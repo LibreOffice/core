@@ -1,0 +1,1026 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project basedir="." default="all" name="Saxon-B The XSLT and XQuery Processor"
+         xmlns:dn="antlib:org.apache.ant.dotnet">
+
+    <!-- TODO *really* Must publish NOTICES directory with patch releases. Should also
+          publish doc directory, and add a notice concerning Saxon/MPL itself, as per section 3.6 of MPL 1.0 -->
+
+    <!--TODO: 1: ensure saxon9api.netmodule is included in the build
+           2: remove the archive target before shipping this file-->
+
+    <!-- note : Ant 1.7 is needed for this script -->
+
+    <!-- Ant 1.7 introduces a <service> element to allow META-INF/services
+         directories to be created in JAR files. Unfortunately it is broken,
+         see http://issues.apache.org/bugzilla/show_bug.cgi?id=41201. The relevant
+         code here is retained in the form of comments, and can be reinstated
+         when the bug is fixed. Meanwhile the directories are created manually -->
+
+    <!-- Build file for Saxon. This builds all four for the released products:
+         Saxon-B and Saxon-SA, on both the Java and .NET platforms. It also builds
+         the released resources file. A full build requires access to Saxonica
+         proprietary source code. The open source Saxon-B product can be built for
+         Java using target "bj"; but building Saxon-B for .NET may require some
+         disentangling of tasks that depend on Saxon-SA being present. -->
+
+    <!-- Useful targets:
+
+         clean        clears temporary directories
+         bj           builds executables for Saxon-B
+         saj          builds executables for Saxon-B and Saxon-SA
+         n            builds executables for Saxon on .NET
+         build        builds all executables
+         resources    builds samples and documentation
+         release      builds ZIP files for published downloads
+         archive      produces a back-up archive  -->
+
+
+    <!-- Naming conventions:
+         -n   : .NET
+         -j   : Java
+         -b   : Saxon-B
+         -sa  : Saxon-SA
+         combined as appropriate, so -bj denotes Saxon-B on the Java platform
+    -->
+
+    <property name="version" value="9.0.0.7"/>
+    <property name="versionh" value="9-0-0-7"/>
+    <property name="release.date" value="2008-07-03"/>
+
+    <!-- following locations are specific to the machine -->
+
+                    <!-- root drive for input files-->
+                    <property name="root" value="."/>
+
+                    <!-- root drive for generated files-->
+                    <property name="troot" value="."/>
+
+                    <!-- directory holding Java source code -->
+                    <property name="development-j.dir" value="${root}/MyJava/saxon8.x"/>
+
+                    <!-- directory holding Java source code as in Subversion -->
+                    <property name="subversion-j.dir" value="${root}"/>
+
+                    <!-- directory holding latest patch state of Saxon-SA Java code -->
+                    <property name="saj-patch.dir" value="${root}/saxon-90-patch"/>
+
+                    <!-- directory holding Java test drivers -->
+                    <property name="drivers-j.dir" value="${root}/MyJava/test"/>
+
+                    <!-- directories holding C# source code -->
+                    <property name="vss-n.dir" value="${root}/Documents and Settings/Mike/My Documents/Visual Studio 2005/Projects/Saxon.Api"/>
+
+                    <!-- directory holding C# source code as in Subversion -->
+                    <property name="subversion-n.dir" value="${root}/saxon-svn/latest9.0/bn/csource"/>
+
+                    <!-- directory holding XML user documentation -->
+                    <property name="userdoc.dir" value="${root}/MyJava/doc/saxon8"/>
+
+                    <!-- directory holding .NET API documentation (which is built manually using NDOC -->
+                    <property name="dotnetdoc.dir" value="${root}/MyDotNet/dotnetdoc"/>
+
+                    <!-- directories holding use cases and sample applications -->
+                    <property name="usercases.dir" value="${root}/MyJava/use-cases"/>
+                    <property name="samples.dir" value="${root}/MyJava/samples"/>
+
+                    <!-- directory in which to build the product for release -->
+                    <property name="product.dir" value="${troot}/saxon-build/${version}"/>
+
+                    <!-- directory in which to build the issued .ZIP files -->
+                    <property name="issue.dir" value="${troot}/saxon-issues/saxon-issue-${release.date} (${version})"/>
+
+                    <!-- location of the C# compiler -->
+                    <property name="csharp.compiler" value="c:/Windows/Microsoft.NET/Framework/v1.1.4322/csc.exe"/>
+
+
+    <!-- following locations are for IKVMC code used to build the .NET product -->
+
+    <property name="development-ikvm.dir" value="${root}/MyDotNet"/>
+    <property name="ikvm.dir" value="${development-ikvm.dir}/ikvm-0.32.0.0"/>
+    <property name="generated.stubs.dir" value="${development-ikvm.dir}/stubs"/>
+    <property name="saxondotnet.snk" value="${development-ikvm.dir}/make/saxondotnet.snk"/>
+
+    <!-- Precondition for .NET compilation: IKVM is installed.
+         * Download from www.ikvm.net
+         * Unzip into ${development-ikvm.dir}
+         * Register in the GAC (access the Microsoft .NET Framework Configuration item in the
+                                Windows Control Panel, and add the assemblies to the Assembly Cache.
+                                At a minimum, install the IKVM.GNU.Classpath.dll and IKVM.Runtime.dll)
+         * Generate stubs in ${generated.stubs.dir}
+           for System.Xml.dll, System.Security.dll, and IKVM.GNU.Classpath.dll
+    -->
+
+    <!-- following locations are relative to the build file -->
+
+    <property name="lib.dir" value="libs"/>
+    <property name="temp.dir" value="temp"/>
+    <property name="archive.dir" value="archive"/>
+    <property name="services.dir" value="services"/>
+    <property name="temp-src-j.dir" value="${temp.dir}/j/source"/>
+    <property name="temp-src-nj.dir" value="${temp.dir}/n/jsource"/>
+    <property name="temp-src-nc.dir" value="${temp.dir}/n/csource"/>
+    <property name="classes-j.dir" value="${temp.dir}/j/classes"/>
+    <property name="classes-n.dir" value="${temp.dir}/n/classes"/>
+    <property name="jar-n.dir" value="${temp.dir}/n/jar"/>
+    <property name="dll-n.dir" value="${temp.dir}/n/dll"/>
+
+                <!-- following locations are relative to the destination directory -->
+
+                <property name="build-bj.dir" value="${product.dir}/bj"/>
+                <property name="build-saj.dir" value="${product.dir}/saj"/>
+                <property name="build-bn.dir" value="${product.dir}/bn"/>
+                <property name="build-san.dir" value="${product.dir}/san"/>
+                <property name="build-resources.dir" value="${product.dir}/resources"/>
+          <property name="javadoc.dir" value="${build-resources.dir}/doc/javadoc"/>
+
+
+    <property name="build.debug" value="true"/>
+    <property name="build.debuglevel" value="source,lines,vars"/>
+    <property name="build.deprecation" value="true"/>
+    <property name="build.optimize" value="true"/>
+    <property name="build.compiler.source" value="1.4"/>
+    <property name="build.compiler.target" value="1.4"/>
+    <property name="build.s9api.compiler.source" value="1.5"/>
+    <property name="build.s9api.compiler.target" value="1.5"/>
+    <property name="build.compress" value="false"/>
+
+    <!-- following properties can be switched to determine whether to build from patch source
+         or from development source -->
+
+    <!-- patch source -->
+
+    <property name="source-bj.dir" value="${subversion-j.dir}"/>
+    <property name="source-saj.dir" value="${saj-patch.dir}"/>
+    <property name="source-api-n.dir" value="${subversion-n.dir}/api/Saxon.Api"/>
+    <property name="source-cmd-n.dir" value="${subversion-n.dir}/cmd"/>
+    <property name="source-samples-n.dir" value="${subversion-n.dir}/samples"/>
+
+    <!-- development source -->
+                <!--
+    <property name="source-bj.dir" value="${development-j.dir}"/>
+    <property name="source-saj.dir" value="${development-j.dir}"/>
+    <property name="source-api-n.dir" value="${vss-n.dir}"/>
+    <property name="source-cmd-n.dir" value="${vss-n.dir}"/>
+    <property name="source-samples-n.dir" value="${vss-n.dir}"/>
+    -->
+
+    <property name="solar.bin" value="${solarbindir}"/>
+    <path id="classpath-j">
+        <fileset dir="${solar.bin}">
+            <include name="jsr173_1.0_api.jar"/>
+        </fileset>
+    </path>
+
+    <path id="classpath-n">
+        <fileset dir="${lib.dir}">
+            <include name="*.jar"/>
+        </fileset>
+        <fileset dir="${ikvm.dir}">
+                 <include name="classpath/mscorlib.jar"/>
+                 <include name="classpath/System.jar"/>
+                 <include name="bin/IKVM.GNU.Classpath.jar"/>
+                 <include name="bin/IKVM.Runtime.jar"/>
+        </fileset>
+        <fileset dir="${generated.stubs.dir}">
+                 <include name="System.Xml.jar"/>
+                 <include name="System.Security.jar"/>
+        </fileset>
+    </path>
+
+    <path id="classpath-samples">
+        <fileset dir="${lib.dir}">
+            <include name="*.jar"/>
+        </fileset>
+        <fileset dir="${build-saj.dir}">
+            <include name="*.jar"/>
+        </fileset>
+        <!-- Substitute build-bj.dir if there is no requirement to compile the sample applications
+             that depend on Saxon-SA -->
+    </path>
+
+    <target name="clean" description="Clean all files other than source code and downloaded jars.">
+        <delete dir="${temp.dir}"/>
+        <delete dir="${product.dir}"/>
+        <mkdir dir="${product.dir}"/>
+    </target>
+
+    <target name="download" description="Download third-party jar files.">
+        <get src="http://mirrors.ibiblio.org/pub/mirrors/maven2/dom4j/dom4j/1.6.1/dom4j-1.6.1.jar"
+            dest="${lib.dir}/dom4j-1.6.1.jar" verbose="true"/>
+
+        <get src="http://www.ibiblio.org/maven/jdom/jars/jdom-1.0.jar"
+            dest="${lib.dir}/jdom-1.0.jar" verbose="true"/>
+
+        <get src="http://www.cafeconleche.org/XOM/xom-1.1.jar" dest="${lib.dir}/xom-1.1.jar"
+            verbose="true"/>
+
+        <get src="http://dist.codehaus.org/stax/jars/stax-api-1.0.1.jar" dest="${lib.dir}/stax-api-1.0.1.jar"
+            verbose="true"/>
+
+            <!-- TODO: add servlet.jar, ant.jar -->
+
+    </target>
+
+
+    <target name="copysource-development" description="Copy relevant source files from development directory">
+        <copy todir="${temp-src-j.dir}">
+          <fileset dir="${source-bj.dir}">
+            <include name="net/sf/saxon/**/*.java"/>
+            <exclude name="**/dotnet/**"/>
+            <!--<exclude name="**/s9api/**"/>            s9api needs Java 5 -->
+            <include name="net/sf/saxon/**/package.html"/>
+          </fileset>
+ <!--
+          <fileset dir="${source-saj.dir}">
+            <include name="com/saxonica/**/*.java"/>
+            <exclude name="com/saxonica/validate/DotNetVerifier.java"/>
+            <include name="com/saxonica/**/package.html"/>
+          </fileset>
+ -->
+        </copy>
+        <!--
+        <replace file="${temp-src-j.dir}/com/saxonica/validate/SchemaAwareConfiguration.java"
+                 token="/*DOTNETONLY*/"
+                 value="//"
+                 summary="yes"/>
+                 -->
+        <replace file="${temp-src-j.dir}/net/sf/saxon/Configuration.java"
+                 token="/*DOTNETONLY*/"
+                 value="//"
+                 summary="yes"/>
+        <copy todir="${temp-src-nj.dir}">
+          <fileset dir="${source-bj.dir}">
+            <include name="net/sf/saxon/**/*.java"/>
+            <exclude name="**/ant/**"/>
+            <exclude name="**/dom/**"/>
+            <exclude name="**/dom4j/**"/>
+            <exclude name="**/java/**"/>
+            <exclude name="**/javax/**"/>
+            <exclude name="**/jdom/**"/>
+            <exclude name="**/pull/PullToStax.java"/>
+            <exclude name="**/pull/StaxBridge.java"/>
+            <!-- <exclude name="**/s9api/**"/>          s9api needs Java 5 -->
+            <exclude name="**/xom/**"/>
+            <exclude name="**/xpath/**"/>
+            <exclude name="**/xqj/**"/>
+          </fileset>
+          <!--
+                                        <fileset dir="${source-saj.dir}">
+            <include name="com/saxonica/extra/*.java"/>
+            <include name="com/saxonica/fsa/*.java"/>
+            <include name="com/saxonica/ptree/*.java"/>
+            <include name="com/saxonica/schema/*.java"/>
+            <include name="com/saxonica/sdoc/*.java"/>
+            <include name="com/saxonica/validate/*.java"/>
+            <include name="com/saxonica/Validate.java"/>
+          </fileset>-->
+        </copy>
+        <!--
+        <replace file="${temp-src-nj.dir}/com/saxonica/validate/SchemaAwareConfiguration.java"
+                 token="/*JAVAONLY*/"
+                 value="//"
+                 summary="yes"/>
+                 -->
+        <replace file="${temp-src-nj.dir}/net/sf/saxon/Configuration.java"
+                 token="/*JAVAONLY*/"
+                 value="//"
+                 summary="yes"/>
+        <!-- when building from development source
+        <copy todir="${temp-src-nc.dir}/api">
+          <fileset dir="${source-api-n.dir}">
+            <include name="Saxon.Api/*.cs"/>
+          </fileset>
+        </copy>
+
+        <copy todir="${temp-src-nc.dir}/cmd">
+          <fileset dir="${source-cmd-n.dir}/Transform">
+            <include name="*.cs"/>
+          </fileset>
+          <fileset dir="${source-cmd-n.dir}/Query">
+            <include name="*.cs"/>
+          </fileset>
+          <fileset dir="${source-cmd-n.dir}/Validate">
+            <include name="*.cs"/>
+          </fileset>
+        </copy>
+        <copy todir="${temp-src-nc.dir}/samples">
+          <fileset dir="${source-samples-n.dir}/XQueryExamples">
+            <include name="*.cs"/>
+          </fileset>
+          <fileset dir="${source-samples-n.dir}/XPathExample">
+            <include name="*.cs"/>
+          </fileset>
+          <fileset dir="${source-samples-n.dir}/XsltExamples">
+            <include name="*.cs"/>
+          </fileset>
+          <fileset dir="${source-samples-n.dir}/SchemaExamples">
+            <include name="*.cs"/>
+          </fileset>
+          <fileset dir="${source-samples-n.dir}/XsltTestSuiteDriver">
+            <include name="*.cs"/>
+          </fileset>
+          <fileset dir="${source-samples-n.dir}/XQueryTestSuiteDriver">
+            <include name="*.cs"/>
+          </fileset>
+          <fileset dir="${source-samples-n.dir}/SampleExtensions">
+            <include name="*.cs"/>
+          </fileset>
+        </copy>
+        -->
+        <!-- when building from patch source
+        <copy todir="${temp-src-nc.dir}/api/Saxon.Api">
+          <fileset dir="${source-api-n.dir}">
+            <include name="*.cs"/>
+          </fileset>
+        </copy>
+        <copy todir="${temp-src-nc.dir}/cmd" >
+          <fileset dir="${source-cmd-n.dir}">
+            <include name="*.cs"/>
+          </fileset>
+        </copy>
+        <copy todir="${temp-src-nc.dir}/samples">
+          <fileset dir="${source-samples-n.dir}">
+            <include name="*.cs"/>
+          </fileset>
+        </copy>
+        -->
+        <!-- -->
+
+    </target>
+
+    <target name="create-meta-inf" description="Create contents of META-INF/services files">
+
+        <!-- given the Ant 1.7.0 bug, create the services files here for copying into the JARS -->
+        <mkdir dir="${services.dir}/saxon9/META-INF/services"/>
+        <echo file="${services.dir}/saxon9/META-INF/services/javax.xml.transform.TransformerFactory"
+              message="net.sf.saxon.TransformerFactoryImpl"/>
+        <mkdir dir="${services.dir}/saxon9-xpath/META-INF/services"/>
+        <echo file="${services.dir}/saxon9-xpath/META-INF/services/javax.xml.xpath.XPathFactory"
+>net.sf.saxon.xpath.XPathFactoryImpl
+http\://java.sun.com/jaxp/xpath/dom:    net.sf.saxon.xpath.XPathFactoryImpl
+http\://saxon.sf.net/jaxp/xpath/om:     net.sf.saxon.xpath.XPathFactoryImpl
+http\://www.xom.nu/jaxp/xpath/xom:      net.sf.saxon.xpath.XPathFactoryImpl
+http\://jdom.org/jaxp/xpath/jdom:       net.sf.saxon.xpath.XPathFactoryImpl
+http\://www.dom4j.org/jaxp/xpath/dom4j: net.sf.saxon.xpath.XPathFactoryImpl
+</echo>
+        <mkdir dir="${services.dir}/saxon9sa/META-INF/services"/>
+        <echo file="${services.dir}/saxon9sa/META-INF/services/javax.xml.transform.TransformerFactory"
+              message="com.saxonica.SchemaAwareTransformerFactory"/>
+        <mkdir dir="${services.dir}/saxon9sa-jaxp/META-INF/services"/>
+        <echo file="${services.dir}/saxon9sa-jaxp/META-INF/services/javax.xml.validation.SchemaFactory"
+>com.saxonica.jaxp.SchemaFactoryImpl
+http\://www.w3.org/2001/XMLSchema: com.saxonica.jaxp.SchemaFactoryImpl
+</echo>
+
+
+    </target>
+
+    <target name="compile-bj" description="Compile Saxon-B classes for Java." depends="copysource-development">
+        <mkdir dir="${classes-j.dir}"/>
+        <javac encoding="ISO-8859-1" debug="${build.debug}" debuglevel="${build.debuglevel}"
+            deprecation="${build.deprecation}" destdir="${classes-j.dir}"
+            optimize="${build.optimize}" srcdir="${temp-src-j.dir}" source="${build.compiler.source}"
+            target="${build.compiler.target}">
+
+            <include name="net/**"/>
+            <exclude name="**/dom/**"/>
+            <exclude name="**/dom4j/**"/>
+            <exclude name="**/javax/**"/>
+            <exclude name="**/jdom/**"/>
+            <exclude name="**/sql/**"/>
+            <exclude name="**/xom/**"/>
+            <exclude name="**/xpath/**"/>
+            <exclude name="**/xqj/**"/>
+            <exclude name="**/dotnet/**"/>
+            <exclude name="**/s9api/**"/>
+
+            <exclude name="**/ant/**"/>
+            <exclude name="**/dotnet/**"/>
+            <exclude name="**/s9api/**"/>
+            <classpath>
+                <path refid="classpath-j"/>
+            </classpath>
+        </javac>
+    </target>
+
+    <target name="compile-saj" description="Compile Saxon-SA classes for Java." depends="copysource-development">
+        <mkdir dir="${classes-j.dir}"/>
+        <javac debug="${build.debug}"  debuglevel="${build.debuglevel}"
+            deprecation="${build.deprecation}" destdir="${classes-j.dir}"
+            optimize="${build.optimize}" srcdir="${temp-src-j.dir}" source="${build.compiler.source}"
+            target="${build.compiler.target}">
+
+            <include name="com/saxonica/**"/>
+            <include name="net/sf/saxon/ant/**"/>
+            <exclude name="com/saxonica/validate/DotNetVerifier.java"/>
+            <classpath>
+                <path refid="classpath-j"/>
+            </classpath>
+        </javac>
+    </target>
+
+    <target name="compile-s9api" description="Compile s9api classes for Java."
+                                 depends="compile-bj, compile-saj, copysource-development">
+        <!-- Compiling the s9api package requires JDK 1.5 -->
+        <!-- The bj and saj source must be compiled first to ensure that it is done using 1.4, otherwise
+             it will be compiled in 1.5 mode because the classes are referenced from the s9api package -->
+        <javac debug="${build.debug}" debuglevel="${build.debuglevel}"
+            deprecation="${build.deprecation}" destdir="${classes-j.dir}"
+            optimize="${build.optimize}" srcdir="${temp-src-j.dir}" source="${build.s9api.compiler.source}"
+            target="${build.s9api.compiler.target}">
+
+            <include name="**/s9api/**"/>
+            <classpath>
+                <path refid="classpath-j"/>
+            </classpath>
+        </javac>
+    </target>
+
+    <target name="compile-bn" description="Compile Saxon-B classes for .NET" depends="copysource-development">
+        <mkdir dir="${classes-n.dir}"/>
+        <javac debug="${build.debug}" debuglevel="${build.debuglevel}"
+            deprecation="${build.deprecation}" destdir="${classes-n.dir}"
+            optimize="${build.optimize}" srcdir="${temp-src-nj.dir}" source="${build.compiler.source}"
+            target="${build.compiler.target}">
+
+            <include name="net/**"/>
+            <exclude name="**/s9api/**"/>
+            <classpath>
+                <path refid="classpath-n"/>
+            </classpath>
+        </javac>
+    </target>
+
+    <target name="compile-san" description="Compile Saxon-SA classes for .NET" depends="copysource-development">
+        <mkdir dir="${classes-n.dir}"/>
+        <javac debug="${build.debug}"  debuglevel="${build.debuglevel}"
+            deprecation="${build.deprecation}" destdir="${classes-n.dir}"
+            optimize="${build.optimize}" srcdir="${temp-src-nj.dir}" source="${build.compiler.source}"
+            target="${build.compiler.target}">
+
+            <include name="com/saxonica/**"/>
+            <exclude name="com/saxonica/validate/JavaVerifier.java"/>
+            <classpath>
+                <path refid="classpath-n"/>
+            </classpath>
+        </javac>
+    </target>
+
+    <target name="jar-bj" description="Create Saxon-B jar files for Java" depends="create-meta-inf, compile-bj">
+        <mkdir dir="${product.dir}/bj"/>
+        <jar basedir="${classes-j.dir}" compress="${build.compress}" jarfile="${product.dir}/bj/saxon9.jar">
+            <include name="net/**/*.class"/>
+            <exclude name="**/ant/**/*.class"/>
+            <exclude name="**/dom/**/*.class"/>
+            <exclude name="**/dom4j/**/*.class"/>
+            <exclude name="**/javax/**/*.class"/>
+            <exclude name="**/jdom/**/*.class"/>
+            <exclude name="**/sql/**/*.class"/>
+            <exclude name="**/xom/**/*.class"/>
+            <exclude name="**/xpath/**/*.class"/>
+            <exclude name="**/xqj/**/*.class"/>
+            <exclude name="**/s9api/**/*.class"/>
+            <include name="META-INF/**"/>
+            <manifest>
+                <attribute name="Project-Name" value="Saxon-B"/>
+                <attribute name="Main-Class" value="net.sf.saxon.Transform"/>
+            </manifest>
+            <metainf dir="${services.dir}/saxon9/META-INF"/>
+            <!--
+            <service type="javax.xml.transform.TransformerFactory"
+                provider="net.sf.saxon.TransformerFactoryImpl"/>
+            -->
+        </jar>
+        <!--
+        <jar basedir="${classes-j.dir}" compress="${build.compress}" jarfile="${product.dir}/bj/saxon9-dom.jar">
+            <include name="net/sf/saxon/dom/*.class"/>
+        </jar>
+        <jar basedir="${classes-j.dir}" compress="${build.compress}" jarfile="${product.dir}/bj/saxon9-dom4j.jar">
+            <include name="net/sf/saxon/dom4j/*.class"/>
+        </jar>
+        <jar basedir="${classes-j.dir}" compress="${build.compress}" jarfile="${product.dir}/bj/saxon9-jdom.jar">
+            <include name="net/sf/saxon/jdom/*.class"/>
+        </jar>
+        <jar basedir="${classes-j.dir}" compress="${build.compress}" jarfile="${product.dir}/bj/saxon9-s9api.jar">
+            <include name="net/sf/saxon/s9api/*.class"/>
+        </jar>
+        <jar basedir="${classes-j.dir}" compress="${build.compress}" jarfile="${product.dir}/bj/saxon9-sql.jar">
+            <include name="net/sf/saxon/sql/*.class"/>
+        </jar>
+        <jar basedir="${classes-j.dir}" compress="${build.compress}" jarfile="${product.dir}/bj/saxon9-xom.jar">
+            <include name="net/sf/saxon/xom/*.class"/>
+        </jar>
+        <jar basedir="${classes-j.dir}" compress="${build.compress}" jarfile="${product.dir}/bj/saxon9-xpath.jar">
+            <include name="net/sf/saxon/xpath/*.class"/>
+            <metainf dir="${services.dir}/saxon9-xpath/META-INF"/>
+            <!==
+            <service type="javax.xml.xpath.XPathFactory">
+                <provider classname="net.sf.saxon.xpath.XPathFactoryImpl"/>
+                <provider classname="http\://java.sun.com/jaxp/xpath/dom:    net.sf.saxon.xpath.XPathFactoryImpl"/>
+                <provider classname="http\://saxon.sf.net/jaxp/xpath/om:     net.sf.saxon.xpath.XPathFactoryImpl"/>
+                <provider classname="http\://www.xom.nu/jaxp/xpath/xom:      net.sf.saxon.xpath.XPathFactoryImpl"/>
+                <provider classname="http\://jdom.org/jaxp/xpath/jdom:       net.sf.saxon.xpath.XPathFactoryImpl"/>
+                <provider classname="http\://www.dom4j.org/jaxp/xpath/dom4j: net.sf.saxon.xpath.XPathFactoryImpl"/>
+            </service> ==>
+        </jar>
+        <jar basedir="${classes-j.dir}" compress="${build.compress}" jarfile="${product.dir}/bj/saxon9-xqj.jar">
+            <include name="net/sf/saxon/xqj/*.class"/>
+            <include name="net/sf/saxon/javax/xml/namespace/*.class"/>
+            <include name="net/sf/saxon/javax/xml/xquery/*.class"/>
+        </jar>
+        -->
+    </target>
+
+    <target name="jar-saj" description="Create Saxon-SA jar files for Java" depends="compile-s9api, jar-bj">
+        <mkdir dir="${product.dir}/saj"/>
+        <copy todir="${product.dir}/saj">
+          <fileset dir="${product.dir}/bj">
+            <include name="*.jar"/>
+          </fileset>
+        </copy>
+        <jar basedir="${classes-j.dir}" compress="${build.compress}" jarfile="${product.dir}/saj/saxon9sa.jar">
+            <include name="net/**/*.class"/>
+            <exclude name="**/dom/**/*.class"/>
+            <exclude name="**/dom4j/**/*.class"/>
+            <exclude name="**/javax/**/*.class"/>
+            <exclude name="**/jdom/**/*.class"/>
+            <exclude name="**/s9api/**/*.class"/>
+            <exclude name="**/sql/**/*.class"/>
+            <exclude name="**/xom/**/*.class"/>
+            <exclude name="**/xpath/**/*.class"/>
+            <exclude name="**/xqj/**/*.class"/>
+            <include name="com/saxonica/**/*.class"/>
+            <exclude name="com/saxonica/jaxp/*.class"/>
+            <exclude name="com.saxonica.CompileQuery.class"/>
+            <manifest>
+                <attribute name="Project-Name" value="Saxon-SA"/>
+            </manifest>
+            <metainf dir="${services.dir}/saxon9sa/META-INF"/>
+            <!--
+            <service type="javax.xml.transform.TransformerFactory"
+                provider="com.saxonica.SchemaAwareTransformerFactory"/>
+            -->
+        </jar>
+        <jar basedir="${classes-j.dir}" compress="${build.compress}" jarfile="${product.dir}/saj/saxon9sa-jaxp.jar">
+            <include name="com/saxonica/jaxp/*.class"/>
+            <include name="net/sf/saxon/dom/TypeInfoImpl.class"/>
+            <metainf dir="${services.dir}/saxon9sa-jaxp/META-INF"/>
+            <!--
+            <service type="javax.xml.validation.SchemaFactory">
+                <provider classname="com.saxonica.jaxp.SchemaFactoryImpl"/>
+                <provider classname="http\://www.w3.org/2001/XMLSchema: com.saxonica.jaxp.SchemaFactoryImpl"/>
+            </service>
+            -->
+        </jar>
+        <jar basedir="${classes-j.dir}" compress="${build.compress}" jarfile="${product.dir}/saj/saxon9sa-qc.jar">
+            <include name="com/saxonica/codegen/*.class"/>
+            <include name="com.saxonica.CompileQuery.class"/>
+        </jar>
+        <!-- The Saxon-Ant task is delivered with Saxon-B but it won't compile without Saxon-SA present,
+             unless modified -->
+        <jar basedir="${classes-j.dir}" compress="${build.compress}" jarfile="${product.dir}/bj/saxon9-ant.jar">
+            <include name="net/sf/saxon/ant/*.class"/>
+        </jar>
+    </target>
+
+    <target name="jar-bn" description="Create Saxon-B jar files for .NET" depends="compile-bn">
+        <mkdir dir="${jar-n.dir}"/>
+        <jar basedir="${classes-n.dir}" compress="${build.compress}" jarfile="${jar-n.dir}/saxon9.jar">
+            <include name="net/**/*.class"/>
+        </jar>
+    </target>
+
+    <target name="jar-san" description="Create Saxon-SA jar files for .NET" depends="compile-san">
+        <mkdir dir="${jar-n.dir}"/>
+        <jar basedir="${classes-n.dir}" compress="${build.compress}" jarfile="${jar-n.dir}/saxon9sa.jar">
+            <include name="com/saxonica/**/*.class"/>
+        </jar>
+    </target>
+
+    <target name="dll-n" description="Create DLLs for .NET" depends="jar-bn, jar-san">
+        <mkdir dir="${dll-n.dir}"/>
+        <copy todir="${dll-n.dir}">
+          <fileset dir="${ikvm.dir}/bin">
+            <include name="IKVM.GNU.Classpath.dll"/>
+            <include name="IKVM.Runtime.dll"/>
+          </fileset>
+        </copy>
+        <copy file="${saxondotnet.snk}" todir="${basedir}"/>
+        <!--
+            Invoke IKVMC to cross-compile the JAR files into DLLs
+        -->
+        <exec dir="." executable="ikvmc.cmd" >
+          <arg line="live"/>  <!-- set to 'debug' for testing, 'live' for final build -->
+          <arg line="${basedir}/${jar-n.dir}"/>
+          <arg line="${basedir}/${dll-n.dir}"/>
+          <arg line="${version}"/>
+        </exec>
+    </target>
+
+    <target name="csharp-n" description="Compile C# source for .NET commands and API library"
+        depends="dll-n">
+
+                                <mkdir dir="${dll-n.dir}/samples"/>
+                                <mkdir dir="${dll-n.dir}/tests"/>
+
+                                <exec dir="." executable="csharp-compile.cmd" >
+          <arg line="${basedir}/${temp-src-nc.dir}"/>
+          <arg line="${basedir}/${dll-n.dir}"/>
+          <arg line="${version}"/>
+        </exec>
+
+
+<!--        <taskdef
+            uri="antlib:org.apache.ant.dotnet">
+            <classpath>
+              <pathelement location="c:/javalib/ant-dotnet-1.0/ant-dotnet-1.0.jar"/>
+            </classpath>
+          </taskdef>
+                <dn:csc xmlns:dn="antlib:org.apache.ant.dotnet"
+                          executable="${csharp.compiler}"
+                                        srcdir="${temp-src-nc.dir}/cmd"
+                                        targettype="exe"
+                                        win32icon="c:\MyDotNet\icons\gyfu.ico"
+                                        destdir="${dll-n.dir}">
+                <reference file="${dll-n.dir}/IKVM.GNU.Classpath.dll"/>
+                <reference file="${dll-n.dir}/IKVM.Runtime.dll"/>
+                <reference file="${dll-n.dir}/saxon9.dll"/>
+                <reference file="${dll-n.dir}/saxon9sa.dll"/>
+          </dn:csc>
+                <dn:csc xmlns:dn="antlib:org.apache.ant.dotnet"
+                          executable="${csharp.compiler}"
+                                        srcdir="${temp-src-nc.dir}/api"
+                                        targettype="module"
+                                        win32icon="c:\MyDotNet\icons\gyfu.ico"
+                                        destdir="${dll-n.dir}">
+                <reference file="${dll-n.dir}/IKVM.GNU.Classpath.dll"/>
+                <reference file="${dll-n.dir}/IKVM.Runtime.dll"/>
+                <reference file="${dll-n.dir}/saxon9.dll"/>
+                <reference file="${dll-n.dir}/saxon9sa.dll"/>
+          </dn:csc>
+-->
+    </target>
+
+    <target name="basic-userdoc" description="Generate Basic Documentation for release with executable">
+          <mkdir dir="${product.dir}/bj"/>
+          <copy todir="${product.dir}/bj">
+        <fileset dir="${userdoc.dir}/welcome">
+          <include name="doc/**"/>
+          <include name="notices/**"/>
+        </fileset>
+      </copy>
+      <mkdir dir="${product.dir}/saj"/>
+      <copy todir="${product.dir}/saj">
+        <fileset dir="${userdoc.dir}/welcome">
+          <include name="doc/**"/>
+          <include name="notices/**"/>
+        </fileset>
+      </copy>
+      <mkdir dir="${product.dir}/bn"/>
+      <copy todir="${product.dir}/bn">
+        <fileset dir="${userdoc.dir}/welcome">
+          <include name="doc/**"/>
+          <include name="notices/**"/>
+        </fileset>
+      </copy>
+      <mkdir dir="${product.dir}/san"/>
+      <copy todir="${product.dir}/san">
+        <fileset dir="${userdoc.dir}/welcome">
+          <include name="doc/**"/>
+          <include name="notices/**"/>
+        </fileset>
+      </copy>
+    </target>
+
+    <target name="product-bn" description="Assemble product.directory for Saxon-B on .NET"
+                                                                                            depends="csharp-n, dll-n, basic-userdoc">
+      <mkdir dir="${build-bn.dir}/bin"/>
+      <copy todir="${build-bn.dir}/bin">
+        <fileset dir="${dll-n.dir}">
+                <include name="IKVM.GNU.Classpath.dll"/>
+          <include name="IKVM.Runtime.dll"/>
+          <include name="saxon9.dll"/>
+          <include name="saxon9api.dll"/>
+          <include name="saxon9api.netmodule"/>
+          <include name="Query.exe"/>
+          <include name="Transform.exe"/>
+        </fileset>
+      </copy>
+                        <echo file="${build-bn.dir}/bin/install-gac.cmd">
+                                set NET="%PROGRAMFILES%\Microsoft.NET\SDK\v1.1\Bin"
+                                %NET%\gacutil /if IKVM.Runtime.dll
+                                %NET%\gacutil /if IKVM.GNU.Classpath.dll
+                                %NET%\gacutil /if saxon9.dll
+                                %NET%\gacutil /if saxon9api.dll
+      </echo>
+    </target>
+
+    <target name="product-san" description="Assemble product.directory for Saxon-SA on .NET"
+                                                                                            depends="csharp-n, dll-n, basic-userdoc">
+      <copy todir="${build-san.dir}/bin">
+        <fileset dir="${dll-n.dir}">
+                <include name="IKVM.GNU.Classpath.dll"/>
+          <include name="IKVM.Runtime.dll"/>
+          <include name="saxon9.dll"/>
+          <include name="saxon9sa.dll"/>
+          <include name="saxon9api.dll"/>
+          <include name="saxon9api.netmodule"/>
+          <include name="Query.exe"/>
+          <include name="Transform.exe"/>
+          <include name="Validate.exe"/>
+        </fileset>
+      </copy>
+      <echo file="${build-san.dir}/bin/install-gac.cmd">
+                                set NET="%PROGRAMFILES%\Microsoft.NET\SDK\v1.1\Bin"
+                                %NET%\gacutil /if IKVM.Runtime.dll
+                                %NET%\gacutil /if IKVM.GNU.Classpath.dll
+                                %NET%\gacutil /if saxon9.dll
+                                %NET%\gacutil /if saxon9sa.dll
+                                %NET%\gacutil /if saxon9api.dll
+      </echo>
+    </target>
+
+    <target name="samples" description="Assemble Cross-Platform Samples and Use-Cases">
+        <mkdir dir="${build-resources.dir}/samples"/>
+      <copy todir="${product.dir}/resources/use-cases">
+        <fileset dir="${usercases.dir}"/>
+      </copy>
+      <copy todir="${product.dir}/resources/samples">
+        <fileset dir="${samples.dir}">
+          <include name="analysis/timing-profile.xsl"/>
+          <include name="data/*.xml"/>
+          <include name="data/*.xsd"/>
+          <include name="data/*.dtd"/>
+          <include name="query/*.xq"/>
+          <include name="styles/*.xsl"/>
+          <include name="trax/xml/**/*.xml"/>
+          <include name="trax/xsl/**/*.xsl"/>
+          <include name="trax/xsl/**/preamble.txt"/>
+        </fileset>
+      </copy>
+    </target>
+
+    <target name="samples-j" description="Copy and Compile Java Samples"
+                                depends="jar-saj">
+      <mkdir dir="${product.dir}/resources/samples/java"/>
+      <mkdir dir="${product.dir}/resources/samples/java/classes"/>
+      <copy todir="${product.dir}/resources/samples/java">
+        <fileset dir="${samples.dir}/java">
+          <include name="ApplyXPathJAXP.java"/>
+          <include name="ExampleContentHandler.java"/>
+          <include name="JDOMExample.java"/>
+          <include name="PullExamples.java"/>
+          <include name="QueryAPIExamples.java"/>
+          <include name="QuickValidator.java"/>
+          <include name="SaxonServlet.java"/>
+          <include name="SaxonSAServlet.java"/>
+          <include name="SchemaValidatorExample.java"/>
+          <include name="SchemaValidatorHandlerExample.java"/>
+          <include name="TraxExamples.java"/>
+          <include name="XMarkBenchmark.java"/>
+          <include name="XPathExample.java"/>
+          <include name="XPathExampleDOM.java"/>
+          <include name="XPathExampleSA.java"/>
+          <include name="XPathExampleServlet.java"/>
+          <include name="XQJExamples.java"/>
+        </fileset>
+      </copy>
+                        <javac debug="true" debuglevel="source, lines"
+                              destdir="${product.dir}/resources/samples/java/classes"
+            srcdir="${product.dir}/resources/samples/java"
+            source="${build.compiler.source}"
+            target="${build.compiler.target}">
+        <include name="*.java"/>
+        <classpath>
+            <path refid="classpath-samples"/>
+        </classpath>
+     </javac>
+    </target>
+
+    <target name="testdrivers-j" description="Copy Java Test Drivers">
+                        <mkdir dir="${product.dir}/resources/drivers/java/test"/>
+                        <copy todir="${product.dir}/resources/drivers/java/test">
+                          <fileset dir="${drivers-j.dir}">
+                            <include name="XQueryTestSuiteDriver.java"/>
+                            <include name="XsltTestSuiteDriver.java"/>
+                            <include name="CanonicalXML.java"/>
+                            <include name="XQTSModuleURIResolver.java"/>
+                            <include name="XQTSCollectionURIResolver.java"/>
+                            <include name="SchemaTestSuiteDriver.java"/>
+        </fileset>
+      </copy>
+    </target>
+
+    <target name="samples-n" description="Assemble release samples for .NET"
+                  depends="csharp-n">
+      <mkdir dir="${build-resources.dir}/samples/cs"/>
+      <copy todir="${build-resources.dir}/samples/cs">
+        <fileset dir="${temp-src-nc.dir}/samples">
+          <include name="*.cs"/>
+        </fileset>
+      </copy>
+      <mkdir dir="${build-resources.dir}/samples/cs/bin"/>
+      <copy todir="${build-resources.dir}/samples/cs/bin">
+        <fileset dir="${dll-n.dir}/samples">
+          <include name="*.exe"/>
+          <include name="*.dll"/>
+          <include name="*.pdb"/>
+        </fileset>
+      </copy>
+      <copy todir="${build-resources.dir}/samples/cs/bin">
+        <fileset dir="${dll-n.dir}/tests">
+          <include name="*.exe"/>
+          <include name="*.dll"/>
+          <include name="*.pdb"/>
+        </fileset>
+      </copy>
+    </target>
+
+    <target name="product-javadoc" description="Generate Javadoc.">
+        <javadoc bottom="Copyright (C) Michael H. Kay. All rights reserved."
+            destdir="${javadoc.dir}" doctitle="saxon9 Javadocs"
+            noindex="true" notree="true" access="public"
+            maxmemory="512M" source="1.5">
+            <packageset dir="${temp-src-j.dir}">
+                <include name="net/**"/>
+                <include name="com/**"/>
+                <exclude name="**/dotnet/**"/>
+                <exclude name="**/DotNetVerifier.java"/>
+            </packageset>
+            <classpath>
+                <path refid="classpath-j"/>
+            </classpath>
+
+            <link href="http://java.sun.com/j2se/1.5.0/docs/api/"/>
+            <link href="http://www.xom.nu/apidocs/"/>
+
+        </javadoc>
+        <copy file="${userdoc.dir}/fixed/javadoc/stylesheet.css"
+              tofile="${javadoc.dir}/stylesheet.css"
+              overwrite="true"/>
+    </target>
+
+    <target name="product-dotnetdoc" description="Copy .NET API documentation">
+      <mkdir dir="${build-resources.dir}/doc/dotnetdoc"/>
+      <copy todir="${build-resources.dir}/doc/dotnetdoc">
+        <fileset dir="${dotnetdoc.dir}"/>
+      </copy>
+    </target>
+
+
+    <target name="release-userdoc" description="Generate User Documentation">
+                        <taskdef name="saxon-xslt"
+                                 classname="net.sf.saxon.ant.AntTransform"
+                                 classpath="c:\saxon-build\9.0.0.1\saj\saxon9sa.jar;c:\saxon-licenses"/>
+                        <copy todir="${build-resources.dir}/doc">
+        <fileset dir="${userdoc.dir}/fixed"/>
+      </copy>
+          <copy todir="${product.dir}/bj">
+        <fileset dir="${userdoc.dir}/welcome">
+          <include name="doc/**"/>
+          <include name="notices/**"/>
+        </fileset>
+      </copy>
+      <copy todir="${product.dir}/saj">
+        <fileset dir="${userdoc.dir}/welcome">
+          <include name="doc/**"/>
+          <include name="notices/**"/>
+        </fileset>
+      </copy>
+      <copy todir="${product.dir}/bn">
+        <fileset dir="${userdoc.dir}/welcome">
+          <include name="doc/**"/>
+          <include name="notices/**"/>
+        </fileset>
+      </copy>
+      <copy todir="${product.dir}/san">
+        <fileset dir="${userdoc.dir}/welcome">
+          <include name="doc/**"/>
+          <include name="notices/**"/>
+        </fileset>
+      </copy>
+                        <saxon-xslt in="${userdoc.dir}/catalog.xml"
+                                    style="${userdoc.dir}/render-page2.xsl"
+                                    schemaAware="true"
+                                    xmlVersion="1.0"
+                                    schemaValidation="strict"
+                                    out="${product.dir}/resources/doc/dummy.html"><!--validation="strict" -->
+                          <param name="destination" expression="offline"/>
+                        </saxon-xslt>
+                        <zip zipfile="${build-resources.dir}/source-userdoc.zip">
+                          <fileset dir="${userdoc.dir}">
+                            <include name="**/*.xml"/>
+                            <include name="**/*.xsl"/>
+                            <include name="**/*.xsd"/>
+                            <include name="**/*.css"/>
+                            <include name="fixed/**"/>
+                            <include name="welcome/**"/>
+                          </fileset>
+                        </zip>
+    </target>
+
+    <target name="release-source" description="Generate Zip file containing issued Source Code">
+      <mkdir dir="${build-resources.dir}"/>
+      <zip zipfile="${build-resources.dir}/source.zip">
+        <fileset dir="${source-bj.dir}">
+           <include name="net/**/*.java"/>
+           <include name="net/**/package.html"/>
+        </fileset>
+        <fileset dir="${source-bj.dir}">
+           <include name="net/sf/saxon/dotnet/*.java"/>
+           <include name="net/sf/saxon/dotnet/package.html"/>
+        </fileset>
+        <fileset dir="${temp-src-nc.dir}">
+           <include name="api/**/*.cs"/>
+           <include name="cmd/**/*.cs"/>
+        </fileset>
+      </zip>
+      <zip zipfile="${build-resources.dir}/sa-source.zip">
+        <fileset dir="${source-saj.dir}">
+           <include name="com/saxonica/**/*.java"/>
+           <include name="com/saxonica/**/package.html"/>
+        </fileset>
+      </zip>
+    </target>
+
+    <target name="resources" description="Generate contents of released resources file"
+        depends="release-userdoc, product-javadoc, product-dotnetdoc,
+                 samples, samples-j, testdrivers-j, samples-n, release-source">
+      <mkdir dir="${product.dir}/resources/build"/>
+      <copy todir="${product.dir}/resources/build">
+        <fileset dir="${basedir}">
+          <include name="build.xml"/>
+          <include name="ikvmc.cmd"/>
+          <include name="csharp-compile.cmd"/>
+        </fileset>
+      </copy>
+      <copy todir="${product.dir}/resources">
+        <fileset dir="${userdoc.dir}/welcome">
+          <include name="notices/**"/>
+        </fileset>
+      </copy>
+    </target>
+
+    <target name="bj" depends="compile-bj, jar-bj, basic-userdoc"
+        description="Generate Saxon-B for the Java platform"/>
+
+    <target name="saj" depends="bj, jar-saj, basic-userdoc"
+        description="Generate Saxon-SA for the Java platform"/>
+
+    <target name="n" depends="product-bn, product-san"
+                description="Generate Saxon for the .NET platform"/>
+
+    <target name="build" description="Complete Saxon product build"
+        depends="bj, saj, n"/> <!-- add resources -->
+
+    <target name="release" description="Create .ZIP files for release" depends="build"
+        >  <!--depends="build, resources"-->
+      <mkdir dir="${issue.dir}"/>
+      <zip zipfile="${issue.dir}/saxonb${versionh}j.zip">
+        <fileset dir="${product.dir}/bj"/>
+      </zip>
+      <zip zipfile="${issue.dir}/saxonb${versionh}n.zip">
+        <fileset dir="${product.dir}/bn"/>
+      </zip>
+                        <zip zipfile="${issue.dir}/saxonsa${versionh}j.zip">
+        <fileset dir="${product.dir}/saj"/>
+      </zip>
+      <zip zipfile="${issue.dir}/saxonsa${versionh}n.zip">
+        <fileset dir="${product.dir}/san"/>
+      </zip>
+      <!--
+      <zip zipfile="${issue.dir}/saxon-resources${versionh}.zip">
+        <fileset dir="${product.dir}/resources"/>
+      </zip>
+      -->
+    </target>
+
+    <target name="archive" description="Archive everything needed for backup">
+      <mkdir dir="${archive.dir}"/>
+      <copy todir="${archive.dir}">
+       <fileset dir="${issue.dir}"/>
+       <fileset dir="${development-j.dir}" includes="sa-source.zip"/>
+       <fileset dir="${build-resources.dir}" includes="source.zip"/>
+      </copy>
+      <zip zipfile="${archive.dir}/saxontests.zip">
+        <fileset dir="e:/tests">
+          <include name="testsuite/*.*"/>
+          <include name="java/**/*.java"/>
+          <include name="xqts-current/SaxonDriver/**"/>
+          <include name="xqts-extra/**"/>
+          <include name="xslts_1_0_4/**/SaxonDriver/**"/>
+        </fileset>
+        <fileset dir="e:/tests/java" includes ="**/*.java"/>
+      </zip>
+      <zip zipfile="${archive.dir}/licensetool.zip">
+        <fileset dir="c:/MyJava/licensetool"/>
+      </zip>
+      <zip zipfile="${archive.dir}/licenses.zip">
+        <fileset dir="c:/saxon-licenses"/>
+      </zip>
+    </target>
+
+
+
+</project>
