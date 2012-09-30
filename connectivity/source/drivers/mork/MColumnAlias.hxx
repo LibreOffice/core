@@ -31,7 +31,7 @@ namespace connectivity
 {
     namespace mork
     {
-        class OColumnAlias
+        class SAL_DLLPUBLIC_EXPORT OColumnAlias
         {
         public:
             struct AliasEntry
@@ -57,6 +57,7 @@ namespace connectivity
 
         public:
             OColumnAlias( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & );
+            OColumnAlias();
 
             inline bool hasAlias( const ::rtl::OUString& _rAlias ) const
             {

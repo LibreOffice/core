@@ -26,6 +26,8 @@
 #include <stdlib.h>
 #include <sstream>
 #include <string>
+#include <vector>
+#include <algorithm>
 #include <string.h>
 
 #include "resource/mork_res.hrc"
@@ -239,7 +241,18 @@ sal_Int32 MQueryHelper::executeQuery(OConnection* xConnection)
     SAL_INFO("connectivity.mork", "MQueryHelper::executeQuery()" );
     reset();
 
-    //dumpExpression(this, &m_aExpr);
+    rtl::OString oStringTable = OUStringToOString( m_aAddressbook, RTL_TEXTENCODING_UTF8 );
+    std::set<int> listRecords;
+    bool handleListTable = false;
+
+    // check if we are retrieving the default table
+    if (oStringTable != "AddressBook")
+    {
+        handleListTable = true;
+        // retrieve row ids for that list table
+        std::string listTable = oStringTable.getStr();
+        xConnection->getMorkParser()->getRecordKeysForListTable(listTable, listRecords);
+    }
     MorkTableMap::iterator tableIter;
     MorkTableMap *Tables = xConnection->getMorkParser()->getTables( 0x80 );
     MorkRowMap *Rows = 0;
@@ -249,38 +262,53 @@ sal_Int32 MQueryHelper::executeQuery(OConnection* xConnection)
     for ( tableIter = Tables->begin(); tableIter != Tables->end(); ++tableIter )
     {
         if (tableIter->first != 1) break;
-        Rows =  xConnection->getMorkParser()->getRows( 0x80, &tableIter->second );
+        Rows = xConnection->getMorkParser()->getRows( 0x80, &tableIter->second );
         if ( Rows )
         {
             // Iterate all rows
             for ( rowIter = Rows->begin(); rowIter != Rows->end(); ++rowIter )
             {
+                // list specific table
+                // only retrieve rowIds that belong to that list table.
+                if (handleListTable)
+                {
+                    int rowId = rowIter->first;
+                    // belongs this row id to the list table?
+                    if (listRecords.end() == std::find(listRecords.begin(), listRecords.end(), rowId))
+                    {
+                        // no, skip it
+                        continue;
+                    }
+                }
+
                 MQueryHelperResultEntry* entry = new MQueryHelperResultEntry();
                 for (MorkCells::iterator CellsIter = rowIter->second.begin();
                      CellsIter != rowIter->second.end(); ++CellsIter )
                 {
                     std::string column = xConnection->getMorkParser()->getColumn(CellsIter->first);
                     std::string value = xConnection->getMorkParser()->getValue(CellsIter->second);
-
-                    //SAL_INFO("connectivity.mork", "key: " << column << " value: " << value);
-
                     OString key(column.c_str(), static_cast<sal_Int32>(column.size()));
                     OString valueOString(value.c_str(), static_cast<sal_Int32>(value.size()));
-                    rtl::OUString valueOUString = ::rtl::OStringToOUString( valueOString, RTL_TEXTENCODING_UTF8 );
+                    rtl::OUString valueOUString = OStringToOUString( valueOString, RTL_TEXTENCODING_UTF8 );
                     entry->setValue(key, valueOUString);
                 }
                 ::std::vector< sal_Bool > vector = entryMatchedByExpression(this, &m_aExpr, entry);
                 sal_Bool result = sal_True;
-                for (::std::vector<sal_Bool>::iterator iter = vector.begin(); iter != vector.end(); ++iter) {
+                for (::std::vector<sal_Bool>::iterator iter = vector.begin(); iter != vector.end(); ++iter)
+                {
                     result = result && *iter;
                 }
-                if (result) {
+                if (result)
+                {
                     append(entry);
+                }
+                else
+                {
+                    delete entry;
                 }
             }
         }
     }
-
     return 0;
 }
 

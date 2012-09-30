@@ -87,6 +87,10 @@ OColumnAlias::OColumnAlias( const ::com::sun::star::uno::Reference< ::com::sun::
     initialize( _rxORB );
 }
 
+OColumnAlias::OColumnAlias()
+{
+}
+
 //------------------------------------------------------------------------------
 void OColumnAlias::initialize( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB )
 {

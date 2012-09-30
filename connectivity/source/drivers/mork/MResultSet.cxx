@@ -70,8 +70,8 @@ using namespace com::sun::star::util;
  Sequence< ::rtl::OUString > SAL_CALL OResultSet::getSupportedServiceNames(  ) throw( RuntimeException)
 {
     ::com::sun::star::uno::Sequence< ::rtl::OUString > aSupported(2);
-    aSupported[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdbc.ResultSet"));
-    aSupported[1] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdbcx.ResultSet"));
+    aSupported[0] = OUString("com.sun.star.sdbc.ResultSet");
+    aSupported[1] = OUString("com.sun.star.sdbcx.ResultSet");
     return aSupported;
 }
 // -------------------------------------------------------------------------
