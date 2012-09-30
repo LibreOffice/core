@@ -575,14 +575,8 @@ void Test::testFdo47764()
 {
     load("fdo47764.rtf");
 
-    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xTextDocument->getText(), uno::UNO_QUERY);
-    uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
-    uno::Reference<beans::XPropertySet> xPropertySet(xParaEnum->nextElement(), uno::UNO_QUERY);
-    sal_Int32 nValue = 0;
     // \cbpat with zero argument should mean the auto (-1) color, not a default color (black)
-    xPropertySet->getPropertyValue("ParaBackColor") >>= nValue;
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), nValue);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), getProperty<sal_Int32>(getParagraph(1), "ParaBackColor"));
 }
 
 void Test::testFdo38786()
