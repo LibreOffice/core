@@ -617,15 +617,7 @@ void Test::testFdo49271()
 {
     load("fdo49271.rtf");
 
-    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xTextDocument->getText(), uno::UNO_QUERY);
-    uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
-    xParaEnum->nextElement();
-    uno::Reference<beans::XPropertySet> xPropertySet(xParaEnum->nextElement(), uno::UNO_QUERY);
-    float fValue = 0;
-    xPropertySet->getPropertyValue("CharHeight") >>= fValue;
-
-    CPPUNIT_ASSERT_EQUAL(25.f, fValue);
+    CPPUNIT_ASSERT_EQUAL(25.f, getProperty<float>(getParagraph(2), "CharHeight"));
 }
 
 void Test::testFdo49692()
@@ -642,12 +634,7 @@ void Test::testFdo49692()
         const beans::PropertyValue& rProp = aProps[i];
 
         if (rProp.Name == "Suffix")
-        {
-            OUString sValue;
-            rProp.Value >>= sValue;
-
-            CPPUNIT_ASSERT_EQUAL(sal_Int32(0), sValue.getLength());
-        }
+            CPPUNIT_ASSERT_EQUAL(sal_Int32(0), rProp.Value.get<OUString>().getLength());
     }
 }
 
@@ -655,54 +642,28 @@ void Test::testFdo45190()
 {
     load("fdo45190.rtf");
 
-    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xTextDocument->getText(), uno::UNO_QUERY);
-    uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
-
     // inherited \fi should be reset
-    uno::Reference<beans::XPropertySet> xPropertySet(xParaEnum->nextElement(), uno::UNO_QUERY);
-    sal_Int32 nValue = 0;
-    xPropertySet->getPropertyValue("ParaFirstLineIndent") >>= nValue;
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), nValue);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(getParagraph(1), "ParaFirstLineIndent"));
 
     // but direct one not
-    xPropertySet.set(xParaEnum->nextElement(), uno::UNO_QUERY);
-    xPropertySet->getPropertyValue("ParaFirstLineIndent") >>= nValue;
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(TWIP_TO_MM100(-100)), nValue);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(TWIP_TO_MM100(-100)), getProperty<sal_Int32>(getParagraph(2), "ParaFirstLineIndent"));
 }
 
 void Test::testFdo50539()
 {
     load("fdo50539.rtf");
 
-    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xTextDocument->getText(), uno::UNO_QUERY);
-    uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
-    uno::Reference<container::XEnumerationAccess> xRunEnumAccess(xParaEnum->nextElement(), uno::UNO_QUERY);
-    uno::Reference<container::XEnumeration> xRunEnum = xRunEnumAccess->createEnumeration();
-    uno::Reference<beans::XPropertySet> xPropertySet(xRunEnum->nextElement(), uno::UNO_QUERY);
-    sal_Int32 nValue = 0;
     // \chcbpat with zero argument should mean the auto (-1) color, not a default color (black)
-    xPropertySet->getPropertyValue("CharBackColor") >>= nValue;
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), nValue);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), getProperty<sal_Int32>(getRun(getParagraph(1), 1), "CharBackColor"));
 }
 
 void Test::testFdo50665()
 {
     load("fdo50665.rtf");
-    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xTextDocument->getText(), uno::UNO_QUERY);
-    uno::Reference<container::XEnumeration> xParaEnum(xParaEnumAccess->createEnumeration());
-    uno::Reference<container::XEnumerationAccess> xRunEnumAccess(xParaEnum->nextElement(), uno::UNO_QUERY);
-    uno::Reference<container::XEnumeration> xRunEnum(xRunEnumAccess->createEnumeration());
-
     // Access the second run, which is a textfield
-    xRunEnum->nextElement();
-    uno::Reference<beans::XPropertySet> xRun(xRunEnum->nextElement(), uno::UNO_QUERY);
-    OUString aValue;
-    xRun->getPropertyValue("CharFontName") >>= aValue;
+    uno::Reference<beans::XPropertySet> xRun(getRun(getParagraph(1), 2), uno::UNO_QUERY);
     // This used to be the default, as character properties were ignored.
-    CPPUNIT_ASSERT_EQUAL(OUString("Book Antiqua"), aValue);
+    CPPUNIT_ASSERT_EQUAL(OUString("Book Antiqua"), getProperty<OUString>(xRun, "CharFontName"));
 }
 
 void Test::testFdo49659()
@@ -717,12 +678,8 @@ void Test::testFdo49659()
     // The graphic was also empty
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
-    uno::Reference<beans::XPropertySet> xPropertySet(xDraws->getByIndex(0), uno::UNO_QUERY);
-    uno::Reference<beans::XPropertySet> xGraphic;
-    xPropertySet->getPropertyValue("Graphic") >>= xGraphic;
-    sal_Int8 nValue = 0;
-    xGraphic->getPropertyValue("GraphicType") >>= nValue;
-    CPPUNIT_ASSERT_EQUAL(graphic::GraphicType::PIXEL, nValue);
+    uno::Reference<beans::XPropertySet> xGraphic(getProperty< uno::Reference<beans::XPropertySet> >(xDraws->getByIndex(0), "Graphic"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(graphic::GraphicType::PIXEL, getProperty<sal_Int8>(xGraphic, "GraphicType"));
 }
 
 void Test::testFdo46966()
@@ -735,9 +692,7 @@ void Test::testFdo46966()
     load("fdo46966.rtf");
 
     uno::Reference<beans::XPropertySet> xPropertySet(getStyles("PageStyles")->getByName("Default"), uno::UNO_QUERY);
-    sal_Int32 nValue = 0;
-    xPropertySet->getPropertyValue("TopMargin") >>= nValue;
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(TWIP_TO_MM100(720)), nValue);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(TWIP_TO_MM100(720)), getProperty<sal_Int32>(xPropertySet, "TopMargin"));
 }
 
 void Test::testFdo52066()
