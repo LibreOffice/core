@@ -7,14 +7,6 @@ ScVbaFormat<ooo::vba::excel::XRange>::setNumberFormat(com::sun::star::lang::Loca
 ScVbaFormat<ooo::vba::excel::XStyle>::getAddIndent()
 ScVbaFormat<ooo::vba::excel::XStyle>::setAddIndent(com::sun::star::uno::Any const&)
 ScVbaFormat<ooo::vba::excel::XStyle>::setNumberFormat(com::sun::star::lang::Locale, rtl::OUString const&)
-SvtUserOptions::SetCompany(rtl::OUString const&)
-SvtUserOptions::SetCountry(rtl::OUString const&)
-SvtUserOptions::SetFax(rtl::OUString const&)
-SvtUserOptions::SetFirstName(rtl::OUString const&)
-SvtUserOptions::SetID(rtl::OUString const&)
-SvtUserOptions::SetPosition(rtl::OUString const&)
-SvtUserOptions::SetState(rtl::OUString const&)
-SvtUserOptions::SetTitle(rtl::OUString const&)
 TextEngine::GetLeftMargin() const
 ThumbnailView::GetItemCount() const
 ThumbnailView::ImplScroll(Point const&)

@@ -78,14 +78,6 @@ public:
     rtl::OUString GetFullName       () const;
 
     // set the address token
-    void SetCompany        (rtl::OUString const&);
-    void SetFirstName      (rtl::OUString const&);
-    void SetID             (rtl::OUString const&);
-    void SetState          (rtl::OUString const&);
-    void SetCountry        (rtl::OUString const&);
-    void SetPosition       (rtl::OUString const&);
-    void SetTitle          (rtl::OUString const&);
-    void SetFax            (rtl::OUString const&);
     void SetCustomerNumber (rtl::OUString const&);
 
     sal_Bool      IsTokenReadonly (sal_uInt16 nToken) const;
