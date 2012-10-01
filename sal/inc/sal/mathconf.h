@@ -69,16 +69,6 @@ extern "C" {
 #define SAL_MATH_FINITE(d) std::isfinite(d)
 #elif defined( WNT)
 #define SAL_MATH_FINITE(d) _finite(d)
-#elif defined IOS
-/* C++ is so nice. This is the only way I could come up with making
- * this actually work in all cases (?), even when <cmath> has been
- * included which #undefs isfinite: copy the definition of isfinite()
- * from <architecture/arm/math.h>
- */
-#define SAL_MATH_FINITE(d) \
-  ( sizeof (d) == sizeof(float ) ?  __inline_isfinitef((float)(d)) \
-  : sizeof (d) == sizeof(double) ?  __inline_isfinited((double)(d)) \
-                                 :  __inline_isfinite ((long double)(d)))
 #elif defined LINUX || defined UNX
 #define SAL_MATH_FINITE(d) finite(d)
 #else /* WNT, LINUX, UNX */
