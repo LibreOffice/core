@@ -3542,6 +3542,16 @@ void DomainMapper::lcl_utext(const sal_uInt8 * data_, size_t len)
 
         if(len == 1 && (sText[0] == 0x0d || sText[0] == 0x07))
         {
+            PropertyMapPtr pContext = m_pImpl->GetTopContextOfType(CONTEXT_PARAGRAPH);
+            if (pContext && m_pImpl->GetSettingsTable()->GetSplitPgBreakAndParaMark())
+            {
+                if (m_pImpl->isBreakDeferred(PAGE_BREAK))
+                    pContext->Insert(PROP_BREAK_TYPE, true, uno::makeAny( com::sun::star::style::BreakType_PAGE_BEFORE));
+                else if (m_pImpl->isBreakDeferred(COLUMN_BREAK))
+                    pContext->Insert(PROP_BREAK_TYPE, true, uno::makeAny( com::sun::star::style::BreakType_COLUMN_BEFORE));
+                m_pImpl->clearDeferredBreaks();
+            }
+
             bool bSingleParagraph = m_pImpl->GetIsFirstParagraphInSection() && m_pImpl->GetIsLastParagraphInSection();
             // If the paragraph contains only the section properties and it has
             // no runs, we should not create a paragraph for it in Writer, unless that would remove the whole section.

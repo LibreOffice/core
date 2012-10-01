@@ -69,6 +69,7 @@ class WRITERFILTER_DLLPRIVATE SettingsTable : public LoggedProperties, public Lo
     bool GetEmbedSystemFonts() const;
 
     bool GetDoNotUseHTMLParagraphAutoSpacing() const;
+    bool GetSplitPgBreakAndParaMark() const;
 
     void ApplyProperties( uno::Reference< text::XTextDocument > xDoc );
 

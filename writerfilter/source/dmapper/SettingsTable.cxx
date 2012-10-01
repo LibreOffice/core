@@ -72,6 +72,7 @@ struct SettingsTable_Impl
     bool                embedTrueTypeFonts;
     bool                embedSystemFonts;
     bool                m_bDoNotUseHTMLParagraphAutoSpacing;
+    bool                m_bSplitPgBreakAndParaMark;
 
     SettingsTable_Impl( DomainMapper& rDMapper, const uno::Reference< lang::XMultiServiceFactory > xTextFactory ) :
     m_rDMapper( rDMapper )
@@ -95,6 +96,7 @@ struct SettingsTable_Impl
     , embedTrueTypeFonts(false)
     , embedSystemFonts(false)
     , m_bDoNotUseHTMLParagraphAutoSpacing(false)
+    , m_bSplitPgBreakAndParaMark(false)
     {}
 
 };
@@ -214,6 +216,9 @@ void SettingsTable::lcl_sprm(Sprm& rSprm)
     case NS_ooxml::LN_CT_Compat_doNotUseHTMLParagraphAutoSpacing:
         m_pImpl->m_bDoNotUseHTMLParagraphAutoSpacing = nIntValue;
         break;
+    case NS_ooxml::LN_CT_Compat_splitPgBreakAndParaMark:
+        m_pImpl->m_bSplitPgBreakAndParaMark = nIntValue;
+        break;
     default:
     {
 #ifdef DEBUG_DMAPPER_SETTINGS_TABLE
@@ -269,6 +274,11 @@ bool SettingsTable::GetEmbedSystemFonts() const
 bool SettingsTable::GetDoNotUseHTMLParagraphAutoSpacing() const
 {
     return m_pImpl->m_bDoNotUseHTMLParagraphAutoSpacing;
+}
+
+bool SettingsTable::GetSplitPgBreakAndParaMark() const
+{
+    return m_pImpl->m_bSplitPgBreakAndParaMark;
 }
 
 void SettingsTable::ApplyProperties( uno::Reference< text::XTextDocument > xDoc )
