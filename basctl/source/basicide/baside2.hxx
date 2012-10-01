@@ -64,8 +64,8 @@ DBG_NAMEEX( ModulWindow )
 // using the stream interface (get/setText() only supports
 // tools Strings limited to 64K).
 // defined in baside2b.cxx
-rtl::OUString getTextEngineText (ExtTextEngine&);
-void setTextEngineText (ExtTextEngine&, rtl::OUString const&);
+OUString getTextEngineText (ExtTextEngine&);
+void setTextEngineText (ExtTextEngine&, OUString const&);
 
 
 class EditorWindow : public Window, public SfxListener
@@ -192,7 +192,7 @@ class WatchTreeListBox : public SvHeaderTabListBox
 
 protected:
     virtual sal_Bool    EditingEntry( SvLBoxEntry* pEntry, Selection& rSel  );
-    virtual sal_Bool    EditedEntry( SvLBoxEntry* pEntry, const rtl::OUString& rNewText );
+    virtual sal_Bool    EditedEntry( SvLBoxEntry* pEntry, const OUString& rNewText );
 
     bool            ImplBasicEntryEdited( SvLBoxEntry* pEntry, const String& rResult );
     SbxBase*        ImplGetSBXForEntry( SvLBoxEntry* pEntry, bool& rbArrayElement );
@@ -294,8 +294,8 @@ private:
     ComplexEditorWindow aXEditorWindow;
     BasicStatus         aStatus;
     SbModuleRef         xModule;
-    ::rtl::OUString     aCurPath;
-    ::rtl::OUString     m_aModule;
+    OUString            aCurPath;
+    OUString            m_aModule;
 
     void                CheckCompileBasic();
     bool                BasicExecute();
@@ -314,7 +314,7 @@ protected:
 public:
                     TYPEINFO();
 
-    ModulWindow( ModulWindowLayout* pParent, const ScriptDocument& rDocument, ::rtl::OUString aLibName, ::rtl::OUString aName, ::rtl::OUString& aModule );
+    ModulWindow( ModulWindowLayout* pParent, const ScriptDocument& rDocument, OUString aLibName, OUString aName, OUString& aModule );
 
                     ~ModulWindow();
 
@@ -328,7 +328,7 @@ public:
     virtual sal_Int32 countPages( Printer* pPrinter );
     // print page
     virtual void printPage( sal_Int32 nPage, Printer* pPrinter );
-    virtual ::rtl::OUString  GetTitle();
+    virtual OUString  GetTitle();
     virtual EntryDescriptor CreateEntryDescriptor();
     virtual bool    AllowUndo();
     virtual void    SetReadOnly (bool bReadOnly);
@@ -338,7 +338,7 @@ public:
 
     SbModule*       GetSbModule() { return xModule; }
     void            SetSbModule( SbModule* pModule ) { xModule = pModule; }
-    ::rtl::OUString GetSbModuleName();
+    OUString        GetSbModuleName();
 
     bool            CompileBasic();
     bool            BasicRun();
@@ -391,8 +391,8 @@ public:
     virtual ::svl::IUndoManager*
                         GetUndoManager();
 
-    const ::rtl::OUString&  GetModule() const { return m_aModule; }
-    void                    SetModule( const ::rtl::OUString& aModule ) { m_aModule = aModule; }
+    const OUString&         GetModule() const { return m_aModule; }
+    void                    SetModule( const OUString& aModule ) { m_aModule = aModule; }
 
     virtual void Activating ();
     virtual void Deactivating ();

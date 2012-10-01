@@ -237,9 +237,9 @@ void LibBox::FillBox()
 void LibBox::InsertEntries( const ScriptDocument& rDocument, LibraryLocation eLocation )
 {
     // get a sorted list of library names
-    Sequence< ::rtl::OUString > aLibNames = rDocument.getLibraryNames();
+    Sequence< OUString > aLibNames = rDocument.getLibraryNames();
     sal_Int32 nLibCount = aLibNames.getLength();
-    const ::rtl::OUString* pLibNames = aLibNames.getConstArray();
+    const OUString* pLibNames = aLibNames.getConstArray();
 
     for ( sal_Int32 i = 0 ; i < nLibCount ; ++i )
     {
