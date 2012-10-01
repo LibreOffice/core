@@ -110,6 +110,8 @@ public:
         mpActionGroup = NULL;
     };
     void UpdateNativeMenu();
+    void UpdateNativeMenu2();
+    bool CanUpdate();
 };
 
 class GtkSalMenuItem : public SalMenuItem
