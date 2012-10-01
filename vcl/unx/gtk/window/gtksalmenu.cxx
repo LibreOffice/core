@@ -376,6 +376,8 @@ void GtkSalMenu::SetSubMenu( SalMenuItem* pSalMenuItem, SalMenu* pSubMenu, unsig
 void GtkSalMenu::SetFrame( const SalFrame* pFrame )
 {
     SolarMutexGuard aGuard;
+    assert(mbMenuBar);
+    std::cout << "GtkSalMenu set to frame" << std::endl;
     mpFrame = static_cast< const GtkSalFrame* >( pFrame );
     GtkSalFrame* pFrameNonConst = const_cast<GtkSalFrame*>(mpFrame);
     if(pFrameNonConst->GetMenu())
@@ -383,18 +385,21 @@ void GtkSalMenu::SetFrame( const SalFrame* pFrame )
         GtkSalMenu* pOldMenu = static_cast< GtkSalMenu*>(pFrameNonConst->GetMenu());
         pOldMenu->DisconnectFrame();
     }
-    pFrameNonConst->SetMenu( this );
-    GObject* pWindow = G_OBJECT(gtk_widget_get_window( GTK_WIDGET(pFrameNonConst->getWindow()) ));
-    if ( !pWindow )
-        return;
 
     // if we had a menu on the GtkSalMenu we have to free it as we generate a
     // full menu anyway and we might need to reuse an existing model and
     // actiongroup
     if(mpMenuModel)
+    {
         g_lo_menu_remove(G_LO_MENU(mpMenuModel), 0);
+        mpMenuModel = NULL;
+    }
     if(mpActionGroup)
+    {
         g_lo_action_group_clear( G_LO_ACTION_GROUP(mpActionGroup) );
+        mpActionGroup = NULL;
+    }
+    pFrameNonConst->SetMenu( this );
     pFrameNonConst->EnsureAppMenuWatch();
     // Generate the main menu structure.
     UpdateNativeMenu();
@@ -595,7 +600,6 @@ void GtkSalMenu::DispatchCommand( gint itemId, const gchar *aCommand )
 
 void GtkSalMenu::Activate( const gchar* aMenuCommand )
 {
-    SolarMutexGuard aGuard;
     if ( mbMenuBar != TRUE )
         return;
 
@@ -603,13 +607,12 @@ void GtkSalMenu::Activate( const gchar* aMenuCommand )
 
     if ( pSalSubMenu != NULL ) {
         pSalSubMenu->mpVCLMenu->Activate();
-        UpdateNativeMenu2(pSalSubMenu);
+        UpdateNativeMenu2( pSalSubMenu );
     }
 }
 
 void GtkSalMenu::Deactivate( const gchar* aMenuCommand )
 {
-    SolarMutexGuard aGuard;
     if ( mbMenuBar != TRUE )
         return;
 
