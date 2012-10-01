@@ -125,6 +125,8 @@ void GtkSalMenu::UpdateNativeMenu( )
 
         if ( pSalMenuItem->mnType == MENUITEM_SEPARATOR )
         {
+            while ( nItemPos < g_lo_menu_get_n_items_from_section( pLOMenu, nSection ) )
+                g_lo_menu_remove_from_section( pLOMenu, nSection, nItemPos );
             nSection++;
             nItemPos = 0;
 
@@ -204,8 +206,16 @@ void GtkSalMenu::UpdateNativeMenu( )
 
         g_free( aNativeCommand );
 
-        nItemPos++;
-        validItems++;
+        ++nItemPos;
+        ++validItems;
+    }
+    while ( nItemPos < g_lo_menu_get_n_items_from_section( pLOMenu, nSection ) )
+        g_lo_menu_remove_from_section( pLOMenu, nSection, nItemPos );
+    ++nSection;
+    if ( nSection < g_menu_model_get_n_items( G_MENU_MODEL( pLOMenu ) ) )
+    {
+        std::cout << "nSection " << nSection << " model sections " << g_menu_model_get_n_items( G_MENU_MODEL( pLOMenu ) ) << std::endl;
+        g_lo_menu_remove(pLOMenu, nSection );
     }
 }
 
@@ -300,12 +310,12 @@ void GtkSalMenu::SetFrame( const SalFrame* pFrame )
     // actiongroup
     if(mpMenuModel)
     {
-        g_lo_menu_remove(G_LO_MENU(mpMenuModel), 0);
+        g_object_unref(G_OBJECT(mpMenuModel));
         mpMenuModel = NULL;
     }
     if(mpActionGroup)
     {
-        g_lo_action_group_clear( G_LO_ACTION_GROUP(mpActionGroup) );
+        g_object_unref(G_OBJECT(mpActionGroup));
         mpActionGroup = NULL;
     }
     pFrameNonConst->SetMenu( this );
