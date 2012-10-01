@@ -90,7 +90,7 @@ TYPEINIT1( ModulWindow , BaseWindow );
 namespace
 {
 
-void lcl_PrintHeader( Printer* pPrinter, sal_uInt16 nPages, sal_uInt16 nCurPage, const ::rtl::OUString& rTitle, bool bOutput )
+void lcl_PrintHeader( Printer* pPrinter, sal_uInt16 nPages, sal_uInt16 nCurPage, const OUString& rTitle, bool bOutput )
 {
     Size const aSz = pPrinter->GetOutputSize();
 
@@ -133,8 +133,8 @@ void lcl_PrintHeader( Printer* pPrinter, sal_uInt16 nPages, sal_uInt16 nCurPage,
 
         if( bOutput )
         {
-            ::rtl::OUStringBuffer aPageStr;
-            aPageStr.appendAscii( RTL_CONSTASCII_STRINGPARAM( " [" ) );
+            OUStringBuffer aPageStr;
+            aPageStr.appendAscii( " [" );
             aPageStr.append(IDE_RESSTR(RID_STR_PAGE));
             aPageStr.append(' ');
             aPageStr.append( nCurPage );
@@ -190,7 +190,7 @@ bool bSourceLinesEnabled = false;
 ModulWindow::ModulWindow (
     ModulWindowLayout* pParent,
     ScriptDocument const& rDocument,
-    rtl::OUString aLibName, rtl::OUString aName, rtl::OUString& aModule
+    OUString aLibName, OUString aName, OUString& aModule
 ) :
     BaseWindow(pParent, rDocument, aLibName, aName),
     rLayout(*pParent),
@@ -358,7 +358,7 @@ bool ModulWindow::BasicExecute()
             if ( !pMethod )
             {
                 // If not in a method then prompt the user
-                return ( !ChooseMacro( uno::Reference< frame::XModel >(), false, rtl::OUString() ).isEmpty() );
+                return ( !ChooseMacro( uno::Reference< frame::XModel >(), false, OUString() ).isEmpty() );
             }
             if ( pMethod )
             {
@@ -442,20 +442,20 @@ bool ModulWindow::LoadBasic()
         Sequence <Any> aServiceType(1);
         aServiceType[0] <<= TemplateDescription::FILEOPEN_SIMPLE;
         xFP = Reference< XFilePicker >( xMSF->createInstanceWithArguments(
-                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.dialogs.FilePicker" ) ), aServiceType ), UNO_QUERY );
+            "com.sun.star.ui.dialogs.FilePicker", aServiceType ), UNO_QUERY );
     }
 
     if ( !aCurPath.isEmpty() )
         xFP->setDisplayDirectory ( aCurPath );
 
     Reference< XFilterManager > xFltMgr(xFP, UNO_QUERY);
-    xFltMgr->appendFilter( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "BASIC" ) ), ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "*.bas" ) ) );
-    xFltMgr->appendFilter( IDE_RESSTR(RID_STR_FILTER_ALLFILES), ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( FilterMask_All ) ) );
-    xFltMgr->setCurrentFilter( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "BASIC" ) ) );
+    xFltMgr->appendFilter( "BASIC" , "*.bas" );
+    xFltMgr->appendFilter( IDE_RESSTR(RID_STR_FILTER_ALLFILES), OUString( FilterMask_All ) );
+    xFltMgr->setCurrentFilter( "BASIC" );
 
     if( xFP->execute() == RET_OK )
     {
-        Sequence< ::rtl::OUString > aPaths = xFP->getFiles();
+        Sequence< OUString > aPaths = xFP->getFiles();
         aCurPath = aPaths[0];
         SfxMedium aMedium( aCurPath, STREAM_READ | STREAM_SHARE_DENYWRITE | STREAM_NOCREATE );
         SvStream* pStream = aMedium.GetInStream();
@@ -496,7 +496,7 @@ bool ModulWindow::SaveBasicSource()
         Sequence <Any> aServiceType(1);
         aServiceType[0] <<= TemplateDescription::FILESAVE_AUTOEXTENSION_PASSWORD;
         xFP = Reference< XFilePicker >( xMSF->createInstanceWithArguments(
-                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.dialogs.FilePicker" ) ), aServiceType ), UNO_QUERY );
+                    "com.sun.star.ui.dialogs.FilePicker", aServiceType ), UNO_QUERY );
     }
 
     Reference< XFilePickerControlAccess > xFPControl(xFP, UNO_QUERY);
@@ -509,13 +509,13 @@ bool ModulWindow::SaveBasicSource()
         xFP->setDisplayDirectory ( aCurPath );
 
     Reference< XFilterManager > xFltMgr(xFP, UNO_QUERY);
-    xFltMgr->appendFilter( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "BASIC" ) ), ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "*.bas" ) ) );
-    xFltMgr->appendFilter( IDE_RESSTR(RID_STR_FILTER_ALLFILES), ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( FilterMask_All ) ) );
-    xFltMgr->setCurrentFilter( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "BASIC" ) ) );
+    xFltMgr->appendFilter( "BASIC", "*.bas" );
+    xFltMgr->appendFilter( IDE_RESSTR(RID_STR_FILTER_ALLFILES), OUString( FilterMask_All ) );
+    xFltMgr->setCurrentFilter( "BASIC" );
 
     if( xFP->execute() == RET_OK )
     {
-        Sequence< ::rtl::OUString > aPaths = xFP->getFiles();
+        Sequence< OUString > aPaths = xFP->getFiles();
         aCurPath = aPaths[0];
         SfxMedium aMedium( aCurPath, STREAM_WRITE | STREAM_SHARE_DENYWRITE | STREAM_TRUNC );
         SvStream* pStream = aMedium.GetOutStream();
@@ -539,12 +539,12 @@ bool ModulWindow::SaveBasicSource()
     return bDone;
 }
 
-extern bool implImportDialog( Window* pWin, const ::rtl::OUString& rCurPath, const ScriptDocument& rDocument, const ::rtl::OUString& aLibName ); // defined in baside3.cxx
+extern bool implImportDialog( Window* pWin, const OUString& rCurPath, const ScriptDocument& rDocument, const OUString& aLibName ); // defined in baside3.cxx
 
 bool ModulWindow::ImportDialog()
 {
     const ScriptDocument& rDocument = GetDocument();
-    ::rtl::OUString aLibName = GetLibName();
+    OUString aLibName = GetLibName();
     return implImportDialog( this, aCurPath, rDocument, aLibName );
 }
 
@@ -671,7 +671,7 @@ long ModulWindow::BasicErrorHdl( StarBASIC * pBasic )
     // ReturnWert: BOOL
     //  FALSE:  cancel
     //  TRUE:   go on....
-    ::rtl::OUString aErrorText( pBasic->GetErrorText() );
+    OUString aErrorText( pBasic->GetErrorText() );
     sal_uInt16 nErrorLine = pBasic->GetLine() - 1;
     sal_uInt16 nErrCol1 = pBasic->GetCol1();
     sal_uInt16 nErrCol2 = pBasic->GetCol2();
@@ -681,7 +681,7 @@ long ModulWindow::BasicErrorHdl( StarBASIC * pBasic )
     AssertValidEditEngine();
     GetEditView()->SetSelection( TextSelection( TextPaM( nErrorLine, nErrCol1 ), TextPaM( nErrorLine, nErrCol2 ) ) );
 
-    ::rtl::OUStringBuffer aErrorTextPrefixBuf;
+    OUStringBuffer aErrorTextPrefixBuf;
     if( pBasic->IsCompilerError() )
         aErrorTextPrefixBuf.append(IDE_RESSTR(RID_STR_COMPILEERROR));
     else
@@ -691,7 +691,7 @@ long ModulWindow::BasicErrorHdl( StarBASIC * pBasic )
         aErrorTextPrefixBuf.append(' ');
         rLayout.UpdateDebug(false);
     }
-    ::rtl::OUString aErrorTextPrefix(aErrorTextPrefixBuf.makeStringAndClear());
+    OUString aErrorTextPrefix(aErrorTextPrefixBuf.makeStringAndClear());
     // if other basic, the IDE should try to display the correct module
     bool const bMarkError = pBasic == GetBasic();
     if ( bMarkError )
@@ -766,7 +766,7 @@ void ModulWindow::BasicAddWatch()
     if ( !GetEditView()->HasSelection() )
     {
         TextPaM aWordStart;
-        ::rtl::OUString aWord = GetEditEngine()->GetWord( GetEditView()->GetSelection().GetEnd(), &aWordStart );
+        OUString aWord = GetEditEngine()->GetWord( GetEditView()->GetSelection().GetEnd(), &aWordStart );
         if ( !aWord.isEmpty() )
         {
             TextSelection aSel( aWordStart );
@@ -918,7 +918,7 @@ sal_Int32 ModulWindow::FormatAndPrint( Printer* pPrinter, sal_Int32 nPrintPage )
 
     // nLinepPage is not correct if there's a line break
     sal_uInt16 nLinespPage = (sal_uInt16) (aPaperSz.Height()/nLineHeight);
-    sal_uInt16 nCharspLine = (sal_uInt16) (aPaperSz.Width() / pPrinter->GetTextWidth(rtl::OUString('X')) );
+    sal_uInt16 nCharspLine = (sal_uInt16) (aPaperSz.Width() / pPrinter->GetTextWidth( 'X' ) );
     sal_uLong nParas = GetEditEngine()->GetParagraphCount();
 
     sal_uInt16 nPages = (sal_uInt16) (nParas/nLinespPage+1 );
@@ -1161,7 +1161,7 @@ void ModulWindow::GetState( SfxItemSet &rSet )
                     String aPos( IDEResId( RID_STR_LINE ) );
                     aPos += ' ';
                     aPos += String::CreateFromInt32( aSel.GetEnd().GetPara()+1 );
-                    aPos += String( RTL_CONSTASCII_USTRINGPARAM( ", " ) );
+                    aPos += String( ", " );
                     aPos += String( IDEResId( RID_STR_COLUMN ) );
                     aPos += ' ';
                     aPos += String::CreateFromInt32( aSel.GetEnd().GetIndex()+1 );
@@ -1217,15 +1217,15 @@ void ModulWindow::GoOnTop()
     GetShell()->GetViewFrame()->ToTop();
 }
 
-::rtl::OUString ModulWindow::GetSbModuleName()
+OUString ModulWindow::GetSbModuleName()
 {
-    ::rtl::OUString aModuleName;
+    OUString aModuleName;
     if ( XModule().Is() )
         aModuleName = xModule->GetName();
     return aModuleName;
 }
 
-::rtl::OUString ModulWindow::GetTitle()
+OUString ModulWindow::GetTitle()
 {
     return GetSbModuleName();
 }
@@ -1381,7 +1381,7 @@ EntryDescriptor ModulWindow::CreateEntryDescriptor()
                 uno::Reference< container::XNameContainer > xLib = aDocument.getOrCreateLibrary( E_SCRIPTS, aLibName );
                 if( xLib.is() )
                 {
-                    ::rtl::OUString sObjName;
+                    OUString sObjName;
                     ModuleInfoHelper::getObjectName( xLib, aModName, sObjName );
                     if( !sObjName.isEmpty() )
                     {
@@ -1461,7 +1461,7 @@ bool ModulWindow::HasActiveEditor () const
 
 void ModulWindow::UpdateModule ()
 {
-    rtl::OUString const aModule = getTextEngineText(*GetEditEngine());
+    OUString const aModule = getTextEngineText(*GetEditEngine());
 
     // update module in basic
     assert(xModule);
