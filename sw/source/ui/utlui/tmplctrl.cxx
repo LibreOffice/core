@@ -36,12 +36,12 @@
 
 SFX_IMPL_STATUSBAR_CONTROL( SwTemplateControl, SfxStringItem );
 
-// class TemplatePopup_Impl --------------------------------------------------
+// class SwTemplatePopup_Impl --------------------------------------------------
 
-class TemplatePopup_Impl : public PopupMenu
+class SwTemplatePopup_Impl : public PopupMenu
 {
 public:
-    TemplatePopup_Impl();
+    SwTemplatePopup_Impl();
 
     sal_uInt16          GetCurId() const { return nCurId; }
 
@@ -51,13 +51,13 @@ private:
     virtual void    Select();
 };
 
-TemplatePopup_Impl::TemplatePopup_Impl() :
+SwTemplatePopup_Impl::SwTemplatePopup_Impl() :
     PopupMenu(),
     nCurId(USHRT_MAX)
 {
 }
 
-void TemplatePopup_Impl::Select()
+void SwTemplatePopup_Impl::Select()
 {
     nCurId = GetCurItemId();
 }
@@ -98,7 +98,7 @@ void SwTemplateControl::Command( const CommandEvent& rCEvt )
             GetStatusBar().GetItemText( GetId() ).Len() )
     {
         CaptureMouse();
-        TemplatePopup_Impl aPop;
+        SwTemplatePopup_Impl aPop;
         {
             SwView* pView = ::GetActiveView();
             SwWrtShell* pWrtShell;

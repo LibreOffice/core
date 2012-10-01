@@ -31,12 +31,12 @@
 
 SFX_IMPL_STATUSBAR_CONTROL( SdTemplateControl, SfxStringItem );
 
-// class TemplatePopup_Impl --------------------------------------------------
+// class SdTemplatePopup_Impl --------------------------------------------------
 
-class TemplatePopup_Impl : public PopupMenu
+class SdTemplatePopup_Impl : public PopupMenu
 {
 public:
-    TemplatePopup_Impl();
+    SdTemplatePopup_Impl();
 
     sal_uInt16          GetCurId() const { return nCurId; }
 
@@ -48,7 +48,7 @@ private:
 
 // -----------------------------------------------------------------------
 
-TemplatePopup_Impl::TemplatePopup_Impl() :
+SdTemplatePopup_Impl::SdTemplatePopup_Impl() :
     PopupMenu(),
     nCurId(USHRT_MAX)
 {
@@ -56,7 +56,7 @@ TemplatePopup_Impl::TemplatePopup_Impl() :
 
 // -----------------------------------------------------------------------
 
-void TemplatePopup_Impl::Select()
+void SdTemplatePopup_Impl::Select()
 {
     nCurId = GetCurItemId();
 }
@@ -114,7 +114,7 @@ void SdTemplateControl::Command( const CommandEvent& rCEvt )
             return;
 
         CaptureMouse();
-        TemplatePopup_Impl aPop;
+        SdTemplatePopup_Impl aPop;
         {
             const sal_uInt16 nMasterCount = pDoc->GetMasterSdPageCount(PK_STANDARD);
 
