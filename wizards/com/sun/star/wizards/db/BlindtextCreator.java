@@ -20,10 +20,6 @@ package com.sun.star.wizards.db;
 import com.sun.star.wizards.common.JavaTools;
 import com.sun.star.wizards.common.PropertyNames;
 
-/**
- *
- * @author  bc93774
- */
 public class BlindtextCreator
 {
 

@@ -19,11 +19,7 @@ package com.sun.star.wizards.reportbuilder.layout;
 
 import com.sun.star.awt.FontDescriptor;
 import com.sun.star.report.XFixedText;
-// import com.sun.star.wizards.common.PropertySetHelper;
-/**
- *
- * @author ll93751
- */
+
 public class SectionLabel extends SectionObject
 {
 

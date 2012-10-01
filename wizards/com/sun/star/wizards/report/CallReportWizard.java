@@ -29,33 +29,11 @@ import java.util.logging.Logger;
 
 /** This class capsulates the class, that implements the minimal component, a
  * factory for creating the service (<CODE>__getServiceFactory</CODE>).
- * @author Bertram Nolte
  */
 public class CallReportWizard
 {
 
     static boolean bWizardstartedalready;
-
-/*    public static void main(String args[])
-    {
-        String ConnectStr = "uno:pipe,name=fs93730;urp;StarOffice.ServiceManager";
-        try
-        {
-            XMultiServiceFactory orb = Desktop.connect(ConnectStr);
-            if ( orb != null )
-            {
-                PropertyValue[] curproperties = new PropertyValue[1];
-                curproperties[0] = Properties.createProperty("DataSourceName", "countries");
-
-                ReportWizard wizard = new ReportWizard( orb, curproperties );
-                wizard.startReportWizard();
-            }
-        }
-        catch (java.lang.Exception jexception)
-        {
-            jexception.printStackTrace(System.err);
-        }
-    }*/
 
     /** Gives a factory for creating the service.
      * This method is called by the <code>JavaLoader</code>
@@ -152,7 +130,6 @@ public class CallReportWizard
         {
             this.m_wizardContext = Properties.convertToPropertyValueArray(object);
 
-        //    xmultiservicefactory = (XMultiservicefactory) UnoRuntime.queryInterface(XMultiServiceFactory.class, object[0]);
         }
 
         /** This method returns an array of all supported service names.

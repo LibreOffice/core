@@ -24,8 +24,6 @@ import com.sun.star.wizards.common.JavaTools;
 import com.sun.star.wizards.common.PropertyNames;
 
 /**
- * @author Administrator
- *
  * To change the template for this generated type comment go to
  * Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and Comments
  */
@@ -45,7 +43,6 @@ public abstract class DBLimitedFieldSelection
     protected int iCurPosY;
     protected int FirstHelpIndex;
     protected int iCompPosX;
-    // protected int MaxSelIndex;
 
     public DBLimitedFieldSelection(WizardDialog _CurUnoDialog, int iStep, int _iCompPosX, int iCompPosY, int iCompWidth, int _FirstHelpIndex)
     {
@@ -59,7 +56,6 @@ public abstract class DBLimitedFieldSelection
         ICompPosX = new Integer(iCompPosX);
         ICompPosY = new Integer(iCompPosY);
         ICompWidth = new Integer(iCompWidth);
-        // boolean bDoEnable;
         iCurPosY = iCompPosY;
         for (int i = 0; i < rowcount; i++)
         {
@@ -75,13 +71,11 @@ public abstract class DBLimitedFieldSelection
 
     protected abstract void updateFromNextControlRow(int CurIndex);
 
-    // protected abstract void setMaxSelIndex();
 
     protected abstract int getMaxSelIndex();
 
     protected void moveupSelectedItems(int CurIndex, boolean bDoEnable)
     {
-        // short iNextItemPos;
         if ((!bDoEnable) && (MAXSELINDEX > CurIndex))
         {
             for (int i = CurIndex; i < MAXSELINDEX; i++)

@@ -40,7 +40,6 @@ import com.sun.star.ucb.XDynamicResultSet;
 import com.sun.star.uno.UnoRuntime;
 
 /**
- * @author rpiterman
  * This class is used to copy the content of a folder to
  * another folder.
  * There is an incosistency with argument order.
@@ -100,7 +99,6 @@ public class UCB
         {
           fa.fileAccess.createFolder(targetDir);
         }
-        //System.out.println("UCB.copy(" + sourceDir + ", " + filename +  ", " + targetDir+ ", " + targetName);
         executeCommand(ucb, "globalTransfer", copyArg(sourceDir,filename, targetDir,targetName));
     }
     
@@ -246,7 +244,6 @@ public class UCB
     
     public Object getContent(String path) throws Exception
     {
-        //System.out.println("Getting Content for : " + path);
         XContentIdentifier id = UnoRuntime.queryInterface(XContentIdentifierFactory.class, ucb).createContentIdentifier(path);
           
         return UnoRuntime.queryInterface(

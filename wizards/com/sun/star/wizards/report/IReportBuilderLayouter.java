@@ -20,7 +20,6 @@ package com.sun.star.wizards.report;
 /**
  * This Interface separate the ReportBuilderImplementation from the layout.
  * Only these less methods are allowed to access from the ReportBuilderImplementation.
- * @author ll93751
  */
 public interface IReportBuilderLayouter
 {

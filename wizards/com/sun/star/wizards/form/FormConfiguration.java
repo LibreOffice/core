@@ -30,8 +30,6 @@ import com.sun.star.wizards.ui.WizardDialog;
 import com.sun.star.wizards.db.RelationController;
 
 /**
- * @author Administrator
- *
  * To change the template for this generated type comment go to
  * Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and Comments
  */
@@ -124,10 +122,6 @@ public class FormConfiguration
         CurUnoDialog.insertInfoImage(97, 120, ISubFormStep.intValue());
     }
 
-    // public void disableSubFormCheckBox()
-    // {
-    //     Helper.setUnoPropertyValue(UnoDialog.getModel(chkcreateSubForm), PropertyNames.PROPERTY_ENABLED, Boolean.FALSE);
-    // }
 
     public RelationController getRelationController()
     {

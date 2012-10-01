@@ -43,9 +43,6 @@ import com.sun.star.wizards.common.JavaTools;
 import com.sun.star.wizards.common.Properties;
 import com.sun.star.wizards.common.PropertyNames;
 
-/**
- * @author  rpiterman
- */
 public class CGSettings extends ConfigGroup
 {
 

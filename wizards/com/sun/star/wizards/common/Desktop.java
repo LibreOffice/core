@@ -17,14 +17,7 @@
  */
 package com.sun.star.wizards.common;
 
-// import java.util.Date;
-
-// import com.sun.star.awt.XToolkit;
 import com.sun.star.beans.PropertyValue;
-// import com.sun.star.frame.XDesktop;
-// import com.sun.star.frame.XFrame;
-// import com.sun.star.frame.XFramesSupplier;
-
 import com.sun.star.lang.WrappedTargetException;
 import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiComponentFactory;
@@ -347,8 +340,6 @@ public class Desktop
 
     /**
      * @deprecated used to retrieve the most common paths used in the office application
-     * @author bc93774
-     * 
      */
     public class OfficePathRetriever
     {

@@ -18,7 +18,6 @@
 package com.sun.star.wizards.web;
 
 /**
- * @author rpiterman
  * Error IDs for errors that can accure
  * in the interaction with the Process class.
  */

@@ -25,7 +25,6 @@ import java.util.Iterator;
 import com.sun.star.wizards.common.PropertyNames;
 
 /**
- * @author rpiterman
  * DataAware objects are used to live-synchronize UI and DataModel/DataObject.
  * It is used as listener on UI events, to keep the DataObject up to date.
  * This class, as a base abstract class, sets a frame of functionality,
@@ -45,8 +44,6 @@ public abstract class DataAware {
      * this is the data object.
      */
     protected Object dataObject;
-    //protected Method setMethod;
-    //protected Method getMethod;
     /**
      * A Value Object knows how to get/set a value
      * from/to the data object.
@@ -61,8 +58,6 @@ public abstract class DataAware {
     protected DataAware(Object dataObject_, Value value_) {
         dataObject = dataObject_;
         value = value_;
-        //getMethod = createGetMethod(dataPropName, dataObject);
-        //setMethod = createSetMethod(dataPropName, dataObject, getMethod.getReturnType());
     }
 
     /**

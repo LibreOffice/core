@@ -80,11 +80,8 @@ public class UnoDialog implements EventNames
             xPSetDlg = UnoRuntime.queryInterface(XPropertySet.class, xDialogModel);
             xDlgContainer = UnoRuntime.queryInterface(XControlContainer.class, xUnoDialog);
             xDlgNames = UnoRuntime.queryInterface(XNameContainer.class, xDialogModel);
-            // xDlgNameAccess = (XNameAccess) UnoRuntime.queryInterface(XNameAccess.class, xDialogModel);
             xComponent = UnoRuntime.queryInterface(XComponent.class, xUnoDialog);
             xWindow = UnoRuntime.queryInterface(XWindow.class, xUnoDialog);
-
-        // setPeerConfiguration(); // LLA: will be done, if really used!
         }
         catch (com.sun.star.uno.Exception exception)
         {
@@ -150,10 +147,6 @@ public class UnoDialog implements EventNames
                 {
                     com.sun.star.uno.Type seqType = new com.sun.star.uno.Type(PropertyValue.getClass());
                     PropertyValue = new com.sun.star.uno.Any(seqType, PropertyValue);
-                /*              PropertyValue = Helper.getArrayValue(PropertyValue);
-                if (PropertyValue == null)
-                PropertyValue = new short[]{};
-                 */
                 }
                 xPSet.setPropertyValue(PropertyName, PropertyValue);
             }
@@ -302,18 +295,6 @@ public class UnoDialog implements EventNames
         }
     }
 
-    /*    public XButton insertButton(String sName, int iControlKey, XActionListener xActionListener, String[] sProperties, Object[] sValues) throws com.sun.star.uno.Exception{
-    Object oButtonModel = insertControlModel("com.sun.star.awt.UnoControlButtonModel", sName, sProperties, sValues);
-    XPropertySet xPSet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, oButtonModel);
-    xPSet.setPropertyValue(PropertyNames.PROPERTY_NAME, sName);
-    Object objectButton = xDlgContainer.getControl( new String(sName));
-    XButton xButton = ( XButton ) UnoRuntime.queryInterface( XButton.class, objectButton );
-    xButton.addActionListener(xActionListener);
-    Integer ControlKey = new Integer(iControlKey);
-    if (ControlList != null)
-    ControlList.put(sName, ControlKey);
-    return xButton;
-    } */
     public XButton insertButton(String sName, int iControlKey, XActionListener xActionListener, String[] sProperties, Object[] sValues) throws com.sun.star.uno.Exception
     {
         Object oButtonModel = insertControlModel("com.sun.star.awt.UnoControlButtonModel", sName, sProperties, sValues);
@@ -538,7 +519,6 @@ public class UnoDialog implements EventNames
     }
 
     /**
-     * @author bc93774
      * The problem with setting the visibility of controls is that changing the current step
      * of a dialog will automatically make all controls visible. The PropertyNames.PROPERTY_STEP property always wins against
      * the property "visible". Therfor a control meant to be invisible is placed on a step far far away.
@@ -559,7 +539,6 @@ public class UnoDialog implements EventNames
     }
 
     /**
-     * @author bc93774
      * The problem with setting the visibility of controls is that changing the current step
      * of a dialog will automatically make all controls visible. The PropertyNames.PROPERTY_STEP property always wins against
      * the property "visible". Therfor a control meant to be invisible is placed on a step far far away.
@@ -592,7 +571,6 @@ public class UnoDialog implements EventNames
 
     /**
      * repaints the currentDialogStep
-     * @author bc93774
      */
     public void repaintDialogStep()
     {
@@ -671,7 +649,6 @@ public class UnoDialog implements EventNames
     }
 
     /** deselects a Listbox. MultipleMode is not supported
-     *
      * @param _xBasisListBox
      */
     public static void deselectListBox(XInterface _xBasisListBox)
@@ -686,7 +663,7 @@ public class UnoDialog implements EventNames
 
     public void calculateDialogPosition(Rectangle FramePosSize)
     {
-        // Todo: check if it would be useful or possible to create a dialog peer, that can be used for the messageboxes to
+        // TODO: check if it would be useful or possible to create a dialog peer, that can be used for the messageboxes to
         // maintain modality when they pop up.
         Rectangle CurPosSize = xWindow.getPosSize();
         int WindowHeight = FramePosSize.Height;
@@ -716,7 +693,6 @@ public class UnoDialog implements EventNames
             createWindowPeer();
         }
         xVclWindowPeer = UnoRuntime.queryInterface(XVclWindowPeer.class, xWindowPeer);
-//      xVclWindowPeer.setProperty("AutoMnemonics", new Boolean(true));
         this.BisHighContrastModeActivated = Boolean.valueOf(this.isHighContrastModeActivated());
         xDialog = UnoRuntime.queryInterface(XDialog.class, xUnoDialog);
         return xDialog.execute();
@@ -735,7 +711,6 @@ public class UnoDialog implements EventNames
     }
 
     /**
-     *
      * @param parent
      * @return 0 for cancel, 1 for ok.
      * @throws com.sun.star.uno.Exception
@@ -747,7 +722,6 @@ public class UnoDialog implements EventNames
     }
 
     /**
-     *
      * @param xComponent
      * @return 0 for cancel, 1 for ok.
      * @throws com.sun.star.uno.Exception
@@ -875,7 +849,6 @@ public class UnoDialog implements EventNames
     }
 
     /**
-     * @author bc93774
      * @param oControlModel the model of a control
      * @return the LabelType according to UIConsts.CONTROLTYPE
      */
@@ -961,7 +934,6 @@ public class UnoDialog implements EventNames
     }
 
     /**
-     * @author bc93774
      * @param oControlModel
      * @return the name of the property that contains the value of a controlmodel
      */
@@ -973,13 +945,11 @@ public class UnoDialog implements EventNames
     }
 
     /**
-     * @author bc93774
      * @param itype The type of the control conforming to UIConst.ControlType
      * @return the name of the property that contains the value of a controlmodel
      */
     public static String getDisplayProperty(int itype)
     {
-        // String propertyname = PropertyNames.EMPTY_STRING;
         switch (itype)
         {
             case UIConsts.CONTROLTYPE.FIXEDTEXT:

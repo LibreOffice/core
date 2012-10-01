@@ -29,7 +29,6 @@ import java.lang.reflect.Method;
  * wrong type, or the mothod doesnot exist on the given object.
  * You can trick this class howmuch you want: it will all throw exceptions
  * on the java level. i throw no error warnings or my own excceptions...
- * @author  rpiterman
  */
 public class MethodInvocation
 {

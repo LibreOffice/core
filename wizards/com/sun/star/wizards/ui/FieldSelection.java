@@ -24,10 +24,6 @@ import com.sun.star.wizards.common.JavaTools;
 
 import java.util.*;
 
-/**
- *
- * @author  bc93774
- */
 public class FieldSelection
 {
     public XListBox xFieldsListBox;                 // Left ListBox
@@ -68,7 +64,6 @@ public class FieldSelection
 
         public void itemStateChanged(com.sun.star.awt.ItemEvent EventObject)
         {
-            // int iPos;
             com.sun.star.wizards.common.Helper.setUnoPropertyValue(CurUnoDialog.xDialogModel, PropertyNames.PROPERTY_ENABLED, Boolean.FALSE);
             int iKey = CurUnoDialog.getControlKey(EventObject.Source, CurUnoDialog.ControlList);
             switch (iKey)
@@ -138,9 +133,6 @@ public class FieldSelection
                         changeSelectionOrder(1);
                         break;
 
-                    default:
-                        // System.err.println( exception);
-                        break;
                 }
             }
             catch (Exception exception)
@@ -353,7 +345,7 @@ public class FieldSelection
         }
     }
 
-    // Todo: If Value is getting smaller than zero -> throw exception
+    // TODO: If Value is getting smaller than zero -> throw exception
     private Integer[] getYButtonPositions(int ButtonCount)
     {
         Integer[] YPosArray;
@@ -384,7 +376,7 @@ public class FieldSelection
     private void changeSelectionOrder(int iNeighbor)
     {
         short[] iSelIndices = xSelectedFieldsListBox.getSelectedItemsPos();
-        // Todo: we are assuming that the array starts with the lowest index. Verfy this assumption!!!!!
+        // TODO: we are assuming that the array starts with the lowest index. Verfy this assumption!!!!!
         if (iSelIndices.length == 1)
         {
             short iSelIndex = iSelIndices[0];
@@ -503,7 +495,6 @@ public class FieldSelection
 
     public void mergeList(String[] AllFieldNames, String[] SecondList)
     {
-        // int MaxIndex = SecondList.length;
         xFieldsListBox.addItems(AllFieldNames, (short) 0);
         toggleListboxButtons((short) - 1, (short) - 1);
     }
@@ -557,10 +548,8 @@ public class FieldSelection
 
     public void selectFields(boolean bMoveAll)
     {
-        // int CurIndex;
         short iFieldSelected = (short) - 1;
         short iSelFieldSelected = (short) - 1;
-        // int MaxCurTarget = xSelectedFieldsListBox.getItemCount();
         String[] SelFieldItems;
         if (bMoveAll)
         {
@@ -600,7 +589,6 @@ public class FieldSelection
 
     public void deselectFields(boolean bMoveAll)
     {
-        // int m = 0;
         String SearchString;
         short iOldFieldSelected = xFieldsListBox.getSelectedItemPos();
         short iOldSelFieldSelected = xSelectedFieldsListBox.getSelectedItemPos();
@@ -615,7 +603,6 @@ public class FieldSelection
         else
         {
             int MaxOriginalCount = AllFieldNames.length;
-            // int MaxSelected = OldSelFieldItems.length;
             String[] SelList = xFieldsListBox.getItems();
             Vector<String> NewSourceVector = new Vector<String>();
             for (int i = 0; i < MaxOriginalCount; i++)

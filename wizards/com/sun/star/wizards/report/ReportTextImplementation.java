@@ -52,10 +52,6 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/**
- *
- * @author ll93751
- */
 public class ReportTextImplementation extends ReportImplementationHelper implements IReportDocument
 {
 
@@ -334,7 +330,6 @@ public class ReportTextImplementation extends ReportImplementationHelper impleme
             DBColumn CurDBColumn;
             Object CurGroupValue;
             String CurGroupTableName;
-//                RecordParser CurDBMetaData = getRecordParser();
             getDoc().oTextFieldHandler.fixDateFields(true);
             getDoc().removeAllVisibleTextSections();
             getDoc().removeNonLayoutTextTables();
@@ -365,11 +360,9 @@ public class ReportTextImplementation extends ReportImplementationHelper impleme
                 }
                 if (getRecordParser().getcurrentRecordData(DataVector))
                 {
-                    // int RowIndex = 1;
                     m_bStopProcess = false;
                     while ((getRecordParser().ResultSet.next()) && (!m_bStopProcess))
                     {
-                        // RowIndex += 1;
                         breset = false;
                         for (ColIndex = 0; ColIndex < GroupFieldCount; ColIndex++)
                         {
@@ -385,7 +378,6 @@ public class ReportTextImplementation extends ReportImplementationHelper impleme
                             }
                         }
                         getRecordParser().getcurrentRecordData(DataVector);
-                    // updateProgressDisplay(RowIndex);
                     }
                     insertDataToRecordTable(xTextCursor, DataVector, RecordFieldCount);
                 }
@@ -418,10 +410,6 @@ public class ReportTextImplementation extends ReportImplementationHelper impleme
         {
             Logger.getLogger( ReportTextImplementation.class.getName() ).log( Level.SEVERE, null, ex );
         }
-//            catch (java.lang.Exception javaexception) 
-//            {
-//                javaexception.printStackTrace(System.err);
-//            }
         getDoc().unlockallControllers();
         getDoc().setLayoutSectionsVisible(false);
         getDoc().removeCopiedTextSections();
@@ -446,22 +434,6 @@ public class ReportTextImplementation extends ReportImplementationHelper impleme
         }
         DataVector.clear();
     }
-//    public void updateProgressDisplay(int iCounter) 
-//        {
-//            try 
-//            {
-//                if (iCounter % 10 == 0) 
-//                {
-//                    sProgressCurRecord = JavaTools.replaceSubString(sProgressBaseCurRecord, String.valueOf(iCounter), "<COUNT>");
-//                    setControlProperty("lblCurProgress", PropertyNames.PROPERTY_LABEL, sProgressCurRecord);
-//                    super.xReschedule.reschedule();
-//                }
-//            } 
-//            catch (java.lang.Exception jexception) 
-//            {
-//                jexception.printStackTrace(System.err);
-//            }
-//        }
     private void replaceUserFields()
     {
         DBColumn CurDBColumn;
@@ -495,7 +467,6 @@ public class ReportTextImplementation extends ReportImplementationHelper impleme
     public void store(String _sName, int _nOpenMode) throws com.sun.star.uno.Exception
     {
         getDoc().createReportForm(ReportWizard.SOREPORTFORMNAME);
-        // int nOpenMode = getReportOpenMode();
         getDoc().oTextFieldHandler.updateDateFields();
         getDoc().oTextFieldHandler.fixDateFields(false);
         if ((_nOpenMode == ReportFinalizer.SOCREATETEMPLATE || _nOpenMode == ReportFinalizer.SOUSETEMPLATE))
@@ -515,10 +486,6 @@ public class ReportTextImplementation extends ReportImplementationHelper impleme
         getDoc().refreshGroupFields(_sNewNames);
     }
 
-    // public boolean isGroupField(String _FieldName)
-    // {
-    //    return getDoc().isGroupField(_FieldName);
-    // }
     public void liveupdate_removeGroupName(String[] NewSelGroupNames, String CurGroupTitle, ArrayList<String> GroupFieldVector)
     {
         getDoc().removeGroupName(NewSelGroupNames, CurGroupTitle, GroupFieldVector);
@@ -540,7 +507,6 @@ public class ReportTextImplementation extends ReportImplementationHelper impleme
         {
             throw new com.sun.star.lang.IllegalArgumentException("Unknown Orientation.");
         }
-    // CurReportDocument.getDoc().unlockallControllers();
     }
 
     public void liveupdate_changeLayoutTemplate(String LayoutTemplatePath/*, String BitmapPath*/)
@@ -636,7 +602,6 @@ public class ReportTextImplementation extends ReportImplementationHelper impleme
             try
             {
                 m_aReportPath = FileAccess.getOfficePaths(getMSF(), "Template", "share", "/wizard");
-                // m_sReportPath = FileAccess.combinePaths(getMSF(), m_sReportPath, "/wizard/report");
                 FileAccess.combinePaths(getMSF(), m_aReportPath, "/wizard/report");
             }
             catch (Exception e)
@@ -687,7 +652,6 @@ public class ReportTextImplementation extends ReportImplementationHelper impleme
         String[][] ContentFiles;
         try
         {
-//                    ContentFiles = FileAccess.getFolderTitles(m_xMSF, "cnt", CurReportDocument.getReportPath());
             ContentFiles = FileAccess.getFolderTitles(getMSF(), "cnt", getReportPath());
             exchangeContentTitlesWithLocalisedOnes(ContentFiles);
         }
@@ -709,7 +673,6 @@ public class ReportTextImplementation extends ReportImplementationHelper impleme
         String[][] LayoutFiles;
         try
         {
-//                    LayoutFiles = FileAccess.getFolderTitles(m_xMSF, "stl", CurReportDocument.getReportPath());
             LayoutFiles = FileAccess.getFolderTitles(getMSF(), "stl", getReportPath());
             exchangeLayoutTitlesWithLocalisedOnes(LayoutFiles);
         }

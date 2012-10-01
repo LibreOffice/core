@@ -19,13 +19,9 @@ package com.sun.star.wizards.common;
 
 import com.sun.star.uno.Exception;
 
-/**
- *
- * @author ll93751
- */
 public class DebugHelper
 {
-
+//TODO - Verify these methods. Can not remove?
     public static void exception(String DetailedMessage, Exception ex, int err, String additionalArgument) throws java.lang.Exception
     {
 //        throw new UnsupportedOperationException("Not supported yet.");

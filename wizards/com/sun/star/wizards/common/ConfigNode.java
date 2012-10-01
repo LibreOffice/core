@@ -23,7 +23,6 @@ package com.sun.star.wizards.common;
  * OO Configuration. <br/>
  * There are 2 direct implementations: ConfigGroup and ConfigSet.
  * The root is the first Java Object in the configuration hirarchie.
- * @author  rpiterman
  */
 public interface ConfigNode
 {

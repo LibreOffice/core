@@ -18,8 +18,6 @@
 package com.sun.star.wizards.agenda;
 
 import java.util.*;
-
-
 import com.sun.star.awt.TextEvent;
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.container.NoSuchElementException;
@@ -538,9 +536,7 @@ public class AgendaTemplate extends TextDocument implements TemplateConsts, Data
         drawTopicConstants();
 
         _allItems.clear();
-        //_allItems = null;
         constItems.clear();
-        //constItems = null;
     }
 
     /**
@@ -584,7 +580,6 @@ public class AgendaTemplate extends TextDocument implements TemplateConsts, Data
             }
         }
      }
-//
     private void initializeConstantTitles()
     {
         XTextRange item = null;
@@ -667,7 +662,6 @@ public class AgendaTemplate extends TextDocument implements TemplateConsts, Data
                 trDeadline = item;
                 constItems.remove(i--);
             }
-//
         }
     }
 
@@ -994,7 +988,6 @@ public class AgendaTemplate extends TextDocument implements TemplateConsts, Data
             for (int i = 0; i < allSections.length; i++)
             {
                 Object section = getSection(allSections[i]);
-                //Try3.showProps(section);
                 boolean visible = ((Boolean) Helper.getUnoPropertyValue(section, "IsVisible")).booleanValue();
                 if (!visible)
                 {
@@ -1384,8 +1377,6 @@ public class AgendaTemplate extends TextDocument implements TemplateConsts, Data
      * since there is anyway only one instance of this class at runtime
      * it could have also be implemented in the AgendaTemplate class
      * but for clarity and separation I decided to make a sub class for it.
-     *
-     * @author rp143992
      */
     public class Topics
     {
@@ -1884,7 +1875,6 @@ public class AgendaTemplate extends TextDocument implements TemplateConsts, Data
     public static void removeTableRows(Object table, int start, int count)
     {
         XTableRows rows = UnoRuntime.queryInterface(XTextTable.class, table).getRows();
-        //rows.removeByIndex(start, count);
     }
 
     /**
@@ -1948,8 +1938,6 @@ public class AgendaTemplate extends TextDocument implements TemplateConsts, Data
  */
 /**
  * Interface that is used for writing content to a Uno Text / TextRange
- * @author rp143992
- *
  */
 interface AgendaElement
 {
@@ -1966,7 +1954,6 @@ interface AgendaElement
 /**
  * Basic implementation of the AgendaElement interface -
  * writes nothing, but applies a ParaStyle to the given XText/XTextRange
- * @author rp143992
  *
  * TODO To change the template for this generated type comment go to
  * Window - Preferences - Java - Code Style - Code Templates
@@ -2010,7 +1997,6 @@ class ParaStyled implements AgendaElement
  * A basic implementation of AgendaElement:
  * writes a String to the given XText/XTextRange, and applies
  * a ParaStyle to it (using the parent class).
- * @author rp143992
  */
 class TextElement extends ParaStyled
 {
@@ -2041,7 +2027,6 @@ class TextElement extends ParaStyled
 /**
  * A Text element which, if the text to write is empty (null or PropertyNames.EMPTY_STRING)
  * inserts a placeholder instead.
- * @author rp143992
  *
  * TODO To change the template for this generated type comment go to
  * Window - Preferences - Java - Code Style - Code Templates
@@ -2096,7 +2081,6 @@ class PlaceholderTextElement extends TextElement
 /**
  * An Agenda element which writes no text, but inserts a placeholder, and formats
  * it using a ParaStyleName.
- * @author rp143992
  *
  */
 class PlaceholderElement extends ParaStyled
@@ -2141,7 +2125,6 @@ class PlaceholderElement extends ParaStyled
  * gets as a parameter a table cursor, and writes
  * a text to the cell marked by this table cursor, and
  * a place holder to the next cell.
- * @author rp143992
  *
  * TODO To change the template for this generated type comment go to
  * Window - Preferences - Java - Code Style - Code Templates

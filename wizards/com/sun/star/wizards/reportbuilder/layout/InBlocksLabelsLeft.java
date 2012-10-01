@@ -24,10 +24,6 @@ import com.sun.star.wizards.common.Resource;
 import com.sun.star.wizards.report.IReportDefinitionReadAccess;
 import com.sun.star.wizards.ui.*;
 
-/**
- *
- * @author ll93751
- */
 public class InBlocksLabelsLeft extends ColumnarTwoColumns
 {
 
@@ -60,7 +56,6 @@ public class InBlocksLabelsLeft extends ColumnarTwoColumns
         {
             return;
         }
-//        int nGroups = getReportDefinition().getGroups().getCount();
 
         final XSection xSection = getReportDefinition().getDetail();
 
@@ -82,7 +77,6 @@ public class InBlocksLabelsLeft extends ColumnarTwoColumns
 
         int i = 0;
         int nCount = aFieldTitleNames.length;
-        // int x = 0;
         aRectLabelFields.Y = 0;
         aRectLabelFields.X = getLeftPageIndent() + getLeftGroupIndent(getCountOfGroups());
 
@@ -93,7 +87,6 @@ public class InBlocksLabelsLeft extends ColumnarTwoColumns
         while (nCount > 0)
         {
             final String sLabel = aFieldTitleNames[i];
-//            nLabelWidth = 3000;
             aRectLabelFields = insertLabel(xSection, sLabel, aRectLabelFields, nLabelWidth, aSOLabel);
             final String sFieldName = convertToFieldName(aFieldNames[i]);
             nFieldWidth = 3000 + nDelta;

@@ -21,10 +21,6 @@ import com.sun.star.awt.FontDescriptor;
 import com.sun.star.wizards.common.PropertyNames;
 import com.sun.star.wizards.common.PropertySetHelper;
 
-/**
- *
- * @author ll93751
- */
 abstract public class SectionObject
 {
 

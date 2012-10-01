@@ -29,9 +29,6 @@ import com.sun.star.wizards.common.Desktop;
 public class WebWizard extends WWD_Events
 {
 
-    /**
-     * @param xmsf
-     */
     public WebWizard(XMultiServiceFactory xmsf) throws Exception
     {
         super(xmsf);

@@ -127,7 +127,6 @@ public abstract class ControlScroller
     }
 
     /**
-     * @author bc93774
      * @param _ntotfieldcount The number of fields that are to be administered by the ControlScroller
      */
     protected void initialize(int _ntotfieldcount)
@@ -365,7 +364,6 @@ public abstract class ControlScroller
             return fieldInfo(
                     scrollfields.get(guiRow + nscrollvalue)[column],
                     scrollfields.get(guiRow)[column]);
-            //System.out.println("getting field info for : " + guiRow + "/" + column  + ":" + pv.Value + "(" + pv.Name + ")" );
         }
         else
         {

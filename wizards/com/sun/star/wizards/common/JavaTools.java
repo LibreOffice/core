@@ -26,10 +26,6 @@ import com.sun.star.lib.util.UrlToFileMapper;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-/**
- *
- * @author  bc93774
- */
 public class JavaTools
 {
 
@@ -38,31 +34,6 @@ public class JavaTools
     {
     }
 
-/*
-    public static void main(String args[])
-    {
-        String sPath = PropertyNames.EMPTY_STRING;
-        DateTime oDateTime = null;
-        long n;
-        String ConnectStr = "uno:socket,host=localhost,port=8100;urp,negotiate=0,forcesynchronous=1;StarOffice.NamingService";   //localhost  ;Lo-1.Germany.sun.com; 10.16.65.155
-        try
-        {
-            XMultiServiceFactory xLocMSF = com.sun.star.wizards.common.Desktop.connect(ConnectStr);
-            if (xLocMSF != null)
-            {
-                System.out.println("Connected to " + ConnectStr);
-                oDateTime = getDateTime(9500000);
-                sPath = convertfromURLNotation("file:///E:/trash/Web%20Wizard.xcu");
-                n = getMillis(oDateTime);
-                int a = 1;
-            }
-        }
-        catch (Exception exception)
-        {
-            exception.printStackTrace(System.err);
-        }
-    }
-*/
     public static String[] copyStringArray(String[] FirstArray)
     {
         if (FirstArray != null)
@@ -218,7 +189,6 @@ public class JavaTools
     }
 
     /**
-     * @author bc93774
      * @param SearchList
      * @param SearchString
      * @return the index of the field that contains the string 'SearchString' or '-1' if not it is
@@ -327,7 +297,6 @@ public class JavaTools
     }
 
     /**
-     * @author bc93774
      * This function bubble sorts an array of with 2 dimensions.
      * The default sorting order is the first dimension
      * Only if sort2ndValue is True the second dimension is the relevant for the sorting order
@@ -496,17 +465,12 @@ public class JavaTools
         if ((baselist != null) && (_complist != null))
         {
             ArrayList<String> retvector = new ArrayList<String>();
-//          String[] orderedcomplist = new String[_complist.length];
-//          System.arraycopy(_complist, 0, orderedcomplist, 0, _complist.length);
             for (int i = 0; i < baselist.length; i++)
-//              if (Arrays.binarySearch(orderedcomplist, baselist[i]) != -1)
             {
                 if (FieldInList(_complist, baselist[i]) > -1)
                 {
                     retvector.add(baselist[i]);
-                //          else
                 // here you could call the method of a defined interface to notify the calling method                                           
-                //      }       
                 }
             }
             retarray = new String[retvector.size()];
@@ -529,7 +493,6 @@ public class JavaTools
                     if (FieldInList(_complist, sValue) != -1)
                     {
                         retvector.add(baselist[i]);
-                    //          else
                     // here you could call the method of a defined interface to notify the calling method                                           
                     }
                 }

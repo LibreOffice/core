@@ -27,10 +27,6 @@ import com.sun.star.uno.UnoRuntime;
 import com.sun.star.wizards.common.Helper;
 import com.sun.star.wizards.common.PropertyNames;
 
-/**
- * @author rpiterman
-
- * */
 public class ListModelBinder implements ListDataListener
 {
 
@@ -124,17 +120,9 @@ public class ListModelBinder implements ListDataListener
      */
     public void intervalAdded(ListDataEvent lde)
     {
-        //Short[] selected = getSelectedItems();
         for (short i = (short) lde.getIndex0(); i <= lde.getIndex1(); i++)
         {
             insert(i);
-
-        /*int insertedItems = lde.getIndex1() - lde.getIndex0() + 1;
-        
-        for (int i = 0; i<selected.length; i++)
-        if (selected[i].intValue() >= lde.getIndex0())
-        selected[i] = new Short((short)(selected[i].shortValue() + insertedItems));
-        setSelectedItems(selected);*/
         }
     }
 
@@ -143,24 +131,7 @@ public class ListModelBinder implements ListDataListener
      */
     public void intervalRemoved(ListDataEvent lde)
     {
-        //Short[] selected = getSelectedItems();
-
         remove((short) lde.getIndex0(), (short) lde.getIndex1());
-
-    /*int removed = 0;
-    for (int i = 0; i<selected.length; i++) {
-    short s = selected[i].shortValue();
-    if (s>=lde.getIndex0() && s<==lde.getIndex1()) {
-    selected[i] = null;
-    removed++;
-    }             
-    }
-    
-    Short[] newSelected = (removed > 0 ? new Short[selected.length - removed] : selected;
-    if (removed>0)
-    
-    if (selected[i].intValue() >= lde.getIndex0())
-     */
     }
 
     public static interface Renderer

@@ -25,8 +25,6 @@ import com.sun.star.wizards.web.data.CGDocument;
 import com.sun.star.wizards.web.data.CGExporter;
 
 /**
- * @author rpiterman
- *
  * An exporter which is configured with a filter name, and
  * uses the specified filter to export documents.
  */

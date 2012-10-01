@@ -27,8 +27,6 @@ import com.sun.star.wizards.common.JavaTools;
 import com.sun.star.wizards.common.PropertyNames;
 
 /**
- * @author bc93774
- *
  * TODO To change the template for this generated type comment go to
  * Window - Preferences - Java - Code Style - Code Templates
  */

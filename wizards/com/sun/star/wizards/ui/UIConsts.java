@@ -18,9 +18,6 @@
 
 package com.sun.star.wizards.ui;
 
-/**
- * @author rpiterman
- */
 public interface UIConsts
 {
 

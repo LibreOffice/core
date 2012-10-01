@@ -18,9 +18,6 @@
 package com.sun.star.wizards.reportbuilder.layout;
 
 import com.sun.star.beans.PropertyValue;
-// import com.sun.star.container.NoSuchElementException;
-// import com.sun.star.lang.IndexOutOfBoundsException;
-// import com.sun.star.lang.WrappedTargetException;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.report.XFixedText;
 import com.sun.star.report.XFormattedField;
@@ -32,10 +29,6 @@ import com.sun.star.uno.UnoRuntime;
 import com.sun.star.wizards.common.Properties;
 import com.sun.star.wizards.common.PropertyNames;
 
-/**
- *
- * @author ll93751
- */
 public class DesignTemplate
 {
 

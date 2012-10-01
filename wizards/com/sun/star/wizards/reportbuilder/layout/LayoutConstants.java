@@ -18,10 +18,6 @@
 
 package com.sun.star.wizards.reportbuilder.layout;
 
-/**
- *
- * @author ll93751
- */
 public class LayoutConstants
 {
     public static final int LabelHeight = 500;

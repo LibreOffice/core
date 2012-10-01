@@ -23,10 +23,6 @@
 
 package com.sun.star.wizards.common;
 
-/**
- *
- * @author  rpiterman
- */
 public interface Indexable {
 
     public int getIndex();

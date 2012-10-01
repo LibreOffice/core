@@ -20,10 +20,6 @@ package com.sun.star.wizards.report;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.wizards.db.RecordParser;
 
-/**
- *
- * @author ll93751
- */
 public class ReportImplementationHelper
 {
 
@@ -32,7 +28,6 @@ public class ReportImplementationHelper
     protected int m_nDefaultPageOrientation;
 
     /**
-     * 
      * @param _aMSF
      * @param _nOrientation 
      */

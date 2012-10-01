@@ -44,7 +44,6 @@ import com.sun.star.wizards.ui.event.EventNames;
 import com.sun.star.wizards.ui.event.MethodInvocation;
 
 /**
- * @author rpiterman
  * This class implements the UI functionality of the topics scroller control.
  * <br/>
  * During developement, there has been a few changes which were not *fully* done -
@@ -1083,8 +1082,6 @@ public class TopicsControl extends ControlScroller implements XFocusListener
     };
 
     /**
-     *
-     * @author rp143992
      * A class represting a single GUI row.
      * Note that the instance methods of this class
      * are being called and handle controls of

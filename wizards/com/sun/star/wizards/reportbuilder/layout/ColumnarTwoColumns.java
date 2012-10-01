@@ -23,10 +23,6 @@ import com.sun.star.wizards.common.Resource;
 import com.sun.star.wizards.report.IReportDefinitionReadAccess;
 import com.sun.star.wizards.ui.UIConsts;
 
-/**
- *
- * @author ll93751
- */
 public class ColumnarTwoColumns extends ReportBuilderLayouter
 {
 
@@ -68,7 +64,6 @@ public class ColumnarTwoColumns extends ReportBuilderLayouter
         {
             return;
         }
-//        int nGroups = getReportDefinition().getGroups().getCount();
 
         final XSection xSection = getReportDefinition().getDetail();
 

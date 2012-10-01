@@ -21,9 +21,6 @@ package com.sun.star.wizards.web.status;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * @author rpiterman
- */
 public class ErrorLog implements ErrorReporter
 {
 

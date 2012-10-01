@@ -31,7 +31,6 @@ import java.util.*;
  * the put(propName,propValue) method.
  * caution: propName should always be a String.
  * When finished, call the getProperties() method to get an array of the set properties.
- * @author  rp
  */
 public class Properties extends HashMap<String,Object>
 {

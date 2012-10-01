@@ -24,9 +24,6 @@ import com.sun.star.wizards.ui.event.Task;
 import com.sun.star.wizards.web.data.CGDocument;
 import com.sun.star.wizards.web.data.CGSession;
 
-/**
- * @author rpiterman
- */
 public class ImpressHTMLExporter extends ConfiguredExporter
 {
 
@@ -52,13 +49,6 @@ public class ImpressHTMLExporter extends ConfiguredExporter
 
         props.put(PropertyNames.PROPERTY_WIDTH, getImageWidth(session));
 
-        /*
-         * props.put("BackColor",...);
-         * props.put("TextColor",...);
-         * props.put("LinkColor",...);
-         * props.put("VLinkColor",...);
-         * props.put("ALinkColor",...);
-         */
         props.put("UseButtonSet", new Integer(session.cp_Design.cp_IconSet));
 
 

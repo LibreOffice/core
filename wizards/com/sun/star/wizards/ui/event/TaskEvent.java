@@ -19,9 +19,6 @@ package com.sun.star.wizards.ui.event;
 
 import java.util.EventObject;
 
-/**
- * @author rpiterman
- */
 public class TaskEvent extends EventObject
 {
 

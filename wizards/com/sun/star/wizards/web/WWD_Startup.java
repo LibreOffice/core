@@ -17,8 +17,6 @@
  */
 package com.sun.star.wizards.web;
 
-//import com.sun.star.awt.ItemEvent;
-//import com.sun.star.awt.XItemListener;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -96,9 +94,6 @@ import com.sun.star.wizards.web.data.CGStyle;
  * The controls are the View, The DataObjects are the Model, containing the
  * Data rad directly from the configuration, and the DataAware objects
  * are the controller inbetween.
- *
- * @author rpiterman
- *
  */
 public abstract class WWD_Startup extends WWD_General
 {
@@ -193,17 +188,6 @@ public abstract class WWD_Startup extends WWD_General
      * instance used for that purpose.
      */
     protected XFrame myFrame;
-
-
-    /* ******************************************
-     *  ****************************************
-     *             General Methods
-     *  ****************************************
-     * ******************************************  */
-
-    /*
-     * GENERAL Initialization  methods
-     */
     /**
      * He - my constructor !
      * I call/do here in this order: <br/>
@@ -284,7 +268,6 @@ public abstract class WWD_Startup extends WWD_General
     {
         Object node = Configuration.getConfigurationRoot(xMSF, "org.openoffice.Inet/Settings", false);
         int i = Configuration.getInt("ooInetProxyType", node);
-        //System.out.println("WWD:Startup:getOOProxies:" + i);
         switch (i)
         {
             case 0: //no proxies
@@ -392,15 +375,6 @@ public abstract class WWD_Startup extends WWD_General
     {
         try
         {
-
-
-            /* myFrame.initialize(docWindow);
-             * */
-
-            //desktopFrame = Desktop.findAFrame(xMSF, myFrame, desktopFrame);
-
-            //XWindow xContainerWindow = myFrame.getContainerWindow();
-
             XWindow xContainerWindow = myFrame.getComponentWindow();
             XWindowPeer xWindowPeer = UnoRuntime.queryInterface(XWindowPeer.class, xContainerWindow);
 
@@ -569,7 +543,6 @@ public abstract class WWD_Startup extends WWD_General
         {
             sda.updateData();
         //TODO xf uncomment
-        //refresh.eventPerformed(ie);
         }
     }
 
@@ -649,8 +622,6 @@ public abstract class WWD_Startup extends WWD_General
         sessionNameDA = UnoDataAware.attachEditControl(settings.cp_DefaultSession, "cp_Name", cbSaveSettings, null, true);
 
     //cleanup when exiting wizard.
-    //guiEventListener.add("WebWizardDialog",EventNames.EVENT_WINDOW_HIDDEN, "cleanup", this);
-    //xWindow.addWindowListener((XWindowListener)guiEventListener);
     }
 
     /**
@@ -853,8 +824,6 @@ public abstract class WWD_Startup extends WWD_General
             // an index change accures
             {
                 content.cp_Documents.remove(i--);
-            /*for (Iterator i = content.cp_Contents.childrenMap.values().iterator(); i.hasNext();)
-            checkContent((CGContent)i.next(),task);*/
             }
         }
     }
@@ -863,7 +832,6 @@ public abstract class WWD_Startup extends WWD_General
      * A Listener which is called whenever
      * a Publish checkbox/textbox state changes, and
      * changes the "create" button enable state accordingly.
-     * @author rpiterman
      */
     private class CheckPublish implements DataAware.Listener
     {
@@ -960,7 +928,6 @@ public abstract class WWD_Startup extends WWD_General
          */
         public int compare(Object o1, Object o2)
         {
-            // TODO Auto-generated method stub
             if (o1 instanceof CGStyle && o2 instanceof CGStyle)
             {
                 return ((CGStyle) o1).cp_Name.compareTo(

@@ -61,8 +61,6 @@ import java.util.logging.Logger;
 /**
  * This class use the IReportDocument Interface to communicate between the UI
  * and the ReportBuilderLayouter which communicates to the new Sun Report Builder.
- *
- * @author ll93751
  */
 public class ReportBuilderImplementation extends ReportImplementationHelper
         implements IReportDocument, IReportDefinitionReadAccess
@@ -99,7 +97,6 @@ public class ReportBuilderImplementation extends ReportImplementationHelper
         return UnoRuntime.queryInterface(XWindowPeer.class, getFrame().getComponentWindow());
     }
     private XFrame m_xFrame = null;
-    // private ReportBuilderLayouter m_aReportBuilderLayouter = null;
     private String m_sReportBuilderLayoutName = PropertyNames.EMPTY_STRING;
 
     /**

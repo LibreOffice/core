@@ -19,9 +19,6 @@ package com.sun.star.wizards.ui.event;
 
 import java.util.EventListener;
 
-/**
- * @author rpiterman
- */
 public interface TaskListener extends EventListener
 {
 

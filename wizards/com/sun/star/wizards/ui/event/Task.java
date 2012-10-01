@@ -20,9 +20,6 @@ package com.sun.star.wizards.ui.event;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * @author rpiterman
- */
 public class Task
 {
 
@@ -149,42 +146,27 @@ public class Task
         }
     }
 
-    /**
-     * @return
-     */
     public String getSubtaskName()
     {
         return subtaskName;
     }
 
-    /**
-     * @return
-     */
     public String getTaskName()
     {
         return taskName;
     }
 
-    /**
-     * @param string
-     */
     public void setSubtaskName(String string)
     {
         subtaskName = string;
         fireSubtaskNameChanged();
     }
 
-    /**
-     * @return
-     */
     public int getFailed()
     {
         return failed;
     }
 
-    /**
-     * @return
-     */
     public int getSuccessfull()
     {
         return successfull;

@@ -23,9 +23,6 @@ import com.sun.star.wizards.common.FileAccess;
 import com.sun.star.wizards.ui.event.Task;
 import com.sun.star.wizards.web.data.CGDocument;
 
-/**
- * @author rpiterman
- */
 public class CopyExporter extends AbstractExporter
 {
 

@@ -17,10 +17,6 @@
  */
 package com.sun.star.wizards.ui.event;
 
-/**
- *
- * @author  rpiterman
- */
 public interface EventNames
 {
 

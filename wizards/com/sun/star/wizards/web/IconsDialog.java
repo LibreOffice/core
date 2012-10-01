@@ -28,7 +28,6 @@ import com.sun.star.wizards.ui.ImageList;
 import com.sun.star.wizards.web.data.CGIconSet;
 
 /**
- * @author rpiterman
  * The dialog class for choosing an icon set.
  * This class simulates a model, though it does not functions really as one,
  * since it does not cast events.
@@ -111,16 +110,10 @@ public class IconsDialog extends ImageListDialog implements ImageList.IImageRend
         this.setSelected(icon >= 0 ? objects[icon] : null);
     }
 
-    /**
-     * dummy
-     */
     public synchronized void addListDataListener(javax.swing.event.ListDataListener listener)
     {
     }
 
-    /**
-     * dummy
-     */
     public synchronized void removeListDataListener(javax.swing.event.ListDataListener listener)
     {
     }
@@ -155,7 +148,6 @@ public class IconsDialog extends ImageListDialog implements ImageList.IImageRend
                 icons[icon] +
                 getIconsetPostfix(iset);
         sRetUrls[1] = sRetUrls[0];
-        //System.out.println(s);
         return sRetUrls;
     }
     /* (non-Javadoc)

@@ -24,10 +24,6 @@ package com.sun.star.wizards.web.data;
 
 import com.sun.star.wizards.common.*;
 
-/**
- *
- * @author  rpiterman
- */
 public class ConfigSetItem extends ConfigGroup implements Indexable
 {
 

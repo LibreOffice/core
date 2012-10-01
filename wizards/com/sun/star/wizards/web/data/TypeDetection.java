@@ -23,10 +23,6 @@
  */
 package com.sun.star.wizards.web.data;
 
-/**
- *
- * @author  rpiterman
- */
 public class TypeDetection
 {
 

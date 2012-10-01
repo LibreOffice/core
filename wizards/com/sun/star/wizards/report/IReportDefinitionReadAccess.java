@@ -24,7 +24,6 @@ import com.sun.star.report.XReportDefinition;
  * This interface contains only one function to give access to the ReportDefinition.
  * The ReportDefinition will be initialized very late, late after the ReportLayouters.
  * So we need this interface for the late access.
- * @author ll93751
  */
 public interface IReportDefinitionReadAccess
 {

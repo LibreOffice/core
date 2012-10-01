@@ -24,8 +24,6 @@ import com.sun.star.wizards.common.Helper;
 import com.sun.star.wizards.common.PropertyNames;
 
 /**
- * @author rpiterman
- *
  * This class suppoprts imple cases where a UI control can
  * be directly synchronized with a data property.
  * Such controls are: the different text controls 
@@ -71,7 +69,6 @@ public class UnoDataAware extends DataAware
 
     protected void setToUI(Object value)
     {
-        //System.out.println("Settings uno property : "+ Helper.getUnoPropertyValue(this.unoModel,PropertyNames.PROPERTY_NAME) + "<-" +stringof(value));
         Helper.setUnoPropertyValue(unoModel, unoPropName, value);
     }
 
