@@ -79,6 +79,9 @@ gb_OBJCXXFLAGS := -x objective-c++ $(gb_OBJC_OBJCXX_COMMON_FLAGS)
 
 gb_OBJCFLAGS := -x objective-c $(gb_OBJC_OBJCXX_COMMON_FLAGS)
 
+gb_COMPILERDEFS += \
+		-DBOOST_DETAIL_NO_CONTAINER_FWD
+
 gb_LinkTarget_LDFLAGS := \
 	$(subst -L../lib , ,$(SOLARLIB)) \
 #man ld says: obsolete	-Wl,-multiply_defined,suppress \
