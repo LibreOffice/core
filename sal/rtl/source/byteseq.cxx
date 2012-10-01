@@ -33,7 +33,6 @@
 
 #include <rtl/byteseq.h>
 #include <rtl/alloc.h>
-#include <rtl/memory.h>
 
 /* static data to be referenced by all empty strings
  * the refCount is predefined to 1 and must never become 0 !
@@ -245,7 +244,7 @@ sal_Bool SAL_CALL rtl_byte_sequence_equals( sal_Sequence *pSequence1 , sal_Seque
         return sal_False;
     }
     return (sal_Bool)
-        (rtl_compareMemory(
+        (memcmp(
             pSequence1->elements, pSequence2->elements, pSequence1->nElements )
          == 0);
 }

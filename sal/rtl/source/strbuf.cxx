@@ -30,7 +30,6 @@
 
 #include <osl/interlck.h>
 #include <rtl/strbuf.hxx>
-#include <rtl/memory.h>
 
 /*************************************************************************
  *  rtl_stringbuffer_newFromStr_WithLength
@@ -125,7 +124,7 @@ void SAL_CALL rtl_stringbuffer_insert( rtl_String ** This,
             /* optimized for 1 character */
             pBuf[offset + len] = pBuf[offset];
         else if( n > 1 )
-            rtl_moveMemory( pBuf + offset + len, pBuf + offset, n * sizeof(sal_Char) );
+            memmove( pBuf + offset + len, pBuf + offset, n * sizeof(sal_Char) );
 
         /* insert the new characters */
         n = len;
@@ -162,7 +161,7 @@ void SAL_CALL rtl_stringbuffer_remove( rtl_String ** This,
     if (nTailLen)
     {
         /* move the tail */
-        rtl_moveMemory(pBuf + start, pBuf + start + len, nTailLen * sizeof(sal_Char));
+        memmove(pBuf + start, pBuf + start + len, nTailLen * sizeof(sal_Char));
     }
 
     (*This)->length-=len;
