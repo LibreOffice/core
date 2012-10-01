@@ -465,8 +465,7 @@ bool ScRangeList::UpdateReference(
         if( nDx < 0 || nDy < 0 )
         {
             size_t n = maRanges.size();
-            for(size_t i = n-1; i > 0; --i)
-                Join(*maRanges[i], true);
+            Join(*maRanges[n-1], true);
         }
     }
 
