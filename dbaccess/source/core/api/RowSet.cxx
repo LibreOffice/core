@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
+#include <string.h>
 #include "RowSet.hxx"
 #include "dbastrings.hrc"
 #include "sdbcoretools.hxx"

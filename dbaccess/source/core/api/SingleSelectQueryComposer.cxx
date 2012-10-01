@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
+#include <string.h>
 #include "composertools.hxx"
 #include "core_resource.hrc"
 #include "core_resource.hxx"

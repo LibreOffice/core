@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <string.h>
 #include "ContentHelper.hxx"
 #include <ucbhelper/cancelcommandexecution.hxx>
 #include <comphelper/property.hxx>
