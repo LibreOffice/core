@@ -564,6 +564,7 @@ on_registrar_available (GDBusConnection * /*connection*/,
                 pMenuBar->SetDisplayable( sal_False );
             }
         }
+        pSalMenu->UpdateNativeMenu();
     }
 
     return;

@@ -396,8 +396,6 @@ void GtkSalMenu::SetFrame( const SalFrame* pFrame )
     if(mpActionGroup)
         g_lo_action_group_clear( G_LO_ACTION_GROUP(mpActionGroup) );
     pFrameNonConst->EnsureAppMenuWatch();
-    mpMenuModel = G_MENU_MODEL( g_object_get_data( G_OBJECT( pWindow ), "g-lo-menubar" ) );
-    mpActionGroup = G_ACTION_GROUP( g_object_get_data( G_OBJECT( pWindow ), "g-lo-action-group" ) );
     // Generate the main menu structure.
     UpdateNativeMenu();
 }
