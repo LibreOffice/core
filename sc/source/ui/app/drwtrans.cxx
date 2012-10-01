@@ -281,7 +281,7 @@ ScDrawTransferObj* ScDrawTransferObj::GetOwnClipboard( Window* )
     return pObj;
 }
 
-sal_Bool lcl_HasOnlyControls( SdrModel* pModel )
+static sal_Bool lcl_HasOnlyControls( SdrModel* pModel )
 {
     sal_Bool bOnlyControls = false;         // default if there are no objects
 
