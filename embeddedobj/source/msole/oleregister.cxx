@@ -29,7 +29,7 @@ using namespace ::com::sun::star;
 
 extern "C" {
 
-SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
+SAL_DLLPUBLIC_EXPORT void * SAL_CALL emboleobj_component_getFactory(
     const sal_Char * pImplName, void * pServiceManager,
     SAL_UNUSED_PARAMETER void * /*pRegistryKey*/ )
 {
