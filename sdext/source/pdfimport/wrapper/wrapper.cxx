@@ -44,7 +44,7 @@
 #include "com/sun/star/io/XInputStream.hpp"
 #include "com/sun/star/uno/XComponentContext.hpp"
 #include "com/sun/star/awt/FontDescriptor.hpp"
-#include "com/sun/star/deployment/XPackageInformationProvider.hpp"
+#include "com/sun/star/deployment/PackageInformationProvider.hpp"
 #include "com/sun/star/beans/XMaterialHolder.hpp"
 #include "com/sun/star/rendering/PathCapType.hpp"
 #include "com/sun/star/rendering/PathJoinType.hpp"
@@ -999,24 +999,21 @@ bool xpdf_ImportFromFile( const ::rtl::OUString&                             rUR
     if( checkEncryption( aSysUPath, xIHdl, aPwd, bIsEncrypted, aDocName ) == false )
         return false;
 
-    rtl::OUStringBuffer converterURL = rtl::OUString("xpdfimport");
-
-    // retrieve package location url (xpdfimport executable is located there)
-    // ---------------------------------------------------
-    uno::Reference<deployment::XPackageInformationProvider> xProvider(
-        xContext->getValueByName(
-            rtl::OUString("/singletons/com.sun.star.deployment.PackageInformationProvider")),
-        uno::UNO_QUERY);
-    if( xProvider.is() )
-    {
-        converterURL.insert(
-            0,
-            rtl::OUString("/"));
-        converterURL.insert(
-            0,
-            xProvider->getPackageLocation(
-                rtl::OUString::createFromAscii(PDFI_IMPL_IDENTIFIER)));
+    // Retrieve package location URL, xpdfimport executable is located there:
+    OUString location(
+        deployment::PackageInformationProvider::get(xContext)->
+        getPackageLocation(PDFI_IMPL_IDENTIFIER));
+    if (location.isEmpty()) {
+        SAL_WARN(
+            "sdext.pdfimport",
+            "getPackageLocation(" PDFI_IMPL_IDENTIFIER ") failed");
+        return false;
     }
+    rtl::OUStringBuffer converterURL(location);
+    if (!location.endsWith("/")) {
+        converterURL.append('/');
+    }
+    converterURL.append("xpdfimport");
 
     // spawn separate process to keep LGPL/GPL code apart.
     // ---------------------------------------------------
