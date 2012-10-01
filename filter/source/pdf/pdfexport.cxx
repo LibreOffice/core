@@ -152,7 +152,8 @@ PDFExport::PDFExport( const Reference< XComponent >& rxSrcDoc,
     mbExportRelativeFsysLinks       ( sal_False ),
     mnDefaultLinkAction         ( 0 ),
     mbConvertOOoTargetToPDFTarget( sal_False ),
-    mbExportBmkToDest           ( sal_False )
+    mbExportBmkToDest           ( sal_False ),
+    mbSignPDF                   ( false )
 {
 }
 
