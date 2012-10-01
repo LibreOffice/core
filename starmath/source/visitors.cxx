@@ -742,7 +742,7 @@ void SmDrawingVisitor::Visit( SmRectangleNode* pNode )
 
 void SmDrawingVisitor::DrawTextNode( SmTextNode* pNode )
 {
-    if ( pNode->IsPhantom( )  ||  pNode->GetText( ).Len( ) == 0  ||  pNode->GetText( ).GetChar( 0 ) == xub_Unicode( '\0' ) )
+    if ( pNode->IsPhantom() || pNode->GetText().isEmpty() || pNode->GetText()[0] == '\0' )
         return;
 
     SmTmpDevice2  aTmpDev ( ( OutputDevice & ) rDev, false );
@@ -936,15 +936,15 @@ void SmSetSelectionVisitor::Visit( SmTextNode* pNode ) {
         IsSelecting = false;
     } else if( !IsSelecting && i1 != -1 ) {
         start = i1;
-        end = pNode->GetText( ).Len( );
+        end = pNode->GetText().getLength();
         IsSelecting = true;
     } else if( !IsSelecting && i2 != -1 ) {
         start = i2;
-        end = pNode->GetText( ).Len( );
+        end = pNode->GetText().getLength();
         IsSelecting = true;
     } else if( IsSelecting ) {
         start = 0;
-        end = pNode->GetText( ).Len( );
+        end = pNode->GetText().getLength();
     } else {
         pNode->SetSelected( false );
         start = 0;
@@ -1329,9 +1329,9 @@ void SmCaretPosGraphBuildingVisitor::Visit( SmMatrixNode* pNode )
  */
 void SmCaretPosGraphBuildingVisitor::Visit( SmTextNode* pNode )
 {
-    OSL_ENSURE( pNode->GetText( ).Len( ) > 0, "Empty SmTextNode is bad" );
+    OSL_ENSURE( !pNode->GetText().isEmpty(), "Empty SmTextNode is bad" );
 
-    int size = pNode->GetText( ).Len( );
+    int size = pNode->GetText().getLength();
     for( int i = 1; i <= size; i++ ){
         SmCaretPosGraphEntry* pRight = pRightMost;
         pRightMost = pGraph->Add( SmCaretPos( pNode, i ), pRight );
@@ -2302,10 +2302,10 @@ void SmNodeToTextVisitor::Visit( SmFontNode* pNode )
                     default:
                         break;
                 }
-                Append( String( ::rtl::math::doubleToUString(
+                Append( ::rtl::math::doubleToUString(
                             static_cast<double>( pNode->GetSizeParameter( ) ),
                             rtl_math_StringFormat_Automatic,
-                            rtl_math_DecimalPlaces_Max, '.', sal_True ) ) );
+                            rtl_math_DecimalPlaces_Max, '.', sal_True ) );
                 Append( " " );
             }
             break;

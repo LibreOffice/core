@@ -85,11 +85,11 @@ void SmOoxmlExport::HandleText( const SmNode* pNode, int /*nLevel*/)
     m_pSerializer->startElementNS( XML_m, XML_t, FSNS( XML_xml, XML_space ), "preserve", FSEND );
     SmTextNode* pTemp=(SmTextNode* )pNode;
     SAL_INFO( "starmath.ooxml", "Text:" << OUStringToOString( pTemp->GetText(), RTL_TEXTENCODING_UTF8 ).getStr());
-    for(xub_StrLen i=0;i<pTemp->GetText().Len();i++)
+    for(sal_Int32 i=0;i<pTemp->GetText().getLength();i++)
     {
 #if 0
         if ((nPendingAttributes) &&
-            (i == ((pTemp->GetText().Len()+1)/2)-1))
+            (i == ((pTemp->GetText().getLength()+1)/2)-1))
         {
             *pS << sal_uInt8(0x22);     //char, with attributes right
                                 //after the character
@@ -104,7 +104,7 @@ void SmOoxmlExport::HandleText( const SmNode* pNode, int /*nLevel*/)
             nFace = 0x7;
         *pS << sal_uInt8(nFace+128); //typeface
 #endif
-        sal_uInt16 nChar = pTemp->GetText().GetChar(i);
+        sal_uInt16 nChar = pTemp->GetText()[i];
         m_pSerializer->writeEscaped( OUString( SmTextNode::ConvertSymbolToUnicode(nChar)));
 
 #if 0
@@ -121,7 +121,7 @@ void SmOoxmlExport::HandleText( const SmNode* pNode, int /*nLevel*/)
         //entities which cannot occur in mathtype e.g. a Summation
         //symbol so these attributes may be lost
         if ((nPendingAttributes) &&
-            (i == ((pTemp->GetText().Len()+1)/2)-1))
+            (i == ((pTemp->GetText().getLength()+1)/2)-1))
         {
             *pS << sal_uInt8(EMBEL);
             while (nPendingAttributes)
@@ -250,8 +250,8 @@ static OString mathSymbolToString( const SmNode* node )
 {
     assert( node->GetType() == NMATH );
     const SmTextNode* txtnode = static_cast< const SmTextNode* >( node );
-    assert( txtnode->GetText().Len() == 1 );
-    sal_Unicode chr = SmTextNode::ConvertSymbolToUnicode( txtnode->GetText().GetChar( 0 ));
+    assert( txtnode->GetText().getLength() == 1 );
+    sal_Unicode chr = SmTextNode::ConvertSymbolToUnicode( txtnode->GetText()[0] );
     return OUStringToOString( OUString( chr ), RTL_TEXTENCODING_UTF8 );
 }
 

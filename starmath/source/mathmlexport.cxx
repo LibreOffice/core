@@ -824,7 +824,7 @@ void SmXMLExport::ExportMath(const SmNode *pNode, int /*nLevel*/)
     const SmMathSymbolNode *pTemp = static_cast<const SmMathSymbolNode *>(pNode);
     SvXMLElementExport aMath(*this, XML_NAMESPACE_MATH, XML_MO, sal_True, sal_False);
     sal_Unicode nArse[2];
-    nArse[0] = pTemp->GetText().GetChar(0);
+    nArse[0] = pTemp->GetText()[0];
     sal_Unicode cTmp = ConvertMathToMathML( nArse[0] );
     if (cTmp != 0)
         nArse[0] = cTmp;
@@ -845,9 +845,9 @@ void SmXMLExport::ExportText(const SmNode *pNode, int /*nLevel*/)
             //Note that we change the fontstyle to italic for strings that
             //are italic and longer than a single character.
             sal_Bool bIsItalic = IsItalic( pTemp->GetFont() );
-            if ((pTemp->GetText().Len() > 1) && bIsItalic)
+            if ((pTemp->GetText().getLength() > 1) && bIsItalic)
                 AddAttribute(XML_NAMESPACE_MATH, XML_MATHVARIANT, XML_ITALIC);
-            else if ((pTemp->GetText().Len() == 1) && !bIsItalic)
+            else if ((pTemp->GetText().getLength() == 1) && !bIsItalic)
                 AddAttribute(XML_NAMESPACE_MATH, XML_MATHVARIANT, XML_NORMAL);
             pText = new SvXMLElementExport(*this, XML_NAMESPACE_MATH, XML_MI,sal_True,sal_False);
             break;
@@ -859,7 +859,7 @@ void SmXMLExport::ExportText(const SmNode *pNode, int /*nLevel*/)
             pText = new SvXMLElementExport(*this, XML_NAMESPACE_MATH, XML_MTEXT,sal_True,sal_False);
             break;
         }
-    GetDocHandler()->characters(OUString(pTemp->GetText().GetBuffer()));
+    GetDocHandler()->characters(pTemp->GetText());
     delete pText;
 }
 
@@ -1030,11 +1030,11 @@ void SmXMLExport::ExportBrace(const SmNode *pNode, int nLevel)
         sal_Unicode nArse[2];
         nArse[1] = 0;
         nArse[0] = static_cast<
-            const SmMathSymbolNode* >(pLeft)->GetText().GetChar(0);
+            const SmMathSymbolNode* >(pLeft)->GetText()[0];
         OSL_ENSURE(nArse[0] != 0xffff,"Non existent symbol");
         AddAttribute(XML_NAMESPACE_MATH, XML_OPEN,nArse);
         nArse[0] = static_cast<
-            const SmMathSymbolNode* >(pRight)->GetText().GetChar(0);
+            const SmMathSymbolNode* >(pRight)->GetText()[0];
         OSL_ENSURE(nArse[0] != 0xffff,"Non existent symbol");
         AddAttribute(XML_NAMESPACE_MATH, XML_CLOSE,nArse);
         pFences = new SvXMLElementExport(*this, XML_NAMESPACE_MATH, XML_MFENCED,
@@ -1406,8 +1406,8 @@ void SmXMLExport::ExportNodes(const SmNode *pNode, int nLevel)
             {
                 sal_Unicode cTmp = 0;
                 const SmTextNode *pTemp = static_cast< const SmTextNode * >(pNode);
-                if (pTemp->GetText().Len() > 0)
-                    cTmp = ConvertMathToMathML( pTemp->GetText().GetChar(0) );
+                if (!pTemp->GetText().isEmpty())
+                    cTmp = ConvertMathToMathML( pTemp->GetText()[0] );
                 if (cTmp == 0)
                 {
                     // no conversion to MathML implemented -> export it as text
