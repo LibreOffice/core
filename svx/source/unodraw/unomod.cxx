@@ -106,7 +106,7 @@ public:
 };
 //-////////////////////////////////////////////////////////////////////
 
-const SvEventDescription* ImplGetSupportedMacroItems()
+static const SvEventDescription* ImplGetSupportedMacroItems()
 {
     static const SvEventDescription aMacroDescriptionsImpl[] =
     {
