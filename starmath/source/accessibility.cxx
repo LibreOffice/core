@@ -1123,7 +1123,7 @@ void SmTextForwarder::FieldClicked(const SvxFieldItem&, sal_uInt16, sal_uInt16)
 {
 }
 
-sal_uInt16 GetSvxEditEngineItemState( EditEngine& rEditEngine, const ESelection& rSel, sal_uInt16 nWhich )
+static sal_uInt16 GetSvxEditEngineItemState( EditEngine& rEditEngine, const ESelection& rSel, sal_uInt16 nWhich )
 {
     std::vector<EECharAttrib> aAttribs;
 
