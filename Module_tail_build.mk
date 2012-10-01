@@ -124,6 +124,7 @@ $(eval $(call gb_Module_add_moduledirs,tail_end,\
 	salhelper \
 	sane \
 	sax \
+	$(call gb_Helper_optional,SAXON,saxon) \
 	sc \
 	scaddins \
 	sccomp \
