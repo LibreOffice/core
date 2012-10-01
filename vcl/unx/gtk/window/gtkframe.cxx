@@ -582,11 +582,10 @@ void on_registrar_unavailable (GDBusConnection * /*connection*/,
     GtkSalMenu* pSalMenu = static_cast< GtkSalMenu* >( pSalFrame->GetMenu() );
 
     if ( pSalMenu ) {
+        pSalMenu->DisconnectFrame();
         MenuBar* pMenuBar = static_cast< MenuBar* >( pSalMenu->GetMenu() );
         pMenuBar->SetDisplayable( false );
     }
-
-    return;
 }
 
 void GtkSalFrame::EnsureAppMenuWatch()
@@ -601,7 +600,7 @@ void GtkSalFrame::EnsureAppMenuWatch()
          on_registrar_unavailable,
          reinterpret_cast<gpointer>(this),
          NULL);
-    ensure_dbus_setup(GTK_WIDGET(m_pWindow)->window, this);
+    ensure_dbus_setup(gtk_widget_get_window(GTK_WIDGET(m_pWindow)), this);
 }
 
 GtkSalFrame::~GtkSalFrame()

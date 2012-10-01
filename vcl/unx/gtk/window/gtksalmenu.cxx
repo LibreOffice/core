@@ -77,135 +77,33 @@ rtl::OUString GetGtkKeyName( rtl::OUString keyName )
 
 bool GtkSalMenu::CanUpdate()
 {
-    if (!mpFrame)
+    const GtkSalFrame* pFrame = GetFrame();
+    if (!pFrame)
     {
         std::cout << "not updating menu model, I have no frame " << mpMenuModel << std::endl;
         return false;
     }
-    GObject* pWindow = G_OBJECT(gtk_widget_get_window( GTK_WIDGET(mpFrame->getWindow()) ));
+    const GObject* pWindow = G_OBJECT(gtk_widget_get_window( GTK_WIDGET(pFrame->getWindow()) ));
     if(!pWindow)
     {
         std::cout << "not updating menu model, I have no frame " << mpMenuModel << std::endl;
         return false;
     }
+    // the root menu does not have its own model and has to use the one owned by the frame
     if(mbMenuBar)
     {
-        Menu* pVCLMenu = GetMenu();
         mpMenuModel = G_MENU_MODEL( g_object_get_data( G_OBJECT( pWindow ), "g-lo-menubar" ) );
         mpActionGroup = G_ACTION_GROUP( g_object_get_data( G_OBJECT( pWindow ), "g-lo-action-group" ) );
-        //std::cout << "updating root menu model" << mpMenuModel << std::endl;
-        if(!mpMenuModel || !mpActionGroup)
-            return false;
     }
-    else
-    {
-        if(!mpActionGroup || !mpMenuModel)
-            return false;
-    }
+    if(!mpMenuModel || !mpActionGroup)
+        return false;
+    std::cout << "updating menu model" << mpMenuModel << std::endl;
     return true;
 }
 
 void GtkSalMenu::UpdateNativeMenu2()
 {
-    if(!CanUpdate())
-        return;
-    Menu* pVCLMenu = GetMenu();
-    GLOMenu* pLOMenu = G_LO_MENU(GetMenuModel() );
-    GActionGroup* pActionGroup = GetActionGroup();
-
-
-    sal_uInt16 nLOMenuSize = g_menu_model_get_n_items( G_MENU_MODEL( pLOMenu ) );
-
-    if ( nLOMenuSize == 0 )
-        g_lo_menu_new_section( pLOMenu, 0, NULL );
-
-    sal_uInt16 nSection = 0;
-    sal_uInt16 nItemPos = 0;
-    sal_uInt16 validItems = 0;
-    sal_uInt16 nItem;
-
-    for ( nItem = 0; nItem < GetItemCount(); nItem++ ) {
-        GtkSalMenuItem *pSalMenuItem = GetItemAtPos( nItem );
-        sal_uInt16 nId = pSalMenuItem->mnId;
-
-        if ( pSalMenuItem->mnType == MENUITEM_SEPARATOR )
-        {
-            nSection++;
-            nItemPos = 0;
-
-            if ( nLOMenuSize <= nSection )
-            {
-                g_lo_menu_new_section( pLOMenu, nSection, NULL );
-                nLOMenuSize++;
-            }
-
-            continue;
-        }
-
-        if ( nItemPos >= g_lo_menu_get_n_items_from_section( pLOMenu, nSection ) )
-            g_lo_menu_insert_in_section( pLOMenu, nSection, nItemPos, "EMPTY STRING" );
-
-        // Get internal menu item values.
-        String aText = pVCLMenu->GetItemText( nId );
-        rtl::OUString aCommand( pVCLMenu->GetItemCommand( nId ) );
-        sal_Bool itemEnabled = pVCLMenu->IsItemEnabled( nId );
-        KeyCode nAccelKey = pVCLMenu->GetAccelKey( nId );
-        sal_Bool itemChecked = pVCLMenu->IsItemChecked( nId );
-        MenuItemBits itemBits = pVCLMenu->GetItemBits( nId );
-
-        // Convert internal values to native values.
-        gboolean bChecked = ( itemChecked == sal_True ) ? TRUE : FALSE;
-        gboolean bEnabled = ( itemEnabled == sal_True ) ? TRUE : FALSE;
-        gchar* aNativeCommand = g_strdup( rtl::OUStringToOString( aCommand, RTL_TEXTENCODING_UTF8 ).getStr() );
-
-        // Force updating of native menu labels.
-        NativeSetItemText( nSection, nItemPos, aText );
-        NativeSetAccelerator( nSection, nItemPos, nAccelKey, nAccelKey.GetName( GetFrame()->GetWindow() ) );
-
-        // Some items are special, so they have different commands.
-        if ( g_strcmp0( aNativeCommand, "" ) == 0 )
-        {
-            gchar *aSpecialItemCmd = GetCommandForSpecialItem( pSalMenuItem );
-
-            if ( aSpecialItemCmd != NULL )
-            {
-                g_free( aNativeCommand );
-                aNativeCommand = aSpecialItemCmd;
-            }
-        }
-
-        if ( g_strcmp0( aNativeCommand, "" ) != 0 && pSalMenuItem->mpSubMenu == NULL )
-        {
-            NativeSetItemCommand( nSection, nItemPos, nId, aNativeCommand, itemBits, bChecked, FALSE );
-            NativeCheckItem( nSection, nItemPos, itemBits, bChecked );
-            NativeSetEnableItem( aNativeCommand, bEnabled );
-        }
-
-        GtkSalMenu* pSubmenu = pSalMenuItem->mpSubMenu;
-
-        if ( pSubmenu && pSubmenu->GetMenu() )
-        {
-            NativeSetItemCommand( nSection, nItemPos, nId, aNativeCommand, itemBits, FALSE, TRUE );
-
-            GLOMenu* pSubMenuModel = g_lo_menu_get_submenu_from_item_in_section( pLOMenu, nSection, nItemPos );
-
-            if ( pSubMenuModel == NULL )
-            {
-                pSubMenuModel = g_lo_menu_new();
-                g_lo_menu_set_submenu_to_item_in_section( pLOMenu, nSection, nItemPos, G_MENU_MODEL( pSubMenuModel ) );
-            }
-
-            g_object_unref( pSubMenuModel );
-            pSubmenu->mpFrame = mpFrame;
-            pSubmenu->SetMenuModel( G_MENU_MODEL( pSubMenuModel ) );
-            pSubmenu->SetActionGroup( pActionGroup );
-        }
-
-        g_free( aNativeCommand );
-
-        nItemPos++;
-        validItems++;
-    }
+    UpdateNativeMenu();
 }
 
 void GtkSalMenu::UpdateNativeMenu( )
@@ -302,7 +200,6 @@ void GtkSalMenu::UpdateNativeMenu( )
             pSubmenu->GetMenu()->Activate();
             pSubmenu->GetMenu()->Deactivate();
 
-            pSubmenu->mpFrame = mpFrame;
             pSubmenu->SetMenuModel( G_MENU_MODEL( pSubMenuModel ) );
             pSubmenu->SetActionGroup( pActionGroup );
             pSubmenu->UpdateNativeMenu();
@@ -315,6 +212,16 @@ void GtkSalMenu::UpdateNativeMenu( )
     }
 }
 
+void GtkSalMenu::DisconnectFrame()
+{
+    if(mbMenuBar)
+    {
+        mpMenuModel = NULL;
+        mpActionGroup = NULL;
+        mpFrame = NULL;
+    }
+}
+    
 void ObjectDestroyedNotify( gpointer data )
 {
     if ( data ) {
@@ -334,12 +241,8 @@ GtkSalMenu::GtkSalMenu( sal_Bool bMenuBar ) :
     mpVCLMenu( NULL ),
     mpParentSalMenu( NULL ),
     mpFrame( NULL ),
-    mWatcherId( 0 ),
     mpMenuModel( NULL ),
-    mpActionGroup( NULL ),
-    mnMenuExportId( 0 ),
-    mnAGExportId( 0 ),
-    mbGdkDisposed( false )
+    mpActionGroup( NULL )
 {
 }
 
@@ -395,12 +298,6 @@ void GtkSalMenu::SetFrame( const SalFrame* pFrame )
     std::cout << "GtkSalMenu set to frame" << std::endl;
     mpFrame = static_cast< const GtkSalFrame* >( pFrame );
     GtkSalFrame* pFrameNonConst = const_cast<GtkSalFrame*>(mpFrame);
-    if(pFrameNonConst->GetMenu())
-    {
-        GtkSalMenu* pOldMenu = static_cast< GtkSalMenu*>(pFrameNonConst->GetMenu());
-        pOldMenu->DisconnectFrame();
-    }
-
     // if we had a menu on the GtkSalMenu we have to free it as we generate a
     // full menu anyway and we might need to reuse an existing model and
     // actiongroup
@@ -415,6 +312,7 @@ void GtkSalMenu::SetFrame( const SalFrame* pFrame )
         mpActionGroup = NULL;
     }
     pFrameNonConst->SetMenu( this );
+    mpFrame = static_cast< const GtkSalFrame* >( pFrame );
     pFrameNonConst->EnsureAppMenuWatch();
     // Generate the main menu structure.
     UpdateNativeMenu();

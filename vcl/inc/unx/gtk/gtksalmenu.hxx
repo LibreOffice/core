@@ -50,8 +50,6 @@ private:
     GtkSalMenu*                     mpParentSalMenu;
     const GtkSalFrame*              mpFrame;
 
-    sal_uInt32                      mWatcherId;
-
     // GMenuModel and GActionGroup attributes
     GMenuModel*                     mpMenuModel;
     GActionGroup*                   mpActionGroup;
@@ -104,11 +102,7 @@ public:
     void                        DispatchCommand( gint itemId, const gchar* aCommand );
     void                        Activate( const gchar* aMenuCommand );
     void                        Deactivate( const gchar* aMenuCommand );
-    inline void DisconnectFrame()
-    {
-        mpMenuModel = NULL;
-        mpActionGroup = NULL;
-    };
+    void DisconnectFrame();
     void UpdateNativeMenu();
     void UpdateNativeMenu2();
     bool CanUpdate();
