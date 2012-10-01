@@ -58,7 +58,7 @@ uno::Sequence< ::rtl::OUString > SAL_CALL EmbedServer_getSupportedServiceNames()
 
 extern "C" {
 
-SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * /*pRegistryKey*/ )
+SAL_DLLPUBLIC_EXPORT void * SAL_CALL emser_component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * /*pRegistryKey*/ )
 {
     void * pRet = 0;
 
