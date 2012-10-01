@@ -65,7 +65,7 @@ enum NfHackConversion
 
 struct ImpSvNumberformatInfo            // Struct for FormatInfo
 {
-    String* sStrArray;                  // Array of symbols
+    OUString* sStrArray;                // Array of symbols
     short* nTypeArray;                  // Array of infos
     sal_uInt16 nThousand;               // Count of group separator sequences
     sal_uInt16 nCntPre;                 // Count of digits before decimal point
@@ -281,7 +281,7 @@ public:
     // Substring of a subformat code nNumFor (0..3)
     // nPos == 0xFFFF => last substring
     // bString==true: first/last SYMBOLTYPE_STRING or SYMBOLTYPE_CURRENCY
-    const String* GetNumForString( sal_uInt16 nNumFor, sal_uInt16 nPos,
+    const OUString* GetNumForString( sal_uInt16 nNumFor, sal_uInt16 nPos,
             bool bString = false ) const;
 
     // Subtype of a subformat code nNumFor (0..3)

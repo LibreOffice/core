@@ -1169,7 +1169,7 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
         while (!bEnd)
         {
             short nElemType = rFormat.GetNumForType( nPart, nPos, sal_False );
-            const XubString* pElemStr = rFormat.GetNumForString( nPart, nPos, sal_False );
+            const OUString* pElemStr = rFormat.GetNumForString( nPart, nPos, sal_False );
 
             switch ( nElemType )
             {
@@ -1178,17 +1178,17 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
                     break;
                 case NF_SYMBOLTYPE_DIGIT:
                     if ( bExpFound && pElemStr )
-                        nExpDigits += pElemStr->Len();
-                    else if ( !bDecDashes && pElemStr && pElemStr->GetChar(0) == '-' )
+                        nExpDigits += pElemStr->getLength();
+                    else if ( !bDecDashes && pElemStr && (*pElemStr)[0] == '-' )
                         bDecDashes = sal_True;
-                    else if ( !bVarDecimals && !bInInteger && pElemStr && pElemStr->GetChar(0) == '#' )
+                    else if ( !bVarDecimals && !bInInteger && pElemStr && (*pElemStr)[0] == '#' )
                     {
                         //  If the decimal digits string starts with a '#', variable
                         //  decimals is assumed (for 0.###, but not 0.0##).
                         bVarDecimals = sal_True;
                     }
                     if ( bInInteger && pElemStr )
-                        nIntegerSymbols += pElemStr->Len();
+                        nIntegerSymbols += pElemStr->getLength();
                     nTrailingThousands = 0;
                     break;
                 case NF_SYMBOLTYPE_DECSEP:
@@ -1196,7 +1196,7 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
                     break;
                 case NF_SYMBOLTYPE_THSEP:
                     if (pElemStr)
-                        nTrailingThousands += pElemStr->Len();      // is reset to 0 if digits follow
+                        nTrailingThousands += pElemStr->getLength();      // is reset to 0 if digits follow
                     break;
                 case NF_SYMBOLTYPE_EXP:
                     bExpFound = sal_True;           // following digits are exponent digits
@@ -1236,7 +1236,7 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
             while (!bEnd)
             {
                 short nElemType = rFormat.GetNumForType( nPart, nPos, sal_False );
-                const XubString* pElemStr = rFormat.GetNumForString( nPart, nPos, sal_False );
+                const OUString* pElemStr = rFormat.GetNumForString( nPart, nPos, sal_False );
 
                 switch ( nElemType )
                 {
@@ -1245,7 +1245,7 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
                         break;
                     case NF_SYMBOLTYPE_DIGIT:
                         if ( pElemStr )
-                            nDigitsPassed += pElemStr->Len();
+                            nDigitsPassed += pElemStr->getLength();
                         break;
                     case NF_SYMBOLTYPE_STRING:
                     case NF_SYMBOLTYPE_BLANK:
@@ -1258,7 +1258,7 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
                             if ( nElemType == NF_SYMBOLTYPE_STRING || nElemType == NF_SYMBOLTYPE_PERCENT )
                                 aEmbeddedStr = *pElemStr;
                             else
-                                SvNumberformat::InsertBlanks( aEmbeddedStr, 0, pElemStr->GetChar(1) );
+                                SvNumberformat::InsertBlanks( aEmbeddedStr, 0, (*pElemStr)[1] );
 
                             sal_Int32 nEmbedPos = nIntegerSymbols - nDigitsPassed;
 
@@ -1281,7 +1281,7 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
         while (!bEnd)
         {
             short nElemType = rFormat.GetNumForType( nPart, nPos, sal_False );
-            const XubString* pElemStr = rFormat.GetNumForString( nPart, nPos, sal_False );
+            const OUString* pElemStr = rFormat.GetNumForString( nPart, nPos, sal_False );
 
             switch ( nElemType )
             {
@@ -1328,7 +1328,7 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
                         //  (#i20396# the spaces may also be in embedded-text elements)
 
                         String aBlanks;
-                        SvNumberformat::InsertBlanks( aBlanks, 0, pElemStr->GetChar(1) );
+                        SvNumberformat::InsertBlanks( aBlanks, 0, (*pElemStr)[1] );
                         AddToTextElement_Impl( aBlanks );
                     }
                     break;
@@ -1415,7 +1415,7 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
                             case NUMBERFORMAT_FRACTION:
                                 {
                                     sal_Int32 nInteger = nLeading;
-                                    if ( pElemStr && pElemStr->GetChar(0) == '?' )
+                                    if ( pElemStr && (*pElemStr)[0] == '?' )
                                     {
                                         //  If the first digit character is a question mark,
                                         //  the fraction doesn't have an integer part, and no
@@ -1575,8 +1575,8 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
                     // export only if ODF 1.2 extensions are enabled
                     if( SvtSaveOptions().GetODFDefaultVersion() > SvtSaveOptions::ODFVER_012 )
                     {
-                        if ( pElemStr && pElemStr->Len() > 1 )
-                            WriteRepeatedElement_Impl( pElemStr->GetChar( 1 ) );
+                        if ( pElemStr && pElemStr->getLength() > 1 )
+                            WriteRepeatedElement_Impl( (*pElemStr)[1] );
                     }
                     break;
             }

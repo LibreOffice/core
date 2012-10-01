@@ -2466,7 +2466,7 @@ bool ImpSvNumberInputScan::ScanStringNumFor(
     if ( !pFormat )
         return false;
     const ::utl::TransliterationWrapper* pTransliteration = pFormatter->GetTransliteration();
-    const String* pStr;
+    const OUString* pStr;
     rtl::OUString aString( rString );
     bool bFound = false;
     bool bFirst = true;
