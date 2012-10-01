@@ -2602,10 +2602,10 @@ void SdGenericDrawPage::setNavigationOrder( const Any& rValue )
     throw IllegalArgumentException();
 }
 
-class NavigationOrderAccess : public ::cppu::WeakImplHelper1< XIndexAccess >
+class SdNavigationOrderAccess : public ::cppu::WeakImplHelper1< XIndexAccess >
 {
 public:
-    NavigationOrderAccess( SdrPage* pPage );
+    SdNavigationOrderAccess( SdrPage* pPage );
 
     // XIndexAccess
     virtual sal_Int32 SAL_CALL getCount(  ) throw (RuntimeException);
@@ -2619,7 +2619,7 @@ private:
     std::vector< Reference< XShape > > maShapes;
 };
 
-NavigationOrderAccess::NavigationOrderAccess( SdrPage* pPage )
+SdNavigationOrderAccess::SdNavigationOrderAccess( SdrPage* pPage )
 : maShapes( static_cast< sal_uInt32 >( pPage ? pPage->GetObjCount() : 0 ) )
 {
     if( pPage )
@@ -2630,19 +2630,19 @@ NavigationOrderAccess::NavigationOrderAccess( SdrPage* pPage )
         {
             SdrObject* pObj = pPage->GetObj( nIndex );
             sal_uInt32 nNavPos = pObj->GetNavigationPosition();
-            DBG_ASSERT( !maShapes[nNavPos].is(), "sd::NavigationOrderAccess::NavigationOrderAccess(), duplicate navigation positions from core!" );
+            DBG_ASSERT( !maShapes[nNavPos].is(), "sd::SdNavigationOrderAccess::SdNavigationOrderAccess(), duplicate navigation positions from core!" );
             maShapes[nNavPos] = Reference< XShape >( pObj->getUnoShape(), UNO_QUERY );
         }
     }
 }
 
 // XIndexAccess
-sal_Int32 SAL_CALL NavigationOrderAccess::getCount(  ) throw (RuntimeException)
+sal_Int32 SAL_CALL SdNavigationOrderAccess::getCount(  ) throw (RuntimeException)
 {
     return static_cast< sal_Int32 >( maShapes.size() );
 }
 
-Any SAL_CALL NavigationOrderAccess::getByIndex( sal_Int32 Index ) throw (IndexOutOfBoundsException, WrappedTargetException, RuntimeException)
+Any SAL_CALL SdNavigationOrderAccess::getByIndex( sal_Int32 Index ) throw (IndexOutOfBoundsException, WrappedTargetException, RuntimeException)
 {
     if( (Index < 0) || (Index > getCount()) )
         throw IndexOutOfBoundsException();
@@ -2651,12 +2651,12 @@ Any SAL_CALL NavigationOrderAccess::getByIndex( sal_Int32 Index ) throw (IndexOu
 }
 
 // XElementAccess
-Type SAL_CALL NavigationOrderAccess::getElementType(  ) throw (RuntimeException)
+Type SAL_CALL SdNavigationOrderAccess::getElementType(  ) throw (RuntimeException)
 {
     return XShape::static_type();
 }
 
-sal_Bool SAL_CALL NavigationOrderAccess::hasElements(  ) throw (RuntimeException)
+sal_Bool SAL_CALL SdNavigationOrderAccess::hasElements(  ) throw (RuntimeException)
 {
     return maShapes.empty() ? sal_False : sal_True;
 }
@@ -2665,7 +2665,7 @@ Any SdGenericDrawPage::getNavigationOrder()
 {
     if( GetPage()->HasObjectNavigationOrder() )
     {
-        return Any( Reference< XIndexAccess >( new NavigationOrderAccess( GetPage() ) ) );
+        return Any( Reference< XIndexAccess >( new SdNavigationOrderAccess( GetPage() ) ) );
     }
     else
     {

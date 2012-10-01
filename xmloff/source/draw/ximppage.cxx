@@ -563,10 +563,10 @@ void SdXMLGenericPageContext::SetPageMaster( OUString& rsPageMasterName )
     }
 }
 
-class NavigationOrderAccess : public ::cppu::WeakImplHelper1< XIndexAccess >
+class XoNavigationOrderAccess : public ::cppu::WeakImplHelper1< XIndexAccess >
 {
 public:
-    NavigationOrderAccess( std::vector< Reference< XShape > >& rShapes );
+    XoNavigationOrderAccess( std::vector< Reference< XShape > >& rShapes );
 
     // XIndexAccess
     virtual sal_Int32 SAL_CALL getCount(  ) throw (RuntimeException);
@@ -580,18 +580,18 @@ private:
     std::vector< Reference< XShape > > maShapes;
 };
 
-NavigationOrderAccess::NavigationOrderAccess( std::vector< Reference< XShape > >& rShapes )
+XoNavigationOrderAccess::XoNavigationOrderAccess( std::vector< Reference< XShape > >& rShapes )
 {
     maShapes.swap( rShapes );
 }
 
 // XIndexAccess
-sal_Int32 SAL_CALL NavigationOrderAccess::getCount(  ) throw (RuntimeException)
+sal_Int32 SAL_CALL XoNavigationOrderAccess::getCount(  ) throw (RuntimeException)
 {
     return static_cast< sal_Int32 >( maShapes.size() );
 }
 
-Any SAL_CALL NavigationOrderAccess::getByIndex( sal_Int32 Index ) throw (IndexOutOfBoundsException, WrappedTargetException, RuntimeException)
+Any SAL_CALL XoNavigationOrderAccess::getByIndex( sal_Int32 Index ) throw (IndexOutOfBoundsException, WrappedTargetException, RuntimeException)
 {
     if( (Index < 0) || (Index > getCount()) )
         throw IndexOutOfBoundsException();
@@ -600,12 +600,12 @@ Any SAL_CALL NavigationOrderAccess::getByIndex( sal_Int32 Index ) throw (IndexOu
 }
 
 // XElementAccess
-Type SAL_CALL NavigationOrderAccess::getElementType(  ) throw (RuntimeException)
+Type SAL_CALL XoNavigationOrderAccess::getElementType(  ) throw (RuntimeException)
 {
     return XShape::static_type();
 }
 
-sal_Bool SAL_CALL NavigationOrderAccess::hasElements(  ) throw (RuntimeException)
+sal_Bool SAL_CALL XoNavigationOrderAccess::hasElements(  ) throw (RuntimeException)
 {
     return maShapes.empty() ? sal_False : sal_True;
 }
@@ -640,7 +640,7 @@ void SdXMLGenericPageContext::SetNavigationOrder()
         }
 
         Reference< XPropertySet > xSet( mxShapes, UNO_QUERY_THROW );
-        xSet->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "NavigationOrder" ) ), Any( Reference< XIndexAccess >( new NavigationOrderAccess( aShapes ) ) ) );
+        xSet->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "NavigationOrder" ) ), Any( Reference< XIndexAccess >( new XoNavigationOrderAccess( aShapes ) ) ) );
     }
     catch(const uno::Exception&)
     {
