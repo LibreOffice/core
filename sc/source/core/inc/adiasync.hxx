@@ -52,7 +52,7 @@ private:
         String*     pStr;
     };
     ScAddInDocs*    pDocs;              // List of using documents
-    FuncData*       mpFuncData;         // Pointer to files in collection
+    FuncData*       mpFuncData;         // Pointer to data in collection
     sal_uLong       nHandle;            // is casted from double to sal_uLong
     ParamType       meType;             // result of type PTR_DOUBLE or PTR_STRING
     bool            bValid;             // is value valid?
