@@ -75,11 +75,29 @@ rtl::OUString GetGtkKeyName( rtl::OUString keyName )
     return aGtkKeyName;
 }
 
-static void UpdateNativeMenu2( GtkSalMenu *pMenu )
+void UpdateNativeMenu2( GtkSalMenu *pMenu )
 {
     if ( pMenu == NULL )
         return;
-
+    if (!pMenu->mpFrame)
+        return;
+    GObject* pWindow = G_OBJECT(gtk_widget_get_window( GTK_WIDGET(pMenu->mpFrame->getWindow()) ));
+    if(!pWindow)
+        return;
+    if(pMenu->mbMenuBar)
+    {
+        Menu* pVCLMenu = pMenu->GetMenu();
+        pMenu->mpMenuModel = G_MENU_MODEL( g_object_get_data( G_OBJECT( pWindow ), "g-lo-menubar" ) );
+        pMenu->mpActionGroup = G_ACTION_GROUP( g_object_get_data( G_OBJECT( pWindow ), "g-lo-action-group" ) );
+        //std::cout << "updating root menu model" << mpMenuModel << std::endl;
+    }
+    else
+    {
+        if(!pMenu->mpActionGroup)
+            return;
+        if(!pMenu->mpMenuModel)
+            return;
+    }
     Menu* pVCLMenu = pMenu->GetMenu();
     GLOMenu* pLOMenu = G_LO_MENU( pMenu->GetMenuModel() );
     GActionGroup* pActionGroup = pMenu->GetActionGroup();

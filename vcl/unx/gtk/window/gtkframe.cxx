@@ -478,6 +478,7 @@ GtkSalFrame::GtkSalFrame( SystemParentData* pSysData )
     Init( pSysData );
 }
 
+#if !GTK_CHECK_VERSION(3,0,0)
 static void
 gdk_x11_window_set_utf8_property  (GdkWindow *window,
                                    const gchar *name,
@@ -500,6 +501,7 @@ gdk_x11_window_set_utf8_property  (GdkWindow *window,
                        gdk_x11_get_xatom_by_name_for_display (display, name));
     }
 }
+#endif
 
 // AppMenu watch functions.
 

@@ -109,6 +109,7 @@ public:
         mpMenuModel = NULL;
         mpActionGroup = NULL;
     };
+    friend void UpdateNativeMenu2( GtkSalMenu *pMenu );
 };
 
 class GtkSalMenuItem : public SalMenuItem
