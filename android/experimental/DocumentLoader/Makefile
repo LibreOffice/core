@@ -32,6 +32,7 @@ LIBS = \
 	basegfxlo \
 	bootstrap.uno \
 	canvastoolslo \
+	cdrlib \
 	collator_data \
 	comphelpgcc3 \
 	configmgr.uno \
@@ -89,6 +90,7 @@ LIBS = \
 	lpsolve55 \
 	lwpftlo \
 	msfilterlo \
+	mspublib \
 	mswordlo \
 	ooxlo \
 	orcus \
@@ -187,7 +189,7 @@ properties:
 link-so:
 # Build the single .so for this app
 	mkdir -p $(OBJLOCAL)
-	$(CXX) -Wl,-Map,liblo-native-code.map -Wl,--no-undefined -DANDROID -DDISABLE_DYNLOADING -shared -o $(OBJLOCAL)/liblo-native-code.so -I$(OUTDIR)/inc native-code.cxx -L$(OUTDIR)/lib $(WHOLELIBS) $(LIBS) -lgnustl_static -landroid -llog -lz
+	$(CXX) -Wl,--stats -Wl,--no-keep-files-mapped -Wl,--no-undefined -DANDROID -DDISABLE_DYNLOADING -shared -o $(OBJLOCAL)/liblo-native-code.so -I$(OUTDIR)/inc native-code.cxx -L$(OUTDIR)/lib $(WHOLELIBS) $(LIBS) -lgnustl_static -landroid -llog -lz
 	mkdir -p $(SODEST)
 	cp $(OBJLOCAL)/liblo-native-code.so $(SODEST)
 	$(STRIP) --strip-debug $(SODEST)/liblo-native-code.so

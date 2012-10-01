@@ -12,11 +12,16 @@
 extern "C"
 {
     extern void * hwp_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
+    extern void * lotuswordpro_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * sc_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * scd_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * scfilt_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
+    extern void * sd_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
+    extern void * sdd_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
+    extern void * svgfilter_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * sw_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * swd_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
+    extern void * t602filter_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * unoxml_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * wpftdraw_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * wpftwriter_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
@@ -32,11 +37,16 @@ lo_get_libmap(void)
 {
     static lib_to_component_mapping map[] = {
         { "libhwplo.a", hwp_component_getFactory },
+        { "liblwpftlo.a", lotuswordpro_component_getFactory },
         { "libscdlo.a", scd_component_getFactory },
         { "libscfiltlo.a", scfilt_component_getFactory },
         { "libsclo.a", sc_component_getFactory },
+        { "libsddlo.a", sdd_component_getFactory },
+        { "libsdlo.a", sd_component_getFactory },
+        { "libsvgfilterlo.a", svgfilter_component_getFactory },
         { "libswdlo.a", swd_component_getFactory },
         { "libswlo.a", sw_component_getFactory },
+        { "libt602filterlo.a", t602filter_component_getFactory },
         { "libunoxmllo.a", unoxml_component_getFactory },
         { "libwpftdrawlo.a", wpftdraw_component_getFactory },
         { "libwpftwriterlo.a", wpftwriter_component_getFactory },
