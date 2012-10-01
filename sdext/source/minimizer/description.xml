@@ -5,7 +5,7 @@
     xmlns:xlink="http://www.w3.org/1999/xlink"
     xmlns:dep="http://openoffice.org/extensions/description/2006">
 
-    <identifier value="com.sun.star.PresentationMinimizer"/>
+    <identifier value="com.sun.star.PresentationMinimizer-@PLATFORM@"/>
 
     <dependencies>
         <OpenOffice.org-minimal-version value="2.3" dep:name="OpenOffice.org 2.3"/>
