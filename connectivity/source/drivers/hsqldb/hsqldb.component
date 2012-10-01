@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  -->
 
-<component loader="com.sun.star.loader.SharedLibrary"
+<component loader="com.sun.star.loader.SharedLibrary" prefix="hsqldb"
     xmlns="http://openoffice.org/2010/uno-components">
   <implementation name="com.sun.star.sdbcx.comp.hsqldb.Driver">
     <service name="com.sun.star.sdbc.Driver"/>
