@@ -2752,7 +2752,6 @@ void WW8TabDesc::FinishSwTable()
                                                nRowSpan :
                                              ((-1) * (nRowSpan - n));
                     pCurrentBox->setRowSpan( nRowSpanSet );
-                    ++n;
                 }
             }
         }
