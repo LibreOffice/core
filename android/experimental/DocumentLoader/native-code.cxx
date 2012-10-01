@@ -11,6 +11,10 @@
 
 extern "C"
 {
+    extern void * avmedia_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
+    extern void * fwk_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
+    extern void * fwl_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
+    extern void * fwm_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * hwp_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * lotuswordpro_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * sc_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
@@ -22,6 +26,7 @@ extern "C"
     extern void * sw_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * swd_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * t602filter_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
+    extern void * textfd_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * unoxml_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * wpftdraw_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * wpftwriter_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
@@ -36,6 +41,10 @@ const lib_to_component_mapping *
 lo_get_libmap(void)
 {
     static lib_to_component_mapping map[] = {
+        { "libavmedialo.a", avmedia_component_getFactory },
+        { "libfwklo.a", fwk_component_getFactory },
+        { "libfwllo.a", fwl_component_getFactory },
+        { "libfwmlo.a", fwm_component_getFactory },
         { "libhwplo.a", hwp_component_getFactory },
         { "liblwpftlo.a", lotuswordpro_component_getFactory },
         { "libscdlo.a", scd_component_getFactory },
@@ -47,6 +56,7 @@ lo_get_libmap(void)
         { "libswdlo.a", swd_component_getFactory },
         { "libswlo.a", sw_component_getFactory },
         { "libt602filterlo.a", t602filter_component_getFactory },
+        { "libtextfdlo.a", textfd_component_getFactory },
         { "libunoxmllo.a", unoxml_component_getFactory },
         { "libwpftdrawlo.a", wpftdraw_component_getFactory },
         { "libwpftwriterlo.a", wpftwriter_component_getFactory },

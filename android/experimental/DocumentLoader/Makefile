@@ -59,6 +59,8 @@ LIBS = \
 	fwelo \
 	fwilo \
 	fwklo \
+	fwllo \
+	fwmlo \
 	gcc3_uno \
 	hwplo \
 	i18nisolang1gcc3 \
