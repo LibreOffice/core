@@ -603,9 +603,9 @@ void GtkSalFrame::EnsureAppMenuWatch()
          G_BUS_NAME_WATCHER_FLAGS_NONE,
          on_registrar_available,
          on_registrar_unavailable,
-         reinterpret_cast<gpointer>(this),
+         static_cast<GtkSalFrame*>(this),
          NULL);
-    ensure_dbus_setup(gtk_widget_get_window(GTK_WIDGET(m_pWindow)), this);
+    ensure_dbus_setup(gtk_widget_get_window(GTK_WIDGET(m_pWindow)), static_cast<GtkSalFrame*>(this));
 }
 
 GtkSalFrame::~GtkSalFrame()
@@ -651,6 +651,8 @@ GtkSalFrame::~GtkSalFrame()
         gtk_widget_destroy( GTK_WIDGET( m_pFixedContainer ) );
     {
         SolarMutexGuard aGuard;
+        if(m_nWatcherId)
+            g_bus_unwatch_name(m_nWatcherId);
         if(m_pSalMenu)
             static_cast<GtkSalMenu*>(m_pSalMenu)->DisconnectFrame();
         if( m_pWindow )
