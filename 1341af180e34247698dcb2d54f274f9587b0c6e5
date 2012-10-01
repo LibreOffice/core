@@ -33,6 +33,40 @@
       "revId": "1341af180e34247698dcb2d54f274f9587b0c6e5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAO3///yk\u003d",
+        "filename": "toolkit/source/awt/vclxpointer.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2012-10-01T10:38:16Z",
+      "side": 1,
+      "message": "What is this for?",
+      "revId": "1341af180e34247698dcb2d54f274f9587b0c6e5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAO3///yg\u003d",
+        "filename": "xmlscript/source/xml_helper/xml_element.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2012-10-01T10:38:16Z",
+      "side": 1,
+      "message": "What is this for?",
+      "revId": "1341af180e34247698dcb2d54f274f9587b0c6e5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }

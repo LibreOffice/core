@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAO3///yo\u003d",
+        "filename": "svtools/source/control/valueacc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1220,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2012-10-01T10:38:16Z",
+      "side": 0,
+      "message": "That won\u0027t work here, neither.",
+      "revId": "037ff8fac75db980a3bc44092df243aadaad3d38",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
