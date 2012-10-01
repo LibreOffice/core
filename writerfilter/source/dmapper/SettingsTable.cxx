@@ -79,6 +79,7 @@ struct SettingsTable_Impl
     bool                m_bEvenAndOddHeaders;
     bool                m_bUsePrinterMetrics;
     bool                m_bDoNotUseHTMLParagraphAutoSpacing;
+    bool                m_bSplitPgBreakAndParaMark;
 
     SettingsTable_Impl( DomainMapper& rDMapper, const uno::Reference< lang::XMultiServiceFactory > xTextFactory ) :
     m_rDMapper( rDMapper )
@@ -100,6 +101,7 @@ struct SettingsTable_Impl
     , m_bEvenAndOddHeaders(false)
     , m_bUsePrinterMetrics(false)
     , m_bDoNotUseHTMLParagraphAutoSpacing(false)
+    , m_bSplitPgBreakAndParaMark(false)
     {}
 
 };
@@ -213,6 +215,9 @@ void SettingsTable::lcl_sprm(Sprm& rSprm)
     case NS_ooxml::LN_CT_Compat_doNotUseHTMLParagraphAutoSpacing:
         m_pImpl->m_bDoNotUseHTMLParagraphAutoSpacing = nIntValue;
         break;
+    case NS_ooxml::LN_CT_Compat_splitPgBreakAndParaMark:
+        m_pImpl->m_bSplitPgBreakAndParaMark = nIntValue;
+        break;
     default:
     {
 #ifdef DEBUG_DMAPPER_SETTINGS_TABLE
@@ -258,6 +263,11 @@ bool SettingsTable::GetEvenAndOddHeaders() const
 bool SettingsTable::GetDoNotUseHTMLParagraphAutoSpacing() const
 {
     return m_pImpl->m_bDoNotUseHTMLParagraphAutoSpacing;
+}
+
+bool SettingsTable::GetSplitPgBreakAndParaMark() const
+{
+    return m_pImpl->m_bSplitPgBreakAndParaMark;
 }
 
 void SettingsTable::ApplyProperties( uno::Reference< text::XTextDocument > xDoc )
