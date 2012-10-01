@@ -25,42 +25,17 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_Module_Module,sdext))
+$(eval $(call gb_CustomTarget_CustomTarget,sdext/source/presenter/help/en-US/com.sun.PresenterScreen))
 
-ifeq ($(ENABLE_MINIMIZER),YES)
-$(eval $(call gb_Module_add_targets,sdext,\
-    Configuration_minimizer \
-    Extension_minimizer \
-    Library_minimizer \
-    Rdb_minimizer \
-))
-endif
+$(call gb_CustomTarget_get_target,sdext/source/presenter/help/en-US/com.sun.PresenterScreen) : \
+	$(call gb_CustomTarget_get_workdir,sdext/source/presenter/help/en-US/com.sun.PresenterScreen)/presenter.xhp
 
-ifeq ($(ENABLE_PDFIMPORT),YES)
-$(eval $(call gb_Module_add_targets,sdext,\
-    CustomTarget_pdfimport \
-    Executable_pdf2xml \
-    Executable_pdfunzip \
-    Executable_xpdfimport \
-    Extension_pdfimport \
-    Library_pdfimport \
-    Rdb_pdfimport \
-    StaticLibrary_pdfimport_s \
-))
+include $(SRCDIR)/sdext/platform.mk
 
-$(eval $(call gb_Module_add_check_targets,sdext,\
-    CppunitTest_pdfimport \
-))
-endif
+$(call gb_CustomTarget_get_workdir,sdext/source/presenter/help/en-US/com.sun.PresenterScreen)/presenter.xhp : \
+		$(SRCDIR)/sdext/source/presenter/help/en-US/com.sun.PresenterScreen/presenter.xhp \
+		| $(call gb_CustomTarget_get_workdir,sdext/source/presenter/help/en-US/com.sun.PresenterScreen)/.dir
+	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),SED,1)
+	sed "s/PLATFORMID/$(sdext_PLATFORM)/" < $< > $@
 
-ifeq ($(ENABLE_PRESENTER_SCREEN),YES)
-$(eval $(call gb_Module_add_targets,sdext,\
-    Configuration_presenter \
-    CustomTarget_presenter \
-    Extension_presenter \
-    Library_presenter \
-    Rdb_presenter \
-))
-endif
-
-# vim:set shiftwidth=4 softtabstop=4 expandtab:
+# vim:set shiftwidth=4 tabstop=4 noexpandtab:
