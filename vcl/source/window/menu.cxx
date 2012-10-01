@@ -2254,7 +2254,7 @@ Size Menu::ImplGetNativeCheckAndRadioSize( Window* pWin, long& rCheckHeight, lon
             )
             {
                 rCheckHeight = aNativeBounds.GetHeight();
-                nCheckWidth = aNativeBounds.GetWidth();
+                nCheckWidth = aNativeContent.GetWidth();
             }
         }
         if( pWin->IsNativeControlSupported( CTRL_MENU_POPUP, PART_MENU_ITEM_RADIO_MARK ) )
@@ -2270,7 +2270,7 @@ Size Menu::ImplGetNativeCheckAndRadioSize( Window* pWin, long& rCheckHeight, lon
             )
             {
                 rRadioHeight = aNativeBounds.GetHeight();
-                nRadioWidth = aNativeBounds.GetWidth();
+                nRadioWidth = aNativeContent.GetWidth();
             }
         }
     }
