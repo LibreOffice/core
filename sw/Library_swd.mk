@@ -48,6 +48,7 @@ $(eval $(call gb_Library_add_linked_libs,swd,\
     sal \
     sfx \
     sot \
+    stl \
     svl \
     svt \
     tl \
