@@ -2,8 +2,6 @@ Contains the UNO Runtime Environment (URE).
 
 Beginnings of standalone UNO distribution.
 
-See also:
-[http://udk.openoffice.org/]
 
 You may also want to read the README located at:
 [git:ure/source/README]
