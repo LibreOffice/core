@@ -378,9 +378,9 @@ public:
                 sal_Unicode cQuote = '"',
                 sal_Unicode cEscIn = '\0', sal_Unicode cEscOut = '\\' );
 
-    void SetComment( const String& rStr )
+    void SetComment( const OUString& rStr )
         { sComment = rStr; }
-    const String& GetComment() const { return sComment; }
+    const OUString& GetComment() const { return sComment; }
 
     /** Insert the number of blanks into the string that is needed to simulate
         the width of character c for underscore formats */
@@ -459,7 +459,7 @@ public:
 private:
     ImpSvNumFor NumFor[4];          // Array for the 4 subformats
     OUString sFormatstring;         // The format code string
-    String sComment;                // Comment, since number formatter version 6
+    OUString sComment;                // Comment, since number formatter version 6
     double fLimit1;                 // Value for first condition
     double fLimit2;                 // Value for second condition
     ImpSvNumberformatScan& rScan;   // Format code scanner
