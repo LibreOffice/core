@@ -104,8 +104,7 @@ public:
     void                        Deactivate( const gchar* aMenuCommand );
     void DisconnectFrame();
     void UpdateNativeMenu();
-    void UpdateNativeMenu2();
-    bool CanUpdate();
+    bool PrepUpdate();
 };
 
 class GtkSalMenuItem : public SalMenuItem

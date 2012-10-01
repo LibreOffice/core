@@ -75,7 +75,7 @@ rtl::OUString GetGtkKeyName( rtl::OUString keyName )
     return aGtkKeyName;
 }
 
-bool GtkSalMenu::CanUpdate()
+bool GtkSalMenu::PrepUpdate()
 {
     const GtkSalFrame* pFrame = GetFrame();
     if (!pFrame)
@@ -101,14 +101,9 @@ bool GtkSalMenu::CanUpdate()
     return true;
 }
 
-void GtkSalMenu::UpdateNativeMenu2()
-{
-    UpdateNativeMenu();
-}
-
 void GtkSalMenu::UpdateNativeMenu( )
 {
-    if(!CanUpdate())
+    if(!PrepUpdate())
         return;
     Menu* pVCLMenu = GetMenu();
     GLOMenu* pLOMenu = G_LO_MENU( GetMenuModel() );
@@ -182,13 +177,11 @@ void GtkSalMenu::UpdateNativeMenu( )
         }
 
         GtkSalMenu* pSubmenu = pSalMenuItem->mpSubMenu;
+        GLOMenu* pSubMenuModel = g_lo_menu_get_submenu_from_item_in_section( pLOMenu, nSection, nItemPos );
 
         if ( pSubmenu && pSubmenu->GetMenu() )
         {
             NativeSetItemCommand( nSection, nItemPos, nId, aNativeCommand, itemBits, FALSE, TRUE );
-
-            GLOMenu* pSubMenuModel = g_lo_menu_get_submenu_from_item_in_section( pLOMenu, nSection, nItemPos );
-
             if ( pSubMenuModel == NULL )
             {
                 pSubMenuModel = g_lo_menu_new();
@@ -204,6 +197,10 @@ void GtkSalMenu::UpdateNativeMenu( )
             pSubmenu->SetActionGroup( pActionGroup );
             pSubmenu->UpdateNativeMenu();
         }
+        else if (pSubMenuModel)
+        {
+            g_lo_menu_set_submenu_to_item_in_section( pLOMenu, nSection, nItemPos, NULL );
+        };
 
         g_free( aNativeCommand );
 
@@ -520,7 +517,7 @@ void GtkSalMenu::Activate( const gchar* aMenuCommand )
 
     if ( pSalSubMenu != NULL ) {
         pSalSubMenu->mpVCLMenu->Activate();
-        pSalSubMenu->UpdateNativeMenu2();
+        pSalSubMenu->UpdateNativeMenu();
     }
 }
 
