@@ -58,9 +58,6 @@ using namespace ::com::sun::star::formula;
 using namespace ::com::sun::star::view;
 using namespace ::com::sun::star::script;
 
-
-using rtl::OUString;
-
 #define TWIP_TO_MM100(TWIP)     ((TWIP) >= 0 ? (((TWIP)*127L+36L)/72L) : (((TWIP)*127L-36L)/72L))
 #define MM100_TO_TWIP(MM100)    ((MM100) >= 0 ? (((MM100)*72L+63L)/127L) : (((MM100)*72L-63L)/127L))
 
@@ -91,9 +88,9 @@ SmPrintUIOptions::SmPrintUIOptions()
 
     // create Section for formula (results in an extra tab page in dialog)
     SvtModuleOptions aOpt;
-    String aAppGroupname( aLocalizedStrings.GetString( 0 ) );
-    aAppGroupname.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM( "%s" ) ),
-                                    aOpt.GetModuleName( SvtModuleOptions::E_SMATH ) );
+    OUString aAppGroupname(
+        aLocalizedStrings.GetString( 0 ).
+            replaceFirst( "%s", aOpt.GetModuleName( SvtModuleOptions::E_SMATH ) ) );
     m_aUIProperties[nIdx++].Value = setGroupControlOpt("tabcontrol-page2", aAppGroupname, ".HelpID:vcl:PrintDialog:TabPage:AppPage");
 
     // create subgroup for print options
@@ -473,13 +470,12 @@ void SmModel::_setPropertyValues(const PropertyMapEntry** ppEntries, const Any* 
             case HANDLE_CUSTOM_FONT_NAME_SANS              :
             case HANDLE_CUSTOM_FONT_NAME_FIXED             :
             {
-                OUString aText;
-                *pValues >>= aText;
-                String sFontName = aText;
-                if(!sFontName.Len())
+                OUString sFontName;
+                *pValues >>= sFontName;
+                if(sFontName.isEmpty())
                     throw IllegalArgumentException();
 
-                if(aFormat.GetFont((*ppEntries)->mnMemberId).GetName() != sFontName)
+                if(OUString(aFormat.GetFont((*ppEntries)->mnMemberId).GetName()) != sFontName)
                 {
                     const SmFace rOld = aFormat.GetFont((*ppEntries)->mnMemberId);
 
