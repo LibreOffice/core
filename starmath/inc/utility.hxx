@@ -27,10 +27,6 @@
 #include <tools/fract.hxx>
 
 
-class String;
-
-/////////////////////////////////////////////////////////////////
-
 inline long SmPtsTo100th_mm(long nNumPts)
     // returns the length (in 100th of mm) that corresponds to the length
     // 'nNumPts' (in units points).
@@ -126,7 +122,6 @@ class SmPickList : public SfxPtrArr
 protected:
     sal_uInt16  nSize;
 
-    virtual void   *CreateItem(const String& rString) = 0;
     virtual void   *CreateItem(const void *pItem) = 0;
     virtual void    DestroyItem(void *pItem) = 0;
 
@@ -172,7 +167,6 @@ class SmFontDialog;
 class SmFontPickList : public SmPickList
 {
 protected:
-    virtual void   *CreateItem(const String& rString);
     virtual void   *CreateItem(const void *pItem);
     virtual void    DestroyItem(void *pItem);
 

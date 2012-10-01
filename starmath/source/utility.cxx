@@ -129,11 +129,6 @@ void SmPickList::Clear()
 
 /**************************************************************************/
 
-void * SmFontPickList::CreateItem(const String& /*rString*/)
-{
-    return new Font();
-}
-
 void * SmFontPickList::CreateItem(const void *pItem)
 {
     return new Font(*((Font *) pItem));
