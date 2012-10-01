@@ -46,31 +46,31 @@ Renderable::Renderable (BaseWindow* pWin)
 
     // show Subgroup for print range
     vcl::PrinterOptionsHelper::UIControlOptions aPrintRangeOpt;
-    aPrintRangeOpt.maGroupHint = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintRange" ) );
+    aPrintRangeOpt.maGroupHint = "PrintRange" ;
     aPrintRangeOpt.mbInternalOnly = true;
     m_aUIProperties[0].Value = setSubgroupControlOpt("printrange",
-        rtl::OUString(aStrings.GetString(0)), rtl::OUString(), aPrintRangeOpt);
+        OUString(aStrings.GetString(0)), OUString(), aPrintRangeOpt);
 
     // create a choice for the range to print
-    rtl::OUString aPrintContentName( RTL_CONSTASCII_USTRINGPARAM( "PrintContent" ) );
-    Sequence< rtl::OUString > aChoices( 2 );
-    Sequence< rtl::OUString > aHelpIds( 2 );
-    Sequence< rtl::OUString > aWidgetIds( 2 );
+    OUString aPrintContentName( "PrintContent" );
+    Sequence< OUString > aChoices( 2 );
+    Sequence< OUString > aHelpIds( 2 );
+    Sequence< OUString > aWidgetIds( 2 );
     aChoices[0] = aStrings.GetString( 1 );
-    aHelpIds[0] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".HelpID:vcl:PrintDialog:PrintContent:RadioButton:0" ) );
+    aHelpIds[0] = ".HelpID:vcl:PrintDialog:PrintContent:RadioButton:0" ;
     aChoices[1] = aStrings.GetString( 2 );
-    aHelpIds[1] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".HelpID:vcl:PrintDialog:PrintContent:RadioButton:1" ) );
-    aWidgetIds[0] = rtl::OUString("printallpages");
-    aWidgetIds[1] = rtl::OUString("printpages");
-    m_aUIProperties[1].Value = setChoiceRadiosControlOpt(aWidgetIds, rtl::OUString(),
+    aHelpIds[1] = ".HelpID:vcl:PrintDialog:PrintContent:RadioButton:1" ;
+    aWidgetIds[0] = "printallpages" ;
+    aWidgetIds[1] = "printpages" ;
+    m_aUIProperties[1].Value = setChoiceRadiosControlOpt(aWidgetIds, OUString(),
                                                    aHelpIds, aPrintContentName,
                                                    aChoices, 0);
 
     // create a an Edit dependent on "Pages" selected
     vcl::PrinterOptionsHelper::UIControlOptions aPageRangeOpt(aPrintContentName, 1, true);
-    m_aUIProperties[2].Value = setEditControlOpt("pagerange", rtl::OUString(),
-                                                 rtl::OUString(), "PageRange",
-                                                 rtl::OUString(), aPageRangeOpt);
+    m_aUIProperties[2].Value = setEditControlOpt("pagerange", OUString(),
+                                                 OUString(), "PageRange",
+                                                 OUString(), aPageRangeOpt);
 }
 
 Renderable::~Renderable()
@@ -80,7 +80,7 @@ Renderable::~Renderable()
 Printer* Renderable::getPrinter()
 {
     Printer* pPrinter = NULL;
-    Any aValue( getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "RenderDevice" ) ) ) );
+    Any aValue( getValue( "RenderDevice" ) );
     Reference<awt::XDevice> xRenderDevice;
 
     if( aValue >>= xRenderDevice )
@@ -107,7 +107,7 @@ sal_Int32 SAL_CALL Renderable::getRendererCount (
             sal_Int64 nContent = getIntValue( "PrintContent", -1 );
             if( nContent == 1 )
             {
-                rtl::OUString aPageRange( getStringValue( "PageRange" ) );
+                OUString aPageRange( getStringValue( "PageRange" ) );
                 if( !aPageRange.isEmpty() )
                 {
                     StringRangeEnumerator aRangeEnum( aPageRange, 0, nCount-1 );
@@ -139,7 +139,7 @@ Sequence<beans::PropertyValue> SAL_CALL Renderable::getRenderer (
         Size aPageSize( pPrinter->PixelToLogic( pPrinter->GetPaperSizePixel(), MapMode( MAP_100TH_MM ) ) );
 
         aVals.realloc( 1 );
-        aVals[0].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PageSize" ) );
+        aVals[0].Name = "PageSize" ;
         awt::Size aSize;
         aSize.Width  = aPageSize.Width();
         aSize.Height = aPageSize.Height();
@@ -165,7 +165,7 @@ void SAL_CALL Renderable::render (
             sal_Int64 nContent = getIntValue( "PrintContent", -1 );
             if( nContent == 1 )
             {
-                rtl::OUString aPageRange( getStringValue( "PageRange" ) );
+                OUString aPageRange( getStringValue( "PageRange" ) );
                 if( !aPageRange.isEmpty() )
                 {
                     sal_Int32 nPageCount = mpWindow->countPages( pPrinter );
