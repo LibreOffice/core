@@ -26,7 +26,7 @@
 *
 **********************************************************************-->
 
-<component loader="com.sun.star.loader.SharedLibrary"
+<component loader="com.sun.star.loader.SharedLibrary" prefix="updchkui"
     xmlns="http://openoffice.org/2010/uno-components">
   <implementation name="vnd.sun.UpdateCheckUI">
     <service name="com.sun.star.setup.UpdateCheckUI"/>
