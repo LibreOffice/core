@@ -99,6 +99,30 @@ static sal_Char sIndentTabs[MAX_INDENT_LEVEL+2] =
     "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t";
 
 SwHTMLWriter::SwHTMLWriter( const String& rBaseURL )
+    , bCfgOutStyles( sal_False )
+    , bCfgPreferStyles( sal_False )
+    , bCfgFormFeed( sal_False )
+    , bCfgStarBasic( sal_False )
+    , bCfgCpyLinkedGrfs( sal_False )
+    , bFirstLine( sal_False )
+    , bTagOn( sal_False )
+    , bTxtAttr( sal_False )
+    , bOutOpts( sal_False )
+    , bOutTable( sal_False )
+    , bOutHeader( sal_False )
+    , bOutFooter( sal_False )
+    , bOutFlyFrame( sal_False )
+    , bFirstCSS1Rule( sal_False )
+    , bFirstCSS1Property( sal_False )
+    , bPoolCollTextModified( sal_False )
+    , bCSS1IgnoreFirstPageDesc( sal_False )
+    , bNoAlign( sal_False )
+    , bClearLeft( sal_False )
+    , bClearRight( sal_False )
+    , bLFPossible( sal_False )
+    , bPreserveForm( sal_False )
+    , bCfgNetscape4( sal_False )
+
 {
     SetBaseURL( rBaseURL );
     bFirstLine = sal_True;
