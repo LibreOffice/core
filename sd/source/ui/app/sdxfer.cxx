@@ -356,7 +356,7 @@ void SdTransferable::CreateData()
 
 // -----------------------------------------------------------------------------
 
-sal_Bool lcl_HasOnlyControls( SdrModel* pModel )
+static sal_Bool lcl_HasOnlyControls( SdrModel* pModel )
 {
     sal_Bool bOnlyControls = sal_False;         // default if there are no objects
 
