@@ -24,11 +24,6 @@
 
 package com.sun.star.lib.uno.adapter;
 
-/**
- *
- * @author  lo119109
- */
-
 import com.sun.star.io.*;
 import  com.sun.star.lib.uno.helper.ComponentBase;
 

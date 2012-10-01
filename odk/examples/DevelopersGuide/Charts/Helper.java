@@ -49,9 +49,8 @@ import com.sun.star.frame.XModel;
 
 // __________ Implementation __________
 
-/** Helper for creating a calc document adding cell values and charts
-    @author Bj&ouml;rn Milcke
- */
+// Helper for creating a calc document adding cell values and charts
+
 public class Helper
 {
     public Helper( String[] args )

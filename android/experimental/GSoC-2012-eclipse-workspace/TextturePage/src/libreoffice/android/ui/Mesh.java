@@ -30,9 +30,6 @@ import android.util.Log;
 /**
  * Mesh is a base class for 3D objects making it easier to create and maintain
  * new primitives.
- * 
- * @author Per-Erik Bergman (per-erik.bergman@jayway.com)
- * 
  */
 public class Mesh {
         // Our vertex buffer.

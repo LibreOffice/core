@@ -35,10 +35,6 @@ import com.sun.star.xforms.XFormsUIHelper1;
 import com.sun.star.xforms.XModel;
 import integration.forms.DocumentType;
 
-/**
- *
- * @author fs93730
- */
 public class XMLDocument extends integration.forms.DocumentHelper
 {
     private XFormsSupplier  m_formsSupplier;

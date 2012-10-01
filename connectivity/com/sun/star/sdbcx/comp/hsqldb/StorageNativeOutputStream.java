@@ -24,10 +24,6 @@
 
 package com.sun.star.sdbcx.comp.hsqldb;
 
-/**
- *
- * @author  oj93728
- */
 public class StorageNativeOutputStream {
     static { NativeLibraries.load(); }
 

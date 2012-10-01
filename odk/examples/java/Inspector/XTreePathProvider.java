@@ -25,10 +25,6 @@
  * and open the template in the editor.
  */
 
-/**
- *
- * @author bc93774
- */
 public interface XTreePathProvider {
 
     public XUnoNode getLastPathComponent();

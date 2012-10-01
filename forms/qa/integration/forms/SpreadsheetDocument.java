@@ -29,10 +29,6 @@ import com.sun.star.sheet.XSpreadsheetDocument;
 import com.sun.star.sheet.XSpreadsheets;
 import com.sun.star.beans.NamedValue;
 
-/**
- *
- * @author  fs93730
- */
 public class SpreadsheetDocument extends DocumentHelper
 {
     /** Creates a new blank spreadsheet document */

@@ -58,9 +58,7 @@ import com.sun.star.frame.XModel;
 
 // __________ Implementation __________
 
-/** StyleDemo
-    @author Sven Jacobi
- */
+// StyleDemo
 
 public class StyleDemo
 {

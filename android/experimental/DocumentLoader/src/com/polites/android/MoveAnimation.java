@@ -15,11 +15,6 @@
  */
 package com.polites.android;
 
-
-/**
- * @author Jason Polites
- *
- */
 public class MoveAnimation implements Animation {
 
 	private boolean firstFrame = true;

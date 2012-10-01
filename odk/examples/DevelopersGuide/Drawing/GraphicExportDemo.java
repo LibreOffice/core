@@ -46,9 +46,7 @@ import com.sun.star.drawing.XDrawPage;
 
 // __________ Implementation __________
 
-/** text demo
-    @author Sven Jacobi
- */
+// text demo
 
 public class GraphicExportDemo
 {

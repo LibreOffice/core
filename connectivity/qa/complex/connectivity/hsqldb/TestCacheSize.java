@@ -62,7 +62,6 @@ import com.sun.star.sdbc.*;
  *
  * This test now incorporates the defunct TestTextTables
  *
- * @author fredt@users
  * @version 1.7.2
  * @since 1.7.0
  */

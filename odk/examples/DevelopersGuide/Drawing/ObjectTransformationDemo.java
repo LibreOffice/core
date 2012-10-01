@@ -52,9 +52,7 @@ import java.awt.geom.AffineTransform;
 
 // __________ Implementation __________
 
-/** ObjectTransformationDemo
-    @author Sven Jacobi
- */
+// ObjectTransformationDemo
 
 public class ObjectTransformationDemo
 {

@@ -56,7 +56,6 @@ import java.awt.event.WindowEvent;
  * inside the global "ViewContainer" of this java
  * demo application which holds all opened views alive.
  *
- * @author     Andreas Schl&uuml;ns
  */
 public class DocumentView extends    JFrame
                           implements com.sun.star.lang.XEventListener, // react for Frame::disposing()

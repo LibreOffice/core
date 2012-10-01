@@ -36,7 +36,6 @@ import com.sun.star.uno.XCurrentContext;
  * The Job is an abstraction for tasks which have to be done
  * remotely because of a method invocation.
  * <p>
- * @author      Kay Ramme
  * @see         com.sun.star.lib.uno.environments.remote.ThreadId
  * @see         com.sun.star.lib.uno.environments.remote.IReceiver
  * @since       UDK1.0

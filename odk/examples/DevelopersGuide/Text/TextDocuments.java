@@ -114,10 +114,6 @@ import java.util.Hashtable;
  * Created on 11. April 2002, 08:47
  */
 
-/**
- *
- * @author  Martin Gallwey, Dietrich Schulten
- */
 public class TextDocuments {
     // adjust these constant to your local printer!
     private static String sOutputDir;

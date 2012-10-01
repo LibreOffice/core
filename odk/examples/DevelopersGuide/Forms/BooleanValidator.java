@@ -32,10 +32,6 @@
  *
  *************************************************************************/
 
-/**
- *
- * @author  fs93730
- */
 public class BooleanValidator extends ControlValidator
 {
     private boolean                         m_preventChecked;

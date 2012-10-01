@@ -21,8 +21,6 @@ import android.support.v4.content.LocalBroadcastManager;
 
 /**
  * Standard Network client. Connects to a server using Sockets.
- *
- * @author Andrzej J.R. Hunt
  */
 public class BluetoothClient extends Client {
 

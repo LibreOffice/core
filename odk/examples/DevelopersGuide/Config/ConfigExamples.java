@@ -67,9 +67,7 @@ import com.sun.star.util.XChangesBatch;
 import com.sun.star.util.XChangesNotifier;
 import com.sun.star.util.XChangesListener;
 import com.sun.star.util.ChangesEvent;
-/** Config examples
-    @author Joerg Barfurth
- */
+// Config examples
 
 /* These examples show how to use the following features of the Config API:
 

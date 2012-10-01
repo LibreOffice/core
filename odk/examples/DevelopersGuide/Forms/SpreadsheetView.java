@@ -27,10 +27,6 @@ import com.sun.star.frame.*;
 import com.sun.star.sheet.*;
 import com.sun.star.container.*;
 
-/**
- *
- * @author  fs93730
- */
 public class SpreadsheetView extends DocumentViewHelper
 {
 

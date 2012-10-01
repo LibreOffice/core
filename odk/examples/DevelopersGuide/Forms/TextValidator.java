@@ -17,11 +17,6 @@
  */
 
 
-
-/**
- *
- * @author  fs@openoffice.org
- */
 public class TextValidator extends ControlValidator
 {
 

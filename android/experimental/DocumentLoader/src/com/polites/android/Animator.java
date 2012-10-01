@@ -15,11 +15,6 @@
  */
 package com.polites.android;
 
-
-/**
- * @author Jason Polites
- *
- */
 public class Animator extends Thread {
 
 	private GestureImageView view;

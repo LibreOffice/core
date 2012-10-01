@@ -98,8 +98,6 @@ package com.sun.star.comp.xsltfilter;
  * periodically to check for updates or to contribute improvements.
  * </p>
  *
- * @author Robert Harder
- * @author rob@iharder.net
  * @version 2.2.2
  */
 public class Base64

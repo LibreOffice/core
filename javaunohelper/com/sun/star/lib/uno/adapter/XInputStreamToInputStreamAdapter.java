@@ -27,8 +27,6 @@ import java.io.InputStream;
  * <code>InputStream</code>.  This allows users to access
  * an <code>XInputStream</code> as if it were an
  * <code>InputStream</code>.
- *
- * @author  Brian Cameron
  */
 public class XInputStreamToInputStreamAdapter extends InputStream {
 

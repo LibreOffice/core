@@ -26,8 +26,6 @@ package org.hsqldb.lib;
 /** is a RuntimeException which indicates failure during basic IO
  *  operations in a FileAccess implementation.
  *
- * @author frank.schoenheit@sun.com
- *
  * @version 1.8.0.8
  * @since 1.8.0.8
  */

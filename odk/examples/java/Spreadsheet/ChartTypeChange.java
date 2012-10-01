@@ -70,7 +70,6 @@ import com.sun.star.uno.XComponentContext;
 
 /** This class loads an OpenOffice.org Calc document and changes the type of the
  * embedded chart.
- * @author Bertram Nolte
  */
 public class ChartTypeChange {
 

@@ -56,9 +56,8 @@ import com.sun.star.beans.UnknownPropertyException;
 
 // __________ Implementation __________
 
-/** Create a spreadsheet add some data and add a chart
-    @author Bj&ouml;rn Milcke
- */
+// Create a spreadsheet add some data and add a chart
+
 public class ChartInDraw
 {
     // ____________________

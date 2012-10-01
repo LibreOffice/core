@@ -42,7 +42,6 @@ import com.sun.star.uno.UnoRuntime;
 /**
  * This component gives a factory for an <code>UnoUrlResolver</code> service.
  * <p>
- * @author      Kay Ramme
  * @see         com.sun.star.bridge.XBridgeFactory
  * @see         com.sun.star.connection.Connector
  * @since       UDK1.0

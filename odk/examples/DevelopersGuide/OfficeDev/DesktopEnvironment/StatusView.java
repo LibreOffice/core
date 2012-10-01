@@ -57,7 +57,6 @@ import java.lang.String;
  * inside the office process and so exist different threads
  * for this constallation.
  *
- * @author     Andreas Schl&uuml;ns
  */
 public class StatusView extends    JPanel
                         implements IShutdownListener

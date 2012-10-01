@@ -18,11 +18,6 @@ package com.polites.android;
 import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.MotionEvent;
 
-
-/**
- * @author Jason Polites
- *
- */
 public class FlingListener extends SimpleOnGestureListener {
 
 	private float velocityX;

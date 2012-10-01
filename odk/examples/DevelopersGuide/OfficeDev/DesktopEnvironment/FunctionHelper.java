@@ -58,8 +58,6 @@ import java.net.*;
  * There exist some other helper functionality too, which
  * doesn't use or demonstrate the office api:
  *      (a) getting file names by using a file chosser
- *
- * @author     Andreas Schl&uuml;ns
  */
 public class FunctionHelper
 {

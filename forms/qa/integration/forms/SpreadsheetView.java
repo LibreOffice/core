@@ -31,10 +31,6 @@ import com.sun.star.container.*;
 
 import integration.forms.DocumentHelper;
 
-/**
- *
- * @author  fs93730
- */
 public class SpreadsheetView extends integration.forms.DocumentViewHelper
 {
 

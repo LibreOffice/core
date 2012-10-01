@@ -53,7 +53,6 @@ import com.sun.star.uno.AnyConverter;
  * service. Therefor the <code>JavaLoader</code> activates external UNO components which are implemented in Java.
  * The loader is used by the <code>ServiceManger</code>.
  * <p>
- * @author      Markus Herzog
  * @see         com.sun.star.loader.XImplementationLoader
  * @see         com.sun.star.loader.Java
  * @see         com.sun.star.comp.servicemanager.ServiceManager

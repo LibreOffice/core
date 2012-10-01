@@ -48,7 +48,6 @@ import java.lang.String;
  * ctor isn't available from outside. You should call static function "getConnection()"
  * to open or use internal set connection which is created one times only.
  *
- * @author      Andreas Schl&uuml;ns
  */
 public class OfficeConnect
 {

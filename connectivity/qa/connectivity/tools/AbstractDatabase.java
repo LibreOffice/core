@@ -32,10 +32,6 @@ import com.sun.star.util.CloseVetoException;
 import connectivity.tools.sdb.Connection;
 import java.io.File;
 
-/**
- *
- * @author oj93728
- */
 public abstract class AbstractDatabase implements DatabaseAccess
 {
     public AbstractDatabase(final XMultiServiceFactory orb) throws Exception

@@ -54,8 +54,6 @@ import com.sun.star.uno.UnoRuntime;
  * synchronous/asynchronous ... normal ones and oneway calls are mixed.
  * Notifications of listener will be oneway mostly - her reactions can
  * be synchronous then. => deadlocks are possible
- *
- * @author     Andreas Schl&uuml;ns
  */
 public class Interceptor implements com.sun.star.frame.XFrameActionListener,
                                     com.sun.star.frame.XDispatchProviderInterceptor,

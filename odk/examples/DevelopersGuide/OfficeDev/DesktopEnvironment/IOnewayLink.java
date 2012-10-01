@@ -45,7 +45,6 @@ import java.util.Vector;
  * interface. It get the object, which whis to be called back and the type and
  * parameter of the original request.
  *
- * @author     Andreas Schl&uuml;ns
  */
 public interface IOnewayLink
 {

@@ -57,9 +57,7 @@ import java.util.Random;
 
 // __________ Implementation __________
 
-/** drawing demo
-    @author Sven Jacobi
- */
+// drawing demo
 
 // This drawing demo will create/load a document, and show how to
 // handle pages and shapes using the Office API,

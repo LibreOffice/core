@@ -38,8 +38,6 @@ import com.sun.star.lang.XMultiComponentFactory;
 import com.sun.star.beans.XPropertySet;
 
 /*
- *
- * @author  Carsten Driesner
  * Provides example code how to access and use the
  * path pathsettings servce.
  */

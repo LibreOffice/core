@@ -52,8 +52,6 @@ import org.openoffice.test.OfficeConnection;
 import static org.junit.Assert.*;
 
 /** complex test case for the css.container.Map implementation
- *
- * @author frank.schoenheit@sun.com
  */
 public class Map /* extends complexlib.ComplexTestCase */
 {

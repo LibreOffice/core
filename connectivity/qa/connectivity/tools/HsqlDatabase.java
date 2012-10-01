@@ -35,10 +35,6 @@ import java.util.Iterator;
 import java.util.Set;
 import java.io.File;
 
-/**
- *
- * @author fs93730
- */
 public class HsqlDatabase extends AbstractDatabase
 {
 

@@ -15,10 +15,6 @@
  */
 package com.polites.android;
 
-/**
- * @author Jason Polites
- *
- */
 public class FlingAnimation implements Animation {
 
 	private float velocityX;

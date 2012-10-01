@@ -11,10 +11,6 @@ import com.sun.star.xml.dom.XNode;
 import com.sun.star.xml.dom.XNodeList;
 import java.util.NoSuchElementException;
 
-/**
- *
- * @author fs93730
- */
 public class Instance
 {
     private Model           m_model;

@@ -49,9 +49,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-/**
- * @author bc93774
- */
 public class MethodParametersDialog extends JDialog{
     private javax.swing.JPanel jPnlParamContainer;
     private ParameterPanel[] m_aParameterPanels;

@@ -36,7 +36,6 @@ import com.sun.star.io.XStreamListener;
  * and is uses by the <code>SocketConnector</code> and the <code>SocketAcceptor</code>.
  * This class is not part of the provided <code>api</code>.
  * <p>
- * @author      Kay Ramme
  * @see         com.sun.star.lib.connections.socket.socketAcceptor
  * @see         com.sun.star.lib.connections.socket.socketConnector
  * @see         com.sun.star.connection.XConnection

@@ -24,10 +24,6 @@ import com.sun.star.sdb.XOfficeDatabaseDocument;
 import com.sun.star.sdbc.SQLException;
 import connectivity.tools.sdb.Connection;
 
-/**
- *
- * @author oj93728
- */
 public interface DatabaseAccess
 {
     Connection defaultConnection() throws SQLException;

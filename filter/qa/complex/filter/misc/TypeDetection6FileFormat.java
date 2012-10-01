@@ -38,10 +38,6 @@ import org.openoffice.test.OfficeConnection;
 import static org.junit.Assert.*;
 // ------------------------------------------
 
-/**
- *
- * @author  cn93815
- */
 public class TypeDetection6FileFormat
 {
 

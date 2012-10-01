@@ -63,7 +63,6 @@ import com.sun.star.beans.UnknownPropertyException;
     Thus, you can not activate the chart by double-clicking.  The office may
     also crash when the document is closed!
 
-    @author Bj&ouml;rn Milcke
  */
 public class ChartInWriter
 {

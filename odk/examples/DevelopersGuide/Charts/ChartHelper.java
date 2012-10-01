@@ -57,9 +57,8 @@ import com.sun.star.awt.Size;
 
 // __________ Implementation __________
 
-/** Helper for creating an OLE chart
-    @author Bj&ouml;rn Milcke
- */
+// Helper for creating an OLE chart
+
 public class ChartHelper
 {
     public ChartHelper( XModel aContainerDoc )

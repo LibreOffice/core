@@ -57,9 +57,7 @@ import com.sun.star.drawing.XLayerSupplier;
 
 // __________ Implementation __________
 
-/** LayerDemo
-    @author Sven Jacobi
- */
+// LayerDemo
 
 public class LayerDemo
 {

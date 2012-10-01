@@ -58,9 +58,7 @@ import com.sun.star.drawing.XGluePointsSupplier;
 
 // __________ Implementation __________
 
-/** GluePointDemo
-    @author Sven Jacobi
- */
+// GluePointDemo
 
 public class GluePointDemo
 {

@@ -22,8 +22,6 @@ import android.content.Intent;
  * transport medium you must provide input and output streams (
  * <code>mInputStream</code> and <code>mOutputStream</code> before calling any
  * methods.
- *
- * @author Andrzej J.R. Hunt
  */
 public abstract class Client {
 
