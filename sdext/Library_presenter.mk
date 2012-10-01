@@ -32,7 +32,7 @@ $(eval $(call gb_Library_set_componentfile,PresenterScreen,sdext/source/presente
 $(eval $(call gb_Library_use_sdk_api,PresenterScreen))
 
 $(eval $(call gb_Library_add_defs,PresenterScreen,\
-    -DPRESENTER_IMPL_IDENTIFIER=\"com.sun.PresenterScreen-$(sdext_PLATFORM)\" \
+    -DPRESENTER_IMPL_IDENTIFIER=\"com.sun.PresenterScreen-$(PLATFORMID)\" \
 ))
 
 $(eval $(call gb_Library_use_libraries,PresenterScreen,\

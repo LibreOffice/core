@@ -41,14 +41,6 @@ $$(eval $$(call gb_Module_register_target,$(call gb_Extension_get_target,$(1)),$
 
 endef
 
-# Set platform.
-#
-# Only use this if the extension is platform-dependent.
-define gb_Extension_set_platform
-$(call gb_ExtensionTarget_set_platform,$(1),$(2))
-
-endef
-
 define gb_Extension_add_file
 $(call gb_ExtensionTarget_add_file,$(1),$(2),$(3))
 

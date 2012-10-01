@@ -30,12 +30,10 @@ $(eval $(call gb_CustomTarget_CustomTarget,sdext/source/presenter/help/en-US/com
 $(call gb_CustomTarget_get_target,sdext/source/presenter/help/en-US/com.sun.PresenterScreen) : \
 	$(call gb_CustomTarget_get_workdir,sdext/source/presenter/help/en-US/com.sun.PresenterScreen)/presenter.xhp
 
-include $(SRCDIR)/sdext/platform.mk
-
 $(call gb_CustomTarget_get_workdir,sdext/source/presenter/help/en-US/com.sun.PresenterScreen)/presenter.xhp : \
 		$(SRCDIR)/sdext/source/presenter/help/en-US/com.sun.PresenterScreen/presenter.xhp \
 		| $(call gb_CustomTarget_get_workdir,sdext/source/presenter/help/en-US/com.sun.PresenterScreen)/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),SED,1)
-	sed "s/PLATFORMID/$(sdext_PLATFORM)/" < $< > $@
+	sed "s/PLATFORMID/$(PLATFORMID)/" < $< > $@
 
 # vim:set shiftwidth=4 tabstop=4 noexpandtab:
