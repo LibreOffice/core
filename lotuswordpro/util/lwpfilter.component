@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<component loader="com.sun.star.loader.SharedLibrary"
+<component loader="com.sun.star.loader.SharedLibrary" prefix="lotuswordpro"
     xmlns="http://openoffice.org/2010/uno-components">
   <implementation name="com.sun.star.comp.Writer.LotusWordProImportFilter">
     <service name="com.sun.star.document.ImportFilter"/>
