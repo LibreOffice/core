@@ -28,36 +28,6 @@ bool openAddressBook(const std::string& path)
             std::string value = mork.getValue( tableIter->first );
             SAL_INFO("connectivity.mork", "table.column : " << column);
             SAL_INFO("connectivity.mork", "table.value : " << value);
-#if 0
-            MorkRowMap *Rows = 0;
-            // Get rows
-            Rows = mork.getRows( defaultScope, &tableIter->second );
-            if ( Rows ) {
-                // Iterate all rows
-                for ( rowIter = Rows->begin(); rowIter != Rows->end(); rowIter++ )
-                {
-                    if ( 0 == rowIter->first ) continue;
-                    RawAbeMap ram;
-                    std::string column;
-                    std::string value;
-                    char buffer[20];
-                    sprintf( buffer, "%d", rowIter->first );
-                    abe.id = std::string( buffer );
-                    // Get cells
-                    for ( MorkCells::iterator cellsIter = rowIter->second.begin();
-                          cellsIter != rowIter->second.end(); cellsIter++ )
-                    {
-                        column = mork.getColumn( cellsIter->first );
-                        value = mork.getValue( cellsIter->second );
-                        ram[ column ] = value;
-                    }
-                    AbeMap::iterator abeIter;
-                    abes_[ rowIter->first ] = abe;
-                    abeIter = abes_.find( rowIter->first );
-                    addEntry( ram, abeIter->second );
-                }
-            }
-#endif
         }
     }
 

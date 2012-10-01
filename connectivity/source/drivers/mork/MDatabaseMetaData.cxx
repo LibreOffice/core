@@ -23,14 +23,6 @@
 #include "MorkParser.hxx"
 #include "connectivity/dbtools.hxx"
 
-#if 0
-#if OSL_DEBUG_LEVEL > 0
-# define OUtoCStr( x ) ( ::rtl::OUStringToOString ( (x), RTL_TEXTENCODING_ASCII_US).getStr())
-#else /* OSL_DEBUG_LEVEL */
-# define OUtoCStr( x ) ("dummy")
-#endif /* OSL_DEBUG_LEVEL */
-#endif
-
 using namespace dbtools;
 using namespace connectivity::mork;
 using namespace connectivity;
@@ -142,7 +134,6 @@ ODatabaseMetaDataResultSet::ORows& SAL_CALL ODatabaseMetaData::getColumnRows(
             {
                 if ( match( columnNamePattern, compare->first, '\0' ) )
                 {
-//                    OSL_TRACE( "\t\t\tColumnName = %s;", OUtoCStr( compare->first ) );
                     SAL_INFO("connectivity.mork", "\t\tColumnNam : " << compare->first);
 
                     // COLUMN_NAME

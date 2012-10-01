@@ -92,11 +92,6 @@ sal_Bool MDatabaseMetaDataHelper::getTables( OConnection* _pCon,
 
         // return tables to caller
         if (match( tableNamePattern, aTableName, '\0' ))
-#if 0
- &&
-                       0 != ::comphelper::findValue( types, aTableType, sal_True ).getLength() ||
-                       0 != ::comphelper::findValue( types, matchAny, sal_True ).getLength()))
-#endif
     {
             if ( aTableName.isEmpty() ) {
                 aTableName = rtl::OUString::createFromAscii("AddressBook");
@@ -105,7 +100,6 @@ sal_Bool MDatabaseMetaDataHelper::getTables( OConnection* _pCon,
             SAL_INFO("connectivity.mork", "TableName: " << aTableName);
 
             aRow.push_back( new ORowSetValueDecorator( aTableName ) ); // Table name
-//            aRow.push_back( new ORowSetValueDecorator( aTableType ) ); // Table type
             aRow.push_back( new ORowSetValueDecorator( rtl::OUString::createFromAscii("TABLE") ) ); // Table type
             aRow.push_back( ODatabaseMetaDataResultSet::getEmptyValue() ); // Remarks
             aRows.push_back(aRow);

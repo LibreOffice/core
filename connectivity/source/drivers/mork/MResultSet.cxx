@@ -1257,13 +1257,6 @@ void SAL_CALL OResultSet::executeQuery() throw( ::com::sun::star::sdbc::SQLExcep
                     // values.
 
                     OSL_TRACE("Query is to be sorted");
-#if 0
-                    if( ! m_aQueryHelper.queryComplete() )
-                        if ( !m_aQueryHelper.waitForQueryComplete() )
-                        {
-                            m_pStatement->getOwnConnection()->throwSQLException( m_aQueryHelper.getError(), *this );
-                        }
-#endif
 
                     OSL_ENSURE( m_aQueryHelper.queryComplete(), "Query not complete!!");
 
@@ -1553,19 +1546,6 @@ sal_Bool OResultSet::seekRow( eRowPosition pos, sal_Int32 nOffset )
     else    //The requested row has not been retrived until now. We should get the right card for it.
         nCurCard = nCurPos + deletedCount();
 
-    // davido: what is this loop for?
-    // it leads to infinite loop, once nCurCard is greater then nNumberOfRecords
-#if 0
-    while ( nCurCard > nNumberOfRecords ) {
-            m_aQueryHelper.checkRowAvailable( nCurCard );
-            if ( m_aQueryHelper.hadError() )
-            {
-                m_pStatement->getOwnConnection()->throwSQLException( m_aQueryHelper.getError(), *this );
-            }
-            nNumberOfRecords = m_aQueryHelper.getResultCount();
-    }
-#endif
-
     if ( nCurCard > nNumberOfRecords) {
         fillKeySet(nNumberOfRecords);
         m_nRowPos = static_cast<sal_uInt32>(m_pKeySet->get().size() + 1);
@@ -1841,104 +1821,21 @@ void SAL_CALL OResultSet::insertRow(  ) throw(::com::sun::star::sdbc::SQLExcepti
 void SAL_CALL OResultSet::updateRow(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
     OSL_FAIL( "OResultSet::updateRow(  ) not implemented" );
-#if 0
-    OSL_TRACE("updateRow in, m_nRowPos = %u", m_nRowPos );
-    ResultSetEntryGuard aGuard( *this );
-    impl_ensureKeySet();
-
-    if (!m_nRowPos || m_pKeySet->get().size() < m_nRowPos )
-    {
-        m_pStatement->getOwnConnection()->throwSQLException( STR_INVALID_ROW_UPDATE, *this );
-    }
-
-    const sal_Int32 nCurrentCard = getCurrentCardNumber();
-
-    if (!pushCard(nCurrentCard))
-    {
-        m_RowStates = RowStates_Error;
-        m_pStatement->getOwnConnection()->throwSQLException( STR_ROW_CAN_NOT_SAVE, *this );
-    }
-
-    if (!m_aQueryHelper.commitRow(nCurrentCard))
-    {
-        m_RowStates = RowStates_Error;
-        m_nUpdatedRow = 0;
-        m_pStatement->getOwnConnection()->throwSQLException( m_aQueryHelper.getError(), *this );
-    }
-
-    m_nUpdatedRow = 0;
-    fetchCurrentRow();
-    OSL_TRACE("updateRow out, m_nRowPos = %u", m_nRowPos );
-#endif
 }
 // -------------------------------------------------------------------------
 void SAL_CALL OResultSet::deleteRow(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
     OSL_FAIL( "OResultSet::deleteRow(  ) not implemented" );
-#if 0
-    OSL_TRACE("deleteRow, m_nRowPos = %u", m_nRowPos );
-    ResultSetEntryGuard aGuard( *this );
-    if (rowDeleted())
-        m_pStatement->getOwnConnection()->throwSQLException( STR_ROW_ALREADY_DELETED, *this );
-
-    const sal_Int32 nCurrentRow = getCurrentCardNumber();
-    //fetchRow(nCurrentRow);
-    if (!nCurrentRow)
-        m_pStatement->getOwnConnection()->throwSQLException( STR_ERROR_GET_ROW, *this );
-
-    sal_Bool m_bRowDeleted = ( m_aQueryHelper.deleteRow( nCurrentRow ) > 0 );
-    if (!m_bRowDeleted)
-        m_pStatement->getOwnConnection()->throwSQLException( m_aQueryHelper.getError(), *this );
-
-    m_aQueryHelper.setRowStates(nCurrentRow,RowStates_Deleted);
-    m_pKeySet->get().erase(m_pKeySet->get().begin() + m_nRowPos -1);
-    m_RowStates = RowStates_Deleted;
-    OSL_TRACE("deleteRow out, m_nRowPos = %u", m_nRowPos );
-#endif
 }
 // -------------------------------------------------------------------------
 void SAL_CALL OResultSet::cancelRowUpdates(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
     OSL_FAIL( "OResultSet::cancelRowUpdates(  ) not implemented" );
-#if 0
-    ResultSetEntryGuard aGuard( *this );
-    OSL_TRACE("cancelRowUpdates, m_nRowPos = %u", m_nRowPos );
-    if (fetchRow(getCurrentCardNumber(),sal_True))  //force fetch current row will cause we lose all change to the current row
-        m_pStatement->getOwnConnection()->throwSQLException( STR_CAN_NOT_CANCEL_ROW_UPDATE, *this );
-#endif
 }
 // -------------------------------------------------------------------------
 void SAL_CALL OResultSet::moveToInsertRow(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
     OSL_FAIL( "OResultSet::moveToInsertRow(  ) not implemented" );
-#if 0
-    OSL_TRACE("moveToInsertRow in, m_nRowPos = %u", m_nRowPos );
-    ResultSetEntryGuard aGuard( *this );
-    m_nOldRowPos = m_nRowPos;
-
-    if (!m_nNewRow) //no new row now, insert one
-    {
-        checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-        checkPendingUpdate();
-        if (rowUpdated())
-        {
-            if (m_nRowPos && !pushCard(getCurrentCardNumber()))
-                throw SQLException();
-        }
-        m_nNewRow = m_aQueryHelper.createNewCard();
-        if (!m_nNewRow)
-            m_pStatement->getOwnConnection()->throwSQLException( STR_CAN_NOT_CREATE_ROW, *this );
-
-        m_RowStates = RowStates_Normal;
-        fillKeySet(m_nNewRow);
-    }
-    else
-        m_nUpdatedRow = 0;
-
-    m_nRowPos = static_cast<sal_uInt32>(m_pKeySet->get().size());
-    fetchCurrentRow();
-    OSL_TRACE("moveToInsertRow out, m_nRowPos = %u", m_nRowPos );
-#endif
 }
 // -------------------------------------------------------------------------
 void SAL_CALL OResultSet::moveToCurrentRow(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)

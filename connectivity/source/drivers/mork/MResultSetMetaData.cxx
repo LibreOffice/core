@@ -168,15 +168,6 @@ sal_Bool SAL_CALL OResultSetMetaData::isSearchable( sal_Int32 column ) throw(SQL
         return sal_False;
     }
 
-#if 0
-    if ( m_pTable->getConnection()->isLDAP() )
-    {
-        const OColumnAlias& aAliases( m_pTable->getConnection()->getColumnAlias() );
-        if ( !aAliases.isColumnSearchable( sColumnName ) )
-            return sal_False;
-    }
-#endif
-
     return sal_True;
 }
 // -------------------------------------------------------------------------
