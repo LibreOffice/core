@@ -521,12 +521,6 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
 ))
 endif
 
-ifeq ($(OS),IOS)
-$(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
-    gcc3_uno \
-))
-endif
-
 $(eval $(call gb_Helper_register_libraries,RTLIBS, \
     comphelper \
     i18nisolang1 \
