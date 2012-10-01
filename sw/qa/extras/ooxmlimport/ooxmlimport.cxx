@@ -47,6 +47,7 @@
 #include <com/sun/star/text/XTextFrame.hpp>
 #include <com/sun/star/text/XTextFramesSupplier.hpp>
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
+#include <com/sun/star/style/BreakType.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/table/ShadowFormat.hpp>
 
@@ -97,6 +98,7 @@ public:
     void testN780843();
     void testShadow();
     void testN782061();
+    void testN782345();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -140,6 +142,7 @@ public:
     CPPUNIT_TEST(testN780843);
     CPPUNIT_TEST(testShadow);
     CPPUNIT_TEST(testN782061);
+    CPPUNIT_TEST(testN782345);
 #endif
     CPPUNIT_TEST_SUITE_END();
 
@@ -991,6 +994,16 @@ void Test::testN782061()
     load("n782061.docx");
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(-9), getProperty<sal_Int32>(getRun(getParagraph(1), 2), "CharEscapement"));
+}
+
+void Test::testN782345()
+{
+    /*
+     * The problem was that the page break was inserted before the 3rd para, instead of before the 2nd para.
+     */
+    load("n782345.docx");
+
+    CPPUNIT_ASSERT_EQUAL(style::BreakType_PAGE_BEFORE, getProperty<style::BreakType>(getParagraph(2), "BreakType"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
