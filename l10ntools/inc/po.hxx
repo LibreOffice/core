@@ -113,6 +113,8 @@ public:
     friend class PoOfstream;
     friend class PoIfstream;
 
+    enum Exception { NOLANG };
+
                     PoHeader();
                     PoHeader( const OString& rExtSrc );
                     PoHeader( std::ifstream& rOldPo );

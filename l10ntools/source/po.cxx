@@ -537,6 +537,7 @@ void PoEntry::setFuzzy(const bool bFuzzy)
 //Check whether po-s belong to the same localization component
 bool PoEntry::IsInSameComp(const PoEntry& rPo1,const PoEntry& rPo2)
 {
+    assert( rPo1.m_bIsInitialized && rPo2.m_bIsInitialized );
     return ( rPo1.getSourceFile() == rPo2.getSourceFile() &&
              rPo1.getGroupId() == rPo2.getGroupId() &&
              rPo1.getLocalId() == rPo2.getLocalId() &&
@@ -632,7 +633,11 @@ OString PoHeader::getLanguage() const
     const OString sTransStr = m_aGenPo.getTransStr();
     const sal_Int32 nFirstIndex = sTransStr.indexOf(sLang)+sLang.getLength();
     const sal_Int32 nCount = sTransStr.indexOf('\n',nFirstIndex)-nFirstIndex;
-    return sTransStr.copy(nFirstIndex,nCount);
+    if( nFirstIndex == sLang.getLength()-1 || nCount == -nFirstIndex-1 )
+    {
+        throw NOLANG;
+    }
+    return sTransStr.copy( nFirstIndex, nCount );
 }
 
 //Class PoOfstream
@@ -741,12 +746,16 @@ void PoIfstream::readEntry( PoEntry& rPoEntry )
     else
     {
         const OString sContext = aGenPo.getContext();
+        const sal_Int32 nFirstEndLine = sContext.indexOf('\n');
+        const sal_Int32 nLastEndLine = sContext.lastIndexOf('\n');
         const sal_Int32 nLastDot = sContext.lastIndexOf('.');
         const OString sType = sContext.copy( nLastDot + 1 );
         if( !aGenPo.getReference().isEmpty() &&
-            sContext.indexOf('\n') > 0 &&
+            nFirstEndLine > 0 &&
+            (nLastEndLine == nFirstEndLine ||
+                nLastEndLine == sContext.indexOf('\n',nFirstEndLine+1)) &&
+            nLastDot - nLastEndLine > 1 &&
             (sType == "text" || sType == "quickhelptext" || sType == "title") &&
-            nLastDot - sContext.lastIndexOf('\n') > 0 &&
             !aGenPo.getUnTransStr().isEmpty() )
         {
             rPoEntry.m_aGenPo = aGenPo;

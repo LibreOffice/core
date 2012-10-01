@@ -165,7 +165,7 @@ MergeDataFile::MergeDataFile(
     bool bFirstLang = true;
     while( !aInputStream.eof() )
     {
-        const OString sHACK("HACK");
+        const OString sHack("HACK");
         const OString sFileName( lcl_NormalizeFilename(rFile) );
         PoIfstream aPoInput;
         aPoInput.open( OString(sPoFileName.data(), sPoFileName.length()) );
@@ -189,8 +189,22 @@ MergeDataFile::MergeDataFile(
                 return;
             }
         }
-        const OString nLANG = aPoHeader.getLanguage();
-        aLanguageSet.insert( nLANG );
+        OString sLang;
+        try
+        {
+            sLang = aPoHeader.getLanguage();
+        }
+        catch( PoHeader::Exception& aException )
+        {
+            if( aException = PoHeader::NOLANG )
+            {
+                printf(
+                    "Warning : %s' header not has language specification\n",
+                    sPoFileName.c_str() );
+                return;
+            }
+        }
+        aLanguageSet.insert( sLang );
         PoEntry aNextPo;
         do
         {
@@ -247,7 +261,7 @@ MergeDataFile::MergeDataFile(
 
             InsertEntry(
                 aActPo.getResourceType(), aActPo.getGroupId(),
-                aActPo.getLocalId(), sHACK, nLANG, sText,
+                aActPo.getLocalId(), sHack, sLang, sText,
                 sQHText, sTitle, sFileName, bCaseSensitive );
 
             if( bFirstLang )
@@ -255,7 +269,7 @@ MergeDataFile::MergeDataFile(
                 aLanguageSet.insert("qtz");
                 InsertEntry(
                     aActPo.getResourceType(), aActPo.getGroupId(),
-                    aActPo.getLocalId(), sHACK, "qtz",
+                    aActPo.getLocalId(), sHack, "qtz",
                     sQTZText + "||" + sExText, sQTZQHText + "||" + sExQHText,
                     sQTZTitle + "||" + sExTitle, sFileName, bCaseSensitive );
             }
