@@ -127,7 +127,7 @@ protected:
 
     virtual bool    CompareItem(const void *pFirstItem, const void *pSecondItem) const = 0;
 
-    virtual String  GetStringItem(void *pItem) = 0;
+    virtual OUString GetStringItem(void *pItem) = 0;
 
     void       *GetPtr(sal_uInt16 nPos) const { return SfxPtrArr::GetObject(nPos); }
     void      *&GetPtr(sal_uInt16 nPos) { return SfxPtrArr::GetObject(nPos); }
@@ -172,7 +172,7 @@ protected:
 
     virtual bool    CompareItem(const void *pFirstItem, const void *pSecondItem) const;
 
-    virtual String  GetStringItem(void *pItem);
+    virtual OUString GetStringItem(void *pItem);
 
 public:
     SmFontPickList()

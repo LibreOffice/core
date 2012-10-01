@@ -19,7 +19,6 @@
 
 #include <sfx2/app.hxx>
 #include <vcl/virdev.hxx>
-#include <tools/string.hxx>
 #include <tools/tenccvt.hxx>
 #include <osl/thread.h>
 
@@ -156,28 +155,23 @@ bool SmFontPickList::CompareItem(const void *pFirstItem, const void *pSecondItem
     return false;
 }
 
-String SmFontPickList::GetStringItem(void *pItem)
+OUString SmFontPickList::GetStringItem(void *pItem)
 {
-    Font   *pFont;
-    String  aString;
-    const sal_Char *pDelim = ", ";
-
-    pFont = (Font *)pItem;
-
-    aString = pFont->GetName();
+    Font *pFont = (Font *)pItem;
+    OUStringBuffer aString(pFont->GetName());
 
     if (IsItalic( *pFont ))
     {
-        aString.AppendAscii( pDelim );
-        aString += String(SmResId(RID_FONTITALIC));
+        aString.append(", ");
+        aString.append(SM_RESSTR(RID_FONTITALIC));
     }
     if (IsBold( *pFont ))
     {
-        aString.AppendAscii( pDelim );
-        aString += String(SmResId(RID_FONTBOLD));
+        aString.append(", ");
+        aString.append(SM_RESSTR(RID_FONTBOLD));
     }
 
-    return (aString);
+    return aString.makeStringAndClear();
 }
 
 void SmFontPickList::Insert(const Font &rFont)
@@ -213,7 +207,7 @@ void SmFontPickList::WriteTo(SmFontDialog& rDialog) const
 IMPL_LINK( SmFontPickListBox, SelectHdl, ListBox *, /*pListBox*/ )
 {
     sal_uInt16  nPos;
-    String  aString;
+    OUString aString;
 
     nPos = GetSelectEntryPos();
 
