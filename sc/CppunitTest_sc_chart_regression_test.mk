@@ -104,7 +104,8 @@ $(eval $(call gb_CppunitTest_use_components,sc_chart_regression_test,\
     sc/util/sc \
     sc/util/scd \
     sc/util/scfilt \
-    sc/util/vbaobj \
+    $(if $(filter TRUE,$(DISABLE_SCRIPTING)),, \
+	    sc/util/vbaobj) \
     scaddins/source/analysis/analysis \
     scaddins/source/datefunc/date \
     scripting/source/basprov/basprov \

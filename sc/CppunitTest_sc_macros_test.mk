@@ -100,7 +100,8 @@ $(eval $(call gb_CppunitTest_use_components,sc_macros_test,\
     sc/util/sc \
     sc/util/scd \
     sc/util/scfilt \
-    sc/util/vbaobj \
+    $(if $(filter TRUE,$(DISABLE_SCRIPTING)),, \
+	    sc/util/vbaobj) \
     scripting/source/basprov/basprov \
     scripting/util/scriptframe \
     sfx2/util/sfx \
