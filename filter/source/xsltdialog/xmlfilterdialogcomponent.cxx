@@ -392,7 +392,7 @@ void SAL_CALL XMLFilterDialogComponent::initialize( const Sequence< Any >& aArgu
 
 extern "C"
 {
-SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
+SAL_DLLPUBLIC_EXPORT void * SAL_CALL xsltdlg_component_getFactory(
     const sal_Char * pImplName, void * pServiceManager, void * /* pRegistryKey */ )
 {
     void * pRet = 0;

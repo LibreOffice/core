@@ -44,11 +44,7 @@ using namespace T602ImportFilter;
 
 extern "C"
 {
-#ifdef DISABLE_DYNLOADING
-#define component_getFactory t602filter_component_getFactory
-#endif
-
-SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
+SAL_DLLPUBLIC_EXPORT void * SAL_CALL t602filter_component_getFactory(
     const sal_Char * pImplName, void * pServiceManager, void * /* pRegistryKey */ )
 {
     void * pRet = 0;
