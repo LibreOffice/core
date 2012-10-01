@@ -513,15 +513,9 @@ static void ObjectDestroyedNotify( gpointer data )
 }
 
 static void
-on_registrar_available (GDBusConnection * /*connection*/,
-                        const gchar     * /*name*/,
-                        const gchar     * /*name_owner*/,
-                        gpointer         user_data)
+ensure_dbus_setup(GdkWindow* gdkWindow, GtkSalFrame* pSalFrame)
 {
-    SolarMutexGuard aGuard;
-    GtkSalFrame* pSalFrame = static_cast< GtkSalFrame* >( user_data );
-    GdkWindow *gdkWindow = gtk_widget_get_window( pSalFrame->getWindow() );
-    if ( gdkWindow != NULL )
+    if ( gdkWindow != NULL && g_object_get_data( G_OBJECT( gdkWindow ), "g-lo-menubar" ) == NULL )
     {
         GMenuModel* pMenuModel = G_MENU_MODEL(g_lo_menu_new());
         GActionGroup* pActionGroup = ((GActionGroup*)g_lo_action_group_new(reinterpret_cast<gpointer>(pSalFrame)));
@@ -564,6 +558,18 @@ on_registrar_available (GDBusConnection * /*connection*/,
 
         bDBusIsAvailable = sal_True;
     }
+}
+    
+static void
+on_registrar_available (GDBusConnection * /*connection*/,
+                        const gchar     * /*name*/,
+                        const gchar     * /*name_owner*/,
+                        gpointer         user_data)
+{
+    SolarMutexGuard aGuard;
+    GtkSalFrame* pSalFrame = static_cast< GtkSalFrame* >( user_data );
+    GdkWindow* gdkWindow = gtk_widget_get_window( pSalFrame->getWindow() );
+    ensure_dbus_setup(gdkWindow, pSalFrame);
     GtkSalMenu* pSalMenu = static_cast< GtkSalMenu* >( pSalFrame->GetMenu() );
     if ( pSalMenu != NULL )
     {
@@ -597,20 +603,7 @@ on_registrar_unavailable (GDBusConnection * /*connection*/,
 void GtkSalFrame::EnsureAppMenuWatch()
 {
     if(m_nWatcherId)
-        return;
-    GObject* pWindow = G_OBJECT(gtk_widget_get_window( GTK_WIDGET(getWindow()) ));
-    if(!pWindow)
-        return;
-    g_object_set_data_full(
-        pWindow,
-        "g-lo-menubar",
-        G_MENU_MODEL(g_lo_menu_new()),
-        ObjectDestroyedNotify);
-    g_object_set_data_full(
-        pWindow,
-        "g-lo-action-group",
-        G_ACTION_GROUP(g_lo_action_group_new( reinterpret_cast<gpointer>(this))),
-        ObjectDestroyedNotify);
+        g_bus_unwatch_name(m_nWatcherId);
     // Publish the menu only if AppMenu registrar is available.
     m_nWatcherId = g_bus_watch_name(G_BUS_TYPE_SESSION,
          "com.canonical.AppMenu.Registrar",
@@ -619,6 +612,7 @@ void GtkSalFrame::EnsureAppMenuWatch()
          on_registrar_unavailable,
          reinterpret_cast<gpointer>(this),
          NULL);
+    ensure_dbus_setup(gtk_widget_get_window( GTK_WIDGET(getWindow()) ), this);
 }
 
 struct DisposeData
