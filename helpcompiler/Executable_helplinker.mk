@@ -39,7 +39,6 @@ $(eval $(call gb_Executable_use_externals,HelpLinker,\
     expat_utf8 \
     libxslt \
     libxml2 \
-    berkeleydb \
     clucene \
 ))
 

@@ -46,7 +46,6 @@ $(eval $(call gb_Library_use_libraries,helplinker,\
 ))
 
 $(eval $(call gb_Library_use_externals,helplinker,\
-    berkeleydb \
     expat_utf8 \
     libxslt \
     libxml2 \
