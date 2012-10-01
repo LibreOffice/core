@@ -505,6 +505,12 @@ gdk_x11_window_set_utf8_property  (GdkWindow *window,
 
 // AppMenu watch functions.
 
+static void ObjectDestroyedNotify( gpointer data )
+{
+    if ( data ) {
+        g_object_unref( data );
+    }
+}
 
 static void
 on_registrar_available (GDBusConnection * /*connection*/,
@@ -514,60 +520,58 @@ on_registrar_available (GDBusConnection * /*connection*/,
 {
     SolarMutexGuard aGuard;
     GtkSalFrame* pSalFrame = static_cast< GtkSalFrame* >( user_data );
-    GtkSalMenu* pSalMenu = static_cast< GtkSalMenu* >( pSalFrame->GetMenu() );
+    GdkWindow *gdkWindow = gtk_widget_get_window( pSalFrame->getWindow() );
+    if ( gdkWindow != NULL )
+    {
+        GMenuModel* pMenuModel = G_MENU_MODEL(g_lo_menu_new());
+        GActionGroup* pActionGroup = ((GActionGroup*)g_lo_action_group_new(reinterpret_cast<gpointer>(pSalFrame)));
+        XLIB_Window windowId = GDK_WINDOW_XID( gdkWindow );
+        gchar* aDBusPath = g_strdup_printf("/window/%lu", windowId);
+        gchar* aDBusWindowPath = g_strdup_printf( "/window/%lu", windowId );
+        gchar* aDBusMenubarPath = g_strdup_printf( "/window/%lu/menus/menubar", windowId );
+        // Get a DBus session connection.
+        if(!pSessionBus)
+            pSessionBus = g_bus_get_sync (G_BUS_TYPE_SESSION, NULL, NULL);
+        if( pSessionBus == NULL )
+            return;
+        if ( aDBusMenubarPath != NULL )
+        {
+            std::cout << "exporting menu model at " << pMenuModel << " for window " << windowId << std::endl;
+            /* pSalFrame->m_nMenuExportId = */ g_dbus_connection_export_menu_model (pSessionBus, aDBusMenubarPath, pMenuModel, NULL);
+        }
+        if ( aDBusPath != NULL && pActionGroup != NULL )
+            /* pSalFrame->m_nActionGroupExportId = */ g_dbus_connection_export_action_group( pSessionBus, aDBusPath, pActionGroup, NULL);
 
+        // Set window properties.
+        g_object_set_data_full(
+            G_OBJECT(gdkWindow),
+            "g-lo-menubar",
+            pMenuModel,
+            ObjectDestroyedNotify);
+        g_object_set_data_full(
+            G_OBJECT(gdkWindow),
+            "g-lo-action-group",
+            pActionGroup,
+            ObjectDestroyedNotify);
+        gdk_x11_window_set_utf8_property ( gdkWindow, "_GTK_UNIQUE_BUS_NAME", g_dbus_connection_get_unique_name( pSessionBus ) );
+        gdk_x11_window_set_utf8_property ( gdkWindow, "_GTK_APPLICATION_OBJECT_PATH", "" );
+        gdk_x11_window_set_utf8_property ( gdkWindow, "_GTK_WINDOW_OBJECT_PATH", aDBusWindowPath );
+        gdk_x11_window_set_utf8_property ( gdkWindow, "_GTK_MENUBAR_OBJECT_PATH", aDBusMenubarPath );
+
+        g_free( aDBusPath );
+        g_free( aDBusWindowPath );
+        g_free( aDBusMenubarPath );
+
+        bDBusIsAvailable = sal_True;
+    }
+    GtkSalMenu* pSalMenu = static_cast< GtkSalMenu* >( pSalFrame->GetMenu() );
     if ( pSalMenu != NULL )
     {
-        MenuBar* pMenuBar = static_cast< MenuBar* >( pSalMenu->GetMenu() );
-
-        GtkWidget *pWidget = pSalFrame->getWindow();
-        GdkWindow *gdkWindow = gtk_widget_get_window( pWidget );
-
-        if ( gdkWindow != NULL )
-        {
-            GMenuModel* pMenuModel = G_MENU_MODEL( g_object_get_data( G_OBJECT( gdkWindow ), "g-lo-menubar" ) );
-            GActionGroup* pActionGroup = G_ACTION_GROUP( g_object_get_data( G_OBJECT( gdkWindow ), "g-lo-action-group" ) );
-
-            XLIB_Window windowId = GDK_WINDOW_XID( gdkWindow );
-
-            gchar* aDBusPath = g_strdup_printf("/window/%lu", windowId);
-            gchar* aDBusWindowPath = g_strdup_printf( "/window/%lu", windowId );
-            gchar* aDBusMenubarPath = g_strdup_printf( "/window/%lu/menus/menubar", windowId );
-
-            // Get a DBus session connection.
-            if(!pSessionBus)
-                pSessionBus = g_bus_get_sync (G_BUS_TYPE_SESSION, NULL, NULL);
-
-            if( pSessionBus == NULL )
-                return;
-
-            if ( aDBusMenubarPath != NULL && pMenuModel != NULL  && !pSalMenu->mbGdkDisposed)
-                pSalMenu->mnMenuExportId = g_dbus_connection_export_menu_model (pSessionBus, aDBusMenubarPath, pMenuModel, NULL);
-
-            if ( aDBusPath != NULL && pActionGroup != NULL && !pSalMenu->mbGdkDisposed)
-                pSalMenu->mnAGExportId = g_dbus_connection_export_action_group( pSessionBus, aDBusPath, pActionGroup, NULL);
-
-            // Set window properties.
-            gdk_x11_window_set_utf8_property ( gdkWindow, "_GTK_UNIQUE_BUS_NAME", g_dbus_connection_get_unique_name( pSessionBus ) );
-            gdk_x11_window_set_utf8_property ( gdkWindow, "_GTK_APPLICATION_OBJECT_PATH", "" );
-            gdk_x11_window_set_utf8_property ( gdkWindow, "_GTK_WINDOW_OBJECT_PATH", aDBusWindowPath );
-            gdk_x11_window_set_utf8_property ( gdkWindow, "_GTK_MENUBAR_OBJECT_PATH", aDBusMenubarPath );
-
-            g_free( aDBusPath );
-            g_free( aDBusWindowPath );
-            g_free( aDBusMenubarPath );
-
-            bDBusIsAvailable = sal_True;
-
-            if ( pMenuBar && !pSalMenu->mbGdkDisposed)
-            {
-                pMenuBar->SetDisplayable( sal_False );
-            }
-        }
         pSalMenu->UpdateNativeMenu();
+        MenuBar* pMenuBar = static_cast< MenuBar* >( pSalMenu->GetMenu() );
+        if(pMenuBar)
+            pMenuBar->SetDisplayable(false);           
     }
-
-    return;
 }
 
 //This is called when the registrar becomes unavailable. It shows the menubar.
@@ -588,13 +592,6 @@ on_registrar_unavailable (GDBusConnection * /*connection*/,
     }
 
     return;
-}
-
-static void ObjectDestroyedNotify( gpointer data )
-{
-    if ( data ) {
-        g_object_unref( data );
-    }
 }
 
 void GtkSalFrame::EnsureAppMenuWatch()
