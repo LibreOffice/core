@@ -84,7 +84,7 @@ class SmGraphicAccessible :
 
 protected:
     SmDocShell *    GetDoc_Impl();
-    String          GetAccessibleText_Impl();
+    OUString        GetAccessibleText_Impl();
 
 public:
     SmGraphicAccessible( SmGraphicWindow *pGraphicWin );

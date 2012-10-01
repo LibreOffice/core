@@ -134,9 +134,9 @@ SmDocShell * SmGraphicAccessible::GetDoc_Impl()
     return pView ? pView->GetDoc() : 0;
 }
 
-String SmGraphicAccessible::GetAccessibleText_Impl()
+OUString SmGraphicAccessible::GetAccessibleText_Impl()
 {
-    String aTxt;
+    OUString aTxt;
     SmDocShell *pDoc = GetDoc_Impl();
     if (pDoc)
         aTxt = pDoc->GetAccessibleText();
@@ -451,9 +451,8 @@ sal_Bool SAL_CALL SmGraphicAccessible::setCaretPosition( sal_Int32 nIndex )
     throw (IndexOutOfBoundsException, RuntimeException)
 {
     SolarMutexGuard aGuard;
-    xub_StrLen nIdx = (xub_StrLen) nIndex;
-    String aTxt( GetAccessibleText_Impl() );
-    if (!(nIdx < aTxt.Len()))
+    OUString aTxt( GetAccessibleText_Impl() );
+    if (!(nIndex < aTxt.getLength()))
         throw IndexOutOfBoundsException();
     return sal_False;
 }
@@ -462,12 +461,10 @@ sal_Unicode SAL_CALL SmGraphicAccessible::getCharacter( sal_Int32 nIndex )
     throw (IndexOutOfBoundsException, RuntimeException)
 {
     SolarMutexGuard aGuard;
-
-    xub_StrLen nIdx = (xub_StrLen) nIndex;
-    String aTxt( GetAccessibleText_Impl() );
-    if (!(nIdx < aTxt.Len()))
+    OUString aTxt( GetAccessibleText_Impl() );
+    if (!(nIndex < aTxt.getLength()))
         throw IndexOutOfBoundsException();
-    return aTxt.GetChar( nIdx );
+    return aTxt[nIndex];
 }
 
 Sequence< beans::PropertyValue > SAL_CALL SmGraphicAccessible::getCharacterAttributes(
@@ -476,7 +473,7 @@ Sequence< beans::PropertyValue > SAL_CALL SmGraphicAccessible::getCharacterAttri
     throw (IndexOutOfBoundsException, RuntimeException)
 {
     SolarMutexGuard aGuard;
-    sal_Int32 nLen = GetAccessibleText_Impl().Len();
+    sal_Int32 nLen = GetAccessibleText_Impl().getLength();
     if (!(0 <= nIndex  &&  nIndex < nLen))
         throw IndexOutOfBoundsException();
     return Sequence< beans::PropertyValue >();
@@ -498,12 +495,12 @@ awt::Rectangle SAL_CALL SmGraphicAccessible::getCharacterBounds( sal_Int32 nInde
         SmDocShell  *pDoc  = pView ? pView->GetDoc() : 0;
         if (!pDoc)
             throw RuntimeException();
-        String aTxt( GetAccessibleText_Impl() );
-        if (!(0 <= nIndex  &&  nIndex <= aTxt.Len()))   // aTxt.Len() is valid
+        OUString aTxt( GetAccessibleText_Impl() );
+        if (!(0 <= nIndex  &&  nIndex <= aTxt.getLength()))   // aTxt.getLength() is valid
             throw IndexOutOfBoundsException();
 
-        // find a reasonable rectangle for position aTxt.Len().
-        bool bWasBehindText = (nIndex == aTxt.Len());
+        // find a reasonable rectangle for position aTxt.getLength().
+        bool bWasBehindText = (nIndex == aTxt.getLength());
         if (bWasBehindText && nIndex)
             --nIndex;
 
@@ -560,7 +557,7 @@ sal_Int32 SAL_CALL SmGraphicAccessible::getCharacterCount()
     throw (RuntimeException)
 {
     SolarMutexGuard aGuard;
-    return GetAccessibleText_Impl().Len();
+    return GetAccessibleText_Impl().getLength();
 }
 
 sal_Int32 SAL_CALL SmGraphicAccessible::getIndexAtPoint( const awt::Point& aPoint )
@@ -656,7 +653,7 @@ sal_Bool SAL_CALL SmGraphicAccessible::setSelection(
     throw (IndexOutOfBoundsException, RuntimeException)
 {
     SolarMutexGuard aGuard;
-    sal_Int32 nLen = GetAccessibleText_Impl().Len();
+    sal_Int32 nLen = GetAccessibleText_Impl().getLength();
     if (!(0 <= nStartIndex  &&  nStartIndex < nLen) ||
         !(0 <= nEndIndex    &&  nEndIndex   < nLen))
         throw IndexOutOfBoundsException();
@@ -680,32 +677,31 @@ OUString SAL_CALL SmGraphicAccessible::getTextRange(
     //!! may be switched.
 
     SolarMutexGuard aGuard;
-    String aTxt( GetAccessibleText_Impl() );
-    xub_StrLen nStart = (xub_StrLen) Min(nStartIndex, nEndIndex);
-    xub_StrLen nEnd   = (xub_StrLen) Max(nStartIndex, nEndIndex);
-    if (!(nStart <= aTxt.Len()) ||
-        !(nEnd   <= aTxt.Len()))
+    OUString aTxt( GetAccessibleText_Impl() );
+    sal_Int32 nStart = Min(nStartIndex, nEndIndex);
+    sal_Int32 nEnd   = Max(nStartIndex, nEndIndex);
+    if (!(nStart <= aTxt.getLength()) ||
+        !(nEnd   <= aTxt.getLength()))
         throw IndexOutOfBoundsException();
-    return aTxt.Copy( nStart, nEnd - nStart );
+    return aTxt.copy( nStart, nEnd - nStart );
 }
 
 ::com::sun::star::accessibility::TextSegment SAL_CALL SmGraphicAccessible::getTextAtIndex( sal_Int32 nIndex, sal_Int16 aTextType ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    String aTxt( GetAccessibleText_Impl() );
-    xub_StrLen nIdx = (xub_StrLen) nIndex;
+    OUString aTxt( GetAccessibleText_Impl() );
     //!! nIndex is allowed to be the string length
-    if (!(nIdx <= aTxt.Len()))
+    if (!(nIndex <= aTxt.getLength()))
         throw IndexOutOfBoundsException();
 
     ::com::sun::star::accessibility::TextSegment aResult;
     aResult.SegmentStart = -1;
     aResult.SegmentEnd = -1;
-    if ( (AccessibleTextType::CHARACTER == aTextType)  &&  (nIdx < aTxt.Len()) )
+    if ( (AccessibleTextType::CHARACTER == aTextType)  &&  (nIndex < aTxt.getLength()) )
     {
-        aResult.SegmentText = aTxt.Copy(nIdx, 1);
-        aResult.SegmentStart = nIdx;
-        aResult.SegmentEnd = nIdx+1;
+        aResult.SegmentText = aTxt.copy(nIndex, 1);
+        aResult.SegmentStart = nIndex;
+        aResult.SegmentEnd = nIndex+1;
     }
     return aResult;
 }
@@ -713,21 +709,20 @@ OUString SAL_CALL SmGraphicAccessible::getTextRange(
 ::com::sun::star::accessibility::TextSegment SAL_CALL SmGraphicAccessible::getTextBeforeIndex( sal_Int32 nIndex, sal_Int16 aTextType ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    String aTxt( GetAccessibleText_Impl() );
-    xub_StrLen nIdx = (xub_StrLen) nIndex;
+    OUString aTxt( GetAccessibleText_Impl() );
     //!! nIndex is allowed to be the string length
-    if (!(nIdx <= aTxt.Len()))
+    if (!(nIndex <= aTxt.getLength()))
         throw IndexOutOfBoundsException();
 
     ::com::sun::star::accessibility::TextSegment aResult;
     aResult.SegmentStart = -1;
     aResult.SegmentEnd = -1;
 
-    if ( (AccessibleTextType::CHARACTER == aTextType)  && nIdx )
+    if ( (AccessibleTextType::CHARACTER == aTextType)  && nIndex )
     {
-        aResult.SegmentText = aTxt.Copy(nIdx-1, 1);
-        aResult.SegmentStart = nIdx-1;
-        aResult.SegmentEnd = nIdx;
+        aResult.SegmentText = aTxt.copy(nIndex-1, 1);
+        aResult.SegmentStart = nIndex-1;
+        aResult.SegmentEnd = nIndex;
     }
     return aResult;
 }
@@ -735,22 +730,21 @@ OUString SAL_CALL SmGraphicAccessible::getTextRange(
 ::com::sun::star::accessibility::TextSegment SAL_CALL SmGraphicAccessible::getTextBehindIndex( sal_Int32 nIndex, sal_Int16 aTextType ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    String aTxt( GetAccessibleText_Impl() );
-    xub_StrLen nIdx = (xub_StrLen) nIndex;
+    OUString aTxt( GetAccessibleText_Impl() );
     //!! nIndex is allowed to be the string length
-    if (!(nIdx <= aTxt.Len()))
+    if (!(nIndex <= aTxt.getLength()))
         throw IndexOutOfBoundsException();
 
     ::com::sun::star::accessibility::TextSegment aResult;
     aResult.SegmentStart = -1;
     aResult.SegmentEnd = -1;
 
-    nIdx++; // text *behind*
-    if ( (AccessibleTextType::CHARACTER == aTextType)  &&  (nIdx < aTxt.Len()) )
+    nIndex++; // text *behind*
+    if ( (AccessibleTextType::CHARACTER == aTextType)  &&  (nIndex < aTxt.getLength()) )
     {
-        aResult.SegmentText = aTxt.Copy(nIdx, 1);
-        aResult.SegmentStart = nIdx;
-        aResult.SegmentEnd = nIdx+1;
+        aResult.SegmentText = aTxt.copy(nIndex, 1);
+        aResult.SegmentStart = nIndex;
+        aResult.SegmentEnd = nIndex+1;
     }
     return aResult;
 }
