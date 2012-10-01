@@ -105,7 +105,7 @@ static awt::Point lcl_GetLocationOnScreen( Window *pWin )
 //////////////////////////////////////////////////////////////////////
 
 SmGraphicAccessible::SmGraphicAccessible( SmGraphicWindow *pGraphicWin ) :
-    aAccName            ( String(SmResId(RID_DOCUMENTSTR)) ),
+    aAccName            (SM_RESSTR(RID_DOCUMENTSTR)),
     nClientId           (0),
     pWin                (pGraphicWin)
 {
@@ -115,7 +115,7 @@ SmGraphicAccessible::SmGraphicAccessible( SmGraphicWindow *pGraphicWin ) :
 
 SmGraphicAccessible::SmGraphicAccessible( const SmGraphicAccessible &rSmAcc ) :
     SmGraphicAccessibleBaseClass(),
-    aAccName            ( String(SmResId(RID_DOCUMENTSTR)) ),
+    aAccName            (SM_RESSTR(RID_DOCUMENTSTR)),
     nClientId           (0)
 {
     pWin = rSmAcc.pWin;
@@ -1631,7 +1631,7 @@ sal_Bool SmEditViewForwarder::Paste()
 //------------------------------------------------------------------------
 
 SmEditAccessible::SmEditAccessible( SmEditWindow *pEditWin ) :
-    aAccName            ( String(SmResId(STR_CMDBOXWINDOW)) ),
+    aAccName            (SM_RESSTR(STR_CMDBOXWINDOW)),
     pTextHelper         (0),
     pWin                (pEditWin)
 {
@@ -1641,7 +1641,7 @@ SmEditAccessible::SmEditAccessible( SmEditWindow *pEditWin ) :
 
 SmEditAccessible::SmEditAccessible( const SmEditAccessible &rSmAcc ) :
     SmEditAccessibleBaseClass(),
-    aAccName            ( String(SmResId(STR_CMDBOXWINDOW)) )
+    aAccName            (SM_RESSTR(STR_CMDBOXWINDOW))
 {
     pWin = rSmAcc.pWin;
     OSL_ENSURE( pWin, "SmEditAccessible: window missing" );
