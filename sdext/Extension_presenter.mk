@@ -25,11 +25,7 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-include $(dir $(realpath $(lastword $(MAKEFILE_LIST))))platform.mk
-
 $(eval $(call gb_Extension_Extension,presenter-screen,sdext/source/presenter))
-
-$(eval $(call gb_Extension_set_platform,presenter-screen,$(sdext_PLATFORM)))
 
 $(eval $(call gb_Extension_add_libraries,presenter-screen,\
     PresenterScreen \
@@ -141,9 +137,9 @@ $(eval $(call gb_Extension_add_files,presenter-screen,registry/data/org/openoffi
     $(call gb_XcuDataTarget_get_target,sdext/source/presenter/registry/data/org/openoffice/Office/ProtocolHandler.xcu) \
 ))
 
-$(eval $(call gb_Extension_add_helpfile,presenter-screen,$(WORKDIR)/CustomTarget/sdext/source/presenter/help/en-US,com.sun.PresenterScreen-$(sdext_PLATFORM)/presenter.xhp,com.sun.PresenterScreen/presenter.xhp))
+$(eval $(call gb_Extension_add_helpfile,presenter-screen,$(WORKDIR)/CustomTarget/sdext/source/presenter/help/en-US,com.sun.PresenterScreen-$(PLATFORMID)/presenter.xhp,com.sun.PresenterScreen/presenter.xhp))
 
-$(eval $(call gb_Extension_add_helptreefile,presenter-screen,$(SRCDIR)/sdext/source/presenter/help/en-US,/help.tree,com.sun.PresenterScreen/help.tree,com.sun.PresenterScreen-$(sdext_PLATFORM)))
+$(eval $(call gb_Extension_add_helptreefile,presenter-screen,$(SRCDIR)/sdext/source/presenter/help/en-US,/help.tree,com.sun.PresenterScreen/help.tree,com.sun.PresenterScreen-$(PLATFORMID)))
 
 
 

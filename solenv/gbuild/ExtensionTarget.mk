@@ -131,7 +131,7 @@ $(call gb_ExtensionTarget_get_target,$(1)) : DESCRIPTION :=
 $(call gb_ExtensionTarget_get_target,$(1)) : FILES := META-INF description.xml
 $(call gb_ExtensionTarget_get_target,$(1)) : LICENSE :=
 $(call gb_ExtensionTarget_get_target,$(1)) : LOCATION := $(SRCDIR)/$(2)
-$(call gb_ExtensionTarget_get_target,$(1)) : PLATFORM :=
+$(call gb_ExtensionTarget_get_target,$(1)) : PLATFORM := $(PLATFORMID)
 $(call gb_ExtensionTarget_get_target,$(1)) : PRJNAME := $(firstword $(subst /, ,$(2)))
 $(call gb_ExtensionTarget_get_workdir,$(1))/description.xml : $(SRCDIR)/$(2)/description.xml
 ifneq ($(strip $(gb_WITH_LANG)),)
@@ -143,14 +143,6 @@ endif
 
 $(foreach lang,$(gb_ExtensionTarget_ALL_LANGS), \
     $(call gb_ExtensionTarget__compile_help_onelang,$(1),$(lang)))
-endef
-
-# Set platform.
-#
-# Only use this if the extension is platform-dependent.
-define gb_ExtensionTarget_set_platform
-$(call gb_ExtensionTarget_get_target,$(1)) : PLATFORM := $(2)
-
 endef
 
 # Use the default license file

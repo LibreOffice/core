@@ -25,11 +25,7 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-include $(dir $(realpath $(lastword $(MAKEFILE_LIST))))platform.mk
-
 $(eval $(call gb_Extension_Extension,presentation-minimizer,sdext/source/minimizer))
-
-$(eval $(call gb_Extension_set_platform,presentation-minimizer,$(sdext_PLATFORM)))
 
 $(eval $(call gb_Extension_add_libraries,presentation-minimizer,\
     SunPresentationMinimizer \

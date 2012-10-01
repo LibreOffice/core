@@ -25,8 +25,6 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-include $(dir $(realpath $(lastword $(MAKEFILE_LIST))))platform.mk
-
 $(eval $(call gb_StaticLibrary_StaticLibrary,pdfimport_s))
 
 $(eval $(call gb_StaticLibrary_use_packages,pdfimport_s,\
@@ -56,7 +54,7 @@ $(eval $(call gb_StaticLibrary_set_include,pdfimport_s,\
 
 $(eval $(call gb_StaticLibrary_add_defs,pdfimport_s,\
     -DBOOST_SPIRIT_USE_OLD_NAMESPACE \
-    -DPDFI_IMPL_IDENTIFIER=\"com.sun.star.PDFImport-$(sdext_PLATFORM)\" \
+    -DPDFI_IMPL_IDENTIFIER=\"com.sun.star.PDFImport-$(PLATFORMID)\" \
 ))
 
 $(eval $(call gb_StaticLibrary_add_exception_objects,pdfimport_s,\
