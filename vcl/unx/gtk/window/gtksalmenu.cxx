@@ -356,7 +356,7 @@ GtkSalMenu::~GtkSalMenu()
 
 sal_Bool GtkSalMenu::VisibleMenuBar()
 {
-    return bDBusIsAvailable;
+    return true;
 }
 
 void GtkSalMenu::InsertItem( SalMenuItem* pSalMenuItem, unsigned nPos )

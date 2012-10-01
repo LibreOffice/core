@@ -512,8 +512,7 @@ static void ObjectDestroyedNotify( gpointer data )
     }
 }
 
-static void
-ensure_dbus_setup(GdkWindow* gdkWindow, GtkSalFrame* pSalFrame)
+void ensure_dbus_setup(GdkWindow* gdkWindow, GtkSalFrame* pSalFrame)
 {
     if ( gdkWindow != NULL && g_object_get_data( G_OBJECT( gdkWindow ), "g-lo-menubar" ) == NULL )
     {
@@ -528,13 +527,9 @@ ensure_dbus_setup(GdkWindow* gdkWindow, GtkSalFrame* pSalFrame)
             pSessionBus = g_bus_get_sync (G_BUS_TYPE_SESSION, NULL, NULL);
         if( pSessionBus == NULL )
             return;
-        if ( aDBusMenubarPath != NULL )
-        {
-            std::cout << "exporting menu model at " << pMenuModel << " for window " << windowId << std::endl;
-            /* pSalFrame->m_nMenuExportId = */ g_dbus_connection_export_menu_model (pSessionBus, aDBusMenubarPath, pMenuModel, NULL);
-        }
-        if ( aDBusPath != NULL && pActionGroup != NULL )
-            /* pSalFrame->m_nActionGroupExportId = */ g_dbus_connection_export_action_group( pSessionBus, aDBusPath, pActionGroup, NULL);
+        std::cout << "exporting menu model at " << pMenuModel << " for window " << windowId << std::endl;
+        pSalFrame->m_nMenuExportId = g_dbus_connection_export_menu_model (pSessionBus, aDBusMenubarPath, pMenuModel, NULL);
+        pSalFrame->m_nActionGroupExportId = g_dbus_connection_export_action_group( pSessionBus, aDBusPath, pActionGroup, NULL);
 
         // Set window properties.
         g_object_set_data_full(
@@ -555,13 +550,10 @@ ensure_dbus_setup(GdkWindow* gdkWindow, GtkSalFrame* pSalFrame)
         g_free( aDBusPath );
         g_free( aDBusWindowPath );
         g_free( aDBusMenubarPath );
-
-        bDBusIsAvailable = sal_True;
     }
 }
     
-static void
-on_registrar_available (GDBusConnection * /*connection*/,
+void on_registrar_available (GDBusConnection * /*connection*/,
                         const gchar     * /*name*/,
                         const gchar     * /*name_owner*/,
                         gpointer         user_data)
@@ -581,8 +573,7 @@ on_registrar_available (GDBusConnection * /*connection*/,
 }
 
 //This is called when the registrar becomes unavailable. It shows the menubar.
-static void
-on_registrar_unavailable (GDBusConnection * /*connection*/,
+void on_registrar_unavailable (GDBusConnection * /*connection*/,
                           const gchar     * /*name*/,
                           gpointer         user_data)
 {
@@ -592,9 +583,7 @@ on_registrar_unavailable (GDBusConnection * /*connection*/,
 
     if ( pSalMenu ) {
         MenuBar* pMenuBar = static_cast< MenuBar* >( pSalMenu->GetMenu() );
-
-        bDBusIsAvailable = sal_False;
-        pMenuBar->SetDisplayable( sal_True );
+        pMenuBar->SetDisplayable( false );
     }
 
     return;
@@ -612,35 +601,7 @@ void GtkSalFrame::EnsureAppMenuWatch()
          on_registrar_unavailable,
          reinterpret_cast<gpointer>(this),
          NULL);
-    ensure_dbus_setup(gtk_widget_get_window( GTK_WIDGET(getWindow()) ), this);
-}
-
-struct DisposeData
-{
-    GLOActionGroup* m_pActionGroup;
-    GLOMenu* m_pMenu;
-    guint m_nActionGroupExportId;
-    guint m_nMenuExportId;
-    guint m_nWatcherId;
-};
-
-static int dispose_menudata(gpointer data)
-{
-    SolarMutexGuard aGuard;
-    DisposeData* pDisposeData = reinterpret_cast<DisposeData*>(data);
-    if(pDisposeData->m_nWatcherId)
-        g_bus_unwatch_name( pDisposeData->m_nWatcherId );
-    if(pSessionBus)
-    {
-        //g_dbus_connection_unexport_action_group (pSessionBus, pDisposeData->m_nActionGroupExportId);
-        //g_dbus_connection_unexport_menu_model (pSessionBus, pDisposeData->m_nMenuExportId);
-    }
-    if(pDisposeData->m_pActionGroup)
-        g_lo_action_group_clear( pDisposeData->m_pActionGroup );
-    if(pDisposeData->m_pMenu)
-        g_lo_menu_remove( pDisposeData->m_pMenu, 0 );
-    g_slice_free(DisposeData, pDisposeData);
-    return FALSE;
+    ensure_dbus_setup(GTK_WIDGET(m_pWindow)->window, this);
 }
 
 GtkSalFrame::~GtkSalFrame()
@@ -684,31 +645,36 @@ GtkSalFrame::~GtkSalFrame()
 
     if( m_pFixedContainer )
         gtk_widget_destroy( GTK_WIDGET( m_pFixedContainer ) );
-    if( m_pWindow )
     {
-        g_object_set_data( G_OBJECT( m_pWindow ), "SalFrame", NULL );
-        gtk_widget_destroy( m_pWindow );
+        SolarMutexGuard aGuard;
+        if(m_pSalMenu)
+            static_cast<GtkSalMenu*>(m_pSalMenu)->DisconnectFrame();
+        if( m_pWindow )
+        {
+            g_object_set_data( G_OBJECT( m_pWindow ), "SalFrame", NULL );
+            if(m_nMenuExportId)
+            {
+                if(pSessionBus)
+                    g_dbus_connection_unexport_menu_model(pSessionBus, m_nMenuExportId);
+                GLOMenu* pMenuModel = G_LO_MENU(g_object_get_data( G_OBJECT( m_pWindow ), "g-lo-menubar" ));
+                if(pMenuModel)
+                    g_lo_menu_remove(pMenuModel,0);
+            }
+            if(m_nActionGroupExportId)
+            {
+                if(pSessionBus)
+                    g_dbus_connection_unexport_action_group(pSessionBus, m_nActionGroupExportId);
+                GLOActionGroup* pActionGroup = G_LO_ACTION_GROUP(g_object_get_data( G_OBJECT( m_pWindow ), "g-lo-action-group" ));
+                if(pActionGroup)
+                    g_lo_action_group_clear( pActionGroup );
+            }
+            gtk_widget_destroy( m_pWindow );
+        }
     }
     if( m_pForeignParent )
         g_object_unref( G_OBJECT( m_pForeignParent ) );
     if( m_pForeignTopLevel )
         g_object_unref( G_OBJECT( m_pForeignTopLevel) );
-
-    DisposeData* pDisposeData = g_slice_new(DisposeData);
-    if(m_pWindow)
-    {
-        pDisposeData->m_pActionGroup = G_LO_ACTION_GROUP( g_object_get_data( G_OBJECT( m_pWindow ), "g-lo-action-group" ) );
-        pDisposeData->m_pMenu = G_LO_MENU( g_object_get_data( G_OBJECT( m_pWindow ), "g-lo-menubar" ) );
-    }
-    else
-    {
-        pDisposeData->m_pActionGroup = NULL;
-        pDisposeData->m_pMenu = NULL;
-    }
-    //pDisposeData->m_nActionGroupExportId = mnAGExportId;
-    //pDisposeData->m_nMenuExportId = mnMenuExportId;
-    pDisposeData->m_nWatcherId = m_nWatcherId;
-    g_timeout_add(0, &dispose_menudata, pDisposeData);
 }
 
 void GtkSalFrame::moveWindow( long nX, long nY )

@@ -54,8 +54,6 @@ typedef XLIB_Window GdkNativeWindow;
 #define gdk_window_foreign_new_for_display(a,b) gdk_x11_window_foreign_new_for_display(a,b)
 #endif
 
-static sal_Bool bDBusIsAvailable = sal_False;
-
 class GtkSalFrame : public SalFrame
 {
     static const int nMaxGraphics = 2;
@@ -215,7 +213,12 @@ class GtkSalFrame : public SalFrame
 #endif
 
     SalMenu*                        m_pSalMenu;
-    sal_uInt32                      m_nWatcherId;
+    friend void ensure_dbus_setup(GdkWindow* gdkWindow, GtkSalFrame* pSalFrame);
+    friend void on_registrar_available (GDBusConnection*, const gchar*, const gchar*, gpointer);
+    friend void on_registrar_unavailable (GDBusConnection*, const gchar*, gpointer);
+    guint                           m_nWatcherId;
+    guint                           m_nMenuExportId;
+    guint                           m_nActionGroupExportId;
 
     void Init( SalFrame* pParent, sal_uLong nStyle );
     void Init( SystemParentData* pSysData );
