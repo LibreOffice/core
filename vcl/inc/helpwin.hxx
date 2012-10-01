@@ -44,8 +44,8 @@ private:
 
     Rectangle           maTextRect; // For wrapped text in QuickHelp
 
-    String              maHelpText;
-    String              maStatusText;
+    OUString            maHelpText;
+    OUString            maStatusText;
 
     Timer               maShowTimer;
     Timer               maHideTimer;
@@ -61,16 +61,16 @@ protected:
     void                ImplShow();
 
 public:
-                        HelpTextWindow( Window* pParent, const String& rText, sal_uInt16 nHelpWinStyle, sal_uInt16 nStyle );
+                        HelpTextWindow( Window* pParent, const OUString& rText, sal_uInt16 nHelpWinStyle, sal_uInt16 nStyle );
                         ~HelpTextWindow();
 
-    const String&       GetHelpText() const { return maHelpText; }
-    void                SetHelpText( const String& rHelpText );
+    const OUString&     GetHelpText() const { return maHelpText; }
+    void                SetHelpText( const OUString& rHelpText );
     sal_uInt16          GetWinStyle() const { return mnHelpWinStyle; }
     sal_uInt16          GetStyle() const { return mnStyle; }
 
     // Nur merken:
-    void                SetStatusText( const String& rStatusText ) { maStatusText = rStatusText; }
+    void                SetStatusText( const OUString& rStatusText ) { maStatusText = rStatusText; }
     void                SetHelpArea( const Rectangle& rRect ) { maHelpArea = rRect; }
 
     void                ShowHelp( sal_uInt16 nDelayMode );
@@ -82,7 +82,7 @@ public:
 };
 
 void ImplShowHelpWindow( Window* pParent, sal_uInt16 nHelpWinStyle, sal_uInt16 nStyle,
-        const String& rHelpText, const String& rStatusText,
+        const OUString& rHelpText, const OUString& rStatusText,
         const Point& rScreenPos, const Rectangle* pHelpArea = NULL );
 void ImplDestroyHelpWindow( bool bUpdateHideTime );
 void ImplSetHelpWindowPos( Window* pHelpWindow, sal_uInt16 nHelpWinStyle, sal_uInt16 nStyle,

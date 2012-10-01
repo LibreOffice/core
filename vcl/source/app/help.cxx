@@ -26,6 +26,7 @@
  *
  ************************************************************************/
 
+#include <comphelper/string.hxx>
 
 #include "tools/debug.hxx"
 #include "tools/diagnose_ex.h"
@@ -66,25 +67,25 @@ Help::~Help()
 
 // -----------------------------------------------------------------------
 
-void Help::OpenHelpAgent( const rtl::OString& )
+void Help::OpenHelpAgent( const OString& )
 {
 }
 
 // -----------------------------------------------------------------------
 
-sal_Bool Help::Start( const XubString&, const Window* )
+sal_Bool Help::Start( const OUString&, const Window* )
 {
     return sal_False;
 }
 
-sal_Bool Help::SearchKeyword( const XubString& )
+sal_Bool Help::SearchKeyword( const OUString& )
 {
     return sal_False;
 }
 
 // -----------------------------------------------------------------------
 
-XubString Help::GetHelpText( const String&, const Window* )
+OUString Help::GetHelpText( const OUString&, const Window* )
 {
     return ImplGetSVEmptyStr();
 }
@@ -193,7 +194,7 @@ sal_Bool Help::IsBalloonHelpEnabled()
 
 sal_Bool Help::ShowBalloon( Window* pParent,
                         const Point& rScreenPos,
-                        const XubString& rHelpText )
+                        const OUString& rHelpText )
 {
     ImplShowHelpWindow( pParent, HELPWINSTYLE_BALLOON, 0,
                         rHelpText, ImplGetSVEmptyStr(), rScreenPos );
@@ -205,7 +206,7 @@ sal_Bool Help::ShowBalloon( Window* pParent,
 
 sal_Bool Help::ShowBalloon( Window* pParent,
                         const Point& rScreenPos, const Rectangle& rRect,
-                        const XubString& rHelpText )
+                        const OUString& rHelpText )
 {
     ImplShowHelpWindow( pParent, HELPWINSTYLE_BALLOON, 0,
                         rHelpText, ImplGetSVEmptyStr(), rScreenPos, &rRect );
@@ -238,8 +239,8 @@ sal_Bool Help::IsQuickHelpEnabled()
 
 sal_Bool Help::ShowQuickHelp( Window* pParent,
                           const Rectangle& rScreenRect,
-                          const XubString& rHelpText,
-                          const XubString& rLongHelpText,
+                          const OUString& rHelpText,
+                          const OUString& rLongHelpText,
                           sal_uInt16 nStyle )
 {
     ImplShowHelpWindow( pParent, HELPWINSTYLE_QUICK, nStyle,
@@ -260,7 +261,7 @@ void Help::HideBalloonAndQuickHelp()
 // -----------------------------------------------------------------------
 
 sal_uIntPtr Help::ShowTip( Window* pParent, const Rectangle& rScreenRect,
-                     const XubString& rText, sal_uInt16 nStyle )
+                     const OUString& rText, sal_uInt16 nStyle )
 {
     sal_uInt16 nHelpWinStyle = ( ( nStyle & QUICKHELP_TIP_STYLE_BALLOON ) != 0 ) ? HELPWINSTYLE_BALLOON : HELPWINSTYLE_QUICK;
     HelpTextWindow* pHelpWin = new HelpTextWindow( pParent, rText, nHelpWinStyle, nStyle );
@@ -274,7 +275,7 @@ sal_uIntPtr Help::ShowTip( Window* pParent, const Rectangle& rScreenRect,
 
 // -----------------------------------------------------------------------
 
-void Help::UpdateTip( sal_uIntPtr nId, Window* pParent, const Rectangle& rScreenRect, const XubString& rText )
+void Help::UpdateTip( sal_uIntPtr nId, Window* pParent, const Rectangle& rScreenRect, const OUString& rText )
 {
     HelpTextWindow* pHelpWin = reinterpret_cast< HelpTextWindow* >( nId );
     ENSURE_OR_RETURN_VOID( pHelpWin != NULL, "Help::UpdateTip: invalid ID!" );
@@ -303,7 +304,7 @@ void Help::HideTip( sal_uLong nId )
 
 // =======================================================================
 
-HelpTextWindow::HelpTextWindow( Window* pParent, const XubString& rText, sal_uInt16 nHelpWinStyle, sal_uInt16 nStyle ) :
+HelpTextWindow::HelpTextWindow( Window* pParent, const OUString& rText, sal_uInt16 nHelpWinStyle, sal_uInt16 nStyle ) :
     //FloatingWindow( pParent->ImplGetFrameWindow(), WB_SYSTEMWINDOW ),
     FloatingWindow( pParent, WB_SYSTEMWINDOW|WB_TOOLTIPWIN ), // #105827# if we change the parent, mirroring will not work correctly when positioning this window
     maHelpText( rText )
@@ -367,10 +368,10 @@ HelpTextWindow::~HelpTextWindow()
 
 // -----------------------------------------------------------------------
 
-void HelpTextWindow::SetHelpText( const String& rHelpText )
+void HelpTextWindow::SetHelpText( const OUString& rHelpText )
 {
     maHelpText = rHelpText;
-    if ( mnHelpWinStyle == HELPWINSTYLE_QUICK && maHelpText.Len() < HELPTEXTMAXLEN)
+    if ( mnHelpWinStyle == HELPWINSTYLE_QUICK && maHelpText.getLength() < HELPTEXTMAXLEN)
     {
         Size aSize;
         aSize.Height() = GetTextHeight();
@@ -383,9 +384,11 @@ void HelpTextWindow::SetHelpText( const String& rHelpText )
     else // HELPWINSTYLE_BALLOON
     {
         Point       aTmpPoint;
-        sal_uInt16      nCharsInLine = 35 + ((maHelpText.Len()/100)*5);
-        XubString   aXXX;
-        aXXX.Fill( nCharsInLine, 'x' );   // average width to have all windows consistent
+        sal_Int32 nCharsInLine = 35 + ((maHelpText.getLength()/100)*5);
+        // average width to have all windows consistent
+        OUStringBuffer aBuf;
+        comphelper::string::padToLength(aBuf, nCharsInLine, 'x');
+        OUString aXXX = aBuf.makeStringAndClear();
         long nWidth = GetTextWidth( aXXX );
         Size aTmpSize( nWidth, 0x7FFFFFFF );
         Rectangle aTry1( aTmpPoint, aTmpSize );
@@ -428,11 +431,11 @@ void HelpTextWindow::Paint( const Rectangle& )
         Rectangle aCtrlRegion( Point( 0, 0 ), GetOutputSizePixel() );
         ImplControlValue    aControlValue;
         bNativeOK = DrawNativeControl( CTRL_TOOLTIP, PART_ENTIRE_CONTROL, aCtrlRegion,
-                                       0, aControlValue, rtl::OUString() );
+                                       0, aControlValue, OUString() );
     }
 
     // paint text
-    if ( mnHelpWinStyle == HELPWINSTYLE_QUICK && maHelpText.Len() < HELPTEXTMAXLEN)
+    if ( mnHelpWinStyle == HELPWINSTYLE_QUICK && maHelpText.getLength() < HELPTEXTMAXLEN)
     {
         if ( mnStyle & QUICKHELP_CTRLTEXT )
             DrawCtrlText( maTextRect.TopLeft(), maHelpText );
@@ -536,7 +539,7 @@ void HelpTextWindow::RequestHelp( const HelpEvent& /*rHEvt*/ )
 
 // -----------------------------------------------------------------------
 
-String HelpTextWindow::GetText() const
+XubString HelpTextWindow::GetText() const
 {
     return maHelpText;
 }
@@ -552,12 +555,12 @@ String HelpTextWindow::GetText() const
 // =======================================================================
 
 void ImplShowHelpWindow( Window* pParent, sal_uInt16 nHelpWinStyle, sal_uInt16 nStyle,
-                         const XubString& rHelpText, const XubString& rStatusText,
+                         const OUString& rHelpText, const OUString& rStatusText,
                          const Point& rScreenPos, const Rectangle* pHelpArea )
 {
     ImplSVData* pSVData = ImplGetSVData();
 
-    if( !rHelpText.Len() && !pSVData->maHelpData.mbRequestingHelp )
+    if (rHelpText.isEmpty() && !pSVData->maHelpData.mbRequestingHelp)
         return;
 
     HelpTextWindow* pHelpWin = pSVData->maHelpData.mpHelpWin;
@@ -602,7 +605,7 @@ void ImplShowHelpWindow( Window* pParent, sal_uInt16 nHelpWinStyle, sal_uInt16 n
         }
     }
 
-    if ( !pHelpWin && rHelpText.Len() )
+    if (!pHelpWin && !rHelpText.isEmpty())
     {
         sal_uLong nCurTime = Time::GetSystemTicks();
         if  (   ( ( nCurTime - pSVData->maHelpData.mnLastHelpHideTime ) < pParent->GetSettings().GetHelpSettings().GetTipDelay() )

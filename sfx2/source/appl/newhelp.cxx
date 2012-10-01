@@ -627,14 +627,11 @@ void IndexTabPage_Impl::InitializeIndex()
 
     try
     {
-        ::rtl::OUString aURL = HELP_URL;
-        aURL += ::rtl::OUString( sFactory );
+        OUStringBuffer aURL = HELP_URL;
+        aURL.append(sFactory);
+        AppendConfigToken(aURL, sal_True);
 
-        String aTemp = aURL;
-        AppendConfigToken( aTemp, sal_True );
-        aURL = aTemp;
-
-        Content aCnt( aURL, Reference< ::com::sun::star::ucb::XCommandEnvironment >(), comphelper::getProcessComponentContext() );
+        Content aCnt( aURL.makeStringAndClear(), Reference< ::com::sun::star::ucb::XCommandEnvironment >(), comphelper::getProcessComponentContext() );
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > xInfo = aCnt.getProperties();
         if ( xInfo->hasPropertyByName( PROPERTY_ANCHORREF ) )
         {
@@ -1070,17 +1067,17 @@ IMPL_LINK_NOARG(SearchTabPage_Impl, SearchHdl)
         EnterWait();
         ClearSearchResults();
         RememberSearchText( aSearchText );
-        String aSearchURL = HELP_URL;
-        aSearchURL += aFactory;
-        aSearchURL += String( HELP_SEARCH_TAG );
+        OUStringBuffer aSearchURL(HELP_URL);
+        aSearchURL.append(aFactory);
+        aSearchURL.append(HELP_SEARCH_TAG);
         if ( !aFullWordsCB.IsChecked() )
             aSearchText = sfx2::PrepareSearchString( aSearchText, xBreakIterator, true );
-        aSearchURL += aSearchText;
-        AppendConfigToken( aSearchURL, sal_False );
+        aSearchURL.append(aSearchText);
+        AppendConfigToken(aSearchURL, sal_False);
         if ( aScopeCB.IsChecked() )
-            aSearchURL += DEFINE_CONST_UNICODE("&Scope=Heading");
-        Sequence< ::rtl::OUString > aFactories = SfxContentHelper::GetResultSet( aSearchURL );
-        const ::rtl::OUString* pFacs  = aFactories.getConstArray();
+            aSearchURL.append("&Scope=Heading");
+        Sequence< OUString > aFactories = SfxContentHelper::GetResultSet(aSearchURL.makeStringAndClear());
+        const OUString* pFacs  = aFactories.getConstArray();
         sal_uInt32 i, nCount = aFactories.getLength();
         for ( i = 0; i < nCount; ++i )
         {
@@ -1479,11 +1476,10 @@ void BookmarksTabPage_Impl::AddBookmarks( const String& rTitle, const String& rU
     sHelpURL.append(HELP_URL);
     sHelpURL.append(sFactory);
     sHelpURL.append(sContent);
-    String sURL = String(sHelpURL.makeStringAndClear());
-    AppendConfigToken(sURL, bUseQuestionMark);
+    AppendConfigToken(sHelpURL, bUseQuestionMark);
     if (!sAnchor.isEmpty())
-        sURL += String(sAnchor);
-    return ::rtl::OUString(sURL);
+        sHelpURL.append(sAnchor);
+    return sHelpURL.makeStringAndClear();
 }
 
 void SfxHelpWindow_Impl::loadHelpContent(const ::rtl::OUString& sHelpURL, sal_Bool bAddToHistory)
@@ -1597,9 +1593,9 @@ SfxHelpIndexWindow_Impl::~SfxHelpIndexWindow_Impl()
 
 void SfxHelpIndexWindow_Impl::Initialize()
 {
-    String aHelpURL = HELP_URL;
-    AppendConfigToken( aHelpURL, sal_True );
-    Sequence< ::rtl::OUString > aFactories = SfxContentHelper::GetResultSet( aHelpURL );
+    OUStringBuffer aHelpURL(HELP_URL);
+    AppendConfigToken(aHelpURL, sal_True);
+    Sequence< ::rtl::OUString > aFactories = SfxContentHelper::GetResultSet(aHelpURL.makeStringAndClear());
     const ::rtl::OUString* pFacs  = aFactories.getConstArray();
     sal_uInt32 i, nCount = aFactories.getLength();
     for ( i = 0; i < nCount; ++i )
