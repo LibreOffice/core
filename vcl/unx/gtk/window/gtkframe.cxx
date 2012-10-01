@@ -559,14 +559,15 @@ void on_registrar_available (GDBusConnection * /*connection*/,
                         gpointer         user_data)
 {
     SolarMutexGuard aGuard;
-    GtkSalFrame* pSalFrame = static_cast< GtkSalFrame* >( user_data );
+    GtkSalFrame* pSalFrame = reinterpret_cast< GtkSalFrame* >( user_data );
     GdkWindow* gdkWindow = gtk_widget_get_window( pSalFrame->getWindow() );
     ensure_dbus_setup(gdkWindow, pSalFrame);
-    GtkSalMenu* pSalMenu = static_cast< GtkSalMenu* >( pSalFrame->GetMenu() );
+    SalMenu* pSalMenu = pSalFrame->GetMenu();
     if ( pSalMenu != NULL )
     {
-        pSalMenu->UpdateNativeMenu();
-        MenuBar* pMenuBar = static_cast< MenuBar* >( pSalMenu->GetMenu() );
+        GtkSalMenu* pGtkSalMenu = static_cast<GtkSalMenu*>(pSalMenu);
+        pGtkSalMenu->UpdateNativeMenu();
+        MenuBar* pMenuBar = static_cast< MenuBar* >( pGtkSalMenu->GetMenu() );
         if(pMenuBar)
             pMenuBar->SetDisplayable(false);           
     }
@@ -577,19 +578,23 @@ void on_registrar_unavailable (GDBusConnection * /*connection*/,
                           const gchar     * /*name*/,
                           gpointer         user_data)
 {
+    SolarMutexGuard aGuard;
+    std::cout << "on_registrar_unavailable" << std::endl;
     pSessionBus = NULL;
-    GtkSalFrame* pSalFrame = static_cast< GtkSalFrame* >( user_data );
-    GtkSalMenu* pSalMenu = static_cast< GtkSalMenu* >( pSalFrame->GetMenu() );
+    GtkSalFrame* pSalFrame = reinterpret_cast< GtkSalFrame* >( user_data );
+    SalMenu* pSalMenu = pSalFrame->GetMenu();
 
     if ( pSalMenu ) {
-        pSalMenu->DisconnectFrame();
-        MenuBar* pMenuBar = static_cast< MenuBar* >( pSalMenu->GetMenu() );
+        GtkSalMenu* pGtkSalMenu = static_cast<GtkSalMenu*>(pSalMenu);
+        pGtkSalMenu->DisconnectFrame();
+        MenuBar* pMenuBar = static_cast< MenuBar* >( pGtkSalMenu->GetMenu() );
         pMenuBar->SetDisplayable( false );
     }
 }
 
 void GtkSalFrame::EnsureAppMenuWatch()
 {
+    SolarMutexGuard aGuard;
     if(m_nWatcherId)
         g_bus_unwatch_name(m_nWatcherId);
     // Publish the menu only if AppMenu registrar is available.
