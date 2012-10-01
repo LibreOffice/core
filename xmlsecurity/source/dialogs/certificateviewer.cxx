@@ -171,9 +171,9 @@ CertificateViewerGeneralTP::CertificateViewerGeneralTP( Window* _pParent, Certif
     utl::typeConvert( xCert->getNotValidBefore(), aDateTimeStart );
     utl::typeConvert( xCert->getNotValidAfter(), aDateTimeEnd );
     OUString sText = maValidDateFI.GetText();
-    sText.replaceFirst( "%SDATE%",
+    sText = sText.replaceFirst( "%SDATE%",
         GetSettings().GetUILocaleDataWrapper().getDate( aDateTimeStart.GetDate() ) );
-    sText.replaceFirst( "%EDATE%",
+    sText = sText.replaceFirst( "%EDATE%",
         GetSettings().GetUILocaleDataWrapper().getDate( aDateTimeEnd.GetDate() ) );
     maValidDateFI.SetText( sText );
 
