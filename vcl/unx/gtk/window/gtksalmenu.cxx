@@ -303,15 +303,6 @@ static void UpdateNativeMenu( GtkSalMenu* pMenu )
     }
 }
 
-gboolean GenerateMenu(gpointer user_data)
-{
-    GtkSalMenu* pSalMenu = static_cast< GtkSalMenu* >( user_data );
-
-    UpdateNativeMenu( pSalMenu );
-
-    return TRUE;
-}
-
 void ObjectDestroyedNotify( gpointer data )
 {
     if ( data ) {
@@ -411,7 +402,7 @@ void GtkSalMenu::SetFrame( const SalFrame* pFrame )
     mpMenuModel = G_MENU_MODEL( g_object_get_data( G_OBJECT( pWindow ), "g-lo-menubar" ) );
     mpActionGroup = G_ACTION_GROUP( g_object_get_data( G_OBJECT( pWindow ), "g-lo-action-group" ) );
     // Generate the main menu structure.
-    GenerateMenu( this );
+    UpdateNativeMenu( this );
 }
 
 const GtkSalFrame* GtkSalMenu::GetFrame() const
