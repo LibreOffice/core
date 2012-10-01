@@ -2,7 +2,7 @@ UDK_3_0_0 {
     global:
         CreateDialogFactory;
         GetSpecialCharsForEdit;
-        component_getFactory;
+        cui_component_getFactory;
     local:
         *;
 };

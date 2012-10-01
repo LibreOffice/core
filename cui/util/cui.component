@@ -30,7 +30,7 @@
  * instead of those above.
  * -->
 
-<component loader="com.sun.star.loader.SharedLibrary"
+<component loader="com.sun.star.loader.SharedLibrary" prefix="cui"
     xmlns="http://openoffice.org/2010/uno-components">
   <implementation name="com.sun.star.cui.ColorPicker">
     <service name="com.sun.star.ui.dialogs.ColorPicker"/>
