@@ -1,2 +1,2 @@
-sw      sw      :    filter TRANSLATIONS:translations configmgr DBCONNECTIVITY:connectivity writerperfect vbahelper svx stoc writerfilter unoxml fileaccess package forms toolkit DBCONNECTIVITY:dbaccess comphelper LIBXSLT:libxslt test DESKTOP:xmlhelp NULL
+sw      sw      :    filter configmgr DBCONNECTIVITY:connectivity writerperfect vbahelper svx stoc writerfilter unoxml fileaccess package forms toolkit DBCONNECTIVITY:dbaccess comphelper LIBXSLT:libxslt test DESKTOP:xmlhelp NULL
 sw sw\prj nmake - all sw_prj   NULL

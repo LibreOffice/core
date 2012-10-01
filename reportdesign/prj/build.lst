@@ -1,2 +1,2 @@
-rd  reportdesign    :   TRANSLATIONS:translations BOOST:boost comphelper dbaccess formula LIBXSLT:libxslt NULL
+rd  reportdesign    :   BOOST:boost comphelper dbaccess formula LIBXSLT:libxslt NULL
 rd  reportdesign\prj nmake - all rd_prj   NULL

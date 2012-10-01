@@ -1,4 +1,4 @@
-ex  extensions :  officecfg salhelper OPENLDAP:openldap TRANSLATIONS:translations DESKTOP:rdbmaker svx SANE:sane TWAIN:twain np_sdk offapi stoc ZLIB:zlib CURL:curl LIBXSLT:libxslt CPPUNIT:cppunit NULL
+ex  extensions :  officecfg salhelper OPENLDAP:openldap DESKTOP:rdbmaker svx SANE:sane TWAIN:twain np_sdk offapi stoc ZLIB:zlib CURL:curl LIBXSLT:libxslt CPPUNIT:cppunit NULL
 ex  extensions\prj                              nmake   -   all ex_prj NULL
 
 # Fails at the moment

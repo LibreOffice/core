@@ -1,2 +1,2 @@
-uu	uui :    TRANSLATIONS:translations vcl svtools LIBXSLT:libxslt NULL
+uu	uui :    vcl svtools LIBXSLT:libxslt NULL
 uu	uui\prj	    nmake	-	all	uu_prj NULL

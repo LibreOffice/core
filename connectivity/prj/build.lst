@@ -1,2 +1,2 @@
-cn  connectivity    :    shell  TRANSLATIONS:translations comphelper MOZ:moz POSTGRESQL:postgresql svl UNIXODBC:unixODBC unoil javaunohelper HSQLDB:hsqldb QADEVOOO:qadevOOo officecfg NSS:nss LIBXSLT:libxslt NULL
+cn  connectivity    :    shell  comphelper MOZ:moz POSTGRESQL:postgresql svl UNIXODBC:unixODBC unoil javaunohelper HSQLDB:hsqldb QADEVOOO:qadevOOo officecfg NSS:nss LIBXSLT:libxslt NULL
 

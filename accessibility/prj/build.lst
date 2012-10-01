@@ -1,3 +1,3 @@
-ac  accessibility	:    TRANSLATIONS:translations tools jurt offapi unoil vcl javaunohelper jvmaccess cppu sal toolkit svtools LIBXSLT:libxslt NULL
+ac  accessibility	:    tools jurt offapi unoil vcl javaunohelper jvmaccess cppu sal toolkit svtools LIBXSLT:libxslt NULL
 ac	accessibility                                         	usr1	-	all	ac_mkout NULL
 ac	accessibility\prj                                      	nmake	-	all	ac_prj NULL

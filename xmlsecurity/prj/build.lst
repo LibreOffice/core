@@ -1,2 +1,2 @@
-xs	xmlsecurity	:    TRANSLATIONS:translations xmloff unotools offapi unoil svx libxmlsec NSS:nss LIBXSLT:libxslt NEON:neon NULL
+xs	xmlsecurity	:    xmloff unotools offapi unoil svx libxmlsec NSS:nss LIBXSLT:libxslt NEON:neon NULL
 xs	xmlsecurity\prj				                                       nmake -	all	xs_prj NULL

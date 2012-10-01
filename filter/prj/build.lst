@@ -1,2 +1,2 @@
-fl      filter  :    TRANSLATIONS:translations svtools unotools xmloff cppu tools cppuhelper sal salhelper svx javaunohelper XPDF:xpdf jvmaccess canvas SAXON:saxon LIBXSLT:libxslt basegfx package PYTHON:python NULL
+fl      filter  :    svtools unotools xmloff cppu tools cppuhelper sal salhelper svx javaunohelper XPDF:xpdf jvmaccess canvas SAXON:saxon LIBXSLT:libxslt basegfx package PYTHON:python NULL
 fl  filter\prj nmake - all fl_prj   NULL

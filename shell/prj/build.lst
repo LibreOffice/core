@@ -1,2 +1,2 @@
-sl    shell	:    TRANSLATIONS:translations offapi DESKTOP:rdbmaker tools sal EXPAT:expat LIBXSLT:libxslt NULL
+sl    shell	:    offapi DESKTOP:rdbmaker tools sal EXPAT:expat LIBXSLT:libxslt NULL
 sl    shell\prj			                           nmake   -   all sl_prj NULL
