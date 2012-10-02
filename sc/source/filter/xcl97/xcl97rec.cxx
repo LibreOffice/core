@@ -566,7 +566,7 @@ VmlCommentExporter::VmlCommentExporter( sax_fastparser::FSHelperPtr p, ScAddress
 void VmlCommentExporter::Commit( EscherPropertyContainer& rProps, const Rectangle& rRect )
 {
     lcl_FillProps( rProps, mpCaption, mbVisible );
-    rProps.AddOpt( ESCHER_Prop_fHidden, 1 );            // bool field
+    rProps.AddOpt( ESCHER_Prop_fHidden, mbVisible ); // bool field
 
     VMLExport::Commit( rProps, rRect );
 }

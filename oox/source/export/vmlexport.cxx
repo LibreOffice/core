@@ -666,7 +666,8 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const Rectangle& rRect 
                 break;
 
             case ESCHER_Prop_fHidden:
-                m_pShapeStyle->append( ";visibility:hidden" );
+                if ( !it->nPropValue )
+                    m_pShapeStyle->append( ";visibility:hidden" );
                 break;
             default:
 #if OSL_DEBUG_LEVEL > 0
