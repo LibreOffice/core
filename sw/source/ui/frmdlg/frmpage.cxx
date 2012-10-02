@@ -775,11 +775,15 @@ void SwFrmPage::EnableGraficMode( void )
     }
 }
 
+SwWrtShell *SwFrmPage::getFrmDlgParentShell()
+{
+    return ((SwFrmDlg*)GetParentDialog())->GetWrtShell();
+}
+
 void SwFrmPage::Reset( const SfxItemSet &rSet )
 {
-
     SwWrtShell* pSh = bFormat ? ::GetActiveWrtShell() :
-            ((SwFrmDlg*)GetParent()->GetParent())->GetWrtShell();
+            getFrmDlgParentShell();
 
     nHtmlMode = ::GetHtmlMode(pSh->GetView().GetDocShell());
     bHtmlMode = nHtmlMode & HTMLMODE_ON ? sal_True : sal_False;
@@ -951,7 +955,7 @@ sal_Bool SwFrmPage::FillItemSet(SfxItemSet &rSet)
 {
     sal_Bool bRet = sal_False;
     SwWrtShell* pSh = bFormat ? ::GetActiveWrtShell()
-                        : ((SwFrmDlg*)GetParent()->GetParent())->GetWrtShell();
+                        : getFrmDlgParentShell();
     OSL_ENSURE( pSh , "shell not found");
     const SfxItemSet& rOldSet = GetItemSet();
     const SfxPoolItem* pOldItem = 0;
@@ -1619,7 +1623,7 @@ int SwFrmPage::DeactivatePage(SfxItemSet * _pSet)
         //FillItemSet doesn't set the anchor into the set when it matches
         //the original. But for the other pages we need the current anchor.
         SwWrtShell* pSh = bFormat ? ::GetActiveWrtShell()
-                            : ((SwFrmDlg*)GetParent()->GetParent())->GetWrtShell();
+                            : getFrmDlgParentShell();
         RndStdIds eAnchorId = (RndStdIds)GetAnchor();
         SwFmtAnchor aAnc( eAnchorId, pSh->GetPhyPageNum() );
         _pSet->Put( aAnc );
@@ -1674,7 +1678,7 @@ IMPL_LINK_NOARG(SwFrmPage, RangeModifyHdl)
         return 0;
 
     SwWrtShell* pSh = bFormat ? ::GetActiveWrtShell()
-                        :((SwFrmDlg*)GetParent()->GetParent())->GetWrtShell();
+                        : getFrmDlgParentShell();
     OSL_ENSURE(pSh , "shell not found");
     SwFlyFrmAttrMgr aMgr( bNew, pSh, (const SwAttrSet&)GetItemSet() );
     SvxSwFrameValidation        aVal;
@@ -2045,7 +2049,7 @@ void SwFrmPage::Init(const SfxItemSet& rSet, sal_Bool bReset)
 {
     if(!bFormat)
     {
-        SwWrtShell* pSh = ((SwFrmDlg*)GetParent()->GetParent())->GetWrtShell();
+        SwWrtShell* pSh = getFrmDlgParentShell();
 
         // size
         const sal_Bool bSizeFixed = pSh->IsSelObjProtected( FLYPROTECT_FIXED );
@@ -2140,7 +2144,7 @@ void SwFrmPage::Init(const SfxItemSet& rSet, sal_Bool bReset)
 
         if ( !bFormat )
         {
-            SwWrtShell* pSh = ((SwFrmDlg*)GetParent()->GetParent())->GetWrtShell();
+            SwWrtShell* pSh = getFrmDlgParentShell();
             const SwFrmFmt* pFmt = pSh->GetFlyFrmFmt();
             if( pFmt && pFmt->GetChain().GetNext() )
                 aAutoHeightCB.Enable( sal_False );

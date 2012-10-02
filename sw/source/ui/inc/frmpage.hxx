@@ -184,6 +184,8 @@ class SwFrmPage: public SfxTabPage
     SwFrmPage(Window *pParent, const SfxItemSet &rSet);
     ~SwFrmPage();
 
+    SwWrtShell *getFrmDlgParentShell();
+
     using SfxTabPage::ActivatePage;
     using SfxTabPage::DeactivatePage;
 
