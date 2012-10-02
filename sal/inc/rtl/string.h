@@ -889,6 +889,23 @@ SAL_DLLPUBLIC void SAL_CALL rtl_string_newFromStr( rtl_String ** newStr, const s
  */
 SAL_DLLPUBLIC void SAL_CALL rtl_string_newFromStr_WithLength( rtl_String ** newStr, const sal_Char * value, sal_Int32 len ) SAL_THROW_EXTERN_C();
 
+/** Allocate a new string that is a substring of this string.
+
+    The substring begins at the specified beginIndex and contains count
+    characters. Meaningless combinations such as negative beginIndex,
+    or beginIndex + count greater than the length of the string have
+    undefined behaviour.
+
+    @param     beginIndex   the beginning index, inclusive.
+    @param     count        the number of characters.
+    @return    the specified substring.
+
+    @since LibreOffice 3.7
+ */
+SAL_DLLPUBLIC void SAL_CALL rtl_string_newFromSubString(
+        rtl_String ** newStr, const rtl_String * from,
+        sal_Int32 beginIndex, sal_Int32 count ) SAL_THROW_EXTERN_C();
+
 /**
  @internal
  @since LibreOffice 3.6

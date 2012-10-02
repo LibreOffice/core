@@ -1340,31 +1340,27 @@ public:
     /**
       Returns a new string that is a substring of this string.
 
-      The substring begins at the specified beginIndex.  It is an error for
-      beginIndex to be negative or to be greater than the length of this string.
+      The substring begins at the specified beginIndex. If
+      beginIndex is negative or be greater than the length of
+      this string, behaviour is undefined.
 
       @param     beginIndex   the beginning index, inclusive.
       @return    the specified substring.
     */
     OUString copy( sal_Int32 beginIndex ) const SAL_THROW(())
     {
-        assert(beginIndex >= 0 && beginIndex <= getLength());
-        if ( beginIndex == 0 )
-            return *this;
-        else
-        {
-            rtl_uString* pNew = 0;
-            rtl_uString_newFromStr_WithLength( &pNew, pData->buffer+beginIndex, getLength()-beginIndex );
-            return OUString( pNew, (DO_NOT_ACQUIRE*)0 );
-        }
+        rtl_uString *pNew = 0;
+        rtl_uString_newFromSubString( &pNew, pData, beginIndex, getLength() - beginIndex );
+        return OUString( pNew, (DO_NOT_ACQUIRE*)0 );
     }
 
     /**
       Returns a new string that is a substring of this string.
 
       The substring begins at the specified beginIndex and contains count
-      characters.  It is an error for either beginIndex or count to be negative,
-      or for beginIndex + count to be greater than the length of this string.
+      characters.  If either beginIndex or count are negative,
+      or beginIndex + count are greater than the length of this string
+      then behaviour is undefined.
 
       @param     beginIndex   the beginning index, inclusive.
       @param     count        the number of characters.
@@ -1372,17 +1368,9 @@ public:
     */
     OUString copy( sal_Int32 beginIndex, sal_Int32 count ) const SAL_THROW(())
     {
-        assert(beginIndex >= 0 && beginIndex <= getLength() && count >= 0
-               && sal::static_int_cast< sal_uInt32 >(count) <=
-                  sal::static_int_cast< sal_uInt32 >(getLength() - beginIndex));
-        if ( (beginIndex == 0) && (count == getLength()) )
-            return *this;
-        else
-        {
-            rtl_uString* pNew = 0;
-            rtl_uString_newFromStr_WithLength( &pNew, pData->buffer+beginIndex, count );
-            return OUString( pNew, (DO_NOT_ACQUIRE*)0 );
-        }
+        rtl_uString *pNew = 0;
+        rtl_uString_newFromSubString( &pNew, pData, beginIndex, count );
+        return OUString( pNew, (DO_NOT_ACQUIRE*)0 );
     }
 
     /**
