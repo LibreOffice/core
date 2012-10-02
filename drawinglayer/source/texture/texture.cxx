@@ -77,7 +77,7 @@ namespace drawinglayer
             const basegfx::B2DRange& rTargetRange,
             const basegfx::BColor& rStart,
             const basegfx::BColor& rEnd,
-            sal_uInt32 nSteps,
+            sal_uInt32 /* nSteps */,
             double fBorder)
         :   GeoTexSvx(),
             maGradientInfo(),
