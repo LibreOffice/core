@@ -26,7 +26,7 @@
 *
 **********************************************************************-->
 
-<component loader="com.sun.star.loader.SharedLibrary"
+<component loader="com.sun.star.loader.SharedLibrary" prefix="frm"
     xmlns="http://openoffice.org/2010/uno-components">
   <implementation name="com.sun.star.comp.form.ONavigationBarControl">
     <service name="com.sun.star.form.control.NavigationToolBar"/>

@@ -319,7 +319,7 @@ void SAL_CALL createRegistryInfo_FORMS()
 }
 
 //---------------------------------------------------------------------------------------
-SAL_DLLPUBLIC_EXPORT void* SAL_CALL component_getFactory(const sal_Char* _pImplName, XMultiServiceFactory* _pServiceManager, void* /*_pRegistryKey*/)
+SAL_DLLPUBLIC_EXPORT void* SAL_CALL frm_component_getFactory(const sal_Char* _pImplName, XMultiServiceFactory* _pServiceManager, void* /*_pRegistryKey*/)
 {
     if (!_pServiceManager || !_pImplName)
         return NULL;
