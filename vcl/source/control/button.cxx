@@ -904,8 +904,6 @@ void PushButton::ImplDrawPushButtonContent( OutputDevice* pDev, sal_uLong nDrawF
     else
     {
         Rectangle aSymbolRect;
-        // FIXME: (GetStyle() & WB_FLATBUTTON) != 0 is preliminary
-        // in the next major this should be replaced by "true"
         ImplDrawAlignedImage( pDev, aPos, aSize, bLayout, nImageSep, nDrawFlags,
                               nTextStyle, IsSymbol() ? &aSymbolRect : NULL, true );
 

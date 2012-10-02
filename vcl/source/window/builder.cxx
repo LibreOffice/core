@@ -24,23 +24,50 @@
 #include <svids.hrc>
 #include <window.h>
 
-VclBuilder::VclBuilder(Window *pParent, rtl::OUString sUIDir, rtl::OUString sUIFile, rtl::OString sID)
+namespace
+{
+    SymbolType mapStockToSymbol(OString sType)
+    {
+        SymbolType eRet = SYMBOL_NOSYMBOL;
+        if (sType == "gtk-media-next")
+            eRet = SYMBOL_NEXT;
+        else if (sType == "gtk-media-previous")
+            eRet = SYMBOL_PREV;
+        else if (sType == "gtk-go-back")
+            eRet = SYMBOL_ARROW_LEFT;
+        else if (sType == "gtk-go-forward")
+            eRet = SYMBOL_ARROW_RIGHT;
+        else if (sType == "gtk-go-up")
+            eRet = SYMBOL_ARROW_UP;
+        else if (sType == "gtk-go-down")
+            eRet = SYMBOL_ARROW_DOWN;
+        else if (sType == "gtk-missing-image")
+            eRet = SYMBOL_IMAGE;
+        else if (sType == "gtk-help")
+            eRet = SYMBOL_HELP;
+        else if (sType == "gtk-close")
+            eRet = SYMBOL_CLOSE;
+        return eRet;
+    }
+}
+
+VclBuilder::VclBuilder(Window *pParent, OUString sUIDir, OUString sUIFile, OString sID)
     : m_sID(sID)
-    , m_sHelpRoot(rtl::OUStringToOString(sUIFile, RTL_TEXTENCODING_UTF8))
+    , m_sHelpRoot(OUStringToOString(sUIFile, RTL_TEXTENCODING_UTF8))
     , m_pParent(pParent)
     , m_pParserState(new ParserState)
 {
     sal_Int32 nIdx = m_sHelpRoot.lastIndexOf('.');
     if (nIdx != -1)
         m_sHelpRoot = m_sHelpRoot.copy(0, nIdx);
-    m_sHelpRoot = m_sHelpRoot + rtl::OString('/');
+    m_sHelpRoot = m_sHelpRoot + OString('/');
 
-    rtl::OUString sUri = sUIDir + sUIFile;
+    OUString sUri = sUIDir + sUIFile;
 
     ::com::sun::star::lang::Locale aLocale = Application::GetSettings().GetUILocale();
     for (int i = aLocale.Country.isEmpty() ? 1 : 0; i < 2; ++i)
     {
-        rtl::OUStringBuffer aTransBuf;
+        OUStringBuffer aTransBuf;
         sal_Int32 nLastSlash = sUri.lastIndexOf('/');
         aTransBuf.append(sUri.copy(0, nLastSlash)).append("/res/").append(aLocale.Language);
         switch (i)
@@ -53,7 +80,7 @@ VclBuilder::VclBuilder(Window *pParent, rtl::OUString sUIDir, rtl::OUString sUIF
         }
         aTransBuf.append(sUri.copy(nLastSlash));
 
-        rtl::OUString sTransUri = aTransBuf.makeStringAndClear();
+        OUString sTransUri = aTransBuf.makeStringAndClear();
         try
         {
             xmlreader::XmlReader reader(sTransUri);
@@ -106,7 +133,33 @@ VclBuilder::VclBuilder(Window *pParent, rtl::OUString sUIDir, rtl::OUString sUIF
             mungeadjustment(*pTarget, *pAdjustment);
     }
 
-    //drop maps, etc. now
+    //Set button images when everything has been imported
+    std::set<OString> aImagesToBeRemoved;
+    for (std::vector<ButtonImageWidgetMap>::iterator aI = m_pParserState->m_aButtonImageWidgetMaps.begin(),
+         aEnd = m_pParserState->m_aButtonImageWidgetMaps.end(); aI != aEnd; ++aI)
+    {
+        PushButton *pTarget = get<PushButton>(aI->m_sID);
+        FixedImage *pImage = get<FixedImage>(aI->m_sValue);
+        aImagesToBeRemoved.insert(aI->m_sValue);
+        SymbolType eType = mapStockToSymbol(m_pParserState->m_aStockMap[aI->m_sValue]);
+        SAL_WARN_IF(!pTarget || !pImage || eType == SYMBOL_NOSYMBOL,
+            "vcl", "missing elements of button/image/stock");
+        //to-do, situation where image isn't a stock image
+        if (pTarget && eType != SYMBOL_NOSYMBOL)
+        {
+            pTarget->SetSymbol(eType);
+        }
+    }
+
+    //There may be duplicate use of an Image, so we used a set to collect and
+    //now we can remove them from the tree after their final munge
+    for (std::set<OString>::iterator aI = aImagesToBeRemoved.begin(),
+        aEnd = aImagesToBeRemoved.end(); aI != aEnd; ++aI)
+    {
+        delete_by_name(*aI);
+    }
+
+    //drop maps, etc. that we don't need again
     delete m_pParserState;
 }
 
@@ -124,9 +177,9 @@ void VclBuilder::handleTranslations(xmlreader::XmlReader &reader)
 {
     xmlreader::Span name;
     int nsId;
-    rtl::OString sType;
+    OString sType;
 
-    rtl::OString sID, sProperty;
+    OString sID, sProperty;
 
     while(1)
     {
@@ -142,7 +195,7 @@ void VclBuilder::handleTranslations(xmlreader::XmlReader &reader)
                     if (name.equals(RTL_CONSTASCII_STRINGPARAM("g")))
                     {
                         name = reader.getAttributeValue(false);
-                        sID = rtl::OString(name.begin, name.length);
+                        sID = OString(name.begin, name.length);
                         sal_Int32 nDelim = sID.indexOf(':');
                         if (nDelim != -1)
                             sID = sID.copy(nDelim);
@@ -150,7 +203,7 @@ void VclBuilder::handleTranslations(xmlreader::XmlReader &reader)
                     else if (name.equals(RTL_CONSTASCII_STRINGPARAM("i")))
                     {
                         name = reader.getAttributeValue(false);
-                        sProperty = rtl::OString(name.begin, name.length);
+                        sProperty = OString(name.begin, name.length);
                     }
                 }
             }
@@ -158,12 +211,12 @@ void VclBuilder::handleTranslations(xmlreader::XmlReader &reader)
 
         if (res == xmlreader::XmlReader::RESULT_TEXT && !sID.isEmpty())
         {
-            rtl::OString sTranslation(name.begin, name.length);
+            OString sTranslation(name.begin, name.length);
             m_pParserState->m_aTranslations[sID][sProperty] = sTranslation;
         }
 
         if (res == xmlreader::XmlReader::RESULT_END)
-            sID = rtl::OString();
+            sID = OString();
 
         if (res == xmlreader::XmlReader::RESULT_DONE)
             break;
@@ -172,10 +225,10 @@ void VclBuilder::handleTranslations(xmlreader::XmlReader &reader)
 
 namespace
 {
-    rtl::OString extractPattern(VclBuilder::stringmap &rMap)
+    OString extractPattern(VclBuilder::stringmap &rMap)
     {
-        rtl::OString sPattern;
-        VclBuilder::stringmap::iterator aFind = rMap.find(rtl::OString(RTL_CONSTASCII_STRINGPARAM("pattern")));
+        OString sPattern;
+        VclBuilder::stringmap::iterator aFind = rMap.find(OString(RTL_CONSTASCII_STRINGPARAM("pattern")));
         if (aFind != rMap.end())
         {
             sPattern = aFind->second;
@@ -187,7 +240,7 @@ namespace
     bool extractResizable(VclBuilder::stringmap &rMap)
     {
         bool bResizable = true;
-        VclBuilder::stringmap::iterator aFind = rMap.find(rtl::OString(RTL_CONSTASCII_STRINGPARAM("resizable")));
+        VclBuilder::stringmap::iterator aFind = rMap.find(OString(RTL_CONSTASCII_STRINGPARAM("resizable")));
         if (aFind != rMap.end())
         {
             bResizable = toBool(aFind->second);
@@ -199,7 +252,7 @@ namespace
     bool extractOrientation(VclBuilder::stringmap &rMap)
     {
         bool bVertical = false;
-        VclBuilder::stringmap::iterator aFind = rMap.find(rtl::OString(RTL_CONSTASCII_STRINGPARAM("orientation")));
+        VclBuilder::stringmap::iterator aFind = rMap.find(OString(RTL_CONSTASCII_STRINGPARAM("orientation")));
         if (aFind != rMap.end())
         {
             bVertical = aFind->second.equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("vertical"));
@@ -211,7 +264,7 @@ namespace
     bool extractInconsistent(VclBuilder::stringmap &rMap)
     {
         bool bInconsistent = false;
-        VclBuilder::stringmap::iterator aFind = rMap.find(rtl::OString(RTL_CONSTASCII_STRINGPARAM("inconsistent")));
+        VclBuilder::stringmap::iterator aFind = rMap.find(OString(RTL_CONSTASCII_STRINGPARAM("inconsistent")));
         if (aFind != rMap.end())
         {
             bInconsistent = toBool(aFind->second);
@@ -225,7 +278,7 @@ namespace
         WinBits nBits = WB_CENTER|WB_VCENTER|WB_3DLOOK;
 
         bool bIsStock = false;
-        VclBuilder::stringmap::iterator aFind = rMap.find(rtl::OString(RTL_CONSTASCII_STRINGPARAM("use-stock")));
+        VclBuilder::stringmap::iterator aFind = rMap.find(OString(RTL_CONSTASCII_STRINGPARAM("use-stock")));
         if (aFind != rMap.end())
         {
             bIsStock = toBool(aFind->second);
@@ -236,8 +289,8 @@ namespace
 
         if (bIsStock)
         {
-            rtl::OString sType;
-            aFind = rMap.find(rtl::OString(RTL_CONSTASCII_STRINGPARAM("label")));
+            OString sType;
+            aFind = rMap.find(OString(RTL_CONSTASCII_STRINGPARAM("label")));
             if (aFind != rMap.end())
             {
                 sType = aFind->second;
@@ -297,7 +350,7 @@ namespace
         return pWindow;
     }
 
-    FieldUnit detectMetricUnit(rtl::OString sUnit)
+    FieldUnit detectMetricUnit(OString sUnit)
     {
         FieldUnit eUnit = FUNIT_NONE;
 
@@ -333,16 +386,16 @@ namespace
 
     void ensureDefaultWidthChars(VclBuilder::stringmap &rMap)
     {
-        rtl::OString sWidthChars(RTL_CONSTASCII_STRINGPARAM("width-chars"));
+        OString sWidthChars(RTL_CONSTASCII_STRINGPARAM("width-chars"));
         VclBuilder::stringmap::iterator aFind = rMap.find(sWidthChars);
         if (aFind == rMap.end())
             rMap[sWidthChars] = "25";
     }
 }
 
-bool VclBuilder::extractGroup(const rtl::OString &id, stringmap &rMap)
+bool VclBuilder::extractGroup(const OString &id, stringmap &rMap)
 {
-    VclBuilder::stringmap::iterator aFind = rMap.find(rtl::OString(RTL_CONSTASCII_STRINGPARAM("group")));
+    VclBuilder::stringmap::iterator aFind = rMap.find(OString(RTL_CONSTASCII_STRINGPARAM("group")));
     if (aFind != rMap.end())
     {
         m_pParserState->m_aGroupMaps.push_back(RadioButtonGroupMap(id, aFind->second));
@@ -352,9 +405,9 @@ bool VclBuilder::extractGroup(const rtl::OString &id, stringmap &rMap)
     return false;
 }
 
-bool VclBuilder::extractAdjustment(const rtl::OString &id, stringmap &rMap)
+bool VclBuilder::extractAdjustment(const OString &id, stringmap &rMap)
 {
-    VclBuilder::stringmap::iterator aFind = rMap.find(rtl::OString(RTL_CONSTASCII_STRINGPARAM("adjustment")));
+    VclBuilder::stringmap::iterator aFind = rMap.find(OString(RTL_CONSTASCII_STRINGPARAM("adjustment")));
     if (aFind != rMap.end())
     {
         m_pParserState->m_aAdjustmentMaps.push_back(SpinButtonAdjustmentMap(id, aFind->second));
@@ -364,9 +417,9 @@ bool VclBuilder::extractAdjustment(const rtl::OString &id, stringmap &rMap)
     return false;
 }
 
-bool VclBuilder::extractModel(const rtl::OString &id, stringmap &rMap)
+bool VclBuilder::extractModel(const OString &id, stringmap &rMap)
 {
-    VclBuilder::stringmap::iterator aFind = rMap.find(rtl::OString(RTL_CONSTASCII_STRINGPARAM("model")));
+    VclBuilder::stringmap::iterator aFind = rMap.find(OString("model"));
     if (aFind != rMap.end())
     {
         m_pParserState->m_aModelMaps.push_back(ComboBoxModelMap(id, aFind->second));
@@ -376,9 +429,33 @@ bool VclBuilder::extractModel(const rtl::OString &id, stringmap &rMap)
     return false;
 }
 
+bool VclBuilder::extractStock(const OString &id, stringmap &rMap)
+{
+    VclBuilder::stringmap::iterator aFind = rMap.find(OString("stock"));
+    if (aFind != rMap.end())
+    {
+        m_pParserState->m_aStockMap[id] = aFind->second;
+        rMap.erase(aFind);
+        return true;
+    }
+    return false;
+}
+
+bool VclBuilder::extractImage(const OString &id, stringmap &rMap)
+{
+    VclBuilder::stringmap::iterator aFind = rMap.find(OString("image"));
+    if (aFind != rMap.end())
+    {
+        m_pParserState->m_aButtonImageWidgetMaps.push_back(ButtonImageWidgetMap(id, aFind->second));
+        rMap.erase(aFind);
+        return true;
+    }
+    return false;
+}
+
 extern "C" { static void SAL_CALL thisModule() {} }
 
-Window *VclBuilder::makeObject(Window *pParent, const rtl::OString &name, const rtl::OString &id, stringmap &rMap)
+Window *VclBuilder::makeObject(Window *pParent, const OString &name, const OString &id, stringmap &rMap)
 {
     bool bIsPlaceHolder = name.isEmpty();
 
@@ -393,7 +470,7 @@ Window *VclBuilder::makeObject(Window *pParent, const rtl::OString &name, const 
         TabControl *pTabControl = static_cast<TabControl*>(pParent);
         sal_uInt16 nNewPageCount = pTabControl->GetPageCount()+1;
         sal_uInt16 nNewPageId = -nNewPageCount;
-        pTabControl->InsertPage(nNewPageId, rtl::OUString());
+        pTabControl->InsertPage(nNewPageId, OUString());
         pTabControl->SetCurPageId(nNewPageId);
 
         if (!bIsPlaceHolder)
@@ -402,9 +479,9 @@ Window *VclBuilder::makeObject(Window *pParent, const rtl::OString &name, const 
             pPage->Show();
 
             //Make up a name for it
-            rtl::OString sTabPageId = get_by_window(pParent) +
-                rtl::OString("-page") +
-                rtl::OString::valueOf(static_cast<sal_Int32>(nNewPageCount));
+            OString sTabPageId = get_by_window(pParent) +
+                OString("-page") +
+                OString::valueOf(static_cast<sal_Int32>(nNewPageCount));
             m_aChildren.push_back(WinAndId(sTabPageId, pPage));
             pPage->SetHelpId(m_sHelpRoot + sTabPageId);
 
@@ -412,8 +489,8 @@ Window *VclBuilder::makeObject(Window *pParent, const rtl::OString &name, const 
             //tab page
             VclBin* pContainer = new VclBin(pPage);
             pContainer->Show();
-            m_aChildren.push_back(WinAndId(rtl::OString(), pContainer));
-            pContainer->SetHelpId(m_sHelpRoot + sTabPageId + rtl::OString("-bin"));
+            m_aChildren.push_back(WinAndId(OString(), pContainer));
+            pContainer->SetHelpId(m_sHelpRoot + sTabPageId + OString("-bin"));
             pParent = pContainer;
 
             pTabControl->SetTabPage(nNewPageId, pPage);
@@ -454,7 +531,10 @@ Window *VclBuilder::makeObject(Window *pParent, const rtl::OString &name, const 
     else if (name.equalsL(RTL_CONSTASCII_STRINGPARAM("GtkAlignment")))
         pWindow = new VclAlignment(pParent);
     else if (name.equalsL(RTL_CONSTASCII_STRINGPARAM("GtkButton")))
+    {
+        extractImage(id, rMap);
         pWindow = extractStockAndBuildButton(pParent, rMap);
+    }
     else if (name.equalsL(RTL_CONSTASCII_STRINGPARAM("GtkRadioButton")))
     {
         extractGroup(id, rMap);
@@ -474,8 +554,8 @@ Window *VclBuilder::makeObject(Window *pParent, const rtl::OString &name, const 
     else if (name.equalsL(RTL_CONSTASCII_STRINGPARAM("GtkSpinButton")))
     {
         extractAdjustment(id, rMap);
-        rtl::OString sPattern = extractPattern(rMap);
-        rtl::OString sUnit = sPattern;
+        OString sPattern = extractPattern(rMap);
+        OString sUnit = sPattern;
 
         for (sal_Int32 i = 0; i < sPattern.getLength(); ++i)
         {
@@ -527,7 +607,10 @@ Window *VclBuilder::makeObject(Window *pParent, const rtl::OString &name, const 
     else if (name.equalsL(RTL_CONSTASCII_STRINGPARAM("GtkLabel")))
         pWindow = new FixedText(pParent, WB_CENTER|WB_VCENTER|WB_3DLOOK);
     else if (name.equalsL(RTL_CONSTASCII_STRINGPARAM("GtkImage")))
+    {
+        extractStock(id, rMap);
         pWindow = new FixedImage(pParent, WB_CENTER|WB_VCENTER|WB_3DLOOK);
+    }
     else if (name.equalsL(RTL_CONSTASCII_STRINGPARAM("GtkSeparator")))
     {
         if (extractOrientation(rMap))
@@ -549,15 +632,15 @@ Window *VclBuilder::makeObject(Window *pParent, const rtl::OString &name, const 
         sal_Int32 nDelim = name.indexOf(':');
         if (nDelim != -1)
         {
-            rtl::OUStringBuffer sModule;
+            OUStringBuffer sModule;
 #ifdef SAL_DLLPREFIX
             sModule.append(SAL_DLLPREFIX);
 #endif
-            sModule.append(rtl::OStringToOUString(name.copy(0, nDelim), RTL_TEXTENCODING_UTF8));
+            sModule.append(OStringToOUString(name.copy(0, nDelim), RTL_TEXTENCODING_UTF8));
 #ifdef SAL_DLLEXTENSION
             sModule.append(SAL_DLLEXTENSION);
 #endif
-            rtl::OUString sFunction(rtl::OStringToOUString(rtl::OString("make") + name.copy(nDelim+1), RTL_TEXTENCODING_UTF8));
+            OUString sFunction(OStringToOUString(OString("make") + name.copy(nDelim+1), RTL_TEXTENCODING_UTF8));
             osl::Module aModule;
             aModule.loadRelative(&thisModule, sModule.makeStringAndClear());
             customMakeWidget pFunction = (customMakeWidget)aModule.getFunctionSymbol(sFunction);
@@ -590,7 +673,7 @@ namespace
     }
 }
 
-Window *VclBuilder::insertObject(Window *pParent, const rtl::OString &rClass, const rtl::OString &rID, stringmap &rMap)
+Window *VclBuilder::insertObject(Window *pParent, const OString &rClass, const OString &rID, stringmap &rMap)
 {
     Window *pCurrentChild = NULL;
 
@@ -620,8 +703,8 @@ Window *VclBuilder::insertObject(Window *pParent, const rtl::OString &rClass, co
     {
         for (stringmap::iterator aI = rMap.begin(), aEnd = rMap.end(); aI != aEnd; ++aI)
         {
-            const rtl::OString &rKey = aI->first;
-            const rtl::OString &rValue = aI->second;
+            const OString &rKey = aI->first;
+            const OString &rValue = aI->second;
             pCurrentChild->set_property(rKey, rValue);
         }
     }
@@ -674,7 +757,7 @@ void VclBuilder::reorderWithinParent(Window &rWindow, sal_uInt16 nNewPosition)
 
 void VclBuilder::handleTabChild(Window *pParent, xmlreader::XmlReader &reader)
 {
-    rtl::OString sID;
+    OString sID;
 
     int nLevel = 1;
     stringmap aProperties;
@@ -696,12 +779,12 @@ void VclBuilder::handleTabChild(Window *pParent, xmlreader::XmlReader &reader)
                     if (name.equals(RTL_CONSTASCII_STRINGPARAM("id")))
                     {
                         name = reader.getAttributeValue(false);
-                        sID = rtl::OString(name.begin, name.length);
+                        sID = OString(name.begin, name.length);
                         sal_Int32 nDelim = sID.indexOf(':');
                         if (nDelim != -1)
                         {
-                            rtl::OString sPattern = sID.copy(nDelim+1);
-                            aProperties[rtl::OString("pattern")] = sPattern;
+                            OString sPattern = sID.copy(nDelim+1);
+                            aProperties[OString("pattern")] = sPattern;
                             sID = sID.copy(0, nDelim);
                         }
                     }
@@ -722,10 +805,10 @@ void VclBuilder::handleTabChild(Window *pParent, xmlreader::XmlReader &reader)
     }
 
     TabControl *pTabControl = static_cast<TabControl*>(pParent);
-    VclBuilder::stringmap::iterator aFind = aProperties.find(rtl::OString(RTL_CONSTASCII_STRINGPARAM("label")));
+    VclBuilder::stringmap::iterator aFind = aProperties.find(OString(RTL_CONSTASCII_STRINGPARAM("label")));
     if (aFind != aProperties.end())
     {
-        pTabControl->SetPageText(pTabControl->GetCurPageId(), rtl::OStringToOUString(aFind->second, RTL_TEXTENCODING_UTF8));
+        pTabControl->SetPageText(pTabControl->GetCurPageId(), OStringToOUString(aFind->second, RTL_TEXTENCODING_UTF8));
 
         sal_Int32 nID = 0;
         //To make it easier to retro fit pre-builder dialog code we take the
@@ -770,14 +853,14 @@ void VclBuilder::handleChild(Window *pParent, xmlreader::XmlReader &reader)
 
     xmlreader::Span name;
     int nsId;
-    rtl::OString sType;
+    OString sType;
 
     while (reader.nextAttribute(&nsId, &name))
     {
         if (name.equals(RTL_CONSTASCII_STRINGPARAM("type")))
         {
             name = reader.getAttributeValue(false);
-            sType = rtl::OString(name.begin, name.length);
+            sType = OString(name.begin, name.length);
         }
     }
 
@@ -858,12 +941,12 @@ void VclBuilder::handleChild(Window *pParent, xmlreader::XmlReader &reader)
     }
 }
 
-void VclBuilder::handleAdjustment(const rtl::OString &rID, stringmap &rProperties)
+void VclBuilder::handleAdjustment(const OString &rID, stringmap &rProperties)
 {
     m_pParserState->m_aAdjustments.push_back(AdjustmentAndId(rID, rProperties));
 }
 
-void VclBuilder::handleRow(xmlreader::XmlReader &reader, const rtl::OString &rID, sal_Int32 nRowIndex)
+void VclBuilder::handleRow(xmlreader::XmlReader &reader, const OString &rID, sal_Int32 nRowIndex)
 {
     int nLevel = 1;
 
@@ -886,7 +969,7 @@ void VclBuilder::handleRow(xmlreader::XmlReader &reader, const rtl::OString &rID
             if (name.equals(RTL_CONSTASCII_STRINGPARAM("col")))
             {
                 bool bTranslated = false;
-                rtl::OString sProperty, sValue;
+                OString sProperty, sValue;
                 sal_uInt32 nId = 0;
 
                 while (reader.nextAttribute(&nsId, &name))
@@ -894,11 +977,11 @@ void VclBuilder::handleRow(xmlreader::XmlReader &reader, const rtl::OString &rID
                     if (name.equals(RTL_CONSTASCII_STRINGPARAM("id")))
                     {
                         name = reader.getAttributeValue(false);
-                        nId = rtl::OString(name.begin, name.length).toInt32();
+                        nId = OString(name.begin, name.length).toInt32();
                     }
                     else if (nId == 0 && name.equals(RTL_CONSTASCII_STRINGPARAM("translatable")) && reader.getAttributeValue(false).equals(RTL_CONSTASCII_STRINGPARAM("yes")))
                     {
-                        sValue = getTranslation(rID, rtl::OString::valueOf(nRowIndex));
+                        sValue = getTranslation(rID, OString::valueOf(nRowIndex));
                         bTranslated = !sValue.isEmpty();
                     }
                 }
@@ -907,7 +990,7 @@ void VclBuilder::handleRow(xmlreader::XmlReader &reader, const rtl::OString &rID
                     xmlreader::XmlReader::TEXT_RAW, &name, &nsId);
 
                 if (!bTranslated)
-                    sValue = rtl::OString(name.begin, name.length);
+                    sValue = OString(name.begin, name.length);
 
                 if (aRow.size() < nId+1)
                     aRow.resize(nId+1);
@@ -928,7 +1011,7 @@ void VclBuilder::handleRow(xmlreader::XmlReader &reader, const rtl::OString &rID
         m_pParserState->m_aModels.back().m_pModel->m_aEntries.push_back(aRow);
 }
 
-void VclBuilder::handleListStore(xmlreader::XmlReader &reader, const rtl::OString &rID)
+void VclBuilder::handleListStore(xmlreader::XmlReader &reader, const OString &rID)
 {
     m_pParserState->m_aModels.push_back(ModelAndId(rID, new ListStore));
 
@@ -966,9 +1049,9 @@ void VclBuilder::handleListStore(xmlreader::XmlReader &reader, const rtl::OStrin
 
 Window* VclBuilder::handleObject(Window *pParent, xmlreader::XmlReader &reader)
 {
-    rtl::OString sClass;
-    rtl::OString sID;
-    rtl::OString sPattern;
+    OString sClass;
+    OString sID;
+    OString sPattern;
 
     xmlreader::Span name;
     int nsId;
@@ -978,12 +1061,12 @@ Window* VclBuilder::handleObject(Window *pParent, xmlreader::XmlReader &reader)
         if (name.equals(RTL_CONSTASCII_STRINGPARAM("class")))
         {
             name = reader.getAttributeValue(false);
-            sClass = rtl::OString(name.begin, name.length);
+            sClass = OString(name.begin, name.length);
         }
         else if (name.equals(RTL_CONSTASCII_STRINGPARAM("id")))
         {
             name = reader.getAttributeValue(false);
-            sID = rtl::OString(name.begin, name.length);
+            sID = OString(name.begin, name.length);
             sal_Int32 nDelim = sID.indexOf(':');
             if (nDelim != -1)
             {
@@ -1004,7 +1087,7 @@ Window* VclBuilder::handleObject(Window *pParent, xmlreader::XmlReader &reader)
     stringmap aProperties;
 
     if (!sPattern.isEmpty())
-        aProperties[rtl::OString("pattern")] = sPattern;
+        aProperties[OString("pattern")] = sPattern;
 
     Window *pCurrentChild = NULL;
     while(1)
@@ -1098,11 +1181,11 @@ void VclBuilder::applyPackingProperty(Window *pCurrent,
         if (name.equals(RTL_CONSTASCII_STRINGPARAM("name")))
         {
             name = reader.getAttributeValue(false);
-            rtl::OString sKey(name.begin, name.length);
+            OString sKey(name.begin, name.length);
             sKey = sKey.replace('_', '-');
             reader.nextItem(
                 xmlreader::XmlReader::TEXT_RAW, &name, &nsId);
-            rtl::OString sValue(name.begin, name.length);
+            OString sValue(name.begin, name.length);
 
             if (sKey.equalsL(RTL_CONSTASCII_STRINGPARAM("expand")))
             {
@@ -1151,7 +1234,7 @@ void VclBuilder::applyPackingProperty(Window *pCurrent,
     }
 }
 
-rtl::OString VclBuilder::getTranslation(const rtl::OString &rID, const rtl::OString &rProperty) const
+OString VclBuilder::getTranslation(const OString &rID, const OString &rProperty) const
 {
     Translations::const_iterator aWidgetFind = m_pParserState->m_aTranslations.find(rID);
     if (aWidgetFind != m_pParserState->m_aTranslations.end())
@@ -1161,16 +1244,16 @@ rtl::OString VclBuilder::getTranslation(const rtl::OString &rID, const rtl::OStr
         if (aPropertyFind != rWidgetTranslations.end())
             return aPropertyFind->second;
     }
-    return rtl::OString();
+    return OString();
 }
 
-void VclBuilder::collectProperty(xmlreader::XmlReader &reader, const rtl::OString &rID, stringmap &rMap)
+void VclBuilder::collectProperty(xmlreader::XmlReader &reader, const OString &rID, stringmap &rMap)
 {
     xmlreader::Span name;
     int nsId;
 
-    rtl::OString sProperty;
-    rtl::OString sValue;
+    OString sProperty;
+    OString sValue;
 
     bool bTranslated = false;
 
@@ -1179,7 +1262,7 @@ void VclBuilder::collectProperty(xmlreader::XmlReader &reader, const rtl::OStrin
         if (name.equals(RTL_CONSTASCII_STRINGPARAM("name")))
         {
             name = reader.getAttributeValue(false);
-            sProperty = rtl::OString(name.begin, name.length);
+            sProperty = OString(name.begin, name.length);
         }
         else if (name.equals(RTL_CONSTASCII_STRINGPARAM("translatable")) && reader.getAttributeValue(false).equals(RTL_CONSTASCII_STRINGPARAM("yes")))
         {
@@ -1191,7 +1274,7 @@ void VclBuilder::collectProperty(xmlreader::XmlReader &reader, const rtl::OStrin
 
     reader.nextItem(xmlreader::XmlReader::TEXT_RAW, &name, &nsId);
     if (!bTranslated)
-        sValue = rtl::OString(name.begin, name.length);
+        sValue = OString(name.begin, name.length);
 
     if (!sProperty.isEmpty())
     {
@@ -1211,7 +1294,7 @@ Window *VclBuilder::get_widget_root()
     return m_aChildren.empty() ? NULL : m_aChildren[0].m_pWindow;
 }
 
-Window *VclBuilder::get_by_name(rtl::OString sID)
+Window *VclBuilder::get_by_name(OString sID)
 {
     for (std::vector<WinAndId>::iterator aI = m_aChildren.begin(),
          aEnd = m_aChildren.end(); aI != aEnd; ++aI)
@@ -1223,7 +1306,21 @@ Window *VclBuilder::get_by_name(rtl::OString sID)
     return NULL;
 }
 
-rtl::OString VclBuilder::get_by_window(const Window *pWindow) const
+void VclBuilder::delete_by_name(OString sID)
+{
+    for (std::vector<WinAndId>::iterator aI = m_aChildren.begin(),
+         aEnd = m_aChildren.end(); aI != aEnd; ++aI)
+    {
+        if (aI->m_sID.equals(sID))
+        {
+            delete aI->m_pWindow;
+            m_aChildren.erase(aI);
+            break;
+        }
+    }
+}
+
+OString VclBuilder::get_by_window(const Window *pWindow) const
 {
     for (std::vector<WinAndId>::const_iterator aI = m_aChildren.begin(),
          aEnd = m_aChildren.end(); aI != aEnd; ++aI)
@@ -1232,7 +1329,7 @@ rtl::OString VclBuilder::get_by_window(const Window *pWindow) const
             return aI->m_sID;
     }
 
-    return rtl::OString();
+    return OString();
 }
 
 sal_Int32 VclBuilder::get_window_packing_position(const Window *pWindow) const
@@ -1257,7 +1354,7 @@ void VclBuilder::set_window_packing_position(const Window *pWindow, sal_Int32 nP
     }
 }
 
-VclBuilder::ListStore *VclBuilder::get_model_by_name(rtl::OString sID)
+VclBuilder::ListStore *VclBuilder::get_model_by_name(OString sID)
 {
     for (std::vector<ModelAndId>::iterator aI = m_pParserState->m_aModels.begin(),
          aEnd = m_pParserState->m_aModels.end(); aI != aEnd; ++aI)
@@ -1269,7 +1366,7 @@ VclBuilder::ListStore *VclBuilder::get_model_by_name(rtl::OString sID)
     return NULL;
 }
 
-VclBuilder::Adjustment *VclBuilder::get_adjustment_by_name(rtl::OString sID)
+VclBuilder::Adjustment *VclBuilder::get_adjustment_by_name(OString sID)
 {
     for (std::vector<AdjustmentAndId>::iterator aI = m_pParserState->m_aAdjustments.begin(),
          aEnd = m_pParserState->m_aAdjustments.end(); aI != aEnd; ++aI)
@@ -1292,7 +1389,7 @@ void VclBuilder::swapGuts(Window &rOrig, Window &rReplacement)
     assert(nPosition == getPositionWithinParent(rReplacement));
 }
 
-bool VclBuilder::replace(rtl::OString sID, Window &rReplacement)
+bool VclBuilder::replace(OString sID, Window &rReplacement)
 {
     for (std::vector<WinAndId>::iterator aI = m_aChildren.begin(),
          aEnd = m_aChildren.end(); aI != aEnd; ++aI)
@@ -1318,7 +1415,7 @@ void VclBuilder::mungemodel(ListBox &rTarget, ListStore &rStore)
         aI != aEnd; ++aI)
     {
         const ListStore::row &rRow = *aI;
-        sal_uInt16 nEntry = rTarget.InsertEntry(rtl::OStringToOUString(rRow[0], RTL_TEXTENCODING_UTF8));
+        sal_uInt16 nEntry = rTarget.InsertEntry(OStringToOUString(rRow[0], RTL_TEXTENCODING_UTF8));
         if (rRow.size() > 1)
         {
             sal_IntPtr nValue = rRow[1].toInt32();
@@ -1335,8 +1432,8 @@ void VclBuilder::mungeadjustment(NumericFormatter &rTarget, Adjustment &rAdjustm
 
     for (stringmap::iterator aI = rAdjustment.begin(), aEnd = rAdjustment.end(); aI != aEnd; ++aI)
     {
-        const rtl::OString &rKey = aI->first;
-        const rtl::OString &rValue = aI->second;
+        const OString &rKey = aI->first;
+        const OString &rValue = aI->second;
 
         if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("upper")))
         {

@@ -23,16 +23,16 @@ class NumericFormatter;
 class VCL_DLLPUBLIC VclBuilder
 {
 public:
-    typedef std::map<rtl::OString, rtl::OString> stringmap;
+    typedef std::map<OString, OString> stringmap;
     typedef Window* (*customMakeWidget)(Window *pParent, stringmap &rVec);
 private:
     struct WinAndId
     {
-        rtl::OString m_sID;
+        OString m_sID;
         Window *m_pWindow;
         sal_Int32 m_nPosition;
         bool m_bOwned;
-        WinAndId(const rtl::OString &rId, Window *pWindow)
+        WinAndId(const OString &rId, Window *pWindow)
             : m_sID(rId)
             , m_pWindow(pWindow)
             , m_nPosition(-1)
@@ -44,15 +44,15 @@ private:
 
     struct ListStore
     {
-        typedef std::vector<rtl::OString> row;
+        typedef std::vector<OString> row;
         std::vector<row> m_aEntries;
     };
 
     struct ModelAndId
     {
-        rtl::OString m_sID;
+        OString m_sID;
         ListStore *m_pModel;
-        ModelAndId(const rtl::OString &rId, ListStore *pListStore)
+        ModelAndId(const OString &rId, ListStore *pListStore)
             : m_sID(rId)
             , m_pModel(pListStore)
         {
@@ -61,9 +61,9 @@ private:
 
     struct StringPair
     {
-        rtl::OString m_sID;
-        rtl::OString m_sValue;
-        StringPair(const rtl::OString &rId, const rtl::OString &rValue)
+        OString m_sID;
+        OString m_sValue;
+        StringPair(const OString &rId, const OString &rValue)
             : m_sID(rId)
             , m_sValue(rValue)
         {
@@ -72,17 +72,18 @@ private:
 
     typedef StringPair RadioButtonGroupMap;
     typedef StringPair ComboBoxModelMap;
+    typedef StringPair ButtonImageWidgetMap;
 
-    ListStore *get_model_by_name(rtl::OString sID);
+    ListStore *get_model_by_name(OString sID);
     static void mungemodel(ListBox &rTarget, ListStore &rStore);
 
     typedef stringmap Adjustment;
 
     struct AdjustmentAndId
     {
-        rtl::OString m_sID;
+        OString m_sID;
         Adjustment m_aAdjustment;
-        AdjustmentAndId(const rtl::OString &rId, Adjustment &rAdjustment)
+        AdjustmentAndId(const OString &rId, Adjustment &rAdjustment)
             : m_sID(rId)
         {
             m_aAdjustment.swap(rAdjustment);
@@ -91,12 +92,13 @@ private:
 
     typedef StringPair SpinButtonAdjustmentMap;
 
-    Adjustment *get_adjustment_by_name(rtl::OString sID);
+    Adjustment *get_adjustment_by_name(OString sID);
     static void mungeadjustment(NumericFormatter &rTarget, Adjustment &rAdjustment);
 
-    typedef std::map<rtl::OString, rtl::OString> WidgetTranslations;
-    typedef std::map<rtl::OString, WidgetTranslations> Translations;
+    typedef std::map<OString, OString> WidgetTranslations;
+    typedef std::map<OString, WidgetTranslations> Translations;
 
+    typedef std::map<OString, OString> StockMap;
     struct ParserState
     {
         std::vector<RadioButtonGroupMap> m_aGroupMaps;
@@ -104,22 +106,25 @@ private:
         std::vector<ModelAndId> m_aModels;
         std::vector<AdjustmentAndId> m_aAdjustments;
         std::vector<SpinButtonAdjustmentMap> m_aAdjustmentMaps;
+        std::vector<ButtonImageWidgetMap> m_aButtonImageWidgetMaps;
+        StockMap m_aStockMap;
         Translations m_aTranslations;
     };
 
-    rtl::OString getTranslation(const rtl::OString &rId, const rtl::OString &rProperty) const;
+    OString getTranslation(const OString &rId, const OString &rProperty) const;
 
-    rtl::OString m_sID;
-    rtl::OString m_sHelpRoot;
+    OString m_sID;
+    OString m_sHelpRoot;
     Window *m_pParent;
     ParserState *m_pParserState;
 
-    Window *get_by_name(rtl::OString sID);
+    Window *get_by_name(OString sID);
+    void delete_by_name(OString sID);
 public:
-    VclBuilder(Window *pParent, rtl::OUString sUIRootDir, rtl::OUString sUIFile, rtl::OString sID = rtl::OString());
+    VclBuilder(Window *pParent, OUString sUIRootDir, OUString sUIFile, OString sID = OString());
     ~VclBuilder();
     Window *get_widget_root();
-    template <typename T> T* get(T*& ret, rtl::OString sID)
+    template <typename T> T* get(T*& ret, OString sID)
     {
         Window *w = get_by_name(sID);
         ret = static_cast<T*>(w);
@@ -134,7 +139,7 @@ public:
 
         return ret;
     }
-    template <typename T /*=Window if we had c++11*/> T* get(rtl::OString sID)
+    template <typename T /*=Window if we had c++11*/> T* get(OString sID)
     {
         Window *w = get_by_name(sID);
         T* ret = static_cast<T*>(w);
@@ -150,18 +155,20 @@ public:
         return ret;
     }
 
-    rtl::OString get_by_window(const Window *pWindow) const;
+    OString get_by_window(const Window *pWindow) const;
     //for the purposes of retrofitting this to the existing code
     //look up sID, clone its properties into replacement and
     //splice replacement into the tree instead of it, without
     //taking ownership of it
-    bool replace(rtl::OString sID, Window &rReplacement);
+    bool replace(OString sID, Window &rReplacement);
 private:
-    Window *insertObject(Window *pParent, const rtl::OString &rClass, const rtl::OString &rID, stringmap &rVec);
-    Window *makeObject(Window *pParent, const rtl::OString &rClass, const rtl::OString &rID, stringmap &rVec);
-    bool extractGroup(const rtl::OString &id, stringmap &rVec);
-    bool extractModel(const rtl::OString &id, stringmap &rVec);
-    bool extractAdjustment(const rtl::OString &id, stringmap &rVec);
+    Window *insertObject(Window *pParent, const OString &rClass, const OString &rID, stringmap &rVec);
+    Window *makeObject(Window *pParent, const OString &rClass, const OString &rID, stringmap &rVec);
+    bool extractGroup(const OString &id, stringmap &rVec);
+    bool extractModel(const OString &id, stringmap &rVec);
+    bool extractAdjustment(const OString &id, stringmap &rVec);
+    bool extractImage(const OString &id, stringmap &rMap);
+    bool extractStock(const OString &id, stringmap &rMap);
 
     void handleTranslations(xmlreader::XmlReader &reader);
 
@@ -169,11 +176,11 @@ private:
     Window* handleObject(Window *pParent, xmlreader::XmlReader &reader);
     void handlePacking(Window *pCurrent, xmlreader::XmlReader &reader);
     void applyPackingProperty(Window *pCurrent, xmlreader::XmlReader &reader);
-    void collectProperty(xmlreader::XmlReader &reader, const rtl::OString &rID, stringmap &rVec);
+    void collectProperty(xmlreader::XmlReader &reader, const OString &rID, stringmap &rVec);
 
-    void handleListStore(xmlreader::XmlReader &reader, const rtl::OString &rID);
-    void handleRow(xmlreader::XmlReader &reader, const rtl::OString &rID, sal_Int32 nRowIndex);
-    void handleAdjustment(const rtl::OString &rID, stringmap &rProperties);
+    void handleListStore(xmlreader::XmlReader &reader, const OString &rID);
+    void handleRow(xmlreader::XmlReader &reader, const OString &rID, sal_Int32 nRowIndex);
+    void handleAdjustment(const OString &rID, stringmap &rProperties);
     void handleTabChild(Window *pParent, xmlreader::XmlReader &reader);
 
     sal_Int32 get_window_packing_position(const Window *pWindow) const;
@@ -205,14 +212,14 @@ protected:
 public:
     VclBuilderContainer();
     virtual ~VclBuilderContainer();
-    static rtl::OUString getUIRootDir();
+    static OUString getUIRootDir();
     static VclBuilder* overrideResourceWithUIXML(Window *pWindow, const ResId& rResId);
     static bool replace_buildable(Window *pParent, const ResId& rResId, Window &rReplacement);
-    template <typename T> T* get(T*& ret, rtl::OString sID)
+    template <typename T> T* get(T*& ret, OString sID)
     {
         return m_pUIBuilder->get<T>(ret, sID);
     }
-    template <typename T /*=Window if we had c++11*/> T* get(rtl::OString sID)
+    template <typename T /*=Window if we had c++11*/> T* get(OString sID)
     {
         return m_pUIBuilder->get<T>(sID);
     }
@@ -221,7 +228,7 @@ public:
 /*
  * @return true if rValue is "True", "true", "1", etc.
  */
-bool VCL_DLLPUBLIC toBool(const rtl::OString &rValue);
+bool VCL_DLLPUBLIC toBool(const OString &rValue);
 
 #endif
 
