@@ -1,5 +1,5 @@
---- misc/expat-2.0.1/lib/makefile.mk	Wed Aug 20 14:33:55 2008
-+++ misc/build/expat-2.0.1/lib/makefile.mk	Wed Aug 20 14:26:42 2008
+--- misc/expat-2.1.0/lib/makefile.mk	Wed Aug 20 14:33:55 2008
++++ misc/build/expat-2.1.0/lib/makefile.mk	Wed Aug 20 14:26:42 2008
 @@ -1 +1,83 @@
 -dummy
 +#**************************************************************

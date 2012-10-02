@@ -1,5 +1,5 @@
---- misc/expat-2.0.1/lib/expat_external.h	2009-11-16 08:53:17.375000000 +0000
-+++ misc/build/expat-2.0.1/lib/expat_external.h	2009-11-16 08:53:34.703125000 +0000
+--- misc/expat-2.1.0/lib/expat_external.h	2009-11-16 08:53:17.375000000 +0000
++++ misc/build/expat-2.1.0/lib/expat_external.h	2009-11-16 08:53:34.703125000 +0000
 @@ -7,10 +7,6 @@
  
  /* External API definitions */

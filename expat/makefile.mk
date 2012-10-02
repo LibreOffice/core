@@ -38,10 +38,10 @@ all:
 
 # --- Files --------------------------------------------------------
 
-TARFILE_NAME=expat-2.0.1
-TARFILE_MD5=ee8b492592568805593f81f8cdf2a04c
+TARFILE_NAME=expat-2.1.0
+TARFILE_MD5=dd7dab7a5fea97d2a6a43f511449b7cd 
 ADDITIONAL_FILES=lib$/makefile.mk
-PATCH_FILES=expat-2.0.1.patch \
+PATCH_FILES=$(TARFILE_NAME).patch \
             expat-winapi.patch
 
 CONFIGURE_DIR=

@@ -235,16 +235,16 @@ if (SYSTEM_VIGRA != YES)
     URL1 = http://hci.iwr.uni-heidelberg.de/vigra/vigra1.6.0.tar.gz
     URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
 
+if (SYSTEM_EXPAT != YES)
+    MD5 = dd7dab7a5fea97d2a6a43f511449b7cd
+    name = expat-2.1.0.tar.gz
+    URL1 = http://sourceforge.net/projects/expat/files/expat/2.1.0/expat-2.1.0.tar.gz/download
+    URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
+
 if (SYSTEM_CURL != YES)
     MD5 = ecb2e37e45c9933e2a963cabe03670ab
     name = curl-7.19.7.tar.gz
     URL1 = http://curl.haxx.se/download/curl-7.19.7.tar.gz
-    URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
-
-if (SYSTEM_EXPAT != YES)
-    MD5 = ee8b492592568805593f81f8cdf2a04c
-    name = expat-2.0.1.tar.gz
-    URL1 = http://sourceforge.net/projects/expat/files/expat/2.0.1/expat-2.0.1.tar.gz/download
     URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
 
 if (WITH_CATA_FONTS == YES)

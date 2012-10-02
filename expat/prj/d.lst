@@ -1,7 +1,7 @@
 mkdir: %_DEST%\inc%_EXT%\external\expat
 mkdir: %_DEST%\lib%_EXT%\x64
-..\%__SRC%\misc\build\expat-2.0.1\lib\expat.h %_DEST%\inc%_EXT%\external\expat.h
-..\%__SRC%\misc\build\expat-2.0.1\lib\expat_external.h %_DEST%\inc%_EXT%\external\expat_external.h
+..\%__SRC%\misc\build\expat-2.1.0\lib\expat.h %_DEST%\inc%_EXT%\external\expat.h
+..\%__SRC%\misc\build\expat-2.1.0\lib\expat_external.h %_DEST%\inc%_EXT%\external\expat_external.h
 ..\%__SRC%\slb\expat_xmltok.lib %_DEST%\lib%_EXT%\expat_xmltok.lib
 ..\%__SRC%\slb\expat_xmlparse.lib %_DEST%\lib%_EXT%\expat_xmlparse.lib
 ..\%__SRC%\slb\ascii_expat_xmlparse.lib %_DEST%\lib%_EXT%\ascii_expat_xmlparse.lib
