@@ -268,7 +268,7 @@ IMPL_LINK_INLINE_START( SwEnvFmtPage, ModifyHdl, Edit *, pEdit )
     }
     else
     {
-        FillItem(GetParent()->aEnvItem);
+        FillItem(GetParentSwEnvDlg()->aEnvItem);
         SetMinMax();
         aPreview.Invalidate();
     }
@@ -278,7 +278,7 @@ IMPL_LINK_INLINE_END( SwEnvFmtPage, ModifyHdl, Edit *, pEdit )
 
 IMPL_LINK( SwEnvFmtPage, EditHdl, MenuButton *, pButton )
 {
-    SwWrtShell* pSh = GetParent()->pSh;
+    SwWrtShell* pSh = GetParentSwEnvDlg()->pSh;
     OSL_ENSURE(pSh, "Shell missing");
 
     // determine collection-ptr
@@ -314,7 +314,7 @@ IMPL_LINK( SwEnvFmtPage, EditHdl, MenuButton *, pButton )
             SwAbstractDialogFactory* pFact = swui::GetFactory();
             OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
-            SfxAbstractTabDialog* pDlg = pFact->CreateSwCharDlg( GetParent(), pSh->GetView(), aTmpSet, DLG_CHAR ,&pColl->GetName() );
+            SfxAbstractTabDialog* pDlg = pFact->CreateSwCharDlg( GetParentSwEnvDlg(), pSh->GetView(), aTmpSet, DLG_CHAR ,&pColl->GetName() );
             OSL_ENSURE(pDlg, "Dialogdiet fail!");
             if (pDlg->Execute() == RET_OK)
             {
@@ -362,7 +362,7 @@ IMPL_LINK( SwEnvFmtPage, EditHdl, MenuButton *, pButton )
             // set BoxInfo
             ::PrepareBoxInfo( aTmpSet, *pSh );
 
-            SwParaDlg *pDlg = new SwParaDlg(GetParent(), pSh->GetView(), aTmpSet, DLG_ENVELOP, &pColl->GetName());
+            SwParaDlg *pDlg = new SwParaDlg(GetParentSwEnvDlg(), pSh->GetView(), aTmpSet, DLG_ENVELOP, &pColl->GetName());
 
             if ( pDlg->Execute() == RET_OK )
             {
@@ -398,7 +398,7 @@ IMPL_LINK( SwEnvFmtPage, EditHdl, MenuButton *, pButton )
 
 SfxItemSet *SwEnvFmtPage::GetCollItemSet(SwTxtFmtColl* pColl, sal_Bool bSender)
 {
-    SfxItemSet *&pAddrSet = bSender ? GetParent()->pSenderSet : GetParent()->pAddresseeSet;
+    SfxItemSet *&pAddrSet = bSender ? GetParentSwEnvDlg()->pSenderSet : GetParentSwEnvDlg()->pAddresseeSet;
 
     if (!pAddrSet)
     {
@@ -424,7 +424,7 @@ SfxItemSet *SwEnvFmtPage::GetCollItemSet(SwTxtFmtColl* pColl, sal_Bool bSender)
         pVec.insert(pVec.end(), aVec.begin(), aVec.end());
         sal_uInt16 *pNewRanges = ::lcl_convertListToRanges(pVec);
 
-        pAddrSet = new SfxItemSet(GetParent()->pSh->GetView().GetCurShell()->GetPool(),
+        pAddrSet = new SfxItemSet(GetParentSwEnvDlg()->pSh->GetView().GetCurShell()->GetPool(),
                                 pNewRanges);
         pAddrSet->Put(pColl->GetAttrSet());
         delete[] pNewRanges;
@@ -470,7 +470,7 @@ IMPL_LINK_NOARG(SwEnvFmtPage, FormatHdl)
 
     SetMinMax();
 
-    FillItem(GetParent()->aEnvItem);
+    FillItem(GetParentSwEnvDlg()->aEnvItem);
     aPreview.Invalidate();
     return 0;
 }
@@ -520,7 +520,7 @@ SfxTabPage* SwEnvFmtPage::Create(Window* pParent, const SfxItemSet& rSet)
 void SwEnvFmtPage::ActivatePage(const SfxItemSet& rSet)
 {
     SfxItemSet aSet(rSet);
-    aSet.Put(GetParent()->aEnvItem);
+    aSet.Put(GetParentSwEnvDlg()->aEnvItem);
     Reset(aSet);
 }
 
@@ -557,8 +557,8 @@ void SwEnvFmtPage::FillItem(SwEnvItem& rItem)
 
 sal_Bool SwEnvFmtPage::FillItemSet(SfxItemSet& rSet)
 {
-    FillItem(GetParent()->aEnvItem);
-    rSet.Put(GetParent()->aEnvItem);
+    FillItem(GetParentSwEnvDlg()->aEnvItem);
+    rSet.Put(GetParentSwEnvDlg()->aEnvItem);
     return sal_True;
 }
 
@@ -582,8 +582,8 @@ void SwEnvFmtPage::Reset(const SfxItemSet& rSet)
     SetFldVal(aSizeHeightField , Min(rItem.lWidth, rItem.lHeight));
     SetMinMax();
 
-    DELETEZ(GetParent()->pSenderSet);
-    DELETEZ(GetParent()->pAddresseeSet);
+    DELETEZ(GetParentSwEnvDlg()->pSenderSet);
+    DELETEZ(GetParentSwEnvDlg()->pAddresseeSet);
 }
 
 

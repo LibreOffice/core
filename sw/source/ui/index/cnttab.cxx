@@ -3425,12 +3425,6 @@ IMPL_LINK(SwTokenWindow, ScrollHdl, ImageButton*, pBtn )
 
         pCtrl = *(aControlList.rbegin());
         aRightScrollWin.Enable((pCtrl->GetPosPixel().X() + pCtrl->GetSizePixel().Width()) > nSpace);
-
-#if OSL_DEBUG_LEVEL > 1
-        sMessage.AppendAscii("Move: ");
-        sMessage += String::CreateFromInt32(nMove);
-        GetParent()->GetParent()->GetParent()->SetText(sMessage);
-#endif
     }
 
     return 0;

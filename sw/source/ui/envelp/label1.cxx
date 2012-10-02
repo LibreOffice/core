@@ -280,10 +280,10 @@ SwLabPage::SwLabPage(Window* pParent, const SfxItemSet& rSet) :
 
     size_t nLstGroup = 0;
 
-    const sal_uInt16 nCount = (sal_uInt16)GetParent()->Makes().size();
+    const sal_uInt16 nCount = (sal_uInt16)GetParentSwLabDlg()->Makes().size();
     for(size_t i = 0; i < nCount; ++i)
     {
-        rtl::OUString& rStr = GetParent()->Makes()[i];
+        rtl::OUString& rStr = GetParentSwLabDlg()->Makes()[i];
         aMakeBox.InsertEntry( rStr );
 
         if ( rStr == aItem.aLstMake)
@@ -364,7 +364,7 @@ IMPL_LINK( SwLabPage, DatabaseHdl, ListBox *, pListBox )
 {
     sActDBName = aDatabaseLB.GetSelectEntry();
 
-    WaitObject aObj( GetParent() );
+    WaitObject aObj( GetParentSwLabDlg() );
 
     if (pListBox == &aDatabaseLB)
         GetNewDBMgr()->GetTableNames(&aTableLB, sActDBName);
@@ -401,32 +401,32 @@ IMPL_LINK_NOARG_INLINE_END(SwLabPage, PageHdl)
 
 IMPL_LINK_NOARG(SwLabPage, MakeHdl)
 {
-    WaitObject aWait( GetParent() );
+    WaitObject aWait( GetParentSwLabDlg() );
 
     aTypeBox.Clear();
     aHiddenSortTypeBox.Clear();
-    GetParent()->TypeIds().clear();
+    GetParentSwLabDlg()->TypeIds().clear();
 
     const String aMake = aMakeBox.GetSelectEntry();
-    GetParent()->ReplaceGroup( aMake );
+    GetParentSwLabDlg()->ReplaceGroup( aMake );
     aItem.aLstMake = aMake;
 
     const sal_Bool   bCont    = aContButton.IsChecked();
-    const sal_uInt16 nCount   = GetParent()->Recs().size();
+    const sal_uInt16 nCount   = GetParentSwLabDlg()->Recs().size();
           sal_uInt16 nLstType = 0;
 
     const String sCustom(SW_RES(STR_CUSTOM));
     //insert the entries into the sorted list box
     for ( sal_uInt16 i = 0; i < nCount; ++i )
     {
-        const String aType ( GetParent()->Recs()[i]->aType );
+        const String aType ( GetParentSwLabDlg()->Recs()[i]->aType );
         sal_Bool bInsert = sal_False;
-        if ( GetParent()->Recs()[i]->aType == sCustom )
+        if ( GetParentSwLabDlg()->Recs()[i]->aType == sCustom )
         {
             bInsert = sal_True;
             aTypeBox.InsertEntry(aType );
         }
-        else if ( GetParent()->Recs()[i]->bCont == bCont )
+        else if ( GetParentSwLabDlg()->Recs()[i]->bCont == bCont )
         {
             if ( aHiddenSortTypeBox.GetEntryPos(aType) == LISTBOX_ENTRY_NOTFOUND )
             {
@@ -436,9 +436,9 @@ IMPL_LINK_NOARG(SwLabPage, MakeHdl)
         }
         if(bInsert)
         {
-            GetParent()->TypeIds().push_back(i);
+            GetParentSwLabDlg()->TypeIds().push_back(i);
             if ( !nLstType && aType == String(aItem.aLstType) )
-                nLstType = GetParent()->TypeIds().size();
+                nLstType = GetParentSwLabDlg()->TypeIds().size();
         }
     }
     for(sal_uInt16 nEntry = 0; nEntry < aHiddenSortTypeBox.GetEntryCount(); nEntry++)
@@ -496,7 +496,7 @@ SwLabRec* SwLabPage::GetSelectedEntryPos()
 {
     String sSelEntry(aTypeBox.GetSelectEntry());
 
-    return GetParent()->GetRecord(sSelEntry, aContButton.IsChecked());
+    return GetParentSwLabDlg()->GetRecord(sSelEntry, aContButton.IsChecked());
 }
 
 void SwLabPage::InitDatabaseBox()
@@ -573,7 +573,7 @@ void SwLabPage::Reset(const SfxItemSet& rSet)
     aAddrBox    .Check      ( aItem.bAddr );
     aWritingEdit.SetText    ( aWriting );
 
-    for(std::vector<rtl::OUString>::const_iterator i = GetParent()->Makes().begin(); i != GetParent()->Makes().end(); ++i)
+    for(std::vector<rtl::OUString>::const_iterator i = GetParentSwLabDlg()->Makes().begin(); i != GetParentSwLabDlg()->Makes().end(); ++i)
     {
         if(aMakeBox.GetEntryPos(String(*i)) == LISTBOX_ENTRY_NOTFOUND)
             aMakeBox.InsertEntry(*i);
@@ -586,7 +586,7 @@ void SwLabPage::Reset(const SfxItemSet& rSet)
     aItem.aType = sType;
     //#102806# a newly added make may not be in the type ListBox already
     if (aTypeBox.GetEntryPos(String(aItem.aType)) == LISTBOX_ENTRY_NOTFOUND && !aItem.aMake.isEmpty())
-        GetParent()->UpdateGroup( aItem.aMake );
+        GetParentSwLabDlg()->UpdateGroup( aItem.aMake );
     if (aTypeBox.GetEntryPos(String(aItem.aType)) != LISTBOX_ENTRY_NOTFOUND)
     {
         aTypeBox.SelectEntry(aItem.aType);

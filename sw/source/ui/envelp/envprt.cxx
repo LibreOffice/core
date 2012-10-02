@@ -174,8 +174,8 @@ void SwEnvPrtPage::FillItem(SwEnvItem& rItem)
 
 sal_Bool SwEnvPrtPage::FillItemSet(SfxItemSet& rSet)
 {
-    FillItem(GetParent()->aEnvItem);
-    rSet.Put(GetParent()->aEnvItem);
+    FillItem(GetParentSwEnvDlg()->aEnvItem);
+    rSet.Put(GetParentSwEnvDlg()->aEnvItem);
     return sal_True;
 }
 

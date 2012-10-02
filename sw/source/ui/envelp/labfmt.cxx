@@ -510,7 +510,7 @@ void SwLabFmtPage::FillItem(SwLabItem& rItem)
     {
         rItem.aMake = rItem.aType = SW_RESSTR(STR_CUSTOM);
 
-        SwLabRec& rRec = *GetParent()->Recs()[0];
+        SwLabRec& rRec = *GetParentSwLabDlg()->Recs()[0];
         rItem.lHDist  = rRec.lHDist  = static_cast< long >(GETFLDVAL(aHDistField ));
         rItem.lVDist  = rRec.lVDist  = static_cast< long >(GETFLDVAL(aVDistField ));
         rItem.lWidth  = rRec.lWidth  = static_cast< long >(GETFLDVAL(aWidthField ));
@@ -535,7 +535,7 @@ sal_Bool SwLabFmtPage::FillItemSet(SfxItemSet& rSet)
 void SwLabFmtPage::Reset(const SfxItemSet& )
 {
     // Initialise fields
-    GetParent()->GetLabItem(aItem);
+    GetParentSwLabDlg()->GetLabItem(aItem);
 
     aHDistField .SetMax(100 * aItem.lHDist , FUNIT_TWIP);
     aVDistField .SetMax(100 * aItem.lVDist , FUNIT_TWIP);
@@ -585,8 +585,8 @@ IMPL_LINK_NOARG(SwLabFmtPage, SaveHdl)
     if(pSaveDlg->GetLabel(aItem))
     {
         bModified = sal_False;
-        const Sequence<OUString>& rMan = GetParent()->GetLabelsConfig().GetManufacturers();
-        std::vector<rtl::OUString>& rMakes(GetParent()->Makes());
+        const Sequence<OUString>& rMan = GetParentSwLabDlg()->GetLabelsConfig().GetManufacturers();
+        std::vector<rtl::OUString>& rMakes(GetParentSwLabDlg()->Makes());
         if(rMakes.size() < (sal_uInt16)rMan.getLength())
         {
             rMakes.clear();
@@ -626,7 +626,7 @@ SwSaveLabelDlg::SwSaveLabelDlg(SwLabFmtPage* pParent, SwLabRec& rRec) :
     aMakeCB.SetModifyHdl(aLk);
     aTypeED.SetModifyHdl(aLk);
 
-    SwLabelConfig& rCfg = pLabPage->GetParent()->GetLabelsConfig();
+    SwLabelConfig& rCfg = pLabPage->GetParentSwLabDlg()->GetLabelsConfig();
     const Sequence<OUString>& rMan = rCfg.GetManufacturers();
     const OUString* pMan = rMan.getConstArray();
     for(sal_Int32 i = 0; i < rMan.getLength(); i++)
@@ -635,7 +635,7 @@ SwSaveLabelDlg::SwSaveLabelDlg(SwLabFmtPage* pParent, SwLabRec& rRec) :
 
 IMPL_LINK_NOARG(SwSaveLabelDlg, OkHdl)
 {
-    SwLabelConfig& rCfg = pLabPage->GetParent()->GetLabelsConfig();
+    SwLabelConfig& rCfg = pLabPage->GetParentSwLabDlg()->GetLabelsConfig();
     String sMake(aMakeCB.GetText());
     String sType(aTypeED.GetText());
     if(rCfg.HasLabel(sMake, sType))
