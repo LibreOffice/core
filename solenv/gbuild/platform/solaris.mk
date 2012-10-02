@@ -301,10 +301,14 @@ gb_Executable_LAYER := \
 	$(foreach exe,$(gb_Executable_NONE),$(exe):NONE) \
 
 
-define gb_Executable_get_rpath
-'-Wl,-rpath,$(call gb_LinkTarget__get_rpath_for_layer,$(call gb_Executable_get_layer,$(1)))' \
--L$(gb_Library_OUTDIRLOCATION)
+define gb_Executable__get_rpath
+$(strip $(if $(1),'-Wl$(COMMA)-rpath$(COMMA)$(1)') \
+-L$(gb_Library_OUTDIRLOCATION))
 #JAD#-Wl,-rpath-link,$(gb_Library_OUTDIRLOCATION)
+endef
+
+define gb_Executable_get_rpath
+$(call gb_Executable__get_rpath,$(call gb_LinkTarget__get_rpath_for_layer,$(call gb_Executable_get_layer,$(1))))
 endef
 
 define gb_Executable_Executable_platform

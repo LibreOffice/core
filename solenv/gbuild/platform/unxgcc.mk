@@ -262,7 +262,7 @@ gb_Library_LAYER := \
 	$(foreach lib,$(gb_Library_EXTENSIONLIBS),$(lib):OXT) \
 
 define gb_Library__get_rpath
-$(if $(1),$(strip -Wl,-z,origin '-Wl,-rpath,$(1)' '-Wl,-rpath-link,$(gb_Library_OUTDIRLOCATION)'))
+$(if $(1),$(strip -Wl,-z,origin '-Wl,-rpath,$(1)' -Wl,-rpath-link,$(gb_Library_OUTDIRLOCATION)))
 endef
 
 define gb_Library_get_rpath
@@ -299,9 +299,12 @@ gb_Executable_LAYER := \
 	$(foreach exe,$(gb_Executable_NONE),$(exe):NONE) \
 
 
+define gb_Executable__get_rpath
+$(strip -Wl,-z,origin $(if $(1),'-Wl$(COMMA)-rpath$(COMMA)$(1)') -Wl,-rpath-link,$(gb_Library_OUTDIRLOCATION))
+endef
+
 define gb_Executable_get_rpath
--Wl,-z,origin '-Wl,-rpath,$(call gb_LinkTarget__get_rpath_for_layer,$(call gb_Executable_get_layer,$(1)))' \
--Wl,-rpath-link,$(gb_Library_OUTDIRLOCATION)
+$(call gb_Executable__get_rpath,$(call gb_LinkTarget__get_rpath_for_layer,$(call gb_Executable_get_layer,$(1))))
 endef
 
 define gb_Executable_Executable_platform
