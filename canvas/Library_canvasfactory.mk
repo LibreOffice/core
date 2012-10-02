@@ -28,6 +28,10 @@
 
 $(eval $(call gb_Library_Library,canvasfactory))
 
+$(eval $(call gb_Library_use_package,canvasfactory,\
+	o3tl_inc \
+))
+
 $(eval $(call gb_Library_set_componentfile,canvasfactory,canvas/source/factory/canvasfactory))
 
 $(eval $(call gb_Library_set_include,canvasfactory,\
