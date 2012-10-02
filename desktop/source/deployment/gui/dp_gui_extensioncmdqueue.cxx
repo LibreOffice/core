@@ -50,6 +50,7 @@
 #include "com/sun/star/deployment/UpdateInformationProvider.hpp"
 #include "com/sun/star/deployment/XPackage.hpp"
 
+#include "com/sun/star/task/InteractionHandler.hpp"
 #include "com/sun/star/task/XAbortChannel.hpp"
 #include "com/sun/star/task/XInteractionAbort.hpp"
 #include "com/sun/star/task/XInteractionApprove.hpp"
@@ -536,10 +537,7 @@ void ProgressCmdEnv::handle( uno::Reference< task::XInteractionRequest > const &
             handlerArgs[ 0 ] <<= beans::PropertyValue(
                 OUSTR("Context"), -1, uno::Any( m_sTitle ),
                 beans::PropertyState_DIRECT_VALUE );
-             m_xHandler.set( m_xContext->getServiceManager()
-                            ->createInstanceWithArgumentsAndContext(
-                                OUSTR("com.sun.star.uui.InteractionHandler"),
-                                handlerArgs, m_xContext ), uno::UNO_QUERY_THROW );
+             m_xHandler.set( task::InteractionHandler::createWithParentAndContext(m_xContext, NULL, m_sTitle), uno::UNO_QUERY_THROW );
         }
         m_xHandler->handle( xRequest );
     }

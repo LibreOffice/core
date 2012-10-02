@@ -45,7 +45,7 @@
 #include <com/sun/star/sdb/XDocumentDataSource.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
-#include <com/sun/star/task/XInteractionHandler.hpp>
+#include <com/sun/star/task/InteractionHandler.hpp>
 #include <com/sun/star/uno/XNamingService.hpp>
 
 #include <comphelper/interaction.hxx>
@@ -524,13 +524,12 @@ namespace abp
 
         // ................................................................
         // create the interaction handler (needed for authentication and error handling)
-        static ::rtl::OUString s_sInteractionHandlerServiceName(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.task.InteractionHandler"));
         Reference< XInteractionHandler > xInteractions;
         try
         {
             xInteractions = Reference< XInteractionHandler >(
-                m_pImpl->xORB->createInstance( s_sInteractionHandlerServiceName ),
-                UNO_QUERY
+                InteractionHandler::createDefault(comphelper::getComponentContext(m_pImpl->xORB)),
+                UNO_QUERY_THROW
             );
         }
         catch(const Exception&)
@@ -541,6 +540,7 @@ namespace abp
         // failure to create the interaction handler is a serious issue ...
         if (!xInteractions.is())
         {
+            ::rtl::OUString s_sInteractionHandlerServiceName(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.task.InteractionHandler"));
             if ( _pMessageParent )
                 ShowServiceNotAvailableError( _pMessageParent, s_sInteractionHandlerServiceName, sal_True );
             return sal_False;

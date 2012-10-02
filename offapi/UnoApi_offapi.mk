@@ -270,6 +270,7 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/system,\
 	SystemShellExecute \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/task,\
+	InteractionHandler \
 	InteractionRequestStringResolver \
 	JobExecutor \
 	OfficeRestartManager \
@@ -1218,7 +1219,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/table,\
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/task,\
 	AsyncJob \
-	InteractionHandler \
 	Job \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/text,\

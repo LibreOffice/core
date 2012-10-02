@@ -32,7 +32,7 @@
 #include <com/sun/star/io/XActiveDataSource.hpp>
 #include <com/sun/star/system/SystemShellExecute.hpp>
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
-#include <com/sun/star/task/XInteractionHandler.hpp>
+#include <com/sun/star/task/InteractionHandler.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/xml/XImportFilter.hpp>
 #include <com/sun/star/xml/XExportFilter.hpp>
@@ -424,8 +424,8 @@ void XMLFilterTestDialog::onExportBrowse()
             maExportRecentFile = aDlg.GetPath();
 
             Reference< XComponentLoader > xLoader( mxMSF->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.Desktop" )) ), UNO_QUERY );
-            Reference< XInteractionHandler > xInter( mxMSF->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.task.InteractionHandler" )) ), UNO_QUERY );
-            if( xLoader.is() && xInter.is() )
+            Reference< XInteractionHandler > xInter( InteractionHandler::createDefault(comphelper::getComponentContext(mxMSF)), UNO_QUERY_THROW );
+            if( xLoader.is() )
             {
                 OUString aFrame( RTL_CONSTASCII_USTRINGPARAM( "_default" ) );
                 Sequence< PropertyValue > aArguments(1);
@@ -619,8 +619,8 @@ void XMLFilterTestDialog::import( const OUString& rURL )
     try
     {
         Reference< XComponentLoader > xLoader( mxMSF->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.Desktop" )) ), UNO_QUERY );
-        Reference< XInteractionHandler > xInter( mxMSF->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.task.InteractionHandler" )) ), UNO_QUERY );
-        if( xLoader.is() && xInter.is() )
+        Reference< XInteractionHandler > xInter( InteractionHandler::createDefault(comphelper::getComponentContext(mxMSF)), UNO_QUERY_THROW );
+        if( xLoader.is() )
         {
 
             OUString aFrame( RTL_CONSTASCII_USTRINGPARAM( "_default" ) );

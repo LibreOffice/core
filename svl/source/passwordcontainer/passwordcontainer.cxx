@@ -22,9 +22,11 @@
 
 #include <unotools/pathoptions.hxx>
 #include <cppuhelper/factory.hxx>
+#include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 #include <com/sun/star/registry/XSimpleRegistry.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/task/InteractionHandler.hpp>
 #include <com/sun/star/task/MasterPasswordRequest.hpp>
 #include <com/sun/star/task/NoMasterException.hpp>
 
@@ -1124,7 +1126,8 @@ sal_Bool SAL_CALL PasswordContainer::authorizateWithMasterPassword( const uno::R
             if ( !xTmpHandler.is() )
             {
                 uno::Reference< lang::XMultiServiceFactory > xFactory( mComponent, uno::UNO_QUERY_THROW );
-                xTmpHandler.set( xFactory->createInstance( ::rtl::OUString( "com.sun.star.task.InteractionHandler"  ) ), uno::UNO_QUERY_THROW );
+                uno::Reference< uno::XComponentContext > xContext( comphelper::getComponentContext(xFactory) );
+                xTmpHandler.set( InteractionHandler::createDefault(xContext), uno::UNO_QUERY_THROW );
             }
 
             if ( !m_aMasterPasswd.isEmpty() )
@@ -1168,7 +1171,8 @@ sal_Bool SAL_CALL PasswordContainer::changeMasterPassword( const uno::Reference<
         if ( !xTmpHandler.is() )
         {
             uno::Reference< lang::XMultiServiceFactory > xFactory( mComponent, uno::UNO_QUERY_THROW );
-            xTmpHandler.set( xFactory->createInstance( ::rtl::OUString( "com.sun.star.task.InteractionHandler"  ) ), uno::UNO_QUERY_THROW );
+            uno::Reference< uno::XComponentContext > xContext( comphelper::getComponentContext(xFactory) );
+            xTmpHandler.set( InteractionHandler::createDefault(xContext), uno::UNO_QUERY_THROW );
         }
 
         sal_Bool bCanChangePassword = sal_True;
@@ -1284,7 +1288,8 @@ void SAL_CALL PasswordContainer::removeMasterPassword()
         if ( !xTmpHandler.is() )
         {
             uno::Reference< lang::XMultiServiceFactory > xFactory( mComponent, uno::UNO_QUERY_THROW );
-            xTmpHandler.set( xFactory->createInstance( ::rtl::OUString( "com.sun.star.task.InteractionHandler"  ) ), uno::UNO_QUERY_THROW );
+            uno::Reference< uno::XComponentContext > xContext( comphelper::getComponentContext(xFactory) );
+            xTmpHandler.set( InteractionHandler::createDefault(xContext), uno::UNO_QUERY_THROW );
         }
 
         sal_Bool bCanChangePassword = sal_True;

@@ -1185,7 +1185,7 @@ SdrObject* FmXFormView::implCreateFieldControl( const ::svx::ODataAccessDescript
                 sDataSource,
                 ::rtl::OUString(),
                 ::rtl::OUString(),
-                m_aContext.getLegacyServiceFactory()
+                m_aContext.getUNOContext()
             ) );
     }
     catch (const SQLException&)

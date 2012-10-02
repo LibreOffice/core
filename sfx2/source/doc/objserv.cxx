@@ -29,7 +29,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/document/XExporter.hpp>
-#include <com/sun/star/task/XInteractionHandler.hpp>
+#include <com/sun/star/task/InteractionHandler.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #include <com/sun/star/task/XStatusIndicatorFactory.hpp>
 #include <com/sun/star/frame/DocumentTemplates.hpp>
@@ -554,28 +554,20 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                 SFX_REQUEST_ARG( rReq, pInteractionHandlerItem, SfxUnoAnyItem, SID_INTERACTIONHANDLER, sal_False );
                 if ( !pInteractionHandlerItem )
                 {
-                    uno::Reference< task::XInteractionHandler > xInteract;
-                    uno::Reference< lang::XMultiServiceFactory > xServiceManager = ::comphelper::getProcessServiceFactory();
-                    if( xServiceManager.is() )
+                    uno::Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+                    uno::Reference< task::XInteractionHandler > xInteract(
+                        task::InteractionHandler::createDefault(xContext),
+                        UNO_QUERY_THROW );
+
+                    SfxUnoAnyItem aInteractionItem( SID_INTERACTIONHANDLER, uno::makeAny( xInteract ) );
+                    if ( nId == SID_SAVEDOC )
                     {
-                        xInteract = Reference< XInteractionHandler >(
-                            xServiceManager->createInstance( DEFINE_CONST_UNICODE("com.sun.star.task.InteractionHandler") ),
-                            UNO_QUERY );
+                        // in case of saving it is not possible to transport the parameters from here
+                        // but it is not clear here whether the saving will be done or saveAs operation
+                        GetMedium()->GetItemSet()->Put( aInteractionItem );
                     }
 
-                    OSL_ENSURE( xInteract.is(), "Can not retrieve default status indicator!\n" );
-                    if ( xInteract.is() )
-                    {
-                        SfxUnoAnyItem aInteractionItem( SID_INTERACTIONHANDLER, uno::makeAny( xInteract ) );
-                        if ( nId == SID_SAVEDOC )
-                        {
-                            // in case of saving it is not possible to transport the parameters from here
-                            // but it is not clear here whether the saving will be done or saveAs operation
-                            GetMedium()->GetItemSet()->Put( aInteractionItem );
-                        }
-
-                        rReq.AppendItem( aInteractionItem );
-                    }
+                    rReq.AppendItem( aInteractionItem );
                 }
                 else if ( nId == SID_SAVEDOC )
                 {

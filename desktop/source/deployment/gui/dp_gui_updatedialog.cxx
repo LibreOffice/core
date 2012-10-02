@@ -66,6 +66,7 @@
 #include "com/sun/star/lang/XSingleServiceFactory.hpp"
 #include "com/sun/star/system/SystemShellExecuteFlags.hpp"
 #include "com/sun/star/system/SystemShellExecute.hpp"
+#include "com/sun/star/task/InteractionHandler.hpp"
 #include "com/sun/star/task/XAbortChannel.hpp"
 #include "com/sun/star/task/XJob.hpp"
 #include "com/sun/star/ucb/CommandAbortedException.hpp"
@@ -272,16 +273,10 @@ UpdateDialog::Thread::Thread(
 {
     if( m_context.is() )
     {
-        uno::Reference< lang::XMultiComponentFactory > xServiceManager( m_context->getServiceManager() );
-
-        if( xServiceManager.is() )
-        {
-            m_xInteractionHdl = uno::Reference< task::XInteractionHandler > (
-                                xServiceManager->createInstanceWithContext( OUSTR( "com.sun.star.task.InteractionHandler" ), m_context),
-                                uno::UNO_QUERY );
-            if ( m_xInteractionHdl.is() )
-                m_updateInformation->setInteractionHandler( m_xInteractionHdl );
-        }
+        m_xInteractionHdl = uno::Reference< task::XInteractionHandler > (
+                            task::InteractionHandler::createDefault(m_context),
+                            uno::UNO_QUERY_THROW );
+        m_updateInformation->setInteractionHandler( m_xInteractionHdl );
     }
 }
 

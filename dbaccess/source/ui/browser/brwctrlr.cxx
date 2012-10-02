@@ -57,7 +57,7 @@
 #include <com/sun/star/sdbc/XWarningsSupplier.hpp>
 #include <com/sun/star/sdbcx/Privilege.hpp>
 #include <com/sun/star/sdbcx/XRowLocate.hpp>
-#include <com/sun/star/task/XInteractionHandler.hpp>
+#include <com/sun/star/task/InteractionHandler.hpp>
 #include <com/sun/star/uno/TypeClass.hpp>
 #include <com/sun/star/util/NumberFormatter.hpp>
 #include <com/sun/star/util/XCancellable.hpp>
@@ -1471,9 +1471,8 @@ sal_Bool SbaXDataBrowserController::approveParameter(const ::com::sun::star::for
         pParamRequest->addContinuation(pAbort);
 
         // create the handler, let it handle the request
-        Reference< XInteractionHandler > xHandler(getORB()->createInstance(SERVICE_TASK_INTERACTION_HANDLER), UNO_QUERY);
-        if (xHandler.is())
-            xHandler->handle(xParamRequest);
+        Reference< XInteractionHandler > xHandler( InteractionHandler::createDefault(comphelper::ComponentContext(getORB()).getUNOContext()), UNO_QUERY_THROW);
+        xHandler->handle(xParamRequest);
 
         if (!pParamValues->wasSelected())
         {   // canceled

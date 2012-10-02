@@ -281,7 +281,7 @@ void ODatabaseImportExport::initialize()
         Reference< XEventListener> xEvt((::cppu::OWeakObject*)this,UNO_QUERY);
 
         Reference< XConnection > xConnection;
-        SQLExceptionInfo aInfo = ::dbaui::createConnection( m_sDataSourceName, xDatabaseContext, m_xFactory, xEvt, xConnection );
+        SQLExceptionInfo aInfo = ::dbaui::createConnection( m_sDataSourceName, xDatabaseContext, comphelper::getComponentContext(m_xFactory), xEvt, xConnection );
         m_xConnection.reset( xConnection );
 
         if(aInfo.isValid() && aInfo.getType() == SQLExceptionInfo::SQL_EXCEPTION)

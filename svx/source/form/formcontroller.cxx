@@ -61,6 +61,7 @@
 #include <com/sun/star/sdb/XInteractionSupplyParameters.hpp>
 #include <com/sun/star/sdbc/ColumnValue.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
+#include <com/sun/star/task/InteractionHandler.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/form/runtime/FormOperations.hpp>
 #include <com/sun/star/form/runtime/FormFeature.hpp>
@@ -199,6 +200,7 @@ namespace svxform
     using ::com::sun::star::util::URL;
     using ::com::sun::star::frame::FeatureStateEvent;
     using ::com::sun::star::form::runtime::XFormControllerContext;
+    using ::com::sun::star::task::InteractionHandler;
     using ::com::sun::star::task::XInteractionHandler;
     using ::com::sun::star::form::runtime::FormOperations;
     using ::com::sun::star::container::XContainer;
@@ -4272,7 +4274,7 @@ bool FormController::ensureInteractionHandler()
         return false;
     m_bAttemptedHandlerCreation = true;
 
-    m_xInteractionHandler.set( m_aContext.createComponent( ::rtl::OUString( "com.sun.star.task.InteractionHandler"  ) ), UNO_QUERY );
+    m_xInteractionHandler.set( InteractionHandler::createDefault(m_aContext.getUNOContext()), UNO_QUERY );
     OSL_ENSURE( m_xInteractionHandler.is(), "FormController::ensureInteractionHandler: could not create an interaction handler!" );
     return m_xInteractionHandler.is();
 }

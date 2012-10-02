@@ -20,7 +20,7 @@
 #include <ucbhelper/commandenvironment.hxx>
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/task/XInteractionHandler.hpp>
+#include <com/sun/star/task/InteractionHandler.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/ucb/XContentAccess.hpp>
@@ -52,9 +52,9 @@ TemplateRemoteView::TemplateRemoteView (Window *pParent, WinBits nWinStyle, bool
     mpItemView->SetColor(Color(COL_WHITE));
     mpItemView->setChangeNameHdl(LINK(this,TemplateRemoteView,ChangeNameHdl));
 
-    Reference< XMultiServiceFactory > xFactory = comphelper::getProcessServiceFactory();
+    Reference< XComponentContext > xContext = comphelper::getProcessComponentContext();
     Reference< XInteractionHandler >  xGlobalInteractionHandler = Reference< XInteractionHandler >(
-        xFactory->createInstance("com.sun.star.task.InteractionHandler" ), UNO_QUERY );
+        InteractionHandler::createDefault(xContext), UNO_QUERY_THROW );
 
     m_xCmdEnv = new ucbhelper::CommandEnvironment( xGlobalInteractionHandler, Reference< XProgressHandler >() );
 }

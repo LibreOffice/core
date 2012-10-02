@@ -110,7 +110,7 @@ namespace svxform
             const ::rtl::OUString& _rDataSourceName,
             const ::rtl::OUString& _rUser,
             const ::rtl::OUString& _rPwd,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory
+            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& _rxContext
         ) const SAL_THROW ( (::com::sun::star::sdbc::SQLException) );
 
         // ------------------------------------------------

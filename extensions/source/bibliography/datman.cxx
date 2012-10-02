@@ -45,7 +45,7 @@
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/sdb/XCompletedConnection.hpp>
-#include <com/sun/star/task/XInteractionHandler.hpp>
+#include <com/sun/star/task/InteractionHandler.hpp>
 #include <com/sun/star/form/XLoadable.hpp>
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #include <com/sun/star/form/XGridColumnFactory.hpp>
@@ -96,7 +96,6 @@ Reference< XConnection > getConnection(const ::rtl::OUString& _rURL)
     // first get the sdb::DataSource corresponding to the url
     Reference< XDataSource >    xDataSource;
     // is it a favorite title ?
-    Reference< XMultiServiceFactory >  xMgr = comphelper::getProcessServiceFactory();
     Reference<XComponentContext>  xContext = comphelper::getProcessComponentContext();
     Reference< XDatabaseContext >  xNamingContext = DatabaseContext::create(xContext);
     if (xNamingContext->hasByName(_rURL))
@@ -120,9 +119,7 @@ Reference< XConnection > getConnection(const ::rtl::OUString& _rURL)
         Reference< XCompletedConnection > xComplConn(xDataSource, UNO_QUERY);
         try
         {
-
-            Reference<XInterface> xHdl = xMgr->createInstance(C2U("com.sun.star.task.InteractionHandler"));
-            Reference<task::XInteractionHandler> xIHdl(xHdl, UNO_QUERY);
+            Reference<task::XInteractionHandler> xIHdl( task::InteractionHandler::createDefault(xContext), UNO_QUERY_THROW);
             xConn = xComplConn->connectWithCompletion(xIHdl);
         }
         catch (const SQLException&)

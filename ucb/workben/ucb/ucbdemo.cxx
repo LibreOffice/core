@@ -650,10 +650,8 @@ uno::Any UcbCommandProcessor::executeCommand( const rtl::OUString& rName,
         if (m_rUCB.getServiceFactory().is())
             xInteractionHandler
                 = uno::Reference< task::XInteractionHandler >(
-                      m_rUCB.getServiceFactory()->
-                          createInstance(
-                              rtl::OUString( "com.sun.star.task.InteractionHandler")),
-                      uno::UNO_QUERY);
+                      task::InteractionHandler::create(m_rUCB.getServiceFactory()),
+                      uno::UNO_QUERY_THROW);
         uno::Reference< ucb::XProgressHandler >
             xProgressHandler(new ProgressHandler(m_rUCB));
         uno::Reference< ucb::XCommandEnvironment > xEnv(
@@ -1308,10 +1306,8 @@ void UcbContent::transfer( const rtl::OUString& rSourceURL, sal_Bool bMove  )
         if (m_rUCB.getServiceFactory().is())
             xInteractionHandler
                 = uno::Reference< task::XInteractionHandler >(
-                          m_rUCB.getServiceFactory()->
-                              createInstance(
-                                rtl::OUString( "com.sun.star.task.InteractionHandler")),
-                        uno::UNO_QUERY);
+                        task::InteractionHandler::createDefault(comphelper::getComponentContext(m_rUCB.getServiceFactory())),
+                        uno::UNO_QUERY_THROW);
         uno::Reference< ucb::XProgressHandler > xProgressHandler(
             new ProgressHandler(m_rUCB));
         uno::Reference< ucb::XCommandEnvironment > xEnv(

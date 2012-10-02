@@ -19,7 +19,7 @@
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/task/XInteractionHandler.hpp>
+#include <com/sun/star/task/InteractionHandler.hpp>
 #include <com/sun/star/util/URL.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
@@ -71,12 +71,12 @@ void SfxTemplateInfoDlg::loadDocument(const OUString &rURL)
 {
     assert(!rURL.isEmpty());
 
-    uno::Reference<lang::XMultiServiceFactory> xContext(comphelper::getProcessServiceFactory());
+    uno::Reference<uno::XComponentContext> xContext(comphelper::getProcessComponentContext());
 
     try
     {
         uno::Reference<task::XInteractionHandler> xInteractionHandler(
-                    xContext->createInstance("com.sun.star.task.InteractionHandler"), uno::UNO_QUERY );
+                    task::InteractionHandler::createDefault(xContext), uno::UNO_QUERY_THROW );
 
         uno::Sequence<beans::PropertyValue> aProps(1);
         aProps[0].Name = "InteractionHandler";

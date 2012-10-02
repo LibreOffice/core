@@ -66,6 +66,7 @@
 #include <com/sun/star/sheet/DataPilotTablePositionData.hpp>
 #include <com/sun/star/sheet/DataPilotTablePositionType.hpp>
 #include <com/sun/star/sheet/DimensionFlags.hpp>
+#include <com/sun/star/task/InteractionHandler.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/lang/XSingleComponentFactory.hpp>
@@ -102,7 +103,6 @@ using ::com::sun::star::beans::XPropertySet;
 using ::rtl::OUString;
 
 #define SC_SERVICE_ROWSET           "com.sun.star.sdb.RowSet"
-#define SC_SERVICE_INTHANDLER       "com.sun.star.task.InteractionHandler"
 
 #define SC_DBPROP_DATASOURCENAME    "DataSourceName"
 #define SC_DBPROP_COMMAND           "Command"
@@ -3058,9 +3058,8 @@ uno::Reference<sdbc::XRowSet> ScDPCollection::DBCaches::createRowSet(
         if ( xExecute.is() )
         {
             uno::Reference<task::XInteractionHandler> xHandler(
-                comphelper::getProcessServiceFactory()->createInstance(
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SC_SERVICE_INTHANDLER )) ),
-                uno::UNO_QUERY);
+                task::InteractionHandler::createDefault(comphelper::getProcessComponentContext()),
+                uno::UNO_QUERY_THROW);
             xExecute->executeWithCompletion( xHandler );
         }
         else

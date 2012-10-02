@@ -29,6 +29,7 @@
 #include <dialmgr.hxx>
 #include <cuires.hrc>
 #include <sal/macros.h>
+#include <com/sun/star/task/InteractionHandler.hpp>
 #include <com/sun/star/task/PasswordContainer.hpp>
 #include <com/sun/star/task/UrlRecord.hpp>
 #include <com/sun/star/task/XPasswordContainer2.hpp>
@@ -187,9 +188,8 @@ void WebConnectionInfoDialog::FillPasswordList()
         if ( xMasterPasswd->isPersistentStoringAllowed() )
         {
             uno::Reference< task::XInteractionHandler > xInteractionHandler(
-                comphelper::getProcessServiceFactory()->createInstance(
-                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.task.InteractionHandler" ) ) ),
-                uno::UNO_QUERY_THROW );
+                task::InteractionHandler::createDefault(comphelper::getProcessComponentContext()),
+                uno::UNO_QUERY_THROW);
 
             uno::Sequence< task::UrlRecord > aURLEntries = xMasterPasswd->getAllPersistent( xInteractionHandler );
             sal_Int32 nCount = 0;
@@ -297,9 +297,7 @@ IMPL_LINK_NOARG(WebConnectionInfoDialog, ChangePasswordHdl)
             uno::Reference< task::XInteractionRequest > rRequest( pPasswordRequest );
 
             uno::Reference< task::XInteractionHandler > xInteractionHandler(
-                comphelper::getProcessServiceFactory()->createInstance(
-                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                        "com.sun.star.task.InteractionHandler" ) ) ),
+                task::InteractionHandler::createDefault(comphelper::getProcessComponentContext()),
                 uno::UNO_QUERY_THROW );
             xInteractionHandler->handle( rRequest );
 

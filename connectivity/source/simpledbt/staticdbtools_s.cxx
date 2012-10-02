@@ -84,9 +84,9 @@ namespace connectivity
 
     //----------------------------------------------------------------
     Reference< XConnection> ODataAccessStaticTools::getConnection_withFeedback(const ::rtl::OUString& _rDataSourceName, const ::rtl::OUString& _rUser,
-        const ::rtl::OUString& _rPwd, const Reference< XMultiServiceFactory>& _rxFactory) const SAL_THROW ( (SQLException) )
+        const ::rtl::OUString& _rPwd, const Reference< XComponentContext>& _rxContext) const SAL_THROW ( (SQLException) )
     {
-        return ::dbtools::getConnection_withFeedback(_rDataSourceName, _rUser, _rPwd, _rxFactory);
+        return ::dbtools::getConnection_withFeedback(_rDataSourceName, _rUser, _rPwd, _rxContext);
     }
 
     //----------------------------------------------------------------

@@ -58,7 +58,7 @@
 #include <com/sun/star/embed/EmbedMapUnits.hpp>
 #include <com/sun/star/embed/XVisualObject.hpp>
 #include <com/sun/star/document/MacroExecMode.hpp>
-#include <com/sun/star/task/XInteractionHandler.hpp>
+#include <com/sun/star/task/InteractionHandler.hpp>
 #include <osl/diagnose.h>
 #include <rtl/process.h>
 
@@ -114,9 +114,8 @@ void DocumentHolder::LoadDocInFrame( sal_Bool bPluginMode )
     if( xComponentLoader.is() && m_xDocument.is() )
     {
         uno::Reference< task::XInteractionHandler > xHandler(
-            m_xFactory->createInstance(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.task.InteractionHandler" ) ) ),
-            uno::UNO_QUERY );
+            task::InteractionHandler::create(comphelper::getComponentContext(m_xFactory)),
+            uno::UNO_QUERY_THROW );
 
         uno::Any aAny;
         sal_Int32 nLen = 3;

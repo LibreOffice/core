@@ -44,6 +44,7 @@
 #include <com/sun/star/task/InteractionClassification.hpp>
 #include <com/sun/star/ucb/InteractiveIOException.hpp>
 #include <com/sun/star/ucb/IOErrorCode.hpp>
+#include <com/sun/star/task/InteractionHandler.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
 
 #include <basic/basmgr.hxx>
@@ -362,7 +363,7 @@ Reference< XInterface > ODatabaseContext::loadObjectFromURL(const ::rtl::OUStrin
         ::comphelper::NamedValueCollection aArgs;
         aArgs.put( "URL", _sURL );
         aArgs.put( "MacroExecutionMode", MacroExecMode::USE_CONFIG );
-        aArgs.put( "InteractionHandler", m_aContext.createComponent( "com.sun.star.task.InteractionHandler" ) );
+        aArgs.put( "InteractionHandler", task::InteractionHandler::createDefault(m_aContext.getUNOContext()) );
 
         Sequence< PropertyValue > aResource( aArgs.getPropertyValues() );
         xLoad->load( aResource );

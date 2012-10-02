@@ -193,12 +193,12 @@ namespace svxform
 
     //--------------------------------------------------------------------
     Reference< XConnection> OStaticDataAccessTools::getConnection_withFeedback(const ::rtl::OUString& _rDataSourceName,
-        const ::rtl::OUString& _rUser, const ::rtl::OUString& _rPwd, const Reference< XMultiServiceFactory>& _rxFactory) const
+        const ::rtl::OUString& _rUser, const ::rtl::OUString& _rPwd, const Reference<XComponentContext>& _rxContext) const
             SAL_THROW ( (SQLException) )
     {
         Reference< XConnection > xReturn;
         if ( ensureLoaded() )
-            xReturn = m_xDataAccessTools->getConnection_withFeedback(_rDataSourceName, _rUser, _rPwd, _rxFactory);
+            xReturn = m_xDataAccessTools->getConnection_withFeedback(_rDataSourceName, _rUser, _rPwd, _rxContext);
         return xReturn;
     }
 

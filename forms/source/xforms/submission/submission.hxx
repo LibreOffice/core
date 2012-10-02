@@ -123,7 +123,7 @@ protected:
     CSS::uno::Reference< CSS::xml::xpath::XXPathObject >    m_aXPathObject;
     CSS::uno::Reference< CSS::xml::dom::XDocumentFragment > m_aFragment;
     CSS::uno::Reference< CSS::io::XInputStream >            m_aResultStream;
-    CSS::uno::Reference< CSS::lang::XMultiServiceFactory >  m_aFactory;
+    CSS::uno::Reference< CSS::uno::XComponentContext >      m_xContext;
     rtl::OUString m_aEncoding;
 
     ::std::auto_ptr< CSerialization > createSerialization(const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& aHandler
@@ -142,7 +142,7 @@ public:
     CSubmission(const rtl::OUString& aURL, const CSS::uno::Reference< CSS::xml::dom::XDocumentFragment >& aFragment)
         : m_aURLObj(aURL)
         , m_aFragment(aFragment)
-        , m_aFactory(::comphelper::getProcessServiceFactory())
+        , m_xContext(::comphelper::getProcessComponentContext())
     {}
 
     virtual ~CSubmission() {}

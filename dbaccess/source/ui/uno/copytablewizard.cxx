@@ -35,7 +35,7 @@
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XChild.hpp>
-#include <com/sun/star/task/XInteractionHandler.hpp>
+#include <com/sun/star/task/InteractionHandler.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/sdb/DatabaseContext.hpp>
 #include <com/sun/star/sdb/XDocumentDataSource.hpp>
@@ -102,6 +102,7 @@ namespace dbaui
     using ::com::sun::star::sdbc::XDataSource;
     using ::com::sun::star::container::XNameAccess;
     using ::com::sun::star::container::XChild;
+    using ::com::sun::star::task::InteractionHandler;
     using ::com::sun::star::task::XInteractionHandler;
     using ::com::sun::star::frame::XModel;
     using ::com::sun::star::sdb::DatabaseContext;
@@ -1553,7 +1554,7 @@ void SAL_CALL CopyTableWizard::initialize( const Sequence< Any >& _rArguments ) 
                 );
         }
         if ( !m_xInteractionHandler.is() )
-            m_xInteractionHandler.set( m_aContext.createComponent( "com.sun.star.task.InteractionHandler" ), UNO_QUERY_THROW );
+            m_xInteractionHandler.set( InteractionHandler::createDefault(m_aContext.getUNOContext()), UNO_QUERY_THROW );
 
         InteractionHandler xSourceDocHandler;
         Reference< XPropertySet > xSourceDescriptor( impl_ensureDataAccessDescriptor_throw( _rArguments, 0, m_xSourceConnection, xSourceDocHandler ) );

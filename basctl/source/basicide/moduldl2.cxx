@@ -50,6 +50,7 @@
 #include <com/sun/star/script/XLibraryContainer2.hpp>
 #include <com/sun/star/script/XLibraryContainerPassword.hpp>
 #include <com/sun/star/script/XLibraryContainerExport.hpp>
+#include <com/sun/star/task/InteractionHandler.hpp>
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
 #include <com/sun/star/ucb/XSimpleFileAccess2.hpp>
 #include "com/sun/star/ucb/XCommandEnvironment.hpp"
@@ -1253,21 +1254,16 @@ void LibPage::ExportAsPackage( const String& aLibName )
 {
     // file open dialog
     Reference< lang::XMultiServiceFactory > xMSF( ::comphelper::getProcessServiceFactory() );
-    Reference< task::XInteractionHandler > xHandler;
-    Reference< XSimpleFileAccess2 > xSFA;
+    Reference< uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
+    Reference< task::XInteractionHandler > xHandler( task::InteractionHandler::createDefault(xContext), UNO_QUERY );
+    Reference< XSimpleFileAccess2 > xSFA = SimpleFileAccess::create(xContext);
+
     Reference < XFilePicker > xFP;
-    if( xMSF.is() )
-    {
-        xHandler = Reference< task::XInteractionHandler >( xMSF->createInstance
-            ( DEFINE_CONST_UNICODE("com.sun.star.task.InteractionHandler") ), UNO_QUERY );
+    Sequence <Any> aServiceType(1);
+    aServiceType[0] <<= TemplateDescription::FILESAVE_SIMPLE;
+    xFP = Reference< XFilePicker >( xMSF->createInstanceWithArguments(
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.dialogs.FilePicker" ) ), aServiceType ), UNO_QUERY );
 
-        xSFA = SimpleFileAccess::create(comphelper::getProcessComponentContext());
-
-        Sequence <Any> aServiceType(1);
-        aServiceType[0] <<= TemplateDescription::FILESAVE_SIMPLE;
-        xFP = Reference< XFilePicker >( xMSF->createInstanceWithArguments(
-                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.dialogs.FilePicker" ) ), aServiceType ), UNO_QUERY );
-    }
     xFP->setTitle( String( IDEResId( RID_STR_EXPORTPACKAGE ) ) );
 
     // filter
@@ -1387,16 +1383,10 @@ void LibPage::ExportAsBasic( const String& aLibName )
 {
     // Folder picker
     Reference< lang::XMultiServiceFactory > xMSF( ::comphelper::getProcessServiceFactory() );
-    Reference< XFolderPicker > xFolderPicker;
-    Reference< task::XInteractionHandler > xHandler;
-    if( xMSF.is() )
-    {
-        xFolderPicker = Reference< XFolderPicker >( xMSF->createInstance(
-                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.dialogs.FolderPicker" ) ) ), UNO_QUERY );
-
-        xHandler = Reference< task::XInteractionHandler >( xMSF->createInstance
-            ( DEFINE_CONST_UNICODE("com.sun.star.task.InteractionHandler") ), UNO_QUERY );
-    }
+    Reference< uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
+    Reference< XFolderPicker > xFolderPicker( xMSF->createInstance(
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.dialogs.FolderPicker" ) ) ), UNO_QUERY );
+    Reference< task::XInteractionHandler > xHandler( task::InteractionHandler::createDefault(xContext), UNO_QUERY_THROW );
 
     if( xFolderPicker.is() )
     {

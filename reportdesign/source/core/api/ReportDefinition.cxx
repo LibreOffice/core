@@ -67,6 +67,7 @@
 #include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/table/BorderLine.hpp>
 #include <com/sun/star/table/ShadowFormat.hpp>
+#include <com/sun/star/task/InteractionHandler.hpp>
 #include <com/sun/star/task/ErrorCodeIOException.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #include <com/sun/star/task/XStatusIndicatorFactory.hpp>
@@ -2649,8 +2650,8 @@ uno::Reference< embed::XStorage > OReportDefinition::getStorage() const
 // -----------------------------------------------------------------------------
 uno::Reference< task::XInteractionHandler > OReportDefinition::getInteractionHandler() const
 {
-    uno::Reference< task::XInteractionHandler > xRet( m_aProps->m_xContext->getServiceManager()->createInstanceWithContext(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.task.InteractionHandler")) ,m_aProps->m_xContext),uno::UNO_QUERY);
+    uno::Reference< task::XInteractionHandler > xRet(
+                task::InteractionHandler::createDefault(m_aProps->m_xContext), uno::UNO_QUERY_THROW);
     return xRet;
 }
 // -----------------------------------------------------------------------------

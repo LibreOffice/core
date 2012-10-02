@@ -41,6 +41,7 @@
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/task/InteractionHandler.hpp>
 #include <ucbhelper/content.hxx>
 
 using namespace com::sun::star::uno;
@@ -129,9 +130,8 @@ SAL_WNODEPRECATED_DECLARATIONS_PUSH
     if( _xHandler.is() )
         pHelper->m_aInteractionHandler = _xHandler;
     else
-        pHelper->m_aInteractionHandler = CSS::uno::Reference< XInteractionHandler >(m_aFactory->createInstance(
-        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.task.InteractionHandler") ) ), UNO_QUERY);
-    OSL_ENSURE(pHelper->m_aInteractionHandler.is(), "failed to create IntreractionHandler");
+        pHelper->m_aInteractionHandler = CSS::uno::Reference< XInteractionHandler >(
+             InteractionHandler::createDefault(m_xContext), UNO_QUERY_THROW);
 
     CProgressHandlerHelper *pProgressHelper = new CProgressHandlerHelper;
     pHelper->m_aProgressHandler = Reference< XProgressHandler >(pProgressHelper);

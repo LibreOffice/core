@@ -19,6 +19,8 @@
 
 #include "iahndl.hxx"
 #include "interactionhandler.hxx"
+#include "comphelper/namedvaluecollection.hxx"
+#include "com/sun/star/awt/XWindow.hpp"
 
 using namespace com::sun::star;
 
@@ -67,7 +69,21 @@ UUIInteractionHandler::initialize(
     throw (uno::Exception)
 {
     delete m_pImpl;
-    m_pImpl = new UUIInteractionHelper(m_xServiceFactory, rArguments);
+
+    uno::Reference< awt::XWindow > xWindow;
+    rtl::OUString aContext;
+    ::comphelper::NamedValueCollection aProperties( rArguments );
+    if ( aProperties.has( "Parent" ) )
+    {
+        OSL_VERIFY( aProperties.get( "Parent" ) >>= xWindow );
+    }
+    if ( aProperties.has( "Context" ) )
+    {
+        OSL_VERIFY( aProperties.get( "Context" ) >>= aContext );
+    }
+
+
+    m_pImpl = new UUIInteractionHelper(m_xServiceFactory, xWindow, aContext);
 }
 
 void SAL_CALL

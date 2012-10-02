@@ -55,7 +55,7 @@
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #include <com/sun/star/sdbcx/XKeysSupplier.hpp>
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
-#include <com/sun/star/task/XInteractionHandler.hpp>
+#include <com/sun/star/task/InteractionHandler.hpp>
 #include <com/sun/star/task/XInteractionRequest.hpp>
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 #include <com/sun/star/uno/XNamingService.hpp>
@@ -279,9 +279,9 @@ Reference< XConnection > getConnection_allowException(
             const ::rtl::OUString& _rsTitleOrPath,
             const ::rtl::OUString& _rsUser,
             const ::rtl::OUString& _rsPwd,
-            const Reference< XMultiServiceFactory>& _rxFactory)
+            const Reference< XComponentContext>& _rxContext)
 {
-    Reference< XDataSource> xDataSource( getDataSource_allowException(_rsTitleOrPath, comphelper::getComponentContext(_rxFactory)) );
+    Reference< XDataSource> xDataSource( getDataSource_allowException(_rsTitleOrPath, _rxContext) );
     Reference<XConnection> xConnection;
     if (xDataSource.is())
     {
@@ -306,12 +306,9 @@ Reference< XConnection > getConnection_allowException(
                 Reference<XCompletedConnection> xConnectionCompletion(xProp, UNO_QUERY);
                 if (xConnectionCompletion.is())
                 {   // instantiate the default SDB interaction handler
-                    Reference< XInteractionHandler > xHandler(_rxFactory->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.task.InteractionHandler"))), UNO_QUERY);
-                    OSL_ENSURE(xHandler.is(), "dbtools::getConnection service com.sun.star.task.InteractionHandler not available!");
-                    if (xHandler.is())
-                    {
-                        xConnection = xConnectionCompletion->connectWithCompletion(xHandler);
-                    }
+                    Reference< XInteractionHandler > xHandler(
+                        InteractionHandler::createDefault(_rxContext), UNO_QUERY_THROW );
+                    xConnection = xConnectionCompletion->connectWithCompletion(xHandler);
                 }
             }
             else
@@ -325,13 +322,13 @@ Reference< XConnection > getConnection_allowException(
 
 //------------------------------------------------------------------------------
 Reference< XConnection> getConnection_withFeedback(const ::rtl::OUString& _rDataSourceName,
-        const ::rtl::OUString& _rUser, const ::rtl::OUString& _rPwd, const Reference< XMultiServiceFactory>& _rxFactory)
+        const ::rtl::OUString& _rUser, const ::rtl::OUString& _rPwd, const Reference< XComponentContext>& _rxContext)
     SAL_THROW ( (SQLException) )
 {
     Reference< XConnection > xReturn;
     try
     {
-        xReturn = getConnection_allowException(_rDataSourceName, _rUser, _rPwd, _rxFactory);
+        xReturn = getConnection_allowException(_rDataSourceName, _rUser, _rPwd, _rxContext);
     }
     catch(SQLException&)
     {
@@ -350,12 +347,12 @@ Reference< XConnection> getConnection(
             const ::rtl::OUString& _rsTitleOrPath,
             const ::rtl::OUString& _rsUser,
             const ::rtl::OUString& _rsPwd,
-            const Reference< XMultiServiceFactory>& _rxFactory)
+            const Reference< XComponentContext>& _rxContext)
 {
     Reference< XConnection > xReturn;
     try
     {
-        xReturn = getConnection_allowException(_rsTitleOrPath, _rsUser, _rsPwd, _rxFactory);
+        xReturn = getConnection_allowException(_rsTitleOrPath, _rsUser, _rsPwd, _rxContext);
     }
     catch(Exception&)
     {
@@ -434,7 +431,7 @@ SharedConnection lcl_connectRowSet(const Reference< XRowSet>& _rxRowSet, const R
             if (hasProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PASSWORD), xRowSetProps))
                 xRowSetProps->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PASSWORD)) >>= sPwd;
 
-            xPureConnection = getConnection_allowException( sDataSourceName, sUser, sPwd, _rxFactory );
+            xPureConnection = getConnection_allowException( sDataSourceName, sUser, sPwd, comphelper::getComponentContext(_rxFactory) );
         }
         else if (!sURL.isEmpty())
         {   // the row set has no data source, but a connection url set

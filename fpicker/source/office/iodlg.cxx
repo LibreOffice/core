@@ -72,7 +72,7 @@
 #include <osl/file.h>
 #include <vcl/waitobj.hxx>
 
-#include <com/sun/star/task/XInteractionHandler.hpp>
+#include <com/sun/star/task/InteractionHandler.hpp>
 #include "com/sun/star/ucb/InteractiveAugmentedIOException.hpp"
 #include "fpinteraction.hxx"
 #include <osl/process.h>
@@ -2001,13 +2001,10 @@ void SvtFileDialog::displayIOException( const String& _rURL, IOErrorCode _eCode 
         pRequest->addContinuation( new ::comphelper::OInteractionAbort( ) );
 
         Reference< XInteractionHandler > xHandler(
-            ::comphelper::getProcessServiceFactory()->createInstance(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.task.InteractionHandler") )
-            ),
-            UNO_QUERY
+            InteractionHandler::createDefault( ::comphelper::getProcessComponentContext() ),
+            UNO_QUERY_THROW
         );
-        if ( xHandler.is() )
-            xHandler->handle( xRequest );
+        xHandler->handle( xRequest );
     }
     catch( const Exception& )
     {

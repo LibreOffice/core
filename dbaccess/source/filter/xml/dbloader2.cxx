@@ -43,6 +43,7 @@
 #include <com/sun/star/sdb/XDocumentDataSource.hpp>
 #include <com/sun/star/task/XJobExecutor.hpp>
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
+#include <com/sun/star/task/InteractionHandler.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
@@ -428,9 +429,8 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const ::
     // not touch it.
     if ( !aMediaDesc.has( "InteractionHandler" ) )
     {
-        Reference< XInteractionHandler > xHandler;
-        if ( m_aContext.createComponent( "com.sun.star.task.InteractionHandler", xHandler ) )
-            aMediaDesc.put( "InteractionHandler", xHandler );
+        Reference< XInteractionHandler > xHandler( InteractionHandler::createDefault(m_aContext.getUNOContext()), UNO_QUERY_THROW );
+       aMediaDesc.put( "InteractionHandler", xHandler );
     }
 
     // it's allowed to pass an existing document

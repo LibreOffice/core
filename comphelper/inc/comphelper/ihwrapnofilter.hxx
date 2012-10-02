@@ -20,6 +20,7 @@
 #ifndef _COMPHELPER_INTERACTIONHANDLERWRAPPER_HXX_
 #define _COMPHELPER_INTERACTIONHANDLERWRAPPER_HXX_
 
+#include <com/sun/star/task/XInteractionHandler2.hpp>
 #ifndef _COM_SUN_STAR_TASK_XINTERACTIONHANDLER_
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #endif
@@ -36,14 +37,13 @@
 #include <com/sun/star/frame/DoubleInitializationException.hpp>
 #endif
 
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase2.hxx>
 #include "comphelper/comphelperdllapi.h"
 
 namespace comphelper {
 
-    class COMPHELPER_DLLPUBLIC OIHWrapNoFilterDialog : public ::cppu::WeakImplHelper3
-        <  ::com::sun::star::task::XInteractionHandler
-        ,  ::com::sun::star::lang::XInitialization
+    class COMPHELPER_DLLPUBLIC OIHWrapNoFilterDialog : public ::cppu::WeakImplHelper2
+        <  ::com::sun::star::task::XInteractionHandler2
         ,  ::com::sun::star::lang::XServiceInfo >
     {
         com::sun::star::uno::Reference< com::sun::star::task::XInteractionHandler > m_xInter;
@@ -61,6 +61,13 @@ namespace comphelper {
         //____________________________________________________________________________________________________
 
         virtual void SAL_CALL handle( const com::sun::star::uno::Reference< com::sun::star::task::XInteractionRequest >& xRequest)
+            throw( com::sun::star::uno::RuntimeException );
+
+        //____________________________________________________________________________________________________
+        // XInteractionHandler2
+        //____________________________________________________________________________________________________
+
+        virtual sal_Bool SAL_CALL handleInteractionRequest( const com::sun::star::uno::Reference< com::sun::star::task::XInteractionRequest >& xRequest)
             throw( com::sun::star::uno::RuntimeException );
 
         //____________________________________________________________________________________________________

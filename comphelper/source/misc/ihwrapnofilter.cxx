@@ -69,6 +69,26 @@ namespace comphelper
     }
 
     //----------------------------------------------------------------------------------------------------
+    // XInteractionHandler2
+    //----------------------------------------------------------------------------------------------------
+    sal_Bool SAL_CALL OIHWrapNoFilterDialog::handleInteractionRequest( const uno::Reference< task::XInteractionRequest >& xRequest)
+            throw( com::sun::star::uno::RuntimeException )
+    {
+        if( !m_xInter.is() )
+            return sal_False;
+
+        uno::Any aRequest = xRequest->getRequest();
+        document::NoSuchFilterRequest aNoSuchFilterRequest;
+        if ( aRequest >>= aNoSuchFilterRequest )
+            return sal_False;
+        else
+        {
+            m_xInter->handle( xRequest );
+            return sal_True;
+        }
+    }
+
+    //----------------------------------------------------------------------------------------------------
     // XInitialization
     //----------------------------------------------------------------------------------------------------
     void SAL_CALL OIHWrapNoFilterDialog::initialize( const uno::Sequence< uno::Any >& )

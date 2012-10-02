@@ -36,6 +36,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <osl/diagnose.h>
 #include <stdio.h>
+#include <com/sun/star/task/InteractionHandler.hpp>
 
 // ----------------------------------------------------------------------------
 
@@ -45,7 +46,6 @@ using rtl::OUString;
 using uno::UNO_QUERY;
 
 // ----------------------------------------------------------------------------
-static char const CONFIGURATION_ERROR_HANDLER[]  = "com.sun.star.configuration.backend.InteractionHandler";
 
 // must be aligned with configmgr/source/misc/configinteractionhandler
 static char const CONFIG_ERROR_HANDLER[] = "configuration.interaction-handler";
@@ -164,17 +164,8 @@ void ConfigurationErrorHandler::deactivate()
 
 ConfigurationErrorHandler::InteractionHandler ConfigurationErrorHandler::getDefaultInteractionHandler()
 {
-    uno::Reference< lang::XMultiServiceFactory > xServiceManager = ::comphelper::getProcessServiceFactory();
-
-    OSL_ENSURE( xServiceManager.is(),"No ServiceManager set for ConfigurationErrorHandler");
-
-    InteractionHandler xHandler;
-
-    if (xServiceManager.is())
-    {
-        xHandler.set( xServiceManager->createInstance(k_ERRORHANDLER), UNO_QUERY );
-    }
-
+    uno::Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+    InteractionHandler xHandler( com::sun::star::task::InteractionHandler::createDefault(xContext), UNO_QUERY_THROW );
     return xHandler;
 }
 //------------------------------------------------------------------------------

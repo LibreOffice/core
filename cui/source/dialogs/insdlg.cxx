@@ -38,7 +38,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/embed/XInsertObjectDialog.hpp>
 #include <com/sun/star/ucb/CommandAbortedException.hpp>
-#include <com/sun/star/task/XInteractionHandler.hpp>
+#include <com/sun/star/task/InteractionHandler.hpp>
 
 #include "insdlg.hxx"
 #include <dialmgr.hxx>
@@ -341,24 +341,13 @@ short SvInsertOleDlg::Execute()
                 aMedium[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "URL" ) );
                 aMedium[0].Value <<= ::rtl::OUString( aFileName );
 
-                uno::Reference< task::XInteractionHandler > xInteraction;
-                uno::Reference< lang::XMultiServiceFactory > xFactory = ::comphelper::getProcessServiceFactory();
-                if ( xFactory.is() )
-                    xInteraction = uno::Reference< task::XInteractionHandler >(
-                        xFactory->createInstance(
-                            DEFINE_CONST_UNICODE("com.sun.star.task.InteractionHandler") ),
-                        uno::UNO_QUERY_THROW );
+                uno::Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+                uno::Reference< task::XInteractionHandler > xInteraction(
+                    task::InteractionHandler::createDefault(xContext),
+                    uno::UNO_QUERY_THROW );
 
-                if ( xInteraction.is() )
-                {
-                       aMedium[1].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "InteractionHandler" ) );
-                       aMedium[1].Value <<= xInteraction;
-                }
-                else
-                {
-                    OSL_FAIL( "Can not get InteractionHandler!\n" );
-                    aMedium.realloc( 1 );
-                }
+               aMedium[1].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "InteractionHandler" ) );
+               aMedium[1].Value <<= xInteraction;
 
                 // create object from media descriptor
                 if ( bLink )

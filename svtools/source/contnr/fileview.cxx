@@ -40,7 +40,7 @@
 #include <svtools/AccessibleBrowseBoxObjType.hxx>
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/task/XInteractionHandler.hpp>
+#include <com/sun/star/task/InteractionHandler.hpp>
 #include <com/sun/star/ucb/XProgressHandler.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/ucb/XAnyCompareFactory.hpp>
@@ -698,9 +698,9 @@ ViewTabListBox_Impl::ViewTabListBox_Impl( Window* pParentWin,
     maResetQuickSearch.SetTimeout( QUICK_SEARCH_TIMEOUT );
     maResetQuickSearch.SetTimeoutHdl( LINK( this, ViewTabListBox_Impl, ResetQuickSearch_Impl ) );
 
-    Reference< XMultiServiceFactory > xFactory = ::comphelper::getProcessServiceFactory();
+    Reference< XComponentContext > xContext = ::comphelper::getProcessComponentContext();
     Reference< XInteractionHandler > xInteractionHandler = Reference< XInteractionHandler > (
-               xFactory->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.uui.InteractionHandler") ) ), UNO_QUERY );
+               InteractionHandler::createDefault(xContext), UNO_QUERY_THROW );
 
     mxCmdEnv = new ::ucbhelper::CommandEnvironment( xInteractionHandler, Reference< XProgressHandler >() );
 
@@ -1160,8 +1160,9 @@ SvtFileView::SvtFileView( Window* pParent, const ResId& rResId,
     if ( bMultiSelection )
         nFlags |= FILEVIEW_MULTISELECTION;
 
+    Reference< XComponentContext > xContext = ::comphelper::getProcessComponentContext();
     Reference< XInteractionHandler > xInteractionHandler = Reference< XInteractionHandler > (
-        ::comphelper::getProcessServiceFactory()->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.uui.InteractionHandler") ) ), UNO_QUERY );
+               InteractionHandler::createDefault(xContext), UNO_QUERY_THROW );
     Reference < XCommandEnvironment > xCmdEnv = new ::ucbhelper::CommandEnvironment( xInteractionHandler, Reference< XProgressHandler >() );
 
     mpImp = new SvtFileView_Impl( this, xCmdEnv, nFlags, bOnlyFolder );
@@ -1177,8 +1178,9 @@ SvtFileView::SvtFileView( Window* pParent, const ResId& rResId, sal_uInt8 nFlags
 
     Control( pParent, rResId )
 {
+    Reference< XComponentContext > xContext = ::comphelper::getProcessComponentContext();
     Reference< XInteractionHandler > xInteractionHandler = Reference< XInteractionHandler > (
-        ::comphelper::getProcessServiceFactory()->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.uui.InteractionHandler") ) ), UNO_QUERY );
+               InteractionHandler::createDefault(xContext), UNO_QUERY_THROW );
     Reference < XCommandEnvironment > xCmdEnv = new ::ucbhelper::CommandEnvironment( xInteractionHandler, Reference< XProgressHandler >() );
 
     mpImp = new SvtFileView_Impl( this, xCmdEnv, nFlags, nFlags & FILEVIEW_ONLYFOLDER );

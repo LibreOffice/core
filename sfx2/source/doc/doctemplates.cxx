@@ -152,7 +152,7 @@ typedef vector< NamePair_Impl* > NameList_Impl;
 typedef vector< GroupData_Impl* > GroupList_Impl;
 
 //=============================================================================
-#include <com/sun/star/task/XInteractionHandler.hpp>
+#include <com/sun/star/task/InteractionHandler.hpp>
 #include <com/sun/star/ucb/XProgressHandler.hpp>
 
 class TplTaskEnvironment : public ::cppu::WeakImplHelper1< ucb::XCommandEnvironment >
@@ -389,12 +389,10 @@ public:
 //-----------------------------------------------------------------------------
 void SfxDocTplService_Impl::init_Impl()
 {
-    uno::Reference< lang::XMultiServiceFactory > xFactory = ::comphelper::getProcessServiceFactory();
-    if ( xFactory.is() )
-    {
-        uno::Reference < task::XInteractionHandler > xInteractionHandler( xFactory->createInstance( DEFINE_CONST_UNICODE("com.sun.star.task.InteractionHandler") ), uno::UNO_QUERY );
-        maCmdEnv = new TplTaskEnvironment( xInteractionHandler );
-    }
+    uno::Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+    uno::Reference < task::XInteractionHandler > xInteractionHandler(
+           task::InteractionHandler::createDefault(xContext), uno::UNO_QUERY_THROW );
+    maCmdEnv = new TplTaskEnvironment( xInteractionHandler );
 
     ::osl::ClearableMutexGuard aGuard( maMutex );
     sal_Bool bIsInitialized = sal_False;

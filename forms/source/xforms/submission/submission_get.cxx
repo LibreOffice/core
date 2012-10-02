@@ -39,6 +39,7 @@
 #include <comphelper/processfactory.hxx>
 #include <ucbhelper/content.hxx>
 #include <com/sun/star/io/Pipe.hpp>
+#include <com/sun/star/task/InteractionHandler.hpp>
 
 using namespace CSS::uno;
 using namespace CSS::ucb;
@@ -72,9 +73,8 @@ CSubmission::SubmissionResult CSubmissionGet::submit(const CSS::uno::Reference< 
     if( aInteractionHandler.is() )
         pHelper->m_aInteractionHandler = aInteractionHandler;
     else
-        pHelper->m_aInteractionHandler = CSS::uno::Reference< XInteractionHandler >(m_aFactory->createInstance(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.task.InteractionHandler"))), UNO_QUERY);
-    OSL_ENSURE(pHelper->m_aInteractionHandler.is(), "failed to create IntreractionHandler");
+        pHelper->m_aInteractionHandler = CSS::uno::Reference< XInteractionHandler >(
+            CSS::task::InteractionHandler::createDefault(m_xContext), UNO_QUERY_THROW);
     CProgressHandlerHelper *pProgressHelper = new CProgressHandlerHelper;
     pHelper->m_aProgressHandler = CSS::uno::Reference< XProgressHandler >(pProgressHelper);
 
@@ -98,8 +98,8 @@ CSubmission::SubmissionResult CSubmissionGet::submit(const CSS::uno::Reference< 
             aUTF8QueryURL.append(aQueryString.makeStringAndClear());
         }
         OUString aQueryURL = OStringToOUString(aUTF8QueryURL.makeStringAndClear(), RTL_TEXTENCODING_UTF8);
-        ucbhelper::Content aContent(aQueryURL, aEnvironment, comphelper::getComponentContext(m_aFactory));
-        CSS::uno::Reference< XOutputStream > aPipe( CSS::io::Pipe::create(comphelper::getComponentContext(m_aFactory)), UNO_QUERY_THROW );
+        ucbhelper::Content aContent(aQueryURL, aEnvironment, m_xContext);
+        CSS::uno::Reference< XOutputStream > aPipe( CSS::io::Pipe::create(m_xContext), UNO_QUERY_THROW );
         aContent.openStream(aPipe);
         // get reply
         try {

@@ -24,11 +24,12 @@
 #include <com/sun/star/sdbc/XWarningsSupplier.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/sdb/XCompletedConnection.hpp>
-#include <com/sun/star/task/XInteractionHandler.hpp>
+#include <com/sun/star/task/InteractionHandler.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/sdb/SQLContext.hpp>
 #include <com/sun/star/sdbc/SQLWarning.hpp>
 #include <osl/thread.h>
+#include <comphelper/processfactory.hxx>
 #include <comphelper/extract.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <connectivity/dbexception.hxx>
@@ -138,15 +139,10 @@ namespace dbaui
                 if ( !xHandler.is() )
                 {
                     // instantiate the default SDB interaction handler
-                    xHandler = Reference< XInteractionHandler >( m_xORB->createInstance( SERVICE_TASK_INTERACTION_HANDLER ), UNO_QUERY );
-                    if ( !xHandler.is() )
-                        ShowServiceNotAvailableError(m_pErrorMessageParent, (::rtl::OUString)SERVICE_TASK_INTERACTION_HANDLER, sal_True);
+                    xHandler = Reference< XInteractionHandler >( InteractionHandler::createDefault(comphelper::getComponentContext(m_xORB)), UNO_QUERY_THROW );
                 }
 
-                if ( xHandler.is() )
-                {
-                    xConnection = xConnectionCompletion->connectWithCompletion(xHandler);
-                }
+                xConnection = xConnectionCompletion->connectWithCompletion(xHandler);
             }
             else
             {

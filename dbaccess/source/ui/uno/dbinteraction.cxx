@@ -25,6 +25,7 @@
 #include <vcl/msgbox.hxx>
 #include <connectivity/dbexception.hxx>
 #include "sqlmessage.hxx"
+#include <com/sun/star/task/InteractionHandler.hpp>
 #include <com/sun/star/task/XInteractionApprove.hpp>
 #include <com/sun/star/task/XInteractionDisapprove.hpp>
 #include <com/sun/star/task/XInteractionRetry.hpp>
@@ -38,6 +39,7 @@
 #include <osl/mutex.hxx>
 #include "CollectionView.hxx"
 #include "UITools.hxx"
+#include <comphelper/processfactory.hxx>
 
 
 //==========================================================================
@@ -304,7 +306,7 @@ namespace dbaui
     {
         Reference< XInteractionHandler > xFallbackHandler;
         if ( m_xORB.is() )
-            xFallbackHandler = xFallbackHandler.query( m_xORB->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.task.InteractionHandler" ) ) ) );
+            xFallbackHandler = xFallbackHandler.query( InteractionHandler::createDefault(comphelper::getComponentContext(m_xORB)) );
         if ( xFallbackHandler.is() )
         {
             xFallbackHandler->handle( _rxRequest );

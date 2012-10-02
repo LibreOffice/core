@@ -70,6 +70,7 @@
 #include <com/sun/star/sdbc/XDriverAccess.hpp>
 #include <com/sun/star/document/MacroExecMode.hpp>
 #include <com/sun/star/ucb/IOErrorCode.hpp>
+#include <com/sun/star/task/InteractionHandler.hpp>
 #include <com/sun/star/task/XInteractionHandler2.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 
@@ -734,7 +735,7 @@ namespace
 //-------------------------------------------------------------------------
 sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
 {
-    Reference< XInteractionHandler2 > xHandler( getORB()->createInstance( SERVICE_TASK_INTERACTION_HANDLER ), UNO_QUERY );
+    Reference< XInteractionHandler2 > xHandler( InteractionHandler::createDefault(comphelper::getComponentContext(getORB())), UNO_QUERY_THROW );
     try
     {
         if (callSaveAsDialog() == sal_True)
@@ -993,9 +994,7 @@ sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
                 m_xDesktop.set( _rxORB->createInstance( SERVICE_FRAME_DESKTOP ), UNO_QUERY_THROW );
                 m_xFrameLoader.set( m_xDesktop, UNO_QUERY_THROW );
                 m_xInteractionHandler.set(
-                    _rxORB->createInstance(
-                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.task.InteractionHandler" ) )
-                    ),
+                    InteractionHandler::createDefault(comphelper::getComponentContext(_rxORB)),
                     UNO_QUERY_THROW );
             }
             catch( const Exception& )

@@ -45,6 +45,7 @@
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #include <com/sun/star/sdbcx/XViewsSupplier.hpp>
 #include <com/sun/star/sdbc/XResultSetMetaDataSupplier.hpp>
+#include <com/sun/star/task/InteractionHandler.hpp>
 
 #include <comphelper/extract.hxx>
 #include <comphelper/processfactory.hxx>
@@ -683,7 +684,7 @@ OCopyTableWizard::OCopyTableWizard( Window* pParent, const ::rtl::OUString& _rDe
     ::dbaui::fillTypeInfo( _xConnection, m_sTypeNames, m_aTypeInfo, m_aTypeInfoIndex );
     ::dbaui::fillTypeInfo( _xConnection, m_sTypeNames, m_aDestTypeInfo, m_aDestTypeInfoIndex );
 
-    m_xInteractionHandler.set( m_xFactory->createInstance( SERVICE_TASK_INTERACTION_HANDLER ), UNO_QUERY);
+    m_xInteractionHandler.set( InteractionHandler::createDefault(comphelper::getComponentContext(m_xFactory)), UNO_QUERY_THROW );
 
     OCopyTable* pPage1( new OCopyTable( this ) );
     pPage1->disallowViews();

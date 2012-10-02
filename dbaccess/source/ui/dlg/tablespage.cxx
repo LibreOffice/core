@@ -48,6 +48,7 @@
 #include <svtools/imgdef.hxx>
 #include "TablesSingleDlg.hxx"
 #include <tools/diagnose_ex.h>
+#include <comphelper/processfactory.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include "AutoControls.hrc"
 
@@ -310,7 +311,7 @@ DBG_NAME(OTableSubscriptionPage)
 
                     xProp->setPropertyValue( PROPERTY_TABLETYPEFILTER, makeAny( Sequence< ::rtl::OUString >() ) );
                     Reference< ::com::sun::star::lang::XEventListener> xEvt;
-                    aErrorInfo = ::dbaui::createConnection(xProp,m_xORB,xEvt,m_xCurrentConnection);
+                    aErrorInfo = ::dbaui::createConnection(xProp,comphelper::getComponentContext(m_xORB),xEvt,m_xCurrentConnection);
 
                     xProp->setPropertyValue(PROPERTY_TABLEFILTER,aTableFilter);
                     xProp->setPropertyValue(PROPERTY_TABLETYPEFILTER,aTableTypeFilter);

@@ -20,16 +20,14 @@
 #ifndef UUI_INTERACTIONHANDLER_HXX
 #define UUI_INTERACTIONHANDLER_HXX
 
-#include "com/sun/star/lang/XInitialization.hpp"
 #include "com/sun/star/lang/XServiceInfo.hpp"
 #include "com/sun/star/task/XInteractionHandler2.hpp"
-#include "cppuhelper/implbase3.hxx"
+#include "cppuhelper/implbase2.hxx"
 
 class UUIInteractionHelper;
 
 class UUIInteractionHandler:
-    public cppu::WeakImplHelper3< com::sun::star::lang::XServiceInfo,
-                                  com::sun::star::lang::XInitialization,
+    public cppu::WeakImplHelper2< com::sun::star::lang::XServiceInfo,
                                   com::sun::star::task::XInteractionHandler2 >
 {
 public:

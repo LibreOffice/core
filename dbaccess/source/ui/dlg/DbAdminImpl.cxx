@@ -45,7 +45,7 @@
 #include <com/sun/star/sdb/SQLContext.hpp>
 #include <com/sun/star/sdbc/XDriver.hpp>
 #include <com/sun/star/sdbc/XDriverAccess.hpp>
-#include <com/sun/star/task/XInteractionHandler.hpp>
+#include <com/sun/star/task/InteractionHandler.hpp>
 #include <com/sun/star/task/XInteractionRequest.hpp>
 #include <com/sun/star/ucb/XInteractionSupplyAuthentication2.hpp>
 #include <com/sun/star/ucb/AuthenticationRequest.hpp>
@@ -255,9 +255,7 @@ sal_Bool ODbDataSourceAdministrationHelper::getCurrentSettings(Sequence< Propert
             if ( !xHandler.is() )
             {
                 // instantiate the default SDB interaction handler
-                xHandler = Reference< XInteractionHandler >( m_xORB->createInstance( SERVICE_TASK_INTERACTION_HANDLER ), UNO_QUERY );
-                if ( !xHandler.is() )
-                    ShowServiceNotAvailableError(m_pParent->GetParent(), String(SERVICE_TASK_INTERACTION_HANDLER), sal_True);
+                xHandler = Reference< XInteractionHandler >( task::InteractionHandler::createDefault(comphelper::getComponentContext(m_xORB)), UNO_QUERY_THROW );
             }
 
             String sName = pName ? pName->GetValue() : String();

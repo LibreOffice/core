@@ -23,7 +23,7 @@
 #include <osl/mutex.hxx>
 #include <svtools/imagemgr.hxx>
 #include <svtools/miscopt.hxx>
-#include <com/sun/star/task/XInteractionHandler.hpp>
+#include <com/sun/star/task/InteractionHandler.hpp>
 #include <com/sun/star/frame/XDispatchResultListener.hpp>
 #include <com/sun/star/frame/XNotifyingDispatch.hpp>
 #include <com/sun/star/frame/XFramesSupplier.hpp>
@@ -439,8 +439,8 @@ IMPL_STATIC_LINK( ShutdownIcon, DialogClosedHdl_Impl, FileDialogHelper*, EMPTYAR
                 Sequence< PropertyValue >   aArgs(3);
 
                 Reference < com::sun::star::task::XInteractionHandler > xInteraction(
-                    ::comphelper::getProcessServiceFactory()->createInstance( OUString("com.sun.star.task.InteractionHandler") ),
-                    com::sun::star::uno::UNO_QUERY );
+                    task::InteractionHandler::createDefault(::comphelper::getProcessComponentContext()),
+                    com::sun::star::uno::UNO_QUERY_THROW );
 
                 aArgs[0].Name = OUString("InteractionHandler");
                 aArgs[0].Value <<= xInteraction;

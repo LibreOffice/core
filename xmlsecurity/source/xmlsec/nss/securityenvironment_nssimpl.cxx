@@ -46,7 +46,7 @@
 #include <comphelper/docpasswordrequest.hxx>
 #include <xmlsecurity/biginteger.hxx>
 #include <rtl/logfile.h>
-#include <com/sun/star/task/XInteractionHandler.hpp>
+#include <com/sun/star/task/InteractionHandler.hpp>
 #include <vector>
 #include "boost/scoped_array.hpp"
 #include <osl/thread.h>
@@ -104,33 +104,27 @@ struct UsageDescription
 
 char* GetPasswordFunction( PK11SlotInfo* pSlot, PRBool bRetry, void* /*arg*/ )
 {
-    uno::Reference< lang::XMultiServiceFactory > xMSF( ::comphelper::getProcessServiceFactory() );
-    if ( xMSF.is() )
+    uno::Reference< uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
+    uno::Reference < task::XInteractionHandler2 > xInteractionHandler(
+        task::InteractionHandler::createDefault(xContext) );
+
+    task::PasswordRequestMode eMode = bRetry ? task::PasswordRequestMode_PASSWORD_REENTER : task::PasswordRequestMode_PASSWORD_ENTER;
+    ::comphelper::DocPasswordRequest* pPasswordRequest = new ::comphelper::DocPasswordRequest(
+        ::comphelper::DocPasswordRequestType_STANDARD, eMode, ::rtl::OUString::createFromAscii(PK11_GetTokenName(pSlot)) );
+
+    uno::Reference< task::XInteractionRequest > xRequest( pPasswordRequest );
+    xInteractionHandler->handle( xRequest );
+
+    if ( pPasswordRequest->isPassword() )
     {
-        uno::Reference < task::XInteractionHandler > xInteractionHandler(
-            xMSF->createInstance( rtl::OUString("com.sun.star.task.InteractionHandler") ), uno::UNO_QUERY );
-
-        if ( xInteractionHandler.is() )
-        {
-            task::PasswordRequestMode eMode = bRetry ? task::PasswordRequestMode_PASSWORD_REENTER : task::PasswordRequestMode_PASSWORD_ENTER;
-            ::comphelper::DocPasswordRequest* pPasswordRequest = new ::comphelper::DocPasswordRequest(
-                ::comphelper::DocPasswordRequestType_STANDARD, eMode, ::rtl::OUString::createFromAscii(PK11_GetTokenName(pSlot)) );
-
-            uno::Reference< task::XInteractionRequest > xRequest( pPasswordRequest );
-            xInteractionHandler->handle( xRequest );
-
-            if ( pPasswordRequest->isPassword() )
-            {
-                rtl::OString aPassword(rtl::OUStringToOString(
-                    pPasswordRequest->getPassword(),
-                    osl_getThreadTextEncoding()));
-                sal_Int32 nLen = aPassword.getLength();
-                char* pPassword = (char*) PORT_Alloc( nLen+1 ) ;
-                pPassword[nLen] = 0;
-                memcpy( pPassword, aPassword.getStr(), nLen );
-                return pPassword;
-            }
-        }
+        rtl::OString aPassword(rtl::OUStringToOString(
+            pPasswordRequest->getPassword(),
+            osl_getThreadTextEncoding()));
+        sal_Int32 nLen = aPassword.getLength();
+        char* pPassword = (char*) PORT_Alloc( nLen+1 ) ;
+        pPassword[nLen] = 0;
+        memcpy( pPassword, aPassword.getStr(), nLen );
+        return pPassword;
     }
     return NULL;
 }

@@ -44,6 +44,7 @@
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/text/MailMergeEvent.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
+#include <com/sun/star/task/InteractionHandler.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/ui/dialogs/XFilePicker.hpp>
 #include <com/sun/star/ui/dialogs/XFilterManager.hpp>
@@ -101,6 +102,7 @@
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/sdbc/ResultSetType.hpp>
 #include <com/sun/star/mail/MailAttachment.hpp>
+#include <comphelper/componentcontext.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/property.hxx>
 #include <comphelper/string.hxx>
@@ -1571,7 +1573,6 @@ uno::Reference< sdbc::XConnection> SwNewDBMgr::GetConnection(const String& rData
                                                     uno::Reference<XDataSource>& rxSource)
 {
     Reference< sdbc::XConnection> xConnection;
-    Reference< XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
     Reference< XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
     try
     {
@@ -1579,9 +1580,8 @@ uno::Reference< sdbc::XConnection> SwNewDBMgr::GetConnection(const String& rData
         if ( xComplConnection.is() )
         {
             rxSource.set(xComplConnection,UNO_QUERY);
-            Reference< XInteractionHandler > xHandler(
-                    xMgr->createInstance( C2U( "com.sun.star.task.InteractionHandler" )), UNO_QUERY);
-                xConnection = xComplConnection->connectWithCompletion( xHandler );
+            Reference< XInteractionHandler > xHandler( InteractionHandler::createDefault(xContext), UNO_QUERY_THROW );
+            xConnection = xComplConnection->connectWithCompletion( xHandler );
         }
     }
     catch(const Exception&)
@@ -2661,7 +2661,7 @@ uno::Reference<XResultSet> SwNewDBMgr::createCursor(const ::rtl::OUString& _sDat
 
                 if ( xRowSet.is() )
                 {
-                    uno::Reference< XInteractionHandler > xHandler(xMgr->createInstance(C2U("com.sun.star.task.InteractionHandler")), UNO_QUERY);
+                    uno::Reference< XInteractionHandler > xHandler( InteractionHandler::createDefault(comphelper::getComponentContext(xMgr)), UNO_QUERY_THROW );
                     xRowSet->executeWithCompletion(xHandler);
                 }
                 xResultSet = uno::Reference<XResultSet>(xRowSet, UNO_QUERY);
