@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAPH////Y\u003d",
+        "filename": "rhino/ExternalProject_rhino.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2012-10-02T21:43:14Z",
+      "side": 1,
+      "message": "please stop copying that -Dfile.encoding\u003dISO-8859-1 around, it\u0027s not in the makefile.mk",
+      "revId": "181e09144ac720ac27e2fa612ee71e3084aba542",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAPH////c\u003d",
+        "filename": "rhino/UnpackedTarball_rhino.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2012-10-02T21:43:14Z",
+      "side": 1,
+      "message": "extracting that file from the patch is a nice idea",
+      "revId": "181e09144ac720ac27e2fa612ee71e3084aba542",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
