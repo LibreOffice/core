@@ -1,30 +1,21 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*************************************************************************
+/*
+ * This file is part of the LibreOffice project.
  *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * This file incorporates work covered by the following license notice:
  *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
 
 #include <string.h>
 
@@ -192,42 +183,9 @@ sal_Int32 VCLXFont::getStringWidthArray( const ::rtl::OUString& str, ::com::sun:
     return nRet;
 }
 
-void VCLXFont::getKernPairs( ::com::sun::star::uno::Sequence< sal_Unicode >& rnChars1, ::com::sun::star::uno::Sequence< sal_Unicode >& rnChars2, ::com::sun::star::uno::Sequence< sal_Int16 >& rnKerns ) throw(::com::sun::star::uno::RuntimeException)
+void VCLXFont::getKernPairs( ::com::sun::star::uno::Sequence< sal_Unicode >& /*rnChars1*/, ::com::sun::star::uno::Sequence< sal_Unicode >& /*rnChars2*/, ::com::sun::star::uno::Sequence< sal_Int16 >& /*rnKerns*/ ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
-
-    OutputDevice* pOutDev = VCLUnoHelper::GetOutputDevice( mxDevice );
-    if( pOutDev )
-    {
-        Font aOldFont = pOutDev->GetFont();
-        pOutDev->SetFont( maFont );
-
-        sal_uLong nPairs = pOutDev->GetKerningPairCount();
-        if ( nPairs )
-        {
-            KerningPair* pData = new KerningPair[ nPairs ];
-            pOutDev->GetKerningPairs( nPairs, pData );
-
-            rnChars1 = ::com::sun::star::uno::Sequence<sal_Unicode>( nPairs );
-            rnChars2 = ::com::sun::star::uno::Sequence<sal_Unicode>( nPairs );
-            rnKerns = ::com::sun::star::uno::Sequence<sal_Int16>( nPairs );
-
-            sal_Unicode* pChars1 = rnChars1.getArray();
-            sal_Unicode* pChars2 = rnChars2.getArray();
-            sal_Int16* pKerns = rnKerns.getArray();
-
-            for ( sal_uLong n = 0; n < nPairs; n++ )
-            {
-                pChars1[n] = pData[n].nChar1;
-                pChars2[n] = pData[n].nChar2;
-                pKerns[n] = sal::static_int_cast< sal_Int16 >(pData[n].nKern);
-            }
-
-
-            delete[] pData;
-        }
-        pOutDev->SetFont( aOldFont );
-    }
+    // NOTE: this empty method is just used for keeping the related UNO-API stable
 }
 
 // ::com::sun::star::awt::XFont2
