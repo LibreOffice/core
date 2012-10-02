@@ -87,8 +87,6 @@ typedef struct tagAFID_CACHE
 #define AFID_MAX_FILE_FORMAT_SIZE                   80
 #define AFID_MAX_CONTEXT_FORMAT_SIZE                80
 
-// OLE defined maximum
-#define MAX_STREAMORSTORAGENAME     32
 /**
  * @descr
  * super class of LwpOleObject and LwpGraphicObject

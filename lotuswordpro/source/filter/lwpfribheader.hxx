@@ -68,10 +68,7 @@
 #define FRIB_MTAG_CHARSTYLE     3
 #define FRIB_MTAG_ATTRIBUTE     4
 #define FRIB_MTAG_LANGUAGE      5
-#define FRIB_MTAG_CHARBORDER    6
-#define FRIB_MTAG_AMIKAKE       7
 #define FRIB_MTAG_CODEPAGE      8
-#define FRIB_MTAG_STXLINK       9       // SmarText; do not #ifdef out
 
 #define FT_MAXIMUM      30
 

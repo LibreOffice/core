@@ -85,9 +85,7 @@
 #include <osl/thread.h>
 
 #define EF_NONE 0x0000
-#define EF_FTP 0x0001
 #define EF_ODMA 0x0002
-#define EF_NOS 0x0003
 
 LwpGraphicObject::LwpGraphicObject(LwpObjectHeader &objHdr, LwpSvStream* pStrm)
     : LwpGraphicOleObject(objHdr, pStrm)
@@ -119,7 +117,6 @@ void LwpGraphicObject::Read()
     {
         pServerContext = new unsigned char[nServerContextSize];
         m_pObjStrm->QuickRead(pServerContext, static_cast<sal_uInt16>(nServerContextSize));
-        // add by , 04/05/2005
         if (nServerContextSize > 44)
         {
             m_aIPData.nBrightness = pServerContext[14];
@@ -129,7 +126,6 @@ void LwpGraphicObject::Read()
             m_aIPData.bInvertImage = (sal_Bool)(pServerContext[34] == 0x01);
             m_aIPData.bAutoContrast = (sal_Bool)(pServerContext[44] == 0x00);
         }
-        // end add
     }
     m_pObjStrm->QuickReaduInt16(); //disksize
     strsize = m_pObjStrm->QuickReaduInt16();
@@ -149,7 +145,6 @@ void LwpGraphicObject::Read()
     }
     m_nCachedBaseLine = m_pObjStrm->QuickReadInt32();
     m_bIsLinked = m_pObjStrm->QuickReadInt16();
-    //OUString pLinkedFilePath;
     unsigned char * pFilterContext = NULL;
 
     if (m_bIsLinked)
@@ -202,15 +197,11 @@ void LwpGraphicObject::XFConvert (XFContentContainer* pCont)
 {
     if ((m_sServerContextFormat[1]=='s'&&m_sServerContextFormat[2]=='d'&&m_sServerContextFormat[3]=='w'))
     {
-        //XFParagraph* pPara = new XFParagraph();
         std::vector <XFFrame*>::iterator iter;
         for (iter = m_vXFDrawObjects.begin(); iter != m_vXFDrawObjects.end(); ++iter)
         {
             pCont->Add(*iter);
         }
-
-        //pCont->Add(pPara);
-
     }
     else if (this->IsGrafFormatValid())
     {
@@ -299,7 +290,6 @@ void LwpGraphicObject::RegisterStyle()
 
 }
 
-// add by , 03/25/2005
 /**
  * @descr   create drawing object.
  */
@@ -443,7 +433,6 @@ sal_uInt32 LwpGraphicObject::GetGrafData(sal_uInt8*& pGrafData)
     return 0;
 }
 
-
 /**
  * @descr   create xf-image object and save it in the container: m_vXFDrawObjects.
  */
@@ -462,8 +451,6 @@ void LwpGraphicObject::CreateGrafObject()
         }
         if (m_aIPData.nContrast != 50)
         {
-            //sal_Int32 nSODCContrast = (sal_Int32)m_aIPData.nContrast*2 - 100;
-            //lwp [0, 100] map to sodc [80, -80]
             sal_Int32 nSODCContrast = (sal_Int32)(80 - (double)m_aIPData.nContrast*1.6);
             pImageStyle->SetContrast(nSODCContrast);
         }
@@ -499,8 +486,8 @@ void LwpGraphicObject::CreateGrafObject()
             double fDisFrameHeight = fFrameHeight - (fTopMargin+fBottomMargin);
 
             // scaled image size
-            double fSclGrafWidth = fOrgGrafWidth;//LwpTools::ConvertFromUnitsToMetric(pMyScale->GetScaleWidth());
-            double fSclGrafHeight = fOrgGrafHeight;//LwpTools::ConvertFromUnitsToMetric(pMyScale->GetScaleHeight());
+            double fSclGrafWidth = fOrgGrafWidth;
+            double fSclGrafHeight = fOrgGrafHeight;
 
             // get scale mode
             sal_uInt16 nScalemode = pMyScale->GetScaleMode();
@@ -664,7 +651,6 @@ void LwpGraphicObject::CreateGrafObject()
 
     // set archor to frame
     pImage->SetAnchorType(enumXFAnchorFrame);
-//      pImage->SetAnchorType(enumXFAnchorPara);//enumXFAnchorFrame);
 
     // set object name
     LwpAtomHolder* pHolder = this->GetName();
@@ -677,7 +663,6 @@ void LwpGraphicObject::CreateGrafObject()
     m_vXFDrawObjects.push_back(pImage);
 
 }
-// end add
 
 /**
  * @descr   Reserve the equation text in a note in the context.
