@@ -598,7 +598,7 @@ private:
 
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(sal_Char const * pImplName,
+extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL javavm_component_getFactory(sal_Char const * pImplName,
                                                 void * pServiceManager,
                                                 void * pRegistryKey)
 {
