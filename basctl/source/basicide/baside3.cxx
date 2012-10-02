@@ -77,7 +77,7 @@ TYPEINIT1( DialogWindow, BaseWindow );
 DialogWindow::DialogWindow (
     DialogWindowLayout* pParent,
     ScriptDocument const& rDocument,
-    rtl::OUString aLibName, rtl::OUString aName,
+    OUString aLibName, OUString aName,
     com::sun::star::uno::Reference<com::sun::star::container::XNameContainer> const& xDialogModel
 ) :
     BaseWindow(pParent, rDocument, aLibName, aName),
@@ -256,7 +256,7 @@ void DialogWindow::GetState( SfxItemSet& rSet )
         if ( xModel.is() )
         {
             Reference< lang::XServiceInfo > xServiceInfo ( xModel, UNO_QUERY );
-            if ( xServiceInfo.is() && xServiceInfo->supportsService( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sheet.SpreadsheetDocument") ) ) )
+            if ( xServiceInfo.is() && xServiceInfo->supportsService( "com.sun.star.sheet.SpreadsheetDocument" ) )
                 bIsCalc = true;
         }
     }
@@ -662,7 +662,7 @@ Reference< container::XNameContainer > DialogWindow::GetDialog() const
     return pEditor->GetDialog();
 }
 
-bool DialogWindow::RenameDialog( const ::rtl::OUString& rNewName )
+bool DialogWindow::RenameDialog( const OUString& rNewName )
 {
     if ( !basctl::RenameDialog( this, GetDocument(), GetLibName(), GetName(), rNewName ) )
         return false;
@@ -683,7 +683,7 @@ void DialogWindow::UpdateBrowser()
     rLayout.UpdatePropertyBrowser();
 }
 
-static ::rtl::OUString aResourceResolverPropName( RTL_CONSTASCII_USTRINGPARAM( "ResourceResolver" ));
+static OUString aResourceResolverPropName( "ResourceResolver" );
 
 bool DialogWindow::SaveDialog()
 {
@@ -697,7 +697,7 @@ bool DialogWindow::SaveDialog()
         Sequence <Any> aServiceType(1);
         aServiceType[0] <<= TemplateDescription::FILESAVE_AUTOEXTENSION_PASSWORD;
         xFP = Reference< XFilePicker >( xMSF->createInstanceWithArguments(
-                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.dialogs.FilePicker" ) ), aServiceType ), UNO_QUERY );
+            "com.sun.star.ui.dialogs.FilePicker", aServiceType ), UNO_QUERY );
     }
 
     Reference< XFilePickerControlAccess > xFPControl(xFP, UNO_QUERY);
@@ -709,17 +709,17 @@ bool DialogWindow::SaveDialog()
     if ( !aCurPath.isEmpty() )
         xFP->setDisplayDirectory ( aCurPath );
 
-    xFP->setDefaultName( ::rtl::OUString( GetName() ) );
+    xFP->setDefaultName( OUString( GetName() ) );
 
-    ::rtl::OUString aDialogStr(IDE_RESSTR(RID_STR_STDDIALOGNAME));
+    OUString aDialogStr(IDE_RESSTR(RID_STR_STDDIALOGNAME));
     Reference< XFilterManager > xFltMgr(xFP, UNO_QUERY);
-    xFltMgr->appendFilter( aDialogStr, String( RTL_CONSTASCII_USTRINGPARAM( "*.xdl" ) ) );
-    xFltMgr->appendFilter( IDE_RESSTR(RID_STR_FILTER_ALLFILES), String( RTL_CONSTASCII_USTRINGPARAM( FilterMask_All ) ) );
+    xFltMgr->appendFilter( aDialogStr, String( "*.xdl" ) );
+    xFltMgr->appendFilter( IDE_RESSTR(RID_STR_FILTER_ALLFILES), String( FilterMask_All ) );
     xFltMgr->setCurrentFilter( aDialogStr );
 
     if( xFP->execute() == RET_OK )
     {
-        Sequence< ::rtl::OUString > aPaths = xFP->getFiles();
+        Sequence< OUString > aPaths = xFP->getFiles();
         aCurPath = aPaths[0];
 
         // export dialog model to xml
@@ -782,29 +782,29 @@ bool DialogWindow::SaveDialog()
             {
                 INetURLObject aURLObj( aCurPath );
                 aURLObj.removeExtension();
-                ::rtl::OUString aDialogName( aURLObj.getName() );
+                OUString aDialogName( aURLObj.getName() );
                 aURLObj.removeSegment();
-                ::rtl::OUString aURL( aURLObj.GetMainURL( INetURLObject::NO_DECODE ) );
+                OUString aURL( aURLObj.GetMainURL( INetURLObject::NO_DECODE ) );
                 bool bReadOnly = false;
-                ::rtl::OUString aComment( RTL_CONSTASCII_USTRINGPARAM( "# " ));
+                OUString aComment( "# " );
                 aComment += aDialogName;
-                aComment += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( " strings" ));
+                aComment += " strings" ;
                 Reference< task::XInteractionHandler > xDummyHandler;
 
                 // Remove old properties files in case of overwriting Dialog files
                 if( xSFI->isFolder( aURL ) )
                 {
-                    Sequence< ::rtl::OUString > aContentSeq = xSFI->getFolderContents( aURL, false );
+                    Sequence< OUString > aContentSeq = xSFI->getFolderContents( aURL, false );
 
-                    ::rtl::OUString aDialogName_( aDialogName );
-                    aDialogName_ += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "_" ));
+                    OUString aDialogName_( aDialogName );
+                    aDialogName_ += "_" ;
                     sal_Int32 nCount = aContentSeq.getLength();
-                    const ::rtl::OUString* pFiles = aContentSeq.getConstArray();
+                    const OUString* pFiles = aContentSeq.getConstArray();
                     for( int i = 0 ; i < nCount ; i++ )
                     {
-                        ::rtl::OUString aCompleteName = pFiles[i];
-                        rtl::OUString aPureName;
-                        rtl::OUString aExtension;
+                        OUString aCompleteName = pFiles[i];
+                        OUString aPureName;
+                        OUString aExtension;
                         sal_Int32 iDot = aCompleteName.lastIndexOf( '.' );
                         sal_Int32 iSlash = aCompleteName.lastIndexOf( '/' );
                         if( iDot != -1 )
@@ -946,7 +946,7 @@ LanguageMismatchQueryBox::LanguageMismatchQueryBox( Window* pParent,
 }
 
 
-bool implImportDialog( Window* pWin, const ::rtl::OUString& rCurPath, const ScriptDocument& rDocument, const ::rtl::OUString& aLibName )
+bool implImportDialog( Window* pWin, const OUString& rCurPath, const ScriptDocument& rDocument, const OUString& aLibName )
 {
     bool bDone = false;
 
@@ -957,7 +957,7 @@ bool implImportDialog( Window* pWin, const ::rtl::OUString& rCurPath, const Scri
         Sequence <Any> aServiceType(1);
         aServiceType[0] <<= TemplateDescription::FILEOPEN_SIMPLE;
         xFP = Reference< XFilePicker >( xMSF->createInstanceWithArguments(
-                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.dialogs.FilePicker" ) ), aServiceType ), UNO_QUERY );
+            "com.sun.star.ui.dialogs.FilePicker", aServiceType ), UNO_QUERY );
     }
 
     Reference< XFilePickerControlAccess > xFPControl(xFP, UNO_QUERY);
@@ -966,23 +966,23 @@ bool implImportDialog( Window* pWin, const ::rtl::OUString& rCurPath, const Scri
     aValue <<= sal_True;
     xFPControl->setValue(ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION, 0, aValue);
 
-    ::rtl::OUString aCurPath( rCurPath );
+    OUString aCurPath( rCurPath );
     if ( !aCurPath.isEmpty() )
         xFP->setDisplayDirectory ( aCurPath );
 
-    ::rtl::OUString aDialogStr(IDE_RESSTR(RID_STR_STDDIALOGNAME));
+    OUString aDialogStr(IDE_RESSTR(RID_STR_STDDIALOGNAME));
     Reference< XFilterManager > xFltMgr(xFP, UNO_QUERY);
-    xFltMgr->appendFilter( aDialogStr, String( RTL_CONSTASCII_USTRINGPARAM( "*.xdl" ) ) );
-    xFltMgr->appendFilter( IDE_RESSTR(RID_STR_FILTER_ALLFILES), String( RTL_CONSTASCII_USTRINGPARAM( FilterMask_All ) ) );
+    xFltMgr->appendFilter( aDialogStr, String( "*.xdl" ) );
+    xFltMgr->appendFilter( IDE_RESSTR(RID_STR_FILTER_ALLFILES), String( FilterMask_All ) );
     xFltMgr->setCurrentFilter( aDialogStr );
 
     if( xFP->execute() == RET_OK )
     {
-        Sequence< ::rtl::OUString > aPaths = xFP->getFiles();
+        Sequence< OUString > aPaths = xFP->getFiles();
         aCurPath = aPaths[0];
 
-        ::rtl::OUString aBasePath;
-        ::rtl::OUString aOUCurPath( aCurPath );
+        OUString aBasePath;
+        OUString aOUCurPath( aCurPath );
         sal_Int32 iSlash = aOUCurPath.lastIndexOf( '/' );
         if( iSlash != -1 )
             aBasePath = aOUCurPath.copy( 0, iSlash + 1 );
@@ -991,7 +991,7 @@ bool implImportDialog( Window* pWin, const ::rtl::OUString& rCurPath, const Scri
         {
             // create dialog model
             Reference< container::XNameContainer > xDialogModel( xMSF->createInstance
-                ( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControlDialogModel" ) ) ), UNO_QUERY_THROW );
+                ( "com.sun.star.awt.UnoControlDialogModel" ), UNO_QUERY_THROW );
 
             Reference< XSimpleFileAccess2 > xSFI( SimpleFileAccess::create(comphelper::getProcessComponentContext()) );
 
@@ -1003,14 +1003,14 @@ bool implImportDialog( Window* pWin, const ::rtl::OUString& rCurPath, const Scri
                 comphelper::getComponentContext( xMSF ) );
             ::xmlscript::importDialogModel( xInput, xDialogModel, xContext, rDocument.isDocument() ? rDocument.getDocument() : Reference< frame::XModel >() );
 
-            ::rtl::OUString aXmlDlgName;
+            OUString aXmlDlgName;
             Reference< beans::XPropertySet > xDialogModelPropSet( xDialogModel, UNO_QUERY );
             if( xDialogModelPropSet.is() )
             {
                 try
                 {
                     Any aXmlDialogNameAny = xDialogModelPropSet->getPropertyValue( DLGED_PROP_NAME );
-                    ::rtl::OUString aOUXmlDialogName;
+                    OUString aOUXmlDialogName;
                     aXmlDialogNameAny >>= aOUXmlDialogName;
                     aXmlDlgName = aOUXmlDialogName;
                 }
@@ -1024,7 +1024,7 @@ bool implImportDialog( Window* pWin, const ::rtl::OUString& rCurPath, const Scri
 
             bool bDialogAlreadyExists = rDocument.hasDialog( aLibName, aXmlDlgName );
 
-            ::rtl::OUString aNewDlgName = aXmlDlgName;
+            OUString aNewDlgName = aXmlDlgName;
             enum NameClashMode
             {
                 NO_CLASH,
@@ -1034,8 +1034,8 @@ bool implImportDialog( Window* pWin, const ::rtl::OUString& rCurPath, const Scri
             NameClashMode eNameClashMode = NO_CLASH;
             if( bDialogAlreadyExists )
             {
-                ::rtl::OUString aQueryBoxTitle(IDE_RESSTR(RID_STR_DLGIMP_CLASH_TITLE));
-                ::rtl::OUString aQueryBoxText(IDE_RESSTR(RID_STR_DLGIMP_CLASH_TEXT));
+                OUString aQueryBoxTitle(IDE_RESSTR(RID_STR_DLGIMP_CLASH_TITLE));
+                OUString aQueryBoxText(IDE_RESSTR(RID_STR_DLGIMP_CLASH_TEXT));
                 aQueryBoxText = aQueryBoxText.replaceAll("$(ARG1)", aXmlDlgName);
 
                 NameClashQueryBox aQueryBox( pWin, aQueryBoxTitle, aQueryBoxText );
@@ -1071,7 +1071,7 @@ bool implImportDialog( Window* pWin, const ::rtl::OUString& rCurPath, const Scri
             bool bReadOnly = true;
             Reference< XStringResourceWithLocation > xImportStringResource =
                 StringResourceWithLocation::create( xContext, aBasePath, bReadOnly,
-                aLocale, aXmlDlgName, ::rtl::OUString(), xDummyHandler );
+                aLocale, aXmlDlgName, OUString(), xDummyHandler );
 
             Sequence< lang::Locale > aImportLocaleSeq = xImportStringResource->getLocales();
             sal_Int32 nImportLocaleCount = aImportLocaleSeq.getLength();
@@ -1098,8 +1098,8 @@ bool implImportDialog( Window* pWin, const ::rtl::OUString& rCurPath, const Scri
             bool bAddDialogLanguagesToLib = false;
             if( nOnlyInImportLanguageCount > 0 )
             {
-                ::rtl::OUString aQueryBoxTitle(IDE_RESSTR(RID_STR_DLGIMP_MISMATCH_TITLE));
-                ::rtl::OUString aQueryBoxText(IDE_RESSTR(RID_STR_DLGIMP_MISMATCH_TEXT));
+                OUString aQueryBoxTitle(IDE_RESSTR(RID_STR_DLGIMP_MISMATCH_TITLE));
+                OUString aQueryBoxText(IDE_RESSTR(RID_STR_DLGIMP_MISMATCH_TEXT));
                 LanguageMismatchQueryBox aQueryBox( pWin, aQueryBoxTitle, aQueryBoxText );
                 sal_uInt16 nRet = aQueryBox.Execute();
                 if( RET_YES == nRet )
@@ -1207,7 +1207,7 @@ bool implImportDialog( Window* pWin, const ::rtl::OUString& rCurPath, const Scri
                     try
                     {
                         Any aXmlDialogNameAny;
-                        aXmlDialogNameAny <<= ::rtl::OUString( aNewDlgName );
+                        aXmlDialogNameAny <<= OUString( aNewDlgName );
                         xDialogModelPropSet->setPropertyValue( DLGED_PROP_NAME, aXmlDialogNameAny );
                         bRenamed = true;
                     }
@@ -1250,7 +1250,7 @@ bool DialogWindow::ImportDialog()
     DBG_CHKTHIS( DialogWindow, 0 );
 
     const ScriptDocument& rDocument = GetDocument();
-    ::rtl::OUString aLibName = GetLibName();
+    OUString aLibName = GetLibName();
     return implImportDialog( this, aCurPath, rDocument, aLibName );
 }
 
@@ -1279,7 +1279,7 @@ bool DialogWindow::IsModified()
     return pUndoMgr.get();
 }
 
-::rtl::OUString DialogWindow::GetTitle()
+OUString DialogWindow::GetTitle()
 {
     return GetName();
 }
@@ -1287,8 +1287,8 @@ bool DialogWindow::IsModified()
 EntryDescriptor DialogWindow::CreateEntryDescriptor()
 {
     ScriptDocument aDocument( GetDocument() );
-    ::rtl::OUString aLibName( GetLibName() );
-    ::rtl::OUString aLibSubName;
+    OUString aLibName( GetLibName() );
+    OUString aLibSubName;
     LibraryLocation eLocation = aDocument.getLibraryLocation( aLibName );
     return EntryDescriptor( aDocument, eLocation, aLibName, aLibSubName, GetName(), OBJ_TYPE_DIALOG );
 }
@@ -1325,7 +1325,7 @@ void DialogWindow::StoreData()
                     Reference< XComponentContext > xContext(
                         comphelper::getProcessComponentContext() );
                     Reference< XInputStreamProvider > xISP = ::xmlscript::exportDialogModel( xDialogModel, xContext, GetDocument().isDocument() ? GetDocument().getDocument() : Reference< frame::XModel >() );
-                    xLib->replaceByName( ::rtl::OUString( GetName() ), makeAny( xISP ) );
+                    xLib->replaceByName( OUString( GetName() ), makeAny( xISP ) );
                 }
             }
         }

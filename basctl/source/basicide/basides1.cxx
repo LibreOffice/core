@@ -114,8 +114,8 @@ void Shell::ExecuteCurrent( SfxRequest& rReq )
                 else
                     nFound = pCurWin->StartSearchAndReplace(rSearchItem);
 
-                rtl::OUString aReplStr(IDE_RESSTR(RID_STR_SEARCHREPLACES));
-                aReplStr = aReplStr.replaceAll("XX", rtl::OUString::valueOf(nFound));
+                OUString aReplStr(IDE_RESSTR(RID_STR_SEARCHREPLACES));
+                aReplStr = aReplStr.replaceAll("XX", OUString::valueOf(nFound));
                 InfoBox( pCurWin, aReplStr ).Execute();
             }
             else
@@ -272,7 +272,7 @@ void Shell::ExecuteGlobal( SfxRequest& rReq )
         break;
         case SID_BASICIDE_CHOOSEMACRO:
         {
-            ChooseMacro( NULL, false, ::rtl::OUString() );
+            ChooseMacro( NULL, false, OUString() );
         }
         break;
         case SID_BASICIDE_CREATEMACRO:
@@ -286,9 +286,9 @@ void Shell::ExecuteGlobal( SfxRequest& rReq )
             ScriptDocument aDocument( ScriptDocument::getDocumentForBasicManager( pBasMgr ) );
 
             StartListening( *pBasMgr, true /* log on only once */ );
-            ::rtl::OUString aLibName( rInfo.GetLib() );
+            OUString aLibName( rInfo.GetLib() );
             if ( aLibName.isEmpty() )
-                aLibName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Standard"));
+                aLibName = "Standard" ;
             StarBASIC* pBasic = pBasMgr->GetLib( aLibName );
             if ( !pBasic )
             {
@@ -310,9 +310,9 @@ void Shell::ExecuteGlobal( SfxRequest& rReq )
                 {
                     if ( rInfo.GetModule().Len() || !pBasic->GetModules()->Count() )
                     {
-                        ::rtl::OUString aModName = rInfo.GetModule();
+                        OUString aModName = rInfo.GetModule();
 
-                        ::rtl::OUString sModuleCode;
+                        OUString sModuleCode;
                         if ( aDocument.createModule( aLibName, aModName, false, sModuleCode ) )
                             pModule = pBasic->FindModule( aModName );
                     }
@@ -351,14 +351,14 @@ void Shell::ExecuteGlobal( SfxRequest& rReq )
             if ( aWindowTable.find( rTabId.GetValue() ) !=  aWindowTable.end() )
             {
                 BaseWindow* pWin = aWindowTable[ rTabId.GetValue() ];
-                ::rtl::OUString aNewName( rModName.GetValue() );
-                ::rtl::OUString aOldName( pWin->GetName() );
+                OUString aNewName( rModName.GetValue() );
+                OUString aOldName( pWin->GetName() );
                 if ( aNewName != aOldName )
                 {
                     bool bRenameOk = false;
                     if (ModulWindow* pModWin = dynamic_cast<ModulWindow*>(pWin))
                     {
-                        rtl::OUString aLibName = pModWin->GetLibName();
+                        OUString aLibName = pModWin->GetLibName();
                         ScriptDocument aDocument( pWin->GetDocument() );
 
                         if (RenameModule(pModWin, aDocument, aLibName, aOldName, aNewName))
@@ -437,7 +437,7 @@ void Shell::ExecuteGlobal( SfxRequest& rReq )
             uno::Reference< frame::XModel > xModel( rShellItem.GetValue(), UNO_QUERY );
             ScriptDocument aDocument( xModel.is() ? ScriptDocument( xModel ) : ScriptDocument::getApplicationScriptDocument() );
             const SfxStringItem& rLibNameItem = (const SfxStringItem&)rReq.GetArgs()->Get( SID_BASICIDE_ARG_LIBNAME );
-            ::rtl::OUString aLibName( rLibNameItem.GetValue() );
+            OUString aLibName( rLibNameItem.GetValue() );
 
             if ( nSlot == SID_BASICIDE_LIBSELECTED )
             {
@@ -453,7 +453,7 @@ void Shell::ExecuteGlobal( SfxRequest& rReq )
                     Reference< script::XLibraryContainerPassword > xPasswd( xModLibContainer, UNO_QUERY );
                     if ( xPasswd.is() && xPasswd->isLibraryPasswordProtected( aLibName ) && !xPasswd->isLibraryPasswordVerified( aLibName ) )
                     {
-                        ::rtl::OUString aPassword;
+                        OUString aPassword;
                         bOK = QueryPassword( xModLibContainer, aLibName, aPassword );
                     }
                 }
@@ -512,8 +512,8 @@ void Shell::ExecuteGlobal( SfxRequest& rReq )
             DBG_ASSERT( rReq.GetArgs(), "arguments expected" );
             const SbxItem& rSbxItem = (const SbxItem&)rReq.GetArgs()->Get(SID_BASICIDE_ARG_SBX );
             ScriptDocument aDocument( rSbxItem.GetDocument() );
-            ::rtl::OUString aLibName( rSbxItem.GetLibName() );
-            ::rtl::OUString aName( rSbxItem.GetName() );
+            OUString aLibName( rSbxItem.GetLibName() );
+            OUString aName( rSbxItem.GetName() );
             if ( m_aCurLibName.isEmpty() || ( aDocument == m_aCurDocument && aLibName == m_aCurLibName ) )
             {
                 if ( rSbxItem.GetType() == TYPE_MODULE )
@@ -538,8 +538,8 @@ void Shell::ExecuteGlobal( SfxRequest& rReq )
             DBG_ASSERT( rReq.GetArgs(), "arguments expected" );
             const SbxItem& rSbxItem = (const SbxItem&)rReq.GetArgs()->Get(SID_BASICIDE_ARG_SBX );
             ScriptDocument aDocument( rSbxItem.GetDocument() );
-            ::rtl::OUString aLibName( rSbxItem.GetLibName() );
-            ::rtl::OUString aName( rSbxItem.GetName() );
+            OUString aLibName( rSbxItem.GetLibName() );
+            OUString aName( rSbxItem.GetName() );
             SetCurLib( aDocument, aLibName );
             BaseWindow* pWin = 0;
             if ( rSbxItem.GetType() == TYPE_DIALOG )
@@ -567,7 +567,7 @@ void Shell::ExecuteGlobal( SfxRequest& rReq )
             SFX_REQUEST_ARG( rReq, pDocumentItem, SfxStringItem, SID_BASICIDE_ARG_DOCUMENT, false );
             if ( pDocumentItem )
             {
-                ::rtl::OUString sDocumentCaption = pDocumentItem->GetValue();
+                OUString sDocumentCaption = pDocumentItem->GetValue();
                 if ( !sDocumentCaption.isEmpty() )
                     pDocument.reset( new ScriptDocument( ScriptDocument::getDocumentWithURLOrCaption( sDocumentCaption ) ) );
             }
@@ -587,16 +587,16 @@ void Shell::ExecuteGlobal( SfxRequest& rReq )
             if ( !pLibNameItem )
                 break;
 
-            ::rtl::OUString aLibName( pLibNameItem->GetValue() );
+            OUString aLibName( pLibNameItem->GetValue() );
             pDocument->loadLibraryIfExists( E_SCRIPTS, aLibName );
             SetCurLib( *pDocument, aLibName );
             SFX_REQUEST_ARG( rReq, pNameItem, SfxStringItem, SID_BASICIDE_ARG_NAME, false );
             if ( pNameItem )
             {
-                ::rtl::OUString aName( pNameItem->GetValue() );
-                ::rtl::OUString aModType(RTL_CONSTASCII_USTRINGPARAM("Module"));
-                ::rtl::OUString aDlgType(RTL_CONSTASCII_USTRINGPARAM("Dialog"));
-                ::rtl::OUString aType( aModType );
+                OUString aName( pNameItem->GetValue() );
+                OUString aModType( "Module" );
+                OUString aDlgType( "Dialog" );
+                OUString aType( aModType );
                 SFX_REQUEST_ARG( rReq, pTypeItem, SfxStringItem, SID_BASICIDE_ARG_TYPE, false );
                 if ( pTypeItem )
                     aType = pTypeItem->GetValue();
@@ -839,7 +839,7 @@ void Shell::GetState(SfxItemSet &rSet)
             break;
             case SID_BASICIDE_LIBSELECTOR:
             {
-                ::rtl::OUString aName;
+                OUString aName;
                 if ( !m_aCurLibName.isEmpty() )
                 {
                     LibraryLocation eLocation = m_aCurDocument.getLibraryLocation( m_aCurLibName );
@@ -851,7 +851,7 @@ void Shell::GetState(SfxItemSet &rSet)
             break;
             case SID_SEARCH_ITEM:
             {
-                ::rtl::OUString aSelected = GetSelectionText(true);
+                OUString aSelected = GetSelectionText(true);
                 SvxSearchItem& rItem = GetExtraData()->GetSearchItem();
                 rItem.SetSearchString( aSelected );
                 rSet.Put( rItem );
@@ -859,7 +859,7 @@ void Shell::GetState(SfxItemSet &rSet)
             break;
             case SID_BASICIDE_STAT_DATE:
             {
-                ::rtl::OUString aDate(RTL_CONSTASCII_USTRINGPARAM("Datum?!"));
+                OUString aDate( "Datum?!" );
                 SfxStringItem aItem( SID_BASICIDE_STAT_DATE, aDate );
                 rSet.Put( aItem );
             }
@@ -887,7 +887,7 @@ void Shell::GetState(SfxItemSet &rSet)
             {
                 if ( pCurWin )
                 {
-                    ::rtl::OUString aTitle = pCurWin->CreateQualifiedName();
+                    OUString aTitle = pCurWin->CreateQualifiedName();
                     SfxStringItem aItem( SID_BASICIDE_STAT_TITLE, aTitle );
                     rSet.Put( aItem );
                 }
@@ -910,7 +910,7 @@ void Shell::GetState(SfxItemSet &rSet)
                     rSet.DisableItem( nWh );
                 else
                 {
-                    ::rtl::OUString aItemStr;
+                    OUString aItemStr;
                     boost::shared_ptr<LocalizationMgr> pCurMgr(GetCurLocalizationMgr());
                     if ( pCurMgr->isLibraryLocalized() )
                     {
@@ -919,7 +919,7 @@ void Shell::GetState(SfxItemSet &rSet)
                         sal_Int32 i, nCount = aLocaleSeq.getLength();
 
                         // Force different results for any combination of locales and default locale
-                        ::rtl::OUString aLangStr;
+                        OUString aLangStr;
                         for ( i = 0;  i <= nCount;  ++i )
                         {
                             lang::Locale aLocale;
@@ -1051,11 +1051,11 @@ void Shell::SetCurWindow( BaseWindow* pNewWin, bool bUpdateTabBar, bool bRemembe
 
 void Shell::ManageToolbars()
 {
-    static ::rtl::OUString aLayoutManagerName( RTL_CONSTASCII_USTRINGPARAM( "LayoutManager" ));
-    static ::rtl::OUString aMacroBarResName( RTL_CONSTASCII_USTRINGPARAM( "private:resource/toolbar/macrobar" ));
-    static ::rtl::OUString aDialogBarResName( RTL_CONSTASCII_USTRINGPARAM( "private:resource/toolbar/dialogbar" ));
-    static ::rtl::OUString aInsertControlsBarResName( RTL_CONSTASCII_USTRINGPARAM( "private:resource/toolbar/insertcontrolsbar" ));
-    static ::rtl::OUString aFormControlsBarResName( RTL_CONSTASCII_USTRINGPARAM( "private:resource/toolbar/formcontrolsbar" ));
+    static OUString aLayoutManagerName( "LayoutManager" );
+    static OUString aMacroBarResName( "private:resource/toolbar/macrobar" );
+    static OUString aDialogBarResName( "private:resource/toolbar/dialogbar" );
+    static OUString aInsertControlsBarResName( "private:resource/toolbar/insertcontrolsbar" );
+    static OUString aFormControlsBarResName( "private:resource/toolbar/formcontrolsbar" );
     (void)aInsertControlsBarResName;
 
     if( !pCurWin )
@@ -1099,7 +1099,7 @@ BaseWindow* Shell::FindApplicationWindow()
 
 BaseWindow* Shell::FindWindow(
     ScriptDocument const& rDocument,
-    rtl::OUString const& rLibName, rtl::OUString const& rName,
+    OUString const& rLibName, OUString const& rName,
     ItemType eType, bool bFindSuspended
 )
 {
@@ -1153,7 +1153,7 @@ long Shell::CallBasicBreakHdl( StarBASIC* pBasic )
 
 ModulWindow* Shell::ShowActiveModuleWindow( StarBASIC* pBasic )
 {
-    SetCurLib( ScriptDocument::getApplicationScriptDocument(), ::rtl::OUString(), false );
+    SetCurLib( ScriptDocument::getApplicationScriptDocument(), OUString(), false );
 
     SbModule* pActiveModule = StarBASIC::GetActiveModule();
     if (SbClassModuleObject* pCMO = dynamic_cast<SbClassModuleObject*>(pActiveModule))
@@ -1169,7 +1169,7 @@ ModulWindow* Shell::ShowActiveModuleWindow( StarBASIC* pBasic )
             if (BasicManager* pBasMgr = FindBasicManager(pLib))
             {
                 ScriptDocument aDocument( ScriptDocument::getDocumentForBasicManager( pBasMgr ) );
-                ::rtl::OUString aLibName = pLib->GetName();
+                OUString aLibName = pLib->GetName();
                 pWin = FindBasWin( aDocument, aLibName, pActiveModule->GetName(), true );
                 DBG_ASSERT( pWin, "Error/Step-Hdl: Fenster wurde nicht erzeugt/gefunden!" );
                 SetCurLib( aDocument, aLibName );
@@ -1260,7 +1260,7 @@ void Shell::Deactivate( sal_Bool bMDI )
             if ( /* !pWin->IsSuspended() && */ !pWin->CanClose() )
             {
                 if ( !m_aCurLibName.isEmpty() && ( pWin->IsDocument( m_aCurDocument ) || pWin->GetLibName() != m_aCurLibName ) )
-                    SetCurLib( ScriptDocument::getApplicationScriptDocument(), ::rtl::OUString(), false );
+                    SetCurLib( ScriptDocument::getApplicationScriptDocument(), OUString(), false );
                 SetCurWindow( pWin, true );
                 break;
             }

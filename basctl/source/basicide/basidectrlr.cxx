@@ -38,7 +38,7 @@ namespace
 {
 
 int const nPropertyIconId = 1;
-rtl::OUString const sPropertyIconId("IconId");
+OUString const sPropertyIconId("IconId");
 
 }
 
