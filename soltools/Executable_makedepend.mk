@@ -13,6 +13,10 @@ $(eval $(call gb_Executable_add_exception_objects,makedepend,\
     soltools/mkdepend/collectdircontent \
 ))
 
+$(eval $(call gb_Executable_use_package,makedepend,\
+    soltools_inc \
+)) 
+
 $(eval $(call gb_Executable_add_defs,makedepend,\
     -DNO_X11 \
     -DXP_PC \
