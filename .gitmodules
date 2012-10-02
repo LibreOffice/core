@@ -1,0 +1,16 @@
+[submodule "binfilter"]
+	path = binfilter
+	url = git://gerrit.libreoffice.org/binfilter
+	revision = .
+[submodule "dictionaries"]
+	path = dictionaries
+	url = git://gerrit.libreoffice.org/dictionaries
+	revision = .
+[submodule "helpcontent2"]
+	path = helpcontent2
+	url = git://gerrit.libreoffice.org/help
+	revision = .
+[submodule "translations"]
+	path = translations
+	url = git://gerrit.libreoffice.org/translations
+	revision = .

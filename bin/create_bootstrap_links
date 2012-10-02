@@ -1,15 +1,17 @@
 #!/usr/bin/env bash
 
-BIN_DIR=$(dirname $0)
-REPOS=$(cat ${BIN_DIR?}/repo-list)
-cd ${BIN_DIR?}/..
-BOOTSTRAP_DIR=$(pwd)
+# with submodules we do not need links anymore
 
-for repo in $REPOS ; do
-    for link in $(ls clone/${repo}) ; do
-        if [ ! -e "$link" ] ; then
-            echo "Creating missing link $link"
-            ln -s "clone/${repo}/$link" "$link"
-        fi
-    done
-done
+#BIN_DIR=$(dirname $0)
+#REPOS=$(cat ${BIN_DIR?}/repo-list)
+#cd ${BIN_DIR?}/..
+#BOOTSTRAP_DIR=$(pwd)
+
+#for repo in $REPOS ; do
+#    for link in $(ls clone/${repo}) ; do
+#        if [ ! -e "$link" ] ; then
+#            echo "Creating missing link $link"
+#            ln -s "clone/${repo}/$link" "$link"
+#        fi
+#    done
+#done

@@ -11,6 +11,7 @@ save_CXX=$CXX
 BUILD_TYPE="LibO"
 SCPDEFS=""
 GIT_REPO_NAMES=""
+GIT_NEEDED_SUBMODULES=""
 LO_PATH= # used by path_munge to construct a PATH variable
 
 PathFormat()
@@ -4347,6 +4348,7 @@ else
     WITH_BINFILTER="YES"
     BUILD_TYPE="$BUILD_TYPE BINFILTER"
     GIT_REPO_NAMES="$GIT_REPO_NAMES binfilter"
+    GIT_NEEDED_SUBMODULES="binfilter $GIT_NEEDED_SUBMODULES"
     AC_MSG_RESULT([yes])
 fi
 AC_SUBST(WITH_BINFILTER)
@@ -4357,6 +4359,7 @@ if test "$with_help" != "no" -a $_os != iOS -a $_os != Android; then
     BUILD_TYPE="$BUILD_TYPE HELP"
     SCPDEFS="$SCPDEFS -DWITH_HELP"
     GIT_REPO_NAMES="$GIT_REPO_NAMES help"
+    GIT_NEEDED_SUBMODULES="helcontent2 $GIT_NEEDED_SUBMODULES"
 else
     AC_MSG_RESULT([no])
 fi
@@ -4369,6 +4372,7 @@ if test -z "$with_myspell_dicts" -o "$with_myspell_dicts" = "yes"; then
     WITH_MYSPELL_DICTS=YES
     BUILD_TYPE="$BUILD_TYPE DICTIONARIES"
     GIT_REPO_NAMES="$GIT_REPO_NAMES dictionaries"
+    GIT_NEEDED_SUBMODULES="dictionaries $GIT_NEEDED_SUBMODULES"
 else
     AC_MSG_RESULT([no])
     WITH_MYSPELL_DICTS=NO
@@ -12185,6 +12189,7 @@ if test -z "$WITH_LANG" -o "$WITH_LANG" = "en-US"; then
 else
     AC_MSG_RESULT([$WITH_LANG])
     GIT_REPO_NAMES="$GIT_REPO_NAMES translations"
+    GIT_NEEDED_SUBMODULES="translations $GIT_NEEDED_SUBMODULES"
 fi
 # check that the list is valid
 for lang in $WITH_LANG; do
@@ -12210,6 +12215,7 @@ AC_SUBST(ALL_LANGS)
 AC_SUBST(WITH_LANG)
 AC_SUBST(WITH_LANG_LIST)
 AC_SUBST(GIT_REPO_NAMES)
+AC_SUBST(GIT_NEEDED_SUBMODULES)
 
 
 PathFormat "$SRC_ROOT/translations"

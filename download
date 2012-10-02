@@ -52,17 +52,19 @@ if [ -d .git ] ; then
     if [ -z "$GIT_LINK_SRC" ]; then
         ./g -f clone
     else
+        echo "FIXME: GIT_LINK_SRC method is not yet implemented with submodules" 1>&2
+        exit 1;
         # space-saving clone from another local workdir
-        mkdir clone
-        branch=$(git symbolic-ref HEAD | cut -d"/" -f 3)
-        for i in $GIT_REPO_NAMES ; do
-            bin/git-new-workdir $GIT_LINK_SRC/$i clone/$i $branch
-            for d in clone/$i/* ; do
-                if [ "${d}" != "clone/$i/git-hooks" ]; then
-                    ln -sfn ${d} $(basename ${d})
-                fi
-            done
-        done
+#        mkdir clone
+#        branch=$(git symbolic-ref HEAD | cut -d"/" -f 3)
+#        for i in $GIT_REPO_NAMES ; do
+#            bin/git-new-workdir $GIT_LINK_SRC/$i clone/$i $branch
+#            for d in clone/$i/* ; do
+#                if [ "${d}" != "clone/$i/git-hooks" ]; then
+#                    ln -sfn ${d} $(basename ${d})
+#                fi
+#            done
+#        done
     fi
 fi
 
@@ -169,7 +171,7 @@ for i in $filelist ; do
 #    echo $i
     if [ "$i" != `echo $i | sed "s/^http:\///"` ]; then
         tarurl=$i
-    # TODO: check for comment    
+    # TODO: check for comment
     else
         if [ "$tarurl" != "" ]; then
             sum=`echo $i | sed "s/-.*//"`

@@ -101,12 +101,6 @@ TAGS
 /external/*/*.msm
 /moz/zipped/*.zip
 
-# links to the other repositories
-/binfilter
-/dictionaries
-/helpcontent2
-/translations
-
 # compiled python objects for gdb pretty printers
 /solenv/gdb/libreoffice/*.py[co]
 /solenv/gdb/libreoffice/util/*.py[co]
