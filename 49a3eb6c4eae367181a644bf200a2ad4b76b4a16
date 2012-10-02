@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAO3///wo\u003d",
+        "filename": "beanshell/ExternalProject_beanshell.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2012-10-02T11:17:47Z",
+      "side": 1,
+      "message": "did you just copy paste that file.encoding?\ndoesnt seem to be in original dmakefile",
+      "revId": "49a3eb6c4eae367181a644bf200a2ad4b76b4a16",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAO3///ws\u003d",
+        "filename": "beanshell/Package_beanshell.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2012-10-02T11:17:47Z",
+      "side": 1,
+      "message": "why is that called beanshell_inc not beanshell?",
+      "revId": "49a3eb6c4eae367181a644bf200a2ad4b76b4a16",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
