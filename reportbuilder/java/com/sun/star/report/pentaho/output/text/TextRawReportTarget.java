@@ -71,7 +71,6 @@ import org.pentaho.reporting.libraries.xmlns.writer.XmlWriterSupport;
 /**
  * Creation-Date: 03.07.2006, 16:28:00
  *
- * @author Thomas Morgner
  */
 public class TextRawReportTarget extends OfficeDocumentReportTarget
 {

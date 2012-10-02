@@ -25,7 +25,6 @@ import org.jfree.report.modules.factories.report.base.JFreeReportXmlResourceFact
  * A LibLoader resource factory for OfficeDocument objects. OfficeDocuments are
  * JFreeReport instances which have some additional properties.
  *
- * @author Thomas Morgner
  * @since 09.03.2007
  */
 public class OfficeDocumentXmlResourceFactory extends JFreeReportXmlResourceFactory

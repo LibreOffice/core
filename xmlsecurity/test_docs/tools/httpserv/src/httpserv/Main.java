@@ -30,7 +30,6 @@ import java.net.InetSocketAddress;
 
 /**
  *
- * @author jochen
  */
 public class Main {
 

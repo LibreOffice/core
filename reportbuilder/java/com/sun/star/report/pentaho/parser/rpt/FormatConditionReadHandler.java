@@ -33,7 +33,6 @@ import org.xml.sax.SAXException;
 /**
  * I'm quite sure I should parse something here. But what?
  *
- * @author Ocke Janssen
  */
 public class FormatConditionReadHandler extends AbstractXmlReadHandler
 {

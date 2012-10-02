@@ -25,7 +25,6 @@ import org.jfree.report.expressions.FormulaExpression;
  * we leave this out for now. Either we'll insert a field there or we call
  * an UNO-component to do the formatting.
  *
- * @author Thomas Morgner
  * @since 02.03.2007
  */
 public class FormattedTextElement extends ReportElement

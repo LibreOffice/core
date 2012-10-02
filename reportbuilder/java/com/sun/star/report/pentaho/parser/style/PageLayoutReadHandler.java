@@ -34,7 +34,6 @@ import org.xml.sax.SAXException;
 /**
  * Reads a page-layout element.
  *
- * @author Thomas Morgner
  * @since 13.03.2007
  */
 public class PageLayoutReadHandler extends ElementReadHandler

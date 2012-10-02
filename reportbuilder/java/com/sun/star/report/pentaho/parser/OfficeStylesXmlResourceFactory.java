@@ -28,7 +28,6 @@ import org.pentaho.reporting.libraries.xmlns.parser.AbstractXmlResourceFactory;
  * A LibLoader resource factory for loading an OfficeStyles-collection. This
  * implementation is meant to parse the 'styles.xml' file.
  *
- * @author Thomas Morgner
  * @since 09.03.2007
  */
 public class OfficeStylesXmlResourceFactory extends AbstractXmlResourceFactory

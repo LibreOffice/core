@@ -36,7 +36,6 @@ import org.xml.sax.SAXException;
  * Deals with Image-content. There are two ways to specify the image;
  * as formula or as static image data.
  *
- * @author Thomas Morgner
  */
 public class ImageReadHandler extends ElementReadHandler
 {

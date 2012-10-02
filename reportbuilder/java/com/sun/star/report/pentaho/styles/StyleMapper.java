@@ -36,7 +36,6 @@ import org.pentaho.reporting.libraries.resourceloader.ResourceManager;
  * mapping information is read from an external definition file and can be
  * maintained externally.
  *
- * @author Thomas Morgner
  * @since 11.03.2007
  */
 public class StyleMapper

@@ -25,7 +25,6 @@ import org.jfree.report.structure.Section;
 /**
  * This represents either a page header or page footer.
  *
- * @author Thomas Morgner
  * @since 02.03.2007
  */
 public class PageSection extends Section

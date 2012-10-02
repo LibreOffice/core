@@ -25,7 +25,6 @@ import org.jfree.report.structure.Section;
  * A page layout describes the physical properties of a page. It is equal to
  * an @page rule in CSS.
  *
- * @author Thomas Morgner
  * @since 13.03.2007
  */
 public class PageLayout extends Section

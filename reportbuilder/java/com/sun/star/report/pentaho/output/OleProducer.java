@@ -38,7 +38,6 @@ import org.apache.commons.logging.LogFactory;
 
 /**
  *
- * @author Ocke Janssen
  */
 public class OleProducer
 {

@@ -20,7 +20,6 @@ package com.sun.star.report.pentaho.styles;
 /**
  * A hash key for the stylemapper.
  *
- * @author Thomas Morgner
  * @since 12.03.2007
  */
 public final class StyleMapperKey

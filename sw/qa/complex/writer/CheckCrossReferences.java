@@ -31,7 +31,6 @@ import static org.junit.Assert.*;
 
 /**
  *
- * @author od138299
  */
 public class CheckCrossReferences {
 

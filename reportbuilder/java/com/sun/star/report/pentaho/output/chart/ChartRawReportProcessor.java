@@ -34,7 +34,6 @@ import org.pentaho.reporting.libraries.resourceloader.ResourceManager;
 
 /**
  *
- * @author Ocke Janssen
  */
 public class ChartRawReportProcessor extends SinglePassReportProcessor
 {

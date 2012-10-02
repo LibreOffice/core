@@ -36,7 +36,6 @@ import org.jfree.report.structure.Element;
 /**
  * Todo: Document me!
  *
- * @author Thomas Morgner
  * @since 15.03.2007
  */
 public class OfficeGroupLayoutController extends SectionLayoutController

@@ -24,7 +24,6 @@ import java.util.Map;
  * specified name and parameters. The parameters-map can be null, if there
  * are no parameters required.
  *
- * @author Thomas Morgner
  */
 public interface DataSourceFactory
 {

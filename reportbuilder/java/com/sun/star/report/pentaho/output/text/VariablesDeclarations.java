@@ -29,7 +29,6 @@ import org.jfree.report.util.AttributeNameGenerator;
  * its original name. If a variable contains more than one type, it is also
  * keyed by the type.
  *
- * @author Thomas Morgner
  * @since 26.03.2007
  */
 public class VariablesDeclarations

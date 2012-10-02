@@ -28,7 +28,6 @@ import org.jfree.report.structure.Section;
  * An office group is a virtual section that contains the group header, footer
  * and either a detail section or another group.
  *
- * @author Thomas Morgner
  * @since 02.03.2007
  */
 public class OfficeGroup extends Section

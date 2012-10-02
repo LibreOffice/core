@@ -62,7 +62,6 @@ import org.pentaho.reporting.libraries.base.util.WaitingImageObserver;
 /**
  * This class manages the images embedded in a report.
  *
- * @author Thomas Morgner
  * @since 31.03.2007
  */
 public class ImageProducer

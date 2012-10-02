@@ -27,7 +27,6 @@ import com.sun.star.sheet.XSpreadsheets;
 import com.sun.star.uno.UnoRuntime;
 
 /**
- * @author  frank.schoenheit@oracle.com
  */
 public class SpreadsheetDocument extends OfficeDocument
 {

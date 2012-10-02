@@ -20,7 +20,6 @@ package complex.memCheck;
 
 /**
  *
- * @author ll93751
  */
 public class FileHelper
 {

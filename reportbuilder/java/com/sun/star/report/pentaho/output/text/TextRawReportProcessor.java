@@ -36,7 +36,6 @@ import org.pentaho.reporting.libraries.resourceloader.ResourceManager;
 /**
  * Creation-Date: 03.07.2006, 17:08:25
  *
- * @author Thomas Morgner
  */
 public class TextRawReportProcessor extends SinglePassReportProcessor
 {

@@ -25,7 +25,6 @@ import org.jfree.layouting.input.style.values.CSSNumericValue;
  * kept separate until the final result is computed to minimize the computation
  * inaccuracy.
  *
- * @author Thomas Morgner
  * @since 15.03.2007
  */
 public class LengthCalculator

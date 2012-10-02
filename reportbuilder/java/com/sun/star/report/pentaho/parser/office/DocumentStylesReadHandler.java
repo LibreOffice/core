@@ -34,7 +34,6 @@ import org.xml.sax.SAXException;
  * (or common) style collection. These styles contain the named common styles
  * and the page layouts.
  *
- * @author Thomas Morgner
  * @since 08.03.2007
  */
 public class DocumentStylesReadHandler extends ElementReadHandler

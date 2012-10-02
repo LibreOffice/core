@@ -30,7 +30,6 @@ import org.jfree.report.structure.Element;
  * A report element is the base class for all content generating elements in a
  * report.
  *
- * @author Thomas Morgner
  * @since 02.03.2007
  */
 public abstract class ReportElement extends Element

@@ -29,7 +29,6 @@ import org.pentaho.reporting.libraries.formula.typing.coretypes.TextType;
 
 /**
  *
- * @author Ocke Janssen
  */
 public class AuthorFunction implements Function
 {

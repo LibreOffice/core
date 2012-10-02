@@ -21,7 +21,6 @@ package com.sun.star.report.pentaho.layoutprocessor;
 /**
  * Todo: Document me!
  *
- * @author Thomas Morgner
  * @since 30.03.2007
  */
 public class ImageElementContext

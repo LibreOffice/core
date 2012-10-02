@@ -34,7 +34,6 @@ import org.xml.sax.SAXException;
 /**
  * Creation-Date: 01.10.2006, 18:48:11
  *
- * @author Thomas Morgner
  */
 public class FixedContentReadHandler extends ElementReadHandler
 {

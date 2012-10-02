@@ -22,7 +22,6 @@ import java.io.Serializable;
 /**
  * Creation-Date: Feb 22, 2007, 8:51:42 PM
  *
- * @author Thomas Morgner
  */
 public class InputResourceKey implements Serializable
 {

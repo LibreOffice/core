@@ -43,7 +43,6 @@ import org.pentaho.reporting.libraries.xmlns.writer.XmlWriterSupport;
 
 /**
  *
- * @author Ocke Janssen
  */
 public class ChartRawReportTarget extends OfficeDocumentReportTarget
 {

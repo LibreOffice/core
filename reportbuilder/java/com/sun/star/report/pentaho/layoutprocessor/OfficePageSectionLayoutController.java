@@ -29,7 +29,6 @@ import org.jfree.report.structure.Element;
 /**
  * Todo: Document Me
  *
- * @author Thomas Morgner
  */
 public class OfficePageSectionLayoutController extends SectionLayoutController
 {

@@ -31,7 +31,6 @@ import org.xml.sax.SAXException;
  * Handles the 'report:conditional-print-expression' element that can appear
  * in all report elements and all root-level sections.
  *
- * @author Thomas Morgner
  * @since 02.03.2007
  */
 public class ConditionalPrintExpressionReadHandler

@@ -78,7 +78,6 @@ public abstract class ControlScroller
      * @param _iCompWidth
      * @param _nblockincrement
      * @param _firsthelpindex
-     * @author bc93774
      */
     // TODO add parameters for tabindices and helpindex
     protected ControlScroller(WizardDialog _CurUnoDialog, XMultiServiceFactory _xMSF, int _iStep, int _iCompPosX, int _iCompPosY, int _iCompWidth, int _nblockincrement, int _nlinedistance, int _firsthelpindex)
@@ -461,7 +460,6 @@ public abstract class ControlScroller
     /** inserts a group of controls into the component. The group may either be a row or a column of controls 
      *  The controls should be put on Step 99 (means made invisible at first). All the controlrows that are needed are than
      *  made visible automatically when calling "initialize(_fieldcount)"
-     * @author bc93774
      * @param _index The index of the control group
      * @param npos Can be an x coordinate or an y coordinate which depends on the orientation of the scrollbar
      */

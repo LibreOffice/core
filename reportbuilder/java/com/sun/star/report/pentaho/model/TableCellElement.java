@@ -22,7 +22,6 @@ import org.jfree.report.structure.Section;
 /**
  * Todo: Document me!
  *
- * @author Thomas Morgner
  * @since 05.03.2007
  */
 public class TableCellElement extends Section

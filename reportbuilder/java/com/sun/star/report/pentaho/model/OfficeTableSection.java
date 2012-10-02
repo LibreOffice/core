@@ -22,7 +22,6 @@ import org.jfree.report.structure.Section;
 /**
  * Creation-Date: 24.04.2007, 15:55:17
  *
- * @author Thomas Morgner
  */
 public class OfficeTableSection extends Section
 {

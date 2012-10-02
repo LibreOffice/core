@@ -38,7 +38,6 @@ import org.xml.sax.SAXException;
  * Reads the font-face declarations section. This one can only contain
  * font-face elements.
  *
- * @author Thomas Morgner
  * @since 13.03.2007
  */
 public class FontFaceDeclsReadHandler extends ElementReadHandler

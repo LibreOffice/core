@@ -46,7 +46,6 @@ import org.openoffice.test.tools.OfficeDocument;
 import static org.junit.Assert.*;
 
 /**
- * @author frank.schoenheit@oracle.com
  */
 public class ChartDocumentTest implements DocumentTest
 {

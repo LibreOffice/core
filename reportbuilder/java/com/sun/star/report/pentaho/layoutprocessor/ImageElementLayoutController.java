@@ -53,7 +53,6 @@ import org.pentaho.reporting.libraries.formula.parser.ParseException;
  * definition does not give any hints about the size of the image, so we have to derive this from the surrounding
  * context.
  *
- * @author Thomas Morgner
  * @since 05.03.2007
  */
 public class ImageElementLayoutController

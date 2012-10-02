@@ -25,7 +25,6 @@ import org.jfree.report.structure.Section;
  * A master page. A master page can contain header and footer and is linked
  * to a page-layout.
  *
- * @author Thomas Morgner
  * @since 13.03.2007
  */
 public class OfficeMasterPage extends Section

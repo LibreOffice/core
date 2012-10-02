@@ -27,7 +27,6 @@ import org.jfree.report.structure.Element;
  * the CSS standard. We do not interpret the attributes of the element in
  * any way yet.
  *
- * @author Thomas Morgner
  * @since 13.03.2007
  */
 public class FontFaceReadHandler extends ElementReadHandler

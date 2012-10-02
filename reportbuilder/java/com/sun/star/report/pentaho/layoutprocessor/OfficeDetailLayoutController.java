@@ -35,7 +35,6 @@ import org.jfree.report.flow.layoutprocessor.SectionLayoutController;
 /**
  * Creation-Date: 11.04.2007, 11:04:02
  *
- * @author Thomas Morgner
  */
 public class OfficeDetailLayoutController extends SectionLayoutController
 {

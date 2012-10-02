@@ -25,7 +25,6 @@ import static org.junit.Assert.*;
 
 /**
  * provides assertion capabilities not found in {@link org.junit.Assert}
- * @author frank.schoenheit@oracle.com
  */
 public class Assert
 {

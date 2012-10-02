@@ -45,7 +45,6 @@ import org.apache.commons.logging.LogFactory;
  * A directory holds all the contents here.
  *
  *
- * @author Ocke Janssen
  */
 public class StorageRepository implements InputRepository, OutputRepository
 {

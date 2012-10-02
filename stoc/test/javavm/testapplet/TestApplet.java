@@ -31,7 +31,6 @@ import java.net.MalformedURLException;
 
 /**
  *
- * @author  jl97489
  * @version
  */
 public class TestApplet extends java.applet.Applet {

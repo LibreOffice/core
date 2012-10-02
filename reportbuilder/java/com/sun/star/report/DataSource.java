@@ -24,7 +24,6 @@ package com.sun.star.report;
  *
  * The column and row index starts at 1 (as it is done in JDBC).
  *
- * @author Thomas Morgner
  */
 public interface DataSource extends DataRow
 {

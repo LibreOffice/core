@@ -1078,7 +1078,6 @@ public abstract class WWD_Events extends WWD_Startup
      * closing the wizard.
      * press "&%" quite fast when the focus is on one
      * of the last steps' checkboxes.
-     * @author rp143992
      */
     private class Create implements XKeyListener
     {

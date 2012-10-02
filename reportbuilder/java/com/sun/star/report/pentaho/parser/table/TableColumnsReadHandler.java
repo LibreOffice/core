@@ -36,7 +36,6 @@ import org.xml.sax.SAXException;
 /**
  * Creation-Date: 03.07.2006, 13:50:41
  *
- * @author Thomas Morgner
  */
 public class TableColumnsReadHandler extends ElementReadHandler
 {

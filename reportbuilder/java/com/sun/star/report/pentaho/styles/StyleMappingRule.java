@@ -20,7 +20,6 @@ package com.sun.star.report.pentaho.styles;
 /**
  * Todo: Document me!
  *
- * @author Thomas Morgner
  * @since 12.03.2007
  */
 public class StyleMappingRule

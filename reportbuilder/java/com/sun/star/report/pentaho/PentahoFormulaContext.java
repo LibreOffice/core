@@ -28,7 +28,6 @@ import org.pentaho.reporting.libraries.formula.typing.TypeRegistry;
 
 /**
  *
- * @author Ocke Janssen
  */
 public class PentahoFormulaContext implements FormulaContext
 {

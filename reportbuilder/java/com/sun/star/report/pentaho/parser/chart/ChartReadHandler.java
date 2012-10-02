@@ -37,7 +37,6 @@ import org.xml.sax.SAXException;
 
 /**
  *
- * @author Ocke Janssen
  */
 public class ChartReadHandler extends ElementReadHandler
 {

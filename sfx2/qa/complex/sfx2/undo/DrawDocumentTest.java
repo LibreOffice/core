@@ -22,7 +22,6 @@ import com.sun.star.lang.XMultiServiceFactory;
 import org.openoffice.test.tools.DocumentType;
 
 /**
- * @author frank.schoenheit@oracle.com
  */
 public class DrawDocumentTest extends DrawingOrPresentationDocumentTest
 {

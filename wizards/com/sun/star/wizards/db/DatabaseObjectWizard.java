@@ -38,7 +38,6 @@ import java.util.logging.Logger;
 
 /**
  * is a base class for a wizard creating a database object
- * @author frank.schoenheit@sun.com
  */
 public abstract class DatabaseObjectWizard extends WizardDialog
 {

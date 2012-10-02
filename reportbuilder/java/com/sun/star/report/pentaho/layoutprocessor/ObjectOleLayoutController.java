@@ -39,7 +39,6 @@ import org.jfree.report.structure.Element;
 
 /**
  *
- * @author Ocke Janssen
  */
 public class ObjectOleLayoutController extends AbstractReportElementLayoutController
 {

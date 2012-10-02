@@ -22,7 +22,6 @@ import org.pentaho.reporting.libraries.formula.function.FunctionCategory;
 
 /**
  *
- * @author Ocke Janssen
  */
 public class MetaDataFunctionCategory extends AbstractFunctionCategory
 {

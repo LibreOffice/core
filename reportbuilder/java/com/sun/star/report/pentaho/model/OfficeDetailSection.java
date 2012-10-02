@@ -22,7 +22,6 @@ import org.jfree.report.structure.DetailSection;
 /**
  * A Marker-Class.
  *
- * @author Thomas Morgner
  * @since 02.03.2007
  */
 public class OfficeDetailSection extends DetailSection

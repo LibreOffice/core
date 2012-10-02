@@ -22,7 +22,6 @@ import org.jfree.report.expressions.FormulaExpression;
 /**
  * The format condition defines, what style-format is applied to an element.
  *
- * @author Thomas Morgner
  * @since 02.03.2007
  */
 public class FormatCondition

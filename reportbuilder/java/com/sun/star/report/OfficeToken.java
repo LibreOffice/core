@@ -19,7 +19,6 @@ package com.sun.star.report;
 
 /**
  *
- * @author Ocke Janssen
  */
 public class OfficeToken
 {

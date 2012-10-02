@@ -25,7 +25,6 @@ import org.jfree.report.structure.Section;
 /**
  * Todo: Document me!
  *
- * @author Thomas Morgner
  * @since 14.03.2007
  */
 public class CoveredCellReadHandler extends ElementReadHandler

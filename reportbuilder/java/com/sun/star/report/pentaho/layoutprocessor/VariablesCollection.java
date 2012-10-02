@@ -32,7 +32,6 @@ import java.util.List;
  * From the idea, this is equal to the 'strings' declaration of CSS3, although
  * this code is explicit instead of declarative.
  *
- * @author Thomas Morgner
  * @since 22.03.2007
  */
 public class VariablesCollection

@@ -48,7 +48,6 @@ import static org.junit.Assert.*;
  * in a com.sun.star.util.MeasureUnit you want.
  * You don't need to know the factors to calculate by hand.
  *
- * @author ll93751
  */
 public class UnitConversion
 {

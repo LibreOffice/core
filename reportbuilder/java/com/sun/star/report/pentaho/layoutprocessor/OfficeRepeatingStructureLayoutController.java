@@ -23,7 +23,6 @@ import org.jfree.report.flow.layoutprocessor.LayoutController;
 /**
  * Todo: Document me!
  *
- * @author Thomas Morgner
  * @since 22.03.2007
  */
 public interface OfficeRepeatingStructureLayoutController extends LayoutController

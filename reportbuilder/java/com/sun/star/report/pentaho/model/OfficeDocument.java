@@ -25,7 +25,6 @@ import org.jfree.report.JFreeReport;
  * An office document represents the root of the report processing. In
  * OpenOffice reports, this is the only child of the report object.
  *
- * @author Thomas Morgner
  * @since 02.03.2007
  */
 public class OfficeDocument extends JFreeReport

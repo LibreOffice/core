@@ -35,7 +35,6 @@ import static complex.toolkit.Assert.*;
 
 /** test for the <code>css.awt.grid.XMutableGridData</code> interface
  *
- * @author frank.schoenheit@oracle.com
  */
 public class TMutableGridDataModel
 {

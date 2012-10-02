@@ -21,7 +21,6 @@ package com.sun.star.report;
  * The report job is created by the report job factory and holds all properties
  * required to complete the reporting task.
  *
- * @author Thomas Morgner
  */
 public interface ReportJobDefinition
 {

@@ -23,7 +23,6 @@ import java.io.InputStream;
 
 /**
  *
- * @author oj93728
  */
 public interface ImageService
 {

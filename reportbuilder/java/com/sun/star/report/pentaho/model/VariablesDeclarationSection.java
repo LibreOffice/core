@@ -29,7 +29,6 @@ import org.jfree.report.structure.Section;
  * as flag for the output-processor. The output processor itself is responsible
  * to maintain the variables.
  *
- * @author Thomas Morgner
  * @since 19.03.2007
  */
 public class VariablesDeclarationSection extends Section

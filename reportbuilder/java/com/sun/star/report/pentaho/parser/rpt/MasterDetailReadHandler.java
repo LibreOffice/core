@@ -30,7 +30,6 @@ import org.xml.sax.SAXException;
 
 /**
  *
- * @author Ocke Janssen
  */
 public class MasterDetailReadHandler extends ElementReadHandler
 {

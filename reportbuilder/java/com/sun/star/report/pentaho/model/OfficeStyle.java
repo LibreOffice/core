@@ -26,7 +26,6 @@ import org.jfree.report.structure.Section;
 /**
  * Represents an automatic or manual style definition.
  *
- * @author Thomas Morgner
  * @since 02.03.2007
  */
 public class OfficeStyle extends Section

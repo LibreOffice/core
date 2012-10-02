@@ -67,7 +67,6 @@ import org.pentaho.reporting.libraries.xmlns.writer.XmlWriterSupport;
 /**
  * Creation-Date: 03.11.2007
  *
- * @author Michael D'Amour
  */
 public class SpreadsheetRawReportTarget extends OfficeDocumentReportTarget
 {

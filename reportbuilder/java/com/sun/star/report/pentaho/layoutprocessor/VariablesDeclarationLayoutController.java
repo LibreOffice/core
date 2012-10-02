@@ -40,7 +40,6 @@ import org.jfree.report.structure.Element;
 /**
  * Writes a full variables-declaration section.
  *
- * @author Thomas Morgner
  * @since 20.03.2007
  */
 public class VariablesDeclarationLayoutController

@@ -21,7 +21,6 @@ package com.sun.star.report;
  * A general exception to indicate that there was an error while accessing the
  * datasource.
  *
- * @author Thomas Morgner
  */
 public class DataSourceException extends Exception
 {

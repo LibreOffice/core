@@ -79,7 +79,6 @@ import static org.junit.Assert.*;
  * Actually, this is not a service, so we need to create a document and
  * go from there...
  *
- * @author mst
  */
 public class DocumentMetadataAccess
 {

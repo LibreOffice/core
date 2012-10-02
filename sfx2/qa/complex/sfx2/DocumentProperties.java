@@ -55,7 +55,6 @@ import static org.junit.Assert.*;
  * Currently, this service is implemented in
  * sfx2/source/doc/SfxDocumentMetaData.cxx.
  *
- * @author mst
  */
 public class DocumentProperties
 {

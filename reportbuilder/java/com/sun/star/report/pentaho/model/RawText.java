@@ -24,7 +24,6 @@ import org.jfree.report.structure.StaticText;
  * will be written without being normalized. Such text represents a page
  * header or footer.
  *
- * @author Thomas Morgner
  * @since 13.03.2007
  */
 public class RawText extends StaticText

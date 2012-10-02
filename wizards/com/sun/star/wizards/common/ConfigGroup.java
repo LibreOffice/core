@@ -21,7 +21,6 @@ import java.lang.reflect.Field;
 
 /**
  *
- * @author  rpiterman
  */
 public class ConfigGroup implements ConfigNode
 {

@@ -39,7 +39,6 @@ import org.jfree.report.structure.Section;
 /**
  * Creation-Date: 24.04.2007, 16:06:52
  *
- * @author Thomas Morgner
  */
 public class OfficeTableTemplateLayoutController extends SectionLayoutController
 {

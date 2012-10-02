@@ -22,7 +22,6 @@ import java.util.List;
 
 /**
  *
- * @author Ocke Janssen
  */
 public class ObjectOleElement extends ReportElement
 {

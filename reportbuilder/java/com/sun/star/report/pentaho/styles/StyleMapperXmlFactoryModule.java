@@ -24,7 +24,6 @@ import org.pentaho.reporting.libraries.xmlns.parser.XmlReadHandler;
 /**
  * An XML-FactoryModule that load the style-mapper contents.
  *
- * @author Thomas Morgner
  * @since 12.03.2007
  */
 public class StyleMapperXmlFactoryModule implements XmlFactoryModule

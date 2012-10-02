@@ -45,7 +45,6 @@ import org.pentaho.reporting.libraries.formula.parser.ParseException;
 /**
  * Todo: Document me!
  *
- * @author Thomas Morgner
  * @since 05.03.2007
  */
 public class FormattedTextLayoutController

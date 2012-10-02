@@ -23,7 +23,6 @@ import com.sun.star.uno.Exception;
 
 /**
  *
- * @author Ocke Janssen
  */
 public interface ReportJobFactory
 {

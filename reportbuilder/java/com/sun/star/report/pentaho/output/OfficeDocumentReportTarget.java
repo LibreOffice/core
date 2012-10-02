@@ -108,7 +108,6 @@ import org.w3c.css.sac.LexicalUnit;
 /**
  * Todo: Document me!
  *
- * @author Thomas Morgner
  * @since 08.03.2007
  */
 public abstract class OfficeDocumentReportTarget extends AbstractReportTarget

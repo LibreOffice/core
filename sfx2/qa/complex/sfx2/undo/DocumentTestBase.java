@@ -24,7 +24,6 @@ import org.openoffice.test.tools.DocumentType;
 import org.openoffice.test.tools.OfficeDocument;
 
 /**
- * @author frank.schoenheit@oracle.com
  */
 abstract class DocumentTestBase implements DocumentTest
 {

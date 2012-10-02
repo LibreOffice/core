@@ -36,7 +36,6 @@ import org.jfree.report.flow.ReportTarget;
 import org.pentaho.reporting.libraries.resourceloader.ResourceManager;
 
 /**
- * @author Michael D'Amour
  */
 public class SpreadsheetRawReportProcessor extends AbstractReportProcessor
 {

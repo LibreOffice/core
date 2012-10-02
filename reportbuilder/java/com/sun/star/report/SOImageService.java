@@ -36,7 +36,6 @@ import java.io.InputStream;
 
 
 /**
- * @author oj93728
  */
 public class SOImageService implements ImageService
 {

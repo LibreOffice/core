@@ -27,7 +27,6 @@ import org.jfree.report.structure.Node;
  * A report can have named expression attached. These expressions will be
  * computed at the global scope and will be available for all child elements.
  *
- * @author Thomas Morgner
  * @since 02.03.2007
  */
 public class OfficeReport extends Element

@@ -33,7 +33,6 @@ import org.jfree.report.structure.Section;
  * no master-page assigned to the paragraph. However, it seems as if the
  * master-page called 'Standard' is used as initial default.
  *
- * @author Thomas Morgner
  * @since 13.03.2007
  */
 public class OfficeMasterStyles extends Element
