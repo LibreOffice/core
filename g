@@ -147,6 +147,7 @@ local repo
 	    if [ -n "$repo" ] ; then
 		cp -r "${repo?}" "${module?}/."
 	    fi
+	fi
     done
 }
 
