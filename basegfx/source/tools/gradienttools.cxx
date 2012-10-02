@@ -24,19 +24,35 @@
 
 namespace basegfx
 {
+    bool ODFGradientInfo::operator==(const ODFGradientInfo& rODFGradientInfo) const
+    {
+        return getTextureTransform() == rODFGradientInfo.getTextureTransform()
+            && getAspectRatio() == rODFGradientInfo.getAspectRatio()
+            && getSteps() == rODFGradientInfo.getSteps();
+    }
+
+    const B2DHomMatrix& ODFGradientInfo::getBackTextureTransform() const
+    {
+        if(maBackTextureTransform.isIdentity())
+        {
+            const_cast< ODFGradientInfo* >(this)->maBackTextureTransform = getTextureTransform();
+            const_cast< ODFGradientInfo* >(this)->maBackTextureTransform.invert();
+        }
+
+        return maBackTextureTransform;
+    }
+
     /** Most of the setup for linear & axial gradient is the same, except
         for the border treatment. Factored out here.
     */
-    static void init1DGradientInfo(ODFGradientInfo& o_rGradientInfo,
-                                   const B2DRange&  rTargetRange,
-                                   sal_uInt32       nSteps,
-                                   double           fBorder,
-                                   double           fAngle,
-                                   bool             bAxial)
+    ODFGradientInfo init1DGradientInfo(
+        const B2DRange& rTargetRange,
+        sal_uInt32 nSteps,
+        double fBorder,
+        double fAngle,
+        bool bAxial)
     {
-        o_rGradientInfo.maTextureTransform.identity();
-        o_rGradientInfo.maBackTextureTransform.identity();
-        o_rGradientInfo.mnSteps = nSteps;
+        B2DHomMatrix aTextureTransform;
 
         fAngle = -fAngle;
 
@@ -46,69 +62,68 @@ namespace basegfx
         double fTargetOffsetY(rTargetRange.getMinY());
 
         // add object expansion
-        if(0.0 != fAngle)
+        const bool bAngleUsed(!fTools::equalZero(fAngle));
+
+        if(bAngleUsed)
         {
             const double fAbsCos(fabs(cos(fAngle)));
             const double fAbsSin(fabs(sin(fAngle)));
             const double fNewX(fTargetSizeX * fAbsCos + fTargetSizeY * fAbsSin);
             const double fNewY(fTargetSizeY * fAbsCos + fTargetSizeX * fAbsSin);
+
             fTargetOffsetX -= (fNewX - fTargetSizeX) / 2.0;
             fTargetOffsetY -= (fNewY - fTargetSizeY) / 2.0;
             fTargetSizeX = fNewX;
             fTargetSizeY = fNewY;
         }
 
-        const double fSizeWithoutBorder=1.0 - fBorder;
-        if( bAxial )
+        const double fSizeWithoutBorder(1.0 - fBorder);
+
+        if(bAxial)
         {
-            o_rGradientInfo.maTextureTransform.scale(1.0, fSizeWithoutBorder * .5);
-            o_rGradientInfo.maTextureTransform.translate(0.0, 0.5);
+            aTextureTransform.scale(1.0, fSizeWithoutBorder * 0.5);
+            aTextureTransform.translate(0.0, 0.5);
         }
         else
         {
             if(!fTools::equal(fSizeWithoutBorder, 1.0))
             {
-                o_rGradientInfo.maTextureTransform.scale(1.0, fSizeWithoutBorder);
-                o_rGradientInfo.maTextureTransform.translate(0.0, fBorder);
+                aTextureTransform.scale(1.0, fSizeWithoutBorder);
+                aTextureTransform.translate(0.0, fBorder);
             }
         }
 
-        o_rGradientInfo.maTextureTransform.scale(fTargetSizeX, fTargetSizeY);
+        aTextureTransform.scale(fTargetSizeX, fTargetSizeY);
 
         // add texture rotate after scale to keep perpendicular angles
-        if(0.0 != fAngle)
+        if(bAngleUsed)
         {
-            const B2DPoint aCenter(0.5*fTargetSizeX,
-                                   0.5*fTargetSizeY);
-            o_rGradientInfo.maTextureTransform *=
-                basegfx::tools::createRotateAroundPoint(aCenter, fAngle);
+            const B2DPoint aCenter(0.5 * fTargetSizeX, 0.5 * fTargetSizeY);
+
+            aTextureTransform *= basegfx::tools::createRotateAroundPoint(aCenter, fAngle);
         }
 
         // add object translate
-        o_rGradientInfo.maTextureTransform.translate(fTargetOffsetX, fTargetOffsetY);
+        aTextureTransform.translate(fTargetOffsetX, fTargetOffsetY);
 
         // prepare aspect for texture
-        o_rGradientInfo.mfAspectRatio = (0.0 != fTargetSizeY) ?  fTargetSizeX / fTargetSizeY : 1.0;
+        const double fAspectRatio(fTools::equalZero(fTargetSizeY) ?  1.0 : fTargetSizeX / fTargetSizeY);
 
-        // build transform from u,v to [0.0 .. 1.0].
-        o_rGradientInfo.maBackTextureTransform = o_rGradientInfo.maTextureTransform;
-        o_rGradientInfo.maBackTextureTransform.invert();
+        return ODFGradientInfo(aTextureTransform, fAspectRatio, nSteps);
     }
 
     /** Most of the setup for radial & ellipsoidal gradient is the same,
         except for the border treatment. Factored out here.
     */
-    static void initEllipticalGradientInfo(ODFGradientInfo& o_rGradientInfo,
-                                           const B2DRange&  rTargetRange,
-                                           const B2DVector& rOffset,
-                                           sal_uInt32       nSteps,
-                                           double           fBorder,
-                                           double           fAngle,
-                                           bool             bCircular)
+    ODFGradientInfo initEllipticalGradientInfo(
+        const B2DRange& rTargetRange,
+        const B2DVector& rOffset,
+        sal_uInt32 nSteps,
+        double fBorder,
+        double fAngle,
+        bool bCircular)
     {
-        o_rGradientInfo.maTextureTransform.identity();
-        o_rGradientInfo.maBackTextureTransform.identity();
-        o_rGradientInfo.mnSteps = nSteps;
+        B2DHomMatrix aTextureTransform;
 
         fAngle = -fAngle;
 
@@ -118,9 +133,10 @@ namespace basegfx
         double fTargetOffsetY(rTargetRange.getMinY());
 
         // add object expansion
-        if( bCircular )
+        if(bCircular)
         {
             const double fOriginalDiag(sqrt((fTargetSizeX * fTargetSizeX) + (fTargetSizeY * fTargetSizeY)));
+
             fTargetOffsetX -= (fOriginalDiag - fTargetSizeX) / 2.0;
             fTargetOffsetY -= (fOriginalDiag - fTargetSizeY) / 2.0;
             fTargetSizeX = fOriginalDiag;
@@ -135,22 +151,21 @@ namespace basegfx
         }
 
         const double fHalfBorder((1.0 - fBorder) * 0.5);
-        o_rGradientInfo.maTextureTransform.scale(fHalfBorder, fHalfBorder);
 
-        o_rGradientInfo.maTextureTransform.translate(0.5, 0.5);
-        o_rGradientInfo.maTextureTransform.scale(fTargetSizeX, fTargetSizeY);
+        aTextureTransform.scale(fHalfBorder, fHalfBorder);
+        aTextureTransform.translate(0.5, 0.5);
+        aTextureTransform.scale(fTargetSizeX, fTargetSizeY);
 
         // add texture rotate after scale to keep perpendicular angles
-        if( !bCircular && 0.0 != fAngle)
+        if(!bCircular && !fTools::equalZero(fAngle))
         {
-            const B2DPoint aCenter(0.5*fTargetSizeX,
-                                   0.5*fTargetSizeY);
-            o_rGradientInfo.maTextureTransform *=
-                basegfx::tools::createRotateAroundPoint(aCenter, fAngle);
+            const B2DPoint aCenter(0.5 * fTargetSizeX, 0.5 * fTargetSizeY);
+
+            aTextureTransform *= basegfx::tools::createRotateAroundPoint(aCenter, fAngle);
         }
 
         // add defined offsets after rotation
-        if(0.5 != rOffset.getX() || 0.5 != rOffset.getY())
+        if(!fTools::equal(0.5, rOffset.getX()) || !fTools::equal(0.5, rOffset.getY()))
         {
             // use original target size
             fTargetOffsetX += (rOffset.getX() - 0.5) * rTargetRange.getWidth();
@@ -158,30 +173,26 @@ namespace basegfx
         }
 
         // add object translate
-        o_rGradientInfo.maTextureTransform.translate(fTargetOffsetX, fTargetOffsetY);
+        aTextureTransform.translate(fTargetOffsetX, fTargetOffsetY);
 
         // prepare aspect for texture
-        o_rGradientInfo.mfAspectRatio = (0.0 != fTargetSizeY) ?  fTargetSizeX / fTargetSizeY : 1.0;
+        const double fAspectRatio((0.0 != fTargetSizeY) ?  fTargetSizeX / fTargetSizeY : 1.0);
 
-        // build transform from u,v to [0.0 .. 1.0].
-        o_rGradientInfo.maBackTextureTransform = o_rGradientInfo.maTextureTransform;
-        o_rGradientInfo.maBackTextureTransform.invert();
+        return ODFGradientInfo(aTextureTransform, fAspectRatio, nSteps);
     }
 
     /** Setup for rect & square gradient is exactly the same. Factored out
         here.
     */
-    static void initRectGradientInfo(ODFGradientInfo& o_rGradientInfo,
-                                     const B2DRange&  rTargetRange,
-                                     const B2DVector& rOffset,
-                                     sal_uInt32       nSteps,
-                                     double           fBorder,
-                                     double           fAngle,
-                                     bool             bSquare)
+    ODFGradientInfo initRectGradientInfo(
+        const B2DRange& rTargetRange,
+        const B2DVector& rOffset,
+        sal_uInt32 nSteps,
+        double fBorder,
+        double fAngle,
+        bool bSquare)
     {
-        o_rGradientInfo.maTextureTransform.identity();
-        o_rGradientInfo.maBackTextureTransform.identity();
-        o_rGradientInfo.mnSteps = nSteps;
+        B2DHomMatrix aTextureTransform;
 
         fAngle = -fAngle;
 
@@ -194,18 +205,22 @@ namespace basegfx
         if(bSquare)
         {
             const double fSquareWidth(std::max(fTargetSizeX, fTargetSizeY));
+
             fTargetOffsetX -= (fSquareWidth - fTargetSizeX) / 2.0;
             fTargetOffsetY -= (fSquareWidth - fTargetSizeY) / 2.0;
             fTargetSizeX = fTargetSizeY = fSquareWidth;
         }
 
         // add object expansion
-        if(0.0 != fAngle)
+        const bool bAngleUsed(!fTools::equalZero(fAngle));
+
+        if(bAngleUsed)
         {
             const double fAbsCos(fabs(cos(fAngle)));
             const double fAbsSin(fabs(sin(fAngle)));
             const double fNewX(fTargetSizeX * fAbsCos + fTargetSizeY * fAbsSin);
             const double fNewY(fTargetSizeY * fAbsCos + fTargetSizeX * fAbsSin);
+
             fTargetOffsetX -= (fNewX - fTargetSizeX) / 2.0;
             fTargetOffsetY -= (fNewY - fTargetSizeY) / 2.0;
             fTargetSizeX = fNewX;
@@ -213,22 +228,21 @@ namespace basegfx
         }
 
         const double fHalfBorder((1.0 - fBorder) * 0.5);
-        o_rGradientInfo.maTextureTransform.scale(fHalfBorder, fHalfBorder);
 
-        o_rGradientInfo.maTextureTransform.translate(0.5, 0.5);
-        o_rGradientInfo.maTextureTransform.scale(fTargetSizeX, fTargetSizeY);
+        aTextureTransform.scale(fHalfBorder, fHalfBorder);
+        aTextureTransform.translate(0.5, 0.5);
+        aTextureTransform.scale(fTargetSizeX, fTargetSizeY);
 
         // add texture rotate after scale to keep perpendicular angles
-        if(0.0 != fAngle)
+        if(bAngleUsed)
         {
-            const B2DPoint aCenter(0.5*fTargetSizeX,
-                                   0.5*fTargetSizeY);
-            o_rGradientInfo.maTextureTransform *=
-                basegfx::tools::createRotateAroundPoint(aCenter, fAngle);
+            const B2DPoint aCenter(0.5 * fTargetSizeX, 0.5 * fTargetSizeY);
+
+            aTextureTransform *= basegfx::tools::createRotateAroundPoint(aCenter, fAngle);
         }
 
         // add defined offsets after rotation
-        if(0.5 != rOffset.getX() || 0.5 != rOffset.getY())
+        if(!fTools::equal(0.5, rOffset.getX()) || !fTools::equal(0.5, rOffset.getY()))
         {
             // use scaled target size
             fTargetOffsetX += (rOffset.getX() - 0.5) * fTargetSizeX;
@@ -236,117 +250,183 @@ namespace basegfx
         }
 
         // add object translate
-        o_rGradientInfo.maTextureTransform.translate(fTargetOffsetX, fTargetOffsetY);
+        aTextureTransform.translate(fTargetOffsetX, fTargetOffsetY);
 
         // prepare aspect for texture
-        o_rGradientInfo.mfAspectRatio = (0.0 != fTargetSizeY) ? fTargetSizeX / fTargetSizeY : 1.0;
+        const double fAspectRatio((0.0 != fTargetSizeY) ? fTargetSizeX / fTargetSizeY : 1.0);
 
-        // build transform from u,v to [0.0 .. 1.0]. As base, use inverse texture transform
-        o_rGradientInfo.maBackTextureTransform = o_rGradientInfo.maTextureTransform;
-        o_rGradientInfo.maBackTextureTransform.invert();
+        return ODFGradientInfo(aTextureTransform, fAspectRatio, nSteps);
     }
 
     namespace tools
     {
-        ODFGradientInfo& createLinearODFGradientInfo(ODFGradientInfo& o_rGradientInfo,
-                                                     const B2DRange&  rTargetArea,
-                                                     sal_uInt32       nSteps,
-                                                     double           fBorder,
-                                                     double           fAngle)
+        ODFGradientInfo createLinearODFGradientInfo(
+            const B2DRange& rTargetArea,
+            sal_uInt32 nSteps,
+            double fBorder,
+            double fAngle)
         {
-            init1DGradientInfo(o_rGradientInfo,
-                               rTargetArea,
-                               nSteps,
-                               fBorder,
-                               fAngle,
-                               false);
-            return o_rGradientInfo;
+            return init1DGradientInfo(
+                rTargetArea,
+                nSteps,
+                fBorder,
+                fAngle,
+                false);
         }
 
-        ODFGradientInfo& createAxialODFGradientInfo(ODFGradientInfo& o_rGradientInfo,
-                                                    const B2DRange&  rTargetArea,
-                                                    sal_uInt32       nSteps,
-                                                    double           fBorder,
-                                                    double           fAngle)
+        ODFGradientInfo createAxialODFGradientInfo(
+            const B2DRange& rTargetArea,
+            sal_uInt32 nSteps,
+            double fBorder,
+            double fAngle)
         {
-            init1DGradientInfo(o_rGradientInfo,
-                               rTargetArea,
-                               nSteps,
-                               fBorder,
-                               fAngle,
-                               true);
-            return o_rGradientInfo;
+            return init1DGradientInfo(
+                rTargetArea,
+                nSteps,
+                fBorder,
+                fAngle,
+                true);
         }
 
-        ODFGradientInfo& createRadialODFGradientInfo(ODFGradientInfo& o_rGradientInfo,
-                                                     const B2DRange&  rTargetArea,
-                                                     const B2DVector& rOffset,
-                                                     sal_uInt32       nSteps,
-                                                     double           fBorder)
+        ODFGradientInfo createRadialODFGradientInfo(
+            const B2DRange& rTargetArea,
+            const B2DVector& rOffset,
+            sal_uInt32 nSteps,
+            double fBorder)
         {
-            initEllipticalGradientInfo(o_rGradientInfo,
-                                       rTargetArea,
-                                       rOffset,
-                                       nSteps,
-                                       fBorder,
-                                       0.0,
-                                       true);
-            return o_rGradientInfo;
+            return initEllipticalGradientInfo(
+                rTargetArea,
+                rOffset,
+                nSteps,
+                fBorder,
+                0.0,
+                true);
         }
 
-        ODFGradientInfo& createEllipticalODFGradientInfo(ODFGradientInfo& o_rGradientInfo,
-                                                         const B2DRange&  rTargetArea,
-                                                         const B2DVector& rOffset,
-                                                         sal_uInt32       nSteps,
-                                                         double           fBorder,
-                                                         double           fAngle)
+        ODFGradientInfo createEllipticalODFGradientInfo(
+            const B2DRange& rTargetArea,
+            const B2DVector& rOffset,
+            sal_uInt32 nSteps,
+            double fBorder,
+            double fAngle)
         {
-            initEllipticalGradientInfo(o_rGradientInfo,
-                                       rTargetArea,
-                                       rOffset,
-                                       nSteps,
-                                       fBorder,
-                                       fAngle,
-                                       false);
-            return o_rGradientInfo;
+            return initEllipticalGradientInfo(
+                rTargetArea,
+                rOffset,
+                nSteps,
+                fBorder,
+                fAngle,
+                false);
         }
 
-        ODFGradientInfo& createSquareODFGradientInfo(ODFGradientInfo& o_rGradientInfo,
-                                                     const B2DRange&  rTargetArea,
-                                                     const B2DVector& rOffset,
-                                                     sal_uInt32       nSteps,
-                                                     double           fBorder,
-                                                     double           fAngle)
+        ODFGradientInfo createSquareODFGradientInfo(
+            const B2DRange& rTargetArea,
+            const B2DVector& rOffset,
+            sal_uInt32 nSteps,
+            double fBorder,
+            double fAngle)
         {
-            initRectGradientInfo(o_rGradientInfo,
-                                 rTargetArea,
-                                 rOffset,
-                                 nSteps,
-                                 fBorder,
-                                 fAngle,
-                                 true);
-            return o_rGradientInfo;
+            return initRectGradientInfo(
+                rTargetArea,
+                rOffset,
+                nSteps,
+                fBorder,
+                fAngle,
+                true);
         }
 
-        ODFGradientInfo& createRectangularODFGradientInfo(ODFGradientInfo& o_rGradientInfo,
-                                                          const B2DRange&  rTargetArea,
-                                                          const B2DVector& rOffset,
-                                                          sal_uInt32       nSteps,
-                                                          double           fBorder,
-                                                          double           fAngle)
+        ODFGradientInfo createRectangularODFGradientInfo(
+            const B2DRange& rTargetArea,
+            const B2DVector& rOffset,
+            sal_uInt32 nSteps,
+            double fBorder,
+            double fAngle)
         {
-            initRectGradientInfo(o_rGradientInfo,
-                                 rTargetArea,
-                                 rOffset,
-                                 nSteps,
-                                 fBorder,
-                                 fAngle,
-                                 false);
-            return o_rGradientInfo;
+            return initRectGradientInfo(
+                rTargetArea,
+                rOffset,
+                nSteps,
+                fBorder,
+                fAngle,
+                false);
         }
 
+        double getLinearGradientAlpha(const B2DPoint& rUV, const ODFGradientInfo& rGradInfo)
+        {
+            const B2DPoint aCoor(rGradInfo.getBackTextureTransform() * rUV);
+            const double t(clamp(aCoor.getY(), 0.0, 1.0));
+            const sal_uInt32 nSteps(rGradInfo.getSteps());
+
+            if(nSteps)
+            {
+                return floor(t * nSteps) / double(nSteps + 1L);
+            }
+
+            return t;
+        }
+
+        double getAxialGradientAlpha(const B2DPoint& rUV, const ODFGradientInfo& rGradInfo)
+        {
+            const B2DPoint aCoor(rGradInfo.getBackTextureTransform() * rUV);
+            const double t(clamp(fabs(aCoor.getY()), 0.0, 1.0));
+            const sal_uInt32 nSteps(rGradInfo.getSteps());
+            const double fInternalSteps((nSteps * 2) - 1);
+
+            if(nSteps)
+            {
+                return floor(((t * fInternalSteps) + 1.0) / 2.0) / double(nSteps - 1L);
+            }
+
+            return t;
+        }
+
+        double getRadialGradientAlpha(const B2DPoint& rUV, const ODFGradientInfo& rGradInfo)
+        {
+            const B2DPoint aCoor(rGradInfo.getBackTextureTransform() * rUV);
+            const double fDist(clamp(aCoor.getX() * aCoor.getX() + aCoor.getY() * aCoor.getY(), 0.0, 1.0));
+            const double t(1.0 - sqrt(fDist));
+            const sal_uInt32 nSteps(rGradInfo.getSteps());
+
+            if(nSteps)
+            {
+                return floor(t * nSteps) / double(nSteps - 1L);
+            }
+
+            return t;
+        }
+
+        double getEllipticalGradientAlpha(const B2DPoint& rUV, const ODFGradientInfo& rGradInfo)
+        {
+            return getRadialGradientAlpha(rUV, rGradInfo); // only matrix setup differs
+        }
+
+        double getSquareGradientAlpha(const B2DPoint& rUV, const ODFGradientInfo& rGradInfo)
+        {
+            const B2DPoint aCoor(rGradInfo.getBackTextureTransform() * rUV);
+            const double fAbsX(fabs(aCoor.getX()));
+            const double fAbsY(fabs(aCoor.getY()));
+
+            if(fTools::moreOrEqual(fAbsX, 1.0) || fTools::moreOrEqual(fAbsY, 1.0))
+            {
+                return 0.0;
+            }
+
+            const double t(1.0 - std::max(fAbsX, fAbsY));
+            const sal_uInt32 nSteps(rGradInfo.getSteps());
+
+            if(nSteps)
+            {
+                return floor(t * nSteps) / double(nSteps - 1L);
+            }
+
+            return t;
+        }
+
+        double getRectangularGradientAlpha(const B2DPoint& rUV, const ODFGradientInfo& rGradInfo)
+        {
+            return getSquareGradientAlpha(rUV, rGradInfo); // only matrix setup differs
+        }
     } // namespace tools
-
 } // namespace basegfx
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

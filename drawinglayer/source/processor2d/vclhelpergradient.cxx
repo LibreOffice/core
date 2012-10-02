@@ -56,44 +56,42 @@ namespace drawinglayer
         void impDrawGradientToOutDevSimple(
             OutputDevice& rOutDev,
             const basegfx::B2DPolyPolygon& rTargetForm,
-            const ::std::vector< basegfx::B2DHomMatrix >& rMatrices,
-            const ::std::vector< basegfx::BColor >& rColors,
+            const std::vector< drawinglayer::texture::B2DHomMatrixAndBColor >& rEntries,
+            const basegfx::BColor& rOutmostColor,
             const basegfx::B2DPolygon& rUnitPolygon)
         {
             rOutDev.SetLineColor();
+            rOutDev.SetFillColor(Color(rOutmostColor));
+            rOutDev.DrawPolyPolygon(rTargetForm);
+            const sal_uInt32 nCount(rEntries.size());
 
-            for(sal_uInt32 a(0L); a < rColors.size(); a++)
+            for(sal_uInt32 a(0); a < nCount; a++)
             {
-                // set correct color
-                const basegfx::BColor aFillColor(rColors[a]);
-                rOutDev.SetFillColor(Color(aFillColor));
+                // create part polygon
+                basegfx::B2DPolygon aNewPoly(rUnitPolygon);
 
-                if(a)
-                {
-                    if(a - 1L < static_cast< sal_uInt32 >(rMatrices.size()))
-                    {
-                        basegfx::B2DPolygon aNewPoly(rUnitPolygon);
-                        aNewPoly.transform(rMatrices[a - 1L]);
-                        rOutDev.DrawPolygon(aNewPoly);
-                    }
-                }
-                else
-                {
-                    rOutDev.DrawPolyPolygon(rTargetForm);
-                }
+                aNewPoly.transform(rEntries[a].maB2DHomMatrix);
+
+                // create solid fill
+                rOutDev.SetFillColor(Color(rEntries[a].maBColor));
+                rOutDev.DrawPolygon(aNewPoly);
             }
         }
 
         void impDrawGradientToOutDevComplex(
             OutputDevice& rOutDev,
             const basegfx::B2DPolyPolygon& rTargetForm,
-            const ::std::vector< basegfx::B2DHomMatrix >& rMatrices,
-            const ::std::vector< basegfx::BColor >& rColors,
+            const std::vector< drawinglayer::texture::B2DHomMatrixAndBColor >& rEntries,
+            const basegfx::BColor& rOutmostColor,
             const basegfx::B2DPolygon& rUnitPolygon)
         {
             PolyPolygon aVclTargetForm(rTargetForm);
             ::std::vector< Polygon > aVclPolygons;
+            const sal_uInt32 nCount(rEntries.size());
             sal_uInt32 a;
+
+            // reserve when possible
+            aVclPolygons.reserve(nCount);
 
             // remember and set to XOR
             rOutDev.SetLineColor();
@@ -101,41 +99,35 @@ namespace drawinglayer
             rOutDev.SetRasterOp(ROP_XOR);
 
             // draw gradient PolyPolygons
-            for(a = 0L; a < rMatrices.size(); a++)
+            for(a = 0; a < nCount; a++)
             {
                 // create polygon and remember
                 basegfx::B2DPolygon aNewPoly(rUnitPolygon);
-                aNewPoly.transform(rMatrices[a]);
+                aNewPoly.transform(rEntries[a].maB2DHomMatrix);
                 aVclPolygons.push_back(Polygon(aNewPoly));
-
-                // set correct color
-                if(rColors.size() > a)
-                {
-                    const basegfx::BColor aFillColor(rColors[a]);
-                    rOutDev.SetFillColor(Color(aFillColor));
-                }
 
                 // create vcl PolyPolygon and draw it
                 if(a)
                 {
-                    PolyPolygon aVclPolyPoly(aVclPolygons[a - 1L]);
+                    rOutDev.SetFillColor(Color(rEntries[a - 1].maBColor));
+                    PolyPolygon aVclPolyPoly(aVclPolygons[a - 1]);
                     aVclPolyPoly.Insert(aVclPolygons[a]);
                     rOutDev.DrawPolyPolygon(aVclPolyPoly);
                 }
                 else
                 {
+                    rOutDev.SetFillColor(Color(rOutmostColor));
                     PolyPolygon aVclPolyPoly(aVclTargetForm);
-                    aVclPolyPoly.Insert(aVclPolygons[0L]);
+                    aVclPolyPoly.Insert(aVclPolygons[0]);
                     rOutDev.DrawPolyPolygon(aVclPolyPoly);
                 }
             }
 
             // draw last poly in last color
-            if(!rColors.empty())
+            if(nCount)
             {
-                const basegfx::BColor aFillColor(rColors[rColors.size() - 1L]);
-                rOutDev.SetFillColor(Color(aFillColor));
-                rOutDev.DrawPolygon(aVclPolygons[aVclPolygons.size() - 1L]);
+                rOutDev.SetFillColor(Color(rEntries[nCount - 1].maBColor));
+                rOutDev.DrawPolygon(aVclPolygons[aVclPolygons.size() - 1]);
             }
 
             // draw object form in black and go back to XOR
@@ -145,36 +137,30 @@ namespace drawinglayer
             rOutDev.SetRasterOp(ROP_XOR);
 
             // draw gradient PolyPolygons again
-            for(a = 0L; a < rMatrices.size(); a++)
+            for(a = 0; a < nCount; a++)
             {
-                // set correct color
-                if(rColors.size() > a)
-                {
-                    const basegfx::BColor aFillColor(rColors[a]);
-                    rOutDev.SetFillColor(Color(aFillColor));
-                }
-
                 // create vcl PolyPolygon and draw it
                 if(a)
                 {
-                    PolyPolygon aVclPolyPoly(aVclPolygons[a - 1L]);
+                    rOutDev.SetFillColor(Color(rEntries[a - 1].maBColor));
+                    PolyPolygon aVclPolyPoly(aVclPolygons[a - 1]);
                     aVclPolyPoly.Insert(aVclPolygons[a]);
                     rOutDev.DrawPolyPolygon(aVclPolyPoly);
                 }
                 else
                 {
+                    rOutDev.SetFillColor(Color(rOutmostColor));
                     PolyPolygon aVclPolyPoly(aVclTargetForm);
-                    aVclPolyPoly.Insert(aVclPolygons[0L]);
+                    aVclPolyPoly.Insert(aVclPolygons[0]);
                     rOutDev.DrawPolyPolygon(aVclPolyPoly);
                 }
             }
 
             // draw last poly in last color
-            if(!rColors.empty())
+            if(nCount)
             {
-                const basegfx::BColor aFillColor(rColors[rColors.size() - 1L]);
-                rOutDev.SetFillColor(Color(aFillColor));
-                rOutDev.DrawPolygon(aVclPolygons[aVclPolygons.size() - 1L]);
+                rOutDev.SetFillColor(Color(rEntries[nCount - 1].maBColor));
+                rOutDev.DrawPolygon(aVclPolygons[aVclPolygons.size() - 1]);
             }
 
             // reset drawmode
@@ -195,8 +181,8 @@ namespace drawinglayer
         double fBorder, double fAngle, double fOffsetX, double fOffsetY, bool bSimple)
     {
         const basegfx::B2DRange aOutlineRange(basegfx::tools::getRange(rTargetForm));
-        ::std::vector< basegfx::B2DHomMatrix > aMatrices;
-        ::std::vector< basegfx::BColor > aColors;
+        std::vector< drawinglayer::texture::B2DHomMatrixAndBColor > aEntries;
+        basegfx::BColor aOutmostColor;
         basegfx::B2DPolygon aUnitPolygon;
 
         // make sure steps is not too high/low
@@ -208,63 +194,57 @@ namespace drawinglayer
             case attribute::GRADIENTSTYLE_LINEAR:
             {
                 texture::GeoTexSvxGradientLinear aGradient(aOutlineRange, rStart, rEnd, nSteps, fBorder, fAngle);
-                aGradient.appendTransformations(aMatrices);
-                aGradient.appendColors(aColors);
-                aUnitPolygon = basegfx::tools::createUnitPolygon();
+                aGradient.appendTransformationsAndColors(aEntries, aOutmostColor);
+                aUnitPolygon = basegfx::tools::createPolygonFromRect(basegfx::B2DRange(-1, -1, 1, 1));
                 break;
             }
             case attribute::GRADIENTSTYLE_AXIAL:
             {
                 texture::GeoTexSvxGradientAxial aGradient(aOutlineRange, rStart, rEnd, nSteps, fBorder, fAngle);
-                aGradient.appendTransformations(aMatrices);
-                aGradient.appendColors(aColors);
+                aGradient.appendTransformationsAndColors(aEntries, aOutmostColor);
                 aUnitPolygon = basegfx::tools::createPolygonFromRect(basegfx::B2DRange(-1, -1, 1, 1));
                 break;
             }
             case attribute::GRADIENTSTYLE_RADIAL:
             {
                 texture::GeoTexSvxGradientRadial aGradient(aOutlineRange, rStart, rEnd, nSteps, fBorder, fOffsetX, fOffsetY);
-                aGradient.appendTransformations(aMatrices);
-                aGradient.appendColors(aColors);
+                aGradient.appendTransformationsAndColors(aEntries, aOutmostColor);
                 aUnitPolygon = basegfx::tools::createPolygonFromCircle(basegfx::B2DPoint(0,0), 1);
                 break;
             }
             case attribute::GRADIENTSTYLE_ELLIPTICAL:
             {
                 texture::GeoTexSvxGradientElliptical aGradient(aOutlineRange, rStart, rEnd, nSteps, fBorder, fOffsetX, fOffsetX, fAngle);
-                aGradient.appendTransformations(aMatrices);
-                aGradient.appendColors(aColors);
+                aGradient.appendTransformationsAndColors(aEntries, aOutmostColor);
                 aUnitPolygon = basegfx::tools::createPolygonFromCircle(basegfx::B2DPoint(0,0), 1);
                 break;
             }
             case attribute::GRADIENTSTYLE_SQUARE:
             {
                 texture::GeoTexSvxGradientSquare aGradient(aOutlineRange, rStart, rEnd, nSteps, fBorder, fOffsetX, fOffsetX, fAngle);
-                aGradient.appendTransformations(aMatrices);
-                aGradient.appendColors(aColors);
+                aGradient.appendTransformationsAndColors(aEntries, aOutmostColor);
                 aUnitPolygon = basegfx::tools::createPolygonFromRect(basegfx::B2DRange(-1, -1, 1, 1));
                 break;
             }
             case attribute::GRADIENTSTYLE_RECT:
             {
                 texture::GeoTexSvxGradientRect aGradient(aOutlineRange, rStart, rEnd, nSteps, fBorder, fOffsetX, fOffsetX, fAngle);
-                aGradient.appendTransformations(aMatrices);
-                aGradient.appendColors(aColors);
+                aGradient.appendTransformationsAndColors(aEntries, aOutmostColor);
                 aUnitPolygon = basegfx::tools::createPolygonFromRect(basegfx::B2DRange(-1, -1, 1, 1));
                 break;
             }
         }
 
         // paint them with mask using the XOR method
-        if(!aMatrices.empty())
+        if(aEntries.size())
         {
             if(bSimple)
             {
-                impDrawGradientToOutDevSimple(rOutDev, rTargetForm, aMatrices, aColors, aUnitPolygon);
+                impDrawGradientToOutDevSimple(rOutDev, rTargetForm, aEntries, aOutmostColor, aUnitPolygon);
             }
             else
             {
-                impDrawGradientToOutDevComplex(rOutDev, rTargetForm, aMatrices, aColors, aUnitPolygon);
+                impDrawGradientToOutDevComplex(rOutDev, rTargetForm, aEntries, aOutmostColor, aUnitPolygon);
             }
         }
     }

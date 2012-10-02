@@ -631,10 +631,12 @@ namespace drawinglayer
                 }
                 else
                 {
+                    static bool bSimple = false; // allow testing simple paint in debugger
+
                     impDrawGradientToOutDev(
                         *mpOutputDevice, aLocalPolyPolygon, rGradient.getStyle(), rGradient.getSteps(),
                         aStartColor, aEndColor, rGradient.getBorder(),
-                        rGradient.getAngle(), rGradient.getOffsetX(), rGradient.getOffsetY(), false);
+                        rGradient.getAngle(), rGradient.getOffsetX(), rGradient.getOffsetY(), bSimple);
                 }
             }
         }

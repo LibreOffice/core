@@ -36,11 +36,10 @@ namespace drawinglayer
     namespace primitive2d
     {
         void FillGradientPrimitive2D::generateMatricesAndColors(
-            std::vector< basegfx::B2DHomMatrix >& rMatrices,
-            std::vector< basegfx::BColor >& rColors) const
+            std::vector< drawinglayer::texture::B2DHomMatrixAndBColor >& rEntries,
+            basegfx::BColor& rOutmostColor) const
         {
-            rMatrices.clear();
-            rColors.clear();
+            rEntries.clear();
 
             // make sure steps is not too high/low
             const basegfx::BColor aStart(getFillGradient().getStartColor());
@@ -70,127 +69,131 @@ namespace drawinglayer
                 case attribute::GRADIENTSTYLE_LINEAR:
                 {
                     texture::GeoTexSvxGradientLinear aGradient(getObjectRange(), aStart, aEnd, nSteps, getFillGradient().getBorder(), getFillGradient().getAngle());
-                    aGradient.appendTransformations(rMatrices);
-                    aGradient.appendColors(rColors);
+                    aGradient.appendTransformationsAndColors(rEntries, rOutmostColor);
                     break;
                 }
                 case attribute::GRADIENTSTYLE_AXIAL:
                 {
                     texture::GeoTexSvxGradientAxial aGradient(getObjectRange(), aStart, aEnd, nSteps, getFillGradient().getBorder(), getFillGradient().getAngle());
-                    aGradient.appendTransformations(rMatrices);
-                    aGradient.appendColors(rColors);
+                    aGradient.appendTransformationsAndColors(rEntries, rOutmostColor);
                     break;
                 }
                 case attribute::GRADIENTSTYLE_RADIAL:
                 {
                     texture::GeoTexSvxGradientRadial aGradient(getObjectRange(), aStart, aEnd, nSteps, getFillGradient().getBorder(), getFillGradient().getOffsetX(), getFillGradient().getOffsetY());
-                    aGradient.appendTransformations(rMatrices);
-                    aGradient.appendColors(rColors);
+                    aGradient.appendTransformationsAndColors(rEntries, rOutmostColor);
                     break;
                 }
                 case attribute::GRADIENTSTYLE_ELLIPTICAL:
                 {
                     texture::GeoTexSvxGradientElliptical aGradient(getObjectRange(), aStart, aEnd, nSteps, getFillGradient().getBorder(), getFillGradient().getOffsetX(), getFillGradient().getOffsetY(), getFillGradient().getAngle());
-                    aGradient.appendTransformations(rMatrices);
-                    aGradient.appendColors(rColors);
+                    aGradient.appendTransformationsAndColors(rEntries, rOutmostColor);
                     break;
                 }
                 case attribute::GRADIENTSTYLE_SQUARE:
                 {
                     texture::GeoTexSvxGradientSquare aGradient(getObjectRange(), aStart, aEnd, nSteps, getFillGradient().getBorder(), getFillGradient().getOffsetX(), getFillGradient().getOffsetY(), getFillGradient().getAngle());
-                    aGradient.appendTransformations(rMatrices);
-                    aGradient.appendColors(rColors);
+                    aGradient.appendTransformationsAndColors(rEntries, rOutmostColor);
                     break;
                 }
                 case attribute::GRADIENTSTYLE_RECT:
                 {
                     texture::GeoTexSvxGradientRect aGradient(getObjectRange(), aStart, aEnd, nSteps, getFillGradient().getBorder(), getFillGradient().getOffsetX(), getFillGradient().getOffsetY(), getFillGradient().getAngle());
-                    aGradient.appendTransformations(rMatrices);
-                    aGradient.appendColors(rColors);
+                    aGradient.appendTransformationsAndColors(rEntries, rOutmostColor);
                     break;
                 }
             }
         }
 
         Primitive2DSequence FillGradientPrimitive2D::createOverlappingFill(
-            const std::vector< basegfx::B2DHomMatrix >& rMatrices,
-            const std::vector< basegfx::BColor >& rColors,
+            const std::vector< drawinglayer::texture::B2DHomMatrixAndBColor >& rEntries,
+            const basegfx::BColor& rOutmostColor,
             const basegfx::B2DPolygon& rUnitPolygon) const
         {
             // prepare return value
-            Primitive2DSequence aRetval(rColors.size() ? rMatrices.size() + 1 : rMatrices.size());
+            Primitive2DSequence aRetval(rEntries.size() + 1);
 
-            // create solid fill with start color
-            if(!rColors.empty())
-            {
-                // create primitive
-                const Primitive2DReference xRef(
-                    new PolyPolygonColorPrimitive2D(
-                        basegfx::B2DPolyPolygon(basegfx::tools::createPolygonFromRect(getObjectRange())),
-                        rColors[0]));
-                aRetval[0] = xRef;
-            }
+            // create solid fill with outmost color
+            aRetval[0] = Primitive2DReference(
+                new PolyPolygonColorPrimitive2D(
+                    basegfx::B2DPolyPolygon(basegfx::tools::createPolygonFromRect(getObjectRange())),
+                    rOutmostColor));
 
             // create solid fill steps
-            for(sal_uInt32 a(0); a < rMatrices.size(); a++)
+            for(sal_uInt32 a(0); a < rEntries.size(); a++)
             {
                 // create part polygon
                 basegfx::B2DPolygon aNewPoly(rUnitPolygon);
-                aNewPoly.transform(rMatrices[a]);
+
+                aNewPoly.transform(rEntries[a].maB2DHomMatrix);
 
                 // create solid fill
-                const Primitive2DReference xRef(
+                aRetval[a + 1] = Primitive2DReference(
                     new PolyPolygonColorPrimitive2D(
                         basegfx::B2DPolyPolygon(aNewPoly),
-                        rColors[a + 1]));
-                aRetval[a + 1] = xRef;
+                        rEntries[a].maBColor));
             }
 
             return aRetval;
         }
 
         Primitive2DSequence FillGradientPrimitive2D::createNonOverlappingFill(
-            const std::vector< basegfx::B2DHomMatrix >& rMatrices,
-            const std::vector< basegfx::BColor >& rColors,
+            const std::vector< drawinglayer::texture::B2DHomMatrixAndBColor >& rEntries,
+            const basegfx::BColor& rOutmostColor,
             const basegfx::B2DPolygon& rUnitPolygon) const
         {
             // prepare return value
-            Primitive2DSequence aRetval;
-            const sal_uInt32 nMatricesSize(rMatrices.size());
+            Primitive2DSequence aRetval(rEntries.size() + 1);
 
-            if(nMatricesSize)
+            // get outmost range from object
+            basegfx::B2DRange aOutmostRange(getObjectRange());
+            basegfx::B2DPolyPolygon aCombinedPolyPoly;
+
+            if(rEntries.size())
             {
-                basegfx::B2DPolygon aOuterPoly(rUnitPolygon);
-                aOuterPoly.transform(rMatrices[0]);
-                basegfx::B2DPolyPolygon aCombinedPolyPoly(aOuterPoly);
-                const sal_uInt32 nEntryCount(rColors.size() ? rMatrices.size() + 1 : rMatrices.size());
-                sal_uInt32 nIndex(0);
+                // extend aOutmostRange with first polygon
+                basegfx::B2DPolygon aFirstPoly(rUnitPolygon);
 
-                aRetval.realloc(nEntryCount);
+                aFirstPoly.transform(rEntries[0].maB2DHomMatrix);
+                aCombinedPolyPoly.append(aFirstPoly);
+                aOutmostRange.expand(aFirstPoly.getB2DRange());
+            }
 
-                if(!rColors.empty())
+            // add outmost range to combined polypolygon (in 1st place), create first primitive
+            aCombinedPolyPoly.insert(0, basegfx::tools::createPolygonFromRect(aOutmostRange));
+            aRetval[0] = Primitive2DReference(
+                new PolyPolygonColorPrimitive2D(
+                    aCombinedPolyPoly,
+                    rOutmostColor));
+
+            if(rEntries.size())
+            {
+                // reuse first polygon, it's the second one
+                aCombinedPolyPoly.remove(0);
+
+                for(sal_uInt32 a(0); a < rEntries.size() - 1; a++)
                 {
-                    basegfx::B2DRange aOuterPolyRange(aOuterPoly.getB2DRange());
-                    aOuterPolyRange.expand(getObjectRange());
-                    aCombinedPolyPoly.append(basegfx::tools::createPolygonFromRect(aOuterPolyRange));
-                    aRetval[nIndex++] = Primitive2DReference(new PolyPolygonColorPrimitive2D(aCombinedPolyPoly, rColors[0]));
-                    aCombinedPolyPoly = basegfx::B2DPolyPolygon(aOuterPoly);
+                    // create next inner polygon, combinbe with last one
+                    basegfx::B2DPolygon aNextPoly(rUnitPolygon);
+
+                    aNextPoly.transform(rEntries[a + 1].maB2DHomMatrix);
+                    aCombinedPolyPoly.append(aNextPoly);
+
+                    // create primitive with correct color
+                    aRetval[a + 1] = Primitive2DReference(
+                        new PolyPolygonColorPrimitive2D(
+                            aCombinedPolyPoly,
+                            rEntries[a].maBColor));
+
+                    // reuse inner polygon, it's the 2nd one
+                    aCombinedPolyPoly.remove(0);
                 }
 
-                for(sal_uInt32 a(1); a < nMatricesSize - 1; a++)
-                {
-                    basegfx::B2DPolygon aInnerPoly(rUnitPolygon);
-                    aInnerPoly.transform(rMatrices[a]);
-                    aCombinedPolyPoly.append(aInnerPoly);
-                    aRetval[nIndex++] = Primitive2DReference(new PolyPolygonColorPrimitive2D(aCombinedPolyPoly, rColors[a]));
-                    aCombinedPolyPoly = basegfx::B2DPolyPolygon(aInnerPoly);
-                }
-
-                if(!rColors.empty())
-                {
-                    aRetval[nIndex] = Primitive2DReference(new PolyPolygonColorPrimitive2D(
-                        aCombinedPolyPoly, rColors[rColors.size() - 1]));
-                }
+                // add last inner polygon with last color
+                aRetval[rEntries.size()] = Primitive2DReference(
+                    new PolyPolygonColorPrimitive2D(
+                        aCombinedPolyPoly,
+                        rEntries[rEntries.size() - 1].maBColor));
             }
 
             return aRetval;
@@ -201,34 +204,35 @@ namespace drawinglayer
             // prepare shape of the Unit Polygon
             basegfx::B2DPolygon aUnitPolygon;
 
-            if(attribute::GRADIENTSTYLE_RADIAL == getFillGradient().getStyle()
-                || attribute::GRADIENTSTYLE_ELLIPTICAL == getFillGradient().getStyle())
+            switch(getFillGradient().getStyle())
             {
-                aUnitPolygon = basegfx::tools::createPolygonFromCircle(
-                    basegfx::B2DPoint(0,0), 1);
-            }
-            else if(attribute::GRADIENTSTYLE_LINEAR == maFillGradient.getStyle())
-            {
-                aUnitPolygon = basegfx::tools::createPolygonFromRect(basegfx::B2DRange(0, 0, 1, 1));
-            }
-            else
-            {
-                aUnitPolygon = basegfx::tools::createPolygonFromRect(basegfx::B2DRange(-1, -1, 1, 1));
+                case attribute::GRADIENTSTYLE_RADIAL:
+                case attribute::GRADIENTSTYLE_ELLIPTICAL:
+                {
+                    aUnitPolygon = basegfx::tools::createPolygonFromCircle(basegfx::B2DPoint(0.0, 0.0), 1.0);
+                    break;
+                }
+                default: // GRADIENTSTYLE_LINEAR, attribute::GRADIENTSTYLE_AXIAL, attribute::GRADIENTSTYLE_SQUARE, attribute::GRADIENTSTYLE_RECT
+                {
+                    aUnitPolygon = basegfx::tools::createPolygonFromRect(basegfx::B2DRange(-1.0, -1.0, 1.0, 1.0));
+                    break;
+                }
             }
 
             // get the transform matrices and colors (where colors
             // will have one more entry that matrices)
-            std::vector< basegfx::B2DHomMatrix > aMatrices;
-            std::vector< basegfx::BColor > aColors;
-            generateMatricesAndColors(aMatrices, aColors);
+            std::vector< drawinglayer::texture::B2DHomMatrixAndBColor > aEntries;
+            basegfx::BColor aOutmostColor;
+
+            generateMatricesAndColors(aEntries, aOutmostColor);
 
             if(bOverlapping)
             {
-                return createOverlappingFill(aMatrices, aColors, aUnitPolygon);
+                return createOverlappingFill(aEntries, aOutmostColor, aUnitPolygon);
             }
             else
             {
-                return createNonOverlappingFill(aMatrices, aColors, aUnitPolygon);
+                return createNonOverlappingFill(aEntries, aOutmostColor, aUnitPolygon);
             }
         }
 
@@ -243,7 +247,9 @@ namespace drawinglayer
 
             if(!getFillGradient().isDefault())
             {
-                return createFill(true);
+                static bool bOverlapping(true); // allow to test non-overlapping in the debugger
+
+                return createFill(bOverlapping);
             }
             else
             {

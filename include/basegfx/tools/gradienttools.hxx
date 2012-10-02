@@ -38,12 +38,13 @@ namespace basegfx
         1.2-compatible gradients. Use the createXXXODFGradientInfo()
         methods below for initializing from ODF attributes.
      */
-    struct BASEGFX_DLLPUBLIC ODFGradientInfo
+    class BASEGFX_DLLPUBLIC ODFGradientInfo
     {
+    private:
         /** transformation mapping from [0,1]^2 texture coordinate
            space to [0,1]^2 shape coordinate space
          */
-        B2DHomMatrix maTextureTransform;
+        B2DHomMatrix    maTextureTransform;
 
         /** transformation mapping from [0,1]^2 shape coordinate space
            to [0,1]^2 texture coordinate space. This is the
@@ -51,20 +52,72 @@ namespace basegfx
            scanline rasterizer (put shape u/v coordinates into it, get
            texture s/t coordinates out of it)
          */
-        B2DHomMatrix maBackTextureTransform;
+        B2DHomMatrix    maBackTextureTransform;
 
         /** Aspect ratio of the gradient. Only used in drawinglayer
            for generating nested gradient polygons currently. Already
            catered for in the transformations above.
          */
-        double       mfAspectRatio;
+        double          mfAspectRatio;
 
         /** Requested gradient steps to render. See the
            implementations of the getXXXGradientAlpha() methods below,
            the semantic differs slightly for the different gradient
            types.
          */
-        sal_uInt32   mnSteps;
+        sal_uInt32      mnSteps;
+
+    public:
+        ODFGradientInfo()
+        :   maTextureTransform(),
+            maBackTextureTransform(),
+            mfAspectRatio(1.0),
+            mnSteps(0)
+        {
+        }
+
+        ODFGradientInfo(
+            const B2DHomMatrix& rTextureTransform,
+            double fAspectRatio,
+            sal_uInt32 nSteps)
+        :   maTextureTransform(rTextureTransform),
+            maBackTextureTransform(),
+            mfAspectRatio(fAspectRatio),
+            mnSteps(nSteps)
+        {
+        }
+
+        ODFGradientInfo(const ODFGradientInfo& rODFGradientInfo)
+        :   maTextureTransform(rODFGradientInfo.getTextureTransform()),
+            maBackTextureTransform(rODFGradientInfo.maBackTextureTransform),
+            mfAspectRatio(rODFGradientInfo.getAspectRatio()),
+            mnSteps(rODFGradientInfo.getSteps())
+        {
+        }
+
+        ODFGradientInfo& operator=(const ODFGradientInfo& rODFGradientInfo)
+        {
+            maTextureTransform = rODFGradientInfo.getTextureTransform();
+            maBackTextureTransform = rODFGradientInfo.maBackTextureTransform;
+            mfAspectRatio = rODFGradientInfo.getAspectRatio();
+            mnSteps = rODFGradientInfo.getSteps();
+
+            return *this;
+        }
+
+        // compare operator
+        bool operator==(const ODFGradientInfo& rGeoTexSvx) const;
+
+        const B2DHomMatrix& getTextureTransform() const { return maTextureTransform; }
+        const B2DHomMatrix& getBackTextureTransform() const;
+        double getAspectRatio() const { return mfAspectRatio; }
+        sal_uInt32 getSteps() const { return mnSteps; }
+
+        void setTextureTransform(const B2DHomMatrix& rNew)
+        {
+            maTextureTransform = rNew;
+            maBackTextureTransform.identity();
+        }
     };
 
     namespace tools
@@ -90,11 +143,12 @@ namespace basegfx
             @param fAngle
             Gradient angle (from ODF)
          */
-        BASEGFX_DLLPUBLIC ODFGradientInfo& createLinearODFGradientInfo(ODFGradientInfo& o_rGradientInfo,
-                                                     const B2DRange&  rTargetArea,
-                                                     sal_uInt32       nSteps,
-                                                     double           fBorder,
-                                                     double           fAngle);
+        BASEGFX_DLLPUBLIC ODFGradientInfo createLinearODFGradientInfo(
+            const B2DRange& rTargetArea,
+            sal_uInt32 nSteps,
+            double fBorder,
+            double fAngle);
+
 
         /** Calculate linear gradient blend value
 
@@ -109,18 +163,8 @@ namespace basegfx
             @param rGradInfo
             Gradient info, for transformation and number of steps
          */
-        inline double getLinearGradientAlpha(const B2DPoint&        rUV,
-                                             const ODFGradientInfo& rGradInfo )
-        {
-            const B2DPoint aCoor(rGradInfo.maBackTextureTransform * rUV);
-            const double t(clamp(aCoor.getY(), 0.0, 1.0));
-            const sal_uInt32 nSteps(rGradInfo.mnSteps);
-
-            if(nSteps > 2L && nSteps < 128L)
-                return floor(t * nSteps) / double(nSteps + 1L);
-
-            return t;
-        }
+        BASEGFX_DLLPUBLIC double getLinearGradientAlpha(const B2DPoint& rUV,
+            const ODFGradientInfo& rGradInfo);
 
         /** Create matrix for ODF's axial gradient definition
 
@@ -149,11 +193,12 @@ namespace basegfx
             @param fAngle
             Gradient angle (from ODF)
          */
-        BASEGFX_DLLPUBLIC ODFGradientInfo& createAxialODFGradientInfo(ODFGradientInfo& o_rGradientInfo,
-                                                    const B2DRange&  rTargetArea,
-                                                    sal_uInt32       nSteps,
-                                                    double           fBorder,
-                                                    double           fAngle);
+        BASEGFX_DLLPUBLIC ODFGradientInfo createAxialODFGradientInfo(
+            const B2DRange& rTargetArea,
+            sal_uInt32 nSteps,
+            double fBorder,
+            double fAngle);
+
 
         /** Calculate axial gradient blend value
 
@@ -168,19 +213,8 @@ namespace basegfx
             @param rGradInfo
             Gradient info, for transformation and number of steps
          */
-        inline double getAxialGradientAlpha(const B2DPoint&        rUV,
-                                            const ODFGradientInfo& rGradInfo )
-        {
-            const B2DPoint   aCoor(rGradInfo.maBackTextureTransform * rUV);
-            const double     t(clamp(fabs(aCoor.getY()), 0.0, 1.0));
-            const sal_uInt32 nSteps(rGradInfo.mnSteps);
-            const double     fInternalSteps((nSteps * 2L) - 1L);
-
-            if(nSteps > 2L && nSteps < 128L)
-                return floor(((t * fInternalSteps) + 1.0) / 2.0) / double(nSteps - 1L);
-
-            return t;
-        }
+        BASEGFX_DLLPUBLIC double getAxialGradientAlpha(const B2DPoint& rUV,
+            const ODFGradientInfo& rGradInfo);
 
         /** Create matrix for ODF's radial gradient definition
 
@@ -204,11 +238,12 @@ namespace basegfx
             @param fAngle
             Gradient angle (from ODF)
          */
-        BASEGFX_DLLPUBLIC ODFGradientInfo& createRadialODFGradientInfo(ODFGradientInfo& o_rGradientInfo,
-                                                     const B2DRange&  rTargetArea,
-                                                     const B2DVector& rOffset,
-                                                     sal_uInt32       nSteps,
-                                                     double           fBorder);
+        BASEGFX_DLLPUBLIC ODFGradientInfo createRadialODFGradientInfo(
+            const B2DRange& rTargetArea,
+            const B2DVector& rOffset,
+            sal_uInt32 nSteps,
+            double fBorder);
+
 
         /** Calculate radial gradient blend value
 
@@ -223,23 +258,8 @@ namespace basegfx
             @param rGradInfo
             Gradient info, for transformation and number of steps
          */
-        inline double getRadialGradientAlpha(const B2DPoint&        rUV,
-                                             const ODFGradientInfo& rGradInfo )
-        {
-            const B2DPoint aCoor(rGradInfo.maBackTextureTransform * rUV);
-            const double   fDist(
-                clamp(aCoor.getX() * aCoor.getX() + aCoor.getY() * aCoor.getY(),
-                      0.0,
-                      1.0));
-
-            const double t(1.0 - sqrt(fDist));
-            const sal_uInt32 nSteps(rGradInfo.mnSteps);
-
-            if(nSteps > 2L && nSteps < 128L)
-                return floor(t * nSteps) / double(nSteps - 1L);
-
-            return t;
-        }
+        BASEGFX_DLLPUBLIC double getRadialGradientAlpha(const B2DPoint& rUV,
+            const ODFGradientInfo& rGradInfo);
 
         /** Create matrix for ODF's elliptical gradient definition
 
@@ -263,12 +283,13 @@ namespace basegfx
             @param fAngle
             Gradient angle (from ODF)
          */
-        BASEGFX_DLLPUBLIC ODFGradientInfo& createEllipticalODFGradientInfo(ODFGradientInfo& o_rGradientInfo,
-                                                         const B2DRange&  rTargetArea,
-                                                         const B2DVector& rOffset,
-                                                         sal_uInt32       nSteps,
-                                                         double           fBorder,
-                                                         double           fAngle);
+        BASEGFX_DLLPUBLIC ODFGradientInfo createEllipticalODFGradientInfo(
+            const B2DRange& rTargetArea,
+            const B2DVector& rOffset,
+            sal_uInt32 nSteps,
+            double fBorder,
+            double fAngle);
+
 
         /** Calculate elliptical gradient blend value
 
@@ -283,11 +304,8 @@ namespace basegfx
             @param rGradInfo
             Gradient info, for transformation and number of steps
          */
-        inline double getEllipticalGradientAlpha(const B2DPoint&        rUV,
-                                                 const ODFGradientInfo& rGradInfo )
-        {
-            return getRadialGradientAlpha(rUV,rGradInfo); // only matrix setup differs
-        }
+        BASEGFX_DLLPUBLIC double getEllipticalGradientAlpha(const B2DPoint& rUV,
+            const ODFGradientInfo& rGradInfo);
 
         /** Create matrix for ODF's square gradient definition
 
@@ -311,12 +329,13 @@ namespace basegfx
             @param fAngle
             Gradient angle (from ODF)
          */
-        BASEGFX_DLLPUBLIC ODFGradientInfo& createSquareODFGradientInfo(ODFGradientInfo& o_rGradientInfo,
-                                                     const B2DRange&  rTargetArea,
-                                                     const B2DVector& rOffset,
-                                                     sal_uInt32       nSteps,
-                                                     double           fBorder,
-                                                     double           fAngle);
+        BASEGFX_DLLPUBLIC ODFGradientInfo createSquareODFGradientInfo(
+            const B2DRange& rTargetArea,
+            const B2DVector& rOffset,
+            sal_uInt32 nSteps,
+            double fBorder,
+            double fAngle);
+
 
         /** Calculate square gradient blend value
 
@@ -331,24 +350,8 @@ namespace basegfx
             @param rGradInfo
             Gradient info, for transformation and number of steps
          */
-        inline double getSquareGradientAlpha(const B2DPoint&        rUV,
-                                             const ODFGradientInfo& rGradInfo )
-        {
-            const B2DPoint aCoor(rGradInfo.maBackTextureTransform * rUV);
-            const double   fAbsX(fabs(aCoor.getX()));
-            const double   fAbsY(fabs(aCoor.getY()));
-
-            if(fTools::moreOrEqual(fAbsX, 1.0) || fTools::moreOrEqual(fAbsY, 1.0))
-                return 0.0;
-
-            const double t(1.0 - (fAbsX > fAbsY ? fAbsX : fAbsY));
-            const sal_uInt32 nSteps(rGradInfo.mnSteps);
-
-            if(nSteps > 2L && nSteps < 128L)
-                return floor(t * nSteps) / double(nSteps - 1L);
-
-            return t;
-        }
+        BASEGFX_DLLPUBLIC double getSquareGradientAlpha(const B2DPoint& rUV,
+            const ODFGradientInfo& rGradInfo);
 
         /** Create matrix for ODF's rectangular gradient definition
 
@@ -372,12 +375,13 @@ namespace basegfx
             @param fAngle
             Gradient angle (from ODF)
          */
-        BASEGFX_DLLPUBLIC ODFGradientInfo& createRectangularODFGradientInfo(ODFGradientInfo& o_rGradientInfo,
-                                                          const B2DRange&  rTargetArea,
-                                                          const B2DVector& rOffset,
-                                                          sal_uInt32       nSteps,
-                                                          double           fBorder,
-                                                          double           fAngle);
+        BASEGFX_DLLPUBLIC ODFGradientInfo createRectangularODFGradientInfo(
+            const B2DRange& rTargetArea,
+            const B2DVector& rOffset,
+            sal_uInt32 nSteps,
+            double fBorder,
+            double fAngle);
+
 
         /** Calculate rectangular gradient blend value
 
@@ -392,11 +396,8 @@ namespace basegfx
             @param rGradInfo
             Gradient info, for transformation and number of steps
          */
-        inline double getRectangularGradientAlpha(const B2DPoint&        rUV,
-                                                  const ODFGradientInfo& rGradInfo )
-        {
-            return getSquareGradientAlpha(rUV, rGradInfo); // only matrix setup differs
-        }
+        BASEGFX_DLLPUBLIC double getRectangularGradientAlpha(const B2DPoint& rUV,
+            const ODFGradientInfo& rGradInfo);
     }
 }
 

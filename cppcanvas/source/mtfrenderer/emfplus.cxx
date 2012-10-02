@@ -1030,20 +1030,20 @@ namespace cppcanvas
                     basegfx::B2DRange aBoundsRectangle (0, 0, 1, 1);
                     if (brush->type == 4) {
                         aGradientService = "LinearGradient";
-                        basegfx::tools::createLinearODFGradientInfo( aGradInfo,
+                        aGradInfo = basegfx::tools::createLinearODFGradientInfo(
                                 aBoundsRectangle,
                                 aStops.getLength(),
                                 0,
-                                0 );
+                                0);
 
                     } else {
                         aGradientService = "EllipticalGradient";
-                        basegfx::tools::createEllipticalODFGradientInfo( aGradInfo,
+                        aGradInfo = basegfx::tools::createEllipticalODFGradientInfo(
                                 aBoundsRectangle,
                                 ::basegfx::B2DVector( 0, 0 ),
                                 aStops.getLength(),
                                 0,
-                                0 );
+                                0);
                     }
 
                     uno::Reference< lang::XMultiServiceFactory > xFactory(
