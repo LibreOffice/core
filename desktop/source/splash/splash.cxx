@@ -155,6 +155,7 @@ SplashScreen::SplashScreen()
     , _yoffset(18)
 {
     loadConfig();
+    _vdev.EnableRTL(IsRTLEnabled());
 }
 
 SplashScreen::~SplashScreen()
