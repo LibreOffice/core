@@ -9703,6 +9703,9 @@ if test "x$enable_ext_pdfimport" != "xno" -a "x$enable_extension_integration" !=
       AC_MSG_RESULT([external])
       SYSTEM_POPPLER=YES
       PKG_CHECK_MODULES( POPPLER, poppler >= 0.8.0 )
+      # sdext test fails with 0.20.0
+      PKG_CHECK_MODULES( POPPLER_NOT_0_20_0, poppler != 0.20.0,
+        , [AC_MSG_ERROR([Poppler 0.20.0 is broken, do not use --with-system-poppler or use a different version])])
       AC_LANG_PUSH([C++])
       save_CXXFLAGS=$CXXFLAGS
       save_CPPFLAGS=$CPPFLAGS
