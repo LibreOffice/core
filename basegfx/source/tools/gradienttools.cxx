@@ -354,42 +354,73 @@ namespace basegfx
         double getLinearGradientAlpha(const B2DPoint& rUV, const ODFGradientInfo& rGradInfo)
         {
             const B2DPoint aCoor(rGradInfo.getBackTextureTransform() * rUV);
-            const double t(clamp(aCoor.getY(), 0.0, 1.0));
+
+            if(aCoor.getX() < 0.0 || aCoor.getX() > 1.0)
+            {
+                return 0.0;
+            }
+
+            if(aCoor.getY() <= 0.0)
+            {
+                return 0.0;
+            }
+
+            if(aCoor.getY() >= 1.0)
+            {
+                return 1.0;
+            }
+
             const sal_uInt32 nSteps(rGradInfo.getSteps());
 
             if(nSteps)
             {
-                return floor(t * nSteps) / double(nSteps + 1L);
+                return floor(aCoor.getY() * nSteps) / double(nSteps - 1);
             }
 
-            return t;
+            return aCoor.getY();
         }
 
         double getAxialGradientAlpha(const B2DPoint& rUV, const ODFGradientInfo& rGradInfo)
         {
             const B2DPoint aCoor(rGradInfo.getBackTextureTransform() * rUV);
-            const double t(clamp(fabs(aCoor.getY()), 0.0, 1.0));
+
+            if(aCoor.getX() < 0.0 || aCoor.getX() > 1.0)
+            {
+                return 0.0;
+            }
+
+            const double fAbsY(fabs(aCoor.getY()));
+
+            if(fAbsY >= 1.0)
+            {
+                return 0.0;
+            }
+
             const sal_uInt32 nSteps(rGradInfo.getSteps());
-            const double fInternalSteps((nSteps * 2) - 1);
 
             if(nSteps)
             {
-                return floor(((t * fInternalSteps) + 1.0) / 2.0) / double(nSteps - 1L);
+                return floor(fAbsY * nSteps) / double(nSteps - 1);
             }
 
-            return t;
+            return fAbsY;
         }
 
         double getRadialGradientAlpha(const B2DPoint& rUV, const ODFGradientInfo& rGradInfo)
         {
             const B2DPoint aCoor(rGradInfo.getBackTextureTransform() * rUV);
-            const double fDist(clamp(aCoor.getX() * aCoor.getX() + aCoor.getY() * aCoor.getY(), 0.0, 1.0));
-            const double t(1.0 - sqrt(fDist));
+
+            if(aCoor.getX() < -1.0 || aCoor.getX() > 1.0 || aCoor.getY() < -1.0 || aCoor.getY() > 1.0)
+            {
+                return 0.0;
+            }
+
+            const double t(1.0 - sqrt(aCoor.getX() * aCoor.getX() + aCoor.getY() * aCoor.getY()));
             const sal_uInt32 nSteps(rGradInfo.getSteps());
 
-            if(nSteps)
+            if(nSteps && t < 1.0)
             {
-                return floor(t * nSteps) / double(nSteps - 1L);
+                return floor(t * nSteps) / double(nSteps - 1);
             }
 
             return t;
@@ -404,9 +435,15 @@ namespace basegfx
         {
             const B2DPoint aCoor(rGradInfo.getBackTextureTransform() * rUV);
             const double fAbsX(fabs(aCoor.getX()));
+
+            if(fAbsX >= 1.0)
+            {
+                return 0.0;
+            }
+
             const double fAbsY(fabs(aCoor.getY()));
 
-            if(fTools::moreOrEqual(fAbsX, 1.0) || fTools::moreOrEqual(fAbsY, 1.0))
+            if(fAbsY >= 1.0)
             {
                 return 0.0;
             }
@@ -414,9 +451,9 @@ namespace basegfx
             const double t(1.0 - std::max(fAbsX, fAbsY));
             const sal_uInt32 nSteps(rGradInfo.getSteps());
 
-            if(nSteps)
+            if(nSteps && t < 1.0)
             {
-                return floor(t * nSteps) / double(nSteps - 1L);
+                return floor(t * nSteps) / double(nSteps - 1);
             }
 
             return t;
