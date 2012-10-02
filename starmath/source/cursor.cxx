@@ -484,7 +484,7 @@ SmNodeList::iterator SmCursor::TakeSelectedNodesFromList(SmNodeList *pLineList,
                 }
                 //If we need to save the selected text
                 if(pSelectedNodes && len2 > 0) {
-                    String str = aText.copy(start2, len2);
+                    OUString str = aText.copy(start2, len2);
                     SmTextNode* pSeg2 = new SmTextNode(aToken, eFontDesc);
                     pSeg2->ChangeText(str);
                     pSelectedNodes->push_back(pSeg2);

@@ -912,12 +912,12 @@ void SmEditWindow::Delete()
     }
 }
 
-void SmEditWindow::InsertText(const String& Text)
+void SmEditWindow::InsertText(const OUString& rText)
 {
     OSL_ENSURE( pEditView, "EditView missing" );
     if (pEditView)
     {
-        pEditView->InsertText(Text);
+        pEditView->InsertText(rText);
         aModifyTimer.Start();
         StartCursorMove();
     }

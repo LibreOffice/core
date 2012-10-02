@@ -113,7 +113,7 @@ public:
     void                Paste();
     void                Delete();
     void                SelectAll();
-    void                InsertText(const String &rText);
+    void                InsertText(const OUString &rText);
     void                InsertCommand(sal_uInt16 nCommand);
     void                MarkError(const Point &rPos);
     void                SelNextMark();
