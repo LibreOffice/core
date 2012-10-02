@@ -39,9 +39,6 @@ class SwShellCrsr;
 // From here classes/methods for non-text cursor.
 
 class SwVisCrsr
-#ifdef SW_CRSR_TIMER
-                : private Timer
-#endif
 {
     friend void _InitCore();
     friend void _FinitCore();
@@ -49,16 +46,9 @@ class SwVisCrsr
     sal_Bool bIsVisible : 1;
     sal_Bool bIsDragCrsr : 1;
 
-#ifdef SW_CRSR_TIMER
-    sal_Bool bTimerOn : 1;
-#endif
-
     Cursor aTxtCrsr;
     const SwCrsrShell* pCrsrShell;
 
-#ifdef SW_CRSR_TIMER
-    virtual void Timeout();
-#endif
     void _SetPosAndShow();
 
 public:
@@ -70,10 +60,6 @@ public:
 
     sal_Bool IsVisible() const { return bIsVisible; }
     void SetDragCrsr( sal_Bool bFlag = sal_True ) { bIsDragCrsr = bFlag; }
-
-#ifdef SW_CRSR_TIMER
-    sal_Bool ChgTimerFlag( sal_Bool bTimerOn = sal_True );
-#endif
 };
 
 

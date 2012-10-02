@@ -70,22 +70,12 @@ SwVisCrsr::SwVisCrsr( const SwCrsrShell * pCShell )
     bIsVisible = aTxtCrsr.IsVisible();
     bIsDragCrsr = sal_False;
     aTxtCrsr.SetWidth( 0 );
-
-#ifdef SW_CRSR_TIMER
-    bTimerOn = sal_True;
-    SetTimeout( 50 ); // 50 millisecond delay
-#endif
 }
 
 
 
 SwVisCrsr::~SwVisCrsr()
 {
-#ifdef SW_CRSR_TIMER
-    if( bTimerOn )
-        Stop(); // stop timer
-#endif
-
     if( bIsVisible && aTxtCrsr.IsVisible() )
         aTxtCrsr.Hide();
 
@@ -103,21 +93,7 @@ void SwVisCrsr::Show()
 
         // display at all?
         if( pCrsrShell->VisArea().IsOver( pCrsrShell->aCharRect ) )
-#ifdef SW_CRSR_TIMER
-        {
-            if( bTimerOn )
-                Start();    // start timer
-            else
-            {
-                if( IsActive() )
-                    Stop(); // stop timer
-
-                _SetPosAndShow();
-            }
-        }
-#else
             _SetPosAndShow();
-#endif
     }
 }
 
@@ -129,50 +105,10 @@ void SwVisCrsr::Hide()
     {
         bIsVisible = sal_False;
 
-#ifdef SW_CRSR_TIMER
-        if( IsActive() )
-            Stop(); // stop timer
-#endif
-
         if( aTxtCrsr.IsVisible() )      // Shouldn't the flags be in effect?
             aTxtCrsr.Hide();
     }
 }
-
-#ifdef SW_CRSR_TIMER
-
-void SwVisCrsr::Timeout()
-{
-    OSL_ENSURE( !bIsDragCrsr, "stop timer before" );
-    if( bIsVisible )
-    {
-        if ( !pCrsrShell->GetWin() ) // SwFrmFmt::GetGraphic suspends Win temporarily!
-            Start();
-        else
-            _SetPosAndShow();
-    }
-}
-
-sal_Bool SwCrsrShell::ChgCrsrTimerFlag( sal_Bool bTimerOn )
-{
-    return pVisCrsr->ChgTimerFlag( bTimerOn );
-}
-
-
-sal_Bool SwVisCrsr::ChgTimerFlag( sal_Bool bFlag )
-{
-    bOld = bTimerOn;
-    if( !bFlag && bIsVisible && IsActive() )
-    {
-        Stop(); // stop timer
-        _SetPosAndShow();
-    }
-    bTimerOn = bFlag;
-    return bOld;
-}
-
-#endif
-
 
 void SwVisCrsr::_SetPosAndShow()
 {

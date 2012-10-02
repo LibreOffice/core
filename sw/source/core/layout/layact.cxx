@@ -2330,9 +2330,6 @@ SwLayIdle::SwLayIdle( SwRootFrm *pRt, SwViewImp *pI ) :
             sal_Bool bVis = sal_False;
             if ( pSh->ISA(SwCrsrShell) )
             {
-#ifdef SW_CRSR_TIMER
-                ((SwCrsrShell*)pSh)->ChgCrsrTimerFlag( sal_False );
-#endif
                 bVis = ((SwCrsrShell*)pSh)->GetCharRect().IsOver(pSh->VisArea());
             }
             aBools.push_back( bVis );
