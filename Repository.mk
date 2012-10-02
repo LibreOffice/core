@@ -217,7 +217,6 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_NONE, \
 endif
 
 $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
-    PptImporter \
     abp \
     acc \
 	adabas \

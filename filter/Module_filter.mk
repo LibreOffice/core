@@ -26,7 +26,6 @@ $(eval $(call gb_Module_add_targets,filter,\
 	AllLangResTarget_xsltdlg \
 	Configuration_filter \
 	CustomTarget_svg \
-	Library_PptImporter \
 	Library_egi \
 	Library_eme \
 	Library_epb \
