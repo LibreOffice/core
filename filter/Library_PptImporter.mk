@@ -35,6 +35,7 @@ $(eval $(call gb_Library_use_libraries,PptImporter,\
 
 $(eval $(call gb_Library_add_exception_objects,PptImporter,\
 	filter/source/msfilter/powerpoint/pptimporter \
+	filter/source/msfilter/powerpoint/pptimporteruno \
 	filter/source/msfilter/powerpoint/ppttoxml \
 ))
 
