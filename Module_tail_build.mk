@@ -120,6 +120,7 @@ $(eval $(call gb_Module_add_moduledirs,tail_end,\
 	remotebridges \
 	reportbuilder \
 	reportdesign \
+	$(call gb_Helper_optional,RHINO,rhino) \
 	ridljar \
 	rsc \
 	salhelper \

@@ -121,13 +121,14 @@ padmin\
 psprint_config\
 pyuno\
 qadevOOo\
+rdbmaker\
 readlicense_oo\
 regexp\
 registry\
 remotebridges\
 reportbuilder\
 reportdesign\
-rdbmaker\
+rhino\
 ridljar\
 rsc\
 sal\
@@ -245,7 +246,6 @@ postgresql\
 postprocess\
 python\
 redland\
-rhino\
 setup_native\
 stax\
 stlport\
