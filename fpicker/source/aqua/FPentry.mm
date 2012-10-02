@@ -53,7 +53,7 @@ static Reference< XInterface > SAL_CALL createFolderInstance(
 extern "C"
 {
 
-SAL_DLLPUBLIC_EXPORT void* SAL_CALL component_getFactory(
+SAL_DLLPUBLIC_EXPORT void* SAL_CALL fps_aqua_component_getFactory(
     const sal_Char* pImplName, uno_Interface* pSrvManager, uno_Interface* /*pRegistryKey*/ )
 {
     void* pRet = 0;

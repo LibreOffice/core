@@ -89,7 +89,7 @@ createInstance_fop( const Reference< XMultiServiceFactory >& rServiceManager )
 extern "C"
 {
 
-SAL_DLLPUBLIC_EXPORT void* SAL_CALL component_getFactory(
+SAL_DLLPUBLIC_EXPORT void* SAL_CALL fps_win32_component_getFactory(
     const sal_Char* pImplName, uno_Interface* pSrvManager, uno_Interface* )
 {
     void* pRet = 0;
