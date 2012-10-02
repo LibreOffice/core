@@ -99,7 +99,7 @@ static sal_Char sIndentTabs[MAX_INDENT_LEVEL+2] =
     "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t";
 
 SwHTMLWriter::SwHTMLWriter( const String& rBaseURL )
-    , bCfgOutStyles( sal_False )
+    : bCfgOutStyles( sal_False )
     , bCfgPreferStyles( sal_False )
     , bCfgFormFeed( sal_False )
     , bCfgStarBasic( sal_False )
