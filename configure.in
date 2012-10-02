@@ -10898,10 +10898,12 @@ AC_MSG_CHECKING([for LanguageTool extension integration])
 if test "x$enable_ext_languagetool" = "xyes" -a "x$enable_extension_integration" != "xno" -a "x$with_java" != "xno"; then
     BUILD_TYPE="$BUILD_TYPE LANGUAGETOOL"
     SCPDEFS="$SCPDEFS -DWITH_EXTENSION_LANGUAGETOOL"
+    LANGUAGETOOL_TARBALL="b63e6340a02ff1cacfeadb2c42286161-JLanguageTool-1.7.0.tar.bz2"
     AC_MSG_RESULT([yes])
 else
     AC_MSG_RESULT([no])
 fi
+AC_SUBST(LANGUAGETOOL_TARBALL)
 
 dnl ===================================================================
 dnl Test whether to include oooblogger extension

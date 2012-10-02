@@ -93,6 +93,7 @@ jurt\
 jvmaccess\
 jvmfwk\
 l10ntools\
+languagetool\
 libcdr\
 libcmis\
 libmspub\
@@ -221,7 +222,6 @@ icu\
 instsetoo_native\
 jfreereport\
 jpeg\
-languagetool\
 libcroco\
 libexttextcat\
 libgsf\
