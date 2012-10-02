@@ -7639,8 +7639,7 @@ void ScInterpreter::ScCurrency()
                                         ScGlobal::eLnge);
         if ( (sal_uInt16) fDec != pFormatter->GetFormatPrecision( nIndex ) )
         {
-            String sFormatString;
-            pFormatter->GenerateFormat(sFormatString,
+            String sFormatString = pFormatter->GenerateFormat(
                                                    nIndex,
                                                    ScGlobal::eLnge,
                                                    true,        // mit Tausenderpunkt
@@ -7728,13 +7727,12 @@ void ScInterpreter::ScFixed()
         else
             fVal = floor(fVal*fFac+0.5)/fFac;
         Color* pColor = NULL;
-        String sFormatString;
         if (fDec < 0.0)
             fDec = 0.0;
         sal_uLong nIndex = pFormatter->GetStandardFormat(
                                             NUMBERFORMAT_NUMBER,
                                             ScGlobal::eLnge);
-        pFormatter->GenerateFormat(sFormatString,
+        String sFormatString = pFormatter->GenerateFormat(
                                                nIndex,
                                                ScGlobal::eLnge,
                                                bThousand,   // mit Tausenderpunkt

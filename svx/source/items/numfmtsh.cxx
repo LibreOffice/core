@@ -366,20 +366,20 @@ void SvxNumberFormatShell::MakeFormat( String& rFormat,
 
         if(rErrPos==0)
         {
-            pFormatter->GenerateFormat( rFormat, nCurFormatKey,
-                                        eCurLanguage,
-                                        bThousand, bNegRed,
-                                        nPrecision, nLeadingZeroes );
+            rFormat = pFormatter->GenerateFormat(nCurFormatKey,
+                                                 eCurLanguage,
+                                                 bThousand, bNegRed,
+                                                 nPrecision, nLeadingZeroes);
         }
         for ( std::vector<String*>::const_iterator it(aFmtEList.begin()); it != aFmtEList.end(); ++it )
             delete *it;
     }
     else
     {
-        pFormatter->GenerateFormat( rFormat, nCurFormatKey,
-                                    eCurLanguage,
-                                    bThousand, bNegRed,
-                                    nPrecision, nLeadingZeroes );
+        rFormat = pFormatter->GenerateFormat(nCurFormatKey,
+                                             eCurLanguage,
+                                             bThousand, bNegRed,
+                                             nPrecision, nLeadingZeroes);
     }
 }
 

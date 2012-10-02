@@ -566,19 +566,19 @@ void SAL_CALL SvNumberFormatsObj::removeByKey( sal_Int32 nKey ) throw(uno::Runti
     }
 }
 
-rtl::OUString SAL_CALL SvNumberFormatsObj::generateFormat( sal_Int32 nBaseKey,
+OUString SAL_CALL SvNumberFormatsObj::generateFormat( sal_Int32 nBaseKey,
                                     const lang::Locale& nLocale, sal_Bool bThousands,
                                     sal_Bool bRed, sal_Int16 nDecimals, sal_Int16 nLeading )
                             throw(uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    String aRet;
+    OUString aRet;
     SvNumberFormatter* pFormatter = rSupplier.GetNumberFormatter();
     if (pFormatter)
     {
         LanguageType eLang = lcl_GetLanguage( nLocale );
-        pFormatter->GenerateFormat( aRet, nBaseKey, eLang, bThousands, bRed, nDecimals, nLeading );
+        aRet = pFormatter->GenerateFormat(nBaseKey, eLang, bThousands, bRed, nDecimals, nLeading);
     }
     else
         throw uno::RuntimeException();

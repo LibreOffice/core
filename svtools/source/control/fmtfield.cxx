@@ -710,10 +710,10 @@ void FormattedField::SetThousandsSep(sal_Bool _bUseSeparator)
 
     // we need the language for the following
     LanguageType eLang;
-    String sFmtDescription = GetFormat(eLang);
+    GetFormat(eLang);
 
     // generate a new format ...
-    ImplGetFormatter()->GenerateFormat(sFmtDescription, m_nFormatKey, eLang, _bUseSeparator, IsRed, nPrecision, nAnzLeading);
+    OUString sFmtDescription = ImplGetFormatter()->GenerateFormat(m_nFormatKey, eLang, _bUseSeparator, IsRed, nPrecision, nAnzLeading);
     // ... and introduce it to the formatter
     sal_uInt16 nCheckPos;
     sal_uInt32  nNewKey;
@@ -753,10 +753,10 @@ void FormattedField::SetDecimalDigits(sal_uInt16 _nPrecision)
 
     // we need the language for the following
     LanguageType eLang;
-    String sFmtDescription = GetFormat(eLang);
+    GetFormat(eLang);
 
     // generate a new format ...
-    ImplGetFormatter()->GenerateFormat(sFmtDescription, m_nFormatKey, eLang, bThousand, IsRed, _nPrecision, nAnzLeading);
+    OUString sFmtDescription = ImplGetFormatter()->GenerateFormat(m_nFormatKey, eLang, bThousand, IsRed, _nPrecision, nAnzLeading);
     // ... and introduce it to the formatter
     sal_uInt16 nCheckPos;
     sal_uInt32 nNewKey;

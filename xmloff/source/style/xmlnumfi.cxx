@@ -1764,9 +1764,8 @@ void SvXMLNumFormatContext::AddNumber( const SvXMLNumberInfo& rInfo )
     if ( nEmbeddedCount )
         bGrouping = sal_False;      // grouping and embedded characters can't be used together
 
-    String aNumStr;
     sal_uInt32 nStdIndex = pFormatter->GetStandardIndex( nFormatLang );
-    pFormatter->GenerateFormat( aNumStr, nStdIndex, nFormatLang,
+    String aNumStr = pFormatter->GenerateFormat( nStdIndex, nFormatLang,
                                 bGrouping, sal_False, nGenPrec, nLeading );
 
     if ( rInfo.nExpDigits >= 0 && nLeading == 0 && !bGrouping && nEmbeddedCount == 0 )

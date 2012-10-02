@@ -178,8 +178,8 @@ public:
     //      freigeben aller Daten, die fuer den AliveMode noetig sind
     void    Clear();
 
-    XubString  GetCellText(const DbGridRow* pRow, const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter) const;
-    XubString  GetCellText(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >& xField, const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter) const;
+    OUString  GetCellText(const DbGridRow* pRow, const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter) const;
+    OUString  GetCellText(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >& xField, const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter) const;
 
     void    SetReadOnly(sal_Bool bRead){m_bReadOnly = bRead;}
     void    SetObject(sal_Int16 nPos) {m_bObject = m_bReadOnly = sal_True; m_nFieldPos = nPos;}
@@ -266,7 +266,7 @@ protected:
 
 protected:
     // adds the given property to the list of properties which we listen for
-    void    doPropertyListening( const ::rtl::OUString& _rPropertyName );
+    void    doPropertyListening( const OUString& _rPropertyName );
 
     // called whenever a property which affects field settings in general is called
     // you should overwrite this method for every property you add yourself as listener to
@@ -304,7 +304,7 @@ public:
     sal_Bool Commit();
 
     // Formatting the field data to output text
-    virtual XubString GetFormatText(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >& _rxField, const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter, Color** ppColor = NULL) = 0;
+    virtual OUString GetFormatText(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >& _rxField, const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter, Color** ppColor = NULL) = 0;
 
     virtual void Update(){}
     // Refresh the control by the field data
@@ -345,7 +345,7 @@ protected:
     virtual void _propertyChanged(const ::com::sun::star::beans::PropertyChangeEvent& evt) throw(::com::sun::star::uno::RuntimeException);
 
 private:
-    void implDoPropertyListening( const ::rtl::OUString& _rPropertyName, sal_Bool _bWarnIfNotExistent = sal_True );
+    void implDoPropertyListening( const OUString& _rPropertyName, sal_Bool _bWarnIfNotExistent = sal_True );
 
     /// updates the "readonly" setting on m_pWindow, according to the respective property value in the given model
     void implAdjustReadOnly( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxModel,bool i_bReadOnly );
@@ -417,7 +417,7 @@ public:
     sal_Bool                    IsSimpleEdit() const { return m_bIsSimpleEdit; }
 
     virtual void Init( Window& rParent, const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >& xCursor );
-    virtual XubString GetFormatText(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >& _rxField, const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter, Color** ppColor = NULL);
+    virtual OUString GetFormatText(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >& _rxField, const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter, Color** ppColor = NULL);
     virtual void UpdateFromField(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >& _rxField, const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter);
     virtual ::svt::CellControllerRef CreateController() const;
     virtual void PaintFieldToCell( OutputDevice& _rDev, const Rectangle& _rRect,
@@ -447,7 +447,7 @@ public:
 
 
     virtual void Init( Window& rParent, const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >& xCursor );
-    virtual XubString GetFormatText(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >& _rxField, const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter, Color** ppColor = NULL);
+    virtual OUString GetFormatText(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >& _rxField, const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter, Color** ppColor = NULL);
     virtual void UpdateFromField(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >& _rxField, const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter);
     virtual ::svt::CellControllerRef CreateController() const;
 
@@ -473,7 +473,7 @@ public:
     virtual void PaintFieldToCell(OutputDevice& rDev, const Rectangle& rRect,
                           const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >& _rxField,
                           const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter);
-    virtual XubString GetFormatText(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >& _rxField, const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter, Color** ppColor = NULL);
+    virtual OUString GetFormatText(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >& _rxField, const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter, Color** ppColor = NULL);
 
 protected:
     // DbCellControl
@@ -491,7 +491,7 @@ public:
     DbComboBox(DbGridColumn& _rColumn);
 
     virtual void Init( Window& rParent, const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >& xCursor );
-    virtual XubString GetFormatText(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >& _rxField, const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter, Color** ppColor = NULL);
+    virtual OUString GetFormatText(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >& _rxField, const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter, Color** ppColor = NULL);
     virtual void UpdateFromField(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >& _rxField, const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter);
     virtual ::svt::CellControllerRef CreateController() const;
 
@@ -512,14 +512,14 @@ protected:
 class DbListBox     :public DbCellControl
 {
     sal_Bool              m_bBound  : 1;
-    ::com::sun::star::uno::Sequence< ::rtl::OUString > m_aValueList;
+    ::com::sun::star::uno::Sequence< OUString > m_aValueList;
 
 public:
     TYPEINFO();
     DbListBox(DbGridColumn& _rColumn);
 
     virtual void Init( Window& rParent, const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >& xCursor );
-    virtual XubString GetFormatText(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >& _rxField, const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter, Color** ppColor = NULL);
+    virtual OUString GetFormatText(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >& _rxField, const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter, Color** ppColor = NULL);
     virtual void UpdateFromField(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >& _rxField, const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter);
     virtual ::svt::CellControllerRef CreateController() const;
 
@@ -543,7 +543,7 @@ public:
     TYPEINFO();
     DbPatternField( DbGridColumn& _rColumn, const ::comphelper::ComponentContext& _rContext );
     virtual void Init( Window& rParent, const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >& xCursor );
-    virtual XubString GetFormatText(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >& _rxField, const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter, Color** ppColor = NULL);
+    virtual OUString GetFormatText(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >& _rxField, const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter, Color** ppColor = NULL);
     virtual void UpdateFromField(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >& _rxField, const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter);
     virtual ::svt::CellControllerRef CreateController() const;
 
@@ -555,7 +555,7 @@ protected:
     virtual void        implAdjustGenericFieldSetting( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxModel );
 
 private:
-    String  impl_formatText( const String& _rText );
+    OUString  impl_formatText(const OUString& _rText);
 
 private:
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
@@ -595,7 +595,7 @@ class DbDateField : public DbSpinField
 public:
     TYPEINFO();
     DbDateField(DbGridColumn& _rColumn);
-    virtual XubString GetFormatText(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >& _rxField, const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter, Color** ppColor = NULL);
+    virtual OUString GetFormatText(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >& _rxField, const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter, Color** ppColor = NULL);
     virtual void UpdateFromField(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >& _rxField, const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter);
 
 protected:
@@ -620,7 +620,7 @@ class DbTimeField : public DbSpinField
 public:
     TYPEINFO();
     DbTimeField(DbGridColumn& _rColumn);
-    virtual XubString GetFormatText(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >& _rxField, const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter, Color** ppColor = NULL);
+    virtual OUString GetFormatText(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >& _rxField, const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter, Color** ppColor = NULL);
     virtual void UpdateFromField(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >& _rxField, const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter);
 
 protected:
@@ -647,7 +647,7 @@ class DbCurrencyField : public DbSpinField
 public:
     TYPEINFO();
     DbCurrencyField(DbGridColumn& _rColumn);
-    virtual XubString GetFormatText(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >& _rxField, const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter, Color** ppColor = NULL);
+    virtual OUString GetFormatText(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >& _rxField, const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter, Color** ppColor = NULL);
     virtual void UpdateFromField(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >& _rxField, const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter);
 
     double GetCurrency(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >& _rxField, const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter) const;
@@ -674,7 +674,7 @@ class DbNumericField : public DbSpinField
 public:
     TYPEINFO();
     DbNumericField(DbGridColumn& _rColumn);
-    virtual XubString GetFormatText(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >& _rxField, const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter, Color** ppColor = NULL);
+    virtual OUString GetFormatText(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >& _rxField, const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter, Color** ppColor = NULL);
     virtual void UpdateFromField(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >& _rxField, const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter);
 
 protected:
@@ -698,8 +698,8 @@ class DbFilterField
         :public DbCellControl
         ,public ::svxform::OSQLParserClient
 {
-    ::com::sun::star::uno::Sequence< ::rtl::OUString >  m_aValueList;
-    XubString   m_aText;
+    ::com::sun::star::uno::Sequence< OUString >  m_aValueList;
+    OUString   m_aText;
     Link    m_aCommitLink;
     sal_Int16   m_nControlClass;
     sal_Bool    m_bFilterList : 1;
@@ -715,11 +715,11 @@ public:
     virtual ::svt::CellControllerRef CreateController() const;
     virtual void PaintCell(OutputDevice& rDev, const Rectangle& rRect);
     virtual void Update();
-    virtual XubString GetFormatText(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >& _rxField, const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter, Color** ppColor = NULL);
+    virtual OUString GetFormatText(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >& _rxField, const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter, Color** ppColor = NULL);
     virtual void UpdateFromField(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >& _rxField, const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter);
 
-    const XubString& GetText() const {return m_aText;}
-    void SetText(const XubString& rText);
+    const OUString& GetText() const {return m_aText;}
+    void SetText(const OUString& rText);
 
     void SetCommitHdl( const Link& rLink ) { m_aCommitLink = rLink; }
     const Link& GetCommitHdl() const { return m_aCommitLink; }
@@ -893,7 +893,7 @@ public:
                const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >& xField,
                const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter);
 
-    XubString GetText(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >& _rxField,
+    OUString GetText(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >& _rxField,
                    const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter,
                    Color** ppColor = NULL)
             {return m_pCellControl->GetFormatText(_rxField, xFormatter, ppColor);}
@@ -907,7 +907,7 @@ class FmXEditCell : public FmXTextCell,
                     public FmXEditCell_Base
 {
 private:
-    ::rtl::OUString                     m_sValueOnEnter;
+    OUString                     m_sValueOnEnter;
 
 protected:
     ::cppu::OInterfaceContainerHelper   m_aTextListeners;
@@ -932,10 +932,10 @@ public:
 // ::com::sun::star::awt::XTextComponent
     virtual void SAL_CALL addTextListener(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTextListener >& l) throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL removeTextListener(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTextListener >& l) throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL setText(const ::rtl::OUString& aText) throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL insertText(const ::com::sun::star::awt::Selection& Sel, const ::rtl::OUString& Text) throw(::com::sun::star::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL getText() throw(::com::sun::star::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL getSelectedText() throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setText(const OUString& aText) throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL insertText(const ::com::sun::star::awt::Selection& Sel, const OUString& Text) throw(::com::sun::star::uno::RuntimeException);
+    virtual OUString SAL_CALL getText() throw(::com::sun::star::uno::RuntimeException);
+    virtual OUString SAL_CALL getSelectedText() throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setSelection(const ::com::sun::star::awt::Selection& aSelection) throw(::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::awt::Selection SAL_CALL getSelection() throw(::com::sun::star::uno::RuntimeException);
     virtual sal_Bool SAL_CALL isEditable() throw(::com::sun::star::uno::RuntimeException);
@@ -966,7 +966,7 @@ class FmXCheckBoxCell : public FmXDataCell,
 {
     ::cppu::OInterfaceContainerHelper   m_aItemListeners;
     ::cppu::OInterfaceContainerHelper   m_aActionListeners;
-    ::rtl::OUString                     m_aActionCommand;
+    OUString                     m_aActionCommand;
     CheckBox*                           m_pBox;
 
 protected:
@@ -989,14 +989,14 @@ public:
     virtual void SAL_CALL removeItemListener(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XItemListener >& l) throw(::com::sun::star::uno::RuntimeException);
     virtual sal_Int16 SAL_CALL getState() throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setState(sal_Int16 n) throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL setLabel(const ::rtl::OUString& Label) throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setLabel(const OUString& Label) throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL enableTriState(sal_Bool b) throw(::com::sun::star::uno::RuntimeException);
 
     // XButton
     virtual void SAL_CALL addActionListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XActionListener >& l ) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL removeActionListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XActionListener >& l ) throw (::com::sun::star::uno::RuntimeException);
-    //virtual void SAL_CALL setLabel( const ::rtl::OUString& Label ) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL setActionCommand( const ::rtl::OUString& Command ) throw (::com::sun::star::uno::RuntimeException);
+    //virtual void SAL_CALL setLabel( const OUString& Label ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setActionCommand( const OUString& Command ) throw (::com::sun::star::uno::RuntimeException);
 
 protected:
     virtual Window* getEventWindow() const;
@@ -1032,19 +1032,19 @@ public:
     virtual void SAL_CALL removeItemListener(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XItemListener >& l) throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL addActionListener(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XActionListener >& l) throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL removeActionListener(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XActionListener >& l) throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL addItem(const ::rtl::OUString& aItem, sal_Int16 nPos) throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL addItems(const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aItems, sal_Int16 nPos) throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL addItem(const OUString& aItem, sal_Int16 nPos) throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL addItems(const ::com::sun::star::uno::Sequence< OUString >& aItems, sal_Int16 nPos) throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL removeItems(sal_Int16 nPos, sal_Int16 nCount) throw(::com::sun::star::uno::RuntimeException);
     virtual sal_Int16 SAL_CALL getItemCount() throw(::com::sun::star::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL getItem(sal_Int16 nPos) throw(::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getItems() throw(::com::sun::star::uno::RuntimeException);
+    virtual OUString SAL_CALL getItem(sal_Int16 nPos) throw(::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getItems() throw(::com::sun::star::uno::RuntimeException);
     virtual sal_Int16 SAL_CALL getSelectedItemPos() throw(::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< sal_Int16 > SAL_CALL getSelectedItemsPos() throw(::com::sun::star::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL getSelectedItem() throw(::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSelectedItems() throw(::com::sun::star::uno::RuntimeException);
+    virtual OUString SAL_CALL getSelectedItem() throw(::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSelectedItems() throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL SAL_CALL selectItemPos(sal_Int16 nPos, sal_Bool bSelect) throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL SAL_CALL selectItemsPos(const ::com::sun::star::uno::Sequence< sal_Int16 >& aPositions, sal_Bool bSelect) throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL SAL_CALL selectItem(const ::rtl::OUString& aItem, sal_Bool bSelect) throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL SAL_CALL selectItem(const OUString& aItem, sal_Bool bSelect) throw(::com::sun::star::uno::RuntimeException);
     virtual sal_Bool SAL_CALL isMutipleMode() throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL SAL_CALL setMultipleMode(sal_Bool bMulti) throw(::com::sun::star::uno::RuntimeException);
     virtual sal_Int16 SAL_CALL getDropDownLineCount() throw(::com::sun::star::uno::RuntimeException);
@@ -1087,12 +1087,12 @@ public:
     virtual void SAL_CALL removeItemListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XItemListener >& _Listener ) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL addActionListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XActionListener >& _Listener ) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL removeActionListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XActionListener >& _Listener ) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL addItem( const ::rtl::OUString& _Item, ::sal_Int16 _Pos ) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL addItems( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& _Items, ::sal_Int16 _Pos ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL addItem( const OUString& _Item, ::sal_Int16 _Pos ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL addItems( const ::com::sun::star::uno::Sequence< OUString >& _Items, ::sal_Int16 _Pos ) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL removeItems( ::sal_Int16 nPos, ::sal_Int16 nCount ) throw (::com::sun::star::uno::RuntimeException);
     virtual ::sal_Int16 SAL_CALL getItemCount(  ) throw (::com::sun::star::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL getItem( ::sal_Int16 _Pos ) throw (::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getItems(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual OUString SAL_CALL getItem( ::sal_Int16 _Pos ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getItems(  ) throw (::com::sun::star::uno::RuntimeException);
     virtual ::sal_Int16 SAL_CALL getDropDownLineCount(  ) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setDropDownLineCount( ::sal_Int16 _Lines ) throw (::com::sun::star::uno::RuntimeException);
 
@@ -1136,10 +1136,10 @@ public:
 // ::com::sun::star::awt::XTextComponent
     virtual void SAL_CALL addTextListener(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTextListener >& l) throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL removeTextListener(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTextListener >& l) throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL setText(const ::rtl::OUString& aText) throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL insertText(const ::com::sun::star::awt::Selection& Sel, const ::rtl::OUString& Text) throw(::com::sun::star::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL getText() throw(::com::sun::star::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL getSelectedText() throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setText(const OUString& aText) throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL insertText(const ::com::sun::star::awt::Selection& Sel, const OUString& Text) throw(::com::sun::star::uno::RuntimeException);
+    virtual OUString SAL_CALL getText() throw(::com::sun::star::uno::RuntimeException);
+    virtual OUString SAL_CALL getSelectedText() throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setSelection(const ::com::sun::star::awt::Selection& aSelection) throw(::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::awt::Selection SAL_CALL getSelection() throw(::com::sun::star::uno::RuntimeException);
     virtual sal_Bool SAL_CALL isEditable() throw(::com::sun::star::uno::RuntimeException);

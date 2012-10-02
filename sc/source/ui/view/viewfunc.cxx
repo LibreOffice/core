@@ -2724,9 +2724,8 @@ void ScViewFunc::ChangeNumFmtDecimals( sal_Bool bIncrement )
 
     if (!bError)
     {
-        String aNewPicture;
-        pFormatter->GenerateFormat( aNewPicture, nOldFormat, eLanguage,
-                                    bThousand, bNegRed, nPrecision, nLeading );
+        String aNewPicture = pFormatter->GenerateFormat(nOldFormat, eLanguage,
+                                    bThousand, bNegRed, nPrecision, nLeading);
 
         nNewFormat = pFormatter->GetEntryKey( aNewPicture, eLanguage );
         if ( nNewFormat == NUMBERFORMAT_ENTRY_NOT_FOUND )

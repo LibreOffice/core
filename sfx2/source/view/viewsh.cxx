@@ -499,8 +499,8 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
                                 for( sal_uInt16 nItem = 0; nItem < nItemCount; ++nItem )
                                 {
                                     sal_uInt16 nItemId = pTextToolbox->GetItemId( nItem );
-                                    const XubString& rCommand = pTextToolbox->GetItemCommand( nItemId );
-                                    if( rCommand.EqualsAscii( ".uno:StyleApply" ) )
+                                    const OUString& rCommand = pTextToolbox->GetItemCommand( nItemId );
+                                    if (rCommand == ".uno:StyleApply")
                                     {
                                         Window* pItemWin = pTextToolbox->GetItemWindow( nItemId );
                                         if( pItemWin )

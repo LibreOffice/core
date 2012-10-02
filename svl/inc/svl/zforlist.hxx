@@ -20,14 +20,16 @@
 #define _ZFORLIST_HXX
 
 #include "svl/svldllapi.h"
+#include <rtl/ustrbuf.hxx>
+#include <rtl/ustring.hxx>
 #include <tools/string.hxx>
 #include <i18npool/lang.h>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/i18n/NumberFormatCode.hpp>
 #include <unotools/localedatawrapper.hxx>
-#include <svl/ondemand.hxx>
 #include <tools/link.hxx>
+#include <svl/ondemand.hxx>
 #include <svl/nfkeytab.hxx>
 
 #include <map>
@@ -49,10 +51,6 @@ namespace com { namespace sun { namespace star {
         class XMultiServiceFactory;
     }
 }}}
-
-namespace rtl {
-    class OUString;
-}
 
 #define SV_COUNTRY_LANGUAGE_OFFSET  5000    // Max count of formats per country/language
 #define SV_MAX_ANZ_STANDARD_FORMATE  100    // Max count of builtin default formats per CL
@@ -273,25 +271,25 @@ public:
     OUString            BuildSymbolString(bool bBank,
                             bool bWithoutExtension = false) const;
 
-                        /** #,##0.00 [$DM-407] is assigned to rStr, separators
+                        /** #,##0.00 [$DM-407] is returned, separators
                               from rLoc,    incl. minus sign but without [RED] */
-    void                BuildPositiveFormatString( String& rStr, bool bBank,
-                            const LocaleDataWrapper&, sal_uInt16 nDecimalFormat = 1 ) const;
-    void                BuildNegativeFormatString( String& rStr, bool bBank,
-                            const LocaleDataWrapper&, sal_uInt16 nDecimalFormat = 1 ) const;
+    OUString            BuildPositiveFormatString(bool bBank,
+                            const LocaleDataWrapper&, sal_uInt16 nDecimalFormat = 1) const;
+    OUString            BuildNegativeFormatString(bool bBank,
+                            const LocaleDataWrapper&, sal_uInt16 nDecimalFormat = 1) const;
 
                         /** [$DM-407] (or [$DEM] if bBank==true)
                             is appended/prepended to rStr, incl. minus sign */
-    void                CompletePositiveFormatString( String& rStr, bool bBank,
-                            sal_uInt16 nPosiFormat ) const;
-    void                CompleteNegativeFormatString( String& rStr, bool bBank,
-                            sal_uInt16 nNegaFormat ) const;
+    void                CompletePositiveFormatString(OUStringBuffer& rStr, bool bBank,
+                            sal_uInt16 nPosiFormat) const;
+    void                CompleteNegativeFormatString(OUStringBuffer& rStr, bool bBank,
+                            sal_uInt16 nNegaFormat) const;
 
                         /// rSymStr is appended/prepended to rStr, incl. minus sign
-    static  void        CompletePositiveFormatString( String& rStr,
-                            const String& rSymStr, sal_uInt16 nPosiFormat );
-    static  void        CompleteNegativeFormatString( String& rStr,
-                            const String& rSymStr, sal_uInt16 nNegaFormat );
+    static  void        CompletePositiveFormatString(OUStringBuffer& rStr,
+                            const String& rSymStr, sal_uInt16 nPosiFormat);
+    static  void        CompleteNegativeFormatString(OUStringBuffer& rStr,
+                            const String& rSymStr, sal_uInt16 nNegaFormat);
 
                         /** Representation of a currency (symbol position and
                              negative sign) in other language settings */
@@ -309,7 +307,7 @@ public:
 
 typedef boost::ptr_vector<NfCurrencyEntry> NfCurrencyTable;
 
-typedef std::vector< ::rtl::OUString > NfWSStringsDtor;
+typedef std::vector< OUString > NfWSStringsDtor;
 
 class SvNumberFormatterRegistry_Impl;
 
@@ -397,7 +395,7 @@ public:
     bool PutEntry( String& rString, xub_StrLen& nCheckPos, short& nType, sal_uInt32& nKey,
                   LanguageType eLnge = LANGUAGE_DONTKNOW );
 
-    bool PutEntry( rtl::OUString& rString, xub_StrLen& nCheckPos, short& nType, sal_uInt32& nKey,
+    bool PutEntry( OUString& rString, xub_StrLen& nCheckPos, short& nType, sal_uInt32& nKey,
                   LanguageType eLnge = LANGUAGE_DONTKNOW );
 
     /** Same as <method>PutEntry</method> but the format code string is
@@ -407,7 +405,7 @@ public:
                              short& nType, sal_uInt32& nKey,
                              LanguageType eLnge, LanguageType eNewLnge );
 
-    bool PutandConvertEntry( rtl::OUString& rString, xub_StrLen& nCheckPos,
+    bool PutandConvertEntry( OUString& rString, xub_StrLen& nCheckPos,
                              short& nType, sal_uInt32& nKey,
                              LanguageType eLnge, LanguageType eNewLnge );
 
@@ -463,10 +461,10 @@ public:
 
     /** Create a format code string using format nIndex as a template and
         applying other settings (passed from the dialog) */
-    void GenerateFormat( String& sString, sal_uInt32 nIndex,
-                        LanguageType eLnge = LANGUAGE_DONTKNOW,
-                        bool bThousand = false, bool IsRed = false,
-                        sal_uInt16 nPrecision = 0, sal_uInt16 nAnzLeading = 1 );
+    OUString GenerateFormat(sal_uInt32 nIndex,
+                            LanguageType eLnge = LANGUAGE_DONTKNOW,
+                            bool bThousand = false, bool IsRed = false,
+                            sal_uInt16 nPrecision = 0, sal_uInt16 nAnzLeading = 1);
 
     /** Analyze an input string
         @return
@@ -483,7 +481,7 @@ public:
 
     /// Format a number according to a format index, return string and color
     void GetOutputString( const double& fOutNumber, sal_uInt32 nFIndex,
-                          rtl::OUString& sOutString, Color** ppColor, bool bUseStarFormat = false );
+                          OUString& sOutString, Color** ppColor, bool bUseStarFormat = false );
 
     /** Format a string according to a format index, return string and color.
         Formats only if the format code is of type text or the 4th subcode
@@ -495,8 +493,8 @@ public:
     /** Format a string according to a format index, return string and color.
         Formats only if the format code is of type text or the 4th subcode
         of a format code is specified, otherwise sOutString will be == "" */
-    void GetOutputString( rtl::OUString& sString, sal_uInt32 nFIndex,
-                          rtl::OUString& sOutString, Color** ppColor, bool bUseStarFormat = false );
+    void GetOutputString( OUString& sString, sal_uInt32 nFIndex,
+                          OUString& sOutString, Color** ppColor, bool bUseStarFormat = false );
 
     /** Format a number according to the standard default format matching
         the given format index */
@@ -504,7 +502,7 @@ public:
                              sal_uInt32 nFIndex, String& sOutString );
 
     void GetInputLineString( const double& fOutNumber,
-                             sal_uInt32 nFIndex, rtl::OUString& rOutString );
+                             sal_uInt32 nFIndex, OUString& rOutString );
 
     /** Format a number according to a format code string to be scanned.
         @return
@@ -878,9 +876,9 @@ private:
     SVL_DLLPRIVATE sal_uInt32 ImpGenerateCL( LanguageType eLnge, bool bNoAdditionalFormats = false );
 
     // Build negative currency format, old compatibility style
-    SVL_DLLPRIVATE void ImpGetNegCurrFormat( String& sNegStr, const String& rCurrSymbol );
+    SVL_DLLPRIVATE void ImpGetNegCurrFormat(OUStringBuffer& sNegStr, const OUString& rCurrSymbol);
     // Build positive currency format, old compatibility style
-    SVL_DLLPRIVATE void ImpGetPosCurrFormat( String& sPosStr, const String& rCurrSymbol );
+    SVL_DLLPRIVATE void ImpGetPosCurrFormat(OUStringBuffer& sPosStr, const OUString& rCurrSymbol);
 
     // Create <type>theCurrencyTable</type> with all <type>NfCurrencyEntry</type>
     SVL_DLLPRIVATE static void ImpInitCurrencyTable();
@@ -978,7 +976,7 @@ public:
 
     // return corresponding Transliteration wrapper with loadModuleByImplName()
     inline const ::utl::TransliterationWrapper* GetTransliterationForModule(
-            const String& rModule, LanguageType eLang ) const
+            const OUString& rModule, LanguageType eLang ) const
                 { return xTransliteration.getForModule( rModule, eLang ); }
 
     // return the corresponding CharacterClassification wrapper
