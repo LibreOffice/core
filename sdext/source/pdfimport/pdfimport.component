@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
 <component xmlns="http://openoffice.org/2010/uno-components"
-        loader="com.sun.star.loader.SharedLibrary">
+        loader="com.sun.star.loader.SharedLibrary"
+	prefix="pdfimport">
     <implementation name="com.sun.star.comp.documents.HybridPDFImport">
         <service name="com.sun.star.document.ImportFilter"/>
     </implementation>
