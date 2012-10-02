@@ -38,8 +38,10 @@ LIBS = \
 	configmgr.uno \
 	cppcanvaslo \
 	crypto \
+	dbalo \
 	dbaxmllo \
 	dbtoolslo \
+	dbulo \
 	deploymentmisclo \
 	dict_ja \
 	dict_zh \
