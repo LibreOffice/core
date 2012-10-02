@@ -83,13 +83,10 @@
 #include "xfilter/xfbgimage.hxx"
 #include "lwpusewhen.hxx"
 
-#define ANCHOR_HEIGHT       0x120000
 #define FIRST_LAYOUTPAGENO  0x0001
 #define LAST_LAYOUTPAGENO       0xffff
 
-#define LAY_BUOYFLOAT       0x01
 #define LAY_BUOYNEUTRAL     0x02
-#define LAY_BUOYSINK        0x03
 #define LAY_BUOYLAYER       0x80
 
 class LwpPara;
@@ -224,7 +221,6 @@ class LwpAssociatedLayouts
 {
 public:
     LwpAssociatedLayouts(){}
-    //LwpAssociatedLayouts(LwpObjectStream* pStrm){Read(pStrm);}
 public:
     void Read(LwpObjectStream* pStrm);
     LwpObjectID* GetOnlyLayout(){return &m_OnlyLayout;}
@@ -247,7 +243,6 @@ protected:
     virtual LWP_LAYOUT_TYPE GetLayoutType () { return LWP_HEAD_LAYOUT;}
 };
 
-//add by , 01/20/2005
 class LwpLayoutStyle
 {
 public:
@@ -271,7 +266,6 @@ private:
     sal_uInt16 m_nGridType;
     LwpAtomHolder* m_pContentStyle;
 };
-//end add
 
 #include "lwplaypiece.hxx"
 
@@ -320,11 +314,8 @@ public:
     virtual double GetHeight();
     virtual LwpPoint GetOrigin();
 
-    // added by , 06/01/2004
     sal_Bool IsPatternFill();
     XFBGImage* GetFillPattern();
-    // end add
-
 
     //Check whether there are contents in the layout
     virtual sal_Bool HasContent();
@@ -342,7 +333,6 @@ protected:
     LwpObjectID m_Content;
     LwpObjectID m_BasedOnStyle;
 
-    // 01/20/2005
     LwpObjectID     m_TabPiece;
     LwpLayoutStyle* m_pStyleStuff;
     LwpLayoutMisc*  m_pMiscStuff;
@@ -352,7 +342,6 @@ protected:
     LwpObjectID     m_LayBorderStuff;
     LwpObjectID     m_LayBackgroundStuff;
     LwpObjectID     m_LayExtBorderStuff;
-    //end
 public:
     LwpObjectID* GetContent(){return &m_Content;}
     LwpTabOverride* GetTabOverride();
@@ -370,7 +359,6 @@ public:
 protected:
     void Read();
 protected:
-    // 01/20/2005
     LwpUseWhen* m_pUseWhen;
     LwpObjectID m_Positon;
     LwpObjectID m_LayColumns;
@@ -378,7 +366,6 @@ protected:
     LwpObjectID m_LayJoinStuff;
     LwpObjectID m_LayShadow;
     LwpObjectID m_LayExtJoinStuff;
-    //end
 
 public:
     LwpUseWhen* VirtualGetUseWhen();
@@ -428,7 +415,6 @@ public:
         LAY_NO_WRAP_AROUND,
         LAY_WRAP_LEFT,
         LAY_WRAP_RIGHT,
-        //OLD_LAY_WRAP_RIGHT,
         LAY_WRAP_BOTH,
         LAY_WRAP_IRREG_BOTH,
         LAY_WRAP_IRREG_LEFT,

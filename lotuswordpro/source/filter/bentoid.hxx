@@ -61,20 +61,11 @@ namespace OpenStormBento
 
 #define BEN_OBJID_TOC 1 // TOC object ID
 #define BEN_PROPID_TOC_SEED 2 // TOC object starting seed
-#define BEN_PROPID_TOC_MIN_SEED 3 // TOC object minimum seed
-#define BEN_PROPID_TOC_OBJECT 4 // TOC object
-#define BEN_PROPID_TOC_CONTAINER 5 // TOC object entire container
-#define BEN_PROPID_TOC_DELETED 6 // TOC object amount deleted
 #define BEN_TYPEID_TOC_TYPE 19 // TOC object property value type
-#define BEN_OBJID_WRITEABLE 20 // Predefined ID's below this value will be
-                               // written to container TOC.  Predefined IDs
-                               // above this are not written
 #define BEN_TYPEID_7_BIT_ASCII 21 // 7-bit ASCII
 #define BEN_PROPID_GLOBAL_TYPE_NAME 23 // Global type name
 #define BEN_PROPID_GLOBAL_PROPERTY_NAME 24 // Global property name
 #define BEN_PROPID_OBJ_REFERENCES 31 // Referenced objects from an object
-#define BEN_TYPEID_OBJ_REFERENCES_DATA 32 // Reference data
-#define BEN_OBJID_MIN_GENERAL_ID 100 // Min object ID for general std objects
 
 #define BEN_NEW_OBJECT 1 // object + property + type
 #define BEN_NEW_PROPERTY 2 // property + type
@@ -95,14 +86,6 @@ namespace OpenStormBento
 #define BEN_SEGMENT_CODE_END 14
 
 #define BEN_REFERENCE_LIST_ID 15 // references recording object ID
-#define BEN_RESERVED4B 16
-#define BEN_RESERVED4C 17
-#define BEN_RESERVED8A 18 // reserved for future use of 8 byte entry
-#define BEN_RESERVED8B 19 // reserved for future use of 8 byte entry
-#define BEN_RESERVED8C 20 // reserved for future use of 8 byte entry
-#define BEN_RESERVED12A 21 // reserved for future use of 12 byte entry
-#define BEN_RESERVED12B 22 // reserved for future use of 12 byte entry
-#define BEN_RESERVED12C 23 // reserved for future use of 12 byte entry
 #define BEN_END_OF_BUFFER 24 // end of current buffer, go to next
 #define BEN_READ_PAST_END_OF_TOC 50 // Our code
 #define BEN_NOOP 0xFF
