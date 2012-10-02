@@ -137,6 +137,7 @@ do_checkout()
 local cmd
 local create_branch="0"
 local branch
+local module
 
     git checkout "$@" || return $?
     for cmd in "$@" ; do
@@ -154,6 +155,11 @@ local branch
 	fi
     else
 	# now that is the nasty case we moved prior to submodules
+	# delete the submodules left over if any
+	for module in $SUBMODULES_ALL ; do
+	    echo "clean-up submodule $module"
+	    rm -fr ${module}
+	done
 	# make sure we have the needed repo in clone
 	./g clone && ./g -f checkout "$@" || return $?
     fi
@@ -167,6 +173,11 @@ do_reset()
 	git submodule update || return $?
     else
 	# now that is the nasty case we moved prior to submodules
+	# delete the submodules left over if any
+	for module in $SUBMODULES_ALL ; do
+	    echo "clean-up submodule $module"
+	    rm -fr ${module}
+	done
 	# make sure we have the needed repo in clone
 	./g clone && ./g -f reset "$@"
     fi
