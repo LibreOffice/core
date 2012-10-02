@@ -27,6 +27,7 @@
 #include <drawinglayer/drawinglayerdllapi.h>
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 #include <drawinglayer/attribute/fillgradientattribute.hxx>
+#include <drawinglayer/texture/texture.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 // predefines
@@ -65,15 +66,15 @@ namespace drawinglayer
 
             /// local helpers
             void generateMatricesAndColors(
-                std::vector< basegfx::B2DHomMatrix >& rMatrices,
-                std::vector< basegfx::BColor >& rColors) const;
+                std::vector< drawinglayer::texture::B2DHomMatrixAndBColor >& rEntries,
+                basegfx::BColor& rOutmostColor) const;
             Primitive2DSequence createOverlappingFill(
-                const std::vector< basegfx::B2DHomMatrix >& rMatrices,
-                const std::vector< basegfx::BColor >& rColors,
+                const std::vector< drawinglayer::texture::B2DHomMatrixAndBColor >& rEntries,
+                const basegfx::BColor& rOutmostColor,
                 const basegfx::B2DPolygon& rUnitPolygon) const;
             Primitive2DSequence createNonOverlappingFill(
-                const std::vector< basegfx::B2DHomMatrix >& rMatrices,
-                const std::vector< basegfx::BColor >& rColors,
+                const std::vector< drawinglayer::texture::B2DHomMatrixAndBColor >& rEntries,
+                const basegfx::BColor& rOutmostColor,
                 const basegfx::B2DPolygon& rUnitPolygon) const;
 
         protected:

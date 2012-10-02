@@ -688,14 +688,14 @@ namespace cppcanvas
                     switch( rGradient.GetStyle() )
                     {
                         case GRADIENT_LINEAR:
-                            basegfx::tools::createLinearODFGradientInfo(aGradInfo,
+                            aGradInfo = basegfx::tools::createLinearODFGradientInfo(
                                                                         aBounds,
                                                                         nSteps,
                                                                         fBorder,
                                                                         fRotation);
                             // map odf to svg gradient orientation - x
                             // instead of y direction
-                            aGradInfo.maTextureTransform = aGradInfo.maTextureTransform * aRot90;
+                            aGradInfo.setTextureTransform(aGradInfo.getTextureTransform() * aRot90);
                             aGradientService = rtl::OUString::createFromAscii("LinearGradient");
                             break;
 
@@ -714,27 +714,27 @@ namespace cppcanvas
                             // border value, hence the second (left
                             // most 1-...
                             const double fAxialBorder (1-2*(1-fBorder));
-                            basegfx::tools::createAxialODFGradientInfo(aGradInfo,
+                            aGradInfo = basegfx::tools::createAxialODFGradientInfo(
                                                                         aBounds,
                                                                         nSteps,
                                                                         fAxialBorder,
                                                                         fRotation);
                             // map odf to svg gradient orientation - x
                             // instead of y direction
-                            aGradInfo.maTextureTransform = aGradInfo.maTextureTransform * aRot90;
+                            aGradInfo.setTextureTransform(aGradInfo.getTextureTransform() * aRot90);
 
                             // map odf axial gradient to 3-stop linear
                             // gradient - shift left by 0.5
                             basegfx::B2DHomMatrix aShift;
-                            aShift.translate(-0.5,0);
-                            aGradInfo.maTextureTransform = aGradInfo.maTextureTransform * aShift;
 
+                            aShift.translate(-0.5,0);
+                            aGradInfo.setTextureTransform(aGradInfo.getTextureTransform() * aShift);
                             aGradientService = rtl::OUString::createFromAscii("LinearGradient");
                             break;
                         }
 
                         case GRADIENT_RADIAL:
-                            basegfx::tools::createRadialODFGradientInfo(aGradInfo,
+                            aGradInfo = basegfx::tools::createRadialODFGradientInfo(
                                                                         aBounds,
                                                                         aOffset,
                                                                         nSteps,
@@ -743,7 +743,7 @@ namespace cppcanvas
                             break;
 
                         case GRADIENT_ELLIPTICAL:
-                            basegfx::tools::createEllipticalODFGradientInfo(aGradInfo,
+                            aGradInfo = basegfx::tools::createEllipticalODFGradientInfo(
                                                                             aBounds,
                                                                             aOffset,
                                                                             nSteps,
@@ -753,7 +753,7 @@ namespace cppcanvas
                             break;
 
                         case GRADIENT_SQUARE:
-                            basegfx::tools::createSquareODFGradientInfo(aGradInfo,
+                            aGradInfo = basegfx::tools::createSquareODFGradientInfo(
                                                                         aBounds,
                                                                         aOffset,
                                                                         nSteps,
@@ -763,7 +763,7 @@ namespace cppcanvas
                             break;
 
                         case GRADIENT_RECT:
-                            basegfx::tools::createRectangularODFGradientInfo(aGradInfo,
+                            aGradInfo = basegfx::tools::createRectangularODFGradientInfo(
                                                                              aBounds,
                                                                              aOffset,
                                                                              nSteps,
@@ -785,10 +785,12 @@ namespace cppcanvas
                     // gradient will always display at the origin, and
                     // not within the polygon bound (which might be
                     // miles away from the origin).
-                    aGradInfo.maTextureTransform.translate( aBounds.getMinX(),
-                                                            aBounds.getMinY() );
+                    aGradInfo.setTextureTransform(
+                        basegfx::tools::createTranslateB2DHomMatrix(
+                            aBounds.getMinX(),
+                            aBounds.getMinY()) * aGradInfo.getTextureTransform());
                     ::basegfx::unotools::affineMatrixFromHomMatrix( aTexture.AffineTransform,
-                                                                    aGradInfo.maTextureTransform );
+                                                                    aGradInfo.getTextureTransform() );
 
                     uno::Sequence<uno::Any> args(3);
                     beans::PropertyValue aProp;
@@ -799,7 +801,7 @@ namespace cppcanvas
                     aProp.Value <<= aStops;
                     args[1] <<= aProp;
                     aProp.Name = rtl::OUString::createFromAscii("AspectRatio");
-                    aProp.Value <<= aGradInfo.mfAspectRatio;
+                    aProp.Value <<= aGradInfo.getAspectRatio();
                     args[2] <<= aProp;
 
                     aTexture.Gradient.set(
