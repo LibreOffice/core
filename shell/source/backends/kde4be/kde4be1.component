@@ -26,7 +26,7 @@
 *
 **********************************************************************-->
 
-<component loader="com.sun.star.loader.SharedLibrary"
+<component loader="com.sun.star.loader.SharedLibrary" prefix="kde4be1"
     xmlns="http://openoffice.org/2010/uno-components">
   <implementation name="com.sun.star.comp.configuration.backend.KDE4Backend">
     <service name="com.sun.star.configuration.backend.KDE4Backend"/>

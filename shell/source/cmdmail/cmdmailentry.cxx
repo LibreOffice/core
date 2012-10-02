@@ -62,7 +62,7 @@ extern "C"
 // component_getFactory
 //----------------------------------------------------------------------
 
-SAL_DLLPUBLIC_EXPORT void* SAL_CALL component_getFactory(
+SAL_DLLPUBLIC_EXPORT void* SAL_CALL cmdmail_component_getFactory(
     const sal_Char* pImplName,
     SAL_UNUSED_PARAMETER uno_Interface* /*pSrvManager*/,
     SAL_UNUSED_PARAMETER uno_Interface* /*pRegistryKey*/ )
