@@ -1980,6 +1980,20 @@ AC_ARG_WITH(intro-progressbar-frame-color,
                           Usage: --with-intro-progressbar-frame-color=207,208,211
 ],,)
 
+AC_ARG_WITH(intro-progressbar-text-color,
+    AS_HELP_STRING([--with-intro-progressbar-text-color],
+        [Set color of progress bar text on intro screen. Comma separated RGB values in decimal format.])
+    [
+                          Usage: --with-intro-progressbar-text-color=207,208,211
+],,)
+
+AC_ARG_WITH(intro-progressbar-text-baseline,
+    AS_HELP_STRING([--with-intro-progressbar-text-baseline],
+        [Set horizontal position of progress bar text on intro screen. Value in decimal format.])
+    [
+                          Usage: --with-intro-progressbar-text-baseline=250
+],,)
+
 AC_ARG_WITH(flat-logo-svg,
 [  --with-flat-logo-svg    Allows specification of the flat Logo SVG.
 
