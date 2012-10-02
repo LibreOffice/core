@@ -189,10 +189,24 @@ public:
     virtual void DataChanged(const ScRange& rRange) = 0;
     virtual void SetParent(ScConditionalFormat* pParent);
 
+    virtual void startRendering();
+    virtual void endRendering();
+
 protected:
-    void getValues( std::vector<double>& rValues ) const;
+    std::vector<double>& getValues() const;
+
+    double getMinValue() const;
+    double getMaxValue() const;
 
     ScConditionalFormat* mpParent;
+
+private:
+
+    struct ScColorFormatCache
+    {
+        std::vector<double> maValues;
+    };
+    mutable boost::scoped_ptr<ScColorFormatCache> mpCache;
 };
 
 class SC_DLLPUBLIC ScColorScaleFormat : public ScColorFormat
