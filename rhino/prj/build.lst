@@ -1,3 +1,2 @@
-xh	rhino	:	soltools NULL
-xh	rhino		usr1	-	all	xh_mkout NULL
-xh	rhino      nmake	-	all	xh_rhino NULL
+xh	rhino	:      soltools NULL
+xh	rhino\prj      nmake	-	all	xh_rhino NULL

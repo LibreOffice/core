@@ -10107,6 +10107,7 @@ if test "x$enable_ext_scripting_javascript" = "xyes" -a "x$enable_extension_inte
    else
        AC_MSG_RESULT([internal])
        SYSTEM_RHINO=NO
+       RHINO_TARBALL="798b2ffdc8bcfe7bca2cf92b62caf685-rhino1_5R5.zip"
        BUILD_TYPE="$BUILD_TYPE RHINO"
    fi
 else
@@ -10117,6 +10118,7 @@ fi
 AC_SUBST(ENABLE_SCRIPTING_JAVASCRIPT)
 AC_SUBST(SYSTEM_RHINO)
 AC_SUBST(RHINO_JAR)
+AC_SUBST(RHINO_TARBALL)
 
 dnl Scripting provider for Python extension?
 dnl We always provide this unless we have disabled Python completely
