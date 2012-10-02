@@ -96,7 +96,7 @@ ScTabPageSortFields::ScTabPageSortFields( Window*           pParent,
         aStrRow         ( SC_RESSTR( SCSTR_ROW ) ),
         //
         nWhichSort      ( rArgSet.GetPool()->GetWhich( SID_SORT ) ),
-        pDlg            ( (ScSortDlg*)(GetParent()->GetParent()) ),
+        pDlg            ( (ScSortDlg*)(GetParentDialog()) ),
         pViewData       ( NULL ),
         aSortData       ( ((const ScSortItem&)
                            rArgSet.Get( nWhichSort )).
@@ -517,7 +517,7 @@ ScTabPageSortOptions::ScTabPageSortOptions( Window*             pParent,
                           rArgSet.Get( nWhichSort )).GetSortData() ),
         pViewData       ( NULL ),
         pDoc            ( NULL ),
-        pDlg            ( (ScSortDlg*)(GetParent() ? GetParent()->GetParent() : 0 ) ),
+        pDlg            ( (ScSortDlg*)(GetParentDialog()) ),
         pColRes         ( NULL ),
         pColWrap        ( NULL )
 {

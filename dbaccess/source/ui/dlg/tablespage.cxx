@@ -335,7 +335,7 @@ DBG_NAME(OTableSubscriptionPage)
             if (aErrorInfo.isValid())
             {
                 // establishing the connection failed. Show an error window and exit.
-                OSQLMessageBox aMessageBox( GetParent()->GetParent(), aErrorInfo );
+                OSQLMessageBox aMessageBox( GetParentDialog(), aErrorInfo );
                 aMessageBox.Execute();
                 m_aTables.Enable(sal_False);
                 m_aTablesList.Enable(sal_False);
