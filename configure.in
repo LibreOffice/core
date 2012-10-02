@@ -10056,6 +10056,7 @@ if test "x$enable_ext_scripting_beanshell" = "xyes" -a "x$enable_extension_integ
    else
        AC_MSG_RESULT([internal])
        SYSTEM_BSH=NO
+       BSH_TARBALL="ea570af93c284aa9e5621cd563f54f4d-bsh-2.0b1-src.tar.gz"
        BUILD_TYPE="$BUILD_TYPE BSH"
    fi
 else
@@ -10066,6 +10067,7 @@ fi
 AC_SUBST(ENABLE_SCRIPTING_BEANSHELL)
 AC_SUBST(SYSTEM_BSH)
 AC_SUBST(BSH_JAR)
+AC_SUBST(BSH_TARBALL)
 
 # scripting provider for JavaScript extension?
 AC_MSG_CHECKING([whether to build extension for support of scripts in JavaScript])
