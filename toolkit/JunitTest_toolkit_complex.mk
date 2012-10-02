@@ -27,11 +27,11 @@
 
 $(eval $(call gb_JunitTest_JunitTest,toolkit_complex))
 
-$(eval $(call gb_JunitTest_add_jars,toolkit_complex,\
-    $(OUTDIR)/bin/OOoRunner.jar \
-    $(OUTDIR)/bin/ridl.jar \
-    $(OUTDIR)/bin/test.jar \
-    $(OUTDIR)/bin/unoil.jar \
+$(eval $(call gb_JunitTest_use_jars,toolkit_complex,\
+    OOoRunner \
+    ridl \
+    test \
+    unoil \
 ))
 
 $(eval $(call gb_JunitTest_add_sourcefiles,toolkit_complex,\
