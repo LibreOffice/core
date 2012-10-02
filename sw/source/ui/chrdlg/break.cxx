@@ -41,25 +41,24 @@
 #include <pagedesc.hxx>
 #include <poolfmt.hxx>
 
-#include <break.hrc>
 #include <chrdlg.hrc>
 #include <SwStyleNameMapper.hxx>
 
 void SwBreakDlg::Apply()
 {
     nKind = 0;
-    if(aLineBtn.IsChecked())
+    if(m_pLineBtn->IsChecked())
         nKind = 1;
-    else if(aColumnBtn.IsChecked())
+    else if(m_pColumnBtn->IsChecked())
         nKind = 2;
-    else if(aPageBtn.IsChecked())
+    else if(m_pPageBtn->IsChecked())
     {
         nKind = 3;
-        const sal_uInt16 nPos = aPageCollBox.GetSelectEntryPos();
+        const sal_uInt16 nPos = m_pPageCollBox->GetSelectEntryPos();
         if(0 != nPos && LISTBOX_ENTRY_NOTFOUND != nPos)
         {
-            aTemplate = aPageCollBox.GetSelectEntry();
-            nPgNum = aPageNumBox.IsChecked() ? (sal_uInt16)aPageNumEdit.GetValue() : 0;
+            aTemplate = m_pPageCollBox->GetSelectEntry();
+            nPgNum = m_pPageNumBox->IsChecked() ? (sal_uInt16)m_pPageNumEdit->GetValue() : 0;
         }
     }
 }
@@ -77,8 +76,8 @@ IMPL_LINK_NOARG_INLINE_END(SwBreakDlg, ClickHdl)
 
 IMPL_LINK_INLINE_START( SwBreakDlg, PageNumHdl, CheckBox *, pBox )
 {
-    if(pBox->IsChecked()) aPageNumEdit.SetValue(1);
-    else aPageNumEdit.SetText(aEmptyStr);
+    if(pBox->IsChecked()) m_pPageNumEdit->SetValue(1);
+    else m_pPageNumEdit->SetText(OUString());
     return 0;
 }
 IMPL_LINK_INLINE_END( SwBreakDlg, PageNumHdl, CheckBox *, pBox )
@@ -89,7 +88,7 @@ IMPL_LINK_INLINE_END( SwBreakDlg, PageNumHdl, CheckBox *, pBox )
 
 IMPL_LINK_NOARG_INLINE_START(SwBreakDlg, PageNumModifyHdl)
 {
-    aPageNumBox.Check();
+    m_pPageNumBox->Check();
     return 0;
 }
 IMPL_LINK_NOARG_INLINE_END(SwBreakDlg, PageNumModifyHdl)
@@ -103,19 +102,19 @@ IMPL_LINK_NOARG_INLINE_END(SwBreakDlg, PageNumModifyHdl)
 
 IMPL_LINK_NOARG(SwBreakDlg, OkHdl)
 {
-    if(aPageNumBox.IsChecked()) {
+    if(m_pPageNumBox->IsChecked()) {
         // In case of differing page descriptions, test validity
-        const sal_uInt16 nPos = aPageCollBox.GetSelectEntryPos();
+        const sal_uInt16 nPos = m_pPageCollBox->GetSelectEntryPos();
         // position 0 says 'Without'.
         const SwPageDesc *pPageDesc;
         if ( 0 != nPos && LISTBOX_ENTRY_NOTFOUND != nPos )
-            pPageDesc = rSh.FindPageDescByName( aPageCollBox.GetSelectEntry(),
+            pPageDesc = rSh.FindPageDescByName( m_pPageCollBox->GetSelectEntry(),
                                                 sal_True );
         else
             pPageDesc = &rSh.GetPageDesc(rSh.GetCurPageDesc());
 
         OSL_ENSURE(pPageDesc, "Page description not found.");
-        const sal_uInt16 nUserPage = sal_uInt16(aPageNumEdit.GetValue());
+        const sal_uInt16 nUserPage = sal_uInt16(m_pPageNumEdit->GetValue());
         sal_Bool bOk = sal_True;
         switch(pPageDesc->GetUseOn())
         {
@@ -127,7 +126,7 @@ IMPL_LINK_NOARG(SwBreakDlg, OkHdl)
         }
         if(!bOk) {
             InfoBox(this, SW_RES(MSG_ILLEGAL_PAGENUM)).Execute();
-            aPageNumEdit.GrabFocus();
+            m_pPageNumEdit->GrabFocus();
             return 0;
         }
     }
@@ -135,41 +134,33 @@ IMPL_LINK_NOARG(SwBreakDlg, OkHdl)
     return 0;
 }
 
-SwBreakDlg::SwBreakDlg( Window *pParent, SwWrtShell &rS ) :
-
-    SvxStandardDialog( pParent,SW_RES(DLG_BREAK) ),
-
-    rSh(rS),
-    aBreakFL(this,SW_RES(FL_BREAK)),
-    aLineBtn(this,SW_RES(RB_LINE)),
-    aColumnBtn(this,SW_RES(RB_COL)),
-    aPageBtn(this,SW_RES(RB_PAGE)),
-    aPageCollText(this, SW_RES(FT_COLL)),
-    aPageCollBox(this, SW_RES(LB_COLL)),
-    aPageNumBox(this, SW_RES(CB_PAGENUM)),
-    aPageNumEdit(this, SW_RES(ED_PAGENUM)),
-
-    aOkBtn(this,SW_RES(BT_OK)),
-    aCancelBtn(this,SW_RES(BT_CANCEL)),
-    aHelpBtn(this,SW_RES(BT_HELP)),
-
-    nKind(0),
-    nPgNum(0),
-
-    bHtmlMode(0 != ::GetHtmlMode(rS.GetView().GetDocShell()))
+SwBreakDlg::SwBreakDlg( Window *pParent, SwWrtShell &rS )
+    : SvxStandardDialog(pParent, "BreakDialog", "modules/swriter/ui/insertbreak.ui")
+    , rSh(rS)
+    , nKind(0)
+    , nPgNum(0)
+    , bHtmlMode(0 != ::GetHtmlMode(rS.GetView().GetDocShell()))
 {
-    aPageNumEdit.SetAccessibleRelationLabeledBy(&aPageNumBox);
-    aPageNumEdit.SetAccessibleName(aPageNumBox.GetText());
+    get(m_pLineBtn, "linerb");
+    get(m_pColumnBtn, "columnrb");
+    get(m_pPageBtn, "pagerb");
+    get(m_pPageCollText, "styleft");
+    get(m_pPageCollBox, "stylelb");
+    get(m_pPageNumBox, "pagenumcb");
+    get(m_pPageNumEdit, "pagenumsb");
+
+    m_pPageNumEdit->SetAccessibleRelationLabeledBy(m_pPageNumBox);
+    m_pPageNumEdit->SetAccessibleName(m_pPageNumBox->GetText());
 
     Link aLk = LINK(this,SwBreakDlg,ClickHdl);
-    aPageBtn.SetClickHdl( aLk );
-    aLineBtn.SetClickHdl( aLk );
-    aColumnBtn.SetClickHdl( aLk );
-    aPageCollBox.SetSelectHdl( aLk );
+    m_pPageBtn->SetClickHdl( aLk );
+    m_pLineBtn->SetClickHdl( aLk );
+    m_pColumnBtn->SetClickHdl( aLk );
+    m_pPageCollBox->SetSelectHdl( aLk );
 
-    aOkBtn.SetClickHdl(LINK(this,SwBreakDlg,OkHdl));
-    aPageNumBox.SetClickHdl(LINK(this,SwBreakDlg,PageNumHdl));
-    aPageNumEdit.SetModifyHdl(LINK(this,SwBreakDlg,PageNumModifyHdl));
+    get<OKButton>("ok")->SetClickHdl(LINK(this,SwBreakDlg,OkHdl));;
+    m_pPageNumBox->SetClickHdl(LINK(this,SwBreakDlg,PageNumHdl));
+    m_pPageNumEdit->SetModifyHdl(LINK(this,SwBreakDlg,PageNumModifyHdl));
 
 
     // Insert page description to Listbox
@@ -179,21 +170,20 @@ SwBreakDlg::SwBreakDlg( Window *pParent, SwWrtShell &rS ) :
     for( i = 0; i < nCount; ++i)
     {
         const SwPageDesc &rPageDesc = rSh.GetPageDesc(i);
-        ::InsertStringSorted(rPageDesc.GetName(), aPageCollBox, 1 );
+        ::InsertStringSorted(rPageDesc.GetName(), *m_pPageCollBox, 1 );
     }
 
     String aFmtName;
     for(i = RES_POOLPAGE_BEGIN; i < RES_POOLPAGE_END; ++i)
-        if(LISTBOX_ENTRY_NOTFOUND == aPageCollBox.GetEntryPos( aFmtName =
+        if(LISTBOX_ENTRY_NOTFOUND == m_pPageCollBox->GetEntryPos( aFmtName =
                                     SwStyleNameMapper::GetUIName( i, aFmtName )))
-            ::InsertStringSorted(aFmtName, aPageCollBox, 1 );
+            ::InsertStringSorted(aFmtName, *m_pPageCollBox, 1 );
     //add landscape page
-    if(LISTBOX_ENTRY_NOTFOUND == aPageCollBox.GetEntryPos( aFmtName =
+    if(LISTBOX_ENTRY_NOTFOUND == m_pPageCollBox->GetEntryPos( aFmtName =
                                     SwStyleNameMapper::GetUIName( RES_POOLPAGE_LANDSCAPE, aFmtName )))
-            ::InsertStringSorted(aFmtName, aPageCollBox, 1 );
+            ::InsertStringSorted(aFmtName, *m_pPageCollBox, 1 );
     CheckEnable();
-    aPageNumEdit.SetText( aEmptyStr );
-    FreeResource();
+    m_pPageNumEdit->SetText(OUString());
 }
 
 void SwBreakDlg::CheckEnable()
@@ -201,32 +191,32 @@ void SwBreakDlg::CheckEnable()
     sal_Bool bEnable = sal_True;
     if ( bHtmlMode )
     {
-        aColumnBtn  .Enable(sal_False);
-        aPageCollBox.Enable(sal_False);
+        m_pColumnBtn->Enable(sal_False);
+        m_pPageCollBox->Enable(sal_False);
         bEnable = sal_False;
     }
     else if(rSh.GetFrmType(0,sal_True)
         & (FRMTYPE_FLY_ANY | FRMTYPE_HEADER | FRMTYPE_FOOTER  | FRMTYPE_FOOTNOTE))
     {
-        aPageBtn.Enable(sal_False);
-        if(aPageBtn.IsChecked())
-            aLineBtn.Check(sal_True);
+        m_pPageBtn->Enable(sal_False);
+        if(m_pPageBtn->IsChecked())
+            m_pLineBtn->Check(sal_True);
         bEnable = sal_False;
     }
-    const sal_Bool bPage = aPageBtn.IsChecked();
-    aPageCollText.Enable( bPage );
-    aPageCollBox.Enable ( bPage );
+    const sal_Bool bPage = m_pPageBtn->IsChecked();
+    m_pPageCollText->Enable( bPage );
+    m_pPageCollBox->Enable ( bPage );
 
     bEnable &= bPage;
     if ( bEnable )
     {
         // position 0 says 'Without' page template.
-        const sal_uInt16 nPos = aPageCollBox.GetSelectEntryPos();
+        const sal_uInt16 nPos = m_pPageCollBox->GetSelectEntryPos();
         if ( 0 == nPos || LISTBOX_ENTRY_NOTFOUND == nPos )
             bEnable = sal_False;
     }
-    aPageNumBox .Enable(bEnable);
-    aPageNumEdit.Enable(bEnable);
+    m_pPageNumBox->Enable(bEnable);
+    m_pPageNumEdit->Enable(bEnable);
 }
 
 SwBreakDlg::~SwBreakDlg()

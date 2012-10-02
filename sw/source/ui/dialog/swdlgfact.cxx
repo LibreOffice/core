@@ -713,24 +713,11 @@ VclAbstractDialog* SwAbstractDialogFactory_Impl::CreateSwInsertBookmarkDlg( Wind
     return 0;
 }
 
-AbstractSwBreakDlg * SwAbstractDialogFactory_Impl::CreateSwBreakDlg ( Window *pParent,
-                                                                     SwWrtShell &rSh,
-                                                                     int nResId )
+AbstractSwBreakDlg * SwAbstractDialogFactory_Impl::CreateSwBreakDlg(Window *pParent,
+                                                                     SwWrtShell &rSh)
 {
-    SwBreakDlg* pDlg=NULL;
-    switch ( nResId )
-    {
-        case DLG_BREAK :
-            pDlg = new SwBreakDlg( pParent, rSh );
-            break;
-
-        default:
-            break;
-    }
-
-    if ( pDlg )
-        return new AbstractSwBreakDlg_Impl( pDlg );
-    return 0;
+    SwBreakDlg* pDlg = new SwBreakDlg(pParent, rSh);
+    return new AbstractSwBreakDlg_Impl(pDlg);
 }
 
 VclAbstractDialog   * SwAbstractDialogFactory_Impl::CreateSwChangeDBDlg( SwView& rVw, int nResId  )

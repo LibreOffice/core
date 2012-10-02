@@ -43,18 +43,13 @@ class SwWrtShell;
 class SwBreakDlg: public SvxStandardDialog
 {
     SwWrtShell     &rSh;
-    FixedLine       aBreakFL;
-    RadioButton     aLineBtn;
-    RadioButton     aColumnBtn;
-    RadioButton     aPageBtn;
-    FixedText       aPageCollText;
-    ListBox         aPageCollBox;
-    CheckBox        aPageNumBox;
-    NumericField    aPageNumEdit;
-
-    OKButton        aOkBtn;
-    CancelButton    aCancelBtn;
-    HelpButton      aHelpBtn;
+    RadioButton*    m_pLineBtn;
+    RadioButton*    m_pColumnBtn;
+    RadioButton*    m_pPageBtn;
+    FixedText*      m_pPageCollText;
+    ListBox*        m_pPageCollBox;
+    CheckBox*       m_pPageNumBox;
+    NumericField*   m_pPageNumEdit;
 
     String          aTemplate;
     sal_uInt16          nKind;

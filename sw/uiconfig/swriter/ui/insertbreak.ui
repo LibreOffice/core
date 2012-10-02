@@ -1,7 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <!-- interface-requires gtk+ 3.0 -->
-  <object class="GtkDialog" id="20705">
+  <object class="GtkAdjustment" id="adjustment1">
+    <property name="lower">1</property>
+    <property name="upper">9999</property>
+    <property name="value">1</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkListStore" id="liststore1">
+    <columns>
+      <!-- column-name gchararray1 -->
+      <column type="gchararray"/>
+    </columns>
+    <data>
+      <row>
+        <col id="0" translatable="yes">[None]</col>
+      </row>
+    </data>
+  </object>
+  <object class="GtkDialog" id="BreakDialog">
     <property name="can_focus">False</property>
     <property name="border_width">5</property>
     <property name="title" translatable="yes">Insert Break</property>
@@ -16,7 +34,7 @@
             <property name="orientation">vertical</property>
             <property name="layout_style">start</property>
             <child>
-              <object class="GtkButton" id="100">
+              <object class="GtkButton" id="ok">
                 <property name="label">gtk-ok</property>
                 <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
@@ -32,7 +50,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id="101">
+              <object class="GtkButton" id="cancel">
                 <property name="label">gtk-cancel</property>
                 <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
@@ -48,7 +66,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id="102">
+              <object class="GtkButton" id="help">
                 <property name="label">gtk-help</property>
                 <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
@@ -88,7 +106,7 @@
                     <property name="can_focus">False</property>
                     <property name="orientation">vertical</property>
                     <child>
-                      <object class="GtkRadioButton" id="2">
+                      <object class="GtkRadioButton" id="linerb">
                         <property name="label" translatable="yes">Line break</property>
                         <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
@@ -106,7 +124,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkRadioButton" id="3">
+                      <object class="GtkRadioButton" id="columnrb">
                         <property name="label" translatable="yes">Column break</property>
                         <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
@@ -116,7 +134,7 @@
                         <property name="xalign">0</property>
                         <property name="active">True</property>
                         <property name="draw_indicator">True</property>
-                        <property name="group">2</property>
+                        <property name="group">linerb</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -125,7 +143,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkRadioButton" id="1">
+                      <object class="GtkRadioButton" id="pagerb">
                         <property name="label" translatable="yes">Page break</property>
                         <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
@@ -135,7 +153,7 @@
                         <property name="xalign">0</property>
                         <property name="active">True</property>
                         <property name="draw_indicator">True</property>
-                        <property name="group">2</property>
+                        <property name="group">linerb</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -144,7 +162,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkLabel" id="4">
+                      <object class="GtkLabel" id="styleft">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="xalign">0</property>
@@ -157,7 +175,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkComboBox" id="5">
+                      <object class="GtkComboBox" id="stylelb">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="model">liststore1</property>
@@ -169,7 +187,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkCheckButton" id="7">
+                      <object class="GtkCheckButton" id="pagenumcb">
                         <property name="label" translatable="yes">Change page number</property>
                         <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
@@ -190,11 +208,12 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <child>
-                          <object class="GtkSpinButton" id="8">
+                          <object class="GtkSpinButton" id="pagenumsb">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="invisible_char">●</property>
                             <property name="invisible_char_set">True</property>
+                            <property name="adjustment">adjustment1</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -217,7 +236,7 @@
               </object>
             </child>
             <child type="label">
-              <object class="GtkLabel" id="6">
+              <object class="GtkLabel" id="label1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes">Type</property>
@@ -234,20 +253,9 @@
       </object>
     </child>
     <action-widgets>
-      <action-widget response="0">100</action-widget>
-      <action-widget response="0">101</action-widget>
-      <action-widget response="0">102</action-widget>
+      <action-widget response="0">ok</action-widget>
+      <action-widget response="0">cancel</action-widget>
+      <action-widget response="0">help</action-widget>
     </action-widgets>
-  </object>
-  <object class="GtkListStore" id="liststore1">
-    <columns>
-      <!-- column-name gchararray1 -->
-      <column type="gchararray"/>
-    </columns>
-    <data>
-      <row>
-        <col id="0" translatable="yes">[None]</col>
-      </row>
-    </data>
   </object>
 </interface>
