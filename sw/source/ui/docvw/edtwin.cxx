@@ -2007,9 +2007,6 @@ KEYINPUT_CHECKTABLE_INSDEL:
                 case KEY_TAB:
                 {
 
-#ifdef SW_CRSR_TIMER
-                    sal_Bool bOld = rSh.ChgCrsrTimerFlag( sal_False );
-#endif
                     if (rSh.IsFormProtected() || rSh.GetCurrentFieldmark() || rSh.GetChar(sal_False)==CH_TXT_ATR_FORMELEMENT)
                     {
                         eKeyState=KS_GotoNextFieldMark;
@@ -2052,17 +2049,10 @@ KEYINPUT_CHECKTABLE_INSDEL:
                                 eKeyState = KS_OutlineDown;
                         }
                     }
-#ifdef SW_CRSR_TIMER
-                    rSh.ChgCrsrTimerFlag( bOld );
-#endif
                 }
                 break;
                 case KEY_TAB | KEY_SHIFT:
                 {
-#ifdef SW_CRSR_TIMER
-                    sal_Bool bOld = rSh.ChgCrsrTimerFlag( sal_False );
-                    sal_Bool bOld = rSh.ChgCrsrTimerFlag( sal_False );
-#endif
                     if (rSh.IsFormProtected() || rSh.GetCurrentFieldmark()|| rSh.GetChar(sal_False)==CH_TXT_ATR_FORMELEMENT) {
                         eKeyState=KS_GotoPrevFieldMark;
                     }
@@ -2103,9 +2093,6 @@ KEYINPUT_CHECKTABLE_INSDEL:
                                 eKeyState = KS_OutlineUp;
                         }
                     }
-#ifdef SW_CRSR_TIMER
-                    rSh.ChgCrsrTimerFlag( bOld );
-#endif
                 }
                 break;
                 case KEY_TAB | KEY_MOD1:
