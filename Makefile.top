@@ -44,6 +44,7 @@ basebmp\
 basegfx\
 basic\
 bean\
+beanshell\
 binaryurp\
 bluez_bluetooth\
 boost\
@@ -196,7 +197,6 @@ xmlsecurity\
 xsltml\
 
 dmake_modules:=\
-beanshell\
 berkeleydb\
 binfilter \
 cairo\

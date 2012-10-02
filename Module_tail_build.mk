@@ -37,6 +37,7 @@ $(eval $(call gb_Module_add_moduledirs,tail_end,\
 	basegfx \
 	basic \
 	bean \
+	$(call gb_Helper_optional,BSH,beanshell) \
 	binaryurp \
 	$(call gb_Helper_optional,BLUEZ,bluez_bluetooth) \
 	bridges \
