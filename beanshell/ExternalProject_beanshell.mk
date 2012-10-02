@@ -17,7 +17,6 @@ $(eval $(call gb_ExternalProject_register_targets,beanshell,\
 
 $(call gb_ExternalProject_get_state_target,beanshell,build) :
 	cd "$(call gb_UnpackedTarball_get_dir,beanshell)" && \
-	ANT_OPTS="$$ANT_OPTS -Dfile.encoding=ISO-8859-1" \
 	"$(ANT)" \
 		-q \
 		-f build.xml \
