@@ -527,7 +527,7 @@ void ensure_dbus_setup(GdkWindow* gdkWindow, GtkSalFrame* pSalFrame)
             pSessionBus = g_bus_get_sync (G_BUS_TYPE_SESSION, NULL, NULL);
         if( pSessionBus == NULL )
             return;
-        std::cout << "exporting menu model at " << pMenuModel << " for window " << windowId << std::endl;
+        SAL_INFO("vcl.unity", "exporting menu model at " << pMenuModel << " for window " << windowId);
         pSalFrame->m_nMenuExportId = g_dbus_connection_export_menu_model (pSessionBus, aDBusMenubarPath, pMenuModel, NULL);
         pSalFrame->m_nActionGroupExportId = g_dbus_connection_export_action_group( pSessionBus, aDBusPath, pActionGroup, NULL);
 
@@ -579,7 +579,7 @@ void on_registrar_unavailable (GDBusConnection * /*connection*/,
                           gpointer         user_data)
 {
     SolarMutexGuard aGuard;
-    std::cout << "on_registrar_unavailable" << std::endl;
+    SAL_INFO("vcl.unity", "on_registrar_unavailable");
     pSessionBus = NULL;
     GtkSalFrame* pSalFrame = reinterpret_cast< GtkSalFrame* >( user_data );
     SalMenu* pSalMenu = pSalFrame->GetMenu();

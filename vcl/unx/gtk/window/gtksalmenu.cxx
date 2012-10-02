@@ -30,10 +30,7 @@
 
 #include <framework/menuconfiguration.hxx>
 
-#include <iostream>
-
-using namespace std;
-
+#include <sal/log.hxx>
 
 static gchar* GetCommandForSpecialItem( GtkSalMenuItem* pSalMenuItem )
 {
@@ -80,13 +77,13 @@ bool GtkSalMenu::PrepUpdate()
     const GtkSalFrame* pFrame = GetFrame();
     if (!pFrame)
     {
-        std::cout << "not updating menu model, I have no frame " << mpMenuModel << std::endl;
+        SAL_INFO("vcl.unity", "not updating menu model, I have no frame " << mpMenuModel);
         return false;
     }
     const GObject* pWindow = G_OBJECT(gtk_widget_get_window( GTK_WIDGET(pFrame->getWindow()) ));
     if(!pWindow)
     {
-        std::cout << "not updating menu model, I have no frame " << mpMenuModel << std::endl;
+        SAL_INFO("vcl.unity", "not updating menu model, I have no frame " << mpMenuModel);
         return false;
     }
     // the root menu does not have its own model and has to use the one owned by the frame
@@ -97,7 +94,7 @@ bool GtkSalMenu::PrepUpdate()
     }
     if(!mpMenuModel || !mpActionGroup)
         return false;
-    std::cout << "updating menu model" << mpMenuModel << std::endl;
+    SAL_INFO("vcl.unity", "updating menu model" << mpMenuModel);
     return true;
 }
 
@@ -214,7 +211,7 @@ void GtkSalMenu::UpdateNativeMenu( )
     ++nSection;
     if ( nSection < g_menu_model_get_n_items( G_MENU_MODEL( pLOMenu ) ) )
     {
-        std::cout << "nSection " << nSection << " model sections " << g_menu_model_get_n_items( G_MENU_MODEL( pLOMenu ) ) << std::endl;
+        SAL_INFO("vcl.unity", "nSection " << nSection << " model sections " << g_menu_model_get_n_items( G_MENU_MODEL( pLOMenu ) ));
         g_lo_menu_remove(pLOMenu, nSection );
     }
 }
@@ -302,7 +299,7 @@ void GtkSalMenu::SetFrame( const SalFrame* pFrame )
 {
     SolarMutexGuard aGuard;
     assert(mbMenuBar);
-    std::cout << "GtkSalMenu set to frame" << std::endl;
+    SAL_INFO("vcl.unity", "GtkSalMenu set to frame");
     mpFrame = static_cast< const GtkSalFrame* >( pFrame );
     GtkSalFrame* pFrameNonConst = const_cast<GtkSalFrame*>(mpFrame);
     // if we had a menu on the GtkSalMenu we have to free it as we generate a
