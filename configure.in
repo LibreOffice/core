@@ -4359,7 +4359,7 @@ if test "$with_help" != "no" -a $_os != iOS -a $_os != Android; then
     BUILD_TYPE="$BUILD_TYPE HELP"
     SCPDEFS="$SCPDEFS -DWITH_HELP"
     GIT_REPO_NAMES="$GIT_REPO_NAMES help"
-    GIT_NEEDED_SUBMODULES="helcontent2 $GIT_NEEDED_SUBMODULES"
+    GIT_NEEDED_SUBMODULES="helpcontent2 $GIT_NEEDED_SUBMODULES"
 else
     AC_MSG_RESULT([no])
 fi
