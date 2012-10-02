@@ -1989,7 +1989,7 @@ AC_ARG_WITH(intro-progressbar-text-color,
 
 AC_ARG_WITH(intro-progressbar-text-baseline,
     AS_HELP_STRING([--with-intro-progressbar-text-baseline],
-        [Set horizontal position of progress bar text on intro screen. Value in decimal format.])
+        [Set vertical position of progress bar text on intro screen. Value in decimal format.])
     [
                           Usage: --with-intro-progressbar-text-baseline=250
 ],,)
