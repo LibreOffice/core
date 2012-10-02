@@ -2948,6 +2948,39 @@ SwXPageStyle::~SwXPageStyle()
 
 }
 
+void lcl_putItemToSet(const SvxSetItem* pSetItem, sal_uInt16 nRes, sal_uInt16 nItemType, const uno::Any& rVal, sal_uInt8 nMemberId, SwStyleBase_Impl& rBaseImpl)
+{
+    SvxSetItem* pNewSetItem = (SvxSetItem*)pSetItem->Clone();
+    SfxItemSet& rSetSet = pNewSetItem->GetItemSet();
+    const SfxPoolItem* pItem = 0;
+    SfxPoolItem* pNewItem = 0;
+    rSetSet.GetItemState(nRes, sal_True, &pItem);
+    if(!pItem && nRes != rSetSet.GetPool()->GetSlotId(nRes))
+        pItem = &rSetSet.GetPool()->GetDefaultItem(nRes);
+    if(pItem)
+    {
+        pNewItem = pItem->Clone();
+    }
+    else
+    {
+        switch(nItemType)
+        {
+            case TYPE_BOOL: pNewItem = new SfxBoolItem(nRes);       break;
+            case TYPE_SIZE: pNewItem = new SvxSizeItem(nRes);       break;
+            case TYPE_BRUSH: pNewItem = new SvxBrushItem(nRes);     break;
+            case TYPE_ULSPACE: pNewItem = new SvxULSpaceItem(nRes); break;
+            case TYPE_SHADOW : pNewItem = new SvxShadowItem(nRes);  break;
+            case TYPE_LRSPACE: pNewItem = new SvxLRSpaceItem(nRes); break;
+            case TYPE_BOX: pNewItem = new SvxBoxItem(nRes);         break;
+        }
+    }
+    pNewItem->PutValue(rVal, nMemberId);
+    rSetSet.Put(*pNewItem);
+    rBaseImpl.GetItemSet().Put(*pNewSetItem);
+    delete pNewItem;
+    delete pNewSetItem;
+}
+
 void SAL_CALL SwXPageStyle::SetPropertyValues_Impl(
     const uno::Sequence< OUString >& rPropertyNames,
     const uno::Sequence< uno::Any >& rValues )
@@ -3067,35 +3100,16 @@ void SAL_CALL SwXPageStyle::SetPropertyValues_Impl(
                             bFooter ? SID_ATTR_PAGE_FOOTERSET : SID_ATTR_PAGE_HEADERSET,
                             sal_False, (const SfxPoolItem**)&pSetItem))
                     {
-                        SvxSetItem* pNewSetItem = (SvxSetItem*)pSetItem->Clone();
-                        SfxItemSet& rSetSet = pNewSetItem->GetItemSet();
-                        const SfxPoolItem* pItem = 0;
-                        SfxPoolItem* pNewItem = 0;
-                        rSetSet.GetItemState(nRes, sal_True, &pItem);
-                        if(!pItem && nRes != rSetSet.GetPool()->GetSlotId(nRes))
-                            pItem = &rSetSet.GetPool()->GetDefaultItem(nRes);
-                        if(pItem)
+                        lcl_putItemToSet(pSetItem, nRes, nItemType, pValues[nProp], pEntry->nMemberId, aBaseImpl);
+
+                        if (nRes == SID_ATTR_PAGE_SHARED_FIRST)
                         {
-                            pNewItem = pItem->Clone();
+                            // Need to add this to the other as well
+                            if (SFX_ITEM_SET == aBaseImpl.GetItemSet().GetItemState(
+                                        bFooter ? SID_ATTR_PAGE_HEADERSET : SID_ATTR_PAGE_FOOTERSET,
+                                        sal_False, (const SfxPoolItem**)&pSetItem))
+                                lcl_putItemToSet(pSetItem, nRes, nItemType, pValues[nProp], pEntry->nMemberId, aBaseImpl);
                         }
-                        else
-                        {
-                            switch(nItemType)
-                            {
-                                case TYPE_BOOL: pNewItem = new SfxBoolItem(nRes);       break;
-                                case TYPE_SIZE: pNewItem = new SvxSizeItem(nRes);       break;
-                                case TYPE_BRUSH: pNewItem = new SvxBrushItem(nRes);     break;
-                                case TYPE_ULSPACE: pNewItem = new SvxULSpaceItem(nRes); break;
-                                case TYPE_SHADOW : pNewItem = new SvxShadowItem(nRes);  break;
-                                case TYPE_LRSPACE: pNewItem = new SvxLRSpaceItem(nRes); break;
-                                case TYPE_BOX: pNewItem = new SvxBoxItem(nRes);         break;
-                            }
-                        }
-                        pNewItem->PutValue(pValues[nProp], pEntry->nMemberId);
-                        rSetSet.Put(*pNewItem);
-                        aBaseImpl.GetItemSet().Put(*pNewSetItem);
-                        delete pNewItem;
-                        delete pNewSetItem;
                     }
                     else if(SID_ATTR_PAGE_ON == nRes )
                     {
