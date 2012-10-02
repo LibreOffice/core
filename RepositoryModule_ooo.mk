@@ -90,6 +90,7 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
     jvmaccess \
     jvmfwk \
 	$(call gb_Helper_optional,DESKTOP,l10ntools) \
+	$(call gb_Helper_optional,LANGUAGETOOL,languagetool) \
 	libcdr \
 	libcmis \
 	libmspub \
