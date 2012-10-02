@@ -125,6 +125,31 @@ get_configured_submodules()
     fi
 }
 
+do_shortcut_update()
+{
+local module
+local repo
+
+    for module in $SUBMODULES_CONFIGURED ; do
+	if [ ! -d ${module?}/.git ] ; then
+	    case "${module?}" in
+		helcontent2)
+		    if [ -d clone/help/.git ] ; then
+			repo="clone/help/.git"
+		    fi
+		    ;;
+		*)
+		    if [ -d clone/${module?}/.git ] ; then
+			repo="clone/${module?}/.git"
+		    fi
+		    ;;
+	    esac
+	    if [ -n "$repo" ] ; then
+		cp -r "${repo?}" "${module?}/."
+	    fi
+    done
+}
+
 do_git_cmd()
 {
     echo "cmd:$@"
@@ -147,11 +172,13 @@ local module
 	    create_branch=1
 	elif [ "$create_branch" = "1" ] ; then
 	    branch="$arg"
+	    create_branch=0
 	fi
     done
     if [ -f .gitmodules ] ; then
+	git submodule update
 	if [ -n "$branch" ] ; then
-	    git submodules foreach git branch ${branch} HEAD || return $?
+	    git submodules foreach git checkout -b ${branch} HEAD || return $?
 	fi
     else
 	# now that is the nasty case we moved prior to submodules
@@ -188,6 +215,8 @@ do_init_modules()
 {
 local module
 local configured
+
+    do_shortcut_update
 
     for module in $SUBMODULES_CONFIGURED ; do
 	configured=$(git config --local --get submodule.${module}.url)
@@ -265,7 +294,7 @@ case "$COMMAND" in
 	do_git_cmd ${COMMAND} "$@"
 	;;
     checkout)
-	do_checkout "$@" && git submodule foreach git checkout "$@"
+	do_checkout "$@"
 	;;
     clone)
 	do_init_modules && git submodule update && refresh_all_hooks
@@ -289,6 +318,9 @@ case "$COMMAND" in
 	;;
     reset)
 	do_reset
+	;;
+    tag)
+	do_git_cmd ${COMMAND} "$@"
 	;;
     *)
 	echo "./g does not support command:$COMMAND" 1>&2
