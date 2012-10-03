@@ -922,6 +922,10 @@ void GraphicImport::lcl_attribute(Id nName, Value & val)
                                    uno::makeAny( aSize.Height ) );
                             xGraphProps->setPropertyValue("Width",
                                    uno::makeAny( aSize.Width ) );
+
+                            // We need to drop the shape here somehow
+                            uno::Reference< lang::XComponent > xShapeComponent( xShape, uno::UNO_QUERY );
+                            xShapeComponent->dispose( );
                         }
                     }
                     catch( const beans::UnknownPropertyException & )
