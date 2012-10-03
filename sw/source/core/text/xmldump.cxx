@@ -384,6 +384,7 @@ void SwFrm::dumpAsXmlAttributes( xmlTextWriterPtr writer )
         SwHeadFootFrm *pHeadFootFrm = (SwHeadFootFrm*)this;
         rtl::OUString aFmtName = pHeadFootFrm->GetFmt()->GetName();
         xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "fmtName" ), "%s", BAD_CAST(rtl::OUStringToOString(aFmtName, RTL_TEXTENCODING_UTF8).getStr()));
+        xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "fmtPtr" ), "%p", pHeadFootFrm->GetFmt());
     }
 }
 
