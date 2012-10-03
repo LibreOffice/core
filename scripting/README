@@ -61,8 +61,3 @@ Support for developing scripts in IDEs such as NetBeans.
 - source/pyprov
 
 LanguageScriptProvider for Python
-
-- source/storage
-- source/runtimemgr
-
-Implementations of deprecated Scripting Framework UNO types
