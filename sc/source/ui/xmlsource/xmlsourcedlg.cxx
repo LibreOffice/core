@@ -29,15 +29,6 @@ ScXMLSourceTree::ScXMLSourceTree(Window* pParent, const ResId& rResId) :
 {
     SetDefaultExpandedEntryBmp(maImgElemDefault);
     SetDefaultCollapsedEntryBmp(maImgElemDefault);
-
-    SvLBoxEntry* p = InsertEntry(OUString("Test1"));
-    p = InsertEntry(OUString("Test2"));
-    SvLBoxEntry* pPar = p;
-    p = InsertEntry(OUString("Test3"), p);
-    Expand(pPar);
-    pPar = p;
-    p = InsertEntry(OUString("Test4"), p);
-    Expand(pPar);
 }
 
 ScXMLSourceDlg::ScXMLSourceDlg(Window* pParent, ScDocument* pDoc) :
