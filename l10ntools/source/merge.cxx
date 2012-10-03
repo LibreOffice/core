@@ -196,7 +196,7 @@ MergeDataFile::MergeDataFile(
         }
         catch( PoHeader::Exception& aException )
         {
-            if( aException = PoHeader::NOLANG )
+            if( aException == PoHeader::NOLANG )
             {
                 printf(
                     "Warning : %s' header not has language specification\n",
