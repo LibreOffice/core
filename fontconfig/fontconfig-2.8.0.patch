@@ -20,6 +20,26 @@
  	      | -mingw32* | -linux-gnu* | -linux-newlib* | -linux-uclibc* \
 --- misc/build/fontconfig-2.8.0/configure
 +++ misc/build/fontconfig-2.8.0/configure
+@@ -14368,7 +14368,7 @@
+ 			;;
+ 		yes)
+ 
+-for ac_func in XML_SetDoctypeDeclHandler
++for ac_func in XML_SetDoctypeDeclHandler_UTF8
+ do
+ as_ac_var=`$as_echo "ac_cv_func_$ac_func" | $as_tr_sh`
+ { $as_echo "$as_me:$LINENO: checking for $ac_func" >&5
+@@ -14468,7 +14468,7 @@
+ fi
+ done
+ 
+-			case "$ac_cv_func_XML_SetDoctypeDeclHandler" in
++			case "$ac_cv_func_XML_SetDoctypeDeclHandler_UTF8" in
+ 			yes)
+ 				HAVE_EXPAT=1
+ 
+--- misc/build/fontconfig-2.8.0/configure
++++ misc/build/fontconfig-2.8.0/configure
 @@ -8718,7 +8718,7 @@
  	*Sun\ F*)			# Sun Fortran 8.3
  	  tmp_sharedflag='-G' ;;

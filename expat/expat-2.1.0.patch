@@ -92,3 +92,93 @@
 +.INCLUDE :  set_wntx64.mk
 +.INCLUDE :	target.mk
 +.INCLUDE :  tg_wntx64.mk
+--- misc/expat-2.1.0/lib/expat_external.h
++++ misc/build/expat-2.1.0/lib/expat_external.h
+@@ -86,9 +86,11 @@
+ typedef unsigned short XML_Char;
+ typedef char XML_LChar;
+ #endif /* XML_UNICODE_WCHAR_T */
++#define EXPAT_CHARTYPE_DECORATE(s) s##_UTF16
+ #else                  /* Information is UTF-8 encoded. */
+ typedef char XML_Char;
+ typedef char XML_LChar;
++#define EXPAT_CHARTYPE_DECORATE(s) s##_UTF8
+ #endif /* XML_UNICODE */
+ 
+ #ifdef XML_LARGE_SIZE  /* Use large integers for file/stream positions. */
+--- misc/expat-2.1.0/lib/expat.h
++++ misc/build/expat-2.1.0/lib/expat.h
+@@ -15,6 +15,73 @@
+ #include <stdlib.h>
+ #include "expat_external.h"
+ 
++#define XML_DefaultCurrent EXPAT_CHARTYPE_DECORATE(XML_DefaultCurrent)
++#define XML_ErrorString EXPAT_CHARTYPE_DECORATE(XML_ErrorString)
++#define XML_ExpatVersion EXPAT_CHARTYPE_DECORATE(XML_ExpatVersion)
++#define XML_ExpatVersionInfo EXPAT_CHARTYPE_DECORATE(XML_ExpatVersionInfo)
++#define XML_ExternalEntityParserCreate EXPAT_CHARTYPE_DECORATE(XML_ExternalEntityParserCreate)
++#define XML_FreeContentModel EXPAT_CHARTYPE_DECORATE(XML_FreeContentModel)
++#define XML_GetBase EXPAT_CHARTYPE_DECORATE(XML_GetBase)
++#define XML_GetBuffer EXPAT_CHARTYPE_DECORATE(XML_GetBuffer)
++#define XML_GetCurrentByteCount EXPAT_CHARTYPE_DECORATE(XML_GetCurrentByteCount)
++#define XML_GetCurrentByteIndex EXPAT_CHARTYPE_DECORATE(XML_GetCurrentByteIndex)
++#define XML_GetCurrentColumnNumber EXPAT_CHARTYPE_DECORATE(XML_GetCurrentColumnNumber)
++#define XML_GetCurrentLineNumber EXPAT_CHARTYPE_DECORATE(XML_GetCurrentLineNumber)
++#define XML_GetErrorCode EXPAT_CHARTYPE_DECORATE(XML_GetErrorCode)
++#define XML_GetFeatureList EXPAT_CHARTYPE_DECORATE(XML_GetFeatureList)
++#define XML_GetIdAttributeIndex EXPAT_CHARTYPE_DECORATE(XML_GetIdAttributeIndex)
++#define XML_GetInputContext EXPAT_CHARTYPE_DECORATE(XML_GetInputContext)
++#define XML_GetParsingStatus EXPAT_CHARTYPE_DECORATE(XML_GetParsingStatus)
++#define XML_GetSpecifiedAttributeCount EXPAT_CHARTYPE_DECORATE(XML_GetSpecifiedAttributeCount)
++#define XML_MemFree EXPAT_CHARTYPE_DECORATE(XML_MemFree)
++#define XML_MemMalloc EXPAT_CHARTYPE_DECORATE(XML_MemMalloc)
++#define XML_MemRealloc EXPAT_CHARTYPE_DECORATE(XML_MemRealloc)
++#define XML_Parse EXPAT_CHARTYPE_DECORATE(XML_Parse)
++#define XML_ParseBuffer EXPAT_CHARTYPE_DECORATE(XML_ParseBuffer)
++#define XML_ParserCreate EXPAT_CHARTYPE_DECORATE(XML_ParserCreate)
++#define XML_ParserCreateNS EXPAT_CHARTYPE_DECORATE(XML_ParserCreateNS)
++#define XML_ParserCreate_MM EXPAT_CHARTYPE_DECORATE(XML_ParserCreate_MM)
++#define XML_ParserFree EXPAT_CHARTYPE_DECORATE(XML_ParserFree)
++#define XML_ParserReset EXPAT_CHARTYPE_DECORATE(XML_ParserReset)
++#define XML_ResumeParser EXPAT_CHARTYPE_DECORATE(XML_ResumeParser)
++#define XML_SetAttlistDeclHandler EXPAT_CHARTYPE_DECORATE(XML_SetAttlistDeclHandler)
++#define XML_SetBase EXPAT_CHARTYPE_DECORATE(XML_SetBase)
++#define XML_SetCdataSectionHandler EXPAT_CHARTYPE_DECORATE(XML_SetCdataSectionHandler)
++#define XML_SetCharacterDataHandler EXPAT_CHARTYPE_DECORATE(XML_SetCharacterDataHandler)
++#define XML_SetCommentHandler EXPAT_CHARTYPE_DECORATE(XML_SetCommentHandler)
++#define XML_SetDefaultHandler EXPAT_CHARTYPE_DECORATE(XML_SetDefaultHandler)
++#define XML_SetDefaultHandlerExpand EXPAT_CHARTYPE_DECORATE(XML_SetDefaultHandlerExpand)
++#define XML_SetDoctypeDeclHandler EXPAT_CHARTYPE_DECORATE(XML_SetDoctypeDeclHandler)
++#define XML_SetElementDeclHandler EXPAT_CHARTYPE_DECORATE(XML_SetElementDeclHandler)
++#define XML_SetElementHandler EXPAT_CHARTYPE_DECORATE(XML_SetElementHandler)
++#define XML_SetEncoding EXPAT_CHARTYPE_DECORATE(XML_SetEncoding)
++#define XML_SetEndCdataSectionHandler EXPAT_CHARTYPE_DECORATE(XML_SetEndCdataSectionHandler)
++#define XML_SetEndDoctypeDeclHandler EXPAT_CHARTYPE_DECORATE(XML_SetEndDoctypeDeclHandler)
++#define XML_SetEndElementHandler EXPAT_CHARTYPE_DECORATE(XML_SetEndElementHandler)
++#define XML_SetEndNamespaceDeclHandler EXPAT_CHARTYPE_DECORATE(XML_SetEndNamespaceDeclHandler)
++#define XML_SetEntityDeclHandler EXPAT_CHARTYPE_DECORATE(XML_SetEntityDeclHandler)
++#define XML_SetExternalEntityRefHandler EXPAT_CHARTYPE_DECORATE(XML_SetExternalEntityRefHandler)
++#define XML_SetExternalEntityRefHandlerArg EXPAT_CHARTYPE_DECORATE(XML_SetExternalEntityRefHandlerArg)
++#define XML_SetHashSalt EXPAT_CHARTYPE_DECORATE(XML_SetHashSalt)
++#define XML_SetNamespaceDeclHandler EXPAT_CHARTYPE_DECORATE(XML_SetNamespaceDeclHandler)
++#define XML_SetNotStandaloneHandler EXPAT_CHARTYPE_DECORATE(XML_SetNotStandaloneHandler)
++#define XML_SetNotationDeclHandler EXPAT_CHARTYPE_DECORATE(XML_SetNotationDeclHandler)
++#define XML_SetParamEntityParsing EXPAT_CHARTYPE_DECORATE(XML_SetParamEntityParsing)
++#define XML_SetProcessingInstructionHandler EXPAT_CHARTYPE_DECORATE(XML_SetProcessingInstructionHandler)
++#define XML_SetReturnNSTriplet EXPAT_CHARTYPE_DECORATE(XML_SetReturnNSTriplet)
++#define XML_SetSkippedEntityHandler EXPAT_CHARTYPE_DECORATE(XML_SetSkippedEntityHandler)
++#define XML_SetStartCdataSectionHandler EXPAT_CHARTYPE_DECORATE(XML_SetStartCdataSectionHandler)
++#define XML_SetStartDoctypeDeclHandler EXPAT_CHARTYPE_DECORATE(XML_SetStartDoctypeDeclHandler)
++#define XML_SetStartElementHandler EXPAT_CHARTYPE_DECORATE(XML_SetStartElementHandler)
++#define XML_SetStartNamespaceDeclHandler EXPAT_CHARTYPE_DECORATE(XML_SetStartNamespaceDeclHandler)
++#define XML_SetUnknownEncodingHandler EXPAT_CHARTYPE_DECORATE(XML_SetUnknownEncodingHandler)
++#define XML_SetUnparsedEntityDeclHandler EXPAT_CHARTYPE_DECORATE(XML_SetUnparsedEntityDeclHandler)
++#define XML_SetUserData EXPAT_CHARTYPE_DECORATE(XML_SetUserData)
++#define XML_SetXmlDeclHandler EXPAT_CHARTYPE_DECORATE(XML_SetXmlDeclHandler)
++#define XML_StopParser EXPAT_CHARTYPE_DECORATE(XML_StopParser)
++#define XML_UseForeignDTD EXPAT_CHARTYPE_DECORATE(XML_UseForeignDTD)
++#define XML_UseParserAsHandlerArg EXPAT_CHARTYPE_DECORATE(XML_UseParserAsHandlerArg)
++
+ #ifdef __cplusplus
+ extern "C" {
+ #endif
