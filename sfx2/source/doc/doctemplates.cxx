@@ -678,8 +678,6 @@ sal_Bool SfxDocTplService_Impl::getTitleFromURL( const OUString& rURL, OUString&
         }
         catch ( Exception& )
         {
-            // the document is not a StarOffice document
-            return sal_False;
         }
 
         try
@@ -2014,7 +2012,6 @@ sal_Bool SfxDocTplService_Impl::addTemplate( const OUString& rGroupName,
     // Get the content type
     OUString aTitle, aType, aTargetURL2, aFullName;
 
-    // only StarOffice documents are acceptable
     sal_Bool bDocHasTitle = sal_False;
     if( !getTitleFromURL( rSourceURL, aTitle, aType, bDocHasTitle ) )
         return sal_False;
@@ -2573,7 +2570,6 @@ void SfxDocTplService_Impl::addFsysGroup( GroupList_Impl& rList,
                 if ( aChildTitle.compareToAscii( "sfx.tlx" ) == 0 || aChildTitle == "groupuinames.xml" )
                     continue;
 
-                // only StarOffice templates are accepted
                 sal_Bool bDocHasTitle = sal_False;
                 if( !getTitleFromURL( aTargetURL, aChildTitle, aType, bDocHasTitle ) )
                     continue;

@@ -1548,7 +1548,7 @@ String SfxOrganizeDlg_Impl::GetPath_Impl( sal_Bool bOpen, const String& rFileNam
         pFileDlg->SetDisplayDirectory( aObj.GetMainURL( INetURLObject::NO_DECODE ) );
     }
 
-    pFileDlg->StartExecuteModal( LINK( this, SfxOrganizeDlg_Impl, ImportHdl ) );
+    pFileDlg->StartExecuteModal( LINK( this, SfxOrganizeDlg_Impl, ExportHdl ) );
 
     return aPath;
 }
@@ -1592,18 +1592,18 @@ String SfxOrganizeDlg_Impl::GetPath_Impl( sal_Bool bOpen, const String& rFileNam
     // add filters of modules which are installed
     SvtModuleOptions aModuleOpt;
     if ( aModuleOpt.IsModuleInstalled( SvtModuleOptions::E_SWRITER ) )
-        sFilterExt += DEFINE_CONST_UNICODE( "*.ott;*.stw;*.oth" );
+        sFilterExt += DEFINE_CONST_UNICODE( "*.ott;*.stw;*.oth;*.dot;*.dotm;*.dotx" );
     if ( aModuleOpt.IsModuleInstalled( SvtModuleOptions::E_SCALC ) )
     {
         if ( sFilterExt.Len() > 0 )
             sFilterExt += ';';
-        sFilterExt += DEFINE_CONST_UNICODE( "*.ots;*.stc" );
+        sFilterExt += DEFINE_CONST_UNICODE( "*.ots;*.stci;*.xlt;*.xltm;*.xltm" );
     }
     if ( aModuleOpt.IsModuleInstalled( SvtModuleOptions::E_SIMPRESS ) )
     {
         if ( sFilterExt.Len() > 0 )
             sFilterExt += ';';
-        sFilterExt += DEFINE_CONST_UNICODE( "*.otp;*.sti" );
+        sFilterExt += DEFINE_CONST_UNICODE( "*.otp;*.sti;*.pot;*.potm;*.potx" );
     }
     if ( aModuleOpt.IsModuleInstalled( SvtModuleOptions::E_SDRAW ) )
     {
@@ -1644,7 +1644,7 @@ String SfxOrganizeDlg_Impl::GetPath_Impl( sal_Bool bOpen, const String& rFileNam
         pFileDlg->SetDisplayDirectory( aObj.GetMainURL( INetURLObject::NO_DECODE ) );
     }
 
-    pFileDlg->StartExecuteModal( LINK( this, SfxOrganizeDlg_Impl, ExportHdl ) );
+    pFileDlg->StartExecuteModal( LINK( this, SfxOrganizeDlg_Impl, ImportHdl ) );
 
     return aPaths;
 }
@@ -2225,9 +2225,9 @@ IMPL_LINK( SfxOrganizeDlg_Impl, AddFiles_Impl, Button *, pButton )
 
 //-------------------------------------------------------------------------
 
-IMPL_LINK_NOARG(SfxOrganizeDlg_Impl, ImportHdl)
+IMPL_LINK_NOARG(SfxOrganizeDlg_Impl, ExportHdl)
 {
-    DBG_ASSERT( pFileDlg, "SfxOrganizeDlg_Impl::ImportHdl(): no file dialog" );
+    DBG_ASSERT( pFileDlg, "SfxOrganizeDlg_Impl::ExportHdl(): no file dialog" );
 
     if ( ERRCODE_NONE == pFileDlg->GetError() )
     {
@@ -2262,7 +2262,7 @@ IMPL_LINK_NOARG(SfxOrganizeDlg_Impl, ImportHdl)
 
 //-------------------------------------------------------------------------
 
-IMPL_LINK_NOARG(SfxOrganizeDlg_Impl, ExportHdl)
+IMPL_LINK_NOARG(SfxOrganizeDlg_Impl, ImportHdl)
 {
     DBG_ASSERT( pFileDlg, "SfxOrganizeDlg_Impl::ImportHdl(): no file dialog" );
     ::com::sun::star::uno::Sequence< ::rtl::OUString > aPaths;
