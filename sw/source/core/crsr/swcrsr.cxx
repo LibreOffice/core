@@ -68,7 +68,7 @@ struct _PercentHdl
 {
     SwDocShell* pDSh;
     sal_uLong nActPos;
-    sal_Bool bBack, bNodeIdx;
+    bool bBack, bNodeIdx;
 
     _PercentHdl( sal_uLong nStt, sal_uLong nEnd, SwDocShell* pSh )
         : pDSh( pSh )
@@ -87,13 +87,13 @@ struct _PercentHdl
         sal_uLong nStt, nEnd;
         if( rPam.GetPoint()->nNode == rPam.GetMark()->nNode )
         {
-            bNodeIdx = sal_False;
+            bNodeIdx = false;
             nStt = rPam.GetMark()->nContent.GetIndex();
             nEnd = rPam.GetPoint()->nContent.GetIndex();
         }
         else
         {
-            bNodeIdx = sal_True;
+            bNodeIdx = true;
             nStt = rPam.GetMark()->nNode.GetIndex();
             nEnd = rPam.GetPoint()->nNode.GetIndex();
         }
@@ -1063,7 +1063,7 @@ sal_uLong SwCursor::FindAll( SwFindParas& rParas,
 
 void SwCursor::FillFindPos( SwDocPositions ePos, SwPosition& rPos ) const
 {
-    sal_Bool bIsStart = sal_True;
+    bool bIsStart = true;
     SwCntntNode* pCNd = 0;
     SwNodes& rNds = GetDoc()->GetNodes();
 
@@ -1077,7 +1077,7 @@ void SwCursor::FillFindPos( SwDocPositions ePos, SwPosition& rPos ) const
     case DOCPOS_END:
         rPos.nNode = rNds.GetEndOfContent();
         pCNd = rNds.GoPrevious( &rPos.nNode );
-        bIsStart = sal_False;
+        bIsStart = false;
         break;
 
     case DOCPOS_OTHERSTART:
@@ -1088,7 +1088,7 @@ void SwCursor::FillFindPos( SwDocPositions ePos, SwPosition& rPos ) const
     case DOCPOS_OTHEREND:
         rPos.nNode = *rNds.GetEndOfContent().StartOfSectionNode();
         pCNd = rNds.GoPrevious( &rPos.nNode );
-        bIsStart = sal_False;
+        bIsStart = false;
         break;
     default:
         rPos = *GetPoint();
@@ -1753,7 +1753,7 @@ sal_Bool SwCursor::UpDown( sal_Bool bUp, sal_uInt16 nCnt,
                             Point* pPt, long nUpDownX )
 {
     SwTableCursor* pTblCrsr = dynamic_cast<SwTableCursor*>(this);
-    sal_Bool bAdjustTableCrsr = sal_False;
+    bool bAdjustTableCrsr = false;
 
     // If the point/mark of the table cursor in the same box then set cursor to
     // beginning of the box
@@ -1762,7 +1762,7 @@ sal_Bool SwCursor::UpDown( sal_Bool bUp, sal_uInt16 nCnt,
     {
         if ( End() != GetPoint() )
             Exchange();
-        bAdjustTableCrsr = sal_True;
+        bAdjustTableCrsr = true;
     }
 
     sal_Bool bRet = sal_False;
@@ -2156,11 +2156,11 @@ SwCursor* SwTableCursor::MakeBoxSels( SwCursor* pAktCrsr )
         SwPaM* pCur = pAktCrsr;
         do {
             size_t nPos;
-            sal_Bool bDel = sal_False;
+            bool bDel = false;
             pSttNd = pCur->GetPoint()->nNode.GetNode().FindTableBoxStartNode();
             if( !pCur->HasMark() || !pSttNd ||
                 pSttNd != pCur->GetMark()->nNode.GetNode().FindTableBoxStartNode() )
-                bDel = sal_True;
+                bDel = true;
 
             else if( lcl_SeekEntry( aTmp, pSttNd, nPos ))
             {
@@ -2186,7 +2186,7 @@ SwCursor* SwTableCursor::MakeBoxSels( SwCursor* pAktCrsr )
                 aTmp.erase( aTmp.begin() + nPos );
             }
             else
-                bDel = sal_True;
+                bDel = true;
 
             pCur = (SwPaM*)pCur->GetNext();
             if( bDel )

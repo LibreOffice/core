@@ -92,10 +92,10 @@ SwPosition &SwPosition::operator=(const SwPosition &rPos)
 }
 
 
-sal_Bool SwPosition::operator<(const SwPosition &rPos) const
+bool SwPosition::operator<(const SwPosition &rPos) const
 {
     if( nNode < rPos.nNode )
-        return sal_True;
+        return true;
     if( nNode == rPos.nNode )
     {
         // note that positions with text node but no SwIndex registered are
@@ -108,17 +108,17 @@ sal_Bool SwPosition::operator<(const SwPosition &rPos) const
         }
         else // by convention position with no index is smaller
         {
-            return (pOtherReg) ? sal_True : sal_False;
+            return (pOtherReg) ? true : false;
         }
     }
-    return sal_False;
+    return false;
 }
 
 
-sal_Bool SwPosition::operator>(const SwPosition &rPos) const
+bool SwPosition::operator>(const SwPosition &rPos) const
 {
     if(nNode > rPos.nNode )
-        return sal_True;
+        return true;
     if( nNode == rPos.nNode )
     {
         // note that positions with text node but no SwIndex registered are
@@ -131,17 +131,17 @@ sal_Bool SwPosition::operator>(const SwPosition &rPos) const
         }
         else // by convention position with no index is smaller
         {
-            return (pThisReg) ? sal_True : sal_False;
+            return (pThisReg) ? true : false;
         }
     }
-    return sal_False;
+    return false;
 }
 
 
-sal_Bool SwPosition::operator<=(const SwPosition &rPos) const
+bool SwPosition::operator<=(const SwPosition &rPos) const
 {
     if(nNode < rPos.nNode )
-        return sal_True;
+        return true;
     if( nNode == rPos.nNode )
     {
         // note that positions with text node but no SwIndex registered are
@@ -154,17 +154,17 @@ sal_Bool SwPosition::operator<=(const SwPosition &rPos) const
         }
         else // by convention position with no index is smaller
         {
-            return (pThisReg) ? sal_False : sal_True;
+            return (pThisReg) ? false : true;
         }
     }
-    return sal_False;
+    return false;
 }
 
 
-sal_Bool SwPosition::operator>=(const SwPosition &rPos) const
+bool SwPosition::operator>=(const SwPosition &rPos) const
 {
     if(nNode > rPos.nNode )
-        return sal_True;
+        return true;
     if( nNode == rPos.nNode )
     {
         // note that positions with text node but no SwIndex registered are
@@ -177,14 +177,14 @@ sal_Bool SwPosition::operator>=(const SwPosition &rPos) const
         }
         else // by convention position with no index is smaller
         {
-            return (pOtherReg) ? sal_False : sal_True;
+            return (pOtherReg) ? false : true;
         }
     }
-    return sal_False;
+    return false;
 }
 
 
-sal_Bool SwPosition::operator==(const SwPosition &rPos) const
+bool SwPosition::operator==(const SwPosition &rPos) const
 {
     return (nNode == rPos.nNode)
         // GetIndexReg may be null for FLY_AT_PARA frame anchor position
@@ -193,7 +193,7 @@ sal_Bool SwPosition::operator==(const SwPosition &rPos) const
 }
 
 
-sal_Bool SwPosition::operator!=(const SwPosition &rPos) const
+bool SwPosition::operator!=(const SwPosition &rPos) const
 {
     return (nNode != rPos.nNode)
         // GetIndexReg may be null for FLY_AT_PARA frame anchor position

@@ -666,7 +666,8 @@ sal_Bool SwCrsrShell::MoveTable( SwWhichTable fnWhichTbl, SwPosTable fnPosTbl )
     SwCallLink aLk( *this ); // watch Crsr-Moves; call Link if needed
 
     SwShellCrsr* pCrsr = pTblCrsr ? pTblCrsr : pCurCrsr;
-    sal_Bool bCheckPos, bRet;
+    bool bCheckPos;
+    sal_Bool bRet;
     sal_uLong nPtNd = 0;
     xub_StrLen nPtCnt = 0;
 
@@ -678,11 +679,11 @@ sal_Bool SwCrsrShell::MoveTable( SwWhichTable fnWhichTbl, SwPosTable fnPosTbl )
         pCurCrsr->SwSelPaintRects::Hide();
         pTblCrsr->SetMark();
         pCrsr = pTblCrsr;
-        bCheckPos = sal_False;
+        bCheckPos = false;
     }
     else
     {
-        bCheckPos = sal_True;
+        bCheckPos = true;
         nPtNd = pCrsr->GetPoint()->nNode.GetIndex();
         nPtCnt = pCrsr->GetPoint()->nContent.GetIndex();
     }
@@ -873,13 +874,13 @@ void SwCrsrShell::SaveTblBoxCntnt( const SwPosition* pPos )
 
     SwStartNode* pSttNd = pPos->nNode.GetNode().FindSttNodeByType( SwTableBoxStartNode );
 
-    sal_Bool bCheckBox = sal_False;
+    bool bCheckBox = false;
     if( pSttNd && pBoxIdx )
     {
         if( pSttNd == &pBoxIdx->GetNode() )
             pSttNd = 0;
         else
-            bCheckBox = sal_True;
+            bCheckBox = true;
     }
     else
         bCheckBox = 0 != pBoxIdx;

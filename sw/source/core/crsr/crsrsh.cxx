@@ -491,7 +491,7 @@ sal_Bool SwCrsrShell::LRMargin( sal_Bool bLeft, sal_Bool bAPI)
     if( pBlockCrsr )
         pBlockCrsr->clearPoints();
 
-    const sal_Bool bWasAtLM =
+    const bool bWasAtLM =
             ( 0 == _GetCrsr()->GetPoint()->nContent.GetIndex() );
 
     sal_Bool bRet = pTmpCrsr->LeftRightMargin( bLeft, bAPI );
@@ -1160,11 +1160,11 @@ void SwCrsrShell::Paint( const Rectangle &rRect)
     // always switch off all cursors when painting
     SwRect aRect( rRect );
 
-    sal_Bool bVis = sal_False;
+    bool bVis = false;
     // if a cursor is visible then hide the SV cursor
     if( pVisCrsr->IsVisible() && !aRect.IsOver( aCharRect ) )
     {
-        bVis = sal_True;
+        bVis = true;
         pVisCrsr->Hide();
     }
 
@@ -1512,7 +1512,7 @@ void SwCrsrShell::UpdateCrsr( sal_uInt16 eFlags, sal_Bool bIdleEnd )
     // are we perhaps in a protected / hidden Section ?
     {
         SwShellCrsr* pShellCrsr = getShellCrsr( true );
-        sal_Bool bChgState = sal_True;
+        bool bChgState = true;
         const SwSectionNode* pSectNd = pShellCrsr->GetNode()->FindSectionNode();
         if( pSectNd && ( pSectNd->GetSection().IsHiddenFlag() ||
             ( !IsReadOnlyAvailable() &&
@@ -1526,7 +1526,7 @@ void SwCrsrShell::UpdateCrsr( sal_uInt16 eFlags, sal_Bool bIdleEnd )
                 // everything protected/hidden -> special mode
                 if( bAllProtect && !IsReadOnlyAvailable() &&
                     pSectNd->GetSection().IsProtectFlag() )
-                    bChgState = sal_False;
+                    bChgState = false;
                 else
                 {
                     eMvState = MV_NONE;     // state for cursor travelling
@@ -1590,15 +1590,15 @@ void SwCrsrShell::UpdateCrsr( sal_uInt16 eFlags, sal_Bool bIdleEnd )
 
 
     SwRect aOld( aCharRect );
-    sal_Bool bFirst = sal_True;
+    bool bFirst = true;
     SwCntntFrm *pFrm;
     int nLoopCnt = 100;
     SwShellCrsr* pShellCrsr = getShellCrsr( true );
 
     do {
-        sal_Bool bAgainst;
+        bool bAgainst;
         do {
-            bAgainst = sal_False;
+            bAgainst = false;
             pFrm = pShellCrsr->GetCntntNode()->getLayoutFrm( GetLayout(),
                         &pShellCrsr->GetPtPos(), pShellCrsr->GetPoint(), sal_False );
             // if the Frm doesn't exist anymore, the complete Layout has to be
@@ -1624,13 +1624,13 @@ void SwCrsrShell::UpdateCrsr( sal_uInt16 eFlags, sal_Bool bIdleEnd )
                  !pDoc->GetDocShell()->IsReadOnly() || bAllProtect ) )
             {
                 // look for a valid position
-                sal_Bool bChgState = sal_True;
+                bool bChgState = true;
                 if( !FindValidCntntNode(!HasDrawView() ||
                     0 == Imp()->GetDrawView()->GetMarkedObjectList().GetMarkCount()))
                 {
                     // everything is protected / hidden -> special Mode
                     if( bAllProtect )
-                        bChgState = sal_False;
+                        bChgState = false;
                     else
                     {
                         eMvState = MV_NONE;     // state for crusor travelling
@@ -1655,7 +1655,7 @@ void SwCrsrShell::UpdateCrsr( sal_uInt16 eFlags, sal_Bool bIdleEnd )
                         CallChgLnk();       // notify UI!
                     }
                     bAllProtect = sal_False;
-                    bAgainst = sal_True; // look for the right Frm again
+                    bAgainst = true; // look for the right Frm again
                 }
             }
         } while( bAgainst );
@@ -1710,7 +1710,7 @@ void SwCrsrShell::UpdateCrsr( sal_uInt16 eFlags, sal_Bool bIdleEnd )
             break;
         }
         aOld = aCharRect;
-        bFirst = sal_False;
+        bFirst = false;
 
         // update cursor Points to the new Positions
         pShellCrsr->GetPtPos().X() = aCharRect.Left();
@@ -2418,7 +2418,7 @@ void SwCrsrShell::_ParkPams( SwPaM* pDelRg, SwShellCrsr** ppDelRing )
     SwPaM *pTmpDel = 0, *pTmp = *ppDelRing;
 
     // search over the whole ring
-    sal_Bool bGoNext;
+    bool bGoNext;
     do {
         const SwPosition *pTmpStt = pTmp->Start(),
                         *pTmpEnd = pTmp->GetPoint() == pTmpStt ?
@@ -2435,7 +2435,7 @@ void SwCrsrShell::_ParkPams( SwPaM* pDelRg, SwShellCrsr** ppDelRing )
             if( *pStt < *pTmpEnd )
                 pTmpDel = pTmp;
 
-        bGoNext = sal_True;
+        bGoNext = true;
         if( pTmpDel ) // is the pam in area -> delete
         {
             sal_Bool bDelete = sal_True;
@@ -2445,7 +2445,7 @@ void SwCrsrShell::_ParkPams( SwPaM* pDelRg, SwShellCrsr** ppDelRing )
                 {
                     if( sal_True == ( bDelete = GoNextCrsr() ))
                     {
-                        bGoNext = sal_False;
+                        bGoNext = false;
                         pTmp = (SwPaM*)pTmp->GetNext();
                     }
                 }

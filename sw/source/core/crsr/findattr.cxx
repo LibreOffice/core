@@ -557,7 +557,7 @@ int SwAttrCheckArr::SetAttrBwd( const SwTxtAttr& rAttr )
                 }
             }
 
-            sal_Bool bContinue = sal_False;
+            bool bContinue = false;
             if( SFX_ITEM_DONTCARE == eState  )
             {
                 // Will the attribute become valid?
@@ -573,7 +573,7 @@ int SwAttrCheckArr::SetAttrBwd( const SwTxtAttr& rAttr )
                     else if( pCmp->nStt > aTmp.nStt ) // extend?
                         pCmp->nStt = aTmp.nStt;
 
-                    bContinue = sal_True;
+                    bContinue = true;
                 }
             }
             // Will the attribute become valid?
@@ -581,7 +581,7 @@ int SwAttrCheckArr::SetAttrBwd( const SwTxtAttr& rAttr )
             {
                 pFndArr[ nWhch - nArrStart ] = aTmp;
                 ++nFound;
-                bContinue = sal_True;
+                bContinue = true;
             }
 
             // then is has to go on the stack
