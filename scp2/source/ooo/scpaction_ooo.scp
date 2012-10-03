@@ -29,8 +29,8 @@
 
 #ifdef MACOSX
 ScpAction scp_Copy_Thirdpartylicense_Readme_Html
-    Copy = "THIRDPARTYLICENSEREADME.html";
-    Name= "THIRDPARTYLICENSEREADME.html";
+    Copy = "LICENSE.html";
+    Name= "LICENSE.html";
     Subdir = "LICENSEs";
 End
 #endif

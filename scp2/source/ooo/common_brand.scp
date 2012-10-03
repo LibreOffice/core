@@ -467,7 +467,7 @@ End
 // Files
 
 File gid_Brand_File_Html_Thirdpartylicensereadme
-    Name = "THIRDPARTYLICENSEREADME.html";
+    Name = "LICENSE.html";
 #ifdef MACOSX
     Dir = gid_Dir_Bundle_Contents;
 #else

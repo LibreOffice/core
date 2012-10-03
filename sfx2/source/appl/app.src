@@ -517,7 +517,7 @@ ModalDialog DLG_HELP_LICENSING
     {
         Text [ en-US ] =
             "Third Party Code Additional copyright notices and license terms applicable to\n"
-            "portions of the Software are set forth in the THIRDPARTYLICENSEREADME.html\n"
+            "portions of the Software are set forth in the LICENSE.html\n"
             "file; choose Show License to see exact details in English." ;
     };
     String STR_LICENSING_INFORMATION_3
