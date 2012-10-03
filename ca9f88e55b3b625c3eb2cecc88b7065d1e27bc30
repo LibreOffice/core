@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAPX////8\u003d",
+        "filename": "connectivity/source/drivers/ado/AStatement.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 834,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2012-10-03T03:50:10Z",
+      "side": 0,
+      "message": "Don\u0027t remove the vim mode lines",
+      "revId": "ca9f88e55b3b625c3eb2cecc88b7065d1e27bc30",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
