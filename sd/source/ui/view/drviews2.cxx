@@ -49,6 +49,7 @@
 #include <svx/xlineit0.hxx>
 #include <svx/graphichelper.hxx>
 #include <svx/compressgraphicdialog.hxx>
+#include <svx/extedit.hxx>
 #include <svx/svdoutl.hxx>
 #include <svx/xlnwtit.hxx>
 #include <svx/svdoattr.hxx>
@@ -92,6 +93,34 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
 namespace sd {
+
+class SdExternalToolEdit : public ExternalToolEdit
+{
+    FmFormView* m_pView;
+    SdrObject*  m_pObj;
+
+public:
+    SdExternalToolEdit ( FmFormView* pView, SdrObject* pObj ) :
+        m_pView   (pView),
+        m_pObj (pObj)
+    {}
+
+    virtual void Update( Graphic& aGraphic )
+    {
+        SdrPageView* pPageView = m_pView->GetSdrPageView();
+        if( pPageView )
+        {
+            SdrGrafObj* pNewObj = (SdrGrafObj*) m_pObj->Clone();
+            String      aStr( m_pView->GetDescriptionOfMarkedObjects() );
+            aStr.Append( sal_Unicode(' ') );
+            aStr.Append( String( "External Edit" ) );
+            m_pView->BegUndo( aStr );
+            pNewObj->SetGraphicObject( aGraphic );
+            m_pView->ReplaceObjectAtView( m_pObj, *pPageView, pNewObj );
+            m_pView->EndUndo();
+        }
+    }
+};
 
 /*************************************************************************
 |*
@@ -943,6 +972,24 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                     {
                         GraphicHelper::ExportGraphic( aGraphicObject.GetGraphic(), String("") );
                     }
+                }
+            }
+            Cancel();
+            rReq.Ignore();
+        }
+        break;
+
+        case SID_EXTERNAL_EDIT:
+        {
+            const SdrMarkList& rMarkList = mpDrawView->GetMarkedObjectList();
+            if( rMarkList.GetMarkCount() == 1 )
+            {
+                SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
+                if( pObj && pObj->ISA( SdrGrafObj ) && ( (SdrGrafObj*) pObj )->GetGraphicType() == GRAPHIC_BITMAP )
+                {
+                    GraphicObject aGraphicObject( ( (SdrGrafObj*) pObj )->GetGraphicObject() );
+                    SdExternalToolEdit* aExternalToolEdit = new SdExternalToolEdit( mpDrawView, pObj );
+                    aExternalToolEdit->Edit( &aGraphicObject );
                 }
             }
             Cancel();

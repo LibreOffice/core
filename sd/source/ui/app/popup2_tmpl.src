@@ -660,6 +660,7 @@
         SEPARATOR
         MenuItem { ITEM_SAVE_GRAPHIC };
         MenuItem { ITEM_COMPRESS_GRAPHIC };
+        MenuItem { ITEM_EXTERNAL_EDIT };
     };
 };
 
