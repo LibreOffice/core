@@ -232,7 +232,7 @@ sal_Bool LngParser::Merge(
             {
                 sal_Int32 n = 0;
                 rtl::OString sLang(sLine.getToken(0, '=', n));
-                if (n == -1)
+                if (n == -1 || static_cast<bool>(sLine.match("/*")))
                 {
                     ++nPos;
                 }
