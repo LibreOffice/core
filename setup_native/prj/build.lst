@@ -1,4 +1,4 @@
-pk	setup_native	:	TRANSLATIONS:translations DESKTOP:l10ntools soltools sal NATIVE:xml2cmp NULL
+pk	setup_native	:	TRANSLATIONS:translations DESKTOP:l10ntools soltools sal NULL
 pk  setup_native                                          usr1    - all  sn_mkout NULL
 pk  setup_native\scripts\source                           nmake   -  u   sn_source NULL
 pk  setup_native\scripts                                  nmake   -  u   sn_scripts sn_source.u NULL

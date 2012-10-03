@@ -1,2 +1,2 @@
-sa	sal	:	NATIVE:xml2cmp external BOOST:boost CPPUNIT:cppunit NULL
+sa	sal	: external BOOST:boost CPPUNIT:cppunit NULL
 sa	sal\prj				nmake	-	all	sa_prj NULL

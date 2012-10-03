@@ -190,7 +190,6 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
     writerperfect \
 	$(call gb_Helper_optional,X11_EXTENSIONS,x11_extensions) \
     xmerge \
-    xml2cmp \
 	$(call gb_Helper_optional,DESKTOP,xmlhelp) \
     xmloff \
     xmlreader \

@@ -74,7 +74,6 @@ $(eval $(call gb_Helper_register_executables,NONE, \
     uiex \
     ulfconv \
     ulfex \
-    xml2cmp \
     xpdfimport \
     xrmex \
 ))
