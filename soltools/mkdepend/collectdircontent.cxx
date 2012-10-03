@@ -1,6 +1,8 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 #include  "collectdircontent.hxx"
 
+using namespace std;
+
 PathFilePair IncludesCollection::split_path(const string& filePath) {
     string sepU = "/";
     string sepW = "\\";
