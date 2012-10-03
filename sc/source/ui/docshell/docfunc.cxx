@@ -5069,6 +5069,7 @@ void ScDocFunc::ReplaceConditionalFormat( sal_uLong nOldFormat, ScConditionalFor
     if(nOldFormat)
     {
         pDoc->DeleteConditionalFormat(nOldFormat, nTab);
+        pDoc->SetStreamValid(nTab, false);
     }
     if(pFormat)
     {
@@ -5082,6 +5083,7 @@ void ScDocFunc::ReplaceConditionalFormat( sal_uLong nOldFormat, ScConditionalFor
 	size_t n = rRanges.size();
 	for(size_t i = 0; i < n; ++i)
 	    pFormat->DoRepaint(rRanges[i]);
+        pDoc->SetStreamValid(nTab, false);
     }
     aModificator.SetDocumentModified();
     SFX_APP()->Broadcast(SfxSimpleHint(SC_HINT_AREAS_CHANGED));
