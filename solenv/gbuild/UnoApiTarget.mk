@@ -88,14 +88,8 @@ gb_UnoApiTarget_REGCOMPARETARGET := $(call gb_Executable_get_target_for_build,re
 gb_UnoApiTarget_REGCOMPARECOMMAND := $(gb_Helper_set_ld_path) SOLARBINDIR=$(OUTDIR_FOR_BUILD)/bin $(gb_UnoApiTarget_REGCOMPARETARGET)
 gb_UnoApiTarget_REGMERGETARGET := $(call gb_Executable_get_target_for_build,regmerge)
 gb_UnoApiTarget_REGMERGECOMMAND := $(gb_Helper_set_ld_path) SOLARBINDIR=$(OUTDIR_FOR_BUILD)/bin $(gb_UnoApiTarget_REGMERGETARGET)
-gb_UnoApiTarget_XML2CMPTARGET := $(call gb_Executable_get_target_for_build,xml2cmp)
-gb_UnoApiTarget_XML2CMPCOMMAND := $(gb_Helper_set_ld_path) $(gb_UnoApiTarget_XML2CMPTARGET)
 
-gb_UnoApiTarget_XMLRDB := $(call gb_UnoApiTarget_get_target,types)
-
-define gb_UnoApiTarget__get_types
-$(if $(1),$(foreach type,$(shell $(gb_UnoApiTarget_XML2CMPCOMMAND) -types stdout $(1)),$(addprefix -T,$(type))))
-endef
+gb_UnoApiTarget_TYPESRDB := $(call gb_UnoApiTarget_get_target,types)
 
 define gb_UnoApiTarget__command_impl
 RESPONSEFILE=$(call var2file,$(shell $(gb_MKTEMP)),500,$(2)) && \
@@ -119,7 +113,7 @@ $(if $(UNOAPI_FILES),\
 	$(if $(UNOAPI_MERGE),\
 		$(call gb_UnoApiTarget__regmerge_command_impl,$(1),$(UNOAPI_ROOT),$(UNOAPI_MERGE)),\
 		$(call gb_UnoApiTarget__rdbmaker_command_impl,$(1),UCR,$(UNOAPI_ROOT),\
-			$(call gb_UnoApiTarget__get_types,$(UNOAPI_XML)),$(gb_UnoApiTarget_XMLRDB)))) \
+			$(addprefix -T,$(UNOAPI_TYPES)),$(gb_UnoApiTarget_TYPESRDB)))) \
 $(if $(UNOAPI_REFERENCE), \
 	$(call gb_Output_announce,$*,$(true),DBc,3) \
 	&& $(gb_UnoApiTarget_REGCOMPARECOMMAND) \
@@ -132,7 +126,7 @@ define gb_UnoApiTarget__check_mode
 $(if $(or $(and $(1),$(2),$(3)),$(and $(1),$(2)),$(and $(2),$(3)),$(and $(1),$(3))),\
 	$(error More than one mode of function of UnoApiTarget used: this is not supported),\
 	$(if $(or $(1),$(2),$(3)),,\
-		$(error Neither IDL files nor merged RDBs nor XML desc. were used: nothing will be produced)))
+		$(error Neither IDL files nor merged RDBs nor type list were used: nothing will be produced)))
 $(if $(4),,$(error No root has been set for the rdb file))
 endef
 
@@ -143,7 +137,7 @@ $(call gb_UnoApiTarget_get_headers_target,%) : $(call gb_UnoApiTarget_get_extern
 	mkdir -p $(dir $@) && touch $@
 
 $(call gb_UnoApiTarget_get_target,%) :
-	$(call gb_UnoApiTarget__check_mode,$(UNOAPI_FILES),$(UNOAPI_MERGE),$(UNOAPI_XML),$(UNOAPI_ROOT))
+	$(call gb_UnoApiTarget__check_mode,$(UNOAPI_FILES),$(UNOAPI_MERGE),$(UNOAPI_TYPES),$(UNOAPI_ROOT))
 	$(call gb_UnoApiTarget__command,$@,$*)
 
 .PHONY : $(call gb_UnoApiTarget_get_clean_target,%)
@@ -180,7 +174,7 @@ define gb_UnoApiTarget_UnoApiTarget
 $(call gb_UnoApiTarget_get_target,$(1)) : INCLUDE :=
 $(call gb_UnoApiTarget_get_target,$(1)) : UNOAPI_FILES :=
 $(call gb_UnoApiTarget_get_target,$(1)) : UNOAPI_MERGE :=
-$(call gb_UnoApiTarget_get_target,$(1)) : UNOAPI_XML :=
+$(call gb_UnoApiTarget_get_target,$(1)) : UNOAPI_TYPES :=
 $(call gb_UnoApiTarget_get_target,$(1)) : UNOAPI_REFERENCE :=
 $(call gb_UnoApiTarget_get_target,$(1)) : UNOAPI_ROOT :=
 
@@ -254,11 +248,9 @@ $(call gb_UnoApiTarget_get_target,$(1)) : $(call gb_UnoApiTarget_get_target,$(2)
 endef
 
 # Set XML component dependencies description.
-define gb_UnoApiTarget_set_xmlfile
-$(call gb_UnoApiTarget_get_target,$(1)) : UNOAPI_XML := $(SRCDIR)/$(2)
-$(call gb_UnoApiTarget_get_target,$(1)) : $(SRCDIR)/$(2)
-$(call gb_UnoApiTarget_get_target,$(1)) : $(gb_UnoApiTarget_XMLRDB)
-$(call gb_UnoApiTarget_get_target,$(1)) : $(gb_UnoApiTarget_XML2CMPTARGET)
+define gb_UnoApiTarget_set_types
+$(call gb_UnoApiTarget_get_target,$(1)) : UNOAPI_TYPES := $(2)
+$(call gb_UnoApiTarget_get_target,$(1)) : $(gb_UnoApiTarget_TYPESRDB)
 $(call gb_UnoApiTarget_get_target,$(1)) : $(gb_UnoApiTarget_RDBMAKERTARGET)
 
 endef

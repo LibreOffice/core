@@ -117,8 +117,8 @@ $(foreach dep,$(3),$(call gb_InternalUnoApi_define_api_dependency,$(1),$(2),$(de
 
 endef
 
-define gb_InternalUnoApi_set_xmlfile
-$(call gb_UnoApiTarget_set_xmlfile,$(1)_out,$(2))
+define gb_InternalUnoApi_set_types
+$(call gb_UnoApiTarget_set_types,$(1)_out,$(2))
 
 endef
 
