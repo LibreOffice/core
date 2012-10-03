@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAPX////0\u003d",
+        "filename": "reportbuilder/java/com/sun/star/report/ReportJobFactory.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2012-10-03T04:01:04Z",
+      "side": 1,
+      "message": "Please remove the whole comment block. No need to keep empty java doc blocks.",
+      "revId": "48f08f2bd41f044fcd7c26e512ac5183b2e529f9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAPX////w\u003d",
+        "filename": "reportbuilder/java/com/sun/star/report/SOImageService.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2012-10-03T04:01:04Z",
+      "side": 1,
+      "message": "Please remove the empty comment block.",
+      "revId": "48f08f2bd41f044fcd7c26e512ac5183b2e529f9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAPX////s\u003d",
+        "filename": "reportbuilder/java/com/sun/star/report/function/metadata/AuthorFunction.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2012-10-03T04:01:04Z",
+      "side": 1,
+      "message": "Please remove the empty comment block.",
+      "revId": "48f08f2bd41f044fcd7c26e512ac5183b2e529f9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAPX////o\u003d",
+        "filename": "reportbuilder/java/com/sun/star/report/function/metadata/AuthorFunctionDescription.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2012-10-03T04:01:04Z",
+      "side": 1,
+      "message": "Please remove the empty comment block.",
+      "revId": "48f08f2bd41f044fcd7c26e512ac5183b2e529f9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
