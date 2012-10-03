@@ -4,7 +4,7 @@ When we build expat internally ("bundled"), we build two variants: One
 that has an "ASCII" (actually UTF-8) API, another that has a "Unicode"
 (meaning UTF-16) API. Additionally, expat is split into two parts,
 expat_xmlparse and expat_xmltok. It's the former which has the two
-variabts, ascii_expat_xmlparse (UTF-8) and expat_xmlparse (UTF-16).
+variants, ascii_expat_xmlparse (UTF-8) and expat_xmlparse (UTF-16).
 
 Code that uses expat then declares in its .mk file which one it wants
 to use. See the magic in ../RepositoryExternal.mk, where in the
