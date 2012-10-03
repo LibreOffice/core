@@ -457,9 +457,8 @@ namespace svxform
                     {
                         case SID_FM_NEW_FORM:
                         {
-                            XubString aStr(SVX_RES(RID_STR_FORM));
-                            XubString aUndoStr(SVX_RES(RID_STR_UNDO_CONTAINER_INSERT));
-                            aUndoStr.SearchAndReplace(rtl::OUString('#'), aStr);
+                            OUString aStr(SVX_RESSTR(RID_STR_FORM));
+                            OUString aUndoStr = SVX_RESSTR(RID_STR_UNDO_CONTAINER_INSERT).replaceAll(OUString('#'), aStr);
 
                             pFormModel->BegUndo(aUndoStr);
                             // der Slot war nur verfuegbar, wenn es genau einen selektierten Eintrag gibt und dieser die Root
@@ -470,9 +469,8 @@ namespace svxform
                         }   break;
                         case SID_FM_NEW_HIDDEN:
                         {
-                            XubString aStr(SVX_RES(RID_STR_CONTROL));
-                            XubString aUndoStr(SVX_RES(RID_STR_UNDO_CONTAINER_INSERT));
-                            aUndoStr.SearchAndReplace(rtl::OUString('#'), aStr);
+                            OUString aStr(SVX_RESSTR(RID_STR_CONTROL));
+                            OUString aUndoStr = SVX_RESSTR(RID_STR_UNDO_CONTAINER_INSERT).replaceAll(OUString('#'), aStr);
 
                             pFormModel->BegUndo(aUndoStr);
                             // dieser Slot war guletig bei (genau) einem selektierten Formular
@@ -1002,9 +1000,8 @@ namespace svxform
             // innerhalb eines Undo ...
             if (pFormModel)
             {
-                XubString aStr(SVX_RES(RID_STR_CONTROL));
-                XubString aUndoStr(SVX_RES(RID_STR_UNDO_CONTAINER_INSERT));
-                aUndoStr.SearchAndReplace(rtl::OUString('#'), aStr);
+                OUString aStr(SVX_RESSTR(RID_STR_CONTROL));
+                OUString aUndoStr = SVX_RESSTR(RID_STR_UNDO_CONTAINER_INSERT).replaceAll(OUString('#'), aStr);
                 pFormModel->BegUndo(aUndoStr);
             }
 
@@ -1078,7 +1075,7 @@ namespace svxform
 
         if( bUndo )
         {
-            XubString strUndoDescription(SVX_RES(RID_STR_UNDO_CONTAINER_REPLACE));
+            OUString strUndoDescription(SVX_RESSTR(RID_STR_UNDO_CONTAINER_REPLACE));
             pFormModel->BegUndo(strUndoDescription);
         }
 
@@ -1482,7 +1479,7 @@ namespace svxform
 
         //////////////////////////////////////////////////////////////////////
         // BasisNamen erzeugen
-        rtl::OUString aBaseName;
+        OUString aBaseName;
         if( pEntryData->ISA(FmFormData) )
             aBaseName = SVX_RESSTR( RID_STR_STDFORMNAME );
         else if( pEntryData->ISA(FmControlData) )
