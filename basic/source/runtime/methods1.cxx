@@ -32,6 +32,7 @@
 #include <vcl/jobset.hxx>
 #include <basic/sbobjmod.hxx>
 
+#include "date.hxx"
 #include "sbintern.hxx"
 #include "runtime.hxx"
 #include "stdobj.hxx"
@@ -57,7 +58,6 @@ using namespace com::sun::star::i18n;
 
 void unoToSbxValue( SbxVariable* pVar, const Any& aValue );
 Any sbxToUnoValue( SbxVariable* pVar, const Type& rType, com::sun::star::beans::Property* pUnoProperty = NULL );
-sal_Int16 implGetWeekDay( double aDate, bool bFirstDayParam = false, sal_Int16 nFirstDay = 0 );
 
 static Reference< XCalendar3 > getLocaleCalendar( void )
 {
@@ -1905,17 +1905,6 @@ IntervalInfo* getIntervalInfo( const String& rStringCode )
     }
     return pInfo;
 }
-
-// From methods.cxx
-bool implDateSerial( sal_Int16 nYear, sal_Int16 nMonth, sal_Int16 nDay, double& rdRet );
-sal_Int16 implGetDateDay( double aDate );
-sal_Int16 implGetDateMonth( double aDate );
-sal_Int16 implGetDateYear( double aDate );
-
-sal_Int16 implGetHour( double dDate );
-sal_Int16 implGetMinute( double dDate );
-sal_Int16 implGetSecond( double dDate );
-
 
 inline void implGetDayMonthYear( sal_Int16& rnYear, sal_Int16& rnMonth, sal_Int16& rnDay, double dDate )
 {
