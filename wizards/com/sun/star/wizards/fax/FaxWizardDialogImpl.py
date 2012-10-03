@@ -327,25 +327,28 @@ class FaxWizardDialogImpl(FaxWizardDialog):
         self.myFaxDoc.updateDateFields()
 
     def initializeSalutation(self):
+        #'Saludation' dropdown list
         self.setControlProperty("lstSalutation", "StringItemList",
-            self.resources.SalutationLabels)
+            tuple(self.resources.SalutationLabels))
 
     def initializeGreeting(self):
+        #'Complimentary Close' dropdown list
         self.setControlProperty("lstGreeting", "StringItemList",
-            self.resources.GreetingLabels)
+            tuple(self.resources.GreetingLabels))
 
     def initializeCommunication(self):
+        #'Type of message' dropdown list
         self.setControlProperty("lstCommunicationType", "StringItemList",
-            self.resources.CommunicationLabels)
+            tuple(self.resources.CommunicationLabels))
 
     def __setDefaultForGreetingAndSalutationAndCommunication(self):
-        if self.lstSalutation.Text == "":
+        if not self.lstSalutation.Text:
             self.lstSalutation.setText(self.resources.SalutationLabels[0])
 
-        if self.lstGreeting.Text == "":
+        if not self.lstGreeting.Text:
             self.lstGreeting.setText(self.resources.GreetingLabels[0])
 
-        if self.lstCommunicationType.Text == "":
+        if not self.lstCommunicationType.Text:
             self.lstCommunicationType.setText( \
                 self.resources.CommunicationLabels[0])
 

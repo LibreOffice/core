@@ -35,17 +35,13 @@ class FaxWizardDialogResources(Resource):
     resConsist2PlaceHolder = "#consist2#"
     resConsist3PlaceHolder = "#consist3#"
 
-
     def __init__(self, xmsf):
         super(FaxWizardDialogResources,self).__init__(xmsf,
             FaxWizardDialogResources.MODULE_NAME)
-        self.RoadmapLabels = ()
-        self.SalutationLabels = ()
-        self.GreetingLabels = ()
-        self.CommunicationLabels = ()
-
-        #Delete the String, uncomment the self.getResText method
-
+        self.RoadmapLabels = []
+        self.SalutationLabels = []
+        self.GreetingLabels = []
+        self.CommunicationLabels = []
 
         self.resFaxWizardDialog_title = self.getResText(
             FaxWizardDialogResources.RID_FAXWIZARDDIALOG_START + 1)
@@ -145,40 +141,37 @@ class FaxWizardDialogResources(Resource):
         FaxWizardDialogResources.resConsist3PlaceHolder : self.getResText(
             FaxWizardDialogResources.RID_FAXWIZARDDIALOG_START + 48)}
         
-        self.loadRoadmapResources()
-        self.loadSalutationResources()
-        self.loadGreetingResources()
-        self.loadCommunicationResources()
-        self.loadCommonResources()
-
-    def loadCommonResources(self):
+        #Common Resources
         self.resOverwriteWarning = self.getResText(
             FaxWizardDialogResources.RID_RID_COMMON_START + 19)
         self.resTemplateDescription = self.getResText(
             FaxWizardDialogResources.RID_RID_COMMON_START + 20)
+        
+        self.loadRoadmapResources()
+        self.loadSalutationResources()
+        self.loadGreetingResources()
+        self.loadCommunicationResources()
 
     def loadRoadmapResources(self):
         for i in xrange(5):
-            self.RoadmapLabels = self.RoadmapLabels + ((self.getResText(
+            self.RoadmapLabels.append(self.getResText(
                 FaxWizardDialogResources.RID_FAXWIZARDROADMAP_START + \
-                + i + 1)),)
+                + i + 1))
 
     def loadSalutationResources(self):
-        i = 1
         for i in xrange(4):
-            self.SalutationLabels = self.SalutationLabels + ((self.getResText(
+            self.SalutationLabels.append(self.getResText(
                 FaxWizardDialogResources.RID_FAXWIZARDSALUTATION_START + \
-                i + 1)),)
+                i + 1))
 
     def loadGreetingResources(self):
         for i in xrange(4):
-            self.GreetingLabels = self.GreetingLabels + ((self.getResText(
+            self.GreetingLabels.append(self.getResText(
                 FaxWizardDialogResources.RID_FAXWIZARDGREETING_START + \
-                i +1 )),)
+                i + 1))
 
     def loadCommunicationResources(self):
         for i in xrange(3):
-            self.CommunicationLabels = \
-            self.CommunicationLabels + ((self.getResText(
+            self.CommunicationLabels.append(self.getResText(
                 FaxWizardDialogResources.RID_FAXWIZARDCOMMUNICATION_START + \
-                i + 1)),)
+                i + 1))
