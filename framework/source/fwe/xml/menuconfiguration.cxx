@@ -36,9 +36,10 @@
 
 #include <uielement/rootitemcontainer.hxx>
 
-#include <com/sun/star/xml/sax/XParser.hpp>
+#include <com/sun/star/xml/sax/Parser.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
+#include <comphelper/processfactory.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -66,7 +67,7 @@ Reference< XIndexAccess > MenuConfiguration::CreateMenuBarConfigurationFromXML(
     Reference< XInputStream >& rInputStream )
 throw ( WrappedTargetException )
 {
-    Reference< XParser > xParser( m_rxServiceManager->createInstance(SERVICENAME_SAXPARSER),UNO_QUERY);
+    Reference< XParser > xParser = Parser::create( comphelper::getComponentContext(m_rxServiceManager) );
 
     // connect stream to input stream to the parser
     InputSource aInputSource;

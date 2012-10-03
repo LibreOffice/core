@@ -317,6 +317,7 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/xml/dom,\
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/xml/sax,\
 	FastShapeContextHandler \
 	FastTokenHandler \
+	Parser \
 ))
 
 

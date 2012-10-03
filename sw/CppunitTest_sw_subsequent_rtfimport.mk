@@ -72,6 +72,7 @@ $(eval $(call gb_CppunitTest_use_components,sw_subsequent_rtfimport,\
     framework/util/fwk \
     i18npool/util/i18npool \
     package/util/package2 \
+    sax/source/expatwrap/expwrap \
     sw/util/sw \
     sw/util/swd \
     sfx2/util/sfx \

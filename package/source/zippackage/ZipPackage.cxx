@@ -464,7 +464,7 @@ void ZipPackage::parseContentType()
                     sal_Int32 nInd = 0;
                     // here aContentTypeInfo[0] - Defaults, and aContentTypeInfo[1] - Overrides
                     uno::Sequence< uno::Sequence< beans::StringPair > > aContentTypeInfo =
-                        ::comphelper::OFOPXMLHelper::ReadContentTypeSequence( xInStream, m_xFactory );
+                        ::comphelper::OFOPXMLHelper::ReadContentTypeSequence( xInStream, comphelper::getComponentContext(m_xFactory) );
 
                     if ( aContentTypeInfo.getLength() != 2 )
                         throw io::IOException(OSL_LOG_PREFIX, uno::Reference< uno::XInterface >() );

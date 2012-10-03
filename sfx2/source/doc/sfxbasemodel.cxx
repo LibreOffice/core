@@ -3382,11 +3382,11 @@ uno::Reference< ui::XUIConfigurationManager > SAL_CALL SfxBaseModel::getUIConfig
                 xOOo1ConfigStorage = getDocumentSubStorage( aOOo1UIConfigFolderName, embed::ElementModes::READ );
                 if ( xOOo1ConfigStorage.is() )
                 {
-                    uno::Reference< lang::XMultiServiceFactory > xServiceMgr( ::comphelper::getProcessServiceFactory() );
+                    uno::Reference< uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
                     uno::Sequence< uno::Reference< container::XIndexContainer > > rToolbars;
 
                     sal_Bool bImported = framework::UIConfigurationImporterOOo1x::ImportCustomToolbars(
-                                            xNewUIConfMan, rToolbars, xServiceMgr, xOOo1ConfigStorage );
+                                            xNewUIConfMan, rToolbars, xContext, xOOo1ConfigStorage );
                     if ( bImported )
                     {
                         SfxObjectShell* pObjShell = SfxBaseModel::GetObjectShell();

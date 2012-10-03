@@ -42,7 +42,7 @@
 
 #include <com/sun/star/beans/PropertyValue.hpp>
 
-#include <com/sun/star/xml/sax/XParser.hpp>
+#include <com/sun/star/xml/sax/Parser.hpp>
 #include <com/sun/star/xml/sax/InputSource.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
@@ -283,15 +283,7 @@ m_rServiceFactory(r), m_bTerminated(sal_False), m_bError(sal_False)
 
         // create SAX parser that will read the document file
         // and provide events to xHandler passed to this call
-        css::uno::Reference<XParser>
-                xSaxParser(
-                        m_rServiceFactory->createInstance(
-                                OUString(
-                                         "com.sun.star.xml.sax.Parser" )),
-                        UNO_QUERY);
-        OSL_ASSERT(xSaxParser.is());
-        if (!xSaxParser.is())
-            return sal_False;
+        css::uno::Reference<XParser> xSaxParser = Parser::create(comphelper::getComponentContext(m_rServiceFactory));
 
         // create transformer
         Sequence<Any> args(3);

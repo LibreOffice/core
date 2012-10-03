@@ -33,13 +33,14 @@
 #include <xmloff/xmlmetae.hxx>
 
 #include <xmloff/xmltoken.hxx>
+#include <comphelper/componentcontext.hxx>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/io/XActiveDataSource.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/util/MeasureUnit.hpp>
 #include <com/sun/star/xml/sax/InputSource.hpp>
-#include <com/sun/star/xml/sax/XParser.hpp>
+#include <com/sun/star/xml/sax/Parser.hpp>
 
 using namespace ::com::sun::star::xml::sax;
 using namespace ::com::sun::star::uno;
@@ -435,17 +436,11 @@ uno::Sequence< util::RevisionTag > SAL_CALL XMLVersionListPersistence::load( con
             if ( !aParserInput.aInputStream.is() )
                 throw uno::RuntimeException();
 
-            // get parser
-            Reference< XInterface > xXMLParser = xServiceFactory->createInstance(
-                OUString("com.sun.star.xml.sax.Parser") );
-            DBG_ASSERT( xXMLParser.is(),
-                    "XMLReader::Read: com.sun.star.xml.sax.Parser service missing" );
-
             // get filter
             Reference< XDocumentHandler > xFilter = new XMLVersionListImport( xServiceFactory, aVersions );
 
             // connect parser and filter
-            Reference< XParser > xParser( xXMLParser, UNO_QUERY );
+            Reference< XParser > xParser = xml::sax::Parser::create(comphelper::getComponentContext(xServiceFactory));
             xParser->setDocumentHandler( xFilter );
 
             // parse

@@ -41,7 +41,7 @@ class DocTemplLocaleHelper : public cppu::WeakImplHelper1 < com::sun::star::xml:
     DocTemplLocaleHelper(); // must not be created directly
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::StringPair > GetParsingResult();
 
-    static ::com::sun::star::uno::Sequence< ::com::sun::star::beans::StringPair > SAL_CALL ReadLocalizationSequence_Impl( const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& xInStream, const ::rtl::OUString& aStringID, const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xFactory )
+    static ::com::sun::star::uno::Sequence< ::com::sun::star::beans::StringPair > SAL_CALL ReadLocalizationSequence_Impl( const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& xInStream, const ::rtl::OUString& aStringID, const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > xContext )
     throw( ::com::sun::star::uno::Exception );
 
 public:
@@ -52,7 +52,7 @@ public:
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::StringPair >
     ReadGroupLocalizationSequence(
         const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& xInStream,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xFactory )
+        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > xContext )
             throw( ::com::sun::star::uno::Exception );
 
     // writes sequence of elements ( GroupName, GroupUIName )

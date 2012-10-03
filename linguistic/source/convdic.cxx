@@ -61,7 +61,7 @@
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/xml/sax/InputSource.hpp>
-#include <com/sun/star/xml/sax/XParser.hpp>
+#include <com/sun/star/xml/sax/Parser.hpp>
 
 
 #include "convdic.hxx"
@@ -88,7 +88,6 @@ void ReadThroughDic( const String &rMainURL, ConvDicXMLImport &rImport )
         return;
     DBG_ASSERT(!INetURLObject( rMainURL ).HasError(), "invalid URL");
 
-    uno::Reference< lang::XMultiServiceFactory > xServiceFactory( comphelper::getProcessServiceFactory() );
     uno::Reference< uno::XComponentContext > xContext( comphelper::getProcessComponentContext() );
 
     // get xInputStream stream
@@ -112,17 +111,7 @@ void ReadThroughDic( const String &rMainURL, ConvDicXMLImport &rImport )
     aParserInput.aInputStream = xIn;
 
     // get parser
-    uno::Reference< xml::sax::XParser > xParser;
-    try
-    {
-        xParser = uno::Reference< xml::sax::XParser >( xServiceFactory->createInstance( "com.sun.star.xml.sax.Parser" ), UNO_QUERY );
-    }
-    catch (uno::Exception &)
-    {
-    }
-    DBG_ASSERT( xParser.is(), "Can't create parser" );
-    if (!xParser.is())
-        return;
+    uno::Reference< xml::sax::XParser > xParser = xml::sax::Parser::create( xContext );
 
     //!! keep a reference until everything is done to
     //!! ensure the proper lifetime of the object

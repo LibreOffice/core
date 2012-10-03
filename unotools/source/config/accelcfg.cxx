@@ -24,7 +24,7 @@
 #include <com/sun/star/io/XActiveDataSource.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
-#include <com/sun/star/xml/sax/XParser.hpp>
+#include <com/sun/star/xml/sax/Parser.hpp>
 #include <unotools/configmgr.hxx>
 #include <unotools/configitem.hxx>
 
@@ -72,9 +72,7 @@ public:
 SvtAcceleratorConfig_Impl::SvtAcceleratorConfig_Impl( Reference< XInputStream >& rInputStream )
         : bModified( false )
 {
-    Reference< XParser > xParser( ::comphelper::getProcessServiceFactory()->createInstance(
-                                    ::rtl::OUString("com.sun.star.xml.sax.Parser")),
-                                  UNO_QUERY);
+    Reference< XParser > xParser = Parser::create( ::comphelper::getProcessComponentContext() );
 
     // connect stream to input stream to the parser
     InputSource aInputSource;

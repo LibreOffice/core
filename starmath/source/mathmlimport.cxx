@@ -26,7 +26,7 @@ one go*/
 #include <com/sun/star/xml/sax/XEntityResolver.hpp>
 #include <com/sun/star/xml/sax/InputSource.hpp>
 #include <com/sun/star/xml/sax/XDTDHandler.hpp>
-#include <com/sun/star/xml/sax/XParser.hpp>
+#include <com/sun/star/xml/sax/Parser.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>
 #include <com/sun/star/io/XActiveDataControl.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
@@ -38,6 +38,7 @@ one go*/
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/uno/Any.h>
 
+#include <comphelper/componentcontext.hxx>
 #include <comphelper/genericpropertyset.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/servicehelper.hxx>
@@ -273,13 +274,7 @@ sal_uLong SmXMLImportWrapper::ReadThroughComponent(
     aParserInput.aInputStream = xInputStream;
 
     // get parser
-    Reference< xml::sax::XParser > xParser(
-        rFactory->createInstance(
-            "com.sun.star.xml.sax.Parser"),
-        UNO_QUERY );
-    OSL_ENSURE( xParser.is(), "Can't create parser" );
-    if ( !xParser.is() )
-        return nError;
+    Reference< xml::sax::XParser > xParser = xml::sax::Parser::create(comphelper::getComponentContext(rFactory));
 
     Sequence<Any> aArgs( 1 );
     aArgs[0] <<= rPropSet;

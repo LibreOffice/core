@@ -44,7 +44,7 @@
 #include "com/sun/star/document/XImporter.hpp"
 #include "com/sun/star/document/XExporter.hpp"
 #include "com/sun/star/document/XFilter.hpp"
-#include "com/sun/star/xml/sax/XParser.hpp"
+#include "com/sun/star/xml/sax/Parser.hpp"
 #include "com/sun/star/xml/dom/XDocument.hpp"
 #include "com/sun/star/xml/dom/XElement.hpp"
 #include "com/sun/star/xml/dom/DocumentBuilder.hpp"
@@ -1918,13 +1918,7 @@ SfxDocumentMetaData::loadFromStorage(
     // create DOM parser service
     css::uno::Reference<css::lang::XMultiComponentFactory> xMsf (
         m_xContext->getServiceManager());
-    css::uno::Reference<css::xml::sax::XParser> xParser (
-        xMsf->createInstanceWithContext(::rtl::OUString(
-                "com.sun.star.xml.sax.Parser"), m_xContext),
-        css::uno::UNO_QUERY_THROW);
-    if (!xParser.is()) throw css::uno::RuntimeException(
-        ::rtl::OUString("SfxDocumentMetaData::loadFromStorage:"
-                " cannot create Parser service"), *this);
+    css::uno::Reference<css::xml::sax::XParser> xParser = css::xml::sax::Parser::create(m_xContext);
     css::xml::sax::InputSource input;
     input.aInputStream = xInStream;
 

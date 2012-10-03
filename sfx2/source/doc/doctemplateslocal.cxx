@@ -21,7 +21,7 @@
 #include <com/sun/star/beans/StringPair.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>
-#include <com/sun/star/xml/sax/XParser.hpp>
+#include <com/sun/star/xml/sax/Parser.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 
@@ -32,11 +32,11 @@
 using namespace ::com::sun::star;
 
 // -----------------------------------
-uno::Sequence< beans::StringPair > DocTemplLocaleHelper::ReadGroupLocalizationSequence( const uno::Reference< io::XInputStream >& xInStream, const uno::Reference< lang::XMultiServiceFactory > xFactory )
+uno::Sequence< beans::StringPair > DocTemplLocaleHelper::ReadGroupLocalizationSequence( const uno::Reference< io::XInputStream >& xInStream, const uno::Reference< uno::XComponentContext > xContext )
     throw( uno::Exception )
 {
     ::rtl::OUString aStringID = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "groupuinames.xml" ) );
-    return ReadLocalizationSequence_Impl( xInStream, aStringID, xFactory );
+    return ReadLocalizationSequence_Impl( xInStream, aStringID, xContext );
 }
 
 // -----------------------------------
@@ -92,15 +92,15 @@ void SAL_CALL DocTemplLocaleHelper::WriteGroupLocalizationSequence( const uno::R
 // ==================================================================================
 
 // -----------------------------------
-uno::Sequence< beans::StringPair > SAL_CALL DocTemplLocaleHelper::ReadLocalizationSequence_Impl( const uno::Reference< io::XInputStream >& xInStream, const ::rtl::OUString& aStringID, const uno::Reference< lang::XMultiServiceFactory > xFactory )
+uno::Sequence< beans::StringPair > SAL_CALL DocTemplLocaleHelper::ReadLocalizationSequence_Impl( const uno::Reference< io::XInputStream >& xInStream, const ::rtl::OUString& aStringID, const uno::Reference< uno::XComponentContext > xContext )
     throw( uno::Exception )
 {
-    if ( !xFactory.is() || !xInStream.is() )
+    if ( !xContext.is() || !xInStream.is() )
         throw uno::RuntimeException();
 
     uno::Sequence< beans::StringPair > aResult;
 
-    uno::Reference< xml::sax::XParser > xParser( xFactory->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.xml.sax.Parser" ) ) ), uno::UNO_QUERY_THROW );
+    uno::Reference< xml::sax::XParser > xParser = xml::sax::Parser::create( xContext );
 
     DocTemplLocaleHelper* pHelper = new DocTemplLocaleHelper();
     uno::Reference< xml::sax::XDocumentHandler > xHelper( static_cast< xml::sax::XDocumentHandler* >( pHelper ) );

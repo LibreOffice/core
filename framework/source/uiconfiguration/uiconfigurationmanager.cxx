@@ -47,6 +47,7 @@
 #include <com/sun/star/io/XStream.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>
 
+#include <comphelper/componentcontext.hxx>
 #include <vcl/svapp.hxx>
 #include <rtl/ustrbuf.hxx>
 
@@ -276,7 +277,7 @@ void UIConfigurationManager::impl_requestUIElementData( sal_Int16 nElementType, 
                         try
                         {
                             Reference< XIndexContainer > xIndexContainer( static_cast< OWeakObject * >( new RootItemContainer() ), UNO_QUERY );
-                            ToolBoxConfiguration::LoadToolBox( m_xServiceManager, xInputStream, xIndexContainer );
+                            ToolBoxConfiguration::LoadToolBox( comphelper::getComponentContext(m_xServiceManager), xInputStream, xIndexContainer );
                             RootItemContainer* pRootItemContainer = RootItemContainer::GetImplementation( xIndexContainer );
                             aUIElementData.xSettings = Reference< XIndexAccess >( static_cast< OWeakObject * >( new ConstItemContainer( pRootItemContainer, sal_True ) ), UNO_QUERY );
                             return;
@@ -293,7 +294,7 @@ void UIConfigurationManager::impl_requestUIElementData( sal_Int16 nElementType, 
                         try
                         {
                             Reference< XIndexContainer > xIndexContainer( static_cast< OWeakObject * >( new RootItemContainer() ), UNO_QUERY );
-                            StatusBarConfiguration::LoadStatusBar( m_xServiceManager, xInputStream, xIndexContainer );
+                            StatusBarConfiguration::LoadStatusBar( comphelper::getComponentContext(m_xServiceManager), xInputStream, xIndexContainer );
                             RootItemContainer* pRootItemContainer = RootItemContainer::GetImplementation( xIndexContainer );
                             aUIElementData.xSettings = Reference< XIndexAccess >( static_cast< OWeakObject * >( new ConstItemContainer( pRootItemContainer, sal_True ) ), UNO_QUERY );
                             return;

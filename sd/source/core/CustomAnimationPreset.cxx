@@ -31,7 +31,7 @@
 #include <com/sun/star/animations/XAnimationNodeSupplier.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/xml/sax/InputSource.hpp>
-#include <com/sun/star/xml/sax/XParser.hpp>
+#include <com/sun/star/xml/sax/Parser.hpp>
 #include <com/sun/star/xml/sax/SAXParseException.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/presentation/EffectPresetClass.hpp>
@@ -266,11 +266,7 @@ Reference< XAnimationNode > implImportEffects( const Reference< XMultiServiceFac
         aParserInput.aInputStream = xInputStream;
 
         // get parser
-        Reference< xml::sax::XParser > xParser( xServiceFactory->createInstance("com.sun.star.xml.sax.Parser" ), UNO_QUERY );
-
-        DBG_ASSERT( xParser.is(), "Can't create parser" );
-        if( !xParser.is() )
-            return xRootNode;
+        Reference< xml::sax::XParser > xParser = xml::sax::Parser::create( comphelper::getComponentContext(xServiceFactory) );
 
         // get filter
         Reference< xml::sax::XDocumentHandler > xFilter( xServiceFactory->createInstance("com.sun.star.comp.Xmloff.AnimationsImport" ), UNO_QUERY );

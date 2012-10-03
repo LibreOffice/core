@@ -44,7 +44,7 @@
 #include <com/sun/star/xml/sax/XEntityResolver.hpp>
 #include <com/sun/star/xml/sax/InputSource.hpp>
 #include <com/sun/star/xml/sax/XDTDHandler.hpp>
-#include <com/sun/star/xml/sax/XParser.hpp>
+#include <com/sun/star/xml/sax/Parser.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>
 #include <com/sun/star/io/XActiveDataControl.hpp>
 #include <com/sun/star/frame/XModel.hpp>
@@ -110,7 +110,7 @@ uno::Reference <task::XStatusIndicator> ScXMLImportWrapper::GetStatusIndicator()
 }
 
 sal_uInt32 ScXMLImportWrapper::ImportFromComponent(uno::Reference<lang::XMultiServiceFactory>& xServiceFactory,
-    uno::Reference<frame::XModel>& xModel, uno::Reference<uno::XInterface>& xXMLParser,
+    uno::Reference<frame::XModel>& xModel, uno::Reference<xml::sax::XParser>& xParser,
     xml::sax::InputSource& aParserInput,
     const rtl::OUString& sComponentName, const rtl::OUString& sDocName,
     const rtl::OUString& sOldDocName, uno::Sequence<uno::Any>& aArgs,
@@ -184,7 +184,6 @@ sal_uInt32 ScXMLImportWrapper::ImportFromComponent(uno::Reference<lang::XMultiSe
         xImporter->setTargetDocument( xComponent );
 
     // connect parser and filter
-    uno::Reference<xml::sax::XParser> xParser( xXMLParser, uno::UNO_QUERY );
     xParser->setDocumentHandler( xDocHandler );
 
     try
@@ -325,6 +324,7 @@ sal_Bool ScXMLImportWrapper::Import(sal_Bool bStylesOnly, ErrCode& nError)
 
     uno::Reference<lang::XMultiServiceFactory> xServiceFactory =
                                         comphelper::getProcessServiceFactory();
+    uno::Reference<uno::XComponentContext> xContext = comphelper::getProcessComponentContext();
     OSL_ENSURE( xServiceFactory.is(), "got no service manager" );
     if( !xServiceFactory.is() )
         return false;
@@ -337,12 +337,7 @@ sal_Bool ScXMLImportWrapper::Import(sal_Bool bStylesOnly, ErrCode& nError)
         xStorage = pMedium->GetStorage();
 
     // get parser
-    uno::Reference<uno::XInterface> xXMLParser(
-        xServiceFactory->createInstance(
-            OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.xml.sax.Parser" )) ));
-    OSL_ENSURE( xXMLParser.is(), "com.sun.star.xml.sax.Parser service missing" );
-    if( !xXMLParser.is() )
-        return false;
+    uno::Reference<xml::sax::XParser> xXMLParser = xml::sax::Parser::create(xContext);
 
     // get filter
     SfxObjectShell* pObjSh = rDoc.GetDocumentShell();

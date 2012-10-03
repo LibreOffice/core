@@ -28,6 +28,7 @@
 #include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 namespace framework
 {
@@ -36,7 +37,7 @@ class FWE_DLLPUBLIC ToolBoxConfiguration
 {
     public:
         static sal_Bool LoadToolBox(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
             const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& rInputStream,
             const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer >& rToolbarConfiguration );
 

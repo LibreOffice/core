@@ -41,7 +41,7 @@
 #include <svtools/ehdl.hxx>
 #include <basic/basmgr.hxx>
 #include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
-#include <com/sun/star/xml/sax/XParser.hpp>
+#include <com/sun/star/xml/sax/Parser.hpp>
 #include <com/sun/star/xml/sax/InputSource.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
@@ -650,13 +650,7 @@ void SfxLibraryContainer::init_Impl( const OUString& rInitialDocumentURL,
         maLibraryPath = SvtPathOptions().GetBasicPath();
     }
 
-    Reference< XParser > xParser( mxMSF->createInstance(
-        OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Parser") ) ), UNO_QUERY );
-    if( !xParser.is() )
-    {
-        SAL_WARN("basic", "couldn't create sax parser component");
-        return;
-    }
+    Reference< XParser > xParser = xml::sax::Parser::create(comphelper::getComponentContext(mxMSF));
 
     uno::Reference< io::XInputStream > xInput;
 
@@ -1603,13 +1597,7 @@ void SfxLibraryContainer::implStoreLibraryIndexFile( SfxLibrary* pLib,
 bool SfxLibraryContainer::implLoadLibraryIndexFile(  SfxLibrary* pLib,
     ::xmlscript::LibDescriptor& rLib, const uno::Reference< embed::XStorage >& xStorage, const OUString& aIndexFileName )
 {
-    Reference< XParser > xParser( mxMSF->createInstance(
-        OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Parser") ) ), UNO_QUERY );
-    if( !xParser.is() )
-    {
-        SAL_WARN("basic", "couldn't create sax parser component");
-        return false;
-    }
+    Reference< XParser > xParser = xml::sax::Parser::create(comphelper::getComponentContext(mxMSF));
 
     sal_Bool bLink = sal_False;
     bool bStorage = false;

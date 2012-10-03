@@ -21,6 +21,7 @@
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/sdb/XOfficeDatabaseDocument.hpp>
 #include <com/sun/star/util/MeasureUnit.hpp>
+#include <com/sun/star/xml/sax/Parser.hpp>
 #include "xmlfilter.hxx"
 #include "xmlGroup.hxx"
 #include "xmlReport.hxx"
@@ -38,6 +39,7 @@
 #include <com/sun/star/xml/sax/XParser.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 
+#include <comphelper/processfactory.hxx>
 #include <comphelper/genericpropertyset.hxx>
 #include <comphelper/mediadescriptor.hxx>
 #include <xmloff/ProgressBarHelper.hxx>
@@ -124,13 +126,13 @@ sal_Int32 ReadThroughComponent(
     const uno::Reference<XInputStream>& xInputStream,
     const uno::Reference<XComponent>& xModelComponent,
     const sal_Char* /*pStreamName*/,
-    const uno::Reference<XMultiServiceFactory> & rFactory,
+    const uno::Reference<XComponentContext> & rContext,
     const uno::Reference< XDocumentHandler >& _xFilter,
     sal_Bool /*bEncrypted*/ )
 {
     OSL_ENSURE(xInputStream.is(), "input stream missing");
     OSL_ENSURE(xModelComponent.is(), "document missing");
-    OSL_ENSURE(rFactory.is(), "factory missing");
+    OSL_ENSURE(rContext.is(), "factory missing");
 
     RTL_LOGFILE_CONTEXT_AUTHOR( aLog, "rptxml", "oj", "ReadThroughComponent" );
 
@@ -139,13 +141,7 @@ sal_Int32 ReadThroughComponent(
     aParserInput.aInputStream = xInputStream;
 
     // get parser
-    uno::Reference< XParser > xParser(
-        rFactory->createInstance(
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Parser"))),
-        UNO_QUERY );
-    OSL_ENSURE( xParser.is(), "Can't create parser" );
-    if( !xParser.is() )
-        return 1;
+    uno::Reference< XParser > xParser = xml::sax::Parser::create(rContext);
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "parser created" );
 
     // get filter
@@ -289,7 +285,7 @@ sal_Int32 ReadThroughComponent(
         return ReadThroughComponent( xInputStream
                                     ,xModelComponent
                                     ,pStreamName
-                                    ,rFactory
+                                    ,comphelper::getComponentContext(rFactory)
                                     ,xDocHandler
                                     ,bEncrypted );
     }

@@ -1307,7 +1307,7 @@ uno::Sequence< beans::StringPair > SfxDocTplService_Impl::ReadUINamesForTemplate
         {
             uno::Reference< io::XInputStream > xLocStream = aLocContent.openStream();
             if ( xLocStream.is() )
-                aUINames = DocTemplLocaleHelper::ReadGroupLocalizationSequence( xLocStream, mxFactory );
+                aUINames = DocTemplLocaleHelper::ReadGroupLocalizationSequence( xLocStream, comphelper::getComponentContext(mxFactory) );
         }
         catch( uno::Exception& )
         {}

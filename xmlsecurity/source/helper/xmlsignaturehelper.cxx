@@ -35,6 +35,7 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/security/SerialNumberAdapter.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/xml/sax/Parser.hpp>
 
 #include <tools/date.hxx>
 #include <tools/time.hxx>
@@ -253,13 +254,7 @@ bool XMLSignatureHelper::ReadAndVerifySignature( const com::sun::star::uno::Refe
     /*
      * get SAX parser component
      */
-    uno::Reference< lang::XMultiComponentFactory > xMCF( mxCtx->getServiceManager() );
-    uno::Reference< xml::sax::XParser > xParser(
-        xMCF->createInstanceWithContext(
-            rtl::OUString("com.sun.star.xml.sax.Parser" ), mxCtx ),
-        uno::UNO_QUERY );
-
-    DBG_ASSERT( xParser.is(), "Can't create parser" );
+    uno::Reference< xml::sax::XParser > xParser = xml::sax::Parser::create(mxCtx);
 
     /*
      * create a signature reader

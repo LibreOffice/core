@@ -36,6 +36,7 @@
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/container/XIndexContainer.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 namespace framework
 {
@@ -44,7 +45,7 @@ class FWE_DLLPUBLIC StatusBarConfiguration
 {
     public:
         static sal_Bool LoadStatusBar(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext,
             const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& xInputStream,
             const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer >& rStatusbarConfiguration );
 

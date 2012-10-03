@@ -45,7 +45,7 @@
 #include <com/sun/star/embed/XTransactedObject.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
-#include <com/sun/star/xml/sax/XParser.hpp>
+#include <com/sun/star/xml/sax/Parser.hpp>
 #include <com/sun/star/xml/sax/SAXParseException.hpp>
 #include <com/sun/star/packages/zip/ZipIOException.hpp>
 #include <com/sun/star/document/XGraphicObjectResolver.hpp>
@@ -332,9 +332,7 @@ sal_Int32 XMLFilter::impl_Import(
             return ERRCODE_SFX_GENERAL;
 
         // create a sax parser
-        Reference< xml::sax::XParser > xSaxParser(
-            xFactory->createInstanceWithContext( C2U( "com.sun.star.xml.sax.Parser" ), m_xContext ),
-            uno::UNO_QUERY_THROW );
+        Reference< xml::sax::XParser > xSaxParser = xml::sax::Parser::create(m_xContext);
 
         bool bOasis = true;
         isOasisFormat( rMediaDescriptor, bOasis );

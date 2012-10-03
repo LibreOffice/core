@@ -18,10 +18,11 @@
  */
 
 #include <com/sun/star/xml/sax/InputSource.hpp>
-#include <com/sun/star/xml/sax/XParser.hpp>
+#include <com/sun/star/xml/sax/Parser.hpp>
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 
+#include <comphelper/processfactory.hxx>
 #include "typedetectionimport.hxx"
 #include "xmlfiltersettingsdialog.hxx"
 
@@ -61,21 +62,19 @@ void TypeDetectionImporter::doImport( Reference< XMultiServiceFactory >& xMSF, R
 {
     try
     {
-        Reference< XParser > xParser( xMSF->createInstance(OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.xml.sax.Parser" )) ), UNO_QUERY );
-        if( xParser.is() )
-        {
-            TypeDetectionImporter* pImporter = new TypeDetectionImporter( xMSF );
-            Reference < XDocumentHandler > xDocHandler( pImporter );
-            xParser->setDocumentHandler( xDocHandler );
+        Reference< XParser > xParser = xml::sax::Parser::create( comphelper::getComponentContext(xMSF) );
 
-            InputSource source;
-            source.aInputStream = xIS;
+        TypeDetectionImporter* pImporter = new TypeDetectionImporter( xMSF );
+        Reference < XDocumentHandler > xDocHandler( pImporter );
+        xParser->setDocumentHandler( xDocHandler );
 
-            // start parsing
-            xParser->parseStream( source );
+        InputSource source;
+        source.aInputStream = xIS;
 
-            pImporter->fillFilterVector( rFilters );
-        }
+        // start parsing
+        xParser->parseStream( source );
+
+        pImporter->fillFilterVector( rFilters );
     }
     catch( const Exception& /* e */ )
     {

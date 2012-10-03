@@ -32,7 +32,7 @@
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <com/sun/star/xml/sax/InputSource.hpp>
-#include <com/sun/star/xml/sax/XParser.hpp>
+#include <com/sun/star/xml/sax/Parser.hpp>
 #include <com/sun/star/frame/XConfigManager.hpp>
 #include <com/sun/star/xml/XImportFilter.hpp>
 #include <com/sun/star/xml/XExportFilter.hpp>
@@ -43,6 +43,7 @@
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/style/XStyleLoader.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
+#include <comphelper/processfactory.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/mediadescriptor.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
@@ -85,8 +86,7 @@ sal_Bool SAL_CALL XmlFilterAdaptor::importImpl( const Sequence< ::com::sun::star
     }
 
     OUString sXMLImportService (  udImport  );
-    const OUString sSaxParser ( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.xml.sax.Parser") );
-    Reference < XParser > xSaxParser( mxMSF->createInstance( sSaxParser ), UNO_QUERY );
+    Reference < XParser > xSaxParser = Parser::create( comphelper::getComponentContext(mxMSF) );
 
     Sequence< Any > aAnys(1);
     OUString aBaseURI;
