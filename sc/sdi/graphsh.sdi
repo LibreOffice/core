@@ -140,6 +140,12 @@ interface GraphSelection
         ExecMethod = ExecuteExternalEdit;
         StateMethod = GetExternalEditState;
     ]
+
+    SID_COMPRESS_GRAPHIC
+    [
+        ExecMethod = ExecuteCompressGraphic;
+        StateMethod = GetCompressGraphicState;
+    ]
 }
 
  // ===========================================================================

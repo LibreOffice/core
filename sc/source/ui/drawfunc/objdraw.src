@@ -527,6 +527,7 @@ Menu RID_POPUP_GRAPHIC
         MN_EDITLNK
         MN_DELLNK
         MenuItem { ITEM_OPEN_HYPERLINK };
+        MenuItem { ITEM_COMPRESS_GRAPHIC };
         MenuItem { ITEM_EXTERNAL_EDIT };
     };
 };

@@ -33,6 +33,8 @@
 #include <svx/svdograf.hxx>
 #include <svx/grfflt.hxx>
 #include <svx/grafctrl.hxx>
+#include <svx/compressgraphicdialog.hxx>
+#include <vcl/msgbox.hxx>
 
 #include "graphsh.hxx"
 #include "sc.hrc"
@@ -48,11 +50,11 @@
 
 class ScExternalToolEdit : public ExternalToolEdit
 {
-    ScDrawView* m_pView;
+    FmFormView* m_pView;
     SdrObject*  m_pObj;
 
 public:
-    ScExternalToolEdit ( ScDrawView* pView, SdrObject* pObj ) :
+    ScExternalToolEdit ( FmFormView* pView, SdrObject* pObj ) :
         m_pView   (pView),
         m_pObj (pObj)
     {}
@@ -199,6 +201,56 @@ void ScGraphicShell::ExecuteExternalEdit( SfxRequest& )
             GraphicObject aGraphicObject( ( (SdrGrafObj*) pObj )->GetGraphicObject() );
             ScExternalToolEdit* aExternalToolEdit = new ScExternalToolEdit( pView, pObj );
             aExternalToolEdit->Edit( &aGraphicObject );
+        }
+    }
+
+    Invalidate();
+}
+
+void ScGraphicShell::GetCompressGraphicState( SfxItemSet& rSet )
+{
+    ScDrawView* pView = GetViewData()->GetScDrawView();
+    const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
+    bool bEnable = false;
+    if( rMarkList.GetMarkCount() == 1 )
+    {
+        SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
+
+        if( pObj && pObj->ISA( SdrGrafObj ) && ( ( (SdrGrafObj*) pObj )->GetGraphicType() == GRAPHIC_BITMAP ) )
+            bEnable = true;
+    }
+
+    if( !bEnable )
+        rSet.DisableItem( SID_COMPRESS_GRAPHIC );
+}
+
+void ScGraphicShell::ExecuteCompressGraphic( SfxRequest& )
+{
+    ScDrawView* pView = GetViewData()->GetScDrawView();
+    const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
+
+    if( rMarkList.GetMarkCount() == 1 )
+    {
+        SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
+
+        if( pObj && pObj->ISA( SdrGrafObj ) && ( (SdrGrafObj*) pObj )->GetGraphicType() == GRAPHIC_BITMAP )
+        {
+            GraphicObject aGraphicObject( ( (SdrGrafObj*) pObj )->GetGraphicObject() );
+            CompressGraphicsDialog dialog( GetViewData()->GetDialogParent(), aGraphicObject.GetGraphic(), pObj->GetLogicRect().GetSize(), GetViewData()->GetBindings() );
+            if ( dialog.Execute() == RET_OK )
+            {
+                SdrGrafObj* pNewObject = (SdrGrafObj*) pObj->Clone();
+                const Graphic aNewGraphic = dialog.GetCompressedGraphic();
+                SdrPageView* pPageView = pView->GetSdrPageView();
+                pNewObject->SetEmptyPresObj( sal_False );
+                pNewObject->SetGraphic( aNewGraphic );
+                String aUndoString( pView->GetDescriptionOfMarkedObjects() );
+                aUndoString += (sal_Unicode) ' ';
+                aUndoString += String( "Compress" );
+                pView->BegUndo( aUndoString );
+                pView->ReplaceObjectAtView( pObj, *pPageView, pNewObject );
+                pView->EndUndo();
+            }
         }
     }
 
