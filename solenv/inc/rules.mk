@@ -623,10 +623,6 @@ $(MISC)/%.mk : $(MISC)/%$($(WINVERSIONNAMES)_MAJOR).xml
     @$(TOUCH) $@
     @echo XML2MK_FILES += $(@:b) >> $@
 
-#generate descriptions from xml
-$(MISC)/%$($(WINVERSIONNAMES)_MAJOR)_description.cxx : $(MISC)/%$($(WINVERSIONNAMES)_MAJOR).xml 
-    xml2cmp -func $(MISC)/$*$($(WINVERSIONNAMES)_MAJOR)_description.cxx $<
-
 #generate private rdb
 $(BIN)/%.rdb: $(MISC)/%$($(WINVERSIONNAMES)_MAJOR).xml
     $(COMMAND_ECHO)$(RDBMAKER) -BUCR -O$(BIN)/$*.rdb @$(mktmp $(foreach,i,$($(@:b)_XML2CMPTYPES) -T$i ) $(COMPRDB))
