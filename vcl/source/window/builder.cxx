@@ -57,6 +57,8 @@ VclBuilder::VclBuilder(Window *pParent, OUString sUIDir, OUString sUIFile, OStri
     , m_pParent(pParent)
     , m_pParserState(new ParserState)
 {
+    m_bToplevelHasDeferredInit = (pParent && pParent->IsDialog()) ? ((Dialog*)pParent)->isDeferredInit() : false;
+
     sal_Int32 nIdx = m_sHelpRoot.lastIndexOf('.');
     if (nIdx != -1)
         m_sHelpRoot = m_sHelpRoot.copy(0, nIdx);
@@ -685,6 +687,7 @@ Window *VclBuilder::insertObject(Window *pParent, const OString &rClass, const O
         {
             Dialog *pDialog = (Dialog*)pCurrentChild;
             pDialog->doDeferredInit(extractResizable(rMap));
+            m_bToplevelHasDeferredInit = false;
         }
         if (pCurrentChild->GetHelpId().isEmpty())
         {
@@ -696,6 +699,11 @@ Window *VclBuilder::insertObject(Window *pParent, const OString &rClass, const O
     }
     else
     {
+        //if we're being inserting under a toplevel dialog whose init is
+        //deferred due to waiting to encounter it in this .ui, and it hasn't
+        //been seen yet, then make unattached widgets parent-less toplevels
+        if (pParent == m_pParent && m_bToplevelHasDeferredInit)
+            pParent = NULL;
         pCurrentChild = makeObject(pParent, rClass, rID, rMap);
     }
 

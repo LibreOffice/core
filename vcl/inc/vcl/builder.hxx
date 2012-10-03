@@ -116,6 +116,7 @@ private:
     OString m_sID;
     OString m_sHelpRoot;
     Window *m_pParent;
+    bool m_bToplevelHasDeferredInit;
     ParserState *m_pParserState;
 
     Window *get_by_name(OString sID);

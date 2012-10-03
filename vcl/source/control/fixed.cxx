@@ -949,7 +949,7 @@ WinBits FixedImage::ImplInitStyle( WinBits nStyle )
 void FixedImage::ImplInitSettings()
 {
     Window* pParent = GetParent();
-    if ( pParent->IsChildTransparentModeEnabled() && !IsControlBackground() )
+    if ( pParent && pParent->IsChildTransparentModeEnabled() && !IsControlBackground() )
     {
         EnableChildTransparentMode( sal_True );
         SetParentClipMode( PARENTCLIPMODE_NOCLIP );
@@ -964,7 +964,7 @@ void FixedImage::ImplInitSettings()
 
         if ( IsControlBackground() )
             SetBackground( GetControlBackground() );
-        else
+        else if ( pParent )
             SetBackground( pParent->GetBackground() );
     }
 }

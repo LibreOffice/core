@@ -1039,12 +1039,10 @@ void Window::ImplInsertWindow( Window* pParent )
     mpWindowImpl->mpParent            = pParent;
     mpWindowImpl->mpRealParent        = pParent;
 
-    Window* pFrameParent = NULL;
-    if (pParent && !mpWindowImpl->mbFrame)
-        pFrameParent = pParent->mpWindowImpl->mpFrameWindow;
-    if (pFrameParent)
+    if ( pParent && !mpWindowImpl->mbFrame )
     {
         // search frame window and set window frame data
+        Window* pFrameParent = pParent->mpWindowImpl->mpFrameWindow;
         mpWindowImpl->mpFrameData     = pFrameParent->mpWindowImpl->mpFrameData;
         mpWindowImpl->mpFrame         = pFrameParent->mpWindowImpl->mpFrame;
         mpWindowImpl->mpFrameWindow   = pFrameParent;
