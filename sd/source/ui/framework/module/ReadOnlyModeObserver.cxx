@@ -124,20 +124,6 @@ void SAL_CALL ReadOnlyModeObserver::disposing (void)
     pIterator->disposeAndClear(aEvent);
 }
 
-
-
-
-void ReadOnlyModeObserver::AddStatusListener (
-    const Reference<frame::XStatusListener>& rxListener)
-{
-    mpBroadcaster->addListener(
-        getCppuType((Reference<frame::XStatusListener>*)NULL),
-        rxListener);
-}
-
-
-
-
 bool ReadOnlyModeObserver::ConnectToDispatch (void)
 {
     if ( ! mxDispatch.is())

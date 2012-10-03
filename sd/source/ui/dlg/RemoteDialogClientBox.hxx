@@ -145,11 +145,6 @@ class ClientBox:
     //-----------------
     DECL_DLLPRIVATE_LINK( ScrollHdl, ScrollBar* );
 
-    //Index starts with 1.
-    //Throws an com::sun::star::lang::IllegalArgumentException, when the index is invalid.
-    void checkIndex(sal_Int32 pos) const;
-
-
 public:
                     ClientBox( Dialog* pParent, RemoteServer *pServer,
                                const SdResId& aId );
@@ -160,7 +155,6 @@ public:
     void    Resize();
     long    Notify( NotifyEvent& rNEvt );
 
-    const Size      GetMinOutputSizePixel() const;
     void            SetExtraSize( long nSize ) { m_nExtraHeight = nSize; }
     TClientBoxEntry     GetEntryData( long nPos ) { return m_vEntries[ nPos ]; }
     long            GetActiveEntryIndex();
@@ -172,16 +166,10 @@ public:
     void            DoScroll( long nDelta );
     void            SetHyperlinkHdl( const Link& rLink ){ m_aClickHdl = rLink; }
     void    RecalcAll();
-    void            RemoveUnlocked();
 
     //-----------------
     void    selectEntry( const long nPos );
     long            addEntry( ClientInfo* pClientInfo );
-    void            updateEntry( const ClientInfo* rPackageInfo );
-    void            removeEntry( const ClientInfo* rPackageInfo );
-
-    void            prepareChecking();
-    void            checkEntries();
 
     OUString getPin();
 

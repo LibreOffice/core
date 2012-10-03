@@ -71,17 +71,6 @@ public:
 
     virtual void SAL_CALL disposing (void);
 
-
-    /** Add a status listener that is called when the state of the
-        .uno:EditDoc command changes.  Note that the listener has to take
-        into account both the IsEnabled and the State fields of the
-        FeatureStateEvent.  Only when IsEnabled is true then the State field
-        is valid.
-    */
-    void AddStatusListener (
-        const ::com::sun::star::uno::Reference<
-            com::sun::star::frame::XStatusListener>& rxListener);
-
     // XEventListener
 
     virtual void SAL_CALL disposing (
