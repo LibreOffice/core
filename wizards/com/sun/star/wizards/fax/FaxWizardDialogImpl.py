@@ -302,15 +302,15 @@ class FaxWizardDialogImpl(FaxWizardDialog):
                 self.sFaxPath)
             self.PrivateFiles = FileAccess.getFolderTitles(xMSF, "pri",
                 self.sFaxPath)
+            
             self.setControlProperty("lstBusinessStyle", "StringItemList",
-                tuple(self.BusinessFiles[0]))
+                tuple(self.BusinessFiles.keys()))
             self.setControlProperty("lstPrivateStyle", "StringItemList",
-                tuple(self.PrivateFiles[0]))
+                tuple(self.PrivateFiles.keys()))
             self.setControlProperty("lstBusinessStyle", "SelectedItems", (0,))
             self.setControlProperty("lstPrivateStyle", "SelectedItems" , (0,))
             return True
         except NoValidPathException, e:
-            # TODO Auto-generated catch block
             traceback.print_exc()
             return False
 
@@ -457,7 +457,7 @@ class FaxWizardDialogImpl(FaxWizardDialog):
         if FaxWizardDialogImpl.lstBusinessStylePos is not selectedItemPos:
             FaxWizardDialogImpl.lstBusinessStylePos = selectedItemPos
             TextDocument.xTextDocument = self.myFaxDoc.loadAsPreview(
-                self.BusinessFiles[1][selectedItemPos], False)
+                self.BusinessFiles.values()[selectedItemPos], False)
             self.initializeElements()
             self.setElements()
             self.drawConstants()
@@ -482,7 +482,7 @@ class FaxWizardDialogImpl(FaxWizardDialog):
         if FaxWizardDialogImpl.lstPrivateStylePos is not selectedItemPos:
             FaxWizardDialogImpl.lstPrivateStylePos = selectedItemPos
             TextDocument.xTextDocument = self.myFaxDoc.loadAsPreview(
-                self.PrivateFiles[1][selectedItemPos], False)
+                self.PrivateFiles.values()[selectedItemPos], False)
             self.initializeElements()
             self.setElements()
 
