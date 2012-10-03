@@ -140,6 +140,26 @@ class FaxWizardDialogResources(Resource):
             FaxWizardDialogResources.RID_FAXWIZARDDIALOG_START + 47),
         FaxWizardDialogResources.resConsist3PlaceHolder : self.getResText(
             FaxWizardDialogResources.RID_FAXWIZARDDIALOG_START + 48)}
+
+        #Create a dictionary for localising the private template
+        self.dictPrivateTemplate = {
+        "Bottle" : self.getResText(
+            FaxWizardDialogResources.RID_FAXWIZARDDIALOG_START + 49),
+        "Lines" : self.getResText(
+            FaxWizardDialogResources.RID_FAXWIZARDDIALOG_START + 50),
+        "Marine" : self.getResText(
+            FaxWizardDialogResources.RID_FAXWIZARDDIALOG_START + 51)}
+
+        #Create a dictionary for localising the business template
+        self.dictBusinessTemplate = {
+        "Classic Fax" : self.getResText(
+            FaxWizardDialogResources.RID_FAXWIZARDDIALOG_START + 52),
+        "Classic Fax from Private" : self.getResText(
+            FaxWizardDialogResources.RID_FAXWIZARDDIALOG_START + 53),
+        "Modern Fax" : self.getResText(
+            FaxWizardDialogResources.RID_FAXWIZARDDIALOG_START + 54),
+        "Modern Fax from Private" : self.getResText(
+            FaxWizardDialogResources.RID_FAXWIZARDDIALOG_START + 55)}
         
         #Common Resources
         self.resOverwriteWarning = self.getResText(

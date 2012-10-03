@@ -299,9 +299,9 @@ class FaxWizardDialogImpl(FaxWizardDialog):
                 "/wizard/fax")
             self.sWorkPath = FileAccess.getOfficePath2(xMSF, "Work", "", "")
             self.BusinessFiles = FileAccess.getFolderTitles(xMSF, "bus",
-                self.sFaxPath)
+                self.sFaxPath, self.resources.dictBusinessTemplate)
             self.PrivateFiles = FileAccess.getFolderTitles(xMSF, "pri",
-                self.sFaxPath)
+                self.sFaxPath, self.resources.dictPrivateTemplate)
             
             self.setControlProperty("lstBusinessStyle", "StringItemList",
                 tuple(self.BusinessFiles.keys()))
@@ -327,17 +327,17 @@ class FaxWizardDialogImpl(FaxWizardDialog):
         self.myFaxDoc.updateDateFields()
 
     def initializeSalutation(self):
-        #'Saludation' dropdown list
+        #'Saludation' listbox
         self.setControlProperty("lstSalutation", "StringItemList",
             tuple(self.resources.SalutationLabels))
 
     def initializeGreeting(self):
-        #'Complimentary Close' dropdown list
+        #'Complimentary Close' listbox
         self.setControlProperty("lstGreeting", "StringItemList",
             tuple(self.resources.GreetingLabels))
 
     def initializeCommunication(self):
-        #'Type of message' dropdown list
+        #'Type of message' listbox
         self.setControlProperty("lstCommunicationType", "StringItemList",
             tuple(self.resources.CommunicationLabels))
 
