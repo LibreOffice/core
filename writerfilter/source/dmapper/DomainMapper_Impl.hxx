@@ -554,7 +554,8 @@ public:
 
     void appendTableHandler( )
     {
-        if (m_pTableHandler.get())
+        // For -3-5, support tables in substreams only for RTF
+        if (m_pTableHandler.get() && IsRTFImport())
             m_aTableManagers.top()->setHandler(m_pTableHandler);
     }
 
