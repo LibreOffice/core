@@ -475,6 +475,7 @@ void VclGrid::calcMaxs(const array_type &A, std::vector<Value> &rWidths, std::ve
     rWidths.resize(nMaxX);
     rHeights.resize(nMaxY);
 
+    //first use the non spanning entries to set default width/heights
     for (sal_Int32 x = 0; x < nMaxX; ++x)
     {
         for (sal_Int32 y = 0; y < nMaxY; ++y)
@@ -483,20 +484,102 @@ void VclGrid::calcMaxs(const array_type &A, std::vector<Value> &rWidths, std::ve
             const Window *pChild = rEntry.pChild;
             if (!pChild)
                 continue;
-            Size aChildSize = getLayoutRequisition(*pChild);
 
             sal_Int32 nWidth = rEntry.nSpanWidth;
+            sal_Int32 nHeight = rEntry.nSpanHeight;
+
             for (sal_Int32 nSpanX = 0; nSpanX < nWidth; ++nSpanX)
-            {
-                rWidths[x+nSpanX].m_nValue = std::max(rWidths[x+nSpanX].m_nValue, aChildSize.Width()/nWidth);
                 rWidths[x+nSpanX].m_bExpand = rWidths[x+nSpanX].m_bExpand | pChild->get_hexpand();
+
+            for (sal_Int32 nSpanY = 0; nSpanY < nHeight; ++nSpanY)
+                rHeights[y+nSpanY].m_bExpand = rHeights[y+nSpanY].m_bExpand | pChild->get_vexpand();
+
+            if (nWidth == 1 || nHeight == 1)
+            {
+                Size aChildSize = getLayoutRequisition(*pChild);
+                if (nWidth == 1)
+                    rWidths[x].m_nValue = std::max(rWidths[x].m_nValue, aChildSize.Width());
+                if (nHeight == 1)
+                    rHeights[y].m_nValue = std::max(rHeights[y].m_nValue, aChildSize.Height());
+            }
+        }
+    }
+
+    //now use the spanning entries and split any extra sizes across expanding rows/cols
+    //where possible
+    for (sal_Int32 x = 0; x < nMaxX; ++x)
+    {
+        for (sal_Int32 y = 0; y < nMaxY; ++y)
+        {
+            const GridEntry &rEntry = A[x][y];
+            const Window *pChild = rEntry.pChild;
+            if (!pChild)
+                continue;
+
+            sal_Int32 nWidth = rEntry.nSpanWidth;
+            sal_Int32 nHeight = rEntry.nSpanHeight;
+
+            if (nWidth == 1 && nHeight == 1)
+                continue;
+
+            Size aChildSize = getLayoutRequisition(*pChild);
+
+            if (nWidth > 1)
+            {
+                sal_Int32 nExistingWidth = 0;
+                for (sal_Int32 nSpanX = 0; nSpanX < nWidth; ++nSpanX)
+                    nExistingWidth += rWidths[x+nSpanX].m_nValue;
+
+                sal_Int32 nExtraWidth = aChildSize.Width() - nExistingWidth;
+
+                if (nExtraWidth > 0)
+                {
+                    bool bForceExpandAll = false;
+                    sal_Int32 nExpandables = 0;
+                    for (sal_Int32 nSpanX = 0; nSpanX < nWidth; ++nSpanX)
+                        if (rWidths[x+nSpanX].m_bExpand)
+                            ++nExpandables;
+                    if (nExpandables == 0)
+                    {
+                        nExpandables = nWidth;
+                        bForceExpandAll = true;
+                    }
+
+                    for (sal_Int32 nSpanX = 0; nSpanX < nWidth; ++nSpanX)
+                    {
+                        if (rWidths[x+nSpanX].m_bExpand || bForceExpandAll)
+                            rWidths[x+nSpanX].m_nValue += nExtraWidth/nExpandables;
+                    }
+                }
             }
 
-            sal_Int32 nHeight = rEntry.nSpanHeight;
-            for (sal_Int32 nSpanY = 0; nSpanY < nHeight; ++nSpanY)
+            if (nHeight > 1)
             {
-                rHeights[y+nSpanY].m_nValue = std::max(rHeights[y+nSpanY].m_nValue, aChildSize.Height()/nHeight);
-                rHeights[y+nSpanY].m_bExpand = rHeights[y+nSpanY].m_bExpand | pChild->get_vexpand();
+                sal_Int32 nExistingHeight = 0;
+                for (sal_Int32 nSpanY = 0; nSpanY < nHeight; ++nSpanY)
+                    nExistingHeight += rHeights[y+nSpanY].m_nValue;
+
+                sal_Int32 nExtraHeight = aChildSize.Height() - nExistingHeight;
+
+                if (nExtraHeight > 0)
+                {
+                    bool bForceExpandAll = false;
+                    sal_Int32 nExpandables = 0;
+                    for (sal_Int32 nSpanY = 0; nSpanY < nHeight; ++nSpanY)
+                        if (rWidths[y+nSpanY].m_bExpand)
+                            ++nExpandables;
+                    if (nExpandables == 0)
+                    {
+                        nExpandables = nHeight;
+                        bForceExpandAll = true;
+                    }
+
+                    for (sal_Int32 nSpanY = 0; nSpanY < nHeight; ++nSpanY)
+                    {
+                        if (rHeights[y+nSpanY].m_bExpand || bForceExpandAll)
+                            rHeights[y+nSpanY].m_nValue += nExtraHeight/nExpandables;
+                    }
+                }
             }
         }
     }
