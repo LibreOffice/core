@@ -146,12 +146,12 @@ void LngParser::WriteSDF(std::ofstream &aSDFStream,
    }
 }
 
-bool LngParser::isNextGroup(rtl::OString &sGroup_out, rtl::OString &sLine_in)
+bool LngParser::isNextGroup(rtl::OString &sGroup_out, const rtl::OString &sLine_in)
 {
-    sLine_in = sLine_in.trim();
-    if ((sLine_in[0] == '[') && (sLine_in[sLine_in.getLength() - 1] == ']'))
+    const OString sLineTrim = sLine_in.trim();
+    if ((sLineTrim[0] == '[') && (sLineTrim[sLineTrim.getLength() - 1] == ']'))
     {
-        sGroup_out = getBracketedContent(sLine_in).trim();
+        sGroup_out = getBracketedContent(sLineTrim).trim();
         return true;
     }
     return false;
@@ -160,10 +160,13 @@ bool LngParser::isNextGroup(rtl::OString &sGroup_out, rtl::OString &sLine_in)
 void LngParser::ReadLine(const rtl::OString &rLine_in,
         OStringHashMap &rText_inout)
 {
-    rtl::OString sLang(rLine_in.getToken(0, '=').trim());
-    if (!sLang.isEmpty()) {
-        rtl::OString sText(rLine_in.getToken(1, '"'));
-        rText_inout[sLang] = sText;
+    if (!rLine_in.match(" *") && !rLine_in.match("/*"))
+    {
+        rtl::OString sLang(rLine_in.getToken(0, '=').trim());
+        if (!sLang.isEmpty()) {
+            rtl::OString sText(rLine_in.getToken(1, '"'));
+            rText_inout[sLang] = sText;
+        }
     }
 }
 
