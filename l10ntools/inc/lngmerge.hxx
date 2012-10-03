@@ -44,7 +44,7 @@ private:
     sal_Bool bULF;
     std::vector<rtl::OString> aLanguages;
 
-    bool isNextGroup(rtl::OString &sGroup_out, rtl::OString &sLine_in);
+    bool isNextGroup(rtl::OString &sGroup_out, const rtl::OString &sLine_in);
     void ReadLine(const rtl::OString &rLine_in,
         OStringHashMap &rText_inout);
     void WriteSDF(std::ofstream &aSDFStream, OStringHashMap &rText_inout,
