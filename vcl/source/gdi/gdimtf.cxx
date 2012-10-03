@@ -1517,9 +1517,9 @@ Rectangle GDIMetaFile::GetBoundRect( OutputDevice& i_rReference, Rectangle* pHai
         *pHairline = Rectangle();
     }
 
-    const sal_uLong nCount(GetActionCount());
+    const sal_uLong nActionCount(GetActionCount());
 
-    for(sal_uLong a(0); a < nCount; a++)
+    for(sal_uLong a(0); a < nActionCount; a++)
     {
         MetaAction* pAction = GetAction(a);
         const sal_uInt16 nActionType = pAction->GetType();
