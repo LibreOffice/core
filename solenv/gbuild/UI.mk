@@ -16,13 +16,16 @@ gb_UILocalizeTarget_COMMAND := $(gb_Helper_set_ldpath) $(gb_UILocalizeTarget_TAR
 
 define gb_UILocalizeTarget__command
 $(call gb_Output_announce,$(2),$(true),UIX,1)
+MERGEINPUT=`$(gb_MKTEMP)` && \
+echo $(POFILES) > $${MERGEINPUT} && \
 $(call gb_Helper_abbreviate_dirs,\
 	$(gb_UILocalizeTarget_COMMAND) \
 		-i $(UI_FILE) \
 		-o $(1) \
 		-l $(UI_LANG) \
-		-m $(SDF) \
-)
+		-m $${MERGEINPUT} ) && \
+rm -rf $${MERGEINPUT}
+
 endef
 
 $(dir $(call gb_UILocalizeTarget_get_target,%))%/.dir :
@@ -42,11 +45,11 @@ $(call gb_UILocalizeTarget_get_clean_target,%) :
 #
 # gb_UILocalizeTarget_UILocalizeTarget target source lang
 define gb_UILocalizeTarget_UILocalizeTarget
-$(call gb_UILocalizeTarget_get_target,$(1)) : SDF := $(gb_SDFLOCATION)/$(dir $(2))localize.sdf
+$(call gb_UILocalizeTarget_get_target,$(1)) : POFILES := $(foreach lang,$(gb_UITarget_LANGS),$(gb_POLOCATION)/$(lang)/$(patsubst %/,%,$(dir $(2))).po)
 $(call gb_UILocalizeTarget_get_target,$(1)) : UI_FILE := $(SRCDIR)/$(2).ui
 $(call gb_UILocalizeTarget_get_target,$(1)) : UI_LANG := $(3)
 
-$(call gb_UILocalizeTarget_get_target,$(1)) : $$(SDF)
+$(call gb_UILocalizeTarget_get_target,$(1)) : $(foreach lang,$(gb_UITarget_LANGS),$(gb_POLOCATION)/$(lang)/$(patsubst %/,%,$(dir $(2))).po)
 $(call gb_UILocalizeTarget_get_target,$(1)) : $$(UI_FILE)
 $(call gb_UILocalizeTarget_get_target,$(1)) :| $(dir $(call gb_UILocalizeTarget_get_target,$(1))).dir
 
