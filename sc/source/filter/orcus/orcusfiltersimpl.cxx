@@ -173,12 +173,14 @@ bool ScOrcusFiltersImpl::importCSV(ScDocument& rDoc, const OUString& rPath) cons
     return true;
 }
 
-void populateTree(SvTreeListBox& rTree, orcus::xml_structure_tree::walker& rWalker, const orcus::xml_structure_tree::element_name& rElemName, SvLBoxEntry* pParent)
+void populateTree(
+   SvTreeListBox& rTreeCtrl, orcus::xml_structure_tree::walker& rWalker,
+   const orcus::xml_structure_tree::element_name& rElemName, SvLBoxEntry* pParent)
 {
     OUString aName(rElemName.name.get(), rElemName.name.size(), RTL_TEXTENCODING_UTF8);
-    SvLBoxEntry* pEntry = rTree.InsertEntry(aName, pParent);
+    SvLBoxEntry* pEntry = rTreeCtrl.InsertEntry(aName, pParent);
     if (pParent)
-        rTree.Expand(pParent);
+        rTreeCtrl.Expand(pParent);
 
     orcus::xml_structure_tree::element_names_type aChildElements;
     rWalker.get_children(aChildElements);
@@ -188,12 +190,12 @@ void populateTree(SvTreeListBox& rTree, orcus::xml_structure_tree::walker& rWalk
     for (; it != itEnd; ++it)
     {
         rWalker.descend(*it);
-        populateTree(rTree, rWalker, *it, pEntry);
+        populateTree(rTreeCtrl, rWalker, *it, pEntry);
         rWalker.ascend();
     }
 }
 
-bool ScOrcusFiltersImpl::loadXMLStructure(const OUString& rPath, SvTreeListBox& rTree) const
+bool ScOrcusFiltersImpl::loadXMLStructure(const OUString& rPath, SvTreeListBox& rTreeCtrl) const
 {
     INetURLObject aURL(rPath);
     OString aSysPath = rtl::OUStringToOString(aURL.getFSysPath(SYSTEM_PATH), RTL_TEXTENCODING_UTF8);
@@ -207,24 +209,24 @@ bool ScOrcusFiltersImpl::loadXMLStructure(const OUString& rPath, SvTreeListBox& 
         return false;
 
     orcus::xmlns_repository aNsRepo; // xml namespace repository.
-    orcus::xml_structure_tree aTree(aNsRepo);
+    orcus::xml_structure_tree aXmlTree(aNsRepo);
     try
     {
-        aTree.parse(&aStrm[0], aStrm.size());
+        aXmlTree.parse(&aStrm[0], aStrm.size());
+
+        rTreeCtrl.Clear();
+
+        orcus::xml_structure_tree::walker aWalker = aXmlTree.get_walker();
+
+        // Root element.
+        orcus::xml_structure_tree::element aElem = aWalker.root();
+        populateTree(rTreeCtrl, aWalker, aElem.name, NULL);
     }
     catch (const std::exception&)
     {
         // Parsing of this XML file failed.
         return false;
     }
-
-    rTree.Clear();
-
-    orcus::xml_structure_tree::walker aWalker = aTree.get_walker();
-
-    // Root element.
-    orcus::xml_structure_tree::element aElem = aWalker.root();
-    populateTree(rTree, aWalker, aElem.name, NULL);
 
     return true;
 }
