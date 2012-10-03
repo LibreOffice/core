@@ -17,7 +17,9 @@ class ScOrcusFiltersImpl : public ScOrcusFilters
 public:
     virtual bool importCSV(ScDocument& rDoc, const rtl::OUString& rPath) const;
 
-    virtual bool loadXMLStructure(const rtl::OUString& rPath, SvTreeListBox& rTree) const;
+    virtual bool loadXMLStructure(
+       SvTreeListBox& rTreeCtrl, const rtl::OUString& rPath,
+       const Image& rImgDefaultElem, const Image& rImgRepeatElem) const;
 };
 
 #endif

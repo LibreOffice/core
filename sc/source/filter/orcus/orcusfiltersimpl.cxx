@@ -175,12 +175,18 @@ bool ScOrcusFiltersImpl::importCSV(ScDocument& rDoc, const OUString& rPath) cons
 
 void populateTree(
    SvTreeListBox& rTreeCtrl, orcus::xml_structure_tree::walker& rWalker,
-   const orcus::xml_structure_tree::element_name& rElemName, bool bRepeat, SvLBoxEntry* pParent)
+   const orcus::xml_structure_tree::element_name& rElemName, bool bRepeat, const Image& rImgRepeatElem, SvLBoxEntry* pParent)
 {
     // TODO: Make use of bRepeat flag.
 
     OUString aName(rElemName.name.get(), rElemName.name.size(), RTL_TEXTENCODING_UTF8);
     SvLBoxEntry* pEntry = rTreeCtrl.InsertEntry(aName, pParent);
+    if (bRepeat)
+    {
+        rTreeCtrl.SetExpandedEntryBmp(pEntry, rImgRepeatElem);
+        rTreeCtrl.SetCollapsedEntryBmp(pEntry, rImgRepeatElem);
+    }
+
     if (pParent)
         rTreeCtrl.Expand(pParent);
 
@@ -192,12 +198,13 @@ void populateTree(
     for (; it != itEnd; ++it)
     {
         orcus::xml_structure_tree::element aElem = rWalker.descend(*it);
-        populateTree(rTreeCtrl, rWalker, *it, aElem.repeat, pEntry);
+        populateTree(rTreeCtrl, rWalker, *it, aElem.repeat, rImgRepeatElem, pEntry);
         rWalker.ascend();
     }
 }
 
-bool ScOrcusFiltersImpl::loadXMLStructure(const OUString& rPath, SvTreeListBox& rTreeCtrl) const
+bool ScOrcusFiltersImpl::loadXMLStructure(
+   SvTreeListBox& rTreeCtrl, const rtl::OUString& rPath, const Image& rImgDefaultElem, const Image& rImgRepeatElem) const
 {
     INetURLObject aURL(rPath);
     OString aSysPath = rtl::OUStringToOString(aURL.getFSysPath(SYSTEM_PATH), RTL_TEXTENCODING_UTF8);
@@ -217,12 +224,14 @@ bool ScOrcusFiltersImpl::loadXMLStructure(const OUString& rPath, SvTreeListBox& 
         aXmlTree.parse(&aStrm[0], aStrm.size());
 
         rTreeCtrl.Clear();
+        rTreeCtrl.SetDefaultCollapsedEntryBmp(rImgDefaultElem);
+        rTreeCtrl.SetDefaultExpandedEntryBmp(rImgDefaultElem);
 
         orcus::xml_structure_tree::walker aWalker = aXmlTree.get_walker();
 
         // Root element.
         orcus::xml_structure_tree::element aElem = aWalker.root();
-        populateTree(rTreeCtrl, aWalker, aElem.name, aElem.repeat, NULL);
+        populateTree(rTreeCtrl, aWalker, aElem.name, aElem.repeat, rImgRepeatElem, NULL);
     }
     catch (const std::exception&)
     {

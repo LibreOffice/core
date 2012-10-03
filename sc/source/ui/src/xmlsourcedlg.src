@@ -62,6 +62,12 @@ ModalDialog RID_SCDLG_XML_SOURCE
         MaskColor = STD_MASKCOLOR ;
     };
 
+    Image IMG_ELEMENT_REPEAT
+    {
+        ImageBitmap = Bitmap { File = "pages.png" ; };
+        MaskColor = STD_MASKCOLOR ;
+    };
+
     Image IMG_FILE_OPEN
     {
         ImageBitmap = Bitmap { File = "file.png" ; };

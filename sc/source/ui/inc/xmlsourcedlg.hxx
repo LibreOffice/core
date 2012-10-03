@@ -23,8 +23,6 @@ class ScDocument;
 
 class ScXMLSourceTree : public SvTreeListBox
 {
-    Image maImgElemDefault;
-    Image maImgElemRepeat;
 public:
     ScXMLSourceTree(Window* pParent, const ResId& rResId);
 };
@@ -42,6 +40,8 @@ class ScXMLSourceDlg : public ModalDialog
     CancelButton maBtnCancel;
 
     Image maImgFileOpen;
+    Image maImgElemDefault;
+    Image maImgElemRepeat;
 
     ScDocument* mpDoc;
 

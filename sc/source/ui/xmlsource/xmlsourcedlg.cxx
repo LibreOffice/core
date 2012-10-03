@@ -23,13 +23,7 @@ using namespace com::sun::star;
 
 
 ScXMLSourceTree::ScXMLSourceTree(Window* pParent, const ResId& rResId) :
-    SvTreeListBox(pParent, rResId),
-    maImgElemDefault(ScResId(IMG_ELEMENT_DEFAULT)),
-    maImgElemRepeat(ScResId(IMG_ELEMENT_REPEAT))
-{
-    SetDefaultExpandedEntryBmp(maImgElemDefault);
-    SetDefaultCollapsedEntryBmp(maImgElemDefault);
-}
+    SvTreeListBox(pParent, rResId) {}
 
 ScXMLSourceDlg::ScXMLSourceDlg(Window* pParent, ScDocument* pDoc) :
     ModalDialog(pParent, ScResId(RID_SCDLG_XML_SOURCE)),
@@ -40,6 +34,8 @@ ScXMLSourceDlg::ScXMLSourceDlg(Window* pParent, ScDocument* pDoc) :
     maLbTree(this, ScResId(LB_SOURCE_TREE)),
     maBtnCancel(this, ScResId(BTN_CANCEL)),
     maImgFileOpen(ScResId(IMG_FILE_OPEN)),
+    maImgElemDefault(ScResId(IMG_ELEMENT_DEFAULT)),
+    maImgElemRepeat(ScResId(IMG_ELEMENT_REPEAT)),
     mpDoc(pDoc)
 {
     maBtnSelectSource.SetModeImage(maImgFileOpen);
@@ -84,7 +80,7 @@ void ScXMLSourceDlg::LoadSourceFileStructure(const OUString& rPath)
     if (!pOrcus)
         return;
 
-    pOrcus->loadXMLStructure(rPath, maLbTree);
+    pOrcus->loadXMLStructure(maLbTree, rPath, maImgElemDefault, maImgElemRepeat);
 }
 
 IMPL_LINK(ScXMLSourceDlg, BtnPressedHdl, Button*, pBtn)
