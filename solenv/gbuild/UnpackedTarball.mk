@@ -100,7 +100,7 @@ endef
 
 # This is what dmake patches use. Once all external modules are
 # converted, it is better to be changed to 1.
-gb_UnpackedTarball_PATCHLEVEL_DEFAULT := 3
+gb_UnpackedTarball_PATCHLEVEL_DEFAULT := 2
 
 gb_UnpackedTarball_CONVERTTODOS = \
 	$(gb_AWK) 'sub("$$","\r")' $(1) > $(1).TEMP && mv $(1).TEMP $(1)
