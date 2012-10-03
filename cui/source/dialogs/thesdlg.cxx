@@ -66,7 +66,7 @@ using ::rtl::OUString;
 // class LookUpComboBox_Impl --------------------------------------------------
 
 LookUpComboBox_Impl::LookUpComboBox_Impl(
-    Window *pParent, const ResId &rResId, SvxThesaurusDialog_Impl &rImpl ) :
+    Window *pParent, const ResId &rResId, SvxThesaurusDialog &rImpl ) :
     ComboBox        (pParent, rResId),
     m_rDialogImpl( rImpl )
 {
@@ -156,7 +156,7 @@ void AlternativesString_Impl::Paint(
 
 ThesaurusAlternativesCtrl_Impl::ThesaurusAlternativesCtrl_Impl(
         Window* pParent,
-        SvxThesaurusDialog_Impl &rImpl ) :
+        SvxThesaurusDialog &rImpl ) :
     SvxCheckListBox( pParent, CUI_RES( CT_THES_ALTERNATIVES ) ),
     m_rDialogImpl( rImpl )
 {
@@ -236,64 +236,22 @@ void ThesaurusAlternativesCtrl_Impl::KeyInput( const KeyEvent& rKEvt )
 
 void ThesaurusAlternativesCtrl_Impl::Paint( const Rectangle& rRect )
 {
-    if (!m_rDialogImpl.m_bWordFound)
+    if (!m_rDialogImpl.WordFound())
     {
-        Size aTextSize( GetTextWidth( m_rDialogImpl.aErrStr ), GetTextHeight() );
+        Size aTextSize( GetTextWidth( m_rDialogImpl.getErrStr() ), GetTextHeight() );
         aTextSize  = LogicToPixel( aTextSize );
         Point aPos;
         aPos.X() += GetSizePixel().Width() / 2  - aTextSize.Width() / 2;
         aPos.Y() += GetSizePixel().Height() / 2;
         aPos = PixelToLogic( aPos );
-        DrawText( aPos, m_rDialogImpl.aErrStr );
+        DrawText( aPos, m_rDialogImpl.getErrStr() );
 
     }
     else
         SvxCheckListBox::Paint( rRect );
 }
 
-// struct SvxThesaurusDialog_Impl ----------------------------------------
-
-SvxThesaurusDialog_Impl::SvxThesaurusDialog_Impl( SvxThesaurusDialog * pDialog ) :
-    m_pDialog       ( pDialog ),
-    aVendorImageFI  ( pDialog, CUI_RES( IMG_VENDOR ) ),
-    aLeftBtn        ( pDialog, CUI_RES( BTN_LEFT ) ),
-    aWordText       ( pDialog, CUI_RES( FT_WORD ) ),
-    aWordCB         ( pDialog, CUI_RES( CB_WORD ), *this ),
-    m_aAlternativesText  ( pDialog, CUI_RES( FT_THES_ALTERNATIVES ) ),
-    m_pAlternativesCT    ( new ThesaurusAlternativesCtrl_Impl( pDialog, *this ) ),
-    aReplaceText    ( pDialog, CUI_RES( FT_REPL ) ),
-    aReplaceEdit    ( pDialog, CUI_RES( ED_REPL ) ),
-    aFL             ( pDialog, CUI_RES( FL_VAR ) ),
-    aHelpBtn        ( pDialog, CUI_RES( BTN_THES_HELP ) ),
-    aLangMBtn       ( pDialog, CUI_RES( MB_LANGUAGE ) ),
-    aReplaceBtn     ( pDialog, CUI_RES( BTN_THES_OK ) ),
-    aCancelBtn      ( pDialog, CUI_RES( BTN_THES_CANCEL ) ),
-    aErrStr                 ( CUI_RES( STR_ERR_TEXTNOTFOUND ) ),
-    aVendorDefaultImage     ( CUI_RES( IMG_DEFAULT_VENDOR ) ),
-    xThesaurus      ( NULL ),
-    aLookUpText     (),
-    nLookUpLanguage ( LANGUAGE_NONE ),
-    m_bWordFound( false )
-{
-    // note: FreeResource must only be called in the c-tor of SvxThesaurusDialog
-
-    aReplaceEdit.SetButton( &aReplaceBtn );
-
-    aLeftBtn.SetClickHdl( LINK( this, SvxThesaurusDialog_Impl, LeftBtnHdl_Impl ) );
-    aWordCB.SetSelectHdl( LINK( this, SvxThesaurusDialog_Impl, WordSelectHdl_Impl ) );
-    aLangMBtn.SetSelectHdl( LINK( this, SvxThesaurusDialog_Impl, LanguageHdl_Impl ) );
-    m_pAlternativesCT->SetSelectHdl( LINK( this, SvxThesaurusDialog_Impl, AlternativesSelectHdl_Impl ));
-    m_pAlternativesCT->SetDoubleClickHdl( LINK( this, SvxThesaurusDialog_Impl, AlternativesDoubleClickHdl_Impl ));
-
-    Application::PostUserEvent( STATIC_LINK( this, SvxThesaurusDialog_Impl, VendorImageInitHdl ) );
-}
-
-SvxThesaurusDialog_Impl::~SvxThesaurusDialog_Impl()
-{
-    delete aLangMBtn.GetPopupMenu();
-}
-
-uno::Sequence< uno::Reference< linguistic2::XMeaning > > SAL_CALL SvxThesaurusDialog_Impl::queryMeanings_Impl(
+uno::Sequence< uno::Reference< linguistic2::XMeaning > > SvxThesaurusDialog::queryMeanings_Impl(
         OUString& rTerm,
         const lang::Locale& rLocale,
         const beans::PropertyValues& rProperties )
@@ -319,7 +277,7 @@ uno::Sequence< uno::Reference< linguistic2::XMeaning > > SAL_CALL SvxThesaurusDi
     return aMeanings;
 }
 
-bool SvxThesaurusDialog_Impl::UpdateAlternativesBox_Impl()
+bool SvxThesaurusDialog::UpdateAlternativesBox_Impl()
 {
     lang::Locale aLocale( SvxCreateLocale( nLookUpLanguage ) );
     uno::Sequence< uno::Reference< linguistic2::XMeaning > > aMeanings = queryMeanings_Impl(
@@ -352,14 +310,14 @@ bool SvxThesaurusDialog_Impl::UpdateAlternativesBox_Impl()
     return nMeanings > 0;
 }
 
-void SvxThesaurusDialog_Impl::LookUp( const String &rText )
+void SvxThesaurusDialog::LookUp( const String &rText )
 {
     if (rText != aWordCB.GetText()) // avoid moving of the cursor if the text is the same
         aWordCB.SetText( rText );
     LookUp_Impl();
 }
 
-IMPL_LINK( SvxThesaurusDialog_Impl, LeftBtnHdl_Impl, Button *, pBtn )
+IMPL_LINK( SvxThesaurusDialog, LeftBtnHdl_Impl, Button *, pBtn )
 {
     if (pBtn && aLookUpHistory.size() >= 2)
     {
@@ -371,7 +329,7 @@ IMPL_LINK( SvxThesaurusDialog_Impl, LeftBtnHdl_Impl, Button *, pBtn )
     return 0;
 }
 
-IMPL_LINK( SvxThesaurusDialog_Impl, LanguageHdl_Impl, MenuButton *, pBtn )
+IMPL_LINK( SvxThesaurusDialog, LanguageHdl_Impl, MenuButton *, pBtn )
 {
     PopupMenu *pMenu = aLangMBtn.GetPopupMenu();
     if (pMenu && pBtn)
@@ -382,14 +340,14 @@ IMPL_LINK( SvxThesaurusDialog_Impl, LanguageHdl_Impl, MenuButton *, pBtn )
         DBG_ASSERT( nLang != LANGUAGE_NONE && nLang != LANGUAGE_DONTKNOW, "failed to get language" );
         if (xThesaurus->hasLocale( SvxCreateLocale( nLang ) ))
             nLookUpLanguage = nLang;
-        m_pDialog->SetWindowTitle( nLang );
+        SetWindowTitle( nLang );
         UpdateVendorImage();
         LookUp_Impl();
     }
     return 0;
 }
 
-void SvxThesaurusDialog_Impl::LookUp_Impl()
+void SvxThesaurusDialog::LookUp_Impl()
 {
     String aText( aWordCB.GetText() );
 
@@ -408,7 +366,7 @@ void SvxThesaurusDialog_Impl::LookUp_Impl()
     aLeftBtn.Enable( aLookUpHistory.size() > 1 );
 }
 
-IMPL_LINK( SvxThesaurusDialog_Impl, WordSelectHdl_Impl, ComboBox *, pBox )
+IMPL_LINK( SvxThesaurusDialog, WordSelectHdl_Impl, ComboBox *, pBox )
 {
     if (pBox && !aWordCB.IsTravelSelect())  // act only upon return key and not when traveling with cursor keys
     {
@@ -422,7 +380,7 @@ IMPL_LINK( SvxThesaurusDialog_Impl, WordSelectHdl_Impl, ComboBox *, pBox )
     return 0;
 }
 
-IMPL_LINK( SvxThesaurusDialog_Impl, AlternativesSelectHdl_Impl, SvxCheckListBox *, pBox )
+IMPL_LINK( SvxThesaurusDialog, AlternativesSelectHdl_Impl, SvxCheckListBox *, pBox )
 {
     SvLBoxEntry *pEntry = pBox ? pBox->GetCurEntry() : NULL;
     if (pEntry)
@@ -439,7 +397,7 @@ IMPL_LINK( SvxThesaurusDialog_Impl, AlternativesSelectHdl_Impl, SvxCheckListBox 
     return 0;
 }
 
-IMPL_LINK( SvxThesaurusDialog_Impl, AlternativesDoubleClickHdl_Impl, SvxCheckListBox *, pBox )
+IMPL_LINK( SvxThesaurusDialog, AlternativesDoubleClickHdl_Impl, SvxCheckListBox *, pBox )
 {
     SvLBoxEntry *pEntry = pBox ? pBox->GetCurEntry() : NULL;
     if (pEntry)
@@ -459,11 +417,11 @@ IMPL_LINK( SvxThesaurusDialog_Impl, AlternativesDoubleClickHdl_Impl, SvxCheckLis
 
     //! workaround to set the selection since calling SelectEntryPos within
     //! the double click handler does not work
-    Application::PostUserEvent( STATIC_LINK( this, SvxThesaurusDialog_Impl, SelectFirstHdl_Impl ), pBox );
+    Application::PostUserEvent( STATIC_LINK( this, SvxThesaurusDialog, SelectFirstHdl_Impl ), pBox );
     return 0;
 }
 
-IMPL_STATIC_LINK( SvxThesaurusDialog_Impl, SelectFirstHdl_Impl, SvxCheckListBox *, pBox )
+IMPL_STATIC_LINK( SvxThesaurusDialog, SelectFirstHdl_Impl, SvxCheckListBox *, pBox )
 {
     (void) pThis;
     if (pBox && pBox->GetEntryCount() >= 2)
@@ -521,9 +479,9 @@ static String lcl_GetThesImplName( const lang::Locale &rLocale )
     return aRes;
 }
 
-void SvxThesaurusDialog_Impl::UpdateVendorImage()
+void SvxThesaurusDialog::UpdateVendorImage()
 {
-    m_pDialog->SetUpdateMode( sal_False );
+    SetUpdateMode( sal_False );
 
     SvtLinguConfig aCfg;
     if (aCfg.HasVendorImages( "ThesaurusDialogImage" ))
@@ -538,12 +496,12 @@ void SvxThesaurusDialog_Impl::UpdateVendorImage()
         aVendorImageFI.SetImage( aImage );
     }
 
-    m_pDialog->SetUpdateMode( sal_True );
+    SetUpdateMode( sal_True );
 }
 
-IMPL_STATIC_LINK( SvxThesaurusDialog_Impl, VendorImageInitHdl, SvxThesaurusDialog_Impl *, EMPTYARG )
+IMPL_STATIC_LINK( SvxThesaurusDialog, VendorImageInitHdl, SvxThesaurusDialog*, EMPTYARG )
 {
-    pThis->m_pDialog->SetUpdateMode( sal_False );
+    pThis->SetUpdateMode( sal_False );
 
     SvtLinguConfig aCfg;
     if (aCfg.HasVendorImages( "ThesaurusDialogImage" ))
@@ -587,14 +545,14 @@ IMPL_STATIC_LINK( SvxThesaurusDialog_Impl, VendorImageInitHdl, SvxThesaurusDialo
             aControls[nControl]->SetPosPixel(aPos);
             ++nControl;
         }
-        Size aDlgSize = pThis->m_pDialog->GetSizePixel();
+        Size aDlgSize = pThis->GetSizePixel();
         aDlgSize.Height() += nDiff;
-        pThis->m_pDialog->SetSizePixel( aDlgSize );
-        pThis->m_pDialog->Invalidate();
+        pThis->SetSizePixel( aDlgSize );
+        pThis->Invalidate();
     }
 
     pThis->UpdateVendorImage();
-    pThis->m_pDialog->SetUpdateMode( sal_True );
+    pThis->SetUpdateMode( sal_True );
 
     return 0;
 };
@@ -607,15 +565,43 @@ SvxThesaurusDialog::SvxThesaurusDialog(
     const String &rWord,
     LanguageType nLanguage ) :
 
-    SvxStandardDialog( pParent, CUI_RES( RID_SVXDLG_THESAURUS ) )
-{
-    m_pImpl = std::auto_ptr< SvxThesaurusDialog_Impl >(new SvxThesaurusDialog_Impl( this ));
+    SvxStandardDialog( pParent, CUI_RES( RID_SVXDLG_THESAURUS ) ),
 
-    m_pImpl->xThesaurus = xThes;
-    m_pImpl->aLookUpText = OUString( rWord );
-    m_pImpl->nLookUpLanguage = nLanguage;
+    aVendorImageFI  ( this, CUI_RES( IMG_VENDOR ) ),
+    aLeftBtn        ( this, CUI_RES( BTN_LEFT ) ),
+    aWordText       ( this, CUI_RES( FT_WORD ) ),
+    aWordCB         ( this, CUI_RES( CB_WORD ), *this ),
+    m_aAlternativesText  ( this, CUI_RES( FT_THES_ALTERNATIVES ) ),
+    m_pAlternativesCT    ( new ThesaurusAlternativesCtrl_Impl( this, *this ) ),
+    aReplaceText    ( this, CUI_RES( FT_REPL ) ),
+    aReplaceEdit    ( this, CUI_RES( ED_REPL ) ),
+    aFL             ( this, CUI_RES( FL_VAR ) ),
+    aHelpBtn        ( this, CUI_RES( BTN_THES_HELP ) ),
+    aLangMBtn       ( this, CUI_RES( MB_LANGUAGE ) ),
+    aReplaceBtn     ( this, CUI_RES( BTN_THES_OK ) ),
+    aCancelBtn      ( this, CUI_RES( BTN_THES_CANCEL ) ),
+    aErrStr                 ( CUI_RES( STR_ERR_TEXTNOTFOUND ) ),
+    aVendorDefaultImage     ( CUI_RES( IMG_DEFAULT_VENDOR ) ),
+    xThesaurus      ( NULL ),
+    aLookUpText     (),
+    nLookUpLanguage ( LANGUAGE_NONE ),
+    m_bWordFound( false )
+{
+    aReplaceEdit.SetButton( &aReplaceBtn );
+
+    aLeftBtn.SetClickHdl( LINK( this, SvxThesaurusDialog, LeftBtnHdl_Impl ) );
+    aWordCB.SetSelectHdl( LINK( this, SvxThesaurusDialog, WordSelectHdl_Impl ) );
+    aLangMBtn.SetSelectHdl( LINK( this, SvxThesaurusDialog, LanguageHdl_Impl ) );
+    m_pAlternativesCT->SetSelectHdl( LINK( this, SvxThesaurusDialog, AlternativesSelectHdl_Impl ));
+    m_pAlternativesCT->SetDoubleClickHdl( LINK( this, SvxThesaurusDialog, AlternativesDoubleClickHdl_Impl ));
+
+    Application::PostUserEvent( STATIC_LINK( this, SvxThesaurusDialog, VendorImageInitHdl ) );
+
+    xThesaurus = xThes;
+    aLookUpText = OUString( rWord );
+    nLookUpLanguage = nLanguage;
     if (rWord.Len() > 0)
-        m_pImpl->aLookUpHistory.push( rWord );
+        aLookUpHistory.push( rWord );
 
     FreeResource();
 
@@ -623,21 +609,21 @@ SvxThesaurusDialog::SvxThesaurusDialog(
     linguistic::RemoveHyphens( aTmp );
     linguistic::ReplaceControlChars( aTmp );
     String aTmp2( aTmp );
-    m_pImpl->aReplaceEdit.SetText( aTmp2 );
-    m_pImpl->aWordCB.InsertEntry( aTmp2 );
+    aReplaceEdit.SetText( aTmp2 );
+    aWordCB.InsertEntry( aTmp2 );
 
-    m_pImpl->LookUp( aTmp2 );
-    m_pImpl->m_pAlternativesCT->GrabFocus();
-    m_pImpl->aLeftBtn.Enable( sal_False );
+    LookUp( aTmp2 );
+    m_pAlternativesCT->GrabFocus();
+    aLeftBtn.Enable( sal_False );
 
     // fill language menu button list
     SvtLanguageTable aLangTab;
     uno::Sequence< lang::Locale > aLocales;
-    if (m_pImpl->xThesaurus.is())
-        aLocales = m_pImpl->xThesaurus->getLocales();
+    if (xThesaurus.is())
+        aLocales = xThesaurus->getLocales();
     const sal_Int32 nLocales = aLocales.getLength();
     const lang::Locale *pLocales = aLocales.getConstArray();
-    delete m_pImpl->aLangMBtn.GetPopupMenu();
+    delete aLangMBtn.GetPopupMenu();
     PopupMenu* pMenu = new PopupMenu;
     pMenu->SetMenuFlags( MENU_FLAG_NOAUTOMNEMONICS );
     std::vector< OUString > aLangVec;
@@ -650,17 +636,18 @@ SvxThesaurusDialog::SvxThesaurusDialog(
     std::sort( aLangVec.begin(), aLangVec.end() );
     for (size_t i = 0;  i < aLangVec.size();  ++i)
         pMenu->InsertItem( (sal_uInt16)i+1, aLangVec[i] );  // menu items should be enumerated from 1 and not 0
-    m_pImpl->aLangMBtn.SetPopupMenu( pMenu );
+    aLangMBtn.SetPopupMenu( pMenu );
 
     SetWindowTitle( nLanguage );
 
     // disable controls if service is missing
-    if (!m_pImpl->xThesaurus.is())
+    if (!xThesaurus.is())
         Enable( sal_False );
 }
 
 SvxThesaurusDialog::~SvxThesaurusDialog()
 {
+    delete aLangMBtn.GetPopupMenu();
 }
 
 void SvxThesaurusDialog::SetWindowTitle( LanguageType nLanguage )
@@ -676,12 +663,12 @@ void SvxThesaurusDialog::SetWindowTitle( LanguageType nLanguage )
 
 String SvxThesaurusDialog::GetWord()
 {
-    return m_pImpl->aReplaceEdit.GetText();
+    return aReplaceEdit.GetText();
 }
 
 sal_uInt16 SvxThesaurusDialog::GetLanguage() const
 {
-    return m_pImpl->nLookUpLanguage;
+    return nLookUpLanguage;
 }
 
 void SvxThesaurusDialog::Apply()
