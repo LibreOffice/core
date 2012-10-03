@@ -34,6 +34,7 @@
 
 #include <i18npool/lang.h>
 #include <i18npool/mslangid.hxx>
+#include <i18npool/languagetag.hxx>
 
 #include <svtools/svtools.hrc>
 #include <svtools/svtresid.hxx>
@@ -149,19 +150,14 @@ const rtl::OUString SvtLanguageTable::GetString( const LanguageType eType, bool 
 
     if ( RESARRAY_INDEX_NOTFOUND != nPos && nPos < Count() )
         return ResStringArray::GetString( nPos );
-    else
-    {
-        // If we knew what a simple "en" should alias to (en_US?) we could
-        // generally raise an error.
-        OSL_ENSURE(
-            eLang == LANGUAGE_ENGLISH, "language entry not found in resource" );
 
-        nPos = FindIndex( LANGUAGE_DONTKNOW );
-
-        if ( RESARRAY_INDEX_NOTFOUND != nPos && nPos < Count() )
-            return ResStringArray::GetString( nPos );
-    }
-    return rtl::OUString();
+    //Rather than return a fairly useless "Unknown" name, return a geeky but usable-in-a-pinch lang-tag
+    OUString sLangTag(LanguageTag(eType).getBcp47());
+    SAL_WARN("svtools", "Language: 0x"
+        << std::hex << eType
+        << " with unknown name, so returning lang-tag of: "
+        << sLangTag);
+    return sLangTag;
 }
 
 String SvtLanguageTable::GetLanguageString( const LanguageType eType )
