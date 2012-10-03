@@ -32,7 +32,7 @@ $(call gb_ExternalProject_get_state_target,saxon,build) :
 				-Dant.build.javac.target=$(JAVA_TARGET_VER) \
 		) \
 		$(if $(debug),-Dbuild.debug="on") \
-		-Dsolarbindir=$(SOLARBINDIR) jar-bj && \
+		-Dsolarbindir=$(OUTDIR)/bin jar-bj && \
 	touch $@
 
 # vim: set noet sw=4 ts=4:
