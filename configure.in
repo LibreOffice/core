@@ -2693,7 +2693,12 @@ if test "$_os" = "Darwin"; then
     AC_MSG_RESULT([SDK $with_macosx_sdk at $MACOSX_SDK_PATH])
 
     if test "$with_macosx_version_min_required" = ""; then
-        with_macosx_version_min_required="10.4"
+        case $with_macosx_sdk in
+        10.4|10.5)
+            with_macosx_version_min_required="10.4";;
+        *)
+            with_macosx_version_min_required="10.6";;
+        esac
     fi
 
     if test "$with_macosx_version_max_allowed" = ""; then
