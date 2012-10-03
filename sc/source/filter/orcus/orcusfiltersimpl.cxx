@@ -175,8 +175,10 @@ bool ScOrcusFiltersImpl::importCSV(ScDocument& rDoc, const OUString& rPath) cons
 
 void populateTree(
    SvTreeListBox& rTreeCtrl, orcus::xml_structure_tree::walker& rWalker,
-   const orcus::xml_structure_tree::element_name& rElemName, SvLBoxEntry* pParent)
+   const orcus::xml_structure_tree::element_name& rElemName, bool bRepeat, SvLBoxEntry* pParent)
 {
+    // TODO: Make use of bRepeat flag.
+
     OUString aName(rElemName.name.get(), rElemName.name.size(), RTL_TEXTENCODING_UTF8);
     SvLBoxEntry* pEntry = rTreeCtrl.InsertEntry(aName, pParent);
     if (pParent)
@@ -189,8 +191,8 @@ void populateTree(
     orcus::xml_structure_tree::element_names_type::const_iterator itEnd = aChildElements.end();
     for (; it != itEnd; ++it)
     {
-        rWalker.descend(*it);
-        populateTree(rTreeCtrl, rWalker, *it, pEntry);
+        orcus::xml_structure_tree::element aElem = rWalker.descend(*it);
+        populateTree(rTreeCtrl, rWalker, *it, aElem.repeat, pEntry);
         rWalker.ascend();
     }
 }
@@ -220,7 +222,7 @@ bool ScOrcusFiltersImpl::loadXMLStructure(const OUString& rPath, SvTreeListBox& 
 
         // Root element.
         orcus::xml_structure_tree::element aElem = aWalker.root();
-        populateTree(rTreeCtrl, aWalker, aElem.name, NULL);
+        populateTree(rTreeCtrl, aWalker, aElem.name, aElem.repeat, NULL);
     }
     catch (const std::exception&)
     {
