@@ -39,6 +39,7 @@ AVAILABLE TARGETS
        debugrun         starts the dev-install instance and allows tests to be run
                         against it
        <module>         build the named module
+       <module>.check   run unittests of the named module
        <module>.clean   clean the named module
        <module>.all     build the named module and the pre-requisite modules for it
        <module>.deliver for dmake modules only, deliver the named module
