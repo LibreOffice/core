@@ -1,4 +1,4 @@
-Simple SAX parser library with added UCS2 support.
+Simple SAX parser library with added UTF-16 support.
 
 When we build expat internally ("bundled"), we build two variants: One
 that has an "ASCII" (actually UTF-8) API, another that has a "Unicode"
