@@ -10988,7 +10988,7 @@ if test "$with_fonts" != "no"; then
     FONT_DEJAVU_TARBALL="f872f4ac066433d8ff92f5e316b36ff9-dejavu-fonts-ttf-2.33.zip"
     FONT_GENTIUM_TARBALL="35efabc239af896dfb79be7ebdd6e6b9-gentiumbasic-fonts-1.10.zip"
     FONT_LIBERATION_NARROW_TARBALL="0be45d54cc5e1c2e3102e32b8c190346-liberation-fonts-ttf-1.07.1.tar.gz"
-    FONT_LIBERATION_TARBALL="cfbf1ac6f61bf6cf45342a0cc9381be5-liberation-fonts-ttf-2.00.0.tar.gz"
+    FONT_LIBERATION_TARBALL="5c781723a0d9ed6188960defba8e91cf-liberation-fonts-ttf-2.00.1.tar.gz"
     FONT_LINLIBERTINEG_TARBALL="e7a384790b13c29113e22e596ade9687-LinLibertineG-20120116.zip"
 else
     AC_MSG_RESULT([no])
