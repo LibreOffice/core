@@ -231,7 +231,7 @@ my_components += component/embeddedobj/source/msole/emboleobj
 .END
 
 .IF "$(DISABLE_NEON)" != "TRUE"
-my_components += component/ucb/source/ucp/webdav/ucpdav1
+my_components += component/ucb/source/ucp/webdav-neon/ucpdav1
 .END
 
 .IF "$(ENABLE_CAIRO_CANVAS)" == "TRUE"

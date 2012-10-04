@@ -1,32 +1,20 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
- * Version: MPL 1.1 / GPLv3+ / LGPLv3+
+ * This file is part of the LibreOffice project.
  *
- * The contents of this file are subject to the Mozilla Public License Version
- * 1.1 (the "License"); you may not use this file except in compliance with
- * the License or as specified alternatively below. You may obtain a copy of
- * the License at http://www.mozilla.org/MPL/
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Software distributed under the License is distributed on an "AS IS" basis,
- * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
- * for the specific language governing rights and limitations under the
- * License.
+ * This file incorporates work covered by the following license notice:
  *
- * The Initial Developer of the Original Code is
- *       Christian Lippka <cl@lippka.com>
- * Portions created by the Initial Developer are Copyright (C) 2010 the
- * Initial Developer. All Rights Reserved.
- *
- * Major Contributor(s):
- *
- *
- * For minor contributions see the git repository.
- *
- * Alternatively, the contents of this file may be used under the terms of
- * either the GNU General Public License Version 3 or later (the "GPLv3+"), or
- * the GNU Lesser General Public License Version 3 or later (the "LGPLv3+"),
- * in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
- * instead of those above.
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -37,11 +25,8 @@
 #include <com/sun/star/datatransfer/XTransferable.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
-
 #include <cppuhelper/compbase4.hxx>
-
 #include <comphelper/broadcasthelper.hxx>
-
 #include <vcl/dialog.hxx>
 #include <vcl/button.hxx>
 #include <vcl/fixed.hxx>
@@ -50,20 +35,15 @@
 #include <vcl/bmpacc.hxx>
 #include <vcl/decoview.hxx>
 #include <vcl/svapp.hxx>
-
 #include <toolkit/helper/vclunohelper.hxx>
-
 #include <sot/exchange.hxx>
 #include <sot/formats.hxx>
-
 #include <sax/tools/converter.hxx>
-
 #include <basegfx/color/bcolortools.hxx>
-
 #include "dialmgr.hxx"
 #include "colorpicker.hrc"
-
 #include <cmath>
+#include <limits>
 
 using rtl::OUString;
 using namespace ::com::sun::star::uno;
@@ -74,7 +54,6 @@ using namespace ::basegfx;
 
 namespace cui
 {
-
 const sal_uInt16 COLORMODE_RGB =  0x10;
 const sal_uInt16 COLORMODE_HSV =  0x20;
 const sal_uInt16 COLORMODE_CMYK = 0x40;
