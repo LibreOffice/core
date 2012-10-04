@@ -815,3 +815,5 @@ void SAL_CALL OStatement::release() throw()
 {
     return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());
 }
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
