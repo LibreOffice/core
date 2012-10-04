@@ -293,8 +293,8 @@ CmisDetailsContainer::CmisDetailsContainer( ) :
     m_xCmdEnv( )
 {
     Reference< XComponentContext > xContext = ::comphelper::getProcessComponentContext();
-    Reference< XInteractionHandler >  xGlobalInteractionHandler = Reference< XInteractionHandler >(
-        InteractionHandler::createDefault(xContext), UNO_QUERY );
+    Reference< XInteractionHandler > xGlobalInteractionHandler(
+        InteractionHandler::createWithParent(xContext, 0), UNO_QUERY );
     m_xCmdEnv = new ucbhelper::CommandEnvironment( xGlobalInteractionHandler, Reference< XProgressHandler >() );
 }
 

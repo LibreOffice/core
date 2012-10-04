@@ -3058,7 +3058,7 @@ uno::Reference<sdbc::XRowSet> ScDPCollection::DBCaches::createRowSet(
         if ( xExecute.is() )
         {
             uno::Reference<task::XInteractionHandler> xHandler(
-                task::InteractionHandler::createDefault(comphelper::getProcessComponentContext()),
+                task::InteractionHandler::createWithParent(comphelper::getProcessComponentContext(), 0),
                 uno::UNO_QUERY_THROW);
             xExecute->executeWithCompletion( xHandler );
         }

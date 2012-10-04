@@ -307,7 +307,7 @@ Reference< XConnection > getConnection_allowException(
                 if (xConnectionCompletion.is())
                 {   // instantiate the default SDB interaction handler
                     Reference< XInteractionHandler > xHandler(
-                        InteractionHandler::createDefault(_rxContext), UNO_QUERY_THROW );
+                        InteractionHandler::createWithParent(_rxContext, 0), UNO_QUERY );
                     xConnection = xConnectionCompletion->connectWithCompletion(xHandler);
                 }
             }

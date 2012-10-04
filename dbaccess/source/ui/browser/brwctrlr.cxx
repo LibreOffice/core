@@ -1471,7 +1471,7 @@ sal_Bool SbaXDataBrowserController::approveParameter(const ::com::sun::star::for
         pParamRequest->addContinuation(pAbort);
 
         // create the handler, let it handle the request
-        Reference< XInteractionHandler > xHandler( InteractionHandler::createDefault(comphelper::ComponentContext(getORB()).getUNOContext()), UNO_QUERY_THROW);
+        Reference< XInteractionHandler2 > xHandler( InteractionHandler::createWithParent(comphelper::getComponentContext(getORB()), 0) );
         xHandler->handle(xParamRequest);
 
         if (!pParamValues->wasSelected())

@@ -1127,7 +1127,7 @@ sal_Bool SAL_CALL PasswordContainer::authorizateWithMasterPassword( const uno::R
             {
                 uno::Reference< lang::XMultiServiceFactory > xFactory( mComponent, uno::UNO_QUERY_THROW );
                 uno::Reference< uno::XComponentContext > xContext( comphelper::getComponentContext(xFactory) );
-                xTmpHandler.set( InteractionHandler::createDefault(xContext), uno::UNO_QUERY_THROW );
+                xTmpHandler.set( InteractionHandler::createWithParent(xContext, 0), uno::UNO_QUERY_THROW );
             }
 
             if ( !m_aMasterPasswd.isEmpty() )
@@ -1172,7 +1172,7 @@ sal_Bool SAL_CALL PasswordContainer::changeMasterPassword( const uno::Reference<
         {
             uno::Reference< lang::XMultiServiceFactory > xFactory( mComponent, uno::UNO_QUERY_THROW );
             uno::Reference< uno::XComponentContext > xContext( comphelper::getComponentContext(xFactory) );
-            xTmpHandler.set( InteractionHandler::createDefault(xContext), uno::UNO_QUERY_THROW );
+            xTmpHandler.set( InteractionHandler::createWithParent(xContext, 0), uno::UNO_QUERY_THROW );
         }
 
         sal_Bool bCanChangePassword = sal_True;
@@ -1289,7 +1289,7 @@ void SAL_CALL PasswordContainer::removeMasterPassword()
         {
             uno::Reference< lang::XMultiServiceFactory > xFactory( mComponent, uno::UNO_QUERY_THROW );
             uno::Reference< uno::XComponentContext > xContext( comphelper::getComponentContext(xFactory) );
-            xTmpHandler.set( InteractionHandler::createDefault(xContext), uno::UNO_QUERY_THROW );
+            xTmpHandler.set( InteractionHandler::createWithParent(xContext, 0), uno::UNO_QUERY_THROW );
         }
 
         sal_Bool bCanChangePassword = sal_True;

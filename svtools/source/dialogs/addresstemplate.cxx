@@ -850,9 +850,9 @@ void AssignmentPersistentData::Commit()
         Reference< XInteractionHandler > xHandler;
         try
         {
-            xHandler = Reference< XInteractionHandler >(
-                         InteractionHandler::createDefault(comphelper::getComponentContext(m_xORB)),
-                         UNO_QUERY_THROW );
+            xHandler.set(
+                InteractionHandler::createWithParent(comphelper::getComponentContext(m_xORB), 0),
+                UNO_QUERY_THROW );
         }
         catch(Exception&) { }
         if (!xHandler.is())

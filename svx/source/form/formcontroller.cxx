@@ -4274,7 +4274,7 @@ bool FormController::ensureInteractionHandler()
         return false;
     m_bAttemptedHandlerCreation = true;
 
-    m_xInteractionHandler.set( InteractionHandler::createDefault(m_aContext.getUNOContext()), UNO_QUERY );
+    m_xInteractionHandler.set( InteractionHandler::createWithParent(m_aContext.getUNOContext(), 0), UNO_QUERY );
     OSL_ENSURE( m_xInteractionHandler.is(), "FormController::ensureInteractionHandler: could not create an interaction handler!" );
     return m_xInteractionHandler.is();
 }

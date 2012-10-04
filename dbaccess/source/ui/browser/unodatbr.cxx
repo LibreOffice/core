@@ -3531,8 +3531,7 @@ void SbaTableQueryBrowser::implAdministrate( SvLBoxEntry* _pApplyTo )
             if ( xDocumentModel.is() )
             {
                 Reference< XInteractionHandler2 > xInteractionHandler(
-                    InteractionHandler::createDefault(comphelper::getComponentContext(getORB())),
-                    UNO_QUERY_THROW );
+                    InteractionHandler::createWithParent(comphelper::getComponentContext(getORB()), 0) );
 
                 ::comphelper::NamedValueCollection aLoadArgs;
                 aLoadArgs.put( "Model", xDocumentModel );

@@ -735,7 +735,7 @@ namespace
 //-------------------------------------------------------------------------
 sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
 {
-    Reference< XInteractionHandler2 > xHandler( InteractionHandler::createDefault(comphelper::getComponentContext(getORB())), UNO_QUERY_THROW );
+    Reference< XInteractionHandler2 > xHandler( InteractionHandler::createWithParent(comphelper::getComponentContext(getORB()), 0) );
     try
     {
         if (callSaveAsDialog() == sal_True)
@@ -965,7 +965,7 @@ sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
         private:
             Reference< XComponentLoader >       m_xFrameLoader;
             Reference< XDesktop >               m_xDesktop;
-            Reference< XInteractionHandler >    m_xInteractionHandler;
+            Reference< XInteractionHandler2 >   m_xInteractionHandler;
             ::rtl::OUString                     m_sURL;
             OAsyncronousLink                    m_aAsyncCaller;
 
@@ -993,9 +993,8 @@ sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
             {
                 m_xDesktop.set( _rxORB->createInstance( SERVICE_FRAME_DESKTOP ), UNO_QUERY_THROW );
                 m_xFrameLoader.set( m_xDesktop, UNO_QUERY_THROW );
-                m_xInteractionHandler.set(
-                    InteractionHandler::createDefault(comphelper::getComponentContext(_rxORB)),
-                    UNO_QUERY_THROW );
+                m_xInteractionHandler =
+                    InteractionHandler::createWithParent(comphelper::getComponentContext(_rxORB), 0);
             }
             catch( const Exception& )
             {

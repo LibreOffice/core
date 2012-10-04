@@ -149,11 +149,22 @@ module com { module sun { module star { module task {
  */
 published service InteractionHandler : XInteractionHandler2
 {
-  createDefault();
+    /** Creates an instance.
 
-  createWithParent([in] com::sun::star::awt::XWindow parent);
+        @param parent denotes the parent window for any GUI dialogs the
+        interaction handler pops up; may be null.
+    */
+    createWithParent([in] com::sun::star::awt::XWindow parent);
 
-  createWithParentAndContext([in] com::sun::star::awt::XWindow parent, [in] string context);
+    /** Creates an instance with an additional context.
+
+        @param parent denotes the parent window for any GUI dialogs the
+        interaction handler pops up; may be null.
+
+        @param context is a textual description of the current context (used,
+        e.g., as a first line of text in error boxes).
+    */
+    createWithParentAndContext([in] com::sun::star::awt::XWindow parent, [in] string context);
 };
 
 }; }; }; };

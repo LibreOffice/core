@@ -53,8 +53,8 @@ TemplateRemoteView::TemplateRemoteView (Window *pParent, WinBits nWinStyle, bool
     mpItemView->setChangeNameHdl(LINK(this,TemplateRemoteView,ChangeNameHdl));
 
     Reference< XComponentContext > xContext = comphelper::getProcessComponentContext();
-    Reference< XInteractionHandler >  xGlobalInteractionHandler = Reference< XInteractionHandler >(
-        InteractionHandler::createDefault(xContext), UNO_QUERY_THROW );
+    Reference< XInteractionHandler > xGlobalInteractionHandler(
+        InteractionHandler::createWithParent(xContext, 0), UNO_QUERY_THROW );
 
     m_xCmdEnv = new ucbhelper::CommandEnvironment( xGlobalInteractionHandler, Reference< XProgressHandler >() );
 }

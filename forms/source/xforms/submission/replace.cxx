@@ -130,8 +130,8 @@ SAL_WNODEPRECATED_DECLARATIONS_PUSH
     if( _xHandler.is() )
         pHelper->m_aInteractionHandler = _xHandler;
     else
-        pHelper->m_aInteractionHandler = CSS::uno::Reference< XInteractionHandler >(
-             InteractionHandler::createDefault(m_xContext), UNO_QUERY_THROW);
+        pHelper->m_aInteractionHandler.set(
+            InteractionHandler::createWithParent(m_xContext, 0), UNO_QUERY_THROW);
 
     CProgressHandlerHelper *pProgressHelper = new CProgressHandlerHelper;
     pHelper->m_aProgressHandler = Reference< XProgressHandler >(pProgressHelper);

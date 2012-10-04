@@ -555,9 +555,8 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                 if ( !pInteractionHandlerItem )
                 {
                     uno::Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
-                    uno::Reference< task::XInteractionHandler > xInteract(
-                        task::InteractionHandler::createDefault(xContext),
-                        UNO_QUERY_THROW );
+                    uno::Reference< task::XInteractionHandler2 > xInteract(
+                        task::InteractionHandler::createWithParent(xContext, 0) );
 
                     SfxUnoAnyItem aInteractionItem( SID_INTERACTIONHANDLER, uno::makeAny( xInteract ) );
                     if ( nId == SID_SAVEDOC )

@@ -165,8 +165,8 @@ void ScDataPilotDatabaseDlg::FillObjects()
         if ( !xSource.is() ) return;
 
         uno::Reference<task::XInteractionHandler> xHandler(
-                task::InteractionHandler::createDefault(comphelper::getProcessComponentContext()),
-                uno::UNO_QUERY_THROW);
+            task::InteractionHandler::createWithParent(comphelper::getProcessComponentContext(), 0),
+            uno::UNO_QUERY_THROW);
 
         uno::Reference<sdbc::XConnection> xConnection = xSource->connectWithCompletion( xHandler );
 

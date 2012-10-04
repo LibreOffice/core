@@ -1580,7 +1580,7 @@ uno::Reference< sdbc::XConnection> SwNewDBMgr::GetConnection(const String& rData
         if ( xComplConnection.is() )
         {
             rxSource.set(xComplConnection,UNO_QUERY);
-            Reference< XInteractionHandler > xHandler( InteractionHandler::createDefault(xContext), UNO_QUERY_THROW );
+            Reference< XInteractionHandler > xHandler( InteractionHandler::createWithParent(xContext, 0), UNO_QUERY_THROW );
             xConnection = xComplConnection->connectWithCompletion( xHandler );
         }
     }
@@ -2661,7 +2661,7 @@ uno::Reference<XResultSet> SwNewDBMgr::createCursor(const ::rtl::OUString& _sDat
 
                 if ( xRowSet.is() )
                 {
-                    uno::Reference< XInteractionHandler > xHandler( InteractionHandler::createDefault(comphelper::getComponentContext(xMgr)), UNO_QUERY_THROW );
+                    uno::Reference< XInteractionHandler > xHandler( InteractionHandler::createWithParent(comphelper::getComponentContext(xMgr), 0), UNO_QUERY_THROW );
                     xRowSet->executeWithCompletion(xHandler);
                 }
                 xResultSet = uno::Reference<XResultSet>(xRowSet, UNO_QUERY);

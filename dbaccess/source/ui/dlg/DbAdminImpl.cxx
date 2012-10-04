@@ -255,7 +255,7 @@ sal_Bool ODbDataSourceAdministrationHelper::getCurrentSettings(Sequence< Propert
             if ( !xHandler.is() )
             {
                 // instantiate the default SDB interaction handler
-                xHandler = Reference< XInteractionHandler >( task::InteractionHandler::createDefault(comphelper::getComponentContext(m_xORB)), UNO_QUERY_THROW );
+                xHandler = Reference< XInteractionHandler >( task::InteractionHandler::createWithParent(comphelper::getComponentContext(m_xORB), 0), UNO_QUERY );
             }
 
             String sName = pName ? pName->GetValue() : String();

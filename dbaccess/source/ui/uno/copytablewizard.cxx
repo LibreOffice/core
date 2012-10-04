@@ -136,7 +136,6 @@ namespace dbaui
     namespace DataType = ::com::sun::star::sdbc::DataType;
 
     typedef ::utl::SharedUNOComponent< XConnection >    SharedConnection;
-    typedef Reference< XInteractionHandler >            InteractionHandler;
 
     //=========================================================================
     //= CopyTableWizard
@@ -239,7 +238,7 @@ namespace dbaui
                     const Sequence< Any >& _rAllArgs,
                     const sal_Int16 _nArgPos,
                     SharedConnection& _out_rxConnection,
-                    InteractionHandler& _out_rxDocInteractionHandler
+                    Reference< XInteractionHandler >& _out_rxDocInteractionHandler
                 ) const;
 
         /** extracts the source object (table or query) described by the given descriptor,
@@ -293,7 +292,7 @@ namespace dbaui
         SharedConnection
                 impl_extractConnection_throw(
                     const Reference< XPropertySet >& _rxDataSourceDescriptor,
-                    InteractionHandler& _out_rxDocInteractionHandler
+                    Reference< XInteractionHandler >& _out_rxDocInteractionHandler
                 ) const;
 
         /** actually copies the table
@@ -358,7 +357,7 @@ private:
         SharedConnection                m_xDestConnection;
 
         // other
-        InteractionHandler              m_xInteractionHandler;
+        Reference< XInteractionHandler > m_xInteractionHandler;
         ::cppu::OInterfaceContainerHelper
                                         m_aCopyTableListeners;
         sal_Int16                       m_nOverrideExecutionResult;
@@ -635,9 +634,9 @@ namespace
             if it occures during invoking any of the data source's methods, or if any of the involved
             components violates its contract by not providing the required interfaces
     */
-    InteractionHandler lcl_getInteractionHandler_throw( const Reference< XDataSource >& _rxDataSource, const InteractionHandler& _rFallback )
+    Reference< XInteractionHandler > lcl_getInteractionHandler_throw( const Reference< XDataSource >& _rxDataSource, const Reference< XInteractionHandler >& _rFallback )
     {
-        InteractionHandler xHandler( _rFallback );
+        Reference< XInteractionHandler > xHandler( _rFallback );
 
         // try to obtain the document model
         Reference< XModel > xDocumentModel;
@@ -664,7 +663,7 @@ namespace
             if it occures during invoking any of the data source's methods, or if any of the involved
             components violates its contract by not providing the required interfaces
     */
-    InteractionHandler lcl_getInteractionHandler_throw( const Reference< XConnection >& _rxConnection, const InteractionHandler& _rFallback )
+    Reference< XInteractionHandler > lcl_getInteractionHandler_throw( const Reference< XConnection >& _rxConnection, const Reference< XInteractionHandler >& _rFallback )
     {
         // try whether there is a data source which the connection belongs to
         Reference< XDataSource > xDataSource;
@@ -682,7 +681,7 @@ namespace
 //-------------------------------------------------------------------------
 Reference< XPropertySet > CopyTableWizard::impl_ensureDataAccessDescriptor_throw(
     const Sequence< Any >& _rAllArgs, const sal_Int16 _nArgPos, SharedConnection& _out_rxConnection,
-    InteractionHandler& _out_rxDocInteractionHandler ) const
+    Reference< XInteractionHandler >& _out_rxDocInteractionHandler ) const
 {
     Reference< XPropertySet > xDescriptor;
     _rAllArgs[ _nArgPos ] >>= xDescriptor;
@@ -879,7 +878,7 @@ void CopyTableWizard::impl_extractSourceResultSet_throw( const Reference< XPrope
 
 //-------------------------------------------------------------------------
 SharedConnection CopyTableWizard::impl_extractConnection_throw( const Reference< XPropertySet >& _rxDataSourceDescriptor,
-    InteractionHandler& _out_rxDocInteractionHandler ) const
+    Reference< XInteractionHandler >& _out_rxDocInteractionHandler ) const
 {
     SharedConnection xConnection;
 
@@ -887,7 +886,7 @@ SharedConnection CopyTableWizard::impl_extractConnection_throw( const Reference<
     if ( !_rxDataSourceDescriptor.is() )
         return xConnection;
 
-    InteractionHandler xInteractionHandler;
+    Reference< XInteractionHandler > xInteractionHandler;
 
     do
     {
@@ -1554,15 +1553,15 @@ void SAL_CALL CopyTableWizard::initialize( const Sequence< Any >& _rArguments ) 
                 );
         }
         if ( !m_xInteractionHandler.is() )
-            m_xInteractionHandler.set( InteractionHandler::createDefault(m_aContext.getUNOContext()), UNO_QUERY_THROW );
+            m_xInteractionHandler.set( InteractionHandler::createWithParent(m_aContext.getUNOContext(), 0), UNO_QUERY );
 
-        InteractionHandler xSourceDocHandler;
+        Reference< XInteractionHandler > xSourceDocHandler;
         Reference< XPropertySet > xSourceDescriptor( impl_ensureDataAccessDescriptor_throw( _rArguments, 0, m_xSourceConnection, xSourceDocHandler ) );
         impl_checkForUnsupportedSettings_throw( xSourceDescriptor );
         m_pSourceObject = impl_extractSourceObject_throw( xSourceDescriptor, m_nCommandType );
         impl_extractSourceResultSet_throw( xSourceDescriptor );
 
-        InteractionHandler xDestDocHandler;
+        Reference< XInteractionHandler > xDestDocHandler;
         impl_ensureDataAccessDescriptor_throw( _rArguments, 1, m_xDestConnection, xDestDocHandler );
 
         if ( xDestDocHandler.is() && !m_xInteractionHandler.is() )

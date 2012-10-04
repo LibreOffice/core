@@ -82,9 +82,9 @@ namespace
 
 class DummyInteractionHandler  : public HandlerImpl_BASE
 {
-    Reference< task::XInteractionHandler > m_xHandler;
+    Reference< task::XInteractionHandler2 > m_xHandler;
 public:
-    DummyInteractionHandler( const Reference< task::XInteractionHandler >& xHandler ) : m_xHandler( xHandler ){}
+    DummyInteractionHandler( const Reference< task::XInteractionHandler2 >& xHandler ) : m_xHandler( xHandler ){}
 
     virtual void SAL_CALL handle( const Reference< task::XInteractionRequest >& rRequest ) throw (::com::sun::star::uno::RuntimeException)
     {
@@ -1255,7 +1255,7 @@ void LibPage::ExportAsPackage( const String& aLibName )
     // file open dialog
     Reference< lang::XMultiServiceFactory > xMSF( ::comphelper::getProcessServiceFactory() );
     Reference< uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
-    Reference< task::XInteractionHandler > xHandler( task::InteractionHandler::createDefault(xContext), UNO_QUERY );
+    Reference< task::XInteractionHandler2 > xHandler( task::InteractionHandler::createWithParent(xContext, 0) );
     Reference< XSimpleFileAccess2 > xSFA = SimpleFileAccess::create(xContext);
 
     Reference < XFilePicker > xFP;
@@ -1307,7 +1307,10 @@ void LibPage::ExportAsPackage( const String& aLibName )
         implExportLib( aLibName, aTmpPath, xDummyHandler );
 
         Reference< XCommandEnvironment > xCmdEnv =
-            static_cast<XCommandEnvironment*>( new OLibCommandEnvironment( xHandler ) );
+            static_cast<XCommandEnvironment*>(
+                new OLibCommandEnvironment(
+                    Reference< task::XInteractionHandler >(
+                        xHandler, UNO_QUERY ) ) );
 
         ::ucbhelper::Content sourceContent( aSourcePath, xCmdEnv, comphelper::getProcessComponentContext() );
 
@@ -1386,7 +1389,7 @@ void LibPage::ExportAsBasic( const String& aLibName )
     Reference< uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
     Reference< XFolderPicker > xFolderPicker( xMSF->createInstance(
                 ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.dialogs.FolderPicker" ) ) ), UNO_QUERY );
-    Reference< task::XInteractionHandler > xHandler( task::InteractionHandler::createDefault(xContext), UNO_QUERY_THROW );
+    Reference< task::XInteractionHandler2 > xHandler( task::InteractionHandler::createWithParent(xContext, 0) );
 
     if( xFolderPicker.is() )
     {

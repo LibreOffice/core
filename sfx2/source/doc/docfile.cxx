@@ -2527,8 +2527,8 @@ SfxMedium::GetInteractionHandler()
 
     // create default handler and cache it!
     Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
-    pImp->xInteraction = Reference< task::XInteractionHandler >(
-             task::InteractionHandler::createDefault(xContext), UNO_QUERY_THROW );
+    pImp->xInteraction.set(
+        task::InteractionHandler::createWithParent(xContext, 0), UNO_QUERY_THROW );
     return pImp->xInteraction;
 }
 

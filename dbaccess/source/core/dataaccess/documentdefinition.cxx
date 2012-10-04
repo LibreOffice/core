@@ -1301,7 +1301,7 @@ sal_Bool ODocumentDefinition::save(sal_Bool _bApprove)
             pRequest->addContinuation(pAbort);
 
             // create the handler, let it handle the request
-            Reference< XInteractionHandler > xHandler( InteractionHandler::createDefault(m_aContext.getUNOContext()), UNO_QUERY_THROW );
+            Reference< XInteractionHandler2 > xHandler( InteractionHandler::createWithParent(m_aContext.getUNOContext(), 0) );
             xHandler->handle(xRequest);
 
             if ( pAbort->wasSelected() )
@@ -1375,7 +1375,7 @@ sal_Bool ODocumentDefinition::saveAs()
             pRequest->addContinuation(pAbort);
 
             // create the handler, let it handle the request
-            Reference< XInteractionHandler > xHandler( InteractionHandler::createDefault(m_aContext.getUNOContext()), UNO_QUERY_THROW);
+            Reference< XInteractionHandler2 > xHandler( InteractionHandler::createWithParent(m_aContext.getUNOContext(), 0) );
             xHandler->handle(xRequest);
 
             if ( pAbort->wasSelected() )

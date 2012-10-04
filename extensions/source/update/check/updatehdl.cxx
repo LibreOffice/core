@@ -450,9 +450,9 @@ void SAL_CALL UpdateHandler::handle( uno::Reference< task::XInteractionRequest >
         if( !xServiceManager.is() )
             throw uno::RuntimeException( UNISTRING( "UpdateHandler: unable to obtain service manager from component context" ), *this );
 
-        mxInteractionHdl = uno::Reference<task::XInteractionHandler> (
-                                task::InteractionHandler::createDefault(mxContext),
-                                uno::UNO_QUERY_THROW);
+        mxInteractionHdl.set(
+            task::InteractionHandler::createWithParent(mxContext, 0),
+            uno::UNO_QUERY_THROW);
     }
     uno::Reference< task::XInteractionRequestStringResolver > xStrResolver =
             task::InteractionRequestStringResolver::create( mxContext );

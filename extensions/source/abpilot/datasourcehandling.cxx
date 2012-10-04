@@ -527,10 +527,9 @@ namespace abp
         Reference< XInteractionHandler > xInteractions;
         try
         {
-            xInteractions = Reference< XInteractionHandler >(
-                InteractionHandler::createDefault(comphelper::getComponentContext(m_pImpl->xORB)),
-                UNO_QUERY_THROW
-            );
+            xInteractions.set(
+                InteractionHandler::createWithParent(comphelper::getComponentContext(m_pImpl->xORB), 0),
+                UNO_QUERY);
         }
         catch(const Exception&)
         {

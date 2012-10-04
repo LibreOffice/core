@@ -188,8 +188,8 @@ void WebConnectionInfoDialog::FillPasswordList()
         if ( xMasterPasswd->isPersistentStoringAllowed() )
         {
             uno::Reference< task::XInteractionHandler > xInteractionHandler(
-                task::InteractionHandler::createDefault(comphelper::getProcessComponentContext()),
-                uno::UNO_QUERY_THROW);
+                task::InteractionHandler::createWithParent(comphelper::getProcessComponentContext(), 0),
+                uno::UNO_QUERY);
 
             uno::Sequence< task::UrlRecord > aURLEntries = xMasterPasswd->getAllPersistent( xInteractionHandler );
             sal_Int32 nCount = 0;
@@ -297,8 +297,8 @@ IMPL_LINK_NOARG(WebConnectionInfoDialog, ChangePasswordHdl)
             uno::Reference< task::XInteractionRequest > rRequest( pPasswordRequest );
 
             uno::Reference< task::XInteractionHandler > xInteractionHandler(
-                task::InteractionHandler::createDefault(comphelper::getProcessComponentContext()),
-                uno::UNO_QUERY_THROW );
+                task::InteractionHandler::createWithParent(comphelper::getProcessComponentContext(), 0),
+                uno::UNO_QUERY );
             xInteractionHandler->handle( rRequest );
 
             if ( pPasswordRequest->isPassword() )

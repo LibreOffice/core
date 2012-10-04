@@ -363,7 +363,7 @@ Reference< XInterface > ODatabaseContext::loadObjectFromURL(const ::rtl::OUStrin
         ::comphelper::NamedValueCollection aArgs;
         aArgs.put( "URL", _sURL );
         aArgs.put( "MacroExecutionMode", MacroExecMode::USE_CONFIG );
-        aArgs.put( "InteractionHandler", task::InteractionHandler::createDefault(m_aContext.getUNOContext()) );
+        aArgs.put( "InteractionHandler", task::InteractionHandler::createWithParent(m_aContext.getUNOContext(), 0) );
 
         Sequence< PropertyValue > aResource( aArgs.getPropertyValues() );
         xLoad->load( aResource );

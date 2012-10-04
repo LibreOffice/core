@@ -524,7 +524,7 @@ DBG_NAME(OConnectionHelper)
         sal_Bool bExists = sal_False;
         IS_PATH_EXIST eExists = PATH_NOT_EXIST;
         Reference< ::com::sun::star::task::XInteractionHandler > xInteractionHandler(
-            task::InteractionHandler::createDefault(comphelper::getComponentContext(m_xORB)), UNO_QUERY_THROW );
+            task::InteractionHandler::createWithParent(comphelper::getComponentContext(m_xORB), 0), UNO_QUERY );
         OFilePickerInteractionHandler* pHandler = new OFilePickerInteractionHandler(xInteractionHandler);
         xInteractionHandler = pHandler;
 

@@ -440,9 +440,7 @@ void ModelData_Impl::CheckInteractionHandler()
     {
         try {
             m_aMediaDescrHM[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("InteractionHandler")) ]
-                <<= uno::Reference< task::XInteractionHandler >(
-                            task::InteractionHandler::createDefault(comphelper::getComponentContext(m_pOwner->GetServiceFactory())),
-                            uno::UNO_QUERY );
+                <<= task::InteractionHandler::createWithParent(comphelper::getComponentContext(m_pOwner->GetServiceFactory()), 0);
         }
         catch( const uno::Exception& )
         {

@@ -391,7 +391,7 @@ void SfxDocTplService_Impl::init_Impl()
 {
     uno::Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
     uno::Reference < task::XInteractionHandler > xInteractionHandler(
-           task::InteractionHandler::createDefault(xContext), uno::UNO_QUERY_THROW );
+        task::InteractionHandler::createWithParent(xContext, 0), uno::UNO_QUERY_THROW );
     maCmdEnv = new TplTaskEnvironment( xInteractionHandler );
 
     ::osl::ClearableMutexGuard aGuard( maMutex );

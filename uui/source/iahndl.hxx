@@ -52,7 +52,7 @@ namespace com { namespace sun { namespace star {
     namespace task {
         class FutureDocumentVersionProductUpdateRequest;
         class XInteractionContinuation;
-        class XInteractionHandler;
+        class XInteractionHandler2;
         class XInteractionRequest;
     }
     namespace ucb {
@@ -161,7 +161,7 @@ private:
     getContextProperty()
         SAL_THROW(());
 
-    com::sun::star::uno::Reference< com::sun::star::task::XInteractionHandler >
+    com::sun::star::uno::Reference< com::sun::star::task::XInteractionHandler2 >
     getInteractionHandler()
         SAL_THROW((com::sun::star::uno::RuntimeException));
 

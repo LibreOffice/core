@@ -165,7 +165,7 @@ void ConfigurationErrorHandler::deactivate()
 ConfigurationErrorHandler::InteractionHandler ConfigurationErrorHandler::getDefaultInteractionHandler()
 {
     uno::Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
-    InteractionHandler xHandler( com::sun::star::task::InteractionHandler::createDefault(xContext), UNO_QUERY_THROW );
+    InteractionHandler xHandler( com::sun::star::task::InteractionHandler::createWithParent(xContext, 0), UNO_QUERY );
     return xHandler;
 }
 //------------------------------------------------------------------------------

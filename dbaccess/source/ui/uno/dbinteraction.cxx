@@ -304,11 +304,10 @@ namespace dbaui
     //-------------------------------------------------------------------------
     bool BasicInteractionHandler::implHandleUnknown( const Reference< XInteractionRequest >& _rxRequest )
     {
-        Reference< XInteractionHandler > xFallbackHandler;
         if ( m_xORB.is() )
-            xFallbackHandler = xFallbackHandler.query( InteractionHandler::createDefault(comphelper::getComponentContext(m_xORB)) );
-        if ( xFallbackHandler.is() )
         {
+            Reference< XInteractionHandler2 > xFallbackHandler(
+                InteractionHandler::createWithParent(comphelper::getComponentContext(m_xORB), 0) );
             xFallbackHandler->handle( _rxRequest );
             return true;
         }

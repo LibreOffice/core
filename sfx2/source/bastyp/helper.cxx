@@ -170,8 +170,8 @@ uno::Sequence< OUString > SfxContentHelper::GetHelpTreeViewContents( const Strin
     try
     {
         uno::Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
-        uno::Reference< task::XInteractionHandler > xInteractionHandler = uno::Reference< task::XInteractionHandler > (
-                    task::InteractionHandler::createDefault(xContext), uno::UNO_QUERY_THROW );
+        uno::Reference< task::XInteractionHandler > xInteractionHandler(
+            task::InteractionHandler::createWithParent(xContext, 0), uno::UNO_QUERY_THROW );
 
         ::ucbhelper::Content aCnt( rURL, new ::ucbhelper::CommandEnvironment( xInteractionHandler, uno::Reference< ucb::XProgressHandler >() ), comphelper::getProcessComponentContext() );
         uno::Reference< sdbc::XResultSet > xResultSet;
@@ -254,8 +254,8 @@ String SfxContentHelper::GetActiveHelpString( const String& rURL )
     try
     {
         uno::Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
-        uno::Reference< task::XInteractionHandler > xInteractionHandler = uno::Reference< task::XInteractionHandler > (
-                    task::InteractionHandler::createDefault(xContext), uno::UNO_QUERY_THROW );
+        uno::Reference< task::XInteractionHandler > xInteractionHandler(
+            task::InteractionHandler::createWithParent(xContext, 0), uno::UNO_QUERY_THROW );
         ::ucbhelper::Content aCnt( rURL, new ::ucbhelper::CommandEnvironment( xInteractionHandler, uno::Reference< ucb::XProgressHandler >() ), comphelper::getProcessComponentContext() );
         // open the "active help" stream
         uno::Reference< io::XInputStream > xStream = aCnt.openStream();

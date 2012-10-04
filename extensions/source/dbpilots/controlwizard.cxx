@@ -518,7 +518,7 @@ namespace dbp
         Reference< XInteractionHandler > xHandler;
         try
         {
-            xHandler = Reference< XInteractionHandler >( InteractionHandler::createDefault(comphelper::getComponentContext(getServiceFactory())), UNO_QUERY_THROW );
+            xHandler = Reference< XInteractionHandler >( InteractionHandler::createWithParent(comphelper::getComponentContext(getServiceFactory()), 0), UNO_QUERY_THROW );
         }
         catch(const Exception&) { }
         if (!xHandler.is())

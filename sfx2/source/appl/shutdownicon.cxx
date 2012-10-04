@@ -438,9 +438,8 @@ IMPL_STATIC_LINK( ShutdownIcon, DialogClosedHdl_Impl, FileDialogHelper*, EMPTYAR
                 int                         nArgs=3;
                 Sequence< PropertyValue >   aArgs(3);
 
-                Reference < com::sun::star::task::XInteractionHandler > xInteraction(
-                    task::InteractionHandler::createDefault(::comphelper::getProcessComponentContext()),
-                    com::sun::star::uno::UNO_QUERY_THROW );
+                Reference < com::sun::star::task::XInteractionHandler2 > xInteraction(
+                    task::InteractionHandler::createWithParent(::comphelper::getProcessComponentContext(), 0) );
 
                 aArgs[0].Name = OUString("InteractionHandler");
                 aArgs[0].Value <<= xInteraction;

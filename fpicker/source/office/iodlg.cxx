@@ -2000,10 +2000,8 @@ void SvtFileDialog::displayIOException( const String& _rURL, IOErrorCode _eCode 
             new ::comphelper::OInteractionRequest( makeAny( aException ) );
         pRequest->addContinuation( new ::comphelper::OInteractionAbort( ) );
 
-        Reference< XInteractionHandler > xHandler(
-            InteractionHandler::createDefault( ::comphelper::getProcessComponentContext() ),
-            UNO_QUERY_THROW
-        );
+        Reference< XInteractionHandler2 > xHandler(
+            InteractionHandler::createWithParent( ::comphelper::getProcessComponentContext(), 0 ) );
         xHandler->handle( xRequest );
     }
     catch( const Exception& )

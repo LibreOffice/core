@@ -699,8 +699,8 @@ ViewTabListBox_Impl::ViewTabListBox_Impl( Window* pParentWin,
     maResetQuickSearch.SetTimeoutHdl( LINK( this, ViewTabListBox_Impl, ResetQuickSearch_Impl ) );
 
     Reference< XComponentContext > xContext = ::comphelper::getProcessComponentContext();
-    Reference< XInteractionHandler > xInteractionHandler = Reference< XInteractionHandler > (
-               InteractionHandler::createDefault(xContext), UNO_QUERY_THROW );
+    Reference< XInteractionHandler > xInteractionHandler(
+        InteractionHandler::createWithParent(xContext, 0), UNO_QUERY_THROW );
 
     mxCmdEnv = new ::ucbhelper::CommandEnvironment( xInteractionHandler, Reference< XProgressHandler >() );
 
@@ -1161,8 +1161,8 @@ SvtFileView::SvtFileView( Window* pParent, const ResId& rResId,
         nFlags |= FILEVIEW_MULTISELECTION;
 
     Reference< XComponentContext > xContext = ::comphelper::getProcessComponentContext();
-    Reference< XInteractionHandler > xInteractionHandler = Reference< XInteractionHandler > (
-               InteractionHandler::createDefault(xContext), UNO_QUERY_THROW );
+    Reference< XInteractionHandler > xInteractionHandler(
+        InteractionHandler::createWithParent(xContext, 0), UNO_QUERY_THROW );
     Reference < XCommandEnvironment > xCmdEnv = new ::ucbhelper::CommandEnvironment( xInteractionHandler, Reference< XProgressHandler >() );
 
     mpImp = new SvtFileView_Impl( this, xCmdEnv, nFlags, bOnlyFolder );
@@ -1179,8 +1179,8 @@ SvtFileView::SvtFileView( Window* pParent, const ResId& rResId, sal_uInt8 nFlags
     Control( pParent, rResId )
 {
     Reference< XComponentContext > xContext = ::comphelper::getProcessComponentContext();
-    Reference< XInteractionHandler > xInteractionHandler = Reference< XInteractionHandler > (
-               InteractionHandler::createDefault(xContext), UNO_QUERY_THROW );
+    Reference< XInteractionHandler > xInteractionHandler(
+        InteractionHandler::createWithParent(xContext, 0), UNO_QUERY_THROW );
     Reference < XCommandEnvironment > xCmdEnv = new ::ucbhelper::CommandEnvironment( xInteractionHandler, Reference< XProgressHandler >() );
 
     mpImp = new SvtFileView_Impl( this, xCmdEnv, nFlags, nFlags & FILEVIEW_ONLYFOLDER );

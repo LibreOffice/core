@@ -192,7 +192,7 @@ SQLExceptionInfo createConnection(  const Reference< ::com::sun::star::beans::XP
             }
             else
             {   // instantiate the default SDB interaction handler
-                Reference< XInteractionHandler > xHandler( InteractionHandler::createDefault(_rxContext), UNO_QUERY_THROW);
+                Reference< XInteractionHandler > xHandler( InteractionHandler::createWithParent(_rxContext, 0), UNO_QUERY);
                 _rOUTConnection = xConnectionCompletion->connectWithCompletion(xHandler);
             }
         }

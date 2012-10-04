@@ -24,7 +24,7 @@
 
 #include "com/sun/star/lang/XServiceInfo.hpp"
 #include "com/sun/star/lang/XSingleServiceFactory.hpp"
-#include "com/sun/star/task/XInteractionHandler.hpp"
+#include "com/sun/star/task/XInteractionHandler2.hpp"
 #include "com/sun/star/task/XPasswordContainer2.hpp"
 
 namespace com {
@@ -90,7 +90,7 @@ public:
                 xSupplyAuthentication,
         rtl::OUString const & rURL,
         com::sun::star::uno::Reference<
-            com::sun::star::task::XInteractionHandler > const & xIH )
+            com::sun::star::task::XInteractionHandler2 > const & xIH )
     SAL_THROW( (com::sun::star::uno::RuntimeException) );
 
     /** This member function adds credentials for the given URL to the password
@@ -125,7 +125,7 @@ public:
                     com::sun::star::uno::Sequence< rtl::OUString > const &
                     rPasswords,
                     com::sun::star::uno::Reference<
-                        com::sun::star::task::XInteractionHandler > const & xIH,
+                        com::sun::star::task::XInteractionHandler2 > const & xIH,
                     bool bPersist )
         SAL_THROW( (com::sun::star::uno::RuntimeException) );
 
@@ -140,7 +140,7 @@ private:
 
 class PasswordContainerInteractionHandler :
         public cppu::WeakImplHelper2< com::sun::star::lang::XServiceInfo,
-                                      com::sun::star::task::XInteractionHandler >
+                                      com::sun::star::task::XInteractionHandler2 >
 {
 public:
     PasswordContainerInteractionHandler(
@@ -160,9 +160,14 @@ public:
     getSupportedServiceNames()
         throw ( com::sun::star::uno::RuntimeException );
 
-    // XInteractionHandler
+    // XInteractionHandler2
     virtual void SAL_CALL
     handle( const ::com::sun::star::uno::Reference<
+                ::com::sun::star::task::XInteractionRequest >& Request )
+        throw (::com::sun::star::uno::RuntimeException);
+
+    virtual sal_Bool SAL_CALL
+    handleInteractionRequest( const ::com::sun::star::uno::Reference<
                 ::com::sun::star::task::XInteractionRequest >& Request )
         throw (::com::sun::star::uno::RuntimeException);
 

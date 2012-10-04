@@ -66,7 +66,7 @@ namespace dbmm
         }
 
         InteractionHandler_Data( const ::comphelper::ComponentContext& _rContext )
-            :xHandler( ::com::sun::star::task::InteractionHandler::createDefault(_rContext.getUNOContext()), UNO_QUERY_THROW )
+            :xHandler( ::com::sun::star::task::InteractionHandler::createWithParent(_rContext.getUNOContext(), 0), UNO_QUERY )
         {
         }
     };

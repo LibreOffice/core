@@ -252,8 +252,8 @@ bool ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
                 if ( xExecute.is() )
                 {
                     uno::Reference<task::XInteractionHandler> xHandler(
-                            task::InteractionHandler::createDefault(comphelper::getProcessComponentContext()),
-                            uno::UNO_QUERY_THROW);
+                        task::InteractionHandler::createWithParent(comphelper::getProcessComponentContext(), 0),
+                        uno::UNO_QUERY_THROW);
                     xExecute->executeWithCompletion( xHandler );
                 }
                 else

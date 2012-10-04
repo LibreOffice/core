@@ -119,7 +119,7 @@ Reference< XConnection > getConnection(const ::rtl::OUString& _rURL)
         Reference< XCompletedConnection > xComplConn(xDataSource, UNO_QUERY);
         try
         {
-            Reference<task::XInteractionHandler> xIHdl( task::InteractionHandler::createDefault(xContext), UNO_QUERY_THROW);
+            Reference<task::XInteractionHandler> xIHdl( task::InteractionHandler::createWithParent(xContext, 0), UNO_QUERY_THROW);
             xConn = xComplConn->connectWithCompletion(xIHdl);
         }
         catch (const SQLException&)

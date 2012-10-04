@@ -29,7 +29,6 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <svtools/QueryFolderName.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -170,20 +169,13 @@ IMPL_LINK_NOARG(OCollectionView, Save_Click)
                     InteractiveAugmentedIOException aException(sTemp,Reference<XInterface>(),eClass,eError,aValues);
 
 
-                    Reference<XInitialization> xIni(
-                       InteractionHandler::createDefault(comphelper::getComponentContext(m_xORB)), UNO_QUERY_THROW);
-                    aValue.Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Parent"));
-                    aValue.Value <<= VCLUnoHelper::GetInterface( this );
-                    Sequence< Any > aArgs(1);
-                    aArgs[0] <<= makeAny(aValue);
-                    xIni->initialize(aArgs);
+                    Reference<XInteractionHandler2> xHandler(
+                        InteractionHandler::createWithParent(comphelper::getComponentContext(m_xORB), VCLUnoHelper::GetInterface( this )));
                     OInteractionRequest* pRequest = new OInteractionRequest(makeAny(aException));
                     Reference< XInteractionRequest > xRequest(pRequest);
 
                     OInteractionApprove* pApprove = new OInteractionApprove;
                     pRequest->addContinuation(pApprove);
-
-                    Reference< XInteractionHandler > xHandler(xIni,UNO_QUERY);
                     xHandler->handle(xRequest);
 
                     return 0;

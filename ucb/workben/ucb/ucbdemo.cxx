@@ -1306,8 +1306,8 @@ void UcbContent::transfer( const rtl::OUString& rSourceURL, sal_Bool bMove  )
         if (m_rUCB.getServiceFactory().is())
             xInteractionHandler
                 = uno::Reference< task::XInteractionHandler >(
-                        task::InteractionHandler::createDefault(comphelper::getComponentContext(m_rUCB.getServiceFactory())),
-                        uno::UNO_QUERY_THROW);
+                    task::InteractionHandler::createWithParent(comphelper::getComponentContext(m_rUCB.getServiceFactory()), 0),
+                    uno::UNO_QUERY_THROW);
         uno::Reference< ucb::XProgressHandler > xProgressHandler(
             new ProgressHandler(m_rUCB));
         uno::Reference< ucb::XCommandEnvironment > xEnv(

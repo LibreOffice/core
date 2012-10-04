@@ -342,9 +342,8 @@ short SvInsertOleDlg::Execute()
                 aMedium[0].Value <<= ::rtl::OUString( aFileName );
 
                 uno::Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
-                uno::Reference< task::XInteractionHandler > xInteraction(
-                    task::InteractionHandler::createDefault(xContext),
-                    uno::UNO_QUERY_THROW );
+                uno::Reference< task::XInteractionHandler2 > xInteraction(
+                    task::InteractionHandler::createWithParent(xContext, 0) );
 
                aMedium[1].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "InteractionHandler" ) );
                aMedium[1].Value <<= xInteraction;

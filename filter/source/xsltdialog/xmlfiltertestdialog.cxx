@@ -424,7 +424,7 @@ void XMLFilterTestDialog::onExportBrowse()
             maExportRecentFile = aDlg.GetPath();
 
             Reference< XComponentLoader > xLoader( mxMSF->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.Desktop" )) ), UNO_QUERY );
-            Reference< XInteractionHandler > xInter( InteractionHandler::createDefault(comphelper::getComponentContext(mxMSF)), UNO_QUERY_THROW );
+            Reference< XInteractionHandler2 > xInter( InteractionHandler::createWithParent(comphelper::getComponentContext(mxMSF), 0) );
             if( xLoader.is() )
             {
                 OUString aFrame( RTL_CONSTASCII_USTRINGPARAM( "_default" ) );
@@ -619,7 +619,7 @@ void XMLFilterTestDialog::import( const OUString& rURL )
     try
     {
         Reference< XComponentLoader > xLoader( mxMSF->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.Desktop" )) ), UNO_QUERY );
-        Reference< XInteractionHandler > xInter( InteractionHandler::createDefault(comphelper::getComponentContext(mxMSF)), UNO_QUERY_THROW );
+        Reference< XInteractionHandler2 > xInter( InteractionHandler::createWithParent(comphelper::getComponentContext(mxMSF), 0) );
         if( xLoader.is() )
         {
 

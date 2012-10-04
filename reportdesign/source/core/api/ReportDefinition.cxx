@@ -2651,7 +2651,7 @@ uno::Reference< embed::XStorage > OReportDefinition::getStorage() const
 uno::Reference< task::XInteractionHandler > OReportDefinition::getInteractionHandler() const
 {
     uno::Reference< task::XInteractionHandler > xRet(
-                task::InteractionHandler::createDefault(m_aProps->m_xContext), uno::UNO_QUERY_THROW);
+        task::InteractionHandler::createWithParent(m_aProps->m_xContext, 0), uno::UNO_QUERY_THROW);
     return xRet;
 }
 // -----------------------------------------------------------------------------

@@ -1107,15 +1107,13 @@ UUIInteractionHelper::getContextProperty()
     return m_aContextParam;
 }
 
-uno::Reference< task::XInteractionHandler >
+uno::Reference< task::XInteractionHandler2 >
 UUIInteractionHelper::getInteractionHandler()
     SAL_THROW((uno::RuntimeException))
 {
-    uno::Reference< task::XInteractionHandler > xIH(
-        InteractionHandler::createWithParentAndContext(comphelper::getComponentContext(m_xServiceFactory),
-                                                 m_xWindowParam, m_aContextParam),
-        UNO_QUERY_THROW);
-    return xIH;
+    return InteractionHandler::createWithParentAndContext(
+        comphelper::getComponentContext(m_xServiceFactory), m_xWindowParam,
+        m_aContextParam);
 }
 
 namespace {

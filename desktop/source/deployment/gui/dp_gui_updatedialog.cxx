@@ -273,9 +273,9 @@ UpdateDialog::Thread::Thread(
 {
     if( m_context.is() )
     {
-        m_xInteractionHdl = uno::Reference< task::XInteractionHandler > (
-                            task::InteractionHandler::createDefault(m_context),
-                            uno::UNO_QUERY_THROW );
+        m_xInteractionHdl.set(
+            task::InteractionHandler::createWithParent(m_context, 0),
+            uno::UNO_QUERY );
         m_updateInformation->setInteractionHandler( m_xInteractionHdl );
     }
 }

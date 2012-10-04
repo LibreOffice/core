@@ -227,9 +227,8 @@ sal_Bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatch
         }
         else
         {
-            Reference < XInteractionHandler > xInteraction(
-                InteractionHandler::createDefault(::comphelper::getProcessComponentContext()),
-                UNO_QUERY_THROW );
+            Reference < XInteractionHandler2 > xInteraction(
+                InteractionHandler::createWithParent(::comphelper::getProcessComponentContext(), 0) );
 
             aArgs[1].Name = OUString(RTL_CONSTASCII_USTRINGPARAM( "InteractionHandler" ));
             aArgs[1].Value <<= xInteraction;

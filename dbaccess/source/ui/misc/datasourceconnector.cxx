@@ -139,7 +139,7 @@ namespace dbaui
                 if ( !xHandler.is() )
                 {
                     // instantiate the default SDB interaction handler
-                    xHandler = Reference< XInteractionHandler >( InteractionHandler::createDefault(comphelper::getComponentContext(m_xORB)), UNO_QUERY_THROW );
+                    xHandler = Reference< XInteractionHandler >( InteractionHandler::createWithParent(comphelper::getComponentContext(m_xORB), 0), UNO_QUERY );
                 }
 
                 xConnection = xConnectionCompletion->connectWithCompletion(xHandler);
