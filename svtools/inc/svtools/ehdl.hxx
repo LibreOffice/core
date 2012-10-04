@@ -38,7 +38,7 @@ public:
     SfxErrorContext(
             sal_uInt16 nCtxIdP, const String &aArg1, Window *pWin=0,
             sal_uInt16 nResIdP=USHRT_MAX, ResMgr *pMgrP=0);
-    virtual sal_Bool GetString(sal_uLong nErrId, String &rStr);
+    virtual sal_Bool GetString(sal_uLong nErrId, OUString &rStr);
 
 private:
     sal_uInt16 nCtxId;
@@ -54,8 +54,8 @@ public:
     ~SfxErrorHandler();
 
 protected:
-    virtual sal_Bool     GetErrorString(sal_uLong lErrId, String &, sal_uInt16&) const;
-    virtual sal_Bool     GetMessageString(sal_uLong lErrId, String &, sal_uInt16&) const;
+    virtual sal_Bool     GetErrorString(sal_uLong lErrId, OUString &, sal_uInt16&) const;
+    virtual sal_Bool     GetMessageString(sal_uLong lErrId, OUString &, sal_uInt16&) const;
 
 private:
 
@@ -67,7 +67,7 @@ private:
 
     SVT_DLLPRIVATE sal_Bool             GetClassString(sal_uLong lErrId, String &) const;
     virtual sal_Bool     CreateString(
-                         const ErrorInfo *, String &, sal_uInt16 &) const;
+                         const ErrorInfo *, OUString &, sal_uInt16 &) const;
 };
 
 #endif

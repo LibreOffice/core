@@ -47,7 +47,7 @@
 
 using namespace ::com::sun::star;
 
-static void aBasicErrorFunc( const String &rErr, const String &rAction )
+static void aBasicErrorFunc( const OUString &rErr, const OUString &rAction )
 {
     OStringBuffer aErr( "Unexpected dialog: " );
     aErr.append( OUStringToOString( rAction, RTL_TEXTENCODING_ASCII_US ) );

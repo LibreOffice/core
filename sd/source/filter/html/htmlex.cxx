@@ -3316,16 +3316,16 @@ HtmlErrorContext::HtmlErrorContext(Window *_pWin)
 
 // =====================================================================
 
-sal_Bool HtmlErrorContext::GetString( sal_uLong, String& rCtxStr )
+sal_Bool HtmlErrorContext::GetString( sal_uLong, OUString& rCtxStr )
 {
     DBG_ASSERT( mnResId != 0, "No error context set" );
     if( mnResId == 0 )
         return false;
 
-    rCtxStr = String( SdResId( mnResId ) );
+    rCtxStr = SdResId( mnResId );
 
-    rCtxStr.SearchAndReplace( rtl::OUString("$(URL1)"), maURL1 );
-    rCtxStr.SearchAndReplace( rtl::OUString("$(URL2)"), maURL2 );
+    rCtxStr = rCtxStr.replaceAll( rtl::OUString("$(URL1)"), maURL1 );
+    rCtxStr = rCtxStr.replaceAll( rtl::OUString("$(URL2)"), maURL2 );
 
     return true;
 }
