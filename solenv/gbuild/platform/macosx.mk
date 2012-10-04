@@ -212,10 +212,10 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(foreach object,$(GENCOBJECTS),$(call gb_GenCObject_get_target,$(object))) \
 		$(foreach object,$(GENCXXOBJECTS),$(call gb_GenCxxObject_get_target,$(object))) \
 		$(foreach extraobjectlist,$(EXTRAOBJECTLISTS),`cat $(extraobjectlist)`) \
-		$(foreach lib,$(LINKED_STATIC_LIBS),$(call gb_StaticLibrary_get_target,$(lib))) \
+		`cat $${DYLIB_FILE}` \
 		$(LIBS) \
-		-o $(if $(SOVERSION),$(1).$(SOVERSION),$(1)) \
-		`cat $${DYLIB_FILE}` && \
+		$(foreach lib,$(LINKED_STATIC_LIBS),$(call gb_StaticLibrary_get_target,$(lib))) \
+		-o $(if $(SOVERSION),$(1).$(SOVERSION),$(1)) && \
 	$(if $(SOVERSION),ln -sf $(notdir $(1)).$(SOVERSION) $(1),:) && \
     $(if $(filter Executable,$(TARGETTYPE)), \
         $(PERL) $(SOLARENV)/bin/macosx-change-install-names.pl Executable \
