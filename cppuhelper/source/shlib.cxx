@@ -462,11 +462,13 @@ extern "C"
     extern void * reflection_component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * sfx_component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * svl_component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey );
+    extern void * tk_component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * stocservices_component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * i18npool_component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * ucb_component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * ucpfile_component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * utl_component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey );
+    extern void * vcl_component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * xstor_component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey );
 }
 #endif
@@ -525,24 +527,27 @@ Reference< XInterface > SAL_CALL loadSharedLibComponentFactory(
     oslGenericFunction pSym = NULL;
 
 #ifdef DISABLE_DYNLOADING
+
     // First test library names that aren't app-specific.
     static lib_to_component_mapping non_app_specific_map[] = {
         { "bootstrap.uno" SAL_DLLEXTENSION, bootstrap_component_getFactory },
         { "bootstrap.uno.a", bootstrap_component_getFactory },
         { "configmgr.uno.a", configmgr_component_getFactory },
-        { "expwrap.uno.a", expwrap_component_getFactory },
-        { "fastsax.uno.a", fastsax_component_getFactory },
-        { "introspection.uno.a", introspection_component_getFactory },
         { "i18npool.uno.a", i18npool_component_getFactory },
+        { "introspection.uno.a", introspection_component_getFactory },
         { "libcomphelp" CPPU_STRINGIFY(CPPU_ENV) ".a", comphelp_component_getFactory },
+        { "libexpwrap.uno.a", expwrap_component_getFactory },
+        { "libfastsax.uno.a", fastsax_component_getFactory },
         { "libfilterconfiglo.a", filterconfig1_component_getFactory },
         { "libfwklo.a", fwk_component_getFactory },
         { "libpackage2.a", package2_component_getFactory },
         { "libsfxlo.a", sfx_component_getFactory },
         { "libsvllo.a", svl_component_getFactory },
+        { "libtklo.a", tk_component_getFactory },
         { "libucb1.a", ucb_component_getFactory },
         { "libucpfile1.a", ucpfile_component_getFactory },
         { "libutllo.a", utl_component_getFactory },
+        { "libvcllo.a", vcl_component_getFactory },
         { "libxstor.a", xstor_component_getFactory },
         { "reflection.uno.a", reflection_component_getFactory },
         { "stocservices.uno.a", stocservices_component_getFactory },
