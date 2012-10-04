@@ -1,1 +1,4 @@
 Wrappers so you can use all the Java Runtime Environments with their slightly incompatible APIs with more ease.
+
+Uses an over-engineered "plugin" mechanism although there is only one
+"plugin", called "sunmajor", that handles all possible JREs.
