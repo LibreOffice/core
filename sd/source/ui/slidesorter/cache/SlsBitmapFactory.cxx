@@ -41,10 +41,6 @@
 #include <vcl/bmpacc.hxx>
 #include <vcl/pngwrite.hxx>
 
-const static sal_Int32 gnSuperSampleFactor (2);
-const static bool gbAllowSuperSampling (false);
-
-
 namespace sd { namespace slidesorter { namespace view {
 class SlideSorterView;
 class PageObjectViewObjectContact;
@@ -73,10 +69,12 @@ Bitmap BitmapFactory::CreateBitmap (
     const bool bDoSuperSampling)
 {
     Size aSize (rPixelSize);
-    if (bDoSuperSampling && gbAllowSuperSampling)
+    if (bDoSuperSampling)
     {
-        aSize.Width() *= gnSuperSampleFactor;
-        aSize.Height() *= gnSuperSampleFactor;
+        // Supersampling factor
+        int aSuperSamplingFactor = 2;
+        aSize.Width() *= aSuperSamplingFactor;
+        aSize.Height() *= aSuperSamplingFactor;
     }
 
     Bitmap aPreview (maRenderer.RenderPage (
@@ -85,7 +83,7 @@ Bitmap BitmapFactory::CreateBitmap (
         String(),
         true,
         false).GetBitmapEx().GetBitmap());
-    if (bDoSuperSampling && gbAllowSuperSampling)
+    if (bDoSuperSampling)
     {
         aPreview.Scale(rPixelSize, BMP_SCALE_BEST);
     }

@@ -819,7 +819,7 @@ void SlideSorterView::ConfigurationChanged (
         mpPreviewCache.reset(
             new cache::PageCache(
                 mpLayouter->GetPageObjectSize(),
-                false,
+                true,
                 cache::SharedCacheContext(new ViewCacheContext(mrSlideSorter))));
     }
 
