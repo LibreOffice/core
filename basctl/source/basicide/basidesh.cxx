@@ -65,7 +65,6 @@ namespace basctl
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
-using ::rtl::OUString;
 
 typedef ::cppu::WeakImplHelper1< container::XContainerListener > ContainerListenerBASE;
 
@@ -79,7 +78,7 @@ public:
     ~ContainerListenerImpl()
     { }
 
-    void addContainerListener( const ScriptDocument& rScriptDocument, const ::rtl::OUString& aLibName )
+    void addContainerListener( const ScriptDocument& rScriptDocument, const OUString& aLibName )
     {
         try
         {
@@ -92,7 +91,7 @@ public:
         }
         catch(const uno::Exception& ) {}
     }
-    void removeContainerListener( const ScriptDocument& rScriptDocument, const ::rtl::OUString& aLibName )
+    void removeContainerListener( const ScriptDocument& rScriptDocument, const OUString& aLibName )
     {
         try
         {
@@ -112,14 +111,14 @@ public:
     // XContainerListener
     virtual void SAL_CALL elementInserted( const container::ContainerEvent& Event ) throw( uno::RuntimeException )
     {
-        rtl::OUString sModuleName;
+        OUString sModuleName;
         if( mpShell && ( Event.Accessor >>= sModuleName ) )
             mpShell->FindBasWin( mpShell->m_aCurDocument, mpShell->m_aCurLibName, sModuleName, true, false );
     }
     virtual void SAL_CALL elementReplaced( const container::ContainerEvent& ) throw( com::sun::star::uno::RuntimeException ) { }
     virtual void SAL_CALL elementRemoved( const container::ContainerEvent& Event ) throw( com::sun::star::uno::RuntimeException )
     {
-        rtl::OUString sModuleName;
+        OUString sModuleName;
         if( mpShell  && ( Event.Accessor >>= sModuleName ) )
         {
             ModulWindow* pWin = mpShell->FindBasWin(mpShell->m_aCurDocument, mpShell->m_aCurLibName, sModuleName, false, true);
@@ -186,7 +185,7 @@ void Shell::Init()
 
     GetExtraData()->ShellInCriticalSection() = true;
 
-    SetName( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "BasicIDE" ) ) );
+    SetName( OUString( "BasicIDE" ) );
     SetHelpId( SVX_INTERFACE_BASIDE_VIEWSH );
 
     LibBoxControl::RegisterControl( SID_BASICIDE_LIBSELECTOR );
@@ -208,7 +207,7 @@ void Shell::Init()
     InitScrollBars();
     InitTabBar();
 
-    SetCurLib( ScriptDocument::getApplicationScriptDocument(), ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Standard")), false, false );
+    SetCurLib( ScriptDocument::getApplicationScriptDocument(), "Standard", false, false );
 
     ShellCreated(this);
 
@@ -330,7 +329,7 @@ void Shell::onDocumentClosed( const ScriptDocument& _rDocument )
         pData->GetLibInfos().RemoveInfoFor( _rDocument );
 
     if ( bSetCurLib )
-        SetCurLib( ScriptDocument::getApplicationScriptDocument(), ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Standard")), true, false );
+        SetCurLib( ScriptDocument::getApplicationScriptDocument(), "Standard", true, false );
     else if ( bSetCurWindow )
         SetCurWindow( FindApplicationWindow(), true );
 }
@@ -401,7 +400,7 @@ sal_uInt16 Shell::PrepareClose( sal_Bool bUI, sal_Bool bForBrowsing )
             if ( !pWin->CanClose() )
             {
                 if ( !m_aCurLibName.isEmpty() && ( pWin->IsDocument( m_aCurDocument ) || pWin->GetLibName() != m_aCurLibName ) )
-                    SetCurLib( ScriptDocument::getApplicationScriptDocument(), ::rtl::OUString(), false );
+                    SetCurLib( ScriptDocument::getApplicationScriptDocument(), OUString(), false );
                 SetCurWindow( pWin, true );
                 bCanClose = false;
             }
@@ -626,7 +625,7 @@ void Shell::CheckWindows()
 
 
 
-void Shell::RemoveWindows( const ScriptDocument& rDocument, const ::rtl::OUString& rLibName, bool bDestroy )
+void Shell::RemoveWindows( const ScriptDocument& rDocument, const OUString& rLibName, bool bDestroy )
 {
     bool bChangeCurWindow = pCurWin ? false : true;
     std::vector<BaseWindow*> aDeleteVec;
@@ -693,13 +692,13 @@ void Shell::UpdateWindows()
         StartListening( *doc->getBasicManager(), true /* log on only once */ );
 
         // libraries
-        Sequence< ::rtl::OUString > aLibNames( doc->getLibraryNames() );
+        Sequence< OUString > aLibNames( doc->getLibraryNames() );
         sal_Int32 nLibCount = aLibNames.getLength();
-        const ::rtl::OUString* pLibNames = aLibNames.getConstArray();
+        const OUString* pLibNames = aLibNames.getConstArray();
 
         for ( sal_Int32 i = 0 ; i < nLibCount ; i++ )
         {
-            ::rtl::OUString aLibName = pLibNames[ i ];
+            OUString aLibName = pLibNames[ i ];
 
             if ( m_aCurLibName.isEmpty() || ( *doc == m_aCurDocument && aLibName == m_aCurLibName ) )
             {
@@ -730,13 +729,13 @@ void Shell::UpdateWindows()
 
                         try
                         {
-                            Sequence< ::rtl::OUString > aModNames( doc->getObjectNames( E_SCRIPTS, aLibName ) );
+                            Sequence< OUString > aModNames( doc->getObjectNames( E_SCRIPTS, aLibName ) );
                             sal_Int32 nModCount = aModNames.getLength();
-                            const ::rtl::OUString* pModNames = aModNames.getConstArray();
+                            const OUString* pModNames = aModNames.getConstArray();
 
                             for ( sal_Int32 j = 0 ; j < nModCount ; j++ )
                             {
-                                ::rtl::OUString aModName = pModNames[ j ];
+                                OUString aModName = pModNames[ j ];
                                 ModulWindow* pWin = FindBasWin( *doc, aLibName, aModName, false );
                                 if ( !pWin )
                                     pWin = CreateBasWin( *doc, aLibName, aModName );
@@ -759,13 +758,13 @@ void Shell::UpdateWindows()
                     {
                         try
                         {
-                            Sequence< ::rtl::OUString > aDlgNames = doc->getObjectNames( E_DIALOGS, aLibName );
+                            Sequence< OUString > aDlgNames = doc->getObjectNames( E_DIALOGS, aLibName );
                             sal_Int32 nDlgCount = aDlgNames.getLength();
-                            const ::rtl::OUString* pDlgNames = aDlgNames.getConstArray();
+                            const OUString* pDlgNames = aDlgNames.getConstArray();
 
                             for ( sal_Int32 j = 0 ; j < nDlgCount ; j++ )
                             {
-                                ::rtl::OUString aDlgName = pDlgNames[ j ];
+                                OUString aDlgName = pDlgNames[ j ];
                                 // this find only looks for non-suspended windows;
                                 // suspended windows are handled in CreateDlgWin
                                 DialogWindow* pWin = FindDlgWin( *doc, aLibName, aDlgName, false );
@@ -907,7 +906,7 @@ void Shell::EnableScrollbars( bool bEnable )
     aVScrollBar.Enable(bEnable);
 }
 
-void Shell::SetCurLib( const ScriptDocument& rDocument, ::rtl::OUString aLibName, bool bUpdateWindows, bool bCheck )
+void Shell::SetCurLib( const ScriptDocument& rDocument, OUString aLibName, bool bUpdateWindows, bool bCheck )
 {
     if ( !bCheck || ( rDocument != m_aCurDocument || aLibName != m_aCurLibName ) )
     {
@@ -938,7 +937,7 @@ void Shell::SetCurLib( const ScriptDocument& rDocument, ::rtl::OUString aLibName
     }
 }
 
-void Shell::SetCurLibForLocalization( const ScriptDocument& rDocument, ::rtl::OUString aLibName )
+void Shell::SetCurLibForLocalization( const ScriptDocument& rDocument, OUString aLibName )
 {
     // Create LocalizationMgr
     Reference< resource::XStringResourceManager > xStringResourceManager;
