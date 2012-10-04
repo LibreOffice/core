@@ -5138,6 +5138,7 @@ void ScDocFunc::SetConditionalFormatList( ScConditionalFormatList* pList, SCTAB 
     }
 
     pDoc->SetCondFormList(pList, nTab);
+    rDocShell.PostPaintGridAll();
 
     pDoc->SetStreamValid(nTab, false);
     aModificator.SetDocumentModified();
