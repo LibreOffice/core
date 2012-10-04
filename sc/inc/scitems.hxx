@@ -117,7 +117,6 @@
 #define ATTR_SHADOW             152
 #define ATTR_VALIDDATA          153
 #define ATTR_CONDITIONAL        154
-#define ATTR_COLORSCALE         155
 
 #define ATTR_PATTERN_END        155     // end cell-attribute-pattern
 

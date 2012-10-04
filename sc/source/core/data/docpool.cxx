@@ -150,7 +150,6 @@ static SfxItemInfo const  aItemInfos[] =
     { SID_ATTR_BORDER_SHADOW,       SFX_ITEM_POOLABLE },    // ATTR_SHADOW
     { 0,                            SFX_ITEM_POOLABLE },    // ATTR_VALIDDATA
     { 0,                            SFX_ITEM_POOLABLE },    // ATTR_CONDITIONAL
-    { 0,                            SFX_ITEM_POOLABLE },    // ATTR_COLORSCALE
     { 0,                            SFX_ITEM_POOLABLE },    // ATTR_PATTERN
     { SID_ATTR_LRSPACE,             SFX_ITEM_POOLABLE },    // ATTR_LRSPACE
     { SID_ATTR_ULSPACE,             SFX_ITEM_POOLABLE },    // ATTR_ULSPACE
@@ -289,7 +288,6 @@ ScDocumentPool::ScDocumentPool( SfxItemPool* pSecPool, sal_Bool bLoadRefCounts )
     ppPoolDefaults[ ATTR_SHADOW          - ATTR_STARTINDEX ] = new SvxShadowItem( ATTR_SHADOW );
     ppPoolDefaults[ ATTR_VALIDDATA       - ATTR_STARTINDEX ] = new SfxUInt32Item( ATTR_VALIDDATA, 0 );
     ppPoolDefaults[ ATTR_CONDITIONAL     - ATTR_STARTINDEX ] = new SfxUInt32Item( ATTR_CONDITIONAL, 0 );
-    ppPoolDefaults[ ATTR_COLORSCALE      - ATTR_STARTINDEX ] = new SfxUInt32Item( ATTR_COLORSCALE, 0 );
 
     //  GetRscString funktioniert erst nach ScGlobal::Init, zu erkennen am EmptyBrushItem
     //! zusaetzliche Methode ScGlobal::IsInit() oder so...
