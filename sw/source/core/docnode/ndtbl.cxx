@@ -1261,6 +1261,29 @@ SwNodeRange * SwNodes::ExpandRangeForTableBox(const SwNodeRange & rRange)
     return pResult;
 }
 
+static void
+lcl_SetTableBoxWidths2(SwTable & rTable, size_t const nMaxBoxes,
+        SwTableBoxFmt & rBoxFmt, SwDoc & rDoc)
+{
+    // rhbz#820283, fdo#55462: set default box widths so table width is covered
+    SwTableLines & rLines = rTable.GetTabLines();
+    for (size_t nTmpLine = 0; nTmpLine < rLines.Count(); ++nTmpLine)
+    {
+        SwTableBoxes & rBoxes = rLines[nTmpLine]->GetTabBoxes();
+        size_t const nMissing = nMaxBoxes - rBoxes.size();
+        if (nMissing)
+        {
+            // default width for box at the end of an incomplete line
+            SwTableBoxFmt *const pNewFmt = rDoc.MakeTableBoxFmt();
+            pNewFmt->SetFmtAttr( SwFmtFrmSize(ATT_VAR_SIZE,
+                        (USHRT_MAX / nMaxBoxes) * (nMissing + 1)) );
+            pNewFmt->Add(rBoxes.back());
+        }
+    }
+    // default width for all boxes not at the end of an incomplete line
+    rBoxFmt.SetFmtAttr(SwFmtFrmSize(ATT_VAR_SIZE, USHRT_MAX / nMaxBoxes));
+}
+
 SwTableNode* SwNodes::TextToTable( const SwNodes::TableRanges_t & rTableNodes,
                                     SwTableFmt* pTblFmt,
                                     SwTableLineFmt* pLineFmt,
@@ -1372,33 +1395,7 @@ SwTableNode* SwNodes::TextToTable( const SwNodes::TableRanges_t & rTableNodes,
             nMaxBoxes = nBoxes;
     }
 
-    // die Tabelle ausgleichen, leere Sections einfuegen
-    sal_uInt16 n;
-
-    if( !aPosArr.empty() )
-    {
-        SwTableLines& rLns = pTable->GetTabLines();
-        sal_uInt16 nLastPos = 0;
-        for( n = 0; n < aPosArr.size(); ++n )
-        {
-            SwTableBoxFmt *pNewFmt = pDoc->MakeTableBoxFmt();
-            pNewFmt->SetFmtAttr( SwFmtFrmSize( ATT_VAR_SIZE,
-                                                aPosArr[ n ] - nLastPos ));
-            for( sal_uInt16 nLines2 = 0; nLines2 < rLns.Count(); ++nLines2 )
-                //JP 24.06.98: hier muss ein Add erfolgen, da das BoxFormat
-                //              von der rufenden Methode noch gebraucht wird!
-                pNewFmt->Add( rLns[ nLines2 ]->GetTabBoxes()[ n ] );
-
-            nLastPos = aPosArr[ n ];
-        }
-
-        // damit die Tabelle die richtige Groesse bekommt, im BoxFormat die
-        // Groesse nach "oben" transportieren.
-        OSL_ENSURE( !pBoxFmt->GetDepends(), "wer ist in dem Format noch angemeldet" );
-        pBoxFmt->SetFmtAttr( SwFmtFrmSize( ATT_VAR_SIZE, nLastPos ));
-    }
-    else
-        pBoxFmt->SetFmtAttr( SwFmtFrmSize( ATT_VAR_SIZE, USHRT_MAX / nMaxBoxes ));
+    lcl_SetTableBoxWidths2(*pTable, nMaxBoxes, *pBoxFmt, *pDoc);
 
     // das wars doch wohl ??
     return pTblNd;
