@@ -1482,9 +1482,8 @@ XclExpColinfo::XclExpColinfo( const XclExpRoot& rRoot,
         SCCOL nScCol, SCROW nLastScRow, XclExpColOutlineBuffer& rOutlineBfr ) :
     XclExpRecord( EXC_ID_COLINFO, 12 ),
     XclExpRoot( rRoot ),
-    mnFlags( 0 ),
     mnWidth( 0 ),
-    mnScWidth( 0 ),
+    mnFlags( 0 ),
     mnFirstXclCol( static_cast< sal_uInt16 >( nScCol ) ),
     mnLastXclCol( static_cast< sal_uInt16 >( nScCol ) )
 {
@@ -1498,7 +1497,7 @@ XclExpColinfo::XclExpColinfo( const XclExpRoot& rRoot,
     // column width
     sal_uInt16 nScWidth = rDoc.GetColWidth( nScCol, nScTab );
     mnWidth = XclTools::GetXclColumnWidth( nScWidth, GetCharWidth() );
-    mnScWidth =  sc::TwipsToHMM( nScWidth );
+
     // column flags
     ::set_flag( mnFlags, EXC_COLINFO_HIDDEN, rDoc.ColHidden(nScCol, nScTab) );
 
@@ -1564,7 +1563,7 @@ void XclExpColinfo::SaveXml( XclExpXmlStream& rStrm )
             // OOXTODO: XML_outlineLevel,
             // OOXTODO: XML_phonetic,
             XML_style,          lcl_GetStyleId( rStrm, maXFId.mnXFIndex ).getStr(),
-            XML_width,          OString::valueOf( (double) (mnScWidth / (double)sc::TwipsToHMM( GetCharWidth() )) ).getStr(),
+            XML_width,          OString::valueOf( (double) (mnWidth / 255.0) ).getStr(),
             FSEND );
 }
 
