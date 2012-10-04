@@ -2057,15 +2057,15 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     aRangeList.push_back(pRange);
                 }
 
-                AbstractScCondFormatDlg* pDlg = NULL;
+                boost::scoped_ptr<AbstractScCondFormatDlg> pDlg;
                 const ScConditionalFormat* pCondFormat = pDoc->GetCondFormat(aPos.Col(), aPos.Row(), aPos.Tab());
                 if(pCondFormat)
                 {
-                    pDlg = pFact->CreateScCondFormatDlg( pTabViewShell->GetDialogParent(), pDoc, pCondFormat, pCondFormat->GetRange(), aPos, RID_SCDLG_CONDFORMAT );
+                    pDlg.reset(pFact->CreateScCondFormatDlg( pTabViewShell->GetDialogParent(), pDoc, pCondFormat, pCondFormat->GetRange(), aPos, RID_SCDLG_CONDFORMAT ));
                 }
                 else
                 {
-                    pDlg = pFact->CreateScCondFormatDlg( pTabViewShell->GetDialogParent(), pDoc, NULL, aRangeList, aRangeList.GetTopLeftCorner(), RID_SCDLG_CONDFORMAT );
+                    pDlg.reset(pFact->CreateScCondFormatDlg( pTabViewShell->GetDialogParent(), pDoc, NULL, aRangeList, aRangeList.GetTopLeftCorner(), RID_SCDLG_CONDFORMAT ));
                 }
 
                 if(pDlg->Execute() == RET_OK)
@@ -2076,7 +2076,6 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                         nOldIndex = pCondFormat->GetKey();
                     pData->GetDocShell()->GetDocFunc().ReplaceConditionalFormat( nOldIndex, pFormat, pData->GetTabNo(), pFormat->GetRange() );
                 }
-                delete pDlg;
             }
             break;
 
@@ -2097,13 +2096,12 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 ScAddress aPos(pData->GetCurX(), pData->GetCurY(), pData->GetTabNo());
 
                 ScConditionalFormatList* pList = pDoc->GetCondFormList( aPos.Tab() );
-                AbstractScCondFormatManagerDlg* pDlg = pFact->CreateScCondFormatMgrDlg( pTabViewShell->GetDialogParent(), pDoc, pList, aPos, RID_SCDLG_COND_FORMAT_MANAGER);
+                boost::scoped_ptr<AbstractScCondFormatManagerDlg> pDlg(pFact->CreateScCondFormatMgrDlg( pTabViewShell->GetDialogParent(), pDoc, pList, aPos, RID_SCDLG_COND_FORMAT_MANAGER));
                 if(pDlg->Execute() == RET_OK && pDlg->CondFormatsChanged())
                 {
                     ScConditionalFormatList* pCondFormatList = pDlg->GetConditionalFormatList();
                     pData->GetDocShell()->GetDocFunc().SetConditionalFormatList(pCondFormatList, aPos.Tab());
                 }
-                delete pDlg;
             }
             break;
 
@@ -2113,10 +2111,9 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
                 ScDocument* pDoc = GetViewData()->GetDocument();
-                AbstractScDataBarSettingsDlg* pDlg = pFact->CreateScDataBarSetttingsDlg( pTabViewShell->GetDialogParent(), pDoc, RID_SCDLG_DATABAR );
+                boost::scoped_ptr<AbstractScDataBarSettingsDlg> pDlg(pFact->CreateScDataBarSetttingsDlg( pTabViewShell->GetDialogParent(), pDoc, RID_SCDLG_DATABAR ));
                 OSL_ENSURE(pDlg, "Dialog create fail!");
                 pDlg->Execute();
-                delete pDlg;
             }
             break;
 
@@ -2126,13 +2123,12 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
 
                 ScDocument* pDoc = GetViewData()->GetDocument();
-                AbstractScDataBarSettingsDlg* pDlg = pFact->CreateScDataBarSetttingsDlg( pTabViewShell->GetDialogParent(), pDoc, RID_SCDLG_DATABAR );
+                boost::scoped_ptr<AbstractScDataBarSettingsDlg> pDlg(pFact->CreateScDataBarSetttingsDlg( pTabViewShell->GetDialogParent(), pDoc, RID_SCDLG_DATABAR ));
                 OSL_ENSURE(pDlg, "Dialog create fail!");
                 if(pDlg->Execute() == RET_OK)
                 {
                     //add here code that handles the data bar inserting
                 }
-                delete pDlg;
             }
             break;
 
