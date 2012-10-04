@@ -64,6 +64,9 @@ CFLAGS_NO_EXCEPTIONS=-fno-exceptions
 
 # Normal C++ compilation flags
 CFLAGSCXX=-pipe -fsigned-char $(ARCH_FLAGS) -Wno-ctor-dtor-privacy
+.IF "$(HAVE_THREADSAFE_STATICS)" != "TRUE"
+CFLAGSCXX += -fno-threadsafe-statics
+.END
 
 # No PIC needed as we don't build dynamic objects
 PICSWITCH:=

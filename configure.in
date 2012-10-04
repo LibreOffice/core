@@ -5166,51 +5166,42 @@ dnl ===================================================================
 AC_MSG_CHECKING([whether $CXX supports thread safe statics])
 unset HAVE_THREADSAFE_STATICS
 if test "$GCC" = "yes"; then
-    save_CXXFLAGS=$CXXFLAGS
-    CXXFLAGS="$CXXFLAGS -fthreadsafe-statics"
-    AC_LANG_PUSH([C++])
-    AC_COMPILE_IFELSE([AC_LANG_PROGRAM(,)],[HAVE_THREADSAFE_STATICS=TRUE],[])
-    AC_LANG_POP([C++])
-    CXXFLAGS=$save_CXXFLAGS
-    if test "$HAVE_THREADSAFE_STATICS" = "TRUE"; then
-        dnl Some C++ runtimes use a single lock for all static variables, which
-        dnl can cause deadlock in multi-threaded applications.  This is not
-        dnl easily tested here; for POSIX-based systems, if executing the
-        dnl following C++ program does not terminate then the tool chain
-        dnl apparently has this problem:
-        dnl
-        dnl   #include <pthread.h>
-        dnl   int h() { return 0; }
-        dnl   void * g(void * unused) {
-        dnl     static int n = h();
-        dnl     return &n;
-        dnl   }
-        dnl   int f() {
-        dnl     pthread_t t;
-        dnl     pthread_create(&t, 0, g, 0);
-        dnl     pthread_join(t, 0);
-        dnl     return 0;
-        dnl   }
-        dnl   int main() {
-        dnl     static int n = f();
-        dnl     return n;
-        dnl   }
-        dnl
-        dnl Mac OS X up to at least 10.7.1 is known to have this problem, as is
-        dnl at least one instance of GCC 4.2.4 (used on a "Linux
-        dnl ooobuild1.osuosl.org 2.6.9-101.plus.c4smp #1 SMP Thu Jul 21 19:08:15
-        dnl EDT 2011 i686 i686 i386 GNU/Linux" machine); see the definition of
-        dnl __cxa_guard_acquire in GCC's libstdc++-v3/libsupc++/guard.cc for
-        dnl what #ifdefs actually make a difference there.  Conservative advice
-        dnl from Jakub Jelinek is to assume it working in GCC >= 4.3:
-        if test "$_os" = "Darwin" -o "${GCCVER?}" -lt 040300; then
-            unset HAVE_THREADSAFE_STATICS
-            AC_MSG_RESULT([broken (i.e., no)])
-        else
-            AC_MSG_RESULT([yes])
-        fi
+    dnl -fthreadsafe-statics is available since GCC 4, so always available for
+    dnl us.  However, some C++ runtimes use a single lock for all static
+    dnl variables, which can cause deadlock in multi-threaded applications.
+    dnl This is not easily tested here; for POSIX-based systems, if executing
+    dnl the following C++ program does not terminate then the tool chain
+    dnl apparently has this problem:
+    dnl
+    dnl   #include <pthread.h>
+    dnl   int h() { return 0; }
+    dnl   void * g(void * unused) {
+    dnl     static int n = h();
+    dnl     return &n;
+    dnl   }
+    dnl   int f() {
+    dnl     pthread_t t;
+    dnl     pthread_create(&t, 0, g, 0);
+    dnl     pthread_join(t, 0);
+    dnl     return 0;
+    dnl   }
+    dnl   int main() {
+    dnl     static int n = f();
+    dnl     return n;
+    dnl   }
+    dnl
+    dnl Mac OS X up to at least 10.7.1 is known to have this problem, as is at
+    dnl least one instance of GCC 4.2.4 (used on a "Linux ooobuild1.osuosl.org
+    dnl 2.6.9-101.plus.c4smp #1 SMP Thu Jul 21 19:08:15 EDT 2011 i686 i686 i386
+    dnl GNU/Linux" machine); see the definition of __cxa_guard_acquire in GCC's
+    dnl libstdc++-v3/libsupc++/guard.cc for what #ifdefs actually make a
+    dnl difference there.  Conservative advice from Jakub Jelinek is to assume
+    dnl it working in GCC >= 4.3:
+    if test "$_os" = "Darwin" -o "${GCCVER?}" -lt 040300; then
+        AC_MSG_RESULT([broken (i.e., no)])
     else
-        AC_MSG_RESULT([no])
+        HAVE_THREADSAFE_STATICS=TRUE
+        AC_MSG_RESULT([yes])
     fi
 else
     AC_MSG_RESULT([unknown (assuming no)])

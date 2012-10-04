@@ -46,6 +46,9 @@ CFLAGS+=-fmessage-length=0 -c
 
 CFLAGSCC=-pipe $(ARCH_FLAGS)
 CFLAGSCXX=-pipe $(ARCH_FLAGS)
+.IF "$(HAVE_THREADSAFE_STATICS)" != "TRUE"
+CFLAGSCXX += -fno-threadsafe-statics
+.END
 
 .IF "$(HAVE_CXX0X)" == "TRUE"
 # FIXME still does not compile fully CFLAGSCXX+=-std=gnu++0x

@@ -81,6 +81,10 @@ gb_CXXFLAGS_COMMON := \
 	-fno-common \
 	-pipe \
 
+ifneq ($(HAVE_THREADSAFE_STATICS),TRUE)
+gb_CXXFLAGS_COMMON += -fno-threadsafe-statics
+endif
+
 ifeq ($(HAVE_GCC_VISIBILITY_FEATURE),TRUE)
 gb_VISIBILITY_FLAGS := -DHAVE_GCC_VISIBILITY_FEATURE -fvisibility=hidden
 ifneq ($(HAVE_GCC_VISIBILITY_BROKEN),TRUE)

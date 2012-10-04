@@ -87,10 +87,6 @@ ifeq ($(HAVE_GCC_NO_LONG_DOUBLE),TRUE)
 gb_CXXFLAGS += -Wno-long-double
 endif
 
-ifneq ($(HAVE_THREADSAFE_STATICS),TRUE)
-gb_CXXFLAGS += -fno-threadsafe-statics
-endif
-
 # these are to get g++ to switch to Objective-C++ mode
 # (see toolkit module for a case where it is necessary to do it this way)
 gb_OBJCXXFLAGS := -x objective-c++ -fobjc-exceptions
