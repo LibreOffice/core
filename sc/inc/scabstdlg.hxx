@@ -94,6 +94,8 @@ class AbstractScCondFormatManagerDlg : public VclAbstractDialog
 {
 public:
     virtual ScConditionalFormatList* GetConditionalFormatList() = 0;
+
+    virtual bool CondFormatsChanged() = 0;
 };
 
 class AbstractScDataBarSettingsDlg : public VclAbstractDialog

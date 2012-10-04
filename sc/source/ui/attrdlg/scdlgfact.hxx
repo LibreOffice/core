@@ -148,6 +148,8 @@ class AbstractScCondFormatManagerDlg_Impl : public AbstractScCondFormatManagerDl
     DECL_ABSTDLG_BASE(AbstractScCondFormatManagerDlg_Impl, ScCondFormatManagerDlg)
 
     virtual ScConditionalFormatList* GetConditionalFormatList();
+
+    virtual bool CondFormatsChanged();
 };
 
 class AbstractScDataBarSettingsDlg_Impl : public AbstractScDataBarSettingsDlg

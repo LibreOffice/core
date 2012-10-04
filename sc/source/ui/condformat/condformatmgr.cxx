@@ -174,7 +174,8 @@ ScCondFormatManagerDlg::ScCondFormatManagerDlg(Window* pParent, ScDocument* pDoc
     mpFormatList( pFormatList ? new ScConditionalFormatList(*pFormatList) : NULL),
     maCtrlManager(this, pDoc, mpFormatList, rPos),
     mpDoc(pDoc),
-    maPos(rPos)
+    maPos(rPos),
+    mbModified(false)
 {
     FreeResource();
 
@@ -196,9 +197,15 @@ ScConditionalFormatList* ScCondFormatManagerDlg::GetConditionalFormatList()
     return pList;
 }
 
+bool ScCondFormatManagerDlg::CondFormatsChanged()
+{
+    return mbModified;
+}
+
 IMPL_LINK_NOARG(ScCondFormatManagerDlg, RemoveBtnHdl)
 {
     maCtrlManager.DeleteSelection();
+    mbModified = true;
     return 0;
 }
 
@@ -221,6 +228,8 @@ IMPL_LINK_NOARG(ScCondFormatManagerDlg, EditBtnHdl)
         maCtrlManager.Update();
     }
     delete pDlg;
+
+    mbModified = true;
 
     return 0;
 }

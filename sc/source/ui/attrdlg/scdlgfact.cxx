@@ -462,6 +462,11 @@ ScConditionalFormatList* AbstractScCondFormatManagerDlg_Impl::GetConditionalForm
     return pDlg->GetConditionalFormatList();
 }
 
+bool AbstractScCondFormatManagerDlg_Impl::CondFormatsChanged()
+{
+    return pDlg->CondFormatsChanged();
+}
+
 
 long AbstractScMetricInputDlg_Impl::GetInputValue( FieldUnit eUnit ) const
 {
