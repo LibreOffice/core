@@ -36,27 +36,22 @@ class SvxSpellWrapper;
 class HyphenEdit : public Edit
 {
 public:
-    HyphenEdit( Window* pParent, const ResId& rResId );
+    HyphenEdit(Window* pParent);
 
 protected:
-    virtual void    KeyInput( const KeyEvent &rKEvt );
+    virtual void KeyInput(const KeyEvent &rKEvt);
 };
-
-// class SvxHyphenWordDialog ---------------------------------------------
 
 class SvxHyphenWordDialog : public SfxModalDialog
 {
-    FixedText           aWordFT;
-    HyphenEdit     aWordEdit;
-    ImageButton         aLeftBtn;
-    ImageButton         aRightBtn;
-    OKButton            aOkBtn;
-    PushButton          aContBtn;
-    PushButton          aDelBtn;
-    FixedLine           aFLBottom;
-    HelpButton          aHelpBtn;
-    PushButton          aHyphAll;
-    CancelButton        aCancelBtn;
+    HyphenEdit*         m_pWordEdit;
+    PushButton*         m_pLeftBtn;
+    PushButton*         m_pRightBtn;
+    PushButton*         m_pOkBtn;
+    PushButton*         m_pContBtn;
+    PushButton*         m_pDelBtn;
+    PushButton*         m_pHyphAll;
+    PushButton*         m_pCloseBtn;
     String              aLabel;
     SvxSpellWrapper*    pHyphWrapper;
     uno::Reference< linguistic2::XHyphenator >        xHyphenator;

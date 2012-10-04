@@ -66,7 +66,6 @@ $(eval $(call gb_SrsTarget_add_files,cui/res,\
     cui/source/dialogs/hangulhanjadlg.src \
     cui/source/dialogs/hlmarkwn.src \
     cui/source/dialogs/hyperdlg.src \
-    cui/source/dialogs/hyphen.src \
     cui/source/dialogs/iconcdlg.src \
     cui/source/dialogs/insrc.src \
     cui/source/dialogs/multipat.src \

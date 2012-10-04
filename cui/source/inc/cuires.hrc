@@ -201,8 +201,6 @@
 #define RID_SVX_WND_COMMON_LINGU            ( RID_SVX_START +  0 )
 #define RID_SVX_GRFFILTER_DLG_EMBOSS_TAB    (RID_SVX_START + 337)
 #define RID_SVXDLG_SEARCHATTR               (RID_SVX_START +  22)
-#define RID_SVXDLG_HYPHENATE                (RID_SVX_START +  30)
-#define RID_SVXSTR_HMERR_CHECKINSTALL       (RID_SVX_START +  94)
 
 // hyperlink dialog
 #define RID_SVXDLG_NEWHYPERLINK             (RID_SVX_START + 227)
