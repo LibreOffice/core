@@ -58,6 +58,7 @@ $(eval $(call gb_SrsTarget_add_files,cui/res,\
     cui/source/dialogs/colorpicker.src \
     cui/source/dialogs/commonlingui.src \
     cui/source/dialogs/cuiimapdlg.src \
+    cui/source/dialogs/cuires.src \
     cui/source/dialogs/dlgname.src \
     cui/source/dialogs/fmsearch.src \
     cui/source/dialogs/gallery.src \
@@ -80,7 +81,6 @@ $(eval $(call gb_SrsTarget_add_files,cui/res,\
     cui/source/dialogs/srchxtra.src \
     cui/source/dialogs/svuidlg.src \
     cui/source/dialogs/tbxform.src \
-    cui/source/dialogs/thesdlg.src \
     cui/source/options/certpath.src \
     cui/source/options/connpooloptions.src \
     cui/source/options/dbregister.src \

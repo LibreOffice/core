@@ -212,7 +212,6 @@
 #define RID_SVX_GRFFILTER_DLG_EMBOSS_TAB    (RID_SVX_START + 337)
 #define RID_SVXDLG_SEARCHATTR               (RID_SVX_START +  22)
 #define RID_SVXDLG_HYPHENATE                (RID_SVX_START +  30)
-#define RID_SVXDLG_THESAURUS                (RID_SVX_START +  31)
 #define RID_SVXSTR_HMERR_CHECKINSTALL       (RID_SVX_START +  94)
 
 // hyperlink dialog
@@ -428,6 +427,8 @@
 #define RID_SVXSTR_EVENT_RIGHTCLICK                         (RID_SVX_START + 1192)
 #define RID_SVXSTR_EVENT_CALCULATE                          (RID_SVX_START + 1193)
 #define RID_SVXSTR_EVENT_CONTENTCHANGED                     (RID_SVX_START + 1194)
+
+#define RID_SVXSTR_ERR_TEXTNOTFOUND                         (RID_SVX_START + 1195)
 
 #define RID_SVXDLG_CERTPATH                                 (RID_SVX_START + 1198)
 

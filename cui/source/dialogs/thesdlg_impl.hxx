@@ -55,14 +55,14 @@ using namespace ::com::sun::star;
 using ::rtl::OUString;
 
 class SvLBoxEntry;
-class ThesaurusAlternativesCtrl_Impl;
+class ThesaurusAlternativesCtrl;
 
-class AlternativesString_Impl : public SvLBoxString
+class AlternativesString : public SvLBoxString
 {
-    ThesaurusAlternativesCtrl_Impl &    m_rControlImpl;
+    ThesaurusAlternativesCtrl&    m_rControlImpl;
 public:
 
-    AlternativesString_Impl( ThesaurusAlternativesCtrl_Impl &rControl,
+    AlternativesString( ThesaurusAlternativesCtrl &rControl,
         SvLBoxEntry* pEntry, sal_uInt16 nFlags, const String& rStr );
 
     virtual void Paint( const Point& rPos, SvLBox& rDev, sal_uInt16 nFlags, SvLBoxEntry* pEntry);
