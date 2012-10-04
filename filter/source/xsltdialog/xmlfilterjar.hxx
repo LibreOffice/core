@@ -47,7 +47,6 @@ private:
 
     ::rtl::OUString sVndSunStarPackage;
     ::rtl::OUString sXSLTPath;
-    ::rtl::OUString sDTDPath;
     ::rtl::OUString sTemplatePath;
     ::rtl::OUString sSpecialConfigManager;
     ::rtl::OUString sPump;

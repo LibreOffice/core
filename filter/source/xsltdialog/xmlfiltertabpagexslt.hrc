@@ -23,9 +23,6 @@
 
 #define FT_XML_DOCTYPE                  1
 #define ED_XML_DOCTYPE                  2
-#define FT_XML_DTD_SCHEMA               3
-#define ED_XML_DTD_SCHEMA               4
-#define ED_XML_DTD_SCHEMA_BROWSE        5
 #define FT_XML_EXPORT_XSLT              6
 #define ED_XML_EXPORT_XSLT              7
 #define PB_XML_EXPORT_XSLT_BROWSE       8

@@ -85,7 +85,6 @@ private:
 
     OUString m_sDialogTitle;
 
-    OUString m_sDTDPath;
 };
 
 #endif

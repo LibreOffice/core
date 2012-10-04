@@ -196,7 +196,7 @@ void TypeDetectionExporter::doExport( Reference< XOutputStream > xOS,  const XML
                 sValue += sDelim;
                 sValue += createRelativeURL( pFilter->maFilterName, pFilter->maExportXSLT );
                 sValue += sDelim;
-                sValue += createRelativeURL( pFilter->maFilterName, pFilter->maDTD );
+                // entry DTD obsolete and removed, but delimiter kept
                 sValue += sDelim;
                 sValue += pFilter->maComment;
                 sValue += sComma;

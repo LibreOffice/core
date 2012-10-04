@@ -175,7 +175,6 @@ filter_info_impl* TypeDetectionImporter::createFilterForNode( Node * pNode )
     pFilter->maExportService = getSubdata( 3, aDelim, aFilterUserData );
     pFilter->maImportXSLT = getSubdata( 4, aDelim, aFilterUserData );
     pFilter->maExportXSLT = getSubdata( 5, aDelim, aFilterUserData );
-    pFilter->maDTD = getSubdata( 6, aDelim, aFilterUserData );
     pFilter->maComment = getSubdata( 7, aDelim, aFilterUserData );
 
 

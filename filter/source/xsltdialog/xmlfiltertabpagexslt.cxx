@@ -43,10 +43,6 @@ XMLFilterTabPageXSLT::XMLFilterTabPageXSLT( Window* pParent, ResMgr& rResMgr, co
     maFTDocType( this, ResId( FT_XML_DOCTYPE, rResMgr ) ),
     maEDDocType( this, ResId( ED_XML_DOCTYPE, rResMgr ) ),
 
-    maFTDTDSchema( this, ResId( FT_XML_DTD_SCHEMA, rResMgr ) ),
-    maEDDTDSchema( this, ResId( ED_XML_DTD_SCHEMA, rResMgr ), INET_PROT_FILE ),
-    maPBDTDSchemaBrowse( this, ResId( ED_XML_DTD_SCHEMA_BROWSE, rResMgr ) ),
-
     maFTExportXSLT( this, ResId( FT_XML_EXPORT_XSLT, rResMgr ) ),
     maEDExportXSLT( this, ResId( ED_XML_EXPORT_XSLT, rResMgr ), INET_PROT_FILE ),
     maPBExprotXSLT( this, ResId( PB_XML_EXPORT_XSLT_BROWSE, rResMgr ) ),
@@ -81,12 +77,10 @@ XMLFilterTabPageXSLT::XMLFilterTabPageXSLT( Window* pParent, ResMgr& rResMgr, co
         OSL_FAIL( "XMLFilterTabPageXSLT::XMLFilterTabPageXSLT exception catched!" );
     }
 
-    maPBDTDSchemaBrowse.SetClickHdl( LINK ( this, XMLFilterTabPageXSLT, ClickBrowseHdl_Impl ) );
     maPBExprotXSLT.SetClickHdl( LINK ( this, XMLFilterTabPageXSLT, ClickBrowseHdl_Impl ) );
     maPBImportXSLT.SetClickHdl( LINK ( this, XMLFilterTabPageXSLT, ClickBrowseHdl_Impl ) );
     maPBImportTemplate.SetClickHdl( LINK ( this, XMLFilterTabPageXSLT, ClickBrowseHdl_Impl ) );
 
-    maEDDTDSchema.SetHelpId( HID_XML_FILTER_DTD );
     maEDExportXSLT.SetHelpId( HID_XML_FILTER_EXPORT_XSLT );
     maEDImportXSLT.SetHelpId( HID_XML_FILTER_IMPORT_XSLT );
     maEDImportTemplate.SetHelpId( HID_XML_FILTER_IMPORT_TEMPLATE );
@@ -102,7 +96,6 @@ bool XMLFilterTabPageXSLT::FillInfo( filter_info_impl* pInfo )
     if( pInfo )
     {
         pInfo->maDocType = maEDDocType.GetText();
-        pInfo->maDTD = GetURL( maEDDTDSchema );
         pInfo->maExportXSLT = GetURL( maEDExportXSLT );
         pInfo->maImportXSLT = GetURL( maEDImportXSLT );
         pInfo->maImportTemplate = GetURL( maEDImportTemplate );
@@ -118,7 +111,6 @@ void XMLFilterTabPageXSLT::SetInfo(const filter_info_impl* pInfo)
     {
         maEDDocType.SetText( pInfo->maDocType );
 
-        SetURL( maEDDTDSchema, pInfo->maDTD );
         SetURL( maEDExportXSLT, pInfo->maExportXSLT );
         SetURL( maEDImportXSLT, pInfo->maImportXSLT );
         SetURL( maEDImportTemplate, pInfo->maImportTemplate );
@@ -184,11 +176,7 @@ IMPL_LINK ( XMLFilterTabPageXSLT, ClickBrowseHdl_Impl, PushButton *, pButton )
 {
     SvtURLBox* pURLBox;
 
-    if( pButton == &maPBDTDSchemaBrowse )
-    {
-        pURLBox = &maEDDTDSchema;
-    }
-    else if( pButton == &maPBExprotXSLT )
+    if( pButton == &maPBExprotXSLT )
     {
         pURLBox = &maEDExportXSLT;
     }

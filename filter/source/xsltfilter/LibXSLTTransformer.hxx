@@ -94,7 +94,6 @@ namespace XSLT
         static const char* const PARAM_SOURCE_BASE_URL;
         static const char* const PARAM_TARGET_URL;
         static const char* const PARAM_TARGET_BASE_URL;
-        static const char* const PARAM_DOCTYPE_SYSTEM;
         static const char* const PARAM_DOCTYPE_PUBLIC;
 
         // the UNO ServiceFactory
