@@ -20,7 +20,9 @@
 #ifndef _DXFGRPRD_HXX
 #define _DXFGRPRD_HXX
 
-#include <svtools/fltcall.hxx>
+#include <sal/types.h>
+
+#include <tools/stream.hxx>
 
 #define DXF_MAX_STRING_LEN 256 // Max Stringlaenge (ohne die 0)
 

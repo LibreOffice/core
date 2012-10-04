@@ -34,10 +34,11 @@
 #include <vcl/virdev.hxx>
 #include <vcl/cvtgrf.hxx>
 #include <vcl/bmpacc.hxx>
-#include <svtools/fltcall.hxx>
 #include <tools/tempfile.hxx>
 #include <osl/process.h>
 #include <osl/file.hxx>
+
+class FilterConfigItem;
 
 /*************************************************************************
 |*

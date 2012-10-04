@@ -20,7 +20,8 @@
 
 #include <vcl/graph.hxx>
 #include <vcl/bmpacc.hxx>
-#include <svtools/fltcall.hxx>
+
+class FilterConfigItem;
 
 #define RAS_TYPE_OLD            0x00000000      // supported formats by this filter
 #define RAS_TYPE_STANDARD       0x00000001

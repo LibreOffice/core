@@ -25,6 +25,8 @@
 #include "dxf2mtf.hxx"
 #include <math.h>
 
+class FilterConfigItem;
+
 //================== GraphicImport - die exportierte Funktion ================
 
 extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool __LOADONCALLAPI

@@ -20,7 +20,8 @@
 
 #include <vcl/graph.hxx>
 #include <vcl/bmpacc.hxx>
-#include <svtools/fltcall.hxx>
+
+class FilterConfigItem;
 
 //============================ PCXReader ==================================
 

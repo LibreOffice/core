@@ -20,7 +20,9 @@
 
 #include <vcl/graph.hxx>
 #include <vcl/bmpacc.hxx>
-#include <svtools/fltcall.hxx>
+#include <vcl/outdev.hxx>
+
+class FilterConfigItem;
 
 //============================ PSDReader ==================================
 

@@ -22,9 +22,10 @@
 #include <tools/poly.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/lineinfo.hxx>
-#include <svtools/fltcall.hxx>
 
 #include <math.h>
+
+class FilterConfigItem;
 
 // MT: NOOLDSV, someone should change the code...
 enum PenStyle { PEN_NULL, PEN_SOLID, PEN_DOT, PEN_DASH, PEN_DASHDOT };

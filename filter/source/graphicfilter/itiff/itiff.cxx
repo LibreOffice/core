@@ -19,10 +19,11 @@
 
 #include <vcl/graph.hxx>
 #include <vcl/bmpacc.hxx>
-#include <svtools/fltcall.hxx>
 #include <vcl/animate.hxx>
 #include "lzwdecom.hxx"
 #include "ccidecom.hxx"
+
+class FilterConfigItem;
 
 #define OOODEBUG(str,Num) //(InfoBox(NULL,String(str)+String(" ")+String(Num)).Execute();
 

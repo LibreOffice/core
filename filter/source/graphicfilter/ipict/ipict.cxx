@@ -23,10 +23,11 @@
 #include <vcl/graph.hxx>
 #include <tools/poly.hxx>
 #include <vcl/virdev.hxx>
-#include <svtools/fltcall.hxx>
 #include <math.h>
 
 #include "shape.hxx"
+
+class FilterConfigItem;
 
 namespace PictReaderInternal {
   //! utilitary class to store a pattern, ...
