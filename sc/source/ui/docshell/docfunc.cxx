@@ -5059,6 +5059,30 @@ sal_Bool ScDocFunc::InsertAreaLink( const String& rFile, const String& rFilter,
     return sal_True;
 }
 
+namespace {
+
+void RemoveCondFormatAttributes(ScDocument* pDoc, const ScConditionalFormat* pFormat)
+{
+    const ScRangeList& rRangeList = pFormat->GetRange();
+
+    ScPatternAttr aPattern( pDoc->GetPool() );
+    aPattern.GetItemSet().Put( SfxUInt32Item( ATTR_CONDITIONAL, 0 ) );
+    ScMarkData aMarkData;
+    aMarkData.MarkFromRangeList(rRangeList, true);
+    pDoc->ApplySelectionPattern( aPattern , aMarkData );
+}
+
+void SetConditionalFormatAttributes(ScDocument* pDoc, const ScRangeList& rRanges, sal_uLong nIndex)
+{
+    ScPatternAttr aPattern( pDoc->GetPool() );
+    aPattern.GetItemSet().Put( SfxUInt32Item( ATTR_CONDITIONAL, nIndex ) );
+    ScMarkData aMarkData;
+    aMarkData.MarkFromRangeList(rRanges, true);
+    pDoc->ApplySelectionPattern( aPattern , aMarkData );
+}
+
+}
+
 void ScDocFunc::ReplaceConditionalFormat( sal_uLong nOldFormat, ScConditionalFormat* pFormat, SCTAB nTab, const ScRangeList& rRanges )
 {
     ScDocShellModificator aModificator(rDocShell);
@@ -5068,6 +5092,12 @@ void ScDocFunc::ReplaceConditionalFormat( sal_uLong nOldFormat, ScConditionalFor
 
     if(nOldFormat)
     {
+        ScConditionalFormat* pOldFormat = pDoc->GetCondFormList(nTab)->GetFormat(nOldFormat);
+        if(pOldFormat)
+        {
+            RemoveCondFormatAttributes(pDoc, pOldFormat);
+        }
+
         pDoc->DeleteConditionalFormat(nOldFormat, nTab);
         pDoc->SetStreamValid(nTab, false);
     }
@@ -5075,16 +5105,41 @@ void ScDocFunc::ReplaceConditionalFormat( sal_uLong nOldFormat, ScConditionalFor
     {
 	sal_uLong nIndex = pDoc->AddCondFormat(pFormat, nTab);
 
-	ScPatternAttr aPattern( pDoc->GetPool() );
-	aPattern.GetItemSet().Put( SfxUInt32Item( ATTR_CONDITIONAL, nIndex ) );
-	ScMarkData aMarkData;
-	aMarkData.MarkFromRangeList(rRanges, true);
-	pDoc->ApplySelectionPattern( aPattern , aMarkData );
+        SetConditionalFormatAttributes(pDoc, rRanges, nIndex);
 	size_t n = rRanges.size();
 	for(size_t i = 0; i < n; ++i)
 	    pFormat->DoRepaint(rRanges[i]);
         pDoc->SetStreamValid(nTab, false);
     }
+    aModificator.SetDocumentModified();
+    SFX_APP()->Broadcast(SfxSimpleHint(SC_HINT_AREAS_CHANGED));
+}
+
+void ScDocFunc::SetConditionalFormatList( ScConditionalFormatList* pList, SCTAB nTab )
+{
+    ScDocShellModificator aModificator(rDocShell);
+    ScDocument* pDoc = rDocShell.GetDocument();
+    if(pDoc->IsTabProtected(nTab))
+        return;
+
+    // first remove all old entries
+    ScConditionalFormatList* pOldList = pDoc->GetCondFormList(nTab);
+    for(ScConditionalFormatList::const_iterator itr = pOldList->begin(), itrEnd = pOldList->end(); itr != itrEnd; ++itr)
+    {
+        RemoveCondFormatAttributes(pDoc, &(*itr));
+    }
+
+    // then set new entries
+    for(ScConditionalFormatList::iterator itr = pList->begin(); itr != pList->end(); ++itr)
+    {
+        sal_uLong nIndex = itr->GetKey();
+        const ScRangeList& rRange = itr->GetRange();
+        SetConditionalFormatAttributes(pDoc, rRange, nIndex);
+    }
+
+    pDoc->SetCondFormList(pList, nTab);
+
+    pDoc->SetStreamValid(nTab, false);
     aModificator.SetDocumentModified();
     SFX_APP()->Broadcast(SfxSimpleHint(SC_HINT_AREAS_CHANGED));
 }

@@ -2100,7 +2100,8 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 AbstractScCondFormatManagerDlg* pDlg = pFact->CreateScCondFormatMgrDlg( pTabViewShell->GetDialogParent(), pDoc, pList, aPos, RID_SCDLG_COND_FORMAT_MANAGER);
                 if(pDlg->Execute() == RET_OK)
                 {
-                    pDoc->SetCondFormList(pDlg->GetConditionalFormatList(), aPos.Tab());
+                    ScConditionalFormatList* pCondFormatList = pDlg->GetConditionalFormatList();
+                    pData->GetDocShell()->GetDocFunc().SetConditionalFormatList(pCondFormatList, aPos.Tab());
                 }
                 delete pDlg;
             }
