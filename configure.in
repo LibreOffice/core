@@ -2919,6 +2919,9 @@ if test "$GCC" = "yes"; then
     else
         AC_MSG_RESULT([gcc $_gcc_version])
     fi
+    if test "$GCCVER" -lt 040000; then
+        AC_MSG_ERROR([GCC $_gcc_version is too old, must be at least GCC 4.0.0])
+    fi
 fi
 
 dnl ===================================================================
