@@ -82,8 +82,6 @@ endif
 
 # UnoApiTarget
 
-gb_UnoApiTarget_RDBMAKERTARGET := $(call gb_Executable_get_target_for_build,rdbmaker)
-gb_UnoApiTarget_RDBMAKERCOMMAND := $(gb_Helper_set_ld_path) SOLARBINDIR=$(OUTDIR_FOR_BUILD)/bin $(gb_UnoApiTarget_RDBMAKERTARGET)
 gb_UnoApiTarget_REGCOMPARETARGET := $(call gb_Executable_get_target_for_build,regcompare)
 gb_UnoApiTarget_REGCOMPARECOMMAND := $(gb_Helper_set_ld_path) SOLARBINDIR=$(OUTDIR_FOR_BUILD)/bin $(gb_UnoApiTarget_REGCOMPARETARGET)
 gb_UnoApiTarget_REGMERGETARGET := $(call gb_Executable_get_target_for_build,regmerge)
@@ -92,30 +90,17 @@ gb_UnoApiTarget_REGMERGECOMMAND := $(gb_Helper_set_ld_path) SOLARBINDIR=$(OUTDIR
 gb_UnoApiTarget_TYPESRDB := $(call gb_UnoApiTarget_get_target,types)
 
 define gb_UnoApiTarget__command_impl
-RESPONSEFILE=$(call var2file,$(shell $(gb_MKTEMP)),500,$(2)) && \
-$(1) @$${RESPONSEFILE} && \
+RESPONSEFILE=$(call var2file,$(shell $(gb_MKTEMP)),500,$(1) $(2) $(3)) && \
+$(gb_UnoApiTarget_REGMERGECOMMAND) @$${RESPONSEFILE} && \
 rm -f $${RESPONSEFILE}
 endef
 
-define gb_UnoApiTarget__regmerge_command_impl
-$(call gb_UnoApiTarget__command_impl,$(gb_UnoApiTarget_REGMERGECOMMAND),$(1) $(2) $(3))
-endef
-
-define gb_UnoApiTarget__rdbmaker_command_impl
-$(call gb_UnoApiTarget__command_impl,$(gb_UnoApiTarget_RDBMAKERCOMMAND),-O$(1) -B$(2) -b$(3) $(4) $(5))
-endef
-
 define gb_UnoApiTarget__command
-$(call gb_Output_announce,$*,$(true),UNO,4)
+$(call gb_Output_announce,$(2),$(true),UNO,4)
 mkdir -p $(dir $(1)) && \
-$(if $(UNOAPI_FILES),\
-	$(call gb_UnoApiTarget__regmerge_command_impl,$(1),$(UNOAPI_ROOT),$(UNOAPI_FILES)),\
-	$(if $(UNOAPI_MERGE),\
-		$(call gb_UnoApiTarget__regmerge_command_impl,$(1),$(UNOAPI_ROOT),$(UNOAPI_MERGE)),\
-		$(call gb_UnoApiTarget__rdbmaker_command_impl,$(1),UCR,$(UNOAPI_ROOT),\
-			$(addprefix -T,$(UNOAPI_TYPES)),$(gb_UnoApiTarget_TYPESRDB)))) \
+$(call gb_UnoApiTarget__command_impl,$(1),$(UNOAPI_ROOT),$(if $(UNOAPI_FILES),$(UNOAPI_FILES),$(UNOAPI_MERGE))) \
 $(if $(UNOAPI_REFERENCE), \
-	$(call gb_Output_announce,$*,$(true),DBc,3) \
+	$(call gb_Output_announce,$(2),$(true),DBc,3) \
 	&& $(gb_UnoApiTarget_REGCOMPARECOMMAND) \
 		-f -t \
 		-r1 $(UNOAPI_REFERENCE) \
@@ -123,11 +108,11 @@ $(if $(UNOAPI_REFERENCE), \
 endef
 
 define gb_UnoApiTarget__check_mode
-$(if $(or $(and $(1),$(2),$(3)),$(and $(1),$(2)),$(and $(2),$(3)),$(and $(1),$(3))),\
-	$(error More than one mode of function of UnoApiTarget used: this is not supported),\
-	$(if $(or $(1),$(2),$(3)),,\
-		$(error Neither IDL files nor merged RDBs nor type list were used: nothing will be produced)))
-$(if $(4),,$(error No root has been set for the rdb file))
+$(if $(and $(UNOAPI_FILES),$(UNOAPI_MERGE)),\
+	$(error Both IDL files and merged RDBs were used: this is not supported))
+$(if $(or $(UNOAPI_FILES),$(UNOAPI_MERGE)),,\
+	$(error Neither IDL files nor merged RDBs were used: nothing will be produced))
+$(if $(UNOAPI_ROOT),,$(error No root has been set for the rdb file))
 endef
 
 $(call gb_UnoApiTarget_get_external_headers_target,%) :
@@ -137,7 +122,7 @@ $(call gb_UnoApiTarget_get_headers_target,%) : $(call gb_UnoApiTarget_get_extern
 	mkdir -p $(dir $@) && touch $@
 
 $(call gb_UnoApiTarget_get_target,%) :
-	$(call gb_UnoApiTarget__check_mode,$(UNOAPI_FILES),$(UNOAPI_MERGE),$(UNOAPI_TYPES),$(UNOAPI_ROOT))
+	$(call gb_UnoApiTarget__check_mode)
 	$(call gb_UnoApiTarget__command,$@,$*)
 
 .PHONY : $(call gb_UnoApiTarget_get_clean_target,%)
@@ -174,7 +159,6 @@ define gb_UnoApiTarget_UnoApiTarget
 $(call gb_UnoApiTarget_get_target,$(1)) : INCLUDE :=
 $(call gb_UnoApiTarget_get_target,$(1)) : UNOAPI_FILES :=
 $(call gb_UnoApiTarget_get_target,$(1)) : UNOAPI_MERGE :=
-$(call gb_UnoApiTarget_get_target,$(1)) : UNOAPI_TYPES :=
 $(call gb_UnoApiTarget_get_target,$(1)) : UNOAPI_REFERENCE :=
 $(call gb_UnoApiTarget_get_target,$(1)) : UNOAPI_ROOT :=
 
@@ -244,14 +228,6 @@ endef
 define gb_UnoApiTarget__merge_api
 $(call gb_UnoApiTarget_get_target,$(1)) : UNOAPI_MERGE += $(call gb_UnoApiTarget_get_target,$(2))
 $(call gb_UnoApiTarget_get_target,$(1)) : $(call gb_UnoApiTarget_get_target,$(2))
-
-endef
-
-# Set XML component dependencies description.
-define gb_UnoApiTarget_set_types
-$(call gb_UnoApiTarget_get_target,$(1)) : UNOAPI_TYPES := $(2)
-$(call gb_UnoApiTarget_get_target,$(1)) : $(gb_UnoApiTarget_TYPESRDB)
-$(call gb_UnoApiTarget_get_target,$(1)) : $(gb_UnoApiTarget_RDBMAKERTARGET)
 
 endef
 
