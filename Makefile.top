@@ -255,7 +255,7 @@ zlib\
 export gb_TAILBUILDTARGET=all slowcheck
 
 define gbuild_module_rules
-.PHONY: $(1) $(1).all $(1).check $(1).clean $(1).subsequentcheck $(1).deliver
+.PHONY: $(1) $(1).all $(1).build $(1).check $(1).clean $(1).subsequentcheck $(1).deliver
 
 $(1): bootstrap fetch
 	cd $(1) && $(GNUMAKE) -j $(GMAKE_PARALLELISM) $(GMAKE_OPTIONS) gb_PARTIALBUILD=T
@@ -268,6 +268,9 @@ $(1).all: bootstrap fetch
 		cd $(1) && unset MAKEFLAGS && \
 	) \
 	$(SOLARENV)/bin/build.pl -P$(BUILD_NCPUS) --all -- -P$(GMAKE_PARALLELISM)
+
+$(1).build:
+	cd $(1) && $(GNUMAKE) -j $(CHECK_PARALLELISM) $(GMAKE_OPTIONS) build gb_PARTIALBUILD=T
 
 $(1).check:
 	cd $(1) && $(GNUMAKE) -j $(CHECK_PARALLELISM) $(GMAKE_OPTIONS) check gb_PARTIALBUILD=T
