@@ -231,7 +231,7 @@ namespace
     OString extractPattern(VclBuilder::stringmap &rMap)
     {
         OString sPattern;
-        VclBuilder::stringmap::iterator aFind = rMap.find(OString(RTL_CONSTASCII_STRINGPARAM("pattern")));
+        VclBuilder::stringmap::iterator aFind = rMap.find(OString("pattern"));
         if (aFind != rMap.end())
         {
             sPattern = aFind->second;
@@ -270,7 +270,7 @@ namespace
         VclBuilder::stringmap::iterator aFind = rMap.find(OString("orientation"));
         if (aFind != rMap.end())
         {
-            bVertical = aFind->second.equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("vertical"));
+            bVertical = aFind->second.equalsIgnoreAsciiCase("vertical");
             rMap.erase(aFind);
         }
         return bVertical;
@@ -279,7 +279,7 @@ namespace
     bool extractInconsistent(VclBuilder::stringmap &rMap)
     {
         bool bInconsistent = false;
-        VclBuilder::stringmap::iterator aFind = rMap.find(OString(RTL_CONSTASCII_STRINGPARAM("inconsistent")));
+        VclBuilder::stringmap::iterator aFind = rMap.find(OString("inconsistent"));
         if (aFind != rMap.end())
         {
             bInconsistent = toBool(aFind->second);
@@ -293,7 +293,7 @@ namespace
         WinBits nBits = WB_CENTER|WB_VCENTER|WB_3DLOOK;
 
         bool bIsStock = false;
-        VclBuilder::stringmap::iterator aFind = rMap.find(OString(RTL_CONSTASCII_STRINGPARAM("use-stock")));
+        VclBuilder::stringmap::iterator aFind = rMap.find(OString("use-stock"));
         if (aFind != rMap.end())
         {
             bIsStock = toBool(aFind->second);
@@ -305,53 +305,59 @@ namespace
         if (bIsStock)
         {
             OString sType;
-            aFind = rMap.find(OString(RTL_CONSTASCII_STRINGPARAM("label")));
+            aFind = rMap.find(OString("label"));
             if (aFind != rMap.end())
             {
                 sType = aFind->second;
                 rMap.erase(aFind);
             }
 
-            if (sType.equalsL(RTL_CONSTASCII_STRINGPARAM("gtk-ok")))
+            if (sType == "gtk-ok")
                 pWindow = new OKButton(pParent, nBits);
-            else if (sType.equalsL(RTL_CONSTASCII_STRINGPARAM("gtk-cancel")))
+            else if (sType == "gtk-cancel")
                 pWindow = new CancelButton(pParent, nBits);
-            else if (sType.equalsL(RTL_CONSTASCII_STRINGPARAM("gtk-help")))
+            else if (sType == "gtk-help")
                 pWindow = new HelpButton(pParent, nBits);
-            else if (sType.equalsL(RTL_CONSTASCII_STRINGPARAM("gtk-media-next")))
+            else if (sType == "gtk-media-next")
             {
                 PushButton *pBtn = new PushButton(pParent, nBits);
                 pBtn->SetSymbol(SYMBOL_NEXT);
                 pWindow = pBtn;
             }
-            else if (sType.equalsL(RTL_CONSTASCII_STRINGPARAM("gtk-media-previous")))
+            else if (sType == "gtk-media-previous")
             {
                 PushButton *pBtn = new PushButton(pParent, nBits);
                 pBtn->SetSymbol(SYMBOL_PREV);
                 pWindow = pBtn;
             }
-            else if (sType.equalsL(RTL_CONSTASCII_STRINGPARAM("gtk-close")))
+            else if (sType == "gtk-close")
             {
                 PushButton *pBtn = new PushButton(pParent, nBits);
                 pBtn->SetText(VclResId(SV_BUTTONTEXT_CLOSE).toString());
                 pWindow = pBtn;
             }
-            else if (sType.equalsL(RTL_CONSTASCII_STRINGPARAM("gtk-revert-to-saved")))
+            else if (sType == "gtk-revert-to-saved")
             {
                 PushButton *pBtn = new PushButton(pParent, nBits);
                 pBtn->SetText(VclResId(SV_BUTTONTEXT_RESET).toString());
                 pWindow = pBtn;
             }
-            else if (sType.equalsL(RTL_CONSTASCII_STRINGPARAM("gtk-add")))
+            else if (sType == "gtk-add")
             {
                 PushButton *pBtn = new PushButton(pParent, nBits);
                 pBtn->SetText(VclResId(SV_BUTTONTEXT_ADD).toString());
                 pWindow = pBtn;
             }
-            else if (sType.equalsL(RTL_CONSTASCII_STRINGPARAM("gtk-delete")))
+            else if (sType == "gtk-delete")
             {
                 PushButton *pBtn = new PushButton(pParent, nBits);
                 pBtn->SetText(VclResId(SV_BUTTONTEXT_DELETE).toString());
+                pWindow = pBtn;
+            }
+            else if (sType == "gtk-remove")
+            {
+                PushButton *pBtn = new PushButton(pParent, nBits);
+                pBtn->SetText(VclResId(SV_BUTTONTEXT_REMOVE).toString());
                 pWindow = pBtn;
             }
             else
@@ -401,7 +407,7 @@ namespace
 
     void ensureDefaultWidthChars(VclBuilder::stringmap &rMap)
     {
-        OString sWidthChars(RTL_CONSTASCII_STRINGPARAM("width-chars"));
+        OString sWidthChars("width-chars");
         VclBuilder::stringmap::iterator aFind = rMap.find(sWidthChars);
         if (aFind == rMap.end())
             rMap[sWidthChars] = "25";
@@ -410,7 +416,7 @@ namespace
 
 bool VclBuilder::extractGroup(const OString &id, stringmap &rMap)
 {
-    VclBuilder::stringmap::iterator aFind = rMap.find(OString(RTL_CONSTASCII_STRINGPARAM("group")));
+    VclBuilder::stringmap::iterator aFind = rMap.find(OString("group"));
     if (aFind != rMap.end())
     {
         m_pParserState->m_aGroupMaps.push_back(RadioButtonGroupMap(id, aFind->second));
@@ -422,7 +428,7 @@ bool VclBuilder::extractGroup(const OString &id, stringmap &rMap)
 
 bool VclBuilder::extractAdjustment(const OString &id, stringmap &rMap)
 {
-    VclBuilder::stringmap::iterator aFind = rMap.find(OString(RTL_CONSTASCII_STRINGPARAM("adjustment")));
+    VclBuilder::stringmap::iterator aFind = rMap.find(OString("adjustment"));
     if (aFind != rMap.end())
     {
         m_pParserState->m_aAdjustmentMaps.push_back(SpinButtonAdjustmentMap(id, aFind->second));
@@ -512,50 +518,50 @@ Window *VclBuilder::makeObject(Window *pParent, const OString &name, const OStri
         }
     }
 
-    if (bIsPlaceHolder || name.equalsL(RTL_CONSTASCII_STRINGPARAM("GtkTreeSelection")))
+    if (bIsPlaceHolder || name == "GtkTreeSelection")
         return NULL;
 
     Window *pWindow = NULL;
-    if (name.equalsL(RTL_CONSTASCII_STRINGPARAM("GtkDialog")))
+    if (name == "GtkDialog")
     {
         WinBits nBits = WB_MOVEABLE|WB_3DLOOK|WB_CLOSEABLE;
         if (extractResizable(rMap))
             nBits |= WB_SIZEABLE;
         pWindow = new Dialog(pParent, nBits);
     }
-    else if (name.equalsL(RTL_CONSTASCII_STRINGPARAM("GtkBox")))
+    else if (name == "GtkBox")
     {
         if (extractOrientation(rMap))
             pWindow = new VclVBox(pParent);
         else
             pWindow = new VclHBox(pParent);
     }
-    else if (name.equalsL(RTL_CONSTASCII_STRINGPARAM("GtkButtonBox")))
+    else if (name == "GtkButtonBox")
     {
         if (extractOrientation(rMap))
             pWindow = new VclVButtonBox(pParent);
         else
             pWindow = new VclHButtonBox(pParent);
     }
-    else if (name.equalsL(RTL_CONSTASCII_STRINGPARAM("GtkGrid")))
+    else if (name == "GtkGrid")
         pWindow = new VclGrid(pParent);
-    else if (name.equalsL(RTL_CONSTASCII_STRINGPARAM("GtkFrame")))
+    else if (name == "GtkFrame")
         pWindow = new VclFrame(pParent);
-    else if (name.equalsL(RTL_CONSTASCII_STRINGPARAM("GtkExpander")))
+    else if (name == "GtkExpander")
         pWindow = new VclExpander(pParent);
-    else if (name.equalsL(RTL_CONSTASCII_STRINGPARAM("GtkAlignment")))
+    else if (name == "GtkAlignment")
         pWindow = new VclAlignment(pParent);
-    else if (name.equalsL(RTL_CONSTASCII_STRINGPARAM("GtkButton")))
+    else if (name == "GtkButton")
     {
         extractImage(id, rMap);
         pWindow = extractStockAndBuildButton(pParent, rMap);
     }
-    else if (name.equalsL(RTL_CONSTASCII_STRINGPARAM("GtkRadioButton")))
+    else if (name == "GtkRadioButton")
     {
         extractGroup(id, rMap);
         pWindow = new RadioButton(pParent, WB_CENTER|WB_VCENTER|WB_3DLOOK);
     }
-    else if (name.equalsL(RTL_CONSTASCII_STRINGPARAM("GtkCheckButton")))
+    else if (name == "GtkCheckButton")
     {
         //maybe always import as TriStateBox and enable/disable tristate
         bool bIsTriState = extractInconsistent(rMap);
@@ -566,7 +572,7 @@ Window *VclBuilder::makeObject(Window *pParent, const OString &name, const OStri
             pCheckBox->SetState(STATE_DONTKNOW);
         pWindow = pCheckBox;
     }
-    else if (name.equalsL(RTL_CONSTASCII_STRINGPARAM("GtkSpinButton")))
+    else if (name == "GtkSpinButton")
     {
         extractAdjustment(id, rMap);
         OString sPattern = extractPattern(rMap);
@@ -600,14 +606,14 @@ Window *VclBuilder::makeObject(Window *pParent, const OString &name, const OStri
             pWindow = pField;
         }
     }
-    else if (name.equalsL(RTL_CONSTASCII_STRINGPARAM("GtkComboBox")))
+    else if (name == "GtkComboBox")
     {
         extractModel(id, rMap);
         ListBox *pListBox = new ListBox(pParent, WB_LEFT|WB_DROPDOWN|WB_VCENTER|WB_3DLOOK);
         pListBox->SetBestDropDownLineCount();
         pWindow = pListBox;
     }
-    else if (name.equalsL(RTL_CONSTASCII_STRINGPARAM("GtkComboBoxText")))
+    else if (name == "GtkComboBoxText")
     {
         extractModel(id, rMap);
         if (extractEntry(rMap))
@@ -625,33 +631,33 @@ Window *VclBuilder::makeObject(Window *pParent, const OString &name, const OStri
             pWindow = pMenuButton;
         }
     }
-    else if (name.equalsL(RTL_CONSTASCII_STRINGPARAM("GtkTreeView")))
+    else if (name == "GtkTreeView")
     {
         extractModel(id, rMap);
         pWindow = new ListBox(pParent, WB_LEFT|WB_VCENTER|WB_3DLOOK);
     }
-    else if (name.equalsL(RTL_CONSTASCII_STRINGPARAM("GtkLabel")))
+    else if (name == "GtkLabel")
         pWindow = new FixedText(pParent, WB_CENTER|WB_VCENTER|WB_3DLOOK);
-    else if (name.equalsL(RTL_CONSTASCII_STRINGPARAM("GtkImage")))
+    else if (name == "GtkImage")
     {
         extractStock(id, rMap);
         pWindow = new FixedImage(pParent, WB_CENTER|WB_VCENTER|WB_3DLOOK);
     }
-    else if (name.equalsL(RTL_CONSTASCII_STRINGPARAM("GtkSeparator")))
+    else if (name == "GtkSeparator")
     {
         if (extractOrientation(rMap))
             pWindow = new FixedLine(pParent, WB_VERT);
         else
             pWindow = new FixedLine(pParent, WB_HORZ);
     }
-    else if (name.equalsL(RTL_CONSTASCII_STRINGPARAM("GtkEntry")))
+    else if (name == "GtkEntry")
     {
         pWindow = new Edit(pParent, WB_LEFT|WB_VCENTER|WB_BORDER|WB_3DLOOK);
         ensureDefaultWidthChars(rMap);
     }
-    else if (name.equalsL(RTL_CONSTASCII_STRINGPARAM("GtkNotebook")))
+    else if (name == "GtkNotebook")
         pWindow = new TabControl(pParent, WB_STDTABCONTROL|WB_3DLOOK);
-    else if (name.equalsL(RTL_CONSTASCII_STRINGPARAM("GtkDrawingArea")))
+    else if (name == "GtkDrawingArea")
         pWindow = new Window(pParent);
     else
     {
@@ -837,7 +843,7 @@ void VclBuilder::handleTabChild(Window *pParent, xmlreader::XmlReader &reader)
     }
 
     TabControl *pTabControl = static_cast<TabControl*>(pParent);
-    VclBuilder::stringmap::iterator aFind = aProperties.find(OString(RTL_CONSTASCII_STRINGPARAM("label")));
+    VclBuilder::stringmap::iterator aFind = aProperties.find(OString("label"));
     if (aFind != aProperties.end())
     {
         pTabControl->SetPageText(pTabControl->GetCurPageId(), OStringToOUString(aFind->second, RTL_TEXTENCODING_UTF8));
@@ -896,7 +902,7 @@ void VclBuilder::handleChild(Window *pParent, xmlreader::XmlReader &reader)
         }
     }
 
-    if (sType.equalsL(RTL_CONSTASCII_STRINGPARAM("tab")))
+    if (sType == "tab")
     {
         handleTabChild(pParent, reader);
         return;
@@ -1108,7 +1114,7 @@ Window* VclBuilder::handleObject(Window *pParent, xmlreader::XmlReader &reader)
         }
     }
 
-    if (sClass.equalsL(RTL_CONSTASCII_STRINGPARAM("GtkListStore")))
+    if (sClass == "GtkListStore")
     {
         handleListStore(reader, sID);
         return NULL;
@@ -1155,7 +1161,7 @@ Window* VclBuilder::handleObject(Window *pParent, xmlreader::XmlReader &reader)
             break;
     }
 
-    if (sClass.equalsL(RTL_CONSTASCII_STRINGPARAM("GtkAdjustment")))
+    if (sClass == "GtkAdjustment")
     {
         handleAdjustment(sID, aProperties);
         return NULL;
@@ -1219,42 +1225,42 @@ void VclBuilder::applyPackingProperty(Window *pCurrent,
                 xmlreader::XmlReader::TEXT_RAW, &name, &nsId);
             OString sValue(name.begin, name.length);
 
-            if (sKey.equalsL(RTL_CONSTASCII_STRINGPARAM("expand")))
+            if (sKey == "expand")
             {
                 bool bTrue = (sValue[0] == 't' || sValue[0] == 'T' || sValue[0] == '1');
                 pCurrent->set_expand(bTrue);
             }
-            else if (sKey.equalsL(RTL_CONSTASCII_STRINGPARAM("fill")))
+            else if (sKey == "fill")
             {
                 bool bTrue = (sValue[0] == 't' || sValue[0] == 'T' || sValue[0] == '1');
                 pCurrent->set_fill(bTrue);
             }
-            else if (sKey.equalsL(RTL_CONSTASCII_STRINGPARAM("pack-type")))
+            else if (sKey == "pack-type")
             {
                 VclPackType ePackType = (sValue[0] == 'e' || sValue[0] == 'e') ? VCL_PACK_END : VCL_PACK_START;
                 pCurrent->set_pack_type(ePackType);
             }
-            else if (sKey.equalsL(RTL_CONSTASCII_STRINGPARAM("left-attach")))
+            else if (sKey == "left-attach")
             {
                 pCurrent->set_grid_left_attach(sValue.toInt32());
             }
-            else if (sKey.equalsL(RTL_CONSTASCII_STRINGPARAM("top-attach")))
+            else if (sKey == "top-attach")
             {
                 pCurrent->set_grid_top_attach(sValue.toInt32());
             }
-            else if (sKey.equalsL(RTL_CONSTASCII_STRINGPARAM("width")))
+            else if (sKey == "width")
             {
                 pCurrent->set_grid_width(sValue.toInt32());
             }
-            else if (sKey.equalsL(RTL_CONSTASCII_STRINGPARAM("height")))
+            else if (sKey == "height")
             {
                 pCurrent->set_grid_height(sValue.toInt32());
             }
-            else if (sKey.equalsL(RTL_CONSTASCII_STRINGPARAM("padding")))
+            else if (sKey == "padding")
             {
                 pCurrent->set_padding(sValue.toInt32());
             }
-            else if (sKey.equalsL(RTL_CONSTASCII_STRINGPARAM("position")))
+            else if (sKey == "position")
             {
                 set_window_packing_position(pCurrent, sValue.toInt32());
             }
@@ -1313,8 +1319,8 @@ void VclBuilder::collectProperty(xmlreader::XmlReader &reader, const OString &rI
         sProperty = sProperty.replace('_', '-');
         //replace '_' with '-' except for property values that
         //refer to widget ids themselves. TO-DO, drop conversion
-        //and just use foo_bar properties throughout
-        if (sProperty.equalsL(RTL_CONSTASCII_STRINGPARAM("group")))
+        //and just use foo_bar properties throughout ?
+        if (sProperty == "group")
             rMap[sProperty] = sValue;
         else
             rMap[sProperty] = sValue.replace('_', '-');
@@ -1467,24 +1473,24 @@ void VclBuilder::mungeadjustment(NumericFormatter &rTarget, Adjustment &rAdjustm
         const OString &rKey = aI->first;
         const OString &rValue = aI->second;
 
-        if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("upper")))
+        if (rKey == "upper")
         {
             sal_Int64 nUpper = rValue.toDouble() * nMul;
             rTarget.SetMax(nUpper);
             rTarget.SetLast(nUpper);
         }
-        else if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("lower")))
+        else if (rKey == "lower")
         {
             sal_Int64 nLower = rValue.toDouble() * nMul;
             rTarget.SetMin(nLower);
             rTarget.SetFirst(nLower);
         }
-        else if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("value")))
+        else if (rKey == "value")
         {
             sal_Int64 nValue = rValue.toDouble() * nMul;
             rTarget.SetValue(nValue);
         }
-        else if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("step-increment")))
+        else if (rKey == "step-increment")
         {
             sal_Int64 nSpinSize = rValue.toDouble() * nMul;
             rTarget.SetSpinSize(nSpinSize);
