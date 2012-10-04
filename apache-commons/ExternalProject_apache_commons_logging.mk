@@ -14,6 +14,13 @@ $(eval $(call gb_ExternalProject_ExternalProject,apache_commons_logging))
 
 $(eval $(call gb_ExternalProject_use_unpacked,apache_commons_logging,apache_commons_logging))
 
+# TODO: this should go into RepositoryExternal.mk
+ifeq ($(SYSTEM_TOMCAT),YES)
+$(eval $(call gb_ExternalProject_use_packages,apache_commons_logging,\
+	tomcat_inc \
+))
+endif
+
 $(eval $(call gb_ExternalProject_register_targets,apache_commons_logging,\
 	build \
 ))
