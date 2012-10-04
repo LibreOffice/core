@@ -170,12 +170,7 @@ short SvxCharacterMap::Execute()
 
 // class SvxShowText =====================================================
 
-SvxShowText::SvxShowText( Window* pParent, const ResId& rResId, sal_Bool bCenter )
-:   Control( pParent, rResId ),
-    mbCenter( bCenter)
-{}
-
-SvxShowText::SvxShowText( Window* pParent, sal_Bool bCenter )
+SvxShowText::SvxShowText(Window* pParent, sal_Bool bCenter)
 :   Control( pParent ),
     mbCenter( bCenter)
 {}

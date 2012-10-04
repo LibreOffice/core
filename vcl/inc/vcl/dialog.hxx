@@ -91,7 +91,6 @@ protected:
 
 public:
                     Dialog( Window* pParent, WinBits nStyle = WB_STDDIALOG );
-                    Dialog( Window* pParent, const ResId& rResId );
                     Dialog( Window* pParent, const rtl::OString& rID, const rtl::OUString& rUIXMLDescription );
     virtual         ~Dialog();
 

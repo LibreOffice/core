@@ -49,9 +49,6 @@ class SvxShowText : public Control
 {
 public:
                     SvxShowText( Window* pParent,
-                                 const ResId& rResId,
-                                 sal_Bool bCenter = sal_False );
-                    SvxShowText( Window* pParent,
                                  sal_Bool bCenter = sal_False );
                     ~SvxShowText();
 

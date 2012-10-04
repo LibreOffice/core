@@ -347,7 +347,6 @@ namespace vcl
             resize();
         }
 
-        void setWindow( Window*, sal_Int32 i_nExpandPrio = 0 );
         void setChild( boost::shared_ptr<WindowArranger> const &, sal_Int32 i_nExpandPrio = 0 );
         // convenience: use for setChild( new WindowArranger( ... ) ) constructs
         void setChild( WindowArranger* i_pChild, sal_Int32 i_nExpandPrio = 0 )

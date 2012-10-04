@@ -547,17 +547,6 @@ Dialog::Dialog( Window* pParent, WinBits nStyle )
     ImplInit( pParent, nStyle );
 }
 
-// -----------------------------------------------------------------------
-
-Dialog::Dialog( Window* pParent, const ResId& rResId )
-    : SystemWindow( WINDOW_DIALOG )
-    , mbIsDefferedInit(false)
-{
-    ImplInitDialogData();
-    rResId.SetRT( RSC_DIALOG );
-    init(pParent, rResId);
-}
-
 VclBuilder* VclBuilderContainer::overrideResourceWithUIXML(Window *pWindow, const ResId& rResId)
 {
     sal_Int32 nUIid = static_cast<sal_Int32>(rResId.GetId());

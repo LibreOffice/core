@@ -774,14 +774,6 @@ void Indenter::resize()
     m_aElement.setPosSize( aPt, aSz );
 }
 
-void Indenter::setWindow( Window* i_pWindow, sal_Int32 i_nExpandPrio )
-{
-    OSL_VERIFY( (m_aElement.m_pElement == 0 && m_aElement.m_pChild == 0) || i_pWindow == 0 );
-    OSL_VERIFY( i_pWindow == 0 || i_pWindow->GetParent() == m_pParentWindow );
-    m_aElement.m_pElement = i_pWindow;
-    m_aElement.m_nExpandPriority = i_nExpandPrio;
-}
-
 void Indenter::setChild( boost::shared_ptr<WindowArranger> const & i_pChild, sal_Int32 i_nExpandPrio )
 {
     OSL_VERIFY( (m_aElement.m_pElement == 0 && m_aElement.m_pChild == 0 ) || i_pChild == 0 );

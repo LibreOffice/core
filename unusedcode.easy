@@ -1,12 +1,18 @@
 FontSelectPattern::FontSelectPattern(PhysicalFontFace const&, Size const&, float, int, bool)
-PopupMenu::SetSelectedEntry(unsigned short)
 RelatedMultipart::getIds()
 SanExtensionImpl::setCertExtn(unsigned char*, unsigned int, unsigned char*, unsigned int, unsigned char)
+ScConditionalFormat::dumpInfo(rtl::OUStringBuffer&) const
 ScMenuFloatingWindow::getDoc()
 ScVbaFormat<ooo::vba::excel::XRange>::setNumberFormat(com::sun::star::lang::Locale, rtl::OUString const&)
 ScVbaFormat<ooo::vba::excel::XStyle>::getAddIndent()
 ScVbaFormat<ooo::vba::excel::XStyle>::setAddIndent(com::sun::star::uno::Any const&)
 ScVbaFormat<ooo::vba::excel::XStyle>::setNumberFormat(com::sun::star::lang::Locale, rtl::OUString const&)
+SvLBoxTreeList::Clone(SvListEntry*, unsigned long&) const
+SvLBoxTreeList::Prev(SvListEntry*, unsigned short*) const
+SvTreeEntryList::front()
+SvtToolPanelOptions::AddListenerLink(Link const&)
+SvtToolPanelOptions::RemoveListenerLink(Link const&)
+SvxAutoCorrect::DeleteText(String const&, unsigned short)
 TextEngine::GetLeftMargin() const
 ThumbnailView::GetItemCount() const
 ThumbnailView::ImplScroll(Point const&)
@@ -81,14 +87,6 @@ oox::ole::AxFormPageModel::AxFormPageModel()
 oox::ole::AxMultiPageModel::AxMultiPageModel()
 oox::ole::AxTabStripModel::AxTabStripModel()
 oox::xls::BiffDrawingObjectBase::BiffDrawingObjectBase(oox::xls::WorksheetHelper const&)
-sd::ClientBox::GetMinOutputSizePixel() const
-sd::ClientBox::RemoveUnlocked()
-sd::ClientBox::SetScrollHdl(Link const&)
-sd::ClientBox::checkEntries()
-sd::ClientBox::checkIndex(int) const
-sd::ClientBox::prepareChecking()
-sd::ClientBox::removeEntry(sd::ClientInfo const*)
-sd::ClientBox::updateEntry(sd::ClientInfo const*)
 sd::Communicator::getTransmitter()
 sd::ImagePreparer::notesToHtml(unsigned int)
 sd::LeftDrawPaneShell::RegisterInterface(SfxModule*)
@@ -99,5 +97,10 @@ sd::framework::ReadOnlyModeObserver::AddStatusListener(com::sun::star::uno::Refe
 sd::framework::ReadOnlyModeObserver::ReadOnlyModeObserver(com::sun::star::uno::Reference<com::sun::star::frame::XController> const&)
 sd::framework::ResourceManager::Disable()
 sd::framework::ResourceManager::Enable()
+sd::slidesorter::controller::AnimationFunction::Blend(double, double, double)
+sd::slidesorter::controller::AnimationFunction::Linear(double)
+sd::slidesorter::controller::Properties::IsHighContrastModeActive() const
+sd::slidesorter::view::ToolTip::ShowDefaultHelpText()
+sd::slidesorter::view::ToolTip::ShowHelpText(rtl::OUString const&)
 std::__cxx1998::vector<SfxFilter*, std::allocator<SfxFilter*> >::~vector()
 std::__cxx1998::vector<std::pair<std::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::basic_string<char, std::char_traits<char>, std::allocator<char> > >, std::allocator<std::pair<std::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::basic_string<char, std::char_traits<char>, std::allocator<char> > > > >::~vector()

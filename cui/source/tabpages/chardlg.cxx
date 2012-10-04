@@ -184,14 +184,7 @@ inline SvxFont& SvxCharBasePage::GetPreviewCTLFont()
 
 // -----------------------------------------------------------------------
 
-SvxCharBasePage::SvxCharBasePage( Window* pParent, const ResId& rResId, const SfxItemSet& rItemset)
-    : SfxTabPage( pParent, rResId, rItemset )
-    , m_pPreviewWin(NULL)
-    , m_bPreviewBackgroundToCharacter( sal_False )
-{
-}
-
-SvxCharBasePage::SvxCharBasePage( Window* pParent, const rtl::OString& rID, const rtl::OUString& rUIXMLDescription, const SfxItemSet& rItemset)
+SvxCharBasePage::SvxCharBasePage(Window* pParent, const rtl::OString& rID, const rtl::OUString& rUIXMLDescription, const SfxItemSet& rItemset)
     : SfxTabPage( pParent, rID, rUIXMLDescription, rItemset )
     , m_pPreviewWin(NULL)
     , m_bPreviewBackgroundToCharacter( sal_False )

@@ -60,7 +60,6 @@ protected:
 
     sal_Bool                m_bPreviewBackgroundToCharacter;
 
-    SvxCharBasePage(Window* pParent, const ResId& rResIdTabPage, const SfxItemSet&);
     SvxCharBasePage(Window* pParent, const rtl::OString& rID, const rtl::OUString& rUIXMLDescription, const SfxItemSet& rItemset);
 
     virtual             ~SvxCharBasePage();

@@ -92,13 +92,6 @@ Name generiert, der dem Anwender praesentiert werden kann.
 
 --------------------------------------------------------------------------
 
-XubString FontList::GetFontMapText( const FontInfo& rInfo ) const;
-
-Diese Methode gibt einen Matchstring zurueck, der dem Anwender
-anzeigen soll, welche Probleme es mit diesem Font geben kann.
-
---------------------------------------------------------------------------
-
 FontInfo FontList::Get( const String& rName, const String& rStyleName ) const;
 
 Diese Methode sucht aus dem uebergebenen Namen und dem uebergebenen StyleName
@@ -189,7 +182,6 @@ public:
 
     OutputDevice*           GetDevice() const { return mpDev; }
     OutputDevice*           GetDevice2() const { return mpDev2; }
-    XubString               GetFontMapText( const FontInfo& rInfo ) const;
 
     const XubString&        GetNormalStr() const { return maNormal; }
     const XubString&        GetItalicStr() const { return maNormalItalic; }
