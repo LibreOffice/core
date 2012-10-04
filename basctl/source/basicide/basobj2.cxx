@@ -56,9 +56,9 @@ using namespace ::com::sun::star::container;
 extern "C" {
     SAL_DLLPUBLIC_EXPORT rtl_uString* basicide_choose_macro( void* pOnlyInDocument_AsXModel, sal_Bool bChooseOnly, rtl_uString* pMacroDesc )
     {
-        ::rtl::OUString aMacroDesc( pMacroDesc );
+        OUString aMacroDesc( pMacroDesc );
         Reference< frame::XModel > aDocument( static_cast< frame::XModel* >( pOnlyInDocument_AsXModel ) );
-        ::rtl::OUString aScriptURL = basctl::ChooseMacro( aDocument, bChooseOnly, aMacroDesc );
+        OUString aScriptURL = basctl::ChooseMacro( aDocument, bChooseOnly, aMacroDesc );
         rtl_uString* pScriptURL = aScriptURL.pData;
         rtl_uString_acquire( pScriptURL );
 
@@ -112,15 +112,15 @@ static bool StringCompareLessThan( const String& rStr1, const String& rStr2 )
 
 //----------------------------------------------------------------------------
 
-Sequence< ::rtl::OUString > GetMergedLibraryNames( const Reference< script::XLibraryContainer >& xModLibContainer, const Reference< script::XLibraryContainer >& xDlgLibContainer )
+Sequence< OUString > GetMergedLibraryNames( const Reference< script::XLibraryContainer >& xModLibContainer, const Reference< script::XLibraryContainer >& xDlgLibContainer )
 {
     // create a sorted list of module library names
     ::std::vector<String> aModLibList;
     if ( xModLibContainer.is() )
     {
-        Sequence< ::rtl::OUString > aModLibNames = xModLibContainer->getElementNames();
+        Sequence< OUString > aModLibNames = xModLibContainer->getElementNames();
         sal_Int32 nModLibCount = aModLibNames.getLength();
-        const ::rtl::OUString* pModLibNames = aModLibNames.getConstArray();
+        const OUString* pModLibNames = aModLibNames.getConstArray();
         for ( sal_Int32 i = 0 ; i < nModLibCount ; i++ )
             aModLibList.push_back( pModLibNames[ i ] );
         ::std::sort( aModLibList.begin() , aModLibList.end() , StringCompareLessThan );
@@ -130,9 +130,9 @@ Sequence< ::rtl::OUString > GetMergedLibraryNames( const Reference< script::XLib
     ::std::vector<String> aDlgLibList;
     if ( xDlgLibContainer.is() )
     {
-        Sequence< ::rtl::OUString > aDlgLibNames = xDlgLibContainer->getElementNames();
+        Sequence< OUString > aDlgLibNames = xDlgLibContainer->getElementNames();
         sal_Int32 nDlgLibCount = aDlgLibNames.getLength();
-        const ::rtl::OUString* pDlgLibNames = aDlgLibNames.getConstArray();
+        const OUString* pDlgLibNames = aDlgLibNames.getConstArray();
         for ( sal_Int32 i = 0 ; i < nDlgLibCount ; i++ )
             aDlgLibList.push_back( pDlgLibNames[ i ] );
         ::std::sort( aDlgLibList.begin() , aDlgLibList.end() , StringCompareLessThan );
@@ -146,7 +146,7 @@ Sequence< ::rtl::OUString > GetMergedLibraryNames( const Reference< script::XLib
 
     // copy to sequence
     sal_Int32 nLibCount = aLibList.size();
-    Sequence< ::rtl::OUString > aSeqLibNames( nLibCount );
+    Sequence< OUString > aSeqLibNames( nLibCount );
     for ( sal_Int32 i = 0 ; i < nLibCount ; i++ )
         aSeqLibNames.getArray()[ i ] = aLibList[ i ];
 
@@ -158,9 +158,9 @@ Sequence< ::rtl::OUString > GetMergedLibraryNames( const Reference< script::XLib
 bool RenameModule (
     Window* pErrorParent,
     const ScriptDocument& rDocument,
-    const ::rtl::OUString& rLibName,
-    const ::rtl::OUString& rOldName,
-    const ::rtl::OUString& rNewName
+    const OUString& rLibName,
+    const OUString& rOldName,
+    const OUString& rNewName
 )
 {
     if ( !rDocument.hasModule( rLibName, rOldName ) )
@@ -259,7 +259,7 @@ namespace
 
 //----------------------------------------------------------------------------
 
-::rtl::OUString ChooseMacro( const uno::Reference< frame::XModel >& rxLimitToDocument, bool bChooseOnly, const ::rtl::OUString& rMacroDesc )
+OUString ChooseMacro( const uno::Reference< frame::XModel >& rxLimitToDocument, bool bChooseOnly, const OUString& rMacroDesc )
 {
     (void)rMacroDesc;
 
@@ -324,15 +324,15 @@ namespace
             aName += pMethod->GetName();
 
             // language
-            rtl::OUString aLanguage("Basic");
+            OUString aLanguage("Basic");
 
             // location
-            rtl::OUString aLocation;
+            OUString aLocation;
             ScriptDocument aDocument( ScriptDocument::getDocumentForBasicManager( pBasMgr ) );
             if ( aDocument.isDocument() )
             {
                 // document basic
-                aLocation = rtl::OUString("document");
+                aLocation = "document" ;
 
                 if ( rxLimitToDocument.is() )
                 {
@@ -366,17 +366,17 @@ namespace
             else
             {
                 // application basic
-                aLocation = rtl::OUString("application");
+                aLocation = "application" ;
             }
 
             // script URL
             if ( !bError )
             {
-                aScriptURL = rtl::OUString("vnd.sun.star.script:");
+                aScriptURL = "vnd.sun.star.script:" ;
                 aScriptURL += aName;
-                aScriptURL += rtl::OUString("?language=");
+                aScriptURL += "?language=" ;
                 aScriptURL += aLanguage;
-                aScriptURL += rtl::OUString("&location=");
+                aScriptURL += "&location=" ;
                 aScriptURL += aLocation;
             }
 
@@ -396,13 +396,13 @@ namespace
 
 //----------------------------------------------------------------------------
 
-Sequence< ::rtl::OUString > GetMethodNames( const ScriptDocument& rDocument, const ::rtl::OUString& rLibName, const ::rtl::OUString& rModName )
+Sequence< OUString > GetMethodNames( const ScriptDocument& rDocument, const OUString& rLibName, const OUString& rModName )
     throw(NoSuchElementException )
 {
-    Sequence< ::rtl::OUString > aSeqMethods;
+    Sequence< OUString > aSeqMethods;
 
     // get module
-    ::rtl::OUString aOUSource;
+    OUString aOUSource;
     if ( rDocument.getModule( rLibName, rModName, aOUSource ) )
     {
         SbModuleRef xModule = new SbModule( rModName );
@@ -435,14 +435,14 @@ Sequence< ::rtl::OUString > GetMethodNames( const ScriptDocument& rDocument, con
 
 bool HasMethod (
     ScriptDocument const& rDocument,
-    rtl::OUString const& rLibName,
-    rtl::OUString const& rModName,
-    rtl::OUString const& rMethName
+    OUString const& rLibName,
+    OUString const& rModName,
+    OUString const& rMethName
 )
 {
     bool bHasMethod = false;
 
-    ::rtl::OUString aOUSource;
+    OUString aOUSource;
     if ( rDocument.hasModule( rLibName, rModName ) && rDocument.getModule( rLibName, rModName, aOUSource ) )
     {
         SbModuleRef xModule = new SbModule( rModName );
