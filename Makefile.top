@@ -255,7 +255,7 @@ zlib\
 export gb_TAILBUILDTARGET=all slowcheck
 
 define gbuild_module_rules
-.PHONY: $(1) $(1).all $(1).clean $(1).deliver
+.PHONY: $(1) $(1).all $(1).check $(1).clean $(1).subsequentcheck $(1).deliver
 
 $(1): bootstrap fetch
 	cd $(1) && $(GNUMAKE) -j $(GMAKE_PARALLELISM) $(GMAKE_OPTIONS) gb_PARTIALBUILD=T
