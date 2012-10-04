@@ -89,6 +89,7 @@ idl\
 idlc\
 io\
 javaunohelper\
+jfreereport\
 jurt\
 jvmaccess\
 jvmfwk\
@@ -219,7 +220,6 @@ hunspell\
 hyphen\
 icu\
 instsetoo_native\
-jfreereport\
 jpeg\
 libcroco\
 libexttextcat\
