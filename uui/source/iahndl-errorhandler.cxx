@@ -258,7 +258,7 @@ UUIInteractionHelper::handleErrorHandlerRequest(
             ErrorContext * pContext = ErrorContext::GetContext();
             if (pContext)
             {
-                UniString aContextString;
+                OUString aContextString;
                 if (pContext->GetString(nErrorCode, aContextString))
                     aContext = aContextString;
             }

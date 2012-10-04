@@ -1243,7 +1243,7 @@ UUIInteractionHelper::handleGenericErrorRequest(
         bHasErrorString = isInformationalErrorMessageRequest(rContinuations);
         if (bHasErrorString)
         {
-            String aErrorString;
+            OUString aErrorString;
             ErrorHandler::GetErrorString(nErrorCode, aErrorString);
             rErrorString = aErrorString;
         }
@@ -1264,7 +1264,7 @@ UUIInteractionHelper::handleGenericErrorRequest(
              || nError == ERRCODE_SFX_INCOMPLETE_ENCRYPTION )
         {
             // the security warning box needs a special title
-            String aErrorString;
+            OUString aErrorString;
             ErrorHandler::GetErrorString( nErrorCode, aErrorString );
 
             boost::scoped_ptr< ResMgr > xManager(
