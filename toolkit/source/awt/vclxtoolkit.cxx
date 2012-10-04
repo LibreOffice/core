@@ -499,12 +499,14 @@ VCLXToolkit::~VCLXToolkit()
 
 void SAL_CALL VCLXToolkit::disposing()
 {
+#ifndef DISABLE_DYNLOADING
     if ( hSvToolsLib )
     {
         osl_unloadModule( hSvToolsLib );
         hSvToolsLib = NULL;
         fnSvtCreateWindow = NULL;
     }
+#endif
 
     {
         osl::Guard< osl::Mutex > aGuard( getInitMutex() );
@@ -1036,7 +1038,15 @@ Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
     return pNewWindow;
 }
 
+#ifndef DISABLE_DYNLOADING
+
 extern "C" { static void SAL_CALL thisModule() {} }
+
+#else
+
+extern "C" Window* SAL_CALL CreateWindow( VCLXWindow** ppNewComp, const ::com::sun::star::awt::WindowDescriptor* pDescriptor, Window* pParent, WinBits nWinBits );
+
+#endif
 
 css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::ImplCreateWindow(
     const css::awt::WindowDescriptor& rDescriptor,
@@ -1070,8 +1080,13 @@ css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::ImplCreateWindow(
     // (do this _before_ creating it on our own: The old mechanism (extended toolkit in SvTools) did it this way,
     // and we need to stay compatible)
     // try to load the lib
-    if ( !fnSvtCreateWindow && !hSvToolsLib )
+    if ( !fnSvtCreateWindow
+#ifndef DISABLE_DYNLOADING
+         && !hSvToolsLib
+#endif
+         )
     {
+#ifndef DISABLE_DYNLOADING
         ::rtl::OUString aLibName = ::vcl::unohelper::CreateLibraryName(
 #ifdef LIBO_MERGELIBS
                                                                        "merged",
@@ -1086,6 +1101,9 @@ css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::ImplCreateWindow(
             ::rtl::OUString aFunctionName( "CreateWindow" );
             fnSvtCreateWindow = (FN_SvtCreateWindow)osl_getFunctionSymbol( hSvToolsLib, aFunctionName.pData );
         }
+#else
+        fnSvtCreateWindow = CreateWindow;
+#endif
     }
     // ask the SvTool creation function
     if ( fnSvtCreateWindow )
