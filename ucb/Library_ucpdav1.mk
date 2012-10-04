@@ -27,7 +27,7 @@
 
 $(eval $(call gb_Library_Library,ucpdav1))
 
-$(eval $(call gb_Library_set_componentfile,ucpdav1,ucb/source/ucp/webdav/ucpdav1))
+$(eval $(call gb_Library_set_componentfile,ucpdav1,ucb/source/ucp/webdav-neon/ucpdav1))
 
 $(eval $(call gb_Library_use_sdk_api,ucpdav1))
 
@@ -48,27 +48,27 @@ $(eval $(call gb_Library_use_externals,ucpdav1,\
 ))
 
 $(eval $(call gb_Library_add_exception_objects,ucpdav1,\
-	ucb/source/ucp/webdav/ContentProperties \
-	ucb/source/ucp/webdav/DateTimeHelper \
-	ucb/source/ucp/webdav/DAVProperties \
-	ucb/source/ucp/webdav/DAVResourceAccess \
-	ucb/source/ucp/webdav/DAVSessionFactory \
-	ucb/source/ucp/webdav/LinkSequence \
-	ucb/source/ucp/webdav/LockEntrySequence \
-	ucb/source/ucp/webdav/LockSequence \
-	ucb/source/ucp/webdav/NeonHeadRequest \
-	ucb/source/ucp/webdav/NeonInputStream \
-	ucb/source/ucp/webdav/NeonLockStore \
-	ucb/source/ucp/webdav/NeonPropFindRequest \
-	ucb/source/ucp/webdav/NeonSession \
-	ucb/source/ucp/webdav/NeonUri \
-	ucb/source/ucp/webdav/UCBDeadPropertyValue \
-	ucb/source/ucp/webdav/webdavcontentcaps \
-	ucb/source/ucp/webdav/webdavcontent \
-	ucb/source/ucp/webdav/webdavdatasupplier \
-	ucb/source/ucp/webdav/webdavprovider \
-	ucb/source/ucp/webdav/webdavresultset \
-	ucb/source/ucp/webdav/webdavservices \
+	ucb/source/ucp/webdav-neon/ContentProperties \
+	ucb/source/ucp/webdav-neon/DateTimeHelper \
+	ucb/source/ucp/webdav-neon/DAVProperties \
+	ucb/source/ucp/webdav-neon/DAVResourceAccess \
+	ucb/source/ucp/webdav-neon/DAVSessionFactory \
+	ucb/source/ucp/webdav-neon/LinkSequence \
+	ucb/source/ucp/webdav-neon/LockEntrySequence \
+	ucb/source/ucp/webdav-neon/LockSequence \
+	ucb/source/ucp/webdav-neon/NeonHeadRequest \
+	ucb/source/ucp/webdav-neon/NeonInputStream \
+	ucb/source/ucp/webdav-neon/NeonLockStore \
+	ucb/source/ucp/webdav-neon/NeonPropFindRequest \
+	ucb/source/ucp/webdav-neon/NeonSession \
+	ucb/source/ucp/webdav-neon/NeonUri \
+	ucb/source/ucp/webdav-neon/UCBDeadPropertyValue \
+	ucb/source/ucp/webdav-neon/webdavcontentcaps \
+	ucb/source/ucp/webdav-neon/webdavcontent \
+	ucb/source/ucp/webdav-neon/webdavdatasupplier \
+	ucb/source/ucp/webdav-neon/webdavprovider \
+	ucb/source/ucp/webdav-neon/webdavresultset \
+	ucb/source/ucp/webdav-neon/webdavservices \
 ))
 
 ifeq ($(OS),WNT)
