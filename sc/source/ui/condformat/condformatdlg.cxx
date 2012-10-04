@@ -1168,6 +1168,13 @@ IMPL_LINK_NOARG( ScCondFormatList, ScrollHdl )
 
 IMPL_LINK_NOARG( ScCondFormatDlg, EdRangeModifyHdl )
 {
+    rtl::OUString aRangeStr = maEdRange.GetText();
+    ScRangeList aRange;
+    sal_uInt16 nFlags = aRange.Parse(aRangeStr, mpDoc, SCA_VALID, mpDoc->GetAddressConvention());
+    if(nFlags & SCA_VALID)
+        maEdRange.SetControlBackground(GetSettings().GetStyleSettings().GetWindowColor());
+    else
+        maEdRange.SetControlBackground(COL_LIGHTRED);
     return 0;
 }
 
