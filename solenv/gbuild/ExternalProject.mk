@@ -109,4 +109,23 @@ $(call gb_ExternalProject_get_preparation_target,$(1)) : $(call gb_ExternalProje
 
 endef
 
+# Make an external project depend on a package
+#
+# This is most useful for depending on output files created by another
+# ExternalProject.
+#
+# gb_ExternalProject_use_package external package
+define gb_ExternalProject_use_package
+$(call gb_ExternalProject_get_preparation_target,$(1)) : $(call gb_Package_get_target,$(2))
+
+endef
+
+# Make an external project depend on several packages at once
+#
+# gb_ExternalProject_use_packages external package(s)
+define gb_ExternalProject_use_packages
+$(foreach package,$(2),$(call gb_ExternalProject_use_package,$(1),$(package)))
+
+endef
+
 # vim: set noet sw=4 ts=4:
