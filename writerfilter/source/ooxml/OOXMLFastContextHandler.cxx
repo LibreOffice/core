@@ -2474,6 +2474,9 @@ void OOXMLFastContextHandlerMath::process()
     comphelper::EmbeddedObjectContainer container;
     OUString aName;
     uno::Reference< embed::XEmbeddedObject > ref = container.CreateEmbeddedObject( name.GetByteSequence(), aName );
+    assert(ref.is());
+    if (!ref.is())
+        return;
     uno::Reference< uno::XInterface > component( ref->getComponent(), uno::UNO_QUERY );
 // gcc4.4 (and 4.3 and possibly older) have a problem with dynamic_cast directly to the target class,
 // so help it with an intermediate cast. I'm not sure what exactly the problem is, seems to be unrelated
