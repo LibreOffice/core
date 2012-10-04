@@ -783,6 +783,7 @@ private:
 private:
     XclExpXFId          maXFId;             /// The XF identifier for column default format.
     sal_uInt16          mnWidth;            /// Excel width of the column.
+    sal_uInt16          mnScWidth;          /// Calc width of the column.
     sal_uInt16          mnFlags;            /// Additional column flags.
     sal_uInt16          mnFirstXclCol;      /// Index to first column.
     sal_uInt16          mnLastXclCol;       /// Index to last column.
