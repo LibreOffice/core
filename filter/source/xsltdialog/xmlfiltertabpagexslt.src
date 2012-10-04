@@ -63,44 +63,18 @@ TabPage RID_XML_FILTER_TABPAGE_XSLT
         Border              = TRUE;
     };
 
-    // DTD/Schema -----------------------------------------------------
-
-    FixedText FT_XML_DTD_SCHEMA
-    {
-        Pos                 = MAP_APPFONT ( FIRST_ROW_X , FIRST_ROW_Y + 1 * ROW_HEIGHT + 1 * SPACING + FIXED_TEXT_OFFSET + EDIT_OFFSET ) ;
-        Size                = MAP_APPFONT ( FIRST_ROW_WIDTH , 8 ) ;
-        Text [ en-US ]  = "DTD";
-    };
-
-    ComboBox ED_XML_DTD_SCHEMA
-    {
-        Pos                 = MAP_APPFONT ( SECOND_ROW_X , SECOND_ROW_Y + 1 * ROW_HEIGHT + 1 * SPACING + EDIT_OFFSET ) ;
-        Size                = MAP_APPFONT ( SECOND_ROW_WIDTH - SPACING - BROWSE_WIDTH, 12 ) ;
-        HelpId              = HID_XML_FILTER_DTD;
-        Border              = TRUE;
-        DropDown            = FALSE ;
-    };
-
-    PushButton ED_XML_DTD_SCHEMA_BROWSE
-    {
-        Pos                 = MAP_APPFONT ( SECOND_ROW_X + SECOND_ROW_WIDTH - BROWSE_WIDTH , FIRST_ROW_Y + 1 * ROW_HEIGHT + 1 * SPACING ) ;
-        Size                = MAP_APPFONT ( BROWSE_WIDTH , 14 ) ;
-        HelpId              = HID_XML_FILTER_DTD_BROWSE;
-        Text [ en-US ]  = "Browse...";
-    };
-
     // Export XSLT ----------------------------------------------------
 
     FixedText FT_XML_EXPORT_XSLT
     {
-        Pos                 = MAP_APPFONT ( FIRST_ROW_X , FIRST_ROW_Y + 2 * ROW_HEIGHT + 2 * SPACING + FIXED_TEXT_OFFSET + EDIT_OFFSET ) ;
+        Pos                 = MAP_APPFONT ( FIRST_ROW_X , FIRST_ROW_Y + 1 * ROW_HEIGHT + 1 * SPACING + FIXED_TEXT_OFFSET + EDIT_OFFSET ) ;
         Size                = MAP_APPFONT ( FIRST_ROW_WIDTH, 8 ) ;
         Text [ en-US ]  = "XSLT for export";
     };
 
     ComboBox ED_XML_EXPORT_XSLT
     {
-        Pos                 = MAP_APPFONT ( SECOND_ROW_X , FIRST_ROW_Y + 2 * ROW_HEIGHT + 2 * SPACING + EDIT_OFFSET ) ;
+        Pos                 = MAP_APPFONT ( SECOND_ROW_X , FIRST_ROW_Y + 1 * ROW_HEIGHT + 1 * SPACING + EDIT_OFFSET ) ;
         Size                = MAP_APPFONT ( SECOND_ROW_WIDTH - SPACING - BROWSE_WIDTH , 12 ) ;
         HelpId              = HID_XML_FILTER_EXPORT_XSLT;
         Border              = TRUE;
@@ -108,7 +82,7 @@ TabPage RID_XML_FILTER_TABPAGE_XSLT
 
     PushButton PB_XML_EXPORT_XSLT_BROWSE
     {
-        Pos                 = MAP_APPFONT ( SECOND_ROW_X + SECOND_ROW_WIDTH - BROWSE_WIDTH , FIRST_ROW_Y + 2 * ROW_HEIGHT + 2 * SPACING ) ;
+        Pos                 = MAP_APPFONT ( SECOND_ROW_X + SECOND_ROW_WIDTH - BROWSE_WIDTH , FIRST_ROW_Y + 1 * ROW_HEIGHT + 1 * SPACING ) ;
         Size                = MAP_APPFONT ( BROWSE_WIDTH , 14 ) ;
         HelpId              = HID_XML_FILTER_EXPORT_XSLT_BROWSE;
         Text [ en-US ]  = "Browse...";
@@ -118,14 +92,14 @@ TabPage RID_XML_FILTER_TABPAGE_XSLT
 
     FixedText FT_XML_IMPORT_XSLT
     {
-        Pos                 = MAP_APPFONT ( FIRST_ROW_X , FIRST_ROW_Y + 3 * ROW_HEIGHT + 3 * SPACING + FIXED_TEXT_OFFSET + EDIT_OFFSET ) ;
+        Pos                 = MAP_APPFONT ( FIRST_ROW_X , FIRST_ROW_Y + 2 * ROW_HEIGHT + 2 * SPACING + FIXED_TEXT_OFFSET + EDIT_OFFSET ) ;
         Size                = MAP_APPFONT ( FIRST_ROW_WIDTH , 8 ) ;
         Text [ en-US ]  = "XSLT for import";
     };
 
     ComboBox ED_XML_IMPORT_XSLT
     {
-        Pos                 = MAP_APPFONT ( SECOND_ROW_X , FIRST_ROW_Y + 3 * ROW_HEIGHT + 3 * SPACING + EDIT_OFFSET ) ;
+        Pos                 = MAP_APPFONT ( SECOND_ROW_X , FIRST_ROW_Y + 2 * ROW_HEIGHT + 2 * SPACING + EDIT_OFFSET ) ;
         Size                = MAP_APPFONT ( SECOND_ROW_WIDTH - SPACING - BROWSE_WIDTH , 12 ) ;
         HelpId              = HID_XML_FILTER_IMPORT_XSLT;
         Border              = TRUE;
@@ -133,7 +107,7 @@ TabPage RID_XML_FILTER_TABPAGE_XSLT
 
     PushButton PB_XML_IMPORT_XSLT_BROWSE
     {
-        Pos                 = MAP_APPFONT ( SECOND_ROW_X + SECOND_ROW_WIDTH - BROWSE_WIDTH , FIRST_ROW_Y + 3 * ROW_HEIGHT + 3 * SPACING ) ;
+        Pos                 = MAP_APPFONT ( SECOND_ROW_X + SECOND_ROW_WIDTH - BROWSE_WIDTH , FIRST_ROW_Y + 2 * ROW_HEIGHT + 2 * SPACING ) ;
         Size                = MAP_APPFONT ( BROWSE_WIDTH , 14 ) ;
         HelpId              = HID_XML_FILTER_IMPORT_XSLT_BROWSE;
         Text [ en-US ]  = "Browse...";
@@ -143,14 +117,14 @@ TabPage RID_XML_FILTER_TABPAGE_XSLT
 
     FixedText FT_XML_IMPORT_TEMPLATE
     {
-        Pos                 = MAP_APPFONT ( FIRST_ROW_X , FIRST_ROW_Y + 4 * ROW_HEIGHT + 4 * SPACING + FIXED_TEXT_OFFSET + EDIT_OFFSET ) ;
+        Pos                 = MAP_APPFONT ( FIRST_ROW_X , FIRST_ROW_Y + 3 * ROW_HEIGHT + 3 * SPACING + FIXED_TEXT_OFFSET + EDIT_OFFSET ) ;
         Size                = MAP_APPFONT ( FIRST_ROW_WIDTH , 8 ) ;
         Text [ en-US ]  = "Template for import";
     };
 
     ComboBox ED_XML_IMPORT_TEMPLATE
     {
-        Pos                 = MAP_APPFONT ( SECOND_ROW_X , FIRST_ROW_Y + 4 * ROW_HEIGHT + 4 * SPACING + EDIT_OFFSET ) ;
+        Pos                 = MAP_APPFONT ( SECOND_ROW_X , FIRST_ROW_Y + 3 * ROW_HEIGHT + 3 * SPACING + EDIT_OFFSET ) ;
         Size                = MAP_APPFONT ( SECOND_ROW_WIDTH - SPACING - BROWSE_WIDTH , 12 ) ;
         HelpId              = HID_XML_FILTER_IMPORT_TEMPLATE;
         Border              = TRUE;
@@ -158,7 +132,7 @@ TabPage RID_XML_FILTER_TABPAGE_XSLT
 
     PushButton PB_XML_IMPORT_TEMPLATE_BROWSE
     {
-        Pos                 = MAP_APPFONT ( SECOND_ROW_X + SECOND_ROW_WIDTH - BROWSE_WIDTH , FIRST_ROW_Y + 4 * ROW_HEIGHT + 4 * SPACING ) ;
+        Pos                 = MAP_APPFONT ( SECOND_ROW_X + SECOND_ROW_WIDTH - BROWSE_WIDTH , FIRST_ROW_Y + 3 * ROW_HEIGHT + 3 * SPACING ) ;
         Size                = MAP_APPFONT ( BROWSE_WIDTH , 14 ) ;
         HelpId              = HID_XML_FILTER_IMPORT_TEMPLATE_BROWSE;
         Text [ en-US ]  = "Browse...";
@@ -169,13 +143,13 @@ TabPage RID_XML_FILTER_TABPAGE_XSLT
     CheckBox CB_XML_NEEDS_XSLT2
     {
         HelpID = HID_XML_FILTER_NEEDS_XSLT2;
-        Pos                 = MAP_APPFONT ( FIRST_ROW_X , FIRST_ROW_Y + 5 * ROW_HEIGHT + 5 * SPACING + FIXED_TEXT_OFFSET + EDIT_OFFSET ) ;
+        Pos                 = MAP_APPFONT ( FIRST_ROW_X , FIRST_ROW_Y + 4 * ROW_HEIGHT + 4 * SPACING + FIXED_TEXT_OFFSET + EDIT_OFFSET ) ;
         Size                = MAP_APPFONT ( 12, 12 ) ;
     };
 
     FixedText FT_XML_NEEDS_XSLT2
     {
-        Pos                 = MAP_APPFONT ( FIRST_ROW_X + 3 * SPACING , SECOND_ROW_Y + 5 * ROW_HEIGHT + 5 * SPACING + FIXED_TEXT_OFFSET + EDIT_OFFSET ) ;
+        Pos                 = MAP_APPFONT ( FIRST_ROW_X + 4 * SPACING , SECOND_ROW_Y + 4 * ROW_HEIGHT + 4 * SPACING + FIXED_TEXT_OFFSET + EDIT_OFFSET ) ;
         Size                = MAP_APPFONT ( 2 * FIRST_ROW_WIDTH , 8 ) ; // guess width
         Text [ en-US ]  = "The filter needs XSLT 2.0 processor";
     };

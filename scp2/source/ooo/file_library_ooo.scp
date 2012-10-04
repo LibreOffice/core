@@ -1399,10 +1399,6 @@ STD_LIB_FILE( gid_File_Lib_Xmlfd, xmlfd )
 STD_LIB_FILE( gid_File_Lib_Textfd, textfd )
 STD_LIB_FILE( gid_File_Lib_Odfflatxml, odfflatxml )
 
-#ifdef SOLAR_JAVA
-STD_JAR_FILE( gid_File_Jar_Xsltvalidate, XSLTValidate )
-#endif
-
 #ifndef SYSTEM_LIBXSLT
 File gid_File_Lib_Xslt
     LIB_FILE_BODY;

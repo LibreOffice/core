@@ -1144,8 +1144,6 @@ void XMLFilterSettingsDialog::initFilterList()
                 pTempFilter->maExportService = aUserData[3];
                 pTempFilter->maImportXSLT = aUserData[4];
                 pTempFilter->maExportXSLT = aUserData[5];
-                if( aUserData.getLength() >= 7 )
-                    pTempFilter->maDTD = aUserData[6];
                 if( aUserData.getLength() >= 8 )
                     pTempFilter->maComment = aUserData[7];
 
@@ -1578,7 +1576,6 @@ filter_info_impl::filter_info_impl( const filter_info_impl& rInfo ) :
     maInterfaceName( rInfo.maInterfaceName ),
     maComment( rInfo.maComment ),
     maExtension( rInfo.maExtension ),
-    maDTD( rInfo.maDTD ),
     maExportXSLT( rInfo.maExportXSLT ),
     maImportXSLT( rInfo.maImportXSLT ),
     maImportTemplate( rInfo.maImportTemplate ),
@@ -1605,7 +1602,6 @@ int filter_info_impl::operator==( const filter_info_impl& r ) const
         maComment != r.maComment ||
         maExtension != r.maExtension ||
         maDocType != r.maDocType ||
-        maDTD != r.maDTD ||
         maExportXSLT != r.maExportXSLT ||
         maImportXSLT != r.maImportXSLT ||
         maExportService != r.maExportService ||
@@ -1632,7 +1628,6 @@ Sequence< OUString > filter_info_impl::getFilterUserData() const
     aUserData[3] = maExportService;
     aUserData[4] = maImportXSLT;
     aUserData[5] = maExportXSLT;
-    aUserData[6] = maDTD;
     aUserData[7] = maComment;
 
     return aUserData;

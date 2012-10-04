@@ -93,7 +93,6 @@ namespace XSLT
     const char* const LibXSLTTransformer::PARAM_TARGET_URL = "targetURL";
     const char* const LibXSLTTransformer::PARAM_TARGET_BASE_URL =
             "targetBaseURL";
-    const char* const LibXSLTTransformer::PARAM_DOCTYPE_SYSTEM = "sytemType";
     const char* const LibXSLTTransformer::PARAM_DOCTYPE_PUBLIC = "publicType";
 
     const sal_Int32 Reader::OUTPUT_BUFFER_SIZE = _OUTPUT_BUFFER_SIZE;
@@ -542,11 +541,6 @@ namespace XSLT
                     {
                         m_parameters.insert(pair<const char*, OString> (
                                 PARAM_TARGET_BASE_URL, valueUTF8));
-                    }
-                else if (nameUTF8.equals("DoctypeSystem"))
-                    {
-                        m_parameters.insert(pair<const char*, OString> (
-                                PARAM_DOCTYPE_SYSTEM, valueUTF8));
                     }
                 else if (nameUTF8.equals("DoctypePublic"))
                     {

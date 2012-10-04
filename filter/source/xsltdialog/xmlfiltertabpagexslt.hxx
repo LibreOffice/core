@@ -44,10 +44,6 @@ public:
     FixedText       maFTDocType;
     Edit            maEDDocType;
 
-    FixedText       maFTDTDSchema;
-    SvtURLBox       maEDDTDSchema;
-    PushButton      maPBDTDSchemaBrowse;
-
     FixedText       maFTExportXSLT;
     SvtURLBox       maEDExportXSLT;
     PushButton      maPBExprotXSLT;

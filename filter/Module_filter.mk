@@ -76,7 +76,6 @@ endif
 
 ifneq ($(SOLAR_JAVA),)
 $(eval $(call gb_Module_add_targets,filter,\
-	Jar_XSLTValidate \
 ))
 endif
 

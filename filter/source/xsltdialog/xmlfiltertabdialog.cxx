@@ -213,22 +213,6 @@ bool XMLFilterTabDialog::onOk()
         }
     }
 
-    // 3. see if the dtd is valid
-    if( 0 == nErrorId )
-    {
-        if( (mpNewInfo->maDTD != mpOldInfo->maDTD) && isFileURL( mpNewInfo->maDTD ) )
-        {
-            osl::File aFile( mpNewInfo->maDTD );
-            osl::File::RC aRC = aFile.open( osl_File_OpenFlag_Read );
-            if( aRC != osl::File::E_None )
-            {
-                nErrorId = STR_ERROR_DTD_NOT_FOUND;
-                nErrorPage = RID_XML_FILTER_TABPAGE_XSLT;
-                pFocusWindow = &(mpXSLTPage->maEDDTDSchema);
-            }
-        }
-    }
-
     if( 0 == nErrorId )
     {
         // 4. see if the export xslt is valid
@@ -261,7 +245,7 @@ bool XMLFilterTabDialog::onOk()
         }
     }
 
-    // see if we have at least an import or an export dtd
+    // see if we have at least an import or an export xslt
     if((mpNewInfo->maImportXSLT.isEmpty()) && (mpNewInfo->maExportXSLT.isEmpty()) )
     {
         nErrorId = STR_ERROR_EXPORT_XSLT_NOT_FOUND;

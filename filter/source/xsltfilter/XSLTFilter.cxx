@@ -444,7 +444,6 @@ m_rServiceFactory(r), m_bTerminated(sal_False), m_bError(sal_False)
         OUString aName, sURL;
         sal_Bool bIndent = sal_False;
         OUString aDoctypePublic;
-        OUString aDoctypeSystem;
         // css::uno::Reference<XOutputStream> rOutputStream;
         sal_Int32 nLength = aSourceData.getLength();
         for (sal_Int32 i = 0; i < nLength; i++)
@@ -454,8 +453,6 @@ m_rServiceFactory(r), m_bTerminated(sal_False), m_bError(sal_False)
                     aSourceData[i].Value >>= bIndent;
                 if ( aName == "DocType_Public" )
                     aSourceData[i].Value >>= aDoctypePublic;
-                if ( aName == "DocType_System" )
-                    aSourceData[i].Value >>= aDoctypeSystem;
                 if ( aName == "OutputStream" )
                     aSourceData[i].Value >>= m_rOutputStream;
                 else if ( aName == "URL" )
@@ -479,12 +476,9 @@ m_rServiceFactory(r), m_bTerminated(sal_False), m_bError(sal_False)
         nv.Name = OUString( "TargetURL" );
         nv.Value <<= sURL;
         args[1] <<= nv;
-        nv.Name = OUString( "DoctypeSystem" );
-        nv.Value <<= aDoctypeSystem;
-        args[2] <<= nv;
         nv.Name = OUString( "DoctypePublic" );
         nv.Value <<= aDoctypePublic;
-        args[3] <<= nv;
+        args[2] <<= nv;
         nv.Name = OUString( "TargetBaseURL" );
         INetURLObject ineturl(sURL);
         ineturl.removeSegment();

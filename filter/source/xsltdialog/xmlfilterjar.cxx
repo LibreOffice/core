@@ -65,7 +65,6 @@ XMLFilterJarHelper::XMLFilterJarHelper( Reference< XMultiServiceFactory >& xMSF 
 : mxMSF( xMSF ),
     sVndSunStarPackage( RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.Package:" ) ),
     sXSLTPath( RTL_CONSTASCII_USTRINGPARAM( "$(user)/xslt/" ) ),
-    sDTDPath( RTL_CONSTASCII_USTRINGPARAM( "$(user)/dtd/" ) ),
     sTemplatePath( RTL_CONSTASCII_USTRINGPARAM( "$(user)/template/") ),
     sSpecialConfigManager( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.config.SpecialConfigManager" ) ),
     sPump( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.io.Pump" ) ),
@@ -78,7 +77,6 @@ XMLFilterJarHelper::XMLFilterJarHelper( Reference< XMultiServiceFactory >& xMSF 
         {
             sProgPath = xCfgMgr->substituteVariables( sProgPath );
             sXSLTPath = xCfgMgr->substituteVariables( sXSLTPath );
-            sDTDPath = xCfgMgr->substituteVariables( sDTDPath );
             sTemplatePath = xCfgMgr->substituteVariables( sTemplatePath );
         }
     }
@@ -192,9 +190,6 @@ bool XMLFilterJarHelper::savePackage( const OUString& rPackageURL, const XMLFilt
 
                 if( xFilterRoot.is() )
                 {
-                    if( !pFilter->maDTD.isEmpty() )
-                        addFile( xFilterRoot, xFactory, pFilter->maDTD );
-
                     if( !pFilter->maExportXSLT.isEmpty() )
                         addFile( xFilterRoot, xFactory, pFilter->maExportXSLT );
                     try
@@ -326,10 +321,7 @@ void XMLFilterJarHelper::openPackage( const OUString& rPackageURL, XMLFilterVect
 
 bool XMLFilterJarHelper::copyFiles( Reference< XHierarchicalNameAccess > xIfc, filter_info_impl* pFilter )
 {
-    bool bOk = copyFile( xIfc, pFilter->maDTD, sDTDPath );
-
-    if( bOk )
-        bOk = copyFile( xIfc, pFilter->maExportXSLT, sXSLTPath );
+    bool bOk = copyFile( xIfc, pFilter->maExportXSLT, sXSLTPath );
 
     if( bOk )
         bOk = copyFile( xIfc, pFilter->maImportXSLT, sXSLTPath );

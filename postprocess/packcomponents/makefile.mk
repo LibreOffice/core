@@ -286,7 +286,6 @@ my_components += component/slideshow/source/engine/OGLTrans/ogltrans
 .IF "$(SOLAR_JAVA)" == "TRUE"
 my_components += \
     component/xmerge/source/bridge/XMergeBridge \
-    component/filter/source/xsltvalidate/XSLTValidate \
     component/scripting/java/ScriptFramework \
     component/scripting/java/ScriptProviderForJava \
     component/wizards/com/sun/star/wizards/agenda/agenda \

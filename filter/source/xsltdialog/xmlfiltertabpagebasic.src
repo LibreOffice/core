@@ -20,7 +20,7 @@
 #include "xmlfilterhelpids.hrc"
 
 #define TAB_PAGE_WIDTH  260
-#define TAB_PAGE_HEIGHT 185
+#define TAB_PAGE_HEIGHT 120
 
 #define SPACING         3
 

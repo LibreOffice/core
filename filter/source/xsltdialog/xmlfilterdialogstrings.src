@@ -104,11 +104,6 @@ String STR_ERROR_TYPE_NAME_EXISTS
     Text [ en-US ]  = "The name for the user interface '%s1' is already used by the XML filter '%s2'. Please enter a different name.";
 };
 
-String STR_ERROR_DTD_NOT_FOUND
-{
-    Text [ en-US ]  = "The DTD could not be found. Please enter a valid path.";
-};
-
 String STR_ERROR_EXPORT_XSLT_NOT_FOUND
 {
     Text [ en-US ]  = "The XSLT for export cannot be found. Please enter a valid path.";

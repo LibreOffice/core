@@ -47,7 +47,6 @@ $(eval $(call gb_Library_use_libraries,xsltdlg,\
 $(eval $(call gb_Library_add_exception_objects,xsltdlg,\
 	filter/source/xsltdialog/typedetectionexport \
 	filter/source/xsltdialog/typedetectionimport \
-	filter/source/xsltdialog/xmlfileview \
 	filter/source/xsltdialog/xmlfilterdialogcomponent \
 	filter/source/xsltdialog/xmlfilterjar \
 	filter/source/xsltdialog/xmlfiltersettingsdialog \

@@ -54,7 +54,6 @@ public:
     rtl::OUString   maInterfaceName;
     rtl::OUString   maComment;
     rtl::OUString   maExtension;
-    rtl::OUString   maDTD;
     rtl::OUString   maExportXSLT;
     rtl::OUString   maImportXSLT;
     rtl::OUString   maImportTemplate;

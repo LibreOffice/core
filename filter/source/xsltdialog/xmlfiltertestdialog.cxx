@@ -140,7 +140,6 @@ XMLFilterTestDialog::XMLFilterTestDialog(Window* pParent,
     : ModalDialog(pParent, "TestXMLFilterDialog", "filter/ui/testxmlfilter.ui")
     , mxMSF(rxMSF)
     , m_pFilterInfo(NULL)
-    , m_sDTDPath("$(inst)/share/dtd/officedocument/1_0/office.dtd")
 {
     get(m_pExport, "export");
     get(m_pFTExportXSLTFile, "exportxsltfile");
@@ -181,10 +180,6 @@ XMLFilterTestDialog::XMLFilterTestDialog(Window* pParent,
 
     try
     {
-        Reference< XConfigManager > xCfgMgr( mxMSF->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.config.SpecialConfigManager" ))), UNO_QUERY );
-        if( xCfgMgr.is() )
-            m_sDTDPath = xCfgMgr->substituteVariables( m_sDTDPath );
-
         mxGlobalBroadcaster = Reference < XEventBroadcaster >( GlobalEventBroadcaster::create(comphelper::getComponentContext(mxMSF)), UNO_QUERY_THROW );
         mxGlobalEventListener = new GlobalEventListenerImpl( this );
         mxGlobalBroadcaster->addEventListener( mxGlobalEventListener );
@@ -469,29 +464,22 @@ void XMLFilterTestDialog::doExport( Reference< XComponent > xComp )
 
                 // create xslt exporter
                 Reference< XOutputStream > xIS( new comphelper::OSLOutputStreamWrapper( aOutputFile ) );
-
-                int bUseDTD = m_pFilterInfo->maDTD.isEmpty() ? 0 : 1 ;
                 int bUseDocType = m_pFilterInfo->maDocType.isEmpty()  ? 0 : 1;
-                Sequence< PropertyValue > aSourceData( 2 + bUseDTD + bUseDocType );
+                Sequence< PropertyValue > aSourceData( 2 + bUseDocType );
                 int i = 0;
-
+                
+                
                 aSourceData[i  ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "OutputStream" ) );
                 aSourceData[i++].Value <<= xIS;
-
+                
                 aSourceData[i].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "Indent" ) );
                 aSourceData[i++].Value <<= (sal_Bool)sal_True;
-
-                if( bUseDTD )
-                {
-                    aSourceData[i  ].Name = OUString(RTL_CONSTASCII_USTRINGPARAM("DocType_System"));
-                    aSourceData[i++].Value <<= m_pFilterInfo->maDTD;
-                }
-
+                
                 if( bUseDocType )
-                {
-                    aSourceData[i  ].Name = OUString(RTL_CONSTASCII_USTRINGPARAM("DocType_Public"));
-                    aSourceData[i++].Value <<= m_pFilterInfo->maDocType;
-                }
+                    {
+                        aSourceData[i  ].Name = OUString(RTL_CONSTASCII_USTRINGPARAM("DocType_Public"));
+                        aSourceData[i++].Value <<= m_pFilterInfo->maDocType;
+                    }
 
                 Reference< XExportFilter > xExporter( mxMSF->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.documentconversion.XSLTFilter" )) ), UNO_QUERY );
                 Reference< XDocumentHandler > xHandler( xExporter, UNO_QUERY );
@@ -645,7 +633,7 @@ void XMLFilterTestDialog::import( const OUString& rURL )
 
                 Reference< XInputStream > xIS( new comphelper::OSLInputStreamWrapper( aInputFile ) );
 
-                Sequence< PropertyValue > aSourceData( 5 );
+                Sequence< PropertyValue > aSourceData( 3 );
                 int i = 0;
 
                 aSourceData[i  ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "InputStream" ));
@@ -656,12 +644,6 @@ void XMLFilterTestDialog::import( const OUString& rURL )
 
                 aSourceData[i  ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "Indent" ));
                 aSourceData[i++].Value <<= (sal_Bool)sal_True;
-
-                aSourceData[i  ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "DocType_Public" ));
-                aSourceData[i++].Value <<= OUString( RTL_CONSTASCII_USTRINGPARAM( "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" ));
-
-                aSourceData[i  ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "DocType_System" ));
-                aSourceData[i++].Value <<= m_sDTDPath;
 
                 Reference< XWriter > xWriter = Writer::create( comphelper::getComponentContext(mxMSF) );
 
