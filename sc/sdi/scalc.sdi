@@ -3389,7 +3389,7 @@ SfxVoidItem Hyphenate SID_ENABLE_HYPHENATION
     HasCoreId = FALSE,
     HasDialog = TRUE,
     ReadOnlyDoc = FALSE,
-    Toggle = TRUE,
+    Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
