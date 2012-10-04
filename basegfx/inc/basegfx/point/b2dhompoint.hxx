@@ -48,13 +48,17 @@ namespace basegfx
         ::basegfx::B2DTuple                 maTuple;
 
         /// This Member holds the homogenous part of the point
-        double                                      mfW;
+        double                              mfW;
 
         /** Test if this homogen point does have a homogenous part
 
             @return Returns true if this point has no homogenous part
         */
-        bool implIsHomogenized() const;
+        inline bool implIsHomogenized() const
+        {
+            const double fOne(1.0);
+            return ::basegfx::fTools::equal(fOne, mfW);
+        }
 
         /** Remove homogenous part of this Point
 
@@ -74,7 +78,11 @@ namespace basegfx
             the homogenous part of a homogenous point does from a mathematical
             point of view not change the point at all.
         */
-        void implTestAndHomogenize() const;
+        inline void implTestAndHomogenize() const
+        {
+            if(!implIsHomogenized())
+                ((B2DHomPoint*)this)->implHomogenize();
+        }
 
     public:
         /** Create a homogen point
@@ -134,7 +142,11 @@ namespace basegfx
             @attention Even when this method is const it may change all
             members of this instance.
         */
-        B2DPoint getB2DPoint() const;
+        inline B2DPoint getB2DPoint() const
+        {
+            implTestAndHomogenize();
+            return B2DPoint(maTuple.getX(), maTuple.getY());
+        }
 
         /** Get X-coordinate
 
@@ -144,7 +156,11 @@ namespace basegfx
             @attention Even when this method is const it may change all
             members of this instance.
         */
-        double getX() const;
+        inline double getX() const
+        {
+            implTestAndHomogenize();
+            return maTuple.getX();
+        }
 
         /** Get Y-coordinate
 
@@ -154,7 +170,11 @@ namespace basegfx
             @attention Even when this method is const it may change all
             members of this instance.
         */
-        double getY() const;
+        inline double getY() const
+        {
+            implTestAndHomogenize();
+            return maTuple.getY();
+        }
 
         /** Set X-coordinate of the homogen point.
 
@@ -164,7 +184,10 @@ namespace basegfx
             @param fX
             The to-be-set X-coordinate without homogenous part.
         */
-        void setX(double fX);
+        inline void setX(double fX)
+        {
+            maTuple.setX(implIsHomogenized() ? fX : fX * mfW );
+        }
 
         /** Set Y-coordinate of the homogen point.
 
@@ -174,58 +197,183 @@ namespace basegfx
             @param fY
             The to-be-set Y-coordinate without homogenous part.
         */
-        void setY(double fY);
+        inline void setY(double fY)
+        {
+            maTuple.setY(implIsHomogenized() ? fY : fY * mfW );
+        }
 
         // operators
         //////////////////////////////////////////////////////////////////////
 
-        B2DHomPoint& operator+=( const B2DHomPoint& rPnt );
+        inline B2DHomPoint& operator+=( const B2DHomPoint& rPnt )
+        {
+            maTuple.setX(getX() * rPnt.mfW + rPnt.getX() * mfW);
+            maTuple.setY(getY() * rPnt.mfW + rPnt.getY() * mfW);
+            mfW = mfW * rPnt.mfW;
 
-        B2DHomPoint& operator-=( const B2DHomPoint& rPnt );
+            return *this;
+        }
 
-        B2DHomPoint& operator*=(double t);
+        inline B2DHomPoint& operator-=( const B2DHomPoint& rPnt )
+        {
+            maTuple.setX(getX() * rPnt.mfW - rPnt.getX() * mfW);
+            maTuple.setY(getY() * rPnt.mfW - rPnt.getY() * mfW);
+            mfW = mfW * rPnt.mfW;
+
+            return *this;
+        }
+
+        inline B2DHomPoint& operator*=(double t)
+        {
+            if(!::basegfx::fTools::equalZero(t))
+            {
+                mfW /= t;
+            }
+
+            return *this;
+        }
 
         B2DHomPoint& operator*=( const B2DHomMatrix& rMat );
 
-        B2DHomPoint& operator/=(double t);
+        inline B2DHomPoint& operator/=(double t)
+        {
+            mfW *= t;
+            return *this;
+        }
 
-        B2DHomPoint& operator-(void);
+        inline B2DHomPoint& operator-(void)
+        {
+            mfW = -mfW;
+            return *this;
+        }
 
-        bool operator==( const B2DHomPoint& rPnt ) const;
+        inline bool operator==( const B2DHomPoint& rPnt ) const
+        {
+            implTestAndHomogenize();
+            return (maTuple == rPnt.maTuple);
+        }
 
-        bool operator!=( const B2DHomPoint& rPnt ) const;
+        inline bool operator!=( const B2DHomPoint& rPnt ) const
+        {
+            implTestAndHomogenize();
+            return (maTuple != rPnt.maTuple);
+        }
 
-        B2DHomPoint& operator=( const B2DHomPoint& rPnt );
+        inline B2DHomPoint& operator=( const B2DHomPoint& rPnt )
+        {
+            maTuple = rPnt.maTuple;
+            mfW = rPnt.mfW;
+            return *this;
+        }
     };
 
     // external operators
     //////////////////////////////////////////////////////////////////////////
 
-    B2DHomPoint minimum(const B2DHomPoint& rVecA, const B2DHomPoint& rVecB);
+    inline B2DHomPoint minimum(const B2DHomPoint& rVecA, const B2DHomPoint& rVecB)
+    {
+        return B2DHomPoint( // getX()/getY() homogenizes already
+            std::min(rVecB.getX(), rVecA.getX()),
+            std::min(rVecB.getY(), rVecA.getY()));
+    }
 
-    B2DHomPoint maximum(const B2DHomPoint& rVecA, const B2DHomPoint& rVecB);
+    inline B2DHomPoint maximum(const B2DHomPoint& rVecA, const B2DHomPoint& rVecB)
+    {
+        return B2DHomPoint( // getX()/getY() homogenizes already
+            std::max(rVecB.getX(), rVecA.getX()),
+            std::max(rVecB.getY(), rVecA.getY()));
+    }
 
-    B2DHomPoint absolute(const B2DHomPoint& rVec);
+    inline B2DHomPoint absolute(const B2DHomPoint& rVec)
+    {
+        return B2DHomPoint( // getX()/getY() homogenizes already
+            fabs(rVec.getX()),
+            fabs(rVec.getY()));
+    }
 
-    B2DHomPoint interpolate(B2DHomPoint& rOld1, B2DHomPoint& rOld2, double t);
+    inline B2DHomPoint interpolate(B2DHomPoint& rOld1, B2DHomPoint& rOld2, double t)
+    {
+        if(0.0 >= t)
+        {
+            return rOld1;
+        }
+        else if(1.0 <= t)
+        {
+            return rOld2;
+        }
+        else if(rOld1 == rOld2) // this call homogenizes already
+        {
+            return rOld1;
+        }
+        else
+        {
+            return B2DHomPoint(
+                ((rOld2.getX() - rOld1.getX()) * t) + rOld1.getX(),
+                ((rOld2.getY() - rOld1.getY()) * t) + rOld1.getY());
+        }
+    }
 
-    B2DHomPoint average(B2DHomPoint& rOld1, B2DHomPoint& rOld2);
+    inline B2DHomPoint average(B2DHomPoint& rOld1, B2DHomPoint& rOld2)
+    {
+        return B2DHomPoint( // getX()/ getY() homogenizes already
+            rOld1.getX() == rOld2.getX() ? rOld1.getX() : (rOld1.getX() + rOld2.getX()) * 0.5,
+            rOld1.getY() == rOld2.getY() ? rOld1.getY() : (rOld1.getY() + rOld2.getY()) * 0.5);
+    }
 
-    B2DHomPoint average(B2DHomPoint& rOld1, B2DHomPoint& rOld2, B2DHomPoint& rOld3);
+    inline B2DHomPoint average(B2DHomPoint& rOld1, B2DHomPoint& rOld2, B2DHomPoint& rOld3)
+    {
+        return B2DHomPoint( // getX()/ getY() homogenizes already
+            (rOld1.getX() == rOld2.getX() && rOld2.getX() == rOld3.getX()) ? rOld1.getX() : (rOld1.getX() + rOld2.getX() + rOld3.getX()) * (1.0 / 3.0),
+            (rOld1.getY() == rOld2.getY() && rOld2.getY() == rOld3.getY()) ? rOld1.getY() : (rOld1.getY() + rOld2.getY() + rOld3.getY()) * (1.0 / 3.0));
+    }
 
-    B2DHomPoint operator+(const B2DHomPoint& rVecA, const B2DHomPoint& rVecB);
+    inline B2DHomPoint operator+(const B2DHomPoint& rVecA, const B2DHomPoint& rVecB)
+    {
+        B2DHomPoint aSum(rVecA);
+        aSum += rVecB;
+        return aSum;
+    }
 
-    B2DHomPoint operator-(const B2DHomPoint& rVecA, const B2DHomPoint& rVecB);
+    inline B2DHomPoint operator-(const B2DHomPoint& rVecA, const B2DHomPoint& rVecB)
+    {
+        B2DHomPoint aSub(rVecA);
+        aSub -= rVecB;
+        return aSub;
+    }
 
-    B2DHomPoint operator*(const B2DHomPoint& rVec, double t);
+    inline B2DHomPoint operator*(const B2DHomPoint& rVec, double t)
+    {
+        B2DHomPoint aNew(rVec);
+        aNew *= t;
+        return aNew;
+    }
 
-    B2DHomPoint operator*(double t, const B2DHomPoint& rVec);
+    inline B2DHomPoint operator*(double t, const B2DHomPoint& rVec)
+    {
+        B2DHomPoint aNew(rVec);
+        aNew *= t;
+        return aNew;
+    }
 
-    B2DHomPoint operator*( const B2DHomMatrix& rMat, const B2DHomPoint& rPoint );
+    inline B2DHomPoint operator*( const B2DHomMatrix& rMat, const B2DHomPoint& rPoint )
+    {
+        B2DHomPoint aNew(rPoint);
+        return aNew*=rMat;
+    }
 
-    B2DHomPoint operator/(const B2DHomPoint& rVec, double t);
+    inline B2DHomPoint operator/(const B2DHomPoint& rVec, double t)
+    {
+        B2DHomPoint aNew(rVec);
+        aNew /= t;
+        return aNew;
+    }
 
-    B2DHomPoint operator/(double t, const B2DHomPoint& rVec);
+    inline B2DHomPoint operator/(double t, const B2DHomPoint& rVec)
+    {
+        B2DHomPoint aNew(rVec);
+        aNew /= t;
+        return aNew;
+    }
 } // end of namespace basegfx
 
 #endif /* _BGFX_POINT_B2DHOMPOINT_HXX */

@@ -164,7 +164,7 @@ namespace drawinglayer
         {
             const double fScaler(basegfx::tools::getLinearGradientAlpha(rUV, maGradientInfo));
 
-            rBColor = (maStart * (1.0 - fScaler)) + (maEnd * fScaler);
+            rBColor = basegfx::interpolate(maStart, maEnd, fScaler);
         }
     } // end of namespace texture
 } // end of namespace drawinglayer
@@ -227,7 +227,7 @@ namespace drawinglayer
         {
             const double fScaler(basegfx::tools::getAxialGradientAlpha(rUV, maGradientInfo));
 
-            rBColor = (maStart * (1.0 - fScaler)) + (maEnd * fScaler);
+            rBColor = basegfx::interpolate(maStart, maEnd, fScaler);
         }
     } // end of namespace texture
 } // end of namespace drawinglayer
@@ -284,7 +284,7 @@ namespace drawinglayer
         {
             const double fScaler(basegfx::tools::getRadialGradientAlpha(rUV, maGradientInfo));
 
-            rBColor = (maStart * (1.0 - fScaler)) + (maEnd * fScaler);
+            rBColor = basegfx::interpolate(maStart, maEnd, fScaler);
         }
     } // end of namespace texture
 } // end of namespace drawinglayer
@@ -361,7 +361,7 @@ namespace drawinglayer
         {
             const double fScaler(basegfx::tools::getEllipticalGradientAlpha(rUV, maGradientInfo));
 
-            rBColor = (maStart * (1.0 - fScaler)) + (maEnd * fScaler);
+            rBColor = basegfx::interpolate(maStart, maEnd, fScaler);
         }
     } // end of namespace texture
 } // end of namespace drawinglayer
@@ -420,7 +420,7 @@ namespace drawinglayer
         {
             const double fScaler(basegfx::tools::getSquareGradientAlpha(rUV, maGradientInfo));
 
-            rBColor = (maStart * (1.0 - fScaler)) + (maEnd * fScaler);
+            rBColor = basegfx::interpolate(maStart, maEnd, fScaler);
         }
     } // end of namespace texture
 } // end of namespace drawinglayer
@@ -497,7 +497,7 @@ namespace drawinglayer
         {
             const double fScaler(basegfx::tools::getRectangularGradientAlpha(rUV, maGradientInfo));
 
-            rBColor = (maStart * (1.0 - fScaler)) + (maEnd * fScaler);
+            rBColor = basegfx::interpolate(maStart, maEnd, fScaler);
         }
     } // end of namespace texture
 } // end of namespace drawinglayer

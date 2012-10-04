@@ -303,56 +303,65 @@ namespace basegfx
 
     inline B3DHomPoint minimum(const B3DHomPoint& rVecA, const B3DHomPoint& rVecB)
     {
-        B3DHomPoint aMin(
-            (rVecB.getX() < rVecA.getX()) ? rVecB.getX() : rVecA.getX(),
-            (rVecB.getY() < rVecA.getY()) ? rVecB.getY() : rVecA.getY(),
-            (rVecB.getZ() < rVecA.getZ()) ? rVecB.getZ() : rVecA.getZ());
-        return aMin;
+        return B3DHomPoint( // getX()/getY()/getZ() homogenizes already
+            std::min(rVecB.getX(), rVecA.getX()),
+            std::min(rVecB.getY(), rVecA.getY()),
+            std::min(rVecB.getZ(), rVecA.getZ()));
     }
 
     inline B3DHomPoint maximum(const B3DHomPoint& rVecA, const B3DHomPoint& rVecB)
     {
-        B3DHomPoint aMax(
-            (rVecB.getX() > rVecA.getX()) ? rVecB.getX() : rVecA.getX(),
-            (rVecB.getY() > rVecA.getY()) ? rVecB.getY() : rVecA.getY(),
-            (rVecB.getZ() > rVecA.getZ()) ? rVecB.getZ() : rVecA.getZ());
-        return aMax;
+        return B3DHomPoint(// getX()/getY()/getZ() homogenizes already
+            std::max(rVecB.getX(), rVecA.getX()),
+            std::max(rVecB.getY(), rVecA.getY()),
+            std::max(rVecB.getZ(), rVecA.getZ()));
     }
 
     inline B3DHomPoint absolute(const B3DHomPoint& rVec)
     {
-        B3DHomPoint aAbs(
-            (0.0 > rVec.getX()) ? -rVec.getX() : rVec.getX(),
-            (0.0 > rVec.getY()) ? -rVec.getY() : rVec.getY(),
-            (0.0 > rVec.getZ()) ? -rVec.getZ() : rVec.getZ());
-        return aAbs;
+        return B3DHomPoint(// getX()/getY()/getZ() homogenizes already
+            fabs(rVec.getX()),
+            fabs(rVec.getY()),
+            fabs(rVec.getZ()));
     }
 
     inline B3DHomPoint interpolate(B3DHomPoint& rOld1, B3DHomPoint& rOld2, double t)
     {
-        B3DHomPoint aInt(
-            ((rOld2.getX() - rOld1.getX()) * t) + rOld1.getX(),
-            ((rOld2.getY() - rOld1.getY()) * t) + rOld1.getY(),
-            ((rOld2.getZ() - rOld1.getZ()) * t) + rOld1.getZ());
-        return aInt;
+        if(0.0 >= t)
+        {
+            return rOld1;
+        }
+        else if(1.0 <= t)
+        {
+            return rOld2;
+        }
+        else if(rOld1 == rOld2) // this call homogenizes already
+        {
+            return rOld1;
+        }
+        else
+        {
+            return B3DHomPoint(
+                ((rOld2.getX() - rOld1.getX()) * t) + rOld1.getX(),
+                ((rOld2.getY() - rOld1.getY()) * t) + rOld1.getY(),
+                ((rOld2.getZ() - rOld1.getZ()) * t) + rOld1.getZ());
+        }
     }
 
     inline B3DHomPoint average(B3DHomPoint& rOld1, B3DHomPoint& rOld2)
     {
-        B3DHomPoint aAvg(
-            (rOld1.getX() + rOld2.getX()) * 0.5,
-            (rOld1.getY() + rOld2.getY()) * 0.5,
-            (rOld1.getZ() + rOld2.getZ()) * 0.5);
-        return aAvg;
+        return B3DHomPoint( // getX()/getY()/getZ() homogenizes already
+            rOld1.getX() == rOld2.getX() ? rOld1.getX() : (rOld1.getX() + rOld2.getX()) * 0.5,
+            rOld1.getY() == rOld2.getY() ? rOld1.getY() : (rOld1.getY() + rOld2.getY()) * 0.5,
+            rOld1.getY() == rOld2.getY() ? rOld1.getY() : (rOld1.getY() + rOld2.getY()) * 0.5);
     }
 
     inline B3DHomPoint average(B3DHomPoint& rOld1, B3DHomPoint& rOld2, B3DHomPoint& rOld3)
     {
-        B3DHomPoint aAvg(
-            (rOld1.getX() + rOld2.getX() + rOld3.getX()) * (1.0 / 3.0),
-            (rOld1.getY() + rOld2.getY() + rOld3.getY()) * (1.0 / 3.0),
-            (rOld1.getZ() + rOld2.getZ() + rOld3.getZ()) * (1.0 / 3.0));
-        return aAvg;
+        return B3DHomPoint( // getX()/getY()/getZ() homogenizes already
+            (rOld1.getX() == rOld2.getX() && rOld2.getX() == rOld3.getX()) ? rOld1.getX() : (rOld1.getX() + rOld2.getX() + rOld3.getX()) * (1.0 / 3.0),
+            (rOld1.getY() == rOld2.getY() && rOld2.getY() == rOld3.getY()) ? rOld1.getY() : (rOld1.getY() + rOld2.getY() + rOld3.getY()) * (1.0 / 3.0),
+            (rOld1.getZ() == rOld2.getZ() && rOld2.getZ() == rOld3.getZ()) ? rOld1.getZ() : (rOld1.getZ() + rOld2.getZ() + rOld3.getZ()) * (1.0 / 3.0));
     }
 
     inline B3DHomPoint operator+(const B3DHomPoint& rVecA, const B3DHomPoint& rVecB)

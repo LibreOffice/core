@@ -25,7 +25,10 @@
 #define _BGFX_TUPLE_B2ITUPLE_HXX
 
 #include <sal/types.h>
-
+#include <basegfx/numeric/ftools.hxx>
+#undef min
+#undef max
+#include <algorithm>
 
 namespace basegfx
 {
@@ -173,7 +176,10 @@ namespace basegfx
             return B2ITuple(-mnX, -mnY);
         }
 
-        bool equalZero() const { return mnX == 0 && mnY == 0; }
+        bool equalZero() const
+        {
+            return mnX == 0 && mnY == 0;
+        }
 
         bool operator==( const B2ITuple& rTup ) const
         {
@@ -198,36 +204,120 @@ namespace basegfx
     // external operators
     //////////////////////////////////////////////////////////////////////////
 
-    class B2DTuple;
+    inline B2ITuple minimum(const B2ITuple& rTupA, const B2ITuple& rTupB)
+    {
+        return B2ITuple(
+            std::min(rTupB.getX(), rTupA.getX()),
+            std::min(rTupB.getY(), rTupA.getY()));
+    }
 
-    B2ITuple minimum(const B2ITuple& rTupA, const B2ITuple& rTupB);
+    inline B2ITuple maximum(const B2ITuple& rTupA, const B2ITuple& rTupB)
+    {
+        return B2ITuple(
+            std::max(rTupB.getX(), rTupA.getX()),
+            std::max(rTupB.getY(), rTupA.getY()));
+    }
 
-    B2ITuple maximum(const B2ITuple& rTupA, const B2ITuple& rTupB);
+    inline B2ITuple absolute(const B2ITuple& rTup)
+    {
+        B2ITuple aAbs(
+            (0 > rTup.getX()) ? -rTup.getX() : rTup.getX(),
+            (0 > rTup.getY()) ? -rTup.getY() : rTup.getY());
+        return aAbs;
+    }
 
-    B2ITuple absolute(const B2ITuple& rTup);
+    inline B2ITuple interpolate(const B2ITuple& rOld1, const B2ITuple& rOld2, double t)
+    {
+        if(rOld1 == rOld2)
+        {
+            return rOld1;
+        }
+        else if(0.0 >= t)
+        {
+            return rOld1;
+        }
+        else if(1.0 <= t)
+        {
+            return rOld2;
+        }
+        else
+        {
+            return B2ITuple(
+                basegfx::fround(((rOld2.getX() - rOld1.getX()) * t) + rOld1.getX()),
+                basegfx::fround(((rOld2.getY() - rOld1.getY()) * t) + rOld1.getY()));
+        }
+    }
 
-    B2DTuple interpolate(const B2ITuple& rOld1, const B2ITuple& rOld2, double t);
+    inline B2ITuple average(const B2ITuple& rOld1, const B2ITuple& rOld2)
+    {
+        return B2ITuple(
+            rOld1.getX() == rOld2.getX() ? rOld1.getX() : basegfx::fround((rOld1.getX() + rOld2.getX()) * 0.5),
+            rOld1.getY() == rOld2.getY() ? rOld1.getY() : basegfx::fround((rOld1.getY() + rOld2.getY()) * 0.5));
+    }
 
-    B2DTuple average(const B2ITuple& rOld1, const B2ITuple& rOld2);
+    inline B2ITuple average(const B2ITuple& rOld1, const B2ITuple& rOld2, const B2ITuple& rOld3)
+    {
+        return B2ITuple(
+            (rOld1.getX() == rOld2.getX() && rOld2.getX() == rOld3.getX()) ? rOld1.getX() : basegfx::fround((rOld1.getX() + rOld2.getX() + rOld3.getX()) * (1.0 / 3.0)),
+            (rOld1.getY() == rOld2.getY() && rOld2.getY() == rOld3.getY()) ? rOld1.getY() : basegfx::fround((rOld1.getY() + rOld2.getY() + rOld3.getY()) * (1.0 / 3.0)));
+    }
 
-    B2DTuple average(const B2ITuple& rOld1, const B2ITuple& rOld2, const B2ITuple& rOld3);
+    inline B2ITuple operator+(const B2ITuple& rTupA, const B2ITuple& rTupB)
+    {
+        B2ITuple aSum(rTupA);
+        aSum += rTupB;
+        return aSum;
+    }
 
-    B2ITuple operator+(const B2ITuple& rTupA, const B2ITuple& rTupB);
+    inline B2ITuple operator-(const B2ITuple& rTupA, const B2ITuple& rTupB)
+    {
+        B2ITuple aSub(rTupA);
+        aSub -= rTupB;
+        return aSub;
+    }
 
-    B2ITuple operator-(const B2ITuple& rTupA, const B2ITuple& rTupB);
+    inline B2ITuple operator/(const B2ITuple& rTupA, const B2ITuple& rTupB)
+    {
+        B2ITuple aDiv(rTupA);
+        aDiv /= rTupB;
+        return aDiv;
+    }
 
-    B2ITuple operator/(const B2ITuple& rTupA, const B2ITuple& rTupB);
+    inline B2ITuple operator*(const B2ITuple& rTupA, const B2ITuple& rTupB)
+    {
+        B2ITuple aMul(rTupA);
+        aMul *= rTupB;
+        return aMul;
+    }
 
-    B2ITuple operator*(const B2ITuple& rTupA, const B2ITuple& rTupB);
+    inline B2ITuple operator*(const B2ITuple& rTup, sal_Int32 t)
+    {
+        B2ITuple aNew(rTup);
+        aNew *= t;
+        return aNew;
+    }
 
-    B2ITuple operator*(const B2ITuple& rTup, sal_Int32 t);
+    inline B2ITuple operator*(sal_Int32 t, const B2ITuple& rTup)
+    {
+        B2ITuple aNew(rTup);
+        aNew *= t;
+        return aNew;
+    }
 
-    B2ITuple operator*(sal_Int32 t, const B2ITuple& rTup);
+    inline B2ITuple operator/(const B2ITuple& rTup, sal_Int32 t)
+    {
+        B2ITuple aNew(rTup);
+        aNew /= t;
+        return aNew;
+    }
 
-    B2ITuple operator/(const B2ITuple& rTup, sal_Int32 t);
-
-    B2ITuple operator/(sal_Int32 t, const B2ITuple& rTup);
-
+    inline B2ITuple operator/(sal_Int32 t, const B2ITuple& rTup)
+    {
+        B2ITuple aNew(t, t);
+        B2ITuple aTmp(rTup);
+        aNew /= aTmp;
+        return aNew;
+    }
 } // end of namespace basegfx
 
 #endif /* _BGFX_TUPLE_B2ITUPLE_HXX */
