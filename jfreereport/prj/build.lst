@@ -1,13 +1,2 @@
-jf	jfreereport	:	solenv APACHE_COMMONS:apache-commons NULL
-jf	jfreereport								usr1	-	all	jf_mkout 							NULL
-jf	jfreereport\java\sac					nmake	-	all	jf_sac								NULL
-jf	jfreereport\java\libbase				nmake	-	all	jf_libbase							NULL
-jf	jfreereport\java\flute					nmake	-	all	jf_flute jf_sac						NULL
-jf	jfreereport\java\libloader				nmake	-	all	jf_libloader jf_libbase				NULL
-jf	jfreereport\java\libxml					nmake	-	all	jf_libxml jf_libbase jf_libloader	NULL
-jf	jfreereport\java\libformula				nmake	-	all	jf_libformula jf_libbase 			NULL
-jf	jfreereport\java\libfonts				nmake	-	all	jf_libfonts	jf_libbase jf_libloader NULL
-jf	jfreereport\java\librepository			nmake	-	all	jf_librepository jf_libbase			NULL
-jf	jfreereport\java\libserializer          nmake	-	all	jf_libserializer jf_libbase         NULL
-jf	jfreereport\java\jfreereport			nmake	-	all	jf_jfreereport jf_liblayout jf_libformula jf_libserializer		NULL
-jf	jfreereport\java\liblayout				nmake	-	all	jf_liblayout jf_libbase	jf_flute jf_libfonts jf_libloader jf_librepository jf_libxml jf_sac		NULL
+jf	jfreereport :           solenv APACHE_COMMONS:apache-commons NULL
+jf	jfreereport\prj	        nmake	-	all	jf_sac	NULL
