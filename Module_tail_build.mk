@@ -81,6 +81,7 @@ $(eval $(call gb_Module_add_moduledirs,tail_end,\
 	$(call gb_Helper_optional,DESKTOP,idlc) \
 	io \
 	javaunohelper \
+	$(call gb_Helper_optional,JFREEREPORT,jfreereport) \
 	jurt \
 	jvmaccess \
 	jvmfwk \
