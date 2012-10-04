@@ -2434,13 +2434,6 @@ void XclExpCellTable::Save( XclExpStream& rStrm )
 
 void XclExpCellTable::SaveXml( XclExpXmlStream& rStrm )
 {
-    // DEFAULT row height
-    XclExpDefaultRowData& rDefData = mxDefrowheight->GetDefaultData();
-    sax_fastparser::FSHelperPtr& rWorksheet = rStrm.GetCurrentStream();
-    rWorksheet->startElement( XML_sheetFormatPr,
-        XML_defaultRowHeight, OString::valueOf( (double) rDefData.mnHeight / 20.0 ).getStr(), FSEND );
-    rWorksheet->endElement( XML_sheetFormatPr );
-
     maColInfoBfr.SaveXml( rStrm );
     maRowBfr.SaveXml( rStrm );
 }
