@@ -193,7 +193,7 @@ void handleCommand(
                     RTL_CONSTASCII_USTRINGPARAM("INPATH_FOR_BUILD"))));
         buf.appendAscii(RTL_CONSTASCII_STRINGPARAM("/bin/"));
         buf.append(executable);
-        buf.appendAscii(RTL_CONSTASCII_STRINGPARAM(" -e -p "));
+        buf.appendAscii(RTL_CONSTASCII_STRINGPARAM(" -p "));
         buf.append(project);
         buf.appendAscii(RTL_CONSTASCII_STRINGPARAM(" -r "));
         buf.append(projectRoot);

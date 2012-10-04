@@ -31,6 +31,15 @@
 #include <time.h>
 #include <stdlib.h>
 
+//flags for handleArguments()
+#define STATE_NON       0x0001
+#define STATE_INPUT     0x0002
+#define STATE_OUTPUT    0x0003
+#define STATE_PRJ       0x0004
+#define STATE_ROOT      0x0005
+#define STATE_MERGESRC  0x0006
+#define STATE_LANGUAGES 0x0007
+
 //
 // class ResData();
 //
@@ -81,6 +90,102 @@ ResData::~ResData()
 rtl::OString Export::sLanguages;
 rtl::OString Export::sForcedLanguages;
 /*****************************************************************************/
+
+bool Export::handleArguments(
+    int argc, char * argv[], HandledArgs& o_aHandledArgs)
+{
+    if ( argc <= 1  )
+    {
+        return false;
+    }
+    sLanguages = "";
+    sal_uInt16 nState = STATE_NON;
+
+    for( int i = 1; i < argc; i++ )
+    {
+        if ( OString( argv[ i ] ).toAsciiUpperCase() == "-I" )
+        {
+            nState = STATE_INPUT; // next token specifies source file
+        }
+        else if ( OString( argv[ i ] ).toAsciiUpperCase() == "-O" )
+        {
+            nState = STATE_OUTPUT; // next token specifies the dest file
+        }
+        else if ( OString( argv[ i ] ).toAsciiUpperCase() == "-P" )
+        {
+            nState = STATE_PRJ; // next token specifies the cur. project
+        }
+        else if ( OString( argv[ i ] ).toAsciiUpperCase() == "-R" )
+        {
+            nState = STATE_ROOT; // next token specifies path to project root
+        }
+        else if ( OString( argv[ i ] ).toAsciiUpperCase() == "-M" )
+        {
+            nState = STATE_MERGESRC; // next token specifies the merge database
+        }
+        else if ( OString( argv[ i ] ).toAsciiUpperCase() == "-L" )
+        {
+            nState = STATE_LANGUAGES;
+        }
+        else
+        {
+            switch ( nState )
+            {
+                case STATE_NON:
+                {
+                    return false;    // no valid command line
+                }
+                case STATE_INPUT:
+                {
+                    o_aHandledArgs.m_sInputFile = OString( argv[i] );
+                }
+                break;
+                case STATE_OUTPUT:
+                {
+                    o_aHandledArgs.m_sOutputFile = OString( argv[i] );
+                }
+                break;
+                case STATE_PRJ:
+                {
+                    o_aHandledArgs.m_sPrj = OString( argv[i] );
+                }
+                break;
+                case STATE_ROOT:
+                {
+                    o_aHandledArgs.m_sPrjRoot = OString( argv[i] );
+                }
+                break;
+                case STATE_MERGESRC:
+                {
+                    o_aHandledArgs.m_sMergeSrc = OString( argv[i] );
+                    o_aHandledArgs.m_bMergeMode = true;
+                }
+                break;
+                case STATE_LANGUAGES:
+                {
+                    sLanguages = OString( argv[i] );
+                }
+                break;
+            }
+        }
+    }
+    return true;
+}
+
+void Export::writeUsage(const OString& rName, const OString& rFileType)
+{
+    std::cout
+        << "Syntax: " << rName.getStr()
+        << " [-p Prj] [-r PrjRoot] -i FileIn -o FileOut"
+        << " [-m DataBase] [-l l1,l2,...]\n"
+        << " Prj:      Project\n"
+        << " PrjRoot:  Path to project root (../.. etc.)\n"
+        << " FileIn:   Source files (*." << rFileType.getStr() << ")\n"
+        << " FileOut:  Destination file (*.*)\n"
+        << " DataBase: Mergedata (*.po)\n"
+        << " -l: Restrict the handled languages; l1, l2, ... are elements of"
+        << " (de, en-US, ...)\n";
+}
 
 /*****************************************************************************/
 void Export::SetLanguages( std::vector<rtl::OString> val ){

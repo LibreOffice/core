@@ -36,20 +36,8 @@ using namespace std;
 void yyerror( const char * );
 void YYWarning( const char * );
 
-// defines to parse command line
-#define STATE_NON       0x0001
-#define STATE_INPUT     0x0002
-#define STATE_OUTPUT    0x0003
-#define STATE_PRJ       0x0004
-#define STATE_ROOT      0x0005
-#define STATE_MERGESRC  0x0006
-#define STATE_ERRORLOG  0x0007
-#define STATE_LANGUAGES 0x000C
-
 // set of global variables
-sal_Bool bEnableExport;
-sal_Bool bMergeMode;
-sal_Bool bUTF8;
+bool bMergeMode;
 sal_Bool bDisplayName;
 sal_Bool bExtensionDescription;
 rtl::OString sPrj;
@@ -69,87 +57,30 @@ extern "C" {
 extern char *GetOutputFile( int argc, char* argv[])
 /*****************************************************************************/
 {
-    bEnableExport = sal_False;
-    bMergeMode = sal_False;
-    bUTF8 = sal_True;
     bDisplayName = sal_False;
     bExtensionDescription = sal_False;
-    sPrj = "";
-    sPrjRoot = "";
-    sInputFileName = "";
     sActFileName = "";
-    Export::sLanguages = "";
-    sal_uInt16 nState = STATE_NON;
-    sal_Bool bInput = sal_False;
 
-    // parse command line
-    for( int i = 1; i < argc; i++ ) {
-        if ( rtl::OString( argv[ i ] ).toAsciiUpperCase() == "-I" ) {
-            nState = STATE_INPUT; // next token specifies source file
-        }
-        else if ( rtl::OString( argv[ i ] ).toAsciiUpperCase() == "-O" ) {
-            nState = STATE_OUTPUT; // next token specifies the dest file
-        }
-        else if ( rtl::OString( argv[ i ] ).toAsciiUpperCase() == "-P" ) {
-            nState = STATE_PRJ; // next token specifies the cur. project
-        }
-        else if ( rtl::OString( argv[ i ] ).toAsciiUpperCase() == "-R" ) {
-            nState = STATE_ROOT; // next token specifies path to project root
-        }
-        else if ( rtl::OString( argv[ i ] ).toAsciiUpperCase() == "-M" ) {
-            nState = STATE_MERGESRC; // next token specifies the merge database
-        }
-        else if ( rtl::OString( argv[ i ] ).toAsciiUpperCase() == "-E" ) {
-            nState = STATE_ERRORLOG;
-        }
-        else if ( rtl::OString( argv[ i ] ).toAsciiUpperCase() == "-L" ) {
-            nState = STATE_LANGUAGES;
-        }
-        else {
-            switch ( nState ) {
-                case STATE_NON: {
-                    return NULL;    // no valid command line
-                }
-                case STATE_INPUT: {
-                    sInputFileName = argv[ i ];
-                    bInput = sal_True; // source file found
-                }
-                break;
-                case STATE_OUTPUT: {
-                    sOutputFile = argv[ i ]; // the dest. file
-                }
-                break;
-                case STATE_PRJ: {
-                    sPrj = rtl::OString( argv[ i ]);
-                }
-                break;
-                case STATE_ROOT: {
-                    sPrjRoot = rtl::OString( argv[ i ]); // path to project root
-                }
-                break;
-                case STATE_MERGESRC: {
-                    sMergeSrc = rtl::OString( argv[ i ]);
-                    bMergeMode = sal_True; // activate merge mode, cause merge database found
-                }
-                break;
-                case STATE_LANGUAGES: {
-                    Export::sLanguages = rtl::OString( argv[ i ]);
-                }
-                break;
-            }
-        }
-    }
-
-    if ( bInput ) {
+    HandledArgs aArgs;
+    if ( Export::handleArguments(argc, argv, aArgs) )
+    {
         // command line is valid
-        bEnableExport = sal_True;
+        bMergeMode = aArgs.m_bMergeMode;
+        sPrj = aArgs.m_sPrj;
+        sPrjRoot = aArgs.m_sPrjRoot;
+        sInputFileName = aArgs.m_sInputFile;
+        sOutputFile = aArgs.m_sOutputFile;
+        sMergeSrc = aArgs.m_sMergeSrc;
         char *pReturn = new char[ sOutputFile.getLength() + 1 ];
         std::strcpy( pReturn, sOutputFile.getStr());  // #100211# - checked
         return pReturn;
     }
-
-    // command line is not valid
-    return NULL;
+    else
+    {
+        // command line is not valid
+        Export::writeUsage("xrmex","xrm/xml");
+        return NULL;
+    }
 }
 
 /*****************************************************************************/

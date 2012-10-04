@@ -221,18 +221,8 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv) {
 
 	pOutput = GetOutputFile( argc, argv );
 
-	if ( !pOutput ) {
-		fprintf( stdout, "Syntax: XRMEX[-p Prj][-r PrjRoot]-i FileIn [-o FileOut][-m DataBase][-e][-b][-u][-NOUTF8][-L l1,l2,...]\n" );
-		fprintf( stdout, " Prj:      Project\n" );
-		fprintf( stdout, " PrjRoot:  Path to project root (..\\.. etc.)\n" );
-		fprintf( stdout, " FileIn:   Source files (*.src)\n" );
-		fprintf( stdout, " FileOut:  Destination file (*.*)\n" );
-		fprintf( stdout, " DataBase: Mergedata (*.sdf)\n" );
-		fprintf( stdout, " -e: Disable writing errorlog\n" );
-		fprintf( stdout, " -b: Break when Token \"HelpText\" found in source\n" );
-		fprintf( stdout, " -u: [english] and [german] are allowed, Id is Taken from DataBase \n" );
-		fprintf( stdout, " -NOUTF8: disable UTF8 as language independent encoding\n" );
-		fprintf( stdout, " -L: Restrict the handled languages. l1,l2,... are elements of (de,en-US,es...)\n" );
+	if ( !pOutput )
+	{
 		return 1;
 	}
 	pFile = GetXrmFile();

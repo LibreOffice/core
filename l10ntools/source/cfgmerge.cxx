@@ -38,86 +38,24 @@ namespace {
 
 namespace global {
 
-bool mergeMode = false;
-char const * prj = 0;
-char const * prjRoot = 0;
 char const * inputPathname = 0;
-char const * outputPathname = 0;
-char const * mergeSrc;
 boost::scoped_ptr< CfgParser > parser;
 
 }
-
-void handleArguments(int argc, char ** argv) {
-    for (int i = 1; i != argc; ++i) {
-        if (std::strcmp(argv[i], "-e") == 0) {
-            // ignored, used to be "Disable writing errorlog"
-        } else if (std::strcmp(argv[i], "-i") == 0) {
-            if (++i == argc) {
-                global::inputPathname = 0; // no valid command line
-                break;
-            }
-            global::inputPathname = argv[i];
-        } else if (std::strcmp(argv[i], "-l") == 0) {
-            if (++i == argc) {
-                global::inputPathname = 0; // no valid command line
-                break;
-            }
-            Export::sLanguages = argv[i];
-        } else if (std::strcmp(argv[i], "-m") == 0) {
-            if (++i == argc) {
-                global::inputPathname = 0; // no valid command line
-                break;
-            }
-            global::mergeSrc = argv[i];
-            global::mergeMode = true;
-        } else if (std::strcmp(argv[i], "-o") == 0) {
-            if (++i == argc) {
-                global::inputPathname = 0; // no valid command line
-                break;
-            }
-            global::outputPathname = argv[i];
-        } else if (std::strcmp(argv[i], "-p") == 0) {
-            if (++i == argc) {
-                global::inputPathname = 0; // no valid command line
-                break;
-            }
-            global::prj = argv[i];
-        } else if (std::strcmp(argv[i], "-r") == 0) {
-            if (++i == argc) {
-                global::inputPathname = 0; // no valid command line
-                break;
-            }
-            global::prjRoot = argv[i];
-        } else {
-            global::inputPathname = 0; // no valid command line
-            break;
-        }
-    }
-    if (global::inputPathname == 0 || global::outputPathname == 0) {
-        std::fprintf(
-            stderr,
-            ("Syntax: cfgex [-p Prj] [-r PrjRoot] -i FileIn -o FileOut"
-             " [-m DataBase] [-e] [-l l1,l2,...]\n"
-             " Prj:      Project\n"
-             " PrjRoot:  Path to project root (../.. etc.)\n"
-             " FileIn:   Source files (*.src)\n"
-             " FileOut:  Destination file (*.*)\n"
-             " DataBase: Mergedata (*.sdf)\n"
-             " -e: ignored\n"
-             " -l: Restrict the handled languages; l1, l2, ... are elements of"
-             " (de, en-US, ...)\n"));
-        std::exit(EXIT_FAILURE);
-    }
-    Export::InitLanguages();
-}
-
 }
 
 extern "C" {
 
 FILE * init(int argc, char ** argv) {
-    handleArguments(argc, argv);
+
+    HandledArgs aArgs;
+    if ( !Export::handleArguments(argc, argv, aArgs) )
+    {
+        Export::writeUsage("cfgex","xcu");
+        std::exit(EXIT_FAILURE);
+    }
+    Export::InitLanguages();
+    global::inputPathname = aArgs.m_sInputFile.getStr();
 
     FILE * pFile = std::fopen(global::inputPathname, "r");
     if (pFile == 0) {
@@ -127,16 +65,17 @@ FILE * init(int argc, char ** argv) {
         std::exit(EXIT_FAILURE);
     }
 
-    if (global::mergeMode) {
+    if (aArgs.m_bMergeMode) {
         global::parser.reset(
             new CfgMerge(
-                global::mergeSrc, global::outputPathname,
+                aArgs.m_sMergeSrc.getStr(), aArgs.m_sOutputFile.getStr(),
                 global::inputPathname));
     } else {
         global::parser.reset(
             new CfgExport(
-                global::outputPathname, global::prj,
-                common::pathnameToken(global::inputPathname, global::prjRoot)));
+                aArgs.m_sOutputFile.getStr(), aArgs.m_sPrj.getStr(),
+                common::pathnameToken(global::inputPathname,
+                aArgs.m_sPrjRoot.getStr())));
     }
 
     return pFile;
