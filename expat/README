@@ -36,14 +36,5 @@ libexpat in builds where that is used, why is a separate Unicode one
 needed when an internal expat is used? Good question. Next
 question. Patches welcome.
 
-Another interesting issue is the disable-dynloading case: When we link
-all needed LO code into one executable (as for iOS apps) or into one
-shared library (as in a tentative approach for Android apps) there is
-a problem with linking two libraries (ascii_expat_xmlparse and
-expat_xmlparse) that contain exactly the same symbols... Obviously
-just the one that happens to be mentioned first on the linking command
-line gets linked in, and code that then thinks it is calling the other
-one will mysteriously crash or silently fail. Working on that...
-
 From:
 [http://expat.sourceforge.net/]
