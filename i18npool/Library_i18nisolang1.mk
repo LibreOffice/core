@@ -28,7 +28,10 @@
 
 $(eval $(call gb_Library_Library,i18nisolang1))
 
-$(eval $(call gb_Library_use_package,i18nisolang1,i18npool_inc))
+$(eval $(call gb_Library_use_packages,i18nisolang1,\
+	cppu_inc \
+	i18npool_inc \
+))
 
 $(eval $(call gb_Library_set_include,i18nisolang1,\
 	-I$(SRCDIR)/i18npool/inc \
