@@ -1530,6 +1530,29 @@ SAL_DLLPUBLIC void SAL_CALL rtl_uString_newReplaceAll(
 
     @param str  pointer to the original string; must not be null
 
+    @param from  pointer to the substring to be replaced; must not be null
+
+    @param to  pointer to the replacing substring; must not be null
+
+    @param fromIndex  the position in the string where we will begin searching
+
+    @since LibreOffice 3.7
+*/
+SAL_DLLPUBLIC void SAL_CALL rtl_uString_newReplaceAllFromIndex(
+    rtl_uString ** newStr, rtl_uString * str, rtl_uString const * from,
+    rtl_uString const * to, sal_Int32 fromIndex) SAL_THROW_EXTERN_C();
+
+/** Create a new string by replacing all occurrences of a given substring with
+    another substring.
+
+    Replacing subsequent occurrences picks up only after a given replacement.
+    That is, replacing from "xa" to "xx" in "xaa" results in "xxa", not "xxx".
+
+    @param[in, out] newStr  pointer to the new string; must not be null; must
+    point to null or a valid rtl_uString
+
+    @param str  pointer to the original string; must not be null
+
     @param from  pointer to the substring to be replaced; must not be null and
     must point to memory of at least \p fromLength ASCII bytes
 

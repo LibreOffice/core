@@ -1531,11 +1531,13 @@ public:
 
       @param to  the replacing substring
 
-      @since LibreOffice 3.6
+      @param fromIndex  the position in the string where we will begin searching
+
+      @since LibreOffice 3.7
     */
-    OUString replaceAll(OUString const & from, OUString const & to) const {
+    OUString replaceAll(OUString const & from, OUString const & to, int fromIndex = 0) const {
         rtl_uString * s = 0;
-        rtl_uString_newReplaceAll(&s, pData, from.pData, to.pData);
+        rtl_uString_newReplaceAllFromIndex(&s, pData, from.pData, to.pData, fromIndex);
         return OUString(s, SAL_NO_ACQUIRE);
     }
 
