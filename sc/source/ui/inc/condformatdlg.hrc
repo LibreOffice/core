@@ -55,4 +55,7 @@
 #define BTN_OPTIONS 30
 #define STR_CONDITION 31
 
+#define FT_RANGE 32
+#define ED_RANGE 33
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

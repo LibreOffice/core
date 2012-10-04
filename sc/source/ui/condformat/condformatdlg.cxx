@@ -1089,10 +1089,12 @@ ScCondFormatDlg::ScCondFormatDlg(Window* pParent, ScDocument* pDoc, const ScCond
     maBtnRemove( this, ScResId( BTN_REMOVE ) ),
     maBtnOk( this, ScResId( BTN_OK ) ),
     maBtnCancel( this, ScResId( BTN_CANCEL ) ),
+    maFtRange( this, ScResId( FT_RANGE ) ),
+    maEdRange( this, ScResId( ED_RANGE ) ),
     maCondFormList( this, ScResId( CTRL_LIST ), pDoc, pFormat, rRange, rPos ),
-    maPos(rPos)
+    maPos(rPos),
+    mpDoc(pDoc)
 {
-
     rtl::OUStringBuffer aTitle( GetText() );
     aTitle.append(rtl::OUString(" "));
     rtl::OUString aRangeString;
@@ -1101,12 +1103,23 @@ ScCondFormatDlg::ScCondFormatDlg(Window* pParent, ScDocument* pDoc, const ScCond
     SetText(aTitle.makeStringAndClear());
     maBtnAdd.SetClickHdl( LINK( &maCondFormList, ScCondFormatList, AddBtnHdl ) );
     maBtnRemove.SetClickHdl( LINK( &maCondFormList, ScCondFormatList, RemoveBtnHdl ) );
+    maEdRange.SetModifyHdl( LINK( &maEdRange, ScCondFormatDlg, EdRangeModifyHdl ) );
     FreeResource();
+
+    maEdRange.SetText(aRangeString);
 }
 
 ScConditionalFormat* ScCondFormatDlg::GetConditionalFormat() const
 {
-    return maCondFormList.GetConditionalFormat();
+    rtl::OUString aRangeStr = maEdRange.GetText();
+    ScRangeList aRange;
+    sal_uInt16 nFlags = aRange.Parse(aRangeStr, mpDoc, SCA_VALID, mpDoc->GetAddressConvention());
+    ScConditionalFormat* pFormat = maCondFormList.GetConditionalFormat();
+
+    if(nFlags & SCA_VALID && !aRange.empty())
+        pFormat->AddRange(aRange);
+
+    return pFormat;
 }
 
 IMPL_LINK_NOARG( ScCondFormatList, AddBtnHdl )
@@ -1150,6 +1163,11 @@ IMPL_LINK( ScCondFormatList, EntrySelectHdl, ScCondFrmtEntry*, pEntry )
 IMPL_LINK_NOARG( ScCondFormatList, ScrollHdl )
 {
     DoScroll(mpScrollBar->GetDelta());
+    return 0;
+}
+
+IMPL_LINK_NOARG( ScCondFormatDlg, EdRangeModifyHdl )
+{
     return 0;
 }
 

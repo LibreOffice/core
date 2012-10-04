@@ -177,10 +177,15 @@ private:
     PushButton maBtnRemove;
     OKButton maBtnOk;
     CancelButton maBtnCancel;
+    FixedText maFtRange;
+    Edit maEdRange;
 
     ScCondFormatList maCondFormList;
 
     ScAddress maPos;
+    ScDocument* mpDoc;
+
+    DECL_LINK( EdRangeModifyHdl, void* );
 
 public:
     ScCondFormatDlg(Window* pWindow, ScDocument* pDoc, const ScConditionalFormat* pFormat, const ScRangeList& rRange, const ScAddress& rPos);

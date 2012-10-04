@@ -50,14 +50,14 @@ ModalDialog RID_SCDLG_CONDFORMAT
     };
     PushButton BTN_ADD
     {
-        Pos = MAP_APPFONT( 5, 255 );
+        Pos = MAP_APPFONT( 5, 245 );
         Size = MAP_APPFONT( 50, 14 );
         Text [ en-US ] = "Add";
         TabStop = TRUE;
     };
     PushButton BTN_REMOVE
     {
-        Pos = MAP_APPFONT( 60, 255 );
+        Pos = MAP_APPFONT( 60, 245 );
         Size = MAP_APPFONT( 50, 14 );
         Text [ en-US ] = "Remove";
         TabStop = TRUE;
@@ -66,6 +66,18 @@ ModalDialog RID_SCDLG_CONDFORMAT
     {
         Pos = MAP_APPFONT( 5, 20 );
         Size = MAP_APPFONT( 290, 220 );
+        Border = TRUE;
+    };
+    FixedText FT_RANGE
+    {
+        Pos = MAP_APPFONT( 5, 262 );
+        Size = MAP_APPFONT( 50, 16 );
+        Text [ en-US ] = "Range:";
+    };
+    Edit ED_RANGE
+    {
+        Pos = MAP_APPFONT( 60, 262 );
+        Size = MAP_APPFONT( 200, 14 );
         Border = TRUE;
     };
 };
