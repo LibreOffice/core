@@ -851,7 +851,7 @@ public:
 
     /** Sets the passed default data as current record contents. */
     void                SetDefaultData( const XclExpDefaultRowData& rDefData );
-
+    XclExpDefaultRowData& GetDefaultData() { return maDefData; }
 private:
     /** Writes the contents of the record. */
     virtual void        WriteBody( XclExpStream& rStrm );
