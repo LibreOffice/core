@@ -244,11 +244,11 @@ ModalDialog DLG_SPLINE_PROPERTIES
         Repeat = TRUE ;
         Spin = TRUE ;
         Minimum = 1 ;
-        Maximum = 100 ;
+        Maximum = 15 ;
         StrictFormat = TRUE ;
         Unit = FUNIT_CUSTOM ;
         First = 1 ;
-        Last = 100 ;
+        Last = 15 ;
         SpinSize = 1 ;
     };
     FixedLine FL_SPLINE_DIALOGBUTTONS
