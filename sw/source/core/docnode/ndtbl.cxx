@@ -1305,6 +1305,29 @@ SwNodeRange * SwNodes::ExpandRangeForTableBox(const SwNodeRange & rRange)
     return pResult;
 }
 
+static void
+lcl_SetTableBoxWidths2(SwTable & rTable, size_t const nMaxBoxes,
+        SwTableBoxFmt & rBoxFmt, SwDoc & rDoc)
+{
+    // rhbz#820283, fdo#55462: set default box widths so table width is covered
+    SwTableLines & rLines = rTable.GetTabLines();
+    for (size_t nTmpLine = 0; nTmpLine < rLines.size(); ++nTmpLine)
+    {
+        SwTableBoxes & rBoxes = rLines[nTmpLine]->GetTabBoxes();
+        size_t const nMissing = nMaxBoxes - rBoxes.size();
+        if (nMissing)
+        {
+            // default width for box at the end of an incomplete line
+            SwTableBoxFmt *const pNewFmt = rDoc.MakeTableBoxFmt();
+            pNewFmt->SetFmtAttr( SwFmtFrmSize(ATT_VAR_SIZE,
+                        (USHRT_MAX / nMaxBoxes) * (nMissing + 1)) );
+            pNewFmt->Add(rBoxes.back());
+        }
+    }
+    // default width for all boxes not at the end of an incomplete line
+    rBoxFmt.SetFmtAttr(SwFmtFrmSize(ATT_VAR_SIZE, USHRT_MAX / nMaxBoxes));
+}
+
 SwTableNode* SwNodes::TextToTable( const SwNodes::TableRanges_t & rTableNodes,
                                     SwTableFmt* pTblFmt,
                                     SwTableLineFmt* pLineFmt,
@@ -1392,10 +1415,7 @@ SwTableNode* SwNodes::TextToTable( const SwNodes::TableRanges_t & rTableNodes,
             nMaxBoxes = nBoxes;
     }
 
-    SwTxtFmtColl *const pTxtColl(const_cast<SwTxtFmtColl*>(
-            GetDoc()->GetDfltTxtFmtColl()));
-    lcl_BalanceTable(*pTable, nMaxBoxes, *pTblNd, *pBoxFmt, *pTxtColl, 0, 0);
-    lcl_SetTableBoxWidths(*pTable, nMaxBoxes, *pBoxFmt, *pDoc, 0);
+    lcl_SetTableBoxWidths2(*pTable, nMaxBoxes, *pBoxFmt, *pDoc);
 
     return pTblNd;
 }
