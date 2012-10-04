@@ -512,36 +512,35 @@ static void ObjectDestroyedNotify( gpointer data )
     }
 }
 
-void ensure_dbus_setup(GdkWindow* gdkWindow, GtkSalFrame* pSalFrame)
+void ensure_dbus_setup( GdkWindow* gdkWindow, GtkSalFrame* pSalFrame )
 {
     if ( gdkWindow != NULL && g_object_get_data( G_OBJECT( gdkWindow ), "g-lo-menubar" ) == NULL )
     {
-        GMenuModel* pMenuModel = G_MENU_MODEL(g_lo_menu_new());
-        GActionGroup* pActionGroup = ((GActionGroup*)g_lo_action_group_new(reinterpret_cast<gpointer>(pSalFrame)));
-        XLIB_Window windowId = GDK_WINDOW_XID( gdkWindow );
-        gchar* aDBusPath = g_strdup_printf("/window/%lu", windowId);
-        gchar* aDBusWindowPath = g_strdup_printf( "/window/%lu", windowId );
-        gchar* aDBusMenubarPath = g_strdup_printf( "/window/%lu/menus/menubar", windowId );
         // Get a DBus session connection.
         if(!pSessionBus)
             pSessionBus = g_bus_get_sync (G_BUS_TYPE_SESSION, NULL, NULL);
         if( pSessionBus == NULL )
             return;
+
+        // Create menu model and action group attached to this frame.
+        GMenuModel* pMenuModel = G_MENU_MODEL( g_lo_menu_new() );
+        GActionGroup* pActionGroup = ( ( GActionGroup* ) g_lo_action_group_new( reinterpret_cast< gpointer >( pSalFrame ) ) );
+
+        // Generate menu paths.
+        XLIB_Window windowId = GDK_WINDOW_XID( gdkWindow );
+        gchar* aDBusPath = g_strdup_printf("/window/%lu", windowId);
+        gchar* aDBusWindowPath = g_strdup_printf( "/window/%lu", windowId );
+        gchar* aDBusMenubarPath = g_strdup_printf( "/window/%lu/menus/menubar", windowId );
+
+        // Publish the menu model and the action group.
         SAL_INFO("vcl.unity", "exporting menu model at " << pMenuModel << " for window " << windowId);
         pSalFrame->m_nMenuExportId = g_dbus_connection_export_menu_model (pSessionBus, aDBusMenubarPath, pMenuModel, NULL);
         pSalFrame->m_nActionGroupExportId = g_dbus_connection_export_action_group( pSessionBus, aDBusPath, pActionGroup, NULL);
 
         // Set window properties.
-        g_object_set_data_full(
-            G_OBJECT(gdkWindow),
-            "g-lo-menubar",
-            pMenuModel,
-            ObjectDestroyedNotify);
-        g_object_set_data_full(
-            G_OBJECT(gdkWindow),
-            "g-lo-action-group",
-            pActionGroup,
-            ObjectDestroyedNotify);
+        g_object_set_data_full( G_OBJECT(gdkWindow), "g-lo-menubar", pMenuModel, ObjectDestroyedNotify);
+        g_object_set_data_full( G_OBJECT(gdkWindow), "g-lo-action-group", pActionGroup, ObjectDestroyedNotify);
+
         gdk_x11_window_set_utf8_property ( gdkWindow, "_GTK_UNIQUE_BUS_NAME", g_dbus_connection_get_unique_name( pSessionBus ) );
         gdk_x11_window_set_utf8_property ( gdkWindow, "_GTK_APPLICATION_OBJECT_PATH", "" );
         gdk_x11_window_set_utf8_property ( gdkWindow, "_GTK_WINDOW_OBJECT_PATH", aDBusWindowPath );
@@ -553,10 +552,10 @@ void ensure_dbus_setup(GdkWindow* gdkWindow, GtkSalFrame* pSalFrame)
     }
 }
     
-void on_registrar_available (GDBusConnection * /*connection*/,
-                        const gchar     * /*name*/,
-                        const gchar     * /*name_owner*/,
-                        gpointer         user_data)
+void on_registrar_available( GDBusConnection * /*connection*/,
+                             const gchar     * /*name*/,
+                             const gchar     * /*name_owner*/,
+                             gpointer         user_data )
 {
     SolarMutexGuard aGuard;
     GtkSalFrame* pSalFrame = reinterpret_cast< GtkSalFrame* >( user_data );
@@ -595,17 +594,31 @@ void on_registrar_unavailable (GDBusConnection * /*connection*/,
 void GtkSalFrame::EnsureAppMenuWatch()
 {
     SolarMutexGuard aGuard;
-    if(m_nWatcherId)
-        g_bus_unwatch_name(m_nWatcherId);
+
+    if ( m_nWatcherId )
+        //g_bus_unwatch_name( m_nWatcherId );
+        return;
+
+
+    // Get a DBus session connection.
+    if ( pSessionBus == NULL )
+    {
+        pSessionBus = g_bus_get_sync( G_BUS_TYPE_SESSION, NULL, NULL );
+
+        if ( pSessionBus == NULL )
+            return;
+    }
+
     // Publish the menu only if AppMenu registrar is available.
-    m_nWatcherId = g_bus_watch_name(G_BUS_TYPE_SESSION,
-         "com.canonical.AppMenu.Registrar",
-         G_BUS_NAME_WATCHER_FLAGS_NONE,
-         on_registrar_available,
-         on_registrar_unavailable,
-         static_cast<GtkSalFrame*>(this),
-         NULL);
-    ensure_dbus_setup(gtk_widget_get_window(GTK_WIDGET(m_pWindow)), static_cast<GtkSalFrame*>(this));
+    m_nWatcherId = g_bus_watch_name_on_connection( pSessionBus,
+                                                   "com.canonical.AppMenu.Registrar",
+                                                   G_BUS_NAME_WATCHER_FLAGS_NONE,
+                                                   on_registrar_available,
+                                                   on_registrar_unavailable,
+                                                   static_cast<GtkSalFrame*>(this),
+                                                   NULL );
+
+    ensure_dbus_setup( gtk_widget_get_window(GTK_WIDGET(m_pWindow)), static_cast<GtkSalFrame*>(this) );
 }
 
 GtkSalFrame::~GtkSalFrame()
@@ -664,7 +677,8 @@ GtkSalFrame::~GtkSalFrame()
                     g_dbus_connection_unexport_menu_model(pSessionBus, m_nMenuExportId);
                 GLOMenu* pMenuModel = G_LO_MENU(g_object_get_data( G_OBJECT( m_pWindow ), "g-lo-menubar" ));
                 if(pMenuModel)
-                    g_lo_menu_remove(pMenuModel,0);
+                    //g_lo_menu_remove(pMenuModel,0);
+                    g_object_unref( pMenuModel );
             }
             if(m_nActionGroupExportId)
             {
@@ -672,7 +686,8 @@ GtkSalFrame::~GtkSalFrame()
                     g_dbus_connection_unexport_action_group(pSessionBus, m_nActionGroupExportId);
                 GLOActionGroup* pActionGroup = G_LO_ACTION_GROUP(g_object_get_data( G_OBJECT( m_pWindow ), "g-lo-action-group" ));
                 if(pActionGroup)
-                    g_lo_action_group_clear( pActionGroup );
+                    //g_lo_action_group_clear( pActionGroup );
+                    g_object_unref( pActionGroup );
             }
             gtk_widget_destroy( m_pWindow );
         }
