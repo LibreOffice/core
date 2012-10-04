@@ -126,6 +126,7 @@ class VCL_DLLPUBLIC Menu : public Resource
 {
     friend class MenuBar;
     friend class MenuBarWindow;
+    friend class MenuButton;
     friend class MenuFloatingWindow;
     friend class PopupMenu;
     friend class SystemWindow;

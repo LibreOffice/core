@@ -17,6 +17,7 @@
 #include <vcl/fixed.hxx>
 #include <vcl/layout.hxx>
 #include <vcl/lstbox.hxx>
+#include <vcl/menubtn.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/tabctrl.hxx>
 #include <vcl/tabpage.hxx>
@@ -242,7 +243,7 @@ namespace
     bool extractResizable(VclBuilder::stringmap &rMap)
     {
         bool bResizable = true;
-        VclBuilder::stringmap::iterator aFind = rMap.find(OString(RTL_CONSTASCII_STRINGPARAM("resizable")));
+        VclBuilder::stringmap::iterator aFind = rMap.find(OString("resizable"));
         if (aFind != rMap.end())
         {
             bResizable = toBool(aFind->second);
@@ -251,10 +252,22 @@ namespace
         return bResizable;
     }
 
+    bool extractEntry(VclBuilder::stringmap &rMap)
+    {
+        bool bHasEntry = false;
+        VclBuilder::stringmap::iterator aFind = rMap.find(OString("has-entry"));
+        if (aFind != rMap.end())
+        {
+            bHasEntry = toBool(aFind->second);
+            rMap.erase(aFind);
+        }
+        return bHasEntry;
+    }
+
     bool extractOrientation(VclBuilder::stringmap &rMap)
     {
         bool bVertical = false;
-        VclBuilder::stringmap::iterator aFind = rMap.find(OString(RTL_CONSTASCII_STRINGPARAM("orientation")));
+        VclBuilder::stringmap::iterator aFind = rMap.find(OString("orientation"));
         if (aFind != rMap.end())
         {
             bVertical = aFind->second.equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("vertical"));
@@ -597,9 +610,20 @@ Window *VclBuilder::makeObject(Window *pParent, const OString &name, const OStri
     else if (name.equalsL(RTL_CONSTASCII_STRINGPARAM("GtkComboBoxText")))
     {
         extractModel(id, rMap);
-        ComboBox* pComboBox = new ComboBox(pParent, WB_LEFT|WB_DROPDOWN|WB_VCENTER|WB_3DLOOK);
-        pComboBox->SetBestDropDownLineCount();
-        pWindow = pComboBox;
+        if (extractEntry(rMap))
+        {
+            ComboBox* pComboBox = new ComboBox(pParent, WB_LEFT|WB_DROPDOWN|WB_VCENTER|WB_3DLOOK);
+            pComboBox->SetBestDropDownLineCount();
+            pWindow = pComboBox;
+        }
+        else
+        {
+            MenuButton *pMenuButton = new MenuButton(pParent, WB_LEFT|WB_VCENTER|WB_3DLOOK);
+            pMenuButton->mpOwnMenu = new PopupMenu; //this now belongs to the menubutton
+            pMenuButton->SetPopupMenu(pMenuButton->mpOwnMenu);
+            pMenuButton->SetShowDisplaySelectedItem(true);
+            pWindow = pMenuButton;
+        }
     }
     else if (name.equalsL(RTL_CONSTASCII_STRINGPARAM("GtkTreeView")))
     {

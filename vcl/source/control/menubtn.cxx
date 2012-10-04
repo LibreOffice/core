@@ -84,8 +84,9 @@ void MenuButton::ImplExecuteMenu()
 
 // -----------------------------------------------------------------------
 
-MenuButton::MenuButton( Window* pParent, WinBits nWinBits ) :
-    PushButton( WINDOW_MENUBUTTON )
+MenuButton::MenuButton( Window* pParent, WinBits nWinBits )
+    : PushButton( WINDOW_MENUBUTTON )
+    , mbDisplaySelectedItem(false)
 {
     ImplInitMenuButtonData();
     ImplInit( pParent, nWinBits );
@@ -93,8 +94,9 @@ MenuButton::MenuButton( Window* pParent, WinBits nWinBits ) :
 
 // -----------------------------------------------------------------------
 
-MenuButton::MenuButton( Window* pParent, const ResId& rResId ) :
-    PushButton( WINDOW_MENUBUTTON )
+MenuButton::MenuButton( Window* pParent, const ResId& rResId )
+    : PushButton( WINDOW_MENUBUTTON )
+    , mbDisplaySelectedItem(false)
 {
     ImplInitMenuButtonData();
     rResId.SetRT( RSC_MENUBUTTON );
@@ -127,6 +129,8 @@ void MenuButton::ImplLoadRes( const ResId& rResId )
 MenuButton::~MenuButton()
 {
     delete mpMenuTimer;
+    if (mbDisplaySelectedItem && mpMenu)
+        mpMenu->RemoveEventListener(LINK(this, MenuButton, MenuEventListener));
     delete mpOwnMenu;
 }
 
@@ -208,7 +212,31 @@ void MenuButton::Activate()
 
 void MenuButton::Select()
 {
+    updateText();
     maSelectHdl.Call( this );
+}
+
+void MenuButton::updateText()
+{
+    if (mbDisplaySelectedItem)
+    {
+        if (mpMenu)
+            SetText(mpMenu->GetItemText(mpMenu->GetCurItemId()));
+        else
+            SetText(OUString());
+    }
+}
+
+Size MenuButton::GetOptimalSize(WindowSizeType eType) const
+{
+    Size aRet = PushButton::GetOptimalSize(eType);
+    if (mbDisplaySelectedItem && mpMenu)
+    {
+        Size aMenuSize(mpMenu->ImplCalcSize(const_cast<MenuButton*>(this)));
+        if (aMenuSize.Width() > aRet.Width())
+            aRet.Width() = aMenuSize.Width();
+    }
+    return aRet;
 }
 
 // -----------------------------------------------------------------------
@@ -220,13 +248,52 @@ void MenuButton::SetMenuMode( sal_uInt16 nMode )
     mnMenuMode = nMode;
 }
 
-// -----------------------------------------------------------------------
+void MenuButton::SetShowDisplaySelectedItem(bool bShow)
+{
+    if (mbDisplaySelectedItem == bShow)
+        return;
+    if (mbDisplaySelectedItem && mpMenu)
+        mpMenu->RemoveEventListener(LINK(this, MenuButton, MenuEventListener));
+    mbDisplaySelectedItem = bShow;
+    if (mbDisplaySelectedItem && mpMenu)
+        mpMenu->AddEventListener(LINK(this, MenuButton, MenuEventListener));
+}
 
 void MenuButton::SetPopupMenu( PopupMenu* pNewMenu )
 {
+    if (pNewMenu == mpMenu)
+        return;
+    if (mbDisplaySelectedItem && mpMenu)
+        mpMenu->RemoveEventListener(LINK(this, MenuButton, MenuEventListener));
     // Fuer die 5.1-Auslieferung besser noch nicht inline, ansonsten kann
     // diese Funktion zur 6.0 inline werden
     mpMenu = pNewMenu;
+    updateText();
+    if (mbDisplaySelectedItem && mpMenu)
+        mpMenu->AddEventListener(LINK(this, MenuButton, MenuEventListener));
+}
+
+IMPL_LINK(MenuButton, MenuEventListener, VclSimpleEvent*, pEvent)
+{
+    if (pEvent && pEvent->ISA(VclMenuEvent))
+    {
+        VclMenuEvent* pMenuEvent = (VclMenuEvent*)pEvent;
+        if (pMenuEvent->GetMenu() == mpMenu)
+        {
+            switch (pMenuEvent->GetId())
+            {
+                case VCLEVENT_MENU_INSERTITEM:
+                case VCLEVENT_MENU_REMOVEITEM:
+                case VCLEVENT_MENU_ITEMTEXTCHANGED:
+                    queue_resize();
+                    break;
+                case VCLEVENT_MENU_SELECT:
+                    updateText();
+                    break;
+            }
+        }
+    }
+    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
