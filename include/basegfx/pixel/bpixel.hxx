@@ -135,22 +135,20 @@ namespace basegfx
 
     inline BPixel minimum(const BPixel& rTupA, const BPixel& rTupB)
     {
-        BPixel aMin(
-            (rTupB.getRed() < rTupA.getRed()) ? rTupB.getRed() : rTupA.getRed(),
-            (rTupB.getGreen() < rTupA.getGreen()) ? rTupB.getGreen() : rTupA.getGreen(),
-            (rTupB.getBlue() < rTupA.getBlue()) ? rTupB.getBlue() : rTupA.getBlue(),
-            (rTupB.getOpacity() < rTupA.getOpacity()) ? rTupB.getOpacity() : rTupA.getOpacity());
-        return aMin;
+        return BPixel(
+            std::min(rTupB.getRed(), rTupA.getRed()),
+            std::min(rTupB.getGreen(), rTupA.getGreen()),
+            std::min(rTupB.getBlue(), rTupA.getBlue()),
+            std::min(rTupB.getOpacity(), rTupA.getOpacity()));
     }
 
     inline BPixel maximum(const BPixel& rTupA, const BPixel& rTupB)
     {
-        BPixel aMax(
-            (rTupB.getRed() > rTupA.getRed()) ? rTupB.getRed() : rTupA.getRed(),
-            (rTupB.getGreen() > rTupA.getGreen()) ? rTupB.getGreen() : rTupA.getGreen(),
-            (rTupB.getBlue() > rTupA.getBlue()) ? rTupB.getBlue() : rTupA.getBlue(),
-            (rTupB.getOpacity() > rTupA.getOpacity()) ? rTupB.getOpacity() : rTupA.getOpacity());
-        return aMax;
+        return BPixel(
+            std::max(rTupB.getRed(), rTupA.getRed()),
+            std::max(rTupB.getGreen(), rTupA.getGreen()),
+            std::max(rTupB.getBlue(), rTupA.getBlue()),
+            std::max(rTupB.getOpacity(), rTupA.getOpacity()));
     }
 
     inline BPixel interpolate(const BPixel& rOld1, const BPixel& rOld2, double t)
@@ -171,6 +169,7 @@ namespace basegfx
         {
             const sal_uInt32 nFactor(fround(256.0 * t));
             const sal_uInt32 nNegFac(256L - nFactor);
+
             return BPixel(
                 (sal_uInt8)(((sal_uInt32)rOld1.getRed() * nNegFac + (sal_uInt32)rOld2.getRed() * nFactor) >> 8L),
                 (sal_uInt8)(((sal_uInt32)rOld1.getGreen() * nNegFac + (sal_uInt32)rOld2.getGreen() * nFactor) >> 8L),
@@ -181,34 +180,20 @@ namespace basegfx
 
     inline BPixel average(const BPixel& rOld1, const BPixel& rOld2)
     {
-        if(rOld1 == rOld2)
-        {
-            return rOld1;
-        }
-        else
-        {
-            return BPixel(
-                (sal_uInt8)(((sal_uInt32)rOld1.getRed() + (sal_uInt32)rOld2.getRed()) >> 1L),
-                (sal_uInt8)(((sal_uInt32)rOld1.getGreen() + (sal_uInt32)rOld2.getGreen()) >> 1L),
-                (sal_uInt8)(((sal_uInt32)rOld1.getBlue() + (sal_uInt32)rOld2.getBlue()) >> 1L),
-                (sal_uInt8)(((sal_uInt32)rOld1.getOpacity() + (sal_uInt32)rOld2.getOpacity()) >> 1L));
-        }
+        return BPixel(
+            rOld1.getRed() == rOld2.getRed() ? rOld1.getRed() : (sal_uInt8)(((sal_uInt32)rOld1.getRed() + (sal_uInt32)rOld2.getRed()) >> 1L),
+            rOld1.getGreen() == rOld2.getGreen() ? rOld1.getGreen() : (sal_uInt8)(((sal_uInt32)rOld1.getGreen() + (sal_uInt32)rOld2.getGreen()) >> 1L),
+            rOld1.getBlue() == rOld2.getBlue() ? rOld1.getBlue() : (sal_uInt8)(((sal_uInt32)rOld1.getBlue() + (sal_uInt32)rOld2.getBlue()) >> 1L),
+            rOld1.getOpacity() == rOld2.getOpacity() ? rOld1.getOpacity() : (sal_uInt8)(((sal_uInt32)rOld1.getOpacity() + (sal_uInt32)rOld2.getOpacity()) >> 1L));
     }
 
     inline BPixel average(const BPixel& rOld1, const BPixel& rOld2, const BPixel& rOld3)
     {
-        if(rOld1 == rOld2 && rOld2 == rOld3)
-        {
-            return rOld1;
-        }
-        else
-        {
-            return BPixel(
-                (sal_uInt8)(((sal_uInt32)rOld1.getRed() + (sal_uInt32)rOld2.getRed() + (sal_uInt32)rOld3.getRed()) / 3L),
-                (sal_uInt8)(((sal_uInt32)rOld1.getGreen() + (sal_uInt32)rOld2.getGreen() + (sal_uInt32)rOld3.getGreen()) / 3L),
-                (sal_uInt8)(((sal_uInt32)rOld1.getBlue() + (sal_uInt32)rOld2.getBlue() + (sal_uInt32)rOld3.getBlue()) / 3L),
-                (sal_uInt8)(((sal_uInt32)rOld1.getOpacity() + (sal_uInt32)rOld2.getOpacity() + (sal_uInt32)rOld3.getOpacity()) / 3L));
-        }
+        return BPixel(
+            (rOld1.getRed() == rOld2.getRed() && rOld2.getRed() == rOld3.getRed()) ? rOld1.getRed() : (sal_uInt8)(((sal_uInt32)rOld1.getRed() + (sal_uInt32)rOld2.getRed() + (sal_uInt32)rOld3.getRed()) / 3L),
+            (rOld1.getGreen() == rOld2.getGreen() && rOld2.getGreen() == rOld3.getGreen()) ? rOld1.getGreen() : (sal_uInt8)(((sal_uInt32)rOld1.getGreen() + (sal_uInt32)rOld2.getGreen() + (sal_uInt32)rOld3.getGreen()) / 3L),
+            (rOld1.getBlue() == rOld2.getBlue() && rOld2.getBlue() == rOld3.getBlue()) ? rOld1.getBlue() : (sal_uInt8)(((sal_uInt32)rOld1.getBlue() + (sal_uInt32)rOld2.getBlue() + (sal_uInt32)rOld3.getBlue()) / 3L),
+            (rOld1.getOpacity() == rOld2.getOpacity() && rOld2.getOpacity() == rOld3.getOpacity()) ? rOld1.getOpacity() : (sal_uInt8)(((sal_uInt32)rOld1.getOpacity() + (sal_uInt32)rOld2.getOpacity() + (sal_uInt32)rOld3.getOpacity()) / 3L));
     }
 } // end of namespace basegfx
 

@@ -22,6 +22,7 @@
 
 #include <sal/types.h>
 #include <basegfx/numeric/ftools.hxx>
+#include <algorithm>
 #include <basegfx/basegfxdllapi.h>
 
 namespace basegfx
@@ -237,50 +238,60 @@ namespace basegfx
 
     inline B2DTuple minimum(const B2DTuple& rTupA, const B2DTuple& rTupB)
     {
-        B2DTuple aMin(
-            (rTupB.getX() < rTupA.getX()) ? rTupB.getX() : rTupA.getX(),
-            (rTupB.getY() < rTupA.getY()) ? rTupB.getY() : rTupA.getY());
-        return aMin;
+        return B2DTuple(
+            std::min(rTupB.getX(), rTupA.getX()),
+            std::min(rTupB.getY(), rTupA.getY()));
     }
 
     inline B2DTuple maximum(const B2DTuple& rTupA, const B2DTuple& rTupB)
     {
-        B2DTuple aMax(
-            (rTupB.getX() > rTupA.getX()) ? rTupB.getX() : rTupA.getX(),
-            (rTupB.getY() > rTupA.getY()) ? rTupB.getY() : rTupA.getY());
-        return aMax;
+        return B2DTuple(
+            std::max(rTupB.getX(), rTupA.getX()),
+            std::max(rTupB.getY(), rTupA.getY()));
     }
 
     inline B2DTuple absolute(const B2DTuple& rTup)
     {
         B2DTuple aAbs(
-            (0.0 > rTup.getX()) ? -rTup.getX() : rTup.getX(),
-            (0.0 > rTup.getY()) ? -rTup.getY() : rTup.getY());
+            fabs(rTup.getX()),
+            fabs(rTup.getY()));
         return aAbs;
     }
 
     inline B2DTuple interpolate(const B2DTuple& rOld1, const B2DTuple& rOld2, double t)
     {
-        B2DTuple aInt(
-            ((rOld2.getX() - rOld1.getX()) * t) + rOld1.getX(),
-            ((rOld2.getY() - rOld1.getY()) * t) + rOld1.getY());
-        return aInt;
+        if(rOld1 == rOld2)
+        {
+            return rOld1;
+        }
+        else if(0.0 >= t)
+        {
+            return rOld1;
+        }
+        else if(1.0 <= t)
+        {
+            return rOld2;
+        }
+        else
+        {
+            return B2DTuple(
+                ((rOld2.getX() - rOld1.getX()) * t) + rOld1.getX(),
+                ((rOld2.getY() - rOld1.getY()) * t) + rOld1.getY());
+        }
     }
 
     inline B2DTuple average(const B2DTuple& rOld1, const B2DTuple& rOld2)
     {
-        B2DTuple aAvg(
-            (rOld1.getX() + rOld2.getX()) * 0.5,
-            (rOld1.getY() + rOld2.getY()) * 0.5);
-        return aAvg;
+        return B2DTuple(
+            rOld1.getX() == rOld2.getX() ? rOld1.getX() : (rOld1.getX() + rOld2.getX()) * 0.5,
+            rOld1.getY() == rOld2.getY() ? rOld1.getY() : (rOld1.getY() + rOld2.getY()) * 0.5);
     }
 
     inline B2DTuple average(const B2DTuple& rOld1, const B2DTuple& rOld2, const B2DTuple& rOld3)
     {
-        B2DTuple aAvg(
-            (rOld1.getX() + rOld2.getX() + rOld3.getX()) * (1.0 / 3.0),
-            (rOld1.getY() + rOld2.getY() + rOld3.getY()) * (1.0 / 3.0));
-        return aAvg;
+        return B2DTuple(
+            (rOld1.getX() == rOld2.getX() && rOld2.getX() == rOld3.getX()) ? rOld1.getX() : (rOld1.getX() + rOld2.getX() + rOld3.getX()) * (1.0 / 3.0),
+            (rOld1.getY() == rOld2.getY() && rOld2.getY() == rOld3.getY()) ? rOld1.getY() : (rOld1.getY() + rOld2.getY() + rOld3.getY()) * (1.0 / 3.0));
     }
 
     inline B2DTuple operator+(const B2DTuple& rTupA, const B2DTuple& rTupB)

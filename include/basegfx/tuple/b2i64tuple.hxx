@@ -196,18 +196,16 @@ namespace basegfx
 
     inline B2I64Tuple minimum(const B2I64Tuple& rTupA, const B2I64Tuple& rTupB)
     {
-        B2I64Tuple aMin(
-            (rTupB.getX() < rTupA.getX()) ? rTupB.getX() : rTupA.getX(),
-            (rTupB.getY() < rTupA.getY()) ? rTupB.getY() : rTupA.getY());
-        return aMin;
+        return B2I64Tuple(
+            std::min(rTupB.getX(), rTupA.getX()),
+            std::min(rTupB.getY(), rTupA.getY()));
     }
 
     inline B2I64Tuple maximum(const B2I64Tuple& rTupA, const B2I64Tuple& rTupB)
     {
-        B2I64Tuple aMax(
-            (rTupB.getX() > rTupA.getX()) ? rTupB.getX() : rTupA.getX(),
-            (rTupB.getY() > rTupA.getY()) ? rTupB.getY() : rTupA.getY());
-        return aMax;
+        return B2I64Tuple(
+            std::max(rTupB.getX(), rTupA.getX()),
+            std::max(rTupB.getY(), rTupA.getY()));
     }
 
     inline B2I64Tuple absolute(const B2I64Tuple& rTup)
@@ -218,28 +216,40 @@ namespace basegfx
         return aAbs;
     }
 
-    inline B2DTuple interpolate(const B2I64Tuple& rOld1, const B2I64Tuple& rOld2, double t)
+    inline B2I64Tuple interpolate(const B2I64Tuple& rOld1, const B2I64Tuple& rOld2, double t)
     {
-        B2DTuple aInt(
-            ((rOld2.getX() - rOld1.getX()) * t) + rOld1.getX(),
-            ((rOld2.getY() - rOld1.getY()) * t) + rOld1.getY());
-        return aInt;
+        if(rOld1 == rOld2)
+        {
+            return rOld1;
+        }
+        else if(0.0 >= t)
+        {
+            return rOld1;
+        }
+        else if(1.0 <= t)
+        {
+            return rOld2;
+        }
+        else
+        {
+            return B2I64Tuple(
+                basegfx::fround64(((rOld2.getX() - rOld1.getX()) * t) + rOld1.getX()),
+                basegfx::fround64(((rOld2.getY() - rOld1.getY()) * t) + rOld1.getY()));
+        }
     }
 
-    inline B2DTuple average(const B2I64Tuple& rOld1, const B2I64Tuple& rOld2)
+    inline B2I64Tuple average(const B2I64Tuple& rOld1, const B2I64Tuple& rOld2)
     {
-        B2DTuple aAvg(
-            (rOld1.getX() + rOld2.getX()) * 0.5,
-            (rOld1.getY() + rOld2.getY()) * 0.5);
-        return aAvg;
+        return B2I64Tuple(
+            rOld1.getX() == rOld2.getX() ? rOld1.getX() : basegfx::fround64((rOld1.getX() + rOld2.getX()) * 0.5),
+            rOld1.getY() == rOld2.getY() ? rOld1.getY() : basegfx::fround64((rOld1.getY() + rOld2.getY()) * 0.5));
     }
 
-    inline B2DTuple average(const B2I64Tuple& rOld1, const B2I64Tuple& rOld2, const B2I64Tuple& rOld3)
+    inline B2I64Tuple average(const B2I64Tuple& rOld1, const B2I64Tuple& rOld2, const B2I64Tuple& rOld3)
     {
-        B2DTuple aAvg(
-            (rOld1.getX() + rOld2.getX() + rOld3.getX()) * (1.0 / 3.0),
-            (rOld1.getY() + rOld2.getY() + rOld3.getY()) * (1.0 / 3.0));
-        return aAvg;
+        return B2I64Tuple(
+            (rOld1.getX() == rOld2.getX() && rOld2.getX() == rOld3.getX()) ? rOld1.getX() : basegfx::fround64((rOld1.getX() + rOld2.getX() + rOld3.getX()) * (1.0 / 3.0)),
+            (rOld1.getY() == rOld2.getY() && rOld2.getY() == rOld3.getY()) ? rOld1.getY() : basegfx::fround64((rOld1.getY() + rOld2.getY() + rOld3.getY()) * (1.0 / 3.0)));
     }
 
     inline B2I64Tuple operator+(const B2I64Tuple& rTupA, const B2I64Tuple& rTupB)

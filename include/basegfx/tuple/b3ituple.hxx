@@ -220,20 +220,18 @@ namespace basegfx
 
     inline B3ITuple minimum(const B3ITuple& rTupA, const B3ITuple& rTupB)
     {
-        B3ITuple aMin(
-            (rTupB.getX() < rTupA.getX()) ? rTupB.getX() : rTupA.getX(),
-            (rTupB.getY() < rTupA.getY()) ? rTupB.getY() : rTupA.getY(),
-            (rTupB.getZ() < rTupA.getZ()) ? rTupB.getZ() : rTupA.getZ());
-        return aMin;
+        return B3ITuple(
+            std::min(rTupB.getX(), rTupA.getX()),
+            std::min(rTupB.getY(), rTupA.getY()),
+            std::min(rTupB.getZ(), rTupA.getZ()));
     }
 
     inline B3ITuple maximum(const B3ITuple& rTupA, const B3ITuple& rTupB)
     {
-        B3ITuple aMax(
-            (rTupB.getX() > rTupA.getX()) ? rTupB.getX() : rTupA.getX(),
-            (rTupB.getY() > rTupA.getY()) ? rTupB.getY() : rTupA.getY(),
-            (rTupB.getZ() > rTupA.getZ()) ? rTupB.getZ() : rTupA.getZ());
-        return aMax;
+        return B3ITuple(
+            std::max(rTupB.getX(), rTupA.getX()),
+            std::max(rTupB.getY(), rTupA.getY()),
+            std::max(rTupB.getZ(), rTupA.getZ()));
     }
 
     inline B3ITuple absolute(const B3ITuple& rTup)
@@ -245,31 +243,43 @@ namespace basegfx
         return aAbs;
     }
 
-    inline B3DTuple interpolate(const B3ITuple& rOld1, const B3ITuple& rOld2, double t)
+    inline B3ITuple interpolate(const B3ITuple& rOld1, const B3ITuple& rOld2, double t)
     {
-        B3DTuple aInt(
-            ((rOld2.getX() - rOld1.getX()) * t) + rOld1.getX(),
-            ((rOld2.getY() - rOld1.getY()) * t) + rOld1.getY(),
-            ((rOld2.getZ() - rOld1.getZ()) * t) + rOld1.getZ());
-        return aInt;
+        if(rOld1 == rOld2)
+        {
+            return rOld1;
+        }
+        else if(0.0 >= t)
+        {
+            return rOld1;
+        }
+        else if(1.0 <= t)
+        {
+            return rOld2;
+        }
+        else
+        {
+            return B3ITuple(
+                basegfx::fround(((rOld2.getX() - rOld1.getX()) * t) + rOld1.getX()),
+                basegfx::fround(((rOld2.getY() - rOld1.getY()) * t) + rOld1.getY()),
+                basegfx::fround(((rOld2.getZ() - rOld1.getZ()) * t) + rOld1.getZ()));
+        }
     }
 
-    inline B3DTuple average(const B3ITuple& rOld1, const B3ITuple& rOld2)
+    inline B3ITuple average(const B3ITuple& rOld1, const B3ITuple& rOld2)
     {
-        B3DTuple aAvg(
-            (rOld1.getX() + rOld2.getX()) * 0.5,
-            (rOld1.getY() + rOld2.getY()) * 0.5,
-            (rOld1.getZ() + rOld2.getZ()) * 0.5);
-        return aAvg;
+        return B3ITuple(
+            rOld1.getX() == rOld2.getX() ? rOld1.getX() : basegfx::fround((rOld1.getX() + rOld2.getX()) * 0.5),
+            rOld1.getY() == rOld2.getY() ? rOld1.getY() : basegfx::fround((rOld1.getY() + rOld2.getY()) * 0.5),
+            rOld1.getZ() == rOld2.getZ() ? rOld1.getZ() : basegfx::fround((rOld1.getZ() + rOld2.getZ()) * 0.5));
     }
 
-    inline B3DTuple average(const B3ITuple& rOld1, const B3ITuple& rOld2, const B3ITuple& rOld3)
+    inline B3ITuple average(const B3ITuple& rOld1, const B3ITuple& rOld2, const B3ITuple& rOld3)
     {
-        B3DTuple aAvg(
-            (rOld1.getX() + rOld2.getX() + rOld3.getX()) * (1.0 / 3.0),
-            (rOld1.getY() + rOld2.getY() + rOld3.getY()) * (1.0 / 3.0),
-            (rOld1.getZ() + rOld2.getZ() + rOld3.getZ()) * (1.0 / 3.0));
-        return aAvg;
+        return B3ITuple(
+            (rOld1.getX() == rOld2.getX() && rOld2.getX() == rOld3.getX()) ? rOld1.getX() : basegfx::fround((rOld1.getX() + rOld2.getX() + rOld3.getX()) * (1.0 / 3.0)),
+            (rOld1.getY() == rOld2.getY() && rOld2.getY() == rOld3.getY()) ? rOld1.getX() : basegfx::fround((rOld1.getY() + rOld2.getY() + rOld3.getY()) * (1.0 / 3.0)),
+            (rOld1.getZ() == rOld2.getZ() && rOld2.getZ() == rOld3.getZ()) ? rOld1.getX() : basegfx::fround((rOld1.getZ() + rOld2.getZ() + rOld3.getZ()) * (1.0 / 3.0)));
     }
 
     inline B3ITuple operator+(const B3ITuple& rTupA, const B3ITuple& rTupB)

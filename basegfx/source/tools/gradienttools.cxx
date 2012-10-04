@@ -355,19 +355,20 @@ namespace basegfx
         {
             const B2DPoint aCoor(rGradInfo.getBackTextureTransform() * rUV);
 
-            if(aCoor.getX() < 0.0 || aCoor.getX() > 1.0)
-            {
-                return 0.0;
-            }
+            // Ignore Y, this is not needed at all for Y-Oriented gradients
+            // if(aCoor.getX() < 0.0 || aCoor.getX() > 1.0)
+            // {
+            //     return 0.0;
+            // }
 
             if(aCoor.getY() <= 0.0)
             {
-                return 0.0;
+                return 0.0; // start value for inside
             }
 
             if(aCoor.getY() >= 1.0)
             {
-                return 1.0;
+                return 1.0; // end value for outside
             }
 
             const sal_uInt32 nSteps(rGradInfo.getSteps());
@@ -384,16 +385,17 @@ namespace basegfx
         {
             const B2DPoint aCoor(rGradInfo.getBackTextureTransform() * rUV);
 
-            if(aCoor.getX() < 0.0 || aCoor.getX() > 1.0)
-            {
-                return 0.0;
-            }
+            // Ignore Y, this is not needed at all for Y-Oriented gradients
+            //if(aCoor.getX() < 0.0 || aCoor.getX() > 1.0)
+            //{
+            //    return 0.0;
+            //}
 
             const double fAbsY(fabs(aCoor.getY()));
 
             if(fAbsY >= 1.0)
             {
-                return 0.0;
+                return 1.0; // use end value when outside in Y
             }
 
             const sal_uInt32 nSteps(rGradInfo.getSteps());

@@ -141,42 +141,152 @@ namespace basegfx
     protected:
         sal_uInt32 addColorInterpolator(const BColor& rA, const BColor& rB, double fInvYDelta)
         {
-            B3DVector aDelta(rB.getRed() - rA.getRed(), rB.getGreen() - rA.getGreen(), rB.getBlue() - rA.getBlue());
-            aDelta *= fInvYDelta;
-            maColorInterpolators.push_back(ip_triple(rA.getRed(), aDelta.getX(), rA.getGreen(), aDelta.getY(), rA.getBlue(), aDelta.getZ()));
-            return (maColorInterpolators.size() - 1L);
+            double aDeltaRed(rB.getRed() - rA.getRed());
+
+            if(fTools::equalZero(aDeltaRed))
+            {
+                aDeltaRed = 0.0;
+            }
+            else
+            {
+                aDeltaRed *= fInvYDelta;
+            }
+
+            double aDeltaGreen(rB.getGreen() - rA.getGreen());
+
+            if(fTools::equalZero(aDeltaGreen))
+            {
+                aDeltaGreen = 0.0;
+            }
+            else
+            {
+                aDeltaGreen *= fInvYDelta;
+            }
+
+            double aDeltaBlue(rB.getBlue() - rA.getBlue());
+
+            if(fTools::equalZero(aDeltaBlue))
+            {
+                aDeltaBlue = 0.0;
+            }
+            else
+            {
+                aDeltaBlue *= fInvYDelta;
+            }
+
+            maColorInterpolators.push_back(
+                ip_triple(
+                    rA.getRed(), aDeltaRed,
+                    rA.getGreen(), aDeltaGreen,
+                    rA.getBlue(), aDeltaBlue));
+
+            return (maColorInterpolators.size() - 1);
         }
 
         sal_uInt32 addNormalInterpolator(const B3DVector& rA, const B3DVector& rB, double fInvYDelta)
         {
-            B3DVector aDelta(rB.getX() - rA.getX(), rB.getY() - rA.getY(), rB.getZ() - rA.getZ());
-            aDelta *= fInvYDelta;
-            maNormalInterpolators.push_back(ip_triple(rA.getX(), aDelta.getX(), rA.getY(), aDelta.getY(), rA.getZ(), aDelta.getZ()));
-            return (maNormalInterpolators.size() - 1L);
+            double aDeltaX(rB.getX() - rA.getX());
+
+            if(fTools::equalZero(aDeltaX))
+            {
+                aDeltaX = 0.0;
+            }
+            else
+            {
+                aDeltaX *= fInvYDelta;
+            }
+
+            double aDeltaY(rB.getY() - rA.getY());
+
+            if(fTools::equalZero(aDeltaY))
+            {
+                aDeltaY = 0.0;
+            }
+            else
+            {
+                aDeltaY *= fInvYDelta;
+            }
+
+            double aDeltaZ(rB.getZ() - rA.getZ());
+
+            if(fTools::equalZero(aDeltaZ))
+            {
+                aDeltaZ = 0.0;
+            }
+            else
+            {
+                aDeltaZ *= fInvYDelta;
+            }
+
+            maNormalInterpolators.push_back(
+                ip_triple(
+                    rA.getX(), aDeltaX,
+                    rA.getY(), aDeltaY,
+                    rA.getZ(), aDeltaZ));
+
+            return (maNormalInterpolators.size() - 1);
         }
 
         sal_uInt32 addTextureInterpolator(const B2DPoint& rA, const B2DPoint& rB, double fInvYDelta)
         {
-            B2DVector aDelta(rB.getX() - rA.getX(), rB.getY() - rA.getY());
-            aDelta *= fInvYDelta;
-            maTextureInterpolators.push_back(ip_double(rA.getX(), aDelta.getX(), rA.getY(), aDelta.getY()));
-            return (maTextureInterpolators.size() - 1L);
+            double aDeltaX(rB.getX() - rA.getX());
+
+            if(fTools::equalZero(aDeltaX))
+            {
+                aDeltaX = 0.0;
+            }
+            else
+            {
+                aDeltaX *= fInvYDelta;
+            }
+
+            double aDeltaY(rB.getY() - rA.getY());
+
+            if(fTools::equalZero(aDeltaY))
+            {
+                aDeltaY = 0.0;
+            }
+            else
+            {
+                aDeltaY *= fInvYDelta;
+            }
+
+            maTextureInterpolators.push_back(
+                ip_double(
+                    rA.getX(), aDeltaX,
+                    rA.getY(), aDeltaY));
+
+            return (maTextureInterpolators.size() - 1);
         }
 
         sal_uInt32 addInverseTextureInterpolator(const B2DPoint& rA, const B2DPoint& rB, double fZEyeA, double fZEyeB, double fInvYDelta)
         {
+            double fZDelta(fZEyeB - fZEyeA);
             const double fInvZEyeA(fTools::equalZero(fZEyeA) ? fZEyeA : 1.0 / fZEyeA);
-            const double fInvZEyeB(fTools::equalZero(fZEyeB) ? fZEyeB : 1.0 / fZEyeB);
+            double fInvZEyeB(fInvZEyeA);
+
+            if(fTools::equalZero(fZDelta))
+            {
+                fZDelta = 0.0;
+            }
+            else
+            {
+                fInvZEyeB = fTools::equalZero(fZEyeB) ? fZEyeB : 1.0 / fZEyeB;
+                fZDelta = (fInvZEyeB - fInvZEyeA) * fInvYDelta;
+            }
+
             const B2DPoint aInvA(rA * fInvZEyeA);
             const B2DPoint aInvB(rB * fInvZEyeB);
-            double fZDelta(fInvZEyeB - fInvZEyeA);
-            B2DVector aDelta(aInvB.getX() - aInvA.getX(), aInvB.getY() - aInvA.getY());
+            const double aDeltaX((aInvB.getX() - aInvA.getX()) * fInvYDelta);
+            const double aDeltaY((aInvB.getY() - aInvA.getY()) * fInvYDelta);
 
-            fZDelta *= fInvYDelta;
-            aDelta *= fInvYDelta;
+            maInverseTextureInterpolators.push_back(
+                ip_triple(
+                    aInvA.getX(), aDeltaX,
+                    aInvA.getY(), aDeltaY,
+                    fInvZEyeA, fZDelta));
 
-            maInverseTextureInterpolators.push_back(ip_triple(aInvA.getX(), aDelta.getX(), aInvA.getY(), aDelta.getY(), fInvZEyeA, fZDelta));
-            return (maInverseTextureInterpolators.size() - 1L);
+            return (maInverseTextureInterpolators.size() - 1);
         }
 
         void reset()

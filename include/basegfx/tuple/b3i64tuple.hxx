@@ -221,20 +221,18 @@ namespace basegfx
 
     inline B3I64Tuple minimum(const B3I64Tuple& rTupA, const B3I64Tuple& rTupB)
     {
-        B3I64Tuple aMin(
-            (rTupB.getX() < rTupA.getX()) ? rTupB.getX() : rTupA.getX(),
-            (rTupB.getY() < rTupA.getY()) ? rTupB.getY() : rTupA.getY(),
-            (rTupB.getZ() < rTupA.getZ()) ? rTupB.getZ() : rTupA.getZ());
-        return aMin;
+        return B3I64Tuple(
+            std::min(rTupB.getX(), rTupA.getX()),
+            std::min(rTupB.getY(), rTupA.getY()),
+            std::min(rTupB.getZ(), rTupA.getZ()));
     }
 
     inline B3I64Tuple maximum(const B3I64Tuple& rTupA, const B3I64Tuple& rTupB)
     {
-        B3I64Tuple aMax(
-            (rTupB.getX() > rTupA.getX()) ? rTupB.getX() : rTupA.getX(),
-            (rTupB.getY() > rTupA.getY()) ? rTupB.getY() : rTupA.getY(),
-            (rTupB.getZ() > rTupA.getZ()) ? rTupB.getZ() : rTupA.getZ());
-        return aMax;
+        return B3I64Tuple(
+            std::max(rTupB.getX(), rTupA.getX()),
+            std::max(rTupB.getY(), rTupA.getY()),
+            std::max(rTupB.getZ(), rTupA.getZ()));
     }
 
     inline B3I64Tuple absolute(const B3I64Tuple& rTup)
@@ -246,31 +244,43 @@ namespace basegfx
         return aAbs;
     }
 
-    inline B3DTuple interpolate(const B3I64Tuple& rOld1, const B3I64Tuple& rOld2, double t)
+    inline B3I64Tuple interpolate(const B3I64Tuple& rOld1, const B3I64Tuple& rOld2, double t)
     {
-        B3DTuple aInt(
-            ((rOld2.getX() - rOld1.getX()) * t) + rOld1.getX(),
-            ((rOld2.getY() - rOld1.getY()) * t) + rOld1.getY(),
-            ((rOld2.getZ() - rOld1.getZ()) * t) + rOld1.getZ());
-        return aInt;
+        if(rOld1 == rOld2)
+        {
+            return rOld1;
+        }
+        else if(0.0 >= t)
+        {
+            return rOld1;
+        }
+        else if(1.0 <= t)
+        {
+            return rOld2;
+        }
+        else
+        {
+            return B3I64Tuple(
+                basegfx::fround64(((rOld2.getX() - rOld1.getX()) * t) + rOld1.getX()),
+                basegfx::fround64(((rOld2.getY() - rOld1.getY()) * t) + rOld1.getY()),
+                basegfx::fround64(((rOld2.getZ() - rOld1.getZ()) * t) + rOld1.getZ()));
+        }
     }
 
-    inline B3DTuple average(const B3I64Tuple& rOld1, const B3I64Tuple& rOld2)
+    inline B3I64Tuple average(const B3I64Tuple& rOld1, const B3I64Tuple& rOld2)
     {
-        B3DTuple aAvg(
-            (rOld1.getX() + rOld2.getX()) * 0.5,
-            (rOld1.getY() + rOld2.getY()) * 0.5,
-            (rOld1.getZ() + rOld2.getZ()) * 0.5);
-        return aAvg;
+        return B3I64Tuple(
+            rOld1.getX() == rOld2.getX() ? rOld1.getX() : basegfx::fround64((rOld1.getX() + rOld2.getX()) * 0.5),
+            rOld1.getY() == rOld2.getY() ? rOld1.getY() : basegfx::fround64((rOld1.getY() + rOld2.getY()) * 0.5),
+            rOld1.getZ() == rOld2.getZ() ? rOld1.getZ() : basegfx::fround64((rOld1.getZ() + rOld2.getZ()) * 0.5));
     }
 
-    inline B3DTuple average(const B3I64Tuple& rOld1, const B3I64Tuple& rOld2, const B3I64Tuple& rOld3)
+    inline B3I64Tuple average(const B3I64Tuple& rOld1, const B3I64Tuple& rOld2, const B3I64Tuple& rOld3)
     {
-        B3DTuple aAvg(
-            (rOld1.getX() + rOld2.getX() + rOld3.getX()) * (1.0 / 3.0),
-            (rOld1.getY() + rOld2.getY() + rOld3.getY()) * (1.0 / 3.0),
-            (rOld1.getZ() + rOld2.getZ() + rOld3.getZ()) * (1.0 / 3.0));
-        return aAvg;
+        return B3I64Tuple(
+            (rOld1.getX() == rOld2.getX() && rOld2.getX() == rOld3.getX()) ? rOld1.getX() : basegfx::fround64((rOld1.getX() + rOld2.getX() + rOld3.getX()) * (1.0 / 3.0)),
+            (rOld1.getY() == rOld2.getY() && rOld2.getY() == rOld3.getY()) ? rOld1.getY() : basegfx::fround64((rOld1.getY() + rOld2.getY() + rOld3.getY()) * (1.0 / 3.0)),
+            (rOld1.getZ() == rOld2.getZ() && rOld2.getZ() == rOld3.getZ()) ? rOld1.getZ() : basegfx::fround64((rOld1.getZ() + rOld2.getZ() + rOld3.getZ()) * (1.0 / 3.0)));
     }
 
     inline B3I64Tuple operator+(const B3I64Tuple& rTupA, const B3I64Tuple& rTupB)
