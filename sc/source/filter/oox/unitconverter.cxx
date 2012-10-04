@@ -149,18 +149,17 @@ void UnitConverter::finalizeImport()
         {
             // XDevice expects pixels in font descriptor, but font contains twips
             FontDescriptor aDesc = pDefFont->getFontDescriptor();
-            aDesc.Height = static_cast< sal_Int16 >( scaleValue( aDesc.Height, UNIT_TWIP, UNIT_REFDEVX ) + 0.5 );
             Reference< XFont > xFont = xDevice->getFont( aDesc );
             if( xFont.is() )
             {
                 // get maximum width of all digits
                 sal_Int32 nDigitWidth = 0;
                 for( sal_Unicode cChar = '0'; cChar <= '9'; ++cChar )
-                    nDigitWidth = ::std::max( nDigitWidth, scaleToMm100( xFont->getCharWidth( cChar ), UNIT_REFDEVX ) );
+                    nDigitWidth = ::std::max( nDigitWidth, scaleToMm100( xFont->getCharWidth( cChar ), UNIT_TWIP ) );
                 if( nDigitWidth > 0 )
                     maCoeffs[ UNIT_DIGIT ] = nDigitWidth;
                 // get width of space character
-                sal_Int32 nSpaceWidth = scaleToMm100( xFont->getCharWidth( ' ' ), UNIT_REFDEVX );
+                sal_Int32 nSpaceWidth = scaleToMm100( xFont->getCharWidth( ' ' ), UNIT_TWIP );
                 if( nSpaceWidth > 0 )
                     maCoeffs[ UNIT_SPACE ] = nSpaceWidth;
             }
