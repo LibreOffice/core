@@ -210,7 +210,7 @@
 					</info>
 					<value>false</value>
 				</prop>
-				<prop oor:name="SimpleControlPoint" oor:type="xs:boolean" oor:nillable="false">
+				<prop oor:name="SimpleControlPoint" oor:type="xs:boolean">
 					<!-- OldPath: HTML_Editor/Layout/Lines -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Option - HTML-Document - Layout - [Section] Lines -->
@@ -221,7 +221,7 @@
 					</info>
 					<value>false</value>
 				</prop>
-				<prop oor:name="LargeControlPoint" oor:type="xs:boolean" oor:nillable="false">
+				<prop oor:name="LargeControlPoint" oor:type="xs:boolean">
 					<!-- OldPath: HTML_Editor/Layout/Lines -->
 					<!-- OldLocation: Soffice.cfg -->
 					<!-- UIHints: Tools - Option - HTML-Document - Layout - [Section] Lines -->
