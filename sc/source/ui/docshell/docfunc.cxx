@@ -5090,9 +5090,11 @@ void ScDocFunc::ReplaceConditionalFormat( sal_uLong nOldFormat, ScConditionalFor
     if(pDoc->IsTabProtected(nTab))
         return;
 
+    boost::scoped_ptr<ScRange> pRepaintRange;
     if(nOldFormat)
     {
         ScConditionalFormat* pOldFormat = pDoc->GetCondFormList(nTab)->GetFormat(nOldFormat);
+        pRepaintRange.reset(new ScRange( pOldFormat->GetRange().Combine() ));
         if(pOldFormat)
         {
             RemoveCondFormatAttributes(pDoc, pOldFormat);
@@ -5103,14 +5105,20 @@ void ScDocFunc::ReplaceConditionalFormat( sal_uLong nOldFormat, ScConditionalFor
     }
     if(pFormat)
     {
+        if(pRepaintRange)
+            pRepaintRange->ExtendTo(rRanges.Combine());
+        else
+            pRepaintRange.reset(new ScRange(rRanges.Combine()));
+
 	sal_uLong nIndex = pDoc->AddCondFormat(pFormat, nTab);
 
         SetConditionalFormatAttributes(pDoc, rRanges, nIndex);
-	size_t n = rRanges.size();
-	for(size_t i = 0; i < n; ++i)
-	    pFormat->DoRepaint(rRanges[i]);
         pDoc->SetStreamValid(nTab, false);
     }
+
+    if(pRepaintRange)
+        rDocShell.PostPaint(*pRepaintRange, PAINT_GRID);
+
     aModificator.SetDocumentModified();
     SFX_APP()->Broadcast(SfxSimpleHint(SC_HINT_AREAS_CHANGED));
 }
