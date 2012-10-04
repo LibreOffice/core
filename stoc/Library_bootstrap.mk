@@ -43,7 +43,7 @@ $(eval $(call gb_Library_set_include,bootstrap,\
 ))
 
 $(eval $(call gb_Library_use_internal_bootstrap_api,bootstrap,\
-    bootstrap \
+    udkapi \
 ))
 
 $(eval $(call gb_Library_use_libraries,bootstrap,\
