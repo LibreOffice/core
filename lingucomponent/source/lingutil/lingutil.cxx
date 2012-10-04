@@ -35,6 +35,7 @@
 #include <osl/file.hxx>
 #include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
+#include <i18npool/languagetag.hxx>
 #include <i18npool/mslangid.hxx>
 #include <unotools/lingucfg.hxx>
 #include <unotools/pathoptions.hxx>
@@ -150,55 +151,65 @@ std::vector< SvtLinguConfigDictionaryEntry > GetOldStyleDics( const char *pDicTy
 
     // set of languages to remember the language where it is already
     // decided to make use of the dictionary.
-    std::set< LanguageType > aDicLangInUse;
+    std::set< OUString > aDicLangInUse;
 
 #ifdef SYSTEM_DICTS
-   osl::Directory aSystemDicts(aSystemDir);
-   if (aSystemDicts.open() == osl::FileBase::E_None)
-   {
-       osl::DirectoryItem aItem;
-       osl::FileStatus aFileStatus(osl_FileStatus_Mask_FileURL);
-       while (aSystemDicts.getNextItem(aItem) == osl::FileBase::E_None)
-       {
-           aItem.getFileStatus(aFileStatus);
-           rtl::OUString sPath = aFileStatus.getFileURL();
-           if (sPath.lastIndexOf(aSystemSuffix) == sPath.getLength()-aSystemSuffix.getLength())
-           {
-               sal_Int32 nStartIndex = sPath.lastIndexOf(sal_Unicode('/')) + 1;
-               if (!sPath.match(aSystemPrefix, nStartIndex))
-                   continue;
-               rtl::OUString sChunk = sPath.copy(0, sPath.getLength() - aSystemSuffix.getLength());
-               sal_Int32 nIndex = nStartIndex + aSystemPrefix.getLength();
-               rtl::OUString sLang = sChunk.getToken( 0, '_', nIndex );
-               if (!sLang.getLength())
-                   continue;
-               rtl::OUString sRegion;
-               if (nIndex != -1)
-                   sRegion = sChunk.copy( nIndex, sChunk.getLength() - nIndex );
+    osl::Directory aSystemDicts(aSystemDir);
+    if (aSystemDicts.open() == osl::FileBase::E_None)
+    {
+        osl::DirectoryItem aItem;
+        osl::FileStatus aFileStatus(osl_FileStatus_Mask_FileURL);
+        while (aSystemDicts.getNextItem(aItem) == osl::FileBase::E_None)
+        {
+            aItem.getFileStatus(aFileStatus);
+            OUString sPath = aFileStatus.getFileURL();
+            if (sPath.lastIndexOf(aSystemSuffix) == sPath.getLength()-aSystemSuffix.getLength())
+            {
+                sal_Int32 nStartIndex = sPath.lastIndexOf(sal_Unicode('/')) + 1;
+                if (!sPath.match(aSystemPrefix, nStartIndex))
+                    continue;
+                OUString sChunk = sPath.copy(nStartIndex + aSystemPrefix.getLength(),
+                    sPath.getLength() - aSystemSuffix.getLength() -
+                    nStartIndex - aSystemPrefix.getLength());
+                if (sChunk.isEmpty())
+                    continue;
+                //We prefer (now) to use language tags
+                LanguageTag aLangTag(sChunk, true);
+                //On failure try older basic LANG_REGION scheme
+                if (!aLangTag.isValidBcp47())
+                {
+                    sal_Int32 nIndex = 0;
+                    OUString sLang = sChunk.getToken(0, '_', nIndex);
+                    if (!sLang.getLength())
+                        continue;
+                    OUString sRegion;
+                    if (nIndex != -1)
+                       sRegion = sChunk.copy(nIndex);
+                    aLangTag = LanguageTag(sLang, sRegion);
+                }
+                if (!aLangTag.isValidBcp47())
+                    continue;
 
-               // Thus we first get the language of the dictionary
-               LanguageType nLang = MsLangId::convertIsoNamesToLanguage(
-                  sLang, sRegion );
+                // Thus we first get the language of the dictionary
+                OUString aLocaleName(aLangTag.getBcp47());
 
-               if (aDicLangInUse.count( nLang ) == 0)
-               {
-                   // remember the new language in use
-                   aDicLangInUse.insert( nLang );
+                if (aDicLangInUse.count(aLocaleName) == 0)
+                {
+                    // remember the new language in use
+                    aDicLangInUse.insert(aLocaleName);
 
-                   // add the dictionary to the resulting vector
-                   SvtLinguConfigDictionaryEntry aDicEntry;
-                   aDicEntry.aLocations.realloc(1);
-                   aDicEntry.aLocaleNames.realloc(1);
-                   rtl::OUString aLocaleName( MsLangId::convertLanguageToIsoString( nLang ) );
-                   aDicEntry.aLocations[0] = sPath;
-                   aDicEntry.aFormatName = aFormatName;
-                   aDicEntry.aLocaleNames[0] = aLocaleName;
-                   aRes.push_back( aDicEntry );
-               }
-           }
-       }
+                    // add the dictionary to the resulting vector
+                    SvtLinguConfigDictionaryEntry aDicEntry;
+                    aDicEntry.aLocations.realloc(1);
+                    aDicEntry.aLocaleNames.realloc(1);
+                    aDicEntry.aLocations[0] = sPath;
+                    aDicEntry.aFormatName = aFormatName;
+                    aDicEntry.aLocaleNames[0] = aLocaleName;
+                    aRes.push_back( aDicEntry );
+                }
+            }
+        }
     }
-
 #endif
 
     return aRes;
