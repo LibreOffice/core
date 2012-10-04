@@ -1159,9 +1159,17 @@ void rtl_uString_newReplaceAll(
     rtl_uString ** newStr, rtl_uString * str, rtl_uString const * from,
     rtl_uString const * to) SAL_THROW_EXTERN_C()
 {
+    rtl_uString_newReplaceAllFromIndex( newStr, str, from, to, 0 );
+}
+
+void rtl_uString_newReplaceAllFromIndex(
+    rtl_uString ** newStr, rtl_uString * str, rtl_uString const * from,
+    rtl_uString const * to, sal_Int32 fromIndex) SAL_THROW_EXTERN_C()
+{
     assert(to != 0);
+    assert(fromIndex >= 0 && fromIndex <= str->length);
     rtl_uString_assign(newStr, str);
-    for (sal_Int32 i = 0;; i += to->length) {
+    for (sal_Int32 i = fromIndex;; i += to->length) {
         rtl_uString_newReplaceFirst(newStr, *newStr, from, to, &i);
         if (i == -1) {
             break;
