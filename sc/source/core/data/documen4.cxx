@@ -738,12 +738,6 @@ const ScValidationData* ScDocument::GetValidationEntry( sal_uLong nIndex ) const
         return NULL;
 }
 
-void ScDocument::FindConditionalFormat( sal_uLong nKey, ScRangeList& rRanges, SCTAB nTab )
-{
-    if(VALIDTAB(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
-        maTabs[nTab]->FindConditionalFormat( nKey, rRanges );
-}
-
 void ScDocument::DeleteConditionalFormat(sal_uLong nOldIndex, SCTAB nTab)
 {
     if(VALIDTAB(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])

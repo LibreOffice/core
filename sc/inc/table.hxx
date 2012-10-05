@@ -778,8 +778,6 @@ public:
                                        SCCOL nCol,
                                        SCROW nRowStart, SCROW nRowEnd ) const;
 
-    void        FindConditionalFormat( sal_uLong nKey, ScRangeList& rRanges ) const;
-
     void        IncRecalcLevel();
     void        DecRecalcLevel( bool bUpdateNoteCaptionPos = true );
 

@@ -1790,9 +1790,7 @@ void ScTable::MaybeAddExtraColumn(SCCOL& rCol, SCROW nRow, OutputDevice* pDev, d
         //  look at alignment
 
         const ScPatternAttr* pPattern = GetPattern( rCol, nRow );
-        const SfxItemSet* pCondSet = NULL;
-        if ( ((const SfxUInt32Item&)pPattern->GetItem(ATTR_CONDITIONAL)).GetValue() )
-            pCondSet = pDocument->GetCondResult( rCol, nRow, nTab );
+        const SfxItemSet* pCondSet = pDocument->GetCondResult( rCol, nRow, nTab );
 
         SvxCellHorJustify eHorJust = (SvxCellHorJustify)((const SvxHorJustifyItem&)
                         pPattern->GetItem( ATTR_HOR_JUSTIFY, pCondSet )).GetValue();

@@ -2302,23 +2302,6 @@ void ScTable::UpdateSelectionFunction( ScFunctionData& rData,
                 aCol[nCol].UpdateAreaFunction( rData, *mpHiddenRows, nStartRow, nEndRow );
 }
 
-void ScTable::FindConditionalFormat( sal_uLong nKey, ScRangeList& rList ) const
-{
-    SCROW nStartRow = 0, nEndRow = 0;
-    for (SCCOL nCol=0; nCol<=MAXCOL; nCol++)
-    {
-        ScAttrIterator* pIter = aCol[nCol].CreateAttrIterator( 0, MAXROW );
-        const ScPatternAttr* pPattern = pIter->Next( nStartRow, nEndRow );
-        while (pPattern)
-        {
-            if (((SfxUInt32Item&)pPattern->GetItem(ATTR_CONDITIONAL)).GetValue() == nKey)
-                rList.Join( ScRange(nCol,nStartRow,nTab, nCol,nEndRow,nTab) );
-            pPattern = pIter->Next( nStartRow, nEndRow );
-        }
-        delete pIter;
-    }
-}
-
 void ScTable::IncRecalcLevel()
 {
     ++nRecalcLvl;

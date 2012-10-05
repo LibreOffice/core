@@ -664,12 +664,13 @@ void ScTable::CopyConditionalFormat( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCRO
         ScAttrIterator* pIter = pTable->aCol[i-nDx].CreateAttrIterator( nRow1-nDy, nRow2-nDy );
         SCROW nStartRow = 0, nEndRow = 0;
         const ScPatternAttr* pPattern = pIter->Next( nStartRow, nEndRow );
-        sal_uInt32 nId = ((SfxUInt32Item&)pPattern->GetItem(ATTR_CONDITIONAL)).GetValue();
-        if ( nId != 0)
+        const std::vector<sal_uInt32>& rCondFormatData = static_cast<const ScCondFormatItem&>(pPattern->GetItem(ATTR_CONDITIONAL)).GetCondFormatData();
+        for(std::vector<sal_uInt32>::const_iterator itr = rCondFormatData.begin(), itrEnd = rCondFormatData.end();
+                itr != itrEnd; ++itr)
         {
-            if (aOldIdToNewId.find(nId) == aOldIdToNewId.end())
+            if (aOldIdToNewId.find(*itr) == aOldIdToNewId.end())
             {
-                ScConditionalFormat* pFormat = pOldCondFormatList->GetFormat(nId);
+                ScConditionalFormat* pFormat = pOldCondFormatList->GetFormat(*itr);
                 if(!pFormat)
                 {
                     // may happen in some strange circumstances where cell storage and
@@ -680,20 +681,20 @@ void ScTable::CopyConditionalFormat( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCRO
                 pNewFormat->SetKey(0);
                 //not in list => create entries in both maps and new format
                 sal_uLong nMax = 0;
-                for(ScConditionalFormatList::const_iterator itr = mpCondFormatList->begin();
-                                        itr != mpCondFormatList->end(); ++itr)
+                for(ScConditionalFormatList::const_iterator itrCond = mpCondFormatList->begin();
+                                        itrCond != mpCondFormatList->end(); ++itrCond)
                 {
-                    if(itr->GetKey() > nMax)
-                        nMax = itr->GetKey();
+                    if(itrCond->GetKey() > nMax)
+                        nMax = itrCond->GetKey();
                 }
                 pNewFormat->SetKey(nMax + 1);
                 mpCondFormatList->InsertNew(pNewFormat);
                 sal_Int32 nNewId = pNewFormat->GetKey();
-                aOldIdToNewId.insert( std::pair<sal_Int32, sal_Int32>( nId, nNewId ) );
-                aIdToRange.insert( std::pair<sal_Int32, ScRangeList>( nId, ScRangeList() ) );
+                aOldIdToNewId.insert( std::pair<sal_Int32, sal_Int32>( *itr, nNewId ) );
+                aIdToRange.insert( std::pair<sal_Int32, ScRangeList>( *itr, ScRangeList() ) );
             }
 
-            aIdToRange.find(nId)->second.Join( ScRange( i, nStartRow + nDy, nTab, i, nEndRow + nDy, nTab ) );
+            aIdToRange.find(*itr)->second.Join( ScRange( i, nStartRow + nDy, nTab, i, nEndRow + nDy, nTab ) );
         }
     }
 
@@ -709,11 +710,7 @@ void ScTable::CopyConditionalFormat( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCRO
                 nDx, nDy, pTable->nTab - nTab);
         pFormat->AddRange(itr->second);
 
-        ScPatternAttr aPattern( pDocument->GetPool() );
-        aPattern.GetItemSet().Put( SfxUInt32Item( ATTR_CONDITIONAL, nNewKey ) );
-        ScMarkData aMarkData;
-        aMarkData.MarkFromRangeList(itr->second, true);
-        pDocument->ApplySelectionPattern( aPattern, aMarkData );
+        pDocument->AddCondFormatData( itr->second, nTab, nNewKey );
     }
 }
 
@@ -1762,31 +1759,35 @@ void ScTable::FindMaxRotCol( RowInfo* pRowInfo, SCSIZE nArrCount, SCCOL nX1, SCC
                     //  alle Formate durchgehen, damit die Zellen nicht einzeln
                     //  angeschaut werden muessen
 
-                    sal_uLong nIndex = ((const SfxUInt32Item*)pCondItem)->GetValue();
+                    const std::vector<sal_uInt32>& rCondFormatData = static_cast<const ScCondFormatItem*>(pCondItem)->GetCondFormatData();
                     ScStyleSheetPool* pStylePool = pDocument->GetStyleSheetPool();
-                    if (mpCondFormatList && pStylePool && nIndex)
+                    if (mpCondFormatList && pStylePool && !rCondFormatData.empty())
                     {
-                        const ScConditionalFormat* pFormat = mpCondFormatList->GetFormat(nIndex);
-                        if ( pFormat )
+                        for(std::vector<sal_uInt32>::const_iterator itr = rCondFormatData.begin(), itrEnd = rCondFormatData.end();
+                                itr != itrEnd; ++itr)
                         {
-                            size_t nEntryCount = pFormat->size();
-                            for (size_t nEntry=0; nEntry<nEntryCount; nEntry++)
+                            const ScConditionalFormat* pFormat = mpCondFormatList->GetFormat(*itr);
+                            if ( pFormat )
                             {
-                                const ScFormatEntry* pEntry = pFormat->GetEntry(nEntry);
-                                if(pEntry->GetType() != condformat::CONDITION)
-                                    continue;
-
-                                String aStyleName = static_cast<const ScCondFormatEntry*>(pEntry)->GetStyle();
-                                if (aStyleName.Len())
+                                size_t nEntryCount = pFormat->size();
+                                for (size_t nEntry=0; nEntry<nEntryCount; nEntry++)
                                 {
-                                    SfxStyleSheetBase* pStyleSheet =
-                                            pStylePool->Find( aStyleName, SFX_STYLE_FAMILY_PARA );
-                                    if ( pStyleSheet )
+                                    const ScFormatEntry* pEntry = pFormat->GetEntry(nEntry);
+                                    if(pEntry->GetType() != condformat::CONDITION)
+                                        continue;
+
+                                    String aStyleName = static_cast<const ScCondFormatEntry*>(pEntry)->GetStyle();
+                                    if (aStyleName.Len())
                                     {
-                                        FillMaxRot( pRowInfo, nArrCount, nX1, nX2,
+                                        SfxStyleSheetBase* pStyleSheet =
+                                            pStylePool->Find( aStyleName, SFX_STYLE_FAMILY_PARA );
+                                        if ( pStyleSheet )
+                                        {
+                                            FillMaxRot( pRowInfo, nArrCount, nX1, nX2,
                                                     nCol, nAttrRow1, nAttrRow2,
                                                     nArrY, pPattern, &pStyleSheet->GetItemSet() );
-                                        //  nArrY nicht veraendern
+                                            //  nArrY nicht veraendern
+                                        }
                                     }
                                 }
                             }

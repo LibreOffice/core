@@ -973,8 +973,7 @@ XclExpCondfmt::XclExpCondfmt( const XclExpRoot& rRoot, const ScConditionalFormat
     XclExpRecord( EXC_ID_CONDFMT ),
     XclExpRoot( rRoot )
 {
-    ScRangeList aScRanges;
-    GetDoc().FindConditionalFormat( rCondFormat.GetKey(), aScRanges, GetCurrScTab() );
+    ScRangeList aScRanges = rCondFormat.GetRange();
     GetAddressConverter().ConvertRangeList( maXclRanges, aScRanges, true );
     if( !maXclRanges.empty() )
     {
