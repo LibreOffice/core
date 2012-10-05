@@ -49,6 +49,7 @@
 #include "compiler.hxx"
 #include "externalrefmgr.hxx"
 #include "colorscale.hxx"
+#include "attrib.hxx"
 
 using namespace formula;
 
@@ -639,22 +640,26 @@ const SfxPoolItem* ScDocument::GetEffItem(
         const SfxPoolItem* pItem;
         if ( rSet.GetItemState( ATTR_CONDITIONAL, true, &pItem ) == SFX_ITEM_SET )
         {
-            sal_uLong nIndex = ((const SfxUInt32Item*)pItem)->GetValue();
+            const std::vector<sal_uInt32>& rIndex = static_cast<const ScCondFormatItem&>(pPattern->GetItem(ATTR_CONDITIONAL)).GetCondFormatData();
             ScConditionalFormatList* pCondFormList = GetCondFormList( nTab );
-            if (nIndex && pCondFormList)
+            if (!rIndex.empty() && pCondFormList)
             {
-                const ScConditionalFormat* pForm = pCondFormList->GetFormat( nIndex );
-                if ( pForm )
+                for(std::vector<sal_uInt32>::const_iterator itr = rIndex.begin(), itrEnd = rIndex.end();
+                        itr != itrEnd; ++itr)
                 {
-                    ScBaseCell* pCell = ((ScDocument*)this)->GetCell(ScAddress(nCol,nRow,nTab));
-                    rtl::OUString aStyle = pForm->GetCellStyle( pCell, ScAddress(nCol, nRow, nTab) );
-                    if (!aStyle.isEmpty())
+                    const ScConditionalFormat* pForm = pCondFormList->GetFormat( *itr );
+                    if ( pForm )
                     {
-                        SfxStyleSheetBase* pStyleSheet = xPoolHelper->GetStylePool()->Find(
-                                                                aStyle, SFX_STYLE_FAMILY_PARA );
-                        if ( pStyleSheet && pStyleSheet->GetItemSet().GetItemState(
-                                                nWhich, true, &pItem ) == SFX_ITEM_SET )
-                            return pItem;
+                        ScBaseCell* pCell = ((ScDocument*)this)->GetCell(ScAddress(nCol,nRow,nTab));
+                        rtl::OUString aStyle = pForm->GetCellStyle( pCell, ScAddress(nCol, nRow, nTab) );
+                        if (!aStyle.isEmpty())
+                        {
+                            SfxStyleSheetBase* pStyleSheet = xPoolHelper->GetStylePool()->Find(
+                                    aStyle, SFX_STYLE_FAMILY_PARA );
+                            if ( pStyleSheet && pStyleSheet->GetItemSet().GetItemState(
+                                        nWhich, true, &pItem ) == SFX_ITEM_SET )
+                                return pItem;
+                        }
                     }
                 }
             }
@@ -667,9 +672,16 @@ const SfxPoolItem* ScDocument::GetEffItem(
 
 const SfxItemSet* ScDocument::GetCondResult( SCCOL nCol, SCROW nRow, SCTAB nTab ) const
 {
-    const ScConditionalFormat* pForm = GetCondFormat( nCol, nRow, nTab );
-    if ( pForm )
+    const ScPatternAttr* pPattern = GetPattern( nCol, nRow, nTab );
+    const std::vector<sal_uInt32>& rIndex = static_cast<const ScCondFormatItem&>(pPattern->GetItem(ATTR_CONDITIONAL)).GetCondFormatData();
+    ScConditionalFormatList* pFormatList = GetCondFormList(nTab);
+    for(std::vector<sal_uInt32>::const_iterator itr = rIndex.begin(), itrEnd = rIndex.end();
+            itr != itrEnd; ++itr)
     {
+        ScConditionalFormat* pForm = pFormatList->GetFormat(*itr);
+        if(!pForm)
+            continue;
+
         ScBaseCell* pCell = ((ScDocument*)this)->GetCell(ScAddress(nCol,nRow,nTab));
         rtl::OUString aStyle = pForm->GetCellStyle( pCell, ScAddress(nCol, nRow, nTab) );
         if (!aStyle.isEmpty())
@@ -679,7 +691,9 @@ const SfxItemSet* ScDocument::GetCondResult( SCCOL nCol, SCROW nRow, SCTAB nTab 
                 return &pStyleSheet->GetItemSet();
             // if style is not there, treat like no condition
         }
+
     }
+
     return NULL;
 }
 
