@@ -9,7 +9,7 @@
 +#ifndef _WIN32
 +#include <endian.h>
 +#if __BYTE_ORDER == __BIG_ENDIAN
-+#define USE_BIG_ENDIAN   1
++#define CMS_USE_BIG_ENDIAN   1
 +#endif
 +#endif /* !_WIN32 */
  
