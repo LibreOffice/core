@@ -175,7 +175,9 @@ bool ScOrcusFiltersImpl::importCSV(ScDocument& rDoc, const OUString& rPath) cons
 
 void populateTree(
    SvTreeListBox& rTreeCtrl, orcus::xml_structure_tree::walker& rWalker,
-   const orcus::xml_structure_tree::entity_name& rElemName, bool bRepeat, const Image& rImgRepeatElem, SvLBoxEntry* pParent)
+   const orcus::xml_structure_tree::entity_name& rElemName, bool bRepeat,
+   const Image& rImgRepeatElem, const Image& rImgElemAttr,
+   SvLBoxEntry* pParent)
 {
     OUString aName(rElemName.name.get(), rElemName.name.size(), RTL_TEXTENCODING_UTF8);
     SvLBoxEntry* pEntry = rTreeCtrl.InsertEntry(aName, pParent);
@@ -196,7 +198,9 @@ void populateTree(
     for (; it != itEnd; ++it)
     {
         orcus::xml_structure_tree::entity_name aAttrName = *it;
-        rTreeCtrl.InsertEntry(OUString(aAttrName.name.get(), aAttrName.name.size(), RTL_TEXTENCODING_UTF8), pEntry);
+        SvLBoxEntry* pAttr = rTreeCtrl.InsertEntry(OUString(aAttrName.name.get(), aAttrName.name.size(), RTL_TEXTENCODING_UTF8), pEntry);
+        rTreeCtrl.SetExpandedEntryBmp(pAttr, rImgElemAttr);
+        rTreeCtrl.SetCollapsedEntryBmp(pAttr, rImgElemAttr);
     }
     rTreeCtrl.Expand(pEntry);
 
@@ -205,13 +209,14 @@ void populateTree(
     for (it = aNames.begin(), itEnd = aNames.end(); it != itEnd; ++it)
     {
         orcus::xml_structure_tree::element aElem = rWalker.descend(*it);
-        populateTree(rTreeCtrl, rWalker, *it, aElem.repeat, rImgRepeatElem, pEntry);
+        populateTree(rTreeCtrl, rWalker, *it, aElem.repeat, rImgRepeatElem, rImgElemAttr, pEntry);
         rWalker.ascend();
     }
 }
 
 bool ScOrcusFiltersImpl::loadXMLStructure(
-   SvTreeListBox& rTreeCtrl, const rtl::OUString& rPath, const Image& rImgDefaultElem, const Image& rImgRepeatElem) const
+   SvTreeListBox& rTreeCtrl, const rtl::OUString& rPath,
+   const Image& rImgDefaultElem, const Image& rImgRepeatElem, const Image& rImgElemAttr) const
 {
     INetURLObject aURL(rPath);
     OString aSysPath = rtl::OUStringToOString(aURL.getFSysPath(SYSTEM_PATH), RTL_TEXTENCODING_UTF8);
@@ -238,7 +243,7 @@ bool ScOrcusFiltersImpl::loadXMLStructure(
 
         // Root element.
         orcus::xml_structure_tree::element aElem = aWalker.root();
-        populateTree(rTreeCtrl, aWalker, aElem.name, aElem.repeat, rImgRepeatElem, NULL);
+        populateTree(rTreeCtrl, aWalker, aElem.name, aElem.repeat, rImgRepeatElem, rImgElemAttr, NULL);
     }
     catch (const std::exception&)
     {

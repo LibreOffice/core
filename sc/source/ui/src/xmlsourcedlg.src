@@ -68,6 +68,12 @@ ModalDialog RID_SCDLG_XML_SOURCE
         MaskColor = STD_MASKCOLOR ;
     };
 
+    Image IMG_ELEMENT_ATTRIBUTE
+    {
+        ImageBitmap = Bitmap { File = "time.png" ; };
+        MaskColor = STD_MASKCOLOR ;
+    };
+
     Image IMG_FILE_OPEN
     {
         ImageBitmap = Bitmap { File = "file.png" ; };

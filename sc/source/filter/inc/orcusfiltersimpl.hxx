@@ -19,7 +19,7 @@ public:
 
     virtual bool loadXMLStructure(
        SvTreeListBox& rTreeCtrl, const rtl::OUString& rPath,
-       const Image& rImgDefaultElem, const Image& rImgRepeatElem) const;
+       const Image& rImgDefaultElem, const Image& rImgRepeatElem, const Image& rImgElemAttr) const;
 };
 
 #endif

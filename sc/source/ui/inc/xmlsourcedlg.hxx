@@ -42,6 +42,7 @@ class ScXMLSourceDlg : public ModalDialog
     Image maImgFileOpen;
     Image maImgElemDefault;
     Image maImgElemRepeat;
+    Image maImgElemAttribute;
 
     ScDocument* mpDoc;
 

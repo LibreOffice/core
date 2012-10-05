@@ -36,6 +36,7 @@ ScXMLSourceDlg::ScXMLSourceDlg(Window* pParent, ScDocument* pDoc) :
     maImgFileOpen(ScResId(IMG_FILE_OPEN)),
     maImgElemDefault(ScResId(IMG_ELEMENT_DEFAULT)),
     maImgElemRepeat(ScResId(IMG_ELEMENT_REPEAT)),
+    maImgElemAttribute(ScResId(IMG_ELEMENT_ATTRIBUTE)),
     mpDoc(pDoc)
 {
     maBtnSelectSource.SetModeImage(maImgFileOpen);
@@ -80,7 +81,8 @@ void ScXMLSourceDlg::LoadSourceFileStructure(const OUString& rPath)
     if (!pOrcus)
         return;
 
-    pOrcus->loadXMLStructure(maLbTree, rPath, maImgElemDefault, maImgElemRepeat);
+    pOrcus->loadXMLStructure(
+        maLbTree, rPath, maImgElemDefault, maImgElemRepeat, maImgElemAttribute);
 }
 
 IMPL_LINK(ScXMLSourceDlg, BtnPressedHdl, Button*, pBtn)
