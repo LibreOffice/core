@@ -167,6 +167,11 @@ namespace drawinglayer
             // take a rotation of 45 degrees (sqrt(2)) as maximum expansion into account
             const Size aSourceSizePixel(rBitmapEx.GetSizePixel());
             const double fMaximumArea(
+
+                // #i121153# With Metafile, aOutputRectPixel may be empty and a virtual
+                // maximum quadratic size has to be used
+                bRecordToMetaFile ? 500000.0 :
+
                 (double)aOutputRectPixel.getWidth() *
                 (double)aOutputRectPixel.getHeight() *
                 1.4142136); // 1.4142136 taken as sqrt(2.0)
