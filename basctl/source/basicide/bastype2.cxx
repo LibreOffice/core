@@ -54,7 +54,7 @@ namespace basctl
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
 
-void ModuleInfoHelper::getObjectName( const uno::Reference< container::XNameContainer >& rLib, const ::rtl::OUString& rModName, ::rtl::OUString& rObjName )
+void ModuleInfoHelper::getObjectName( const uno::Reference< container::XNameContainer >& rLib, const OUString& rModName, OUString& rObjName )
 {
     try
     {
@@ -64,7 +64,7 @@ void ModuleInfoHelper::getObjectName( const uno::Reference< container::XNameCont
             script::ModuleInfo aModuleInfo = xVBAModuleInfo->getModuleInfo( rModName );
             uno::Any aObject( aModuleInfo.ModuleObject );
             uno::Reference< lang::XServiceInfo > xServiceInfo( aObject, uno::UNO_QUERY );
-            if( xServiceInfo.is() && xServiceInfo->supportsService( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ooo.vba.excel.Worksheet" )) ) )
+            if( xServiceInfo.is() && xServiceInfo->supportsService( "ooo.vba.excel.Worksheet" ) )
             {
                 uno::Reference< container::XNamed > xNamed( aObject, uno::UNO_QUERY );
                 if( xNamed.is() )
@@ -77,7 +77,7 @@ void ModuleInfoHelper::getObjectName( const uno::Reference< container::XNameCont
     }
 }
 
-sal_Int32 ModuleInfoHelper::getModuleType(  const uno::Reference< container::XNameContainer >& rLib, const ::rtl::OUString& rModName )
+sal_Int32 ModuleInfoHelper::getModuleType(  const uno::Reference< container::XNameContainer >& rLib, const OUString& rModName )
 {
     sal_Int32 nType = script::ModuleType::NORMAL;
     uno::Reference< script::vba::XVBAModuleInfo > xVBAModuleInfo( rLib, uno::UNO_QUERY );
@@ -110,7 +110,7 @@ DocumentEntry::~DocumentEntry()
 LibEntry::LibEntry (
     ScriptDocument const& rDocument,
     LibraryLocation eLocation,
-    rtl::OUString const& rLibName,
+    OUString const& rLibName,
     EntryType eType
 ) :
     DocumentEntry(rDocument, eLocation, eType),
@@ -129,9 +129,9 @@ EntryDescriptor::EntryDescriptor () :
 EntryDescriptor::EntryDescriptor (
     ScriptDocument const& rDocument,
     LibraryLocation eLocation,
-    rtl::OUString const& rLibName,
-    rtl::OUString const& rLibSubName,
-    rtl::OUString const& rName,
+    OUString const& rLibName,
+    OUString const& rLibSubName,
+    OUString const& rName,
     EntryType eType
 ) :
     m_aDocument(rDocument),
@@ -147,10 +147,10 @@ EntryDescriptor::EntryDescriptor (
 EntryDescriptor::EntryDescriptor (
     ScriptDocument const& rDocument,
     LibraryLocation eLocation,
-    rtl::OUString const& rLibName,
-    rtl::OUString const& rLibSubName,
-    rtl::OUString const& rName,
-    rtl::OUString const& rMethodName,
+    OUString const& rLibName,
+    OUString const& rLibSubName,
+    OUString const& rName,
+    OUString const& rMethodName,
     EntryType eType
 ) :
     m_aDocument(rDocument),
@@ -223,7 +223,7 @@ void TreeListBox::ScanEntry( const ScriptDocument& rDocument, LibraryLocation eL
         ImpCreateLibEntries( pDocumentRootEntry, rDocument, eLocation );
     if ( !pDocumentRootEntry )
     {
-        ::rtl::OUString aRootName( GetRootEntryName( rDocument, eLocation ) );
+        OUString aRootName( GetRootEntryName( rDocument, eLocation ) );
         Image aImage;
         GetRootEntryBitmaps( rDocument, aImage );
         SAL_WNODEPRECATED_DECLARATIONS_PUSH
@@ -242,19 +242,19 @@ void TreeListBox::ScanEntry( const ScriptDocument& rDocument, LibraryLocation eL
 void TreeListBox::ImpCreateLibEntries( SvLBoxEntry* pDocumentRootEntry, const ScriptDocument& rDocument, LibraryLocation eLocation )
 {
     // get a sorted list of library names
-    Sequence< ::rtl::OUString > aLibNames( rDocument.getLibraryNames() );
+    Sequence< OUString > aLibNames( rDocument.getLibraryNames() );
     sal_Int32 nLibCount = aLibNames.getLength();
-    const ::rtl::OUString* pLibNames = aLibNames.getConstArray();
+    const OUString* pLibNames = aLibNames.getConstArray();
 
     for ( sal_Int32 i = 0 ; i < nLibCount ; i++ )
     {
-        ::rtl::OUString aLibName = pLibNames[ i ];
+        OUString aLibName = pLibNames[ i ];
 
         if ( eLocation == rDocument.getLibraryLocation( aLibName ) )
         {
             // check, if the module library is loaded
             bool bModLibLoaded = false;
-            ::rtl::OUString aOULibName( aLibName );
+            OUString aOULibName( aLibName );
             Reference< script::XLibraryContainer > xModLibContainer( rDocument.getLibraryContainer( E_SCRIPTS ) );
             if ( xModLibContainer.is() && xModLibContainer->hasByName( aOULibName ) && xModLibContainer->isLibraryLoaded( aOULibName ) )
                 bModLibLoaded = true;
@@ -303,7 +303,7 @@ void TreeListBox::ImpCreateLibEntries( SvLBoxEntry* pDocumentRootEntry, const Sc
     }
 }
 
-void TreeListBox::ImpCreateLibSubEntries( SvLBoxEntry* pLibRootEntry, const ScriptDocument& rDocument, const ::rtl::OUString& rLibName )
+void TreeListBox::ImpCreateLibSubEntries( SvLBoxEntry* pLibRootEntry, const ScriptDocument& rDocument, const OUString& rLibName )
 {
     // modules
     if ( nMode & BROWSEMODE_MODULES )
@@ -319,13 +319,13 @@ void TreeListBox::ImpCreateLibSubEntries( SvLBoxEntry* pLibRootEntry, const Scri
                 else
                 {
                     // get a sorted list of module names
-                    Sequence< ::rtl::OUString > aModNames = rDocument.getObjectNames( E_SCRIPTS, rLibName );
+                    Sequence< OUString > aModNames = rDocument.getObjectNames( E_SCRIPTS, rLibName );
                     sal_Int32 nModCount = aModNames.getLength();
-                    const ::rtl::OUString* pModNames = aModNames.getConstArray();
+                    const OUString* pModNames = aModNames.getConstArray();
 
                     for ( sal_Int32 i = 0 ; i < nModCount ; i++ )
                     {
-                        ::rtl::OUString aModName = pModNames[ i ];
+                        OUString aModName = pModNames[ i ];
                         SvLBoxEntry* pModuleEntry = FindEntry( pLibRootEntry, aModName, OBJ_TYPE_MODULE );
                         if ( !pModuleEntry )
                             pModuleEntry = AddEntry(
@@ -338,13 +338,13 @@ void TreeListBox::ImpCreateLibSubEntries( SvLBoxEntry* pLibRootEntry, const Scri
                         // methods
                         if ( nMode & BROWSEMODE_SUBS )
                         {
-                            Sequence< ::rtl::OUString > aNames = GetMethodNames( rDocument, rLibName, aModName );
+                            Sequence< OUString > aNames = GetMethodNames( rDocument, rLibName, aModName );
                             sal_Int32 nCount = aNames.getLength();
-                            const ::rtl::OUString* pNames = aNames.getConstArray();
+                            const OUString* pNames = aNames.getConstArray();
 
                             for ( sal_Int32 j = 0 ; j < nCount ; j++ )
                             {
-                                ::rtl::OUString aName = pNames[ j ];
+                                OUString aName = pNames[ j ];
                                 SvLBoxEntry* pEntry = FindEntry( pModuleEntry, aName, OBJ_TYPE_METHOD );
                                 if ( !pEntry )
                                     pEntry = AddEntry(
@@ -375,13 +375,13 @@ void TreeListBox::ImpCreateLibSubEntries( SvLBoxEntry* pLibRootEntry, const Scri
             try
             {
                 // get a sorted list of dialog names
-                Sequence< ::rtl::OUString > aDlgNames( rDocument.getObjectNames( E_DIALOGS, rLibName ) );
+                Sequence< OUString > aDlgNames( rDocument.getObjectNames( E_DIALOGS, rLibName ) );
                 sal_Int32 nDlgCount = aDlgNames.getLength();
-                const ::rtl::OUString* pDlgNames = aDlgNames.getConstArray();
+                const OUString* pDlgNames = aDlgNames.getConstArray();
 
                 for ( sal_Int32 i = 0 ; i < nDlgCount ; i++ )
                 {
-                    ::rtl::OUString aDlgName = pDlgNames[ i ];
+                    OUString aDlgName = pDlgNames[ i ];
                     SvLBoxEntry* pDialogEntry = FindEntry( pLibRootEntry, aDlgName, OBJ_TYPE_DIALOG );
                     if ( !pDialogEntry )
                         pDialogEntry = AddEntry(
@@ -400,20 +400,20 @@ void TreeListBox::ImpCreateLibSubEntries( SvLBoxEntry* pLibRootEntry, const Scri
     }
 }
 
-void TreeListBox::ImpCreateLibSubEntriesInVBAMode( SvLBoxEntry* pLibRootEntry, const ScriptDocument& rDocument, const ::rtl::OUString& rLibName )
+void TreeListBox::ImpCreateLibSubEntriesInVBAMode( SvLBoxEntry* pLibRootEntry, const ScriptDocument& rDocument, const OUString& rLibName )
 {
 
-    std::vector<std::pair<EntryType, rtl::OUString> > aEntries;
+    std::vector<std::pair<EntryType, OUString> > aEntries;
     aEntries.push_back( ::std::make_pair( OBJ_TYPE_DOCUMENT_OBJECTS, IDE_RESSTR(RID_STR_DOCUMENT_OBJECTS) ) );
     aEntries.push_back( ::std::make_pair( OBJ_TYPE_USERFORMS, IDE_RESSTR(RID_STR_USERFORMS) ) );
     aEntries.push_back( ::std::make_pair( OBJ_TYPE_NORMAL_MODULES, IDE_RESSTR(RID_STR_NORMAL_MODULES) ) );
     aEntries.push_back( ::std::make_pair( OBJ_TYPE_CLASS_MODULES, IDE_RESSTR(RID_STR_CLASS_MODULES) ) );
 
-    std::vector<std::pair<EntryType, rtl::OUString> >::iterator iter;
+    std::vector<std::pair<EntryType, OUString> >::iterator iter;
     for( iter = aEntries.begin(); iter != aEntries.end(); ++iter )
     {
         EntryType eType = iter->first;
-        rtl::OUString aEntryName = iter->second;
+        OUString aEntryName = iter->second;
         SvLBoxEntry* pLibSubRootEntry = FindEntry( pLibRootEntry, aEntryName, eType );
         if( pLibSubRootEntry )
         {
@@ -433,7 +433,7 @@ void TreeListBox::ImpCreateLibSubEntriesInVBAMode( SvLBoxEntry* pLibRootEntry, c
     }
 }
 
-void TreeListBox::ImpCreateLibSubSubEntriesInVBAMode( SvLBoxEntry* pLibSubRootEntry, const ScriptDocument& rDocument, const ::rtl::OUString& rLibName )
+void TreeListBox::ImpCreateLibSubSubEntriesInVBAMode( SvLBoxEntry* pLibSubRootEntry, const ScriptDocument& rDocument, const OUString& rLibName )
 {
     uno::Reference< container::XNameContainer > xLib = rDocument.getOrCreateLibrary( E_SCRIPTS, rLibName );
     if( !xLib.is() )
@@ -442,16 +442,16 @@ void TreeListBox::ImpCreateLibSubSubEntriesInVBAMode( SvLBoxEntry* pLibSubRootEn
     try
     {
         // get a sorted list of module names
-        Sequence< ::rtl::OUString > aModNames = rDocument.getObjectNames( E_SCRIPTS, rLibName );
+        Sequence< OUString > aModNames = rDocument.getObjectNames( E_SCRIPTS, rLibName );
         sal_Int32 nModCount = aModNames.getLength();
-        const ::rtl::OUString* pModNames = aModNames.getConstArray();
+        const OUString* pModNames = aModNames.getConstArray();
 
         EntryDescriptor aDesc( GetEntryDescriptor( pLibSubRootEntry ) );
         EntryType eCurrentType( aDesc.GetType() );
 
         for ( sal_Int32 i = 0 ; i < nModCount ; i++ )
         {
-            ::rtl::OUString aModName = pModNames[ i ];
+            OUString aModName = pModNames[ i ];
             EntryType eType = OBJ_TYPE_UNKNOWN;
             switch( ModuleInfoHelper::getModuleType( xLib, aModName ) )
             {
@@ -473,19 +473,19 @@ void TreeListBox::ImpCreateLibSubSubEntriesInVBAMode( SvLBoxEntry* pLibSubRootEn
 
             // display a nice friendly name in the ObjectModule tab,
                // combining the objectname and module name, e.g. Sheet1 ( Financials )
-            ::rtl::OUStringBuffer aEntryNameBuf( aModName );
+            OUStringBuffer aEntryNameBuf( aModName );
             if( eType == OBJ_TYPE_DOCUMENT_OBJECTS )
             {
-                ::rtl::OUString sObjName;
+                OUString sObjName;
                 ModuleInfoHelper::getObjectName( xLib, aModName, sObjName );
                 if( !sObjName.isEmpty() )
                 {
-                    aEntryNameBuf.appendAscii(RTL_CONSTASCII_STRINGPARAM(" ("));
+                    aEntryNameBuf.appendAscii( " (" );
                     aEntryNameBuf.append(sObjName);
                     aEntryNameBuf.append(')');
                 }
             }
-            ::rtl::OUString aEntryName(aEntryNameBuf.makeStringAndClear());
+            OUString aEntryName(aEntryNameBuf.makeStringAndClear());
             SvLBoxEntry* pModuleEntry = FindEntry( pLibSubRootEntry, aEntryName, OBJ_TYPE_MODULE );
             if ( !pModuleEntry )
                 pModuleEntry = AddEntry(
@@ -498,13 +498,13 @@ void TreeListBox::ImpCreateLibSubSubEntriesInVBAMode( SvLBoxEntry* pLibSubRootEn
             // methods
             if ( nMode & BROWSEMODE_SUBS )
             {
-                Sequence< ::rtl::OUString > aNames = GetMethodNames( rDocument, rLibName, aModName );
+                Sequence< OUString > aNames = GetMethodNames( rDocument, rLibName, aModName );
                 sal_Int32 nCount = aNames.getLength();
-                const ::rtl::OUString* pNames = aNames.getConstArray();
+                const OUString* pNames = aNames.getConstArray();
 
                 for ( sal_Int32 j = 0 ; j < nCount ; j++ )
                 {
-                    ::rtl::OUString aName = pNames[ j ];
+                    OUString aName = pNames[ j ];
                     SvLBoxEntry* pEntry = FindEntry( pModuleEntry, aName, OBJ_TYPE_METHOD );
                     if ( !pEntry )
                         pEntry = AddEntry(
@@ -523,7 +523,7 @@ void TreeListBox::ImpCreateLibSubSubEntriesInVBAMode( SvLBoxEntry* pLibSubRootEn
     }
 }
 
-SvLBoxEntry* TreeListBox::ImpFindEntry( SvLBoxEntry* pParent, const ::rtl::OUString& rText )
+SvLBoxEntry* TreeListBox::ImpFindEntry( SvLBoxEntry* pParent, const OUString& rText )
 {
     sal_uLong nRootPos = 0;
     SvLBoxEntry* pEntry = pParent ? FirstChild( pParent ) : GetEntry( nRootPos );
@@ -640,7 +640,7 @@ SvLBoxEntry* TreeListBox::CloneEntry( SvLBoxEntry* pSource )
     return pNew;
 }
 
-SvLBoxEntry* TreeListBox::FindEntry( SvLBoxEntry* pParent, const ::rtl::OUString& rText, EntryType eType )
+SvLBoxEntry* TreeListBox::FindEntry( SvLBoxEntry* pParent, const OUString& rText, EntryType eType )
 {
     sal_uLong nRootPos = 0;
     SvLBoxEntry* pEntry = pParent ? FirstChild( pParent ) : GetEntry( nRootPos );
@@ -668,10 +668,10 @@ long TreeListBox::ExpandingHdl()
         OSL_ENSURE( aDocument.isAlive(), "TreeListBox::ExpandingHdl: no document, or document is dead!" );
         if ( aDocument.isAlive() )
         {
-            ::rtl::OUString aLibName( aDesc.GetLibName() );
-            ::rtl::OUString aLibSubName( aDesc.GetLibSubName() );
-            ::rtl::OUString aName( aDesc.GetName() );
-            ::rtl::OUString aMethodName( aDesc.GetMethodName() );
+            OUString aLibName( aDesc.GetLibName() );
+            OUString aLibSubName( aDesc.GetLibSubName() );
+            OUString aName( aDesc.GetName() );
+            OUString aMethodName( aDesc.GetMethodName() );
 
             if ( !aLibName.isEmpty() && aLibSubName.isEmpty() && aName.isEmpty() && aMethodName.isEmpty() )
             {
@@ -682,7 +682,7 @@ long TreeListBox::ExpandingHdl()
                     Reference< script::XLibraryContainerPassword > xPasswd( xModLibContainer, UNO_QUERY );
                     if ( xPasswd.is() && xPasswd->isLibraryPasswordProtected( aLibName ) && !xPasswd->isLibraryPasswordVerified( aLibName ) )
                     {
-                        ::rtl::OUString aPassword;
+                        OUString aPassword;
                         bOK = QueryPassword( xModLibContainer, aLibName, aPassword );
                     }
                 }
@@ -702,7 +702,7 @@ bool TreeListBox::IsEntryProtected( SvLBoxEntry* pEntry )
         OSL_ENSURE( aDocument.isAlive(), "TreeListBox::IsEntryProtected: no document, or document is dead!" );
         if ( aDocument.isAlive() )
         {
-            ::rtl::OUString aOULibName( aDesc.GetLibName() );
+            OUString aOULibName( aDesc.GetLibName() );
             Reference< script::XLibraryContainer > xModLibContainer( aDocument.getLibraryContainer( E_SCRIPTS ) );
             if ( xModLibContainer.is() && xModLibContainer->hasByName( aOULibName ) )
             {
@@ -719,7 +719,7 @@ bool TreeListBox::IsEntryProtected( SvLBoxEntry* pEntry )
 
 SAL_WNODEPRECATED_DECLARATIONS_PUSH
 SvLBoxEntry* TreeListBox::AddEntry(
-    rtl::OUString const& rText,
+    OUString const& rText,
     const Image& rImage,
     SvLBoxEntry* pParent,
     bool bChildrenOnDemand,
@@ -750,7 +750,7 @@ LibraryType TreeListBox::GetLibraryType() const
     return eType;
 }
 
-::rtl::OUString TreeListBox::GetRootEntryName( const ScriptDocument& rDocument, LibraryLocation eLocation ) const
+OUString TreeListBox::GetRootEntryName( const ScriptDocument& rDocument, LibraryLocation eLocation ) const
 {
     return rDocument.getTitle( eLocation, GetLibraryType() );
 }
@@ -763,12 +763,12 @@ void TreeListBox::GetRootEntryBitmaps( const ScriptDocument& rDocument, Image& r
 
     if ( rDocument.isDocument() )
     {
-        ::rtl::OUString sFactoryURL;
+        OUString sFactoryURL;
         Reference<uno::XComponentContext> xContext( ::comphelper::getProcessComponentContext() );
         Reference< frame::XModuleManager2 > xModuleManager( frame::ModuleManager::create(xContext) );
         try
         {
-            ::rtl::OUString sModule( xModuleManager->identify( rDocument.getDocument() ) );
+            OUString sModule( xModuleManager->identify( rDocument.getDocument() ) );
             Reference< container::XNameAccess > xModuleConfig( xModuleManager, UNO_QUERY );
             if ( xModuleConfig.is() )
             {
@@ -816,7 +816,7 @@ void TreeListBox::SetCurrentEntry (EntryDescriptor& rDesc)
         aDesc = EntryDescriptor(
             ScriptDocument::getApplicationScriptDocument(),
             LIBRARY_LOCATION_USER, "Standard",
-            ::rtl::OUString(), ".", OBJ_TYPE_UNKNOWN
+            OUString(), ".", OBJ_TYPE_UNKNOWN
         );
     }
     ScriptDocument aDocument = aDesc.GetDocument();
@@ -826,7 +826,7 @@ void TreeListBox::SetCurrentEntry (EntryDescriptor& rDesc)
     if ( pRootEntry )
     {
         pCurEntry = pRootEntry;
-        ::rtl::OUString aLibName( aDesc.GetLibName() );
+        OUString aLibName( aDesc.GetLibName() );
         if ( !aLibName.isEmpty() )
         {
             Expand( pRootEntry );
@@ -834,7 +834,7 @@ void TreeListBox::SetCurrentEntry (EntryDescriptor& rDesc)
             if ( pLibEntry )
             {
                 pCurEntry = pLibEntry;
-                ::rtl::OUString aLibSubName( aDesc.GetLibSubName() );
+                OUString aLibSubName( aDesc.GetLibSubName() );
                 if( !aLibSubName.isEmpty() )
                 {
                     Expand( pLibEntry );
@@ -844,7 +844,7 @@ void TreeListBox::SetCurrentEntry (EntryDescriptor& rDesc)
                         pCurEntry = pLibSubEntry;
                     }
                 }
-                ::rtl::OUString aName( aDesc.GetName() );
+                OUString aName( aDesc.GetName() );
                 if ( !aName.isEmpty() )
                 {
                     Expand( pCurEntry );
@@ -855,7 +855,7 @@ void TreeListBox::SetCurrentEntry (EntryDescriptor& rDesc)
                     if ( pEntry )
                     {
                         pCurEntry = pEntry;
-                        ::rtl::OUString aMethodName( aDesc.GetMethodName() );
+                        OUString aMethodName( aDesc.GetMethodName() );
                         if ( !aMethodName.isEmpty() )
                         {
                             Expand( pEntry );
