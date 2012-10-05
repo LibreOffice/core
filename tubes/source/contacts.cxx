@@ -28,44 +28,26 @@
 
 #include <sal/config.h>
 
-#include "contacts.hrc"
 #include <svtools/filter.hxx>
-#include <svx/simptabl.hxx>
-#include <tools/resid.hxx>
 #include <tubes/conference.hxx>
 #include <tubes/collaboration.hxx>
 #include <tubes/manager.hxx>
-#include <unotools/confignode.hxx>
-#include <vcl/fixed.hxx>
+#include <vcl/button.hxx>
 #include <vcl/dialog.hxx>
-#include <vcl/unohelp.hxx>
+#include <vcl/lstbox.hxx>
 
-#include <map>
-#include <vector>
 #include <telepathy-glib/telepathy-glib.h>
 
 namespace {
 
-ResId TubesResId( sal_uInt32 nId )
-{
-    static ResMgr* pResMgr = NULL;
-    if (!pResMgr)
-    {
-        pResMgr = ResMgr::CreateResMgr( "tubes" );
-    }
-    return ResId( nId, *pResMgr );
-}
-
 class TubeContacts : public ModelessDialog
 {
-    FixedLine               maLabel;
-    PushButton              maBtnDemo;
-    PushButton              maBtnConnect;
-    PushButton              maBtnGroup;
-    PushButton              maBtnInvite;
-    PushButton              maBtnListen;
-    SvxSimpleTableContainer maListContainer;
-    SvxSimpleTable          maList;
+    PushButton*             mpBtnDemo;
+    PushButton*             mpBtnBuddy;
+    PushButton*             mpBtnGroup;
+    PushButton*             mpBtnInvite;
+    PushButton*             mpBtnListen;
+    ListBox*                mpList;
     Collaboration*          mpCollaboration;
 
     DECL_LINK( BtnDemoHdl, void * );
@@ -78,12 +60,11 @@ class TubeContacts : public ModelessDialog
 
     void Invite()
     {
-        AccountContactPair *pAC = NULL;
-        if (maList.FirstSelected())
-            pAC = static_cast<AccountContactPair*> (maList.FirstSelected()->GetUserData());
-        if (pAC)
+        if (mpList->GetSelectEntryCount())
         {
-            mpCollaboration->Invite( pAC->second );
+            sal_uInt16 i = mpList->GetSelectEntryPos();
+            TpContact* pContact = maACs[i].second;
+            mpCollaboration->Invite( pContact );
         }
     }
 
@@ -107,13 +88,11 @@ class TubeContacts : public ModelessDialog
 
     void StartBuddySession()
     {
-        AccountContactPair *pAC = NULL;
-        if (maList.FirstSelected())
-            pAC = static_cast<AccountContactPair*> (maList.FirstSelected()->GetUserData());
-        if (pAC)
+        if (mpList->GetSelectEntryCount())
         {
-            TpAccount* pAccount = pAC->first;
-            TpContact* pContact = pAC->second;
+            sal_uInt16 i = mpList->GetSelectEntryPos();
+            TpAccount* pAccount = maACs[i].first;
+            TpContact* pContact = maACs[i].second;
             SAL_INFO( "tubes", "picked " << tp_contact_get_identifier( pContact ) );
             TeleConference* pConference = TeleManager::startBuddySession( pAccount, pContact );
             if (!pConference)
@@ -129,12 +108,10 @@ class TubeContacts : public ModelessDialog
 
     void StartGroupSession()
     {
-        AccountContactPair *pAC = NULL;
-        if (maList.FirstSelected())
-            pAC = static_cast<AccountContactPair*> (maList.FirstSelected()->GetUserData());
-        if (pAC)
+        if (mpList->GetSelectEntryCount())
         {
-            TpAccount* pAccount = pAC->first;
+            sal_uInt16 i = mpList->GetSelectEntryPos();
+            TpAccount* pAccount = maACs[i].first;
             SAL_INFO( "tubes", "picked " << tp_account_get_display_name( pAccount ) );
             TeleConference* pConference = TeleManager::startGroupSession( pAccount,
                     rtl::OUString("liboroom"), rtl::OUString("conference.jabber.org") );
@@ -149,36 +126,20 @@ class TubeContacts : public ModelessDialog
 
 public:
     TubeContacts( Collaboration* pCollaboration ) :
-        ModelessDialog( NULL, TubesResId( RID_TUBES_DLG_CONTACTS ) ),
-        maLabel( this, TubesResId( FL_LABEL ) ),
-        maBtnDemo( this, TubesResId( BTN_DEMO ) ),
-        maBtnConnect( this, TubesResId( BTN_CONNECT ) ),
-        maBtnGroup( this, TubesResId( BTN_GROUP ) ),
-        maBtnInvite( this, TubesResId( BTN_INVITE ) ),
-        maBtnListen( this, TubesResId( BTN_LISTEN ) ),
-        maListContainer( this, TubesResId( CTL_LIST ) ),
-        maList( maListContainer ),
+        ModelessDialog( NULL, "ContactsDialog", "tubes/ui/contacts.ui" ),
         mpCollaboration( pCollaboration )
     {
-        Hide();
-        maBtnDemo.SetClickHdl( LINK( this, TubeContacts, BtnDemoHdl ) );
-        maBtnConnect.SetClickHdl( LINK( this, TubeContacts, BtnConnectHdl ) );
-        maBtnGroup.SetClickHdl( LINK( this, TubeContacts, BtnGroupHdl ) );
-        maBtnInvite.SetClickHdl( LINK( this, TubeContacts, BtnInviteHdl ) );
-        maBtnListen.SetClickHdl( LINK( this, TubeContacts, BtnListenHdl ) );
-
-        static long aStaticTabs[]=
-        {
-            3 /* count */, 0, 20, 100, 150, 200
-        };
-
-        maList.SvxSimpleTable::SetTabs( aStaticTabs );
-        String sHeader( '\t' );
-        sHeader += String( TubesResId( STR_HEADER_ALIAS ) );
-        sHeader += '\t';
-        sHeader += String( TubesResId( STR_HEADER_NAME ) );
-        sHeader += '\t';
-        maList.InsertHeaderEntry( sHeader, HEADERBAR_APPEND, HIB_LEFT );
+        get( mpBtnListen, "listen");
+        get( mpBtnInvite, "invite");
+        get( mpBtnDemo, "demo");
+        get( mpBtnBuddy, "buddy");
+        get( mpBtnGroup, "group");
+        get( mpList, "contacts");
+        mpBtnListen->SetClickHdl( LINK( this, TubeContacts, BtnListenHdl ) );
+        mpBtnInvite->SetClickHdl( LINK( this, TubeContacts, BtnInviteHdl ) );
+        mpBtnDemo->SetClickHdl( LINK( this, TubeContacts, BtnDemoHdl ) );
+        mpBtnBuddy->SetClickHdl( LINK( this, TubeContacts, BtnConnectHdl ) );
+        mpBtnGroup->SetClickHdl( LINK( this, TubeContacts, BtnGroupHdl ) );
     }
     virtual ~TubeContacts()
     {
@@ -193,13 +154,13 @@ public:
     void Populate()
     {
         SAL_INFO( "tubes", "Populating contact list dialog" );
-        maList.Clear();
+        mpList->Clear();
         maACs.clear();
 
         AccountContactPairV aPairs = TeleManager::getContacts();
         AccountContactPairV::iterator it;
         // make sure we have enough memory to not need re-allocation
-        // which would invalidate pointers stored in maList entries
+        // which would invalidate pointers stored in mpList entries
         maACs.reserve( aPairs.size() );
         for( it = aPairs.begin(); it != aPairs.end(); ++it )
         {
@@ -218,15 +179,13 @@ public:
                 }
             }
             rtl::OUStringBuffer aEntry( 128 );
-            aEntry.append( sal_Unicode( '\t' ) );
+            aEntry.append( "    " );
             aEntry.append( fromUTF8 ( tp_contact_get_alias( it->second ) ) );
-            aEntry.append( sal_Unicode( '\t' ) );
+            aEntry.append( "    -    " );
             aEntry.append( fromUTF8 ( tp_contact_get_identifier( it->second ) ) );
-            aEntry.append( sal_Unicode( '\t' ) );
-            SvLBoxEntry* pEntry = maList.InsertEntry( aEntry.makeStringAndClear(), aImage, aImage );
+            mpList->InsertEntry( aEntry.makeStringAndClear(), aImage);
             // FIXME: ref the TpAccount, TpContact ...
             maACs.push_back( AccountContactPair( it->first, it->second ) );
-            pEntry->SetUserData( &maACs.back() );
 
             g_object_unref (it->first);
             g_object_unref (it->second);
