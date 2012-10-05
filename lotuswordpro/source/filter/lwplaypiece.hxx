@@ -121,9 +121,7 @@ public:
     void SetContentRotation(sal_uInt16 nVal){m_nContentRotation = nVal;}
     sal_uInt16 GetPlacement(){return m_nPlacement;}
     void SetPlacement(sal_uInt16 nVal){m_nPlacement = nVal;}
-    // add by , 04/05/2005
     inline LwpPoint* GetOffset() {return &m_Offset;}
-    // end add
 protected:
     virtual void Read();
 protected:
@@ -275,7 +273,6 @@ private:
         DOG_EAR_PAGE = 8,
         DESKTOP = 9,
         BOX_HIGHLIGHT = 10,
-//#ifdef BORDER_BMP
         STAR = 11,
         ROPE = 12,
         DECO1 = 13,
@@ -285,7 +282,6 @@ private:
         ROSE = 17,
         SUNF = 18,
         DECO3 = 19,
-//#endif //BORDER_BMP
         WARNING = 20,
         BUBBLE = 21,
         GIRDER = 22,
@@ -326,7 +322,6 @@ protected:
     LwpShadow m_Shadow;
 };
 
-/*class LwpLayoutRelativityGuts*/
 class LwpLayoutRelativityGuts
 {
 public:
