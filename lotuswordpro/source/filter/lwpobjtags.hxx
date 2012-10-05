@@ -212,13 +212,6 @@
 #define TAG_NOTIFY          0x7966744EUL        // "Ntfy"
 #define TAG_LONGHOLDER      0x676E6F4CUL        // "Long"
 
-#ifdef SMARTEXT
-#define TAG_STXINFO         0x6e495f53UL        // "S_In"
-#define TAG_STXMANAGER      0x674d5f53UL        // "S_Mg"
-#define TAG_STXLINK         0x6b4c5f53UL        // "S_Lk"
-#define TAG_STXLINKMARKERLIST   0x4c4d5f53UL        // "S_ML"
-#endif // SMARTEXT
-
 #define TAG_DIVOPTS         0x74704f44UL        // "DOpt"
 #define TAG_FOOTNOTEOPTS    0x704f4e46UL        // "FNOp"
 

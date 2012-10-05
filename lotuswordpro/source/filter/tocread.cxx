@@ -230,7 +230,6 @@ CBenTOCReader::ReadTOC()
 
                 if (LookAhead == BEN_REFERENCE_LIST_ID)
                 {
-                    // Eat it, unless BENUTIL_SUPPORT turned on
                     if ((Err = GetDWord(&ReferencedListID)) != BenErr_OK)
                         return Err;
                     LookAhead = GetCode();
@@ -298,9 +297,6 @@ CBenTOCReader::ReadTOC()
 
                     delete[] sAllocBuffer;
                 }
-                // If BENUTIL_SUPPORT turned on, read in references object
-                // like regular object
-#ifndef BENUTIL_SUPPORT
                 else if (PropertyID == BEN_PROPID_OBJ_REFERENCES)
                 {
                     // Don't need to read in references object--we assume
@@ -308,7 +304,6 @@ CBenTOCReader::ReadTOC()
                     if ((Err = ReadSegments(NULL, &LookAhead)) != BenErr_OK)
                         return Err;
                 }
-#endif
                 else if (ObjectID == BEN_OBJID_TOC)
                 {
                     if (PropertyID == BEN_PROPID_TOC_SEED)
@@ -342,11 +337,6 @@ CBenTOCReader::ReadTOC()
 
                     pProperty = new CBenProperty(pObject, PropertyID, TypeID,
                       (pCBenProperty) pObject->GetProperties()->GetLast());
-
-#ifdef BENUTIL_SUPPORT
-                    pProperty->UseValue()->
-                      SetReferencedListObjectID(ReferencedListID);
-#endif
 
                     if ((Err = ReadSegments(pProperty->UseValue(),
                       &LookAhead)) != BenErr_OK)
