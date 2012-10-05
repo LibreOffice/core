@@ -35,6 +35,8 @@
 
 #include <toolkit/helper/mutexandbroadcasthelper.hxx>
 #include <cppuhelper/propshlp.hxx>
+#include <cppuhelper/implbase1.hxx>
+#include <comphelper/uno3.hxx>
 
 #include "vcl/oldprintadaptor.hxx"
 
@@ -51,10 +53,11 @@
 //  class VCLXPrinterPropertySet
 //  ----------------------------------------------------
 
-class VCLXPrinterPropertySet :  public ::com::sun::star::awt::XPrinterPropertySet,
-                                public ::com::sun::star::lang::XTypeProvider,
-                                public MutexAndBroadcastHelper,
-                                public ::cppu::OPropertySetHelper
+typedef ::cppu::WeakImplHelper1 <   ::com::sun::star::awt::XPrinterPropertySet
+                                >   VCLXPrinterPropertySet_Base;
+class VCLXPrinterPropertySet    :public VCLXPrinterPropertySet_Base
+                                ,public MutexAndBroadcastHelper
+                                ,public ::cppu::OPropertySetHelper
 {
 protected:
     boost::shared_ptr<Printer>                      mpPrinter;
@@ -62,7 +65,7 @@ protected:
 
     sal_Int16                   mnOrientation;
     sal_Bool                    mbHorizontal;
-public:
+public: 
     VCLXPrinterPropertySet( const String& rPrinterName );
     virtual ~VCLXPrinterPropertySet();
 
@@ -70,11 +73,10 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XDevice >  GetDevice();
 
     // ::com::sun::star::uno::XInterface
-    ::com::sun::star::uno::Any                  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
+    DECLARE_XINTERFACE();
 
     // ::com::sun::star::lang::XTypeProvider
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >  SAL_CALL getTypes() throw(::com::sun::star::uno::RuntimeException);
-    ::com::sun::star::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException);
+    DECLARE_XTYPEPROVIDER();
 
     // ::com::sun::star::beans::XPropertySet
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);
@@ -104,25 +106,16 @@ public:
 //  class VCLXPrinter
 //  ----------------------------------------------------
 
-class VCLXPrinter:  public ::com::sun::star::awt::XPrinter,
-                    public VCLXPrinterPropertySet,
-                    public ::cppu::OWeakObject
+typedef ::cppu::ImplInheritanceHelper1  <   VCLXPrinterPropertySet
+                                        ,   ::com::sun::star::awt::XPrinter
+                                        >   VCLXPrinter_Base;
+class VCLXPrinter:  public VCLXPrinter_Base
 {
     boost::shared_ptr<vcl::OldStylePrintAdaptor>    mpListener;
     JobSetup                                        maInitJobSetup;
 public:
                     VCLXPrinter( const String& rPrinterName );
                     ~VCLXPrinter();
-
-    // ::com::sun::star::uno::XInterface
-    ::com::sun::star::uno::Any                  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
-    void                                        SAL_CALL acquire() throw()  { OWeakObject::acquire(); }
-    void                                        SAL_CALL release() throw()  { OWeakObject::release(); }
-
-    // ::com::sun::star::lang::XTypeProvider
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >  SAL_CALL getTypes() throw(::com::sun::star::uno::RuntimeException);
-    ::com::sun::star::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException);
-
 
     // ::com::sun::star::beans::XPropertySet
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException) { return VCLXPrinterPropertySet::getPropertySetInfo(); }
@@ -152,23 +145,14 @@ public:
 //  class VCLXInfoPrinter
 //  ----------------------------------------------------
 
-class VCLXInfoPrinter:  public ::com::sun::star::awt::XInfoPrinter,
-                        public VCLXPrinterPropertySet,
-                        public ::cppu::OWeakObject
+typedef ::cppu::ImplInheritanceHelper1  <   VCLXPrinterPropertySet
+                                        ,   ::com::sun::star::awt::XInfoPrinter
+                                        >   VCLXInfoPrinter_Base;
+class VCLXInfoPrinter:  public VCLXInfoPrinter_Base
 {
 public:
                         VCLXInfoPrinter( const String& rPrinterName );
                         ~VCLXInfoPrinter();
-
-    // ::com::sun::star::uno::XInterface
-    ::com::sun::star::uno::Any                  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
-    void                                        SAL_CALL acquire() throw()  { OWeakObject::acquire(); }
-    void                                        SAL_CALL release() throw()  { OWeakObject::release(); }
-
-    // ::com::sun::star::lang::XTypeProvider
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >  SAL_CALL getTypes() throw(::com::sun::star::uno::RuntimeException);
-    ::com::sun::star::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException);
-
 
     // ::com::sun::star::beans::XPropertySet
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException) { return VCLXPrinterPropertySet::getPropertySetInfo(); }
@@ -194,20 +178,11 @@ public:
 //  class VCLXPrinterServer
 //  ----------------------------------------------------
 
-class VCLXPrinterServer :   public ::com::sun::star::awt::XPrinterServer,
-                            public  ::cppu::OWeakObject
+typedef ::cppu::WeakImplHelper1 <   ::com::sun::star::awt::XPrinterServer
+                                >   VCLXPrinterServer_Base;
+class VCLXPrinterServer : public VCLXPrinterServer_Base
 {
 public:
-
-    // ::com::sun::star::uno::XInterface
-    ::com::sun::star::uno::Any                  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
-    void                                        SAL_CALL acquire() throw()  { OWeakObject::acquire(); }
-    void                                        SAL_CALL release() throw()  { OWeakObject::release(); }
-
-    // ::com::sun::star::lang::XTypeProvider
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >  SAL_CALL getTypes() throw(::com::sun::star::uno::RuntimeException);
-    ::com::sun::star::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException);
-
     // ::com::sun::star::awt::XPrinterServer
     ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getPrinterNames(  ) throw(::com::sun::star::uno::RuntimeException);
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XPrinter > SAL_CALL createPrinter( const ::rtl::OUString& printerName ) throw(::com::sun::star::uno::RuntimeException);
@@ -218,4 +193,3 @@ public:
 
 
 #endif // _TOOLKIT_AWT_VCLXPRINTER_HXX_
-
