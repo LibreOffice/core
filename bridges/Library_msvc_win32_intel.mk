@@ -32,13 +32,6 @@ $(eval $(call gb_Library_add_defs,msci_uno,\
 	) \
 ))
 
-# In case someone enabled the non-standard -fomit-frame-pointer which does not
-# work with the .cxx sources of this library.
-$(eval $(call gb_Library_add_cxxflags,msci_uno,\
-	-fno-omit-frame-pointer \
-	-fno-strict-aliasing \
-))
-
 $(eval $(call gb_Library_use_libraries,msci_uno,\
 	cppu \
 	sal \
