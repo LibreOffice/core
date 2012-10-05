@@ -2412,11 +2412,8 @@ void ScCellRangesBase::SetOnePropertyValue( const SfxItemPropertySimpleEntry* pE
                                 ScConditionalFormat* pNew = new ScConditionalFormat( 0, pDoc );    // Index wird beim Einfuegen gesetzt
                                 pFormat->FillFormat( *pNew, pDoc, eGrammar );
                                 pNew->AddRange( aRanges );
-                                sal_uLong nIndex = pDoc->AddCondFormat( pNew, aRanges.front()->aStart.Tab() );
-
-                                ScPatternAttr aPattern( pDoc->GetPool() );
-                                aPattern.GetItemSet().Put( SfxUInt32Item( ATTR_CONDITIONAL, nIndex ) );
-                                pDocShell->GetDocFunc().ApplyAttributes( *GetMarkData(), aPattern, sal_True, sal_True );
+                                SCTAB nTab = aRanges.front()->aStart.Tab();
+                                pDocShell->GetDocFunc().ReplaceConditionalFormat( 0, pNew, nTab, aRanges );
                             }
                         }
                     }
@@ -2572,8 +2569,11 @@ void ScCellRangesBase::GetOnePropertyValue( const SfxItemPropertySimpleEntry* pE
                             formula::FormulaGrammar::Grammar eGrammar = (bXML ?
                                     pDoc->GetStorageGrammar() :
                                    formula::FormulaGrammar::mapAPItoGrammar( bEnglish, bXML));
-                            sal_uLong nIndex = ((const SfxUInt32Item&)
-                                    pPattern->GetItem(ATTR_CONDITIONAL)).GetValue();
+                            const std::vector<sal_uInt32>& rIndex = ((const ScCondFormatItem&)
+                                    pPattern->GetItem(ATTR_CONDITIONAL)).GetCondFormatData();
+                            sal_uLong nIndex = 0;
+                            if(!rIndex.empty())
+                                nIndex = rIndex[0];
                             rAny <<= uno::Reference<sheet::XSheetConditionalEntries>(
                                     new ScTableConditionalFormat( pDoc, nIndex, aRanges.front()->aStart.Tab(), eGrammar ));
                         }
