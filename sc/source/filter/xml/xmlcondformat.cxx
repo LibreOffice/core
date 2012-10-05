@@ -36,11 +36,6 @@
 #include "rangelst.hxx"
 #include "rangeutl.hxx"
 #include "docfunc.hxx"
-#include "markdata.hxx"
-#include "docpool.hxx"
-#include "scitems.hxx"
-#include "patattr.hxx"
-#include "svl/intitem.hxx"
 #include "XMLConverter.hxx"
 
 
