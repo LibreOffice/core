@@ -57,9 +57,16 @@ TabPage RID_SVXPAGE_HEADER
         Size = MAP_APPFONT ( 152 , 10 ) ;
         Text [ en-US ] = "Same ~content left/right" ;
     };
+    CheckBox CB_SHARED_FIRST
+    {
+        HelpID = "svx:CheckBox:RID_SVXPAGE_HEADER:CB_SHARED_FIRST";
+        Pos = MAP_APPFONT ( 12 , 46 ) ;
+        Size = MAP_APPFONT ( 152 , 10 ) ;
+        Text [ en-US ] = "Same content on first page" ;
+    };
     FixedText FT_LMARGIN
     {
-        Pos = MAP_APPFONT ( 12 , 48 ) ;
+        Pos = MAP_APPFONT ( 12 , 64 ) ;
         Size = MAP_APPFONT ( 102 , 8 ) ;
         _TEXT_FT_LMARGIN
         Left = TRUE ;
@@ -68,7 +75,7 @@ TabPage RID_SVXPAGE_HEADER
     {
         HelpID = "svx:MetricField:RID_SVXPAGE_HEADER:ED_LMARGIN";
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 124 , 46 ) ;
+        Pos = MAP_APPFONT ( 124 , 62 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
         Left = TRUE ;
         Repeat = TRUE ;
@@ -82,7 +89,7 @@ TabPage RID_SVXPAGE_HEADER
     };
     FixedText FT_RMARGIN
     {
-        Pos = MAP_APPFONT ( 12 , 64 ) ;
+        Pos = MAP_APPFONT ( 12 , 80 ) ;
         Size = MAP_APPFONT ( 102 , 8 ) ;
         _TEXT_FT_RMARGIN
         Left = TRUE ;
@@ -91,7 +98,7 @@ TabPage RID_SVXPAGE_HEADER
     {
         HelpID = "svx:MetricField:RID_SVXPAGE_HEADER:ED_RMARGIN";
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 124 , 62 ) ;
+        Pos = MAP_APPFONT ( 124 , 78 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
         Left = TRUE ;
         Repeat = TRUE ;
@@ -106,7 +113,7 @@ TabPage RID_SVXPAGE_HEADER
 
     FixedText FT_DIST
     {
-        Pos = MAP_APPFONT ( 12 , 82 ) ;
+        Pos = MAP_APPFONT ( 12 , 98 ) ;
         Size = MAP_APPFONT ( 102 , 8 ) ;
         Text [ en-US ] = "~Spacing" ;
     };
@@ -115,7 +122,7 @@ TabPage RID_SVXPAGE_HEADER
         HelpID = "svx:MetricField:RID_SVXPAGE_HEADER:ED_DIST";
         Disable = TRUE ;
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 124 , 80 ) ;
+        Pos = MAP_APPFONT ( 124 , 96 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
         Left = TRUE ;
         Repeat = TRUE ;
@@ -129,14 +136,14 @@ TabPage RID_SVXPAGE_HEADER
     CheckBox CB_DYNSPACING
     {
         HelpID = "svx:CheckBox:RID_SVXPAGE_HEADER:CB_DYNSPACING";
-        Pos = MAP_APPFONT ( 12 , 96 ) ;
+        Pos = MAP_APPFONT ( 12 , 112 ) ;
         Size = MAP_APPFONT ( 152 , 10 ) ;
         Hide = TRUE;
         Text [ en-US ] = "Use d~ynamic spacing" ;
     };
     FixedText FT_HEIGHT
     {
-        Pos = MAP_APPFONT ( 12 , 98 ) ;
+        Pos = MAP_APPFONT ( 12 , 114 ) ;
         Size = MAP_APPFONT ( 102 , 8 ) ;
         Text [ en-US ] = "~Height" ;
     };
@@ -145,7 +152,7 @@ TabPage RID_SVXPAGE_HEADER
         HelpID = "svx:MetricField:RID_SVXPAGE_HEADER:ED_HEIGHT";
         Disable = TRUE ;
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 124 , 96 ) ;
+        Pos = MAP_APPFONT ( 124 , 112 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
         Left = TRUE ;
         Repeat = TRUE ;
@@ -161,7 +168,7 @@ TabPage RID_SVXPAGE_HEADER
     CheckBox CB_HEIGHT_DYN
     {
         HelpID = "svx:CheckBox:RID_SVXPAGE_HEADER:CB_HEIGHT_DYN";
-        Pos = MAP_APPFONT ( 12 , 112 ) ;
+        Pos = MAP_APPFONT ( 12 , 128 ) ;
         Size = MAP_APPFONT ( 152 , 10 ) ;
         Text [ en-US ] = "~AutoFit height" ;
     };
@@ -179,7 +186,7 @@ TabPage RID_SVXPAGE_HEADER
     PushButton BTN_EXTRAS
     {
         HelpID = "svx:PushButton:RID_SVXPAGE_HEADER:BTN_EXTRAS";
-        Pos = MAP_APPFONT ( 12 , 130 ) ;
+        Pos = MAP_APPFONT ( 12 , 146 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text [ en-US ] = "~More..." ;
     };
@@ -205,9 +212,16 @@ TabPage RID_SVXPAGE_FOOTER
         Size = MAP_APPFONT ( 152 , 10 ) ;
         Text [ en-US ] = "Same ~content left/right" ;
     };
+    CheckBox CB_SHARED_FIRST
+    {
+        HelpID = "svx:CheckBox:RID_SVXPAGE_FOOTER:CB_SHARED_FIRST";
+        Pos = MAP_APPFONT ( 12 , 46 ) ;
+        Size = MAP_APPFONT ( 152 , 10 ) ;
+        Text [ en-US ] = "Same content on first page" ;
+    };
     FixedText FT_LMARGIN
     {
-        Pos = MAP_APPFONT ( 12 , 48 ) ;
+        Pos = MAP_APPFONT ( 12 , 64 ) ;
         Size = MAP_APPFONT ( 102 , 8 ) ;
         Left = TRUE ;
         _TEXT_FT_LMARGIN
@@ -215,29 +229,6 @@ TabPage RID_SVXPAGE_FOOTER
     MetricField ED_LMARGIN
     {
         HelpID = "svx:MetricField:RID_SVXPAGE_FOOTER:ED_LMARGIN";
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 124 , 46 ) ;
-        Size = MAP_APPFONT ( 40 , 12 ) ;
-        Left = TRUE ;
-        Repeat = TRUE ;
-        Spin = TRUE ;
-        Minimum = 0 ;
-        Maximum = 9999 ;
-        DecimalDigits = 2 ;
-        Unit = FUNIT_CM ;
-        Last = 9999 ;
-        SpinSize = 10 ;
-    };
-    FixedText FT_RMARGIN
-    {
-        Pos = MAP_APPFONT ( 12 , 64 ) ;
-        Size = MAP_APPFONT ( 102 , 8 ) ;
-        _TEXT_FT_RMARGIN
-        Left = TRUE ;
-    };
-    MetricField ED_RMARGIN
-    {
-        HelpID = "svx:MetricField:RID_SVXPAGE_FOOTER:ED_RMARGIN";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 124 , 62 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
@@ -251,9 +242,32 @@ TabPage RID_SVXPAGE_FOOTER
         Last = 9999 ;
         SpinSize = 10 ;
     };
+    FixedText FT_RMARGIN
+    {
+        Pos = MAP_APPFONT ( 12 , 80 ) ;
+        Size = MAP_APPFONT ( 102 , 8 ) ;
+        _TEXT_FT_RMARGIN
+        Left = TRUE ;
+    };
+    MetricField ED_RMARGIN
+    {
+        HelpID = "svx:MetricField:RID_SVXPAGE_FOOTER:ED_RMARGIN";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 124 , 78 ) ;
+        Size = MAP_APPFONT ( 40 , 12 ) ;
+        Left = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = 0 ;
+        Maximum = 9999 ;
+        DecimalDigits = 2 ;
+        Unit = FUNIT_CM ;
+        Last = 9999 ;
+        SpinSize = 10 ;
+    };
     FixedText FT_DIST
     {
-        Pos = MAP_APPFONT ( 12 , 82 ) ;
+        Pos = MAP_APPFONT ( 12 , 98 ) ;
         Size = MAP_APPFONT ( 102 , 8 ) ;
         Text [ en-US ] = "~Spacing" ;
     };
@@ -262,7 +276,7 @@ TabPage RID_SVXPAGE_FOOTER
         HelpID = "svx:MetricField:RID_SVXPAGE_FOOTER:ED_DIST";
         Disable = TRUE ;
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 124 , 80 ) ;
+        Pos = MAP_APPFONT ( 124 , 96 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
         Left = TRUE ;
         Repeat = TRUE ;
@@ -276,14 +290,14 @@ TabPage RID_SVXPAGE_FOOTER
     CheckBox CB_DYNSPACING
     {
         HelpID = "svx:CheckBox:RID_SVXPAGE_FOOTER:CB_DYNSPACING";
-        Pos = MAP_APPFONT ( 12 , 96 ) ;
+        Pos = MAP_APPFONT ( 12 , 112 ) ;
         Size = MAP_APPFONT ( 152 , 10 ) ;
         Hide = TRUE;
         Text [ en-US ] = "Use d~ynamic spacing" ;
     };
     FixedText FT_HEIGHT
     {
-        Pos = MAP_APPFONT ( 12 , 98 ) ;
+        Pos = MAP_APPFONT ( 12 , 114 ) ;
         Size = MAP_APPFONT ( 102 , 8 ) ;
         Disable = TRUE ;
         Text [ en-US ] = "~Height" ;
@@ -293,7 +307,7 @@ TabPage RID_SVXPAGE_FOOTER
         HelpID = "svx:MetricField:RID_SVXPAGE_FOOTER:ED_HEIGHT";
         Disable = TRUE ;
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 124 , 96 ) ;
+        Pos = MAP_APPFONT ( 124 , 112 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
         Left = TRUE ;
         Repeat = TRUE ;
@@ -309,7 +323,7 @@ TabPage RID_SVXPAGE_FOOTER
     CheckBox CB_HEIGHT_DYN
     {
         HelpID = "svx:CheckBox:RID_SVXPAGE_FOOTER:CB_HEIGHT_DYN";
-        Pos = MAP_APPFONT ( 12 , 112 ) ;
+        Pos = MAP_APPFONT ( 12 , 128 ) ;
         Size = MAP_APPFONT ( 152 , 10 ) ;
         Text [ en-US ] = "~AutoFit height" ;
     };
@@ -328,7 +342,7 @@ TabPage RID_SVXPAGE_FOOTER
     PushButton BTN_EXTRAS
     {
         HelpID = "svx:PushButton:RID_SVXPAGE_FOOTER:BTN_EXTRAS";
-        Pos = MAP_APPFONT ( 12 , 130 ) ;
+        Pos = MAP_APPFONT ( 12 , 146 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text [ en-US ] = "~More..." ;
     };

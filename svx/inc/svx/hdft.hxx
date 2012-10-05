@@ -72,6 +72,7 @@ protected:
     FixedLine       aFrm;
     CheckBox        aTurnOnBox;
     CheckBox        aCntSharedBox;
+    CheckBox        aCntSharedFirstBox;
     FixedText       aLMLbl;
     MetricField     aLMEdit;
     FixedText       aRMLbl;
