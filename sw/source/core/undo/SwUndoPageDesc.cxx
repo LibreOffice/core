@@ -149,6 +149,8 @@ SwUndoPageDesc::SwUndoPageDesc(const SwPageDesc & _aOld,
         bExchange = false;
     if( rOldFoot.IsActive() && ( rOldDesc.IsFooterShared() != rNewDesc.IsFooterShared() ) )
         bExchange = false;
+    if( ( rOldHead.IsActive() || rOldFoot.IsActive() ) && ( rOldDesc.IsFirstShared() != rNewDesc.IsFirstShared() ) )
+        bExchange = false;
     if( bExchange )
     {
         if( rNewHead.IsActive() )
@@ -162,6 +164,12 @@ SwUndoPageDesc::SwUndoPageDesc(const SwPageDesc & _aOld,
                 // The Ctor of this object will remove the duplicate!
                 SwFmtHeader aFormatHeader( pFormat );
             }
+            if( !rNewDesc.IsFirstShared() )
+            {
+                pFormat = new SwFrmFmt( *rNewDesc.GetFirst().GetHeader().GetHeaderFmt() );
+                // The Ctor of this object will remove the duplicate!
+                SwFmtHeader aFormatHeader( pFormat );
+            }
         }
         // Same procedure for footers...
         if( rNewFoot.IsActive() )
@@ -172,6 +180,12 @@ SwUndoPageDesc::SwUndoPageDesc(const SwPageDesc & _aOld,
             if( !rNewDesc.IsFooterShared() )
             {
                 pFormat = new SwFrmFmt( *rNewDesc.GetLeft().GetFooter().GetFooterFmt() );
+                // The Ctor of this object will remove the duplicate!
+                SwFmtFooter aFormatFooter( pFormat );
+            }
+            if( !rNewDesc.IsFirstShared() )
+            {
+                pFormat = new SwFrmFmt( *rNewDesc.GetFirst().GetFooter().GetFooterFmt() );
                 // The Ctor of this object will remove the duplicate!
                 SwFmtFooter aFormatFooter( pFormat );
             }
