@@ -31,10 +31,11 @@ $(eval $(call gb_Module_add_targets,extensions,\
 	AllLangResTarget_abp \
 	AllLangResTarget_scn \
 	AllLangResTarget_upd \
-	Library_abp \
-	Library_log \
 	Library_res \
-	Library_scn \
+	$(if $(filter IOS ANDROID,$(OS)),, \
+		Library_abp \
+		Library_log \
+		Library_scn) \
 ))
 
 ifneq ($(filter-out IOS ANDROID,$(OS)),)
