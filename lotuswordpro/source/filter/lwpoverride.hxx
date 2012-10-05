@@ -458,12 +458,7 @@ private:
         IO_REL_FIRST    = 0x0100,
         IO_REL_REST     = 0x0200,
         IO_REL_FLAGS    = (IO_REL_ALL | IO_REL_FIRST | IO_REL_REST),
-#ifdef JAPANESE_ENABLED // 96/4/8 ueda for indentation by char width
-        IO_USE_RELATIVE = 0x0400,
-        IO_CHARUNIT     = 0x0800
-#else
         IO_USE_RELATIVE = 0x0400
-#endif
     };
 
     sal_Int32   m_nAll;

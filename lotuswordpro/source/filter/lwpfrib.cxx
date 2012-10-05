@@ -169,36 +169,10 @@ LwpFrib* LwpFrib::CreateFrib(LwpPara* pPara, LwpObjectStream* pObjStrm, sal_uInt
         case FRIB_TAG_NOTE:
             newFrib = new  LwpFribNote(pPara);
             break;
-/*      case FRIB_TAG_KANJI:
-            #ifdef KANJI
-            newFrib = new CFribHelperKanji;
-            #else
-            newFrib = new CFribHelperUnicode;
-            #endif
-            break;
-        case FRIB_TAG_HKATAKANA:
-            #ifdef KANJI
-            newFrib = new CFribHelperHKatakana;
-            #else
-            newFrib = new CFribHelperUnicode;
-            #endif
-            break;
-        case FRIB_TAG_SEPARATOR:
-            newFrib = new CFribHelperSeparator;
-            break;*/
         case FRIB_TAG_SECTION:
             newFrib = new LwpFribSection(pPara);
             break;
-/*      case FRIB_TAG_TOMBSTONE:
-            newFrib = new CFribHelperTombstone;
-            break;
-        case FRIB_TAG_SPECIALTAB:
-            newFrib = new CFribHelperSpecialTab;
-            break;
         case FRIB_TAG_PAGENUMBER:
-            newFrib = new CFribHelperPageNumber;
-            break;
-*/      case FRIB_TAG_PAGENUMBER:
             newFrib = new LwpFribPageNumber(pPara);
             break;
         case FRIB_TAG_DOCVAR:
@@ -207,30 +181,18 @@ LwpFrib* LwpFrib::CreateFrib(LwpPara* pPara, LwpObjectStream* pObjStrm, sal_uInt
         case FRIB_TAG_BOOKMARK:
             newFrib = new LwpFribBookMark(pPara);
             break;
-/*      case FRIB_TAG_DOCVAR:
-            newFrib = new CFribHelperBookmark;
-            break;
-        case FRIB_TAG_DDE:
-            newFrib = new CFribHelperDDE;
-            break;
-*/      case FRIB_TAG_FIELD:
+        case FRIB_TAG_FIELD:
             newFrib = new LwpFribField(pPara);
             break;
         case FRIB_TAG_CHBLOCK:
             newFrib = new LwpFribCHBlock(pPara);
             break;
-/*      case FRIB_TAG_FLOWBREAK:
-            newFrib = new CFribHelperFlowBreak;
-            break;
-#ifdef RUBY*/
         case FRIB_TAG_RUBYMARKER:
             newFrib = new LwpFribRubyMarker(pPara);
             break;
         case FRIB_TAG_RUBYFRAME:
             newFrib = new LwpFribRubyFrame(pPara);
             break;
-/*#endif
-*/
     }
 
     //Do not know why the fribTag judgement is necessary, to be checked with
@@ -399,10 +361,6 @@ void LwpFrib::ReadModifiers(LwpObjectStream* pObjStrm,ModifierInfo* pModInfo)
         // TODO: read the modifier data
     }
 }
-
-//do nothing
-//void LwpFrib::Parse(IXFStream* pOutputStream)
-//{}
 
 /**
 *  @descr:   Whether there are other fribs following current frib.
