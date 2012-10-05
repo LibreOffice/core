@@ -124,6 +124,13 @@ $(call gb_ExternalProject_get_preparation_target,$(1)) : $(call gb_Package_get_t
 
 endef
 
+# TODO: do we really want to have projects depending on gbuild libraries?
+define gb_ExternalProject_use_static_libraries
+$(foreach $(lib),$(2),$(call gb_ExternalProject_get_preparation_target,$(1)) : \
+	$(call gb_StaticLibrary_get_target,$(lib)))
+
+endef
+
 # Make an external project depend on several packages at once
 #
 # gb_ExternalProject_use_packages external package(s)
