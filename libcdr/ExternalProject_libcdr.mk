@@ -16,7 +16,8 @@ $(eval $(call gb_ExternalProject_register_targets,libcdr,\
 ))
 
 $(eval $(call gb_ExternalProject_use_externals,cdrlib,\
-	libwpd \
+	wpd \
+	wpg \
 ))
 
 ifeq ($(OS)$(COM),WNTMSC)
@@ -45,8 +46,6 @@ else # !SYSTEM_LIBWPD
 libcdr_cflags += -I$(OUTDIR)/inc/external
 libcdr_libs += $(SOLARLIB)
 
-$(eval $(call gb_ExternalProject_use_package,libcdr,libwpd))
-
 endif # SYSTEM_LIBWPD
 
 
@@ -59,9 +58,6 @@ else # !SYSTEM_LIBWPG
 
 libcdr_cflags += -I$(OUTDIR)/inc/external
 libcdr_libs += $(SOLARLIB)
-
-$(eval $(call gb_ExternalProject_use_package,libcdr,libwpg_inc))
-$(eval $(call gb_ExternalProject_use_static_libraries,libcdr,wpglib))
 
 endif # SYSTEM_LIBWPG
 

@@ -14,8 +14,8 @@ $(eval $(call gb_ExternalProject_ExternalProject,apache_commons_httpclient))
 
 $(eval $(call gb_ExternalProject_use_unpacked,apache_commons_codec,apache_commons_httpclient))
 
-$(eval $(call gb_ExternalProject_use_external,apache_commons_httpclient,apache_commons_codec))
-$(eval $(call gb_ExternalProject_use_external,apache_commons_httpclient,apache_commons_logging))
+$(eval $(call gb_ExternalProject_use_external,apache_commons_httpclient,commons-codec))
+$(eval $(call gb_ExternalProject_use_external,apache_commons_httpclient,commons-logging))
 
 $(eval $(call gb_ExternalProject_register_targets,apache_commons_httpclient,\
 	build \

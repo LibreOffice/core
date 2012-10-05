@@ -103,14 +103,24 @@ $(foreach target,$(2),$(call gb_ExternalProject_register_target,$(1),$(target)))
 
 endef
 
-# Make an external Project depend on another external project
-define gb_ExternalProject_use_external
+# Make an external Project depend on another ExternalProject
+define gb_ExternalProject_use_external_project
 $(call gb_ExternalProject_get_preparation_target,$(1)) : $(call gb_ExternalProject_get_target,$(2))
 
 endef
 
+# Make an ExternalProject depend on an external
+#
+# this forwards to functions that must be defined in RepositoryExternal.mk.
+# $(eval $(call gb_ExternalProject_use_external,library,external))
+define gb_ExternalProject_use_external
+$(if $(filter undefined,$(origin gb_ExternalProject__use_$(2))),\
+  $(error gb_ExternalProject_use_external: unknown external: $(2)),\
+  $(call gb_ExternalProject__use_$(2),$(1)))
+endef
+
 define gb_ExternalProject_use_externals
-$(foreach external,$(2),$(call gb_ExternalProject_use_external,$(1),$(2)))
+$(foreach external,$(2),$(call gb_ExternalProject_use_external,$(1),$(external)))
 endef
 
 # Make an external project depend on a package

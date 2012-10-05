@@ -1020,6 +1020,7 @@ $(call gb_LinkTarget_set_include,$(1),\
 $(call gb_LinkTarget_add_libs,$(1),$(WPD_LIBS))
 
 endef
+gb_ExternalProject__use_wpd :=
 
 else # !SYSTEM_LIBWPD
 
@@ -1036,6 +1037,10 @@ $(call gb_LinkTarget_use_static_libraries,$(1),\
 )
 
 endef
+define gb_ExternalProject__use_wpd
+$(call gb_ExternalProject_use_package,$(1),libwpd)
+
+endef
 
 endif # SYSTEM_LIBWPD
 
@@ -1050,6 +1055,7 @@ $(call gb_LinkTarget_set_include,$(1),\
 $(call gb_LinkTarget_add_libs,$(1),$(WPG_LIBS))
 
 endef
+gb_ExternalProject__use_wpg :=
 
 else # !SYSTEM_LIBWPG
 
@@ -1066,6 +1072,11 @@ $(call gb_LinkTarget_use_static_libraries,$(1),\
 )
 
 endef
+define gb_ExternalProject__use_wpg
+$(call gb_ExternalProject_use_package,$(1),libwpg_inc)
+$(call gb_ExternalProject_use_static_libraries,$(1),wpglib)
+
+endef
 
 endif # SYSTEM_LIBWPG
 
@@ -1080,6 +1091,7 @@ $(call gb_LinkTarget_set_include,$(1),\
 $(call gb_LinkTarget_add_libs,$(1),$(WPS_LIBS))
 
 endef
+gb_ExternalProject__use_wps :=
 
 else # !SYSTEM_LIBWPS
 
@@ -1091,6 +1103,11 @@ define gb_LinkTarget__use_wps
 $(call gb_LinkTarget_use_static_libraries,$(1),\
 	wpslib \
 )
+
+endef
+define gb_ExternalProject__use_wps
+$(call gb_ExternalProject_use_package,$(1),libwps_inc)
+$(call gb_ExternalProject_use_static_libraries,$(1),wpslib)
 
 endef
 
@@ -2161,18 +2178,22 @@ ifeq ($(SYSTEM_APACHE_COMMONS),YES)
 define gb_Jar__use_commons-codec
 $(call gb_Jar_use_system_jar,$(1),$(COMMONS_CODEC_JAR))
 endef
+gb_ExternalProject__use_commons-codec :=
 
 define gb_Jar__use_commons-httpclient
 $(call gb_Jar_use_system_jar,$(1),$(COMMONS_HTTPCLIENT_JAR))
 endef
+gb_ExternalProject__use_commons-httpclient :=
 
 define gb_Jar__use_commons-lang
 $(call gb_Jar_usadd_linked_libse_system_jar,$(1),$(COMMONS_LANG_JAR))
 endef
+gb_ExternalProject__use_commons-lang :=
 
 define gb_Jar__use_commons-logging
 $(call gb_Jar_use_system_jar,$(1),$(COMMONS_LOGGING_JAR))
 endef
+gb_ExternalProject__use_commons-logging :=
 
 else # !SYSTEM_APACHE_COMMONS
 
@@ -2186,17 +2207,29 @@ $(eval $(call gb_Helper_register_jars,OXT,\
 define gb_Jar__use_commons-codec
 $(call gb_Jar_use_jar,$(1),commons-codec-1.3)
 endef
+define gb_ExternalProject__use_commons-codec
+$(call gb_ExternalProject_use_external_project,$(1),apache_commons_codec)
+endef
 
 define gb_Jar__use_commons-httpclient
 $(call gb_Jar_use_jar,$(1),commons-httpclient-3.1)
+endef
+define gb_ExternalProject__use_commons-httpclient
+$(call gb_ExternalProject_use_external_project,$(1),apache_commons_httpclient)
 endef
 
 define gb_Jar__use_commons-lang
 $(call gb_Jar_use_jar,$(1),commons-lang-2.3)
 endef
+define gb_ExternalProject__use_commons-lang
+$(call gb_ExternalProject_use_external_project,$(1),apache_commons_lang)
+endef
 
 define gb_Jar__use_commons-logging
 $(call gb_Jar_use_jar,$(1),commons-logging-1.1.1)
+endef
+define gb_ExternalProject__use_commons-logging
+$(call gb_ExternalProject_use_external_project,$(1),apache_commons_logging)
 endef
 
 endif # SYSTEM_APACHE_COMMONS
