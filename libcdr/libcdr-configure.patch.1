@@ -1,5 +1,4 @@
-diff -u cdr.old/configure cdr/configure
---- cdr.old/configure	2012-10-05 21:47:11.246958344 +0200
+--- cdr/configure	2012-10-05 21:47:11.246958344 +0200
 +++ cdr/configure	2012-10-05 22:05:33.913874511 +0200
 @@ -637,6 +617,7 @@
  DOXYGEN
@@ -431,36 +430,3 @@ diff -u cdr.old/configure cdr/configure
  
  
  
-diff -u cdr.old/configure.ac cdr/configure.ac
---- cdr.old/configure.ac	2012-10-05 21:47:11.248958454 +0200
-+++ cdr/configure.ac	2012-10-05 22:05:22.847875386 +0200
-@@ -37,10 +37,16 @@
- # ====================
- # Find additional apps
- # ====================
--PKG_CHECK_MODULES([LIBCDR],[
-+PKG_CHECK_MODULES([WPD],[
- 	libwpd-0.9
- 	libwpd-stream-0.9
-+])
-+
-+PKG_CHECK_MODULES([WPG],[
- 	libwpg-0.2
-+])
-+
-+PKG_CHECK_MODULES([LCMS2],[
- 	lcms2
- ])
- 
-@@ -168,8 +174,10 @@
- ], [
- 	DEBUG_CXXFLAGS="-DNDEBUG"
- ])
--LIBCDR_CXXFLAGS="$LIBCDR_CFLAGS"
-+LIBCDR_CXXFLAGS="${WPD_CFLAGS} ${WPG_CFLAGS} ${LCMS2_CFLAGS}"
-+LIBCDR_LIBS="${WPD_LIBS} ${WPG_LIBS} ${LCMS2_LIBS}"
- AC_SUBST(LIBCDR_CXXFLAGS)
-+AC_SUBST(LIBCDR_LIBS)
- AC_SUBST(DEBUG_CXXFLAGS)
- 
- # ============
