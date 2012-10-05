@@ -225,6 +225,13 @@ class UNOTOOLS_DLLPUBLIC SvtViewOptions: public utl::detail::Options
         sal_Bool IsVisible (                 ) const;
         void     SetVisible( sal_Bool bState );
 
+        /** Return true if the "Visible" property actually has a non-nil value
+
+            (IsVisible will somewhat arbitrarily return false if the property is
+            nil.)
+        */
+        bool HasVisible() const;
+
         /*-****************************************************************************************************//**
             @short      use it to set/get the extended user data (consisting of a set of named scalar values)
             @descr      It's supported for ALL types!
