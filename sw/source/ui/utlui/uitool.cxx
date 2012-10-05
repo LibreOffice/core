@@ -257,6 +257,8 @@ void ItemSetToPageDesc( const SfxItemSet& rSet, SwPageDesc& rPageDesc )
 
             rPageDesc.ChgFooterShare(((const SfxBoolItem&)
                         rFooterSet.Get(SID_ATTR_PAGE_SHARED)).GetValue());
+            rPageDesc.ChgFirstShare(((const SfxBoolItem&)
+                        rFooterSet.Get(SID_ATTR_PAGE_SHARED_FIRST)).GetValue());
         }
         else
         {   // Footer ausschalten
@@ -439,6 +441,8 @@ void PageDescToItemSet( const SwPageDesc& rPageDesc, SfxItemSet& rSet)
         //
         SfxBoolItem aShared(SID_ATTR_PAGE_SHARED, rPageDesc.IsFooterShared());
         aFooterSet.Put(aShared);
+        SfxBoolItem aFirstShared(SID_ATTR_PAGE_SHARED_FIRST, rPageDesc.IsFirstShared());
+        aFooterSet.Put(aFirstShared);
 
         // Groesse
         SvxSizeItem aSize(SID_ATTR_PAGE_SIZE, Size(rFrmSize.GetSize()));
