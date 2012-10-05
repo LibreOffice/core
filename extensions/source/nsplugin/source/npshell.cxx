@@ -63,6 +63,8 @@
 #pragma warning (pop)
 #endif
 
+#include "tools/pathutils.hxx"
+
 #endif //end of WNT
 
 
@@ -71,7 +73,6 @@
 #include <string.h>
 #include <errno.h>
 #include "boost/scoped_array.hpp"
-#include "tools/pathutils.hxx"
 
 #include "npapi.h"
 #include "npshell.hxx"
