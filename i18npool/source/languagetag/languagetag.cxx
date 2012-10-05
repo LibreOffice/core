@@ -342,8 +342,10 @@ bool LanguageTag::canonicalize() const
     }
     else
     {
-        SAL_WARN( "i18npool.langtag", "LanguageTag::canonicalize: could not parse, " <<
-                (aError.p ? aError.p->message : ""));
+        SAL_INFO(
+            "i18npool.langtag",
+            "LanguageTag::canonicalize " << maBcp47 << ": could not parse, "
+                << (aError.p ? aError.p->message : ""));
     }
     meIsValid = DECISION_NO;
     return false;
