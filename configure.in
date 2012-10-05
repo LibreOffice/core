@@ -6688,7 +6688,7 @@ else
     SYSTEM_MINIZIP=NO
     BUILD_TYPE="$BUILD_TYPE ZLIB"
     ZLIB_CFLAGS="-I${OUTDIR}/inc/external/zlib"
-    ZLIB_LIBS="-L${OUTDIR}/lib"
+    ZLIB_LIBS="-L${OUTDIR}/lib -lz"
 fi
 AC_SUBST(ZLIB_CFLAGS)
 AC_SUBST(ZLIB_LIBS)
@@ -6877,7 +6877,7 @@ else
     AC_MSG_RESULT([internal])
     SYSTEM_LIBWPD=NO
     WPD_CFLAGS="-I${OUTDIR}/inc/external"
-    WPD_LIBS="-L${OUTDIR}/lib"
+    WPD_LIBS="-L${OUTDIR}/lib -lwpdlib"
     WPD_TARBALL=e7f84e3199dfee9122949448cab3823f-libwpd-0.9.6.tar.bz2
 fi
 AC_SUBST(SYSTEM_LIBWPD)
@@ -6899,7 +6899,7 @@ else
     SYSTEM_LCMS2=NO
     BUILD_TYPE="$BUILD_TYPE LCMS2"
     LCMS2_CFLAGS="-I${OUTDIR}/inc/lcms2"
-    LCMS2_LIBS="-L${OUTDIR}/lib"
+    LCMS2_LIBS="-L${OUTDIR}/lib -llcms2"
 fi
 AC_SUBST(SYSTEM_LCMS2)
 AC_SUBST(LCMS2_CFLAGS)
@@ -6954,7 +6954,7 @@ else
     AC_MSG_RESULT([internal])
     SYSTEM_LIBWPS=NO
     WPS_CFLAGS="-I${OUTDIR}/inc/external"
-    WPS_LIBS="-L${OUTDIR}/lib"
+    WPS_LIBS="-L${OUTDIR}/lib -lwpslib"
     WPS_TARBALL=d197bd6211669a2fa4ca648faf04bcb1-libwps-0.2.7.tar.bz2
 fi
 AC_SUBST(SYSTEM_LIBWPS)
@@ -6976,7 +6976,7 @@ else
     AC_MSG_RESULT([internal])
     SYSTEM_LIBWPG=NO
     WPG_CFLAGS="-I${OUTDIR}/inc/external"
-    WPG_LIBS="-L${OUTDIR}/lib"
+    WPG_LIBS="-L${OUTDIR}/lib -lwpglib"
     WPG_TARBALL=9d283e02441d8cebdcd1e5d9df227d67-libwpg-0.2.1.tar.bz2
 fi
 AC_SUBST(SYSTEM_LIBWPG)
