@@ -404,8 +404,8 @@ bool ImpSvNumFor::HasNewCurrency() const
     return false;
 }
 
-bool ImpSvNumFor::GetNewCurrencySymbol( String& rSymbol,
-            String& rExtension ) const
+bool ImpSvNumFor::GetNewCurrencySymbol( OUString& rSymbol,
+            OUString& rExtension ) const
 {
     for ( sal_uInt16 j=0; j<nAnzStrings; j++ )
     {
@@ -415,7 +415,7 @@ bool ImpSvNumFor::GetNewCurrencySymbol( String& rSymbol,
             if ( j < nAnzStrings-1 && aI.nTypeArray[j+1] == NF_SYMBOLTYPE_CURREXT )
                 rExtension = aI.sStrArray[j+1];
             else
-                rExtension.Erase();
+                rExtension = "";
             return true;
         }
     }
@@ -1849,16 +1849,16 @@ bool SvNumberformat::HasNewCurrency() const
     return false;
 }
 
-bool SvNumberformat::GetNewCurrencySymbol( String& rSymbol,
-            String& rExtension ) const
+bool SvNumberformat::GetNewCurrencySymbol( OUString& rSymbol,
+            OUString& rExtension ) const
 {
     for ( sal_uInt16 j=0; j<4; j++ )
     {
         if ( NumFor[j].GetNewCurrencySymbol( rSymbol, rExtension ) )
             return true;
     }
-    rSymbol.Erase();
-    rExtension.Erase();
+    rSymbol = "";
+    rExtension = "";
     return false;
 }
 

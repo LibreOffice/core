@@ -146,7 +146,7 @@ public:
 
     // new SYMBOLTYPE_CURRENCY in subformat?
     bool HasNewCurrency() const;
-    bool GetNewCurrencySymbol( String& rSymbol, String& rExtension ) const;
+    bool GetNewCurrencySymbol( OUString& rSymbol, OUString& rExtension ) const;
     void SaveNewCurrencyMap( SvStream& rStream ) const;
     void LoadNewCurrencyMap( SvStream& rStream );
 
@@ -344,7 +344,7 @@ public:
     // If a new SYMBOLTYPE_CURRENCY is contained if the format is of type
     // NUMBERFORMAT_CURRENCY, and if so the symbol xxx and the extension nnn
     // of [$xxx-nnn] are returned
-    bool GetNewCurrencySymbol( String& rSymbol, String& rExtension ) const;
+    bool GetNewCurrencySymbol( OUString& rSymbol, OUString& rExtension ) const;
 
     static bool HasStringNegativeSign( const String& rStr );
 
