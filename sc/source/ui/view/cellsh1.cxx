@@ -2061,9 +2061,12 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 const ScConditionalFormat* pCondFormat = pDoc->GetCondFormat(aPos.Col(), aPos.Row(), aPos.Tab());
                 if(pCondFormat)
                 {
-                    pDlg.reset(pFact->CreateScCondFormatDlg( pTabViewShell->GetDialogParent(), pDoc, pCondFormat, pCondFormat->GetRange(), aPos, RID_SCDLG_CONDFORMAT ));
+                    const ScRangeList& rCondFormatRange = pCondFormat->GetRange();
+                    if(rCondFormatRange == aRangeList)
+                        pDlg.reset(pFact->CreateScCondFormatDlg( pTabViewShell->GetDialogParent(), pDoc, pCondFormat, pCondFormat->GetRange(), aPos, RID_SCDLG_CONDFORMAT ));
                 }
-                else
+
+                if(!pDlg)
                 {
                     pDlg.reset(pFact->CreateScCondFormatDlg( pTabViewShell->GetDialogParent(), pDoc, NULL, aRangeList, aRangeList.GetTopLeftCorner(), RID_SCDLG_CONDFORMAT ));
                 }
