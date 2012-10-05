@@ -1045,13 +1045,17 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                     }
                     if ( bVerticalText )
                     {
-                        bAutoGrowWidth = bFitShapeToText;   // bFitShapeToText; can't be used, because we cut the text if it is too height,
+                        bAutoGrowWidth = bFitShapeToText;
                         bAutoGrowHeight = sal_False;
                     }
                     else
                     {
                         bAutoGrowWidth = sal_False;
-                        bAutoGrowHeight = sal_True;         // bFitShapeToText; can't be used, because we cut the text if it is too height,
+
+                        // #119885# re-activationg bFitShapeToText here, could not find deeper explanations
+                        // for it (it was from 2005). Keeping the old commeht here for reference
+                        // old comment: // bFitShapeToText; can't be used, because we cut the text if it is too height,
+                        bAutoGrowHeight = bFitShapeToText;
                     }
                 }
                 pTObj->SetMergedItem( SvxFrameDirectionItem( bVerticalText ? FRMDIR_VERT_TOP_RIGHT : FRMDIR_HORI_LEFT_TOP, EE_PARA_WRITINGDIR ) );
