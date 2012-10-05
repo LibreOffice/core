@@ -45,8 +45,9 @@ $(eval $(call gb_Module_add_targets,connectivity,\
 	Library_file \
 	Library_flat \
 	Library_mysql \
-	Library_odbc \
-	Library_odbcbase \
+	$(if $(filter ANDROID IOS,$(OS)),, \
+		Library_odbc \
+		Library_odbcbase) \
 	Library_sdbc2 \
 	Package_generated \
 	Package_inc \
