@@ -802,19 +802,19 @@ uno::Any SAL_CALL SvNumberFormatObj::getPropertyValue( const rtl::OUString& aPro
         }
         else if (aString.EqualsAscii( PROPERTYNAME_CURRSYM ))
         {
-            String aSymbol, aExt;
+            OUString aSymbol, aExt;
             pFormat->GetNewCurrencySymbol( aSymbol, aExt );
             aRet <<= rtl::OUString( aSymbol );
         }
         else if (aString.EqualsAscii( PROPERTYNAME_CURREXT ))
         {
-            String aSymbol, aExt;
+            OUString aSymbol, aExt;
             pFormat->GetNewCurrencySymbol( aSymbol, aExt );
             aRet <<= rtl::OUString( aExt );
         }
         else if (aString.EqualsAscii( PROPERTYNAME_CURRABB ))
         {
-            String aSymbol, aExt;
+            OUString aSymbol, aExt;
             bool bBank = false;
             pFormat->GetNewCurrencySymbol( aSymbol, aExt );
             const NfCurrencyEntry* pCurr = pFormatter->GetCurrencyEntry( bBank,
@@ -876,7 +876,8 @@ uno::Sequence<beans::PropertyValue> SAL_CALL SvNumberFormatObj::getPropertyValue
     const SvNumberformat* pFormat = pFormatter ? pFormatter->GetEntry(nKey) : NULL;
     if (pFormat)
     {
-        String aSymbol, aExt, aAbb;
+        OUString aSymbol, aExt;
+        String aAbb;
         bool bBank = false;
         pFormat->GetNewCurrencySymbol( aSymbol, aExt );
         const NfCurrencyEntry* pCurr = pFormatter->GetCurrencyEntry( bBank,

@@ -673,15 +673,15 @@ bool ImpSvNumberInputScan::GetCurrency( const String& rString, xub_StrLen& nPos,
         }
         if ( pFormat )
         {
-            String aSymbol, aExtension;
+            OUString aSymbol, aExtension;
             if ( pFormat->GetNewCurrencySymbol( aSymbol, aExtension ) )
             {
-                if ( aSymbol.Len() <= rString.Len() - nPos )
+                if ( aSymbol.getLength() <= rString.Len() - nPos )
                 {
                     aSymbol = pFormatter->GetCharClass()->uppercase(aSymbol);
                     if ( StringContains( aSymbol, rString, nPos ) )
                     {
-                        nPos = nPos + aSymbol.Len();
+                        nPos = nPos + aSymbol.getLength();
                         return true;
                     }
                 }

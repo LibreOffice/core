@@ -3307,7 +3307,7 @@ bool SvNumberFormatter::GetNewCurrencySymbolString( sal_uInt32 nFormat,
     const SvNumberformat* pFormat = GetFormatEntry(nFormat);
     if ( pFormat )
     {
-        String aSymbol, aExtension;
+        OUString aSymbol, aExtension;
         if ( pFormat->GetNewCurrencySymbol( aSymbol, aExtension ) )
         {
             if ( ppEntry )
@@ -3329,8 +3329,8 @@ bool SvNumberFormatter::GetNewCurrencySymbolString( sal_uInt32 nFormat,
             {   // analog to BuildSymbolString
                 rStr  = '[';
                 rStr += '$';
-                if ( aSymbol.Search( '-' ) != STRING_NOTFOUND ||
-                        aSymbol.Search( ']' ) != STRING_NOTFOUND )
+                if ( aSymbol.indexOf( '-' ) != -1 ||
+                        aSymbol.indexOf( ']' ) != -1 )
                 {
                     rStr += '"';
                     rStr += aSymbol;
@@ -3338,7 +3338,7 @@ bool SvNumberFormatter::GetNewCurrencySymbolString( sal_uInt32 nFormat,
                 }
                 else
                     rStr += aSymbol;
-                if ( aExtension.Len() )
+                if ( aExtension.getLength() )
                     rStr += aExtension;
                 rStr += ']';
             }
