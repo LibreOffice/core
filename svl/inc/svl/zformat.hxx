@@ -421,13 +421,13 @@ public:
     /** Switches to the first non-"gregorian" calendar, but only if the current
         calendar is "gregorian"; original calendar name and date/time returned,
         but only if calendar switched and rOrgCalendar was empty. */
-    void SwitchToOtherCalendar( String& rOrgCalendar, double& fOrgDateTime ) const;
+    void SwitchToOtherCalendar( OUString& rOrgCalendar, double& fOrgDateTime ) const;
 
     /** Switches to the "gregorian" calendar, but only if the current calendar
         is non-"gregorian" and rOrgCalendar is not empty. Thus a preceding
         ImpSwitchToOtherCalendar() call should have been placed prior to
         calling this method. */
-    void SwitchToGregorianCalendar( const String& rOrgCalendar, double fOrgDateTime ) const;
+    void SwitchToGregorianCalendar( const OUString& rOrgCalendar, double fOrgDateTime ) const;
 
 #ifdef THE_FUTURE
     /** Switches to the first specified calendar, if any, in subformat nNumFor
@@ -438,7 +438,7 @@ public:
             <TRUE/> if a calendar was specified and switched to,
             <FALSE/> else.
      */
-    bool SwitchToSpecifiedCalendar( String& rOrgCalendar, double& fOrgDateTime,
+    bool SwitchToSpecifiedCalendar( OUString& rOrgCalendar, double& fOrgDateTime,
             sal_uInt16 nNumFor ) const
         {
             if ( nNumFor < 4 )
@@ -620,7 +620,7 @@ private:
     // know a "before" era (like zh_TW ROC or ja_JP Gengou). If switched and
     // rOrgCalendar was "gregorian" the string is emptied. If rOrgCalendar was
     // empty the previous calendar name and date/time are returned.
-    SVL_DLLPRIVATE bool ImpFallBackToGregorianCalendar( String& rOrgCalendar, double& fOrgDateTime );
+    SVL_DLLPRIVATE bool ImpFallBackToGregorianCalendar( OUString& rOrgCalendar, double& fOrgDateTime );
 
     // Append a "G" short era string of the given calendar. In the case of a
     // Gengou calendar this is a one character abbreviation, for other
