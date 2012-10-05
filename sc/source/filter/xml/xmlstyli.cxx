@@ -454,12 +454,7 @@ void XMLTableStyleContext::ApplyCondFormat( uno::Sequence<table::CellRangeAddres
                 rRangeList.Join(*pRange);
             }
 
-            ScPatternAttr aPattern( pDoc->GetPool() );
-            aPattern.GetItemSet().Put( SfxUInt32Item( ATTR_CONDITIONAL, nCondId ) );
-            ScMarkData aMarkData;
-            aMarkData.MarkFromRangeList(aRangeList, true);
-            pDoc->ApplySelectionPattern( aPattern , aMarkData);
-
+            pDoc->AddCondFormatData( aRangeList, nTab, nCondId );
             break;
         }
     }
@@ -471,11 +466,7 @@ void XMLTableStyleContext::ApplyCondFormat( uno::Sequence<table::CellRangeAddres
         mpCondFormat->SetKey(nIndex);
         mpCondFormat->AddRange(aRangeList);
 
-        ScPatternAttr aPattern( pDoc->GetPool() );
-        aPattern.GetItemSet().Put( SfxUInt32Item( ATTR_CONDITIONAL, nIndex ) );
-        ScMarkData aMarkData;
-        aMarkData.MarkFromRangeList(aRangeList, true);
-        pDoc->ApplySelectionPattern( aPattern , aMarkData);
+        pDoc->AddCondFormatData( aRangeList, nTab, nIndex );
     }
 
 
