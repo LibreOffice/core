@@ -15,7 +15,7 @@ $(eval $(call gb_ExternalProject_register_targets,libcdr,\
 	build \
 ))
 
-$(eval $(call gb_ExternalProject_use_externals,cdrlib,\
+$(eval $(call gb_ExternalProject_use_externals,libcdr,\
 	wpd \
 	wpg \
 ))
