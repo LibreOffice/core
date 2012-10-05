@@ -940,12 +940,15 @@ endef
 else # !SYSTEM_LIBCDR
 
 $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
-	cdrlib \
+	cdr-0.0 \
 ))
 
 define gb_LinkTarget__use_cdr
+$(call gb_LinkTarget_use_package,$(1),\
+	libcdr \
+)
 $(call gb_LinkTarget_use_static_libraries,$(1),\
-	cdrlib \
+	cdr-0.0 \
 )
 
 endef
