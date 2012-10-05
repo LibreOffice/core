@@ -33,61 +33,17 @@ $(call gb_ExternalProject_get_state_target,libcdr,build) :
 
 else
 
-libcdr_cflags :=
-libcdr_libs :=
-
-ifeq ($(SYSTEM_LIBWPD),YES)
-
-libcdr_cflags += $(WPD_CFLAGS)
-libcdr_libs += $(WPD_LIBS)
-
-else # !SYSTEM_LIBWPD
-
-libcdr_cflags += -I$(OUTDIR)/inc/external
-libcdr_libs += $(SOLARLIB)
-
-endif # SYSTEM_LIBWPD
-
-
-ifeq ($(SYSTEM_LIBWPG),YES)
-
-libcdr_cflags += $(WPG_CFLAGS)
-libcdr_libs += $(WPG_LIBS)
-
-else # !SYSTEM_LIBWPG
-
-libcdr_cflags += -I$(OUTDIR)/inc/external
-libcdr_libs += $(SOLARLIB)
-
-endif # SYSTEM_LIBWPG
-
-
-ifeq ($(SYSTEM_LCMS2),YES)
-
-else # !SYSTEM_LCMS2
-
-libcdr_cflags += -I$(OUTDIR)/inc/lcms2
-libcdr_libs += $(SOLARLIB)
-
-endif # SYSTEM_LCMS2
-
-zlib_cflags :=
-zlib_libs :=
-
-ifneq ($(SYSTEM_ZLIB),YES)
-
-zlib_cflags += -I$(OUTDIR)/inc/external/zlib
-zlib_libs += $(SOLARLIB)
-
-endif # !SYSTEM_ZLIB
-
 $(call gb_ExternalProject_get_state_target,libcdr,build) :
 	cd $(EXTERNAL_WORKDIR) \
 	&& PKG_CONFIG="" \
-	LIBCDR_CFLAGS="$(libcdr_cflags)" \
-	LIBCDR_LIBS="$(libcdr_libs)" \
-	ZLIB_CFLAGS="$(zlib_cflags)" \
-	ZLIB_LIBS="$(zlib_libs)" \
+	WPD_CFLAGS="$(WPD_CFLAGS)" \
+	WPD_LIBS="$(WPD_LIBS)" \
+	WPG_CFLAGS="$(WPG_CFLAGS)" \
+	WPG_LIBS="$(WPG_LIBS)" \
+	LCMS2_CFLAGS="$(LCMS2_CFLAGS)" \
+	LCMS2_LIBS="$(LCMS2_LIBS)" \
+	ZLIB_CFLAGS="$(ZLIB_CFLAGS)" \
+	ZLIB_LIBS="$(ZLIB_LIBS)" \
 	./configure \
 		--with-pic \
 		--enable-static \
