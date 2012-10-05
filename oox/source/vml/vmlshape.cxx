@@ -464,7 +464,9 @@ Reference< XShape > SimpleShape::implConvertAndInsert( const Reference< XShapes 
             if ( maTypeModel.maWidthRelative.isEmpty() || maTypeModel.maWidthRelative.equalsAscii( "page" ) )
             {
                 sal_Int16 nWidth = maTypeModel.maWidthPercent.toInt32() / 10;
-                PropertySet( xShape ).setAnyProperty(PROP_RelativeWidth, makeAny( nWidth ) );
+                // Only apply if nWidth != 0
+                if ( nWidth )
+                    PropertySet( xShape ).setAnyProperty(PROP_RelativeWidth, makeAny( nWidth ) );
             }
         }
         if ( !maTypeModel.maHeightPercent.isEmpty( ) )
@@ -473,7 +475,9 @@ Reference< XShape > SimpleShape::implConvertAndInsert( const Reference< XShapes 
             if ( maTypeModel.maHeightRelative.isEmpty() || maTypeModel.maHeightRelative.equalsAscii( "page" ) )
             {
                 sal_Int16 nHeight = maTypeModel.maHeightPercent.toInt32() / 10;
-                PropertySet( xShape ).setAnyProperty(PROP_RelativeHeight, makeAny( nHeight ) );
+                // Only apply if nHeight != 0
+                if ( nHeight )
+                    PropertySet( xShape ).setAnyProperty(PROP_RelativeHeight, makeAny( nHeight ) );
             }
         }
     }
