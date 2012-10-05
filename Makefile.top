@@ -351,10 +351,12 @@ ifeq ($(CROSS_COMPILING),YES)
 	rm -rf $(SRCDIR)/*/$(INPATH_FOR_BUILD)
 endif
 
+include $(SRCDIR)/compilerplugins/Makefile.mk
+
 #
 # Distclean
 #
-distclean : clean
+distclean : clean compilerplugins-clean
 ifeq ($(BUILD_DMAKE),YES)
 	(if [ -f dmake/Makefile ] ; then $(GNUMAKE) -j $(GMAKE_PARALLELISM) -C dmake distclean; fi) && \
 	rm -f solenv/*/bin/dmake*
@@ -393,7 +395,7 @@ endif
 #
 bootstrap: $(WORKDIR)/bootstrap
 
-$(WORKDIR)/bootstrap: solenv/bin/concat-deps.c
+$(WORKDIR)/bootstrap: solenv/bin/concat-deps.c compilerplugins
 	@cd $(SRCDIR) && ./bootstrap
 	@mkdir -p $(dir $@) && touch $@
 

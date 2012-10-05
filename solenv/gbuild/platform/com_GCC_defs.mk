@@ -153,6 +153,12 @@ gb_DEBUG_CXXFLAGS := $(FNO_DEFAULT_INLINE)
 gb_LinkTarget_INCLUDE := $(filter-out %/stl, $(subst -I. , ,$(SOLARINC)))
 gb_LinkTarget_INCLUDE_STL := $(filter %/stl, $(subst -I. , ,$(SOLARINC)))
 
+ifeq ($(COM_GCC_IS_CLANG),TRUE)
+gb_COMPILER_PLUGINS :=-Xclang -load -Xclang $(SRCDIR)/compilerplugins/obj/compileplugin.so -Xclang -add-plugin -Xclang loplugin
+else
+gb_COMPILER_PLUGINS :=
+endif
+
 # Executable class
 
 gb_Executable_EXT_for_build :=

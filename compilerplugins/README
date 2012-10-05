@@ -1,0 +1,27 @@
+Compiler plugins.
+
+== Overview ==
+
+This directory contains code for compiler plugins. These are used to perform
+additional actions during compilation (such as additional warnings) and
+also to perform mass code refactoring.
+
+Currently only the Clang compiler is supported (http://clang.llvm.org).
+
+== Usage ==
+
+Compiler plugins are enabled automatically by --enable-dbgutil if Clang headers
+are found or explicitly using --enable-compiler-plugins.
+
+
+== Functionality ==
+
+=== Compile plugin ===
+
+The compile plugin is used during normal compilation to perform additional checks.
+All warnings and errors are marked '[loplugin]' in the message.
+
+
+== Code documentation / howtos ==
+
+TBD

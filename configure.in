@@ -791,6 +791,11 @@ AC_ARG_ENABLE(dbgutil,
          It is not possible to mix object files or libraries from a
          --enable-dbgutil and a --disable-dbgutil build.]))
 
+AC_ARG_ENABLE(compiler-plugins,
+    AS_HELP_STRING([--enable-compiler-plugins],
+        [Enable compiler plugins that will perform additional checks during
+         building. Enabled automatically by --enable-dbgutil.]))
+
 AC_ARG_ENABLE(linkoo,
     AS_HELP_STRING([--disable-linkoo],
         [Disable linkoo for the smoketest installation.]))
@@ -5022,6 +5027,40 @@ if test "$cross_compiling" != "yes" -a "$enable_dbgutil" != "no" -a \
     CPPFLAGS=$prev_cppflags
 fi
 AC_SUBST([VALGRIND_CFLAGS])
+
+dnl ===================================================================
+dnl Compiler plugins
+dnl ===================================================================
+
+COMPILER_PLUGINS=
+# currently only Clang
+if test "$COM_GCC_IS_CLANG" = "TRUE"; then
+    if test -n "$enable_compiler_plugins"; then
+        compiler_plugins="$enable_compiler_plugins"
+    elif test -n "$enable_dbgutil" -a "$enable_dbgutil" != "no"; then
+        compiler_plugins=test
+    else
+        compiler_plugins=no
+    fi
+    if test "$compiler_plugins" != "no"; then
+        AC_LANG_PUSH([C++])
+        save_CPPFLAGS=$CPPFLAGS
+        CPPFLAGS="$CPPFLAGS -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS"
+        AC_CHECK_HEADER(clang/AST/RecursiveASTVisitor.h,
+            [COMPILER_PLUGINS=TRUE],
+            [
+            if test "$compiler_plugins" = "yes"; then
+                AC_MSG_ERROR([Cannot find Clang headers to build compiler plugins.])
+            else
+                AC_MSG_WARN([Cannot find Clang headers to build compiler plugins, plugins disabled])
+                add_warning "Cannot find Clang headers to build compiler plugins, plugins disabled."
+            fi
+            ])
+        CPPFLAGS=$save_CPPFLAGS
+        AC_LANG_POP([C++])
+    fi
+fi
+AC_SUBST(COMPILER_PLUGINS)
 
 dnl ===================================================================
 dnl Set the MinGW sys-root
