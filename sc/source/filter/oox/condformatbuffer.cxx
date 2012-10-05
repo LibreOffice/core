@@ -58,9 +58,6 @@
 #include "document.hxx"
 #include "convuno.hxx"
 #include "docfunc.hxx"
-#include "markdata.hxx"
-#include "docpool.hxx"
-#include "scitems.hxx"
 #include "tokenarray.hxx"
 #include "tokenuno.hxx"
 
@@ -892,21 +889,17 @@ void CondFormat::finalizeImport()
 {
     ScDocument& rDoc = getScDocument();
     maRules.forEachMem( &CondFormatRule::finalizeImport );
-    sal_Int32 nIndex = getScDocument().AddCondFormat(mpFormat, maModel.maRanges.getBaseAddress().Sheet);
+    SCTAB nTab = maModel.maRanges.getBaseAddress().Sheet;
+    sal_Int32 nIndex = getScDocument().AddCondFormat(mpFormat, nTab);
 
     ScRangeList aList;
     for( ApiCellRangeList::const_iterator itr = maModel.maRanges.begin(); itr != maModel.maRanges.end(); ++itr)
     {
         ScRange aRange;
         ScUnoConversion::FillScRange(aRange, *itr);
-        ScPatternAttr aPattern( rDoc.GetPool() );
-        aPattern.GetItemSet().Put( SfxUInt32Item( ATTR_CONDITIONAL, nIndex ) );
-        ScMarkData aMarkData;
-        aMarkData.SetMarkArea(aRange);
-        rDoc.ApplySelectionPattern( aPattern , aMarkData);
-
         aList.Append(aRange);
     }
+    rDoc.AddCondFormatData( aList, nTab, nIndex );
     mpFormat->AddRange(aList);
 }
 
