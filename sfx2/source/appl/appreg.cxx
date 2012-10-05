@@ -27,6 +27,7 @@
 #include <sfx2/templdlg.hxx>
 #include "inettbc.hxx"
 #include "sfx2/stbitem.hxx"
+#include <sfx2/infobar.hxx>
 #include <sfx2/navigat.hxx>
 #include <sfx2/taskpane.hxx>
 #include <sfx2/module.hxx>
@@ -56,6 +57,7 @@ void SfxApplication::Registrations_Impl()
     SfxPartChildWnd_Impl::RegisterChildWindow();
     SfxTemplateDialogWrapper::RegisterChildWindow(sal_True);
     SfxDockingWrapper::RegisterChildWindow();
+    SfxInfoBarContainerChild::RegisterChildWindow( sal_True, NULL, SFX_CHILDWIN_NEVERHIDE );
 
     // Controller
     SfxToolBoxControl::RegisterControl(SID_REPEAT);

@@ -63,6 +63,7 @@ $(eval $(call gb_Package_add_file,sfx2_inc,inc/sfx2/htmlmode.hxx,sfx2/htmlmode.h
 $(eval $(call gb_Package_add_file,sfx2_inc,inc/sfx2/imagemgr.hxx,sfx2/imagemgr.hxx))
 $(eval $(call gb_Package_add_file,sfx2_inc,inc/sfx2/imgdef.hxx,sfx2/imgdef.hxx))
 $(eval $(call gb_Package_add_file,sfx2_inc,inc/sfx2/imgmgr.hxx,sfx2/imgmgr.hxx))
+$(eval $(call gb_Package_add_file,sfx2_inc,inc/sfx2/infobar.hxx,sfx2/infobar.hxx))
 $(eval $(call gb_Package_add_file,sfx2_inc,inc/sfx2/ipclient.hxx,sfx2/ipclient.hxx))
 $(eval $(call gb_Package_add_file,sfx2_inc,inc/sfx2/itemconnect.hxx,sfx2/itemconnect.hxx))
 $(eval $(call gb_Package_add_file,sfx2_inc,inc/sfx2/itemwrapper.hxx,sfx2/itemwrapper.hxx))

@@ -20,6 +20,7 @@
 
 #include <stdio.h>
 
+#include <sfx2/infobar.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <com/sun/star/document/MacroExecMode.hpp>
 #include <com/sun/star/frame/XLoadable.hpp>
@@ -3347,6 +3348,16 @@ void SfxViewFrame::ActivateToolPanel_Impl( const ::rtl::OUString& i_rPanelURL )
     ::sfx2::ITaskPaneToolPanelAccess* pPanelAccess = dynamic_cast< ::sfx2::ITaskPaneToolPanelAccess* >( pTaskPaneChildWindow );
     ENSURE_OR_RETURN_VOID( pPanelAccess, "SfxViewFrame::ActivateToolPanel_Impl: task pane child window does not implement a required interface!" );
     pPanelAccess->ActivateToolPanel( i_rPanelURL );
+}
+
+void SfxViewFrame::AppendInfoBar( const rtl::OUString& sMessage, std::vector< PushButton* > aButtons )
+{
+    const sal_uInt16 nId = SfxInfoBarContainerChild::GetChildWindowId();
+    ShowChildWindow( nId );
+    SfxChildWindow* pChild = GetChildWindow( nId );
+    SfxInfoBarContainerWindow* pInfoBars = ( SfxInfoBarContainerWindow* )pChild->GetWindow();
+    pInfoBars->appendInfoBar( sMessage, aButtons );
+    ShowChildWindow( nId );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
