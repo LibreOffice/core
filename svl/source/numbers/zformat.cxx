@@ -3055,7 +3055,7 @@ bool SvNumberformat::ImpIsOtherCalendar( const ImpSvNumFor& rNumFor ) const
     return false;
 }
 
-void SvNumberformat::SwitchToOtherCalendar( String& rOrgCalendar,
+void SvNumberformat::SwitchToOtherCalendar( OUString& rOrgCalendar,
         double& fOrgDateTime ) const
 {
     CalendarWrapper& rCal = GetCal();
@@ -3072,7 +3072,7 @@ void SvNumberformat::SwitchToOtherCalendar( String& rOrgCalendar,
             {
                 if ( xCals[j] != rGregorian )
                 {
-                    if ( !rOrgCalendar.Len() )
+                    if ( !rOrgCalendar.getLength() )
                     {
                         rOrgCalendar = rCal.getUniqueID();
                         fOrgDateTime = rCal.getDateTime();
@@ -3086,19 +3086,19 @@ void SvNumberformat::SwitchToOtherCalendar( String& rOrgCalendar,
     }
 }
 
-void SvNumberformat::SwitchToGregorianCalendar( const String& rOrgCalendar,
+void SvNumberformat::SwitchToGregorianCalendar( const OUString& rOrgCalendar,
         double fOrgDateTime ) const
 {
     CalendarWrapper& rCal = GetCal();
     const rtl::OUString &rGregorian = Gregorian::get();
-    if ( rOrgCalendar.Len() && rCal.getUniqueID() != rGregorian )
+    if ( rOrgCalendar.getLength() && rCal.getUniqueID() != rGregorian )
     {
         rCal.loadCalendar( rGregorian, rLoc().getLocale() );
         rCal.setDateTime( fOrgDateTime );
     }
 }
 
-bool SvNumberformat::ImpFallBackToGregorianCalendar( String& rOrgCalendar, double& fOrgDateTime )
+bool SvNumberformat::ImpFallBackToGregorianCalendar( OUString& rOrgCalendar, double& fOrgDateTime )
 {
     using namespace ::com::sun::star::i18n;
     CalendarWrapper& rCal = GetCal();
@@ -3108,13 +3108,13 @@ bool SvNumberformat::ImpFallBackToGregorianCalendar( String& rOrgCalendar, doubl
         sal_Int16 nVal = rCal.getValue( CalendarFieldIndex::ERA );
         if ( nVal == 0 && rCal.getLoadedCalendar().Eras[0].ID == "Dummy" )
         {
-            if ( !rOrgCalendar.Len() )
+            if ( !rOrgCalendar.getLength() )
             {
                 rOrgCalendar = rCal.getUniqueID();
                 fOrgDateTime = rCal.getDateTime();
             }
-            else if ( rOrgCalendar == String(rGregorian) )
-                rOrgCalendar.Erase();
+            else if ( rOrgCalendar == rGregorian )
+                rOrgCalendar = "";
             rCal.loadCalendar( rGregorian, rLoc().getLocale() );
             rCal.setDateTime( fOrgDateTime );
             return true;
@@ -3257,7 +3257,7 @@ bool SvNumberformat::ImpGetDateOutput(double fNumber,
     fNumber += fDiff;
     rCal.setLocalDateTime( fNumber );
     int nUseMonthCase = 0;      // not decided yet
-    String aOrgCalendar;        // empty => not changed yet
+    OUString aOrgCalendar;        // empty => not changed yet
     double fOrgDateTime;
     bool bOtherCalendar = ImpIsOtherCalendar( NumFor[nIx] );
     if ( bOtherCalendar )
@@ -3272,7 +3272,7 @@ bool SvNumberformat::ImpGetDateOutput(double fNumber,
         switch (rInfo.nTypeArray[i])
         {
             case NF_SYMBOLTYPE_CALENDAR :
-                if ( !aOrgCalendar.Len() )
+                if ( !aOrgCalendar.getLength() )
                 {
                     aOrgCalendar = rCal.getUniqueID();
                     fOrgDateTime = rCal.getDateTime();
@@ -3436,7 +3436,7 @@ bool SvNumberformat::ImpGetDateOutput(double fNumber,
             break;
         }
     }
-    if ( aOrgCalendar.Len() )
+    if ( aOrgCalendar.getLength() )
         rCal.loadCalendar( aOrgCalendar, rLoc().getLocale() );  // restore calendar
     return bRes;
 }
@@ -3477,7 +3477,7 @@ bool SvNumberformat::ImpGetDateTimeOutput(double fNumber,
     rCal.setLocalDateTime( fNumber );
 
     int nUseMonthCase = 0;      // not decided yet
-    String aOrgCalendar;        // empty => not changed yet
+    OUString aOrgCalendar;        // empty => not changed yet
     double fOrgDateTime;
     bool bOtherCalendar = ImpIsOtherCalendar( NumFor[nIx] );
     if ( bOtherCalendar )
@@ -3559,7 +3559,7 @@ bool SvNumberformat::ImpGetDateTimeOutput(double fNumber,
         switch (rInfo.nTypeArray[i])
         {
             case NF_SYMBOLTYPE_CALENDAR :
-                if ( !aOrgCalendar.Len() )
+                if ( !aOrgCalendar.getLength() )
                 {
                     aOrgCalendar = rCal.getUniqueID();
                     fOrgDateTime = rCal.getDateTime();
@@ -3772,7 +3772,7 @@ bool SvNumberformat::ImpGetDateTimeOutput(double fNumber,
             break;
         }
     }
-    if ( aOrgCalendar.Len() )
+    if ( aOrgCalendar.getLength() )
         rCal.loadCalendar( aOrgCalendar, rLoc().getLocale() );  // restore calendar
     return bRes;
 }
