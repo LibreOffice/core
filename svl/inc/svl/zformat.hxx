@@ -224,7 +224,7 @@ public:
     const OUString& GetFormatstring() const   { return sFormatstring; }
 
     // Build a format string of application defined keywords
-    String GetMappedFormatstring( const NfKeywordTable& rKeywords,
+    OUString GetMappedFormatstring( const NfKeywordTable& rKeywords,
                                     const LocaleDataWrapper& rLoc,
                                     bool bDontQuote = false ) const;
 
