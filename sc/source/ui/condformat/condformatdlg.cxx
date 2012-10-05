@@ -1103,7 +1103,7 @@ ScCondFormatDlg::ScCondFormatDlg(Window* pParent, ScDocument* pDoc, const ScCond
     SetText(aTitle.makeStringAndClear());
     maBtnAdd.SetClickHdl( LINK( &maCondFormList, ScCondFormatList, AddBtnHdl ) );
     maBtnRemove.SetClickHdl( LINK( &maCondFormList, ScCondFormatList, RemoveBtnHdl ) );
-    maEdRange.SetModifyHdl( LINK( &maEdRange, ScCondFormatDlg, EdRangeModifyHdl ) );
+    maEdRange.SetModifyHdl( LINK( this, ScCondFormatDlg, EdRangeModifyHdl ) );
     FreeResource();
 
     maEdRange.SetText(aRangeString);
@@ -1166,15 +1166,15 @@ IMPL_LINK_NOARG( ScCondFormatList, ScrollHdl )
     return 0;
 }
 
-IMPL_LINK_NOARG( ScCondFormatDlg, EdRangeModifyHdl )
+IMPL_LINK( ScCondFormatDlg, EdRangeModifyHdl, Edit*, pEdit )
 {
-    rtl::OUString aRangeStr = maEdRange.GetText();
+    rtl::OUString aRangeStr = pEdit->GetText();
     ScRangeList aRange;
     sal_uInt16 nFlags = aRange.Parse(aRangeStr, mpDoc, SCA_VALID, mpDoc->GetAddressConvention());
     if(nFlags & SCA_VALID)
-        maEdRange.SetControlBackground(GetSettings().GetStyleSettings().GetWindowColor());
+        pEdit->SetControlBackground(GetSettings().GetStyleSettings().GetWindowColor());
     else
-        maEdRange.SetControlBackground(COL_LIGHTRED);
+        pEdit->SetControlBackground(COL_LIGHTRED);
     return 0;
 }
 

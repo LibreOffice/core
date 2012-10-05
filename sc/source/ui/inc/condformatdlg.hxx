@@ -185,7 +185,7 @@ private:
     ScAddress maPos;
     ScDocument* mpDoc;
 
-    DECL_LINK( EdRangeModifyHdl, void* );
+    DECL_LINK( EdRangeModifyHdl, Edit* );
 
 public:
     ScCondFormatDlg(Window* pWindow, ScDocument* pDoc, const ScConditionalFormat* pFormat, const ScRangeList& rRange, const ScAddress& rPos);
