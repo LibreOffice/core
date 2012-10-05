@@ -328,7 +328,6 @@ struct PptSlidePersistEntry
     SdrObject*          pBObj;
     sal_Bool            bBObjIsTemporary;
 
-    void*               pDummy2;
     PptPageKind         ePageKind;              //
 
     sal_Bool            bNotesMaster    : 1;    // for NotesMaster
@@ -379,11 +378,8 @@ struct PPTOleEntry
 struct PptExOleObjAtom
 {
     sal_uInt32  nAspect;
-    sal_uInt32  nDummy1;
     sal_uInt32  nId;
-    sal_uInt32  nDummy2;
     sal_uInt32  nPersistPtr;
-    sal_uInt32  nDummy4;
 
 public:
 
@@ -428,11 +424,6 @@ public:
     using SvxMSDffManager::ReadObjText;
 
     PowerPointImportParam& rImportParam;
-
-    void*               pSdrEscherDummy1;
-    void*               pSdrEscherDummy2;
-    void*               pSdrEscherDummy3;
-    void*               pSdrEscherDummy4;
 
                         SdrEscherImport( PowerPointImportParam&, const String& rBaseURL );
     virtual             ~SdrEscherImport();
@@ -858,7 +849,6 @@ struct PPTStyleSheet : public PPTNumberFormatCreator
     PPTCharSheet*       mpCharSheet[ PPT_STYLESHEETENTRYS ];
     PPTParaSheet*       mpParaSheet[ PPT_STYLESHEETENTRYS ];
     SvxNumBulletItem*   mpNumBulletItem[ PPT_STYLESHEETENTRYS ];
-    void*               mpDummy;
 
                         PPTStyleSheet(
                             const DffRecordHeader& rSlideHd,

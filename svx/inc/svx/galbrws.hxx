@@ -83,9 +83,6 @@ private:
     GalleryBrowser1*        mpBrowser1;
     GalleryBrowser2*        mpBrowser2;
     Gallery*                mpGallery;
-    long                    mnDummy1;
-    long                    mnDummy2;
-    long                    mnDummy3;
 
     void                    InitSettings();
 

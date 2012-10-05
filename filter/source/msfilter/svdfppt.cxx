@@ -221,12 +221,16 @@ SvStream& operator>>( SvStream& rIn, PptInteractiveInfoAtom& rAtom )
 
 SvStream& operator>>( SvStream& rIn, PptExOleObjAtom& rAtom )
 {
+    sal_uInt32 nDummy1;
+    sal_uInt32 nDummy2;
+    sal_uInt32 nDummy4;
+
     rIn >> rAtom.nAspect
-        >> rAtom.nDummy1
+        >> nDummy1
         >> rAtom.nId
-        >> rAtom.nDummy2
+        >> nDummy2
         >> rAtom.nPersistPtr
-        >> rAtom.nDummy4;
+        >> nDummy4;
     return rIn;
 }
 

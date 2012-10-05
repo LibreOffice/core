@@ -93,7 +93,6 @@ class SwTabFrm: public SwLayoutFrm, public SwFlowFrm
     // #i26945#
     sal_Bool bObjsDoesFit :1; // For splitting table rows algorithm, this boolean
                           // indicates, if the floating screen objects fits
-    sal_Bool bDummy4 :1;
 
     //Split() spaltet den Frm an der angegebenen Stelle, es wird ein
     //Follow erzeugt und aufgebaut und direkt hinter this gepastet.
