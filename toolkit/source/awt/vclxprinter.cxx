@@ -33,7 +33,7 @@
 #include <toolkit/awt/vclxdevice.hxx>
 
 
-#define BINARYSETUPMARKER   0x23864691
+#define BINARYSETUPMARKER       0x23864691
 
 #define PROPERTY_Orientation    0
 #define PROPERTY_Horizontal     1
@@ -60,29 +60,12 @@
     return pProperties;
 }
 
-//  ----------------------------------------------------
-//  class VCLXPrinterPropertySet
-//  ----------------------------------------------------
+//    ----------------------------------------------------
+//    class VCLXPrinterPropertySet
+//    ----------------------------------------------------
 
-// ::com::sun::star::uno::XInterface
-::com::sun::star::uno::Any VCLXPrinterPropertySet::queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException)
-{
-    ::com::sun::star::uno::Any aRet = ::cppu::queryInterface( rType,
-                                        (static_cast< ::com::sun::star::beans::XMultiPropertySet* >(this)),
-                                        (static_cast< ::com::sun::star::beans::XFastPropertySet* >(this)),
-                                        (static_cast< ::com::sun::star::beans::XPropertySet* >((::cppu::OPropertySetHelper*) this) ),
-                                        (static_cast< ::com::sun::star::awt::XPrinterPropertySet* >(this)),
-                                        (static_cast< ::com::sun::star::lang::XTypeProvider* >(this)) );
-    return (aRet.hasValue() ? aRet : OPropertySetHelper::queryInterface( rType ));
-}
-
-// ::com::sun::star::lang::XTypeProvider
-IMPL_XTYPEPROVIDER_START( VCLXPrinterPropertySet )
-    getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XMultiPropertySet>* ) NULL ),
-    getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XFastPropertySet>* ) NULL ),
-    getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>* ) NULL ),
-    getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XPrinterPropertySet>* ) NULL )
-IMPL_XTYPEPROVIDER_END
+IMPLEMENT_FORWARD_XINTERFACE2( VCLXPrinterPropertySet, VCLXPrinterPropertySet_Base, OPropertySetHelper )
+IMPLEMENT_FORWARD_XTYPEPROVIDER2( VCLXPrinterPropertySet, VCLXPrinterPropertySet_Base, ::cppu::OPropertySetHelper )
 
 VCLXPrinterPropertySet::VCLXPrinterPropertySet( const OUString& rPrinterName )
     : OPropertySetHelper( BrdcstHelper )
@@ -227,7 +210,7 @@ void VCLXPrinterPropertySet::setHorizontal( sal_Bool bHorizontal ) throw(::com::
     ::osl::MutexGuard aGuard( Mutex );
 
     sal_uInt16 nPaperBinCount = GetPrinter()->GetPaperBinCount();
-    ::com::sun::star::uno::Sequence< OUString >  aDescriptions( nPaperBinCount );
+    ::com::sun::star::uno::Sequence< OUString > aDescriptions( nPaperBinCount );
     for ( sal_uInt16 n = 0; n < nPaperBinCount; n++ )
     {
         // Format: <DisplayFormName;FormNameId;DisplayPaperBinName;PaperBinNameId;DisplayPaperName;PaperNameId>
@@ -279,35 +262,17 @@ void VCLXPrinterPropertySet::setBinarySetup( const ::com::sun::star::uno::Sequen
 }
 
 
-//  ----------------------------------------------------
-//  class VCLXPrinter
-//  ----------------------------------------------------
+//    ----------------------------------------------------
+//    class VCLXPrinter
+//    ----------------------------------------------------
 VCLXPrinter::VCLXPrinter( const OUString& rPrinterName )
-    : VCLXPrinterPropertySet( rPrinterName )
+    : VCLXPrinter_Base( rPrinterName )
 {
 }
 
 VCLXPrinter::~VCLXPrinter()
 {
 }
-
-// ::com::sun::star::uno::XInterface
-::com::sun::star::uno::Any VCLXPrinter::queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException)
-{
-    ::com::sun::star::uno::Any aRet = ::cppu::queryInterface( rType,
-                                        (static_cast< ::com::sun::star::awt::XPrinter* >(this)) );
-
-    if ( !aRet.hasValue() )
-        aRet = VCLXPrinterPropertySet::queryInterface( rType );
-
-    return (aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType ));
-}
-
-// ::com::sun::star::lang::XTypeProvider
-IMPL_XTYPEPROVIDER_START( VCLXPrinter )
-    getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XPrinter>* ) NULL ),
-    VCLXPrinterPropertySet::getTypes()
-IMPL_XTYPEPROVIDER_END
 
 sal_Bool VCLXPrinter::start( const OUString& /*rJobName*/, sal_Int16 /*nCopies*/, sal_Bool /*bCollate*/ ) throw(::com::sun::star::awt::PrinterException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
 {
@@ -363,36 +328,18 @@ void VCLXPrinter::endPage(  ) throw(::com::sun::star::awt::PrinterException, ::c
 }
 
 
-//  ----------------------------------------------------
-//  class VCLXInfoPrinter
-//  ----------------------------------------------------
+//    ----------------------------------------------------
+//    class VCLXInfoPrinter
+//    ----------------------------------------------------
 
 VCLXInfoPrinter::VCLXInfoPrinter( const OUString& rPrinterName )
-    : VCLXPrinterPropertySet( rPrinterName )
+    : VCLXInfoPrinter_Base( rPrinterName )
 {
 }
 
 VCLXInfoPrinter::~VCLXInfoPrinter()
 {
 }
-
-// ::com::sun::star::uno::XInterface
-::com::sun::star::uno::Any VCLXInfoPrinter::queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException)
-{
-    ::com::sun::star::uno::Any aRet = ::cppu::queryInterface( rType,
-                                        (static_cast< ::com::sun::star::awt::XInfoPrinter* >(this)) );
-
-    if ( !aRet.hasValue() )
-        aRet = VCLXPrinterPropertySet::queryInterface( rType );
-
-    return (aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType ));
-}
-
-// ::com::sun::star::lang::XTypeProvider
-IMPL_XTYPEPROVIDER_START( VCLXInfoPrinter )
-    getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XInfoPrinter>* ) NULL ),
-    VCLXPrinterPropertySet::getTypes()
-IMPL_XTYPEPROVIDER_END
 
 // ::com::sun::star::awt::XInfoPrinter
 ::com::sun::star::uno::Reference< ::com::sun::star::awt::XDevice > VCLXInfoPrinter::createDevice(  ) throw(::com::sun::star::uno::RuntimeException)
@@ -402,9 +349,9 @@ IMPL_XTYPEPROVIDER_END
     return GetDevice();
 }
 
-//  ----------------------------------------------------
-//  class VCLXPrinterServer
-//  ----------------------------------------------------
+//    ----------------------------------------------------
+//    class VCLXPrinterServer
+//    ----------------------------------------------------
 
 // ::com::sun::star::awt::XPrinterServer
 ::com::sun::star::uno::Sequence< OUString > VCLXPrinterServer::getPrinterNames(  ) throw(::com::sun::star::uno::RuntimeException)
@@ -412,7 +359,7 @@ IMPL_XTYPEPROVIDER_END
     const std::vector<OUString>& rQueues = Printer::GetPrinterQueues();
     sal_uInt32 nPrinters = rQueues.size();
 
-    ::com::sun::star::uno::Sequence< OUString >  aNames( nPrinters );
+    ::com::sun::star::uno::Sequence< OUString > aNames( nPrinters );
     for ( sal_uInt32 n = 0; n < nPrinters; n++ )
         aNames.getArray()[n] = rQueues[n];
 
@@ -432,7 +379,6 @@ IMPL_XTYPEPROVIDER_END
     xP = new VCLXInfoPrinter( rPrinterName );
     return xP;
 }
-
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
