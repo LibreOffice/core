@@ -22,6 +22,7 @@ $(eval $(call gb_ExternalProject_use_externals,libcdr,\
 
 ifeq ($(OS)$(COM),WNTMSC)
 
+ifeq ($(VCVER),90)
 $(call gb_ExternalProject_get_state_target,libcdr,build) :
 	cd $(EXTERNAL_WORKDIR)/build/win32 \
 	&& export LIBWPD_INCLUDE_DIR=$(OUTDIR)/inc/external \
@@ -30,6 +31,25 @@ $(call gb_ExternalProject_get_state_target,libcdr,build) :
 	&& export ZLIB_INCLUDE_DIR=$(OUTDIR)/inc/external/zlib \
 	&& $(COMPATH)/vcpackages/vcbuild.exe libcdr.vcproj "Release|Win32" \
 	&& touch $@
+else ifeq ($(VCVER),100)
+$(call gb_ExternalProject_get_state_target,libcdr,build) :
+	cd $(EXTERNAL_WORKDIR)/build/win32 \
+	&& export LIBWPD_INCLUDE_DIR=$(OUTDIR)/inc/external \
+	&& export LIBWPG_INCLUDE_DIR=$(OUTDIR)/inc/external \
+	&& export LCMS2_INCLUDE_DIR=$(OUTDIR)/inc/lcms2 \
+	&& export ZLIB_INCLUDE_DIR=$(OUTDIR)/inc/external/zlib \
+	&& msbuild.exe libcdr.vcxproj /p:Configuration=Release \
+	&& touch $@
+else
+$(call gb_ExternalProject_get_state_target,libcdr,build) :
+	cd $(EXTERNAL_WORKDIR)/build/win32 \
+	&& export LIBWPD_INCLUDE_DIR=$(OUTDIR)/inc/external \
+	&& export LIBWPG_INCLUDE_DIR=$(OUTDIR)/inc/external \
+	&& export LCMS2_INCLUDE_DIR=$(OUTDIR)/inc/lcms2 \
+	&& export ZLIB_INCLUDE_DIR=$(OUTDIR)/inc/external/zlib \
+	&& msbuild.exe libcdr.vcxproj /p:PlatformToolset=v110 /p:Configuration=Release \
+	&& touch $@
+endif
 
 else
 
