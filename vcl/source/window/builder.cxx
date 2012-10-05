@@ -869,20 +869,32 @@ void VclBuilder::handleTabChild(Window *pParent, xmlreader::XmlReader &reader)
         pTabControl->RemovePage(pTabControl->GetCurPageId());
 }
 
-namespace
+//so that tabbing between controls goes in a visually sensible sequence
+//we sort these into a best-tab-order sequence
+bool VclBuilder::sortIntoBestTabTraversalOrder::operator()(const Window *pA, const Window *pB) const
 {
-    bool sortByGridPositions(Window *pA, Window *pB)
-    {
-        sal_Int32 nTopA = pA->get_grid_top_attach();
-        sal_Int32 nTopB = pB->get_grid_top_attach();
-        if (nTopA < nTopB)
-            return true;
-        if (nTopA > nTopB)
-            return false;
-        sal_Int32 nLeftA = pA->get_grid_left_attach();
-        sal_Int32 nLeftB = pB->get_grid_left_attach();
-        return nLeftA < nLeftB;
-    }
+    //sort child order within parent list by grid position
+    sal_Int32 nTopA = pA->get_grid_top_attach();
+    sal_Int32 nTopB = pB->get_grid_top_attach();
+    if (nTopA < nTopB)
+        return true;
+    if (nTopA > nTopB)
+        return false;
+    sal_Int32 nLeftA = pA->get_grid_left_attach();
+    sal_Int32 nLeftB = pB->get_grid_left_attach();
+    if (nLeftA < nLeftB)
+        return true;
+    if (nLeftA > nLeftB)
+        return false;
+    //sort into two groups of pack start and pack end
+    VclPackType ePackA = pA->get_pack_type();
+    VclPackType ePackB = pB->get_pack_type();
+    if (ePackA < ePackB)
+        return true;
+    if (ePackA > ePackB)
+        return false;
+    //honour relative box positions with pack group
+    return m_pBuilder->get_window_packing_position(pA) < m_pBuilder->get_window_packing_position(pB);
 }
 
 void VclBuilder::handleChild(Window *pParent, xmlreader::XmlReader &reader)
@@ -943,20 +955,11 @@ void VclBuilder::handleChild(Window *pParent, xmlreader::XmlReader &reader)
                             aChilds.push_back(pChild);
                         }
 
-                        //sort child order within parent list by grid position
-                        //so that tabbing between controls goes in a visually sensible sequence
-                        std::stable_sort(aChilds.begin(), aChilds.end(), sortByGridPositions);
+                        //sort child order within parent so that tabbing
+                        //between controls goes in a visually sensible sequence
+                        std::stable_sort(aChilds.begin(), aChilds.end(), sortIntoBestTabTraversalOrder(this));
                         for (size_t i = 0; i < aChilds.size(); ++i)
                             reorderWithinParent(*aChilds[i], i);
-
-                        //honour box positions if there is any
-                        for (size_t i = 0; i < aChilds.size(); ++i)
-                        {
-                            sal_Int32 nPosition = get_window_packing_position(aChilds[i]);
-                            if (nPosition == -1)
-                                continue;
-                            reorderWithinParent(*aChilds[i], nPosition);
-                        }
                     }
                 }
             }

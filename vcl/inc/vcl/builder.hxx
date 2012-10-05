@@ -121,6 +121,18 @@ private:
 
     Window *get_by_name(OString sID);
     void delete_by_name(OString sID);
+
+    class sortIntoBestTabTraversalOrder
+        : public std::binary_function<const Window*, const Window*, bool>
+    {
+        VclBuilder *m_pBuilder;
+    public:
+        sortIntoBestTabTraversalOrder(VclBuilder *pBuilder)
+            : m_pBuilder(pBuilder)
+        {
+        }
+        bool operator()(const Window *pA, const Window *pB) const;
+    };
 public:
     VclBuilder(Window *pParent, OUString sUIRootDir, OUString sUIFile, OString sID = OString());
     ~VclBuilder();
