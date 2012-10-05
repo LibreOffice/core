@@ -1,5 +1,5 @@
---- misc/build/lcms2-2.3/include/lcms2.h.sav	2011-12-15 16:45:47.000000000 +0100
-+++ misc/build/lcms2-2.3/include/lcms2.h	2012-03-17 22:53:28.731585981 +0100
+--- misc/build/lcms2-2.4/include/lcms2.h.sav	2011-12-15 16:45:47.000000000 +0100
++++ misc/build/lcms2-2.4/include/lcms2.h	2012-03-17 22:53:28.731585981 +0100
 @@ -192,6 +192,15 @@ typedef int                  cmsBool;
  # endif
  #endif

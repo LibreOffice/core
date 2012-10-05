@@ -36,8 +36,8 @@ TARGET=so_lcms2
 
 # --- Files --------------------------------------------------------
 
-TARFILE_NAME=lcms2-2.3
-TARFILE_MD5=327348d67c979c88c2dec59a23a17d85
+TARFILE_NAME=lcms2-2.4
+TARFILE_MD5=861ef15fa0bc018f9ddc932c4ad8b6dd
 
 PATCH_FILES = lcms2.patch
 

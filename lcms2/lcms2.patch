@@ -1,5 +1,5 @@
---- misc/build/lcms2-2.3/config.sub
-+++ misc/build/lcms2-2.3/config.sub
+--- misc/build/lcms2-2.4/config.sub
++++ misc/build/lcms2-2.4/config.sub
 @@ -123,7 +123,7 @@
  # Here we must recognize all the valid KERNEL-OS combinations.
  maybe_os=`echo $1 | sed 's/^\(.*\)-\([^-]*-[^-]*\)$/\2/'`
