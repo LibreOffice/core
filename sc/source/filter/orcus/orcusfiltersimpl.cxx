@@ -175,10 +175,8 @@ bool ScOrcusFiltersImpl::importCSV(ScDocument& rDoc, const OUString& rPath) cons
 
 void populateTree(
    SvTreeListBox& rTreeCtrl, orcus::xml_structure_tree::walker& rWalker,
-   const orcus::xml_structure_tree::element_name& rElemName, bool bRepeat, const Image& rImgRepeatElem, SvLBoxEntry* pParent)
+   const orcus::xml_structure_tree::entity_name& rElemName, bool bRepeat, const Image& rImgRepeatElem, SvLBoxEntry* pParent)
 {
-    // TODO: Make use of bRepeat flag.
-
     OUString aName(rElemName.name.get(), rElemName.name.size(), RTL_TEXTENCODING_UTF8);
     SvLBoxEntry* pEntry = rTreeCtrl.InsertEntry(aName, pParent);
     if (bRepeat)
@@ -190,12 +188,21 @@ void populateTree(
     if (pParent)
         rTreeCtrl.Expand(pParent);
 
-    orcus::xml_structure_tree::element_names_type aChildElements;
-    rWalker.get_children(aChildElements);
+    orcus::xml_structure_tree::entity_names_type aNames;
 
-    orcus::xml_structure_tree::element_names_type::const_iterator it = aChildElements.begin();
-    orcus::xml_structure_tree::element_names_type::const_iterator itEnd = aChildElements.end();
+    rWalker.get_attributes(aNames);
+    orcus::xml_structure_tree::entity_names_type::const_iterator it = aNames.begin();
+    orcus::xml_structure_tree::entity_names_type::const_iterator itEnd = aNames.end();
     for (; it != itEnd; ++it)
+    {
+        orcus::xml_structure_tree::entity_name aAttrName = *it;
+        rTreeCtrl.InsertEntry(OUString(aAttrName.name.get(), aAttrName.name.size(), RTL_TEXTENCODING_UTF8), pEntry);
+    }
+    rTreeCtrl.Expand(pEntry);
+
+    rWalker.get_children(aNames);
+
+    for (it = aNames.begin(), itEnd = aNames.end(); it != itEnd; ++it)
     {
         orcus::xml_structure_tree::element aElem = rWalker.descend(*it);
         populateTree(rTreeCtrl, rWalker, *it, aElem.repeat, rImgRepeatElem, pEntry);
