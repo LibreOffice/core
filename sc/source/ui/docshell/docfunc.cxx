@@ -5061,9 +5061,10 @@ sal_Bool ScDocFunc::InsertAreaLink( const String& rFile, const String& rFilter,
 
 namespace {
 
-void RemoveCondFormatAttributes(ScDocument* pDoc, const ScConditionalFormat* pFormat)
+void RemoveCondFormatAttributes(ScDocument* pDoc, const ScConditionalFormat* pFormat, SCTAB nTab)
 {
     const ScRangeList& rRangeList = pFormat->GetRange();
+    pDoc->RemoveCondFormatData( rRangeList, nTab, pFormat->GetKey() );
 }
 
 void SetConditionalFormatAttributes(ScDocument* pDoc, const ScRangeList& rRanges, sal_uLong nIndex, SCTAB nTab)
@@ -5087,7 +5088,7 @@ void ScDocFunc::ReplaceConditionalFormat( sal_uLong nOldFormat, ScConditionalFor
         pRepaintRange.reset(new ScRange( pOldFormat->GetRange().Combine() ));
         if(pOldFormat)
         {
-            RemoveCondFormatAttributes(pDoc, pOldFormat);
+            RemoveCondFormatAttributes(pDoc, pOldFormat, nTab);
         }
 
         pDoc->DeleteConditionalFormat(nOldFormat, nTab);
@@ -5124,7 +5125,7 @@ void ScDocFunc::SetConditionalFormatList( ScConditionalFormatList* pList, SCTAB 
     ScConditionalFormatList* pOldList = pDoc->GetCondFormList(nTab);
     for(ScConditionalFormatList::const_iterator itr = pOldList->begin(), itrEnd = pOldList->end(); itr != itrEnd; ++itr)
     {
-        RemoveCondFormatAttributes(pDoc, &(*itr));
+        RemoveCondFormatAttributes(pDoc, &(*itr), nTab);
     }
 
     // then set new entries

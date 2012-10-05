@@ -544,6 +544,7 @@ public:
     void        ApplyPatternIfNumberformatIncompatible( const ScRange& rRange,
                             const ScPatternAttr& rPattern, short nNewType );
     void        AddCondFormatData( const ScRangeList& rRange, sal_uInt32 nIndex );
+    void        RemoveCondFormatData( const ScRangeList& rRange, sal_uInt32 nIndex );
 
     void        ApplyStyle( SCCOL nCol, SCROW nRow, const ScStyleSheet& rStyle );
     void        ApplyStyleArea( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow, const ScStyleSheet& rStyle );

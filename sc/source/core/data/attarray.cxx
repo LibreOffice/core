@@ -322,6 +322,57 @@ void ScAttrArray::AddCondFormat( SCROW nStartRow, SCROW nEndRow, sal_uInt32 nInd
 
 }
 
+void ScAttrArray::RemoveCondFormat( SCROW nStartRow, SCROW nEndRow, sal_uInt32 nIndex )
+{
+    if(!VALIDROW(nStartRow) || !VALIDROW(nEndRow))
+        return;
+
+    if(nEndRow < nStartRow)
+        return;
+
+    SCROW nTempStartRow = nStartRow;
+    SCROW nTempEndRow = nEndRow;
+
+    do
+    {
+        const ScPatternAttr* pPattern = GetPattern(nTempStartRow);
+
+        ScPatternAttr aPattern( pDocument->GetPool() );
+        if(pPattern)
+        {
+            SCROW nPatternStartRow;
+            SCROW nPatternEndRow;
+            GetPatternRange( nPatternStartRow, nPatternEndRow, nTempStartRow );
+
+            nTempEndRow = std::min<SCROW>( nPatternEndRow, nEndRow );
+            const SfxPoolItem* pItem = NULL;
+            pPattern->GetItemSet().GetItemState( ATTR_CONDITIONAL, true, &pItem );
+            if(pItem)
+            {
+                std::vector< sal_uInt32 > aCondFormatData = static_cast<const ScCondFormatItem*>(pItem)->GetCondFormatData();
+                std::vector<sal_uInt32>::iterator itr = std::find(aCondFormatData.begin(), aCondFormatData.end(), nIndex);
+                if(itr != aCondFormatData.end())
+                {
+                    ScCondFormatItem aItem;
+                    aCondFormatData.erase(itr);
+                    aItem.SetCondFormatData( aCondFormatData );
+                    aPattern.GetItemSet().Put( aItem );
+                    SetPatternArea( nTempStartRow, nTempEndRow, &aPattern, true );
+                }
+
+            }
+        }
+        else
+        {
+            return;
+        }
+
+        nTempStartRow = nTempEndRow + 1;
+    }
+    while(nTempEndRow < nEndRow);
+
+}
+
 //------------------------------------------------------------------------
 
 void ScAttrArray::SetPattern( SCROW nRow, const ScPatternAttr* pPattern, bool bPutToPool )

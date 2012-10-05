@@ -4222,6 +4222,17 @@ void ScDocument::AddCondFormatData( const ScRangeList& rRange, SCTAB nTab, sal_u
     maTabs[nTab]->AddCondFormatData(rRange, nIndex);
 }
 
+void ScDocument::RemoveCondFormatData( const ScRangeList& rRange, SCTAB nTab, sal_uInt32 nIndex )
+{
+    if(!(static_cast<size_t>(nTab) < maTabs.size()))
+        return;
+
+    if(!maTabs[nTab])
+        return;
+
+    maTabs[nTab]->RemoveCondFormatData(rRange, nIndex);
+}
+
 
 void ScDocument::ApplyStyle( SCCOL nCol, SCROW nRow, SCTAB nTab, const ScStyleSheet& rStyle)
 {

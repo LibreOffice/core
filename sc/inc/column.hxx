@@ -318,6 +318,7 @@ public:
     void        ApplySelectionLineStyle( const ScMarkData& rMark,
                                     const ::editeng::SvxBorderLine* pLine, bool bColorOnly );
     void        AddCondFormat(SCROW nStartRow, SCROW nEndRow, sal_uInt32 nIndex );
+    void        RemoveCondFormat(SCROW nStartRow, SCROW nEndRow, sal_uInt32 nIndex );
 
     const ScStyleSheet* GetStyle( SCROW nRow ) const;
     const ScStyleSheet* GetSelectionStyle( const ScMarkData& rMark, bool& rFound ) const;
