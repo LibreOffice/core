@@ -9,7 +9,7 @@
 
 $(eval $(call gb_ExternalPackage_ExternalPackage,libcdr,cdr))
 
-$(eval $(call gb_ExternalPackage_add_unpacked_files,libcdr_inc,inc/external/libcdr,\
+$(eval $(call gb_ExternalPackage_add_unpacked_files,libcdr,inc/external/libcdr,\
 	src/lib/libcdr.h \
 	src/lib/CDRDocument.h \
 	src/lib/CDRStringVector.h \
