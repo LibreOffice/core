@@ -1155,6 +1155,7 @@ public:
     SC_DLLPUBLIC const ScPatternAttr*    GetMostUsedPattern( SCCOL nCol, SCROW nStartRow, SCROW nEndRow, SCTAB nTab ) const;
     const ScPatternAttr*    GetSelectionPattern( const ScMarkData& rMark, bool bDeep = true );
     ScPatternAttr*          CreateSelectionPattern( const ScMarkData& rMark, bool bDeep = true );
+    SC_DLLPUBLIC void AddCondFormatData( const ScRangeList& rRange, SCTAB nTab, sal_uInt32 nIndex );
 
     SC_DLLPUBLIC ScConditionalFormat* GetCondFormat( SCCOL nCol, SCROW nRow, SCTAB nTab ) const;
     SC_DLLPUBLIC const SfxItemSet*  GetCondResult( SCCOL nCol, SCROW nRow, SCTAB nTab ) const;

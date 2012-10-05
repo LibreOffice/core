@@ -477,12 +477,8 @@ void ScDocument::FillInfo( ScTableInfo& rTabInfo, SCCOL nX1, SCROW nY1, SCCOL nX
                         else
                             bHidden = bHideFormula = false;
 
-                        sal_uLong nConditional = ((const SfxUInt32Item&)pPattern->
-                                                GetItem(ATTR_CONDITIONAL)).GetValue();
-
-                        const ScConditionalFormat* pCondForm = NULL;
-                        if ( nConditional && pCondFormList )
-                            pCondForm = pCondFormList->GetFormat( nConditional );
+                        const std::vector<sal_uInt32>& rCondFormats = static_cast<const ScCondFormatItem&>(pPattern->GetItem(ATTR_CONDITIONAL)).GetCondFormatData();
+                        bool bContainsCondFormat = !rCondFormats.empty();
 
                         do
                         {
@@ -493,7 +489,7 @@ void ScDocument::FillInfo( ScTableInfo& rTabInfo, SCCOL nX1, SCROW nY1, SCCOL nX
                                 RowInfo* pThisRowInfo = &pRowInfo[nArrY];
                                 if (pBackground != pDefBackground)          // Spalten-HG == Standard ?
                                     pThisRowInfo->bEmptyBack = false;
-                                if (pCondForm)
+                                if (bContainsCondFormat)
                                     pThisRowInfo->bEmptyBack = false;
                                 if (bAutoFilter)
                                     pThisRowInfo->bAutoFilter = true;
@@ -529,41 +525,50 @@ void ScDocument::FillInfo( ScTableInfo& rTabInfo, SCCOL nX1, SCROW nY1, SCCOL nX
                                     pThisRowInfo->bEmptyBack = false;
                                 }
 
-                                if ( pCondForm )
+                                if ( bContainsCondFormat )
                                 {
-                                    ScCondFormatData aData = pCondForm->GetData( pInfo->pCell,
-                                                        ScAddress( nX, nCurRow, nTab ) );
-                                    if (!aData.aStyleName.isEmpty())
+                                    bool bFound = false;
+                                    for(std::vector<sal_uInt32>::const_iterator itr = rCondFormats.begin();
+                                            itr != rCondFormats.end() && !bFound; ++itr)
                                     {
-                                        SfxStyleSheetBase* pStyleSheet =
-                                                pStlPool->Find( aData.aStyleName, SFX_STYLE_FAMILY_PARA );
-                                        if ( pStyleSheet )
+                                        ScConditionalFormat* pCondForm = pCondFormList->GetFormat(*itr);
+                                        ScCondFormatData aData = pCondForm->GetData( pInfo->pCell,
+                                                ScAddress( nX, nCurRow, nTab ) );
+                                        if (!aData.aStyleName.isEmpty())
                                         {
-                                            //! Style-Sets cachen !!!
-                                            pInfo->pConditionSet = &pStyleSheet->GetItemSet();
-                                            bAnyCondition = true;
-
-                                            // we need to check already here for protected cells
-                                            const SfxPoolItem* pItem;
-                                            if ( bTabProtect && pInfo->pConditionSet->GetItemState( ATTR_PROTECTION, true, &pItem ) == SFX_ITEM_SET )
+                                            SfxStyleSheetBase* pStyleSheet =
+                                                pStlPool->Find( aData.aStyleName, SFX_STYLE_FAMILY_PARA );
+                                            if ( pStyleSheet )
                                             {
-                                                const ScProtectionAttr* pProtAttr = static_cast<const ScProtectionAttr*>(pItem);
-                                                bHidden = pProtAttr->GetHideCell();
-                                                bHideFormula = pProtAttr->GetHideFormula();
+                                                //! Style-Sets cachen !!!
+                                                pInfo->pConditionSet = &pStyleSheet->GetItemSet();
+                                                bAnyCondition = true;
+
+                                                // we need to check already here for protected cells
+                                                const SfxPoolItem* pItem;
+                                                if ( bTabProtect && pInfo->pConditionSet->GetItemState( ATTR_PROTECTION, true, &pItem ) == SFX_ITEM_SET )
+                                                {
+                                                    const ScProtectionAttr* pProtAttr = static_cast<const ScProtectionAttr*>(pItem);
+                                                    bHidden = pProtAttr->GetHideCell();
+                                                    bHideFormula = pProtAttr->GetHideFormula();
+
+                                                }
+                                                bFound = true;
 
                                             }
-
+                                            // if style is not there, treat like no condition
                                         }
-                                        // if style is not there, treat like no condition
-                                    }
-                                    if(aData.pColorScale)
-                                    {
-                                        pInfo->pColorScale = aData.pColorScale;
-                                    }
+                                        if(aData.pColorScale)
+                                        {
+                                            pInfo->pColorScale = aData.pColorScale;
+                                            bFound = true;
+                                        }
 
-                                    if(aData.pDataBar)
-                                    {
-                                        pInfo->pDataBar = aData.pDataBar;
+                                        if(aData.pDataBar)
+                                        {
+                                            pInfo->pDataBar = aData.pDataBar;
+                                            bFound = true;
+                                        }
                                     }
                                 }
 

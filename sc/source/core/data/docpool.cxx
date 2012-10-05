@@ -287,7 +287,7 @@ ScDocumentPool::ScDocumentPool( SfxItemPool* pSecPool, sal_Bool bLoadRefCounts )
     ppPoolDefaults[ ATTR_BORDER_INNER    - ATTR_STARTINDEX ] = pGlobalBorderInnerAttr;
     ppPoolDefaults[ ATTR_SHADOW          - ATTR_STARTINDEX ] = new SvxShadowItem( ATTR_SHADOW );
     ppPoolDefaults[ ATTR_VALIDDATA       - ATTR_STARTINDEX ] = new SfxUInt32Item( ATTR_VALIDDATA, 0 );
-    ppPoolDefaults[ ATTR_CONDITIONAL     - ATTR_STARTINDEX ] = new SfxUInt32Item( ATTR_CONDITIONAL, 0 );
+    ppPoolDefaults[ ATTR_CONDITIONAL     - ATTR_STARTINDEX ] = new ScCondFormatItem;
 
     //  GetRscString funktioniert erst nach ScGlobal::Init, zu erkennen am EmptyBrushItem
     //! zusaetzliche Methode ScGlobal::IsInit() oder so...

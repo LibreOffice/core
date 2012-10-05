@@ -5064,21 +5064,11 @@ namespace {
 void RemoveCondFormatAttributes(ScDocument* pDoc, const ScConditionalFormat* pFormat)
 {
     const ScRangeList& rRangeList = pFormat->GetRange();
-
-    ScPatternAttr aPattern( pDoc->GetPool() );
-    aPattern.GetItemSet().Put( SfxUInt32Item( ATTR_CONDITIONAL, 0 ) );
-    ScMarkData aMarkData;
-    aMarkData.MarkFromRangeList(rRangeList, true);
-    pDoc->ApplySelectionPattern( aPattern , aMarkData );
 }
 
-void SetConditionalFormatAttributes(ScDocument* pDoc, const ScRangeList& rRanges, sal_uLong nIndex)
+void SetConditionalFormatAttributes(ScDocument* pDoc, const ScRangeList& rRanges, sal_uLong nIndex, SCTAB nTab)
 {
-    ScPatternAttr aPattern( pDoc->GetPool() );
-    aPattern.GetItemSet().Put( SfxUInt32Item( ATTR_CONDITIONAL, nIndex ) );
-    ScMarkData aMarkData;
-    aMarkData.MarkFromRangeList(rRanges, true);
-    pDoc->ApplySelectionPattern( aPattern , aMarkData );
+    pDoc->AddCondFormatData( rRanges, nTab, nIndex );
 }
 
 }
@@ -5112,7 +5102,7 @@ void ScDocFunc::ReplaceConditionalFormat( sal_uLong nOldFormat, ScConditionalFor
 
 	sal_uLong nIndex = pDoc->AddCondFormat(pFormat, nTab);
 
-        SetConditionalFormatAttributes(pDoc, rRanges, nIndex);
+        SetConditionalFormatAttributes(pDoc, rRanges, nIndex, nTab);
         pDoc->SetStreamValid(nTab, false);
     }
 
@@ -5142,7 +5132,7 @@ void ScDocFunc::SetConditionalFormatList( ScConditionalFormatList* pList, SCTAB 
     {
         sal_uLong nIndex = itr->GetKey();
         const ScRangeList& rRange = itr->GetRange();
-        SetConditionalFormatAttributes(pDoc, rRange, nIndex);
+        SetConditionalFormatAttributes(pDoc, rRange, nIndex, nTab);
     }
 
     pDoc->SetCondFormList(pList, nTab);

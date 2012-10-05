@@ -393,6 +393,30 @@ private:
     sal_uInt16                  mnHeight;
 };
 
+class ScCondFormatItem : public SfxPoolItem
+{
+public:
+    TYPEINFO();
+
+    explicit ScCondFormatItem();
+    explicit ScCondFormatItem(sal_uInt32 nIndex);
+    explicit ScCondFormatItem(const std::vector<sal_uInt32>& nIndex);
+
+    virtual ~ScCondFormatItem();
+
+    virtual int operator==(const SfxPoolItem& rCmp ) const;
+    virtual ScCondFormatItem*  Clone( SfxItemPool* = 0 ) const;
+
+    const std::vector<sal_uInt32>& GetCondFormatData() const;
+    void AddCondFormatData( sal_uInt32 nIndex );
+    void SetCondFormatData( const std::vector<sal_uInt32>& aIndex );
+    void RemoveCondFormatData( sal_uInt32 nIndex );
+
+private:
+
+    std::vector<sal_uInt32> maIndex;
+};
+
 // ============================================================================
 
 #endif

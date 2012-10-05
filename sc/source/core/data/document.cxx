@@ -4211,6 +4211,17 @@ void ScDocument::ApplyPatternIfNumberformatIncompatible( const ScRange& rRange,
             maTabs[*itr]->ApplyPatternIfNumberformatIncompatible( rRange, rPattern, nNewType );
 }
 
+void ScDocument::AddCondFormatData( const ScRangeList& rRange, SCTAB nTab, sal_uInt32 nIndex )
+{
+    if(!static_cast<SCTAB>(nTab) < maTabs.size())
+        return;
+
+    if(!maTabs[nTab])
+        return;
+
+    maTabs[nTab]->AddCondFormatData(rRange, nIndex);
+}
+
 
 void ScDocument::ApplyStyle( SCCOL nCol, SCROW nRow, SCTAB nTab, const ScStyleSheet& rStyle)
 {

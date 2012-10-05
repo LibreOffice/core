@@ -2146,6 +2146,23 @@ void ScTable::ApplyPatternIfNumberformatIncompatible( const ScRange& rRange,
     }
 }
 
+void ScTable::AddCondFormatData( const ScRangeList& rRange, sal_uInt32 nIndex )
+{
+    size_t n = rRange.size();
+    for(size_t i = 0; i < n; ++i)
+    {
+        const ScRange* pRange = rRange[i];
+        SCCOL nColStart = pRange->aStart.Col();
+        SCCOL nColEnd = pRange->aEnd.Col();
+        SCROW nRowStart = pRange->aStart.Row();
+        SCROW nRowEnd = pRange->aEnd.Row();
+        for(SCCOL nCol = nColStart; nCol <= nColEnd; ++nCol)
+        {
+            aCol[nCol].AddCondFormat(nRowStart, nRowEnd, nIndex);
+        }
+    }
+}
+
 
 
 void ScTable::ApplyStyle( SCCOL nCol, SCROW nRow, const ScStyleSheet& rStyle )
