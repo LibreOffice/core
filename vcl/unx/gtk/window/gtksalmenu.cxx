@@ -241,10 +241,10 @@ void RemoveUnusedCommands( GLOActionGroup* pActionGroup, GList* pOldCommandList,
 
 void GtkSalMenu::UpdateNativeMenu()
 {
+    SolarMutexGuard aGuard;
     if( !PrepUpdate() )
         return;
 
-//    SolarMutexGuard aGuard;
 
     Menu* pVCLMenu = mpVCLMenu;
     GLOMenu* pLOMenu = G_LO_MENU( mpMenuModel );
