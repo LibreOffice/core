@@ -126,7 +126,7 @@ void Shell::SetMDITitle()
         aTitleBuf.append(IDE_RESSTR(RID_STR_SIGNED));
         aTitleBuf.append(' ');
     }
-    ::rtl::OUString aTitle(aTitleBuf.makeStringAndClear());
+    OUString aTitle(aTitleBuf.makeStringAndClear());
 
     SfxViewFrame* pViewFrame = GetViewFrame();
     if ( pViewFrame )
@@ -145,18 +145,18 @@ void Shell::SetMDITitle()
     }
 }
 
-ModulWindow* Shell::CreateBasWin( const ScriptDocument& rDocument, const ::rtl::OUString& rLibName, const ::rtl::OUString& rModName )
+ModulWindow* Shell::CreateBasWin( const ScriptDocument& rDocument, const OUString& rLibName, const OUString& rModName )
 {
     bCreatingWindow = true;
 
     sal_uLong nKey = 0;
     ModulWindow* pWin = 0;
 
-    ::rtl::OUString aLibName( rLibName );
-    ::rtl::OUString aModName( rModName );
+    OUString aLibName( rLibName );
+    OUString aModName( rModName );
 
     if ( aLibName.isEmpty() )
-        aLibName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Standard"));
+        aLibName = "Standard" ;
 
     uno::Reference< container::XNameContainer > xLib = rDocument.getOrCreateLibrary( E_SCRIPTS, aLibName );
 
@@ -168,7 +168,7 @@ ModulWindow* Shell::CreateBasWin( const ScriptDocument& rDocument, const ::rtl::
 
     if ( !pWin )
     {
-        ::rtl::OUString aModule;
+        OUString aModule;
         bool bSuccess = false;
         if ( rDocument.hasModule( aLibName, aModName ) )
             bSuccess = rDocument.getModule( aLibName, aModName, aModule );
@@ -200,11 +200,11 @@ ModulWindow* Shell::CreateBasWin( const ScriptDocument& rDocument, const ::rtl::
     {
         // display a nice friendly name in the ObjectModule tab,
         // combining the objectname and module name, e.g. Sheet1 ( Financials )
-        ::rtl::OUString sObjName;
+        OUString sObjName;
         ModuleInfoHelper::getObjectName( xLib, rModName, sObjName );
         if( !sObjName.isEmpty() )
         {
-            ::rtl::OUStringBuffer aModNameBuf(aModName);
+            OUStringBuffer aModNameBuf(aModName);
             aModNameBuf.append(' ');
             aModNameBuf.append('(');
             aModNameBuf.append(sObjName);
@@ -224,7 +224,7 @@ ModulWindow* Shell::CreateBasWin( const ScriptDocument& rDocument, const ::rtl::
 
 ModulWindow* Shell::FindBasWin (
     ScriptDocument const& rDocument,
-    rtl::OUString const& rLibName, rtl::OUString const& rName,
+    OUString const& rLibName, OUString const& rName,
     bool bCreateIfNotExist, bool bFindSuspended
 )
 {
