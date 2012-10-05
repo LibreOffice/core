@@ -30,6 +30,10 @@
 
 $(eval $(call gb_Library_Library,npsoplugin))
 
+$(eval $(call gb_Library_use_packages,npsoplugin,\
+	comphelper_inc \
+))
+
 $(eval $(call gb_Library_use_external,npsoplugin,mozilla_headers))
 
 $(eval $(call gb_Library_use_static_libraries,npsoplugin,\
