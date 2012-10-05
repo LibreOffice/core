@@ -407,6 +407,7 @@ GtkSalMenu::GtkSalMenu( sal_Bool bMenuBar ) :
 
 GtkSalMenu::~GtkSalMenu()
 {
+    SolarMutexGuard aGuard;
     if ( mbMenuBar == sal_True )
         ((GtkSalFrame*) mpFrame)->SetMenu( NULL );
 
@@ -420,6 +421,7 @@ sal_Bool GtkSalMenu::VisibleMenuBar()
 
 void GtkSalMenu::InsertItem( SalMenuItem* pSalMenuItem, unsigned nPos )
 {
+    SolarMutexGuard aGuard;
     GtkSalMenuItem *pItem = static_cast<GtkSalMenuItem*>( pSalMenuItem );
 
     if ( nPos == MENU_APPEND )
@@ -432,11 +434,13 @@ void GtkSalMenu::InsertItem( SalMenuItem* pSalMenuItem, unsigned nPos )
 
 void GtkSalMenu::RemoveItem( unsigned nPos )
 {
+    SolarMutexGuard aGuard;
     maItems.erase( maItems.begin() + nPos );
 }
 
 void GtkSalMenu::SetSubMenu( SalMenuItem* pSalMenuItem, SalMenu* pSubMenu, unsigned nPos )
 {
+    SolarMutexGuard aGuard;
     GtkSalMenuItem *pItem = static_cast< GtkSalMenuItem* >( pSalMenuItem );
     GtkSalMenu *pGtkSubMenu = static_cast< GtkSalMenu* >( pSubMenu );
 
@@ -492,6 +496,7 @@ void GtkSalMenu::SetFrame( const SalFrame* pFrame )
 
 const GtkSalFrame* GtkSalMenu::GetFrame() const
 {
+    SolarMutexGuard aGuard;
     const GtkSalMenu* pMenu = this;
     while( pMenu && ! pMenu->mpFrame )
         pMenu = pMenu->mpParentSalMenu;
@@ -716,6 +721,7 @@ void GtkSalMenu::Deactivate( const gchar* aMenuCommand )
 
 sal_Bool GtkSalMenu::IsItemVisible( unsigned nPos )
 {
+    SolarMutexGuard aGuard;
     sal_Bool bVisible = sal_False;
 
     if ( nPos < maItems.size() )
@@ -734,6 +740,7 @@ void GtkSalMenu::EnableItem( unsigned, sal_Bool )
 
 void GtkSalMenu::ShowItem( unsigned nPos, sal_Bool bShow )
 {
+    SolarMutexGuard aGuard;
     if ( nPos < maItems.size() )
         ( ( GtkSalMenuItem* ) maItems[ nPos ] )->mbVisible = bShow;
 }
