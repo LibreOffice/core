@@ -4543,11 +4543,11 @@ void lcl_SvNumberformat_AddLimitStringImpl( String& rStr,
     }
 }
 
-String SvNumberformat::GetMappedFormatstring(
+OUString SvNumberformat::GetMappedFormatstring(
         const NfKeywordTable& rKeywords, const LocaleDataWrapper& rLocWrp,
         bool bDontQuote ) const
 {
-    String aStr;
+    OUStringBuffer aStr;
     bool bDefault[4];
     // 1 subformat matches all if no condition specified,
     bDefault[0] = ( NumFor[1].GetCount() == 0 && eOp1 == NUMBERFORMAT_OP_NO );
@@ -4628,13 +4628,13 @@ String SvNumberformat::GetMappedFormatstring(
         if ( nSem && (nAnz || aPrefix.Len()) )
         {
             for ( ; nSem; --nSem )
-                aStr += ';';
+                aStr.append( ';' );
             for ( ; nSub <= n; ++nSub )
                 bDefault[nSub] = false;
         }
 
         if ( aPrefix.Len() )
-            aStr += aPrefix;
+            aStr.append( aPrefix );
 
         if ( nAnz )
         {
@@ -4644,64 +4644,64 @@ String SvNumberformat::GetMappedFormatstring(
             {
                 if ( 0 <= pType[j] && pType[j] < NF_KEYWORD_ENTRIES_COUNT )
                 {
-                    aStr += rKeywords[pType[j]];
+                    aStr.append( rKeywords[pType[j]] );
                     if( NF_KEY_NNNN == pType[j] )
-                        aStr += rLocWrp.getLongDateDayOfWeekSep();
+                        aStr.append( rLocWrp.getLongDateDayOfWeekSep() );
                 }
                 else
                 {
                     switch ( pType[j] )
                     {
                         case NF_SYMBOLTYPE_DECSEP :
-                            aStr += rLocWrp.getNumDecimalSep();
+                            aStr.append( rLocWrp.getNumDecimalSep() );
                         break;
                         case NF_SYMBOLTYPE_THSEP :
-                            aStr += rLocWrp.getNumThousandSep();
+                            aStr.append( rLocWrp.getNumThousandSep() );
                         break;
                         case NF_SYMBOLTYPE_DATESEP :
-                            aStr += rLocWrp.getDateSep();
+                            aStr.append( rLocWrp.getDateSep() );
                         break;
                         case NF_SYMBOLTYPE_TIMESEP :
-                            aStr += rLocWrp.getTimeSep();
+                            aStr.append( rLocWrp.getTimeSep() );
                         break;
                         case NF_SYMBOLTYPE_TIME100SECSEP :
-                            aStr += rLocWrp.getTime100SecSep();
+                            aStr.append( rLocWrp.getTime100SecSep() );
                         break;
                         case NF_SYMBOLTYPE_STRING :
                             if( bDontQuote )
-                                aStr += pStr[j];
+                                aStr.append( pStr[j] );
                             else if ( pStr[j].getLength() == 1 )
                             {
-                                aStr += '\\';
-                                aStr += pStr[j];
+                                aStr.append( '\\' );
+                                aStr.append( pStr[j] );
                             }
                             else
                             {
-                                aStr += '"';
-                                aStr += pStr[j];
-                                aStr += '"';
+                                aStr.append( '"' );
+                                aStr.append( pStr[j] );
+                                aStr.append( '"' );
                             }
                             break;
                         case NF_SYMBOLTYPE_CALDEL :
                             if ( pStr[j+1].equalsAscii("buddhist") )
                             {
-                                aStr.InsertAscii( "[$-", 0 );
+                                aStr.insert( 0, "[$-" );
                                 if ( rNum.IsSet() && rNum.GetNatNum() == 1 &&
                                         MsLangId::getRealLanguage( rNum.GetLang() ) ==
                                         LANGUAGE_THAI )
                                 {
-                                    aStr.InsertAscii( "D07041E]", 3 ); // date in Thai digit, Buddhist era
+                                    aStr.insert( 3, "D07041E]" ); // date in Thai digit, Buddhist era
                                 }
                                 else
                                 {
-                                    aStr.InsertAscii( "107041E]", 3 ); // date in Arabic digit, Buddhist era
+                                    aStr.insert( 3, "107041E]" ); // date in Arabic digit, Buddhist era
                                 }
                                 j = j+2;
                             }
                             LCIDInserted = true;
                         break;
                         default:
-                            aStr += pStr[j];
+                            aStr.append( pStr[j] );
                     }
 
                 }
@@ -4714,14 +4714,14 @@ String SvNumberformat::GetMappedFormatstring(
                 LANGUAGE_THAI && !LCIDInserted )
         {
 
-            aStr.InsertAscii( "[$-D00041E]", 0 ); // number in Thai digit
+            aStr.insert( 0, "[$-D00041E]" ); // number in Thai digit
         }
     }
     for ( ; nSub<4 && bDefault[nSub]; ++nSub )
     {   // append empty subformats
-        aStr += ';';
+        aStr.append( ';' );
     }
-    return aStr;
+    return aStr.getStr();
 }
 
 String SvNumberformat::ImpGetNatNumString( const SvNumberNatNum& rNum,
