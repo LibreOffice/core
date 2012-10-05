@@ -659,7 +659,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/drawing
 	HatchTable \
 	Layer \
 	LayerManager \
-	LineCap \
 	LineProperties \
 	LineShape \
 	MarkerTable \
@@ -2222,6 +2221,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/drawing,\
 	HomogenMatrixLine4 \
 	HorizontalDimensioning \
 	LayerType \
+	LineCap \
 	LineDash \
 	LineEndType \
 	LineJoint \
