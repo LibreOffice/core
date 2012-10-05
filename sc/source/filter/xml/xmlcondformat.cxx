@@ -137,14 +137,11 @@ void ScXMLConditionalFormatContext::EndElement()
 {
     ScDocument* pDoc = GetScImport().GetDocument();
 
-    sal_uLong nIndex = pDoc->AddCondFormat(mpFormat, GetScImport().GetTables().GetCurrentSheet());
+    SCTAB nTab = GetScImport().GetTables().GetCurrentSheet();
+    sal_uLong nIndex = pDoc->AddCondFormat(mpFormat, nTab);
     mpFormat->SetKey(nIndex);
 
-    ScPatternAttr aPattern( pDoc->GetPool() );
-    aPattern.GetItemSet().Put( SfxUInt32Item( ATTR_CONDITIONAL, nIndex ) );
-    ScMarkData aMarkData;
-    aMarkData.MarkFromRangeList(mpFormat->GetRange(), true);
-    pDoc->ApplySelectionPattern( aPattern , aMarkData);
+    pDoc->AddCondFormatData( mpFormat->GetRange(), nTab, nIndex);
 }
 
 ScXMLColorScaleFormatContext::ScXMLColorScaleFormatContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
