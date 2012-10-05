@@ -124,18 +124,48 @@ $(call gb_ExternalProject_get_preparation_target,$(1)) : $(call gb_Package_get_t
 
 endef
 
-# TODO: do we really want to have projects depending on gbuild libraries?
-define gb_ExternalProject_use_static_libraries
-$(foreach lib,$(2),$(call gb_ExternalProject_get_preparation_target,$(1)) : \
-	$(call gb_StaticLibrary_get_target,$(lib)))
-
-endef
-
 # Make an external project depend on several packages at once
 #
 # gb_ExternalProject_use_packages external package(s)
 define gb_ExternalProject_use_packages
 $(foreach package,$(2),$(call gb_ExternalProject_use_package,$(1),$(package)))
+
+endef
+
+# Make an external project depend on a StaticLibrary
+#
+# Realistically there are some externals that do not have a usable build
+# system, and other externals that do may depend on those.
+#
+# gb_ExternalProject_use_static_libraries external staticlibraries
+define gb_ExternalProject_use_static_libraries
+ifneq (,$$(filter-out $(gb_StaticLibrary_KNOWNLIBS),$(2)))
+$$(eval $$(call gb_Output_info, currently known static libraries are: $(sort $(gb_StaticLibrary_KNOWNLIBS)),ALL))
+$$(eval $$(call gb_Output_error,Cannot link against static library/libraries $$(filter-out $(gb_StaticLibrary_KNOWNLIBS),$(2)). Static libraries must be registered in Repository.mk))
+endif
+
+$(call gb_ExternalProject_get_preparation_target,$(1)) : \
+	$(foreach lib,$(2),$(call gb_StaticLibrary_get_target,$(lib)))
+
+endef
+
+# Make an external project depend on a Library
+#
+# Realistically there are some externals that do not have a usable build
+# system, and other externals that do may depend on those.
+#
+# gb_ExternalProject_use_libraries external libraries
+define gb_ExternalProject_use_libraries
+ifneq (,$$(filter-out $(gb_Library_KNOWNLIBS),$(2)))
+$$(eval $$(call gb_Output_info,currently known libraries are: $(sort $(gb_Library_KNOWNLIBS)),ALL))
+$$(eval $$(call gb_Output_error,Cannot link against library/libraries $$(filter-out $(gb_Library_KNOWNLIBS),$(2)). Libraries must be registered in Repository.mk))
+endif
+ifneq (,$$(filter $$(gb_MERGEDLIBS),$(2)))
+$$(eval $$(call gb_Output_error,Cannot link against library/libraries $$(filter $$(gb_MERGEDLIBS),$(2)) because they are merged.))
+endif
+
+$(call gb_ExternalProject_get_preparation_target,$(1)) : \
+	$(foreach lib,$(2),$(call gb_Library_get_target,$(lib)))
 
 endef
 
