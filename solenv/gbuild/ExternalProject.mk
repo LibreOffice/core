@@ -109,6 +109,10 @@ $(call gb_ExternalProject_get_preparation_target,$(1)) : $(call gb_ExternalProje
 
 endef
 
+define gb_ExternalProject_use_externals
+$(foreach external,$(2),$(call gb_ExternalProject_use_external,$(1),$(2)))
+endef
+
 # Make an external project depend on a package
 #
 # This is most useful for depending on output files created by another
