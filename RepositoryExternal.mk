@@ -1058,6 +1058,9 @@ $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
 ))
 
 define gb_LinkTarget__use_wpg
+$(call gb_LinkTarget_use_package,$(1),\
+	libwpg_inc \
+)
 $(call gb_LinkTarget_use_static_libraries,$(1),\
 	wpglib \
 )
