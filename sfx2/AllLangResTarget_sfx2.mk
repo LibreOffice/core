@@ -58,7 +58,6 @@ $(eval $(call gb_SrsTarget_add_files,sfx/res,\
     sfx2/source/dialog/mailwindow.src \
     sfx2/source/dialog/mgetempl.src \
     sfx2/source/dialog/newstyle.src \
-    sfx2/source/dialog/passwd.src \
     sfx2/source/dialog/printopt.src \
     sfx2/source/dialog/recfloat.src \
     sfx2/source/dialog/securitypage.src \

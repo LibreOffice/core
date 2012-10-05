@@ -35,20 +35,17 @@
 #include "sfx2/sfxresid.hxx"
 
 #include "dialog.hrc"
-#include "passwd.hrc"
-
-#include "vcl/arrange.hxx"
 
 // -----------------------------------------------------------------------
 
 IMPL_LINK_INLINE_START( SfxPasswordDialog, EditModifyHdl, Edit *, pEdit )
 {
-    if( mbAsciiOnly && (pEdit == &maPasswordED || pEdit == &maPassword2ED) )
+    if (mbAsciiOnly && (pEdit == mpPassword1ED || pEdit == mpPassword2ED))
     {
-        rtl::OUString aTest( pEdit->GetText() );
+        OUString aTest( pEdit->GetText() );
         const sal_Unicode* pTest = aTest.getStr();
         sal_Int32 nLen = aTest.getLength();
-        rtl::OUStringBuffer aFilter( nLen );
+        OUStringBuffer aFilter( nLen );
         bool bReset = false;
         for( sal_Int32 i = 0; i < nLen; i++ )
         {
@@ -65,10 +62,10 @@ IMPL_LINK_INLINE_START( SfxPasswordDialog, EditModifyHdl, Edit *, pEdit )
         }
 
     }
-    bool bEnable = maPasswordED.GetText().Len() >= mnMinLen;
-    if( maPassword2ED.IsVisible() )
-        bEnable = (bEnable && (maPassword2ED.GetText().Len() >= mnMinLen));
-    maOKBtn.Enable( bEnable );
+    bool bEnable = mpPassword1ED->GetText().Len() >= mnMinLen;
+    if( mpPassword2ED->IsVisible() )
+        bEnable = (bEnable && (mpPassword2ED->GetText().Len() >= mnMinLen));
+    mpOKBtn->Enable( bEnable );
     return 0;
 }
 IMPL_LINK_INLINE_END(SfxPasswordDialog, EditModifyHdl, Edit *, pEdit)
@@ -85,8 +82,8 @@ IMPL_LINK_NOARG(SfxPasswordDialog, OKHdl)
     {
         ErrorBox aBox( this, SfxResId( MSG_ERROR_WRONG_CONFIRM ) );
         aBox.Execute();
-        maConfirmED.SetText( String() );
-        maConfirmED.GrabFocus();
+        mpConfirm1ED->SetText( String() );
+        mpConfirm1ED->GrabFocus();
     }
     else
         EndDialog( RET_OK );
@@ -95,103 +92,44 @@ IMPL_LINK_NOARG(SfxPasswordDialog, OKHdl)
 
 // CTOR / DTOR -----------------------------------------------------------
 
-SfxPasswordDialog::SfxPasswordDialog( Window* pParent, const String* pGroupText ) :
-
-    ModalDialog( pParent, SfxResId ( DLG_PASSWD ) ),
-
-    maPasswordBox   ( this, SfxResId( GB_PASSWD_PASSWORD ) ),
-    maUserFT        ( this, SfxResId( FT_PASSWD_USER ) ),
-    maUserED        ( this, SfxResId( ED_PASSWD_USER ) ),
-    maPasswordFT    ( this, SfxResId( FT_PASSWD_PASSWORD ) ),
-    maPasswordED    ( this, SfxResId( ED_PASSWD_PASSWORD ) ),
-    maConfirmFT     ( this, SfxResId( FT_PASSWD_CONFIRM ) ),
-    maConfirmED     ( this, SfxResId( ED_PASSWD_CONFIRM ) ),
-
-    maMinLengthFT   ( this, SfxResId( FT_PASSWD_MINLEN ) ),
-    maPassword2Box  ( this, 0 ),
-    maPassword2FT   ( this, SfxResId( FT_PASSWD_PASSWORD2 ) ),
-    maPassword2ED   ( this, SfxResId( ED_PASSWD_PASSWORD2 ) ),
-    maConfirm2FT    ( this, SfxResId( FT_PASSWD_CONFIRM2 ) ),
-    maConfirm2ED    ( this, SfxResId( ED_PASSWD_CONFIRM2 ) ),
-    maOKBtn         ( this, SfxResId( BTN_PASSWD_OK ) ),
-    maCancelBtn     ( this, SfxResId( BTN_PASSWD_CANCEL ) ),
-    maHelpBtn       ( this, SfxResId( BTN_PASSWD_HELP ) ),
-
-    maMinLenPwdStr  ( SfxResId( STR_PASSWD_MIN_LEN ).toString() ),
-    maEmptyPwdStr   ( SfxResId( STR_PASSWD_EMPTY ).toString() ),
-    maMainPwdStr    ( ),
-    mnMinLen        ( 5 ),
-    mnExtras        ( 0 ),
-    mbAsciiOnly     ( false )
-
+SfxPasswordDialog::SfxPasswordDialog(Window* pParent, const String* pGroupText)
+    : ModalDialog(pParent, "PasswordDialog", "sfx/ui/password.ui")
+    , maMinLenPwdStr(SFX2_RESSTR(STR_PASSWD_MIN_LEN))
+    , maEmptyPwdStr(SFX2_RESSTR(STR_PASSWD_EMPTY))
+    , mnMinLen(5)
+    , mnExtras(0)
+    , mbAsciiOnly(false)
 {
-    maPasswordED.SetAccessibleName(SfxResId(TEXT_PASSWD).toString());
-    FreeResource();
+    get(mpPassword1Box, "password1frame");
+    get(mpUserFT, "userft");
+    get(mpUserED, "usered");
+    get(mpPassword1FT, "pass1ft");
+    get(mpPassword1ED, "pass1ed");
+    get(mpConfirm1FT, "confirm1ft");
+    get(mpConfirm1ED, "confirm1ed");
 
-    // setup layout
-    boost::shared_ptr<vcl::RowOrColumn> xLayout =
-        boost::dynamic_pointer_cast<vcl::RowOrColumn>( getLayout() );
-    xLayout->setOuterBorder( 0 );
+    get(mpPassword2Box, "password2frame");
+    get(mpPassword2FT, "pass2ft");
+    get(mpPassword2ED, "pass2ed");
+    get(mpConfirm2FT, "confirm2ft");
+    get(mpConfirm2ED, "confirm2ed");
 
-    // get edit size, should be used as minimum
-    Size aEditSize( maUserED.GetSizePixel() );
+    get(mpMinLengthFT, "minlenft");
 
-    // add labelcolumn for the labeled edit fields
-    boost::shared_ptr<vcl::LabelColumn> xEdits( new vcl::LabelColumn( xLayout.get() ) );
-    size_t nChildIndex = xLayout->addChild( xEdits );
-    xLayout->setBorders( nChildIndex, -2, -2, -2, 0 );
+    get(mpOKBtn, "ok");
 
-    // add group box
-    xEdits->addWindow( &maPasswordBox );
-
-    // add user line
-    xEdits->addRow( &maUserFT, &maUserED, -2, aEditSize );
-
-    // add password line
-    xEdits->addRow( &maPasswordFT, &maPasswordED, -2, aEditSize );
-
-    // add confirm line
-    xEdits->addRow( &maConfirmFT, &maConfirmED, -2, aEditSize );
-
-    // add second group box
-    xEdits->addWindow( &maPassword2Box );
-
-    // add second password line
-    xEdits->addRow( &maPassword2FT, &maPassword2ED, -2, aEditSize );
-
-    // add second confirm line
-    xEdits->addRow( &maConfirm2FT, &maConfirm2ED, -2, aEditSize );
-
-    // add password length warning line
-    xEdits->addWindow( &maMinLengthFT );
-
-    // add a FixedLine
-    FixedLine* pLine = new FixedLine( this, 0 );
-    pLine->Show();
-    addWindow( pLine, true );
-    xLayout->addWindow( pLine );
-
-    // add button column
-    Size aBtnSize( maCancelBtn.GetSizePixel() );
-    boost::shared_ptr<vcl::RowOrColumn> xButtons( new vcl::RowOrColumn( xLayout.get(), false ) );
-    nChildIndex = xLayout->addChild( xButtons );
-    xLayout->setBorders( nChildIndex, -2, 0, -2, -2 );
-
-    xButtons->addWindow( &maHelpBtn, 0, aBtnSize );
-    xButtons->addChild( new vcl::Spacer( xButtons.get() ) );
-    xButtons->addWindow( &maOKBtn, 0, aBtnSize );
-    xButtons->addWindow( &maCancelBtn, 0, aBtnSize );
+    mpPassword1ED->SetAccessibleName(SFX2_RESSTR(STR_PASSWD));
 
     Link aLink = LINK( this, SfxPasswordDialog, EditModifyHdl );
-    maPasswordED.SetModifyHdl( aLink );
-    maPassword2ED.SetModifyHdl( aLink );
+    mpPassword1ED->SetModifyHdl( aLink );
+    mpPassword2ED->SetModifyHdl( aLink );
     aLink = LINK( this, SfxPasswordDialog, OKHdl );
-    maOKBtn.SetClickHdl( aLink );
+    mpOKBtn->SetClickHdl( aLink );
 
-    if ( pGroupText )
-          maPasswordBox.SetText( *pGroupText );
+    if (pGroupText)
+        mpPassword1Box->set_label(*pGroupText);
 
-//set the text to the pasword length
+    //set the text to the pasword length
     SetPasswdText();
 }
 
@@ -201,13 +139,12 @@ void SfxPasswordDialog::SetPasswdText( )
 {
 //set the new string to the minimum password length
     if( mnMinLen == 0 )
-        maMinLengthFT.SetText( maEmptyPwdStr );
+        mpMinLengthFT->SetText(maEmptyPwdStr);
     else
     {
         maMainPwdStr = maMinLenPwdStr;
-        maMainPwdStr.SearchAndReplace( rtl::OUString("$(MINLEN)"), String::CreateFromInt32((sal_Int32) mnMinLen ), 0);
-        maMinLengthFT.SetText( maMainPwdStr );
-        maMinLengthFT.Show();
+        maMainPwdStr.SearchAndReplace( OUString("$(MINLEN)"), String::CreateFromInt32((sal_Int32) mnMinLen ), 0);
+        mpMinLengthFT->SetText(maMainPwdStr);
     }
 }
 
@@ -224,105 +161,41 @@ void SfxPasswordDialog::SetMinLen( sal_uInt16 nLen )
 
 short SfxPasswordDialog::Execute()
 {
-    maUserFT.Hide();
-    maUserED.Hide();
-    maConfirmFT.Hide();
-    maConfirmED.Hide();
-    maPasswordFT.Hide();
-    maPassword2Box.Hide();
-    maPassword2FT.Hide();
-    maPassword2ED.Hide();
-    maPassword2FT.Hide();
-    maConfirm2FT.Hide();
-    maConfirm2ED.Hide();
+    mpUserFT->Hide();
+    mpUserED->Hide();
+    mpConfirm1FT->Hide();
+    mpConfirm1ED->Hide();
+    mpPassword1FT->Hide();
+    mpPassword2Box->Hide();
+    mpPassword2FT->Hide();
+    mpPassword2ED->Hide();
+    mpPassword2FT->Hide();
+    mpConfirm2FT->Hide();
+    mpConfirm2ED->Hide();
 
-    if( mnExtras != SHOWEXTRAS_NONE )
-        maPasswordFT.Show();
-    if( (mnExtras & SHOWEXTRAS_USER ) )
+    if (mnExtras != SHOWEXTRAS_NONE)
+        mpPassword1FT->Show();
+    if (mnExtras & SHOWEXTRAS_USER)
     {
-        //TODO: Inevitably this layout logic will be wrong post merge until we can see the dialog to test it.
-        Size a3Size = LogicToPixel( Size( 3, 3 ), MAP_APPFONT );
-        Size a6Size = LogicToPixel( Size( 6, 6 ), MAP_APPFONT );
-        long nMinHeight = maHelpBtn.GetPosPixel().Y() +
-                          maHelpBtn.GetSizePixel().Height() + a6Size.Height();
-        sal_uInt16 nRowHided = 1;
-
-        if ( SHOWEXTRAS_NONE == mnExtras )
-        {
-            maUserFT.Hide();
-            maUserED.Hide();
-            maConfirmFT.Hide();
-            maConfirmED.Hide();
-            maPasswordFT.Hide();
-
-            Point aPos = maUserFT.GetPosPixel();
-            long nEnd = maUserED.GetPosPixel().X() + maUserED.GetSizePixel().Width();
-            maPasswordED.SetPosPixel( aPos );
-            Size aSize = maPasswordED.GetSizePixel();
-            aSize.Width() = nEnd - aPos.X();
-            maPasswordED.SetSizePixel( aSize );
-
-            nRowHided = 2;
-        }
-        else if ( SHOWEXTRAS_USER == mnExtras )
-        {
-            maConfirmFT.Hide();
-            maConfirmED.Hide();
-        }
-        else if ( SHOWEXTRAS_CONFIRM == mnExtras )
-        {
-            maUserFT.Hide();
-            maUserED.Hide();
-
-            Point aPwdPos1 = maPasswordFT.GetPosPixel();
-            Point aPwdPos2 = maPasswordED.GetPosPixel();
-
-            Point aPos = maUserFT.GetPosPixel();
-            maPasswordFT.SetPosPixel( aPos );
-            aPos = maUserED.GetPosPixel();
-            maPasswordED.SetPosPixel( aPos );
-
-            aPos = maConfirmFT.GetPosPixel();
-            maConfirmFT.SetPosPixel( aPwdPos1 );
-            maConfirmED.SetPosPixel( aPwdPos2 );
-            maMinLengthFT.SetPosPixel(aPos);
-        }
-
-        Size aBoxSize = maPasswordBox.GetSizePixel();
-        aBoxSize.Height() -= ( nRowHided * maUserED.GetSizePixel().Height() );
-        aBoxSize.Height() -= ( nRowHided * a3Size.Height() );
-        maPasswordBox.SetSizePixel( aBoxSize );
-
-        long nDlgHeight = maPasswordBox.GetPosPixel().Y() + aBoxSize.Height() + a6Size.Height();
-        if ( nDlgHeight < nMinHeight )
-            nDlgHeight = nMinHeight;
-        Size aDlgSize = GetOutputSizePixel();
-        aDlgSize.Height() = nDlgHeight;
-        SetOutputSizePixel( aDlgSize );
-
-        maUserFT.Show();
-        maUserED.Show();
+        mpUserFT->Show();
+        mpUserED->Show();
     }
-    if( (mnExtras & SHOWEXTRAS_CONFIRM ) )
+    if (mnExtras & SHOWEXTRAS_CONFIRM)
     {
-        maConfirmFT.Show();
-        maConfirmED.Show();
+        mpConfirm1FT->Show();
+        mpConfirm1ED->Show();
     }
-    if( (mnExtras & SHOWEXTRAS_PASSWORD2) )
+    if (mnExtras & SHOWEXTRAS_PASSWORD2)
     {
-        maPassword2Box.Show();
-        maPassword2FT.Show();
-        maPassword2ED.Show();
+        mpPassword2Box->Show();
+        mpPassword2FT->Show();
+        mpPassword2ED->Show();
     }
-    if( (mnExtras & SHOWEXTRAS_CONFIRM2 ) )
+    if (mnExtras & SHOWEXTRAS_CONFIRM2)
     {
-        maConfirm2FT.Show();
-        maConfirm2ED.Show();
+        mpConfirm2FT->Show();
+        mpConfirm2ED->Show();
     }
-
-    boost::shared_ptr<vcl::RowOrColumn> xLayout =
-        boost::dynamic_pointer_cast<vcl::RowOrColumn>( getLayout() );
-    SetSizePixel( xLayout->getOptimalSize( WINDOWSIZE_PREFERRED ) );
 
     return ModalDialog::Execute();
 }
