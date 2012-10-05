@@ -33,10 +33,6 @@ $(eval $(call gb_StaticLibrary_set_include,shell_xmlparser,\
 ))
 
 ifeq ($(GUI),WNT)
-$(eval $(call gb_StaticLibrary_add_defs,shell_xmlparser,\
-	-DXML_UNICODE \
-))
-
 $(eval $(call gb_StaticLibrary_use_externals,shell_xmlparser,\
 	expat_utf16 \
 ))

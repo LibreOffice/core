@@ -42,7 +42,6 @@ $(eval $(call gb_Library_add_defs,propertyhdl_x64,\
 	-DISOLATION_AWARE_ENABLED \
 	-DUNICODE \
 	-DWIN32_LEAN_AND_MEAN \
-	-DXML_UNICODE \
 	-D_NTSDK \
 	-D_UNICODE \
 	-UNOMINMAX \
