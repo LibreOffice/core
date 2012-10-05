@@ -2350,6 +2350,12 @@ if test -z "$enable_database_connectivity"; then
 
     # And actually, do enable it for iOS, too. Let's get back to
     # figuring out what to do with this later, if ever.
+
+    # (Note that with "enable", I mean "enable building the related
+    # code". Very likely little of it will make any sense at run-time
+    # on Android or iOS and won't even be shipped with/linked into any
+    # app.)
+
     #if test $_os != iOS; then
         enable_database_connectivity=yes
     #fi
