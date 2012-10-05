@@ -297,7 +297,7 @@ void ScAttrArray::AddCondFormat( SCROW nStartRow, SCROW nEndRow, sal_uInt32 nInd
 
             nTempEndRow = std::min<SCROW>( nPatternEndRow, nEndRow );
             const SfxPoolItem* pItem = NULL;
-            SfxItemState eState = pPattern->GetItemSet().GetItemState( ATTR_CONDITIONAL, true, &pItem );
+            pPattern->GetItemSet().GetItemState( ATTR_CONDITIONAL, true, &pItem );
             std::vector< sal_uInt32 > aCondFormatData;
             if(pItem)
                 aCondFormatData = static_cast<const ScCondFormatItem*>(pItem)->GetCondFormatData();
@@ -1229,9 +1229,9 @@ bool ScAttrArray::HasAttrib( SCROW nRow1, SCROW nRow2, sal_uInt16 nMask ) const
         }
         if ( nMask & HASATTR_CONDITIONAL )
         {
-            const SfxUInt32Item* pConditional =
-                    (const SfxUInt32Item*) &pPattern->GetItem( ATTR_CONDITIONAL );
-            if ( pConditional->GetValue() != 0 )
+            bool bContainsCondFormat =
+                    !static_cast<const ScCondFormatItem&>(pPattern->GetItem( ATTR_CONDITIONAL )).GetCondFormatData().empty();
+            if ( bContainsCondFormat )
                 bFound = true;
         }
         if ( nMask & HASATTR_PROTECTED )
@@ -1242,9 +1242,9 @@ bool ScAttrArray::HasAttrib( SCROW nRow1, SCROW nRow2, sal_uInt16 nMask ) const
             if ( pProtect->GetProtection() || pProtect->GetHideCell() )
                 bFoundTemp = true;
 
-            const SfxUInt32Item* pConditional =
-                    (const SfxUInt32Item*) &pPattern->GetItem( ATTR_CONDITIONAL );
-            if ( pConditional->GetValue() != 0 )
+            bool bContainsCondFormat =
+                    !static_cast<const ScCondFormatItem&>(pPattern->GetItem( ATTR_CONDITIONAL )).GetCondFormatData().empty();
+            if ( bContainsCondFormat )
             {
                 SCROW nRowStartCond = std::max<SCROW>( nRow1, i ? pData[i-1].nRow + 1: 0 );
                 SCROW nRowEndCond = std::min<SCROW>( nRow2, pData[i].nRow );

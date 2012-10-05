@@ -126,9 +126,7 @@ long ScColumn::GetNeededSize( SCROW nRow, OutputDevice* pDev,
         }
 
         //      bedingte Formatierung
-        const SfxItemSet* pCondSet = NULL;
-        if ( ((const SfxUInt32Item&)pPattern->GetItem(ATTR_CONDITIONAL)).GetValue() )
-            pCondSet = pDocument->GetCondResult( nCol, nRow, nTab );
+        const SfxItemSet* pCondSet = pDocument->GetCondResult( nCol, nRow, nTab );
 
         //  Zeilenumbruch?
 
