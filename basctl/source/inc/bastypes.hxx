@@ -50,7 +50,7 @@ class DialogWindow;
 #define LINE_SEP        0x0A
 
 // Implementation: baside2b.cxx
-sal_Int32 searchEOL( const ::rtl::OUString& rStr, sal_Int32 fromIndex );
+sal_Int32 searchEOL( const OUString& rStr, sal_Int32 fromIndex );
 
 // Meaning of bToBeKilled:
 // While being in a reschedule-loop, I may not destroy the window.
@@ -155,8 +155,8 @@ private:
     int nStatus;
 
     ScriptDocument      m_aDocument;
-    rtl::OUString     m_aLibName;
-    rtl::OUString     m_aName;
+    OUString            m_aLibName;
+    OUString            m_aName;
 
     friend class ModulWindow;
     friend class DialogWindow;
@@ -166,7 +166,7 @@ protected:
 
 public:
                     TYPEINFO();
-    BaseWindow( Window* pParent, const ScriptDocument& rDocument, ::rtl::OUString aLibName, ::rtl::OUString aName );
+    BaseWindow( Window* pParent, const ScriptDocument& rDocument, OUString aLibName, OUString aName );
     virtual         ~BaseWindow();
 
     void            Init();
@@ -192,8 +192,8 @@ public:
     // print page
     virtual void printPage( sal_Int32 nPage, Printer* pPrinter ) = 0;
 
-    virtual ::rtl::OUString  GetTitle();
-    ::rtl::OUString          CreateQualifiedName();
+    virtual OUString         GetTitle();
+    OUString                 CreateQualifiedName();
     virtual EntryDescriptor  CreateEntryDescriptor() = 0;
 
     virtual bool    IsModified();
@@ -223,16 +223,16 @@ public:
                     GetDocument() const { return m_aDocument; }
     void            SetDocument( const ScriptDocument& rDocument ) { m_aDocument = rDocument; }
     bool            IsDocument( const ScriptDocument& rDocument ) const { return rDocument == m_aDocument; }
-    const ::rtl::OUString&   GetLibName() const { return m_aLibName; }
-    void            SetLibName( const ::rtl::OUString& aLibName ) { m_aLibName = aLibName; }
-    const ::rtl::OUString&   GetName() const { return m_aName; }
-    void            SetName( const ::rtl::OUString& aName ) { m_aName = aName; }
+    const OUString&   GetLibName() const { return m_aLibName; }
+    void            SetLibName( const OUString& aLibName ) { m_aLibName = aLibName; }
+    const OUString&   GetName() const { return m_aName; }
+    void            SetName( const OUString& aName ) { m_aName = aName; }
 
     virtual void OnNewDocument ();
     virtual char const* GetHid () const = 0;
     virtual ItemType GetType () const = 0;
     void InsertLibInfo () const;
-    bool Is (ScriptDocument const&, rtl::OUString const&, rtl::OUString const&, ItemType, bool bFindSuspended);
+    bool Is (ScriptDocument const&, OUString const&, OUString const&, ItemType, bool bFindSuspended);
     virtual bool HasActiveEditor () const;
 };
 
@@ -244,19 +244,19 @@ public:
     LibInfos ();
     ~LibInfos ();
 public:
-    void InsertInfo (ScriptDocument const&, rtl::OUString const& rLibName, rtl::OUString const& rCurrentName, ItemType eCurrentType);
+    void InsertInfo (ScriptDocument const&, OUString const& rLibName, OUString const& rCurrentName, ItemType eCurrentType);
     void RemoveInfoFor (ScriptDocument const&);
-    Item const* GetInfo (ScriptDocument const&, rtl::OUString const& rLibName);
+    Item const* GetInfo (ScriptDocument const&, OUString const& rLibName);
 
 private:
     class Key
     {
     private:
         ScriptDocument  m_aDocument;
-        ::rtl::OUString m_aLibName;
+        OUString        m_aLibName;
 
     public:
-        Key (ScriptDocument const&, rtl::OUString const& rLibName);
+        Key (ScriptDocument const&, OUString const& rLibName);
         ~Key ();
     public:
         bool operator == (Key const&) const;
@@ -266,24 +266,24 @@ private:
         };
     public:
         const ScriptDocument& GetDocument() const { return m_aDocument; }
-        const ::rtl::OUString& GetLibName() const { return m_aLibName; }
+        const OUString& GetLibName() const { return m_aLibName; }
     };
 public:
     class Item
     {
     private:
         ScriptDocument  m_aDocument;
-        ::rtl::OUString m_aLibName;
-        ::rtl::OUString m_aCurrentName;
+        OUString        m_aLibName;
+        OUString        m_aCurrentName;
         ItemType        m_eCurrentType;
 
     public:
-        Item (ScriptDocument const&, rtl::OUString const& rLibName, rtl::OUString const& rCurrentName, ItemType eCurrentType);
+        Item (ScriptDocument const&, OUString const& rLibName, OUString const& rCurrentName, ItemType eCurrentType);
         ~Item ();
     public:
         const ScriptDocument&  GetDocument()    const { return m_aDocument; }
-        const ::rtl::OUString& GetLibName()     const { return m_aLibName; }
-        const ::rtl::OUString& GetCurrentName() const { return m_aCurrentName; }
+        const OUString& GetLibName()            const { return m_aLibName; }
+        const OUString& GetCurrentName()        const { return m_aCurrentName; }
         ItemType               GetCurrentType() const { return m_eCurrentType; }
     };
 private:
@@ -291,16 +291,16 @@ private:
     Map m_aMap;
 };
 
-void            CutLines( ::rtl::OUString& rStr, sal_Int32 nStartLine, sal_Int32 nLines, bool bEraseTrailingEmptyLines = false );
-::rtl::OUString CreateMgrAndLibStr( const ::rtl::OUString& rMgrName, const ::rtl::OUString& rLibName );
+void            CutLines( OUString& rStr, sal_Int32 nStartLine, sal_Int32 nLines, bool bEraseTrailingEmptyLines = false );
+OUString CreateMgrAndLibStr( const OUString& rMgrName, const OUString& rLibName );
 sal_uLong           CalcLineCount( SvStream& rStream );
 
-bool QueryReplaceMacro( const ::rtl::OUString& rName, Window* pParent = 0 );
-bool QueryDelMacro( const ::rtl::OUString& rName, Window* pParent = 0 );
-bool QueryDelDialog( const ::rtl::OUString& rName, Window* pParent = 0 );
-bool QueryDelModule( const ::rtl::OUString& rName, Window* pParent = 0 );
-bool QueryDelLib( const ::rtl::OUString& rName, bool bRef = false, Window* pParent = 0 );
-bool QueryPassword( const ::com::sun::star::uno::Reference< ::com::sun::star::script::XLibraryContainer >& xLibContainer, const ::rtl::OUString& rLibName, ::rtl::OUString& rPassword, bool bRepeat = false, bool bNewTitle = false );
+bool QueryReplaceMacro( const OUString& rName, Window* pParent = 0 );
+bool QueryDelMacro( const OUString& rName, Window* pParent = 0 );
+bool QueryDelDialog( const OUString& rName, Window* pParent = 0 );
+bool QueryDelModule( const OUString& rName, Window* pParent = 0 );
+bool QueryDelLib( const OUString& rName, bool bRef = false, Window* pParent = 0 );
+bool QueryPassword( const ::com::sun::star::uno::Reference< ::com::sun::star::script::XLibraryContainer >& xLibContainer, const OUString& rLibName, OUString& rPassword, bool bRepeat = false, bool bNewTitle = false );
 
 class ModuleInfoHelper
 {
@@ -309,8 +309,8 @@ class ModuleInfoHelper
     ModuleInfoHelper (const ModuleInfoHelper&);
     ModuleInfoHelper& operator = (const ModuleInfoHelper&);
 public:
-    static void getObjectName( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& rLib, const ::rtl::OUString& rModName, ::rtl::OUString& rObjName );
-    static sal_Int32 getModuleType(  const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& rLib, const ::rtl::OUString& rModName );
+    static void getObjectName( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& rLib, const OUString& rModName, OUString& rObjName );
+    static sal_Int32 getModuleType(  const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& rLib, const OUString& rModName );
 };
 
 } // namespace basctl
