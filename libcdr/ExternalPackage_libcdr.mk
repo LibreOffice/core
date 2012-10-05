@@ -7,7 +7,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_ExternalPackage_ExternalPackage,libcdr_inc,cdr))
+$(eval $(call gb_ExternalPackage_ExternalPackage,libcdr,cdr))
 
 $(eval $(call gb_ExternalPackage_add_unpacked_files,libcdr_inc,inc/external/libcdr,\
 	src/lib/libcdr.h \
