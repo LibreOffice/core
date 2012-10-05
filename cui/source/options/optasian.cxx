@@ -44,8 +44,6 @@ using namespace com::sun::star::frame;
 using namespace com::sun::star::beans;
 using rtl::OUString;
 
-#define C2U(cChar) rtl::OUString::createFromAscii(cChar)
-
 const sal_Char cIsKernAsianPunctuation[] = "IsKernAsianPunctuation";
 const sal_Char cCharacterCompressionType[] = "CharacterCompressionType";
 
@@ -171,7 +169,7 @@ sal_Bool SvxAsianLayoutPage::FillItemSet( SfxItemSet& )
     if(aCharKerningRB.IsChecked() != aCharKerningRB.GetSavedValue())
     {
         pImpl->aConfig.SetKerningWesternTextOnly(aCharKerningRB.IsChecked());
-        OUString sPunct(C2U(cIsKernAsianPunctuation));
+        OUString sPunct(cIsKernAsianPunctuation);
         if(pImpl->xPrSetInfo.is() && pImpl->xPrSetInfo->hasPropertyByName(sPunct))
         {
             Any aVal;
@@ -187,7 +185,7 @@ sal_Bool SvxAsianLayoutPage::FillItemSet( SfxItemSet& )
         sal_Int16 nSet = aNoCompressionRB.IsChecked() ? 0 :
                             aPunctCompressionRB.IsChecked() ? 1 : 2;
         pImpl->aConfig.SetCharDistanceCompression(nSet);
-        OUString sCompress(C2U(cCharacterCompressionType));
+        OUString sCompress(cCharacterCompressionType);
         if(pImpl->xPrSetInfo.is() && pImpl->xPrSetInfo->hasPropertyByName(sCompress))
         {
             Any aVal;
@@ -233,11 +231,11 @@ void SvxAsianLayoutPage::Reset( const SfxItemSet& )
     if(xFact.is())
     {
         pImpl->xPrSet = Reference<XPropertySet>(
-            xFact->createInstance(C2U("com.sun.star.document.Settings")), UNO_QUERY);
+            xFact->createInstance("com.sun.star.document.Settings"), UNO_QUERY);
     }
     if( pImpl->xPrSet.is() )
         pImpl->xPrSetInfo = pImpl->xPrSet->getPropertySetInfo();
-    OUString sForbidden(C2U("ForbiddenCharacters"));
+    OUString sForbidden("ForbiddenCharacters");
     sal_Bool bKernWesternText = pImpl->aConfig.IsKerningWesternTextOnly();
     sal_Int16 nCompress = pImpl->aConfig.GetCharDistanceCompression();
     if(pImpl->xPrSetInfo.is())
@@ -247,13 +245,13 @@ void SvxAsianLayoutPage::Reset( const SfxItemSet& )
             Any aForbidden = pImpl->xPrSet->getPropertyValue(sForbidden);
             aForbidden >>= pImpl->xForbidden;
         }
-        OUString sCompress(C2U(cCharacterCompressionType));
+        OUString sCompress(cCharacterCompressionType);
         if(pImpl->xPrSetInfo->hasPropertyByName(sCompress))
         {
             Any aVal = pImpl->xPrSet->getPropertyValue(sCompress);
             aVal >>= nCompress;
         }
-        OUString sPunct(C2U(cIsKernAsianPunctuation));
+        OUString sPunct(cIsKernAsianPunctuation);
         if(pImpl->xPrSetInfo->hasPropertyByName(sPunct))
         {
             Any aVal = pImpl->xPrSet->getPropertyValue(sPunct);

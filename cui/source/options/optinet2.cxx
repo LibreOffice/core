@@ -97,8 +97,6 @@ using ::rtl::OUString;
 
 // static ----------------------------------------------------------------
 
-#define C2U(cChar) OUString::createFromAscii(cChar)
-
 #include <sal/config.h>
 
 // -----------------------------------------------------------------------
@@ -1251,7 +1249,7 @@ public:
 /* -------------------------------------------------------------------------*/
 
 MailerProgramCfg_Impl::MailerProgramCfg_Impl() :
-    utl::ConfigItem(C2U("Office.Common/ExternalMailer")),
+    utl::ConfigItem("Office.Common/ExternalMailer"),
     bROProgram(sal_False)
 {
     const Sequence< OUString > aNames = GetPropertyNames();
@@ -1288,7 +1286,7 @@ const Sequence<OUString> MailerProgramCfg_Impl::GetPropertyNames()
 {
     Sequence<OUString> aRet(1);
     OUString* pRet = aRet.getArray();
-    pRet[0] = C2U("Program");
+    pRet[0] = "Program";
     return aRet;
 }
 

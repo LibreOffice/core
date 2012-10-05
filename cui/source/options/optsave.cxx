@@ -52,9 +52,7 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::container;
 using namespace comphelper;
-using rtl::OUString;
 
-#define C2U(cChar)                  OUString::createFromAscii(cChar)
 #define C2S(cChar)                  String( RTL_CONSTASCII_USTRINGPARAM(cChar) )
 #define CFG_PAGE_AND_GROUP          C2S("General"), C2S("LoadSave")
 // !! you have to update these index, if you changed the list of the child windows !!
@@ -415,7 +413,7 @@ void SfxSaveTabPage::Reset( const SfxItemSet& )
         {
             Reference< XMultiServiceFactory > xMSF = comphelper::getProcessServiceFactory();
             pImpl->xFact = Reference<XNameContainer>(
-                    xMSF->createInstance(C2U("com.sun.star.document.FilterFactory")), UNO_QUERY);
+                    xMSF->createInstance("com.sun.star.document.FilterFactory"), UNO_QUERY);
 
             DBG_ASSERT(pImpl->xFact.is(), "service com.sun.star.document.FilterFactory unavailable");
             Reference< XContainerQuery > xQuery(pImpl->xFact, UNO_QUERY);
@@ -425,21 +423,21 @@ void SfxSaveTabPage::Reset( const SfxItemSet& )
                 {
                     long nData = (long) aDocTypeLB.GetEntryData(n);
                     OUString sCommand;
-                    sCommand = C2U("matchByDocumentService=%1:iflags=");
+                    sCommand = "matchByDocumentService=%1:iflags=";
                     sCommand += String::CreateFromInt32(SFX_FILTER_IMPORT|SFX_FILTER_EXPORT);
-                    sCommand += C2U(":eflags=");
+                    sCommand += ":eflags=";
                     sCommand += String::CreateFromInt32(SFX_FILTER_NOTINFILEDLG);
-                    sCommand += C2U(":default_first");
+                    sCommand += ":default_first";
                     String sReplace;
                     switch(nData)
                     {
-                        case  APP_WRITER        : sReplace = C2U("com.sun.star.text.TextDocument");  break;
-                        case  APP_WRITER_WEB    : sReplace = C2U("com.sun.star.text.WebDocument");   break;
-                        case  APP_WRITER_GLOBAL : sReplace = C2U("com.sun.star.text.GlobalDocument");   break;
-                        case  APP_CALC          : sReplace = C2U("com.sun.star.sheet.SpreadsheetDocument");break;
-                        case  APP_IMPRESS       : sReplace = C2U("com.sun.star.presentation.PresentationDocument");break;
-                        case  APP_DRAW          : sReplace = C2U("com.sun.star.drawing.DrawingDocument");break;
-                        case  APP_MATH          : sReplace = C2U("com.sun.star.formula.FormulaProperties");break;
+                        case  APP_WRITER        : sReplace = "com.sun.star.text.TextDocument";  break;
+                        case  APP_WRITER_WEB    : sReplace = "com.sun.star.text.WebDocument";   break;
+                        case  APP_WRITER_GLOBAL : sReplace = "com.sun.star.text.GlobalDocument";   break;
+                        case  APP_CALC          : sReplace = "com.sun.star.sheet.SpreadsheetDocument";break;
+                        case  APP_IMPRESS       : sReplace = "com.sun.star.presentation.PresentationDocument";break;
+                        case  APP_DRAW          : sReplace = "com.sun.star.drawing.DrawingDocument";break;
+                        case  APP_MATH          : sReplace = "com.sun.star.formula.FormulaProperties";break;
                         default: OSL_FAIL("illegal user data");
                     }
                     String sTmp(sCommand);

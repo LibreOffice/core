@@ -98,8 +98,6 @@ using namespace ::utl;
 using ::rtl::OString;
 using ::rtl::OUString;
 
-#define C2U(cChar) OUString::createFromAscii(cChar)
-
 // class OfaMiscTabPage --------------------------------------------------
 
 int OfaMiscTabPage::DeactivatePage( SfxItemSet* pSet_ )
@@ -1496,7 +1494,7 @@ sal_Bool OfaLanguagesTabPage::FillItemSet( SfxItemSet& rSet )
             sNewLang = aLocale.Language;
             if ( !aLocale.Country.isEmpty() )
             {
-                sNewLang += C2U("-");
+                sNewLang += "-";
                 sNewLang += aLocale.Country;
             }
         }
@@ -1549,7 +1547,7 @@ sal_Bool OfaLanguagesTabPage::FillItemSet( SfxItemSet& rSet )
             Any aValue;
             Locale aLocale = MsLangId::convertLanguageToLocale( eSelectLang, false );
             aValue <<= aLocale;
-            OUString aPropName( C2U("DefaultLocale") );
+            OUString aPropName( "DefaultLocale" );
             pLangConfig->aLinguConfig.SetProperty( aPropName, aValue );
             if (xLinguProp.is())
                 xLinguProp->setPropertyValue( aPropName, aValue );
@@ -1569,7 +1567,7 @@ sal_Bool OfaLanguagesTabPage::FillItemSet( SfxItemSet& rSet )
             Any aValue;
             Locale aLocale = MsLangId::convertLanguageToLocale( eSelectLang, false );
             aValue <<= aLocale;
-            OUString aPropName( C2U("DefaultLocale_CJK") );
+            OUString aPropName( "DefaultLocale_CJK" );
             pLangConfig->aLinguConfig.SetProperty( aPropName, aValue );
             if (xLinguProp.is())
                 xLinguProp->setPropertyValue( aPropName, aValue );
@@ -1589,7 +1587,7 @@ sal_Bool OfaLanguagesTabPage::FillItemSet( SfxItemSet& rSet )
             Any aValue;
             Locale aLocale = MsLangId::convertLanguageToLocale( eSelectLang, false );
             aValue <<= aLocale;
-            OUString aPropName( C2U("DefaultLocale_CTL") );
+            OUString aPropName( "DefaultLocale_CTL" );
             pLangConfig->aLinguConfig.SetProperty( aPropName, aValue );
             if (xLinguProp.is())
                 xLinguProp->setPropertyValue( aPropName, aValue );
@@ -1713,18 +1711,18 @@ void OfaLanguagesTabPage::Reset( const SfxItemSet& rSet )
     Any aCTLLang;
     try
     {
-        aWestLang = pLangConfig->aLinguConfig.GetProperty(C2U("DefaultLocale"));
+        aWestLang = pLangConfig->aLinguConfig.GetProperty("DefaultLocale");
         Locale aLocale;
         aWestLang >>= aLocale;
 
         eCurLang = MsLangId::convertLocaleToLanguage( aLocale );
 
-        aCJKLang = pLangConfig->aLinguConfig.GetProperty(C2U("DefaultLocale_CJK"));
+        aCJKLang = pLangConfig->aLinguConfig.GetProperty("DefaultLocale_CJK");
         aLocale = Locale();
         aCJKLang >>= aLocale;
         eCurLangCJK = MsLangId::convertLocaleToLanguage( aLocale );
 
-        aCTLLang = pLangConfig->aLinguConfig.GetProperty(C2U("DefaultLocale_CTL"));
+        aCTLLang = pLangConfig->aLinguConfig.GetProperty("DefaultLocale_CTL");
         aLocale = Locale();
         aCTLLang >>= aLocale;
         eCurLangCTL = MsLangId::convertLocaleToLanguage( aLocale );
@@ -1779,7 +1777,7 @@ void OfaLanguagesTabPage::Reset( const SfxItemSet& rSet )
     aComplexLanguageLB.SaveValue();
     aCurrentDocCB.SaveValue();
 
-    sal_Bool bEnable = !pLangConfig->aLinguConfig.IsReadOnly( C2U("DefaultLocale") );
+    sal_Bool bEnable = !pLangConfig->aLinguConfig.IsReadOnly( "DefaultLocale" );
     aWesternLanguageFT.Enable( bEnable );
     aWesternLanguageLB.Enable( bEnable );
 
@@ -1788,11 +1786,11 @@ void OfaLanguagesTabPage::Reset( const SfxItemSet& rSet )
 
     // #i15812# controls for CJK/CTL already enabled/disabled from LocaleSettingHdl
 #if 0
-    bEnable = ( !pLangConfig->aLinguConfig.IsReadOnly( C2U("DefaultLocale_CJK") ) && aAsianSupportCB.IsChecked() );
+    bEnable = ( !pLangConfig->aLinguConfig.IsReadOnly( "DefaultLocale_CJK" ) && aAsianSupportCB.IsChecked() );
     aAsianLanguageFT.Enable( bEnable );
     aAsianLanguageLB.Enable( bEnable );
 
-    bEnable = ( !pLangConfig->aLinguConfig.IsReadOnly( C2U("DefaultLocale_CTL") ) && aCTLSupportCB.IsChecked() );
+    bEnable = ( !pLangConfig->aLinguConfig.IsReadOnly( "DefaultLocale_CTL" ) && aCTLSupportCB.IsChecked() );
     aComplexLanguageFT.Enable( bEnable );
     aComplexLanguageLB.Enable( bEnable );
 #endif
@@ -1814,7 +1812,7 @@ IMPL_LINK(  OfaLanguagesTabPage, SupportHdl, CheckBox*, pBox )
     sal_Bool bCheck = pBox->IsChecked();
     if ( &aAsianSupportCB == pBox )
     {
-        sal_Bool bReadonly = pLangConfig->aLinguConfig.IsReadOnly( C2U("DefaultLocale_CJK"));
+        sal_Bool bReadonly = pLangConfig->aLinguConfig.IsReadOnly("DefaultLocale_CJK");
         bCheck = ( bCheck && !bReadonly );
         aAsianLanguageFT.Enable( bCheck );
         aAsianLanguageLB.Enable( bCheck );
@@ -1824,7 +1822,7 @@ IMPL_LINK(  OfaLanguagesTabPage, SupportHdl, CheckBox*, pBox )
     }
     else if ( &aCTLSupportCB == pBox )
     {
-        sal_Bool bReadonly = pLangConfig->aLinguConfig.IsReadOnly( C2U("DefaultLocale_CTL"));
+        sal_Bool bReadonly = pLangConfig->aLinguConfig.IsReadOnly("DefaultLocale_CTL");
         bCheck = ( bCheck && !bReadonly  );
         aComplexLanguageFT.Enable( bCheck );
         aComplexLanguageLB.Enable( bCheck );

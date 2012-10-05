@@ -78,7 +78,6 @@ using namespace ::com::sun::star::linguistic2;
 using namespace ::com::sun::star::beans;
 namespace css = com::sun::star;
 
-#define C2U(cChar) OUString::createFromAscii(cChar)
 #define CBCOL_FIRST     0
 #define CBCOL_SECOND    1
 #define CBCOL_BOTH      2
@@ -733,7 +732,7 @@ SvxLinguData_Impl::SvxLinguData_Impl() :
 {
     xMSF = ::comphelper::getProcessServiceFactory();
     uno::Reference < XInterface > xI = xMSF->createInstance(
-        C2U( "com.sun.star.linguistic2.LinguServiceManager" ) );
+        "com.sun.star.linguistic2.LinguServiceManager" );
     xLinguSrvcMgr = uno::Reference<XLinguServiceManager>(xI, UNO_QUERY);
     DBG_ASSERT(xLinguSrvcMgr.is(), "No linguistic service available!");
     if(xLinguSrvcMgr.is())
@@ -746,7 +745,7 @@ SvxLinguData_Impl::SvxLinguData_Impl() :
 
         //read spell checker
         Sequence< OUString > aSpellNames = xLinguSrvcMgr->getAvailableServices(
-                        C2U(cSpell),    Locale() );
+                        cSpell,    Locale() );
         const OUString* pSpellNames = aSpellNames.getConstArray();
 
         sal_Int32 nIdx;
@@ -772,7 +771,7 @@ SvxLinguData_Impl::SvxLinguData_Impl() :
 
         //read grammar checker
         Sequence< OUString > aGrammarNames = xLinguSrvcMgr->getAvailableServices(
-                        C2U(cGrammar), Locale() );
+                        cGrammar, Locale() );
         const OUString* pGrammarNames = aGrammarNames.getConstArray();
         for(nIdx = 0; nIdx < aGrammarNames.getLength(); nIdx++)
         {
@@ -796,7 +795,7 @@ SvxLinguData_Impl::SvxLinguData_Impl() :
 
         //read hyphenator
         Sequence< OUString > aHyphNames = xLinguSrvcMgr->getAvailableServices(
-                        C2U(cHyph), Locale() );
+                        cHyph, Locale() );
         const OUString* pHyphNames = aHyphNames.getConstArray();
         for(nIdx = 0; nIdx < aHyphNames.getLength(); nIdx++)
         {
@@ -820,7 +819,7 @@ SvxLinguData_Impl::SvxLinguData_Impl() :
 
         //read thesauri
         Sequence< OUString > aThesNames = xLinguSrvcMgr->getAvailableServices(
-                        C2U(cThes),     Locale() );
+                        cThes,     Locale() );
         const OUString* pThesNames = aThesNames.getConstArray();
         for(nIdx = 0; nIdx < aThesNames.getLength(); nIdx++)
         {
@@ -848,22 +847,22 @@ SvxLinguData_Impl::SvxLinguData_Impl() :
         {
             sal_Int16 nLang = SvxLocaleToLanguage( pAllLocales[nLocale] );
 
-            aCfgSvcs = xLinguSrvcMgr->getConfiguredServices(C2U(cSpell), pAllLocales[nLocale]);
+            aCfgSvcs = xLinguSrvcMgr->getConfiguredServices(cSpell, pAllLocales[nLocale]);
             SetChecked( aCfgSvcs );
             if (aCfgSvcs.getLength())
                 aCfgSpellTable[ nLang ] = aCfgSvcs;
 
-            aCfgSvcs = xLinguSrvcMgr->getConfiguredServices(C2U(cGrammar), pAllLocales[nLocale]);
+            aCfgSvcs = xLinguSrvcMgr->getConfiguredServices(cGrammar, pAllLocales[nLocale]);
             SetChecked( aCfgSvcs );
             if (aCfgSvcs.getLength())
                 aCfgGrammarTable[ nLang ] = aCfgSvcs;
 
-            aCfgSvcs = xLinguSrvcMgr->getConfiguredServices(C2U(cHyph), pAllLocales[nLocale]);
+            aCfgSvcs = xLinguSrvcMgr->getConfiguredServices(cHyph, pAllLocales[nLocale]);
             SetChecked( aCfgSvcs );
             if (aCfgSvcs.getLength())
                 aCfgHyphTable[ nLang ] = aCfgSvcs;
 
-            aCfgSvcs = xLinguSrvcMgr->getConfiguredServices(C2U(cThes), pAllLocales[nLocale]);
+            aCfgSvcs = xLinguSrvcMgr->getConfiguredServices(cThes, pAllLocales[nLocale]);
             SetChecked( aCfgSvcs );
             if (aCfgSvcs.getLength())
                 aCfgThesTable[ nLang ] = aCfgSvcs;
@@ -1231,7 +1230,7 @@ sal_Bool SvxLinguTabPage::FillItemSet( SfxItemSet& rCoreSet )
             uno::Reference< XLinguServiceManager > xMgr( pLinguData->GetManager() );
             Locale aLocale( SvxCreateLocale(nLang) );
             if (xMgr.is())
-                xMgr->setConfiguredServices( C2U(cSpell), aLocale, aImplNames );
+                xMgr->setConfiguredServices( cSpell, aLocale, aImplNames );
         }
 
         // update grammar checker configuration entries
@@ -1243,7 +1242,7 @@ sal_Bool SvxLinguTabPage::FillItemSet( SfxItemSet& rCoreSet )
             uno::Reference< XLinguServiceManager > xMgr( pLinguData->GetManager() );
             Locale aLocale( SvxCreateLocale(nLang) );
             if (xMgr.is())
-                xMgr->setConfiguredServices( C2U(cGrammar), aLocale, aImplNames );
+                xMgr->setConfiguredServices( cGrammar, aLocale, aImplNames );
         }
 
         // update hyphenator configuration entries
@@ -1255,7 +1254,7 @@ sal_Bool SvxLinguTabPage::FillItemSet( SfxItemSet& rCoreSet )
             uno::Reference< XLinguServiceManager > xMgr( pLinguData->GetManager() );
             Locale aLocale( SvxCreateLocale(nLang) );
             if (xMgr.is())
-                xMgr->setConfiguredServices( C2U(cHyph), aLocale, aImplNames );
+                xMgr->setConfiguredServices( cHyph, aLocale, aImplNames );
         }
 
         // update thesaurus configuration entries
@@ -1267,7 +1266,7 @@ sal_Bool SvxLinguTabPage::FillItemSet( SfxItemSet& rCoreSet )
             uno::Reference< XLinguServiceManager > xMgr( pLinguData->GetManager() );
             Locale aLocale( SvxCreateLocale(nLang) );
             if (xMgr.is())
-                xMgr->setConfiguredServices( C2U(cThes), aLocale, aImplNames );
+                xMgr->setConfiguredServices( cThes, aLocale, aImplNames );
         }
     }
 
@@ -1487,7 +1486,7 @@ void SvxLinguTabPage::Reset( const SfxItemSet& rSet )
     sal_uLong nUserData = 0;
 
     pEntry = CreateEntry( sSpellAuto,       CBCOL_FIRST );
-    aLngCfg.GetProperty( C2U(UPN_IS_SPELL_AUTO) ) >>= bVal;
+    aLngCfg.GetProperty( UPN_IS_SPELL_AUTO ) >>= bVal;
     const SfxPoolItem* pItem = GetItem( rSet, SID_AUTOSPELL_CHECK );
     if (pItem)
         bVal = ((SfxBoolItem *) pItem)->GetValue();
@@ -1497,42 +1496,42 @@ void SvxLinguTabPage::Reset( const SfxItemSet& rSet )
     lcl_SetCheckButton( pEntry, bVal );
 
     pEntry = CreateEntry( sGrammarAuto,       CBCOL_FIRST );
-    aLngCfg.GetProperty( C2U(UPN_IS_GRAMMAR_AUTO) ) >>= bVal;
+    aLngCfg.GetProperty( UPN_IS_GRAMMAR_AUTO ) >>= bVal;
     nUserData = OptionsUserData( EID_GRAMMAR_AUTO, sal_False, 0, sal_True, bVal).GetUserData();
     pEntry->SetUserData( (void *)nUserData );
     pModel->Insert( pEntry );
     lcl_SetCheckButton( pEntry, bVal );
 
     pEntry = CreateEntry( sCapitalWords,    CBCOL_FIRST );
-    aLngCfg.GetProperty( C2U(UPN_IS_SPELL_UPPER_CASE) ) >>= bVal;
+    aLngCfg.GetProperty( UPN_IS_SPELL_UPPER_CASE ) >>= bVal;
     nUserData = OptionsUserData( EID_CAPITAL_WORDS, sal_False, 0, sal_True, bVal).GetUserData();
     pEntry->SetUserData( (void *)nUserData );
     pModel->Insert( pEntry );
     lcl_SetCheckButton( pEntry, bVal );
 
     pEntry = CreateEntry( sWordsWithDigits, CBCOL_FIRST );
-    aLngCfg.GetProperty( C2U(UPN_IS_SPELL_WITH_DIGITS) ) >>= bVal;
+    aLngCfg.GetProperty( UPN_IS_SPELL_WITH_DIGITS ) >>= bVal;
     nUserData = OptionsUserData( EID_WORDS_WITH_DIGITS, sal_False, 0, sal_True, bVal).GetUserData();
     pEntry->SetUserData( (void *)nUserData );
     pModel->Insert( pEntry );
     lcl_SetCheckButton( pEntry, bVal );
 
     pEntry = CreateEntry( sCapitalization,  CBCOL_FIRST );
-    aLngCfg.GetProperty( C2U(UPN_IS_SPELL_CAPITALIZATION) ) >>= bVal;
+    aLngCfg.GetProperty( UPN_IS_SPELL_CAPITALIZATION ) >>= bVal;
     nUserData = OptionsUserData( EID_CAPITALIZATION, sal_False, 0, sal_True, bVal).GetUserData();
     pEntry->SetUserData( (void *)nUserData );
     pModel->Insert( pEntry );
     lcl_SetCheckButton( pEntry, bVal );
 
     pEntry = CreateEntry( sSpellSpecial,    CBCOL_FIRST );
-    aLngCfg.GetProperty( C2U(UPN_IS_SPELL_SPECIAL) ) >>= bVal;
+    aLngCfg.GetProperty( UPN_IS_SPELL_SPECIAL ) >>= bVal;
     nUserData = OptionsUserData( EID_SPELL_SPECIAL, sal_False, 0, sal_True, bVal).GetUserData();
     pEntry->SetUserData( (void *)nUserData );
     pModel->Insert( pEntry );
     lcl_SetCheckButton( pEntry, bVal );
 
     pEntry = CreateEntry( sNumMinWordlen,   CBCOL_SECOND );
-    aLngCfg.GetProperty( C2U(UPN_HYPH_MIN_WORD_LENGTH) ) >>= nVal;
+    aLngCfg.GetProperty( UPN_HYPH_MIN_WORD_LENGTH ) >>= nVal;
     nUserData = OptionsUserData( EID_NUM_MIN_WORDLEN, sal_True, (sal_uInt16)nVal, sal_False, sal_False).GetUserData();
     pEntry->SetUserData( (void *)nUserData );
     pModel->Insert( pEntry );
@@ -1543,7 +1542,7 @@ void SvxLinguTabPage::Reset( const SfxItemSet& rSet )
         pHyp = &( (const SfxHyphenRegionItem &) rSet.Get( nWhich ) );
 
     pEntry = CreateEntry( sNumPreBreak,     CBCOL_SECOND );
-    aLngCfg.GetProperty( C2U(UPN_HYPH_MIN_LEADING) ) >>= nVal;
+    aLngCfg.GetProperty( UPN_HYPH_MIN_LEADING ) >>= nVal;
     if (pHyp)
         nVal = (sal_Int16) pHyp->GetMinLead();
     nUserData = OptionsUserData( EID_NUM_PRE_BREAK, sal_True, (sal_uInt16)nVal, sal_False, sal_False).GetUserData();
@@ -1551,7 +1550,7 @@ void SvxLinguTabPage::Reset( const SfxItemSet& rSet )
     pModel->Insert( pEntry );
 
     pEntry = CreateEntry( sNumPostBreak,    CBCOL_SECOND );
-    aLngCfg.GetProperty( C2U(UPN_HYPH_MIN_TRAILING) ) >>= nVal;
+    aLngCfg.GetProperty( UPN_HYPH_MIN_TRAILING ) >>= nVal;
     if (pHyp)
         nVal = (sal_Int16) pHyp->GetMinTrail();
     nUserData = OptionsUserData( EID_NUM_POST_BREAK, sal_True, (sal_uInt16)nVal, sal_False, sal_False).GetUserData();
@@ -1559,14 +1558,14 @@ void SvxLinguTabPage::Reset( const SfxItemSet& rSet )
     pModel->Insert( pEntry );
 
     pEntry = CreateEntry( sHyphAuto,        CBCOL_FIRST );
-    aLngCfg.GetProperty( C2U(UPN_IS_HYPH_AUTO) ) >>= bVal;
+    aLngCfg.GetProperty( UPN_IS_HYPH_AUTO ) >>= bVal;
     nUserData = OptionsUserData( EID_HYPH_AUTO, sal_False, 0, sal_True, bVal).GetUserData();
     pEntry->SetUserData( (void *)nUserData );
     pModel->Insert( pEntry );
     lcl_SetCheckButton( pEntry, bVal );
 
     pEntry = CreateEntry( sHyphSpecial,     CBCOL_FIRST );
-    aLngCfg.GetProperty( C2U(UPN_IS_HYPH_SPECIAL) ) >>= bVal;
+    aLngCfg.GetProperty( UPN_IS_HYPH_SPECIAL ) >>= bVal;
     nUserData = OptionsUserData( EID_HYPH_SPECIAL, sal_False, 0, sal_True, bVal).GetUserData();
     pEntry->SetUserData( (void *)nUserData );
     pModel->Insert( pEntry );
@@ -2009,7 +2008,7 @@ SvxEditModulesDlg::SvxEditModulesDlg(Window* pParent, SvxLinguData_Impl& rData) 
     if (xAvail.is())
     {
         aAvailLang = lcl_LocaleSeqToLangSeq(
-                        xAvail->getAvailableLocales( C2U(cSpell) ) );
+                        xAvail->getAvailableLocales( cSpell ) );
     }
     const Sequence< Locale >& rLoc = rLinguData.GetAllSupportedLocales();
     const Locale* pLocales = rLoc.getConstArray();
@@ -2125,10 +2124,10 @@ OUString lcl_GetServiceName(sal_uInt8 nType)
 {
     switch(nType)
     {
-        case  TYPE_SPELL    : return C2U(cSpell);
-        case  TYPE_GRAMMAR  : return C2U(cGrammar);
-        case  TYPE_HYPH     : return C2U(cHyph);
-        case  TYPE_THES     : return C2U(cThes);
+        case  TYPE_SPELL    : return OUString(cSpell);
+        case  TYPE_GRAMMAR  : return OUString(cGrammar);
+        case  TYPE_HYPH     : return OUString(cHyph);
+        case  TYPE_THES     : return OUString(cThes);
     }
     return OUString();
 }
