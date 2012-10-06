@@ -85,7 +85,6 @@ void ImagePreparer::execute()
         }
         sendNotes( i );
     }
-//      notesToHtml( 0 );
     mRef.clear();
 }
 
@@ -220,53 +219,6 @@ void ImagePreparer::sendNotes( sal_uInt32 aSlideNumber )
 }
 
 sal_Bool ExportTo( uno::Reference< drawing::XDrawPage>& aNotesPage, String aUrl );
-OString ImagePreparer::notesToHtml( sal_uInt32 aSlideNumber )
-{
-    OString aRet("");
-
-    OUString aFileURL;
-    FileBase::createTempFile( 0, 0, &aFileURL );
-    fprintf( stderr, "%s", OUStringToOString( aFileURL, RTL_TEXTENCODING_UTF8).getStr() );
-
-    if ( !xController->isRunning() )
-        return "";
-
-
-
-
-    // Get the page
-    uno::Reference< drawing::XDrawPage > xNotesPage;
-    uno::Reference< drawing::XDrawPage > xSourceDoc(
-        xController->getSlideByIndex( aSlideNumber ),
-        uno::UNO_QUERY_THROW );
-
-    uno::Reference<presentation::XPresentationPage> xPresentationPage(
-        xSourceDoc, UNO_QUERY);
-    if (xPresentationPage.is())
-        xNotesPage = uno::Reference< drawing::XDrawPage >(
-            xPresentationPage->getNotesPage(), uno::UNO_QUERY_THROW );
-    else
-        return "";
-
-
-    ExportTo( xNotesPage, aFileURL );
-
-    // FIXME: error handling.
-
-//     File aFile( aFileURL );
-//     aFile.open(0);
-//     sal_uInt64 aRead;
-//     rSize = 0;
-//     aFile.getSize( rSize );
-//     uno::Sequence<sal_Int8> aContents( rSize );
-
-//     aFile.read( aContents.getArray(), rSize, aRead );
-//     aFile.close();
-//     File::remove( aFileURL );
-//     return aContents;
-
-    return aRet;
-}
 
 // Code copied from sdremote/source/presenter/PresenterNotesView.cxx
 OString ImagePreparer::prepareNotes( sal_uInt32 aSlideNumber )
