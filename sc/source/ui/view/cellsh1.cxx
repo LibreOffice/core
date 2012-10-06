@@ -2035,6 +2035,8 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
             break;
 
         case SID_OPENDLG_CONDFRMT:
+        case SID_OPENDLG_COLORSCALE:
+        case SID_OPENDLG_DATABAR:
             {
                 ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                 OSL_ENSURE(pFact, "ScAbstractFactory create fail!");

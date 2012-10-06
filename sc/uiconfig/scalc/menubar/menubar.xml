@@ -277,6 +277,8 @@
             <menu:menu menu:id=".uno:ConditionalFormatMenu">
               <menu:menupopup>
                 <menu:menuitem menu:id=".uno:ConditionalFormatDialog"/>
+                <menu:menuitem menu:id=".uno:ColorScaleFormatDialog"/>
+                <menu:menuitem menu:id=".uno:DataBarFormatDialog"/>
                 <menu:menuseparator/>
                 <menu:menuitem menu:id=".uno:ConditionalFormatManagerDialog"/>
               </menu:menupopup>
