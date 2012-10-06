@@ -401,7 +401,8 @@ GtkSalMenu::~GtkSalMenu()
 {
     SolarMutexGuard aGuard;
     if ( mbMenuBar == sal_True )
-        ((GtkSalFrame*) mpFrame)->SetMenu( NULL );
+        if ( mpFrame )
+            ((GtkSalFrame*) mpFrame)->SetMenu( NULL );
 
     maItems.clear();
 }
