@@ -19,6 +19,7 @@
 
 class ListBox;
 class NumericFormatter;
+class ScrollBar;
 
 class VCL_DLLPUBLIC VclBuilder
 {
@@ -90,10 +91,11 @@ private:
         }
     };
 
-    typedef StringPair SpinButtonAdjustmentMap;
+    typedef StringPair WidgetAdjustmentMap;
 
     Adjustment *get_adjustment_by_name(OString sID);
-    static void mungeadjustment(NumericFormatter &rTarget, Adjustment &rAdjustment);
+    static void mungeSpinAdjustment(NumericFormatter &rTarget, Adjustment &rAdjustment);
+    static void mungeScrollAdjustment(ScrollBar &rTarget, Adjustment &rAdjustment);
 
     typedef std::map<OString, OString> WidgetTranslations;
     typedef std::map<OString, WidgetTranslations> Translations;
@@ -105,7 +107,8 @@ private:
         std::vector<ComboBoxModelMap> m_aModelMaps;
         std::vector<ModelAndId> m_aModels;
         std::vector<AdjustmentAndId> m_aAdjustments;
-        std::vector<SpinButtonAdjustmentMap> m_aAdjustmentMaps;
+        std::vector<WidgetAdjustmentMap> m_aSpinAdjustmentMaps;
+        std::vector<WidgetAdjustmentMap> m_aScrollAdjustmentMaps;
         std::vector<ButtonImageWidgetMap> m_aButtonImageWidgetMaps;
         StockMap m_aStockMap;
         Translations m_aTranslations;
@@ -179,7 +182,8 @@ private:
     Window *makeObject(Window *pParent, const OString &rClass, const OString &rID, stringmap &rVec);
     bool extractGroup(const OString &id, stringmap &rVec);
     bool extractModel(const OString &id, stringmap &rVec);
-    bool extractAdjustment(const OString &id, stringmap &rVec);
+    bool extractSpinAdjustment(const OString &id, stringmap &rVec);
+    bool extractScrollAdjustment(const OString &id, stringmap &rVec);
     bool extractImage(const OString &id, stringmap &rMap);
     bool extractStock(const OString &id, stringmap &rMap);
 

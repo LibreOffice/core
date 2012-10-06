@@ -18,6 +18,7 @@
 #include <vcl/layout.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/menubtn.hxx>
+#include <vcl/scrbar.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/tabctrl.hxx>
 #include <vcl/tabpage.hxx>
@@ -130,14 +131,25 @@ VclBuilder::VclBuilder(Window *pParent, OUString sUIDir, OUString sUIFile, OStri
     }
 
     //Set SpinButton adjustments when everything has been imported
-    for (std::vector<SpinButtonAdjustmentMap>::iterator aI = m_pParserState->m_aAdjustmentMaps.begin(),
-         aEnd = m_pParserState->m_aAdjustmentMaps.end(); aI != aEnd; ++aI)
+    for (std::vector<WidgetAdjustmentMap>::iterator aI = m_pParserState->m_aSpinAdjustmentMaps.begin(),
+         aEnd = m_pParserState->m_aSpinAdjustmentMaps.end(); aI != aEnd; ++aI)
     {
         NumericFormatter *pTarget = dynamic_cast<NumericFormatter*>(get<Window>(aI->m_sID));
         Adjustment *pAdjustment = get_adjustment_by_name(aI->m_sValue);
         SAL_WARN_IF(!pTarget || !pAdjustment, "vcl", "missing elements of spinbutton/adjustment");
         if (pTarget && pAdjustment)
-            mungeadjustment(*pTarget, *pAdjustment);
+            mungeSpinAdjustment(*pTarget, *pAdjustment);
+    }
+
+    //Set ScrollBar adjustments when everything has been imported
+    for (std::vector<WidgetAdjustmentMap>::iterator aI = m_pParserState->m_aScrollAdjustmentMaps.begin(),
+         aEnd = m_pParserState->m_aScrollAdjustmentMaps.end(); aI != aEnd; ++aI)
+    {
+        ScrollBar *pTarget = get<ScrollBar>(aI->m_sID);
+        Adjustment *pAdjustment = get_adjustment_by_name(aI->m_sValue);
+        SAL_WARN_IF(!pTarget || !pAdjustment, "vcl", "missing elements of scrollbar/adjustment");
+        if (pTarget && pAdjustment)
+            mungeScrollAdjustment(*pTarget, *pAdjustment);
     }
 
     //Set button images when everything has been imported
@@ -430,17 +442,30 @@ bool VclBuilder::extractGroup(const OString &id, stringmap &rMap)
     return false;
 }
 
-bool VclBuilder::extractAdjustment(const OString &id, stringmap &rMap)
+bool VclBuilder::extractSpinAdjustment(const OString &id, stringmap &rMap)
 {
     VclBuilder::stringmap::iterator aFind = rMap.find(OString("adjustment"));
     if (aFind != rMap.end())
     {
-        m_pParserState->m_aAdjustmentMaps.push_back(SpinButtonAdjustmentMap(id, aFind->second));
+        m_pParserState->m_aSpinAdjustmentMaps.push_back(WidgetAdjustmentMap(id, aFind->second));
         rMap.erase(aFind);
         return true;
     }
     return false;
 }
+
+bool VclBuilder::extractScrollAdjustment(const OString &id, stringmap &rMap)
+{
+    VclBuilder::stringmap::iterator aFind = rMap.find(OString("adjustment"));
+    if (aFind != rMap.end())
+    {
+        m_pParserState->m_aScrollAdjustmentMaps.push_back(WidgetAdjustmentMap(id, aFind->second));
+        rMap.erase(aFind);
+        return true;
+    }
+    return false;
+}
+
 
 bool VclBuilder::extractModel(const OString &id, stringmap &rMap)
 {
@@ -580,7 +605,7 @@ Window *VclBuilder::makeObject(Window *pParent, const OString &name, const OStri
     }
     else if (name == "GtkSpinButton")
     {
-        extractAdjustment(id, rMap);
+        extractSpinAdjustment(id, rMap);
         OString sPattern = extractPattern(rMap);
         OString sUnit = sPattern;
 
@@ -655,6 +680,14 @@ Window *VclBuilder::makeObject(Window *pParent, const OString &name, const OStri
             pWindow = new FixedLine(pParent, WB_VERT);
         else
             pWindow = new FixedLine(pParent, WB_HORZ);
+    }
+    else if (name == "GtkScrollbar")
+    {
+        extractScrollAdjustment(id, rMap);
+        if (extractOrientation(rMap))
+            pWindow = new ScrollBar(pParent, WB_VERT);
+        else
+            pWindow = new ScrollBar(pParent, WB_HORZ);
     }
     else if (name == "GtkEntry")
     {
@@ -1479,7 +1512,7 @@ void VclBuilder::mungemodel(ListBox &rTarget, ListStore &rStore)
         rTarget.SelectEntryPos(0);
 }
 
-void VclBuilder::mungeadjustment(NumericFormatter &rTarget, Adjustment &rAdjustment)
+void VclBuilder::mungeSpinAdjustment(NumericFormatter &rTarget, Adjustment &rAdjustment)
 {
     int nMul = rtl_math_pow10Exp(1, rTarget.GetDecimalDigits());
 
@@ -1516,5 +1549,30 @@ void VclBuilder::mungeadjustment(NumericFormatter &rTarget, Adjustment &rAdjustm
         }
     }
 }
+
+void VclBuilder::mungeScrollAdjustment(ScrollBar &rTarget, Adjustment &rAdjustment)
+{
+    for (stringmap::iterator aI = rAdjustment.begin(), aEnd = rAdjustment.end(); aI != aEnd; ++aI)
+    {
+        const OString &rKey = aI->first;
+        const OString &rValue = aI->second;
+
+        if (rKey == "upper")
+            rTarget.SetRangeMax(rValue.toInt32());
+        else if (rKey == "lower")
+            rTarget.SetRangeMin(rValue.toInt32());
+        else if (rKey == "value")
+            rTarget.SetThumbPos(rValue.toInt32());
+        else if (rKey == "step-increment")
+            rTarget.SetLineSize(rValue.toInt32());
+        else if (rKey == "page-increment")
+            rTarget.SetPageSize(rValue.toInt32());
+        else
+        {
+            SAL_INFO("vcl.layout", "unhandled property :" << rKey.getStr());
+        }
+    }
+}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
