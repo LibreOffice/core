@@ -643,86 +643,86 @@ void CondFormatRule::finalizeImport()
         break;
         case XML_duplicateValues:
             eOperator = CondFormatBuffer::convertToApiOperator( XML_duplicateValues );
-            aReplaceFormula = CREATE_OUSTRING( " " );
+            aReplaceFormula = " ";
         break;
         case XML_expression:
             eOperator = ::com::sun::star::sheet::ConditionOperator2::FORMULA;
         break;
         case XML_containsText:
             OSL_ENSURE( maModel.mnOperator == XML_containsText, "CondFormatRule::finalizeImport - unexpected operator" );
-            aReplaceFormula = CREATE_OUSTRING( "NOT(ISERROR(SEARCH(#T,#B)))" );
+            aReplaceFormula = "NOT(ISERROR(SEARCH(#T,#B)))";
         break;
         case XML_notContainsText:
             // note: type XML_notContainsText vs. operator XML_notContains
             OSL_ENSURE( maModel.mnOperator == XML_notContains, "CondFormatRule::finalizeImport - unexpected operator" );
-            aReplaceFormula = CREATE_OUSTRING( "ISERROR(SEARCH(#T,#B))" );
+            aReplaceFormula = "ISERROR(SEARCH(#T,#B))";
         break;
         case XML_beginsWith:
             OSL_ENSURE( maModel.mnOperator == XML_beginsWith, "CondFormatRule::finalizeImport - unexpected operator" );
-            aReplaceFormula = CREATE_OUSTRING( "LEFT(#B,#L)=#T" );
+            aReplaceFormula = "LEFT(#B,#L)=#T";
         break;
         case XML_endsWith:
             OSL_ENSURE( maModel.mnOperator == XML_endsWith, "CondFormatRule::finalizeImport - unexpected operator" );
-            aReplaceFormula = CREATE_OUSTRING( "RIGHT(#B,#L)=#T" );
+            aReplaceFormula = "RIGHT(#B,#L)=#T";
         break;
         case XML_timePeriod:
             switch( maModel.mnTimePeriod )
             {
                 case XML_yesterday:
-                    aReplaceFormula = CREATE_OUSTRING( "FLOOR(#B,1)=TODAY()-1" );
+                    aReplaceFormula = "FLOOR(#B,1)=TODAY()-1";
                 break;
                 case XML_today:
-                    aReplaceFormula = CREATE_OUSTRING( "FLOOR(#B,1)=TODAY()" );
+                    aReplaceFormula = "FLOOR(#B,1)=TODAY()";
                 break;
                 case XML_tomorrow:
-                    aReplaceFormula = CREATE_OUSTRING( "FLOOR(#B,1)=TODAY()+1" );
+                    aReplaceFormula = "FLOOR(#B,1)=TODAY()+1";
                 break;
                 case XML_last7Days:
-                    aReplaceFormula = CREATE_OUSTRING( "AND(TODAY()-7<FLOOR(#B,1),FLOOR(#B,1)<=TODAY())" );
+                    aReplaceFormula = "AND(TODAY()-7<FLOOR(#B,1),FLOOR(#B,1)<=TODAY())";
                 break;
                 case XML_lastWeek:
-                    aReplaceFormula = CREATE_OUSTRING( "AND(TODAY()-WEEKDAY(TODAY())-7<FLOOR(#B,1),FLOOR(#B,1)<=TODAY()-WEEKDAY(TODAY()))" );
+                    aReplaceFormula = "AND(TODAY()-WEEKDAY(TODAY())-7<FLOOR(#B,1),FLOOR(#B,1)<=TODAY()-WEEKDAY(TODAY()))";
                 break;
                 case XML_thisWeek:
-                    aReplaceFormula = CREATE_OUSTRING( "AND(TODAY()-WEEKDAY(TODAY())<FLOOR(#B,1),FLOOR(#B,1)<=TODAY()-WEEKDAY(TODAY())+7)" );
+                    aReplaceFormula = "AND(TODAY()-WEEKDAY(TODAY())<FLOOR(#B,1),FLOOR(#B,1)<=TODAY()-WEEKDAY(TODAY())+7)";
                 break;
                 case XML_nextWeek:
-                    aReplaceFormula = CREATE_OUSTRING( "AND(TODAY()-WEEKDAY(TODAY())+7<FLOOR(#B,1),FLOOR(#B,1)<=TODAY()-WEEKDAY(TODAY())+14)" );
+                    aReplaceFormula = "AND(TODAY()-WEEKDAY(TODAY())+7<FLOOR(#B,1),FLOOR(#B,1)<=TODAY()-WEEKDAY(TODAY())+14)";
                 break;
                 case XML_lastMonth:
-                    aReplaceFormula = CREATE_OUSTRING( "OR(AND(MONTH(#B)=MONTH(TODAY())-1,YEAR(#B)=YEAR(TODAY())),AND(MONTH(#B)=12,MONTH(TODAY())=1,YEAR(#B)=YEAR(TODAY())-1))" );
+                    aReplaceFormula = "OR(AND(MONTH(#B)=MONTH(TODAY())-1,YEAR(#B)=YEAR(TODAY())),AND(MONTH(#B)=12,MONTH(TODAY())=1,YEAR(#B)=YEAR(TODAY())-1))";
                 break;
                 case XML_thisMonth:
-                    aReplaceFormula = CREATE_OUSTRING( "AND(MONTH(#B)=MONTH(TODAY()),YEAR(#B)=YEAR(TODAY()))" );
+                    aReplaceFormula = "AND(MONTH(#B)=MONTH(TODAY()),YEAR(#B)=YEAR(TODAY()))";
                 break;
                 case XML_nextMonth:
-                    aReplaceFormula = CREATE_OUSTRING( "OR(AND(MONTH(#B)=MONTH(TODAY())+1,YEAR(#B)=YEAR(TODAY())),AND(MONTH(#B)=1,MONTH(TODAY())=12,YEAR(#B)=YEAR(TODAY())+1))" );
+                    aReplaceFormula = "OR(AND(MONTH(#B)=MONTH(TODAY())+1,YEAR(#B)=YEAR(TODAY())),AND(MONTH(#B)=1,MONTH(TODAY())=12,YEAR(#B)=YEAR(TODAY())+1))";
                 break;
                 default:
                     OSL_FAIL( "CondFormatRule::finalizeImport - unknown time period type" );
             }
         break;
         case XML_containsBlanks:
-            aReplaceFormula = CREATE_OUSTRING( "LEN(TRIM(#B))=0" );
+            aReplaceFormula = "LEN(TRIM(#B))=0";
         break;
         case XML_notContainsBlanks:
-            aReplaceFormula = CREATE_OUSTRING( "LEN(TRIM(#B))>0" );
+            aReplaceFormula = "LEN(TRIM(#B))>0";
         break;
         case XML_containsErrors:
-            aReplaceFormula = CREATE_OUSTRING( "ISERROR(#B)" );
+            aReplaceFormula = "ISERROR(#B)";
         break;
         case XML_notContainsErrors:
-            aReplaceFormula = CREATE_OUSTRING( "NOT(ISERROR(#B))" );
+            aReplaceFormula = "NOT(ISERROR(#B))";
         break;
         case XML_top10:
             if( maModel.mbPercent )
-                aReplaceFormula = CREATE_OUSTRING( "RANK(#B,#R,#M)/COUNT(#R)<=#K%" );
+                aReplaceFormula = "RANK(#B,#R,#M)/COUNT(#R)<=#K%";
             else
-                aReplaceFormula = CREATE_OUSTRING( "RANK(#B,#R,#M)<=#K" );
+                aReplaceFormula = "RANK(#B,#R,#M)<=#K";
         break;
         case XML_aboveAverage:
             if( maModel.mnStdDev == 0 )
-                aReplaceFormula = CREATE_OUSTRING( "#B#CAVERAGE(#R)" );
+                aReplaceFormula = "#B#CAVERAGE(#R)";
         break;
         case XML_colorScale:
         break;
@@ -767,8 +767,8 @@ void CondFormatRule::finalizeImport()
                 case 'C':       // average comparison operator
                     if( aComp.isEmpty() )
                         aComp = maModel.mbAboveAverage ?
-                            (maModel.mbEqualAverage ? CREATE_OUSTRING( ">=" ) : CREATE_OUSTRING( ">" )) :
-                            (maModel.mbEqualAverage ? CREATE_OUSTRING( "<=" ) : CREATE_OUSTRING( "<" ));
+                            (maModel.mbEqualAverage ? OUString( ">=" ) : OUString( ">" ) ) :
+                            (maModel.mbEqualAverage ? OUString( "<=" ) : OUString( "<" ) );
                     aReplaceFormula = aReplaceFormula.replaceAt( nStrPos, 2, aComp );
                 break;
                 default:

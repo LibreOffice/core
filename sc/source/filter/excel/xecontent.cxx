@@ -1692,7 +1692,7 @@ XclExpWebQueryBuffer::XclExpWebQueryBuffer( const XclExpRoot& rRoot )
     if( !aModelProp.Is() ) return;
 
     Reference< XAreaLinks > xAreaLinks;
-    aModelProp.GetProperty( xAreaLinks, CREATE_OUSTRING( SC_UNO_AREALINKS ) );
+    aModelProp.GetProperty( xAreaLinks, SC_UNO_AREALINKS );
     Reference< XIndexAccess > xLinksIA( xAreaLinks, UNO_QUERY );
     if( !xLinksIA.is() ) return;
 
@@ -1706,16 +1706,16 @@ XclExpWebQueryBuffer::XclExpWebQueryBuffer( const XclExpRoot& rRoot )
             {
                 ScfPropertySet aLinkProp( xAreaLink );
                 OUString aFilter;
-                if( aLinkProp.GetProperty( aFilter, CREATE_OUSTRING( SC_UNONAME_FILTER ) ) &&
-                    (aFilter == CREATE_OUSTRING( EXC_WEBQRY_FILTER )) )
+                if( aLinkProp.GetProperty( aFilter, SC_UNONAME_FILTER ) &&
+                    (aFilter == EXC_WEBQRY_FILTER) )
                 {
                     // get properties
                     OUString /*aFilterOpt,*/ aUrl;
                     sal_Int32 nRefresh = 0;
 
-//                  aLinkProp.GetProperty( aFilterOpt, CREATE_OUSTRING( SC_UNONAME_FILTOPT ) );
-                    aLinkProp.GetProperty( aUrl, CREATE_OUSTRING( SC_UNONAME_LINKURL ) );
-                    aLinkProp.GetProperty( nRefresh, CREATE_OUSTRING( SC_UNONAME_REFDELAY ) );
+//                  aLinkProp.GetProperty( aFilterOpt, SC_UNONAME_FILTOPT );
+                    aLinkProp.GetProperty( aUrl, SC_UNONAME_LINKURL );
+                    aLinkProp.GetProperty( nRefresh, SC_UNONAME_REFDELAY );
 
                     String aAbsDoc( ScGlobal::GetAbsDocName( aUrl, pShell ) );
                     INetURLObject aUrlObj( aAbsDoc );

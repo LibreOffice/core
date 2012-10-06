@@ -1947,8 +1947,8 @@ bool XclExpChSeries::ConvertDataSeries(
                     Reference< XColorScheme > xColorScheme = xDiagram->getDefaultColorScheme();
                     if( xColorScheme.is() )
                     {
-                        const OUString aFillStyleName = CREATE_OUSTRING( "FillStyle" );
-                        const OUString aColorName = CREATE_OUSTRING( "Color" );
+                        const OUString aFillStyleName = "FillStyle";
+                        const OUString aColorName = "Color";
                         namespace cssd = ::com::sun::star::drawing;
                         for( sal_Int32 nPointIdx = 0; nPointIdx < nMaxPointCount; ++nPointIdx )
                         {

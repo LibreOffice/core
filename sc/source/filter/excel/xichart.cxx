@@ -832,7 +832,7 @@ void XclImpChSourceLink::ConvertNumFmt( ScfPropertySet& rPropSet, bool bPercent 
 {
     bool bLinkToSource = ::get_flag( maData.mnFlags, EXC_CHSRCLINK_NUMFMT );
     sal_uInt32 nScNumFmt = bLinkToSource ? GetNumFmtBuffer().GetScFormat( maData.mnNumFmtIdx ) : NUMBERFORMAT_ENTRY_NOT_FOUND;
-    OUString aPropName = bPercent ? EXC_CHPROP_PERCENTAGENUMFMT : EXC_CHPROP_NUMBERFORMAT;
+    OUString aPropName = bPercent ? OUString( EXC_CHPROP_PERCENTAGENUMFMT ) : OUString( EXC_CHPROP_NUMBERFORMAT );
     if( nScNumFmt != NUMBERFORMAT_ENTRY_NOT_FOUND )
         rPropSet.SetProperty( aPropName, static_cast< sal_Int32 >( nScNumFmt ) );
     else
@@ -1551,7 +1551,7 @@ void XclImpChDataFormat::Convert( ScfPropertySet& rPropSet, const XclChExtTypeIn
 #if EXC_CHART2_3DBAR_HAIRLINES_ONLY
     // #i83151# only hair lines in 3D charts with filled data points
     if( rTypeInfo.mb3dChart && rTypeInfo.IsSeriesFrameFormat() && mxLineFmt && mxLineFmt->HasLine() )
-        rPropSet.SetProperty< sal_Int32 >( CREATE_OUSTRING( "BorderWidth" ), 0 );
+        rPropSet.SetProperty< sal_Int32 >( "BorderWidth", 0 );
 #endif
 
     // other formatting
@@ -3076,7 +3076,7 @@ void XclImpChValueRange::Convert( ScaleData& rScaleData, bool bMirrorOrient ) co
 {
     // scaling algorithm
     bool bLogScale = ::get_flag( maData.mnFlags, EXC_CHVALUERANGE_LOGSCALE );
-    OUString aScalingService = bLogScale ? SERVICE_CHART2_LOGSCALING : SERVICE_CHART2_LINEARSCALING;
+    OUString aScalingService = bLogScale ? OUString( SERVICE_CHART2_LOGSCALING ) : OUString( SERVICE_CHART2_LINEARSCALING );
     rScaleData.Scaling.set( ScfApiHelper::CreateInstance( aScalingService ), UNO_QUERY );
 
     // min/max

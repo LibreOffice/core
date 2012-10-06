@@ -86,11 +86,11 @@ void ShapeMacroAttacher::attachMacro( const OUString& rMacroUrl )
         Reference< XEventsSupplier > xSupplier( mxShape, UNO_QUERY_THROW );
         Reference< XNameReplace > xEvents( xSupplier->getEvents(), UNO_SET_THROW );
         Sequence< PropertyValue > aEventProps( 2 );
-        aEventProps[ 0 ].Name = CREATE_OUSTRING( "EventType" );
-        aEventProps[ 0 ].Value <<= CREATE_OUSTRING( "Script" );
-        aEventProps[ 1 ].Name = CREATE_OUSTRING( "Script" );
+        aEventProps[ 0 ].Name = "EventType";
+        aEventProps[ 0 ].Value <<= OUString( "Script" );
+        aEventProps[ 1 ].Name = "Script";
         aEventProps[ 1 ].Value <<= rMacroUrl;
-        xEvents->replaceByName( CREATE_OUSTRING( "OnClick" ), Any( aEventProps ) );
+        xEvents->replaceByName( "OnClick", Any( aEventProps ) );
     }
     catch( Exception& )
     {
@@ -340,7 +340,7 @@ VmlControlMacroAttacher::VmlControlMacroAttacher( const OUString& rMacroName,
 void VmlControlMacroAttacher::attachMacro( const OUString& rMacroUrl )
 {
     ScriptEventDescriptor aEventDesc;
-    aEventDesc.ScriptType = CREATE_OUSTRING( "Script" );
+    aEventDesc.ScriptType = "Script";
     aEventDesc.ScriptCode = rMacroUrl;
 
     // editable drop downs are treated like edit boxes
@@ -352,28 +352,28 @@ void VmlControlMacroAttacher::attachMacro( const OUString& rMacroUrl )
         case XML_Button:
         case XML_Checkbox:
         case XML_Radio:
-            aEventDesc.ListenerType = CREATE_OUSTRING( "XActionListener" );
-            aEventDesc.EventMethod = CREATE_OUSTRING( "actionPerformed" );
+            aEventDesc.ListenerType = "XActionListener";
+            aEventDesc.EventMethod = "actionPerformed";
         break;
         case XML_Label:
         case XML_GBox:
         case XML_Dialog:
-            aEventDesc.ListenerType = CREATE_OUSTRING( "XMouseListener" );
-            aEventDesc.EventMethod = CREATE_OUSTRING( "mouseReleased" );
+            aEventDesc.ListenerType = "XMouseListener";
+            aEventDesc.EventMethod = "mouseReleased";
         break;
         case XML_Edit:
-            aEventDesc.ListenerType = CREATE_OUSTRING( "XTextListener" );
-            aEventDesc.EventMethod = CREATE_OUSTRING( "textChanged" );
+            aEventDesc.ListenerType = "XTextListener";
+            aEventDesc.EventMethod = "textChanged";
         break;
         case XML_Spin:
         case XML_Scroll:
-            aEventDesc.ListenerType = CREATE_OUSTRING( "XAdjustmentListener" );
-            aEventDesc.EventMethod = CREATE_OUSTRING( "adjustmentValueChanged" );
+            aEventDesc.ListenerType = "XAdjustmentListener";
+            aEventDesc.EventMethod = "adjustmentValueChanged";
         break;
         case XML_List:
         case XML_Drop:
-            aEventDesc.ListenerType = CREATE_OUSTRING( "XChangeListener" );
-            aEventDesc.EventMethod = CREATE_OUSTRING( "changed" );
+            aEventDesc.ListenerType = "XChangeListener";
+            aEventDesc.EventMethod = "changed";
         break;
         default:
             OSL_ENSURE( false, "VmlControlMacroAttacher::attachMacro - unexpected object type" );
@@ -398,8 +398,8 @@ VmlDrawing::VmlDrawing( const WorksheetHelper& rHelper ) :
     maControlConv( rHelper.getBaseFilter().getModel(), rHelper.getBaseFilter().getGraphicHelper() )
 {
     // default font for legacy listboxes and dropdowns: Tahoma, 8pt
-    maListBoxFont.moName = CREATE_OUSTRING( "Tahoma" );
-    maListBoxFont.moColor = CREATE_OUSTRING( "auto" );
+    maListBoxFont.moName = "Tahoma";
+    maListBoxFont.moColor = "auto";
     maListBoxFont.monSize = 160;
 }
 
@@ -420,19 +420,19 @@ OUString VmlDrawing::getShapeBaseName( const ::oox::vml::ShapeBase& rShape ) con
     {
         switch( pClientData->mnObjType )
         {
-            case XML_Button:    return CREATE_OUSTRING( "Button" );
-            case XML_Checkbox:  return CREATE_OUSTRING( "Check Box" );
-            case XML_Dialog:    return CREATE_OUSTRING( "Dialog Frame" );
-            case XML_Drop:      return CREATE_OUSTRING( "Drop Down" );
-            case XML_Edit:      return CREATE_OUSTRING( "Edit Box" );
-            case XML_GBox:      return CREATE_OUSTRING( "Group Box" );
-            case XML_Label:     return CREATE_OUSTRING( "Label" );
-            case XML_List:      return CREATE_OUSTRING( "List Box" );
-            case XML_Note:      return CREATE_OUSTRING( "Comment" );
-            case XML_Pict:      return (pClientData->mbDde || getOleObjectInfo( rShape.getShapeId() )) ? CREATE_OUSTRING( "Object" ) : CREATE_OUSTRING( "Picture" );
-            case XML_Radio:     return CREATE_OUSTRING( "Option Button" );
-            case XML_Scroll:    return CREATE_OUSTRING( "Scroll Bar" );
-            case XML_Spin:      return CREATE_OUSTRING( "Spinner" );
+            case XML_Button:    return OUString( "Button" );
+            case XML_Checkbox:  return OUString( "Check Box" );
+            case XML_Dialog:    return OUString( "Dialog Frame" );
+            case XML_Drop:      return OUString( "Drop Down" );
+            case XML_Edit:      return OUString( "Edit Box" );
+            case XML_GBox:      return OUString( "Group Box" );
+            case XML_Label:     return OUString( "Label" );
+            case XML_List:      return OUString( "List Box" );
+            case XML_Note:      return OUString( "Comment" );
+            case XML_Pict:      return (pClientData->mbDde || getOleObjectInfo( rShape.getShapeId() )) ? OUString( "Object" ) : OUString( "Picture" );
+            case XML_Radio:     return OUString( "Option Button" );
+            case XML_Scroll:    return OUString( "Scroll Bar" );
+            case XML_Spin:      return OUString( "Spinner" );
         }
     }
     return ::oox::vml::Drawing::getShapeBaseName( rShape );

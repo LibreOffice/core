@@ -127,7 +127,7 @@ XclImpPalette::ExportPalette()
         if ( xProps.is() )
         {
             uno::Reference< container::XIndexAccess > xIndex( new PaletteIndex( aColors ) );
-            xProps->setPropertyValue( CREATE_OUSTRING("ColorPalette"), uno::makeAny( xIndex ) );
+            xProps->setPropertyValue( "ColorPalette", uno::makeAny( xIndex ) );
         }
     }
 

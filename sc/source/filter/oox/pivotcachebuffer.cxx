@@ -1182,7 +1182,7 @@ void PivotCache::importPCDSheetSource( SequenceInputStream& rStrm, const Relatio
     {
         rStrm >> maSheetSrcModel.maDefName;
         if( nIsBuiltinName != 0 )
-            maSheetSrcModel.maDefName = CREATE_OUSTRING( "_xlnm." ) + maSheetSrcModel.maDefName;
+            maSheetSrcModel.maDefName = "_xlnm." + maSheetSrcModel.maDefName;
     }
 
     // resolve URL of external document
@@ -1397,7 +1397,7 @@ void PivotCache::prepareSourceDataSheet()
     if( getAddressConverter().checkCellRange( rRange, false, true ) )
     {
         maColSpans.insert( ValueRange( rRange.StartColumn, rRange.EndColumn ) );
-        OUString aSheetName = CREATE_OUSTRING( "DPCache_" ) + maSheetSrcModel.maSheet;
+        OUString aSheetName = "DPCache_" + maSheetSrcModel.maSheet;
         rRange.Sheet = getWorksheets().insertEmptySheet( aSheetName, false );
         mbValidSource = mbDummySheet = rRange.Sheet >= 0;
     }

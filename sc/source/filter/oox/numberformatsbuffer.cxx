@@ -1857,7 +1857,7 @@ sal_Int32 lclCreateFormat( const Reference< XNumberFormats >& rxNumFmts,
     catch( Exception& )
     {
         // BIFF2-BIFF4 stores standard format explicitly in stream
-        static const OUString saGeneral = CREATE_OUSTRING( "general" );
+        static const OUString saGeneral = "general";
         if( rFmtCode.equalsIgnoreAsciiCase( saGeneral ) )
         {
             nIndex = lclCreatePredefinedFormat( rxNumFmts, 0, rToLocale );
@@ -1891,7 +1891,7 @@ private:
 };
 
 NumberFormatFinalizer::NumberFormatFinalizer( const WorkbookHelper& rHelper ) :
-    maEnUsLocale( CREATE_OUSTRING( "en" ), CREATE_OUSTRING( "US" ), OUString() )
+    maEnUsLocale( "en", "US", OUString() )
 {
     try
     {
@@ -2046,7 +2046,7 @@ void NumberFormatsBuffer::insertBuiltinFormats()
         append( "' not supported (#i29949#)" ).getStr() );
     // start with default table, if no table has been found
     if( aMIt == aMEnd )
-        aMIt = aBuiltinMap.find( CREATE_OUSTRING( "*" ) );
+        aMIt = aBuiltinMap.find( "*" );
     OSL_ENSURE( aMIt != aMEnd, "NumberFormatsBuffer::insertBuiltinFormats - default map not found" );
     // insert all tables into the vector
     for( ; aMIt != aMEnd; aMIt = aBuiltinMap.find( OUString::createFromAscii( aMIt->second->mpcParent ) ) )

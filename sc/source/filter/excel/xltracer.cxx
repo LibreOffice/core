@@ -39,7 +39,7 @@ XclTracer::XclTracer( const String& rDocUrl )
     , maFirstTimes(eTraceLength,true)
 {
     Sequence< PropertyValue > aConfigData( 1 );
-    aConfigData[ 0 ].Name = CREATE_OUSTRING( "DocumentURL" );
+    aConfigData[ 0 ].Name = "DocumentURL";
     aConfigData[ 0 ].Value <<= OUString( rDocUrl );
 }
 

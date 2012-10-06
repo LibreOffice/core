@@ -466,10 +466,10 @@ OUString XclChartHelper::GetErrorBarValuesRole( sal_uInt8 nBarType )
 {
     switch( nBarType )
     {
-        case EXC_CHSERERR_XPLUS:    return EXC_CHPROP_ROLE_ERRORBARS_POSX;
-        case EXC_CHSERERR_XMINUS:   return EXC_CHPROP_ROLE_ERRORBARS_NEGX;
-        case EXC_CHSERERR_YPLUS:    return EXC_CHPROP_ROLE_ERRORBARS_POSY;
-        case EXC_CHSERERR_YMINUS:   return EXC_CHPROP_ROLE_ERRORBARS_NEGY;
+        case EXC_CHSERERR_XPLUS:    return OUString( EXC_CHPROP_ROLE_ERRORBARS_POSX );
+        case EXC_CHSERERR_XMINUS:   return OUString( EXC_CHPROP_ROLE_ERRORBARS_NEGX );
+        case EXC_CHSERERR_YPLUS:    return OUString( EXC_CHPROP_ROLE_ERRORBARS_POSY );
+        case EXC_CHSERERR_YMINUS:   return OUString( EXC_CHPROP_ROLE_ERRORBARS_NEGY );
         default:    OSL_FAIL( "XclChartHelper::GetErrorBarValuesRole - unknown bar type" );
     }
     return OUString();
@@ -1253,7 +1253,7 @@ namespace {
     using the specified interface function. Checks a boolean property first. */
 #define EXC_FRAGMENT_GETTITLESHAPE( shape_supplier, supplier_func, property_name ) \
     ScfPropertySet aPropSet( shape_supplier ); \
-    if( shape_supplier.is() && aPropSet.GetBoolProperty( CREATE_OUSTRING( #property_name ) ) ) \
+    if( shape_supplier.is() && aPropSet.GetBoolProperty( #property_name ) ) \
         return shape_supplier->supplier_func(); \
     return Reference< XShape >(); \
 
@@ -1322,13 +1322,13 @@ void XclChRootData::InitConversion( const XclRoot& rRoot, const Reference< XChar
     // create object tables
     Reference< XMultiServiceFactory > xFactory( mxChartDoc, UNO_QUERY );
     mxLineDashTable.reset( new XclChObjectTable(
-        xFactory, SERVICE_DRAWING_DASHTABLE, CREATE_OUSTRING( "Excel line dash " ) ) );
+        xFactory, SERVICE_DRAWING_DASHTABLE, "Excel line dash " ) );
     mxGradientTable.reset( new XclChObjectTable(
-        xFactory, SERVICE_DRAWING_GRADIENTTABLE, CREATE_OUSTRING( "Excel gradient " ) ) );
+        xFactory, SERVICE_DRAWING_GRADIENTTABLE, "Excel gradient " ) );
     mxHatchTable.reset( new XclChObjectTable(
-        xFactory, SERVICE_DRAWING_HATCHTABLE, CREATE_OUSTRING( "Excel hatch " ) ) );
+        xFactory, SERVICE_DRAWING_HATCHTABLE, "Excel hatch " ) );
     mxBitmapTable.reset( new XclChObjectTable(
-        xFactory, SERVICE_DRAWING_BITMAPTABLE, CREATE_OUSTRING( "Excel bitmap " ) ) );
+        xFactory, SERVICE_DRAWING_BITMAPTABLE, "Excel bitmap " ) );
 }
 
 void XclChRootData::FinishConversion()

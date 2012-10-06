@@ -124,13 +124,13 @@ UnitConverter::UnitConverter( const WorkbookHelper& rHelper ) :
     maCoeffs[ UNIT_SPACE ]   = 100.0;                // default  1 space = 1 mm
 
     // error code maps
-    addErrorCode( BIFF_ERR_NULL,  CREATE_OUSTRING( "#NULL!" ) );
-    addErrorCode( BIFF_ERR_DIV0,  CREATE_OUSTRING( "#DIV/0!" ) );
-    addErrorCode( BIFF_ERR_VALUE, CREATE_OUSTRING( "#VALUE!" ) );
-    addErrorCode( BIFF_ERR_REF,   CREATE_OUSTRING( "#REF!" ) );
-    addErrorCode( BIFF_ERR_NAME,  CREATE_OUSTRING( "#NAME?" ) );
-    addErrorCode( BIFF_ERR_NUM,   CREATE_OUSTRING( "#NUM!" ) );
-    addErrorCode( BIFF_ERR_NA,    CREATE_OUSTRING( "#NA" ) );
+    addErrorCode( BIFF_ERR_NULL,  "#NULL!" );
+    addErrorCode( BIFF_ERR_DIV0,  "#DIV/0!" );
+    addErrorCode( BIFF_ERR_VALUE, "#VALUE!" );
+    addErrorCode( BIFF_ERR_REF,   "#REF!" );
+    addErrorCode( BIFF_ERR_NAME,  "#NAME?" );
+    addErrorCode( BIFF_ERR_NUM,   "#NUM!" );
+    addErrorCode( BIFF_ERR_NA,    "#NA" );
 }
 
 void UnitConverter::finalizeImport()

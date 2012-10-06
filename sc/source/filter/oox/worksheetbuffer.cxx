@@ -168,7 +168,7 @@ WorksheetBuffer::IndexNamePair WorksheetBuffer::createSheet( const OUString& rPr
         Reference< XIndexAccess > xSheetsIA( xSheets, UNO_QUERY_THROW );
         Reference< XNameAccess > xSheetsNA( xSheets, UNO_QUERY_THROW );
         sal_Int16 nCalcSheet = -1;
-        OUString aSheetName = rPreferredName.isEmpty() ? CREATE_OUSTRING( "Sheet" ) : rPreferredName;
+        OUString aSheetName = rPreferredName.isEmpty() ? "Sheet" : rPreferredName;
         PropertySet aPropSet;
         if( nSheetPos < xSheetsIA->getCount() )
         {

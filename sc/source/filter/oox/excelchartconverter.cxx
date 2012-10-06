@@ -69,7 +69,7 @@ void ExcelChartConverter::createDataProvider( const Reference< XChartDocument >&
     {
         Reference< XDataReceiver > xDataRec( rxChartDoc, UNO_QUERY_THROW );
         Reference< XDataProvider > xDataProv( getBaseFilter().getModelFactory()->createInstance(
-            CREATE_OUSTRING( "com.sun.star.chart2.data.DataProvider" ) ), UNO_QUERY_THROW );
+            "com.sun.star.chart2.data.DataProvider" ), UNO_QUERY_THROW );
         xDataRec->attachDataProvider( xDataProv );
     }
     catch( Exception& )

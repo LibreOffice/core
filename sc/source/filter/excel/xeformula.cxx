@@ -27,13 +27,6 @@
  ************************************************************************/
 
 
-// XXX xelink.hxx MUST be included before xeformula.hxx because of the
-// redifinition of the CREATE_OUSTRING() macro, which is in oox/helper.hxx
-// (indirectly included via xelink.hxx) and ../inc/ftools.hxx (indirectly
-// included via xeformula.hxx) that does an undef first. Ugly.
-#include "xelink.hxx"
-#include "xeformula.hxx"
-
 #include <list>
 #include <map>
 #include <memory>
@@ -44,7 +37,9 @@
 #include "rangelst.hxx"
 #include "token.hxx"
 #include "tokenarray.hxx"
+#include "xeformula.hxx"
 #include "xehelper.hxx"
+#include "xelink.hxx"
 #include "xename.hxx"
 #include "xestream.hxx"
 

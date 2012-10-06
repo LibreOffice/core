@@ -83,14 +83,14 @@ void ExcelFilterBase::unregisterWorkbookGlobals()
 
 OUString SAL_CALL ExcelFilter_getImplementationName() throw()
 {
-    return CREATE_OUSTRING( "com.sun.star.comp.oox.xls.ExcelFilter" );
+    return OUString( "com.sun.star.comp.oox.xls.ExcelFilter" );
 }
 
 Sequence< OUString > SAL_CALL ExcelFilter_getSupportedServiceNames() throw()
 {
     Sequence< OUString > aSeq( 2 );
-    aSeq[ 0 ] = CREATE_OUSTRING( "com.sun.star.document.ImportFilter" );
-    aSeq[ 1 ] = CREATE_OUSTRING( "com.sun.star.document.ExportFilter" );
+    aSeq[ 0 ] = "com.sun.star.document.ImportFilter";
+    aSeq[ 1 ] = "com.sun.star.document.ExportFilter";
     return aSeq;
 }
 
@@ -178,7 +178,7 @@ sal_Bool SAL_CALL ExcelFilter::filter( const ::com::sun::star::uno::Sequence< ::
 
     if ( isExportFilter() )
     {
-        Reference< XExporter > xExporter( getServiceFactory()->createInstance( CREATE_OUSTRING( "com.sun.star.comp.oox.ExcelFilterExport" ) ), UNO_QUERY );
+        Reference< XExporter > xExporter( getServiceFactory()->createInstance( "com.sun.star.comp.oox.ExcelFilterExport" ), UNO_QUERY );
 
         if ( xExporter.is() )
         {

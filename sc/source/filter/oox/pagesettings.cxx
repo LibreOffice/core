@@ -335,7 +335,7 @@ void PageSettings::setFitToPagesMode( bool bFitToPages )
 
 void PageSettings::finalizeImport()
 {
-    OUStringBuffer aStyleNameBuffer( CREATE_OUSTRING( "PageStyle_" ) );
+    OUStringBuffer aStyleNameBuffer( "PageStyle_" );
     Reference< XNamed > xSheetName( getSheet(), UNO_QUERY );
     if( xSheetName.is() )
         aStyleNameBuffer.append( xSheetName->getName() );
@@ -499,11 +499,11 @@ static const sal_Char* const sppcItalicNames[] =
 
 HeaderFooterParser::HeaderFooterParser( const WorkbookHelper& rHelper ) :
     WorkbookHelper( rHelper ),
-    maPageNumberService( CREATE_OUSTRING( "com.sun.star.text.TextField.PageNumber" ) ),
-    maPageCountService( CREATE_OUSTRING( "com.sun.star.text.TextField.PageCount" ) ),
-    maSheetNameService( CREATE_OUSTRING( "com.sun.star.text.TextField.SheetName" ) ),
-    maFileNameService( CREATE_OUSTRING( "com.sun.star.text.TextField.FileName" ) ),
-    maDateTimeService( CREATE_OUSTRING( "com.sun.star.text.TextField.DateTime" ) ),
+    maPageNumberService( "com.sun.star.text.TextField.PageNumber" ),
+    maPageCountService( "com.sun.star.text.TextField.PageCount" ),
+    maSheetNameService( "com.sun.star.text.TextField.SheetName" ),
+    maFileNameService( "com.sun.star.text.TextField.FileName" ),
+    maDateTimeService( "com.sun.star.text.TextField.DateTime" ),
     maBoldNames( sppcBoldNames, STATIC_ARRAY_END( sppcBoldNames ) ),
     maItalicNames( sppcItalicNames, STATIC_ARRAY_END( sppcItalicNames ) ),
     maPortions( static_cast< size_t >( HF_COUNT ) ),

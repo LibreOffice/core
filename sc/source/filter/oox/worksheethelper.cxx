@@ -426,8 +426,8 @@ private:
 
 WorksheetGlobals::WorksheetGlobals( const WorkbookHelper& rHelper, const ISegmentProgressBarRef& rxProgressBar, WorksheetType eSheetType, sal_Int16 nSheet ) :
     WorkbookHelper( rHelper ),
-    maSheetCellRanges( CREATE_OUSTRING( "com.sun.star.sheet.SheetCellRanges" ) ),
-    maUrlTextField( CREATE_OUSTRING( "com.sun.star.text.TextField.URL" ) ),
+    maSheetCellRanges( "com.sun.star.sheet.SheetCellRanges" ),
+    maUrlTextField( "com.sun.star.text.TextField.URL" ),
     mrMaxApiPos( rHelper.getAddressConverter().getMaxApiAddress() ),
     maUsedArea( nSheet, SAL_MAX_INT32, SAL_MAX_INT32, -1, -1 ),
     maSheetData( *this ),

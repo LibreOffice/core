@@ -360,10 +360,10 @@ void ImportExcel8::ReadBasic( void )
             SfxMedium& rMedium = GetMedium();
             uno::Reference< io::XInputStream > xIn = rMedium.GetInputStream();
             oox::ole::OleStorage root( aCtx, xIn, false );
-            oox::StorageRef vbaStg = root.openSubStorage( CREATE_OUSTRING( "_VBA_PROJECT_CUR" ), false );
+            oox::StorageRef vbaStg = root.openSubStorage( "_VBA_PROJECT_CUR", false );
             if ( vbaStg.get() )
             {
-                oox::ole::VbaProject aVbaPrj( aCtx, pShell->GetModel(), CREATE_OUSTRING( "Calc") );
+                oox::ole::VbaProject aVbaPrj( aCtx, pShell->GetModel(), "Calc" );
                 // collect names of embedded form controls, as specified in the VBA project
                 uno::Reference< container::XNameContainer > xOleNameOverrideSink( new OleNameOverrideContainer );
                 aVbaPrj.setOleOverridesSink( xOleNameOverrideSink );
