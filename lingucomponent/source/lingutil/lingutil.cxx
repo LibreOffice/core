@@ -149,14 +149,14 @@ std::vector< SvtLinguConfigDictionaryEntry > GetOldStyleDics( const char *pDicTy
     if (aFormatName.isEmpty() || aDicExtension.Len() == 0)
         return aRes;
 
-    // set of languages to remember the language where it is already
-    // decided to make use of the dictionary.
-    std::set< OUString > aDicLangInUse;
-
 #ifdef SYSTEM_DICTS
     osl::Directory aSystemDicts(aSystemDir);
     if (aSystemDicts.open() == osl::FileBase::E_None)
     {
+        // set of languages to remember the language where it is already
+        // decided to make use of the dictionary.
+        std::set< OUString > aDicLangInUse;
+
         osl::DirectoryItem aItem;
         osl::FileStatus aFileStatus(osl_FileStatus_Mask_FileURL);
         while (aSystemDicts.getNextItem(aItem) == osl::FileBase::E_None)
