@@ -46,6 +46,7 @@
 #include "conditio.hxx"
 #include "colorscale.hxx"
 #include "colorformat.hxx"
+#include "reffact.hxx"
 
 #include "globstr.hrc"
 
@@ -1111,9 +1112,9 @@ void ScCondFormatList::DoScroll(long nDelta)
     mpScrollBar->SetPosPixel(aNewPoint);
 }
 
-ScCondFormatDlg::ScCondFormatDlg(Window* pParent, ScDocument* pDoc, const ScConditionalFormat* pFormat, const ScRangeList& rRange,
+ScCondFormatDlg::ScCondFormatDlg(SfxBindings* pB, SfxChildWindow* pCW, Window* pParent, ScDocument* pDoc, const ScConditionalFormat* pFormat, const ScRangeList& rRange,
                                     const ScAddress& rPos, condformat::dialog::ScCondFormatDialogType eType):
-    ModalDialog(pParent, ScResId( RID_SCDLG_CONDFORMAT )),
+    ScAnyRefDlg(pB, pCW, pParent, RID_SCDLG_CONDFORMAT ),
     maBtnAdd( this, ScResId( BTN_ADD ) ),
     maBtnRemove( this, ScResId( BTN_REMOVE ) ),
     maBtnOk( this, ScResId( BTN_OK ) ),
@@ -1134,9 +1135,24 @@ ScCondFormatDlg::ScCondFormatDlg(Window* pParent, ScDocument* pDoc, const ScCond
     maBtnRemove.SetClickHdl( LINK( &maCondFormList, ScCondFormatList, RemoveBtnHdl ) );
     maEdRange.SetModifyHdl( LINK( this, ScCondFormatDlg, EdRangeModifyHdl ) );
     maBtnOk.SetClickHdl( LINK( this, ScCondFormatDlg, OkBtnHdl ) );
+    maBtnCancel.SetClickHdl( LINK( this, ScCondFormatDlg, CancelBtnHdl ) );
     FreeResource();
 
     maEdRange.SetText(aRangeString);
+}
+
+ScCondFormatDlg::~ScCondFormatDlg()
+{
+}
+
+void ScCondFormatDlg::SetActive()
+{
+
+}
+
+void ScCondFormatDlg::SetReference(const ScRange&, ScDocument*)
+{
+
 }
 
 ScConditionalFormat* ScCondFormatDlg::GetConditionalFormat() const
@@ -1210,16 +1226,14 @@ IMPL_LINK( ScCondFormatDlg, EdRangeModifyHdl, Edit*, pEdit )
 
 IMPL_LINK_NOARG( ScCondFormatDlg, OkBtnHdl )
 {
-    rtl::OUString aRangeStr = maEdRange.GetText();
-    ScRangeList aRange;
-    aRange.Parse(aRangeStr, mpDoc, SCA_VALID, mpDoc->GetAddressConvention());
-    boost::scoped_ptr<ScConditionalFormat> pFormat(maCondFormList.GetConditionalFormat());
-    if(pFormat && pFormat->GetRange().empty() && aRange.empty())
-        return 0;
-    else
-    {
-        EndDialog(RET_OK);
-    }
+    DoClose( ScCondFormatDlgWrapper::GetChildWindowId() );
+
+    return 0;
+}
+
+IMPL_LINK_NOARG( ScCondFormatDlg, CancelBtnHdl )
+{
+    DoClose( ScCondFormatDlgWrapper::GetChildWindowId() );
 
     return 0;
 }

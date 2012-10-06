@@ -28,7 +28,7 @@
 
 #include "condformatdlg.hrc"
 
-ModalDialog RID_SCDLG_CONDFORMAT
+ModelessDialog RID_SCDLG_CONDFORMAT
 {
     OutputSize = TRUE;
     Hide = TRUE;

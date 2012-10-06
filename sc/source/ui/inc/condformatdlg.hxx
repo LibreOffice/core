@@ -40,6 +40,7 @@
 
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <boost/scoped_ptr.hpp>
+#include "anyrefdg.hxx"
 
 class ScDocument;
 class ScConditionalFormat;
@@ -189,7 +190,7 @@ public:
 
 };
 
-class ScCondFormatDlg : public ModalDialog
+class ScCondFormatDlg : public ScAnyRefDlg
 {
 private:
     PushButton maBtnAdd;
@@ -206,11 +207,17 @@ private:
 
     DECL_LINK( EdRangeModifyHdl, Edit* );
     DECL_LINK( OkBtnHdl, void* );
+    DECL_LINK( CancelBtnHdl, void* );
 
 public:
-    ScCondFormatDlg(Window* pWindow, ScDocument* pDoc, const ScConditionalFormat* pFormat, const ScRangeList& rRange, const ScAddress& rPos, condformat::dialog::ScCondFormatDialogType eType);
+    ScCondFormatDlg(SfxBindings* pB, SfxChildWindow* pSW, Window* pWindow, ScDocument* pDoc, const ScConditionalFormat* pFormat,
+            const ScRangeList& rRange, const ScAddress& rPos, condformat::dialog::ScCondFormatDialogType eType);
+    virtual ~ScCondFormatDlg();
 
-    ScConditionalFormat* GetConditionalFormat() const;
+    SC_DLLPUBLIC ScConditionalFormat* GetConditionalFormat() const;
+
+    virtual void SetReference(const ScRange&, ScDocument*);
+    virtual void SetActive();
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

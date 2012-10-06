@@ -63,6 +63,7 @@ SFX_IMPL_INTERFACE(ScTabViewShell,SfxViewShell,ScResId(SCSTR_TABVIEWSHELL))
     SFX_CHILDWINDOW_REGISTRATION(SID_TASKPANE);
     SFX_CHILDWINDOW_REGISTRATION(ScNameDlgWrapper::GetChildWindowId());
     SFX_CHILDWINDOW_REGISTRATION(ScNameDefDlgWrapper::GetChildWindowId());
+    SFX_CHILDWINDOW_REGISTRATION(ScCondFormatDlgWrapper::GetChildWindowId());
     SFX_CHILDWINDOW_REGISTRATION(ScSolverDlgWrapper::GetChildWindowId());
     SFX_CHILDWINDOW_REGISTRATION(ScOptSolverDlgWrapper::GetChildWindowId());
     SFX_CHILDWINDOW_REGISTRATION(ScPivotLayoutWrapper::GetChildWindowId());

@@ -63,8 +63,6 @@ class ScTabBgColorDlg;
 class ScImportOptionsDlg;
 class SfxTabDialog;
 class ScTextImportOptionsDlg;
-class ScDataBarSettingsDlg;
-class ScCondFormatDlg;
 class ScCondFormatManagerDlg;
 
 #define DECL_ABSTDLG_BASE(Class,DialogClass)        \
@@ -136,13 +134,6 @@ class AbstractScColRowLabelDlg_Impl : public AbstractScColRowLabelDlg  //add for
     virtual sal_Bool IsRow();
 };
 
-class AbstractScCondFormatDlg_Impl : public AbstractScCondFormatDlg
-{
-    DECL_ABSTDLG_BASE(AbstractScCondFormatDlg_Impl, ScCondFormatDlg)
-
-    virtual ScConditionalFormat* GetConditionalFormat();
-};
-
 class AbstractScCondFormatManagerDlg_Impl : public AbstractScCondFormatManagerDlg
 {
     DECL_ABSTDLG_BASE(AbstractScCondFormatManagerDlg_Impl, ScCondFormatManagerDlg)
@@ -150,11 +141,6 @@ class AbstractScCondFormatManagerDlg_Impl : public AbstractScCondFormatManagerDl
     virtual ScConditionalFormatList* GetConditionalFormatList();
 
     virtual bool CondFormatsChanged();
-};
-
-class AbstractScDataBarSettingsDlg_Impl : public AbstractScDataBarSettingsDlg
-{
-    DECL_ABSTDLG_BASE(AbstractScDataBarSettingsDlg_Impl, ScDataBarSettingsDlg)
 };
 
 class AbstractScDataPilotDatabaseDlg_Impl  :public AbstractScDataPilotDatabaseDlg  //add for ScDataPilotDatabaseDlg
@@ -435,13 +421,8 @@ public:
 
     virtual VclAbstractDialog * CreateScSortWarningDlg( Window* pParent, const String& rExtendText, const String& rCurrentText, int nId );
 
-    virtual AbstractScCondFormatDlg* CreateScCondFormatDlg(Window* pParent, ScDocument* pDoc, const ScConditionalFormat* pFormat,
-                                                                const ScRangeList& rRange, const ScAddress& rPos, int nId ); //add for ScDataBarSettingsDlg
-
     virtual AbstractScCondFormatManagerDlg* CreateScCondFormatMgrDlg(Window* pParent, ScDocument* pDoc, const ScConditionalFormatList* pFormatList,
                                                                 const ScAddress& rPos, int nId );
-
-    virtual AbstractScDataBarSettingsDlg* CreateScDataBarSetttingsDlg (Window* pParent, ScDocument* pDoc, int nId ); //add for ScDataBarSettingsDlg
 
     virtual AbstractScDataPilotDatabaseDlg * CreateScDataPilotDatabaseDlg (Window* pParent ,int nId ); //add for ScDataPilotDatabaseDlg
 

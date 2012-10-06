@@ -90,9 +90,7 @@ IMPL_ABSTDLG_BASE(ScVclAbstractDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractScImportAsciiDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractScAutoFormatDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractScColRowLabelDlg_Impl);
-IMPL_ABSTDLG_BASE(AbstractScCondFormatDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractScCondFormatManagerDlg_Impl);
-IMPL_ABSTDLG_BASE(AbstractScDataBarSettingsDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractScDataPilotDatabaseDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractScDataPilotSourceTypeDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractScDataPilotServiceDlg_Impl);
@@ -452,11 +450,6 @@ sal_uLong   AbstractScLinkedAreaDlg_Impl::GetRefresh()
 }
 
 
-ScConditionalFormat* AbstractScCondFormatDlg_Impl::GetConditionalFormat()
-{
-    return pDlg->GetConditionalFormat();
-}
-
 ScConditionalFormatList* AbstractScCondFormatManagerDlg_Impl::GetConditionalFormatList()
 {
     return pDlg->GetConditionalFormatList();
@@ -781,33 +774,6 @@ VclAbstractDialog * ScAbstractDialogFactory_Impl::CreateScSortWarningDlg( Window
 }
 
 
-AbstractScCondFormatDlg* ScAbstractDialogFactory_Impl::CreateScCondFormatDlg(Window* pParent, ScDocument* pDoc, const ScConditionalFormat* pFormat,
-                                                                            const ScRangeList& rRange, const ScAddress& rPos, int nId)
-{
-    ScCondFormatDlg* pDlg = NULL;
-    switch( nId )
-    {
-        case 0:
-            pDlg = new ScCondFormatDlg( pParent, pDoc, pFormat, rRange, rPos, condformat::dialog::NONE );
-            break;
-        case SID_OPENDLG_CONDFRMT:
-            pDlg = new ScCondFormatDlg( pParent, pDoc, pFormat, rRange, rPos, condformat::dialog::CONDITION );
-            break;
-        case SID_OPENDLG_COLORSCALE:
-            pDlg = new ScCondFormatDlg( pParent, pDoc, pFormat, rRange, rPos, condformat::dialog::COLORSCALE );
-            break;
-        case SID_OPENDLG_DATABAR:
-            pDlg = new ScCondFormatDlg( pParent, pDoc, pFormat, rRange, rPos, condformat::dialog::DATABAR );
-            break;
-        default:
-            break;
-    }
-    if(pDlg)
-        return new AbstractScCondFormatDlg_Impl( pDlg );
-
-    return NULL;
-}
-
 AbstractScCondFormatManagerDlg* ScAbstractDialogFactory_Impl::CreateScCondFormatMgrDlg(Window* pParent, ScDocument* pDoc, const ScConditionalFormatList* pFormatList,
                                                                 const ScAddress& rPos, int nId )
 {
@@ -825,24 +791,6 @@ AbstractScCondFormatManagerDlg* ScAbstractDialogFactory_Impl::CreateScCondFormat
 
     return NULL;
 }
-
-AbstractScDataBarSettingsDlg* ScAbstractDialogFactory_Impl::CreateScDataBarSetttingsDlg(Window* pParent, ScDocument* pDoc, int nId)
-{
-    ScDataBarSettingsDlg* pDlg = NULL;
-    switch( nId )
-    {
-        case RID_SCDLG_DATABAR:
-            pDlg = new ScDataBarSettingsDlg( pParent, pDoc );
-            break;
-        default:
-            break;
-    }
-    if(pDlg)
-        return new AbstractScDataBarSettingsDlg_Impl( pDlg );
-
-    return NULL;
-}
-
 
 AbstractScDataPilotDatabaseDlg *  ScAbstractDialogFactory_Impl::CreateScDataPilotDatabaseDlg (Window* pParent ,
                                                                                               int nId )

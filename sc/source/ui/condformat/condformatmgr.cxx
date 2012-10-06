@@ -216,8 +216,8 @@ IMPL_LINK_NOARG(ScCondFormatManagerDlg, EditBtnHdl)
     if(!pFormat)
         return 0;
 
-    boost::scoped_ptr<ScCondFormatDlg> pDlg(new ScCondFormatDlg(this, mpDoc, pFormat, pFormat->GetRange(),
-                                                pFormat->GetRange().GetTopLeftCorner(), condformat::dialog::NONE));
+    boost::scoped_ptr<ScCondFormatDlg> pDlg;//(new ScCondFormatDlg(this, mpDoc, pFormat, pFormat->GetRange(),
+                                              //  pFormat->GetRange().GetTopLeftCorner(), condformat::dialog::NONE));
     if(pDlg->Execute() == RET_OK)
     {
         sal_Int32 nKey = pFormat->GetKey();
@@ -252,8 +252,8 @@ sal_uInt32 FindKey(ScConditionalFormatList* pFormatList)
 
 IMPL_LINK_NOARG(ScCondFormatManagerDlg, AddBtnHdl)
 {
-    boost::scoped_ptr<ScCondFormatDlg> pDlg(new ScCondFormatDlg(this, mpDoc, NULL, ScRangeList(),
-                                                maPos, condformat::dialog::CONDITION));
+    boost::scoped_ptr<ScCondFormatDlg> pDlg;//(new ScCondFormatDlg(this, mpDoc, NULL, ScRangeList(),
+                                              //  maPos, condformat::dialog::CONDITION));
     if(pDlg->Execute() == RET_OK)
     {
         ScConditionalFormat* pNewFormat = pDlg->GetConditionalFormat();
