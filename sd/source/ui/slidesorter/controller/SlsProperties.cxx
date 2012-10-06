@@ -254,14 +254,6 @@ bool Properties::IsOnlyPreviewTriggersMouseOver (void) const
 }
 
 
-
-
-bool Properties::IsHighContrastModeActive (void) const
-{
-    return mbIsHighContrastModeActive;
-}
-
-
 } } } // end of namespace ::sd::slidesorter::controller
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

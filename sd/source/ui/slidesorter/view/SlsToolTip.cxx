@@ -102,37 +102,6 @@ void ToolTip::SetPage (const model::SharedPageDescriptor& rpDescriptor)
 
 
 
-
-void ToolTip::ShowDefaultHelpText (void)
-{
-    if (msCurrentHelpText != msDefaultHelpText)
-    {
-        const bool bIsVisible (Hide());
-
-        msCurrentHelpText = msDefaultHelpText;
-
-        Show(bIsVisible);
-    }
-}
-
-
-
-
-void ToolTip::ShowHelpText (const ::rtl::OUString& rsHelpText)
-{
-    if (msCurrentHelpText != rsHelpText)
-    {
-        const bool bIsVisible (Hide());
-
-        msCurrentHelpText = rsHelpText;
-
-        Show(bIsVisible);
-    }
-}
-
-
-
-
 void ToolTip::Show (const bool bNoDelay)
 {
     if (bNoDelay)

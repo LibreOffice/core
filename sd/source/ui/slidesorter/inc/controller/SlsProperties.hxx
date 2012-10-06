@@ -120,7 +120,6 @@ public:
     */
     bool IsOnlyPreviewTriggersMouseOver (void) const;
 
-    bool IsHighContrastModeActive (void) const;
 
 private:
     bool mbIsHighlightCurrentSlide;
