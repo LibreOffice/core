@@ -30,11 +30,7 @@ $(eval $(call gb_Package_add_file,l10ntools_scripts,bin/addkeyid2pot.pl,addkeyid
 $(eval $(call gb_Package_add_file,l10ntools_scripts,bin/fast_merge.pl,fast_merge.pl))
 $(eval $(call gb_Package_add_file,l10ntools_scripts,bin/keyidGen.pl,keyidGen.pl))
 $(eval $(call gb_Package_add_file,l10ntools_scripts,bin/po2lo,po2lo))
-$(eval $(call gb_Package_add_file,l10ntools_scripts,bin/propex,propex))
 $(eval $(call gb_Package_add_file,l10ntools_scripts,bin/propmerge,propmerge))
 
-ifeq ($(OS_FOR_BUILD),WNT)
-$(eval $(call gb_Package_add_file,l10ntools_scripts,bin/propex.bat,propex.bat))
-endif
 
 # vim: set noet sw=4 ts=4:

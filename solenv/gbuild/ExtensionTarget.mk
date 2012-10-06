@@ -34,10 +34,10 @@ gb_ExtensionTarget_ZIPCOMMAND := zip $(if $(findstring s,$(MAKEFLAGS)),-q)
 gb_ExtensionTarget_XRMEXTARGET := $(call gb_Executable_get_target_for_build,xrmex)
 gb_ExtensionTarget_XRMEXCOMMAND := \
 	$(gb_Helper_set_ld_path) $(gb_ExtensionTarget_XRMEXTARGET)
-# propmerge is a perl script
-gb_ExtensionTarget_PROPMERGETARGET := $(OUTDIR_FOR_BUILD)/bin/propmerge
+
+gb_ExtensionTarget_PROPMERGETARGET := $(call gb_Executable_get_target_for_build,propex)
 gb_ExtensionTarget_PROPMERGECOMMAND := \
-	$(PERL) $(gb_ExtensionTarget_PROPMERGETARGET)
+	$(gb_Helper_set_ld_path) $(gb_ExtensionTarget_PROPMERGETARGET)
 
 gb_ExtensionTarget_UPDATETREETARGET := $(SRCDIR)/l10ntools/scripts/update_tree.pl
 gb_ExtensionTarget_UPDATETREECOMMAND := \
@@ -213,24 +213,30 @@ endef
 # localize .properties file
 # source file is copied to $(WORKDIR)
 define gb_ExtensionTarget_localize_properties
+$(foreach lang,$(gb_ExtensionTarget_ALL_LANGS),\
+	$(call gb_ExtensionTarget_localize_properties_onelang,$(1),$(subst en_US,$(subst -,_,$(lang)),$(2)),$(3),$(lang)))
+endef
+
+define gb_ExtensionTarget_localize_properties_onelang
 $(call gb_ExtensionTarget_get_target,$(1)) : FILES += $(2)
-ifneq ($(strip $(gb_WITH_LANG)),)
-$(call gb_ExtensionTarget_get_target,$(1)) : FILES += $(foreach lang,$(subst -,_,$(gb_ExtensionTarget_TRANS_LANGS)),$(subst en_US,$(lang),$(2)))
+ifneq ($(filter-out en-US,$(4)),)
 $(call gb_ExtensionTarget_get_rootdir,$(1))/$(2) : \
-	POFILES := $(foreach lang,$(gb_ExtensionTarget_TRANS_LANGS),$(gb_POLOCATION)/$(lang)/$(patsubst /%/,%,$(subst $(SRCDIR),,$(dir $(3)))).po)
+	POFILE := $(gb_POLOCATION)/$(4)/$(patsubst /%/,%,$(subst $(SRCDIR),,$(dir $(3)))).po
 $(call gb_ExtensionTarget_get_rootdir,$(1))/$(2) : \
-	$(foreach lang,$(gb_ExtensionTarget_TRANS_LANGS),$(gb_POLOCATION)/$(lang)/$(patsubst /%/,%,$(subst $(SRCDIR),,$(dir $(3)))).po)
+	$(gb_POLOCATION)/$(4)/$(patsubst /%/,%,$(subst $(SRCDIR),,$(dir $(3)))).po
 endif
 $(call gb_ExtensionTarget_get_target,$(1)) : $(call gb_ExtensionTarget_get_rootdir,$(1))/$(2)
 $(call gb_ExtensionTarget_get_rootdir,$(1))/$(2) : $(3) \
 		$(gb_ExtensionTarget_PROPMERGETARGET)
 	$$(call gb_Output_announce,$(2),$(true),PRP,3)
-	MERGEINPUT=`$(gb_MKTEMP)` && \
-	echo $$(POFILES) > $$$${MERGEINPUT} && \
-	mkdir -p $$(dir $$@) && \
-	cp -f $$< $$@ \
-	$(if $(strip $(gb_WITH_LANG)),&& $(gb_ExtensionTarget_PROPMERGECOMMAND) -i $$@ -m $$$${MERGEINPUT}) && \
-	rm -rf $$$${MERGEINPUT}
+	$$(call gb_Helper_abbreviate_dirs, \
+		$(if $(filter-out en-US,$(4)), \
+			MERGEINPUT=`$(gb_MKTEMP)` && \
+			echo $$(POFILE) > $$$${MERGEINPUT} && \
+			mkdir -p $$(dir $$@) && \
+			$(gb_ExtensionTarget_PROPMERGECOMMAND) -i $$< -o $$@ -m $$$${MERGEINPUT} -l $(4) && \
+			rm -rf $$$${MERGEINPUT}, \
+			cp $$< $$@))
 
 endef
 
