@@ -42,7 +42,7 @@
 #include <toolkit/awt/vclxdevice.hxx>
 
 
-#define BINARYSETUPMARKER   0x23864691
+#define BINARYSETUPMARKER       0x23864691
 
 #define PROPERTY_Orientation    0
 #define PROPERTY_Horizontal     1
@@ -69,9 +69,9 @@
     return pProperties;
 }
 
-//  ----------------------------------------------------
-//  class VCLXPrinterPropertySet
-//  ----------------------------------------------------
+//    ----------------------------------------------------
+//    class VCLXPrinterPropertySet
+//    ----------------------------------------------------
 
 IMPLEMENT_FORWARD_XINTERFACE2( VCLXPrinterPropertySet, VCLXPrinterPropertySet_Base, OPropertySetHelper )
 IMPLEMENT_FORWARD_XTYPEPROVIDER2( VCLXPrinterPropertySet, VCLXPrinterPropertySet_Base, ::cppu::OPropertySetHelper )
@@ -219,7 +219,7 @@ void VCLXPrinterPropertySet::setHorizontal( sal_Bool bHorizontal ) throw(::com::
     ::osl::Guard< ::osl::Mutex > aGuard( Mutex );
 
     sal_uInt16 nPaperBinCount = GetPrinter()->GetPaperBinCount();
-    ::com::sun::star::uno::Sequence< ::rtl::OUString >  aDescriptions( nPaperBinCount );
+    ::com::sun::star::uno::Sequence< ::rtl::OUString > aDescriptions( nPaperBinCount );
     for ( sal_uInt16 n = 0; n < nPaperBinCount; n++ )
     {
         // Format: <DisplayFormName;FormNameId;DisplayPaperBinName;PaperBinNameId;DisplayPaperName;PaperNameId>
@@ -271,9 +271,9 @@ void VCLXPrinterPropertySet::setBinarySetup( const ::com::sun::star::uno::Sequen
 }
 
 
-//  ----------------------------------------------------
-//  class VCLXPrinter
-//  ----------------------------------------------------
+//    ----------------------------------------------------
+//    class VCLXPrinter
+//    ----------------------------------------------------
 VCLXPrinter::VCLXPrinter( const String& rPrinterName )
     : VCLXPrinter_Base( rPrinterName )
 {
@@ -337,9 +337,9 @@ void VCLXPrinter::endPage(  ) throw(::com::sun::star::awt::PrinterException, ::c
 }
 
 
-//  ----------------------------------------------------
-//  class VCLXInfoPrinter
-//  ----------------------------------------------------
+//    ----------------------------------------------------
+//    class VCLXInfoPrinter
+//    ----------------------------------------------------
 
 VCLXInfoPrinter::VCLXInfoPrinter( const String& rPrinterName )
     : VCLXInfoPrinter_Base( rPrinterName )
@@ -358,9 +358,9 @@ VCLXInfoPrinter::~VCLXInfoPrinter()
     return GetDevice();
 }
 
-//  ----------------------------------------------------
-//  class VCLXPrinterServer
-//  ----------------------------------------------------
+//    ----------------------------------------------------
+//    class VCLXPrinterServer
+//    ----------------------------------------------------
 
 // ::com::sun::star::awt::XPrinterServer
 ::com::sun::star::uno::Sequence< ::rtl::OUString > VCLXPrinterServer::getPrinterNames(  ) throw(::com::sun::star::uno::RuntimeException)
@@ -368,7 +368,7 @@ VCLXInfoPrinter::~VCLXInfoPrinter()
     const std::vector<rtl::OUString>& rQueues = Printer::GetPrinterQueues();
     sal_uInt32 nPrinters = rQueues.size();
 
-    ::com::sun::star::uno::Sequence< ::rtl::OUString >  aNames( nPrinters );
+    ::com::sun::star::uno::Sequence< ::rtl::OUString > aNames( nPrinters );
     for ( sal_uInt32 n = 0; n < nPrinters; n++ )
         aNames.getArray()[n] = rQueues[n];
 
