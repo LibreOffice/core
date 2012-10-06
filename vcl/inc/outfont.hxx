@@ -269,9 +269,6 @@ private:
 // --------------------
 // - ImplKernPairData -
 // --------------------
-// TODO: get rid of ImplKernPairData and use outdev.hxx's KerningPair struct
-// the problem is that outdev.hxx is too high level for the device layers
-// and outdev.hxx's customers depend on KerningPair being defined there
 
 struct ImplKernPairData
 {

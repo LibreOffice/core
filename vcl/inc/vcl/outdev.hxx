@@ -134,17 +134,6 @@ struct ImplThresholdRes
     long                mnThresPixToLogY;   // ""
 };
 
-// ---------------
-// - KerningPair -
-// ---------------
-
-struct KerningPair
-{
-    sal_Unicode         nChar1;
-    sal_Unicode         nChar2;
-    long                nKern;
-};
-
 // ----------------------
 // - OutputDevice-Types -
 // ----------------------
@@ -649,9 +638,6 @@ public:
     static XubString    GetNonMnemonicString( const XubString& rStr, xub_StrLen& rMnemonicPos );
     static XubString    GetNonMnemonicString( const XubString& rStr )
                             { xub_StrLen nDummy; return GetNonMnemonicString( rStr, nDummy ); }
-
-    sal_uLong               GetKerningPairCount() const;
-    void                GetKerningPairs( sal_uLong nPairs, KerningPair* pKernPairs ) const;
 
     sal_Bool                GetTextBoundRect( Rectangle& rRect,
                             const String& rStr, xub_StrLen nBase = 0, xub_StrLen nIndex = 0, xub_StrLen nLen = STRING_LEN,
