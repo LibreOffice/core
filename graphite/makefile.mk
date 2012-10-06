@@ -39,14 +39,14 @@ TARGET=libgraphite
 
 .IF "$(SYSTEM_GRAPHITE)" == "YES"
 all:
-    @echo "An already available installation of graphite2 should exist on your system."
-    @echo "Therefore the version provided here does not need to be built in addition."
+	@echo "An already available installation of graphite2 should exist on your system."
+	@echo "Therefore the version provided here does not need to be built in addition."
 .ENDIF
 
 # --- Files --------------------------------------------------------
 .IF "$(ENABLE_GRAPHITE)"=="TRUE"
-TARFILE_NAME=graphite2-1.0.3
-TARFILE_MD5=3bf481ca95109b14435125c0dd1f2217
+TARFILE_NAME=graphite2-1.2.0
+TARFILE_MD5=f5ef3f7f10fa8c3542c6a085a233080b
 PATCH_FILES= graphite2.patch \
         graphite_make.patch 
 
