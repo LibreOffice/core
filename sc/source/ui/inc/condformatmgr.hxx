@@ -106,6 +106,7 @@ private:
 
     DECL_LINK(RemoveBtnHdl, void*);
     DECL_LINK(EditBtnHdl, void*);
+    DECL_LINK(AddBtnHdl, void*);
 
     bool mbModified;
 };
