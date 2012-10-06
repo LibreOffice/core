@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAPn////8\u003d",
+        "filename": "scaddins/source/analysis/financial.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 339,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2012-10-06T16:23:39Z",
+      "side": 1,
+      "message": "this has to be \u003c\u003d",
+      "revId": "c7e811144558004735b831f3e7ecd549fdd96b77",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
