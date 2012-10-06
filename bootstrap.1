@@ -39,7 +39,7 @@ chmod +x "$SRC_ROOT/solenv/bin/gccinstlib.pl"
 
 # fetch or update external tarballs
 if [ "$DO_FETCH_TARBALLS" = "yes" ]; then
-    download_external_dependencies.pl $SRC_ROOT/external_deps.lst
+    "$PERL" "$SOLARENV/bin/download_external_dependencies.pl" $SRC_ROOT/external_deps.lst
 fi
 
 # ------------------------------------------------------------------------------
@@ -152,4 +152,4 @@ else
 fi
 
 # Download missing extensions.
-download_missing_extensions.pl
+"$PERL" "$SOLARENV/bin/download_missing_extensions.pl"

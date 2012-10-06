@@ -1539,11 +1539,11 @@ for my $repo (split(/ /,"@ADDITIONAL_REPOSITORIES@"))
 #
 print "Setting the aliases... ";
 # 1. alias for a full product make. 
-	$mkout           = '"perl $SOLARENV/bin/mkout.pl"';
-	$deliver         = '"perl $SOLARENV/bin/deliver.pl"';
-	$build           = '"perl $SOLARENV/bin/build.pl"';
-	$build_client    = '"perl $SOLARENV/bin/build_client.pl"';
-	$zipdep          = '"perl $SOLARENV/bin/zipdep.pl"';
+	$mkout           = '"$PERL $SOLARENV/bin/mkout.pl"';
+	$deliver         = '"$PERL $SOLARENV/bin/deliver.pl"';
+	$build           = '"$PERL $SOLARENV/bin/build.pl"';
+	$build_client    = '"$PERL $SOLARENV/bin/build_client.pl"';
+	$zipdep          = '"$PERL $SOLARENV/bin/zipdep.pl"';
 # 3. alias for a full product make
 $nmake           = '"dmake"';
 print "done\n";
