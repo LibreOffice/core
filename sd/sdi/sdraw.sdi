@@ -3260,7 +3260,7 @@ SfxBoolItem Hyphenation SID_HYPHENATION
     HasCoreId = FALSE,
     HasDialog = FALSE,
     ReadOnlyDoc = FALSE,
-    Toggle = FALSE,
+    Toggle = TRUE,
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
