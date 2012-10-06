@@ -78,7 +78,7 @@ connectivity::mork::ProfileAccess::isProfileLocked(com::sun::star::mozilla::Mozi
 connectivity::mozab::MQueryHelper::next()
 connectivity::sdbcx::OGroup::OGroup(rtl::OUString const&, unsigned char)
 connectivity::sdbcx::OGroup::OGroup(unsigned char)
-dbtools::getConnection(rtl::OUString const&, rtl::OUString const&, rtl::OUString const&, com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> const&)
+dbtools::getConnection(rtl::OUString const&, rtl::OUString const&, rtl::OUString const&, com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext> const&)
 formula::FormulaTokenIterator::First()
 framework::OReadMenuDocumentHandler::getServiceFactory()
 jfw_plugin::VendorBase::createInstance()

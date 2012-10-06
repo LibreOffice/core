@@ -730,18 +730,6 @@ size_t LabelColumn::addRow( Window* i_pLabel, boost::shared_ptr<WindowArranger> 
     return nIndex;
 }
 
-size_t LabelColumn::addRow( Window* i_pLabel, Window* i_pElement, long i_nIndent, const Size& i_rElementMinSize )
-{
-    boost::shared_ptr< LabeledElement > xLabel( new LabeledElement( this, 1 ) );
-    xLabel->setLabel( i_pLabel );
-    xLabel->setBorders( 0, i_nIndent, 0, 0, 0 );
-    xLabel->setElement( i_pElement );
-    xLabel->setMinimumSize( 1, i_rElementMinSize );
-    size_t nIndex = addChild( xLabel );
-    resize();
-    return nIndex;
-}
-
 // ----------------------------------------
 // vcl::Indenter
 //-----------------------------------------

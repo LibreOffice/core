@@ -317,7 +317,6 @@ namespace vcl
 
         // returns the index of the added label
         size_t addRow( Window* i_pLabel, boost::shared_ptr<WindowArranger> const& i_rElement, long i_nIndent = 0 );
-        size_t addRow( Window* i_pLabel, Window* i_pElement, long i_nIndent = 0, const Size& i_rElementMinSize = Size() );
     };
 
     class VCL_DLLPUBLIC Indenter : public WindowArranger

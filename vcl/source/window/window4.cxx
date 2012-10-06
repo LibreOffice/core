@@ -100,38 +100,6 @@ void Window::ImplExtResize()
     }
 }
 
-boost::shared_ptr< vcl::WindowArranger > Window::getLayout()
-{
-    boost::shared_ptr< vcl::WindowArranger > xRet;
-    vcl::ExtWindowImpl* pImpl = ImplGetExtWindowImpl();
-    if( pImpl )
-    {
-        if( ! pImpl->mxLayout.get() )
-        {
-            pImpl->mxLayout.reset( new vcl::LabelColumn() );
-            pImpl->mxLayout->setParentWindow( this );
-            pImpl->mxLayout->setOuterBorder( -1 );
-        }
-        xRet = pImpl->mxLayout;
-    }
-
-    return xRet;
-}
-
-void Window::addWindow( Window* i_pWin, bool i_bTakeOwnership )
-{
-    vcl::ExtWindowImpl* pImpl = ImplGetExtWindowImpl();
-    if( pImpl && i_pWin )
-    {
-        vcl::ExtWindowImpl* pChildImpl = i_pWin->ImplGetExtWindowImpl();
-        if( pChildImpl )
-        {
-            i_pWin->SetParent( this );
-            pChildImpl->mbOwnedByParent = i_bTakeOwnership;
-        }
-    }
-}
-
 Window* Window::findWindow( const rtl::OUString& i_rIdentifier ) const
 {
     if( getIdentifier() == i_rIdentifier )

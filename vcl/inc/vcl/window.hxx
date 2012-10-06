@@ -126,7 +126,6 @@ namespace dnd {
 
 namespace vcl {
     struct ControlLayoutData;
-    class WindowArranger;
     struct ExtWindowImpl;
 }
 
@@ -1313,20 +1312,7 @@ public:
 
     // ExtImpl
 
-    // layouting
-    boost::shared_ptr< vcl::WindowArranger > getLayout();
-
-    /* add a child Window
-       addWindow will do the following things
-       - insert the passed window into the child list (equivalent to i_pWin->SetParent( this ))
-       - mark the window as "owned", meaning that the added Window will be destroyed by
-         the parent's desctructor.
-         This means: do not pass in member windows or stack objects here. Do not cause
-         the destructor of the added window to be called in any way.
-
-         to avoid ownership pass i_bTakeOwnership as "false"
-    */
-    void addWindow( Window* i_pWin, bool i_bTakeOwnership = true );
+    // old layouting, in-process-of-removal
 
     /* return the identifier of this window
     */
