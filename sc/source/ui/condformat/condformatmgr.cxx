@@ -257,6 +257,9 @@ IMPL_LINK_NOARG(ScCondFormatManagerDlg, AddBtnHdl)
     if(pDlg->Execute() == RET_OK)
     {
         ScConditionalFormat* pNewFormat = pDlg->GetConditionalFormat();
+        if(!pNewFormat)
+            return 0;
+
         mpFormatList->InsertNew(pNewFormat);
         pNewFormat->SetKey(FindKey(mpFormatList));
         maCtrlManager.Update();
