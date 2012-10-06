@@ -121,9 +121,8 @@ static nsresult enumSubs(nsISimpleEnumerator * subDirs,nsISupportsArray * array)
 //enum all sub folders
 static nsresult enumSubs(nsIAbDirectory * parentDir,nsISupportsArray * array)
 {
-    nsresult rv = NS_OK ;
     nsCOMPtr<nsISimpleEnumerator> subDirectories;
-    rv = parentDir->GetChildNodes(getter_AddRefs(subDirectories));
+    nsresult rv = parentDir->GetChildNodes(getter_AddRefs(subDirectories));
     if (NS_FAILED(rv)) { return rv; }
 
     rv = enumSubs(subDirectories,array);
@@ -206,12 +205,11 @@ static nsresult getSubsFromParent(const rtl::OString& aParent, nsIEnumerator **a
 
     if (aSubs == nsnull) { return NS_ERROR_NULL_POINTER ; }
     *aSubs = nsnull ;
-    nsresult retCode = NS_OK ;
     nsCOMPtr<nsISupportsArray> array ;
 
     NS_NewISupportsArray(getter_AddRefs(array)) ;
 
-    retCode = insertPABDescription();
+    nsresult retCode = insertPABDescription();
     NS_ENSURE_SUCCESS(retCode, retCode) ;
 
     nsCOMPtr<nsIRDFService> rdfService(do_GetService(kRDFServiceCID, &retCode)) ;
@@ -747,14 +745,12 @@ sal_Bool MDatabaseMetaDataHelper::NewAddressBook(OConnection* _pCon,const ::rtl:
         OSL_TRACE("Create table");
 
     // Get the mozilla addressbooks from the base directory.
-    nsresult rv = NS_OK;
-
     MNSMozabProxy xMProxy;
     RunArgs args;
     args.funcIndex = ProxiedFunc::FUNC_NEW_ADDRESS_BOOK;
     args.argCount = 1;
     args.arg1 = (void*)&aTableName;
-    rv = xMProxy.StartProxy(&args,m_ProductType,m_ProfileName);
+    nsresult rv = xMProxy.StartProxy(&args,m_ProductType,m_ProfileName);
 
     _pCon->setForceLoadTables(sal_True); //force reload table next time
     if (rv == NS_ERROR_FILE_IS_LOCKED)

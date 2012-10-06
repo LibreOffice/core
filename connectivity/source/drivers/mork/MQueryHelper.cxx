@@ -246,18 +246,18 @@ sal_Int32 MQueryHelper::executeQuery(OConnection* xConnection)
     MorkRowMap::iterator rowIter;
 
     // Iterate all tables
-    for ( tableIter = Tables->begin(); tableIter != Tables->end(); tableIter++ )
+    for ( tableIter = Tables->begin(); tableIter != Tables->end(); ++tableIter )
     {
         if (tableIter->first != 1) break;
         Rows =  xConnection->getMorkParser()->getRows( 0x80, &tableIter->second );
         if ( Rows )
         {
             // Iterate all rows
-            for ( rowIter = Rows->begin(); rowIter != Rows->end(); rowIter++ )
+            for ( rowIter = Rows->begin(); rowIter != Rows->end(); ++rowIter )
             {
                 MQueryHelperResultEntry* entry = new MQueryHelperResultEntry();
                 for (MorkCells::iterator CellsIter = rowIter->second.begin();
-                     CellsIter != rowIter->second.end(); CellsIter++ )
+                     CellsIter != rowIter->second.end(); ++CellsIter )
                 {
                     std::string column = xConnection->getMorkParser()->getColumn(CellsIter->first);
                     std::string value = xConnection->getMorkParser()->getValue(CellsIter->second);

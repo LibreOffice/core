@@ -137,7 +137,7 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
     if (Tables)
     {
         // Iterate all tables
-        for ( tableIter = Tables->begin(); tableIter != Tables->end(); tableIter++ )
+        for ( tableIter = Tables->begin(); tableIter != Tables->end(); ++tableIter )
         {
             if ( 0 == tableIter->first ) continue;
             SAL_INFO("connectivity.mork", "table->first : " << tableIter->first);

@@ -960,9 +960,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTablePrivileges(
 {
     SAL_INFO("connectivity.mork", "=> ODatabaseMetaData::getTablePrivileges()" );
     ::connectivity::ODatabaseMetaDataResultSet* pResult = new ::connectivity::ODatabaseMetaDataResultSet(ODatabaseMetaDataResultSet::eTablePrivileges);
-    Reference< XResultSet > xRef = NULL;
-
-    xRef = pResult;
+    Reference< XResultSet > xRef = pResult;
 
     ::std::vector< ::rtl::OUString > tables;
     if ( !m_pMetaDataHelper->getTableStrings( m_pConnection, tables) )

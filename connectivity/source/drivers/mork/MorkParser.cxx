@@ -102,10 +102,9 @@ void MorkParser::initVars()
 bool MorkParser::parse()
 {
     bool Result = true;
-    char cur = 0;
 
     // Run over mork chars and parse each term
-    cur = nextChar();
+    char cur = nextChar();
 
     int i = 0;
 
@@ -606,7 +605,7 @@ void MorkParser::dump()
 
     //// columns dict
     for ( MorkDict::iterator iter = columns_.begin();
-          iter != columns_.end(); iter++ )
+          iter != columns_.end(); ++iter )
     {
         std::cout  << std::hex << std::uppercase << iter->first
                    << " : "
@@ -619,7 +618,7 @@ void MorkParser::dump()
     std::cout << "=============================================\r\n\r\n";
 
     for ( MorkDict::iterator iter = values_.begin();
-          iter != values_.end(); iter++ )
+          iter != values_.end(); ++iter )
     {
         if (iter->first >= nextAddValueId_) {
             continue;
@@ -637,27 +636,27 @@ void MorkParser::dump()
 
     //// Mork data
     for ( TableScopeMap::iterator iter = mork_.begin();
-          iter != mork_.end(); iter++ )
+          iter != mork_.end(); ++iter )
     {
         std::cout << "\r\n Scope:" << std::hex << std::uppercase
                   << iter->first << std::endl;
 
         for ( MorkTableMap::iterator TableIter = iter->second.begin();
-              TableIter != iter->second.end(); TableIter++ )
+              TableIter != iter->second.end(); ++TableIter )
         {
             std::cout << "\t Table:"
                       << ( ( int ) TableIter->first < 0 ? "-" : " " )
                       << std::hex << std::uppercase << TableIter->first << std::endl;
 
             for (RowScopeMap::iterator RowScopeIter = TableIter->second.begin();
-                 RowScopeIter != TableIter->second.end(); RowScopeIter++ )
+                 RowScopeIter != TableIter->second.end(); ++RowScopeIter )
             {
                 std::cout << "\t\t RowScope:"
                           << std::hex << std::uppercase
                           << RowScopeIter->first << std::endl;
 
                 for (MorkRowMap::iterator RowIter = RowScopeIter->second.begin();
-                     RowIter != RowScopeIter->second.end(); RowIter++ )
+                     RowIter != RowScopeIter->second.end(); ++RowIter )
                 {
                     std::cout << "\t\t\t Row Id:"
                               << ((int) RowIter->first < 0 ? "-" : " ")
@@ -666,7 +665,7 @@ void MorkParser::dump()
                     std::cout << "\t\t\t\t Cells:" << std::endl;
 
                     for (MorkCells::iterator CellsIter = RowIter->second.begin();
-                         CellsIter != RowIter->second.end(); CellsIter++ )
+                         CellsIter != RowIter->second.end(); ++CellsIter )
                     {
                         // Write ids
                         std::cout << "\t\t\t\t\t"

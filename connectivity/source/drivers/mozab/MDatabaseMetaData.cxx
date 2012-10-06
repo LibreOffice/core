@@ -959,9 +959,8 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTablePrivileges(
     const Any& /*catalog*/, const ::rtl::OUString& /*schemaPattern*/, const ::rtl::OUString& tableNamePattern ) throw(SQLException, RuntimeException)
 {
     ::connectivity::ODatabaseMetaDataResultSet* pResult = new ::connectivity::ODatabaseMetaDataResultSet(ODatabaseMetaDataResultSet::eTablePrivileges);
-    Reference< XResultSet > xRef = NULL;
 
-    xRef = pResult;
+    Reference< XResultSet > xRef = pResult;
 
     ::std::vector< ::rtl::OUString > tables;
     ::std::vector< ::rtl::OUString > types;
