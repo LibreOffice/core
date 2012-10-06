@@ -1133,6 +1133,7 @@ ScCondFormatDlg::ScCondFormatDlg(Window* pParent, ScDocument* pDoc, const ScCond
     maBtnAdd.SetClickHdl( LINK( &maCondFormList, ScCondFormatList, AddBtnHdl ) );
     maBtnRemove.SetClickHdl( LINK( &maCondFormList, ScCondFormatList, RemoveBtnHdl ) );
     maEdRange.SetModifyHdl( LINK( this, ScCondFormatDlg, EdRangeModifyHdl ) );
+    maBtnOk.SetClickHdl( LINK( this, ScCondFormatDlg, OkBtnHdl ) );
     FreeResource();
 
     maEdRange.SetText(aRangeString);
@@ -1204,6 +1205,22 @@ IMPL_LINK( ScCondFormatDlg, EdRangeModifyHdl, Edit*, pEdit )
         pEdit->SetControlBackground(GetSettings().GetStyleSettings().GetWindowColor());
     else
         pEdit->SetControlBackground(COL_LIGHTRED);
+    return 0;
+}
+
+IMPL_LINK_NOARG( ScCondFormatDlg, OkBtnHdl )
+{
+    rtl::OUString aRangeStr = maEdRange.GetText();
+    ScRangeList aRange;
+    aRange.Parse(aRangeStr, mpDoc, SCA_VALID, mpDoc->GetAddressConvention());
+    boost::scoped_ptr<ScConditionalFormat> pFormat(maCondFormList.GetConditionalFormat());
+    if(pFormat && pFormat->GetRange().empty() && aRange.empty())
+        return 0;
+    else
+    {
+        EndDialog(RET_OK);
+    }
+
     return 0;
 }
 
