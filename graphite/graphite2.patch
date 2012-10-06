@@ -1,12 +1,12 @@
---- misc/graphite2-1.0.3/include/graphite2/Types.h	2011-02-12 16:54:16.000000000 +0100
-+++ misc/build/graphite2-1.0.3/include/graphite2/Types.h	2011-03-15 21:38:06.264788098 +0100
-@@ -36,7 +36,8 @@
+--- misc/graphite2-1.2.0/include/graphite2/Types.h	2011-02-12 16:54:16.000000000 +0100
++++ misc/build/graphite2-1.2.0/include/graphite2/Types.h	2011-03-15 21:38:06.264788098 +0100
+@@ -41,7 +41,8 @@
  };
  
  // Definitions for library publicly exported symbols
 -#if defined _WIN32 || defined __CYGWIN__
 +#define GR2_STATIC 1
 +#if ( defined _WIN32 || defined __CYGWIN__ ) && !defined GR2_STATIC
-   #ifdef GR2_EXPORTING
-     #ifdef __GNUC__
-       #define GR2_API    __attribute__((dllexport))
+   #if defined GRAPHITE2_STATIC
+     #define GR2_API
+   #elif defined GRAPHITE2_EXPORTING
