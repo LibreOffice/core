@@ -341,10 +341,10 @@ $(call gb_UnoApiHeadersTarget_get_bootstrap_dir,$(1),/%.hpp) :
 	touch $$@
 
 $(call gb_UnoApiHeadersTarget_get_comprehensive_dir,$(1),/%.hdl) :
-	touch $$@
+	mkdir -p `dirname $$@` && touch $$@
 
 $(call gb_UnoApiHeadersTarget_get_comprehensive_dir,$(1),/%.hpp) :
-	touch $$@
+	mkdir -p `dirname $$@` && touch $$@
 
 endef
 
