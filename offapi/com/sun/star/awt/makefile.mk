@@ -125,6 +125,7 @@ IDLFILES=\
     PopupMenuDirection.idl\
     PosSize.idl\
     PrinterException.idl\
+    PrinterServer.idl\
     PushButtonType.idl\
     RasterOperation.idl\
     Rectangle.idl\
