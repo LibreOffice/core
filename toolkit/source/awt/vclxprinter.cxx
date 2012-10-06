@@ -279,7 +279,7 @@ sal_Bool VCLXPrinter::start( const OUString& /*rJobName*/, sal_Int16 /*nCopies*/
     ::osl::MutexGuard aGuard( Mutex );
 
     sal_Bool bDone = sal_True;
-    if ( mpListener.get() )
+    if ( mpPrinter.get() )
     {
         maInitJobSetup = mpPrinter->GetJobSetup();
         mpListener.reset( new vcl::OldStylePrintAdaptor( mpPrinter ) );
