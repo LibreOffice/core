@@ -359,11 +359,7 @@ sal_Bool SAL_CALL SpellChecker::isValid( const OUString& rWord, const Locale& rL
         return sal_True;
 
     if (!hasLocale( rLocale ))
-#ifdef LINGU_EXCEPTIONS
-        throw( IllegalArgumentException() );
-#else
         return sal_True;
-#endif
 
     // return sal_False to process SPELLML requests (they are longer than the header)
     if (rWord.match(A2OU(SPELLML_HEADER), 0) && (rWord.getLength() > 10)) return sal_False;
@@ -480,11 +476,7 @@ Reference< XSpellAlternatives > SAL_CALL SpellChecker::spell(
         return NULL;
 
     if (!hasLocale( rLocale ))
-#ifdef LINGU_EXCEPTIONS
-        throw( IllegalArgumentException() );
-#else
         return NULL;
-#endif
 
     Reference< XSpellAlternatives > xAlt;
     if (!isValid( rWord, rLocale, rProperties ))

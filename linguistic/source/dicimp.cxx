@@ -333,10 +333,6 @@ sal_uLong DictionaryNeo::loadEntries(const OUString &rMainURL)
                 break;
             if (0 != (nErr = pStream->GetError()))
                 return nErr;
-#ifdef LINGU_EXCEPTIONS
-            if (nLen >= BUFSIZE)
-                throw  io::IOException() ;
-#endif
 
             if (nLen < BUFSIZE)
             {
@@ -1006,13 +1002,7 @@ void SAL_CALL DictionaryNeo::store()
 
     if (bIsModified && hasLocation() && !isReadonly())
     {
-        if (saveEntries( aMainURL ))
-        {
-#ifdef LINGU_EXCEPTIONS
-            throw io::IOException();
-#endif
-        }
-        else
+        if (!saveEntries( aMainURL ))
             bIsModified = sal_False;
     }
 }
@@ -1024,13 +1014,7 @@ void SAL_CALL DictionaryNeo::storeAsURL(
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
-    if (saveEntries( aURL ))
-    {
-#ifdef LINGU_EXCEPTIONS
-        throw io::IOException();
-#endif
-    }
-    else
+    if (!saveEntries( aURL ))
     {
         aMainURL = aURL;
         bIsModified = sal_False;
@@ -1044,13 +1028,6 @@ void SAL_CALL DictionaryNeo::storeToURL(
         throw(io::IOException, RuntimeException)
 {
     MutexGuard  aGuard( GetLinguMutex() );
-
-    if (saveEntries( aURL ))
-    {
-#ifdef LINGU_EXCEPTIONS
-        throw io::IOException();
-#endif
-    }
 }
 
 

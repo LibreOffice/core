@@ -281,11 +281,7 @@ sal_Bool SAL_CALL
         return sal_True;
 
     if (!hasLocale( rLocale ))
-#ifdef LINGU_EXCEPTIONS
-        throw( IllegalArgumentException() );
-#else
         return sal_True;
-#endif
 
     // Get property values to be used.
     // These are be the default values set in the SN_LINGU_PROPERTIES
@@ -395,11 +391,7 @@ Reference< XSpellAlternatives > SAL_CALL
         return NULL;
 
     if (!hasLocale( rLocale ))
-#ifdef LINGU_EXCEPTIONS
-        throw( IllegalArgumentException() );
-#else
         return NULL;
-#endif
 
     Reference< XSpellAlternatives > xAlt;
     if (!isValid( rWord, rLocale, rProperties ))

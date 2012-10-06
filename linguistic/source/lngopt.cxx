@@ -250,12 +250,6 @@ void SAL_CALL LinguProps::setPropertyValue(
             launchEvent( aChgEvt );
         }
     }
-#ifdef LINGU_EXCEPTIONS
-    else
-    {
-        throw UnknownPropertyException();
-    }
-#endif
 }
 
 Any SAL_CALL LinguProps::getPropertyValue( const OUString& rPropertyName )
@@ -270,12 +264,6 @@ Any SAL_CALL LinguProps::getPropertyValue( const OUString& rPropertyName )
     {
         aRet = aConfig.GetProperty( pCur->nWID );
     }
-#ifdef LINGU_EXCEPTIONS
-    else
-    {
-        throw UnknownPropertyException();
-    }
-#endif
 
     return aRet;
 }
@@ -292,12 +280,6 @@ void SAL_CALL LinguProps::addPropertyChangeListener(
         const SfxItemPropertySimpleEntry* pCur = aPropertyMap.getByName( rPropertyName );
         if(pCur)
             aPropListeners.addInterface( pCur->nWID, rxListener );
-#ifdef LINGU_EXCEPTIONS
-        else
-        {
-            throw UnknownPropertyException();
-        }
-#endif
     }
 }
 
@@ -313,12 +295,6 @@ void SAL_CALL LinguProps::removePropertyChangeListener(
         const SfxItemPropertySimpleEntry* pCur = aPropertyMap.getByName( rPropertyName );
         if(pCur)
             aPropListeners.removeInterface( pCur->nWID, rxListener );
-#ifdef LINGU_EXCEPTIONS
-        else
-        {
-            throw UnknownPropertyException();
-        }
-#endif
     }
 }
 

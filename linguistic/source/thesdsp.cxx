@@ -124,13 +124,7 @@ Sequence< Reference< XMeaning > > SAL_CALL
     ThesSvcByLangMap_t::iterator    aIt( aSvcMap.find( nLanguage ) );
     LangSvcEntries_Thes     *pEntry = aIt != aSvcMap.end() ? aIt->second.get() : NULL;
 
-    if (!pEntry)
-    {
-#ifdef LINGU_EXCEPTIONS
-        throw IllegalArgumentException();
-#endif
-    }
-    else
+    if (pEntry)
     {
         OUString aChkWord( rTerm );
         aChkWord = aChkWord.replace( SVT_HARD_SPACE, ' ' );
