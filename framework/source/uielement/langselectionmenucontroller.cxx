@@ -251,7 +251,6 @@ void LanguageSelectionMenuController::fillPopupMenu( Reference< css::awt::XPopup
     sal_Int16 nItemId = 1;  // in this control the item id is not important for executing the command
     const OUString sAsterix("*");  // multiple languages in current selection
     const OUString sEmpty;  // 'no language found' from language guessing
-    std::map< sal_Int16, OUString > aLangMap;
     std::set< OUString >::const_iterator it;
     for (it = aLangItems.begin(); it != aLangItems.end(); ++it)
     {
@@ -269,7 +268,6 @@ void LanguageSelectionMenuController::fillPopupMenu( Reference< css::awt::XPopup
                 //make a sign for the current language
                 pPopupMenu->CheckItem( nItemId, sal_True );
             }
-            aLangMap[ nItemId ] = rStr;
             ++nItemId;
         }
     }
