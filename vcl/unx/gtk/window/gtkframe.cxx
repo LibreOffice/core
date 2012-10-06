@@ -558,36 +558,40 @@ void on_registrar_available( GDBusConnection * /*connection*/,
                              gpointer         user_data )
 {
     SolarMutexGuard aGuard;
+
     GtkSalFrame* pSalFrame = reinterpret_cast< GtkSalFrame* >( user_data );
     GdkWindow* gdkWindow = gtk_widget_get_window( pSalFrame->getWindow() );
+
     ensure_dbus_setup(gdkWindow, pSalFrame);
+
     SalMenu* pSalMenu = pSalFrame->GetMenu();
+
     if ( pSalMenu != NULL )
     {
         GtkSalMenu* pGtkSalMenu = static_cast<GtkSalMenu*>(pSalMenu);
         pGtkSalMenu->UpdateNativeMenu();
-        MenuBar* pMenuBar = static_cast< MenuBar* >( pGtkSalMenu->GetMenu() );
-        if(pMenuBar)
-            pMenuBar->SetDisplayable(false);           
+        pGtkSalMenu->Display( sal_True );
     }
 }
 
-//This is called when the registrar becomes unavailable. It shows the menubar.
-void on_registrar_unavailable (GDBusConnection * /*connection*/,
-                          const gchar     * /*name*/,
-                          gpointer         user_data)
+// This is called when the registrar becomes unavailable. It shows the menubar.
+void on_registrar_unavailable( GDBusConnection * /*connection*/,
+                               const gchar     * /*name*/,
+                               gpointer         user_data )
 {
     SolarMutexGuard aGuard;
+
     SAL_INFO("vcl.unity", "on_registrar_unavailable");
+
     pSessionBus = NULL;
     GtkSalFrame* pSalFrame = reinterpret_cast< GtkSalFrame* >( user_data );
+
     SalMenu* pSalMenu = pSalFrame->GetMenu();
 
     if ( pSalMenu ) {
-        GtkSalMenu* pGtkSalMenu = static_cast<GtkSalMenu*>(pSalMenu);
+        GtkSalMenu* pGtkSalMenu = static_cast< GtkSalMenu* >( pSalMenu );
         pGtkSalMenu->DisconnectFrame();
-        MenuBar* pMenuBar = static_cast< MenuBar* >( pGtkSalMenu->GetMenu() );
-        pMenuBar->SetDisplayable( false );
+        pGtkSalMenu->Display( sal_False );
     }
 }
 

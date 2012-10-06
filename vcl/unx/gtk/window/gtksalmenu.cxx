@@ -37,6 +37,8 @@
 
 #include <sal/log.hxx>
 
+static sal_Bool bMenuVisibility = sal_False;
+
 static gchar* GetCommandForSpecialItem( GtkSalMenuItem* pSalMenuItem )
 {
     gchar* aCommand = NULL;
@@ -380,16 +382,6 @@ void GtkSalMenu::UpdateNativeMenu()
     RemoveUnusedCommands( pActionGroup, pOldCommandList, pNewCommandList );
 }
 
-void GtkSalMenu::DisconnectFrame()
-{
-    if(mbMenuBar)
-    {
-        mpMenuModel = NULL;
-        mpActionGroup = NULL;
-        mpFrame = NULL;
-    }
-}
-
 
 /*
  * GtkSalMenu
@@ -416,7 +408,7 @@ GtkSalMenu::~GtkSalMenu()
 
 sal_Bool GtkSalMenu::VisibleMenuBar()
 {
-    return true;
+    return bMenuVisibility;
 }
 
 void GtkSalMenu::InsertItem( SalMenuItem* pSalMenuItem, unsigned nPos )
@@ -491,7 +483,6 @@ void GtkSalMenu::SetFrame( const SalFrame* pFrame )
 
     // Generate the main menu structure.
     UpdateNativeMenu();
-
 }
 
 const GtkSalFrame* GtkSalMenu::GetFrame() const
@@ -708,7 +699,7 @@ void GtkSalMenu::Activate( const gchar* aMenuCommand )
 
 void GtkSalMenu::Deactivate( const gchar* aMenuCommand )
 {
-    if ( mbMenuBar != TRUE )
+    if ( mbMenuBar == sal_False )
         return;
 
     GtkSalMenu* pSalSubMenu = GetMenuForItemCommand( (gchar*) aMenuCommand, TRUE );
@@ -717,6 +708,29 @@ void GtkSalMenu::Deactivate( const gchar* aMenuCommand )
         MenuBar* pMenuBar = static_cast< MenuBar* >( mpVCLMenu );
         pMenuBar->HandleMenuDeActivateEvent( pSalSubMenu->mpVCLMenu );
     }
+}
+
+void GtkSalMenu::DisconnectFrame()
+{
+    if( mbMenuBar == sal_True )
+    {
+        mpMenuModel = NULL;
+        mpActionGroup = NULL;
+        mpFrame = NULL;
+    }
+}
+
+void GtkSalMenu::Display( sal_Bool bVisible )
+{
+    if ( mbMenuBar == sal_False || mpVCLMenu == NULL )
+        return;
+
+    bMenuVisibility = bVisible;
+
+    sal_Bool bVCLMenuVisible = ( bVisible == sal_True ) ? sal_False : sal_True;
+
+    MenuBar* pMenuBar = static_cast< MenuBar* >( mpVCLMenu );
+    pMenuBar->SetDisplayable( bVCLMenuVisible );
 }
 
 sal_Bool GtkSalMenu::IsItemVisible( unsigned nPos )
