@@ -199,7 +199,7 @@ double SAL_CALL AnalysisAddIn::getPrice( constREFXPS& xOpt,
     sal_Int32 nSettle, sal_Int32 nMat, double fRate, double fYield, double fRedemp, sal_Int32 nFreq,
     const ANY& rOB ) THROWDEF_RTE_IAE
 {
-    if( fYield < 0.0 || fRate < 0.0 || fRedemp <= 0 || CHK_Freq || nSettle >= nMat )
+    if( fYield < 0.0 || fRate < 0.0 || fRedemp <= 0.0 || CHK_Freq || nSettle >= nMat )
         THROW_IAE;
 
     double fRet = getPrice_( GetNullDate( xOpt ), nSettle, nMat, fRate, fYield, fRedemp, nFreq, getDateMode( xOpt, rOB ) );
@@ -210,7 +210,7 @@ double SAL_CALL AnalysisAddIn::getPrice( constREFXPS& xOpt,
 double SAL_CALL AnalysisAddIn::getPricedisc( constREFXPS& xOpt,
     sal_Int32 nSettle, sal_Int32 nMat, double fDisc, double fRedemp, const ANY& rOB ) THROWDEF_RTE_IAE
 {
-    if( fDisc <= 0.0 || fRedemp <= 0 || nSettle >= nMat )
+    if( fDisc <= 0.0 || fRedemp <= 0.0 || nSettle >= nMat )
         THROW_IAE;
 
     double fRet = fRedemp * ( 1.0 - fDisc * GetYearDiff( GetNullDate( xOpt ), nSettle, nMat, getDateMode( xOpt, rOB ) ) );
@@ -336,7 +336,7 @@ double SAL_CALL AnalysisAddIn::getYieldmat( constREFXPS& xOpt,
     sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nIssue, double fRate, double fPrice, const ANY& rOB )
     THROWDEF_RTE_IAE
 {
-    if( fRate < 0.0 || fRate <= 0.0 || nSettle >= nMat )
+    if( fPrice <= 0.0 || fRate <= 0.0 || nSettle >= nMat )
         THROW_IAE;
 
     double fRet = GetYieldmat( GetNullDate( xOpt ),  nSettle, nMat, nIssue, fRate, fPrice, getDateMode( xOpt, rOB ) );
@@ -401,7 +401,7 @@ double SAL_CALL AnalysisAddIn::getOddfprice( constREFXPS& xOpt,
     sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nIssue, sal_Int32 nFirstCoup,
     double fRate, double fYield, double fRedemp, sal_Int32 nFreq, const ANY& rOB ) THROWDEF_RTE_IAE
 {
-    if( fRate < 0 || fYield < 0 || CHK_Freq || nMat <= nFirstCoup || nFirstCoup <= nSettle || nSettle <= nIssue )
+    if( fRate < 0.0 || fYield < 0.0 || CHK_Freq || nMat <= nFirstCoup || nFirstCoup <= nSettle || nSettle <= nIssue )
         THROW_IAE;
 
     double fRet = GetOddfprice( GetNullDate( xOpt ), nSettle, nMat, nIssue, nFirstCoup, fRate, fYield, fRedemp, nFreq, getDateMode( xOpt, rOB ) );
@@ -413,7 +413,7 @@ double SAL_CALL AnalysisAddIn::getOddfyield( constREFXPS& xOpt,
     sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nIssue, sal_Int32 nFirstCoup,
     double fRate, double fPrice, double fRedemp, sal_Int32 nFreq, const ANY& rOB ) THROWDEF_RTE_IAE
 {
-    if( fRate < 0 || fPrice <= 0 || CHK_Freq || nMat <= nFirstCoup || nFirstCoup <= nSettle || nSettle <= nIssue )
+    if( fRate < 0.0 || fPrice <= 0.0 || CHK_Freq || nMat <= nFirstCoup || nFirstCoup <= nSettle || nSettle <= nIssue )
         THROW_IAE;
 
     double fRet = GetOddfyield( GetNullDate( xOpt ), nSettle, nMat, nIssue, nFirstCoup, fRate, fPrice, fRedemp, nFreq,
@@ -426,7 +426,7 @@ double SAL_CALL AnalysisAddIn::getOddlprice( constREFXPS& xOpt,
     sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nLastInterest,
     double fRate, double fYield, double fRedemp, sal_Int32 nFreq, const ANY& rOB ) THROWDEF_RTE_IAE
 {
-    if( fRate < 0 || fYield < 0 || CHK_Freq || nMat <= nSettle || nSettle <= nLastInterest )
+    if( fRate < 0.0 || fYield < 0.0 || CHK_Freq || nMat <= nSettle || nSettle <= nLastInterest )
         THROW_IAE;
 
     double fRet = GetOddlprice( GetNullDate( xOpt ), nSettle, nMat, nLastInterest, fRate, fYield, fRedemp, nFreq,
@@ -439,7 +439,7 @@ double SAL_CALL AnalysisAddIn::getOddlyield( constREFXPS& xOpt,
     sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nLastInterest,
     double fRate, double fPrice, double fRedemp, sal_Int32 nFreq, const ANY& rOB ) THROWDEF_RTE_IAE
 {
-    if( fRate < 0 || fPrice <= 0 || CHK_Freq || nMat <= nSettle || nSettle <= nLastInterest )
+    if( fRate < 0.0 || fPrice <= 0.0 || CHK_Freq || nMat <= nSettle || nSettle <= nLastInterest )
         THROW_IAE;
 
     double fRet = GetOddlyield( GetNullDate( xOpt ), nSettle, nMat, nLastInterest, fRate, fPrice, fRedemp, nFreq,
