@@ -633,6 +633,14 @@ void ScCondFrmtEntry::Select()
     SetHeight();
 }
 
+void ScCondFrmtEntry::SetType( ScCondFormatEntryType eType )
+{
+    meType = eType;
+    if(eType == DATABAR)
+        maLbColorFormat.SelectEntryPos(2);
+    Select();
+}
+
 void ScCondFrmtEntry::Deselect()
 {
     SetControlBackground(GetSettings().GetStyleSettings().GetDialogColor());
@@ -987,7 +995,8 @@ IMPL_LINK_NOARG( ScCondFrmtEntry, ConditionTypeSelectHdl )
     return 0;
 }
 
-ScCondFormatList::ScCondFormatList(Window* pParent, const ResId& rResId, ScDocument* pDoc, const ScConditionalFormat* pFormat, const ScRangeList& rRanges, const ScAddress& rPos):
+ScCondFormatList::ScCondFormatList(Window* pParent, const ResId& rResId, ScDocument* pDoc, const ScConditionalFormat* pFormat,
+                                const ScRangeList& rRanges, const ScAddress& rPos, condformat::dialog::ScCondFormatDialogType eType):
     Control(pParent, rResId),
     mbHasScrollBar(false),
     mpScrollBar(new ScrollBar(this, WB_VERT )),
@@ -1005,9 +1014,28 @@ ScCondFormatList::ScCondFormatList(Window* pParent, const ResId& rResId, ScDocum
         {
             maEntries.push_back(new ScCondFrmtEntry( this, mpDoc, pFormat->GetEntry(nIndex), maPos ));
         }
-        if (nCount > 0)
-            maEntries.begin()->Select();
     }
+    else
+    {
+        switch(eType)
+        {
+            case condformat::dialog::CONDITION:
+                maEntries.push_back(new ScCondFrmtEntry( this, mpDoc, maPos ));
+                break;
+            case condformat::dialog::COLORSCALE:
+                maEntries.push_back(new ScCondFrmtEntry( this, mpDoc, maPos ));
+                maEntries[0].SetType(COLORSCALE);
+                break;
+            case condformat::dialog::DATABAR:
+                maEntries.push_back(new ScCondFrmtEntry( this, mpDoc, maPos ));
+                maEntries[0].SetType(DATABAR);
+                break;
+            default:
+                break;
+        }
+    }
+    if (!maEntries.empty())
+        maEntries.begin()->Select();
 
     RecalcAll();
     FreeResource();
@@ -1083,7 +1111,8 @@ void ScCondFormatList::DoScroll(long nDelta)
     mpScrollBar->SetPosPixel(aNewPoint);
 }
 
-ScCondFormatDlg::ScCondFormatDlg(Window* pParent, ScDocument* pDoc, const ScConditionalFormat* pFormat, const ScRangeList& rRange, const ScAddress& rPos):
+ScCondFormatDlg::ScCondFormatDlg(Window* pParent, ScDocument* pDoc, const ScConditionalFormat* pFormat, const ScRangeList& rRange,
+                                    const ScAddress& rPos, condformat::dialog::ScCondFormatDialogType eType):
     ModalDialog(pParent, ScResId( RID_SCDLG_CONDFORMAT )),
     maBtnAdd( this, ScResId( BTN_ADD ) ),
     maBtnRemove( this, ScResId( BTN_REMOVE ) ),
@@ -1091,7 +1120,7 @@ ScCondFormatDlg::ScCondFormatDlg(Window* pParent, ScDocument* pDoc, const ScCond
     maBtnCancel( this, ScResId( BTN_CANCEL ) ),
     maFtRange( this, ScResId( FT_RANGE ) ),
     maEdRange( this, ScResId( ED_RANGE ) ),
-    maCondFormList( this, ScResId( CTRL_LIST ), pDoc, pFormat, rRange, rPos ),
+    maCondFormList( this, ScResId( CTRL_LIST ), pDoc, pFormat, rRange, rPos, eType ),
     maPos(rPos),
     mpDoc(pDoc)
 {

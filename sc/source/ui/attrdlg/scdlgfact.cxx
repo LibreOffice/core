@@ -787,8 +787,17 @@ AbstractScCondFormatDlg* ScAbstractDialogFactory_Impl::CreateScCondFormatDlg(Win
     ScCondFormatDlg* pDlg = NULL;
     switch( nId )
     {
-        case RID_SCDLG_CONDFORMAT:
-            pDlg = new ScCondFormatDlg( pParent, pDoc, pFormat, rRange, rPos );
+        case 0:
+            pDlg = new ScCondFormatDlg( pParent, pDoc, pFormat, rRange, rPos, condformat::dialog::NONE );
+            break;
+        case SID_OPENDLG_CONDFRMT:
+            pDlg = new ScCondFormatDlg( pParent, pDoc, pFormat, rRange, rPos, condformat::dialog::CONDITION );
+            break;
+        case SID_OPENDLG_COLORSCALE:
+            pDlg = new ScCondFormatDlg( pParent, pDoc, pFormat, rRange, rPos, condformat::dialog::COLORSCALE );
+            break;
+        case SID_OPENDLG_DATABAR:
+            pDlg = new ScCondFormatDlg( pParent, pDoc, pFormat, rRange, rPos, condformat::dialog::DATABAR );
             break;
         default:
             break;

@@ -47,6 +47,22 @@ class ScFormatEntry;
 class ScConditionalFormat;
 struct ScDataBarFormatData;
 
+namespace condformat {
+
+namespace dialog {
+
+enum ScCondFormatDialogType
+{
+    NONE,
+    CONDITION,
+    COLORSCALE,
+    DATABAR
+};
+
+}
+
+}
+
 class ScCondFrmtEntry : public Control
 {
 private:
@@ -96,7 +112,6 @@ private:
     boost::scoped_ptr<ScDataBarFormatData> mpDataBarData;
 
     //
-    void SwitchToType(ScCondFormatEntryType eType);
     void SetCondType();
     void SetColorScaleType();
     void SetDataBarType();
@@ -104,6 +119,7 @@ private:
     void HideCondElements();
     void HideColorScaleElements();
     void HideDataBarElements();
+    void SwitchToType(ScCondFormatEntryType eType);
 
     void SetHeight();
     void Init();
@@ -134,6 +150,8 @@ public:
 
     virtual long Notify( NotifyEvent& rNEvt );
 
+    void SetType( ScCondFormatEntryType eType );
+
     void Select();
     void Deselect();
 
@@ -159,7 +177,8 @@ private:
     void RecalcAll();
     void DoScroll(long nDiff);
 public:
-    ScCondFormatList( Window* pParent, const ResId& rResId, ScDocument* pDoc, const ScConditionalFormat* pFormat, const ScRangeList& rRanges, const ScAddress& rPos);
+    ScCondFormatList( Window* pParent, const ResId& rResId, ScDocument* pDoc, const ScConditionalFormat* pFormat,
+            const ScRangeList& rRanges, const ScAddress& rPos, condformat::dialog::ScCondFormatDialogType eType);
 
     ScConditionalFormat* GetConditionalFormat() const;
 
@@ -188,7 +207,7 @@ private:
     DECL_LINK( EdRangeModifyHdl, Edit* );
 
 public:
-    ScCondFormatDlg(Window* pWindow, ScDocument* pDoc, const ScConditionalFormat* pFormat, const ScRangeList& rRange, const ScAddress& rPos);
+    ScCondFormatDlg(Window* pWindow, ScDocument* pDoc, const ScConditionalFormat* pFormat, const ScRangeList& rRange, const ScAddress& rPos, condformat::dialog::ScCondFormatDialogType eType);
 
     ScConditionalFormat* GetConditionalFormat() const;
 };

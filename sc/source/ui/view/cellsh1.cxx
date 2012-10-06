@@ -2065,15 +2065,15 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 {
                     const ScRangeList& rCondFormatRange = pCondFormat->GetRange();
                     if(rCondFormatRange == aRangeList)
-                        pDlg.reset(pFact->CreateScCondFormatDlg( pTabViewShell->GetDialogParent(), pDoc, pCondFormat, pCondFormat->GetRange(), aPos, RID_SCDLG_CONDFORMAT ));
+                        pDlg.reset(pFact->CreateScCondFormatDlg( pTabViewShell->GetDialogParent(), pDoc, pCondFormat, pCondFormat->GetRange(), aPos, 0 ));
                 }
 
                 if(!pDlg)
                 {
-                    pDlg.reset(pFact->CreateScCondFormatDlg( pTabViewShell->GetDialogParent(), pDoc, NULL, aRangeList, aRangeList.GetTopLeftCorner(), RID_SCDLG_CONDFORMAT ));
+                    pDlg.reset(pFact->CreateScCondFormatDlg( pTabViewShell->GetDialogParent(), pDoc, NULL, aRangeList, aRangeList.GetTopLeftCorner(), nSlot ));
                 }
 
-                if(pDlg->Execute() == RET_OK)
+                if(pDlg && pDlg->Execute() == RET_OK)
                 {
                     ScConditionalFormat* pFormat = pDlg->GetConditionalFormat();
                     sal_uLong nOldIndex = 0;

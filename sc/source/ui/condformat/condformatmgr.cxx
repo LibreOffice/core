@@ -217,7 +217,7 @@ IMPL_LINK_NOARG(ScCondFormatManagerDlg, EditBtnHdl)
         return 0;
 
     boost::scoped_ptr<ScCondFormatDlg> pDlg(new ScCondFormatDlg(this, mpDoc, pFormat, pFormat->GetRange(),
-                                                pFormat->GetRange().GetTopLeftCorner()));
+                                                pFormat->GetRange().GetTopLeftCorner(), condformat::dialog::NONE));
     if(pDlg->Execute() == RET_OK)
     {
         sal_Int32 nKey = pFormat->GetKey();
