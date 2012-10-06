@@ -273,11 +273,7 @@ Reference< XHyphenatedWord > SAL_CALL
     bool bWordModified = false;
     if (!pEntry || (nMaxLeading < 0 || nMaxLeading > nWordLen))
     {
-#ifdef LINGU_EXCEPTIONS
-        throw IllegalArgumentException();
-#else
         return NULL;
-#endif
     }
     else
     {
@@ -414,11 +410,7 @@ Reference< XHyphenatedWord > SAL_CALL
     bool bWordModified = false;
     if (!pEntry || !(0 <= nIndex && nIndex <= nWordLen - 2))
     {
-#ifdef LINGU_EXCEPTIONS
-        throw IllegalArgumentException();
-#else
         return NULL;
-#endif
     }
     else
     {
@@ -546,13 +538,7 @@ Reference< XPossibleHyphens > SAL_CALL
     HyphSvcByLangMap_t::iterator    aIt( aSvcMap.find( nLanguage ) );
     LangSvcEntries_Hyph     *pEntry = aIt != aSvcMap.end() ? aIt->second.get() : NULL;
 
-    if (!pEntry)
-    {
-#ifdef LINGU_EXCEPTIONS
-        throw IllegalArgumentException();
-#endif
-    }
-    else
+    if (pEntry)
     {
         OUString aChkWord( rWord );
 

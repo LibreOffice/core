@@ -304,13 +304,7 @@ sal_Bool SpellCheckerDispatcher::isValid_Impl(
     SpellSvcByLangMap_t::iterator    aIt( aSvcMap.find( nLanguage ) );
     LangSvcEntries_Spell    *pEntry = aIt != aSvcMap.end() ? aIt->second.get() : NULL;
 
-    if (!pEntry)
-    {
-#ifdef LINGU_EXCEPTIONS
-        throw IllegalArgumentException();
-#endif
-    }
-    else
+    if (pEntry)
     {
         OUString aChkWord( rWord );
         Locale aLocale( CreateLocale( nLanguage ) );
@@ -470,13 +464,7 @@ Reference< XSpellAlternatives > SpellCheckerDispatcher::spell_Impl(
     SpellSvcByLangMap_t::iterator    aIt( aSvcMap.find( nLanguage ) );
     LangSvcEntries_Spell    *pEntry = aIt != aSvcMap.end() ? aIt->second.get() : NULL;
 
-    if (!pEntry)
-    {
-#ifdef LINGU_EXCEPTIONS
-        throw IllegalArgumentException();
-#endif
-    }
-    else
+    if (pEntry)
     {
         OUString aChkWord( rWord );
         Locale aLocale( CreateLocale( nLanguage ) );
