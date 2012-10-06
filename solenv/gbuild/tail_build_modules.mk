@@ -29,6 +29,10 @@ TAIL_BUILD_MODULES :=
 
 gb_Module_Module :=
 
+define gb_Helper_optional
+$(if $(filter $(1),$(BUILD_TYPE)),$(2))
+endef
+
 define gb_Module_add_moduledirs
 TAIL_BUILD_MODULES += $(2)
 
