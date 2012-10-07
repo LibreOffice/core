@@ -58,7 +58,9 @@ namespace svt
 #ifdef UNLOAD_ON_LAST_CLIENT_DYING
         static oslInterlockedCount                      s_nAccessibleFactoryAccesss = 0;
 #endif // UNLOAD_ON_LAST_CLIENT_DYING
+#ifndef DISABLE_DYNLOADING
         static oslModule                                s_hAccessibleImplementationModule = NULL;
+#endif
         static GetSvtAccessibilityComponentFactory      s_pAccessibleFactoryFunc = NULL;
         static ::rtl::Reference< IAccessibleFactory >   s_pFactory;
 
