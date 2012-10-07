@@ -43,10 +43,10 @@ TextSeparatorResources::TextSeparatorResources( Window* pWindow )
     m_aLB_Separator.SetDropDownLineCount(m_aLB_Separator.GetEntryCount());
     m_aLB_Separator.SetSizePixel( m_aLB_Separator.CalcMinimumSize() );
 
-    m_aEntryMap[ C2U( " " ) ] = 0;
-    m_aEntryMap[ C2U( ", " ) ] = 1;
-    m_aEntryMap[ C2U( "; " ) ] = 2;
-    m_aEntryMap[ C2U( "\n" ) ] = 3;
+    m_aEntryMap[ " " ] = 0;
+    m_aEntryMap[ ", " ] = 1;
+    m_aEntryMap[ "; " ] = 2;
+    m_aEntryMap[ "\n" ] = 3;
 
     m_aLB_Separator.SetAccessibleName(m_aFT_Separator.GetText());
     m_aLB_Separator.SetAccessibleRelationLabeledBy(&m_aFT_Separator);
@@ -113,9 +113,9 @@ Size TextSeparatorResources::GetCurrentListBoxSize() const
     return m_aLB_Separator.GetSizePixel();
 }
 
-void TextSeparatorResources::SetValue( const rtl::OUString& rSeparator )
+void TextSeparatorResources::SetValue( const OUString& rSeparator )
 {
-    ::std::map< ::rtl::OUString, sal_uInt16 >::iterator aIter( m_aEntryMap.find(rSeparator) );
+    ::std::map< OUString , sal_uInt16 >::iterator aIter( m_aEntryMap.find(rSeparator) );
     if( aIter == m_aEntryMap.end() )
         m_aLB_Separator.SelectEntryPos( m_nDefaultPos );
     else
@@ -127,17 +127,17 @@ void TextSeparatorResources::SetDefault()
     m_aLB_Separator.SelectEntryPos( m_nDefaultPos );
 }
 
-rtl::OUString TextSeparatorResources::GetValue() const
+ OUString TextSeparatorResources::GetValue() const
 {
     sal_uInt16 nPos = m_aLB_Separator.GetSelectEntryPos();
-    ::std::map< ::rtl::OUString, sal_uInt16 >::const_iterator aIter( m_aEntryMap.begin() );
+    ::std::map< OUString , sal_uInt16 >::const_iterator aIter( m_aEntryMap.begin() );
     while( aIter != m_aEntryMap.end() )
     {
         if(aIter->second==nPos )
             return aIter->first;
         ++aIter;
     }
-    return C2U( " " );
+    return OUString( " " );
 }
 
 //.............................................................................

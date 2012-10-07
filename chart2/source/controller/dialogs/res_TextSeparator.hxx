@@ -47,15 +47,15 @@ public:
     Point GetCurrentListBoxPosition() const;
     Size GetCurrentListBoxSize() const;
 
-    ::rtl::OUString GetValue() const;
-    void SetValue( const ::rtl::OUString& rSeparator );
+    OUString GetValue() const;
+    void SetValue( const OUString& rSeparator );
     void SetDefault();
 
 private:
     FixedText   m_aFT_Separator;
     ListBox     m_aLB_Separator;
 
-    ::std::map< ::rtl::OUString, sal_uInt16 > m_aEntryMap;
+    ::std::map< OUString, sal_uInt16 > m_aEntryMap;
 
     const sal_uInt16 m_nDefaultPos;
 };

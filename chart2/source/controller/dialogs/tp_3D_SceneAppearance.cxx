@@ -55,7 +55,7 @@ lcl_ModelProperties lcl_getPropertiesFromModel( uno::Reference< frame::XModel > 
     {
         uno::Reference< chart2::XDiagram > xDiagram( ::chart::ChartModelHelper::findDiagram( xModel ) );
         uno::Reference< beans::XPropertySet > xDiaProp( xDiagram, uno::UNO_QUERY_THROW );
-        xDiaProp->getPropertyValue( C2U("D3DSceneShadeMode")) >>= aProps.m_aShadeMode;
+        xDiaProp->getPropertyValue( "D3DSceneShadeMode" ) >>= aProps.m_aShadeMode;
         ::chart::ThreeDHelper::getRoundedEdgesAndObjectLines( xDiagram, aProps.m_nRoundedEdges, aProps.m_nObjectLines );
         aProps.m_eScheme = ::chart::ThreeDHelper::detectScheme( xDiagram );
     }
@@ -72,7 +72,7 @@ void lcl_setShadeModeAtModel( uno::Reference< frame::XModel > & xModel, drawing:
     {
         uno::Reference< beans::XPropertySet > xDiaProp(
             ::chart::ChartModelHelper::findDiagram( xModel ), uno::UNO_QUERY_THROW );
-        xDiaProp->setPropertyValue( C2U("D3DSceneShadeMode"), uno::makeAny( aShadeMode ));
+        xDiaProp->setPropertyValue( "D3DSceneShadeMode" , uno::makeAny( aShadeMode ));
     }
     catch( const uno::Exception & ex )
     {
