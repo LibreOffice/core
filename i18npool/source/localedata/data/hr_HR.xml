@@ -307,6 +307,68 @@
           <DefaultFullName>prosinac</DefaultFullName>
         </Month>
       </MonthsOfYear>
+      <GenitiveMonths>
+        <Month>
+          <MonthID>jan</MonthID>
+          <DefaultAbbrvName>sij</DefaultAbbrvName>
+          <DefaultFullName>siječnja</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>feb</MonthID>
+          <DefaultAbbrvName>velj</DefaultAbbrvName>
+          <DefaultFullName>veljače</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>mar</MonthID>
+          <DefaultAbbrvName>ožu</DefaultAbbrvName>
+          <DefaultFullName>ožujka</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>apr</MonthID>
+          <DefaultAbbrvName>tra</DefaultAbbrvName>
+          <DefaultFullName>travnja</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>may</MonthID>
+          <DefaultAbbrvName>svi</DefaultAbbrvName>
+          <DefaultFullName>svibnja</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>jun</MonthID>
+          <DefaultAbbrvName>lip</DefaultAbbrvName>
+          <DefaultFullName>lipnja</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>jul</MonthID>
+          <DefaultAbbrvName>srp</DefaultAbbrvName>
+          <DefaultFullName>srpnja</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>aug</MonthID>
+          <DefaultAbbrvName>kol</DefaultAbbrvName>
+          <DefaultFullName>kolovoza</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>sep</MonthID>
+          <DefaultAbbrvName>ruj</DefaultAbbrvName>
+          <DefaultFullName>rujna</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>oct</MonthID>
+          <DefaultAbbrvName>lis</DefaultAbbrvName>
+          <DefaultFullName>listopada</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>nov</MonthID>
+          <DefaultAbbrvName>stu</DefaultAbbrvName>
+          <DefaultFullName>studenog</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>dec</MonthID>
+          <DefaultAbbrvName>pro</DefaultAbbrvName>
+          <DefaultFullName>prosinca</DefaultFullName>
+        </Month>
+      </GenitiveMonths>
       <Eras>
         <Era>
           <EraID>bc</EraID>
