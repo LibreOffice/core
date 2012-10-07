@@ -347,29 +347,29 @@ $(call gb_UnoApiHeadersTarget_get_comprehensive_target,$(1)) : UNOAPI_DEPS :=
 # need dummy recipes so that header files are delivered in Package_inc;
 # otherwise make will consider the header to be up-to-date because it was
 # actually built by the recipe for gb_UnoApiHeadersTarget_get_target
-$(call gb_UnoApiHeadersTarget_get_dir,$(1),/%.hdl) :
+$(call gb_UnoApiHeadersTarget_get_dir,$(1))/%.hdl :
 	touch $$@
 
-$(call gb_UnoApiHeadersTarget_get_dir,$(1),/%.hpp) :
+$(call gb_UnoApiHeadersTarget_get_dir,$(1))/%.hpp :
 	touch $$@
 
-$(call gb_UnoApiHeadersTarget_get_bootstrap_dir,$(1),/%.hdl) :
+$(call gb_UnoApiHeadersTarget_get_bootstrap_dir,$(1))/%.hdl :
 	touch $$@
 
-$(call gb_UnoApiHeadersTarget_get_bootstrap_dir,$(1),/%.hpp) :
+$(call gb_UnoApiHeadersTarget_get_bootstrap_dir,$(1))/%.hpp :
 	touch $$@
 
-$(call gb_UnoApiHeadersTarget_get_comprehensive_dir,$(1),/%.hdl) :
+$(call gb_UnoApiHeadersTarget_get_comprehensive_dir,$(1))/%.hdl :
 	mkdir -p `dirname $$@` && touch $$@
 
-$(call gb_UnoApiHeadersTarget_get_comprehensive_dir,$(1),/%.hpp) :
+$(call gb_UnoApiHeadersTarget_get_comprehensive_dir,$(1))/%.hpp :
 	mkdir -p `dirname $$@` && touch $$@
 
 endef
 
 # ensure that new urd triggers the dummy rule to rebuild the headers
 define gb_UnoApiHeadersTarget_add_headerfile
-$(call gb_UnoApiHeadersTarget_get_dir,$(1),/$(3)) : \
+$(call gb_UnoApiHeadersTarget_get_dir,$(1))/$(3) : \
 	$(call gb_UnoApiPartTarget_get_target,$(basename $(2)).urd)
 
 endef
