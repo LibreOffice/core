@@ -356,7 +356,11 @@ void __EXPORT EditorWindow::MouseButtonUp( const MouseEvent &rEvt )
         pEditView->MouseButtonUp( rEvt );
         SfxBindings* pBindings = BasicIDE::GetBindingsPtr();
         if ( pBindings )
+        {
+            pBindings->Invalidate( SID_COPY );
+            pBindings->Invalidate( SID_CUT );
             pBindings->Invalidate( SID_BASICIDE_STAT_POS );
+        }
     }
 }
 
@@ -454,15 +458,20 @@ void __EXPORT EditorWindow::KeyInput( const KeyEvent& rKEvt )
         SfxBindings* pBindings = BasicIDE::GetBindingsPtr();
         if ( pBindings )
         {
+            pBindings->Invalidate( SID_CUT );
+            pBindings->Invalidate( SID_COPY );
             pBindings->Invalidate( SID_BASICIDE_STAT_POS );
+
             if ( rKEvt.GetKeyCode().GetGroup() == KEYGROUP_CURSOR )
                 pBindings->Update( SID_BASICIDE_STAT_POS );
+
             if ( !bWasModified && pEditEngine->IsModified() )
             {
                 pBindings->Invalidate( SID_SAVEDOC );
                 pBindings->Invalidate( SID_DOC_MODIFIED );
                 pBindings->Invalidate( SID_UNDO );
             }
+
             if ( rKEvt.GetKeyCode().GetCode() == KEY_INSERT )
                 pBindings->Invalidate( SID_ATTR_INSERT );
         }

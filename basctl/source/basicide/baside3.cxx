@@ -188,6 +188,8 @@ void DialogWindow::MouseButtonUp( const MouseEvent& rMEvt )
         pBindings->Invalidate( SID_SHOW_PROPERTYBROWSER );
         pBindings->Invalidate( SID_DOC_MODIFIED );
         pBindings->Invalidate( SID_SAVEDOC );
+        pBindings->Invalidate( SID_COPY );
+        pBindings->Invalidate( SID_CUT );
     }
 }
 
@@ -202,6 +204,8 @@ void DialogWindow::MouseMove( const MouseEvent& rMEvt )
 
 void DialogWindow::KeyInput( const KeyEvent& rKEvt )
 {
+    SfxBindings* pBindings = BasicIDE::GetBindingsPtr();
+
     if( rKEvt.GetKeyCode() == KEY_BACKSPACE )
     {
         BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
@@ -214,7 +218,6 @@ void DialogWindow::KeyInput( const KeyEvent& rKEvt )
     }
     else
     {
-        SfxBindings* pBindings = BasicIDE::GetBindingsPtr();
         if( pBindings && rKEvt.GetKeyCode() == KEY_TAB )
             pBindings->Invalidate( SID_SHOW_PROPERTYBROWSER );
 
@@ -223,6 +226,13 @@ void DialogWindow::KeyInput( const KeyEvent& rKEvt )
             if( !SfxViewShell::Current()->KeyInput( rKEvt ) )
                 Window::KeyInput( rKEvt );
         }
+    }
+
+    // may be KEY_TAB, KEY_BACKSPACE, KEY_ESCAPE
+    if( pBindings )
+    {
+        pBindings->Invalidate( SID_COPY );
+        pBindings->Invalidate( SID_CUT );
     }
 }
 
