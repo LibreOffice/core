@@ -343,7 +343,7 @@ void ImportExcel8::ReadBasic( void )
                 SvStorageStreamRef xXCB = xRootStrg->OpenSotStream( String( RTL_CONSTASCII_USTRINGPARAM( "XCB" ) ), STREAM_STD_READ | STREAM_NOCREATE  );
                 if ( xXCB.Is()|| SVSTREAM_OK == xXCB->GetError() )
                 {
-                    CTBWrapper wrapper;
+                    ScCTBWrapper wrapper;
                     if ( wrapper.Read( *xXCB ) )
                     {
 #if OSL_DEBUG_LEVEL > 1

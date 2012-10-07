@@ -45,7 +45,7 @@
 #include <map>
 using namespace com::sun::star;
 
-// no. of visual data elements in a CTB ( fixed )
+// no. of visual data elements in a SwCTB ( fixed )
 const short nVisualData = 5;
 
 typedef std::map< sal_Int16, rtl::OUString > IdToString;
@@ -91,7 +91,7 @@ rtl::OUString MSOWordCommandConvertor::MSOTCIDToOOCommand( sal_Int16 key )
 }
 
 
-CTBWrapper::CTBWrapper( bool bReadId ) : Tcg255SubStruct( bReadId )
+SwCTBWrapper::SwCTBWrapper( bool bReadId ) : Tcg255SubStruct( bReadId )
 ,reserved2(0)
 ,reserved3(0)
 ,reserved4(0)
@@ -103,20 +103,20 @@ CTBWrapper::CTBWrapper( bool bReadId ) : Tcg255SubStruct( bReadId )
 {
 }
 
-CTBWrapper::~CTBWrapper()
+SwCTBWrapper::~SwCTBWrapper()
 {
 }
 
-Customization* CTBWrapper::GetCustomizaton( sal_Int16 index )
+Customization* SwCTBWrapper::GetCustomizaton( sal_Int16 index )
 {
     if ( index < 0 || index >= static_cast<sal_Int16>( rCustomizations.size() ) )
         return NULL;
     return &rCustomizations[ index ];
 }
 
-CTB* CTBWrapper::GetCustomizationData( const rtl::OUString& sTBName )
+SwCTB* SwCTBWrapper::GetCustomizationData( const rtl::OUString& sTBName )
 {
-    CTB* pCTB = NULL;
+    SwCTB* pCTB = NULL;
     for ( std::vector< Customization >::iterator it = rCustomizations.begin(); it != rCustomizations.end(); ++it )
     {
         if ( it->GetCustomizationData() && it->GetCustomizationData()->GetName().equals( sTBName ) )
@@ -128,9 +128,9 @@ CTB* CTBWrapper::GetCustomizationData( const rtl::OUString& sTBName )
     return pCTB;
 }
 
-bool CTBWrapper::Read( SvStream& rS )
+bool SwCTBWrapper::Read( SvStream& rS )
 {
-    OSL_TRACE("CTBWrapper::Read() stream pos 0x%x", rS.Tell() );
+    OSL_TRACE("SwCTBWrapper::Read() stream pos 0x%x", rS.Tell() );
     nOffSet = rS.Tell();
     Tcg255SubStruct::Read( rS );
     rS >> reserved2 >> reserved3 >> reserved4 >> reserved5;
@@ -138,18 +138,18 @@ bool CTBWrapper::Read( SvStream& rS )
     long nExpectedPos =  rS.Tell() + cbDTBC;
     if ( cbDTBC )
     {
-        // cbDTBC is the size in bytes of the TBC array
-        // but the size of a TBC element is dynamic ( and this relates to TBDelta's
+        // cbDTBC is the size in bytes of the SwTBC array
+        // but the size of a SwTBC element is dynamic ( and this relates to TBDelta's
         int nStart = rS.Tell();
 
         int bytesRead = 0;
         int bytesToRead = cbDTBC - bytesRead;
         // cbDTBC specifies the size ( in bytes ) taken by an array ( of unspecified size )
-        // of TBC records ( TBC records have dynamic length, so we need to check our position
+        // of SwTBC records ( SwTBC records have dynamic length, so we need to check our position
         // after each read )
         do
         {
-            TBC aTBC;
+            SwTBC aTBC;
             if ( !aTBC.Read( rS ) )
                 return false;
             rtbdc.push_back( aTBC );
@@ -159,7 +159,7 @@ bool CTBWrapper::Read( SvStream& rS )
     if ( static_cast< long >( rS.Tell() ) != nExpectedPos )
     {
         // Strange error condition, shouldn't happen ( but does in at least
-        // one test document ) In the case where it happens the TBC &
+        // one test document ) In the case where it happens the SwTBC &
         // TBCHeader records seem blank??? ( and incorrect )
         OSL_ENSURE( static_cast< long >(rS.Tell()) == nExpectedPos, "### Error: Expected pos not equal to actual pos after reading rtbdc");
         OSL_TRACE("\tPos now is 0x%x should be 0x%x", rS.Tell(), nExpectedPos );
@@ -184,9 +184,9 @@ bool CTBWrapper::Read( SvStream& rS )
     return true;
 }
 
-TBC* CTBWrapper::GetTBCAtOffset( sal_uInt32 nStreamOffset )
+SwTBC* SwCTBWrapper::GetTBCAtOffset( sal_uInt32 nStreamOffset )
 {
-    for ( std::vector< TBC >::iterator it = rtbdc.begin(); it != rtbdc.end(); ++it )
+    for ( std::vector< SwTBC >::iterator it = rtbdc.begin(); it != rtbdc.end(); ++it )
     {
         if ( (*it).GetOffset() == nStreamOffset )
             return &(*it);
@@ -194,10 +194,10 @@ TBC* CTBWrapper::GetTBCAtOffset( sal_uInt32 nStreamOffset )
     return NULL;
 }
 
-void CTBWrapper::Print( FILE* fp )
+void SwCTBWrapper::Print( FILE* fp )
 {
     Indent a;
-    indent_printf(fp,"[ 0x%x ] CTBWrapper - dump\n", nOffSet );
+    indent_printf(fp,"[ 0x%x ] SwCTBWrapper - dump\n", nOffSet );
     bool bRes = ( ch == 0x12 && reserved2 == 0x0 && reserved3 == 0x7 && reserved4 == 0x6 && reserved5 == 0xC );
     if ( bRes )
         indent_printf(fp,"  sanity check ( first 8 bytes conform )\n");
@@ -217,7 +217,7 @@ void CTBWrapper::Print( FILE* fp )
 
     sal_Int32 index = 0;
 
-    for ( std::vector< TBC >::iterator it = rtbdc.begin(); it != rtbdc.end(); ++it, ++index )
+    for ( std::vector< SwTBC >::iterator it = rtbdc.begin(); it != rtbdc.end(); ++it, ++index )
     {
         indent_printf(fp,"  Dumping rtbdc[%d]\n", static_cast< int >( index ));
         Indent b;
@@ -234,7 +234,7 @@ void CTBWrapper::Print( FILE* fp )
     }
 }
 
-bool CTBWrapper::ImportCustomToolBar( SfxObjectShell& rDocSh )
+bool SwCTBWrapper::ImportCustomToolBar( SfxObjectShell& rDocSh )
 {
     for ( std::vector< Customization >::iterator it = rCustomizations.begin(); it != rCustomizations.end(); ++it )
     {
@@ -256,7 +256,7 @@ bool CTBWrapper::ImportCustomToolBar( SfxObjectShell& rDocSh )
     return false;
 }
 
-Customization::Customization( CTBWrapper* wrapper ) : tbidForTBD( 0 )
+Customization::Customization( SwCTBWrapper* wrapper ) : tbidForTBD( 0 )
 ,reserved1( 0 )
 , ctbds( 0 )
 , pWrapper( wrapper )
@@ -288,7 +288,7 @@ bool Customization::Read( SvStream &rS)
     }
     else
     {
-        customizationDataCTB.reset( new CTB() );
+        customizationDataCTB.reset( new SwCTB() );
         if ( !customizationDataCTB->Read( rS ) )
                 return false;
     }
@@ -328,7 +328,7 @@ void Customization::Print( FILE* fp )
 
 }
 
-bool Customization::ImportMenu( CTBWrapper& rWrapper, CustomToolBarImportHelper& helper )
+bool Customization::ImportMenu( SwCTBWrapper& rWrapper, CustomToolBarImportHelper& helper )
 {
     if ( tbidForTBD == 0x25 )  // we can handle in a limited way additions the built-in menu bar
     {
@@ -346,7 +346,7 @@ bool Customization::ImportMenu( CTBWrapper& rWrapper, CustomToolBarImportHelper&
 
                     sMenuBar = sMenuBar.concat( "menubar" );
                     // Get menu name
-                    TBC* pTBC = pWrapper->GetTBCAtOffset( it->TBCStreamOffset() );
+                    SwTBC* pTBC = pWrapper->GetTBCAtOffset( it->TBCStreamOffset() );
                     if ( !pTBC )
                         return false;
                     rtl::OUString sMenuName = pTBC->GetCustomText();
@@ -402,7 +402,7 @@ bool Customization::ImportMenu( CTBWrapper& rWrapper, CustomToolBarImportHelper&
     return true;
 }
 
-bool Customization::ImportCustomToolBar( CTBWrapper& rWrapper, CustomToolBarImportHelper& helper )
+bool Customization::ImportCustomToolBar( SwCTBWrapper& rWrapper, CustomToolBarImportHelper& helper )
 {
     if ( GetTBIDForTB() == 0x25 )
         return ImportMenu( rWrapper, helper );
@@ -487,7 +487,7 @@ void TBDelta::Print( FILE* fp )
     }
 }
 
-CTB::CTB() : cbTBData( 0 )
+SwCTB::SwCTB() : cbTBData( 0 )
 ,iWCTBl( 0 )
 ,reserved( 0 )
 ,unused( 0 )
@@ -495,19 +495,19 @@ CTB::CTB() : cbTBData( 0 )
 {
 }
 
-CTB::~CTB()
+SwCTB::~SwCTB()
 {
 }
 
-bool CTB::IsMenuToolbar()
+bool SwCTB::IsMenuToolbar()
 {
     return tb.IsMenuToolbar();
 }
 
 
-bool CTB::Read( SvStream &rS)
+bool SwCTB::Read( SvStream &rS)
 {
-    OSL_TRACE("CTB::Read() stream pos 0x%x", rS.Tell() );
+    OSL_TRACE("SwCTB::Read() stream pos 0x%x", rS.Tell() );
     nOffSet = rS.Tell();
     if ( !name.Read( rS ) )
         return false;
@@ -527,7 +527,7 @@ bool CTB::Read( SvStream &rS)
     {
         for ( sal_Int32 index = 0; index < cCtls; ++index )
         {
-            TBC aTBC;
+            SwTBC aTBC;
             if ( !aTBC.Read( rS ) )
                 return false;
             rTBC.push_back( aTBC );
@@ -537,10 +537,10 @@ bool CTB::Read( SvStream &rS)
 }
 
 void
-CTB::Print( FILE* fp )
+SwCTB::Print( FILE* fp )
 {
     Indent a;
-    indent_printf(fp, "[ 0x%x ] CTB - dump\n", nOffSet );
+    indent_printf(fp, "[ 0x%x ] SwCTB - dump\n", nOffSet );
     indent_printf(fp, "  name %s\n", rtl::OUStringToOString( name.getString(), RTL_TEXTENCODING_UTF8 ).getStr() );
     indent_printf(fp, "  cbTBData size, in bytes, of this structure excluding the name, cCtls, and rTBC fields.  %x\n", static_cast< unsigned int >( cbTBData ) );
 
@@ -563,7 +563,7 @@ CTB::Print( FILE* fp )
     }
 }
 
-bool CTB::ImportCustomToolBar( CTBWrapper& rWrapper, CustomToolBarImportHelper& helper )
+bool SwCTB::ImportCustomToolBar( SwCTBWrapper& rWrapper, CustomToolBarImportHelper& helper )
 {
     static rtl::OUString sToolbarPrefix( "private:resource/toolbar/custom_" );
     bool bRes = false;
@@ -580,7 +580,7 @@ bool CTB::ImportCustomToolBar( CTBWrapper& rWrapper, CustomToolBarImportHelper& 
         xProps->setPropertyValue( "UIName", uno::makeAny( name.getString() ) );
 
         rtl::OUString sToolBarName = sToolbarPrefix.concat( name.getString() );
-        for ( std::vector< TBC >::iterator it =  rTBC.begin(); it != rTBC.end(); ++it )
+        for ( std::vector< SwTBC >::iterator it =  rTBC.begin(); it != rTBC.end(); ++it )
         {
             // createToolBar item for control
             if ( !it->ImportToolBarControl( rWrapper, xIndexContainer, helper, IsMenuToolbar() ) )
@@ -608,9 +608,9 @@ bool CTB::ImportCustomToolBar( CTBWrapper& rWrapper, CustomToolBarImportHelper& 
     return bRes;
 }
 
-bool CTB::ImportMenuTB( CTBWrapper& rWrapper, const css::uno::Reference< css::container::XIndexContainer >& xIndexContainer, CustomToolBarImportHelper& rHelper )
+bool SwCTB::ImportMenuTB( SwCTBWrapper& rWrapper, const css::uno::Reference< css::container::XIndexContainer >& xIndexContainer, CustomToolBarImportHelper& rHelper )
 {
-    for ( std::vector< TBC >::iterator it =  rTBC.begin(); it != rTBC.end(); ++it )
+    for ( std::vector< SwTBC >::iterator it =  rTBC.begin(); it != rTBC.end(); ++it )
     {
         // createToolBar item for control
         if ( !it->ImportToolBarControl( rWrapper, xIndexContainer, rHelper, true ) )
@@ -619,17 +619,17 @@ bool CTB::ImportMenuTB( CTBWrapper& rWrapper, const css::uno::Reference< css::co
     return true;
 }
 
-TBC::TBC()
+SwTBC::SwTBC()
 {
 }
 
-TBC::~TBC()
+SwTBC::~SwTBC()
 {
 }
 
-bool TBC::Read( SvStream &rS )
+bool SwTBC::Read( SvStream &rS )
 {
-    OSL_TRACE("TBC::Read() stream pos 0x%x", rS.Tell() );
+    OSL_TRACE("SwTBC::Read() stream pos 0x%x", rS.Tell() );
     nOffSet = rS.Tell();
     if ( !tbch.Read( rS ) )
         return false;
@@ -648,10 +648,10 @@ bool TBC::Read( SvStream &rS )
     return true;
 }
 
-void TBC::Print( FILE* fp )
+void SwTBC::Print( FILE* fp )
 {
     Indent a;
-    indent_printf(fp,"[ 0x%x ] TBC -- dump\n", nOffSet );
+    indent_printf(fp,"[ 0x%x ] SwTBC -- dump\n", nOffSet );
     indent_printf(fp,"  dumping header ( TBCHeader )\n");
     tbch.Print( fp );
     if ( cid.get() )
@@ -664,7 +664,7 @@ void TBC::Print( FILE* fp )
 }
 
 bool
-TBC::ImportToolBarControl( CTBWrapper& rWrapper, const css::uno::Reference< css::container::XIndexContainer >& toolbarcontainer, CustomToolBarImportHelper& helper, bool bIsMenuBar )
+SwTBC::ImportToolBarControl( SwCTBWrapper& rWrapper, const css::uno::Reference< css::container::XIndexContainer >& toolbarcontainer, CustomToolBarImportHelper& helper, bool bIsMenuBar )
 {
     // cmtFci       0x1 Command based on a built-in command. See CidFci.
     // cmtMacro     0x2 Macro command. See CidMacro.
@@ -724,11 +724,11 @@ TBC::ImportToolBarControl( CTBWrapper& rWrapper, const css::uno::Reference< css:
         if ( pMenu )
         {
             OSL_TRACE("** control has a menu, name of toolbar with menu items is %s", rtl::OUStringToOString( pMenu->Name(), RTL_TEXTENCODING_UTF8 ).getStr() );
-            // search for CTB with the appropriate name ( it contains the
+            // search for SwCTB with the appropriate name ( it contains the
             // menu items, although we cannot import ( or create ) a menu on
             // a custom toolbar we can import the menu items in a separate
             // toolbar ( better than nothing )
-            CTB* pCustTB = rWrapper.GetCustomizationData( pMenu->Name() );
+            SwCTB* pCustTB = rWrapper.GetCustomizationData( pMenu->Name() );
             if ( pCustTB )
             {
                  uno::Reference< container::XIndexContainer > xMenuDesc;
@@ -772,7 +772,7 @@ TBC::ImportToolBarControl( CTBWrapper& rWrapper, const css::uno::Reference< css:
 }
 
 rtl::OUString
-TBC::GetCustomText()
+SwTBC::GetCustomText()
 {
     rtl::OUString sCustomText;
     if ( tbcd.get() )
@@ -874,7 +874,7 @@ bool Tcg255::processSubStruct( sal_uInt8 nId, SvStream &rS )
          }
          case 0x12:
          {
-             pSubStruct = new CTBWrapper( false );
+             pSubStruct = new SwCTBWrapper( false );
              break;
          }
          default:
@@ -890,13 +890,13 @@ bool Tcg255::processSubStruct( sal_uInt8 nId, SvStream &rS )
 
 bool Tcg255::ImportCustomToolBar( SfxObjectShell& rDocSh )
 {
-    // Find the CTBWrapper
+    // Find the SwCTBWrapper
     for ( std::vector< Tcg255SubStruct* >::const_iterator it = rgtcgData.begin(); it != rgtcgData.end(); ++it )
     {
         if ( (*it)->id() == 0x12 )
         {
             // not so great, shouldn't really have to do a horror casting
-            CTBWrapper* pCTBWrapper =  dynamic_cast< CTBWrapper* > ( *it );
+            SwCTBWrapper* pCTBWrapper =  dynamic_cast< SwCTBWrapper* > ( *it );
             if ( pCTBWrapper )
             {
                 if ( !pCTBWrapper->ImportCustomToolBar( rDocSh ) )

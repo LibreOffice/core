@@ -35,7 +35,7 @@
 
 namespace css = ::com::sun::star;
 
-class CTBWrapper;
+class ScCTBWrapper;
 // hmm I don't normally use these packed structures
 // but.. hey always good to do something different
 class TBCCmd : public TBBase
@@ -52,36 +52,36 @@ public:
     void Print(FILE* fp);
 };
 
-class TBC : public TBBase
+class ScTBC : public TBBase
 {
     TBCHeader tbch;
     boost::shared_ptr<TBCCmd> tbcCmd; // optional
     boost::shared_ptr<TBCData> tbcd;
 public:
-    TBC();
-    ~TBC(){}
+    ScTBC();
+    ~ScTBC(){}
     void Print( FILE* );
     bool Read(SvStream &rS);
-    bool ImportToolBarControl( CTBWrapper&, const com::sun::star::uno::Reference< com::sun::star::container::XIndexContainer >& toolbarcontainer, CustomToolBarImportHelper& helper, bool bIsMenuBar );
+    bool ImportToolBarControl( ScCTBWrapper&, const com::sun::star::uno::Reference< com::sun::star::container::XIndexContainer >& toolbarcontainer, CustomToolBarImportHelper& helper, bool bIsMenuBar );
 };
 
-class CTB : public TBBase
+class ScCTB : public TBBase
 {
     sal_uInt16 nViews;
     TB tb;
     std::vector<TBVisualData> rVisualData;
     sal_uInt32 ectbid;
-    std::vector< TBC > rTBC;
-    bool ImportCustomToolBar_Impl( CTBWrapper&, CustomToolBarImportHelper& );
+    std::vector< ScTBC > rTBC;
+    bool ImportCustomToolBar_Impl( ScCTBWrapper&, CustomToolBarImportHelper& );
 public:
-    CTB();
-    CTB(sal_uInt16);
-    ~CTB(){}
+    ScCTB();
+    ScCTB(sal_uInt16);
+    ~ScCTB(){}
     void Print( FILE* );
     bool Read(SvStream &rS);
     bool IsMenuToolbar();
-    bool ImportCustomToolBar( CTBWrapper&, CustomToolBarImportHelper& );
-    bool ImportMenuTB( CTBWrapper&, const css::uno::Reference< css::container::XIndexContainer >&, CustomToolBarImportHelper& );
+    bool ImportCustomToolBar( ScCTBWrapper&, CustomToolBarImportHelper& );
+    bool ImportMenuTB( ScCTBWrapper&, const css::uno::Reference< css::container::XIndexContainer >&, CustomToolBarImportHelper& );
     rtl::OUString GetName() { return tb.getName().getString(); }
 
 
@@ -106,19 +106,19 @@ public:
     bool Read(SvStream &rS);
 };
 
-class CTBWrapper : public TBBase
+class ScCTBWrapper : public TBBase
 {
     CTBS ctbSet;
 
-    std::vector< CTB > rCTB;
+    std::vector< ScCTB > rCTB;
 
 public:
-    CTBWrapper();
-    ~CTBWrapper();
+    ScCTBWrapper();
+    ~ScCTBWrapper();
     bool Read(SvStream &rS);
     void Print( FILE* );
     bool ImportCustomToolBar( SfxObjectShell& rDocSh );
-    CTB* GetCustomizationData( const rtl::OUString& name );
+    ScCTB* GetCustomizationData( const rtl::OUString& name );
 };
 
 

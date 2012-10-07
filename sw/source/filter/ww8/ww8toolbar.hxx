@@ -45,22 +45,22 @@ public:
     void Print( FILE* fp );
 };
 
-class CTBWrapper;
-class TBC : public TBBase
+class SwCTBWrapper;
+class SwTBC : public TBBase
 {
     TBCHeader tbch;
     boost::shared_ptr< sal_uInt32 > cid; // optional
     boost::shared_ptr<TBCData> tbcd;
 public:
-    TBC();
-    ~TBC();
+    SwTBC();
+    ~SwTBC();
     bool Read(SvStream &rS);
     void Print( FILE* );
-    bool ImportToolBarControl( CTBWrapper&, const css::uno::Reference< css::container::XIndexContainer >&, CustomToolBarImportHelper&, bool );
+    bool ImportToolBarControl( SwCTBWrapper&, const css::uno::Reference< css::container::XIndexContainer >&, CustomToolBarImportHelper&, bool );
     rtl::OUString GetCustomText();
 };
 
-class CTB : public TBBase
+class SwCTB : public TBBase
 {
     Xst name;
     sal_Int32 cbTBData;
@@ -70,18 +70,18 @@ class CTB : public TBBase
     sal_uInt16 reserved;
     sal_uInt16 unused;
     sal_Int32 cCtls;
-    std::vector< TBC > rTBC;
+    std::vector< SwTBC > rTBC;
 
-    CTB(const CTB&);
-    CTB& operator = ( const CTB&);
+    SwCTB(const SwCTB&);
+    SwCTB& operator = ( const SwCTB&);
 public:
-    CTB();
-    ~CTB();
+    SwCTB();
+    ~SwCTB();
     bool Read(SvStream &rS);
     void Print( FILE* fp );
     bool IsMenuToolbar();
-    bool ImportCustomToolBar( CTBWrapper&, CustomToolBarImportHelper& );
-    bool ImportMenuTB( CTBWrapper&, const css::uno::Reference< css::container::XIndexContainer >&, CustomToolBarImportHelper& );
+    bool ImportCustomToolBar( SwCTBWrapper&, CustomToolBarImportHelper& );
+    bool ImportMenuTB( SwCTBWrapper&, const css::uno::Reference< css::container::XIndexContainer >&, CustomToolBarImportHelper& );
     rtl::OUString GetName() { return tb.getName().getString(); }
 };
 
@@ -124,32 +124,32 @@ public:
     bool Read(SvStream &rS);
 };
 
-class CTBWrapper;
+class SwCTBWrapper;
 class Customization : public TBBase
 {
-friend class CTBWrapper;
+friend class SwCTBWrapper;
     sal_Int32 tbidForTBD;
     sal_uInt16 reserved1;
     sal_Int16 ctbds;
-    CTBWrapper* pWrapper;
-    boost::shared_ptr< CTB > customizationDataCTB;
+    SwCTBWrapper* pWrapper;
+    boost::shared_ptr< SwCTB > customizationDataCTB;
     std::vector< TBDelta > customizationDataTBDelta;
     bool bIsDroppedMenuTB;
-    bool ImportMenu( CTBWrapper&, const css::uno::Reference< css::container::XIndexContainer >&, CustomToolBarImportHelper& );
+    bool ImportMenu( SwCTBWrapper&, const css::uno::Reference< css::container::XIndexContainer >&, CustomToolBarImportHelper& );
 public:
-    Customization( CTBWrapper* rapper );
+    Customization( SwCTBWrapper* rapper );
     ~Customization();
     bool Read(SvStream &rS);
-    bool ImportCustomToolBar( CTBWrapper&, CustomToolBarImportHelper& );
-    bool ImportMenu( CTBWrapper&, CustomToolBarImportHelper& );
+    bool ImportCustomToolBar( SwCTBWrapper&, CustomToolBarImportHelper& );
+    bool ImportMenu( SwCTBWrapper&, CustomToolBarImportHelper& );
     void Print( FILE* );
     sal_Int32 GetTBIDForTB(){ return tbidForTBD; }
-    CTB*  GetCustomizationData() { return customizationDataCTB.get(); };
+    SwCTB*  GetCustomizationData() { return customizationDataCTB.get(); };
 };
 
 class SfxObjectShell;
 
-class CTBWrapper : public Tcg255SubStruct
+class SwCTBWrapper : public Tcg255SubStruct
 {
     // reserved1 is the ch field of Tcg255SubStruct
     sal_uInt16 reserved2;
@@ -162,21 +162,21 @@ class CTBWrapper : public Tcg255SubStruct
 
     sal_Int32 cbDTBC;
 
-    std::vector< TBC > rtbdc; //
+    std::vector< SwTBC > rtbdc; //
     std::vector< Customization > rCustomizations; // array of Customizations
     std::vector< sal_Int16 > dropDownMenuIndices; // array of indexes of Customization toolbars that are dropped by a menu
-    CTBWrapper(const CTBWrapper&);
-    CTBWrapper& operator = ( const CTBWrapper&);
+    SwCTBWrapper(const SwCTBWrapper&);
+    SwCTBWrapper& operator = ( const SwCTBWrapper&);
 public:
-    CTBWrapper( bool bReadId = true );
-    ~CTBWrapper();
+    SwCTBWrapper( bool bReadId = true );
+    ~SwCTBWrapper();
     void InsertDropIndex( sal_Int32 aIndex ) { dropDownMenuIndices.push_back( aIndex ); }
-    TBC* GetTBCAtOffset( sal_uInt32 nStreamOffset );
+    SwTBC* GetTBCAtOffset( sal_uInt32 nStreamOffset );
     bool Read(SvStream &rS);
     bool ImportCustomToolBar( SfxObjectShell& rDocSh );
 
     Customization* GetCustomizaton( sal_Int16 index );
-    CTB* GetCustomizationData( const rtl::OUString& name );
+    SwCTB* GetCustomizationData( const rtl::OUString& name );
     void Print( FILE* );
 };
 
