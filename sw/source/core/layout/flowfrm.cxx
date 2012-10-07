@@ -920,7 +920,7 @@ sal_Bool SwFrm::WrongPageDesc( SwPageFrm* pNew )
     // Does the Cntnt bring a Pagedesc or do we need the
     // virtual page number of the new layout leaf?
     // PageDesc isn't allowed with Follows
-    const sal_Bool bOdd = nTmp ? ( nTmp % 2 ? sal_True : sal_False )
+    const sal_Bool bOdd = nTmp ? ( (nTmp % 2) ? sal_True : sal_False )
                            : pNew->OnRightPage();
     if ( !pDesc )
         pDesc = pNew->FindPageDesc();
@@ -934,7 +934,7 @@ sal_Bool SwFrm::WrongPageDesc( SwPageFrm* pNew )
     if ( pNewFlow && pNewFlow->GetFrm()->IsInTab() )
         pNewFlow = pNewFlow->GetFrm()->FindTabFrm();
     const SwPageDesc *pNewDesc= ( pNewFlow && !pNewFlow->IsFollow() )
-            ? pNewFlow->GetFrm()->GetAttrSet()->GetPageDesc().GetPageDesc():0;
+            ? pNewFlow->GetFrm()->GetAttrSet()->GetPageDesc().GetPageDesc() : 0;
 
     return ( pNew->GetPageDesc() != pDesc ||   //  own desc ?
         pNew->GetFmt() != (bFirst ? pDesc->GetFirstFmt() : (bOdd ? pDesc->GetRightFmt() : pDesc->GetLeftFmt())) ||
