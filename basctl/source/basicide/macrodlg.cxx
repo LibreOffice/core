@@ -303,7 +303,7 @@ void MacroChooser::DeleteMacro()
 
         SbModule* pModule = pMethod->GetModule();
         DBG_ASSERT( pModule, "DeleteMacro: Kein Modul?!" );
-        ::rtl::OUString aSource( pModule->GetSource32() );
+        OUString aSource( pModule->GetSource32() );
         sal_uInt16 nStart, nEnd;
         pMethod->GetLineRange( nStart, nEnd );
         pModule->GetMethods()->Remove( pMethod );
@@ -335,11 +335,11 @@ SbMethod* MacroChooser::CreateMacro()
     String aLibName( aDesc.GetLibName() );
 
     if ( !aLibName.Len() )
-        aLibName = rtl::OUString("Standard");
+        aLibName = "Standard" ;
 
     aDocument.getOrCreateLibrary( E_SCRIPTS, aLibName );
 
-    ::rtl::OUString aOULibName( aLibName );
+    OUString aOULibName( aLibName );
     Reference< script::XLibraryContainer > xModLibContainer( aDocument.getLibraryContainer( E_SCRIPTS ) );
     if ( xModLibContainer.is() && xModLibContainer->hasByName( aOULibName ) && !xModLibContainer->isLibraryLoaded( aOULibName ) )
         xModLibContainer->loadLibrary( aOULibName );
@@ -405,7 +405,7 @@ void MacroChooser::CheckButtons()
     if ( nDepth == 1 || nDepth == 2 )
     {
         ScriptDocument aDocument( aDesc.GetDocument() );
-        ::rtl::OUString aOULibName( aDesc.GetLibName() );
+        OUString aOULibName( aDesc.GetLibName() );
         Reference< script::XLibraryContainer2 > xModLibContainer( aDocument.getLibraryContainer( E_SCRIPTS ), UNO_QUERY );
         Reference< script::XLibraryContainer2 > xDlgLibContainer( aDocument.getLibraryContainer( E_DIALOGS ), UNO_QUERY );
         if ( ( xModLibContainer.is() && xModLibContainer->hasByName( aOULibName ) && xModLibContainer->isLibraryReadOnly( aOULibName ) ) ||
@@ -504,7 +504,7 @@ IMPL_LINK( MacroChooser, BasicSelectHdl, SvTreeListBox *, pBox )
     if ( pModule )
     {
         String aStr = aMacrosInTxtBaseStr;
-        aStr += rtl::OUString(" ");
+        aStr += " " ;
         aStr += pModule->GetName();
 
         aMacrosInTxt.SetText( aStr );
