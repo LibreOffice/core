@@ -32,9 +32,11 @@ extern "C"
     extern void * t602filter_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * textfd_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * unoxml_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
+    extern void * unordf_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * wpftdraw_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * wpftwriter_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * xmlfd_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
+    extern void * xmlsecurity_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * xo_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * xof_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
 }
@@ -65,10 +67,12 @@ lo_get_libmap(void)
         { "libswlo.a", sw_component_getFactory },
         { "libt602filterlo.a", t602filter_component_getFactory },
         { "libtextfdlo.a", textfd_component_getFactory },
+        { "libunordflo.a", unordf_component_getFactory },
         { "libunoxmllo.a", unoxml_component_getFactory },
         { "libwpftdrawlo.a", wpftdraw_component_getFactory },
         { "libwpftwriterlo.a", wpftwriter_component_getFactory },
         { "libxmlfdlo.a", xmlfd_component_getFactory },
+        { "libxmlsecurity.a", xmlsecurity_component_getFactory },
         { "libxoflo.a", xof_component_getFactory },
         { "libxolo.a", xo_component_getFactory },
         { NULL, NULL }

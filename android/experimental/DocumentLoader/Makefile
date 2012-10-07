@@ -85,6 +85,7 @@ LIBS = \
 	libotouchlo \
 	lnglo \
 	lo-bootstrap \
+	localebe1.uno \
 	localedata_en \
 	localedata_es \
 	localedata_euro \
@@ -99,6 +100,9 @@ LIBS = \
 	ooxlo \
 	orcus \
 	package2 \
+	raptor \
+	rasqal \
+	rdf \
 	reflection.uno \
 	reg \
 	saxlo \
