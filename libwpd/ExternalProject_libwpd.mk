@@ -25,7 +25,7 @@ $(call gb_ExternalProject_get_state_target,libwpd,build) :
 else ifeq ($(VCVER),100)
 $(call gb_ExternalProject_get_state_target,libwpd,build) :
 	cd $(EXTERNAL_WORKDIR)/build/win32 \
-	&& msbuild.exe libwpd.vcxproj \
+	&& msbuild.exe libwpd.vcxproj /p:Configuration=Release \
 	&& touch $@
 else
 $(call gb_ExternalProject_get_state_target,libwpd,build) :
