@@ -41,7 +41,7 @@ LineNumberWindow::LineNumberWindow (Window* pParent, ModulWindow* pModulWindow) 
     m_nCurYOffset(0)
 {
     SetBackground(Wallpaper(GetSettings().GetStyleSettings().GetFieldColor()));
-    m_nBaseWidth = GetTextWidth(rtl::OUString('8'));
+    m_nBaseWidth = GetTextWidth('8');
     m_nWidth = m_nBaseWidth * 3 + m_nBaseWidth / 2;
 }
 
@@ -75,7 +75,7 @@ void LineNumberWindow::Paint( const Rectangle& )
 
     // FIXME: it would be best if we could get notified of a font change
     // rather than doing that re-calculation at each Paint event
-    m_nBaseWidth = GetTextWidth(rtl::OUString('8'));
+    m_nBaseWidth = GetTextWidth(OUString('8'));
 
     // reserve enough for 3 sigit minimum, with a bit to spare for confort
     m_nWidth = m_nBaseWidth * 3 + m_nBaseWidth / 2;
@@ -88,7 +88,7 @@ void LineNumberWindow::Paint( const Rectangle& )
 
     sal_Int64 y = (nStartLine - 1) * nLineHeight;
     for(sal_Int32 n = nStartLine; n <= nEndLine; ++n, y += nLineHeight)
-        DrawText(Point(0, y - m_nCurYOffset), rtl::OUString::valueOf(n));
+        DrawText(Point(0, y - m_nCurYOffset), OUString::valueOf(n));
 }
 
 void LineNumberWindow::DataChanged(DataChangedEvent const & rDCEvt)
