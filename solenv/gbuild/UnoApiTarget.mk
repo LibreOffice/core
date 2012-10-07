@@ -288,7 +288,9 @@ endef
 # technical reasons to get around silly limitations in the OS, sigh.
 #
 # gb_UnoApiHeadersTarget_select_variant api default-variant
-# define gb_UnoApiHeadersTarget_select_variant
+ifeq ($(origin gb_UnoApiHeadersTarget_select_variant),undefined)
+$(eval $(call gb_Output_error,gb_UnoApiHeadersTarget_select_variant must be defined by platform))
+endif
 
 gb_UnoApiHeadersTarget_CPPUMAKERTARGET := $(call gb_Executable_get_target_for_build,cppumaker)
 gb_UnoApiHeadersTarget_CPPUMAKERCOMMAND := $(gb_Helper_set_ld_path) SOLARBINDIR=$(OUTDIR_FOR_BUILD)/bin $(gb_UnoApiHeadersTarget_CPPUMAKERTARGET)
