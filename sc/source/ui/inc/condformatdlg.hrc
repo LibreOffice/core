@@ -57,5 +57,6 @@
 
 #define FT_RANGE 32
 #define ED_RANGE 33
+#define RB_RANGE 34
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -198,7 +198,8 @@ private:
     OKButton maBtnOk;
     CancelButton maBtnCancel;
     FixedText maFtRange;
-    Edit maEdRange;
+    formula::RefEdit maEdRange;
+    formula::RefButton maRbRange;
 
     ScCondFormatList maCondFormList;
 
@@ -210,8 +211,13 @@ private:
     DECL_LINK( EdRangeModifyHdl, Edit* );
     DECL_LINK( OkBtnHdl, void* );
     DECL_LINK( CancelBtnHdl, void* );
+    DECL_LINK( RangeGetFocusHdl, void* );
 
     virtual sal_Bool Close();
+protected:
+
+    virtual void RefInputDone( sal_Bool bForced = false );
+
 
 public:
     ScCondFormatDlg(SfxBindings* pB, SfxChildWindow* pSW, Window* pWindow, ScDocument* pDoc, const ScConditionalFormat* pFormat,
@@ -221,6 +227,7 @@ public:
     SC_DLLPUBLIC ScConditionalFormat* GetConditionalFormat() const;
 
     virtual void SetReference(const ScRange&, ScDocument*);
+    virtual sal_Bool IsRefInputMode() const;
     virtual void SetActive();
     virtual sal_Bool IsTableLocked() const { return sal_True; }
 };

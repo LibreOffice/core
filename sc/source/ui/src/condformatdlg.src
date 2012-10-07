@@ -77,7 +77,13 @@ ModelessDialog RID_SCDLG_CONDFORMAT
     Edit ED_RANGE
     {
         Pos = MAP_APPFONT( 60, 262 );
-        Size = MAP_APPFONT( 200, 14 );
+        Size = MAP_APPFONT( 182, 14 );
+        Border = TRUE;
+    };
+    ImageButton RB_RANGE
+    {
+        Pos = MAP_APPFONT( 245, 262 );
+        Size = MAP_APPFONT( 14, 14 );
         Border = TRUE;
     };
 };

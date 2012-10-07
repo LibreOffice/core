@@ -1120,7 +1120,8 @@ ScCondFormatDlg::ScCondFormatDlg(SfxBindings* pB, SfxChildWindow* pCW, Window* p
     maBtnOk( this, ScResId( BTN_OK ) ),
     maBtnCancel( this, ScResId( BTN_CANCEL ) ),
     maFtRange( this, ScResId( FT_RANGE ) ),
-    maEdRange( this, ScResId( ED_RANGE ) ),
+    maEdRange( this, this, ScResId( ED_RANGE ) ),
+    maRbRange( this, ScResId( RB_RANGE ), &maEdRange, this ),
     maCondFormList( this, ScResId( CTRL_LIST ), pDoc, pFormat, rRange, rPos, eType ),
     maPos(rPos),
     mpDoc(pDoc),
@@ -1137,6 +1138,7 @@ ScCondFormatDlg::ScCondFormatDlg(SfxBindings* pB, SfxChildWindow* pCW, Window* p
     maEdRange.SetModifyHdl( LINK( this, ScCondFormatDlg, EdRangeModifyHdl ) );
     maBtnOk.SetClickHdl( LINK( this, ScCondFormatDlg, OkBtnHdl ) );
     maBtnCancel.SetClickHdl( LINK( this, ScCondFormatDlg, CancelBtnHdl ) );
+    maEdRange.SetGetFocusHdl( LINK( this, ScCondFormatDlg, RangeGetFocusHdl ) );
     FreeResource();
 
     maEdRange.SetText(aRangeString);
@@ -1148,12 +1150,36 @@ ScCondFormatDlg::~ScCondFormatDlg()
 
 void ScCondFormatDlg::SetActive()
 {
-
+    maEdRange.GrabFocus();
+    RefInputDone();
 }
 
-void ScCondFormatDlg::SetReference(const ScRange&, ScDocument*)
+void ScCondFormatDlg::RefInputDone( sal_Bool bForced )
 {
+    ScAnyRefDlg::RefInputDone(bForced);
+}
 
+sal_Bool ScCondFormatDlg::IsRefInputMode() const
+{
+    return maEdRange.IsEnabled();
+}
+
+#define ABS_SREF          SCA_VALID \
+    | SCA_COL_ABSOLUTE | SCA_ROW_ABSOLUTE | SCA_TAB_ABSOLUTE
+#define ABS_DREF          ABS_SREF \
+    | SCA_COL2_ABSOLUTE | SCA_ROW2_ABSOLUTE | SCA_TAB2_ABSOLUTE
+
+void ScCondFormatDlg::SetReference(const ScRange& rRef, ScDocument*)
+{
+    if( maEdRange.IsEnabled() )
+    {
+        if(rRef.aStart != rRef.aEnd)
+            RefInputStart(&maEdRange);
+
+        rtl::OUString aRefStr;
+        rRef.Format( aRefStr, ABS_DREF, mpDoc, ScAddress::Details(mpDoc->GetAddressConvention(), 0, 0) );
+        maEdRange.SetRefString( aRefStr );
+    }
 }
 
 ScConditionalFormat* ScCondFormatDlg::GetConditionalFormat() const
@@ -1256,6 +1282,11 @@ IMPL_LINK_NOARG( ScCondFormatDlg, CancelBtnHdl )
 {
     Close();
 
+    return 0;
+}
+
+IMPL_LINK_NOARG( ScCondFormatDlg, RangeGetFocusHdl )
+{
     return 0;
 }
 
