@@ -77,7 +77,9 @@ using ::rtl::OUStringToOString;
  *  static helpers
  */
 
+#if defined( UNX ) && !( defined( QUARTZ ) || defined( IOS )  || defined( ANDROID ) )
 static oslModule driverLib                  = NULL;
+#endif
 extern "C"
 {
 typedef int(*setupFunction)(PrinterInfo&);
