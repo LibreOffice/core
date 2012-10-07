@@ -39,24 +39,20 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv) {
     //sal_uInt32 startfull = Export::startMessure();
     bool hasNoError = true;
 
-    if ( !aArgs.m_sOutputFile.isEmpty() ){
-        HelpParser aParser( aArgs.m_sInputFile );
-
-        if ( aArgs.m_bMergeMode )
-        {
-            //sal_uInt64 startreadloc = Export::startMessure();
-            MergeDataFile aMergeDataFile( aArgs.m_sMergeSrc, aArgs.m_sInputFile, false );
-
-            hasNoError = aParser.Merge( aArgs.m_sMergeSrc, aArgs.m_sOutputFile , Export::sLanguages , aMergeDataFile );
-        }
-        else
-            hasNoError =
-                aParser.CreateSDF(
-                    aArgs.m_sOutputFile, aArgs.m_sPrj, aArgs.m_sPrjRoot,
-                    aArgs.m_sInputFile, new XMLFile( OUString('0') ), "help" );
+    HelpParser aParser( aArgs.m_sInputFile );
+    if ( aArgs.m_bMergeMode )
+    {
+        //sal_uInt64 startreadloc = Export::startMessure();
+        MergeDataFile aMergeDataFile( aArgs.m_sMergeSrc, aArgs.m_sInputFile, false );
+        hasNoError = aParser.Merge( aArgs.m_sMergeSrc, aArgs.m_sOutputFile , Export::sLanguages , aMergeDataFile );
     }
     else
-        std::cerr << "helpex ERROR: Wrong input parameters!\n";
+    {
+        hasNoError =
+            aParser.CreateSDF(
+                aArgs.m_sOutputFile, aArgs.m_sPrj, aArgs.m_sPrjRoot,
+                aArgs.m_sInputFile, new XMLFile( OUString('0') ), "help" );
+    }
 
     if( hasNoError )
         return 0;

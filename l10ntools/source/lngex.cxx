@@ -34,15 +34,12 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv) {
         return 1;
     }
 
-    if (!aArgs.m_sOutputFile.isEmpty())
-    {
-        LngParser aParser( aArgs.m_sInputFile, true );
-        if ( aArgs.m_bMergeMode )
-            aParser.Merge(aArgs.m_sMergeSrc, aArgs.m_sOutputFile);
-        else
-            aParser.CreateSDF(
-                aArgs.m_sOutputFile, aArgs.m_sPrj, aArgs.m_sPrjRoot );
-    }
+    LngParser aParser( aArgs.m_sInputFile, true );
+    if ( aArgs.m_bMergeMode )
+        aParser.Merge(aArgs.m_sMergeSrc, aArgs.m_sOutputFile);
+    else
+        aParser.CreateSDF(
+            aArgs.m_sOutputFile, aArgs.m_sPrj, aArgs.m_sPrjRoot );
 
     return 0;
 }

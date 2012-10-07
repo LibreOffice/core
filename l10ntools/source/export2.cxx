@@ -94,6 +94,7 @@ rtl::OString Export::sForcedLanguages;
 bool Export::handleArguments(
     int argc, char * argv[], HandledArgs& o_aHandledArgs)
 {
+    o_aHandledArgs = HandledArgs();
     if ( argc <= 1  )
     {
         return false;
@@ -169,7 +170,16 @@ bool Export::handleArguments(
             }
         }
     }
-    return true;
+    if( !o_aHandledArgs.m_sInputFile.isEmpty() &&
+        !o_aHandledArgs.m_sOutputFile.isEmpty() )
+    {
+        return true;
+    }
+    else
+    {
+        o_aHandledArgs = HandledArgs();
+        return false;
+    }
 }
 
 void Export::writeUsage(const OString& rName, const OString& rFileType)
