@@ -63,6 +63,13 @@ Java_com_sun_star_comp_helper_SharedLibraryLoader_component_1writeInfo(
     OUString aLibName( pJLibName );
     pJEnv->ReleaseStringChars( jLibName, pJLibName);
 
+#ifdef DISABLE_DYNLOADING
+    (void) jSMgr;
+    (void) jRegKey;
+    (void) loader;
+
+    fprintf(stderr, "Hmm, %s called for %s\n", __PRETTY_FUNCTION__, ::rtl::OUStringToOString(pJLibName, RTL_TEXTENCODING_JAVA_UTF8).getStr());
+#else
     oslModule lib = osl_loadModule( aLibName.pData, SAL_LOADMODULE_LAZY | SAL_LOADMODULE_GLOBAL );
     if (lib)
     {
@@ -123,7 +130,7 @@ Java_com_sun_star_comp_helper_SharedLibraryLoader_component_1writeInfo(
             }
         }
     }
-
+#endif
     return bRet == sal_False? JNI_FALSE : JNI_TRUE;
 }
 
@@ -138,6 +145,16 @@ Java_com_sun_star_comp_helper_SharedLibraryLoader_component_1getFactory(
     jobject jSMgr, jobject jRegKey, jobject loader )
 {
     const jchar* pJLibName = pJEnv->GetStringChars(jLibName, NULL);
+
+#ifdef DISABLE_DYNLOADING
+    (void) jImplName;
+    (void) jSMgr;
+    (void) jRegKey;
+    (void) loader;
+
+    fprintf(stderr, "Hmm, %s called for %s\n", __PRETTY_FUNCTION__, ::rtl::OUStringToOString(pJLibName, RTL_TEXTENCODING_JAVA_UTF8).getStr());
+#endif
+
     OUString aLibName( pJLibName );
     pJEnv->ReleaseStringChars( jLibName, pJLibName);
 
@@ -145,6 +162,7 @@ Java_com_sun_star_comp_helper_SharedLibraryLoader_component_1getFactory(
 
     jobject joSLL_cpp = 0;
 
+#ifndef DISABLE_DYNLOADING
     oslModule lib = osl_loadModule( aLibName.pData, SAL_LOADMODULE_LAZY | SAL_LOADMODULE_GLOBAL );
     if (lib)
     {
@@ -219,7 +237,7 @@ Java_com_sun_star_comp_helper_SharedLibraryLoader_component_1getFactory(
             }
         }
     }
-
+#endif
     return joSLL_cpp;
 }
 
