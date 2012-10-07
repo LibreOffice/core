@@ -249,8 +249,8 @@ void ChartController::TheModel::tryTermination()
     catch(const uno::Exception& ex)
     {
         (void)(ex); // no warning in non-debug builds
-        OSL_FAIL( ( rtl::OString("Termination of model failed: ")
-            + rtl::OUStringToOString( ex.Message, RTL_TEXTENCODING_ASCII_US ) ).getStr() );
+        OSL_FAIL( ( OString("Termination of model failed: ")
+            + OUStringToOString( ex.Message, RTL_TEXTENCODING_ASCII_US ) ).getStr() );
     }
 }
 
@@ -332,12 +332,12 @@ sal_Bool ChartController::TheModelRef::is() const
 
 APPHELPER_XSERVICEINFO_IMPL(ChartController,CHART_CONTROLLER_SERVICE_IMPLEMENTATION_NAME)
 
-    uno::Sequence< rtl::OUString > ChartController
+    uno::Sequence< OUString > ChartController
 ::getSupportedServiceNames_Static()
 {
-    uno::Sequence< rtl::OUString > aSNS( 2 );
+    uno::Sequence< OUString > aSNS( 2 );
     aSNS.getArray()[ 0 ] = CHART_CONTROLLER_SERVICE_NAME;
-    aSNS.getArray()[ 1 ] = ::rtl::OUString( "com.sun.star.frame.Controller"  );
+    aSNS.getArray()[ 1 ] = "com.sun.star.frame.Controller";
     //// @todo : add additional services if you support any further
     return aSNS;
 }
@@ -417,23 +417,23 @@ APPHELPER_XSERVICEINFO_IMPL(ChartController,CHART_CONTROLLER_SERVICE_IMPLEMENTAT
             try
             {
                 uno::Reference< ::com::sun::star::frame::XLayoutManager > xLayoutManager;
-                xPropSet->getPropertyValue( C2U( "LayoutManager" ) ) >>= xLayoutManager;
+                xPropSet->getPropertyValue( "LayoutManager" ) >>= xLayoutManager;
                 if ( xLayoutManager.is() )
                 {
                     xLayoutManager->lock();
-                    xLayoutManager->requestElement( C2U( "private:resource/menubar/menubar" ) );
+                    xLayoutManager->requestElement( "private:resource/menubar/menubar" );
                     //@todo: createElement should become unnecessary, remove when #i79198# is fixed
-                    xLayoutManager->createElement(  C2U( "private:resource/toolbar/standardbar" ) );
-                    xLayoutManager->requestElement( C2U( "private:resource/toolbar/standardbar" ) );
+                    xLayoutManager->createElement( "private:resource/toolbar/standardbar" );
+                    xLayoutManager->requestElement( "private:resource/toolbar/standardbar" );
                     //@todo: createElement should become unnecessary, remove when #i79198# is fixed
-                    xLayoutManager->createElement(  C2U( "private:resource/toolbar/toolbar" ) );
-                    xLayoutManager->requestElement( C2U( "private:resource/toolbar/toolbar" ) );
+                    xLayoutManager->createElement( "private:resource/toolbar/toolbar" );
+                    xLayoutManager->requestElement( "private:resource/toolbar/toolbar" );
 
                     // #i12587# support for shapes in chart
-                    xLayoutManager->createElement(  C2U( "private:resource/toolbar/drawbar" ) );
-                    xLayoutManager->requestElement( C2U( "private:resource/toolbar/drawbar" ) );
+                    xLayoutManager->createElement( "private:resource/toolbar/drawbar" );
+                    xLayoutManager->requestElement( "private:resource/toolbar/drawbar" );
 
-                    xLayoutManager->requestElement( C2U( "private:resource/statusbar/statusbar" ) );
+                    xLayoutManager->requestElement( "private:resource/statusbar/statusbar" );
                     xLayoutManager->unlock();
 
                     // add as listener to get notified when
@@ -456,14 +456,14 @@ void SAL_CALL ChartController::modeChanged( const util::ModeChangeEvent& rEvent 
 {
     //adjust controller to view status changes
 
-    if( rEvent.NewMode.equals(C2U("dirty")) )
+    if( rEvent.NewMode == "dirty" )
     {
         //the view has become dirty, we should repaint it if we have a window
         SolarMutexGuard aGuard;
         if( m_pChartWindow )
             m_pChartWindow->ForceInvalidate();
     }
-    else if( rEvent.NewMode.equals(C2U("invalid")) )
+    else if( rEvent.NewMode == "invalid" )
     {
         //the view is about to become invalid so end all actions on it
         impl_invalidateAccessible();
@@ -582,7 +582,7 @@ sal_Bool SAL_CALL ChartController::attachModel( const uno::Reference< frame::XMo
 #endif
 
     //select chart area per default:
-    select( uno::makeAny( ObjectIdentifier::createClassifiedIdentifier( OBJECTTYPE_PAGE, rtl::OUString() ) ) );
+    select( uno::makeAny( ObjectIdentifier::createClassifiedIdentifier( OBJECTTYPE_PAGE, OUString() ) ) );
 
     uno::Reference< lang::XMultiServiceFactory > xFact( getModel(), uno::UNO_QUERY );
     if( xFact.is())
@@ -953,8 +953,8 @@ void SAL_CALL ChartController::layoutEvent( const lang::EventObject& aSource, ::
         Reference< frame::XLayoutManager > xLM( aSource.Source, uno::UNO_QUERY );
         if( xLM.is())
         {
-            xLM->createElement( C2U("private:resource/statusbar/statusbar"));
-            xLM->requestElement( C2U("private:resource/statusbar/statusbar"));
+            xLM->createElement(  "private:resource/statusbar/statusbar" );
+            xLM->requestElement( "private:resource/statusbar/statusbar" );
         }
     }
 }
@@ -966,55 +966,55 @@ void SAL_CALL ChartController::layoutEvent( const lang::EventObject& aSource, ::
 
 namespace
 {
-bool lcl_isFormatObjectCommand( const rtl::OString& aCommand )
+bool lcl_isFormatObjectCommand( const OString& aCommand )
 {
-    if(    aCommand.equals("MainTitle")
-        || aCommand.equals("SubTitle")
-        || aCommand.equals("XTitle")
-        || aCommand.equals("YTitle")
-        || aCommand.equals("ZTitle")
-        || aCommand.equals("SecondaryXTitle")
-        || aCommand.equals("SecondaryYTitle")
-        || aCommand.equals("AllTitles")
-        || aCommand.equals("DiagramAxisX")
-        || aCommand.equals("DiagramAxisY")
-        || aCommand.equals("DiagramAxisZ")
-        || aCommand.equals("DiagramAxisA")
-        || aCommand.equals("DiagramAxisB")
-        || aCommand.equals("DiagramAxisAll")
-        || aCommand.equals("DiagramGridXMain")
-        || aCommand.equals("DiagramGridYMain")
-        || aCommand.equals("DiagramGridZMain")
-        || aCommand.equals("DiagramGridXHelp")
-        || aCommand.equals("DiagramGridYHelp")
-        || aCommand.equals("DiagramGridZHelp")
-        || aCommand.equals("DiagramGridAll")
+    if(    aCommand == "MainTitle"
+        || aCommand == "SubTitle"
+        || aCommand == "XTitle"
+        || aCommand == "YTitle"
+        || aCommand == "ZTitle"
+        || aCommand == "SecondaryXTitle"
+        || aCommand == "SecondaryYTitle"
+        || aCommand == "AllTitles"
+        || aCommand == "DiagramAxisX"
+        || aCommand == "DiagramAxisY"
+        || aCommand == "DiagramAxisZ"
+        || aCommand == "DiagramAxisA"
+        || aCommand == "DiagramAxisB"
+        || aCommand == "DiagramAxisAll"
+        || aCommand == "DiagramGridXMain"
+        || aCommand == "DiagramGridYMain"
+        || aCommand == "DiagramGridZMain"
+        || aCommand == "DiagramGridXHelp"
+        || aCommand == "DiagramGridYHelp"
+        || aCommand == "DiagramGridZHelp"
+        || aCommand == "DiagramGridAll"
 
-        || aCommand.equals("DiagramWall")
-        || aCommand.equals("DiagramFloor")
-        || aCommand.equals("DiagramArea")
-        || aCommand.equals("Legend")
+        || aCommand == "DiagramWall"
+        || aCommand == "DiagramFloor"
+        || aCommand == "DiagramArea"
+        || aCommand == "Legend"
 
-        || aCommand.equals("FormatWall")
-        || aCommand.equals("FormatFloor")
-        || aCommand.equals("FormatChartArea")
-        || aCommand.equals("FormatLegend")
+        || aCommand == "FormatWall"
+        || aCommand == "FormatFloor"
+        || aCommand == "FormatChartArea"
+        || aCommand == "FormatLegend"
 
-        || aCommand.equals("FormatTitle")
-        || aCommand.equals("FormatAxis")
-        || aCommand.equals("FormatDataSeries")
-        || aCommand.equals("FormatDataPoint")
-        || aCommand.equals("FormatDataLabels")
-        || aCommand.equals("FormatDataLabel")
-        || aCommand.equals("FormatXErrorBars")
-        || aCommand.equals("FormatYErrorBars")
-        || aCommand.equals("FormatMeanValue")
-        || aCommand.equals("FormatTrendline")
-        || aCommand.equals("FormatTrendlineEquation")
-        || aCommand.equals("FormatStockLoss")
-        || aCommand.equals("FormatStockGain")
-        || aCommand.equals("FormatMajorGrid")
-        || aCommand.equals("FormatMinorGrid")
+        || aCommand == "FormatTitle"
+        || aCommand == "FormatAxis"
+        || aCommand == "FormatDataSeries"
+        || aCommand == "FormatDataPoint"
+        || aCommand == "FormatDataLabels"
+        || aCommand == "FormatDataLabel"
+        || aCommand == "FormatXErrorBars"
+        || aCommand == "FormatYErrorBars"
+        || aCommand == "FormatMeanValue"
+        || aCommand == "FormatTrendline"
+        || aCommand == "FormatTrendlineEquation"
+        || aCommand == "FormatStockLoss"
+        || aCommand == "FormatStockGain"
+        || aCommand == "FormatMajorGrid"
+        || aCommand == "FormatMinorGrid"
         )
     return true;
 
@@ -1025,7 +1025,7 @@ bool lcl_isFormatObjectCommand( const rtl::OString& aCommand )
 
         uno::Reference<frame::XDispatch> SAL_CALL ChartController
 ::queryDispatch( const util::URL& rURL
-        , const rtl::OUString& rTargetFrameName
+        , const OUString& rTargetFrameName
         , sal_Int32 /* nSearchFlags */)
         throw(uno::RuntimeException)
 {
@@ -1059,109 +1059,109 @@ bool lcl_isFormatObjectCommand( const rtl::OString& aCommand )
             throw (uno::RuntimeException)
 {
     //@todo avoid OString
-    rtl::OString aCommand( rtl::OUStringToOString( rURL.Path, RTL_TEXTENCODING_ASCII_US ) );
+    OString aCommand( OUStringToOString( rURL.Path, RTL_TEXTENCODING_ASCII_US ) );
 
-    if(aCommand.equals("Paste"))
+    if(aCommand == "Paste")
         this->executeDispatch_Paste();
-    else if(aCommand.equals("Copy"))
+    else if(aCommand == "Copy" )
         this->executeDispatch_Copy();
-    else if(aCommand.equals("Cut"))
+    else if(aCommand == "Cut" )
         this->executeDispatch_Cut();
-    else if(aCommand.equals("DataRanges"))
+    else if(aCommand == "DataRanges" )
         this->executeDispatch_SourceData();
     //----------------------------------
-    else if(aCommand.equals("Update")) //Update Chart
+    else if(aCommand == "Update" ) //Update Chart
     {
         ChartViewHelper::setViewToDirtyState( getModel() );
         SolarMutexGuard aGuard;
         if( m_pChartWindow )
             m_pChartWindow->Invalidate();
     }
-    else if(aCommand.equals("DiagramData"))
+    else if(aCommand == "DiagramData" )
         this->executeDispatch_EditData();
     //insert objects
-    else if( aCommand.equals("InsertTitles")
-        || aCommand.equals("InsertMenuTitles") )
+    else if( aCommand == "InsertTitles"
+        || aCommand == "InsertMenuTitles")
         this->executeDispatch_InsertTitles();
-    else if( aCommand.equals("InsertMenuLegend") )
+    else if( aCommand == "InsertMenuLegend" )
         this->executeDispatch_OpenLegendDialog();
-    else if( aCommand.equals("InsertLegend") )
+    else if( aCommand == "InsertLegend" )
         this->executeDispatch_InsertLegend();
-    else if( aCommand.equals("DeleteLegend") )
+    else if( aCommand == "DeleteLegend" )
         this->executeDispatch_DeleteLegend();
-    else if( aCommand.equals("InsertMenuDataLabels"))
+    else if( aCommand == "InsertMenuDataLabels" )
         this->executeDispatch_InsertMenu_DataLabels();
-    else if( aCommand.equals("InsertMenuAxes")
-        || aCommand.equals("InsertRemoveAxes") )
+    else if( aCommand == "InsertMenuAxes"
+        || aCommand == "InsertRemoveAxes" )
         this->executeDispatch_InsertAxes();
-    else if( aCommand.equals("InsertMenuGrids"))
+    else if( aCommand == "InsertMenuGrids" )
         this->executeDispatch_InsertGrid();
-    else if( aCommand.equals("InsertMenuTrendlines"))
+    else if( aCommand == "InsertMenuTrendlines" )
         this->executeDispatch_InsertMenu_Trendlines();
-    else if( aCommand.equals("InsertMenuMeanValues"))
+    else if( aCommand == "InsertMenuMeanValues" )
         this->executeDispatch_InsertMenu_MeanValues();
-    else if( aCommand.equals("InsertMenuXErrorBars"))
+    else if( aCommand == "InsertMenuXErrorBars" )
         this->executeDispatch_InsertErrorBars(false);
-    else if( aCommand.equals("InsertMenuYErrorBars"))
+    else if( aCommand == "InsertMenuYErrorBars" )
         this->executeDispatch_InsertErrorBars(true);
-    else if( aCommand.equals("InsertSymbol"))
+    else if( aCommand == "InsertSymbol" )
          this->executeDispatch_InsertSpecialCharacter();
-    else if( aCommand.equals("InsertTrendline"))
+    else if( aCommand == "InsertTrendline" )
          this->executeDispatch_InsertTrendline();
-    else if( aCommand.equals("DeleteTrendline"))
+    else if( aCommand == "DeleteTrendline" )
          this->executeDispatch_DeleteTrendline();
-    else if( aCommand.equals("InsertMeanValue"))
+    else if( aCommand == "InsertMeanValue" )
         this->executeDispatch_InsertMeanValue();
-    else if( aCommand.equals("DeleteMeanValue"))
+    else if( aCommand == "DeleteMeanValue" )
         this->executeDispatch_DeleteMeanValue();
-    else if( aCommand.equals("InsertXErrorBars"))
+    else if( aCommand == "InsertXErrorBars" )
         this->executeDispatch_InsertErrorBars(false);
-    else if( aCommand.equals("InsertYErrorBars"))
+    else if( aCommand == "InsertYErrorBars" )
         this->executeDispatch_InsertErrorBars(true);
-    else if( aCommand.equals("DeleteXErrorBars"))
+    else if( aCommand == "DeleteXErrorBars" )
         this->executeDispatch_DeleteErrorBars(false);
-    else if( aCommand.equals("DeleteYErrorBars"))
+    else if( aCommand == "DeleteYErrorBars" )
         this->executeDispatch_DeleteErrorBars(true);
-    else if( aCommand.equals("InsertTrendlineEquation"))
+    else if( aCommand == "InsertTrendlineEquation" )
          this->executeDispatch_InsertTrendlineEquation();
-    else if( aCommand.equals("DeleteTrendlineEquation"))
+    else if( aCommand == "DeleteTrendlineEquation" )
          this->executeDispatch_DeleteTrendlineEquation();
-    else if( aCommand.equals("InsertTrendlineEquationAndR2"))
+    else if( aCommand == "InsertTrendlineEquationAndR2" )
          this->executeDispatch_InsertTrendlineEquation( true );
-    else if( aCommand.equals("InsertR2Value"))
+    else if( aCommand == "InsertR2Value" )
          this->executeDispatch_InsertR2Value();
-    else if( aCommand.equals("DeleteR2Value"))
+    else if( aCommand == "DeleteR2Value")
          this->executeDispatch_DeleteR2Value();
-    else if( aCommand.equals("InsertDataLabels") )
+    else if( aCommand == "InsertDataLabels" )
         this->executeDispatch_InsertDataLabels();
-    else if( aCommand.equals("InsertDataLabel") )
+    else if( aCommand == "InsertDataLabel" )
         this->executeDispatch_InsertDataLabel();
-    else if( aCommand.equals("DeleteDataLabels") )
+    else if( aCommand == "DeleteDataLabels")
         this->executeDispatch_DeleteDataLabels();
-    else if( aCommand.equals("DeleteDataLabel") )
+    else if( aCommand == "DeleteDataLabel" )
         this->executeDispatch_DeleteDataLabel();
-    else if( aCommand.equals("ResetAllDataPoints") )
+    else if( aCommand == "ResetAllDataPoints" )
         this->executeDispatch_ResetAllDataPoints();
-    else if( aCommand.equals("ResetDataPoint") )
+    else if( aCommand == "ResetDataPoint" )
         this->executeDispatch_ResetDataPoint();
-    else if( aCommand.equals("InsertAxis") )
+    else if( aCommand == "InsertAxis" )
         this->executeDispatch_InsertAxis();
-    else if( aCommand.equals("InsertMajorGrid") )
+    else if( aCommand == "InsertMajorGrid" )
         this->executeDispatch_InsertMajorGrid();
-    else if( aCommand.equals("InsertMinorGrid") )
+    else if( aCommand == "InsertMinorGrid" )
         this->executeDispatch_InsertMinorGrid();
-    else if( aCommand.equals("InsertAxisTitle") )
+    else if( aCommand == "InsertAxisTitle" )
         this->executeDispatch_InsertAxisTitle();
-    else if( aCommand.equals("DeleteAxis") )
+    else if( aCommand == "DeleteAxis" )
         this->executeDispatch_DeleteAxis();
-    else if( aCommand.equals("DeleteMajorGrid") )
+    else if( aCommand == "DeleteMajorGrid")
         this->executeDispatch_DeleteMajorGrid();
-    else if( aCommand.equals("DeleteMinorGrid") )
+    else if( aCommand == "DeleteMinorGrid" )
         this->executeDispatch_DeleteMinorGrid();
     //format objects
-    else if( aCommand.equals("FormatSelection") )
+    else if( aCommand == "FormatSelection" )
         this->executeDispatch_ObjectProperties();
-    else if( aCommand.equals("TransformDialog"))
+    else if( aCommand == "TransformDialog" )
     {
         if ( isShapeContext() )
         {
@@ -1175,11 +1175,11 @@ bool lcl_isFormatObjectCommand( const rtl::OString& aCommand )
     else if( lcl_isFormatObjectCommand(aCommand) )
         this->executeDispatch_FormatObject(rURL.Path);
     //more format
-    else if( aCommand.equals("DiagramType"))
+    else if( aCommand == "DiagramType" )
         this->executeDispatch_ChartType();
-    else if( aCommand.equals("View3D"))
+    else if( aCommand == "View3D" )
         this->executeDispatch_View3D();
-    else if ( aCommand.equals( "Forward" ) )
+    else if ( aCommand == "Forward" )
     {
         if ( isShapeContext() )
         {
@@ -1190,7 +1190,7 @@ bool lcl_isFormatObjectCommand( const rtl::OString& aCommand )
             this->executeDispatch_MoveSeries( sal_True );
         }
     }
-    else if ( aCommand.equals( "Backward" ) )
+    else if ( aCommand == "Backward" )
     {
         if ( isShapeContext() )
         {
@@ -1201,34 +1201,34 @@ bool lcl_isFormatObjectCommand( const rtl::OString& aCommand )
             this->executeDispatch_MoveSeries( sal_False );
         }
     }
-    else if( aCommand.equals("NewArrangement"))
+    else if( aCommand == "NewArrangement")
         this->executeDispatch_NewArrangement();
-    else if( aCommand.equals("ToggleLegend"))
+    else if( aCommand == "ToggleLegend" )
         this->executeDispatch_ToggleLegend();
-    else if( aCommand.equals("ToggleGridHorizontal"))
+    else if( aCommand == "ToggleGridHorizontal" )
         this->executeDispatch_ToggleGridHorizontal();
-    else if( aCommand.equals("ScaleText"))
+    else if( aCommand == "ScaleText" )
         this->executeDispatch_ScaleText();
-    else if( aCommand.equals("StatusBarVisible"))
+    else if( aCommand == "StatusBarVisible" )
     {
         // workaround: this should not be necessary.
         uno::Reference< beans::XPropertySet > xPropSet( m_xFrame, uno::UNO_QUERY );
         if( xPropSet.is() )
         {
             uno::Reference< ::com::sun::star::frame::XLayoutManager > xLayoutManager;
-            xPropSet->getPropertyValue( C2U( "LayoutManager" ) ) >>= xLayoutManager;
+            xPropSet->getPropertyValue( "LayoutManager" ) >>= xLayoutManager;
             if ( xLayoutManager.is() )
             {
-                bool bIsVisible( xLayoutManager->isElementVisible( C2U("private:resource/statusbar/statusbar")));
+                bool bIsVisible( xLayoutManager->isElementVisible( "private:resource/statusbar/statusbar" ));
                 if( bIsVisible )
                 {
-                    xLayoutManager->hideElement( C2U( "private:resource/statusbar/statusbar"));
-                    xLayoutManager->destroyElement( C2U( "private:resource/statusbar/statusbar"));
+                    xLayoutManager->hideElement( "private:resource/statusbar/statusbar" );
+                    xLayoutManager->destroyElement( "private:resource/statusbar/statusbar" );
                 }
                 else
                 {
-                    xLayoutManager->createElement( C2U( "private:resource/statusbar/statusbar"));
-                    xLayoutManager->showElement( C2U( "private:resource/statusbar/statusbar"));
+                    xLayoutManager->createElement( "private:resource/statusbar/statusbar" );
+                    xLayoutManager->showElement( "private:resource/statusbar/statusbar" );
                 }
                 // @todo: update menu state (checkmark next to "Statusbar").
             }
@@ -1323,7 +1323,7 @@ void SAL_CALL ChartController::executeDispatch_MoveSeries( sal_Bool bForward )
     ControllerLockGuard aCLGuard( getModel() );
 
     //get selected series
-    ::rtl::OUString aObjectCID(m_aSelection.getSelectedCID());
+    OUString aObjectCID(m_aSelection.getSelectedCID());
     uno::Reference< XDataSeries > xGivenDataSeries( ObjectIdentifier::getDataSeriesForCID( //yyy todo also legendentries and labels?
             aObjectCID, getModel() ) );
 
@@ -1343,19 +1343,19 @@ void SAL_CALL ChartController::executeDispatch_MoveSeries( sal_Bool bForward )
 
 // ____ XMultiServiceFactory ____
 uno::Reference< uno::XInterface > SAL_CALL
-    ChartController::createInstance( const ::rtl::OUString& aServiceSpecifier )
+    ChartController::createInstance( const OUString& aServiceSpecifier )
     throw (uno::Exception,
            uno::RuntimeException)
 {
     uno::Reference< uno::XInterface > xResult;
 
-    if( aServiceSpecifier.equals( CHART_ACCESSIBLE_TEXT_SERVICE_NAME ))
+    if( aServiceSpecifier == CHART_ACCESSIBLE_TEXT_SERVICE_NAME )
         xResult.set( impl_createAccessibleTextContext());
     return xResult;
 }
 
 uno::Reference< uno::XInterface > SAL_CALL
-    ChartController::createInstanceWithArguments( const ::rtl::OUString& ServiceSpecifier,
+    ChartController::createInstanceWithArguments( const OUString& ServiceSpecifier,
                                  const uno::Sequence< uno::Any >& /* Arguments */ )
     throw (uno::Exception,
            uno::RuntimeException)
@@ -1364,11 +1364,11 @@ uno::Reference< uno::XInterface > SAL_CALL
     return createInstance( ServiceSpecifier );
 }
 
-uno::Sequence< ::rtl::OUString > SAL_CALL
+uno::Sequence< OUString > SAL_CALL
     ChartController::getAvailableServiceNames()
     throw (uno::RuntimeException)
 {
-    uno::Sequence< ::rtl::OUString > aServiceNames(1);
+    uno::Sequence< OUString > aServiceNames(1);
     aServiceNames[0] = CHART_ACCESSIBLE_TEXT_SERVICE_NAME;
     return aServiceNames;
 }
@@ -1388,7 +1388,7 @@ IMPL_LINK( ChartController, NotifyUndoActionHdl, SdrUndoAction*, pUndoAction )
 {
     ENSURE_OR_RETURN( pUndoAction, "invalid Undo action", 1L );
 
-    ::rtl::OUString aObjectCID = m_aSelection.getSelectedCID();
+    OUString aObjectCID = m_aSelection.getSelectedCID();
     if ( aObjectCID.isEmpty() )
     {
         try
@@ -1483,9 +1483,9 @@ void ChartController::impl_initializeAccessible( const uno::Reference< lang::XIn
     }
 }
 
-::std::set< ::rtl::OUString > ChartController::impl_getAvailableCommands()
+::std::set< OUString > ChartController::impl_getAvailableCommands()
 {
-    return ::comphelper::MakeSet< ::rtl::OUString >
+    return ::comphelper::MakeSet< OUString >
         // commands for container forward
         ( "AddDirect" )           ( "NewDoc" )                ( "Open" )
         ( "Save" )                ( "SaveAs" )                ( "SendMail" )

@@ -57,7 +57,7 @@ uno::Reference< beans::XPropertySet > lcl_GetErrorBar(
     if( xProp.is())
         try
         {
-        ( xProp->getPropertyValue( bYError ? C2U( "ErrorBarY" ) : C2U("ErrorBarX") ) >>= xResult );
+        ( xProp->getPropertyValue( bYError ? OUString( "ErrorBarY" ) : OUString("ErrorBarX") ) >>= xResult );
         }
         catch( const uno::Exception & ex )
         {
@@ -106,8 +106,8 @@ void lcl_getErrorValues( const uno::Reference< beans::XPropertySet > & xErrorBar
 
     try
     {
-        xErrorBarProp->getPropertyValue( C2U( "PositiveError" )) >>= rOutPosError;
-        xErrorBarProp->getPropertyValue( C2U( "NegativeError" )) >>= rOutNegError;
+        xErrorBarProp->getPropertyValue( "PositiveError" ) >>= rOutPosError;
+        xErrorBarProp->getPropertyValue( "NegativeError" ) >>= rOutNegError;
     }
     catch( const uno::Exception & ex )
     {
@@ -124,8 +124,8 @@ void lcl_getErrorIndicatorValues(
 
     try
     {
-        xErrorBarProp->getPropertyValue( C2U( "ShowPositiveError" )) >>= rOutShowPosError;
-        xErrorBarProp->getPropertyValue( C2U( "ShowNegativeError" )) >>= rOutShowNegError;
+        xErrorBarProp->getPropertyValue( "ShowPositiveError" ) >>= rOutShowPosError;
+        xErrorBarProp->getPropertyValue( "ShowNegativeError" ) >>= rOutShowNegError;
     }
     catch( const uno::Exception & ex )
     {
@@ -282,12 +282,11 @@ bool StatisticsItemConverter::ApplySpecialItem(
                 if( !xErrorBarProp.is() )
                 {
                     xErrorBarProp = lcl_GetDefaultErrorBar();
-                    GetPropertySet()->setPropertyValue( bYError ? C2U( "ErrorBarY" ) : C2U("ErrorBarX"),
+                    GetPropertySet()->setPropertyValue( bYError ? OUString( "ErrorBarY" ) : OUString("ErrorBarX"),
                                                         uno::makeAny( xErrorBarProp ));
                 }
 
-                xErrorBarProp->setPropertyValue( C2U( "ErrorBarStyle" ),
-                                                    uno::makeAny( nStyle ));
+                xErrorBarProp->setPropertyValue( "ErrorBarStyle" , uno::makeAny( nStyle ));
                 bChanged = true;
             }
         }
@@ -296,7 +295,7 @@ bool StatisticsItemConverter::ApplySpecialItem(
         case SCHATTR_STAT_PERCENT:
         case SCHATTR_STAT_BIGERROR:
         {
-            OSL_FAIL( "Deprectaed item" );
+            OSL_FAIL( "Deprecated item" );
             bool bYError =
                 static_cast<const SfxBoolItem&>(rItemSet.Get(SCHATTR_STAT_ERRORBAR_TYPE)).GetValue();
 
@@ -314,10 +313,8 @@ bool StatisticsItemConverter::ApplySpecialItem(
                 ! ( ::rtl::math::approxEqual( fPos, fValue ) &&
                     ::rtl::math::approxEqual( fNeg, fValue )))
             {
-                xErrorBarProp->setPropertyValue( C2U( "PositiveError" ),
-                                                    uno::makeAny( fValue ));
-                xErrorBarProp->setPropertyValue( C2U( "NegativeError" ),
-                                                    uno::makeAny( fValue ));
+                xErrorBarProp->setPropertyValue( "PositiveError" , uno::makeAny( fValue ));
+                xErrorBarProp->setPropertyValue( "NegativeError" , uno::makeAny( fValue ));
                 bChanged = true;
             }
         }
@@ -341,7 +338,7 @@ bool StatisticsItemConverter::ApplySpecialItem(
             if( bOldHasErrorBar &&
                 ! ::rtl::math::approxEqual( fPos, fValue ))
             {
-                xErrorBarProp->setPropertyValue( C2U( "PositiveError" ), uno::makeAny( fValue ));
+                xErrorBarProp->setPropertyValue( "PositiveError" , uno::makeAny( fValue ));
                 bChanged = true;
             }
         }
@@ -364,7 +361,7 @@ bool StatisticsItemConverter::ApplySpecialItem(
             if( bOldHasErrorBar &&
                 ! ::rtl::math::approxEqual( fNeg, fValue ))
             {
-                xErrorBarProp->setPropertyValue( C2U( "NegativeError" ), uno::makeAny( fValue ));
+                xErrorBarProp->setPropertyValue( "NegativeError" , uno::makeAny( fValue ));
                 bChanged = true;
             }
         }
@@ -406,12 +403,12 @@ bool StatisticsItemConverter::ApplySpecialItem(
             if( xEqProp.is())
             {
                 bool bShowEq = false;
-                xEqProp->getPropertyValue( C2U("ShowEquation")) >>= bShowEq;
+                xEqProp->getPropertyValue( "ShowEquation" ) >>= bShowEq;
                 bool bNewShowEq =
                     static_cast< const SfxBoolItem & >( rItemSet.Get( nWhichId )).GetValue();
                 if( bShowEq != bNewShowEq )
                 {
-                    xEqProp->setPropertyValue( C2U("ShowEquation"), uno::makeAny( bNewShowEq ));
+                    xEqProp->setPropertyValue( "ShowEquation" , uno::makeAny( bNewShowEq ));
                     bChanged = true;
                 }
             }
@@ -424,12 +421,12 @@ bool StatisticsItemConverter::ApplySpecialItem(
             if( xEqProp.is())
             {
                 bool bShowCoeff = false;
-                xEqProp->getPropertyValue( C2U("ShowCorrelationCoefficient")) >>= bShowCoeff;
+                xEqProp->getPropertyValue( "ShowCorrelationCoefficient" ) >>= bShowCoeff;
                 bool bNewShowCoeff =
                     static_cast< const SfxBoolItem & >( rItemSet.Get( nWhichId )).GetValue();
                 if( bShowCoeff != bNewShowCoeff )
                 {
-                    xEqProp->setPropertyValue( C2U("ShowCorrelationCoefficient"), uno::makeAny( bNewShowCoeff ));
+                    xEqProp->setPropertyValue( "ShowCorrelationCoefficient" , uno::makeAny( bNewShowCoeff ));
                     bChanged = true;
                 }
             }
@@ -458,8 +455,8 @@ bool StatisticsItemConverter::ApplySpecialItem(
                 ( bShowPos != bNewIndPos ||
                   bShowNeg != bNewIndNeg ))
             {
-                xErrorBarProp->setPropertyValue( C2U( "ShowPositiveError" ), uno::makeAny( bNewIndPos ));
-                xErrorBarProp->setPropertyValue( C2U( "ShowNegativeError" ), uno::makeAny( bNewIndNeg ));
+                xErrorBarProp->setPropertyValue( "ShowPositiveError" , uno::makeAny( bNewIndPos ));
+                xErrorBarProp->setPropertyValue( "ShowNegativeError" , uno::makeAny( bNewIndNeg ));
                 bChanged = true;
             }
         }
@@ -479,7 +476,7 @@ bool StatisticsItemConverter::ApplySpecialItem(
                 xDataProvider.set( xChartDoc->getDataProvider());
             if( xErrorBarSource.is() && xDataProvider.is())
             {
-                ::rtl::OUString aNewRange( static_cast< const SfxStringItem & >( rItemSet.Get( nWhichId )).GetValue());
+                OUString aNewRange( static_cast< const SfxStringItem & >( rItemSet.Get( nWhichId )).GetValue());
                 bool bApplyNewRange = false;
 
                 bool bIsPositiveValue( nWhichId == SCHATTR_STAT_RANGE_POS );
@@ -498,7 +495,7 @@ bool StatisticsItemConverter::ApplySpecialItem(
                             if( xIntDataProvider.is())
                             {
                                 xIntDataProvider->appendSequence();
-                                aNewRange = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("last"));
+                                aNewRange = "last";
                                 bApplyNewRange = true;
                             }
                         }
@@ -510,7 +507,7 @@ bool StatisticsItemConverter::ApplySpecialItem(
                         StatisticsHelper::getErrorDataSequenceFromDataSource(
                             xErrorBarSource, bIsPositiveValue, bYError ));
                     bApplyNewRange =
-                        ! ( xSeq.is() && aNewRange.equals( xSeq->getSourceRangeRepresentation()));
+                        ! ( xSeq.is() && (aNewRange == xSeq->getSourceRangeRepresentation()));
                 }
 
                 if( bApplyNewRange )
@@ -548,7 +545,7 @@ void StatisticsItemConverter::FillSpecialItem(
             if( xErrorBarProp.is() )
             {
                 sal_Int32 nStyle = 0;
-                if( xErrorBarProp->getPropertyValue( C2U( "ErrorBarStyle" )) >>= nStyle )
+                if( xErrorBarProp->getPropertyValue( "ErrorBarStyle" ) >>= nStyle )
                 {
                     switch( nStyle )
                     {
@@ -647,7 +644,7 @@ void StatisticsItemConverter::FillSpecialItem(
             bool bShowEq = false;
             uno::Reference< beans::XPropertySet > xEqProp( lcl_getEquationProperties( GetPropertySet(), 0 ));
             if( xEqProp.is())
-                xEqProp->getPropertyValue( C2U("ShowEquation")) >>= bShowEq;
+                xEqProp->getPropertyValue( "ShowEquation" ) >>= bShowEq;
             rOutItemSet.Put( SfxBoolItem( nWhichId, bShowEq ));
         }
         break;
@@ -657,7 +654,7 @@ void StatisticsItemConverter::FillSpecialItem(
             bool bShowCoeff = false;
             uno::Reference< beans::XPropertySet > xEqProp( lcl_getEquationProperties( GetPropertySet(), 0 ));
             if( xEqProp.is())
-                xEqProp->getPropertyValue( C2U("ShowCorrelationCoefficient")) >>= bShowCoeff;
+                xEqProp->getPropertyValue( "ShowCorrelationCoefficient" ) >>= bShowCoeff;
             rOutItemSet.Put( SfxBoolItem( nWhichId, bShowCoeff ));
         }
         break;
