@@ -5310,7 +5310,7 @@ if test "$GCC" = "yes"; then
     dnl libstdc++-v3/libsupc++/guard.cc for what #ifdefs actually make a
     dnl difference there.  Conservative advice from Jakub Jelinek is to assume
     dnl it working in GCC >= 4.3:
-    if test "$_os" = "Darwin" -o "${GCCVER?}" -lt 040300; then
+    if test "$_os" = "Darwin" -o $_os = Android -o "${GCCVER?}" -lt 040300; then
         AC_MSG_RESULT([broken (i.e., no)])
     else
         HAVE_THREADSAFE_STATICS=TRUE
