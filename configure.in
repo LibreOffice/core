@@ -6899,6 +6899,9 @@ else
     SYSTEM_LCMS2=NO
     BUILD_TYPE="$BUILD_TYPE LCMS2"
     LCMS2_CFLAGS="-I${OUTDIR}/inc/lcms2"
+    if test $_os = Darwin; then
+        LCMS2_CFLAGS="$LCMS2_CFLAGS -Wno-long-long"
+    fi
     LCMS2_LIBS="-L${OUTDIR}/lib -llcms2"
 fi
 AC_SUBST(SYSTEM_LCMS2)
