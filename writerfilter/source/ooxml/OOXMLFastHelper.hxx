@@ -224,15 +224,14 @@ void OOXMLFastHelper<T>::mark(OOXMLFastContextHandler * pHandler,
 {
     OOXMLValue::Pointer_t pVal(new T(rValue));
 
+#ifdef DEBUG_HELPER
     string aStr = (*QNameToString::Instance())(nId);
 
-#ifdef DEBUG_HELPER
     debug_logger->startElement("helper.mark");
     debug_logger->attribute("name", aStr);
-    debug_logger->attribute
-    ("value",
-     OUStringToOString
-     (rValue, RTL_TEXTENCODING_ASCII_US).getStr());
+    debug_logger->attribute("value",
+        OUStringToOString
+        (rValue, RTL_TEXTENCODING_ASCII_US).getStr());
 
     if (aStr.empty())
         debug_logger->element("unknown-qname");
