@@ -145,9 +145,14 @@ my_components += \
     component/connectivity/source/dbtools/dbtools \
     component/connectivity/source/drivers/flat/flat \
     component/connectivity/source/drivers/mysql/mysql \
-    component/connectivity/source/drivers/odbc/odbc \
     component/connectivity/source/manager/sdbc2 \
     component/shell/source/backends/localebe/localebe1 \
+
+.IF "$(OS)" != "ANDROID" && "$(OS)" != "IOS"
+my_components += \
+    component/connectivity/source/drivers/odbc/odbc \
+
+.ENDIF
 
 .ENDIF
 
