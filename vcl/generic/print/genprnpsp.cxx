@@ -107,7 +107,7 @@ static rtl::OUString getPdfDir( const PrinterInfo& rInfo )
 
 static void getPaLib()
 {
-#if defined( UNX ) && !( defined( QUARTZ ) || defined( IOS ) )
+#if defined( UNX ) && !( defined( QUARTZ ) || defined( IOS )  || defined( ANDROID ) )
     if( ! driverLib )
     {
         OUString aLibName( RTL_CONSTASCII_USTRINGPARAM( _XSALSET_LIBNAME ) );
