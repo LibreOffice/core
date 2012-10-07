@@ -70,6 +70,8 @@ typedef void* oslModule;
 */
 typedef void ( SAL_CALL *oslGenericFunction )( void );
 
+#ifndef DISABLE_DYNLOADING
+
 /** Load a shared library or module.
     @param strModuleName denotes the name of the module to be loaded.
     @param nRtldMode denotes the mode.
@@ -129,6 +131,8 @@ SAL_DLLPUBLIC oslModule SAL_CALL osl_loadModuleRelativeAscii(
        FullTextEncodingDataSingleton in sal/textenc/textenc.cxx, so can be used
        in its implementation without running into circles. */
 
+#endif
+
 /** Retrieve the handle of an already loaded module.
 
     This function can be used to search for a function symbol in the process address space.
@@ -151,9 +155,13 @@ SAL_DLLPUBLIC oslModule SAL_CALL osl_loadModuleRelativeAscii(
 */
 SAL_DLLPUBLIC sal_Bool SAL_CALL osl_getModuleHandle(rtl_uString *pModuleName, oslModule *pResult);
 
+#ifndef DISABLE_DYNLOADING
+
 /** Release the module
 */
 SAL_DLLPUBLIC void SAL_CALL osl_unloadModule(oslModule Module);
+
+#endif
 
 /** lookup the specified symbol name.
     @return address of the symbol or NULL if lookup failed.

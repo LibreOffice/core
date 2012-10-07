@@ -72,15 +72,23 @@ public:
 
     Module(): m_Module(0){}
 
+#ifndef DISABLE_DYNLOADING
+
     Module( const ::rtl::OUString& strModuleName, sal_Int32 nRtldMode = SAL_LOADMODULE_DEFAULT) : m_Module(0)
     {
         load( strModuleName, nRtldMode);
     }
 
+#endif
+
     ~Module()
     {
+#ifndef DISABLE_DYNLOADING
         osl_unloadModule(m_Module);
+#endif
     }
+
+#ifndef DISABLE_DYNLOADING
 
     sal_Bool SAL_CALL load( const ::rtl::OUString& strModuleName,
         sal_Int32 nRtldMode = SAL_LOADMODULE_DEFAULT)
@@ -118,6 +126,8 @@ public:
             m_Module = 0;
         }
     }
+
+#endif
 
     sal_Bool SAL_CALL is() const
     {
