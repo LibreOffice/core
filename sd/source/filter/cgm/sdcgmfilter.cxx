@@ -108,7 +108,7 @@ sal_Bool SdCGMFilter::Import()
        mxModel.is() )
     {
 #ifndef DISABLE_DYNLOADING
-        ImportCGMPointer FncImportCGM = reinterpret_cast< ImportCGM >( pLibrary->getFunctionSymbol(  "ImportCGM" ) );
+        ImportCGMPointer FncImportCGM = reinterpret_cast< ImportCGMPointer >( pLibrary->getFunctionSymbol(  "ImportCGM" ) );
 #else
         ImportCGMPointer FncImportCGM = ImportCGM;
 #endif
@@ -162,7 +162,7 @@ sal_Bool SdCGMFilter::Export()
        mxModel.is() )
     {
 #ifndef DISABLE_DYNLOADING
-        ExportCGMPointer FncCGMExport = reinterpret_cast< ExportCGM >( pLibrary->getFunctionSymbol( "ExportCGM" ) );
+        ExportCGMPointer FncCGMExport = reinterpret_cast< ExportCGMPointer >( pLibrary->getFunctionSymbol( "ExportCGM" ) );
 #else
         ExportCGMPointer FncCGMExport = ExportCGM;
 #endif
