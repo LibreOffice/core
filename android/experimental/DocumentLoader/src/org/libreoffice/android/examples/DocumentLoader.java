@@ -597,6 +597,7 @@ public class DocumentLoader
                           final int level,
                           final int location)
     {
+        Log.i(TAG, "renderPage(" + number + ", " + level + ", " + location + ")");
         try {
             // Use dummySmallDevice with no scale or offset just to find out
             // the paper size of this page.
@@ -726,6 +727,8 @@ public class DocumentLoader
             protected Integer doInBackground(Integer... params)
             {
                 int number = params[0];
+
+                Log.i(TAG, "doInBackground(" + number + ")");
 
                 if (number >= pageCount)
                     return -1;
