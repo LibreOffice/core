@@ -535,7 +535,11 @@ void DocxAttributeOutput::EndRun()
 
     if ( m_closeHyperlinkInPreviousRun )
     {
-        m_pSerializer->endElementNS( XML_w, XML_hyperlink );
+        if ( m_startedHyperlink )
+        {
+            m_pSerializer->endElementNS( XML_w, XML_hyperlink );
+            m_startedHyperlink = false;
+        }
         m_closeHyperlinkInPreviousRun = false;
     }
 

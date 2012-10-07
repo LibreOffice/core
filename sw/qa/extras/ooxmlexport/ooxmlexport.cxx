@@ -63,6 +63,7 @@ public:
     void testMathSubscripts();
     void testMathVerticalStacks();
     void testTablePosition();
+    void testFdo47669();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -86,6 +87,7 @@ public:
     CPPUNIT_TEST(testMathSubscripts);
     CPPUNIT_TEST(testMathVerticalStacks);
     CPPUNIT_TEST(testTablePosition);
+    CPPUNIT_TEST(testFdo47669);
 #endif
     CPPUNIT_TEST_SUITE_END();
 
@@ -395,6 +397,20 @@ void Test::testTablePosition()
         CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Incorrect left spacing computed from docx cell margin",
             cellLeftMarginFromOffice[i], aLeftMargin - 0.5 * aLeftBorderLine.LineWidth, 1);
     }
+}
+
+void Test::testFdo47669()
+{
+    roundtrip("fdo47669.docx");
+
+    /*
+     * Problem: we created imbalance </w:hyperlink> which shouldn't be there,
+     * resulting in loading error: missing last character of hyperlink text
+     * and content after it wasn't loaded.
+     */
+    getParagraph(1, "This is a hyperlink with anchor. Also, this sentence should be seen.");
+    getRun(getParagraph(1), 2, "hyperlink with anchor");
+    CPPUNIT_ASSERT_EQUAL(OUString("http://www.google.com/#a"), getProperty<OUString>(getRun(getParagraph(1), 2), "HyperLinkURL"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
