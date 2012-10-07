@@ -245,7 +245,7 @@ SwAutoCompleteWord::~SwAutoCompleteWord()
 #endif
 }
 
-sal_Bool SwAutoCompleteWord::InsertWord( const String& rWord, SwDoc& rDoc )
+bool SwAutoCompleteWord::InsertWord( const String& rWord, SwDoc& rDoc )
 {
     SwDocShell* pDocShell = rDoc.GetDocShell();
     SfxMedium* pMedium = pDocShell ? pDocShell->GetMedium() : 0;
@@ -262,7 +262,7 @@ sal_Bool SwAutoCompleteWord::InsertWord( const String& rWord, SwDoc& rDoc )
     aNewWord = comphelper::string::remove(aNewWord, CH_TXTATR_BREAKWORD);
 
     pImpl->AddDocument(rDoc);
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     xub_StrLen nWrdLen = aNewWord.Len();
     while( nWrdLen && '.' == aNewWord.GetChar( nWrdLen-1 ))
         --nWrdLen;
@@ -278,7 +278,7 @@ sal_Bool SwAutoCompleteWord::InsertWord( const String& rWord, SwDoc& rDoc )
 
         if (aInsPair.second)
         {
-            bRet = sal_True;
+            bRet = true;
             if (aLRULst.size() >= nMaxCount)
             {
                 // the last one needs to be removed

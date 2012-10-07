@@ -255,7 +255,7 @@ SwXTextPortionEnumeration::SwXTextPortionEnumeration(
     : m_Portions()
 {
     SwUnoCrsr* pUnoCrsr =
-       rParaCrsr.GetDoc()->CreateUnoCrsr(*rParaCrsr.GetPoint(), sal_False);
+       rParaCrsr.GetDoc()->CreateUnoCrsr(*rParaCrsr.GetPoint(), false);
     pUnoCrsr->Add(this);
 
     OSL_ENSURE(nEnd == -1 || (nStart <= nEnd &&
@@ -274,7 +274,7 @@ SwXTextPortionEnumeration::SwXTextPortionEnumeration(
     : m_Portions( rPortions )
 {
     SwUnoCrsr* const pUnoCrsr =
-       rParaCrsr.GetDoc()->CreateUnoCrsr(*rParaCrsr.GetPoint(), sal_False);
+       rParaCrsr.GetDoc()->CreateUnoCrsr(*rParaCrsr.GetPoint(), false);
     pUnoCrsr->Add(this);
 }
 

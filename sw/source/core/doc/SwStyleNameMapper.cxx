@@ -314,11 +314,11 @@ const struct SwTableEntry NumRuleProgNameTable [] =
 };
 #undef ENTRY
 
-sal_Bool SwStyleNameMapper::SuffixIsUser ( const String & rString )
+bool SwStyleNameMapper::SuffixIsUser ( const String & rString )
 {
     const sal_Unicode *pChar = rString.GetBuffer();
     sal_Int32 nLen = rString.Len();
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     if( nLen > 8 &&
         pChar[nLen-7] == ' ' &&
         pChar[nLen-6] == '(' &&
@@ -327,7 +327,7 @@ sal_Bool SwStyleNameMapper::SuffixIsUser ( const String & rString )
         pChar[nLen-3] == 'e' &&
         pChar[nLen-2] == 'r' &&
         pChar[nLen-1] == ')' )
-        bRet = sal_True;
+        bRet = true;
     return bRet;
 }
 void SwStyleNameMapper::CheckSuffixAndDelete ( String & rString )
@@ -468,10 +468,10 @@ const NameToIdHash & SwStyleNameMapper::getHashTable ( SwGetPoolIdFromName eFlag
         break;
     }
 #ifdef _NEED_TO_DEBUG_MAPPING
-    static sal_Bool bTested = sal_False;
+    static bool bTested = false;
     if ( !bTested )
     {
-        bTested = sal_True;
+        bTested = true;
         {
             for ( sal_uInt16 nIndex = 0, nId = RES_POOLCOLL_TEXT_BEGIN ; nId < RES_POOLCOLL_TEXT_END ; nId++,nIndex++ )
             {
@@ -1086,7 +1086,7 @@ const boost::ptr_vector<String>& SwStyleNameMapper::GetNumRuleProgNameArray()
 const String SwStyleNameMapper::GetSpecialExtraProgName( const String& rExtraUIName )
 {
     String aRes = rExtraUIName;
-    sal_Bool bChgName = sal_False;
+    bool bChgName = false;
     const boost::ptr_vector<String>& rExtraArr(GetExtraUINameArray());
     static sal_uInt16 nIds[] =
     {
@@ -1101,7 +1101,7 @@ const String SwStyleNameMapper::GetSpecialExtraProgName( const String& rExtraUIN
     {
         if (aRes == rExtraArr[ *pIds ])
         {
-            bChgName = sal_True;
+            bChgName = true;
             break;
         }
     }
@@ -1113,7 +1113,7 @@ const String SwStyleNameMapper::GetSpecialExtraProgName( const String& rExtraUIN
 const String SwStyleNameMapper::GetSpecialExtraUIName( const String& rExtraProgName )
 {
     String aRes = rExtraProgName;
-    sal_Bool bChgName = sal_False;
+    bool bChgName = false;
     const boost::ptr_vector<String>& rExtraArr(GetExtraProgNameArray());
     static sal_uInt16 nIds[] =
     {
@@ -1129,7 +1129,7 @@ const String SwStyleNameMapper::GetSpecialExtraUIName( const String& rExtraProgN
     {
         if (aRes == rExtraArr[ *pIds ])
         {
-            bChgName = sal_True;
+            bChgName = true;
             break;
         }
     }

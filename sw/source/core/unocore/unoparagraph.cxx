@@ -1027,7 +1027,7 @@ throw (beans::UnknownPropertyException, uno::RuntimeException)
             SwPosition aStart( *aCursor.Start() );
             SwPosition aEnd  ( *aCursor.End()   );
             ::std::auto_ptr<SwUnoCrsr> pTemp(
-                aCursor.GetDoc()->CreateUnoCrsr(aStart, sal_False) );
+                aCursor.GetDoc()->CreateUnoCrsr(aStart, false) );
             if(!SwUnoCursorHelper::IsStartOfPara(*pTemp))
             {
                 pTemp->MovePara(fnParaCurr, fnParaStart);

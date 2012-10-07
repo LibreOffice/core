@@ -722,7 +722,7 @@ SW_DLLPUBLIC const char * dbg_out(const SwTxtNode * pNode)
         return NULL;
 }
 
-sal_Bool lcl_dbg_add_node(const SwNodePtr & pNode, void * pArgs)
+bool lcl_dbg_add_node(const SwNodePtr & pNode, void * pArgs)
 {
     if (pNode)
     {
@@ -731,7 +731,7 @@ sal_Bool lcl_dbg_add_node(const SwNodePtr & pNode, void * pArgs)
     }
 
     //MBA: this code didn't compile, needed to add a return value
-    return sal_True;
+    return true;
 }
 
 void lcl_dbg_nodes_inner(String & aStr, SwNodes & rNodes, sal_uLong & nIndex)

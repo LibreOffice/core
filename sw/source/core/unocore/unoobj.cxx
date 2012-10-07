@@ -726,7 +726,7 @@ public:
             const enum CursorType eType,
             uno::Reference<text::XText> xParent,
             SwPosition const& rPoint, SwPosition const*const pMark)
-        : SwClient(rDoc.CreateUnoCrsr(rPoint, sal_False))
+        : SwClient(rDoc.CreateUnoCrsr(rPoint, false))
         , m_rPropSet(*aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXT_CURSOR))
         , m_eType(eType)
         , m_xParentText(xParent)
@@ -2035,7 +2035,7 @@ lcl_SelectParaAndReset( SwPaM &rPaM, SwDoc & rDoc,
     SwPosition aStart = *rPaM.Start();
     SwPosition aEnd = *rPaM.End();
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    ::std::auto_ptr< SwUnoCrsr > pTemp ( rDoc.CreateUnoCrsr(aStart, sal_False) );
+    ::std::auto_ptr< SwUnoCrsr > pTemp ( rDoc.CreateUnoCrsr(aStart, false) );
     SAL_WNODEPRECATED_DECLARATIONS_POP
     if(!SwUnoCursorHelper::IsStartOfPara(*pTemp))
     {

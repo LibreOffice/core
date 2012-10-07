@@ -79,7 +79,7 @@ SwUnoTableCrsr * SwUnoTableCrsr::Clone() const
 {
     SwUnoTableCrsr * pNewCrsr = dynamic_cast<SwUnoTableCrsr*>(
         GetDoc()->CreateUnoCrsr(
-            *GetPoint(), sal_True /* create SwUnoTableCrsr */ ) );
+            *GetPoint(), true /* create SwUnoTableCrsr */ ) );
     OSL_ENSURE(pNewCrsr, "Clone: cannot create SwUnoTableCrsr?");
     if (HasMark())
     {

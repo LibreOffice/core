@@ -835,10 +835,10 @@ sal_Bool SwEditShell::RemoveInvisibleContent()
     EndAllAction();
     return bRet;
 }
-sal_Bool SwEditShell::ConvertFieldsToText()
+bool SwEditShell::ConvertFieldsToText()
 {
     StartAllAction();
-    sal_Bool bRet = GetDoc()->ConvertFieldsToText();
+    bool bRet = GetDoc()->ConvertFieldsToText();
     EndAllAction();
     return bRet;
 }

@@ -1835,7 +1835,7 @@ public:
     /// restore the invisible content if it's available on the undo stack
     bool RestoreInvisibleContent();
 
-    sal_Bool ConvertFieldsToText();
+    bool ConvertFieldsToText();
 
     /// Create sub-documents according to given collection.
     /// If no collection is given, use chapter styles for 1st level.
@@ -1883,7 +1883,7 @@ public:
 
     // -------------------- Uno - Interfaces ---------------------------
     const SwUnoCrsrTbl& GetUnoCrsrTbl() const       { return *pUnoCrsrTbl; }
-    SwUnoCrsr* CreateUnoCrsr( const SwPosition& rPos, sal_Bool bTblCrsr = sal_False );
+    SwUnoCrsr* CreateUnoCrsr( const SwPosition& rPos, bool bTblCrsr = false );
 
     // -------------------- FeShell - Interfaces -----------------------
     // !!! These assume always an existing layout !!!

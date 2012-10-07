@@ -141,7 +141,7 @@ protected:
     static void fillNameFromId ( sal_uInt16 nId, String &rName, sal_Bool bProgName );
     static const String& getNameFromId ( sal_uInt16 nId, const String &rName, sal_Bool bProgName );
     static const NameToIdHash& getHashTable ( SwGetPoolIdFromName, sal_Bool bProgName );
-    static sal_Bool SuffixIsUser ( const String & rString );
+    static bool SuffixIsUser ( const String & rString );
     static void CheckSuffixAndDelete ( String & rString );
 
 public:

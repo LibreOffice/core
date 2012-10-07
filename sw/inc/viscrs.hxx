@@ -43,8 +43,8 @@ class SwVisCrsr
     friend void _InitCore();
     friend void _FinitCore();
 
-    sal_Bool bIsVisible : 1;
-    sal_Bool bIsDragCrsr : 1;
+    bool bIsVisible : 1;
+    bool bIsDragCrsr : 1;
 
     Cursor aTxtCrsr;
     const SwCrsrShell* pCrsrShell;
@@ -58,8 +58,8 @@ public:
     void Show();
     void Hide();
 
-    sal_Bool IsVisible() const { return bIsVisible; }
-    void SetDragCrsr( sal_Bool bFlag = sal_True ) { bIsDragCrsr = bFlag; }
+    bool IsVisible() const { return bIsVisible; }
+    void SetDragCrsr( bool bFlag = true ) { bIsDragCrsr = bFlag; }
 };
 
 

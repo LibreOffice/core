@@ -1194,10 +1194,10 @@ void SwCrsrShell::Paint( const Rectangle &rRect)
 void SwCrsrShell::VisPortChgd( const SwRect & rRect )
 {
     SET_CURR_SHELL( this );
-    sal_Bool bVis; // switch off all cursors when scrolling
+    bool bVis; // switch off all cursors when scrolling
 
     // if a cursor is visible then hide the SV cursor
-    if( sal_True == ( bVis = pVisCrsr->IsVisible() ))
+    if( ( bVis = pVisCrsr->IsVisible() ) )
         pVisCrsr->Hide();
 
     bVisPortChgd = sal_True;
@@ -2317,7 +2317,7 @@ sal_Bool SwCrsrShell::SetVisCrsr( const Point &rPt )
             aCrsrHeight.Y() = aCharRect.Height();
         }
 
-        pVisCrsr->SetDragCrsr( sal_True );
+        pVisCrsr->SetDragCrsr( true );
         pVisCrsr->Show(); // show again
     }
     return bRet;

@@ -901,7 +901,7 @@ inline SwPaM* SwCrsrShell::GetTblCrs()
 inline void SwCrsrShell::UnSetVisCrsr()
 {
     pVisCrsr->Hide();
-    pVisCrsr->SetDragCrsr( sal_False );
+    pVisCrsr->SetDragCrsr( false );
 }
 
 #endif  // _CRSRSH_HXX

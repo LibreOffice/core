@@ -63,9 +63,9 @@ public:
     /* Constructor that initializes the shell to the current shell */
     SwNavigationMgr( SwWrtShell & rShell );
     /* Can we go back in the history ? */
-    sal_Bool backEnabled() ;
+    bool backEnabled() ;
     /* Can we go forward in the history ? */
-    sal_Bool forwardEnabled();
+    bool forwardEnabled();
     /* The method that is called when we click the back button */
     void goBack() ;
     /* The method that is called when we click the forward button */

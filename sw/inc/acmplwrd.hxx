@@ -59,7 +59,7 @@ public:
     SwAutoCompleteWord( sal_uInt16 nWords = 500, sal_uInt16 nMWrdLen = 10 );
     ~SwAutoCompleteWord();
 
-    sal_Bool InsertWord( const String& rWord, SwDoc& rDoc );
+    bool InsertWord( const String& rWord, SwDoc& rDoc );
 
     sal_Bool GetRange( const String& rWord, sal_uInt16& rStt, sal_uInt16& rEnd ) const;
 

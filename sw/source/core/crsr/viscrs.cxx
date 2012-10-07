@@ -68,7 +68,7 @@ SwVisCrsr::SwVisCrsr( const SwCrsrShell * pCShell )
 {
     pCShell->GetWin()->SetCursor( &aTxtCrsr );
     bIsVisible = aTxtCrsr.IsVisible();
-    bIsDragCrsr = sal_False;
+    bIsDragCrsr = false;
     aTxtCrsr.SetWidth( 0 );
 }
 
@@ -89,7 +89,7 @@ void SwVisCrsr::Show()
 {
     if( !bIsVisible )
     {
-        bIsVisible = sal_True;
+        bIsVisible = true;
 
         // display at all?
         if( pCrsrShell->VisArea().IsOver( pCrsrShell->aCharRect ) )
@@ -103,7 +103,7 @@ void SwVisCrsr::Hide()
 {
     if( bIsVisible )
     {
-        bIsVisible = sal_False;
+        bIsVisible = false;
 
         if( aTxtCrsr.IsVisible() )      // Shouldn't the flags be in effect?
             aTxtCrsr.Hide();

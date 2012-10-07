@@ -82,7 +82,7 @@ SwNavigationMgr::SwNavigationMgr(SwWrtShell & rShell)
  * It is called when we want to check if the back button should be enabled or not.
  * The back button should be enabled only if there are some entries in the navigation history
  */
-sal_Bool SwNavigationMgr::backEnabled() {
+bool SwNavigationMgr::backEnabled() {
     return (m_nCurrent > 0);
 }
 /*
@@ -92,7 +92,7 @@ sal_Bool SwNavigationMgr::backEnabled() {
  * current position within the navigation history entries in not the last one
  * i.e. when the m_nCurrent index is not at the end of the m_entries vector
  */
-sal_Bool SwNavigationMgr::forwardEnabled() {
+bool SwNavigationMgr::forwardEnabled() {
     return m_nCurrent+1 < m_entries.size();
 }
 
