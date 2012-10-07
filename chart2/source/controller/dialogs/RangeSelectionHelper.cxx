@@ -38,7 +38,6 @@ using namespace ::com::sun::star;
 
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
-using ::rtl::OUString;
 
 // ----------------------------------------
 
@@ -124,17 +123,17 @@ bool RangeSelectionHelper::chooseRange(
         {
             Sequence< beans::PropertyValue > aArgs( 4 );
             aArgs[0] = beans::PropertyValue(
-                C2U("InitialValue"), -1, uno::makeAny( aCurrentRange ),
+                "InitialValue", -1, uno::makeAny( aCurrentRange ),
                 beans::PropertyState_DIRECT_VALUE );
             aArgs[1] = beans::PropertyValue(
-                C2U("Title"), -1,
+                "Title", -1,
                 uno::makeAny( aUIString ),
                 beans::PropertyState_DIRECT_VALUE );
             aArgs[2] = beans::PropertyValue(
-                C2U("CloseOnMouseRelease"), -1, uno::makeAny( true ),
+                "CloseOnMouseRelease", -1, uno::makeAny( true ),
                 beans::PropertyState_DIRECT_VALUE );
             aArgs[3] = beans::PropertyValue(
-                C2U("MultiSelectionMode"), -1, uno::makeAny( true ),
+                "MultiSelectionMode", -1, uno::makeAny( true ),
                 beans::PropertyState_DIRECT_VALUE );
 
             if( m_xRangeSelectionListener.is() )
