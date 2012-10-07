@@ -47,12 +47,11 @@ using namespace ::com::sun::star::chart2;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Any;
-using rtl::OUString;
 
 namespace
 {
 
-OUString lcl_getDataSeriesName( const rtl::OUString& rObjectCID, const Reference< frame::XModel >& xChartModel )
+OUString lcl_getDataSeriesName( const OUString& rObjectCID, const Reference< frame::XModel >& xChartModel )
 {
     OUString aRet;
 
@@ -71,10 +70,10 @@ OUString lcl_getDataSeriesName( const rtl::OUString& rObjectCID, const Reference
     return aRet;
 }
 
-OUString lcl_getFullSeriesName( const rtl::OUString& rObjectCID, const Reference< frame::XModel >& xChartModel )
+OUString lcl_getFullSeriesName( const OUString& rObjectCID, const Reference< frame::XModel >& xChartModel )
 {
     OUString aRet = String(SchResId(STR_TIP_DATASERIES));
-    OUString aWildcard( C2U("%SERIESNAME") );
+    OUString aWildcard( "%SERIESNAME" );
     sal_Int32 nIndex = aRet.indexOf( aWildcard );
     if( nIndex != -1 )
         aRet = aRet.replaceAt( nIndex, aWildcard.getLength(), lcl_getDataSeriesName( rObjectCID, xChartModel ) );
@@ -103,7 +102,7 @@ OUString lcl_getDataPointValueText( const Reference< XDataSeries >& xSeries, sal
 
     Sequence< Reference< data::XLabeledDataSequence > > aDataSequences( xDataSource->getDataSequences() );
 
-    rtl::OUString aX, aY, aY_Min, aY_Max, aY_First, aY_Last, a_Size;
+    OUString aX, aY, aY_Min, aY_Max, aY_First, aY_Last, a_Size;
     double fValue = 0;
 
     uno::Reference< util::XNumberFormatsSupplier > xNumberFormatsSupplier( xChartModel, uno::UNO_QUERY );
@@ -124,47 +123,47 @@ OUString lcl_getDataPointValueText( const Reference< XDataSeries >& xSeries, sal
         {
             try
             {
-                uno::Any aARole = xProp->getPropertyValue( C2U( "Role" ) );
-                rtl::OUString aRole;
+                uno::Any aARole = xProp->getPropertyValue( "Role" );
+                OUString aRole;
                 aARole >>= aRole;
 
-                if( aRole.equals(C2U("values-x")) )
+                if( aRole == "values-x" )
                 {
                     aData[nPointIndex]>>= fValue;
                     sal_Int32 nNumberFormatKey = xDataSequence->getNumberFormatKeyByIndex( nPointIndex );
                     aX = aNumberFormatterWrapper.getFormattedString( nNumberFormatKey, fValue, nLabelColor, bColorChanged );
                 }
-                else if( aRole.equals(C2U("values-y")) )
+                else if( aRole == "values-y")
                 {
                     aData[nPointIndex]>>= fValue;
                     sal_Int32 nNumberFormatKey = xDataSequence->getNumberFormatKeyByIndex( nPointIndex );
                     aY = aNumberFormatterWrapper.getFormattedString( nNumberFormatKey, fValue, nLabelColor, bColorChanged );
                 }
-                else if( aRole.equals(C2U("values-first")) )
+                else if( aRole == "values-first" )
                 {
                     aData[nPointIndex]>>= fValue;
                     sal_Int32 nNumberFormatKey = xDataSequence->getNumberFormatKeyByIndex( nPointIndex );
                     aY_First = aNumberFormatterWrapper.getFormattedString( nNumberFormatKey, fValue, nLabelColor, bColorChanged );
                 }
-                else if( aRole.equals(C2U("values-min")) )
+                else if( aRole == "values-min" )
                 {
                     aData[nPointIndex]>>= fValue;
                     sal_Int32 nNumberFormatKey = xDataSequence->getNumberFormatKeyByIndex( nPointIndex );
                     aY_Min = aNumberFormatterWrapper.getFormattedString( nNumberFormatKey, fValue, nLabelColor, bColorChanged );
                 }
-                else if( aRole.equals(C2U("values-max")) )
+                else if( aRole == "values-max" )
                 {
                     aData[nPointIndex]>>= fValue;
                     sal_Int32 nNumberFormatKey = xDataSequence->getNumberFormatKeyByIndex( nPointIndex );
                     aY_Max = aNumberFormatterWrapper.getFormattedString( nNumberFormatKey, fValue, nLabelColor, bColorChanged );
                 }
-                else if( aRole.equals(C2U("values-last")) )
+                else if( aRole == "values-last" )
                 {
                     aData[nPointIndex]>>= fValue;
                     sal_Int32 nNumberFormatKey = xDataSequence->getNumberFormatKeyByIndex( nPointIndex );
                     aY_Last = aNumberFormatterWrapper.getFormattedString( nNumberFormatKey, fValue, nLabelColor, bColorChanged );
                 }
-                else if( aRole.equals(C2U("values-size")) )
+                else if( aRole == "values-size" )
                 {
                     aData[nPointIndex]>>= fValue;
                     sal_Int32 nNumberFormatKey = xDataSequence->getNumberFormatKeyByIndex( nPointIndex );
@@ -187,7 +186,7 @@ OUString lcl_getDataPointValueText( const Reference< XDataSeries >& xSeries, sal
         aRet = aX;
     }
 
-    OUString aSeparator(C2U(" "));
+    OUString aSeparator( " " );
 
     lcl_addText( aRet, aSeparator, aY );
     lcl_addText( aRet, aSeparator, aY_First );
@@ -201,9 +200,9 @@ OUString lcl_getDataPointValueText( const Reference< XDataSeries >& xSeries, sal
 
 } //end anonymous namespace
 
-rtl::OUString ObjectNameProvider::getName( ObjectType eObjectType, bool bPlural )
+OUString ObjectNameProvider::getName( ObjectType eObjectType, bool bPlural )
 {
-    rtl::OUString aRet;
+    OUString aRet;
     switch( eObjectType )
     {
         case OBJECTTYPE_PAGE:
@@ -311,10 +310,10 @@ rtl::OUString ObjectNameProvider::getName( ObjectType eObjectType, bool bPlural 
     return aRet;
 }
 
-rtl::OUString ObjectNameProvider::getAxisName( const rtl::OUString& rObjectCID
+OUString ObjectNameProvider::getAxisName( const OUString& rObjectCID
                         , const uno::Reference< frame::XModel >& xChartModel  )
 {
-    rtl::OUString aRet;
+    OUString aRet;
 
 
 
@@ -408,10 +407,10 @@ OUString ObjectNameProvider::getTitleName( const OUString& rObjectCID
     return aRet;
 }
 
-rtl::OUString ObjectNameProvider::getGridName( const rtl::OUString& rObjectCID
+OUString ObjectNameProvider::getGridName( const OUString& rObjectCID
                         , const uno::Reference< frame::XModel >& xChartModel )
 {
-    rtl::OUString aRet;
+    OUString aRet;
 
 
     sal_Int32 nCooSysIndex = -1;
@@ -462,14 +461,14 @@ rtl::OUString ObjectNameProvider::getGridName( const rtl::OUString& rObjectCID
     return aRet;
 }
 
-rtl::OUString ObjectNameProvider::getHelpText( const rtl::OUString& rObjectCID, const Reference< chart2::XChartDocument >& xChartDocument, bool bVerbose )
+OUString ObjectNameProvider::getHelpText( const OUString& rObjectCID, const Reference< chart2::XChartDocument >& xChartDocument, bool bVerbose )
 {
     return getHelpText( rObjectCID, Reference< frame::XModel >( xChartDocument, uno::UNO_QUERY ), bVerbose );
 }
 
-rtl::OUString ObjectNameProvider::getHelpText( const rtl::OUString& rObjectCID, const Reference< frame::XModel >& xChartModel, bool bVerbose )
+OUString ObjectNameProvider::getHelpText( const OUString& rObjectCID, const Reference< frame::XModel >& xChartModel, bool bVerbose )
 {
-    rtl::OUString aRet;
+    OUString aRet;
     ObjectType eObjectType( ObjectIdentifier::getObjectType(rObjectCID) );
     if( OBJECTTYPE_AXIS == eObjectType )
     {
@@ -492,7 +491,7 @@ rtl::OUString ObjectNameProvider::getHelpText( const rtl::OUString& rObjectCID, 
     {
         if( bVerbose )
         {
-            OUString aNewLine(C2U("\n"));
+            OUString aNewLine( "\n" );
 
             aRet=String(SchResId(STR_TIP_DATAPOINT_INDEX));
             aRet+=aNewLine;
@@ -511,7 +510,7 @@ rtl::OUString ObjectNameProvider::getHelpText( const rtl::OUString& rObjectCID, 
 
             //replace data point index
             sal_Int32 nIndex = -1;
-            OUString aWildcard( C2U("%POINTNUMBER") );
+            OUString aWildcard(  "%POINTNUMBER" );
             nIndex = aRet.indexOf( aWildcard );
             if( nIndex != -1 )
             {
@@ -519,7 +518,7 @@ rtl::OUString ObjectNameProvider::getHelpText( const rtl::OUString& rObjectCID, 
             }
 
             //replace data series index
-            aWildcard = C2U("%SERIESNUMBER");
+            aWildcard =  "%SERIESNUMBER";
             nIndex = aRet.indexOf( aWildcard );
             if( nIndex != -1 )
             {
@@ -539,14 +538,14 @@ rtl::OUString ObjectNameProvider::getHelpText( const rtl::OUString& rObjectCID, 
             }
 
             //replace point values
-            aWildcard = C2U("%POINTVALUES");
+            aWildcard =  "%POINTVALUES";
             nIndex = aRet.indexOf( aWildcard );
             if( nIndex != -1 )
                 aRet = aRet.replaceAt( nIndex, aWildcard.getLength(), lcl_getDataPointValueText(
                 xSeries,nPointIndex, DataSeriesHelper::getCoordinateSystemOfSeries(xSeries, xDiagram), xChartModel ) );
 
             //replace series name
-            aWildcard = C2U("%SERIESNAME");
+            aWildcard = "%SERIESNAME";
             nIndex = aRet.indexOf( aWildcard );
             if( nIndex != -1 )
                 aRet = aRet.replaceAt( nIndex, aWildcard.getLength(), lcl_getDataSeriesName( rObjectCID, xChartModel ) );
@@ -571,13 +570,13 @@ rtl::OUString ObjectNameProvider::getHelpText( const rtl::OUString& rObjectCID, 
 
                         // replace formula
                         sal_Int32 nIndex = -1;
-                        OUString aWildcard( C2U("%FORMULA") );
+                        OUString aWildcard( "%FORMULA" );
                         nIndex = aRet.indexOf( aWildcard );
                         if( nIndex != -1 )
                             aRet = aRet.replaceAt( nIndex, aWildcard.getLength(), xCalculator->getRepresentation());
 
                         // replace r^2
-                        aWildcard = C2U("%RSQUARED");
+                        aWildcard = "%RSQUARED";
                         nIndex = aRet.indexOf( aWildcard );
                         if( nIndex != -1 )
                         {
@@ -622,7 +621,7 @@ rtl::OUString ObjectNameProvider::getHelpText( const rtl::OUString& rObjectCID, 
                         sal_Unicode aDecimalSep( '.' );
 
                         sal_Int32 nIndex = -1;
-                        OUString aWildcard( C2U("%AVERAGE_VALUE") );
+                        OUString aWildcard( "%AVERAGE_VALUE" );
                         nIndex = aRet.indexOf( aWildcard );
                         // as the curve is constant, the value at any x-value is ok
                         if( nIndex != -1 )
@@ -635,7 +634,7 @@ rtl::OUString ObjectNameProvider::getHelpText( const rtl::OUString& rObjectCID, 
                         }
 
                         // replace standard deviation
-                        aWildcard = C2U("%STD_DEVIATION");
+                        aWildcard = "%STD_DEVIATION";
                         nIndex = aRet.indexOf( aWildcard );
                         if( nIndex != -1 )
                         {
@@ -666,9 +665,9 @@ rtl::OUString ObjectNameProvider::getHelpText( const rtl::OUString& rObjectCID, 
     return aRet;
 }
 
-rtl::OUString ObjectNameProvider::getSelectedObjectText( const rtl::OUString & rObjectCID, const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartDocument >& xChartDocument )
+OUString ObjectNameProvider::getSelectedObjectText( const OUString & rObjectCID, const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartDocument >& xChartDocument )
 {
-    rtl::OUString aRet;
+    OUString aRet;
     ObjectType eObjectType( ObjectIdentifier::getObjectType(rObjectCID) );
     Reference< frame::XModel > xChartModel( xChartDocument, uno::UNO_QUERY );
 
@@ -683,7 +682,7 @@ rtl::OUString ObjectNameProvider::getSelectedObjectText( const rtl::OUString & r
             sal_Int32 nPointIndex( ObjectIdentifier::getParticleID(rObjectCID).toInt32() );
 
             // replace data point index
-            replaceParamterInString( aRet, C2U("%POINTNUMBER"), OUString::valueOf( nPointIndex + 1 ));
+            replaceParamterInString( aRet, "%POINTNUMBER", OUString::valueOf( nPointIndex + 1 ));
 
             // replace data series index
             {
@@ -695,11 +694,11 @@ rtl::OUString ObjectNameProvider::getSelectedObjectText( const rtl::OUString & r
                     if( aSeriesVector[nSeriesIndex] == xSeries )
                         break;
                 }
-                replaceParamterInString( aRet, C2U("%SERIESNUMBER"), OUString::valueOf( nSeriesIndex + 1 ) );
+                replaceParamterInString( aRet, "%SERIESNUMBER", OUString::valueOf( nSeriesIndex + 1 ) );
             }
 
             // replace point value
-            replaceParamterInString( aRet, C2U("%POINTVALUES"), lcl_getDataPointValueText(
+            replaceParamterInString( aRet, "%POINTVALUES", lcl_getDataPointValueText(
                 xSeries, nPointIndex, DataSeriesHelper::getCoordinateSystemOfSeries(xSeries, xDiagram), xChartModel ) );
         }
     }
@@ -711,7 +710,7 @@ rtl::OUString ObjectNameProvider::getSelectedObjectText( const rtl::OUString & r
         if( !aHelpText.isEmpty())
         {
             aRet = String( SchResId( STR_STATUS_OBJECT_MARKED ));
-            replaceParamterInString( aRet, C2U("%OBJECTNAME"), aHelpText );
+            replaceParamterInString( aRet, "%OBJECTNAME", aHelpText );
         }
     }
 
@@ -719,8 +718,8 @@ rtl::OUString ObjectNameProvider::getSelectedObjectText( const rtl::OUString & r
 }
 
 
-rtl::OUString ObjectNameProvider::getNameForCID(
-    const rtl::OUString& rObjectCID,
+OUString ObjectNameProvider::getNameForCID(
+    const OUString& rObjectCID,
     const uno::Reference< chart2::XChartDocument >& xChartDocument )
 {
     ObjectType eType( ObjectIdentifier::getObjectType( rObjectCID ));
@@ -747,18 +746,18 @@ rtl::OUString ObjectNameProvider::getNameForCID(
         case OBJECTTYPE_DATA_AVERAGE_LINE:
         case OBJECTTYPE_DATA_CURVE_EQUATION:
             {
-                rtl::OUString aRet = lcl_getFullSeriesName( rObjectCID, xModel );
-                aRet += C2U(" ");
+                OUString aRet = lcl_getFullSeriesName( rObjectCID, xModel );
+                aRet += " ";
                 if( eType == OBJECTTYPE_DATA_POINT || eType == OBJECTTYPE_DATA_LABEL )
                 {
                     aRet += getName( OBJECTTYPE_DATA_POINT  );
                     sal_Int32 nPointIndex = ObjectIdentifier::getIndexFromParticleOrCID( rObjectCID );
-                    aRet += C2U(" ");
+                    aRet += " ";
                     aRet += OUString::valueOf(nPointIndex+1);
 
                     if( eType == OBJECTTYPE_DATA_LABEL )
                     {
-                        aRet += C2U(" ");
+                        aRet += " ";
                         aRet += getName( OBJECTTYPE_DATA_LABEL  );
                     }
                 }
@@ -773,9 +772,9 @@ rtl::OUString ObjectNameProvider::getNameForCID(
     return getName( eType );
 }
 
-rtl::OUString ObjectNameProvider::getName_ObjectForSeries(
+OUString ObjectNameProvider::getName_ObjectForSeries(
         ObjectType eObjectType,
-        const rtl::OUString& rSeriesCID,
+        const OUString& rSeriesCID,
         const uno::Reference< chart2::XChartDocument >& xChartDocument )
 {
     uno::Reference< frame::XModel> xChartModel( xChartDocument, uno::UNO_QUERY );
@@ -783,18 +782,18 @@ rtl::OUString ObjectNameProvider::getName_ObjectForSeries(
     if( xSeries.is() )
     {
         OUString aRet = String(SchResId(STR_OBJECT_FOR_SERIES));
-        replaceParamterInString( aRet, C2U("%OBJECTNAME"), getName( eObjectType, false /*bPlural*/ ) );
-        replaceParamterInString( aRet, C2U("%SERIESNAME"), lcl_getDataSeriesName( rSeriesCID, xChartModel ) );
+        replaceParamterInString( aRet, "%OBJECTNAME", getName( eObjectType, false /*bPlural*/ ) );
+        replaceParamterInString( aRet, "%SERIESNAME", lcl_getDataSeriesName( rSeriesCID, xChartModel ) );
         return aRet;
     }
     else
         return ObjectNameProvider::getName_ObjectForAllSeries( eObjectType );
 }
 
-rtl::OUString ObjectNameProvider::getName_ObjectForAllSeries( ObjectType eObjectType )
+OUString ObjectNameProvider::getName_ObjectForAllSeries( ObjectType eObjectType )
 {
     OUString aRet = String(SchResId(STR_OBJECT_FOR_ALL_SERIES));
-    replaceParamterInString( aRet, C2U("%OBJECTNAME"), getName( eObjectType, true /*bPlural*/ ) );
+    replaceParamterInString( aRet, "%OBJECTNAME", getName( eObjectType, true /*bPlural*/ ) );
     return aRet;
 }
 

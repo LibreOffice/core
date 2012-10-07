@@ -79,7 +79,7 @@ using ::com::sun::star::uno::Reference;
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 
-ObjectPropertiesDialogParameter::ObjectPropertiesDialogParameter( const rtl::OUString& rObjectCID )
+ObjectPropertiesDialogParameter::ObjectPropertiesDialogParameter( const OUString& rObjectCID )
         : m_aObjectCID( rObjectCID )
         , m_eObjectType( ObjectIdentifier::getObjectType( m_aObjectCID ) )
         , m_bAffectsMultipleObjects(false)
@@ -103,8 +103,8 @@ ObjectPropertiesDialogParameter::ObjectPropertiesDialogParameter( const rtl::OUS
         , m_xChartDocument( 0 )
         , m_bComplexCategoriesAxis( false )
 {
-    rtl::OUString aParticleID = ObjectIdentifier::getParticleID( m_aObjectCID );
-    m_bAffectsMultipleObjects = aParticleID.equals(C2U("ALLELEMENTS"));
+    OUString aParticleID = ObjectIdentifier::getParticleID( m_aObjectCID );
+    m_bAffectsMultipleObjects = (aParticleID == "ALLELEMENTS");
 }
 ObjectPropertiesDialogParameter::~ObjectPropertiesDialogParameter()
 {
@@ -113,7 +113,7 @@ ObjectType ObjectPropertiesDialogParameter::getObjectType() const
 {
     return m_eObjectType;
 }
-rtl::OUString ObjectPropertiesDialogParameter::getLocalizedName() const
+OUString ObjectPropertiesDialogParameter::getLocalizedName() const
 {
     return m_aLocalizedName;
 }
@@ -296,7 +296,7 @@ bool ObjectPropertiesDialogParameter::IsCrossingAxisIsCategoryAxis() const
 {
     return m_bIsCrossingAxisIsCategoryAxis;
 }
-const uno::Sequence< rtl::OUString >& ObjectPropertiesDialogParameter::GetCategories() const
+const uno::Sequence< OUString >& ObjectPropertiesDialogParameter::GetCategories() const
 {
     return m_aCategories;
 }

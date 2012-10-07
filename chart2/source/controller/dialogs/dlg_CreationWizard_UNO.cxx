@@ -54,7 +54,7 @@ CreationWizardUnoDlg::CreationWizardUnoDlg( const uno::Reference< uno::XComponen
 {
     uno::Reference< frame::XDesktop > xDesktop(
         m_xCC->getServiceManager()->createInstanceWithContext(
-            C2U( "com.sun.star.frame.Desktop" ), m_xCC ), uno::UNO_QUERY );
+            "com.sun.star.frame.Desktop" , m_xCC ), uno::UNO_QUERY );
     if( xDesktop.is() )
     {
         uno::Reference< frame::XTerminateListener > xListener( this );
@@ -74,10 +74,10 @@ CreationWizardUnoDlg::~CreationWizardUnoDlg()
 // lang::XServiceInfo
 APPHELPER_XSERVICEINFO_IMPL(CreationWizardUnoDlg,CHART_WIZARD_DIALOG_SERVICE_IMPLEMENTATION_NAME)
 
-    uno::Sequence< rtl::OUString > CreationWizardUnoDlg
+    uno::Sequence< OUString > CreationWizardUnoDlg
 ::getSupportedServiceNames_Static()
 {
-    uno::Sequence< rtl::OUString > aSNS( 1 );
+    uno::Sequence< OUString > aSNS( 1 );
     aSNS.getArray()[ 0 ] = CHART_WIZARD_DIALOG_SERVICE_NAME;
     return aSNS;
 }
@@ -191,7 +191,7 @@ void SAL_CALL CreationWizardUnoDlg::disposing( const lang::EventObject& /*Source
 }
 
 //-------------------------------------------------------------------------
-void SAL_CALL CreationWizardUnoDlg::setTitle( const ::rtl::OUString& /*rTitle*/ ) throw(uno::RuntimeException)
+void SAL_CALL CreationWizardUnoDlg::setTitle( const OUString& /*rTitle*/ ) throw(uno::RuntimeException)
 {
 }
 //-------------------------------------------------------------------------
@@ -292,7 +292,7 @@ void SAL_CALL CreationWizardUnoDlg::disposing()
     {
         uno::Reference< frame::XDesktop > xDesktop(
             m_xCC->getServiceManager()->createInstanceWithContext(
-                C2U( "com.sun.star.frame.Desktop" ), m_xCC ), uno::UNO_QUERY );
+                "com.sun.star.frame.Desktop" , m_xCC ), uno::UNO_QUERY );
         if( xDesktop.is() )
         {
             uno::Reference< frame::XTerminateListener > xListener( this );
@@ -313,16 +313,16 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL CreationWizardUnoDlg::getProp
     return 0;
 }
 
-void SAL_CALL CreationWizardUnoDlg::setPropertyValue( const ::rtl::OUString& rPropertyName
+void SAL_CALL CreationWizardUnoDlg::setPropertyValue( const OUString& rPropertyName
                                                      , const uno::Any& rValue )
     throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException
           , lang::WrappedTargetException, uno::RuntimeException)
 {
-    if( rPropertyName.equals(C2U("Position")) )
+    if( rPropertyName == "Position" )
     {
         awt::Point aPos;
         if( ! (rValue >>= aPos) )
-            throw lang::IllegalArgumentException( C2U("Property 'Position' requires value of type awt::Point"), 0, 0 );
+            throw lang::IllegalArgumentException( "Property 'Position' requires value of type awt::Point", 0, 0 );
 
         //set left upper outer corner relative to screen
         //pixels, screen position
@@ -337,24 +337,24 @@ void SAL_CALL CreationWizardUnoDlg::setPropertyValue( const ::rtl::OUString& rPr
             m_pDialog->SetPosPixel( aNewOuterPos );
         }
     }
-    else if( rPropertyName.equals(C2U("Size")) )
+    else if( rPropertyName == "Size")
     {
         //read only property, do nothing
     }
-    else if( rPropertyName.equals(C2U("UnlockControllersOnExecute")) )
+    else if( rPropertyName == "UnlockControllersOnExecute" )
     {
         if( ! (rValue >>= m_bUnlockControllersOnExecute) )
-            throw lang::IllegalArgumentException( C2U("Property 'UnlockControllers' requires value of type boolean"), 0, 0 );
+            throw lang::IllegalArgumentException( "Property 'UnlockControllers' requires value of type boolean" , 0, 0 );
     }
     else
-        throw beans::UnknownPropertyException( C2U("unknown property was tried to set to chart wizard"), 0 );
+        throw beans::UnknownPropertyException( "unknown property was tried to set to chart wizard" , 0 );
 }
 
-uno::Any SAL_CALL CreationWizardUnoDlg::getPropertyValue( const ::rtl::OUString& rPropertyName )
+uno::Any SAL_CALL CreationWizardUnoDlg::getPropertyValue( const OUString& rPropertyName )
     throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     uno::Any aRet;
-    if( rPropertyName.equals(C2U("Position")) )
+    if( rPropertyName == "Position" )
     {
         //get left upper outer corner relative to screen
         //pixels, screen position
@@ -367,7 +367,7 @@ uno::Any SAL_CALL CreationWizardUnoDlg::getPropertyValue( const ::rtl::OUString&
             aRet = uno::makeAny( aPoint );
         }
     }
-    else if( rPropertyName.equals(C2U("Size")) )
+    else if( rPropertyName == "Size" )
     {
         //get outer size inclusive decoration
         //pixels, screen position
@@ -380,35 +380,35 @@ uno::Any SAL_CALL CreationWizardUnoDlg::getPropertyValue( const ::rtl::OUString&
             aRet = uno::makeAny( aSize );
         }
     }
-    else if( rPropertyName.equals(C2U("UnlockControllersOnExecute")) )
+    else if( rPropertyName == "UnlockControllersOnExecute" )
     {
         aRet = uno::makeAny( m_bUnlockControllersOnExecute );
     }
     else
-        throw beans::UnknownPropertyException( C2U("unknown property was tried to get from chart wizard"), 0 );
+        throw beans::UnknownPropertyException( "unknown property was tried to get from chart wizard" , 0 );
     return aRet;
 }
 
 void SAL_CALL CreationWizardUnoDlg::addPropertyChangeListener(
-        const ::rtl::OUString& /* aPropertyName */, const uno::Reference< beans::XPropertyChangeListener >& /* xListener */ )
+        const OUString& /* aPropertyName */, const uno::Reference< beans::XPropertyChangeListener >& /* xListener */ )
         throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     OSL_FAIL("not implemented");
 }
 void SAL_CALL CreationWizardUnoDlg::removePropertyChangeListener(
-    const ::rtl::OUString& /* aPropertyName */, const uno::Reference< beans::XPropertyChangeListener >& /* aListener */ )
+    const OUString& /* aPropertyName */, const uno::Reference< beans::XPropertyChangeListener >& /* aListener */ )
     throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     OSL_FAIL("not implemented");
 }
 
-void SAL_CALL CreationWizardUnoDlg::addVetoableChangeListener( const ::rtl::OUString& /* PropertyName */, const uno::Reference< beans::XVetoableChangeListener >& /* aListener */ )
+void SAL_CALL CreationWizardUnoDlg::addVetoableChangeListener( const OUString& /* PropertyName */, const uno::Reference< beans::XVetoableChangeListener >& /* aListener */ )
     throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     OSL_FAIL("not implemented");
 }
 
-void SAL_CALL CreationWizardUnoDlg::removeVetoableChangeListener( const ::rtl::OUString& /* PropertyName */, const uno::Reference< beans::XVetoableChangeListener >& /* aListener */ )
+void SAL_CALL CreationWizardUnoDlg::removeVetoableChangeListener( const OUString& /* PropertyName */, const uno::Reference< beans::XVetoableChangeListener >& /* aListener */ )
     throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     OSL_FAIL("not implemented");

@@ -75,7 +75,6 @@
 using namespace ::com::sun::star;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Reference;
-using ::rtl::OUString;
 
 using namespace ::svt;
 
@@ -580,7 +579,7 @@ void DataBrowser::RenewTable()
                             GetDataWindow().LogicToPixel( Size( 42, 0 )).getWidth() ));
 
     OUString aDefaultSeriesName(SCH_RESSTR(STR_COLUMN_LABEL));
-    replaceParamterInString( aDefaultSeriesName, C2U("%COLUMNNUMBER"), OUString::valueOf( sal_Int32(24) ) );
+    replaceParamterInString( aDefaultSeriesName, "%COLUMNNUMBER", OUString::valueOf( sal_Int32(24) ) );
     sal_Int32 nColumnWidth = GetDataWindow().GetTextWidth( aDefaultSeriesName )
         + GetDataWindow().LogicToPixel( Point( 4 + impl::SeriesHeader::GetRelativeAppFontXPosForNameField(), 0 ), MAP_APPFONT ).X();
     sal_Int32 nColumnCount = m_apDataBrowserModel->getColumnCount();
@@ -613,7 +612,7 @@ void DataBrowser::RenewTable()
         sal_Int32 nColor = 0;
         // @todo: Set "DraftColor", i.e. interpolated colors for gradients, bitmaps, etc.
         if( xSeriesProp.is() &&
-            ( xSeriesProp->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("Color"))) >>= nColor ))
+            ( xSeriesProp->getPropertyValue( "Color" ) >>= nColor ))
             spHeader->SetColor( Color( nColor ));
         spHeader->SetChartType( aIt->m_xChartType, aIt->m_bSwapXAndYAxis );
         spHeader->SetSeriesName(
@@ -621,7 +620,7 @@ void DataBrowser::RenewTable()
                         aIt->m_xDataSeries,
                         (aIt->m_xChartType.is() ?
                          aIt->m_xChartType->getRoleOfSequenceForSeriesLabel() :
-                         OUString( RTL_CONSTASCII_USTRINGPARAM("values-y"))))));
+                         OUString("values-y")))));
         // index is 1-based, as 0 is for the column that contains the row-numbers
         spHeader->SetRange( aIt->m_nStartColumn + 1, aIt->m_nEndColumn + 1 );
         spHeader->SetGetFocusHdl( aFocusLink );
@@ -646,7 +645,7 @@ String DataBrowser::GetColString( sal_Int32 nColumnId ) const
 
 String DataBrowser::GetRowString( sal_Int32 nRow ) const
 {
-    return rtl::OUString::valueOf(nRow + 1);
+    return OUString::valueOf(nRow + 1);
 }
 
 String DataBrowser::GetCellText( long nRow, sal_uInt16 nColumnId ) const
@@ -1119,7 +1118,7 @@ sal_uInt32 DataBrowser::GetNumberFormatKey( sal_Int32 nRow, sal_uInt16 nCol ) co
     return m_apDataBrowserModel->getNumberFormatKey( lcl_getColumnInData( nCol ), lcl_getRowInData( nRow ));
 }
 
-bool DataBrowser::isDateString( rtl::OUString aInputString, double& fOutDateValue )
+bool DataBrowser::isDateString( OUString aInputString, double& fOutDateValue )
 {
     sal_uInt32 nNumberFormat=0;
     SvNumberFormatter* pSvNumberFormatter = m_spNumberFormatterWrapper.get() ? m_spNumberFormatterWrapper->getSvNumberFormatter() : 0;
@@ -1259,7 +1258,7 @@ void DataBrowser::RenewSeriesHeaders()
         Reference< beans::XPropertySet > xSeriesProp( aIt->m_xDataSeries, uno::UNO_QUERY );
         sal_Int32 nColor = 0;
         if( xSeriesProp.is() &&
-            ( xSeriesProp->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("Color"))) >>= nColor ))
+            ( xSeriesProp->getPropertyValue( "Color" ) >>= nColor ))
             spHeader->SetColor( Color( nColor ));
         spHeader->SetChartType( aIt->m_xChartType, aIt->m_bSwapXAndYAxis );
         spHeader->SetSeriesName(
@@ -1267,7 +1266,7 @@ void DataBrowser::RenewSeriesHeaders()
                         aIt->m_xDataSeries,
                         (aIt->m_xChartType.is() ?
                          aIt->m_xChartType->getRoleOfSequenceForSeriesLabel() :
-                         OUString( RTL_CONSTASCII_USTRINGPARAM("values-y"))))));
+                         OUString( "values-y")))));
         spHeader->SetRange( aIt->m_nStartColumn + 1, aIt->m_nEndColumn + 1 );
         spHeader->SetGetFocusHdl( aFocusLink );
         spHeader->SetEditChangedHdl( aSeriesHeaderChangedLink );

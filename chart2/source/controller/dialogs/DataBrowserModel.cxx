@@ -57,7 +57,7 @@ using namespace ::com::sun::star;
 
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
-using ::rtl::OUString;
+
 
 namespace
 {
@@ -70,7 +70,7 @@ OUString lcl_getRole(
     {
         try
         {
-            xProp->getPropertyValue( C2U("Role")) >>= aResult;
+            xProp->getPropertyValue( "Role" ) >>= aResult;
         }
         catch( const uno::Exception & ex )
         {
@@ -235,8 +235,8 @@ struct DataBrowserModel::tDataColumn
 {
     ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::XDataSeries >                m_xDataSeries;
-    sal_Int32                                                  m_nIndexInDataSeries;
-    ::rtl::OUString                                            m_aUIRoleName;
+    sal_Int32                                                      m_nIndexInDataSeries;
+    OUString                                                       m_aUIRoleName;
     ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::data::XLabeledDataSequence > m_xLabeledDataSequence;
     eCellType                                                  m_eCellType;
@@ -249,7 +249,7 @@ struct DataBrowserModel::tDataColumn
         const ::com::sun::star::uno::Reference<
         ::com::sun::star::chart2::XDataSeries > & xDataSeries,
         sal_Int32 nIndexInDataSeries,
-        ::rtl::OUString aUIRoleName,
+        OUString aUIRoleName,
         ::com::sun::star::uno::Reference<
         ::com::sun::star::chart2::data::XLabeledDataSequence >  xLabeledDataSequence,
         eCellType aCellType,
@@ -336,7 +336,7 @@ void DataBrowserModel::insertDataSeries( sal_Int32 nAfterColumnIndex )
 
             Reference< beans::XPropertySet > xSeriesProps( xSeries, uno::UNO_QUERY );
             if( xSeriesProps.is() )
-                xSeriesProps->getPropertyValue( C2U( "NumberFormat" )) >>= nSeriesNumberFormat;
+                xSeriesProps->getPropertyValue( "NumberFormat" ) >>= nSeriesNumberFormat;
         }
         else
         {
@@ -394,7 +394,7 @@ void DataBrowserModel::insertDataSeries( sal_Int32 nAfterColumnIndex )
                                 // labels
                                 Reference< chart2::data::XDataSequence > xNewLabelSeq(
                                     xDataProvider->createDataSequenceByRangeRepresentation(
-                                        OUString( RTL_CONSTASCII_USTRINGPARAM( "label " )) +
+                                        "label " +
                                         OUString::valueOf( nIndex )));
                                 lcl_copyDataSequenceProperties(
                                     aLSequences[nSeqIdx]->getLabel(), xNewLabelSeq );
@@ -409,7 +409,7 @@ void DataBrowserModel::insertDataSeries( sal_Int32 nAfterColumnIndex )
                     //give the new series the same number format as the former series especially for bubble charts thus the bubble size values can be edited with same format immidiately
                     Reference< beans::XPropertySet > xNewSeriesProps( xNewSeries, uno::UNO_QUERY );
                     if( xNewSeriesProps.is() )
-                        xNewSeriesProps->setPropertyValue( C2U( "NumberFormat" ), uno::makeAny( nSeriesNumberFormat ) );
+                        xNewSeriesProps->setPropertyValue( "NumberFormat" , uno::makeAny( nSeriesNumberFormat ) );
                 }
 
                 updateFromModel();
@@ -704,7 +704,7 @@ bool DataBrowserModel::setCellNumber( sal_Int32 nAtColumn, sal_Int32 nAtRow, dou
         setCellAny( nAtColumn, nAtRow, uno::makeAny( fValue ));
 }
 
-bool DataBrowserModel::setCellText( sal_Int32 nAtColumn, sal_Int32 nAtRow, const ::rtl::OUString & rText )
+bool DataBrowserModel::setCellText( sal_Int32 nAtColumn, sal_Int32 nAtRow, const OUString & rText )
 {
     return (getCellType( nAtColumn, nAtRow ) == TEXT) &&
         setCellAny( nAtColumn, nAtRow, uno::makeAny( rText ));
@@ -831,7 +831,7 @@ void DataBrowserModel::updateFromModel()
             Reference< chart2::XDataSeriesContainer > xSeriesCnt( aChartTypes[nCTIdx], uno::UNO_QUERY );
             if( xSeriesCnt.is())
             {
-                rtl::OUString aRoleForDataLabelNumberFormat = ChartTypeHelper::getRoleOfSequenceForDataLabelNumberFormatDetection( aChartTypes[nCTIdx] );
+                OUString aRoleForDataLabelNumberFormat = ChartTypeHelper::getRoleOfSequenceForDataLabelNumberFormatDetection( aChartTypes[nCTIdx] );
 
                 Sequence< Reference< chart2::XDataSeries > > aSeries( xSeriesCnt->getDataSeries());
                 lcl_tSharedSeqVec aSharedSequences( lcl_getSharedSequences( aSeries ));
@@ -877,7 +877,7 @@ void DataBrowserModel::updateFromModel()
                                 nSequenceNumberFormatKey = ExplicitValueProvider::getExplicitNumberFormatKeyForDataLabel(
                                     Reference< beans::XPropertySet >( xSeries, uno::UNO_QUERY ), xSeries, -1, xDiagram );
                             }
-                            else if( aRole.equals( C2U( "values-x" ) ) )
+                            else if( aRole.equals( "values-x" ) )
                                 nSequenceNumberFormatKey = nXAxisNumberFormat;
 
                             if( ::std::find_if( aSharedSequences.begin(), aSharedSequences.end(),
@@ -900,7 +900,7 @@ void DataBrowserModel::updateFromModel()
                         try
                         {
                             Reference< beans::XPropertySet > xProp( aCooSysSeq[nCooSysIdx], uno::UNO_QUERY );
-                            xProp->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("SwapXAndYAxis"))) >>= bSwapXAndYAxis;
+                            xProp->getPropertyValue( "SwapXAndYAxis" ) >>= bSwapXAndYAxis;
                         }
                         catch( const beans::UnknownPropertyException & ex )
                         {
