@@ -460,6 +460,7 @@ extern "C"
     extern void * filterconfig1_component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * fwk_component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * introspection_component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey );
+    extern void * localebe1_component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * package2_component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * reflection_component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * sfx_component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey );
@@ -532,18 +533,26 @@ Reference< XInterface > SAL_CALL loadSharedLibComponentFactory(
 
     // First test library names that aren't app-specific.
     static lib_to_component_mapping non_app_specific_map[] = {
+        // Sigh, the name under which the bootstrap component is looked for
+        // varies a lot? Or then I just have been confused by some mixed-up
+        // incremental build.
         { "bootstrap.uno" SAL_DLLEXTENSION, bootstrap_component_getFactory },
         { "bootstrap.uno.a", bootstrap_component_getFactory },
-        { "configmgr.uno.a", configmgr_component_getFactory },
-        { "i18npool.uno.a", i18npool_component_getFactory },
-        { "introspection.uno.a", introspection_component_getFactory },
+        { "libbootstrap.uno.a", bootstrap_component_getFactory },
+        // The rest seems to consistently have a "lib" prefix now
+        { "libconfigmgr.uno.a", configmgr_component_getFactory },
         { "libcomphelp" CPPU_STRINGIFY(CPPU_ENV) ".a", comphelp_component_getFactory },
         { "libexpwrap.uno.a", expwrap_component_getFactory },
         { "libfastsax.uno.a", fastsax_component_getFactory },
         { "libfilterconfiglo.a", filterconfig1_component_getFactory },
         { "libfwklo.a", fwk_component_getFactory },
+        { "libi18npool.uno.a", i18npool_component_getFactory },
+        { "libintrospection.uno.a", introspection_component_getFactory },
+        { "liblocalebe1.uno.a", localebe1_component_getFactory },
         { "libpackage2.a", package2_component_getFactory },
+        { "libreflection.uno.a", reflection_component_getFactory },
         { "libsfxlo.a", sfx_component_getFactory },
+        { "libstocservices.uno.a", stocservices_component_getFactory },
         { "libsvllo.a", svl_component_getFactory },
         { "libtklo.a", tk_component_getFactory },
         { "libucb1.a", ucb_component_getFactory },
@@ -551,8 +560,6 @@ Reference< XInterface > SAL_CALL loadSharedLibComponentFactory(
         { "libutllo.a", utl_component_getFactory },
         { "libvcllo.a", vcl_component_getFactory },
         { "libxstor.a", xstor_component_getFactory },
-        { "reflection.uno.a", reflection_component_getFactory },
-        { "stocservices.uno.a", stocservices_component_getFactory },
         { NULL, NULL }
     };
     for (int i = 0; pSym == NULL && non_app_specific_map[i].lib != NULL; ++i)
