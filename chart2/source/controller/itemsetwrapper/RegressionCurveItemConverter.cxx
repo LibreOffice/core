@@ -169,10 +169,10 @@ bool RegressionCurveItemConverter::ApplySpecialItem(
                 OSL_ASSERT( xEqProp.is());
                 bool bOldShow = false;
                 if( xEqProp.is() &&
-                    (xEqProp->getPropertyValue( C2U( "ShowEquation" )) >>= bOldShow) &&
+                    (xEqProp->getPropertyValue( "ShowEquation" ) >>= bOldShow) &&
                     bOldShow != bNewShow )
                 {
-                    xEqProp->setPropertyValue( C2U( "ShowEquation" ), uno::makeAny( bNewShow ));
+                    xEqProp->setPropertyValue( "ShowEquation" , uno::makeAny( bNewShow ));
                     bChanged = true;
                 }
             }
@@ -192,10 +192,10 @@ bool RegressionCurveItemConverter::ApplySpecialItem(
                 OSL_ASSERT( xEqProp.is());
                 bool bOldShow = false;
                 if( xEqProp.is() &&
-                    (xEqProp->getPropertyValue( C2U( "ShowCorrelationCoefficient" )) >>= bOldShow) &&
+                    (xEqProp->getPropertyValue( "ShowCorrelationCoefficient" ) >>= bOldShow) &&
                     bOldShow != bNewShow )
                 {
-                    xEqProp->setPropertyValue( C2U( "ShowCorrelationCoefficient" ), uno::makeAny( bNewShow ));
+                    xEqProp->setPropertyValue( "ShowCorrelationCoefficient" , uno::makeAny( bNewShow ));
                     bChanged = true;
                 }
             }
@@ -235,7 +235,7 @@ void RegressionCurveItemConverter::FillSpecialItem(
                 OSL_ASSERT( xEqProp.is());
                 bool bShow = false;
                 if( xEqProp.is() &&
-                    (xEqProp->getPropertyValue( C2U( "ShowEquation" )) >>= bShow))
+                    (xEqProp->getPropertyValue( "ShowEquation" ) >>= bShow))
                 {
                     rOutItemSet.Put( SfxBoolItem( nWhichId, bShow ));
                 }
@@ -252,7 +252,7 @@ void RegressionCurveItemConverter::FillSpecialItem(
                 OSL_ASSERT( xEqProp.is());
                 bool bShow = false;
                 if( xEqProp.is() &&
-                    (xEqProp->getPropertyValue( C2U( "ShowCorrelationCoefficient" )) >>= bShow))
+                    (xEqProp->getPropertyValue( "ShowCorrelationCoefficient" ) >>= bShow))
                 {
                     rOutItemSet.Put( SfxBoolItem( nWhichId, bShow ));
                 }
