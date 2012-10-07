@@ -67,7 +67,6 @@ namespace connectivity
             inline AliasMap::const_iterator begin() const { return m_aAliasMap.begin(); }
             inline AliasMap::const_iterator end() const { return m_aAliasMap.end(); }
 
-            bool isColumnSearchable( const ::rtl::OUString _alias ) const;
 
         private:
             void initialize( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB );

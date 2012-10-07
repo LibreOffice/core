@@ -137,16 +137,4 @@ void OColumnAlias::initialize( const ::com::sun::star::uno::Reference< ::com::su
     return pos->second.programmaticAsciiName;
 }
 
-//------------------------------------------------------------------
-bool OColumnAlias::isColumnSearchable( const ::rtl::OUString _alias ) const
-{
-    ::rtl::OString sProgrammatic = getProgrammaticNameOrFallbackToUTF8Alias( _alias );
-
-    return  (   !sProgrammatic.equals( "HomeCountry" )
-            &&  !sProgrammatic.equals( "WorkCountry" )
-            );
-    // for those, we know that they're not searchable in the Mozilla/LDAP implementation.
-    // There might be more ...
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
