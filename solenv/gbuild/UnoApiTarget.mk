@@ -278,9 +278,28 @@ endef
 # harm, by accident or careful design, on platforms where shared
 # libraries are used.)
 
+# We are experimenting with static linking on Android, too. There for
+# technical reasons to get around silly limitations in the OS, sigh.
+
+ifeq ($(DISABLE_DYNLOADING),TRUE)
+gb_UnoApiHeadersTarget_UDKAPI_always_comprehensive = TRUE
+endif
+
+# It seems that when using the latest Xcode and Clang for OS X, we
+# also neeed to always generate comprehensive headers for
+# udkapi. Otherwise we get assertion failures in saxparser when doing
+# i18npool, at least.
+
+ifeq ($(OS),MACOSX)
+ifeq ($(COM_GCC_IS_CLANG),TRUE)
+gb_UnoApiHeadersTarget_UDKAPI_always_comprehensive = TRUE
+endif
+endif
+
+
 $(call gb_UnoApiHeadersTarget_get_bootstrap_target,%) : \
 		$(gb_UnoApiHeadersTarget_CPPUMAKERTARGET)
-	$(if $(filter TRUEudkapi,$(DISABLE_DYNLOADING)$*), \
+	$(if $(filter TRUEudkapi,$(gb_UnoApiHeadersTarget_UDKAPI_always_comprehensive)$*), \
 		$(call gb_Output_announce,$*,$(true),HPB,3) \
 		$(call gb_UnoApiHeadersTarget__command,$@,$*,$(call gb_UnoApiHeadersTarget_get_bootstrap_dir,$*),-C), \
 	\
@@ -295,7 +314,7 @@ $(call gb_UnoApiHeadersTarget_get_comprehensive_target,%) : \
 
 $(call gb_UnoApiHeadersTarget_get_target,%) : \
 		$(gb_UnoApiHeadersTarget_CPPUMAKERTARGET)
-	$(if $(filter TRUEudkapi,$(DISABLE_DYNLOADING)$*), \
+	$(if $(filter TRUEudkapi,$(gb_UnoApiHeadersTarget_UDKAPI_always_comprehensive)$*), \
 		$(call gb_Output_announce,$*,$(true),HPP,3) \
 		$(call gb_UnoApiHeadersTarget__command,$@,$*,$(call gb_UnoApiHeadersTarget_get_dir,$*),-C), \
 	\
