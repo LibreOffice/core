@@ -618,12 +618,11 @@ void SfxDocTplService_Impl::getDirList()
 sal_Bool SfxDocTplService_Impl::needsUpdate()
 {
     OUString aPropName( PROPERTY_NEEDSUPDATE  );
-    sal_Bool bHasProperty = sal_False;
     sal_Bool bNeedsUpdate = sal_True;
     Any      aValue;
 
     // Get the template dir list
-    bHasProperty = getProperty( maRootContent, aPropName, aValue );
+    sal_Bool bHasProperty = getProperty( maRootContent, aPropName, aValue );
 
     if ( bHasProperty )
         aValue >>= bNeedsUpdate;

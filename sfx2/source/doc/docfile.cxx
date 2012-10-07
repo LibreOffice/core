@@ -325,6 +325,7 @@ SfxMedium_Impl::SfxMedium_Impl( SfxMedium* pAntiImplP ) :
     bIsStorage( false ),
     bUseInteractionHandler( true ),
     bAllowDefaultIntHdl( false ),
+    bDisposeStorage( false ),
     bStorageBasedOnInStream( false ),
     m_bSalvageMode( false ),
     m_bVersionsAlreadyLoaded( false ),
