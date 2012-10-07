@@ -54,7 +54,7 @@ DBG_NAME( BaseWindow )
 TYPEINIT0( BaseWindow )
 TYPEINIT1( SbxItem, SfxPoolItem );
 
-BaseWindow::BaseWindow( Window* pParent, const ScriptDocument& rDocument, ::rtl::OUString aLibName, ::rtl::OUString aName )
+BaseWindow::BaseWindow( Window* pParent, const ScriptDocument& rDocument, OUString aLibName, OUString aName )
     :Window( pParent, WinBits( WB_3DLOOK ) )
     ,m_aDocument( rDocument )
     ,m_aLibName( aLibName )
@@ -176,14 +176,14 @@ void BaseWindow::UpdateData()
 {
 }
 
-::rtl::OUString BaseWindow::GetTitle()
+OUString BaseWindow::GetTitle()
 {
-    return ::rtl::OUString();
+    return OUString();
 }
 
-::rtl::OUString BaseWindow::CreateQualifiedName()
+OUString BaseWindow::CreateQualifiedName()
 {
-    ::rtl::OUStringBuffer aName;
+    OUStringBuffer aName;
     if ( !m_aLibName.isEmpty() )
     {
         LibraryLocation eLocation = m_aDocument.getLibraryLocation( m_aLibName );
@@ -250,7 +250,7 @@ void BaseWindow::InsertLibInfo () const
 
 bool BaseWindow::Is (
     ScriptDocument const& rDocument,
-    rtl::OUString const& rLibName, rtl::OUString const& rName,
+    OUString const& rLibName, OUString const& rName,
     ItemType eType, bool bFindSuspended
 )
 {
@@ -521,7 +521,7 @@ void TabBar::Command( const CommandEvent& rCEvt )
         if (Shell* pShell = GetShell())
         {
             ScriptDocument aDocument( pShell->GetCurDocument() );
-            ::rtl::OUString aOULibName( pShell->GetCurLibName() );
+            OUString       aOULibName( pShell->GetCurLibName() );
             Reference< script::XLibraryContainer2 > xModLibContainer( aDocument.getLibraryContainer( E_SCRIPTS ), UNO_QUERY );
             Reference< script::XLibraryContainer2 > xDlgLibContainer( aDocument.getLibraryContainer( E_DIALOGS ), UNO_QUERY );
             if ( ( xModLibContainer.is() && xModLibContainer->hasByName( aOULibName ) && xModLibContainer->isLibraryReadOnly( aOULibName ) ) ||
@@ -651,7 +651,7 @@ void TabBar::Sort()
     }
 }
 
-void CutLines( ::rtl::OUString& rStr, sal_Int32 nStartLine, sal_Int32 nLines, bool bEraseTrailingEmptyLines )
+void CutLines( OUString& rStr, sal_Int32 nStartLine, sal_Int32 nLines, bool bEraseTrailingEmptyLines )
 {
     sal_Int32 nStartPos = 0;
     sal_Int32 nLine = 0;
@@ -678,7 +678,7 @@ void CutLines( ::rtl::OUString& rStr, sal_Int32 nStartLine, sal_Int32 nLines, bo
         else
             nEndPos++;
 
-        ::rtl::OUString aEndStr = rStr.copy( nEndPos );
+        OUString aEndStr = rStr.copy( nEndPos );
         rStr = rStr.copy( 0, nStartPos );
         rStr += aEndStr;
     }
@@ -694,7 +694,7 @@ void CutLines( ::rtl::OUString& rStr, sal_Int32 nStartLine, sal_Int32 nLines, bo
 
         if ( n > nStartPos )
         {
-            ::rtl::OUString aEndStr = rStr.copy( n );
+            OUString aEndStr = rStr.copy( n );
             rStr = rStr.copy( 0, nStartPos );
             rStr += aEndStr;
         }
@@ -737,8 +737,8 @@ LibInfos::~LibInfos ()
 
 void LibInfos::InsertInfo (
     ScriptDocument const& rDocument,
-    rtl::OUString const& rLibName,
-    rtl::OUString const& rCurrentName,
+    OUString const& rLibName,
+    OUString const& rCurrentName,
     ItemType eCurrentType
 )
 {
@@ -758,14 +758,14 @@ void LibInfos::RemoveInfoFor (ScriptDocument const& rDocument)
 }
 
 LibInfos::Item const* LibInfos::GetInfo (
-    ScriptDocument const& rDocument, rtl::OUString const& rLibName
+    ScriptDocument const& rDocument, OUString const& rLibName
 )
 {
     Map::iterator it = m_aMap.find(Key(rDocument, rLibName));
     return it != m_aMap.end() ? &it->second : 0;
 }
 
-LibInfos::Key::Key (ScriptDocument const& rDocument, rtl::OUString const& rLibName) :
+LibInfos::Key::Key (ScriptDocument const& rDocument, OUString const& rLibName) :
     m_aDocument(rDocument), m_aLibName(rLibName)
 { }
 
@@ -784,8 +784,8 @@ size_t LibInfos::Key::Hash::operator () (Key const& rKey) const
 
 LibInfos::Item::Item (
     ScriptDocument const& rDocument,
-    rtl::OUString const& rLibName,
-    rtl::OUString const& rCurrentName,
+    OUString const& rLibName,
+    OUString const& rCurrentName,
     ItemType eCurrentType
 ) :
     m_aDocument(rDocument),
@@ -797,10 +797,10 @@ LibInfos::Item::Item (
 LibInfos::Item::~Item ()
 { }
 
-bool QueryDel( const ::rtl::OUString& rName, const ResId& rId, Window* pParent )
+bool QueryDel( const OUString& rName, const ResId& rId, Window* pParent )
 {
-    ::rtl::OUString aQuery(rId.toString());
-    ::rtl::OUStringBuffer aNameBuf( rName );
+    OUString aQuery(rId.toString());
+    OUStringBuffer aNameBuf( rName );
     aNameBuf.append('\'');
     aNameBuf.insert(sal_Int32(0), sal_Unicode('\''));
     aQuery = aQuery.replaceAll("XX", aNameBuf.makeStringAndClear());
@@ -808,32 +808,32 @@ bool QueryDel( const ::rtl::OUString& rName, const ResId& rId, Window* pParent )
     return ( aQueryBox.Execute() == RET_YES );
 }
 
-bool QueryDelMacro( const ::rtl::OUString& rName, Window* pParent )
+bool QueryDelMacro( const OUString& rName, Window* pParent )
 {
     return QueryDel( rName, IDEResId( RID_STR_QUERYDELMACRO ), pParent );
 }
 
-bool QueryReplaceMacro( const ::rtl::OUString& rName, Window* pParent )
+bool QueryReplaceMacro( const OUString& rName, Window* pParent )
 {
     return QueryDel( rName, IDEResId( RID_STR_QUERYREPLACEMACRO ), pParent );
 }
 
-bool QueryDelDialog( const ::rtl::OUString& rName, Window* pParent )
+bool QueryDelDialog( const OUString& rName, Window* pParent )
 {
     return QueryDel( rName, IDEResId( RID_STR_QUERYDELDIALOG ), pParent );
 }
 
-bool QueryDelLib( const ::rtl::OUString& rName, bool bRef, Window* pParent )
+bool QueryDelLib( const OUString& rName, bool bRef, Window* pParent )
 {
     return QueryDel( rName, IDEResId( bRef ? RID_STR_QUERYDELLIBREF : RID_STR_QUERYDELLIB ), pParent );
 }
 
-bool QueryDelModule( const ::rtl::OUString& rName, Window* pParent )
+bool QueryDelModule( const OUString& rName, Window* pParent )
 {
     return QueryDel( rName, IDEResId( RID_STR_QUERYDELMODULE ), pParent );
 }
 
-bool QueryPassword( const Reference< script::XLibraryContainer >& xLibContainer, const ::rtl::OUString& rLibName, ::rtl::OUString& rPassword, bool bRepeat, bool bNewTitle )
+bool QueryPassword( const Reference< script::XLibraryContainer >& xLibContainer, const OUString& rLibName, OUString& rPassword, bool bRepeat, bool bNewTitle )
 {
     bool bOK = false;
     sal_uInt16 nRet = 0;
@@ -847,7 +847,7 @@ bool QueryPassword( const Reference< script::XLibraryContainer >& xLibContainer,
         // set new title
         if ( bNewTitle )
         {
-            ::rtl::OUString aTitle(IDE_RESSTR(RID_STR_ENTERPASSWORD));
+            OUString aTitle(IDE_RESSTR(RID_STR_ENTERPASSWORD));
             aTitle = aTitle.replaceAll("XX", rLibName);
             aDlg.SetText( aTitle );
         }
@@ -864,7 +864,7 @@ bool QueryPassword( const Reference< script::XLibraryContainer >& xLibContainer,
                 if ( xPasswd.is() && xPasswd->isLibraryPasswordProtected( rLibName ) && !xPasswd->isLibraryPasswordVerified( rLibName ) )
                 {
                     rPassword = aDlg.GetPassword();
-                    //                    ::rtl::OUString aOUPassword( rPassword );
+                    //                    OUString aOUPassword( rPassword );
                     bOK = xPasswd->verifyLibraryPassword( rLibName, rPassword );
 
                     if ( !bOK )

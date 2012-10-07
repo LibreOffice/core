@@ -58,7 +58,7 @@ void TreeListBox::RequestingChildren( SvLBoxEntry* pEntry )
     }
     else if ( eType == OBJ_TYPE_LIBRARY )
     {
-        ::rtl::OUString aOULibName( aDesc.GetLibName() );
+        OUString aOULibName( aDesc.GetLibName() );
 
         // check password
         bool bOK = true;
@@ -68,7 +68,7 @@ void TreeListBox::RequestingChildren( SvLBoxEntry* pEntry )
             Reference< script::XLibraryContainerPassword > xPasswd( xModLibContainer, UNO_QUERY );
             if ( xPasswd.is() && xPasswd->isLibraryPasswordProtected( aOULibName ) && !xPasswd->isLibraryPasswordVerified( aOULibName ) )
             {
-                ::rtl::OUString aPassword;
+                OUString aPassword;
                 bOK = QueryPassword( xModLibContainer, aOULibName, aPassword );
             }
         }
@@ -123,7 +123,7 @@ void TreeListBox::RequestingChildren( SvLBoxEntry* pEntry )
             || eType == OBJ_TYPE_NORMAL_MODULES
             || eType == OBJ_TYPE_CLASS_MODULES )
     {
-        ::rtl::OUString aLibName( aDesc.GetLibName() );
+        OUString aLibName( aDesc.GetLibName() );
         ImpCreateLibSubSubEntriesInVBAMode( pEntry, aDocument, aLibName );
     }
     else {
@@ -452,9 +452,9 @@ SvLBoxEntry* TreeListBox::FindRootEntry( const ScriptDocument& rDocument, Librar
     return 0;
 }
 
-::rtl::OUString CreateMgrAndLibStr( const ::rtl::OUString& rMgrName, const ::rtl::OUString& rLibName )
+OUString CreateMgrAndLibStr( const OUString& rMgrName, const OUString& rLibName )
 {
-    ::rtl::OUStringBuffer aName;
+    OUStringBuffer aName;
     aName.append('[');
     aName.append(rMgrName);
     aName.append(']');
