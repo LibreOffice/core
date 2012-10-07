@@ -33,6 +33,10 @@ namespace swui
     }
 }
 
+#ifdef DISABLE_DYNLOADING
+#define CreateDialogFactory SwCreateDialogFactory
+#endif
+
 extern "C"
 {
     SAL_DLLPUBLIC_EXPORT SwAbstractDialogFactory* CreateDialogFactory()

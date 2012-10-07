@@ -400,6 +400,10 @@ void PCXReader::ImplReadPalette( sal_uLong nCol )
 
 //================== GraphicImport - die exportierte Funktion ================
 
+#ifdef DISABLE_DYNLOADING
+#define GraphicImport ipxGraphicImport
+#endif
+
 extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool __LOADONCALLAPI
 GraphicImport(SvStream & rStream, Graphic & rGraphic, FilterConfigItem*, sal_Bool)
 {

@@ -834,16 +834,28 @@ void SfxApplication::MiscState_Impl(SfxItemSet &rSet)
     }
 }
 
+#ifndef DISABLE_SCRIPTING
+
 typedef rtl_uString* (SAL_CALL *basicide_choose_macro)(XModel*, sal_Bool, rtl_uString*);
 typedef void (SAL_CALL *basicide_macro_organizer)( sal_Int16 );
 
 #define DOSTRING( x )                       #x
 #define STRING( x )                         DOSTRING( x )
 
+#ifndef DISABLE_DYNLOADING
+
 extern "C" { static void SAL_CALL thisModule() {} }
+
+#else
+
+extern "C" rtl_uString* basicide_choose_macro(XModel*, sal_Bool, rtl_uString*);
+extern "C" void basicide_macro_organizer( sal_Int16 );
+
+#endif
 
 ::rtl::OUString ChooseMacro( const Reference< XModel >& rxLimitToDocument, sal_Bool bChooseOnly, const ::rtl::OUString& rMacroDesc = ::rtl::OUString() )
 {
+#ifndef DISABLE_DYNLOADING
     // get basctl dllname
     static ::rtl::OUString aLibName( SVLIBRARY( "basctl"  ) );
 
@@ -854,16 +866,24 @@ extern "C" { static void SAL_CALL thisModule() {} }
     // get symbol
     ::rtl::OUString aSymbol( "basicide_choose_macro"  );
     basicide_choose_macro pSymbol = (basicide_choose_macro) osl_getFunctionSymbol( handleMod, aSymbol.pData );
+#else
+#define pSymbol basicide_choose_macro
+#endif
 
     // call basicide_choose_macro in basctl
     rtl_uString* pScriptURL = pSymbol( rxLimitToDocument.get(), bChooseOnly, rMacroDesc.pData );
     ::rtl::OUString aScriptURL( pScriptURL );
     rtl_uString_release( pScriptURL );
     return aScriptURL;
+
+#ifdef DISABLE_DYNLOADING
+#undef pSymbol
+#endif
 }
 
 void MacroOrganizer( sal_Int16 nTabId )
 {
+#ifndef DISABLE_DYNLOADING
     // get basctl dllname
     static ::rtl::OUString aLibName( SVLIBRARY( "basctl"  ) );
 
@@ -874,10 +894,16 @@ void MacroOrganizer( sal_Int16 nTabId )
     // get symbol
     ::rtl::OUString aSymbol( "basicide_macro_organizer"  );
     basicide_macro_organizer pSymbol = (basicide_macro_organizer) osl_getFunctionSymbol( handleMod, aSymbol.pData );
-
     // call basicide_macro_organizer in basctl
     pSymbol( nTabId );
+#else
+    basicide_macro_organizer( nTabId );
+#endif
+
 }
+
+#endif
+
 
 #define RID_ERRBOX_MODULENOTINSTALLED     (RID_OFA_START + 72)
 
@@ -890,6 +916,7 @@ ResMgr* SfxApplication::GetOffResManager_Impl()
 
 namespace
 {
+#ifndef DISABLE_SCRIPTING
     Window* lcl_getDialogParent( const Reference< XFrame >& _rxFrame, Window* _pFallback )
     {
         if ( !_rxFrame.is() )
@@ -964,6 +991,7 @@ namespace
         }
         return NULL;
     }
+#endif // !DISABLE_SCRIPTING
 }
 
 static ::rtl::OUString getConfigurationStringValue(
@@ -1076,7 +1104,7 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
             }
             break;
         }
-
+#ifndef DISABLE_SCRIPTING
         case SID_BASICIDE_APPEAR:
         {
             SfxViewFrame* pView = lcl_getBasicIDEViewFrame( NULL );
@@ -1258,6 +1286,7 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
             rReq.Done();
         }
         break;
+#endif // !DISABLE_SCRIPTING
 
         case SID_OFFICE_CHECK_PLZ:
         {

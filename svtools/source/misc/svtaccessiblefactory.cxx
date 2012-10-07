@@ -265,7 +265,11 @@ namespace svt
     }
 
     //--------------------------------------------------------------------
+#ifndef DISABLE_DYNLOADING
     extern "C" { static void SAL_CALL thisModule() {} }
+#else
+    extern "C" void* getSvtAccessibilityComponentFactory();
+#endif
 
     void AccessibleFactoryAccess::ensureInitialized()
     {
@@ -281,6 +285,7 @@ namespace svt
             // load the library implementing the factory
             if ( !s_pFactory.get() )
             {
+#ifndef DISABLE_DYNLOADING
                 const ::rtl::OUString sModuleName( SVLIBRARY( "acc" ));
                 s_hAccessibleImplementationModule = osl_loadModuleRelative( &thisModule, sModuleName.pData, 0 );
                 if ( s_hAccessibleImplementationModule != NULL )
@@ -291,7 +296,9 @@ namespace svt
 
                 }
                 OSL_ENSURE( s_pAccessibleFactoryFunc, "ac_registerClient: could not load the library, or not retrieve the needed symbol!" );
-
+#else
+                s_pAccessibleFactoryFunc = getSvtAccessibilityComponentFactory;
+#endif
                 // get a factory instance
                 if ( s_pAccessibleFactoryFunc )
                 {

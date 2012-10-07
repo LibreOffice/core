@@ -36,6 +36,10 @@ namespace scui
     }
 }
 
+#ifdef DISABLE_DYNLOADING
+#define CreateDialogFactory ScCreateDialogFactory
+#endif
+
 extern "C"
 {
     SAL_DLLPUBLIC_EXPORT ScAbstractDialogFactory* CreateDialogFactory()

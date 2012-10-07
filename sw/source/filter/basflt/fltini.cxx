@@ -126,7 +126,11 @@ inline void _SetFltPtr( sal_uInt16 rPos, SwRead pReader )
 
 namespace {
 
+#ifndef DISABLE_DYNLOADING
+
 extern "C" { static void SAL_CALL thisModule() {} }
+
+#endif
 
 }
 
@@ -153,6 +157,8 @@ Filters::~Filters()
     }
 }
 
+#ifndef DISABLE_DYNLOADING
+
 oslGenericFunction Filters::GetMswordLibSymbol( const char *pSymbol )
 {
     if (!msword_.is())
@@ -164,6 +170,8 @@ oslGenericFunction Filters::GetMswordLibSymbol( const char *pSymbol )
         return msword_.getFunctionSymbol( ::rtl::OUString::createFromAscii( pSymbol ) );
     return NULL;
 }
+
+#endif
 
 }
 
@@ -818,44 +826,75 @@ void SwAsciiOptions::WriteUserData( String& rStr )
         rStr += ',';
 }
 
+#ifdef DISABLE_DYNLOADING
+
+extern "C" {
+    Reader *ImportRTF();
+    void ExportRTF( const String&, const String& rBaseURL, WriterRef& );
+    Reader *ImportDOC();
+    void ExportDOC( const String&, const String& rBaseURL, WriterRef& );
+    sal_uLong SaveOrDelMSVBAStorage_ww8( SfxObjectShell&, SotStorage&, sal_Bool, const String& );
+    sal_uLong GetSaveWarningOfMSVBAStorage_ww8( SfxObjectShell& );
+}
+
+#endif
+
 Reader* GetRTFReader()
 {
+#ifndef DISABLE_DYNLOADING
+
     FnGetReader pFunction = reinterpret_cast<FnGetReader>( SwGlobals::getFilters().GetMswordLibSymbol( "ImportRTF" ) );
 
     if ( pFunction )
         return (*pFunction)();
 
     return NULL;
+#else
+    return ImportRTF();
+#endif
+
 }
 
 void GetRTFWriter( const String& rFltName, const String& rBaseURL, WriterRef& xRet )
 {
+#ifndef DISABLE_DYNLOADING
     FnGetWriter pFunction = reinterpret_cast<FnGetWriter>( SwGlobals::getFilters().GetMswordLibSymbol( "ExportRTF" ) );
 
     if ( pFunction )
         (*pFunction)( rFltName, rBaseURL, xRet );
     else
         xRet = WriterRef(0);
+#else
+    ExportRTF( rFltName, rBaseURL, xRet );
+#endif
 }
 
 Reader* GetWW8Reader()
 {
+#ifndef DISABLE_DYNLOADING
     FnGetReader pFunction = reinterpret_cast<FnGetReader>( SwGlobals::getFilters().GetMswordLibSymbol( "ImportDOC" ) );
 
     if ( pFunction )
         return (*pFunction)();
 
     return NULL;
+#else
+    return ImportDOC();
+#endif
 }
 
 void GetWW8Writer( const String& rFltName, const String& rBaseURL, WriterRef& xRet )
 {
+#ifndef DISABLE_DYNLOADING
     FnGetWriter pFunction = reinterpret_cast<FnGetWriter>( SwGlobals::getFilters().GetMswordLibSymbol( "ExportDOC" ) );
 
     if ( pFunction )
         (*pFunction)( rFltName, rBaseURL, xRet );
     else
         xRet = WriterRef(0);
+#else
+    ExportDOC( rFltName, rBaseURL, xRet );
+#endif
 }
 
 typedef sal_uLong ( __LOADONCALLAPI *SaveOrDel )( SfxObjectShell&, SotStorage&, sal_Bool, const String& );
@@ -863,18 +902,26 @@ typedef sal_uLong ( __LOADONCALLAPI *GetSaveWarning )( SfxObjectShell& );
 
 sal_uLong SaveOrDelMSVBAStorage( SfxObjectShell& rDoc, SotStorage& rStor, sal_Bool bSaveInto, const String& rStorageName )
 {
+#ifndef DISABLE_DYNLOADING
     SaveOrDel pFunction = reinterpret_cast<SaveOrDel>( SwGlobals::getFilters().GetMswordLibSymbol( "SaveOrDelMSVBAStorage_ww8" ) );
     if( pFunction )
-                return pFunction( rDoc, rStor, bSaveInto, rStorageName );
-        return ERRCODE_NONE;
+        return pFunction( rDoc, rStor, bSaveInto, rStorageName );
+    return ERRCODE_NONE;
+#else
+    return SaveOrDelMSVBAStorage_ww8( rDoc, rStor, bSaveInto, rStorageName );
+#endif
 }
 
 sal_uLong GetSaveWarningOfMSVBAStorage( SfxObjectShell &rDocS )
 {
+#ifndef DISABLE_DYNLOADING
     GetSaveWarning pFunction = reinterpret_cast<GetSaveWarning>( SwGlobals::getFilters().GetMswordLibSymbol( "GetSaveWarningOfMSVBAStorage_ww8" ) );
     if( pFunction )
-                        return pFunction( rDocS );
-        return ERRCODE_NONE;
+        return pFunction( rDocS );
+    return ERRCODE_NONE;
+#else
+    return GetSaveWarningOfMSVBAStorage_ww8( rDocS );
+#endif
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

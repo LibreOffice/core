@@ -22,7 +22,7 @@
 
 #include "commontypes.hxx"
 
-#if defined(WNT) || defined (UNX)
+#if defined(WNT) || (defined (UNX) && !defined(ANDROID) && !defined(IOS))
 #define HAVE_ODBC_SUPPORT
 #endif
 

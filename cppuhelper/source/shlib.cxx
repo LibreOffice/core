@@ -595,7 +595,9 @@ Reference< XInterface > SAL_CALL loadSharedLibComponentFactory(
 
     if (! xRet.is())
     {
+#ifndef DISABLE_DYNLOADING
         osl_unloadModule( lib );
+#endif
 #if OSL_DEBUG_LEVEL > 1
         out( "### cannot activate factory: " );
         out( aExcMsg );

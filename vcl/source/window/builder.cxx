@@ -25,6 +25,10 @@
 #include <svids.hrc>
 #include <window.h>
 
+#ifdef DISABLE_DYNLOADING
+#include <dlfcn.h>              //  For RTLD_DEFAULT
+#endif
+
 namespace
 {
     SymbolType mapStockToSymbol(OString sType)
@@ -474,7 +478,9 @@ bool VclBuilder::extractImage(const OString &id, stringmap &rMap)
     return false;
 }
 
+#ifndef DISABLE_DYNLOADING
 extern "C" { static void SAL_CALL thisModule() {} }
+#endif
 
 Window *VclBuilder::makeObject(Window *pParent, const OString &name, const OString &id, stringmap &rMap)
 {
@@ -664,6 +670,7 @@ Window *VclBuilder::makeObject(Window *pParent, const OString &name, const OStri
         sal_Int32 nDelim = name.indexOf(':');
         if (nDelim != -1)
         {
+#ifndef DISABLE_DYNLOADING
             OUStringBuffer sModule;
 #ifdef SAL_DLLPREFIX
             sModule.append(SAL_DLLPREFIX);
@@ -672,10 +679,15 @@ Window *VclBuilder::makeObject(Window *pParent, const OString &name, const OStri
 #ifdef SAL_DLLEXTENSION
             sModule.append(SAL_DLLEXTENSION);
 #endif
+#endif
             OUString sFunction(OStringToOUString(OString("make") + name.copy(nDelim+1), RTL_TEXTENCODING_UTF8));
+#ifndef DISABLE_DYNLOADING
             osl::Module aModule;
             aModule.loadRelative(&thisModule, sModule.makeStringAndClear());
             customMakeWidget pFunction = (customMakeWidget)aModule.getFunctionSymbol(sFunction);
+#else
+            customMakeWidget pFunction = (customMakeWidget)osl_getFunctionSymbol((oslModule) RTLD_DEFAULT, sFunction.pData);
+#endif
             if (pFunction)
                 pWindow = (*pFunction)(pParent, rMap);
         }

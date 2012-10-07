@@ -89,7 +89,14 @@ friend class ModuleCollection;
     osl::Module* pInstance;
 public:
     ModuleData(const rtl::OUString& rStr, osl::Module* pInst) : aName(rStr), pInstance(pInst) {}
-    ModuleData(const ModuleData& rData) : aName(rData.aName) {pInstance = new osl::Module(aName);}
+    ModuleData(const ModuleData& rData) : aName(rData.aName)
+    {
+#ifndef DISABLE_DYNLOADING
+        pInstance = new osl::Module(aName);
+#else
+        pInstance = NULL;
+#endif
+    }
     ~ModuleData() { delete pInstance; }
 
     const rtl::OUString& GetName() const { return aName; }
@@ -174,6 +181,10 @@ ModuleCollection aModuleCollection;
 
 bool InitExternalFunc(const rtl::OUString& rModuleName)
 {
+#ifdef DISABLE_DYNLOADING
+    (void) rModuleName;
+    return false;
+#else
     // Module already loaded?
     const ModuleData* pTemp = aModuleCollection.findByName(rModuleName);
     if (pTemp)
@@ -252,6 +263,7 @@ bool InitExternalFunc(const rtl::OUString& rModuleName)
     else
         delete pLib;
     return bRet;
+#endif
 }
 
 //------------------------------------------------------------------------
@@ -265,6 +277,10 @@ void ExitExternalFunc()
 
 bool FuncData::Call(void** ppParam) const
 {
+#ifdef DISABLE_DYNLOADING
+    (void) ppParam;
+    return false;
+#else
     bool bRet = false;
     osl::Module* pLib = pModuleData->GetInstance();
     FARPROC fProc = (FARPROC)pLib->getFunctionSymbol(aFuncName);
@@ -354,12 +370,17 @@ bool FuncData::Call(void** ppParam) const
         }
     }
     return bRet;
+#endif
 }
 
 //------------------------------------------------------------------------
 
 bool FuncData::Unadvice( double nHandle )
 {
+#ifdef DISABLE_DYNLOADING
+    (void) nHandle;
+    return false;
+#else
     bool bRet = false;
     osl::Module* pLib = pModuleData->GetInstance();
     FARPROC fProc = (FARPROC)pLib->getFunctionSymbol(UNADVICE);
@@ -369,6 +390,7 @@ bool FuncData::Unadvice( double nHandle )
         bRet = true;
     }
     return bRet;
+#endif
 }
 
 //------------------------------------------------------------------------

@@ -29,6 +29,8 @@
 
 namespace cppu { namespace detail {
 
+#ifndef DISABLE_DYNLOADING
+
 ::oslModule loadModule(rtl::OUString const & name) {
     rtl::OUStringBuffer b;
 #if defined SAL_DLLPREFIX
@@ -41,6 +43,8 @@ namespace cppu { namespace detail {
         b.makeStringAndClear().pData,
         SAL_LOADMODULE_GLOBAL | SAL_LOADMODULE_LAZY);
 }
+
+#endif
 
 } }
 

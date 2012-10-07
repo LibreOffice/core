@@ -742,6 +742,10 @@ sal_Bool TGAReader::ImplReadPalette()
 
 //================== GraphicImport - die exportierte Funktion ================
 
+#ifdef DISABLE_DYNLOADING
+#define GraphicImport itgGraphicImport
+#endif
+
 extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool __LOADONCALLAPI
 GraphicImport(SvStream & rStream, Graphic & rGraphic, FilterConfigItem*, sal_Bool)
 {

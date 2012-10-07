@@ -34,6 +34,10 @@
 #include "sddlgfact.hxx"
 #include "sal/types.h"
 
+#ifdef DISABLE_DYNLOADING
+#define CreateDialogFactory SdCreateDialogFactory
+#endif
+
 extern "C"
 {
     SAL_DLLPUBLIC_EXPORT SdAbstractDialogFactory* CreateDialogFactory()

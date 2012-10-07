@@ -178,7 +178,11 @@ namespace toolkit
     }
 
     //--------------------------------------------------------------------
+#ifndef DISABLE_DYNLOADING
     extern "C" { static void SAL_CALL thisModule() {} }
+#else
+    extern "C" void *getStandardAccessibleFactory();
+#endif
 
     void AccessibilityClient::ensureInitialized()
     {
@@ -194,6 +198,7 @@ namespace toolkit
             // load the library implementing the factory
             if ( !s_pFactory.get() )
             {
+#ifndef DISABLE_DYNLOADING
                 const ::rtl::OUString sModuleName( SVLIBRARY( "acc" ) );
                 s_hAccessibleImplementationModule = osl_loadModuleRelative( &thisModule, sModuleName.pData, 0 );
                 if ( s_hAccessibleImplementationModule != NULL )
@@ -205,6 +210,9 @@ namespace toolkit
 
                 }
                 OSL_ENSURE( s_pAccessibleFactoryFunc, "AccessibilityClient::ensureInitialized: could not load the library, or not retrieve the needed symbol!" );
+#else
+                s_pAccessibleFactoryFunc = getStandardAccessibleFactory;
+#endif
 
                 // get a factory instance
                 if ( s_pAccessibleFactoryFunc )

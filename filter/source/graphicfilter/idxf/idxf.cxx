@@ -29,6 +29,10 @@ class FilterConfigItem;
 
 //================== GraphicImport - die exportierte Funktion ================
 
+#ifdef DISABLE_DYNLOADING
+#define GraphicImport idxGraphicImport
+#endif
+
 extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool __LOADONCALLAPI
 GraphicImport(SvStream & rStream, Graphic & rGraphic, FilterConfigItem*, sal_Bool)
 {

@@ -558,6 +558,10 @@ void GIFWriter::WriteTerminator()
 
 // ------------------------------------------------------------------------
 
+#ifdef DISABLE_DYNLOADING
+#define GraphicExport egiGraphicExport
+#endif
+
 extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool __LOADONCALLAPI
 GraphicExport( SvStream& rStream, Graphic& rGraphic,
                                                FilterConfigItem* pConfigItem, sal_Bool )

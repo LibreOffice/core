@@ -105,7 +105,16 @@ namespace svxform
     }
 
     //--------------------------------------------------------------------
+
+#ifndef DISABLE_DYNLOADING
+
     extern "C" { static void SAL_CALL thisModule() {} }
+
+#else
+
+    extern "C" void * createDataAccessToolsFactory();
+
+#endif
 
     void ODbtoolsClient::registerClient()
     {
@@ -115,6 +124,7 @@ namespace svxform
             OSL_ENSURE(NULL == s_hDbtoolsModule, "ODbtoolsClient::registerClient: inconsistence: already have a module!");
             OSL_ENSURE(NULL == s_pFactoryCreationFunc, "ODbtoolsClient::registerClient: inconsistence: already have a factory function!");
 
+#ifndef DISABLE_DYNLOADING
             const ::rtl::OUString sModuleName( SVLIBRARY( "dbtools" )
             );
 
@@ -137,6 +147,9 @@ namespace svxform
                     s_hDbtoolsModule = NULL;
                 }
             }
+#else
+            s_pFactoryCreationFunc = createDataAccessToolsFactory;
+#endif
         }
     }
 
@@ -146,9 +159,11 @@ namespace svxform
         ::osl::MutexGuard aGuard(theODbtoolsClientMutex::get());
         if (0 == --s_nClients)
         {
+#ifndef DISABLE_DYNLOADING
             s_pFactoryCreationFunc = NULL;
             if (s_hDbtoolsModule)
                 osl_unloadModule(s_hDbtoolsModule);
+#endif
             s_hDbtoolsModule = NULL;
         }
 

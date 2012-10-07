@@ -49,14 +49,27 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::task;
 using namespace ::com::sun::star::frame;
 
-typedef sal_Bool ( __LOADONCALLAPI *ExportPPT )( const std::vector< com::sun::star::beans::PropertyValue >&, SvStorageRef&,
+typedef sal_Bool ( __LOADONCALLAPI *ExportPPTPointer )( const std::vector< com::sun::star::beans::PropertyValue >&, SvStorageRef&,
                                              Reference< XModel > &,
                                              Reference< XStatusIndicator > &,
                                              SvMemoryStream*, sal_uInt32 nCnvrtFlags );
 
-typedef sal_Bool ( SAL_CALL *ImportPPT )( SdDrawDocument*, SvStream&, SvStorage&, SfxMedium& );
+typedef sal_Bool ( SAL_CALL *ImportPPTPointer )( SdDrawDocument*, SvStream&, SvStorage&, SfxMedium& );
 
-typedef sal_Bool ( __LOADONCALLAPI *SaveVBA )( SfxObjectShell&, SvMemoryStream*& );
+typedef sal_Bool ( __LOADONCALLAPI *SaveVBAPointer )( SfxObjectShell&, SvMemoryStream*& );
+
+#ifdef DISABLE_DYNLOADING
+
+extern "C" sal_Bool ExportPPT( const std::vector< com::sun::star::beans::PropertyValue >&, SvStorageRef&,
+                               Reference< XModel > &,
+                               Reference< XStatusIndicator > &,
+                               SvMemoryStream*, sal_uInt32 nCnvrtFlags );
+
+extern "C" sal_Bool ImportPPT( SdDrawDocument*, SvStream&, SvStorage&, SfxMedium& );
+
+extern "C" sal_Bool SaveVBA( SfxObjectShell&, SvMemoryStream*& );
+
+#endif
 
 // ---------------
 // - SdPPTFilter -
@@ -102,16 +115,22 @@ sal_Bool SdPPTFilter::Import()
                 mrMedium.SetError( ERRCODE_SVX_READ_FILTER_PPOINT, OSL_LOG_PREFIX );
             else
             {
+#ifndef DISABLE_DYNLOADING
                 ::osl::Module* pLibrary = OpenLibrary( mrMedium.GetFilter()->GetUserData() );
                 if ( pLibrary )
                 {
-                    ImportPPT PPTImport = reinterpret_cast< ImportPPT >( pLibrary->getFunctionSymbol( "ImportPPT" ) );
+                    ImportPPTPointer PPTImport = reinterpret_cast< ImportPPT >( pLibrary->getFunctionSymbol( "ImportPPT" ) );
                     if ( PPTImport )
                         bRet = PPTImport( &mrDocument, *pDocStream, *pStorage, mrMedium );
 
                     if ( !bRet )
                         mrMedium.SetError( SVSTREAM_WRONGVERSION, OSL_LOG_PREFIX );
                 }
+#else
+                bRet = ImportPPT( &mrDocument, *pDocStream, *pStorage, mrMedium );
+                if ( !bRet )
+                    mrMedium.SetError( SVSTREAM_WRONGVERSION, OSL_LOG_PREFIX );
+#endif
             }
 
             delete pDocStream;
@@ -125,15 +144,23 @@ sal_Bool SdPPTFilter::Import()
 
 sal_Bool SdPPTFilter::Export()
 {
+#ifndef DISABLE_DYNLOADING
     ::osl::Module* pLibrary = OpenLibrary( mrMedium.GetFilter()->GetUserData() );
+#endif
     sal_Bool        bRet = sal_False;
 
+#ifndef DISABLE_DYNLOADING
     if( pLibrary )
+#endif
     {
         if( mxModel.is() )
         {
             SotStorageRef    xStorRef = new SotStorage( mrMedium.GetOutStream(), sal_False );
-            ExportPPT       PPTExport = reinterpret_cast<ExportPPT>(pLibrary->getFunctionSymbol( "ExportPPT" ));
+#ifndef DISABLE_DYNLOADING
+            ExportPPTPointer PPTExport = reinterpret_cast<ExportPPT>(pLibrary->getFunctionSymbol( "ExportPPT" ));
+#else
+            ExportPPTPointer PPTExport = ExportPPT;
+#endif
 
             if( PPTExport && xStorRef.Is() )
             {
@@ -166,7 +193,9 @@ sal_Bool SdPPTFilter::Export()
                 xStorRef->Commit();
             }
         }
+#ifndef DISABLE_DYNLOADING
         delete pLibrary;
+#endif
     }
     return bRet;
 }
@@ -176,15 +205,19 @@ void SdPPTFilter::PreSaveBasic()
     const SvtFilterOptions& rFilterOptions = SvtFilterOptions::Get();
     if( rFilterOptions.IsLoadPPointBasicStorage() )
     {
+#ifndef DISABLE_DYNLOADING
         ::osl::Module* pLibrary = OpenLibrary( mrMedium.GetFilter()->GetUserData() );
         if( pLibrary )
         {
-            SaveVBA pSaveVBA= reinterpret_cast<SaveVBA>(pLibrary->getFunctionSymbol( "SaveVBA" ));
+            SaveVBAPointer pSaveVBA= reinterpret_cast<SaveVBA>(pLibrary->getFunctionSymbol( "SaveVBA" ));
             if( pSaveVBA )
             {
                 pSaveVBA( (SfxObjectShell&) mrDocShell, pBas );
             }
         }
+#else
+        SaveVBA( (SfxObjectShell&) mrDocShell, pBas );
+#endif
     }
 }
 
