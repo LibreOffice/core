@@ -119,7 +119,7 @@ sal_Bool SdPPTFilter::Import()
                 ::osl::Module* pLibrary = OpenLibrary( mrMedium.GetFilter()->GetUserData() );
                 if ( pLibrary )
                 {
-                    ImportPPTPointer PPTImport = reinterpret_cast< ImportPPT >( pLibrary->getFunctionSymbol( "ImportPPT" ) );
+                    ImportPPTPointer PPTImport = reinterpret_cast< ImportPPTPointer >( pLibrary->getFunctionSymbol( "ImportPPT" ) );
                     if ( PPTImport )
                         bRet = PPTImport( &mrDocument, *pDocStream, *pStorage, mrMedium );
 
@@ -157,7 +157,7 @@ sal_Bool SdPPTFilter::Export()
         {
             SotStorageRef    xStorRef = new SotStorage( mrMedium.GetOutStream(), sal_False );
 #ifndef DISABLE_DYNLOADING
-            ExportPPTPointer PPTExport = reinterpret_cast<ExportPPT>(pLibrary->getFunctionSymbol( "ExportPPT" ));
+            ExportPPTPointer PPTExport = reinterpret_cast<ExportPPTPointer>(pLibrary->getFunctionSymbol( "ExportPPT" ));
 #else
             ExportPPTPointer PPTExport = ExportPPT;
 #endif
@@ -209,7 +209,7 @@ void SdPPTFilter::PreSaveBasic()
         ::osl::Module* pLibrary = OpenLibrary( mrMedium.GetFilter()->GetUserData() );
         if( pLibrary )
         {
-            SaveVBAPointer pSaveVBA= reinterpret_cast<SaveVBA>(pLibrary->getFunctionSymbol( "SaveVBA" ));
+            SaveVBAPointer pSaveVBA= reinterpret_cast<SaveVBAPointer>(pLibrary->getFunctionSymbol( "SaveVBA" ));
             if( pSaveVBA )
             {
                 pSaveVBA( (SfxObjectShell&) mrDocShell, pBas );
