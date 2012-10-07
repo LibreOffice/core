@@ -402,6 +402,14 @@ gb_ExtensionTarget_LICENSEFILE_DEFAULT := $(OUTDIR)/bin/osl/LICENSE
 
 gb_UnpackedTarget_TARFILE_LOCATION := $(TARFILE_LOCATION)
 
+# UnoApiHeadersTarget class
+
+ifeq ($(DISABLE_DYNLOADING),TRUE)
+gb_UnoApiHeadersTarget_select_variant = $(if $(filter udkapi,$(1)),comprehensive,$(2))
+else
+gb_UnoApiHeadersTarget_select_variant = $(2)
+endif
+
 # Python
 gb_PYTHON_PRECOMMAND := $(gb_Helper_set_ld_path) PYTHONHOME=$(OUTDIR)/lib/python PYTHONPATH=$(OUTDIR)/lib/python:$(OUTDIR)/lib/python/lib-dynload
 

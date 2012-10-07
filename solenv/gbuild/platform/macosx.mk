@@ -409,6 +409,18 @@ gb_ExtensionTarget_LICENSEFILE_DEFAULT := $(OUTDIR)/bin/osl/LICENSE
 
 gb_UnpackedTarget_TARFILE_LOCATION := $(TARFILE_LOCATION)
 
+# UnoApiHeadersTarget class
+
+# It seems that when using the latest Xcode and Clang for OS X, we
+# also neeed to always generate comprehensive headers for
+# udkapi. Otherwise we get assertion failures in saxparser when doing
+# i18npool, at least.
+ifneq ($(filter TRUE,$(COM_GCC_IS_CLANG) $(DISABLE_DYNLOADING)),)
+gb_UnoApiHeadersTarget_select_variant = $(if $(filter udkapi,$(1)),comprehensive,$(2))
+else
+gb_UnoApiHeadersTarget_select_variant = $(2)
+endif
+
 # Python
 gb_PYTHON_PRECOMMAND := DYLD_LIBRARY_PATH=$(OUTDIR)/lib
 

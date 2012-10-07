@@ -253,6 +253,43 @@ endef
 
 # UnoApiHeadersTarget
 
+# defined by platform
+#  gb_UnoApiHeadersTarget_select_variant
+
+# Allow to redefine header variant.
+#
+# On iOS we use static linking because dynamic loading of own code
+# isn't allowed by the iOS App Store rules, and we want our code to be
+# eventually distributable there as part of apps.
+#
+# To avoid problems that this causes together with the lovely
+# intentional breaking of the One Definition Rule, for iOS we always
+# generate comprehensive headers for certain type RDBS. (The ODR
+# breakage doesn't harm, by accident or careful design, on platforms
+# where shared libraries are used.) To avoid generating the same headers
+# more than once, we are silently "redirecting" the target to point to
+# comprehensive headers instead.
+#
+# Example:
+# If gb_UnoApiHeadersTarget_select_variant is defined as
+#
+# ifeq ($(DISABLE_DYNLOADING),YES)
+# gb_UnoApiHeadersTarget_select_variant = $(if $(filter udkapi,$(1)),comprehensive,$(2))
+# else
+# gb_UnoApiHeadersTarget_select_variant = $(2)
+# endif
+#
+# then, for the DISABLE_DYNLOADING case, whenever a makefile uses
+# $(call gb_UnoApiHeadersTarget_get_target,udkapi) or $(call
+# gb_UnoApiHeadersTarget_get_dir,udkapi), it will get target or dir for
+# comprehensive headers instead.
+#
+# We are experimenting with static linking on Android, too. There for
+# technical reasons to get around silly limitations in the OS, sigh.
+#
+# gb_UnoApiHeadersTarget_select_variant api default-variant
+# define gb_UnoApiHeadersTarget_select_variant
+
 gb_UnoApiHeadersTarget_CPPUMAKERTARGET := $(call gb_Executable_get_target_for_build,cppumaker)
 gb_UnoApiHeadersTarget_CPPUMAKERCOMMAND := $(gb_Helper_set_ld_path) SOLARBINDIR=$(OUTDIR_FOR_BUILD)/bin $(gb_UnoApiHeadersTarget_CPPUMAKERTARGET)
 
@@ -268,71 +305,32 @@ define gb_UnoApiHeadersTarget__command
 
 endef
 
-# On iOS we use static linking because dynamic loading of own code
-# isn't allowed by the iOS App Store rules, and we want our code to be
-# eventually distributable there as part of apps.
-
-# To avoid problems that this causes together with the lovely
-# intentional breaking of the One Definition Rule, for iOS we always
-# generate comprehensive headers for udkapi. (The ODR breakage doesn't
-# harm, by accident or careful design, on platforms where shared
-# libraries are used.)
-
-# We are experimenting with static linking on Android, too. There for
-# technical reasons to get around silly limitations in the OS, sigh.
-
-ifeq ($(DISABLE_DYNLOADING),TRUE)
-gb_UnoApiHeadersTarget_UDKAPI_always_comprehensive = TRUE
-endif
-
-# It seems that when using the latest Xcode and Clang for OS X, we
-# also neeed to always generate comprehensive headers for
-# udkapi. Otherwise we get assertion failures in saxparser when doing
-# i18npool, at least.
-
-ifeq ($(OS),MACOSX)
-ifeq ($(COM_GCC_IS_CLANG),TRUE)
-gb_UnoApiHeadersTarget_UDKAPI_always_comprehensive = TRUE
-endif
-endif
-
-
-$(call gb_UnoApiHeadersTarget_get_bootstrap_target,%) : \
+$(call gb_UnoApiHeadersTarget_get_real_bootstrap_target,%) : \
 		$(gb_UnoApiHeadersTarget_CPPUMAKERTARGET)
-	$(if $(filter TRUEudkapi,$(gb_UnoApiHeadersTarget_UDKAPI_always_comprehensive)$*), \
-		$(call gb_Output_announce,$*,$(true),HPB,3) \
-		$(call gb_UnoApiHeadersTarget__command,$@,$*,$(call gb_UnoApiHeadersTarget_get_bootstrap_dir,$*),-C), \
-	\
-		$(call gb_Output_announce,$*,$(true),HPB,3) \
-		$(call gb_UnoApiHeadersTarget__command,$@,$*,$(call gb_UnoApiHeadersTarget_get_bootstrap_dir,$*)) \
-	)
+	$(call gb_Output_announce,$*,$(true),HPB,3) \
+	$(call gb_UnoApiHeadersTarget__command,$@,$*,$(call gb_UnoApiHeadersTarget_get_bootstrap_dir,$*))
 
-$(call gb_UnoApiHeadersTarget_get_comprehensive_target,%) : \
+$(call gb_UnoApiHeadersTarget_get_real_comprehensive_target,%) : \
 		$(gb_UnoApiHeadersTarget_CPPUMAKERTARGET)
 	$(call gb_Output_announce,$*,$(true),HPC,3)
 	$(call gb_UnoApiHeadersTarget__command,$@,$*,$(call gb_UnoApiHeadersTarget_get_comprehensive_dir,$*),-C)
 
-$(call gb_UnoApiHeadersTarget_get_target,%) : \
+$(call gb_UnoApiHeadersTarget_get_real_target,%) : \
 		$(gb_UnoApiHeadersTarget_CPPUMAKERTARGET)
-	$(if $(filter TRUEudkapi,$(gb_UnoApiHeadersTarget_UDKAPI_always_comprehensive)$*), \
-		$(call gb_Output_announce,$*,$(true),HPP,3) \
-		$(call gb_UnoApiHeadersTarget__command,$@,$*,$(call gb_UnoApiHeadersTarget_get_dir,$*),-C), \
-	\
-		$(call gb_Output_announce,$*,$(true),HPP,3) \
-		$(call gb_UnoApiHeadersTarget__command,$@,$*,$(call gb_UnoApiHeadersTarget_get_dir,$*),-L) \
-	)
+	$(call gb_Output_announce,$*,$(true),HPP,3) \
+	$(call gb_UnoApiHeadersTarget__command,$@,$*,$(call gb_UnoApiHeadersTarget_get_dir,$*),-L)
 
 .PHONY : $(call gb_UnoApiHeadersTarget_get_clean_target,%)
 $(call gb_UnoApiHeadersTarget_get_clean_target,%) :
 	$(call gb_Output_announce,$*,$(false),HPP,3)
 	$(call gb_Helper_abbreviate_dirs,\
 		rm -rf \
-			$(call gb_UnoApiHeadersTarget_get_dir,$*) \
-			$(call gb_UnoApiHeadersTarget_get_bootstrap_dir,$*) \
-			$(call gb_UnoApiHeadersTarget_get_comprehensive_dir,$*) \
-			$(call gb_UnoApiHeadersTarget_get_target,$*) \
-			$(call gb_UnoApiHeadersTarget_get_bootstrap_target,$*)) \
-			$(call gb_UnoApiHeadersTarget_get_comprehensive_target,$*)
+			$(call gb_UnoApiHeadersTarget_get_real_dir,$*) \
+			$(call gb_UnoApiHeadersTarget_get_real_bootstrap_dir,$*) \
+			$(call gb_UnoApiHeadersTarget_get_real_comprehensive_dir,$*) \
+			$(call gb_UnoApiHeadersTarget_get_real_target,$*) \
+			$(call gb_UnoApiHeadersTarget_get_real_bootstrap_target,$*)) \
+			$(call gb_UnoApiHeadersTarget_get_real_comprehensive_target,$*)
 
 define gb_UnoApiHeadersTarget_UnoApiHeadersTarget
 $(call gb_UnoApiHeadersTarget_get_target,$(1)) : $(call gb_UnoApiTarget_get_target,$(1))
@@ -347,22 +345,22 @@ $(call gb_UnoApiHeadersTarget_get_comprehensive_target,$(1)) : UNOAPI_DEPS :=
 # need dummy recipes so that header files are delivered in Package_inc;
 # otherwise make will consider the header to be up-to-date because it was
 # actually built by the recipe for gb_UnoApiHeadersTarget_get_target
-$(call gb_UnoApiHeadersTarget_get_dir,$(1))/%.hdl :
+$(call gb_UnoApiHeadersTarget_get_real_dir,$(1))/%.hdl :
 	touch $$@
 
-$(call gb_UnoApiHeadersTarget_get_dir,$(1))/%.hpp :
+$(call gb_UnoApiHeadersTarget_get_real_dir,$(1))/%.hpp :
 	touch $$@
 
-$(call gb_UnoApiHeadersTarget_get_bootstrap_dir,$(1))/%.hdl :
+$(call gb_UnoApiHeadersTarget_get_real_bootstrap_dir,$(1))/%.hdl :
 	touch $$@
 
-$(call gb_UnoApiHeadersTarget_get_bootstrap_dir,$(1))/%.hpp :
+$(call gb_UnoApiHeadersTarget_get_real_bootstrap_dir,$(1))/%.hpp :
 	touch $$@
 
-$(call gb_UnoApiHeadersTarget_get_comprehensive_dir,$(1))/%.hdl :
+$(call gb_UnoApiHeadersTarget_get_real_comprehensive_dir,$(1))/%.hdl :
 	mkdir -p `dirname $$@` && touch $$@
 
-$(call gb_UnoApiHeadersTarget_get_comprehensive_dir,$(1))/%.hpp :
+$(call gb_UnoApiHeadersTarget_get_real_comprehensive_dir,$(1))/%.hpp :
 	mkdir -p `dirname $$@` && touch $$@
 
 endef
