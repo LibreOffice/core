@@ -205,9 +205,13 @@ private:
     ScAddress maPos;
     ScDocument* mpDoc;
 
+    condformat::dialog::ScCondFormatDialogType meType;
+
     DECL_LINK( EdRangeModifyHdl, Edit* );
     DECL_LINK( OkBtnHdl, void* );
     DECL_LINK( CancelBtnHdl, void* );
+
+    virtual sal_Bool Close();
 
 public:
     ScCondFormatDlg(SfxBindings* pB, SfxChildWindow* pSW, Window* pWindow, ScDocument* pDoc, const ScConditionalFormat* pFormat,
@@ -218,6 +222,7 @@ public:
 
     virtual void SetReference(const ScRange&, ScDocument*);
     virtual void SetActive();
+    virtual sal_Bool IsTableLocked() const { return sal_True; }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1769,7 +1769,21 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
         case SID_OPENDLG_COLORSCALE:
         case SID_OPENDLG_DATABAR:
             {
-                sal_uInt16          nId  = ScCondFormatDlgWrapper::GetChildWindowId();
+                sal_uInt16 nId = 0;
+                switch( nSlot )
+                {
+                    case SID_OPENDLG_CONDFRMT:
+                        nId = ScCondFormatConditionDlgWrapper::GetChildWindowId();
+                        break;
+                    case SID_OPENDLG_COLORSCALE:
+                        nId = ScCondFormatColorScaleDlgWrapper::GetChildWindowId();
+                        break;
+                    case SID_OPENDLG_DATABAR:
+                        nId = ScCondFormatDataBarDlgWrapper::GetChildWindowId();
+                        break;
+                    default:
+                        break;
+                }
                 SfxViewFrame* pViewFrm = pTabViewShell->GetViewFrame();
                 SfxChildWindow* pWnd = pViewFrm->GetChildWindow( nId );
 

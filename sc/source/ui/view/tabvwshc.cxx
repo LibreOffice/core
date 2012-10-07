@@ -65,8 +65,6 @@
 #include "reffact.hxx"
 #include "condformatdlg.hxx"
 
-#include <iostream>
-
 //------------------------------------------------------------------
 
 void ScTabViewShell::SetCurRefDlgId( sal_uInt16 nNew )
@@ -187,7 +185,6 @@ SfxModelessDialog* ScTabViewShell::CreateRefDialog(
         case SID_OPENDLG_COLORSCALE:
         case SID_OPENDLG_DATABAR:
         {
-            std::cout << "Open Dlg" << std::endl;
             ScRangeList aRangeList;
             ScViewData* pData = GetViewData();
             pData->GetMarkData().FillRangeListWithMarks(&aRangeList, false);

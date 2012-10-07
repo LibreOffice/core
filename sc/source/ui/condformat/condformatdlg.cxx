@@ -1123,7 +1123,8 @@ ScCondFormatDlg::ScCondFormatDlg(SfxBindings* pB, SfxChildWindow* pCW, Window* p
     maEdRange( this, ScResId( ED_RANGE ) ),
     maCondFormList( this, ScResId( CTRL_LIST ), pDoc, pFormat, rRange, rPos, eType ),
     maPos(rPos),
-    mpDoc(pDoc)
+    mpDoc(pDoc),
+    meType(eType)
 {
     rtl::OUStringBuffer aTitle( GetText() );
     aTitle.append(rtl::OUString(" "));
@@ -1224,16 +1225,36 @@ IMPL_LINK( ScCondFormatDlg, EdRangeModifyHdl, Edit*, pEdit )
     return 0;
 }
 
+sal_Bool ScCondFormatDlg::Close()
+{
+    sal_uInt16 nId = 0;
+    switch(meType)
+    {
+        case condformat::dialog::NONE:
+        case condformat::dialog::CONDITION:
+            nId = ScCondFormatConditionDlgWrapper::GetChildWindowId();
+            break;
+        case condformat::dialog::COLORSCALE:
+            nId = ScCondFormatColorScaleDlgWrapper::GetChildWindowId();
+            break;
+        case condformat::dialog::DATABAR:
+            nId = ScCondFormatDataBarDlgWrapper::GetChildWindowId();
+            break;
+    }
+
+    return DoClose(nId);
+}
+
 IMPL_LINK_NOARG( ScCondFormatDlg, OkBtnHdl )
 {
-    DoClose( ScCondFormatDlgWrapper::GetChildWindowId() );
+    Close();
 
     return 0;
 }
 
 IMPL_LINK_NOARG( ScCondFormatDlg, CancelBtnHdl )
 {
-    DoClose( ScCondFormatDlgWrapper::GetChildWindowId() );
+    Close();
 
     return 0;
 }
