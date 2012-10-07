@@ -424,7 +424,11 @@ void EditorWindow::MouseButtonUp( const MouseEvent &rEvt )
     {
         pEditView->MouseButtonUp( rEvt );
         if (SfxBindings* pBindings = GetBindingsPtr())
+        {
+            pBindings->Invalidate( SID_COPY );
+            pBindings->Invalidate( SID_CUT );
             pBindings->Invalidate( SID_BASICIDE_STAT_POS );
+        }
     }
 }
 
@@ -511,15 +515,20 @@ void EditorWindow::KeyInput( const KeyEvent& rKEvt )
     {
         if (SfxBindings* pBindings = GetBindingsPtr())
         {
+            pBindings->Invalidate( SID_CUT );
+            pBindings->Invalidate( SID_COPY );
             pBindings->Invalidate( SID_BASICIDE_STAT_POS );
+
             if ( rKEvt.GetKeyCode().GetGroup() == KEYGROUP_CURSOR )
                 pBindings->Update( SID_BASICIDE_STAT_POS );
+
             if ( !bWasModified && pEditEngine->IsModified() )
             {
                 pBindings->Invalidate( SID_SAVEDOC );
                 pBindings->Invalidate( SID_DOC_MODIFIED );
                 pBindings->Invalidate( SID_UNDO );
             }
+
             if ( rKEvt.GetKeyCode().GetCode() == KEY_INSERT )
                 pBindings->Invalidate( SID_ATTR_INSERT );
         }

@@ -863,6 +863,9 @@ void Shell::InvalidateBasicIDESlots()
     {
         if (SfxBindings* pBindings = GetBindingsPtr())
         {
+            pBindings->Invalidate( SID_COPY );
+            pBindings->Invalidate( SID_CUT );
+            pBindings->Invalidate( SID_PASTE );
             pBindings->Invalidate( SID_UNDO );
             pBindings->Invalidate( SID_REDO );
             pBindings->Invalidate( SID_SAVEDOC );
