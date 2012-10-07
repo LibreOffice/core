@@ -21,6 +21,4 @@ $(eval $(call gb_CliUnoApi_set_policy,cli_uretypes,$(CLI_URETYPES_POLICY_ASSEMBL
 
 $(eval $(call gb_CliUnoApi_wrap_api,cli_uretypes,udkapi))
 
-$(call gb_CliUnoApiTarget_get_target,cli_uretypes) :| $(call gb_Library_get_target,bootstrap)
-
 # vim: set noet sw=4 ts=4:
