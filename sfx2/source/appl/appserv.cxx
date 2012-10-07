@@ -836,13 +836,10 @@ void SfxApplication::MiscState_Impl(SfxItemSet &rSet)
 
 #ifndef DISABLE_SCRIPTING
 
+#ifndef DISABLE_DYNLOADING
+
 typedef rtl_uString* (SAL_CALL *basicide_choose_macro)(XModel*, sal_Bool, rtl_uString*);
 typedef void (SAL_CALL *basicide_macro_organizer)( sal_Int16 );
-
-#define DOSTRING( x )                       #x
-#define STRING( x )                         DOSTRING( x )
-
-#ifndef DISABLE_DYNLOADING
 
 extern "C" { static void SAL_CALL thisModule() {} }
 
