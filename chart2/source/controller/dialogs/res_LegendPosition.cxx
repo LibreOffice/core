@@ -95,13 +95,13 @@ void LegendPositionResources::writeToResources( const uno::Reference< frame::XMo
         {
             //show
             sal_Bool bShowLegend = sal_False;
-            xProp->getPropertyValue( C2U("Show") ) >>= bShowLegend;
+            xProp->getPropertyValue( "Show" ) >>= bShowLegend;
             m_aCbxShow.Check( bShowLegend );
             PositionEnableHdl(0);
 
             //position
             chart2::LegendPosition ePos;
-            xProp->getPropertyValue( C2U( "AnchorPosition" )) >>= ePos;
+            xProp->getPropertyValue( "AnchorPosition" )  >>= ePos;
             switch( ePos )
             {
                 case chart2::LegendPosition_LINE_START:
@@ -139,7 +139,7 @@ void LegendPositionResources::writeToModel( const ::com::sun::star::uno::Referen
         if( xProp.is() )
         {
             //show
-            xProp->setPropertyValue( C2U("Show"), uno::makeAny( bShowLegend ));
+            xProp->setPropertyValue( "Show" , uno::makeAny( bShowLegend ));
 
             //position
             chart2::LegendPosition eNewPos;
@@ -162,9 +162,9 @@ void LegendPositionResources::writeToModel( const ::com::sun::star::uno::Referen
                 eExp = ::com::sun::star::chart::ChartLegendExpansion_WIDE;
             }
 
-            xProp->setPropertyValue( C2U( "AnchorPosition" ), uno::makeAny( eNewPos ));
-            xProp->setPropertyValue( C2U( "Expansion" ), uno::makeAny( eExp ));
-            xProp->setPropertyValue( C2U( "RelativePosition" ), uno::Any());
+            xProp->setPropertyValue( "AnchorPosition" , uno::makeAny( eNewPos ));
+            xProp->setPropertyValue( "Expansion" , uno::makeAny( eExp ));
+            xProp->setPropertyValue( "RelativePosition" , uno::Any());
         }
     }
     catch( const uno::Exception & ex )

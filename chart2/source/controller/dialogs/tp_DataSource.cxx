@@ -58,7 +58,7 @@ using ::rtl::OUStringBuffer;
 namespace
 {
 
-const OUString lcl_aLabelRole( RTL_CONSTASCII_USTRINGPARAM( "label" ));
+const OUString lcl_aLabelRole( "label" );
 
 String lcl_GetRoleLBEntry(
     const OUString & rRole, const OUString & rRange )
@@ -124,7 +124,7 @@ OUString lcl_GetSelectedRolesRange( const SvTabListBox & rRoleListBox )
 
 OUString lcl_GetSequenceNameForLabel( ::chart::SeriesEntry * pEntry )
 {
-    OUString aResult( RTL_CONSTASCII_USTRINGPARAM("values-y"));
+    OUString aResult( "values-y" );
     if( pEntry &&
         pEntry->m_xChartType.is())
     {
@@ -477,7 +477,7 @@ void DataSourceTabPage::fillSeriesListBox()
                 OUString aResString( String( ::chart::SchResId( STR_DATA_UNNAMED_SERIES_WITH_INDEX )));
 
                 // replace index of unnamed series
-                const OUString aReplacementStr( RTL_CONSTASCII_USTRINGPARAM( "%NUMBER" ));
+                const OUString aReplacementStr( "%NUMBER" );
                 sal_Int32 nIndex = aResString.indexOf( aReplacementStr );
                 if( nIndex != -1 )
                     aLabel = String( aResString.replaceAt(
@@ -609,7 +609,7 @@ IMPL_LINK_NOARG(DataSourceTabPage, RoleSelectionChangedHdl)
         OUString aSelectedRange = lcl_GetSelectedRolesRange( m_aLB_ROLE );
 
         // replace role in fixed text label
-        const OUString aReplacementStr( RTL_CONSTASCII_USTRINGPARAM( "%VALUETYPE" ));
+        const OUString aReplacementStr( "%VALUETYPE" );
         sal_Int32 nIndex = m_aFixedTextRange.indexOf( aReplacementStr );
         if( nIndex != -1 )
         {
@@ -644,7 +644,7 @@ IMPL_LINK_NOARG(DataSourceTabPage, MainRangeButtonClickedHdl)
         OUString aUIStr( aStr );
 
         // replace role
-        OUString aReplacement( RTL_CONSTASCII_USTRINGPARAM( "%VALUETYPE" ));
+        OUString aReplacement( "%VALUETYPE" );
         sal_Int32 nIndex = aUIStr.indexOf( aReplacement );
         if( nIndex != -1 )
         {
@@ -652,7 +652,7 @@ IMPL_LINK_NOARG(DataSourceTabPage, MainRangeButtonClickedHdl)
                                        lcl_GetSelectedRole( m_aLB_ROLE, true ));
         }
         // replace series name
-        aReplacement = C2U( "%SERIESNAME" );
+        aReplacement = "%SERIESNAME";
         nIndex = aUIStr.indexOf( aReplacement );
         if( nIndex != -1 )
         {
@@ -936,7 +936,7 @@ bool DataSourceTabPage::updateModelFromControl( Edit * pField )
                 OUString aSelectedRole = lcl_GetSelectedRole( m_aLB_ROLE );
                 OUString aRange( m_aEDT_RANGE.GetText());
                 OUString aSequenceRole( aSelectedRole );
-                bool bIsLabel = aSequenceRole.equals( lcl_aLabelRole );
+                bool bIsLabel = (aSequenceRole == lcl_aLabelRole );
                 OUString aSequenceNameForLabel( lcl_GetSequenceNameForLabel( pSeriesEntry ));
 
                 if( bIsLabel )
@@ -982,7 +982,7 @@ bool DataSourceTabPage::updateModelFromControl( Edit * pField )
                                     // "$Sheet1.$A$1"
                                     aRange = xNewSeq->getSourceRangeRepresentation();
                                     Reference< beans::XPropertySet > xProp( xNewSeq, uno::UNO_QUERY_THROW );
-                                    xProp->setPropertyValue( C2U("Role"), uno::makeAny( lcl_aLabelRole ));
+                                    xProp->setPropertyValue( "Role" , uno::makeAny( lcl_aLabelRole ));
                                     xLabeledSeq->setLabel( xNewSeq );
                                 }
                             }
@@ -1014,10 +1014,10 @@ bool DataSourceTabPage::updateModelFromControl( Edit * pField )
                                 aRange = xNewSeq->getSourceRangeRepresentation();
 
                                 Reference< beans::XPropertySet > xProp( xNewSeq, uno::UNO_QUERY_THROW );
-                                xProp->setPropertyValue( C2U("Role"), uno::makeAny( aSelectedRole ));
+                                xProp->setPropertyValue( "Role" , uno::makeAny( aSelectedRole ));
                                 if( !xLabeledSeq.is())
                                 {
-                                    if( aSelectedRole.equals( aSequenceNameForLabel ))
+                                    if( aSelectedRole == aSequenceNameForLabel )
                                         xLabeledSeq.set( lcl_findLSequenceWithOnlyLabel( xSource ));
                                     if( ! xLabeledSeq.is())
                                     {
