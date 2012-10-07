@@ -82,7 +82,7 @@ BreakPointDialog::BreakPointDialog( Window* pParent, BreakPointList& rBrkPntList
     for ( size_t i = 0, n = m_aModifiedBreakPointList.size(); i < n; ++i )
     {
         BreakPoint* pBrk = m_aModifiedBreakPointList.at( i );
-        String aEntryStr( "# " );
+        OUString aEntryStr( "# " );
         aEntryStr += String::CreateFromInt32( pBrk->nLine );
         aComboBox.InsertEntry( aEntryStr, COMBOBOX_APPEND );
     }
@@ -200,7 +200,7 @@ IMPL_LINK( BreakPointDialog, ButtonHdl, Button *, pButton )
             pBrk->bEnabled = aCheckBox.IsChecked();
             pBrk->nStopAfter = (size_t) aNumericField.GetValue();
             m_aModifiedBreakPointList.InsertSorted( pBrk );
-            String aEntryStr( "# " );
+            OUString aEntryStr( "# " );
             aEntryStr += String::CreateFromInt32( pBrk->nLine );
             aComboBox.InsertEntry( aEntryStr, COMBOBOX_APPEND );
             if (SfxDispatcher* pDispatcher = GetDispatcher())
