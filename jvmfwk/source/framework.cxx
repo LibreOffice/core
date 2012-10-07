@@ -387,11 +387,11 @@ javaFrameworkError SAL_CALL jfw_startVM(JavaVMOption *arOptions, sal_Int32 cOpti
         jfw::VendorSettings aVendorSettings;
         rtl::OUString sLibPath = aVendorSettings.getPluginLibrary(aInfo.getVendor());
 
+#ifndef DISABLE_DYNLOADING
         osl::Module modulePlugin(sLibPath);
         if ( ! modulePlugin)
             return JFW_E_NO_PLUGIN;
 
-#ifndef DISABLE_DYNLOADING
         rtl::OUString sFunctionName(
             RTL_CONSTASCII_USTRINGPARAM("jfw_plugin_startJavaVirtualMachine"));
         jfw_plugin_startJavaVirtualMachine_ptr pFunc =
