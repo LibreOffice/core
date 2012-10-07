@@ -100,7 +100,7 @@ protected: //member
     ::com::sun::star::uno::Reference<
          ::com::sun::star::chart2::data::XDataProvider >    m_xDataProvider;
 
-    rtl::OUString                                           m_aLastValidRangeString;
+    OUString                                                m_aLastValidRangeString;
     ::com::sun::star::uno::Reference<
          ::com::sun::star::chart2::XChartTypeTemplate >     m_xCurrentChartTypeTemplate;
     ChartTypeTemplateProvider*                              m_pTemplateProvider;
