@@ -119,7 +119,6 @@ bool isBootstrapType(rtl::OString const & name) {
         "com/sun/star/reflection/XMethodParameter",
         "com/sun/star/reflection/XStructTypeDescription",
         "com/sun/star/reflection/XTypeDescription",
-        "com/sun/star/reflection/XTypeDescriptionEnumeration",
         "com/sun/star/reflection/XTypeDescriptionEnumerationAccess",
         "com/sun/star/reflection/XUnionTypeDescription",
         "com/sun/star/registry/XImplementationRegistration",
