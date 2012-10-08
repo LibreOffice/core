@@ -73,7 +73,6 @@ typedef sal_Bool ( __LOADONCALLAPI *ExportCGMPointer )( ::rtl::OUString&, Refere
 #ifdef DISABLE_DYNLOADING
 
 extern "C" sal_uInt32 ImportCGM( ::rtl::OUString&, Reference< XModel >&, sal_uInt32, Reference< XStatusIndicator >& );
-extern "C" sal_Bool ExportCGM( ::rtl::OUString&, Reference< XModel >&, Reference< XStatusIndicator >&, void* );
 
 #endif
 
@@ -150,22 +149,16 @@ sal_Bool SdCGMFilter::Import()
 
 sal_Bool SdCGMFilter::Export()
 {
-#ifndef DISABLE_DYNLOADING
+#ifdef DISABLE_DYNLOADING
+    // No ExportCGM function exists(!)
+    return sal_False;
+#else
     ::osl::Module* pLibrary = OpenLibrary( mrMedium.GetFilter()->GetUserData() );
-#endif
     sal_Bool        bRet = sal_False;
 
-    if(
-#ifndef DISABLE_DYNLOADING
-       pLibrary &&
-#endif
-       mxModel.is() )
+    if( pLibrary && mxModel.is() )
     {
-#ifndef DISABLE_DYNLOADING
         ExportCGMPointer FncCGMExport = reinterpret_cast< ExportCGMPointer >( pLibrary->getFunctionSymbol( "ExportCGM" ) );
-#else
-        ExportCGMPointer FncCGMExport = ExportCGM;
-#endif
 
         if( FncCGMExport )
         {
@@ -176,10 +169,9 @@ sal_Bool SdCGMFilter::Export()
         }
     }
 
-#ifndef DISABLE_DYNLOADING
     delete pLibrary;
-#endif
     return bRet;
+#endif
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
