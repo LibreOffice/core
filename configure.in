@@ -5451,7 +5451,7 @@ _ACEOF
             fi
         fi
 
-        rm -f libconftest1$DLLPOST libconftest2$DLLPOST
+        rm -fr libconftest*
         AC_MSG_RESULT([$gccvisinlineshiddenok])
         if test "$gccvisinlineshiddenok" = "no"; then
             AC_MSG_WARN([Your gcc/clang is not -fvisibility-inlines-hidden safe, disabling that.])
