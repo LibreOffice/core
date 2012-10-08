@@ -287,7 +287,7 @@ End
 
 /* ** Script provider for BeanShell ** */
 
-#if defined SOLAR_JAVA && !defined WITHOUT_EXTENSION_SCRIPTING_BEANSHELL
+#if defined SOLAR_JAVA && !defined WITHOUT_SCRIPTING_BEANSHELL
 
 #if !defined SYSTEM_BSH
 STD_JAR_FILE( gid_File_Jar_Bsh, bsh )
@@ -306,7 +306,7 @@ End
 
 /* ** Script provider for JavaScript ** */
 
-#if defined SOLAR_JAVA && !defined WITHOUT_EXTENSION_SCRIPTING_JAVASCRIPT
+#if defined SOLAR_JAVA && !defined WITHOUT_SCRIPTING_JAVASCRIPT
 
 STD_JAR_FILE( gid_File_Jar_Js, js )
 

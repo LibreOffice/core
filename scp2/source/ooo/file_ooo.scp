@@ -723,7 +723,7 @@ File gid_File_Scripts_Java
     Name = "ScriptsJava.zip";
 End
 
-#ifndef WITHOUT_EXTENSION_SCRIPTING_BEANSHELL
+#ifndef WITHOUT_SCRIPTING_BEANSHELL
 File gid_File_Scripts_Beanshell
     Dir = gid_Dir_Share_Scripts;
     ARCHIVE_TXT_FILE_BODY;
@@ -731,7 +731,7 @@ File gid_File_Scripts_Beanshell
 End
 #endif
 
-#ifndef WITHOUT_EXTENSION_SCRIPTING_JAVASCRIPT
+#ifndef WITHOUT_SCRIPTING_JAVASCRIPT
 File gid_File_Scripts_Javascript
     Dir = gid_Dir_Share_Scripts;
     ARCHIVE_TXT_FILE_BODY;
