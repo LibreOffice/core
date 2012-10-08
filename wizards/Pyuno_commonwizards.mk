@@ -60,7 +60,6 @@ $(eval $(call gb_Pyuno_add_files,wizards,\
     ui/PathSelection.py \
     ui/UIConsts.py \
     ui/UnoDialog.py \
-    ui/XPathSelectionListener.py \
     ui/DocumentPreview.py \
     ui/PeerConfig.py \
     ui/UIConsts.py \
