@@ -1748,7 +1748,7 @@ Size PushButton::GetOptimalSize(WindowSizeType eType) const
 
 bool PushButton::set_property(const rtl::OString &rKey, const rtl::OString &rValue)
 {
-    if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("has-default")))
+    if (rKey == "has-default")
     {
         WinBits nBits = GetStyle();
         nBits &= ~(WB_DEFBUTTON);
@@ -2912,7 +2912,7 @@ void RadioButton::SetState( sal_Bool bCheck )
 
 bool RadioButton::set_property(const rtl::OString &rKey, const rtl::OString &rValue)
 {
-    if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("active")))
+    if (rKey == "active")
         SetState(toBool(rValue));
     else
         return Window::set_property(rKey, rValue);
@@ -3885,7 +3885,7 @@ void CheckBox::SetState( TriState eState )
 
 bool CheckBox::set_property(const rtl::OString &rKey, const rtl::OString &rValue)
 {
-    if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("active")))
+    if (rKey == "active")
         SetState(toBool(rValue) ? STATE_CHECK : STATE_NOCHECK);
     else
         return Window::set_property(rKey, rValue);
