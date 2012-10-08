@@ -42,15 +42,20 @@
 
 #define UNO_JAVA_JFW_JREHOME "UNO_JAVA_JFW_JREHOME"
 namespace {
-JavaVM * g_pJavaVM = NULL;
 
-bool g_bEnabledSwitchedOn = false;
+static bool g_bEnabledSwitchedOn = false;
+
+#ifdef SOLAAR_JAVA
+
+static JavaVM * g_pJavaVM = NULL;
 
 sal_Bool areEqualJavaInfo(
     JavaInfo const * pInfoA,JavaInfo const * pInfoB)
 {
     return jfw_areEqualJavaInfo(pInfoA, pInfoB);
 }
+
+#endif
 }
 
 #ifdef DISABLE_DYNLOADING
@@ -90,6 +95,12 @@ javaPluginError jfw_plugin_existJRE(const JavaInfo *pInfo, sal_Bool *exist);
 
 javaFrameworkError SAL_CALL jfw_findAllJREs(JavaInfo ***pparInfo, sal_Int32 *pSize)
 {
+#ifndef SOLAR_JAVA
+    (void) pparInfo;
+    (void) pSize;
+
+    return JFW_E_JAVA_DISABLED;
+#else
     javaFrameworkError retVal = JFW_E_NONE;
     try
     {
@@ -182,13 +193,13 @@ javaFrameworkError SAL_CALL jfw_findAllJREs(JavaInfo ***pparInfo, sal_Int32 *pSi
             jfw_plugin_getJavaInfoByPath_ptr jfw_plugin_getJavaInfoByPathFunc =
                 (jfw_plugin_getJavaInfoByPath_ptr) pluginLib.getFunctionSymbol(
                     rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("jfw_plugin_getJavaInfoByPath")));
+            OSL_ASSERT(jfw_plugin_getJavaInfoByPathFunc);
+            if (jfw_plugin_getJavaInfoByPathFunc == NULL)
+                return JFW_E_ERROR;
 #else
             jfw_plugin_getJavaInfoByPath_ptr jfw_plugin_getJavaInfoByPathFunc =
                 jfw_plugin_getJavaInfoByPath;
 #endif
-            OSL_ASSERT(jfw_plugin_getJavaInfoByPathFunc);
-            if (jfw_plugin_getJavaInfoByPathFunc == NULL)
-                return JFW_E_ERROR;
 
             typedef std::vector<rtl::OUString>::const_iterator citLoc;
             //Check every manually added location
@@ -276,6 +287,7 @@ javaFrameworkError SAL_CALL jfw_findAllJREs(JavaInfo ***pparInfo, sal_Int32 *pSi
         OSL_FAIL(e.message.getStr());
     }
     return retVal;
+#endif
 }
 
 javaFrameworkError SAL_CALL jfw_startVM(JavaVMOption *arOptions, sal_Int32 cOptions,
@@ -287,7 +299,7 @@ javaFrameworkError SAL_CALL jfw_startVM(JavaVMOption *arOptions, sal_Int32 cOpti
     (void) ppVM;
     (void) ppEnv;
 
-    return JFW_E_ERROR;
+    return JFW_E_JAVA_DISABLED;
 #else
     javaFrameworkError errcode = JFW_E_NONE;
     if (cOptions > 0 && arOptions == NULL)
@@ -477,6 +489,11 @@ javaFrameworkError SAL_CALL jfw_startVM(JavaVMOption *arOptions, sal_Int32 cOpti
  */
 javaFrameworkError SAL_CALL jfw_findAndSelectJRE(JavaInfo **pInfo)
 {
+#ifndef SOLAR_JAVA
+    (void) pInfo;
+
+    return JFW_E_JAVA_DISABLED;
+#else
     javaFrameworkError errcode = JFW_E_NONE;
     try
     {
@@ -682,7 +699,9 @@ javaFrameworkError SAL_CALL jfw_findAndSelectJRE(JavaInfo **pInfo)
     }
 
     return errcode;
+#endif
 }
+
 sal_Bool SAL_CALL jfw_areEqualJavaInfo(
     JavaInfo const * pInfoA,JavaInfo const * pInfoB)
 {
@@ -774,6 +793,10 @@ javaFrameworkError SAL_CALL jfw_getSelectedJRE(JavaInfo **ppInfo)
 
 javaFrameworkError SAL_CALL jfw_isVMRunning(sal_Bool *bRunning)
 {
+#ifndef SOLAR_JAVA
+    (void) bRunning;
+    return JFW_E_JAVA_DISABLED;
+#else
     osl::MutexGuard guard(jfw::FwkMutex::get());
     if (bRunning == NULL)
         return JFW_E_INVALID_ARG;
@@ -782,11 +805,18 @@ javaFrameworkError SAL_CALL jfw_isVMRunning(sal_Bool *bRunning)
     else
         *bRunning = sal_True;
     return JFW_E_NONE;
+#endif
 }
 
 javaFrameworkError SAL_CALL jfw_getJavaInfoByPath(
     rtl_uString *pPath, JavaInfo **ppInfo)
 {
+#ifndef SOLAR_JAVA
+    (void) pPath;
+    (void) ppInfo;
+
+    return JFW_E_JAVA_DISABLED;
+#else
     javaFrameworkError errcode = JFW_E_NONE;
     try
     {
@@ -905,6 +935,7 @@ javaFrameworkError SAL_CALL jfw_getJavaInfoByPath(
     }
 
     return errcode;
+#endif
 }
 
 
@@ -1170,6 +1201,12 @@ javaFrameworkError SAL_CALL jfw_getJRELocations(
 
 javaFrameworkError jfw_existJRE(const JavaInfo *pInfo, sal_Bool *exist)
 {
+#ifndef SOLAR_JAVA
+    (void) pInfo;
+    (void) exist;
+
+    return JFW_E_JAVA_DISABLED;
+#else
     //get the function jfw_plugin_existJRE
     jfw::VendorSettings aVendorSettings;
     jfw::CJavaInfo aInfo;
@@ -1208,6 +1245,7 @@ javaFrameworkError jfw_existJRE(const JavaInfo *pInfo, sal_Bool *exist)
         ret = JFW_E_ERROR;
     }
     return ret;
+#endif
 }
 
 void SAL_CALL jfw_lock()
