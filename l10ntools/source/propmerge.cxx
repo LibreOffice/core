@@ -71,7 +71,7 @@ namespace
         return sResult;
     }
 
-    //Escape unicode charachters
+    //Escape unicode characters
     void lcl_PrintJavaStyle( const OString& rText, std::ofstream &rOfstream )
     {
         const OUString sTemp =
@@ -94,7 +94,7 @@ namespace
     }
 }
 
-//Open sourcefile and store it's lines
+//Open source file and store its lines
 PropParser::PropParser(
     const OString& rInputFile, const OString& rLang,
     const bool bMergeMode )
@@ -122,7 +122,7 @@ PropParser::PropParser(
     else
     {
         std::cerr
-            << "Propex error: Cannot open sourcefile: "
+            << "Propex error: Cannot open source file: "
             << m_sSource.getStr() << std::endl;
         return;
     }
@@ -175,7 +175,7 @@ void PropParser::Merge( const OString &rSDFFile, const OString &rDestinationFile
         rDestinationFile.getStr(), std::ios_base::out | std::ios_base::trunc );
     if( !aDestination.is_open() ) {
         std::cerr
-            << "Propex error: Cannot open sourcefile for merge: "
+            << "Propex error: Cannot open source file for merge: "
             << rDestinationFile.getStr() << std::endl;
         return;
     }
