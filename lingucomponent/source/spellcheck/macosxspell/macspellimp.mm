@@ -103,7 +103,6 @@ Sequence< Locale > SAL_CALL MacSpellChecker::getLocales()
         // dictionary list and the shared dictionary list
         // to see what dictionaries the admin/user has installed
 
-        int numusr;          // number of user dictionary entries
         int numshr;          // number of shared dictionary entries
         SvtPathOptions aPathOpt;
         rtl_TextEncoding aEnc = RTL_TEXTENCODING_UTF8;
@@ -133,7 +132,7 @@ Sequence< Locale > SAL_CALL MacSpellChecker::getLocales()
         // users can name their dictionaries anything they want it would
         // be impossible to know if a real duplication exists unless we
         // add some unique key to each myspell dictionary
-        numdict = numshr + numusr;
+        numdict = numshr;
 
         if (numdict) {
             aDLocs = new Locale [numdict];
