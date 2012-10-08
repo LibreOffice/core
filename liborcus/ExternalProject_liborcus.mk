@@ -17,7 +17,7 @@ $(eval $(call gb_ExternalProject_register_targets,liborcus,\
 
 ifeq ($(OS)$(COM),WNTMSC)
 
-ifeq ($(CCNUMVER),90)
+ifeq ($(VCVER),90)
 $(call gb_ExternalProject_get_state_target,liborcus,build) :
 	cd $(EXTERNAL_WORKDIR)/vsprojects/liborcus-static-nozip \
 	&& export BOOST_INCLUDE_DIR=$(OUTDIR)/inc/external \
