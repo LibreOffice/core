@@ -95,9 +95,9 @@ private:
 };
 //for GalleryThemeProperties end
 
-class VclAbstractDialog_Impl : public VclAbstractDialog
+class CuiVclAbstractDialog_Impl : public VclAbstractDialog
 {
-    DECL_ABSTDLG_BASE(VclAbstractDialog_Impl,Dialog)
+    DECL_ABSTDLG_BASE(CuiVclAbstractDialog_Impl,Dialog)
 };
 
 //for ActualizeProgress begin
@@ -119,9 +119,9 @@ class AbstractSfxDialog_Impl : public SfxAbstractDialog
     virtual String      GetText() const ;
 };
 
-class AbstractTabDialog_Impl : public SfxAbstractTabDialog
+class CuiAbstractTabDialog_Impl : public SfxAbstractTabDialog
 {
-    DECL_ABSTDLG_BASE(AbstractTabDialog_Impl,SfxTabDialog)
+    DECL_ABSTDLG_BASE(CuiAbstractTabDialog_Impl,SfxTabDialog)
     virtual void                SetCurPageId( sal_uInt16 nId );
     virtual const SfxItemSet*   GetOutputItemSet() const;
     virtual const sal_uInt16*       GetInputRanges( const SfxItemPool& pItem );
