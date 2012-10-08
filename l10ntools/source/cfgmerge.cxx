@@ -38,7 +38,7 @@ namespace {
 
 namespace global {
 
-char const * inputPathname = 0;
+OString inputPathname;
 boost::scoped_ptr< CfgParser > parser;
 
 }
@@ -55,13 +55,13 @@ FILE * init(int argc, char ** argv) {
         std::exit(EXIT_FAILURE);
     }
     Export::InitLanguages();
-    global::inputPathname = aArgs.m_sInputFile.getStr();
+    global::inputPathname = aArgs.m_sInputFile;
 
-    FILE * pFile = std::fopen(global::inputPathname, "r");
+    FILE * pFile = std::fopen(global::inputPathname.getStr(), "r");
     if (pFile == 0) {
         std::fprintf(
             stderr, "Error: Cannot open file \"%s\"\n",
-            global::inputPathname);
+            global::inputPathname.getStr() );
         std::exit(EXIT_FAILURE);
     }
 
@@ -74,7 +74,7 @@ FILE * init(int argc, char ** argv) {
         global::parser.reset(
             new CfgExport(
                 aArgs.m_sOutputFile.getStr(), aArgs.m_sPrj.getStr(),
-                common::pathnameToken(global::inputPathname,
+                common::pathnameToken(global::inputPathname.getStr(),
                 aArgs.m_sPrjRoot.getStr())));
     }
 

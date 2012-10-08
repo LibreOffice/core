@@ -42,9 +42,9 @@ MergeDataFile * pMergeDataFile = 0; //TODO
 
 namespace global {
 
-char const * prj = 0;
-char const * prjRoot = 0;
-char const * inputPathname = 0;
+OString prj;
+OString prjRoot;
+OString inputPathname;
 boost::scoped_ptr< Export > exporter;
 
 }
@@ -61,15 +61,15 @@ FILE * init(int argc, char ** argv) {
         std::exit(EXIT_FAILURE);
     }
     Export::InitLanguages();
-    global::prj =  aArgs.m_sPrj.getStr();
-    global::prjRoot =  aArgs.m_sPrjRoot.getStr();
-    global::inputPathname =  aArgs.m_sInputFile.getStr();
+    global::prj =  aArgs.m_sPrj;
+    global::prjRoot =  aArgs.m_sPrjRoot;
+    global::inputPathname =  aArgs.m_sInputFile;
 
-    FILE * pFile = std::fopen(global::inputPathname, "r");
+    FILE * pFile = std::fopen(global::inputPathname.getStr(), "r");
     if (pFile == 0) {
         std::fprintf(
             stderr, "Error: Cannot open file \"%s\"\n",
-            global::inputPathname);
+            global::inputPathname.getStr());
         std::exit(EXIT_FAILURE);
     }
 
@@ -78,7 +78,8 @@ FILE * init(int argc, char ** argv) {
             new Export(aArgs.m_sMergeSrc.getStr(), aArgs.m_sOutputFile.getStr()));
     } else {
         sActFileName =
-            common::pathnameToken(global::inputPathname, global::prjRoot);
+            common::pathnameToken(
+                global::inputPathname.getStr(), global::prjRoot.getStr());
         global::exporter.reset(new Export(aArgs.m_sOutputFile.getStr()));
     }
 
