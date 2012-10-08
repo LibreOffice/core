@@ -1740,6 +1740,10 @@ WW8SwFlyPara::WW8SwFlyPara( SwPaM& rPaM,
     nNewNettoWidth = MINFLY;                    // Minimum
 
     eSurround = ( rWW.nSp37 > 1 ) ? SURROUND_IDEAL : SURROUND_NONE;
+    //#i119466 mapping "Around" wrap setting to "Parallel" for table
+    const bool bIsTable = rIo.pPlcxMan->HasParaSprm(0x2416);
+    if (  bIsTable && rWW.nSp37 == 2 )
+        eSurround = SURROUND_PARALLEL;
 
     /*
      #95905#, #83307# seems to have gone away now, so reenable parallel
