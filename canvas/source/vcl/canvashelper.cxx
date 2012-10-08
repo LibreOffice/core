@@ -90,6 +90,7 @@ namespace vclcanvas
             return basegfx::B2DLINEJOIN_NONE;
         }
 
+#ifdef FIXME_REMOVE_WHEN_RE_BASE_COMPLETE
         drawing::LineCap unoCapeFromCap( sal_Int8 nCapType)
         {
             switch ( nCapType)
@@ -109,6 +110,7 @@ namespace vclcanvas
             }
             return drawing::LineCap_BUTT;
         }
+#endif
     }
 
     CanvasHelper::CanvasHelper() :
