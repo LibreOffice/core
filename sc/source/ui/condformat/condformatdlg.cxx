@@ -92,7 +92,7 @@ ScCondFormatList::ScCondFormatList(Window* pParent, const ResId& rResId, ScDocum
         }
     }
     if (!maEntries.empty())
-        maEntries.begin()->Select();
+        maEntries.begin()->SetActive();
 
     RecalcAll();
     FreeResource();
@@ -176,9 +176,28 @@ IMPL_LINK(ScCondFormatList, ColFormatTypeHdl, ListBox*, pBox)
 
 IMPL_LINK(ScCondFormatList, TypeListHdl, ListBox*, pBox)
 {
+    EntryContainer::iterator itr = maEntries.begin();
+    for(; itr != maEntries.end(); ++itr)
+    {
+        if(itr->IsSelected())
+            break;
+    }
+    if(itr == maEntries.end())
+        return 0;;
+
     sal_Int32 nPos = pBox->GetSelectEntryPos();
     switch(nPos)
     {
+        case 0:
+            maEntries.replace( itr, new ScColorScaleFrmtEntry(this, mpDoc, maPos));
+            itr->SetHeight();
+            break;
+        case 1:
+            maEntries.replace( itr, new ScConditionFrmtEntry(this, mpDoc, maPos));
+            itr->SetHeight();
+            break;
+        case 2:
+            break;
     }
     RecalcAll();
     return 0;
@@ -190,9 +209,9 @@ IMPL_LINK_NOARG( ScCondFormatList, AddBtnHdl )
     maEntries.push_back( pNewEntry );
     for(EntryContainer::iterator itr = maEntries.begin(); itr != maEntries.end(); ++itr)
     {
-        itr->Deselect();
+        itr->SetInactive();
     }
-    pNewEntry->Select();
+    pNewEntry->SetActive();
     RecalcAll();
     return 0;
 }
@@ -215,9 +234,9 @@ IMPL_LINK( ScCondFormatList, EntrySelectHdl, ScCondFrmtEntry*, pEntry )
 {
     for(EntryContainer::iterator itr = maEntries.begin(); itr != maEntries.end(); ++itr)
     {
-        itr->Deselect();
+        itr->SetInactive();
     }
-    pEntry->Select();
+    pEntry->SetActive();
     RecalcAll();
     return 0;
 }

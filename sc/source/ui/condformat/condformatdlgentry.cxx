@@ -22,27 +22,23 @@
 ScCondFrmtEntry::ScCondFrmtEntry(Window* pParent, ScDocument* pDoc, const ScAddress& rPos):
     Control(pParent, ScResId( RID_COND_ENTRY ) ),
     mbActive(false),
-    maLbType( this, ScResId( LB_TYPE ) ),
     maFtCondNr( this, ScResId( FT_COND_NR ) ),
     maFtCondition( this, ScResId( FT_CONDITION ) ),
     mnIndex(0),
     maStrCondition(ScResId( STR_CONDITION ).toString()),
+    maLbType( this, ScResId( LB_TYPE ) ),
     mpDoc(pDoc),
     maPos(rPos)
 {
     SetControlBackground(GetSettings().GetStyleSettings().GetDialogColor());
-    FreeResource();
 
     /*
-    maLbType.SelectEntryPos(1);
-    maLbCondType.SelectEntryPos(0);
-    maEdVal2.Hide();
     */
     //disable entries for color formats
 
+    maLbType.SetSelectHdl( LINK( pParent, ScCondFormatList, TypeListHdl ) );
     Init();
     maClickHdl = LINK( pParent, ScCondFormatList, EntrySelectHdl );
-    SetHeight();
 }
 
 ScCondFrmtEntry::~ScCondFrmtEntry()
@@ -51,9 +47,7 @@ ScCondFrmtEntry::~ScCondFrmtEntry()
 
 void ScCondFrmtEntry::Init()
 {
-    maLbType.SetSelectHdl( LINK( this, ScCondFormatList, TypeListHdl ) );
     /*
-    maLbColorFormat.SetSelectHdl( LINK( this, ScCondFormatList, ColFormatTypeHdl ) );
 
     */
 }
@@ -103,12 +97,19 @@ void ScCondFrmtEntry::SetHeight()
 
 void ScCondFrmtEntry::Select()
 {
+    maFtCondition.SetText(rtl::OUString());
+    maFtCondition.Hide();
+    maLbType.Show();
     mbActive = true;
     SetHeight();
 }
 
 void ScCondFrmtEntry::Deselect()
 {
+    rtl::OUString maCondText("deselected");// = ScCondFormatHelper::GetExpression(CONDITION, maLbCondType.GetSelectEntryPos());
+    maFtCondition.SetText(maCondText);
+    maFtCondition.Show();
+    maLbType.Hide();
     mbActive = false;
     SetHeight();
 }
@@ -159,6 +160,11 @@ ScConditionFrmtEntry::ScConditionFrmtEntry( Window* pParent, ScDocument* pDoc, c
     maLbStyle( this, ScResId( LB_STYLE ) ),
     maWdPreview( this, ScResId( WD_PREVIEW ) )
 {
+
+    FreeResource();
+
+    Init();
+
     if(pFormatEntry)
     {
         rtl::OUString aStyleName = pFormatEntry->GetStyle();
@@ -209,9 +215,11 @@ ScConditionFrmtEntry::ScConditionFrmtEntry( Window* pParent, ScDocument* pDoc, c
     }
     else
     {
+        maLbCondType.SelectEntryPos(0);
+        maEdVal2.Hide();
         maLbStyle.SelectEntryPos(1);
     }
-
+    maLbType.SelectEntryPos(1);
 }
 
 void ScConditionFrmtEntry::Init()
@@ -292,6 +300,30 @@ ScFormatEntry* ScConditionFrmtEntry::createConditionEntry() const
 ScFormatEntry* ScConditionFrmtEntry::GetEntry() const
 {
     return createConditionEntry();
+}
+
+void ScConditionFrmtEntry::SetActive()
+{
+    maLbCondType.Show();
+    maEdVal1.Show();
+    maEdVal2.Show();
+    maFtStyle.Show();
+    maLbStyle.Show();
+    maWdPreview.Show();
+
+    Select();
+}
+
+void ScConditionFrmtEntry::SetInactive()
+{
+    maLbCondType.Hide();
+    maEdVal1.Hide();
+    maEdVal2.Hide();
+    maFtStyle.Hide();
+    maLbStyle.Hide();
+    maWdPreview.Hide();
+
+    Deselect();
 }
 
 IMPL_LINK_NOARG(ScConditionFrmtEntry, StyleSelectHdl)
@@ -440,7 +472,7 @@ ScColorScaleEntry* createColorScaleEntry( const ListBox& rType, const ColorListB
 
 ScColorScaleFrmtEntry::ScColorScaleFrmtEntry( Window* pParent, ScDocument* pDoc, const ScAddress& rPos, const ScColorScaleFormat* pFormat ):
     ScCondFrmtEntry( pParent, pDoc, rPos ),
-    //maLbColorFormat( this, ScResId( LB_COLOR_FORMAT ) ),
+    maLbColorFormat( this, ScResId( LB_COLOR_FORMAT ) ),
     maLbColScale2( this, ScResId( LB_COL_SCALE2 ) ),
     maLbColScale3( this, ScResId( LB_COL_SCALE3 ) ),
     maLbEntryTypeMin( this, ScResId( LB_TYPE_COL_SCALE ) ),
@@ -455,12 +487,10 @@ ScColorScaleFrmtEntry::ScColorScaleFrmtEntry( Window* pParent, ScDocument* pDoc,
 {
     if(pFormat)
     {
-        /*
         if(pFormat->size() == 2)
             maLbColorFormat.SelectEntryPos(0);
         else
             maLbColorFormat.SelectEntryPos(1);
-        */
         ScColorScaleFormat::const_iterator itr = pFormat->begin();
         SetColorScaleEntryTypes(*itr, maLbEntryTypeMin, maEdMin, maLbColMin);
         if(pFormat->size() == 3)
@@ -473,12 +503,17 @@ ScColorScaleFrmtEntry::ScColorScaleFrmtEntry( Window* pParent, ScDocument* pDoc,
     }
     else
     {
-        //maLbColorFormat.SelectEntryPos(0);
+        maLbColorFormat.SelectEntryPos(1);
         maLbEntryTypeMin.SelectEntryPos(0);
         maLbEntryTypeMiddle.SelectEntryPos(2);
         maLbEntryTypeMax.SelectEntryPos(1);
         maEdMiddle.SetText(rtl::OUString::valueOf(static_cast<sal_Int32>(50)));
     }
+    FreeResource();
+
+    maLbColorFormat.SetSelectHdl( LINK( pParent, ScCondFormatList, ColFormatTypeHdl ) );
+
+    Init();
 }
 
 void ScColorScaleFrmtEntry::Init()
@@ -551,10 +586,8 @@ ScFormatEntry* ScColorScaleFrmtEntry::createColorscaleEntry() const
 {
     ScColorScaleFormat* pColorScale = new ScColorScaleFormat(mpDoc);
     pColorScale->AddEntry(createColorScaleEntry(maLbEntryTypeMin, maLbColMin, maEdMin, mpDoc, maPos));
-    /*
     if(maLbColorFormat.GetSelectEntryPos() == 1)
         pColorScale->AddEntry(createColorScaleEntry(maLbEntryTypeMiddle, maLbColMiddle, maEdMiddle, mpDoc, maPos));
-        */
     pColorScale->AddEntry(createColorScaleEntry(maLbEntryTypeMax, maLbColMax, maEdMax, mpDoc, maPos));
     return pColorScale;
 }
@@ -562,6 +595,46 @@ ScFormatEntry* ScColorScaleFrmtEntry::createColorscaleEntry() const
 ScFormatEntry* ScColorScaleFrmtEntry::GetEntry() const
 {
     return createColorscaleEntry();
+}
+
+void ScColorScaleFrmtEntry::SetActive()
+{
+    maLbColScale2.Show();
+    maLbColScale3.Show();
+
+    maLbEntryTypeMin.Show();
+    maLbEntryTypeMiddle.Show();
+    maLbEntryTypeMax.Show();
+
+    maEdMin.Show();
+    maEdMiddle.Show();
+    maEdMax.Show();
+
+    maLbColMin.Show();
+    maLbColMiddle.Show();
+    maLbColMax.Show();
+
+    Select();
+}
+
+void ScColorScaleFrmtEntry::SetInactive()
+{
+    maLbColScale2.Hide();
+    maLbColScale3.Hide();
+
+    maLbEntryTypeMin.Hide();
+    maLbEntryTypeMiddle.Hide();
+    maLbEntryTypeMax.Hide();
+
+    maEdMin.Hide();
+    maEdMiddle.Hide();
+    maEdMax.Hide();
+
+    maLbColMin.Hide();
+    maLbColMiddle.Hide();
+    maLbColMax.Hide();
+
+    Deselect();
 }
 
 IMPL_LINK( ScColorScaleFrmtEntry, EntryTypeHdl, ListBox*, pBox )
@@ -646,16 +719,17 @@ void SetDataBarEntryTypes( const ScColorScaleEntry& rEntry, ListBox& rLbType, Ed
 
 ScDataBarFrmtEntry::ScDataBarFrmtEntry( Window* pParent, ScDocument* pDoc, const ScAddress& rPos, const ScDataBarFormat* pFormat ):
     ScCondFrmtEntry( pParent, pDoc, rPos ),
+    maLbColorFormat( this, ScResId( LB_COLOR_FORMAT ) ),
     maLbDataBarMinType( this, ScResId( LB_TYPE_COL_SCALE ) ),
     maLbDataBarMaxType( this, ScResId( LB_TYPE_COL_SCALE ) ),
     maEdDataBarMin( this, ScResId( ED_COL_SCALE ) ),
     maEdDataBarMax( this, ScResId( ED_COL_SCALE ) ),
     maBtOptions( this, ScResId( BTN_OPTIONS ) )
 {
+    maLbColorFormat.SelectEntryPos(2);
     if(pFormat)
     {
         mpDataBarData.reset(new ScDataBarFormatData(*pFormat->GetDataBarData()));
-        //maLbColorFormat.SelectEntryPos(2);
         SetDataBarEntryTypes(*mpDataBarData->mpLowerLimit, maLbDataBarMinType, maEdDataBarMin);
         SetDataBarEntryTypes(*mpDataBarData->mpUpperLimit, maLbDataBarMaxType, maEdDataBarMax);
         DataBarTypeSelectHdl(NULL);
@@ -665,7 +739,11 @@ ScDataBarFrmtEntry::ScDataBarFrmtEntry( Window* pParent, ScDocument* pDoc, const
         maLbDataBarMinType.SelectEntryPos(0);
         maLbDataBarMaxType.SelectEntryPos(1);
     }
+    Init();
 
+    maLbColorFormat.SetSelectHdl( LINK( pParent, ScCondFormatList, ColFormatTypeHdl ) );
+
+    FreeResource();
 }
 
 ScFormatEntry* ScDataBarFrmtEntry::GetEntry() const
@@ -702,6 +780,28 @@ ScFormatEntry* ScDataBarFrmtEntry::createDatabarEntry() const
     ScDataBarFormat* pDataBar = new ScDataBarFormat(mpDoc);
     pDataBar->SetDataBarData(new ScDataBarFormatData(*mpDataBarData.get()));
     return pDataBar;
+}
+
+void ScDataBarFrmtEntry::SetActive()
+{
+    maLbDataBarMinType.Show();
+    maLbDataBarMaxType.Show();
+    maEdDataBarMin.Show();
+    maEdDataBarMax.Show();
+    maBtOptions.Show();
+
+    Select();
+}
+
+void ScDataBarFrmtEntry::SetInactive()
+{
+    maLbDataBarMinType.Hide();
+    maLbDataBarMaxType.Hide();
+    maEdDataBarMin.Hide();
+    maEdDataBarMax.Hide();
+    maBtOptions.Hide();
+
+    Deselect();
 }
 
 IMPL_LINK_NOARG( ScDataBarFrmtEntry, DataBarTypeSelectHdl )

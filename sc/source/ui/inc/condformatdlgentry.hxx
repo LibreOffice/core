@@ -9,20 +9,23 @@ private:
     Link maClickHdl;
 
     //general ui elements
-    ListBox maLbType;
     FixedText maFtCondNr;
     FixedText maFtCondition;
 
-    void SetHeight();
     void Init();
 
     sal_Int32 mnIndex;
     rtl::OUString maStrCondition;
 protected:
+    ListBox maLbType;
+
     ScDocument* mpDoc;
     ScAddress maPos;
 
     DECL_LINK( EdModifyHdl, Edit* );
+
+    void Select();
+    void Deselect();
 
 public:
     ScCondFrmtEntry( Window* pParent, ScDocument* pDoc, const ScAddress& rPos );
@@ -30,13 +33,14 @@ public:
 
     virtual long Notify( NotifyEvent& rNEvt );
 
-    void Select();
-    void Deselect();
-
     bool IsSelected() const;
     void SetIndex(sal_Int32 nIndex);
+    sal_Int32 GetIndex() const { return mnIndex; }
+    void SetHeight();
 
     virtual ScFormatEntry* GetEntry() const = 0;
+    virtual void SetActive() = 0;
+    virtual void SetInactive() = 0;
 };
 
 class ScConditionFrmtEntry : public ScCondFrmtEntry
@@ -53,7 +57,6 @@ class ScConditionFrmtEntry : public ScCondFrmtEntry
     ScFormatEntry* createConditionEntry() const;
     ScFormatEntry* createFormulaEntry() const;
 
-    void SetHeight();
     void Init();
     DECL_LINK( StyleSelectHdl, void* );
     DECL_LINK( ConditionTypeSelectHdl, void* );
@@ -61,13 +64,15 @@ public:
     ScConditionFrmtEntry( Window* pParent, ScDocument* pDoc, const ScAddress& rPos, const ScCondFormatEntry* pFormatEntry = NULL );
 
     virtual ScFormatEntry* GetEntry() const;
+    virtual void SetActive();
+    virtual void SetInactive();
 };
 
 class ScColorScaleFrmtEntry : public ScCondFrmtEntry
 {
 
     //color format ui elements
-    //ListBox maLbColorFormat;
+    ListBox maLbColorFormat;
 
     //color scale ui elements
     ListBox maLbColScale2;
@@ -87,19 +92,20 @@ class ScColorScaleFrmtEntry : public ScCondFrmtEntry
 
     ScFormatEntry* createColorscaleEntry() const;
 
-    void SetHeight();
     void Init();
 
     DECL_LINK( EntryTypeHdl, ListBox* );
 public:
     ScColorScaleFrmtEntry( Window* pParent, ScDocument* pDoc, const ScAddress& rPos, const ScColorScaleFormat* pFormat = NULL );
     virtual ScFormatEntry* GetEntry() const;
+    virtual void SetActive();
+    virtual void SetInactive();
 };
 
 class ScDataBarFrmtEntry : public ScCondFrmtEntry
 {
     //color format ui elements
-    //ListBox maLbColorFormat;
+    ListBox maLbColorFormat;
 
     //data bar ui elements
     ListBox maLbDataBarMinType;
@@ -113,7 +119,6 @@ class ScDataBarFrmtEntry : public ScCondFrmtEntry
 
     ScFormatEntry* createDatabarEntry() const;
 
-    void SetHeight();
     void Init();
 
     DECL_LINK( OptionBtnHdl, void* );
@@ -121,5 +126,7 @@ class ScDataBarFrmtEntry : public ScCondFrmtEntry
 public:
     ScDataBarFrmtEntry( Window* pParemt, ScDocument* pDoc, const ScAddress& rPos, const ScDataBarFormat* pFormat = NULL );
     virtual ScFormatEntry* GetEntry() const;
+    virtual void SetActive();
+    virtual void SetInactive();
 };
 
