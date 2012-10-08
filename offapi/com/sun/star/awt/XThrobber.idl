@@ -28,7 +28,7 @@
 
 /**
     @deprecated
-        You should use XAnimation, AnimatedImagesControl, and AnimatedImagesControlModel.
+        You should use XAnimation, AnimatedImagesControl, and SpinningProgressControlModel.
  */
 published interface XThrobber: com::sun::star::uno::XInterface
 {

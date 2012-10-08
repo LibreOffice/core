@@ -30,7 +30,7 @@
 /**
     @since OOo 2.2
     @deprecated
-        You should use AnimatedImagesControl.
+        You should use AnimatedImagesControl and SpinningProgressControlModel
  */
 published service UnoControlThrobber
 {
