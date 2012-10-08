@@ -16,7 +16,8 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 import traceback
-from .FaxWizardDialog import FaxWizardDialog, Helper, PropertyNames, uno
+from .FaxWizardDialog import FaxWizardDialog, Helper, PropertyNames, uno, \
+    WizardDialog
 from .CGFaxWizard import CGFaxWizard
 from .FaxDocument import FaxDocument
 from .FaxWizardDialogConst import HID
@@ -103,7 +104,7 @@ class FaxWizardDialogImpl(FaxWizardDialog):
             self.initializeCommunication()
             self.__initializePaths()
 
-            #special Control fFrameor setting the save Path:
+            #special Control for setting the save Path:
             self.insertPathSelectionControl()
 
             self.initializeTemplates(xMSF)
@@ -157,7 +158,7 @@ class FaxWizardDialogImpl(FaxWizardDialog):
         try:
             fileAccess = FileAccess(self.xMSF)
             self.sPath = self.myPathSelection.getSelectedPath()
-            if self.sPath == "":
+            if not self.sPath:
                 self.myPathSelection.triggerPathPicker()
                 self.sPath = self.myPathSelection.getSelectedPath()
 
@@ -279,8 +280,7 @@ class FaxWizardDialogImpl(FaxWizardDialog):
         self.myPathSelection.sDefaultDirectory = self.UserTemplatePath
         self.myPathSelection.sDefaultName = "myFaxTemplate.ott"
         self.myPathSelection.sDefaultFilter = "writer8_template"
-        self.myPathSelection.addSelectionListener( \
-            self.myPathSelectionListener())
+        self.myPathSelection.addSelectionListener(self)
 
     def __initializePaths(self):
         try:
@@ -708,3 +708,8 @@ class FaxWizardDialogImpl(FaxWizardDialog):
         Helper.setUnoPropertyValue(BPaperItem,
             PropertyNames.PROPERTY_ENABLED, False)
 
+
+    def validatePath(self):
+        if self.myPathSelection.usedPathPicker:
+                self.filenameChanged = True
+        self.myPathSelection.usedPathPicker = False

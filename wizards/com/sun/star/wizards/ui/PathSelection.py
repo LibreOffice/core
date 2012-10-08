@@ -117,7 +117,7 @@ class PathSelection(object):
                         self.sDefaultName, self.sDefaultFilter)
                     sStorePath = myFilePickerDialog.sStorePath
                     if sStorePath is not None:
-                        myFA = FileAccess(self.xMSF);
+                        myFA = FileAccess(self.xMSF)
                         self.xSaveTextBox.Text = myFA.getPath(sStorePath, None)
                         self.sDefaultDirectory = \
                             FileAccess.getParentDir(sStorePath)
@@ -134,5 +134,5 @@ class PathSelection(object):
             traceback.print_exc()
 
     def callXPathSelectionListener(self):
-        if self.xAction != None:
-            self.xAction.validatePath()
+            if self.xAction is not None:
+                self.xAction.validatePath()      

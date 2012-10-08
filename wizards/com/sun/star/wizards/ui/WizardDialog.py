@@ -20,7 +20,6 @@ import traceback
 from abc import ABCMeta, abstractmethod
 from .UnoDialog2 import UnoDialog2, Desktop, PropertyNames, UIConsts, \
 	ItemListenerProcAdapter
-from .XPathSelectionListener import XPathSelectionListener
 from .event.CommonListener import TerminateListenerProcAdapter
 from ..common.Helper import Helper
 from ..common.Resource import Resource
@@ -501,11 +500,3 @@ class WizardDialog(UnoDialog2):
         OfficeDocument.attachEventCall(
             TextDocument.xTextDocument, "OnNew", "StarBasic",
             "macro:///Template.Correspondence.Database()")
-
-    class myPathSelectionListener(XPathSelectionListener):
-
-        def validatePath(self):
-            if self.myPathSelection.usedPathPicker:
-                self.filenameChanged = True
-
-            self.myPathSelection.usedPathPicker = False
