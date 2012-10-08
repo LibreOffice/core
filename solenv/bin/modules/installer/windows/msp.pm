@@ -311,7 +311,7 @@ sub set_mspfilename
 {
     my ($allvariables, $mspdir, $languagesarrayref) = @_;
 
-    my $databasename = $allvariables->{'PRODUCTNAME'} . "-PTF-" . $allvariables->{'PRODUCTVERSION'} . "-" . $allvariables->{'WINDOWSPATCHLEVEL'} . ".msp";
+    my $databasename = $allvariables->{'PRODUCTNAME'} . "-" . $allvariables->{'PRODUCTVERSION'} . "-" . $allvariables->{'WINDOWSPATCHLEVEL'} . ".msp";
 
     my $fullmspname = $mspdir . $installer::globals::separator . $databasename;
 
