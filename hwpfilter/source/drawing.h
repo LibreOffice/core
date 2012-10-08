@@ -652,11 +652,6 @@ HWPDrawingObject::HWPDrawingObject()
 
 HWPDrawingObject::~HWPDrawingObject()
 {
-#if 0
-    if (hdo->property.pictype == PICTYP_EMBED)
-        RemoveEmbeddedPic(hdo->property.szPatternFile);
-    hdo->property.szPatternFile[0] = 0;
-#endif
     if (child)
         delete child;
 
