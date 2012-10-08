@@ -99,6 +99,12 @@ struct ObjAreaType {
     sal_uInt8   FFarbe;   //  [Index]
     sal_uInt8   FBFarbe;  //  [Index]
     sal_uInt8   FIntens;  //  [%]
+    // Despite the "Dummy" in the name, and not being used anywhere in
+    // the code, these two fields are *essential*. These structs are
+    // 1:1 mappings of actual on-disk/wire file format structures...
+    // So don't clean the "unused dummy" fields away. (Actually it
+    // might well be that many other fields around here are never used
+    // in our code either.)
     sal_uInt8   FDummy1;  //
     sal_Int16  FDummy2;  //
     sal_uInt16 FMuster;  //  [Index] inkl. Invers, Transparenz
