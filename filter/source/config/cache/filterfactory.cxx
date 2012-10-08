@@ -35,20 +35,6 @@ namespace filter{
 namespace css = ::com::sun::star;
 
 
-/** @short  can be used to query for filters related to its application module.
- */
-#define BASE_QUERY_ALL          "_query_all"
-#define BASE_QUERY_WRITER       "_query_Writer"
-#define BASE_QUERY_WEB          "_query_web"
-#define BASE_QUERY_GLOBAL       "_query_global"
-#define BASE_QUERY_CHART        "_query_chart"
-#define BASE_QUERY_CALC         "_query_calc"
-#define BASE_QUERY_IMPRESS      "_query_impress"
-#define BASE_QUERY_DRAW         "_query_draw"
-#define BASE_QUERY_MATH         "_query_math"
-
-//_______________________________________________
-
 /** @short  define all possible parts of a filter query.
 
     @descr  syntax: "<query>[:<param>[=<value>]]"
@@ -64,22 +50,6 @@ namespace css = ::com::sun::star;
             default_first                   set default filter on top of return list        false
             case_sensitive                  compare "sort_prop" case sensitive              false
  */
-#define SEPERATOR_QUERYPARAM                            ((sal_Unicode)':')
-#define SEPERATOR_QUERYPARAMVALUE                       ((sal_Unicode)'=')
-
-#define QUERYPARAM_IFLAGS                               ::rtl::OUString( "iflags" )
-#define QUERYPARAM_EFLAGS                               ::rtl::OUString( "eflags" )
-#define QUERYPARAM_SORT_PROP                            ::rtl::OUString( "sort_prop" )
-
-#define QUERYPARAM_DESCENDING                           ::rtl::OUString( "descending" )
-#define QUERYPARAM_USE_ORDER                            ::rtl::OUString( "use_order" )
-#define QUERYPARAM_DEFAULT_FIRST                        ::rtl::OUString( "default_first" )
-#define QUERYPARAM_CASE_SENSITIVE                       ::rtl::OUString( "case_sensitive" )
-
-#define QUERYPARAMVALUE_SORT_PROP_NAME                  ::rtl::OUString( "name" )
-#define QUERYPARAMVALUE_SORT_PROP_UINAME                ::rtl::OUString( "uiname" )
-
-
 
 FilterFactory::FilterFactory(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR)
 {
