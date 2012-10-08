@@ -24,7 +24,7 @@ $(call gb_ExternalProject_get_state_target,rhino,build) :
 		-q \
 		-f build.xml \
 		-Dbuild.label="build-$(RSCREVISION)" \
-		-DTARFILE_LOCATION="$(TARFILE_LOCATION)" \
+		-DTARFILE_LOCATION="$(if $(findstring -cygwin,$(BUILD_PLATFORM)),$(shell cygpath -m $(TARFILE_LOCATION)),$(TARFILE_LOCATION))" \
 		$(if $(filter yes,$(JAVACISGCJ))\
 			,-Dbuild.compiler=gcj \
 			,-Dant.build.javac.source=$(JAVA_SOURCE_VER) \
