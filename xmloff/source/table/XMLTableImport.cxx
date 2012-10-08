@@ -472,16 +472,6 @@ SvXMLImportContext * XMLTableImportContext::ImportRow( sal_uInt16 nPrefix, const
                 {
                     msDefaultCellStyleName = sValue;
                 }
-#if 0
-                else if( IsXMLToken( aLocalName, XML_VISIBILITY ) )
-                {
-                    bVisibility = IsXMLToken( sValue, XML_VISIBLE );
-                }
-                else if( IsXMLToken( aLocalName, XML_NUMBER_ROWS_REPEATED ) )
-                {
-                    nRepeated = sValue.toInt32();
-                }
-#endif
             }
             else if ( (XML_NAMESPACE_XML == nPrefix2) &&
                  IsXMLToken(aLocalName, XML_ID)   )

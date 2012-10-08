@@ -51,10 +51,6 @@ void ParagraphStyle::write(OdfDocumentHandler *pHandler) const
     WPXPropertyList::Iter i(mpPropList);
     for (i.rewind(); i.next(); )
     {
-#if 0
-        if (strcmp(i.key(), "style:list-style-name") == 0)
-            propList.insert("style:list-style-name", i()->getStr());
-#endif
         if (strncmp(i.key(), "fo:margin-",10) == 0)
         {
             if (strcmp(i.key(), "fo:margin-left") == 0 ||

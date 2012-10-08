@@ -241,22 +241,6 @@ static inline double cubicBase(double t, double a, double b, double c, double d)
     return (1.0-t)*(1.0-t)*(1.0-t)*a + 3.0*(1.0-t)*(1.0-t)*t*b + 3.0*(1.0-t)*t*t*c + t*t*t*d;
 }
 
-#if 0
-static std::vector<double> cubicExtremes(double a, double b, double c, double d)
-{
-    std::vector<double> vec;
-    double u = -a + 2*b - c;
-    double v = sqrt((-a*(c-d) + b*b - b*(c+d) + c*c));
-    double w = -a + 3.0*b - 3.0*c + d;
-    if (w != 0.0)
-    {
-        vec.push_back((u-v)/w);
-        vec.push_back((u+v)/w);
-    }
-    return vec;
-}
-#endif
-
 static void getCubicBezierBBox(double x0, double y0, double x1, double y1, double x2, double y2, double x, double y,
                                double &xmin, double &ymin, double &xmax, double &ymax)
 {
@@ -265,29 +249,6 @@ static void getCubicBezierBBox(double x0, double y0, double x1, double y1, doubl
     ymin = y0 < y ? y0 : y;
     ymax = y0 > y ? y0 : y;
 
-#if 0
-    std::vector<double> extremes = cubicExtremes(x0, x1, x2, x);
-    for(std::vector<double>::iterator iterX = extremes.begin(); iterX != extremes.end(); ++iterX)
-    {
-        if(*iterX >= 0 && *iterX <= 1)
-        {
-            double tmpx = cubicBase(*iterX, x0, x1, x2, x);
-            xmin = tmpx < xmin ? tmpx : xmin;
-            xmax = tmpx > xmax ? tmpx : xmax;
-        }
-    }
-
-    extremes = cubicExtremes(y0, y1, y2, y);
-    for(std::vector<double>::iterator iterY = extremes.begin(); iterY != extremes.end(); ++iterY)
-    {
-        if(*iterY>=0.0 && *iterY<=1.0)
-        {
-            double tmpy = cubicBase(*iterY, y0, y1, y2, y);
-            ymin = tmpy < ymin ? tmpy : ymin;
-            ymax = tmpy > ymax ? tmpy : ymax;
-        }
-    }
-#else
     for (double t = 0.0; t <= 1.0; t+=0.01)
     {
         double tmpx = cubicBase(t, x0, x1, x2, x);
@@ -297,7 +258,6 @@ static void getCubicBezierBBox(double x0, double y0, double x1, double y1, doubl
         ymin = tmpy < ymin ? tmpy : ymin;
         ymax = tmpy > ymax ? tmpy : ymax;
     }
-#endif
 }
 
 
@@ -763,7 +723,6 @@ void OdgGenerator::startGraphics(const ::WPXPropertyList &propList)
 
 
     TagOpenElement *pStyleDrawingPagePropertiesOpenElement = new TagOpenElement("style:drawing-page-properties");
-    // pStyleDrawingPagePropertiesOpenElement->addAttribute("draw:background-size", "border");
     pStyleDrawingPagePropertiesOpenElement->addAttribute("draw:fill", "none");
     mpImpl->mPageAutomaticStyles.push_back(pStyleDrawingPagePropertiesOpenElement);
 

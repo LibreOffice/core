@@ -205,22 +205,11 @@ void XMLSettingsExportHelper::exportBool(const sal_Bool bValue, const rtl::OUStr
 
 void XMLSettingsExportHelper::exportByte(const sal_Int8 nValue, const rtl::OUString& rName) const
 {
-#if 0
-    DBG_ASSERT(!rName.isEmpty(), "no name");
-    m_rContext.AddAttribute( XML_NAME, rName );
-    m_rContext.AddAttribute( XML_TYPE, XML_BYTE );
-    m_rContext.StartElement( XML_CONFIG_ITEM, sal_True );
-    rtl::OUStringBuffer sBuffer;
-	::sax::Converter::convertNumber(sBuffer, sal_Int32(nValue));
-    m_rContext.Characters( sBuffer.makeStringAndClear() );
-    m_rContext.EndElement( sal_False );
-#else
     (void) nValue; (void) rName;
     OSL_ENSURE(false, "XMLSettingsExportHelper::exportByte(): #i114162#:\n"
         "config-items of type \"byte\" are not valid ODF, "
         "so storing them is disabled!\n"
         "Use a different type instead (e.g. \"short\").");
-#endif
 }
 void XMLSettingsExportHelper::exportShort(const sal_Int16 nValue, const rtl::OUString& rName) const
 {
