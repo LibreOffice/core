@@ -78,7 +78,7 @@ System::Object^ Bridge::call_uno(uno_Interface * pUnoI,
         uno_ret = (mem + (nParams * sizeof (void *)));
     largest * uno_args_mem = (largest *)(mem + (nParams * sizeof (void *)) + return_size);
 
-    OSL_ASSERT( (0 == nParams) || (nParams == args->get_Length()) );
+    OSL_ASSERT( (0 == nParams) || (nParams == args->Length) );
     for ( sal_Int32 nPos = 0; nPos < nParams; ++nPos )
     {
         typelib_MethodParameter const & param = pParams[ nPos ];

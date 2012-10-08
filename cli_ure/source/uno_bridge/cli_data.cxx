@@ -1584,7 +1584,7 @@ void Bridge::map_to_cli(
      {
          if (info != nullptr)
          {
-             OSL_ASSERT(info->get_IsByRef());
+             OSL_ASSERT(info->IsByRef);
              info= info->GetElementType();
              *cli_data= System::Enum::ToObject(info, *(System::Int32*) uno_data);
          }
@@ -1661,10 +1661,10 @@ void Bridge::map_to_cli(
                     ctorInfo = arCtorInfo[i];
                     break;
                 }
-                OSL_ASSERT(arParamInfo[0]->get_ParameterType()->Equals(__typeof(System::String))
-                    && arParamInfo[1]->get_ParameterType()->Equals(__typeof(System::Object))
-                    && arParamInfo[0]->get_Position() == 0
-                    && arParamInfo[1]->get_Position() == 1);
+                OSL_ASSERT(arParamInfo[0]->ParameterType->Equals(System::String::typeid)
+                    && arParamInfo[1]->ParameterType->Equals(System::Object::typeid)
+                    && arParamInfo[0]->Position == 0
+                    && arParamInfo[1]->Position == 1);
                 //Prepare parameters for constructor
                 int numArgs = arParamInfo->Length;
                 array<System::Object^>^ args = gcnew array<System::Object^>(numArgs);

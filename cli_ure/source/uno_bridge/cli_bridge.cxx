@@ -276,8 +276,8 @@ SAL_DLLPUBLIC_EXPORT void SAL_CALL uno_initEnvironment( uno_Environment * uno_cl
     uno_cli_env->pExtEnv = 0;
     //Set the console to print Trace messages
 #if OSL_DEBUG_LEVEL >= 1
-    System::Diagnostics::Trace::get_Listeners()->
-            Add( new System::Diagnostics::TextWriterTraceListener(System::Console::get_Out()));
+    System::Diagnostics::Trace::Listeners->
+            Add( gcnew System::Diagnostics::TextWriterTraceListener(System::Console::Out));
 #endif
     OSL_ASSERT( 0 == uno_cli_env->pContext );
 

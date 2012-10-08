@@ -285,10 +285,10 @@ bool UnoInterfaceProxy::CanCastTo(System::Type^ fromType,
                 UnoInterfaceProxy ^ proxy =
                     static_cast< UnoInterfaceProxy ^ >(
                         srr::RemotingServices::GetRealProxy( obj ) );
-                OSL_ASSERT( 0 != proxy->findInfo( fromType ) );
+                OSL_ASSERT( nullptr != proxy->findInfo( fromType ) );
                 m_listAdditionalProxies->Add( proxy );
                 m_nlistAdditionalProxies = m_listAdditionalProxies->Count;
-                OSL_ASSERT( 0 != findInfo( fromType ) );
+                OSL_ASSERT( nullptr != findInfo( fromType ) );
                 return true;
             }
         }
@@ -337,7 +337,7 @@ srrm::IMessage^ UnoInterfaceProxy::invokeObject(
     if (m_Equals_String->Equals(sMethod))
     {
         // Object.Equals
-        OSL_ASSERT(args->get_Length() == 1);
+        OSL_ASSERT(args->Length == 1);
         srrp::RealProxy^ rProxy = srr::RemotingServices::GetRealProxy(args[0]);
         bool bDone = false;
         if (rProxy)
@@ -433,7 +433,7 @@ srrm::IMessage^ UnoInterfaceProxy::Invoke(srrm::IMessage^ callmsg)
 
         System::Type^ typeBeingCalled = loadCliType(sTypeName);
         UnoInterfaceInfo^ info = findInfo( typeBeingCalled );
-        OSL_ASSERT( 0 != info );
+        OSL_ASSERT( nullptr != info );
 
         // ToDo do without string conversion, a OUString is not needed here
         // get the type description of the call
