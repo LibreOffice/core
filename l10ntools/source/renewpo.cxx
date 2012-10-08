@@ -147,14 +147,17 @@ void HandleLanguage(struct dirent* pLangEntry, const OString& rPath,
             if (!sActUnTrans.getToken(vTypes[nIndex],'\t').isEmpty())
             {
                 /**Because of xrmex there are duplicated id's,
-                   only use this if xrmex have already fixed
+                   only use this if xrmex have already fixed*/
+                const OString sSource =
+                    sActUnTrans.getToken(PoEntry::SOURCEFILE,'\t');
+                const OString sEnding =
+                    sSource.copy(sSource.getLength()-4, 4);
                 if (sActUnTrans.getToken(PoEntry::GROUPID,'\t')==
                     sActUnTrans.getToken(PoEntry::LOCALID,'\t') &&
-                    sActUnTrans.getToken(PoEntry::SOURCEFILE,'\t').
-                                endsWith(".xrm"))
+                    ( sEnding == ".xrm" || sEnding == ".xml" ))
                 {
                     sActUnTrans = DelLocalId(sActUnTrans);
-                }*/
+                }
                 PoEntry aPE(sActUnTrans, vTypes[nIndex]);
                 const OString sActStr =
                     sActTrans.getToken(vTypes[nIndex],'\t');
