@@ -59,9 +59,9 @@ namespace sd {
 }
 // add for BreakDlg
 class Dialog;
-class VclAbstractDialog_Impl : public VclAbstractDialog
+class SdVclAbstractDialog_Impl : public VclAbstractDialog
 {
-    DECL_ABSTDLG_BASE(VclAbstractDialog_Impl,Dialog)
+    DECL_ABSTDLG_BASE(SdVclAbstractDialog_Impl,Dialog)
 };
 
 // add for CopyDlg
@@ -83,9 +83,9 @@ class AbstractSdCustomShowDlg_Impl : public AbstractSdCustomShowDlg
 
 //add for SdCharDlg begin
 class SfxTabDialog;
-class AbstractTabDialog_Impl : public SfxAbstractTabDialog
+class SdAbstractTabDialog_Impl : public SfxAbstractTabDialog
 {
-    DECL_ABSTDLG_BASE( AbstractTabDialog_Impl,SfxTabDialog )
+    DECL_ABSTDLG_BASE( SdAbstractTabDialog_Impl,SfxTabDialog )
     virtual void                SetCurPageId( sal_uInt16 nId );
     virtual const SfxItemSet*   GetOutputItemSet() const;
     virtual const sal_uInt16*       GetInputRanges( const SfxItemPool& pItem );

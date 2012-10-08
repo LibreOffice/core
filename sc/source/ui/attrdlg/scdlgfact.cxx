@@ -86,7 +86,7 @@
 // ause
 #include "editutil.hxx"
 
-IMPL_ABSTDLG_BASE(VclAbstractDialog_Impl);
+IMPL_ABSTDLG_BASE(ScVclAbstractDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractScImportAsciiDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractScAutoFormatDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractScColRowLabelDlg_Impl);
@@ -123,34 +123,34 @@ IMPL_ABSTDLG_BASE(AbstractScStringInputDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractScTabBgColorDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractScImportOptionsDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractScTextImportOptionsDlg_Impl);
-IMPL_ABSTDLG_BASE(AbstractTabDialog_Impl);
+IMPL_ABSTDLG_BASE(ScAbstractTabDialog_Impl);
 
-// AbstractTabDialog_Impl begin
-void AbstractTabDialog_Impl::SetCurPageId( sal_uInt16 nId )
+// ScAbstractTabDialog_Impl begin
+void ScAbstractTabDialog_Impl::SetCurPageId( sal_uInt16 nId )
 {
     pDlg->SetCurPageId( nId );
 }
 
-const SfxItemSet* AbstractTabDialog_Impl::GetOutputItemSet() const
+const SfxItemSet* ScAbstractTabDialog_Impl::GetOutputItemSet() const
 {
     return pDlg->GetOutputItemSet();
 }
 
-const sal_uInt16* AbstractTabDialog_Impl::GetInputRanges(const SfxItemPool& pItem )
+const sal_uInt16* ScAbstractTabDialog_Impl::GetInputRanges(const SfxItemPool& pItem )
 {
     return pDlg->GetInputRanges( pItem );
 }
 
-void AbstractTabDialog_Impl::SetInputSet( const SfxItemSet* pInSet )
+void ScAbstractTabDialog_Impl::SetInputSet( const SfxItemSet* pInSet )
 {
      pDlg->SetInputSet( pInSet );
 }
 //From class Window.
-void AbstractTabDialog_Impl::SetText( const XubString& rStr )
+void ScAbstractTabDialog_Impl::SetText( const XubString& rStr )
 {
     pDlg->SetText( rStr );
 }
-String AbstractTabDialog_Impl::GetText() const
+String ScAbstractTabDialog_Impl::GetText() const
 {
     return pDlg->GetText();
 }
@@ -757,7 +757,7 @@ VclAbstractDialog *  ScAbstractDialogFactory_Impl::CreateScColOrRowDlg(Window*  
     }
 
     if ( pDlg )
-        return new VclAbstractDialog_Impl( pDlg );
+        return new ScVclAbstractDialog_Impl( pDlg );
     return 0;
 }
 
@@ -776,7 +776,7 @@ VclAbstractDialog * ScAbstractDialogFactory_Impl::CreateScSortWarningDlg( Window
         break;
     }
     if( pDlg )
-        return new VclAbstractDialog_Impl( pDlg );
+        return new ScVclAbstractDialog_Impl( pDlg );
     return 0;
 }
 
@@ -1456,13 +1456,13 @@ SfxAbstractTabDialog * ScAbstractDialogFactory_Impl::CreateScAttrDlg( SfxViewFra
     }
 
     if ( pDlg )
-        return new AbstractTabDialog_Impl( pDlg );
+        return new ScAbstractTabDialog_Impl( pDlg );
     return 0;
 
 }
 
 #undef SfxTabDialog
-#undef AbstractTabDialog_Impl
+#undef ScAbstractTabDialog_Impl
 
 
 SfxAbstractTabDialog * ScAbstractDialogFactory_Impl::CreateScHFEditDlg( SfxViewFrame*       pFrame,
@@ -1483,7 +1483,7 @@ SfxAbstractTabDialog * ScAbstractDialogFactory_Impl::CreateScHFEditDlg( SfxViewF
     }
 
     if ( pDlg )
-        return new AbstractTabDialog_Impl( pDlg );
+        return new ScAbstractTabDialog_Impl( pDlg );
     return 0;
 }
 
@@ -1506,7 +1506,7 @@ SfxAbstractTabDialog * ScAbstractDialogFactory_Impl::CreateScStyleDlg( Window*  
     }
 
     if ( pDlg )
-        return new AbstractTabDialog_Impl( pDlg );
+        return new ScAbstractTabDialog_Impl( pDlg );
     return 0;
 }
 
@@ -1527,7 +1527,7 @@ SfxAbstractTabDialog * ScAbstractDialogFactory_Impl::CreateScSubTotalDlg( Window
     }
 
     if ( pDlg )
-        return new AbstractTabDialog_Impl( pDlg );
+        return new ScAbstractTabDialog_Impl( pDlg );
     return 0;
 }
 
@@ -1547,7 +1547,7 @@ SfxAbstractTabDialog * ScAbstractDialogFactory_Impl::CreateScCharDlg( Window* pP
     }
 
     if ( pDlg )
-        return new AbstractTabDialog_Impl( pDlg );
+        return new ScAbstractTabDialog_Impl( pDlg );
     return 0;
 }
 
@@ -1567,7 +1567,7 @@ SfxAbstractTabDialog * ScAbstractDialogFactory_Impl::CreateScParagraphDlg( Windo
     }
 
     if ( pDlg )
-        return new AbstractTabDialog_Impl( pDlg );
+        return new ScAbstractTabDialog_Impl( pDlg );
     return 0;
 }
 
@@ -1587,7 +1587,7 @@ SfxAbstractTabDialog * ScAbstractDialogFactory_Impl::CreateScValidationDlg( Wind
     }
 
     if ( pDlg )
-        return new AbstractTabDialog_Impl( pDlg );
+        return new ScAbstractTabDialog_Impl( pDlg );
     return 0;
 }
 
@@ -1606,11 +1606,11 @@ SfxAbstractTabDialog * ScAbstractDialogFactory_Impl::CreateScSortDlg( Window*   
     }
 
     if ( pDlg )
-        return new AbstractTabDialog_Impl( pDlg );
+        return new ScAbstractTabDialog_Impl( pDlg );
     return 0;
 }
 #undef SfxTabDialog
-#undef AbstractTabDialog_Impl
+#undef ScAbstractTabDialog_Impl
 
 
 //------------------ Factories for TabPages--------------------

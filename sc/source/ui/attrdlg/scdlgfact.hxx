@@ -110,9 +110,9 @@ long Class::GetResult()                             \
     return pDlg->GetResult();                       \
 }
 
-class VclAbstractDialog_Impl : public VclAbstractDialog //add for ScColOrRowDlg
+class ScVclAbstractDialog_Impl : public VclAbstractDialog //add for ScColOrRowDlg
 {
-    DECL_ABSTDLG_BASE(VclAbstractDialog_Impl,Dialog)
+    DECL_ABSTDLG_BASE(ScVclAbstractDialog_Impl,Dialog)
 };
 
 class AbstractScImportAsciiDlg_Impl : public AbstractScImportAsciiDlg  //add for ScImportAsciiDlg
@@ -392,9 +392,9 @@ class AbstractScTextImportOptionsDlg_Impl : public AbstractScTextImportOptionsDl
 };
 
 //add for ScAttrDlg , ScHFEditDlg, ScStyleDlg, ScSubTotalDlg, ScCharDlg, ScParagraphDlg, ScValidationDlg, ScSortDlg
-class AbstractTabDialog_Impl : public SfxAbstractTabDialog
+class ScAbstractTabDialog_Impl : public SfxAbstractTabDialog
 {
-    DECL_ABSTDLG_BASE( AbstractTabDialog_Impl,SfxTabDialog )
+    DECL_ABSTDLG_BASE( ScAbstractTabDialog_Impl,SfxTabDialog )
     virtual void                SetCurPageId( sal_uInt16 nId );
     virtual const SfxItemSet*   GetOutputItemSet() const;
     virtual const sal_uInt16*       GetInputRanges( const SfxItemPool& pItem );

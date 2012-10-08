@@ -61,10 +61,10 @@
 #include "masterlayoutdlg.hxx"
 #include "headerfooterdlg.hxx"
 
-IMPL_ABSTDLG_BASE(VclAbstractDialog_Impl);
+IMPL_ABSTDLG_BASE(SdVclAbstractDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractCopyDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractSdCustomShowDlg_Impl);
-IMPL_ABSTDLG_BASE(AbstractTabDialog_Impl);
+IMPL_ABSTDLG_BASE(SdAbstractTabDialog_Impl);
 IMPL_ABSTDLG_BASE(SdPresLayoutTemplateDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractAssistentDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractSdModifyFieldDlg_Impl);
@@ -99,33 +99,33 @@ sal_Bool AbstractSdCustomShowDlg_Impl::IsCustomShow() const
 }
 // AbstractSdCustomShowDlg_Impl end
 
-// AbstractTabDialog_Impl begin
-void AbstractTabDialog_Impl::SetCurPageId( sal_uInt16 nId )
+// SdAbstractTabDialog_Impl begin
+void SdAbstractTabDialog_Impl::SetCurPageId( sal_uInt16 nId )
 {
     pDlg->SetCurPageId( nId );
 }
-const SfxItemSet* AbstractTabDialog_Impl::GetOutputItemSet() const
+const SfxItemSet* SdAbstractTabDialog_Impl::GetOutputItemSet() const
 {
     return pDlg->GetOutputItemSet();
 }
-const sal_uInt16* AbstractTabDialog_Impl::GetInputRanges(const SfxItemPool& pItem )
+const sal_uInt16* SdAbstractTabDialog_Impl::GetInputRanges(const SfxItemPool& pItem )
 {
     return pDlg->GetInputRanges( pItem );
 }
-void AbstractTabDialog_Impl::SetInputSet( const SfxItemSet* pInSet )
+void SdAbstractTabDialog_Impl::SetInputSet( const SfxItemSet* pInSet )
 {
      pDlg->SetInputSet( pInSet );
 }
 //From class Window.
-void AbstractTabDialog_Impl::SetText( const XubString& rStr )
+void SdAbstractTabDialog_Impl::SetText( const XubString& rStr )
 {
     pDlg->SetText( rStr );
 }
-String AbstractTabDialog_Impl::GetText() const
+String SdAbstractTabDialog_Impl::GetText() const
 {
     return pDlg->GetText();
 }
-//add for AbstractTabDialog_Impl end
+//add for SdAbstractTabDialog_Impl end
 
 // --------------------------------------------------------------------
 
@@ -388,7 +388,7 @@ VclAbstractDialog * SdAbstractDialogFactory_Impl::CreateBreakDlg(
                                             sal_uLong nSumActionCount,
                                             sal_uLong nObjCount ) //add for BreakDlg
 {
-    return new VclAbstractDialog_Impl( new ::sd::BreakDlg( pWindow, pDrView, pShell, nSumActionCount, nObjCount ) );
+    return new SdVclAbstractDialog_Impl( new ::sd::BreakDlg( pWindow, pDrView, pShell, nSumActionCount, nObjCount ) );
 }
 //add for BreakDlg end
 
@@ -412,13 +412,13 @@ AbstractSdCustomShowDlg * SdAbstractDialogFactory_Impl::CreateSdCustomShowDlg( :
 // add for SdCharDlg begin
 SfxAbstractTabDialog *  SdAbstractDialogFactory_Impl::CreateSdTabCharDialog( ::Window* pParent, const SfxItemSet* pAttr, SfxObjectShell* pDocShell )
 {
-    return new AbstractTabDialog_Impl( new SdCharDlg( pParent, pAttr, pDocShell ) );
+    return new SdAbstractTabDialog_Impl( new SdCharDlg( pParent, pAttr, pDocShell ) );
 }
 
 
 SfxAbstractTabDialog *  SdAbstractDialogFactory_Impl::CreateSdTabPageDialog( ::Window* pParent, const SfxItemSet* pAttr, SfxObjectShell* pDocShell, sal_Bool bAreaPage )
 {
-    return new AbstractTabDialog_Impl( new SdPageDlg( pDocShell, pParent, pAttr, bAreaPage ) );
+    return new SdAbstractTabDialog_Impl( new SdPageDlg( pDocShell, pParent, pAttr, bAreaPage ) );
 }
 // add for SdCharDlg end
 
@@ -479,7 +479,7 @@ SfxAbstractTabDialog *  SdAbstractDialogFactory_Impl::CreateSdOutlineBulletTabDl
 
 SfxAbstractTabDialog *  SdAbstractDialogFactory_Impl::CreateSdParagraphTabDlg( ::Window* pParent, const SfxItemSet* pAttr )
 {
-    return new AbstractTabDialog_Impl( new SdParagraphDlg( pParent, pAttr ) );
+    return new SdAbstractTabDialog_Impl( new SdParagraphDlg( pParent, pAttr ) );
 }
 // add for OutlineBulletDlg end
 
@@ -494,7 +494,7 @@ AbstractSdStartPresDlg *  SdAbstractDialogFactory_Impl::CreateSdStartPresentatio
 // add for SdRemoteDlg begin
 VclAbstractDialog * SdAbstractDialogFactory_Impl::CreateRemoteDialog( ::Window* pWindow )
 {
-     return new VclAbstractDialog_Impl( new ::sd::RemoteDialog( pWindow ) );
+     return new SdVclAbstractDialog_Impl( new ::sd::RemoteDialog( pWindow ) );
 }
 // add for SdRemoteDlg end
 
@@ -514,7 +514,7 @@ AbstractSdPresLayoutDlg *  SdAbstractDialogFactory_Impl::CreateSdPresLayoutDlg( 
 // add for SdTabTemplateDlg begin
 SfxAbstractTabDialog *  SdAbstractDialogFactory_Impl::CreateSdTabTemplateDlg( ::Window* pParent, const SfxObjectShell* pDocShell, SfxStyleSheetBase& rStyleBase, SdrModel* pModel, SdrView* pView )
 {
-    return new AbstractTabDialog_Impl( new SdTabTemplateDlg( pParent, pDocShell, rStyleBase, pModel, pView ) );
+    return new SdAbstractTabDialog_Impl( new SdTabTemplateDlg( pParent, pDocShell, rStyleBase, pModel, pView ) );
 }
 // add for SdTabTemplateDlg end
 
@@ -561,7 +561,7 @@ CreateTabPage SdAbstractDialogFactory_Impl::GetSdOptionsSnapTabPageCreatorFunc()
 VclAbstractDialog* SdAbstractDialogFactory_Impl::CreateMasterLayoutDialog( ::Window* pParent,
     SdDrawDocument* pDoc, SdPage* pCurrentPage )
 {
-  return new VclAbstractDialog_Impl( new ::sd::MasterLayoutDialog( pParent, pDoc, pCurrentPage ));
+  return new SdVclAbstractDialog_Impl( new ::sd::MasterLayoutDialog( pParent, pDoc, pCurrentPage ));
 }
 
 AbstractHeaderFooterDialog* SdAbstractDialogFactory_Impl::CreateHeaderFooterDialog( ViewShell* pViewShell,
