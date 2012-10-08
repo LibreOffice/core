@@ -427,9 +427,9 @@ void SFTreeListBox::ExpandedHdl()
 }
 
 // ----------------------------------------------------------------------------
-// InputDialog ------------------------------------------------------------
+// CuiInputDialog ------------------------------------------------------------
 // ----------------------------------------------------------------------------
-InputDialog::InputDialog(Window * pParent, sal_uInt16 nMode )
+CuiInputDialog::CuiInputDialog(Window * pParent, sal_uInt16 nMode )
     : ModalDialog( pParent, CUI_RES( RID_DLG_NEWLIB ) ),
         aText( this, CUI_RES( FT_NEWLIB ) ),
         aEdit( this, CUI_RES( ED_LIBNAME ) ),
@@ -484,7 +484,7 @@ InputDialog::InputDialog(Window * pParent, sal_uInt16 nMode )
 
 }
 
-InputDialog::~InputDialog()
+CuiInputDialog::~CuiInputDialog()
 {
 }
 // ----------------------------------------------------------------------------
@@ -933,7 +933,7 @@ void SvxScriptOrgDialog::createEntry( SvLBoxEntry* pEntry )
         }
 
         SAL_WNODEPRECATED_DECLARATIONS_PUSH
-        std::auto_ptr< InputDialog > xNewDlg( new InputDialog( static_cast<Window*>(this), nMode ) );
+        std::auto_ptr< CuiInputDialog > xNewDlg( new CuiInputDialog( static_cast<Window*>(this), nMode ) );
         SAL_WNODEPRECATED_DECLARATIONS_POP
         xNewDlg->SetObjectName( aNewName );
 
@@ -1065,7 +1065,7 @@ void SvxScriptOrgDialog::renameEntry( SvLBoxEntry* pEntry )
         sal_uInt16 nMode = INPUTMODE_RENAME;
 
         SAL_WNODEPRECATED_DECLARATIONS_PUSH
-        std::auto_ptr< InputDialog > xNewDlg( new InputDialog( static_cast<Window*>(this), nMode ) );
+        std::auto_ptr< CuiInputDialog > xNewDlg( new CuiInputDialog( static_cast<Window*>(this), nMode ) );
         SAL_WNODEPRECATED_DECLARATIONS_POP
         xNewDlg->SetObjectName( aNewName );
 

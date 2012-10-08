@@ -98,7 +98,7 @@ public:
     void deleteAllTree( );
 };
 
-class InputDialog : public ModalDialog
+class CuiInputDialog : public ModalDialog
 {
 private:
     FixedText       aText;
@@ -107,8 +107,8 @@ private:
     CancelButton    aCancelButton;
 
 public:
-    InputDialog( Window * pParent, sal_uInt16 nMode );
-                ~InputDialog();
+    CuiInputDialog( Window * pParent, sal_uInt16 nMode );
+    ~CuiInputDialog();
 
     String      GetObjectName() const { return aEdit.GetText(); }
     void        SetObjectName( const String& rName ) { aEdit.SetText( rName ); aEdit.SetSelection( Selection( 0, rName.Len() ) );}
