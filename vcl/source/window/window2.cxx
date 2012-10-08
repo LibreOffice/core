@@ -2002,6 +2002,14 @@ bool Window::set_property(const rtl::OString &rKey, const rtl::OString &rValue)
 
         SetStyle(nBits);
     }
+    else if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("wrap")))
+    {
+        WinBits nBits = GetStyle();
+        nBits &= ~(WB_WORDBREAK);
+        if (toBool(rValue))
+            nBits |= WB_WORDBREAK;
+        SetStyle(nBits);
+    }
     else if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("text")))
         SetText(rtl::OStringToOUString(rValue, RTL_TEXTENCODING_UTF8));
     else if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("height-request")))
