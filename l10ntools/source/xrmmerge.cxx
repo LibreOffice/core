@@ -192,9 +192,9 @@ int XRMResParser::Execute( int nToken, char * pToken )
 
     switch ( nToken ) {
         case XRM_TEXT_START:{
-                rtl::OString sNewLID = GetAttribute( rToken, "id" );
-                if ( sNewLID != sLID ) {
-                    sLID = sNewLID;
+                rtl::OString sNewGID = GetAttribute( rToken, "id" );
+                if ( sNewGID != sGID ) {
+                    sGID = sNewGID;
                 }
                 bText = sal_True;
                 sCurrentText = "";
@@ -228,7 +228,7 @@ int XRMResParser::Execute( int nToken, char * pToken )
 
         case DESC_TEXT_START:{
                 if (bDisplayName) {
-                    sLID = rtl::OString("dispname");
+                    sGID = rtl::OString("dispname");
                     bText = sal_True;
                     sCurrentText = "";
                     sCurrentOpenTag = rToken;
@@ -264,7 +264,7 @@ int XRMResParser::Execute( int nToken, char * pToken )
 
         case DESC_EXTENSION_DESCRIPTION_SRC: {
                 if (bExtensionDescription) {
-                    sLID = rtl::OString("extdesc");
+                    sGID = rtl::OString("extdesc");
                     sResourceType = rtl::OString ( "description" );
                     sLangAttribute = rtl::OString ( "lang" );
                     sCurrentOpenTag = rToken;
@@ -429,7 +429,6 @@ void XRMResExport::WorkOnText(
     {
         rtl::OString sPlatform( "" );
         pResData = new ResData( sPlatform, GetGID() );
-        pResData->sId = GetLID();
     }
 
     rtl::OString sText(rText);
@@ -459,12 +458,8 @@ void XRMResExport::EndOfText(
             sOutput += "\t0\t";
             sOutput += sResourceType;
             sOutput += "\t";
-            sOutput += pResData->sId;
-            // USE LID AS GID OR MERGE DON'T WORK
-            //sOutput += pResData->sGId;
-            sOutput += "\t";
-            sOutput += pResData->sId;
-            sOutput += "\t\t\t0\t";
+            sOutput += pResData->sGId;
+            sOutput += "\t\t\t\t0\t";
             sOutput += sCur;
             sOutput += "\t";
 
@@ -601,8 +596,7 @@ void XRMResMerge::WorkOnText(
     if ( pMergeDataFile ) {
         if ( !pResData ) {
             rtl::OString sPlatform( "" );
-            pResData = new ResData( sPlatform, GetLID() , sFilename );
-            pResData->sId = GetLID();
+            pResData = new ResData( sPlatform, GetGID() , sFilename );
             pResData->sResTyp = sResourceType;
         }
 
