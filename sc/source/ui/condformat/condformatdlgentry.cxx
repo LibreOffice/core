@@ -1,6 +1,7 @@
 #include "condformatdlg.hxx"
 #include "condformatdlgentry.hxx"
 #include "condformatdlg.hrc"
+#include "conditio.hxx"
 
 #include "document.hxx"
 
@@ -138,18 +139,6 @@ IMPL_LINK(ScCondFrmtEntry, EdModifyHdl, Edit*, pEdit)
 
 //
 //condition
-
-ScFormatEntry* ScConditionFrmtEntry::createFormulaEntry() const
-{
-    ScConditionMode eMode = SC_COND_DIRECT;
-    rtl::OUString aFormula = maEdVal1.GetText();
-    if(aFormula.isEmpty())
-        return NULL;
-
-    rtl::OUString aExpr2;
-    ScFormatEntry* pEntry = new ScCondFormatEntry(eMode, aFormula, aExpr2, mpDoc, maPos, maLbStyle.GetSelectEntry());
-    return pEntry;
-}
 
 ScConditionFrmtEntry::ScConditionFrmtEntry( Window* pParent, ScDocument* pDoc, const ScAddress& rPos, const ScCondFormatEntry* pFormatEntry ):
     ScCondFrmtEntry( pParent, pDoc, rPos ),
@@ -375,6 +364,131 @@ IMPL_LINK_NOARG(ScConditionFrmtEntry, StyleSelectHdl)
     }
 
     return 0;
+}
+
+// formula
+
+ScFormulaFrmtEntry::ScFormulaFrmtEntry( Window* pParent, ScDocument* pDoc, const ScAddress& rPos, const ScCondFormatEntry* pFormat ):
+    ScCondFrmtEntry( pParent, pDoc, rPos ),
+    maFtStyle( this, ScResId( FT_STYLE ) ),
+    maLbStyle( this, ScResId( LB_STYLE ) ),
+    maWdPreview( this, ScResId( WD_PREVIEW ) ),
+    maEdFormula( this, ScResId( ED_FORMULA ) )
+{
+    Init();
+
+    FreeResource();
+
+    if(pFormat)
+    {
+        maEdFormula.SetText(pFormat->GetExpression(rPos, 0, 0, pDoc->GetGrammar()));
+        maLbStyle.SelectEntry(pFormat->GetStyle());
+    }
+    else
+    {
+        maLbStyle.SelectEntryPos(1);
+    }
+}
+
+void ScFormulaFrmtEntry::Init()
+{
+    maLbStyle.SetSeparatorPos(0);
+
+    SfxStyleSheetIterator aStyleIter( mpDoc->GetStyleSheetPool(), SFX_STYLE_FAMILY_PARA );
+    for ( SfxStyleSheetBase* pStyle = aStyleIter.First(); pStyle; pStyle = aStyleIter.Next() )
+    {
+        rtl::OUString aName = pStyle->GetName();
+        maLbStyle.InsertEntry( aName );
+    }
+    maLbStyle.SetSelectHdl( LINK( this, ScFormulaFrmtEntry, StyleSelectHdl ) );
+}
+
+IMPL_LINK_NOARG(ScFormulaFrmtEntry, StyleSelectHdl)
+{
+    if(maLbStyle.GetSelectEntryPos() == 0)
+    {
+        // call new style dialog
+        SfxUInt16Item aFamilyItem( SID_STYLE_FAMILY, SFX_STYLE_FAMILY_PARA );
+        SfxStringItem aRefItem( SID_STYLE_REFERENCE, ScGlobal::GetRscString(STR_STYLENAME_STANDARD) );
+
+        // unlock the dispatcher so SID_STYLE_NEW can be executed
+        // (SetDispatcherLock would affect all Calc documents)
+        ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
+        SfxDispatcher* pDisp = pViewShell->GetDispatcher();
+        sal_Bool bLocked = pDisp->IsLocked();
+        if (bLocked)
+            pDisp->Lock(false);
+
+        // Execute the "new style" slot, complete with undo and all necessary updates.
+        // The return value (SfxUInt16Item) is ignored, look for new styles instead.
+        pDisp->Execute( SID_STYLE_NEW, SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_RECORD | SFX_CALLMODE_MODAL,
+                &aFamilyItem,
+                &aRefItem,
+                0L );
+
+        if (bLocked)
+            pDisp->Lock(sal_True);
+
+        // Find the new style and add it into the style list boxes
+        rtl::OUString aNewStyle;
+        SfxStyleSheetIterator aStyleIter( mpDoc->GetStyleSheetPool(), SFX_STYLE_FAMILY_PARA );
+        for ( SfxStyleSheetBase* pStyle = aStyleIter.First(); pStyle; pStyle = aStyleIter.Next() )
+        {
+            rtl::OUString aName = pStyle->GetName();
+            if ( maLbStyle.GetEntryPos(aName) == LISTBOX_ENTRY_NOTFOUND )    // all lists contain the same entries
+            {
+                maLbStyle.InsertEntry(aName);
+                maLbStyle.SelectEntry(aName);
+            }
+        }
+    }
+
+    rtl::OUString aStyleName = maLbStyle.GetSelectEntry();
+    SfxStyleSheetBase* pStyleSheet = mpDoc->GetStyleSheetPool()->Find( aStyleName, SFX_STYLE_FAMILY_PARA );
+    if(pStyleSheet)
+    {
+        const SfxItemSet& rSet = pStyleSheet->GetItemSet();
+        maWdPreview.Init( rSet );
+    }
+
+    return 0;
+}
+
+ScFormatEntry* ScFormulaFrmtEntry::createFormulaEntry() const
+{
+    ScConditionMode eMode = SC_COND_DIRECT;
+    rtl::OUString aFormula = maEdFormula.GetText();
+    if(aFormula.isEmpty())
+        return NULL;
+
+    rtl::OUString aExpr2;
+    ScFormatEntry* pEntry = new ScCondFormatEntry(eMode, aFormula, aExpr2, mpDoc, maPos, maLbStyle.GetSelectEntry());
+    return pEntry;
+}
+
+ScFormatEntry* ScFormulaFrmtEntry::GetEntry() const
+{
+    return createFormulaEntry();
+}
+
+void ScFormulaFrmtEntry::SetActive()
+{
+    maWdPreview.Show();
+    maFtStyle.Show();
+    maLbStyle.Show();
+    maEdFormula.Show();
+
+    Select();
+}
+
+void ScFormulaFrmtEntry::SetInactive()
+{
+    maWdPreview.Hide();
+    maFtStyle.Hide();
+    maLbStyle.Hide();
+    maEdFormula.Hide();
+
+    Deselect();
 }
 
 //color scale

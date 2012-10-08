@@ -149,6 +149,12 @@ Control RID_COND_ENTRY
         Size = MAP_APPFONT( 50, 12 );
         Border = TRUE;
     };
+    Edit ED_FORMULA
+    {
+        Pos = MAP_APPFONT( 90, 15 );
+        Size = MAP_APPFONT( 135, 12 );
+        Border = TRUE;
+    };
     Edit ED_VAL2
     {
         Pos = MAP_APPFONT( 230, 15 );

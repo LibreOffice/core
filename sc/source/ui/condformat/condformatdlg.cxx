@@ -190,13 +190,15 @@ IMPL_LINK(ScCondFormatList, TypeListHdl, ListBox*, pBox)
     {
         case 0:
             maEntries.replace( itr, new ScColorScaleFrmtEntry(this, mpDoc, maPos));
-            itr->SetHeight();
+            itr->SetActive();
             break;
         case 1:
             maEntries.replace( itr, new ScConditionFrmtEntry(this, mpDoc, maPos));
-            itr->SetHeight();
+            itr->SetActive();
             break;
         case 2:
+            maEntries.replace( itr, new ScFormulaFrmtEntry(this, mpDoc, maPos));
+            itr->SetActive();
             break;
     }
     RecalcAll();

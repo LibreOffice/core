@@ -55,13 +55,31 @@ class ScConditionFrmtEntry : public ScCondFrmtEntry
     SvxFontPrevWindow maWdPreview;
 
     ScFormatEntry* createConditionEntry() const;
-    ScFormatEntry* createFormulaEntry() const;
 
     void Init();
     DECL_LINK( StyleSelectHdl, void* );
     DECL_LINK( ConditionTypeSelectHdl, void* );
 public:
     ScConditionFrmtEntry( Window* pParent, ScDocument* pDoc, const ScAddress& rPos, const ScCondFormatEntry* pFormatEntry = NULL );
+
+    virtual ScFormatEntry* GetEntry() const;
+    virtual void SetActive();
+    virtual void SetInactive();
+};
+
+class ScFormulaFrmtEntry : public ScCondFrmtEntry
+{
+    FixedText maFtStyle;
+    ListBox maLbStyle;
+    SvxFontPrevWindow maWdPreview;
+    Edit maEdFormula;
+
+    ScFormatEntry* createFormulaEntry() const;
+    void Init();
+
+    DECL_LINK( StyleSelectHdl, void* );
+public:
+    ScFormulaFrmtEntry( Window* pParent, ScDocument* PDoc, const ScAddress& rPos, const ScCondFormatEntry* pFormatEntry = NULL );
 
     virtual ScFormatEntry* GetEntry() const;
     virtual void SetActive();
