@@ -26,8 +26,10 @@
 module com { module sun { module star { module awt {
 
 
-/** is a specialization of the AnimatedImagesControlModel which provides standard image sets
-    for displaying a non-procentual progress.
+/** is a specialization of the AnimatedImagesControlModel.
+
+    <p>To show a progress which cannot be expressed as a percentage of execution,
+    it displays animated images from a standard image set.</p>
 
     <p>Three image sets are provided, of size 16x16, 32x32, and 64x64 pixels.</p>
  */
