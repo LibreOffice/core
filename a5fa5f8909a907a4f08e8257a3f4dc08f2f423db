@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAPn///4Q\u003d",
+        "filename": "sal/inc/rtl/ustring.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 1536,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2012-10-08T16:07:23Z",
+      "side": 1,
+      "message": "the new fromIndex parameter wants to be documented",
+      "revId": "a5fa5f8909a907a4f08e8257a3f4dc08f2f423db",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAPn///4M\u003d",
+        "filename": "sal/inc/rtl/ustring.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1536,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2012-10-08T16:07:23Z",
+      "side": 1,
+      "message": "the new fromIndex parameter wants to be documented",
+      "revId": "a5fa5f8909a907a4f08e8257a3f4dc08f2f423db",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAPn///4E\u003d",
+        "filename": "sal/rtl/source/ustring.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1169,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2012-10-08T16:07:23Z",
+      "side": 1,
+      "message": "cannot hurt to add an assertion that fromIndex is valid here",
+      "revId": "a5fa5f8909a907a4f08e8257a3f4dc08f2f423db",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
