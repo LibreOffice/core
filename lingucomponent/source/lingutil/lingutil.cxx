@@ -47,22 +47,6 @@
 using ::com::sun::star::lang::Locale;
 using namespace ::com::sun::star;
 
-#if 0
-//////////////////////////////////////////////////////////////////////
-
-String GetDirectoryPathFromFileURL( const String &rFileURL )
-{
-    // get file URL
-    INetURLObject aURLObj;
-    aURLObj.SetSmartProtocol( INET_PROT_FILE );
-    aURLObj.SetSmartURL( rFileURL );
-    aURLObj.removeSegment();
-    DBG_ASSERT( !aURLObj.HasError(), "invalid URL" );
-    String aRes = aURLObj.GetMainURL( INetURLObject::DECODE_TO_IURI );
-    return aRes;
-}
-#endif
-
 #if defined(WNT)
 rtl::OString Win_GetShortPathName( const rtl::OUString &rLongPathName )
 {

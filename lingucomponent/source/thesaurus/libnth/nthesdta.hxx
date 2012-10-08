@@ -52,11 +52,7 @@ class Meaning :
     Meaning & operator = (const Meaning &);
 
 public:
-#if 0
-    Meaning(const ::rtl::OUString &rTerm, sal_Int16 nLang, const PropertyHelper_Thes &rHelper);
-#else
     Meaning(const ::rtl::OUString &rTerm, sal_Int16 nLang);
-#endif
     virtual ~Meaning();
 
     // XMeaning
@@ -67,9 +63,6 @@ public:
     void    SetSynonyms( const ::com::sun::star::uno::Sequence< ::rtl::OUString > &rSyn );
     void    SetMeaning( const ::rtl::OUString  &rTerm );
 };
-
-
-///////////////////////////////////////////////////////////////////////////
 
 }   // namespace linguistic
 
