@@ -181,7 +181,7 @@ my %msvc_2012 = (
 
 sub find_msvs()
 {
-    my @ms_versions = ( \%msvs_2012, \%msvs_2010, \%msvs_2008, \%msvs_express_2008 );
+    my @ms_versions = ( \%msvs_2008, \%msvs_express_2008, \%msvs_2012, \%msvs_2010 );
 
     for $ver (@ms_versions) {
         my $install = reg_get_value ("HKEY_LOCAL_MACHINE/SOFTWARE/" . $ver->{'key'});
@@ -195,7 +195,7 @@ sub find_msvs()
 
 sub find_msvc()
 {
-    my @ms_versions = ( \%msvc_2012, \%msvc_2010, \%msvc_2008, \%msvc_express_2008 );
+    my @ms_versions = ( \%msvc_2008, \%msvc_express_2008, \%msvc_2012, \%msvc_2010 );
 
     for $ver (@ms_versions) {
         my $install = reg_get_value ("HKEY_LOCAL_MACHINE/SOFTWARE/" . $ver->{'key'});
