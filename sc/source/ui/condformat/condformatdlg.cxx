@@ -71,7 +71,19 @@ ScCondFormatList::ScCondFormatList(Window* pParent, const ResId& rResId, ScDocum
         size_t nCount = pFormat->size();
         for (size_t nIndex = 0; nIndex < nCount; ++nIndex)
         {
-            maEntries.push_back(new ScConditionFrmtEntry( this, mpDoc, maPos, static_cast<const ScCondFormatEntry*>(pFormat->GetEntry(nIndex) ) ) );
+            const ScFormatEntry* pEntry = pFormat->GetEntry(nIndex);
+            switch(pEntry->GetType())
+            {
+                case condformat::CONDITION:
+                    maEntries.push_back(new ScConditionFrmtEntry( this, mpDoc, maPos, static_cast<const ScCondFormatEntry*>( pEntry ) ) );
+                    break;
+                case condformat::COLORSCALE:
+                    maEntries.push_back(new ScColorScaleFrmtEntry( this, mpDoc, maPos, static_cast<const ScColorScaleFormat*>( pEntry ) ) );
+                    break;
+                case condformat::DATABAR:
+                    maEntries.push_back(new ScDataBarFrmtEntry( this, mpDoc, maPos, static_cast<const ScDataBarFormat*>( pEntry ) ) );
+                    break;
+            }
         }
     }
     else
