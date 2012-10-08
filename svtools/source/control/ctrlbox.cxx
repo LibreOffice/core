@@ -832,7 +832,7 @@ sal_uInt16 LineListBox::InsertEntry( const XubString& rStr, sal_uInt16 nPos )
         if ( nPos < pLineList->size() ) {
             ImpLineList::iterator it = pLineList->begin();
             ::std::advance( it, nPos );
-            pLineList->insert( it, NULL );
+            pLineList->insert( it, reinterpret_cast<ImpLineListData *>(NULL) );
         } else {
             pLineList->push_back( NULL );
         }
