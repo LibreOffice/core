@@ -18,39 +18,27 @@
  */
 
 #include "docxattributeoutput.hxx"
-#include "docxexport.hxx"
 #include "docxexportfilter.hxx"
 #include "docxfootnotes.hxx"
 #include "writerwordglue.hxx"
-#include "wrtww8.hxx"
 #include "ww8par.hxx"
 #include "fmtcntnt.hxx"
-#include "fmtsrnd.hxx"
 #include "fchrfmt.hxx"
 #include "tgrditem.hxx"
 #include "fmtruby.hxx"
-#include "charfmt.hxx"
 #include "breakit.hxx"
 
 #include <comphelper/string.hxx>
 #include <oox/token/tokens.hxx>
-#include <oox/export/drawingml.hxx>
 #include <oox/export/utils.hxx>
 #include <oox/mathml/export.hxx>
 
 #include <i18npool/mslangid.hxx>
 
-#include <hintids.hxx>
-
-#include <svl/poolitem.hxx>
-
 #include <editeng/fontitem.hxx>
 #include <editeng/tstpitem.hxx>
-#include <editeng/adjitem.hxx>
 #include <editeng/spltitem.hxx>
 #include <editeng/widwitem.hxx>
-#include <editeng/lspcitem.hxx>
-#include <editeng/keepitem.hxx>
 #include <editeng/shaditem.hxx>
 #include <editeng/brshitem.hxx>
 #include <editeng/postitem.hxx>
@@ -58,21 +46,16 @@
 #include <editeng/kernitem.hxx>
 #include <editeng/crsditem.hxx>
 #include <editeng/cmapitem.hxx>
-#include <editeng/wrlmitem.hxx>
 #include <editeng/udlnitem.hxx>
 #include <editeng/langitem.hxx>
 #include <editeng/escpitem.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <editeng/colritem.hxx>
 #include <editeng/hyznitem.hxx>
-#include <editeng/brkitem.hxx>
-#include <editeng/lrspitem.hxx>
 #include <editeng/ulspitem.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/cntritem.hxx>
 #include <editeng/shdditem.hxx>
-#include <editeng/akrnitem.hxx>
-#include <editeng/pbinitem.hxx>
 #include <editeng/emphitem.hxx>
 #include <editeng/twolinesitem.hxx>
 #include <editeng/charscaleitem.hxx>
@@ -92,16 +75,11 @@
 #include <anchoredobject.hxx>
 #include <docufld.hxx>
 #include <flddropdown.hxx>
-#include <format.hxx>
 #include <fmtanchr.hxx>
 #include <fmtclds.hxx>
 #include <fmtinfmt.hxx>
-#include <fmtfld.hxx>
-#include <fmtfsize.hxx>
-#include <fmtftn.hxx>
 #include <fmtrowsplt.hxx>
 #include <fmtline.hxx>
-#include <frmfmt.hxx>
 #include <frmatr.hxx>
 #include <ftninfo.hxx>
 #include <htmltbl.hxx>
@@ -109,31 +87,18 @@
 #include <ndgrf.hxx>
 #include <ndole.hxx>
 #include <ndtxt.hxx>
-#include <node.hxx>
 #include <pagedesc.hxx>
 #include <paratr.hxx>
 #include <swmodule.hxx>
 #include <swtable.hxx>
 #include <txtftn.hxx>
 #include <txtinet.hxx>
-#include <numrule.hxx>
 
 #include <osl/file.hxx>
-#include <rtl/strbuf.hxx>
-#include <rtl/ustrbuf.hxx>
-#include <rtl/ustring.hxx>
 #include <vcl/temporaryfonts.hxx>
 
-#include <tools/color.hxx>
-
 #include <com/sun/star/i18n/ScriptType.hpp>
-#include <com/sun/star/drawing/XShape.hpp>
-#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/container/XNamed.hpp>
-#include <com/sun/star/io/XOutputStream.hpp>
-#include <IMark.hxx>
 
 #if OSL_DEBUG_LEVEL > 1
 #include <stdio.h>
