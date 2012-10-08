@@ -173,12 +173,6 @@ void RscTypCont::Init()
     aNmTb.Put( "TRUE",               BOOLEAN,        (long)sal_True  );
     aNmTb.Put( "FALSE",              BOOLEAN,        (long)sal_False );
 
-    #if 0
-/* Vordefinierte HilfeId's */
-    aNmTb.Put( "HELP_INDEX",         NUMBER,     OOO_HELP_INDEX      );
-    aNmTb.Put( "HELP_HELPONHELP",    NUMBER,     OOO_HELP_HELPONHELP );
-    #endif
-
     aNmTb.Put( "XSCALE",             XSCALE ,        (long)0     );
     aNmTb.Put( "YSCALE",             YSCALE ,        (long)0     );
     aNmTb.Put( "RGB",                RGB    ,        (long)0     );

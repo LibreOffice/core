@@ -55,22 +55,8 @@ sal_Int16 rtl_ImplGetDigit( sal_Unicode ch, sal_Int16 nRadix );
 sal_Bool rtl_ImplIsWhitespace( sal_Unicode c );
 
 // string lifetime instrumentation / diagnostics
-#if 0
-#  include <rtl/ustring.hxx>
-#  define RTL_LOG_STRING_NEW(s)                                              \
-      do {                                                                     \
-          fprintf (stderr, "+%s\n",                                            \
-                   rtl::OUStringToOString(s, RTL_TEXTENCODING_UTF8).getStr()); \
-      } while (0)
-#  define RTL_LOG_STRING_DELETE(s)                                           \
-      do {                                                                     \
-          fprintf (stderr, "-%s\n",                                            \
-                   rtl::OUStringToOString(s, RTL_TEXTENCODING_UTF8).getStr()); \
-      } while (0)
-#else
 #  define RTL_LOG_STRING_NEW(s)
 #  define RTL_LOG_STRING_DELETE(s)
-#endif
 
 #endif /* INCLUDED_RTL_SOURCE_STRIMP_HXX */
 

@@ -39,12 +39,7 @@ namespace linguistic
 ///////////////////////////////////////////////////////////////////////////
 
 Meaning::Meaning(
-#if 0
-            const OUString &rTerm, sal_Int16 nLang,
-            const PropertyHelper_Thes &rHelper ) :
-#else
             const OUString &rTerm, sal_Int16 nLang) :
-#endif
 
     aSyn        ( Sequence< OUString >(1) ),
     aTerm       (rTerm),
@@ -91,13 +86,6 @@ void Meaning::SetMeaning( const OUString &rTerm )
         aTerm = rTerm;
 }
 
-///////////////////////////////////////////////////////////////////////////
-
 }   // namespace linguistic
-
-
-
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
