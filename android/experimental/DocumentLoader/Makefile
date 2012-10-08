@@ -26,6 +26,7 @@ endef
 LIBS = \
   -Wl,--start-group \
   $(addprefix -l,$(strip \
+	acclo \
 	ascii_expat_xmlparse \
 	avmedialo \
 	basebmp \
@@ -47,8 +48,17 @@ LIBS = \
 	dict_zh \
 	drawinglayerlo \
 	editenglo \
+	egilo \
+	emelo \
+	epblo \
+	epplo \
+	epslo \
+	eptlo \
+	eralo \
+	etilo \
 	expat_xmlparse \
 	expat_xmltok \
+	explo \
 	expwrap.uno \
 	fastsax.uno \
 	filterconfiglo \
@@ -70,13 +80,25 @@ LIBS = \
 	i18nregexplo \
 	i18nsearch.uno \
 	i18nutilgcc3 \
+	icdlo \
+	icglo \
 	icudata \
 	icui18n \
 	icule \
 	icutu \
 	icuuc \
+	idxlo \
+	imelo \
 	index_data \
 	introspection.uno \
+	ipblo \
+	ipdlo \
+	ipslo \
+	iptlo \
+	ipxlo \
+	iralo \
+	itglo \
+	itilo \
 	java_uno \
 	jpeg \
 	jvmaccessgcc3 \
@@ -111,9 +133,11 @@ LIBS = \
 	sclo \
 	scdlo \
 	scfiltlo \
+	scuilo \
 	sddlo \
 	sdfiltlo \
 	sdlo \
+	sduilo \
 	sfxlo \
 	smdlo \
 	smlo \
