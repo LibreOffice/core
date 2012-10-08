@@ -48,11 +48,14 @@ std::type_info const & getSimpleReferenceObjectTypeInfo()
 
 }
 
-#include "testshl/simpleheader.hxx"
 #include "osl/mutex.hxx"
 #include "salhelper/condition.hxx"
 #include "salhelper/dynload.hxx"
 #include "salhelper/simplereferenceobject.hxx"
+#include <cppunit/TestFixture.h>
+#include <cppunit/extensions/HelperMacros.h>
+#include <cppunit/plugin/TestPlugIn.h>
+#include <boost/scoped_ptr.hpp>
 
 #include <memory>
 
@@ -208,12 +211,12 @@ void Test::testSimpleReferenceObject() {
 
 void Test::testDerivedCondition() {
     osl::Mutex mutex;
-    std::auto_ptr< salhelper::Condition > p(new DerivedCondition(mutex));
+    boost::scoped_ptr< salhelper::Condition > p(new DerivedCondition(mutex));
     CPPUNIT_ASSERT(dynamic_cast< DerivedCondition * >(p.get()) != 0);
 }
 
 void Test::testDerivedConditionWaiterTimedout() {
-    std::auto_ptr< salhelper::ConditionWaiter::timedout > p(
+    boost::scoped_ptr< salhelper::ConditionWaiter::timedout > p(
         new DerivedConditionWaiterTimedout);
     CPPUNIT_ASSERT(
         dynamic_cast< DerivedConditionWaiterTimedout * >(p.get()) != 0);
@@ -235,10 +238,10 @@ void Test::testDerivedSimpleReferenceObject() {
     }
 }
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(Test, "alltests");
+CPPUNIT_TEST_SUITE_REGISTRATION(Test);
 
 }
 
-NOADDITIONAL;
+CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
