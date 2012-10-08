@@ -685,23 +685,10 @@ namespace cppcanvas
 
                         case GradientStyle_AXIAL:
                         {
-                            // Adapt the border so that it is suitable
-                            // for the axial gradient.  An axial
-                            // gradient consists of two linear
-                            // gradients.  Each of those covers half
-                            // of the total size.  In order to
-                            // compensate for the condensed display of
-                            // the linear gradients, we have to
-                            // enlarge the area taken up by the actual
-                            // gradient (1-fBorder).  After that we
-                            // have to turn the result back into a
-                            // border value, hence the second (left
-                            // most 1-...
-                            const double fAxialBorder (1-2*(1-fBorder));
-                            basegfx::tools::createAxialODFGradientInfo(aGradInfo,
+                            basegfx::tools::createLinearODFGradientInfo(aGradInfo,
                                                                         aBounds,
                                                                         nSteps,
-                                                                        fAxialBorder,
+                                                                        fBorder,
                                                                         fRotation);
                             // map odf to svg gradient orientation - x
                             // instead of y direction
