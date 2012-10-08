@@ -99,8 +99,6 @@ class SvtToolPanelOptions_Impl : public ConfigItem
         bool m_bVisibleHandoutView;
         bool m_bVisibleSlideSorterView;
 
-        void AddListenerLink( const Link& rLink );
-        void RemoveListenerLink( const Link& rLink );
         void CallListeners();
 
     private:
@@ -248,23 +246,6 @@ void SvtToolPanelOptions_Impl::Load( const Sequence< OUString >& rPropertyNames 
             }
             break;
        }
-    }
-}
-
-void SvtToolPanelOptions_Impl::AddListenerLink( const Link& rLink )
-{
-    aList.push_back( rLink );
-}
-
-void SvtToolPanelOptions_Impl::RemoveListenerLink( const Link& rLink )
-{
-    for ( ::std::list<Link>::iterator iter = aList.begin(); iter != aList.end(); ++iter )
-    {
-        if ( *iter == rLink )
-        {
-            aList.erase(iter);
-            break;
-        }
     }
 }
 
@@ -426,16 +407,6 @@ namespace
 Mutex & SvtToolPanelOptions::GetInitMutex()
 {
     return theSvtToolPanelOptionsMutex::get();
-}
-
-void SvtToolPanelOptions::AddListenerLink( const Link& rLink )
-{
-    m_pDataContainer->AddListenerLink( rLink );
-}
-
-void SvtToolPanelOptions::RemoveListenerLink( const Link& rLink )
-{
-    m_pDataContainer->RemoveListenerLink( rLink );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

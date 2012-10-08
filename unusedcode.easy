@@ -10,8 +10,6 @@ ScVbaFormat<ooo::vba::excel::XStyle>::setNumberFormat(com::sun::star::lang::Loca
 SvLBoxTreeList::Clone(SvListEntry*, unsigned long&) const
 SvLBoxTreeList::Prev(SvListEntry*, unsigned short*) const
 SvTreeEntryList::front()
-SvtToolPanelOptions::AddListenerLink(Link const&)
-SvtToolPanelOptions::RemoveListenerLink(Link const&)
 SvxAutoCorrect::DeleteText(String const&, unsigned short)
 TextEngine::GetLeftMargin() const
 ThumbnailView::GetItemCount() const
