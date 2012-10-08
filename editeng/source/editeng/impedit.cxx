@@ -44,7 +44,6 @@
 #include <sot/exchange.hxx>
 #include <sot/formats.hxx>
 
-
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::linguistic2;
@@ -433,65 +432,52 @@ void ImpEditView::SetOutputArea( const Rectangle& rRect )
 
 void ImpEditView::ResetOutputArea( const Rectangle& rRect )
 {
-    Rectangle aCurArea( aOutArea );
-    SetOutputArea( rRect );
-    // Invalidate surrounding areas if in update mode of the engine on sal_True
-    if ( !aCurArea.IsEmpty() && pEditEngine->pImpEditEngine->GetUpdateMode() )
-    {
-        long nMore = 0;
-        if ( DoInvalidateMore() )
-            nMore = GetWindow()->PixelToLogic( Size( nInvMore, 0 ) ).Width();
-        if ( aCurArea.Left() < aOutArea.Left() )
-        {
-            Rectangle aRect( aCurArea.TopLeft(),
-                Size( aOutArea.Left()-aCurArea.Left(), aCurArea.GetHeight() ) );
-            if ( nMore )
-            {
-                aRect.Left() -= nMore;
-                aRect.Top() -= nMore;
-                aRect.Bottom() += nMore;
-            }
-            GetWindow()->Invalidate( aRect );
-        }
-        if ( aCurArea.Right() > aOutArea.Right() )
-        {
-            long nW = aCurArea.Right() - aOutArea.Right();
-            Point aPos( aCurArea.TopRight() );
-            aPos.X() -= nW;
-            Rectangle aRect( aPos, Size( nW, aCurArea.GetHeight() ) );
-            if ( nMore )
-            {
-                aRect.Right() += nMore;
-                aRect.Top() -= nMore;
-                aRect.Bottom() += nMore;
-            }
-            GetWindow()->Invalidate( aRect );
-        }
-        if ( aCurArea.Top() < aOutArea.Top() )
-        {
-            Rectangle aRect( aCurArea.TopLeft(), Size( aCurArea.GetWidth(), aOutArea.Top() - aCurArea.Top() ) );
-            if ( nMore )
-            {
-                aRect.Top() -= nMore;
-                aRect.Left() -= nMore;
-                aRect.Right() += nMore;
-            }
-            GetWindow()->Invalidate( aRect );
-        }
-        if ( aCurArea.Bottom() > aOutArea.Bottom() )
-        {
-            long nH = aCurArea.Bottom() - aOutArea.Bottom();
-            Point aPos( aCurArea.BottomLeft() );
-            aPos.Y() -= nH;
-            Rectangle aRect( aPos, Size( aCurArea.GetWidth(), nH ) );
-            if ( nMore )
-            {
-                aRect.Bottom() += nMore;
-                aRect.Left() -= nMore;
-                aRect.Right() += nMore;
-            }
+    // remember old out area
+    const Rectangle aOldArea(aOutArea);
 
-            GetWindow()->Invalidate( aRect );
+    // apply new one
+    SetOutputArea(rRect);
+
+    // invalidate surrounding areas if update is true
+    if(!aOldArea.IsEmpty() && pEditEngine->pImpEditEngine->GetUpdateMode())
+    {
+        // #i119885# use grown area if needed; do when getting bigger OR smaller
+        const sal_Int32 nMore(DoInvalidateMore() ? GetWindow()->PixelToLogic(Size(nInvMore, 0)).Width() : 0);
+
+        if(aOldArea.Left() > aOutArea.Left())
+        {
+            GetWindow()->Invalidate(Rectangle(aOutArea.Left() - nMore, aOldArea.Top() - nMore, aOldArea.Left(), aOldArea.Bottom() + nMore));
+        }
+        else if(aOldArea.Left() < aOutArea.Left())
+        {
+            GetWindow()->Invalidate(Rectangle(aOldArea.Left() - nMore, aOldArea.Top() - nMore, aOutArea.Left(), aOldArea.Bottom() + nMore));
+        }
+
+        if(aOldArea.Right() > aOutArea.Right())
+        {
+            GetWindow()->Invalidate(Rectangle(aOutArea.Right(), aOldArea.Top() - nMore, aOldArea.Right() + nMore, aOldArea.Bottom() + nMore));
+        }
+        else if(aOldArea.Right() < aOutArea.Right())
+        {
+            GetWindow()->Invalidate(Rectangle(aOldArea.Right(), aOldArea.Top() - nMore, aOutArea.Right() + nMore, aOldArea.Bottom() + nMore));
+        }
+
+        if(aOldArea.Top() > aOutArea.Top())
+        {
+            GetWindow()->Invalidate(Rectangle(aOldArea.Left() - nMore, aOutArea.Top() - nMore, aOldArea.Right() + nMore, aOldArea.Top()));
+        }
+        else if(aOldArea.Top() < aOutArea.Top())
+        {
+            GetWindow()->Invalidate(Rectangle(aOldArea.Left() - nMore, aOldArea.Top() - nMore, aOldArea.Right() + nMore, aOutArea.Top()));
+        }
+
+        if(aOldArea.Bottom() > aOutArea.Bottom())
+        {
+            GetWindow()->Invalidate(Rectangle(aOldArea.Left() - nMore, aOutArea.Bottom(), aOldArea.Right() + nMore, aOldArea.Bottom() + nMore));
+        }
+        else if(aOldArea.Bottom() < aOutArea.Bottom())
+        {
+            GetWindow()->Invalidate(Rectangle(aOldArea.Left() - nMore, aOldArea.Bottom(), aOldArea.Right() + nMore, aOutArea.Bottom() + nMore));
         }
     }
 }

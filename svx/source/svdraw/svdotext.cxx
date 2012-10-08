@@ -718,6 +718,17 @@ void SdrTextObj::TakeTextRect( SdrOutliner& rOutliner, Rectangle& rTextRect, boo
                 if (eAniDirection==SDRTEXTANI_LEFT || eAniDirection==SDRTEXTANI_RIGHT) nWdt=1000000;
                 if (eAniDirection==SDRTEXTANI_UP || eAniDirection==SDRTEXTANI_DOWN) nHgt=1000000;
             }
+
+            // #i119885# Do not limit/force height to geometrical frame (vice versa for vertical writing)
+            if(IsVerticalWriting())
+            {
+                nWdt = 1000000;
+            }
+            else
+            {
+                nHgt = 1000000;
+            }
+
             rOutliner.SetMaxAutoPaperSize(Size(nWdt,nHgt));
         }
 

@@ -195,6 +195,7 @@ void SdrObjEditView::ModelHasChanged()
                 aMinArea1.Move(aPvOfs.X(),aPvOfs.Y());
                 Rectangle aNewArea(aMinArea1);
                 aNewArea.Union(aEditArea1);
+
                 if (aNewArea!=aOldArea || aEditArea1!=aTextEditArea || aMinArea1!=aMinTextEditArea ||
                     pTextEditOutliner->GetMinAutoPaperSize()!=aPaperMin1 || pTextEditOutliner->GetMaxAutoPaperSize()!=aPaperMax1) {
                     aTextEditArea=aEditArea1;

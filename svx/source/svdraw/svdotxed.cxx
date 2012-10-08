@@ -156,8 +156,19 @@ void SdrTextObj::TakeTextEditArea(Size* pPaperMin, Size* pPaperMax, Rectangle* p
         if (!bFitToSize) {
             if (nMaxWdt==0 || nMaxWdt>aMaxSiz.Width())  nMaxWdt=aMaxSiz.Width();
             if (nMaxHgt==0 || nMaxHgt>aMaxSiz.Height()) nMaxHgt=aMaxSiz.Height();
-            if (!IsAutoGrowWidth() ) { nMaxWdt=aAnkSiz.Width();  nMinWdt=nMaxWdt; }
-            if (!IsAutoGrowHeight()) { nMaxHgt=aAnkSiz.Height(); nMinHgt=nMaxHgt; }
+
+            if (!IsAutoGrowWidth() )
+            {
+                nMinWdt = aAnkSiz.Width();
+                nMaxWdt = nMinWdt;
+            }
+
+            if (!IsAutoGrowHeight())
+            {
+                nMinHgt = aAnkSiz.Height();
+                nMaxHgt = nMinHgt;
+            }
+
             SdrTextAniKind      eAniKind=GetTextAniKind();
             SdrTextAniDirection eAniDirection=GetTextAniDirection();
 
@@ -169,9 +180,22 @@ void SdrTextObj::TakeTextEditArea(Size* pPaperMin, Size* pPaperMax, Rectangle* p
                 if (eAniDirection==SDRTEXTANI_LEFT || eAniDirection==SDRTEXTANI_RIGHT) nMaxWdt=1000000;
                 if (eAniDirection==SDRTEXTANI_UP || eAniDirection==SDRTEXTANI_DOWN) nMaxHgt=1000000;
             }
+
+            // #i119885# Do not limit/force height to geometrical frame (vice versa for vertical writing)
+            if(IsVerticalWriting())
+            {
+                nMaxWdt = 1000000;
+            }
+            else
+            {
+                nMaxHgt = 1000000;
+            }
+
             aPaperMax.Width()=nMaxWdt;
             aPaperMax.Height()=nMaxHgt;
-        } else {
+        }
+        else
+        {
             aPaperMax=aMaxSiz;
         }
         aPaperMin.Width()=nMinWdt;
