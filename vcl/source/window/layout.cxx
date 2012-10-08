@@ -54,8 +54,8 @@ void VclContainer::SetPosSizePixel(const Point& rAllocPos, const Size& rAllocati
     Window::SetPosSizePixel(rAllocPos, rAllocation);
     if (m_bLayoutDirty || bSizeChanged)
     {
-        setAllocation(rAllocation);
         m_bLayoutDirty = false;
+        setAllocation(rAllocation);
     }
 }
 
@@ -81,8 +81,8 @@ void VclContainer::SetSizePixel(const Size& rAllocation)
         Window::SetSizePixel(aAllocation);
     if (m_bLayoutDirty || bSizeChanged)
     {
-        setAllocation(aAllocation);
         m_bLayoutDirty = false;
+        setAllocation(aAllocation);
     }
 }
 

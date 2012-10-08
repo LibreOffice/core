@@ -730,7 +730,7 @@ Window *VclBuilder::makeObject(Window *pParent, const OString &name, const OStri
     {
         pWindow->SetHelpId(m_sHelpRoot + id);
         SAL_INFO("vcl.layout", "for " << name.getStr() <<
-            ", created << " << pWindow << " child of " <<
+            ", created " << pWindow << " child of " <<
             pParent << "(" << pWindow->mpWindowImpl->mpParent << "/" <<
             pWindow->mpWindowImpl->mpRealParent << "/" <<
             pWindow->mpWindowImpl->mpBorderWindow << ") with helpid " <<
