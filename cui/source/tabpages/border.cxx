@@ -1011,7 +1011,7 @@ void SvxBorderTabPage::FillValueSets()
 }
 
 // ============================================================================
-Color lcl_mediumColor( Color aMain, Color /*aDefault*/ )
+static Color lcl_mediumColor( Color aMain, Color /*aDefault*/ )
 {
     return SvxBorderLine::threeDMediumColor( aMain );
 }
