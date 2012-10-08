@@ -671,7 +671,7 @@ dnl ---------- *** ----------
 AC_ARG_ENABLE(mergelibs,
     AS_HELP_STRING([--enable-mergelibs],
         [Enables linking of big, merged, library. Experimental feature tested
-	only on Linux and Android.])
+        only on Linux and Android.])
 )
 
 AC_ARG_ENABLE(graphite,
@@ -2762,7 +2762,7 @@ if test "$_os" = "Darwin"; then
 
     # If no CC and CXX environment vars, try to guess where the compiler is
     if test -z "$save_CC"; then
-        AC_MSG_CHECKING([what compiler to use]) 
+        AC_MSG_CHECKING([what compiler to use])
         case $with_macosx_sdk in
         10.4)
             case "$MACOSX_SDK_PATH" in
@@ -2796,7 +2796,7 @@ if test "$_os" = "Darwin"; then
         esac
         AC_MSG_RESULT([$CC and $CXX])
     fi
-    
+
     case "$with_macosx_version_max_allowed" in
     10.4)
         MAC_OS_X_VERSION_MAX_ALLOWED="1040"
@@ -2848,10 +2848,10 @@ if test "$_os" = "WINNT" -a "$WITH_MINGW" != yes; then
     AC_MSG_CHECKING([whether to build a 64-bit LibreOffice])
     if test "$enable_64_bit" = "" -o "$enable_64_bit" = "no"; then
         AC_MSG_RESULT([no])
-		SDK_ARCH="x86"
+        SDK_ARCH="x86"
     else
         AC_MSG_RESULT([yes])
-		SDK_ARCH="x64"
+        SDK_ARCH="x64"
         BITNESS_OVERRIDE=64
     fi
 
@@ -3185,15 +3185,15 @@ if test "$_os" = "WINNT"; then
             if test "$CCNUMVER" -ge "001700000000"; then
                 COMEX=14
                 MSVSVER=2012
-				VCVER=110
+                VCVER=110
             elif test "$CCNUMVER" -ge "001600000000"; then
                 COMEX=13
                 MSVSVER=2010
-				VCVER=100
+                VCVER=100
             elif test "$CCNUMVER" -ge "001500000000"; then
                 COMEX=12
                 MSVSVER=2008
-				VCVER=90
+                VCVER=90
             else
                 AC_MSG_ERROR([Compiler too old. Use Microsoft Visual Studio 2008 or 2010.])
             fi
@@ -3290,22 +3290,22 @@ AC_SUBST(DBGHELP_DLL)
 # prefix C with ccache if needed
 #
 if test "$CCACHE" != ""; then
-	AC_MSG_CHECKING([whether $CC is already ccached])
+    AC_MSG_CHECKING([whether $CC is already ccached])
 
-	AC_LANG_PUSH([C])
-	save_CFLAGS=$CFLAGS
-	CFLAGS="$CFLAGS --ccache-skip -O2"
-	dnl an empty program will do, we're checking the compiler flags
-	AC_COMPILE_IFELSE([AC_LANG_PROGRAM([],[])],
-					  [use_ccache=yes], [use_ccache=no])
-	if test $use_ccache = yes; then
-		AC_MSG_RESULT([yes])
-	else
-		CC="$CCACHE $CC"
-		AC_MSG_RESULT([no])
-	fi
-	CFLAGS=$save_CFLAGS
-	AC_LANG_POP([C])
+    AC_LANG_PUSH([C])
+    save_CFLAGS=$CFLAGS
+    CFLAGS="$CFLAGS --ccache-skip -O2"
+    dnl an empty program will do, we're checking the compiler flags
+    AC_COMPILE_IFELSE([AC_LANG_PROGRAM([],[])],
+                      [use_ccache=yes], [use_ccache=no])
+    if test $use_ccache = yes; then
+        AC_MSG_RESULT([yes])
+    else
+        CC="$CCACHE $CC"
+        AC_MSG_RESULT([no])
+    fi
+    CFLAGS=$save_CFLAGS
+    AC_LANG_POP([C])
 fi
 
 #
@@ -4675,9 +4675,9 @@ if test "$build_os" = "cygwin"; then
         winsdktest=`./oowintool --windows-sdk-home`
         if test -x "$winsdktest/Bin/midl.exe"; then
             MIDL_PATH="$winsdktest/Bin"
-		elif test -x "$winsdktest/Bin/$SDK_ARCH/midl.exe"; then
-				MIDL_PATH="$winsdktest/Bin/$SDK_ARCH"
-		fi
+        elif test -x "$winsdktest/Bin/$SDK_ARCH/midl.exe"; then
+            MIDL_PATH="$winsdktest/Bin/$SDK_ARCH"
+        fi
     fi
     if test ! -x "$MIDL_PATH/midl.exe"; then
         AC_MSG_ERROR([midl.exe not found. Make sure it's in PATH or use --with-midl-path])
@@ -4709,7 +4709,7 @@ if test "$build_os" = "cygwin"; then
     CSC_PATH=`cygpath -d "$CSC_PATH"`
     CSC_PATH=`cygpath -u "$CSC_PATH"`
 
-	dnl Check al.exe
+    dnl Check al.exe
     AC_PATH_PROG(AL_PATH, al.exe)
     if test -n "$AL_PATH";then
         AL_PATH=`dirname "$AL_PATH"`
@@ -4724,11 +4724,11 @@ if test "$build_os" = "cygwin"; then
         winsdktest=`./oowintool --windows-sdk-home`
         if test -x "$winsdktest/Bin/al.exe"; then
             AL_PATH="$winsdktest/Bin"
-		fi
+        fi
     fi
-	if test -z "$AL_PATH"; then
+    if test -z "$AL_PATH"; then
         altest=`./oowintool --al-home`
-		if test -x "$altest/bin/al.exe"; then
+        if test -x "$altest/bin/al.exe"; then
             AL_PATH="$altest/bin"
         elif test -x "$altest/al.exe"; then
             AL_PATH="$altest"
@@ -4740,13 +4740,13 @@ if test "$build_os" = "cygwin"; then
     # Convert to posix path with 8.3 filename restrictions ( No spaces )
     AL_PATH=`cygpath -d "$AL_PATH"`
     AL_PATH=`cygpath -u "$AL_PATH"`
-	
+
     dnl Check mscoree.lib / .NET Framework dir
     AC_MSG_CHECKING(.NET Framework)
     if test -n "$with_dotnet_framework_home"; then
         with_dotnet_framework_home=`cygpath -u "$with_dotnet_framework_home"`
     fi
-	    if test -f "$with_dotnet_framework_home/lib/mscoree.lib"; then
+        if test -f "$with_dotnet_framework_home/lib/mscoree.lib"; then
         DOTNET_FRAMEWORK_HOME="$with_dotnet_framework_home"
     fi
     if test -z "$DOTNET_FRAMEWORK_HOME"; then
@@ -4767,8 +4767,8 @@ if test "$build_os" = "cygwin"; then
 
     PathFormat "$MIDL_PATH"
     MIDL_PATH="$formatted_path"
-	
-	PathFormat "$AL_PATH"
+
+    PathFormat "$AL_PATH"
     AL_PATH="$formatted_path"
 
     PathFormat "$DOTNET_FRAMEWORK_HOME"
@@ -4851,23 +4851,23 @@ fi
 # prefx CXX with ccache if needed
 #
 if test "$_os" != "WINNT" -o "$WITH_MINGW" = "yes"; then
-	if test "$CCACHE" != ""; then
-		AC_MSG_CHECKING([whether $CXX is already ccached])
-		AC_LANG_PUSH([C++])
-		save_CXXFLAGS=$CXXFLAGS
-		CXXFLAGS="$CXXFLAGS --ccache-skip -O2"
-		dnl an empty program will do, we're checking the compiler flags
-		AC_COMPILE_IFELSE([AC_LANG_PROGRAM([],[])],
-						  [use_ccache=yes], [use_ccache=no])
-		if test $use_ccache = yes; then
-			AC_MSG_RESULT([yes])
-		else
-			CXX="$CCACHE $CXX"
-			AC_MSG_RESULT([no])
-		fi
-		CXXFLAGS=$save_CXXFLAGS
-		AC_LANG_POP([C++])
-	fi
+    if test "$CCACHE" != ""; then
+        AC_MSG_CHECKING([whether $CXX is already ccached])
+        AC_LANG_PUSH([C++])
+        save_CXXFLAGS=$CXXFLAGS
+        CXXFLAGS="$CXXFLAGS --ccache-skip -O2"
+        dnl an empty program will do, we're checking the compiler flags
+        AC_COMPILE_IFELSE([AC_LANG_PROGRAM([],[])],
+                          [use_ccache=yes], [use_ccache=no])
+        if test $use_ccache = yes; then
+            AC_MSG_RESULT([yes])
+        else
+            CXX="$CCACHE $CXX"
+            AC_MSG_RESULT([no])
+        fi
+        CXXFLAGS=$save_CXXFLAGS
+        AC_LANG_POP([C++])
+    fi
 fi
 
 dnl ===================================================================
@@ -5312,15 +5312,15 @@ if test "$GCC" = "yes"; then
 
     AC_MSG_CHECKING([whether $CC supports atomic functions])
     AC_LINK_IFELSE([AC_LANG_PROGRAM([[]], [[
-	int v = 0;
-	if (__sync_add_and_fetch(&v, 1) != 1 ||
-	    __sync_sub_and_fetch(&v, 1) != 0)
-		return 1;
-	__sync_synchronize();
-	if (__sync_val_compare_and_swap(&v, 0, 1) != 0 ||
-	    v != 1)
-		return 1;
-	return 0;
+    int v = 0;
+    if (__sync_add_and_fetch(&v, 1) != 1 ||
+        __sync_sub_and_fetch(&v, 1) != 0)
+        return 1;
+    __sync_synchronize();
+    if (__sync_val_compare_and_swap(&v, 0, 1) != 0 ||
+        v != 1)
+        return 1;
+    return 0;
 ]])],[HAVE_GCC_BUILTIN_ATOMIC=TRUE],[])
     if test "$HAVE_GCC_BUILTIN_ATOMIC" = "TRUE"; then
         AC_MSG_RESULT([yes])
@@ -9067,7 +9067,7 @@ problem can be found in issue 49856.])
              -a -f "$WINDOWS_SDK_HOME/Include/SqlUcode.h" \
              -a -f "$WINDOWS_SDK_HOME/Include/usp10.h"; then
             HAVE_PSDK_H="yes"
-		elif test -f "$WINDOWS_SDK_HOME/Include/um/adoint.h" \
+        elif test -f "$WINDOWS_SDK_HOME/Include/um/adoint.h" \
              -a -f "$WINDOWS_SDK_HOME/Include/um/SqlUcode.h" \
              -a -f "$WINDOWS_SDK_HOME/Include/um/usp10.h"; then
             HAVE_PSDK_H="yes"
@@ -9076,7 +9076,7 @@ problem can be found in issue 49856.])
         fi
         if test -f "$WINDOWS_SDK_HOME/lib/user32.lib"; then
             HAVE_PSDK_LIB="yes"
-		elif test -f "$WINDOWS_SDK_HOME/lib/win8/um/$SDK_ARCH/user32.lib"; then
+        elif test -f "$WINDOWS_SDK_HOME/lib/win8/um/$SDK_ARCH/user32.lib"; then
             HAVE_PSDK_LIB="yes"
         else
             HAVE_PSDK_LIB="no"
@@ -9091,11 +9091,11 @@ the  Windows SDK are installed.])
              -o ! -x "$WINDOWS_SDK_HOME/bin/msidb.exe" \
              -o ! -x "$WINDOWS_SDK_HOME/bin/uuidgen.exe" \
              -o ! -x "$WINDOWS_SDK_HOME/bin/msitran.exe"; then :
-		elif test ! -x "$WINDOWS_SDK_HOME/bin/x86/msiinfo.exe" \
+        elif test ! -x "$WINDOWS_SDK_HOME/bin/x86/msiinfo.exe" \
              -o ! -x "$WINDOWS_SDK_HOME/bin/x86/msidb.exe" \
              -o ! -x "$WINDOWS_SDK_HOME/bin/x86/uuidgen.exe" \
              -o ! -x "$WINDOWS_SDK_HOME/bin/x86/msitran.exe"; then :
-		else
+        else
             AC_MSG_ERROR([Some (all) files of the Windows Installer SDK are missing, please install.])
         fi
     fi
@@ -9103,16 +9103,16 @@ the  Windows SDK are installed.])
     if test -z "$WINDOWS_SDK_HOME"; then
         AC_MSG_RESULT([no, hoping the necessary headers and libraries will be found anyway])
     elif echo $WINDOWS_SDK_HOME | grep "v6.1" >/dev/null 2>/dev/null; then
-		WINDOWS_SDK_VERSION=61
+        WINDOWS_SDK_VERSION=61
         AC_MSG_RESULT([found Windows SDK 6.1 ($WINDOWS_SDK_HOME)])
     elif echo $WINDOWS_SDK_HOME | grep "v6.0" >/dev/null 2>/dev/null; then
-		WINDOWS_SDK_VERSION=60
+        WINDOWS_SDK_VERSION=60
         AC_MSG_RESULT([found Windows SDK 6.0 ($WINDOWS_SDK_HOME)])
     elif echo $WINDOWS_SDK_HOME | grep "v7" >/dev/null 2>/dev/null; then
-		WINDOWS_SDK_VERSION=70
+        WINDOWS_SDK_VERSION=70
         AC_MSG_RESULT([found Windows SDK 7 ($WINDOWS_SDK_HOME)])
-	elif echo $WINDOWS_SDK_HOME | grep "8.0" >/dev/null 2>/dev/null; then
-		WINDOWS_SDK_VERSION=80
+    elif echo $WINDOWS_SDK_HOME | grep "8.0" >/dev/null 2>/dev/null; then
+        WINDOWS_SDK_VERSION=80
         AC_MSG_RESULT([found Windows SDK 8.0 ($WINDOWS_SDK_HOME)])
     else
         AC_MSG_ERROR([Found legacy Windows Platform SDK ($WINDOWS_SDK_HOME)])
@@ -9121,9 +9121,9 @@ the  Windows SDK are installed.])
     WINDOWS_SDK_HOME="$formatted_path"
     if test "$build_os" = "cygwin"; then
         SOLARINC="$SOLARINC -I$WINDOWS_SDK_HOME/include -I$COMPATH/include"
-		if test -d "$WINDOWS_SDK_HOME/include/um"; then
-			SOLARINC="$SOLARINC -I$WINDOWS_SDK_HOME/include/um -I$WINDOWS_SDK_HOME/include/shared"
-		fi
+        if test -d "$WINDOWS_SDK_HOME/include/um"; then
+            SOLARINC="$SOLARINC -I$WINDOWS_SDK_HOME/include/um -I$WINDOWS_SDK_HOME/include/shared"
+        fi
     fi
 fi
 AC_SUBST(WINDOWS_SDK_HOME)
@@ -9133,10 +9133,10 @@ dnl =========================================
 dnl Check for Micorosft rebase.exe
 dnl =========================================
 if test "$build_os" = "cygwin"; then
-		AC_PATH_PROG([REBASE], [rebase])
+        AC_PATH_PROG([REBASE], [rebase])
         if test \( -z "$REBASE" -o "$REBASE" = "/usr/bin/rebase" \); then
             REBASE=download
-			AC_SUBST(REBASE)
+            AC_SUBST(REBASE)
         fi
 fi
 
@@ -9517,41 +9517,41 @@ AC_SUBST(DBUS_LIBS)
 
 AC_MSG_CHECKING([whether to enable font install via packagekit])
 if test "$ENABLE_DBUS" = "TRUE"; then
-	if test -n "$enable_packagekit" -a "$enable_packagekit" != "no"; then
-		ENABLE_PACKAGEKIT=YES
-		AC_MSG_RESULT([yes])
-	else
-		ENABLE_PACKAGEKIT=NO
-		AC_MSG_RESULT([no])
-	fi	
+    if test -n "$enable_packagekit" -a "$enable_packagekit" != "no"; then
+        ENABLE_PACKAGEKIT=YES
+        AC_MSG_RESULT([yes])
+    else
+        ENABLE_PACKAGEKIT=NO
+        AC_MSG_RESULT([no])
+    fi
 else
-	AC_MSG_RESULT([no, dbus disabled.])
+    AC_MSG_RESULT([no, dbus disabled.])
 fi
 AC_SUBST(ENABLE_PACKAGEKIT)
 
 AC_MSG_CHECKING([whether to enable sd remotecontrol])
 if test "$ENABLE_DBUS" = "TRUE"; then
-	if test -n "$enable_sdremote" -a "$enable_sdremote" != "no"; then
-		AC_MSG_RESULT([yes])
-		ENABLE_SDREMOTE=YES
-		if test "$OS" = "LINUX"; then
-			dnl ===================================================================
-			dnl Check for system bluez
-			dnl ===================================================================
-			AC_MSG_CHECKING([which bluetooth header to use])
-			if test "$with_system_bluez" = "yes"; then
-    				AC_MSG_RESULT([external])
-    				AC_CHECK_HEADER(bluetooth/bluetooth.h, [],
-      					[AC_MSG_ERROR(bluetooth.h not found. install bluez)], [])
-			else
-    				AC_MSG_RESULT([internal])
-    				BUILD_TYPE="$BUILD_TYPE BLUEZ"
-			fi
-		fi
-	else
-		ENABLE_SDREMOTE=NO
-		AC_MSG_RESULT([no])
-	fi
+    if test -n "$enable_sdremote" -a "$enable_sdremote" != "no"; then
+        AC_MSG_RESULT([yes])
+        ENABLE_SDREMOTE=YES
+        if test "$OS" = "LINUX"; then
+            dnl ===================================================================
+            dnl Check for system bluez
+            dnl ===================================================================
+            AC_MSG_CHECKING([which bluetooth header to use])
+            if test "$with_system_bluez" = "yes"; then
+                    AC_MSG_RESULT([external])
+                    AC_CHECK_HEADER(bluetooth/bluetooth.h, [],
+                        [AC_MSG_ERROR(bluetooth.h not found. install bluez)], [])
+            else
+                    AC_MSG_RESULT([internal])
+                    BUILD_TYPE="$BUILD_TYPE BLUEZ"
+            fi
+        fi
+    else
+        ENABLE_SDREMOTE=NO
+        AC_MSG_RESULT([no])
+    fi
 else
         AC_MSG_RESULT([no, dbus disabled.])
 fi
@@ -12545,15 +12545,15 @@ if test "$build_os" = "cygwin"; then
     if test "$BITNESS_OVERRIDE" = 64; then
         ILIB="$ILIB;$COMPATH/lib/amd64"
         ILIB="$ILIB;$WINDOWS_SDK_HOME/lib64"
-		if test "$WINDOWS_SDK_VERSION" = "80"; then
-			ILIB="$ILIB;$WINDOWS_SDK_HOME/lib/win8/um/x64"
-		fi
+        if test "$WINDOWS_SDK_VERSION" = "80"; then
+            ILIB="$ILIB;$WINDOWS_SDK_HOME/lib/win8/um/x64"
+        fi
     else
         ILIB="$ILIB;$COMPATH/lib"
         ILIB="$ILIB;$WINDOWS_SDK_HOME/lib"
-		if test "$WINDOWS_SDK_VERSION" = "80"; then
-			ILIB="$ILIB;$WINDOWS_SDK_HOME/lib/win8/um/x86"
-		fi
+        if test "$WINDOWS_SDK_VERSION" = "80"; then
+            ILIB="$ILIB;$WINDOWS_SDK_HOME/lib/win8/um/x86"
+        fi
     fi
     ILIB="$ILIB;$DOTNET_FRAMEWORK_HOME/lib"
 
@@ -12741,14 +12741,14 @@ else
         pathmunge "$WINDOWS_SDK_HOME/bin" "before"
         pathmunge "$CSC_PATH" "before"
         pathmunge "$MIDL_PATH" "before"
-		pathmunge "$AL_PATH" "before"
+        pathmunge "$AL_PATH" "before"
         pathmunge "$MSPDB_PATH" "before"
         if test "$BITNESS_OVERRIDE" = 64; then
             pathmunge "$COMPATH/bin/amd64" "before"
-			pathmunge "$WINDOWS_SDK_HOME/bin/x64" "before"
+            pathmunge "$WINDOWS_SDK_HOME/bin/x64" "before"
         else
             pathmunge "$COMPATH/bin" "before"
-			pathmunge "$WINDOWS_SDK_HOME/bin/x86" "before"
+            pathmunge "$WINDOWS_SDK_HOME/bin/x86" "before"
         fi
         if test "$SOLAR_JAVA" != "" -a "$JDK"!="gcj"; then
             if test -d "$JAVA_HOME/jre/bin/client"; then
