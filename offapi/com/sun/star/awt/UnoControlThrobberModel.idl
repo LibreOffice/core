@@ -36,8 +36,8 @@
 
 /**
     @since OOo 2.2
-    @deprecatd
-        You should use <type>SpinningAnimationControlModel</type>.
+    @deprecated
+        You should use <type>SpinningProgressControlModel</type>.
  */
 
 published service UnoControlThrobberModel

@@ -38,8 +38,8 @@
 //=============================================================================
 
 /**
-    @deprecatd
-        You should use <type>XAnimation</type>, <type>AnimatedImagesControl</type>, and <type>AnimatedImagesControlModel</type>.
+    @deprecated
+        You should use <type>XAnimation</type>, <type>AnimatedImagesControl</type> and <type>SpinningProgressControlModel</type>.
  */
 published interface XThrobber: com::sun::star::uno::XInterface
 {

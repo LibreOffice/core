@@ -40,8 +40,8 @@
 
 /**
     @since OOo 2.2
-    @deprecatd
-        You should use <type>AnimatedImagesControl</type>.
+    @deprecated
+        You should use <type>AnimatedImagesControl</type> and <type>SpinningProgressControlModel</type>.
  */
 published service UnoControlThrobber
 {
