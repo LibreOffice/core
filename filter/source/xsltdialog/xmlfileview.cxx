@@ -55,12 +55,6 @@ using namespace com::sun::star::xml::sax;
 
 using ::rtl::OUString;
 
-
-#define MAX_SYNTAX_HIGHLIGHT 20
-#define MAX_HIGHLIGHTTIME 200
-#define SYNTAX_HIGHLIGHT_TIMEOUT 200
-
-
 struct SwTextPortion
 {
     sal_uInt16 nLine;
