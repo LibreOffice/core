@@ -99,6 +99,8 @@ struct ObjAreaType {
     sal_uInt8   FFarbe;   //  [Index]
     sal_uInt8   FBFarbe;  //  [Index]
     sal_uInt8   FIntens;  //  [%]
+    sal_uInt8   FDummy1;  //
+    sal_Int16  FDummy2;  //
     sal_uInt16 FMuster;  //  [Index] inkl. Invers, Transparenz
 };
 
