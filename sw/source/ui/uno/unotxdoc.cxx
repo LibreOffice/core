@@ -3033,6 +3033,12 @@ uno::Reference< text::XFlatParagraphIterator > SAL_CALL SwXTextDocument::getFlat
     throw ( uno::RuntimeException )
 {
     SolarMutexGuard aGuard;
+    if (!IsValid())
+    {
+        throw DisposedException("SwXTextDocument not valid",
+                static_cast<XTextDocument*>(this));
+    }
+
     return new SwXFlatParagraphIterator( *pDocShell->GetDoc(), nTextMarkupType, bAutomatic );
 }
 
