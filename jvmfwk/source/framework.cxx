@@ -45,7 +45,7 @@ namespace {
 
 static bool g_bEnabledSwitchedOn = false;
 
-#ifdef SOLAAR_JAVA
+#ifdef SOLAR_JAVA
 
 static JavaVM * g_pJavaVM = NULL;
 
