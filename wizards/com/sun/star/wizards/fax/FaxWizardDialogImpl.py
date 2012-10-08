@@ -16,8 +16,7 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 import traceback
-from .FaxWizardDialog import FaxWizardDialog, Helper, PropertyNames, uno, \
-    WizardDialog
+from .FaxWizardDialog import FaxWizardDialog, Helper, PropertyNames, uno
 from .CGFaxWizard import CGFaxWizard
 from .FaxDocument import FaxDocument
 from .FaxWizardDialogConst import HID
