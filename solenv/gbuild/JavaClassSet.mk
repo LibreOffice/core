@@ -26,7 +26,7 @@
 #
 #*************************************************************************
 
-gb_JavaClassSet_JAVACCOMMAND := $(JAVACOMPILER) $(JAVAFLAGS) \
+gb_JavaClassSet_JAVACCOMMAND := $(ICECREAM_RUN) $(JAVACOMPILER) $(JAVAFLAGS) \
     -source $(JAVA_SOURCE_VER) -target $(JAVA_TARGET_VER)
 gb_JavaClassSet_JAVACDEBUG :=
 

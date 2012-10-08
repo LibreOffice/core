@@ -12614,6 +12614,17 @@ fi
 AC_MSG_RESULT([$BUILD_MAX_JOBS])
 AC_SUBST(BUILD_MAX_JOBS)
 
+dnl ===================================================================
+dnl icerun is a wrapper that stops us spawning tens of processes
+dnl locally - for tools that can't be executed on the compile cluster
+dnl this avoids a dozen javac's ganging up on your laptop to kill it.
+dnl ===================================================================
+ICECREAM_RUN=
+if test "$enable_icecream" = "yes"; then
+   ICECREAM_RUN=icerun
+fi
+AC_SUBST(ICECREAM_RUN)
+
 # =====================================================================
 # determine the parallelism for gnu make
 # =====================================================================
