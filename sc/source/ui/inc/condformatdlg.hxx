@@ -47,6 +47,7 @@ class ScConditionalFormat;
 class ScFormatEntry;
 class ScConditionalFormat;
 struct ScDataBarFormatData;
+class ScCondFrmtEntry;
 
 namespace condformat {
 
@@ -64,104 +65,6 @@ enum ScCondFormatDialogType
 
 }
 
-class ScCondFrmtEntry : public Control
-{
-private:
-    bool mbActive;
-    ScCondFormatEntryType meType;
-
-    Link maClickHdl;
-
-    //general ui elements
-    ListBox maLbType;
-    FixedText maFtCondNr;
-    FixedText maFtCondition;
-
-    //cond format ui elements
-    ListBox maLbCondType;
-    Edit maEdVal1;
-    Edit maEdVal2;
-    FixedText maFtStyle;
-    ListBox maLbStyle;
-    SvxFontPrevWindow maWdPreview;
-
-    //color format ui elements
-    ListBox maLbColorFormat;
-    //color scale ui elements
-    ListBox maLbColScale2;
-    ListBox maLbColScale3;
-
-    ListBox maLbEntryTypeMin;
-    ListBox maLbEntryTypeMiddle;
-    ListBox maLbEntryTypeMax;
-
-    Edit maEdMin;
-    Edit maEdMiddle;
-    Edit maEdMax;
-
-    ColorListBox maLbColMin;
-    ColorListBox maLbColMiddle;
-    ColorListBox maLbColMax;
-
-    //data bar ui elements
-    ListBox maLbDataBarMinType;
-    ListBox maLbDataBarMaxType;
-    Edit maEdDataBarMin;
-    Edit maEdDataBarMax;
-    PushButton maBtOptions;
-
-    boost::scoped_ptr<ScDataBarFormatData> mpDataBarData;
-
-    //
-    void SetCondType();
-    void SetColorScaleType();
-    void SetDataBarType();
-    void SetFormulaType();
-    void HideCondElements();
-    void HideColorScaleElements();
-    void HideDataBarElements();
-    void SwitchToType(ScCondFormatEntryType eType);
-
-    void SetHeight();
-    void Init();
-
-    ScFormatEntry* createConditionEntry() const;
-    ScFormatEntry* createColorscaleEntry() const;
-    ScFormatEntry* createDatabarEntry() const;
-    ScFormatEntry* createFormulaEntry() const;
-
-    ScDocument* mpDoc;
-    ScAddress maPos;
-    sal_Int32 mnIndex;
-    rtl::OUString maStrCondition;
-
-    DECL_LINK( TypeListHdl, void*);
-    DECL_LINK( ColFormatTypeHdl, void*);
-    DECL_LINK( StyleSelectHdl, void* );
-    DECL_LINK( OptionBtnHdl, void* );
-    DECL_LINK( DataBarTypeSelectHdl, void* );
-    DECL_LINK( ConditionTypeSelectHdl, void* );
-    DECL_LINK( EntryTypeHdl, ListBox* );
-    DECL_LINK( EdModifyHdl, Edit* );
-
-public:
-    ScCondFrmtEntry( Window* pParent, ScDocument* pDoc, const ScAddress& rPos );
-    ScCondFrmtEntry( Window* pParent, ScDocument* pDoc, const ScFormatEntry* pFormatEntry, const ScAddress& rPos );
-    virtual ~ScCondFrmtEntry();
-
-    virtual long Notify( NotifyEvent& rNEvt );
-
-    void SetType( ScCondFormatEntryType eType );
-
-    void Select();
-    void Deselect();
-
-    bool IsSelected() const;
-    void SetIndex(sal_Int32 nIndex);
-
-    ScFormatEntry* GetEntry() const;
-};
-
 class ScCondFormatList : public Control
 {
 private:
@@ -177,6 +80,7 @@ private:
 
     void RecalcAll();
     void DoScroll(long nDiff);
+
 public:
     ScCondFormatList( Window* pParent, const ResId& rResId, ScDocument* pDoc, const ScConditionalFormat* pFormat,
             const ScRangeList& rRanges, const ScAddress& rPos, condformat::dialog::ScCondFormatDialogType eType);
@@ -188,6 +92,8 @@ public:
     DECL_LINK( ScrollHdl, void* );
     DECL_LINK( EntrySelectHdl, ScCondFrmtEntry* );
 
+    DECL_LINK( TypeListHdl, ListBox*);
+    DECL_LINK( ColFormatTypeHdl, ListBox*);
 };
 
 class ScCondFormatDlg : public ScAnyRefDlg
