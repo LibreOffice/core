@@ -415,10 +415,6 @@ Sequence < Reference < ::com::sun::star::linguistic2::XMeaning > > SAL_CALL Thes
                     codeTerm = seq[0];
                     stem2 = 1;
                 }
-#if 0
-                OString o = OUStringToOString(codeTerm, RTL_TEXTENCODING_UTF8);
-                fprintf(stderr, "CODETERM: %s\n", o.pData->buffer);
-#endif
             }
         }
 
@@ -479,9 +475,6 @@ Sequence < Reference < ::com::sun::star::linguistic2::XMeaning > > SAL_CALL Thes
                     OUString aAlt( cTerm + catst);
                     pStr[i] = aAlt;
                 }
-#if 0
-                Meaning * pMn = new Meaning(rTerm,nLanguage,rHelper);
-#endif
                 Meaning * pMn = new Meaning(rTerm,nLanguage);
                 OUString dTerm(pe->defn,strlen(pe->defn),eEnc );
                 pMn->SetMeaning(dTerm);
@@ -514,13 +507,6 @@ Sequence < Reference < ::com::sun::star::linguistic2::XMeaning > > SAL_CALL Thes
         if (xTmpRes.is())
         {
             Sequence<OUString>seq = xTmpRes->getAlternatives();
-#if 0
-            for (int i = 0; i < seq.getLength(); i++)
-            {
-                OString o = OUStringToOString(seq[i], RTL_TEXTENCODING_UTF8);
-                fprintf(stderr, "%d: %s\n", i + 1, o.pData->buffer);
-            }
-#endif
             if (seq.getLength() > 0)
             {
                 rTerm = seq[0];  // XXX Use only the first stem

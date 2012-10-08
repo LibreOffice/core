@@ -464,37 +464,6 @@ sal_Bool SAL_CALL osl_getHomeDir(oslSecurity Security, rtl_uString **pustrDirect
         }
         else
         {
-#if 0
-            if (pSecImpl->m_hToken)
-            {
-                DWORD  nInfoBuffer = 512;
-                UCHAR* pInfoBuffer = malloc(nInfoBuffer);
-
-                while (!GetTokenInformation(pSecImpl->m_hToken, TokenUser,
-                                               pInfoBuffer, nInfoBuffer, &nInfoBuffer))
-                {
-                    if (GetLastError() == ERROR_INSUFFICIENT_BUFFER)
-                        pInfoBuffer = realloc(pInfoBuffer, nInfoBuffer);
-                    else
-                    {
-                        free(pInfoBuffer);
-                        pInfoBuffer = NULL;
-                        break;
-                    }
-                }
-
-                /* not implemented */
-                OSL_ASSERT(sal_False);
-
-                if (pInfoBuffer)
-                {
-                    /* if (EqualSid() ... */
-
-                }
-            }
-            else
-#endif
-
                 bSuccess = (sal_Bool)(GetSpecialFolder(&ustrSysDir, CSIDL_PERSONAL) &&
                                      (osl_File_E_None == osl_getFileURLFromSystemPath(ustrSysDir, pustrDirectory)));
         }

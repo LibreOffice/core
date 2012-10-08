@@ -58,12 +58,6 @@ inline sal_Bool operator == ( const ::com::sun::star::lang::Locale &rL1, const :
             rL1.Variant  ==  rL2.Variant;
 }
 
-#if 0
-///////////////////////////////////////////////////////////////////////////
-
-String GetDirectoryPathFromFileURL( const String &rFileURL );
-#endif
-
 #if defined(WNT)
 ///////////////////////////////////////////////////////////////////////////
 // to be use to get a short path name under Windows that still can be used with
