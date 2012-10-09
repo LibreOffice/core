@@ -59,11 +59,13 @@ LIBS = \
 	eptlo \
 	eralo \
 	etilo \
+	evtattlo \
 	expat_xmlparse \
 	expat_xmltok \
 	explo \
 	expwrap.uno \
 	fastsax.uno \
+	fileacc \
 	filterconfiglo \
 	fontconfig \
 	forlo \
@@ -77,7 +79,10 @@ LIBS = \
 	fwllo \
 	fwmlo \
 	gcc3_uno \
+	hunspell-1.3 \
 	hwplo \
+	hyphen \
+	hyphenlo \
 	i18nisolang1gcc3 \
 	i18npool.uno \
 	i18nregexplo \
@@ -109,6 +114,7 @@ LIBS = \
 	lcms2 \
 	libotouchlo \
 	lnglo \
+	lnthlo \
 	lo-bootstrap \
 	localebe1.uno \
 	localedata_en \
@@ -122,6 +128,7 @@ LIBS = \
 	msfilterlo \
 	mspublib \
 	mswordlo \
+	mythes-1.2 \
 	ooxlo \
 	orcus \
 	package2 \
@@ -145,6 +152,7 @@ LIBS = \
 	smdlo \
 	smlo \
 	sotlo \
+	spelllo \
 	spllo \
 	stocservices.uno \
 	store \
@@ -169,6 +177,7 @@ LIBS = \
 	ucbhelper4gcc3 \
 	ucpfile1 \
 	ucppkg1 \
+	ulingu \
 	uno_cppu \
 	uno_cppuhelpergcc3 \
 	uno_sal \

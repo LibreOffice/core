@@ -13,12 +13,20 @@ extern "C"
 {
     extern void * avmedia_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * dbaxml_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
+    extern void * evtatt_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
+    extern void * fileacc_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
+    extern void * frm_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
+    extern void * fsstorage_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * fwk_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * fwl_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * fwm_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * hwp_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
+    extern void * hyphen_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
+    extern void * lng_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
+    extern void * lnth_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * lotuswordpro_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * oox_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
+    extern void * sb_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * sc_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * scd_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * scfilt_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
@@ -49,14 +57,22 @@ lo_get_libmap(void)
     static lib_to_component_mapping map[] = {
         { "libavmedialo.a", avmedia_component_getFactory },
         { "libdbaxmllo.a", dbaxml_component_getFactory },
+        { "libevtattlo.a", evtatt_component_getFactory },
+        { "libfileacc.a", fileacc_component_getFactory },
+        { "libfrmlo.a", frm_component_getFactory },
+        { "libfsstorage.uno.a", fsstorage_component_getFactory },
         { "libfwklo.a", fwk_component_getFactory },
         { "libfwllo.a", fwl_component_getFactory },
         { "libfwmlo.a", fwm_component_getFactory },
         { "libhwplo.a", hwp_component_getFactory },
+        { "libhyphenlo.a", hyphen_component_getFactory },
+        { "liblnglo.a", lng_component_getFactory },
+        { "liblnthlo.a", lnth_component_getFactory },
         { "liblwpftlo.a", lotuswordpro_component_getFactory },
         { "libooxlo.a", oox_component_getFactory },
         { "libscdlo.a", scd_component_getFactory },
         { "libscfiltlo.a", scfilt_component_getFactory },
+        { "libsblo.a", sb_component_getFactory },
         { "libsclo.a", sc_component_getFactory },
         { "libsddlo.a", sdd_component_getFactory },
         { "libsdlo.a", sd_component_getFactory },
