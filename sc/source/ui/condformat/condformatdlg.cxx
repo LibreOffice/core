@@ -47,6 +47,8 @@
 #include "colorscale.hxx"
 #include "colorformat.hxx"
 #include "reffact.hxx"
+#include "docsh.hxx"
+#include "docfunc.hxx"
 #include "condformatdlgentry.hxx"
 
 #include "globstr.hrc"
@@ -306,6 +308,7 @@ ScCondFormatDlg::ScCondFormatDlg(SfxBindings* pB, SfxChildWindow* pCW, Window* p
     maCondFormList( this, ScResId( CTRL_LIST ), pDoc, pFormat, rRange, rPos, eType ),
     maPos(rPos),
     mpDoc(pDoc),
+    mpFormat(pFormat),
     meType(eType)
 {
     rtl::OUStringBuffer aTitle( GetText() );
@@ -410,13 +413,21 @@ sal_Bool ScCondFormatDlg::Close()
 
 IMPL_LINK_NOARG( ScCondFormatDlg, OkBtnHdl )
 {
-    Close();
+    ScConditionalFormat* pFormat = GetConditionalFormat();
+    SfxObjectShell* pObjectShell = mpDoc->GetDocumentShell();
+    sal_Int32 nKey = 0;
+    if(mpFormat)
+        nKey = mpFormat->GetKey();
 
+    static_cast<ScDocShell*>(pObjectShell)->GetDocFunc().ReplaceConditionalFormat(nKey, pFormat, maPos.Tab(), pFormat->GetRange());
+
+    Close();
     return 0;
 }
 
 IMPL_LINK_NOARG( ScCondFormatDlg, CancelBtnHdl )
 {
+
     Close();
 
     return 0;

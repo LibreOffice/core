@@ -112,6 +112,8 @@ private:
     ScAddress maPos;
     ScDocument* mpDoc;
 
+    const ScConditionalFormat* mpFormat;
+
     condformat::dialog::ScCondFormatDialogType meType;
 
     DECL_LINK( EdRangeModifyHdl, Edit* );
