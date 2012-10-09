@@ -17,6 +17,8 @@
 #include <clang/Frontend/FrontendPluginRegistry.h>
 #include <clang/Rewrite/Rewriter.h>
 
+#include "unusedvariablecheck.hxx"
+
 using namespace clang;
 
 namespace loplugin
@@ -31,12 +33,14 @@ class PluginHandler
     public:
         explicit PluginHandler( ASTContext& context )
             : rewriter( context.getSourceManager(), context.getLangOpts())
+            , unusedVariableCheck( context )
             {
             }
         virtual void HandleTranslationUnit( ASTContext& context )
             {
             if( context.getDiagnostics().hasErrorOccurred())
                 return;
+            unusedVariableCheck.run();
             // TODO also LO header files? or a subdir?
            if( const RewriteBuffer* buf = rewriter.getRewriteBufferFor( context.getSourceManager().getMainFileID()))
                 buf->write( llvm::outs());
@@ -44,6 +48,7 @@ class PluginHandler
             }
     private:
         Rewriter rewriter;
+        UnusedVariableCheck unusedVariableCheck;
     };
 
 /**

@@ -489,6 +489,26 @@ template< typename T1, typename T2 > inline T1 static_int_cast(T2 n) {
 #endif
 #endif
 
+/**
+
+ Annotate classes where a compiler should warn if an instance is unused.
+
+ The compiler cannot warn about unused instances if they have non-trivial
+ or external constructors or destructors. Classes marked with SAL_WARN_UNUSED
+ will be warned about.
+
+ Currently implemented by a Clang compiler plugin.
+
+ @since LibreOffice 3.7
+
+*/
+
+#if defined __clang__
+#define SAL_WARN_UNUSED __attribute__((annotate("lo_warn_unused")))
+#else
+#define SAL_WARN_UNUSED
+#endif
+
 #endif /*_SAL_TYPES_H_ */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
