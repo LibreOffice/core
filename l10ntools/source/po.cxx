@@ -352,21 +352,21 @@ namespace
     //Escape special tags
     static OString lcl_EscapeTags( const OString& rText )
     {
-        typedef std::vector<OString> StrVec;
+        typedef std::vector<OString> StrVec_t;
         const OString vInitializer[] = {
             "ahelp", "link", "item", "emph", "defaultinline",
             "switchinline", "caseinline", "variable",
             "bookmark_value", "image", "embedvar", "alt" };
-        const StrVec vTagsForEscape( vInitializer,
+        const StrVec_t vTagsForEscape( vInitializer,
             vInitializer + sizeof(vInitializer) / sizeof(vInitializer[0]) );
-        StrVec vFoundTags;
+        StrVec_t vFoundTags;
         lcl_FindAllTag(rText,vFoundTags);
         OString sResult = rText;
-        for(StrVec::const_iterator pFound  = vFoundTags.begin();
+        for(StrVec_t::const_iterator pFound  = vFoundTags.begin();
             pFound != vFoundTags.end(); ++pFound)
         {
             bool bEscapeThis = false;
-            for(StrVec::const_iterator pEscape = vTagsForEscape.begin();
+            for(StrVec_t::const_iterator pEscape = vTagsForEscape.begin();
                 pEscape != vTagsForEscape.end(); ++pEscape)
             {
                 if (pFound->startsWith("<" + *pEscape) ||
