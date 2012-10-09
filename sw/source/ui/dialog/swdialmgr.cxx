@@ -33,12 +33,14 @@
 #ifndef DISABLE_DYNLOADING
 //copy from core\bastyp\swtypes.cxx
 String aEmptyStr; // constant strings
+
+ResMgr* pSwResMgr=0;
+#else
+static ResMgr *pSwResMgr;
 #endif
 
 ResMgr* SwDialogsResMgr::GetResMgr()
 {
-    static ResMgr* pSwResMgr=0;
-
     if ( !pSwResMgr )
     {
         pSwResMgr = SfxApplication::CreateResManager( "sw" );
