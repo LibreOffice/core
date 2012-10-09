@@ -41,9 +41,7 @@
 
 #include "com/sun/star/beans/XPropertySet.hpp"
 
-#if OSL_DEBUG_LEVEL > 1
 #include <stdio.h>
-#endif
 #include <vector>
 
 #ifdef IOS
@@ -570,9 +568,7 @@ Reference< XInterface > SAL_CALL loadSharedLibComponentFactory(
         }
         if ( pSym == NULL )
         {
-#if OSL_DEBUG_LEVEL > 1
             fprintf( stderr, "attempting to load unknown library %s\n", OUStringToOString( rLibName, RTL_TEXTENCODING_ASCII_US ).getStr() );
-#endif
             assert( !"Attempt to load unknown library" );
         }
     }
