@@ -472,6 +472,7 @@ bool FixedText::set_property(const rtl::OString &rKey, const rtl::OString &rValu
     if (rKey == "max-width-chars")
     {
         setMaxWidthChars(rValue.toInt32());
+        return true;
     }
     else
         return Control::set_property(rKey, rValue);
