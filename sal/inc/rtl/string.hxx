@@ -91,7 +91,7 @@ namespace rtl
   use this class.
 */
 
-class OString
+class SAL_WARN_UNUSED OString
 {
 public:
     /// @cond INTERNAL

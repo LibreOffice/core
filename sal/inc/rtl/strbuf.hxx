@@ -97,7 +97,7 @@ namespace rtl
     buffer array. If the internal buffer overflows, it is
     automatically made larger.
  */
-class OStringBuffer
+class SAL_WARN_UNUSED OStringBuffer
 {
 public:
     /**

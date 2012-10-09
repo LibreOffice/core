@@ -90,7 +90,7 @@ namespace rtl
   use this class.
 */
 
-class OUString
+class SAL_WARN_UNUSED OUString
 {
 public:
     /// @cond INTERNAL

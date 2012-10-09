@@ -92,7 +92,7 @@ namespace rtl
     buffer array. If the internal buffer overflows, it is
     automatically made larger.
  */
-class OUStringBuffer
+class SAL_WARN_UNUSED OUStringBuffer
 {
 public:
     /**
