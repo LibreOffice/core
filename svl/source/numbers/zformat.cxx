@@ -4721,7 +4721,7 @@ OUString SvNumberformat::GetMappedFormatstring(
     {   // append empty subformats
         aStr.append( ';' );
     }
-    return aStr.getStr();
+    return aStr.makeStringAndClear();
 }
 
 String SvNumberformat::ImpGetNatNumString( const SvNumberNatNum& rNum,

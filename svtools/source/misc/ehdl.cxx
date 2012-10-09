@@ -192,13 +192,7 @@ sal_Bool SfxErrorHandler::CreateString(
     {
         if(GetMessageString(nErrCode, rStr, nFlags))
         {
-            for (xub_StrLen i = 0; i < rStr.getLength();)
-            {
-                if( rStr.indexOf(OUString("$(ARG1)"), i) == -1 )
-                    break;
-                rStr = rStr.replaceAll("$(ARG1)", pMsgInfo->GetMessageArg(), i);
-                i = i + pMsgInfo->GetMessageArg().getLength();
-            }
+            rStr = rStr.replaceAll("$(ARG1)", pMsgInfo->GetMessageArg());
             return sal_True;
         }
     }
@@ -206,35 +200,19 @@ sal_Bool SfxErrorHandler::CreateString(
     {
         StringErrorInfo *pStringInfo=PTR_CAST(StringErrorInfo,pErr);
         if(pStringInfo)
-            for (xub_StrLen i = 0; i < rStr.getLength();)
-            {
-                if( rStr.indexOf("$(ARG1)", i) == -1 )
-                    break;
-                rStr = rStr.replaceAll(rtl::OUString("$(ARG1)"),
-                                          pStringInfo->GetErrorString(), i);
-                i = i + pStringInfo->GetErrorString().getLength();
-            }
+        {
+            rStr = rStr.replaceAll(rtl::OUString("$(ARG1)"),
+                                      pStringInfo->GetErrorString());
+        }
         else
         {
             TwoStringErrorInfo * pTwoStringInfo = PTR_CAST(TwoStringErrorInfo,
                                                            pErr);
             if (pTwoStringInfo)
-                for (sal_uInt16 i = 0; i < rStr.getLength();)
-                {
-                    sal_uInt16 nArg1Pos = rStr.indexOf(rtl::OUString("$(ARG1)"), i);
-                    sal_uInt16 nArg2Pos = rStr.indexOf(rtl::OUString("$(ARG2)"), i);
-                    if (nArg1Pos < nArg2Pos)
-                    {
-                        rStr = rStr.replaceAt(nArg1Pos, 7, pTwoStringInfo->GetArg1());
-                        i = nArg1Pos + pTwoStringInfo->GetArg1().getLength();
-                    }
-                    else if (nArg2Pos < nArg1Pos)
-                    {
-                        rStr = rStr.replaceAt(nArg2Pos, 7, pTwoStringInfo->GetArg2());
-                        i = nArg2Pos + pTwoStringInfo->GetArg2().getLength();
-                    }
-                    else break;
-                }
+            {
+                rStr = rStr.replaceAll("$(ARG1)", pTwoStringInfo->GetArg1());
+                rStr = rStr.replaceAll("$(ARG2)", pTwoStringInfo->GetArg2());
+            }
         }
         return sal_True;
     }
