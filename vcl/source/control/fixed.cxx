@@ -476,6 +476,7 @@ bool FixedText::set_property(const rtl::OString &rKey, const rtl::OString &rValu
     }
     else
         return Control::set_property(rKey, rValue);
+    return true;
 }
 
 // =======================================================================

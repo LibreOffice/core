@@ -140,9 +140,11 @@ public:
     VclBuilder(Window *pParent, OUString sUIRootDir, OUString sUIFile, OString sID = OString());
     ~VclBuilder();
     Window *get_widget_root();
+    //sID must exist and be of type T
     template <typename T> T* get(T*& ret, OString sID)
     {
         Window *w = get_by_name(sID);
+        assert(w);
         ret = static_cast<T*>(w);
 
 #if OSL_DEBUG_LEVEL > 0
@@ -155,6 +157,7 @@ public:
 
         return ret;
     }
+    //sID may not exist, but must be of type T if it does
     template <typename T /*=Window if we had c++11*/> T* get(OString sID)
     {
         Window *w = get_by_name(sID);
