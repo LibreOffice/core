@@ -394,7 +394,7 @@ static sal_uInt16 aAddPgRg[] = {
     0
 };
 
-size_t lcl_GetFrmMapCount( const FrmMap* pMap)
+static size_t lcl_GetFrmMapCount( const FrmMap* pMap)
 {
     if ( pMap )
     {
@@ -567,7 +567,7 @@ SvxSwFramePosString::StringId lcl_ChangeResIdToVerticalOrRTL(SvxSwFramePosString
 
 // helper method in order to determine all possible
 // listbox relations in a relation map for a given relation
-sal_uLong lcl_GetLBRelationsForRelations( const sal_uInt16 _nRel )
+static sal_uLong lcl_GetLBRelationsForRelations( const sal_uInt16 _nRel )
 {
     sal_uLong nLBRelations = 0L;
 
@@ -585,9 +585,9 @@ sal_uLong lcl_GetLBRelationsForRelations( const sal_uInt16 _nRel )
 
 // helper method on order to determine all possible
 // listbox relations in a relation map for a given string ID
-sal_uLong lcl_GetLBRelationsForStrID( const FrmMap* _pMap,
-                                  const SvxSwFramePosString::StringId _eStrId,
-                                  const bool _bUseMirrorStr )
+static sal_uLong lcl_GetLBRelationsForStrID( const FrmMap* _pMap,
+                                             const SvxSwFramePosString::StringId _eStrId,
+                                             const bool _bUseMirrorStr )
 {
     sal_uLong nLBRelations = 0L;
 
@@ -2740,7 +2740,7 @@ IMPL_LINK_NOARG(SwFrmURLPage, InsertFileHdl)
     return 0;
 }
 
-void lcl_Move(Window& rWin, sal_Int32 nDiff)
+static void lcl_Move(Window& rWin, sal_Int32 nDiff)
 {
     Point aPos(rWin.GetPosPixel());
     aPos.Y() -= nDiff;
