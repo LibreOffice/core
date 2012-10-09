@@ -54,7 +54,7 @@ void BodyNotInBlock::traverseStatement( const Stmt* stmt, StmtParents& parents )
             parents.push_back( *it );
             if( const IfStmt* ifstmt = dyn_cast< IfStmt >( *it ))
                 {
-                checkBody( ifstmt->getThen(), parents, 0 );
+                checkBody( ifstmt->getThen(), parents, 0, ifstmt->getElse() != NULL );
                 checkBody( ifstmt->getElse(), parents, 0 );
                 }
             else if( const WhileStmt* whilestmt = dyn_cast< WhileStmt >( *it ))
@@ -70,7 +70,7 @@ void BodyNotInBlock::traverseStatement( const Stmt* stmt, StmtParents& parents )
     parents.pop_back();
     }
 
-void BodyNotInBlock::checkBody( const Stmt* body, const StmtParents& parents, int stmtType )
+void BodyNotInBlock::checkBody( const Stmt* body, const StmtParents& parents, int stmtType, bool dontGoUp )
     {
     if( body == NULL || parents.size() < 2 )
         return;
@@ -126,6 +126,11 @@ void BodyNotInBlock::checkBody( const Stmt* body, const StmtParents& parents, in
         // If going up would mean leaving a {} block, stop, because the } should
         // make it visible the two statements are not in the same body.
         if( dyn_cast< CompoundStmt >( parents[ parent_pos ] ))
+            return;
+        // If the body to be checked is a body of an if statement that has also
+        // an else part, don't go up, the else is after the body and should make
+        // it clear the body does not continue there.
+        if( dontGoUp )
             return;
         }
     }
