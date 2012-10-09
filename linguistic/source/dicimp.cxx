@@ -1028,6 +1028,7 @@ void SAL_CALL DictionaryNeo::storeToURL(
         throw(io::IOException, RuntimeException)
 {
     MutexGuard  aGuard( GetLinguMutex() );
+    saveEntries(aURL);
 }
 
 
