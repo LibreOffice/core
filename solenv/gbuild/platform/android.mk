@@ -7,9 +7,21 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
+ifeq ($(DISABLE_DYNLOADING),TRUE)
+# Link with -lgnustl_static
+gb_STDLIBS := \
+	gnustl_static
+
+gb_Library_PLAINLIBS_NONE := \
+	android \
+	gnustl_static \
+
+else
 # Link almost everything with -lgnustl_shared
 gb_STDLIBS := \
 	-lgnustl_shared \
+
+endif
 
 # No unit testing can be run
 gb_CppunitTest_CPPTESTPRECOMMAND := :
@@ -45,6 +57,28 @@ $(call gb_Helper_abbreviate_dirs,\
 		-o $(1))
 endef
 
+ifeq ($(DISABLE_DYNLOADING),TRUE)
+
+# Library class
+
+gb_Library_DEFS :=
+gb_Library_SYSPRE := lib
+gb_Library_UNOVERPRE := $(gb_Library_SYSPRE)uno_
+gb_Library_PLAINEXT := .a
+gb_Library_DLLEXT := .a
+gb_Library_RTEXT := gcc3$(gb_Library_PLAINEXT)
+
+gb_Library_OOOEXT := $(gb_Library_DLLPOSTFIX)$(gb_Library_PLAINEXT)
+gb_Library_UNOEXT := .uno$(gb_Library_PLAINEXT)
+
+gb_Library_PLAINLIBS_NONE += \
+	jpeg \
+	m \
+	pthread \
+	z \
+
+endif
+
 # Prefix UNO library filenames with "lib"
 gb_Library_FILENAMES := \
 	$(foreach lib,$(gb_Library_OOOLIBS),$(lib):$(gb_Library_SYSPRE)$(lib)$(gb_Library_OOOEXT)) \
@@ -57,6 +91,38 @@ gb_Library_FILENAMES := \
 	$(foreach lib,$(gb_Library_UNOLIBS_OOO),$(lib):$(gb_Library_SYSPRE)$(lib)$(gb_Library_UNOEXT)) \
 	$(foreach lib,$(gb_Library_UNOVERLIBS),$(lib):$(gb_Library_UNOVERPRE)$(lib)$(gb_Library_PLAINEXT)) \
 
+
+ifeq ($(DISABLE_DYNLOADING),TRUE)
+
+gb_Library_FILENAMES += \
+	$(foreach lib,$(gb_Library_EXTENSIONLIBS),$(lib):$(lib)$(gb_Library_UNOEXT)) \
+
+gb_Library_LAYER := \
+	$(foreach lib,$(gb_Library_OOOLIBS),$(lib):OOO) \
+	$(foreach lib,$(gb_Library_PLAINLIBS_URE),$(lib):OOO) \
+	$(foreach lib,$(gb_Library_PLAINLIBS_OOO),$(lib):OOO) \
+	$(foreach lib,$(gb_Library_RTLIBS),$(lib):OOO) \
+	$(foreach lib,$(gb_Library_RTVERLIBS),$(lib):OOO) \
+	$(foreach lib,$(gb_Library_UNOLIBS_URE),$(lib):OOO) \
+	$(foreach lib,$(gb_Library_UNOLIBS_OOO),$(lib):OOO) \
+	$(foreach lib,$(gb_Library_UNOVERLIBS),$(lib):OOO) \
+	$(foreach lib,$(gb_Library_EXTENSIONLIBS),$(lib):OXT) \
+
+define gb_Library_Library_platform
+$(call gb_LinkTarget_get_target,$(2)) : LAYER := $(call gb_Library_get_layer,$(1))
+
+endef
+
+# CppunitTest class
+
+gb_CppunitTest_EXT := .a
+
+define gb_LinkTarget__command
+$(call gb_Output_announce,$(2),$(true),LNK,4)
+$(call gb_LinkTarget__command_staticlink,$(1))
+endef
+
+endif
 
 # No DT_RPATH or DT_RUNPATH support in the Bionic dynamic linker so
 # don't bother generating such.
