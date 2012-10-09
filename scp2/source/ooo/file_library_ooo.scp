@@ -824,17 +824,6 @@ End
 
 #endif
 
-#if defined(WNT) && defined(HAVE_WINDOWS_SDK)
-
-File gid_File_Lib_Rebasemsi
-    LIB_FILE_BODY;
-    Name = "rebase.dll";
-    Dir = SCP2_OOO_BIN_DIR;
-    Styles = (PACKED,BINARYTABLE,BINARYTABLE_ONLY,DONTRENAMEINPATCH);
-End
-
-#endif /* WNT && HAVE_WINDOWS_SDK */
-
 STD_LIB_FILE( gid_File_Lib_Lng, lng)
 
 File gid_File_Lib_Localedata_En
