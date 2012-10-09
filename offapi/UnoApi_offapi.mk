@@ -2131,6 +2131,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/document,\
 	UpdateDocMode \
 	XActionLockable \
 	XBinaryStreamResolver \
+	XCmisDocument \
 	XCodeNameQuery \
 	XCompatWriterDocProperties \
 	XDocumentEventBroadcaster \

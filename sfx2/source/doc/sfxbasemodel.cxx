@@ -211,6 +211,8 @@ struct IMPL_SfxBaseModel_DataContainer : public ::sfx2::IModifiableDocument
     css::uno::Reference< css::frame::XUntitledNumbers >     m_xNumberedControllers;
     uno::Reference< rdf::XDocumentMetadataAccess>           m_xDocumentMetadata;
     ::rtl::Reference< ::sfx2::DocumentUndoManager >         m_pDocumentUndoManager;
+    uno::Sequence< beans::PropertyValue>                    m_cmisPropertiesValues;
+    uno::Sequence< beans::PropertyValue>                    m_cmisPropertiesDisplayNames;
 
 
     IMPL_SfxBaseModel_DataContainer( ::osl::Mutex& rMutex, SfxObjectShell* pObjectShell )
@@ -229,6 +231,8 @@ struct IMPL_SfxBaseModel_DataContainer : public ::sfx2::IModifiableDocument
             ,   m_xNumberedControllers  ()
             ,   m_xDocumentMetadata     () // lazy
             ,   m_pDocumentUndoManager  ()
+            ,   m_cmisPropertiesValues  ()
+            ,   m_cmisPropertiesDisplayNames ()
     {
         // increase global instance counter.
         ++g_nInstanceCounter;
@@ -2512,6 +2516,30 @@ void SAL_CALL SfxBaseModel::notifyDocumentEvent( const ::rtl::OUString&, const u
     throw ( lang::IllegalArgumentException, lang::NoSupportException, uno::RuntimeException )
 {
     throw lang::NoSupportException( ::rtl::OUString( "SfxBaseModel controlls all the sent notifications itself!"  ), uno::Reference< uno::XInterface >() );
+}
+
+uno::Sequence< beans::PropertyValue > SAL_CALL SfxBaseModel::getCmisPropertiesValues()
+    throw ( uno::RuntimeException )
+{
+    return m_pData->m_cmisPropertiesValues;
+}
+
+void SAL_CALL SfxBaseModel::setCmisPropertiesValues( const uno::Sequence< beans::PropertyValue >& _cmispropertiesvalues )
+    throw ( uno::RuntimeException )
+{
+    m_pData->m_cmisPropertiesValues = _cmispropertiesvalues;
+}
+
+uno::Sequence< beans::PropertyValue > SAL_CALL SfxBaseModel::getCmisPropertiesDisplayNames()
+    throw ( uno::RuntimeException )
+{
+    return m_pData->m_cmisPropertiesDisplayNames;
+}
+
+void SAL_CALL SfxBaseModel::setCmisPropertiesDisplayNames( const uno::Sequence< beans::PropertyValue >& _cmispropertiesdisplaynames )
+    throw ( uno::RuntimeException )
+{
+    m_pData->m_cmisPropertiesDisplayNames = _cmispropertiesdisplaynames;
 }
 
 //________________________________________________________________________________________________________

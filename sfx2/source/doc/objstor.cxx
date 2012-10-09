@@ -29,6 +29,7 @@
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
+#include <com/sun/star/document/XCmisDocument.hpp>
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/document/XImporter.hpp>
 #include <com/sun/star/document/XExporter.hpp>
@@ -744,6 +745,26 @@ sal_Bool SfxObjectShell::DoLoad( SfxMedium *pMed )
             com::sun::star::uno::Reference < XPropertySetInfo > xProps = aContent.getProperties();
             if ( xProps.is() )
             {
+                // Copy all the CMIS properties to the document (if there is any)
+                ::rtl::OUString aCmisPropsValues( "CmisPropertiesValues" );
+                ::rtl::OUString aCmisPropsNames( "CmisPropertiesDisplayNames" );
+                uno::Reference< document::XCmisDocument > xCmisDoc( GetModel( ), uno::UNO_QUERY_THROW );
+                if ( xProps->hasPropertyByName( aCmisPropsValues ) )
+                {
+                    beans::PropertyValues aCmisValues;
+                    aContent.getPropertyValue( aCmisPropsValues ) >>= aCmisValues;
+                    xCmisDoc->setCmisPropertiesValues( aCmisValues );
+
+                    // TODO For CMIS case, try to look for cmis:isVersionSeriesCheckedOut
+                    // If set to false, then show InfoBar to propose checkOut
+                }
+                if ( xProps->hasPropertyByName( aCmisPropsNames ) )
+                {
+                    beans::PropertyValues aPropNames;
+                    aContent.getPropertyValue( aCmisPropsNames ) >>= aPropNames;
+                    xCmisDoc->setCmisPropertiesDisplayNames( aPropNames );
+                }
+
                 ::rtl::OUString aAuthor( "Author" );
                 ::rtl::OUString aKeywords( "Keywords" );
                 ::rtl::OUString aSubject( "Subject" );

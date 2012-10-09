@@ -32,6 +32,7 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/container/XNameReplace.hpp>
 #include <com/sun/star/frame/XController2.hpp>
+#include <com/sun/star/document/XCmisDocument.hpp>
 #include <com/sun/star/document/XDocumentInfo.hpp>
 #include <com/sun/star/document/XDocumentInfoSupplier.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
@@ -87,9 +88,9 @@
 #include <com/sun/star/task/XInteractionHandler.hpp>
 
 //________________________________________________________________________________________________________
-#ifndef INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_32
-#define INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_32
-#define COMPHELPER_IMPLBASE_INTERFACE_NUMBER 32
+#ifndef INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_33
+#define INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_33
+#define COMPHELPER_IMPLBASE_INTERFACE_NUMBER 33
 #include <comphelper/implbase_var.hxx>
 #endif
 
@@ -209,9 +210,10 @@ namespace sfx { namespace intern {
                  SfxListener
 */
 
-typedef ::comphelper::WeakImplHelper32  <   XCHILD
+typedef ::comphelper::WeakImplHelper33  <   XCHILD
                                         ,   XDOCUMENTINFOSUPPLIER
                                         ,   ::com::sun::star::document::XDocumentPropertiesSupplier
+                                        ,   ::com::sun::star::document::XCmisDocument
                                         ,   ::com::sun::star::rdf::XDocumentMetadataAccess
                                         ,   ::com::sun::star::document::XDocumentRecovery
                                         ,   ::com::sun::star::document::XUndoManagerSupplier
@@ -1401,6 +1403,23 @@ public:
         throw (::com::sun::star::uno::RuntimeException,
             ::com::sun::star::lang::IllegalArgumentException,
             ::com::sun::star::lang::WrappedTargetException);
+
+    // XCmisDocument
+
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >
+            SAL_CALL getCmisPropertiesValues()
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setCmisPropertiesValues(
+            const ::com::sun::star::uno::Sequence<
+                ::com::sun::star::beans::PropertyValue >& _cmispropertiesvalues )
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >
+            SAL_CALL getCmisPropertiesDisplayNames()
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setCmisPropertiesDisplayNames(
+            const ::com::sun::star::uno::Sequence<
+                ::com::sun::star::beans::PropertyValue >& _cmispropertiesdisplaynames )
+        throw (::com::sun::star::uno::RuntimeException);
 
 
     //____________________________________________________________________________________________________

@@ -30,6 +30,7 @@
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/beans/PropertyValues.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/io/XActiveDataSink.hpp>
 #include <com/sun/star/io/XActiveDataStreamer.hpp>
@@ -88,6 +89,123 @@ namespace
         unoTime.HundredthSeconds = hundredthSeconds;
 
         return unoTime;
+    }
+
+    uno::Any lcl_cmisPropertyToUno( libcmis::PropertyPtr pProperty )
+    {
+        uno::Any aValue;
+        bool bMultiValued = pProperty->getPropertyType( )->isMultiValued( );
+        switch ( pProperty->getPropertyType( )->getType( ) )
+        {
+            default:
+            case libcmis::PropertyType::String:
+                {
+                    vector< string > aCmisStrings = pProperty->getStrings( );
+                    if ( bMultiValued )
+                    {
+                        uno::Sequence< rtl::OUString > aStrings( aCmisStrings.size( ) );
+                        rtl::OUString* aStringsArr = aStrings.getArray( );
+                        sal_Int32 i = 0;
+                        for ( vector< string >::iterator it = aCmisStrings.begin( );
+                                it != aCmisStrings.end( ); ++it, ++i )
+                        {
+                            string str = *it;
+                            aStringsArr[i] = STD_TO_OUSTR( str );
+                        }
+                        aValue <<= aStrings;
+                    }
+                    else if ( !aCmisStrings.empty( ) )
+                    {
+                        aValue <<= STD_TO_OUSTR( aCmisStrings.front( ) );
+                    }
+                }
+                break;
+            case libcmis::PropertyType::Integer:
+                {
+                    vector< long > aCmisLongs = pProperty->getLongs( );
+                    if ( bMultiValued )
+                    {
+                        uno::Sequence< sal_Int64 > aLongs( aCmisLongs.size( ) );
+                        sal_Int64* aLongsArr = aLongs.getArray( );
+                        sal_Int32 i = 0;
+                        for ( vector< long >::iterator it = aCmisLongs.begin( );
+                                it != aCmisLongs.end( ); ++it, ++i )
+                        {
+                            aLongsArr[i] = *it;
+                        }
+                        aValue <<= aLongs;
+                    }
+                    else if ( !aCmisLongs.empty( ) )
+                    {
+                        aValue <<= aCmisLongs.front( );
+                    }
+                }
+                break;
+            case libcmis::PropertyType::Decimal:
+                {
+                    vector< double > aCmisDoubles = pProperty->getDoubles( );
+                    if ( bMultiValued )
+                    {
+                        uno::Sequence< double > aDoubles( aCmisDoubles.size( ) );
+                        double* aDoublesArr = aDoubles.getArray( );
+                        sal_Int32 i = 0;
+                        for ( vector< double >::iterator it = aCmisDoubles.begin( );
+                                it != aCmisDoubles.end( ); ++it, ++i )
+                        {
+                            aDoublesArr[i] = *it;
+                        }
+                        aValue <<= aDoubles;
+                    }
+                    else if ( !aCmisDoubles.empty( ) )
+                    {
+                        aValue <<= aCmisDoubles.front( );
+                    }
+                }
+                break;
+            case libcmis::PropertyType::Bool:
+                {
+                    vector< bool > aCmisBools = pProperty->getBools( );
+                    if ( bMultiValued )
+                    {
+                        uno::Sequence< sal_Bool > aBools( aCmisBools.size( ) );
+                        sal_Bool* aBoolsArr = aBools.getArray( );
+                        sal_Int32 i = 0;
+                        for ( vector< bool >::iterator it = aCmisBools.begin( );
+                                it != aCmisBools.end( ); ++it, ++i )
+                        {
+                            aBoolsArr[i] = *it;
+                        }
+                        aValue <<= aBools;
+                    }
+                    else if ( !aCmisBools.empty( ) )
+                    {
+                        aValue <<= sal_Bool( aCmisBools.front( ) );
+                    }
+                }
+                break;
+            case libcmis::PropertyType::DateTime:
+                {
+                    vector< boost::posix_time::ptime > aCmisTimes = pProperty->getDateTimes( );
+                    if ( bMultiValued )
+                    {
+                        uno::Sequence< util::DateTime > aTimes( aCmisTimes.size( ) );
+                        util::DateTime* aTimesArr = aTimes.getArray( );
+                        sal_Int32 i = 0;
+                        for ( vector< boost::posix_time::ptime >::iterator it = aCmisTimes.begin( );
+                                it != aCmisTimes.end( ); ++it, ++i )
+                        {
+                            aTimesArr[i] = lcl_boostToUnoTime( *it );
+                        }
+                        aValue <<= aTimes;
+                    }
+                    else if ( !aCmisTimes.empty( ) )
+                    {
+                        aValue <<= lcl_boostToUnoTime( aCmisTimes.front( ) );
+                    }
+                }
+                break;
+        }
+        return aValue;
     }
 }
 
@@ -368,6 +486,53 @@ namespace cmis
                             xRow->appendString( rProp, STD_TO_OUSTR( document->getContentType() ) );
                         else
                             xRow->appendVoid( rProp );
+                    }
+                    catch ( const libcmis::Exception& )
+                    {
+                        xRow->appendVoid( rProp );
+                    }
+                }
+                else if ( rProp.Name == "CmisPropertiesValues" )
+                {
+                    try
+                    {
+                        libcmis::ObjectPtr object = getObject( xEnv );
+                        map< string, libcmis::PropertyPtr >& aProperties = object->getProperties( );
+                        beans::PropertyValues aCmisProperties( aProperties.size( ) );
+                        beans::PropertyValue* pCmisProps = aCmisProperties.getArray( );
+                        sal_Int32 i = 0;
+                        for ( map< string, libcmis::PropertyPtr >::iterator it = aProperties.begin();
+                                it != aProperties.end( ); ++it, ++i )
+                        {
+                            string name = it->first;
+                            pCmisProps[i].Name = STD_TO_OUSTR( name );
+                            pCmisProps[i].Value = lcl_cmisPropertyToUno( it->second );
+                        }
+                        xRow->appendObject( rProp.Name, uno::makeAny( aCmisProperties ) );
+                    }
+                    catch ( const libcmis::Exception& )
+                    {
+                        xRow->appendVoid( rProp );
+                    }
+                }
+                else if ( rProp.Name == "CmisPropertiesDisplayNames" )
+                {
+                    try
+                    {
+                        libcmis::ObjectPtr object = getObject( xEnv );
+                        map< string, libcmis::PropertyPtr >& aProperties = object->getProperties( );
+                        beans::PropertyValues aCmisProperties( aProperties.size( ) );
+                        beans::PropertyValue* pCmisProps = aCmisProperties.getArray( );
+                        sal_Int32 i = 0;
+                        for ( map< string, libcmis::PropertyPtr >::iterator it = aProperties.begin();
+                                it != aProperties.end( ); ++it, ++i )
+                        {
+                            string name = it->first;
+                            string displayName = it->second->getPropertyType()->getDisplayName( );
+                            pCmisProps[i].Name = STD_TO_OUSTR( name );
+                            pCmisProps[i].Value = uno::makeAny( STD_TO_OUSTR( displayName ) );
+                        }
+                        xRow->appendObject( rProp.Name, uno::makeAny( aCmisProperties ) );
                     }
                     catch ( const libcmis::Exception& )
                     {
@@ -797,6 +962,12 @@ namespace cmis
                 beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
             beans::Property( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "MediaType" ) ),
                 -1, getCppuType( static_cast< const rtl::OUString * >( 0 ) ),
+                beans::PropertyAttribute::BOUND ),
+            beans::Property( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CmisPropertiesValues" ) ),
+                -1, getCppuType( static_cast< const beans::PropertyValues * >( 0 ) ),
+                beans::PropertyAttribute::BOUND ),
+            beans::Property( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CmisPropertiesDisplayNames" ) ),
+                -1, getCppuType( static_cast< const beans::PropertyValues * >( 0 ) ),
                 beans::PropertyAttribute::BOUND ),
         };
 
