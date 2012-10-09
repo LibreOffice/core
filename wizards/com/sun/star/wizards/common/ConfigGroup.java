@@ -51,7 +51,6 @@ public class ConfigGroup implements ConfigNode
     private void writeField(Field field, Object configView, String prefix) throws Exception
     {
         String propertyName = field.getName().substring(prefix.length());
-        //System.out.println("Going to save:" + propertyName);
         Class<?> fieldType = field.getType();
         if (ConfigNode.class.isAssignableFrom(fieldType))
         {

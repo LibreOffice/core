@@ -198,11 +198,6 @@ public class ImageElementLayoutController
                 continue;
             }
             final Element child = (Element) node;
-            /*
-            if (! OfficeToken.COVERED_TABLE_CELL.equals(child.getType()) &&
-            (ObjectUtilities.equal(child.getNamespace(), namespace) == false ||
-            ObjectUtilities.equal(child.getType(), type) == false))
-             */
             if (!ObjectUtilities.equal(child.getNamespace(), namespace) || (!ObjectUtilities.equal(child.getType(), type) && (secondType == null || !ObjectUtilities.equal(child.getType(), secondType))))
             {
                 continue;

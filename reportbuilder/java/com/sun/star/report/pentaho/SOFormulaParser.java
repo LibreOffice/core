@@ -309,11 +309,6 @@ public final class SOFormulaParser extends ComponentBase
 
     public void setOpCodeMap(com.sun.star.sheet.FormulaOpCodeMapEntry[] the_value)
     {
-//        m_prophlp.prepareSet("OpCodeMap", null);
-//        synchronized (this)
-//        {
-//            m_OpCodeMap.clear();
-//        }
     }
 
     public String getImplementationName()

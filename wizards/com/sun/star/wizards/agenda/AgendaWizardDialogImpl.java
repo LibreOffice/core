@@ -490,16 +490,6 @@ public class AgendaWizardDialogImpl extends AgendaWizardDialog
             //document, but it is already stored, written down by a code above. The
             //reason this piece is malfunctioning, because the agendaTemplate.document
             //is read-only (At least as my tests indicated.).
-            /*
-            * try {
-            *     XStorable xStoreable = UnoRuntime.queryInterface(XStorable.class, agendaTemplate.document);
-            *     xStoreable.store();
-            * }
-            * catch (Exception ex) {
-            *     SystemDialog.showMessageBox(xMSF, "ErrorBox", VclWindowPeerAttribute.OK, resources.resErrSaveTemplate);
-            *     ex.printStackTrace();
-            * }
-            */
 
             agendaTemplate.xTextDocument.unlockControllers();
 
