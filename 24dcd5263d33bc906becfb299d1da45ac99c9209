@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAPn///24\u003d",
+        "filename": "wizards/com/sun/star/wizards/common/NumericalHelper.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1502,
+      "author": {
+        "id": 1000138
+      },
+      "writtenOn": "2012-10-09T08:27:00Z",
+      "side": 1,
+      "message": "Was this accidently?",
+      "revId": "24dcd5263d33bc906becfb299d1da45ac99c9209",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
