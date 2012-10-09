@@ -182,11 +182,6 @@ if [ "$COM" = "MSC" ]; then
     downloaditem "http://download.microsoft.com/download/E/9/F/E9FCA9E9-9908-4D8F-B491-8E8A4C294C01/" "WindowsXP-KB958911-x86-ENU.exe" "ff084c5815b0672d54628158b820f5b1"
 fi
 
-if [ "$REBASE" = "download" ]; then
-	downloaditem "http://download.microsoft.com/download/A/6/A/A6AC035D-DA3F-4F0C-ADA4-37C8E5D34E3D/setup/WinSDKTools/" "cab1.cab" "15331cc5cb4a03e7a44aaa303e34bf5b"
-	downloaditem "http://download.microsoft.com/download/A/6/A/A6AC035D-DA3F-4F0C-ADA4-37C8E5D34E3D/setup/WinSDKTools/" "WinSDKTools_x86.msi" "d1f44ddc2ba6bbda79407e951e44303b"
-fi
-
 if [ -f $start_dir/sources.ver -a ! -d $start_dir/.git ] ; then
     # these sources are from a tarball, so get the other source tarballs
     . $start_dir/sources.ver
@@ -222,17 +217,14 @@ if [ "$COM" = "MSC" -a -n "$md5sum" ]; then
     if [ ! -f ./external/dbghelp/dbghelp.dll -a -f $TARFILE_LOCATION/13fbc2e8b37ddf28181dd6d8081c2b8e-dbghelp.dll ]; then
 	    cp $TARFILE_LOCATION/13fbc2e8b37ddf28181dd6d8081c2b8e-dbghelp.dll ./external/dbghelp/dbghelp.dll
 	fi
-	if [ "$REBASE" = "download" ]; then
-		if [ ! -f ./external/rebase/rebase.exe -a -f $TARFILE_LOCATION/WinSDKTools_x86.msi ]; then
-			msiexec /a `cygpath -d $TARFILE_LOCATION/WinSDKTools_x86.msi` /qn TARGETDIR=$TMPUNPACK SHORTFILENAMES=1
-			rebase_exe_path=Pfiles/*/Windows/v7.1/Bin/ReBase.Exe
-			sum=`$md5sum $md5special $TARFILE_LOCATION/tmp/$rebase_exe_path | sed "s/ .*//"`
-			if [ "$sum" = "5892a62147b7be59f0553ae3634e9dfa" ]; then
-				cp $TARFILE_LOCATION/tmp/$rebase_exe_path ./external/rebase/rebase.exe
-			fi
-		fi
-	fi
-	
+    if [ ! -f ./external/dbghelp/dbghelp.dll -a -f $TARFILE_LOCATION/dbg_x86.msi ]; then
+        msiexec /a `cygpath -d $TARFILE_LOCATION/dbg_x86.msi` /qn TARGETDIR=$TMPUNPACK SHORTFILENAMES=1
+		dbghelp_dll_path=PFiles/DbgTools/dbghelp.dll
+        sum=`$md5sum $md5special $TARFILE_LOCATION/tmp/$dbghelp_dll_path | sed "s/ .*//"`
+        if [ "$sum" = "4003e34416ebd25e4c115d49dc15e1a7" ]; then
+			cp $TARFILE_LOCATION/tmp/$dbghelp_dll_path ./external/dbghelp/dbghelp.dll
+        fi
+    fi
     if [ ! -f ./external/gdiplus/gdiplus.dll -a -f $TARFILE_LOCATION/WindowsXP-KB958911-x86-ENU.exe ]; then
 	gdiplus_dll_path=SP3QFE/asms/10/msft/windows/gdiplus/gdiplus.dll
 	chmod +x `cygpath $TARFILE_LOCATION`/WindowsXP-KB958911-x86-ENU.exe
