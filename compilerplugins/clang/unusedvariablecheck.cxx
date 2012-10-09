@@ -12,8 +12,6 @@
 
 #include <clang/Basic/SourceManager.h>
 
-using namespace clang;
-
 namespace loplugin
 {
 
@@ -31,24 +29,13 @@ that cannot be edited there is a manual list below.
 */
 
 UnusedVariableCheck::UnusedVariableCheck( ASTContext& context )
-    : context( context )
+    : Plugin( context )
     {
     }
 
 void UnusedVariableCheck::run()
     {
     TraverseDecl( context.getTranslationUnitDecl());
-    }
-
-DiagnosticBuilder UnusedVariableCheck::report( DiagnosticsEngine::Level level, StringRef message, SourceLocation loc )
-    {
-    // Do some mappings (e.g. for -Werror) that clang does not do for custom messages for some reason.
-    DiagnosticsEngine& diag = context.getDiagnostics();
-    if( level == DiagnosticsEngine::Warning && diag.getWarningsAsErrors())
-        level = DiagnosticsEngine::Error;
-    if( level == DiagnosticsEngine::Error && diag.getErrorsAsFatal())
-        level = DiagnosticsEngine::Fatal;
-    return diag.Report( loc, diag.getCustomDiagID( level, message ));
     }
 
 bool UnusedVariableCheck::VisitNamedDecl( NamedDecl* declaration )

@@ -25,6 +25,22 @@ using namespace clang;
 namespace loplugin
 {
 
+Plugin::Plugin( ASTContext& context )
+    : context( context )
+    {
+    }
+
+DiagnosticBuilder Plugin::report( DiagnosticsEngine::Level level, StringRef message, SourceLocation loc )
+    {
+    // Do some mappings (e.g. for -Werror) that clang does not do for custom messages for some reason.
+    DiagnosticsEngine& diag = context.getDiagnostics();
+    if( level == DiagnosticsEngine::Warning && diag.getWarningsAsErrors())
+        level = DiagnosticsEngine::Error;
+    if( level == DiagnosticsEngine::Error && diag.getErrorsAsFatal())
+        level = DiagnosticsEngine::Fatal;
+    return diag.Report( loc, diag.getCustomDiagID( level, message ));
+    }
+
 /**
  Class that manages all LO modules.
 */

@@ -11,23 +11,19 @@
 #ifndef UNUSEDVARIABLECHECK_H
 #define UNUSEDVARIABLECHECK_H
 
-#include <clang/AST/RecursiveASTVisitor.h>
-
-using namespace clang;
+#include "compileplugin.hxx"
 
 namespace loplugin
 {
 
 class UnusedVariableCheck
     : public RecursiveASTVisitor< UnusedVariableCheck >
+    , public Plugin
     {
     public:
         explicit UnusedVariableCheck( ASTContext& context );
         void run();
         bool VisitNamedDecl( NamedDecl* declaration );
-    private:
-        DiagnosticBuilder report( DiagnosticsEngine::Level level, StringRef message, SourceLocation loc );
-        ASTContext& context;
     };
 
 } // namespace

@@ -11,27 +11,23 @@
 #ifndef BODYNOTINBLOCK_H
 #define BODYNOTINBLOCK_H
 
-#include <clang/AST/RecursiveASTVisitor.h>
-
-using namespace clang;
+#include "compileplugin.hxx"
 
 namespace loplugin
 {
 
-typedef std::vector< const Stmt* > StmtParents;
-
 class BodyNotInBlock
     : public RecursiveASTVisitor< BodyNotInBlock >
+    , public Plugin
     {
     public:
         explicit BodyNotInBlock( ASTContext& context );
         void run();
         bool VisitFunctionDecl( FunctionDecl* declaration );
     private:
+        typedef std::vector< const Stmt* > StmtParents;
         void traverseStatement( const Stmt* stmt, StmtParents& parents );
         void checkBody( const Stmt* body, const StmtParents& parents, int stmtType );
-        DiagnosticBuilder report( DiagnosticsEngine::Level level, StringRef message, SourceLocation loc );
-        ASTContext& context;
     };
 
 } // namespace

@@ -12,8 +12,6 @@
 
 #include <clang/Basic/SourceManager.h>
 
-using namespace clang;
-
 namespace loplugin
 {
 
@@ -23,19 +21,8 @@ but are not inside a compound statement and thus the second one is unrelated.
 */
 
 BodyNotInBlock::BodyNotInBlock( ASTContext& context )
-    : context( context )
+    : Plugin( context )
     {
-    }
-
-DiagnosticBuilder BodyNotInBlock::report( DiagnosticsEngine::Level level, StringRef message, SourceLocation loc )
-    {
-    // Do some mappings (e.g. for -Werror) that clang does not do for custom messages for some reason.
-    DiagnosticsEngine& diag = context.getDiagnostics();
-    if( level == DiagnosticsEngine::Warning && diag.getWarningsAsErrors())
-        level = DiagnosticsEngine::Error;
-    if( level == DiagnosticsEngine::Error && diag.getErrorsAsFatal())
-        level = DiagnosticsEngine::Fatal;
-    return diag.Report( loc, diag.getCustomDiagID( level, message ));
     }
 
 void BodyNotInBlock::run()
