@@ -5059,6 +5059,10 @@ if test "$COM_GCC_IS_CLANG" = "TRUE"; then
         CPPFLAGS=$save_CPPFLAGS
         AC_LANG_POP([C++])
     fi
+else
+    if test "$enable_compiler_plugins" = "yes"; then
+        AC_MSG_ERROR([Compiler plugins are currently supported only with the Clang compiler.])
+    fi
 fi
 AC_SUBST(COMPILER_PLUGINS)
 
