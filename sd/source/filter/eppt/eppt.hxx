@@ -689,6 +689,7 @@ class PPTWriter : public GroupTable, public PropValue, public PPTExBulletProvide
         MapMode                         maMapModeSrc;
         MapMode                         maMapModeDest;
         ::com::sun::star::awt::Size     maDestPageSize;
+        Size                            maPageSize; // #121183# Keep size in logic coordinates (100th mm)
         ::com::sun::star::awt::Size     maNotesPageSize;
         PageType                        meLatestPageType;
         List                            maSlideNameList;

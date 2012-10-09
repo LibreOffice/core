@@ -172,6 +172,7 @@ PPTWriter::PPTWriter( const std::vector< com::sun::star::beans::PropertyValue >&
     if ( ImplGetPropertyValue( mXPagePropSet, String( RTL_CONSTASCII_USTRINGPARAM( "Height" ) ) ) )
         mAny >>= nHeight;
     maDestPageSize = ImplMapSize( ::com::sun::star::awt::Size( nWidth, nHeight ) );
+    maPageSize = Size(nWidth, nHeight);
 
     mrStg = rSvStorage;
     if ( !mrStg.Is() )
@@ -1704,8 +1705,10 @@ void PPTWriter::ImplWriteBackground( ::com::sun::star::uno::Reference< ::com::su
 
     mpPptEscherEx->OpenContainer( ESCHER_SpContainer );
     mpPptEscherEx->AddShape( ESCHER_ShpInst_Rectangle, 0xc00 );                     // Flags: Connector | Background | HasSpt
-    Point aEmptyPoint = Point();
-    Rectangle aRect( aEmptyPoint, Size( 28000, 21000 ) );
+
+    // #121183# Use real PageSize in 100th mm
+    Rectangle aRect(Point(0, 0), maPageSize);
+
     EscherPropertyContainer aPropOpt( mpPptEscherEx->GetGraphicProvider(), mpPicStrm, aRect );
     aPropOpt.AddOpt( ESCHER_Prop_fillType, ESCHER_FillSolid );
     ::com::sun::star::drawing::FillStyle aFS( ::com::sun::star::drawing::FillStyle_NONE );
