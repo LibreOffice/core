@@ -78,7 +78,7 @@ ScCondFormatList::ScCondFormatList(Window* pParent, const ResId& rResId, ScDocum
                     maEntries.push_back(new ScConditionFrmtEntry( this, mpDoc, maPos, static_cast<const ScCondFormatEntry*>( pEntry ) ) );
                     break;
                 case condformat::COLORSCALE:
-                    maEntries.push_back(new ScColorScaleFrmtEntry( this, mpDoc, maPos, static_cast<const ScColorScaleFormat*>( pEntry ) ) );
+                    maEntries.push_back(new ScColorScale3FrmtEntry( this, mpDoc, maPos, static_cast<const ScColorScaleFormat*>( pEntry ) ) );
                     break;
                 case condformat::DATABAR:
                     maEntries.push_back(new ScDataBarFrmtEntry( this, mpDoc, maPos, static_cast<const ScDataBarFormat*>( pEntry ) ) );
@@ -94,7 +94,7 @@ ScCondFormatList::ScCondFormatList(Window* pParent, const ResId& rResId, ScDocum
                 maEntries.push_back(new ScConditionFrmtEntry( this, mpDoc, maPos ));
                 break;
             case condformat::dialog::COLORSCALE:
-                maEntries.push_back(new ScColorScaleFrmtEntry( this, mpDoc, maPos ));
+                maEntries.push_back(new ScColorScale3FrmtEntry( this, mpDoc, maPos ));
                 break;
             case condformat::dialog::DATABAR:
                 maEntries.push_back(new ScDataBarFrmtEntry( this, mpDoc, maPos ));
@@ -182,6 +182,34 @@ void ScCondFormatList::DoScroll(long nDelta)
 
 IMPL_LINK(ScCondFormatList, ColFormatTypeHdl, ListBox*, pBox)
 {
+    EntryContainer::iterator itr = maEntries.begin();
+    for(; itr != maEntries.end(); ++itr)
+    {
+        if(itr->IsSelected())
+            break;
+    }
+    if(itr == maEntries.end())
+        return 0;;
+
+    sal_Int32 nPos = pBox->GetSelectEntryPos();
+    switch(nPos)
+    {
+        case 0:
+            if(itr->GetType() != condformat::entry::COLORSCALE2)
+                maEntries.replace( itr, new ScColorScale2FrmtEntry( this, mpDoc, maPos ) );
+            break;
+        case 1:
+            if(itr->GetType() != condformat::entry::COLORSCALE3)
+                maEntries.replace( itr, new ScColorScale3FrmtEntry( this, mpDoc, maPos ) );
+            break;
+        case 2:
+            if(itr->GetType() != condformat::entry::DATABAR)
+                maEntries.replace( itr, new ScDataBarFrmtEntry( this, mpDoc, maPos ) );
+            break;
+        default:
+            break;
+    }
+    itr->SetActive();
     RecalcAll();
     return 0;
 }
@@ -201,7 +229,7 @@ IMPL_LINK(ScCondFormatList, TypeListHdl, ListBox*, pBox)
     switch(nPos)
     {
         case 0:
-            maEntries.replace( itr, new ScColorScaleFrmtEntry(this, mpDoc, maPos));
+            maEntries.replace( itr, new ScColorScale3FrmtEntry(this, mpDoc, maPos));
             itr->SetActive();
             break;
         case 1:

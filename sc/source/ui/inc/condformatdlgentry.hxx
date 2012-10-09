@@ -1,6 +1,23 @@
 #include "colorscale.hxx"
 #include "conditio.hxx"
 
+namespace condformat {
+
+namespace entry {
+
+enum ScCondFrmtEntryType
+{
+    CONDITION,
+    FORMULA,
+    COLORSCALE2,
+    COLORSCALE3,
+    DATABAR
+};
+
+}
+
+}
+
 class ScCondFrmtEntry : public Control
 {
 private:
@@ -41,6 +58,8 @@ public:
     virtual ScFormatEntry* GetEntry() const = 0;
     virtual void SetActive() = 0;
     virtual void SetInactive() = 0;
+
+    virtual condformat::entry::ScCondFrmtEntryType GetType() = 0;
 };
 
 class ScConditionFrmtEntry : public ScCondFrmtEntry
@@ -65,6 +84,8 @@ public:
     virtual ScFormatEntry* GetEntry() const;
     virtual void SetActive();
     virtual void SetInactive();
+
+    virtual condformat::entry::ScCondFrmtEntryType GetType() { return condformat::entry::CONDITION; }
 };
 
 class ScFormulaFrmtEntry : public ScCondFrmtEntry
@@ -84,9 +105,41 @@ public:
     virtual ScFormatEntry* GetEntry() const;
     virtual void SetActive();
     virtual void SetInactive();
+    virtual condformat::entry::ScCondFrmtEntryType GetType() { return condformat::entry::FORMULA; }
 };
 
-class ScColorScaleFrmtEntry : public ScCondFrmtEntry
+class ScColorScale2FrmtEntry : public ScCondFrmtEntry
+{
+
+    //color format ui elements
+    ListBox maLbColorFormat;
+
+    //color scale ui elements
+    ListBox maLbColScale2;
+
+    ListBox maLbEntryTypeMin;
+    ListBox maLbEntryTypeMax;
+
+    Edit maEdMin;
+    Edit maEdMax;
+
+    ColorListBox maLbColMin;
+    ColorListBox maLbColMax;
+
+    ScFormatEntry* createColorscaleEntry() const;
+
+    void Init();
+
+    DECL_LINK( EntryTypeHdl, ListBox* );
+public:
+    ScColorScale2FrmtEntry( Window* pParent, ScDocument* pDoc, const ScAddress& rPos, const ScColorScaleFormat* pFormat = NULL );
+    virtual ScFormatEntry* GetEntry() const;
+    virtual void SetActive();
+    virtual void SetInactive();
+    virtual condformat::entry::ScCondFrmtEntryType GetType() { return condformat::entry::COLORSCALE2; }
+};
+
+class ScColorScale3FrmtEntry : public ScCondFrmtEntry
 {
 
     //color format ui elements
@@ -114,10 +167,11 @@ class ScColorScaleFrmtEntry : public ScCondFrmtEntry
 
     DECL_LINK( EntryTypeHdl, ListBox* );
 public:
-    ScColorScaleFrmtEntry( Window* pParent, ScDocument* pDoc, const ScAddress& rPos, const ScColorScaleFormat* pFormat = NULL );
+    ScColorScale3FrmtEntry( Window* pParent, ScDocument* pDoc, const ScAddress& rPos, const ScColorScaleFormat* pFormat = NULL );
     virtual ScFormatEntry* GetEntry() const;
     virtual void SetActive();
     virtual void SetInactive();
+    virtual condformat::entry::ScCondFrmtEntryType GetType() { return condformat::entry::COLORSCALE3; }
 };
 
 class ScDataBarFrmtEntry : public ScCondFrmtEntry
@@ -146,5 +200,7 @@ public:
     virtual ScFormatEntry* GetEntry() const;
     virtual void SetActive();
     virtual void SetInactive();
+
+    virtual condformat::entry::ScCondFrmtEntryType GetType() { return condformat::entry::DATABAR; }
 };
 

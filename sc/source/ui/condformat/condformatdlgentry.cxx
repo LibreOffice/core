@@ -151,6 +151,7 @@ ScConditionFrmtEntry::ScConditionFrmtEntry( Window* pParent, ScDocument* pDoc, c
 {
 
     FreeResource();
+    maLbType.SelectEntryPos(1);
 
     Init();
 
@@ -378,6 +379,7 @@ ScFormulaFrmtEntry::ScFormulaFrmtEntry( Window* pParent, ScDocument* pDoc, const
     Init();
 
     FreeResource();
+    maLbType.SelectEntryPos(2);
 
     if(pFormat)
     {
@@ -584,7 +586,168 @@ ScColorScaleEntry* createColorScaleEntry( const ListBox& rType, const ColorListB
 
 }
 
-ScColorScaleFrmtEntry::ScColorScaleFrmtEntry( Window* pParent, ScDocument* pDoc, const ScAddress& rPos, const ScColorScaleFormat* pFormat ):
+ScColorScale2FrmtEntry::ScColorScale2FrmtEntry( Window* pParent, ScDocument* pDoc, const ScAddress& rPos, const ScColorScaleFormat* pFormat ):
+    ScCondFrmtEntry( pParent, pDoc, rPos ),
+    maLbColorFormat( this, ScResId( LB_COLOR_FORMAT ) ),
+    maLbColScale2( this, ScResId( LB_COL_SCALE2 ) ),
+    maLbEntryTypeMin( this, ScResId( LB_TYPE_COL_SCALE ) ),
+    maLbEntryTypeMax( this, ScResId( LB_TYPE_COL_SCALE ) ),
+    maEdMin( this, ScResId( ED_COL_SCALE ) ),
+    maEdMax( this, ScResId( ED_COL_SCALE ) ),
+    maLbColMin( this, ScResId( LB_COL) ),
+    maLbColMax( this, ScResId( LB_COL) )
+{
+    maLbType.SelectEntryPos(0);
+    maLbColorFormat.SelectEntryPos(0);
+    if(pFormat)
+    {
+        ScColorScaleFormat::const_iterator itr = pFormat->begin();
+        SetColorScaleEntryTypes(*itr, maLbEntryTypeMin, maEdMin, maLbColMin);
+        ++itr;
+        SetColorScaleEntryTypes(*itr, maLbEntryTypeMax, maEdMax, maLbColMax);
+    }
+    else
+    {
+        maLbEntryTypeMin.SelectEntryPos(0);
+        maLbEntryTypeMax.SelectEntryPos(1);
+    }
+    FreeResource();
+
+    maLbColorFormat.SetSelectHdl( LINK( pParent, ScCondFormatList, ColFormatTypeHdl ) );
+
+    Init();
+}
+
+void ScColorScale2FrmtEntry::Init()
+{
+    maLbEntryTypeMin.SetSelectHdl( LINK( this, ScColorScale2FrmtEntry, EntryTypeHdl ) );
+    maLbEntryTypeMax.SetSelectHdl( LINK( this, ScColorScale2FrmtEntry, EntryTypeHdl ) );
+
+    SfxObjectShell*     pDocSh      = SfxObjectShell::Current();
+    const SfxPoolItem*  pItem       = NULL;
+    XColorListRef       pColorTable;
+
+    DBG_ASSERT( pDocSh, "DocShell not found!" );
+
+    /*
+    Point aPointLb = maLbEntryTypeMiddle.GetPosPixel();
+    Point aPointEd = maEdMiddle.GetPosPixel();
+    Point aPointCol = maLbColMiddle.GetPosPixel();
+    const long nMovePos = maLbEntryTypeMiddle.GetSizePixel().Width() * 1.2;
+    aPointLb.X() += nMovePos;
+    aPointEd.X() += nMovePos;
+    aPointCol.X() += nMovePos;
+    maLbEntryTypeMiddle.SetPosPixel(aPointLb);
+    maEdMiddle.SetPosPixel(aPointEd);
+    maLbColMiddle.SetPosPixel(aPointCol);
+    aPointLb.X() += nMovePos;
+    aPointEd.X() += nMovePos;
+    aPointCol.X() += nMovePos;
+    maLbEntryTypeMax.SetPosPixel(aPointLb);
+    maEdMax.SetPosPixel(aPointEd);
+    maLbColMax.SetPosPixel(aPointCol);
+    */
+
+    if ( pDocSh )
+    {
+        pItem = pDocSh->GetItem( SID_COLOR_TABLE );
+        if ( pItem != NULL )
+            pColorTable = ( (SvxColorListItem*)pItem )->GetColorList();
+    }
+    if ( pColorTable.is() )
+    {
+        // filling the line color box
+        maLbColMin.SetUpdateMode( false );
+        maLbColMax.SetUpdateMode( false );
+
+        for ( long i = 0; i < pColorTable->Count(); ++i )
+        {
+            XColorEntry* pEntry = pColorTable->GetColor(i);
+            maLbColMin.InsertEntry( pEntry->GetColor(), pEntry->GetName() );
+            maLbColMax.InsertEntry( pEntry->GetColor(), pEntry->GetName() );
+
+            if(pEntry->GetColor() == Color(COL_LIGHTRED))
+                maLbColMin.SelectEntryPos(i);
+            if(pEntry->GetColor() == Color(COL_LIGHTBLUE))
+                maLbColMax.SelectEntryPos(i);
+        }
+        maLbColMin.SetUpdateMode( sal_True );
+        maLbColMax.SetUpdateMode( sal_True );
+    }
+
+    EntryTypeHdl(&maLbEntryTypeMin);
+    EntryTypeHdl(&maLbEntryTypeMax);
+}
+
+ScFormatEntry* ScColorScale2FrmtEntry::createColorscaleEntry() const
+{
+    ScColorScaleFormat* pColorScale = new ScColorScaleFormat(mpDoc);
+    pColorScale->AddEntry(createColorScaleEntry(maLbEntryTypeMin, maLbColMin, maEdMin, mpDoc, maPos));
+    pColorScale->AddEntry(createColorScaleEntry(maLbEntryTypeMax, maLbColMax, maEdMax, mpDoc, maPos));
+    return pColorScale;
+}
+
+ScFormatEntry* ScColorScale2FrmtEntry::GetEntry() const
+{
+    return createColorscaleEntry();
+}
+
+void ScColorScale2FrmtEntry::SetActive()
+{
+    maLbColScale2.Show();
+
+    maLbEntryTypeMin.Show();
+    maLbEntryTypeMax.Show();
+
+    maEdMin.Show();
+    maEdMax.Show();
+
+    maLbColMin.Show();
+    maLbColMax.Show();
+
+    Select();
+}
+
+void ScColorScale2FrmtEntry::SetInactive()
+{
+    maLbColScale2.Hide();
+
+    maLbEntryTypeMin.Hide();
+    maLbEntryTypeMax.Hide();
+
+    maEdMin.Hide();
+    maEdMax.Hide();
+
+    maLbColMin.Hide();
+    maLbColMax.Hide();
+
+    Deselect();
+}
+
+IMPL_LINK( ScColorScale2FrmtEntry, EntryTypeHdl, ListBox*, pBox )
+{
+    bool bEnableEdit = true;
+    sal_Int32 nPos = pBox->GetSelectEntryPos();
+    if(nPos == 0 || nPos == 1)
+    {
+        bEnableEdit = false;
+    }
+
+    Edit* pEd = NULL;
+    if(pBox == &maLbEntryTypeMin)
+        pEd = &maEdMin;
+    else if(pBox == &maLbEntryTypeMax)
+        pEd = &maEdMax;
+
+    if(bEnableEdit)
+        pEd->Enable();
+    else
+        pEd->Disable();
+
+    return 0;
+}
+
+ScColorScale3FrmtEntry::ScColorScale3FrmtEntry( Window* pParent, ScDocument* pDoc, const ScAddress& rPos, const ScColorScaleFormat* pFormat ):
     ScCondFrmtEntry( pParent, pDoc, rPos ),
     maLbColorFormat( this, ScResId( LB_COLOR_FORMAT ) ),
     maLbColScale2( this, ScResId( LB_COL_SCALE2 ) ),
@@ -599,6 +762,7 @@ ScColorScaleFrmtEntry::ScColorScaleFrmtEntry( Window* pParent, ScDocument* pDoc,
     maLbColMiddle( this, ScResId( LB_COL) ),
     maLbColMax( this, ScResId( LB_COL) )
 {
+    maLbType.SelectEntryPos(0);
     if(pFormat)
     {
         if(pFormat->size() == 2)
@@ -630,11 +794,11 @@ ScColorScaleFrmtEntry::ScColorScaleFrmtEntry( Window* pParent, ScDocument* pDoc,
     Init();
 }
 
-void ScColorScaleFrmtEntry::Init()
+void ScColorScale3FrmtEntry::Init()
 {
-    maLbEntryTypeMin.SetSelectHdl( LINK( this, ScColorScaleFrmtEntry, EntryTypeHdl ) );
-    maLbEntryTypeMax.SetSelectHdl( LINK( this, ScColorScaleFrmtEntry, EntryTypeHdl ) );
-    maLbEntryTypeMiddle.SetSelectHdl( LINK( this, ScColorScaleFrmtEntry, EntryTypeHdl ) );
+    maLbEntryTypeMin.SetSelectHdl( LINK( this, ScColorScale3FrmtEntry, EntryTypeHdl ) );
+    maLbEntryTypeMax.SetSelectHdl( LINK( this, ScColorScale3FrmtEntry, EntryTypeHdl ) );
+    maLbEntryTypeMiddle.SetSelectHdl( LINK( this, ScColorScale3FrmtEntry, EntryTypeHdl ) );
 
     SfxObjectShell*     pDocSh      = SfxObjectShell::Current();
     const SfxPoolItem*  pItem       = NULL;
@@ -696,7 +860,7 @@ void ScColorScaleFrmtEntry::Init()
     EntryTypeHdl(&maLbEntryTypeMax);
 }
 
-ScFormatEntry* ScColorScaleFrmtEntry::createColorscaleEntry() const
+ScFormatEntry* ScColorScale3FrmtEntry::createColorscaleEntry() const
 {
     ScColorScaleFormat* pColorScale = new ScColorScaleFormat(mpDoc);
     pColorScale->AddEntry(createColorScaleEntry(maLbEntryTypeMin, maLbColMin, maEdMin, mpDoc, maPos));
@@ -706,12 +870,12 @@ ScFormatEntry* ScColorScaleFrmtEntry::createColorscaleEntry() const
     return pColorScale;
 }
 
-ScFormatEntry* ScColorScaleFrmtEntry::GetEntry() const
+ScFormatEntry* ScColorScale3FrmtEntry::GetEntry() const
 {
     return createColorscaleEntry();
 }
 
-void ScColorScaleFrmtEntry::SetActive()
+void ScColorScale3FrmtEntry::SetActive()
 {
     maLbColScale2.Show();
     maLbColScale3.Show();
@@ -731,7 +895,7 @@ void ScColorScaleFrmtEntry::SetActive()
     Select();
 }
 
-void ScColorScaleFrmtEntry::SetInactive()
+void ScColorScale3FrmtEntry::SetInactive()
 {
     maLbColScale2.Hide();
     maLbColScale3.Hide();
@@ -751,7 +915,7 @@ void ScColorScaleFrmtEntry::SetInactive()
     Deselect();
 }
 
-IMPL_LINK( ScColorScaleFrmtEntry, EntryTypeHdl, ListBox*, pBox )
+IMPL_LINK( ScColorScale3FrmtEntry, EntryTypeHdl, ListBox*, pBox )
 {
     bool bEnableEdit = true;
     sal_Int32 nPos = pBox->GetSelectEntryPos();
@@ -841,6 +1005,7 @@ ScDataBarFrmtEntry::ScDataBarFrmtEntry( Window* pParent, ScDocument* pDoc, const
     maBtOptions( this, ScResId( BTN_OPTIONS ) )
 {
     maLbColorFormat.SelectEntryPos(2);
+    maLbType.SelectEntryPos(0);
     if(pFormat)
     {
         mpDataBarData.reset(new ScDataBarFormatData(*pFormat->GetDataBarData()));
