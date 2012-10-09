@@ -962,6 +962,16 @@ namespace
         Size aRet(std::max(aMinTextSize.Width(), aMaxTextSize.Width()),
                   std::max(aMinTextSize.Height(), aMaxTextSize.Height()));
 
+        OUStringBuffer sBuf("999999999");
+        sal_uInt16 nDigits = rFormatter.GetDecimalDigits();
+        if (nDigits)
+        {
+            sBuf.append('.');
+            comphelper::string::padToLength(aBuf, aBuf.getLength() + nDigits, '9');
+        }
+        aMaxTextSize = rSpinField.CalcMinimumSizeForText(sBuf.makeStringAndClear());
+        aRet.Width() = std::min(aRet.Width(), aMaxTextSize.Width());
+
         return aRet;
     }
 }
