@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAPn///1E\u003d",
+        "filename": "svl/source/numbers/zformat.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4724,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2012-10-09T21:20:19Z",
+      "side": 1,
+      "message": "it is more efficient to call makeStringAndClear() here",
+      "revId": "67d3fd2c888eedbaec737a37322bdaaa7e77f913",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
