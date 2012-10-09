@@ -32,8 +32,7 @@ void BodyNotInBlock::run()
 
 bool BodyNotInBlock::VisitFunctionDecl( FunctionDecl* declaration )
     {
-    // TODO also LO header files? or a subdir?
-    if( !context.getSourceManager().isFromMainFile( declaration->getLocStart()))
+    if( ignoreLocation( declaration ))
         return true;
     if( !declaration->doesThisDeclarationHaveABody())
         return true;

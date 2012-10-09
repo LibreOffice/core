@@ -24,8 +24,23 @@ class Plugin
         explicit Plugin( ASTContext& context );
     protected:
         DiagnosticBuilder report( DiagnosticsEngine::Level level, StringRef message, SourceLocation loc );
+        bool ignoreLocation( SourceLocation loc );
+        bool ignoreLocation( const Decl* decl );
+        bool ignoreLocation( const Stmt* stmt );
         ASTContext& context;
     };
+
+inline
+bool Plugin::ignoreLocation( const Decl* decl )
+    {
+    return ignoreLocation( decl->getLocStart());
+    }
+
+inline
+bool Plugin::ignoreLocation( const Stmt* stmt )
+    {
+    return ignoreLocation( stmt->getLocStart());
+    }
 
 } // namespace
 

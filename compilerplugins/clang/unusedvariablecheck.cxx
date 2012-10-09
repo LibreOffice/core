@@ -40,8 +40,7 @@ void UnusedVariableCheck::run()
 
 bool UnusedVariableCheck::VisitNamedDecl( NamedDecl* declaration )
     {
-    // TODO also LO header files? or a subdir?
-    if( !context.getSourceManager().isFromMainFile( declaration->getLocStart()))
+    if( ignoreLocation( declaration ))
         return true;
     if( !isa< VarDecl >( declaration ))
         return true;

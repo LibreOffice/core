@@ -43,6 +43,11 @@ DiagnosticBuilder Plugin::report( DiagnosticsEngine::Level level, StringRef mess
     return diag.Report( loc, diag.getCustomDiagID( level, message ));
     }
 
+bool Plugin::ignoreLocation( SourceLocation loc )
+    {
+    return context.getSourceManager().isInSystemHeader( context.getSourceManager().getExpansionLoc( loc ));
+    }
+
 /**
  Class that manages all LO modules.
 */
