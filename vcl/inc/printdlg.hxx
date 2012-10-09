@@ -42,7 +42,6 @@
 #include "vcl/field.hxx"
 #include "vcl/tabctrl.hxx"
 #include "vcl/tabpage.hxx"
-#include "vcl/arrange.hxx"
 #include "vcl/virdev.hxx"
 
 #include <boost/shared_ptr.hpp>
@@ -136,9 +135,6 @@ namespace vcl
             // border around each page
             CheckBox*                               mpBorderCB;
 
-            boost::shared_ptr< vcl::RowOrColumn >   mxBrochureDep;
-            boost::shared_ptr< vcl::LabeledElement >mxPagesBtnLabel;
-
             void setupLayout();
 
             NUpTabPage( VclBuilder* );
@@ -184,8 +180,6 @@ namespace vcl
             CheckBox*                           mpToFileBox;
             CheckBox*                           mpCollateSingleJobsBox;
 
-            boost::shared_ptr<vcl::RowOrColumn> mxOptGroup;
-
             OutputOptPage( VclBuilder* );
 
             void readFromSettings();
@@ -230,8 +224,6 @@ namespace vcl
         rtl::OUString                           maPrintToFileText;
         rtl::OUString                           maPrintText;
         rtl::OUString                           maDefPrtText;
-
-        boost::shared_ptr<vcl::RowOrColumn>     mxPreviewCtrls;
 
         Size                                    maDetailsCollapsedSize;
         Size                                    maDetailsExpandedSize;
