@@ -596,7 +596,6 @@ ExportDialog::ExportDialog( FltCallDialogParameter& rPara,
                 maFtJPGMax              ( this, ResId( FT_JPG_MAX, *rPara.pResMgr ) ),
                 maFtPNGMin              ( this, ResId( FT_PNG_MIN, *rPara.pResMgr ) ),
                 maFtPNGMax              ( this, ResId( FT_PNG_MAX, *rPara.pResMgr ) ),
-                maCbJPGPreview          ( this, ResId( CB_JPG_PREVIEW, *rPara.pResMgr ) ),
                 maCbInterlaced          ( this, ResId( CB_INTERLACED, *rPara.pResMgr ) ),
                 maCbRLEEncoding         ( this, ResId( CB_RLE_ENCODING, *rPara.pResMgr ) ),
                 maFlGIFDrawingObjects   ( this, ResId( FL_GIF_DRAWING_OBJECTS, *rPara.pResMgr ) ),
@@ -709,11 +708,6 @@ ExportDialog::ExportDialog( FltCallDialogParameter& rPara,
 
     maRbBinary.SetClickHdl( LINK( this, ExportDialog, UpdateHdl ) );
     maRbText.SetClickHdl( LINK( this, ExportDialog, UpdateHdl ) );
-
-
-    // JPG Preview
-//  maCbJPGPreview.SetClickHdl( LINK( this, ExportDialog, UpdateHdl ) );
-maCbJPGPreview.Enable( sal_False );
 
     maSbJPGPreviewVert.SetScrollHdl( LINK( this, ExportDialog, UpdateHdl ) );
     maSbJPGPreviewHorz.SetScrollHdl( LINK( this, ExportDialog, UpdateHdl ) );
@@ -875,8 +869,6 @@ void ExportDialog::createFilterOptions( vcl::RowOrColumn& rLayout )
             createScrollBar( *xRows.get() );
             xRows->addWindow( &maFtJPGMin );
             xRows->addWindow( &maFtJPGMax );
-            if ( maCbJPGPreview.IsEnabled() )
-                xRows->addWindow( &maCbJPGPreview );
 
             boost::shared_ptr< vcl::Spacer > xSpacer( new vcl::Spacer( &rLayout, 2 ) );
             rLayout.addChild( xSpacer );
@@ -891,8 +883,6 @@ void ExportDialog::createFilterOptions( vcl::RowOrColumn& rLayout )
             maNfCompression.SetMax( 100 );
             maNfCompression.SetValue( nQuality );
             maNfCompression.SetStrictFormat( sal_True );
-            if ( maCbJPGPreview.IsEnabled() )
-                maCbJPGPreview.Check( sal_False );
         }
         break;
         case FORMAT_PNG :
@@ -1160,10 +1150,6 @@ sal_Int32 static GetZoomValueFromThumbPos( sal_Int32 nThumbPos )
 
 void ExportDialog::updatePreview()
 {
-    // JPG
-//  maCbJPGPreview.Enable( IsTempExportAvailable() );
-
-//  if ( maCbJPGPreview.IsEnabled() && maCbJPGPreview.IsChecked() )
     if ( mbPreview )
     {
         long nScrollBarSize = Application::GetSettings().GetStyleSettings().GetScrollBarSize();

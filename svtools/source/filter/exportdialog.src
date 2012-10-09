@@ -258,13 +258,6 @@ ModalDialog DLG_EXPORT
         Size = MAP_APPFONT ( 41 , 10 ) ;
         Text [ en-US ] = "9 is smallest file size and slowest loading." ;
     };
-    CheckBox CB_JPG_PREVIEW
-    {
-        HelpID = "svtools:CheckBox:DLG_EXPORT:CB_JPG_PREVIEW";
-        Hide = TRUE;
-        Size = MAP_APPFONT ( 60 , 10 ) ;
-        Text [ en-US ] = "Preview" ;
-    };
     CheckBox CB_INTERLACED
     {
         HelpID = "svtools:CheckBox:DLG_EXPORT:CB_INTERLACED";

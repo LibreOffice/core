@@ -64,7 +64,6 @@
 #define RB_EPS_COMPRESSION_LZW  7
 #define RB_EPS_COMPRESSION_NONE 8
 
-#define CB_JPG_PREVIEW          1
 #define CB_INTERLACED           2
 #define CB_RLE_ENCODING         3
 #define CB_SAVE_TRANSPARENCY    4

@@ -77,7 +77,6 @@ private:
     FixedText           maFtJPGMax;
     FixedText           maFtPNGMin;
     FixedText           maFtPNGMax;
-    CheckBox            maCbJPGPreview;
     CheckBox            maCbInterlaced;
     CheckBox            maCbRLEEncoding;
     FixedLine           maFlGIFDrawingObjects;
