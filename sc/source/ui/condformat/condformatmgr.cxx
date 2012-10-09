@@ -183,6 +183,9 @@ ScCondFormatManagerDlg::ScCondFormatManagerDlg(Window* pParent, ScDocument* pDoc
     maBtnEdit.SetClickHdl(LINK(this, ScCondFormatManagerDlg, EditBtnHdl));
     maBtnAdd.SetClickHdl(LINK(this, ScCondFormatManagerDlg, AddBtnHdl));
     maCtrlManager.GetListControl().SetDoubleClickHdl(LINK(this, ScCondFormatManagerDlg, EditBtnHdl));
+
+    maBtnAdd.Disable();
+    maBtnEdit.Disable();
 }
 
 ScCondFormatManagerDlg::~ScCondFormatManagerDlg()
