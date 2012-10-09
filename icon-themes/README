@@ -54,11 +54,6 @@ How to add a new image set:
     < "New set" ; > ;
   both in cui/source/options/optgdlg.src
 
-- FIXME: is this step still needed?
-  Add all known localizations of the new item to svx/source/dialog/localize.sdf, e.g.
-    svx	source\dialog\optgdlg.src	0	stringlist	OFA_TP_VIEW.LB_ICONSTYLE	6			0	cs	New set				2002-02-02 02:02:02
-  the check box item will not be visible in the other localizations otherwise, see http://www.openoffice.org/issues/show_bug.cgi?id=74982
-
 - Add the new_set to 'SymbolsStyle' property
   in officecfg/registry/schema/org/openoffice/Office/Common.xcs.
 
