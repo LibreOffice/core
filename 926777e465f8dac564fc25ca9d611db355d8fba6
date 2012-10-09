@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAPn///1Q\u003d",
+        "filename": "svtools/source/misc/ehdl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 215,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2012-10-09T21:15:07Z",
+      "side": 1,
+      "message": "the loop here appears to be unnecessary - replaceAll should replace all instances on the first iteration.",
+      "revId": "926777e465f8dac564fc25ca9d611db355d8fba6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
