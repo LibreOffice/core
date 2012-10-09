@@ -48,7 +48,7 @@ dummy:
 
 TARFILE_NAME=xpdf-3.02
 TARFILE_MD5=599dc4cc65a07ee868cf92a667a913d2
-PATCH_FILES=$(TARFILE_NAME).patch xpdf-3.02-ooopwd.patch xpdf-3.02-gfxColorMaxComps.patch
+PATCH_FILES=$(TARFILE_NAME).patch xpdf-3.02-ooopwd.patch xpdf-3.02-gfxColorMaxComps.patch xpdf-no-writable-literals.patch
 
 CONFIGURE_DIR=
 BUILD_DIR=$(CONFIGURE_DIR)
