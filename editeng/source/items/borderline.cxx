@@ -126,7 +126,7 @@ ConvertBorderStyleFromWord(int const nWordLineStyle)
         // First the single lines
         case  1:
         case  2: // thick line
-        case  5:
+        case  5: // hairline
         // and the unsupported special cases which we map to a single line
         case  8:
         case  9:
@@ -208,9 +208,23 @@ ConvertBorderWidthFromWord(SvxBorderStyle const eStyle, double const fWidth,
     {
         // Single lines
         case SOLID:
+            switch (nWordLineStyle)
+            {
+                case 2:
+                    return (fWidth * 2.0); // thick
+                    break;
+                case 5: // fdo#55526: map 0 hairline width to > 0
+                    return (fWidth > 1.0) ? fWidth : 1.0;
+                    break;
+                default:
+                    return fWidth;
+                    break;
+            }
+            break;
+
         case DOTTED:
         case DASHED:
-            return (2 == nWordLineStyle) ? (fWidth * 2.0) : fWidth;
+            return fWidth;
             break;
 
         // Double lines
