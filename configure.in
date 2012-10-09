@@ -9147,8 +9147,8 @@ dnl =========================================
 dnl Check for Micorosft rebase.exe
 dnl =========================================
 if test "$build_os" = "cygwin"; then
-        AC_PATH_PROG([REBASE], [rebase])
-        if test \( -z "$REBASE" -o "$REBASE" = "/usr/bin/rebase" \); then
+		AC_PATH_PROG([REBASE], [rebase])
+        if test \( -z "$REBASE" -o "$REBASE" = "/usr/bin/rebase" \) -a "$WINDOWS_SDK_VERSION" = "80"; then
             REBASE=download
             AC_SUBST(REBASE)
         fi
