@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAPn///2A\u003d",
+        "filename": "basctl/source/basicide/basobj3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1000059
+      },
+      "writtenOn": "2012-10-09T15:14:08Z",
+      "side": 1,
+      "message": "Please check if you can replace String by OUString. If not, please keep the line as before",
+      "revId": "409b42c3abeeb7fa47bb80d73c7693aa5760edfb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAPn///18\u003d",
+        "filename": "basctl/source/basicide/basobj3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1000059
+      },
+      "writtenOn": "2012-10-09T15:14:08Z",
+      "side": 1,
+      "message": "idem",
+      "revId": "409b42c3abeeb7fa47bb80d73c7693aa5760edfb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAPn///14\u003d",
+        "filename": "basctl/source/basicide/bastype2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 483,
+      "author": {
+        "id": 1000059
+      },
+      "writtenOn": "2012-10-09T15:14:08Z",
+      "side": 1,
+      "message": "Please check this one. RTL_CONSTASCII_STRINGPARAM forces \" (\" to be Ascii.",
+      "revId": "409b42c3abeeb7fa47bb80d73c7693aa5760edfb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
