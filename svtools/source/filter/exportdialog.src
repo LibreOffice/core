@@ -400,58 +400,6 @@ ModalDialog DLG_EXPORT
         Hide = TRUE;
         Size = MAP_APPFONT ( 41 , 10 ) ;
     };
-    FixedBitmap FB_JPG_PREVIEW
-    {
-        Hide = TRUE;
-        OutputSize = TRUE ;
-        Scale = TRUE;
-        Border = TRUE;
-    };
-    ScrollBar SB_ZOOM
-    {
-        Hide = TRUE;
-        Size = MAP_APPFONT ( 48, 10 );
-        VScroll = FALSE;
-        HScroll = TRUE;
-        Drag = TRUE;
-        MinPos = 5;
-        MaxPos = 100;
-        ThumbPos = 50;
-    };
-    NumericField NF_ZOOM
-    {
-        HelpID = "svtools:NumericField:DLG_EXPORT:NF_ZOOM";
-        Hide = TRUE;
-        Border = TRUE ;
-        Size = MAP_APPFONT ( 30, 12 ) ;
-        TabStop = TRUE ;
-        Repeat = TRUE ;
-        Spin = FALSE ;
-        Maximum = 3000;
-        Last = 255 ;
-    };
-    ScrollBar SB_JPG_PREVIEW_HORZ
-    {
-        Hide = TRUE;
-        Size = MAP_APPFONT ( 48, 10 );
-        VScroll = FALSE;
-        HScroll = TRUE;
-        Drag = TRUE;
-        MinPos = 0;
-        MaxPos = 100;
-        ThumbPos = 50;
-    };
-    ScrollBar SB_JPG_PREVIEW_VERT
-    {
-        Hide = TRUE;
-        Size = MAP_APPFONT ( 48, 10 );
-        VScroll = TRUE;
-        HScroll = FALSE;
-        Drag = TRUE;
-        MinPos = 0;
-        MaxPos = 100;
-        ThumbPos = 50;
-    };
     OKButton BTN_OK
     {
         Hide = TRUE;

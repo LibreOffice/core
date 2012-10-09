@@ -101,11 +101,6 @@ private:
     String              msEstimatedSizePix2;
     String              msEstimatedSizeVec;
     FixedLine           maFlButtons;
-    FixedBitmap         maFbJPGPreview;
-    ScrollBar           maSbZoom;
-    NumericField        maNfZoom;
-    ScrollBar           maSbJPGPreviewHorz;
-    ScrollBar           maSbJPGPreviewVert;
     OKButton            maBtnOK;
     CancelButton        maBtnCancel;
     HelpButton          maBtnHelp;
@@ -142,7 +137,6 @@ private:
     com::sun::star::awt::Size
                         maSize;             // for vector graphics it always contains the logical size in 1/100mm
 
-    sal_Bool            mbPreview;
     sal_Bool            mbIsPixelFormat;
     sal_Bool            mbExportSelection;
     sal_Bool            mbPreserveAspectRatio;

@@ -620,11 +620,6 @@ ExportDialog::ExportDialog( FltCallDialogParameter& rPara,
                 msEstimatedSizePix2     ( ResId( STR_ESTIMATED_SIZE_PIX_2, *rPara.pResMgr ).toString() ),
                 msEstimatedSizeVec      ( ResId( STR_ESTIMATED_SIZE_VEC, *rPara.pResMgr ).toString() ),
                 maFlButtons             ( this, ResId( FL_BUTTONS, *rPara.pResMgr ) ),
-                maFbJPGPreview          ( this, ResId( FB_JPG_PREVIEW, *rPara.pResMgr ) ),
-                maSbZoom                ( this, ResId( SB_ZOOM, *rPara.pResMgr ) ),
-                maNfZoom                ( this, ResId( NF_ZOOM, *rPara.pResMgr ) ),
-                maSbJPGPreviewHorz      ( this, ResId( SB_JPG_PREVIEW_HORZ, *rPara.pResMgr ) ),
-                maSbJPGPreviewVert      ( this, ResId( SB_JPG_PREVIEW_VERT, *rPara.pResMgr ) ),
                 maBtnOK                 ( this, ResId( BTN_OK, *rPara.pResMgr ) ),
                 maBtnCancel             ( this, ResId( BTN_CANCEL, *rPara.pResMgr ) ),
                 maBtnHelp               ( this, ResId( BTN_HELP, *rPara.pResMgr ) ),
@@ -640,7 +635,6 @@ ExportDialog::ExportDialog( FltCallDialogParameter& rPara,
                 mnMaxFilesizeForRealtimePreview( 0 ),
                 mpTempStream            ( new SvMemoryStream() ),
                 maOriginalSize          ( awt::Size( 0, 0 ) ),
-                mbPreview               ( sal_False ),
                 mbIsPixelFormat         ( bIsPixelFormat ),
                 mbExportSelection       ( bExportSelection ),
                 mbPreserveAspectRatio   ( sal_True )
@@ -708,10 +702,6 @@ ExportDialog::ExportDialog( FltCallDialogParameter& rPara,
 
     maRbBinary.SetClickHdl( LINK( this, ExportDialog, UpdateHdl ) );
     maRbText.SetClickHdl( LINK( this, ExportDialog, UpdateHdl ) );
-
-    maSbJPGPreviewVert.SetScrollHdl( LINK( this, ExportDialog, UpdateHdl ) );
-    maSbJPGPreviewHorz.SetScrollHdl( LINK( this, ExportDialog, UpdateHdl ) );
-    maSbZoom.SetScrollHdl( LINK( this, ExportDialog, UpdateHdl ) );
 
     // BMP
     maCbRLEEncoding.SetClickHdl( LINK( this, ExportDialog, UpdateHdl ) );
@@ -1116,7 +1106,7 @@ void ExportDialog::setupLayout()
     maLayout.show();
     maDialogSize = maLayout.getOptimalSize( WINDOWSIZE_PREFERRED );
     maLayout.setManagedArea( Rectangle( Point(), maDialogSize ) );
-    SetOutputSizePixel( Size( mbPreview ? maDialogSize.Width() * 2 : maDialogSize.Width(), maDialogSize.Height() ) );
+    SetOutputSizePixel( maDialogSize );
 
     maRectFlButtons = Rectangle( maFlButtons.GetPosPixel(), maFlButtons.GetSizePixel() );
     maRectBtnHelp   = Rectangle( maBtnHelp.GetPosPixel(), maBtnHelp.GetSizePixel() );
@@ -1138,150 +1128,14 @@ static rtl::OUString ImpValueOfInKB( const sal_Int64& rVal )
     return aVal.makeStringAndClear();
 }
 
-sal_Int32 static GetZoomValueFromThumbPos( sal_Int32 nThumbPos )
-{
-    sal_Int32 nProz = 0;
-    if ( nThumbPos <= 50 )
-        nProz = nThumbPos * 2;                  // so a range of 50 represents 100%
-    else
-        nProz = ( ( nThumbPos - 50 ) * 60 ) + 100;  // we want to scale up to 3000%
-    return nProz;
-}
-
 void ExportDialog::updatePreview()
 {
-    if ( mbPreview )
-    {
-        long nScrollBarSize = Application::GetSettings().GetStyleSettings().GetScrollBarSize();
+    SetOutputSizePixel( maDialogSize );
 
-        Point   aPreviewPos( maDialogSize.Width(), 0 );
-        Size    aPreviewSize( maDialogSize.Width(), maFlButtons.GetPosPixel().Y() );
-
-        Point   aFixedBitmapPos( aPreviewPos );
-        Size    aFixedBitmapSize( aPreviewSize );
-
-        maSbZoom.Show( sal_False );
-        maSbZoom.SetPosPixel( Point( aPreviewPos.X(), aPreviewPos.Y() ) );
-        maSbZoom.SetSizePixel( Size( aPreviewSize.Width() / 4, nScrollBarSize ) );
-        maNfZoom.Show( sal_False );
-        maNfZoom.SetPosPixel( Point( aPreviewPos.X() + aPreviewSize.Width() / 4, aPreviewPos.Y() ) );
-        maNfZoom.SetSizePixel( Size( aPreviewSize.Width() / 6, nScrollBarSize ) );
-        maNfZoom.SetValue( GetZoomValueFromThumbPos( maSbZoom.GetThumbPos() ) );
-        maFbJPGPreview.Show( sal_True );
-
-        sal_Int32 nZoom = GetZoomValueFromThumbPos( maSbZoom.GetThumbPos() );
-        double fSizePixelX = static_cast< double >( maSize.Width * nZoom ) / 100.0;
-        double fSizePixelY = static_cast< double >( maSize.Height * nZoom ) / 100.0;
-
-        double fXRatio = fSizePixelX / maSize.Width;        // the size of each pixel
-        double fYRatio = fSizePixelY / maSize.Height;
-
-        sal_Bool bHorzSb = fSizePixelX > aFixedBitmapSize.Width();
-        sal_Bool bVertSb = fSizePixelY > aFixedBitmapSize.Height();
-        if ( bHorzSb )
-        {
-            aFixedBitmapSize.Height() -= nScrollBarSize;
-
-            maSbJPGPreviewHorz.Show( sal_True );
-            maSbJPGPreviewHorz.SetPosPixel( Point( aFixedBitmapPos.X(), aFixedBitmapPos.Y() + aFixedBitmapSize.Height() ) );
-            maSbJPGPreviewHorz.SetSizePixel( Size( aFixedBitmapSize.Width(), nScrollBarSize ) );
-        }
-        else
-        {
-            maSbJPGPreviewHorz.Show( sal_False );
-        }
-
-
-        if ( bVertSb )
-        {
-            aFixedBitmapSize.Width() -= nScrollBarSize;
-
-            maSbJPGPreviewVert.Show( sal_True );
-            maSbJPGPreviewVert.SetPosPixel( Point( aFixedBitmapPos.X() + aFixedBitmapSize.Width(), aFixedBitmapPos.Y() ) );
-            maSbJPGPreviewVert.SetSizePixel( Size( nScrollBarSize, aFixedBitmapSize.Height() ) );
-        }
-        else
-        {
-            maSbJPGPreviewVert.Show( sal_False );
-        }
-
-        Point aPos( 0, 0 );
-        Size aSize;
-        if ( fXRatio > 1.0 )
-        {
-            aSize.Width() =  maSize.Width > aFixedBitmapSize.Width() ? maSize.Width : aFixedBitmapSize.Width();
-            aSize.Width() /= static_cast<long int>(fXRatio);
-        }
-        else
-        {
-            aSize.Width() =  maSize.Width < aFixedBitmapSize.Width() ? maSize.Width : aFixedBitmapSize.Width();
-            aSize.Width() /= static_cast<long int>(fXRatio);
-        }
-
-        if ( fYRatio > 1.0 )
-        {
-            aSize.Height() =  maSize.Height > aFixedBitmapSize.Height() ? maSize.Height : aFixedBitmapSize.Height();
-            aSize.Height() /= static_cast<long int>(fYRatio);
-        }
-        else
-        {
-            aSize.Height() =  maSize.Height < aFixedBitmapSize.Height() ? maSize.Height : aFixedBitmapSize.Height();
-            aSize.Height() /= static_cast<long int>(fYRatio);
-        }
-
-        if ( aSize.Width() < maSize.Width )
-        {
-            sal_Int32 nXDiff = static_cast< sal_Int32 >( ( ( ( maSize.Width - aSize.Width() ) * maSbJPGPreviewHorz.GetThumbPos() ) / 100.0 ) );
-            aPos.X() += nXDiff;
-        }
-        if ( aSize.Height() < maSize.Height )
-        {
-            sal_Int32 nYDiff = static_cast< sal_Int32 >( ( ( ( maSize.Height - aSize.Height() ) * maSbJPGPreviewVert.GetThumbPos() ) / 100.0 ) );
-            aPos.Y() += nYDiff;
-        }
-
-        Bitmap aCroppedBitmap( maBitmap );
-        aCroppedBitmap.Crop( Rectangle( aPos, aSize ) );
-        aSize = aCroppedBitmap.GetSizePixel();
-        aSize = Size( static_cast<long int>(aSize.Width() * fXRatio), static_cast<long int>(aSize.Height() * fYRatio) );
-        aCroppedBitmap.Scale( aSize );
-
-        if ( aSize.Width() > aFixedBitmapSize.Width() )
-            aSize.Width() = aFixedBitmapSize.Width();
-        if ( aSize.Height() > aFixedBitmapSize.Height() )
-            aSize.Height() = aFixedBitmapSize.Height();
-        Point aPoint( aFixedBitmapPos );
-        if ( aSize.Width() < aFixedBitmapSize.Width() )
-            aPoint.X() += ( aFixedBitmapSize.Width() - aSize.Width() ) / 2;
-        if ( aSize.Height() < aFixedBitmapSize.Height() )
-            aPoint.Y() += ( aFixedBitmapSize.Height() - aSize.Height() ) / 2;
-
-        maFbJPGPreview.SetPosPixel( aPoint );
-        maFbJPGPreview.SetSizePixel( aSize );
-        maFbJPGPreview.SetBitmap( aCroppedBitmap );
-
-        SetOutputSizePixel( Size( maDialogSize.Width() * 2, maDialogSize.Height() ) );
-
-        maFlButtons.SetSizePixel( Size( maRectFlButtons.GetWidth() * 2, maRectFlButtons.GetHeight() ) );
-        maBtnHelp.SetPosPixel( Point( maRectBtnHelp.Left() + maDialogSize.Width(), maRectBtnHelp.Top() ) );
-        maBtnOK.SetPosPixel( Point( maRectBtnOK.Left() + maDialogSize.Width(), maRectBtnOK.Top() ) );
-        maBtnCancel.SetPosPixel( Point( maRectBtnCancel.Left() + maDialogSize.Width(), maRectBtnCancel.Top() ) );
-    }
-    else
-    {
-        maSbZoom.Show( sal_False );
-        maNfZoom.Show( sal_False );
-        maFbJPGPreview.Show( sal_False );
-        maSbJPGPreviewHorz.Show( sal_False );
-        maSbJPGPreviewVert.Show( sal_False );
-
-        SetOutputSizePixel( maDialogSize );
-
-        maFlButtons.SetSizePixel( Size( maRectFlButtons.GetWidth(), maRectFlButtons.GetHeight() ) );
-        maBtnHelp.SetPosPixel( Point( maRectBtnHelp.Left(), maRectBtnHelp.Top() ) );
-        maBtnOK.SetPosPixel( Point( maRectBtnOK.Left(), maRectBtnOK.Top() ) );
-        maBtnCancel.SetPosPixel( Point( maRectBtnCancel.Left(), maRectBtnCancel.Top() ) );
-    }
+    maFlButtons.SetSizePixel( Size( maRectFlButtons.GetWidth(), maRectFlButtons.GetHeight() ) );
+    maBtnHelp.SetPosPixel( Point( maRectBtnHelp.Left(), maRectBtnHelp.Top() ) );
+    maBtnOK.SetPosPixel( Point( maRectBtnOK.Left(), maRectBtnOK.Top() ) );
+    maBtnCancel.SetPosPixel( Point( maRectBtnCancel.Left(), maRectBtnCancel.Top() ) );
 }
 
 void ExportDialog::updateControls()

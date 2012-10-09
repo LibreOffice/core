@@ -45,7 +45,6 @@
 
 #define NF_RESOLUTION           1
 #define NF_COMPRESSION          2
-#define NF_ZOOM                 3
 
 #define MF_SIZEX                1
 #define MF_SIZEY                2
@@ -70,12 +69,7 @@
 #define CB_EPS_PREVIEW_TIFF     5
 #define CB_EPS_PREVIEW_EPSI     6
 
-#define FB_JPG_PREVIEW          1
-
 #define SB_COMPRESSION          1
-#define SB_JPG_PREVIEW_HORZ     2
-#define SB_JPG_PREVIEW_VERT     3
-#define SB_ZOOM                 4
 
 #define STR_1BIT_THRESHOLD      1
 #define STR_1BIT_DITHERED       2
