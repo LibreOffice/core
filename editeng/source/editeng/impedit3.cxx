@@ -1,30 +1,21 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*************************************************************************
+/*
+ * This file is part of the LibreOffice project.
  *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * This file incorporates work covered by the following license notice:
  *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
 
 
 #include <vcl/wrkwin.hxx>
@@ -2929,6 +2920,8 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
                 if ( ( !IsVertical() && ( aStartPos.Y() > aClipRec.Top() ) )
                     || ( IsVertical() && aStartPos.X() < aClipRec.Right() ) )
                 {
+                    bool bPaintBullet (false);
+
                     // Why not just also call when stripping portions? This will give the correct values
                     // and needs no position corrections in OutlinerEditEng::DrawingText which tries to call
                     // PaintBullet correctly; exactly what GetEditEnginePtr()->PaintingFirstLine
@@ -2936,6 +2929,11 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
                     if(0 == nLine) // && !bStripOnly)
                     {
                         GetEditEnginePtr()->PaintingFirstLine( n, aParaStart, aTmpPos.Y(), aOrigin, nOrientation, pOutDev );
+
+                        // Remember whether a bullet was painted.
+                        const SfxBoolItem& rBulletState = static_cast<const SfxBoolItem&>(
+                            pEditEngine->GetParaAttrib(n, EE_PARA_BULLETSTATE));
+                        bPaintBullet = rBulletState.GetValue() ? true : false;
                     }
 
                     // --------------------------------------------------
@@ -2948,8 +2946,15 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
                     // #i108052# When stripping a callback for empty paragraphs is needed. This
                     // was somehow lost/removed/killed by making the TextPortions with empty
                     // paragraph to type PORTIONKIND_TAB instead of PORTIONKIND_TEXT. Adding here
-                    // since I could not find out who and why this has changed.
-                    if(bStripOnly && pLine->GetStartPortion() == pLine->GetEndPortion())
+
+					// since I could not find out who and why this has
+					// changed.
+                    // #i118881#: Do not include the empty paragraph
+                    // after a bullet.  Otherwise the wrong paragraph
+                    // indices will eventually find their way into
+                    // metafiles and break the association between
+                    // paragraphs and Impress animations.
+					if(!bPaintBullet && bStripOnly && pLine->GetStartPortion() == pLine->GetEndPortion())
                     {
                         const Color aOverlineColor(pOutDev->GetOverlineColor());
                         const Color aTextLineColor(pOutDev->GetTextLineColor());

@@ -1,30 +1,21 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*************************************************************************
+/*
+ * This file is part of the LibreOffice project.
  *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * This file incorporates work covered by the following license notice:
  *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
 
 #ifndef _SVXRTF_HXX
 #define _SVXRTF_HXX
@@ -245,16 +236,16 @@ class EDITENG_DLLPUBLIC SvxRTFParser : public SvRTFParser
     long    nVersionNo;
     int     nDfltFont;
 
-    sal_Bool    bNewDoc : 1;            // FALSE - Reading in an existing
-    sal_Bool    bNewGroup : 1;          // TRUE - there was an opening parenthesis
-    sal_Bool    bIsSetDfltTab : 1;      // TRUE - DefTab was loaded
-    sal_Bool    bChkStyleAttr : 1;      // TRUE - StyleSheets are evaluated
-    sal_Bool    bCalcValue : 1;         // TRUE - Twip values adapt to App
-    sal_Bool    bPardTokenRead : 1;     // TRUE - Token \pard was detected
-    sal_Bool    bReadDocInfo : 1;       // TRUE - DocInfo to read
-    sal_Bool    bIsLeftToRightDef : 1;  // TRUE - in LeftToRight char run def.
-                                        // FALSE - in RightToLeft char run def.
-    sal_Bool    bIsInReadStyleTab : 1;  // TRUE - in ReadStyleTable
+    sal_Bool    bNewDoc : 1;            // sal_False - Reading in an existing
+    sal_Bool    bNewGroup : 1;          // sal_True - there was an opening parenthesis
+    sal_Bool    bIsSetDfltTab : 1;      // sal_True - DefTab was loaded
+    sal_Bool    bChkStyleAttr : 1;      // sal_True - StyleSheets are evaluated
+    sal_Bool    bCalcValue : 1;         // sal_True - Twip values adapt to App
+    sal_Bool    bPardTokenRead : 1;     // sal_True - Token \pard was detected
+    sal_Bool    bReadDocInfo : 1;       // sal_True - DocInfo to read
+    sal_Bool    bIsLeftToRightDef : 1;  // sal_True - in LeftToRight char run def.
+                                        // sal_False - in RightToLeft char run def.
+    sal_Bool    bIsInReadStyleTab : 1;  // sal_True - in ReadStyleTable
 
     void ClearColorTbl();
     void ClearFontTbl();
@@ -370,7 +361,7 @@ protected:
 
     // Read the graphics data and make up for the graphics and the picture
     // meta data.
-    // Return - TRUE: the graphic is valid
+    // Return - sal_True: the graphic is valid
     sal_Bool ReadBmpData( Graphic& rGrf, SvxRTFPictureType& rPicType );
         // Change the ASCII-HexCodes into binary characters. If invalid data is
         // found (strings not 0-9 | a-f | A-F, then USHRT_MAX is returned,

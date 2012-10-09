@@ -1,30 +1,21 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*************************************************************************
+/*
+ * This file is part of the LibreOffice project.
  *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * This file incorporates work covered by the following license notice:
  *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
 
 #ifndef _SVDOGRAF_HXX
 #define _SVDOGRAF_HXX
@@ -106,6 +97,7 @@ private:
     rtl::OUString aFileName;          // Wenn es sich um einen Link handelt, steht hier der Dateiname drin.
     rtl::OUString aFilterName;
     GraphicObject*          pGraphic;           // Zur Beschleunigung von Bitmapausgaben, besonders von gedrehten.
+    GraphicObject*          mpReplacementGraphic;
     SdrGraphicLink*         pGraphicLink;       // Und hier noch ein Pointer fuer gelinkte Grafiken
     bool                    bMirrored:1;        // True bedeutet, die Grafik ist horizontal, d.h. ueber die Y-Achse gespiegelt auszugeben.
 
@@ -135,6 +127,7 @@ public:
 
     void                    SetGraphicObject( const GraphicObject& rGrfObj );
     const GraphicObject&    GetGraphicObject(bool bForceSwapIn = false) const;
+    const GraphicObject*    GetReplacementGraphicObject() const;
 
     void                    NbcSetGraphic(const Graphic& rGrf);
     void                    SetGraphic(const Graphic& rGrf);
@@ -148,8 +141,6 @@ public:
     // Keep ATM for SD.
     bool IsAnimated() const;
     bool IsEPS() const;
-    bool IsRenderGraphic() const;
-    bool HasRenderGraphic() const;
     bool IsSwappedOut() const;
 
     const MapMode&          GetGrafPrefMapMode() const;
@@ -200,7 +191,14 @@ public:
     virtual void            SetPage(SdrPage* pNewPage);
     virtual void            SetModel(SdrModel* pNewModel);
 
-    virtual SdrObject*      DoConvertToPolyObj(sal_Bool bBezier) const;
+    bool isEmbeddedSvg() const;
+    GDIMetaFile getMetafileFromEmbeddedSvg() const;
+
+#ifdef FIXME_REMOVE_WHEN_RE_BASE_COMPLETE
+    virtual SdrObject*      DoConvertToPolyObj(sal_Bool bBezier, bool bAddText) const
+#else
+    virtual SdrObject*      DoConvertToPolyObj(sal_Bool bBezier /*, bool bAddText */) const;
+#endif
 
     virtual void            AdjustToMaxRect( const Rectangle& rMaxRect, bool bShrinkOnly = false );
 

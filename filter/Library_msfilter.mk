@@ -56,6 +56,8 @@ $(eval $(call gb_Library_use_libraries,msfilter,\
 
 $(eval $(call gb_Library_add_exception_objects,msfilter,\
 	filter/source/msfilter/countryid \
+	filter/source/msfilter/dffpropset \
+	filter/source/msfilter/dffrecordheader \
 	filter/source/msfilter/escherex \
 	filter/source/msfilter/eschesdo \
 	filter/source/msfilter/mscodec \

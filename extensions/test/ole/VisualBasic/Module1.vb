@@ -1,7 +1,25 @@
+'
+' This file is part of the LibreOffice project.
+'
+' This Source Code Form is subject to the terms of the Mozilla Public
+' License, v. 2.0. If a copy of the MPL was not distributed with this
+' file, You can obtain one at http://mozilla.org/MPL/2.0/.
+'
+' This file incorporates work covered by the following license notice:
+'
+'   Licensed to the Apache Software Foundation (ASF) under one or more
+'   contributor license agreements. See the NOTICE file distributed
+'   with this work for additional information regarding copyright
+'   ownership. The ASF licenses this file to you under the Apache
+'   License, Version 2.0 (the "License"); you may not use this file
+'   except in compliance with the License. You may obtain a copy of
+'   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+'
+
 Option Strict Off
 Option Explicit On
 Module Module1
-	
+
 Private objServiceManager As Object
 Private objCoreReflection As Object
 Private objOleTest As Object
@@ -35,7 +53,7 @@ Public Sub Main()
 
     End Sub
 	Function testProps() As Object
-				
+
 		Dim aToolbarItemProp1 As Object
         aToolbarItemProp1 = objOleTest.Bridge_GetStruct("com.sun.star.beans.PropertyValue")
 		Dim aToolbarItemProp2 As Object
@@ -43,19 +61,19 @@ Public Sub Main()
 		Dim aToolbarItemProp3 As Object
         aToolbarItemProp3 = objOleTest.Bridge_GetStruct("com.sun.star.beans.PropertyValue")
 		Dim properties(2) As Object
-		
+
         aToolbarItemProp1.Name = "CommandURL"
         aToolbarItemProp1.Value = "macro:///standard.module1.TestIt"
         aToolbarItemProp2.Name = "Label"
         aToolbarItemProp2.Value = "Test"
         aToolbarItemProp3.Name = "Type"
         aToolbarItemProp3.Value = 0
-		
+
 		properties(0) = aToolbarItemProp1
 		properties(1) = aToolbarItemProp2
 		properties(2) = aToolbarItemProp3
-		
-		
+
+
         Dim dummy(-1) As Object
         
         Dim Desktop As Object
@@ -64,25 +82,25 @@ Public Sub Main()
         Doc = Desktop.loadComponentFromURL("private:factory/swriter", "_blank", 2, dummy)
 		Dim LayoutManager As Object
         LayoutManager = Doc.currentController.Frame.LayoutManager
-		
+
         LayoutManager.createElement("private:resource/toolbar/user_toolbar1")
         LayoutManager.showElement("private:resource/toolbar/user_toolbar1")
 		Dim ToolBar As Object
         ToolBar = LayoutManager.getElement("private:resource/toolbar/user_toolbar1")
 		Dim settings As Object
         settings = ToolBar.getSettings(True)
-		
+
 		'the changes are here:
 		Dim aany As Object
         aany = objServiceManager.Bridge_GetValueObject()
         Call aany.Set("[]com.sun.star.beans.PropertyValue", properties)
         Call settings.insertByIndex(0, aany)
         Call ToolBar.setSettings(settings)
-		
-		
+
+
 	End Function
-	
-	
+
+
 	Function testBasics() As Object
 		' In Parameter, simple types
 		'============================================
@@ -105,8 +123,8 @@ Public Sub Main()
 		Dim outType, inType, retType As Object
 		Dim outXInterface, inXInterface, retXInterface As Object
 		Dim outXInterface2, inXInterface2, retXInterface2 As Object
-		
-		
+
+
 		Dim outVarByte As Object
 		Dim outVarBool As Object
 		Dim outVarShort As Object
@@ -119,7 +137,7 @@ Public Sub Main()
 		Dim outVarChar As Object
 		Dim outVarAny As Object
 		Dim outVarType As Object
-		
+
 		inByte = 10
 		inBool = True
 		inShort = -10
@@ -137,7 +155,7 @@ Public Sub Main()
         inType = objServiceManager.Bridge_CreateType("[]long")
 		inXInterface = objCoreReflection
 		inXInterface2 = objEventListener
-		
+
         retByte = objOleTest.in_methodByte(inByte)
         retBool = objOleTest.in_methodBool(inBool)
         retShort = objOleTest.in_methodShort(inShort)
@@ -345,12 +363,12 @@ Public Sub Main()
 
     End Function
 	Function testHyper() As Object
-		
+
 		'======================================================================
 		' Other Hyper tests
 		Dim emptyVar As Object
 		Dim retAny As Object
-		
+
 		retAny = emptyVar
 		inHyper = CDec("9223372036854775807") 'highest positiv value of int64
 		retAny = objOleTest.in_methodAny(inHyper)
@@ -380,18 +398,18 @@ Public Sub Main()
 		If inHyper <> retAny Then
 			MsgBox(sError)
 		End If
-		
+
 		'==============================================================================
-		
-		
+
+
 	End Function
 	Function testAny() As Object
 		Dim outVAr As Object
-		
+
 		'Any test. We pass in an any as value object. If it is not correct converted
 		'then the target component throws a RuntimeException
 		Dim lengthInAny As Integer
-		
+
 		lengthInAny = 10
 		Dim seqLongInAny(10) As Integer
 		For i = 0 To lengthInAny - 1
@@ -404,12 +422,12 @@ Public Sub Main()
 		Err.Clear()
 		On Error Resume Next
 		anySeqRet = objOleTest.other_methodAny(anySeqLong, "[]long")
-		
+
 		If Err.Number <> 0 Then
 			MsgBox("error")
 		End If
 	End Function
-	
+
 	Function testObjects() As Object
 		' COM obj
 		Dim outVAr As Object
@@ -425,7 +443,7 @@ Public Sub Main()
 		If ret = False Then
 			MsgBox("Error")
 		End If
-		
+
 		'The returned object should be objEventListener, test it by calling disposing
 		' takes an IDispatch as Param ( EventObject).To provide a TypeMismatch
 		'we put in another IDispatch
@@ -434,7 +452,7 @@ Public Sub Main()
 		If retObj.disposingCalled = False Then
 			MsgBox("Error")
 		End If
-		
+
 		' out param gives out the OleTestComponent
 		'objOleTest.testout_methodXInterface retObj
 		'outVAr = Null
@@ -443,21 +461,21 @@ Public Sub Main()
 		'If outVAr <> "I am a string in an any" Then
 		'    MsgBox "error"
 		'End If
-		
-		
+
+
 		'in out
 		' in: UNO object, the same is expected as out param
 		' the function expects OleTest as parameter and sets a value
-		
+
 		Dim myAny As Object
-		
-		
-		
+
+
+
 		Dim objOleTest2 As Object
 		objOleTest2 = objServiceManager.createInstance("oletest.OleTest")
 		'Set a value
 		objOleTest2.AttrAny2 = "VBString "
-		
+
 		'testinout_methodXInterfaces substitutes the argument with the object set in in_methodXInterface
 		objOleTest.AttrAny2 = "VBString  this string was written in the UNO component to the inout pararmeter"
 		objOleTest.in_methodXInterface(objOleTest)
@@ -469,8 +487,8 @@ Public Sub Main()
 		If tmpVar <> "VBString  this string was written in the UNO component to the inout pararmeter" Then
 			MsgBox("error")
 		End If
-		
-		
+
+
 		'create a struct
 		Dim structClass As Object
 		structClass = objCoreReflection.forName("oletest.SimpleStruct")
@@ -481,7 +499,7 @@ Public Sub Main()
 		If structInstance.message <> "Now we are in VB" Then
 			MsgBox("error")
 		End If
-		
+
 		'put the struct into OleTest. The same struct will be returned with an added String
 		Dim structRet As Object
 		structRet = objOleTest.in_methodStruct(structInstance)
@@ -489,8 +507,8 @@ Public Sub Main()
 		If structRet.message <> "Now we are in VBThis string was set in OleTest" Then
 			MsgBox("error")
 		End If
-		
-		
+
+
 	End Function
 	Function testGetStruct() As Object
 		'Bridge_GetStruct
@@ -501,14 +519,14 @@ Public Sub Main()
         'objDocument.dispose()
         objDocument.close(True)
 	End Function
-	
+
 	Function testImplementedInterfaces() As Object
 		'Bridge_ImplementedInterfaces
 		'=================================================
 		' call an UNO function that takes an XEventListener interface
 		'We provide a COM implementation (IDispatch) as EventListener
 		'Open a new empty writer document
-		
+
 		Dim objDocument As Object
 		objDocument = createHiddenDocument()
 		objEventListener.resetDisposing()
@@ -518,7 +536,7 @@ Public Sub Main()
 			MsgBox("Error")
 		End If
 	End Function
-	
+
 	Function testGetValueObject() As Object
 		'Bridge_GetValueObject
 		'==================================================
@@ -529,13 +547,13 @@ Public Sub Main()
 		For countvar = 0 To 9
 			arrByte(countvar) = countvar
 		Next countvar
-		
+
 		objVal.Set("[]byte", arrByte)
 		Dim ret As Object
 		ret = 0
 		ret = objOleTest.methodByte(objVal)
 		'Test if ret is the same array
-		
+
 		Dim key As Object
 		key = 0
 		For	Each key In ret
@@ -544,7 +562,7 @@ Public Sub Main()
 			End If
 			Debug.Print(ret(key))
 		Next key
-		
+
 		Dim outByte As Byte
 		outByte = 77
 		Dim retByte As Byte
@@ -553,14 +571,14 @@ Public Sub Main()
 		objOleTest.testinout_methodByte(objVal)
 		objVal.InitInOutParam("byte", retByte)
 		objOleTest.testinout_methodByte(objVal)
-		
+
 		ret = 0
 		ret = objVal.Get()
 		Debug.Print(ret)
 		If ret <> outByte Then
 			MsgBox("error")
 		End If
-		
+
 		objVal.InitOutParam()
 		Dim inChar As Short
 		inChar = 65
@@ -572,9 +590,9 @@ Public Sub Main()
 		If ret <> inChar Then
 			MsgBox("error")
 		End If
-		
+
 	End Function
-	
+
 	Function testArrays() As Object
 		'Arrays
 		'========================================
@@ -587,11 +605,11 @@ Public Sub Main()
 			arrObj(countvar) = CreateObject("VBasicEventListener.VBEventListener")
 			arrObj(countvar).setQuiet(True)
 		Next 
-		
+
 		'Arrays always contain VARIANTS
 		Dim seq() As Object
 		seq = objOleTest.methodLong(arrLong)
-		
+
 		For countvar = 0 To 2
 			Debug.Print(CStr(seq(countvar)))
 			If arrLong(countvar) <> seq(countvar) Then
@@ -607,14 +625,14 @@ Public Sub Main()
 				MsgBox("Error")
 			End If
 		Next 
-		
+
 		'Array containing interfaces (element type is VT_DISPATCH)
 		Dim arEventListener(2) As Object
 		For countvar = 0 To 2
 			arEventListener(countvar) = CreateObject("VBasicEventListener.VBEventListener")
 			arEventListener(countvar).setQuiet(True)
 		Next 
-		
+
 		'The function calls disposing on the listeners
 		seq = objOleTest.methodXEventListeners(arEventListener)
 		Dim count As Object
@@ -635,7 +653,7 @@ Public Sub Main()
 				MsgBox("Error")
 			End If
 		Next 
-		
+
 		'Variant containing Array containing interfaces (element type is VT_VARIANT which contains VT_DISPATCH
 		Dim arEventListener3(2) As Object
 		Dim var As Object
@@ -651,10 +669,10 @@ Public Sub Main()
 				MsgBox("Error")
 			End If
 		Next 
-		
+
 		'Get a sequence created in UNO, out param is Variant ( VT_BYREF|VT_VARIANT)
 		Dim seqX As Object
-		
+
 		objOleTest.testout_methodSequence(seqX)
 		Dim key As Object
 		For	Each key In seqX
@@ -666,11 +684,11 @@ Public Sub Main()
 		'Get a sequence created in UNO, out param is array Variant ( VT_BYREF|VT_VARIANT|VT_ARRAY)
 		Dim seqX2() As Object
 		objOleTest.testout_methodSequence(seqX2)
-		
+
 		For	Each key In seqX2
 			Debug.Print(CStr(seqX2(key)))
 		Next key
-		
+
 		'pass it to UNO and get it back
 		Dim seq7() As Object
 		seq7 = objOleTest.methodLong(seqX)
@@ -681,7 +699,7 @@ Public Sub Main()
 				MsgBox("error")
 			End If
 		Next key2
-		
+
 		'array with starting index != 0
 		Dim seqIndex(2) As Integer
         Dim seq8() As Object
@@ -699,17 +717,17 @@ Public Sub Main()
         If longVal1 <> CInt(seq8(1)) And longVal2 <> CInt(seq8(2)) Then
             MsgBox("error")
         End If
-		
+
 		'in out Array
 		' arrLong is Long Array
 		Dim inoutVar(2) As Object
-		
+
 		For countvar = 0 To 2
 			inoutVar(countvar) = countvar + 10
 		Next 
-		
+
 		objOleTest.testinout_methodSequence(inoutVar)
-		
+
 		countvar = 0
 		For countvar = 0 To 2
 			Debug.Print(CStr(inoutVar(countvar)))
@@ -717,7 +735,7 @@ Public Sub Main()
 				MsgBox("error")
 			End If
 		Next 
-		
+
 		'Multidimensional array
 		'============================================================
 		' Sequence< Sequence<long> > methodSequence( Sequence< Sequence long> >)
@@ -729,10 +747,10 @@ Public Sub Main()
 				mulAr(j, i) = i * 10 + j
 			Next j
 		Next i
-		
+
 		Dim resMul As Object
 		resMul = objOleTest.methodSequence(mulAr)
-		
+
 		Dim countDim1 As Integer
 		Dim countDim2 As Integer
 		Dim arr As Object
@@ -746,7 +764,7 @@ Public Sub Main()
 			Next countDim1
 		Next countDim2
 		IsArray(resMul)
-		
+
 		'Array of VARIANTs containing arrays
 		Dim mulAr2(1) As Object
 		Dim arr2(9) As Integer
@@ -757,7 +775,7 @@ Public Sub Main()
 			Next j
 			mulAr2(i) = VB6.CopyArray(arr2)
 		Next i
-		
+
 		resMul = 0
 		resMul = objOleTest.methodSequence(mulAr2)
 		arr = 0
@@ -772,7 +790,7 @@ Public Sub Main()
 				End If
 			Next countDim1
 		Next countDim2
-		
+
 		'Array containing interfaces (element type is VT_DISPATCH)
 		Dim arArEventListener(1, 2) As Object
 		For i = 0 To 1
@@ -790,7 +808,7 @@ Public Sub Main()
 				End If
 			Next 
 		Next 
-		
+
 		'Array containing interfaces (element type is VT_VARIANT containing VT_DISPATCH)
 		Dim arArEventListener2(1, 2) As Object
 		For i = 0 To 1
@@ -808,7 +826,7 @@ Public Sub Main()
 				End If
 			Next 
 		Next 
-		
+
 		' SAFEARRAY of VARIANTS containing SAFEARRAYs
 		'The ultimate element type is VT_DISPATCH ( XEventListener)
 		Dim arEventListener4(1) As Object
@@ -829,9 +847,9 @@ Public Sub Main()
 				MsgBox("Error")
 			End If
 		Next 
-		
+
 	End Function
-	
+
 	Function createHiddenDocument() As Object
 		'Try to create a hidden document
 		Dim objPropValue As Object
@@ -840,7 +858,7 @@ Public Sub Main()
         objPropValue.Name = "Hidden"
 		objPropValue.Handle = -1
 		objPropValue.Value = True
-		
+
 		'create a hidden document
 		'Create the Desktop
 		Dim objDesktop As Object

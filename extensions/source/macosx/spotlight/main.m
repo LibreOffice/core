@@ -1,36 +1,42 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
 //
-//  main.c
+//  main.m
 //  SpotlightTester
 //
 //  Created by Florian Heckl on 10.07.07.
-//  Copyright (c) 2007 __MyCompanyName__. All rights reserved.
-//
-
-
-
-
-
-//==============================================================================
-//
-//	DO NO MODIFY THE CONTENT OF THIS FILE
-//
-//	This file contains the generic CFPlug-in code necessary for your importer
-//	To complete your importer implement the function in GetMetadataForFile.c
 //
 //==============================================================================
-
-
-
-
-
+//
+//    DO NOT MODIFY THE CONTENTS OF THIS FILE
+//
+//    This file contains the generic CFPlug-in code necessary for your importer
+//    To complete your importer implement the function in GetMetadataForFile.c
+//
+//==============================================================================
 
 #include <CoreFoundation/CoreFoundation.h>
 #include <CoreFoundation/CFPlugInCOM.h>
 #include <CoreServices/CoreServices.h>
 
 // -----------------------------------------------------------------------------
-//	constants
+//    constants
 // -----------------------------------------------------------------------------
 
 
@@ -45,16 +51,16 @@
 
 
 // -----------------------------------------------------------------------------
-//	typedefs
+//    typedefs
 // -----------------------------------------------------------------------------
 
 // The import function to be implemented in GetMetadataForFile.c
-Boolean GetMetadataForFile(void *thisInterface, 
-			   CFMutableDictionaryRef attributes, 
-			   CFStringRef contentTypeUTI,
-			   CFStringRef pathToFile);
-			   
-// The layout for an instance of MetaDataImporterPlugIn 
+Boolean GetMetadataForFile(void *thisInterface,
+               CFMutableDictionaryRef attributes,
+               CFStringRef contentTypeUTI,
+               CFStringRef pathToFile);
+
+// The layout for an instance of MetaDataImporterPlugIn
 typedef struct __MetadataImporterPluginType
 {
     MDImporterInterfaceStruct *conduitInterface;
@@ -63,9 +69,9 @@ typedef struct __MetadataImporterPluginType
 } MetadataImporterPluginType;
 
 // -----------------------------------------------------------------------------
-//	prototypes
+//    prototypes
 // -----------------------------------------------------------------------------
-//	Forward declaration for the IUnknown implementation.
+//    Forward declaration for the IUnknown implementation.
 //
 
 MetadataImporterPluginType  *AllocMetadataImporterPluginType(CFUUIDRef inFactoryID);
@@ -75,9 +81,9 @@ void                     *MetadataImporterPluginFactory(CFAllocatorRef allocator
 ULONG                     MetadataImporterPluginAddRef(void *thisInstance);
 ULONG                     MetadataImporterPluginRelease(void *thisInstance);
 // -----------------------------------------------------------------------------
-//	testInterfaceFtbl	definition
+//    testInterfaceFtbl    definition
 // -----------------------------------------------------------------------------
-//	The TestInterface function table.
+//    The TestInterface function table.
 //
 
 static MDImporterInterfaceStruct testInterfaceFtbl = {
@@ -90,9 +96,9 @@ static MDImporterInterfaceStruct testInterfaceFtbl = {
 
 
 // -----------------------------------------------------------------------------
-//	AllocMetadataImporterPluginType
+//    AllocMetadataImporterPluginType
 // -----------------------------------------------------------------------------
-//	Utility function that allocates a new instance.
+//    Utility function that allocates a new instance.
 //      You can do some initial setup for the importer here if you wish
 //      like allocating globals etc...
 //
@@ -116,10 +122,10 @@ MetadataImporterPluginType *AllocMetadataImporterPluginType(CFUUIDRef inFactoryI
 }
 
 // -----------------------------------------------------------------------------
-//	DeallocSpotlightTesterMDImporterPluginType
+//    DeallocSpotlightTesterMDImporterPluginType
 // -----------------------------------------------------------------------------
-//	Utility function that deallocates the instance when
-//	the refCount goes to zero.
+//    Utility function that deallocates the instance when
+//    the refCount goes to zero.
 //      In the current implementation importer interfaces are never deallocated
 //      but implement this as this might change in the future
 //
@@ -136,9 +142,9 @@ void DeallocMetadataImporterPluginType(MetadataImporterPluginType *thisInstance)
 }
 
 // -----------------------------------------------------------------------------
-//	MetadataImporterQueryInterface
+//    MetadataImporterQueryInterface
 // -----------------------------------------------------------------------------
-//	Implementation of the IUnknown QueryInterface function.
+//    Implementation of the IUnknown QueryInterface function.
 //
 HRESULT MetadataImporterQueryInterface(void *thisInstance,REFIID iid,LPVOID *ppv)
 {
@@ -172,11 +178,11 @@ HRESULT MetadataImporterQueryInterface(void *thisInstance,REFIID iid,LPVOID *ppv
 }
 
 // -----------------------------------------------------------------------------
-//	MetadataImporterPluginAddRef
+//    MetadataImporterPluginAddRef
 // -----------------------------------------------------------------------------
-//	Implementation of reference counting for this type. Whenever an interface
-//	is requested, bump the refCount for the instance. NOTE: returning the
-//	refcount is a convention but is not required so don't rely on it.
+//    Implementation of reference counting for this type. Whenever an interface
+//    is requested, bump the refCount for the instance. NOTE: returning the
+//    refcount is a convention but is not required so don't rely on it.
 //
 ULONG MetadataImporterPluginAddRef(void *thisInstance)
 {
@@ -187,8 +193,8 @@ ULONG MetadataImporterPluginAddRef(void *thisInstance)
 // -----------------------------------------------------------------------------
 // SampleCMPluginRelease
 // -----------------------------------------------------------------------------
-//	When an interface is released, decrement the refCount.
-//	If the refCount goes to zero, deallocate the instance.
+//    When an interface is released, decrement the refCount.
+//    If the refCount goes to zero, deallocate the instance.
 //
 ULONG MetadataImporterPluginRelease(void *thisInstance)
 {
@@ -202,9 +208,9 @@ ULONG MetadataImporterPluginRelease(void *thisInstance)
 }
 
 // -----------------------------------------------------------------------------
-//	SpotlightTesterMDImporterPluginFactory
+//    SpotlightTesterMDImporterPluginFactory
 // -----------------------------------------------------------------------------
-//	Implementation of the factory function for this type.
+//    Implementation of the factory function for this type.
 //
 void *
 MetadataImporterPluginFactory(CFAllocatorRef allocator, CFUUIDRef typeID)

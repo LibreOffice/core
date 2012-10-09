@@ -1,36 +1,28 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*************************************************************************
+/*
+ * This file is part of the LibreOffice project.
  *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * This file incorporates work covered by the following license notice:
  *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
 
 #include <com/sun/star/animations/TransitionType.hpp>
 #include <com/sun/star/ucb/XAnyCompareFactory.hpp>
 #include <com/sun/star/container/XIndexReplace.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/drawing/LineJoint.hpp>
+#include <com/sun/star/drawing/LineCap.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/presentation/AnimationSpeed.hpp>
 #include <com/sun/star/presentation/FadeEffect.hpp>
@@ -114,6 +106,7 @@ const XMLPropertyMapEntry aXMLSDProperties[] =
     GMAP( "LineEndCenter",                  XML_NAMESPACE_DRAW, XML_MARKER_END_CENTER,      XML_TYPE_BOOL, 0 ),
     GMAP( "LineTransparence",               XML_NAMESPACE_SVG,  XML_STROKE_OPACITY,         XML_SD_TYPE_OPACITY, 0 ),
     GMAP( "LineJoint",                      XML_NAMESPACE_DRAW, XML_STROKE_LINEJOIN,        XML_SD_TYPE_LINEJOIN, 0 ),
+    GMAP( "LineCap",                        XML_NAMESPACE_SVG , XML_STROKE_LINECAP,         XML_SD_TYPE_LINECAP, 0 ),
 
     // fill attributes
     GMAP( "FillStyle",                      XML_NAMESPACE_DRAW, XML_FILL,                   XML_SD_TYPE_FILLSTYLE, 0 ),
@@ -392,6 +385,15 @@ SvXMLEnumMapEntry aXML_LineJoint_EnumMap[] =
     { XML_ROUND,    drawing::LineJoint_ROUND },
     { XML_BEVEL,    drawing::LineJoint_BEVEL },
     { XML_MIDDLE,   drawing::LineJoint_MIDDLE },
+    { XML_TOKEN_INVALID, 0 }
+};
+
+SvXMLEnumMapEntry aXML_LineCap_EnumMap[] =
+{
+    { XML_BUTT, drawing::LineCap_BUTT },
+    { XML_ROUND, drawing::LineCap_ROUND },
+    // use XML_GRADIENTSTYLE_SQUARE as XML_SQUARE, is defined as "square" already
+    { XML_GRADIENTSTYLE_SQUARE, drawing::LineCap_SQUARE },
     { XML_TOKEN_INVALID, 0 }
 };
 
@@ -896,6 +898,11 @@ const XMLPropertyHandler* XMLSdPropHdlFactory::GetPropertyHandler( sal_Int32 nTy
             case XML_SD_TYPE_LINEJOIN :
             {
                 pHdl = new XMLEnumPropertyHdl( aXML_LineJoint_EnumMap, ::getCppuType((const drawing::LineJoint*)0) );
+                break;
+            }
+            case XML_SD_TYPE_LINECAP :
+            {
+                pHdl = new XMLEnumPropertyHdl( aXML_LineCap_EnumMap, ::getCppuType((const drawing::LineCap*)0) );
                 break;
             }
             case XML_SD_TYPE_FILLSTYLE :

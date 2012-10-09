@@ -1,30 +1,21 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*************************************************************************
+/*
+ * This file is part of the LibreOffice project.
  *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * This file incorporates work covered by the following license notice:
  *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
 
 #ifndef _BGFX_POLYGON_B2DPOLYPOLYGONCUTTER_HXX
 #define _BGFX_POLYGON_B2DPOLYPOLYGONCUTTER_HXX
@@ -47,6 +38,11 @@ namespace basegfx
         // contained sub-polygons in a preparing step and to explicitly correct their orientations.
         BASEGFX_DLLPUBLIC B2DPolyPolygon solveCrossovers(const B2DPolyPolygon& rCandidate);
 
+        // Version for single polygons. This is for solving self-intersections. Result will be free of
+        // crossovers. When result contains multiple polygons, it may be necessary to rearrange their
+        // orientations since holes may have been created (use correctOrientations eventually).
+        BASEGFX_DLLPUBLIC B2DPolyPolygon solveCrossovers(const B2DPolygon& rCandidate);
+
         // Neutral polygons will be stripped. Neutral polygons are ones who's orientation is
         // neutral, so normally they have no volume -> just closed paths. A polygon with the same
         // positive and negative oriented volume is also neutral, so this may not be wanted. It is
@@ -65,6 +61,13 @@ namespace basegfx
         // In combination with correct orientation of the input orientations and the SolveCrossover calls this
         // can be combined for logical polygon operations or polygon clipping.
         BASEGFX_DLLPUBLIC B2DPolyPolygon stripDispensablePolygons(const B2DPolyPolygon& rCandidate, bool bKeepAboveZero = false);
+
+        // geometrically convert PolyPolygons which are proposed to use nonzero fill rule
+        // to a representation where evenodd paint will give the same result. To do this
+        // all intersections and self-intersections get solved (the polygons will be rearranged
+        // if needed). Then all polygons which are inside another one with the same orientation
+        // get deleted
+        BASEGFX_DLLPUBLIC B2DPolyPolygon createNonzeroConform(const B2DPolyPolygon& rCandidate);
 
         // For convenience: The four basic operations OR, XOR, AND and DIFF for
         // two PolyPolygons. These are combinations of the above methods. To not be forced
@@ -105,7 +108,7 @@ namespace basegfx
 
             @return A single PolyPolygon containing the Or-merged result
         */
-        BASEGFX_DLLPUBLIC B2DPolyPolygon mergeToSinglePolyPolygon(const std::vector< basegfx::B2DPolyPolygon >& rInput);
+        BASEGFX_DLLPUBLIC B2DPolyPolygon mergeToSinglePolyPolygon(const B2DPolyPolygonVector& rInput);
 
     } // end of namespace tools
 } // end of namespace basegfx

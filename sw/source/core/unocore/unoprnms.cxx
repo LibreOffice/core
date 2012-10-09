@@ -1,30 +1,21 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*************************************************************************
+/*
+ * This file is part of the LibreOffice project.
  *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * This file incorporates work covered by the following license notice:
  *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
 
 #include <svl/itemprop.hxx>
 #include <unoprnms.hxx>
@@ -781,11 +772,11 @@ const SwPropNameTab aPropNameTab = {
 /* 0742 UNO_NAME_SEPARATOR_LINE_STYLE */ {MAP_CHAR_LEN("SeparatorLineStyle")},
 /* 0743 UNO_NAME_FOOTNOTE_LINE_STYLE */ {MAP_CHAR_LEN("FootnoteLineStyle")},
 /* 0744 UNO_NAME_EMBEDDED_OBJECT */ {MAP_CHAR_LEN("EmbeddedObject")},
-/* 0745 UNO_NAME_RSID */	         {MAP_CHAR_LEN("Rsid")},
-/* 0746 UNO_NAME_PARRSID */	         {MAP_CHAR_LEN("ParRsid")},
+/* 0745 UNO_NAME_RSID */             {MAP_CHAR_LEN("Rsid")},
+/* 0746 UNO_NAME_PARRSID */          {MAP_CHAR_LEN("ParRsid")},
 
-/* 0747 UNO_NAME_LINE_STYLE */	         {MAP_CHAR_LEN("LineStyle")},
-/* 0748 UNO_NAME_LINE_WIDTH */	         {MAP_CHAR_LEN("LineWidth")},
+/* 0747 UNO_NAME_LINE_STYLE */           {MAP_CHAR_LEN("LineStyle")},
+/* 0748 UNO_NAME_LINE_WIDTH */           {MAP_CHAR_LEN("LineWidth")},
 
 /* 0749 PARA_CONTEXT_MARGIN */           {MAP_CHAR_LEN("ParaContextMargin")},
 /* 0750 PARAGRAPH_STYLE_NAME */           {MAP_CHAR_LEN("ParagraphStyleName")},
@@ -794,6 +785,7 @@ const SwPropNameTab aPropNameTab = {
 /* 0753 FOOTER_TEXT_FIRST */            {MAP_CHAR_LEN("FooterTextFirst")},
 /* 0754 UNO_NAME_INITIALS */            {MAP_CHAR_LEN("Initials")},
 /* 0755 UNO_NAME_INITIALS */            {MAP_CHAR_LEN("TableBorder2")},
+/* 0756 UNO_NAME_REPLACEMENT_GRAPHIC_URL */ {MAP_CHAR_LEN("ReplacementGraphicURL")},
 
 // new items in this array must match enum SwPropNameIds
 };

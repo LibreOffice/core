@@ -349,6 +349,7 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     spl \
     sts \
     svgfilter \
+	svgio \
     svl \
     svt \
     svx \

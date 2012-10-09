@@ -1,30 +1,22 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*************************************************************************
+/*
+ * This file is part of the LibreOffice project.
  *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * This file incorporates work covered by the following license notice:
  *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
 #ifndef _SVX_UNOSHPRP_HXX
 #define _SVX_UNOSHPRP_HXX
 
@@ -37,6 +29,7 @@
 #include <com/sun/star/awt/Gradient.hpp>
 #include <com/sun/star/drawing/Hatch.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
+#include <com/sun/star/drawing/LineCap.hpp>
 #include <com/sun/star/drawing/LineDash.hpp>
 #include <com/sun/star/drawing/LineJoint.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
@@ -129,6 +122,9 @@
 #define OWN_ATTR_TRANSFORMATION                 (OWN_ATTR_VALUE_START+46)
 #define OWN_ATTR_BASE_GEOMETRY                  (OWN_ATTR_VALUE_START+47)
 
+/// reuse attr slots for GraphicObject which will never be used together with graphic object
+#define OWN_ATTR_REPLACEMENTGRAFURL             (OWN_ATTR_VALUE_START+14)
+
 #define OWN_ATTR_APPLET_DOCBASE                 (OWN_ATTR_VALUE_START+48)
 #define OWN_ATTR_APPLET_CODEBASE                (OWN_ATTR_VALUE_START+49)
 #define OWN_ATTR_APPLET_NAME                    (OWN_ATTR_VALUE_START+50)
@@ -216,6 +212,7 @@
     { MAP_CHAR_LEN(UNO_NAME_SHADOWYDIST),       SDRATTR_SHADOWYDIST,        &::getCppuType((const sal_Int32*)0),    0,      SFX_METRIC_ITEM},
 
 #define LINE_PROPERTIES_DEFAULTS\
+    { MAP_CHAR_LEN(UNO_NAME_LINECAP),           XATTR_LINECAP,          &::getCppuType((const ::com::sun::star::drawing::LineCap*)0),     0,     0}, \
     { MAP_CHAR_LEN(UNO_NAME_LINECOLOR),         XATTR_LINECOLOR,        &::getCppuType((const sal_Int32*)0) ,           0,     0}, \
     { MAP_CHAR_LEN(UNO_NAME_LINEENDCENTER),     XATTR_LINEENDCENTER,    &::getBooleanCppuType() ,           0,     0}, \
     { MAP_CHAR_LEN(UNO_NAME_LINEENDWIDTH),      XATTR_LINEENDWIDTH,     &::getCppuType((const sal_Int32*)0) ,           0,     SFX_METRIC_ITEM}, \
@@ -423,11 +420,12 @@
 
 #define SPECIAL_GRAPHOBJ_PROPERTIES \
     SPECIAL_GRAPHOBJ_PROPERTIES_DEFAULTS \
-    { MAP_CHAR_LEN(UNO_NAME_GRAPHIC_GRAPHICCROP),   SDRATTR_GRAFCROP            , &::getCppuType((const ::com::sun::star::text::GraphicCrop*)0),        0,  0 }, \
-    { MAP_CHAR_LEN(UNO_NAME_GRAPHOBJ_GRAFURL),      OWN_ATTR_GRAFURL            , &::getCppuType((const ::rtl::OUString*)0), 0, 0 }, \
-    { MAP_CHAR_LEN(UNO_NAME_GRAPHOBJ_GRAFSTREAMURL),OWN_ATTR_GRAFSTREAMURL      , &::getCppuType((const ::rtl::OUString*)0), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 }, \
-    { MAP_CHAR_LEN(UNO_NAME_GRAPHOBJ_FILLBITMAP),   OWN_ATTR_VALUE_FILLBITMAP   , &::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XBitmap>*)0)  ,    0,     0},    \
-    { MAP_CHAR_LEN(UNO_NAME_GRAPHOBJ_GRAPHIC),      OWN_ATTR_VALUE_GRAPHIC      , &::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic>*)0)  ,   0,     0},
+    { MAP_CHAR_LEN(UNO_NAME_GRAPHIC_GRAPHICCROP),           SDRATTR_GRAFCROP            , &::getCppuType((const ::com::sun::star::text::GraphicCrop*)0),        0,  0 }, \
+    { MAP_CHAR_LEN(UNO_NAME_GRAPHOBJ_GRAFURL),              OWN_ATTR_GRAFURL            , &::getCppuType((const ::rtl::OUString*)0), 0, 0 }, \
+    { MAP_CHAR_LEN(UNO_NAME_GRAPHOBJ_REPLACEMENTGRAFURL),   OWN_ATTR_REPLACEMENTGRAFURL , &::getCppuType((const ::rtl::OUString*)0), 0, 0 }, \
+    { MAP_CHAR_LEN(UNO_NAME_GRAPHOBJ_GRAFSTREAMURL),        OWN_ATTR_GRAFSTREAMURL      , &::getCppuType((const ::rtl::OUString*)0), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 }, \
+    { MAP_CHAR_LEN(UNO_NAME_GRAPHOBJ_FILLBITMAP),           OWN_ATTR_VALUE_FILLBITMAP   , &::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XBitmap>*)0)  ,    0,     0},    \
+    { MAP_CHAR_LEN(UNO_NAME_GRAPHOBJ_GRAPHIC),              OWN_ATTR_VALUE_GRAPHIC      , &::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic>*)0)  ,   0,     0},
 
 
 #define SPECIAL_3DSCENEOBJECT_PROPERTIES_DEFAULTS \

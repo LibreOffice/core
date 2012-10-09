@@ -1,30 +1,21 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*************************************************************************
+/*
+ * This file is part of the LibreOffice project.
  *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * This file incorporates work covered by the following license notice:
  *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
 
 #include <com/sun/star/io/XStream.hpp>
 #include <com/sun/star/lang/Locale.hpp>
@@ -124,6 +115,40 @@ static inline int IsUpperLetter( sal_Int32 nCharType )
 {
     return CharClass::isLetterType( nCharType ) &&
             0 == ( ::com::sun::star::i18n::KCharacterType::LOWER & nCharType);
+}
+
+bool lcl_IsUnsupportedUnicodeChar( CharClass& rCC, const String& rTxt,
+                                   xub_StrLen nStt, xub_StrLen nEnd )
+{
+    for( ; nStt < nEnd; ++nStt )
+    {
+#if OSL_DEBUG_LEVEL > 1
+        sal_Int32 nCharType;
+        sal_Int32 nChType;
+        nCharType = rCC.getCharacterType( rTxt, nStt );
+        nChType = rCC.getType( rTxt, nStt );
+#endif
+        short nScript = rCC.getScript( rTxt, nStt );
+        switch( nScript )
+        {
+            case ::com::sun::star::i18n::UnicodeScript_kCJKRadicalsSupplement:
+            case ::com::sun::star::i18n::UnicodeScript_kHangulJamo:
+            case ::com::sun::star::i18n::UnicodeScript_kCJKSymbolPunctuation:
+            case ::com::sun::star::i18n::UnicodeScript_kHiragana:
+            case ::com::sun::star::i18n::UnicodeScript_kKatakana:
+            case ::com::sun::star::i18n::UnicodeScript_kHangulCompatibilityJamo:
+            case ::com::sun::star::i18n::UnicodeScript_kEnclosedCJKLetterMonth:
+            case ::com::sun::star::i18n::UnicodeScript_kCJKCompatibility:
+            case ::com::sun::star::i18n::UnicodeScript_k_CJKUnifiedIdeographsExtensionA:
+            case ::com::sun::star::i18n::UnicodeScript_kCJKUnifiedIdeograph:
+            case ::com::sun::star::i18n::UnicodeScript_kHangulSyllable:
+            case ::com::sun::star::i18n::UnicodeScript_kCJKCompatibilityIdeograph:
+            case ::com::sun::star::i18n::UnicodeScript_kHalfwidthFullwidthForm:
+                return true;
+            default: ; //do nothing
+        }
+    }
+    return false;
 }
 
 static sal_Bool lcl_IsSymbolChar( CharClass& rCC, const String& rTxt,
@@ -1337,6 +1362,7 @@ sal_uLong SvxAutoCorrect::AutoCorrect( SvxAutoCorrDoc& rDoc, const String& rTxt,
         else
         {
             bool bLockKeyOn = pFrameWin && (pFrameWin->GetIndicatorState() & INDICATOR_CAPSLOCK);
+            bool bUnsupported = lcl_IsUnsupportedUnicodeChar( rCC, rTxt, nCapLttrPos, nInsPos );
 
             nRet = 0;
             if ( bLockKeyOn && IsAutoCorrFlag( CorrectCapsLock ) &&
@@ -1350,12 +1376,14 @@ sal_uLong SvxAutoCorrect::AutoCorrect( SvxAutoCorrDoc& rDoc, const String& rTxt,
             }
 
             // Capital letter at beginning of paragraph ?
-            if( IsAutoCorrFlag( CptlSttSntnc ) &&
+            if( !bUnsupported &&
+                IsAutoCorrFlag( CptlSttSntnc ) &&
                 FnCptlSttSntnc( rDoc, rTxt, sal_True, nCapLttrPos, nInsPos, eLang ) )
                 nRet |= CptlSttSntnc;
 
             // Two capital letters at beginning of word ??
-            if( IsAutoCorrFlag( CptlSttWrd ) &&
+            if( !bUnsupported &&
+                IsAutoCorrFlag( CptlSttWrd ) &&
                 FnCptlSttWrd( rDoc, rTxt, nCapLttrPos, nInsPos, eLang ) )
                 nRet |= CptlSttWrd;
 

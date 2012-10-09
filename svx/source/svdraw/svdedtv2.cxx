@@ -1,31 +1,21 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*************************************************************************
+/*
+ * This file is part of the LibreOffice project.
  *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * This file incorporates work covered by the following license notice:
  *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
-
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
 
 #include <svx/svdedtv.hxx>
 #include <editeng/outliner.hxx>
@@ -2016,30 +2006,78 @@ void SdrEditView::DoImportMarkedMtf(SvdProgressInfo *pProgrInfo)
         SdrGrafObj*  pGraf=PTR_CAST(SdrGrafObj,pObj);
         SdrOle2Obj*  pOle2=PTR_CAST(SdrOle2Obj,pObj);
         sal_uIntPtr        nInsAnz=0;
-        if (pGraf!=NULL && pGraf->HasGDIMetaFile())
+        Rectangle aLogicRect;
+
+        if(pGraf && (pGraf->HasGDIMetaFile() || pGraf->isEmbeddedSvg()))
         {
-            ImpSdrGDIMetaFileImport aFilter(*pMod);
-            aFilter.SetScaleRect(pGraf->GetSnapRect());
-            aFilter.SetLayer(pObj->GetLayer());
-            nInsAnz=aFilter.DoImport(pGraf->GetTransformedGraphic().GetGDIMetaFile(),*pOL,nInsPos,pProgrInfo);
+            GDIMetaFile aMetaFile;
+
+            if(pGraf->HasGDIMetaFile())
+            {
+                aMetaFile = pGraf->GetTransformedGraphic(
+                    SDRGRAFOBJ_TRANSFORMATTR_COLOR|SDRGRAFOBJ_TRANSFORMATTR_MIRROR).GetGDIMetaFile();
+            }
+            else if(pGraf->isEmbeddedSvg())
+            {
+                aMetaFile = pGraf->getMetafileFromEmbeddedSvg();
+            }
+
+            if(aMetaFile.GetActionSize())
+            {
+                ImpSdrGDIMetaFileImport aFilter(*pMod);
+
+                aLogicRect = pGraf->GetLogicRect();
+                aFilter.SetScaleRect(aLogicRect);
+                aFilter.SetLayer(pObj->GetLayer());
+
+                nInsAnz = aFilter.DoImport(aMetaFile, *pOL, nInsPos, pProgrInfo);
+            }
         }
         if ( pOle2!=NULL && pOle2->GetGraphic() )
         {
             ImpSdrGDIMetaFileImport aFilter(*pMod);
-            aFilter.SetScaleRect(pOle2->GetLogicRect());
+
+            aLogicRect = pOle2->GetLogicRect();
+            aFilter.SetScaleRect(aLogicRect);
             aFilter.SetLayer(pObj->GetLayer());
             nInsAnz=aFilter.DoImport(pOle2->GetGraphic()->GetGDIMetaFile(),*pOL,nInsPos,pProgrInfo);
         }
         if (nInsAnz!=0)
         {
+            // transformation
+            GeoStat aGeoStat(pGraf ? pGraf->GetGeoStat() : pOle2->GetGeoStat());
             sal_uIntPtr nObj=nInsPos;
+
+            if(aGeoStat.nShearWink)
+            {
+                aGeoStat.RecalcTan();
+            }
+
+            if(aGeoStat.nDrehWink)
+            {
+                aGeoStat.RecalcSinCos();
+            }
+
             for (sal_uIntPtr i=0; i<nInsAnz; i++)
             {
                 if( bUndo )
                     AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoNewObject(*pOL->GetObj(nObj)));
 
                 // update new MarkList
-                SdrMark aNewMark(pOL->GetObj(nObj), pPV);
+                SdrObject* pCandidate = pOL->GetObj(nObj);
+
+                // apply original transformation
+                if(aGeoStat.nShearWink)
+                {
+                    pCandidate->NbcShear(aLogicRect.TopLeft(), aGeoStat.nShearWink, aGeoStat.nTan, false);
+                }
+
+                if(aGeoStat.nDrehWink)
+                {
+                    pCandidate->NbcRotate(aLogicRect.TopLeft(), aGeoStat.nDrehWink, aGeoStat.nSin, aGeoStat.nCos);
+                }
+
+                SdrMark aNewMark(pCandidate, pPV);
                 aNewMarked.InsertEntry(aNewMark);
 
                 nObj++;

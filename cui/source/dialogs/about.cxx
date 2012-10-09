@@ -44,7 +44,9 @@
 #include <sfx2/app.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <vcl/bitmap.hxx>
-#include <vcl/rendergraphicrasterizer.hxx>
+#ifdef FIXME_REMOVE_WHEN_RE_BASE_COMPLETE
+#  include <vcl/rendergraphicrasterizer.hxx>
+#endif
 #include <officecfg/Office/Common.hxx>
 
 using namespace ::com::sun::star::uno;
@@ -208,6 +210,7 @@ void AboutDialog::LayoutControls()
     Size aLogoSize( aIdealTextWidth, aIdealTextWidth / 20 );
     Point aLogoPos( 0, 0 );
 
+#ifdef FIXME_REMOVE_WHEN_RE_BASE_COMPLETE
     vcl::RenderGraphicRasterizer aRasterizerLogo = Application::LoadBrandSVG("flat_logo");
     if ( !aRasterizerLogo.GetRenderGraphic().IsEmpty() &&
          aRasterizerLogo.GetDefaultSizePixel().Width() > 0 && aRasterizerLogo.GetDefaultSizePixel().Height() > 0 )
@@ -222,6 +225,7 @@ void AboutDialog::LayoutControls()
         aLogoImage.Show();
     }
     else
+#endif
     {
         aLogoPos.X() = aDialogBorder;
         aLogoPos.Y() = aDialogBorder;
@@ -274,6 +278,7 @@ void AboutDialog::LayoutControls()
 
 
     // Layout background image
+#ifdef FIXME_REMOVE_WHEN_RE_BASE_COMPLETE
     if ( !(Application::GetSettings().GetStyleSettings().GetHighContrastMode()) )   {
         vcl::RenderGraphicRasterizer aRasterizerBackground = Application::LoadBrandSVG("shell/about");
 
@@ -293,6 +298,7 @@ void AboutDialog::LayoutControls()
             aBackgroundBitmap = aRasterizerBackground.Rasterize( aBackgroundSize );
         }
     }
+#endif
 
     SetOutputSizePixel( aDialogSize );
 

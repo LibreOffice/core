@@ -1,31 +1,21 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*************************************************************************
+/*
+ * This file is part of the LibreOffice project.
  *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * This file incorporates work covered by the following license notice:
  *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
-
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
 
 #include <tools/debug.hxx>
 #include <tools/poly.hxx>
@@ -1008,7 +998,16 @@ void OutputDevice::ImplInitClipRegion()
                                              mnOutOffY+GetOutputHeightPixel()-1 );
                     aRegion.Intersect( aDeviceBounds );
                 }
-                ImplSelectClipRegion( aRegion );
+
+                if ( aRegion.IsEmpty() )
+                {
+                    mbOutputClipped = sal_True;
+                }
+                else
+                {
+                    mbOutputClipped = sal_False;
+                    ImplSelectClipRegion( aRegion );
+                }
             }
 
             mbClipRegionSet = sal_True;
@@ -1527,7 +1526,7 @@ void OutputDevice::DrawLine( const Point& rStartPt, const Point& rEndPt )
             aB2DPolyLine = basegfx::tools::snapPointsOfHorizontalOrVerticalEdges(aB2DPolyLine);
         }
 
-        if( mpGraphics->DrawPolyLine( aB2DPolyLine, 0.0, aB2DLineWidth, basegfx::B2DLINEJOIN_NONE, this))
+        if( mpGraphics->DrawPolyLine( aB2DPolyLine, 0.0, aB2DLineWidth, basegfx::B2DLINEJOIN_NONE, com::sun::star::drawing::LineCap_BUTT, this))
         {
             return;
         }
@@ -1614,7 +1613,8 @@ void OutputDevice::impPaintLineGeometryWithEvtlExpand(
             aFillPolyPolygon.append(basegfx::tools::createAreaGeometry(
                 aLinePolyPolygon.getB2DPolygon(a),
                 fHalfLineWidth,
-                rInfo.GetLineJoin()));
+                rInfo.GetLineJoin(),
+                rInfo.GetLineCap()));
         }
 
         aLinePolyPolygon.clear();
@@ -1632,7 +1632,7 @@ void OutputDevice::impPaintLineGeometryWithEvtlExpand(
 
             if(bTryAA)
             {
-                bDone = mpGraphics->DrawPolyLine( aCandidate, 0.0, basegfx::B2DVector(1.0,1.0), basegfx::B2DLINEJOIN_NONE, this);
+                bDone = mpGraphics->DrawPolyLine( aCandidate, 0.0, basegfx::B2DVector(1.0,1.0), basegfx::B2DLINEJOIN_NONE, com::sun::star::drawing::LineCap_BUTT, this);
             }
 
             if(!bDone)
@@ -1664,7 +1664,10 @@ void OutputDevice::impPaintLineGeometryWithEvtlExpand(
         {
             for(sal_uInt32 a(0); a < aFillPolyPolygon.count(); a++)
             {
-                const Polygon aPolygon(aFillPolyPolygon.getB2DPolygon(a));
+                Polygon aPolygon(aFillPolyPolygon.getB2DPolygon(a));
+
+                // need to subdivide, mpGraphics->DrawPolygon ignores curves
+                aPolygon.AdaptiveSubdivide(aPolygon);
                 mpGraphics->DrawPolygon(aPolygon.GetSize(), (const SalPoint*)aPolygon.GetConstPointAry(), this);
             }
         }
@@ -1807,7 +1810,7 @@ void OutputDevice::DrawPolyLine( const Polygon& rPoly )
         && IsLineColor());
 
     // use b2dpolygon drawing if possible
-    if(bTryAA && ImpTryDrawPolyLineDirect(rPoly.getB2DPolygon(), 0.0, basegfx::B2DLINEJOIN_NONE))
+    if(bTryAA && ImpTryDrawPolyLineDirect(rPoly.getB2DPolygon()))
     {
         basegfx::B2DPolygon aB2DPolyLine(rPoly.getB2DPolygon());
         const ::basegfx::B2DHomMatrix aTransform = ImplGetDeviceTransformation();
@@ -1821,7 +1824,7 @@ void OutputDevice::DrawPolyLine( const Polygon& rPoly )
             aB2DPolyLine = basegfx::tools::snapPointsOfHorizontalOrVerticalEdges(aB2DPolyLine);
         }
 
-        if(mpGraphics->DrawPolyLine( aB2DPolyLine, 0.0, aB2DLineWidth, basegfx::B2DLINEJOIN_NONE, this))
+        if(mpGraphics->DrawPolyLine( aB2DPolyLine, 0.0, aB2DLineWidth, basegfx::B2DLINEJOIN_NONE, com::sun::star::drawing::LineCap_BUTT, this))
         {
             return;
         }
@@ -1869,7 +1872,7 @@ void OutputDevice::DrawPolyLine( const Polygon& rPoly, const LineInfo& rLineInfo
     if((mnAntialiasing & ANTIALIASING_ENABLE_B2DDRAW)
         && LINE_SOLID == rLineInfo.GetStyle())
     {
-        DrawPolyLine( rPoly.getB2DPolygon(), (double)rLineInfo.GetWidth(), rLineInfo.GetLineJoin());
+        DrawPolyLine( rPoly.getB2DPolygon(), (double)rLineInfo.GetWidth(), rLineInfo.GetLineJoin(), rLineInfo.GetLineCap());
         return;
     }
 
@@ -2001,7 +2004,13 @@ void OutputDevice::DrawPolygon( const Polygon& rPoly )
                 aB2DPolygon = basegfx::tools::snapPointsOfHorizontalOrVerticalEdges(aB2DPolygon);
             }
 
-            bSuccess = mpGraphics->DrawPolyLine( aB2DPolygon, 0.0, aB2DLineWidth, basegfx::B2DLINEJOIN_NONE, this);
+            bSuccess = mpGraphics->DrawPolyLine(
+                aB2DPolygon,
+                0.0,
+                aB2DLineWidth,
+                basegfx::B2DLINEJOIN_NONE,
+                com::sun::star::drawing::LineCap_BUTT,
+                this);
         }
 
         if(bSuccess)
@@ -2093,7 +2102,13 @@ void OutputDevice::DrawPolyPolygon( const PolyPolygon& rPolyPoly )
 
             for(sal_uInt32 a(0); bSuccess && a < aB2DPolyPolygon.count(); a++)
             {
-                bSuccess = mpGraphics->DrawPolyLine( aB2DPolyPolygon.getB2DPolygon(a), 0.0, aB2DLineWidth, basegfx::B2DLINEJOIN_NONE, this);
+                bSuccess = mpGraphics->DrawPolyLine(
+                    aB2DPolyPolygon.getB2DPolygon(a),
+                    0.0,
+                    aB2DLineWidth,
+                    basegfx::B2DLINEJOIN_NONE,
+                    com::sun::star::drawing::LineCap_BUTT,
+                    this);
             }
         }
 
@@ -2208,7 +2223,13 @@ void OutputDevice::ImpDrawPolyPolygonWithB2DPolyPolygon(const basegfx::B2DPolyPo
 
             for(sal_uInt32 a(0);bSuccess && a < aB2DPolyPolygon.count(); a++)
             {
-                bSuccess = mpGraphics->DrawPolyLine( aB2DPolyPolygon.getB2DPolygon(a), 0.0, aB2DLineWidth, basegfx::B2DLINEJOIN_NONE, this);
+                bSuccess = mpGraphics->DrawPolyLine(
+                    aB2DPolyPolygon.getB2DPolygon(a),
+                    0.0,
+                    aB2DLineWidth,
+                    basegfx::B2DLINEJOIN_NONE,
+                    com::sun::star::drawing::LineCap_BUTT,
+                    this);
             }
         }
 
@@ -2229,7 +2250,8 @@ void OutputDevice::ImpDrawPolyPolygonWithB2DPolyPolygon(const basegfx::B2DPolyPo
 bool OutputDevice::ImpTryDrawPolyLineDirect(
     const basegfx::B2DPolygon& rB2DPolygon,
     double fLineWidth,
-    basegfx::B2DLineJoin eLineJoin)
+    basegfx::B2DLineJoin eLineJoin,
+    com::sun::star::drawing::LineCap eLineCap)
 {
     const basegfx::B2DHomMatrix aTransform = ImplGetDeviceTransformation();
     basegfx::B2DVector aB2DLineWidth(1.0, 1.0);
@@ -2255,17 +2277,25 @@ bool OutputDevice::ImpTryDrawPolyLineDirect(
     }
 
     // draw the polyline
-    return mpGraphics->DrawPolyLine( aB2DPolygon, 0.0, aB2DLineWidth, eLineJoin, this);
+    return mpGraphics->DrawPolyLine(
+        aB2DPolygon,
+        0.0,
+        aB2DLineWidth,
+        eLineJoin,
+        eLineCap,
+        this);
 }
 
 void OutputDevice::DrawPolyLine(
     const basegfx::B2DPolygon& rB2DPolygon,
     double fLineWidth,
-    basegfx::B2DLineJoin eLineJoin)
+    basegfx::B2DLineJoin eLineJoin,
+    com::sun::star::drawing::LineCap eLineCap)
 {
     OSL_TRACE( "OutputDevice::DrawPolyLine(B2D&)" );
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
     (void)eLineJoin; // ATM used in UNX, but not in WNT, access it for warning-free
+    (void)eLineCap;
 
     if( mpMetaFile )
     {
@@ -2300,7 +2330,7 @@ void OutputDevice::DrawPolyLine(
         && IsLineColor());
 
     // use b2dpolygon drawing if possible
-    if(bTryAA && ImpTryDrawPolyLineDirect(rB2DPolygon, fLineWidth, eLineJoin))
+    if(bTryAA && ImpTryDrawPolyLineDirect(rB2DPolygon, fLineWidth, eLineJoin, eLineCap))
     {
         return;
     }
@@ -2314,9 +2344,12 @@ void OutputDevice::DrawPolyLine(
         && rB2DPolygon.count() <= 1000)
     {
         const double fHalfLineWidth((fLineWidth * 0.5) + 0.5);
-        const basegfx::B2DPolyPolygon aAreaPolyPolygon(basegfx::tools::createAreaGeometry(
-            rB2DPolygon, fHalfLineWidth, eLineJoin));
-
+        const basegfx::B2DPolyPolygon aAreaPolyPolygon(
+            basegfx::tools::createAreaGeometry(
+                rB2DPolygon,
+                fHalfLineWidth,
+                eLineJoin,
+                eLineCap));
         const Color aOldLineColor(maLineColor);
         const Color aOldFillColor(maFillColor);
 
@@ -2343,7 +2376,7 @@ void OutputDevice::DrawPolyLine(
             // to avoid optical gaps
             for(sal_uInt32 a(0); a < aAreaPolyPolygon.count(); a++)
             {
-                ImpTryDrawPolyLineDirect(aAreaPolyPolygon.getB2DPolygon(a), 0.0, basegfx::B2DLINEJOIN_NONE);
+                ImpTryDrawPolyLineDirect(aAreaPolyPolygon.getB2DPolygon(a));
             }
         }
     }

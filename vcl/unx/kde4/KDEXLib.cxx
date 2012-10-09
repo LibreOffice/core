@@ -1,30 +1,21 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*************************************************************************
+/*
+ * This file is part of the LibreOffice project.
  *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * This file incorporates work covered by the following license notice:
  *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
 
 #include "VCLKDEApplication.hxx"
 
@@ -102,16 +93,16 @@ void KDEXLib::Init()
     pInputMethod->SetLocale();
     XrmInitialize();
 
-    KAboutData *kAboutData = new KAboutData("LibreOffice",
+    KAboutData *kAboutData = new KAboutData( "LibreOffice",
             "kdelibs4",
             ki18n( "LibreOffice" ),
-            "3.3.0",
+            "3.6.0",
             ki18n( "LibreOffice with KDE Native Widget Support." ),
-            KAboutData::License_LGPL,
-            ki18n( "Copyright (c) 2003, 2004, 2005, 2006, 2007, 2008, 2009 Novell, Inc"),
+            KAboutData::License_File,
+            "(c) 2003-2012 Novell, Inc and Apache Software Foundation",
             ki18n( "LibreOffice is an office suite.\n" ),
             "http://libreoffice.org",
-            "libreoffice@lists.freedesktop.org" );
+            "libreoffice@lists.freedesktop.org");
 
     kAboutData->addAuthor( ki18n( "Jan Holesovsky" ),
             ki18n( "Original author and maintainer of the KDE NWF." ),
@@ -123,8 +114,6 @@ void KDEXLib::Init()
     kAboutData->addAuthor( ki18n("Eric Bischoff"),
             ki18n( "Accessibility fixes, porting to KDE 4." ),
             "bischoff@kde.org" );
-
-    //kAboutData->setProgramIconName("OpenOffice");
 
     m_nFakeCmdLineArgs = 2;
     sal_uInt16 nIdx;

@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <canvas/debug.hxx>
 #include <tools/diagnose_ex.h>
 
@@ -90,7 +89,6 @@ namespace vclcanvas
             return basegfx::B2DLINEJOIN_NONE;
         }
 
-#ifdef FIXME_REMOVE_WHEN_RE_BASE_COMPLETE
         drawing::LineCap unoCapeFromCap( sal_Int8 nCapType)
         {
             switch ( nCapType)
@@ -110,7 +108,6 @@ namespace vclcanvas
             }
             return drawing::LineCap_BUTT;
         }
-#endif
     }
 
     CanvasHelper::CanvasHelper() :
@@ -405,10 +402,8 @@ namespace vclcanvas
                     aStrokedPolyPoly.append(basegfx::tools::createAreaGeometry(
                         aPolyPoly.getB2DPolygon(i),
                         strokeAttributes.StrokeWidth*0.5,
-                        b2DJoineFromJoin(strokeAttributes.JoinType)
-#ifdef FIXME_REMOVE_WHEN_RE_BASE_COMPLETE
-                        ,unoCapeFromCap(strokeAttributes.StartCapType)
-#endif
+                        b2DJoineFromJoin(strokeAttributes.JoinType),
+                        unoCapeFromCap(strokeAttributes.StartCapType)
                         ));
                     //aStrokedPolyPoly.append(
                     //    ::basegfx::tools::createAreaGeometryForPolygon( aPolyPoly.getB2DPolygon(i),

@@ -1,48 +1,34 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*************************************************************************
+/*
+ * This file is part of the LibreOffice project.
  *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * This file incorporates work covered by the following license notice:
  *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
-
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
 
 #include <vcl/outdev.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/graph.hxx>
-
+#include <vcl/metaact.hxx>
 #include <impgraph.hxx>
-
 #include <comphelper/processfactory.hxx>
-
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/graphic/GraphicProvider.hpp>
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
-#include <cppuhelper/typeprovider.hxx>
-#include <rtl/instance.hxx>
 
 using namespace ::com::sun::star;
 
@@ -200,16 +186,6 @@ static void ImplDrawDefault( OutputDevice* pOutDev, const UniString* pText,
 // - Graphic -
 // -----------
 
-namespace {
-
-struct Id: public rtl::Static< cppu::OImplementationId, Id > {};
-
-}
-
-uno::Sequence< sal_Int8 > Graphic::getUnoTunnelId() {
-    return Id::get().getImplementationId();
-}
-
 TYPEINIT1_AUTOFACTORY( Graphic, SvDataCopyStream );
 
 // ------------------------------------------------------------------------
@@ -249,6 +225,13 @@ Graphic::Graphic( const BitmapEx& rBmpEx )
 
 // ------------------------------------------------------------------------
 
+Graphic::Graphic(const SvgDataPtr& rSvgDataPtr)
+{
+    mpImpGraphic = new ImpGraphic(rSvgDataPtr);
+}
+
+// ------------------------------------------------------------------------
+
 Graphic::Graphic( const Animation& rAnimation )
 {
     mpImpGraphic = new ImpGraphic( rAnimation );
@@ -266,8 +249,9 @@ Graphic::Graphic( const GDIMetaFile& rMtf )
 Graphic::Graphic( const ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic >& rxGraphic )
 {
     uno::Reference< lang::XUnoTunnel >      xTunnel( rxGraphic, uno::UNO_QUERY );
-	const ::Graphic* 						pGraphic = ( xTunnel.is() ?
-														 reinterpret_cast< ::Graphic* >( xTunnel->getSomething( getUnoTunnelId() ) ) :
+    uno::Reference< lang::XTypeProvider >   xProv( rxGraphic, uno::UNO_QUERY );
+    const ::Graphic*                        pGraphic = ( ( xTunnel.is() && xProv.is() ) ?
+                                                         reinterpret_cast< ::Graphic* >( xTunnel->getSomething( xProv->getImplementationId() ) ) :
                                                           NULL );
 
     if( pGraphic )
@@ -438,20 +422,6 @@ sal_Bool Graphic::IsEPS() const
 
 // ------------------------------------------------------------------------
 
-sal_Bool Graphic::IsRenderGraphic() const
-{
-    return mpImpGraphic->ImplIsRenderGraphic();
-}
-
-// ------------------------------------------------------------------------
-
-sal_Bool Graphic::HasRenderGraphic() const
-{
-    return mpImpGraphic->ImplHasRenderGraphic();
-}
-
-// ------------------------------------------------------------------------
-
 Bitmap Graphic::GetBitmap(const GraphicConversionParameters& rParameters) const
 {
     return mpImpGraphic->ImplGetBitmap(rParameters);
@@ -476,13 +446,6 @@ Animation Graphic::GetAnimation() const
 const GDIMetaFile& Graphic::GetGDIMetaFile() const
 {
     return mpImpGraphic->ImplGetGDIMetaFile();
-}
-
-// ------------------------------------------------------------------------
-
-::vcl::RenderGraphic Graphic::GetRenderGraphic() const
-{
-    return mpImpGraphic->ImplGetRenderGraphic();
 }
 
 // ------------------------------------------------------------------------
@@ -756,6 +719,13 @@ SvStream& operator>>( SvStream& rIStream, Graphic& rGraphic )
 SvStream& operator<<( SvStream& rOStream, const Graphic& rGraphic )
 {
     return rOStream << *rGraphic.mpImpGraphic;
+}
+
+// ------------------------------------------------------------------------
+
+const SvgDataPtr& Graphic::getSvgData() const
+{
+    return mpImpGraphic->getSvgData();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

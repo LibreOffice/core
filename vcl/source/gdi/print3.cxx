@@ -1,31 +1,21 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*************************************************************************
+/*
+ * This file is part of the LibreOffice project.
  *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * This file incorporates work covered by the following license notice:
  *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
-
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
 
 #include "vcl/print.hxx"
 #include "vcl/svapp.hxx"
@@ -425,6 +415,46 @@ void Printer::ImplPrintJob( const boost::shared_ptr<PrinterController>& i_pContr
         sal_Bool bReverse = sal_False;
         pReverseVal->Value >>= bReverse;
         pController->setReversePrint( bReverse );
+    }
+
+    // setup NUp printing from properties
+    sal_Int32 nRows = i_pController->getIntProperty( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "NUpRows" ) ), 1 );
+    sal_Int32 nCols = i_pController->getIntProperty( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "NUpColumns" ) ), 1 );
+    if( nRows > 1 || nCols > 1 )
+    {
+        PrinterController::MultiPageSetup aMPS;
+        aMPS.nRows         = nRows > 1 ? nRows : 1;
+        aMPS.nColumns      = nCols > 1 ? nCols : 1;
+        sal_Int32 nValue = i_pController->getIntProperty( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "NUpPageMarginLeft" ) ), aMPS.nLeftMargin );
+        if( nValue >= 0 )
+            aMPS.nLeftMargin = nValue;
+        nValue = i_pController->getIntProperty( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "NUpPageMarginRight" ) ), aMPS.nRightMargin );
+        if( nValue >= 0 )
+            aMPS.nRightMargin = nValue;
+        nValue = i_pController->getIntProperty( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "NUpPageMarginTop" ) ), aMPS.nTopMargin );
+        if( nValue >= 0 )
+            aMPS.nTopMargin = nValue;
+        nValue = i_pController->getIntProperty( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "NUpPageMarginBottom" ) ), aMPS.nBottomMargin );
+        if( nValue >= 0 )
+            aMPS.nBottomMargin = nValue;
+        nValue = i_pController->getIntProperty( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "NUpHorizontalSpacing" ) ), aMPS.nHorizontalSpacing );
+        if( nValue >= 0 )
+            aMPS.nHorizontalSpacing = nValue;
+        nValue = i_pController->getIntProperty( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "NUpVerticalSpacing" ) ), aMPS.nVerticalSpacing );
+        if( nValue >= 0 )
+            aMPS.nVerticalSpacing = nValue;
+        aMPS.bDrawBorder = i_pController->getBoolProperty( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "NUpDrawBorder" ) ), aMPS.bDrawBorder );
+        aMPS.nOrder = static_cast<PrinterController::NupOrderType>(i_pController->getIntProperty( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "NUpSubPageOrder" ) ), aMPS.nOrder ));
+        aMPS.aPaperSize = i_pController->getPrinter()->PixelToLogic( i_pController->getPrinter()->GetPaperSizePixel(), MapMode( MAP_100TH_MM ) );
+        beans::PropertyValue* pPgSizeVal = i_pController->getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "NUpPaperSize" ) ) );
+        awt::Size aSizeVal;
+        if( pPgSizeVal && (pPgSizeVal->Value >>= aSizeVal) )
+        {
+            aMPS.aPaperSize.Width() = aSizeVal.Width;
+            aMPS.aPaperSize.Height() = aSizeVal.Height;
+        }
+
+        i_pController->setMultipage( aMPS );
     }
 
     // in direct print case check whether there is anything to print.
@@ -1634,6 +1664,15 @@ sal_Bool PrinterController::getBoolProperty( const rtl::OUString& i_rProperty, s
     if( pVal )
         pVal->Value >>= bRet;
     return bRet;
+}
+
+sal_Int32 PrinterController::getIntProperty( const rtl::OUString& i_rProperty, sal_Int32 i_nFallback ) const
+{
+    sal_Int32 nRet = i_nFallback;
+    const com::sun::star::beans::PropertyValue* pVal = getValue( i_rProperty );
+    if( pVal )
+        pVal->Value >>= nRet;
+    return nRet;
 }
 
 /*

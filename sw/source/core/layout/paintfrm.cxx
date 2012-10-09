@@ -1,31 +1,21 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*************************************************************************
+/*
+ * This file is part of the LibreOffice project.
  *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * This file incorporates work covered by the following license notice:
  *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
-
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
 
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <hintids.hxx>
@@ -93,7 +83,7 @@
 // <--
 
 #include <ndole.hxx>
-#include <svtools/chartprettypainter.hxx>
+#include <svx/charthelper.hxx>
 #include <PostItMgr.hxx>
 #include <vcl/svapp.hxx>
 
@@ -3792,6 +3782,10 @@ sal_Bool SwFlyFrm::IsPaint( SdrObject *pObj, const ViewShell *pSh )
     {
         //The paint may be prevented by the superior Flys.
         SwFrm *pAnch = 0;
+        if ( pObj->ISA(SwFlyDrawObj) ) // i#117962#
+        {
+            bPaint = false;
+        }
         if ( pObj->ISA(SwVirtFlyDrawObj) )
         {
             SwFlyFrm *pFly = ((SwVirtFlyDrawObj*)pObj)->GetFlyFrm();
@@ -3922,7 +3916,7 @@ void SwFlyFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
         if( pNoTNd )
         {
             SwOLENode* pOLENd = const_cast<SwOLENode*>(pNoTNd->GetOLENode());
-            if( pOLENd && ChartPrettyPainter::IsChart( pOLENd->GetOLEObj().GetObject() ) )
+            if( pOLENd && ChartHelper::IsChart( pOLENd->GetOLEObj().GetObject() ) )
                 bIsChart = true;
         }
     }
@@ -7236,7 +7230,7 @@ Graphic SwDrawFrmFmt::MakeGraphic( ImageMap* )
         SdrView *pView = new SdrView( pMod );
         SdrPageView *pPgView = pView->ShowSdrPage(pView->GetModel()->GetPage(0));
         pView->MarkObj( pObj, pPgView );
-        aRet = pView->GetMarkedObjBitmap();
+        aRet = pView->GetMarkedObjBitmapEx();
         pView->HideSdrPage();
         delete pView;
     }

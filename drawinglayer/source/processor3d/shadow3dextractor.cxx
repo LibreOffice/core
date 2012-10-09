@@ -1,30 +1,21 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*************************************************************************
+/*
+ * This file is part of the LibreOffice project.
  *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * This file incorporates work covered by the following license notice:
  *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
 
 #include <drawinglayer/processor3d/shadow3dextractor.hxx>
 #include <drawinglayer/primitive3d/shadowprimitive3d.hxx>
@@ -49,25 +40,6 @@ namespace drawinglayer
 {
     namespace processor3d
     {
-        /// helper to convert from BasePrimitive2DVector to primitive2d::Primitive2DSequence
-        const primitive2d::Primitive2DSequence Shadow3DExtractingProcessor::getPrimitive2DSequenceFromBasePrimitive2DVector(
-            const BasePrimitive2DVector& rVector) const
-        {
-            const sal_uInt32 nCount(rVector.size());
-            primitive2d::Primitive2DSequence aRetval(nCount);
-
-            for(sal_uInt32 a(0); a < nCount; a++)
-            {
-                aRetval[a] = rVector[a];
-            }
-
-            // all entries taken over; no need to delete entries, just reset to
-            // mark as empty
-            const_cast< BasePrimitive2DVector& >(rVector).clear();
-
-            return aRetval;
-        }
-
         // as tooling, the process() implementation takes over API handling and calls this
         // virtual render method when the primitive implementation is BasePrimitive3D-based.
         void Shadow3DExtractingProcessor::processBasePrimitive3D(const primitive3d::BasePrimitive3D& rCandidate)
@@ -81,8 +53,8 @@ namespace drawinglayer
                     const primitive3d::ShadowPrimitive3D& rPrimitive = static_cast< const primitive3d::ShadowPrimitive3D& >(rCandidate);
 
                     // set new target
-                    BasePrimitive2DVector aNewSubList;
-                    BasePrimitive2DVector* pLastTargetSequence = mpPrimitive2DSequence;
+                    primitive2d::Primitive2DVector aNewSubList;
+                    primitive2d::Primitive2DVector* pLastTargetSequence = mpPrimitive2DSequence;
                     mpPrimitive2DSequence = &aNewSubList;
 
                     // activate convert
@@ -106,7 +78,7 @@ namespace drawinglayer
                     primitive2d::BasePrimitive2D* pNew = new primitive2d::ShadowPrimitive2D(
                         rPrimitive.getShadowTransform(),
                         rPrimitive.getShadowColor(),
-                        getPrimitive2DSequenceFromBasePrimitive2DVector(aNewSubList));
+                        primitive2d::Primitive2DVectorToPrimitive2DSequence(aNewSubList));
 
                     if(basegfx::fTools::more(rPrimitive.getShadowTransparence(), 0.0))
                     {
@@ -330,7 +302,7 @@ namespace drawinglayer
 
         const primitive2d::Primitive2DSequence Shadow3DExtractingProcessor::getPrimitive2DSequence() const
         {
-            return getPrimitive2DSequenceFromBasePrimitive2DVector(maPrimitive2DSequence);
+            return Primitive2DVectorToPrimitive2DSequence(maPrimitive2DSequence);
         }
 
     } // end of namespace processor3d

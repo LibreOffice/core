@@ -1,30 +1,21 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*************************************************************************
+/*
+ * This file is part of the LibreOffice project.
  *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * This file incorporates work covered by the following license notice:
  *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
 
 #include <svx/sdr/primitive2d/sdrattributecreator.hxx>
 #include <svl/itemset.hxx>
@@ -35,6 +26,7 @@
 #include <svx/xlntrit.hxx>
 #include <svx/xlnwtit.hxx>
 #include <svx/xlinjoit.hxx>
+#include <svx/xlncapit.hxx>
 #include <svx/xlnclit.hxx>
 #include <svx/xlnstwit.hxx>
 #include <svx/xlnedwit.hxx>
@@ -82,6 +74,7 @@
 #include <drawinglayer/attribute/sdrlightingattribute3d.hxx>
 #include <drawinglayer/attribute/sdrlightattribute3d.hxx>
 #include <svx/sdr/attribute/sdrfilltextattribute.hxx>
+#include <com/sun/star/drawing/LineCap.hpp>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -241,6 +234,7 @@ namespace drawinglayer
                     const sal_uInt32 nWidth(((const XLineWidthItem&)(rSet.Get(XATTR_LINEWIDTH))).GetValue());
                     const Color aColor(((const XLineColorItem&)(rSet.Get(XATTR_LINECOLOR))).GetColorValue());
                     const XLineJoint eJoint(((const XLineJointItem&)(rSet.Get(XATTR_LINEJOINT))).GetValue());
+                    const com::sun::star::drawing::LineCap eCap(((const XLineCapItem&)(rSet.Get(XATTR_LINECAP))).GetValue());
                     ::std::vector< double > aDotDashArray;
                     double fFullDotDashLen(0.0);
 
@@ -259,6 +253,7 @@ namespace drawinglayer
                         (double)nWidth,
                         (double)nTransparence * 0.01,
                         aColor.getBColor(),
+                        eCap,
                         aDotDashArray,
                         fFullDotDashLen);
                 }
@@ -596,7 +591,11 @@ namespace drawinglayer
             // make sure it's not empty, use default instead
             if(aBitmap.IsEmpty())
             {
+                // #i118485# Add PrefMapMode and PrefSize to avoid mini-tiling and
+                // expensive primitive processing in this case. Use 10x10 cm
                 aBitmap = Bitmap(Size(4,4), 8);
+                aBitmap.SetPrefMapMode(MapMode(MAP_100TH_MM));
+                aBitmap.SetPrefSize(Size(10000.0, 10000.0));
             }
 
             // if there is no logical size, create a size from pixel size and set MapMode accordingly

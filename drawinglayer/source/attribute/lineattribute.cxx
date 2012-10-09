@@ -1,30 +1,21 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*************************************************************************
+/*
+ * This file is part of the LibreOffice project.
  *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * This file incorporates work covered by the following license notice:
  *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
 
 #include <drawinglayer/attribute/lineattribute.hxx>
 #include <basegfx/color/bcolor.hxx>
@@ -45,15 +36,18 @@ namespace drawinglayer
             basegfx::BColor                         maColor;                // color
             double                                  mfWidth;                // absolute line width
             basegfx::B2DLineJoin                    meLineJoin;             // type of LineJoin
+            com::sun::star::drawing::LineCap        meLineCap;              // BUTT, ROUND, or SQUARE
 
             ImpLineAttribute(
                 const basegfx::BColor& rColor,
                 double fWidth,
-                basegfx::B2DLineJoin aB2DLineJoin)
+                basegfx::B2DLineJoin aB2DLineJoin,
+                com::sun::star::drawing::LineCap aLineCap)
             :   mnRefCount(0),
                 maColor(rColor),
                 mfWidth(fWidth),
-                meLineJoin(aB2DLineJoin)
+                meLineJoin(aB2DLineJoin),
+                meLineCap(aLineCap)
             {
             }
 
@@ -61,12 +55,14 @@ namespace drawinglayer
             const basegfx::BColor& getColor() const { return maColor; }
             double getWidth() const { return mfWidth; }
             basegfx::B2DLineJoin getLineJoin() const { return meLineJoin; }
+            com::sun::star::drawing::LineCap getLineCap() const { return meLineCap; }
 
             bool operator==(const ImpLineAttribute& rCandidate) const
             {
                 return (getColor() == rCandidate.getColor()
                     && getWidth() == rCandidate.getWidth()
-                    && getLineJoin() == rCandidate.getLineJoin());
+                    && getLineJoin() == rCandidate.getLineJoin()
+                    && getLineCap() == rCandidate.getLineCap());
             }
 
             static ImpLineAttribute* get_global_default()
@@ -78,7 +74,8 @@ namespace drawinglayer
                     pDefault = new ImpLineAttribute(
                         basegfx::BColor(),
                         0.0,
-                        basegfx::B2DLINEJOIN_ROUND);
+                        basegfx::B2DLINEJOIN_ROUND,
+                        com::sun::star::drawing::LineCap_BUTT);
 
                     // never delete; start with RefCount 1, not 0
                     pDefault->mnRefCount++;
@@ -91,9 +88,14 @@ namespace drawinglayer
         LineAttribute::LineAttribute(
             const basegfx::BColor& rColor,
             double fWidth,
-            basegfx::B2DLineJoin aB2DLineJoin)
-        :   mpLineAttribute(new ImpLineAttribute(
-                rColor, fWidth, aB2DLineJoin))
+            basegfx::B2DLineJoin aB2DLineJoin,
+            com::sun::star::drawing::LineCap aLineCap)
+        :   mpLineAttribute(
+                new ImpLineAttribute(
+                    rColor,
+                    fWidth,
+                    aB2DLineJoin,
+                    aLineCap))
         {
         }
 
@@ -174,6 +176,11 @@ namespace drawinglayer
         basegfx::B2DLineJoin LineAttribute::getLineJoin() const
         {
             return mpLineAttribute->getLineJoin();
+        }
+
+        com::sun::star::drawing::LineCap LineAttribute::getLineCap() const
+        {
+            return mpLineAttribute->getLineCap();
         }
 
     } // end of namespace attribute

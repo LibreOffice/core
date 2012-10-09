@@ -10,4 +10,3 @@ needs the proper right within the client.
 
 The component implements a run function, which runs the demo example that is written
 in JScript.
-

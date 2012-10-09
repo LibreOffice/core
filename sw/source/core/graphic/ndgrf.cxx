@@ -1,30 +1,21 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*************************************************************************
+/*
+ * This file is part of the LibreOffice project.
  *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * This file incorporates work covered by the following license notice:
  *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
 
 #include <hintids.hxx>
 #include <tools/helpers.hxx>
@@ -73,6 +64,8 @@ SwGrfNode::SwGrfNode(
         SwGrfFmtColl *pGrfColl,
         SwAttrSet* pAutoAttr ) :
     SwNoTxtNode( rWhere, ND_GRFNODE, pGrfColl, pAutoAttr ),
+    aGrfObj(),
+    mpReplacementGraphic(0),
     // #i73788#
     mbLinkedInputStreamReady( false ),
     mbIsStreamReadOnly( sal_False )
@@ -89,6 +82,8 @@ SwGrfNode::SwGrfNode( const SwNodeIndex & rWhere,
                           const GraphicObject& rGrfObj,
                       SwGrfFmtColl *pGrfColl, SwAttrSet* pAutoAttr ) :
     SwNoTxtNode( rWhere, ND_GRFNODE, pGrfColl, pAutoAttr ),
+    aGrfObj(),
+    mpReplacementGraphic(0),
     // #i73788#
     mbLinkedInputStreamReady( false ),
     mbIsStreamReadOnly( sal_False )
@@ -111,6 +106,8 @@ SwGrfNode::SwGrfNode( const SwNodeIndex & rWhere,
                       SwGrfFmtColl *pGrfColl,
                       SwAttrSet* pAutoAttr ) :
     SwNoTxtNode( rWhere, ND_GRFNODE, pGrfColl, pAutoAttr ),
+    aGrfObj(),
+    mpReplacementGraphic(0),
     // #i73788#
     mbLinkedInputStreamReady( false ),
     mbIsStreamReadOnly( sal_False )
@@ -143,6 +140,8 @@ sal_Bool SwGrfNode::ReRead(
     sal_Bool bNewGrf )
 {
     sal_Bool bReadGrf = sal_False, bSetTwipSize = sal_True;
+    delete mpReplacementGraphic;
+    mpReplacementGraphic = 0;
 
     OSL_ENSURE( pGraphic || pGrfObj || rGrfName.Len(),
             "GraphicNode without a name, Graphic or GraphicObject" );
@@ -307,6 +306,9 @@ sal_Bool SwGrfNode::ReRead(
 
 SwGrfNode::~SwGrfNode()
 {
+    delete mpReplacementGraphic;
+    mpReplacementGraphic = 0;
+
     // #i73788#
     mpThreadConsumer.reset();
 
@@ -337,6 +339,21 @@ SwGrfNode::~SwGrfNode()
         DelFrms();
 }
 
+
+const GraphicObject* SwGrfNode::GetReplacementGrfObj() const
+{
+    if(!mpReplacementGraphic)
+    {
+        const SvgDataPtr& rSvgDataPtr = GetGrfObj().GetGraphic().getSvgData();
+
+        if(rSvgDataPtr.get())
+        {
+            const_cast< SwGrfNode* >(this)->mpReplacementGraphic = new GraphicObject(rSvgDataPtr->getReplacement());
+        }
+    }
+
+    return mpReplacementGraphic;
+}
 
 SwCntntNode *SwGrfNode::SplitCntntNode( const SwPosition & )
 {
@@ -379,16 +396,18 @@ Size SwGrfNode::GetTwipSize() const
     return nGrfSize;
 }
 
-
-
 sal_Bool SwGrfNode::ImportGraphic( SvStream& rStrm )
 {
     Graphic aGraphic;
-    const String aGraphicURL( aGrfObj.GetUserData() );
-    if( !GraphicFilter::GetGraphicFilter().ImportGraphic( aGraphic, aGraphicURL, rStrm ) )
+    const String aURL(aGrfObj.GetUserData());
+
+    if(!GraphicFilter::GetGraphicFilter().ImportGraphic(aGraphic, aURL, rStrm))
     {
+        delete mpReplacementGraphic;
+        mpReplacementGraphic = 0;
+
         aGrfObj.SetGraphic( aGraphic );
-        aGrfObj.SetUserData( aGraphicURL );
+        aGrfObj.SetUserData( aURL );
         return sal_True;
     }
 
@@ -421,6 +440,9 @@ short SwGrfNode::SwapIn( sal_Bool bWaitForData )
             else if( GRAPHIC_DEFAULT == aGrfObj.GetType() )
             {
                 // keine default Bitmap mehr, also neu Painten!
+                delete mpReplacementGraphic;
+                mpReplacementGraphic = 0;
+
                 aGrfObj.SetGraphic( Graphic() );
                 SwMsgPoolItem aMsgHint( RES_GRAPHIC_PIECE_ARRIVED );
                 ModifyNotification( &aMsgHint, &aMsgHint );
@@ -876,8 +898,8 @@ SwCntntNode* SwGrfNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
             SvStream* pStrm = _GetStreamForEmbedGrf( refPics, aStrmName );
             if ( pStrm )
             {
-                const String aGraphicURL( aGrfObj.GetUserData() );
-                GraphicFilter::GetGraphicFilter().ImportGraphic( aTmpGrf, aGraphicURL, *pStrm );
+                const String aURL(aGrfObj.GetUserData());
+                GraphicFilter::GetGraphicFilter().ImportGraphic(aTmpGrf, aURL, *pStrm);
                 delete pStrm;
             }
         }

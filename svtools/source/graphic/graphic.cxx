@@ -1,31 +1,21 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*************************************************************************
+/*
+ * This file is part of the LibreOffice project.
  *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * This file incorporates work covered by the following license notice:
  *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
-
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
 
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
@@ -108,6 +98,19 @@ void SAL_CALL Graphic::acquire()
 void SAL_CALL Graphic::release() throw()
 {
     ::unographic::GraphicDescriptor::release();
+}
+
+// ------------------------------------------------------------------------------
+
+namespace
+{
+    class theGraphicUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theGraphicUnoTunnelId > {};
+}
+
+uno::Sequence< sal_Int8 > SAL_CALL Graphic::getImplementationId_Static()
+    throw(uno::RuntimeException)
+{
+    return theGraphicUnoTunnelId::get().getSeq();
 }
 
 // ------------------------------------------------------------------------------
@@ -195,7 +198,7 @@ uno::Sequence< uno::Type > SAL_CALL Graphic::getTypes()
 uno::Sequence< sal_Int8 > SAL_CALL Graphic::getImplementationId()
     throw(uno::RuntimeException)
 {
-    return uno::Sequence< sal_Int8 >();
+    return getImplementationId_Static();
 }
 
 // ------------------------------------------------------------------------------
@@ -267,14 +270,14 @@ const ::Graphic* Graphic::getImplementation( const uno::Reference< uno::XInterfa
     throw()
 {
     uno::Reference< lang::XUnoTunnel > xTunnel( rxIFace, uno::UNO_QUERY );
-	return( xTunnel.is() ? reinterpret_cast< ::Graphic* >( xTunnel->getSomething( ::Graphic::getUnoTunnelId() ) ) : NULL );
+    return( xTunnel.is() ? reinterpret_cast< ::Graphic* >( xTunnel->getSomething( getImplementationId_Static() ) ) : NULL );
 }
 
 //----------------------------------------------------------------------
 sal_Int64 SAL_CALL Graphic::getSomething( const uno::Sequence< sal_Int8 >& rId )
     throw( uno::RuntimeException )
 {
-    return( ( rId.getLength() == 16 && 0 == memcmp( ::Graphic::getUnoTunnelId().getConstArray(), rId.getConstArray(), 16 ) ) ?
+    return( ( rId.getLength() == 16 && 0 == rtl_compareMemory( getImplementationId().getConstArray(), rId.getConstArray(), 16 ) ) ?
             reinterpret_cast< sal_Int64 >( mpGraphic ) :
             0 );
 }

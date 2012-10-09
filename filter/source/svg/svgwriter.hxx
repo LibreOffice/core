@@ -1,30 +1,21 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*************************************************************************
+/*
+ * This file is part of the LibreOffice project.
  *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * This file incorporates work covered by the following license notice:
  *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
 
 #ifndef SVGWRITER_HXX
 #define SVGWRITER_HXX
@@ -40,7 +31,6 @@
 #include <vcl/virdev.hxx>
 #include <vcl/cvtgrf.hxx>
 #include <vcl/graphictools.hxx>
-#include <vcl/rendergraphicrasterizer.hxx>
 #include <xmloff/xmlexp.hxx>
 #include <xmloff/nmspmap.hxx>
 
@@ -98,7 +88,6 @@ using namespace ::com::sun::star::style;
 #define SVGWRITER_WRITE_FILL    0x00000001
 #define SVGWRITER_WRITE_TEXT    0x00000002
 #define SVGWRITER_NO_SHAPE_COMMENTS 0x01000000
-#define SVGWRITER_WRITE_ALL     0xFFFFFFFF
 
 // ----------------------
 // - SVGAttributeWriter -
@@ -120,6 +109,9 @@ private:
     SvXMLElementExport*        mpElemFont;
     SvXMLElementExport*        mpElemPaint;
 
+    basegfx::B2DLineJoin maLineJoin;
+    com::sun::star::drawing::LineCap maLineCap;
+
                             SVGAttributeWriter();
 
     double                  ImplRound( double fVal, sal_Int32 nDecs = 3 );
@@ -129,8 +121,6 @@ public:
                             SVGAttributeWriter( SVGExport& rExport, SVGFontExport& rFontExport );
     virtual                 ~SVGAttributeWriter();
 
-    ::rtl::OUString         GetFontStyle( const Font& rFont );
-    ::rtl::OUString         GetPaintStyle( const Color& rLineColor, const Color& rFillColor, const LineInfo* pLineInfo );
     void                    AddColorAttr( const char* pColorAttrName, const char* pColorOpacityAttrName, const Color& rColor );
     void                    AddGradientDef( const Rectangle& rObjRect,const Gradient& rGradient, ::rtl::OUString& rGradientId );
     void                    AddPaintAttr( const Color& rLineColor, const Color& rFillColor,
@@ -154,12 +144,17 @@ struct SVGShapeDescriptor
     ::std::auto_ptr< Gradient > mapShapeGradient;
     ::rtl::OUString             maId;
 
+    basegfx::B2DLineJoin                maLineJoin;
+    com::sun::star::drawing::LineCap    maLineCap;
+
     // -------------------------------------------------------------------------
 
     SVGShapeDescriptor() :
         maShapeFillColor( Color( COL_TRANSPARENT ) ),
         maShapeLineColor( Color( COL_TRANSPARENT ) ),
-        mnStrokeWidth( 0 )
+        mnStrokeWidth( 0 ),
+        maLineJoin(basegfx::B2DLINEJOIN_MITER), // miter is Svg 'stroke-linejoin' default
+        maLineCap(com::sun::star::drawing::LineCap_BUTT) // butt is Svg 'stroke-linecap' default
     {
     }
 };

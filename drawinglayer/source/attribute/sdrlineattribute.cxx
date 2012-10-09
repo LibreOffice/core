@@ -1,32 +1,21 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*************************************************************************
+/*
+ * This file is part of the LibreOffice project.
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * This file incorporates work covered by the following license notice:
  *
- *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
- *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
- *
- ************************************************************************/
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
 
 #include <drawinglayer/attribute/sdrlineattribute.hxx>
 #include <basegfx/color/bcolor.hxx>
@@ -48,6 +37,7 @@ namespace drawinglayer
             double                                  mfWidth;            // 1/100th mm, 0.0==hair
             double                                  mfTransparence;     // [0.0 .. 1.0], 0.0==no transp.
             basegfx::BColor                         maColor;            // color of line
+            com::sun::star::drawing::LineCap        meCap;              // BUTT, ROUND, or SQUARE
             ::std::vector< double >                 maDotDashArray;     // array of double which defines the dot-dash pattern
             double                                  mfFullDotDashLen;   // sum of maDotDashArray (for convenience)
 
@@ -56,6 +46,7 @@ namespace drawinglayer
                 double fWidth,
                 double fTransparence,
                 const basegfx::BColor& rColor,
+                com::sun::star::drawing::LineCap eCap,
                 const ::std::vector< double >& rDotDashArray,
                 double fFullDotDashLen)
             :   mnRefCount(0),
@@ -63,6 +54,7 @@ namespace drawinglayer
                 mfWidth(fWidth),
                 mfTransparence(fTransparence),
                 maColor(rColor),
+                meCap(eCap),
                 maDotDashArray(rDotDashArray),
                 mfFullDotDashLen(fFullDotDashLen)
             {
@@ -74,6 +66,7 @@ namespace drawinglayer
                 mfWidth(0.0),
                 mfTransparence(0.0),
                 maColor(rColor),
+                meCap(com::sun::star::drawing::LineCap_BUTT),
                 maDotDashArray(),
                 mfFullDotDashLen(0.0)
             {
@@ -84,6 +77,7 @@ namespace drawinglayer
             double getWidth() const { return mfWidth; }
             double getTransparence() const { return mfTransparence; }
             const basegfx::BColor& getColor() const { return maColor; }
+            com::sun::star::drawing::LineCap getCap() const { return meCap; }
             const ::std::vector< double >& getDotDashArray() const { return maDotDashArray; }
             double getFullDotDashLen() const { return mfFullDotDashLen; }
 
@@ -93,6 +87,7 @@ namespace drawinglayer
                     && getWidth() == rCandidate.getWidth()
                     && getTransparence() == rCandidate.getTransparence()
                     && getColor() == rCandidate.getColor()
+                    && getCap() == rCandidate.getCap()
                     && getDotDashArray() == rCandidate.getDotDashArray());
             }
 
@@ -107,6 +102,7 @@ namespace drawinglayer
                         0.0,
                         0.0,
                         basegfx::BColor(),
+                        com::sun::star::drawing::LineCap_BUTT,
                         std::vector< double >(),
                         0.0);
 
@@ -123,10 +119,19 @@ namespace drawinglayer
             double fWidth,
             double fTransparence,
             const basegfx::BColor& rColor,
+            com::sun::star::drawing::LineCap eCap,
             const ::std::vector< double >& rDotDashArray,
             double fFullDotDashLen)
-        :   mpSdrLineAttribute(new ImpSdrLineAttribute(
-                eJoin, fWidth, fTransparence, rColor, rDotDashArray, fFullDotDashLen))
+        :   mpSdrLineAttribute(
+                new ImpSdrLineAttribute(
+                    eJoin,
+                    fWidth,
+                    fTransparence,
+                    rColor,
+                    eCap,
+                    rDotDashArray,
+                    fFullDotDashLen))
+
         {
         }
 
@@ -222,6 +227,11 @@ namespace drawinglayer
         double SdrLineAttribute::getFullDotDashLen() const
         {
             return mpSdrLineAttribute->getFullDotDashLen();
+        }
+
+        com::sun::star::drawing::LineCap SdrLineAttribute::getCap() const
+        {
+            return mpSdrLineAttribute->getCap();
         }
 
     } // end of namespace attribute

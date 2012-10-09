@@ -1,30 +1,21 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*************************************************************************
+/*
+ * This file is part of the LibreOffice project.
  *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * This file incorporates work covered by the following license notice:
  *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
 
 #ifndef _SV_OUTDEV_HXX
 #define _SV_OUTDEV_HXX
@@ -45,7 +36,8 @@
 #include <basegfx/vector/b2enums.hxx>
 #include <com/sun/star/uno/Reference.h>
 #include <unotools/fontdefs.hxx>
-
+#include <basegfx/polygon/b2dpolypolygon.hxx>
+#include <com/sun/star/drawing/LineCap.hpp>
 #include <vector>
 
 struct ImplOutDevData;
@@ -91,7 +83,6 @@ namespace basegfx {
     class B2DHomMatrix;
     class B2DPolygon;
     class B2DPolyPolygon;
-    typedef ::std::vector< B2DPolyPolygon > B2DPolyPolygonVector;
 }
 
 namespace com {
@@ -109,7 +100,6 @@ namespace vcl
     class ExtOutDevData;
     class ITextLayout;
     struct FontCapabilities;
-    class RenderGraphic;
 }
 
 // ---------------------
@@ -541,7 +531,11 @@ public:
 
     // #i101491#
     // Helper who tries to use SalGDI's DrawPolyLine direct and returns it's bool. Contains no AA check.
-    SAL_DLLPRIVATE bool ImpTryDrawPolyLineDirect(const basegfx::B2DPolygon& rB2DPolygon, double fLineWidth, basegfx::B2DLineJoin eLineJoin);
+    SAL_DLLPRIVATE bool ImpTryDrawPolyLineDirect(
+        const basegfx::B2DPolygon& rB2DPolygon,
+        double fLineWidth = 0.0,
+        basegfx::B2DLineJoin eLineJoin = basegfx::B2DLINEJOIN_NONE,
+        com::sun::star::drawing::LineCap eLineCap = com::sun::star::drawing::LineCap_BUTT);
 
     // Helper for line geometry paint with support for graphic expansion (pattern and fat_to_area)
     void impPaintLineGeometryWithEvtlExpand(const LineInfo& rInfo, basegfx::B2DPolyPolygon aLinePolyPolygon);
@@ -675,7 +669,11 @@ public:
         @see DrawPolyPolygon
      */
     void                DrawPolyLine( const Polygon& rPoly );
-    void                DrawPolyLine( const basegfx::B2DPolygon&, double fLineWidth = 0.0, basegfx::B2DLineJoin = basegfx::B2DLINEJOIN_ROUND );
+    void DrawPolyLine(
+        const basegfx::B2DPolygon&,
+        double fLineWidth = 0.0,
+        basegfx::B2DLineJoin = basegfx::B2DLINEJOIN_ROUND,
+        com::sun::star::drawing::LineCap = com::sun::star::drawing::LineCap_BUTT);
 
     /** Render the given polygon as a line stroke
 
@@ -799,9 +797,6 @@ public:
         that's too much for now, wrote #i107046# for this */
     bool                DrawEPS( const Point& rPt, const Size& rSz,
                                  const GfxLink& rGfxLink, GDIMetaFile* pSubst = NULL );
-
-    void                DrawRenderGraphic( const Point& rPt, const Size& rSz,
-                                           const ::vcl::RenderGraphic& rRenderGraphic );
 
     Color               GetPixel( const Point& rPt ) const;
 

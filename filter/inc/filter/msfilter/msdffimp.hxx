@@ -1,30 +1,21 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*************************************************************************
+/*
+ * This file is part of the LibreOffice project.
  *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * This file incorporates work covered by the following license notice:
  *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
 
 #ifndef FLT_MSDFFIMP_HXX
 #define FLT_MSDFFIMP_HXX
@@ -53,9 +44,10 @@
 #include <vcl/graph.hxx>
 
 #include <svx/msdffdef.hxx>
+#include <filter/msfilter/dffpropset.hxx>
+#include <filter/msfilter/dffrecordheader.hxx>
 
 #include <filter/msfilter/msfilterdllapi.h>
-
 
 class Graphic;
 class SvStream;
@@ -66,91 +58,13 @@ class Polygon;
 class PolyPolygon;
 class FmFormModel;
 class SdrModel;
-class DffRecordHeader;
 class SwFlyFrmFmt;
 
 struct SvxMSDffBLIPInfo;
 struct SvxMSDffShapeInfo;
 struct SvxMSDffShapeOrder;
 
-class MSFILTER_DLLPUBLIC DffRecordHeader
-{
-public:
-    sal_uInt8   nRecVer; // may be DFF_PSFLAG_CONTAINER
-    sal_uInt16  nRecInstance;
-    sal_uInt16  nImpVerInst;
-    sal_uInt16  nRecType;
-    sal_uInt32  nRecLen;
-    sal_uLong   nFilePos;
-
-    DffRecordHeader() : nRecVer(0), nRecInstance(0), nImpVerInst(0),
-                        nRecType(0), nRecLen(0), nFilePos(0) {}
-    bool        IsContainer() const { return nRecVer == DFF_PSFLAG_CONTAINER; }
-    sal_uLong   GetRecBegFilePos() const { return nFilePos; }
-    sal_uLong   GetRecEndFilePos() const
-        { return nFilePos + DFF_COMMON_RECORD_HEADER_SIZE + nRecLen; }
-    bool SeekToEndOfRecord(SvStream& rIn) const
-    {
-        sal_Size nPos = nFilePos + DFF_COMMON_RECORD_HEADER_SIZE + nRecLen;
-        return nPos == rIn.Seek(nPos);
-    }
-    bool SeekToContent(SvStream& rIn) const
-    {
-        sal_Size nPos = nFilePos + DFF_COMMON_RECORD_HEADER_SIZE;
-        return nPos == rIn.Seek(nPos);
-    }
-    bool SeekToBegOfRecord(SvStream& rIn) const
-    {
-        return nFilePos == rIn.Seek(nFilePos);
-    }
-
-    MSFILTER_DLLPUBLIC friend SvStream& operator>>(SvStream& rIn, DffRecordHeader& rRec);
-};
-
-struct DffPropFlags
-{
-    sal_uInt8   bSet        : 1;
-    sal_uInt8   bComplex    : 1;
-    sal_uInt8   bBlip       : 1;
-    sal_uInt8   bSoftAttr   : 1;
-};
-
 class SvxMSDffManager;
-
-class MSFILTER_DLLPUBLIC DffPropSet
-{
-private:
-    void InitializeProp(sal_uInt32 nKey, sal_uInt32 nContent,
-            DffPropFlags& rFlags, sal_uInt32 nRecordType) const;
-
-protected:
-    typedef std::map<sal_uInt32, sal_uInt32> RecordTypesMap;
-
-    RecordTypesMap  maRecordTypes;
-    sal_uInt32      mpContents[ 1024 ];
-    DffPropFlags    mpFlags[ 1024 ];
-
-public:
-    explicit DffPropSet( sal_Bool bInitialize = sal_False )
-    {
-        if ( bInitialize )
-            memset( mpFlags, 0, 0x400 * sizeof( DffPropFlags ) );
-    };
-
-    inline sal_Bool IsProperty( sal_uInt32 nRecType ) const
-        { return ( mpFlags[ nRecType & 0x3ff ].bSet ); };
-    sal_Bool        IsHardAttribute( sal_uInt32 nId ) const;
-    sal_uInt32      GetPropertyValue( sal_uInt32 nId, sal_uInt32 nDefault = 0 ) const;
-    /** Returns a boolean property by its real identifier. */
-    bool            GetPropertyBool( sal_uInt32 nId, bool bDefault = false ) const;
-    /** Returns a string property. */
-    ::rtl::OUString GetPropertyString( sal_uInt32 nId, SvStream& rStrm ) const;
-    sal_Bool        SeekToContent( sal_uInt32 nRecType, SvStream& rSt ) const;
-    void            Merge( DffPropSet& rMasterPropSet ) const;
-    void            InitializePropSet() const;
-    friend SvStream& operator>>( SvStream& rIn, DffPropSet& rPropSet );
-};
-
 class SfxItemSet;
 class SdrObject;
 struct DffObjData;
@@ -161,6 +75,7 @@ class MSFILTER_DLLPUBLIC DffPropertyReader : public DffPropSet
     DffPropSet*             pDefaultPropSet;
 
     void ApplyCustomShapeTextAttributes( SfxItemSet& rSet ) const;
+    void CheckAndCorrectExcelTextRotation( SvStream& rIn, SfxItemSet& rSet, DffObjData& rObjData ) const;
     void ApplyCustomShapeAdjustmentAttributes( SfxItemSet& rSet ) const;
     void ApplyCustomShapeGeometryAttributes( SvStream& rIn,
                                              SfxItemSet& rSet,
@@ -182,7 +97,7 @@ public:
 
     void SetDefaultPropSet( SvStream& rIn, sal_uInt32 nOffDgg ) const;
     void ApplyAttributes( SvStream& rIn, SfxItemSet& rSet ) const;
-    void ApplyAttributes( SvStream& rIn, SfxItemSet& rSet, const DffObjData& rObjData ) const;
+    void ApplyAttributes( SvStream& rIn, SfxItemSet& rSet, DffObjData& rObjData ) const;
 };
 
 #define COL_DEFAULT RGB_COLORDATA( 0xFA, 0xFB, 0xFC )
@@ -394,7 +309,9 @@ struct DffObjData
     sal_Bool bClientData    : 1;
     sal_Bool bChildAnchor   : 1;
     sal_Bool bOpt           : 1;
+    sal_Bool bOpt2          : 1;
     sal_Bool bIsAutoText    : 1;
+    sal_Bool bRotateTextWithShape : 1;
 
     int nCalledByGroup;
 
@@ -411,7 +328,9 @@ struct DffObjData
         bClientData( sal_False ),
         bChildAnchor( sal_False ),
         bOpt( sal_False ),
+        bOpt2( sal_False ),
         bIsAutoText( sal_False ),
+        bRotateTextWithShape( sal_True ),
         nCalledByGroup( nClByGroup ){}
 };
 
@@ -600,6 +519,7 @@ protected :
     virtual sal_Bool ShapeHasText(sal_uLong nShapeId, sal_uLong nFilePos) const;
 
 public:
+    DffPropertyReader* pSecPropSet;
     std::map<sal_uInt32,rtl::OString> aEscherBlipCache;
 
     DffRecordManager    maShapeRecords;
@@ -685,9 +605,6 @@ public:
                                        sal_uInt32 nLen,
                                        const GDIMetaFile*,
                                        const SotStorageRef & rDest );
-    static rtl::OUString ReadDffString( SvStream& rSt,
-                                        DffRecordHeader aStrHd = DffRecordHeader());
-    static bool ReadObjText(SvStream& rSt, SdrObject* pObj);
 
     void SetModel(SdrModel* pModel, long nApplicationScale);
     SdrModel*  GetModel() const { return pSdrModel; }

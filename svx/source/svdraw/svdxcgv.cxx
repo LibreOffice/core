@@ -1,31 +1,21 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*************************************************************************
+/*
+ * This file is part of the LibreOffice project.
  *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * This file incorporates work covered by the following license notice:
  *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
-
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
 
 #include <vector>
 #include <editeng/editeng.hxx>
@@ -454,24 +444,38 @@ void SdrExchangeView::ImpPasteObject(SdrObject* pObj, SdrObjList& rLst, const Po
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-Bitmap SdrExchangeView::GetMarkedObjBitmap( sal_Bool bNoVDevIfOneBmpMarked ) const
+BitmapEx SdrExchangeView::GetMarkedObjBitmapEx(bool bNoVDevIfOneBmpMarked) const
 {
-    Bitmap aBmp;
+    BitmapEx aBmp;
 
     if( AreObjectsMarked() )
     {
-        if( bNoVDevIfOneBmpMarked )
+        if(1 == GetMarkedObjectCount())
         {
-            SdrObject*  pGrafObjTmp = GetMarkedObjectByIndex( 0 );
-            SdrGrafObj* pGrafObj = ( GetMarkedObjectCount() == 1 ) ? PTR_CAST( SdrGrafObj, pGrafObjTmp ) : NULL;
+            if(bNoVDevIfOneBmpMarked)
+            {
+                SdrObject*  pGrafObjTmp = GetMarkedObjectByIndex( 0 );
+                SdrGrafObj* pGrafObj = ( GetMarkedObjectCount() == 1 ) ? PTR_CAST( SdrGrafObj, pGrafObjTmp ) : NULL;
 
-            if( pGrafObj && ( pGrafObj->GetGraphicType() == GRAPHIC_BITMAP ) )
-                aBmp = pGrafObj->GetTransformedGraphic().GetBitmap();
+                if( pGrafObj && ( pGrafObj->GetGraphicType() == GRAPHIC_BITMAP ) )
+                {
+                    aBmp = pGrafObj->GetTransformedGraphic().GetBitmapEx();
+                }
+            }
+            else
+            {
+                const SdrGrafObj* pSdrGrafObj = dynamic_cast< const SdrGrafObj* >(GetMarkedObjectByIndex(0));
+
+                if(pSdrGrafObj && pSdrGrafObj->isEmbeddedSvg())
+                {
+                    aBmp = pSdrGrafObj->GetGraphic().getSvgData()->getReplacement();
+                }
+            }
         }
 
         if( !aBmp )
         {
-            const Graphic aGraphic( GetMarkedObjMetaFile( bNoVDevIfOneBmpMarked ) );
+            const Graphic aGraphic(GetMarkedObjMetaFile(bNoVDevIfOneBmpMarked));
 
             // #i102089# support user's settings of AA and LineSnap when the MetaFile gets
             // raster-converted to a bitmap
@@ -482,7 +486,7 @@ Bitmap SdrExchangeView::GetMarkedObjBitmap( sal_Bool bNoVDevIfOneBmpMarked ) con
                 aDrawinglayerOpt.IsAntiAliasing(),
                 aDrawinglayerOpt.IsSnapHorVerLinesToDiscrete());
 
-            aBmp = aGraphic.GetBitmap(aParameters);
+            aBmp = aGraphic.GetBitmapEx(aParameters);
         }
     }
 
@@ -491,7 +495,7 @@ Bitmap SdrExchangeView::GetMarkedObjBitmap( sal_Bool bNoVDevIfOneBmpMarked ) con
 
 // -----------------------------------------------------------------------------
 
-GDIMetaFile SdrExchangeView::GetMarkedObjMetaFile( sal_Bool bNoVDevIfOneMtfMarked ) const
+GDIMetaFile SdrExchangeView::GetMarkedObjMetaFile(bool bNoVDevIfOneMtfMarked) const
 {
     GDIMetaFile aMtf;
 
@@ -570,7 +574,7 @@ Graphic SdrExchangeView::GetAllMarkedGraphic() const
         if( ( 1 == GetMarkedObjectCount() ) && GetSdrMarkByIndex( 0 ) )
             aRet = SdrExchangeView::GetObjGraphic( pMod, GetMarkedObjectByIndex( 0 ) );
         else
-            aRet = GetMarkedObjMetaFile( sal_False );
+            aRet = GetMarkedObjMetaFile(false);
     }
 
     return aRet;
@@ -590,10 +594,18 @@ Graphic SdrExchangeView::GetObjGraphic( const SdrModel* pModel, const SdrObject*
 
         if(pSdrGrafObj)
         {
-            // Make behaviour coherent with metafile
-            // recording below (which of course also takes
-            // view-transformed objects)
-            aRet = pSdrGrafObj->GetTransformedGraphic();
+            if(pSdrGrafObj->isEmbeddedSvg())
+            {
+                // get Metafile for Svg content
+                aRet = pSdrGrafObj->getMetafileFromEmbeddedSvg();
+            }
+            else
+            {
+                // Make behaviour coherent with metafile
+                // recording below (which of course also takes
+                // view-transformed objects)
+                aRet = pSdrGrafObj->GetTransformedGraphic();
+            }
         }
         else if(pSdrOle2Obj)
         {

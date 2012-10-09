@@ -1,30 +1,21 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*************************************************************************
+/*
+ * This file is part of the LibreOffice project.
  *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * This file incorporates work covered by the following license notice:
  *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
 
 #ifndef _SV_METAACT_HXX
 #define _SV_METAACT_HXX
@@ -43,7 +34,6 @@
 #include <vcl/gdimtf.hxx>
 #include <vcl/gfxlink.hxx>
 #include <vcl/lineinfo.hxx>
-#include <vcl/rendergraphic.hxx>
 
 class SvStream;
 
@@ -104,7 +94,6 @@ class SvStream;
 #define META_LAYOUTMODE_ACTION              (149)
 #define META_TEXTLANGUAGE_ACTION            (150)
 #define META_OVERLINECOLOR_ACTION           (151)
-#define META_RENDERGRAPHIC_ACTION           (152)
 
 #define META_COMMENT_ACTION                 (512)
 
@@ -125,11 +114,9 @@ struct ImplMetaReadData
 struct ImplMetaWriteData
 {
     rtl_TextEncoding        meActualCharSet;
-    GDIMetaFileWriteFlags   mnWriteFlags;
 
                             ImplMetaWriteData() :
-                                meActualCharSet( RTL_TEXTENCODING_ASCII_US ),
-                                mnWriteFlags( GDIMETAFILE_WRITE_DEFAULT )
+                                meActualCharSet( RTL_TEXTENCODING_ASCII_US )
                             {
                             }
 };
@@ -1551,43 +1538,6 @@ public:
                         MetaTextLanguageAction( LanguageType );
 
     LanguageType        GetTextLanguage() const { return meTextLanguage; }
-};
-
-// ---------------------------
-// - MetaRenderGraphicAction -
-// ---------------------------
-
-class VCL_DLLPUBLIC MetaRenderGraphicAction : public MetaAction
-{
-private:
-
-    ::vcl::RenderGraphic        maRenderGraphic;
-    Point                       maPoint;
-    Size                        maSize;
-    double                      mfRotateAngle;
-    double                      mfShearAngleX;
-    double                      mfShearAngleY;
-
-    virtual sal_Bool            Compare( const MetaAction& ) const;
-
-public:
-                                DECL_META_ACTION( RenderGraphic, META_RENDERGRAPHIC_ACTION )
-
-                                MetaRenderGraphicAction( const Point& rPoint, const Size& rSize,
-                                                         const vcl::RenderGraphic& rRenderData,
-                                                         double fRotateAngle = 0.0,
-                                                         double fShearAngleX = 0.0,
-                                                         double fShearAngleY = 0.0 );
-
-    virtual void                Move( long nHorzMove, long nVertMove );
-    virtual void                Scale( double fScaleX, double fScaleY );
-
-    const ::vcl::RenderGraphic& GetRenderGraphic() const { return maRenderGraphic; }
-    const Point&                GetPoint() const { return maPoint; }
-    const Size&                 GetSize() const { return maSize; }
-    double                      GetRotateAngle() const { return mfRotateAngle; }
-    double                      GetShearAngleX() const { return mfShearAngleX; }
-    double                      GetShearAngleY() const { return mfShearAngleY; }
 };
 
 #endif // _SV_METAACT_HXX

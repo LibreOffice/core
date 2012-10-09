@@ -1,30 +1,21 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*************************************************************************
+/*
+ * This file is part of the LibreOffice project.
  *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * This file incorporates work covered by the following license notice:
  *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
 
 #include <tools/debug.hxx>
 #include <com/sun/star/document/XEventsSupplier.hpp>
@@ -83,6 +74,7 @@
 #include "xmloff/xmlerror.hxx"
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <com/sun/star/drawing/XEnhancedCustomShapeDefaulter.hpp>
+#include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
 
 using ::rtl::OUString;
@@ -2704,6 +2696,30 @@ void SdXMLObjectShapeContext::StartElement( const ::com::sun::star::uno::Referen
 
 void SdXMLObjectShapeContext::EndElement()
 {
+    // #i67705#
+    const sal_uInt16 nGeneratorVersion(GetImport().getGeneratorVersion());
+
+#ifdef FIXME_REMOVE_WHEN_RE_BASE_COMPLETE
+    if(nGeneratorVersion < SvXMLImport::OOo_34x)
+#else
+    if(nGeneratorVersion < SvXMLImport::OOo_Current)
+#endif
+    {
+        // #i118485#
+        // If it's an old file from us written before OOo3.4, we need to correct
+        // FillStyle and LineStyle for OLE2 objects. The error was that the old paint
+        // implementations just ignored added fill/linestyles completely, thus
+        // those objects need to be corrected to not show blue and hairline which
+        // always was the default, but would be shown now
+        uno::Reference< beans::XPropertySet > xProps(mxShape, uno::UNO_QUERY);
+
+        if( xProps.is() )
+        {
+            xProps->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FillStyle")), uno::makeAny(drawing::FillStyle_NONE));
+            xProps->setPropertyValue(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("LineStyle")), uno::makeAny(drawing::LineStyle_NONE));
+        }
+    }
+
     // #100592#
     if( mxBase64Stream.is() )
     {
@@ -3337,7 +3353,10 @@ SdXMLFrameShapeContext::SdXMLFrameShapeContext( SvXMLImport& rImport, sal_uInt16
         com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes,
         sal_Bool bTemporaryShape)
 : SdXMLShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes, bTemporaryShape ),
-    mbSupportsReplacement( sal_False )
+    multiImageImportHelper(),
+    mbSupportsReplacement( sal_False ),
+    mxImplContext(),
+    mxReplImplContext()
 {
     uno::Reference < util::XCloneable > xClone( xAttrList, uno::UNO_QUERY );
     if( xClone.is() )
@@ -3349,6 +3368,73 @@ SdXMLFrameShapeContext::SdXMLFrameShapeContext( SvXMLImport& rImport, sal_uInt16
 
 SdXMLFrameShapeContext::~SdXMLFrameShapeContext()
 {
+}
+
+void SdXMLFrameShapeContext::removeGraphicFromImportContext(const SvXMLImportContext& rContext) const
+{
+    const SdXMLGraphicObjectShapeContext* pSdXMLGraphicObjectShapeContext = dynamic_cast< const SdXMLGraphicObjectShapeContext* >(&rContext);
+
+    if(pSdXMLGraphicObjectShapeContext)
+    {
+        try
+        {
+            uno::Reference< container::XChild > xChild(pSdXMLGraphicObjectShapeContext->getShape(), uno::UNO_QUERY_THROW);
+
+            if(xChild.is())
+            {
+                uno::Reference< drawing::XShapes > xParent(xChild->getParent(), uno::UNO_QUERY_THROW);
+
+                if(xParent.is())
+                {
+                    // remove from parent
+                    xParent->remove(pSdXMLGraphicObjectShapeContext->getShape());
+
+                    // dispose
+                    uno::Reference< lang::XComponent > xComp(pSdXMLGraphicObjectShapeContext->getShape(), UNO_QUERY);
+
+                    if(xComp.is())
+                    {
+                        xComp->dispose();
+                    }
+                }
+            }
+        }
+        catch( uno::Exception& )
+        {
+            OSL_FAIL( "Error in cleanup of multiple graphic object import (!)" );
+        }
+    }
+}
+
+rtl::OUString SdXMLFrameShapeContext::getGraphicURLFromImportContext(const SvXMLImportContext& rContext) const
+{
+    rtl::OUString aRetval;
+    const SdXMLGraphicObjectShapeContext* pSdXMLGraphicObjectShapeContext = dynamic_cast< const SdXMLGraphicObjectShapeContext* >(&rContext);
+
+    if(pSdXMLGraphicObjectShapeContext)
+    {
+        try
+        {
+            const uno::Reference< beans::XPropertySet > xPropSet(pSdXMLGraphicObjectShapeContext->getShape(), uno::UNO_QUERY_THROW);
+
+            if(xPropSet.is())
+            {
+                xPropSet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("GraphicStreamURL"))) >>= aRetval;
+
+                if(!aRetval.getLength())
+                {
+                    // it maybe a link, try GraphicURL
+                    xPropSet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("GraphicURL"))) >>= aRetval;
+                }
+            }
+        }
+        catch( uno::Exception& )
+        {
+            OSL_FAIL( "Error in cleanup of multiple graphic object import (!)" );
+        }
+    }
+
+    return aRetval;
 }
 
 SvXMLImportContext *SdXMLFrameShapeContext::CreateChildContext( sal_uInt16 nPrefix,
@@ -3370,8 +3456,25 @@ SvXMLImportContext *SdXMLFrameShapeContext::CreateChildContext( sal_uInt16 nPref
             pShapeContext->setHyperlink( msHyperlink );
 
         mxImplContext = pContext;
-        mbSupportsReplacement = IsXMLToken( rLocalName, XML_OBJECT ) ||
-                                IsXMLToken( rLocalName, XML_OBJECT_OLE );
+        mbSupportsReplacement = IsXMLToken(rLocalName, XML_OBJECT ) || IsXMLToken(rLocalName, XML_OBJECT_OLE);
+        setSupportsMultipleContents(IsXMLToken(rLocalName, XML_IMAGE));
+
+        if(getSupportsMultipleContents() && dynamic_cast< SdXMLGraphicObjectShapeContext* >(pContext))
+        {
+            addContent(*mxImplContext);
+        }
+    }
+    else if(getSupportsMultipleContents() && XML_NAMESPACE_DRAW == nPrefix && IsXMLToken(rLocalName, XML_IMAGE))
+    {
+        // read another image
+        pContext = GetImport().GetShapeImport()->CreateFrameChildContext(
+            GetImport(), nPrefix, rLocalName, xAttrList, mxShapes, mxAttrList);
+        mxImplContext = pContext;
+
+        if(dynamic_cast< SdXMLGraphicObjectShapeContext* >(pContext))
+        {
+            addContent(*mxImplContext);
+        }
     }
     else if( mbSupportsReplacement && !mxReplImplContext &&
              XML_NAMESPACE_DRAW == nPrefix &&
@@ -3431,6 +3534,9 @@ void SdXMLFrameShapeContext::StartElement(const uno::Reference< xml::sax::XAttri
 
 void SdXMLFrameShapeContext::EndElement()
 {
+    /// solve if multiple image child contexts were imported
+    solveMultipleImages();
+
     if( !mxImplContext.Is() )
     {
         // now check if this is an empty presentation object

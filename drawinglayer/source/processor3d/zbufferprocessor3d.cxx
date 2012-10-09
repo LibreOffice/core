@@ -1,30 +1,21 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*************************************************************************
+/*
+ * This file is part of the LibreOffice project.
  *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * This file incorporates work covered by the following license notice:
  *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
 
 #include <drawinglayer/processor3d/zbufferprocessor3d.hxx>
 #include <basegfx/raster/bpixelraster.hxx>
@@ -59,8 +50,9 @@ namespace
         if(nWidth && nHeight)
         {
             const Size aDestSize(nWidth, nHeight);
+            sal_uInt8 nInitAlpha(255);
             Bitmap aContent(aDestSize, 24);
-			AlphaMask aAlpha(aDestSize);
+            AlphaMask aAlpha(aDestSize, &nInitAlpha);
             BitmapWriteAccess* pContent = aContent.AcquireWriteAccess();
             BitmapWriteAccess* pAlpha = aAlpha.AcquireWriteAccess();
 
@@ -95,20 +87,14 @@ namespace
                             }
 
                             nOpacity = nOpacity / nDivisor;
+
                             if(nOpacity)
                             {
                                 pContent->SetPixel(y, x, BitmapColor(
                                     (sal_uInt8)(nRed / nDivisor),
                                     (sal_uInt8)(nGreen / nDivisor),
                                     (sal_uInt8)(nBlue / nDivisor)));
-                                pAlpha->SetPixel(
-                                    y, x,
-                                    BitmapColor(255 - (sal_uInt8)nOpacity));
-                            }
-                            else
-                            {
-                                pContent->SetPixel(y, x, BitmapColor(0, 0, 0));
-                                pAlpha->SetPixel(y, x, BitmapColor(255));
+                                pAlpha->SetPixel(y, x, BitmapColor(255 - (sal_uInt8)nOpacity));
                             }
                         }
                     }
@@ -122,8 +108,12 @@ namespace
                         for(sal_uInt32 x(0L); x < nWidth; x++)
                         {
                             const basegfx::BPixel& rPixel(rRaster.getBPixel(nIndex++));
-                            pContent->SetPixel(y, x, BitmapColor(rPixel.getRed(), rPixel.getGreen(), rPixel.getBlue()));
-                            pAlpha->SetPixel(y, x, BitmapColor(255 - rPixel.getOpacity()));
+
+                            if(rPixel.getOpacity())
+                            {
+                                pContent->SetPixel(y, x, BitmapColor(rPixel.getRed(), rPixel.getGreen(), rPixel.getBlue()));
+                                pAlpha->SetPixel(y, x, BitmapColor(255 - rPixel.getOpacity()));
+                            }
                         }
                     }
                 }
@@ -135,7 +125,7 @@ namespace
             aRetval = BitmapEx(aContent, aAlpha);
 
             // #i101811# set PrefMapMode and PrefSize at newly created Bitmap
-            aRetval.SetPrefMapMode(MAP_100TH_MM);
+            aRetval.SetPrefMapMode(MAP_PIXEL);
             aRetval.SetPrefSize(Size(nWidth, nHeight));
         }
 

@@ -1,31 +1,21 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*************************************************************************
+/*
+ * This file is part of the LibreOffice project.
  *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * This file incorporates work covered by the following license notice:
  *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
-
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
 
 #include <com/sun/star/embed/Aspects.hpp>
 
@@ -41,6 +31,8 @@
 #include <unotools/streamwrap.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
+#include <comphelper/seqstream.hxx>
+#include <comphelper/storagehelper.hxx>
 #include <sot/exchange.hxx>
 #include <sot/storinfo.hxx>
 #include <vcl/cvtgrf.hxx>
@@ -205,319 +197,11 @@ void Impl_OlePres::Write( SvStream & rStm )
     rStm.Seek( nEndPos );
 }
 
-//---------------------------------------------------------------------------
-//  Hilfs Klassen aus MSDFFDEF.HXX
-//---------------------------------------------------------------------------
-
-SvStream& operator>>( SvStream& rIn, DffRecordHeader& rRec )
-{
-    rRec.nFilePos = rIn.Tell();
-    sal_uInt16 nTmp(0);
-    rIn >> nTmp;
-    rRec.nImpVerInst = nTmp;
-    rRec.nRecVer = sal::static_int_cast< sal_uInt8 >(nTmp & 0x000F);
-    rRec.nRecInstance = nTmp >> 4;
-    rIn >> rRec.nRecType;
-    rIn >> rRec.nRecLen;
-    return rIn;
-}
-
-SvStream& operator>>( SvStream& rIn, DffPropSet& rRec )
-{
-    rRec.InitializePropSet();
-
-    DffRecordHeader aHd;
-    rIn >> aHd;
-    sal_uInt32 nPropCount = aHd.nRecInstance;
-
-    // remember FilePos of the ComplexData
-    sal_uInt32 nComplexDataFilePos = rIn.Tell() + ( nPropCount * 6 );
-
-    for( sal_uInt32 nPropNum = 0; nPropNum < nPropCount; nPropNum++ )
-    {
-        sal_uInt16 nTmp;
-        sal_uInt32 nRecType, nContent, nContentEx = 0xffff0000;
-        rIn >> nTmp
-            >> nContent;
-
-        nRecType = nTmp & 0x3fff;
-
-        if ( nRecType > 0x3ff )
-            break;
-        if ( ( nRecType & 0x3f ) == 0x3f )
-        {   // clear flags that have to be cleared
-            rRec.mpContents[ nRecType ] &= ( ( nContent >> 16 ) ^ 0xffffffff );
-            // set flags that have to be set
-            rRec.mpContents[ nRecType ] |= nContent;
-            nContentEx |= ( nContent >> 16 );
-            rRec.maRecordTypes[ nRecType ] = nContentEx;
-        }
-        else
-        {
-            DffPropFlags aPropFlag = { 1, 0, 0, 0 };
-            if ( nTmp & 0x4000 )
-                aPropFlag.bBlip = sal_True;
-            if ( nTmp & 0x8000 )
-                aPropFlag.bComplex = sal_True;
-            if ( aPropFlag.bComplex && nContent && ( nComplexDataFilePos < aHd.GetRecEndFilePos() ) )
-            {
-                // normally nContent is the complete size of the complex property,
-                // but this is not always true for IMsoArrays ( what the hell is a IMsoArray ? )
-
-                // I love special treatments :-(
-                if ( ( nRecType == DFF_Prop_pVertices ) || ( nRecType == DFF_Prop_pSegmentInfo )
-                    || ( nRecType == DFF_Prop_fillShadeColors ) || ( nRecType == DFF_Prop_lineDashStyle )
-                        || ( nRecType == DFF_Prop_pWrapPolygonVertices ) || ( nRecType == DFF_Prop_connectorPoints )
-                            || ( nRecType == DFF_Prop_Handles ) || ( nRecType == DFF_Prop_pFormulas )
-                                || ( nRecType == DFF_Prop_textRectangles ) )
-                {
-                    // now check if the current content size is possible, or 6 bytes too small
-                    sal_uInt32  nOldPos = rIn.Tell();
-                    sal_Int16   nNumElem, nNumElemReserved, nSize;
-
-                    rIn.Seek( nComplexDataFilePos );
-                    rIn >>  nNumElem >> nNumElemReserved >> nSize;
-                    if ( nNumElemReserved >= nNumElem )
-                    {
-                        // the size of these array elements is nowhere defined,
-                        // what if the size is negative ?
-                        // ok, we will make it positive and shift it.
-                        // for -16 this works
-                        if ( nSize < 0 )
-                            nSize = ( -nSize ) >> 2;
-                        sal_uInt32 nDataSize = (sal_uInt32)( nSize * nNumElem );
-
-                        // sometimes the content size is 6 bytes too small (array header information is missing )
-                        if ( nDataSize == nContent )
-                            nContent += 6;
-
-                        // check if array fits into the PropertyContainer
-                        if ( ( nComplexDataFilePos + nContent ) > aHd.GetRecEndFilePos() )
-                            nContent = 0;
-                    }
-                    else
-                        nContent = 0;
-                    rIn.Seek( nOldPos );
-                }
-                if ( nContent )
-                {
-                    nContentEx = nComplexDataFilePos;   // insert the filepos of this property;
-                    nComplexDataFilePos += nContent;    // store filepos, that is used for the next complex property
-                }
-                else                                    // a complex property needs content
-                    aPropFlag.bSet = sal_False;         // otherwise something is wrong
-            }
-            rRec.mpContents[ nRecType ] = nContent;
-            rRec.mpFlags[ nRecType ] = aPropFlag;
-            rRec.maRecordTypes[ nRecType ] = nContentEx;
-        }
-    }
-    aHd.SeekToEndOfRecord( rIn );
-    return rIn;
-}
-
-void DffPropSet::InitializePropSet() const
-{
-    /*
-    cmc:
-    " Boolean properties are grouped in bitfields by property set; note that
-    the Boolean properties in each property set are contiguous. They are saved
-    under the property ID of the last Boolean property in the set, and are
-    placed in the value field in reverse order starting with the last property
-    in the low bit. "
-
-    e.g.
-
-    fEditedWrap
-    fBehindDocument
-    fOnDblClickNotify
-    fIsButton
-    fOneD
-    fHidden
-    fPrint
-
-    are all part of a group and all are by default false except for fPrint,
-    which equates to a default bit sequence for the group of 0000001 -> 0x1
-
-    If at a later stage word sets fBehindDocument away from the default it
-    will be done by having a property named fPrint whose bitsequence will have
-    the fBehindDocument bit set. e.g. a DFF_Prop_fPrint with value 0x200020
-    has set bit 6 on so as to enable fBehindDocument (as well as disabling
-    everything else)
-    */
-
-    DffPropSet* self = (DffPropSet*) this;
-    memset( self->mpFlags, 0, 0x400 * sizeof(DffPropFlags) );
-    self->maRecordTypes.clear();
-
-    DffPropFlags nFlags = { 1, 0, 0, 1 };
-
-    //0x01ff0000;
-    InitializeProp( DFF_Prop_LockAgainstGrouping, 0x0000, nFlags, 0xffff0000 );
-    //0x001f0010;
-    InitializeProp( DFF_Prop_FitTextToShape, 0x0010, nFlags, 0xffff0000 );
-    //0xffff0000;
-    InitializeProp( DFF_Prop_gtextFStrikethrough, 0x0000, nFlags, 0xffff0000 );
-    //0x000f0000;
-    InitializeProp( DFF_Prop_pictureActive, 0x0000, nFlags, 0xffff0000 );
-    //0x003f0039;
-    InitializeProp( DFF_Prop_fFillOK, 0x0039, nFlags, 0xffff0000 );
-    //0x001f001c;
-    InitializeProp( DFF_Prop_fNoFillHitTest, 0x001c, nFlags, 0xffff0000 );
-    //0x001f000e;
-    InitializeProp( DFF_Prop_fNoLineDrawDash, 0x001e, nFlags, 0xffff0000 );
-    //0x00030000;
-    InitializeProp( DFF_Prop_fshadowObscured, 0x0000, nFlags, 0xffff0000 );
-    //0x00010000;
-    InitializeProp( DFF_Prop_fPerspective, 0x0000, nFlags, 0xffff0000 );
-    //0x000f0001;
-    InitializeProp( DFF_Prop_fc3DLightFace, 0x0001, nFlags, 0xffff0000 );
-    //0x001f0016;
-    InitializeProp( DFF_Prop_fc3DFillHarsh, 0x0016, nFlags, 0xffff0000 );
-    //0x001f0000;
-    InitializeProp( DFF_Prop_fBackground, 0x0000, nFlags, 0xffff0000 );
-    //0x00ef0010;
-    InitializeProp( DFF_Prop_fCalloutLengthSpecified, 0x0010, nFlags, 0xffff0000 );
-    //0x00ef0001;
-    InitializeProp( DFF_Prop_fPrint, 0x0001, nFlags, 0xffff0000 );
-
-    InitializeProp( DFF_Prop_fillColor, 0xffffff, nFlags, 0xffff0000 );
-}
-
-void DffPropSet::InitializeProp(sal_uInt32 nKey, sal_uInt32 nContent, DffPropFlags& rFlags, sal_uInt32 nRecordType ) const
-{
-    DffPropSet* self = (DffPropSet*) this;
-    self->mpContents[ nKey ] = nContent;
-    self->mpFlags[ nKey ] = rFlags;
-    self->maRecordTypes[ nKey ] =  nRecordType;
-}
-
-
-void DffPropSet::Merge( DffPropSet& rMaster ) const
-{
-    for ( RecordTypesMap::const_iterator it = rMaster.maRecordTypes.begin();
-          it != rMaster.maRecordTypes.end(); ++it )
-    {
-        sal_uInt32 nRecType = it->first;
-        if ( ( nRecType & 0x3f ) == 0x3f )      // this is something called FLAGS
-        {
-            sal_uInt32 nCurrentFlags = mpContents[ nRecType ];
-            sal_uInt32 nMergeFlags = rMaster.mpContents[ nRecType ];
-            nMergeFlags &=  ( nMergeFlags >> 16 ) | 0xffff0000;             // clearing low word
-            nMergeFlags &= ( ( nCurrentFlags & 0xffff0000 )                 // remove already hard set
-                            | ( nCurrentFlags >> 16 ) ) ^ 0xffffffff;       // attributes from mergeflags
-            nCurrentFlags &= ( ( nMergeFlags & 0xffff0000 )                 // apply zero master bits
-                            | ( nMergeFlags >> 16 ) ) ^ 0xffffffff;
-            nCurrentFlags |= (sal_uInt16)nMergeFlags;                           // apply filled master bits
-            ( (DffPropSet*) this )->mpContents[ nRecType ] = nCurrentFlags;
-
-
-            sal_uInt32 nNewContentEx = it->second;
-            RecordTypesMap::const_iterator it2 = maRecordTypes.find( nRecType );
-            if ( it2 != maRecordTypes.end() )
-                nNewContentEx |= it2->second;
-            ( (DffPropSet*) this )->maRecordTypes[ nRecType ] = nNewContentEx;
-        }
-        else
-        {
-            if ( !IsProperty( nRecType ) || !IsHardAttribute( nRecType ) )
-            {
-                ( (DffPropSet*) this )->mpContents[ nRecType ] = rMaster.mpContents[ nRecType ];
-                DffPropFlags nFlags( rMaster.mpFlags[ nRecType ] );
-                nFlags.bSoftAttr = sal_True;
-                ( (DffPropSet*) this )->mpFlags[ nRecType ] = nFlags;
-                ( (DffPropSet*) this )->maRecordTypes[ nRecType ] = it->second;
-            }
-        }
-    }
-}
-
-sal_Bool DffPropSet::IsHardAttribute( sal_uInt32 nId ) const
-{
-    sal_Bool bRetValue = sal_True;
-    nId &= 0x3ff;
-    if ( ( nId & 0x3f ) >= 48 ) // is this a flag id
-    {
-        RecordTypesMap::const_iterator it = maRecordTypes.find( nId | 0x3f );
-        if ( it != maRecordTypes.end() )
-        {
-            sal_uInt32 nContentEx = it->second;
-            bRetValue = ( nContentEx & ( 1 << ( 0xf - ( nId & 0xf ) ) ) ) != 0;
-        }
-    }
-    else
-        bRetValue = ( mpFlags[ nId ].bSoftAttr == 0 );
-    return bRetValue;
-};
-
-sal_uInt32 DffPropSet::GetPropertyValue( sal_uInt32 nId, sal_uInt32 nDefault ) const
-{
-    nId &= 0x3ff;
-    return ( mpFlags[ nId ].bSet ) ? mpContents[ nId ] : nDefault;
-};
-
-bool DffPropSet::GetPropertyBool( sal_uInt32 nId, bool bDefault ) const
-{
-    sal_uInt32 nBaseId = nId | 31;              // base ID to get the sal_uInt32 property value
-    sal_uInt32 nMask = 1 << (nBaseId - nId);    // bit mask of the boolean property
-
-    sal_uInt32 nPropValue = GetPropertyValue( nBaseId, bDefault ? nMask : 0 );
-    return (nPropValue & nMask) != 0;
-}
-
-::rtl::OUString DffPropSet::GetPropertyString( sal_uInt32 nId, SvStream& rStrm ) const
-{
-    sal_Size nOldPos = rStrm.Tell();
-    ::rtl::OUStringBuffer aBuffer;
-    sal_uInt32 nBufferSize = GetPropertyValue( nId );
-    if( (nBufferSize > 0) && SeekToContent( nId, rStrm ) )
-    {
-        sal_Int32 nStrLen = static_cast< sal_Int32 >( nBufferSize / 2 );
-        //clip initial size of buffer to something sane in case of silly length
-        //strings. If there really is a silly amount of data available it still
-        //works out ok of course
-        aBuffer.ensureCapacity(std::min(nStrLen,static_cast<sal_Int32>(8192)));
-        for( sal_Int32 nCharIdx = 0; nCharIdx < nStrLen; ++nCharIdx )
-        {
-            sal_uInt16 nChar = 0;
-            rStrm >> nChar;
-            if( nChar > 0 )
-                aBuffer.append( static_cast< sal_Unicode >( nChar ) );
-            else
-                break;
-        }
-    }
-    rStrm.Seek( nOldPos );
-    return aBuffer.makeStringAndClear();
-}
-
-sal_Bool DffPropSet::SeekToContent( sal_uInt32 nRecType, SvStream& rStrm ) const
-{
-    nRecType &= 0x3ff;
-    if ( mpFlags[ nRecType ].bSet )
-    {
-        if ( mpFlags[ nRecType ].bComplex )
-        {
-            RecordTypesMap::const_iterator it = maRecordTypes.find( nRecType );
-            if ( it != maRecordTypes.end() )
-            {
-                sal_uInt32 nOffset = it->second;
-                if ( nOffset && ( ( nOffset & 0xffff0000 ) != 0xffff0000 ) )
-                {
-                    rStrm.Seek( nOffset );
-                    return sal_True;
-                }
-            }
-        }
-    }
-    return sal_False;
-}
-
 DffPropertyReader::DffPropertyReader( const SvxMSDffManager& rMan ) :
     rManager( rMan ),
     pDefaultPropSet( NULL )
 {
-    InitializePropSet();
+    InitializePropSet( DFF_msofbtOPT );
 }
 
 void DffPropertyReader::SetDefaultPropSet( SvStream& rStCtrl, sal_uInt32 nOffsDgg ) const
@@ -555,9 +239,7 @@ void DffPropertyReader::ReadPropSet( SvStream& rIn, void* pClientData ) const
             rIn >> aRecHd;
             if ( rManager.SeekToRec( rIn, DFF_msofbtOPT, aRecHd.GetRecEndFilePos() ) )
             {
-                DffPropSet aMasterPropSet;
-                rIn >> aMasterPropSet;
-                Merge( aMasterPropSet );
+                rIn |= (DffPropertyReader&)*this;
             }
         }
     }
@@ -1217,22 +899,43 @@ void DffPropertyReader::ApplyLineAttributes( SfxItemSet& rSet, const MSO_SPT eSh
 
     if ( nLineFlags & 8 )
     {
-        // Linienattribute
+        // Line Attributes
         sal_Int32 nLineWidth = (sal_Int32)GetPropertyValue( DFF_Prop_lineWidth, 9525 );
+
+        // support LineCap
+        const MSO_LineCap eLineCap((MSO_LineCap)GetPropertyValue(DFF_Prop_lineEndCapStyle, mso_lineEndCapSquare));
+
+        switch(eLineCap)
+        {
+            default: /* case mso_lineEndCapFlat */
+            {
+                // no need to set, it is the default. If this changes, this needs to be activated
+                // rSet.Put(XLineCapItem(com::sun::star::drawing::LineCap_BUTT));
+                break;
+            }
+            case mso_lineEndCapRound:
+            {
+                rSet.Put(XLineCapItem(com::sun::star::drawing::LineCap_ROUND));
+                break;
+            }
+            case mso_lineEndCapSquare:
+            {
+                rSet.Put(XLineCapItem(com::sun::star::drawing::LineCap_SQUARE));
+                break;
+            }
+        }
 
         MSO_LineDashing eLineDashing = (MSO_LineDashing)GetPropertyValue( DFF_Prop_lineDashing, mso_lineSolid );
         if ( eLineDashing == mso_lineSolid )
             rSet.Put(XLineStyleItem( XLINE_SOLID ) );
         else
         {
-//          MSO_LineCap eLineCap = (MSO_LineCap)GetPropertyValue( DFF_Prop_lineEndCapStyle, mso_lineEndCapSquare );
-
             XDashStyle  eDash = XDASH_RECT;
             sal_uInt16  nDots = 1;
             sal_uInt32  nDotLen = nLineWidth / 360;
             sal_uInt16  nDashes = 0;
             sal_uInt32  nDashLen = ( 8 * nLineWidth ) / 360;
-            sal_uInt32  nDistance = ( 3 * nLineWidth ) / 360;;
+            sal_uInt32  nDistance = ( 3 * nLineWidth ) / 360;
 
             switch ( eLineDashing )
             {
@@ -1348,24 +1051,6 @@ void DffPropertyReader::ApplyLineAttributes( SfxItemSet& rSet, const MSO_SPT eSh
                 rSet.Put( XLineEndWidthItem( nArrowWidth ) );
                 rSet.Put( XLineEndItem( aArrowName, aPolyPoly ) );
                 rSet.Put( XLineEndCenterItem( bArrowCenter ) );
-            }
-            if ( IsProperty( DFF_Prop_lineEndCapStyle ) )
-            {
-                MSO_LineCap eLineCap = (MSO_LineCap)GetPropertyValue( DFF_Prop_lineEndCapStyle );
-                const SfxPoolItem* pPoolItem = NULL;
-                if ( rSet.GetItemState( XATTR_LINEDASH, sal_False, &pPoolItem ) == SFX_ITEM_SET )
-                {
-                    XDashStyle eNewStyle = XDASH_RECT;
-                    if ( eLineCap == mso_lineEndCapRound )
-                        eNewStyle = XDASH_ROUND;
-                    const XDash& rOldDash = ( (const XLineDashItem*)pPoolItem )->GetDashValue();
-                    if ( rOldDash.GetDashStyle() != eNewStyle )
-                    {
-                        XDash aNew( rOldDash );
-                        aNew.SetDashStyle( eNewStyle );
-                        rSet.Put( XLineDashItem( rtl::OUString(), aNew ) );
-                    }
-                }
             }
         }
     }
@@ -2890,91 +2575,65 @@ void DffPropertyReader::ApplyAttributes( SvStream& rIn, SfxItemSet& rSet ) const
     ApplyAttributes( rIn, rSet, aDffObjTemp );
 }
 
-void DffPropertyReader::ApplyAttributes( SvStream& rIn, SfxItemSet& rSet, const DffObjData& rObjData ) const
+void DffPropertyReader::ApplyAttributes( SvStream& rIn, SfxItemSet& rSet, DffObjData& rObjData ) const
 {
     sal_Bool bHasShadow = sal_False;
 
-    for ( RecordTypesMap::const_iterator it = maRecordTypes.begin(); it != maRecordTypes.end(); ++it )
+    if ( IsProperty( DFF_Prop_gtextSize ) )
+        rSet.Put( SvxFontHeightItem( rManager.ScalePt( GetPropertyValue( DFF_Prop_gtextSize ) ), 100, EE_CHAR_FONTHEIGHT ) );
+    sal_uInt32 nFontAttributes = GetPropertyValue( DFF_Prop_gtextFStrikethrough );
+    if ( nFontAttributes & 0x20 )
+        rSet.Put( SvxWeightItem( nFontAttributes & 0x20 ? WEIGHT_BOLD : WEIGHT_NORMAL, EE_CHAR_WEIGHT ) );
+    if ( nFontAttributes & 0x10 )
+        rSet.Put( SvxPostureItem( nFontAttributes & 0x10 ? ITALIC_NORMAL : ITALIC_NONE, EE_CHAR_ITALIC ) );
+    if ( nFontAttributes & 0x08 )
+        rSet.Put( SvxUnderlineItem( nFontAttributes & 0x08 ? UNDERLINE_SINGLE : UNDERLINE_NONE, EE_CHAR_UNDERLINE ) );
+    if ( nFontAttributes & 0x40 )
+        rSet.Put( SvxShadowedItem( ( nFontAttributes & 0x40 ) != 0, EE_CHAR_SHADOW ) );
+//    if ( nFontAttributes & 0x02 )
+//        rSet.Put( SvxCaseMapItem( nFontAttributes & 0x02 ? SVX_CASEMAP_KAPITAELCHEN : SVX_CASEMAP_NOT_MAPPED ) );
+    if ( nFontAttributes & 0x01 )
+        rSet.Put( SvxCrossedOutItem( nFontAttributes & 0x01 ? STRIKEOUT_SINGLE : STRIKEOUT_NONE, EE_CHAR_STRIKEOUT ) );
+    if ( IsProperty( DFF_Prop_fillColor ) )
+        rSet.Put( XFillColorItem( String(), rManager.MSO_CLR_ToColor( GetPropertyValue( DFF_Prop_fillColor ), DFF_Prop_fillColor ) ) );
+    if ( IsProperty( DFF_Prop_shadowType ) )
     {
-        sal_uInt32 nRecType = it->first;
-        sal_uInt32 nContent = mpContents[ nRecType ];
-        switch ( nRecType )
+        MSO_ShadowType eShadowType = static_cast< MSO_ShadowType >( GetPropertyValue( DFF_Prop_shadowType ) );
+        if( eShadowType != mso_shadowOffset )
         {
-            case DFF_Prop_gtextSize :
-                rSet.Put( SvxFontHeightItem( rManager.ScalePt( nContent ), 100, EE_CHAR_FONTHEIGHT ) );
-            break;
-            // GeoText
-            case DFF_Prop_gtextFStrikethrough :
-            {
-                if ( nContent & 0x20 )
-                    rSet.Put( SvxWeightItem( nContent ? WEIGHT_BOLD : WEIGHT_NORMAL, EE_CHAR_WEIGHT ) );
-                if ( nContent & 0x10 )
-                    rSet.Put( SvxPostureItem( nContent ? ITALIC_NORMAL : ITALIC_NONE, EE_CHAR_ITALIC ) );
-                if ( nContent & 0x08 )
-                    rSet.Put( SvxUnderlineItem( nContent ? UNDERLINE_SINGLE : UNDERLINE_NONE, EE_CHAR_UNDERLINE ) );
-                if ( nContent & 0x40 )
-                    rSet.Put(SvxShadowedItem( nContent != 0, EE_CHAR_SHADOW ) );
-                if ( nContent & 0x01 )
-                    rSet.Put( SvxCrossedOutItem( nContent ? STRIKEOUT_SINGLE : STRIKEOUT_NONE, EE_CHAR_STRIKEOUT ) );
-            }
-            break;
-
-            case DFF_Prop_fillColor :
-                rSet.Put( XFillColorItem( rtl::OUString(), rManager.MSO_CLR_ToColor( nContent, DFF_Prop_fillColor ) ) );
-            break;
-
-            // ShadowStyle
-            case DFF_Prop_shadowType :
-            {
-                MSO_ShadowType eShadowType = (MSO_ShadowType)nContent;
-                if( eShadowType != mso_shadowOffset )
-                {
-                    //   mso_shadowDouble
-                    //   mso_shadowRich
-                    //   mso_shadowEmbossOrEngrave
-                    // not possible in LibreOffice, create default shadow with default distance
-                    rSet.Put( SdrShadowXDistItem( 35 ) ); // 0,35 mm shadow distance
-                    rSet.Put( SdrShadowYDistItem( 35 ) );
-                }
-            }
-            break;
-            case DFF_Prop_shadowColor :
-                rSet.Put( SdrShadowColorItem( rtl::OUString(), rManager.MSO_CLR_ToColor( nContent, DFF_Prop_shadowColor ) ) );
-            break;
-            case DFF_Prop_shadowOpacity :
-                rSet.Put( SdrShadowTransparenceItem( (sal_uInt16)( ( 0x10000 - nContent ) / 655 ) ) );
-            break;
-            case DFF_Prop_shadowOffsetX :
-            {
-                sal_Int32 nVal = (sal_Int32)nContent;
-                rManager.ScaleEmu( nVal );
-                if ( nVal )
-                    rSet.Put( SdrShadowXDistItem( nVal ) );
-            }
-            break;
-            case DFF_Prop_shadowOffsetY :
-            {
-                sal_Int32 nVal = (sal_Int32)nContent;
-                rManager.ScaleEmu( nVal );
-                if ( nVal )
-                    rSet.Put( SdrShadowYDistItem( nVal ) );
-            }
-            break;
-            case DFF_Prop_fshadowObscured :
-            {
-                bHasShadow = ( nContent & 2 ) != 0;
-                if ( bHasShadow )
-                {
-                    if ( !IsProperty( DFF_Prop_shadowOffsetX ) )
-                        rSet.Put( SdrShadowXDistItem( 35 ) );
-                    if ( !IsProperty( DFF_Prop_shadowOffsetY ) )
-                        rSet.Put( SdrShadowYDistItem( 35 ) );
-                }
-            }
-            break;
+            rSet.Put( SdrShadowXDistItem( 35 ) ); // 0,35 mm Schattendistanz
+            rSet.Put( SdrShadowYDistItem( 35 ) );
         }
     }
-
+    if ( IsProperty( DFF_Prop_shadowColor ) )
+        rSet.Put( SdrShadowColorItem( String(), rManager.MSO_CLR_ToColor( GetPropertyValue( DFF_Prop_shadowColor ), DFF_Prop_shadowColor ) ) );
+    if ( IsProperty( DFF_Prop_shadowOpacity ) )
+        rSet.Put( SdrShadowTransparenceItem( (sal_uInt16)( ( 0x10000 - GetPropertyValue( DFF_Prop_shadowOpacity ) ) / 655 ) ) );
+    if ( IsProperty( DFF_Prop_shadowOffsetX ) )
+    {
+        sal_Int32 nVal = static_cast< sal_Int32 >( GetPropertyValue( DFF_Prop_shadowOffsetX ) );
+        rManager.ScaleEmu( nVal );
+        if ( nVal )
+            rSet.Put( SdrShadowXDistItem( nVal ) );
+    }
+    if ( IsProperty( DFF_Prop_shadowOffsetY ) )
+    {
+        sal_Int32 nVal = static_cast< sal_Int32 >( GetPropertyValue( DFF_Prop_shadowOffsetY ) );
+        rManager.ScaleEmu( nVal );
+        if ( nVal )
+            rSet.Put( SdrShadowYDistItem( nVal ) );
+    }
+    if ( IsProperty( DFF_Prop_fshadowObscured ) )
+    {
+        bHasShadow = ( GetPropertyValue( DFF_Prop_fshadowObscured ) & 2 ) != 0;
+        if ( bHasShadow )
+        {
+            if ( !IsProperty( DFF_Prop_shadowOffsetX ) )
+                rSet.Put( SdrShadowXDistItem( 35 ) );
+            if ( !IsProperty( DFF_Prop_shadowOffsetY ) )
+                rSet.Put( SdrShadowYDistItem( 35 ) );
+        }
+    }
     if ( bHasShadow )
     {
         // #160376# sj: activating shadow only if fill and or linestyle is used
@@ -3018,6 +2677,105 @@ void DffPropertyReader::ApplyAttributes( SvStream& rIn, SfxItemSet& rSet, const 
     {
         ApplyCustomShapeGeometryAttributes( rIn, rSet, rObjData );
         ApplyCustomShapeTextAttributes( rSet );
+        if ( rManager.GetSvxMSDffSettings() & SVXMSDFF_SETTINGS_IMPORT_EXCEL )
+        {
+            if ( mnFix16Angle || ( rObjData.nSpFlags & SP_FFLIPV ) )
+                CheckAndCorrectExcelTextRotation( rIn, rSet, rObjData );
+        }
+    }
+}
+
+void DffPropertyReader::CheckAndCorrectExcelTextRotation( SvStream& rIn, SfxItemSet& rSet, DffObjData& rObjData ) const
+{
+    sal_Bool bRotateTextWithShape = rObjData.bRotateTextWithShape;
+    if ( rObjData.bOpt2 )        // sj: #158494# is the second property set available ? if then we have to check the xml data of
+    {                            // the shape, because the textrotation of Excel 2003 and greater versions is stored there
+                                // (upright property of the textbox)
+        if ( rManager.pSecPropSet->SeekToContent( DFF_Prop_metroBlob, rIn ) )
+        {
+            sal_uInt32 nLen = rManager.pSecPropSet->GetPropertyValue( DFF_Prop_metroBlob );
+            if ( nLen )
+            {
+                ::com::sun::star::uno::Sequence< sal_Int8 > aXMLDataSeq( nLen );
+                rIn.Read( aXMLDataSeq.getArray(), nLen );
+                ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > xInputStream
+                    ( new ::comphelper::SequenceInputStream( aXMLDataSeq ) );
+                try
+                {
+                    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
+                    if ( xFactory.is() )
+                    {
+                        ::com::sun::star::uno::Reference< com::sun::star::embed::XStorage > xStorage
+                            ( ::comphelper::OStorageHelper::GetStorageOfFormatFromInputStream(
+                                OFOPXML_STORAGE_FORMAT_STRING, xInputStream, xFactory, sal_True ) );
+                        if ( xStorage.is() )
+                        {
+                            const rtl::OUString sDRS( RTL_CONSTASCII_USTRINGPARAM ( "drs" ) );
+                            ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >
+                                xStorageDRS( xStorage->openStorageElement( sDRS, ::com::sun::star::embed::ElementModes::SEEKABLEREAD ) );
+                            if ( xStorageDRS.is() )
+                            {
+                                const rtl::OUString sShapeXML( RTL_CONSTASCII_USTRINGPARAM ( "shapexml.xml" ) );
+                                ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream > xShapeXMLStream( xStorageDRS->openStreamElement( sShapeXML, ::com::sun::star::embed::ElementModes::SEEKABLEREAD ) );
+                                if ( xShapeXMLStream.is() )
+                                {
+                                    ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > xShapeXMLInputStream( xShapeXMLStream->getInputStream() );
+                                    if ( xShapeXMLInputStream.is() )
+                                    {
+                                        ::com::sun::star::uno::Sequence< sal_Int8 > aSeq;
+                                        sal_Int32 nBytesRead = xShapeXMLInputStream->readBytes( aSeq, 0x7fffffff );
+                                        if ( nBytesRead )
+                                        {    // for only one property I spare to use a XML parser at this point, this
+                                            // should be enhanced if needed
+
+                                            bRotateTextWithShape = sal_True;    // using the correct xml default
+                                            const char* pArry = reinterpret_cast< char* >( aSeq.getArray() );
+                                            const char* pUpright = "upright=";
+                                            const char* pEnd = pArry + nBytesRead;
+                                            const char* pPtr = pArry;
+                                            while( ( pPtr + 12 ) < pEnd )
+                                            {
+                                                if ( !memcmp( pUpright, pPtr, 8 ) )
+                                                {
+                                                    bRotateTextWithShape = ( pPtr[ 9 ] != '1' ) && ( pPtr[ 9 ] != 't' );
+                                                    break;
+                                                }
+                                                else
+                                                    pPtr++;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                catch( com::sun::star::uno::Exception& )
+                {
+                }
+            }
+        }
+    }
+    if ( !bRotateTextWithShape )
+    {
+        const com::sun::star::uno::Any* pAny, aAny;
+        SdrCustomShapeGeometryItem aGeometryItem((SdrCustomShapeGeometryItem&)rSet.Get( SDRATTR_CUSTOMSHAPE_GEOMETRY ));
+        const rtl::OUString sTextRotateAngle( RTL_CONSTASCII_USTRINGPARAM ( "TextRotateAngle" ) );
+        pAny = aGeometryItem.GetPropertyValueByName( sTextRotateAngle );
+        double fExtraTextRotateAngle = 0.0;
+        if ( pAny )
+            *pAny >>= fExtraTextRotateAngle;
+
+        if ( rManager.mnFix16Angle )
+            fExtraTextRotateAngle += mnFix16Angle / 100.0;
+        if ( rObjData.nSpFlags & SP_FFLIPV )
+            fExtraTextRotateAngle -= 180.0;
+
+        com::sun::star::beans::PropertyValue aTextRotateAngle;
+        aTextRotateAngle.Name = sTextRotateAngle;
+        aTextRotateAngle.Value <<= fExtraTextRotateAngle;
+        aGeometryItem.SetPropertyValue( aTextRotateAngle );
+        rSet.Put( aGeometryItem );
     }
 }
 
@@ -3374,7 +3132,7 @@ sal_Bool SvxMSDffManager::SeekToShape( SvStream& rSt, void* /* pClientData */, s
 bool SvxMSDffManager::SeekToRec( SvStream& rSt, sal_uInt16 nRecId, sal_uLong nMaxFilePos, DffRecordHeader* pRecHd, sal_uLong nSkipCount ) const
 {
     bool bRet = sal_False;
-    sal_uLong nFPosMerk = rSt.Tell(); // FilePos merken fuer ggf. spaetere Restauration
+    sal_uLong nFPosMerk = rSt.Tell(); // store FilePos to restore it later if necessary
     DffRecordHeader aHd;
     do
     {
@@ -3405,7 +3163,7 @@ bool SvxMSDffManager::SeekToRec( SvStream& rSt, sal_uInt16 nRecId, sal_uLong nMa
     }
     while ( rSt.good() && rSt.Tell() < nMaxFilePos && !bRet );
     if ( !bRet )
-        rSt.Seek( nFPosMerk );  // restore FilePos
+        rSt.Seek( nFPosMerk );  // restore original FilePos
     return bRet;
 }
 
@@ -3433,7 +3191,7 @@ bool SvxMSDffManager::SeekToRec2( sal_uInt16 nRecId1, sal_uInt16 nRecId2, sal_uL
         if ( !bRet )
             aHd.SeekToEndOfRecord( rStCtrl );
     }
-    while ( rStCtrl.GetError() == 0 && rStCtrl.Tell() < nMaxFilePos && !bRet );
+    while ( rStCtrl.good() && rStCtrl.Tell() < nMaxFilePos && !bRet );
     if ( !bRet )
         rStCtrl.Seek( nFPosMerk ); // restore FilePos
     return bRet;
@@ -3697,32 +3455,6 @@ Color SvxMSDffManager::MSO_CLR_ToColor( sal_uInt32 nColorCode, sal_uInt16 nConte
     return aColor;
 }
 
-rtl::OUString SvxMSDffManager::ReadDffString(SvStream& rSt, DffRecordHeader aStrHd)
-{
-    String aRet;
-    if( aStrHd.nRecType == 0x0 && !ReadCommonRecordHeader(aStrHd, rSt) )
-        rSt.Seek( aStrHd.nFilePos );
-    else if ( aStrHd.nRecType == DFF_PST_TextBytesAtom || aStrHd.nRecType == DFF_PST_TextCharsAtom )
-    {
-        bool bUniCode=aStrHd.nRecType==DFF_PST_TextCharsAtom;
-        sal_uInt32 nBytes = aStrHd.nRecLen;
-        aRet = MSDFFReadZString( rSt, nBytes, bUniCode );
-        if( !bUniCode )
-        {
-            for ( xub_StrLen n = 0; n < nBytes; n++ )
-            {
-                if( aRet.GetChar( n ) == 0x0B )
-                    aRet.SetChar( n, ' ' );     // Weicher Umbruch
-                // TODO: Zeilenumbruch im Absatz via Outliner setzen.
-            }
-        }
-        aStrHd.SeekToEndOfRecord( rSt );
-    }
-    else
-        aStrHd.SeekToBegOfRecord( rSt );
-    return aRet;
-}
-
 // sj: I just want to set a string for a text object that may contain multiple
 // paragraphs. If I now take a look at the follwing code I get the impression that
 // our outliner is too complicate to be used properly,
@@ -3784,185 +3516,6 @@ void SvxMSDffManager::ReadObjText( const String& rText, SdrObject* pObj ) const
         rOutliner.SetUpdateMode( bOldUpdateMode );
         pText->SetOutlinerParaObject( pNewText );
     }
-}
-
-bool SvxMSDffManager::ReadObjText(SvStream& rSt, SdrObject* pObj)
-{
-    bool bRet=sal_False;
-    SdrTextObj* pText = PTR_CAST(SdrTextObj, pObj);
-    if( pText )
-    {
-        DffRecordHeader aTextHd;
-        if( !ReadCommonRecordHeader(aTextHd, rSt) )
-            rSt.Seek( aTextHd.nFilePos );
-        else if ( aTextHd.nRecType==DFF_msofbtClientTextbox || aTextHd.nRecType == 0x1022 )
-        {
-            bRet=sal_True;
-            sal_uLong nRecEnd=aTextHd.GetRecEndFilePos();
-            DffRecordHeader aHd;
-            String aText;
-
-            SdrOutliner& rOutliner=pText->ImpGetDrawOutliner();
-            sal_uInt16 nOutlMode = rOutliner.GetMode();
-
-            {   // apparently a small bug in the EditEngine which causes
-                // the paragraph attributes not to be delted on Clear()
-                bool bClearParaAttribs = true;
-                rOutliner.SetStyleSheet( 0, NULL );
-                SfxItemSet aSet(rOutliner.GetEmptyItemSet());
-                aSet.Put(SvxColorItem( COL_BLACK ));
-                rOutliner.SetParaAttribs(0,aSet);
-                pText->SetMergedItemSet(aSet);
-
-                bClearParaAttribs = sal_False;
-                if( bClearParaAttribs )
-                {
-                    // apparently a small bug in the EditEngine which causes
-                    // the paragraph attributes not to be delted on Clear()
-                    rOutliner.SetParaAttribs(0,rOutliner.GetEmptyItemSet());
-                }
-            }
-            rOutliner.Init( OUTLINERMODE_TEXTOBJECT );
-
-            ///////////////////////////////////
-            // read TextString and MetaChars //
-            ///////////////////////////////////
-            do
-            {
-                if( !ReadCommonRecordHeader(aHd, rSt) )
-                    rSt.Seek( aHd.nFilePos );
-                else
-                {
-                    switch (aHd.nRecType)
-                    {
-                        default:
-                            break;
-                        //case DFF_PST_TextHeaderAtom:
-                        //case TextSpecInfoAtom
-                        case DFF_PST_TextBytesAtom:
-                        case DFF_PST_TextCharsAtom:
-                            aText = ReadDffString(rSt, aHd);
-                            break;
-                        case DFF_PST_TextRulerAtom               :
-                        {
-                            sal_uInt16 nLen = (sal_uInt16)aHd.nRecLen;
-                            if(nLen)
-                            {
-                                sal_uInt32 nMask;
-                                sal_uInt16 nVal1, nVal2, nVal3;
-                                sal_uInt16 nDefaultTab = 2540; // PPT def: 1 Inch //rOutliner.GetDefTab();
-                                sal_uInt16 nMostrightTab = 0;
-                                SfxItemSet aSet(rOutliner.GetEmptyItemSet());
-                                SvxTabStopItem aTabItem(0, 0, SVX_TAB_ADJUST_DEFAULT, EE_PARA_TABS);
-
-                                rSt >> nMask;
-                                nLen -= 4;
-
-                                if(nLen && (nMask & 0x0002))
-                                {
-                                    // number of indent levels
-                                    rSt >> nVal3;
-                                    nLen -= 2;
-                                }
-
-                                // Allg. TAB verstellt auf Wert in nVal3
-                                if(nLen && (nMask & 0x0001))
-                                {
-                                    rSt >> nVal3;
-                                    nLen -= 2;
-                                    nDefaultTab = (sal_uInt16)(((sal_uInt32)nVal3 * 1000) / 240);
-                                }
-
-                                // Weitere, frei gesetzte TABs
-                                if(nLen && (nMask & 0x0004))
-                                {
-                                    rSt >> nVal1;
-                                    nLen -= 2;
-
-                                    // fest gesetzte TABs importieren
-                                    while(nLen && nVal1--)
-                                    {
-                                        rSt >> nVal2;
-                                        rSt >> nVal3;
-                                        nLen -= 4;
-
-                                        sal_uInt16 nNewTabPos = (sal_uInt16)(((sal_uInt32)nVal2 * 1000) / 240);
-                                        if(nNewTabPos > nMostrightTab)
-                                            nMostrightTab = nNewTabPos;
-
-                                        SvxTabStop aTabStop(nNewTabPos);
-                                        aTabItem.Insert(aTabStop);
-                                    }
-                                }
-
-                                // evtl. noch default-TABs ergaenzen (immer)
-                                sal_uInt16 nObjWidth = sal_uInt16(pObj->GetSnapRect().GetWidth() + 1);
-                                sal_uInt16 nDefaultTabPos = nDefaultTab;
-
-                                while(nDefaultTabPos <= nObjWidth && nDefaultTabPos <= nMostrightTab)
-                                    nDefaultTabPos =
-                                        nDefaultTabPos + nDefaultTab;
-
-                                while(nDefaultTabPos <= nObjWidth)
-                                {
-                                    SvxTabStop aTabStop(nDefaultTabPos);
-                                    aTabItem.Insert(aTabStop);
-                                    nDefaultTabPos =
-                                        nDefaultTabPos + nDefaultTab;
-                                }
-
-                                // Falls TABs angelegt wurden, setze diese
-                                if(aTabItem.Count())
-                                {
-                                    aSet.Put(aTabItem);
-                                    rOutliner.SetParaAttribs(0, aSet);
-                                }
-                            }
-                        }
-                        break;
-                    }
-                    aHd.SeekToEndOfRecord( rSt );
-                }
-            }
-            while ( rSt.GetError() == 0 && rSt.Tell() < nRecEnd );
-
-            ////////////////////////
-            // replace SHIFT-Ret  //
-            ////////////////////////
-            if ( aText.Len() )
-            {
-                aText += ' ';
-                aText.SetChar( aText.Len()-1, 0x0D );
-                rOutliner.SetText( aText, rOutliner.GetParagraph( 0 ) );
-
-                // replace SHIFT-Ret in the Outliner
-                if (comphelper::string::getTokenCount(aText, 0x0B) > 1)
-                {
-                    sal_uInt32 nParaCount = rOutliner.GetParagraphCount();
-                    for(sal_uInt16 a=0;a<nParaCount;a++)
-                    {
-                        Paragraph* pActPara = rOutliner.GetParagraph(a);
-                        String aParaText = rOutliner.GetText(pActPara);
-                        for(sal_uInt16 b=0;b<aParaText.Len();b++)
-                        {
-                            if( aParaText.GetChar( b ) == 0x0B)
-                            {
-                                ESelection aSelection(a, b, a, b+1);
-                                rOutliner.QuickInsertLineBreak(aSelection);
-                            }
-                        }
-                    }
-                }
-            }
-            OutlinerParaObject* pNewText=rOutliner.CreateParaObject();
-            rOutliner.Init( nOutlMode );
-            pText->NbcSetOutlinerParaObject(pNewText);
-        }
-        else
-            aTextHd.SeekToBegOfRecord(rSt);
-
-    }
-    return bRet;
 }
 
 //static
@@ -4442,6 +3995,7 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
         return pRet;
 
     DffObjData aObjData( rHd, rClientRect, nCalledByGroup );
+    aObjData.bRotateTextWithShape = ( GetSvxMSDffSettings() & SVXMSDFF_SETTINGS_IMPORT_EXCEL ) == 0;
     maShapeRecords.Consume( rSt, sal_False );
     aObjData.bShapeType = maShapeRecords.SeekToContent( rSt, DFF_msofbtSp, SEEK_FROM_BEGINNING );
     if ( aObjData.bShapeType )
@@ -4473,8 +4027,16 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
     }
     else
     {
-        InitializePropSet();    // get the default PropSet
+        InitializePropSet( DFF_msofbtOPT ); // get the default PropSet
         ( (DffPropertyReader*) this )->mnFix16Angle = 0;
+    }
+
+    aObjData.bOpt2 = maShapeRecords.SeekToContent( rSt, DFF_msofbtUDefProp, SEEK_FROM_CURRENT_AND_RESTART );
+    if ( aObjData.bOpt2 )
+    {
+        maShapeRecords.Current()->SeekToBegOfRecord( rSt );
+        pSecPropSet = new DffPropertyReader( *this );
+        pSecPropSet->ReadPropSet( rSt, NULL );
     }
 
     aObjData.bChildAnchor = maShapeRecords.SeekToContent( rSt, DFF_msofbtChildAnchor, SEEK_FROM_CURRENT_AND_RESTART );
@@ -5756,6 +5318,7 @@ SvxMSDffManager::SvxMSDffManager(SvStream& rStCtrl_,
      pStData2( pStData2_ ),
      nSvxMSDffSettings( 0 ),
      nSvxMSDffOLEConvFlags( 0 ),
+     pSecPropSet( NULL ),
      mnDefaultColor( mnDefaultColor_),
      mbTracing( sal_False )
 {
@@ -5800,6 +5363,7 @@ SvxMSDffManager::SvxMSDffManager( SvStream& rStCtrl_, const String& rBaseURL )
      pStData2( 0 ),
      nSvxMSDffSettings( 0 ),
      nSvxMSDffOLEConvFlags( 0 ),
+     pSecPropSet( NULL ),
      mnDefaultColor( COL_DEFAULT ),
      mbTracing( sal_False )
 {
@@ -5808,6 +5372,7 @@ SvxMSDffManager::SvxMSDffManager( SvStream& rStCtrl_, const String& rBaseURL )
 
 SvxMSDffManager::~SvxMSDffManager()
 {
+    delete pSecPropSet;
     delete pBLIPInfos;
     delete pShapeOrders;
     delete pFormModel;
@@ -6009,7 +5574,7 @@ void SvxMSDffManager::GetCtrlData( sal_uInt32 nOffsDgg_ )
 
             if( !bOk )
             {
-                nPos++;
+                nPos++;                // ????????? TODO: trying to get an one-hit wonder, this code code should be rewritten...
                 if (nPos != rStCtrl.Seek(nPos))
                     break;
                 bOk = ReadCommonRecordHeader( rStCtrl, nVer, nInst, nFbt, nLength )
@@ -6022,7 +5587,7 @@ void SvxMSDffManager::GetCtrlData( sal_uInt32 nOffsDgg_ )
             nPos += DFF_COMMON_RECORD_HEADER_SIZE + nLength;
             ++nDrawingContainerId;
         }
-        while( nPos < nMaxStrPos && bOk );
+        while( ( rStCtrl.GetError() == 0 ) && ( nPos < nMaxStrPos ) && bOk );
     }
 }
 

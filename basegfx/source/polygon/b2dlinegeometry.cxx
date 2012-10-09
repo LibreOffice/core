@@ -1,30 +1,21 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*************************************************************************
+/*
+ * This file is part of the LibreOffice project.
  *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * This file incorporates work covered by the following license notice:
  *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
 
 #include <cstdio>
 #include <osl/diagnose.h>
@@ -37,6 +28,8 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/curve/b2dcubicbezier.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <com/sun/star/drawing/LineCap.hpp>
+#include <basegfx/polygon/b2dpolypolygoncutter.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -341,7 +334,13 @@ namespace basegfx
             }
         }
 
-        B2DPolygon createAreaGeometryForEdge(const B2DCubicBezier& rEdge, double fHalfLineWidth)
+        B2DPolygon createAreaGeometryForEdge(
+            const B2DCubicBezier& rEdge,
+            double fHalfLineWidth,
+            bool bStartRound,
+            bool bEndRound,
+            bool bStartSquare,
+            bool bEndSquare)
         {
             // create polygon for edge
             // Unfortunately, while it would be geometrically correct to not add
@@ -354,31 +353,87 @@ namespace basegfx
                 const B2DVector aPureEdgeVector(rEdge.getEndPoint() - rEdge.getStartPoint());
                 const double fEdgeLength(aPureEdgeVector.getLength());
                 const bool bIsEdgeLengthZero(fTools::equalZero(fEdgeLength));
-                const B2DVector aTangentA(rEdge.getTangent(0.0));
-                const B2DVector aTangentB(rEdge.getTangent(1.0));
+                B2DVector aTangentA(rEdge.getTangent(0.0)); aTangentA.normalize();
+                B2DVector aTangentB(rEdge.getTangent(1.0)); aTangentB.normalize();
+                const B2DVector aNormalizedPerpendicularA(getPerpendicular(aTangentA));
+                const B2DVector aNormalizedPerpendicularB(getPerpendicular(aTangentB));
+
+                // create upper displacement vectors and check if they cut
+                const B2DVector aPerpendStartA(aNormalizedPerpendicularA * -fHalfLineWidth);
+                const B2DVector aPerpendEndA(aNormalizedPerpendicularB * -fHalfLineWidth);
+                double fCutA(0.0);
+                const tools::CutFlagValue aCutA(tools::findCut(
+                    rEdge.getStartPoint(), aPerpendStartA,
+                    rEdge.getEndPoint(), aPerpendEndA,
+                    CUTFLAG_ALL, &fCutA));
+                const bool bCutA(CUTFLAG_NONE != aCutA);
+
+                // create lower displacement vectors and check if they cut
+                const B2DVector aPerpendStartB(aNormalizedPerpendicularA * fHalfLineWidth);
+                const B2DVector aPerpendEndB(aNormalizedPerpendicularB * fHalfLineWidth);
+                double fCutB(0.0);
+                const tools::CutFlagValue aCutB(tools::findCut(
+                    rEdge.getEndPoint(), aPerpendEndB,
+                    rEdge.getStartPoint(), aPerpendStartB,
+                    CUTFLAG_ALL, &fCutB));
+                const bool bCutB(CUTFLAG_NONE != aCutB);
+
+                // check if cut happens
+                const bool bCut(bCutA || bCutB);
+                B2DPoint aCutPoint;
+
+                // create left edge
+                if(bStartRound || bStartSquare)
+                {
+                    if(bStartRound)
+                    {
+                        basegfx::B2DPolygon aStartPolygon(tools::createHalfUnitCircle());
+
+                        aStartPolygon.transform(
+                            tools::createScaleShearXRotateTranslateB2DHomMatrix(
+                                fHalfLineWidth, fHalfLineWidth,
+                                0.0,
+                                atan2(aTangentA.getY(), aTangentA.getX()) + F_PI2,
+                                rEdge.getStartPoint().getX(), rEdge.getStartPoint().getY()));
+                        aBezierPolygon.append(aStartPolygon);
+                    }
+                    else // bStartSquare
+                    {
+                        const basegfx::B2DPoint aStart(rEdge.getStartPoint() - (aTangentA * fHalfLineWidth));
+
+                        if(bCutB)
+                        {
+                            aBezierPolygon.append(rEdge.getStartPoint() + aPerpendStartB);
+                        }
+
+                        aBezierPolygon.append(aStart + aPerpendStartB);
+                        aBezierPolygon.append(aStart + aPerpendStartA);
+
+                        if(bCutA)
+                        {
+                            aBezierPolygon.append(rEdge.getStartPoint() + aPerpendStartA);
+                        }
+                    }
+                }
+                else
+                {
+                    // append original in-between point
+                    aBezierPolygon.append(rEdge.getStartPoint());
+                }
 
                 // create upper edge.
                 {
-                    // create displacement vectors and check if they cut
-                    const B2DVector aPerpendStart(getNormalizedPerpendicular(aTangentA) * -fHalfLineWidth);
-                    const B2DVector aPerpendEnd(getNormalizedPerpendicular(aTangentB) * -fHalfLineWidth);
-                    double fCut(0.0);
-                    const tools::CutFlagValue aCut(tools::findCut(
-                        rEdge.getStartPoint(), aPerpendStart,
-                        rEdge.getEndPoint(), aPerpendEnd,
-                        CUTFLAG_ALL, &fCut));
-
-                    if(CUTFLAG_NONE != aCut)
+                    if(bCutA)
                     {
                         // calculate cut point and add
-                        const B2DPoint aCutPoint(rEdge.getStartPoint() + (aPerpendStart * fCut));
+                        aCutPoint = rEdge.getStartPoint() + (aPerpendStartA * fCutA);
                         aBezierPolygon.append(aCutPoint);
                     }
                     else
                     {
                         // create scaled bezier segment
-                        const B2DPoint aStart(rEdge.getStartPoint() + aPerpendStart);
-                        const B2DPoint aEnd(rEdge.getEndPoint() + aPerpendEnd);
+                        const B2DPoint aStart(rEdge.getStartPoint() + aPerpendStartA);
+                        const B2DPoint aEnd(rEdge.getEndPoint() + aPerpendEndA);
                         const B2DVector aEdge(aEnd - aStart);
                         const double fLength(aEdge.getLength());
                         const double fScale(bIsEdgeLengthZero ? 1.0 : fLength / fEdgeLength);
@@ -390,31 +445,58 @@ namespace basegfx
                     }
                 }
 
-                // append original in-between point
-                aBezierPolygon.append(rEdge.getEndPoint());
+                // create right edge
+                if(bEndRound || bEndSquare)
+                {
+                    if(bEndRound)
+                    {
+                        basegfx::B2DPolygon aEndPolygon(tools::createHalfUnitCircle());
+
+                        aEndPolygon.transform(
+                            tools::createScaleShearXRotateTranslateB2DHomMatrix(
+                                fHalfLineWidth, fHalfLineWidth,
+                                0.0,
+                                atan2(aTangentB.getY(), aTangentB.getX()) - F_PI2,
+                                rEdge.getEndPoint().getX(), rEdge.getEndPoint().getY()));
+                        aBezierPolygon.append(aEndPolygon);
+                    }
+                    else // bEndSquare
+                    {
+                        const basegfx::B2DPoint aEnd(rEdge.getEndPoint() + (aTangentB * fHalfLineWidth));
+
+                        if(bCutA)
+                        {
+                            aBezierPolygon.append(rEdge.getEndPoint() + aPerpendEndA);
+                        }
+
+                        aBezierPolygon.append(aEnd + aPerpendEndA);
+                        aBezierPolygon.append(aEnd + aPerpendEndB);
+
+                        if(bCutB)
+                        {
+                            aBezierPolygon.append(rEdge.getEndPoint() + aPerpendEndB);
+                        }
+                    }
+                }
+                else
+                {
+                    // append original in-between point
+                    aBezierPolygon.append(rEdge.getEndPoint());
+                }
 
                 // create lower edge.
                 {
-                    // create displacement vectors and check if they cut
-                    const B2DVector aPerpendStart(getNormalizedPerpendicular(aTangentA) * fHalfLineWidth);
-                    const B2DVector aPerpendEnd(getNormalizedPerpendicular(aTangentB) * fHalfLineWidth);
-                    double fCut(0.0);
-                    const tools::CutFlagValue aCut(tools::findCut(
-                        rEdge.getEndPoint(), aPerpendEnd,
-                        rEdge.getStartPoint(), aPerpendStart,
-                        CUTFLAG_ALL, &fCut));
-
-                    if(CUTFLAG_NONE != aCut)
+                    if(bCutB)
                     {
                         // calculate cut point and add
-                        const B2DPoint aCutPoint(rEdge.getEndPoint() + (aPerpendEnd * fCut));
+                        aCutPoint = rEdge.getEndPoint() + (aPerpendEndB * fCutB);
                         aBezierPolygon.append(aCutPoint);
                     }
                     else
                     {
                         // create scaled bezier segment
-                        const B2DPoint aStart(rEdge.getEndPoint() + aPerpendEnd);
-                        const B2DPoint aEnd(rEdge.getStartPoint() + aPerpendStart);
+                        const B2DPoint aStart(rEdge.getEndPoint() + aPerpendEndB);
+                        const B2DPoint aEnd(rEdge.getStartPoint() + aPerpendStartB);
                         const B2DVector aEdge(aEnd - aStart);
                         const double fLength(aEdge.getLength());
                         const double fScale(bIsEdgeLengthZero ? 1.0 : fLength / fEdgeLength);
@@ -426,38 +508,165 @@ namespace basegfx
                     }
                 }
 
-                // append original in-between point
-                aBezierPolygon.append(rEdge.getStartPoint());
-
-                // close and return
+                // close
                 aBezierPolygon.setClosed(true);
+
+                if(bStartRound || bEndRound)
+                {
+                    // double points possible when round caps are used at start or end
+                    aBezierPolygon.removeDoublePoints();
+                }
+
+                if(bCut && ((bStartRound || bStartSquare) && (bEndRound || bEndSquare)))
+                {
+                    // When cut exists and both ends are extended with caps, a self-intersecting polygon
+                    // is created; one cut point is known, but there is a 2nd one in the caps geometry.
+                    // Solve by using tooling.
+                    // Remark: This nearly never happens due to curve preparations to extreme points
+                    // and maximum angle turning, but I constructed a test case and checkd that it is
+                    // working propery.
+                    const B2DPolyPolygon aTemp(tools::solveCrossovers(aBezierPolygon));
+                    const sal_uInt32 nTempCount(aTemp.count());
+
+                    if(nTempCount)
+                    {
+                        if(nTempCount > 1)
+                        {
+                            // as expected, multiple polygons (with same orientation). Remove
+                            // the one which contains aCutPoint, or better take the one without
+                            for (sal_uInt32 a(0); a < nTempCount; a++)
+                            {
+                                aBezierPolygon = aTemp.getB2DPolygon(a);
+
+                                const sal_uInt32 nCandCount(aBezierPolygon.count());
+
+                                for(sal_uInt32 b(0); b < nCandCount; b++)
+                                {
+                                    if(aCutPoint.equal(aBezierPolygon.getB2DPoint(b)))
+                                    {
+                                        aBezierPolygon.clear();
+                                        break;
+                                    }
+                                }
+
+                                if(aBezierPolygon.count())
+                                {
+                                    break;
+                                }
+                            }
+
+                            OSL_ENSURE(aBezierPolygon.count(), "Error in line geometry creation, could not solve self-intersection (!)");
+                        }
+                        else
+                        {
+                            // none found, use result
+                            aBezierPolygon = aTemp.getB2DPolygon(0);
+                        }
+                    }
+                    else
+                    {
+                        OSL_ENSURE(false, "Error in line geometry creation, could not solve self-intersection (!)");
+                    }
+                }
+
+                // return
                 return aBezierPolygon;
             }
             else
             {
-                // #i101491# emulate rEdge.getTangent call which applies a factor of 0.3 to the
-                // full-length edge vector to have numerically exactly the same results as in the
-                // createAreaGeometryForJoin implementation
-                const B2DVector aEdgeTangent((rEdge.getEndPoint() - rEdge.getStartPoint()) * 0.3);
-                const B2DVector aPerpendEdgeVector(getNormalizedPerpendicular(aEdgeTangent) * fHalfLineWidth);
+                // Get start and  end point, create tangent and set to needed length
+                B2DVector aTangent(rEdge.getEndPoint() - rEdge.getStartPoint());
+                aTangent.setLength(fHalfLineWidth);
+
+                // prepare return value
                 B2DPolygon aEdgePolygon;
 
-                // create upper edge
-                aEdgePolygon.append(rEdge.getStartPoint() - aPerpendEdgeVector);
-                aEdgePolygon.append(rEdge.getEndPoint() - aPerpendEdgeVector);
+                // buffered angle
+                double fAngle(0.0);
+                bool bAngle(false);
 
-                // append original in-between point
-                aEdgePolygon.append(rEdge.getEndPoint());
+                // buffered perpendicular
+                B2DVector aPerpend;
+                bool bPerpend(false);
 
-                // create lower edge
-                aEdgePolygon.append(rEdge.getEndPoint() + aPerpendEdgeVector);
-                aEdgePolygon.append(rEdge.getStartPoint() + aPerpendEdgeVector);
+                // create left vertical
+                if(bStartRound)
+                {
+                    aEdgePolygon = tools::createHalfUnitCircle();
+                    fAngle = atan2(aTangent.getY(), aTangent.getX());
+                    bAngle = true;
+                    aEdgePolygon.transform(
+                        tools::createScaleShearXRotateTranslateB2DHomMatrix(
+                            fHalfLineWidth, fHalfLineWidth,
+                            0.0,
+                            fAngle + F_PI2,
+                            rEdge.getStartPoint().getX(), rEdge.getStartPoint().getY()));
+                }
+                else
+                {
+                    aPerpend.setX(-aTangent.getY());
+                    aPerpend.setY(aTangent.getX());
+                    bPerpend = true;
 
-                // append original in-between point
-                aEdgePolygon.append(rEdge.getStartPoint());
+                    if(bStartSquare)
+                    {
+                        const basegfx::B2DPoint aStart(rEdge.getStartPoint() - aTangent);
+
+                        aEdgePolygon.append(aStart + aPerpend);
+                        aEdgePolygon.append(aStart - aPerpend);
+                    }
+                    else
+                    {
+                        aEdgePolygon.append(rEdge.getStartPoint() + aPerpend);
+                        aEdgePolygon.append(rEdge.getStartPoint()); // keep the in-between point for numerical reasons
+                        aEdgePolygon.append(rEdge.getStartPoint() - aPerpend);
+                    }
+                }
+
+                // create right vertical
+                if(bEndRound)
+                {
+                    basegfx::B2DPolygon aEndPolygon(tools::createHalfUnitCircle());
+
+                    if(!bAngle)
+                    {
+                        fAngle = atan2(aTangent.getY(), aTangent.getX());
+                    }
+
+                    aEndPolygon.transform(
+                        tools::createScaleShearXRotateTranslateB2DHomMatrix(
+                            fHalfLineWidth, fHalfLineWidth,
+                            0.0,
+                            fAngle - F_PI2,
+                            rEdge.getEndPoint().getX(), rEdge.getEndPoint().getY()));
+                    aEdgePolygon.append(aEndPolygon);
+                }
+                else
+                {
+                    if(!bPerpend)
+                    {
+                        aPerpend.setX(-aTangent.getY());
+                        aPerpend.setY(aTangent.getX());
+                    }
+
+                    if(bEndSquare)
+                    {
+                        const basegfx::B2DPoint aEnd(rEdge.getEndPoint() + aTangent);
+
+                        aEdgePolygon.append(aEnd - aPerpend);
+                        aEdgePolygon.append(aEnd + aPerpend);
+                    }
+                    else
+                    {
+                        aEdgePolygon.append(rEdge.getEndPoint() - aPerpend);
+                        aEdgePolygon.append(rEdge.getEndPoint()); // keep the in-between point for numerical reasons
+                        aEdgePolygon.append(rEdge.getEndPoint() + aPerpend);
+                    }
+                }
 
                 // close and return
                 aEdgePolygon.setClosed(true);
+
                 return aEdgePolygon;
             }
         }
@@ -577,6 +786,7 @@ namespace basegfx
             const B2DPolygon& rCandidate,
             double fHalfLineWidth,
             B2DLineJoin eJoin,
+            com::sun::star::drawing::LineCap eCap,
             double fMaxAllowedAngle,
             double fMaxPartOfEdge,
             double fMiterMinimumAngle)
@@ -621,6 +831,7 @@ namespace basegfx
                 B2DPolyPolygon aRetval;
                 const bool bIsClosed(aCandidate.isClosed());
                 const sal_uInt32 nEdgeCount(bIsClosed ? nPointCount : nPointCount - 1);
+                const bool bLineCap(!bIsClosed && com::sun::star::drawing::LineCap_BUTT != eCap);
 
                 if(nEdgeCount)
                 {
@@ -652,16 +863,16 @@ namespace basegfx
                         // check and create linejoin
                         if(bEventuallyCreateLineJoin && (bIsClosed || 0 != a))
                         {
-                            const B2DVector aTangentPrev(aPrev.getTangent(1.0));
-                            const B2DVector aTangentEdge(aEdge.getTangent(0.0));
+                            B2DVector aTangentPrev(aPrev.getTangent(1.0)); aTangentPrev.normalize();
+                            B2DVector aTangentEdge(aEdge.getTangent(0.0)); aTangentEdge.normalize();
                             B2VectorOrientation aOrientation(getOrientation(aTangentPrev, aTangentEdge));
 
                             if(ORIENTATION_NEUTRAL == aOrientation)
                             {
-                                // they are parallell or empty; if they are both not zero and point
-                                // in opposite direction, a half-circle is needed
-                                if(!aTangentPrev.equalZero() && !aTangentEdge.equalZero())
-                                {
+                                   // they are parallell or empty; if they are both not zero and point
+                                   // in opposite direction, a half-circle is needed
+                                   if(!aTangentPrev.equalZero() && !aTangentEdge.equalZero())
+                                   {
                                     const double fAngle(fabs(aTangentPrev.angle(aTangentEdge)));
 
                                     if(fTools::equal(fAngle, F_PI))
@@ -675,38 +886,76 @@ namespace basegfx
 
                             if(ORIENTATION_POSITIVE == aOrientation)
                             {
-                                const B2DVector aPerpendPrev(getNormalizedPerpendicular(aTangentPrev) * -fHalfLineWidth);
-                                const B2DVector aPerpendEdge(getNormalizedPerpendicular(aTangentEdge) * -fHalfLineWidth);
+                                const B2DVector aPerpendPrev(getPerpendicular(aTangentPrev) * -fHalfLineWidth);
+                                const B2DVector aPerpendEdge(getPerpendicular(aTangentEdge) * -fHalfLineWidth);
 
-                                aRetval.append(createAreaGeometryForJoin(
-                                    aTangentPrev, aTangentEdge,
-                                    aPerpendPrev, aPerpendEdge,
-                                    aEdge.getStartPoint(), fHalfLineWidth,
-                                    eJoin, fMiterMinimumAngle));
+                                aRetval.append(
+                                    createAreaGeometryForJoin(
+                                        aTangentPrev,
+                                        aTangentEdge,
+                                        aPerpendPrev,
+                                        aPerpendEdge,
+                                        aEdge.getStartPoint(),
+                                        fHalfLineWidth,
+                                        eJoin,
+                                        fMiterMinimumAngle));
                             }
                             else if(ORIENTATION_NEGATIVE == aOrientation)
                             {
-                                const B2DVector aPerpendPrev(getNormalizedPerpendicular(aTangentPrev) * fHalfLineWidth);
-                                const B2DVector aPerpendEdge(getNormalizedPerpendicular(aTangentEdge) * fHalfLineWidth);
+                                const B2DVector aPerpendPrev(getPerpendicular(aTangentPrev) * fHalfLineWidth);
+                                const B2DVector aPerpendEdge(getPerpendicular(aTangentEdge) * fHalfLineWidth);
 
-                                aRetval.append(createAreaGeometryForJoin(
-                                    aTangentEdge, aTangentPrev,
-                                    aPerpendEdge, aPerpendPrev,
-                                    aEdge.getStartPoint(), fHalfLineWidth,
-                                    eJoin, fMiterMinimumAngle));
+                                aRetval.append(
+                                    createAreaGeometryForJoin(
+                                        aTangentEdge,
+                                        aTangentPrev,
+                                        aPerpendEdge,
+                                        aPerpendPrev,
+                                        aEdge.getStartPoint(),
+                                        fHalfLineWidth,
+                                        eJoin,
+                                        fMiterMinimumAngle));
                             }
                         }
 
                         // create geometry for edge
-                        aRetval.append(createAreaGeometryForEdge(aEdge, fHalfLineWidth));
+                        const bool bLast(a + 1 == nEdgeCount);
 
-                        // prepare next step
-                        if(bEventuallyCreateLineJoin)
+                        if(bLineCap)
                         {
-                            aPrev = aEdge;
+                            const bool bFirst(!a);
+
+                            aRetval.append(
+                                createAreaGeometryForEdge(
+                                    aEdge,
+                                    fHalfLineWidth,
+                                    bFirst && com::sun::star::drawing::LineCap_ROUND == eCap,
+                                    bLast && com::sun::star::drawing::LineCap_ROUND == eCap,
+                                    bFirst && com::sun::star::drawing::LineCap_SQUARE == eCap,
+                                    bLast && com::sun::star::drawing::LineCap_SQUARE == eCap));
+                        }
+                        else
+                        {
+                            aRetval.append(
+                                createAreaGeometryForEdge(
+                                    aEdge,
+                                    fHalfLineWidth,
+                                    false,
+                                    false,
+                                    false,
+                                    false));
                         }
 
-                        aEdge.setStartPoint(aEdge.getEndPoint());
+                        // prepare next step
+                        if(!bLast)
+                        {
+                            if(bEventuallyCreateLineJoin)
+                            {
+                                aPrev = aEdge;
+                            }
+
+                            aEdge.setStartPoint(aEdge.getEndPoint());
+                        }
                     }
                 }
 

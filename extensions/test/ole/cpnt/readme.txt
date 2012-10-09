@@ -8,7 +8,7 @@ The uno types are also build in this folder. The idl file is in ..\idl. The
 types rdb is in wntmscixx.pro\bin\oletest.rdb
 
 The service is used by:
-OleTest.htm 
+OleTest.htm
 JScriptNewStyle.htm
 ScriptTest.html
 

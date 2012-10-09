@@ -20,6 +20,8 @@ $(eval $(call gb_Package_Package,filter_inc,$(SRCDIR)/filter/inc))
 
 $(eval $(call gb_Package_add_file,filter_inc,inc/filter/msfilter/msfilterdllapi.h,filter/msfilter/msfilterdllapi.h))
 $(eval $(call gb_Package_add_file,filter_inc,inc/filter/msfilter/countryid.hxx,filter/msfilter/countryid.hxx))
+$(eval $(call gb_Package_add_file,filter_inc,inc/filter/msfilter/dffpropset.hxx,filter/msfilter/dffpropset.hxx))
+$(eval $(call gb_Package_add_file,filter_inc,inc/filter/msfilter/dffrecordheader.hxx,filter/msfilter/dffrecordheader.hxx))
 $(eval $(call gb_Package_add_file,filter_inc,inc/filter/msfilter/escherex.hxx,filter/msfilter/escherex.hxx))
 $(eval $(call gb_Package_add_file,filter_inc,inc/filter/msfilter/mscodec.hxx,filter/msfilter/mscodec.hxx))
 $(eval $(call gb_Package_add_file,filter_inc,inc/filter/msfilter/msdffimp.hxx,filter/msfilter/msdffimp.hxx))

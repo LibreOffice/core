@@ -38,6 +38,8 @@ $(eval $(call gb_Library_add_defs,drawinglayer,\
     -DDRAWINGLAYER_DLLIMPLEMENTATION \
 ))
 
+$(eval $(call gb_Library_set_componentfile,drawinglayer,drawinglayer/drawinglayer))
+
 $(eval $(call gb_Library_use_sdk_api,drawinglayer))
 
 $(eval $(call gb_Library_use_externals,drawinglayer,\
@@ -92,9 +94,9 @@ $(eval $(call gb_Library_add_exception_objects,drawinglayer,\
     drawinglayer/source/primitive2d/baseprimitive2d \
     drawinglayer/source/primitive2d/bitmapprimitive2d \
     drawinglayer/source/primitive2d/borderlineprimitive2d \
-    drawinglayer/source/primitive2d/chartprimitive2d \
     drawinglayer/source/primitive2d/clippedborderlineprimitive2d \
     drawinglayer/source/primitive2d/controlprimitive2d \
+	drawinglayer/source/primitive2d/cropprimitive2d \
     drawinglayer/source/primitive2d/discretebitmapprimitive2d \
     drawinglayer/source/primitive2d/discreteshadowprimitive2d \
     drawinglayer/source/primitive2d/embedded3dprimitive2d \
@@ -114,15 +116,17 @@ $(eval $(call gb_Library_add_exception_objects,drawinglayer,\
     drawinglayer/source/primitive2d/metafileprimitive2d \
     drawinglayer/source/primitive2d/modifiedcolorprimitive2d \
     drawinglayer/source/primitive2d/pagepreviewprimitive2d \
+	drawinglayer/source/primitive2d/patternfillprimitive2d \
     drawinglayer/source/primitive2d/pointarrayprimitive2d \
     drawinglayer/source/primitive2d/polygonprimitive2d \
     drawinglayer/source/primitive2d/polypolygonprimitive2d \
     drawinglayer/source/primitive2d/primitivetools2d \
-    drawinglayer/source/primitive2d/rendergraphicprimitive2d \
     drawinglayer/source/primitive2d/sceneprimitive2d \
     drawinglayer/source/primitive2d/sdrdecompositiontools2d \
     drawinglayer/source/primitive2d/shadowprimitive2d \
     drawinglayer/source/primitive2d/structuretagprimitive2d \
+	drawinglayer/source/primitive2d/svggradientprimitive2d \
+	drawinglayer/source/primitive2d/textbreakuphelper \
     drawinglayer/source/primitive2d/textdecoratedprimitive2d \
     drawinglayer/source/primitive2d/texteffectprimitive2d \
     drawinglayer/source/primitive2d/textenumsprimitive2d \
@@ -159,7 +163,6 @@ $(eval $(call gb_Library_add_exception_objects,drawinglayer,\
     drawinglayer/source/processor2d/canvasprocessor \
     drawinglayer/source/processor2d/contourextractor2d \
     drawinglayer/source/processor2d/getdigitlanguage \
-    drawinglayer/source/processor2d/helperchartrenderer \
     drawinglayer/source/processor2d/helperwrongspellrenderer \
     drawinglayer/source/processor2d/hittestprocessor2d \
     drawinglayer/source/processor2d/linegeometryextractor2d \
@@ -179,6 +182,9 @@ $(eval $(call gb_Library_add_exception_objects,drawinglayer,\
     drawinglayer/source/processor3d/shadow3dextractor \
     drawinglayer/source/processor3d/zbufferprocessor3d \
     drawinglayer/source/texture/texture3d \
+	drawinglayer/source/tools/converters \
+	drawinglayer/source/drawinglayeruno/drawinglayeruno \
+	drawinglayer/source/drawinglayeruno/xprimitive2drenderer \
     drawinglayer/source/texture/texture \
     drawinglayer/source/dumper/XShapeDumper \
     drawinglayer/source/dumper/EnhancedShapeDumper \

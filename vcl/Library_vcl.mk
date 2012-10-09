@@ -99,9 +99,6 @@ $(eval $(call gb_Library_use_externals,vcl,\
 	lcms2 \
 ))
 
-$(eval $(call gb_Library_add_cobjects,vcl,\
-    vcl/source/fontsubset/list \
-))
 $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/app/brand \
     vcl/source/app/dbggui \
@@ -159,6 +156,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/fontsubset/cff \
     vcl/source/fontsubset/fontsubset \
     vcl/source/fontsubset/gsub \
+    vcl/source/fontsubset/list \
     vcl/source/fontsubset/sft \
     vcl/source/fontsubset/ttcr \
     vcl/source/fontsubset/xlat \
@@ -221,13 +219,11 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/gdi/print \
     vcl/source/gdi/regband \
     vcl/source/gdi/region \
-    vcl/source/gdi/rendergraphic \
-    vcl/source/gdi/rendergraphicrasterizer \
     vcl/source/gdi/salgdilayout \
     vcl/source/gdi/sallayout \
     vcl/source/gdi/salmisc \
     vcl/source/gdi/salnativewidgets-none \
-    vcl/source/gdi/svgread \
+    vcl/source/gdi/svgdata \
     vcl/source/gdi/temporaryfonts \
     vcl/source/gdi/textlayout \
     vcl/source/gdi/virdev \
@@ -289,7 +285,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
 # optional parts
 
 ## handle Graphite
-ifneq ($(ENABLE_GRAPHITE),)
+ifeq ($(ENABLE_GRAPHITE),TRUE)
 # add defines, graphite sources for all platforms
 $(eval $(call gb_Library_add_defs,vcl,\
     -DENABLE_GRAPHITE \
@@ -312,19 +308,6 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
 endif
 
 $(eval $(call gb_Library_use_external,vcl,graphite))
-
-endif
-
-ifneq ($(ENABLE_LIBRSVG),NO)
-$(eval $(call gb_Library_add_exception_objects,vcl,\
-    vcl/source/components/rasterizer_rsvg \
-))
-
-$(eval $(call gb_Library_add_defs,vcl,\
-    -DENABLE_LIBRSVG \
-))
-
-$(eval $(call gb_Library_use_external,vcl,cairo))
 
 endif
 
@@ -644,7 +627,6 @@ $(eval $(call gb_Library_use_system_win32_libs,vcl,\
 	imm32 \
 	mpr \
 	msimg32 \
-	oldnames \
 	ole32 \
 	shell32 \
 	usp10 \
@@ -655,9 +637,11 @@ $(eval $(call gb_Library_use_system_win32_libs,vcl,\
 
 $(eval $(call gb_Library_add_nativeres,vcl,vcl/src))
 ifeq ($(COM),MSC)
+ifeq ($(USE_MINGW),)
 $(eval $(call gb_Library_add_ldflags,vcl,\
     /ENTRY:LibMain@12 \
 ))
+endif
 endif
 endif
 

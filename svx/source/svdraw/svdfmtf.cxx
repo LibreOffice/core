@@ -1,31 +1,21 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*************************************************************************
+/*
+ * This file is part of the LibreOffice project.
  *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * This file incorporates work covered by the following license notice:
  *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
-
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
 
 #include "svdfmtf.hxx"
 #include <editeng/editdata.hxx>
@@ -40,6 +30,7 @@
 #include <editeng/crsditem.hxx>
 #include <editeng/shdditem.hxx>
 #include <svx/xlnclit.hxx>
+#include <svx/xlncapit.hxx>
 #include <svx/xlnwtit.hxx>
 #include <svx/xflclit.hxx>
 #include <svx/xgrad.hxx>
@@ -79,6 +70,7 @@ ImpSdrGDIMetaFileImport::ImpSdrGDIMetaFileImport(SdrModel& rModel):
     pPage(NULL),pModel(NULL),nLayer(0),
     nLineWidth(0),
     maLineJoin(basegfx::B2DLINEJOIN_NONE),
+    maLineCap(com::sun::star::drawing::LineCap_BUTT),
     maDash(XDASH_RECT, 0, 0, 0, 0, 0),
     fScaleX(0.0),fScaleY(0.0),
     bFntDirty(sal_True),
@@ -195,7 +187,6 @@ sal_uIntPtr ImpSdrGDIMetaFileImport::DoImport(const GDIMetaFile& rMtf,
             case META_POP_ACTION            : DoAction((MetaPopAction            &)*pAct); break;
             case META_HATCH_ACTION          : DoAction((MetaHatchAction          &)*pAct); break;
             case META_COMMENT_ACTION        : DoAction((MetaCommentAction        &)*pAct, pMtf); break;
-            case META_RENDERGRAPHIC_ACTION  : DoAction((MetaRenderGraphicAction  &)*pAct); break;
         }
 
         if(pProgrInfo != NULL)
@@ -309,6 +300,9 @@ void ImpSdrGDIMetaFileImport::SetAttributes(SdrObject* pObj, bool bForceTextAttr
                 break;
         }
 
+        // Add LineCap support
+        pLineAttr->Put(XLineCapItem(maLineCap));
+
         if(((maDash.GetDots() && maDash.GetDotLen()) || (maDash.GetDashes() && maDash.GetDashLen())) && maDash.GetDistance())
         {
             pLineAttr->Put(XLineDashItem(String(), maDash));
@@ -354,10 +348,13 @@ void ImpSdrGDIMetaFileImport::SetAttributes(SdrObject* pObj, bool bForceTextAttr
         pTextAttr->Put(SvxOverlineItem(aFnt.GetOverline(), EE_CHAR_OVERLINE));
         pTextAttr->Put(SvxCrossedOutItem(aFnt.GetStrikeout(), EE_CHAR_STRIKEOUT));
         pTextAttr->Put(SvxShadowedItem(aFnt.IsShadow(), EE_CHAR_SHADOW));
-        pTextAttr->Put(SvxAutoKernItem(aFnt.IsKerning(), EE_CHAR_KERNING));
+
+        // #i118485# Setting this item leads to problems (written #i118498# for this)
+        // pTextAttr->Put(SvxAutoKernItem(aFnt.IsKerning(), EE_CHAR_KERNING));
+
         pTextAttr->Put(SvxWordLineModeItem(aFnt.IsWordLineMode(), EE_CHAR_WLM));
         pTextAttr->Put(SvxContourItem(aFnt.IsOutline(), EE_CHAR_OUTLINE));
-        pTextAttr->Put(SvxColorItem(aFnt.GetColor(), EE_CHAR_COLOR));
+        pTextAttr->Put(SvxColorItem(aVD.GetTextColor(), EE_CHAR_COLOR));
         //... svxfont textitem svditext
         bFntDirty=sal_False;
     }
@@ -480,6 +477,7 @@ void ImpSdrGDIMetaFileImport::DoAction(MetaLineAction& rAct)
             SdrPathObj* pPath = new SdrPathObj(OBJ_LINE, basegfx::B2DPolyPolygon(aLine));
             nLineWidth = nNewLineWidth;
             maLineJoin = rLineInfo.GetLineJoin();
+            maLineCap = rLineInfo.GetLineCap();
             maDash = XDash(XDASH_RECT,
                 rLineInfo.GetDotCount(), rLineInfo.GetDotLen(),
                 rLineInfo.GetDashCount(), rLineInfo.GetDashLen(),
@@ -685,6 +683,7 @@ void ImpSdrGDIMetaFileImport::DoAction( MetaPolyLineAction& rAct )
             basegfx::B2DPolyPolygon(aSource));
         nLineWidth = nNewLineWidth;
         maLineJoin = rLineInfo.GetLineJoin();
+        maLineCap = rLineInfo.GetLineCap();
         maDash = XDash(XDASH_RECT,
             rLineInfo.GetDotCount(), rLineInfo.GetDotLen(),
             rLineInfo.GetDashCount(), rLineInfo.GetDashLen(),
@@ -1019,27 +1018,6 @@ void ImpSdrGDIMetaFileImport::DoAction( MetaCommentAction& rAct, GDIMetaFile* pM
             pSkipAct = pMtf->NextAction();
         }
     }
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
-void ImpSdrGDIMetaFileImport::DoAction(MetaRenderGraphicAction& rAct)
-{
-    GDIMetaFile                 aMtf;
-    const ::vcl::RenderGraphic& rRenderGraphic = rAct.GetRenderGraphic();
-    Rectangle                   aRect( rAct.GetPoint(), rAct.GetSize() );
-    const Point                 aPos;
-    const Size                  aPrefSize( rRenderGraphic.GetPrefSize() );
-
-    aRect.Right()++; aRect.Bottom()++;
-
-    aMtf.SetPrefMapMode( rRenderGraphic.GetPrefMapMode() );
-    aMtf.SetPrefSize( aPrefSize );
-    aMtf.AddAction( new MetaRenderGraphicAction( aPos, aPrefSize, rRenderGraphic ) );
-    aMtf.WindStart();
-
-    SdrGrafObj* pGraf=new SdrGrafObj( aMtf, aRect );
-    InsertObj( pGraf );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

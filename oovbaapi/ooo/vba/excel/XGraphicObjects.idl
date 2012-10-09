@@ -1,34 +1,37 @@
-/*************************************************************************
+/*
+ * This file is part of the LibreOffice project.
  *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * This file incorporates work covered by the following license notice:
  *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
 
-#ifndef __ooo_vba_excel_GraphicObjects_idl__
-#define __ooo_vba_excel_GraphicObjects_idl__
+/*  Note: This is a compatibility interface for drawing objects and drawing
+    controls embedded in sheets. All these symbols are deprecated
+    in VBA and kept for compatibility with old VBA scripts. */
 
-#include <com/sun/star/uno/XInterface.idl>
+#ifndef __ooo_vba_excel_XGraphicObjects_idl__
+#define __ooo_vba_excel_XGraphicObjects_idl__
+
+#include <ooo/vba/XCollection.idl>
+
+//=============================================================================
+
+/*  Note: This file collects all compatibility interfaces for collections of
+    drawing objects and drawing controls embedded in sheets. All these symbols
+    are deprecated in VBA and kept for compatibility with old VBA scripts. */
+
+//=============================================================================
 
 module ooo {  module vba { module excel {
 
@@ -66,10 +69,10 @@ interface XGraphicObjects : com::sun::star::uno::XInterface
     /** Adds a new graphic object to the sheet this collection belongs to. The
         type of the object is determined by the type of the collection.
 
-        @param fLeft  Position of the left border in points (1/72 inch).
-        @param fTop  Position of the top border in points (1/72 inch).
-        @param fWidth  Width of the object in points (1/72 inch).
-        @param fHeight  Height of the object in points (1/72 inch).
+        @param Left  Position of the left border in points (1/72 inch).
+        @param Top  Position of the top border in points (1/72 inch).
+        @param Width  Width of the object in points (1/72 inch).
+        @param Height  Height of the object in points (1/72 inch).
 
         @return  The created graphic object.
      */

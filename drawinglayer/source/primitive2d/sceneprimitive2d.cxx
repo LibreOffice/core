@@ -1,30 +1,21 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*************************************************************************
+/*
+ * This file is part of the LibreOffice project.
  *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * This file incorporates work covered by the following license notice:
  *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
 
 #include <drawinglayer/primitive2d/sceneprimitive2d.hxx>
 #include <basegfx/tools/canvastools.hxx>
@@ -207,24 +198,84 @@ namespace drawinglayer
                     }
                 }
 
-                // calculate logic render size in world coordinates for usage in renderer
-                basegfx::B2DVector aLogicRenderSize(
-                    aDiscreteRange.getWidth() * fReduceFactor,
-                    aDiscreteRange.getHeight() * fReduceFactor);
-                aLogicRenderSize *= rViewInformation.getInverseObjectToViewTransformation();
-
                 // determine the oversample value
                 static sal_uInt16 nDefaultOversampleValue(3);
                 const sal_uInt16 nOversampleValue(aDrawinglayerOpt.IsAntiAliasing() ? nDefaultOversampleValue : 0);
 
+                geometry::ViewInformation3D aViewInformation3D(getViewInformation3D());
+                {
+                    // calculate a transformation from DiscreteRange to evtl. rotated/sheared content.
+                    // Start with full transformation from object to discrete units
+                    basegfx::B2DHomMatrix aObjToUnit(rViewInformation.getObjectToViewTransformation() * getObjectTransformation());
+
+                    // bring to unit coordinates by applying inverse DiscreteRange
+                    aObjToUnit.translate(-aDiscreteRange.getMinX(), -aDiscreteRange.getMinY());
+                    aObjToUnit.scale(1.0 / aDiscreteRange.getWidth(), 1.0 / aDiscreteRange.getHeight());
+
+                    // calculate transformed user coordinate system
+                    const basegfx::B2DPoint aStandardNull(0.0, 0.0);
+                    const basegfx::B2DPoint aUnitRangeTopLeft(aObjToUnit * aStandardNull);
+                    const basegfx::B2DVector aStandardXAxis(1.0, 0.0);
+                    const basegfx::B2DVector aUnitRangeXAxis(aObjToUnit * aStandardXAxis);
+                    const basegfx::B2DVector aStandardYAxis(0.0, 1.0);
+                    const basegfx::B2DVector aUnitRangeYAxis(aObjToUnit * aStandardYAxis);
+
+                    if(!aUnitRangeTopLeft.equal(aStandardNull) || !aUnitRangeXAxis.equal(aStandardXAxis) || !aUnitRangeYAxis.equal(aStandardYAxis))
+                    {
+                        // build transformation from unit range to user coordinate system; the unit range
+                        // X and Y axes are the column vectors, the null point is the offset
+                        basegfx::B2DHomMatrix aUnitRangeToUser;
+
+                        aUnitRangeToUser.set3x2(
+                            aUnitRangeXAxis.getX(), aUnitRangeYAxis.getX(), aUnitRangeTopLeft.getX(),
+                            aUnitRangeXAxis.getY(), aUnitRangeYAxis.getY(), aUnitRangeTopLeft.getY());
+
+                        // decompose to allow to apply this to the 3D transformation
+                        basegfx::B2DVector aScale, aTranslate;
+                        double fRotate, fShearX;
+                        aUnitRangeToUser.decompose(aScale, aTranslate, fRotate, fShearX);
+
+                        // apply before DeviceToView and after Projection, 3D is in range [-1.0 .. 1.0] in X,Y and Z
+                        // and not yet flipped in Y
+                        basegfx::B3DHomMatrix aExtendedProjection(aViewInformation3D.getProjection());
+
+                        // bring to unit coordiantes, flip Y, leave Z unchanged
+                        aExtendedProjection.scale(0.5, -0.5, 1.0);
+                        aExtendedProjection.translate(0.5, 0.5, 0.0);
+
+                        // apply extra; Y is flipped now, go with positive shear and rotate values
+                        aExtendedProjection.scale(aScale.getX(), aScale.getY(), 1.0);
+                        aExtendedProjection.shearXZ(fShearX, 0.0);
+                        aExtendedProjection.rotate(0.0, 0.0, fRotate);
+                        aExtendedProjection.translate(aTranslate.getX(), aTranslate.getY(), 0.0);
+
+                        // back to state after projection
+                        aExtendedProjection.translate(-0.5, -0.5, 0.0);
+                        aExtendedProjection.scale(2.0, -2.0, 1.0);
+
+                        aViewInformation3D = geometry::ViewInformation3D(
+                            aViewInformation3D.getObjectTransformation(),
+                            aViewInformation3D.getOrientation(),
+                            aExtendedProjection,
+                            aViewInformation3D.getDeviceToView(),
+                            aViewInformation3D.getViewTime(),
+                            aViewInformation3D.getExtendedInformationSequence());
+                    }
+                }
+
+                // calculate logic render size in world coordinates for usage in renderer
+                const basegfx::B2DHomMatrix aInverseOToV(rViewInformation.getInverseObjectToViewTransformation());
+                const double fLogicX((aInverseOToV * basegfx::B2DVector(aDiscreteRange.getWidth() * fReduceFactor, 0.0)).getLength());
+                const double fLogicY((aInverseOToV * basegfx::B2DVector(0.0, aDiscreteRange.getHeight() * fReduceFactor)).getLength());
+
                 // use default 3D primitive processor to create BitmapEx for aUnitVisiblePart and process
                 processor3d::ZBufferProcessor3D aZBufferProcessor3D(
-                    getViewInformation3D(),
+                    aViewInformation3D,
                     rViewInformation,
                     getSdrSceneAttribute(),
                     getSdrLightingAttribute(),
-                    aLogicRenderSize.getX(),
-                    aLogicRenderSize.getY(),
+                    fLogicX,
+                    fLogicY,
                     aUnitVisibleRange,
                     nOversampleValue);
 
@@ -245,7 +296,7 @@ namespace drawinglayer
                     aNew2DTransform.set(1, 2, aVisibleDiscreteRange.getMinY());
 
                     // transform back to world coordinates for usage in primitive creation
-                    aNew2DTransform *= rViewInformation.getInverseObjectToViewTransformation();
+                    aNew2DTransform *= aInverseOToV;
 
                     // create bitmap primitive and add
                     const Primitive2DReference xRef(new BitmapPrimitive2D(maOldRenderedBitmap, aNew2DTransform));

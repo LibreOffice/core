@@ -74,7 +74,6 @@
 using namespace basegfx;
 using namespace basegfx::tools;
 using namespace drawinglayer::attribute;
-using namespace drawinglayer::primitive2d;
 
 namespace
 {
@@ -265,7 +264,7 @@ bool SwHeaderFooterWin::Contains( const Point &rDocPt ) const
 void SwHeaderFooterWin::Paint( const Rectangle& )
 {
     const Rectangle aRect( Rectangle( Point( 0, 0 ), PixelToLogic( GetSizePixel() ) ) );
-    Primitive2DSequence aSeq( 3 );
+    drawinglayer::primitive2d::Primitive2DSequence aSeq( 3 );
 
     B2DPolygon aPolygon = lcl_GetPolygon( aRect, m_bIsHeader );
 
@@ -282,7 +281,7 @@ void SwHeaderFooterWin::Paint( const Rectangle& )
         aFillColor = rSettings.GetDialogColor( ).getBColor();
         aLineColor = rSettings.GetDialogTextColor( ).getBColor();
 
-        aSeq[0] = Primitive2DReference( new PolyPolygonColorPrimitive2D(
+        aSeq[0] = drawinglayer::primitive2d::Primitive2DReference( new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(
                 B2DPolyPolygon( aPolygon ), aFillColor ) );
     }
     else
@@ -293,17 +292,17 @@ void SwHeaderFooterWin::Paint( const Rectangle& )
             nAngle = 0;
         FillGradientAttribute aFillAttrs( GRADIENTSTYLE_LINEAR, 0.0, 0.0, 0.0, nAngle,
                 aLighterColor, aFillColor, 10 );
-        aSeq[0] = Primitive2DReference( new FillGradientPrimitive2D(
+        aSeq[0] = drawinglayer::primitive2d::Primitive2DReference( new drawinglayer::primitive2d::FillGradientPrimitive2D(
                 aGradientRect, aFillAttrs ) );
     }
 
     // Create the border lines primitive
-    aSeq[1] = Primitive2DReference( new PolygonHairlinePrimitive2D(
+    aSeq[1] = drawinglayer::primitive2d::Primitive2DReference( new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(
             aPolygon, aLineColor ) );
 
     // Create the text primitive
     B2DVector aFontSize;
-    FontAttribute aFontAttr = getFontAttributeFromVclFont(
+    FontAttribute aFontAttr = drawinglayer::primitive2d::getFontAttributeFromVclFont(
            aFontSize, GetFont(), false, false );
 
     Rectangle aTextRect;
@@ -317,7 +316,7 @@ void SwHeaderFooterWin::Paint( const Rectangle& )
                 aFontSize.getX(), aFontSize.getY(),
                 double( aTextPos.X() ), double( aTextPos.Y() ) ) );
 
-    aSeq[2] = Primitive2DReference( new TextSimplePortionPrimitive2D(
+    aSeq[2] = drawinglayer::primitive2d::Primitive2DReference( new drawinglayer::primitive2d::TextSimplePortionPrimitive2D(
                 aTextMatrix,
                 String( m_sLabel ), 0, m_sLabel.getLength(),
                 std::vector< double >( ),
@@ -371,7 +370,7 @@ void SwHeaderFooterWin::Paint( const Rectangle& )
         aSignColor = Color( COL_WHITE ).getBColor( );
 
     aSeq.realloc( aSeq.getLength() + 1 );
-    aSeq[ aSeq.getLength() - 1 ] = Primitive2DReference( new PolyPolygonColorPrimitive2D(
+    aSeq[ aSeq.getLength() - 1 ] = drawinglayer::primitive2d::Primitive2DReference( new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(
             B2DPolyPolygon( aSign ), aSignColor ) );
 
     // Create the processor and process the primitives
@@ -381,9 +380,9 @@ void SwHeaderFooterWin::Paint( const Rectangle& )
                     *this, aNewViewInfos );
 
     // TODO Ghost it all if needed
-    Primitive2DSequence aGhostedSeq( 1 );
+    drawinglayer::primitive2d::Primitive2DSequence aGhostedSeq( 1 );
     double nFadeRate = double( m_nFadeRate ) / 100.0;
-    aGhostedSeq[0] = Primitive2DReference( new ModifiedColorPrimitive2D(
+    aGhostedSeq[0] = drawinglayer::primitive2d::Primitive2DReference( new drawinglayer::primitive2d::ModifiedColorPrimitive2D(
                 aSeq, BColorModifier( Color( COL_WHITE ).getBColor(), 1.0 - nFadeRate, BCOLORMODIFYMODE_INTERPOLATE ) ) );
 
     pProcessor->process( aGhostedSeq );

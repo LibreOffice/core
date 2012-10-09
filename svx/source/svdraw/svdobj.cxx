@@ -1,30 +1,21 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*************************************************************************
+/*
+ * This file is part of the LibreOffice project.
  *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * This file incorporates work covered by the following license notice:
  *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
 
 #include <com/sun/star/lang/XComponent.hpp>
 
@@ -1201,10 +1192,10 @@ basegfx::B2DPolyPolygon SdrObject::TakeContour() const
             // use neutral ViewInformation
             const drawinglayer::geometry::ViewInformation2D aViewInformation2D;
 
-            // create extractor, process and get result
-            drawinglayer::processor2d::ContourExtractor2D aExtractor(aViewInformation2D);
+            // create extractor, process and get result (with hairlines as opened polygons)
+            drawinglayer::processor2d::ContourExtractor2D aExtractor(aViewInformation2D, false);
             aExtractor.process(xSequence);
-            const std::vector< basegfx::B2DPolyPolygon >& rResult(aExtractor.getExtractedContour());
+            const basegfx::B2DPolyPolygonVector& rResult(aExtractor.getExtractedContour());
             const sal_uInt32 nSize(rResult.size());
 
             // when count is one, it is implied that the object has only its normal
@@ -2411,7 +2402,7 @@ SdrObject* SdrObject::ImpConvertToContourObj(SdrObject* pRet, bool bForceLineDas
             aExtractor.process(xSequence);
 
             // #i102241# check for line results
-            const std::vector< basegfx::B2DPolygon >& rHairlineVector = aExtractor.getExtractedHairlines();
+            const basegfx::B2DPolygonVector& rHairlineVector = aExtractor.getExtractedHairlines();
 
             if(!rHairlineVector.empty())
             {
@@ -2423,7 +2414,7 @@ SdrObject* SdrObject::ImpConvertToContourObj(SdrObject* pRet, bool bForceLineDas
             }
 
             // #i102241# check for fill rsults
-            const std::vector< basegfx::B2DPolyPolygon >& rLineFillVector(aExtractor.getExtractedLineFills());
+            const basegfx::B2DPolyPolygonVector& rLineFillVector(aExtractor.getExtractedLineFills());
 
             if(!rLineFillVector.empty())
             {
@@ -2698,7 +2689,7 @@ SdrObject* SdrObject::ConvertToContourObj(SdrObject* pRet, bool bForceLineDash) 
 
 SdrObject* SdrObject::ConvertToPolyObj(bool bBezier, bool bLineToArea) const
 {
-    SdrObject* pRet = DoConvertToPolyObj(bBezier);
+    SdrObject* pRet = DoConvertToPolyObj(bBezier /*, true */); // FIXME_REMOVE_WHEN_RE_BASE_COMPLETE
 
     if(pRet && bLineToArea)
     {
@@ -2718,7 +2709,8 @@ SdrObject* SdrObject::ConvertToPolyObj(bool bBezier, bool bLineToArea) const
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-SdrObject* SdrObject::DoConvertToPolyObj(sal_Bool /*bBezier*/) const
+// FIXME_REMOVE_WHEN_RE_BASE_COMPLETE comment ..
+SdrObject* SdrObject::DoConvertToPolyObj(sal_Bool /*bBezier*/ /*, bool */ /*bAddText*/) const
 {
     return NULL;
 }

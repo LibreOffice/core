@@ -1,31 +1,21 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*************************************************************************
+/*
+ * This file is part of the LibreOffice project.
  *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * This file incorporates work covered by the following license notice:
  *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
-
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
 
 #include <algorithm>
 #include <string.h>
@@ -588,6 +578,14 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                     sal_Int16 nLineJoin(0);
                     rIStm >> nLineJoin;
                     aLineInfo.SetLineJoin((basegfx::B2DLineJoin)nLineJoin);
+                }
+                break;
+
+                case (GDI_LINECAP_ACTION) :
+                {
+                    sal_Int16 nLineCap(0);
+                    rIStm >> nLineCap;
+                    aLineInfo.SetLineCap((com::sun::star::drawing::LineCap)nLineCap);
                 }
                 break;
 
@@ -1454,6 +1452,7 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
                 const LineInfo& rInfo = pAct->GetLineInfo();
                 const bool bFatLine(!rInfo.IsDefault() && (LINE_NONE != rInfo.GetStyle()));
                 const bool bLineJoin(bFatLine && basegfx::B2DLINEJOIN_ROUND != rInfo.GetLineJoin());
+                const bool bLineCap(bFatLine && com::sun::star::drawing::LineCap_BUTT != rInfo.GetLineCap());
                 const bool bLineDashDot(LINE_DASH == rInfo.GetStyle());
 
                 if( bFatLine )
@@ -1468,16 +1467,23 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
                         rOStm << (sal_Int16) rInfo.GetLineJoin();
                     }
 
-                    if(bLineDashDot)
+                    if(bLineCap)
                     {
-                        rOStm << (sal_Int16) GDI_LINEDASHDOT_ACTION;
-                        rOStm << (sal_Int32) 4 + 16;
-                        rOStm << (sal_Int16)rInfo.GetDashCount();
-                        rOStm << (sal_Int32)rInfo.GetDashLen();
-                        rOStm << (sal_Int16)rInfo.GetDotCount();
-                        rOStm << (sal_Int32)rInfo.GetDotLen();
-                        rOStm << (sal_Int32)rInfo.GetDistance();
+                        rOStm << (sal_Int16) GDI_LINECAP_ACTION;
+                        rOStm << (sal_Int32) 6;
+                        rOStm << (sal_Int16) rInfo.GetLineCap();
                     }
+                }
+
+                if(bLineDashDot)
+                {
+                    rOStm << (sal_Int16) GDI_LINEDASHDOT_ACTION;
+                    rOStm << (sal_Int32) 4 + 16;
+                    rOStm << (sal_Int16)rInfo.GetDashCount();
+                    rOStm << (sal_Int32)rInfo.GetDashLen();
+                    rOStm << (sal_Int16)rInfo.GetDotCount();
+                    rOStm << (sal_Int32)rInfo.GetDotLen();
+                    rOStm << (sal_Int32)rInfo.GetDistance();
                 }
 
                 rOStm << (sal_Int16) GDI_LINE_ACTION;
@@ -1496,10 +1502,15 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
                         nCount += 1;
                     }
 
-                    if(bLineDashDot)
+                    if(bLineCap)
                     {
                         nCount += 1;
                     }
+                }
+
+                if(bLineDashDot)
+                {
+                    nCount += 1;
                 }
             }
             break;
@@ -1597,6 +1608,7 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
                  const sal_uInt16 nPoints(aSimplePoly.GetSize());
                 const bool bFatLine(!rInfo.IsDefault() && (LINE_NONE != rInfo.GetStyle()));
                 const bool bLineJoin(bFatLine && basegfx::B2DLINEJOIN_ROUND != rInfo.GetLineJoin());
+                const bool bLineCap(bFatLine && com::sun::star::drawing::LineCap_BUTT != rInfo.GetLineCap());
                 const bool bLineDashDot(LINE_DASH == rInfo.GetStyle());
 
                 if( bFatLine )
@@ -1609,6 +1621,13 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
                         rOStm << (sal_Int16) GDI_LINEJOIN_ACTION;
                         rOStm << (sal_Int32) 6;
                         rOStm << (sal_Int16) rInfo.GetLineJoin();
+                    }
+
+                    if(bLineCap)
+                    {
+                        rOStm << (sal_Int16) GDI_LINECAP_ACTION;
+                        rOStm << (sal_Int32) 6;
+                        rOStm << (sal_Int16) rInfo.GetLineCap();
                     }
                 }
 
@@ -1646,6 +1665,11 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
                     nCount += 3;
 
                     if(bLineJoin)
+                    {
+                        nCount += 1;
+                    }
+
+                    if(bLineCap)
                     {
                         nCount += 1;
                     }

@@ -9,7 +9,7 @@
 # there is a java which is available for use by all
 #_____________________________________________
 
-import sys, string, os.path, codecs 
+import sys, string, os.path, codecs
 
 CFGFILE             = os.environ["SOLARVER"] + "/" + os.environ["INPATH_FOR_BUILD"] + "/inc/l10ntools/FCFGMerge.cfg"
 
