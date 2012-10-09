@@ -383,6 +383,7 @@ private:
     };
     SAL_DLLPRIVATE void ConnectSfxFrame_Impl( const ConnectSfxFrame i_eConnect );
     SAL_DLLPRIVATE SfxViewFrame& GetViewFrame_Impl() const;
+    SAL_DLLPRIVATE void ShowInfoBars( );
 
 //________________________________________________________________________________________________________
 //  private variables

@@ -3353,7 +3353,10 @@ void SfxViewFrame::ActivateToolPanel_Impl( const ::rtl::OUString& i_rPanelURL )
 void SfxViewFrame::AppendInfoBar( const rtl::OUString& sMessage, std::vector< PushButton* > aButtons )
 {
     const sal_uInt16 nId = SfxInfoBarContainerChild::GetChildWindowId();
-    ShowChildWindow( nId );
+
+    // Make sure the InfoBar container is visible
+    if ( !HasChildWindow( nId ) )
+        ToggleChildWindow( nId );
     SfxChildWindow* pChild = GetChildWindow( nId );
     SfxInfoBarContainerWindow* pInfoBars = ( SfxInfoBarContainerWindow* )pChild->GetWindow();
     pInfoBars->appendInfoBar( sMessage, aButtons );

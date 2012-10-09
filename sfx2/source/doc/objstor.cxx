@@ -754,9 +754,6 @@ sal_Bool SfxObjectShell::DoLoad( SfxMedium *pMed )
                     beans::PropertyValues aCmisValues;
                     aContent.getPropertyValue( aCmisPropsValues ) >>= aCmisValues;
                     xCmisDoc->setCmisPropertiesValues( aCmisValues );
-
-                    // TODO For CMIS case, try to look for cmis:isVersionSeriesCheckedOut
-                    // If set to false, then show InfoBar to propose checkOut
                 }
                 if ( xProps->hasPropertyByName( aCmisPropsNames ) )
                 {
