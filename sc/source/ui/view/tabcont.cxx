@@ -176,7 +176,8 @@ void ScTabControl::MouseButtonUp( const MouseEvent& rMEvt )
     {
         // Insert a new sheet at the right end, with default name.
         ScDocument* pDoc = pViewData->GetDocument();
-        if (!pDoc->IsDocEditable())
+        ScModule* pScMod = SC_MOD();
+        if (!pDoc->IsDocEditable() || pScMod->IsTableLocked())
             return;
         rtl::OUString aName;
         pDoc->CreateValidTabName(aName);
