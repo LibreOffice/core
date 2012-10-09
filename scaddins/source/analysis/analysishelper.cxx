@@ -2535,7 +2535,7 @@ ConvertDataList::ConvertDataList( void )
     NEWD( "Humpen",     2.0,                    CDC_Volume ); // ***
     NEWD( "ly3",        1.1810108125623799E-51, CDC_Volume ); // *** Cubic light-year
     NEWD( "MTON",       1.4125866688595436E00,  CDC_Volume ); // *** Measurement ton
-    NEWD( "tspm",       5.0000000000000000E02,  CDC_Volume ); // *** Modern teaspoon
+    NEWD( "tspm",       2.0000000000000000E02,  CDC_Volume ); // *** Modern teaspoon
     NEWD( "uk_gal",     2.1996924829908779E-01,  CDC_Volume ); // U.K. / Imperial gallon        1/4.54609
     NEWD( "uk_qt",      8.7987699319635115E-01,  CDC_Volume ); // U.K. / Imperial quart         1/4 imperial gallon
 
