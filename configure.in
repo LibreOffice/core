@@ -186,7 +186,7 @@ if test -n "$with_android_ndk"; then
 
     if test $host_cpu = arm; then
         ANDROID_APP_ABI=armeabi-v7a
-        ANDROIDCFLAGS="-march=armv7-a -mfloat-abi=softfp -mfpu=neon -Wl,--fix-cortex-a8"
+        ANDROIDCFLAGS="-march=armv7-a -mfloat-abi=softfp -mthumb -mfpu=neon -Wl,--fix-cortex-a8"
     elif test $host_cpu = mips; then
         ANDROID_APP_ABI=mips
         ANDROIDCFLAGS=""
