@@ -70,11 +70,9 @@ int find_includes(struct filepointer *filep, struct inclist *file, struct inclis
             if (type == ELSE)
                 find_includes(filep, file,
                       file_red, recursion+1, recfailOK, incCollection, symbols);
-            else
-            if (type == ELIF)
+            else if (type == ELIF)
                 goto doif;
-            else
-            if ((type == ELIFFALSE) || (type == ELIFGUESSFALSE))
+            else if ((type == ELIFFALSE) || (type == ELIFGUESSFALSE))
                 goto doiffalse;
             break;
         case IFDEF:
@@ -398,14 +396,14 @@ void define( def, symbols )
     /* Separate symbol name and its value */
     val = def;
     while (isalnum(*val) || *val == '_')
-    val++;
+        val++;
     if (*val)
-    *val++ = '\0';
+        *val++ = '\0';
     while (*val == ' ' || *val == '\t')
-    val++;
+        val++;
 
     if (!*val)
-    val = "1";
+        val = "1";
     hash_define( def, val, symbols );
 }
 

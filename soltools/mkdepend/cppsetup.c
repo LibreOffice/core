@@ -161,7 +161,7 @@ _lookup_variable (var, len)
     char tmpbuf[MAXNAMELEN + 1];
 
     if (len > MAXNAMELEN)
-    return 0;
+        return 0;
 
     strncpy (tmpbuf, var, len);
     tmpbuf[len] = '\0';
@@ -177,9 +177,9 @@ _my_eval_defined (ip, var, len)
 {
     (void)ip;
     if (_lookup_variable (var, len))
-    return 1;
+        return 1;
     else
-    return 0;
+        return 0;
 }
 
 #define isvarfirstletter(ccc) (isalpha(ccc) || (ccc) == '_')
@@ -196,7 +196,7 @@ _my_eval_variable (ip, var, len)
 
     s = _lookup_variable (var, len);
     if (!s)
-    return 0;
+        return 0;
     do {
     var = s;
     if (!isvarfirstletter(*var))

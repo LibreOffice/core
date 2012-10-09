@@ -82,7 +82,7 @@ parse_variable (g, cp, varp)
     SKIPSPACE (cp);
 
     if (!isvarfirstletter (*cp))
-    return CALLFUNC(g, handle_error) (g, cp, "variable name");
+        return CALLFUNC(g, handle_error) (g, cp, "variable name");
 
     *varp = cp;
     /* EMPTY */
@@ -100,7 +100,7 @@ parse_number (g, cp, valp)
     SKIPSPACE (cp);
 
     if (!isdigit(*cp))
-    return CALLFUNC(g, handle_error) (g, cp, "number");
+        return CALLFUNC(g, handle_error) (g, cp, "number");
 
 #ifdef WIN32
     {
@@ -128,7 +128,7 @@ parse_value (g, cp, valp)
 
     SKIPSPACE (cp);
     if (!*cp)
-    return cp;
+        return cp;
 
     switch (*cp) {
       case '(':
@@ -178,7 +178,7 @@ parse_value (g, cp, valp)
         len = (int)(cp - var);
         SKIPSPACE (cp);
         if (paren && *cp != ')')
-        return CALLFUNC(g, handle_error) (g, cp, ")");
+            return CALLFUNC(g, handle_error) (g, cp, ")");
         *valp = (*(g->funcs.eval_defined)) (g, var, len);
         return cp + paren;      /* skip the right paren */
     }

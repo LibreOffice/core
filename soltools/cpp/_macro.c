@@ -664,7 +664,7 @@ Tokenrow *
 
         // Change by np 31.10.2001, #93725 - begin
         if ( tp->wslen > 0 )
-        *sp++ = ' ';
+            *sp++ = ' ';
         // change end.
 
         for (i = 0, cp = tp->t; (unsigned int)i < tp->len; i++)
