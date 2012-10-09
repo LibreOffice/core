@@ -296,7 +296,8 @@ void ScConditionFrmtEntry::SetActive()
 {
     maLbCondType.Show();
     maEdVal1.Show();
-    maEdVal2.Show();
+    if(maLbCondType.GetSelectEntryPos() == 6 || maLbCondType.GetSelectEntryPos() == 7)
+        maEdVal2.Show();
     maFtStyle.Show();
     maLbStyle.Show();
     maWdPreview.Show();
