@@ -29,6 +29,7 @@ LIBS = \
 	acclo \
 	ascii_expat_xmlparse \
 	avmedialo \
+	basctllo \
 	basebmp \
 	basegfxlo \
 	bootstrap.uno \
@@ -39,6 +40,7 @@ LIBS = \
 	configmgr.uno \
 	cppcanvaslo \
 	crypto \
+	cuilo \
 	dbalo \
 	dbaxmllo \
 	dbtoolslo \
@@ -51,6 +53,7 @@ LIBS = \
 	egilo \
 	emelo \
 	epblo \
+	epglo \
 	epplo \
 	epslo \
 	eptlo \
@@ -145,6 +148,7 @@ LIBS = \
 	spllo \
 	stocservices.uno \
 	store \
+	sunjavaplugin \
 	svgfilterlo \
 	svllo \
 	svtlo \
@@ -152,6 +156,7 @@ LIBS = \
 	svxlo \
 	swdlo \
 	swlo \
+	swuilo \
 	t602filterlo \
 	textconv_dict \
 	textconversiondlgslo \
