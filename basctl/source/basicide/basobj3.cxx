@@ -87,11 +87,11 @@ SbMethod* CreateMacro( SbModule* pModule, const String& rMacroName )
     if ( aMacroName.Len() == 0 )
     {
         if ( !pModule->GetMethods()->Count() )
-            aMacroName = String( "Main" );
+            aMacroName = OUString( "Main" );
         else
         {
             bool bValid = false;
-            String aStdMacroText( "Macro" );
+            OUString aStdMacroText( "Macro" );
             sal_uInt16 nMacro = 1;
             while ( !bValid )
             {
