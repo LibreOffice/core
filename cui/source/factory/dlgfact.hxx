@@ -109,9 +109,9 @@ class VclAbstractRefreshableDialog_Impl : public VclAbstractRefreshableDialog
 };
 //for ActualizeProgress end
 
-class AbstractSfxDialog_Impl : public SfxAbstractDialog
+class CuiAbstractSfxDialog_Impl : public SfxAbstractDialog
 {
-    DECL_ABSTDLG_BASE(AbstractSfxDialog_Impl,SfxModalDialog)
+    DECL_ABSTDLG_BASE(CuiAbstractSfxDialog_Impl,SfxModalDialog)
     virtual const SfxItemSet*   GetOutputItemSet() const;
 
         //From class Window.

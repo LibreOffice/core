@@ -100,7 +100,7 @@ using ::com::sun::star::uno::Reference;
 
 using namespace svx;
 // AbstractTabDialog implementations just forwards everything to the dialog
-IMPL_ABSTDLG_BASE(AbstractSfxDialog_Impl)
+IMPL_ABSTDLG_BASE(CuiAbstractSfxDialog_Impl)
 IMPL_ABSTDLG_BASE(CuiVclAbstractDialog_Impl)
 IMPL_ABSTDLG_BASE(VclAbstractRefreshableDialog_Impl);
 IMPL_ABSTDLG_BASE(CuiAbstractTabDialog_Impl);
@@ -221,17 +221,17 @@ String CuiAbstractTabDialog_Impl::GetText() const
 }
 
 
-const SfxItemSet* AbstractSfxDialog_Impl::GetOutputItemSet() const
+const SfxItemSet* CuiAbstractSfxDialog_Impl::GetOutputItemSet() const
 {
     return pDlg->GetOutputItemSet();
 }
 
-void AbstractSfxDialog_Impl::SetText( const XubString& rStr )
+void CuiAbstractSfxDialog_Impl::SetText( const XubString& rStr )
 {
     pDlg->SetText( rStr );
 }
 
-String AbstractSfxDialog_Impl::GetText() const
+String CuiAbstractSfxDialog_Impl::GetText() const
 {
     return pDlg->GetText();
 }
@@ -1299,7 +1299,7 @@ SfxAbstractDialog* AbstractDialogFactory_Impl::CreateSfxDialog( sal_uInt32,
                                             const SfxItemSet* pAttrSet )
 {
     SfxModalDialog* pDlg = new SvxCharacterMap( pParent, sal_True, pAttrSet );
-    return new AbstractSfxDialog_Impl( pDlg );
+    return new CuiAbstractSfxDialog_Impl( pDlg );
 }
 
 SfxAbstractTabDialog* AbstractDialogFactory_Impl::CreateTabItemDialog( Window* pParent,
@@ -1628,7 +1628,7 @@ SfxAbstractDialog* AbstractDialogFactory_Impl::CreateSfxDialog( Window* pParent,
     }
 
     if ( pDlg )
-        return new AbstractSfxDialog_Impl( pDlg );
+        return new CuiAbstractSfxDialog_Impl( pDlg );
     return 0;
 }
 
@@ -1655,7 +1655,7 @@ SfxAbstractDialog* AbstractDialogFactory_Impl::CreateSfxDialog( Window* pParent,
     }
 
     if ( pDlg )
-        return new AbstractSfxDialog_Impl( pDlg );
+        return new CuiAbstractSfxDialog_Impl( pDlg );
     return 0;
 }
 

@@ -218,9 +218,9 @@ class AbstractSdPresLayoutDlg_Impl : public AbstractSdPresLayoutDlg
 };
 
 // add for SdActionDlg
-class AbstractSfxDialog_Impl : public SfxAbstractDialog
+class SdAbstractSfxDialog_Impl : public SfxAbstractDialog
 {
-    DECL_ABSTDLG_BASE(AbstractSfxDialog_Impl,SfxModalDialog)
+    DECL_ABSTDLG_BASE(SdAbstractSfxDialog_Impl,SfxModalDialog)
     virtual const SfxItemSet*   GetOutputItemSet() const;
     virtual void        SetText( const XubString& rStr );
     virtual String      GetText() const;

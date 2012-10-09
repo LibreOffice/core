@@ -95,9 +95,9 @@ class AbstractSwInsertAbstractDlg_Impl : public AbstractSwInsertAbstractDlg
 
 // add for SwAddrDlg, SwDropCapsDlg, SwBackgroundDlg SwNumFmtDlg  SwWrapDlg SwBorderDlg, SwFldEditDlg  begin
 class SfxSingleTabDialog;
-class AbstractSfxDialog_Impl :public SfxAbstractDialog
+class SwAbstractSfxDialog_Impl :public SfxAbstractDialog
 {
-    DECL_ABSTDLG_BASE(AbstractSfxDialog_Impl,SfxModalDialog)
+    DECL_ABSTDLG_BASE(SwAbstractSfxDialog_Impl,SfxModalDialog)
     virtual const SfxItemSet*   GetOutputItemSet() const;
     virtual void        SetText( const XubString& rStr );
     virtual String      GetText() const;

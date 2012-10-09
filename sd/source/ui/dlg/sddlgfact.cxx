@@ -75,7 +75,7 @@ IMPL_ABSTDLG_BASE(AbstractSdInsertPagesObjsDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractMorphDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractSdStartPresDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractSdPresLayoutDlg_Impl);
-IMPL_ABSTDLG_BASE(AbstractSfxDialog_Impl);
+IMPL_ABSTDLG_BASE(SdAbstractSfxDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractSdVectorizeDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractSdPublishingDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractHeaderFooterDialog_Impl);
@@ -332,15 +332,15 @@ void AbstractSdPresLayoutDlg_Impl::GetAttr( SfxItemSet& rOutAttrs )
 // AbstractSdPresLayoutDlg_Impl end
 
 //SfxAbstractDialog_Impl begin
-const SfxItemSet* AbstractSfxDialog_Impl::GetOutputItemSet() const
+const SfxItemSet* SdAbstractSfxDialog_Impl::GetOutputItemSet() const
 {
     return pDlg->GetOutputItemSet();
 }
-void AbstractSfxDialog_Impl::SetText( const XubString& rStr )
+void SdAbstractSfxDialog_Impl::SetText( const XubString& rStr )
 {
     pDlg->SetText( rStr );
 }
-String AbstractSfxDialog_Impl::GetText() const
+String SdAbstractSfxDialog_Impl::GetText() const
 {
     return pDlg->GetText();
 }
@@ -520,7 +520,7 @@ SfxAbstractTabDialog *  SdAbstractDialogFactory_Impl::CreateSdTabTemplateDlg( ::
 
 SfxAbstractDialog* SdAbstractDialogFactory_Impl::CreatSdActionDialog( ::Window* pParent, const SfxItemSet* pAttr, ::sd::View* pView )
 {
-    return new AbstractSfxDialog_Impl( new SdActionDlg( pParent, pAttr, pView ) );
+    return new SdAbstractSfxDialog_Impl( new SdActionDlg( pParent, pAttr, pView ) );
 }
 
 // add for SdVectorizeDlg begin

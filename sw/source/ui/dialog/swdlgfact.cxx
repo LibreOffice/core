@@ -107,7 +107,7 @@ using namespace ::com::sun::star;
 
 IMPL_ABSTDLG_BASE(AbstractSwWordCountFloatDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractSwInsertAbstractDlg_Impl);
-IMPL_ABSTDLG_BASE(AbstractSfxDialog_Impl);
+IMPL_ABSTDLG_BASE(SwAbstractSfxDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractSwAsciiFilterDlg_Impl);
 IMPL_ABSTDLG_BASE(VclAbstractDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractSplitTableDialog_Impl);
@@ -178,17 +178,17 @@ sal_uInt8 AbstractSwInsertAbstractDlg_Impl::GetPara() const
 }
 
 //add for SwAddrDlg, SwDropCapsDlg ,SwBackgroundDlg, SwNumFmtDlg SwBorderDlg SwWrapDlg  SwFldEditDlg begin
-const SfxItemSet* AbstractSfxDialog_Impl::GetOutputItemSet() const
+const SfxItemSet* SwAbstractSfxDialog_Impl::GetOutputItemSet() const
 {
     return pDlg->GetOutputItemSet();
 }
 
-void AbstractSfxDialog_Impl::SetText( const XubString& rStr )
+void SwAbstractSfxDialog_Impl::SetText( const XubString& rStr )
 {
     pDlg->SetText( rStr );
 }
 
-String AbstractSfxDialog_Impl::GetText() const
+String SwAbstractSfxDialog_Impl::GetText() const
 {
     return pDlg->GetText();
 }
@@ -667,7 +667,7 @@ SfxAbstractDialog* SwAbstractDialogFactory_Impl::CreateSfxDialog( Window* pParen
     }
 
     if ( pDlg )
-        return new AbstractSfxDialog_Impl( pDlg );
+        return new SwAbstractSfxDialog_Impl( pDlg );
     return 0;
 }
 
@@ -980,7 +980,7 @@ SfxAbstractDialog * SwAbstractDialogFactory_Impl::CreateSwBorderDlg (Window* pPa
     }
 
     if ( pDlg )
-        return new AbstractSfxDialog_Impl( pDlg );
+        return new SwAbstractSfxDialog_Impl( pDlg );
     return 0;
 }
 
@@ -997,7 +997,7 @@ SfxAbstractDialog* SwAbstractDialogFactory_Impl::CreateSwWrapDlg ( Window* pPare
     }
 
     if ( pDlg )
-        return new AbstractSfxDialog_Impl( pDlg );
+        return new SwAbstractSfxDialog_Impl( pDlg );
     return 0;
 }
 
@@ -1057,7 +1057,7 @@ SfxAbstractDialog*   SwAbstractDialogFactory_Impl::CreateSwFldEditDlg ( SwView& 
     }
 
     if ( pDlg )
-        return new AbstractSfxDialog_Impl( pDlg );
+        return new SwAbstractSfxDialog_Impl( pDlg );
     return 0;
 }
 
