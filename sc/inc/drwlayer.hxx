@@ -101,6 +101,7 @@ private:
     sal_Bool            bRecording;
     sal_Bool            bAdjustEnabled;
     sal_Bool            bHyphenatorSet;
+    bool            mbUndoAllowed;
 
 private:
     void            MoveAreaTwips( SCTAB nTab, const Rectangle& rArea, const Point& rMove,
@@ -149,6 +150,21 @@ public:
     SdrUndoGroup*   GetCalcUndo();
     sal_Bool            IsRecording() const         { return bRecording; }
     void            AddCalcUndo( SdrUndoAction* pUndo );
+
+    template< typename TUndoAction, typename TArg >
+    inline void         AddCalcUndo( const TArg & rArg )    {   if( this->IsUndoAllowed() )  this->AddCalcUndo( new TUndoAction( rArg ) ); }
+
+    template< typename TUndoAction, typename TArg >
+    inline void         AddCalcUndo( TArg & rArg )    {   if( this->IsUndoAllowed() )  this->AddCalcUndo( new TUndoAction( rArg ) ); }
+
+    template< typename TUndoAction, typename TArg1, typename TArg2 >
+    inline void         AddCalcUndo( TArg1 & rArg1, TArg2 & rArg2 ) {   if( this->IsUndoAllowed() )  this->AddCalcUndo( new TUndoAction( rArg1, rArg2 ) ); }
+
+    template< typename TUndoAction, typename TArg1, typename TArg2 >
+    inline void         AddCalcUndo( const TArg1 & rArg1, const TArg2 & rArg2 ) {   if( this->IsUndoAllowed() )  this->AddCalcUndo( new TUndoAction( rArg1, rArg2 ) ); }
+
+    template< typename TUndoAction, typename TArg1, typename TArg2, typename TArg3, typename TArg4, typename TArg5 >
+    inline void         AddCalcUndo( const TArg1 & rArg1, const TArg2 & rArg2, const TArg3 & rArg3, const TArg4 & rArg4, const TArg5 & rArg5 )    {   if( this->IsUndoAllowed() )  this->AddCalcUndo( new TUndoAction( rArg1, rArg2, rArg3, rArg4, rArg5 ) ); }
 
     void            MoveArea( SCTAB nTab, SCCOL nCol1,SCROW nRow1, SCCOL nCol2,SCROW nRow2,
                                 SCsCOL nDx,SCsROW nDy, sal_Bool bInsDel, bool bUpdateNoteCaptionPos = true );
@@ -221,6 +237,9 @@ public:
     static void     SetGlobalDrawPersist(SfxObjectShell* pPersist);
 protected:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > createUnoModel();
+public:
+    inline void SetUndoAllowed( bool bUndoAllowed ){ mbUndoAllowed = bUndoAllowed; }
+    inline bool IsUndoAllowed() const{ return mbUndoAllowed; }
 };
 
 

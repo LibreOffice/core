@@ -66,6 +66,7 @@
 #include <com/sun/star/script/vba/XVBAEventProcessor.hpp>
 #include <com/sun/star/sheet/XSpreadsheetView.hpp>
 #include <com/sun/star/task/XJob.hpp>
+#include <com/sun/star/embed/EmbedStates.hpp>
 #include <basic/sbstar.hxx>
 #include <basic/basmgr.hxx>
 
@@ -171,6 +172,97 @@ static const sal_Char __FAR_DATA pFilterRtf[]       = "Rich Text Format (StarCal
 #define ScDocShell
 #include "scslots.hxx"
 
+namespace
+{
+    template< bool bByName >
+    inline sal_uInt8 GetMediumFlag( const String & rName )
+    {
+        sal_uInt8 bResult = E_MEDIUM_FLAG_NONE;
+
+#define SFX2_FILTER_ENTRY( entry ) { #entry, (sizeof #entry)/sizeof((#entry)[0]) - 1 },
+        static const struct
+        {
+            const char * mpFilterTypeName;
+            unsigned mnFilterTypeLen;
+        } szMSFilterTypes [] =
+        {
+            SFX2_FILTER_ENTRY(calc_MS_Excel_40)
+            SFX2_FILTER_ENTRY(calc_MS_Excel_40_VorlageTemplate)
+            SFX2_FILTER_ENTRY(calc_MS_Excel_5095)
+            SFX2_FILTER_ENTRY(calc_MS_Excel_5095_VorlageTemplate)
+            SFX2_FILTER_ENTRY(calc_MS_Excel_95)
+            SFX2_FILTER_ENTRY(calc_MS_Excel_95_VorlageTemplate)
+            SFX2_FILTER_ENTRY(calc_MS_Excel_97)
+            SFX2_FILTER_ENTRY(calc_MS_Excel_97_VorlageTemplate)
+            SFX2_FILTER_ENTRY(calc_MS_Excel_2003_XML)
+            SFX2_FILTER_ENTRY(MS Excel 2007 XML)
+            SFX2_FILTER_ENTRY(MS Excel 2007 XML Template)
+            SFX2_FILTER_ENTRY(MS Excel 2007 Binary)
+        };
+
+        static const struct
+        {
+            const char * mpFilterName;
+            unsigned mnFilterNameLen;
+        } szMSFilterNames [] =
+        {
+            { pFilterExcel4, strlen( pFilterExcel4 ) },
+            { pFilterEx4Temp, strlen( pFilterEx4Temp ) },
+            { pFilterExcel95, strlen( pFilterExcel95 ) },
+            { pFilterEx95Temp, strlen( pFilterEx95Temp ) },
+            { pFilterExcel5, strlen( pFilterExcel5 ) },
+            { pFilterEx5Temp, strlen( pFilterEx5Temp ) },
+            { pFilterExcel97, strlen( pFilterExcel97 ) },
+            { pFilterEx97Temp, strlen( pFilterEx97Temp ) },
+            SFX2_FILTER_ENTRY(Microsoft Excel 2003 XML)
+            { pFilterEx07Xml, strlen( pFilterEx07Xml ) },
+            SFX2_FILTER_ENTRY(Microsoft Excel 2007 XML Template)
+            SFX2_FILTER_ENTRY(Microsoft Excel 2007 Binary)
+        };
+
+        enum{
+            e_calc_MS_Excel_40,
+            e_calc_MS_Excel_40_VorlageTemplate,
+            e_calc_MS_Excel_5095,
+            e_calc_MS_Excel_5095_VorlageTemplate,
+            e_calc_MS_Excel_95,
+            Se_calc_MS_Excel_95_VorlageTemplate,
+            e_calc_MS_Excel_97,
+            e_calc_MS_Excel_97_VorlageTemplate,
+            e_calc_MS_Excel_2003_XML,
+            e_MS_Excel_2007_XML,
+            e_MS_Excel_2007_XML_Template,
+            e_MS_Excel_2007_Binary
+        };
+
+#undef SFX2_FILTER_ENTRY
+
+        if( bByName )
+        {
+            for( unsigned i = 0; i < (sizeof szMSFilterNames)/sizeof(szMSFilterNames[0] ); i++ )
+                if( rName.Len() == szMSFilterNames[i].mnFilterNameLen
+                    && std::equal( szMSFilterNames[i].mpFilterName, szMSFilterNames[i].mpFilterName + szMSFilterNames[i].mnFilterNameLen, rName.GetBuffer() ) )
+                    bResult |= ( E_MEDIUM_FLAG_EXCEL | ( ( i == e_MS_Excel_2007_XML ) * E_MEDIUM_FLAG_MSXML ) );
+        }
+        else
+        {
+            for( unsigned i = 0; i < (sizeof szMSFilterTypes)/sizeof(szMSFilterTypes[0] ); i++ )
+                if( rName.Len() == szMSFilterTypes[i].mnFilterTypeLen
+                    && std::equal( szMSFilterTypes[i].mpFilterTypeName, szMSFilterTypes[i].mpFilterTypeName + szMSFilterTypes[i].mnFilterTypeLen, rName.GetBuffer() ) )
+                    bResult |= ( E_MEDIUM_FLAG_EXCEL | ( ( i == e_MS_Excel_2007_XML ) * E_MEDIUM_FLAG_MSXML ) );
+        }
+
+        return bResult;
+    }
+
+    inline sal_uInt8 GetMediumFlag( const SfxMedium * pMedium )
+    {
+        if( const SfxFilter * pFilter = pMedium ? pMedium->GetFilter() : NULL )
+            return GetMediumFlag<false>( pFilter->GetTypeName() );
+
+        return E_MEDIUM_FLAG_NONE;
+    }
+}
 
 SFX_IMPL_INTERFACE(ScDocShell,SfxObjectShell, ScResId(SCSTR_DOCSHELL))
 {
@@ -2907,4 +2999,53 @@ bool ScDocShell::GetProtectionHash( /*out*/ ::com::sun::star::uno::Sequence< sal
     return bRes;
 }
 
+void ScDocShell::BeforeLoading( SfxMedium& rMedium, const ::rtl::OUString & rstrTypeName, const ::rtl::OUString & rstrFilterName )
+{
+    const sal_uInt8 nMediumFlag = GetMediumFlag<false>( rstrTypeName );
+
+    if( nMediumFlag & E_MEDIUM_FLAG_MSXML )
+    {
+        aDocument.SetImportingMSXML( true );
+
+        if ( GetCreateMode() != SFX_CREATE_MODE_ORGANIZER )
+            ScColumn::bDoubleAlloc = sal_True;
+    }
+}
+
+void ScDocShell::AfterLoading( SfxMedium& rMedium, const ::rtl::OUString & rstrTypeName, const ::rtl::OUString & rstrFilterName )
+{
+    const sal_uInt8 nMediumFlag = GetMediumFlag<false>( rstrTypeName );
+
+    if( nMediumFlag & E_MEDIUM_FLAG_MSXML )
+    {
+        aDocument.SetImportingMSXML( false );
+
+        if ( GetCreateMode() != SFX_CREATE_MODE_ORGANIZER )
+            ScColumn::bDoubleAlloc = sal_False;
+
+        // After loading, the XEmbeddedObject was probably set modified flag, so reset the flag to false.
+        uno::Sequence < ::rtl::OUString > aNames = GetEmbeddedObjectContainer().GetObjectNames();
+        for ( sal_Int32 n = 0; n < aNames.getLength(); n++ )
+        {
+            ::rtl::OUString aName = aNames[n];
+            uno::Reference < embed::XEmbeddedObject > xObj = GetEmbeddedObjectContainer().GetEmbeddedObject( aName );
+            OSL_ENSURE( xObj.is(), "An empty entry in the embedded objects list!\n" );
+            if ( xObj.is() )
+            {
+                try
+                {
+                    sal_Int32 nState = xObj->getCurrentState();
+                    if ( nState != embed::EmbedStates::LOADED )
+                    {
+                        uno::Reference< util::XModifiable > xModifiable( xObj->getComponent(), uno::UNO_QUERY );
+                        if ( xModifiable.is() )
+                            xModifiable->setModified(sal_False);
+                    }
+                }
+                catch( uno::Exception& )
+                {}
+            }
+        }
+    }
+}
 

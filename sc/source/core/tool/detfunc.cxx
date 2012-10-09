@@ -494,7 +494,7 @@ sal_Bool ScDetectiveFunc::InsertArrow( SCCOL nCol, SCROW nRow,
         ScDrawLayer::SetAnchor( pBox, SCA_CELL );
         pBox->SetLayer( SC_LAYER_INTERN );
         pPage->InsertObject( pBox );
-        pModel->AddCalcUndo( new SdrUndoInsertObj( *pBox ) );
+            pModel->AddCalcUndo< SdrUndoInsertObj >( *pBox );
 
         ScDrawObjData* pData = ScDrawLayer::GetObjData( pBox, sal_True );
         pData->maStart.Set( nRefStartCol, nRefStartRow, nTab);
@@ -536,7 +536,7 @@ sal_Bool ScDetectiveFunc::InsertArrow( SCCOL nCol, SCROW nRow,
     ScDrawLayer::SetAnchor( pArrow, SCA_CELL );
     pArrow->SetLayer( SC_LAYER_INTERN );
     pPage->InsertObject( pArrow );
-    pModel->AddCalcUndo( new SdrUndoInsertObj( *pArrow ) );
+        pModel->AddCalcUndo< SdrUndoInsertObj >( *pArrow );
 
     ScDrawObjData* pData = ScDrawLayer::GetObjData( pArrow, sal_True );
     if (bFromOtherTab)
@@ -568,7 +568,7 @@ sal_Bool ScDetectiveFunc::InsertToOtherTab( SCCOL nStartCol, SCROW nStartRow,
         ScDrawLayer::SetAnchor( pBox, SCA_CELL );
         pBox->SetLayer( SC_LAYER_INTERN );
         pPage->InsertObject( pBox );
-        pModel->AddCalcUndo( new SdrUndoInsertObj( *pBox ) );
+            pModel->AddCalcUndo< SdrUndoInsertObj >( *pBox );
 
         ScDrawObjData* pData = ScDrawLayer::GetObjData( pBox, sal_True );
         pData->maStart.Set( nStartCol, nStartRow, nTab);
@@ -603,7 +603,7 @@ sal_Bool ScDetectiveFunc::InsertToOtherTab( SCCOL nStartCol, SCROW nStartRow,
     ScDrawLayer::SetAnchor( pArrow, SCA_CELL );
     pArrow->SetLayer( SC_LAYER_INTERN );
     pPage->InsertObject( pArrow );
-    pModel->AddCalcUndo( new SdrUndoInsertObj( *pArrow ) );
+        pModel->AddCalcUndo< SdrUndoInsertObj >( *pArrow );
 
     ScDrawObjData* pData = ScDrawLayer::GetObjData( pArrow, sal_True );
     pData->maStart.Set( nStartCol, nStartRow, nTab);
@@ -672,7 +672,7 @@ void ScDetectiveFunc::DrawCircle( SCCOL nCol, SCROW nRow, ScDetectiveData& rData
     ScDrawLayer::SetAnchor( pCircle, SCA_CELL );
     pCircle->SetLayer( SC_LAYER_INTERN );
     pPage->InsertObject( pCircle );
-    pModel->AddCalcUndo( new SdrUndoInsertObj( *pCircle ) );
+        pModel->AddCalcUndo< SdrUndoInsertObj >( *pCircle );
 
     ScDrawObjData* pData = ScDrawLayer::GetObjData( pCircle, sal_True );
     pData->maStart.Set( nCol, nRow, nTab);
@@ -713,7 +713,7 @@ void ScDetectiveFunc::DeleteArrowsAt( SCCOL nCol, SCROW nRow, sal_Bool bDestPnt 
 
         long i;
         for (i=1; i<=nDelCount; i++)
-            pModel->AddCalcUndo( new SdrUndoRemoveObj( *ppObj[nDelCount-i] ) );
+            pModel->AddCalcUndo< SdrUndoRemoveObj >( *ppObj[nDelCount-i] );
 
         for (i=1; i<=nDelCount; i++)
             pPage->RemoveObject( ppObj[nDelCount-i]->GetOrdNum() );
@@ -790,7 +790,7 @@ void ScDetectiveFunc::DeleteBox( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nR
 
         long i;
         for (i=1; i<=nDelCount; i++)
-            pModel->AddCalcUndo( new SdrUndoRemoveObj( *ppObj[nDelCount-i] ) );
+                pModel->AddCalcUndo< SdrUndoRemoveObj >( *ppObj[nDelCount-i] );
 
         for (i=1; i<=nDelCount; i++)
             pPage->RemoveObject( ppObj[nDelCount-i]->GetOrdNum() );
@@ -1334,7 +1334,7 @@ sal_Bool ScDetectiveFunc::DeleteAll( ScDetectiveDelete eWhat )
 
         long i;
         for (i=1; i<=nDelCount; i++)
-            pModel->AddCalcUndo( new SdrUndoRemoveObj( *ppObj[nDelCount-i] ) );
+                pModel->AddCalcUndo< SdrUndoRemoveObj >( *ppObj[nDelCount-i] );
 
         for (i=1; i<=nDelCount; i++)
             pPage->RemoveObject( ppObj[nDelCount-i]->GetOrdNum() );

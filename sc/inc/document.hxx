@@ -232,6 +232,7 @@ const sal_uInt8 SC_DDE_IGNOREMODE    = 255;       /// For usage in FindDdeLink()
 
 
 // -----------------------------------------------------------------------
+enum { E_MEDIUM_FLAG_NONE = 0, E_MEDIUM_FLAG_EXCEL = 1, E_MEDIUM_FLAG_MSXML = 2 };
 
 class ScDocument
 {
@@ -390,6 +391,7 @@ private:
     sal_Bool                bInsertingFromOtherDoc;
     bool                bLoadingMedium;
     bool                bImportingXML;      // special handling of formula text
+    bool                mbImportingMSXML;
     sal_Bool                bXMLFromWrapper;    // distinguish ScXMLImportWrapper from external component
     sal_Bool                bCalcingAfterLoad;              // in CalcAfterLoad TRUE
     // wenn temporaer keine Listener auf/abgebaut werden sollen
@@ -1570,6 +1572,8 @@ public:
     void            SetLoadingMedium( bool bVal );
     void            SetImportingXML( bool bVal );
     bool            IsImportingXML() const { return bImportingXML; }
+    void            SetImportingMSXML( bool bVal );
+    bool            IsImportingMSXML() const { return mbImportingMSXML; }
     void            SetXMLFromWrapper( sal_Bool bVal );
     sal_Bool            IsXMLFromWrapper() const { return bXMLFromWrapper; }
     void            SetCalcingAfterLoad( sal_Bool bVal ) { bCalcingAfterLoad = bVal; }

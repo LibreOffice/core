@@ -131,7 +131,7 @@ void ScDocument::TransferDrawPage(ScDocument* pSrcDoc, SCTAB nSrcPos, SCTAB nDes
                     pNewPage->InsertObject( pNewObject );
 
                     if (pDrawLayer->IsRecording())
-                        pDrawLayer->AddCalcUndo( new SdrUndoInsertObj( *pNewObject ) );
+            pDrawLayer->AddCalcUndo< SdrUndoInsertObj >( *pNewObject );
                 }
 
                 pOldObject = aIter.Next();
@@ -196,6 +196,9 @@ void ScDocument::InitDrawLayer( SfxObjectShell* pDocShell )
         UpdateDrawLanguages();
         if (bImportingXML)
             pDrawLayer->EnableAdjust(sal_False);
+
+        if( IsImportingMSXML( ) )
+            pDrawLayer->SetUndoAllowed( false );
 
         pDrawLayer->SetForbiddenCharsTable( xForbiddenCharacters );
         pDrawLayer->SetCharCompressType( GetAsianCompression() );
@@ -766,6 +769,14 @@ void ScDocument::SetImportingXML( bool bVal )
     }
 
     SetLoadingMedium(bVal);
+}
+
+void ScDocument::SetImportingMSXML( bool bVal )
+{
+    mbImportingMSXML = bVal;
+
+    if (pDrawLayer)
+        pDrawLayer->SetUndoAllowed( !mbImportingMSXML );
 }
 
 void ScDocument::SetXMLFromWrapper( sal_Bool bVal )

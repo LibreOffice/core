@@ -2364,6 +2364,7 @@ sal_Bool SfxObjectShell::ImportFrom( SfxMedium& rMedium )
     ::rtl::OUString aTypeName( rMedium.GetFilter()->GetTypeName() );
     ::rtl::OUString aFilterName( rMedium.GetFilter()->GetFilterName() );
 
+        BeforeLoading( rMedium, aTypeName, aFilterName );
     uno::Reference< lang::XMultiServiceFactory >  xMan = ::comphelper::getProcessServiceFactory();
     uno::Reference < lang::XMultiServiceFactory > xFilterFact (
                 xMan->createInstance( DEFINE_CONST_UNICODE( "com.sun.star.document.FilterFactory" ) ), uno::UNO_QUERY );
@@ -2463,6 +2464,8 @@ sal_Bool SfxObjectShell::ImportFrom( SfxMedium& rMedium )
                 }
             }
         }
+        AfterLoading( rMedium, aTypeName, aFilterName );
+
         return bRtn;
 //<- #i119492
         }catch(const uno::Exception&)
