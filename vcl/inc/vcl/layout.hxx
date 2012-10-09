@@ -53,7 +53,6 @@ public:
         , m_bHomogeneous(bHomogeneous)
         , m_nSpacing(nSpacing)
     {
-        Show();
     }
     void set_spacing(int nSpacing)
     {
@@ -339,7 +338,6 @@ public:
         , m_bRowHomogeneous(false), m_bColumnHomogeneous(false)
         , m_nRowSpacing(0), m_nColumnSpacing(0)
     {
-        Show();
     }
     void set_row_homogeneous(bool bHomogeneous)
     {

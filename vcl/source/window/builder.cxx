@@ -945,6 +945,7 @@ bool VclBuilder::sortIntoBestTabTraversalOrder::operator()(const Window *pA, con
 void VclBuilder::handleChild(Window *pParent, xmlreader::XmlReader &reader)
 {
     Window *pCurrentChild = NULL;
+    bool bIsInternalChild = false;
 
     xmlreader::Span name;
     int nsId;
@@ -956,6 +957,10 @@ void VclBuilder::handleChild(Window *pParent, xmlreader::XmlReader &reader)
         {
             name = reader.getAttributeValue(false);
             sType = OString(name.begin, name.length);
+        }
+        else if (name.equals(RTL_CONSTASCII_STRINGPARAM("internal-child")))
+        {
+            bIsInternalChild = true;
         }
     }
 
@@ -981,6 +986,11 @@ void VclBuilder::handleChild(Window *pParent, xmlreader::XmlReader &reader)
 
                 if (bObjectInserted)
                 {
+                    //Internal-children default in glade to not having their visible bits set
+                    //even though they are visible (generally anyway)
+                    if (bIsInternalChild)
+                        pCurrentChild->Show();
+
                     //Select the first page if its a notebook
                     if (pCurrentChild->GetType() == WINDOW_TABCONTROL)
                     {
