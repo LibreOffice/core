@@ -2099,12 +2099,15 @@ bool SwWW8ImplReader::ProcessSpecial(bool &rbReSync, WW8_CP nStartCp)
 
     WW8_TablePos *pTabPos=0;
     WW8_TablePos aTabPos;
+    WW8PLCFx_Cp_FKP* pPap = 0;
+    bool bTableHasPositionInfo = false;
+
     if (nCellLevel && !bVer67)
     {
         WW8PLCFxSave1 aSave;
         pPlcxMan->GetPap()->Save( aSave );
         rbReSync = true;
-        WW8PLCFx_Cp_FKP* pPap = pPlcxMan->GetPapPLCF();
+        pPap = pPlcxMan->GetPapPLCF();
         WW8_CP nMyStartCp=nStartCp;
 
         if (const sal_uInt8 *pLevel = pPlcxMan->HasParaSprm(0x6649))
@@ -2116,15 +2119,29 @@ bool SwWW8ImplReader::ProcessSpecial(bool &rbReSync, WW8_CP nStartCp)
         if (!bHasRowEnd)
             nCellLevel = static_cast< sal_uInt8 >(nInTable);
 
-        if (bHasRowEnd && ParseTabPos(&aTabPos,pPap))
-            pTabPos = &aTabPos;
+        sal_uLong idstart = rDoc.GetNodes().GetEndOfContent().StartOfSectionIndex(); // get the node index
+        sal_uLong idcur = 0;
+        if ( pPaM && pPaM->GetPoint() )
+            idcur = pPaM->GetPoint()->nNode.GetIndex();
+
+        // Memory first table postion info
+        if ( !pFirstTablePap && idstart + 1 == idcur )
+            pFirstTablePap = pPap;
+
+        if ( bHasRowEnd  && ParseTabPos(&aTabPos,pPap) )
+        {
+            // If table front don't have some content and it is doc first table, ignore table text wrapping property
+            bTableHasPositionInfo = true;
+            if ( pFirstTablePap != pPap )
+                pTabPos = &aTabPos;
+        }
 
         pPlcxMan->GetPap()->Restore( aSave );
     }
 
 //  then look if we are in an Apo
 
-    ApoTestResults aApo = TestApo(nCellLevel, bTableRowEnd, pTabPos);
+    ApoTestResults aApo = TestApo(nCellLevel, bTableRowEnd, pTabPos, !(pFirstTablePap == pPap && bTableHasPositionInfo));
 
     //look to see if we are in a Table, but Table in foot/end note not allowed
     bool bStartTab = (nInTable < nCellLevel) && !bFtnEdn;

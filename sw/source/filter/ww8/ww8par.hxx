@@ -1103,6 +1103,8 @@ private:
     bool bBidi;
     bool bReadTable;
     boost::shared_ptr<SwPaM> mpTableEndPaM;
+    WW8PLCFx_Cp_FKP* pFirstTablePap;
+
     // Indicate that currently on loading a TOC, managed by Read_F_TOX() and End_Field()
     bool mbLoadingTOCCache;
     // Indicate that current on loading a hyperlink, which is inside a TOC; Managed by Read_F_Hyperlink() and End_Field()
@@ -1239,8 +1241,8 @@ private:
     bool StartApo(const ApoTestResults &rApo, const WW8_TablePos *pTabPos);
     void StopApo();
     bool TestSameApo(const ApoTestResults &rApo, const WW8_TablePos *pTabPos);
-    ApoTestResults TestApo(int nCellLevel, bool bTableRowEnd,
-        const WW8_TablePos *pTabPos);
+    ApoTestResults TestApo(int nCellLevel, bool bTableRowEnd, const WW8_TablePos *pTabPos,
+        bool bReadTablePos = true);
 
     void EndSpecial();
     bool ProcessSpecial(bool &rbReSync, WW8_CP nStartCp);

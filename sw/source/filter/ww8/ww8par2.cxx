@@ -528,7 +528,7 @@ bool SwWW8ImplReader::SearchRowEnd(WW8PLCFx_Cp_FKP* pPap, WW8_CP &rStartCp,
 }
 
 ApoTestResults SwWW8ImplReader::TestApo(int nCellLevel, bool bTableRowEnd,
-    const WW8_TablePos *pTabPos)
+        const WW8_TablePos *pTabPos, bool bReadTablePos)
 {
     const WW8_TablePos *pTopLevelTable = nCellLevel <= 1 ? pTabPos : 0;
     ApoTestResults aRet;
@@ -556,9 +556,13 @@ ApoTestResults SwWW8ImplReader::TestApo(int nCellLevel, bool bTableRowEnd,
     If we are already a table in a frame then we must grab the para properties
     to see if we are still in that frame.
     */
+    // If table front don't have some content and it is doc first table, ignore table text wrapping property
+    if ( bReadTablePos )
+    {
+        aRet.mpSprm37 = pPlcxMan->HasParaSprm( bVer67 ? 37 : 0x2423 );
+        aRet.mpSprm29 = pPlcxMan->HasParaSprm( bVer67 ? 29 : 0x261B );
+    }
 
-    aRet.mpSprm37 = pPlcxMan->HasParaSprm( bVer67 ? 37 : 0x2423 );
-    aRet.mpSprm29 = pPlcxMan->HasParaSprm( bVer67 ? 29 : 0x261B );
 
     // Is there some frame data here
     bool bNowApo = aRet.HasFrame() || pTopLevelTable;
