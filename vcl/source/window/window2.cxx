@@ -1799,7 +1799,6 @@ void Window::take_properties(Window &rOther)
     if (!mpWindowImpl->mpRealParent)
         ImplInit(pWindowImpl->mpRealParent, rOther.GetStyle(), NULL);
     std::swap(mpWindowImpl->mpUserData, pWindowImpl->mpUserData);
-    std::swap(mpWindowImpl->mpExtImpl, pWindowImpl->mpExtImpl);
     std::swap(mpWindowImpl->mpCursor, pWindowImpl->mpCursor);
     std::swap(mpWindowImpl->maPointer, pWindowImpl->maPointer);
     mpWindowImpl->maZoom = pWindowImpl->maZoom;

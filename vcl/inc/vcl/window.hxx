@@ -126,7 +126,6 @@ namespace dnd {
 
 namespace vcl {
     struct ControlLayoutData;
-    struct ExtWindowImpl;
 }
 
 namespace svt { class PopupWindowControllerImpl; }
@@ -483,10 +482,7 @@ public:
     SAL_DLLPRIVATE sal_Bool                ImplUpdatePos();
     SAL_DLLPRIVATE void                ImplUpdateSysObjPos();
     SAL_DLLPRIVATE WindowImpl*         ImplGetWindowImpl() const { return mpWindowImpl; }
-    SAL_DLLPRIVATE void                ImplFreeExtWindowImpl();
-    // creates ExtWindowImpl on demand, but may return NULL (e.g. if mbInDtor)
-    SAL_DLLPRIVATE vcl::ExtWindowImpl* ImplGetExtWindowImpl() const;
-    SAL_DLLPRIVATE void                ImplDeleteOwnedChildren();
+
     /** check whether a font is suitable for UI
 
     The font to be tested will be checked whether it could display a
@@ -549,7 +545,6 @@ public:
     SAL_DLLPRIVATE sal_Bool        ImplRegisterAccessibleNativeFrame();
     SAL_DLLPRIVATE void        ImplRevokeAccessibleNativeFrame();
     SAL_DLLPRIVATE void        ImplCallResize();
-    SAL_DLLPRIVATE void        ImplExtResize();
     SAL_DLLPRIVATE void        ImplCallMove();
     SAL_DLLPRIVATE Rectangle   ImplOutputToUnmirroredAbsoluteScreenPixel( const Rectangle& rRect ) const;
     SAL_DLLPRIVATE void        ImplMirrorFramePos( Point &pt ) const;
@@ -1309,28 +1304,6 @@ public:
 
     virtual rtl::OUString GetSurroundingText() const;
     virtual Selection GetSurroundingTextSelection() const;
-
-    // ExtImpl
-
-    // old layouting, in-process-of-removal
-
-    /* return the identifier of this window
-    */
-    const rtl::OUString& getIdentifier() const;
-
-    /* returns the first found descendant that matches
-       the passed identifier or NULL
-    */
-    Window* findWindow( const rtl::OUString& ) const;
-
-    /* get/set properties
-       this will contain window properties (like visible, enabled)
-       as well as properties of derived classes (e.g. text of Edit fields)
-    */
-    virtual com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > getProperties() const;
-    /*
-    */
-    virtual void setProperties( const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& );
 };
 
 
