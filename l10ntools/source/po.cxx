@@ -29,85 +29,91 @@
 
 //Class GenPoEntry
 
-//Generate KeyId
-OString ImplGenKeyId(const OString& rGenerator)
+namespace
 {
-    boost::crc_32_type aCRC32;
-    aCRC32.process_bytes(rGenerator.getStr(), rGenerator.getLength());
-    sal_uInt32 nCRC = aCRC32.checksum();
-    //Use all readable ASCII charachter exclude xml special tags: ",',&,<,>
-    const OString sSymbols = "!#$%()*+,-./0123456789:;=?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~";
-    char sKeyId[5];
-    for( short nKeyInd = 0; nKeyInd < 4; ++nKeyInd )
+    //Generate KeyId
+    static OString lcl_GenKeyId(const OString& rGenerator)
     {
-        sKeyId[nKeyInd] = sSymbols[(nCRC & 255) % 89];
-        nCRC >>= 8;
-    }
-    sKeyId[4] = '\0';
-    return OString(sKeyId);
-}
-
-//Escape text
-OString ImplEscapeText(const OString& rText,
-                       const OString& rUnEscaped= POUNESCAPED,
-                       const OString& rEscaped = POESCAPED)
-{
-    assert( rEscaped.getLength() == 2*rUnEscaped.getLength() );
-    OString sResult = rText;
-    int nCount = 0;
-    for(sal_Int32 nIndex=0; nIndex<rText.getLength(); ++nIndex)
-    {
-        sal_Int32 nActChar = rUnEscaped.indexOf(rText[nIndex]);
-        if(nActChar!=-1)
-            sResult = sResult.replaceAt((nIndex)+(nCount++),1,
-                                        rEscaped.copy(2*nActChar,2));
-    }
-    return sResult;
-}
-
-//Unescape text
-OString ImplUnEscapeText(const OString& rText,
-                         const OString& rEscaped = POESCAPED,
-                         const OString& rUnEscaped = POUNESCAPED)
-{
-    assert( rEscaped.getLength() == 2*rUnEscaped.getLength() );
-    OString sResult = rText;
-    int nCount = 0;
-    for(sal_Int32 nIndex=0; nIndex<rText.getLength()-1; ++nIndex)
-    {
-        sal_Int32 nActChar = rEscaped.indexOf(rText.copy(nIndex,2));
-        if(nActChar % 2 == 0)
-            sResult = sResult.replaceAt((nIndex++)-(nCount++),2,
-                                        rUnEscaped.copy(nActChar/2,1));
-    }
-    return sResult;
-}
-
-//Convert a normal string to msg/po output string
-OString ImplGenMsgString(const OString& rString)
-{
-    if ( rString.isEmpty() )
-        return "\"\"";
-
-    OString sResult = "\"" + ImplEscapeText(rString) + "\"";
-    sal_Int32 nIndex = 0;
-    while((nIndex=sResult.indexOf("\\n",nIndex))!=-1)
-    {
-        if(sResult.copy(nIndex-1,3)!="\\\\n" && nIndex!=sResult.getLength()-3)
-           sResult = sResult.replaceAt(nIndex,2,"\\n\"\n\"");
-        ++nIndex;
+        boost::crc_32_type aCRC32;
+        aCRC32.process_bytes(rGenerator.getStr(), rGenerator.getLength());
+        sal_uInt32 nCRC = aCRC32.checksum();
+        //Use all readable ASCII charachter exclude xml special tags: ",',&,<,>
+        const OString sSymbols = "!#$%()*+,-./0123456789:;=?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~";
+        char sKeyId[5];
+        for( short nKeyInd = 0; nKeyInd < 4; ++nKeyInd )
+        {
+            sKeyId[nKeyInd] = sSymbols[(nCRC & 255) % 89];
+            nCRC >>= 8;
+        }
+        sKeyId[4] = '\0';
+        return OString(sKeyId);
     }
 
-    if ( sResult.indexOf('\n') != -1 )
-        return "\"\"\n" +  sResult;
+    //Escape text
+    static OString lcl_EscapeText(const OString& rText,
+                           const OString& rUnEscaped= POUNESCAPED,
+                           const OString& rEscaped = POESCAPED)
+    {
+        assert( rEscaped.getLength() == 2*rUnEscaped.getLength() );
+        OString sResult = rText;
+        int nCount = 0;
+        for(sal_Int32 nIndex=0; nIndex<rText.getLength(); ++nIndex)
+        {
+            sal_Int32 nActChar = rUnEscaped.indexOf(rText[nIndex]);
+            if(nActChar!=-1)
+                sResult = sResult.replaceAt((nIndex)+(nCount++),1,
+                                            rEscaped.copy(2*nActChar,2));
+        }
+        return sResult;
+    }
 
-    return sResult;
-}
+    //Unescape text
+    static OString lcl_UnEscapeText(const OString& rText,
+                             const OString& rEscaped = POESCAPED,
+                             const OString& rUnEscaped = POUNESCAPED)
+    {
+        assert( rEscaped.getLength() == 2*rUnEscaped.getLength() );
+        OString sResult = rText;
+        int nCount = 0;
+        for(sal_Int32 nIndex=0; nIndex<rText.getLength()-1; ++nIndex)
+        {
+            sal_Int32 nActChar = rEscaped.indexOf(rText.copy(nIndex,2));
+            if(nActChar % 2 == 0)
+                sResult = sResult.replaceAt((nIndex++)-(nCount++),2,
+                                            rUnEscaped.copy(nActChar/2,1));
+        }
+        return sResult;
+    }
 
-//Convert msg string to normal form
-OString ImplGenNormString(const OString& rString)
-{
-    return ImplUnEscapeText(rString.copy(1,rString.getLength()-2));
+    //Convert a normal string to msg/po output string
+    static OString lcl_GenMsgString(const OString& rString)
+    {
+        if ( rString.isEmpty() )
+            return "\"\"";
+
+        OString sResult = "\"" + lcl_EscapeText(rString) + "\"";
+        sal_Int32 nIndex = 0;
+        while((nIndex=sResult.indexOf("\\n",nIndex))!=-1)
+        {
+            if( sResult.copy(nIndex-1,3)!="\\\\n" &&
+                nIndex!=sResult.getLength()-3)
+            {
+               sResult = sResult.replaceAt(nIndex,2,"\\n\"\n\"");
+            }
+            ++nIndex;
+        }
+
+        if ( sResult.indexOf('\n') != -1 )
+            return "\"\"\n" +  sResult;
+
+        return sResult;
+    }
+
+    //Convert msg string to normal form
+    static OString lcl_GenNormString(const OString& rString)
+    {
+        return lcl_UnEscapeText(rString.copy(1,rString.getLength()-2));
+    }
 }
 
 //Default constructor
@@ -168,7 +174,7 @@ void GenPoEntry::setFuzzy(const bool bFuzzy)
 //Set keyid
 void GenPoEntry::genKeyId()
 {
-    m_sKeyId = ImplGenKeyId( m_sReference + m_sContext + m_sUnTransStr );
+    m_sKeyId = lcl_GenKeyId( m_sReference + m_sContext + m_sUnTransStr );
 }
 
 //Write to file
@@ -186,11 +192,11 @@ void GenPoEntry::writeToFile(std::ofstream& rOFStream) const
         rOFStream << "#, fuzzy" << std::endl;
     if ( !m_sContext.isEmpty() )
         rOFStream << "msgctxt "
-                  << ImplGenMsgString(m_sContext).getStr() << std::endl;
+                  << lcl_GenMsgString(m_sContext).getStr() << std::endl;
     rOFStream << "msgid "
-              << ImplGenMsgString(m_sUnTransStr).getStr() << std::endl;
+              << lcl_GenMsgString(m_sUnTransStr).getStr() << std::endl;
     rOFStream << "msgstr "
-              << ImplGenMsgString(m_sTransStr).getStr() << std::endl;
+              << lcl_GenMsgString(m_sTransStr).getStr() << std::endl;
 }
 
 //Read from file
@@ -226,22 +232,22 @@ void GenPoEntry::readFromFile(std::ifstream& rIFStream)
         }
         else if (sLine.startsWith("msgctxt "))
         {
-            m_sContext = ImplGenNormString(sLine.copy(8));
+            m_sContext = lcl_GenNormString(sLine.copy(8));
             pLastMsg = &m_sContext;
         }
         else if (sLine.startsWith("msgid "))
         {
-            m_sUnTransStr = ImplGenNormString(sLine.copy(6));
+            m_sUnTransStr = lcl_GenNormString(sLine.copy(6));
             pLastMsg = &m_sUnTransStr;
         }
         else if (sLine.startsWith("msgstr "))
         {
-            m_sTransStr = ImplGenNormString(sLine.copy(7));
+            m_sTransStr = lcl_GenNormString(sLine.copy(7));
             pLastMsg = &m_sTransStr;
         }
         else if (sLine.startsWith("\"") && pLastMsg)
         {
-            *pLastMsg += ImplGenNormString(sLine);
+            *pLastMsg += lcl_GenNormString(sLine);
         }
         else
             break;
@@ -253,132 +259,145 @@ void GenPoEntry::readFromFile(std::ifstream& rIFStream)
 
 //Class PoEntry
 
-//Split string at the delimiter char
-void ImplSplitAt(const OString& rSource, const sal_Char nDelimiter,
-                 std::vector<OString>& o_vParts)
+namespace
 {
-    o_vParts.resize( 0 );
-    sal_Int32 nActIndex = 0;
-    sal_Int32 nLastSplit = 0;
-    while( nActIndex < rSource.getLength() )
+    //Split string at the delimiter char
+    static void lcl_SplitAt(const OString& rSource, const sal_Char nDelimiter,
+                     std::vector<OString>& o_vParts)
     {
-        if ( rSource[nActIndex] == nDelimiter )
+        o_vParts.resize( 0 );
+        sal_Int32 nActIndex = 0;
+        sal_Int32 nLastSplit = 0;
+        while( nActIndex < rSource.getLength() )
         {
-            o_vParts.push_back(rSource.copy(nLastSplit,nActIndex-nLastSplit));
-            nLastSplit = nActIndex+1;
-        }
-        ++nActIndex;
-    }
-    o_vParts.push_back(rSource.copy(nLastSplit));
-}
-
-//Unescape sdf string
-OString ImplUnEscapeSDFText(const OString& rText,const bool bHelpText = false)
-{
-    if ( bHelpText )
-        return ImplUnEscapeText(rText,"\\<\\>\\\"\\\\","<>\"\\");
-    else
-        return ImplUnEscapeText(rText,"\\n\\t\\r","\n\t\r");
-}
-
-//Miminize the length of the regular expression result
-void ImplMinimize(const OUString& rText, Regexpr& io_rRegExp, re_registers& io_rRegs)
-{
-    re_registers aPrevRegs;
-    const sal_Int32 nStart = io_rRegs.start[0];
-    do
-    {
-        const OUString sTemp = rText.copy(0,io_rRegs.end[0]-1);
-        memcpy(static_cast<void*>(&aPrevRegs), static_cast<void*>(&io_rRegs),
-               sizeof(re_registers));
-        memset(static_cast<void*>(&io_rRegs), 0, sizeof(re_registers));
-        io_rRegExp.set_line(sTemp.getStr(),sTemp.getLength());
-        io_rRegExp.re_search(&io_rRegs,nStart);
-    } while(io_rRegs.num_of_match);
-
-    memcpy(static_cast<void*>(&io_rRegs),static_cast<void*>(&aPrevRegs),
-           sizeof(re_registers));
-    io_rRegExp.set_line(rText.getStr(),rText.getLength());
-}
-
-//Find all special tag in a string using a regular expression
-void ImplFindAllTag(const OString& rText,std::vector<OString>& o_vFoundTags)
-{
-    ::com::sun::star::util::SearchOptions aOptions;
-    aOptions.algorithmType = ::com::sun::star::util::SearchAlgorithms_REGEXP;
-    aOptions.searchFlag = ::com::sun::star::util::SearchFlags::NORM_WORD_ONLY;
-    aOptions.searchString = "<[/]?[a-z_\\-]+(| +[a-z]+=\".*\") *[/]?>";
-    ::com::sun::star::uno::Reference<
-         ::com::sun::star::i18n::XExtendedTransliteration > xTrans;
-
-    Regexpr aRegExp(aOptions,xTrans);
-    const OUString sTemp(OStringToOUString(rText,RTL_TEXTENCODING_UTF8));
-    aRegExp.set_line(sTemp.getStr(),sTemp.getLength());
-
-    re_registers aRegs;
-    memset(static_cast<void*>(&aRegs), 0, sizeof(re_registers));
-    sal_Int32 nStart = 0;
-    o_vFoundTags.resize(0);
-    aRegExp.re_search(&aRegs,nStart);
-    while(aRegs.num_of_match)
-    {
-        ImplMinimize(sTemp,aRegExp,aRegs);
-        o_vFoundTags.push_back(
-            OUStringToOString(
-                sTemp.copy(aRegs.start[0],aRegs.end[0]-aRegs.start[0]),
-                RTL_TEXTENCODING_UTF8));
-        nStart = aRegs.end[0];
-        memset(static_cast<void*>(&aRegs), 0, sizeof(re_registers));
-        aRegExp.re_search(&aRegs,nStart);
-    }
-}
-
-//Escape special tags
-OString ImplEscapeTags(const OString& rText)
-{
-    typedef std::vector<OString> StrVec;
-    const OString vInitializer[] = {
-        "ahelp", "link", "item", "emph", "defaultinline",
-        "switchinline", "caseinline", "variable",
-        "bookmark_value", "image", "embedvar", "alt" };
-    const StrVec vTagsForEscape( vInitializer,
-        vInitializer + sizeof(vInitializer) / sizeof(vInitializer[0]) );
-    StrVec vFoundTags;
-    ImplFindAllTag(rText,vFoundTags);
-    OString sResult = rText;
-    for(StrVec::const_iterator pFound  = vFoundTags.begin();
-        pFound != vFoundTags.end(); ++pFound)
-    {
-        bool bEscapeThis = false;
-        for(StrVec::const_iterator pEscape = vTagsForEscape.begin();
-            pEscape != vTagsForEscape.end(); ++pEscape)
-        {
-            if (pFound->startsWith("<" + *pEscape) ||
-                *pFound == "</" + *pEscape + ">")
+            if ( rSource[nActIndex] == nDelimiter )
             {
-                bEscapeThis = true;
-                break;
+                o_vParts.push_back(
+                    rSource.copy(nLastSplit,nActIndex-nLastSplit));
+                nLastSplit = nActIndex+1;
+            }
+            ++nActIndex;
+        }
+        o_vParts.push_back(rSource.copy(nLastSplit));
+    }
+
+    //Unescape sdf string
+    static OString lcl_UnEscapeSDFText(
+        const OString& rText,const bool bHelpText = false )
+    {
+        if ( bHelpText )
+            return lcl_UnEscapeText(rText,"\\<\\>\\\"\\\\","<>\"\\");
+        else
+            return lcl_UnEscapeText(rText,"\\n\\t\\r","\n\t\r");
+    }
+
+    //Miminize the length of the regular expression result
+    static void lcl_Minimize(
+        const OUString& rText, Regexpr& io_rRegExp, re_registers& io_rRegs )
+    {
+        re_registers aPrevRegs;
+        const sal_Int32 nStart = io_rRegs.start[0];
+        do
+        {
+            const OUString sTemp = rText.copy(0,io_rRegs.end[0]-1);
+            memcpy(
+                static_cast<void*>(&aPrevRegs),
+                static_cast<void*>(&io_rRegs),
+                sizeof(re_registers));
+            memset(static_cast<void*>(&io_rRegs), 0, sizeof(re_registers));
+            io_rRegExp.set_line(sTemp.getStr(),sTemp.getLength());
+            io_rRegExp.re_search(&io_rRegs,nStart);
+        } while(io_rRegs.num_of_match);
+
+        memcpy(static_cast<void*>(&io_rRegs),static_cast<void*>(&aPrevRegs),
+               sizeof(re_registers));
+        io_rRegExp.set_line(rText.getStr(),rText.getLength());
+    }
+
+    //Find all special tag in a string using a regular expression
+    static void lcl_FindAllTag(
+        const OString& rText,std::vector<OString>& o_vFoundTags )
+    {
+        ::com::sun::star::util::SearchOptions aOptions;
+        aOptions.algorithmType =
+            ::com::sun::star::util::SearchAlgorithms_REGEXP;
+        aOptions.searchFlag =
+            ::com::sun::star::util::SearchFlags::NORM_WORD_ONLY;
+        aOptions.searchString = "<[/]?[a-z_\\-]+(| +[a-z]+=\".*\") *[/]?>";
+        ::com::sun::star::uno::Reference<
+             ::com::sun::star::i18n::XExtendedTransliteration > xTrans;
+
+        Regexpr aRegExp(aOptions,xTrans);
+        const OUString sTemp(OStringToOUString(rText,RTL_TEXTENCODING_UTF8));
+        aRegExp.set_line(sTemp.getStr(),sTemp.getLength());
+
+        re_registers aRegs;
+        memset(static_cast<void*>(&aRegs), 0, sizeof(re_registers));
+        sal_Int32 nStart = 0;
+        o_vFoundTags.resize(0);
+        aRegExp.re_search(&aRegs,nStart);
+        while(aRegs.num_of_match)
+        {
+            lcl_Minimize(sTemp,aRegExp,aRegs);
+            o_vFoundTags.push_back(
+                OUStringToOString(
+                    sTemp.copy(aRegs.start[0],aRegs.end[0]-aRegs.start[0]),
+                    RTL_TEXTENCODING_UTF8));
+            nStart = aRegs.end[0];
+            memset(static_cast<void*>(&aRegs), 0, sizeof(re_registers));
+            aRegExp.re_search(&aRegs,nStart);
+        }
+    }
+
+    //Escape special tags
+    static OString lcl_EscapeTags( const OString& rText )
+    {
+        typedef std::vector<OString> StrVec;
+        const OString vInitializer[] = {
+            "ahelp", "link", "item", "emph", "defaultinline",
+            "switchinline", "caseinline", "variable",
+            "bookmark_value", "image", "embedvar", "alt" };
+        const StrVec vTagsForEscape( vInitializer,
+            vInitializer + sizeof(vInitializer) / sizeof(vInitializer[0]) );
+        StrVec vFoundTags;
+        lcl_FindAllTag(rText,vFoundTags);
+        OString sResult = rText;
+        for(StrVec::const_iterator pFound  = vFoundTags.begin();
+            pFound != vFoundTags.end(); ++pFound)
+        {
+            bool bEscapeThis = false;
+            for(StrVec::const_iterator pEscape = vTagsForEscape.begin();
+                pEscape != vTagsForEscape.end(); ++pEscape)
+            {
+                if (pFound->startsWith("<" + *pEscape) ||
+                    *pFound == "</" + *pEscape + ">")
+                {
+                    bEscapeThis = true;
+                    break;
+                }
+            }
+            if( bEscapeThis || *pFound=="<br/>" ||
+                *pFound =="<help-id-missing/>")
+            {
+                OString sToReplace = "\\<" +
+                    pFound->copy(1,pFound->getLength()-2).
+                        replaceAll("\"","\\\"") + "\\>";
+                sResult = sResult.replaceAll(*pFound, sToReplace);
             }
         }
-        if (bEscapeThis || *pFound=="<br/>" || *pFound =="<help-id-missing/>")
-        {
-            OString sToReplace = "\\<" + pFound->copy(1,pFound->getLength()-2).
-                                           replaceAll("\"","\\\"") + "\\>";
-            sResult = sResult.replaceAll(*pFound, sToReplace);
-        }
+        return sResult;
     }
-    return sResult;
-}
 
-//Escape to get sdf/merge string
-OString ImplEscapeSDFText(const OString& rText,const bool bHelpText = false)
-{
-    if ( bHelpText )
-        return ImplEscapeTags(rText.replaceAll("\\","\\\\"));
-    else
-        return ImplEscapeText(rText,"\n\t\r","\\n\\t\\r");
+    //Escape to get sdf/merge string
+    static OString lcl_EscapeSDFText(
+        const OString& rText,const bool bHelpText = false )
+    {
+        if ( bHelpText )
+            return lcl_EscapeTags(rText.replaceAll("\\","\\\\"));
+        else
+            return lcl_EscapeText(rText,"\n\t\r","\\n\\t\\r");
+    }
 }
-
 
 //Default constructor
 PoEntry::PoEntry()
@@ -393,7 +412,7 @@ PoEntry::PoEntry(const OString& rSDFLine, const TYPE eType)
     , m_bIsInitialized( false )
 {
     std::vector<OString> vParts;
-    ImplSplitAt(rSDFLine,'\t',vParts);
+    lcl_SplitAt(rSDFLine,'\t',vParts);
     if( vParts.size()!=15 ||
         vParts[SOURCEFILE].isEmpty() ||
         vParts[GROUPID].isEmpty() ||
@@ -424,7 +443,7 @@ PoEntry::PoEntry(const OString& rSDFLine, const TYPE eType)
     }
     m_aGenPo.setContext(sContext);
     m_aGenPo.setUnTransStr(
-        ImplUnEscapeSDFText(
+        lcl_UnEscapeSDFText(
             vParts[eType],vParts[SOURCEFILE].endsWith(".xhp")));
     m_aGenPo.genKeyId();
     m_bIsInitialized = true;
@@ -506,7 +525,7 @@ OString PoEntry::getUnTransStr() const
 {
     assert( m_bIsInitialized );
     return
-        ImplEscapeSDFText(
+        lcl_EscapeSDFText(
             m_aGenPo.getUnTransStr(), getSourceFile().endsWith(".xhp") );
 }
 
@@ -515,7 +534,7 @@ OString PoEntry::getTransStr() const
 {
     assert( m_bIsInitialized );
     return
-        ImplEscapeSDFText(
+        lcl_EscapeSDFText(
             m_aGenPo.getTransStr(), getSourceFile().endsWith(".xhp") );
 
 }
@@ -524,7 +543,7 @@ OString PoEntry::getTransStr() const
 void PoEntry::setTransStr(const OString& rTransStr)
 {
     m_aGenPo.setTransStr(
-                ImplUnEscapeSDFText(
+                lcl_UnEscapeSDFText(
                     rTransStr,getSourceFile().endsWith(".xhp")));
 }
 
@@ -546,23 +565,27 @@ bool PoEntry::IsInSameComp(const PoEntry& rPo1,const PoEntry& rPo2)
 
 //Class PoHeader
 
-//Get actual time in "YEAR-MO-DA HO:MI+ZONE" form
-OString ImplGetTime()
+namespace
 {
-    time_t aNow = time(NULL);
-    struct tm* pNow = localtime(&aNow);
-    char pBuff[50];
-    strftime( pBuff, sizeof pBuff, "%Y-%m-%d %H:%M%z", pNow );
-    return pBuff;
-}
+    //Get actual time in "YEAR-MO-DA HO:MI+ZONE" form
+    static OString lcl_GetTime()
+    {
+        time_t aNow = time(NULL);
+        struct tm* pNow = localtime(&aNow);
+        char pBuff[50];
+        strftime( pBuff, sizeof pBuff, "%Y-%m-%d %H:%M%z", pNow );
+        return pBuff;
+    }
 
-OString ImplReplaceAttribute(
-    const OString& rSource, const OString& rOld, const OString& rNew )
-{
-    const sal_Int32 nFirstIndex = rSource.indexOf( rOld ) + rOld.getLength()+2;
-    const sal_Int32 nCount =
-        rSource.indexOf( "\n", nFirstIndex ) - nFirstIndex;
-    return rSource.replaceFirst( rSource.copy(nFirstIndex, nCount), rNew );
+    static OString lcl_ReplaceAttribute(
+        const OString& rSource, const OString& rOld, const OString& rNew )
+    {
+        const sal_Int32 nFirstIndex =
+            rSource.indexOf( rOld ) + rOld.getLength()+2;
+        const sal_Int32 nCount =
+            rSource.indexOf( "\n", nFirstIndex ) - nFirstIndex;
+        return rSource.replaceFirst( rSource.copy(nFirstIndex, nCount), rNew );
+    }
 }
 
 //Default Constructor
@@ -582,7 +605,7 @@ PoHeader::PoHeader( const OString& rExtSrc )
         OString("Project-Id-Version: PACKAGE VERSION\n"
         "Report-Msgid-Bugs-To: https://bugs.freedesktop.org/enter_bug.cgi?"
         "product=LibreOffice&bug_status=UNCONFIRMED&component=UI\n"
-        "POT-Creation-Date: ") + ImplGetTime() +
+        "POT-Creation-Date: ") + lcl_GetTime() +
         OString("\nPO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
         "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
         "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -610,13 +633,13 @@ PoHeader::PoHeader(  std::ifstream& rOldPo )
 
     OString sTransStr = m_aGenPo.getTransStr();
     sTransStr =
-        ImplReplaceAttribute( sTransStr, "Report-Msgid-Bugs-To",
+        lcl_ReplaceAttribute( sTransStr, "Report-Msgid-Bugs-To",
             "https://bugs.freedesktop.org/enter_bug.cgi?product="
             "LibreOffice&bug_status=UNCONFIRMED&component=UI" );
     sTransStr =
-        ImplReplaceAttribute( sTransStr, "X-Generator", "LibreOffice" );
+        lcl_ReplaceAttribute( sTransStr, "X-Generator", "LibreOffice" );
     sTransStr =
-        ImplReplaceAttribute( sTransStr, "X-Accelerator-Marker", "~" );
+        lcl_ReplaceAttribute( sTransStr, "X-Accelerator-Marker", "~" );
     m_aGenPo.setTransStr( sTransStr );
     m_bIsInitialized = true;
 }

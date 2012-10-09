@@ -20,7 +20,7 @@
 namespace
 {
     //Write out an sdf line
-    void lcl_WriteSDF(
+    static void lcl_WriteSDF(
         std::ofstream &aSDFStream, const OString& rText, const OString& rPrj,
         const OString& rActFileName, const OString& rID )
     {
@@ -33,7 +33,7 @@ namespace
     }
 
     //Find ascii escaped unicode
-    sal_Int32 lcl_IndexOfUnicode(
+    static sal_Int32 lcl_IndexOfUnicode(
         const OString& rSource, const sal_Int32 nFrom = 0 )
     {
         const OString sHexDigits = "0123456789abcdefABCDEF";
@@ -54,7 +54,7 @@ namespace
     }
 
     //Convert ascii escaped unicode to utf-8
-    OString lcl_ConvertToUTF8( const OString& rText )
+    static OString lcl_ConvertToUTF8( const OString& rText )
     {
         OString sResult = rText;
         sal_Int32 nIndex = lcl_IndexOfUnicode( sResult );
@@ -72,7 +72,7 @@ namespace
     }
 
     //Escape unicode characters
-    void lcl_PrintJavaStyle( const OString& rText, std::ofstream &rOfstream )
+    static void lcl_PrintJavaStyle( const OString& rText, std::ofstream &rOfstream )
     {
         const OUString sTemp =
             OStringToOUString( rText, RTL_TEXTENCODING_UTF8 );
