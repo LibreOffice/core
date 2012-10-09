@@ -27,6 +27,10 @@
 
 $(eval $(call gb_Library_Library,srtrs1))
 
+$(eval $(call gb_Library_use_packages,srtrs1,\
+	ucbhelper_inc \
+))
+
 $(eval $(call gb_Library_set_componentfile,srtrs1,ucb/source/sorter/srtrs1))
 
 $(eval $(call gb_Library_use_sdk_api,srtrs1))
