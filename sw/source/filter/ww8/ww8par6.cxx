@@ -1280,83 +1280,13 @@ sal_uInt8 lcl_ReadBorders(bool bVer67, WW8_BRC* brc, WW8PLCFx_Cp_FKP* pPap,
 void GetLineIndex(SvxBoxItem &rBox, short nLineThickness, short nSpace, sal_uInt8 nCol, short nIdx,
     sal_uInt16 nOOIndex, sal_uInt16 nWWIndex, short *pSize=0)
 {
-    ::editeng::SvxBorderStyle eStyle = table::BorderLineStyle::SOLID;
-    switch (nIdx)
-    {
-        // First the single lines
-        case  1:
-        case  5:
-        // and the unsupported special cases which we map to a single line
-        case  8:
-        case  9:
-        case 20:
-        case 22:
-            eStyle = table::BorderLineStyle::SOLID;
-            break;
-        case  2:
-            {
-                eStyle = table::BorderLineStyle::SOLID;
-                nLineThickness *= 2;
-            }
-            break;
-        case  6:
-            eStyle = table::BorderLineStyle::DOTTED;
-            break;
-        case  7:
-            eStyle = table::BorderLineStyle::DASHED;
-            break;
-        // then the shading beams which we represent by a double line
-        case 23:
-            eStyle = table::BorderLineStyle::DOUBLE;
-            break;
-        // then the double lines, for which we have good matches
-        case  3:
-        case 10: //Don't have tripple so use double
-        case 21: //Don't have double wave: use double instead
-            eStyle = table::BorderLineStyle::DOUBLE;
-            break;
-        case 11:
-            eStyle = table::BorderLineStyle::THINTHICK_SMALLGAP;
-            break;
-        case 12:
-        case 13: //Don't have thin thick thin, so use thick thin
-            eStyle = table::BorderLineStyle::THICKTHIN_SMALLGAP;
-            break;
-        case 14:
-            eStyle = table::BorderLineStyle::THINTHICK_MEDIUMGAP;
-            break;
-        case 15:
-        case 16: //Don't have thin thick thin, so use thick thin
-            eStyle = table::BorderLineStyle::THICKTHIN_MEDIUMGAP;
-            break;
-        case 17:
-            eStyle = table::BorderLineStyle::THINTHICK_LARGEGAP;
-            break;
-        case 18:
-        case 19: //Don't have thin thick thin, so use thick thin
-            eStyle = table::BorderLineStyle::THICKTHIN_LARGEGAP;
-            break;
-        case 24:
-            eStyle = table::BorderLineStyle::EMBOSSED;
-            break;
-        case 25:
-            eStyle = table::BorderLineStyle::ENGRAVED;
-            break;
-        case 26:
-            eStyle = table::BorderLineStyle::OUTSET;
-            break;
-        case 27:
-            eStyle = table::BorderLineStyle::INSET;
-            break;
-        default:
-            eStyle = table::BorderLineStyle::NONE;
-            break;
-    }
+    ::editeng::SvxBorderStyle const eStyle(
+            ::editeng::ConvertBorderStyleFromWord(nIdx));
 
     ::editeng::SvxBorderLine aLine;
     aLine.SetBorderLineStyle( eStyle );
     double const fConverted( (table::BorderLineStyle::NONE == eStyle) ? 0.0 :
-            ::editeng::ConvertBorderWidthFromWord(eStyle, nLineThickness));
+        ::editeng::ConvertBorderWidthFromWord(eStyle, nLineThickness, nIdx));
     aLine.SetWidth(fConverted);
 
     //No AUTO for borders as yet, so if AUTO, use BLACK

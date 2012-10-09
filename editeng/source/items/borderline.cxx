@@ -117,6 +117,78 @@ SvxBorderLine::SvxBorderLine( const Color *pCol, long nWidth,
         aColor = *pCol;
 }
 
+
+SvxBorderStyle
+ConvertBorderStyleFromWord(int const nWordLineStyle)
+{
+    switch (nWordLineStyle)
+    {
+        // First the single lines
+        case  1:
+        case  2: // thick line
+        case  5:
+        // and the unsupported special cases which we map to a single line
+        case  8:
+        case  9:
+        case 20:
+            return SOLID;
+            break;
+        case  6:
+            return DOTTED;
+            break;
+        case  7:
+        case 22:
+            return DASHED;
+            break;
+        // then the shading beams which we represent by a double line
+        case 23:
+            return DOUBLE;
+            break;
+        // then the double lines, for which we have good matches
+        case  3:
+        case 10: // Don't have triple so use double
+        case 21: // Don't have double wave: use double instead
+            return DOUBLE;
+            break;
+        case 11:
+            return THINTHICK_SMALLGAP;
+            break;
+        case 12:
+        case 13: // Don't have thin thick thin, so use thick thin
+            return THICKTHIN_SMALLGAP;
+            break;
+        case 14:
+            return THINTHICK_MEDIUMGAP;
+            break;
+        case 15:
+        case 16: // Don't have thin thick thin, so use thick thin
+            return THICKTHIN_MEDIUMGAP;
+            break;
+        case 17:
+            return THINTHICK_LARGEGAP;
+            break;
+        case 18:
+        case 19: // Don't have thin thick thin, so use thick thin
+            return THICKTHIN_LARGEGAP;
+            break;
+        case 24:
+            return EMBOSSED;
+            break;
+        case 25:
+            return ENGRAVED;
+            break;
+        case 26:
+            return OUTSET;
+            break;
+        case 27:
+            return INSET;
+            break;
+        default:
+            return NONE;
+            break;
+    }
+}
+
 static const double THINTHICK_SMALLGAP_line2 = 15.0;
 static const double THINTHICK_SMALLGAP_gap   = 15.0;
 static const double THINTHICK_LARGEGAP_line1 = 30.0;
@@ -129,7 +201,8 @@ static const double OUTSET_line1 = 15.0;
 static const double INSET_line2  = 15.0;
 
 double
-ConvertBorderWidthFromWord(SvxBorderStyle const eStyle, double const fWidth)
+ConvertBorderWidthFromWord(SvxBorderStyle const eStyle, double const fWidth,
+        int const nWordLineStyle)
 {
     switch (eStyle)
     {
@@ -137,7 +210,7 @@ ConvertBorderWidthFromWord(SvxBorderStyle const eStyle, double const fWidth)
         case SOLID:
         case DOTTED:
         case DASHED:
-            return fWidth;
+            return (2 == nWordLineStyle) ? (fWidth * 2.0) : fWidth;
             break;
 
         // Double lines
