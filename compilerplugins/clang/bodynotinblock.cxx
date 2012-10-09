@@ -74,6 +74,13 @@ void BodyNotInBlock::checkBody( const Stmt* body, const StmtParents& parents, in
     {
     if( body == NULL || parents.size() < 2 )
         return;
+    // TODO: If the if/while/for comes from a macro expansion, ignore it completely for
+    // now. The code below could assume everything is in the same place (and thus also column)
+    // and give a false warning. Moreover some macros are rather lousily written and would
+    // result in poor formatting. To be evaluated later, maybe this could be handled
+    // including macro expansion.
+    if( parents.back()->getLocStart().isMacroID())
+        return;
     if( dyn_cast< CompoundStmt >( body ))
         return; // if body is a compound statement, then it is in {}
     // Find the next statement (in source position) after 'body'.
@@ -93,13 +100,6 @@ void BodyNotInBlock::checkBody( const Stmt* body, const StmtParents& parents, in
                     ++it; // skip empty ones (missing 'else' bodies for example)
                 if( it != parents[ parent_pos ]->child_end())
                     {
-                    // TODO: If both statements come from macro expansions, they may be
-                    // below evaluated to be in the same place (because they may be
-                    // the result of expansion of the same macro). Analysing this including
-                    // macro expansions would be probably more complicated, so just
-                    // ignore that in order to avoid false positives.
-                    if( body->getLocStart().isMacroID() && (*it)->getLocStart().isMacroID())
-                        return;
                     bool invalid1, invalid2;
                     unsigned bodyColumn = context.getSourceManager()
                         .getPresumedColumnNumber( body->getLocStart(), &invalid1 );
