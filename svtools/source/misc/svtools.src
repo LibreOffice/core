@@ -1,0 +1,52 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+#include "svtools/svtools.hrc"
+
+String STR_1BIT_THRESHOLD
+{
+    Text [ en-US ] = "1 bit threshold";
+};
+String STR_1BIT_DITHERED
+{
+    Text [ en-US ] = "1 bit dithered";
+};
+String STR_4BIT_GRAYSCALE
+{
+    Text [ en-US ] = "4 bit grayscale";
+};
+String STR_4BIT_COLOR_PALETTE
+{
+    Text [ en-US ] = "4 bit color";
+};
+String STR_8BIT_GRAYSCALE
+{
+    Text [ en-US ] = "8 bit grayscale";
+};
+String STR_8BIT_COLOR_PALETTE
+{
+    Text [ en-US ] = "8 bit color";
+};
+String STR_24BIT_TRUE_COLOR
+{
+    Text [ en-US ] = "24 bit true color";
+};
+String STR_ESTIMATED_SIZE_PIX_1
+{
+    Text [ en-US ] = "The picture needs about %1 KB of memory.";
+};
+String STR_ESTIMATED_SIZE_PIX_2
+{
+    Text [ en-US ] = "The picture needs about %1 KB of memory, the file size is %2 KB.";
+};
+String STR_ESTIMATED_SIZE_VEC
+{
+    Text [ en-US ] = "The file size is %1 KB.";
+};
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

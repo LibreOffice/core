@@ -26,9 +26,9 @@
 #include <vcl/button.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/field.hxx>
+#include <vcl/layout.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/msgbox.hxx>
-#include <vcl/arrange.hxx>
 #include <vcl/scrbar.hxx>
 #include <com/sun/star/document/XExporter.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
@@ -46,63 +46,60 @@ class ExportDialog : public ModalDialog
 {
 private:
 
-    FltCallDialogParameter&
-        mrFltCallPara;
-
-    ResMgr*             mpMgr;
+    FltCallDialogParameter& mrFltCallPara;
 
     const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >
         mxMgr;
     const com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >&
         mxSourceDocument;
 
-    FixedLine           maFlExportSize;
-    FixedText           maFtSizeX;
-    MetricField         maMfSizeX;
-    ListBox             maLbSizeX;
-    FixedText           maFtSizeY;
-    MetricField         maMfSizeY;
-    ListBox             maLbSizeY;
-    FixedText           maFtResolution;
-    NumericField        maNfResolution;
-    ListBox             maLbResolution;
-    FixedLine           maFlColorDepth;
-    ListBox             maLbColorDepth;
-    FixedLine           maFlJPGQuality;
-    FixedLine           maFlMode;
-    ScrollBar           maSbCompression;
-    NumericField        maNfCompression;
-    FixedText           maFtJPGMin;
-    FixedText           maFtJPGMax;
-    FixedText           maFtPNGMin;
-    FixedText           maFtPNGMax;
-    CheckBox            maCbInterlaced;
-    CheckBox            maCbRLEEncoding;
-    FixedLine           maFlGIFDrawingObjects;
-    CheckBox            maCbSaveTransparency;
-    RadioButton         maRbBinary;
-    RadioButton         maRbText;
-    FixedLine           maFlEPSPreview;
-    CheckBox            maCbEPSPreviewTIFF;
-    CheckBox            maCbEPSPreviewEPSI;
-    FixedLine           maFlEPSVersion;
-    RadioButton         maRbEPSLevel1;
-    RadioButton         maRbEPSLevel2;
-    FixedLine           maFlEPSColorFormat;
-    RadioButton         maRbEPSColorFormat1;
-    RadioButton         maRbEPSColorFormat2;
-    FixedLine           maFlCompression;
-    RadioButton         maRbEPSCompressionLZW;
-    RadioButton         maRbEPSCompressionNone;
-    FixedLine           maFlEstimatedSize;
-    FixedText           maFtEstimatedSize;
+    NumericField*       mpMfSizeX;
+    ListBox*            mpLbSizeX;
+    NumericField*       mpMfSizeY;
+    FixedText*          mpFtResolution;
+    NumericField*       mpNfResolution;
+    ListBox*            mpLbResolution;
+
+    VclContainer*       mpColorDepth;
+    ListBox*            mpLbColorDepth;
+
+    VclContainer*       mpJPGQuality;
+    VclContainer*       mpPNGCompression;
+
+    ScrollBar*          mpSbCompression;
+    NumericField*       mpNfCompression;
+
+    VclContainer*       mpMode;
+    CheckBox*           mpCbInterlaced;
+
+    VclContainer*       mpBMPCompression;
+    CheckBox*           mpCbRLEEncoding;
+
+    VclContainer*       mpDrawingObjects;
+    CheckBox*           mpCbSaveTransparency;
+
+    VclContainer*       mpEncoding;
+    RadioButton*        mpRbBinary;
+    RadioButton*        mpRbText;
+
+    VclContainer*       mpEPSGrid;
+    CheckBox*           mpCbEPSPreviewTIFF;
+    CheckBox*           mpCbEPSPreviewEPSI;
+    RadioButton*        mpRbEPSLevel1;
+    RadioButton*        mpRbEPSLevel2;
+    RadioButton*        mpRbEPSColorFormat1;
+    RadioButton*        mpRbEPSColorFormat2;
+    RadioButton*        mpRbEPSCompressionLZW;
+    RadioButton*        mpRbEPSCompressionNone;
+
+    VclContainer*       mpInfo;
+    FixedText*          mpFtEstimatedSize;
+
+    OKButton*           mpBtnOK;
+
     String              msEstimatedSizePix1;
     String              msEstimatedSizePix2;
     String              msEstimatedSizeVec;
-    FixedLine           maFlButtons;
-    OKButton            maBtnOK;
-    CancelButton        maBtnCancel;
-    HelpButton          maBtnHelp;
 
     String              ms1BitTreshold;
     String              ms1BitDithered;
@@ -112,7 +109,6 @@ private:
     String              ms8BitColorPalette;
     String              ms24BitColor;
 
-    vcl::RowOrColumn    maLayout;
     Size                maDialogSize;
 
     FilterConfigItem*   mpOptionsItem;
@@ -122,11 +118,6 @@ private:
     String              maEstimatedSizeText;
     sal_Int16           mnFormat;
     sal_Int32           mnMaxFilesizeForRealtimePreview;
-
-    Rectangle           maRectFlButtons;
-    Rectangle           maRectBtnHelp;
-    Rectangle           maRectBtnOK;
-    Rectangle           maRectBtnCancel;
 
     SvStream*           mpTempStream;
     Bitmap              maBitmap;
@@ -163,13 +154,9 @@ private:
 
                         DECL_LINK( OK, void* p );
 
-                        void createSizeControls( vcl::RowOrColumn& );
-                        void createColorDepthControls( vcl::RowOrColumn& );
-                        void createFilterOptions( vcl::RowOrColumn& );
-                        void createButtons( vcl::RowOrColumn& );
-                        void createScrollBar( vcl::RowOrColumn& );
-                        void setupLayout();
-                        void updatePreview();
+                        void setupSizeControls();
+                        void createFilterOptions();
+                        void setupControls();
                         void updateControls();
 
                         void GetGraphicSource();

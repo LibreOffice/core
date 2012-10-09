@@ -34,6 +34,8 @@
 #include <tools/stream.hxx>
 #include <svtools/filter.hxx>
 #include <svtools/FilterConfigItem.hxx>
+#include <svtools/svtools.hrc>
+#include <svtools/svtresid.hxx>
 #include <com/sun/star/io/XStream.hpp>
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
@@ -53,7 +55,6 @@
 #include <rtl/ustrbuf.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include "exportdialog.hxx"
-#include "exportdialog.hrc"
 
 #define FORMAT_UNKNOWN  0
 #define FORMAT_JPG      1
@@ -84,7 +85,7 @@
 
 using namespace ::com::sun::star;
 
-static sal_Int16 GetFilterFormat(const rtl::OUString& rExt)
+static sal_Int16 GetFilterFormat(const OUString& rExt)
 {
     sal_Int16 nFormat = FORMAT_UNKNOWN;
     if ( rExt == "JPG" )
@@ -187,7 +188,7 @@ uno::Sequence< beans::PropertyValue > ExportDialog::GetFilterData( sal_Bool bUpd
 {
     if ( bUpdateConfig )
     {
-        sal_Int32 nUnit = maLbSizeX.GetSelectEntryPos();
+        sal_Int32 nUnit = mpLbSizeX->GetSelectEntryPos();
         if ( nUnit < 0 )
             nUnit = UNIT_CM;
 
@@ -200,20 +201,20 @@ uno::Sequence< beans::PropertyValue > ExportDialog::GetFilterData( sal_Bool bUpd
             if ( nUnit > UNIT_MAX_ID )
                 nUnit = UNIT_PIXEL;
 
-            sal_Int32 nResolution = maNfResolution.GetValue();
+            sal_Int32 nResolution = mpNfResolution->GetValue();
             if ( nResolution < 1 )
                 nResolution = 96;
 
-            mpOptionsItem->WriteInt32( String( RTL_CONSTASCII_USTRINGPARAM( "PixelExportUnit" ) ), nUnit );
-            mpOptionsItem->WriteInt32( String( RTL_CONSTASCII_USTRINGPARAM( "PixelExportResolution" ) ), nResolution );
-            mpOptionsItem->WriteInt32( String( RTL_CONSTASCII_USTRINGPARAM( "PixelExportResolutionUnit" ) ), maLbResolution.GetSelectEntryPos() );
+            mpOptionsItem->WriteInt32(OUString("PixelExportUnit"), nUnit);
+            mpOptionsItem->WriteInt32(OUString("PixelExportResolution"), nResolution);
+            mpOptionsItem->WriteInt32(OUString("PixelExportResolutionUnit"), mpLbResolution->GetSelectEntryPos());
         }
         else
         {
             if ( nUnit >= UNIT_PIXEL )
                 nUnit = UNIT_CM;
 
-            mpOptionsItem->WriteInt32( String( RTL_CONSTASCII_USTRINGPARAM( "VectorExportUnit" ) ), nUnit );
+            mpOptionsItem->WriteInt32(OUString("VectorExportUnit"), nUnit);
         }
     }
 
@@ -226,12 +227,12 @@ uno::Sequence< beans::PropertyValue > ExportDialog::GetFilterData( sal_Bool bUpd
         pFilterOptions = new FilterConfigItem( &aFilterData );
     }
 
-    const String sLogicalWidth( String( RTL_CONSTASCII_USTRINGPARAM( "LogicalWidth" ) ) );
-    const String sLogicalHeight( String( RTL_CONSTASCII_USTRINGPARAM( "LogicalHeight" ) ) );
+    const OUString sLogicalWidth(OUString("LogicalWidth"));
+    const OUString sLogicalHeight(OUString("LogicalHeight"));
     if ( mbIsPixelFormat )
     {
-        pFilterOptions->WriteInt32( String( RTL_CONSTASCII_USTRINGPARAM( "PixelWidth" ) ), static_cast< sal_Int32 >( maSize.Width ) );
-        pFilterOptions->WriteInt32( String( RTL_CONSTASCII_USTRINGPARAM( "PixelHeight" ) ), static_cast< sal_Int32 >( maSize.Height ) );
+        pFilterOptions->WriteInt32(OUString("PixelWidth"), static_cast< sal_Int32 >( maSize.Width ) );
+        pFilterOptions->WriteInt32(OUString("PixelHeight"), static_cast< sal_Int32 >( maSize.Height ) );
         if ( maResolution.Width && maResolution.Height )
         {
             const double f100thmmPerPixelX = 100000.0 / maResolution.Width;
@@ -254,44 +255,44 @@ uno::Sequence< beans::PropertyValue > ExportDialog::GetFilterData( sal_Bool bUpd
     {
         case FORMAT_JPG :
         {
-            sal_Int32 nColor = maLbColorDepth.GetSelectEntryPos();
+            sal_Int32 nColor = mpLbColorDepth->GetSelectEntryPos();
             if ( nColor == 1 )
                 nColor = 0;
             else
                 nColor = 1;
-            pFilterOptions->WriteInt32( String( RTL_CONSTASCII_USTRINGPARAM( "ColorMode" ) ), nColor );
-            pFilterOptions->WriteInt32( String( RTL_CONSTASCII_USTRINGPARAM( "Quality" ) ), static_cast< sal_Int32 >( maSbCompression.GetThumbPos() ) );
+            pFilterOptions->WriteInt32(OUString("ColorMode"), nColor);
+            pFilterOptions->WriteInt32(OUString("Quality"), static_cast<sal_Int32>(mpSbCompression->GetThumbPos()));
         }
         break;
 
         case FORMAT_PNG :
         {
-            pFilterOptions->WriteInt32( String( RTL_CONSTASCII_USTRINGPARAM( "Compression" ) ), static_cast< sal_Int32 >( maSbCompression.GetThumbPos() ) );
+            pFilterOptions->WriteInt32(OUString("Compression"), static_cast<sal_Int32>(mpSbCompression->GetThumbPos()));
             sal_Int32 nInterlace = 0;
-            if ( maCbInterlaced.IsChecked() )
+            if ( mpCbInterlaced->IsChecked() )
                 nInterlace++;
-            pFilterOptions->WriteInt32( String( RTL_CONSTASCII_USTRINGPARAM( "Interlaced" ) ), nInterlace );
+            pFilterOptions->WriteInt32(OUString("Interlaced"), nInterlace);
         }
         break;
 
         case FORMAT_BMP :
         {
-            pFilterOptions->WriteInt32( String( RTL_CONSTASCII_USTRINGPARAM( "Color" ) ), maLbColorDepth.GetSelectEntryPos() + 1 );
-            pFilterOptions->WriteBool( String( RTL_CONSTASCII_USTRINGPARAM( "RLE_Coding" ) ), maCbRLEEncoding.IsChecked() );
+            pFilterOptions->WriteInt32(OUString("Color"), mpLbColorDepth->GetSelectEntryPos() + 1);
+            pFilterOptions->WriteBool(OUString("RLE_Coding"), mpCbRLEEncoding->IsChecked());
         }
         break;
 
         case FORMAT_GIF :
         {
             sal_Int32 nValue = 0;
-            if ( maCbInterlaced.IsChecked() )
+            if ( mpCbInterlaced->IsChecked() )
                 nValue++;
-            pFilterOptions->WriteInt32( String( RTL_CONSTASCII_USTRINGPARAM( "Interlaced" ) ), nValue );
+            pFilterOptions->WriteInt32(OUString("Interlaced"), nValue);
 
             nValue = 0;
-            if ( maCbSaveTransparency.IsChecked() )
+            if (mpCbSaveTransparency->IsChecked())
                 nValue++;
-            pFilterOptions->WriteInt32( String( RTL_CONSTASCII_USTRINGPARAM( "Translucent" ) ), nValue );
+            pFilterOptions->WriteInt32(OUString("Translucent"), nValue);
         }
         break;
 
@@ -300,35 +301,35 @@ uno::Sequence< beans::PropertyValue > ExportDialog::GetFilterData( sal_Bool bUpd
         case FORMAT_PPM :
         {
             sal_Int32 nFormat = 0;
-            if ( maRbText.IsChecked() )
+            if ( mpRbText->IsChecked() )
                 nFormat++;
-            pFilterOptions->WriteInt32( String( RTL_CONSTASCII_USTRINGPARAM( "FileFormat" ) ), nFormat );
+            pFilterOptions->WriteInt32(OUString("FileFormat"), nFormat);
         }
         break;
 
         case FORMAT_EPS :
         {
             sal_Int32 nCheck = 0;
-            if ( maCbEPSPreviewTIFF.IsChecked() )
+            if ( mpCbEPSPreviewTIFF->IsChecked() )
                 nCheck++;
-            if ( maCbEPSPreviewEPSI.IsChecked() )
+            if ( mpCbEPSPreviewEPSI->IsChecked() )
                 nCheck += 2;
-            pFilterOptions->WriteInt32( String( RTL_CONSTASCII_USTRINGPARAM( "Preview" ) ), nCheck );
+            pFilterOptions->WriteInt32(OUString("Preview"), nCheck);
 
             nCheck = 1;
-            if ( maRbEPSLevel2.IsChecked() )
+            if ( mpRbEPSLevel2->IsChecked() )
                 nCheck++;
-            pFilterOptions->WriteInt32( String( RTL_CONSTASCII_USTRINGPARAM( "Version" ) ), nCheck );
+            pFilterOptions->WriteInt32(OUString("Version"), nCheck);
 
             nCheck = 1;
-            if ( maRbEPSColorFormat2.IsChecked() )
+            if ( mpRbEPSColorFormat2->IsChecked() )
                 nCheck++;
-            pFilterOptions->WriteInt32( String( RTL_CONSTASCII_USTRINGPARAM( "ColorFormat" ) ), nCheck );
+            pFilterOptions->WriteInt32(OUString("ColorFormat"), nCheck);
 
             nCheck = 1;
-            if ( maRbEPSCompressionNone.IsChecked() )
+            if ( mpRbEPSCompressionNone->IsChecked() )
                 nCheck++;
-            pFilterOptions->WriteInt32( String( RTL_CONSTASCII_USTRINGPARAM( "CompressionMode" ) ), nCheck );
+            pFilterOptions->WriteInt32(OUString("CompressionMode"), nCheck);
         }
         break;
     }
@@ -352,9 +353,9 @@ awt::Size ExportDialog::GetOriginalSize()
             sal_Int32 nWidth = 0;
             sal_Int32 nHeight= 0;
             com::sun::star::uno::Any aAny;
-            aAny = xPagePropSet->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Width" ) ) );
+            aAny = xPagePropSet->getPropertyValue(OUString("Width"));
             aAny >>= nWidth;
-            aAny = xPagePropSet->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Height" ) ) );
+            aAny = xPagePropSet->getPropertyValue(OUString("Height"));
             aAny >>= nHeight;
             aShapesRange = basegfx::B2DRange( 0, 0, nWidth, nHeight );
         }
@@ -362,7 +363,7 @@ awt::Size ExportDialog::GetOriginalSize()
     else
     {
         uno::Reference< graphic::XPrimitiveFactory2D > xPrimitiveFactory(
-            mxMgr->createInstance( String( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.graphic.PrimitiveFactory2D" ) ) ), uno::UNO_QUERY );
+            mxMgr->createInstance(OUString("com.sun.star.comp.graphic.PrimitiveFactory2D")), uno::UNO_QUERY);
         if ( xPrimitiveFactory.is() )
         {
             basegfx::B2DHomMatrix aViewTransformation( Application::GetDefaultDevice()->GetViewTransformation() );
@@ -374,7 +375,7 @@ awt::Size ExportDialog::GetOriginalSize()
             aTransformation.m11 = aViewTransformation.get(1,1);
             aTransformation.m12 = aViewTransformation.get(1,2);
 
-            const rtl::OUString sViewTransformation( RTL_CONSTASCII_USTRINGPARAM( "ViewTransformation" ) );
+            const OUString sViewTransformation( RTL_CONSTASCII_USTRINGPARAM( "ViewTransformation" ) );
             uno::Sequence< beans::PropertyValue > aViewInformation( 1 );
             aViewInformation[ 0 ].Value <<= aTransformation;
             aViewInformation[ 0 ].Name  = sViewTransformation;
@@ -464,20 +465,20 @@ sal_Bool ExportDialog::GetGraphicStream()
             uno::Reference < io::XOutputStream > xOutputStream( xStream->getOutputStream() );
 
             uno::Reference< document::XExporter > xGraphicExporter(
-                mxMgr->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.GraphicExportFilter") ) ), uno::UNO_QUERY_THROW );
+                mxMgr->createInstance(OUString("com.sun.star.drawing.GraphicExportFilter")), uno::UNO_QUERY_THROW);
             uno::Reference< document::XFilter > xFilter( xGraphicExporter, uno::UNO_QUERY_THROW );
 
             sal_Int32 nProperties = 2;
             uno::Sequence< beans::PropertyValue > aFilterData( nProperties );
 
 
-            rtl::OUString sFormat( maExt );
+            OUString sFormat( maExt );
             uno::Sequence< beans::PropertyValue > aDescriptor( 3 );
-            aDescriptor[0].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("OutputStream") );
+            aDescriptor[0].Name = OUString("OutputStream");
             aDescriptor[0].Value <<= xOutputStream;
-            aDescriptor[1].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("FilterName") );
+            aDescriptor[1].Name = OUString("FilterName");
             aDescriptor[1].Value <<= sFormat;
-            aDescriptor[2].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("FilterData") );
+            aDescriptor[2].Name = OUString("FilterData");
             aDescriptor[2].Value <<= aNewFilterData;
 
             uno::Reference< lang::XComponent > xSourceDoc;
@@ -531,7 +532,7 @@ sal_uInt32 ExportDialog::GetRawFileSize() const
     if ( mbIsPixelFormat )
     {
         sal_Int32 nBitsPerPixel = 24;
-        String aEntry( maLbColorDepth.GetSelectEntry() );
+        String aEntry( mpLbColorDepth->GetSelectEntry() );
         if ( ms1BitTreshold == aEntry )
             nBitsPerPixel = 1;
         else if ( ms1BitDithered == aEntry )
@@ -566,79 +567,77 @@ sal_Bool ExportDialog::IsTempExportAvailable() const
     return GetRawFileSize() < static_cast< sal_uInt32 >( mnMaxFilesizeForRealtimePreview );
 }
 
-ExportDialog::ExportDialog( FltCallDialogParameter& rPara,
+ExportDialog::ExportDialog(FltCallDialogParameter& rPara,
     const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory > rxMgr,
-        const com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& rxSourceDocument,
-            sal_Bool bExportSelection, sal_Bool bIsPixelFormat ) :
-                ModalDialog             ( rPara.pWindow, ResId( DLG_EXPORT, *rPara.pResMgr ) ),
-                mrFltCallPara           ( rPara ),
-                mpMgr                   ( rPara.pResMgr ),
-                mxMgr                   ( rxMgr ),
-                mxSourceDocument        ( rxSourceDocument ),
-                maFlExportSize          ( this, ResId( FL_EXPORT_SIZE, *rPara.pResMgr ) ),
-                maFtSizeX               ( this, ResId( FT_SIZEX, *rPara.pResMgr ) ),
-                maMfSizeX               ( this, ResId( MF_SIZEX, *rPara.pResMgr ) ),
-                maLbSizeX               ( this, ResId( LB_SIZEX, *rPara.pResMgr ) ),
-                maFtSizeY               ( this, ResId( FT_SIZEY, *rPara.pResMgr ) ),
-                maMfSizeY               ( this, ResId( MF_SIZEY, *rPara.pResMgr ) ),
-                maLbSizeY               ( this, ResId( LB_SIZEY, *rPara.pResMgr ) ),
-                maFtResolution          ( this, ResId( FT_RESOLUTION, *rPara.pResMgr ) ),
-                maNfResolution          ( this, ResId( NF_RESOLUTION, *rPara.pResMgr ) ),
-                maLbResolution          ( this, ResId( LB_RESOLUTION, *rPara.pResMgr ) ),
-                maFlColorDepth          ( this, ResId( FL_COLOR_DEPTH, *rPara.pResMgr ) ),
-                maLbColorDepth          ( this, ResId( LB_COLOR_DEPTH, *rPara.pResMgr ) ),
-                maFlJPGQuality          ( this, ResId( FL_JPG_QUALITY, *rPara.pResMgr ) ),
-                maFlMode                ( this, ResId( FL_MODE, *rPara.pResMgr ) ),
-                maSbCompression         ( this, ResId( SB_COMPRESSION, *rPara.pResMgr ) ),
-                maNfCompression         ( this, ResId( NF_COMPRESSION, *rPara.pResMgr ) ),
-                maFtJPGMin              ( this, ResId( FT_JPG_MIN, *rPara.pResMgr ) ),
-                maFtJPGMax              ( this, ResId( FT_JPG_MAX, *rPara.pResMgr ) ),
-                maFtPNGMin              ( this, ResId( FT_PNG_MIN, *rPara.pResMgr ) ),
-                maFtPNGMax              ( this, ResId( FT_PNG_MAX, *rPara.pResMgr ) ),
-                maCbInterlaced          ( this, ResId( CB_INTERLACED, *rPara.pResMgr ) ),
-                maCbRLEEncoding         ( this, ResId( CB_RLE_ENCODING, *rPara.pResMgr ) ),
-                maFlGIFDrawingObjects   ( this, ResId( FL_GIF_DRAWING_OBJECTS, *rPara.pResMgr ) ),
-                maCbSaveTransparency    ( this, ResId( CB_SAVE_TRANSPARENCY, *rPara.pResMgr ) ),
-                maRbBinary              ( this, ResId( RB_BINARY, *rPara.pResMgr ) ),
-                maRbText                ( this, ResId( RB_TEXT, *rPara.pResMgr ) ),
-                maFlEPSPreview          ( this, ResId( FL_EPS_PREVIEW, *rPara.pResMgr ) ),
-                maCbEPSPreviewTIFF      ( this, ResId( CB_EPS_PREVIEW_TIFF, *rPara.pResMgr ) ),
-                maCbEPSPreviewEPSI      ( this, ResId( CB_EPS_PREVIEW_EPSI, *rPara.pResMgr ) ),
-                maFlEPSVersion          ( this, ResId( FL_EPS_VERSION, *rPara.pResMgr ) ),
-                maRbEPSLevel1           ( this, ResId( RB_EPS_LEVEL1, *rPara.pResMgr ) ),
-                maRbEPSLevel2           ( this, ResId( RB_EPS_LEVEL2, *rPara.pResMgr ) ),
-                maFlEPSColorFormat      ( this, ResId( FL_EPS_COLOR_FORMAT, *rPara.pResMgr ) ),
-                maRbEPSColorFormat1     ( this, ResId( RB_EPS_COLOR_FORMAT1, *rPara.pResMgr ) ),
-                maRbEPSColorFormat2     ( this, ResId( RB_EPS_COLOR_FORMAT2, *rPara.pResMgr ) ),
-                maFlCompression         ( this, ResId( FL_COMPRESSION, *rPara.pResMgr ) ),
-                maRbEPSCompressionLZW   ( this, ResId( RB_EPS_COMPRESSION_LZW, *rPara.pResMgr ) ),
-                maRbEPSCompressionNone  ( this, ResId( RB_EPS_COMPRESSION_NONE, *rPara.pResMgr ) ),
-                maFlEstimatedSize       ( this, ResId( FL_ESTIMATED_SIZE, *rPara.pResMgr ) ),
-                maFtEstimatedSize       ( this, ResId( FT_ESTIMATED_SIZE, *rPara.pResMgr ) ),
-                msEstimatedSizePix1     ( ResId( STR_ESTIMATED_SIZE_PIX_1, *rPara.pResMgr ).toString() ),
-                msEstimatedSizePix2     ( ResId( STR_ESTIMATED_SIZE_PIX_2, *rPara.pResMgr ).toString() ),
-                msEstimatedSizeVec      ( ResId( STR_ESTIMATED_SIZE_VEC, *rPara.pResMgr ).toString() ),
-                maFlButtons             ( this, ResId( FL_BUTTONS, *rPara.pResMgr ) ),
-                maBtnOK                 ( this, ResId( BTN_OK, *rPara.pResMgr ) ),
-                maBtnCancel             ( this, ResId( BTN_CANCEL, *rPara.pResMgr ) ),
-                maBtnHelp               ( this, ResId( BTN_HELP, *rPara.pResMgr ) ),
-                ms1BitTreshold          ( ResId( STR_1BIT_THRESHOLD, *rPara.pResMgr ).toString() ),
-                ms1BitDithered          ( ResId( STR_1BIT_DITHERED, *rPara.pResMgr ).toString() ),
-                ms4BitGrayscale         ( ResId( STR_4BIT_GRAYSCALE, *rPara.pResMgr ).toString() ),
-                ms4BitColorPalette      ( ResId( STR_4BIT_COLOR_PALETTE, *rPara.pResMgr ).toString() ),
-                ms8BitGrayscale         ( ResId( STR_8BIT_GRAYSCALE, *rPara.pResMgr ).toString() ),
-                ms8BitColorPalette      ( ResId( STR_8BIT_COLOR_PALETTE, *rPara.pResMgr ).toString() ),
-                ms24BitColor            ( ResId( STR_24BIT_TRUE_COLOR, *rPara.pResMgr ).toString() ),
-                maExt                   ( rPara.aFilterExt ),
-                mnFormat                ( FORMAT_UNKNOWN ),
-                mnMaxFilesizeForRealtimePreview( 0 ),
-                mpTempStream            ( new SvMemoryStream() ),
-                maOriginalSize          ( awt::Size( 0, 0 ) ),
-                mbIsPixelFormat         ( bIsPixelFormat ),
-                mbExportSelection       ( bExportSelection ),
-                mbPreserveAspectRatio   ( sal_True )
+    const com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& rxSourceDocument,
+    sal_Bool bExportSelection, sal_Bool bIsPixelFormat)
+    : ModalDialog(rPara.pWindow, "GraphicExportDialog", "svt/ui/graphicexport.ui")
+    , mrFltCallPara(rPara)
+    , mxMgr(rxMgr)
+    , mxSourceDocument(rxSourceDocument)
+    , mpSbCompression(NULL)
+    , mpNfCompression(NULL)
+    , msEstimatedSizePix1(SVT_RESSTR(STR_ESTIMATED_SIZE_PIX_1))
+    , msEstimatedSizePix2(SVT_RESSTR(STR_ESTIMATED_SIZE_PIX_2))
+    , msEstimatedSizeVec(SVT_RESSTR(STR_ESTIMATED_SIZE_VEC))
+    , ms1BitTreshold(SVT_RESSTR(STR_1BIT_THRESHOLD))
+    , ms1BitDithered(SVT_RESSTR(STR_1BIT_DITHERED))
+    , ms4BitGrayscale(SVT_RESSTR(STR_4BIT_GRAYSCALE))
+    , ms4BitColorPalette(SVT_RESSTR(STR_4BIT_COLOR_PALETTE))
+    , ms8BitGrayscale(SVT_RESSTR(STR_8BIT_GRAYSCALE))
+    , ms8BitColorPalette(SVT_RESSTR(STR_8BIT_COLOR_PALETTE))
+    , ms24BitColor(SVT_RESSTR(STR_24BIT_TRUE_COLOR))
+    , maExt(rPara.aFilterExt)
+    , mnFormat(FORMAT_UNKNOWN)
+    , mnMaxFilesizeForRealtimePreview(0)
+    , mpTempStream(new SvMemoryStream())
+    , maOriginalSize(awt::Size(0, 0))
+    , mbIsPixelFormat(bIsPixelFormat)
+    , mbExportSelection(bExportSelection)
+    , mbPreserveAspectRatio(sal_True)
 {
+    get(mpMfSizeX, "widthmf-nospin");
+    get(mpMfSizeY, "heightmf-nospin");
+    get(mpLbSizeX, "widthlb");
+    get(mpFtResolution, "resolutionft");
+    get(mpNfResolution, "resolutionmf-nospin");
+    get(mpLbResolution, "resolutionlb");
+
+    get(mpColorDepth, "colordepth");
+    get(mpLbColorDepth, "colordepthlb");
+
+    get(mpJPGQuality, "jpgquality");
+    get(mpPNGCompression, "pngcompression");
+
+    get(mpBMPCompression, "bmpcompression");
+    get(mpCbRLEEncoding, "rlecb");
+
+    get(mpMode, "mode");
+    get(mpCbInterlaced, "interlacedcb");
+
+    get(mpDrawingObjects, "drawingobjects");
+    get(mpCbSaveTransparency, "savetransparencycb");
+
+    get(mpEncoding, "encoding");
+    get(mpRbBinary, "binarycb");
+    get(mpRbText, "textcb");
+
+    get(mpEPSGrid, "epsgrid");
+    get(mpCbEPSPreviewTIFF, "tiffpreviewcb");
+    get(mpCbEPSPreviewEPSI, "epsipreviewcb");
+    get(mpRbEPSLevel1, "level1rb");
+    get(mpRbEPSLevel2, "level2rb");
+    get(mpRbEPSColorFormat1, "color1rb");
+    get(mpRbEPSColorFormat2, "color2rb");
+    get(mpRbEPSCompressionLZW, "compresslzw");
+    get(mpRbEPSCompressionNone, "compressnone");
+
     GetGraphicSource();
+
+    get(mpInfo, "information");
+    get(mpFtEstimatedSize, "estsizeft");;
+
+    get(mpBtnOK, "ok");
 
     maExt.ToUpperAscii();
 
@@ -648,15 +647,15 @@ ExportDialog::ExportDialog( FltCallDialogParameter& rPara,
     mpFilterOptionsItem = new FilterConfigItem( aFilterConfigPath, &rPara.aFilterData );
 
     mnInitialResolutionUnit = mbIsPixelFormat
-        ? mpOptionsItem->ReadInt32( String( RTL_CONSTASCII_USTRINGPARAM( "PixelExportUnit" ) ), UNIT_DEFAULT )
-        : mpOptionsItem->ReadInt32( String( RTL_CONSTASCII_USTRINGPARAM( "VectorExportUnit" ) ), UNIT_DEFAULT );
+        ? mpOptionsItem->ReadInt32(OUString("PixelExportUnit"), UNIT_DEFAULT)
+        : mpOptionsItem->ReadInt32(OUString( "VectorExportUnit"), UNIT_DEFAULT);
 
-    mnMaxFilesizeForRealtimePreview = mpOptionsItem->ReadInt32( String( RTL_CONSTASCII_USTRINGPARAM( "MaxFilesizeForRealtimePreview" ) ), 0 );
-    maFtEstimatedSize.SetText( String( RTL_CONSTASCII_USTRINGPARAM( " \n " ) ) );
+    mnMaxFilesizeForRealtimePreview = mpOptionsItem->ReadInt32(OUString("MaxFilesizeForRealtimePreview"), 0);
+    mpFtEstimatedSize->SetText(OUString(" \n "));
 
-    String  aTitle( maExt );
-    aTitle += ResId(DLG_EXPORT_TITLE, *mpMgr).toString();
-    SetText( aTitle );
+    String aTitle(maExt);
+    aTitle += GetText();
+    SetText(aTitle);
 
     mnFormat = GetFilterFormat( maExt );
 
@@ -675,98 +674,61 @@ ExportDialog::ExportDialog( FltCallDialogParameter& rPara,
         maSize = maOriginalSize;
     }
 
+    setupControls();
+
     // Size
-    maLbSizeX.SetSelectHdl( LINK( this, ExportDialog, UpdateHdl ) );
+    mpLbSizeX->SetSelectHdl( LINK( this, ExportDialog, UpdateHdl ) );
 
-    maSbCompression.SetScrollHdl( LINK( this, ExportDialog, SbCompressionUpdateHdl ) );
-    maNfCompression.SetModifyHdl( LINK( this, ExportDialog, UpdateHdl ) );
+    if (mpSbCompression)
+        mpSbCompression->SetScrollHdl(LINK(this, ExportDialog, SbCompressionUpdateHdl));
+    if (mpNfCompression)
+        mpNfCompression->SetModifyHdl(LINK(this, ExportDialog, UpdateHdl));
 
-    maMfSizeX.SetModifyHdl( LINK( this, ExportDialog, UpdateHdlMtfSizeX ) );
-    maMfSizeY.SetModifyHdl( LINK( this, ExportDialog, UpdateHdlMtfSizeY ) );
+    mpMfSizeX->SetModifyHdl( LINK( this, ExportDialog, UpdateHdlMtfSizeX ) );
+    mpMfSizeY->SetModifyHdl( LINK( this, ExportDialog, UpdateHdlMtfSizeY ) );
 
-    maNfResolution.SetModifyHdl( LINK( this, ExportDialog, UpdateHdlNfResolution ) );
-    maLbResolution.SetSelectHdl( LINK( this, ExportDialog, UpdateHdl ) );
+    mpNfResolution->SetModifyHdl( LINK( this, ExportDialog, UpdateHdlNfResolution ) );
+    mpLbResolution->SetSelectHdl( LINK( this, ExportDialog, UpdateHdl ) );
 
-    maLbColorDepth.SetSelectHdl( LINK( this, ExportDialog, UpdateHdl ) );
+    mpLbColorDepth->SetSelectHdl( LINK( this, ExportDialog, UpdateHdl ) );
 
-    maCbInterlaced.SetClickHdl( LINK( this, ExportDialog, UpdateHdl ) );
+    mpCbInterlaced->SetClickHdl( LINK( this, ExportDialog, UpdateHdl ) );
 
-    maCbSaveTransparency.SetClickHdl( LINK( this, ExportDialog, UpdateHdl ) );
+    mpCbSaveTransparency->SetClickHdl( LINK( this, ExportDialog, UpdateHdl ) );
 
-    maCbEPSPreviewTIFF.SetClickHdl( LINK( this, ExportDialog, UpdateHdl ) );
-    maCbEPSPreviewEPSI.SetClickHdl( LINK( this, ExportDialog, UpdateHdl ) );
+    mpCbEPSPreviewTIFF->SetClickHdl( LINK( this, ExportDialog, UpdateHdl ) );
+    mpCbEPSPreviewEPSI->SetClickHdl( LINK( this, ExportDialog, UpdateHdl ) );
 
-    maRbEPSCompressionLZW.SetClickHdl( LINK( this, ExportDialog, UpdateHdl ) );
-    maRbEPSCompressionNone.SetClickHdl( LINK( this, ExportDialog, UpdateHdl ) );
+    mpRbEPSCompressionLZW->SetClickHdl( LINK( this, ExportDialog, UpdateHdl ) );
+    mpRbEPSCompressionNone->SetClickHdl( LINK( this, ExportDialog, UpdateHdl ) );
 
-    maRbBinary.SetClickHdl( LINK( this, ExportDialog, UpdateHdl ) );
-    maRbText.SetClickHdl( LINK( this, ExportDialog, UpdateHdl ) );
+    mpRbBinary->SetClickHdl( LINK( this, ExportDialog, UpdateHdl ) );
+    mpRbText->SetClickHdl( LINK( this, ExportDialog, UpdateHdl ) );
 
     // BMP
-    maCbRLEEncoding.SetClickHdl( LINK( this, ExportDialog, UpdateHdl ) );
+    mpCbRLEEncoding->SetClickHdl( LINK( this, ExportDialog, UpdateHdl ) );
 
     // EPS
-    maRbEPSLevel1.SetClickHdl( LINK( this, ExportDialog, UpdateHdl ) );
-    maRbEPSLevel2.SetClickHdl( LINK( this, ExportDialog, UpdateHdl ) );
+    mpRbEPSLevel1->SetClickHdl( LINK( this, ExportDialog, UpdateHdl ) );
+    mpRbEPSLevel2->SetClickHdl( LINK( this, ExportDialog, UpdateHdl ) );
 
-    maBtnOK.SetClickHdl( LINK( this, ExportDialog, OK ) );
+    mpBtnOK->SetClickHdl( LINK( this, ExportDialog, OK ) );
 
-    setupLayout();
     updateControls();
-
-    FreeResource();
 }
 
-void ExportDialog::createSizeControls( vcl::RowOrColumn& rLayout )
+void ExportDialog::setupSizeControls()
 {
-    size_t nIndex;
-    Size aBorder( LogicToPixel( Size( 5, 5 ), MapMode( MAP_APPFONT ) ) );
-    long nIndent = aBorder.Width();
-
-    // Size controls
-    rLayout.addWindow( &maFlExportSize );
-
-    Size aLbMax( maLbSizeX.GetSizePixel() );
-    aLbMax.Width() = Max( aLbMax.Width(), maLbResolution.GetSizePixel().Width() );
-
-    boost::shared_ptr< vcl::LabelColumn > xSizeColumns( new vcl::LabelColumn( &rLayout ) );
-    rLayout.addChild( xSizeColumns );
-
-    // row 1
-    boost::shared_ptr< vcl::RowOrColumn > xColumn( new vcl::RowOrColumn( xSizeColumns.get(), false ) );
-    xSizeColumns->addRow( &maFtSizeX, xColumn, nIndent );
-    Size aMinSize( maMfSizeX.GetSizePixel() );
-    nIndex = xColumn->addWindow( &maMfSizeX );
-    xColumn->setMinimumSize( nIndex, aMinSize );
-    nIndex = xColumn->addWindow( &maLbSizeX );
-    xColumn->setMinimumSize( nIndex, aLbMax );
-
-    // row 2
-    xColumn = boost::shared_ptr< vcl::RowOrColumn >( new vcl::RowOrColumn( xSizeColumns.get(), false ) );
-    xSizeColumns->addRow( &maFtSizeY, xColumn, nIndent );
-    nIndex = xColumn->addWindow( &maMfSizeY );
-    xColumn->setMinimumSize( nIndex, aMinSize );
-    nIndex = xColumn->addWindow( &maLbSizeY );
-    xColumn->setMinimumSize( nIndex, aLbMax );
-
-    // row 3
-    if ( mbIsPixelFormat )      // TODO: (metafileresolutionsupport)
-    {
-        xColumn = boost::shared_ptr< vcl::RowOrColumn >( new vcl::RowOrColumn( xSizeColumns.get(), false ) );
-        xSizeColumns->addRow( &maFtResolution, xColumn, nIndent );
-        nIndex = xColumn->addWindow( &maNfResolution );
-        xColumn->setMinimumSize( nIndex, aMinSize );
-        nIndex = xColumn->addWindow( &maLbResolution );
-        xColumn->setMinimumSize( nIndex, aLbMax );
-    }
-
     sal_Int32 nUnit = mnInitialResolutionUnit;
-    if ( nUnit == UNIT_DEFAULT )
+    if (nUnit == UNIT_DEFAULT)
         nUnit = GetDefaultUnit();
 
-    if ( !mbIsPixelFormat )
+    if (!mbIsPixelFormat)
     {
-        maLbSizeX.RemoveEntry( UNIT_PIXEL );        // removing pixel
+        mpFtResolution->Hide();
+        mpNfResolution->Hide();
+        mpLbResolution->Hide();
+        mpLbSizeX->RemoveEntry( UNIT_PIXEL );        // removing pixel
         if ( nUnit >= UNIT_PIXEL )
             nUnit = UNIT_CM;
     }
@@ -774,367 +736,163 @@ void ExportDialog::createSizeControls( vcl::RowOrColumn& rLayout )
         nUnit = UNIT_PIXEL;
     if ( nUnit < 0 )
         nUnit = UNIT_CM;
-    maLbSizeX.SelectEntryPos( static_cast< sal_uInt16 >( nUnit ) );
+    mpLbSizeX->SelectEntryPos( static_cast< sal_uInt16 >( nUnit ) );
 
     if ( mbIsPixelFormat )      // TODO: (metafileresolutionsupport) should be supported for vector formats also... this makes
     {                           // sense eg for bitmap fillings in metafiles, to preserve high dpi output
                                 // (atm without special vector support the bitmaps are rendered with 96dpi)
-        sal_Int32 nResolution = mpOptionsItem->ReadInt32( String( RTL_CONSTASCII_USTRINGPARAM( "PixelExportResolution" ) ), 96 );
+        sal_Int32 nResolution = mpOptionsItem->ReadInt32(OUString("PixelExportResolution"), 96);
         if ( nResolution < 1 )
             nResolution = 96;
-        maNfResolution.SetValue( nResolution );
+        mpNfResolution->SetValue( nResolution );
 
-        sal_Int32 nResolutionUnit = mpOptionsItem->ReadInt32( String( RTL_CONSTASCII_USTRINGPARAM( "PixelExportResolutionUnit" ) ), 1 );
+        sal_Int32 nResolutionUnit = mpOptionsItem->ReadInt32(OUString("PixelExportResolutionUnit"), 1);
         if ( ( nResolutionUnit < 0 ) || ( nResolutionUnit > 2 ) )
             nResolutionUnit = 1;
-        maLbResolution.SelectEntryPos( static_cast< sal_uInt16 >( nResolutionUnit ) );
+        mpLbResolution->SelectEntryPos( static_cast< sal_uInt16 >( nResolutionUnit ) );
     }
-
-    boost::shared_ptr< vcl::Spacer > xSpacer( new vcl::Spacer( &rLayout, 2 ) );
-    rLayout.addChild( xSpacer );
 }
 
-void ExportDialog::createColorDepthControls( vcl::RowOrColumn& rLayout )
+void ExportDialog::createFilterOptions()
 {
-    // Color Depth
-    Size aBorder( LogicToPixel( Size( 5, 5 ), MapMode( MAP_APPFONT ) ) );
-    long nIndent = aBorder.Width();
-
-    boost::shared_ptr< vcl::RowOrColumn > xRow( new vcl::RowOrColumn( &rLayout, false ) );
-    rLayout.addChild( xRow );
-    xRow->addWindow( &maFlColorDepth );
-
-    xRow = boost::shared_ptr< vcl::RowOrColumn >( new vcl::RowOrColumn( &rLayout, false ) );
-    rLayout.addChild( xRow );
-    boost::shared_ptr< vcl::Indenter > xIndenter( new vcl::Indenter( &rLayout, nIndent ) );
-    xRow->addChild( xIndenter );
-    boost::shared_ptr< vcl::RowOrColumn > xRows( new vcl::RowOrColumn( &rLayout, true ) );
-    xIndenter->setChild( xRows );
-    xRows->addWindow( &maLbColorDepth );
-
-    boost::shared_ptr< vcl::Spacer > xSpacer( new vcl::Spacer( &rLayout, 2 ) );
-    rLayout.addChild( xSpacer );
-}
-
-void ExportDialog::createScrollBar( vcl::RowOrColumn& rLayout )
-{
-    boost::shared_ptr< vcl::RowOrColumn > xRow( new vcl::RowOrColumn( &rLayout, false ) );
-    rLayout.addChild( xRow );
-
-    Size aMinSize( maSbCompression.GetSizePixel() );
-    size_t nIndex = xRow->addWindow( &maSbCompression );
-    xRow->setMinimumSize( nIndex, aMinSize );
-    aMinSize = maNfCompression.GetSizePixel();
-    nIndex = xRow->addWindow( &maNfCompression );
-    xRow->setMinimumSize( nIndex, aMinSize );
-}
-
-void ExportDialog::createFilterOptions( vcl::RowOrColumn& rLayout )
-{
-    Size aBorder( LogicToPixel( Size( 5, 5 ), MapMode( MAP_APPFONT ) ) );
-    long nIndent = aBorder.Width();
-
     switch( mnFormat )
     {
         case FORMAT_JPG :
         {
-            sal_Int32 nColor = mpFilterOptionsItem->ReadInt32( String( RTL_CONSTASCII_USTRINGPARAM( "ColorMode" ) ), 0 );
+            sal_Int32 nColor = mpFilterOptionsItem->ReadInt32(OUString("ColorMode"), 0);
             if ( nColor == 1 )
                 nColor = 0;
             else
                 nColor = 1;
-            maLbColorDepth.InsertEntry( ms8BitGrayscale );
-            maLbColorDepth.InsertEntry( ms24BitColor );
-            maLbColorDepth.SelectEntryPos( nColor );
-            createColorDepthControls( maLayout );
-
-            rLayout.addWindow( &maFlJPGQuality );
+            mpLbColorDepth->InsertEntry( ms8BitGrayscale );
+            mpLbColorDepth->InsertEntry( ms24BitColor );
+            mpLbColorDepth->SelectEntryPos( nColor );
+            mpColorDepth->Show();
 
             // Quality
-            boost::shared_ptr< vcl::Indenter > xIndenter( new vcl::Indenter( &rLayout, nIndent ) );
-            rLayout.addChild( xIndenter );
-            boost::shared_ptr< vcl::RowOrColumn > xRows( new vcl::RowOrColumn( &rLayout, true ) );
-            xIndenter->setChild( xRows );
-            createScrollBar( *xRows.get() );
-            xRows->addWindow( &maFtJPGMin );
-            xRows->addWindow( &maFtJPGMax );
-
-            boost::shared_ptr< vcl::Spacer > xSpacer( new vcl::Spacer( &rLayout, 2 ) );
-            rLayout.addChild( xSpacer );
-
-            sal_Int32 nQuality = mpFilterOptionsItem->ReadInt32( String( RTL_CONSTASCII_USTRINGPARAM( "Quality" ) ), 75 );
-            if ( ( nQuality < 1 ) || ( nQuality > 100 ) )
+            mpJPGQuality->Show();
+            sal_Int32 nQuality = mpFilterOptionsItem->ReadInt32(OUString("Quality"), 75);
+            if ((nQuality < 1 ) || (nQuality > 100))
                 nQuality = 75;
-
-            maSbCompression.SetRangeMin( 1 );
-            maSbCompression.SetRangeMax( 100 );
-            maNfCompression.SetMin( 1 );
-            maNfCompression.SetMax( 100 );
-            maNfCompression.SetValue( nQuality );
-            maNfCompression.SetStrictFormat( sal_True );
+            get(mpSbCompression, "compressionjpgsb");
+            get(mpNfCompression, "compressionjpgnf-nospin");
+            mpSbCompression->SetRangeMin( 1 );
+            mpSbCompression->SetRangeMax( 100 );
+            mpNfCompression->SetMin( 1 );
+            mpNfCompression->SetMax( 100 );
+            mpNfCompression->SetValue( nQuality );
+            mpNfCompression->SetStrictFormat( sal_True );
         }
         break;
         case FORMAT_PNG :
         {
-            rLayout.addWindow( &maFlCompression );
-
             // Compression 1..9
-            boost::shared_ptr< vcl::Indenter > xIndenter( new vcl::Indenter( &rLayout, nIndent ) );
-            rLayout.addChild( xIndenter );
-            boost::shared_ptr< vcl::RowOrColumn > xRows( new vcl::RowOrColumn( &rLayout, true ) );
-            xIndenter->setChild( xRows );
-            createScrollBar( *xRows.get() );
-            xRows->addWindow( &maFtPNGMin );
-            xRows->addWindow( &maFtPNGMax );
-            boost::shared_ptr< vcl::Spacer > xSpacer( new vcl::Spacer( &rLayout, 2 ) );
-            rLayout.addChild( xSpacer );
-
-            // Interlaced
-            rLayout.addWindow( &maFlMode );
-            xIndenter.reset( new vcl::Indenter( &rLayout, nIndent ) );
-            rLayout.addChild( xIndenter );
-            xRows.reset( new vcl::RowOrColumn( &rLayout, true ) );
-            xIndenter->setChild( xRows );
-            xRows->addWindow( &maCbInterlaced );
-
-            xSpacer.reset( new vcl::Spacer( &rLayout, 2 ) );
-            rLayout.addChild( xSpacer );
-
-            sal_Int32 nCompression = mpFilterOptionsItem->ReadInt32( String( RTL_CONSTASCII_USTRINGPARAM( "Compression" ) ), 6 );
+            mpPNGCompression->Show();
+            sal_Int32 nCompression = mpFilterOptionsItem->ReadInt32(OUString("Compression"), 6);
             if ( ( nCompression < 1 ) || ( nCompression > 9 ) )
                 nCompression = 6;
-            maSbCompression.SetRangeMin( 1 );
-            maSbCompression.SetRangeMax( 9 );
-            maNfCompression.SetMin( 1 );
-            maNfCompression.SetMax( 9 );
-            maNfCompression.SetValue( 9 );
-            maNfCompression.SetStrictFormat( sal_True );
+            get(mpSbCompression, "compressionpngsb");
+            get(mpNfCompression, "compressionpngnf-nospin");
+            mpSbCompression->SetRangeMin( 1 );
+            mpSbCompression->SetRangeMax( 9 );
+            mpNfCompression->SetMin( 1 );
+            mpNfCompression->SetMax( 9 );
+            mpNfCompression->SetValue( 9 );
+            mpNfCompression->SetStrictFormat( sal_True );
 
-            maCbInterlaced.Check( mpFilterOptionsItem->ReadInt32( String( RTL_CONSTASCII_USTRINGPARAM( "Interlaced" ) ), 0 ) != 0 );
+            // Interlaced
+            mpMode->Show();
+            mpCbInterlaced->Check( mpFilterOptionsItem->ReadInt32(OUString("Interlaced"), 0) != 0);
         }
         break;
         case FORMAT_BMP :
         {
-            sal_Int32 nColor = mpFilterOptionsItem->ReadInt32( String( RTL_CONSTASCII_USTRINGPARAM( "Color" ) ), 0 );
+            sal_Int32 nColor = mpFilterOptionsItem->ReadInt32(OUString("Color"), 0);
             if ( nColor == 0 )
                 nColor = 6;
             else
                 nColor--;
-            maLbColorDepth.InsertEntry( ms1BitTreshold );
-            maLbColorDepth.InsertEntry( ms1BitDithered );
-            maLbColorDepth.InsertEntry( ms4BitGrayscale );
-            maLbColorDepth.InsertEntry( ms4BitColorPalette );
-            maLbColorDepth.InsertEntry( ms8BitGrayscale );
-            maLbColorDepth.InsertEntry( ms8BitColorPalette );
-            maLbColorDepth.InsertEntry( ms24BitColor );
-            maLbColorDepth.SelectEntryPos( nColor );
-            createColorDepthControls( maLayout );
+            mpLbColorDepth->InsertEntry( ms1BitTreshold );
+            mpLbColorDepth->InsertEntry( ms1BitDithered );
+            mpLbColorDepth->InsertEntry( ms4BitGrayscale );
+            mpLbColorDepth->InsertEntry( ms4BitColorPalette );
+            mpLbColorDepth->InsertEntry( ms8BitGrayscale );
+            mpLbColorDepth->InsertEntry( ms8BitColorPalette );
+            mpLbColorDepth->InsertEntry( ms24BitColor );
+            mpLbColorDepth->SelectEntryPos( nColor );
+            mpColorDepth->Show();
 
-            rLayout.addWindow( &maFlCompression );
             // RLE coding
-            boost::shared_ptr< vcl::Indenter > xIndenter( new vcl::Indenter( &rLayout, nIndent ) );
-            rLayout.addChild( xIndenter );
-            boost::shared_ptr< vcl::RowOrColumn > xRows( new vcl::RowOrColumn( &rLayout, true ) );
-            xIndenter->setChild( xRows );
-            xRows->addWindow( &maCbRLEEncoding );
-            boost::shared_ptr< vcl::Spacer > xSpacer( new vcl::Spacer( &rLayout, 2 ) );
-            rLayout.addChild( xSpacer );
-
-            maCbRLEEncoding.Check( mpFilterOptionsItem->ReadBool( String( RTL_CONSTASCII_USTRINGPARAM( "RLE_Coding" ) ), sal_True ) );
+            mpBMPCompression->Show();
+            mpCbRLEEncoding->Check(mpFilterOptionsItem->ReadBool(OUString("RLE_Coding"), sal_True));
         }
         break;
         case FORMAT_GIF :
         {
-            rLayout.addWindow( &maFlMode );
-            boost::shared_ptr< vcl::Indenter > xIndenter( new vcl::Indenter( &rLayout, nIndent ) );
-            rLayout.addChild( xIndenter );
-            boost::shared_ptr< vcl::RowOrColumn > xRows( new vcl::RowOrColumn( &rLayout, true ) );
-            xIndenter->setChild( xRows );
-            xRows->addWindow( &maCbInterlaced );
-            boost::shared_ptr< vcl::Spacer > xSpacer( new vcl::Spacer( &rLayout, 2 ) );
-            rLayout.addChild( xSpacer );
+            mpMode->Show();
+            mpCbInterlaced->Check(mpFilterOptionsItem->ReadInt32(OUString("Interlaced"), 1) != 0);
 
-            rLayout.addWindow( &maFlGIFDrawingObjects );
-            xIndenter = boost::shared_ptr< vcl::Indenter >( new vcl::Indenter( &rLayout, nIndent ) );
-            rLayout.addChild( xIndenter );
-            xRows = boost::shared_ptr< vcl::RowOrColumn >( new vcl::RowOrColumn( &rLayout, true ) );
-            xIndenter->setChild( xRows );
-            xRows->addWindow( &maCbSaveTransparency );
-            xSpacer.reset( new vcl::Spacer( &rLayout, 2 ) );
-            rLayout.addChild( xSpacer );
-
-            maCbInterlaced.Check( mpFilterOptionsItem->ReadInt32( String( RTL_CONSTASCII_USTRINGPARAM( "Interlaced" ) ), 1 ) != 0 );
-            maCbSaveTransparency.Check( mpFilterOptionsItem->ReadInt32( String( RTL_CONSTASCII_USTRINGPARAM( "Translucent" ) ), 1 ) != 0 );
+            mpDrawingObjects->Show();
+            mpCbSaveTransparency->Check(mpFilterOptionsItem->ReadInt32(OUString("Translucent"), 1) != 0);
         }
         break;
         case FORMAT_PBM :
         case FORMAT_PGM :
         case FORMAT_PPM :
         {
-            rLayout.addWindow( &maFlJPGQuality );
-
             // RB Binary / Text
-            boost::shared_ptr< vcl::Indenter > xIndenter( new vcl::Indenter( &rLayout, nIndent ) );
-            rLayout.addChild( xIndenter );
-            boost::shared_ptr< vcl::RowOrColumn > xRows( new vcl::RowOrColumn( &rLayout, true ) );
-            xIndenter->setChild( xRows );
-            xRows->addWindow( &maRbBinary );
-            xRows->addWindow( &maRbText );
-            boost::shared_ptr< vcl::Spacer > xSpacer( new vcl::Spacer( &rLayout, 2 ) );
-            rLayout.addChild( xSpacer );
-
-            sal_Int32 nFormat = mpFilterOptionsItem->ReadInt32( String( RTL_CONSTASCII_USTRINGPARAM( "FileFormat" ) ), 1 );
-            maRbBinary.Check( nFormat == 0 );
-            maRbText.Check( nFormat != 0 );
+            mpEncoding->Show();
+            sal_Int32 nFormat = mpFilterOptionsItem->ReadInt32(OUString("FileFormat"), 1);
+            mpRbBinary->Check( nFormat == 0 );
+            mpRbText->Check( nFormat != 0 );
         }
         break;
         case FORMAT_EPS :
         {
-            boost::shared_ptr< vcl::RowOrColumn > xColumns( new vcl::RowOrColumn( &rLayout, false ) );
-            rLayout.addChild( xColumns );
-            boost::shared_ptr< vcl::RowOrColumn > xLeft( new vcl::RowOrColumn( &rLayout, true ) );
-            xColumns->addChild( xLeft );
+            mpEPSGrid->Show();
 
-            xLeft->addWindow( &maFlEPSPreview );
-            boost::shared_ptr< vcl::Indenter > xIndenter( new vcl::Indenter( xLeft.get(), nIndent ) );
-            xLeft->addChild( xIndenter );
-            boost::shared_ptr< vcl::RowOrColumn > xRows( new vcl::RowOrColumn( xLeft.get(), true ) );
-            xIndenter->setChild( xRows );
-            xRows->addWindow( &maCbEPSPreviewTIFF );
-            xRows->addWindow( &maCbEPSPreviewEPSI );
-            boost::shared_ptr< vcl::Spacer > xSpacer( new vcl::Spacer( xLeft.get(), 2 ) );
-            xLeft->addChild( xSpacer );
+            sal_Int32 nPreview = mpFilterOptionsItem->ReadInt32(OUString("Preview"), 0);
+            sal_Int32 nVersion = mpFilterOptionsItem->ReadInt32(OUString("Version"), 2);
+            sal_Int32 nColor = mpFilterOptionsItem->ReadInt32(OUString("ColorFormat"), 0);
+            sal_Int32 nCompr = mpFilterOptionsItem->ReadInt32(OUString("CompressionMode"), 2);
 
-            xLeft->addWindow( &maFlEPSVersion );
-            xIndenter = boost::shared_ptr< vcl::Indenter >( new vcl::Indenter( xLeft.get(), nIndent ) );
-            xLeft->addChild( xIndenter );
-            xRows = boost::shared_ptr< vcl::RowOrColumn >( new vcl::RowOrColumn( xLeft.get(), true ) );
-            xIndenter->setChild( xRows );
-            xRows->addWindow( &maRbEPSLevel1 );
-            xRows->addWindow( &maRbEPSLevel2 );
-            xSpacer.reset( new vcl::Spacer( xLeft.get(), 2 ) );
-            xLeft->addChild( xSpacer );
+            mpFilterOptionsItem->ReadInt32(OUString("TextMode"), 0);
 
-            boost::shared_ptr< vcl::RowOrColumn > xRight( new vcl::RowOrColumn( &rLayout, true ) );
-            xColumns->addChild( xRight );
+            mpCbEPSPreviewTIFF->Check( ( nPreview & 1 ) != 0 );
+            mpCbEPSPreviewEPSI->Check( ( nPreview & 2 ) != 0 );
 
-            xRight->addWindow( &maFlEPSColorFormat );
-            xIndenter = boost::shared_ptr< vcl::Indenter >( new vcl::Indenter( xRight.get(), nIndent ) );
-            xRight->addChild( xIndenter );
-            xRows = boost::shared_ptr< vcl::RowOrColumn >( new vcl::RowOrColumn( xRight.get(), true ) );
-            xIndenter->setChild( xRows );
-            xRows->addWindow( &maRbEPSColorFormat1 );
-            xRows->addWindow( &maRbEPSColorFormat2 );
-            xSpacer.reset( new vcl::Spacer( xRight.get(), 2 ) );
-            xRight->addChild( xSpacer );
+            mpRbEPSLevel1->Check( nVersion == 1 );
+            mpRbEPSLevel2->Check( nVersion == 2 );
 
-            xRight->addWindow( &maFlCompression );
-            xIndenter = boost::shared_ptr< vcl::Indenter >( new vcl::Indenter( xRight.get(), nIndent ) );
-            xRight->addChild( xIndenter );
-            xRows = boost::shared_ptr< vcl::RowOrColumn >( new vcl::RowOrColumn( xRight.get(), true ) );
-            xIndenter->setChild( xRows );
-            xRows->addWindow( &maRbEPSCompressionLZW );
-            xRows->addWindow( &maRbEPSCompressionNone );
+            mpRbEPSColorFormat1->Check( nColor == 1 );
+            mpRbEPSColorFormat2->Check( nColor != 1 );
 
-            xSpacer.reset( new vcl::Spacer( &rLayout, 2 ) );
-            rLayout.addChild( xSpacer );
-
-            sal_Int32 nPreview = mpFilterOptionsItem->ReadInt32( String( RTL_CONSTASCII_USTRINGPARAM( "Preview" ) ), 0 );
-            sal_Int32 nVersion = mpFilterOptionsItem->ReadInt32( String( RTL_CONSTASCII_USTRINGPARAM( "Version" ) ), 2 );
-            sal_Int32 nColor = mpFilterOptionsItem->ReadInt32( String( RTL_CONSTASCII_USTRINGPARAM( "ColorFormat" ) ), 0 );
-            sal_Int32 nCompr = mpFilterOptionsItem->ReadInt32( String( RTL_CONSTASCII_USTRINGPARAM( "CompressionMode" ) ), 2 );
-
-            mpFilterOptionsItem->ReadInt32( String( RTL_CONSTASCII_USTRINGPARAM( "TextMode" ) ), 0 );
-
-            maCbEPSPreviewTIFF.Check( ( nPreview & 1 ) != 0 );
-            maCbEPSPreviewEPSI.Check( ( nPreview & 2 ) != 0 );
-
-            maRbEPSLevel1.Check( nVersion == 1 );
-            maRbEPSLevel2.Check( nVersion == 2 );
-
-            maRbEPSColorFormat1.Check( nColor == 1 );
-            maRbEPSColorFormat2.Check( nColor != 1 );
-
-            maRbEPSCompressionLZW.Check( nCompr == 1 );
-            maRbEPSCompressionNone.Check( nCompr != 1 );
+            mpRbEPSCompressionLZW->Check( nCompr == 1 );
+            mpRbEPSCompressionNone->Check( nCompr != 1 );
         }
         break;
     }
 }
 
-void ExportDialog::createButtons( vcl::RowOrColumn& rLayout )
+void ExportDialog::setupControls()
 {
-    rLayout.addWindow( &maFlButtons );
-    boost::shared_ptr< vcl::Spacer > xSpacer( new vcl::Spacer( &rLayout, 2 ) );
-    rLayout.addChild( xSpacer );
+    setupSizeControls();
+    createFilterOptions();
 
-    Size aBorder( LogicToPixel( Size( 5, 5 ), MapMode( MAP_APPFONT ) ) );
-
-    boost::shared_ptr< vcl::RowOrColumn > xButtons( new vcl::RowOrColumn( &rLayout, false ) );
-    size_t nIndex = rLayout.addChild( xButtons );
-    rLayout.setBorders( nIndex, aBorder.Width(), 0, aBorder.Width(), aBorder.Width() );
-
-    Size aMinSize( maBtnCancel.GetSizePixel() );
-    // insert help button
-    xButtons->setMinimumSize( xButtons->addWindow( &maBtnHelp ), aMinSize );
-
-    // insert a spacer, cancel and OK buttons are right aligned
-
-    xSpacer.reset( new vcl::Spacer( xButtons.get(), 2 ) );
-    xButtons->addChild( xSpacer );
-    xButtons->setMinimumSize( xButtons->addWindow( &maBtnOK ), aMinSize );
-    xButtons->setMinimumSize( xButtons->addWindow( &maBtnCancel ), aMinSize );
+    if (mnMaxFilesizeForRealtimePreview || mbIsPixelFormat)
+        mpInfo->Show();
 }
 
-void ExportDialog::setupLayout()
-{
-    Size aBorder( LogicToPixel( Size( 5, 5 ), MapMode( MAP_APPFONT ) ) );
-    maLayout.setParentWindow( this );
-    maLayout.setOuterBorder( aBorder.Width() );
-
-    createSizeControls( maLayout );
-    createFilterOptions( maLayout );
-
-    if ( mnMaxFilesizeForRealtimePreview || mbIsPixelFormat )
-    {
-        maLayout.addWindow( &maFlEstimatedSize );
-        maLayout.addWindow( &maFtEstimatedSize );
-    }
-    createButtons( maLayout );
-
-    maLayout.show();
-    maDialogSize = maLayout.getOptimalSize( WINDOWSIZE_PREFERRED );
-    maLayout.setManagedArea( Rectangle( Point(), maDialogSize ) );
-    SetOutputSizePixel( maDialogSize );
-
-    maRectFlButtons = Rectangle( maFlButtons.GetPosPixel(), maFlButtons.GetSizePixel() );
-    maRectBtnHelp   = Rectangle( maBtnHelp.GetPosPixel(), maBtnHelp.GetSizePixel() );
-    maRectBtnOK     = Rectangle( maBtnOK.GetPosPixel(), maBtnOK.GetSizePixel() );
-    maRectBtnCancel = Rectangle( maBtnCancel.GetPosPixel(), maBtnOK.GetSizePixel() );
-
-    maLbSizeY.Hide();
-}
-
-static rtl::OUString ImpValueOfInKB( const sal_Int64& rVal )
+static OUString ImpValueOfInKB( const sal_Int64& rVal )
 {
     double fVal( static_cast<double>( rVal ) );
     fVal /= ( 1 << 10 );
     fVal += 0.05;
-    rtl::OUStringBuffer aVal( rtl::OUString::valueOf( fVal ) );
-    sal_Int32 nX( rtl::OUString( aVal.getStr() ).indexOf( '.', 0 ) );
+    OUStringBuffer aVal( OUString::valueOf( fVal ) );
+    sal_Int32 nX( OUString( aVal.getStr() ).indexOf( '.', 0 ) );
     if ( nX > 0 )
         aVal.setLength( nX + 2 );
     return aVal.makeStringAndClear();
-}
-
-void ExportDialog::updatePreview()
-{
-    SetOutputSizePixel( maDialogSize );
-
-    maFlButtons.SetSizePixel( Size( maRectFlButtons.GetWidth(), maRectFlButtons.GetHeight() ) );
-    maBtnHelp.SetPosPixel( Point( maRectBtnHelp.Left(), maRectBtnHelp.Top() ) );
-    maBtnOK.SetPosPixel( Point( maRectBtnOK.Left(), maRectBtnOK.Top() ) );
-    maBtnCancel.SetPosPixel( Point( maRectBtnCancel.Left(), maRectBtnCancel.Top() ) );
 }
 
 void ExportDialog::updateControls()
@@ -1146,26 +904,26 @@ void ExportDialog::updateControls()
     {
         awt::Size aSize100thmm( maSize );
         Size aSize( LogicToLogic( Size( aSize100thmm.Width * 100, aSize100thmm.Height * 100 ), MAP_100TH_MM,
-            MapMode( GetMapUnit( maLbSizeX.GetSelectEntryPos() ) ) ) );
-        maMfSizeX.SetValue( aSize.Width() );
-        maMfSizeY.SetValue( aSize.Height() );
+            MapMode( GetMapUnit( mpLbSizeX->GetSelectEntryPos() ) ) ) );
+        mpMfSizeX->SetValue( aSize.Width() );
+        mpMfSizeY->SetValue( aSize.Height() );
     }
     else
     {
-        MapUnit aMapUnit( GetMapUnit( maLbSizeX.GetSelectEntryPos() ) );
+        MapUnit aMapUnit( GetMapUnit( mpLbSizeX->GetSelectEntryPos() ) );
         if ( aMapUnit == MAP_PIXEL )
         {   // calculating pixel count via resolution and original graphic size
-            maMfSizeX.SetDecimalDigits( 0 );
-            maMfSizeY.SetDecimalDigits( 0 );
-            maMfSizeX.SetValue( maSize.Width );
-            maMfSizeY.SetValue( maSize.Height );
+            mpMfSizeX->SetDecimalDigits( 0 );
+            mpMfSizeY->SetDecimalDigits( 0 );
+            mpMfSizeX->SetValue( maSize.Width );
+            mpMfSizeY->SetValue( maSize.Height );
         }
         else
         {
-            maMfSizeX.SetDecimalDigits( 2 );
-            maMfSizeY.SetDecimalDigits( 2 );
+            mpMfSizeX->SetDecimalDigits( 2 );
+            mpMfSizeY->SetDecimalDigits( 2 );
             double fRatio;
-            switch( GetMapUnit( maLbSizeX.GetSelectEntryPos() ) )
+            switch( GetMapUnit( mpLbSizeX->GetSelectEntryPos() ) )
             {
                 case MAP_INCH : fRatio = static_cast< double >( maResolution.Width ) * 0.0254; break;
                 case MAP_MM :   fRatio = static_cast< double >( maResolution.Width ) * 0.001; break;
@@ -1173,22 +931,22 @@ void ExportDialog::updateControls()
                 default:
                 case MAP_CM :   fRatio = static_cast< double >( maResolution.Width ) * 0.01; break;
             }
-            maMfSizeX.SetValue( static_cast< sal_Int32 >( ( static_cast< double >( maSize.Width * 100 ) / fRatio ) + 0.5 ) );
-            maMfSizeY.SetValue( static_cast< sal_Int32 >( ( static_cast< double >( maSize.Height * 100 ) / fRatio ) + 0.5 ) );
+            mpMfSizeX->SetValue( static_cast< sal_Int32 >( ( static_cast< double >( maSize.Width * 100 ) / fRatio ) + 0.5 ) );
+            mpMfSizeY->SetValue( static_cast< sal_Int32 >( ( static_cast< double >( maSize.Height * 100 ) / fRatio ) + 0.5 ) );
         }
     }
     sal_Int32 nResolution = 0;
-    switch( maLbResolution.GetSelectEntryPos() )
+    switch( mpLbResolution->GetSelectEntryPos() )
     {
         case 0 : nResolution = maResolution.Width / 100; break;     // pixels / cm
         case 2 : nResolution = maResolution.Width; break;           // pixels / meter
         default:
         case 1 : nResolution = static_cast< sal_Int32 >(maResolution.Width * 0.0254); break;    // pixels / inch
     }
-    maNfResolution.SetValue( nResolution );
+    mpNfResolution->SetValue( nResolution );
 
-    if ( maSbCompression.IsVisible() )
-        maSbCompression.SetThumbPos( maNfCompression.GetValue() );
+    if (mpSbCompression && mpSbCompression->IsVisible() && mpNfCompression)
+        mpSbCompression->SetThumbPos(mpNfCompression->GetValue());
 
     // updating estimated size
     sal_Int64 nRealFileSize( mpTempStream->Tell() );
@@ -1204,7 +962,7 @@ void ExportDialog::updateControls()
             nInd = aEst.Search( '%', nInd );
             aEst.Replace( nInd, 2, ImpValueOfInKB( nRealFileSize ) );
         }
-        maFtEstimatedSize.SetText( aEst );
+        mpFtEstimatedSize->SetText( aEst );
     }
     else
     {
@@ -1213,19 +971,18 @@ void ExportDialog::updateControls()
             String aEst( msEstimatedSizeVec );
             xub_StrLen nInd = aEst.Search( '%', 0 );
             aEst.Replace( nInd, 2, ImpValueOfInKB( nRealFileSize ) );
-            maFtEstimatedSize.SetText( aEst );
+            mpFtEstimatedSize->SetText( aEst );
         }
     }
-    updatePreview();
 
     // EPS
-    if ( maRbEPSLevel1.IsVisible() )
+    if ( mpRbEPSLevel1->IsVisible() )
     {
-        sal_Bool bEnabled = maRbEPSLevel1.IsChecked() == sal_False;
-        maRbEPSColorFormat1.Enable( bEnabled );
-        maRbEPSColorFormat2.Enable( bEnabled );
-        maRbEPSCompressionLZW.Enable( bEnabled );
-        maRbEPSCompressionNone.Enable( bEnabled );
+        sal_Bool bEnabled = mpRbEPSLevel1->IsChecked() == sal_False;
+        mpRbEPSColorFormat1->Enable( bEnabled );
+        mpRbEPSColorFormat2->Enable( bEnabled );
+        mpRbEPSCompressionLZW->Enable( bEnabled );
+        mpRbEPSCompressionNone->Enable( bEnabled );
     }
 }
 
@@ -1253,24 +1010,24 @@ IMPL_LINK_NOARG(ExportDialog, UpdateHdlMtfSizeX)
 
     if ( mbIsPixelFormat )
     {
-        switch( GetMapUnit( maLbSizeX.GetSelectEntryPos() ) )
+        switch( GetMapUnit( mpLbSizeX->GetSelectEntryPos() ) )
         {
-            case MAP_INCH :     maSize.Width = static_cast< sal_Int32 >( static_cast< double >( maResolution.Width ) * 0.0254 * maMfSizeX.GetValue() / 100.0 + 0.5 ); break;
-            case MAP_CM :       maSize.Width = static_cast< sal_Int32 >( static_cast< double >( maResolution.Width ) * 0.01 * maMfSizeX.GetValue() / 100.0 + 0.5 ); break;
-            case MAP_MM :       maSize.Width = static_cast< sal_Int32 >( static_cast< double >( maResolution.Width ) * 0.001 * maMfSizeX.GetValue() / 100.0 + 0.5 ); break;
-            case MAP_POINT :    maSize.Width = static_cast< sal_Int32 >( static_cast< double >( maResolution.Width ) * 0.0254 * maMfSizeX.GetValue() / 100.0 * 72 + 0.5 ); break;
+            case MAP_INCH :     maSize.Width = static_cast< sal_Int32 >( static_cast< double >( maResolution.Width ) * 0.0254 * mpMfSizeX->GetValue() / 100.0 + 0.5 ); break;
+            case MAP_CM :       maSize.Width = static_cast< sal_Int32 >( static_cast< double >( maResolution.Width ) * 0.01 * mpMfSizeX->GetValue() / 100.0 + 0.5 ); break;
+            case MAP_MM :       maSize.Width = static_cast< sal_Int32 >( static_cast< double >( maResolution.Width ) * 0.001 * mpMfSizeX->GetValue() / 100.0 + 0.5 ); break;
+            case MAP_POINT :    maSize.Width = static_cast< sal_Int32 >( static_cast< double >( maResolution.Width ) * 0.0254 * mpMfSizeX->GetValue() / 100.0 * 72 + 0.5 ); break;
             default:
-            case MAP_PIXEL :    maSize.Width = maMfSizeX.GetValue(); break;
+            case MAP_PIXEL :    maSize.Width = mpMfSizeX->GetValue(); break;
         }
         maSize.Height = static_cast< sal_Int32 >( fRatio * maSize.Width + 0.5 );
     }
     else
     {
         Fraction aFract( 1, 100 );
-        sal_Int32 nWidth = maMfSizeX.GetValue();
+        sal_Int32 nWidth = mpMfSizeX->GetValue();
         sal_Int32 nHeight= static_cast< sal_Int32 >( nWidth * fRatio );
         const Size aSource( static_cast< sal_Int32 >( nWidth ), static_cast< sal_Int32 >( nHeight ) );
-        MapMode aSourceMapMode( GetMapUnit( maLbSizeX.GetSelectEntryPos() ),Point(), aFract, aFract );
+        MapMode aSourceMapMode( GetMapUnit( mpLbSizeX->GetSelectEntryPos() ),Point(), aFract, aFract );
         Size aDest( LogicToLogic( aSource, aSourceMapMode, MAP_100TH_MM ) );
 
         maSize.Width = aDest.Width();
@@ -1287,24 +1044,24 @@ IMPL_LINK_NOARG(ExportDialog, UpdateHdlMtfSizeY)
 
     if ( mbIsPixelFormat )
     {
-        switch( GetMapUnit( maLbSizeX.GetSelectEntryPos() ) )
+        switch( GetMapUnit( mpLbSizeX->GetSelectEntryPos() ) )
         {
-            case MAP_INCH :     maSize.Height = static_cast< sal_Int32 >( static_cast< double >( maResolution.Height ) * 0.0254 * maMfSizeY.GetValue() / 100.0 + 0.5 ); break;
-            case MAP_CM :       maSize.Height = static_cast< sal_Int32 >( static_cast< double >( maResolution.Height ) * 0.01 * maMfSizeY.GetValue() / 100.0 + 0.5 ); break;
-            case MAP_MM :       maSize.Height = static_cast< sal_Int32 >( static_cast< double >( maResolution.Height ) * 0.001 * maMfSizeY.GetValue() / 100.0 + 0.5 ); break;
-            case MAP_POINT :    maSize.Height = static_cast< sal_Int32 >( static_cast< double >( maResolution.Height ) * 0.0254 * maMfSizeY.GetValue() / 100.0 * 72 + 0.5 ); break;
+            case MAP_INCH :     maSize.Height = static_cast< sal_Int32 >( static_cast< double >( maResolution.Height ) * 0.0254 * mpMfSizeY->GetValue() / 100.0 + 0.5 ); break;
+            case MAP_CM :       maSize.Height = static_cast< sal_Int32 >( static_cast< double >( maResolution.Height ) * 0.01 * mpMfSizeY->GetValue() / 100.0 + 0.5 ); break;
+            case MAP_MM :       maSize.Height = static_cast< sal_Int32 >( static_cast< double >( maResolution.Height ) * 0.001 * mpMfSizeY->GetValue() / 100.0 + 0.5 ); break;
+            case MAP_POINT :    maSize.Height = static_cast< sal_Int32 >( static_cast< double >( maResolution.Height ) * 0.0254 * mpMfSizeY->GetValue() / 100.0 * 72 + 0.5 ); break;
             default:
-            case MAP_PIXEL :    maSize.Height = maMfSizeY.GetValue(); break;
+            case MAP_PIXEL :    maSize.Height = mpMfSizeY->GetValue(); break;
         }
         maSize.Width = static_cast< sal_Int32 >( fRatio * maSize.Height + 0.5 );
     }
     else
     {
         Fraction aFract( 1, 100 );
-        sal_Int32 nHeight= maMfSizeY.GetValue();
+        sal_Int32 nHeight= mpMfSizeY->GetValue();
         sal_Int32 nWidth = static_cast< sal_Int32 >( nHeight * fRatio );
         const Size aSource( static_cast< sal_Int32 >( nWidth ), static_cast< sal_Int32 >( nHeight ) );
-        MapMode aSourceMapMode( GetMapUnit( maLbSizeX.GetSelectEntryPos() ),Point(), aFract, aFract );
+        MapMode aSourceMapMode( GetMapUnit( mpLbSizeX->GetSelectEntryPos() ),Point(), aFract, aFract );
         Size aDest( LogicToLogic( aSource, aSourceMapMode, MAP_100TH_MM ) );
 
         maSize.Height = aDest.Height();
@@ -1317,10 +1074,10 @@ IMPL_LINK_NOARG(ExportDialog, UpdateHdlMtfSizeY)
 
 IMPL_LINK_NOARG(ExportDialog, UpdateHdlNfResolution)
 {
-    sal_Int32 nResolution = maNfResolution.GetValue();
-    if ( maLbResolution.GetSelectEntryPos() == 0 )      // pixels / cm
+    sal_Int32 nResolution = mpNfResolution->GetValue();
+    if ( mpLbResolution->GetSelectEntryPos() == 0 )      // pixels / cm
         nResolution *= 100;
-    else if ( maLbResolution.GetSelectEntryPos() == 1 ) // pixels / inch
+    else if ( mpLbResolution->GetSelectEntryPos() == 1 ) // pixels / inch
         nResolution = static_cast< sal_Int32 >( ( ( static_cast< double >( nResolution ) + 0.5 ) / 0.0254 ) );
     maResolution.Width = nResolution;
     maResolution.Height= nResolution;
@@ -1331,7 +1088,7 @@ IMPL_LINK_NOARG(ExportDialog, UpdateHdlNfResolution)
 
 IMPL_LINK_NOARG(ExportDialog, SbCompressionUpdateHdl)
 {
-    maNfCompression.SetValue( maSbCompression.GetThumbPos() );
+    mpNfCompression->SetValue( mpSbCompression->GetThumbPos() );
     updateControls();
     return 0;
 }
