@@ -83,20 +83,20 @@ SbMethod* CreateMacro( SbModule* pModule, const String& rMacroName )
     if ( pModule->GetMethods()->Find( rMacroName, SbxCLASS_METHOD ) )
         return 0;
 
-    String aMacroName( rMacroName );
-    if ( aMacroName.Len() == 0 )
+    OUString aMacroName( rMacroName );
+    if ( aMacroName.getLength() == 0 )
     {
         if ( !pModule->GetMethods()->Count() )
-            aMacroName = String( "Main" );
+            aMacroName = "Main" ;
         else
         {
             bool bValid = false;
-            String aStdMacroText( "Macro" );
+            OUString aStdMacroText( "Macro" );
             sal_uInt16 nMacro = 1;
             while ( !bValid )
             {
                 aMacroName = aStdMacroText;
-                aMacroName += String::CreateFromInt32( nMacro );
+                aMacroName += OUString::valueOf( nMacro );
                 // test whether existing...
                 bValid = pModule->GetMethods()->Find( aMacroName, SbxCLASS_METHOD ) ? false : true;
                 nMacro++;
