@@ -81,7 +81,6 @@ public class SOImageService implements ImageService
             {
                 new PropertyValue()
             };
-            // value[0] = new PropertyValue();
             value[0].Name = "InputStream";
             value[0].Value = image;
 

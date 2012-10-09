@@ -179,17 +179,6 @@ public class SDBCReportData implements DataSource
     {
     }
 
-//  public int getCurrentRow() throws DataSourceException
-//  {
-//    try
-//    {
-//      return rowSet.getRow();
-//    }
-//    catch (SQLException e)
-//    {
-//      throw new DataSourceException(e.getMessage(), e);
-//    }
-//  }
     static private java.sql.Date getDate(final Object obj)
     {
         final java.sql.Date date;
