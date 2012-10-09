@@ -144,36 +144,17 @@ public:
     template <typename T> T* get(T*& ret, OString sID)
     {
         Window *w = get_by_name(sID);
-        assert(w);
+        assert(w && dynamic_cast<T*>(w));
         ret = static_cast<T*>(w);
-
-#if OSL_DEBUG_LEVEL > 0
-        if (w)
-        {
-            ret = dynamic_cast<T*>(w);
-            assert(ret);
-        }
-#endif
-
         return ret;
     }
     //sID may not exist, but must be of type T if it does
     template <typename T /*=Window if we had c++11*/> T* get(OString sID)
     {
         Window *w = get_by_name(sID);
-        T* ret = static_cast<T*>(w);
-
-#if OSL_DEBUG_LEVEL > 0
-        if (w)
-        {
-            ret = dynamic_cast<T*>(w);
-            assert(ret);
-        }
-#endif
-
-        return ret;
+        assert(!w || dynamic_cast<T*>(w));
+        return static_cast<T*>(w);
     }
-
     OString get_by_window(const Window *pWindow) const;
     //for the purposes of retrofitting this to the existing code
     //look up sID, clone its properties into replacement and
