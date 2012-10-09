@@ -179,7 +179,6 @@ public class FormatValueUtility
             if (!"string".equals(valueType))
             {
                 variableSection.setAttribute(OfficeNamespaces.OFFICE_NS, VALUE_TYPE, "string");
-                //variableSection.setAttribute(OfficeNamespaces.OFFICE_NS, VALUE, String.valueOf(value));
             }
             variableSection.setAttribute(OfficeNamespaces.OFFICE_NS, STRING_VALUE, String.valueOf(value));
         }

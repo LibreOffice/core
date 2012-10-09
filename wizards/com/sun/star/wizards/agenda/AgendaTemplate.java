@@ -1757,10 +1757,6 @@ public class AgendaTemplate extends TextDocument implements TemplateConsts, Data
             }
             XTableRows tableRows = table.getRows();
             int targetNumOfRows = topics * rowsPerTopic + 1;
-            if (tableRows.getCount() > targetNumOfRows)
-            {
-                //tableRows.removeByIndex(targetNumOfRows, tableRows.getCount() - targetNumOfRows);
-            }
             formatLastRow();
             while (writtenTopics.size() > topics)
             {
