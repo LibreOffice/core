@@ -909,9 +909,6 @@ void CNodeJavaInfo::writeToNode(xmlDoc* pDoc,
 
 {
     OSL_ASSERT(pJavaInfoNode && pDoc);
-    rtl::OString sExcMsg("[Java framework] Error in function NodeJavaInfo::writeToNode "
-                         "(elements.cxx).");
-
     //write the attribute vendorSettings
 
     //javaInfo@vendorUpdate
