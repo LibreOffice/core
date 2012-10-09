@@ -455,18 +455,18 @@ void XMLTableStyleContext::ApplyCondFormat( uno::Sequence<table::CellRangeAddres
             }
 
             pDoc->AddCondFormatData( aRangeList, nTab, nCondId );
-            break;
+            return;
         }
     }
 
-    if(mpCondFormat)
+    if(mpCondFormat && mbDeleteCondFormat)
     {
-        mbDeleteCondFormat = false;
         sal_uLong nIndex = pDoc->AddCondFormat(mpCondFormat, nTab );
         mpCondFormat->SetKey(nIndex);
         mpCondFormat->AddRange(aRangeList);
 
         pDoc->AddCondFormatData( aRangeList, nTab, nIndex );
+        mbDeleteCondFormat = false;
     }
 
 
