@@ -590,13 +590,12 @@ ScColorScaleEntry* createColorScaleEntry( const ListBox& rType, const ColorListB
 ScColorScale2FrmtEntry::ScColorScale2FrmtEntry( Window* pParent, ScDocument* pDoc, const ScAddress& rPos, const ScColorScaleFormat* pFormat ):
     ScCondFrmtEntry( pParent, pDoc, rPos ),
     maLbColorFormat( this, ScResId( LB_COLOR_FORMAT ) ),
-    maLbColScale2( this, ScResId( LB_COL_SCALE2 ) ),
-    maLbEntryTypeMin( this, ScResId( LB_TYPE_COL_SCALE ) ),
-    maLbEntryTypeMax( this, ScResId( LB_TYPE_COL_SCALE ) ),
-    maEdMin( this, ScResId( ED_COL_SCALE ) ),
-    maEdMax( this, ScResId( ED_COL_SCALE ) ),
-    maLbColMin( this, ScResId( LB_COL) ),
-    maLbColMax( this, ScResId( LB_COL) )
+    maLbEntryTypeMin( this, ScResId( LB_TYPE_COL_SCALE_MIN ) ),
+    maLbEntryTypeMax( this, ScResId( LB_TYPE_COL_SCALE_MAX ) ),
+    maEdMin( this, ScResId( ED_COL_SCALE_MIN ) ),
+    maEdMax( this, ScResId( ED_COL_SCALE_MAX ) ),
+    maLbColMin( this, ScResId( LB_COL_MIN ) ),
+    maLbColMax( this, ScResId( LB_COL_MAX ) )
 {
     maLbType.SelectEntryPos(0);
     maLbColorFormat.SelectEntryPos(0);
@@ -695,8 +694,6 @@ ScFormatEntry* ScColorScale2FrmtEntry::GetEntry() const
 
 void ScColorScale2FrmtEntry::SetActive()
 {
-    maLbColScale2.Show();
-
     maLbEntryTypeMin.Show();
     maLbEntryTypeMax.Show();
 
@@ -711,8 +708,6 @@ void ScColorScale2FrmtEntry::SetActive()
 
 void ScColorScale2FrmtEntry::SetInactive()
 {
-    maLbColScale2.Hide();
-
     maLbEntryTypeMin.Hide();
     maLbEntryTypeMax.Hide();
 
@@ -751,17 +746,15 @@ IMPL_LINK( ScColorScale2FrmtEntry, EntryTypeHdl, ListBox*, pBox )
 ScColorScale3FrmtEntry::ScColorScale3FrmtEntry( Window* pParent, ScDocument* pDoc, const ScAddress& rPos, const ScColorScaleFormat* pFormat ):
     ScCondFrmtEntry( pParent, pDoc, rPos ),
     maLbColorFormat( this, ScResId( LB_COLOR_FORMAT ) ),
-    maLbColScale2( this, ScResId( LB_COL_SCALE2 ) ),
-    maLbColScale3( this, ScResId( LB_COL_SCALE3 ) ),
-    maLbEntryTypeMin( this, ScResId( LB_TYPE_COL_SCALE ) ),
-    maLbEntryTypeMiddle( this, ScResId( LB_TYPE_COL_SCALE ) ),
-    maLbEntryTypeMax( this, ScResId( LB_TYPE_COL_SCALE ) ),
-    maEdMin( this, ScResId( ED_COL_SCALE ) ),
-    maEdMiddle( this, ScResId( ED_COL_SCALE ) ),
-    maEdMax( this, ScResId( ED_COL_SCALE ) ),
-    maLbColMin( this, ScResId( LB_COL) ),
-    maLbColMiddle( this, ScResId( LB_COL) ),
-    maLbColMax( this, ScResId( LB_COL) )
+    maLbEntryTypeMin( this, ScResId( LB_TYPE_COL_SCALE_MIN ) ),
+    maLbEntryTypeMiddle( this, ScResId( LB_TYPE_COL_SCALE_MIDDLE ) ),
+    maLbEntryTypeMax( this, ScResId( LB_TYPE_COL_SCALE_MAX ) ),
+    maEdMin( this, ScResId( ED_COL_SCALE_MIN ) ),
+    maEdMiddle( this, ScResId( ED_COL_SCALE_MIDDLE ) ),
+    maEdMax( this, ScResId( ED_COL_SCALE_MAX ) ),
+    maLbColMin( this, ScResId( LB_COL_MIN ) ),
+    maLbColMiddle( this, ScResId( LB_COL_MIDDLE ) ),
+    maLbColMax( this, ScResId( LB_COL_MAX ) )
 {
     maLbType.SelectEntryPos(0);
     if(pFormat)
@@ -806,23 +799,6 @@ void ScColorScale3FrmtEntry::Init()
     XColorListRef       pColorTable;
 
     DBG_ASSERT( pDocSh, "DocShell not found!" );
-
-    Point aPointLb = maLbEntryTypeMiddle.GetPosPixel();
-    Point aPointEd = maEdMiddle.GetPosPixel();
-    Point aPointCol = maLbColMiddle.GetPosPixel();
-    const long nMovePos = maLbEntryTypeMiddle.GetSizePixel().Width() * 1.2;
-    aPointLb.X() += nMovePos;
-    aPointEd.X() += nMovePos;
-    aPointCol.X() += nMovePos;
-    maLbEntryTypeMiddle.SetPosPixel(aPointLb);
-    maEdMiddle.SetPosPixel(aPointEd);
-    maLbColMiddle.SetPosPixel(aPointCol);
-    aPointLb.X() += nMovePos;
-    aPointEd.X() += nMovePos;
-    aPointCol.X() += nMovePos;
-    maLbEntryTypeMax.SetPosPixel(aPointLb);
-    maEdMax.SetPosPixel(aPointEd);
-    maLbColMax.SetPosPixel(aPointCol);
 
     if ( pDocSh )
     {
@@ -878,9 +854,6 @@ ScFormatEntry* ScColorScale3FrmtEntry::GetEntry() const
 
 void ScColorScale3FrmtEntry::SetActive()
 {
-    maLbColScale2.Show();
-    maLbColScale3.Show();
-
     maLbEntryTypeMin.Show();
     maLbEntryTypeMiddle.Show();
     maLbEntryTypeMax.Show();
@@ -898,9 +871,6 @@ void ScColorScale3FrmtEntry::SetActive()
 
 void ScColorScale3FrmtEntry::SetInactive()
 {
-    maLbColScale2.Hide();
-    maLbColScale3.Hide();
-
     maLbEntryTypeMin.Hide();
     maLbEntryTypeMiddle.Hide();
     maLbEntryTypeMax.Hide();
@@ -999,10 +969,10 @@ void SetDataBarEntryTypes( const ScColorScaleEntry& rEntry, ListBox& rLbType, Ed
 ScDataBarFrmtEntry::ScDataBarFrmtEntry( Window* pParent, ScDocument* pDoc, const ScAddress& rPos, const ScDataBarFormat* pFormat ):
     ScCondFrmtEntry( pParent, pDoc, rPos ),
     maLbColorFormat( this, ScResId( LB_COLOR_FORMAT ) ),
-    maLbDataBarMinType( this, ScResId( LB_TYPE_COL_SCALE ) ),
-    maLbDataBarMaxType( this, ScResId( LB_TYPE_COL_SCALE ) ),
-    maEdDataBarMin( this, ScResId( ED_COL_SCALE ) ),
-    maEdDataBarMax( this, ScResId( ED_COL_SCALE ) ),
+    maLbDataBarMinType( this, ScResId( LB_TYPE_COL_SCALE_MIN ) ),
+    maLbDataBarMaxType( this, ScResId( LB_TYPE_COL_SCALE_MAX ) ),
+    maEdDataBarMin( this, ScResId( ED_COL_SCALE_MIN ) ),
+    maEdDataBarMax( this, ScResId( ED_COL_SCALE_MAX ) ),
     maBtOptions( this, ScResId( BTN_OPTIONS ) )
 {
     maLbColorFormat.SelectEntryPos(2);
@@ -1035,13 +1005,6 @@ void ScDataBarFrmtEntry::Init()
 {
     maLbDataBarMinType.SetSelectHdl( LINK( this, ScDataBarFrmtEntry, DataBarTypeSelectHdl ) );
     maLbDataBarMaxType.SetSelectHdl( LINK( this, ScDataBarFrmtEntry, DataBarTypeSelectHdl ) );
-    Point aPointEdDataBar = maEdDataBarMin.GetPosPixel();
-    Point aPointLbDataBar = maLbDataBarMaxType.GetPosPixel();
-    long nMovePos = 10;
-    aPointEdDataBar.X() += 2*nMovePos;
-    aPointLbDataBar.X() += 2*nMovePos;
-    maEdDataBarMax.SetPosPixel(aPointEdDataBar);
-    maLbDataBarMaxType.SetPosPixel(aPointLbDataBar);
 
     maBtOptions.SetClickHdl( LINK( this, ScDataBarFrmtEntry, OptionBtnHdl ) );
 

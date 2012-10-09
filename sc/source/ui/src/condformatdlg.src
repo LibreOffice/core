@@ -191,9 +191,45 @@ Control RID_COND_ENTRY
             "New Style...";
         };
     };
-    ListBox LB_TYPE_COL_SCALE
+    ListBox LB_TYPE_COL_SCALE_MIN
     {
         Pos = MAP_APPFONT( 5, 32 );
+        Size = MAP_APPFONT( 80, 60 );
+        Border = TRUE;
+        DropDown = TRUE;
+        StringList [ en-US ] =
+        {
+            "Min";
+            "Max";
+            "Percentile";
+            "Value";
+            "Percent";
+            "Formula";
+            "AutoMin";
+            "AutoMax";
+        };
+    };
+    ListBox LB_TYPE_COL_SCALE_MIDDLE
+    {
+        Pos = MAP_APPFONT( 100, 32 );
+        Size = MAP_APPFONT( 80, 60 );
+        Border = TRUE;
+        DropDown = TRUE;
+        StringList [ en-US ] =
+        {
+            "Min";
+            "Max";
+            "Percentile";
+            "Value";
+            "Percent";
+            "Formula";
+            "AutoMin";
+            "AutoMax";
+        };
+    };
+    ListBox LB_TYPE_COL_SCALE_MAX
+    {
+        Pos = MAP_APPFONT( 195, 32 );
         Size = MAP_APPFONT( 80, 60 );
         Border = TRUE;
         DropDown = TRUE;
@@ -216,16 +252,44 @@ Control RID_COND_ENTRY
         Text [ en-US ] = "Example";
         Border = TRUE;
     };
-    Edit ED_COL_SCALE
+    Edit ED_COL_SCALE_MIN
     {
         Pos = MAP_APPFONT( 5, 48 );
-        Size = MAP_APPFONT( 60, 12 );
+        Size = MAP_APPFONT( 80, 12 );
         Border = TRUE;
     };
-    ListBox LB_COL
+    Edit ED_COL_SCALE_MIDDLE
+    {
+        Pos = MAP_APPFONT( 100, 48 );
+        Size = MAP_APPFONT( 80, 12 );
+        Border = TRUE;
+    };
+    Edit ED_COL_SCALE_MAX
+    {
+        Pos = MAP_APPFONT( 195, 48 );
+        Size = MAP_APPFONT( 80, 12 );
+        Border = TRUE;
+    };
+    ListBox LB_COL_MIN
     {
         Pos = MAP_APPFONT( 5, 62 );
-        Size = MAP_APPFONT( 60, 40 );
+        Size = MAP_APPFONT( 80, 40 );
+        Border = TRUE;
+        DropDown = TRUE;
+        DDExtraWidth = TRUE;
+    };
+    ListBox LB_COL_MIDDLE
+    {
+        Pos = MAP_APPFONT( 100, 62 );
+        Size = MAP_APPFONT( 80, 40 );
+        Border = TRUE;
+        DropDown = TRUE;
+        DDExtraWidth = TRUE;
+    };
+    ListBox LB_COL_MAX
+    {
+        Pos = MAP_APPFONT( 195, 62 );
+        Size = MAP_APPFONT( 80, 40 );
         Border = TRUE;
         DropDown = TRUE;
         DDExtraWidth = TRUE;

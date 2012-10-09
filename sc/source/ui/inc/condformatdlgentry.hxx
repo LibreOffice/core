@@ -115,8 +115,6 @@ class ScColorScale2FrmtEntry : public ScCondFrmtEntry
     ListBox maLbColorFormat;
 
     //color scale ui elements
-    ListBox maLbColScale2;
-
     ListBox maLbEntryTypeMin;
     ListBox maLbEntryTypeMax;
 
@@ -146,9 +144,6 @@ class ScColorScale3FrmtEntry : public ScCondFrmtEntry
     ListBox maLbColorFormat;
 
     //color scale ui elements
-    ListBox maLbColScale2;
-    ListBox maLbColScale3;
-
     ListBox maLbEntryTypeMin;
     ListBox maLbEntryTypeMiddle;
     ListBox maLbEntryTypeMax;
