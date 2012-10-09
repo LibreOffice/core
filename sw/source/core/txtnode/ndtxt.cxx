@@ -826,10 +826,10 @@ void SwTxtNode::NewAttrSet( SwAttrPool& rPool )
     const SwFmtColl* pAnyFmtColl = &GetAnyFmtColl();
     const SwFmtColl* pFmtColl = GetFmtColl();
     String sVal;
-    SwStyleNameMapper::FillProgName( pAnyFmtColl->GetName(), sVal, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL, sal_True );
+    SwStyleNameMapper::FillProgName( pAnyFmtColl->GetName(), sVal, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL, true );
     SfxStringItem aAnyFmtColl( RES_FRMATR_STYLE_NAME, sVal );
     if ( pFmtColl != pAnyFmtColl )
-        SwStyleNameMapper::FillProgName( pFmtColl->GetName(), sVal, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL, sal_True );
+        SwStyleNameMapper::FillProgName( pFmtColl->GetName(), sVal, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL, true );
     SfxStringItem aFmtColl( RES_FRMATR_CONDITIONAL_STYLE_NAME, sVal );
     aNewAttrSet.Put( aAnyFmtColl );
     aNewAttrSet.Put( aFmtColl );

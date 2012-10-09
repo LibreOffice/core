@@ -123,12 +123,12 @@ void SetParent( boost::shared_ptr<const SfxItemSet>& mrpAttrSet,
 
         if ( pParentFmt )
         {
-            SwStyleNameMapper::FillProgName( pParentFmt->GetName(), sVal, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL, sal_True );
+            SwStyleNameMapper::FillProgName( pParentFmt->GetName(), sVal, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL, true );
             const SfxStringItem aAnyFmtColl( RES_FRMATR_STYLE_NAME, sVal );
             aNewSet.Put( aAnyFmtColl );
 
             if ( pConditionalFmt != pParentFmt )
-                SwStyleNameMapper::FillProgName( pConditionalFmt->GetName(), sVal, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL, sal_True );
+                SwStyleNameMapper::FillProgName( pConditionalFmt->GetName(), sVal, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL, true );
 
             const SfxStringItem aFmtColl( RES_FRMATR_CONDITIONAL_STYLE_NAME, sVal );
             aNewSet.Put( aFmtColl );

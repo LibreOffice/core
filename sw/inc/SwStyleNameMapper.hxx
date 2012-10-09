@@ -138,20 +138,20 @@ protected:
                                           const SwTableEntry *pTable,
                                           sal_uInt8 nCount);
 
-    static void fillNameFromId ( sal_uInt16 nId, String &rName, sal_Bool bProgName );
-    static const String& getNameFromId ( sal_uInt16 nId, const String &rName, sal_Bool bProgName );
-    static const NameToIdHash& getHashTable ( SwGetPoolIdFromName, sal_Bool bProgName );
+    static void fillNameFromId ( sal_uInt16 nId, String &rName, bool bProgName );
+    static const String& getNameFromId ( sal_uInt16 nId, const String &rName, bool bProgName );
+    static const NameToIdHash& getHashTable ( SwGetPoolIdFromName, bool bProgName );
     static bool SuffixIsUser ( const String & rString );
     static void CheckSuffixAndDelete ( String & rString );
 
 public:
     // This gets the UI Name from the programmatic name
     static const String& GetUIName ( const String& rName, SwGetPoolIdFromName );
-    static         void FillUIName ( const String& rName, String& rFillName, SwGetPoolIdFromName, sal_Bool bDisambiguate = sal_False );
+    static         void FillUIName ( const String& rName, String& rFillName, SwGetPoolIdFromName, bool bDisambiguate = false );
 
     // Get the programmatic Name from the UI name
     static const String& GetProgName ( const String& rName, SwGetPoolIdFromName );
-    static         void FillProgName ( const String& rName, String& rFillName, SwGetPoolIdFromName, sal_Bool bDisambiguate = sal_False );
+    static         void FillProgName ( const String& rName, String& rFillName, SwGetPoolIdFromName, bool bDisambiguate = false );
 
     // This gets the UI Name from the Pool ID
     SW_DLLPUBLIC static          void FillUIName ( sal_uInt16 nId, String& rFillName );

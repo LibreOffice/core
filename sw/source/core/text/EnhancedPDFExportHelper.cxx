@@ -182,7 +182,7 @@ bool lcl_IsHeadlineCell( const SwCellFrm& rCellFrm )
         const SwFmt* pTxtFmt = pTxtNode->GetFmtColl();
 
         String sStyleName;
-        SwStyleNameMapper::FillProgName( pTxtFmt->GetName(), sStyleName, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL, sal_True );
+        SwStyleNameMapper::FillProgName( pTxtFmt->GetName(), sStyleName, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL, true );
         bRet = sStyleName.EqualsAscii(aTableHeadingName);
     }
 
@@ -1109,9 +1109,9 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
                 String sParentStyleName;
 
                 if ( pTxtFmt)
-                    SwStyleNameMapper::FillProgName( pTxtFmt->GetName(), sStyleName, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL, sal_True );
+                    SwStyleNameMapper::FillProgName( pTxtFmt->GetName(), sStyleName, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL, true );
                 if ( pParentTxtFmt)
-                    SwStyleNameMapper::FillProgName( pParentTxtFmt->GetName(), sParentStyleName, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL, sal_True );
+                    SwStyleNameMapper::FillProgName( pParentTxtFmt->GetName(), sParentStyleName, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL, true );
 
                 // This is the default. If the paragraph could not be mapped to
                 // any of the standard pdf tags, we write a user defined tag
@@ -1406,7 +1406,7 @@ void SwTaggedPDFHelper::BeginInlineStructureElements()
                     const SwCharFmt* pCharFmt = (charAttrs.size())
                         ? (*charAttrs.begin())->GetCharFmt().GetCharFmt() : 0;
                     if ( pCharFmt )
-                        SwStyleNameMapper::FillProgName( pCharFmt->GetName(), sStyleName, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL, sal_True );
+                        SwStyleNameMapper::FillProgName( pCharFmt->GetName(), sStyleName, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL, true );
                 }
 
                 // Check for Link:

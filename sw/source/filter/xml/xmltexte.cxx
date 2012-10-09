@@ -178,7 +178,7 @@ void SwXMLTextParagraphExport::exportStyleContent(
                                     rCond.GetTxtFmtColl()->GetName(),
                                     aString,
                                     nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL,
-                                    sal_True);
+                                    true);
                     aString = GetExport().EncodeStyleName( aString );
                     GetExport().AddAttribute( XML_NAMESPACE_STYLE,
                                 XML_APPLY_STYLE_NAME, aString );

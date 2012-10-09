@@ -346,7 +346,7 @@ void SwStyleNameMapper::CheckSuffixAndDelete ( String & rString )
         rString.Erase ( nLen - 7, 7 );
     }
 }
-const NameToIdHash & SwStyleNameMapper::getHashTable ( SwGetPoolIdFromName eFlags, sal_Bool bProgName )
+const NameToIdHash & SwStyleNameMapper::getHashTable ( SwGetPoolIdFromName eFlags, bool bProgName )
 {
     NameToIdHash *pHash = 0;
     const boost::ptr_vector<String> *pStrings;
@@ -634,7 +634,7 @@ const String& SwStyleNameMapper::GetProgName( const String& rName, SwGetPoolIdFr
 }
 
 // Get the programmatic name from the UI name in rName and put it into rFillName
-void SwStyleNameMapper::FillProgName ( const String& rName, String& rFillName, SwGetPoolIdFromName eFlags, sal_Bool bDisambiguate )
+void SwStyleNameMapper::FillProgName ( const String& rName, String& rFillName, SwGetPoolIdFromName eFlags, bool bDisambiguate )
 {
     sal_uInt16 nId = GetPoolIdFromUIName ( rName, eFlags );
     if ( bDisambiguate && nId == USHRT_MAX )
@@ -659,11 +659,11 @@ void SwStyleNameMapper::FillProgName ( const String& rName, String& rFillName, S
     else
     {
         // If we aren't trying to disambiguate, then just do a normal fill
-        fillNameFromId ( nId, rFillName, sal_True);
+        fillNameFromId ( nId, rFillName, true);
     }
 }
 // Get the UI name from the programmatic name in rName and put it into rFillName
-void SwStyleNameMapper::FillUIName ( const String& rName, String& rFillName, SwGetPoolIdFromName eFlags, sal_Bool bDisambiguate )
+void SwStyleNameMapper::FillUIName ( const String& rName, String& rFillName, SwGetPoolIdFromName eFlags, bool bDisambiguate )
 {
     sal_uInt16 nId = GetPoolIdFromProgName ( rName, eFlags );
     if ( bDisambiguate && nId == USHRT_MAX )
@@ -675,11 +675,11 @@ void SwStyleNameMapper::FillUIName ( const String& rName, String& rFillName, SwG
     else
     {
         // If we aren't trying to disambiguate, then just do a normal fill
-        fillNameFromId ( nId, rFillName, sal_False);
+        fillNameFromId ( nId, rFillName, false);
     }
 }
 
-const String& SwStyleNameMapper::getNameFromId( sal_uInt16 nId, const String& rFillName, sal_Bool bProgName )
+const String& SwStyleNameMapper::getNameFromId( sal_uInt16 nId, const String& rFillName, bool bProgName )
 {
     sal_uInt16 nStt = 0;
     const boost::ptr_vector<String>* pStrArr = 0;
@@ -764,7 +764,7 @@ const String& SwStyleNameMapper::getNameFromId( sal_uInt16 nId, const String& rF
     }
     return pStrArr ? (pStrArr->operator[] ( nId - nStt ) ) : rFillName;
 }
-void SwStyleNameMapper::fillNameFromId( sal_uInt16 nId, String& rFillName, sal_Bool bProgName )
+void SwStyleNameMapper::fillNameFromId( sal_uInt16 nId, String& rFillName, bool bProgName )
 {
     sal_uInt16 nStt = 0;
     const boost::ptr_vector<String>* pStrArr = 0;
@@ -853,35 +853,35 @@ void SwStyleNameMapper::fillNameFromId( sal_uInt16 nId, String& rFillName, sal_B
 // Get the UI Name from the pool ID
 void SwStyleNameMapper::FillUIName ( sal_uInt16 nId, String& rFillName )
 {
-    fillNameFromId ( nId, rFillName, sal_False );
+    fillNameFromId ( nId, rFillName, false );
 }
 // Get the UI Name from the pool ID
 const String& SwStyleNameMapper::GetUIName ( sal_uInt16 nId, const String& rName )
 {
-    return getNameFromId ( nId, rName, sal_False );
+    return getNameFromId ( nId, rName, false );
 }
 
 // Get the programmatic Name from the pool ID
 void SwStyleNameMapper::FillProgName ( sal_uInt16 nId, String& rFillName )
 {
-    fillNameFromId ( nId, rFillName, sal_True );
+    fillNameFromId ( nId, rFillName, true );
 }
 // Get the programmatic Name from the pool ID
 const String& SwStyleNameMapper::GetProgName ( sal_uInt16 nId, const String& rName )
 {
-    return getNameFromId ( nId, rName, sal_True );
+    return getNameFromId ( nId, rName, true );
 }
 // This gets the PoolId from the UI Name
 sal_uInt16 SwStyleNameMapper::GetPoolIdFromUIName( const String& rName, SwGetPoolIdFromName eFlags )
 {
-    const NameToIdHash & rHashMap = getHashTable ( eFlags, sal_False );
+    const NameToIdHash & rHashMap = getHashTable ( eFlags, false );
     NameToIdHash::const_iterator aIter = rHashMap.find ( &rName );
     return aIter != rHashMap.end() ? (*aIter).second : USHRT_MAX;
 }
 // Get the Pool ID from the programmatic name
 sal_uInt16 SwStyleNameMapper::GetPoolIdFromProgName( const String& rName, SwGetPoolIdFromName eFlags )
 {
-    const NameToIdHash & rHashMap = getHashTable ( eFlags, sal_True );
+    const NameToIdHash & rHashMap = getHashTable ( eFlags, true );
     NameToIdHash::const_iterator aIter = rHashMap.find ( &rName );
     return aIter != rHashMap.end() ? (*aIter).second : USHRT_MAX;
 }

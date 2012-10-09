@@ -106,7 +106,7 @@ void SwXMLExport::ExportFmt( const SwFmt& rFmt, enum XMLTokenEnum eFamily )
                                     pPageDesc->GetName(),
                                     sName,
                                     nsSwGetPoolIdFromName::GET_POOLID_PAGEDESC,
-                                    sal_True);
+                                    true);
             AddAttribute( XML_NAMESPACE_STYLE, XML_MASTER_PAGE_NAME,
                           EncodeStyleName( sName ) );
         }

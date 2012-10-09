@@ -198,7 +198,7 @@ void lcl_SetSpecialProperty(SwFrmFmt* pFmt, const SfxItemPropertySimpleEntry* pE
             const SwPageDesc* pDesc = 0;
             if(sPageStyle.Len())
             {
-                SwStyleNameMapper::FillUIName(sPageStyle, sPageStyle, nsSwGetPoolIdFromName::GET_POOLID_PAGEDESC, sal_True );
+                SwStyleNameMapper::FillUIName(sPageStyle, sPageStyle, nsSwGetPoolIdFromName::GET_POOLID_PAGEDESC, true );
                 pDesc = ::GetPageDescByName_Impl(*pFmt->GetDoc(), sPageStyle);
             }
             SwFmtPageDesc aDesc( pDesc );
@@ -1980,7 +1980,7 @@ void    SwTableProperties_Impl::ApplyTblAttr(const SwTable& rTbl, SwDoc& rDoc)
         String sPageStyle = uTmp;
         if(sPageStyle.Len())
         {
-            SwStyleNameMapper::FillUIName(sPageStyle, sPageStyle, nsSwGetPoolIdFromName::GET_POOLID_PAGEDESC, sal_True );
+            SwStyleNameMapper::FillUIName(sPageStyle, sPageStyle, nsSwGetPoolIdFromName::GET_POOLID_PAGEDESC, true );
             const SwPageDesc* pDesc = ::GetPageDescByName_Impl(rDoc, sPageStyle);
             if(pDesc)
             {
