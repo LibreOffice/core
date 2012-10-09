@@ -70,7 +70,6 @@ private:
     ListBox             maLbColorDepth;
     FixedLine           maFlJPGQuality;
     FixedLine           maFlMode;
-    FixedLine           maFlPBMOptions;
     ScrollBar           maSbCompression;
     NumericField        maNfCompression;
     FixedText           maFtJPGMin;

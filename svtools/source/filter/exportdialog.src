@@ -208,12 +208,6 @@ ModalDialog DLG_EXPORT
         Size = MAP_APPFONT ( 110 , 8 ) ;
         Text [ en-US ] = "Mode" ;
     };
-    FixedLine FL_PBM_OPTIONS
-    {
-        Hide = TRUE;
-        Size = MAP_APPFONT ( 110 , 8 ) ;
-        Text [ en-US ] = "File Format" ;
-    };
     ScrollBar SB_COMPRESSION
     {
         Hide = TRUE;

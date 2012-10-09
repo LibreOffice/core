@@ -27,7 +27,6 @@
 #define FL_COMPRESSION          4
 #define FL_MODE                 5
 #define FL_GIF_DRAWING_OBJECTS  6
-#define FL_PBM_OPTIONS          7
 #define FL_EPS_PREVIEW          8
 #define FL_EPS_VERSION          9
 #define FL_EPS_COLOR_FORMAT     10
