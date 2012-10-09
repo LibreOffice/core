@@ -28,6 +28,18 @@ All warnings and errors are marked '[loplugin]' in the message.
 
 Additional check for unused variables.
 
+==== Body of if/while/for not in {} ====
+
+- statement aligned as second statement in if/while/for body but not in a statement block [loplugin]
+
+Warn about the following construct:
+
+    if( a != 0 )
+        b = 2;
+        c = 3;
+        
+Here either both statements should be inside {} or the second statement in indented wrong.
+
 
 == Code documentation / howtos ==
 

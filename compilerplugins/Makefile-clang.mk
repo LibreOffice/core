@@ -9,7 +9,10 @@
 # Make sure variables in this Makefile do not conflict with other variables (e.g. from gbuild).
 
 # The list of source files.
-CLANGSRC=compileplugin.cxx unusedvariablecheck.cxx
+CLANGSRC=compileplugin.cxx \
+    bodynotinblock.cxx \
+    unusedvariablecheck.cxx \
+
 
 # You may occassionally want to override some of these
 

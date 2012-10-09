@@ -17,6 +17,7 @@
 #include <clang/Frontend/FrontendPluginRegistry.h>
 #include <clang/Rewrite/Rewriter.h>
 
+#include "bodynotinblock.hxx"
 #include "unusedvariablecheck.hxx"
 
 using namespace clang;
@@ -33,6 +34,7 @@ class PluginHandler
     public:
         explicit PluginHandler( ASTContext& context )
             : rewriter( context.getSourceManager(), context.getLangOpts())
+            , bodyNotInBlock( context )
             , unusedVariableCheck( context )
             {
             }
@@ -40,6 +42,7 @@ class PluginHandler
             {
             if( context.getDiagnostics().hasErrorOccurred())
                 return;
+            bodyNotInBlock.run();
             unusedVariableCheck.run();
             // TODO also LO header files? or a subdir?
            if( const RewriteBuffer* buf = rewriter.getRewriteBufferFor( context.getSourceManager().getMainFileID()))
@@ -48,6 +51,7 @@ class PluginHandler
             }
     private:
         Rewriter rewriter;
+        BodyNotInBlock bodyNotInBlock;
         UnusedVariableCheck unusedVariableCheck;
     };
 
