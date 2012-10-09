@@ -1648,6 +1648,10 @@ bool lcl_isInHeader(const SwFrmFmt& rFmt)
     if (!pFlyFrmFmt)
         return false;
     SwFlyFrm* pFlyFrm = const_cast<SwFlyFrm*>(pFlyFrmFmt->GetFrm());
+    if (!pFlyFrm) // fdo#54648: "hidden" drawing object has no layout frame
+    {
+        return false;
+    }
     SwPageFrm* pPageFrm = pFlyFrm->FindPageFrmOfAnchor();
     SwFrm* pHeader = pPageFrm->Lower();
     if (pHeader->GetType() == FRM_HEADER)
