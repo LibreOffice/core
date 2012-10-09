@@ -462,11 +462,11 @@ void XMLTableStyleContext::ApplyCondFormat( uno::Sequence<table::CellRangeAddres
             aMarkData.MarkFromRangeList(rRange, true);
             pDoc->ApplySelectionPattern( aPattern , aMarkData);
 
-            break;
+            return;
         }
     }
 
-    if(mpCondFormat)
+    if(mpCondFormat && mbDeleteCondFormat)
     {
         mbDeleteCondFormat = false;
         sal_uLong nIndex = pDoc->AddCondFormat(mpCondFormat, nTab );
