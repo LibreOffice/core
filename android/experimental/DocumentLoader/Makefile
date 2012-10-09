@@ -183,7 +183,6 @@ uninstall:
 	$(ANDROID_SDK_HOME)/platform-tools/adb uninstall $(APP_PACKAGE)
 
 run:
-# /data/local/tmp/sample-document.odt
 	adb shell am start -n org.libreoffice.android.examples/.DocumentLoader -e input /assets/test1.odt
 
 
