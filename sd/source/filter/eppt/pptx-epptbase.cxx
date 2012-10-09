@@ -197,6 +197,7 @@ void PPTWriterBase::exportPPT( const std::vector< com::sun::star::beans::Propert
     if ( ImplGetPropertyValue( mXPagePropSet, OUString( "Height" ) ) )
         mAny >>= nHeight;
     maDestPageSize = MapSize( awt::Size( nWidth, nHeight ) );
+    maPageSize = awt::Size(nWidth, nHeight);
 
     DBG(printf( "call exportDocumentPre()\n"));
     exportPPTPre(rMediaData);

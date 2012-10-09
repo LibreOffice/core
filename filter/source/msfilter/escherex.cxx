@@ -1389,26 +1389,30 @@ sal_Bool EscherPropertyContainer::CreateEmbeddedBitmapProperties(
 
 namespace {
 
-GraphicObject lclDrawHatch( const ::com::sun::star::drawing::Hatch& rHatch, const Color& rBackColor, bool bFillBackground )
+GraphicObject lclDrawHatch( const ::com::sun::star::drawing::Hatch& rHatch, const Color& rBackColor, bool bFillBackground, const Rectangle& rRect )
 {
-    const MapMode aMap100( MAP_100TH_MM );
-    VirtualDevice aVDev( *Application::GetDefaultDevice(), 0, 1 );
-    aVDev.SetMapMode( aMap100 );
+    // #i121183# For hatch, do no longer create a bitmap with the fixed size of 28x28 pixels. Also
+    // do not create a bitmap in page size, that would explode file sizes (and have no good quality).
+    // Better use a MetaFile graphic in page size; thus we have good quality due to vector format and
+    // no bit file sizes.
+    VirtualDevice aOut;
+    GDIMetaFile aMtf;
 
-    const Size aOutSize = aVDev.PixelToLogic( Size( 28, 28 ) );
-    aVDev.SetOutputSize( aOutSize );
+    aOut.SetOutputSizePixel(Size(2, 2));
+    aOut.EnableOutput(false);
+    aOut.SetMapMode(MapMode(MAP_100TH_MM));
+    aMtf.Clear();
+    aMtf.Record(&aOut);
+    aOut.SetLineColor();
+    aOut.SetFillColor(bFillBackground ? rBackColor : Color(COL_TRANSPARENT));
+    aOut.DrawRect(rRect);
+    aOut.DrawHatch(PolyPolygon(rRect), Hatch((HatchStyle)rHatch.Style, Color(rHatch.Color), rHatch.Distance, (sal_uInt16)rHatch.Angle));
+    aMtf.Stop();
+    aMtf.WindStart();
+    aMtf.SetPrefMapMode(MapMode(MAP_100TH_MM));
+    aMtf.SetPrefSize(rRect.GetSize());
 
-    Rectangle aRectangle( Point( 0, 0 ), aOutSize );
-    const PolyPolygon aPolyPoly( aRectangle );
-
-    aVDev.SetLineColor();
-    aVDev.SetFillColor( bFillBackground ? rBackColor : Color( COL_TRANSPARENT ) );
-    aVDev.DrawRect( Rectangle( Point(), aOutSize ) );
-
-    Hatch aVclHatch( (HatchStyle) rHatch.Style, Color( rHatch.Color ), rHatch.Distance, (sal_uInt16)rHatch.Angle );
-    aVDev.DrawHatch( aPolyPoly, aVclHatch );
-
-    return GraphicObject( Graphic( aVDev.GetBitmapEx( Point(), aOutSize ) ) );
+    return GraphicObject(Graphic(aMtf));
 }
 
 } // namespace
@@ -1416,7 +1420,8 @@ GraphicObject lclDrawHatch( const ::com::sun::star::drawing::Hatch& rHatch, cons
 
 sal_Bool EscherPropertyContainer::CreateEmbeddedHatchProperties( const ::com::sun::star::drawing::Hatch& rHatch, const Color& rBackColor, bool bFillBackground )
 {
-    GraphicObject aGraphicObject = lclDrawHatch( rHatch, rBackColor, bFillBackground );
+    const Rectangle aRect(pShapeBoundRect ? *pShapeBoundRect : Rectangle(Point(0,0), Size(28000, 21000)));
+    GraphicObject aGraphicObject = lclDrawHatch( rHatch, rBackColor, bFillBackground, aRect );
     OString aUniqueId = aGraphicObject.GetUniqueID();
     sal_Bool bRetValue = ImplCreateEmbeddedBmp( aUniqueId );
     if ( bRetValue )
@@ -1515,7 +1520,9 @@ sal_Bool EscherPropertyContainer::CreateGraphicProperties(
                 {
                     aAny >>= bFillBackground;
                 }
-                aGraphicObject = lclDrawHatch( aHatch, aBackColor, bFillBackground );
+
+                const Rectangle aRect(Point(0, 0), pShapeBoundRect ? pShapeBoundRect->GetSize() : Size(28000, 21000));
+                aGraphicObject = lclDrawHatch( aHatch, aBackColor, bFillBackground, aRect );
                 aUniqueId = aGraphicObject.GetUniqueID();
                 eBitmapMode = ::com::sun::star::drawing::BitmapMode_REPEAT;
                 bIsGraphicMtf = aGraphicObject.GetType() == GRAPHIC_GDIMETAFILE;

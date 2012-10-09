@@ -353,6 +353,7 @@ protected:
     MapMode                         maMapModeSrc;
     MapMode                         maMapModeDest;
     ::com::sun::star::awt::Size     maDestPageSize;
+    ::com::sun::star::awt::Size     maPageSize; // #i121183# Keep size in logic coordinates (100th mm)
     ::com::sun::star::awt::Size     maNotesPageSize;
 
     PageType                        meLatestPageType;

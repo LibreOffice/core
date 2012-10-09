@@ -1202,8 +1202,10 @@ void PPTWriter::ImplWriteBackground( ::com::sun::star::uno::Reference< ::com::su
 
     mpPptEscherEx->OpenContainer( ESCHER_SpContainer );
     mpPptEscherEx->AddShape( ESCHER_ShpInst_Rectangle, 0xc00 );                     // Flags: Connector | Background | HasSpt
-    Point aEmptyPoint = Point();
-    Rectangle aRect( aEmptyPoint, Size( 28000, 21000 ) );
+
+    // #i121183# Use real PageSize in 100th mm
+    Rectangle aRect(Point(0, 0), Size(maPageSize.Width, maPageSize.Height));
+
     EscherPropertyContainer aPropOpt( mpPptEscherEx->GetGraphicProvider(), mpPicStrm, aRect );
     aPropOpt.AddOpt( ESCHER_Prop_fillType, ESCHER_FillSolid );
     ::com::sun::star::drawing::FillStyle aFS( ::com::sun::star::drawing::FillStyle_NONE );
