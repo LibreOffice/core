@@ -804,13 +804,13 @@ uno::Any SAL_CALL SvNumberFormatObj::getPropertyValue( const rtl::OUString& aPro
         {
             OUString aSymbol, aExt;
             pFormat->GetNewCurrencySymbol( aSymbol, aExt );
-            aRet <<= rtl::OUString( aSymbol );
+            aRet <<= aSymbol;
         }
         else if (aString.EqualsAscii( PROPERTYNAME_CURREXT ))
         {
             OUString aSymbol, aExt;
             pFormat->GetNewCurrencySymbol( aSymbol, aExt );
-            aRet <<= rtl::OUString( aExt );
+            aRet <<= aExt;
         }
         else if (aString.EqualsAscii( PROPERTYNAME_CURRABB ))
         {
@@ -877,7 +877,7 @@ uno::Sequence<beans::PropertyValue> SAL_CALL SvNumberFormatObj::getPropertyValue
     if (pFormat)
     {
         OUString aSymbol, aExt;
-        String aAbb;
+        OUString aAbb;
         bool bBank = false;
         pFormat->GetNewCurrencySymbol( aSymbol, aExt );
         const NfCurrencyEntry* pCurr = pFormatter->GetCurrencyEntry( bBank,
@@ -885,8 +885,8 @@ uno::Sequence<beans::PropertyValue> SAL_CALL SvNumberFormatObj::getPropertyValue
         if ( pCurr )
             aAbb = pCurr->GetBankSymbol();
 
-        String aFmtStr = pFormat->GetFormatstring();
-        String aComment = pFormat->GetComment();
+        OUString aFmtStr = pFormat->GetFormatstring();
+        OUString aComment = pFormat->GetComment();
         sal_Bool bStandard = ( ( nKey % SV_COUNTRY_LANGUAGE_OFFSET ) == 0 );
         //! SvNumberformat Member bStandard rausreichen?
         sal_Bool bUserDef = ( ( pFormat->GetType() & NUMBERFORMAT_DEFINED ) != 0 );
@@ -900,13 +900,13 @@ uno::Sequence<beans::PropertyValue> SAL_CALL SvNumberFormatObj::getPropertyValue
         beans::PropertyValue* pArray = aSeq.getArray();
 
         pArray[0].Name = rtl::OUString(PROPERTYNAME_FMTSTR );
-        pArray[0].Value <<= rtl::OUString( aFmtStr );
+        pArray[0].Value <<= aFmtStr;
         pArray[1].Name = rtl::OUString(PROPERTYNAME_LOCALE );
         pArray[1].Value <<= aLocale;
         pArray[2].Name = rtl::OUString(PROPERTYNAME_TYPE );
         pArray[2].Value <<= (sal_Int16)( pFormat->GetType() );
         pArray[3].Name = rtl::OUString(PROPERTYNAME_COMMENT );
-        pArray[3].Value <<= rtl::OUString( aComment );
+        pArray[3].Value <<= aComment;
         pArray[4].Name = rtl::OUString(PROPERTYNAME_STDFORM );
         pArray[4].Value.setValue( &bStandard, getBooleanCppuType() );
         pArray[5].Name = rtl::OUString(PROPERTYNAME_USERDEF );
@@ -920,11 +920,11 @@ uno::Sequence<beans::PropertyValue> SAL_CALL SvNumberFormatObj::getPropertyValue
         pArray[9].Name = rtl::OUString(PROPERTYNAME_THOUS );
         pArray[9].Value.setValue( &bThousand, getBooleanCppuType() );
         pArray[10].Name = rtl::OUString(PROPERTYNAME_CURRSYM );
-        pArray[10].Value <<= rtl::OUString( aSymbol );
+        pArray[10].Value <<= aSymbol;
         pArray[11].Name = rtl::OUString(PROPERTYNAME_CURREXT );
-        pArray[11].Value <<= rtl::OUString( aExt );
+        pArray[11].Value <<= aExt;
         pArray[12].Name = rtl::OUString(PROPERTYNAME_CURRABB );
-        pArray[12].Value <<= rtl::OUString( aAbb );
+        pArray[12].Value <<= aAbb;
 
         return aSeq;
     }
