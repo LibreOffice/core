@@ -1,3 +1,5 @@
+This "bundled" fontconfig is built only in an Android build
+
 Fontconfig is a font configuration and customization library. It is designed to locate fonts
 within the system and select them according to requirements specified by applications. 
 
