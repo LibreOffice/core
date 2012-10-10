@@ -2931,40 +2931,43 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
         {
             try
             {
-
-            SvXMLElementExport aElem( mrExport, XML_NAMESPACE_NONE, "desc", sal_False, sal_False );
-            OUStringBuffer sType;
-            sType.append(static_cast<sal_Int32>(nType));
-            if( pAction && ( nType == META_COMMENT_ACTION ) )
-            {
-                sType.append(": ");
-                const MetaCommentAction* pA = (const MetaCommentAction*) pAction;
-                rtl::OString sComment = pA->GetComment();
-                if( !sComment.isEmpty() )
+                SvXMLElementExport aElem( mrExport,
+                        XML_NAMESPACE_NONE, "desc", sal_False, sal_False );
+                OUStringBuffer sType;
+                sType.append(static_cast<sal_Int32>(nType));
+                if (pAction && (nType == META_COMMENT_ACTION))
                 {
-                    OUString ssComment = OUString( sComment.getStr(), sComment.getLength(), RTL_TEXTENCODING_UTF8 );
-                    sType.append(ssComment);
-                }
-                if( sComment.equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("FIELD_SEQ_BEGIN")) )
-                {
-                    sal_uInt8 const*const pData = pA->GetData();
-                    if( pData && ( pA->GetDataSize() ) )
+                    sType.append(": ");
+                    const MetaCommentAction* pA = (const MetaCommentAction*) pAction;
+                    rtl::OString sComment = pA->GetComment();
+                    if (!sComment.isEmpty())
                     {
-                        sal_uInt16 sz = (sal_uInt16)( ( pA->GetDataSize() ) / 2 );
-                        if( sz )
+                        OUString ssComment = OUString( sComment.getStr(),
+                                sComment.getLength(), RTL_TEXTENCODING_UTF8 );
+                        sType.append(ssComment);
+                    }
+                    if (sComment.equalsIgnoreAsciiCaseL(
+                                RTL_CONSTASCII_STRINGPARAM("FIELD_SEQ_BEGIN")))
+                    {
+                        sal_uInt8 const*const pData = pA->GetData();
+                        if (pData && (pA->GetDataSize()))
                         {
-                            sType.append("; ");
-                            sType.append(
-                                reinterpret_cast<sal_Unicode const*>(pData),
-                                sz);
+                            sal_uInt16 sz = (sal_uInt16)((pA->GetDataSize()) / 2);
+                            if (sz)
+                            {
+                                sType.append("; ");
+                                sType.append(
+                                    reinterpret_cast<sal_Unicode const*>(pData),
+                                    sz);
+                            }
                         }
                     }
                 }
-            }
-            if (sType.getLength())
-            {
-                mrExport.GetDocHandler()->characters(sType.makeStringAndClear());
-            }
+                if (sType.getLength())
+                {
+                    mrExport.GetDocHandler()->characters(
+                            sType.makeStringAndClear());
+                }
             }
             catch( ... )
             {
