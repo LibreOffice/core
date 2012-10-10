@@ -478,74 +478,81 @@ Bitmap ImpGraphic::ImplGetBitmap(const GraphicConversionParameters& rParameters)
     }
     else if( ( meType != GRAPHIC_DEFAULT ) && ImplIsSupportedGraphic() )
     {
-        // calculate size
-        VirtualDevice aVDev;
-        Size aDrawSize(aVDev.LogicToPixel(maMetaFile.GetPrefSize(), maMetaFile.GetPrefMapMode()));
-
-        if(rParameters.getSizePixel().Width() && rParameters.getSizePixel().Height())
+        if(maEx.IsEmpty())
         {
-            // apply given size if exists
-            aDrawSize = rParameters.getSizePixel();
-        }
+            // calculate size
+            VirtualDevice aVDev;
+            Size aDrawSize(aVDev.LogicToPixel(maMetaFile.GetPrefSize(), maMetaFile.GetPrefMapMode()));
 
-        if(aDrawSize.Width() && aDrawSize.Height() && !rParameters.getUnlimitedSize()
-            && (aDrawSize.Width() > GRAPHIC_MTFTOBMP_MAXEXT || aDrawSize.Height() > GRAPHIC_MTFTOBMP_MAXEXT))
-        {
-            // limit bitmap size to a maximum of GRAPHIC_MTFTOBMP_MAXEXT x GRAPHIC_MTFTOBMP_MAXEXT
-            double fWH((double)aDrawSize.Width() / (double)aDrawSize.Height());
-
-            if(fWH <= 1.0)
+            if(rParameters.getSizePixel().Width() && rParameters.getSizePixel().Height())
             {
-                aDrawSize.setWidth(basegfx::fround(GRAPHIC_MTFTOBMP_MAXEXT * fWH));
-                aDrawSize.setHeight(GRAPHIC_MTFTOBMP_MAXEXT);
+                // apply given size if exists
+                aDrawSize = rParameters.getSizePixel();
             }
-            else
+
+            if(aDrawSize.Width() && aDrawSize.Height() && !rParameters.getUnlimitedSize()
+                && (aDrawSize.Width() > GRAPHIC_MTFTOBMP_MAXEXT || aDrawSize.Height() > GRAPHIC_MTFTOBMP_MAXEXT))
             {
-                aDrawSize.setWidth(GRAPHIC_MTFTOBMP_MAXEXT);
-                aDrawSize.setHeight(basegfx::fround(GRAPHIC_MTFTOBMP_MAXEXT / fWH));
-            }
-        }
+                // limit bitmap size to a maximum of GRAPHIC_MTFTOBMP_MAXEXT x GRAPHIC_MTFTOBMP_MAXEXT
+                double fWH((double)aDrawSize.Width() / (double)aDrawSize.Height());
 
-        // calculate pixel size. Normally, it's the same as aDrawSize, but may
-        // need to be extended when hairlines are on the right or bottom edge
-        Size aPixelSize(aDrawSize);
-
-        if(GRAPHIC_GDIMETAFILE == ImplGetType())
-        {
-            // get hairline and full bound rect
-            Rectangle aHairlineRect;
-            const Rectangle aRect(maMetaFile.GetBoundRect(aVDev, &aHairlineRect));
-
-            if(!aRect.IsEmpty() && !aHairlineRect.IsEmpty())
-            {
-                // expand if needed to allow bottom and right hairlines to be added
-                if(aRect.Right() == aHairlineRect.Right())
+                if(fWH <= 1.0)
                 {
-                    aPixelSize.setWidth(aPixelSize.getWidth() + 1);
+                    aDrawSize.setWidth(basegfx::fround(GRAPHIC_MTFTOBMP_MAXEXT * fWH));
+                    aDrawSize.setHeight(GRAPHIC_MTFTOBMP_MAXEXT);
                 }
-
-                if(aRect.Bottom() == aHairlineRect.Bottom())
+                else
                 {
-                    aPixelSize.setHeight(aPixelSize.getHeight() + 1);
+                    aDrawSize.setWidth(GRAPHIC_MTFTOBMP_MAXEXT);
+                    aDrawSize.setHeight(basegfx::fround(GRAPHIC_MTFTOBMP_MAXEXT / fWH));
                 }
             }
-        }
 
-        if(aVDev.SetOutputSizePixel(aPixelSize))
-        {
-            if(rParameters.getAntiAliase())
+            // calculate pixel size. Normally, it's the same as aDrawSize, but may
+            // need to be extended when hairlines are on the right or bottom edge
+            Size aPixelSize(aDrawSize);
+
+            if(GRAPHIC_GDIMETAFILE == ImplGetType())
             {
-                aVDev.SetAntialiasing(aVDev.GetAntialiasing() | ANTIALIASING_ENABLE_B2DDRAW);
+                // get hairline and full bound rect
+                Rectangle aHairlineRect;
+                const Rectangle aRect(maMetaFile.GetBoundRect(aVDev, &aHairlineRect));
+
+                if(!aRect.IsEmpty() && !aHairlineRect.IsEmpty())
+                {
+                    // expand if needed to allow bottom and right hairlines to be added
+                    if(aRect.Right() == aHairlineRect.Right())
+                    {
+                        aPixelSize.setWidth(aPixelSize.getWidth() + 1);
+                    }
+
+                    if(aRect.Bottom() == aHairlineRect.Bottom())
+                    {
+                        aPixelSize.setHeight(aPixelSize.getHeight() + 1);
+                    }
+                }
             }
 
-            if(rParameters.getSnapHorVerLines())
+            if(aVDev.SetOutputSizePixel(aPixelSize))
             {
-                aVDev.SetAntialiasing(aVDev.GetAntialiasing() | ANTIALIASING_PIXELSNAPHAIRLINE);
-            }
+                if(rParameters.getAntiAliase())
+                {
+                    aVDev.SetAntialiasing(aVDev.GetAntialiasing() | ANTIALIASING_ENABLE_B2DDRAW);
+                }
 
-            ImplDraw( &aVDev, Point(), aDrawSize );
-            aRetBmp =  aVDev.GetBitmap( Point(), aVDev.GetOutputSizePixel() );
+                if(rParameters.getSnapHorVerLines())
+                {
+                    aVDev.SetAntialiasing(aVDev.GetAntialiasing() | ANTIALIASING_PIXELSNAPHAIRLINE);
+                }
+
+                ImplDraw( &aVDev, Point(), aDrawSize );
+
+                // use maEx as local buffer for rendered metafile
+                const_cast< ImpGraphic* >(this)->maEx = aVDev.GetBitmap( Point(), aVDev.GetOutputSizePixel() );
+            }
         }
+
+        aRetBmp = maEx.GetBitmap();
     }
 
     if( !!aRetBmp )
@@ -576,8 +583,15 @@ BitmapEx ImpGraphic::ImplGetBitmapEx(const GraphicConversionParameters& rParamet
     }
     else if( ( meType != GRAPHIC_DEFAULT ) && ImplIsSupportedGraphic() )
     {
-        const ImpGraphic aMonoMask( maMetaFile.GetMonochromeMtf( COL_BLACK ) );
-        aRetBmpEx = BitmapEx(ImplGetBitmap(rParameters), aMonoMask.ImplGetBitmap(rParameters));
+        if(maEx.IsEmpty())
+        {
+            const ImpGraphic aMonoMask( maMetaFile.GetMonochromeMtf( COL_BLACK ) );
+
+            // use maEx as local buffer for rendered metafile
+            const_cast< ImpGraphic* >(this)->maEx = BitmapEx(ImplGetBitmap(rParameters), aMonoMask.ImplGetBitmap(rParameters));
+        }
+
+        aRetBmpEx = maEx;
     }
 
     return aRetBmpEx;
