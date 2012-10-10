@@ -819,10 +819,22 @@ short SbiConstExpression::GetShortValue()
     else
     {
         double n = nVal;
-        if( n > 0 ) n += .5; else n -= .5;
-        if( n > SbxMAXINT ) n = SbxMAXINT, pParser->Error( SbERR_OUT_OF_RANGE );
+        if( n > 0 )
+            n += .5;
         else
-        if( n < SbxMININT ) n = SbxMININT, pParser->Error( SbERR_OUT_OF_RANGE );
+            n -= .5;
+
+        if( n > SbxMAXINT )
+        {
+            n = SbxMAXINT;
+            pParser->Error( SbERR_OUT_OF_RANGE );
+        }
+        else if( n < SbxMININT )
+        {
+            n = SbxMININT;
+            pParser->Error( SbERR_OUT_OF_RANGE );
+        }
+
         return (short) n;
     }
 }
