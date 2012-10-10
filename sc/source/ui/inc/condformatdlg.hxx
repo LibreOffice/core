@@ -114,12 +114,13 @@ private:
 
     const ScConditionalFormat* mpFormat;
 
+    formula::RefEdit* mpLastEdit;
+
     condformat::dialog::ScCondFormatDialogType meType;
 
     DECL_LINK( EdRangeModifyHdl, Edit* );
     DECL_LINK( OkBtnHdl, void* );
     DECL_LINK( CancelBtnHdl, void* );
-    DECL_LINK( RangeGetFocusHdl, void* );
 
     virtual sal_Bool Close();
 protected:
@@ -138,6 +139,11 @@ public:
     virtual sal_Bool IsRefInputMode() const;
     virtual void SetActive();
     virtual sal_Bool IsTableLocked() const { return sal_True; }
+
+    void InvalidateRefData();
+
+    DECL_LINK( RangeGetFocusHdl, formula::RefEdit* );
+    DECL_LINK( RangeLoseFocusHdl, void* );
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

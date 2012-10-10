@@ -198,15 +198,24 @@ IMPL_LINK(ScCondFormatList, ColFormatTypeHdl, ListBox*, pBox)
     {
         case 0:
             if(itr->GetType() != condformat::entry::COLORSCALE2)
+            {
                 maEntries.replace( itr, new ScColorScale2FrmtEntry( this, mpDoc, maPos ) );
+                static_cast<ScCondFormatDlg*>(GetParent())->InvalidateRefData();
+            }
             break;
         case 1:
             if(itr->GetType() != condformat::entry::COLORSCALE3)
+            {
                 maEntries.replace( itr, new ScColorScale3FrmtEntry( this, mpDoc, maPos ) );
+                static_cast<ScCondFormatDlg*>(GetParent())->InvalidateRefData();
+            }
             break;
         case 2:
             if(itr->GetType() != condformat::entry::DATABAR)
+            {
                 maEntries.replace( itr, new ScDataBarFrmtEntry( this, mpDoc, maPos ) );
+                static_cast<ScCondFormatDlg*>(GetParent())->InvalidateRefData();
+            }
             break;
         default:
             break;
@@ -232,14 +241,17 @@ IMPL_LINK(ScCondFormatList, TypeListHdl, ListBox*, pBox)
     {
         case 0:
             maEntries.replace( itr, new ScColorScale3FrmtEntry(this, mpDoc, maPos));
+            static_cast<ScCondFormatDlg*>(GetParent())->InvalidateRefData();
             itr->SetActive();
             break;
         case 1:
             maEntries.replace( itr, new ScConditionFrmtEntry(this, mpDoc, maPos));
+            static_cast<ScCondFormatDlg*>(GetParent())->InvalidateRefData();
             itr->SetActive();
             break;
         case 2:
             maEntries.replace( itr, new ScFormulaFrmtEntry(this, mpDoc, maPos));
+            static_cast<ScCondFormatDlg*>(GetParent())->InvalidateRefData();
             itr->SetActive();
             break;
     }
@@ -255,6 +267,7 @@ IMPL_LINK_NOARG( ScCondFormatList, AddBtnHdl )
     {
         itr->SetInactive();
     }
+    static_cast<ScCondFormatDlg*>(GetParent())->InvalidateRefData();
     pNewEntry->SetActive();
     RecalcAll();
     return 0;
@@ -270,6 +283,7 @@ IMPL_LINK_NOARG( ScCondFormatList, RemoveBtnHdl )
             break;
         }
     }
+    static_cast<ScCondFormatDlg*>(GetParent())->InvalidateRefData();
     RecalcAll();
     return 0;
 }
@@ -280,6 +294,7 @@ IMPL_LINK( ScCondFormatList, EntrySelectHdl, ScCondFrmtEntry*, pEntry )
     {
         itr->SetInactive();
     }
+    static_cast<ScCondFormatDlg*>(GetParent())->InvalidateRefData();
     pEntry->SetActive();
     RecalcAll();
     return 0;
@@ -309,6 +324,7 @@ ScCondFormatDlg::ScCondFormatDlg(SfxBindings* pB, SfxChildWindow* pCW, Window* p
     maPos(rPos),
     mpDoc(pDoc),
     mpFormat(pFormat),
+    mpLastEdit(NULL),
     meType(eType)
 {
     rtl::OUStringBuffer aTitle( GetText() );
@@ -323,6 +339,7 @@ ScCondFormatDlg::ScCondFormatDlg(SfxBindings* pB, SfxChildWindow* pCW, Window* p
     maBtnOk.SetClickHdl( LINK( this, ScCondFormatDlg, OkBtnHdl ) );
     maBtnCancel.SetClickHdl( LINK( this, ScCondFormatDlg, CancelBtnHdl ) );
     maEdRange.SetGetFocusHdl( LINK( this, ScCondFormatDlg, RangeGetFocusHdl ) );
+    maEdRange.SetLoseFocusHdl( LINK( this, ScCondFormatDlg, RangeLoseFocusHdl ) );
     FreeResource();
 
     maEdRange.SetText(aRangeString);
@@ -334,7 +351,11 @@ ScCondFormatDlg::~ScCondFormatDlg()
 
 void ScCondFormatDlg::SetActive()
 {
-    maEdRange.GrabFocus();
+    if(mpLastEdit)
+        mpLastEdit->GrabFocus();
+    else
+        maEdRange.GrabFocus();
+
     RefInputDone();
 }
 
@@ -355,14 +376,18 @@ sal_Bool ScCondFormatDlg::IsRefInputMode() const
 
 void ScCondFormatDlg::SetReference(const ScRange& rRef, ScDocument*)
 {
-    if( maEdRange.IsEnabled() )
+    formula::RefEdit* pEdit = mpLastEdit;
+    if(!mpLastEdit)
+        pEdit = &maEdRange;
+
+    if( pEdit->IsEnabled() )
     {
         if(rRef.aStart != rRef.aEnd)
-            RefInputStart(&maEdRange);
+            RefInputStart(pEdit);
 
         rtl::OUString aRefStr;
         rRef.Format( aRefStr, ABS_DREF, mpDoc, ScAddress::Details(mpDoc->GetAddressConvention(), 0, 0) );
-        maEdRange.SetRefString( aRefStr );
+        pEdit->SetRefString( aRefStr );
     }
 }
 
@@ -377,6 +402,11 @@ ScConditionalFormat* ScCondFormatDlg::GetConditionalFormat() const
         pFormat->AddRange(aRange);
 
     return pFormat;
+}
+
+void ScCondFormatDlg::InvalidateRefData()
+{
+    mpLastEdit = NULL;
 }
 
 IMPL_LINK( ScCondFormatDlg, EdRangeModifyHdl, Edit*, pEdit )
@@ -427,16 +457,21 @@ IMPL_LINK_NOARG( ScCondFormatDlg, OkBtnHdl )
 
 IMPL_LINK_NOARG( ScCondFormatDlg, CancelBtnHdl )
 {
-
     Close();
 
     return 0;
 }
 
-IMPL_LINK_NOARG( ScCondFormatDlg, RangeGetFocusHdl )
+IMPL_LINK( ScCondFormatDlg, RangeGetFocusHdl, formula::RefEdit*, pEdit )
 {
+    mpLastEdit = pEdit;
     return 0;
 }
 
+IMPL_LINK_NOARG( ScCondFormatDlg, RangeLoseFocusHdl )
+{
+    //mpLastEdit = NULL;
+    return 0;
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

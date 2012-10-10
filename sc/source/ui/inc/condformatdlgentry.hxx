@@ -9,6 +9,7 @@
 
 #include "colorscale.hxx"
 #include "conditio.hxx"
+#include <formula/funcutl.hxx>
 
 namespace condformat {
 
@@ -76,8 +77,8 @@ class ScConditionFrmtEntry : public ScCondFrmtEntry
 
     //cond format ui elements
     ListBox maLbCondType;
-    Edit maEdVal1;
-    Edit maEdVal2;
+    formula::RefEdit maEdVal1;
+    formula::RefEdit maEdVal2;
     FixedText maFtStyle;
     ListBox maLbStyle;
     SvxFontPrevWindow maWdPreview;
@@ -87,6 +88,7 @@ class ScConditionFrmtEntry : public ScCondFrmtEntry
     void Init();
     DECL_LINK( StyleSelectHdl, void* );
     DECL_LINK( ConditionTypeSelectHdl, void* );
+
 public:
     ScConditionFrmtEntry( Window* pParent, ScDocument* pDoc, const ScAddress& rPos, const ScCondFormatEntry* pFormatEntry = NULL );
 
@@ -102,12 +104,13 @@ class ScFormulaFrmtEntry : public ScCondFrmtEntry
     FixedText maFtStyle;
     ListBox maLbStyle;
     SvxFontPrevWindow maWdPreview;
-    Edit maEdFormula;
+    formula::RefEdit maEdFormula;
 
     ScFormatEntry* createFormulaEntry() const;
     void Init();
 
     DECL_LINK( StyleSelectHdl, void* );
+
 public:
     ScFormulaFrmtEntry( Window* pParent, ScDocument* PDoc, const ScAddress& rPos, const ScCondFormatEntry* pFormatEntry = NULL );
 

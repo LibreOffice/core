@@ -224,6 +224,10 @@ ScConditionFrmtEntry::ScConditionFrmtEntry( Window* pParent, ScDocument* pDoc, c
 void ScConditionFrmtEntry::Init()
 {
     maLbStyle.SetSeparatorPos(0);
+    maEdVal1.SetGetFocusHdl( LINK( GetParent()->GetParent(), ScCondFormatDlg, RangeGetFocusHdl ) );
+    maEdVal2.SetGetFocusHdl( LINK( GetParent()->GetParent(), ScCondFormatDlg, RangeGetFocusHdl ) );
+    maEdVal1.SetLoseFocusHdl( LINK( GetParent()->GetParent(), ScCondFormatDlg, RangeLoseFocusHdl ) );
+    maEdVal2.SetLoseFocusHdl( LINK( GetParent()->GetParent(), ScCondFormatDlg, RangeLoseFocusHdl ) );
 
     maEdVal1.SetStyle( maEdVal1.GetStyle() | WB_FORCECTRLBACKGROUND );
     maEdVal2.SetStyle( maEdVal2.GetStyle() | WB_FORCECTRLBACKGROUND );
@@ -405,6 +409,8 @@ ScFormulaFrmtEntry::ScFormulaFrmtEntry( Window* pParent, ScDocument* pDoc, const
 void ScFormulaFrmtEntry::Init()
 {
     maLbStyle.SetSeparatorPos(0);
+    maEdFormula.SetGetFocusHdl( LINK( GetParent()->GetParent(), ScCondFormatDlg, RangeGetFocusHdl ) );
+    maEdFormula.SetLoseFocusHdl( LINK( GetParent()->GetParent(), ScCondFormatDlg, RangeLoseFocusHdl ) );
 
     SfxStyleSheetIterator aStyleIter( mpDoc->GetStyleSheetPool(), SFX_STYLE_FAMILY_PARA );
     for ( SfxStyleSheetBase* pStyle = aStyleIter.First(); pStyle; pStyle = aStyleIter.Next() )
