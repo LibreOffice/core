@@ -358,9 +358,6 @@ private:
 
     bool                bIsEmbedded;                    // display/adjust Embedded area?
 
-    // no SetDirty for ScFormulaCell::CompileTokenArray but at the end of
-    // ScDocument::CompileAll[WithFormats], CopyScenario, CopyBlockFromClip
-    bool                bNoSetDirty;
     // no broadcast, construct no listener during insert from a different
     // Doc (per filter or the like ), not until CompileAll / CalcAfterLoad
     bool                bInsertingFromOtherDoc;
@@ -1550,8 +1547,6 @@ public:
     SC_DLLPUBLIC sal_uInt32      GetRangeOverflowType() const            { return nRangeOverflowType; }
 
     // for broadcasting/listening
-    void            SetNoSetDirty( bool bVal ) { bNoSetDirty = bVal; }
-    bool            GetNoSetDirty() const { return bNoSetDirty; }
     void            SetInsertingFromOtherDoc( bool bVal ) { bInsertingFromOtherDoc = bVal; }
     bool            IsInsertingFromOtherDoc() const { return bInsertingFromOtherDoc; }
     void            SetLoadingMedium( bool bVal );
