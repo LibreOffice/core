@@ -1123,7 +1123,8 @@ sal_Bool SVGFilter::implGenerateMetaData()
                         // We look for a slide transition.
                         // Transition properties are exported together with animations.
                         sal_Int16 nTransitionType(0);
-                        if( xPropSet->getPropertyValue( B2UCONST( "TransitionType" ) )  >>= nTransitionType )
+                        if( xPropSet->getPropertySetInfo()->hasPropertyByName( "TransitionType" ) &&
+                            (xPropSet->getPropertyValue( "TransitionType" ) >>= nTransitionType) )
                         {
                             sal_Int16 nTransitionSubType(0);
                             if( xPropSet->getPropertyValue( B2UCONST( "TransitionSubtype" ) )  >>= nTransitionSubType )
@@ -1187,7 +1188,7 @@ sal_Bool SVGFilter::implExportAnimations()
     {
         Reference< XPropertySet > xProps( mSelectedPages[i], UNO_QUERY );
 
-        if( xProps.is() )
+        if( xProps.is() && xProps->getPropertySetInfo()->hasPropertyByName( "TransitionType" ) )
         {
             sal_Int16 nTransition = 0;
             xProps->getPropertyValue(  B2UCONST( "TransitionType" ) )  >>= nTransition;
