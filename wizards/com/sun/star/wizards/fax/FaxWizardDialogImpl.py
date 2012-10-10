@@ -180,9 +180,9 @@ class FaxWizardDialogImpl(FaxWizardDialog):
                 self.resources.resFaxWizardDialog_title,
                 self.resources.resTemplateDescription)
             self.myFaxDoc.killEmptyUserFields()
-            self.myFaxDoc.keepLogoFrame = (self.chkUseLogo.State is not 0)
+            self.myFaxDoc.keepLogoFrame = bool(self.chkUseLogo.State)
             self.myFaxDoc.keepTypeFrame = \
-                (self.chkUseCommunicationType.State is not 0)
+                bool(self.chkUseCommunicationType.State)
             self.myFaxDoc.killEmptyFrames()
             self.bSaveSuccess = OfficeDocument.store(self.xMSF,
                 TextDocument.xTextDocument, self.sPath, "writer8_template")
@@ -601,36 +601,36 @@ class FaxWizardDialogImpl(FaxWizardDialog):
     def chkUseLogoItemChanged(self):
         if self.myFaxDoc.hasElement("Company Logo"):
             self.myFaxDoc.switchElement("Company Logo",
-                (self.chkUseLogo.State is not 0))
+                bool(self.chkUseLogo.State))
 
     def chkUseSubjectItemChanged(self):
         if self.myFaxDoc.hasElement("Subject Line"):
             self.myFaxDoc.switchElement("Subject Line",
-                (self.chkUseSubject.State is not 0))
+                bool(self.chkUseSubject.State))
 
     def chkUseDateItemChanged(self):
         if self.myFaxDoc.hasElement("Date"):
             self.myFaxDoc.switchElement("Date",
-                (self.chkUseDate.State is not 0))
+                bool(self.chkUseDate.State))
 
     def chkUseFooterItemChanged(self):
         try:
-            bFooterPossible = (self.chkUseFooter.State is not 0) \
+            bFooterPossible = bool(self.chkUseFooter.State) \
                 and bool(self.getControlProperty("chkUseFooter",
                     PropertyNames.PROPERTY_ENABLED))
-            if self.chkFooterNextPages.State is not 0:
+            if bool(self.chkFooterNextPages.State):
                 self.myFaxDoc.switchFooter("First Page", False,
-                    (self.chkFooterPageNumbers.State is not 0),
+                    bool(self.chkFooterPageNumbers.State),
                         self.txtFooter.Text)
                 self.myFaxDoc.switchFooter("Standard", bFooterPossible,
-                    (self.chkFooterPageNumbers.State is not 0),
+                    bool(self.chkFooterPageNumbers.State),
                     self.txtFooter.Text)
             else:
                 self.myFaxDoc.switchFooter("First Page", bFooterPossible,
-                    (self.chkFooterPageNumbers.State is not 0),
+                    bool(self.chkFooterPageNumbers.State),
                     self.txtFooter.Text)
                 self.myFaxDoc.switchFooter("Standard", bFooterPossible,
-                    (self.chkFooterPageNumbers.State is not 0),
+                    bool(self.chkFooterPageNumbers.State),
                     self.txtFooter.Text)
 
             #enable/disable roadmap item for footer page
@@ -649,43 +649,43 @@ class FaxWizardDialogImpl(FaxWizardDialog):
 
     def txtFooterTextChanged(self):
         self.myFaxDoc.switchFooter("First Page", True,
-                    (self.chkFooterPageNumbers.State is not 0),
+                    bool(self.chkFooterPageNumbers.State),
                     self.txtFooter.Text)
 
     def chkUseSalutationItemChanged(self):
         self.myFaxDoc.switchUserField("Salutation",
-            self.lstSalutation.Text, (self.chkUseSalutation.State is not 0))
+            self.lstSalutation.Text, bool(self.chkUseSalutation.State))
         self.setControlProperty("lstSalutation",
             PropertyNames.PROPERTY_ENABLED,
-            self.chkUseSalutation.State is not 0)
+            bool(self.chkUseSalutation.State))
 
     def lstSalutationItemChanged(self):
         self.myFaxDoc.switchUserField("Salutation",
-            self.lstSalutation.Text, (self.chkUseSalutation.State is not 0))
+            self.lstSalutation.Text, bool(self.chkUseSalutation.State))
 
     def chkUseCommunicationItemChanged(self):
         self.myFaxDoc.switchUserField("CommunicationType",
             self.lstCommunicationType.Text,
-            (self.chkUseCommunicationType.State is not 0))
+            bool(self.chkUseCommunicationType.State))
         self.setControlProperty("lstCommunicationType",
             PropertyNames.PROPERTY_ENABLED,
-            self.chkUseCommunicationType.State is not 0)
+            bool(self.chkUseCommunicationType.State))
 
     def lstCommunicationItemChanged(self):
         self.myFaxDoc.switchUserField("CommunicationType",
             self.lstCommunicationType.Text,
-            (self.chkUseCommunicationType.State is not 0))
+            bool(self.chkUseCommunicationType.State))
 
     def chkUseGreetingItemChanged(self):
         self.myFaxDoc.switchUserField("Greeting",
-            self.lstGreeting.Text, (self.chkUseGreeting.State is not 0))
+            self.lstGreeting.Text, bool(self.chkUseGreeting.State))
         self.setControlProperty("lstGreeting",
             PropertyNames.PROPERTY_ENABLED,
-            (self.chkUseGreeting.State is not 0))
+            bool(self.chkUseGreeting.State))
 
     def lstGreetingItemChanged(self):
         self.myFaxDoc.switchUserField("Greeting", self.lstGreeting.Text,
-            (self.chkUseGreeting.State is not 0))
+            bool(self.chkUseGreeting.State))
 
     def __setPossibleFooter(self, bState):
         self.setControlProperty("chkUseFooter",
