@@ -42,24 +42,12 @@ ScCondFrmtEntry::ScCondFrmtEntry(Window* pParent, ScDocument* pDoc, const ScAddr
 {
     SetControlBackground(GetSettings().GetStyleSettings().GetDialogColor());
 
-    /*
-    */
-    //disable entries for color formats
-
     maLbType.SetSelectHdl( LINK( pParent, ScCondFormatList, TypeListHdl ) );
-    Init();
     maClickHdl = LINK( pParent, ScCondFormatList, EntrySelectHdl );
 }
 
 ScCondFrmtEntry::~ScCondFrmtEntry()
 {
-}
-
-void ScCondFrmtEntry::Init()
-{
-    /*
-
-    */
 }
 
 long ScCondFrmtEntry::Notify( NotifyEvent& rNEvt )
@@ -103,7 +91,6 @@ void ScCondFrmtEntry::SetHeight()
         SetSizePixel(aSize);
     }
 }
-
 
 void ScCondFrmtEntry::Select()
 {

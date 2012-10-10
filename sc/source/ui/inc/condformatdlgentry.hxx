@@ -39,8 +39,6 @@ private:
     FixedText maFtCondNr;
     FixedText maFtCondition;
 
-    void Init();
-
     sal_Int32 mnIndex;
     rtl::OUString maStrCondition;
 protected:
