@@ -49,20 +49,15 @@ class TestTeleTubes: public CppUnit::TestFixture
 {
 public:
 
-    TestTeleTubes();
-    ~TestTeleTubes();
-    // This could happen in costructor wasn't there TestTeleTubes instance for each test:
-    void testContactList();
-    void testSession();
-    void testFailAlways();
+    virtual void setUp();
+    virtual void tearDown();
 
-    // Order is significant.
+    void testSession();
+
+    // There is only one method because the code in setUp
+    // and tearDown is expected to be executed only once.
     CPPUNIT_TEST_SUITE( TestTeleTubes );
-    CPPUNIT_TEST( testContactList );
     CPPUNIT_TEST( testSession );
-#if 0
-    CPPUNIT_TEST( testFailAlways );     // test failure displays SAL_LOG, uncomment for debugging
-#endif
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -70,8 +65,6 @@ class TestCollaboration;
 // static, not members, so they actually survive cppunit test iteration
 static TestCollaboration*   mpCollaboration1 = NULL;
 static TestCollaboration*   mpCollaboration2 = NULL;
-static TpAccount*           mpOffererAccount = NULL;
-static TpContact*           mpAccepterContact = NULL;
 //static bool                 mbFileSentSuccess = false;
 static bool                 mbPacketReceived = false;
 static OUString             maTestConfigIniURL;
@@ -97,7 +90,7 @@ static gboolean timed_out( void * )
     return FALSE;
 }
 
-TestTeleTubes::TestTeleTubes()
+void TestTeleTubes::setUp()
 {
     g_timeout_add_seconds (10, timed_out, NULL);
     maTestConfigIniURL = OUString( "file://" +
@@ -122,8 +115,16 @@ TestTeleTubes::TestTeleTubes()
     CPPUNIT_ASSERT( TeleManager::init( true));
 }
 
-void TestTeleTubes::testContactList()
+/* FIXME: do we need the possibility to pass function to Collaboration::SendFile() ?
+static void lcl_FileSent( bool success, void * )
 {
+    mbFileSentSuccess = success;
+}
+*/
+
+void TestTeleTubes::testSession()
+{
+    // First try to get account and contact
     AccountContactPairV pairs = TeleManager::getContacts();
     /* Both our accounts are meant to be signed in, and they both should be
      * capable of LibreOffice tubes because this test runs after we register
@@ -132,7 +133,9 @@ void TestTeleTubes::testContactList()
         "Make sure both your test accounts are signed in "
         "and are on each other's contact lists",
         pairs.size() > 0 );
-    CPPUNIT_ASSERT(!mpAccepterContact);
+
+    TpAccount* mpOffererAccount = NULL;
+    TpContact* mpAccepterContact = NULL;
 
     for (guint i = 0; i < pairs.size(); i++)
     {
@@ -160,24 +163,18 @@ void TestTeleTubes::testContactList()
         "Make sure both your test accounts are signed in "
         "and are on each other's contact lists",
         mpAccepterContact);
-}
 
-/* FIXME: do we need the possibility to pass function to Collaboration::SendFile() ?
-static void lcl_FileSent( bool success, void * )
-{
-    mbFileSentSuccess = success;
-}
-*/
-
-void TestTeleTubes::testSession()
-{
+    // Now we can start session
     TeleConference* pConference = NULL;
-    CPPUNIT_ASSERT( mpOffererAccount != 0);
-    CPPUNIT_ASSERT( mpAccepterContact != 0);
     pConference = TeleManager::startBuddySession( mpOffererAccount, mpAccepterContact);
     CPPUNIT_ASSERT( pConference != NULL);
     mpCollaboration1->SetConference( pConference );
     mpCollaboration1->SendFile( mpAccepterContact, maTestConfigIniURL );
+
+    g_object_unref(mpOffererAccount);
+    mpOffererAccount = NULL;
+    g_object_unref(mpAccepterContact);
+    mpAccepterContact = NULL;
 
     //while (!mbFileSentSuccess)
     //    g_main_context_iteration( NULL, TRUE);
@@ -196,26 +193,13 @@ void TestTeleTubes::testSession()
         g_main_context_iteration( NULL, TRUE);
 }
 
-TestTeleTubes::~TestTeleTubes()
+void TestTeleTubes::tearDown()
 {
-    if (mpOffererAccount) {
-        g_object_unref(mpOffererAccount);
-        mpOffererAccount = NULL;
-    }
-    if (mpAccepterContact) {
-        g_object_unref(mpAccepterContact);
-        mpAccepterContact = NULL;
-    }
     // Closes the TeleConference in destructor:
     delete mpCollaboration1;
     delete mpCollaboration2;
 
     TeleManager::finalize();
-}
-
-void TestTeleTubes::testFailAlways()
-{
-    CPPUNIT_ASSERT( false);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION( TestTeleTubes);
