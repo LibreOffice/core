@@ -130,7 +130,7 @@ $(eval $(call gb_Module_add_targets,connectivity,\
 ))
 endif
 
-else ifneq ($(filter-out ANDROID IOS,$(OS)),)
+else ifneq (,$(filter DESKTOP,$(BUILD_TYPE)))
 
 $(eval $(call gb_Module_add_targets,connectivity,\
 	Configuration_mork \
@@ -149,9 +149,13 @@ $(eval $(call gb_Module_add_subsequentcheck_targets,connectivity,\
 
 endif
 
+ifneq (,$(filter DESKTOP,$(BUILD_TYPE)))
+
 $(eval $(call gb_Module_add_check_targets,connectivity,\
 	CppunitTest_connectivity_mork \
 ))
+
+endif
 
 endif
 
