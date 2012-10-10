@@ -2933,36 +2933,38 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
             {
 
             SvXMLElementExport aElem( mrExport, XML_NAMESPACE_NONE, "desc", sal_False, sal_False );
-            ::rtl::OUString sType = ::rtl::OUString::valueOf( ( (sal_Int32) nType ) );
+            OUStringBuffer sType;
+            sType.append(static_cast<sal_Int32>(nType));
             if( pAction && ( nType == META_COMMENT_ACTION ) )
             {
-                sType += B2UCONST( ": " );
+                sType.append(": ");
                 const MetaCommentAction* pA = (const MetaCommentAction*) pAction;
                 rtl::OString sComment = pA->GetComment();
                 if( !sComment.isEmpty() )
                 {
                     OUString ssComment = OUString( sComment.getStr(), sComment.getLength(), RTL_TEXTENCODING_UTF8 );
-                    sType += ssComment;
+                    sType.append(ssComment);
                 }
                 if( sComment.equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("FIELD_SEQ_BEGIN")) )
                 {
-                    const sal_uInt8* pData = NULL;
-                    pData = pA->GetData();
+                    sal_uInt8 const*const pData = pA->GetData();
                     if( pData && ( pA->GetDataSize() ) )
                     {
                         sal_uInt16 sz = (sal_uInt16)( ( pA->GetDataSize() ) / 2 );
                         if( sz )
                         {
-                            String sData( ( (const sal_Unicode*) pData ), sz );
-                            OUString ssData = OUString::valueOf( (sal_Int32) pA->GetDataSize() );
-                            sType += B2UCONST( "; " );
-                            sType += sData;
+                            sType.append("; ");
+                            sType.append(
+                                reinterpret_cast<sal_Unicode const*>(pData),
+                                sz);
                         }
                     }
                 }
             }
-            if( !sType.isEmpty() )
-                mrExport.GetDocHandler()->characters( sType );
+            if (sType.getLength())
+            {
+                mrExport.GetDocHandler()->characters(sType.makeStringAndClear());
+            }
             }
             catch( ... )
             {
