@@ -1026,7 +1026,7 @@ sal_Bool SwCrsrShell::GetContentAtPos( const Point& rPt,
             if( pONd )
             {
                 rCntntAtPos.eCntntAtPos = SwContentAtPos::SW_OUTLINE;
-                rCntntAtPos.sStr = pONd->GetExpandTxt( 0, STRING_LEN, true );
+                rCntntAtPos.sStr = pONd->GetExpandTxt( 0, STRING_LEN, true, true );
                 bRet = sal_True;
             }
         }
