@@ -249,20 +249,30 @@ class QueryAnalyzer
 
             // Analyze query ...
             // Try to find base of it and safe it for faster access as enum value!
-            sal_Int32       nToken = 0;
-            ::rtl::OUString sParam    ;
-            ::rtl::OUString sBase  = sNewQuery.getToken( 0, SEPERATOR_QUERYPARAM, nToken );
+            sal_Int32 nToken = 0;
+            OUString sParam;
+            OUString sBase = sNewQuery.getToken( 0, SEPERATOR_QUERYPARAM, nToken );
 
-            if( sBase.equalsIgnoreAsciiCase( BASE_QUERY_ALL      ) == sal_True ) m_eQuery = E_ALL      ;  else
-            if( sBase.equalsIgnoreAsciiCase( BASE_QUERY_WRITER   ) == sal_True ) m_eQuery = E_WRITER   ;  else
-            if( sBase.equalsIgnoreAsciiCase( BASE_QUERY_WEB      ) == sal_True ) m_eQuery = E_WEB      ;  else
-            if( sBase.equalsIgnoreAsciiCase( BASE_QUERY_GLOBAL   ) == sal_True ) m_eQuery = E_GLOBAL   ;  else
-            if( sBase.equalsIgnoreAsciiCase( BASE_QUERY_CHART    ) == sal_True ) m_eQuery = E_CHART    ;  else
-            if( sBase.equalsIgnoreAsciiCase( BASE_QUERY_CALC     ) == sal_True ) m_eQuery = E_CALC     ;  else
-            if( sBase.equalsIgnoreAsciiCase( BASE_QUERY_IMPRESS  ) == sal_True ) m_eQuery = E_IMPRESS  ;  else
-            if( sBase.equalsIgnoreAsciiCase( BASE_QUERY_DRAW     ) == sal_True ) m_eQuery = E_DRAW     ;  else
-            if( sBase.equalsIgnoreAsciiCase( BASE_QUERY_MATH     ) == sal_True ) m_eQuery = E_MATH     ;  else
-            if( sBase.equalsIgnoreAsciiCase( BASE_QUERY_GRAPHICS ) == sal_True ) m_eQuery = E_GRAPHICS ;
+            if (sBase.equalsIgnoreAsciiCase(BASE_QUERY_ALL))
+                m_eQuery = E_ALL;
+            else if( sBase.equalsIgnoreAsciiCase(BASE_QUERY_WRITER))
+                m_eQuery = E_WRITER;
+            else if( sBase.equalsIgnoreAsciiCase(BASE_QUERY_WEB))
+                m_eQuery = E_WEB;
+            else if( sBase.equalsIgnoreAsciiCase(BASE_QUERY_GLOBAL))
+                m_eQuery = E_GLOBAL;
+            else if( sBase.equalsIgnoreAsciiCase(BASE_QUERY_CHART))
+                m_eQuery = E_CHART;
+            else if( sBase.equalsIgnoreAsciiCase(BASE_QUERY_CALC))
+                m_eQuery = E_CALC;
+            else if( sBase.equalsIgnoreAsciiCase(BASE_QUERY_IMPRESS))
+                m_eQuery = E_IMPRESS;
+            else if( sBase.equalsIgnoreAsciiCase(BASE_QUERY_DRAW))
+                m_eQuery = E_DRAW;
+            else if( sBase.equalsIgnoreAsciiCase(BASE_QUERY_MATH))
+                m_eQuery = E_MATH;
+            else if( sBase.equalsIgnoreAsciiCase(BASE_QUERY_GRAPHICS))
+                m_eQuery = E_GRAPHICS;
 
             // Try to get additional parameters ...
             while( nToken >= 0 )
@@ -296,7 +306,7 @@ class QueryAnalyzer
                 if( sParam.compareTo( QUERYPARAM_IFLAGS, QUERYPARAM_IFLAGS.getLength() ) == 0 )
                 {
                     sal_Int32       nSubToken  = 0;
-                    ::rtl::OUString sParamName = sParam.getToken( 0, SEPERATOR_QUERYPARAMVALUE, nSubToken );
+                    sParam.getToken( 0, SEPERATOR_QUERYPARAMVALUE, nSubToken );
                     if( nSubToken > 0 )
                     {
                         m_nIFlags = sParam.getToken( 0, SEPERATOR_QUERYPARAMVALUE, nSubToken ).toInt32();
@@ -307,7 +317,7 @@ class QueryAnalyzer
                 if( sParam.compareTo( QUERYPARAM_EFLAGS, QUERYPARAM_EFLAGS.getLength() ) == 0 )
                 {
                     sal_Int32       nSubToken  = 0;
-                    ::rtl::OUString sParamName = sParam.getToken( 0, SEPERATOR_QUERYPARAMVALUE, nSubToken );
+                    sParam.getToken( 0, SEPERATOR_QUERYPARAMVALUE, nSubToken );
                     if( nSubToken > 0 )
                     {
                         m_nEFlags = sParam.getToken( 0, SEPERATOR_QUERYPARAMVALUE, nSubToken ).toInt32();
@@ -318,7 +328,7 @@ class QueryAnalyzer
                 if( sParam.compareTo( QUERYPARAM_SORT_PROP, QUERYPARAM_SORT_PROP.getLength() ) == 0 )
                 {
                     sal_Int32       nSubToken  = 0;
-                    ::rtl::OUString sParamName = sParam.getToken( 0, SEPERATOR_QUERYPARAMVALUE, nSubToken );
+                    sParam.getToken( 0, SEPERATOR_QUERYPARAMVALUE, nSubToken );
                     if( nSubToken > 0 )
                     {
                         ::rtl::OUString sParamValue = sParam.getToken( 0, SEPERATOR_QUERYPARAMVALUE, nSubToken );
