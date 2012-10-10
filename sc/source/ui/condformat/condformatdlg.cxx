@@ -301,6 +301,9 @@ IMPL_LINK_NOARG( ScCondFormatList, RemoveBtnHdl )
 
 IMPL_LINK( ScCondFormatList, EntrySelectHdl, ScCondFrmtEntry*, pEntry )
 {
+    if(pEntry->IsSelected())
+        return 0;
+
     for(EntryContainer::iterator itr = maEntries.begin(); itr != maEntries.end(); ++itr)
     {
         itr->SetInactive();
