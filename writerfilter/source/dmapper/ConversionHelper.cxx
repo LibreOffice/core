@@ -147,6 +147,7 @@ void MakeBorderLine( sal_Int32 nLineThickness,   sal_Int32 nLineType,
     rToFill.Color = nLineColor;
 }
 
+namespace {
 void lcl_SwapQuotesInField(OUString &rFmt)
 {
     //Swap unescaped " and ' with ' and "
@@ -171,6 +172,7 @@ bool lcl_IsNotAM(OUString& rFmt, sal_Int32 nPos)
             (rFmt[nPos+1] != 'm')
             )
         );
+}
 }
 
 OUString ConvertMSFormatStringToSO(
