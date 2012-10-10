@@ -38,7 +38,6 @@
 #include <ooo/vba/excel/XlPlacement.hpp>
 #include <rtl/ustrbuf.hxx>
 #include <filter/msfilter/msvbahelper.hxx>
-#include <oox/helper/helper.hxx>
 #include <svx/unoshape.hxx>
 #include "vbafont.hxx"
 #include "drwlayer.hxx"

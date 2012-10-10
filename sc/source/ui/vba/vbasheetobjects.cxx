@@ -39,7 +39,6 @@
 #include <com/sun/star/form/XForm.hpp>
 #include <com/sun/star/form/XFormComponent.hpp>
 #include <com/sun/star/form/XFormsSupplier.hpp>
-#include <oox/helper/helper.hxx>
 #include "vbasheetobject.hxx"
 
 using ::rtl::OUString;
