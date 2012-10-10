@@ -97,7 +97,7 @@ class SvInsertPlugInDialog : public InsertObjectDialog_Impl
 private:
     Edit* m_pEdFileurl;
     PushButton* m_pBtnFileurl;
-    VCLMultiLineEdit* m_pEdPluginsOptions;
+    VclMultiLineEdit* m_pEdPluginsOptions;
     INetURLObject* m_pURL;
     OUString m_aCommands;
 

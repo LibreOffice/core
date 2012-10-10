@@ -179,6 +179,14 @@ VclBuilder::VclBuilder(Window *pParent, OUString sUIDir, OUString sUIFile, OStri
         delete_by_name(*aI);
     }
 
+    //Remove ScrollWindow parent widgets whose children in vcl implement scrolling
+    //internally.
+    for (std::set<Window*>::iterator aI = m_pParserState->m_aRedundantParentWidgets.begin(),
+        aEnd = m_pParserState->m_aRedundantParentWidgets.end(); aI != aEnd; ++aI)
+    {
+        delete_by_window(*aI);
+    }
+
     //drop maps, etc. that we don't need again
     delete m_pParserState;
 }
@@ -721,7 +729,7 @@ Window *VclBuilder::makeObject(Window *pParent, const OString &name, const OStri
     else if (name == "GtkTextView")
     {
         WinBits nWinStyle = WB_LEFT | WB_BORDER;
-        //VCLMultiLineEdit manage their own scrolling,
+        //VclMultiLineEdit manage their own scrolling,
         //so if it appears as a child of a scrolling window
         //shoehorn that scrolling settings to this
         //widget and remove the parent
@@ -739,9 +747,9 @@ Window *VclBuilder::makeObject(Window *pParent, const OString &name, const OStri
             sal_Int32 nHeightReq = pScrollParent->get_height_request();
             rMap[OString("height-request")] = OString::valueOf(nHeightReq);
 
-            delete_by_window(pScrollParent);
+            m_pParserState->m_aRedundantParentWidgets.insert(pScrollParent);
         }
-        pWindow = new VCLMultiLineEdit(pParent, nWinStyle);
+        pWindow = new VclMultiLineEdit(pParent, nWinStyle);
     }
     else
     {

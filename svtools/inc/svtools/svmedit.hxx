@@ -37,7 +37,7 @@
 
 
 
-class SVT_DLLPUBLIC MultiLineEdit : public VCLMultiLineEdit
+class SVT_DLLPUBLIC MultiLineEdit : public VclMultiLineEdit
 {
 public:
                     MultiLineEdit( Window* pParent, WinBits nWinStyle = WB_LEFT | WB_BORDER );

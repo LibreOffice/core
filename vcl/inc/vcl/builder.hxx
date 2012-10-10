@@ -14,6 +14,7 @@
 #include <vcl/window.hxx>
 #include <xmlreader/xmlreader.hxx>
 #include <map>
+#include <set>
 #include <stack>
 #include <vector>
 
@@ -112,6 +113,7 @@ private:
         std::vector<ButtonImageWidgetMap> m_aButtonImageWidgetMaps;
         StockMap m_aStockMap;
         Translations m_aTranslations;
+        std::set<Window*> m_aRedundantParentWidgets;
     };
 
     OString getTranslation(const OString &rId, const OString &rProperty) const;

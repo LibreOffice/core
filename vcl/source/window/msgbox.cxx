@@ -398,7 +398,7 @@ void MessBox::ImplPosControls()
         mpCheckBox->Show();
     }
 
-    mpVCLMultiLineEdit = new VCLMultiLineEdit( this, nWinStyle );
+    mpVCLMultiLineEdit = new VclMultiLineEdit( this, nWinStyle );
     mpVCLMultiLineEdit->SetText( aMessText );
     mpVCLMultiLineEdit->SetPosSizePixel( aTextPos, aMEditSize );
     mpVCLMultiLineEdit->Show();

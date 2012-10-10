@@ -92,7 +92,7 @@ public:
 class ImpSvMEdit : public SfxListener
 {
 private:
-    VCLMultiLineEdit*   pSvVCLMultiLineEdit;
+    VclMultiLineEdit*   pSvVCLMultiLineEdit;
 
     TextWindow*         mpTextWindow;
     ScrollBar*          mpHScrollBar;
@@ -112,7 +112,7 @@ protected:
     DECL_LINK(          ScrollHdl, ScrollBar* );
 
 public:
-                ImpSvMEdit( VCLMultiLineEdit* pSvVCLMultiLineEdit, WinBits nWinStyle );
+                ImpSvMEdit( VclMultiLineEdit* pSvVCLMultiLineEdit, WinBits nWinStyle );
                 ~ImpSvMEdit();
 
     void        SetModified( sal_Bool bMod );
@@ -162,7 +162,7 @@ public:
     ScrollBar*  GetVScrollBar() { return mpVScrollBar; }
 };
 
-ImpSvMEdit::ImpSvMEdit( VCLMultiLineEdit* pEdt, WinBits nWinStyle )
+ImpSvMEdit::ImpSvMEdit( VclMultiLineEdit* pEdt, WinBits nWinStyle )
     :mpHScrollBar(NULL)
     ,mpVScrollBar(NULL)
     ,mpScrollBox(NULL)
@@ -264,7 +264,7 @@ void ImpSvMEdit::InitFromStyle( WinBits nWinStyle )
     else
     {
         mpTextWindow->SetIgnoreTab( sal_False );
-        // #103667# VCLMultiLineEdit has the flag, but focusable window also needs this flag
+        // #103667# VclMultiLineEdit has the flag, but focusable window also needs this flag
         WinBits nStyle = mpTextWindow->GetStyle();
         nStyle |= WINDOW_DLGCTRL_MOD1TAB;
         mpTextWindow->SetStyle( nStyle );
@@ -938,7 +938,7 @@ void TextWindow::LoseFocus()
         mpExtTextView->SetPaintSelection( sal_False );
 }
 
-VCLMultiLineEdit::VCLMultiLineEdit( Window* pParent, WinBits nWinStyle )
+VclMultiLineEdit::VclMultiLineEdit( Window* pParent, WinBits nWinStyle )
     : Edit( pParent, nWinStyle )
 {
     SetType( WINDOW_MULTILINEEDIT );
@@ -950,7 +950,7 @@ VCLMultiLineEdit::VCLMultiLineEdit( Window* pParent, WinBits nWinStyle )
     SetStyle( ImplInitStyle( nWinStyle ) );
 }
 
-VCLMultiLineEdit::VCLMultiLineEdit( Window* pParent, const ResId& rResId )
+VclMultiLineEdit::VclMultiLineEdit( Window* pParent, const ResId& rResId )
     : Edit( pParent, rResId.SetRT( RSC_MULTILINEEDIT ) )
 {
     SetType( WINDOW_MULTILINEEDIT );
@@ -974,13 +974,13 @@ VCLMultiLineEdit::VCLMultiLineEdit( Window* pParent, const ResId& rResId )
     // Base Edit ctor could call Show already, but that would cause problems
     // with accessibility, as Show might (indirectly) trigger a call to virtual
     // GetComponentInterface, which is the Edit's base version instead of the
-    // VCLMultiLineEdit's version while in the base Edit ctor:
+    // VclMultiLineEdit's version while in the base Edit ctor:
     if ((GetStyle() & WB_HIDE) == 0)
         Show();
 
 }
 
-VCLMultiLineEdit::~VCLMultiLineEdit()
+VclMultiLineEdit::~VclMultiLineEdit()
 {
     {
         ::std::auto_ptr< ImpSvMEdit > pDelete( pImpSvMEdit );
@@ -989,7 +989,7 @@ VCLMultiLineEdit::~VCLMultiLineEdit()
     delete pUpdateDataTimer;
 }
 
-WinBits VCLMultiLineEdit::ImplInitStyle( WinBits nStyle )
+WinBits VclMultiLineEdit::ImplInitStyle( WinBits nStyle )
 {
     if ( !(nStyle & WB_NOTABSTOP) )
         nStyle |= WB_TABSTOP;
@@ -1004,7 +1004,7 @@ WinBits VCLMultiLineEdit::ImplInitStyle( WinBits nStyle )
 }
 
 
-void VCLMultiLineEdit::ImplInitSettings( sal_Bool /*bFont*/, sal_Bool /*bForeground*/, sal_Bool bBackground )
+void VclMultiLineEdit::ImplInitSettings( sal_Bool /*bFont*/, sal_Bool /*bForeground*/, sal_Bool bBackground )
 {
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
 
@@ -1048,14 +1048,14 @@ void VCLMultiLineEdit::ImplInitSettings( sal_Bool /*bFont*/, sal_Bool /*bForegro
                 pImpSvMEdit->GetTextWindow()->SetBackground( GetControlBackground() );
             else
                 pImpSvMEdit->GetTextWindow()->SetBackground( rStyleSettings.GetFieldColor() );
-            // Auch am VCLMultiLineEdit einstellen, weil die TextComponent
+            // Auch am VclMultiLineEdit einstellen, weil die TextComponent
             // ggf. die Scrollbars hidet.
             SetBackground( pImpSvMEdit->GetTextWindow()->GetBackground() );
         }
     }
 }
 
-void VCLMultiLineEdit::Modify()
+void VclMultiLineEdit::Modify()
 {
     aModifyHdlLink.Call( this );
 
@@ -1065,33 +1065,33 @@ void VCLMultiLineEdit::Modify()
         pUpdateDataTimer->Start();
 }
 
-IMPL_LINK_NOARG(VCLMultiLineEdit, ImpUpdateDataHdl)
+IMPL_LINK_NOARG(VclMultiLineEdit, ImpUpdateDataHdl)
 {
     UpdateData();
     return 0;
 }
 
-void VCLMultiLineEdit::UpdateData()
+void VclMultiLineEdit::UpdateData()
 {
     aUpdateDataHdlLink.Call( this );
 }
 
-void VCLMultiLineEdit::SetModifyFlag()
+void VclMultiLineEdit::SetModifyFlag()
 {
     pImpSvMEdit->SetModified( sal_True );
 }
 
-void VCLMultiLineEdit::ClearModifyFlag()
+void VclMultiLineEdit::ClearModifyFlag()
 {
     pImpSvMEdit->SetModified( sal_False );
 }
 
-sal_Bool VCLMultiLineEdit::IsModified() const
+sal_Bool VclMultiLineEdit::IsModified() const
 {
     return pImpSvMEdit->IsModified();
 }
 
-void VCLMultiLineEdit::EnableUpdateData( sal_uLong nTimeout )
+void VclMultiLineEdit::EnableUpdateData( sal_uLong nTimeout )
 {
     if ( !nTimeout )
         DisableUpdateData();
@@ -1100,13 +1100,13 @@ void VCLMultiLineEdit::EnableUpdateData( sal_uLong nTimeout )
         if ( !pUpdateDataTimer )
         {
             pUpdateDataTimer = new Timer;
-            pUpdateDataTimer->SetTimeoutHdl( LINK( this, VCLMultiLineEdit, ImpUpdateDataHdl ) );
+            pUpdateDataTimer->SetTimeoutHdl( LINK( this, VclMultiLineEdit, ImpUpdateDataHdl ) );
         }
         pUpdateDataTimer->SetTimeout( nTimeout );
     }
 }
 
-void VCLMultiLineEdit::SetReadOnly( sal_Bool bReadOnly )
+void VclMultiLineEdit::SetReadOnly( sal_Bool bReadOnly )
 {
     pImpSvMEdit->SetReadOnly( bReadOnly );
     Edit::SetReadOnly( bReadOnly );
@@ -1120,82 +1120,82 @@ void VCLMultiLineEdit::SetReadOnly( sal_Bool bReadOnly )
     SetStyle( nStyle );
 }
 
-sal_Bool VCLMultiLineEdit::IsReadOnly() const
+sal_Bool VclMultiLineEdit::IsReadOnly() const
 {
     return pImpSvMEdit->IsReadOnly();
 }
 
-void VCLMultiLineEdit::SetMaxTextLen( xub_StrLen nMaxLen )
+void VclMultiLineEdit::SetMaxTextLen( xub_StrLen nMaxLen )
 {
     pImpSvMEdit->SetMaxTextLen( nMaxLen );
 }
 
-xub_StrLen VCLMultiLineEdit::GetMaxTextLen() const
+xub_StrLen VclMultiLineEdit::GetMaxTextLen() const
 {
     return pImpSvMEdit->GetMaxTextLen();
 }
 
-void VCLMultiLineEdit::ReplaceSelected( const String& rStr )
+void VclMultiLineEdit::ReplaceSelected( const String& rStr )
 {
     pImpSvMEdit->InsertText( rStr );
 }
 
-void VCLMultiLineEdit::DeleteSelected()
+void VclMultiLineEdit::DeleteSelected()
 {
     pImpSvMEdit->InsertText( String() );
 }
 
-String VCLMultiLineEdit::GetSelected() const
+String VclMultiLineEdit::GetSelected() const
 {
     return pImpSvMEdit->GetSelected();
 }
 
-String VCLMultiLineEdit::GetSelected( LineEnd aSeparator ) const
+String VclMultiLineEdit::GetSelected( LineEnd aSeparator ) const
 {
     return pImpSvMEdit->GetSelected( aSeparator );
 }
 
-void VCLMultiLineEdit::Cut()
+void VclMultiLineEdit::Cut()
 {
     pImpSvMEdit->Cut();
 }
 
-void VCLMultiLineEdit::Copy()
+void VclMultiLineEdit::Copy()
 {
     pImpSvMEdit->Copy();
 }
 
-void VCLMultiLineEdit::Paste()
+void VclMultiLineEdit::Paste()
 {
     pImpSvMEdit->Paste();
 }
 
-void VCLMultiLineEdit::SetText( const String& rStr )
+void VclMultiLineEdit::SetText( const String& rStr )
 {
     pImpSvMEdit->SetText( rStr );
 }
 
-String VCLMultiLineEdit::GetText() const
+String VclMultiLineEdit::GetText() const
 {
     return pImpSvMEdit->GetText();
 }
 
-String VCLMultiLineEdit::GetText( LineEnd aSeparator ) const
+String VclMultiLineEdit::GetText( LineEnd aSeparator ) const
 {
     return pImpSvMEdit->GetText( aSeparator );
 }
 
-String VCLMultiLineEdit::GetTextLines(  LineEnd aSeparator ) const
+String VclMultiLineEdit::GetTextLines(  LineEnd aSeparator ) const
 {
     return pImpSvMEdit->GetTextLines( aSeparator );
 }
 
-void VCLMultiLineEdit::Resize()
+void VclMultiLineEdit::Resize()
 {
     pImpSvMEdit->Resize();
 }
 
-void VCLMultiLineEdit::GetFocus()
+void VclMultiLineEdit::GetFocus()
 {
     if ( !pImpSvMEdit )  // might be called from within the dtor, when pImpSvMEdit == NULL is a valid state
         return;
@@ -1204,17 +1204,17 @@ void VCLMultiLineEdit::GetFocus()
     pImpSvMEdit->GetFocus();
 }
 
-void VCLMultiLineEdit::SetSelection( const Selection& rSelection )
+void VclMultiLineEdit::SetSelection( const Selection& rSelection )
 {
     pImpSvMEdit->SetSelection( rSelection );
 }
 
-const Selection& VCLMultiLineEdit::GetSelection() const
+const Selection& VclMultiLineEdit::GetSelection() const
 {
     return pImpSvMEdit->GetSelection();
 }
 
-Size VCLMultiLineEdit::CalcMinimumSize() const
+Size VclMultiLineEdit::CalcMinimumSize() const
 {
     Size aSz = pImpSvMEdit->CalcMinimumSize();
 
@@ -1226,7 +1226,7 @@ Size VCLMultiLineEdit::CalcMinimumSize() const
     return aSz;
 }
 
-Size VCLMultiLineEdit::CalcAdjustedSize( const Size& rPrefSize ) const
+Size VclMultiLineEdit::CalcAdjustedSize( const Size& rPrefSize ) const
 {
     Size aSz = rPrefSize;
     sal_Int32 nLeft, nTop, nRight, nBottom;
@@ -1246,7 +1246,7 @@ Size VCLMultiLineEdit::CalcAdjustedSize( const Size& rPrefSize ) const
     return aSz;
 }
 
-Size VCLMultiLineEdit::CalcSize( sal_uInt16 nColumns, sal_uInt16 nLines ) const
+Size VclMultiLineEdit::CalcSize( sal_uInt16 nColumns, sal_uInt16 nLines ) const
 {
     Size aSz = pImpSvMEdit->CalcSize( nColumns, nLines );
 
@@ -1257,12 +1257,12 @@ Size VCLMultiLineEdit::CalcSize( sal_uInt16 nColumns, sal_uInt16 nLines ) const
     return aSz;
 }
 
-void VCLMultiLineEdit::GetMaxVisColumnsAndLines( sal_uInt16& rnCols, sal_uInt16& rnLines ) const
+void VclMultiLineEdit::GetMaxVisColumnsAndLines( sal_uInt16& rnCols, sal_uInt16& rnLines ) const
 {
     pImpSvMEdit->GetMaxVisColumnsAndLines( rnCols, rnLines );
 }
 
-void VCLMultiLineEdit::StateChanged( StateChangedType nType )
+void VclMultiLineEdit::StateChanged( StateChangedType nType )
 {
     if( nType == STATE_CHANGE_ENABLE )
     {
@@ -1315,7 +1315,7 @@ void VCLMultiLineEdit::StateChanged( StateChangedType nType )
     Control::StateChanged( nType );
 }
 
-void VCLMultiLineEdit::DataChanged( const DataChangedEvent& rDCEvt )
+void VclMultiLineEdit::DataChanged( const DataChangedEvent& rDCEvt )
 {
     if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
          (rDCEvt.GetFlags() & SETTINGS_STYLE) )
@@ -1328,7 +1328,7 @@ void VCLMultiLineEdit::DataChanged( const DataChangedEvent& rDCEvt )
         Control::DataChanged( rDCEvt );
 }
 
-void VCLMultiLineEdit::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags )
+void VclMultiLineEdit::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags )
 {
     ImplInitSettings( sal_True, sal_True, sal_True );
 
@@ -1408,7 +1408,7 @@ void VCLMultiLineEdit::Draw( OutputDevice* pDev, const Point& rPos, const Size& 
     pDev->Pop();
 }
 
-long VCLMultiLineEdit::Notify( NotifyEvent& rNEvt )
+long VclMultiLineEdit::Notify( NotifyEvent& rNEvt )
 {
     long nDone = 0;
     if( rNEvt.GetType() == EVENT_COMMAND )
@@ -1418,7 +1418,7 @@ long VCLMultiLineEdit::Notify( NotifyEvent& rNEvt )
     return nDone ? nDone : Edit::Notify( rNEvt );
 }
 
-long VCLMultiLineEdit::PreNotify( NotifyEvent& rNEvt )
+long VclMultiLineEdit::PreNotify( NotifyEvent& rNEvt )
 {
     long nDone = 0;
 
@@ -1514,33 +1514,33 @@ long VCLMultiLineEdit::PreNotify( NotifyEvent& rNEvt )
 //
 // Internas fuer abgeleitete Klassen, z.B. TextComponent
 
-ExtTextEngine* VCLMultiLineEdit::GetTextEngine() const
+ExtTextEngine* VclMultiLineEdit::GetTextEngine() const
 {
     return pImpSvMEdit->GetTextWindow()->GetTextEngine();
 }
 
-ExtTextView* VCLMultiLineEdit::GetTextView() const
+ExtTextView* VclMultiLineEdit::GetTextView() const
 {
     return pImpSvMEdit->GetTextWindow()->GetTextView();
 }
 
-ScrollBar* VCLMultiLineEdit::GetVScrollBar() const
+ScrollBar* VclMultiLineEdit::GetVScrollBar() const
 {
     return pImpSvMEdit->GetVScrollBar();
 }
 
-void VCLMultiLineEdit::EnableFocusSelectionHide( sal_Bool bHide )
+void VclMultiLineEdit::EnableFocusSelectionHide( sal_Bool bHide )
 {
     pImpSvMEdit->GetTextWindow()->SetAutoFocusHide( bHide );
 }
 
-void VCLMultiLineEdit::SetLeftMargin( sal_uInt16 n )
+void VclMultiLineEdit::SetLeftMargin( sal_uInt16 n )
 {
     if ( GetTextEngine() )
         GetTextEngine()->SetLeftMargin( n );
 }
 
-void VCLMultiLineEdit::SetRightToLeft( sal_Bool bRightToLeft )
+void VclMultiLineEdit::SetRightToLeft( sal_Bool bRightToLeft )
 {
     if ( GetTextEngine() )
     {
@@ -1549,7 +1549,7 @@ void VCLMultiLineEdit::SetRightToLeft( sal_Bool bRightToLeft )
     }
 }
 
-sal_Bool VCLMultiLineEdit::IsRightToLeft() const
+sal_Bool VclMultiLineEdit::IsRightToLeft() const
 {
     sal_Bool bRightToLeft = sal_False;
 
@@ -1559,12 +1559,12 @@ sal_Bool VCLMultiLineEdit::IsRightToLeft() const
     return bRightToLeft;
 }
 
-void VCLMultiLineEdit::DisableSelectionOnFocus()
+void VclMultiLineEdit::DisableSelectionOnFocus()
 {
     pImpSvMEdit->GetTextWindow()->DisableSelectionOnFocus();
 }
 
-void VCLMultiLineEdit::SetTextSelectable( sal_Bool bTextSelectable )
+void VclMultiLineEdit::SetTextSelectable( sal_Bool bTextSelectable )
 {
     pImpSvMEdit->GetTextWindow()->SetTextSelectable( bTextSelectable );
 }

@@ -34,11 +34,11 @@
 
 
 MultiLineEdit::MultiLineEdit( Window* pParent, WinBits nWinStyle )
-    : VCLMultiLineEdit( pParent,nWinStyle )
+    : VclMultiLineEdit( pParent,nWinStyle )
 {
 }
 MultiLineEdit::MultiLineEdit( Window* pParent, const ResId& rResId )
-    : VCLMultiLineEdit( pParent,rResId )
+    : VclMultiLineEdit( pParent,rResId )
 {
 }
 
@@ -49,7 +49,7 @@ namespace css = ::com::sun::star;
 MultiLineEdit::GetComponentInterface(sal_Bool bCreate)
 {
     ::css::uno::Reference< ::css::awt::XWindowPeer > xPeer(
-        VCLMultiLineEdit::GetComponentInterface(false));
+        VclMultiLineEdit::GetComponentInterface(false));
     if (!xPeer.is() && bCreate)
     {
         ::std::auto_ptr< VCLXMultiLineEdit > xVCLMEdit(new VCLXMultiLineEdit());
