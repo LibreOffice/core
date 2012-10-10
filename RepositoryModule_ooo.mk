@@ -143,7 +143,6 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
     salhelper \
     sane \
     sax \
-	$(call gb_Helper_optional,SAXON,saxon) \
     sc \
     scaddins \
     sccomp \

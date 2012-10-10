@@ -2268,23 +2268,6 @@ endef
 
 endif # SYSTEM_HSQLDB
 
-ifeq ($(SYSTEM_SAXON),YES)
-
-define gb_Jar__use_saxon
-$(call gb_Jar_use_system_jar,$(1),$(SAXON_JAR))
-endef
-
-else # !SYSTEM_SAXON
-
-$(eval $(call gb_Helper_register_jars,OOO,\
-	saxon9 \
-))
-
-define gb_Jar__use_saxon
-$(call gb_Jar_use_jar,$(1),saxon9)
-endef
-
-endif # SYSTEM_SAXON
 
 ifeq ($(SYSTEM_BSH),YES)
 

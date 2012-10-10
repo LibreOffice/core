@@ -142,7 +142,6 @@ sal\
 salhelper\
 sane\
 sax\
-saxon\
 sc\
 scaddins\
 sccomp\
@@ -245,7 +244,6 @@ postprocess\
 python\
 redland\
 setup_native\
-stax\
 stlport\
 sysui\
 xpdf\
