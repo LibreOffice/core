@@ -16,49 +16,13 @@
 
 class PoOfstream;
 class PoIfstream;
-
-class GenPoEntry
-{
-private:
-
-    OString    m_sExtractCom;
-    OString    m_sReference;
-    OString    m_sContext;
-    OString    m_sUnTransStr;
-    OString    m_sTransStr;
-    bool       m_bFuzzy;
-    bool       m_bNull;
-
-public:
-
-                        GenPoEntry();
-    virtual             ~GenPoEntry();
-                        //Default copy constructor and copy operator work well
-
-    virtual OString     getExtractCom() const   { return m_sExtractCom; }
-    virtual OString     getReference() const    { return m_sReference; }
-    virtual OString     getContext() const      { return m_sContext; }
-    virtual OString     getUnTransStr() const   { return m_sUnTransStr; }
-    virtual OString     getTransStr() const     { return m_sTransStr; }
-    virtual bool        getFuzzy() const        { return m_bFuzzy; }
-    virtual bool        isNull() const          { return m_bNull; }
-
-    virtual void        setExtractCom(const OString& rExtractCom);
-    virtual void        setReference(const OString& rReference);
-    virtual void        setContext(const OString& rContext);
-    virtual void        setUnTransStr(const OString& rUnTransStr);
-    virtual void        setTransStr(const OString& rTransStr);
-    virtual void        setFuzzy(const bool bFuzzy);
-
-    virtual void        writeToFile(std::ofstream& rOFStream) const;
-    virtual void        readFromFile(std::ifstream& rIFStream);
-};
+class GenPoEntry;
 
 class PoEntry
 {
 private:
 
-    GenPoEntry m_aGenPo;
+    GenPoEntry* m_pGenPo;
     bool m_bIsInitialized;
 
 public:
@@ -76,7 +40,9 @@ public:
                     PoEntry(const OString& rSDFLine,
                             const TYPE eType = TTEXT);
                     ~PoEntry();
-                    //Default copy constructor and copy operator work well
+
+                    PoEntry( const PoEntry& rPo );
+    PoEntry&        operator=( const PoEntry& rPo );
 
     OString         getSourceFile() const;
     OString         getGroupId() const;
@@ -95,11 +61,11 @@ public:
 
 };
 
-class PoHeader
+class PoHeader: private boost::noncopyable
 {
 private:
 
-    GenPoEntry m_aGenPo;
+    GenPoEntry* m_pGenPo;
     bool m_bIsInitialized;
 
 public:
@@ -113,7 +79,6 @@ public:
                     PoHeader( const OString& rExtSrc );
                     PoHeader( std::ifstream& rOldPo );
                     ~PoHeader();
-                    //Default copy constructor and copy operator work well
 
     OString         getLanguage() const;
 };

@@ -29,6 +29,43 @@
 
 //Class GenPoEntry
 
+class GenPoEntry
+{
+private:
+
+    OString    m_sExtractCom;
+    OString    m_sReference;
+    OString    m_sContext;
+    OString    m_sUnTransStr;
+    OString    m_sTransStr;
+    bool       m_bFuzzy;
+    bool       m_bNull;
+
+public:
+
+                        GenPoEntry();
+    virtual             ~GenPoEntry();
+                        //Default copy constructor and copy operator work well
+
+    virtual OString     getExtractCom() const   { return m_sExtractCom; }
+    virtual OString     getReference() const    { return m_sReference; }
+    virtual OString     getContext() const      { return m_sContext; }
+    virtual OString     getUnTransStr() const   { return m_sUnTransStr; }
+    virtual OString     getTransStr() const     { return m_sTransStr; }
+    virtual bool        getFuzzy() const        { return m_bFuzzy; }
+    virtual bool        isNull() const          { return m_bNull; }
+
+    virtual void        setExtractCom(const OString& rExtractCom);
+    virtual void        setReference(const OString& rReference);
+    virtual void        setContext(const OString& rContext);
+    virtual void        setUnTransStr(const OString& rUnTransStr);
+    virtual void        setTransStr(const OString& rTransStr);
+    virtual void        setFuzzy(const bool bFuzzy);
+
+    virtual void        writeToFile(std::ofstream& rOFStream) const;
+    virtual void        readFromFile(std::ifstream& rIFStream);
+};
+
 namespace
 {
     //Escape text
@@ -386,14 +423,14 @@ namespace
 
 //Default constructor
 PoEntry::PoEntry()
-    : m_aGenPo( GenPoEntry() )
+    : m_pGenPo( 0 )
     , m_bIsInitialized( false )
 {
 }
 
 //Construct PoEntry from sdfline
 PoEntry::PoEntry(const OString& rSDFLine, const TYPE eType)
-    : m_aGenPo( GenPoEntry() )
+    : m_pGenPo( 0 )
     , m_bIsInitialized( false )
 {
     std::vector<OString> vParts;
@@ -408,7 +445,8 @@ PoEntry::PoEntry(const OString& rSDFLine, const TYPE eType)
         throw INVALIDSDFLINE;
     }
 
-    m_aGenPo.setReference(vParts[SOURCEFILE].
+    m_pGenPo = new GenPoEntry();
+    m_pGenPo->setReference(vParts[SOURCEFILE].
         copy(vParts[SOURCEFILE].lastIndexOf("\\")+1));
 
     OString sContext =
@@ -425,12 +463,12 @@ PoEntry::PoEntry(const OString& rSDFLine, const TYPE eType)
     /*Default case is unneeded because the type of eType has
       only three element*/
     }
-    m_aGenPo.setExtractCom(
+    m_pGenPo->setExtractCom(
         ( !vParts[HELPTEXT].isEmpty() ?  vParts[HELPTEXT] + "\n" : "" ) +
         lcl_GenKeyId(
             vParts[SOURCEFILE] + sContext + vParts[eType] ) );
-    m_aGenPo.setContext(sContext);
-    m_aGenPo.setUnTransStr(
+    m_pGenPo->setContext(sContext);
+    m_pGenPo->setUnTransStr(
         lcl_UnEscapeSDFText(
             vParts[eType],vParts[SOURCEFILE].endsWith(".xhp")));
     m_bIsInitialized = true;
@@ -439,27 +477,62 @@ PoEntry::PoEntry(const OString& rSDFLine, const TYPE eType)
 //Destructor
 PoEntry::~PoEntry()
 {
+    delete m_pGenPo;
+}
+
+//Copy constructor
+PoEntry::PoEntry( const PoEntry& rPo )
+    : m_pGenPo( rPo.m_pGenPo ? new GenPoEntry( *(rPo.m_pGenPo) ) : 0 )
+    , m_bIsInitialized( rPo.m_bIsInitialized )
+{
+}
+
+//Copy operator
+PoEntry& PoEntry::operator=(const PoEntry& rPo)
+{
+    if( this == &rPo )
+    {
+        return *this;
+    }
+    if( rPo.m_pGenPo )
+    {
+        if( m_pGenPo )
+        {
+            *m_pGenPo = *(rPo.m_pGenPo);
+        }
+        else
+        {
+            m_pGenPo = new GenPoEntry( *(rPo.m_pGenPo) );
+        }
+    }
+    else
+    {
+        delete m_pGenPo;
+        m_pGenPo = 0;
+    }
+    m_bIsInitialized = rPo.m_bIsInitialized;
+    return *this;
 }
 
 //Get name of file from which entry is extracted
 OString PoEntry::getSourceFile() const
 {
     assert( m_bIsInitialized );
-    return m_aGenPo.getReference();
+    return m_pGenPo->getReference();
 }
 
 //Get groupid
 OString PoEntry::getGroupId() const
 {
     assert( m_bIsInitialized );
-    return m_aGenPo.getContext().getToken(0,'\n');
+    return m_pGenPo->getContext().getToken(0,'\n');
 }
 
 //Get localid
 OString PoEntry::getLocalId() const
 {
     assert( m_bIsInitialized );
-    const OString sContext = m_aGenPo.getContext();
+    const OString sContext = m_pGenPo->getContext();
     if (sContext.indexOf('\n')==sContext.lastIndexOf('\n'))
         return OString();
     else
@@ -470,7 +543,7 @@ OString PoEntry::getLocalId() const
 OString PoEntry::getResourceType() const
 {
     assert( m_bIsInitialized );
-    const OString sContext = m_aGenPo.getContext();
+    const OString sContext = m_pGenPo->getContext();
     if (sContext.indexOf('\n')==sContext.lastIndexOf('\n'))
         return sContext.getToken(1,'\n').getToken(0,'.');
     else
@@ -480,9 +553,10 @@ OString PoEntry::getResourceType() const
 //Get the type of entry
 PoEntry::TYPE PoEntry::getType() const
 {
-    const OString sContext = m_aGenPo.getContext();
+    assert( m_bIsInitialized );
+    const OString sContext = m_pGenPo->getContext();
     const OString sType = sContext.copy( sContext.lastIndexOf('.') + 1 );
-    assert( m_bIsInitialized &&
+    assert(
         (sType == "text" || sType == "quickhelptext" || sType == "title") );
     if ( sType == "text" )
         return TTEXT;
@@ -496,14 +570,14 @@ PoEntry::TYPE PoEntry::getType() const
 bool PoEntry::getFuzzy() const
 {
     assert( m_bIsInitialized );
-    return m_aGenPo.getFuzzy();
+    return m_pGenPo->getFuzzy();
 }
 
 //Get keyid
 OString PoEntry::getKeyId() const
 {
     assert( m_bIsInitialized );
-    const OString sExtractCom = m_aGenPo.getExtractCom();
+    const OString sExtractCom = m_pGenPo->getExtractCom();
     if( sExtractCom.indexOf("\n") == -1 )
     {
         return sExtractCom;
@@ -521,7 +595,7 @@ OString PoEntry::getUnTransStr() const
     assert( m_bIsInitialized );
     return
         lcl_EscapeSDFText(
-            m_aGenPo.getUnTransStr(), getSourceFile().endsWith(".xhp") );
+            m_pGenPo->getUnTransStr(), getSourceFile().endsWith(".xhp") );
 }
 
 //Get translated string in sdf/merge format
@@ -530,14 +604,15 @@ OString PoEntry::getTransStr() const
     assert( m_bIsInitialized );
     return
         lcl_EscapeSDFText(
-            m_aGenPo.getTransStr(), getSourceFile().endsWith(".xhp") );
+            m_pGenPo->getTransStr(), getSourceFile().endsWith(".xhp") );
 
 }
 
 //Set translated string when input is in sdf format
 void PoEntry::setTransStr(const OString& rTransStr)
 {
-    m_aGenPo.setTransStr(
+    assert( m_bIsInitialized );
+    m_pGenPo->setTransStr(
                 lcl_UnEscapeSDFText(
                     rTransStr,getSourceFile().endsWith(".xhp")));
 }
@@ -545,7 +620,8 @@ void PoEntry::setTransStr(const OString& rTransStr)
 //Set fuzzy flag
 void PoEntry::setFuzzy(const bool bFuzzy)
 {
-    m_aGenPo.setFuzzy(bFuzzy);
+    assert( m_bIsInitialized );
+    m_pGenPo->setFuzzy(bFuzzy);
 }
 
 //Check whether po-s belong to the same localization component
@@ -585,18 +661,18 @@ namespace
 
 //Default Constructor
 PoHeader::PoHeader()
-    : m_aGenPo( GenPoEntry() )
+    : m_pGenPo( 0 )
     , m_bIsInitialized( false )
 {
 }
 
 //Template Constructor
 PoHeader::PoHeader( const OString& rExtSrc )
-    : m_aGenPo( GenPoEntry() )
+    : m_pGenPo( new GenPoEntry() )
     , m_bIsInitialized( false )
 {
-    m_aGenPo.setExtractCom("extracted from " + rExtSrc);
-    m_aGenPo.setTransStr(
+    m_pGenPo->setExtractCom("extracted from " + rExtSrc);
+    m_pGenPo->setTransStr(
         OString("Project-Id-Version: PACKAGE VERSION\n"
         "Report-Msgid-Bugs-To: https://bugs.freedesktop.org/enter_bug.cgi?"
         "product=LibreOffice&bug_status=UNCONFIRMED&component=UI\n"
@@ -615,17 +691,17 @@ PoHeader::PoHeader( const OString& rExtSrc )
 
 //Constructor for old headers to renew po files
 PoHeader::PoHeader(  std::ifstream& rOldPo )
-    : m_aGenPo( GenPoEntry() )
+    : m_pGenPo( new GenPoEntry() )
     , m_bIsInitialized( false )
 {
     assert( rOldPo.is_open() );
-    m_aGenPo.readFromFile( rOldPo );
+    m_pGenPo->readFromFile( rOldPo );
 
-    const OString sExtractCom = m_aGenPo.getExtractCom();
-    m_aGenPo.setExtractCom(
+    const OString sExtractCom = m_pGenPo->getExtractCom();
+    m_pGenPo->setExtractCom(
         sExtractCom.copy( 0, sExtractCom.getLength() - 3 ) );
 
-    OString sTransStr = m_aGenPo.getTransStr();
+    OString sTransStr = m_pGenPo->getTransStr();
     sTransStr =
         lcl_ReplaceAttribute( sTransStr, "Report-Msgid-Bugs-To",
             "https://bugs.freedesktop.org/enter_bug.cgi?product="
@@ -634,12 +710,13 @@ PoHeader::PoHeader(  std::ifstream& rOldPo )
         lcl_ReplaceAttribute( sTransStr, "X-Generator", "LibreOffice" );
     sTransStr =
         lcl_ReplaceAttribute( sTransStr, "X-Accelerator-Marker", "~" );
-    m_aGenPo.setTransStr( sTransStr );
+    m_pGenPo->setTransStr( sTransStr );
     m_bIsInitialized = true;
 }
 
 PoHeader::~PoHeader()
 {
+    delete m_pGenPo;
 }
 
 //Get the language of header
@@ -647,7 +724,7 @@ OString PoHeader::getLanguage() const
 {
     assert( m_bIsInitialized );
     const OString sLang = "Language: ";
-    const OString sTransStr = m_aGenPo.getTransStr();
+    const OString sTransStr = m_pGenPo->getTransStr();
     const sal_Int32 nFirstIndex = sTransStr.indexOf(sLang)+sLang.getLength();
     const sal_Int32 nCount = sTransStr.indexOf('\n',nFirstIndex)-nFirstIndex;
     if( nFirstIndex == sLang.getLength()-1 || nCount == -nFirstIndex-1 )
@@ -690,14 +767,14 @@ void PoOfstream::close()
 void PoOfstream::writeHeader(const PoHeader& rPoHeader)
 {
     assert( isOpen() && !m_bIsAfterHeader && rPoHeader.m_bIsInitialized );
-    rPoHeader.m_aGenPo.writeToFile( m_aOutPut );
+    rPoHeader.m_pGenPo->writeToFile( m_aOutPut );
     m_bIsAfterHeader = true;
 }
 
 void PoOfstream::writeEntry( const PoEntry& rPoEntry )
 {
     assert( isOpen() && m_bIsAfterHeader && rPoEntry.m_bIsInitialized );
-    rPoEntry.m_aGenPo.writeToFile( m_aOutPut );
+    rPoEntry.m_pGenPo->writeToFile( m_aOutPut );
 }
 
 //Class PoIfstream
@@ -740,7 +817,14 @@ void PoIfstream::readHeader( PoHeader& rPoHeader )
         aGenPo.getUnTransStr().isEmpty() &&
         !aGenPo.getTransStr().isEmpty() )
     {
-        rPoHeader.m_aGenPo = aGenPo;
+        if( rPoHeader.m_pGenPo )
+        {
+            *(rPoHeader.m_pGenPo) = aGenPo;
+        }
+        else
+        {
+            rPoHeader.m_pGenPo = new GenPoEntry( aGenPo );
+        }
         rPoHeader.m_bIsInitialized = true;
         m_bIsAfterHeader = true;
     }
@@ -775,7 +859,14 @@ void PoIfstream::readEntry( PoEntry& rPoEntry )
             (sType == "text" || sType == "quickhelptext" || sType == "title")&&
             !aGenPo.getUnTransStr().isEmpty() )
         {
-            rPoEntry.m_aGenPo = aGenPo;
+            if( rPoEntry.m_pGenPo )
+            {
+                *(rPoEntry.m_pGenPo) = aGenPo;
+            }
+            else
+            {
+                rPoEntry.m_pGenPo = new GenPoEntry( aGenPo );
+            }
             const OString sExtractCom = aGenPo.getExtractCom();
             if( sExtractCom.isEmpty() ||
                 ( sExtractCom.getLength() != 4 &&
