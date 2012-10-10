@@ -22,6 +22,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/tabctrl.hxx>
 #include <vcl/tabpage.hxx>
+#include <vcl/vclmedit.hxx>
 #include <svdata.hxx>
 #include <svids.hrc>
 #include <window.h>
@@ -698,6 +699,8 @@ Window *VclBuilder::makeObject(Window *pParent, const OString &name, const OStri
         pWindow = new TabControl(pParent, WB_STDTABCONTROL|WB_3DLOOK);
     else if (name == "GtkDrawingArea")
         pWindow = new Window(pParent);
+    else if (name == "GtkTextView")
+        pWindow = new VCLMultiLineEdit(pParent);
     else
     {
         sal_Int32 nDelim = name.indexOf(':');

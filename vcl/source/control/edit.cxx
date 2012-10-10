@@ -230,8 +230,10 @@ void Edit::SetMaxWidthInChars(sal_Int32 nMinWidthInChars)
 
 bool Edit::set_property(const rtl::OString &rKey, const rtl::OString &rValue)
 {
-    if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("width-chars")))
+    if (rKey == "width-chars")
         SetMaxWidthInChars(rValue.toInt32());
+    else if (rKey == "editable")
+        SetReadOnly(!toBool(rValue));
     else
         return Control::set_property(rKey, rValue);
     return true;
