@@ -21,7 +21,6 @@ class GenPoEntry
 {
 private:
 
-    OString    m_sWhiteSpace;
     OString    m_sExtractCom;
     OString    m_sReference;
     OString    m_sContext;
@@ -36,7 +35,6 @@ public:
     virtual             ~GenPoEntry();
                         //Default copy constructor and copy operator work well
 
-    virtual OString     getWhiteSpace() const   { return m_sWhiteSpace; }
     virtual OString     getExtractCom() const   { return m_sExtractCom; }
     virtual OString     getReference() const    { return m_sReference; }
     virtual OString     getContext() const      { return m_sContext; }
@@ -45,7 +43,6 @@ public:
     virtual bool        getFuzzy() const        { return m_bFuzzy; }
     virtual bool        isNull() const          { return m_bNull; }
 
-    virtual void        setWhiteSpace(const OString& rWhiteSpace);
     virtual void        setExtractCom(const OString& rExtractCom);
     virtual void        setReference(const OString& rReference);
     virtual void        setContext(const OString& rContext);

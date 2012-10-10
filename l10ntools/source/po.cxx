@@ -100,8 +100,7 @@ namespace
 
 //Default constructor
 GenPoEntry::GenPoEntry()
-    : m_sWhiteSpace( OString() )
-    , m_sExtractCom( OString() )
+    : m_sExtractCom( OString() )
     , m_sReference( OString() )
     , m_sContext( OString() )
     , m_sUnTransStr( OString() )
@@ -117,11 +116,6 @@ GenPoEntry::~GenPoEntry()
 }
 
 //Set class members
-void GenPoEntry::setWhiteSpace(const OString& rWhiteSpace)
-{
-    m_sWhiteSpace = rWhiteSpace;
-}
-
 void GenPoEntry::setExtractCom(const OString& rExtractCom)
 {
     m_sExtractCom = rExtractCom;
@@ -155,8 +149,8 @@ void GenPoEntry::setFuzzy(const bool bFuzzy)
 //Write to file
 void GenPoEntry::writeToFile(std::ofstream& rOFStream) const
 {
-    if ( !m_sWhiteSpace.isEmpty() )
-        rOFStream << m_sWhiteSpace.getStr();
+    if ( rOFStream.tellp() != 0 )
+        rOFStream << std::endl;
     if ( !m_sExtractCom.isEmpty() )
         rOFStream
             << "#. "
@@ -183,7 +177,6 @@ void GenPoEntry::readFromFile(std::ifstream& rIFStream)
         m_bNull = true;
         return;
     }
-    m_sWhiteSpace = "\n";
     OString* pLastMsg = 0;
     std::string sTemp;
     getline(rIFStream,sTemp);
@@ -414,7 +407,6 @@ PoEntry::PoEntry(const OString& rSDFLine, const TYPE eType)
     {
         throw INVALIDSDFLINE;
     }
-    m_aGenPo.setWhiteSpace("\n");
 
     m_aGenPo.setReference(vParts[SOURCEFILE].
         copy(vParts[SOURCEFILE].lastIndexOf("\\")+1));
@@ -629,7 +621,6 @@ PoHeader::PoHeader(  std::ifstream& rOldPo )
     assert( rOldPo.is_open() );
     m_aGenPo.readFromFile( rOldPo );
 
-    m_aGenPo.setWhiteSpace( OString() );
     const OString sExtractCom = m_aGenPo.getExtractCom();
     m_aGenPo.setExtractCom(
         sExtractCom.copy( 0, sExtractCom.getLength() - 3 ) );
