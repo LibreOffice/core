@@ -27,24 +27,26 @@
                     <property name="can_focus">False</property>
                     <property name="left_padding">12</property>
                     <child>
-                      <object class="GtkBox" id="box1">
+                      <object class="GtkGrid" id="grid1">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="spacing">6</property>
                         <child>
-                          <object class="GtkEntry" id="entry1">
+                          <object class="GtkEntry" id="urled">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
+                            <property name="hexpand">True</property>
                             <property name="invisible_char">•</property>
+                            <property name="invisible_char_set">True</property>
                           </object>
                           <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
-                            <property name="position">0</property>
+                            <property name="left_attach">0</property>
+                            <property name="top_attach">0</property>
+                            <property name="width">1</property>
+                            <property name="height">1</property>
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkButton" id="button1">
+                          <object class="GtkButton" id="urlbtn">
                             <property name="label" translatable="yes">Browse...</property>
                             <property name="use_action_appearance">False</property>
                             <property name="visible">True</property>
@@ -53,9 +55,10 @@
                             <property name="use_action_appearance">False</property>
                           </object>
                           <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
-                            <property name="position">1</property>
+                            <property name="left_attach">1</property>
+                            <property name="top_attach">0</property>
+                            <property name="width">1</property>
+                            <property name="height">1</property>
                           </packing>
                         </child>
                       </object>
@@ -90,14 +93,17 @@
                     <property name="left_padding">12</property>
                     <child>
                       <object class="GtkScrolledWindow" id="scrolledwindow1">
+                        <property name="width_request">400</property>
                         <property name="height_request">80</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="hexpand">True</property>
+                        <property name="vexpand">True</property>
                         <property name="hscrollbar_policy">never</property>
                         <property name="vscrollbar_policy">always</property>
                         <property name="shadow_type">in</property>
                         <child>
-                          <object class="GtkTextView" id="textview1">
+                          <object class="GtkTextView" id="pluginoptions">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="wrap_mode">char</property>

@@ -385,66 +385,6 @@ ModalDialog MD_INSERT_OLEOBJECT
     };
     Text [ en-US ] = "Insert OLE Object" ;
 };
-ModalDialog MD_INSERT_OBJECT_PLUGIN
-{
-    HelpID = "cui:ModalDialog:MD_INSERT_OBJECT_PLUGIN";
-    OutputSize = TRUE ;
-    SVLook = TRUE ;
-    Size = MAP_APPFONT ( 284 , 123 ) ;
-    Moveable = TRUE ;
-    Edit ED_FILEURL
-    {
-        HelpID = "cui:Edit:MD_INSERT_OBJECT_PLUGIN:ED_FILEURL";
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 14 ) ;
-        Size = MAP_APPFONT ( 204 , 12 ) ;
-    };
-    PushButton BTN_FILEURL
-    {
-        HelpID = "cui:PushButton:MD_INSERT_OBJECT_PLUGIN:BTN_FILEURL";
-        Pos = MAP_APPFONT ( 166 , 29 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ en-US ] = "~Browse..." ;
-    };
-    FixedLine GB_FILEURL
-    {
-        Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 216 , 8 ) ;
-        Text [ en-US ] = "File / URL" ;
-    };
-    MultiLineEdit ED_PLUGINS_OPTIONS
-    {
-        HelpID = "cui:MultiLineEdit:MD_INSERT_OBJECT_PLUGIN:ED_PLUGINS_OPTIONS";
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 66 ) ;
-        Size = MAP_APPFONT ( 204 , 45 ) ;
-        VScroll = TRUE ;
-        IgnoreTab = TRUE;
-    };
-    FixedLine GB_PLUGINS_OPTIONS
-    {
-        Pos = MAP_APPFONT ( 6 , 55 ) ;
-        Size = MAP_APPFONT ( 216 , 8 ) ;
-        Text [ en-US ] = "Options" ;
-    };
-    OKButton 1
-    {
-        Pos = MAP_APPFONT ( 228 , 6 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        DefButton = TRUE ;
-    };
-    CancelButton 1
-    {
-        Pos = MAP_APPFONT ( 228 , 23 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-    };
-    HelpButton 1
-    {
-        Pos = MAP_APPFONT ( 228 , 43 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-    };
-    Text [ en-US ] = "Insert Plug-in" ;
-};
 ModalDialog MD_INSERT_OBJECT_APPLET
 {
     HelpID = "cui:ModalDialog:MD_INSERT_OBJECT_APPLET";

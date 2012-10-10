@@ -43,6 +43,9 @@ protected:
     comphelper::EmbeddedObjectContainer aCnt;
 
     InsertObjectDialog_Impl( Window * pParent, const ResId & rResId, const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& xStorage );
+    InsertObjectDialog_Impl(Window * pParent, const OString& rID,
+        const OUString& rUIXMLDescription,
+        const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& xStorage);
 public:
     com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject > GetObject()
                         { return m_xObj; }
@@ -92,28 +95,21 @@ public:
 class SvInsertPlugInDialog : public InsertObjectDialog_Impl
 {
 private:
-    FixedLine aGbFileurl;
-    Edit aEdFileurl;
-    PushButton aBtnFileurl;
-    FixedLine aGbPluginsOptions;
-    MultiLineEdit aEdPluginsOptions;
-    OKButton aOKButton1;
-    CancelButton aCancelButton1;
-    HelpButton aHelpButton1;
-    INetURLObject*      m_pURL;
-    String              m_aCommands;
+    Edit* m_pEdFileurl;
+    PushButton* m_pBtnFileurl;
+    VCLMultiLineEdit* m_pEdPluginsOptions;
+    INetURLObject* m_pURL;
+    OUString m_aCommands;
 
     DECL_LINK(BrowseHdl, void *);
-    String              GetPlugInFile() const { return aEdFileurl.GetText(); }
-    String              GetPlugInOptions() const { return aEdPluginsOptions.GetText(); }
+    OUString GetPlugInFile() const { return m_pEdFileurl->GetText(); }
+    OUString GetPlugInOptions() const { return m_pEdPluginsOptions->GetText(); }
 
 public:
-                        SvInsertPlugInDialog( Window* pParent,
-                            const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& xStorage );
-
-                        ~SvInsertPlugInDialog();
-
-    virtual short       Execute();
+    SvInsertPlugInDialog(Window* pParent,
+        const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& xStorage);
+    ~SvInsertPlugInDialog();
+    virtual short Execute();
 };
 
 class SfxInsertFloatingFrameDialog : public InsertObjectDialog_Impl

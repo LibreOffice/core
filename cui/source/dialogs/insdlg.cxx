@@ -39,13 +39,13 @@
 #include <tools/urlobj.hxx>
 #include <tools/debug.hxx>
 #include <svl/urihelper.hxx>
-#include <svtools/svmedit.hxx>
 #include <vcl/button.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/group.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/vclmedit.hxx>
 #include <sot/clsids.hxx>
 #include <sfx2/frmdescr.hxx>
 #include <sfx2/viewsh.hxx>
@@ -95,6 +95,15 @@ InsertObjectDialog_Impl::InsertObjectDialog_Impl( Window * pParent, const ResId 
  : ModalDialog( pParent, rResId )
  , m_xStorage( xStorage )
  , aCnt( m_xStorage )
+{
+}
+
+InsertObjectDialog_Impl::InsertObjectDialog_Impl(Window * pParent, const OString& rID,
+    const OUString& rUIXMLDescription,
+    const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& xStorage)
+    : ModalDialog(pParent, rID, rUIXMLDescription)
+    , m_xStorage( xStorage )
+    , aCnt( m_xStorage )
 {
 }
 
@@ -411,7 +420,7 @@ IMPL_LINK_NOARG(SvInsertPlugInDialog, BrowseHdl)
             {
                 Sequence< OUString > aPathSeq( xFilePicker->getFiles() );
                 INetURLObject aObj( aPathSeq[0] );
-                aEdFileurl.SetText( aObj.PathToFileName() );
+                m_pEdFileurl->SetText(aObj.PathToFileName());
             }
         }
     }
@@ -421,20 +430,15 @@ IMPL_LINK_NOARG(SvInsertPlugInDialog, BrowseHdl)
 
 // -----------------------------------------------------------------------
 
-SvInsertPlugInDialog::SvInsertPlugInDialog( Window* pParent, const uno::Reference < embed::XStorage >& xStorage )
-    : InsertObjectDialog_Impl( pParent, CUI_RES( MD_INSERT_OBJECT_PLUGIN ), xStorage ),
-    aGbFileurl( this, CUI_RES( GB_FILEURL ) ),
-    aEdFileurl( this, CUI_RES( ED_FILEURL ) ),
-    aBtnFileurl( this, CUI_RES( BTN_FILEURL ) ),
-    aGbPluginsOptions( this, CUI_RES( GB_PLUGINS_OPTIONS ) ),
-    aEdPluginsOptions( this, CUI_RES( ED_PLUGINS_OPTIONS ) ),
-    aOKButton1( this, CUI_RES( 1 ) ),
-    aCancelButton1( this, CUI_RES( 1 ) ),
-    aHelpButton1( this, CUI_RES( 1 ) ),
-    m_pURL(0)
+SvInsertPlugInDialog::SvInsertPlugInDialog(Window* pParent,
+    const uno::Reference < embed::XStorage >& xStorage)
+    : InsertObjectDialog_Impl(pParent, "InsertPluginDialog", "cui/ui/insertplugin.ui", xStorage)
+    , m_pURL(0)
 {
-    FreeResource();
-    aBtnFileurl.SetClickHdl( LINK( this, SvInsertPlugInDialog, BrowseHdl ) );
+    get(m_pEdFileurl, "urled");
+    get(m_pBtnFileurl, "urlbtn");
+    get(m_pEdPluginsOptions, "pluginoptions");
+    m_pBtnFileurl->SetClickHdl(LINK(this, SvInsertPlugInDialog, BrowseHdl));
 }
 
 SvInsertPlugInDialog::~SvInsertPlugInDialog()
@@ -464,7 +468,7 @@ static void Plugin_ImplFillCommandSequence( const String& aCommands, uno::Sequen
 short SvInsertPlugInDialog::Execute()
 {
     short nRet = RET_OK;
-    m_aCommands.Erase();
+    m_aCommands = OUString();
     DBG_ASSERT( m_xStorage.is(), "No storage!");
     if ( m_xStorage.is() && ( nRet = Dialog::Execute() ) == RET_OK )
     {
