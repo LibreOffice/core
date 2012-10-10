@@ -138,8 +138,8 @@ ModalDialog RID_SCDLG_DATABAR
             "Minimum";
             "Maximum";
             "Percentile";
-            "Percent";
             "Value";
+            "Percent";
             "Formula";
         };
     };

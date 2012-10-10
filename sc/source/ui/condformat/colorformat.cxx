@@ -69,62 +69,26 @@ ScDataBarSettingsDlg::ScDataBarSettingsDlg(Window* pWindow, ScDocument* pDoc):
 
 namespace {
 
-void SetType(const ScColorScaleEntry* pEntry, ListBox& aLstBox)
+void SetType(const ScColorScaleEntry* pEntry, ListBox& rLstBox)
 {
-    switch(pEntry->GetType())
-    {
-        case COLORSCALE_AUTO:
-            aLstBox.SelectEntryPos(0);
-            break;
-        case COLORSCALE_MIN:
-            aLstBox.SelectEntryPos(1);
-            break;
-        case COLORSCALE_MAX:
-            aLstBox.SelectEntryPos(2);
-            break;
-        case COLORSCALE_PERCENTILE:
-            aLstBox.SelectEntryPos(3);
-            break;
-        case COLORSCALE_PERCENT:
-            aLstBox.SelectEntryPos(4);
-            break;
-        case COLORSCALE_FORMULA:
-            aLstBox.SelectEntryPos(6);
-            break;
-        case COLORSCALE_VALUE:
-            aLstBox.SelectEntryPos(5);
-            break;
-    }
+    rLstBox.SelectEntryPos(pEntry->GetType());
 }
 
 void GetType(const ListBox& rLstBox, const Edit& rEd, ScColorScaleEntry* pEntry, SvNumberFormatter* pNumberFormatter )
 {
     double nVal = 0;
     sal_uInt32 nIndex = 0;
+    pEntry->SetType(static_cast<ScColorScaleEntryType>(rLstBox.GetSelectEntryPos()));
     switch(rLstBox.GetSelectEntryPos())
     {
-        case 0:
-            pEntry->SetType(COLORSCALE_AUTO);
+        case COLORSCALE_AUTO:
+        case COLORSCALE_MIN:
+        case COLORSCALE_MAX:
             break;
-        case 1:
-            pEntry->SetType(COLORSCALE_MIN);
-            break;
-        case 2:
-            pEntry->SetType(COLORSCALE_MAX);
-            break;
-        case 3:
-            pEntry->SetType(COLORSCALE_PERCENTILE);
+        case COLORSCALE_PERCENTILE:
+        case COLORSCALE_VALUE:
+        case COLORSCALE_PERCENT:
             pNumberFormatter->IsNumberFormat( rEd.GetText(), nIndex, nVal );
-            pEntry->SetValue(nVal);
-            break;
-        case 4:
-            pEntry->SetType(COLORSCALE_PERCENT);
-            pNumberFormatter->IsNumberFormat( rEd.GetText(), nIndex, nVal );
-            pEntry->SetValue(nVal);
-            break;
-        case 5:
-            pNumberFormatter->IsNumberFormat( rEd.GetText(), nIndex, nVal );
-            pEntry->SetType(COLORSCALE_VALUE);
             pEntry->SetValue(nVal);
             break;
         case 6:
@@ -288,10 +252,10 @@ IMPL_LINK_NOARG( ScDataBarSettingsDlg, OkBtnHdl )
     //check that min < max
     bool bWarn = false;
     sal_Int32 nSelectMin = maLbTypeMin.GetSelectEntryPos();
-    if( nSelectMin == 1 || nSelectMin == 7)
+    if( nSelectMin == COLORSCALE_MIN )
         bWarn = true;
     sal_Int32 nSelectMax = maLbTypeMax.GetSelectEntryPos();
-    if( nSelectMax == 0 || nSelectMax == 6 )
+    if( nSelectMax == COLORSCALE_MAX )
         bWarn = true;
 
     if(!bWarn && maLbTypeMin.GetSelectEntryPos() == maLbTypeMax.GetSelectEntryPos())
@@ -327,14 +291,14 @@ IMPL_LINK_NOARG( ScDataBarSettingsDlg, OkBtnHdl )
 IMPL_LINK_NOARG( ScDataBarSettingsDlg, TypeSelectHdl )
 {
     sal_Int32 nSelectMin = maLbTypeMin.GetSelectEntryPos();
-    if( nSelectMin == 0 || nSelectMin == 1 || nSelectMin == 6 || nSelectMin == 7)
+    if( nSelectMin <= COLORSCALE_MAX)
         maEdMin.Disable();
     else
     {
         maEdMin.Enable();
         if(!maEdMin.GetText().Len())
         {
-            if(nSelectMin == 2 || nSelectMin == 3)
+            if(nSelectMin == COLORSCALE_PERCENTILE || nSelectMin == COLORSCALE_PERCENT)
                 maEdMin.SetText(rtl::OUString::valueOf(static_cast<sal_Int32>(50)));
             else
                 maEdMin.SetText(rtl::OUString::valueOf(static_cast<sal_Int32>(0)));
@@ -342,14 +306,14 @@ IMPL_LINK_NOARG( ScDataBarSettingsDlg, TypeSelectHdl )
     }
 
     sal_Int32 nSelectMax = maLbTypeMax.GetSelectEntryPos();
-    if(nSelectMax == 0 || nSelectMax == 1 || nSelectMax == 6 || nSelectMax == 7)
+    if(nSelectMax <= COLORSCALE_MAX)
         maEdMax.Disable();
     else
     {
         maEdMax.Enable();
         if(!maEdMax.GetText().Len())
         {
-            if(nSelectMax == 2 || nSelectMax == 3)
+            if(nSelectMax == COLORSCALE_PERCENTILE || nSelectMax == COLORSCALE_PERCENT)
                 maEdMax.SetText(rtl::OUString::valueOf(static_cast<sal_Int32>(50)));
             else
                 maEdMax.SetText(rtl::OUString::valueOf(static_cast<sal_Int32>(0)));

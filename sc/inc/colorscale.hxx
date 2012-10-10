@@ -45,15 +45,18 @@ class ScFormulaCell;
 class ScTokenArray;
 struct ScDataBarInfo;
 
+// don't change the order
+// they are also used in the dialog to determine the position
+// in the list box
 enum ScColorScaleEntryType
 {
-    COLORSCALE_VALUE,
+    COLORSCALE_AUTO,
     COLORSCALE_MIN,
     COLORSCALE_MAX,
-    COLORSCALE_PERCENT,
     COLORSCALE_PERCENTILE,
+    COLORSCALE_VALUE,
+    COLORSCALE_PERCENT,
     COLORSCALE_FORMULA,
-    COLORSCALE_AUTO,
 };
 
 class SC_DLLPUBLIC ScColorScaleEntry
