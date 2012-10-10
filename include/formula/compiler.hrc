@@ -403,9 +403,13 @@
 #define SC_OPCODE_COUNT_IFS         405
 #define SC_OPCODE_SKEWP             406
 #define SC_OPCODE_STOP_2_PAR        407
-#define SC_OPCODE_LAST_OPCODE_ID    406     /* last OpCode */
+#define SC_OPCODE_LENB              408
+#define SC_OPCODE_RIGHTB            409
+#define SC_OPCODE_LEFTB             410
+#define SC_OPCODE_MIDB              412
+#define SC_OPCODE_LAST_OPCODE_ID    413     /* last OpCode */
 
-#define SC_OPCODE_STOP_FUNCTION     407
+#define SC_OPCODE_STOP_FUNCTION     412
 
 /*** Internal ***/
 #define SC_OPCODE_INTERNAL_BEGIN   9999

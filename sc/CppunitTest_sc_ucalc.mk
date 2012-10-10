@@ -26,6 +26,10 @@ $(eval $(call gb_CppunitTest_use_externals,sc_ucalc,\
 	mdds_headers \
 	orcus \
 	orcus-parser \
+    icu_headers \
+    icudata \
+    icui18n \
+    icuuc \
 ))
 
 $(eval $(call gb_CppunitTest_use_libraries,sc_ucalc, \

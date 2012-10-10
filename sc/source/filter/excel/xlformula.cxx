@@ -203,6 +203,10 @@ static const XclFunctionInfo saFuncTable_2[] =
     { ocIsLogical,          198,    1,  1,  V, { VR }, 0, 0 },
     { ocDBCount2,           199,    3,  3,  V, { RO, RR }, 0, 0 },
     { ocCurrency,           204,    1,  2,  V, { VR }, EXC_FUNCFLAG_IMPORTONLY, 0 },
+    { ocLeftB,              208,    1,  2,  V, { VR }, 0, 0 },
+    { ocRightB,             209,    1,  2,  V, { VR }, 0, 0 },
+    { ocMidB,               210,    3,  3,  V, { VR }, 0, 0 },
+    { ocLenB,               211,    1,  1,  V, { VR }, 0, 0 },
     { ocRoundUp,            212,    2,  2,  V, { VR }, 0, 0 },
     { ocRoundDown,          213,    2,  2,  V, { VR }, 0, 0 },
     { ocExternal,           255,    1,  MX, R, { RO_E, RO }, EXC_FUNCFLAG_IMPORTONLY, 0 }

@@ -9608,6 +9608,130 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ en-US ] = "The integer number of bits the value is to be shifted." ;
         };
     };
+    Resource SC_OPCODE_LENB
+    {
+        String 1 // Description
+        {
+            Text [ en-US ] = "Calculates length of a text string, with DBCS" ;
+        };
+        ExtraData =
+        {
+            0;
+            ID_FUNCTION_GRP_TEXT;
+            U2S( HID_FUNC_LENB );
+            1;  0;
+            0;
+        };
+        String 2 // Name of Parameter 1
+        {
+            Text [ en-US ] = "text" ;
+        };
+        String 3 // Description of Parameter 1
+        {
+            Text [ en-US ] = "The text in which the length is to be determined." ;
+        };
+    };
+    Resource SC_OPCODE_RIGHTB
+    {
+        String 1 // Description
+        {
+            Text [ en-US ] = "Returns the last character or characters of a text,with DBCS" ;
+        };
+        ExtraData =
+        {
+            0;
+            ID_FUNCTION_GRP_TEXT;
+            U2S( HID_FUNC_RIGHTB );
+            2;  0;  1;
+            0;
+        };
+        String 2 // Name of Parameter 1
+        {
+            Text [ en-US ] = "text" ;
+        };
+        String 3 // Description of Parameter 1
+        {
+            Text [ en-US ] = "The text in which the end partial words are to be determined." ;
+        };
+        String 4 // Name of Parameter 2
+        {
+            Text [ en-US ] = "number" ;
+        };
+        String 5 // Description of Parameter 2
+        {
+            Text [ en-US ] = "The number of characters for the end text." ;
+        };
+    };
+    Resource SC_OPCODE_LEFTB
+    {
+        String 1 // Description
+        {
+            Text [ en-US ] = "Returns the first character or characters of a text,with DBCS" ;
+        };
+        ExtraData =
+        {
+            0;
+            ID_FUNCTION_GRP_TEXT;
+            U2S( HID_FUNC_LEFTB );
+            2;  0;  1;
+            0;
+        };
+        String 2 // Name of Parameter 1
+        {
+            Text [ en-US ] = "text" ;
+        };
+        String 3 // Description of Parameter 1
+        {
+            Text [ en-US ] = "The text where the initial partial words are to be determined." ;
+        };
+        String 4 // Name of Parameter 2
+        {
+            Text [ en-US ] = "number" ;
+        };
+        String 5 // Description of Parameter 2
+        {
+            Text [ en-US ] = "The number of characters for the start text." ;
+        };
+    };
+    Resource SC_OPCODE_MIDB
+    {
+        String 1 // Description
+        {
+            Text [ en-US ] = "Returns a partial text string of a text, with DBCS" ;
+        };
+        ExtraData =
+        {
+            0;
+            ID_FUNCTION_GRP_TEXT;
+            U2S( HID_FUNC_MIDB );
+            3;  0;  0;  0;
+            0;
+        };
+        String 2 // Name of Parameter 1
+        {
+            Text [ en-US ] = "text" ;
+        };
+        String 3 // Description of Parameter 1
+        {
+            Text [ en-US ] = "The text in which partial words are to be determined." ;
+        };
+        String 4 // Name of Parameter 2
+        {
+            Text [ en-US ] = "start" ;
+        };
+        String 5 // Description of Parameter 2
+        {
+            Text [ en-US ] = "The position from which the part word is to be determined." ;
+        };
+        String 6 // Name of Parameter 3
+        {
+            Text [ en-US ] = "number" ;
+        };
+        String 7 // Description of Parameter 3
+        {
+            Text [ en-US ] = "The number of characters for the text." ;
+        };
+    };
 };
 
 #if defined(U2S)

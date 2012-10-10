@@ -260,6 +260,10 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH_ODFF
     String SC_OPCODE_RIGHT { Text = "RIGHT" ; };
     String SC_OPCODE_SEARCH { Text = "SEARCH" ; };
     String SC_OPCODE_MID { Text = "MID" ; };
+    String SC_OPCODE_LENB          { Text = "LENB" ; };
+    String SC_OPCODE_RIGHTB        { Text = "RIGHTB" ; };
+    String SC_OPCODE_LEFTB         { Text = "LEFTB" ; };
+    String SC_OPCODE_MIDB          { Text = "MIDB" ; };
     String SC_OPCODE_TEXT { Text = "TEXT" ; };
     String SC_OPCODE_SUBSTITUTE { Text = "SUBSTITUTE" ; };
     String SC_OPCODE_REPT { Text = "REPT" ; };
@@ -601,6 +605,10 @@ Resource RID_STRLIST_FUNCTION_NAMES_ENGLISH
     String SC_OPCODE_RIGHT { Text = "RIGHT" ; };
     String SC_OPCODE_SEARCH { Text = "SEARCH" ; };
     String SC_OPCODE_MID { Text = "MID" ; };
+    String SC_OPCODE_LENB { Text = "LENB" ; };
+    String SC_OPCODE_RIGHTB { Text = "RIGHTB" ; };
+    String SC_OPCODE_LEFTB { Text = "LEFTB" ; };
+    String SC_OPCODE_MIDB { Text = "MIDB" ; };
     String SC_OPCODE_TEXT { Text = "TEXT" ; };
     String SC_OPCODE_SUBSTITUTE { Text = "SUBSTITUTE" ; };
     String SC_OPCODE_REPT { Text = "REPT" ; };
@@ -1577,6 +1585,22 @@ Resource RID_STRLIST_FUNCTION_NAMES
     String SC_OPCODE_MID
     {
         Text [ en-US ] = "MID" ;
+    };
+    String SC_OPCODE_LENB
+    {
+        Text [ en-US ] = "LENB" ;
+    };
+    String SC_OPCODE_RIGHTB
+    {
+        Text [ en-US ] = "RIGHTB" ;
+    };
+    String SC_OPCODE_LEFTB
+    {
+        Text [ en-US ] = "LEFTB" ;
+    };
+    String SC_OPCODE_MIDB
+    {
+        Text [ en-US ] = "MIDB" ;
     };
     String SC_OPCODE_TEXT
     {

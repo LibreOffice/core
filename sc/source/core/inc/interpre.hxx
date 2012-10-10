@@ -788,6 +788,10 @@ void ScSTEXY();
 void ScSlope();
 void ScTrend();
 void ScInfo();
+void ScLenB();
+void ScRightB();
+void ScLeftB();
+void ScMidB();
 
 static const double fMaxGammaArgument;
 

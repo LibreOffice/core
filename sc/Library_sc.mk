@@ -38,6 +38,10 @@ $(eval $(call gb_Library_use_sdk_api,sc))
 $(eval $(call gb_Library_use_externals,sc,\
 	boost_headers \
 	mdds_headers \
+    icu_headers \
+    icudata \
+    icui18n \
+    icuuc \
 ))
 
 ifeq ($(ENABLE_TELEPATHY),TRUE)

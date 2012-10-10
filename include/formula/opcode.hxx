@@ -301,6 +301,10 @@ enum OpCodeEnum
         ocSubstitute        = SC_OPCODE_SUBSTITUTE,
         ocRept              = SC_OPCODE_REPT,
         ocConcat            = SC_OPCODE_CONCAT,
+        ocLenB              = SC_OPCODE_LENB,
+        ocRightB            = SC_OPCODE_RIGHTB,
+        ocLeftB             = SC_OPCODE_LEFTB,
+        ocMidB              = SC_OPCODE_MIDB,
         ocNumberValue       = SC_OPCODE_NUMBERVALUE,
     // Matrix functions
         ocMatValue          = SC_OPCODE_MAT_VALUE,

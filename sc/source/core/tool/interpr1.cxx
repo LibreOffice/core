@@ -34,6 +34,7 @@
 #include <unotools/transliterationwrapper.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/logfile.hxx>
+#include <unicode/uchar.h>
 
 #include "patattr.hxx"
 #include "global.hxx"
@@ -8620,6 +8621,182 @@ void ScInterpreter::ScLeft()
     }
 }
 
+typedef struct {
+    UBlockCode from;
+    UBlockCode to;
+} UBlockScript;
+
+static UBlockScript scriptList[] = {
+    {UBLOCK_HANGUL_JAMO, UBLOCK_HANGUL_JAMO},
+    {UBLOCK_CJK_RADICALS_SUPPLEMENT, UBLOCK_HANGUL_SYLLABLES},
+    {UBLOCK_CJK_COMPATIBILITY_IDEOGRAPHS,UBLOCK_CJK_RADICALS_SUPPLEMENT },
+    {UBLOCK_IDEOGRAPHIC_DESCRIPTION_CHARACTERS,UBLOCK_CJK_COMPATIBILITY_IDEOGRAPHS},
+    {UBLOCK_CJK_COMPATIBILITY_FORMS, UBLOCK_CJK_COMPATIBILITY_FORMS},
+    {UBLOCK_HALFWIDTH_AND_FULLWIDTH_FORMS, UBLOCK_HALFWIDTH_AND_FULLWIDTH_FORMS},
+    {UBLOCK_CJK_UNIFIED_IDEOGRAPHS_EXTENSION_B, UBLOCK_CJK_COMPATIBILITY_IDEOGRAPHS_SUPPLEMENT},
+    {UBLOCK_CJK_STROKES, UBLOCK_CJK_STROKES}
+};
+#define scriptListCount sizeof (scriptList) / sizeof (UBlockScript)
+bool SAL_CALL lcl_getScriptClass(sal_uInt32 currentChar)
+{
+    // for the locale of ja-JP, character U+0x005c and U+0x20ac should be ScriptType::Asian
+    if( (currentChar == 0x005c || currentChar == 0x20ac) &&
+          (MsLangId::getSystemLanguage() == LANGUAGE_JAPANESE) )
+        return true;
+    sal_uInt16 i;
+    static sal_Int16 nRet = 0;
+    UBlockCode block = (UBlockCode)ublock_getCode((sal_uInt32)currentChar);
+    for ( i = 0; i < scriptListCount; i++) {
+        if (block <= scriptList[i].to) break;
+    }
+    nRet = (i < scriptListCount && block >= scriptList[i].from);
+    return nRet;
+}
+bool IsDBCS(sal_Unicode ch)
+{
+    return lcl_getScriptClass(ch);
+}
+sal_Int32 getLengthB(String &str)
+{
+    sal_Int32 index = 0;
+    sal_Int32 length = 0;
+    if(0 == str.Len())
+        return 0;
+    while(index < str.Len()){
+        if(IsDBCS(str.GetChar(index)))
+            length += 2;
+        else
+            length++;
+        index++;
+    }
+    return length;
+}
+void ScInterpreter::ScLenB()
+{
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "luzhang", "ScInterpreter::ScLenB" );
+    String aStr( GetString() );
+    PushDouble( getLengthB(aStr) );
+}
+void lcl_RightB(String &aStr, sal_Int32 n)
+{
+    if( n < getLengthB(aStr) )
+    {
+        sal_Int32 index = aStr.Len();
+        while(index-- >= 0)
+        {
+            if(0 == n)
+            {
+                aStr.Erase( 0, index + 1);
+                break;
+            }
+            if(-1 == n)
+            {
+                aStr.Erase( 0, index + 2 );
+                aStr.InsertAscii(" ", 0);
+                break;
+            }
+            if(IsDBCS(aStr.GetChar(index)))
+                n -= 2;
+            else
+                n--;
+        }
+    }
+}
+void ScInterpreter::ScRightB()
+{
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "luzhang", "ScInterpreter::ScRightB" );
+    sal_uInt8 nParamCount = GetByte();
+    if ( MustHaveParamCount( nParamCount, 1, 2 ) )
+    {
+        sal_Int32 n;
+        if (nParamCount == 2)
+        {
+            double nVal = ::rtl::math::approxFloor(GetDouble());
+            if ( nVal < 0.0 || nVal > STRING_MAXLEN )
+            {
+                PushIllegalArgument();
+                return ;
+            }
+            else
+                n = (xub_StrLen) nVal;
+        }
+        else
+            n = 1;
+        String aStr( GetString() );
+        lcl_RightB(aStr, n);
+        PushString( aStr );
+    }
+}
+void lcl_LeftB(String &aStr, sal_Int32 n)
+{
+    if( n < getLengthB(aStr) )
+    {
+        sal_Int32 index = -1;
+        while(index++ < aStr.Len())
+        {
+            if(0 == n)
+            {
+                aStr.Erase( index );
+                break;
+            }
+            if(-1 == n)
+            {
+                aStr.Erase( index - 1 );
+                aStr.InsertAscii(" ");
+                break;
+            }
+            if(IsDBCS(aStr.GetChar(index)))
+                n -= 2;
+            else
+                n--;
+        }
+    }
+}
+void ScInterpreter::ScLeftB()
+{
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "luzhang", "ScInterpreter::ScLeftB" );
+    sal_uInt8 nParamCount = GetByte();
+    if ( MustHaveParamCount( nParamCount, 1, 2 ) )
+    {
+        sal_Int32 n;
+        if (nParamCount == 2)
+        {
+            double nVal = ::rtl::math::approxFloor(GetDouble());
+            if ( nVal < 0.0 || nVal > STRING_MAXLEN )
+            {
+                PushIllegalArgument();
+                return ;
+            }
+            else
+                n = (xub_StrLen) nVal;
+        }
+        else
+            n = 1;
+        String aStr( GetString() );
+        lcl_LeftB(aStr, n);
+        PushString( aStr );
+    }
+}
+void ScInterpreter::ScMidB()
+{
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "luzhang", "ScInterpreter::ScMidB" );
+    if ( MustHaveParamCount( GetByte(), 3 ) )
+    {
+        double fAnz    = ::rtl::math::approxFloor(GetDouble());
+        double fAnfang = ::rtl::math::approxFloor(GetDouble());
+        String rStr( GetString() );
+        if (fAnfang < 1.0 || fAnz < 0.0 || fAnfang > double(STRING_MAXLEN) || fAnz > double(STRING_MAXLEN))
+            PushIllegalArgument();
+        else
+        {
+
+            lcl_LeftB(rStr, (xub_StrLen)fAnfang + (xub_StrLen)fAnz - 1);
+            sal_Int32 nCnt = getLengthB(rStr) - (xub_StrLen)fAnfang + 1;
+            lcl_RightB(rStr, nCnt>0 ? nCnt:0);
+            PushString(rStr);
+        }
+    }
+}
 
 void ScInterpreter::ScRight()
 {
