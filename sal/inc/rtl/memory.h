@@ -39,11 +39,17 @@
 extern "C" {
 #endif
 
+SAL_DEPRECATED("Use memset instead")
 SAL_DLLPUBLIC void SAL_CALL rtl_zeroMemory(void *Ptr, sal_Size Bytes);
+SAL_DEPRECATED("Use memset instead")
 SAL_DLLPUBLIC void SAL_CALL rtl_fillMemory(void *Ptr, sal_Size Bytes, sal_uInt8 Fill);
+SAL_DEPRECATED("Use memcpy instead")
 SAL_DLLPUBLIC void SAL_CALL rtl_copyMemory(void *Dst, const void *Src, sal_Size Bytes);
+SAL_DEPRECATED("Use memmove instead")
 SAL_DLLPUBLIC void SAL_CALL rtl_moveMemory(void *Dst, const void *Src, sal_Size Bytes);
+SAL_DEPRECATED("Use memcmp instead")
 SAL_DLLPUBLIC sal_Int32 SAL_CALL rtl_compareMemory(const void *MemA, const void *MemB, sal_Size Bytes);
+SAL_DEPRECATED("Use memchr instead")
 SAL_DLLPUBLIC void* SAL_CALL rtl_findInMemory(const void *MemA, sal_uInt8 ch, sal_Size Bytes);
 
 #ifdef __cplusplus
