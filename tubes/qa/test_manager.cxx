@@ -100,17 +100,8 @@ static gboolean timed_out( void * )
 TestTeleTubes::TestTeleTubes()
 {
     g_timeout_add_seconds (10, timed_out, NULL);
-    try
-    {
-        utl::LocalFileHelper::ConvertPhysicalNameToURL(
-                OUString::createFromAscii( getenv("SRCDIR") ) + "/tubes/qa/test-config.ini",
-                maTestConfigIniURL );
-    }
-    catch (const com::sun::star::uno::Exception& e)
-    {
-        CPPUNIT_ASSERT_MESSAGE( OUStringToOString( "Exception while getting config.ini url: "
-                    + e.Message, RTL_TEXTENCODING_UTF8).getStr(), false);
-    }
+    maTestConfigIniURL = OUString( "file://" +
+            OUString::createFromAscii( getenv("SRCDIR") ) + "/tubes/qa/test-config.ini");
     rtl::Bootstrap aTestConfig( maTestConfigIniURL );
 
     TeleManager::addSuffixToNames( "TeleTest");
