@@ -330,12 +330,13 @@ SVGExport::SVGExport(
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
     const Reference< XDocumentHandler >& rxHandler,
     const Sequence< PropertyValue >& rFilterData )
-        : SvXMLExport( util::MeasureUnit::MM_100TH, xServiceFactory )
+    : SvXMLExport( util::MeasureUnit::MM_100TH,
+                   xServiceFactory,
+                   xmloff::token::XML_TOKEN_INVALID,
+                   EXPORT_META|EXPORT_PRETTY )
         , mrFilterData( rFilterData )
 {
     SetDocHandler( rxHandler );
-    sal_uInt16 nExportFlags = getExportFlags() | EXPORT_PRETTY;
-    setExportFlags( nExportFlags );
     GetDocHandler()->startDocument();
 }
 
@@ -834,15 +835,9 @@ sal_Bool SVGFilter::implExportDocument()
     // standard line width is based on 1 pixel on a 90 DPI device (0.28222mmm)
     mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "stroke-width", OUString::valueOf( 28.222 ) );
     mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "stroke-linejoin", B2UCONST( "round" ) );
-    mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "xmlns:ooo", B2UCONST( "http://xml.openoffice.org/svg/export" ) );
     mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "xmlns", B2UCONST( "http://www.w3.org/2000/svg" ) );
+    mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "xmlns:ooo", B2UCONST( "http://xml.openoffice.org/svg/export" ) );
     mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "xmlns:xlink", B2UCONST( "http://www.w3.org/1999/xlink" ) );
-
-    mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "xmlns:draw", B2UCONST( "urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" ) );
-    mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "xmlns:presentation", B2UCONST( "urn:oasis:names:tc:opendocument:xmlns:presentation:1.0" ) );
-    mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "xmlns:smil", B2UCONST( "urn:oasis:names:tc:opendocument:xmlns:smil-compatible:1.0" ) );
-    mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "xmlns:anim", B2UCONST( "urn:oasis:names:tc:opendocument:xmlns:animation:1.0" ) );
-
     mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "xml:space", B2UCONST( "preserve" ) );
 
     mpSVGDoc = new SvXMLElementExport( *mpSVGExport, XML_NAMESPACE_NONE, "svg", sal_True, sal_True );
