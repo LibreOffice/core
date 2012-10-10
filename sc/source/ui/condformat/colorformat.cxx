@@ -63,7 +63,7 @@ ScDataBarSettingsDlg::ScDataBarSettingsDlg(Window* pWindow, ScDocument* pDoc):
     FreeResource();
 
     maLbTypeMin.SelectEntryPos(0);
-    maLbTypeMax.SelectEntryPos(1);
+    maLbTypeMax.SelectEntryPos(0);
     maLbAxisPos.SelectEntryPos(0);
 }
 
@@ -73,29 +73,26 @@ void SetType(const ScColorScaleEntry* pEntry, ListBox& aLstBox)
 {
     switch(pEntry->GetType())
     {
-        case COLORSCALE_MIN:
+        case COLORSCALE_AUTO:
             aLstBox.SelectEntryPos(0);
             break;
-        case COLORSCALE_MAX:
+        case COLORSCALE_MIN:
             aLstBox.SelectEntryPos(1);
             break;
-        case COLORSCALE_PERCENTILE:
+        case COLORSCALE_MAX:
             aLstBox.SelectEntryPos(2);
             break;
-        case COLORSCALE_PERCENT:
+        case COLORSCALE_PERCENTILE:
             aLstBox.SelectEntryPos(3);
             break;
-        case COLORSCALE_FORMULA:
-            aLstBox.SelectEntryPos(5);
-            break;
-        case COLORSCALE_VALUE:
+        case COLORSCALE_PERCENT:
             aLstBox.SelectEntryPos(4);
             break;
-        case COLORSCALE_AUTOMIN:
+        case COLORSCALE_FORMULA:
             aLstBox.SelectEntryPos(6);
             break;
-        case COLORSCALE_AUTOMAX:
-            aLstBox.SelectEntryPos(7);
+        case COLORSCALE_VALUE:
+            aLstBox.SelectEntryPos(5);
             break;
     }
 }
@@ -107,34 +104,31 @@ void GetType(const ListBox& rLstBox, const Edit& rEd, ScColorScaleEntry* pEntry,
     switch(rLstBox.GetSelectEntryPos())
     {
         case 0:
-            pEntry->SetType(COLORSCALE_MIN);
+            pEntry->SetType(COLORSCALE_AUTO);
             break;
         case 1:
-            pEntry->SetType(COLORSCALE_MAX);
+            pEntry->SetType(COLORSCALE_MIN);
             break;
         case 2:
+            pEntry->SetType(COLORSCALE_MAX);
+            break;
+        case 3:
             pEntry->SetType(COLORSCALE_PERCENTILE);
             pNumberFormatter->IsNumberFormat( rEd.GetText(), nIndex, nVal );
             pEntry->SetValue(nVal);
             break;
-        case 3:
+        case 4:
             pEntry->SetType(COLORSCALE_PERCENT);
             pNumberFormatter->IsNumberFormat( rEd.GetText(), nIndex, nVal );
             pEntry->SetValue(nVal);
             break;
-        case 4:
+        case 5:
             pNumberFormatter->IsNumberFormat( rEd.GetText(), nIndex, nVal );
             pEntry->SetType(COLORSCALE_VALUE);
             pEntry->SetValue(nVal);
             break;
-        case 5:
-            //TODO: moggi
-            break;
         case 6:
-            pEntry->SetType(COLORSCALE_AUTOMIN);
-            break;
-        case 7:
-            pEntry->SetType(COLORSCALE_AUTOMAX);
+            //TODO: moggi
             break;
     }
 }

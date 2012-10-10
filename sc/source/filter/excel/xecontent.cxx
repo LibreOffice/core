@@ -885,17 +885,18 @@ void XclExpCF::SaveXml( XclExpXmlStream& rStrm )
     mxImpl->SaveXml( rStrm );
 }
 
-XclExpCfvo::XclExpCfvo(const XclExpRoot& rRoot, const ScColorScaleEntry& rEntry, const ScAddress& rAddr):
+XclExpCfvo::XclExpCfvo(const XclExpRoot& rRoot, const ScColorScaleEntry& rEntry, const ScAddress& rAddr, bool bFirst):
     XclExpRecord(),
     XclExpRoot( rRoot ),
     mrEntry(rEntry),
-    maSrcPos(rAddr)
+    maSrcPos(rAddr),
+    mbFirst(bFirst)
 {
 }
 
 namespace {
 
-rtl::OString getColorScaleType( const ScColorScaleEntry& rEntry )
+rtl::OString getColorScaleType( const ScColorScaleEntry& rEntry, bool bFirst )
 {
     switch(rEntry.GetType())
     {
@@ -907,10 +908,11 @@ rtl::OString getColorScaleType( const ScColorScaleEntry& rEntry )
             return "percent";
         case COLORSCALE_FORMULA:
             return "formula";
-        case COLORSCALE_AUTOMIN:
-            return "min";
-        case COLORSCALE_AUTOMAX:
-            return "max";
+        case COLORSCALE_AUTO:
+            if(bFirst)
+                return "min";
+            else
+                return "max";
         case COLORSCALE_PERCENTILE:
             return "percentile";
         default:
@@ -938,7 +940,7 @@ void XclExpCfvo::SaveXml( XclExpXmlStream& rStrm )
     }
 
     rWorksheet->startElement( XML_cfvo,
-            XML_type, getColorScaleType(mrEntry).getStr(),
+            XML_type, getColorScaleType(mrEntry, mbFirst).getStr(),
             XML_val, aValue.getStr(),
             FSEND );
 
@@ -1115,8 +1117,8 @@ XclExpDataBar::XclExpDataBar( const XclExpRoot& rRoot, const ScDataBarFormat& rF
     const ScRange* pRange = rFormat.GetRange().front();
     ScAddress aAddr = pRange->aStart;
     // exact position is not important, we allow only absolute refs
-    mpCfvoLowerLimit.reset( new XclExpCfvo( GetRoot(), *mrFormat.GetDataBarData()->mpLowerLimit.get(), aAddr ) );
-    mpCfvoUpperLimit.reset( new XclExpCfvo( GetRoot(), *mrFormat.GetDataBarData()->mpUpperLimit.get(), aAddr ) );
+    mpCfvoLowerLimit.reset( new XclExpCfvo( GetRoot(), *mrFormat.GetDataBarData()->mpLowerLimit.get(), aAddr, true ) );
+    mpCfvoUpperLimit.reset( new XclExpCfvo( GetRoot(), *mrFormat.GetDataBarData()->mpUpperLimit.get(), aAddr, false ) );
 
     mpCol.reset( new XclExpColScaleCol( GetRoot(), mrFormat.GetDataBarData()->maPositiveColor ) );
     if(xExtLst.get())

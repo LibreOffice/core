@@ -131,9 +131,9 @@ void ExtCfRuleContext::importCfvo( const AttributeList& rAttribs )
     else if (aColorScaleType == "max")
         pEntry->SetType(COLORSCALE_MAX);
     else if (aColorScaleType == "autoMin")
-        pEntry->SetType(COLORSCALE_AUTOMIN);
+        pEntry->SetType(COLORSCALE_AUTO);
     else if (aColorScaleType == "autoMax")
-        pEntry->SetType(COLORSCALE_AUTOMAX);
+        pEntry->SetType(COLORSCALE_AUTO);
     else if (aColorScaleType == "percentile")
         pEntry->SetType(COLORSCALE_PERCENTILE);
     else if (aColorScaleType == "percent")

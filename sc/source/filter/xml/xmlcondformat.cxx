@@ -436,11 +436,9 @@ void setColorEntryType(const rtl::OUString& rType, ScColorScaleEntry* pEntry, co
         pEntry->SetFormula(rFormula, rImport.GetDocument(), ScAddress(0,0,rImport.GetTables().GetCurrentSheet()), formula::FormulaGrammar::GRAM_ODFF);
     }
     else if(rType == "auto-minimum")
-        pEntry->SetType(COLORSCALE_AUTOMIN);
+        pEntry->SetType(COLORSCALE_AUTO);
     else if(rType == "auto-maximum")
-        pEntry->SetType(COLORSCALE_AUTOMAX);
-
-    //TODO: add formulas
+        pEntry->SetType(COLORSCALE_AUTO);
 }
 
 }

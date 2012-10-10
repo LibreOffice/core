@@ -518,72 +518,72 @@ void SetColorScaleEntryTypes( const ScColorScaleEntry& rEntry, ListBox& rLbType,
     switch(rEntry.GetType())
     {
         case COLORSCALE_MIN:
-            rLbType.SelectEntryPos(0);
+            rLbType.SelectEntryPos(1);
             break;
         case COLORSCALE_MAX:
-            rLbType.SelectEntryPos(1);
+            rLbType.SelectEntryPos(2);
             break;
         case COLORSCALE_PERCENTILE:
             rEdit.SetText(rtl::OUString::valueOf(rEntry.GetValue()));
-            rLbType.SelectEntryPos(2);
+            rLbType.SelectEntryPos(3);
             break;
         case COLORSCALE_PERCENT:
             rEdit.SetText(rtl::OUString::valueOf(rEntry.GetValue()));
-            rLbType.SelectEntryPos(4);
+            rLbType.SelectEntryPos(5);
             break;
         case COLORSCALE_FORMULA:
             rEdit.SetText(rEntry.GetFormula(formula::FormulaGrammar::GRAM_DEFAULT));
-            rLbType.SelectEntryPos(5);
+            rLbType.SelectEntryPos(6);
             break;
         case COLORSCALE_VALUE:
             rEdit.SetText(rtl::OUString::valueOf(rEntry.GetValue()));
-            rLbType.SelectEntryPos(3);
+            rLbType.SelectEntryPos(4);
             break;
-        case COLORSCALE_AUTOMIN:
-            rLbType.SelectEntryPos(6);
-            break;
-        case COLORSCALE_AUTOMAX:
-            rLbType.SelectEntryPos(7);
+        case COLORSCALE_AUTO:
+            abort();
             break;
     }
     rLbCol.SelectEntry(rEntry.GetColor());
 }
 
-void SetColorScaleEntry( ScColorScaleEntry* pEntry, const ListBox& rType, const Edit& rValue, ScDocument* pDoc, const ScAddress& rPos )
+void SetColorScaleEntry( ScColorScaleEntry* pEntry, const ListBox& rType, const Edit& rValue, ScDocument* pDoc, const ScAddress& rPos, bool bDataBar )
 {
     sal_uInt32 nIndex = 0;
     double nVal = 0;
     SvNumberFormatter* pNumberFormatter = pDoc->GetFormatTable();
     pNumberFormatter->IsNumberFormat(rValue.GetText(), nIndex, nVal);
-    switch(rType.GetSelectEntryPos())
+
+    // color scale does not have the automatic entry
+    sal_Int32 nPos = rType.GetSelectEntryPos();
+    if(!bDataBar)
+        ++nPos;
+
+    switch(nPos)
     {
-        case 0:
+        case 1:
             pEntry->SetType(COLORSCALE_MIN);
             break;
-        case 1:
+        case 2:
             pEntry->SetType(COLORSCALE_MAX);
             break;
-        case 2:
+        case 3:
             pEntry->SetType(COLORSCALE_PERCENTILE);
             pEntry->SetValue(nVal);
             break;
-        case 3:
+        case 4:
             pEntry->SetType(COLORSCALE_VALUE);
             pEntry->SetValue(nVal);
             break;
-        case 4:
+        case 5:
             pEntry->SetType(COLORSCALE_PERCENT);
             pEntry->SetValue(nVal);
             break;
-        case 5:
+        case 6:
             pEntry->SetType(COLORSCALE_FORMULA);
             pEntry->SetFormula(rValue.GetText(), pDoc, rPos);
             break;
-        case 6:
-            pEntry->SetType(COLORSCALE_AUTOMIN);
-            break;
-        case 7:
-            pEntry->SetType(COLORSCALE_AUTOMAX);
+        case 0:
+            pEntry->SetType(COLORSCALE_AUTO);
             break;
         default:
             break;
@@ -594,7 +594,7 @@ ScColorScaleEntry* createColorScaleEntry( const ListBox& rType, const ColorListB
 {
     ScColorScaleEntry* pEntry = new ScColorScaleEntry();
 
-    SetColorScaleEntry( pEntry, rType, rValue, pDoc, rPos );
+    SetColorScaleEntry( pEntry, rType, rValue, pDoc, rPos, false );
     Color aColor = rColor.GetSelectEntryColor();
     pEntry->SetColor(aColor);
     return pEntry;
@@ -612,6 +612,10 @@ ScColorScale2FrmtEntry::ScColorScale2FrmtEntry( Window* pParent, ScDocument* pDo
     maLbColMin( this, ScResId( LB_COL_MIN ) ),
     maLbColMax( this, ScResId( LB_COL_MAX ) )
 {
+    // remove the automatic entry from color scales
+    maLbEntryTypeMin.RemoveEntry(0);
+    maLbEntryTypeMax.RemoveEntry(0);
+
     maLbType.SelectEntryPos(0);
     maLbColorFormat.SelectEntryPos(0);
     if(pFormat)
@@ -771,6 +775,11 @@ ScColorScale3FrmtEntry::ScColorScale3FrmtEntry( Window* pParent, ScDocument* pDo
     maLbColMiddle( this, ScResId( LB_COL_MIDDLE ) ),
     maLbColMax( this, ScResId( LB_COL_MAX ) )
 {
+    // remove the automatic entry from color scales
+    maLbEntryTypeMin.RemoveEntry(0);
+    maLbEntryTypeMiddle.RemoveEntry(0);
+    maLbEntryTypeMax.RemoveEntry(0);
+
     maLbType.SelectEntryPos(0);
     if(pFormat)
     {
@@ -949,32 +958,29 @@ void SetDataBarEntryTypes( const ScColorScaleEntry& rEntry, ListBox& rLbType, Ed
     switch(rEntry.GetType())
     {
         case COLORSCALE_MIN:
-            rLbType.SelectEntryPos(0);
+            rLbType.SelectEntryPos(1);
             break;
         case COLORSCALE_MAX:
-            rLbType.SelectEntryPos(1);
+            rLbType.SelectEntryPos(2);
             break;
         case COLORSCALE_PERCENTILE:
             rEdit.SetText(rtl::OUString::valueOf(rEntry.GetValue()));
-            rLbType.SelectEntryPos(2);
+            rLbType.SelectEntryPos(3);
             break;
         case COLORSCALE_PERCENT:
             rEdit.SetText(rtl::OUString::valueOf(rEntry.GetValue()));
-            rLbType.SelectEntryPos(4);
+            rLbType.SelectEntryPos(5);
             break;
         case COLORSCALE_FORMULA:
             rEdit.SetText(rEntry.GetFormula(formula::FormulaGrammar::GRAM_DEFAULT));
-            rLbType.SelectEntryPos(5);
+            rLbType.SelectEntryPos(6);
             break;
         case COLORSCALE_VALUE:
             rEdit.SetText(rtl::OUString::valueOf(rEntry.GetValue()));
-            rLbType.SelectEntryPos(3);
+            rLbType.SelectEntryPos(4);
             break;
-        case COLORSCALE_AUTOMIN:
-            rLbType.SelectEntryPos(6);
-            break;
-        case COLORSCALE_AUTOMAX:
-            rLbType.SelectEntryPos(7);
+        case COLORSCALE_AUTO:
+            rLbType.SelectEntryPos(0);
             break;
     }
 }
@@ -1002,7 +1008,7 @@ ScDataBarFrmtEntry::ScDataBarFrmtEntry( Window* pParent, ScDocument* pDoc, const
     else
     {
         maLbDataBarMinType.SelectEntryPos(0);
-        maLbDataBarMaxType.SelectEntryPos(1);
+        maLbDataBarMaxType.SelectEntryPos(0);
     }
     Init();
 
@@ -1033,8 +1039,8 @@ void ScDataBarFrmtEntry::Init()
 
 ScFormatEntry* ScDataBarFrmtEntry::createDatabarEntry() const
 {
-    SetColorScaleEntry(mpDataBarData->mpLowerLimit.get(), maLbDataBarMinType, maEdDataBarMin, mpDoc, maPos);
-    SetColorScaleEntry(mpDataBarData->mpUpperLimit.get(), maLbDataBarMaxType, maEdDataBarMax, mpDoc, maPos);
+    SetColorScaleEntry(mpDataBarData->mpLowerLimit.get(), maLbDataBarMinType, maEdDataBarMin, mpDoc, maPos, true);
+    SetColorScaleEntry(mpDataBarData->mpUpperLimit.get(), maLbDataBarMaxType, maEdDataBarMax, mpDoc, maPos, true);
     ScDataBarFormat* pDataBar = new ScDataBarFormat(mpDoc);
     pDataBar->SetDataBarData(new ScDataBarFormatData(*mpDataBarData.get()));
     return pDataBar;
@@ -1081,8 +1087,8 @@ IMPL_LINK_NOARG( ScDataBarFrmtEntry, DataBarTypeSelectHdl )
 
 IMPL_LINK_NOARG( ScDataBarFrmtEntry, OptionBtnHdl )
 {
-    SetColorScaleEntry(mpDataBarData->mpLowerLimit.get(), maLbDataBarMinType, maEdDataBarMin, mpDoc, maPos);
-    SetColorScaleEntry(mpDataBarData->mpUpperLimit.get(), maLbDataBarMaxType, maEdDataBarMax, mpDoc, maPos);
+    SetColorScaleEntry(mpDataBarData->mpLowerLimit.get(), maLbDataBarMinType, maEdDataBarMin, mpDoc, maPos, true);
+    SetColorScaleEntry(mpDataBarData->mpUpperLimit.get(), maLbDataBarMaxType, maEdDataBarMax, mpDoc, maPos, true);
     ScDataBarSettingsDlg* pDlg = new ScDataBarSettingsDlg(this, *mpDataBarData, mpDoc);
     if( pDlg->Execute() == RET_OK)
     {

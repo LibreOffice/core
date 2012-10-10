@@ -194,13 +194,14 @@ private:
 class XclExpCfvo : public XclExpRecord, protected XclExpRoot
 {
 public:
-    explicit XclExpCfvo( const XclExpRoot& rRoot, const ScColorScaleEntry& rFormatEntry, const ScAddress& rPos);
+    explicit XclExpCfvo( const XclExpRoot& rRoot, const ScColorScaleEntry& rFormatEntry, const ScAddress& rPos, bool bFirst = true);
     virtual ~XclExpCfvo() {}
 
     virtual void SaveXml( XclExpXmlStream& rStrm );
 private:
     const ScColorScaleEntry& mrEntry;
     ScAddress maSrcPos;
+    bool mbFirst;
 };
 
 class XclExpColScaleCol : public XclExpRecord, protected XclExpRoot

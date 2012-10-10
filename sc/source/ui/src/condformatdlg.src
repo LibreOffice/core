@@ -199,14 +199,13 @@ Control RID_COND_ENTRY
         DropDown = TRUE;
         StringList [ en-US ] =
         {
+            "Automatic";
             "Min";
             "Max";
             "Percentile";
             "Value";
             "Percent";
             "Formula";
-            "AutoMin";
-            "AutoMax";
         };
     };
     ListBox LB_TYPE_COL_SCALE_MIDDLE
@@ -217,14 +216,13 @@ Control RID_COND_ENTRY
         DropDown = TRUE;
         StringList [ en-US ] =
         {
+            "Automatic";
             "Min";
             "Max";
             "Percentile";
             "Value";
             "Percent";
             "Formula";
-            "AutoMin";
-            "AutoMax";
         };
     };
     ListBox LB_TYPE_COL_SCALE_MAX
@@ -235,14 +233,13 @@ Control RID_COND_ENTRY
         DropDown = TRUE;
         StringList [ en-US ] =
         {
+            "Automatic";
             "Min";
             "Max";
             "Percentile";
             "Value";
             "Percent";
             "Formula";
-            "AutoMin";
-            "AutoMax";
         };
     };
     Window WD_PREVIEW

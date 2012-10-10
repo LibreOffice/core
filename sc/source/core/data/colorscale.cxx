@@ -397,12 +397,8 @@ double ScColorScaleFormat::CalcValue(double nMin, double nMax, ScColorScaleForma
             return nMin + (nMax-nMin)*(itr->GetValue()/100);
         case COLORSCALE_MIN:
             return nMin;
-        case COLORSCALE_AUTOMIN:
-            return std::min<double>(0, nMin);
         case COLORSCALE_MAX:
             return nMax;
-        case COLORSCALE_AUTOMAX:
-            return std::max<double>(0, nMax);
         case COLORSCALE_PERCENTILE:
         {
             std::vector<double>& rValues = getValues();
@@ -526,8 +522,6 @@ bool ScColorScaleFormat::CheckEntriesForRel(const ScRange& rRange) const
         {
             case COLORSCALE_MIN:
             case COLORSCALE_MAX:
-            case COLORSCALE_AUTOMIN:
-            case COLORSCALE_AUTOMAX:
                 bNeedUpdate = true;
                 break;
             case COLORSCALE_FORMULA:
@@ -634,8 +628,7 @@ bool NeedUpdate(ScColorScaleEntry* pEntry)
         case COLORSCALE_MIN:
         case COLORSCALE_MAX:
         case COLORSCALE_FORMULA:
-        case COLORSCALE_AUTOMIN:
-        case COLORSCALE_AUTOMAX:
+        case COLORSCALE_AUTO:
             return true;
         default:
             return false;
@@ -678,7 +671,7 @@ double ScDataBarFormat::getMin(double nMin, double nMax) const
         case COLORSCALE_MIN:
             return nMin;
 
-        case COLORSCALE_AUTOMIN:
+        case COLORSCALE_AUTO:
             return std::min<double>(0, nMin);
 
         case COLORSCALE_PERCENT:
@@ -704,7 +697,7 @@ double ScDataBarFormat::getMax(double nMin, double nMax) const
     {
         case COLORSCALE_MAX:
             return nMax;
-        case COLORSCALE_AUTOMAX:
+        case COLORSCALE_AUTO:
             return std::max<double>(0, nMax);
         case COLORSCALE_PERCENT:
             return nMin + (nMax-nMin)/100*mpFormatData->mpUpperLimit->GetValue();
