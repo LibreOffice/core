@@ -50,10 +50,10 @@ LngParser::LngParser(const rtl::OString &rLngFile,
     if (aStream.is_open())
     {
         bool bFirstLine = true;
+        std::string s;
+        std::getline(aStream, s);
         while (!aStream.eof())
         {
-            std::string s;
-            std::getline(aStream, s);
             rtl::OString sLine(s.data(), s.length());
 
             if( bFirstLine )
@@ -64,6 +64,7 @@ LngParser::LngParser(const rtl::OString &rLngFile,
             }
 
             pLines->push_back( new rtl::OString(sLine) );
+            std::getline(aStream, s);
         }
     }
     else
