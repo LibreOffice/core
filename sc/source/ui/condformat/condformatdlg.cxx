@@ -53,9 +53,6 @@
 
 #include "globstr.hrc"
 
-#include <cassert>
-#include <iostream>
-
 ScCondFormatList::ScCondFormatList(Window* pParent, const ResId& rResId, ScDocument* pDoc, const ScConditionalFormat* pFormat,
                                 const ScRangeList& rRanges, const ScAddress& rPos, condformat::dialog::ScCondFormatDialogType eType):
     Control(pParent, rResId),
@@ -191,35 +188,33 @@ IMPL_LINK(ScCondFormatList, ColFormatTypeHdl, ListBox*, pBox)
             break;
     }
     if(itr == maEntries.end())
-        return 0;;
+        return 0;
 
     sal_Int32 nPos = pBox->GetSelectEntryPos();
     switch(nPos)
     {
         case 0:
-            if(itr->GetType() != condformat::entry::COLORSCALE2)
-            {
-                maEntries.replace( itr, new ScColorScale2FrmtEntry( this, mpDoc, maPos ) );
-                static_cast<ScCondFormatDlg*>(GetParent())->InvalidateRefData();
-            }
+            if(itr->GetType() == condformat::entry::COLORSCALE2)
+                return 0;
+
+            maEntries.replace( itr, new ScColorScale2FrmtEntry( this, mpDoc, maPos ) );
             break;
         case 1:
-            if(itr->GetType() != condformat::entry::COLORSCALE3)
-            {
-                maEntries.replace( itr, new ScColorScale3FrmtEntry( this, mpDoc, maPos ) );
-                static_cast<ScCondFormatDlg*>(GetParent())->InvalidateRefData();
-            }
+            if(itr->GetType() == condformat::entry::COLORSCALE3)
+                return 0;
+
+            maEntries.replace( itr, new ScColorScale3FrmtEntry( this, mpDoc, maPos ) );
             break;
         case 2:
-            if(itr->GetType() != condformat::entry::DATABAR)
-            {
-                maEntries.replace( itr, new ScDataBarFrmtEntry( this, mpDoc, maPos ) );
-                static_cast<ScCondFormatDlg*>(GetParent())->InvalidateRefData();
-            }
+            if(itr->GetType() == condformat::entry::DATABAR)
+                return 0;
+
+            maEntries.replace( itr, new ScDataBarFrmtEntry( this, mpDoc, maPos ) );
             break;
         default:
             break;
     }
+    static_cast<ScCondFormatDlg*>(GetParent())->InvalidateRefData();
     itr->SetActive();
     RecalcAll();
     return 0;
