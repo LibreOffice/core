@@ -504,6 +504,21 @@ bool VclBuilder::extractImage(const OString &id, stringmap &rMap)
     return false;
 }
 
+//This doesn't actually do anything yet, so hide it down here in builder.cxx as
+//merely a temporary storage for scrolling information for vcl controls which
+//actually manage their own scrolling. If you want to put something inside
+//a scrolled window that doesn't handle its own scrolling, then you
+//need to implement this fully and move into a top-level header
+class VclScrolledWindow : public Window
+{
+public:
+    VclScrolledWindow(Window *pParent)
+        : Window(WINDOW_SCROLLWINDOW)
+    {
+        ImplInit(pParent, WB_HIDE, NULL);
+    }
+};
+
 #ifndef DISABLE_DYNLOADING
 extern "C" { static void SAL_CALL thisModule() {} }
 #endif
@@ -690,6 +705,10 @@ Window *VclBuilder::makeObject(Window *pParent, const OString &name, const OStri
         else
             pWindow = new ScrollBar(pParent, WB_HORZ);
     }
+    else if (name == "GtkScrolledWindow")
+    {
+        pWindow = new VclScrolledWindow(pParent);
+    }
     else if (name == "GtkEntry")
     {
         pWindow = new Edit(pParent, WB_LEFT|WB_VCENTER|WB_BORDER|WB_3DLOOK);
@@ -700,7 +719,30 @@ Window *VclBuilder::makeObject(Window *pParent, const OString &name, const OStri
     else if (name == "GtkDrawingArea")
         pWindow = new Window(pParent);
     else if (name == "GtkTextView")
-        pWindow = new VCLMultiLineEdit(pParent);
+    {
+        WinBits nWinStyle = WB_LEFT | WB_BORDER;
+        //VCLMultiLineEdit manage their own scrolling,
+        //so if it appears as a child of a scrolling window
+        //shoehorn that scrolling settings to this
+        //widget and remove the parent
+        if (pParent && pParent->GetType() == WINDOW_SCROLLWINDOW)
+        {
+            WinBits nScrollBits = pParent->GetStyle();
+            nScrollBits &= (WB_AUTOHSCROLL|WB_HSCROLL|WB_AUTOVSCROLL|WB_VSCROLL);
+            nWinStyle |= nScrollBits;
+
+            Window *pScrollParent = pParent;
+            pParent = pParent->GetParent();
+
+            sal_Int32 nWidthReq = pScrollParent->get_width_request();
+            rMap[OString("width-request")] = OString::valueOf(nWidthReq);
+            sal_Int32 nHeightReq = pScrollParent->get_height_request();
+            rMap[OString("height-request")] = OString::valueOf(nHeightReq);
+
+            delete_by_window(pScrollParent);
+        }
+        pWindow = new VCLMultiLineEdit(pParent, nWinStyle);
+    }
     else
     {
         sal_Int32 nDelim = name.indexOf(':');
@@ -747,7 +789,7 @@ namespace
 {
     //return true for window types which exist in vcl but are not themselves
     //represented in the .ui format, i.e. only their children exist.
-    bool isConsideredPseudo(Window *pWindow)
+    bool isConsideredGtkPseudo(Window *pWindow)
     {
         return pWindow->GetType() == WINDOW_TABPAGE;
     }
@@ -757,7 +799,7 @@ Window *VclBuilder::insertObject(Window *pParent, const OString &rClass, const O
 {
     Window *pCurrentChild = NULL;
 
-    if (m_pParent && !isConsideredPseudo(m_pParent) && !m_sID.isEmpty() && rID.equals(m_sID))
+    if (m_pParent && !isConsideredGtkPseudo(m_pParent) && !m_sID.isEmpty() && rID.equals(m_sID))
     {
         pCurrentChild = m_pParent;
         //toplevels default to resizable
@@ -1411,6 +1453,20 @@ void VclBuilder::delete_by_name(OString sID)
          aEnd = m_aChildren.end(); aI != aEnd; ++aI)
     {
         if (aI->m_sID.equals(sID))
+        {
+            delete aI->m_pWindow;
+            m_aChildren.erase(aI);
+            break;
+        }
+    }
+}
+
+void VclBuilder::delete_by_window(const Window *pWindow)
+{
+    for (std::vector<WinAndId>::iterator aI = m_aChildren.begin(),
+         aEnd = m_aChildren.end(); aI != aEnd; ++aI)
+    {
+        if (aI->m_pWindow == pWindow)
         {
             delete aI->m_pWindow;
             m_aChildren.erase(aI);

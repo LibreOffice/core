@@ -2037,6 +2037,26 @@ bool Window::set_property(const rtl::OString &rKey, const rtl::OString &rValue)
         set_margin_top(rValue.toInt32());
     else if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("margin-bottom")))
         set_margin_bottom(rValue.toInt32());
+    else if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("hscrollbar-policy")))
+    {
+        WinBits nBits = GetStyle();
+        nBits &= ~(WB_AUTOHSCROLL|WB_HSCROLL);
+        if (rValue == "always")
+            nBits |= WB_HSCROLL;
+        else if (rValue == "automatic")
+            nBits |= WB_AUTOHSCROLL;
+        SetStyle(nBits);
+    }
+    else if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("vscrollbar-policy")))
+    {
+        WinBits nBits = GetStyle();
+        nBits &= ~(WB_AUTOVSCROLL|WB_VSCROLL);
+        if (rValue == "always")
+            nBits |= WB_VSCROLL;
+        else if (rValue == "automatic")
+            nBits |= WB_AUTOVSCROLL;
+        SetStyle(nBits);
+    }
     else
     {
         SAL_INFO("vcl.layout", "unhandled property: " << rKey.getStr());
@@ -2073,9 +2093,7 @@ void Window::set_width_request(sal_Int32 nWidthRequest)
 
 Size Window::get_preferred_size() const
 {
-    WindowImpl *pWindowImpl = mpWindowImpl->mpBorderWindow ? mpWindowImpl->mpBorderWindow->mpWindowImpl : mpWindowImpl;
-
-    Size aRet(pWindowImpl->mnWidthRequest, pWindowImpl->mnHeightRequest);
+    Size aRet(get_width_request(), get_height_request());
     if (aRet.Width() == -1 || aRet.Height() == -1)
     {
         Size aOptimal = GetOptimalSize(WINDOWSIZE_PREFERRED);
@@ -2289,6 +2307,18 @@ sal_Int32 Window::get_margin_bottom() const
 {
     WindowImpl *pWindowImpl = mpWindowImpl->mpBorderWindow ? mpWindowImpl->mpBorderWindow->mpWindowImpl : mpWindowImpl;
     return pWindowImpl->mnMarginBottom;
+}
+
+sal_Int32 Window::get_height_request() const
+{
+    WindowImpl *pWindowImpl = mpWindowImpl->mpBorderWindow ? mpWindowImpl->mpBorderWindow->mpWindowImpl : mpWindowImpl;
+    return pWindowImpl->mnHeightRequest;
+}
+
+sal_Int32 Window::get_width_request() const
+{
+    WindowImpl *pWindowImpl = mpWindowImpl->mpBorderWindow ? mpWindowImpl->mpBorderWindow->mpWindowImpl : mpWindowImpl;
+    return pWindowImpl->mnWidthRequest;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

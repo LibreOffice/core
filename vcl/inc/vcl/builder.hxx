@@ -156,6 +156,7 @@ public:
         return static_cast<T*>(w);
     }
     OString get_by_window(const Window *pWindow) const;
+    void delete_by_window(const Window *pWindow);
     //for the purposes of retrofitting this to the existing code
     //look up sID, clone its properties into replacement and
     //splice replacement into the tree instead of it, without

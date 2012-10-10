@@ -595,6 +595,9 @@ protected:
      */
     SAL_DLLPRIVATE void queue_resize();
 
+    sal_Int32 get_height_request() const;
+    sal_Int32 get_width_request() const;
+
     // FIXME: this is a hack to workaround missing layout functionality
     SAL_DLLPRIVATE void ImplAdjustNWFSizes();
 public:
