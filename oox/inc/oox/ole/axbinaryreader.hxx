@@ -112,9 +112,6 @@ public:
     /** Reads the next string property from the stream, if the respective flag
         in the property mask is set. */
     void                readStringProperty( ::rtl::OUString& orValue );
-    /** Reads a string array property from the stream, if the respective flag
-        in the property mask is set. */
-    void                readStringArrayProperty( AxStringArray& orArray );
     /** Reads the next GUID property from the stream, if the respective flag
         in the property mask is set. The GUID will be enclosed in braces. */
     void                readGuidProperty( ::rtl::OUString& orGuid );
@@ -138,9 +135,6 @@ public:
     /** Skips the next string property in the stream, if the respective flag in
         the property mask is set. */
     inline void         skipStringProperty() { readStringProperty( maDummyString ); }
-    /** Skips the next string array property in the stream, if the respective
-        flag in the property mask is set. */
-    inline void         skipStringArrayProperty() { readStringArrayProperty( maDummyStringArray ); }
     /** Skips the next GUID property in the stream, if the respective flag in
         the property mask is set. */
     inline void         skipGuidProperty() { readGuidProperty( maDummyString ); }
