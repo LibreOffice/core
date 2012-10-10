@@ -34,6 +34,7 @@
 #include "anyrefdg.hxx"
 
 struct ScDataBarFormatData;
+class ScDocument;
 
 class ScDataBarSettingsDlg : public ModalDialog
 {
@@ -65,14 +66,17 @@ private:
     rtl::OUString maStrWarnSameValue;
     SvNumberFormatter* mpNumberFormatter;
 
+    ScDocument* mpDoc;
+    ScAddress   maPos;
+
     DECL_LINK(OkBtnHdl, void*);
     DECL_LINK(TypeSelectHdl, void*);
 
     void Init();
 
 public:
-    ScDataBarSettingsDlg(Window* pParent, ScDocument* pDoc);
-    ScDataBarSettingsDlg(Window* pParent, const ScDataBarFormatData& rData, ScDocument* pDoc);
+    ScDataBarSettingsDlg(Window* pParent, ScDocument* pDoc, const ScAddress& rPos);
+    ScDataBarSettingsDlg(Window* pParent, const ScDataBarFormatData& rData, ScDocument* pDoc, const ScAddress& rPos);
 
     ScDataBarFormatData* GetData();
 };

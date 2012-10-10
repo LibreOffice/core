@@ -1041,7 +1041,7 @@ IMPL_LINK_NOARG( ScDataBarFrmtEntry, OptionBtnHdl )
 {
     SetColorScaleEntry(mpDataBarData->mpLowerLimit.get(), maLbDataBarMinType, maEdDataBarMin, mpDoc, maPos, true);
     SetColorScaleEntry(mpDataBarData->mpUpperLimit.get(), maLbDataBarMaxType, maEdDataBarMax, mpDoc, maPos, true);
-    ScDataBarSettingsDlg* pDlg = new ScDataBarSettingsDlg(this, *mpDataBarData, mpDoc);
+    ScDataBarSettingsDlg* pDlg = new ScDataBarSettingsDlg(this, *mpDataBarData, mpDoc, maPos);
     if( pDlg->Execute() == RET_OK)
     {
         mpDataBarData.reset(pDlg->GetData());

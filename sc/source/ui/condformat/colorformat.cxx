@@ -36,7 +36,7 @@
 #include <svx/drawitem.hxx>
 #include <vcl/msgbox.hxx>
 
-ScDataBarSettingsDlg::ScDataBarSettingsDlg(Window* pWindow, ScDocument* pDoc):
+ScDataBarSettingsDlg::ScDataBarSettingsDlg(Window* pWindow, ScDocument* pDoc, const ScAddress& rPos):
     ModalDialog( pWindow, ScResId( RID_SCDLG_DATABAR ) ),
     maBtnOk( this, ScResId( BTN_OK ) ),
     maBtnCancel( this, ScResId( BTN_CANCEL ) ),
@@ -57,7 +57,9 @@ ScDataBarSettingsDlg::ScDataBarSettingsDlg(Window* pWindow, ScDocument* pDoc):
     maLbAxisPos( this, ScResId( LB_AXIS_POSITION ) ),
     maEdMin( this, ScResId( ED_MIN ) ),
     maEdMax( this, ScResId( ED_MAX ) ),
-    mpNumberFormatter( pDoc->GetFormatTable() )
+    mpNumberFormatter( pDoc->GetFormatTable() ),
+    mpDoc(pDoc),
+    maPos(rPos)
 {
     Init();
     FreeResource();
@@ -74,7 +76,8 @@ void SetType(const ScColorScaleEntry* pEntry, ListBox& rLstBox)
     rLstBox.SelectEntryPos(pEntry->GetType());
 }
 
-void GetType(const ListBox& rLstBox, const Edit& rEd, ScColorScaleEntry* pEntry, SvNumberFormatter* pNumberFormatter )
+void GetType(const ListBox& rLstBox, const Edit& rEd, ScColorScaleEntry* pEntry, SvNumberFormatter* pNumberFormatter,
+        ScDocument* pDoc, const ScAddress& rPos )
 {
     double nVal = 0;
     sal_uInt32 nIndex = 0;
@@ -91,8 +94,8 @@ void GetType(const ListBox& rLstBox, const Edit& rEd, ScColorScaleEntry* pEntry,
             pNumberFormatter->IsNumberFormat( rEd.GetText(), nIndex, nVal );
             pEntry->SetValue(nVal);
             break;
-        case 6:
-            //TODO: moggi
+        case COLORSCALE_FORMULA:
+            pEntry->SetFormula(rEd.GetText(), pDoc, rPos);
             break;
     }
 }
@@ -109,7 +112,7 @@ void SetValue( ScColorScaleEntry* pEntry, Edit& aEdit)
 
 }
 
-ScDataBarSettingsDlg::ScDataBarSettingsDlg(Window* pWindow, const ScDataBarFormatData& rData, ScDocument* pDoc):
+ScDataBarSettingsDlg::ScDataBarSettingsDlg(Window* pWindow, const ScDataBarFormatData& rData, ScDocument* pDoc, const ScAddress& rPos):
     ModalDialog( pWindow, ScResId( RID_SCDLG_DATABAR ) ),
     maBtnOk( this, ScResId( BTN_OK ) ),
     maBtnCancel( this, ScResId( BTN_CANCEL ) ),
@@ -131,7 +134,9 @@ ScDataBarSettingsDlg::ScDataBarSettingsDlg(Window* pWindow, const ScDataBarForma
     maEdMin( this, ScResId( ED_MIN ) ),
     maEdMax( this, ScResId( ED_MAX ) ),
     maStrWarnSameValue( SC_RESSTR( STR_WARN_SAME_VALUE ) ),
-    mpNumberFormatter( pDoc->GetFormatTable() )
+    mpNumberFormatter( pDoc->GetFormatTable() ),
+    mpDoc(pDoc),
+    maPos(rPos)
 {
     Init();
     FreeResource();
@@ -240,8 +245,8 @@ ScDataBarFormatData* ScDataBarSettingsDlg::GetData()
     pData->mpLowerLimit.reset(new ScColorScaleEntry());
     pData->maAxisColor = maLbAxisCol.GetSelectEntryColor();
 
-    ::GetType(maLbTypeMin, maEdMin, pData->mpLowerLimit.get(), mpNumberFormatter);
-    ::GetType(maLbTypeMax, maEdMax, pData->mpUpperLimit.get(), mpNumberFormatter);
+    ::GetType(maLbTypeMin, maEdMin, pData->mpLowerLimit.get(), mpNumberFormatter, mpDoc, maPos);
+    ::GetType(maLbTypeMax, maEdMax, pData->mpUpperLimit.get(), mpNumberFormatter, mpDoc, maPos);
     GetAxesPosition(pData, maLbAxisPos);
 
     return pData;
