@@ -171,9 +171,9 @@ namespace rtl
 #define RTL_LOGFILE_CONTEXT( instance, name )  ((void)0)
 #define RTL_LOGFILE_CONTEXT_AUTHOR( instance, project, author, name )  ((void)0)
 #define RTL_LOGFILE_CONTEXT_TRACE( instance, message )  ((void)0)
-#define RTL_LOGFILE_CONTEXT_TRACE1( instance, frmt, arg1 ) ((void)0)
-#define RTL_LOGFILE_CONTEXT_TRACE2( instance, frmt, arg1, arg2 ) ((void)0)
-#define RTL_LOGFILE_CONTEXT_TRACE3( instance, frmt, arg1, arg2 , arg3 ) ((void)0)
+#define RTL_LOGFILE_CONTEXT_TRACE1( instance, frmt, arg1 ) ((void)arg1,(void)0)
+#define RTL_LOGFILE_CONTEXT_TRACE2( instance, frmt, arg1, arg2 ) ((void)arg1,(void)arg2,(void)0)
+#define RTL_LOGFILE_CONTEXT_TRACE3( instance, frmt, arg1, arg2 , arg3 ) ((void)arg1,(void)arg2,(void)arg3,(void)0)
 #endif
 
 // Normal RTL_LOGFILE_* entries will not make it into release versions,
