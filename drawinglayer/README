@@ -1,0 +1,3 @@
+*Somewhat of a middle layer between rendering subsystems and application cores.
+
+*It offers a nice and easy API to render complex shapes. 

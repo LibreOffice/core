@@ -1,0 +1,9 @@
+Git hooks are executable scripts you can place in $GIT_DIR/hooks directory to trigger action at certain points. 
+
+There are two groups of these hooks: client side and server side. 
+The client-side hooks:
+are for client operations such as committing and merging.
+The server-side hooks:
+are for Git server operations such as receiving pushed commits.
+
+See Also [ http://git-scm.com/book/en/Customizing-Git-Git-Hooks ]
