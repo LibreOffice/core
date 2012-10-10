@@ -47,15 +47,6 @@
 
 #   define FILE_PREFIX          "file:///"
 
-//Korea charactors
-::rtl::OUString aKname(
-    RTL_CONSTASCII_STRINGPARAM(
-        "/\xEC\x95\x88\xEB\x85\x95\xED\x95\x98\xEC\x84\xB8\xEC\x9A\x94"),
-    RTL_TEXTENCODING_ISO_8859_1);
-    // zero-extend the individual byte-sized characters one-to-one to individual
-    // sal_Unicode-sized characters; not sure whether this is what was
-    // intended...
-
 //------------------------------------------------------------------------
 // function pointer type.
 //------------------------------------------------------------------------

@@ -258,8 +258,6 @@ public:
             /* rtlCipherError */ aError = rtl_cipher_decode(aCipher, pCipherBuffer, nCipherLen, pPlainText2Buffer, nPlainText2Len);
             CPPUNIT_ASSERT_MESSAGE("wrong decode", aError == rtl_Cipher_E_None);
 
-            rtl::OString sPlainText2Str((char*)pPlainText2Buffer, nPlainText2Len);
-
             sal_Int32 nCompare = memcmp(pPlainTextBuffer, pPlainText2Buffer, 16);
 
             CPPUNIT_ASSERT_MESSAGE("compare between plain and decoded plain failed", nCompare == 0);

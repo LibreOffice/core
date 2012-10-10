@@ -173,9 +173,6 @@ void oldtestfile::test_file_004()
         {
             CPPUNIT_ASSERT_MESSAGE("failure #10.1",  target.equalsAscii( aSource1[i+1] ) );
         }
-        OString o = OUStringToOString( target , RTL_TEXTENCODING_ASCII_US );
-        OString obase = OUStringToOString( base4 , RTL_TEXTENCODING_ASCII_US );
-        //fprintf( stderr, "%d %s + %s = %s\n" ,e, obase.getStr(), aSource1[i], o.pData->buffer );
     }
 #endif
 }
