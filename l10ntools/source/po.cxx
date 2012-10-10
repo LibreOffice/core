@@ -31,24 +31,6 @@
 
 namespace
 {
-    //Generate KeyId
-    static OString lcl_GenKeyId(const OString& rGenerator)
-    {
-        boost::crc_32_type aCRC32;
-        aCRC32.process_bytes(rGenerator.getStr(), rGenerator.getLength());
-        sal_uInt32 nCRC = aCRC32.checksum();
-        //Use all readable ASCII charachter exclude xml special tags: ",',&,<,>
-        const OString sSymbols = "!#$%()*+,-./0123456789:;=?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~";
-        char sKeyId[5];
-        for( short nKeyInd = 0; nKeyInd < 4; ++nKeyInd )
-        {
-            sKeyId[nKeyInd] = sSymbols[(nCRC & 255) % 89];
-            nCRC >>= 8;
-        }
-        sKeyId[4] = '\0';
-        return OString(sKeyId);
-    }
-
     //Escape text
     static OString lcl_EscapeText(const OString& rText,
                            const OString& rUnEscaped= POUNESCAPED,
@@ -126,7 +108,6 @@ GenPoEntry::GenPoEntry()
     , m_sTransStr( OString() )
     , m_bFuzzy( false )
     , m_bNull( false )
-    , m_sKeyId( OString() )
 {
 }
 
@@ -171,21 +152,15 @@ void GenPoEntry::setFuzzy(const bool bFuzzy)
     m_bFuzzy = bFuzzy;
 }
 
-//Set keyid
-void GenPoEntry::genKeyId()
-{
-    m_sKeyId = lcl_GenKeyId( m_sReference + m_sContext + m_sUnTransStr );
-}
-
 //Write to file
 void GenPoEntry::writeToFile(std::ofstream& rOFStream) const
 {
     if ( !m_sWhiteSpace.isEmpty() )
         rOFStream << m_sWhiteSpace.getStr();
     if ( !m_sExtractCom.isEmpty() )
-        rOFStream << "#. " << m_sExtractCom.getStr() << std::endl;
-    if ( !m_sKeyId.isEmpty() )
-        rOFStream << "#. " << m_sKeyId.getStr() << std::endl;
+        rOFStream
+            << "#. "
+            << m_sExtractCom.replaceAll("\n","\n#. ").getStr() << std::endl;
     if ( !m_sReference.isEmpty() )
         rOFStream << "#: " << m_sReference.getStr() << std::endl;
     if ( m_bFuzzy )
@@ -217,10 +192,11 @@ void GenPoEntry::readFromFile(std::ifstream& rIFStream)
         OString sLine = OString(sTemp.data(),sTemp.length());
         if (sLine.startsWith("#. "))
         {
-            if (sLine.getLength()==7)
-                m_sKeyId = sLine.copy(3);
-            else
-                m_sExtractCom = sLine.copy(3);
+            if( !m_sExtractCom.isEmpty() )
+            {
+                m_sExtractCom += "\n";
+            }
+            m_sExtractCom += sLine.copy(3);
         }
         else if (sLine.startsWith("#: "))
         {
@@ -253,14 +229,30 @@ void GenPoEntry::readFromFile(std::ifstream& rIFStream)
             break;
         getline(rIFStream,sTemp);
     }
-    if( m_sKeyId.isEmpty() && !m_sUnTransStr.isEmpty() )
-        genKeyId();
  }
 
 //Class PoEntry
 
 namespace
 {
+    //Generate KeyId
+    static OString lcl_GenKeyId(const OString& rGenerator)
+    {
+        boost::crc_32_type aCRC32;
+        aCRC32.process_bytes(rGenerator.getStr(), rGenerator.getLength());
+        sal_uInt32 nCRC = aCRC32.checksum();
+        //Use all readable ASCII charachter exclude xml special tags: ",',&,<,>
+        const OString sSymbols = "!#$%()*+,-./0123456789:;=?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~";
+        char sKeyId[5];
+        for( short nKeyInd = 0; nKeyInd < 4; ++nKeyInd )
+        {
+            sKeyId[nKeyInd] = sSymbols[(nCRC & 255) % 89];
+            nCRC >>= 8;
+        }
+        sKeyId[4] = '\0';
+        return OString(sKeyId);
+    }
+
     //Split string at the delimiter char
     static void lcl_SplitAt(const OString& rSource, const sal_Char nDelimiter,
                      std::vector<OString>& o_vParts)
@@ -417,7 +409,8 @@ PoEntry::PoEntry(const OString& rSDFLine, const TYPE eType)
         vParts[SOURCEFILE].isEmpty() ||
         vParts[GROUPID].isEmpty() ||
         vParts[RESOURCETYPE].isEmpty() ||
-        vParts[eType].isEmpty() )
+        vParts[eType].isEmpty() ||
+        vParts[HELPTEXT].getLength() == 4 )
     {
         throw INVALIDSDFLINE;
     }
@@ -426,7 +419,6 @@ PoEntry::PoEntry(const OString& rSDFLine, const TYPE eType)
     m_aGenPo.setReference(vParts[SOURCEFILE].
         copy(vParts[SOURCEFILE].lastIndexOf("\\")+1));
 
-    m_aGenPo.setExtractCom(vParts[HELPTEXT]);
     OString sContext =
         vParts[GROUPID] + "\n" +
         (vParts[LOCALID].isEmpty() ? "" : vParts[LOCALID] + "\n") +
@@ -441,11 +433,14 @@ PoEntry::PoEntry(const OString& rSDFLine, const TYPE eType)
     /*Default case is unneeded because the type of eType has
       only three element*/
     }
+    m_aGenPo.setExtractCom(
+        ( !vParts[HELPTEXT].isEmpty() ?  vParts[HELPTEXT] + "\n" : "" ) +
+        lcl_GenKeyId(
+            vParts[SOURCEFILE] + sContext + vParts[eType] ) );
     m_aGenPo.setContext(sContext);
     m_aGenPo.setUnTransStr(
         lcl_UnEscapeSDFText(
             vParts[eType],vParts[SOURCEFILE].endsWith(".xhp")));
-    m_aGenPo.genKeyId();
     m_bIsInitialized = true;
 }
 
@@ -516,7 +511,15 @@ bool PoEntry::getFuzzy() const
 OString PoEntry::getKeyId() const
 {
     assert( m_bIsInitialized );
-    return m_aGenPo.getKeyId();
+    const OString sExtractCom = m_aGenPo.getExtractCom();
+    if( sExtractCom.indexOf("\n") == -1 )
+    {
+        return sExtractCom;
+    }
+    else
+    {
+        return sExtractCom.getToken(1,'\n');
+    }
 }
 
 
@@ -778,10 +781,21 @@ void PoIfstream::readEntry( PoEntry& rPoEntry )
             (nLastEndLine == nFirstEndLine ||
                 nLastEndLine == sContext.indexOf('\n',nFirstEndLine+1)) &&
             nLastDot - nLastEndLine > 1 &&
-            (sType == "text" || sType == "quickhelptext" || sType == "title") &&
+            (sType == "text" || sType == "quickhelptext" || sType == "title")&&
             !aGenPo.getUnTransStr().isEmpty() )
         {
             rPoEntry.m_aGenPo = aGenPo;
+            const OString sExtractCom = aGenPo.getExtractCom();
+            if( sExtractCom.isEmpty() ||
+                ( sExtractCom.getLength() != 4 &&
+                    sExtractCom.indexOf("\n") == -1 ) )
+            {
+                aGenPo.setExtractCom(
+                    ( !sExtractCom.isEmpty() ? sExtractCom + "\n" : "" ) +
+                    lcl_GenKeyId(
+                        aGenPo.getReference() + sContext +
+                        aGenPo.getUnTransStr() ) );
+            }
             rPoEntry.m_bIsInitialized = true;
         }
         else

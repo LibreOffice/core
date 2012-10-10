@@ -29,7 +29,6 @@ private:
     OString    m_sTransStr;
     bool       m_bFuzzy;
     bool       m_bNull;
-    OString    m_sKeyId;
 
 public:
 
@@ -45,7 +44,6 @@ public:
     virtual OString     getTransStr() const     { return m_sTransStr; }
     virtual bool        getFuzzy() const        { return m_bFuzzy; }
     virtual bool        isNull() const          { return m_bNull; }
-    virtual OString     getKeyId() const        { return m_sKeyId; }
 
     virtual void        setWhiteSpace(const OString& rWhiteSpace);
     virtual void        setExtractCom(const OString& rExtractCom);
@@ -54,7 +52,6 @@ public:
     virtual void        setUnTransStr(const OString& rUnTransStr);
     virtual void        setTransStr(const OString& rTransStr);
     virtual void        setFuzzy(const bool bFuzzy);
-    virtual void        genKeyId();
 
     virtual void        writeToFile(std::ofstream& rOFStream) const;
     virtual void        readFromFile(std::ifstream& rIFStream);
