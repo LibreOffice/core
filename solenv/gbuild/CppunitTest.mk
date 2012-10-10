@@ -196,6 +196,16 @@ $(foreach rdb,$(2),$(call gb_CppunitTest__use_api,$(1),$(rdb)))
 
 endef
 
+define gb_CppunitTest_use_udk_api
+$(call gb_CppunitTest_use_api,$(1),udkapi)
+
+endef
+
+define gb_CppunitTest_use_sdk_api
+$(call gb_CppunitTest_use_api,$(1),udkapi offapi)
+
+endef
+
 define gb_CppunitTest_add_service_rdb
 $$(call gb_Output_error,\
  gb_CppunitTest_add_service_rdb: use gb_CppunitTest_use_rdb instead.)
@@ -345,8 +355,6 @@ $(eval $(foreach method,\
 	disable_standard_system_libs \
 	use_system_darwin_frameworks \
 	use_system_win32_libs \
-	use_sdk_api \
-	use_udk_api \
 	use_internal_api \
 	use_internal_bootstrap_api \
 	use_internal_comprehensive_api \
