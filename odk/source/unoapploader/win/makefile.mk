@@ -41,7 +41,7 @@ APP1TARGET= $(TARGET)
 APP1OBJS=   $(OBJ)$/unoapploader.obj
 APP1STDLIBS=findsofficepath.lib
 
-APP1STDLIBS=\
+APP1STDLIBS+=\
             $(ADVAPI32LIB)
 
 # --- Targets ------------------------------------------------------
