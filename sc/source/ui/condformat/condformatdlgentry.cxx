@@ -674,6 +674,8 @@ ScFormatEntry* ScColorScale2FrmtEntry::GetEntry() const
 
 void ScColorScale2FrmtEntry::SetActive()
 {
+    maLbColorFormat.Show();
+
     maLbEntryTypeMin.Show();
     maLbEntryTypeMax.Show();
 
@@ -688,6 +690,8 @@ void ScColorScale2FrmtEntry::SetActive()
 
 void ScColorScale2FrmtEntry::SetInactive()
 {
+    maLbColorFormat.Hide();
+
     maLbEntryTypeMin.Hide();
     maLbEntryTypeMax.Hide();
 
@@ -839,6 +843,7 @@ ScFormatEntry* ScColorScale3FrmtEntry::GetEntry() const
 
 void ScColorScale3FrmtEntry::SetActive()
 {
+    maLbColorFormat.Show();
     maLbEntryTypeMin.Show();
     maLbEntryTypeMiddle.Show();
     maLbEntryTypeMax.Show();
@@ -856,6 +861,8 @@ void ScColorScale3FrmtEntry::SetActive()
 
 void ScColorScale3FrmtEntry::SetInactive()
 {
+    maLbColorFormat.Hide();
+
     maLbEntryTypeMin.Hide();
     maLbEntryTypeMiddle.Hide();
     maLbEntryTypeMax.Hide();
@@ -1002,6 +1009,8 @@ ScFormatEntry* ScDataBarFrmtEntry::createDatabarEntry() const
 
 void ScDataBarFrmtEntry::SetActive()
 {
+    maLbColorFormat.Show();
+
     maLbDataBarMinType.Show();
     maLbDataBarMaxType.Show();
     maEdDataBarMin.Show();
@@ -1013,6 +1022,8 @@ void ScDataBarFrmtEntry::SetActive()
 
 void ScDataBarFrmtEntry::SetInactive()
 {
+    maLbColorFormat.Hide();
+
     maLbDataBarMinType.Hide();
     maLbDataBarMaxType.Hide();
     maEdDataBarMin.Hide();
