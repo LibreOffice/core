@@ -738,7 +738,6 @@ Reference< XDocumentHandler > SVGFilter::implCreateExportDocumentHandler( const 
 
 // -----------------------------------------------------------------------------
 
-inline
 sal_Bool SVGFilter::implLookForFirstVisiblePage()
 {
     sal_Int32 nCurPage = 0, nLastPage = mSelectedPages.getLength() - 1;
@@ -781,7 +780,6 @@ sal_Bool SVGFilter::implExportDocument()
 
     mbSinglePage = (nLastPage == 0) || !bExperimentalMode;
     mnVisiblePage = -1;
-//    mnVisibleMasterPage = -1;
 
     const Reference< XPropertySet >             xDefaultPagePropertySet( mxDefaultPage, UNO_QUERY );
     const Reference< XExtendedDocumentHandler > xExtDocHandler( mpSVGExport->GetDocHandler(), UNO_QUERY );
@@ -836,13 +834,7 @@ sal_Bool SVGFilter::implExportDocument()
     // standard line width is based on 1 pixel on a 90 DPI device (0.28222mmm)
     mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "stroke-width", OUString::valueOf( 28.222 ) );
     mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "stroke-linejoin", B2UCONST( "round" ) );
-
-    if( !mbSinglePage )
-    {
-        mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "xmlns:ooo", B2UCONST( "http://xml.openoffice.org/svg/export" ) );
-    }
-
-
+    mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "xmlns:ooo", B2UCONST( "http://xml.openoffice.org/svg/export" ) );
     mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "xmlns", B2UCONST( "http://www.w3.org/2000/svg" ) );
     mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "xmlns:xlink", B2UCONST( "http://www.w3.org/1999/xlink" ) );
 
@@ -2116,7 +2108,6 @@ OUString SVGFilter::implGetClassFromShape( const Reference< XShape >& rxShape )
 
 // -----------------------------------------------------------------------------
 
-//inline
 void SVGFilter::implRegisterInterface( const Reference< XInterface >& rxIf )
 {
     if( rxIf.is() )
@@ -2125,12 +2116,10 @@ void SVGFilter::implRegisterInterface( const Reference< XInterface >& rxIf )
 
 // -----------------------------------------------------------------------------
 
-//inline
 const ::rtl::OUString & SVGFilter::implGetValidIDFromInterface( const Reference< XInterface >& rxIf )
 {
    return (mpSVGExport->getInterfaceToIdentifierMapper()).getIdentifier( rxIf );
 }
-
 
 // -----------------------------------------------------------------------------
 
