@@ -95,7 +95,7 @@ published constants NumberingType
     const short CIRCLE_NUMBER = 14;
 
     /** Numbering for Chinese lower case number
-        as "一,二,三..."
+        as "&#19968;,&#20108;,&#19977;..."
      */
     const short NUMBER_LOWER_ZH = 15;
 
@@ -108,12 +108,12 @@ published constants NumberingType
     const short NUMBER_UPPER_ZH_TW = 17;
 
     /** Bullet for Chinese Tian Gan
-        as "甲,乙,丙..."
+        as "&#30002;,&#20057;,&#19993;..."
      */
     const short TIAN_GAN_ZH = 18;
 
     /** Bullet for Chinese Di Zi
-        as "子,丑,寅..."
+        as "&#23376;,&#19985;,&#23493;..."
      */
     const short DI_ZI_ZH = 19;
 
@@ -138,37 +138,37 @@ published constants NumberingType
     const short IROHA_HALFWIDTH_JA = 24;
 
     /** Numbering for Korean upper case number
-        as "壹,貳,參..."
+        as "&#22777;,&#36019;,&#21443;..."
      */
     const short NUMBER_UPPER_KO = 25;
 
     /** Numbering for Korean Hangul number
-        as "일,이,삼..."
+        as "&#51068;,&#51060;,&#49340;..."
      */
     const short NUMBER_HANGUL_KO = 26;
 
     /** Bullet for Korean Hangul Jamo
-        as "ㄱ,ㄴ,ㄷ..."
+        as "&#12593;,&#12596;,&#12599;..."
      */
     const short HANGUL_JAMO_KO = 27;
 
     /** Bullet for Korean Hangul Syllable
-        as "가,나,다..."
+        as "&#44032;,&#45208;,&#45796;..."
      */
     const short HANGUL_SYLLABLE_KO = 28;
 
     /** Bullet for Korean Hangul Circled Jamo
-        as "㉠,㉡,㉢..."
+        as "&#12896;,&#12897;,&#12898;..."
      */
     const short HANGUL_CIRCLED_JAMO_KO = 29;
 
     /** Bullet for Korean Hangul Circled Syllable
-        as "㉮,㉯,㉰..."
+        as "&#12910;,&#12911;,&#12912;..."
      */
     const short HANGUL_CIRCLED_SYLLABLE_KO = 30;
 
     /** Numbering in Arabic alphabet letters
-        as "أ,ب,ت..."
+        as "&#1571;,&#1576;,&#1578;..."
 
         @since OOo 1.1.2
      */
