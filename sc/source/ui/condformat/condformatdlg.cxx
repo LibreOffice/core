@@ -240,16 +240,32 @@ IMPL_LINK(ScCondFormatList, TypeListHdl, ListBox*, pBox)
     switch(nPos)
     {
         case 0:
+            switch(itr->GetType())
+            {
+                case condformat::entry::FORMULA:
+                case condformat::entry::CONDITION:
+                    break;
+                case condformat::entry::COLORSCALE2:
+                case condformat::entry::COLORSCALE3:
+                case condformat::entry::DATABAR:
+                    return 0;
+            }
             maEntries.replace( itr, new ScColorScale3FrmtEntry(this, mpDoc, maPos));
             static_cast<ScCondFormatDlg*>(GetParent())->InvalidateRefData();
             itr->SetActive();
             break;
         case 1:
+            if(itr->GetType() == condformat::entry::CONDITION)
+                return 0;
+
             maEntries.replace( itr, new ScConditionFrmtEntry(this, mpDoc, maPos));
             static_cast<ScCondFormatDlg*>(GetParent())->InvalidateRefData();
             itr->SetActive();
             break;
         case 2:
+            if(itr->GetType() == condformat::entry::FORMULA)
+                return 0;
+
             maEntries.replace( itr, new ScFormulaFrmtEntry(this, mpDoc, maPos));
             static_cast<ScCondFormatDlg*>(GetParent())->InvalidateRefData();
             itr->SetActive();
