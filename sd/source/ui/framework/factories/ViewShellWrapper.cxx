@@ -67,14 +67,6 @@ ViewShellWrapper::ViewShellWrapper (
       mxViewId(rxViewId),
       mxWindow(rxWindow)
 {
-    if (rxWindow.is())
-    {
-        rxWindow->addWindowListener(this);
-        if (pViewShell != NULL)
-        {
-            pViewShell->Resize();
-        }
-    }
 }
 
 

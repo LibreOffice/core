@@ -368,10 +368,22 @@ void SAL_CALL BasicViewFactory::initialize (const Sequence<Any>& aArguments)
         pDescriptor->mpViewShell->Init(bIsCenterPane);
         mpBase->GetViewShellManager()->ActivateViewShell(pDescriptor->mpViewShell.get());
 
+        Reference<awt::XWindow> xWindow(rxPane->getWindow());
         pDescriptor->mpWrapper = new ViewShellWrapper(
             pDescriptor->mpViewShell,
             rxViewId,
-            rxPane->getWindow());
+            xWindow);
+
+        // register ViewShellWrapper on pane window
+        if (xWindow.is())
+        {
+            xWindow->addWindowListener(pDescriptor->mpWrapper);
+            if (pDescriptor->mpViewShell != NULL)
+            {
+                pDescriptor->mpViewShell->Resize();
+            }
+        }
+
         pDescriptor->mxView.set( pDescriptor->mpWrapper->queryInterface( XResource::static_type() ), UNO_QUERY_THROW );
     }
 
