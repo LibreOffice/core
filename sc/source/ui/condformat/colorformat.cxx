@@ -252,15 +252,15 @@ IMPL_LINK_NOARG( ScDataBarSettingsDlg, OkBtnHdl )
     //check that min < max
     bool bWarn = false;
     sal_Int32 nSelectMin = maLbTypeMin.GetSelectEntryPos();
-    if( nSelectMin == COLORSCALE_MIN )
+    if( nSelectMin == COLORSCALE_MAX )
         bWarn = true;
     sal_Int32 nSelectMax = maLbTypeMax.GetSelectEntryPos();
-    if( nSelectMax == COLORSCALE_MAX )
+    if( nSelectMax == COLORSCALE_MIN )
         bWarn = true;
 
     if(!bWarn && maLbTypeMin.GetSelectEntryPos() == maLbTypeMax.GetSelectEntryPos())
     {
-        if(maLbTypeMax.GetSelectEntryPos() != 5)
+        if(maLbTypeMax.GetSelectEntryPos() != COLORSCALE_FORMULA)
         {
             rtl::OUString aMinString = maEdMin.GetText();
             rtl::OUString aMaxString = maEdMax.GetText();
