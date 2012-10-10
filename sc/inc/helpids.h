@@ -687,6 +687,10 @@
 #define HID_FUNC_LINKS                                          "SC_HID_FUNC_LINKS"
 #define HID_FUNC_RECHTS                                         "SC_HID_FUNC_RECHTS"
 #define HID_FUNC_TEIL                                           "SC_HID_FUNC_TEIL"
+#define HID_FUNC_LENB                                           "SC_HID_FUNC_LENB"
+#define HID_FUNC_RIGHTB                                         "SC_HID_FUNC_RIGHTB"
+#define HID_FUNC_LEFTB                                          "SC_HID_FUNC_LEFTB"
+#define HID_FUNC_MIDB                                           "SC_HID_FUNC_MIDB"
 #define HID_FUNC_WIEDERHOLEN                                    "SC_HID_FUNC_WIEDERHOLEN"
 #define HID_FUNC_WECHSELN                                       "SC_HID_FUNC_WECHSELN"
 #define HID_FUNC_BASIS                                          "SC_HID_FUNC_BASIS"
@@ -699,3 +703,4 @@
 #define HID_FUNC_UNICODE                                        "SC_HID_FUNC_UNICODE"
 #define HID_FUNC_UNICHAR                                        "SC_HID_FUNC_UNICHAR"
 #define HID_FUNC_NUMBERVALUE                                    "SC_HID_FUNC_NUMBERVALUE"
+

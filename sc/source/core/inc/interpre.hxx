@@ -787,6 +787,10 @@ void ScSTEXY();
 void ScSlope();
 void ScTrend();
 void ScInfo();
+void ScLenB();
+void ScRightB();
+void ScLeftB();
+void ScMidB();
 
 //------------------------ Functions in interpr6.cxx -------------------------
 

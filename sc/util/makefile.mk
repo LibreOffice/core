@@ -92,7 +92,10 @@ SHL1STDLIBS=       \
     $(XMLOFFLIB)	\
     $(AVMEDIALIB) \
     $(FORLIB) \
-    $(FORUILIB)
+    $(FORUILIB) \
+    $(ICUINLIB) \
+    $(ICUUCLIB) \
+    $(ICUDATALIB)
     
 SHL1LIBS=$(LIB3TARGET) $(LIB4TARGET)
 

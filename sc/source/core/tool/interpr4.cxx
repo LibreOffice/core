@@ -3759,6 +3759,10 @@ StackVar ScInterpreter::Interpret()
                 case ocGetPivotData     : ScGetPivotData();             break;
                 case ocJis              : ScJis();                      break;
                 case ocAsc              : ScAsc();                      break;
+                case ocLenB             : ScLenB();                     break;
+                case ocRightB           : ScRightB();                   break;
+                case ocLeftB            : ScLeftB();                    break;
+                case ocMidB             : ScMidB();                     break;
                 case ocUnicode          : ScUnicode();                  break;
                 case ocUnichar          : ScUnichar();                  break;
                 case ocTTT              : ScTTT();                      break;
