@@ -17,7 +17,7 @@ $(eval $(call gb_ExternalProject_register_targets,hsqldb,\
 
 $(call gb_ExternalProject_get_state_target,hsqldb,build) :
 	cd $(EXTERNAL_WORKDIR) && \
-	"$(ANT)" \
+	$(ICECREAM_RUN) "$(ANT)" \
 		-q \
 		-f build/build.xml \
 		-Dbuild.label="build-libreoffice" \

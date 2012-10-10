@@ -18,7 +18,7 @@ $(eval $(call gb_ExternalProject_register_targets,saxon,\
 $(call gb_ExternalProject_get_state_target,saxon,build) :
 	cd "$(call gb_UnpackedTarball_get_dir,saxon)" && \
 	ANT_OPTS="$$ANT_OPTS -Dfile.encoding=ISO-8859-1" \
-	"$(ANT)" \
+	$(ICECREAM_RUN) "$(ANT)" \
 		-q \
 		-f build.xml \
 		-Dbuild.label="build-libreoffice" \

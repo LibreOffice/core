@@ -17,7 +17,7 @@ $(eval $(call gb_ExternalProject_register_targets,languagetool,\
 
 $(call gb_ExternalProject_get_state_target,languagetool,build) :
 	cd "$(call gb_UnpackedTarball_get_dir,languagetool)" && \
-	"$(ANT)" \
+	$(ICECREAM_RUN) "$(ANT)" \
 		-q \
 		-f build.xml \
 		-Dbuild.label="build-libreoffice" \

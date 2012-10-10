@@ -22,7 +22,7 @@ $(eval $(call gb_ExternalProject_register_targets,jfreereport_libloader,\
 
 $(call gb_ExternalProject_get_state_target,jfreereport_libloader,build) :
 	cd "$(call gb_UnpackedTarball_get_dir,jfreereport_libloader)" && \
-	"$(ANT)" \
+	$(ICECREAM_RUN) "$(ANT)" \
 		-q \
 		-f build.xml \
 		-Dbuild.label="build-$(RSCREVISION)" \

@@ -20,7 +20,7 @@ $(eval $(call gb_ExternalProject_register_targets,rhino,\
 
 $(call gb_ExternalProject_get_state_target,rhino,build) :
 	cd "$(call gb_UnpackedTarball_get_dir,rhino)" && \
-	"$(ANT)" \
+	$(ICECREAM_RUN) "$(ANT)" \
 		-q \
 		-f build.xml \
 		-Dbuild.label="build-$(RSCREVISION)" \
