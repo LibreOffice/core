@@ -1,1 +1,0 @@
-The xslt2-transformer implements a transformer for XSLT import/export filters with support for XSLT 2.0.
