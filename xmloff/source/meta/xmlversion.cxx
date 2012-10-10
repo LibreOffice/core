@@ -41,6 +41,7 @@
 #include <com/sun/star/util/MeasureUnit.hpp>
 #include <com/sun/star/xml/sax/InputSource.hpp>
 #include <com/sun/star/xml/sax/Parser.hpp>
+#include <com/sun/star/xml/sax/Writer.hpp>
 
 using namespace ::com::sun::star::xml::sax;
 using namespace ::com::sun::star::uno;
@@ -356,10 +357,10 @@ void SAL_CALL XMLVersionListPersistence::store( const uno::Reference< embed::XSt
         Reference< lang::XMultiServiceFactory > xServiceFactory =
                 comphelper::getProcessServiceFactory();
         DBG_ASSERT( xServiceFactory.is(), "XMLReader::Read: got no service manager" );
+        Reference< uno::XComponentContext > xContext =
+                comphelper::getProcessComponentContext();
 
-        Reference< XInterface > xWriter (xServiceFactory->createInstance(
-                OUString("com.sun.star.xml.sax.Writer")));
-        DBG_ASSERT( xWriter.is(), "com.sun.star.xml.sax.Writer service missing" );
+        Reference< XWriter > xWriter = Writer::create(xContext);
 
         // check whether there's already a sub storage with the version info
         // and delete it

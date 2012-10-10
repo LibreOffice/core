@@ -1406,7 +1406,7 @@ sal_Bool SfxDocTplService_Impl::WriteUINamesForTemplateDir_Impl( const ::rtl::OU
         if ( !xOutStream.is() )
             throw uno::RuntimeException();
 
-        DocTemplLocaleHelper::WriteGroupLocalizationSequence( xOutStream, aUINames, mxFactory );
+        DocTemplLocaleHelper::WriteGroupLocalizationSequence( xOutStream, aUINames, comphelper::getComponentContext(mxFactory));
         try {
             // the SAX writer might close the stream
             xOutStream->closeOutput();

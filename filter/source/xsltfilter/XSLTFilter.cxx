@@ -47,6 +47,7 @@
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
 #include <com/sun/star/xml/sax/SAXException.hpp>
+#include <com/sun/star/xml/sax/Writer.hpp>
 #include <com/sun/star/xml/XImportFilter.hpp>
 #include <com/sun/star/xml/XExportFilter.hpp>
 
@@ -431,11 +432,9 @@ m_rServiceFactory(r), m_bTerminated(sal_False), m_bError(sal_False)
         if (!getDelegate().is())
             {
                 // get the document writer
-                setDelegate(css::uno::Reference<XExtendedDocumentHandler> (
-                                m_rServiceFactory->createInstance(
-                                        OUString(
-                                                 "com.sun.star.xml.sax.Writer" )),
-                                UNO_QUERY));
+                setDelegate(css::uno::Reference<XExtendedDocumentHandler>(
+                                Writer::create(comphelper::getComponentContext(m_rServiceFactory)),
+                                UNO_QUERY_THROW));
             }
 
         // create transformer

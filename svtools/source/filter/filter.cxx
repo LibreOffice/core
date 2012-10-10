@@ -63,6 +63,7 @@
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/svg/XSVGWriter.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
+#include <com/sun/star/xml/sax/Writer.hpp>
 #include <com/sun/star/ucb/CommandAbortedException.hpp>
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/localfilehelper.hxx>
@@ -2073,11 +2074,12 @@ sal_uInt16 GraphicFilter::ExportGraphic( const Graphic& rGraphic, const String& 
                     try
                     {
                         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
+                        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
 
                         if( xMgr.is() )
                         {
-                            ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler > xSaxWriter( xMgr->createInstance(
-                                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.xml.sax.Writer" )) ), ::com::sun::star::uno::UNO_QUERY );
+                            ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler > xSaxWriter(
+                                xml::sax::Writer::create( xContext ), uno::UNO_QUERY_THROW);
 
                             ::com::sun::star::uno::Reference< ::com::sun::star::svg::XSVGWriter > xSVGWriter( xMgr->createInstance(
                                 ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.svg.SVGWriter" )) ), ::com::sun::star::uno::UNO_QUERY );

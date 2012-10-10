@@ -37,6 +37,7 @@
 #include <com/sun/star/xml/sax/InputSource.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>
 #include <com/sun/star/xml/sax/Parser.hpp>
+#include <com/sun/star/xml/sax/Writer.hpp>
 #include <com/sun/star/document/XStorageBasedDocument.hpp>
 #include <doc.hxx>
 #include <docsh.hxx>
@@ -380,6 +381,8 @@ sal_uLong SwXMLTextBlocks::PutBlockText( const String& rShort, const String& ,
 
     uno::Reference< lang::XMultiServiceFactory > xServiceFactory =
         comphelper::getProcessServiceFactory();
+    uno::Reference< uno::XComponentContext > xContext =
+        comphelper::getProcessComponentContext();
     OSL_ENSURE( xServiceFactory.is(),
             "XMLReader::Read: got no service manager" );
     if( !xServiceFactory.is() )
@@ -387,9 +390,7 @@ sal_uLong SwXMLTextBlocks::PutBlockText( const String& rShort, const String& ,
         // Throw an exception ?
     }
 
-       uno::Reference < XInterface > xWriter (xServiceFactory->createInstance(
-           OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Writer"))));
-       OSL_ENSURE(xWriter.is(),"com.sun.star.xml.sax.Writer service missing");
+    uno::Reference < xml::sax::XWriter > xWriter = xml::sax::Writer::create(xContext);
     sal_uLong nRes = 0;
 
     try
@@ -512,6 +513,8 @@ void SwXMLTextBlocks::WriteInfo( void )
     {
         uno::Reference< lang::XMultiServiceFactory > xServiceFactory =
             comphelper::getProcessServiceFactory();
+        uno::Reference< uno::XComponentContext > xContext =
+            comphelper::getProcessComponentContext();
         OSL_ENSURE( xServiceFactory.is(),
                 "XMLReader::Read: got no service manager" );
         if( !xServiceFactory.is() )
@@ -519,9 +522,7 @@ void SwXMLTextBlocks::WriteInfo( void )
             // Throw an exception ?
         }
 
-        uno::Reference < XInterface > xWriter (xServiceFactory->createInstance(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Writer"))));
-        OSL_ENSURE(xWriter.is(),"com.sun.star.xml.sax.Writer service missing");
+        uno::Reference < xml::sax::XWriter > xWriter = xml::sax::Writer::create(xContext);
         OUString sDocName( RTL_CONSTASCII_USTRINGPARAM( XMLN_BLOCKLIST ) );
 
         /*
@@ -580,6 +581,8 @@ sal_uLong SwXMLTextBlocks::SetMacroTable(
 
     uno::Reference< lang::XMultiServiceFactory > xServiceFactory =
         comphelper::getProcessServiceFactory();
+    uno::Reference< uno::XComponentContext > xContext =
+        comphelper::getProcessComponentContext();
     OSL_ENSURE( xServiceFactory.is(),
             "XML autotext event write:: got no service manager" );
     if( !xServiceFactory.is() )
@@ -619,51 +622,43 @@ sal_uLong SwXMLTextBlocks::SetMacroTable(
             uno::Reference < io::XOutputStream > xOutputStream = xDocStream->getOutputStream();
 
             // get XML writer
-            uno::Reference< io::XActiveDataSource > xSaxWriter(
-                xServiceFactory->createInstance(
-                OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Writer")) ),
-                UNO_QUERY );
-            OSL_ENSURE( xSaxWriter.is(), "can't instantiate XML writer" );
-            if( xSaxWriter.is() )
+            uno::Reference< xml::sax::XWriter > xSaxWriter =
+                xml::sax::Writer::create( xContext );
+
+            // connect XML writer to output stream
+            xSaxWriter->setOutputStream( xOutputStream );
+            uno::Reference<xml::sax::XDocumentHandler> xDocHandler(
+                xSaxWriter, UNO_QUERY);
+
+            // construct events object
+            uno::Reference<XNameAccess> xEvents =
+                new SvMacroTableEventDescriptor(rMacroTbl,aAutotextEvents);
+
+            // prepare arguments (prepend doc handler to given arguments)
+            Sequence<Any> aParams(2);
+            aParams[0] <<= xDocHandler;
+            aParams[1] <<= xEvents;
+
+
+            // get filter component
+            OUString sFilterComponent = bOasis
+                ? OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Writer.XMLOasisAutotextEventsExporter"))
+                : OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Writer.XMLAutotextEventsExporter"));
+            uno::Reference< document::XExporter > xExporter(
+                xServiceFactory->createInstanceWithArguments(
+                    sFilterComponent, aParams), UNO_QUERY);
+            OSL_ENSURE( xExporter.is(),
+                    "can't instantiate export filter component" );
+            if( xExporter.is() )
             {
+                // connect model and filter
+                xExporter->setSourceDocument( xModelComp );
 
-                // connect XML writer to output stream
-                xSaxWriter->setOutputStream( xOutputStream );
-                uno::Reference<xml::sax::XDocumentHandler> xDocHandler(
-                    xSaxWriter, UNO_QUERY);
-
-                // construct events object
-                uno::Reference<XNameAccess> xEvents =
-                    new SvMacroTableEventDescriptor(rMacroTbl,aAutotextEvents);
-
-                // prepare arguments (prepend doc handler to given arguments)
-                Sequence<Any> aParams(2);
-                aParams[0] <<= xDocHandler;
-                aParams[1] <<= xEvents;
-
-
-                // get filter component
-                OUString sFilterComponent = bOasis
-                    ? OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Writer.XMLOasisAutotextEventsExporter"))
-                    : OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Writer.XMLAutotextEventsExporter"));
-                uno::Reference< document::XExporter > xExporter(
-                    xServiceFactory->createInstanceWithArguments(
-                        sFilterComponent, aParams), UNO_QUERY);
-                OSL_ENSURE( xExporter.is(),
-                        "can't instantiate export filter component" );
-                if( xExporter.is() )
-                {
-                    // connect model and filter
-                    xExporter->setSourceDocument( xModelComp );
-
-                    // filter!
-                    Sequence<beans::PropertyValue> aFilterProps( 0 );
-                    uno::Reference < document::XFilter > xFilter( xExporter,
-                                                             UNO_QUERY );
-                    xFilter->filter( aFilterProps );
-                }
-                else
-                    nRes = ERR_SWG_WRITE_ERROR;
+                // filter!
+                Sequence<beans::PropertyValue> aFilterProps( 0 );
+                uno::Reference < document::XFilter > xFilter( xExporter,
+                                                         UNO_QUERY );
+                xFilter->filter( aFilterProps );
             }
             else
                 nRes = ERR_SWG_WRITE_ERROR;

@@ -20,16 +20,16 @@
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
-#include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
 #include <com/sun/star/xml/sax/XParser.hpp>
 #include <com/sun/star/xml/sax/SAXParseException.hpp>
 #include <com/sun/star/xml/sax/SAXInvalidCharacterException.hpp>
+#include <com/sun/star/xml/sax/XWriter.hpp>
 
 #include <com/sun/star/io/XActiveDataSource.hpp>
 
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/weak.hxx>
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase2.hxx>
 
 #include <rtl/strbuf.hxx>
 #include <rtl/byteseq.hxx>
@@ -863,10 +863,9 @@ static inline sal_Int32 getLastLineBreak( const Sequence<sal_Int8>  & seq) throw
 
 
 class SAXWriter :
-    public WeakImplHelper3<
-            XActiveDataSource,
-            XExtendedDocumentHandler,
-              XServiceInfo >
+    public WeakImplHelper2<
+            XWriter,
+            XServiceInfo >
 {
 public:
     SAXWriter( ) :

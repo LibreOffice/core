@@ -35,6 +35,7 @@
 
 #include <com/sun/star/util/MeasureUnit.hpp>
 #include <com/sun/star/text/textfield/Type.hpp>
+#include <com/sun/star/xml/sax/Writer.hpp>
 
 #include <rtl/bootstrap.hxx>
 #include <svtools/miscopt.hxx>
@@ -639,7 +640,7 @@ sal_Bool SVGFilter::implExport( const Sequence< PropertyValue >& rDescriptor )
     {
         if( mSelectedPages.hasElements() && mMasterPageTargets.hasElements() )
         {
-            Reference< XDocumentHandler > xDocHandler( implCreateExportDocumentHandler( xOStm ) );
+            Reference< XDocumentHandler > xDocHandler( implCreateExportDocumentHandler( xOStm ), UNO_QUERY );
 
             if( xDocHandler.is() )
             {
@@ -714,24 +715,14 @@ sal_Bool SVGFilter::implExport( const Sequence< PropertyValue >& rDescriptor )
 
 // -----------------------------------------------------------------------------
 
-Reference< XDocumentHandler > SVGFilter::implCreateExportDocumentHandler( const Reference< XOutputStream >& rxOStm )
+Reference< XWriter > SVGFilter::implCreateExportDocumentHandler( const Reference< XOutputStream >& rxOStm )
 {
-    Reference< XMultiServiceFactory >   xMgr( ::comphelper::getProcessServiceFactory() );
-    Reference< XDocumentHandler >       xSaxWriter;
+    Reference< XWriter >       xSaxWriter;
 
-    if( xMgr.is() && rxOStm.is() )
+    if( rxOStm.is() )
     {
-        xSaxWriter = Reference< XDocumentHandler >( xMgr->createInstance( B2UCONST( "com.sun.star.xml.sax.Writer" ) ), UNO_QUERY );
-
-        if( xSaxWriter.is() )
-        {
-            Reference< XActiveDataSource > xActiveDataSource( xSaxWriter, UNO_QUERY );
-
-            if( xActiveDataSource.is() )
-                xActiveDataSource->setOutputStream( rxOStm );
-            else
-                xSaxWriter = NULL;
-        }
+        xSaxWriter = Writer::create( ::comphelper::getProcessComponentContext() );
+        xSaxWriter->setOutputStream( rxOStm );
     }
 
     return xSaxWriter;

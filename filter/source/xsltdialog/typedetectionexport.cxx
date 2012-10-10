@@ -19,6 +19,7 @@
 
 
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
+#include <com/sun/star/xml/sax/Writer.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>
 #include <tools/urlobj.hxx>
@@ -36,8 +37,8 @@ using namespace com::sun::star::xml::sax;
 
 using ::rtl::OUString;
 
-TypeDetectionExporter::TypeDetectionExporter( Reference< XMultiServiceFactory >& xMSF )
-: mxMSF( xMSF )
+TypeDetectionExporter::TypeDetectionExporter( Reference< XComponentContext >& xContext )
+: mxContext( xContext )
 {
 }
 
@@ -95,9 +96,8 @@ void TypeDetectionExporter::doExport( Reference< XOutputStream > xOS,  const XML
 
 
         // set up sax writer and connect to given output stream
-        Reference< XDocumentHandler > xHandler( mxMSF->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.xml.sax.Writer" ) ) ), UNO_QUERY );
-        Reference< XActiveDataSource > xDocSrc( xHandler, UNO_QUERY );
-        xDocSrc->setOutputStream( xOS );
+        Reference< XWriter > xHandler = Writer::create( mxContext );
+        xHandler->setOutputStream( xOS );
 
         ::comphelper::AttributeList * pAttrList = new ::comphelper::AttributeList;
         pAttrList->AddAttribute ( OUString( RTL_CONSTASCII_USTRINGPARAM( "xmlns:oor" )), sCdataAttribute, OUString( RTL_CONSTASCII_USTRINGPARAM( "http://openoffice.org/2001/registry" )) );
@@ -223,7 +223,7 @@ void TypeDetectionExporter::doExport( Reference< XOutputStream > xOS,  const XML
     }
 }
 
-void TypeDetectionExporter::addProperty( Reference< XDocumentHandler > xHandler, const OUString& rName, const OUString& rValue )
+void TypeDetectionExporter::addProperty( Reference< XWriter > xHandler, const OUString& rName, const OUString& rValue )
 {
     try
     {
@@ -253,7 +253,7 @@ void TypeDetectionExporter::addProperty( Reference< XDocumentHandler > xHandler,
     }
 }
 
-void TypeDetectionExporter::addLocaleProperty( Reference< XDocumentHandler > xHandler, const OUString& rName, const OUString& rValue )
+void TypeDetectionExporter::addLocaleProperty( Reference< XWriter > xHandler, const OUString& rName, const OUString& rValue )
 {
     try
     {

@@ -33,6 +33,7 @@
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>
+#include <com/sun/star/xml/sax/Writer.hpp>
 #include <svl/itemprop.hxx>
 #include <svl/brdcst.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
@@ -420,6 +421,7 @@ void SvxWriteXML( EditEngine& rEditEngine, SvStream& rStream, const ESelection& 
             // create service factory
 
             uno::Reference< lang::XMultiServiceFactory> xServiceFactory( ::comphelper::getProcessServiceFactory() );
+            uno::Reference<uno::XComponentContext> xContext( ::comphelper::getProcessComponentContext() );
 
             if( !xServiceFactory.is() )
             {
@@ -428,16 +430,7 @@ void SvxWriteXML( EditEngine& rEditEngine, SvStream& rStream, const ESelection& 
             }
 
             // create document handler
-
-            uno::Reference< uno::XInterface > xWriter( xServiceFactory->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.xml.sax.Writer" ) ) ) );
-
-            if( !xWriter.is() )
-            {
-                OSL_FAIL( "com.sun.star.xml.sax.Writer service missing" );
-                break;
-            }
-
-            uno::Reference<xml::sax::XDocumentHandler>  xHandler( xWriter, uno::UNO_QUERY );
+            uno::Reference< xml::sax::XWriter > xWriter = xml::sax::Writer::create( xContext );
 
             // create output stream and active data source
             uno::Reference<io::XOutputStream> xOut( new utl::OOutputStreamWrapper( rStream ) );
@@ -450,13 +443,13 @@ void SvxWriteXML( EditEngine& rEditEngine, SvStream& rStream, const ESelection& 
 */
 
 
-            uno::Reference<io::XActiveDataSource> xMetaSrc( xWriter, uno::UNO_QUERY );
-            xMetaSrc->setOutputStream( xOut );
+            xWriter->setOutputStream( xOut );
 
             // export text
             const OUString aName;
 
             // SvxXMLTextExportComponent aExporter( &rEditEngine, rSel, aName, xHandler );
+            uno::Reference< xml::sax::XDocumentHandler > xHandler(xWriter, UNO_QUERY_THROW);
             SvxXMLTextExportComponent aExporter( xServiceFactory, &rEditEngine, rSel, aName, xHandler );
 
             aExporter.exportDoc();

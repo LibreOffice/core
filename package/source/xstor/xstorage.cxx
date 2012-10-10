@@ -1845,7 +1845,7 @@ void OStorage_Impl::CommitRelInfo( const uno::Reference< container::XNameContain
                     if ( !xOutStream.is() )
                         throw uno::RuntimeException( OSL_LOG_PREFIX, uno::Reference< uno::XInterface >() );
 
-                    ::comphelper::OFOPXMLHelper::WriteRelationsInfoSequence( xOutStream, m_aRelInfo, m_xFactory );
+                    ::comphelper::OFOPXMLHelper::WriteRelationsInfoSequence( xOutStream, m_aRelInfo, comphelper::getComponentContext(m_xFactory) );
 
                     // set the mediatype
                     uno::Reference< beans::XPropertySet > xPropSet( xRelsStream, uno::UNO_QUERY_THROW );

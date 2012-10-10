@@ -38,7 +38,7 @@ namespace com { namespace sun { namespace star {
     namespace uno { class XInterface; }
     namespace embed { class XStorage; }
     namespace xml {
-        namespace sax { struct InputSource; class XParser; } }
+        namespace sax { struct InputSource; class XParser; class XWriter; } }
 } } }
 
 class ScXMLImportWrapper
@@ -59,7 +59,7 @@ class ScXMLImportWrapper
 
     sal_Bool ExportToComponent(com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory>& xServiceFactory,
         com::sun::star::uno::Reference<com::sun::star::frame::XModel>& xModel,
-        com::sun::star::uno::Reference<com::sun::star::uno::XInterface>& xWriter,
+        com::sun::star::uno::Reference<com::sun::star::xml::sax::XWriter>& xWriter,
         com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aDescriptor,
         const rtl::OUString& sName, const rtl::OUString& sMediaType, const rtl::OUString& sComponentName,
         const sal_Bool bPlainText, com::sun::star::uno::Sequence<com::sun::star::uno::Any>& aArgs,

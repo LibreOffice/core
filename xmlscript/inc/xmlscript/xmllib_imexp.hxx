@@ -19,7 +19,7 @@
 #ifndef _XMLSCRIPT_XMLLIB_IMEXP_HXX_
 #define _XMLSCRIPT_XMLLIB_IMEXP_HXX_
 
-#include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
+#include <com/sun/star/xml/sax/XWriter.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 
 #include "xmlscript/xmlns.h"
@@ -59,7 +59,7 @@ struct XMLSCRIPT_DLLPUBLIC LibDescriptorArray
 XMLSCRIPT_DLLPUBLIC void
 SAL_CALL exportLibraryContainer(
     ::com::sun::star::uno::Reference<
-    ::com::sun::star::xml::sax::XExtendedDocumentHandler > const & xOut,
+    ::com::sun::star::xml::sax::XWriter > const & xOut,
     const LibDescriptorArray* pLibArray )
         SAL_THROW( (::com::sun::star::uno::Exception) );
 
@@ -72,7 +72,7 @@ SAL_CALL importLibraryContainer( LibDescriptorArray* pLibArray )
 XMLSCRIPT_DLLPUBLIC void
 SAL_CALL exportLibrary(
     ::com::sun::star::uno::Reference<
-    ::com::sun::star::xml::sax::XExtendedDocumentHandler > const & xOut,
+    ::com::sun::star::xml::sax::XWriter > const & xOut,
     const LibDescriptor& rLib )
         SAL_THROW( (::com::sun::star::uno::Exception) );
 

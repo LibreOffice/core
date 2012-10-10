@@ -31,7 +31,7 @@
 #include <xmlsecurity/sigstruct.hxx>
 
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/xml/sax/XDocumentHandler.hpp>
+#include <com/sun/star/xml/sax/XWriter.hpp>
 #include <com/sun/star/xml/crypto/XUriBinding.hpp>
 #include <com/sun/star/xml/crypto/XSEInitializer.hpp>
 #include <com/sun/star/xml/crypto/sax/XSecurityController.hpp>
@@ -179,7 +179,7 @@ public:
     // MT: ??? I think only for adding/removing, not for new signatures...
     // MM: Yes, but if you want to insert a new signature into an existing signature file, those function
     //     will be very usefull, see Mission 3 in the new "multisigdemo" program   :-)
-    ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler> CreateDocumentHandlerWithHeader( const com::sun::star::uno::Reference< com::sun::star::io::XOutputStream >& xOutputStream );
+    ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XWriter> CreateDocumentHandlerWithHeader( const com::sun::star::uno::Reference< com::sun::star::io::XOutputStream >& xOutputStream );
     void CloseDocumentHandler( const ::com::sun::star::uno::Reference< com::sun::star::xml::sax::XDocumentHandler>& xDocumentHandler );
     void ExportSignature( const com::sun::star::uno::Reference< com::sun::star::xml::sax::XDocumentHandler >& xDocumentHandler, const SignatureInformation& signatureInfo );
 };

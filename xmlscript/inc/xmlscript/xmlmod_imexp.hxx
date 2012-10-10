@@ -19,7 +19,7 @@
 #ifndef _XMLSCRIPT_XMLMOD_IMEXP_HXX_
 #define _XMLSCRIPT_XMLMOD_IMEXP_HXX_
 
-#include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
+#include <com/sun/star/xml/sax/XWriter.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <xmlscript/xmlns.h>
 #include "xmlscript/xmlscriptdllapi.h"
@@ -43,7 +43,7 @@ struct XMLSCRIPT_DLLPUBLIC ModuleDescriptor
 XMLSCRIPT_DLLPUBLIC void
 SAL_CALL exportScriptModule(
     ::com::sun::star::uno::Reference<
-    ::com::sun::star::xml::sax::XExtendedDocumentHandler > const & xOut,
+    ::com::sun::star::xml::sax::XWriter > const & xOut,
     const ModuleDescriptor& rMod )
         SAL_THROW( (::com::sun::star::uno::Exception) );
 

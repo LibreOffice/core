@@ -59,6 +59,7 @@
 #include <com/sun/star/xml/sax/InputSource.hpp>
 #include <com/sun/star/xml/sax/XDTDHandler.hpp>
 #include <com/sun/star/xml/sax/Parser.hpp>
+#include <com/sun/star/xml/sax/Writer.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>
 #include <com/sun/star/io/XActiveDataControl.hpp>
 #include <comphelper/componentcontext.hxx>
@@ -878,6 +879,7 @@ sal_Bool SdXMLFilter::Export()
         }
 
         uno::Reference< lang::XMultiServiceFactory> xServiceFactory( ::comphelper::getProcessServiceFactory() );
+        uno::Reference<uno::XComponentContext> xContext( ::comphelper::getProcessComponentContext() );
 
         if( !xServiceFactory.is() )
         {
@@ -885,14 +887,7 @@ sal_Bool SdXMLFilter::Export()
             return sal_False;
         }
 
-        uno::Reference< uno::XInterface > xWriter( xServiceFactory->createInstance( "com.sun.star.xml.sax.Writer" ) );
-
-        if( !xWriter.is() )
-        {
-            OSL_FAIL( "com.sun.star.xml.sax.Writer service missing" );
-            return sal_False;
-        }
-        uno::Reference<xml::sax::XDocumentHandler>  xHandler( xWriter, uno::UNO_QUERY );
+        uno::Reference< xml::sax::XWriter > xWriter = xml::sax::Writer::create( xContext );
 
         /** property map for export info set */
         PropertyMapEntry aExportInfoMap[] =
@@ -1076,7 +1071,7 @@ sal_Bool SdXMLFilter::Export()
                 if( xObjectResolver.is() )      *pArgs++ <<= xObjectResolver;
                 if( mxStatusIndicator.is() )    *pArgs++ <<= mxStatusIndicator;
 
-                *pArgs   <<= xHandler;
+                *pArgs   <<= xWriter;
 
                 uno::Reference< document::XFilter > xFilter( xServiceFactory->createInstanceWithArguments( OUString::createFromAscii( pServices->mpService ), aArgs ), uno::UNO_QUERY );
                 if( xFilter.is() )

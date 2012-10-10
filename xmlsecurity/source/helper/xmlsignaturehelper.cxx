@@ -36,6 +36,7 @@
 #include <com/sun/star/security/SerialNumberAdapter.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/xml/sax/Parser.hpp>
+#include <com/sun/star/xml/sax/Writer.hpp>
 
 #include <tools/date.hxx>
 #include <tools/time.hxx>
@@ -150,29 +151,19 @@ void XMLSignatureHelper::AddForSigning( sal_Int32 nSecurityId, const rtl::OUStri
 }
 
 
-uno::Reference<xml::sax::XDocumentHandler> XMLSignatureHelper::CreateDocumentHandlerWithHeader(
+uno::Reference<xml::sax::XWriter> XMLSignatureHelper::CreateDocumentHandlerWithHeader(
     const com::sun::star::uno::Reference< com::sun::star::io::XOutputStream >& xOutputStream )
 {
     /*
      * get SAX writer component
      */
     uno::Reference< lang::XMultiComponentFactory > xMCF( mxCtx->getServiceManager() );
-    uno::Reference< io::XActiveDataSource > xSaxWriter(
-        xMCF->createInstanceWithContext(rtl::OUString(
-            "com.sun.star.xml.sax.Writer"), mxCtx ), uno::UNO_QUERY );
-
-    DBG_ASSERT( xSaxWriter.is(), "can't instantiate XML writer" );
+    uno::Reference< xml::sax::XWriter > xSaxWriter = xml::sax::Writer::create(mxCtx);
 
     /*
      * connect XML writer to output stream
      */
     xSaxWriter->setOutputStream( xOutputStream );
-
-    /*
-     * prepare document handler
-     */
-    uno::Reference<xml::sax::XDocumentHandler>
-        xDocHandler( xSaxWriter,uno::UNO_QUERY);
 
     /*
      * write the xml context for signatures
@@ -190,12 +181,12 @@ uno::Reference<xml::sax::XDocumentHandler> XMLSignatureHelper::CreateDocumentHan
         rtl::OUString(ATTR_XMLNS),
         sNamespace);
 
-    xDocHandler->startDocument();
-    xDocHandler->startElement(
+    xSaxWriter->startDocument();
+    xSaxWriter->startElement(
         tag_AllSignatures,
         uno::Reference< com::sun::star::xml::sax::XAttributeList > (pAttributeList));
 
-    return xDocHandler;
+    return xSaxWriter;
 }
 
 void XMLSignatureHelper::CloseDocumentHandler( const uno::Reference<xml::sax::XDocumentHandler>& xDocumentHandler )

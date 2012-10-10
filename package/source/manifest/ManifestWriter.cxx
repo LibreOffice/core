@@ -19,9 +19,10 @@
 
 #include <ManifestWriter.hxx>
 #include <ManifestExport.hxx>
+#include <comphelper/processfactory.hxx>
 #include <cppuhelper/factory.hxx>
 #include <com/sun/star/io/XActiveDataSource.hpp>
-#include <com/sun/star/xml/sax/XDocumentHandler.hpp>
+#include <com/sun/star/xml/sax/Writer.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/xml/sax/SAXException.hpp>
@@ -51,20 +52,15 @@ ManifestWriter::~ManifestWriter()
 void SAL_CALL ManifestWriter::writeManifestSequence( const Reference< XOutputStream >& rStream, const Sequence< Sequence< PropertyValue > >& rSequence )
         throw (RuntimeException)
 {
-    OUString sSaxWriter ( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.xml.sax.Writer" ) );
-    Reference < XActiveDataSource > xSource ( xFactory->createInstance ( sSaxWriter ), UNO_QUERY );
-    if (xSource.is())
-    {
-        xSource->setOutputStream ( rStream );
+    Reference < XWriter > xSource = Writer::create( comphelper::getComponentContext(xFactory) );
+    xSource->setOutputStream ( rStream );
+    try {
         Reference < XDocumentHandler > xHandler ( xSource, UNO_QUERY );
-        if (xHandler.is())
-            try {
-                ManifestExport( xHandler, rSequence);
-            }
-            catch( SAXException& )
-            {
-                throw RuntimeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
-            }
+        ManifestExport( xHandler, rSequence);
+    }
+    catch( SAXException& )
+    {
+        throw RuntimeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ), uno::Reference< uno::XInterface >() );
     }
 }
 

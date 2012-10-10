@@ -44,6 +44,7 @@
 #include <com/sun/star/xml/sax/Parser.hpp>
 #include <com/sun/star/xml/sax/InputSource.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
+#include <com/sun/star/xml/sax/Writer.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -1495,14 +1496,7 @@ void SfxLibraryContainer::implStoreLibraryIndexFile( SfxLibrary* pLib,
     const ::rtl::OUString& aTargetURL, Reference< XSimpleFileAccess2 > xToUseSFI )
 {
     // Create sax writer
-    Reference< XExtendedDocumentHandler > xHandler(
-        mxMSF->createInstance(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Writer") ) ), UNO_QUERY );
-    if( !xHandler.is() )
-    {
-        SAL_WARN("basic", "couldn't create sax-writer component");
-        return;
-    }
+    Reference< XWriter > xWriter = xml::sax::Writer::create(comphelper::getComponentContext(mxMSF));
 
     sal_Bool bLink = pLib->mbLink;
     bool bStorage = xStorage.is() && !bLink;
@@ -1587,10 +1581,9 @@ void SfxLibraryContainer::implStoreLibraryIndexFile( SfxLibrary* pLib,
         return;
     }
 
-    Reference< XActiveDataSource > xSource( xHandler, UNO_QUERY );
-    xSource->setOutputStream( xOut );
+    xWriter->setOutputStream( xOut );
 
-    xmlscript::exportLibrary( xHandler, rLib );
+    xmlscript::exportLibrary( xWriter, rLib );
 }
 
 
@@ -1962,14 +1955,7 @@ void SfxLibraryContainer::storeLibraries_Impl( const uno::Reference< embed::XSto
 
     // Write library container info
     // Create sax writer
-    Reference< XExtendedDocumentHandler > xHandler(
-        mxMSF->createInstance(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Writer") ) ), UNO_QUERY );
-    if( !xHandler.is() )
-    {
-        SAL_WARN("basic", "couldn't create sax-writer component");
-        return;
-    }
+    Reference< XWriter > xWriter = xml::sax::Writer::create(comphelper::getComponentContext(mxMSF));
 
     // Write info file
     uno::Reference< io::XOutputStream > xOut;
@@ -2031,12 +2017,11 @@ void SfxLibraryContainer::storeLibraries_Impl( const uno::Reference< embed::XSto
         return;
     }
 
-    Reference< XActiveDataSource > xSource( xHandler, UNO_QUERY );
-    xSource->setOutputStream( xOut );
+    xWriter->setOutputStream( xOut );
 
     try
     {
-        xmlscript::exportLibraryContainer( xHandler, pLibArray.get() );
+        xmlscript::exportLibraryContainer( xWriter, pLibArray.get() );
         if ( bStorage )
         {
             uno::Reference< embed::XTransactedObject > xTransact( xTargetLibrariesStor, uno::UNO_QUERY );

@@ -31,6 +31,7 @@
 #include <com/sun/star/xml/sax/InputSource.hpp>
 #include <com/sun/star/xml/sax/XDTDHandler.hpp>
 #include <com/sun/star/xml/sax/XParser.hpp>
+#include <com/sun/star/xml/sax/Writer.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>
 #include <com/sun/star/io/XActiveDataControl.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
@@ -51,6 +52,7 @@
 #include <unotools/saveopt.hxx>
 #include <svl/stritem.hxx>
 #include <svl/itemprop.hxx>
+#include <comphelper/componentcontext.hxx>
 #include <comphelper/processfactory.hxx>
 #include <unotools/streamwrap.hxx>
 #include <sax/tools/converter.hxx>
@@ -265,9 +267,8 @@ sal_Bool SmXMLExportWrapper::WriteThroughComponent(
     OSL_ENSURE(NULL != pComponentName, "Need component name!");
 
     // get component
-    Reference< io::XActiveDataSource > xSaxWriter(
-        rFactory->createInstance( "com.sun.star.xml.sax.Writer" ),
-        UNO_QUERY );
+    Reference< xml::sax::XWriter > xSaxWriter = xml::sax::Writer::create(
+        comphelper::getComponentContext(rFactory) );
     OSL_ENSURE( xSaxWriter.is(), "can't instantiate XML writer" );
     if (!xSaxWriter.is())
         return sal_False;

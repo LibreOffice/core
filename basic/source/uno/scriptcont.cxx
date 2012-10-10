@@ -22,6 +22,7 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/xml/sax/Parser.hpp>
 #include <com/sun/star/xml/sax/InputSource.hpp>
+#include <com/sun/star/xml/sax/Writer.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>
@@ -181,22 +182,14 @@ void SAL_CALL SfxScriptLibraryContainer::writeLibraryElement
     throw(Exception)
 {
     // Create sax writer
-    Reference< XExtendedDocumentHandler > xHandler(
-        mxMSF->createInstance(
-            OUString( "com.sun.star.xml.sax.Writer" ) ), UNO_QUERY );
-    if( !xHandler.is() )
-    {
-        OSL_FAIL( "### couldn't create sax-writer component\n" );
-        return;
-    }
+    Reference< XWriter > xWriter = xml::sax::Writer::create(comphelper::getComponentContext(mxMSF));
 
     Reference< XTruncate > xTruncate( xOutput, UNO_QUERY );
     OSL_ENSURE( xTruncate.is(), "Currently only the streams that can be truncated are expected!" );
     if ( xTruncate.is() )
         xTruncate->truncate();
 
-    Reference< XActiveDataSource > xSource( xHandler, UNO_QUERY );
-    xSource->setOutputStream( xOutput );
+    xWriter->setOutputStream( xOutput );
 
     xmlscript::ModuleDescriptor aMod;
     aMod.aName = aElementName;
@@ -228,7 +221,7 @@ void SAL_CALL SfxScriptLibraryContainer::writeLibraryElement
         }
     }
 
-    xmlscript::exportScriptModule( xHandler, aMod );
+    xmlscript::exportScriptModule( xWriter, aMod );
 }
 
 

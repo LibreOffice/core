@@ -1692,7 +1692,7 @@ void OWriteStream_Impl::CommitStreamRelInfo( const uno::Reference< embed::XStora
                     if ( !xOutStream.is() )
                         throw uno::RuntimeException();
 
-                    ::comphelper::OFOPXMLHelper::WriteRelationsInfoSequence( xOutStream, m_aNewRelInfo, m_xFactory );
+                    ::comphelper::OFOPXMLHelper::WriteRelationsInfoSequence( xOutStream, m_aNewRelInfo, comphelper::getComponentContext(m_xFactory) );
 
                     // set the mediatype
                     uno::Reference< beans::XPropertySet > xPropSet( xRelsStream, uno::UNO_QUERY_THROW );

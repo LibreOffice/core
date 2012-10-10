@@ -29,6 +29,7 @@
 #include <com/sun/star/util/XChangesBatch.hpp>
 
 
+#include <comphelper/processfactory.hxx>
 #include <comphelper/oslfile2streamwrap.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <unotools/streamwrap.hxx>
@@ -225,7 +226,8 @@ bool XMLFilterJarHelper::savePackage( const OUString& rPackageURL, const XMLFilt
                 /* osl::File::RC rc = */ aOutputFile.open( osl_File_OpenFlag_Write );
                 Reference< XOutputStream > xOS( new OSLOutputStreamWrapper( aOutputFile ) );
 
-                TypeDetectionExporter aExporter( mxMSF );
+                Reference<XComponentContext> xContext( comphelper::getComponentContext(mxMSF) );
+                TypeDetectionExporter aExporter( xContext );
                 aExporter.doExport(xOS,rFilters);
             }
 

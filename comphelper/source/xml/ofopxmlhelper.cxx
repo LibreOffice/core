@@ -23,6 +23,7 @@
 #include <com/sun/star/io/XActiveDataSource.hpp>
 #include <com/sun/star/xml/sax/Parser.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
+#include <com/sun/star/xml/sax/Writer.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 
 #include <comphelper/ofopxmlhelper.hxx>
@@ -54,19 +55,15 @@ uno::Sequence< uno::Sequence< beans::StringPair > > SAL_CALL OFOPXMLHelper::Read
 }
 
 // -----------------------------------
-void SAL_CALL OFOPXMLHelper::WriteRelationsInfoSequence( const uno::Reference< io::XOutputStream >& xOutStream, const uno::Sequence< uno::Sequence< beans::StringPair > >& aSequence, const uno::Reference< lang::XMultiServiceFactory > xFactory )
+void SAL_CALL OFOPXMLHelper::WriteRelationsInfoSequence( const uno::Reference< io::XOutputStream >& xOutStream, const uno::Sequence< uno::Sequence< beans::StringPair > >& aSequence, const uno::Reference< uno::XComponentContext > xContext )
     throw( uno::Exception )
 {
     if ( !xOutStream.is() )
         throw uno::RuntimeException();
 
-    uno::Reference< io::XActiveDataSource > xWriterSource(
-        xFactory->createInstance(
-            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.xml.sax.Writer" ) ) ),
-        uno::UNO_QUERY_THROW );
-    uno::Reference< xml::sax::XDocumentHandler > xWriterHandler( xWriterSource, uno::UNO_QUERY_THROW );
+    uno::Reference< xml::sax::XWriter > xWriter = xml::sax::Writer::create(xContext);
 
-    xWriterSource->setOutputStream( xOutStream );
+    xWriter->setOutputStream( xOutStream );
 
     ::rtl::OUString aRelListElement( RTL_CONSTASCII_USTRINGPARAM( "Relationships" ) );
     ::rtl::OUString aRelElement( RTL_CONSTASCII_USTRINGPARAM( "Relationship" ) );
@@ -85,8 +82,8 @@ void SAL_CALL OFOPXMLHelper::WriteRelationsInfoSequence( const uno::Reference< i
         aCDATAString,
         ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "http://schemas.openxmlformats.org/package/2006/relationships" ) ) );
 
-    xWriterHandler->startDocument();
-    xWriterHandler->startElement( aRelListElement, xRootAttrList );
+    xWriter->startDocument();
+    xWriter->startElement( aRelListElement, xRootAttrList );
 
     for ( sal_Int32 nInd = 0; nInd < aSequence.getLength(); nInd++ )
     {
@@ -108,30 +105,26 @@ void SAL_CALL OFOPXMLHelper::WriteRelationsInfoSequence( const uno::Reference< i
             }
         }
 
-        xWriterHandler->startElement( aRelElement, xAttrList );
-        xWriterHandler->ignorableWhitespace( aWhiteSpace );
-        xWriterHandler->endElement( aRelElement );
+        xWriter->startElement( aRelElement, xAttrList );
+        xWriter->ignorableWhitespace( aWhiteSpace );
+        xWriter->endElement( aRelElement );
     }
 
-    xWriterHandler->ignorableWhitespace( aWhiteSpace );
-    xWriterHandler->endElement( aRelListElement );
-    xWriterHandler->endDocument();
+    xWriter->ignorableWhitespace( aWhiteSpace );
+    xWriter->endElement( aRelListElement );
+    xWriter->endDocument();
 }
 
 // -----------------------------------
-void SAL_CALL OFOPXMLHelper::WriteContentSequence( const uno::Reference< io::XOutputStream >& xOutStream, const uno::Sequence< beans::StringPair >& aDefaultsSequence, const uno::Sequence< beans::StringPair >& aOverridesSequence, const uno::Reference< lang::XMultiServiceFactory > xFactory )
+void SAL_CALL OFOPXMLHelper::WriteContentSequence( const uno::Reference< io::XOutputStream >& xOutStream, const uno::Sequence< beans::StringPair >& aDefaultsSequence, const uno::Sequence< beans::StringPair >& aOverridesSequence, const uno::Reference< uno::XComponentContext > xContext )
     throw( uno::Exception )
 {
     if ( !xOutStream.is() )
         throw uno::RuntimeException();
 
-    uno::Reference< io::XActiveDataSource > xWriterSource(
-        xFactory->createInstance(
-            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.xml.sax.Writer" ) ) ),
-        uno::UNO_QUERY_THROW );
-    uno::Reference< xml::sax::XDocumentHandler > xWriterHandler( xWriterSource, uno::UNO_QUERY_THROW );
+    uno::Reference< xml::sax::XWriter > xWriter = xml::sax::Writer::create(xContext);
 
-    xWriterSource->setOutputStream( xOutStream );
+    xWriter->setOutputStream( xOutStream );
 
     ::rtl::OUString aTypesElement( RTL_CONSTASCII_USTRINGPARAM( "Types" ) );
     ::rtl::OUString aDefaultElement( RTL_CONSTASCII_USTRINGPARAM( "Default" ) );
@@ -150,8 +143,8 @@ void SAL_CALL OFOPXMLHelper::WriteContentSequence( const uno::Reference< io::XOu
         aCDATAString,
         ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "http://schemas.openxmlformats.org/package/2006/content-types" ) ) );
 
-    xWriterHandler->startDocument();
-    xWriterHandler->startElement( aTypesElement, xRootAttrList );
+    xWriter->startDocument();
+    xWriter->startElement( aTypesElement, xRootAttrList );
 
     for ( sal_Int32 nInd = 0; nInd < aDefaultsSequence.getLength(); nInd++ )
     {
@@ -160,9 +153,9 @@ void SAL_CALL OFOPXMLHelper::WriteContentSequence( const uno::Reference< io::XOu
         pAttrList->AddAttribute( aExtensionAttr, aCDATAString, aDefaultsSequence[nInd].First );
         pAttrList->AddAttribute( aContentTypeAttr, aCDATAString, aDefaultsSequence[nInd].Second );
 
-        xWriterHandler->startElement( aDefaultElement, xAttrList );
-        xWriterHandler->ignorableWhitespace( aWhiteSpace );
-        xWriterHandler->endElement( aDefaultElement );
+        xWriter->startElement( aDefaultElement, xAttrList );
+        xWriter->ignorableWhitespace( aWhiteSpace );
+        xWriter->endElement( aDefaultElement );
     }
 
     for ( sal_Int32 nInd = 0; nInd < aOverridesSequence.getLength(); nInd++ )
@@ -172,14 +165,14 @@ void SAL_CALL OFOPXMLHelper::WriteContentSequence( const uno::Reference< io::XOu
         pAttrList->AddAttribute( aPartNameAttr, aCDATAString, aOverridesSequence[nInd].First );
         pAttrList->AddAttribute( aContentTypeAttr, aCDATAString, aOverridesSequence[nInd].Second );
 
-        xWriterHandler->startElement( aOverrideElement, xAttrList );
-        xWriterHandler->ignorableWhitespace( aWhiteSpace );
-        xWriterHandler->endElement( aOverrideElement );
+        xWriter->startElement( aOverrideElement, xAttrList );
+        xWriter->ignorableWhitespace( aWhiteSpace );
+        xWriter->endElement( aOverrideElement );
     }
 
-    xWriterHandler->ignorableWhitespace( aWhiteSpace );
-    xWriterHandler->endElement( aTypesElement );
-    xWriterHandler->endDocument();
+    xWriter->ignorableWhitespace( aWhiteSpace );
+    xWriter->endElement( aTypesElement );
+    xWriter->endDocument();
 
 }
 

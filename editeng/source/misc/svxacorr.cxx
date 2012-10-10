@@ -60,6 +60,7 @@
 #include <helpid.hrc>
 #include <com/sun/star/xml/sax/InputSource.hpp>
 #include <com/sun/star/xml/sax/Parser.hpp>
+#include <com/sun/star/xml/sax/Writer.hpp>
 #include <unotools/streamwrap.hxx>
 #include <SvXMLAutoCorrectImport.hxx>
 #include <SvXMLAutoCorrectExport.hxx>
@@ -2069,23 +2070,15 @@ void SvxAutoCorrectLanguageLists::SaveExceptList_Imp(
 
                 uno::Reference< lang::XMultiServiceFactory > xServiceFactory =
                     comphelper::getProcessServiceFactory();
-                OSL_ENSURE( xServiceFactory.is(),
-                            "XMLReader::Read: got no service manager" );
-                if( !xServiceFactory.is() )
-                {
-                    // Throw an exception ?
-                }
+                uno::Reference< uno::XComponentContext > xContext =
+                    comphelper::getProcessComponentContext();
 
-                    uno::Reference < XInterface > xWriter (xServiceFactory->createInstance(
-                        OUString("com.sun.star.xml.sax.Writer")));
-                    OSL_ENSURE(xWriter.is(),"com.sun.star.xml.sax.Writer service missing");
+                uno::Reference < xml::sax::XWriter > xWriter  = xml::sax::Writer::create(xContext);
                 uno::Reference < io::XOutputStream> xOut = new utl::OOutputStreamWrapper( *xStrm );
-                    uno::Reference<io::XActiveDataSource> xSrc(xWriter, uno::UNO_QUERY);
-                    xSrc->setOutputStream(xOut);
+                xWriter->setOutputStream(xOut);
 
-                    uno::Reference<xml::sax::XDocumentHandler> xHandler(xWriter, uno::UNO_QUERY);
-
-                    SvXMLExceptionListExport aExp( xServiceFactory, rLst, sStrmName, xHandler );
+                uno::Reference < xml::sax::XDocumentHandler > xHandler(xWriter, UNO_QUERY_THROW);
+                SvXMLExceptionListExport aExp( xServiceFactory, rLst, sStrmName, xHandler );
 
                 aExp.exportDoc( XML_BLOCK_LIST );
 
@@ -2440,23 +2433,15 @@ sal_Bool SvxAutoCorrectLanguageLists::MakeBlocklist_Imp( SvStorage& rStg )
 
             uno::Reference< lang::XMultiServiceFactory > xServiceFactory =
                 comphelper::getProcessServiceFactory();
-            OSL_ENSURE( xServiceFactory.is(),
-                        "XMLReader::Read: got no service manager" );
-            if( !xServiceFactory.is() )
-            {
-                // Throw an exception ?
-            }
+            uno::Reference< uno::XComponentContext > xContext =
+                comphelper::getProcessComponentContext();
 
-                uno::Reference < XInterface > xWriter (xServiceFactory->createInstance(
-                    OUString("com.sun.star.xml.sax.Writer")));
-                OSL_ENSURE(xWriter.is(),"com.sun.star.xml.sax.Writer service missing");
+            uno::Reference < xml::sax::XWriter > xWriter = xml::sax::Writer::create(xContext);
             uno::Reference < io::XOutputStream> xOut = new utl::OOutputStreamWrapper( *refList );
-                uno::Reference<io::XActiveDataSource> xSrc(xWriter, uno::UNO_QUERY);
-                xSrc->setOutputStream(xOut);
+            xWriter->setOutputStream(xOut);
 
-                uno::Reference<xml::sax::XDocumentHandler> xHandler(xWriter, uno::UNO_QUERY);
-
-                SvXMLAutoCorrectExport aExp( xServiceFactory, pAutocorr_List, sStrmName, xHandler );
+            uno::Reference<xml::sax::XDocumentHandler> xHandler(xWriter, uno::UNO_QUERY);
+            SvXMLAutoCorrectExport aExp( xServiceFactory, pAutocorr_List, sStrmName, xHandler );
 
             aExp.exportDoc( XML_BLOCK_LIST );
 

@@ -1104,7 +1104,7 @@ void ZipPackage::WriteContentTypes( ZipOutputStream& aZipOut, const vector< uno:
     aOverridesSequence.realloc( nSeqLength );
 
     ::comphelper::OFOPXMLHelper::WriteContentSequence(
-            xConTypeOutStream, aDefaultsSequence, aOverridesSequence, m_xFactory );
+            xConTypeOutStream, aDefaultsSequence, aOverridesSequence, comphelper::getComponentContext(m_xFactory) );
 
     sal_Int32 nBufferLength = static_cast < sal_Int32 > ( pBuffer->getPosition() );
     pBuffer->realloc( nBufferLength );

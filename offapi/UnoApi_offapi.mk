@@ -318,6 +318,7 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/xml/sax,\
 	FastShapeContextHandler \
 	FastTokenHandler \
 	Parser \
+    Writer \
 ))
 
 
@@ -4251,6 +4252,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/xml/sax,\
 	XLocator \
 	XParser \
 	XSAXSerializable \
+	XWriter \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/xml/wrapper,\
 	XXMLDocumentWrapper \

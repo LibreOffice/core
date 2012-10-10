@@ -52,6 +52,7 @@
 #include <com/sun/star/ui/XUIConfigurationStorage.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
+#include <com/sun/star/xml/sax/Writer.hpp>
 #include <com/sun/star/ucb/XContent.hpp>
 #include <com/sun/star/sdb/DatabaseContext.hpp>
 #include <com/sun/star/sdb/application/XDatabaseDocumentUI.hpp>
@@ -1585,10 +1586,7 @@ void ODatabaseDocument::WriteThroughComponent( const Reference< XOutputStream >&
     OSL_ENSURE( NULL != pServiceName, "Need component name!" );
 
     // get component
-    Reference< XActiveDataSource > xSaxWriter;
-    OSL_VERIFY( m_pImpl->m_aContext.createComponent( "com.sun.star.xml.sax.Writer", xSaxWriter ) );
-    if ( !xSaxWriter.is() )
-        return;
+    Reference< XWriter > xSaxWriter = xml::sax::Writer::create( m_pImpl->m_aContext.getUNOContext() );
 
     // connect XML writer to output stream
     xSaxWriter->setOutputStream( xOutputStream );

@@ -73,7 +73,7 @@
 #include <com/sun/star/task/XStatusIndicatorFactory.hpp>
 #include <com/sun/star/ui/XUIConfigurationStorage.hpp>
 #include <com/sun/star/xml/AttributeData.hpp>
-#include <com/sun/star/xml/sax/XDocumentHandler.hpp>
+#include <com/sun/star/xml/sax/Writer.hpp>
 
 #include <comphelper/broadcasthelper.hxx>
 #include <comphelper/documentconstants.hxx>
@@ -1738,20 +1738,15 @@ sal_Bool OReportDefinition::WriteThroughComponent(
     OSL_ENSURE( NULL != pServiceName, "Need component name!" );
 
     // get component
-    uno::Reference< io::XActiveDataSource > xSaxWriter(
-        m_aProps->m_xContext->getServiceManager()->createInstanceWithContext(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Writer")),m_aProps->m_xContext),
-        uno::UNO_QUERY );
-    OSL_ENSURE( xSaxWriter.is(), "can't instantiate XML com.sun.star.xml.sax.Writer" );
-    if(!xSaxWriter.is())
-        return sal_False;
+    uno::Reference< xml::sax::XWriter > xSaxWriter(
+        xml::sax::Writer::create(m_aProps->m_xContext) );
 
     // connect XML writer to output stream
     xSaxWriter->setOutputStream( xOutputStream );
 
     // prepare arguments (prepend doc handler to given arguments)
-    uno::Reference<xml::sax::XDocumentHandler> xDocHandler( xSaxWriter,uno::UNO_QUERY);
     uno::Sequence<uno::Any> aArgs( 1 + rArguments.getLength() );
-    aArgs[0] <<= xDocHandler;
+    aArgs[0] <<= xSaxWriter;
     for(sal_Int32 i = 0; i < rArguments.getLength(); i++)
         aArgs[i+1] = rArguments[i];
 
