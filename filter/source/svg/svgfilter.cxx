@@ -32,6 +32,9 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/drawing/framework/XControllerManager.hpp>
 #include <com/sun/star/drawing/framework/XConfigurationController.hpp>
+#include <com/sun/star/drawing/framework/XConfiguration.hpp>
+#include <com/sun/star/drawing/framework/AnchorBindingMode.hpp>
+#include <com/sun/star/drawing/framework/XResourceId.hpp>
 #include <com/sun/star/drawing/framework/XResource.hpp>
 #include <com/sun/star/drawing/framework/XView.hpp>
 #include <com/sun/star/drawing/framework/ResourceId.hpp>
@@ -77,7 +80,6 @@ SVGFilter::~SVGFilter()
 
 // -----------------------------------------------------------------------------
 
-
 sal_Bool SAL_CALL SVGFilter::filter( const Sequence< PropertyValue >& rDescriptor )
     throw (RuntimeException)
 {
@@ -92,48 +94,70 @@ sal_Bool SAL_CALL SVGFilter::filter( const Sequence< PropertyValue >& rDescripto
         bRet = implImport( rDescriptor );
     else if( mxSrcDoc.is() )
     {
-        if( !mbExportAll )
+        if( !mbExportAll && !mSelectedPages.hasElements() )
         {
-            uno::Reference< frame::XDesktop > xDesktop( mxMSF->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.Desktop" )) ),
-                                                        uno::UNO_QUERY);
-            if( xDesktop.is() )
+            uno::Reference< frame::XDesktop >                            xDesktop(mxMSF->createInstance( "com.sun.star.frame.Desktop" ),
+                                                                                  uno::UNO_QUERY_THROW);
+            uno::Reference< frame::XFrame >                              xFrame(xDesktop->getCurrentFrame(),
+                                                                                uno::UNO_QUERY_THROW);
+            uno::Reference<frame::XController >                          xController(xFrame->getController(),
+                                                                                     uno::UNO_QUERY_THROW);
+            uno::Reference<drawing::XDrawView >                          xDrawView(xController,
+                                                                                   uno::UNO_QUERY_THROW);
+            uno::Reference<drawing::framework::XControllerManager>       xManager(xController,
+                                                                                  uno::UNO_QUERY_THROW);
+            uno::Reference<drawing::framework::XConfigurationController> xConfigController(xManager->getConfigurationController());
+
+            // which view configuration are we in?
+            //
+            // * traverse Impress resources to find slide preview pane, grab selection from there
+            // * otherwise, fallback to current slide
+            //
+            uno::Sequence<uno::Reference<drawing::framework::XResourceId> > aResIds(
+                xConfigController->getCurrentConfiguration()->getResources(
+                    uno::Reference<drawing::framework::XResourceId>(),
+                    "",
+                    drawing::framework::AnchorBindingMode_INDIRECT));
+
+            for( sal_Int32 i=0; i<aResIds.getLength(); ++i )
             {
-                uno::Reference< frame::XFrame > xFrame( xDesktop->getCurrentFrame() );
-
-                if( xFrame.is() )
+                // can we somehow obtain the slidesorter from the Impress framework?
+                if( aResIds[i]->getResourceURL() == "private:resource/view/SlideSorter" )
                 {
-                    uno::Reference< frame::XController > xController( xFrame->getController() );
+                    // got it, grab current selection from there
+                    uno::Reference<drawing::framework::XResource> xRes(
+                        xConfigController->getResource(aResIds[i]));
 
-                    if( xController.is() )
+                    uno::Reference< view::XSelectionSupplier > xSelectionSupplier(
+                        xRes,
+                        uno::UNO_QUERY );
+                    if( xSelectionSupplier.is() )
                     {
-                        /*
-                         *  Get the selection from the Slide Sorter Center Pane
-                         */
-                        if( !mSelectedPages.hasElements() )
+                        uno::Any aSelection = xSelectionSupplier->getSelection();
+                        if( aSelection.hasValue() )
                         {
-                            uno::Reference< beans::XPropertySet > xControllerPropertySet( xController, uno::UNO_QUERY );
-                            uno::Reference< drawing::XDrawSubController > xSubController;
-                            xControllerPropertySet->getPropertyValue(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "SubController" ) ) )
-                                    >>= xSubController;
-
-                            if( xSubController.is() )
+                            ObjectSequence aSelectedPageSequence;
+                            aSelection >>= aSelectedPageSequence;
+                            mSelectedPages.realloc( aSelectedPageSequence.getLength() );
+                            for( sal_Int32 j=0; j<mSelectedPages.getLength(); ++j )
                             {
-                                uno::Any aSelection = xSubController->getSelection();
-                                if( aSelection.hasValue() )
-                                {
-                                    ObjectSequence aSelectedPageSequence;
-                                    aSelection >>= aSelectedPageSequence;
-                                    mSelectedPages.realloc( aSelectedPageSequence.getLength() );
-                                    for( sal_Int32 i = 0; i < mSelectedPages.getLength(); ++i )
-                                    {
-                                        uno::Reference< drawing::XDrawPage > xDrawPage( aSelectedPageSequence[i],  uno::UNO_QUERY );
-                                        mSelectedPages[i] = xDrawPage;
-                                    }
-                                }
+                                uno::Reference< drawing::XDrawPage > xDrawPage( aSelectedPageSequence[j],
+                                                                                uno::UNO_QUERY );
+                                mSelectedPages[j] = xDrawPage;
                             }
+
+                            // and stop looping. it is likely not getting better
+                            break;
                         }
                     }
                 }
+            }
+
+            if( !mSelectedPages.hasElements() )
+            {
+                // apparently failed to glean selection - fallback to current page
+                mSelectedPages.realloc( 1 );
+                mSelectedPages[0] = xDrawView->getCurrentPage();
             }
         }
 
@@ -154,8 +178,8 @@ sal_Bool SAL_CALL SVGFilter::filter( const Sequence< PropertyValue >& rDescripto
                 }
             }
 
-            uno::Reference< drawing::XMasterPagesSupplier >        xMasterPagesSupplier( mxSrcDoc, uno::UNO_QUERY );
-            uno::Reference< drawing::XDrawPagesSupplier >        xDrawPagesSupplier( mxSrcDoc, uno::UNO_QUERY );
+            uno::Reference< drawing::XMasterPagesSupplier > xMasterPagesSupplier( mxSrcDoc, uno::UNO_QUERY );
+            uno::Reference< drawing::XDrawPagesSupplier >   xDrawPagesSupplier( mxSrcDoc, uno::UNO_QUERY );
 
             if( xMasterPagesSupplier.is() && xDrawPagesSupplier.is() )
             {
