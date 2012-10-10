@@ -648,25 +648,6 @@ void ScColorScale2FrmtEntry::Init()
 
     DBG_ASSERT( pDocSh, "DocShell not found!" );
 
-    /*
-    Point aPointLb = maLbEntryTypeMiddle.GetPosPixel();
-    Point aPointEd = maEdMiddle.GetPosPixel();
-    Point aPointCol = maLbColMiddle.GetPosPixel();
-    const long nMovePos = maLbEntryTypeMiddle.GetSizePixel().Width() * 1.2;
-    aPointLb.X() += nMovePos;
-    aPointEd.X() += nMovePos;
-    aPointCol.X() += nMovePos;
-    maLbEntryTypeMiddle.SetPosPixel(aPointLb);
-    maEdMiddle.SetPosPixel(aPointEd);
-    maLbColMiddle.SetPosPixel(aPointCol);
-    aPointLb.X() += nMovePos;
-    aPointEd.X() += nMovePos;
-    aPointCol.X() += nMovePos;
-    maLbEntryTypeMax.SetPosPixel(aPointLb);
-    maEdMax.SetPosPixel(aPointEd);
-    maLbColMax.SetPosPixel(aPointCol);
-    */
-
     if ( pDocSh )
     {
         pItem = pDocSh->GetItem( SID_COLOR_TABLE );
