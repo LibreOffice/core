@@ -1,0 +1,4 @@
+Fontconfig is a font configuration and customization library. It is designed to locate fonts
+within the system and select them according to requirements specified by applications. 
+
+From [ http://packages.debian.org/squeeze/fontconfig ]

@@ -1,0 +1,4 @@
+GLib is a general-purpose utility library, which provides many useful data types, macros,
+type conversions, string utilities, file utilities, a main loop abstraction, and so on.
+
+From [ http://www.gtk.org/api/2.6/glib/glib.html ]
