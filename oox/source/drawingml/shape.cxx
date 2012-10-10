@@ -562,7 +562,7 @@ Reference< XShape > Shape::createAndInsert(
             if( getTextBody() )
             {
                 sal_Int32 nTextRotateAngle = static_cast< sal_Int32 >( getTextBody()->getTextProperties().moRotation.get( 0 ) );
-                mpCustomShapePropertiesPtr->setTextRotateAngle( -nTextRotateAngle / 60000 );
+                mpCustomShapePropertiesPtr->setTextRotateAngle( nTextRotateAngle / 60000 );
             }
 
             SAL_INFO("oox", "==cscode== shape name: '" << msName << "'");
