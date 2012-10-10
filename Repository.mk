@@ -651,6 +651,7 @@ $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
     codemaker_java \
     cosv \
     dtobj \
+	findsofficepath \
     headless \
     libeay32 \
     npsoenv \

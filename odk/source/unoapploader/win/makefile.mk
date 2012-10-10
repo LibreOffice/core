@@ -38,7 +38,8 @@ APP1RPATH=NONE
 
 APP1TARGET= $(TARGET)
 
-APP1OBJS=   $(OBJ)$/unoapploader.obj $(SOLARLIBDIR)$/findsofficepath.obj
+APP1OBJS=   $(OBJ)$/unoapploader.obj
+APP1STDLIBS=findsofficepath.lib
 
 APP1STDLIBS=\
             $(ADVAPI32LIB)
