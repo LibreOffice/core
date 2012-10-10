@@ -480,7 +480,7 @@ void TreeListBox::ImpCreateLibSubSubEntriesInVBAMode( SvLBoxEntry* pLibSubRootEn
                 ModuleInfoHelper::getObjectName( xLib, aModName, sObjName );
                 if( !sObjName.isEmpty() )
                 {
-                    aEntryNameBuf.appendAscii( " (" );
+                    aEntryNameBuf.append( " (" );
                     aEntryNameBuf.append(sObjName);
                     aEntryNameBuf.append(')');
                 }
