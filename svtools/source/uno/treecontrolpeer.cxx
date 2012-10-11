@@ -144,14 +144,6 @@ public:
     TreeControlPeer* mpPeer;
 };
 
-// --------------------------------------------------------------------
-
-class TreeNodeMap : public std::map< Reference< XTreeNode >, UnoTreeListEntry* >
-{
-};
-
-// --------------------------------------------------------------------
-
 TreeControlPeer::TreeControlPeer()
 : maSelectionListeners( *this )
 , maTreeExpansionListeners( *this )
