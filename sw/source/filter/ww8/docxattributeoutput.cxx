@@ -265,7 +265,10 @@ void DocxAttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pT
     // Write the anchored frame if any
     if ( m_pParentFrame )
     {
-        const SwFrmFmt& rFrmFmt = m_pParentFrame->GetFrmFmt( );
+        sw::Frame *pParentFrame = m_pParentFrame;
+        m_pParentFrame = NULL;
+
+        const SwFrmFmt& rFrmFmt = pParentFrame->GetFrmFmt( );
         const SwNodeIndex* pNodeIndex = rFrmFmt.GetCntnt().GetCntntIdx();
 
         sal_uLong nStt = pNodeIndex ? pNodeIndex->GetIndex()+1                  : 0;
@@ -273,12 +276,13 @@ void DocxAttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pT
 
         m_rExport.SaveData( nStt, nEnd );
 
-        m_rExport.mpParentFrame = m_pParentFrame;
-        m_pParentFrame = NULL;
+        m_rExport.mpParentFrame = pParentFrame;
 
         m_rExport.WriteText( );
 
         m_rExport.RestoreData();
+
+        delete pParentFrame;
     }
 }
 
@@ -2430,8 +2434,8 @@ void DocxAttributeOutput::OutputFlyFrame_Impl( const sw::Frame &rFrame, const Po
             break;
         case sw::Frame::eTxtBox:
             {
-                // The frame output is postponed at the end of the anchor paragraph
-                m_pParentFrame = &rFrame;
+                // The frame output is postponed to the end of the anchor paragraph
+                m_pParentFrame = new sw::Frame(rFrame);
             }
             break;
         case sw::Frame::eOle:
@@ -4598,7 +4602,7 @@ DocxAttributeOutput::~DocxAttributeOutput()
     delete m_pEndnotesList, m_pEndnotesList = NULL;
 
     delete m_pTableWrt, m_pTableWrt = NULL;
-    m_pParentFrame = NULL;
+    delete m_pParentFrame;
 }
 
 DocxExport& DocxAttributeOutput::GetExport()
