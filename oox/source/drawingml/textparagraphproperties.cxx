@@ -26,6 +26,7 @@
 #include <com/sun/star/awt/XBitmap.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/style/TabStop.hpp>
 
 #include "oox/helper/helper.hxx"
 #include "oox/helper/propertyset.hxx"
@@ -418,12 +419,15 @@ void TextParagraphProperties::pushToPropSet( const ::oox::core::XmlFilterBase* p
         if ( noParaLeftMargin )
         {
             rioBulletMap[ PROP_LeftMargin ] <<= static_cast< sal_Int32 >( *noParaLeftMargin );
-            noParaLeftMargin = boost::optional< sal_Int32 >( 0 );
+            noParaLeftMargin = boost::none;
         }
         if ( noFirstLineIndentation )
         {
+            // Force Paragraph property as zero - impress seems to use the value from previous
+            // (non) bullet line if not set to zero explicitly :(
+            aPropSet.setProperty( PROP_ParaFirstLineIndent, 0 );
             rioBulletMap[ PROP_FirstLineOffset ] <<= static_cast< sal_Int32 >( *noFirstLineIndentation );
-            noFirstLineIndentation = boost::optional< sal_Int32 >( 0 );
+            noFirstLineIndentation = boost::none;
         }
         if ( nNumberingType != NumberingType::BITMAP && !rioBulletMap.hasProperty( PROP_BulletColor ) && pFilterBase )
             rioBulletMap[ PROP_BulletColor ] <<= static_cast< sal_Int32 >( maTextCharacterProperties.maCharColor.getColor( pFilterBase->getGraphicHelper()));
@@ -459,7 +463,18 @@ void TextParagraphProperties::pushToPropSet( const ::oox::core::XmlFilterBase* p
     if ( noParaLeftMargin )
         aPropSet.setProperty( PROP_ParaLeftMargin, sal_Int32( *noParaLeftMargin ) );
     if ( noFirstLineIndentation )
+    {
         aPropSet.setProperty( PROP_ParaFirstLineIndent, *noFirstLineIndentation );
+        if( bPushDefaultValues )
+        {
+            // Reset TabStops - these would be auto calculated by Impress
+            TabStop aTabStop;
+            aTabStop.Position = 0;
+            Sequence< TabStop > aSeq(1);
+            aSeq[0] = aTabStop;
+            aPropSet.setProperty( PROP_ParaTabStops, aSeq );
+        }
+    }
 }
 
 float TextParagraphProperties::getCharHeightPoints( float fDefault ) const
