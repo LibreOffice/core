@@ -104,6 +104,7 @@ public:
     void testShadow();
     void testN782061();
     void testN782345();
+    void testN783638();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -150,6 +151,7 @@ public:
     CPPUNIT_TEST(testShadow);
     CPPUNIT_TEST(testN782061);
     CPPUNIT_TEST(testN782345);
+    CPPUNIT_TEST(testN783638);
 #endif
     CPPUNIT_TEST_SUITE_END();
 
@@ -1075,6 +1077,17 @@ void Test::testN779957()
         CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Incorrect left spacing computed from docx cell margin",
             cellLeftMarginFromOffice[i], aLeftMargin - 0.5 * aLeftBorderLine.LineWidth, 1);
     }
+}
+
+void Test::testN783638()
+{
+    // The problem was that the margins of inline images were not zero.
+    load("n783638.docx");
+
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPropertySet(xDraws->getByIndex(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xPropertySet, "LeftMargin"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
