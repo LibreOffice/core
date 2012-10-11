@@ -6839,9 +6839,11 @@ if test "$with_system_jpeg" = "yes"; then
 else
     AC_MSG_RESULT([internal])
     SYSTEM_JPEG=NO
+    JPEG_TARBALL="a2c10c04f396a9ce72894beb18b4e1f9-jpeg-8c.tar.gz"
     BUILD_TYPE="$BUILD_TYPE JPEG"
 fi
 AC_SUBST(SYSTEM_JPEG)
+AC_SUBST(JPEG_TARBALL)
 AC_SUBST([MINGW_JPEG_DLL])
 
 dnl ===================================================================
