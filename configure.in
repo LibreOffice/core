@@ -3302,8 +3302,10 @@ AC_SUBST(SHOWINCLUDES_PREFIX)
 #
 if test "$_os" == "WINNT"; then
     DBGHELP_DLL="13fbc2e8b37ddf28181dd6d8081c2b8e-dbghelp.dll"
+    UNOWINREG_DLL="185d60944ea767075d27247c3162b3bc-unowinreg.dll"
 fi
 AC_SUBST(DBGHELP_DLL)
+AC_SUBST(UNOWINREG_DLL)
 
 #
 # prefix C with ccache if needed

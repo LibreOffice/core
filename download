@@ -214,8 +214,8 @@ if [ "$COM" = "MSC" -a -n "$md5sum" ]; then
     # This can be run only on Windows itself (Cygwin)
     TMPUNPACK=`cygpath -d $TARFILE_LOCATION/tmp`
     chmod a+w $TARFILE_LOCATION/tmp
-    if [ ! -f ./external/dbghelp/dbghelp.dll -a -f $TARFILE_LOCATION/13fbc2e8b37ddf28181dd6d8081c2b8e-dbghelp.dll ]; then
-	    cp $TARFILE_LOCATION/13fbc2e8b37ddf28181dd6d8081c2b8e-dbghelp.dll ./external/dbghelp/dbghelp.dll
+    if [ ! -f ./external/dbghelp/dbghelp.dll -a -f $TARFILE_LOCATION/$DBGHELP_DLL ]; then
+	    cp $TARFILE_LOCATION/$DBGHELP_DLL ./external/dbghelp/dbghelp.dll
 	fi
     if [ ! -f ./external/dbghelp/dbghelp.dll -a -f $TARFILE_LOCATION/dbg_x86.msi ]; then
         msiexec /a `cygpath -d $TARFILE_LOCATION/dbg_x86.msi` /qn TARGETDIR=$TMPUNPACK SHORTFILENAMES=1
