@@ -393,9 +393,9 @@ endif
 #
 # Bootstap
 #
-bootstrap: $(WORKDIR)/bootstrap
+bootstrap: $(WORKDIR)/bootstrap compilerplugins
 
-$(WORKDIR)/bootstrap: solenv/bin/concat-deps.c compilerplugins
+$(WORKDIR)/bootstrap: solenv/bin/concat-deps.c
 	@cd $(SRCDIR) && ./bootstrap
 	@mkdir -p $(dir $@) && touch $@
 
