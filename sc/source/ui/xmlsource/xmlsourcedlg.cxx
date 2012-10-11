@@ -151,8 +151,8 @@ void ScXMLSourceDlg::SelectSourceFile()
     if (!aFiles.getLength())
         return;
 
-    maSrcPath = aFiles[0];
     // There should only be one file returned from the file picker.
+    maSrcPath = aFiles[0];
     maFtSourceFile.SetText(maSrcPath);
 
     LoadSourceFileStructure(maSrcPath);

@@ -173,6 +173,8 @@ bool ScOrcusFiltersImpl::importCSV(ScDocument& rDoc, const OUString& rPath) cons
     return true;
 }
 
+namespace {
+
 void populateTree(
    SvTreeListBox& rTreeCtrl, orcus::xml_structure_tree::walker& rWalker,
    const orcus::xml_structure_tree::entity_name& rElemName, bool bRepeat,
@@ -214,6 +216,23 @@ void populateTree(
     }
 }
 
+class TreeUpdateSwitch
+{
+    SvTreeListBox& mrTreeCtrl;
+public:
+    TreeUpdateSwitch(SvTreeListBox& rTreeCtrl) : mrTreeCtrl(rTreeCtrl)
+    {
+        mrTreeCtrl.SetUpdateMode(false);
+    }
+
+    ~TreeUpdateSwitch()
+    {
+        mrTreeCtrl.SetUpdateMode(true);
+    }
+};
+
+}
+
 bool ScOrcusFiltersImpl::loadXMLStructure(
    SvTreeListBox& rTreeCtrl, const rtl::OUString& rPath,
    const Image& rImgDefaultElem, const Image& rImgRepeatElem, const Image& rImgElemAttr) const
@@ -235,6 +254,7 @@ bool ScOrcusFiltersImpl::loadXMLStructure(
     {
         aXmlTree.parse(&aStrm[0], aStrm.size());
 
+        TreeUpdateSwitch aSwitch(rTreeCtrl);
         rTreeCtrl.Clear();
         rTreeCtrl.SetDefaultCollapsedEntryBmp(rImgDefaultElem);
         rTreeCtrl.SetDefaultExpandedEntryBmp(rImgDefaultElem);
