@@ -231,24 +231,24 @@ MergeDataFile::MergeDataFile(
             {
                 if( bInSameComp )
                     aActPo = aNextPo;
-                OString sTemp = aActPo.getTransStr();
+                OString sTemp = aActPo.getMsgStr();
                 if( aActPo.getFuzzy() || sTemp.isEmpty() )
-                    sTemp = aActPo.getUnTransStr();
+                    sTemp = aActPo.getMsgId();
                 switch( aActPo.getType() )
                 {
                     case PoEntry::TTEXT:
                         sText = sTemp;
-                        sExText = aActPo.getUnTransStr();
+                        sExText = aActPo.getMsgId();
                         sQTZText = aActPo.getKeyId();
                         break;
                     case PoEntry::TQUICKHELPTEXT:
                         sQHText = sTemp;
-                        sExQHText = aActPo.getUnTransStr();
+                        sExQHText = aActPo.getMsgId();
                         sQTZQHText = aActPo.getKeyId();
                         break;
                     case PoEntry::TTITLE:
                         sTitle = sTemp;
-                        sExTitle = aActPo.getUnTransStr();
+                        sExTitle = aActPo.getMsgId();
                         sQTZTitle = aActPo.getKeyId();
                         break;
                 }

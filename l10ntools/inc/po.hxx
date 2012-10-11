@@ -49,12 +49,12 @@ public:
     OString         getLocalId() const;
     OString         getResourceType() const;
     TYPE            getType() const;
-    OString         getUnTransStr() const;
-    OString         getTransStr() const;
+    OString         getMsgId() const;
+    OString         getMsgStr() const;
     bool            getFuzzy() const;
     OString         getKeyId() const;
-    void            setUnTransStr(const OString& rUnTransStr);
-    void            setTransStr(const OString& rTransStr);
+    void            setMsgId(const OString& rUnTransStr);
+    void            setMsgStr(const OString& rTransStr);
     void            setFuzzy(const bool bFuzzy);
 
     static bool     IsInSameComp(const PoEntry& rPo1,const PoEntry& rPo2);

@@ -161,7 +161,7 @@ void HandleLanguage(struct dirent* pLangEntry, const OString& rPath,
                 PoEntry aPE(sActUnTrans, vTypes[nIndex]);
                 const OString sActStr =
                     sActTrans.getToken(vTypes[nIndex],'\t');
-                aPE.setTransStr(sActStr);
+                aPE.setMsgStr(sActStr);
                 aPE.setFuzzy( sActStr.isEmpty() ? false :
                     static_cast<bool>(sActTrans.getToken(PoEntry::DUMMY,'\t').
                         copy(nDummyBit++,1).toBoolean()));

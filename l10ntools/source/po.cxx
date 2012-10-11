@@ -35,9 +35,9 @@ private:
 
     OString    m_sExtractCom;
     OString    m_sReference;
-    OString    m_sContext;
-    OString    m_sUnTransStr;
-    OString    m_sTransStr;
+    OString    m_sMsgCtxt;
+    OString    m_sMsgId;
+    OString    m_sMsgStr;
     bool       m_bFuzzy;
     bool       m_bNull;
 
@@ -49,17 +49,17 @@ public:
 
     virtual OString     getExtractCom() const   { return m_sExtractCom; }
     virtual OString     getReference() const    { return m_sReference; }
-    virtual OString     getContext() const      { return m_sContext; }
-    virtual OString     getUnTransStr() const   { return m_sUnTransStr; }
-    virtual OString     getTransStr() const     { return m_sTransStr; }
+    virtual OString     getMsgCtxt() const      { return m_sMsgCtxt; }
+    virtual OString     getMsgId() const        { return m_sMsgId; }
+    virtual OString     getMsgStr() const       { return m_sMsgStr; }
     virtual bool        getFuzzy() const        { return m_bFuzzy; }
     virtual bool        isNull() const          { return m_bNull; }
 
     virtual void        setExtractCom(const OString& rExtractCom);
     virtual void        setReference(const OString& rReference);
-    virtual void        setContext(const OString& rContext);
-    virtual void        setUnTransStr(const OString& rUnTransStr);
-    virtual void        setTransStr(const OString& rTransStr);
+    virtual void        setMsgCtxt(const OString& rMsgCtxt);
+    virtual void        setMsgId(const OString& rMsgId);
+    virtual void        setMsgStr(const OString& rMsgStr);
     virtual void        setFuzzy(const bool bFuzzy);
 
     virtual void        writeToFile(std::ofstream& rOFStream) const;
@@ -139,9 +139,9 @@ namespace
 GenPoEntry::GenPoEntry()
     : m_sExtractCom( OString() )
     , m_sReference( OString() )
-    , m_sContext( OString() )
-    , m_sUnTransStr( OString() )
-    , m_sTransStr( OString() )
+    , m_sMsgCtxt( OString() )
+    , m_sMsgId( OString() )
+    , m_sMsgStr( OString() )
     , m_bFuzzy( false )
     , m_bNull( false )
 {
@@ -163,19 +163,19 @@ void GenPoEntry::setReference(const OString& rReference)
     m_sReference = rReference;
 }
 
-void GenPoEntry::setContext(const OString& rContext)
+void GenPoEntry::setMsgCtxt(const OString& rMsgCtxt)
 {
-    m_sContext = rContext;
+    m_sMsgCtxt = rMsgCtxt;
 }
 
-void GenPoEntry::setUnTransStr(const OString& rUnTransStr)
+void GenPoEntry::setMsgId(const OString& rMsgId)
 {
-    m_sUnTransStr = rUnTransStr;
+    m_sMsgId = rMsgId;
 }
 
-void GenPoEntry::setTransStr(const OString& rTransStr)
+void GenPoEntry::setMsgStr(const OString& rMsgStr)
 {
-    m_sTransStr = rTransStr;
+    m_sMsgStr = rMsgStr;
 }
 
 void GenPoEntry::setFuzzy(const bool bFuzzy)
@@ -196,13 +196,13 @@ void GenPoEntry::writeToFile(std::ofstream& rOFStream) const
         rOFStream << "#: " << m_sReference.getStr() << std::endl;
     if ( m_bFuzzy )
         rOFStream << "#, fuzzy" << std::endl;
-    if ( !m_sContext.isEmpty() )
+    if ( !m_sMsgCtxt.isEmpty() )
         rOFStream << "msgctxt "
-                  << lcl_GenMsgString(m_sContext).getStr() << std::endl;
+                  << lcl_GenMsgString(m_sMsgCtxt).getStr() << std::endl;
     rOFStream << "msgid "
-              << lcl_GenMsgString(m_sUnTransStr).getStr() << std::endl;
+              << lcl_GenMsgString(m_sMsgId).getStr() << std::endl;
     rOFStream << "msgstr "
-              << lcl_GenMsgString(m_sTransStr).getStr() << std::endl;
+              << lcl_GenMsgString(m_sMsgStr).getStr() << std::endl;
 }
 
 //Read from file
@@ -238,18 +238,18 @@ void GenPoEntry::readFromFile(std::ifstream& rIFStream)
         }
         else if (sLine.startsWith("msgctxt "))
         {
-            m_sContext = lcl_GenNormString(sLine.copy(8));
-            pLastMsg = &m_sContext;
+            m_sMsgCtxt = lcl_GenNormString(sLine.copy(8));
+            pLastMsg = &m_sMsgCtxt;
         }
         else if (sLine.startsWith("msgid "))
         {
-            m_sUnTransStr = lcl_GenNormString(sLine.copy(6));
-            pLastMsg = &m_sUnTransStr;
+            m_sMsgId = lcl_GenNormString(sLine.copy(6));
+            pLastMsg = &m_sMsgId;
         }
         else if (sLine.startsWith("msgstr "))
         {
-            m_sTransStr = lcl_GenNormString(sLine.copy(7));
-            pLastMsg = &m_sTransStr;
+            m_sMsgStr = lcl_GenNormString(sLine.copy(7));
+            pLastMsg = &m_sMsgStr;
         }
         else if (sLine.startsWith("\"") && pLastMsg)
         {
@@ -449,26 +449,26 @@ PoEntry::PoEntry(const OString& rSDFLine, const TYPE eType)
     m_pGenPo->setReference(vParts[SOURCEFILE].
         copy(vParts[SOURCEFILE].lastIndexOf("\\")+1));
 
-    OString sContext =
+    OString sMsgCtxt =
         vParts[GROUPID] + "\n" +
         (vParts[LOCALID].isEmpty() ? "" : vParts[LOCALID] + "\n") +
         vParts[RESOURCETYPE];
     switch(eType){
     case TTEXT:
-        sContext += ".text"; break;
+        sMsgCtxt += ".text"; break;
     case TQUICKHELPTEXT:
-        sContext += ".quickhelptext"; break;
+        sMsgCtxt += ".quickhelptext"; break;
     case TTITLE:
-        sContext += ".title"; break;
+        sMsgCtxt += ".title"; break;
     /*Default case is unneeded because the type of eType has
       only three element*/
     }
     m_pGenPo->setExtractCom(
         ( !vParts[HELPTEXT].isEmpty() ?  vParts[HELPTEXT] + "\n" : "" ) +
         lcl_GenKeyId(
-            vParts[SOURCEFILE] + sContext + vParts[eType] ) );
-    m_pGenPo->setContext(sContext);
-    m_pGenPo->setUnTransStr(
+            vParts[SOURCEFILE] + sMsgCtxt + vParts[eType] ) );
+    m_pGenPo->setMsgCtxt(sMsgCtxt);
+    m_pGenPo->setMsgId(
         lcl_UnEscapeSDFText(
             vParts[eType],vParts[SOURCEFILE].endsWith(".xhp")));
     m_bIsInitialized = true;
@@ -525,37 +525,37 @@ OString PoEntry::getSourceFile() const
 OString PoEntry::getGroupId() const
 {
     assert( m_bIsInitialized );
-    return m_pGenPo->getContext().getToken(0,'\n');
+    return m_pGenPo->getMsgCtxt().getToken(0,'\n');
 }
 
 //Get localid
 OString PoEntry::getLocalId() const
 {
     assert( m_bIsInitialized );
-    const OString sContext = m_pGenPo->getContext();
-    if (sContext.indexOf('\n')==sContext.lastIndexOf('\n'))
+    const OString sMsgCtxt = m_pGenPo->getMsgCtxt();
+    if (sMsgCtxt.indexOf('\n')==sMsgCtxt.lastIndexOf('\n'))
         return OString();
     else
-        return sContext.getToken(1,'\n');
+        return sMsgCtxt.getToken(1,'\n');
 }
 
 //Get the type of component from which entry is extracted
 OString PoEntry::getResourceType() const
 {
     assert( m_bIsInitialized );
-    const OString sContext = m_pGenPo->getContext();
-    if (sContext.indexOf('\n')==sContext.lastIndexOf('\n'))
-        return sContext.getToken(1,'\n').getToken(0,'.');
+    const OString sMsgCtxt = m_pGenPo->getMsgCtxt();
+    if (sMsgCtxt.indexOf('\n')==sMsgCtxt.lastIndexOf('\n'))
+        return sMsgCtxt.getToken(1,'\n').getToken(0,'.');
     else
-        return sContext.getToken(2,'\n').getToken(0,'.');
+        return sMsgCtxt.getToken(2,'\n').getToken(0,'.');
 }
 
 //Get the type of entry
 PoEntry::TYPE PoEntry::getType() const
 {
     assert( m_bIsInitialized );
-    const OString sContext = m_pGenPo->getContext();
-    const OString sType = sContext.copy( sContext.lastIndexOf('.') + 1 );
+    const OString sMsgCtxt = m_pGenPo->getMsgCtxt();
+    const OString sType = sMsgCtxt.copy( sMsgCtxt.lastIndexOf('.') + 1 );
     assert(
         (sType == "text" || sType == "quickhelptext" || sType == "title") );
     if ( sType == "text" )
@@ -590,31 +590,31 @@ OString PoEntry::getKeyId() const
 
 
 //Get translation string in sdf/merge format
-OString PoEntry::getUnTransStr() const
+OString PoEntry::getMsgId() const
 {
     assert( m_bIsInitialized );
     return
         lcl_EscapeSDFText(
-            m_pGenPo->getUnTransStr(), getSourceFile().endsWith(".xhp") );
+            m_pGenPo->getMsgId(), getSourceFile().endsWith(".xhp") );
 }
 
 //Get translated string in sdf/merge format
-OString PoEntry::getTransStr() const
+OString PoEntry::getMsgStr() const
 {
     assert( m_bIsInitialized );
     return
         lcl_EscapeSDFText(
-            m_pGenPo->getTransStr(), getSourceFile().endsWith(".xhp") );
+            m_pGenPo->getMsgStr(), getSourceFile().endsWith(".xhp") );
 
 }
 
 //Set translated string when input is in sdf format
-void PoEntry::setTransStr(const OString& rTransStr)
+void PoEntry::setMsgStr(const OString& rMsgStr)
 {
     assert( m_bIsInitialized );
-    m_pGenPo->setTransStr(
+    m_pGenPo->setMsgStr(
                 lcl_UnEscapeSDFText(
-                    rTransStr,getSourceFile().endsWith(".xhp")));
+                    rMsgStr,getSourceFile().endsWith(".xhp")));
 }
 
 //Set fuzzy flag
@@ -672,7 +672,7 @@ PoHeader::PoHeader( const OString& rExtSrc )
     , m_bIsInitialized( false )
 {
     m_pGenPo->setExtractCom("extracted from " + rExtSrc);
-    m_pGenPo->setTransStr(
+    m_pGenPo->setMsgStr(
         OString("Project-Id-Version: PACKAGE VERSION\n"
         "Report-Msgid-Bugs-To: https://bugs.freedesktop.org/enter_bug.cgi?"
         "product=LibreOffice&bug_status=UNCONFIRMED&component=UI\n"
@@ -701,16 +701,16 @@ PoHeader::PoHeader(  std::ifstream& rOldPo )
     m_pGenPo->setExtractCom(
         sExtractCom.copy( 0, sExtractCom.getLength() - 3 ) );
 
-    OString sTransStr = m_pGenPo->getTransStr();
-    sTransStr =
-        lcl_ReplaceAttribute( sTransStr, "Report-Msgid-Bugs-To",
+    OString sMsgStr = m_pGenPo->getMsgStr();
+    sMsgStr =
+        lcl_ReplaceAttribute( sMsgStr, "Report-Msgid-Bugs-To",
             "https://bugs.freedesktop.org/enter_bug.cgi?product="
             "LibreOffice&bug_status=UNCONFIRMED&component=UI" );
-    sTransStr =
-        lcl_ReplaceAttribute( sTransStr, "X-Generator", "LibreOffice" );
-    sTransStr =
-        lcl_ReplaceAttribute( sTransStr, "X-Accelerator-Marker", "~" );
-    m_pGenPo->setTransStr( sTransStr );
+    sMsgStr =
+        lcl_ReplaceAttribute( sMsgStr, "X-Generator", "LibreOffice" );
+    sMsgStr =
+        lcl_ReplaceAttribute( sMsgStr, "X-Accelerator-Marker", "~" );
+    m_pGenPo->setMsgStr( sMsgStr );
     m_bIsInitialized = true;
 }
 
@@ -724,14 +724,14 @@ OString PoHeader::getLanguage() const
 {
     assert( m_bIsInitialized );
     const OString sLang = "Language: ";
-    const OString sTransStr = m_pGenPo->getTransStr();
-    const sal_Int32 nFirstIndex = sTransStr.indexOf(sLang)+sLang.getLength();
-    const sal_Int32 nCount = sTransStr.indexOf('\n',nFirstIndex)-nFirstIndex;
+    const OString sMsgStr = m_pGenPo->getMsgStr();
+    const sal_Int32 nFirstIndex = sMsgStr.indexOf(sLang)+sLang.getLength();
+    const sal_Int32 nCount = sMsgStr.indexOf('\n',nFirstIndex)-nFirstIndex;
     if( nFirstIndex == sLang.getLength()-1 || nCount == -nFirstIndex-1 )
     {
         throw NOLANG;
     }
-    return sTransStr.copy( nFirstIndex, nCount );
+    return sMsgStr.copy( nFirstIndex, nCount );
 }
 
 //Class PoOfstream
@@ -814,8 +814,8 @@ void PoIfstream::readHeader( PoHeader& rPoHeader )
     GenPoEntry aGenPo;
     aGenPo.readFromFile( m_aInPut );
     if( !aGenPo.getExtractCom().isEmpty() &&
-        aGenPo.getUnTransStr().isEmpty() &&
-        !aGenPo.getTransStr().isEmpty() )
+        aGenPo.getMsgId().isEmpty() &&
+        !aGenPo.getMsgStr().isEmpty() )
     {
         if( rPoHeader.m_pGenPo )
         {
@@ -846,18 +846,18 @@ void PoIfstream::readEntry( PoEntry& rPoEntry )
     }
     else
     {
-        const OString sContext = aGenPo.getContext();
-        const sal_Int32 nFirstEndLine = sContext.indexOf('\n');
-        const sal_Int32 nLastEndLine = sContext.lastIndexOf('\n');
-        const sal_Int32 nLastDot = sContext.lastIndexOf('.');
-        const OString sType = sContext.copy( nLastDot + 1 );
+        const OString sMsgCtxt = aGenPo.getMsgCtxt();
+        const sal_Int32 nFirstEndLine = sMsgCtxt.indexOf('\n');
+        const sal_Int32 nLastEndLine = sMsgCtxt.lastIndexOf('\n');
+        const sal_Int32 nLastDot = sMsgCtxt.lastIndexOf('.');
+        const OString sType = sMsgCtxt.copy( nLastDot + 1 );
         if( !aGenPo.getReference().isEmpty() &&
             nFirstEndLine > 0 &&
             (nLastEndLine == nFirstEndLine ||
-                nLastEndLine == sContext.indexOf('\n',nFirstEndLine+1)) &&
+                nLastEndLine == sMsgCtxt.indexOf('\n',nFirstEndLine+1)) &&
             nLastDot - nLastEndLine > 1 &&
             (sType == "text" || sType == "quickhelptext" || sType == "title")&&
-            !aGenPo.getUnTransStr().isEmpty() )
+            !aGenPo.getMsgId().isEmpty() )
         {
             if( rPoEntry.m_pGenPo )
             {
@@ -875,8 +875,8 @@ void PoIfstream::readEntry( PoEntry& rPoEntry )
                 aGenPo.setExtractCom(
                     ( !sExtractCom.isEmpty() ? sExtractCom + "\n" : "" ) +
                     lcl_GenKeyId(
-                        aGenPo.getReference() + sContext +
-                        aGenPo.getUnTransStr() ) );
+                        aGenPo.getReference() + sMsgCtxt +
+                        aGenPo.getMsgId() ) );
             }
             rPoEntry.m_bIsInitialized = true;
         }
