@@ -52,7 +52,7 @@ public:
     virtual OString     getMsgCtxt() const      { return m_sMsgCtxt; }
     virtual OString     getMsgId() const        { return m_sMsgId; }
     virtual OString     getMsgStr() const       { return m_sMsgStr; }
-    virtual bool        getFuzzy() const        { return m_bFuzzy; }
+    virtual bool        isFuzzy() const         { return m_bFuzzy; }
     virtual bool        isNull() const          { return m_bNull; }
 
     virtual void        setExtractCom(const OString& rExtractCom);
@@ -567,10 +567,10 @@ PoEntry::TYPE PoEntry::getType() const
 }
 
 //Check wheather entry is fuzzy
-bool PoEntry::getFuzzy() const
+bool PoEntry::isFuzzy() const
 {
     assert( m_bIsInitialized );
-    return m_pGenPo->getFuzzy();
+    return m_pGenPo->isFuzzy();
 }
 
 //Get keyid

@@ -51,7 +51,7 @@ public:
     TYPE            getType() const;
     OString         getMsgId() const;
     OString         getMsgStr() const;
-    bool            getFuzzy() const;
+    bool            isFuzzy() const;
     OString         getKeyId() const;
     void            setMsgId(const OString& rUnTransStr);
     void            setMsgStr(const OString& rTransStr);

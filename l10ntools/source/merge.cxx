@@ -232,7 +232,7 @@ MergeDataFile::MergeDataFile(
                 if( bInSameComp )
                     aActPo = aNextPo;
                 OString sTemp = aActPo.getMsgStr();
-                if( aActPo.getFuzzy() || sTemp.isEmpty() )
+                if( aActPo.isFuzzy() || sTemp.isEmpty() )
                     sTemp = aActPo.getMsgId();
                 switch( aActPo.getType() )
                 {
