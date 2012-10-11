@@ -5386,11 +5386,14 @@ if test "$GCC" = "yes"; then
     fi
 
     AC_MSG_CHECKING([whether $CXX supports -std=gnu++0x without Language Defect 757])
-    save_CXXFLAGS=$CXXFLAGS
-    CXXFLAGS="$CXXFLAGS -std=gnu++0x"
-    AC_LANG_PUSH([C++])
+    if test "$GCCVER" -ge 040700 -a "$GCCVER" -lt 040702; then
+        AC_MSG_NOTICE([Not using -std=gnu++0x on $CXX version 4.7.0/4.7.1 due to libstdc++ ABI breakage.])
+    else
+        save_CXXFLAGS=$CXXFLAGS
+        CXXFLAGS="$CXXFLAGS -std=gnu++0x"
+        AC_LANG_PUSH([C++])
 
-    AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
+        AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
 #include <stddef.h>
 
 #include <vector>
@@ -5419,8 +5422,9 @@ size_t j = sizeof(sal_n_array_size(thingb));
 return !(i != 0 && j != 0);
 ]])],[HAVE_CXX0X=TRUE],[])
 
-    AC_LANG_POP([C++])
-    CXXFLAGS=$save_CXXFLAGS
+        AC_LANG_POP([C++])
+        CXXFLAGS=$save_CXXFLAGS
+    fi
     if test "$HAVE_CXX0X" = "TRUE"; then
         AC_MSG_RESULT([yes])
     else
