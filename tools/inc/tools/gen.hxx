@@ -28,7 +28,7 @@ class SvStream;
 
 // Pair
 
-class Pair
+class SAL_WARN_UNUSED Pair
 {
 public:
     long                nA;
@@ -73,7 +73,7 @@ inline sal_Bool Pair::operator != ( const Pair& rPair ) const
 
 // Point
 
-class Point : public Pair
+class SAL_WARN_UNUSED Point : public Pair
 {
 public:
                         Point();
@@ -191,7 +191,7 @@ inline Point operator/( const Point &rVal1, const long nVal2 )
 
 // Size
 
-class Size : public Pair
+class SAL_WARN_UNUSED Size : public Pair
 {
 public:
                     Size();
@@ -222,7 +222,7 @@ inline Size::Size( long nWidth, long nHeight ) :
 
 #define RANGE_MAX   LONG_MAX
 
-class Range : public Pair
+class SAL_WARN_UNUSED Range : public Pair
 {
 public:
                     Range();
@@ -268,7 +268,7 @@ inline void Range::Justify()
 #define SELECTION_MIN   LONG_MIN
 #define SELECTION_MAX   LONG_MAX
 
-class Selection : public Pair
+class SAL_WARN_UNUSED Selection : public Pair
 {
 public:
                     Selection();
@@ -326,7 +326,7 @@ inline void Selection::Justify()
 
 #define RECT_EMPTY  ((short)-32767)
 
-class TOOLS_DLLPUBLIC Rectangle
+class TOOLS_DLLPUBLIC SAL_WARN_UNUSED Rectangle
 {
 public:
     long                nLeft;

@@ -97,7 +97,7 @@ typedef struct _UniStringData
 
 // UniString
 
-class TOOLS_DLLPUBLIC UniString
+class TOOLS_DLLPUBLIC SAL_WARN_UNUSED UniString
 {
 private:
     UniStringData*      mpData;
