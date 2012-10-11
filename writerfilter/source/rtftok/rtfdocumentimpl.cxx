@@ -653,7 +653,10 @@ int RTFDocumentImpl::resolvePict(bool bInline)
             Graphic aGraphic = GraphicObject(aURLBS.copy(RTL_CONSTASCII_LENGTH(aURLBegin))).GetTransformedGraphic();
             Size aSize(aGraphic.GetPrefSize());
             MapMode aMap(MAP_100TH_MM);
-            aSize = Application::GetDefaultDevice()->PixelToLogic( aSize, aMap );
+            if (aGraphic.GetPrefMapMode().GetMapUnit() == MAP_PIXEL)
+                aSize = Application::GetDefaultDevice()->PixelToLogic(aSize, aMap);
+            else
+                aSize = OutputDevice::LogicToLogic(aSize, aGraphic.GetPrefMapMode(), aMap);
             m_aStates.top().aPicture.nWidth = aSize.Width();
             m_aStates.top().aPicture.nHeight = aSize.Height();
         }
