@@ -224,6 +224,7 @@ public:
     void testFindAreaPosRowDown();
     void testFindAreaPosColRight();
     void testSort();
+    void testSortWithFormulaRefs();
 
     CPPUNIT_TEST_SUITE(Test);
     CPPUNIT_TEST(testCollator);
@@ -273,6 +274,7 @@ public:
     CPPUNIT_TEST(testFindAreaPosRowDown);
     CPPUNIT_TEST(testFindAreaPosColRight);
     CPPUNIT_TEST(testSort);
+    CPPUNIT_TEST(testSortWithFormulaRefs);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -4918,6 +4920,71 @@ void Test::testFindAreaPosColRight()
     CPPUNIT_ASSERT_EQUAL(static_cast<SCCOL>(6), nCol);
 
     pDoc->DeleteTab(0);
+}
+
+// regression test fo fdo#53814, sorting doens't work as expected
+// if cells in the sort are referenced by formulas
+void Test::testSortWithFormulaRefs()
+{
+    ScDocument* pDoc = m_xDocShRef->GetDocument();
+    rtl::OUString aTabName1("List1");
+    rtl::OUString aTabName2("List2");
+    pDoc->InsertTab(0, aTabName1);
+    pDoc->InsertTab(1, aTabName2);
+
+    const char* aFormulaData[6] = {
+        "=IF($List1.A2<>\"\",$List1.A2,\"\")",
+        "=IF($List1.A3<>\"\",$List1.A3,\"\")",
+        "=IF($List1.A4<>\"\",$List1.A4,\"\")",
+        "=IF($List1.A5<>\"\",$List1.A5,\"\")",
+        "=IF($List1.A6<>\"\",$List1.A6,\"\")",
+        "=IF($List1.A7<>\"\",$List1.A7,\"\")",
+    };
+
+    const char* aTextData[4] = {
+        "bob",
+        "tim",
+        "brian",
+        "larry",
+    };
+
+    const char* aResults[ 6 ] = {
+        "bob",
+        "brian",
+        "larry",
+        "tim",
+        "",
+        "",
+    };
+    // insert data to sort
+    SCROW nStart = 1, nEnd = 4;
+    for ( SCROW i = nStart; i <= nEnd; ++i )
+        pDoc->SetString( 0, i, 0, rtl::OUString::createFromAscii(aTextData[i-1]) );
+    // insert forumulas
+    nStart = 0;
+    nEnd = SAL_N_ELEMENTS(aFormulaData);
+    for ( SCROW i = nStart; i < nEnd; ++i )
+        pDoc->SetString( 0, i, 1, rtl::OUString::createFromAscii(aFormulaData[i]) );
+
+    ScSortParam aSortData;
+    aSortData.nCol1 = 0;
+    aSortData.nCol2 = 0;
+    aSortData.nRow1 = 1;
+    aSortData.nRow2 = 7;
+    aSortData.maKeyState[0].bDoSort = true;
+    aSortData.maKeyState[0].nField = 0;
+
+    pDoc->Sort(0, aSortData, false, NULL);
+
+    nEnd = SAL_N_ELEMENTS( aResults );
+    for ( SCROW i = nStart; i < nEnd; ++i )
+    {
+        rtl::OUString sResult;
+        pDoc->GetString( 0, i + 1, 0, sResult );
+        CPPUNIT_ASSERT_EQUAL( rtl::OUString::createFromAscii( aResults[ i ] ), sResult );
+    }
+    pDoc->DeleteTab(0);
+    pDoc->DeleteTab(1);
 }
 
 void Test::testSort()
