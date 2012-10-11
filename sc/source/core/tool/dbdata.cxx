@@ -455,7 +455,9 @@ bool ScDBData::HasQueryParam() const
 
 bool ScDBData::HasSortParam() const
 {
-    return mpSortParam && mpSortParam->maKeyState[0].bDoSort;
+    return mpSortParam &&
+        !mpSortParam->maKeyState.empty() &&
+        mpSortParam->maKeyState[0].bDoSort;
 }
 
 bool ScDBData::HasSubTotalParam() const
