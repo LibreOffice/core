@@ -78,7 +78,14 @@ VclBuilder::VclBuilder(Window *pParent, OUString sUIDir, OUString sUIFile, OStri
     {
         OUStringBuffer aTransBuf;
         sal_Int32 nLastSlash = sUri.lastIndexOf('/');
-        aTransBuf.append(sUri.copy(0, nLastSlash)).append("/res/").append(aLocale.Language);
+        if (nLastSlash != -1)
+            aTransBuf.append(sUri.copy(0, nLastSlash));
+        else
+        {
+            aTransBuf.append('.');
+            nLastSlash = 0;
+        }
+        aTransBuf.append("/res/").append(aLocale.Language);
         switch (i)
         {
             case 0:
