@@ -86,7 +86,7 @@ void ValWnd::SetValue( const String& rStrVal )
 //----------------------------------------------------------------------------
 
 ArgEdit::ArgEdit( Window* pParent, const ResId& rResId )
-    :   RefEdit( pParent, rResId ),
+    :   RefEdit( pParent, NULL, rResId ),
         pEdPrev ( NULL ),
         pEdNext ( NULL ),
         pSlider ( NULL ),
@@ -852,12 +852,6 @@ RefEdit::RefEdit( Window* _pParent,IControlReferenceHandler* pParent, const ResI
 {
     aTimer.SetTimeoutHdl( LINK( this, RefEdit, UpdateHdl ) );
     aTimer.SetTimeout( SC_ENABLE_TIME );
-}
-
-RefEdit::RefEdit( Window* pParent, const ResId& rResId ) :
-    Edit( pParent, rResId ),
-    pAnyRefDlg( NULL )
-{
 }
 
 RefEdit::~RefEdit()

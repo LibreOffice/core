@@ -44,7 +44,6 @@ protected:
 
 public:
                         RefEdit( Window* _pParent,IControlReferenceHandler* pParent, const ResId& rResId );
-                        RefEdit( Window* pParent, const ResId& rResId );
     virtual             ~RefEdit();
 
     void                SetRefString( const XubString& rStr );

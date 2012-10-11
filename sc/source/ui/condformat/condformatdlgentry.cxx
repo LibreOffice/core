@@ -139,8 +139,8 @@ IMPL_LINK(ScCondFrmtEntry, EdModifyHdl, Edit*, pEdit)
 ScConditionFrmtEntry::ScConditionFrmtEntry( Window* pParent, ScDocument* pDoc, const ScAddress& rPos, const ScCondFormatEntry* pFormatEntry ):
     ScCondFrmtEntry( pParent, pDoc, rPos ),
     maLbCondType( this, ScResId( LB_CELLIS_TYPE ) ),
-    maEdVal1( this, ScResId( ED_VAL1 ) ),
-    maEdVal2( this, ScResId( ED_VAL2 ) ),
+    maEdVal1( this, static_cast<ScAnyRefDlg*>(pParent->GetParent()), ScResId( ED_VAL1 ) ),
+    maEdVal2( this, static_cast<ScAnyRefDlg*>(pParent->GetParent()), ScResId( ED_VAL2 ) ),
     maFtStyle( this, ScResId( FT_STYLE ) ),
     maLbStyle( this, ScResId( LB_STYLE ) ),
     maWdPreview( this, ScResId( WD_PREVIEW ) )
@@ -375,7 +375,7 @@ ScFormulaFrmtEntry::ScFormulaFrmtEntry( Window* pParent, ScDocument* pDoc, const
     maFtStyle( this, ScResId( FT_STYLE ) ),
     maLbStyle( this, ScResId( LB_STYLE ) ),
     maWdPreview( this, ScResId( WD_PREVIEW ) ),
-    maEdFormula( this, ScResId( ED_FORMULA ) )
+    maEdFormula( this, static_cast<ScAnyRefDlg*>(pParent->GetParent()), ScResId( ED_FORMULA ) )
 {
     Init();
 
