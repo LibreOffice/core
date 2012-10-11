@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAPn///xM\u003d",
+        "filename": "jpeg/StaticLibrary_jpeg.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000021
+      },
+      "writtenOn": "2012-10-11T13:43:34Z",
+      "side": 1,
+      "message": "This file has clearly been copied from another module (libwps, I guess), but not cleaned sufficiently :-)",
+      "revId": "9b98042e2fecb682511ed194b1e59468f78e975b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
