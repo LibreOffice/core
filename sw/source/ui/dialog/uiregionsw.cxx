@@ -136,16 +136,6 @@ void lcl_FillSubRegionList( SwWrtShell& rSh, ComboBox& rSubRegions, ComboBox* pA
     }
 }
 
-class SwTestPasswdDlg : public SfxPasswordDialog
-{
-public:
-        SwTestPasswdDlg(Window* pParent) :
-        SfxPasswordDialog(pParent)
-        {
-            SetHelpId(HID_DLG_PASSWD_SECTION);
-        }
-};
-
 /*----------------------------------------------------------------------------
  Description: user data class for region information
 ----------------------------------------------------------------------------*/
@@ -448,7 +438,7 @@ sal_Bool SwEditRegionDlg::CheckPasswd(CheckBox* pBox)
         if (!pRepr->GetTempPasswd().getLength()
             && pRepr->GetSectionData().GetPassword().getLength())
         {
-            SwTestPasswdDlg aPasswdDlg(this);
+            SfxPasswordDialog aPasswdDlg(this);
             bRet = sal_False;
             if (aPasswdDlg.Execute())
             {
@@ -1327,7 +1317,7 @@ IMPL_LINK( SwEditRegionDlg, ChangePasswdHdl, Button *, pBox )
         {
             if(!pRepr->GetTempPasswd().getLength() || bChange)
             {
-                SwTestPasswdDlg aPasswdDlg(this);
+                SfxPasswordDialog aPasswdDlg(this);
                 aPasswdDlg.ShowExtras(SHOWEXTRAS_CONFIRM);
                 if(RET_OK == aPasswdDlg.Execute())
                 {
@@ -1782,7 +1772,7 @@ IMPL_LINK( SwInsertSectionTabPage, ChangePasswdHdl, Button *, pButton )
     {
         if(!m_aNewPasswd.getLength() || bChange)
         {
-            SwTestPasswdDlg aPasswdDlg(this);
+            SfxPasswordDialog aPasswdDlg(this);
             aPasswdDlg.ShowExtras(SHOWEXTRAS_CONFIRM);
             if(RET_OK == aPasswdDlg.Execute())
             {

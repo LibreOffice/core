@@ -330,7 +330,6 @@
 #define HID_LINGU_WORD_LANGUAGE                                 "SW_HID_LINGU_WORD_LANGUAGE"
 #define HID_LINGU_PARA_LANGUAGE                                 "SW_HID_LINGU_PARA_LANGUAGE"
 #define HID_MD_GLOS_DEFINE_TEXT                                 "SW_HID_MD_GLOS_DEFINE_TEXT"
-#define HID_DLG_PASSWD_SECTION                                  "SW_HID_DLG_PASSWD_SECTION"
 #define HID_MD_COPY_TO_CLIPBOARD                                "SW_HID_MD_COPY_TO_CLIPBOARD"
 #define HID_MD_GLOS_IMPORT                                      "SW_HID_MD_GLOS_IMPORT"
 #define HID_SMARTTAG_MAIN                                       "SW_HID_SMARTTAG_MAIN"    // SMARTTAGS
