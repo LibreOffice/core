@@ -425,7 +425,7 @@ void TextParagraphProperties::pushToPropSet( const ::oox::core::XmlFilterBase* p
         {
             // Force Paragraph property as zero - impress seems to use the value from previous
             // (non) bullet line if not set to zero explicitly :(
-            aPropSet.setProperty( PROP_ParaFirstLineIndent, 0 );
+            aPropSet.setProperty( PROP_ParaFirstLineIndent, static_cast< sal_Int32>(0) );
             rioBulletMap[ PROP_FirstLineOffset ] <<= static_cast< sal_Int32 >( *noFirstLineIndentation );
             noFirstLineIndentation = boost::none;
         }
