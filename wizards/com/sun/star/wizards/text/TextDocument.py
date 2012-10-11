@@ -139,13 +139,6 @@ class TextDocument(object):
             'com.sun.star.beans.PropertyValue')
         loadValues[2].Name = "Preview"
         loadValues[2].Value = True
-        '''set the preview document to non-modified
-        mode in order to avoid the 'do u want to save' box'''
-        if TextDocument.xTextDocument is not None:
-            try:
-                TextDocument.xTextDocument.Modified = False
-            except PropertyVetoException, e1:
-                traceback.print_exc()
 
         TextDocument.xTextDocument = OfficeDocument.load(
             self.xFrame, sDefaultTemplate, "_self", loadValues)
