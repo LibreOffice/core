@@ -378,6 +378,14 @@ void ScCondFormatDlg::RefInputDone( sal_Bool bForced )
     ScAnyRefDlg::RefInputDone(bForced);
 }
 
+sal_Bool ScCondFormatDlg::IsTableLocked() const
+{
+    if(mpLastEdit && mpLastEdit != &maEdRange)
+        return sal_False;
+
+    return sal_True;
+}
+
 sal_Bool ScCondFormatDlg::IsRefInputMode() const
 {
     return maEdRange.IsEnabled();
