@@ -34,8 +34,8 @@ ScXMLSourceDlg::ScXMLSourceDlg(
     maFtSourceFile(this, ScResId(FT_SOURCE_FILE)),
     maFtMapXmlDoc(this, ScResId(FL_MAP_XML_TO_DOCUMENT)),
     maFtMappedCellTitle(this, ScResId(FT_MAPPED_CELL_TITLE)),
-    maEdit(this, ScResId(ED_MAPPED_CELL)),
-    maBtnRb(this, ScResId(BTN_MAPPED_CELL)),
+    maEdit(this, this, ScResId(ED_MAPPED_CELL)),
+    maBtnRb(this, ScResId(BTN_MAPPED_CELL), &maEdit, this),
     maLbTree(this, ScResId(LB_SOURCE_TREE)),
     maBtnCancel(this, ScResId(BTN_CANCEL)),
     maImgFileOpen(ScResId(IMG_FILE_OPEN)),
@@ -45,12 +45,20 @@ ScXMLSourceDlg::ScXMLSourceDlg(
     maStrCellLink(ScResId(STR_CELL_LINK).toString()),
     maStrRangeLink(ScResId(STR_RANGE_LINK).toString()),
     mpDoc(pDoc),
-    mbRefMode(false)
+    mpActiveEdit(&maEdit),
+    mbDlgLostFocus(false)
 {
     maBtnSelectSource.SetModeImage(maImgFileOpen);
     FreeResource();
 
     maBtnSelectSource.SetClickHdl(LINK(this, ScXMLSourceDlg, BtnPressedHdl));
+
+    Link aLink = LINK(this, ScXMLSourceDlg, GetFocusHdl);
+    maEdit.SetGetFocusHdl(aLink);
+    maBtnRb.SetGetFocusHdl(aLink);
+    aLink = LINK(this, ScXMLSourceDlg, LoseFocusHdl);
+    maEdit.SetLoseFocusHdl(aLink);
+    maBtnRb.SetLoseFocusHdl(aLink);
 
     maFtMappedCellTitle.SetText(maStrCellLink);
 }
@@ -61,16 +69,43 @@ ScXMLSourceDlg::~ScXMLSourceDlg()
 
 sal_Bool ScXMLSourceDlg::IsRefInputMode() const
 {
-    return mbRefMode;
+    return mpActiveEdit != NULL;
 }
 
 void ScXMLSourceDlg::SetReference(const ScRange& rRange, ScDocument* pDoc)
 {
+    if (!mpActiveEdit)
+        return;
+
+    if (rRange.aStart != rRange.aEnd)
+        RefInputStart(mpActiveEdit);
+
+    OUString aStr;
+    rRange.aStart.Format(aStr, SCA_ABS_3D, pDoc, pDoc->GetAddressConvention());
+    mpActiveEdit->SetRefString(aStr);
+}
+
+void ScXMLSourceDlg::Deactivate()
+{
+    mbDlgLostFocus = true;
 }
 
 void ScXMLSourceDlg::SetActive()
 {
-    GrabFocus();
+    if (mbDlgLostFocus)
+    {
+        mbDlgLostFocus = false;
+        if (mpActiveEdit)
+        {
+            mpActiveEdit->GrabFocus();
+        }
+    }
+    else
+    {
+        GrabFocus();
+    }
+
+    RefInputDone();
 }
 
 sal_Bool ScXMLSourceDlg::Close()
@@ -112,6 +147,32 @@ void ScXMLSourceDlg::LoadSourceFileStructure(const OUString& rPath)
 
     pOrcus->loadXMLStructure(
         maLbTree, rPath, maImgElemDefault, maImgElemRepeat, maImgElemAttribute);
+}
+
+void ScXMLSourceDlg::HandleGetFocus(Control* pCtrl)
+{
+    mpActiveEdit = NULL;
+    if (pCtrl == &maEdit || pCtrl == &maBtnRb)
+        mpActiveEdit = &maEdit;
+
+    if (mpActiveEdit)
+        mpActiveEdit->SetSelection(Selection(0, SELECTION_MAX));
+}
+
+void ScXMLSourceDlg::HandleLoseFocus(Control* /*pCtrl*/)
+{
+}
+
+IMPL_LINK(ScXMLSourceDlg, GetFocusHdl, Control*, pCtrl)
+{
+    HandleGetFocus(pCtrl);
+    return 0;
+}
+
+IMPL_LINK(ScXMLSourceDlg, LoseFocusHdl, Control*, pCtrl)
+{
+    HandleLoseFocus(pCtrl);
+    return 0;
 }
 
 IMPL_LINK(ScXMLSourceDlg, BtnPressedHdl, Button*, pBtn)

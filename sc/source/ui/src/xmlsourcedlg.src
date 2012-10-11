@@ -50,7 +50,7 @@ ModelessDialog RID_SCDLG_XML_SOURCE
 
     FixedText FT_MAPPED_CELL_TITLE
     {
-        Pos = MAP_APPFONT( 12, 50 );
+        Pos = MAP_APPFONT( 12, 52 );
         Size = MAP_APPFONT ( 100 , 8 ) ;
 
         Text [ en-US ] = "";
@@ -59,15 +59,14 @@ ModelessDialog RID_SCDLG_XML_SOURCE
     Edit ED_MAPPED_CELL
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 63 ) ;
+        Pos = MAP_APPFONT ( 12 , 66 ) ;
         Size = MAP_APPFONT ( 69 , 12 ) ;
         TabStop = TRUE ;
     };
 
-
     ImageButton BTN_MAPPED_CELL
     {
-        Pos = MAP_APPFONT ( 83 , 62 ) ;
+        Pos = MAP_APPFONT ( 83 , 65 ) ;
         Size = MAP_APPFONT ( 13 , 15 ) ;
         TabStop = FALSE ;
         QuickHelpText [ en-US ] = "Shrink" ;

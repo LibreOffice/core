@@ -54,7 +54,8 @@ class ScXMLSourceDlg : public ScAnyRefDlg
 
     ScDocument* mpDoc;
 
-    bool mbRefMode;
+    formula::RefEdit* mpActiveEdit;
+    bool mbDlgLostFocus;
 
 public:
     ScXMLSourceDlg(
@@ -63,6 +64,7 @@ public:
 
     virtual sal_Bool IsRefInputMode() const;
     virtual void SetReference(const ScRange& rRange, ScDocument* pDoc);
+    virtual void Deactivate();
     virtual void SetActive();
     virtual sal_Bool Close();
 
@@ -70,7 +72,11 @@ private:
 
     void SelectSourceFile();
     void LoadSourceFileStructure(const OUString& rPath);
+    void HandleGetFocus(Control* pCtrl);
+    void HandleLoseFocus(Control* pCtrl);
 
+    DECL_LINK(GetFocusHdl, Control*);
+    DECL_LINK(LoseFocusHdl, Control*);
     DECL_LINK(BtnPressedHdl, Button*);
 };
 
