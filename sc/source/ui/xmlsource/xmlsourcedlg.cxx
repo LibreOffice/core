@@ -16,6 +16,9 @@
 #include "filter.hxx"
 #include "reffact.hxx"
 
+#include "unotools/pathoptions.hxx"
+#include "tools/urlobj.hxx"
+
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/ui/dialogs/XFilePicker.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
@@ -60,6 +63,8 @@ ScXMLSourceDlg::ScXMLSourceDlg(
     maEdit.SetLoseFocusHdl(aLink);
     maBtnRb.SetLoseFocusHdl(aLink);
 
+    aLink = LINK(this, ScXMLSourceDlg, TreeItemSelectHdl);
+    maLbTree.SetSelectHdl(aLink);
     maFtMappedCellTitle.SetText(maStrCellLink);
 }
 
@@ -125,6 +130,19 @@ void ScXMLSourceDlg::SelectSourceFile()
     if (!xFilePicker.is())
         return;
 
+    if (maSrcPath.isEmpty())
+        // Use default path.
+        xFilePicker->setDisplayDirectory(SvtPathOptions().GetWorkPath());
+    else
+    {
+        // Use the directory of current source file.
+        INetURLObject aURL(maSrcPath);
+        aURL.removeSegment();
+        aURL.removeFinalSlash();
+        OUString aPath = aURL.GetMainURL(INetURLObject::NO_DECODE);
+        xFilePicker->setDisplayDirectory(aPath);
+    }
+
     if (xFilePicker->execute() != ui::dialogs::ExecutableDialogResults::OK)
         // File picker dialog cancelled.
         return;
@@ -133,10 +151,11 @@ void ScXMLSourceDlg::SelectSourceFile()
     if (!aFiles.getLength())
         return;
 
+    maSrcPath = aFiles[0];
     // There should only be one file returned from the file picker.
-    maFtSourceFile.SetText(aFiles[0]);
+    maFtSourceFile.SetText(maSrcPath);
 
-    LoadSourceFileStructure(aFiles[0]);
+    LoadSourceFileStructure(maSrcPath);
 }
 
 void ScXMLSourceDlg::LoadSourceFileStructure(const OUString& rPath)
@@ -163,6 +182,14 @@ void ScXMLSourceDlg::HandleLoseFocus(Control* /*pCtrl*/)
 {
 }
 
+void ScXMLSourceDlg::TreeItemSelected()
+{
+    SvLBoxEntry* pEntry = maLbTree.GetCurEntry();
+    OUString aName = maLbTree.GetEntryText(pEntry);
+    fprintf(stdout, "ScXMLSourceDlg::TreeItemSelected:   name = '%s'\n",
+            rtl::OUStringToOString(aName, RTL_TEXTENCODING_UTF8).getStr());
+}
+
 IMPL_LINK(ScXMLSourceDlg, GetFocusHdl, Control*, pCtrl)
 {
     HandleGetFocus(pCtrl);
@@ -179,6 +206,12 @@ IMPL_LINK(ScXMLSourceDlg, BtnPressedHdl, Button*, pBtn)
 {
     if (pBtn == &maBtnSelectSource)
         SelectSourceFile();
+    return 0;
+}
+
+IMPL_LINK_NOARG(ScXMLSourceDlg, TreeItemSelectHdl)
+{
+    TreeItemSelected();
     return 0;
 }
 

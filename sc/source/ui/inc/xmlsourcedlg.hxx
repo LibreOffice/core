@@ -52,6 +52,8 @@ class ScXMLSourceDlg : public ScAnyRefDlg
     rtl::OUString maStrCellLink;
     rtl::OUString maStrRangeLink;
 
+    rtl::OUString maSrcPath;
+
     ScDocument* mpDoc;
 
     formula::RefEdit* mpActiveEdit;
@@ -74,10 +76,12 @@ private:
     void LoadSourceFileStructure(const OUString& rPath);
     void HandleGetFocus(Control* pCtrl);
     void HandleLoseFocus(Control* pCtrl);
+    void TreeItemSelected();
 
     DECL_LINK(GetFocusHdl, Control*);
     DECL_LINK(LoseFocusHdl, Control*);
     DECL_LINK(BtnPressedHdl, Button*);
+    DECL_LINK(TreeItemSelectHdl, void*);
 };
 
 #endif
