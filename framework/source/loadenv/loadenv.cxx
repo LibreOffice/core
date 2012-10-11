@@ -1141,8 +1141,7 @@ sal_Bool LoadEnv::impl_loadContent()
 
         return sal_True;
     }
-    else
-    if (xSyncLoader.is())
+    else if (xSyncLoader.is())
     {
         sal_Bool bResult = xSyncLoader->load(lDescriptor, xTargetFrame);
         // react for the result here, so the outside waiting
