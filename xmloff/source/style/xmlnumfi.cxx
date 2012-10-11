@@ -770,7 +770,7 @@ void SvXMLNumFmtEmbeddedTextContext::EndElement()
 
 //-------------------------------------------------------------------------
 
-sal_Bool lcl_ValidChar( sal_Unicode cChar, const SvXMLNumFormatContext& rParent )
+static sal_Bool lcl_ValidChar( sal_Unicode cChar, const SvXMLNumFormatContext& rParent )
 {
     sal_uInt16 nFormatType = rParent.GetType();
 
@@ -816,7 +816,7 @@ sal_Bool lcl_ValidChar( sal_Unicode cChar, const SvXMLNumFormatContext& rParent 
     return sal_False;
 }
 
-void lcl_EnquoteIfNecessary( rtl::OUStringBuffer& rContent, const SvXMLNumFormatContext& rParent )
+static void lcl_EnquoteIfNecessary( rtl::OUStringBuffer& rContent, const SvXMLNumFormatContext& rParent )
 {
     sal_Bool bQuote = sal_True;
     sal_Int32 nLength = rContent.getLength();
@@ -1978,7 +1978,7 @@ void SvXMLNumFormatContext::AddNfKeyword( sal_uInt16 nIndex )
     }
 }
 
-sal_Bool lcl_IsAtEnd( rtl::OUStringBuffer& rBuffer, const String& rToken )
+static sal_Bool lcl_IsAtEnd( rtl::OUStringBuffer& rBuffer, const String& rToken )
 {
     sal_Int32 nBufLen = rBuffer.getLength();
     xub_StrLen nTokLen = rToken.Len();

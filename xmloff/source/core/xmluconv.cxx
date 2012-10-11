@@ -264,7 +264,7 @@ sal_Bool SvXMLUnitConverter::convertEnum(
     return (eTok != XML_TOKEN_INVALID);
 }
 
-int lcl_gethex( int nChar )
+static int lcl_gethex( int nChar )
 {
     if( nChar >= '0' && nChar <= '9' )
         return nChar - '0';
@@ -498,7 +498,7 @@ sal_Bool SvXMLTokenEnumerator::getNextToken( OUString& rToken )
     return sal_True;
 }
 
-bool lcl_getPositions(const OUString& _sValue,OUString& _rContentX,OUString& _rContentY,OUString& _rContentZ)
+static bool lcl_getPositions(const OUString& _sValue,OUString& _rContentX,OUString& _rContentY,OUString& _rContentZ)
 {
     if(_sValue.isEmpty() || _sValue[0] != '(')
         return false;

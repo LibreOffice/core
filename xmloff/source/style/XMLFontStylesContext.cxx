@@ -67,7 +67,7 @@ enum XMLFontStyleAttrTokens
     XML_TOK_FONT_STYLE_ATTR_END=XML_TOK_UNKNOWN
 };
 
-const SvXMLTokenMapEntry* lcl_getFontStyleAttrTokenMap()
+static const SvXMLTokenMapEntry* lcl_getFontStyleAttrTokenMap()
 {
     static SvXMLTokenMapEntry aFontStyleAttrTokenMap[] =
     {

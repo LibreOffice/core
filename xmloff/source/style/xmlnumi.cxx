@@ -169,7 +169,7 @@ enum SvxXMLTextListLevelStyleAttrTokens
     XML_TOK_TEXT_LEVEL_ATTR_END=XML_TOK_UNKNOWN
 };
 
-const SvXMLTokenMapEntry* lcl_getLevelAttrTokenMap()
+static const SvXMLTokenMapEntry* lcl_getLevelAttrTokenMap()
 {
     static SvXMLTokenMapEntry aLevelAttrTokenMap[] =
     {
@@ -680,7 +680,7 @@ enum SvxXMLStyleAttributesAttrTokens
     XML_TOK_STYLE_ATTRIBUTES_ATTR_POSITION_AND_SPACE_MODE,
     XML_TOK_STYLE_ATTRIBUTES_ATTR_END=XML_TOK_UNKNOWN
 };
-const SvXMLTokenMapEntry* lcl_getStyleAttributesAttrTokenMap()
+static const SvXMLTokenMapEntry* lcl_getStyleAttributesAttrTokenMap()
 {
     static SvXMLTokenMapEntry aStyleAttributesAttrTokenMap[] =
     {
@@ -1004,7 +1004,7 @@ enum SvxXMLStyleAttributesLabelAlignmentAttrTokens
 
     XML_TOK_STYLE_ATTRIBUTES_LABEL_ALIGNMENT_ATTR_END=XML_TOK_UNKNOWN
 };
-const SvXMLTokenMapEntry* lcl_getStyleAlignmentAttributesAttrTokenMap()
+static const SvXMLTokenMapEntry* lcl_getStyleAlignmentAttributesAttrTokenMap()
 {
     static SvXMLTokenMapEntry aStyleAlignmentAttributesAttrTokenMap[] =
     {

@@ -234,7 +234,7 @@ void XMLTextParagraphExport::exportTextFootnoteConfiguration()
 }
 
 
-void lcl_exportString(
+static void lcl_exportString(
     SvXMLExport& rExport,
     const Reference<XPropertySet> & rPropSet,
     const OUString& sProperty,

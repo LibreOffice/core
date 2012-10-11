@@ -66,7 +66,7 @@ using com::sun::star::uno::Exception;
 using namespace com::sun::star;
 using namespace xmloff::token;
 
-Reference<XPropertySet> lcl_createPropertySet( const OUString& rServiceName )
+static Reference<XPropertySet> lcl_createPropertySet( const OUString& rServiceName )
 {
     Reference<XMultiServiceFactory> xFactory = getProcessServiceFactory();
     DBG_ASSERT( xFactory.is(), "can't get service factory" );
@@ -78,12 +78,12 @@ Reference<XPropertySet> lcl_createPropertySet( const OUString& rServiceName )
     return xModel;
 }
 
-Reference<XPropertySet> lcl_createXFormsModel()
+Reference<XPropertySet> xforms_createXFormsModel()
 {
     return lcl_createPropertySet( OUSTRING( "com.sun.star.xforms.Model" ) );
 }
 
-void lcl_addXFormsModel(
+void xforms_addXFormsModel(
     const Reference<frame::XModel>& xDocument,
     const Reference<XPropertySet>& xModel )
 {
@@ -113,7 +113,7 @@ void lcl_addXFormsModel(
     (void)bSuccess;
 }
 
-Reference<XPropertySet> lcl_findXFormsBindingOrSubmission(
+static Reference<XPropertySet> lcl_findXFormsBindingOrSubmission(
     Reference<frame::XModel>& xDocument,
     const rtl::OUString& rBindingID,
     bool bBinding )
@@ -168,21 +168,21 @@ Reference<XPropertySet> lcl_findXFormsBindingOrSubmission(
     return xRet;
 }
 
-Reference<XPropertySet> lcl_findXFormsBinding(
+Reference<XPropertySet> xforms_findXFormsBinding(
     Reference<frame::XModel>& xDocument,
     const rtl::OUString& rBindingID )
 {
     return lcl_findXFormsBindingOrSubmission( xDocument, rBindingID, true );
 }
 
-Reference<XPropertySet> lcl_findXFormsSubmission(
+Reference<XPropertySet> xforms_findXFormsSubmission(
     Reference<frame::XModel>& xDocument,
     const rtl::OUString& rBindingID )
 {
     return lcl_findXFormsBindingOrSubmission( xDocument, rBindingID, false );
 }
 
-void lcl_setValue( Reference<XPropertySet>& xPropertySet,
+void xforms_setValue( Reference<XPropertySet>& xPropertySet,
                    const OUString& rName,
                    const Any rAny )
 {
@@ -207,7 +207,7 @@ static SvXMLTokenMapEntry aTypes[] =
     XML_TOKEN_MAP_END
 };
 
-sal_uInt16 lcl_getTypeClass(
+sal_uInt16 xforms_getTypeClass(
     const Reference<XDataTypeRepository>&
     #ifdef DBG_UTIL
     xRepository
@@ -282,7 +282,7 @@ sal_uInt16 lcl_getTypeClass(
 }
 
 
-rtl::OUString lcl_getTypeName(
+rtl::OUString xforms_getTypeName(
     const Reference<XDataTypeRepository>& xRepository,
     const SvXMLNamespaceMap& rNamespaceMap,
     const OUString& rXMLName )
@@ -293,10 +293,10 @@ rtl::OUString lcl_getTypeName(
     sal_uInt16 mnToken = aMap.Get( nPrefix, sLocalName );
     return ( mnToken == XML_TOK_UNKNOWN )
         ? rXMLName
-        : lcl_getBasicTypeName( xRepository, rNamespaceMap, rXMLName );
+        : xforms_getBasicTypeName( xRepository, rNamespaceMap, rXMLName );
 }
 
-rtl::OUString lcl_getBasicTypeName(
+rtl::OUString xforms_getBasicTypeName(
     const Reference<XDataTypeRepository>& xRepository,
     const SvXMLNamespaceMap& rNamespaceMap,
     const OUString& rXMLName )
@@ -306,7 +306,7 @@ rtl::OUString lcl_getBasicTypeName(
     {
         sTypeName =
             xRepository->getBasicDataType(
-                lcl_getTypeClass( xRepository, rNamespaceMap, rXMLName ) )
+                xforms_getTypeClass( xRepository, rNamespaceMap, rXMLName ) )
             ->getName();
     }
     catch( const Exception& )

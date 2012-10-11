@@ -3996,7 +3996,7 @@ XMLDropDownFieldImportContext::XMLDropDownFieldImportContext(
     bValid = sal_True;
 }
 
-bool lcl_ProcessLabel( const SvXMLImport& rImport,
+static bool lcl_ProcessLabel( const SvXMLImport& rImport,
                        const Reference<XAttributeList>& xAttrList,
                        OUString& rLabel,
                        bool& rIsSelected )

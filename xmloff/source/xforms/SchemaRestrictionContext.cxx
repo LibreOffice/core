@@ -125,7 +125,7 @@ void SchemaRestrictionContext::CreateDataType()
         mxDataType =
             Reference<XPropertySet>(
                 mxRepository->cloneDataType(
-                    lcl_getBasicTypeName( mxRepository,
+                    xforms_getBasicTypeName( mxRepository,
                                           GetImport().GetNamespaceMap(),
                                           msBaseName ),
                     msTypeName ),
@@ -150,26 +150,26 @@ void SchemaRestrictionContext::HandleAttribute(
 
 typedef Any (*convert_t)( const OUString& );
 
-Any lcl_string( const OUString& rValue )
+Any xforms_string( const OUString& rValue )
 {
     return makeAny( rValue );
 }
 
-Any lcl_int32( const OUString& rValue )
+Any xforms_int32( const OUString& rValue )
 {
     sal_Int32 nValue;
     bool bSuccess = ::sax::Converter::convertNumber( nValue, rValue );
     return bSuccess ? makeAny( nValue ) : Any();
 }
 
-Any lcl_int16( const OUString& rValue )
+Any xforms_int16( const OUString& rValue )
 {
     sal_Int32 nValue;
     bool bSuccess = ::sax::Converter::convertNumber( nValue, rValue );
     return bSuccess ? makeAny( static_cast<sal_Int16>( nValue ) ) : Any();
 }
 
-Any lcl_whitespace( const OUString& rValue )
+Any xforms_whitespace( const OUString& rValue )
 {
     Any aValue;
     if( IsXMLToken( rValue, XML_PRESERVE ) )
@@ -181,14 +181,14 @@ Any lcl_whitespace( const OUString& rValue )
     return aValue;
 }
 
-Any lcl_double( const OUString& rValue )
+Any xforms_double( const OUString& rValue )
 {
     double fValue;
     bool bSuccess = ::sax::Converter::convertDouble( fValue, rValue );
     return bSuccess ? makeAny( fValue ) : Any();
 }
 
-Any lcl_date( const OUString& rValue )
+Any xforms_date( const OUString& rValue )
 {
     Any aAny;
 
@@ -209,14 +209,14 @@ Any lcl_date( const OUString& rValue )
     return aAny;
 }
 
-Any lcl_dateTime( const OUString& rValue )
+Any xforms_dateTime( const OUString& rValue )
 {
     DateTime aDateTime;
     bool const bSuccess = ::sax::Converter::convertDateTime(aDateTime, rValue);
     return bSuccess ? makeAny( aDateTime ) : Any();
 }
 
-Any lcl_time( const OUString& rValue )
+Any xforms_time( const OUString& rValue )
 {
     Any aAny;
     Duration aDuration;
@@ -255,31 +255,31 @@ SvXMLImportContext* SchemaRestrictionContext::HandleChild(
     {
     case XML_LENGTH:
         sPropertyName = OUString(RTL_CONSTASCII_USTRINGPARAM("Length"));
-        pConvert = &lcl_int32;
+        pConvert = &xforms_int32;
         break;
     case XML_MINLENGTH:
         sPropertyName = OUString(RTL_CONSTASCII_USTRINGPARAM("MinLength"));
-        pConvert = &lcl_int32;
+        pConvert = &xforms_int32;
         break;
     case XML_MAXLENGTH:
         sPropertyName = OUString(RTL_CONSTASCII_USTRINGPARAM("MaxLength"));
-        pConvert = &lcl_int32;
+        pConvert = &xforms_int32;
         break;
     case XML_TOTALDIGITS:
         sPropertyName = OUString(RTL_CONSTASCII_USTRINGPARAM("TotalDigits"));
-        pConvert = &lcl_int32;
+        pConvert = &xforms_int32;
         break;
     case XML_FRACTIONDIGITS:
         sPropertyName =OUString(RTL_CONSTASCII_USTRINGPARAM("FractionDigits"));
-        pConvert = &lcl_int32;
+        pConvert = &xforms_int32;
         break;
     case XML_PATTERN:
         sPropertyName = OUString(RTL_CONSTASCII_USTRINGPARAM("Pattern"));
-        pConvert = &lcl_string;
+        pConvert = &xforms_string;
         break;
     case XML_WHITESPACE:
         sPropertyName = OUString(RTL_CONSTASCII_USTRINGPARAM("WhiteSpace"));
-        pConvert = &lcl_whitespace;
+        pConvert = &xforms_whitespace;
         break;
     case XML_MININCLUSIVE:
     case XML_MINEXCLUSIVE:
@@ -309,7 +309,7 @@ SvXMLImportContext* SchemaRestrictionContext::HandleChild(
             }
 
             // second, type-dependent suffix + converter
-            switch( lcl_getTypeClass( mxRepository,
+            switch( xforms_getTypeClass( mxRepository,
                                       GetImport().GetNamespaceMap(),
                                       msBaseName ) )
             {
@@ -317,25 +317,25 @@ SvXMLImportContext* SchemaRestrictionContext::HandleChild(
             case com::sun::star::xsd::DataTypeClass::DOUBLE:
             case com::sun::star::xsd::DataTypeClass::FLOAT:
                 sPropertyName += OUString(RTL_CONSTASCII_USTRINGPARAM("Double"));
-                pConvert = &lcl_double;
+                pConvert = &xforms_double;
                 break;
             case com::sun::star::xsd::DataTypeClass::DATETIME:
                 sPropertyName += OUString(RTL_CONSTASCII_USTRINGPARAM("DateTime"));
-                pConvert = &lcl_dateTime;
+                pConvert = &xforms_dateTime;
                 break;
             case com::sun::star::xsd::DataTypeClass::DATE:
                 sPropertyName += OUString(RTL_CONSTASCII_USTRINGPARAM("Date"));
-                pConvert = &lcl_date;
+                pConvert = &xforms_date;
                 break;
             case com::sun::star::xsd::DataTypeClass::TIME:
                 sPropertyName += OUString(RTL_CONSTASCII_USTRINGPARAM("Time"));
-                pConvert = &lcl_time;
+                pConvert = &xforms_time;
                 break;
             case com::sun::star::xsd::DataTypeClass::gYear:
             case com::sun::star::xsd::DataTypeClass::gDay:
             case com::sun::star::xsd::DataTypeClass::gMonth:
                 sPropertyName += OUString(RTL_CONSTASCII_USTRINGPARAM("Int"));
-                pConvert = &lcl_int16;
+                pConvert = &xforms_int16;
                 break;
 
             case com::sun::star::xsd::DataTypeClass::STRING:

@@ -309,7 +309,7 @@ SvXMLNumFmtExport::~SvXMLNumFmtExport()
 //  helper methods
 //
 
-OUString lcl_CreateStyleName( sal_Int32 nKey, sal_Int32 nPart, sal_Bool bDefPart, const rtl::OUString& rPrefix )
+static OUString lcl_CreateStyleName( sal_Int32 nKey, sal_Int32 nPart, sal_Bool bDefPart, const rtl::OUString& rPrefix )
 {
     OUStringBuffer aFmtName( 10L );
     aFmtName.append( rPrefix );
@@ -836,7 +836,7 @@ sal_Bool SvXMLNumFmtExport::WriteTextWithCurrency_Impl( const OUString& rString,
 
 //-------------------------------------------------------------------------
 
-OUString lcl_GetDefaultCalendar( SvNumberFormatter* pFormatter, LanguageType nLang )
+static OUString lcl_GetDefaultCalendar( SvNumberFormatter* pFormatter, LanguageType nLang )
 {
     //  get name of first non-gregorian calendar for the language
 
@@ -863,7 +863,7 @@ OUString lcl_GetDefaultCalendar( SvNumberFormatter* pFormatter, LanguageType nLa
 
 //-------------------------------------------------------------------------
 
-sal_Bool lcl_IsInEmbedded( const SvXMLEmbeddedTextEntryArr& rEmbeddedEntries, sal_uInt16 nPos )
+static sal_Bool lcl_IsInEmbedded( const SvXMLEmbeddedTextEntryArr& rEmbeddedEntries, sal_uInt16 nPos )
 {
     sal_uInt16 nCount = rEmbeddedEntries.size();
     for (sal_uInt16 i=0; i<nCount; i++)
@@ -873,7 +873,7 @@ sal_Bool lcl_IsInEmbedded( const SvXMLEmbeddedTextEntryArr& rEmbeddedEntries, sa
     return sal_False;       // not found
 }
 
-sal_Bool lcl_IsDefaultDateFormat( const SvNumberformat& rFormat, sal_Bool bSystemDate, NfIndexTableOffset eBuiltIn )
+static sal_Bool lcl_IsDefaultDateFormat( const SvNumberformat& rFormat, sal_Bool bSystemDate, NfIndexTableOffset eBuiltIn )
 {
     //  make an extra loop to collect date elements, to check if it is a default format
     //  before adding the automatic-order attribute
@@ -1769,7 +1769,7 @@ void SvXMLNumFmtExport::SetWasUsed(const uno::Sequence<sal_Int32>& rWasUsed)
 
 
 
-const SvNumberformat* lcl_GetFormat( SvNumberFormatter* pFormatter,
+static const SvNumberformat* lcl_GetFormat( SvNumberFormatter* pFormatter,
                            sal_uInt32 nKey )
 {
     return ( pFormatter != NULL ) ? pFormatter->GetEntry( nKey ) : NULL;

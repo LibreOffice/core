@@ -592,7 +592,7 @@ bool lcl_SpecialHandlingForDonutChartNeeded(
 } // anonymous namespace
 
 
-void lcl_ApplyDataFromRectangularRangeToDiagram(
+static void lcl_ApplyDataFromRectangularRangeToDiagram(
         const uno::Reference< chart2::XChartDocument >& xNewDoc
         , const rtl::OUString& rRectangularRange
         , ::com::sun::star::chart::ChartDataRowSource eDataRowSource

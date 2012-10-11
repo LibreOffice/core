@@ -115,50 +115,50 @@ void XFormsSubmissionContext::HandleAttribute( sal_uInt16 nToken,
     switch( nToken )
     {
     case XML_ID:
-        lcl_setValue( mxSubmission, OUSTRING("ID"), rValue );
+        xforms_setValue( mxSubmission, OUSTRING("ID"), rValue );
         break;
     case XML_BIND:
-        lcl_setValue( mxSubmission, OUSTRING("Bind"), rValue );
+        xforms_setValue( mxSubmission, OUSTRING("Bind"), rValue );
         break;
     case XML_REF:
-        lcl_setValue( mxSubmission, OUSTRING("Ref"), rValue );
+        xforms_setValue( mxSubmission, OUSTRING("Ref"), rValue );
         break;
     case XML_ACTION:
-        lcl_setValue( mxSubmission, OUSTRING("Action"), rValue );
+        xforms_setValue( mxSubmission, OUSTRING("Action"), rValue );
         break;
     case XML_METHOD:
-        lcl_setValue( mxSubmission, OUSTRING("Method"), rValue );
+        xforms_setValue( mxSubmission, OUSTRING("Method"), rValue );
         break;
     case XML_VERSION:
-        lcl_setValue( mxSubmission, OUSTRING("Version"), rValue );
+        xforms_setValue( mxSubmission, OUSTRING("Version"), rValue );
         break;
     case XML_INDENT:
-        lcl_setValue( mxSubmission, OUSTRING("Indent"), toBool( rValue ) );
+        xforms_setValue( mxSubmission, OUSTRING("Indent"), toBool( rValue ) );
         break;
     case XML_MEDIATYPE:
-        lcl_setValue( mxSubmission, OUSTRING("MediaType"), rValue );
+        xforms_setValue( mxSubmission, OUSTRING("MediaType"), rValue );
         break;
     case XML_ENCODING:
-        lcl_setValue( mxSubmission, OUSTRING("Encoding"), rValue );
+        xforms_setValue( mxSubmission, OUSTRING("Encoding"), rValue );
         break;
     case XML_OMIT_XML_DECLARATION:
-        lcl_setValue( mxSubmission, OUSTRING("OmitXmlDeclaration"),
+        xforms_setValue( mxSubmission, OUSTRING("OmitXmlDeclaration"),
                       toBool( rValue ) );
         break;
     case XML_STANDALONE:
-        lcl_setValue( mxSubmission, OUSTRING("Standalone"), toBool( rValue ) );
+        xforms_setValue( mxSubmission, OUSTRING("Standalone"), toBool( rValue ) );
         break;
     case XML_CDATA_SECTION_ELEMENTS:
-        lcl_setValue( mxSubmission, OUSTRING("CDataSectionElement"), rValue );
+        xforms_setValue( mxSubmission, OUSTRING("CDataSectionElement"), rValue );
         break;
     case XML_REPLACE:
-        lcl_setValue( mxSubmission, OUSTRING("Replace"), rValue );
+        xforms_setValue( mxSubmission, OUSTRING("Replace"), rValue );
         break;
     case XML_SEPARATOR:
-        lcl_setValue( mxSubmission, OUSTRING("Separator"), rValue );
+        xforms_setValue( mxSubmission, OUSTRING("Separator"), rValue );
         break;
     case XML_INCLUDENAMESPACEPREFIXES:
-        lcl_setValue( mxSubmission, OUSTRING("IncludeNamespacePrefixes"), rValue );
+        xforms_setValue( mxSubmission, OUSTRING("IncludeNamespacePrefixes"), rValue );
         break;
     default:
         OSL_FAIL( "unknown attribute" );

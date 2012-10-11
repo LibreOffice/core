@@ -843,7 +843,7 @@ XMLPropertyMapEntry aXMLTableRowDefaultsMap[] =
     M_END()
 };
 
-XMLPropertyMapEntry *lcl_txtprmap_getMap( sal_uInt16 nType )
+static XMLPropertyMapEntry *lcl_txtprmap_getMap( sal_uInt16 nType )
 {
     XMLPropertyMapEntry *pMap = 0;
     switch( nType )

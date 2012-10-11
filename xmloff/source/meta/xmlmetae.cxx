@@ -55,7 +55,7 @@ using namespace ::xmloff::token;
 
 //-------------------------------------------------------------------------
 
-void lcl_AddTwoDigits( rtl::OUStringBuffer& rStr, sal_Int32 nVal )
+static void lcl_AddTwoDigits( rtl::OUStringBuffer& rStr, sal_Int32 nVal )
 {
     if ( nVal < 10 )
         rStr.append( sal_Unicode('0') );
