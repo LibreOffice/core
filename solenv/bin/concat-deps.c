@@ -710,11 +710,34 @@ static inline void eat_space(char ** token)
     }
 }
 
+/*
+ * Prune LibreOffice specific duplicate dependencies to improve
+ * gnumake startup time, and shrink the disk-space footprint.
+ */
+static inline int elide_dependency(const char* key, int key_len)
+{
+#if 0
+    {
+        int i;
+        fprintf (stderr, "elide?!: '");
+        for (i = 0; i < key_len; i++) {
+            fprintf (stderr, "%c", key[i]);
+        }
+        fprintf (stderr, "'\n");
+    }
+#endif
+
+    /* .hdl files are always matched by .hpp */
+    if (key_len > 4 && !strncmp(key + key_len - 4, ".hdl", 4))
+        return 1;
+    return 0;
+}
+
 /* prefix paths to absolute */
 static inline void print_fullpaths(char* line)
 {
-char* token;
-char* end;
+    char* token;
+    char* end;
 
     token = line;
     eat_space(&token);
@@ -724,15 +747,16 @@ char* end;
         while (*end && (' ' != *end) && ('\t' != *end)) {
             ++end;
         }
-        if(*token == ':' || *token == '\\' || *token == '/' || *token == '$'
-            || ':' == token[1])
+        int token_len = end - token;
+        if(elide_dependency(token, token_len))
+            ; /* don't output it */
+        else if(*token == ':' || *token == '\\' || *token == '/' ||
+                *token == '$' || ':' == token[1])
         {
-            fwrite(token, end - token, 1, stdout);
+            fwrite(token, token_len, 1, stdout);
         }
         else
         {
-            fputs(base_dir_var, stdout);
-            fputc('/', stdout);
             fwrite(token, end - token, 1, stdout);
         }
         fputc(' ', stdout);
@@ -740,6 +764,7 @@ char* end;
         eat_space(&token);
     }
 }
+
 
 static int _process(struct hash* dep_hash, char* fn)
 {
@@ -795,7 +820,9 @@ off_t size;
                              * these are the one for which we want to filter
                              * duplicate out
                              */
-                            if(hash_store(dep_hash, base, (int)(cursor_out - base)))
+                            int key_len = cursor_out - base;
+                            if(!elide_dependency(base,key_len - 1) &&
+                               hash_store(dep_hash, base, key_len))
                             {
                                 /* DO NOT modify base after it has been added
                                    as key by hash_store */
