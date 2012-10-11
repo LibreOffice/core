@@ -17,11 +17,17 @@
 #define FT_SOURCE_FILE 12
 
 #define FL_MAP_XML_TO_DOCUMENT 20
-#define LB_SOURCE_TREE 21
+#define FT_MAPPED_CELL_TITLE 21
+#define ED_MAPPED_CELL 22
+#define BTN_MAPPED_CELL 23
+#define LB_SOURCE_TREE 24
 
 #define IMG_ELEMENT_DEFAULT 50
 #define IMG_ELEMENT_REPEAT  51
 #define IMG_ELEMENT_ATTRIBUTE 52
 #define IMG_FILE_OPEN 53
+
+#define STR_CELL_LINK 70
+#define STR_RANGE_LINK 71
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

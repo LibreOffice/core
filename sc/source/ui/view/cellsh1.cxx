@@ -2403,14 +2403,12 @@ void ScCellShell::ExecuteXMLSourceDialog()
     if (!pTabViewShell)
         return;
 
-    boost::scoped_ptr<AbstractScXMLSourceDlg> pDlg(
-        pFact->CreateScXMLSourceDlg(
-            pTabViewShell->GetDialogParent(), GetViewData()->GetDocument(), RID_SCDLG_XML_SOURCE));
+    ScModule* pScMod = SC_MOD();
 
-    if (!pDlg)
-        return;
-
-    pDlg->Execute();
+    sal_uInt16 nId = ScXMLSourceDlgWrapper::GetChildWindowId();
+    SfxViewFrame* pViewFrame = pTabViewShell->GetViewFrame();
+    SfxChildWindow* pWnd = pViewFrame->GetChildWindow(nId);
+    pScMod->SetRefDialog(nId, pWnd ? false : true);
 }
 
 void ScCellShell::ExecuteSubtotals(SfxRequest& rReq)

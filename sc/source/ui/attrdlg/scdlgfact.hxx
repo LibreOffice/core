@@ -378,11 +378,6 @@ class AbstractScTextImportOptionsDlg_Impl : public AbstractScTextImportOptionsDl
     virtual bool IsDateConversionSet() const;
 };
 
-class AbstractScXMLSourceDlg_Impl : public AbstractScXMLSourceDlg
-{
-    DECL_ABSTDLG_BASE(AbstractScXMLSourceDlg_Impl, ScXMLSourceDlg)
-};
-
 //add for ScAttrDlg , ScHFEditDlg, ScStyleDlg, ScSubTotalDlg, ScCharDlg, ScParagraphDlg, ScValidationDlg, ScSortDlg
 class ScAbstractTabDialog_Impl : public SfxAbstractTabDialog
 {
@@ -592,8 +587,6 @@ public:
 
     virtual SfxAbstractTabDialog * CreateScSortDlg( Window*          pParent, //add for ScSortDlg
                                                     const SfxItemSet* pArgSet,int nId );
-
-    virtual AbstractScXMLSourceDlg* CreateScXMLSourceDlg(Window* pParent, ScDocument* pDoc, int nId);
 
     // For TabPage
     virtual CreateTabPage               GetTabPageCreatorFunc( sal_uInt16 nId );

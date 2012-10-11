@@ -8,7 +8,7 @@
 
 #include "xmlsourcedlg.hrc"
 
-ModalDialog RID_SCDLG_XML_SOURCE
+ModelessDialog RID_SCDLG_XML_SOURCE
 {
     HelpID = "sc:ModalDialog:RID_SCDLG_XML_SOURCE";
     Text [ en-US ] = "XML Source" ;
@@ -48,6 +48,31 @@ ModalDialog RID_SCDLG_XML_SOURCE
         Text [ en-US ] = "Map to document";
     };
 
+    FixedText FT_MAPPED_CELL_TITLE
+    {
+        Pos = MAP_APPFONT( 12, 50 );
+        Size = MAP_APPFONT ( 100 , 8 ) ;
+
+        Text [ en-US ] = "";
+    };
+
+    Edit ED_MAPPED_CELL
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 63 ) ;
+        Size = MAP_APPFONT ( 69 , 12 ) ;
+        TabStop = TRUE ;
+    };
+
+
+    ImageButton BTN_MAPPED_CELL
+    {
+        Pos = MAP_APPFONT ( 83 , 62 ) ;
+        Size = MAP_APPFONT ( 13 , 15 ) ;
+        TabStop = FALSE ;
+        QuickHelpText [ en-US ] = "Shrink" ;
+    };
+
     Control LB_SOURCE_TREE
     {
         Border = TRUE ;
@@ -84,6 +109,16 @@ ModalDialog RID_SCDLG_XML_SOURCE
     {
         Pos = MAP_APPFONT ( 194 , 181 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
+    };
+
+    String STR_CELL_LINK
+    {
+        Text [ en-US ] = "Link to cell";
+    };
+
+    String STR_RANGE_LINK
+    {
+        Text [ en-US ] = "Link to range";
     };
 };
 

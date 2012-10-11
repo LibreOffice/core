@@ -11,15 +11,16 @@
 #define __SC_XMLSOURCEDLG_HXX__
 
 #include "vcl/button.hxx"
-#include "vcl/dialog.hxx"
 #include "vcl/fixed.hxx"
 #include "svtools/svtreebx.hxx"
 
 #include "expftext.hxx"
+#include "anyrefdg.hxx"
 
 #include <boost/scoped_ptr.hpp>
 
 class ScDocument;
+class ScRange;
 
 class ScXMLSourceTree : public SvTreeListBox
 {
@@ -27,13 +28,17 @@ public:
     ScXMLSourceTree(Window* pParent, const ResId& rResId);
 };
 
-class ScXMLSourceDlg : public ModalDialog
+class ScXMLSourceDlg : public ScAnyRefDlg
 {
     FixedLine maFlSourceFile;
     ImageButton maBtnSelectSource;
     ScExpandedFixedText maFtSourceFile;
 
     FixedLine maFtMapXmlDoc;
+
+    FixedText maFtMappedCellTitle;
+    formula::RefEdit   maEdit;
+    formula::RefButton maBtnRb;
 
     ScXMLSourceTree maLbTree;
 
@@ -44,11 +49,22 @@ class ScXMLSourceDlg : public ModalDialog
     Image maImgElemRepeat;
     Image maImgElemAttribute;
 
+    rtl::OUString maStrCellLink;
+    rtl::OUString maStrRangeLink;
+
     ScDocument* mpDoc;
 
+    bool mbRefMode;
+
 public:
-    ScXMLSourceDlg(Window* pParent, ScDocument* pDoc);
+    ScXMLSourceDlg(
+        SfxBindings* pB, SfxChildWindow* pCW, Window* pParent, ScDocument* pDoc);
     virtual ~ScXMLSourceDlg();
+
+    virtual sal_Bool IsRefInputMode() const;
+    virtual void SetReference(const ScRange& rRange, ScDocument* pDoc);
+    virtual void SetActive();
+    virtual sal_Bool Close();
 
 private:
 

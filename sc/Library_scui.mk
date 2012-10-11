@@ -114,7 +114,6 @@ $(eval $(call gb_Library_add_exception_objects,scui,\
     sc/source/ui/pagedlg/tphf \
     sc/source/ui/pagedlg/tptable \
     sc/source/ui/styleui/styledlg \
-    sc/source/ui/xmlsource/xmlsourcedlg \
 ))
 
 ifeq ($(OS),WNT)

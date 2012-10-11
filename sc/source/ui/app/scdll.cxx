@@ -257,6 +257,7 @@ void ScDLL::Init()
             sal::static_int_cast<sal_uInt16>(ScTabViewShell::GetInterfaceId()), pMod);
     ScSolverDlgWrapper          ::RegisterChildWindow(false, pMod);
     ScOptSolverDlgWrapper       ::RegisterChildWindow(false, pMod);
+    ScXMLSourceDlgWrapper       ::RegisterChildWindow(false, pMod);
     ScNameDlgWrapper            ::RegisterChildWindow(false, pMod);
     ScNameDefDlgWrapper         ::RegisterChildWindow(false, pMod);
     ScCondFormatConditionDlgWrapper ::RegisterChildWindow(false, pMod);

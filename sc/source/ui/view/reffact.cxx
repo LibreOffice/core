@@ -49,6 +49,7 @@ SFX_IMPL_MODELESSDIALOG_WITHID(ScCondFormatColorScaleDlgWrapper, SID_OPENDLG_COL
 SFX_IMPL_MODELESSDIALOG_WITHID(ScCondFormatDataBarDlgWrapper, SID_OPENDLG_DATABAR )
 SFX_IMPL_MODELESSDIALOG_WITHID(ScSolverDlgWrapper, SID_OPENDLG_SOLVE )
 SFX_IMPL_MODELESSDIALOG_WITHID(ScOptSolverDlgWrapper, SID_OPENDLG_OPTSOLVER )
+SFX_IMPL_MODELESSDIALOG_WITHID(ScXMLSourceDlgWrapper, SID_MANAGE_XML_SOURCE)
 SFX_IMPL_MODELESSDIALOG_WITHID(ScPivotLayoutWrapper, SID_OPENDLG_PIVOTTABLE )
 SFX_IMPL_MODELESSDIALOG_WITHID(ScTabOpDlgWrapper, SID_OPENDLG_TABOP )
 SFX_IMPL_MODELESSDIALOG_WITHID(ScFilterDlgWrapper, SID_FILTER )
@@ -62,6 +63,7 @@ SFX_IMPL_MODELESSDIALOG_WITHID(ScAcceptChgDlgWrapper, FID_CHG_ACCEPT )
 SFX_IMPL_MODELESSDIALOG_WITHID(ScHighlightChgDlgWrapper, FID_CHG_SHOW )
 SFX_IMPL_MODELESSDIALOG_WITHID(ScSimpleRefDlgWrapper, WID_SIMPLE_REF )
 SFX_IMPL_CHILDWINDOW_WITHID(ScValidityRefChildWin, SID_VALIDITY_REFERENCE)
+
 SfxChildWinInfo ScValidityRefChildWin::GetInfo() const
 {
     SfxChildWinInfo anInfo = SfxChildWindow::GetInfo();
@@ -147,6 +149,8 @@ IMPL_CHILD_CTOR( ScSolverDlgWrapper, SID_OPENDLG_SOLVE )
 //-------------------------------------------------------------------------
 
 IMPL_CHILD_CTOR( ScOptSolverDlgWrapper, SID_OPENDLG_OPTSOLVER )
+
+IMPL_CHILD_CTOR(ScXMLSourceDlgWrapper, SID_MANAGE_XML_SOURCE)
 
 //-------------------------------------------------------------------------
 // ScPivotLayoutWrapper

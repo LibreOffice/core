@@ -122,9 +122,8 @@ IMPL_ABSTDLG_BASE(AbstractScStringInputDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractScTabBgColorDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractScImportOptionsDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractScTextImportOptionsDlg_Impl);
-IMPL_ABSTDLG_BASE(ScAbstractTabDialog_Impl);
-IMPL_ABSTDLG_BASE(AbstractScXMLSourceDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractTabDialog_Impl);
+IMPL_ABSTDLG_BASE(AbstractScXMLSourceDlg_Impl);
 
 // ScAbstractTabDialog_Impl begin
 void ScAbstractTabDialog_Impl::SetCurPageId( sal_uInt16 nId )
@@ -1548,13 +1547,6 @@ SfxAbstractTabDialog * ScAbstractDialogFactory_Impl::CreateScSortDlg( Window*   
     if ( pDlg )
         return new ScAbstractTabDialog_Impl( pDlg );
     return 0;
-}
-
-AbstractScXMLSourceDlg* ScAbstractDialogFactory_Impl::CreateScXMLSourceDlg(Window* pParent, ScDocument* pDoc, int nId)
-{
-    ScXMLSourceDlg* pDlg = (nId == RID_SCDLG_XML_SOURCE) ? new ScXMLSourceDlg(pParent, pDoc) : NULL;
-
-    return pDlg ? new AbstractScXMLSourceDlg_Impl(pDlg) : NULL;
 }
 
 #undef SfxTabDialog

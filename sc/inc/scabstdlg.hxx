@@ -326,11 +326,6 @@ public:
     virtual bool IsDateConversionSet() const = 0;
 };
 
-class AbstractScXMLSourceDlg : public VclAbstractDialog
-{
-public:
-};
-
 //-------Scabstract fractory ---------------------------
 class ScAbstractDialogFactory
 {
@@ -523,8 +518,6 @@ public:
                                                         const SfxItemSet* pArgSet,int nId, ScTabViewShell *pTabVwSh  ) = 0;
     virtual SfxAbstractTabDialog * CreateScSortDlg( Window*          pParent, //add for ScSortDlg
                                                     const SfxItemSet* pArgSet,int nId ) = 0;
-
-    virtual AbstractScXMLSourceDlg* CreateScXMLSourceDlg(Window* pParent, ScDocument* pDoc, int nId) = 0;
 
     // for tabpage
     virtual CreateTabPage               GetTabPageCreatorFunc( sal_uInt16 nId ) = 0;

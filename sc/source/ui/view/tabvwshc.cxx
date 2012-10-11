@@ -64,6 +64,7 @@
 #include "markdata.hxx"
 #include "reffact.hxx"
 #include "condformatdlg.hxx"
+#include "xmlsourcedlg.hxx"
 
 //------------------------------------------------------------------
 
@@ -403,6 +404,12 @@ SfxModelessDialog* ScTabViewShell::CreateRefDialog(
             //  Dialog schaut selber, was in der Zelle steht
 
             pResult = new ScFormulaDlg( pB, pCW, pParent, GetViewData(),ScGlobal::GetStarCalcFunctionMgr() );
+        }
+        break;
+
+        case SID_MANAGE_XML_SOURCE:
+        {
+            pResult = new ScXMLSourceDlg(pB, pCW, pParent, pDoc);
         }
         break;
 
