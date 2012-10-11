@@ -19,7 +19,6 @@
  *
  *************************************************************/
 
-
 #include "vbachart.hxx"
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/document/XEmbeddedObjectSupplier.hpp>
@@ -37,13 +36,15 @@ const rtl::OUString PERSIST_NAME( RTL_CONSTASCII_USTRINGPARAM("PersistName") );
 
 ScVbaChartObject::ScVbaChartObject( const css::uno::Reference< ov::XHelperInterface >& _xParent, const css::uno::Reference< css::uno::XComponentContext >& _xContext, const css::uno::Reference< css::table::XTableChart >& _xTableChart, const css::uno::Reference< css::drawing::XDrawPageSupplier >& _xDrawPageSupplier ) : ChartObjectImpl_BASE( _xParent, _xContext ), xTableChart( _xTableChart ), xDrawPageSupplier( _xDrawPageSupplier )
 {
-        xDrawPage = xDrawPageSupplier->getDrawPage();
-        xEmbeddedObjectSupplier.set( xTableChart, uno::UNO_QUERY_THROW );
-        xNamed.set( xTableChart, uno::UNO_QUERY_THROW );
-        sPersistName = getPersistName();
-        xShape = setShape();
-        setName(sPersistName);
-        oShapeHelper.reset(new ShapeHelper(xShape));
+    xDrawPage = xDrawPageSupplier->getDrawPage();
+    xEmbeddedObjectSupplier.set( xTableChart, uno::UNO_QUERY_THROW );
+    xNamed.set( xTableChart, uno::UNO_QUERY_THROW );
+    sPersistName = getPersistName();
+    xShape = setShape();
+// #i121178#: don't set the persist name to the object but the OLE object's name(displaying name)
+//    setName(sPersistName);
+    setName(xNamed->getDisplayName());
+    oShapeHelper.reset(new ShapeHelper(xShape));
 }
 
 rtl::OUString ScVbaChartObject::getPersistName()
@@ -87,7 +88,6 @@ ScVbaChartObject::setName( const rtl::OUString& sName ) throw (css::uno::Runtime
 {
     xNamedShape->setName(sName);
 }
-
 
 ::rtl::OUString SAL_CALL
 ScVbaChartObject::getName() throw (css::uno::RuntimeException)

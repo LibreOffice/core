@@ -19,11 +19,8 @@
  *
  *************************************************************/
 
-
-
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
-
 
 #include <com/sun/star/embed/Aspects.hpp>
 #include <com/sun/star/awt/Size.hpp>
@@ -461,7 +458,9 @@ ScChartObj::ScChartObj(ScDocShell* pDocSh, SCTAB nT, const String& rN)
     ,aChartName( rN )
 {
     pDocShell->GetDocument()->AddUnoObject(*this);
-
+    SdrOle2Obj* pObject = lcl_FindChartObj( pDocShell, nTab, aChartName );
+    if ( pObject && svt::EmbeddedObjectRef::TryRunningState( pObject->GetObjRef() ) )
+        aObjectName = pObject->GetName();   // #i121178#: keep the OLE object's name
     uno::Sequence< table::CellRangeAddress > aInitialPropValue;
     registerPropertyNoMember( ::rtl::OUString::createFromAscii( "RelatedCellRanges" ),
         PROP_HANDLE_RELATED_CELLRANGES, beans::PropertyAttribute::MAYBEVOID,
@@ -799,6 +798,20 @@ void SAL_CALL ScChartObj::setName( const rtl::OUString& /* aName */ ) throw(uno:
 {
     ScUnoGuard aGuard;
     throw uno::RuntimeException();      // name cannot be changed
+}
+
+// XNamedEx
+
+rtl::OUString SAL_CALL ScChartObj::getDisplayName() throw(uno::RuntimeException)
+{
+    ScUnoGuard aGuard;
+    return aObjectName;
+}
+
+void SAL_CALL ScChartObj::setDisplayName( const rtl::OUString& aName ) throw(uno::RuntimeException)
+{
+    ScUnoGuard aGuard;
+    aObjectName = aName;
 }
 
 // XPropertySet

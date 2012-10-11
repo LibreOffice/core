@@ -19,8 +19,6 @@
  *
  *************************************************************/
 
-
-
 #ifndef SC_CHARTUNO_HXX
 #define SC_CHARTUNO_HXX
 
@@ -36,7 +34,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
-#include <com/sun/star/container/XNamed.hpp>
+#include <com/sun/star/container/XNamedEx.hpp>
 #include <cppuhelper/compbase4.hxx>
 #include <cppuhelper/implbase4.hxx>
 
@@ -115,7 +113,7 @@ public:
 typedef ::cppu::WeakComponentImplHelper4<
     ::com::sun::star::table::XTableChart,
     ::com::sun::star::document::XEmbeddedObjectSupplier,
-    ::com::sun::star::container::XNamed,
+    ::com::sun::star::container::XNamedEx,  // #i121178#: support displaying name
     ::com::sun::star::lang::XServiceInfo > ScChartObj_Base;
 
 typedef ::comphelper::OPropertyContainer ScChartObj_PBase;
@@ -131,6 +129,7 @@ private:
     ScDocShell*             pDocShell;
     SCTAB                   nTab;           // Charts sind pro Sheet
     String                  aChartName;
+    String                  aObjectName;    // #i121178#: the OLE object's name(displaying name)
 
     void    Update_Impl( const ScRangeListRef& rRanges, bool bColHeaders, bool bRowHeaders );
     void    GetData_Impl( ScRangeListRef& rRanges, bool& rColHeaders, bool& rRowHeaders ) const;
@@ -181,6 +180,11 @@ public:
                             // XNamed
     virtual ::rtl::OUString SAL_CALL getName() throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL   setName( const ::rtl::OUString& aName )
+                                throw(::com::sun::star::uno::RuntimeException);
+
+                            // XNamedEx
+    virtual ::rtl::OUString SAL_CALL getDisplayName() throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL   setDisplayName( const ::rtl::OUString& aName )
                                 throw(::com::sun::star::uno::RuntimeException);
 
                             // XServiceInfo

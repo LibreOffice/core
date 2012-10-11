@@ -19,14 +19,13 @@
  *
  *************************************************************/
 
-
 #ifndef SC_VBA_CHARTOBJECT_HXX
 #define SC_VBA_CHARTOBJECT_HXX
 #include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/table/XTableChart.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
-#include <com/sun/star/container/XNamed.hpp>
+#include <com/sun/star/container/XNamedEx.hpp>
 #include <com/sun/star/document/XEmbeddedObjectSupplier.hpp>
 #include <ooo/vba/excel/XChartObject.hpp>
 #include <vbahelper/vbahelperinterface.hxx>
@@ -36,14 +35,13 @@ typedef InheritedHelperInterfaceImpl1<ov::excel::XChartObject > ChartObjectImpl_
 
 class ScVbaChartObject : public ChartObjectImpl_BASE
 {
-
     css::uno::Reference< css::table::XTableChart  > xTableChart;
     css::uno::Reference< css::document::XEmbeddedObjectSupplier > xEmbeddedObjectSupplier;
     css::uno::Reference< css::beans::XPropertySet > xPropertySet;
     css::uno::Reference< css::drawing::XDrawPageSupplier > xDrawPageSupplier;
     css::uno::Reference< css::drawing::XDrawPage > xDrawPage;
     css::uno::Reference< css::drawing::XShape > xShape;
-    css::uno::Reference< css::container::XNamed > xNamed;
+    css::uno::Reference< css::container::XNamedEx > xNamed;
     rtl::OUString sPersistName;
     std::auto_ptr<ov::ShapeHelper> oShapeHelper;
     css::uno::Reference< css::container::XNamed > xNamedShape;
