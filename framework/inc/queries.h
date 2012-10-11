@@ -92,9 +92,9 @@ class QueryBuilder
         //---------------------------------------------------------------------------------------------------------
         // returns full query as copy of internal set values
         //---------------------------------------------------------------------------------------------------------
-        ::rtl::OUString getQuery()
+        OUString getQuery()
         {
-            ::rtl::OUStringBuffer sCopy( m_sParams );
+            OUStringBuffer sCopy( m_sParams );
             sCopy.insert( 0, m_sBase );
             return sCopy.makeStringAndClear();
         }
@@ -102,7 +102,7 @@ class QueryBuilder
         //---------------------------------------------------------------------------------------------------------
         // set new or change existing base query part
         //---------------------------------------------------------------------------------------------------------
-        void setBase( const ::rtl::OUString& sBase )
+        void setBase( const OUString& sBase )
         {
             m_sBase = sBase;
         }
@@ -110,7 +110,7 @@ class QueryBuilder
         //---------------------------------------------------------------------------------------------------------
         // add new parameter (with optional value) to param list
         //---------------------------------------------------------------------------------------------------------
-        void addParam( const ::rtl::OUString& sParam, const ::rtl::OUString& sValue = ::rtl::OUString() )
+        void addParam( const OUString& sParam, const OUString& sValue = OUString() )
         {
             m_sParams.append( SEPERATOR_QUERYPARAM );
             m_sParams.append( sParam               );
@@ -136,13 +136,13 @@ class QueryBuilder
         //---------------------------------------------------------------------------------------------------------
         void resetAll()
         {
-            m_sBase = ::rtl::OUString();
+            m_sBase = OUString();
             resetParams();
         }
 
     private:
-        ::rtl::OUString         m_sBase     ;
-        ::rtl::OUStringBuffer   m_sParams   ;
+        OUString         m_sBase     ;
+        OUStringBuffer   m_sParams   ;
 
 };      // class QueryBuilder
 
@@ -186,7 +186,7 @@ class QueryAnalyzer
         //---------------------------------------------------------------------------------------------------------
         // analyze given query and split it into his different parts; <base>:<param1>:<param2=value>...
         //---------------------------------------------------------------------------------------------------------
-        QueryAnalyzer( const ::rtl::OUString& sQuery )
+        QueryAnalyzer(const OUString& sQuery)
             // Don't forget to set default values for non given params!
             :   m_eQuery        ( E_ALL      )   // return ALL filter ...
             ,   m_nIFlags       ( 0          )   // which has set ANY flag ... (we remove all entries which match with these mask .. => 0!)
@@ -198,54 +198,39 @@ class QueryAnalyzer
             ,   m_bDefaultFirst ( sal_False  )   // and don't handle default entries in special case!
         {
             // Translate old query format to new one first!
-            ::rtl::OUString sNewQuery( sQuery );
-            if( sQuery == DECLARE_ASCII("_filterquery_textdocument_withdefault") )
-                sNewQuery=DECLARE_ASCII("_query_writer:default_first:use_order:sort_prop=uiname");
-            else
-            if( sQuery == DECLARE_ASCII("_filterquery_webdocument_withdefault") )
-                sNewQuery=DECLARE_ASCII("_query_web:default_first:use_order:sort_prop=uiname");
-            else
-            if( sQuery == DECLARE_ASCII("_filterquery_globaldocument_withdefault") )
-                sNewQuery=DECLARE_ASCII("_query_global:default_first:use_order:sort_prop=uiname");
-            else
-            if( sQuery == DECLARE_ASCII("_filterquery_chartdocument_withdefault") )
-                sNewQuery=DECLARE_ASCII("_query_chart:default_first:use_order:sort_prop=uiname");
-            else
-            if( sQuery == DECLARE_ASCII("_filterquery_spreadsheetdocument_withdefault") )
-                sNewQuery=DECLARE_ASCII("_query_calc:default_first:use_order:sort_prop=uiname");
-            else
-            if( sQuery == DECLARE_ASCII("_filterquery_presentationdocument_withdefault") )
-                sNewQuery=DECLARE_ASCII("_query_impress:default_first:use_order:sort_prop=uiname");
-            else
-            if( sQuery == DECLARE_ASCII("_filterquery_drawingdocument_withdefault") )
-                sNewQuery=DECLARE_ASCII("_query_draw:default_first:use_order:sort_prop=uiname");
-            else
-            if( sQuery == DECLARE_ASCII("_filterquery_formulaproperties_withdefault") )
-                sNewQuery=DECLARE_ASCII("_query_math:default_first:use_order:sort_prop=uiname");
-            else
-            if( sQuery == DECLARE_ASCII("_filterquery_textdocument") )
-                sNewQuery=DECLARE_ASCII("_query_writer:use_order:sort_prop=uiname");
-            else
-            if( sQuery == DECLARE_ASCII("_filterquery_webdocument") )
-                sNewQuery=DECLARE_ASCII("_query_web:use_order:sort_prop=uiname");
-            else
-            if( sQuery == DECLARE_ASCII("_filterquery_globaldocument") )
-                sNewQuery=DECLARE_ASCII("_query_global:use_order:sort_prop=uiname");
-            else
-            if( sQuery == DECLARE_ASCII("_filterquery_chartdocument") )
-                sNewQuery=DECLARE_ASCII("_query_chart:use_order:sort_prop=uiname");
-            else
-            if( sQuery == DECLARE_ASCII("_filterquery_spreadsheetdocument") )
-                sNewQuery=DECLARE_ASCII("_query_calc:use_order:sort_prop=uiname");
-            else
-            if( sQuery == DECLARE_ASCII("_filterquery_presentationdocument") )
-                sNewQuery=DECLARE_ASCII("_query_impress:use_order:sort_prop=uiname");
-            else
-            if( sQuery == DECLARE_ASCII("_filterquery_drawingdocument") )
-                sNewQuery=DECLARE_ASCII("_query_draw:use_order:sort_prop=uiname");
-            else
-            if( sQuery == DECLARE_ASCII("_filterquery_formulaproperties") )
-                sNewQuery=DECLARE_ASCII("_query_math:use_order:sort_prop=uiname");
+            OUString sNewQuery( sQuery );
+            if (sQuery == "_filterquery_textdocument_withdefault")
+                sNewQuery = "_query_writer:default_first:use_order:sort_prop=uiname";
+            else if (sQuery == "_filterquery_webdocument_withdefault")
+                sNewQuery = "_query_web:default_first:use_order:sort_prop=uiname";
+            else if (sQuery == "_filterquery_globaldocument_withdefault")
+                sNewQuery = "_query_global:default_first:use_order:sort_prop=uiname";
+            else if (sQuery == "_filterquery_chartdocument_withdefault")
+                sNewQuery = "_query_chart:default_first:use_order:sort_prop=uiname";
+            else if (sQuery == "_filterquery_spreadsheetdocument_withdefault")
+                sNewQuery = "_query_calc:default_first:use_order:sort_prop=uiname";
+            else if (sQuery == "_filterquery_presentationdocument_withdefault")
+                sNewQuery = "_query_impress:default_first:use_order:sort_prop=uiname";
+            else if (sQuery == "_filterquery_drawingdocument_withdefault")
+                sNewQuery = "_query_draw:default_first:use_order:sort_prop=uiname";
+            else if (sQuery == "_filterquery_formulaproperties_withdefault")
+                sNewQuery = "_query_math:default_first:use_order:sort_prop=uiname";
+            else if (sQuery == "_filterquery_textdocument")
+                sNewQuery = "_query_writer:use_order:sort_prop=uiname";
+            else if (sQuery == "_filterquery_webdocument")
+                sNewQuery = "_query_web:use_order:sort_prop=uiname";
+            else if (sQuery == "_filterquery_globaldocument")
+                sNewQuery = "_query_global:use_order:sort_prop=uiname";
+            else if (sQuery == "_filterquery_chartdocument")
+                sNewQuery = "_query_chart:use_order:sort_prop=uiname";
+            else if (sQuery == "_filterquery_spreadsheetdocument")
+                sNewQuery = "_query_calc:use_order:sort_prop=uiname";
+            else if (sQuery == "_filterquery_presentationdocument")
+                sNewQuery = "_query_impress:use_order:sort_prop=uiname";
+            else if (sQuery == "_filterquery_drawingdocument")
+                sNewQuery = "_query_draw:use_order:sort_prop=uiname";
+            else if (sQuery == "_filterquery_formulaproperties")
+                sNewQuery = "_query_math:use_order:sort_prop=uiname";
 
             // Analyze query ...
             // Try to find base of it and safe it for faster access as enum value!
@@ -283,27 +268,23 @@ class QueryAnalyzer
                 {
                     m_bDefaultFirst = sal_True;
                 }
-                else
                 // "use_order"
-                if( sParam.compareTo( QUERYPARAM_USE_ORDER, QUERYPARAM_USE_ORDER.getLength() ) == 0 )
+                else if( sParam.compareTo( QUERYPARAM_USE_ORDER, QUERYPARAM_USE_ORDER.getLength() ) == 0 )
                 {
                     m_bUseOrder = sal_True;
                 }
-                else
                 // "descending"
-                if( sParam.compareTo( QUERYPARAM_DESCENDING, QUERYPARAM_DESCENDING.getLength() ) == 0 )
+                else if( sParam.compareTo( QUERYPARAM_DESCENDING, QUERYPARAM_DESCENDING.getLength() ) == 0 )
                 {
                     m_bDescending = sal_True;
                 }
-                else
                 // "case_sensitive"
-                if( sParam.compareTo( QUERYPARAM_CASE_SENSITIVE, QUERYPARAM_CASE_SENSITIVE.getLength() ) == 0 )
+                else if( sParam.compareTo( QUERYPARAM_CASE_SENSITIVE, QUERYPARAM_CASE_SENSITIVE.getLength() ) == 0 )
                 {
                     m_bCaseSensitive = sal_True;
                 }
-                else
                 // "iflags=<mask>"
-                if( sParam.compareTo( QUERYPARAM_IFLAGS, QUERYPARAM_IFLAGS.getLength() ) == 0 )
+                else if( sParam.compareTo( QUERYPARAM_IFLAGS, QUERYPARAM_IFLAGS.getLength() ) == 0 )
                 {
                     sal_Int32       nSubToken  = 0;
                     sParam.getToken( 0, SEPERATOR_QUERYPARAMVALUE, nSubToken );
@@ -312,9 +293,8 @@ class QueryAnalyzer
                         m_nIFlags = sParam.getToken( 0, SEPERATOR_QUERYPARAMVALUE, nSubToken ).toInt32();
                     }
                 }
-                else
                 // "eflags=<mask>"
-                if( sParam.compareTo( QUERYPARAM_EFLAGS, QUERYPARAM_EFLAGS.getLength() ) == 0 )
+                else if( sParam.compareTo( QUERYPARAM_EFLAGS, QUERYPARAM_EFLAGS.getLength() ) == 0 )
                 {
                     sal_Int32       nSubToken  = 0;
                     sParam.getToken( 0, SEPERATOR_QUERYPARAMVALUE, nSubToken );
@@ -323,15 +303,14 @@ class QueryAnalyzer
                         m_nEFlags = sParam.getToken( 0, SEPERATOR_QUERYPARAMVALUE, nSubToken ).toInt32();
                     }
                 }
-                else
                 // "sort_prop=<[name,uiname]>"
-                if( sParam.compareTo( QUERYPARAM_SORT_PROP, QUERYPARAM_SORT_PROP.getLength() ) == 0 )
+                else if( sParam.compareTo( QUERYPARAM_SORT_PROP, QUERYPARAM_SORT_PROP.getLength() ) == 0 )
                 {
                     sal_Int32       nSubToken  = 0;
                     sParam.getToken( 0, SEPERATOR_QUERYPARAMVALUE, nSubToken );
                     if( nSubToken > 0 )
                     {
-                        ::rtl::OUString sParamValue = sParam.getToken( 0, SEPERATOR_QUERYPARAMVALUE, nSubToken );
+                        OUString sParamValue = sParam.getToken( 0, SEPERATOR_QUERYPARAMVALUE, nSubToken );
                         if( sParamValue.compareTo( QUERYPARAMVALUE_SORT_PROP_NAME, QUERYPARAMVALUE_SORT_PROP_NAME.getLength() ) == 0 )
                             m_eSortProp = E_NAME;
                         else
@@ -364,7 +343,7 @@ class QueryAnalyzer
         // this method checks if given string match any supported query.
         // (ignore additional parameters!)
         //---------------------------------------------------------------------------------------------------------
-        static sal_Bool isQuery( const ::rtl::OUString& sQuery )
+        static sal_Bool isQuery( const OUString& sQuery )
         {
             return(
                     ( sQuery.compareToAscii( "_query_"      , 7  ) == 0 ) ||    // new style
