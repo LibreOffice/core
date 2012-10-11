@@ -646,12 +646,18 @@ int RTFDocumentImpl::resolvePict(bool bInline)
         // provided by picw and pich.
         OString aURLBS(OUStringToOString(aGraphicUrl, RTL_TEXTENCODING_UTF8));
         const char aURLBegin[] = "vnd.sun.star.GraphicObject:";
-        Graphic aGraphic = GraphicObject(aURLBS.copy(RTL_CONSTASCII_LENGTH(aURLBegin))).GetTransformedGraphic();
-        Size aSize(aGraphic.GetPrefSize());
-        MapMode aMap(MAP_100TH_MM);
-        aSize = Application::GetDefaultDevice()->PixelToLogic( aSize, aMap );
-        m_aStates.top().aPicture.nWidth = aSize.Width();
-        m_aStates.top().aPicture.nHeight = aSize.Height();
+        if (aURLBS.compareTo(aURLBegin, RTL_CONSTASCII_LENGTH(aURLBegin)) == 0)
+        {
+            Graphic aGraphic = GraphicObject(aURLBS.copy(RTL_CONSTASCII_LENGTH(aURLBegin))).GetTransformedGraphic();
+            Size aSize(aGraphic.GetPrefSize());
+            MapMode aMap(MAP_100TH_MM);
+            if (aGraphic.GetPrefMapMode().GetMapUnit() == MAP_PIXEL)
+                aSize = Application::GetDefaultDevice()->PixelToLogic(aSize, aMap);
+            else
+                aSize = OutputDevice::LogicToLogic(aSize, aGraphic.GetPrefMapMode(), aMap);
+            m_aStates.top().aPicture.nWidth = aSize.Width();
+            m_aStates.top().aPicture.nHeight = aSize.Height();
+        }
     }
 
     // Wrap it in an XShape.
