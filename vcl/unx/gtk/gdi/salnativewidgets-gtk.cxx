@@ -3736,13 +3736,14 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
     // text colors
     Color aTextColor = getColor( pStyle->text[GTK_STATE_NORMAL] );
     aStyleSet.SetDialogTextColor( aTextColor );
+    aStyleSet.SetWindowTextColor( aTextColor );
+    aStyleSet.SetFieldTextColor( aTextColor );
+    aTextColor = getColor( pStyle->fg[GTK_STATE_NORMAL] );
     aStyleSet.SetButtonTextColor( aTextColor );
     aStyleSet.SetRadioCheckTextColor( aTextColor );
     aStyleSet.SetGroupTextColor( aTextColor );
     aStyleSet.SetLabelTextColor( aTextColor );
     aStyleSet.SetInfoTextColor( aTextColor );
-    aStyleSet.SetWindowTextColor( aTextColor );
-    aStyleSet.SetFieldTextColor( aTextColor );
 
     // Tooltip colors
     GtkStyle* pTooltipStyle = gtk_widget_get_style( gWidgetData[m_nXScreen].gTooltipPopup );
