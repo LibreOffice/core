@@ -60,6 +60,7 @@ ScFormulaReferenceHelper::ScFormulaReferenceHelper(IAnyRefDialog* _pDlg,SfxBindi
  , pAccel( NULL )
  , pHiddenMarks(NULL)
  , nRefTab(0)
+ , mpOldEditParent( NULL )
  , bHighLightRef( false )
  , bAccInserted( false )
 {
@@ -365,6 +366,9 @@ void ScFormulaReferenceHelper::RefInputDone( sal_Bool bForced )
             bAccInserted = false;
         }
 
+        // restore the parent of the edit field
+        pRefEdit->SetParent(mpOldEditParent);
+
         // Fenstertitel anpassen
         m_pWindow->SetText(sOldDialogText);
 
@@ -377,6 +381,7 @@ void ScFormulaReferenceHelper::RefInputDone( sal_Bool bForced )
         // set button position and image
         if( pRefBtn )
         {
+            pRefBtn->SetParent(m_pWindow);
             pRefBtn->SetPosPixel( aOldButtonPos );
             pRefBtn->SetStartImage();
         }
@@ -408,6 +413,19 @@ void ScFormulaReferenceHelper::RefInputStart( formula::RefEdit* pEdit, formula::
         sNewDialogText  = sOldDialogText;
         sNewDialogText.AppendAscii(RTL_CONSTASCII_STRINGPARAM( ": " ));
 
+        mpOldEditParent = pRefEdit->GetParent();
+
+        // Alte Daten merken
+        aOldDialogSize = m_pWindow->GetOutputSizePixel();
+        aOldEditPos = pRefEdit->GetPosPixel();
+        aOldEditSize = pRefEdit->GetSizePixel();
+        if (pRefBtn)
+            aOldButtonPos = pRefBtn->GetPosPixel();
+
+        pRefEdit->SetParent(m_pWindow);
+        if(pRefBtn)
+            pRefBtn->SetParent(m_pWindow);
+
         // Alle Elemente ausser EditCell und Button verstecken
         sal_uInt16 nChildren = m_pWindow->GetChildCount();
         pHiddenMarks = new sal_Bool [nChildren];
@@ -428,13 +446,6 @@ void ScFormulaReferenceHelper::RefInputStart( formula::RefEdit* pEdit, formula::
                 pWin->Hide();
             }
         }
-
-        // Alte Daten merken
-        aOldDialogSize = m_pWindow->GetOutputSizePixel();
-        aOldEditPos = pRefEdit->GetPosPixel();
-        aOldEditSize = pRefEdit->GetSizePixel();
-        if (pRefBtn)
-            aOldButtonPos = pRefBtn->GetPosPixel();
 
         // Edit-Feld verschieben und anpassen
         Size aNewDlgSize(aOldDialogSize.Width(), aOldEditSize.Height());
