@@ -980,8 +980,8 @@ void ScDataBarFrmtEntry::Init()
     mpDataBarData.reset(new ScDataBarFormatData());
     mpDataBarData->mpUpperLimit.reset(new ScColorScaleEntry());
     mpDataBarData->mpLowerLimit.reset(new ScColorScaleEntry());
-    mpDataBarData->mpLowerLimit->SetType(COLORSCALE_MIN);
-    mpDataBarData->mpUpperLimit->SetType(COLORSCALE_MAX);
+    mpDataBarData->mpLowerLimit->SetType(COLORSCALE_AUTO);
+    mpDataBarData->mpUpperLimit->SetType(COLORSCALE_AUTO);
     mpDataBarData->maPositiveColor = COL_LIGHTBLUE;
 }
 
