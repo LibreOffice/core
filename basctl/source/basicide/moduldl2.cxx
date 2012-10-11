@@ -45,7 +45,7 @@
 #include <sot/storage.hxx>
 #include <com/sun/star/io/Pipe.hpp>
 #include <com/sun/star/ui/dialogs/XFilePicker.hpp>
-#include <com/sun/star/ui/dialogs/XFolderPicker.hpp>
+#include <com/sun/star/ui/dialogs/FolderPicker.hpp>
 #include <com/sun/star/ui/dialogs/XFilterManager.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/script/XLibraryContainer2.hpp>
@@ -1386,30 +1386,26 @@ void LibPage::ExportAsBasic( const String& aLibName )
     // Folder picker
     Reference< lang::XMultiServiceFactory > xMSF( ::comphelper::getProcessServiceFactory() );
     Reference< uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
-    Reference< XFolderPicker > xFolderPicker( xMSF->createInstance(
-                "com.sun.star.ui.dialogs.FolderPicker" ), UNO_QUERY );
+    Reference< XFolderPicker2 > xFolderPicker = FolderPicker::create(xContext);
     Reference< task::XInteractionHandler2 > xHandler( task::InteractionHandler::createWithParent(xContext, 0) );
 
-    if( xFolderPicker.is() )
+    xFolderPicker->setTitle( String( IDEResId( RID_STR_EXPORTBASIC ) ) );
+
+    // set display directory and filter
+    String aPath =GetExtraData()->GetAddLibPath();
+    if( !aPath.Len() )
+        aPath = SvtPathOptions().GetWorkPath();
+
+    // INetURLObject aURL(m_sSavePath, INET_PROT_FILE);
+    xFolderPicker->setDisplayDirectory( aPath );
+    short nRet = xFolderPicker->execute();
+    if( nRet == RET_OK )
     {
-        xFolderPicker->setTitle( String( IDEResId( RID_STR_EXPORTBASIC ) ) );
+        String aTargetURL = xFolderPicker->getDirectory();
+        GetExtraData()->SetAddLibPath(aTargetURL);
 
-        // set display directory and filter
-        String aPath =GetExtraData()->GetAddLibPath();
-        if( !aPath.Len() )
-            aPath = SvtPathOptions().GetWorkPath();
-
-        // INetURLObject aURL(m_sSavePath, INET_PROT_FILE);
-        xFolderPicker->setDisplayDirectory( aPath );
-        short nRet = xFolderPicker->execute();
-        if( nRet == RET_OK )
-        {
-            String aTargetURL = xFolderPicker->getDirectory();
-            GetExtraData()->SetAddLibPath(aTargetURL);
-
-            Reference< task::XInteractionHandler > xDummyHandler( new DummyInteractionHandler( xHandler ) );
-            implExportLib( aLibName, aTargetURL, xDummyHandler );
-        }
+        Reference< task::XInteractionHandler > xDummyHandler( new DummyInteractionHandler( xHandler ) );
+        implExportLib( aLibName, aTargetURL, xDummyHandler );
     }
 }
 

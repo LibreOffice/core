@@ -39,6 +39,7 @@
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include <com/sun/star/ui/dialogs/XAsynchronousExecutableDialog.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
+#include <com/sun/star/ui/dialogs/FolderPicker.hpp>
 #include <com/sun/star/ucb/XContentProvider.hpp>
 #include <jvmfwk/framework.h>
 
@@ -236,9 +237,8 @@ IMPL_LINK_NOARG(SvxJavaOptionsPage, AddHdl_Impl)
 {
     try
     {
-        Reference < XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
-        xFolderPicker = Reference< XFolderPicker >(
-            xMgr->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ui.dialogs.FolderPicker") ) ), UNO_QUERY );
+        Reference < XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
+        xFolderPicker = FolderPicker::create(xContext);
 
         String sWorkFolder = SvtPathOptions().GetWorkPath();
         xFolderPicker->setDisplayDirectory( sWorkFolder );
@@ -965,9 +965,8 @@ IMPL_LINK_NOARG(SvxJavaClassPathDlg, AddArchiveHdl_Impl)
 
 IMPL_LINK_NOARG(SvxJavaClassPathDlg, AddPathHdl_Impl)
 {
-    rtl::OUString sService( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.dialogs.FolderPicker" ) );
-    Reference < XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
-    Reference < XFolderPicker > xFolderPicker( xFactory->createInstance( sService ), UNO_QUERY );
+    Reference < XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
+    Reference < XFolderPicker2 > xFolderPicker = FolderPicker::create(xContext);;
 
     String sOldFolder;
     if ( m_aPathList.GetSelectEntryCount() > 0 )

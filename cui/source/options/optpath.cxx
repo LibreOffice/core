@@ -48,6 +48,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include <com/sun/star/ui/dialogs/XAsynchronousExecutableDialog.hpp>
+#include <com/sun/star/ui/dialogs/FolderPicker.hpp>
 #include <officecfg/Office/Common.hxx>
 #include "optHeaderTabListbox.hxx"
 #include <readonlyimage.hxx>
@@ -610,10 +611,8 @@ IMPL_LINK_NOARG(SvxPathTabPage, PathHdl_Impl)
     {
         try
         {
-            rtl::OUString aService( RTL_CONSTASCII_USTRINGPARAM( FOLDER_PICKER_SERVICE_NAME ) );
-            Reference < XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
-            xFolderPicker = ::com::sun::star::uno::Reference< XFolderPicker >(
-                xFactory->createInstance( aService ), UNO_QUERY );
+            Reference < XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
+            xFolderPicker = FolderPicker::create(xContext);;
 
             INetURLObject aURL( sWritable, INET_PROT_FILE );
             xFolderPicker->setDisplayDirectory( aURL.GetMainURL( INetURLObject::NO_DECODE ) );

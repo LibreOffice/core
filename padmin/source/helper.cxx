@@ -26,7 +26,7 @@
 #include <vcl/msgbox.hxx>
 #include <tools/config.hxx>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
-#include <com/sun/star/ui/dialogs/XFolderPicker.hpp>
+#include <com/sun/star/ui/dialogs/FolderPicker.hpp>
 #include <com/sun/star/ui/dialogs/XControlAccess.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <comphelper/processfactory.hxx>
@@ -275,42 +275,36 @@ void padmin::freePadminRC()
 bool padmin::chooseDirectory( String& rInOutPath )
 {
     bool bRet = false;
-    Reference< XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
-    if( xFactory.is() )
+    Reference< XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
+    Reference< XFolderPicker2 > xFolderPicker = FolderPicker::create(xContext);;
+    Reference< XControlAccess > xCA( xFolderPicker, UNO_QUERY );
+    if( xCA.is() )
     {
-        Reference< XFolderPicker > xFolderPicker( xFactory->createInstance( OUString(  "com.sun.star.ui.dialogs.FolderPicker"  ) ), UNO_QUERY );
-        if( xFolderPicker.is() )
+        try
         {
-            Reference< XControlAccess > xCA( xFolderPicker, UNO_QUERY );
-            if( xCA.is() )
-            {
-                try
-                {
-                    Any aState;
-                    aState <<= sal_False;
-                    xCA->setControlProperty( OUString(  "HelpButton"  ),
-                                             OUString(  "Visible"  ),
-                                             aState );
+            Any aState;
+            aState <<= sal_False;
+            xCA->setControlProperty( OUString(  "HelpButton"  ),
+                                     OUString(  "Visible"  ),
+                                     aState );
 
-                }
-                catch( ... )
-                {
-                }
-            }
-            INetURLObject aObj( rInOutPath, INET_PROT_FILE, INetURLObject::ENCODE_ALL );
-            xFolderPicker->setDisplayDirectory( aObj.GetMainURL(INetURLObject::DECODE_TO_IURI) );
-            if( xFolderPicker->execute() == ExecutableDialogResults::OK )
-            {
-                aObj = INetURLObject( xFolderPicker->getDirectory() );
-                rInOutPath = aObj.PathToFileName();
-                bRet = true;
-            }
         }
-#if OSL_DEBUG_LEVEL > 1
-        else
-            fprintf( stderr, "could not get FolderPicker service\n" );
-#endif
+        catch( ... )
+        {
+        }
     }
+    INetURLObject aObj( rInOutPath, INET_PROT_FILE, INetURLObject::ENCODE_ALL );
+    xFolderPicker->setDisplayDirectory( aObj.GetMainURL(INetURLObject::DECODE_TO_IURI) );
+    if( xFolderPicker->execute() == ExecutableDialogResults::OK )
+    {
+        aObj = INetURLObject( xFolderPicker->getDirectory() );
+        rInOutPath = aObj.PathToFileName();
+        bRet = true;
+    }
+#if OSL_DEBUG_LEVEL > 1
+    else
+        fprintf( stderr, "could not get FolderPicker service\n" );
+#endif
     return bRet;
 }
 

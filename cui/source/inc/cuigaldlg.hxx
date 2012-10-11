@@ -38,7 +38,7 @@
 #include <svx/galctrl.hxx>
 #include <svx/galmisc.hxx>
 #include <com/sun/star/media/XPlayer.hpp>
-#include <com/sun/star/ui/dialogs/XFolderPicker.hpp>
+#include <com/sun/star/ui/dialogs/XFolderPicker2.hpp>
 #include <svtools/dialogclosedlistener.hxx>
 #include <vector>
 
@@ -335,7 +335,7 @@ class TPGalleryThemeProperties : public SfxTabPage
 
     ::com::sun::star::uno::Reference< ::svt::DialogClosedListener >                  xDialogListener;
     ::com::sun::star::uno::Reference< ::com::sun::star::media::XPlayer >             xMediaPlayer;
-    ::com::sun::star::uno::Reference< ::com::sun::star::ui::dialogs::XFolderPicker > xFolderPicker;
+    ::com::sun::star::uno::Reference< ::com::sun::star::ui::dialogs::XFolderPicker2 > xFolderPicker;
 
     virtual void        Reset( const SfxItemSet& /*rSet*/ ) {}
     virtual sal_Bool        FillItemSet( SfxItemSet& /*rSet*/ ) { return sal_True; }

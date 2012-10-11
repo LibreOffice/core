@@ -39,7 +39,7 @@
 
 #include <com/sun/star/mozilla/XMozillaBootstrap.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
-#include <com/sun/star/ui/dialogs/XFolderPicker.hpp>
+#include <com/sun/star/ui/dialogs/FolderPicker.hpp>
 #include <comphelper/processfactory.hxx>
 
 using namespace ::com::sun::star;
@@ -237,10 +237,7 @@ IMPL_LINK_NOARG(CertPathDialog, AddHdl_Impl)
 {
     try
     {
-        uno::Reference<uno::XInterface> xInstance = comphelper::getProcessServiceFactory()->createInstance(
-            "com.sun.star.ui.dialogs.FolderPicker");
-
-        uno::Reference<ui::dialogs::XFolderPicker> xFolderPicker(xInstance, uno::UNO_QUERY_THROW);
+        uno::Reference<ui::dialogs::XFolderPicker2> xFolderPicker = ui::dialogs::FolderPicker::create(comphelper::getProcessComponentContext());
 
         rtl::OUString sURL;
         osl::Security().getHomeDir(sURL);

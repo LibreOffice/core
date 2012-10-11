@@ -46,7 +46,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
-#include <com/sun/star/ui/dialogs/XFolderPicker.hpp>
+#include <com/sun/star/ui/dialogs/FolderPicker.hpp>
 
 #include "doc.hrc"
 #include "templatedlg.hrc"
@@ -62,6 +62,7 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::embed;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::ui::dialogs;
 
 static bool lcl_getServiceName (const OUString &rFileURL, OUString &rName );
@@ -838,8 +839,8 @@ void SfxTemplateManagerDlg::OnTemplateImport ()
 
 void SfxTemplateManagerDlg::OnTemplateExport()
 {
-    uno::Reference<XMultiServiceFactory> xFactory(comphelper::getProcessServiceFactory());
-    uno::Reference<XFolderPicker> xFolderPicker(xFactory->createInstance(FOLDER_PICKER_SERVICE_NAME),uno::UNO_QUERY);
+    uno::Reference<XComponentContext> xContext(comphelper::getProcessComponentContext());
+    uno::Reference<XFolderPicker2> xFolderPicker = FolderPicker::create(xContext);
 
     xFolderPicker->setDisplayDirectory(SvtPathOptions().GetWorkPath());
 

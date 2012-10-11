@@ -34,7 +34,7 @@
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/ui/dialogs/XFolderPicker.hpp>
+#include <com/sun/star/ui/dialogs/FolderPicker.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include <tools/urlobj.hxx>
 
@@ -228,9 +228,8 @@ IMPL_LINK_NOARG(MacroSecurityTrustedSourcesTP, AddLocPBHdl)
 {
     try
     {
-        rtl::OUString aService( RTL_CONSTASCII_USTRINGPARAM( FOLDER_PICKER_SERVICE_NAME ) );
-        uno::Reference < lang::XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
-        uno::Reference < ui::dialogs::XFolderPicker > xFolderPicker( xFactory->createInstance( aService ), uno::UNO_QUERY );
+        uno::Reference < uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
+        uno::Reference < ui::dialogs::XFolderPicker2 > xFolderPicker = ui::dialogs::FolderPicker::create(xContext);
 
         short nRet = xFolderPicker->execute();
 

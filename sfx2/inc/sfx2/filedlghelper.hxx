@@ -70,7 +70,6 @@ class Window;
 #define FILEDIALOG_FILTER_ALL   "*.*"
 
 #define FILE_OPEN_SERVICE_NAME      "com.sun.star.ui.dialogs.FilePicker"
-#define FOLDER_PICKER_SERVICE_NAME  "com.sun.star.ui.dialogs.FolderPicker"
 #define FILE_OPEN_SERVICE_NAME_OOO   "com.sun.star.ui.dialogs.OfficeFilePicker"
 
 namespace sfx2 {

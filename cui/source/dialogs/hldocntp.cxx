@@ -36,7 +36,7 @@
 #include "hyperdlg.hrc"
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/ui/dialogs/XFolderPicker.hpp>
+#include <com/sun/star/ui/dialogs/FolderPicker.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 
 using namespace ::com::sun::star::lang;
@@ -399,9 +399,8 @@ void SvxHyperlinkNewDocTp::DoApply ()
 
 IMPL_LINK_NOARG(SvxHyperlinkNewDocTp, ClickNewHdl_Impl)
 {
-    rtl::OUString                       aService( RTL_CONSTASCII_USTRINGPARAM( FOLDER_PICKER_SERVICE_NAME ) );
-    uno::Reference < XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
-    uno::Reference < XFolderPicker >            xFolderPicker( xFactory->createInstance( aService ), UNO_QUERY );
+    uno::Reference < XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
+    uno::Reference < XFolderPicker2 >  xFolderPicker = FolderPicker::create(xContext);
 
     String              aStrURL;
     String              aTempStrURL( maCbbPath.GetText() );

@@ -300,6 +300,7 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/ui,\
 	WindowContentFactory \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/ui/dialogs,\
+	FolderPicker \
 	Wizard \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/util,\
@@ -1477,7 +1478,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/ui,\
 $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/ui/dialogs,\
 	FilePicker \
 	FilterOptionsDialog \
-	FolderPicker \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/util,\
 	NumberFormatProperties \
@@ -3984,6 +3984,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/ui/dialogs,\
 	XFilterGroupManager \
 	XFilterManager \
 	XFolderPicker \
+	XFolderPicker2 \
 	XWizard \
 	XWizardController \
 	XWizardPage \

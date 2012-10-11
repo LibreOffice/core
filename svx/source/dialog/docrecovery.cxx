@@ -55,7 +55,7 @@
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
-#include <com/sun/star/ui/dialogs/XFolderPicker.hpp>
+#include <com/sun/star/ui/dialogs/FolderPicker.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <osl/file.hxx>
@@ -1548,8 +1548,8 @@ IMPL_LINK_NOARG(BrokenRecoveryDialog, SaveButtonHdl)
 //===============================================
 void BrokenRecoveryDialog::impl_askForSavePath()
 {
-    css::uno::Reference< css::ui::dialogs::XFolderPicker > xFolderPicker(
-        m_pCore->getSMGR()->createInstance(SERVICENAME_FOLDERPICKER), css::uno::UNO_QUERY_THROW);
+    css::uno::Reference< css::ui::dialogs::XFolderPicker2 > xFolderPicker =
+        css::ui::dialogs::FolderPicker::create(::comphelper::getComponentContext(m_pCore->getSMGR()));
 
     INetURLObject aURL(m_sSavePath, INET_PROT_FILE);
     xFolderPicker->setDisplayDirectory(aURL.GetMainURL(INetURLObject::NO_DECODE));

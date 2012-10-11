@@ -29,7 +29,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/ui/dialogs/XFolderPicker.hpp>
+#include <com/sun/star/ui/dialogs/FolderPicker.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 
 #include <unotools/localfilehelper.hxx>
@@ -79,9 +79,8 @@ IMPL_LINK( SvxMultiPathDialog, CheckHdl_Impl, svx::SvxRadioButtonListBox *, pBox
 
 IMPL_LINK_NOARG(SvxMultiPathDialog, AddHdl_Impl)
 {
-    rtl::OUString aService( RTL_CONSTASCII_USTRINGPARAM( FOLDER_PICKER_SERVICE_NAME ) );
-    Reference < XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
-    Reference < XFolderPicker > xFolderPicker( xFactory->createInstance( aService ), UNO_QUERY );
+    Reference < XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
+    Reference < XFolderPicker2 >  xFolderPicker = FolderPicker::create(xContext);
 
     if ( xFolderPicker->execute() == ExecutableDialogResults::OK )
     {
