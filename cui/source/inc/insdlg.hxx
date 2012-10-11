@@ -33,6 +33,8 @@
 #include <svtools/svmedit.hxx>  // MultiLineEdit
 #include <comphelper/embeddedobjectcontainer.hxx>
 
+class VclFrame;
+
 class INetURLObject;
 
 class InsertObjectDialog_Impl : public ModalDialog
@@ -55,38 +57,37 @@ public:
 
 class SvInsertOleDlg : public InsertObjectDialog_Impl
 {
-    RadioButton aRbNewObject;
-    RadioButton aRbObjectFromfile;
-    FixedLine aGbObject;
-    ListBox aLbObjecttype;
-    Edit aEdFilepath;
-    PushButton aBtnFilepath;
-    CheckBox aCbFilelink;
-    OKButton aOKButton1;
-    CancelButton aCancelButton1;
-    HelpButton aHelpButton1;
-    String aStrFile;
-    String      _aOldStr;
+    RadioButton* m_pRbNewObject;
+    RadioButton* m_pRbObjectFromfile;
+    VclFrame* m_pObjectTypeFrame;
+    ListBox* m_pLbObjecttype;
+    VclFrame* m_pFileFrame;
+    Edit* m_pEdFilepath;
+    PushButton* m_pBtnFilepath;
+    CheckBox* m_pCbFilelink;
     const SvObjectServerList* m_pServers;
 
     ::com::sun::star::uno::Sequence< sal_Int8 > m_aIconMetaFile;
-    ::rtl::OUString m_aIconMediaType;
+    OUString m_aIconMediaType;
 
-    DECL_LINK(          DoubleClickHdl, void* );
+    DECL_LINK(DoubleClickHdl, void*);
     DECL_LINK(BrowseHdl, void *);
     DECL_LINK(RadioHdl, void *);
-    void                SelectDefault();
-    ListBox&            GetObjectTypes()
-                        { return aLbObjecttype; }
-    String              GetFilePath() const { return aEdFilepath.GetText(); }
-    sal_Bool                IsLinked() const    { return aCbFilelink.IsChecked(); }
-    sal_Bool                IsCreateNew() const { return aRbNewObject.IsChecked(); }
+    void SelectDefault();
+    ListBox& GetObjectTypes()
+        { return *m_pLbObjecttype; }
+    OUString GetFilePath() const
+        { return m_pEdFilepath->GetText(); }
+    sal_Bool IsLinked() const
+        { return m_pCbFilelink->IsChecked(); }
+    sal_Bool IsCreateNew() const
+        { return m_pRbNewObject->IsChecked(); }
 
 public:
-                        SvInsertOleDlg( Window* pParent,
-                            const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& xStorage,
-                            const SvObjectServerList* pServers = NULL );
-    virtual short       Execute();
+    SvInsertOleDlg( Window* pParent,
+        const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& xStorage,
+        const SvObjectServerList* pServers = NULL );
+    virtual short Execute();
 
     /// get replacement for the iconified embedded object and the mediatype of the replacement
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > GetIconIfIconified( ::rtl::OUString* pGraphicMediaType );

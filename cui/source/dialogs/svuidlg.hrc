@@ -83,13 +83,6 @@
 #define ED_APPLET_OPTIONS       20
 #define GB_APPLET_OPTIONS       21
 
-#define MD_INSERT_OLEOBJECT     32010
-#define RB_NEW_OBJECT           10
-#define RB_OBJECT_FROMFILE      11
-#define LB_OBJECTTYPE           12
-#define GB_OBJECT               13
-#define STR_FILE                14
-
 #define MD_INSERT_OBJECT_IFRAME 32011
 #define FT_FRAMENAME                    3
 #define ED_FRAMENAME                    4

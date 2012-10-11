@@ -42,6 +42,7 @@
 #include <vcl/button.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/group.hxx>
+#include <vcl/layout.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
@@ -151,7 +152,7 @@ IMPL_LINK_NOARG(SvInsertOleDlg, BrowseHdl)
             {
                 Sequence< OUString > aPathSeq( xFilePicker->getFiles() );
                 INetURLObject aObj( aPathSeq[0] );
-                aEdFilepath.SetText( aObj.PathToFileName() );
+                m_pEdFilepath->SetText( aObj.PathToFileName() );
             }
         }
     }
@@ -163,22 +164,15 @@ IMPL_LINK_NOARG(SvInsertOleDlg, BrowseHdl)
 
 IMPL_LINK_NOARG(SvInsertOleDlg, RadioHdl)
 {
-    if ( aRbNewObject.IsChecked() )
+    if ( m_pRbNewObject->IsChecked() )
     {
-        aLbObjecttype.Show();
-        aEdFilepath.Hide();
-        aBtnFilepath.Hide();
-        aCbFilelink.Hide();
-        aGbObject.SetText( _aOldStr );
+        m_pObjectTypeFrame->Show();
+        m_pFileFrame->Hide();
     }
     else
     {
-        aCbFilelink.Show();
-        aLbObjecttype.Hide();
-        aEdFilepath.Show();
-        aBtnFilepath.Show();
-        aCbFilelink.Show();
-        aGbObject.SetText( aStrFile );
+        m_pFileFrame->Show();
+        m_pObjectTypeFrame->Hide();
     }
     return 0;
 }
@@ -187,7 +181,7 @@ IMPL_LINK_NOARG(SvInsertOleDlg, RadioHdl)
 
 void SvInsertOleDlg::SelectDefault()
 {
-    aLbObjecttype.SelectEntryPos( 0 );
+    m_pLbObjecttype->SelectEntryPos(0);
 }
 
 // -----------------------------------------------------------------------
@@ -197,30 +191,24 @@ SvInsertOleDlg::SvInsertOleDlg
     const Reference < embed::XStorage >& xStorage,
     const SvObjectServerList* pServers
 )
-    : InsertObjectDialog_Impl( pParent, CUI_RES( MD_INSERT_OLEOBJECT ), xStorage ),
-    aRbNewObject( this, CUI_RES( RB_NEW_OBJECT ) ),
-    aRbObjectFromfile( this, CUI_RES( RB_OBJECT_FROMFILE ) ),
-    aGbObject( this, CUI_RES( GB_OBJECT ) ),
-    aLbObjecttype( this, CUI_RES( LB_OBJECTTYPE ) ),
-    aEdFilepath( this, CUI_RES( ED_FILEPATH ) ),
-    aBtnFilepath( this, CUI_RES( BTN_FILEPATH ) ),
-    aCbFilelink( this, CUI_RES( CB_FILELINK ) ),
-    aOKButton1( this, CUI_RES( 1 ) ),
-    aCancelButton1( this, CUI_RES( 1 ) ),
-    aHelpButton1( this, CUI_RES( 1 ) ),
-    aStrFile( CUI_RES( STR_FILE ) ),
+    : InsertObjectDialog_Impl( pParent, "InsertOLEObjectDialog", "cui/ui/insertoleobject.ui", xStorage ),
     m_pServers( pServers )
 {
-    FreeResource();
-    _aOldStr = aGbObject.GetText();
-    aLbObjecttype.SetDoubleClickHdl( LINK( this, SvInsertOleDlg, DoubleClickHdl ) );
-    aBtnFilepath.SetClickHdl( LINK( this, SvInsertOleDlg, BrowseHdl ) );
+    get(m_pRbNewObject, "createnew");
+    get(m_pRbObjectFromfile, "createfromfile");
+    get(m_pObjectTypeFrame, "objecttypeframe");
+    get(m_pLbObjecttype, "types");
+    get(m_pFileFrame, "fileframe");
+    get(m_pEdFilepath, "urled");
+    get(m_pBtnFilepath, "urlbtn");
+    get(m_pCbFilelink, "linktofile");
+    m_pLbObjecttype->SetDoubleClickHdl( LINK( this, SvInsertOleDlg, DoubleClickHdl ) );
+    m_pBtnFilepath->SetClickHdl( LINK( this, SvInsertOleDlg, BrowseHdl ) );
     Link aLink( LINK( this, SvInsertOleDlg, RadioHdl ) );
-    aRbNewObject.SetClickHdl( aLink );
-    aRbObjectFromfile.SetClickHdl( aLink );
-    aRbNewObject.Check( sal_True );
+    m_pRbNewObject->SetClickHdl( aLink );
+    m_pRbObjectFromfile->SetClickHdl( aLink );
+    m_pRbNewObject->Check( sal_True );
     RadioHdl( NULL );
-    aBtnFilepath.SetAccessibleRelationMemberOf(&aGbObject);
 }
 
 short SvInsertOleDlg::Execute()
