@@ -231,8 +231,10 @@ SAL_IMPLEMENT_MAIN() {
             fn = (oslGenericFunction) unobootstrapprotector;
         else
         {
-            fprintf(stderr, "Only unoexceptionprotector or unobootstrapprotector protectors allowed\n");
-            assert(!"unrecognized protector");
+            std::cerr
+                << "Only unoexceptionprotector or unobootstrapprotector protectors allowed"
+                << std::endl;
+            std::exit(EXIT_FAILURE);
         }
 #endif
         CppUnit::Protector *protector = fn == 0
