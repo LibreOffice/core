@@ -26,7 +26,7 @@
 #include <svl/lngmisc.hxx>
 #include <svtools/filter.hxx>
 #include <svtools/svlbitm.hxx>
-#include <svtools/svtreebx.hxx>
+#include <svtools/treelistbox.hxx>
 #include <vcl/wrkwin.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
@@ -139,7 +139,7 @@ AlternativesString::AlternativesString(
 
 void AlternativesString::Paint(
     const Point& rPos,
-    SvLBox& rDev, sal_uInt16,
+    SvTreeListBox& rDev, sal_uInt16,
     SvLBoxEntry* pEntry )
 {
     AlternativesExtraData* pData = m_rControlImpl.GetExtraData( pEntry );

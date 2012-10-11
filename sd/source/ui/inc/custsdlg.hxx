@@ -34,7 +34,7 @@
 #include <vcl/lstbox.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/edit.hxx>
-#include <svtools/svtreebx.hxx>
+#include <svtools/treelistbox.hxx>
 #include <vcl/dialog.hxx>
 
 class SdDrawDocument;

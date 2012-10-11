@@ -47,7 +47,7 @@
 #include <com/sun/star/system/SystemShellExecute.hpp>
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
 #include <unotools/extendedsecurityoptions.hxx>
-#include <svtools/svlbox.hxx>
+#include <svtools/treelistbox.hxx>
 #include <svtools/langhelp.hxx>
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>
@@ -283,11 +283,11 @@ public:
     BrwStringDic_Impl( SvLBoxEntry* pEntry, sal_uInt16 nFlags,
         const String& rStr ) : SvLBoxString( pEntry, nFlags, rStr ) {}
 
-    virtual void Paint( const Point& rPos, SvLBox& rDev, sal_uInt16 nFlags,
+    virtual void Paint( const Point& rPos, SvTreeListBox& rDev, sal_uInt16 nFlags,
                                             SvLBoxEntry* pEntry);
 };
 
-void BrwStringDic_Impl::Paint( const Point& rPos, SvLBox& rDev, sal_uInt16,
+void BrwStringDic_Impl::Paint( const Point& rPos, SvTreeListBox& rDev, sal_uInt16,
     SvLBoxEntry* pEntry )
 {
     ModuleUserData_Impl* pData = (ModuleUserData_Impl*)pEntry->GetUserData();
@@ -450,11 +450,11 @@ public:
     BrwString_Impl( SvLBoxEntry* pEntry, sal_uInt16 nFlags,
         const String& rStr ) : SvLBoxString( pEntry, nFlags, rStr ) {}
 
-    virtual void Paint( const Point& rPos, SvLBox& rDev, sal_uInt16 nFlags,
+    virtual void Paint( const Point& rPos, SvTreeListBox& rDev, sal_uInt16 nFlags,
                                             SvLBoxEntry* pEntry);
 };
 
-void BrwString_Impl::Paint( const Point& rPos, SvLBox& rDev, sal_uInt16,
+void BrwString_Impl::Paint( const Point& rPos, SvTreeListBox& rDev, sal_uInt16,
     SvLBoxEntry* pEntry )
 {
     Point aPos(rPos);

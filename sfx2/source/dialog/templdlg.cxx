@@ -442,7 +442,7 @@ public:
 
     void            SetDoubleClickHdl(const Link &rLink) { aDoubleClickLink = rLink; }
     void            SetDropHdl(const Link &rLink) { aDropLink = rLink; }
-        using SvLBox::GetParent;
+    using SvTreeListBox::GetParent;
     const String&   GetParent() const { return aParent; }
     const String&   GetStyle() const { return aStyle; }
     void            MakeExpanded_Impl(ExpandedEntries_t& rEntries) const;

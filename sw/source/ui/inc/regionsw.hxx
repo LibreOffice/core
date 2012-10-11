@@ -36,7 +36,7 @@
 #include <vcl/fixed.hxx>
 #include <vcl/combobox.hxx>
 #include <vcl/group.hxx>
-#include <svtools/svtreebx.hxx>
+#include <svtools/treelistbox.hxx>
 #include <sfx2/basedlgs.hxx>
 #include <sfx2/tabdlg.hxx>
 #include <editeng/brshitem.hxx>

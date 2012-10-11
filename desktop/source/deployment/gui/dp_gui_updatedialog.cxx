@@ -93,7 +93,7 @@
 #include "sal/types.h"
 #include "salhelper/thread.hxx"
 #include "svtools/svlbitm.hxx"
-#include "svtools/svlbox.hxx"
+#include "svtools/treelistbox.hxx"
 #include <svtools/controldims.hrc>
 #include "svx/checklbx.hxx"
 #include "tools/gen.hxx"

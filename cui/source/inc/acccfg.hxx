@@ -40,7 +40,7 @@
 #include <vcl/lstbox.hxx>
 #include <vcl/group.hxx>
 #include <svtools/svtabbx.hxx>
-#include <svtools/svtreebx.hxx>
+#include <svtools/treelistbox.hxx>
 #include <sfx2/tabdlg.hxx>
 #include <sfx2/basedlgs.hxx>
 #include <sfx2/minarray.hxx>

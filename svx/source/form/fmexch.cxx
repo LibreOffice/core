@@ -32,7 +32,7 @@
 #include <svl/itempool.hxx>
 
 #include <sot/formats.hxx>
-#include <svtools/svtreebx.hxx>
+#include <svtools/treelistbox.hxx>
 #include <tools/diagnose_ex.h>
 
 

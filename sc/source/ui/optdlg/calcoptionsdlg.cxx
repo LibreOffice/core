@@ -42,10 +42,10 @@ public:
     OptionString(const rtl::OUString& rDesc, const rtl::OUString& rValue) :
         maDesc(rDesc), maValue(rValue) {}
 
-    virtual void Paint(const Point& rPos, SvLBox& rDev, sal_uInt16 nFlags, SvLBoxEntry* pEntry);
+    virtual void Paint(const Point& rPos, SvTreeListBox& rDev, sal_uInt16 nFlags, SvLBoxEntry* pEntry);
 };
 
-void OptionString::Paint(const Point& rPos, SvLBox& rDev, sal_uInt16 /*nFlags*/, SvLBoxEntry* /*pEntry*/)
+void OptionString::Paint(const Point& rPos, SvTreeListBox& rDev, sal_uInt16 /*nFlags*/, SvLBoxEntry* /*pEntry*/)
 {
     Point aPos = rPos;
     rtl::OUString aDesc = maDesc + rtl::OUString(": ");

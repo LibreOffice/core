@@ -19,7 +19,7 @@
 #ifndef DBAUI_TABLEWINDOWLISTBOX_HXX
 #define DBAUI_TABLEWINDOWLISTBOX_HXX
 
-#include <svtools/svtreebx.hxx>
+#include <svtools/treelistbox.hxx>
 #include "callbacks.hxx"
 
 struct AcceptDropEvent;

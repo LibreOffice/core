@@ -3130,7 +3130,7 @@ public:
     SwContentLBoxString( SvLBoxEntry* pEntry, sal_uInt16 nFlags,
         const String& rStr ) : SvLBoxString(pEntry,nFlags,rStr) {}
 
-    virtual void Paint( const Point& rPos, SvLBox& rDev, sal_uInt16 nFlags,
+    virtual void Paint( const Point& rPos, SvTreeListBox& rDev, sal_uInt16 nFlags,
         SvLBoxEntry* pEntry);
 };
 
@@ -3145,7 +3145,7 @@ void SwContentTree::InitEntry(SvLBoxEntry* pEntry,
     pEntry->ReplaceItem( pStr, nColToHilite );
 }
 
-void SwContentLBoxString::Paint( const Point& rPos, SvLBox& rDev, sal_uInt16 nFlags,
+void SwContentLBoxString::Paint( const Point& rPos, SvTreeListBox& rDev, sal_uInt16 nFlags,
     SvLBoxEntry* pEntry )
 {
     if(lcl_IsContent(pEntry) &&

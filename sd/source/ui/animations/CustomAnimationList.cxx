@@ -45,6 +45,8 @@
 #include <vcl/svapp.hxx>
 #include "sdresid.hxx"
 
+#include "svtools/svlbitm.hxx"
+
 #include "res_bmp.hrc"
 #include "glob.hrc"
 
@@ -210,8 +212,8 @@ class CustomAnimationListEntryItem : public SvLBoxString
 public:
                     CustomAnimationListEntryItem( SvLBoxEntry*,sal_uInt16 nFlags, OUString aDescription, CustomAnimationEffectPtr pEffect, CustomAnimationList* pParent  );
     virtual         ~CustomAnimationListEntryItem();
-    void            InitViewData( SvLBox*,SvLBoxEntry*,SvViewDataItem* );
-    void            Paint( const Point&, SvLBox& rDev, sal_uInt16 nFlags,SvLBoxEntry* );
+    void            InitViewData( SvTreeListBox*,SvLBoxEntry*,SvViewDataItem* );
+    void            Paint( const Point&, SvTreeListBox& rDev, sal_uInt16 nFlags,SvLBoxEntry* );
     SvLBoxItem*     Create() const;
     void            Clone( SvLBoxItem* pSource );
 
@@ -239,7 +241,7 @@ CustomAnimationListEntryItem::~CustomAnimationListEntryItem()
 
 // --------------------------------------------------------------------
 
-void CustomAnimationListEntryItem::InitViewData( SvLBox* pView, SvLBoxEntry* pEntry, SvViewDataItem* pViewData )
+void CustomAnimationListEntryItem::InitViewData( SvTreeListBox* pView, SvLBoxEntry* pEntry, SvViewDataItem* pViewData )
 {
     if( !pViewData )
         pViewData = pView->GetViewDataItem( pEntry, this );
@@ -252,7 +254,7 @@ void CustomAnimationListEntryItem::InitViewData( SvLBox* pView, SvLBoxEntry* pEn
 
 // --------------------------------------------------------------------
 
-void CustomAnimationListEntryItem::Paint( const Point& rPos, SvLBox& rDev, sal_uInt16, SvLBoxEntry* pEntry )
+void CustomAnimationListEntryItem::Paint( const Point& rPos, SvTreeListBox& rDev, sal_uInt16, SvLBoxEntry* pEntry )
 {
 
     SvViewDataItem* pViewData = mpParent->GetViewDataItem( pEntry, this );
@@ -361,8 +363,8 @@ public:
                     CustomAnimationTriggerEntryItem( SvLBoxEntry*,sal_uInt16 nFlags, OUString aDescription );
     virtual         ~CustomAnimationTriggerEntryItem();
     virtual sal_uInt16  IsA();
-    void            InitViewData( SvLBox*,SvLBoxEntry*,SvViewDataItem* );
-    void            Paint( const Point&, SvLBox& rDev, sal_uInt16 nFlags,SvLBoxEntry* );
+    void            InitViewData( SvTreeListBox*,SvLBoxEntry*,SvViewDataItem* );
+    void            Paint( const Point&, SvTreeListBox& rDev, sal_uInt16 nFlags,SvLBoxEntry* );
     SvLBoxItem*     Create() const;
     void            Clone( SvLBoxItem* pSource );
 
@@ -392,7 +394,7 @@ sal_uInt16 CustomAnimationTriggerEntryItem::IsA()
 
 // --------------------------------------------------------------------
 
-void CustomAnimationTriggerEntryItem::InitViewData( SvLBox* pView, SvLBoxEntry* pEntry, SvViewDataItem* pViewData )
+void CustomAnimationTriggerEntryItem::InitViewData( SvTreeListBox* pView, SvLBoxEntry* pEntry, SvViewDataItem* pViewData )
 {
     if( !pViewData )
         pViewData = pView->GetViewDataItem( pEntry, this );
@@ -405,7 +407,7 @@ void CustomAnimationTriggerEntryItem::InitViewData( SvLBox* pView, SvLBoxEntry* 
 
 // --------------------------------------------------------------------
 
-void CustomAnimationTriggerEntryItem::Paint( const Point& rPos, SvLBox& rDev, sal_uInt16, SvLBoxEntry* )
+void CustomAnimationTriggerEntryItem::Paint( const Point& rPos, SvTreeListBox& rDev, sal_uInt16, SvLBoxEntry* )
 {
     Size aSize( rDev.GetOutputSizePixel().Width(), static_cast< SvTreeListBox* >(&rDev)->GetEntryHeight() );
 

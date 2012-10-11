@@ -35,7 +35,7 @@
 #include <vcl/group.hxx>
 #include <vcl/field.hxx>
 #include <vcl/edit.hxx>
-#include <svtools/svtreebx.hxx>
+#include <svtools/treelistbox.hxx>
 
 #include <sane.hxx>
 

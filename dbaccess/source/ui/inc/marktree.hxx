@@ -22,6 +22,7 @@
 
 #include "dbtreelistbox.hxx"
 
+#include "svtools/svlbitm.hxx"
 
 
 //.........................................................................

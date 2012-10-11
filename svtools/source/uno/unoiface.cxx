@@ -44,7 +44,7 @@
 #include <svl/numuno.hxx>
 #include <svtools/calendar.hxx>
 #include <svtools/prgsbar.hxx>
-#include <svtools/svtreebx.hxx>
+#include <svtools/treelistbox.hxx>
 #include "treecontrolpeer.hxx"
 #include "svtxgridcontrol.hxx"
 #include <svtools/table/tablecontrol.hxx>

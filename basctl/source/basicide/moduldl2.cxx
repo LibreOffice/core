@@ -40,6 +40,7 @@
 #include <sfx2/request.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/diagnose_ex.h>
+#include <svtools/svlbitm.hxx>
 
 #include <sot/storage.hxx>
 #include <com/sun/star/io/Pipe.hpp>
@@ -121,12 +122,12 @@ public:
     LibLBoxString( SvLBoxEntry* pEntry, sal_uInt16 nFlags, const String& rTxt ) :
         SvLBoxString( pEntry, nFlags, rTxt ) {}
 
-    virtual void Paint( const Point& rPos, SvLBox& rDev, sal_uInt16 nFlags, SvLBoxEntry* pEntry );
+    virtual void Paint( const Point& rPos, SvTreeListBox& rDev, sal_uInt16 nFlags, SvLBoxEntry* pEntry );
 };
 
 //----------------------------------------------------------------------------
 
-void LibLBoxString::Paint( const Point& rPos, SvLBox& rDev, sal_uInt16, SvLBoxEntry* pEntry )
+void LibLBoxString::Paint( const Point& rPos, SvTreeListBox& rDev, sal_uInt16, SvLBoxEntry* pEntry )
 {
     // Change text color if library is read only:
     bool bReadOnly = false;
@@ -1445,7 +1446,7 @@ void LibPage::DeleteCurrent()
         if ( xDlgLibContainer.is() && xDlgLibContainer->hasByName( aOULibName ) )
             xDlgLibContainer->removeLibrary( aOULibName );
 
-        static_cast<SvLBox&>(aLibBox).GetModel()->Remove( pCurEntry );
+        static_cast<SvTreeListBox&>(aLibBox).GetModel()->Remove( pCurEntry );
         MarkDocumentModified( m_aCurDocument );
     }
 }

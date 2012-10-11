@@ -40,7 +40,7 @@ namespace com { namespace sun { namespace star { namespace text { class XTextRan
 #include <vcl/button.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/dialog.hxx>
-#include <svtools/svtreebx.hxx>
+#include <svtools/treelistbox.hxx>
 #include <unotools/moduleoptions.hxx>
 
 #include "srchdlg.hxx"

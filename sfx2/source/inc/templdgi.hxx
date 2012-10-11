@@ -25,7 +25,7 @@ class SfxTemplateControllerItem;
 #include <vcl/toolbox.hxx>
 #include <vcl/lstbox.hxx>
 #include <svl/lstner.hxx>
-#include <svtools/svtreebx.hxx>
+#include <svtools/treelistbox.hxx>
 #include <svl/eitem.hxx>
 
 #include <rsc/rscsfx.hxx>
@@ -68,7 +68,7 @@ public:
 
     virtual void     MouseButtonDown( const MouseEvent& rMEvt );
     virtual sal_Int8 AcceptDrop( const AcceptDropEvent& rEvt );
-    using SvLBox::ExecuteDrop;
+    using SvTreeListBox::ExecuteDrop;
     virtual sal_Int8 ExecuteDrop( const ExecuteDropEvent& rEvt );
 
     sal_uInt16           GetModifier() const { return nModifier; }

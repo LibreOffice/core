@@ -628,10 +628,8 @@ class SfxAccCfgLBoxString_Impl : public SvLBoxString
 
     virtual ~SfxAccCfgLBoxString_Impl();
 
-    virtual void Paint(const Point&       aPos   ,
-                             SvLBox&      rDevice,
-                             sal_uInt16       nFlags ,
-                             SvLBoxEntry* pEntry );
+    virtual void Paint(
+        const Point& aPos, SvTreeListBox& rDevice, sal_uInt16 nFlags, SvLBoxEntry* pEntry);
 };
 
 //-----------------------------------------------
@@ -647,13 +645,9 @@ SfxAccCfgLBoxString_Impl::~SfxAccCfgLBoxString_Impl()
 {
 }
 
-//-----------------------------------------------
-void SfxAccCfgLBoxString_Impl::Paint(const Point&       aPos   ,
-                                           SvLBox&      rDevice,
-                                           sal_uInt16       /*nFlags*/,
-                                           SvLBoxEntry* pEntry )
+void SfxAccCfgLBoxString_Impl::Paint(
+    const Point& aPos, SvTreeListBox& rDevice, sal_uInt16 /*nFlags*/, SvLBoxEntry* pEntry)
 {
-
     if (!pEntry)
         return;
 

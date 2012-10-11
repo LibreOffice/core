@@ -24,7 +24,7 @@
 #include <memory>
 #include "tools/solar.h"
 
-#include <svtools/svtreebx.hxx>
+#include <svtools/treelistbox.hxx>
 #include <svl/lstner.hxx>
 #include <basic/sbstar.hxx>
 #include <sbxitem.hxx>

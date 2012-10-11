@@ -29,7 +29,7 @@
 #define _SVTABBX_HXX
 
 #include "svtools/svtdllapi.h"
-#include <svtools/svtreebx.hxx>
+#include <svtools/treelistbox.hxx>
 #include <svtools/accessibletableprovider.hxx>
 
 #include <vector>

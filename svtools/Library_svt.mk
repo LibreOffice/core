@@ -101,11 +101,10 @@ $(eval $(call gb_Library_add_exception_objects,svt,\
     svtools/source/contnr/ivctrl \
     svtools/source/contnr/svimpbox \
     svtools/source/contnr/svlbitm \
-    svtools/source/contnr/svlbox \
     svtools/source/contnr/svtabbx \
-    svtools/source/contnr/svtreebx \
     svtools/source/contnr/templwin \
     svtools/source/contnr/treelist \
+    svtools/source/contnr/treelistbox \
     svtools/source/control/asynclink \
     svtools/source/control/calendar \
     svtools/source/control/collatorres \

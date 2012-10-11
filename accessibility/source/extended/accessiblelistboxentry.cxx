@@ -18,7 +18,7 @@
  */
 
 #include "accessibility/extended/accessiblelistboxentry.hxx"
-#include <svtools/svtreebx.hxx>
+#include <svtools/treelistbox.hxx>
 #include <svtools/stringtransfer.hxx>
 #include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/awt/Rectangle.hpp>

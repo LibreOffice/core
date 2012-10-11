@@ -37,7 +37,7 @@
 #include <vcl/lstbox.hxx>
 #include <svtools/svmedit.hxx>
 #include <svtools/headbar.hxx>
-#include <svtools/svtreebx.hxx>
+#include <svtools/treelistbox.hxx>
 #include <vcl/combobox.hxx>
 #include <svl/lstner.hxx>
 class SwMailMergeWizard;

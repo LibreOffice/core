@@ -64,7 +64,7 @@ SvLBoxItem* SvLBoxFontString::Create() const
     return new SvLBoxFontString;
 }
 
-void SvLBoxFontString::Paint( const Point& rPos, SvLBox& rDev, sal_uInt16 nFlags, SvLBoxEntry* pEntry )
+void SvLBoxFontString::Paint( const Point& rPos, SvTreeListBox& rDev, sal_uInt16 nFlags, SvLBoxEntry* pEntry )
 {
     DBG_CHKTHIS( SvLBoxFontString, 0 );
     Font aOldFont( rDev.GetFont() );
@@ -81,7 +81,7 @@ void SvLBoxFontString::Paint( const Point& rPos, SvLBox& rDev, sal_uInt16 nFlags
     rDev.SetFont( aOldFont );
 }
 
-void SvLBoxFontString::InitViewData( SvLBox* pView, SvLBoxEntry* pEntry, SvViewDataItem* pViewData )
+void SvLBoxFontString::InitViewData( SvTreeListBox* pView, SvLBoxEntry* pEntry, SvViewDataItem* pViewData )
 {
     DBG_CHKTHIS( SvLBoxFontString, 0 );
     Font aOldFont( pView->GetFont() );

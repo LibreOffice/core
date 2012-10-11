@@ -80,7 +80,7 @@
 #include <com/sun/star/awt/XLayoutConstrains.hpp>
 #include <com/sun/star/awt/XProgressBar.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
-#include <svtools/svtreebx.hxx>
+#include <svtools/treelistbox.hxx>
 #include <label.hxx>
 #include <labimg.hxx>
 #include <vector>

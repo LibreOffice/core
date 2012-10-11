@@ -43,6 +43,7 @@
 #include <sfx2/filedlghelper.hxx>
 #include <svl/stritem.hxx>
 #include <svtools/miscopt.hxx>
+#include <svtools/svlbitm.hxx>
 #include <tools/diagnose_ex.h>
 #include <toolkit/unohlp.hxx>
 
@@ -1358,7 +1359,7 @@ public:
 
     ~PopupPainter() { }
 
-    void Paint( const Point& rPos, SvLBox& rOutDev,
+    void Paint( const Point& rPos, SvTreeListBox& rOutDev,
         sal_uInt16 nViewDataEntryFlags, SvLBoxEntry* pEntry )
     {
         SvLBoxString::Paint( rPos, rOutDev, nViewDataEntryFlags, pEntry );

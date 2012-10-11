@@ -21,7 +21,7 @@
 
 
 #include <vcl/dialog.hxx>
-#include <svtools/svtreebx.hxx>
+#include <svtools/treelistbox.hxx>
 
 #include <sfx2/objsh.hxx>
 #include "orgmgr.hxx"
@@ -68,7 +68,7 @@ protected:
     virtual long ExpandingHdl();
     virtual sal_Bool Select( SvLBoxEntry* pEntry, sal_Bool bSelect=sal_True );
 
-        using SvLBox::ExecuteDrop;
+        using SvTreeListBox::ExecuteDrop;
     // new d&d
     virtual DragDropMode    NotifyStartDrag( TransferDataContainer&, SvLBoxEntry* );
     virtual sal_Bool            NotifyAcceptDrop( SvLBoxEntry* );
@@ -97,13 +97,13 @@ public:
 
 private:
     sal_Bool IsStandard_Impl( SvLBoxEntry *) const;
-    sal_Bool MoveOrCopyTemplates(SvLBox *pSourceBox,
+    sal_Bool MoveOrCopyTemplates(SvTreeListBox *pSourceBox,
                             SvLBoxEntry *pSource,
                             SvLBoxEntry* pTarget,
                             SvLBoxEntry *&pNewParent,
                             sal_uIntPtr &rIdx,
                             sal_Bool bCopy);
-    sal_Bool MoveOrCopyContents(SvLBox *pSourceBox,
+    sal_Bool MoveOrCopyContents(SvTreeListBox *pSourceBox,
                             SvLBoxEntry *pSource,
                             SvLBoxEntry* pTarget,
                             SvLBoxEntry *&pNewParent,

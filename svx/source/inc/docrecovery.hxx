@@ -35,7 +35,8 @@
 #include <vcl/button.hxx>
 #include <vcl/fixed.hxx>
 #include <svtools/svmedit2.hxx>
-#include <svtools/svtreebx.hxx>
+#include <svtools/treelistbox.hxx>
+#include <svtools/svlbitm.hxx>
 #include <svx/simptabl.hxx>
 
 #include <cppuhelper/implbase1.hxx>
@@ -576,10 +577,8 @@ class RecovDocListEntry : public SvLBoxString
 
         //---------------------------------------
         /** @short TODO */
-        virtual void Paint(const Point&       aPos   ,
-                                 SvLBox&      aDevice,
-                                 sal_uInt16       nFlags ,
-                                 SvLBoxEntry* pEntry );
+        virtual void Paint(
+            const Point& aPos, SvTreeListBox& aDevice, sal_uInt16 nFlags, SvLBoxEntry* pEntry);
 };
 
 //===============================================

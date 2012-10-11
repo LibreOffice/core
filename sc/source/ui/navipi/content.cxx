@@ -39,6 +39,7 @@
 #include <vcl/svapp.hxx>
 #include <tools/urlobj.hxx>
 #include <svl/urlbmk.hxx>
+#include "svtools/svlbitm.hxx"
 #include <stdlib.h>
 
 #include "content.hxx"

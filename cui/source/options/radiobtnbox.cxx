@@ -20,6 +20,8 @@
 #include "radiobtnbox.hxx"
 #include <dialmgr.hxx>
 
+#include "svtools/svlbitm.hxx"
+
 namespace svx {
 
 // class SvxRadioButtonListBox ----------------------------------------------------

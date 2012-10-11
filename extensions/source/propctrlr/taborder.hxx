@@ -20,7 +20,7 @@
 #ifndef EXTENSIONS_SOURCE_PROPCTRLR_TABORDER_HXX
 #define EXTENSIONS_SOURCE_PROPCTRLR_TABORDER_HXX
 
-#include <svtools/svtreebx.hxx>
+#include <svtools/treelistbox.hxx>
 #include <com/sun/star/awt/XTabControllerModel.hpp>
 #include <com/sun/star/awt/XControlContainer.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>

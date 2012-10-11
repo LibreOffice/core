@@ -56,7 +56,7 @@ public:
     AlternativesString( ThesaurusAlternativesCtrl &rControl,
         SvLBoxEntry* pEntry, sal_uInt16 nFlags, const String& rStr );
 
-    virtual void Paint( const Point& rPos, SvLBox& rDev, sal_uInt16 nFlags, SvLBoxEntry* pEntry);
+    virtual void Paint( const Point& rPos, SvTreeListBox& rDev, sal_uInt16 nFlags, SvLBoxEntry* pEntry);
 };
 
 #endif

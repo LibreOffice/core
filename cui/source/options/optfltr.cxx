@@ -25,6 +25,8 @@
 #include "helpid.hrc"
 #include <dialmgr.hxx>
 
+#include "svtools/svlbitm.hxx"
+
 enum MSFltrPg2_CheckBoxEntries {
     Math,
     Writer,

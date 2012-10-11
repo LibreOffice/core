@@ -32,9 +32,9 @@
 
 #include <stack>
 
-#define _SVTREEBX_CXX
-#include <svtools/svtreebx.hxx>
-#include <svtools/svlbox.hxx>
+#include <svtools/treelistbox.hxx>
+#include <svtools/treelistbox.hxx>
+#include <svtools/svlbitm.hxx>
 #include <svimpbox.hxx>
 #include <rtl/instance.hxx>
 #include <svtools/svtresid.hxx>

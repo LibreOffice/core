@@ -47,7 +47,7 @@
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
 #include <com/sun/star/container/XIndexContainer.hpp>
 
-#include <svtools/svtreebx.hxx>
+#include <svtools/treelistbox.hxx>
 
 #include <vcl/dialog.hxx>
 #include <vcl/group.hxx>

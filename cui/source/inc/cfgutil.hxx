@@ -31,7 +31,7 @@
 #include <com/sun/star/script/browse/XBrowseNode.hpp>
 #include <vcl/timer.hxx>
 #include <svtools/svtabbx.hxx>
-#include <svtools/svtreebx.hxx>
+#include <svtools/treelistbox.hxx>
 #include <vcl/image.hxx>
 
 class SfxMacroInfoItem;

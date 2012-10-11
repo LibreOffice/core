@@ -19,7 +19,7 @@
 
 
 #include "dbtreeview.hxx"
-#include <svtools/svtreebx.hxx>
+#include <svtools/treelistbox.hxx>
 #include "dbtreelistbox.hxx"
 #include "dbtreemodel.hxx"
 #include "dbaccess_helpid.hrc"

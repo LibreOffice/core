@@ -29,7 +29,7 @@
 #ifndef SC_CONTENT_HXX
 #define SC_CONTENT_HXX
 
-#include <svtools/svtreebx.hxx>
+#include <svtools/treelistbox.hxx>
 #include "global.hxx"
 #include "address.hxx"
 #include <tools/solar.h>

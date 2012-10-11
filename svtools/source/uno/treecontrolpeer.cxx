@@ -27,7 +27,6 @@
  ************************************************************************/
 
 
-#define _SVTREEBX_CXX
 #include <com/sun/star/graphic/GraphicProvider.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
@@ -42,7 +41,8 @@
 #include <rtl/ref.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/svapp.hxx>
-#include <svtools/svtreebx.hxx>
+#include <svtools/treelistbox.hxx>
+#include <svtools/svlbitm.hxx>
 
 #include <map>
 
@@ -118,12 +118,12 @@ public:
                     UnoTreeListItem( SvLBoxEntry* );
                     UnoTreeListItem();
     virtual         ~UnoTreeListItem();
-    void            InitViewData( SvLBox*,SvLBoxEntry*,SvViewDataItem* );
+    void            InitViewData( SvTreeListBox*,SvLBoxEntry*,SvViewDataItem* );
     Image           GetImage() const;
     void            SetImage( const Image& rImage );
     OUString        GetGraphicURL() const;
     void            SetGraphicURL( const OUString& rGraphicURL );
-    void            Paint( const Point&, SvLBox& rDev, sal_uInt16 nFlags,SvLBoxEntry* );
+    void            Paint( const Point&, SvTreeListBox& rDev, sal_uInt16 nFlags,SvLBoxEntry* );
     SvLBoxItem*     Create() const;
     void            Clone( SvLBoxItem* pSource );
 
@@ -1608,7 +1608,7 @@ UnoTreeListItem::~UnoTreeListItem()
 
 // --------------------------------------------------------------------
 
-void UnoTreeListItem::Paint( const Point& rPos, SvLBox& rDev, sal_uInt16 /* nFlags */, SvLBoxEntry* _pEntry)
+void UnoTreeListItem::Paint( const Point& rPos, SvTreeListBox& rDev, sal_uInt16 /* nFlags */, SvLBoxEntry* _pEntry)
 {
     Point aPos( rPos );
     if( _pEntry )
@@ -1676,7 +1676,7 @@ void UnoTreeListItem::SetGraphicURL( const OUString& rGraphicURL )
 
 // --------------------------------------------------------------------
 
-void UnoTreeListItem::InitViewData( SvLBox* pView,SvLBoxEntry* pEntry, SvViewDataItem* pViewData)
+void UnoTreeListItem::InitViewData( SvTreeListBox* pView,SvLBoxEntry* pEntry, SvViewDataItem* pViewData)
 {
     if( !pViewData )
         pViewData = pView->GetViewDataItem( pEntry, this );

@@ -28,7 +28,7 @@
 
 #include <vcl/tabctrl.hxx>
 #include <vcl/button.hxx>
-#include <svtools/svtreebx.hxx>
+#include <svtools/treelistbox.hxx>
 
 #include <boost/shared_ptr.hpp>
 #include <vector>

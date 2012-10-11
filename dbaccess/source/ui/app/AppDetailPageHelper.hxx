@@ -26,7 +26,7 @@
 #include <com/sun/star/sdb/application/NamedDatabaseObject.hpp>
 #include <com/sun/star/ucb/XContent.hpp>
 #include "AppElementType.hxx"
-#include <svtools/svtreebx.hxx>
+#include <svtools/treelistbox.hxx>
 #include <svtools/DocumentInfoPreview.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/toolbox.hxx>

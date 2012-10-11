@@ -33,7 +33,7 @@
 #include <vcl/lstbox.hxx>
 #include <vcl/button.hxx>
 #include <vcl/group.hxx>
-#include <svtools/svtreebx.hxx>
+#include <svtools/treelistbox.hxx>
 
 #include "numfmtlb.hxx"
 #include "fldpage.hxx"

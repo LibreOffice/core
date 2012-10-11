@@ -22,6 +22,7 @@
 #include "macropg.hxx"
 #include <vcl/msgbox.hxx>
 #include <svtools/svmedit.hxx>
+#include <svtools/svlbitm.hxx>
 #include <svl/eitem.hxx>
 #include <tools/diagnose_ex.h>
 #include <sfx2/app.hxx>
@@ -434,7 +435,7 @@ class IconLBoxString : public SvLBoxString
     public:
         IconLBoxString( SvLBoxEntry* pEntry, sal_uInt16 nFlags, const String& sText,
             Image* pMacroImg, Image* pComponentImg );
-        virtual void Paint(const Point& aPos, SvLBox& aDevice, sal_uInt16 nFlags, SvLBoxEntry* pEntry );
+        virtual void Paint(const Point& aPos, SvTreeListBox& aDevice, sal_uInt16 nFlags, SvLBoxEntry* pEntry );
 };
 
 
@@ -448,7 +449,7 @@ IconLBoxString::IconLBoxString( SvLBoxEntry* pEntry, sal_uInt16 nFlags, const St
 }
 
 //===============================================
-void IconLBoxString::Paint( const Point& aPos, SvLBox& aDevice,
+void IconLBoxString::Paint( const Point& aPos, SvTreeListBox& aDevice,
                                sal_uInt16 /*nFlags*/, SvLBoxEntry* /*pEntry*/ )
 {
     String aTxt( GetText() );

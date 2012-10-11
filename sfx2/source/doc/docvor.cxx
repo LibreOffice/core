@@ -114,7 +114,7 @@ friend class SfxOrganizeListBox_Impl;
     Printer*                 pPrt;
 
     // save pointer for asynchronous D&D
-    SvLBox*                 pSourceView;
+    SvTreeListBox*                 pSourceView;
     SvLBoxEntry*            pTargetEntry;
     SfxOrganizeListBox_Impl* pFinishedBox;
     sal_Int8                nDropAction;
@@ -391,7 +391,7 @@ class Path
 {
     ImpPath_Impl *pData;
 public:
-    Path(SvLBox *pBox, SvLBoxEntry *pEntry);
+    Path(SvTreeListBox *pBox, SvLBoxEntry *pEntry);
     Path(const Path &rPath):
         pData(rPath.pData)
     {
@@ -422,7 +422,7 @@ public:
 
 //-------------------------------------------------------------------------
 
-Path::Path(SvLBox *pBox, SvLBoxEntry *pEntry) :
+Path::Path(SvTreeListBox *pBox, SvLBoxEntry *pEntry) :
     pData(new ImpPath_Impl)
 {
     DBG_ASSERT(pEntry != 0, "EntryPtr ist NULL");
@@ -441,7 +441,7 @@ Path::Path(SvLBox *pBox, SvLBoxEntry *pEntry) :
 
 //-------------------------------------------------------------------------
 
-SvLBoxEntry *GetIndices_Impl(SvLBox *pBox,
+SvLBoxEntry *GetIndices_Impl(SvTreeListBox *pBox,
                                SvLBoxEntry *pEntry,
                                sal_uInt16 &rRegion,
                                sal_uInt16 &rOffset)
@@ -451,7 +451,7 @@ SvLBoxEntry *GetIndices_Impl(SvLBox *pBox,
 
     [Parameter]
 
-    SvLBox *pBox            Listbox where the event occurred
+    SvTreeListBox *pBox            Listbox where the event occurred
     SvLBoxEntry *pEntry     Entry whose position is to be determined
     sal_uInt16 &rRegion         the region within the region of the
                             document template (Out-Parameter)
@@ -504,7 +504,7 @@ sal_Bool SfxOrganizeListBox_Impl::Select( SvLBoxEntry* pEntry, sal_Bool bSelect 
 
 //-------------------------------------------------------------------------
 
-sal_Bool SfxOrganizeListBox_Impl::MoveOrCopyTemplates(SvLBox *pSourceBox,
+sal_Bool SfxOrganizeListBox_Impl::MoveOrCopyTemplates(SvTreeListBox *pSourceBox,
                                             SvLBoxEntry *pSource,
                                             SvLBoxEntry* pTarget,
                                             SvLBoxEntry *&pNewParent,
@@ -516,7 +516,7 @@ sal_Bool SfxOrganizeListBox_Impl::MoveOrCopyTemplates(SvLBox *pSourceBox,
 
     [Parameter]
 
-    SvLBox *pSourceBox          Source Listbox, at which the event occurred
+    SvTreeListBox *pSourceBox          Source Listbox, at which the event occurred
     SvLBoxEntry* pTarget        Target entry, to where it will be moved
     SvLBoxEntry *pSource        Source entry, to be copied / moved
     SvLBoxEntry *&pNewParent    the parent of the target position generated
@@ -529,7 +529,7 @@ sal_Bool SfxOrganizeListBox_Impl::MoveOrCopyTemplates(SvLBox *pSourceBox,
 
     [Cross-references]
 
-    <SfxOrganizeListBox_Impl::MoveOrCopyContents(SvLBox *pSourceBox,
+    <SfxOrganizeListBox_Impl::MoveOrCopyContents(SvTreeListBox *pSourceBox,
                                             SvLBoxEntry *pSource,
                                             SvLBoxEntry* pTarget,
                                             SvLBoxEntry *&pNewParent,
@@ -577,7 +577,7 @@ sal_Bool SfxOrganizeListBox_Impl::MoveOrCopyTemplates(SvLBox *pSourceBox,
                     rIdx = 0;
                 }
                 else
-                    SvLBox::NotifyCopying(
+                    SvTreeListBox::NotifyCopying(
                         pTarget, pSource, pNewParent, rIdx);
             }
         }
@@ -595,7 +595,7 @@ sal_Bool SfxOrganizeListBox_Impl::MoveOrCopyTemplates(SvLBox *pSourceBox,
 
 //-------------------------------------------------------------------------
 
-sal_Bool SfxOrganizeListBox_Impl::MoveOrCopyContents(SvLBox *pSourceBox,
+sal_Bool SfxOrganizeListBox_Impl::MoveOrCopyContents(SvTreeListBox *pSourceBox,
                                             SvLBoxEntry *pSource,
                                             SvLBoxEntry* pTarget,
                                             SvLBoxEntry *&pNewParent,
@@ -607,7 +607,7 @@ sal_Bool SfxOrganizeListBox_Impl::MoveOrCopyContents(SvLBox *pSourceBox,
 
     [Parameter]
 
-    SvLBox *pSourceBox          Source Listbox, at which the event occurred
+    SvTreeListBox *pSourceBox          Source Listbox, at which the event occurred
     SvLBoxEntry* pTarget        Target entry, to where it will be moved
     SvLBoxEntry *pSource        Source entry, to be copied / moved
     SvLBoxEntry *&pNewParent    the parent of the target position generated
@@ -620,7 +620,7 @@ sal_Bool SfxOrganizeListBox_Impl::MoveOrCopyContents(SvLBox *pSourceBox,
 
     [Cross-references]
 
-    <SfxOrganizeListBox_Impl::MoveOrCopyTemplates(SvLBox *pSourceBox,
+    <SfxOrganizeListBox_Impl::MoveOrCopyTemplates(SvTreeListBox *pSourceBox,
                                             SvLBoxEntry *pSource,
                                             SvLBoxEntry* pTarget,
                                             SvLBoxEntry *&pNewParent,
@@ -769,13 +769,13 @@ sal_Bool SfxOrganizeListBox_Impl::NotifyMoving(SvLBoxEntry *pTarget,
 
     [Cross-references]
 
-    <SfxOrganizeListBox_Impl::MoveOrCopyTemplates(SvLBox *pSourceBox,
+    <SfxOrganizeListBox_Impl::MoveOrCopyTemplates(SvTreeListBox *pSourceBox,
                                             SvLBoxEntry *pSource,
                                             SvLBoxEntry* pTarget,
                                             SvLBoxEntry *&pNewParent,
                                             sal_uIntPtr &rIdx,
                                             sal_Bool bCopy)>
-    <SfxOrganizeListBox_Impl::MoveOrCopyContents(SvLBox *pSourceBox,
+    <SfxOrganizeListBox_Impl::MoveOrCopyContents(SvTreeListBox *pSourceBox,
                                             SvLBoxEntry *pSource,
                                             SvLBoxEntry* pTarget,
                                             SvLBoxEntry *&pNewParent,
@@ -789,7 +789,7 @@ sal_Bool SfxOrganizeListBox_Impl::NotifyMoving(SvLBoxEntry *pTarget,
 
 {
     sal_Bool bOk =  sal_False;
-    SvLBox* pSourceBox = GetSourceView();
+    SvTreeListBox* pSourceBox = GetSourceView();
     if ( !pSourceBox )
         pSourceBox = pDlg->pSourceView;
     DBG_ASSERT( pSourceBox, "no source view" );
@@ -828,13 +828,13 @@ sal_Bool SfxOrganizeListBox_Impl::NotifyCopying(SvLBoxEntry *pTarget,
 
     [Cross-references]
 
-    <SfxOrganizeListBox_Impl::MoveOrCopyTemplates(SvLBox *pSourceBox,
+    <SfxOrganizeListBox_Impl::MoveOrCopyTemplates(SvTreeListBox *pSourceBox,
                                             SvLBoxEntry *pSource,
                                             SvLBoxEntry* pTarget,
                                             SvLBoxEntry *&pNewParent,
                                             sal_uIntPtr &rIdx,
                                             sal_Bool bCopy)>
-    <SfxOrganizeListBox_Impl::MoveOrCopyContents(SvLBox *pSourceBox,
+    <SfxOrganizeListBox_Impl::MoveOrCopyContents(SvTreeListBox *pSourceBox,
                                             SvLBoxEntry *pSource,
                                             SvLBoxEntry* pTarget,
                                             SvLBoxEntry *&pNewParent,
@@ -847,7 +847,7 @@ sal_Bool SfxOrganizeListBox_Impl::NotifyCopying(SvLBoxEntry *pTarget,
 */
 {
     sal_Bool bOk =  sal_False;
-    SvLBox* pSourceBox = GetSourceView();
+    SvTreeListBox* pSourceBox = GetSourceView();
     if ( !pSourceBox )
         pSourceBox = pDlg->pSourceView;
     DBG_ASSERT( pSourceBox, "no source view" );
@@ -963,7 +963,7 @@ sal_Bool SfxOrganizeListBox_Impl::NotifyAcceptDrop( SvLBoxEntry* pEntry )
 {
     if(!pEntry)
         return sal_False;
-    SvLBox *pSource = GetSourceView();
+    SvTreeListBox *pSource = GetSourceView();
     SvLBoxEntry *pSourceEntry = pSource->FirstSelected();
     if(pEntry == pSourceEntry)
         return sal_False;
@@ -1203,11 +1203,11 @@ long SfxOrganizeListBox_Impl::ExpandingHdl()
             else
                 pMgr->DeleteObjectShell(aPath[0], aPath[1]);
             // Delete all SubEntries
-            SvLBoxEntry *pToDel = SvLBox::GetEntry(pEntry, 0);
+            SvLBoxEntry *pToDel = SvTreeListBox::GetEntry(pEntry, 0);
             while(pToDel)
             {
                 GetModel()->Remove(pToDel);
-                pToDel = SvLBox::GetEntry(pEntry, 0);
+                pToDel = SvTreeListBox::GetEntry(pEntry, 0);
             }
         }
     }
@@ -1333,7 +1333,7 @@ IMPL_LINK( SfxOrganizeListBox_Impl, OnAsyncExecuteDrop, ExecuteDropEvent*, pEven
     DBG_ASSERT( pEvent, "invalid DropEvent" );
     if ( pEvent )
     {
-        SvLBox* pSourceView = GetSourceView();
+        SvTreeListBox* pSourceView = GetSourceView();
         if ( !pSourceView )
             pSourceView = pDlg->pSourceView;
         pDlg->bExecDropFinished = false;

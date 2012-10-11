@@ -62,6 +62,7 @@
 #include <tools/shl.hxx>
 #include <vcl/wrkwin.hxx>
 #include <tools/diagnose_ex.h>
+#include <svtools/svlbitm.hxx>
 
 #include <functional>
 
@@ -1040,13 +1041,13 @@ public:
     FmFilterItemsString( SvLBoxEntry* pEntry, sal_uInt16 nFlags,    const XubString& rStr )
         :SvLBoxString(pEntry,nFlags,rStr){}
 
-    virtual void Paint(const Point& rPos, SvLBox& rDev, sal_uInt16 nFlags, SvLBoxEntry* pEntry);
-    virtual void InitViewData( SvLBox* pView,SvLBoxEntry* pEntry, SvViewDataItem* pViewData);
+    virtual void Paint(const Point& rPos, SvTreeListBox& rDev, sal_uInt16 nFlags, SvLBoxEntry* pEntry);
+    virtual void InitViewData( SvTreeListBox* pView,SvLBoxEntry* pEntry, SvViewDataItem* pViewData);
 };
 
 const int nxDBmp = 12;
 //------------------------------------------------------------------------
-void FmFilterItemsString::Paint(const Point& rPos, SvLBox& rDev, sal_uInt16 /*nFlags*/, SvLBoxEntry* pEntry )
+void FmFilterItemsString::Paint(const Point& rPos, SvTreeListBox& rDev, sal_uInt16 /*nFlags*/, SvLBoxEntry* pEntry )
 {
     FmFilterItems* pRow = (FmFilterItems*)pEntry->GetUserData();
     FmFormItem* pForm = (FmFormItem*)pRow->GetParent();
@@ -1079,7 +1080,7 @@ void FmFilterItemsString::Paint(const Point& rPos, SvLBox& rDev, sal_uInt16 /*nF
 }
 
 //------------------------------------------------------------------------
-void FmFilterItemsString::InitViewData( SvLBox* pView,SvLBoxEntry* pEntry, SvViewDataItem* pViewData)
+void FmFilterItemsString::InitViewData( SvTreeListBox* pView,SvLBoxEntry* pEntry, SvViewDataItem* pViewData)
 {
     if( !pViewData )
         pViewData = pView->GetViewDataItem( pEntry, this );
@@ -1104,14 +1105,14 @@ public:
         m_aName.AppendAscii(": ");
     }
 
-    virtual void Paint(const Point& rPos, SvLBox& rDev, sal_uInt16 nFlags, SvLBoxEntry* pEntry);
-    virtual void InitViewData( SvLBox* pView,SvLBoxEntry* pEntry, SvViewDataItem* pViewData);
+    virtual void Paint(const Point& rPos, SvTreeListBox& rDev, sal_uInt16 nFlags, SvLBoxEntry* pEntry);
+    virtual void InitViewData( SvTreeListBox* pView,SvLBoxEntry* pEntry, SvViewDataItem* pViewData);
 };
 
 const int nxD = 4;
 
 //------------------------------------------------------------------------
-void FmFilterString::InitViewData( SvLBox* pView,SvLBoxEntry* pEntry, SvViewDataItem* pViewData)
+void FmFilterString::InitViewData( SvTreeListBox* pView,SvLBoxEntry* pEntry, SvViewDataItem* pViewData)
 {
     if( !pViewData )
         pViewData = pView->GetViewDataItem( pEntry, this );
@@ -1128,7 +1129,7 @@ void FmFilterString::InitViewData( SvLBox* pView,SvLBoxEntry* pEntry, SvViewData
 }
 
 //------------------------------------------------------------------------
-void FmFilterString::Paint(const Point& rPos, SvLBox& rDev, sal_uInt16 /*nFlags*/, SvLBoxEntry* /*pEntry*/ )
+void FmFilterString::Paint(const Point& rPos, SvTreeListBox& rDev, sal_uInt16 /*nFlags*/, SvLBoxEntry* /*pEntry*/ )
 {
     Font aOldFont( rDev.GetFont());
     Font aFont( aOldFont );

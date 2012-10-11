@@ -40,7 +40,7 @@
 #include <comphelper/types.hxx>
 #include "cppuhelper/basemutex.hxx"
 #include "comphelper/SelectionMultiplex.hxx"
-#include <svtools/svtreebx.hxx>
+#include <svtools/treelistbox.hxx>
 #include <svl/solar.hrc>
 #include "ReportVisitor.hxx"
 #include "ModuleHelper.hxx"

@@ -35,7 +35,7 @@
 #include "pres.hxx"
 #include "sddllapi.h"
 #include <tools/string.hxx>
-#include <svtools/svtreebx.hxx>
+#include <svtools/treelistbox.hxx>
 #include <svl/urlbmk.hxx>
 #include <tools/ref.hxx>
 #include "sdxfer.hxx"
@@ -223,7 +223,7 @@ public:
     sal_Bool                    IsLinkableSelected() const { return mbLinkableSelected; }
 
     static sal_Bool             IsInDrag();
-    using SvLBox::ExecuteDrop;
+    using SvTreeListBox::ExecuteDrop;
 
     using SvTreeListBox::SelectEntry;
 private:

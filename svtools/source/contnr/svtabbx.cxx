@@ -29,6 +29,7 @@
 #include <svtools/svtabbx.hxx>
 #include <svtools/headbar.hxx>
 #include <svtools/svtresid.hxx>
+#include <svtools/svlbitm.hxx>
 #include <svtools/svtools.hrc>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
@@ -838,12 +839,12 @@ sal_Bool SvHeaderTabListBox::GoToCell( sal_Int32 _nRow, sal_uInt16 _nColumn )
 // -----------------------------------------------------------------------
 void SvHeaderTabListBox::SetNoSelection()
 {
-    SvLBox::SelectAll( sal_False );
+    SvTreeListBox::SelectAll(false);
 }
 // -----------------------------------------------------------------------
 void SvHeaderTabListBox::SelectAll()
 {
-    SvLBox::SelectAll( sal_True );
+    SvTreeListBox::SelectAll(true);
 }
 // -----------------------------------------------------------------------
 void SvHeaderTabListBox::SelectAll( sal_Bool bSelect, sal_Bool bPaint )

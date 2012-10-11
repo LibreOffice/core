@@ -28,7 +28,8 @@
 #ifndef _CONTTREE_HXX
 #define _CONTTREE_HXX
 
-#include <svtools/svtreebx.hxx>
+#include "svtools/treelistbox.hxx"
+#include "svtools/svlbitm.hxx"
 #include "swcont.hxx"
 
 #include <map>
@@ -101,7 +102,7 @@ class SwContentTree : public SvTreeListBox
 
     void                FindActiveTypeAndRemoveUserData();
 
-    using SvLBox::ExecuteDrop;
+    using SvTreeListBox::ExecuteDrop;
     using SvTreeListBox::EditEntry;
     using SvListView::Expand;
     using SvListView::Collapse;
@@ -219,7 +220,7 @@ public:
     {
     }
 
-    virtual void Paint( const Point& rPos, SvLBox& rDev, sal_uInt16 nFlags,
+    virtual void Paint( const Point& rPos, SvTreeListBox& rDev, sal_uInt16 nFlags,
         SvLBoxEntry* pEntry);
 };
 
@@ -254,8 +255,8 @@ private:
 
     DECL_LINK(  DialogClosedHdl, sfx2::FileDialogHelper* );
 
-    using SvLBox::DoubleClickHdl;
-    using SvLBox::ExecuteDrop;
+    using SvTreeListBox::DoubleClickHdl;
+    using SvTreeListBox::ExecuteDrop;
     using Window::Update;
 
 protected:

@@ -18,7 +18,7 @@
  */
 
 #include <accessibility/extended/listboxaccessible.hxx>
-#include <svtools/svtreebx.hxx>
+#include <svtools/treelistbox.hxx>
 
 //........................................................................
 namespace accessibility

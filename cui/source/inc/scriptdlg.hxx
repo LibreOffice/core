@@ -24,7 +24,7 @@
 
 #include "tools/solar.h"
 
-#include <svtools/svtreebx.hxx>
+#include <svtools/treelistbox.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/button.hxx>
 #include <vcl/fixed.hxx>

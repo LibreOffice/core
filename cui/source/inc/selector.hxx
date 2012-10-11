@@ -23,7 +23,7 @@
 #include <vcl/fixed.hxx>
 #include <vcl/group.hxx>
 #include <vcl/menubtn.hxx>
-#include <svtools/svtreebx.hxx>
+#include <svtools/treelistbox.hxx>
 
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/frame/XFrame.hpp>

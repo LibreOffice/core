@@ -30,7 +30,7 @@
 
 #include <svtools/stdctrl.hxx>
 #include <svtools/svmedit.hxx>
-#include <svtools/svtreebx.hxx>
+#include <svtools/treelistbox.hxx>
 #include <svl/stritem.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/eitem.hxx>

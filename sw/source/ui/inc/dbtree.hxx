@@ -28,7 +28,7 @@
 #ifndef _DBTREE_HXX
 #define _DBTREE_HXX
 
-#include <svtools/svtreebx.hxx>
+#include <svtools/treelistbox.hxx>
 #include <com/sun/star/uno/Reference.h>
 
 #include "swdllapi.h"

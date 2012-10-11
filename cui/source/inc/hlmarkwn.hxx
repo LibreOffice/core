@@ -23,7 +23,7 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <vcl/dialog.hxx>
 #include <vcl/button.hxx>
-#include <svtools/svtreebx.hxx>
+#include <svtools/treelistbox.hxx>
 
 #include "hlmarkwn_def.hxx"
 class SvxHyperlinkTabPageBase;

@@ -45,8 +45,8 @@ namespace dbaui
 
         virtual sal_uInt16 IsA();
 
-        virtual void Paint(const Point& rPos, SvLBox& rDev, sal_uInt16 nFlags, SvLBoxEntry* pEntry);
-        virtual void InitViewData( SvLBox* pView,SvLBoxEntry* pEntry, SvViewDataItem* _pViewData);
+        virtual void Paint(const Point& rPos, SvTreeListBox& rDev, sal_uInt16 nFlags, SvLBoxEntry* pEntry);
+        virtual void InitViewData( SvTreeListBox* pView,SvLBoxEntry* pEntry, SvViewDataItem* _pViewData);
 
         sal_Bool    isEmphasized() const { return m_bEmphasized; }
         void        emphasize(sal_Bool _bEmphasize) { m_bEmphasized = _bEmphasize; }

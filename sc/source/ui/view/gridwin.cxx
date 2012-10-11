@@ -42,7 +42,6 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/docfile.hxx>
 #include <svl/stritem.hxx>
-#include <svtools/svlbox.hxx>
 #include <svtools/svtabbx.hxx>
 #include <svl/urlbmk.hxx>
 #include <vcl/cursor.hxx>

@@ -29,7 +29,7 @@
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <vcl/toolbox.hxx>
-#include <svtools/svtreebx.hxx>
+#include <svtools/treelistbox.hxx>
 #include <unotools/viewoptions.hxx>
 #include "indexes.hxx"
 #include "ToolBoxHelper.hxx"
