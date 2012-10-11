@@ -465,6 +465,7 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
     pyuno \
     pyuno_wrapper \
     recentfile \
+	librsvg-2-2 \
     scriptframe \
     sdbc2 \
     smoketest \

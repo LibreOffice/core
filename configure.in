@@ -11528,6 +11528,7 @@ internal|fully-internal)
     ENABLE_LIBRSVG=INTERNAL
     SYSTEM_LIBRSVG=NO
     BUILD_TYPE="$BUILD_TYPE LIBRSVG"
+	LIBRSVG_TARBALL="d7a242ca43e33e1b63d3073f9d46a6a8-librsvg-2.32.1.tar.gz"
     ;;
 
 no)
@@ -11541,6 +11542,7 @@ no)
 esac
 
 AC_SUBST(ENABLE_LIBRSVG)
+AC_SUBST(LIBRSVG_TARBALL)
 AC_SUBST(LIBRSVG_CFLAGS)
 AC_SUBST(LIBRSVG_LIBS)
 AC_SUBST(SYSTEM_LIBRSVG)
@@ -11812,6 +11814,7 @@ if test "$SYSTEM_LIBRSVG" = YES; then
     AC_MSG_RESULT([yes])
 elif test "$enable_librsvg" = fully-internal; then
     SYSTEM_LIBGSF=NO
+	
     AC_MSG_RESULT([no])
 else
     case "$_os" in

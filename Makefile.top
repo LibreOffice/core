@@ -101,6 +101,7 @@ libcmis\
 libmspub\
 liborcus\
 libpng\
+librsvg\
 libvisio\
 libwpd\
 libwpg\
@@ -225,7 +226,6 @@ libcroco\
 libexttextcat\
 libgsf\
 liblangtag\
-librsvg\
 libxml2\
 libxmlsec\
 libxslt\

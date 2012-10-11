@@ -98,6 +98,7 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
 	libmspub \
 	liborcus \
 	libpng \
+	$(call gb_Helper_optional,LIBRSVG,librsvg) \
 	libvisio \
 	libwpd \
 	libwpg \
