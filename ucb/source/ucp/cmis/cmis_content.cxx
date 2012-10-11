@@ -1005,6 +1005,9 @@ namespace cmis
             ( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "open" ) ),
               -1, getCppuType( static_cast<ucb::OpenCommandArgument2 * >( 0 ) ) ),
 
+            // Mandatory CMIS-only commands
+            ucb::CommandInfo ( rtl::OUString( "checkout" ), -1, getCppuVoidType() ),
+
             // Folder Only, omitted if not a folder
             ucb::CommandInfo
             ( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "transfer" ) ),
@@ -1176,6 +1179,49 @@ namespace cmis
                     libcmis::Folder* folder = dynamic_cast< libcmis::Folder* >( getObject( xEnv ).get() );
                     folder->removeTree( );
                 }
+            }
+            catch ( const libcmis::Exception& e )
+            {
+                SAL_INFO( "cmisucp", "Unexpected libcmis exception: " << e.what( ) );
+                ucbhelper::cancelCommandExecution(
+                                    ucb::IOErrorCode_GENERAL,
+                                    uno::Sequence< uno::Any >( 0 ),
+                                    xEnv,
+                                    rtl::OUString::createFromAscii( e.what() ) );
+            }
+        }
+        else if ( aCommand.Name == "checkout" )
+        {
+            try
+            {
+                // Checkout the document if possible
+                libcmis::DocumentPtr pDoc = boost::dynamic_pointer_cast< libcmis::Document >( getObject( xEnv ) );
+                if ( pDoc.get( ) == NULL )
+                {
+                    ucbhelper::cancelCommandExecution(
+                                        ucb::IOErrorCode_GENERAL,
+                                        uno::Sequence< uno::Any >( 0 ),
+                                        xEnv,
+                                        "Checkout only supported by documents" );
+                }
+                libcmis::DocumentPtr pPwc = pDoc->checkOut( );
+
+                // Compute the URL of the Private Working Copy (PWC)
+                URL aCmisUrl( m_sURL );
+                vector< string > aPaths = pPwc->getPaths( );
+                if ( !aPaths.empty() )
+                {
+                    string sPath = aPaths.front( );
+                    aCmisUrl.setObjectPath( STD_TO_OUSTR( sPath ) );
+                }
+                else
+                {
+                    // We may have unfiled PWC depending on the server, those
+                    // won't have any path, use their ID instead
+                    string sId = pPwc->getId( );
+                    aCmisUrl.setObjectId( STD_TO_OUSTR( sId ) );
+                }
+                aRet <<= aCmisUrl.asString( );
             }
             catch ( const libcmis::Exception& e )
             {

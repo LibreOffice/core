@@ -56,6 +56,7 @@ namespace cmis
             rtl::OUString& getUsername( ) { return m_sUser; }
             rtl::OUString& getPassword( ) { return m_sPass; }
             void setObjectPath( rtl::OUString sPath );
+            void setObjectId( rtl::OUString sId );
 
             rtl::OUString asString( );
     };

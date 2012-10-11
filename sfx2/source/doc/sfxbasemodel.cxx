@@ -2001,6 +2001,8 @@ void SAL_CALL SfxBaseModel::load(   const uno::Sequence< beans::PropertyValue >&
             }
         }
 
+        loadCmisProperties( );
+
         sal_Bool bHidden = sal_False;
         SFX_ITEMSET_ARG( pMedium->GetItemSet(), pHidItem, SfxBoolItem, SID_HIDDEN, sal_False);
         if ( pHidItem )
@@ -2540,6 +2542,74 @@ void SAL_CALL SfxBaseModel::setCmisPropertiesDisplayNames( const uno::Sequence< 
     throw ( uno::RuntimeException )
 {
     m_pData->m_cmisPropertiesDisplayNames = _cmispropertiesdisplaynames;
+}
+
+void SAL_CALL SfxBaseModel::checkOut(  ) throw ( uno::RuntimeException )
+{
+    SfxMedium* pMedium = m_pData->m_pObjectShell->GetMedium();
+    if ( pMedium )
+    {
+        try
+        {
+            ::ucbhelper::Content aContent( pMedium->GetName(),
+                uno::Reference<ucb::XCommandEnvironment>(),
+                comphelper::getProcessComponentContext() );
+
+            uno::Any aResult = aContent.executeCommand( "checkout", uno::Any( ) );
+            rtl::OUString sURL;
+            aResult >>= sURL;
+
+            m_pData->m_pObjectShell->GetMedium( )->SwitchDocumentToFile( sURL );
+            m_pData->m_xDocumentProperties->setTitle( getTitle( ) );
+            uno::Sequence< beans::PropertyValue > aSequence ;
+            TransformItems( SID_OPENDOC, *pMedium->GetItemSet(), aSequence );
+            attachResource( sURL, aSequence );
+
+            // Reload the CMIS properties
+            loadCmisProperties( );
+        }
+        catch (const ucb::ContentCreationException &)
+        {
+        }
+        catch (const ucb::CommandAbortedException &)
+        {
+        }
+    }
+}
+
+void SfxBaseModel::loadCmisProperties( )
+{
+    SfxMedium* pMedium = m_pData->m_pObjectShell->GetMedium();
+    if ( pMedium )
+    {
+        try
+        {
+            ::ucbhelper::Content aContent( pMedium->GetName( ),
+                uno::Reference<ucb::XCommandEnvironment>(),
+                comphelper::getProcessComponentContext() );
+            com::sun::star::uno::Reference < beans::XPropertySetInfo > xProps = aContent.getProperties();
+            ::rtl::OUString aCmisPropsValues( "CmisPropertiesValues" );
+            ::rtl::OUString aCmisPropsNames( "CmisPropertiesDisplayNames" );
+            if ( xProps->hasPropertyByName( aCmisPropsValues ) )
+            {
+                beans::PropertyValues aCmisValues;
+                aContent.getPropertyValue( aCmisPropsValues ) >>= aCmisValues;
+                setCmisPropertiesValues( aCmisValues );
+            }
+            if ( xProps->hasPropertyByName( aCmisPropsNames ) )
+            {
+                beans::PropertyValues aPropNames;
+                aContent.getPropertyValue( aCmisPropsNames ) >>= aPropNames;
+                setCmisPropertiesDisplayNames( aPropNames );
+            }
+        }
+        catch (const ucb::ContentCreationException &)
+        {
+        }
+        catch (const ucb::CommandAbortedException &)
+        {
+        }
+    }
 }
 
 //________________________________________________________________________________________________________
@@ -3587,6 +3657,7 @@ void SAL_CALL SfxBaseModel::loadFromStorage( const uno::Reference< XSTORAGE >& x
                                             uno::Reference< uno::XInterface >(),
                                             nError ? nError : ERRCODE_IO_CANTREAD );
     }
+    loadCmisProperties( );
 }
 
 void SAL_CALL SfxBaseModel::storeToStorage( const uno::Reference< XSTORAGE >& xStorage,

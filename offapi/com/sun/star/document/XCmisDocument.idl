@@ -19,6 +19,11 @@ module com {   module sun {   module star {   module document {
   */
 interface XCmisDocument : com::sun::star::uno::XInterface
 {
+    /** Check out the document into a private working copy on the
+        server, and update the loaded document to reflect this change.
+     */
+    void checkOut( );
+
     /** Contains the properties values named after their CMIS ID.
      */
     [attribute] com::sun::star::beans::PropertyValues CmisPropertiesValues;

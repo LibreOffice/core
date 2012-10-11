@@ -1421,6 +1421,7 @@ public:
                 ::com::sun::star::beans::PropertyValue >& _cmispropertiesdisplaynames )
         throw (::com::sun::star::uno::RuntimeException);
 
+    virtual void SAL_CALL checkOut(  ) throw ( ::com::sun::star::uno::RuntimeException );
 
     //____________________________________________________________________________________________________
     //  SfxListener
@@ -1541,6 +1542,8 @@ private:
                     ) const;
 
     SAL_DLLPRIVATE void NotifyModifyListeners_Impl() const;
+
+    SAL_DLLPRIVATE void loadCmisProperties();
 
 //________________________________________________________________________________________________________
 //  private variables and methods

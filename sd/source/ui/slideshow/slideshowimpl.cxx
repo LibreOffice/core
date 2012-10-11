@@ -44,6 +44,7 @@
 
 #include <toolkit/unohlp.hxx>
 
+#include <sfx2/infobar.hxx>
 #include <sfx2/imagemgr.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/docfile.hxx>
@@ -2570,7 +2571,8 @@ FncGetChildWindowId aShowChildren[] =
     &SvxIMapDlgChildWindow::GetChildWindowId,
     &SvxHlinkDlgWrapper::GetChildWindowId,
     &SfxTemplateDialogWrapper::GetChildWindowId,
-    &GalleryChildWindow::GetChildWindowId
+    &GalleryChildWindow::GetChildWindowId,
+    &SfxInfoBarContainerChild::GetChildWindowId
 };
 
 #define NAVIGATOR_CHILD_MASK        0x80000000UL

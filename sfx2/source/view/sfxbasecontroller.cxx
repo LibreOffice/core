@@ -63,6 +63,7 @@
 #include <sfx2/sfxresid.hxx>
 #include <workwin.hxx>
 #include <sfx2/objface.hxx>
+#include <sfx2/infobar.hxx>
 
 #include <osl/mutex.hxx>
 #include <tools/diagnose_ex.h>
@@ -1460,12 +1461,34 @@ void SfxBaseController::ShowInfoBars( )
                 SfxViewFrame* pViewFrame = m_pData->m_pViewShell->GetFrame();
                 std::vector< PushButton* > aButtons;
                 PushButton* pBtn = new PushButton( &pViewFrame->GetWindow(), SfxResId( BT_CHECKOUT ) );
-                // TODO Set the handler
+                pBtn->SetClickHdl( LINK( this, SfxBaseController, CheckOutHandler ) );
                 aButtons.push_back( pBtn );
                 pViewFrame->AppendInfoBar( SfxResId( STR_NONCHECKEDOUT_DOCUMENT ), aButtons );
             }
         }
     }
+}
+
+IMPL_LINK( SfxBaseController, CheckOutHandler, PushButton*, pBtn )
+{
+    if ( m_pData->m_pViewShell )
+    {
+        try
+        {
+            REFERENCE< document::XCmisDocument > xCmisDoc( m_pData->m_pViewShell->GetObjectShell()->GetModel(), uno::UNO_QUERY_THROW );
+            xCmisDoc->checkOut( );
+
+            // Remove the info bar
+            SfxInfoBarWindow* pInfoBar = ( SfxInfoBarWindow* )pBtn->GetParent( );
+            SfxViewFrame* pViewFrame = m_pData->m_pViewShell->GetFrame();
+            pViewFrame->RemoveInfoBar( pInfoBar );
+        }
+        catch ( const uno::RuntimeException& )
+        {
+            // TODO Handle the problem in some way?
+        }
+    }
+    return 0;
 }
 
 

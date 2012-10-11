@@ -3358,9 +3358,28 @@ void SfxViewFrame::AppendInfoBar( const rtl::OUString& sMessage, std::vector< Pu
     if ( !HasChildWindow( nId ) )
         ToggleChildWindow( nId );
     SfxChildWindow* pChild = GetChildWindow( nId );
-    SfxInfoBarContainerWindow* pInfoBars = ( SfxInfoBarContainerWindow* )pChild->GetWindow();
-    pInfoBars->appendInfoBar( sMessage, aButtons );
-    ShowChildWindow( nId );
+    if ( pChild )
+    {
+        SfxInfoBarContainerWindow* pInfoBars = ( SfxInfoBarContainerWindow* )pChild->GetWindow();
+        pInfoBars->appendInfoBar( sMessage, aButtons );
+        ShowChildWindow( nId );
+    }
+}
+
+void SfxViewFrame::RemoveInfoBar( SfxInfoBarWindow* pInfoBar )
+{
+    const sal_uInt16 nId = SfxInfoBarContainerChild::GetChildWindowId();
+
+    // Make sure the InfoBar container is visible
+    if ( !HasChildWindow( nId ) )
+        ToggleChildWindow( nId );
+    SfxChildWindow* pChild = GetChildWindow( nId );
+    if ( pChild )
+    {
+        SfxInfoBarContainerWindow* pInfoBars = ( SfxInfoBarContainerWindow* )pChild->GetWindow();
+        pInfoBars->removeInfoBar( pInfoBar );
+        ShowChildWindow( nId );
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
