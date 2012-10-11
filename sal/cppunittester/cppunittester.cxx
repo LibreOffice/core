@@ -224,7 +224,7 @@ SAL_IMPLEMENT_MAIN() {
         modules.push_back(new osl::Module(lib, SAL_LOADMODULE_GLOBAL));
         oslGenericFunction fn = modules.back().getFunctionSymbol(sym);
 #else
-        oslGenericFunction fn;
+        oslGenericFunction fn = 0;
         if (sym == "unoexceptionprotector")
             fn = (oslGenericFunction) unoexceptionprotector;
         else if (sym == "unobootstrapprotector")
