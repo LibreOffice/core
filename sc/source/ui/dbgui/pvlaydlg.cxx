@@ -105,7 +105,7 @@ ScDPLayoutDlg::ScDPLayoutDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pPar
         aFlAreas        ( this, ScResId( FL_OUTPUT ) ),
 
         aFtInArea       ( this, ScResId( FT_INAREA) ),
-        aEdInPos        ( this, ScResId( ED_INAREA) ),
+        aEdInPos        ( this, this, ScResId( ED_INAREA) ),
         aRbInPos        ( this, ScResId( RB_INAREA ), &aEdInPos, this ),
 
         aLbOutPos       ( this, ScResId( LB_OUTAREA ) ),
@@ -1742,7 +1742,7 @@ void ScDPLayoutDlg::SetActive()
         if ( pEditActive == &aEdInPos )
             EdInModifyHdl( NULL );
         else if ( pEditActive == &aEdOutPos )
-        EdModifyHdl( NULL );
+            EdModifyHdl( NULL );
     }
     else
     {
