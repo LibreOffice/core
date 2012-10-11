@@ -58,7 +58,8 @@ using ::rtl::OUStringToOString;
 namespace {
 
 //! TODO: this limit may change, is there a way to obtain it via API?
-const sal_Int16 API_MAXTAB          = 255;
+//! same value as MAXTAB in sc/inc/address.hxx
+const sal_Int16 API_MAXTAB          = 9999;
 
 const sal_Int32 OOX_MAXCOL          = static_cast< sal_Int32 >( (1 << 14) - 1 );
 const sal_Int32 OOX_MAXROW          = static_cast< sal_Int32 >( (1 << 20) - 1 );
