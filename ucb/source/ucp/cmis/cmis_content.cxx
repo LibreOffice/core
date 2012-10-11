@@ -274,6 +274,11 @@ namespace cmis
                         rUsername, rPassword, OUSTR_TO_STDSTR( m_aURL.getRepositoryId( ) ) );
                 m_pProvider->registerSession( sSessionId, m_pSession );
             }
+            else
+            {
+                // Silently fail as the user cancelled the authentication
+                throw uno::RuntimeException( );
+            }
         }
         return m_pSession;
     }
@@ -322,7 +327,7 @@ namespace cmis
                                 ucb::IOErrorCode_GENERAL,
                                 uno::Sequence< uno::Any >( 0 ),
                                 xEnv,
-                                rtl::OUString::createFromAscii( e.what() ) );
+                                rtl::OUString::createFromAscii( e.what( ) ) );
         }
         return bIsFolder;
     }
