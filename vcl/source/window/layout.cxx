@@ -912,12 +912,23 @@ void VclFrame::setAllocation(const Size &rAllocation)
         setLayoutAllocation(*pChild, aChildPos, aAllocation);
 }
 
+const Window *VclFrame::get_label_widget() const
+{
+    //The label widget is the last (of two) children
+    const Window *pChild = get_child();
+    const WindowImpl* pWindowImpl = ImplGetWindowImpl();
+    return pChild != pWindowImpl->mpLastChild ? pWindowImpl->mpLastChild : NULL;
+}
+
+Window *VclFrame::get_label_widget()
+{
+    return const_cast<Window*>(const_cast<const VclFrame*>(this)->get_label_widget());
+}
+
 void VclFrame::set_label(const rtl::OUString &rLabel)
 {
     //The label widget is the last (of two) children
-    Window *pChild = get_child();
-    WindowImpl* pWindowImpl = ImplGetWindowImpl();
-    Window *pLabel = pChild != pWindowImpl->mpLastChild ? pWindowImpl->mpLastChild : NULL;
+    Window *pLabel = get_label_widget();
     assert(pLabel);
     pLabel->SetText(rLabel);
 }
