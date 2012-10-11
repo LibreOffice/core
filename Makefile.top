@@ -90,6 +90,7 @@ idlc\
 io\
 javaunohelper\
 jfreereport\
+jpeg\
 jurt\
 jvmaccess\
 jvmfwk\
@@ -220,7 +221,6 @@ hunspell\
 hyphen\
 icu\
 instsetoo_native\
-jpeg\
 libcroco\
 libexttextcat\
 libgsf\
