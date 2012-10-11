@@ -1383,8 +1383,7 @@ css::uno::Reference< css::frame::XFrame > LoadEnv::impl_searchAlreadyLoaded()
     css::uno::Reference< css::frame::XFrame > xResult;
     if (xTask.is())
         xResult = xTask;
-    else
-    if (xHiddenTask.is())
+    else if (xHiddenTask.is())
         xResult = xHiddenTask;
 
     if (xResult.is())
@@ -1578,8 +1577,7 @@ void LoadEnv::impl_reactForLoadingState()
             if (pWindow && pWindow->IsSystemWindow())
                 ((WorkWindow*)pWindow)->Minimize();
         }
-        else
-        if (!bHidden)
+        else if (!bHidden)
         {
             // show frame ... if it's not still visible ...
             // But do nothing if it's already visible!

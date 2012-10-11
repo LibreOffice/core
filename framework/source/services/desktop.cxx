@@ -1068,8 +1068,7 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Desktop::findFrame( const ::r
     // I.II) "_top"
     //  We are top by definition
     //-----------------------------------------------------------------------------------------------------
-    else
-    if ( sTargetFrameName==SPECIALTARGET_TOP )
+    else if ( sTargetFrameName==SPECIALTARGET_TOP )
     {
         xTarget = this;
     }
@@ -1078,11 +1077,10 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Desktop::findFrame( const ::r
     // I.III) "_self", ""
     //  This mean this "frame" in every case.
     //-----------------------------------------------------------------------------------------------------
-    else
-    if (
-        ( sTargetFrameName==SPECIALTARGET_SELF ) ||
-        ( sTargetFrameName.isEmpty()           )
-       )
+    else if (
+             ( sTargetFrameName==SPECIALTARGET_SELF ) ||
+             ( sTargetFrameName.isEmpty()           )
+            )
     {
         xTarget = this;
     }
@@ -1414,8 +1412,7 @@ void SAL_CALL Desktop::handle( const css::uno::Reference< css::task::XInteractio
             xFilterSelect->select();
         }
     }
-    else
-    if( aRequest >>= aErrorCodeRequest )
+    else if( aRequest >>= aErrorCodeRequest )
     {
         sal_Bool bWarning = ((aErrorCodeRequest.ErrCode & ERRCODE_WARNING_MASK) == ERRCODE_WARNING_MASK);
         if (xApprove.is() && bWarning)
@@ -1427,8 +1424,7 @@ void SAL_CALL Desktop::handle( const css::uno::Reference< css::task::XInteractio
             bAbort = sal_True;
         }
     }
-    else
-    if( xAbort.is() )
+    else if( xAbort.is() )
     {
         xAbort->select();
         bAbort = sal_True;
