@@ -234,6 +234,14 @@ bool Edit::set_property(const rtl::OString &rKey, const rtl::OString &rValue)
         SetMaxWidthInChars(rValue.toInt32());
     else if (rKey == "editable")
         SetReadOnly(!toBool(rValue));
+    else if (rKey == "visibility")
+    {
+        WinBits nBits = GetStyle();
+        nBits &= ~(WB_PASSWORD);
+        if (!toBool(rValue))
+            nBits |= WB_PASSWORD;
+        SetStyle(nBits);
+    }
     else
         return Control::set_property(rKey, rValue);
     return true;
