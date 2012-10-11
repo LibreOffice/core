@@ -34,7 +34,7 @@
 #include <vcl/dllapi.h>
 
 
-class ImpSvMEdit;
+class ImpVclMEdit;
 class Timer;
 class ExtTextEngine;
 class ExtTextView;
@@ -42,7 +42,7 @@ class ExtTextView;
 class VCL_DLLPUBLIC VclMultiLineEdit : public Edit
 {
 private:
-    ImpSvMEdit*     pImpSvMEdit;
+    ImpVclMEdit*    pImpVclMEdit;
 
     XubString       aSaveValue;
     Link            aModifyHdlLink;
