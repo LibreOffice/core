@@ -395,6 +395,7 @@ sal_Bool ScCondFormatDlg::IsRefInputMode() const
     | SCA_COL_ABSOLUTE | SCA_ROW_ABSOLUTE | SCA_TAB_ABSOLUTE
 #define ABS_DREF          ABS_SREF \
     | SCA_COL2_ABSOLUTE | SCA_ROW2_ABSOLUTE | SCA_TAB2_ABSOLUTE
+#define ABS_DREF3D      ABS_DREF | SCA_TAB_3D
 
 void ScCondFormatDlg::SetReference(const ScRange& rRef, ScDocument*)
 {
@@ -408,7 +409,13 @@ void ScCondFormatDlg::SetReference(const ScRange& rRef, ScDocument*)
             RefInputStart(pEdit);
 
         rtl::OUString aRefStr;
-        rRef.Format( aRefStr, ABS_DREF, mpDoc, ScAddress::Details(mpDoc->GetAddressConvention(), 0, 0) );
+        sal_uInt16 n = 0;
+        if(mpLastEdit && mpLastEdit != &maEdRange)
+            n = ABS_DREF3D;
+        else
+            n = ABS_DREF;
+
+        rRef.Format( aRefStr, n, mpDoc, ScAddress::Details(mpDoc->GetAddressConvention(), 0, 0) );
         pEdit->SetRefString( aRefStr );
     }
 }
