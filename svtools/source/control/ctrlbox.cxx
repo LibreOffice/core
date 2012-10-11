@@ -1598,7 +1598,7 @@ void FontStyleBox::Fill( const XubString& rName, const FontList* pList )
     sal_Handle hFontInfo = pList->GetFirstFontInfo( rName );
     if ( hFontInfo )
     {
-        XubString   aStyleText;
+        OUString aStyleText;
         FontWeight  eLastWeight = WEIGHT_DONTKNOW;
         FontItalic  eLastItalic = ITALIC_NONE;
         FontWidth   eLastWidth = WIDTH_DONTKNOW;
@@ -1657,11 +1657,11 @@ void FontStyleBox::Fill( const XubString& rName, const FontList* pList )
                 {
                     // If we have two names for the same attributes
                     // we prefer the translated standard names
-                    const XubString& rAttrStyleText = pList->GetStyleName( eWeight, eItalic );
-                    if ( rAttrStyleText != aStyleText )
+                    const OUString& rAttrStyleText = pList->GetStyleName( eWeight, eItalic );
+                    if (rAttrStyleText != aStyleText)
                     {
-                        XubString aTempStyleText = pList->GetStyleName( aInfo );
-                        if ( rAttrStyleText == aTempStyleText )
+                        OUString aTempStyleText = pList->GetStyleName( aInfo );
+                        if (rAttrStyleText == aTempStyleText)
                             aStyleText = rAttrStyleText;
                         bInsert = GetEntryPos( aStyleText ) == LISTBOX_ENTRY_NOTFOUND;
                     }

@@ -32,7 +32,7 @@
 #include <boost/ptr_container/ptr_vector.hpp>
 
 #include "svtools/svtdllapi.h"
-
+#include <rtl/ustring.hxx>
 #include <sal/types.h>
 #include <vcl/metric.hxx>
 
@@ -147,27 +147,27 @@ von der FontList, sollte deshalb das Array nicht mehr referenziert werden.
 class SVT_DLLPUBLIC FontList
 {
 private:
-    XubString               maMapBoth;
-    XubString               maMapPrinterOnly;
-    XubString               maMapScreenOnly;
-    XubString               maMapSizeNotAvailable;
-    XubString               maMapStyleNotAvailable;
-    XubString               maMapNotAvailable;
-    XubString               maLight;
-    XubString               maLightItalic;
-    XubString               maNormal;
-    XubString               maNormalItalic;
-    XubString               maBold;
-    XubString               maBoldItalic;
-    XubString               maBlack;
-    XubString               maBlackItalic;
+    OUString                maMapBoth;
+    OUString                maMapPrinterOnly;
+    OUString                maMapScreenOnly;
+    OUString                maMapSizeNotAvailable;
+    OUString                maMapStyleNotAvailable;
+    OUString                maMapNotAvailable;
+    OUString                maLight;
+    OUString                maLightItalic;
+    OUString                maNormal;
+    OUString                maNormalItalic;
+    OUString                maBold;
+    OUString                maBoldItalic;
+    OUString                maBlack;
+    OUString                maBlackItalic;
     long*                   mpSizeAry;
     OutputDevice*           mpDev;
     OutputDevice*           mpDev2;
     boost::ptr_vector<ImplFontListNameInfo> maEntries;
 #ifdef CTRLTOOL_CXX
-    SVT_DLLPRIVATE ImplFontListNameInfo*    ImplFind( const XubString& rSearchName, sal_uLong* pIndex ) const;
-    SVT_DLLPRIVATE ImplFontListNameInfo*    ImplFindByName( const XubString& rStr ) const;
+    SVT_DLLPRIVATE ImplFontListNameInfo*    ImplFind( const OUString& rSearchName, sal_uLong* pIndex ) const;
+    SVT_DLLPRIVATE ImplFontListNameInfo*    ImplFindByName( const OUString& rStr ) const;
     SVT_DLLPRIVATE void                 ImplInsertFonts( OutputDevice* pDev, sal_Bool bAll,
                                              sal_Bool bInsertData );
 #endif
@@ -183,25 +183,27 @@ public:
     OutputDevice*           GetDevice() const { return mpDev; }
     OutputDevice*           GetDevice2() const { return mpDev2; }
 
-    const XubString&        GetNormalStr() const { return maNormal; }
-    const XubString&        GetItalicStr() const { return maNormalItalic; }
-    const XubString&        GetBoldStr() const { return maBold; }
-    const XubString&        GetBoldItalicStr() const { return maBoldItalic; }
-    const XubString&        GetStyleName( FontWeight eWeight, FontItalic eItalic ) const;
-    XubString               GetStyleName( const FontInfo& rInfo ) const;
+    const OUString&         GetNormalStr() const { return maNormal; }
+    const OUString&         GetItalicStr() const { return maNormalItalic; }
+    const OUString&         GetBoldStr() const { return maBold; }
+    const OUString&         GetBoldItalicStr() const { return maBoldItalic; }
+    const OUString&         GetStyleName( FontWeight eWeight, FontItalic eItalic ) const;
+    OUString                GetStyleName( const FontInfo& rInfo ) const;
 
-    FontInfo                Get( const XubString& rName,
-                                 const XubString& rStyleName ) const;
-    FontInfo                Get( const XubString& rName,
+    FontInfo                Get( const OUString& rName,
+                                 const OUString& rStyleName ) const;
+    FontInfo                Get( const OUString& rName,
                                  FontWeight eWeight,
                                  FontItalic eItalic ) const;
 
-    sal_Bool                    IsAvailable( const XubString& rName ) const;
-    sal_uInt16                  GetFontNameCount() const
-                                { return (sal_uInt16)maEntries.size(); }
+    sal_Bool                IsAvailable( const OUString& rName ) const;
+    sal_uInt16              GetFontNameCount() const
+    {
+        return (sal_uInt16)maEntries.size();
+    }
     const FontInfo&         GetFontName( sal_uInt16 nFont ) const;
-    sal_uInt16                  GetFontNameType( sal_uInt16 nFont ) const;
-    sal_Handle              GetFirstFontInfo( const XubString& rName ) const;
+    sal_uInt16              GetFontNameType( sal_uInt16 nFont ) const;
+    sal_Handle              GetFirstFontInfo( const OUString& rName ) const;
     sal_Handle              GetNextFontInfo( sal_Handle hFontInfo ) const;
     const FontInfo&         GetFontInfo( sal_Handle hFontInfo ) const;
 
