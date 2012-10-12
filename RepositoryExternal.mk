@@ -237,10 +237,17 @@ $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
 	ascii_expat_xmlparse \
 	expat_xmlparse \
 	expat_xmltok \
+	expat_xmlparse_x64 \
+	expat_xmltok_x64 \
 ))
 
 define gb_LinkTarget__use_expat
 $(if $(2),,$(error gb_LinkTarget__use_expat needs additional parameter))
+
+$(call gb_LinkTarget_set_include,$(1),\
+    -I$(OUTDIR)/inc/external/expat \
+    $$(INCLUDE) \
+)
 
 $(if $(filter-out ascii_expat_xmlparse,$(2)),\
 	$(call gb_LinkTarget_add_defs,$(1),\
