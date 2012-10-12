@@ -427,6 +427,14 @@ VclGrid::array_type VclGrid::assembleGrid() const
         for (sal_Int32 y = 0; y < nMaxY; ++y)
         {
             ExtendedGridEntry &rSpan = A[x][y];
+            //cell x/y is spanned by the widget at cell rSpan.x/rSpan.y,
+            //just points back to itself if there's no cell spanning
+            if ((rSpan.x == -1) || (rSpan.y == -1))
+            {
+                //there is no entry for this cell, i.e. this is a cell
+                //with no widget in it, or spanned by any other widget
+                continue;
+            }
             ExtendedGridEntry &rEntry = A[rSpan.x][rSpan.y];
             if (aNonEmptyCols[x] == false)
                 --rEntry.nSpanWidth;
