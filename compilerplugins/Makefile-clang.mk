@@ -51,6 +51,7 @@ CLANGOBJS=
 
 define clangbuildsrc
 $(3): $(2) $(SRCDIR)/compilerplugins/Makefile-clang.mk $(CLANGOUTDIR)/clang-timestamp
+	@echo [build CXX] $(subst $(SRCDIR)/,,$(2))
 	$(CXX) $(CLANGCXXFLAGS) $(CLANGDEFS) $(CLANGINCLUDES) $(2) -fPIC -c -o $(3) -MMD -MT $(3) -MP -MF $(CLANGOUTDIR)/$(1).d
 
 -include $(CLANGOUTDIR)/$(1).d
@@ -62,6 +63,7 @@ endef
 $(foreach src, $(CLANGSRC), $(eval $(call clangbuildsrc,$(src),$(CLANGINDIR)/$(src),$(CLANGOUTDIR)/$(src:.cxx=.o))))
 
 $(CLANGOUTDIR)/compileplugin.so: $(CLANGOBJS)
+	@echo [build LNK] $(subst $(SRCDIR)/,,$@)
 	$(CXX) -shared $(CLANGOBJS) -o $@
 
 # Clang most probably doesn't maintain binary compatibility, so rebuild when clang changes.
