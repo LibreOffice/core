@@ -31,7 +31,7 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::frame;
 
-void lcl_updateThumbnails (TemplateLocalViewItem *pItem);
+static void lcl_updateThumbnails (TemplateLocalViewItem *pItem);
 
 class FolderFilter_Application
 {
@@ -742,7 +742,7 @@ IMPL_LINK(TemplateLocalView, ChangeNameHdl, TemplateView*, pView)
     return true;
 }
 
-void lcl_updateThumbnails (TemplateLocalViewItem *pItem)
+static void lcl_updateThumbnails (TemplateLocalViewItem *pItem)
 {
     pItem->maPreview1.Clear();
     pItem->maPreview2.Clear();

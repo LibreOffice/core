@@ -458,7 +458,7 @@ Reference< XResultSet >  BibliographyLoader::GetDataCursor() const
     return m_xCursor;
 }
 
-rtl::OUString lcl_AddProperty(Reference< XNameAccess >  xColumns,
+static rtl::OUString lcl_AddProperty(Reference< XNameAccess >  xColumns,
         const Mapping* pMapping, const String& rColumnName)
 {
     String sColumnName(rColumnName);

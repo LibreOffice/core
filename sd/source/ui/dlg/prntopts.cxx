@@ -258,7 +258,7 @@ void SdPrintOptions::updateControls()
     aCbxPagename.Enable( !aRbtBooklet.IsChecked() && (aCbxDraw.IsChecked() || aCbxNotes.IsChecked() || aCbxOutline.IsChecked()) );
 }
 
-void lcl_MoveRB_Impl(Window& rBtn, long nXDiff)
+static void lcl_MoveRB_Impl(Window& rBtn, long nXDiff)
 {
     Point aPos(rBtn.GetPosPixel());
     aPos.X() -= nXDiff;

@@ -86,7 +86,7 @@ using namespace ::com::sun::star;
 #define PROPERTY_UNBOUND 0
 #define PROPERTY_MAYBEVOID ::com::sun::star::beans::PropertyAttribute::MAYBEVOID
 
-const SfxItemPropertyMapEntry* lcl_GetDocInfoPropertyMap()
+static const SfxItemPropertyMapEntry* lcl_GetDocInfoPropertyMap()
 {
     static SfxItemPropertyMapEntry aDocInfoPropertyMap_Impl[] =
     {

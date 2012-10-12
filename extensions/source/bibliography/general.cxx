@@ -65,7 +65,7 @@ using namespace ::rtl;
 #define C2S(cChar) String::CreateFromAscii(cChar)
 #define DISTANCE_CONTROL_TO_FIXEDTEXT 5
 
-::Point lcl_MovePoint(const FixedText& rFixedText)
+static ::Point lcl_MovePoint(const FixedText& rFixedText)
 {
     ::Point aRet(rFixedText.GetPosPixel());
     aRet.X() += rFixedText.GetSizePixel().Width();
@@ -74,7 +74,7 @@ using namespace ::rtl;
 }
 
 //-----------------------------------------------------------------------------
-OUString lcl_GetColumnName( const Mapping* pMapping, sal_uInt16 nIndexPos )
+static OUString lcl_GetColumnName( const Mapping* pMapping, sal_uInt16 nIndexPos )
 {
     BibConfig* pBibConfig = BibModul::GetConfig();
     OUString sRet = pBibConfig->GetDefColumnName(nIndexPos);

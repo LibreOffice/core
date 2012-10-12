@@ -64,11 +64,11 @@ using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::ui::dialogs;
 
-void lcl_createTemplate(uno::Reference<XComponentLoader> xDesktop, const FILTER_APPLICATION eApp);
+static void lcl_createTemplate(uno::Reference<XComponentLoader> xDesktop, const FILTER_APPLICATION eApp);
 
-bool lcl_getServiceName (const OUString &rFileURL, OUString &rName );
+static bool lcl_getServiceName (const OUString &rFileURL, OUString &rName );
 
-std::vector<OUString> lcl_getAllFactoryURLs ();
+static std::vector<OUString> lcl_getAllFactoryURLs ();
 
 // Sort by name in ascending order
 class SortView_Name
@@ -1471,7 +1471,7 @@ void SfxTemplateManagerDlg::localSearchMoveTo(sal_uInt16 nMenuId)
     SearchUpdateHdl(mpSearchEdit);
 }
 
-bool lcl_getServiceName ( const OUString &rFileURL, OUString &rName )
+static bool lcl_getServiceName ( const OUString &rFileURL, OUString &rName )
 {
     bool bRet = false;
 
@@ -1499,7 +1499,7 @@ bool lcl_getServiceName ( const OUString &rFileURL, OUString &rName )
     return bRet;
 }
 
-std::vector<OUString> lcl_getAllFactoryURLs ()
+static std::vector<OUString> lcl_getAllFactoryURLs ()
 {
     SvtModuleOptions aModOpt;
     std::vector<OUString> aList;

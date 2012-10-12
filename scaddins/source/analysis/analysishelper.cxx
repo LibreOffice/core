@@ -1176,7 +1176,7 @@ double GetZw( double fZins, double fZzr, double fRmz, double fBw, sal_Int32 nF )
 
 //-------
 // COUPPCD: find last coupon date before settlement (can be equal to settlement)
-void lcl_GetCouppcd( ScaDate& rDate, const ScaDate& rSettle, const ScaDate& rMat, sal_Int32 nFreq )
+static void lcl_GetCouppcd( ScaDate& rDate, const ScaDate& rSettle, const ScaDate& rMat, sal_Int32 nFreq )
     throw( lang::IllegalArgumentException )
 {
     rDate = rMat;
@@ -1201,7 +1201,7 @@ double GetCouppcd( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_I
 
 //-------
 // COUPNCD: find first coupon date after settlement (is never equal to settlement)
-void lcl_GetCoupncd( ScaDate& rDate, const ScaDate& rSettle, const ScaDate& rMat, sal_Int32 nFreq )
+static void lcl_GetCoupncd( ScaDate& rDate, const ScaDate& rSettle, const ScaDate& rMat, sal_Int32 nFreq )
     throw( lang::IllegalArgumentException )
 {
     rDate = rMat;

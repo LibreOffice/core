@@ -289,7 +289,7 @@ public:
 
 };
 
-sal_uInt16 lcl_FindLogicalName(BibConfig* pConfig ,
+static sal_uInt16 lcl_FindLogicalName(BibConfig* pConfig ,
                                     const ::rtl::OUString& rLogicalColumnName)
 {
     for(sal_uInt16 i = 0; i < COLUMN_COUNT; i++)

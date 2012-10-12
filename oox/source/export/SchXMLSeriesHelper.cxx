@@ -100,7 +100,7 @@ using ::rtl::OUString;
     return aRet;
 }
 
-uno::Reference< chart2::XChartType > lcl_getChartTypeOfSeries(
+static uno::Reference< chart2::XChartType > lcl_getChartTypeOfSeries(
                                 const uno::Reference< chart2::XDiagram >&   xDiagram
                               , const Reference< chart2::XDataSeries >& xSeries )
 {

@@ -840,7 +840,7 @@ sal_Bool SAL_CALL
     return bRes;
 }
 
-void lcl_SequenceRemoveElementAt(
+static void lcl_SequenceRemoveElementAt(
             uno::Sequence< uno::Reference< XDictionaryEntry > >& rEntries, int nPos )
 {
     //TODO: helper for SequenceRemoveElementAt available?

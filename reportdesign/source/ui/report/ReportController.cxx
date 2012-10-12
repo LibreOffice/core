@@ -230,7 +230,7 @@ namespace
 }
 
 // -----------------------------------------------------------------------------
-void lcl_getReportControlFormat(const Sequence< PropertyValue >& aArgs,
+static void lcl_getReportControlFormat(const Sequence< PropertyValue >& aArgs,
                                  ODesignView* _pView,
                                  uno::Reference< awt::XWindow>& _xWindow,
                                  ::std::vector< uno::Reference< uno::XInterface > >& _rControlsFormats)
@@ -2298,7 +2298,7 @@ void SAL_CALL OReportController::disposing( const lang::EventObject& Source ) th
 }
 
 // -----------------------------------------------------------------------------
-sal_uInt16 lcl_getNonVisbleGroupsBefore( const uno::Reference< report::XGroups>& _xGroups
+static sal_uInt16 lcl_getNonVisbleGroupsBefore( const uno::Reference< report::XGroups>& _xGroups
                           ,sal_Int32 _nGroupPos
                           ,::std::mem_fun_t<sal_Bool,OGroupHelper>&_pGroupMemberFunction)
 {

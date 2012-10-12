@@ -455,7 +455,7 @@ double SAL_CALL AnalysisAddIn::getOddlyield( constREFXPS& xOpt,
 #define D_(i) (*rDates.Get(i))
 
 /** Calculates the resulting amount for the passed interest rate and the given XIRR parameters. */
-double lcl_sca_XirrResult( const ScaDoubleList& rValues, const ScaDoubleList& rDates, double fRate )
+static double lcl_sca_XirrResult( const ScaDoubleList& rValues, const ScaDoubleList& rDates, double fRate )
 {
     /*  V_0 ... V_n = input values.
         D_0 ... D_n = input dates.
@@ -477,7 +477,7 @@ double lcl_sca_XirrResult( const ScaDoubleList& rValues, const ScaDoubleList& rD
 }
 
 /** Calculates the first derivation of lcl_sca_XirrResult(). */
-double lcl_sca_XirrResult_Deriv1( const ScaDoubleList& rValues, const ScaDoubleList& rDates, double fRate )
+static double lcl_sca_XirrResult_Deriv1( const ScaDoubleList& rValues, const ScaDoubleList& rDates, double fRate )
 {
     /*  V_0 ... V_n = input values.
         D_0 ... D_n = input dates.

@@ -2497,7 +2497,7 @@ IMPL_LINK_INLINE_START( SfxTemplateDialog_Impl, ToolBoxLSelect, ToolBox *, pBox 
 IMPL_LINK_INLINE_END( SfxTemplateDialog_Impl, ToolBoxLSelect, ToolBox *, pBox )
 
 //-------------------------------------------------------------------------
-::rtl::OUString lcl_GetLabel(uno::Any& rAny)
+static ::rtl::OUString lcl_GetLabel(uno::Any& rAny)
 {
     ::rtl::OUString sRet;
     uno::Sequence< beans::PropertyValue >aPropSeq;
