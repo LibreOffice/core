@@ -313,7 +313,61 @@ class SVT_DLLPUBLIC SvTreeListBox
                 ,public ::vcl::ISearchableStringList
 {
     friend class SvLBoxEntry;
+    friend class SvImpLBox;
+    friend class ImpLBSelEng;
+    friend class TreeControlPeer;
 
+    SvLBox_Impl*    pLBoxImpl;
+    SvImpLBox*      pImp;
+    Link            aCheckButtonHdl;
+    Link            aScrolledHdl;
+    Link            aExpandedHdl;
+    Link            aExpandingHdl;
+    Link            aSelectHdl;
+    Link            aDeselectHdl;
+
+    Accelerator     aInpEditAcc;
+    Image           aPrevInsertedExpBmp;
+    Image           aPrevInsertedColBmp;
+    Image           aCurInsertedExpBmp;
+    Image           aCurInsertedColBmp;
+
+    short           nContextBmpWidthMax;
+    short           nEntryHeight;
+    short           nEntryHeightOffs;
+    short           nIndent;
+    short           nFocusWidth;
+    sal_uInt16      nFirstSelTab;
+    sal_uInt16      nLastSelTab;
+    sal_uInt16      aContextBmpMode;
+
+    long mnCheckboxItemWidth;
+
+    SvLBoxEntry*    pHdlEntry;
+    SvLBoxItem*     pHdlItem;
+
+    DragDropMode    nDragDropMode;
+    DragDropMode    nOldDragMode;
+    SelectionMode   eSelMode;
+    sal_Int8        nDragOptions;
+
+    SvLBoxEntry*        pEdEntry;
+    SvLBoxItem*         pEdItem;
+
+protected:
+    Link            aDoubleClickHdl;
+    SvLBoxEntry*    pTargetEntry;
+    SvLBoxButtonData*   pCheckButtonData;
+    std::vector<SvLBoxTab*> aTabs;
+    sal_uInt16      nTreeFlags;
+    sal_uInt16      nImpFlags;
+    // Move/CopySelection: Position des aktuellen Eintrags in Selektionsliste
+    sal_uInt16      nCurEntrySelPos;
+
+private:
+    void SetBaseModel(SvLBoxTreeList* pNewModel);
+
+    DECL_DLLPRIVATE_LINK( CheckButtonClick, SvLBoxButtonData * );
     DECL_DLLPRIVATE_LINK( TextEditEndedHdl_Impl, void * );
     // Handler, der von TreeList zum Clonen eines Entries aufgerufen wird
     DECL_DLLPRIVATE_LINK( CloneHdl_Impl, SvListEntry* );
@@ -328,31 +382,7 @@ class SVT_DLLPUBLIC SvTreeListBox
     SVT_DLLPRIVATE static void RemoveBoxFromDDList_Impl( const SvTreeListBox& rB );
     DECL_DLLPRIVATE_STATIC_LINK( SvTreeListBox, DragFinishHdl_Impl, sal_Int8* );
 
-    DragDropMode nOldDragMode;
-
-private:
-    void SetBaseModel(SvLBoxTreeList* pNewModel);
-
 protected:
-
-    Link            aExpandedHdl;
-    Link            aExpandingHdl;
-    Link            aSelectHdl;
-    Link            aDeselectHdl;
-    Link            aDoubleClickHdl;
-    SvLBoxEntry*    pHdlEntry;
-    SvLBoxItem*     pHdlItem;
-    SvLBoxEntry*    pTargetEntry;
-
-    SvLBox_Impl*    pLBoxImpl;
-
-    sal_uInt16          nImpFlags;
-    // Move/CopySelection: Position des aktuellen Eintrags in Selektionsliste
-    sal_uInt16          nCurEntrySelPos;
-
-    DragDropMode    nDragDropMode;
-    SelectionMode   eSelMode;
-    sal_Int8        nDragOptions;
 
     sal_Bool            CheckDragAndDropMode( SvTreeListBox* pSource, sal_Int8 );
     void            ImplShowTargetEmphasis( SvLBoxEntry* pEntry, sal_Bool bShow);
@@ -600,33 +630,6 @@ protected:
     using SvListView::Select;
     using SvListView::SelectAll;
 
-// boundary ----- former SvTreeListBox ends here.
-
-    friend class SvImpLBox;
-    friend class ImpLBSelEng;
-    friend class TreeControlPeer;
-
-    SvImpLBox*      pImp;
-    Link            aCheckButtonHdl;
-    Link            aScrolledHdl;
-    Accelerator     aInpEditAcc;
-    Image           aPrevInsertedExpBmp;
-    Image           aPrevInsertedColBmp;
-    Image           aCurInsertedExpBmp;
-    Image           aCurInsertedColBmp;
-
-    short           nContextBmpWidthMax;
-    sal_uInt16          nFirstSelTab, nLastSelTab;
-    short           nEntryHeight;
-    short           nEntryHeightOffs;
-    short           nIndent;
-    short           nFocusWidth;
-    sal_uInt16          aContextBmpMode;
-
-    long mnCheckboxItemWidth;
-
-    DECL_DLLPRIVATE_LINK( CheckButtonClick, SvLBoxButtonData * );
-
     SVT_DLLPRIVATE short        GetHeightOffset( const Image& rBmp, Size& rLogicSize);
     SVT_DLLPRIVATE short        GetHeightOffset( const Font& rFont, Size& rLogicSize);
 
@@ -645,19 +648,12 @@ protected:
     SVT_DLLPRIVATE void         ImplInitStyle();
 
 protected:
-    SvLBoxButtonData*   pCheckButtonData;
-    sal_uInt16              nTreeFlags;
-
-    SvLBoxEntry*        pEdEntry;
-    SvLBoxItem*         pEdItem;
 
     void            EditItemText( SvLBoxEntry* pEntry, SvLBoxString* pItem,
                         const Selection& );
     void            EditedText( const XubString& );
     void            EditingRequest( SvLBoxEntry* pEntry, SvLBoxItem* pItem,
                         const Point& rMousePos );
-
-    std::vector<SvLBoxTab*> aTabs;
 
     // berechnet abhaengig von TreeList-Style & Bitmap-Groessen
     // alle Tabulatoren neu; wird beim Einfuegen/Austauschen von

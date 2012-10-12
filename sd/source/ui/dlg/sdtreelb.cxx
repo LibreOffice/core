@@ -1081,7 +1081,7 @@ sal_Int8 SdPageObjsTLB::AcceptDrop (const AcceptDropEvent& rEvent)
         {
             ImplShowTargetEmphasis( pTargetEntry, sal_False );
         }
-        else if( !nDragDropMode )
+        else if( !GetDragDropMode() )
         {
             SAL_WARN( "sc.ui", "SdPageObjsTLB::AcceptDrop(): no target" );
         }
