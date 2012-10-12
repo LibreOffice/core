@@ -1603,8 +1603,6 @@ Link SvTreeListBox::GetDragFinishedHdl() const
     return STATIC_LINK( this, SvTreeListBox, DragFinishHdl_Impl );
 }
 
-// --- boundary of former SvLBox ---
-
 /*
     Bugs/TODO
 
