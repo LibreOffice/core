@@ -83,7 +83,7 @@ bool UnusedVariableCheck::VisitNamedDecl( NamedDecl* declaration )
                     return true; // unnamed parameter -> unused
                 // If this declaration does not have a body, then the parameter is indeed not used,
                 // so ignore.
-                if( const FunctionDecl* func = dyn_cast< FunctionDecl >( param->getParentFunctionOrMethod()))
+                if( const FunctionDecl* func = dyn_cast_or_null< FunctionDecl >( param->getParentFunctionOrMethod()))
                     if( !func->doesThisDeclarationHaveABody())
                         return true;
                 report( DiagnosticsEngine::Warning, "unused parameter %0 [loplugin]",
