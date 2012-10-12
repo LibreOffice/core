@@ -29,7 +29,7 @@
 #include <com/sun/star/script/XLibraryContainer.hpp>
 #include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/exc_hlp.hxx>
-#include <com/sun/star/beans/XIntrospection.hpp>
+#include <com/sun/star/beans/Introspection.hpp>
 #include <com/sun/star/resource/XStringResourceSupplier.hpp>
 #include <com/sun/star/resource/XStringResourceManager.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -578,34 +578,20 @@ static ::rtl::OUString aResourceResolverPropName("ResourceResolver");
 
         if( !xIntrospection.is() )
         {
-            Reference< XMultiComponentFactory > xSMgr( m_xContext->getServiceManager(), UNO_QUERY );
-            if ( !xSMgr.is() )
-            {
-                throw RuntimeException(
-                    ::rtl::OUString( "DialogProviderImpl::getIntrospectionAccess: Couldn't instantiate MultiComponent factory"  ),
-                        Reference< XInterface >() );
-            }
-
             // Get introspection service
-            Reference< XInterface > xI = xSMgr->createInstanceWithContext
-                ( rtl::OUString("com.sun.star.beans.Introspection"), m_xContext );
-            if (xI.is())
-                xIntrospection = Reference< XIntrospection >::query( xI );
+            xIntrospection = Introspection::create( m_xContext );
         }
 
-        if( xIntrospection.is() )
+        // Do introspection
+        try
         {
-            // Do introspection
-            try
-            {
-                Any aHandlerAny;
-                aHandlerAny <<= rxHandler;
-                xIntrospectionAccess = xIntrospection->inspect( aHandlerAny );
-            }
-            catch( RuntimeException& )
-            {
-                xIntrospectionAccess.clear();
-            }
+            Any aHandlerAny;
+            aHandlerAny <<= rxHandler;
+            xIntrospectionAccess = xIntrospection->inspect( aHandlerAny );
+        }
+        catch( RuntimeException& )
+        {
+            xIntrospectionAccess.clear();
         }
         return xIntrospectionAccess;
     }

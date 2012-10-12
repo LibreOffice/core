@@ -59,6 +59,7 @@
 #include <com/sun/star/awt/XCheckBox.hpp>
 #include <com/sun/star/awt/XListBox.hpp>
 #include <com/sun/star/awt/XTextComponent.hpp>
+#include <com/sun/star/beans/Introspection.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
@@ -84,7 +85,6 @@
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
 #include <com/sun/star/util/XNumberFormatter.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
-#include <com/sun/star/beans/XIntrospection.hpp>
 
 #include <comphelper/extract.hxx>
 #include <comphelper/evtmethodhelper.hxx>
@@ -385,16 +385,16 @@ namespace
         Sequence< Type> aModelListeners;
         Sequence< Type> aControlListeners;
 
-        Reference< XIntrospection> xModelIntrospection(::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString("com.sun.star.beans.Introspection")), UNO_QUERY);
-        Reference< XIntrospection> xControlIntrospection(::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString("com.sun.star.beans.Introspection")), UNO_QUERY);
+        Reference< XIntrospection> xModelIntrospection = Introspection::create(::comphelper::getProcessComponentContext());
+        Reference< XIntrospection> xControlIntrospection = Introspection::create(::comphelper::getProcessComponentContext());
 
-        if (xModelIntrospection.is() && xModel.is())
+        if (xModel.is())
         {
             Any aModel(makeAny(xModel));
             aModelListeners = xModelIntrospection->inspect(aModel)->getSupportedListeners();
         }
 
-        if (xControlIntrospection.is() && xControl.is())
+        if (xControl.is())
         {
             Any aControl(makeAny(xControl));
             aControlListeners = xControlIntrospection->inspect(aControl)->getSupportedListeners();

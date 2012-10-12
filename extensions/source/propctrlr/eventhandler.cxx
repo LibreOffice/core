@@ -41,7 +41,7 @@
 #include <com/sun/star/awt/XTabControllerModel.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/UnknownPropertyException.hpp>
-#include <com/sun/star/beans/XIntrospection.hpp>
+#include <com/sun/star/beans/Introspection.hpp>
 #include <com/sun/star/beans/XIntrospectionAccess.hpp>
 #include <com/sun/star/container/NoSuchElementException.hpp>
 #include <com/sun/star/container/XChild.hpp>
@@ -95,6 +95,7 @@ namespace pcr
     using ::com::sun::star::uno::Any;
     using ::com::sun::star::uno::TypeClass_STRING;
     using ::com::sun::star::uno::Type;
+    using ::com::sun::star::beans::Introspection;
     using ::com::sun::star::beans::XPropertyChangeListener;
     using ::com::sun::star::beans::Property;
     using ::com::sun::star::beans::PropertyState;
@@ -1060,7 +1061,7 @@ namespace pcr
             // we use a set to avoid duplicates
             TypeBag aListeners;
 
-            Reference< XIntrospection > xIntrospection( m_aContext.createComponent( "com.sun.star.beans.Introspection" ), UNO_QUERY_THROW );
+            Reference< XIntrospection > xIntrospection = Introspection::create( m_aContext.getUNOContext() );
 
             // --- model listeners
             lcl_addListenerTypesFor_throw(

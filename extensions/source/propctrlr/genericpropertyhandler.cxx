@@ -32,7 +32,7 @@
 
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/reflection/XEnumTypeDescription.hpp>
-#include <com/sun/star/beans/XIntrospection.hpp>
+#include <com/sun/star/beans/Introspection.hpp>
 #include <com/sun/star/inspection/PropertyControlType.hpp>
 #include <com/sun/star/inspection/XHyperlinkControl.hpp>
 #include <com/sun/star/awt/XActionListener.hpp>
@@ -384,9 +384,7 @@ namespace pcr
         m_xPropertyState.clear();
 
         // create an introspection adapter for the component
-        Reference< XIntrospection > xIntrospection;
-        if ( !m_aContext.createComponent( "com.sun.star.beans.Introspection", xIntrospection ) )
-            throw RuntimeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Could not create an instance of the service com.sun.star.beans.Introspection." ) ), *this );
+        Reference< XIntrospection > xIntrospection = Introspection::create( m_aContext.getUNOContext() );
 
         Reference< XIntrospectionAccess > xIntrospectionAccess( xIntrospection->inspect( makeAny( _rxIntrospectee ) ) );
         if ( !xIntrospectionAccess.is() )

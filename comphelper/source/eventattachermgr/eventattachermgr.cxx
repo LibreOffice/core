@@ -25,7 +25,7 @@
 #include <osl/diagnose.h>
 #include <comphelper/eventattachermgr.hxx>
 #include <comphelper/processfactory.hxx>
-#include <com/sun/star/beans/XIntrospection.hpp>
+#include <com/sun/star/beans/Introspection.hpp>
 #include <com/sun/star/io/XObjectInputStream.hpp>
 #include <com/sun/star/io/XPersistObject.hpp>
 #include <com/sun/star/io/XObjectOutputStream.hpp>
@@ -353,20 +353,11 @@ void SAL_CALL AttacherAllListener_Impl::disposing(const EventObject& )
 
 
 // Constructor method for EventAttacherManager
-Reference< XEventAttacherManager > createEventAttacherManager( const Reference< XMultiServiceFactory > & rSMgr )
+Reference< XEventAttacherManager > createEventAttacherManager( const Reference< XComponentContext > & rxContext )
     throw( Exception )
 {
-    if ( rSMgr.is() )
-    {
-        Reference< XInterface > xIFace( rSMgr->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.beans.Introspection" )) ) );
-        if ( xIFace.is() )
-        {
-            Reference< XIntrospection > xIntrospection( xIFace, UNO_QUERY);
-            return new ImplEventAttacherManager( xIntrospection, comphelper::getComponentContext(rSMgr) );
-        }
-    }
-
-    return Reference< XEventAttacherManager >();
+    Reference< XIntrospection > xIntrospection = Introspection::create( rxContext );
+    return new ImplEventAttacherManager( xIntrospection, rxContext );
 }
 
 //-----------------------------------------------------------------------------

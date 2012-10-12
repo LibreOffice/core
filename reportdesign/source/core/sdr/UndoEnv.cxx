@@ -32,6 +32,7 @@
 #include <com/sun/star/script/XEventAttacherManager.hpp>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
+#include <com/sun/star/beans/Introspection.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
 #include <com/sun/star/beans/XIntrospectionAccess.hpp>
@@ -277,16 +278,13 @@ void SAL_CALL OXUndoEnvironment::propertyChange( const PropertyChangeEvent& _rEv
                     if ( !m_pImpl->m_xIntrospection.is() )
                     {
                         ::comphelper::ComponentContext aContext( m_pImpl->m_rModel.getController()->getORB() );
-                        OSL_VERIFY( aContext.createComponent( "com.sun.star.beans.Introspection", m_pImpl->m_xIntrospection ) );
+                        m_pImpl->m_xIntrospection = Introspection::create( aContext.getUNOContext() );
                     }
-                    if ( m_pImpl->m_xIntrospection.is() )
-                    {
-                        Reference< XIntrospectionAccess > xIntrospection(
-                            m_pImpl->m_xIntrospection->inspect( makeAny( _rEvent.Source ) ),
-                            UNO_SET_THROW
-                        );
-                        rObjectInfo.xPropertyIntrospection.set( xIntrospection->queryAdapter( XPropertySet::static_type() ), UNO_QUERY_THROW );
-                    }
+                    Reference< XIntrospectionAccess > xIntrospection(
+                        m_pImpl->m_xIntrospection->inspect( makeAny( _rEvent.Source ) ),
+                        UNO_SET_THROW
+                    );
+                    rObjectInfo.xPropertyIntrospection.set( xIntrospection->queryAdapter( XPropertySet::static_type() ), UNO_QUERY_THROW );
                 }
                 if ( rObjectInfo.xPropertyIntrospection.is() )
                 {

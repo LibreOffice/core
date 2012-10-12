@@ -26,7 +26,7 @@
 #include <ooo/vba/XVBAToOOEventDescGen.hpp>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/beans/XIntrospection.hpp>
+#include <com/sun/star/beans/Introspection.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
@@ -376,40 +376,28 @@ ScriptEventHelper::ScriptEventHelper( const Reference< XInterface >& xControl ):
 Sequence< rtl::OUString >
 ScriptEventHelper::getEventListeners()
 {
-    Reference< lang::XMultiComponentFactory > xMFac(
-        m_xCtx->getServiceManager(), UNO_QUERY );
     std::list< rtl::OUString > eventMethods;
 
-    if ( xMFac.is() )
-    {
-        Reference< beans::XIntrospection > xIntrospection(
-            xMFac->createInstanceWithContext( rtl::OUString(
-                "com.sun.star.beans.Introspection"   ), m_xCtx ), UNO_QUERY );
+    Reference< beans::XIntrospection > xIntrospection = beans::Introspection::create( m_xCtx );
 
-        Reference< beans::XIntrospectionAccess > xIntrospectionAccess;
-    if  ( xIntrospection.is() )
+    Reference< beans::XIntrospectionAccess > xIntrospectionAccess =
+        xIntrospection->inspect( makeAny( m_xControl ) );
+    Sequence< Type > aControlListeners =
+        xIntrospectionAccess->getSupportedListeners();
+    sal_Int32 nLength = aControlListeners.getLength();
+    for ( sal_Int32 i = 0; i< nLength; ++i )
     {
-            xIntrospectionAccess = xIntrospection->inspect(
-                makeAny( m_xControl ) );
-            Sequence< Type > aControlListeners =
-                xIntrospectionAccess->getSupportedListeners();
-            sal_Int32 nLength = aControlListeners.getLength();
-            for ( sal_Int32 i = 0; i< nLength; ++i )
-            {
-                Type& listType = aControlListeners[ i ];
-                rtl::OUString sFullTypeName = listType.getTypeName();
-                Sequence< ::rtl::OUString > sMeths =
-                    comphelper::getEventMethodsForType( listType );
-                sal_Int32 sMethLen = sMeths.getLength();
-                for ( sal_Int32 j=0 ; j < sMethLen; ++j )
-                {
-                    rtl::OUString sEventMethod = sFullTypeName;
-                    sEventMethod += DELIM;
-                    sEventMethod += sMeths[ j ];
-                    eventMethods.push_back( sEventMethod );
-                }
-            }
-
+        Type& listType = aControlListeners[ i ];
+        rtl::OUString sFullTypeName = listType.getTypeName();
+        Sequence< ::rtl::OUString > sMeths =
+            comphelper::getEventMethodsForType( listType );
+        sal_Int32 sMethLen = sMeths.getLength();
+        for ( sal_Int32 j=0 ; j < sMethLen; ++j )
+        {
+            rtl::OUString sEventMethod = sFullTypeName;
+            sEventMethod += DELIM;
+            sEventMethod += sMeths[ j ];
+            eventMethods.push_back( sEventMethod );
         }
     }
 

@@ -244,7 +244,7 @@ void OInterfaceContainer::impl_createEventAttacher_nothrow()
 {
     try
     {
-        m_xEventAttacher.set( ::comphelper::createEventAttacherManager( m_xServiceFactory ), UNO_SET_THROW );
+        m_xEventAttacher.set( ::comphelper::createEventAttacherManager( comphelper::getComponentContext(m_xServiceFactory) ), UNO_SET_THROW );
     }
     catch( const Exception& )
     {
@@ -621,7 +621,7 @@ void SAL_CALL OInterfaceContainer::read( const Reference< XObjectInputStream >& 
     {
         try
         {
-            m_xEventAttacher = ::comphelper::createEventAttacherManager( m_xServiceFactory );
+            m_xEventAttacher = ::comphelper::createEventAttacherManager( comphelper::getComponentContext(m_xServiceFactory) );
             OSL_ENSURE( m_xEventAttacher.is(), "OInterfaceContainer::read: could not create an event attacher manager!" );
         }
         catch( const Exception& )

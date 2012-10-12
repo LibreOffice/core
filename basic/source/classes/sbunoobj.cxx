@@ -47,6 +47,7 @@
 #include <com/sun/star/beans/PropertyConcept.hpp>
 #include <com/sun/star/beans/MethodConcept.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/beans/Introspection.hpp>
 #include <com/sun/star/script/BasicErrorException.hpp>
 #include <com/sun/star/script/XAllListener.hpp>
 #include <com/sun/star/script/XInvocationAdapterFactory.hpp>
@@ -2421,18 +2422,8 @@ void SbUnoObject::doIntrospection( void )
     if( !xIntrospection.is() )
     {
         // get the introspection service
-        Reference< XMultiServiceFactory > xFactory( comphelper::getProcessServiceFactory() );
-        if ( xFactory.is() )
-        {
-            Reference< XInterface > xI = xFactory->createInstance( rtl::OUString("com.sun.star.beans.Introspection") );
-            if (xI.is())
-                xIntrospection = Reference< XIntrospection >::query( xI );
-        }
-    }
-    if( !xIntrospection.is() )
-    {
-        StarBASIC::FatalError( ERRCODE_BASIC_EXCEPTION );
-        return;
+        Reference< XComponentContext > xContext( comphelper::getProcessComponentContext() );
+        xIntrospection = Introspection::create( xContext );
     }
 
     // pass the introspection
