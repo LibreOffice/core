@@ -330,6 +330,9 @@ class SVT_DLLPUBLIC SvTreeListBox
 
     DragDropMode nOldDragMode;
 
+private:
+    void SetBaseModel(SvLBoxTreeList* pNewModel);
+
 protected:
 
     Link            aExpandedHdl;
@@ -423,7 +426,7 @@ public:
 
     SvLBoxTreeList* GetModel() const { return (SvLBoxTreeList*)pModel; }
     using SvListView::SetModel;
-    void            SetModel( SvLBoxTreeList* );
+    void SetModel(SvLBoxTreeList* pNewModel);
 
     sal_uInt16 IsA();
     sal_uLong           GetEntryCount() const {return pModel->GetEntryCount();}

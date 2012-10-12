@@ -597,7 +597,7 @@ SvTreeListBox::SvTreeListBox( Window* pParent, WinBits nWinStyle  ) :
     pLBoxImpl = new SvLBox_Impl( *this );
     SvLBoxTreeList* pTempModel = new SvLBoxTreeList;
     pTempModel->SetRefCount( 0 );
-    SetModel( pTempModel );
+    SetBaseModel(pTempModel);
     pModel->SetCloneLink( LINK(this, SvTreeListBox, CloneHdl_Impl ));
     pModel->InsertView( this );
     pHdlEntry = 0;
@@ -623,7 +623,7 @@ SvTreeListBox::SvTreeListBox( Window* pParent, const ResId& rResId ) :
     nDragDropMode = 0;
     SvLBoxTreeList* pTempModel = new SvLBoxTreeList;
     pTempModel->SetRefCount( 0 );
-    SetModel( pTempModel );
+    SetBaseModel(pTempModel);
     pModel->InsertView( this );
     pHdlEntry = 0;
     pEdCtrl = 0;
@@ -1614,9 +1614,6 @@ Link SvTreeListBox::GetDragFinishedHdl() const
 
 #define TREEFLAG_FIXEDHEIGHT        0x0010
 
-
-DBG_NAME(SvTreeListBox)
-
 #define SV_LBOX_DEFAULT_INDENT_PIXEL 20
 
 void SvTreeListBox::InitTreeView()
@@ -1687,7 +1684,11 @@ void SvTreeListBox::SetModel( SvLBoxTreeList* pNewModel )
 {
     DBG_CHKTHIS(SvTreeListBox,0);
     pImp->SetModel( pNewModel );
+    SetBaseModel(pNewModel);
+}
 
+void SvTreeListBox::SetBaseModel( SvLBoxTreeList* pNewModel )
+{
     // does the CleanUp
     SvListView::SetModel( pNewModel );
     pModel->SetCloneLink( LINK(this, SvTreeListBox, CloneHdl_Impl ));
