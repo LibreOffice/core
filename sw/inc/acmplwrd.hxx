@@ -61,8 +61,6 @@ public:
 
     bool InsertWord( const String& rWord, SwDoc& rDoc );
 
-    sal_Bool GetRange( const String& rWord, sal_uInt16& rStt, sal_uInt16& rEnd ) const;
-
     const String& operator[](size_t n) const
         { return m_WordList[n]->GetAutoCompleteString(); }
 
