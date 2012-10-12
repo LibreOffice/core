@@ -1195,19 +1195,6 @@ SfxTabPage* SvxLinguTabPage::Create( Window* pParent,
 
 //------------------------------------------------------------------------
 
-static Any lcl_Bool2Any(sal_Bool bVal)
-{
-    Any aRet(&bVal, ::getBooleanCppuType());
-    return aRet;
-}
-
-
-static sal_Bool lcl_Bool2Any(Any& rVal)
-{
-    return *(sal_Bool*)rVal.getValue();
-}
-
-
 sal_Bool SvxLinguTabPage::FillItemSet( SfxItemSet& rCoreSet )
 {
     sal_Bool bModified = sal_True; // !!!!
