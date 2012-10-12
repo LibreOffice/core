@@ -88,6 +88,7 @@ $(eval $(foreach method,\
 	add_x64_generated_exception_objects \
 	add_noexception_objects \
 	add_generated_cobjects \
+	add_x64_generated_cobjects \
 	add_generated_cxxobjects \
 	add_generated_exception_objects \
 	add_cflags \
@@ -120,6 +121,7 @@ $(eval $(foreach method,\
 	use_package \
 	use_packages \
 	use_unpacked \
+	use_external_project \
 	use_static_libraries \
 	add_sdi_headers \
 	set_warnings_not_errors \

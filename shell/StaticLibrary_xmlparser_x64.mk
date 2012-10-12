@@ -35,7 +35,7 @@ $(eval $(call gb_StaticLibrary_set_include,shell_xmlparser_x64,\
 ))
 
 $(eval $(call gb_StaticLibrary_use_externals,shell_xmlparser_x64,\
-	expat_utf16 \
+	expat_utf16_x64 \
 ))
 
 $(eval $(call gb_StaticLibrary_add_x64_generated_exception_objects,shell_xmlparser_x64,\
