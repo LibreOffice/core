@@ -1104,7 +1104,7 @@ void SwFEShell::SetRowsToRepeat( sal_uInt16 nSet )
 /*-------------------------------------------------------------------------
     returns the number of rows consecutively selected from top
   -----------------------------------------------------------------------*/
-sal_uInt16 lcl_GetRowNumber( const SwPosition& rPos )
+static sal_uInt16 lcl_GetRowNumber( const SwPosition& rPos )
 {
     sal_uInt16 nRet = USHRT_MAX;
     Point aTmpPt;
@@ -1445,7 +1445,7 @@ sal_uInt16 SwFEShell::GetCurTabColNum() const
 |*
 |*************************************************************************/
 
-const SwFrm *lcl_FindFrmInTab( const SwLayoutFrm *pLay, const Point &rPt, SwTwips nFuzzy )
+static const SwFrm *lcl_FindFrmInTab( const SwLayoutFrm *pLay, const Point &rPt, SwTwips nFuzzy )
 {
     const SwFrm *pFrm = pLay->Lower();
 
@@ -1469,7 +1469,7 @@ const SwFrm *lcl_FindFrmInTab( const SwLayoutFrm *pLay, const Point &rPt, SwTwip
     return 0;
 }
 
-const SwCellFrm *lcl_FindFrm( const SwLayoutFrm *pLay, const Point &rPt,
+static const SwCellFrm *lcl_FindFrm( const SwLayoutFrm *pLay, const Point &rPt,
                               SwTwips nFuzzy, bool* pbRow, bool* pbCol )
 {
     // bMouseMoveRowCols :
@@ -1711,7 +1711,7 @@ const SwFrm* SwFEShell::GetBox( const Point &rPt, bool* pbRow, bool* pbCol ) con
 
 /* Helper function*/
 /* calculated the distance between Point rC and Line Segment (rA, rB) */
-double lcl_DistancePoint2Segment( const Point& rA, const Point& rB, const Point& rC )
+static double lcl_DistancePoint2Segment( const Point& rA, const Point& rB, const Point& rC )
 {
     double nRet = 0;
 
@@ -1740,7 +1740,7 @@ double lcl_DistancePoint2Segment( const Point& rA, const Point& rB, const Point&
 }
 
 /* Helper function*/
-Point lcl_ProjectOntoClosestTableFrm( const SwTabFrm& rTab, const Point& rPoint, bool bRowDrag )
+static Point lcl_ProjectOntoClosestTableFrm( const SwTabFrm& rTab, const Point& rPoint, bool bRowDrag )
 {
     Point aRet( rPoint );
     const SwTabFrm* pCurrentTab = &rTab;
@@ -2200,7 +2200,7 @@ void SwFEShell::SetTblAttr( const SfxItemSet &rNew )
  * @param bUp true: move up, false: move down
  * @returns true if successful
  */
-bool lcl_GoTableRow( SwCrsrShell* pShell, bool bUp )
+static bool lcl_GoTableRow( SwCrsrShell* pShell, bool bUp )
 {
     OSL_ENSURE( pShell != NULL, "need shell" );
 
@@ -2333,7 +2333,7 @@ sal_Bool SwFEShell::SetColRowWidthHeight( sal_uInt16 eType, sal_uInt16 nDiff )
     return bRet;
 }
 
-sal_Bool lcl_IsFormulaSelBoxes( const SwTable& rTbl, const SwTblBoxFormula& rFml,
+static sal_Bool lcl_IsFormulaSelBoxes( const SwTable& rTbl, const SwTblBoxFormula& rFml,
                             SwCellFrms& rCells )
 {
     SwTblBoxFormula aTmp( rFml );

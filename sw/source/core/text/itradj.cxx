@@ -125,7 +125,7 @@ void SwTxtAdjuster::FormatBlock( )
 /*************************************************************************
  * lcl_CheckKashidaPositions()
  *************************************************************************/
-bool lcl_CheckKashidaPositions( SwScriptInfo& rSI, SwTxtSizeInfo& rInf, SwTxtIter& rItr,
+static bool lcl_CheckKashidaPositions( SwScriptInfo& rSI, SwTxtSizeInfo& rInf, SwTxtIter& rItr,
                                 xub_StrLen& nKashidas, xub_StrLen& nGluePortion )
 {
     // i60594 validate Kashida justification
@@ -203,7 +203,7 @@ bool lcl_CheckKashidaPositions( SwScriptInfo& rSI, SwTxtSizeInfo& rInf, SwTxtIte
 /*************************************************************************
  * lcl_CheckKashidaWidth()
  *************************************************************************/
-bool lcl_CheckKashidaWidth ( SwScriptInfo& rSI, SwTxtSizeInfo& rInf, SwTxtIter& rItr, xub_StrLen& nKashidas,
+static bool lcl_CheckKashidaWidth ( SwScriptInfo& rSI, SwTxtSizeInfo& rInf, SwTxtIter& rItr, xub_StrLen& nKashidas,
                              xub_StrLen& nGluePortion, const long nGluePortionWidth, long& nSpaceAdd )
 {
     // check kashida width

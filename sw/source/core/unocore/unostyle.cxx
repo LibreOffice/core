@@ -116,7 +116,7 @@ using namespace ::com::sun::star;
 using ::rtl::OUString;
 
 //convert FN_... to RES_ in header and footer itemset
-sal_uInt16 lcl_ConvertFNToRES(sal_uInt16 nFNId)
+static sal_uInt16 lcl_ConvertFNToRES(sal_uInt16 nFNId)
 {
     sal_uInt16 nRes = USHRT_MAX;
     switch(nFNId)
@@ -158,7 +158,7 @@ sal_uInt16 lcl_ConvertFNToRES(sal_uInt16 nFNId)
 
 }
 
-SwGetPoolIdFromName lcl_GetSwEnumFromSfxEnum ( SfxStyleFamily eFamily )
+static SwGetPoolIdFromName lcl_GetSwEnumFromSfxEnum ( SfxStyleFamily eFamily )
 {
     switch ( eFamily )
     {
@@ -475,7 +475,7 @@ SwXStyleFamily::~SwXStyleFamily()
 
 }
 
-sal_Int32 lcl_GetCountOrName ( const SwDoc &rDoc, SfxStyleFamily eFamily, String *pString, sal_uInt16 nIndex = USHRT_MAX )
+static sal_Int32 lcl_GetCountOrName ( const SwDoc &rDoc, SfxStyleFamily eFamily, String *pString, sal_uInt16 nIndex = USHRT_MAX )
 {
     sal_Int32 nCount = 0;
     switch( eFamily )
@@ -1514,7 +1514,7 @@ void SwXStyle::setParentStyle(const OUString& rParentStyle)
         throw uno::RuntimeException();
 }
 
-uno::Reference< beans::XPropertySetInfo > lcl_getPropertySetInfo( SfxStyleFamily eFamily, sal_Bool bIsConditional )
+static uno::Reference< beans::XPropertySetInfo > lcl_getPropertySetInfo( SfxStyleFamily eFamily, sal_Bool bIsConditional )
 {
     uno::Reference< beans::XPropertySetInfo >  xRet;
     switch( eFamily )
@@ -1676,7 +1676,7 @@ const SwPageDesc& SwStyleBase_Impl::GetOldPageDesc()
     return *pOldPageDesc;
 }
 
-void lcl_SetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
+static void lcl_SetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
                         const SfxItemPropertySet& rPropSet,
                         const uno::Any& rValue,
                         SwStyleBase_Impl& rBase,
@@ -2162,7 +2162,7 @@ void SwXStyle::setPropertyValues(
     }
 }
 
-uno::Any lcl_GetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
+static uno::Any lcl_GetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
                         const SfxItemPropertySet& rPropSet,
                         SwStyleBase_Impl& rBase,
                         SfxStyleSheetBase* pBase,
@@ -2948,7 +2948,7 @@ SwXPageStyle::~SwXPageStyle()
 
 }
 
-void lcl_putItemToSet(const SvxSetItem* pSetItem, sal_uInt16 nRes, sal_uInt16 nItemType, const uno::Any& rVal, sal_uInt8 nMemberId, SwStyleBase_Impl& rBaseImpl)
+static void lcl_putItemToSet(const SvxSetItem* pSetItem, sal_uInt16 nRes, sal_uInt16 nItemType, const uno::Any& rVal, sal_uInt8 nMemberId, SwStyleBase_Impl& rBaseImpl)
 {
     SvxSetItem* pNewSetItem = (SvxSetItem*)pSetItem->Clone();
     SfxItemSet& rSetSet = pNewSetItem->GetItemSet();

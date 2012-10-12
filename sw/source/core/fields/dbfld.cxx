@@ -57,7 +57,7 @@ using ::rtl::OUString;
     Beschreibung: Datenbanktrenner durch Punkte fuer Anzeige ersetzen
  --------------------------------------------------------------------*/
 
-String lcl_DBTrennConv(const String& aContent)
+static String lcl_DBTrennConv(const String& aContent)
 {
     String sTmp(aContent);
     sal_Unicode* pStr = sTmp.GetBufferAccess();

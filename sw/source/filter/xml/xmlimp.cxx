@@ -507,7 +507,7 @@ sal_Int64 SAL_CALL SwXMLImport::getSomething( const Sequence< sal_Int8 >& rId )
     return SvXMLImport::getSomething( rId );
 }
 
-OTextCursorHelper *lcl_xml_GetSwXTextCursor( const Reference < XTextCursor >& rTextCursor )
+static OTextCursorHelper *lcl_xml_GetSwXTextCursor( const Reference < XTextCursor >& rTextCursor )
 {
     Reference<XUnoTunnel> xCrsrTunnel( rTextCursor, UNO_QUERY );
     OSL_ENSURE( xCrsrTunnel.is(), "missing XUnoTunnel for Cursor" );

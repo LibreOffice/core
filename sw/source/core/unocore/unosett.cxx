@@ -209,7 +209,7 @@ const SfxItemPropertySet* GetLineNumberingSet()
     return &aLineNumberingSet_Impl;
 }
 
-SwCharFmt* lcl_getCharFmt(SwDoc* pDoc, const uno::Any& aValue)
+static SwCharFmt* lcl_getCharFmt(SwDoc* pDoc, const uno::Any& aValue)
 {
     SwCharFmt* pRet = 0;
     String sStandard(SW_RES(STR_POOLCOLL_STANDARD));
@@ -230,7 +230,7 @@ SwCharFmt* lcl_getCharFmt(SwDoc* pDoc, const uno::Any& aValue)
     return pRet;
 }
 
-SwTxtFmtColl* lcl_GetParaStyle(SwDoc* pDoc, const uno::Any& aValue)
+static SwTxtFmtColl* lcl_GetParaStyle(SwDoc* pDoc, const uno::Any& aValue)
 {
     OUString uTmp;
     aValue >>= uTmp;
@@ -246,7 +246,7 @@ SwTxtFmtColl* lcl_GetParaStyle(SwDoc* pDoc, const uno::Any& aValue)
     return pRet;
 }
 
-SwPageDesc* lcl_GetPageDesc(SwDoc* pDoc, const uno::Any& aValue)
+static SwPageDesc* lcl_GetPageDesc(SwDoc* pDoc, const uno::Any& aValue)
 {
     SwPageDesc* pRet = 0;
     sal_uInt16 nCount = pDoc->GetPageDescCnt();
@@ -1611,7 +1611,7 @@ uno::Sequence<beans::PropertyValue> SwXNumberingRules::GetNumberingRuleByIndex(
     return aSeq;
 }
 
-PropValData* lcl_FindProperty(const char* cName, PropValDataArr&    rPropertyValues)
+static PropValData* lcl_FindProperty(const char* cName, PropValDataArr&    rPropertyValues)
 {
     OUString sCmp = rtl::OUString::createFromAscii(cName);
     for(sal_uInt16 i = 0; i < rPropertyValues.size(); i++)

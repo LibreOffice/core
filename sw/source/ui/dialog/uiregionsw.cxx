@@ -76,7 +76,7 @@ using namespace ::com::sun::star;
 
 static void   lcl_ReadSections( SfxMedium& rMedium, ComboBox& rBox );
 
-void lcl_FillList( SwWrtShell& rSh, ComboBox& rSubRegions, ComboBox* pAvailNames, const SwSectionFmt* pNewFmt )
+static void lcl_FillList( SwWrtShell& rSh, ComboBox& rSubRegions, ComboBox* pAvailNames, const SwSectionFmt* pNewFmt )
 {
     const SwSectionFmt* pFmt;
     if( !pNewFmt )
@@ -122,7 +122,7 @@ void lcl_FillList( SwWrtShell& rSh, ComboBox& rSubRegions, ComboBox* pAvailNames
     }
 }
 
-void lcl_FillSubRegionList( SwWrtShell& rSh, ComboBox& rSubRegions, ComboBox* pAvailNames )
+static void lcl_FillSubRegionList( SwWrtShell& rSh, ComboBox& rSubRegions, ComboBox* pAvailNames )
 {
     lcl_FillList( rSh, rSubRegions, pAvailNames, 0 );
     IDocumentMarkAccess* const pMarkAccess = rSh.getIDocumentMarkAccess();

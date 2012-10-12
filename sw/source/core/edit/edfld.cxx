@@ -297,7 +297,7 @@ SwField* SwEditShell::GetCurFld() const
 |*    Beschreibung  Stehen die PaMs auf Feldern ?
 |*
 *************************************************************************/
-SwTxtFld* lcl_FindInputFld( SwDoc* pDoc, SwField& rFld )
+static SwTxtFld* lcl_FindInputFld( SwDoc* pDoc, SwField& rFld )
 {
     // suche das Feld ueber seine Addresse. Muss fuer InputFelder in
     // geschuetzten Feldern erfolgen

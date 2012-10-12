@@ -79,7 +79,7 @@ using ::rtl::OUString;
 #endif
 #define SW_PROP_NAME_STR(nId) SwGetPropName((nId)).pName
 
-void lcl_SetProp( uno::Reference< XPropertySetInfo > & xInfo,
+static void lcl_SetProp( uno::Reference< XPropertySetInfo > & xInfo,
                            uno::Reference< XPropertySet > & xProps,
                          const char* pPropName, const String& rValue)
 {
@@ -92,14 +92,14 @@ void lcl_SetProp( uno::Reference< XPropertySetInfo > & xInfo,
     }
 }
 
-void lcl_SetProp( uno::Reference< XPropertySetInfo > & xInfo,
+static void lcl_SetProp( uno::Reference< XPropertySetInfo > & xInfo,
                            uno::Reference< XPropertySet > & xProps,
                            sal_uInt16 nId, const String& rValue)
 {
     lcl_SetProp( xInfo, xProps, SW_PROP_NAME_STR(nId), rValue);
 }
 
-void lcl_SetProp( uno::Reference< XPropertySetInfo > & xInfo,
+static void lcl_SetProp( uno::Reference< XPropertySetInfo > & xInfo,
                            uno::Reference< XPropertySet > & xProps,
                            sal_uInt16 nId, sal_Int16 nValue )
 {
@@ -112,7 +112,7 @@ void lcl_SetProp( uno::Reference< XPropertySetInfo > & xInfo,
     }
 }
 
-void lcl_SetBOOLProp(
+static void lcl_SetBOOLProp(
                 uno::Reference< beans::XPropertySetInfo > & xInfo,
                 uno::Reference< beans::XPropertySet > & xProps,
                 sal_uInt16 nId, sal_Bool bValue )

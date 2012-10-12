@@ -479,7 +479,7 @@ sal_uLong SwHTMLWriter::WriteStream()
     return nWarn;
 }
 
-const SwFmtCol *lcl_html_GetFmtCol( const SwHTMLWriter& rHTMLWrt,
+static const SwFmtCol *lcl_html_GetFmtCol( const SwHTMLWriter& rHTMLWrt,
                                        const SwSection& rSection,
                                        const SwSectionFmt& rFmt )
 {
@@ -497,7 +497,7 @@ const SwFmtCol *lcl_html_GetFmtCol( const SwHTMLWriter& rHTMLWrt,
     return pCol;
 }
 
-sal_Bool lcl_html_IsMultiColStart( const SwHTMLWriter& rHTMLWrt, sal_uLong nIndex )
+static sal_Bool lcl_html_IsMultiColStart( const SwHTMLWriter& rHTMLWrt, sal_uLong nIndex )
 {
     sal_Bool bRet = sal_False;
     const SwSectionNode *pSectNd =
@@ -513,7 +513,7 @@ sal_Bool lcl_html_IsMultiColStart( const SwHTMLWriter& rHTMLWrt, sal_uLong nInde
     return bRet;
 }
 
-sal_Bool lcl_html_IsMultiColEnd( const SwHTMLWriter& rHTMLWrt, sal_uLong nIndex )
+static sal_Bool lcl_html_IsMultiColEnd( const SwHTMLWriter& rHTMLWrt, sal_uLong nIndex )
 {
     sal_Bool bRet = sal_False;
     const SwEndNode *pEndNd = rHTMLWrt.pDoc->GetNodes()[nIndex]->GetEndNode();
@@ -525,7 +525,7 @@ sal_Bool lcl_html_IsMultiColEnd( const SwHTMLWriter& rHTMLWrt, sal_uLong nIndex 
 }
 
 
-void lcl_html_OutSectionStartTag( SwHTMLWriter& rHTMLWrt,
+static void lcl_html_OutSectionStartTag( SwHTMLWriter& rHTMLWrt,
                                      const SwSection& rSection,
                                      const SwSectionFmt& rFmt,
                                   const SwFmtCol *pCol,
@@ -636,7 +636,7 @@ void lcl_html_OutSectionStartTag( SwHTMLWriter& rHTMLWrt,
     rHTMLWrt.IncIndentLevel();
 }
 
-void lcl_html_OutSectionEndTag( SwHTMLWriter& rHTMLWrt,
+static void lcl_html_OutSectionEndTag( SwHTMLWriter& rHTMLWrt,
                                 const SwFmtCol *pCol )
 {
     const sal_Char *pTag = pCol ? OOO_STRING_SVTOOLS_HTML_multicol : OOO_STRING_SVTOOLS_HTML_division;

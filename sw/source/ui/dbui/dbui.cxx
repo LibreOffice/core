@@ -51,13 +51,13 @@ PrintMonitor::PrintMonitor( Window *pParent, PrintMonitorType eType )
     FreeResource();
 }
 
-void lcl_ResizeControl( Window* pWin, long nDiff )
+static void lcl_ResizeControl( Window* pWin, long nDiff )
 {
     Size aSize( pWin->GetSizePixel() );
     aSize.Width() += nDiff;
     pWin->SetSizePixel( aSize );
 }
-void lcl_RePosControl( Window* pWin, long nDiff )
+static void lcl_RePosControl( Window* pWin, long nDiff )
 {
     Point aPos( pWin->GetPosPixel() );
     aPos.X()  += nDiff;

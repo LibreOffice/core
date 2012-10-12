@@ -890,7 +890,7 @@ lcl_ExportHints(
     return xRef;
 }
 
-void lcl_MoveCursor( SwUnoCrsr * const pUnoCrsr,
+static void lcl_MoveCursor( SwUnoCrsr * const pUnoCrsr,
     const xub_StrLen nCurrentIndex,
     const sal_Int32 nNextFrameIndex, const sal_Int32 nNextPortionIndex,
     const sal_Int32 nNextAttrIndex,  const sal_Int32 nNextFieldMarkIndex,

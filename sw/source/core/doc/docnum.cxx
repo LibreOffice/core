@@ -577,7 +577,7 @@ sal_Bool SwDoc::MoveOutlinePara( const SwPaM& rPam, short nOffset )
     return MoveParagraph( aPam, nOffs, sal_True );
 }
 
-sal_uInt16 lcl_FindOutlineName( const SwNodes& rNds, const String& rName,
+static sal_uInt16 lcl_FindOutlineName( const SwNodes& rNds, const String& rName,
                             sal_Bool bExact )
 {
     sal_uInt16 nSavePos = USHRT_MAX;
@@ -603,7 +603,7 @@ sal_uInt16 lcl_FindOutlineName( const SwNodes& rNds, const String& rName,
     return nSavePos;
 }
 
-sal_uInt16 lcl_FindOutlineNum( const SwNodes& rNds, String& rName )
+static sal_uInt16 lcl_FindOutlineNum( const SwNodes& rNds, String& rName )
 {
     // Valid numbers are (always just offsets!):
     //  ([Number]+\.)+  (as a regular expression!)
@@ -770,7 +770,7 @@ sal_Bool SwDoc::GotoOutline( SwPosition& rPos, const String& rName ) const
     return sal_False;
 }
 
-void lcl_ChgNumRule( SwDoc& rDoc, const SwNumRule& rRule )
+static void lcl_ChgNumRule( SwDoc& rDoc, const SwNumRule& rRule )
 {
     SwNumRule* pOld = rDoc.FindNumRulePtr( rRule.GetName() );
     OSL_ENSURE( pOld, "we cannot proceed without the old NumRule" );
@@ -1390,7 +1390,7 @@ void SwDoc::InvalidateNumRules()
 }
 
 // To the next/preceding Bullet at the same Level
-sal_Bool lcl_IsNumOk( sal_uInt8 nSrchNum, sal_uInt8& rLower, sal_uInt8& rUpper,
+static sal_Bool lcl_IsNumOk( sal_uInt8 nSrchNum, sal_uInt8& rLower, sal_uInt8& rUpper,
                     sal_Bool bOverUpper, sal_uInt8 nNumber )
 {
     OSL_ENSURE( nNumber < MAXLEVEL,
@@ -1408,7 +1408,7 @@ sal_Bool lcl_IsNumOk( sal_uInt8 nSrchNum, sal_uInt8& rLower, sal_uInt8& rUpper,
     return bRet;
 }
 
-sal_Bool lcl_IsValidPrevNextNumNode( const SwNodeIndex& rIdx )
+static sal_Bool lcl_IsValidPrevNextNumNode( const SwNodeIndex& rIdx )
 {
     sal_Bool bRet = sal_False;
     const SwNode& rNd = rIdx.GetNode();
@@ -1430,7 +1430,7 @@ sal_Bool lcl_IsValidPrevNextNumNode( const SwNodeIndex& rIdx )
     return bRet;
 }
 
-sal_Bool lcl_GotoNextPrevNum( SwPosition& rPos, sal_Bool bNext,
+static sal_Bool lcl_GotoNextPrevNum( SwPosition& rPos, sal_Bool bNext,
                             sal_Bool bOverUpper, sal_uInt8* pUpper, sal_uInt8* pLower )
 {
     const SwTxtNode* pNd = rPos.nNode.GetNode().GetTxtNode();

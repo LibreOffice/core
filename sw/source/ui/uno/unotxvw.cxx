@@ -97,7 +97,7 @@ using comphelper::HelperBaseNoState;
 
 using ::rtl::OUString;
 
-SwPaM* lcl_createPamCopy(const SwPaM& rPam)
+static SwPaM* lcl_createPamCopy(const SwPaM& rPam)
 {
     SwPaM *const pRet = new SwPaM(*rPam.GetPoint());
     ::sw::DeepCopyPaM(rPam, *pRet);

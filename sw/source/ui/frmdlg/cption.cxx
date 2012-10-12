@@ -595,7 +595,7 @@ long SwCaptionDialog::CategoryBox::PreNotify( NotifyEvent& rNEvt )
 /*-------------------------------------------------------------------------
     //#i61007# order of captions
   -----------------------------------------------------------------------*/
-void lcl_MoveH( Window& rWin, sal_Int32 nMove )
+static void lcl_MoveH( Window& rWin, sal_Int32 nMove )
 {
     Point aPos( rWin.GetPosPixel() );
     aPos.Y() += nMove;

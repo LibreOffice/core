@@ -143,7 +143,7 @@ struct ParaRstFmt
  * Is need for selections at the beginning/end and with no SSelection.
  */
 
-sal_Bool lcl_RstTxtAttr( const SwNodePtr& rpNd, void* pArgs )
+static sal_Bool lcl_RstTxtAttr( const SwNodePtr& rpNd, void* pArgs )
 {
     ParaRstFmt* pPara = (ParaRstFmt*)pArgs;
     SwTxtNode * pTxtNode = (SwTxtNode*)rpNd->GetTxtNode();
@@ -176,7 +176,7 @@ sal_Bool lcl_RstTxtAttr( const SwNodePtr& rpNd, void* pArgs )
     return sal_True;
 }
 
-sal_Bool lcl_RstAttr( const SwNodePtr& rpNd, void* pArgs )
+static sal_Bool lcl_RstAttr( const SwNodePtr& rpNd, void* pArgs )
 {
     ParaRstFmt* pPara = (ParaRstFmt*)pArgs;
     SwCntntNode* pNode = (SwCntntNode*)rpNd->GetCntntNode();
@@ -1121,7 +1121,7 @@ void SwDoc::ResetAttrAtFormat( const sal_uInt16 nWhichId,
         delete pUndo;
 }
 
-int lcl_SetNewDefTabStops( SwTwips nOldWidth, SwTwips nNewWidth,
+static int lcl_SetNewDefTabStops( SwTwips nOldWidth, SwTwips nNewWidth,
                                 SvxTabStopItem& rChgTabStop )
 {
     // Set the default values of all TabStops to the new value.
@@ -1611,7 +1611,7 @@ void SwDoc::DelTxtFmtColl( SwTxtFmtColl *pColl, sal_Bool bBroadcast )
     DelTxtFmtColl( nFmt, bBroadcast );
 }
 
-sal_Bool lcl_SetTxtFmtColl( const SwNodePtr& rpNode, void* pArgs )
+static sal_Bool lcl_SetTxtFmtColl( const SwNodePtr& rpNode, void* pArgs )
 {
     // ParaSetFmtColl * pPara = (ParaSetFmtColl*)pArgs;
     SwCntntNode* pCNd = (SwCntntNode*)rpNode->GetTxtNode();
@@ -1873,7 +1873,7 @@ SwGrfFmtColl* SwDoc::CopyGrfColl( const SwGrfFmtColl& rColl )
     return pNewColl;
 }
 
-SwPageDesc* lcl_FindPageDesc( const SwPageDescs& rArr, const String& rName )
+static SwPageDesc* lcl_FindPageDesc( const SwPageDescs& rArr, const String& rName )
 {
     for( sal_uInt16 n = rArr.size(); n; )
     {

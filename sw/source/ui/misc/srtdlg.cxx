@@ -76,7 +76,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
 using ::rtl::OUString;
 
-void lcl_ClearLstBoxAndDelUserData( ListBox& rLstBox )
+static void lcl_ClearLstBoxAndDelUserData( ListBox& rLstBox )
 {
     void* pDel;
     for( sal_uInt16 n = 0, nEnd = rLstBox.GetEntryCount(); n < nEnd; ++n )
@@ -88,7 +88,7 @@ void lcl_ClearLstBoxAndDelUserData( ListBox& rLstBox )
 /*--------------------------------------------------------------------
      Description: determine lines and columns for table selection
  --------------------------------------------------------------------*/
-sal_Bool lcl_GetSelTbl( SwWrtShell &rSh, sal_uInt16& rX, sal_uInt16& rY )
+static sal_Bool lcl_GetSelTbl( SwWrtShell &rSh, sal_uInt16& rX, sal_uInt16& rY )
 {
     const SwTableNode* pTblNd = rSh.IsCrsrInTbl();
     if( !pTblNd )

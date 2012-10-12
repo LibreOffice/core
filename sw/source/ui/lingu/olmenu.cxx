@@ -95,7 +95,7 @@
 using namespace ::com::sun::star;
 using ::rtl::OUString;
 
-extern void lcl_CharDialog( SwWrtShell &rWrtSh, sal_Bool bUseDialog, sal_uInt16 nSlot,const SfxItemSet *pArgs, SfxRequest *pReq );
+extern void sw_CharDialog( SwWrtShell &rWrtSh, sal_Bool bUseDialog, sal_uInt16 nSlot,const SfxItemSet *pArgs, SfxRequest *pReq );
 
 
 
@@ -191,7 +191,7 @@ static LanguageType lcl_CheckLanguage(
 ///     selected text. Or in other words, the language a spell checker would use.
 ///     If there is more than one language LANGUAGE_DONTKNOW will be returned.
 // check if nScriptType includes the script type associated to nLang
-inline bool lcl_checkScriptType( sal_Int16 nScriptType, LanguageType nLang )
+static inline bool lcl_checkScriptType( sal_Int16 nScriptType, LanguageType nLang )
 {
     return 0 != (nScriptType & SvtLanguageOptions::GetScriptTypeOfLanguage( nLang ));
 }
@@ -899,7 +899,7 @@ void SwSpellPopup::Execute( sal_uInt16 nId )
         else if (nId == MN_SET_SELECTION_MORE)
         {
             //Open Format/Character Dialog
-            lcl_CharDialog( *pSh, true, nId, 0, 0 );
+            sw_CharDialog( *pSh, true, nId, 0, 0 );
         }
         else if (MN_SET_LANGUAGE_PARAGRAPH_START <= nId && nId <= MN_SET_LANGUAGE_PARAGRAPH_END)
         {
@@ -931,7 +931,7 @@ void SwSpellPopup::Execute( sal_uInt16 nId )
             pSh->Push();        // save cursor
             SwLangHelper::SelectCurrentPara( *pSh );
             //Open Format/Character Dialog
-            lcl_CharDialog( *pSh, true, nId, 0, 0 );
+            sw_CharDialog( *pSh, true, nId, 0, 0 );
             pSh->Pop( sal_False );  // restore cursor
         }
     }

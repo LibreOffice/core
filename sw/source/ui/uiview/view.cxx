@@ -483,7 +483,7 @@ void SwView::SelectShell()
 
 extern "C"
 {
-    int lcl_CmpIds( const void *pFirst, const void *pSecond)
+    static int lcl_CmpIds( const void *pFirst, const void *pSecond)
     {
         return (*(sal_uInt16*)pFirst) - (*(sal_uInt16*)pSecond);
     }
@@ -1135,7 +1135,7 @@ void SwView::WriteUserData( String &rUserData, sal_Bool bBrowse )
 /*--------------------------------------------------------------------
     Beschreibung: CursorPos setzen
  --------------------------------------------------------------------*/
-bool lcl_IsOwnDocument( SwView& rView )
+static bool lcl_IsOwnDocument( SwView& rView )
 {
     uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
         rView.GetDocShell()->GetModel(), uno::UNO_QUERY_THROW);

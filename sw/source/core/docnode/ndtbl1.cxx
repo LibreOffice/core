@@ -106,7 +106,7 @@ void SwTblFmtCmp::Delete( std::vector<SwTblFmtCmp*> &rArr )
         delete rArr[i];
 }
 
-void lcl_GetStartEndCell( const SwCursor& rCrsr,
+static void lcl_GetStartEndCell( const SwCursor& rCrsr,
                         SwLayoutFrm *&prStart, SwLayoutFrm *&prEnd )
 {
     OSL_ENSURE( rCrsr.GetCntntNode() && rCrsr.GetCntntNode( sal_False ),
@@ -131,7 +131,7 @@ void lcl_GetStartEndCell( const SwCursor& rCrsr,
     prEnd   = pMarkFrm  ? pMarkFrm->GetUpper() : 0;
 }
 
-sal_Bool lcl_GetBoxSel( const SwCursor& rCursor, SwSelBoxes& rBoxes,
+static sal_Bool lcl_GetBoxSel( const SwCursor& rCursor, SwSelBoxes& rBoxes,
                     sal_Bool bAllCrsr = sal_False )
 {
     const SwTableCursor* pTblCrsr =
@@ -176,7 +176,7 @@ inline void InsertLine( std::vector<SwTableLine*>& rLineArr, SwTableLine* pLine 
 
 //-----------------------------------------------------------------------------
 
-sal_Bool lcl_IsAnLower( const SwTableLine *pLine, const SwTableLine *pAssumed )
+static sal_Bool lcl_IsAnLower( const SwTableLine *pLine, const SwTableLine *pAssumed )
 {
     const SwTableLine *pTmp = pAssumed->GetUpper() ?
                                     pAssumed->GetUpper()->GetUpper() : 0;
@@ -243,7 +243,7 @@ sal_Bool _FindLine( _FndLine& rLine, LinesAndTable* pPara )
     return sal_True;
 }
 
-void lcl_CollectLines( std::vector<SwTableLine*> &rArr, const SwCursor& rCursor, bool bRemoveLines )
+static void lcl_CollectLines( std::vector<SwTableLine*> &rArr, const SwCursor& rCursor, bool bRemoveLines )
 {
     //Zuerst die selektierten Boxen einsammeln.
     SwSelBoxes aBoxes;
@@ -285,7 +285,7 @@ void lcl_CollectLines( std::vector<SwTableLine*> &rArr, const SwCursor& rCursor,
 
 //-----------------------------------------------------------------------------
 
-void lcl_ProcessRowAttr( std::vector<SwTblFmtCmp*>& rFmtCmp, SwTableLine* pLine, const SfxPoolItem& rNew )
+static void lcl_ProcessRowAttr( std::vector<SwTblFmtCmp*>& rFmtCmp, SwTableLine* pLine, const SfxPoolItem& rNew )
 {
     SwFrmFmt *pNewFmt;
     if ( 0 != (pNewFmt = SwTblFmtCmp::FindNewFmt( rFmtCmp, pLine->GetFrmFmt(), 0 )))
@@ -301,9 +301,9 @@ void lcl_ProcessRowAttr( std::vector<SwTblFmtCmp*>& rFmtCmp, SwTableLine* pLine,
 
 //-----------------------------------------------------------------------------
 
-void lcl_ProcessBoxSize( std::vector<SwTblFmtCmp*> &rFmtCmp, SwTableBox *pBox, const SwFmtFrmSize &rNew );
+static void lcl_ProcessBoxSize( std::vector<SwTblFmtCmp*> &rFmtCmp, SwTableBox *pBox, const SwFmtFrmSize &rNew );
 
-void lcl_ProcessRowSize( std::vector<SwTblFmtCmp*> &rFmtCmp, SwTableLine *pLine, const SwFmtFrmSize &rNew )
+static void lcl_ProcessRowSize( std::vector<SwTblFmtCmp*> &rFmtCmp, SwTableLine *pLine, const SwFmtFrmSize &rNew )
 {
     lcl_ProcessRowAttr( rFmtCmp, pLine, rNew );
     SwTableBoxes &rBoxes = pLine->GetTabBoxes();
@@ -313,7 +313,7 @@ void lcl_ProcessRowSize( std::vector<SwTblFmtCmp*> &rFmtCmp, SwTableLine *pLine,
 
 //-----------------------------------------------------------------------------
 
-void lcl_ProcessBoxSize( std::vector<SwTblFmtCmp*> &rFmtCmp, SwTableBox *pBox, const SwFmtFrmSize &rNew )
+static void lcl_ProcessBoxSize( std::vector<SwTblFmtCmp*> &rFmtCmp, SwTableBox *pBox, const SwFmtFrmSize &rNew )
 {
     SwTableLines &rLines = pBox->GetTabLines();
     if ( !rLines.empty() )
@@ -562,7 +562,7 @@ inline void InsertCell( std::vector<SwCellFrm*>& rCellArr, SwCellFrm* pCellFrm )
 }
 
 //-----------------------------------------------------------------------------
-void lcl_CollectCells( std::vector<SwCellFrm*> &rArr, const SwRect &rUnion,
+static void lcl_CollectCells( std::vector<SwCellFrm*> &rArr, const SwRect &rUnion,
                           SwTabFrm *pTab )
 {
     SwLayoutFrm *pCell = pTab->FirstCell();
@@ -813,7 +813,7 @@ void SwDoc::SetTabBorders( const SwCursor& rCursor, const SfxItemSet& rSet )
     }
 }
 
-void lcl_SetLineStyle( SvxBorderLine *pToSet,
+static void lcl_SetLineStyle( SvxBorderLine *pToSet,
                           const Color *pColor, const SvxBorderLine *pBorderLine)
 {
     if ( pBorderLine )
@@ -1275,7 +1275,7 @@ sal_uInt16 SwDoc::GetBoxAlign( const SwCursor& rCursor ) const
 #*  Class      :  SwDoc
 #*  Methoden   :  AdjustCellWidth()
 #***********************************************************************/
-sal_uInt16 lcl_CalcCellFit( const SwLayoutFrm *pCell )
+static sal_uInt16 lcl_CalcCellFit( const SwLayoutFrm *pCell )
 {
     SwTwips nRet = 0;
     const SwFrm *pFrm = pCell->Lower(); //Die ganze Zelle.
@@ -1315,7 +1315,7 @@ sal_uInt16 lcl_CalcCellFit( const SwLayoutFrm *pCell )
  *dieser erhalten, kleinere Wuensche werden ueberschrieben.
  */
 
-void lcl_CalcSubColValues( std::vector<sal_uInt16> &rToFill, const SwTabCols &rCols,
+static void lcl_CalcSubColValues( std::vector<sal_uInt16> &rToFill, const SwTabCols &rCols,
                               const SwLayoutFrm *pCell, const SwLayoutFrm *pTab,
                               sal_Bool bWishValues )
 {
@@ -1375,7 +1375,7 @@ void lcl_CalcSubColValues( std::vector<sal_uInt16> &rToFill, const SwTabCols &rC
  *                      schneidet wird der Minimalwert ermittelt.
  */
 
-void lcl_CalcColValues( std::vector<sal_uInt16> &rToFill, const SwTabCols &rCols,
+static void lcl_CalcColValues( std::vector<sal_uInt16> &rToFill, const SwTabCols &rCols,
                            const SwLayoutFrm *pStart, const SwLayoutFrm *pEnd,
                            sal_Bool bWishValues )
 {

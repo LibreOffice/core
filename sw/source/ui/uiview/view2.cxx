@@ -1912,7 +1912,7 @@ sal_Bool SwView::JumpToSwMark( const String& rMark )
 // Undo "Insert form file" crashes with documents imported from binary filter (.sdw) => disabled
 // Undo "Insert form file" crashes with (.odt) documents crashes if these documents contains
 // page styles with active header/footer => disabled for those documents
-sal_uInt16 lcl_PageDescWithHeader( const SwDoc& rDoc )
+static sal_uInt16 lcl_PageDescWithHeader( const SwDoc& rDoc )
 {
     sal_uInt16 nRet = 0;
     sal_uInt16 nCnt = rDoc.GetPageDescCnt();
@@ -2105,13 +2105,13 @@ long SwView::InsertMedium( sal_uInt16 nSlotId, SfxMedium* pMedium, sal_Int16 nVe
         SfxObjectShellRef xDocSh;
         SfxObjectShellLock xLockRef;
 
-extern int lcl_FindDocShell( SfxObjectShellRef& xDocSh, SfxObjectShellLock& xLockRef,
+        extern int sw_FindDocShell( SfxObjectShellRef& xDocSh, SfxObjectShellLock& xLockRef,
                             const String& rFileName, const String& rPasswd,
                             String& rFilter, sal_Int16 nVersion,
                             SwDocShell* pDestSh );
 
         String sFltNm;
-        int nRet = lcl_FindDocShell( xDocSh, xLockRef, pMedium->GetName(), aEmptyStr,
+        int nRet = sw_FindDocShell( xDocSh, xLockRef, pMedium->GetName(), aEmptyStr,
                                     sFltNm, nVersion, pDocSh );
         if( nRet )
         {

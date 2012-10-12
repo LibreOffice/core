@@ -149,7 +149,7 @@ static const char cUserSuffix[] = " (user)";
 #define USER_LEN 12
 #define USER_AND_SUFFIXLEN 19
 
-void lcl_ConvertTOUNameToProgrammaticName(OUString& rTmp)
+static void lcl_ConvertTOUNameToProgrammaticName(OUString& rTmp)
 {
     ShellResource* pShellRes = ViewShell::GetShellRes();
 

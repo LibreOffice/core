@@ -533,7 +533,7 @@ void SwTxtNode::CopyCollFmt( SwTxtNode& rDestNd )
 
 // Copy method from SwDoc
 // Prevent copying in Flys that are anchored in the area
-sal_Bool lcl_ChkFlyFly( SwDoc* pDoc, sal_uLong nSttNd, sal_uLong nEndNd,
+static sal_Bool lcl_ChkFlyFly( SwDoc* pDoc, sal_uLong nSttNd, sal_uLong nEndNd,
                         sal_uLong nInsNd )
 {
     const SwFrmFmts& rFrmFmtTbl = *pDoc->GetSpzFrmFmts();
@@ -572,7 +572,7 @@ sal_Bool lcl_ChkFlyFly( SwDoc* pDoc, sal_uLong nSttNd, sal_uLong nEndNd,
     return sal_False;
 }
 
-void lcl_DeleteRedlines( const SwPaM& rPam, SwPaM& rCpyPam )
+static void lcl_DeleteRedlines( const SwPaM& rPam, SwPaM& rCpyPam )
 {
     const SwDoc* pSrcDoc = rPam.GetDoc();
     const SwRedlineTbl& rTbl = pSrcDoc->GetRedlineTbl();
@@ -653,7 +653,7 @@ void lcl_DeleteRedlines( const SwPaM& rPam, SwPaM& rCpyPam )
     }
 }
 
-void lcl_DeleteRedlines( const SwNodeRange& rRg, SwNodeRange& rCpyRg )
+static void lcl_DeleteRedlines( const SwNodeRange& rRg, SwNodeRange& rCpyRg )
 {
     SwDoc* pSrcDoc = rRg.aStart.GetNode().GetDoc();
     if( !pSrcDoc->GetRedlineTbl().empty() )
@@ -799,7 +799,7 @@ SwDoc::CopyRange( SwPaM& rPam, SwPosition& rPos, const bool bCopyAll ) const
     return bRet;
 }
 
-bool lcl_MarksWholeNode(const SwPaM & rPam)
+static bool lcl_MarksWholeNode(const SwPaM & rPam)
 {
     bool bResult = false;
     const SwPosition* pStt = rPam.Start();
@@ -822,7 +822,7 @@ bool lcl_MarksWholeNode(const SwPaM & rPam)
 }
 
 // #i86492#
-bool lcl_ContainsOnlyParagraphsInList( const SwPaM& rPam )
+static bool lcl_ContainsOnlyParagraphsInList( const SwPaM& rPam )
 {
     bool bRet = false;
 
@@ -1371,7 +1371,7 @@ void SwDoc::CopyWithFlyInFly( const SwNodeRange& rRg, const xub_StrLen nEndConte
     pDest->GetNodes()._DelDummyNodes( aCpyRange );
 }
 
-void lcl_ChainFmts( SwFlyFrmFmt *pSrc, SwFlyFrmFmt *pDest )
+static void lcl_ChainFmts( SwFlyFrmFmt *pSrc, SwFlyFrmFmt *pDest )
 {
     SwFmtChain aSrc( pSrc->GetChain() );
     if ( !aSrc.GetNext() )

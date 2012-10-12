@@ -1246,7 +1246,7 @@ void SwEditShell::PutSpellingToSentenceStart()
     pSpellIter->ToSentenceStart();
 }
 
-sal_uInt32 lcl_CountRedlines(
+static sal_uInt32 lcl_CountRedlines(
                             const ::svx::SpellPortions& rLastPortions)
 {
     sal_uInt32 nRet = 0;
@@ -1426,7 +1426,7 @@ void SwEditShell::ApplyChangedSentence(const ::svx::SpellPortions& rNewPortions,
     collect all deleted redlines of the current text node beginning at the
     start of the cursor position
   -----------------------------------------------------------------------*/
-SpellContentPositions lcl_CollectDeletedRedlines(SwEditShell* pSh)
+static SpellContentPositions lcl_CollectDeletedRedlines(SwEditShell* pSh)
 {
     SpellContentPositions aRedlines;
     SwDoc* pDoc = pSh->GetDoc();
@@ -1465,7 +1465,7 @@ SpellContentPositions lcl_CollectDeletedRedlines(SwEditShell* pSh)
 /*-------------------------------------------------------------------------
     remove the redline positions after the current selection
   -----------------------------------------------------------------------*/
-void lcl_CutRedlines( SpellContentPositions& aDeletedRedlines, SwEditShell* pSh )
+static void lcl_CutRedlines( SpellContentPositions& aDeletedRedlines, SwEditShell* pSh )
 {
     if(!aDeletedRedlines.empty())
     {
@@ -1480,7 +1480,7 @@ void lcl_CutRedlines( SpellContentPositions& aDeletedRedlines, SwEditShell* pSh 
     }
 }
 
-SpellContentPosition  lcl_FindNextDeletedRedline(
+static SpellContentPosition  lcl_FindNextDeletedRedline(
         const SpellContentPositions& rDeletedRedlines,
         xub_StrLen nSearchFrom )
 {
@@ -1707,7 +1707,7 @@ void SwSpellIter::ToSentenceStart()
     bBackToStartOfSentence = true;
 }
 
-LanguageType lcl_GetLanguage(SwEditShell& rSh)
+static LanguageType lcl_GetLanguage(SwEditShell& rSh)
 {
     sal_uInt16 nScriptType = rSh.GetScriptType();
     sal_uInt16 nLangWhichId = RES_CHRATR_LANGUAGE;

@@ -63,7 +63,7 @@ public:
 };
 
 /*************************************************************************
- *                      xub_StrLen lcl_CalcCaseMap()
+ *                      xub_StrLen sw_CalcCaseMap()
  *
  * rFnt: required for CalcCaseMap
  * rOrigString: The original string
@@ -73,7 +73,7 @@ public:
  *       to a position in rOrigString
  *************************************************************************/
 
-xub_StrLen lcl_CalcCaseMap( const SwFont& rFnt,
+xub_StrLen sw_CalcCaseMap( const SwFont& rFnt,
                             const XubString& rOrigString,
                             xub_StrLen nOfst,
                             xub_StrLen nLen,
@@ -81,7 +81,7 @@ xub_StrLen lcl_CalcCaseMap( const SwFont& rFnt,
 {
     int j = 0;
     const xub_StrLen nEnd = nOfst + nLen;
-    OSL_ENSURE( nEnd <= rOrigString.Len(), "lcl_CalcCaseMap: Wrong parameters" );
+    OSL_ENSURE( nEnd <= rOrigString.Len(), "sw_CalcCaseMap: Wrong parameters" );
 
     // special case for title case:
     const bool bTitle = SVX_CASEMAP_TITEL == rFnt.GetCaseMap() &&
@@ -236,7 +236,7 @@ void SwDoGetCapitalBreak::Do()
             if ( GetCapInf()  )
             {
                 if ( GetCapInf()->nLen != rInf.GetLen() )
-                    nBreak = lcl_CalcCaseMap( *rInf.GetFont(),
+                    nBreak = sw_CalcCaseMap( *rInf.GetFont(),
                                               GetCapInf()->rString,
                                               GetCapInf()->nIdx,
                                               GetCapInf()->nLen, nBreak );

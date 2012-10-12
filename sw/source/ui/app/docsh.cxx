@@ -518,7 +518,7 @@ sal_Bool SwDocShell::SaveAs( SfxMedium& rMedium )
 /*--------------------------------------------------------------------
     Description: Save all Formats
  --------------------------------------------------------------------*/
-SwSrcView* lcl_GetSourceView( SwDocShell* pSh )
+static SwSrcView* lcl_GetSourceView( SwDocShell* pSh )
 {
     // are we in SourceView?
     SfxViewFrame* pVFrame = SfxViewFrame::GetFirst( pSh );

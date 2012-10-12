@@ -630,7 +630,7 @@ SfxTabPage* SwStdFontTabPage::Create( Window* pParent,
     return new SwStdFontTabPage(pParent, rAttrSet);
 }
 
-void lcl_SetColl(SwWrtShell* pWrtShell, sal_uInt16 nType,
+static void lcl_SetColl(SwWrtShell* pWrtShell, sal_uInt16 nType,
                     SfxPrinter* pPrt, const String& rStyle,
                     sal_uInt16 nFontWhich)
 {
@@ -642,7 +642,7 @@ void lcl_SetColl(SwWrtShell* pWrtShell, sal_uInt16 nType,
                 aEmptyStr, aFont.GetPitch(), aFont.GetCharSet(), nFontWhich));
 }
 
-void lcl_SetColl(SwWrtShell* pWrtShell, sal_uInt16 nType,
+static void lcl_SetColl(SwWrtShell* pWrtShell, sal_uInt16 nType,
                     sal_Int32 nHeight, sal_uInt16 nFontHeightWhich)
 {
     float fSize = (float)nHeight / 10;
@@ -2435,7 +2435,7 @@ IMPL_LINK_NOARG(SwCompareOptionsTabPage, IgnoreHdl)
 
 #ifdef DBG_UTIL
 
-void lcl_SetPosSize(Window& rWin, Point aPos, Size aSize)
+static void lcl_SetPosSize(Window& rWin, Point aPos, Size aSize)
 {
     aPos = rWin.LogicToPixel(aPos, MAP_APPFONT);
     aSize = rWin.OutputDevice::LogicToPixel(aSize, MAP_APPFONT);

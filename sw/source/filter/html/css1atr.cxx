@@ -1115,7 +1115,7 @@ const SwFmt *SwHTMLWriter::GetParentFmt( const SwFmt& rFmt, sal_uInt16 nDeep )
     return pRefFmt;
 }
 
-sal_Bool lcl_css1atr_equalFontItems( const SfxPoolItem& r1, const SfxPoolItem& r2 )
+sal_Bool swhtml_css1atr_equalFontItems( const SfxPoolItem& r1, const SfxPoolItem& r2 )
 {
     return  ((const SvxFontItem &)r1).GetFamilyName() ==
                     ((const SvxFontItem &)r2).GetFamilyName() &&
@@ -1185,7 +1185,7 @@ void SwHTMLWriter::SubtractItemSet( SfxItemSet& rItemSet,
                   ((RES_CHRATR_FONT == nWhich ||
                     RES_CHRATR_CJK_FONT == nWhich ||
                     RES_CHRATR_CTL_FONT == nWhich)  &&
-                   lcl_css1atr_equalFontItems( *pItem, *pRefItem )) ) )
+                   swhtml_css1atr_equalFontItems( *pItem, *pRefItem )) ) )
             {
                 // das Attribut ist mit dem gleichen Wert in beiden
                 // Vorlagen vorhanden und muss nicht ausgegeben werden
@@ -1332,9 +1332,9 @@ sal_Bool SwHTMLWriter::HasScriptDependentItems( const SfxItemSet& rItemSet,
             // to take care about their special HTML/CSS1 representation.
             if( RES_CHRATR_FONT == aWhichIds[i] )
             {
-                if( !lcl_css1atr_equalFontItems( *pItem, *pItemCJK ) ||
-                    !lcl_css1atr_equalFontItems( *pItem, *pItemCTL ) ||
-                    !lcl_css1atr_equalFontItems( *pItemCJK, *pItemCTL ) )
+                if( !swhtml_css1atr_equalFontItems( *pItem, *pItemCJK ) ||
+                    !swhtml_css1atr_equalFontItems( *pItem, *pItemCTL ) ||
+                    !swhtml_css1atr_equalFontItems( *pItemCJK, *pItemCTL ) )
                     return sal_True;
             }
             else

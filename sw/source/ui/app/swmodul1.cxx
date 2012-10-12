@@ -71,7 +71,7 @@ using namespace ::com::sun::star::view;
 using namespace ::com::sun::star::lang;
 
 
-void lcl_SetUIPrefs(const SwViewOption &rPref, SwView* pView, ViewShell* pSh )
+static void lcl_SetUIPrefs(const SwViewOption &rPref, SwView* pView, ViewShell* pSh )
 {
     // in FrameSets the actual visibility can differ from the ViewOption's setting
     sal_Bool bVScrollChanged = rPref.IsViewVScrollBar() != pSh->GetViewOptions()->IsViewVScrollBar();
@@ -444,7 +444,7 @@ sal_uInt16 SwModule::InsertRedlineAuthor(const String& rAuthor)
     return nPos;
 }
 
-void lcl_FillAuthorAttr( sal_uInt16 nAuthor, SfxItemSet &rSet,
+static void lcl_FillAuthorAttr( sal_uInt16 nAuthor, SfxItemSet &rSet,
                         const AuthorCharAttr &rAttr )
 {
     Color aCol( rAttr.nColor );

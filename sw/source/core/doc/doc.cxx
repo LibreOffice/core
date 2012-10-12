@@ -1224,7 +1224,7 @@ sal_uInt16 _PostItFld::GetPageNo(
     return 0;
 }
 
-bool lcl_GetPostIts(
+bool sw_GetPostIts(
     IDocumentFieldsAccess* pIDFA,
     _SetGetExpFlds * pSrtLst )
 {
@@ -1979,7 +1979,7 @@ void SwDoc::ReRead( SwPaM& rPam, const String& rGrfName,
     }
 }
 
-sal_Bool lcl_SpellAndGrammarAgain( const SwNodePtr& rpNd, void* pArgs )
+static sal_Bool lcl_SpellAndGrammarAgain( const SwNodePtr& rpNd, void* pArgs )
 {
     SwTxtNode *pTxtNode = (SwTxtNode*)rpNd->GetTxtNode();
     sal_Bool bOnlyWrong = *(sal_Bool*)pArgs;
@@ -2007,7 +2007,7 @@ sal_Bool lcl_SpellAndGrammarAgain( const SwNodePtr& rpNd, void* pArgs )
     return sal_True;
 }
 
-sal_Bool lcl_CheckSmartTagsAgain( const SwNodePtr& rpNd, void*  )
+static sal_Bool lcl_CheckSmartTagsAgain( const SwNodePtr& rpNd, void*  )
 {
     SwTxtNode *pTxtNode = (SwTxtNode*)rpNd->GetTxtNode();
 //  sal_Bool bOnlyWrong = *(sal_Bool*)pArgs;
@@ -2499,7 +2499,7 @@ bool SwDoc::LinksUpdated() const
 }
 
 // embedded alle lokalen Links (Bereiche/Grafiken)
-::sfx2::SvBaseLink* lcl_FindNextRemovableLink( const ::sfx2::SvBaseLinks& rLinks, sfx2::LinkManager& rLnkMgr )
+static ::sfx2::SvBaseLink* lcl_FindNextRemovableLink( const ::sfx2::SvBaseLinks& rLinks, sfx2::LinkManager& rLnkMgr )
 {
     for( sal_uInt16 n = 0; n < rLinks.size(); ++n )
     {

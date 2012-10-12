@@ -320,7 +320,7 @@ sal_uInt16 SwEditShell::GetFullSelectedSectionCount() const
  *
  * If a suitable node is found, an SwNode* is returned; else it is NULL.
  */
-const SwNode* lcl_SpecialInsertNode(const SwPosition* pCurrentPos)
+static const SwNode* lcl_SpecialInsertNode(const SwPosition* pCurrentPos)
 {
     const SwNode* pReturn = NULL;
 

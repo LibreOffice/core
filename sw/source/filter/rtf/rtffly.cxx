@@ -148,7 +148,7 @@ void SwFlySave::SetFlySize( const SwTableNode& rTblNd )
         aFlySet.Put( SwFmtFrmSize( rSz.GetHeightSizeType(), nWidth, rSz.GetHeight() ));
 }
 
-sal_Bool lcl_HasBreakAttrs( const SwCntntNode& rNd )
+static sal_Bool lcl_HasBreakAttrs( const SwCntntNode& rNd )
 {
     sal_Bool bRet = sal_False;
     const SfxItemSet& rSet = rNd.GetSwAttrSet();
@@ -163,7 +163,7 @@ sal_Bool lcl_HasBreakAttrs( const SwCntntNode& rNd )
 }
 
 
-void lcl_CpyBreakAttrs( SwCntntNode* pSrcNd, SwCntntNode* pDstNd,
+static void lcl_CpyBreakAttrs( SwCntntNode* pSrcNd, SwCntntNode* pDstNd,
                         SwNodeIndex* pNewIdx )
 {
     const SfxItemSet* pSet;

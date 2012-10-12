@@ -1642,7 +1642,7 @@ void SwBasicEscherEx::WriteBrushAttr(const SvxBrushItem &rBrush,
     }
 }
 
-bool lcl_isInHeader(const SwFrmFmt& rFmt)
+static bool lcl_isInHeader(const SwFrmFmt& rFmt)
 {
     const SwFlyFrmFmt* pFlyFrmFmt = dynamic_cast<const SwFlyFrmFmt*>(&rFmt);
     if (!pFlyFrmFmt)

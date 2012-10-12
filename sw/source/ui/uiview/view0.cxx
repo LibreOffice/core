@@ -160,13 +160,13 @@ sal_Bool SwView::IsMailMergeSourceView() const
     return pViewImpl->IsMailMergeSourceView();
 }
 
-sal_Bool lcl_IsViewMarks( const SwViewOption& rVOpt )
+static sal_Bool lcl_IsViewMarks( const SwViewOption& rVOpt )
 {
     return  rVOpt.IsHardBlank() &&
             rVOpt.IsSoftHyph() &&
             SwViewOption::IsFieldShadings();
 }
-void lcl_SetViewMarks(SwViewOption& rVOpt, sal_Bool bOn )
+static void lcl_SetViewMarks(SwViewOption& rVOpt, sal_Bool bOn )
 {
     rVOpt.SetHardBlank(bOn);
     rVOpt.SetSoftHyph(bOn);
@@ -174,7 +174,7 @@ void lcl_SetViewMarks(SwViewOption& rVOpt, sal_Bool bOn )
             VIEWOPT_FIELD_SHADINGS, bOn, sal_True);
 }
 
-void lcl_SetViewMetaChars( SwViewOption& rVOpt, sal_Bool bOn)
+static void lcl_SetViewMetaChars( SwViewOption& rVOpt, sal_Bool bOn)
 {
     rVOpt.SetViewMetaChars( bOn );
     if(bOn && !(rVOpt.IsParagraph()     ||

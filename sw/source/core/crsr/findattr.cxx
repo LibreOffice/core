@@ -106,7 +106,7 @@ const SwTxtAttr* GetBkwrdTxtHint( const SwpHints& rHtsArr, sal_uInt16& rPos,
     return 0; // invalid text attribute
 }
 
-void lcl_SetAttrPam( SwPaM& rPam, xub_StrLen nStart, const xub_StrLen* pEnd,
+static void lcl_SetAttrPam( SwPaM& rPam, xub_StrLen nStart, const xub_StrLen* pEnd,
                      const sal_Bool bSaveMark )
 {
     xub_StrLen nCntntPos;
@@ -144,7 +144,7 @@ void lcl_SetAttrPam( SwPaM& rPam, xub_StrLen nStart, const xub_StrLen* pEnd,
     @param bValue   ???
     @return Returns <true> if found, <false> otherwise.
 */
-sal_Bool lcl_Search( const SwTxtNode& rTxtNd, SwPaM& rPam,
+static sal_Bool lcl_Search( const SwTxtNode& rTxtNd, SwPaM& rPam,
                     const SfxPoolItem& rCmpItem,
                     SwMoveFn fnMove, sal_Bool bValue )
 {
@@ -680,7 +680,7 @@ int SwAttrCheckArr::CheckStack()
 
 
 
-int lcl_SearchForward( const SwTxtNode& rTxtNd, SwAttrCheckArr& rCmpArr,
+static int lcl_SearchForward( const SwTxtNode& rTxtNd, SwAttrCheckArr& rCmpArr,
                             SwPaM& rPam )
 {
     xub_StrLen nEndPos, nSttPos;
@@ -751,7 +751,7 @@ int lcl_SearchForward( const SwTxtNode& rTxtNd, SwAttrCheckArr& rCmpArr,
 }
 
 
-int lcl_SearchBackward( const SwTxtNode& rTxtNd, SwAttrCheckArr& rCmpArr,
+static int lcl_SearchBackward( const SwTxtNode& rTxtNd, SwAttrCheckArr& rCmpArr,
                             SwPaM& rPam )
 {
     xub_StrLen nEndPos, nSttPos;
@@ -827,7 +827,7 @@ int lcl_SearchBackward( const SwTxtNode& rTxtNd, SwAttrCheckArr& rCmpArr,
 }
 
 
-int lcl_Search( const SwCntntNode& rCNd, const SfxItemSet& rCmpSet, sal_Bool bNoColls )
+static int lcl_Search( const SwCntntNode& rCNd, const SfxItemSet& rCmpSet, sal_Bool bNoColls )
 {
     // search only hard attribution?
     if( bNoColls && !rCNd.HasSwAttrSet() )

@@ -68,7 +68,7 @@ char* db_pretty_print(const String* str, int flags, char* fmt)
 }
 
 template<class T>
-String lcl_dbg_out_SvPtrArr(const T & rArr)
+static String lcl_dbg_out_SvPtrArr(const T & rArr)
 {
     String aStr("[ ", RTL_TEXTENCODING_ASCII_US);
 
@@ -259,7 +259,7 @@ map<sal_uInt16,String,CompareUShort> & GetItemWhichMap()
     return aItemWhichMap;
 }
 
-const String lcl_dbg_out(const SfxPoolItem & rItem)
+static const String lcl_dbg_out(const SfxPoolItem & rItem)
 {
     String aStr("[ ", RTL_TEXTENCODING_ASCII_US);
 
@@ -284,7 +284,7 @@ SW_DLLPUBLIC const char * dbg_out(const SfxPoolItem * pItem)
                    String("(nil)", RTL_TEXTENCODING_ASCII_US));
 }
 
-SW_DLLPUBLIC const String lcl_dbg_out(const SfxItemSet & rSet)
+SW_DLLPUBLIC static const String lcl_dbg_out(const SfxItemSet & rSet)
 {
     SfxItemIter aIter(rSet);
     const SfxPoolItem * pItem;
@@ -318,7 +318,7 @@ SW_DLLPUBLIC const char * dbg_out(const SfxItemSet & rSet)
     return dbg_out(lcl_dbg_out(rSet));
 }
 
-const String lcl_dbg_out(const SwTxtAttr & rAttr)
+static const String lcl_dbg_out(const SwTxtAttr & rAttr)
 {
     String aStr("[ ", RTL_TEXTENCODING_ASCII_US);
 
@@ -338,7 +338,7 @@ SW_DLLPUBLIC const char * dbg_out(const SwTxtAttr & rAttr)
     return dbg_out(lcl_dbg_out(rAttr));
 }
 
-const String lcl_dbg_out(const SwpHints & rHints)
+static const String lcl_dbg_out(const SwpHints & rHints)
 {
     String aStr("[ SwpHints\n", RTL_TEXTENCODING_ASCII_US);
 
@@ -359,7 +359,7 @@ SW_DLLPUBLIC const char * dbg_out(const SwpHints &rHints)
     return dbg_out(lcl_dbg_out(rHints));
 }
 
-String lcl_dbg_out(const SwPosition & rPos)
+static String lcl_dbg_out(const SwPosition & rPos)
 {
     String aStr("( ", RTL_TEXTENCODING_ASCII_US);
 
@@ -380,7 +380,7 @@ SW_DLLPUBLIC const char * dbg_out(const SwPosition & rPos)
     return dbg_out(lcl_dbg_out(rPos));
 }
 
-String lcl_dbg_out(const SwPaM & rPam)
+static String lcl_dbg_out(const SwPaM & rPam)
 {
    String aStr("[ Pt: ", RTL_TEXTENCODING_ASCII_US);
 
@@ -402,7 +402,7 @@ SW_DLLPUBLIC const char * dbg_out(const SwPaM & rPam)
     return dbg_out(lcl_dbg_out(rPam));
 }
 
-String lcl_dbg_out(const SwNodeNum & )
+static String lcl_dbg_out(const SwNodeNum & )
 {
     return String();/*rNum.ToString();*/
 }
@@ -412,7 +412,7 @@ SW_DLLPUBLIC const char * dbg_out(const SwNodeNum & rNum)
     return dbg_out(lcl_dbg_out(rNum));
 }
 
-String lcl_dbg_out(const SwRect & rRect)
+static String lcl_dbg_out(const SwRect & rRect)
 {
     String aResult("[ [", RTL_TEXTENCODING_ASCII_US);
 
@@ -434,7 +434,7 @@ SW_DLLPUBLIC const char * dbg_out(const SwRect & rRect)
     return dbg_out(lcl_dbg_out(rRect));
 }
 
-String lcl_dbg_out(const SwFrmFmt & rFrmFmt)
+static String lcl_dbg_out(const SwFrmFmt & rFrmFmt)
 {
     String aResult("[ ", RTL_TEXTENCODING_ASCII_US);
 
@@ -461,7 +461,7 @@ SW_DLLPUBLIC const char * dbg_out(const SwFrmFmt & rFrmFmt)
     return dbg_out(lcl_dbg_out(rFrmFmt));
 }
 
-const String lcl_AnchoredFrames(const SwNode & rNode)
+static const String lcl_AnchoredFrames(const SwNode & rNode)
 {
     String aResult("[", RTL_TEXTENCODING_ASCII_US);
 
@@ -497,7 +497,7 @@ const String lcl_AnchoredFrames(const SwNode & rNode)
     return aResult;
 }
 
-String lcl_dbg_out_NumType(sal_Int16 nType)
+static String lcl_dbg_out_NumType(sal_Int16 nType)
 {
     String aTmpStr;
 
@@ -542,7 +542,7 @@ String lcl_dbg_out_NumType(sal_Int16 nType)
     return aTmpStr;
 }
 
-String lcl_dbg_out(const SwNode & rNode)
+static String lcl_dbg_out(const SwNode & rNode)
 {
     String aTmpStr;
 
@@ -722,19 +722,7 @@ SW_DLLPUBLIC const char * dbg_out(const SwTxtNode * pNode)
         return NULL;
 }
 
-bool lcl_dbg_add_node(const SwNodePtr & pNode, void * pArgs)
-{
-    if (pNode)
-    {
-        (*((String *) pArgs)) += lcl_dbg_out(*pNode);
-        (*((String *) pArgs)) += String("\n", RTL_TEXTENCODING_ASCII_US);
-    }
-
-    //MBA: this code didn't compile, needed to add a return value
-    return true;
-}
-
-void lcl_dbg_nodes_inner(String & aStr, SwNodes & rNodes, sal_uLong & nIndex)
+static void lcl_dbg_nodes_inner(String & aStr, SwNodes & rNodes, sal_uLong & nIndex)
 {
     SwNode * pNode = rNodes[nIndex];
     SwStartNode * pStartNode = dynamic_cast<SwStartNode *> (pNode);
@@ -783,7 +771,7 @@ void lcl_dbg_nodes_inner(String & aStr, SwNodes & rNodes, sal_uLong & nIndex)
     aStr += String(">\n", RTL_TEXTENCODING_ASCII_US);
 }
 
-String lcl_dbg_out(SwNodes & rNodes)
+static String lcl_dbg_out(SwNodes & rNodes)
 {
     String aStr("<nodes-array>", RTL_TEXTENCODING_ASCII_US);
 
@@ -805,7 +793,7 @@ SW_DLLPUBLIC const char * dbg_out(SwNodes & rNodes)
     return dbg_out(lcl_dbg_out(rNodes));
 }
 
-String lcl_dbg_out(const SwUndo & rUndo)
+static String lcl_dbg_out(const SwUndo & rUndo)
 {
     String aStr("[ ", RTL_TEXTENCODING_ASCII_US);
 
@@ -824,7 +812,7 @@ SW_DLLPUBLIC const char * dbg_out(const SwUndo & rUndo)
     return dbg_out(lcl_dbg_out(rUndo));
 }
 
-String lcl_dbg_out(SwOutlineNodes & rNodes)
+static String lcl_dbg_out(SwOutlineNodes & rNodes)
 {
     String aStr("[\n", RTL_TEXTENCODING_ASCII_US);
 
@@ -844,7 +832,7 @@ SW_DLLPUBLIC const char * dbg_out(SwOutlineNodes & rNodes)
     return dbg_out(lcl_dbg_out(rNodes));
 }
 
-String lcl_dbg_out(const SwRewriter & rRewriter)
+static String lcl_dbg_out(const SwRewriter & rRewriter)
 {
     (void) rRewriter;
     String aResult;
@@ -859,7 +847,7 @@ SW_DLLPUBLIC const char * dbg_out(const SwRewriter & rRewriter)
     return dbg_out(lcl_dbg_out(rRewriter));
 }
 
-String lcl_dbg_out(const SvxNumberFormat & rFmt)
+static String lcl_dbg_out(const SvxNumberFormat & rFmt)
 {
     String aResult;
 
@@ -868,7 +856,7 @@ String lcl_dbg_out(const SvxNumberFormat & rFmt)
     return aResult;
 }
 
-String lcl_dbg_out(const SwNumRule & rRule)
+static String lcl_dbg_out(const SwNumRule & rRule)
 {
     String aResult("[ ", RTL_TEXTENCODING_ASCII_US);
 
@@ -895,7 +883,7 @@ SW_DLLPUBLIC const char * dbg_out(const SwNumRule & rRule)
     return dbg_out(lcl_dbg_out(rRule));
 }
 
-String lcl_dbg_out(const SwTxtFmtColl & rFmt)
+static String lcl_dbg_out(const SwTxtFmtColl & rFmt)
 {
     String aResult(rFmt.GetName());
 
@@ -911,7 +899,7 @@ SW_DLLPUBLIC const char * dbg_out(const SwTxtFmtColl & rFmt)
     return dbg_out(lcl_dbg_out(rFmt));
 }
 
-String lcl_dbg_out(const SwFrmFmts & rFrmFmts)
+static String lcl_dbg_out(const SwFrmFmts & rFrmFmts)
 {
     return lcl_dbg_out_SvPtrArr<SwFrmFmts>(rFrmFmts);
 }
@@ -921,7 +909,7 @@ SW_DLLPUBLIC const char * dbg_out(const SwFrmFmts & rFrmFmts)
     return dbg_out(lcl_dbg_out(rFrmFmts));
 }
 
-String lcl_dbg_out(const SwNumRuleTbl & rTbl)
+static String lcl_dbg_out(const SwNumRuleTbl & rTbl)
 {
     String aResult("[", RTL_TEXTENCODING_ASCII_US);
 
@@ -947,7 +935,7 @@ SW_DLLPUBLIC const char * dbg_out(const SwNumRuleTbl & rTbl)
     return dbg_out(lcl_dbg_out(rTbl));
 }
 
-String lcl_TokenType2Str(FormTokenType nType)
+static String lcl_TokenType2Str(FormTokenType nType)
 {
     switch(nType)
     {
@@ -979,7 +967,7 @@ String lcl_TokenType2Str(FormTokenType nType)
     }
 }
 
-String lcl_dbg_out(const SwFormToken & rToken)
+static String lcl_dbg_out(const SwFormToken & rToken)
 {
     return rToken.GetString();
 }
@@ -989,7 +977,7 @@ SW_DLLPUBLIC const char * dbg_out(const SwFormToken & rToken)
     return dbg_out(lcl_dbg_out(rToken));
 }
 
-String lcl_dbg_out(const SwFormTokens & rTokens)
+static String lcl_dbg_out(const SwFormTokens & rTokens)
 {
     String aStr("[", RTL_TEXTENCODING_ASCII_US);
 
@@ -1015,7 +1003,7 @@ SW_DLLPUBLIC const char * dbg_out(const SwFormTokens & rTokens)
     return dbg_out(lcl_dbg_out(rTokens));
 }
 
-String lcl_dbg_out(const SwNodeRange & rRange)
+static String lcl_dbg_out(const SwNodeRange & rRange)
 {
     String aStr("[", RTL_TEXTENCODING_ASCII_US);
 

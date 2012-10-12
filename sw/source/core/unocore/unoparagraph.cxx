@@ -96,7 +96,7 @@ SwParaSelection::~SwParaSelection()
 /******************************************************************
  * forward declarations
  ******************************************************************/
-beans::PropertyState lcl_SwXParagraph_getPropertyState(
+static beans::PropertyState lcl_SwXParagraph_getPropertyState(
                             const SwTxtNode& rTxtNode,
                             const SwAttrSet** ppSet,
                             const SfxItemPropertySimpleEntry& rEntry,
@@ -849,7 +849,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
     OSL_FAIL("SwXParagraph::removeVetoableChangeListener(): not implemented");
 }
 
-beans::PropertyState lcl_SwXParagraph_getPropertyState(
+static beans::PropertyState lcl_SwXParagraph_getPropertyState(
 //                          SwUnoCrsr& rUnoCrsr,
                             const SwTxtNode& rTxtNode,
                             const SwAttrSet** ppSet,

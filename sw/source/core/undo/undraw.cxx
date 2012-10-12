@@ -123,13 +123,13 @@ rtl::OUString SwSdrUndo::GetComment() const
 
 //--------------------------------------------
 
-void lcl_SendRemoveToUno( SwFmt& rFmt )
+static void lcl_SendRemoveToUno( SwFmt& rFmt )
 {
     SwPtrMsgPoolItem aMsgHint( RES_REMOVE_UNO_OBJECT, &rFmt );
     rFmt.ModifyNotification( &aMsgHint, &aMsgHint );
 }
 
-void lcl_SaveAnchor( SwFrmFmt* pFmt, sal_uLong& rNodePos )
+static void lcl_SaveAnchor( SwFrmFmt* pFmt, sal_uLong& rNodePos )
 {
     const SwFmtAnchor& rAnchor = pFmt->GetAnchor();
     if ((FLY_AT_PARA == rAnchor.GetAnchorId()) ||
@@ -167,7 +167,7 @@ void lcl_SaveAnchor( SwFrmFmt* pFmt, sal_uLong& rNodePos )
     }
 }
 
-void lcl_RestoreAnchor( SwFrmFmt* pFmt, sal_uLong& rNodePos )
+static void lcl_RestoreAnchor( SwFrmFmt* pFmt, sal_uLong& rNodePos )
 {
     const SwFmtAnchor& rAnchor = pFmt->GetAnchor();
     if ((FLY_AT_PARA == rAnchor.GetAnchorId()) ||

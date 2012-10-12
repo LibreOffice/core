@@ -924,7 +924,7 @@ sal_Int8 SwContentTree::AcceptDrop( const AcceptDropEvent& rEvt )
 /***************************************************************************
     Beschreibung:   Drop wird im Navigator ausgefuehrt
 ***************************************************************************/
-void* lcl_GetOutlineKey( SwContentTree* pTree, SwOutlineContent* pContent)
+static void* lcl_GetOutlineKey( SwContentTree* pTree, SwOutlineContent* pContent)
 {
     void* key = 0;
     if( pTree && pContent )

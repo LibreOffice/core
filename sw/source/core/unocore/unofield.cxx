@@ -190,7 +190,7 @@ static const ServiceIdResId aServiceToRes[] =
     {USHRT_MAX,         USHRT_MAX                                        }
 };
 
-sal_uInt16 lcl_ServiceIdToResId(sal_uInt16 nServiceId)
+static sal_uInt16 lcl_ServiceIdToResId(sal_uInt16 nServiceId)
 {
     const ServiceIdResId* pMap = aServiceToRes;
     while( USHRT_MAX != pMap->nServiceId && nServiceId != pMap->nServiceId )
@@ -202,7 +202,7 @@ sal_uInt16 lcl_ServiceIdToResId(sal_uInt16 nServiceId)
     return pMap->nResId;
 }
 
-sal_uInt16 lcl_GetServiceForField( const SwField& rFld )
+static sal_uInt16 lcl_GetServiceForField( const SwField& rFld )
 {
     sal_uInt16 nWhich = rFld.Which(), nSrvId = USHRT_MAX;
     //special handling for some fields
@@ -282,7 +282,7 @@ sal_uInt16 lcl_GetServiceForField( const SwField& rFld )
     return nSrvId;
 }
 
-sal_uInt16 lcl_GetPropMapIdForFieldType( sal_uInt16 nWhich )
+static sal_uInt16 lcl_GetPropMapIdForFieldType( sal_uInt16 nWhich )
 {
     sal_uInt16 nId;
     switch( nWhich )
@@ -311,7 +311,7 @@ sal_uInt16 GetFieldTypeMId( const OUString& rProperty, const SwFieldType& rTyp )
     return nId;
 }
 
-sal_uInt16 lcl_GetPropertyMapOfService( sal_uInt16 nServiceId )
+static sal_uInt16 lcl_GetPropertyMapOfService( sal_uInt16 nServiceId )
 {
     sal_uInt16 nRet;
     switch ( nServiceId)
@@ -2439,7 +2439,7 @@ SwXTextFieldMasters::~SwXTextFieldMasters()
     Falls wir grosszuegig werden wollen, dann koennte man com.sun.star.text
     auch optional weglassen
   -----------------------------------------------------------------------*/
-sal_uInt16 lcl_GetIdByName( String& rName, String& rTypeName )
+static sal_uInt16 lcl_GetIdByName( String& rName, String& rTypeName )
 {
     if( rName.EqualsAscii( COM_TEXT_FLDMASTER, 0, RTL_CONSTASCII_LENGTH(COM_TEXT_FLDMASTER ))
         ||  rName.EqualsAscii( COM_TEXT_FLDMASTER_CC, 0, RTL_CONSTASCII_LENGTH(COM_TEXT_FLDMASTER_CC )))

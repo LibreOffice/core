@@ -89,7 +89,7 @@ SwTxtFrm *GetAdjFrmAtPos( SwTxtFrm *pFrm, const SwPosition &rPos,
                 nNew = 0;
             else
                 nNew -= MIN_OFFSET_STEP;
-            lcl_ChangeOffset( pFrmAtPos, nNew );
+            sw_ChangeOffset( pFrmAtPos, nNew );
         }
     }
     while( pFrm != pFrmAtPos )
@@ -112,7 +112,7 @@ SwTxtFrm *GetAdjFrmAtPos( SwTxtFrm *pFrm, const SwPosition &rPos,
     return pFrmAtPos ? pFrmAtPos : pFrm;
 }
 
-sal_Bool lcl_ChangeOffset( SwTxtFrm* pFrm, xub_StrLen nNew )
+sal_Bool sw_ChangeOffset( SwTxtFrm* pFrm, xub_StrLen nNew )
 {
     // Do not scroll in areas and outside of flies
     OSL_ENSURE( !pFrm->IsFollow(), "Illegal Scrolling by Follow!" );
@@ -305,7 +305,7 @@ sal_Bool SwTxtFrm::GetCharRect( SwRect& rOrig, const SwPosition &rPos,
                 pFrm->GetOfst() < nOffset &&
                 !pFrm->IsFollow() && !bNoScroll &&
                 pFrm->GetTxtNode()->GetTxt().Len() != nNextOfst )
-                bGoOn = lcl_ChangeOffset( pFrm, nNextOfst );
+                bGoOn = sw_ChangeOffset( pFrm, nNextOfst );
             else
                 bGoOn = sal_False;
         } while ( bGoOn );
@@ -724,7 +724,7 @@ sal_Bool SwTxtFrm::LeftMargin(SwPaM *pPam) const
         nIndx = aLine.GetStart();
         if( pFrm->GetOfst() && !pFrm->IsFollow() && !aLine.GetPrev() )
         {
-            lcl_ChangeOffset( pFrm, 0 );
+            sw_ChangeOffset( pFrm, 0 );
             nIndx = 0;
         }
     }
@@ -821,7 +821,7 @@ sal_Bool SwTxtFrm::_UnitUp( SwPaM *pPam, const SwTwips nOffset,
         do
         {
             if( nFormat != STRING_LEN && !IsFollow() )
-                lcl_ChangeOffset( ((SwTxtFrm*)this), nFormat );
+                sw_ChangeOffset( ((SwTxtFrm*)this), nFormat );
 
             SwTxtSizeInfo aInf( (SwTxtFrm*)this );
             SwTxtCursor  aLine( ((SwTxtFrm*)this), &aInf );
@@ -938,7 +938,7 @@ sal_Bool SwTxtFrm::_UnitUp( SwPaM *pPam, const SwTwips nOffset,
 // nPos: the new visual position
 // bLeft: whether the break iterator has to add or subtract from the
 //        current position
-void lcl_VisualMoveRecursion( const SwLineLayout& rCurrLine, xub_StrLen nIdx,
+static void lcl_VisualMoveRecursion( const SwLineLayout& rCurrLine, xub_StrLen nIdx,
                               xub_StrLen& nPos, sal_Bool& bRight,
                               sal_uInt8& nCrsrLevel, sal_uInt8 nDefaultDir )
 {
@@ -1218,7 +1218,7 @@ sal_Bool SwTxtFrm::_UnitDown(SwPaM *pPam, const SwTwips nOffset,
         do
         {
             if( nFormat != STRING_LEN && !IsFollow() &&
-                !lcl_ChangeOffset( ((SwTxtFrm*)this), nFormat ) )
+                !sw_ChangeOffset( ((SwTxtFrm*)this), nFormat ) )
                 break;
 
             SwTxtSizeInfo aInf( (SwTxtFrm*)this );

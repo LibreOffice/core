@@ -192,7 +192,7 @@ sal_Bool SwEditWin::bTransparentBackColor = sal_False; // background not transpa
 
 extern sal_Bool     bExecuteDrag;
 
-SfxShell* lcl_GetShellFromDispatcher( SwView& rView, TypeId nType );
+static SfxShell* lcl_GetShellFromDispatcher( SwView& rView, TypeId nType );
 
 DBG_NAME(edithdl)
 
@@ -768,7 +768,7 @@ sal_Bool SwEditWin::IsInputSequenceCheckingRequired( const String &rText, const 
 
 //return INVALID_HINT if language should not be explictly overridden, the correct
 //HintId to use for the eBufferLanguage otherwise
-sal_uInt16 lcl_isNonDefaultLanguage(LanguageType eBufferLanguage, SwView& rView,
+static sal_uInt16 lcl_isNonDefaultLanguage(LanguageType eBufferLanguage, SwView& rView,
     const String &rInBuffer)
 {
     sal_uInt16 nWhich = INVALID_HINT;
@@ -2744,7 +2744,7 @@ void SwEditWin::RstMBDownFlags()
  * Determines if the current position has a clickable url over a background
  * frame. In that case, ctrl-click should select the url, not the frame.
  */
-bool lcl_urlOverBackground(SwWrtShell& rSh, const Point& rDocPos)
+static bool lcl_urlOverBackground(SwWrtShell& rSh, const Point& rDocPos)
 {
     SwContentAtPos aSwContentAtPos(SwContentAtPos::SW_INETATTR);
     SdrObject* pSelectableObj = rSh.GetObjAt(rDocPos);
@@ -2854,7 +2854,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
 
     // After GrabFocus a shell should be pushed. That should actually
     // work but in practice ...
-    lcl_SelectShellForDrop( rView );
+    rView.SelectShellForDrop();
 
     sal_Bool bIsDocReadOnly = rView.GetDocShell()->IsReadOnly();
     sal_Bool bCallBase = sal_True;
@@ -5539,7 +5539,7 @@ sal_Bool SwEditWin::SelectMenuPosition(SwWrtShell& rSh, const Point& rMousePos )
     return bRet;
 }
 
-SfxShell* lcl_GetShellFromDispatcher( SwView& rView, TypeId nType )
+static SfxShell* lcl_GetShellFromDispatcher( SwView& rView, TypeId nType )
 {
     // determine Shell
     SfxShell* pShell;

@@ -210,7 +210,7 @@ SwDoc * SwPosition::GetDoc() const
 enum CHKSECTION { Chk_Both, Chk_One, Chk_None };
 
 
-CHKSECTION lcl_TstIdx( sal_uLong nSttIdx, sal_uLong nEndIdx, const SwNode& rEndNd )
+static CHKSECTION lcl_TstIdx( sal_uLong nSttIdx, sal_uLong nEndIdx, const SwNode& rEndNd )
 {
     sal_uLong nStt = rEndNd.StartOfSectionIndex(), nEnd = rEndNd.GetIndex();
     CHKSECTION eSec = nStt < nSttIdx && nEnd >= nSttIdx ? Chk_One : Chk_None;
@@ -220,7 +220,7 @@ CHKSECTION lcl_TstIdx( sal_uLong nSttIdx, sal_uLong nEndIdx, const SwNode& rEndN
 }
 
 
-sal_Bool lcl_ChkOneRange( CHKSECTION eSec, sal_Bool bChkSections,
+static sal_Bool lcl_ChkOneRange( CHKSECTION eSec, sal_Bool bChkSections,
                     const SwNode& rBaseEnd, sal_uLong nStt, sal_uLong nEnd )
 {
     if( eSec != Chk_Both )
@@ -573,7 +573,7 @@ sal_uInt16 SwPaM::GetPageNum( sal_Bool bAtPoint, const Point* pLayPos )
 }
 
 // Formular view - See also SwCrsrShell::IsCrsrReadonly()
-const SwFrm* lcl_FindEditInReadonlyFrm( const SwFrm& rFrm )
+static const SwFrm* lcl_FindEditInReadonlyFrm( const SwFrm& rFrm )
 {
     const SwFrm* pRet = 0;
 

@@ -298,7 +298,7 @@ SwLabPage::~SwLabPage()
 {
 }
 
-void lcl_ChgYPos(Window& rWin, long nDiff)
+static void lcl_ChgYPos(Window& rWin, long nDiff)
 {
     Point aTempPos(rWin.GetPosPixel());
     aTempPos.Y() += nDiff;
@@ -696,7 +696,7 @@ sal_Bool SwVisitingCardPage::FillItemSet(SfxItemSet& rSet)
     return sal_True;
 }
 
-void lcl_SelectBlock(SvTreeListBox& rAutoTextLB, const String& rBlockName)
+static void lcl_SelectBlock(SvTreeListBox& rAutoTextLB, const String& rBlockName)
 {
     SvLBoxEntry* pEntry = rAutoTextLB.First();
     while(pEntry)
@@ -711,7 +711,7 @@ void lcl_SelectBlock(SvTreeListBox& rAutoTextLB, const String& rBlockName)
     }
 }
 
-sal_Bool lcl_FindBlock(SvTreeListBox& rAutoTextLB, const String& rBlockName)
+static sal_Bool lcl_FindBlock(SvTreeListBox& rAutoTextLB, const String& rBlockName)
 {
     SvLBoxEntry* pEntry = rAutoTextLB.First();
     while(pEntry)

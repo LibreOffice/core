@@ -697,7 +697,7 @@ sal_Bool SwDoc::SetTOXBaseName(const SwTOXBase& rTOXBase, const String& rName)
     return bRet;
 }
 
-const SwTxtNode* lcl_FindChapterNode( const SwNode& rNd, sal_uInt8 nLvl = 0 )
+static const SwTxtNode* lcl_FindChapterNode( const SwNode& rNd, sal_uInt8 nLvl = 0 )
 {
     const SwNode* pNd = &rNd;
     if( pNd->GetNodes().GetEndOfExtras().GetIndex() > pNd->GetIndex() )
@@ -1346,7 +1346,7 @@ void SwTOXBaseSection::UpdateAuthorities( const SwTOXInternational& rIntl )
     }
 }
 
-long lcl_IsSOObject( const SvGlobalName& rFactoryNm )
+static long lcl_IsSOObject( const SvGlobalName& rFactoryNm )
 {
     static struct _SoObjType {
         long nFlag;
@@ -1547,7 +1547,7 @@ void SwTOXBaseSection::UpdateTable( const SwTxtNode* pOwnChapterNode )
   Description: Generate String according to the Form and remove the
   special characters 0-31 and 255
  --------------------------------------------------------------------*/
-String lcl_GetNumString( const SwTOXSortTabBase& rBase, sal_Bool bUsePrefix, sal_uInt8 nLevel )
+static String lcl_GetNumString( const SwTOXSortTabBase& rBase, sal_Bool bUsePrefix, sal_uInt8 nLevel )
 {
     String sRet;
 
@@ -1966,7 +1966,7 @@ void SwTOXBaseSection::UpdatePageNum()
   Description: Replace the PageNumber place holders
  --------------------------------------------------------------------*/
 // search for the page no in the array of main entry page numbers
-sal_Bool lcl_HasMainEntry( const std::vector<sal_uInt16>* pMainEntryNums, sal_uInt16 nToFind )
+static sal_Bool lcl_HasMainEntry( const std::vector<sal_uInt16>* pMainEntryNums, sal_uInt16 nToFind )
 {
     for(sal_uInt16 i = 0; pMainEntryNums && i < pMainEntryNums->size(); ++i)
         if(nToFind == (*pMainEntryNums)[i])

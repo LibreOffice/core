@@ -46,7 +46,7 @@
 
 /** helper function to select all objects in an SdrMarkList;
  * implementation: see below */
-void lcl_SelectSdrMarkList( SwEditShell* pShell,
+static void lcl_SelectSdrMarkList( SwEditShell* pShell,
                             const SdrMarkList* pSdrMarkList );
 
 bool SwEditShell::CursorsLocked() const
@@ -239,7 +239,7 @@ bool SwEditShell::Repeat(sal_uInt16 const nCount)
 }
 
 
-void lcl_SelectSdrMarkList( SwEditShell* pShell,
+static void lcl_SelectSdrMarkList( SwEditShell* pShell,
                             const SdrMarkList* pSdrMarkList )
 {
     OSL_ENSURE( pShell != NULL, "need shell!" );

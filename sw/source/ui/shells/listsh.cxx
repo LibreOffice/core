@@ -73,7 +73,7 @@ TYPEINIT1(SwListShell,SwBaseShell)
 // for outline numbered paragraphs should match the functions for outlines
 // available in the navigator. Therefore the code in the following
 // function is quite similar the the code in SwContentTree::ExecCommand.
-void lcl_OutlineUpDownWithSubPoints( SwWrtShell& rSh, bool bMove, bool bUp )
+static void lcl_OutlineUpDownWithSubPoints( SwWrtShell& rSh, bool bMove, bool bUp )
 {
     const sal_uInt16 nActPos = rSh.GetOutlinePos();
     if ( nActPos < USHRT_MAX && rSh.IsOutlineMovable( nActPos ) )

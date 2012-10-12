@@ -125,7 +125,7 @@ sal_Bool SwCrsrShell::GoPrevCell()
     return bRet;
 }
 
-const SwFrm* lcl_FindMostUpperCellFrm( const SwFrm* pFrm )
+static const SwFrm* lcl_FindMostUpperCellFrm( const SwFrm* pFrm )
 {
     while ( pFrm &&
             ( !pFrm->IsCellFrm() ||
@@ -355,7 +355,7 @@ sal_Bool SwCrsrShell::SelTblBox()
     @return <false> if no suitable cell could be found, otherwise <rIdx> points
             to content in a suitable cell and <true> is returned.
 */
-bool lcl_FindNextCell( SwNodeIndex& rIdx, sal_Bool bInReadOnly )
+static bool lcl_FindNextCell( SwNodeIndex& rIdx, sal_Bool bInReadOnly )
 {
     // check protected cells
     SwNodeIndex aTmp( rIdx, 2 ); // TableNode + StartNode
@@ -434,7 +434,7 @@ bool lcl_FindNextCell( SwNodeIndex& rIdx, sal_Bool bInReadOnly )
 }
 
 /// see lcl_FindNextCell()
-bool lcl_FindPrevCell( SwNodeIndex& rIdx, sal_Bool bInReadOnly  )
+static bool lcl_FindPrevCell( SwNodeIndex& rIdx, sal_Bool bInReadOnly  )
 {
     SwNodeIndex aTmp( rIdx, -2 ); // TableNode + EndNode
 

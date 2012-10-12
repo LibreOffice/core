@@ -1117,7 +1117,7 @@ SwLinePortion *SwTxtFormatter::WhichFirstPortion(SwTxtFormatInfo &rInf)
     return pPor;
 }
 
-sal_Bool lcl_OldFieldRest( const SwLineLayout* pCurr )
+static sal_Bool lcl_OldFieldRest( const SwLineLayout* pCurr )
 {
     if( !pCurr->GetNext() )
         return sal_False;

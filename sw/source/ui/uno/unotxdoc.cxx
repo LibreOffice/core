@@ -162,9 +162,9 @@ using ::osl::FileBase;
 #define SW_CREATE_MARKER_TABLE          0x06
 #define SW_CREATE_DRAW_DEFAULTS         0x07
 
-extern bool lcl_GetPostIts( IDocumentFieldsAccess* pIDFA, _SetGetExpFlds * pSrtLst );
+extern bool sw_GetPostIts( IDocumentFieldsAccess* pIDFA, _SetGetExpFlds * pSrtLst );
 
-SwPrintUIOptions * lcl_GetPrintUIOptions(
+static SwPrintUIOptions * lcl_GetPrintUIOptions(
     SwDocShell * pDocShell,
     const SfxViewShell * pView )
 {
@@ -175,7 +175,7 @@ SwPrintUIOptions * lcl_GetPrintUIOptions(
     const bool bSwSrcView   = NULL != dynamic_cast< const SwSrcView * >(pView);
     const SwView * pSwView = dynamic_cast< const SwView * >(pView);
     const bool bHasSelection    = pSwView ? pSwView->HasSelection( sal_False ) : false;  // check for any selection, not just text selection
-    const bool bHasPostIts      = lcl_GetPostIts( pDocShell->GetDoc(), 0 );
+    const bool bHasPostIts      = sw_GetPostIts( pDocShell->GetDoc(), 0 );
 
     // get default values to use in dialog from documents SwPrintData
     const SwPrintData &rPrintData = pDocShell->GetDoc()->getPrintData();
@@ -198,7 +198,7 @@ SwPrintUIOptions * lcl_GetPrintUIOptions(
     return new SwPrintUIOptions( nCurrentPage, bWebDoc, bSwSrcView, bHasSelection, bHasPostIts, rPrintData );
 }
 
-SwTxtFmtColl *lcl_GetParaStyle(const String& rCollName, SwDoc* pDoc)
+static SwTxtFmtColl *lcl_GetParaStyle(const String& rCollName, SwDoc* pDoc)
 {
     SwTxtFmtColl* pColl = pDoc->FindTxtFmtCollByName( rCollName );
     if( !pColl )
@@ -210,7 +210,7 @@ SwTxtFmtColl *lcl_GetParaStyle(const String& rCollName, SwDoc* pDoc)
     return pColl;
 }
 
-void lcl_DisposeView( SfxViewFrame* pToClose, SwDocShell* pDocShell )
+static void lcl_DisposeView( SfxViewFrame* pToClose, SwDocShell* pDocShell )
 {
     // check if the view frame still exists
     SfxViewFrame* pFound = SfxViewFrame::GetFirst( pDocShell,
@@ -1017,7 +1017,7 @@ Sequence< beans::PropertyValue > SwXTextDocument::getPagePrintSettings(void)
     return aSeq;
 }
 
-sal_uInt32 lcl_Any_To_ULONG(const Any& rValue, sal_Bool& bException)
+static sal_uInt32 lcl_Any_To_ULONG(const Any& rValue, sal_Bool& bException)
 {
     bException = sal_False;
     TypeClass eType = rValue.getValueType().getTypeClass();
@@ -1036,7 +1036,7 @@ sal_uInt32 lcl_Any_To_ULONG(const Any& rValue, sal_Bool& bException)
     return nRet;
 }
 
-String lcl_CreateOutlineString( sal_uInt16 nIndex,
+static String lcl_CreateOutlineString( sal_uInt16 nIndex,
             const SwOutlineNodes& rOutlineNodes, const SwNumRule* pOutlRule)
 {
     String sEntry;
@@ -3608,7 +3608,7 @@ void SwXLinkNameAccessWrapper::setPropertyValue(
     throw UnknownPropertyException();
 }
 
-Any lcl_GetDisplayBitmap(String sLinkSuffix)
+static Any lcl_GetDisplayBitmap(String sLinkSuffix)
 {
     Any aRet;
     if(sLinkSuffix.Len())

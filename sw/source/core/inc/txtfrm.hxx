@@ -61,7 +61,7 @@ class SwTxtFrm: public SwCntntFrm
     friend class SwTestFormat;
     friend class WidowsAndOrphans;
     friend class SwTxtFrmLocker;        // duerfen Lock()/Unlock()
-    friend sal_Bool lcl_ChangeOffset( SwTxtFrm* pFrm, sal_uInt16 nNew );
+    friend sal_Bool sw_ChangeOffset( SwTxtFrm* pFrm, sal_uInt16 nNew );
 
     static SwCache *pTxtCache;  //Pointer auf den Line-Cache
     static long nMinPrtLine;    //Diese Linie darf beim Drucken nicht

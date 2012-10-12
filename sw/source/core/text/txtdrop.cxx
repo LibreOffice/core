@@ -58,7 +58,7 @@ using namespace ::com::sun::star;
  *  the position is calculated from the values in rInf
  *************************************************************************/
 
-sal_Bool lcl_IsDropFlyInter( const SwTxtFormatInfo &rInf,
+static sal_Bool lcl_IsDropFlyInter( const SwTxtFormatInfo &rInf,
                              sal_uInt16 nWidth, sal_uInt16 nHeight )
 {
     const SwTxtFly *pTxtFly = rInf.GetTxtFly();

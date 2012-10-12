@@ -607,7 +607,7 @@ sal_Bool SwCrsrShell::MoveSection( SwWhichSection fnWhichSect,
 // position cursor
 
 
-SwFrm* lcl_IsInHeaderFooter( const SwNodeIndex& rIdx, Point& rPt )
+static SwFrm* lcl_IsInHeaderFooter( const SwNodeIndex& rIdx, Point& rPt )
 {
     SwFrm* pFrm = 0;
     SwCntntNode* pCNd = rIdx.GetNode().GetCntntNode();
@@ -3113,7 +3113,7 @@ void SwCrsrShell::SetSelection( const SwPaM& rCrsr )
     EndAction();
 }
 
-void lcl_RemoveMark( SwPaM* pPam )
+static void lcl_RemoveMark( SwPaM* pPam )
 {
     OSL_ENSURE( pPam->HasMark(), "Don't remove pPoint!" );
     pPam->GetMark()->nContent.Assign( 0, 0 );
@@ -3121,7 +3121,7 @@ void lcl_RemoveMark( SwPaM* pPam )
     pPam->DeleteMark();
 }
 
-const SwStartNode* lcl_NodeContext( const SwNode& rNode )
+static const SwStartNode* lcl_NodeContext( const SwNode& rNode )
 {
     const SwStartNode *pRet = rNode.StartOfSectionNode();
     while( pRet->IsSectionNode() || pRet->IsTableNode() ||
@@ -3138,7 +3138,7 @@ const SwStartNode* lcl_NodeContext( const SwNode& rNode )
 
    @param aPos the position to check.
 */
-bool lcl_PosOk(const SwPosition & aPos)
+bool sw_PosOk(const SwPosition & aPos)
 {
     return NULL != aPos.nNode.GetNode().GetCntntNode() &&
            aPos.nContent.GetIdxReg();
@@ -3152,8 +3152,8 @@ bool lcl_PosOk(const SwPosition & aPos)
 */
 static bool lcl_CrsrOk(SwPaM & aPam)
 {
-    return lcl_PosOk(*aPam.GetPoint()) && (! aPam.HasMark()
-        || lcl_PosOk(*aPam.GetMark()));
+    return sw_PosOk(*aPam.GetPoint()) && (! aPam.HasMark()
+        || sw_PosOk(*aPam.GetMark()));
 }
 
 void SwCrsrShell::ClearUpCrsrs()
@@ -3181,12 +3181,12 @@ void SwCrsrShell::ClearUpCrsrs()
         pCrsr = pTmpCrsr;
     }
 
-    if( pStartCrsr->HasMark() && !lcl_PosOk( *pStartCrsr->GetMark() ) )
+    if( pStartCrsr->HasMark() && !sw_PosOk( *pStartCrsr->GetMark() ) )
     {
         lcl_RemoveMark( pStartCrsr );
         bChanged = true;
     }
-    if( !lcl_PosOk( *pStartCrsr->GetPoint() ) )
+    if( !sw_PosOk( *pStartCrsr->GetPoint() ) )
     {
         SwNodes & aNodes = GetDoc()->GetNodes();
         const SwNode* pStart = lcl_NodeContext( pStartCrsr->GetPoint()->nNode.GetNode() );
@@ -3235,7 +3235,7 @@ String SwCrsrShell::GetCrsrDescr() const
 
 // SMARTTAGS
 
-void lcl_FillRecognizerData( uno::Sequence< rtl::OUString >& rSmartTagTypes,
+static void lcl_FillRecognizerData( uno::Sequence< rtl::OUString >& rSmartTagTypes,
                              uno::Sequence< uno::Reference< container::XStringKeyMap > >& rStringKeyMaps,
                              const SwWrongList& rSmartTagList, xub_StrLen nCurrent )
 {
@@ -3276,7 +3276,7 @@ void lcl_FillRecognizerData( uno::Sequence< rtl::OUString >& rSmartTagTypes,
     }
 }
 
-void lcl_FillTextRange( uno::Reference<text::XTextRange>& rRange,
+static void lcl_FillTextRange( uno::Reference<text::XTextRange>& rRange,
                    SwTxtNode& rNode, xub_StrLen nBegin, xub_StrLen nLen )
 {
     // create SwPosition for nStartIndex

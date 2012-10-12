@@ -48,7 +48,7 @@
 #include <calc.hxx>
 
 
-SfxItemSet* lcl_GetAttrSet( const SwSection& rSect )
+static SfxItemSet* lcl_GetAttrSet( const SwSection& rSect )
 {
     // save attributes of the format (columns, color, ...)
     // Cntnt and Protect items are not interesting since they are already

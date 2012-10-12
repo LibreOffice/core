@@ -417,7 +417,7 @@ void SwSendMailDialog::SetDocumentCount( sal_Int32 nAllDocuments )
     UpdateTransferStatus();
 }
 
-void lcl_Move(Control& rCtrl, long nYOffset)
+static void lcl_Move(Control& rCtrl, long nYOffset)
 {
     Point aPos(rCtrl.GetPosPixel());
     aPos.Y() += nYOffset;

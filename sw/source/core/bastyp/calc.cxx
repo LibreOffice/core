@@ -229,7 +229,7 @@ inline LanguageType GetDocAppScriptLang( SwDoc& rDoc )
             )).GetLanguage();
 }
 
-double lcl_ConvertToDateValue( SwDoc& rDoc, sal_Int32 nDate )
+static double lcl_ConvertToDateValue( SwDoc& rDoc, sal_Int32 nDate )
 {
     double nRet = 0;
     SvNumberFormatter* pFormatter = rDoc.GetNumberFormatter();

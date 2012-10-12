@@ -444,7 +444,7 @@ static size_t lcl_GetFrmMapCount( const FrmMap* pMap)
     return 0;
 }
 
-void lcl_InsertVectors(ListBox& rBox,
+static void lcl_InsertVectors(ListBox& rBox,
     const ::std::vector< String >& rPrev, const ::std::vector< String >& rThis,
     const ::std::vector< String >& rNext, const ::std::vector< String >& rRemain)
 {
@@ -472,7 +472,7 @@ void lcl_InsertVectors(ListBox& rBox,
 
 // --> OD 2009-08-31 #mongolianlayout#
 // add input parameter
-SvxSwFramePosString::StringId lcl_ChangeResIdToVerticalOrRTL(SvxSwFramePosString::StringId eStringId, sal_Bool bVertical, sal_Bool bVerticalL2R, sal_Bool bRTL)
+static SvxSwFramePosString::StringId lcl_ChangeResIdToVerticalOrRTL(SvxSwFramePosString::StringId eStringId, sal_Bool bVertical, sal_Bool bVerticalL2R, sal_Bool bRTL)
 {
     //special handling of STR_FROMLEFT
     if ( SwFPos::FROMLEFT == eStringId )

@@ -78,7 +78,7 @@ using ::rtl::OUString;
 
 extern void InsertSort( std::vector<sal_uInt16>& rArr, sal_uInt16 nIdx, sal_uInt16* pInsPos = 0 );
 
-void lcl_GetLayTree( const SwFrm* pFrm, std::vector<const SwFrm*>& rArr )
+static void lcl_GetLayTree( const SwFrm* pFrm, std::vector<const SwFrm*>& rArr )
 {
     while( pFrm )
     {

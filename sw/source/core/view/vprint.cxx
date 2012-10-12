@@ -476,7 +476,7 @@ SwDoc * ViewShell::FillPrtDoc( SwDoc *pPrtDoc, const SfxPrinter* pPrt)
 // TODO: there is already a GetPageByPageNum, but it checks some physical page
 // number; unsure if we want that here, should find out what that is...
 SwPageFrm const*
-lcl_getPage(SwRootFrm const& rLayout, sal_Int32 const nPage)
+sw_getPage(SwRootFrm const& rLayout, sal_Int32 const nPage)
 {
     // yes this is O(n^2) but at least it does not crash...
     SwPageFrm const* pPage = dynamic_cast<const SwPageFrm*>(rLayout.Lower());
@@ -548,7 +548,7 @@ sal_Bool ViewShell::PrintOrPDFExport(
                 : pShell; // a 'regular' page, not one from the post-it doc
 
         SwPageFrm const*const pStPage =
-            lcl_getPage(*pViewSh2->GetLayout(), abs(nPage));
+            sw_getPage(*pViewSh2->GetLayout(), abs(nPage));
         OSL_ENSURE( pStPage, "failed to get start page" );
         if (!pStPage)
         {

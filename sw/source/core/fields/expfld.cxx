@@ -69,7 +69,7 @@ using namespace ::com::sun::star::text;
 using ::rtl::OUString;
 
 //-----------------------------------------------------------------------------
-sal_Int16 lcl_SubTypeToAPI(sal_uInt16 nSubType)
+static sal_Int16 lcl_SubTypeToAPI(sal_uInt16 nSubType)
 {
         sal_Int16 nRet = 0;
         switch(nSubType)
@@ -90,7 +90,7 @@ sal_Int16 lcl_SubTypeToAPI(sal_uInt16 nSubType)
         return nRet;
 }
 //-----------------------------------------------------------------------------
-sal_Int32 lcl_APIToSubType(const uno::Any& rAny)
+static sal_Int32 lcl_APIToSubType(const uno::Any& rAny)
 {
         sal_Int16 nVal = 0;
         rAny >>= nVal;

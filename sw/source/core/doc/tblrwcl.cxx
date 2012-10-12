@@ -168,17 +168,17 @@ struct CR_SetBoxWidth
     }
 };
 
-sal_Bool lcl_SetSelBoxWidth( SwTableLine* pLine, CR_SetBoxWidth& rParam,
+static sal_Bool lcl_SetSelBoxWidth( SwTableLine* pLine, CR_SetBoxWidth& rParam,
                          SwTwips nDist, sal_Bool bCheck );
-sal_Bool lcl_SetOtherBoxWidth( SwTableLine* pLine, CR_SetBoxWidth& rParam,
+static sal_Bool lcl_SetOtherBoxWidth( SwTableLine* pLine, CR_SetBoxWidth& rParam,
                                 SwTwips nDist, sal_Bool bCheck );
-sal_Bool lcl_InsSelBox( SwTableLine* pLine, CR_SetBoxWidth& rParam,
+static sal_Bool lcl_InsSelBox( SwTableLine* pLine, CR_SetBoxWidth& rParam,
                                 SwTwips nDist, sal_Bool bCheck );
-sal_Bool lcl_InsOtherBox( SwTableLine* pLine, CR_SetBoxWidth& rParam,
+static sal_Bool lcl_InsOtherBox( SwTableLine* pLine, CR_SetBoxWidth& rParam,
                                 SwTwips nDist, sal_Bool bCheck );
-sal_Bool lcl_DelSelBox( SwTableLine* pLine, CR_SetBoxWidth& rParam,
+static sal_Bool lcl_DelSelBox( SwTableLine* pLine, CR_SetBoxWidth& rParam,
                                 SwTwips nDist, sal_Bool bCheck );
-sal_Bool lcl_DelOtherBox( SwTableLine* pLine, CR_SetBoxWidth& rParam,
+static sal_Bool lcl_DelOtherBox( SwTableLine* pLine, CR_SetBoxWidth& rParam,
                                 SwTwips nDist, sal_Bool bCheck );
 
 typedef sal_Bool (*FN_lcl_SetBoxWidth)(SwTableLine*, CR_SetBoxWidth&, SwTwips, sal_Bool );
@@ -254,11 +254,11 @@ struct CR_SetLineHeight
     }
 };
 
-sal_Bool lcl_SetSelLineHeight( SwTableLine* pLine, CR_SetLineHeight& rParam,
+static sal_Bool lcl_SetSelLineHeight( SwTableLine* pLine, CR_SetLineHeight& rParam,
                          SwTwips nDist, sal_Bool bCheck );
-sal_Bool lcl_SetOtherLineHeight( SwTableLine* pLine, CR_SetLineHeight& rParam,
+static sal_Bool lcl_SetOtherLineHeight( SwTableLine* pLine, CR_SetLineHeight& rParam,
                                 SwTwips nDist, sal_Bool bCheck );
-sal_Bool lcl_InsDelSelLine( SwTableLine* pLine, CR_SetLineHeight& rParam,
+static sal_Bool lcl_InsDelSelLine( SwTableLine* pLine, CR_SetLineHeight& rParam,
                                 SwTwips nDist, sal_Bool bCheck );
 
 typedef sal_Bool (*FN_lcl_SetLineHeight)(SwTableLine*, CR_SetLineHeight&, SwTwips, sal_Bool );
@@ -474,7 +474,7 @@ static void lcl_CopyRow(_FndLine& rFndLine, _CpyPara *const pCpyPara)
     pCpyPara->nDelBorderFlag &= 0xf8;
 }
 
-void lcl_InsCol( _FndLine* pFndLn, _CpyPara& rCpyPara, sal_uInt16 nCpyCnt,
+static void lcl_InsCol( _FndLine* pFndLn, _CpyPara& rCpyPara, sal_uInt16 nCpyCnt,
                 sal_Bool bBehind )
 {
     // Bug 29124: Not only copy in the BaseLines. If possible, we go down as far as possible
@@ -767,10 +767,10 @@ sal_Bool SwTable::AppendRow( SwDoc* pDoc, sal_uInt16 nCnt )
     return sal_True;
 }
 
-void lcl_LastBoxSetWidth( SwTableBoxes &rBoxes, const long nOffset,
+static void lcl_LastBoxSetWidth( SwTableBoxes &rBoxes, const long nOffset,
                             sal_Bool bFirst, SwShareBoxFmts& rShareFmts );
 
-void lcl_LastBoxSetWidthLine( SwTableLines &rLines, const long nOffset,
+static void lcl_LastBoxSetWidthLine( SwTableLines &rLines, const long nOffset,
                                 sal_Bool bFirst, SwShareBoxFmts& rShareFmts )
 {
     for ( sal_uInt16 i = 0; i < rLines.size(); ++i )
@@ -778,7 +778,7 @@ void lcl_LastBoxSetWidthLine( SwTableLines &rLines, const long nOffset,
                                 rShareFmts );
 }
 
-void lcl_LastBoxSetWidth( SwTableBoxes &rBoxes, const long nOffset,
+static void lcl_LastBoxSetWidth( SwTableBoxes &rBoxes, const long nOffset,
                             sal_Bool bFirst, SwShareBoxFmts& rShareFmts )
 {
     SwTableBox& rBox = *(bFirst ? rBoxes.front() : rBoxes.back());
@@ -1413,7 +1413,7 @@ sal_Bool SwTable::SplitCol( SwDoc* pDoc, const SwSelBoxes& rBoxes, sal_uInt16 nC
 
     ----------------------- >> MERGE << ------------------------
 */
-void lcl_CpyLines( sal_uInt16 nStt, sal_uInt16 nEnd,
+static void lcl_CpyLines( sal_uInt16 nStt, sal_uInt16 nEnd,
                                 SwTableLines& rLines,
                                 SwTableBox* pInsBox,
                                 sal_uInt16 nPos = USHRT_MAX )
@@ -1427,7 +1427,7 @@ void lcl_CpyLines( sal_uInt16 nStt, sal_uInt16 nEnd,
     rLines.erase( rLines.begin() + nStt, rLines.begin() + nEnd );
 }
 
-void lcl_CpyBoxes( sal_uInt16 nStt, sal_uInt16 nEnd,
+static void lcl_CpyBoxes( sal_uInt16 nStt, sal_uInt16 nEnd,
                                 SwTableBoxes& rBoxes,
                                 SwTableLine* pInsLine,
                                 sal_uInt16 nPos = USHRT_MAX )
@@ -1441,7 +1441,7 @@ void lcl_CpyBoxes( sal_uInt16 nStt, sal_uInt16 nEnd,
     rBoxes.erase( rBoxes.begin() + nStt, rBoxes.begin() + nEnd );
 }
 
-void lcl_CalcWidth( SwTableBox* pBox )
+static void lcl_CalcWidth( SwTableBox* pBox )
 {
     // Assertion: Every Line in the Box is as large
     SwFrmFmt* pFmt = pBox->ClaimFrmFmt();
@@ -1854,7 +1854,7 @@ sal_Bool SwTable::OldMerge( SwDoc* pDoc, const SwSelBoxes& rBoxes,
     return sal_True;
 }
 
-void lcl_CheckRowSpan( SwTable &rTbl )
+static void lcl_CheckRowSpan( SwTable &rTbl )
 {
     sal_uInt16 nLineCount = rTbl.GetTabLines().size();
     sal_uInt16 nMaxSpan = nLineCount;
@@ -1876,7 +1876,7 @@ void lcl_CheckRowSpan( SwTable &rTbl )
     }
 }
 
-sal_uInt16 lcl_GetBoxOffset( const _FndBox& rBox )
+static sal_uInt16 lcl_GetBoxOffset( const _FndBox& rBox )
 {
     // Find the first Box
     const _FndBox* pFirstBox = &rBox;
@@ -1896,7 +1896,7 @@ sal_uInt16 lcl_GetBoxOffset( const _FndBox& rBox )
     return nRet;
 }
 
-sal_uInt16 lcl_GetLineWidth( const _FndLine& rLine )
+static sal_uInt16 lcl_GetLineWidth( const _FndLine& rLine )
 {
     sal_uInt16 nRet = 0;
     for( sal_uInt16 n = rLine.GetBoxes().size(); n; )
@@ -1907,7 +1907,7 @@ sal_uInt16 lcl_GetLineWidth( const _FndLine& rLine )
     return nRet;
 }
 
-void lcl_CalcNewWidths( const _FndLines& rFndLines, _CpyPara& rPara )
+static void lcl_CalcNewWidths( const _FndLines& rFndLines, _CpyPara& rPara )
 {
     rPara.pWidths.reset();
     sal_uInt16 nLineCount = rFndLines.size();
@@ -2321,7 +2321,7 @@ sal_Bool SwTable::MakeCopy( SwDoc* pInsDoc, const SwPosition& rPos,
             pLn = GetTabLines()[ nLnPos - 1 ];
             for( SwTableBoxes::iterator it = pLn->GetTabBoxes().begin();
                      it != pLn->GetTabBoxes().end(); ++it)
-                lcl_Box_CollectBox( *it, &aLnPara );
+                sw_Box_CollectBox( *it, &aLnPara );
 
             if( aLnPara.Resize( lcl_GetBoxOffset( aFndBox ),
                                 lcl_GetLineWidth( *pFndLn )) )
@@ -2330,7 +2330,7 @@ sal_Bool SwTable::MakeCopy( SwDoc* pInsDoc, const SwPosition& rPos,
                 pLn = pNewTbl->GetTabLines()[ 0 ];
                 for( SwTableBoxes::iterator it = pLn->GetTabBoxes().begin();
                          it != pLn->GetTabBoxes().end(); ++it)
-                    lcl_BoxSetSplitBoxFmts(*it, &aLnPara );
+                    sw_BoxSetSplitBoxFmts(*it, &aLnPara );
             }
         }
 
@@ -2346,7 +2346,7 @@ sal_Bool SwTable::MakeCopy( SwDoc* pInsDoc, const SwPosition& rPos,
             pLn = GetTabLines()[ nLnPos + 1 ];
             for( SwTableBoxes::iterator it = pLn->GetTabBoxes().begin();
                      it != pLn->GetTabBoxes().end(); ++it)
-                lcl_Box_CollectBox( *it, &aLnPara );
+                sw_Box_CollectBox( *it, &aLnPara );
 
             if( aLnPara.Resize( lcl_GetBoxOffset( aFndBox ),
                                 lcl_GetLineWidth( *pFndLn )) )
@@ -2355,7 +2355,7 @@ sal_Bool SwTable::MakeCopy( SwDoc* pInsDoc, const SwPosition& rPos,
                 pLn = pNewTbl->GetTabLines().back();
                 for( SwTableBoxes::iterator it = pLn->GetTabBoxes().begin();
                          it != pLn->GetTabBoxes().end(); ++it)
-                    lcl_BoxSetSplitBoxFmts(*it, &aLnPara );
+                    sw_BoxSetSplitBoxFmts(*it, &aLnPara );
             }
         }
     }
@@ -2507,16 +2507,16 @@ static void lcl_BoxSetHeadCondColl( const SwTableBox* pBox )
         pSttNd->CheckSectionCondColl();
     else
         BOOST_FOREACH( const SwTableLine* pLine, pBox->GetTabLines() )
-            lcl_LineSetHeadCondColl( pLine );
+            sw_LineSetHeadCondColl( pLine );
 }
 
-void lcl_LineSetHeadCondColl( const SwTableLine* pLine )
+void sw_LineSetHeadCondColl( const SwTableLine* pLine )
 {
     BOOST_FOREACH( const SwTableBox* pBox, pLine->GetTabBoxes() )
         lcl_BoxSetHeadCondColl(pBox);
 }
 
-SwTwips lcl_GetDistance( SwTableBox* pBox, sal_Bool bLeft )
+static SwTwips lcl_GetDistance( SwTableBox* pBox, sal_Bool bLeft )
 {
     sal_Bool bFirst = sal_True;
     SwTwips nRet = 0;
@@ -2537,7 +2537,7 @@ SwTwips lcl_GetDistance( SwTableBox* pBox, sal_Bool bLeft )
     return nRet;
 }
 
-sal_Bool lcl_SetSelBoxWidth( SwTableLine* pLine, CR_SetBoxWidth& rParam,
+static sal_Bool lcl_SetSelBoxWidth( SwTableLine* pLine, CR_SetBoxWidth& rParam,
                          SwTwips nDist, sal_Bool bCheck )
 {
     SwTableBoxes& rBoxes = pLine->GetTabBoxes();
@@ -2638,7 +2638,7 @@ sal_Bool lcl_SetSelBoxWidth( SwTableLine* pLine, CR_SetBoxWidth& rParam,
     return sal_True;
 }
 
-sal_Bool lcl_SetOtherBoxWidth( SwTableLine* pLine, CR_SetBoxWidth& rParam,
+static sal_Bool lcl_SetOtherBoxWidth( SwTableLine* pLine, CR_SetBoxWidth& rParam,
                                 SwTwips nDist, sal_Bool bCheck )
 {
     SwTableBoxes& rBoxes = pLine->GetTabBoxes();
@@ -2732,7 +2732,7 @@ sal_Bool lcl_SetOtherBoxWidth( SwTableLine* pLine, CR_SetBoxWidth& rParam,
     return sal_True;
 }
 
-sal_Bool lcl_InsSelBox( SwTableLine* pLine, CR_SetBoxWidth& rParam,
+static sal_Bool lcl_InsSelBox( SwTableLine* pLine, CR_SetBoxWidth& rParam,
                             SwTwips nDist, sal_Bool bCheck )
 {
     SwTableBoxes& rBoxes = pLine->GetTabBoxes();
@@ -2867,7 +2867,7 @@ sal_Bool lcl_InsSelBox( SwTableLine* pLine, CR_SetBoxWidth& rParam,
     return sal_True;
 }
 
-sal_Bool lcl_InsOtherBox( SwTableLine* pLine, CR_SetBoxWidth& rParam,
+static sal_Bool lcl_InsOtherBox( SwTableLine* pLine, CR_SetBoxWidth& rParam,
                                 SwTwips nDist, sal_Bool bCheck )
 {
     // Special case: There is no space in the other Boxes, but in the cell
@@ -3060,7 +3060,7 @@ SwComparePosition _CheckBoxInRange( sal_uInt16 nStt, sal_uInt16 nEnd,
     return nRet;
 }
 
-void lcl_DelSelBox_CorrLowers( SwTableLine& rLine, CR_SetBoxWidth& rParam,
+static void lcl_DelSelBox_CorrLowers( SwTableLine& rLine, CR_SetBoxWidth& rParam,
                                 SwTwips nWidth )
 {
     // 1. step: Calculate own width
@@ -3096,7 +3096,7 @@ void lcl_DelSelBox_CorrLowers( SwTableLine& rLine, CR_SetBoxWidth& rParam,
     }
 }
 
-void lcl_ChgBoxSize( SwTableBox& rBox, CR_SetBoxWidth& rParam,
+static void lcl_ChgBoxSize( SwTableBox& rBox, CR_SetBoxWidth& rParam,
                     const SwFmtFrmSize& rOldSz,
                     sal_uInt16& rDelWidth, SwTwips nDist )
 {
@@ -3155,7 +3155,7 @@ void lcl_ChgBoxSize( SwTableBox& rBox, CR_SetBoxWidth& rParam,
     }
 }
 
-sal_Bool lcl_DeleteBox_Rekursiv( CR_SetBoxWidth& rParam, SwTableBox& rBox,
+static sal_Bool lcl_DeleteBox_Rekursiv( CR_SetBoxWidth& rParam, SwTableBox& rBox,
                             sal_Bool bCheck )
 {
     sal_Bool bRet = sal_True;
@@ -3191,7 +3191,7 @@ sal_Bool lcl_DeleteBox_Rekursiv( CR_SetBoxWidth& rParam, SwTableBox& rBox,
     return bRet;
 }
 
-sal_Bool lcl_DelSelBox( SwTableLine* pTabLine, CR_SetBoxWidth& rParam,
+static sal_Bool lcl_DelSelBox( SwTableLine* pTabLine, CR_SetBoxWidth& rParam,
                     SwTwips nDist, sal_Bool bCheck )
 {
     SwTableBoxes& rBoxes = pTabLine->GetTabBoxes();
@@ -3461,12 +3461,12 @@ sal_Bool lcl_DelSelBox( SwTableLine* pTabLine, CR_SetBoxWidth& rParam,
 }
 
 // Dummy function for the method SetColWidth
-sal_Bool lcl_DelOtherBox( SwTableLine* , CR_SetBoxWidth& , SwTwips , sal_Bool )
+static sal_Bool lcl_DelOtherBox( SwTableLine* , CR_SetBoxWidth& , SwTwips , sal_Bool )
 {
     return sal_True;
 }
 
-void lcl_AjustLines( SwTableLine* pLine, CR_SetBoxWidth& rParam )
+static void lcl_AjustLines( SwTableLine* pLine, CR_SetBoxWidth& rParam )
 {
     SwTableBoxes& rBoxes = pLine->GetTabBoxes();
     for( sal_uInt16 n = 0; n < rBoxes.size(); ++n )
@@ -3510,7 +3510,7 @@ void _CheckBoxWidth( const SwTableLine& rLine, SwTwips nSize )
 }
 #endif
 
-_FndBox* lcl_SaveInsDelData( CR_SetBoxWidth& rParam, SwUndo** ppUndo,
+static _FndBox* lcl_SaveInsDelData( CR_SetBoxWidth& rParam, SwUndo** ppUndo,
                                 SwTableSortBoxes& rTmpLst, SwTwips nDistStt )
 {
     // Find all Boxes/Lines
@@ -4048,7 +4048,7 @@ sal_Bool SwTable::SetColWidth( SwTableBox& rAktBox, sal_uInt16 eType,
     return bRet;
 }
 
-_FndBox* lcl_SaveInsDelData( CR_SetLineHeight& rParam, SwUndo** ppUndo,
+static _FndBox* lcl_SaveInsDelData( CR_SetLineHeight& rParam, SwUndo** ppUndo,
                                 SwTableSortBoxes& rTmpLst )
 {
     // Find all Boxes/Lines
@@ -4122,7 +4122,7 @@ void SetLineHeight( SwTableLine& rLine, SwTwips nOldHeight, SwTwips nNewHeight,
     }
 }
 
-sal_Bool lcl_SetSelLineHeight( SwTableLine* pLine, CR_SetLineHeight& rParam,
+static sal_Bool lcl_SetSelLineHeight( SwTableLine* pLine, CR_SetLineHeight& rParam,
                              SwTwips nDist, sal_Bool bCheck )
 {
     sal_Bool bRet = sal_True;
@@ -4144,7 +4144,7 @@ sal_Bool lcl_SetSelLineHeight( SwTableLine* pLine, CR_SetLineHeight& rParam,
     return bRet;
 }
 
-sal_Bool lcl_SetOtherLineHeight( SwTableLine* pLine, CR_SetLineHeight& rParam,
+static sal_Bool lcl_SetOtherLineHeight( SwTableLine* pLine, CR_SetLineHeight& rParam,
                                 SwTwips nDist, sal_Bool bCheck )
 {
     sal_Bool bRet = sal_True;
@@ -4194,7 +4194,7 @@ sal_Bool lcl_SetOtherLineHeight( SwTableLine* pLine, CR_SetLineHeight& rParam,
     return bRet;
 }
 
-sal_Bool lcl_InsDelSelLine( SwTableLine* pLine, CR_SetLineHeight& rParam,
+static sal_Bool lcl_InsDelSelLine( SwTableLine* pLine, CR_SetLineHeight& rParam,
                             SwTwips nDist, sal_Bool bCheck )
 {
     sal_Bool bRet = sal_True;

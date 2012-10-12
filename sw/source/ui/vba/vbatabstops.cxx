@@ -34,14 +34,14 @@
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
-uno::Sequence< style::TabStop > lcl_getTabStops( const uno::Reference< beans::XPropertySet >& xParaProps ) throw (uno::RuntimeException)
+static uno::Sequence< style::TabStop > lcl_getTabStops( const uno::Reference< beans::XPropertySet >& xParaProps ) throw (uno::RuntimeException)
 {
     uno::Sequence< style::TabStop > aSeq;
     xParaProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ParaTabStops") ) ) >>= aSeq;
     return aSeq;
 }
 
-void lcl_setTabStops( const uno::Reference< beans::XPropertySet >& xParaProps, const uno::Sequence< style::TabStop >& aSeq ) throw (uno::RuntimeException)
+static void lcl_setTabStops( const uno::Reference< beans::XPropertySet >& xParaProps, const uno::Sequence< style::TabStop >& aSeq ) throw (uno::RuntimeException)
 {
     xParaProps->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ParaTabStops") ), uno::makeAny( aSeq ) );
 }

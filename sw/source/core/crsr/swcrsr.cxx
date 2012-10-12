@@ -711,7 +711,7 @@ SwMoveFnCollection* SwCursor::MakeFindRange( SwDocPositions nStart,
 }
 
 
-sal_uLong lcl_FindSelection( SwFindParas& rParas, SwCursor* pCurCrsr,
+static sal_uLong lcl_FindSelection( SwFindParas& rParas, SwCursor* pCurCrsr,
                         SwMoveFn fnMove, SwCursor*& pFndRing,
                         SwPaM& aRegion, FindRanges eFndRngs,
                         sal_Bool bInReadOnly, sal_Bool& bCancel )
@@ -836,7 +836,7 @@ sal_uLong lcl_FindSelection( SwFindParas& rParas, SwCursor* pCurCrsr,
 }
 
 
-int lcl_MakeSelFwrd( const SwNode& rSttNd, const SwNode& rEndNd,
+static int lcl_MakeSelFwrd( const SwNode& rSttNd, const SwNode& rEndNd,
                         SwPaM& rPam, int bFirst )
 {
     if( rSttNd.GetIndex() + 1 == rEndNd.GetIndex() )
@@ -869,7 +869,7 @@ int lcl_MakeSelFwrd( const SwNode& rSttNd, const SwNode& rEndNd,
 }
 
 
-int lcl_MakeSelBkwrd( const SwNode& rSttNd, const SwNode& rEndNd,
+static int lcl_MakeSelBkwrd( const SwNode& rSttNd, const SwNode& rEndNd,
                         SwPaM& rPam, int bFirst )
 {
     if( rEndNd.GetIndex() + 1 == rSttNd.GetIndex() )

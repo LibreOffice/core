@@ -110,9 +110,9 @@ const sal_Unicode T2T_PARA = 0x0a;
 extern void ClearFEShellTabCols();
 
 // steht im gctable.cxx
-extern sal_Bool lcl_GC_Line_Border( const SwTableLine*& , void* pPara );
+extern sal_Bool sw_GC_Line_Border( const SwTableLine*& , void* pPara );
 
-void lcl_SetDfltBoxAttr( SwFrmFmt& rFmt, sal_uInt8 nId )
+static void lcl_SetDfltBoxAttr( SwFrmFmt& rFmt, sal_uInt8 nId )
 {
     sal_Bool bTop = sal_False, bBottom = sal_False, bLeft = sal_False, bRight = sal_False;
     switch ( nId )
@@ -183,7 +183,7 @@ lcl_SetDfltBoxAttr(SwTableBox& rBox, DfltBoxAttrList_t & rBoxFmtArr,
     rBox.ChgFrmFmt( pNewTableBoxFmt );
 }
 
-SwTableBoxFmt *lcl_CreateDfltBoxFmt( SwDoc &rDoc, std::vector<SwTableBoxFmt*> &rBoxFmtArr,
+static SwTableBoxFmt *lcl_CreateDfltBoxFmt( SwDoc &rDoc, std::vector<SwTableBoxFmt*> &rBoxFmtArr,
                                     sal_uInt16 nCols, sal_uInt8 nId )
 {
     if ( !rBoxFmtArr[nId] )
@@ -198,7 +198,7 @@ SwTableBoxFmt *lcl_CreateDfltBoxFmt( SwDoc &rDoc, std::vector<SwTableBoxFmt*> &r
     return rBoxFmtArr[nId];
 }
 
-SwTableBoxFmt *lcl_CreateAFmtBoxFmt( SwDoc &rDoc, std::vector<SwTableBoxFmt*> &rBoxFmtArr,
+static SwTableBoxFmt *lcl_CreateAFmtBoxFmt( SwDoc &rDoc, std::vector<SwTableBoxFmt*> &rBoxFmtArr,
                                     const SwTableAutoFmt& rAutoFmt,
                                     sal_uInt16 nCols, sal_uInt8 nId )
 {
@@ -2549,7 +2549,7 @@ bool FuzzyCompare::operator() ( long s1, long s2 ) const
     return ( s1 < s2 && abs( s1 - s2 ) > ROWFUZZY );
 }
 
-bool lcl_IsFrmInColumn( const SwCellFrm& rFrm, SwSelBoxes& rBoxes )
+static bool lcl_IsFrmInColumn( const SwCellFrm& rFrm, SwSelBoxes& rBoxes )
 {
     for (size_t i = 0; i < rBoxes.size(); ++i)
     {
@@ -3017,21 +3017,21 @@ sal_Bool SwCollectTblLineBoxes::Resize( sal_uInt16 nOffset, sal_uInt16 nOldWidth
     return !aPosArr.empty();
 }
 
-sal_Bool lcl_Line_CollectBox( const SwTableLine*& rpLine, void* pPara )
+sal_Bool sw_Line_CollectBox( const SwTableLine*& rpLine, void* pPara )
 {
     SwCollectTblLineBoxes* pSplPara = (SwCollectTblLineBoxes*)pPara;
     if( pSplPara->IsGetValues() )
         for( SwTableBoxes::iterator it = ((SwTableLine*)rpLine)->GetTabBoxes().begin();
                  it != ((SwTableLine*)rpLine)->GetTabBoxes().end(); ++it)
-            lcl_Box_CollectBox(*it, pSplPara );
+            sw_Box_CollectBox(*it, pSplPara );
     else
         for( SwTableBoxes::iterator it = ((SwTableLine*)rpLine)->GetTabBoxes().begin();
                  it != ((SwTableLine*)rpLine)->GetTabBoxes().end(); ++it)
-            lcl_BoxSetSplitBoxFmts(*it, pSplPara );
+            sw_BoxSetSplitBoxFmts(*it, pSplPara );
     return sal_True;
 }
 
-void lcl_Box_CollectBox( const SwTableBox* pBox, SwCollectTblLineBoxes* pSplPara )
+void sw_Box_CollectBox( const SwTableBox* pBox, SwCollectTblLineBoxes* pSplPara )
 {
     sal_uInt16 nLen = pBox->GetTabLines().size();
     if( nLen )
@@ -3043,13 +3043,13 @@ void lcl_Box_CollectBox( const SwTableBox* pBox, SwCollectTblLineBoxes* pSplPara
             --nLen;
 
         const SwTableLine* pLn = pBox->GetTabLines()[ nLen ];
-        lcl_Line_CollectBox( pLn, pSplPara );
+        sw_Line_CollectBox( pLn, pSplPara );
     }
     else
         pSplPara->AddBox( *pBox );
 }
 
-void lcl_BoxSetSplitBoxFmts( SwTableBox* pBox, SwCollectTblLineBoxes* pSplPara )
+void sw_BoxSetSplitBoxFmts( SwTableBox* pBox, SwCollectTblLineBoxes* pSplPara )
 {
     sal_uInt16 nLen = pBox->GetTabLines().size();
     if( nLen )
@@ -3061,7 +3061,7 @@ void lcl_BoxSetSplitBoxFmts( SwTableBox* pBox, SwCollectTblLineBoxes* pSplPara )
             --nLen;
 
         const SwTableLine* pLn = pBox->GetTabLines()[ nLen ];
-        lcl_Line_CollectBox( pLn, pSplPara );
+        sw_Line_CollectBox( pLn, pSplPara );
     }
     else
     {
@@ -3192,13 +3192,13 @@ sal_Bool SwDoc::SplitTable( const SwPosition& rPos, sal_uInt16 eHdlnMode,
                             rTbl.GetTabLines().size() - 1 ];
                 for( SwTableBoxes::iterator it = pLn->GetTabBoxes().begin();
                          it != pLn->GetTabBoxes().end(); ++it)
-                    lcl_Box_CollectBox(*it, &aPara );
+                    sw_Box_CollectBox(*it, &aPara );
 
                 aPara.SetValues( sal_True );
                 pLn = pNew->GetTable().GetTabLines()[ 0 ];
                 for( SwTableBoxes::iterator it = pLn->GetTabBoxes().begin();
                          it != pLn->GetTabBoxes().end(); ++it)
-                    lcl_BoxSetSplitBoxFmts(*it, &aPara );
+                    sw_BoxSetSplitBoxFmts(*it, &aPara );
 
                 // Kopfzeile wiederholen abschalten
                 pNew->GetTable().SetRowsToRepeat( 0 );
@@ -3217,13 +3217,13 @@ sal_Bool SwDoc::SplitTable( const SwPosition& rPos, sal_uInt16 eHdlnMode,
                 SwTableLine* pLn = rTbl.GetTabLines()[ 0 ];
                 for( SwTableBoxes::iterator it = pLn->GetTabBoxes().begin();
                          it != pLn->GetTabBoxes().end(); ++it)
-                    lcl_Box_CollectBox(*it, &aPara );
+                    sw_Box_CollectBox(*it, &aPara );
 
                 aPara.SetValues( sal_True );
                 pLn = pNew->GetTable().GetTabLines()[ 0 ];
                 for( SwTableBoxes::iterator it = pLn->GetTabBoxes().begin();
                          it != pLn->GetTabBoxes().end(); ++it)
-                    lcl_BoxSetSplitBoxFmts(*it, &aPara );
+                    sw_BoxSetSplitBoxFmts(*it, &aPara );
             }
             break;
 
@@ -3260,7 +3260,7 @@ sal_Bool SwDoc::SplitTable( const SwPosition& rPos, sal_uInt16 eHdlnMode,
     return 0 != pNew;
 }
 
-sal_Bool lcl_ChgTblSize( SwTable& rTbl )
+static sal_Bool lcl_ChgTblSize( SwTable& rTbl )
 {
     // das Attribut darf nicht ueber das Modify an der
     // Tabelle gesetzt werden, denn sonst werden alle
@@ -3625,7 +3625,7 @@ sal_Bool SwNodes::MergeTable( const SwNodeIndex& rPos, sal_Bool bWithPrev,
         // Header-Vorlagen in der Zeile setzen
         // und ggfs. in der History speichern fuers Undo!!!
     }
-    lcl_LineSetHeadCondColl( pFirstLn );
+    sw_LineSetHeadCondColl( pFirstLn );
 
     // und die Borders "aufrauemen"
     if( nOldSize )
@@ -3633,7 +3633,7 @@ sal_Bool SwNodes::MergeTable( const SwNodeIndex& rPos, sal_Bool bWithPrev,
         _SwGCLineBorder aPara( rTbl );
         aPara.nLinePos = --nOldSize;
         pFirstLn = rTbl.GetTabLines()[ nOldSize ];
-        lcl_GC_Line_Border( pFirstLn, &aPara );
+        sw_GC_Line_Border( pFirstLn, &aPara );
     }
 
     //Layout updaten
@@ -3661,10 +3661,10 @@ struct _SetAFmtTabPara
 
 // forward deklarieren damit sich die Lines und Boxen rekursiv aufrufen
 // koennen.
-sal_Bool lcl_SetAFmtBox(_FndBox &, _SetAFmtTabPara *pSetPara);
-sal_Bool lcl_SetAFmtLine(_FndLine &, _SetAFmtTabPara *pPara);
+static sal_Bool lcl_SetAFmtBox(_FndBox &, _SetAFmtTabPara *pSetPara);
+static sal_Bool lcl_SetAFmtLine(_FndLine &, _SetAFmtTabPara *pPara);
 
-sal_Bool lcl_SetAFmtLine(_FndLine & rLine, _SetAFmtTabPara *pPara)
+static sal_Bool lcl_SetAFmtLine(_FndLine & rLine, _SetAFmtTabPara *pPara)
 {
     for (_FndBoxes::iterator it = rLine.GetBoxes().begin();
          it != rLine.GetBoxes().end(); ++it)
@@ -3674,7 +3674,7 @@ sal_Bool lcl_SetAFmtLine(_FndLine & rLine, _SetAFmtTabPara *pPara)
     return sal_True;
 }
 
-sal_Bool lcl_SetAFmtBox( _FndBox & rBox, _SetAFmtTabPara *pSetPara )
+static sal_Bool lcl_SetAFmtBox( _FndBox & rBox, _SetAFmtTabPara *pSetPara )
 {
     if (!rBox.GetUpper()->GetUpper())     // Box on first level?
     {

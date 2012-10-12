@@ -42,7 +42,7 @@ using namespace utl;
 using rtl::OUString;
 using namespace com::sun::star::uno;
 
-inline LanguageType lcl_LanguageOfType(sal_Int16 nType, sal_Int16 eWestern, sal_Int16 eCJK, sal_Int16 eCTL)
+static inline LanguageType lcl_LanguageOfType(sal_Int16 nType, sal_Int16 eWestern, sal_Int16 eCJK, sal_Int16 eCTL)
 {
     return LanguageType(
                 nType < FONT_STANDARD_CJK ? eWestern :

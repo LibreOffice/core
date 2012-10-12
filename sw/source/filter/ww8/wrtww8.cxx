@@ -344,7 +344,7 @@ const sal_Unicode *WW8DopTypography::GetJapanNotEndLevel1()
     return &aJapanNotEndLevel1[0];
 }
 
-int lcl_CmpBeginEndChars( const rtl::OUString& rSWStr,
+static int lcl_CmpBeginEndChars( const rtl::OUString& rSWStr,
     const sal_Unicode* pMSStr, int nMSStrByteLen )
 {
     nMSStrByteLen /= sizeof( sal_Unicode );

@@ -250,7 +250,7 @@ static void lcl_addURL ( SvXMLExport &rExport, const String &rURL,
     }
 }
 
-void lcl_addAspect(
+static void lcl_addAspect(
         const svt::EmbeddedObjectRef& rObj,
         const XMLPropertyState **pStates,
         const UniReference < XMLPropertySetMapper >& rMapper )
@@ -266,7 +266,7 @@ void lcl_addAspect(
     }
 }
 
-void lcl_addOutplaceProperties(
+static void lcl_addOutplaceProperties(
         const svt::EmbeddedObjectRef& rObj,
         const XMLPropertyState **pStates,
         const UniReference < XMLPropertySetMapper >& rMapper )
@@ -297,7 +297,7 @@ void lcl_addOutplaceProperties(
     }
 }
 
-void lcl_addFrameProperties(
+static void lcl_addFrameProperties(
         const uno::Reference < embed::XEmbeddedObject >& xObj,
         const XMLPropertyState **pStates,
         const UniReference < XMLPropertySetMapper >& rMapper )

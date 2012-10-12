@@ -362,7 +362,7 @@ void SvXMLExportItemMapper::handleElementItem(
     OSL_FAIL( "element item not handled in xml export" );
 }
 
-bool lcl_isOdfDoubleLine( const SvxBorderLine* pLine )
+static bool lcl_isOdfDoubleLine( const SvxBorderLine* pLine )
 {
     bool bIsOdfDouble = false;
     switch (pLine->GetBorderLineStyle())

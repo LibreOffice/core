@@ -56,7 +56,7 @@
 using namespace ::com::sun::star;
 using namespace nsSwDocInfoSubType;
 
-sal_uInt16 lcl_GetLanguageOfFormat( sal_uInt16 nLng, sal_uLong nFmt,
+static sal_uInt16 lcl_GetLanguageOfFormat( sal_uInt16 nLng, sal_uLong nFmt,
                                 const SvNumberFormatter& rFormatter )
 {
     if( nLng == LANGUAGE_NONE ) // wegen Bug #60010

@@ -728,7 +728,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
     }
 }
 
-bool lcl_IsMarkInSameSection( SwWrtShell& rWrtSh, const SwSection* pSect )
+static bool lcl_IsMarkInSameSection( SwWrtShell& rWrtSh, const SwSection* pSect )
 {
     rWrtSh.SwapPam();
     bool bRet = pSect == rWrtSh.GetCurrSection();

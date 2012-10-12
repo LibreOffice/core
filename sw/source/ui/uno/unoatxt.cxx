@@ -336,7 +336,7 @@ void SwXAutoTextGroup::renameByName(const OUString& aElementName,
         throw uno::RuntimeException();
 }
 
-sal_Bool lcl_CopySelToDoc( SwDoc* pInsDoc, OTextCursorHelper* pxCursor, SwXTextRange* pxRange)
+static sal_Bool lcl_CopySelToDoc( SwDoc* pInsDoc, OTextCursorHelper* pxCursor, SwXTextRange* pxRange)
 {
     OSL_ENSURE( pInsDoc, "no InsDoc");
 

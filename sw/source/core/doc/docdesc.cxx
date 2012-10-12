@@ -129,7 +129,7 @@ static void lcl_DefaultPageFmt( sal_uInt16 nPoolFmtId,
 |*
 |*************************************************************************/
 
-void lcl_DescSetAttr( const SwFrmFmt &rSource, SwFrmFmt &rDest,
+static void lcl_DescSetAttr( const SwFrmFmt &rSource, SwFrmFmt &rDest,
                          const sal_Bool bPage = sal_True )
 {
     // We should actually use ItemSet's Intersect here, but that doesn't work

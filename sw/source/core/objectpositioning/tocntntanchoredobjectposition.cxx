@@ -101,7 +101,7 @@ SwTxtFrm& SwToCntntAnchoredObjectPosition::GetAnchorTxtFrm() const
 }
 
 // #i23512#
-bool lcl_DoesVertPosFits( const SwTwips _nRelPosY,
+static bool lcl_DoesVertPosFits( const SwTwips _nRelPosY,
                           const SwTwips _nAvail,
                           const SwLayoutFrm* _pUpperOfOrientFrm,
                           const bool _bBrowse,

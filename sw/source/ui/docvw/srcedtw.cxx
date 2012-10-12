@@ -807,7 +807,7 @@ void SwSrcEditWindow::GetFocus()
     pOutWin->GrabFocus();
 }
 
-sal_Bool  lcl_GetLanguagesForEncoding(rtl_TextEncoding eEnc, LanguageType aLanguages[])
+static sal_Bool  lcl_GetLanguagesForEncoding(rtl_TextEncoding eEnc, LanguageType aLanguages[])
 {
     switch(eEnc)
     {

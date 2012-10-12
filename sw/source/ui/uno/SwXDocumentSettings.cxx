@@ -134,7 +134,7 @@ enum SwDocumentSettingsPropertyHandles
     HANDLE_EMBED_SYSTEM_FONTS
 };
 
-MasterPropertySetInfo * lcl_createSettingsInfo()
+static MasterPropertySetInfo * lcl_createSettingsInfo()
 {
     static PropertyInfo aWriterSettingsInfoMap[] =
     {

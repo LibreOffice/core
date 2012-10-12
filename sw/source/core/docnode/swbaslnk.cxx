@@ -68,7 +68,7 @@ TYPEINIT1( SwBaseLink, ::sfx2::SvBaseLink );
 
 SV_IMPL_REF( SwServerObject )
 
-void lcl_CallModify( SwGrfNode& rGrfNd, SfxPoolItem& rItem )
+static void lcl_CallModify( SwGrfNode& rGrfNd, SfxPoolItem& rItem )
 {
     //call fist all not SwNoTxtFrames, then the SwNoTxtFrames.
     //              The reason is, that in the SwNoTxtFrames the Graphic

@@ -46,34 +46,34 @@ namespace rtl { class OUString; }
 /** Define various helper variables and functions for xmlimpit.cxx and
  * xmlexpit.cxx.  */
 
-sal_Bool lcl_frmitems_parseXMLBorder( const ::rtl::OUString& rValue,
+sal_Bool sw_frmitems_parseXMLBorder( const ::rtl::OUString& rValue,
                                       const SvXMLUnitConverter& rUnitConverter,
                                       sal_Bool& rHasStyle, sal_uInt16& rStyle,
                                       sal_Bool& rHasWidth, sal_uInt16& rWidth,
                                       sal_uInt16& rNamedWidth,
                                       sal_Bool& rHasColor, Color& rColor );
 
-void lcl_frmitems_setXMLBorderWidth( editeng::SvxBorderLine& rLine,
+void sw_frmitems_setXMLBorderWidth( editeng::SvxBorderLine& rLine,
                                      sal_uInt16 nOutWidth, sal_uInt16 nInWidth,
                                      sal_uInt16 nDistance );
 
-void lcl_frmitems_setXMLBorderWidth( editeng::SvxBorderLine& rLine,
+void sw_frmitems_setXMLBorderWidth( editeng::SvxBorderLine& rLine,
                                      sal_uInt16 nWidth, sal_Bool bDouble );
 
-sal_Bool lcl_frmitems_setXMLBorder( editeng::SvxBorderLine*& rpLine,
+sal_Bool sw_frmitems_setXMLBorder( editeng::SvxBorderLine*& rpLine,
                                     sal_Bool bHasStyle, sal_uInt16 nStyle,
                                     sal_Bool bHasWidth, sal_uInt16 nWidth,
                                     sal_uInt16 nNamedWidth,
                                     sal_Bool bHasColor, const Color& rColor );
 
-void lcl_frmitems_setXMLBorder( editeng::SvxBorderLine*& rpLine,
+void sw_frmitems_setXMLBorder( editeng::SvxBorderLine*& rpLine,
                                 sal_uInt16 nWidth, sal_uInt16 nOutWidth,
                                 sal_uInt16 nInWidth, sal_uInt16 nDistance );
 
-void lcl_frmitems_MergeXMLHoriPos( SvxGraphicPosition& ePos,
+void sw_frmitems_MergeXMLHoriPos( SvxGraphicPosition& ePos,
                                    SvxGraphicPosition eHori );
 
-void lcl_frmitems_MergeXMLVertPos( SvxGraphicPosition& ePos,
+void sw_frmitems_MergeXMLVertPos( SvxGraphicPosition& ePos,
                                      SvxGraphicPosition eVert );
 
 extern const sal_uInt16 aSBorderWidths[];

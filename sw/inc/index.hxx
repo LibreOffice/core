@@ -121,7 +121,7 @@ public:
 class SwIndexReg
 {
     friend class SwIndex;
-    friend bool lcl_PosOk(const SwPosition & aPos);
+    friend bool sw_PosOk(const SwPosition & aPos);
 
     const SwIndex * m_pFirst;
     const SwIndex * m_pLast;

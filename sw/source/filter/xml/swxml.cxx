@@ -95,7 +95,7 @@ using namespace ::com::sun::star::lang;
 using ::rtl::OUString;
 
 
-void lcl_EnsureValidPam( SwPaM& rPam )
+static void lcl_EnsureValidPam( SwPaM& rPam )
 {
     if( rPam.GetCntntNode() != NULL )
     {
@@ -400,7 +400,7 @@ sal_Int32 ReadThroughComponent(
 }
 
 // #i44177#
-void lcl_AdjustOutlineStylesForOOo( SwDoc& _rDoc )
+static void lcl_AdjustOutlineStylesForOOo( SwDoc& _rDoc )
 {
     // array containing the names of the default outline styles ('Heading 1',
     // 'Heading 2', ..., 'Heading 10')
@@ -479,7 +479,7 @@ void lcl_AdjustOutlineStylesForOOo( SwDoc& _rDoc )
 
 }
 
-void lcl_ConvertSdrOle2ObjsToSdrGrafObjs( SwDoc& _rDoc )
+static void lcl_ConvertSdrOle2ObjsToSdrGrafObjs( SwDoc& _rDoc )
 {
     if ( _rDoc.GetDrawModel() &&
          _rDoc.GetDrawModel()->GetPage( 0 ) )

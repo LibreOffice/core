@@ -1430,7 +1430,7 @@ const SwFrm* SwFlowFrm::_GetPrevFrmForUpperSpaceCalc( const SwFrm* _pProposedPre
 }
 
 /// Compare styles attached to these text frames.
-bool lcl_IdenticalStyles(const SwFrm* pPrevFrm, const SwFrm* pFrm)
+static bool lcl_IdenticalStyles(const SwFrm* pPrevFrm, const SwFrm* pFrm)
 {
     SwTxtFmtColl *pPrevFmtColl = 0;
     if (pPrevFrm && pPrevFrm->IsTxtFrm())
@@ -1449,7 +1449,7 @@ bool lcl_IdenticalStyles(const SwFrm* pPrevFrm, const SwFrm* pFrm)
     return bIdenticalStyles;
 }
 
-bool lcl_getContextualSpacing(const SwFrm* pPrevFrm)
+static bool lcl_getContextualSpacing(const SwFrm* pPrevFrm)
 {
     bool bRet;
     SwBorderAttrAccess *pAccess = new SwBorderAttrAccess( SwFrm::GetCache(), pPrevFrm );

@@ -482,21 +482,21 @@ void SwMailMergeDlg::Apply()
 {
 }
 
-void lcl_MoveControlY( Window* ppW, long nDiffSize )
+static void lcl_MoveControlY( Window* ppW, long nDiffSize )
 {
     Point aPos( ppW->GetPosPixel());
     aPos.Y() += nDiffSize;
     ppW->SetPosPixel( aPos );
 }
 
-void lcl_MoveControlX( Window* ppW, long nDiffSize )
+static void lcl_MoveControlX( Window* ppW, long nDiffSize )
 {
     Point aPos( ppW->GetPosPixel());
     aPos.X() += nDiffSize;
     ppW->SetPosPixel( aPos );
 }
 
-void lcl_ChangeWidth( Window* ppW, long nDiffSize )
+static void lcl_ChangeWidth( Window* ppW, long nDiffSize )
 {
     Size aSize( ppW->GetSizePixel());
     aSize.Width() += nDiffSize;

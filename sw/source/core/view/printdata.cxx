@@ -45,7 +45,7 @@
 #include <vcl/outdev.hxx>
 
 
-extern bool lcl_GetPostIts( IDocumentFieldsAccess* pIDFA, _SetGetExpFlds * pSrtLst );
+extern bool sw_GetPostIts( IDocumentFieldsAccess* pIDFA, _SetGetExpFlds * pSrtLst );
 
 
 using namespace ::com::sun::star;
@@ -70,7 +70,7 @@ void SwRenderData::CreatePostItData( SwDoc *pDoc, const SwViewOption *pViewOpt, 
 {
     DeletePostItData();
     m_pPostItFields.reset(new _SetGetExpFlds);
-    lcl_GetPostIts( pDoc, m_pPostItFields.get() );
+    sw_GetPostIts( pDoc, m_pPostItFields.get() );
 
     //!! Disable spell and grammar checking in the temporary document.
     //!! Otherwise the grammar checker might process it and crash if we later on

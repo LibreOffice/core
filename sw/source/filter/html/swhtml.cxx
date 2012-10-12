@@ -2057,9 +2057,9 @@ void SwHTMLParser::NextToken( int nToken )
 }
 
 
-extern sal_Bool lcl_css1atr_equalFontItems( const SfxPoolItem& r1, const SfxPoolItem& r2 );
+extern sal_Bool swhtml_css1atr_equalFontItems( const SfxPoolItem& r1, const SfxPoolItem& r2 );
 
-void lcl_swhtml_getItemInfo( const _HTMLAttr& rAttr,
+static void lcl_swhtml_getItemInfo( const _HTMLAttr& rAttr,
                                  sal_Bool& rScriptDependent, sal_Bool& rFont,
                                  sal_uInt16& rScriptType )
 {
@@ -2363,7 +2363,7 @@ sal_Bool SwHTMLParser::AppendTxtNode( SwHTMLAppendMode eMode, sal_Bool bUpdateNu
                     sal_Bool bFont = (nIdx % 5) == 0;
                     const SfxPoolItem& rItem =
                         ((const SwCntntNode *)pTxtNd)->GetAttr( nWhich );
-                    if( bFont ? lcl_css1atr_equalFontItems(rItem,pHt->GetAttr())
+                    if( bFont ? swhtml_css1atr_equalFontItems(rItem,pHt->GetAttr())
                               : rItem == pHt->GetAttr() )
                     {
                         // The hint is the same as set in the paragraph and

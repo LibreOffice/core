@@ -236,7 +236,7 @@ struct SwNewDBMgr_Impl
         {}
 };
 
-void lcl_InitNumberFormatter(SwDSParam& rParam, uno::Reference<XDataSource> xSource)
+static void lcl_InitNumberFormatter(SwDSParam& rParam, uno::Reference<XDataSource> xSource)
 {
     uno::Reference<XComponentContext> xContext = ::comphelper::getProcessComponentContext();
     rParam.xFormatter = uno::Reference<util::XNumberFormatter>(util::NumberFormatter::create(xContext), UNO_QUERY);
@@ -263,7 +263,7 @@ void lcl_InitNumberFormatter(SwDSParam& rParam, uno::Reference<XDataSource> xSou
     }
 }
 
-sal_Bool lcl_MoveAbsolute(SwDSParam* pParam, long nAbsPos)
+static sal_Bool lcl_MoveAbsolute(SwDSParam* pParam, long nAbsPos)
 {
     sal_Bool bRet = sal_False;
     try
@@ -283,7 +283,7 @@ sal_Bool lcl_MoveAbsolute(SwDSParam* pParam, long nAbsPos)
     return bRet;
 }
 
-sal_Bool lcl_GetColumnCnt(SwDSParam* pParam,
+static sal_Bool lcl_GetColumnCnt(SwDSParam* pParam,
     const String& rColumnName, long nLanguage, rtl::OUString& rResult, double* pNumber)
 {
     uno::Reference< XColumnsSupplier > xColsSupp( pParam->xResultSet, UNO_QUERY );
@@ -503,7 +503,7 @@ void SwNewDBMgr::ImportFromConnection(  SwWrtShell* pSh )
     }
 }
 
-String  lcl_FindColumn(const String& sFormatStr,sal_uInt16  &nUsedPos, sal_uInt8 &nSeparator)
+static String  lcl_FindColumn(const String& sFormatStr,sal_uInt16  &nUsedPos, sal_uInt8 &nSeparator)
 {
     String sReturn;
     sal_uInt16 nLen = sFormatStr.Len();
@@ -750,7 +750,7 @@ SwNewDBMgr::~SwNewDBMgr()
 /*--------------------------------------------------------------------
     Description:    save bulk letters as single documents
  --------------------------------------------------------------------*/
-String lcl_FindUniqueName(SwWrtShell* pTargetShell, const String& rStartingPageDesc, sal_uLong nDocNo )
+static String lcl_FindUniqueName(SwWrtShell* pTargetShell, const String& rStartingPageDesc, sal_uLong nDocNo )
 {
     do
     {
@@ -762,7 +762,7 @@ String lcl_FindUniqueName(SwWrtShell* pTargetShell, const String& rStartingPageD
     }while(true);
 }
 
-void lcl_CopyDynamicDefaults( const SwDoc& rSource, SwDoc& rTarget )
+static void lcl_CopyDynamicDefaults( const SwDoc& rSource, SwDoc& rTarget )
 {
     sal_uInt16 aRangeOfDefaults[] = {
         RES_FRMATR_BEGIN, RES_FRMATR_END-1,
@@ -791,7 +791,7 @@ void lcl_CopyDynamicDefaults( const SwDoc& rSource, SwDoc& rTarget )
         rTarget.SetDefault( aNewDefaults );
 }
 
-void lcl_CopyFollowPageDesc(
+static void lcl_CopyFollowPageDesc(
                             SwWrtShell& rTargetShell,
                             const SwPageDesc& rSourcePageDesc,
                             const SwPageDesc& rTargetPageDesc,
@@ -814,7 +814,7 @@ void lcl_CopyFollowPageDesc(
     }
 }
 
-void lcl_RemoveSectionLinks( SwWrtShell& rWorkShell )
+static void lcl_RemoveSectionLinks( SwWrtShell& rWorkShell )
 {
     //reset all links of the sections of synchronized labels
     sal_uInt16 nSections = rWorkShell.GetSectionFmtCount();

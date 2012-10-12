@@ -68,7 +68,7 @@
 // #i21457# - new implementation of local method <lcl_IsInSameTblBox(..)>.
 // Method now determines the previous/next on its own. Thus, it can be controlled,
 // for which previous/next is checked, if it's visible.
-bool lcl_IsInSameTblBox( SwNodes& _rNds,
+static bool lcl_IsInSameTblBox( SwNodes& _rNds,
                          const SwNode& _rNd,
                          const bool _bPrev )
 {
@@ -135,7 +135,7 @@ bool lcl_IsInSameTblBox( SwNodes& _rNds,
     return true;
 }
 
-void lcl_CheckEmptyLayFrm( SwNodes& rNds, SwSectionData& rSectionData,
+static void lcl_CheckEmptyLayFrm( SwNodes& rNds, SwSectionData& rSectionData,
                         const SwNode& rStt, const SwNode& rEnd )
 {
     SwNodeIndex aIdx( rStt );
@@ -768,7 +768,7 @@ void SwDoc::UpdateSection(sal_uInt16 const nPos, SwSectionData & rNewData,
  * --------------------------------------------------*/
 
 // und dann waren da noch die Fussnoten:
-void lcl_DeleteFtn( SwSectionNode *pNd, sal_uLong nStt, sal_uLong nEnd )
+void sw_DeleteFtn( SwSectionNode *pNd, sal_uLong nStt, sal_uLong nEnd )
 {
     SwFtnIdxs& rFtnArr = pNd->GetDoc()->GetFtnIdxs();
     if( rFtnArr.size() )
@@ -967,7 +967,7 @@ SwSectionNode* SwNodes::InsertTextSection(SwNodeIndex const& rNdIdx,
             ((SwCntntNode*)pNd)->DelFrms();
     }
 
-    lcl_DeleteFtn( pSectNd, nStart, nEnde );
+    sw_DeleteFtn( pSectNd, nStart, nEnde );
 
     if( bInsFrm )
     {

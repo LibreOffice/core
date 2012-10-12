@@ -118,7 +118,7 @@ SwImplShellAction::~SwImplShellAction()
                     possibly fill Style
  --------------------------------------------------------------------*/
 
-SwCharFmt* lcl_FindCharFmt( SwDoc& rDoc,
+static SwCharFmt* lcl_FindCharFmt( SwDoc& rDoc,
                             const String& rName,
                             SwDocStyleSheet* pStyle = 0,
                             sal_Bool bCreate = sal_True )
@@ -164,7 +164,7 @@ SwCharFmt* lcl_FindCharFmt( SwDoc& rDoc,
                     fill Style
  --------------------------------------------------------------------*/
 
-SwTxtFmtColl* lcl_FindParaFmt(  SwDoc& rDoc,
+static SwTxtFmtColl* lcl_FindParaFmt(  SwDoc& rDoc,
                                 const String& rName,
                                 SwDocStyleSheet* pStyle = 0,
                                 sal_Bool bCreate = sal_True )
@@ -207,7 +207,7 @@ SwTxtFmtColl* lcl_FindParaFmt(  SwDoc& rDoc,
  --------------------------------------------------------------------*/
 
 
-SwFrmFmt* lcl_FindFrmFmt(   SwDoc& rDoc,
+static SwFrmFmt* lcl_FindFrmFmt(   SwDoc& rDoc,
                             const String& rName,
                             SwDocStyleSheet* pStyle = 0,
                             sal_Bool bCreate = sal_True )
@@ -245,7 +245,7 @@ SwFrmFmt* lcl_FindFrmFmt(   SwDoc& rDoc,
  --------------------------------------------------------------------*/
 
 
-const SwPageDesc* lcl_FindPageDesc( SwDoc&  rDoc,
+static const SwPageDesc* lcl_FindPageDesc( SwDoc&  rDoc,
                                     const String&    rName,
                                     SwDocStyleSheet* pStyle = 0,
                                     sal_Bool bCreate = sal_True )
@@ -279,7 +279,7 @@ const SwPageDesc* lcl_FindPageDesc( SwDoc&  rDoc,
     return pDesc;
 }
 
-const SwNumRule* lcl_FindNumRule(   SwDoc&  rDoc,
+static const SwNumRule* lcl_FindNumRule(   SwDoc&  rDoc,
                                     const String&    rName,
                                     SwDocStyleSheet* pStyle = 0,
                                     sal_Bool bCreate = sal_True )
@@ -311,7 +311,7 @@ const SwNumRule* lcl_FindNumRule(   SwDoc&  rDoc,
 }
 
 
-sal_uInt16 lcl_FindName(const SwPoolFmtList& rLst, SfxStyleFamily eFam,
+static sal_uInt16 lcl_FindName(const SwPoolFmtList& rLst, SfxStyleFamily eFam,
     const rtl::OUString& rName)
 {
     if(!rLst.empty())
@@ -1371,7 +1371,7 @@ void SwDocStyleSheet::SetItemSet( const SfxItemSet& rSet,
     }
 }
 
-void lcl_SaveStyles( sal_uInt16 nFamily, std::vector<void*>& rArr, SwDoc& rDoc )
+static void lcl_SaveStyles( sal_uInt16 nFamily, std::vector<void*>& rArr, SwDoc& rDoc )
 {
     switch( nFamily )
     {
@@ -1429,7 +1429,7 @@ static bool lcl_Contains(const std::vector<void*>& rArr, const void* p)
     return std::find( rArr.begin(), rArr.end(), p ) != rArr.end();
 }
 
-void lcl_DeleteInfoStyles( sal_uInt16 nFamily, std::vector<void*>& rArr, SwDoc& rDoc )
+static void lcl_DeleteInfoStyles( sal_uInt16 nFamily, std::vector<void*>& rArr, SwDoc& rDoc )
 {
     sal_uInt16 n, nCnt;
     switch( nFamily )

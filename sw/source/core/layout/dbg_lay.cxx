@@ -176,7 +176,7 @@
 sal_uLong SwProtocol::nRecord = 0;
 SwImplProtocol* SwProtocol::pImpl = NULL;
 
-sal_uLong lcl_GetFrameId( const SwFrm* pFrm )
+static sal_uLong lcl_GetFrameId( const SwFrm* pFrm )
 {
 #if OSL_DEBUG_LEVEL > 1
     static sal_Bool bFrameId = sal_False;
@@ -496,7 +496,7 @@ void SwImplProtocol::FileInit()
  * lcl_Start enables indentation by two spaces during ACT_START and disables
  * it again at ACT_END.
  * --------------------------------------------------*/
-void lcl_Start(rtl::OStringBuffer& rOut, rtl::OStringBuffer& rLay, sal_uLong nAction)
+static void lcl_Start(rtl::OStringBuffer& rOut, rtl::OStringBuffer& rLay, sal_uLong nAction)
 {
     if( nAction == ACT_START )
     {
@@ -519,7 +519,7 @@ void lcl_Start(rtl::OStringBuffer& rOut, rtl::OStringBuffer& rLay, sal_uLong nAc
  * of the frame; "+" stands for valid, "-" stands for invalid.
  * --------------------------------------------------*/
 
-void lcl_Flags(rtl::OStringBuffer& rOut, const SwFrm* pFrm)
+static void lcl_Flags(rtl::OStringBuffer& rOut, const SwFrm* pFrm)
 {
     rOut.append(RTL_CONSTASCII_STRINGPARAM(" Sz"));
     rOut.append(pFrm->GetValidSizeFlag() ? '+' : '-');
@@ -533,7 +533,7 @@ void lcl_Flags(rtl::OStringBuffer& rOut, const SwFrm* pFrm)
  * lcl_FrameType outputs the type of the frame as clear text.
  * --------------------------------------------------*/
 
-void lcl_FrameType( rtl::OStringBuffer& rOut, const SwFrm* pFrm )
+static void lcl_FrameType( rtl::OStringBuffer& rOut, const SwFrm* pFrm )
 {
     if( pFrm->IsTxtFrm() )
         rOut.append(RTL_CONSTASCII_STRINGPARAM("Txt "));

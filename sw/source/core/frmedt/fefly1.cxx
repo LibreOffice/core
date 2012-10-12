@@ -92,7 +92,7 @@ void RegistFlys( SwPageFrm*, const SwLayoutFrm* );
 #*                 will be made, to fit to the format
 #***********************************************************************/
 
-sal_Bool lcl_SetNewFlyPos( const SwNode& rNode, SwFmtAnchor& rAnchor,
+static sal_Bool lcl_SetNewFlyPos( const SwNode& rNode, SwFmtAnchor& rAnchor,
                         const Point& rPt )
 {
     sal_Bool bRet = sal_False;
@@ -115,7 +115,7 @@ sal_Bool lcl_SetNewFlyPos( const SwNode& rNode, SwFmtAnchor& rAnchor,
     return bRet;
 }
 
-sal_Bool lcl_FindAnchorPos( SwDoc& rDoc, const Point& rPt, const SwFrm& rFrm,
+static sal_Bool lcl_FindAnchorPos( SwDoc& rDoc, const Point& rPt, const SwFrm& rFrm,
                         SfxItemSet& rSet )
 {
     sal_Bool bRet = sal_True;
@@ -202,7 +202,7 @@ sal_Bool lcl_FindAnchorPos( SwDoc& rDoc, const Point& rPt, const SwFrm& rFrm,
 //
 //! also used in unoframe.cxx
 //
-sal_Bool lcl_ChkAndSetNewAnchor( const SwFlyFrm& rFly, SfxItemSet& rSet )
+sal_Bool sw_ChkAndSetNewAnchor( const SwFlyFrm& rFly, SfxItemSet& rSet )
 {
     const SwFrmFmt& rFmt = *rFly.GetFmt();
     const SwFmtAnchor &rOldAnch = rFmt.GetAnchor();
@@ -1091,7 +1091,7 @@ sal_Bool SwFEShell::SetFlyFrmAttr( SfxItemSet& rSet )
             const Point aPt( pFly->Frm().Pos() );
 
             if( SFX_ITEM_SET == rSet.GetItemState( RES_ANCHOR, sal_False ))
-                ::lcl_ChkAndSetNewAnchor( *pFly, rSet );
+                sw_ChkAndSetNewAnchor( *pFly, rSet );
             SwFlyFrmFmt* pFlyFmt = (SwFlyFrmFmt*)pFly->GetFmt();
 
             if( GetDoc()->SetFlyFrmAttr( *pFlyFmt, rSet ))
@@ -1249,7 +1249,7 @@ void SwFEShell::SetFrmFmt( SwFrmFmt *pNewFmt, sal_Bool bKeepOrient, Point* pDocP
         {
             pSet = new SfxItemSet( GetDoc()->GetAttrPool(), aFrmFmtSetRange );
             pSet->Put( *pItem );
-            if( !::lcl_ChkAndSetNewAnchor( *pFly, *pSet ))
+            if( !sw_ChkAndSetNewAnchor( *pFly, *pSet ))
                 delete pSet, pSet = 0;
         }
 

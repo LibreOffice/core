@@ -215,7 +215,7 @@ sal_Bool IsItemIncluded( const sal_uInt16 nWhich, const SwTxtAttr *pAttr )
  * 2. The user has choosen to override these colors in the view options
  *************************************************************************/
 
-bool lcl_ChgHyperLinkColor( const SwTxtAttr& rAttr,
+static bool lcl_ChgHyperLinkColor( const SwTxtAttr& rAttr,
                             const SfxPoolItem& rItem,
                             const ViewShell* pShell,
                             Color* pColor )

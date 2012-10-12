@@ -1147,7 +1147,7 @@ void SwXMLDDETableContext_Impl::StartElement(
 }
 
 // generate a new name for DDE field type (called by lcl_GetDDEFieldType below)
-String lcl_GenerateFldTypeName(OUString sPrefix, SwTableNode* pTableNode)
+static String lcl_GenerateFldTypeName(OUString sPrefix, SwTableNode* pTableNode)
 {
     String sPrefixStr(sPrefix);
 
@@ -1176,7 +1176,7 @@ String lcl_GenerateFldTypeName(OUString sPrefix, SwTableNode* pTableNode)
 }
 
 // set table properties
-SwDDEFieldType* lcl_GetDDEFieldType(SwXMLDDETableContext_Impl* pContext,
+static SwDDEFieldType* lcl_GetDDEFieldType(SwXMLDDETableContext_Impl* pContext,
                                     SwTableNode* pTableNode)
 {
     // make command string

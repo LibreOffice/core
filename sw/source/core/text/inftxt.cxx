@@ -516,7 +516,7 @@ extern Color aGlobalRetoucheColor;
  * Returns if the current background color is dark.
  *************************************************************************/
 
-sal_Bool lcl_IsDarkBackground( const SwTxtPaintInfo& rInf )
+static sal_Bool lcl_IsDarkBackground( const SwTxtPaintInfo& rInf )
 {
     const Color* pCol = rInf.GetFont()->GetBackColor();
     if( ! pCol || COL_TRANSPARENT == pCol->GetColor() )

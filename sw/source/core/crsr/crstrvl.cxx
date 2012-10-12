@@ -599,7 +599,7 @@ const SwTOXMark& SwCrsrShell::GotoTOXMark( const SwTOXMark& rStart,
 }
 
 /// jump to next/previous field type
-void lcl_MakeFldLst( _SetGetExpFlds& rLst, const SwFieldType& rFldType,
+static void lcl_MakeFldLst( _SetGetExpFlds& rLst, const SwFieldType& rFldType,
                         sal_uInt16 nSubType, sal_Bool bInReadOnly,
                         sal_Bool bChkInpFlag = sal_False )
 {

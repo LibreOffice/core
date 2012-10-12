@@ -152,7 +152,7 @@ SwFrmFmt* SwDoc::GetFlyNum( sal_uInt16 nIdx, FlyCntType eType )
     return pRetFmt;
 }
 
-Point lcl_FindAnchorLayPos( SwDoc& rDoc, const SwFmtAnchor& rAnch,
+static Point lcl_FindAnchorLayPos( SwDoc& rDoc, const SwFmtAnchor& rAnch,
                             const SwFrmFmt* pFlyFmt )
 {
     Point aRet;

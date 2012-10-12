@@ -377,7 +377,7 @@ IMPL_LINK_NOARG_INLINE_START(SwEndNoteOptionPage, PosChapterHdl)
 }
 IMPL_LINK_NOARG_INLINE_END(SwEndNoteOptionPage, PosChapterHdl)
 
-SwCharFmt* lcl_GetCharFormat( SwWrtShell* pSh, const String& rCharFmtName )
+static SwCharFmt* lcl_GetCharFormat( SwWrtShell* pSh, const String& rCharFmtName )
 {
     SwCharFmt* pFmt = 0;
     sal_uInt16 nChCount = pSh->GetCharFmtCount();

@@ -85,7 +85,7 @@ using namespace ::com::sun::star::linguistic2;
 // alignment attributes for a drawing object, which is newly connected to
 // the layout. Used for a newly formed group object <SwDoc::GroupSelection(..)>
 // and the members of a destroyed group <SwDoc::UnGroupSelection(..)>
-void lcl_AdjustPositioningAttr( SwDrawFrmFmt* _pFrmFmt,
+static void lcl_AdjustPositioningAttr( SwDrawFrmFmt* _pFrmFmt,
                                 const SdrObject& _rSdrObj )
 {
     const SwContact* pContact = GetUserCall( &_rSdrObj );

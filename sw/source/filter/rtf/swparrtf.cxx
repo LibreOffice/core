@@ -288,7 +288,7 @@ SvParserState SwRTFParser::CallParser()
     return SvxRTFParser::CallParser();
 }
 
-bool lcl_UsedPara(SwPaM &rPam)
+static bool lcl_UsedPara(SwPaM &rPam)
 {
     const SwCntntNode* pCNd;
     const SfxItemSet* pSet;
@@ -2733,7 +2733,7 @@ void SwRTFParser::MakeStyleTab()
     }
 }
 
-sal_Bool lcl_SetFmtCol( SwFmt& rFmt, sal_uInt16 nCols, sal_uInt16 nColSpace,
+static sal_Bool lcl_SetFmtCol( SwFmt& rFmt, sal_uInt16 nCols, sal_uInt16 nColSpace,
                     const std::vector<sal_uInt16>& rColumns )
 {
     sal_Bool bSet = sal_False;

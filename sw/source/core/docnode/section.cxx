@@ -698,7 +698,7 @@ SwSection * SwSectionFmt::GetSection() const
     return SwIterator<SwSection,SwSectionFmt>::FirstElement( *this );
 }
 
-extern void lcl_DeleteFtn( SwSectionNode *pNd, sal_uLong nStt, sal_uLong nEnd );
+extern void sw_DeleteFtn( SwSectionNode *pNd, sal_uLong nStt, sal_uLong nEnd );
 
 //Vernichtet alle Frms in aDepend (Frms werden per PTR_CAST erkannt).
 void SwSectionFmt::DelFrms()
@@ -724,7 +724,7 @@ void SwSectionFmt::DelFrms()
 
         sal_uLong nEnde = pSectNd->EndOfSectionIndex();
         sal_uLong nStart = pSectNd->GetIndex()+1;
-        lcl_DeleteFtn( pSectNd, nStart, nEnde );
+        sw_DeleteFtn( pSectNd, nStart, nEnde );
     }
     if( pIdx )
     {
@@ -1113,7 +1113,7 @@ SwSectionFmt::MakeUnoObject()
 
 
 // Method to break section links inside a linked section
-void lcl_BreakSectionLinksInSect( const SwSectionNode& rSectNd )
+static void lcl_BreakSectionLinksInSect( const SwSectionNode& rSectNd )
 {
     if ( !rSectNd.GetDoc() )
     {
@@ -1147,7 +1147,7 @@ void lcl_BreakSectionLinksInSect( const SwSectionNode& rSectNd )
     }
 }
 
-void lcl_UpdateLinksInSect( SwBaseLink& rUpdLnk, SwSectionNode& rSectNd )
+static void lcl_UpdateLinksInSect( SwBaseLink& rUpdLnk, SwSectionNode& rSectNd )
 {
     SwDoc* pDoc = rSectNd.GetDoc();
     SwDocShell* pDShell = pDoc->GetDocShell();
@@ -1202,7 +1202,7 @@ void lcl_UpdateLinksInSect( SwBaseLink& rUpdLnk, SwSectionNode& rSectNd )
 //  1 - DocShell ist ein existieren Document
 //  2 - DocShell wurde neu angelegt, muss also wieder geschlossen werden ( will be assigned to xLockRef additionaly )
 
-int lcl_FindDocShell( SfxObjectShellRef& xDocSh,
+int sw_FindDocShell( SfxObjectShellRef& xDocSh,
                         SfxObjectShellLock& xLockRef,
                         const String& rFileName,
                         const String& rPasswd,
@@ -1397,7 +1397,7 @@ int lcl_FindDocShell( SfxObjectShellRef& xDocSh,
             }
             else
             {
-                nRet = lcl_FindDocShell( xDocSh, xLockRef, sFileName,
+                nRet = sw_FindDocShell( xDocSh, xLockRef, sFileName,
                                     rSection.GetLinkFilePassword(),
                                     sFilter, 0, pDoc->GetDocShell() );
                 if( nRet )

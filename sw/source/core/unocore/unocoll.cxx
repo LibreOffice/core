@@ -471,7 +471,7 @@ const ProvNamesId_Type aProvNamesId[] =
     { CSS_TEXT_FIELDMASTER_BIBLIOGRAPHY,              SW_SERVICE_FIELDMASTER_BIBLIOGRAPHY }
 };
 
-const SvEventDescription* lcl_GetSupportedMacroItems()
+const SvEventDescription* sw_GetSupportedMacroItems()
 {
     static const SvEventDescription aMacroDescriptionsImpl[] =
     {
@@ -829,13 +829,13 @@ uno::Reference< uno::XInterface >   SwXServiceProvider::MakeInstance(sal_uInt16 
             xRet = (cppu::OWeakObject*)new SwXTextDefaults( pDoc );
         break;
         case SW_SERVICE_IMAP_RECTANGLE :
-            xRet = SvUnoImageMapRectangleObject_createInstance( lcl_GetSupportedMacroItems() );
+            xRet = SvUnoImageMapRectangleObject_createInstance( sw_GetSupportedMacroItems() );
         break;
         case SW_SERVICE_IMAP_CIRCLE    :
-            xRet = SvUnoImageMapCircleObject_createInstance( lcl_GetSupportedMacroItems() );
+            xRet = SvUnoImageMapCircleObject_createInstance( sw_GetSupportedMacroItems() );
         break;
         case SW_SERVICE_IMAP_POLYGON   :
-            xRet = SvUnoImageMapPolygonObject_createInstance( lcl_GetSupportedMacroItems() );
+            xRet = SvUnoImageMapPolygonObject_createInstance( sw_GetSupportedMacroItems() );
         break;
         case SW_SERVICE_CHART2_DATA_PROVIDER :
             // #i64497# If a chart is in a temporary document during clipoard

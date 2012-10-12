@@ -58,7 +58,7 @@ using namespace ::com::sun::star;
 
 
 SwPageFrm const*
-lcl_getPage(SwRootFrm const& rLayout, sal_Int32 const nPage); // vprint.cxx
+sw_getPage(SwRootFrm const& rLayout, sal_Int32 const nPage); // vprint.cxx
 
 // OD 12.12.2002 #103492#
 SwPagePreviewLayout* ViewShell::PagePreviewLayout()
@@ -132,11 +132,11 @@ void ViewShell::PrintProspect(
     const SwPageFrm *pNxtPage   = 0;
     if (rPagesToPrint.first > 0)
     {
-        pStPage = lcl_getPage(*aShell.GetLayout(), rPagesToPrint.first);
+        pStPage = sw_getPage(*aShell.GetLayout(), rPagesToPrint.first);
     }
     if (rPagesToPrint.second > 0)
     {
-        pNxtPage = lcl_getPage(*aShell.GetLayout(), rPagesToPrint.second);
+        pNxtPage = sw_getPage(*aShell.GetLayout(), rPagesToPrint.second);
     }
 
     // OD 05.05.2003 #i14016# - consider empty pages on calculation

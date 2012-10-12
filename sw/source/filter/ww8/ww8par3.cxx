@@ -489,7 +489,7 @@ WW8LSTInfo* WW8ListManager::GetLSTByListId( sal_uInt32 nIdLst ) const
     return *aResult;
 }
 
-void lcl_CopyGreaterEight(String &rDest, String &rSrc,
+static void lcl_CopyGreaterEight(String &rDest, String &rSrc,
     xub_StrLen nStart, xub_StrLen nLen = STRING_LEN)
 {
     if (nLen > rSrc.Len() || nLen == STRING_LEN)

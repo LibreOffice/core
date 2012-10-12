@@ -287,7 +287,7 @@ xub_StrLen SwTxtNode::Len() const
  *  ftnfrms.
  * --------------------------------------------------------------------------*/
 
-void lcl_ChangeFtnRef( SwTxtNode &rNode )
+static void lcl_ChangeFtnRef( SwTxtNode &rNode )
 {
     SwpHints *pSwpHints = rNode.GetpSwpHints();
     if( pSwpHints && rNode.GetDoc()->GetCurrentViewShell() )    //swmod 071108//swmod 071225
@@ -1251,7 +1251,7 @@ SwTxtNode::GetTxtAttrAt(xub_StrLen const nIndex, RES_TXTATR const nWhich,
  *                          CopyHint()
  *************************************************************************/
 
-SwCharFmt* lcl_FindCharFmt( const SwCharFmts* pCharFmts, const XubString& rName )
+static SwCharFmt* lcl_FindCharFmt( const SwCharFmts* pCharFmts, const XubString& rName )
 {
     if( rName.Len() )
     {
@@ -1267,7 +1267,7 @@ SwCharFmt* lcl_FindCharFmt( const SwCharFmts* pCharFmts, const XubString& rName 
     return NULL;
 }
 
-void lcl_CopyHint( const sal_uInt16 nWhich, const SwTxtAttr * const pHt,
+static void lcl_CopyHint( const sal_uInt16 nWhich, const SwTxtAttr * const pHt,
     SwTxtAttr *const pNewHt, SwDoc *const pOtherDoc, SwTxtNode *const pDest )
 {
     OSL_ENSURE( nWhich == pHt->Which(), "Falsche Hint-Id" );

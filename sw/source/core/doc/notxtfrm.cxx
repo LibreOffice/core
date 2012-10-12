@@ -92,7 +92,7 @@ inline sal_Bool GetRealURL( const SwGrfNode& rNd, String& rTxt )
     return bRet;
 }
 
-void lcl_PaintReplacement( const SwRect &rRect, const String &rText,
+static void lcl_PaintReplacement( const SwRect &rRect, const String &rText,
                            const ViewShell &rSh, const SwNoTxtFrm *pFrm,
                            sal_Bool bDefect )
 {
@@ -204,7 +204,7 @@ void SetOutDev( ViewShell *pSh, OutputDevice *pOut )
 
 
 
-void lcl_ClearArea( const SwFrm &rFrm,
+static void lcl_ClearArea( const SwFrm &rFrm,
                     OutputDevice &rOut, const SwRect& rPtArea,
                     const SwRect &rGrfArea )
 {
@@ -349,7 +349,7 @@ void SwNoTxtFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
 *************************************************************************/
 
 
-void lcl_CalcRect( Point& rPt, Size& rDim, sal_uInt16 nMirror )
+static void lcl_CalcRect( Point& rPt, Size& rDim, sal_uInt16 nMirror )
 {
     if( nMirror == RES_MIRROR_GRAPH_VERT || nMirror == RES_MIRROR_GRAPH_BOTH )
     {
@@ -745,7 +745,7 @@ void SwNoTxtFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
     }
 }
 
-void lcl_correctlyAlignRect( SwRect& rAlignedGrfArea, const SwRect& rInArea, OutputDevice* pOut )
+static void lcl_correctlyAlignRect( SwRect& rAlignedGrfArea, const SwRect& rInArea, OutputDevice* pOut )
 {
 
     if(!pOut)

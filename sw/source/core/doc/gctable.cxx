@@ -103,7 +103,7 @@ static void lcl_GCBorder_GetLastBox_B( const SwTableBox* pBox, SwTableBoxes* pPa
 }
 
 // Find the "end" of the passed BorderLine. Returns the "Layout"Pos!
-sal_uInt16 lcl_FindEndPosOfBorder( const SwCollectTblLineBoxes& rCollTLB,
+static sal_uInt16 lcl_FindEndPosOfBorder( const SwCollectTblLineBoxes& rCollTLB,
                         const SvxBorderLine& rBrdLn, sal_uInt16& rStt, sal_Bool bTop )
 {
     sal_uInt16 nPos, nLastPos = 0;
@@ -122,7 +122,7 @@ sal_uInt16 lcl_FindEndPosOfBorder( const SwCollectTblLineBoxes& rCollTLB,
     return nLastPos;
 }
 
-inline const SvxBorderLine* lcl_GCBorder_GetBorder( const SwTableBox& rBox,
+static inline const SvxBorderLine* lcl_GCBorder_GetBorder( const SwTableBox& rBox,
                                                 sal_Bool bTop,
                                                 const SfxPoolItem** ppItem )
 {
@@ -131,7 +131,7 @@ inline const SvxBorderLine* lcl_GCBorder_GetBorder( const SwTableBox& rBox,
             : 0;
 }
 
-void lcl_GCBorder_DelBorder( const SwCollectTblLineBoxes& rCollTLB,
+static void lcl_GCBorder_DelBorder( const SwCollectTblLineBoxes& rCollTLB,
                                 sal_uInt16& rStt, sal_Bool bTop,
                                 const SvxBorderLine& rLine,
                                 const SfxPoolItem* pItem,
@@ -171,7 +171,7 @@ void lcl_GCBorder_DelBorder( const SwCollectTblLineBoxes& rCollTLB,
 
 static void lcl_GC_Box_Border( const SwTableBox* pBox, _SwGCLineBorder* pPara );
 
-void lcl_GC_Line_Border( const SwTableLine* pLine, _SwGCLineBorder* pGCPara )
+void sw_GC_Line_Border( const SwTableLine* pLine, _SwGCLineBorder* pGCPara )
 {
     // First the right edge with the left edge of the succeeding Box within this Line
     {
@@ -220,10 +220,10 @@ void lcl_GC_Line_Border( const SwTableLine* pLine, _SwGCLineBorder* pGCPara )
         SwCollectTblLineBoxes aBottom( sal_False );
         SwCollectTblLineBoxes aTop( sal_True );
 
-        ::lcl_Line_CollectBox( pLine, &aBottom );
+        sw_Line_CollectBox( pLine, &aBottom );
 
         const SwTableLine* pNextLine = (*pGCPara->pLines)[ pGCPara->nLinePos+1 ];
-        ::lcl_Line_CollectBox( pNextLine, &aTop );
+        sw_Line_CollectBox( pNextLine, &aTop );
 
         // remove all "duplicated" Lines that are the same
         sal_uInt16 nBtmPos, nTopPos,
@@ -322,7 +322,7 @@ static void lcl_GC_Box_Border( const SwTableBox* pBox, _SwGCLineBorder* pPara )
         _SwGCLineBorder aPara( *pBox );
         aPara.pShareFmts = pPara->pShareFmts;
         BOOST_FOREACH( const SwTableLine* pLine, pBox->GetTabLines() )
-            lcl_GC_Line_Border( pLine, &aPara );
+            sw_GC_Line_Border( pLine, &aPara );
     }
 }
 

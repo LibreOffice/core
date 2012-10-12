@@ -200,7 +200,7 @@ void SwModule::StateOther(SfxItemSet &rSet)
     }
 }
 
-SwView* lcl_LoadDoc(SwView* pView, const String& rURL)
+static SwView* lcl_LoadDoc(SwView* pView, const String& rURL)
 {
     SwView* pNewView = 0;
     if(rURL.Len())

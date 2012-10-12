@@ -126,7 +126,7 @@ if bSet is true, rMin and rMax will be set to the left and right border of the b
 
 */
 
-void lcl_CheckMinMax( long& rMin, long& rMax, const SwTableLine& rLine, sal_uInt16 nCheck, bool bSet )
+static void lcl_CheckMinMax( long& rMin, long& rMax, const SwTableLine& rLine, sal_uInt16 nCheck, bool bSet )
 {
     ++nCheck;
     if( rLine.GetTabBoxes().size() < nCheck )
@@ -164,7 +164,7 @@ is the requested table box
 
 */
 
-long lcl_Box2LeftBorder( const SwTableBox& rBox )
+static long lcl_Box2LeftBorder( const SwTableBox& rBox )
 {
     if( !rBox.GetUpper() )
         return 0;
@@ -199,7 +199,7 @@ the row (table line) to be scanned
 
 */
 
-SwTableBox* lcl_LeftBorder2Box( long nLeft, const SwTableLine* pLine )
+static SwTableBox* lcl_LeftBorder2Box( long nLeft, const SwTableLine* pLine )
 {
     if( !pLine )
         return 0;
@@ -249,7 +249,7 @@ false is also needed for deleted rows
 
 */
 
-void lcl_ChangeRowSpan( const SwTable& rTable, const long nDiff,
+static void lcl_ChangeRowSpan( const SwTable& rTable, const long nDiff,
                         sal_uInt16 nRowIdx, const bool bSingle )
 {
     if( !nDiff || nRowIdx >= rTable.GetTabLines().size() )
@@ -587,7 +587,7 @@ SwBoxSelection* SwTable::CollectBoxSelection( const SwPaM& rPam ) const
     to initiate a reformatting
 */
 
-void lcl_InvalidateCellFrm( const SwTableBox& rBox )
+static void lcl_InvalidateCellFrm( const SwTableBox& rBox )
 {
     SwIterator<SwCellFrm,SwFmt> aIter( *rBox.GetFrmFmt() );
     for( SwCellFrm* pCell = aIter.First(); pCell; pCell = aIter.Next() )
@@ -606,7 +606,7 @@ void lcl_InvalidateCellFrm( const SwTableBox& rBox )
     when a selection of cells is given and returns the average cell widths
 */
 
-long lcl_InsertPosition( SwTable &rTable, std::vector<sal_uInt16>& rInsPos,
+static long lcl_InsertPosition( SwTable &rTable, std::vector<sal_uInt16>& rInsPos,
     const SwSelBoxes& rBoxes, sal_Bool bBehind )
 {
     sal_Int32 nAddWidth = 0;
@@ -1065,7 +1065,7 @@ SwTableBox& SwTableBox::FindEndOfRowSpan( const SwTable& rTable, sal_uInt16 nMax
 /** lcl_getAllMergedBoxes(..) collects all overlapped boxes to a given (master) box
 */
 
-void lcl_getAllMergedBoxes( const SwTable& rTable, SwSelBoxes& rBoxes, SwTableBox& rBox )
+static void lcl_getAllMergedBoxes( const SwTable& rTable, SwSelBoxes& rBoxes, SwTableBox& rBox )
 {
     SwTableBox* pBox = &rBox;
     OSL_ENSURE( pBox == &rBox.FindStartOfRowSpan( rTable, USHRT_MAX ), "Not a master box" );
@@ -1088,7 +1088,7 @@ void lcl_getAllMergedBoxes( const SwTable& rTable, SwSelBoxes& rBoxes, SwTableBo
     and its overlapped cells to split them into several pieces.
 */
 
-void lcl_UnMerge( const SwTable& rTable, SwTableBox& rBox, size_t nCnt,
+static void lcl_UnMerge( const SwTable& rTable, SwTableBox& rBox, size_t nCnt,
     sal_Bool bSameHeight )
 {
     SwSelBoxes aBoxes;
@@ -1141,7 +1141,7 @@ void lcl_UnMerge( const SwTable& rTable, SwTableBox& rBox, size_t nCnt,
 /** lcl_FillSelBoxes(..) puts all boxes of a given line into the selection structure
 */
 
-void lcl_FillSelBoxes( SwSelBoxes &rBoxes, SwTableLine &rLine )
+static void lcl_FillSelBoxes( SwSelBoxes &rBoxes, SwTableLine &rLine )
 {
     sal_uInt16 nBoxCount = rLine.GetTabBoxes().size();
     for( sal_uInt16 i = 0; i < nBoxCount; ++i )
@@ -1202,7 +1202,7 @@ Output
 
 ******************************************************************************/
 
-void lcl_SophisticatedFillLineIndices( SwLineOffsetArray &rArr,
+static void lcl_SophisticatedFillLineIndices( SwLineOffsetArray &rArr,
     const SwTable& rTable, const SwSelBoxes& rBoxes, sal_uInt16 nCnt )
 {
     std::list< SwLineOffset > aBoxes;
@@ -1297,7 +1297,7 @@ typedef std::set< SwTwips > SwSplitLines;
     to be splitted to fulfill the requested "split same height"
 */
 
-sal_uInt16 lcl_CalculateSplitLineHeights( SwSplitLines &rCurr, SwSplitLines &rNew,
+static sal_uInt16 lcl_CalculateSplitLineHeights( SwSplitLines &rCurr, SwSplitLines &rNew,
     const SwTable& rTable, const SwSelBoxes& rBoxes, sal_uInt16 nCnt )
 {
     if( nCnt < 2 )
@@ -1358,7 +1358,7 @@ sal_uInt16 lcl_CalculateSplitLineHeights( SwSplitLines &rCurr, SwSplitLines &rNe
     the box selection.
 */
 
-sal_uInt16 lcl_LineIndex( const SwTable& rTable, const SwSelBoxes& rBoxes,
+static sal_uInt16 lcl_LineIndex( const SwTable& rTable, const SwSelBoxes& rBoxes,
                       bool bBehind )
 {
     sal_uInt16 nDirect = USHRT_MAX;
@@ -1602,7 +1602,7 @@ void SwTable::PrepareDelBoxes( const SwSelBoxes& rBoxes )
     if it overlaps with the given x-position range
 */
 
-void lcl_SearchSelBox( const SwTable &rTable, SwSelBoxes& rBoxes, long nMin, long nMax,
+static void lcl_SearchSelBox( const SwTable &rTable, SwSelBoxes& rBoxes, long nMin, long nMax,
                        SwTableLine& rLine, bool bChkProtected, bool bColumn )
 {
     long nLeft = 0;

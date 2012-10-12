@@ -47,7 +47,7 @@
 #include "switerator.hxx"
 
 // ftnfrm.cxx:
-void lcl_RemoveFtns( SwFtnBossFrm* pBoss, sal_Bool bPageOnly, sal_Bool bEndNotes );
+void sw_RemoveFtns( SwFtnBossFrm* pBoss, sal_Bool bPageOnly, sal_Bool bEndNotes );
 
 
 /*************************************************************************
@@ -83,13 +83,13 @@ SwColumnFrm::~SwColumnFrm()
 |*
 |*************************************************************************/
 
-void lcl_RemoveColumns( SwLayoutFrm *pCont, sal_uInt16 nCnt )
+static void lcl_RemoveColumns( SwLayoutFrm *pCont, sal_uInt16 nCnt )
 {
     OSL_ENSURE( pCont && pCont->Lower() && pCont->Lower()->IsColumnFrm(),
             "Keine Spalten zu entfernen." );
 
     SwColumnFrm *pColumn = (SwColumnFrm*)pCont->Lower();
-    ::lcl_RemoveFtns( pColumn, sal_True, sal_True );
+    sw_RemoveFtns( pColumn, sal_True, sal_True );
     while ( pColumn->GetNext() )
     {
         OSL_ENSURE( pColumn->GetNext()->IsColumnFrm(),
@@ -105,7 +105,7 @@ void lcl_RemoveColumns( SwLayoutFrm *pCont, sal_uInt16 nCnt )
     }
 }
 
-SwLayoutFrm * lcl_FindColumns( SwLayoutFrm *pLay, sal_uInt16 nCount )
+static SwLayoutFrm * lcl_FindColumns( SwLayoutFrm *pLay, sal_uInt16 nCount )
 {
     SwFrm *pCol = pLay->Lower();
     if ( pLay->IsPageFrm() )

@@ -118,7 +118,7 @@
 #include <comphelper/servicehelper.hxx>
 
 // from fefly1.cxx
-extern sal_Bool lcl_ChkAndSetNewAnchor( const SwFlyFrm& rFly, SfxItemSet& rSet );
+extern sal_Bool sw_ChkAndSetNewAnchor( const SwFlyFrm& rFly, SfxItemSet& rSet );
 
 using namespace ::com::sun::star;
 using ::rtl::OUString;
@@ -533,7 +533,7 @@ SwFrameProperties_Impl::SwFrameProperties_Impl():
 {
 }
 
-inline void lcl_FillCol ( SfxItemSet &rToSet, const :: SfxItemSet &rFromSet, const :: uno::Any *pAny)
+static inline void lcl_FillCol ( SfxItemSet &rToSet, const :: SfxItemSet &rFromSet, const :: uno::Any *pAny)
 {
     if ( pAny )
     {
@@ -600,7 +600,7 @@ SwGraphicProperties_Impl::SwGraphicProperties_Impl( ) :
 {
 }
 
-inline void lcl_FillMirror ( SfxItemSet &rToSet, const :: SfxItemSet &rFromSet, const ::uno::Any *pHEvenMirror, const ::uno::Any *pHOddMirror, const ::uno::Any *pVMirror, bool &rRet )
+static inline void lcl_FillMirror ( SfxItemSet &rToSet, const :: SfxItemSet &rFromSet, const ::uno::Any *pHEvenMirror, const ::uno::Any *pHOddMirror, const ::uno::Any *pVMirror, bool &rRet )
 {
     if(pHEvenMirror || pHOddMirror || pVMirror )
     {
@@ -919,7 +919,7 @@ SdrObject *SwXFrame::GetOrCreateSdrObject( SwFlyFrmFmt *pFmt )
     return pObject;
 }
 
-SwFrmFmt *lcl_GetFrmFmt( const :: uno::Any& rValue, SwDoc *pDoc )
+static SwFrmFmt *lcl_GetFrmFmt( const :: uno::Any& rValue, SwDoc *pDoc )
 {
     SwFrmFmt *pRet = 0;
     SwDocShell* pDocSh = pDoc->GetDocShell();
@@ -1068,7 +1068,7 @@ void SwXFrame::setPropertyValue(const :: OUString& rPropertyName, const :: uno::
 
                 SfxItemSet* pSet = 0;
                 // #i31771#, #i25798# - No adjustment of
-                // anchor ( no call of method <::lcl_ChkAndSetNewAnchor(..)> ),
+                // anchor ( no call of method <sw_ChkAndSetNewAnchor(..)> ),
                 // if document is currently in reading mode.
                 if ( !pFmt->GetDoc()->IsInReading() )
                 {
@@ -1086,7 +1086,7 @@ void SwXFrame::setPropertyValue(const :: OUString& rPropertyName, const :: uno::
                         {
                             pSet = new SfxItemSet( pDoc->GetAttrPool(), aFrmFmtSetRange );
                             pSet->Put( *pItem );
-                            if ( !::lcl_ChkAndSetNewAnchor( *pFly, *pSet ) )
+                            if ( !sw_ChkAndSetNewAnchor( *pFly, *pSet ) )
                                 delete pSet, pSet = 0;
                         }
                     }
@@ -1350,7 +1350,7 @@ void SwXFrame::setPropertyValue(const :: OUString& rPropertyName, const :: uno::
                 }
 
                 // #i31771#, #i25798# - No adjustment of
-                // anchor ( no call of method <::lcl_ChkAndSetNewAnchor(..)> ),
+                // anchor ( no call of method <sw_ChkAndSetNewAnchor(..)> ),
                 // if document is currently in reading mode.
                 if ( !pFmt->GetDoc()->IsInReading() )
                 {
@@ -1364,7 +1364,7 @@ void SwXFrame::setPropertyValue(const :: OUString& rPropertyName, const :: uno::
                         if( SFX_ITEM_SET == aSet.GetItemState( RES_ANCHOR, false, &pItem ))
                         {
                             aSet.Put( *pItem );
-                            ::lcl_ChkAndSetNewAnchor( *pFly, aSet );
+                            sw_ChkAndSetNewAnchor( *pFly, aSet );
                         }
                     }
                 }

@@ -1728,7 +1728,7 @@ sal_Bool SwTxtNode::SetAttr( const SfxItemSet& rSet, xub_StrLen nStt,
     return nCount ? sal_True : sal_False;
 }
 
-void lcl_MergeAttr( SfxItemSet& rSet, const SfxPoolItem& rAttr )
+static void lcl_MergeAttr( SfxItemSet& rSet, const SfxPoolItem& rAttr )
 {
     if ( RES_TXTATR_AUTOFMT == rAttr.Which() )
     {
@@ -1750,7 +1750,7 @@ void lcl_MergeAttr( SfxItemSet& rSet, const SfxPoolItem& rAttr )
         rSet.Put( rAttr );
 }
 
-void lcl_MergeAttr_ExpandChrFmt( SfxItemSet& rSet, const SfxPoolItem& rAttr )
+static void lcl_MergeAttr_ExpandChrFmt( SfxItemSet& rSet, const SfxPoolItem& rAttr )
 {
     if( RES_TXTATR_CHARFMT == rAttr.Which() ||
         RES_TXTATR_INETFMT == rAttr.Which() ||
@@ -1795,7 +1795,7 @@ public:
     SwPoolItemEndPair() : mpItem( 0 ), mnEndPos( 0 ) {};
 };
 
-void lcl_MergeListLevelIndentAsLRSpaceItem( const SwTxtNode& rTxtNode,
+static void lcl_MergeListLevelIndentAsLRSpaceItem( const SwTxtNode& rTxtNode,
                                             SfxItemSet& rSet )
 {
     if ( rTxtNode.AreListLevelIndentsApplicable() )
@@ -2521,7 +2521,7 @@ bool SwpHints::MergePortions( SwTxtNode& rNode )
 }
 
 // check if there is already a character format and adjust the sort numbers
-void lcl_CheckSortNumber( const SwpHints& rHints, SwTxtCharFmt& rNewCharFmt )
+static void lcl_CheckSortNumber( const SwpHints& rHints, SwTxtCharFmt& rNewCharFmt )
 {
     const xub_StrLen nHtStart = *rNewCharFmt.GetStart();
     const xub_StrLen nHtEnd   = *rNewCharFmt.GetEnd();

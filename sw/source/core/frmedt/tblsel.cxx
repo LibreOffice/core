@@ -114,14 +114,14 @@ struct _Sort_CellFrm
 
 typedef std::deque< _Sort_CellFrm > _Sort_CellFrms;
 
-const SwLayoutFrm *lcl_FindCellFrm( const SwLayoutFrm *pLay )
+static const SwLayoutFrm *lcl_FindCellFrm( const SwLayoutFrm *pLay )
 {
     while ( pLay && !pLay->IsCellFrm() )
         pLay = pLay->GetUpper();
     return pLay;
 }
 
-const SwLayoutFrm *lcl_FindNextCellFrm( const SwLayoutFrm *pLay )
+static const SwLayoutFrm *lcl_FindNextCellFrm( const SwLayoutFrm *pLay )
 {
     // ensure we leave the cell (sections)
     const SwLayoutFrm *pTmp = pLay;
@@ -866,7 +866,7 @@ _CmpLPt::_CmpLPt( const Point& rPt, const SwTableBox* pBox, sal_Bool bVertical )
     : aPos( rPt ), pSelBox( pBox ), bVert( bVertical )
 {}
 
-void lcl_InsTblBox( SwTableNode* pTblNd, SwDoc* pDoc, SwTableBox* pBox,
+static void lcl_InsTblBox( SwTableNode* pTblNd, SwDoc* pDoc, SwTableBox* pBox,
                         sal_uInt16 nInsPos, sal_uInt16 nCnt = 1 )
 {
     OSL_ENSURE( pBox->GetSttNd(), "Box without Start-Node" );
@@ -1507,7 +1507,7 @@ sal_uInt16 CheckMergeSel( const SwSelBoxes& rBoxes )
     return eRet;
 }
 
-SwTwips lcl_CalcWish( const SwLayoutFrm *pCell, long nWish,
+static SwTwips lcl_CalcWish( const SwLayoutFrm *pCell, long nWish,
                                                 const long nAct )
 {
     const SwLayoutFrm *pTmp = pCell;
@@ -1534,7 +1534,7 @@ SwTwips lcl_CalcWish( const SwLayoutFrm *pCell, long nWish,
     return nRet;
 }
 
-void lcl_FindStartEndRow( const SwLayoutFrm *&rpStart,
+static void lcl_FindStartEndRow( const SwLayoutFrm *&rpStart,
                              const SwLayoutFrm *&rpEnd,
                              const int bChkProtected )
 {
@@ -1605,7 +1605,7 @@ void lcl_FindStartEndRow( const SwLayoutFrm *&rpStart,
 }
 
 
-void lcl_FindStartEndCol( const SwLayoutFrm *&rpStart,
+static void lcl_FindStartEndCol( const SwLayoutFrm *&rpStart,
                              const SwLayoutFrm *&rpEnd,
                              const int bChkProtected )
 {
@@ -2041,7 +2041,7 @@ sal_Bool CheckSplitCells( const SwCursor& rCrsr, sal_uInt16 nDiv,
 // into a new structure, retaining the table structure
 // new: SS for targeted erasing/restoring of the layout
 
-void lcl_InsertRow( SwTableLine &rLine, SwLayoutFrm *pUpper, SwFrm *pSibling )
+static void lcl_InsertRow( SwTableLine &rLine, SwLayoutFrm *pUpper, SwFrm *pSibling )
 {
     SwRowFrm *pRow = new SwRowFrm( rLine, pUpper );
     if ( pUpper->IsTabFrm() && ((SwTabFrm*)pUpper)->IsFollow() )
@@ -2292,7 +2292,7 @@ void _FndBox::DelFrms( SwTable &rTable )
     }
 }
 
-sal_Bool lcl_IsLineOfTblFrm( const SwTabFrm& rTable, const SwFrm& rChk )
+static sal_Bool lcl_IsLineOfTblFrm( const SwTabFrm& rTable, const SwFrm& rChk )
 {
     const SwTabFrm* pTblFrm = rChk.FindTabFrm();
     if( pTblFrm->IsFollow() )
@@ -2303,7 +2303,7 @@ sal_Bool lcl_IsLineOfTblFrm( const SwTabFrm& rTable, const SwFrm& rChk )
 /*
  * lcl_UpdateRepeatedHeadlines
  */
-void lcl_UpdateRepeatedHeadlines( SwTabFrm& rTabFrm, bool bCalcLowers )
+static void lcl_UpdateRepeatedHeadlines( SwTabFrm& rTabFrm, bool bCalcLowers )
 {
     OSL_ENSURE( rTabFrm.IsFollow(), "lcl_UpdateRepeatedHeadlines called for non-follow tab" );
 

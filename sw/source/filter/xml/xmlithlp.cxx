@@ -98,7 +98,7 @@ const sal_uInt16 aBorderWidths[] =
         DEF_LINE_WIDTH_1,
 };
 
-sal_Bool lcl_frmitems_parseXMLBorder( const OUString& rValue,
+sal_Bool sw_frmitems_parseXMLBorder( const OUString& rValue,
                                       const SvXMLUnitConverter& rUnitConverter,
                                       sal_Bool& rHasStyle, sal_uInt16& rStyle,
                                       sal_Bool& rHasWidth, sal_uInt16& rWidth,
@@ -152,7 +152,7 @@ sal_Bool lcl_frmitems_parseXMLBorder( const OUString& rValue,
     return rHasStyle || rHasWidth || rHasColor;
 }
 
-void lcl_frmitems_setXMLBorderStyle( SvxBorderLine& rLine, sal_uInt16 nStyle )
+void sw_frmitems_setXMLBorderStyle( SvxBorderLine& rLine, sal_uInt16 nStyle )
 {
     ::editeng::SvxBorderStyle eStyle = table::BorderLineStyle::NONE;
     if ( nStyle != API_LINE_NONE )
@@ -160,7 +160,7 @@ void lcl_frmitems_setXMLBorderStyle( SvxBorderLine& rLine, sal_uInt16 nStyle )
     rLine.SetBorderLineStyle(eStyle);
 }
 
-sal_Bool lcl_frmitems_setXMLBorder( SvxBorderLine*& rpLine,
+sal_Bool sw_frmitems_setXMLBorder( SvxBorderLine*& rpLine,
                                     sal_Bool bHasStyle, sal_uInt16 nStyle,
                                     sal_Bool bHasWidth, sal_uInt16 nWidth,
                                     sal_uInt16 nNamedWidth,
@@ -220,7 +220,7 @@ sal_Bool lcl_frmitems_setXMLBorder( SvxBorderLine*& rpLine,
                rpLine->SetWidth( nWidth );
            }
        }
-       lcl_frmitems_setXMLBorderStyle( *rpLine, nStyle );
+       sw_frmitems_setXMLBorderStyle( *rpLine, nStyle );
    }
 
     // set color
@@ -230,7 +230,7 @@ sal_Bool lcl_frmitems_setXMLBorder( SvxBorderLine*& rpLine,
     return sal_True;
 }
 
-void lcl_frmitems_setXMLBorder( SvxBorderLine*& rpLine,
+void sw_frmitems_setXMLBorder( SvxBorderLine*& rpLine,
   sal_uInt16 nWidth, sal_uInt16 nOutWidth,
   sal_uInt16 nInWidth, sal_uInt16 nDistance )
 {
@@ -266,11 +266,11 @@ const struct SvXMLEnumMapEntry psXML_BrushVertPos[] =
     { XML_TOKEN_INVALID, 0 }
 };
 
-void lcl_frmitems_MergeXMLHoriPos( SvxGraphicPosition& ePos,
+void sw_frmitems_MergeXMLHoriPos( SvxGraphicPosition& ePos,
                                    SvxGraphicPosition eHori )
 {
     OSL_ENSURE( GPOS_LM==eHori || GPOS_MM==eHori || GPOS_RM==eHori,
-                "lcl_frmitems_MergeXMLHoriPos: vertical pos must be middle" );
+                "sw_frmitems_MergeXMLHoriPos: vertical pos must be middle" );
 
     switch( ePos )
     {
@@ -296,11 +296,11 @@ void lcl_frmitems_MergeXMLHoriPos( SvxGraphicPosition& ePos,
     }
 }
 
-void lcl_frmitems_MergeXMLVertPos( SvxGraphicPosition& ePos,
+void sw_frmitems_MergeXMLVertPos( SvxGraphicPosition& ePos,
                                      SvxGraphicPosition eVert )
 {
     OSL_ENSURE( GPOS_MT==eVert || GPOS_MM==eVert || GPOS_MB==eVert,
-                "lcl_frmitems_MergeXMLVertPos: horizontal pos must be middle" );
+                "sw_frmitems_MergeXMLVertPos: horizontal pos must be middle" );
 
     switch( ePos )
     {

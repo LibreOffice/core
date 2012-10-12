@@ -217,7 +217,7 @@ void SwDocShell::DoFlushDocInfo()
     }
 }
 
-void lcl_processCompatibleSfxHint( const uno::Reference< script::vba::XVBAEventProcessor >& xVbaEvents, const SfxHint& rHint )
+static void lcl_processCompatibleSfxHint( const uno::Reference< script::vba::XVBAEventProcessor >& xVbaEvents, const SfxHint& rHint )
 {
     using namespace com::sun::star::script::vba::VBAEventId;
     if ( rHint.ISA( SfxEventHint ) )

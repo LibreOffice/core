@@ -435,7 +435,7 @@ void RtfSdrExport::AddRectangleDimensions( rtl::OStringBuffer& rBuffer, const Re
 
 extern const char* pShapeTypes[];
 
-void lcl_AppendSP( ::rtl::OStringBuffer& rRunText, const char cName[], const ::rtl::OString& rValue)
+static void lcl_AppendSP( ::rtl::OStringBuffer& rRunText, const char cName[], const ::rtl::OString& rValue)
 {
     rRunText.append('{').append(OOO_STRING_SVTOOLS_RTF_SP)
         .append('{').append(OOO_STRING_SVTOOLS_RTF_SN " ").append(cName).append('}')

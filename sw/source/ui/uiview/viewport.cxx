@@ -80,7 +80,7 @@ inline long GetLeftMargin( SwView &rView )
                                          lRet + DOCUMENTBORDER + nLeftOfst;
 }
 
-void lcl_GetPos(SwView* pView,
+static void lcl_GetPos(SwView* pView,
                 Point& rPos,
                 SwScrollbar* pScrollbar,
                 sal_Bool bBorder)

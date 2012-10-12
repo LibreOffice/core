@@ -57,7 +57,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
 // PUBLIC METHODES -------------------------------------------------------
-String lcl_CheckFileName( const String& rNewFilePath,
+static String lcl_CheckFileName( const String& rNewFilePath,
                           const String& rNewGroupName )
 {
     String sRet;
@@ -408,7 +408,7 @@ SwGlossaries::SwGlossaries()
 /* --------------------------------------------------
 *   #61050# double paths cause irritation - get rid of it
  * --------------------------------------------------*/
-sal_Bool lcl_FindSameEntry(const std::vector<String*>& rDirArr, const String& rEntryURL)
+static sal_Bool lcl_FindSameEntry(const std::vector<String*>& rDirArr, const String& rEntryURL)
 {
     for(std::vector<String*>::const_iterator it(rDirArr.begin()); it != rDirArr.end(); ++it)
         if( **it == rEntryURL )

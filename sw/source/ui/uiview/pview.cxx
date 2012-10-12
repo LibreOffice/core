@@ -111,7 +111,7 @@ TYPEINIT1(SwPagePreView,SfxViewShell)
 #define MIN_PREVIEW_ZOOM 25
 #define MAX_PREVIEW_ZOOM 600
 
-sal_uInt16 lcl_GetNextZoomStep(sal_uInt16 nCurrentZoom, sal_Bool bZoomIn)
+static sal_uInt16 lcl_GetNextZoomStep(sal_uInt16 nCurrentZoom, sal_Bool bZoomIn)
 {
     static sal_uInt16 aZoomArr[] =
     {
@@ -133,7 +133,7 @@ sal_uInt16 lcl_GetNextZoomStep(sal_uInt16 nCurrentZoom, sal_Bool bZoomIn)
     return bZoomIn ? MAX_PREVIEW_ZOOM : MIN_PREVIEW_ZOOM;
 };
 
-void lcl_InvalidateZoomSlots(SfxBindings& rBindings)
+static void lcl_InvalidateZoomSlots(SfxBindings& rBindings)
 {
     static sal_uInt16 const aInval[] =
     {

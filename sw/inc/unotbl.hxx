@@ -87,10 +87,10 @@ class SwXCell : public SwXCellBaseClass,
     public SwXText,
     public SwClient
 {
-    friend void   lcl_setString( SwXCell &rCell, const rtl::OUString &rTxt,
+    friend void   sw_setString( SwXCell &rCell, const rtl::OUString &rTxt,
                                  sal_Bool bKeepNumberFmt = sal_False );
-    friend double lcl_getValue( SwXCell &rCell );
-    friend void   lcl_setValue( SwXCell &rCell, double nVal );
+    friend double sw_getValue( SwXCell &rCell );
+    friend void   sw_setValue( SwXCell &rCell, double nVal );
 
 
     const SfxItemPropertySet*   m_pPropSet;

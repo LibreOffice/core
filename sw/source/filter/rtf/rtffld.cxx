@@ -277,7 +277,7 @@ xub_StrLen lcl_FindEndBracket( const String& rStr )
     return nRet;
 }
 
-void lcl_ScanEquationField( const String& rStr, RTF_EquationData& rData,
+static void lcl_ScanEquationField( const String& rStr, RTF_EquationData& rData,
                             sal_Unicode nSttKey )
 {
     int nSubSupFlag(0);

@@ -161,7 +161,7 @@ TYPEINIT1(SwBaseShell,SfxShell)
 /*--------------------------------------------------------------------
     Beschreibung:   statics
  --------------------------------------------------------------------*/
-void lcl_UpdateIMapDlg( SwWrtShell& rSh )
+static void lcl_UpdateIMapDlg( SwWrtShell& rSh )
 {
     Graphic aGrf( rSh.GetIMapGraphic() );
     GraphicType nGrfType = aGrf.GetType();
@@ -181,7 +181,7 @@ void lcl_UpdateIMapDlg( SwWrtShell& rSh )
     delete pList;
 }
 
-sal_Bool lcl_UpdateContourDlg( SwWrtShell &rSh, int nSel )
+static sal_Bool lcl_UpdateContourDlg( SwWrtShell &rSh, int nSel )
 {
     Graphic aGraf( rSh.GetIMapGraphic() );
     GraphicType nGrfType = aGraf.GetType();

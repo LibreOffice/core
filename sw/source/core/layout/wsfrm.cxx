@@ -3285,7 +3285,7 @@ long SwLayoutFrm::CalcRel( const SwFmtFrmSize &rSz, sal_Bool ) const
 /*************************************************************************
 |*  Local helpers for SwLayoutFrm::FormatWidthCols()
 |*************************************************************************/
-long lcl_CalcMinColDiff( SwLayoutFrm *pLayFrm )
+static long lcl_CalcMinColDiff( SwLayoutFrm *pLayFrm )
 {
     long nDiff = 0, nFirstDiff = 0;
     SwLayoutFrm *pCol = (SwLayoutFrm*)pLayFrm->Lower();
@@ -3316,7 +3316,7 @@ long lcl_CalcMinColDiff( SwLayoutFrm *pLayFrm )
     return nDiff ? nDiff : nFirstDiff ? nFirstDiff : 240;
 }
 
-sal_Bool lcl_IsFlyHeightClipped( SwLayoutFrm *pLay )
+static sal_Bool lcl_IsFlyHeightClipped( SwLayoutFrm *pLay )
 {
     SwFrm *pFrm = pLay->ContainsCntnt();
     while ( pFrm )
@@ -3711,7 +3711,7 @@ void SwLayoutFrm::FormatWidthCols( const SwBorderAttrs &rAttrs,
 |*
 |*************************************************************************/
 
-SwCntntFrm* lcl_InvalidateSection( SwFrm *pCnt, sal_uInt8 nInv )
+static SwCntntFrm* lcl_InvalidateSection( SwFrm *pCnt, sal_uInt8 nInv )
 {
     SwSectionFrm* pSect = pCnt->FindSctFrm();
     // If our CntntFrm is placed inside a table or a footnote, only sections
@@ -3734,7 +3734,7 @@ SwCntntFrm* lcl_InvalidateSection( SwFrm *pCnt, sal_uInt8 nInv )
     return pRet;
 }
 
-SwCntntFrm* lcl_InvalidateTable( SwTabFrm *pTable, sal_uInt8 nInv )
+static SwCntntFrm* lcl_InvalidateTable( SwTabFrm *pTable, sal_uInt8 nInv )
 {
     if( ( nInv & INV_SECTION ) && pTable->IsInSct() )
         lcl_InvalidateSection( pTable, nInv );
@@ -3747,9 +3747,9 @@ SwCntntFrm* lcl_InvalidateTable( SwTabFrm *pTable, sal_uInt8 nInv )
     return pTable->FindLastCntnt();
 }
 
-void lcl_InvalidateAllCntnt( SwCntntFrm *pCnt, sal_uInt8 nInv );
+static void lcl_InvalidateAllCntnt( SwCntntFrm *pCnt, sal_uInt8 nInv );
 
-void lcl_InvalidateCntnt( SwCntntFrm *pCnt, sal_uInt8 nInv )
+static void lcl_InvalidateCntnt( SwCntntFrm *pCnt, sal_uInt8 nInv )
 {
     SwCntntFrm *pLastTabCnt = NULL;
     SwCntntFrm *pLastSctCnt = NULL;
@@ -3812,7 +3812,7 @@ void lcl_InvalidateCntnt( SwCntntFrm *pCnt, sal_uInt8 nInv )
     }
 }
 
-void lcl_InvalidateAllCntnt( SwCntntFrm *pCnt, sal_uInt8 nInv )
+static void lcl_InvalidateAllCntnt( SwCntntFrm *pCnt, sal_uInt8 nInv )
 {
     SwSortedObjs &rObjs = *pCnt->GetDrawObjs();
     for ( sal_uInt16 i = 0; i < rObjs.Count(); ++i )

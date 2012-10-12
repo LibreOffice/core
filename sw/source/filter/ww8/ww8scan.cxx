@@ -6186,7 +6186,7 @@ struct WW8_FFN_Ver8 : public WW8_FFN_BASE
 };
 
 // #i43762# check font name for illegal characters
-void lcl_checkFontname( String& sString )
+static void lcl_checkFontname( String& sString )
 {
     // for efficiency, we'd like to use String methods as far as possible.
     // Hence, we will:

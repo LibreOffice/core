@@ -80,7 +80,7 @@ using namespace svt;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
-String lcl_GetExtensionForDocType(sal_uLong nDocType)
+static String lcl_GetExtensionForDocType(sal_uLong nDocType)
 {
     rtl::OUString sExtension;
     switch( nDocType )
@@ -94,7 +94,7 @@ String lcl_GetExtensionForDocType(sal_uLong nDocType)
     return sExtension;
 }
 
-::rtl::OUString lcl_GetColumnValueOf(const ::rtl::OUString& rColumn, Reference < container::XNameAccess>& rxColAccess )
+static ::rtl::OUString lcl_GetColumnValueOf(const ::rtl::OUString& rColumn, Reference < container::XNameAccess>& rxColAccess )
 {
     ::rtl::OUString sRet;
     try

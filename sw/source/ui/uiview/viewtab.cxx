@@ -76,7 +76,7 @@ using namespace ::com::sun::star;
 /*--------------------------------------------------------------------
     Beschreibung:   Columns eintueten
  --------------------------------------------------------------------*/
-void lcl_FillSvxColumn(const SwFmtCol& rCol,
+static void lcl_FillSvxColumn(const SwFmtCol& rCol,
                           sal_uInt16 nTotalWidth,
                           SvxColumnItem& rColItem,
                           long nDistance)
@@ -117,7 +117,7 @@ void lcl_FillSvxColumn(const SwFmtCol& rCol,
 /*--------------------------------------------------------------------
     Beschreibung:   ColumnItem in ColumnInfo ueberfuehren
  --------------------------------------------------------------------*/
-void lcl_ConvertToCols(const SvxColumnItem& rColItem,
+static void lcl_ConvertToCols(const SvxColumnItem& rColItem,
                           sal_uInt16 nTotalWidth,
                           SwFmtCol& rCols)
 {
@@ -167,7 +167,7 @@ void lcl_ConvertToCols(const SvxColumnItem& rColItem,
 /*--------------------------------------------------------------------
     Beschreibung:   Tabs loeschen
  --------------------------------------------------------------------*/
-void lcl_EraseDefTabs(SvxTabStopItem& rTabStops)
+static void lcl_EraseDefTabs(SvxTabStopItem& rTabStops)
 {
     // Def Tabs loeschen
     for ( sal_uInt16 i = 0; i < rTabStops.Count(); )
@@ -203,7 +203,7 @@ void SwView::SwapPageMargin(const SwPageDesc& rDesc, SvxLRSpaceItem& rLRSpace)
     Beschreibung:   Wenn der Rahmenrand verschoben wird, sollen die
                     Spaltentrenner an der gleichen absoluten Position bleiben
  --------------------------------------------------------------------*/
-void lcl_Scale(long& nVal, long nScale)
+static void lcl_Scale(long& nVal, long nScale)
 {
     nVal *= nScale;
     nVal >>= 8;

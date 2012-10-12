@@ -65,15 +65,15 @@ using namespace ::com::sun::star;
 using ::rtl::OUString;
 
 // from unotbl.cxx
-extern void lcl_GetCellPosition( const String &rCellName, sal_Int32 &rColumn, sal_Int32 &rRow);
-extern String lcl_GetCellName( sal_Int32 nColumn, sal_Int32 nRow );
-extern int lcl_CompareCellsByColFirst( const String &rCellName1, const String &rCellName2 );
-extern int lcl_CompareCellsByRowFirst( const String &rCellName1, const String &rCellName2 );
-extern int lcl_CompareCellRanges(
+extern void sw_GetCellPosition( const String &rCellName, sal_Int32 &rColumn, sal_Int32 &rRow);
+extern String sw_GetCellName( sal_Int32 nColumn, sal_Int32 nRow );
+extern int sw_CompareCellsByColFirst( const String &rCellName1, const String &rCellName2 );
+extern int sw_CompareCellsByRowFirst( const String &rCellName1, const String &rCellName2 );
+extern int sw_CompareCellRanges(
         const String &rRange1StartCell, const String &rRange1EndCell,
         const String &rRange2StartCell, const String &rRange2EndCell,
         sal_Bool bCmpColsFirst );
-extern void lcl_NormalizeRange( String &rCell1, String &rCell2 );
+extern void sw_NormalizeRange( String &rCell1, String &rCell2 );
 
 //static
 void SwChartHelper::DoUpdateAllCharts( SwDoc* pDoc )
@@ -230,8 +230,8 @@ sal_Bool FillRangeDescriptor(
         return sal_False;
 
     rDesc.nTop = rDesc.nLeft = rDesc.nBottom = rDesc.nRight = -1;
-    lcl_GetCellPosition( aTLName, rDesc.nLeft,  rDesc.nTop );
-    lcl_GetCellPosition( aBRName, rDesc.nRight, rDesc.nBottom );
+    sw_GetCellPosition( aTLName, rDesc.nLeft,  rDesc.nTop );
+    sw_GetCellPosition( aBRName, rDesc.nRight, rDesc.nBottom );
     rDesc.Normalize();
     OSL_ENSURE( rDesc.nTop    != -1 &&
                 rDesc.nLeft   != -1 &&
@@ -341,7 +341,7 @@ static sal_Bool GetTableAndCellsFromRangeRep(
 
             // need to switch start and end cell ?
             // (does not check for normalization here)
-            if (bSortStartEndCells && 1 == lcl_CompareCellsByColFirst( aStartCell, aEndCell ))
+            if (bSortStartEndCells && 1 == sw_CompareCellsByColFirst( aStartCell, aEndCell ))
             {
                 String aTmp( aStartCell );
                 aStartCell  = aEndCell;
@@ -491,7 +491,7 @@ static sal_Bool GetSubranges( const OUString &rRangeRepresentation,
 
                 if (bNormalize)
                 {
-                    lcl_NormalizeRange( aStartCell, aEndCell );
+                    sw_NormalizeRange( aStartCell, aEndCell );
                     pRanges[nCnt] = GetRangeRepFromTableAndCells( aTableName,
                                     aStartCell, aEndCell, sal_True );
                 }
@@ -541,7 +541,7 @@ static void SortSubranges( uno::Sequence< OUString > &rSubRanges, sal_Bool bCmpB
                 aEndCell = aStartCell;
 
             // compare cell ranges ( is the new one smaller? )
-            if (-1 == lcl_CompareCellRanges( aStartCell, aEndCell,
+            if (-1 == sw_CompareCellRanges( aStartCell, aEndCell,
                                 aSmallestStartCell, aSmallestEndCell, bCmpByColumn ))
             {
                 nIdxOfSmallest = k;
@@ -673,8 +673,8 @@ uno::Reference< chart2::data::XDataSource > SwChartDataProvider::Impl_createData
             aDesc.nTop      -= 1;
             aDesc.nBottom   -= 1;
 
-            String aNewStartCell( lcl_GetCellName( aDesc.nLeft, aDesc.nTop ) );
-            String aNewEndCell( lcl_GetCellName( aDesc.nRight, aDesc.nBottom ) );
+            String aNewStartCell( sw_GetCellName( aDesc.nLeft, aDesc.nTop ) );
+            String aNewEndCell( sw_GetCellName( aDesc.nRight, aDesc.nBottom ) );
             aRangeRepresentation = GetRangeRepFromTableAndCells(
                         aChartTableName, aNewStartCell, aNewEndCell, sal_True );
             bOk = GetSubranges( aRangeRepresentation, aSubRanges, sal_True );
@@ -735,8 +735,8 @@ uno::Reference< chart2::data::XDataSource > SwChartDataProvider::Impl_createData
                 OSL_ENSURE( bOk2, "failed to get table and start/end cells" );
 
                 sal_Int32 nStartRow, nStartCol, nEndRow, nEndCol;
-                lcl_GetCellPosition( aStartCell, nStartCol, nStartRow );
-                lcl_GetCellPosition( aEndCell,   nEndCol,   nEndRow );
+                sw_GetCellPosition( aStartCell, nStartCol, nStartRow );
+                sw_GetCellPosition( aEndCell,   nEndCol,   nEndRow );
                 OSL_ENSURE( nStartRow <= nEndRow && nStartCol <= nEndCol,
                         "cell range not normalized");
 
@@ -902,18 +902,18 @@ uno::Reference< chart2::data::XDataSource > SwChartDataProvider::Impl_createData
                 if (aLabelIdx[oi] != -1)
                 {
                     aLabelRange += aBaseName;
-                    aLabelRange += lcl_GetCellName( aLabelDesc.nLeft, aLabelDesc.nTop );
+                    aLabelRange += sw_GetCellName( aLabelDesc.nLeft, aLabelDesc.nTop );
                     aLabelRange += ':';
-                    aLabelRange += lcl_GetCellName( aLabelDesc.nRight, aLabelDesc.nBottom );
+                    aLabelRange += sw_GetCellName( aLabelDesc.nRight, aLabelDesc.nBottom );
                 }
                 //
                 String aDataRange;
                 if (aDataStartIdx[oi] != -1)
                 {
                     aDataRange += aBaseName;
-                    aDataRange += lcl_GetCellName( aDataDesc.nLeft, aDataDesc.nTop );
+                    aDataRange += sw_GetCellName( aDataDesc.nLeft, aDataDesc.nTop );
                     aDataRange += ':';
-                    aDataRange += lcl_GetCellName( aDataDesc.nRight, aDataDesc.nBottom );
+                    aDataRange += sw_GetCellName( aDataDesc.nRight, aDataDesc.nBottom );
                 }
 
                 // get cursors spanning the cell ranges for label and data
@@ -1037,14 +1037,14 @@ OUString SwChartDataProvider::GetBrokenCellRangeForExport(
         GetTableAndCellsFromRangeRep( rCellRangeRepresentation,
             aTblName, aStartCell, aEndCell, sal_False );
         sal_Int32 nStartCol = -1, nStartRow = -1, nEndCol = -1, nEndRow = -1;
-        lcl_GetCellPosition( aStartCell, nStartCol, nStartRow );
-        lcl_GetCellPosition( aEndCell, nEndCol, nEndRow );
+        sw_GetCellPosition( aStartCell, nStartCol, nStartRow );
+        sw_GetCellPosition( aEndCell, nEndCol, nEndRow );
 
         // get new cell names
         ++nStartRow;
         ++nEndRow;
-        aStartCell = lcl_GetCellName( nStartCol, nStartRow );
-        aEndCell   = lcl_GetCellName( nEndCol, nEndRow );
+        aStartCell = sw_GetCellName( nStartCol, nStartRow );
+        aEndCell   = sw_GetCellName( nEndCol, nEndRow );
 
         aRes = GetRangeRepFromTableAndCells( aTblName,
                 aStartCell, aEndCell, sal_False );
@@ -1154,8 +1154,8 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwChartDataProvider::detectArgume
         sal_Int32 nFirstCol = -1, nFirstRow = -1, nLastCol = -1, nLastRow = -1;
         String aCell( aLabelStartCell.Len() ? aLabelStartCell : aValuesStartCell );
         OSL_ENSURE( aCell.Len() , "start cell missing?" );
-        lcl_GetCellPosition( aCell, nFirstCol, nFirstRow);
-        lcl_GetCellPosition( aValuesEndCell, nLastCol, nLastRow);
+        sw_GetCellPosition( aCell, nFirstCol, nFirstRow);
+        sw_GetCellPosition( aValuesEndCell, nLastCol, nLastRow);
         //
         sal_Int16 nDirection = -1;  // -1: not yet set,  0: columns,  1: rows, -2: failed
         if (nFirstCol == nLastCol && nFirstRow == nLastRow) // a single cell...
@@ -1210,8 +1210,8 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwChartDataProvider::detectArgume
             if (aLabelStartCell.Len() && aLabelEndCell.Len())
             {
                 sal_Int32 nStartCol = -1, nStartRow = -1, nEndCol = -1, nEndRow = -1;
-                lcl_GetCellPosition( aLabelStartCell, nStartCol, nStartRow );
-                lcl_GetCellPosition( aLabelEndCell,   nEndCol,   nEndRow );
+                sw_GetCellPosition( aLabelStartCell, nStartCol, nStartRow );
+                sw_GetCellPosition( aLabelEndCell,   nEndCol,   nEndRow );
                 if (nStartRow < 0 || nEndRow >= nTableRows ||
                     nStartCol < 0 || nEndCol >= nTableCols)
                 {
@@ -1232,8 +1232,8 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwChartDataProvider::detectArgume
             if (aValuesStartCell.Len() && aValuesEndCell.Len())
             {
                 sal_Int32 nStartCol = -1, nStartRow = -1, nEndCol = -1, nEndRow = -1;
-                lcl_GetCellPosition( aValuesStartCell, nStartCol, nStartRow );
-                lcl_GetCellPosition( aValuesEndCell,   nEndCol,   nEndRow );
+                sw_GetCellPosition( aValuesStartCell, nStartCol, nStartRow );
+                sw_GetCellPosition( aValuesEndCell,   nEndCol,   nEndRow );
                 if (nStartRow < 0 || nEndRow >= nTableRows ||
                     nStartCol < 0 || nEndCol >= nTableCols)
                 {
@@ -1260,16 +1260,16 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwChartDataProvider::detectArgume
             sal_Int32 nStartRow = -1, nStartCol = -1, nEndRow = -1, nEndCol = -1;
             if (xCurLabel.is())
             {
-                lcl_GetCellPosition( aLabelStartCell, nStartCol, nStartRow);
-                lcl_GetCellPosition( aLabelEndCell,   nEndCol,   nEndRow);
+                sw_GetCellPosition( aLabelStartCell, nStartCol, nStartRow);
+                sw_GetCellPosition( aLabelEndCell,   nEndCol,   nEndRow);
                 OSL_ENSURE( (nStartCol == nEndCol && (nEndRow - nStartRow + 1) == xCurLabel->getData().getLength()) ||
                             (nStartRow == nEndRow && (nEndCol - nStartCol + 1) == xCurLabel->getData().getLength()),
                         "label sequence length does not match range representation!" );
             }
             if (xCurValues.is())
             {
-                lcl_GetCellPosition( aValuesStartCell, nStartCol, nStartRow);
-                lcl_GetCellPosition( aValuesEndCell,   nEndCol,   nEndRow);
+                sw_GetCellPosition( aValuesStartCell, nStartCol, nStartRow);
+                sw_GetCellPosition( aValuesEndCell,   nEndCol,   nEndRow);
                 OSL_ENSURE( (nStartCol == nEndCol && (nEndRow - nStartRow + 1) == xCurValues->getData().getLength()) ||
                             (nStartRow == nEndRow && (nEndCol - nStartCol + 1) == xCurValues->getData().getLength()),
                         "value sequence length does not match range representation!" );
@@ -1305,8 +1305,8 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwChartDataProvider::detectArgume
                     ++nColIndex1;
                     ++nColSubLen;
                 }
-                String aStartCell( lcl_GetCellName( k, i ) );
-                String aEndCell( lcl_GetCellName( k + nColSubLen - 1, i + nRowSubLen - 1) );
+                String aStartCell( sw_GetCellName( k, i ) );
+                String aEndCell( sw_GetCellName( k + nColSubLen - 1, i + nRowSubLen - 1) );
                 aCurRange = aCellRangeBase;
                 aCurRange += aStartCell;
                 aCurRange += ':';
@@ -1694,8 +1694,8 @@ void SwChartDataProvider::AddRowCols(
     if (pFirstBox && pLastBox)
     {
         sal_Int32 nFirstCol = -1, nFirstRow = -1, nLastCol = -1, nLastRow = -1;
-        lcl_GetCellPosition( pFirstBox->GetName(), nFirstCol, nFirstRow  );
-        lcl_GetCellPosition( pLastBox->GetName(),  nLastCol,  nLastRow );
+        sw_GetCellPosition( pFirstBox->GetName(), nFirstCol, nFirstRow  );
+        sw_GetCellPosition( pLastBox->GetName(),  nLastCol,  nLastRow );
 
         bool bAddCols = false;  // default; also to be used if nBoxes == 1 :-/
         if (nFirstCol == nLastCol && nFirstRow != nLastRow)
@@ -1800,7 +1800,7 @@ rtl::OUString SAL_CALL SwChartDataProvider::convertRangeToXML( const rtl::OUStri
             throw lang::IllegalArgumentException();
 
         sal_Int32 nCol, nRow;
-        lcl_GetCellPosition( aStartCell, nCol, nRow );
+        sw_GetCellPosition( aStartCell, nCol, nRow );
         if (nCol < 0 || nRow < 0)
             throw uno::RuntimeException();
 
@@ -1813,7 +1813,7 @@ rtl::OUString SAL_CALL SwChartDataProvider::convertRangeToXML( const rtl::OUStri
         aCellRange.aUpperLeft.bIsEmpty  = false;
         if (aStartCell != aEndCell && aEndCell.Len() != 0)
         {
-            lcl_GetCellPosition( aEndCell, nCol, nRow );
+            sw_GetCellPosition( aEndCell, nCol, nRow );
             if (nCol < 0 || nRow < 0)
                 throw uno::RuntimeException();
 
@@ -1860,13 +1860,13 @@ rtl::OUString SAL_CALL SwChartDataProvider::convertRangeFromXML( const rtl::OUSt
 
         OUString aTmp( aCellRange.aTableName );
         aTmp += OUString::valueOf((sal_Unicode) '.');
-        aTmp += lcl_GetCellName( aCellRange.aUpperLeft.nColumn,
+        aTmp += sw_GetCellName( aCellRange.aUpperLeft.nColumn,
                                  aCellRange.aUpperLeft.nRow );
         // does cell range consist of more than a single cell?
         if (!aCellRange.aLowerRight.bIsEmpty)
         {
             aTmp += OUString::valueOf((sal_Unicode) ':');
-            aTmp += lcl_GetCellName( aCellRange.aLowerRight.nColumn,
+            aTmp += sw_GetCellName( aCellRange.aLowerRight.nColumn,
                                      aCellRange.aLowerRight.nRow );
         }
 
@@ -2168,7 +2168,7 @@ uno::Sequence< OUString > SAL_CALL SwChartDataSequence::generateLabel(
                         nCol = nCol + i;
                     else
                         nRow = nRow + i;
-                    String aCellName( lcl_GetCellName( nCol, nRow ) );
+                    String aCellName( sw_GetCellName( nCol, nRow ) );
 
                     xub_StrLen nLen = aCellName.Len();
                     if (nLen)
@@ -2530,8 +2530,8 @@ sal_Bool SwChartDataSequence::DeleteBox( const SwTableBox &rBox )
         String aPointCellName( pTable->GetTblBox( pPointStartNode->GetIndex() )->GetName() );
         String aMarkCellName( pTable->GetTblBox( pMarkStartNode->GetIndex() )->GetName() );
 
-        lcl_GetCellPosition( aPointCellName, nPointCol, nPointRow );
-        lcl_GetCellPosition( aMarkCellName,  nMarkCol,  nMarkRow );
+        sw_GetCellPosition( aPointCellName, nPointCol, nPointRow );
+        sw_GetCellPosition( aMarkCellName,  nMarkCol,  nMarkRow );
         OSL_ENSURE( nPointRow >= 0 && nPointCol >= 0, "invalid row and col" );
         OSL_ENSURE( nMarkRow >= 0 && nMarkCol >= 0, "invalid row and col" );
 
@@ -2571,7 +2571,7 @@ sal_Bool SwChartDataSequence::DeleteBox( const SwTableBox &rBox )
             nRow += bMoveUp ? -1 : +1;
         if (bMoveHorizontal)
             nCol += bMoveLeft ? -1 : +1;
-        String aNewCellName = lcl_GetCellName( nCol, nRow );
+        String aNewCellName = sw_GetCellName( nCol, nRow );
         SwTableBox* pNewBox = (SwTableBox*) pTable->GetTblBox( aNewCellName );
 
         if (pNewBox)    // set new position (cell range) to use
@@ -2684,8 +2684,8 @@ bool SwChartDataSequence::ExtendTo( bool bExtendCol,
         // new column cells adjacent to the bottom of the
         // current data-sequence to be added...
         OSL_ENSURE( aDesc.nLeft == aDesc.nRight, "data-sequence is not a column" );
-        aNewStartCell = lcl_GetCellName(aDesc.nLeft,  aDesc.nTop);
-        aNewEndCell   = lcl_GetCellName(aDesc.nRight, aDesc.nBottom + nCount);
+        aNewStartCell = sw_GetCellName(aDesc.nLeft,  aDesc.nTop);
+        aNewEndCell   = sw_GetCellName(aDesc.nRight, aDesc.nBottom + nCount);
         bChanged = true;
     }
     else if (bExtendCol && aDesc.nTop - nCount == nFirstNew)
@@ -2693,8 +2693,8 @@ bool SwChartDataSequence::ExtendTo( bool bExtendCol,
         // new column cells adjacent to the top of the
         // current data-sequence to be added...
         OSL_ENSURE( aDesc.nLeft == aDesc.nRight, "data-sequence is not a column" );
-        aNewStartCell = lcl_GetCellName(aDesc.nLeft,  aDesc.nTop - nCount);
-        aNewEndCell   = lcl_GetCellName(aDesc.nRight, aDesc.nBottom);
+        aNewStartCell = sw_GetCellName(aDesc.nLeft,  aDesc.nTop - nCount);
+        aNewEndCell   = sw_GetCellName(aDesc.nRight, aDesc.nBottom);
         bChanged = true;
     }
     else if (!bExtendCol && aDesc.nRight + 1 == nFirstNew)
@@ -2702,8 +2702,8 @@ bool SwChartDataSequence::ExtendTo( bool bExtendCol,
         // new row cells adjacent to the right of the
         // current data-sequence to be added...
         OSL_ENSURE( aDesc.nTop == aDesc.nBottom, "data-sequence is not a row" );
-        aNewStartCell = lcl_GetCellName(aDesc.nLeft, aDesc.nTop);
-        aNewEndCell   = lcl_GetCellName(aDesc.nRight + nCount, aDesc.nBottom);
+        aNewStartCell = sw_GetCellName(aDesc.nLeft, aDesc.nTop);
+        aNewEndCell   = sw_GetCellName(aDesc.nRight + nCount, aDesc.nBottom);
         bChanged = true;
     }
     else if (!bExtendCol && aDesc.nLeft - nCount == nFirstNew)
@@ -2711,8 +2711,8 @@ bool SwChartDataSequence::ExtendTo( bool bExtendCol,
         // new row cells adjacent to the left of the
         // current data-sequence to be added...
         OSL_ENSURE( aDesc.nTop == aDesc.nBottom, "data-sequence is not a row" );
-        aNewStartCell = lcl_GetCellName(aDesc.nLeft - nCount, aDesc.nTop);
-        aNewEndCell   = lcl_GetCellName(aDesc.nRight, aDesc.nBottom);
+        aNewStartCell = sw_GetCellName(aDesc.nLeft - nCount, aDesc.nTop);
+        aNewEndCell   = sw_GetCellName(aDesc.nRight, aDesc.nBottom);
         bChanged = true;
     }
 

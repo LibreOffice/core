@@ -89,7 +89,7 @@ extern String InsertLabEnvText( SwWrtShell& , SwFldMgr& , const String& );
 
 const char MASTER_LABEL[] = "MasterLabel";
 
-const SwFrmFmt *lcl_InsertBCText( SwWrtShell& rSh, const SwLabItem& rItem,
+static const SwFrmFmt *lcl_InsertBCText( SwWrtShell& rSh, const SwLabItem& rItem,
                         SwFrmFmt &rFmt,
                         sal_uInt16 nCol, sal_uInt16 nRow )
 {
@@ -126,7 +126,7 @@ const SwFrmFmt *lcl_InsertBCText( SwWrtShell& rSh, const SwLabItem& rItem,
     return pFmt;
 }
 
-const SwFrmFmt *lcl_InsertLabText( SwWrtShell& rSh, const SwLabItem& rItem,
+static const SwFrmFmt *lcl_InsertLabText( SwWrtShell& rSh, const SwLabItem& rItem,
                         SwFrmFmt &rFmt, SwFldMgr& rFldMgr,
                         sal_uInt16 nCol, sal_uInt16 nRow, sal_Bool bLast )
 {

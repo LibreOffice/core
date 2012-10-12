@@ -121,7 +121,7 @@ using namespace nsHdFtFlags;
 #define MM_200 1134             // WW-Default fuer u.Seitenrand: 2.0 cm
 
 
-sal_uInt8 lcl_ReadBorders(bool bVer67, WW8_BRC* brc, WW8PLCFx_Cp_FKP* pPap,
+static sal_uInt8 lcl_ReadBorders(bool bVer67, WW8_BRC* brc, WW8PLCFx_Cp_FKP* pPap,
     const WW8RStyle* pSty = 0, const WW8PLCFx_SEPX* pSep = 0);
 
 
@@ -440,7 +440,7 @@ void wwSectionManager::SetPage(SwPageDesc &rInPageDesc, SwFrmFmt &rFmt,
         SetCols(rFmt, rSection, rSection.GetTextAreaWidth());
 }
 
-sal_uInt16 lcl_MakeSafeNegativeSpacing(sal_uInt16 nIn)
+static sal_uInt16 lcl_MakeSafeNegativeSpacing(sal_uInt16 nIn)
 {
     if (nIn > SHRT_MAX)
         nIn = 0;
@@ -1225,7 +1225,7 @@ static bool _SetWW8_BRC(bool bVer67, WW8_BRC& rVar, const sal_uInt8* pS)
     return 0 != pS;
 }
 
-sal_uInt8 lcl_ReadBorders(bool bVer67, WW8_BRC* brc, WW8PLCFx_Cp_FKP* pPap,
+static sal_uInt8 lcl_ReadBorders(bool bVer67, WW8_BRC* brc, WW8PLCFx_Cp_FKP* pPap,
     const WW8RStyle* pSty, const WW8PLCFx_SEPX* pSep)
 {
 
@@ -1315,7 +1315,7 @@ void Set1Border(bool bVer67, SvxBoxItem &rBox, const WW8_BRC& rBor,
 
 }
 
-bool lcl_IsBorder(bool bVer67, const WW8_BRC* pbrc, bool bChkBtwn = false)
+static bool lcl_IsBorder(bool bVer67, const WW8_BRC* pbrc, bool bChkBtwn = false)
 {
     if( bVer67  )
         return ( pbrc[WW8_TOP  ].aBits1[0] & 0x18 ) ||  // brcType  != 0

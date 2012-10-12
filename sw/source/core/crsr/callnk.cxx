@@ -85,7 +85,7 @@ SwCallLink::SwCallLink( SwCrsrShell & rSh )
     }
 }
 
-void lcl_notifyRow(const SwCntntNode* pNode, SwCrsrShell& rShell)
+static void lcl_notifyRow(const SwCntntNode* pNode, SwCrsrShell& rShell)
 {
     if ( pNode != NULL )
     {

@@ -77,7 +77,7 @@ using namespace ::com::sun::star;
 #define MAX_DROPCAP_LINES 9
 #define MAX_DROPCAP_CHARS 9
 
-void lcl_swcss1_setEncoding( SwFmt& rFmt, rtl_TextEncoding eEnc );
+static void lcl_swcss1_setEncoding( SwFmt& rFmt, rtl_TextEncoding eEnc );
 
 
 // Implementierung des SwCSS1Parsers (eigentlich swcss1.cxx)
@@ -664,7 +664,7 @@ static CSS1SelectorType GetTokenAndClass( const CSS1Selector *pSelector,
     return eType;
 }
 
-extern sal_Bool lcl_css1atr_equalFontItems( const SfxPoolItem& r1, const SfxPoolItem& r2 );
+extern sal_Bool swhtml_css1atr_equalFontItems( const SfxPoolItem& r1, const SfxPoolItem& r2 );
 
 static void RemoveScriptItems( SfxItemSet& rItemSet, sal_uInt16 nScript,
                                const SfxItemSet *pParentItemSet = 0 )
@@ -707,7 +707,7 @@ static void RemoveScriptItems( SfxItemSet& rItemSet, sal_uInt16 nScript,
             if( aClearItems[j] ||
                 (pParentItemSet &&
                  SFX_ITEM_SET == rItemSet.GetItemState( nWhich, sal_False, &pItem ) &&
-                 (0==i ? lcl_css1atr_equalFontItems( *pItem, pParentItemSet->Get(nWhich, sal_True ) )
+                 (0==i ? swhtml_css1atr_equalFontItems( *pItem, pParentItemSet->Get(nWhich, sal_True ) )
                         : *pItem == pParentItemSet->Get(nWhich, sal_True ) ) ) )
             {
                 rItemSet.ClearItem( nWhich );
@@ -2344,7 +2344,7 @@ void SwHTMLParser::InsertParaAttrs( const SfxItemSet& rItemSet )
     }
 }
 
-void lcl_swcss1_setEncoding( SwFmt& rFmt, rtl_TextEncoding eEnc )
+static void lcl_swcss1_setEncoding( SwFmt& rFmt, rtl_TextEncoding eEnc )
 {
     if( RTL_TEXTENCODING_DONTKNOW == eEnc )
         return;

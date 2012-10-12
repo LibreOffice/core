@@ -572,7 +572,7 @@ sal_Bool SwSectionFrm::SplitSect( SwFrm* pFrm, sal_Bool bApres )
 // If a multi-column section is cancelled, the ContentFrms have to be
 // invalidated
 
-void lcl_InvalidateInfFlags( SwFrm* pFrm, bool bInva )
+static void lcl_InvalidateInfFlags( SwFrm* pFrm, bool bInva )
 {
     while ( pFrm )
     {
@@ -593,7 +593,7 @@ void lcl_InvalidateInfFlags( SwFrm* pFrm, bool bInva )
 //
 // Works like SwCntntFrm::ImplGetNextCntntFrm, but starts with a LayoutFrm
 //
-SwCntntFrm* lcl_GetNextCntntFrm( const SwLayoutFrm* pLay, bool bFwd )
+static SwCntntFrm* lcl_GetNextCntntFrm( const SwLayoutFrm* pLay, bool bFwd )
 {
     if ( bFwd )
     {
@@ -828,7 +828,7 @@ const SwSectionFmt* SwSectionFrm::_GetEndSectFmt() const
     return pFmt;
 }
 
-void lcl_FindCntntFrm( SwCntntFrm* &rpCntntFrm, SwFtnFrm* &rpFtnFrm,
+static void lcl_FindCntntFrm( SwCntntFrm* &rpCntntFrm, SwFtnFrm* &rpFtnFrm,
     SwFrm* pFrm, sal_Bool &rbChkFtn )
 {
     if( pFrm )
@@ -918,7 +918,7 @@ sal_Bool SwSectionFrm::CalcMinDiff( SwTwips& rMinDiff ) const
  *
  *************************************************************************/
 
-SwFtnFrm* lcl_FindEndnote( SwSectionFrm* &rpSect, sal_Bool &rbEmpty,
+static SwFtnFrm* lcl_FindEndnote( SwSectionFrm* &rpSect, sal_Bool &rbEmpty,
     SwLayouter *pLayouter )
 {
     // if rEmpty is set, the rpSect is already searched
@@ -965,7 +965,7 @@ SwFtnFrm* lcl_FindEndnote( SwSectionFrm* &rpSect, sal_Bool &rbEmpty,
     return NULL;
 }
 
-void lcl_ColumnRefresh( SwSectionFrm* pSect, sal_Bool bFollow )
+static void lcl_ColumnRefresh( SwSectionFrm* pSect, sal_Bool bFollow )
 {
     while( pSect )
     {
@@ -1939,7 +1939,7 @@ SwLayoutFrm *SwFrm::GetPrevSctLeaf( MakePageType )
     return pLayLeaf;
 }
 
-SwTwips lcl_DeadLine( const SwFrm* pFrm )
+static SwTwips lcl_DeadLine( const SwFrm* pFrm )
 {
     const SwLayoutFrm* pUp = pFrm->GetUpper();
     while( pUp && pUp->IsInSct() )

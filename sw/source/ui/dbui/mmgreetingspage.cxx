@@ -43,7 +43,7 @@ using namespace svt;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
-void lcl_FillGreetingsBox(ListBox& rBox,
+static void lcl_FillGreetingsBox(ListBox& rBox,
                         SwMailMergeConfigItem& rConfig,
                         SwMailMergeConfigItem::Gender eType)
 {
@@ -53,7 +53,7 @@ void lcl_FillGreetingsBox(ListBox& rBox,
     rBox.SelectEntryPos((sal_uInt16)rConfig.GetCurrentGreeting(eType));
 }
 
-void lcl_FillGreetingsBox(ComboBox& rBox,
+static void lcl_FillGreetingsBox(ComboBox& rBox,
                         SwMailMergeConfigItem& rConfig,
                         SwMailMergeConfigItem::Gender eType)
 {
@@ -63,7 +63,7 @@ void lcl_FillGreetingsBox(ComboBox& rBox,
     rBox.SelectEntryPos((sal_uInt16)rConfig.GetCurrentGreeting(eType));
 }
 
-void lcl_StoreGreetingsBox(ListBox& rBox,
+static void lcl_StoreGreetingsBox(ListBox& rBox,
                         SwMailMergeConfigItem& rConfig,
                         SwMailMergeConfigItem::Gender eType)
 {
@@ -75,7 +75,7 @@ void lcl_StoreGreetingsBox(ListBox& rBox,
     rConfig.SetCurrentGreeting(eType, rBox.GetSelectEntryPos());
 }
 
-void lcl_StoreGreetingsBox(ComboBox& rBox,
+static void lcl_StoreGreetingsBox(ComboBox& rBox,
                         SwMailMergeConfigItem& rConfig,
                         SwMailMergeConfigItem::Gender eType)
 {

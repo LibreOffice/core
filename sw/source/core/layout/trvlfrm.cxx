@@ -589,12 +589,12 @@ sal_Bool SwCntntFrm::RightMargin(SwPaM *pPam, sal_Bool) const
     return sal_True;
 }
 
-const SwCntntFrm *lcl_GetNxtCnt( const SwCntntFrm* pCnt )
+static const SwCntntFrm *lcl_GetNxtCnt( const SwCntntFrm* pCnt )
 {
     return pCnt->GetNextCntntFrm();
 }
 
-const SwCntntFrm *lcl_GetPrvCnt( const SwCntntFrm* pCnt )
+static const SwCntntFrm *lcl_GetPrvCnt( const SwCntntFrm* pCnt )
 {
     return pCnt->GetPrevCntntFrm();
 }
@@ -602,7 +602,7 @@ const SwCntntFrm *lcl_GetPrvCnt( const SwCntntFrm* pCnt )
 typedef const SwCntntFrm *(*GetNxtPrvCnt)( const SwCntntFrm* );
 
 //Frame in wiederholter Headline?
-sal_Bool lcl_IsInRepeatedHeadline( const SwFrm *pFrm,
+static sal_Bool lcl_IsInRepeatedHeadline( const SwFrm *pFrm,
                                     const SwTabFrm** ppTFrm = 0 )
 {
     const SwTabFrm *pTab = pFrm->FindTabFrm();
@@ -616,7 +616,7 @@ sal_Bool lcl_IsInRepeatedHeadline( const SwFrm *pFrm,
 //Ueberspringen von wiederholten Headlines.
 //MA 26. Jan. 98: Chg auch andere Geschuetzte Bereiche ueberspringen.
 // FME: Skip follow flow cells
-const SwCntntFrm * lcl_MissProtectedFrames( const SwCntntFrm *pCnt,
+static const SwCntntFrm * lcl_MissProtectedFrames( const SwCntntFrm *pCnt,
                                                        GetNxtPrvCnt fnNxtPrv,
                                                        sal_Bool bMissHeadline,
                                                        sal_Bool bInReadOnly,
@@ -647,7 +647,7 @@ const SwCntntFrm * lcl_MissProtectedFrames( const SwCntntFrm *pCnt,
     return pCnt;
 }
 
-sal_Bool lcl_UpDown( SwPaM *pPam, const SwCntntFrm *pStart,
+static sal_Bool lcl_UpDown( SwPaM *pPam, const SwCntntFrm *pStart,
                     GetNxtPrvCnt fnNxtPrv, sal_Bool bInReadOnly )
 {
     OSL_ENSURE( pPam->GetNode() == (SwCntntNode*)pStart->GetNode(),
@@ -1165,7 +1165,7 @@ sal_uLong CalcDiff( const Point &rPt1, const Point &rPt2 )
 // eher akzeptiert wird als ein anderer, der nicht dort liegt, auch wenn
 // dessen Abstand zum Punkt geringer ist.
 
-const SwLayoutFrm* lcl_Inside( const SwCntntFrm *pCnt, Point& rPt )
+static const SwLayoutFrm* lcl_Inside( const SwCntntFrm *pCnt, Point& rPt )
 {
     const SwLayoutFrm* pUp = pCnt->GetUpper();
     while( pUp )

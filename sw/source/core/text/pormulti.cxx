@@ -825,7 +825,7 @@ void SwRubyPortion::CalcRubyOffset()
  * the 2-line-formats has the same brackets.
  * --------------------------------------------------*/
 
-sal_Bool lcl_Has2Lines( const SwTxtAttr& rAttr, const SvxTwoLinesItem* &rpRef,
+static sal_Bool lcl_Has2Lines( const SwTxtAttr& rAttr, const SvxTwoLinesItem* &rpRef,
     sal_Bool &rValue )
 {
     const SfxPoolItem* pItem = CharFmt::GetItem( rAttr, RES_CHRATR_TWO_LINES );
@@ -855,7 +855,7 @@ sal_Bool lcl_Has2Lines( const SwTxtAttr& rAttr, const SvxTwoLinesItem* &rpRef,
  * to the charrotate-format's value.
  * --------------------------------------------------*/
 
-sal_Bool lcl_HasRotation( const SwTxtAttr& rAttr,
+static sal_Bool lcl_HasRotation( const SwTxtAttr& rAttr,
     const SvxCharRotateItem* &rpRef, sal_Bool &rValue )
 {
     const SfxPoolItem* pItem = CharFmt::GetItem( rAttr, RES_CHRATR_ROTATE );
@@ -1684,7 +1684,7 @@ void SwTxtPainter::PaintMultiPortion( const SwRect &rPaint,
     SetPropFont( 0 );
 }
 
-sal_Bool lcl_ExtractFieldFollow( SwLineLayout* pLine, SwLinePortion* &rpFld )
+static sal_Bool lcl_ExtractFieldFollow( SwLineLayout* pLine, SwLinePortion* &rpFld )
 {
     SwLinePortion* pLast = pLine;
     rpFld = pLine->GetPortion();
@@ -1715,7 +1715,7 @@ sal_Bool lcl_ExtractFieldFollow( SwLineLayout* pLine, SwLinePortion* &rpFld )
  * the rest of the remaining multi portion
  * --------------------------------------------------*/
 
-void lcl_TruncateMultiPortion( SwMultiPortion& rMulti, SwTxtFormatInfo& rInf,
+static void lcl_TruncateMultiPortion( SwMultiPortion& rMulti, SwTxtFormatInfo& rInf,
                                xub_StrLen nStartIdx )
 {
     rMulti.GetRoot().Truncate();

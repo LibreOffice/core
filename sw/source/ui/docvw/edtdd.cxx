@@ -194,15 +194,15 @@ void SwEditWin::CleanupDropUserMarker()
 
 
 //exhibition hack (MA,MBA)
-void lcl_SelectShellForDrop( SwView &rView )
+void SwView::SelectShellForDrop()
 {
-    if ( !rView.GetCurShell() )
-        rView.SelectShell();
+    if ( !GetCurShell() )
+        SelectShell();
 }
 
 sal_Int8 SwEditWin::ExecuteDrop( const ExecuteDropEvent& rEvt )
 {
-    ::lcl_SelectShellForDrop( GetView() );
+    GetView().SelectShellForDrop();
     DropCleanup();
     sal_Int8 nRet = DND_ACTION_NONE;
 
