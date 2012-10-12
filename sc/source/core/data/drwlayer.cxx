@@ -186,12 +186,6 @@ inline void ReverseTwipsToMM( long& nVal )
     nVal = HmmToTwips (nVal);
 }
 
-static void lcl_ReverseTwipsToMM( Point& rPoint )
-{
-    ReverseTwipsToMM( rPoint.X() );
-    ReverseTwipsToMM( rPoint.Y() );
-}
-
 static void lcl_ReverseTwipsToMM( Rectangle& rRect )
 {
     ReverseTwipsToMM( rRect.Left() );

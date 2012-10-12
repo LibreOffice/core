@@ -1870,20 +1870,6 @@ void ScDPObject::ToggleDetails(const DataPilotTableHeaderData& rElemDesc, ScDPOb
     }
 }
 
-static long lcl_FindName( const rtl::OUString& rString, const uno::Reference<container::XNameAccess>& xCollection )
-{
-    if ( xCollection.is() )
-    {
-        uno::Sequence<rtl::OUString> aSeq = xCollection->getElementNames();
-        long nCount = aSeq.getLength();
-        const rtl::OUString* pArr = aSeq.getConstArray();
-        for (long nPos=0; nPos<nCount; nPos++)
-            if ( pArr[nPos] == rString )
-                return nPos;
-    }
-    return -1;      // not found
-}
-
 static sal_uInt16 lcl_FirstSubTotal( const uno::Reference<beans::XPropertySet>& xDimProp )     // PIVOT_FUNC mask
 {
     uno::Reference<sheet::XHierarchiesSupplier> xDimSupp( xDimProp, uno::UNO_QUERY );
@@ -1931,21 +1917,6 @@ static sal_uInt16 lcl_FirstSubTotal( const uno::Reference<beans::XPropertySet>& 
 
     OSL_FAIL("FirstSubTotal: NULL");
     return 0;
-}
-
-static sal_uInt16 lcl_CountBits( sal_uInt16 nBits )
-{
-    if (!nBits) return 0;
-
-    sal_uInt16 nCount = 0;
-    sal_uInt16 nMask = 1;
-    for (sal_uInt16 i=0; i<16; i++)
-    {
-        if ( nBits & nMask )
-            ++nCount;
-        nMask <<= 1;
-    }
-    return nCount;
 }
 
 namespace {
