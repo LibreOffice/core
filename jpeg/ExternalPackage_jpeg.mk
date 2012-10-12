@@ -7,16 +7,13 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Module_Module,jpeg))
+$(eval $(call gb_ExternalPackage_ExternalPackage,jpeg_inc,jpeg))
 
-ifeq ($(SYSTEM_JPEG),NO)
-
-$(eval $(call gb_Module_add_targets,jpeg,\
-	ExternalPackage_jpeg \
-    UnpackedTarball_jpeg \
-    StaticLibrary_jpeg \
+$(eval $(call gb_ExternalPackage_add_unpacked_files,jpeg_inc,inc/external/jpeg,\
+	jconfig.h \
+	jerror.h \
+	jmorecfg.h \
+	jpeglib.h \
 ))
-
-endif
 
 # vim: set noet sw=4 ts=4:

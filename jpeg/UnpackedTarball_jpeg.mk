@@ -23,11 +23,4 @@ $(eval $(call gb_UnpackedTarball_add_patches,jpeg,\
 ))
 endif
 
-$(eval $(call gb_UnpackedTarball_mark_output_files,jpeg,\
-	jconfig.h \
-	jerror.h \
-	jmorecfg.h \
-	jpeglib.h \
-))
-
 # vim: set noet sw=4 ts=4:
