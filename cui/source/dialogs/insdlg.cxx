@@ -209,6 +209,7 @@ SvInsertOleDlg::SvInsertOleDlg
     m_pRbObjectFromfile->SetClickHdl( aLink );
     m_pRbNewObject->Check( sal_True );
     RadioHdl( NULL );
+    m_pBtnFilepath->SetAccessibleRelationMemberOf(m_pFileFrame->get_label_widget());
 }
 
 short SvInsertOleDlg::Execute()
