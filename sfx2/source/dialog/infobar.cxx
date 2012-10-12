@@ -18,6 +18,7 @@
 #include <sfx2/objsh.hxx>
 #include <sfx2/sfx.hrc>
 #include <sfx2/viewsh.hxx>
+#include <vcl/svapp.hxx>
 
 using namespace std;
 
@@ -48,6 +49,14 @@ namespace
 
         basegfx::BColor aLightColor( 1.0, 1.0, 191.0 / 255.0 );
         basegfx::BColor aDarkColor( 217.0 / 255.0, 217.0 / 255.0, 78.0 / 255.0 );
+
+        const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
+        if ( rSettings.GetHighContrastMode() )
+        {
+            aLightColor = rSettings.GetLightColor( ).getBColor( );
+            aDarkColor = rSettings.GetDialogTextColor( ).getBColor( );
+
+        }
 
         // Light background
         basegfx::B2DPolygon aPolygon;
@@ -148,6 +157,16 @@ void SfxInfoBarWindow::Paint( const Rectangle& rPaintRect )
 
     basegfx::BColor aLightColor( 1.0, 1.0, 191.0 / 255.0 );
     basegfx::BColor aDarkColor( 217.0 / 255.0, 217.0 / 255.0, 78.0 / 255.0 );
+
+    const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
+    if ( rSettings.GetHighContrastMode() )
+    {
+        aLightColor = rSettings.GetLightColor( ).getBColor( );
+        aDarkColor = rSettings.GetDialogTextColor( ).getBColor( );
+    }
+
+    // Update the label background color
+    m_pMessage->SetBackground( Wallpaper( Color( aLightColor ) ) );
 
     // Light background
     basegfx::B2DPolygon aPolygon;
