@@ -314,6 +314,11 @@ private:
     {
         int x;
         int y;
+        ExtendedGridEntry()
+            : x(0)
+            , y(0)
+        {
+        }
     };
 
     typedef boost::multi_array<ExtendedGridEntry, 2> ext_array_type;
