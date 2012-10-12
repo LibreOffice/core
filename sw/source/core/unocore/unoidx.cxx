@@ -1342,25 +1342,6 @@ SwXDocumentIndex::getAnchor() throw (uno::RuntimeException)
     return xRet;
 }
 
-void lcl_RemoveChildSections(SwSectionFmt& rParentFmt)
-{
-    SwSections aTmpArr;
-    SwDoc *const pDoc = rParentFmt.GetDoc();
-    const sal_uInt16 nCnt = rParentFmt.GetChildSections(aTmpArr, SORTSECT_POS);
-    if( nCnt )
-    {
-        for( sal_uInt16 n = 0; n < nCnt; ++n )
-        {
-            if( aTmpArr[n]->GetFmt()->IsInNodesArr() )
-            {
-                SwSectionFmt* pFmt = aTmpArr[n]->GetFmt();
-                lcl_RemoveChildSections(*pFmt);
-                pDoc->DelSectionFmt( pFmt );
-            }
-        }
-    }
-}
-
 void SAL_CALL SwXDocumentIndex::dispose() throw (uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
