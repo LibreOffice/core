@@ -211,13 +211,13 @@ struct SvSortData
     SvListEntry* pRight;
 };
 
-typedef ::std::vector< SvListView* > SvListView_impl;
-
 class SVT_DLLPUBLIC SvTreeList
 {
+    typedef std::vector<SvListView*> ListViewsType;
+
     friend class        SvListView;
 
-    SvListView_impl     aViewList;
+    ListViewsType       aViewList;
     sal_uLong           nEntryCount;
 
     Link                aCloneLink;
