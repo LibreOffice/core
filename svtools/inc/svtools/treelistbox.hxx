@@ -301,9 +301,7 @@ class SVT_DLLPUBLIC SvTreeListBox
                 ,public ::vcl::IMnemonicEntryList
                 ,public ::vcl::ISearchableStringList
 {
-    friend class SvLBoxEntry;
     friend class SvImpLBox;
-    friend class ImpLBSelEng;
     friend class TreeControlPeer;
 
     SvTreeListBoxImpl* mpImpl;
