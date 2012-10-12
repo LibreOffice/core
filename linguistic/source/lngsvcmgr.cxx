@@ -487,6 +487,8 @@ LngSvcMgr::LngSvcMgr()
     uno::Reference<deployment::XExtensionManager> xExtensionManager;
     try {
         xExtensionManager = deployment::ExtensionManager::get(xContext);
+    } catch ( const uno::DeploymentException & ) {
+        SAL_WARN( "linguistic", "no extension manager - should fire on mobile only" );
     } catch ( const deployment::DeploymentException & ) {
         SAL_WARN( "linguistic", "no extension manager - should fire on mobile only" );
     }
