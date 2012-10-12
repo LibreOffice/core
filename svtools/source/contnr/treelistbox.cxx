@@ -566,35 +566,40 @@ SvViewDataEntry::~SvViewDataEntry()
     delete [] pItemData;
 }
 
-// ***************************************************************
-// struct SvLBox_Impl
-// ***************************************************************
-SvLBox_Impl::SvLBox_Impl( SvTreeListBox& _rBox )
-    :m_bIsEmptyTextAllowed( true )
-    ,m_bEntryMnemonicsEnabled( false )
-    ,m_bDoingQuickSelection( false )
-    ,m_pLink( NULL )
-    ,m_aMnemonicEngine( _rBox )
-    ,m_aQuickSelectionEngine( _rBox )
+struct SvTreeListBoxImpl
 {
-}
+    bool m_bIsEmptyTextAllowed:1;
+    bool m_bEntryMnemonicsEnabled:1;
+    bool m_bDoingQuickSelection:1;
 
-// ***************************************************************
-// class SvTreeListBox
-// ***************************************************************
+    Link* m_pLink;
+
+    vcl::MnemonicEngine m_aMnemonicEngine;
+    vcl::QuickSelectionEngine m_aQuickSelectionEngine;
+
+    SvTreeListBoxImpl(SvTreeListBox& _rBox) :
+        m_bIsEmptyTextAllowed(true),
+        m_bEntryMnemonicsEnabled(false),
+        m_bDoingQuickSelection(false),
+        m_pLink(NULL),
+        m_aMnemonicEngine(_rBox),
+        m_aQuickSelectionEngine(_rBox) {}
+};
 
 DBG_NAME(SvTreeListBox);
 
-SvTreeListBox::SvTreeListBox( Window* pParent, WinBits nWinStyle  ) :
-    Control( pParent, nWinStyle | WB_CLIPCHILDREN ),
-    DropTargetHelper( this ), DragSourceHelper( this ), eSelMode( NO_SELECTION )
+SvTreeListBox::SvTreeListBox(Window* pParent, WinBits nWinStyle) :
+    Control(pParent, nWinStyle | WB_CLIPCHILDREN),
+    DropTargetHelper(this),
+    DragSourceHelper(this),
+    mpImpl(new SvTreeListBoxImpl(*this)),
+    eSelMode(NO_SELECTION)
 {
     DBG_CTOR(SvTreeListBox,0);
     nDragOptions =  DND_ACTION_COPYMOVE | DND_ACTION_LINK;
     nImpFlags = 0;
     pTargetEntry = 0;
     nDragDropMode = 0;
-    pLBoxImpl = new SvLBox_Impl( *this );
     SvLBoxTreeList* pTempModel = new SvLBoxTreeList;
     pTempModel->SetRefCount( 0 );
     SetBaseModel(pTempModel);
@@ -611,14 +616,16 @@ SvTreeListBox::SvTreeListBox( Window* pParent, WinBits nWinStyle  ) :
     SetSublistOpenWithLeftRight();
 }
 
-SvTreeListBox::SvTreeListBox( Window* pParent, const ResId& rResId ) :
-    Control( pParent, rResId ),
-    DropTargetHelper( this ), DragSourceHelper( this ), eSelMode( NO_SELECTION )
+SvTreeListBox::SvTreeListBox(Window* pParent, const ResId& rResId) :
+    Control(pParent, rResId),
+    DropTargetHelper(this),
+    DragSourceHelper(this),
+    mpImpl(new SvTreeListBoxImpl(*this)),
+    eSelMode(NO_SELECTION)
 {
     DBG_CTOR(SvTreeListBox,0);
     pTargetEntry = 0;
     nImpFlags = 0;
-    pLBoxImpl = new SvLBox_Impl( *this );
     nDragOptions = DND_ACTION_COPYMOVE | DND_ACTION_LINK;
     nDragDropMode = 0;
     SvLBoxTreeList* pTempModel = new SvLBoxTreeList;
@@ -647,13 +654,13 @@ void SvTreeListBox::EnableEntryMnemonics( bool _bEnable )
     if ( _bEnable == IsEntryMnemonicsEnabled() )
         return;
 
-    pLBoxImpl->m_bEntryMnemonicsEnabled = _bEnable;
+    mpImpl->m_bEntryMnemonicsEnabled = _bEnable;
     Invalidate();
 }
 
 bool SvTreeListBox::IsEntryMnemonicsEnabled() const
 {
-    return pLBoxImpl->m_bEntryMnemonicsEnabled;
+    return mpImpl->m_bEntryMnemonicsEnabled;
 }
 
 IMPL_LINK_INLINE_START( SvTreeListBox, CloneHdl_Impl, SvListEntry*, pEntry )
@@ -1018,8 +1025,8 @@ void SvTreeListBox::ImplShowTargetEmphasis( SvLBoxEntry* pEntry, sal_Bool bShow)
 
 void SvTreeListBox::OnCurrentEntryChanged()
 {
-    if ( !pLBoxImpl->m_bDoingQuickSelection )
-        pLBoxImpl->m_aQuickSelectionEngine.Reset();
+    if ( !mpImpl->m_bDoingQuickSelection )
+        mpImpl->m_aQuickSelectionEngine.Reset();
 }
 
 SvLBoxEntry* SvTreeListBox::GetEntryFromPath( const ::std::deque< sal_Int32 >& _rPath ) const
@@ -1225,13 +1232,13 @@ void SvTreeListBox::EndEditing( bool bCancel )
 bool SvTreeListBox::IsEmptyTextAllowed() const
 {
     DBG_CHKTHIS(SvTreeListBox,0);
-    return pLBoxImpl->m_bIsEmptyTextAllowed;
+    return mpImpl->m_bIsEmptyTextAllowed;
 }
 
 void SvTreeListBox::ForbidEmptyText()
 {
     DBG_CHKTHIS(SvTreeListBox,0);
-    pLBoxImpl->m_bIsEmptyTextAllowed = false;
+    mpImpl->m_bIsEmptyTextAllowed = false;
 }
 
 SvLBoxEntry* SvTreeListBox::CreateEntry() const
@@ -1326,15 +1333,15 @@ void SvTreeListBox::SelectEntry( ::vcl::StringEntryIdentifier _entry )
 bool SvTreeListBox::HandleKeyInput( const KeyEvent& _rKEvt )
 {
     if  (   IsEntryMnemonicsEnabled()
-        &&  pLBoxImpl->m_aMnemonicEngine.HandleKeyEvent( _rKEvt )
+        &&  mpImpl->m_aMnemonicEngine.HandleKeyEvent( _rKEvt )
         )
         return true;
 
     if ( ( GetStyle() & WB_QUICK_SEARCH ) != 0 )
     {
-        pLBoxImpl->m_bDoingQuickSelection = true;
-        const bool bHandled = pLBoxImpl->m_aQuickSelectionEngine.HandleKeyEvent( _rKEvt );
-        pLBoxImpl->m_bDoingQuickSelection = false;
+        mpImpl->m_bDoingQuickSelection = true;
+        const bool bHandled = mpImpl->m_aQuickSelectionEngine.HandleKeyEvent( _rKEvt );
+        mpImpl->m_bDoingQuickSelection = false;
         if ( bHandled )
             return true;
     }
@@ -1628,7 +1635,7 @@ void SvTreeListBox::InitTreeView()
     mnCheckboxItemWidth = 0;
 
     Link* pLink = new Link( LINK(this,SvTreeListBox, DefaultCompare) );
-    pLBoxImpl->m_pLink = pLink;
+    mpImpl->m_pLink = pLink;
 
     nTreeFlags = TREEFLAG_RECALCTABS;
     nIndent = SV_LBOX_DEFAULT_INDENT_PIXEL;
@@ -1652,7 +1659,7 @@ SvTreeListBox::~SvTreeListBox()
 
     pImp->CallEventListeners( VCLEVENT_OBJECT_DYING );
     delete pImp;
-    delete pLBoxImpl->m_pLink;
+    delete mpImpl->m_pLink;
     ClearTabList();
 
     delete pEdCtrl;
@@ -1671,7 +1678,7 @@ SvTreeListBox::~SvTreeListBox()
         pDDSource = 0;
     if( this == pDDTarget )
         pDDTarget = 0;
-    delete pLBoxImpl;
+    delete mpImpl;
 }
 
 void SvTreeListBox::SetExtendedWinBits( ExtendedWinBits _nBits )

@@ -291,18 +291,7 @@ public:
 #define SVLBOX_TARGEMPH_VIS     0x0010
 #define SVLBOX_EDTEND_CALLED    0x0020
 
-class SvTreeListBox;
-struct SvLBox_Impl
-{
-    bool                        m_bIsEmptyTextAllowed;
-    bool                        m_bEntryMnemonicsEnabled;
-    bool                        m_bDoingQuickSelection;
-    Link*                       m_pLink;
-    ::vcl::MnemonicEngine       m_aMnemonicEngine;
-    ::vcl::QuickSelectionEngine m_aQuickSelectionEngine;
-
-    SvLBox_Impl( SvTreeListBox& _rBox );
-};
+struct SvTreeListBoxImpl;
 
 class SVT_DLLPUBLIC SvTreeListBox
                 :public Control
@@ -317,7 +306,7 @@ class SVT_DLLPUBLIC SvTreeListBox
     friend class ImpLBSelEng;
     friend class TreeControlPeer;
 
-    SvLBox_Impl*    pLBoxImpl;
+    SvTreeListBoxImpl* mpImpl;
     SvImpLBox*      pImp;
     Link            aCheckButtonHdl;
     Link            aScrolledHdl;
