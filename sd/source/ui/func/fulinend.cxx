@@ -44,9 +44,6 @@
 
 namespace sd {
 
-#define BITMAP_WIDTH  32
-#define BITMAP_HEIGHT 12
-
 TYPEINIT1( FuLineEnd, FuPoor );
 
 /*************************************************************************

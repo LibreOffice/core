@@ -105,7 +105,6 @@ using namespace ::com::sun::star::document;
 // Parameter aus Itemset abfragen
 
 #define RESTOHTML( res ) StringToHTMLString(String(SdResId(res)))
-#define S2H( str ) StringToHTMLString( str )
 
 // bei Aenderungen auch NUM_BUTTONS in pubdlg.hxx aendern!!
 const char *pButtonNames[NUM_BUTTONS] =
@@ -1502,7 +1501,6 @@ bool HtmlExport::CreateHtmlForPresPages()
 
         while (!bMasterDone)
         {
-            // sal_True = rueckwaerts
             SdrObjListIter aIter(*pPage, IM_DEEPWITHGROUPS, sal_True);
 
             SdrObject* pObject = aIter.Next();

@@ -36,10 +36,6 @@
 #include "com/sun/star/deployment/DependencyException.hpp"
 #include "com/sun/star/deployment/DeploymentException.hpp"
 
-#define USER_PACKAGE_MANAGER    "user"
-#define SHARED_PACKAGE_MANAGER  "shared"
-#define BUNDLED_PACKAGE_MANAGER "bundled"
-
 using namespace ::com::sun::star;
 
 namespace sd {
@@ -109,10 +105,6 @@ ClientBox::ClientBox( Dialog* pParent, RemoteServer *pServer,
         m_nStdHeight = nIconHeight;
     m_nStdHeight += GetTextHeight() + TOP_OFFSET;
 
-//     nIconHeight = ICON_HEIGHT + 2*TOP_OFFSET + 1;
-//     if ( m_nStdHeight < nIconHeight )
-//         m_nStdHeight = nIconHeight;
-
     m_nActiveHeight = m_nStdHeight;
 
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
@@ -135,11 +127,6 @@ ClientBox::~ClientBox()
     m_bInDelete = true;
 
     typedef std::vector< TClientBoxEntry >::iterator ITER;
-
-    for ( ITER iIndex = m_vEntries.begin(); iIndex < m_vEntries.end(); ++iIndex )
-    {
-//         (*iIndex)->m_xPackage->removeEventListener( uno::Reference< lang::XEventListener > ( m_xRemoveListener, uno::UNO_QUERY ) );
-    }
 
     m_vEntries.clear();
 
@@ -350,7 +337,6 @@ void ClientBox::DrawRow( const Rectangle& rRect, const TClientBoxEntry pEntry )
         Size  aBtnSize( m_aPinBox.GetSizePixel() );
         Point aBtnPos( aRect.Left(),
                    aRect.Bottom() - TOP_OFFSET - aBtnSize.Height() );
-//         m_aPinDescription.SetPosPixel( aBtnPos );
         DrawText( Rectangle( aBtnPos.X(), aBtnPos.Y(), rRect.Right(), rRect.Bottom() - TOP_OFFSET),
                   String( SdResId( STR_ENTER_PIN ) ), 0 );
 
@@ -359,20 +345,6 @@ void ClientBox::DrawRow( const Rectangle& rRect, const TClientBoxEntry pEntry )
 
         m_aPinBox.SetPosPixel( aBtnPos );
 
-
-
-
-
-//         long nExtraHeight = 0;
-//
-//         if ( pEntry->m_bHasButtons )
-//             nExtraHeight = m_nExtraHeight;
-//
-//         DrawText( Rectangle( aPos.X(), aPos.Y(), rRect.Right(), rRect.Bottom() - nExtraHeight ),
-//                   sDescription, TEXT_DRAW_MULTILINE | TEXT_DRAW_WORDBREAK );
-    }
-    else
-    {
     }
 
     SetLineColor( Color( COL_LIGHTGRAY ) );
@@ -644,8 +616,6 @@ long ClientBox::Notify( NotifyEvent& rNEvt )
 long ClientBox::addEntry( ClientInfo* pClientInfo )
 {
     long         nPos = 0;
-//     PackageState eState = m_pManager->getPackageState( xPackage );
-//     bool         bLocked = m_pManager->isReadOnly( xPackage );
 
     TClientBoxEntry pEntry( new ClientBoxEntry( pClientInfo ) );
 
@@ -659,15 +629,8 @@ long ClientBox::addEntry( ClientInfo* pClientInfo )
     }
     else
     {
-//         if ( !FindEntryPos( pEntry, 0, m_vEntries.size()-1, nPos ) )
-//         {
             m_vEntries.insert( m_vEntries.begin()+nPos, pEntry );
             bNewEntryInserted = true;
-//         }
-//         else if ( !m_bInCheckMode )
-//         {
-//             OSL_FAIL( "ClientBox::addEntry(): Will not add duplicate entries"  );
-//         }
     }
 
     //Related: rhbz#702833 Only add a Listener if we're adding a new entry, to
@@ -677,16 +640,6 @@ long ClientBox::addEntry( ClientInfo* pClientInfo )
 
         //         pEntry->m_xPackage->addEventListener(uno::Reference< lang::XEventListener > ( m_xRemoveListener, uno::UNO_QUERY ) );
     }
-
-
-//     pEntry->m_bHasOptions = m_pManager->supportsOptions( xPackage );
-//     pEntry->m_bUser       = xPackage->getRepositoryName().equals( USER_PACKAGE_MANAGER );
-//     pEntry->m_bShared     = xPackage->getRepositoryName().equals( SHARED_PACKAGE_MANAGER );
-//     pEntry->m_bNew        = m_bInCheckMode;
-//     pEntry->m_bMissingLic = bLicenseMissing;
-
-//     if ( bLicenseMissing )
-//         pEntry->m_sErrorText = DialogHelper::getResourceString( RID_STR_ERROR_MISSING_LICENSE );
 
     //access to m_nActive must be guarded
     if ( !m_bInCheckMode && m_bHasActive && ( m_nActive >= nPos ) )
