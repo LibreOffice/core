@@ -18,8 +18,7 @@ public:
     virtual bool importCSV(ScDocument& rDoc, const rtl::OUString& rPath) const;
 
     virtual bool loadXMLStructure(
-       SvTreeListBox& rTreeCtrl, const rtl::OUString& rPath,
-       const Image& rImgDefaultElem, const Image& rImgRepeatElem, const Image& rImgElemAttr) const;
+        SvTreeListBox& rTreeCtrl, const rtl::OUString& rPath, ScOrcusXMLTreeParam& rParam) const;
 };
 
 #endif

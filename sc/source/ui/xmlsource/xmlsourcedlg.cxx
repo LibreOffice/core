@@ -42,15 +42,16 @@ ScXMLSourceDlg::ScXMLSourceDlg(
     maLbTree(this, ScResId(LB_SOURCE_TREE)),
     maBtnCancel(this, ScResId(BTN_CANCEL)),
     maImgFileOpen(ScResId(IMG_FILE_OPEN)),
-    maImgElemDefault(ScResId(IMG_ELEMENT_DEFAULT)),
-    maImgElemRepeat(ScResId(IMG_ELEMENT_REPEAT)),
-    maImgElemAttribute(ScResId(IMG_ELEMENT_ATTRIBUTE)),
     maStrCellLink(ScResId(STR_CELL_LINK).toString()),
     maStrRangeLink(ScResId(STR_RANGE_LINK).toString()),
     mpDoc(pDoc),
     mpActiveEdit(&maEdit),
     mbDlgLostFocus(false)
 {
+    maXMLParam.maImgElementDefault = Image(ScResId(IMG_ELEMENT_DEFAULT));
+    maXMLParam.maImgElementRepeat = Image(ScResId(IMG_ELEMENT_REPEAT));
+    maXMLParam.maImgAttribute = Image(ScResId(IMG_ELEMENT_ATTRIBUTE));
+
     maBtnSelectSource.SetModeImage(maImgFileOpen);
     FreeResource();
 
@@ -164,8 +165,7 @@ void ScXMLSourceDlg::LoadSourceFileStructure(const OUString& rPath)
     if (!pOrcus)
         return;
 
-    pOrcus->loadXMLStructure(
-        maLbTree, rPath, maImgElemDefault, maImgElemRepeat, maImgElemAttribute);
+    pOrcus->loadXMLStructure(maLbTree, rPath, maXMLParam);
 }
 
 void ScXMLSourceDlg::HandleGetFocus(Control* pCtrl)

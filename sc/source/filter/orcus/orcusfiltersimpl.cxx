@@ -10,6 +10,7 @@
 #include "orcusfiltersimpl.hxx"
 
 #include "document.hxx"
+#include "orcusxml.hxx"
 
 #include "tools/urlobj.hxx"
 #include "svtools/treelistbox.hxx"
@@ -178,15 +179,14 @@ namespace {
 void populateTree(
    SvTreeListBox& rTreeCtrl, orcus::xml_structure_tree::walker& rWalker,
    const orcus::xml_structure_tree::entity_name& rElemName, bool bRepeat,
-   const Image& rImgRepeatElem, const Image& rImgElemAttr,
-   SvLBoxEntry* pParent)
+   SvLBoxEntry* pParent, ScOrcusXMLTreeParam& rParam)
 {
     OUString aName(rElemName.name.get(), rElemName.name.size(), RTL_TEXTENCODING_UTF8);
     SvLBoxEntry* pEntry = rTreeCtrl.InsertEntry(aName, pParent);
     if (bRepeat)
     {
-        rTreeCtrl.SetExpandedEntryBmp(pEntry, rImgRepeatElem);
-        rTreeCtrl.SetCollapsedEntryBmp(pEntry, rImgRepeatElem);
+        rTreeCtrl.SetExpandedEntryBmp(pEntry, rParam.maImgElementRepeat);
+        rTreeCtrl.SetCollapsedEntryBmp(pEntry, rParam.maImgElementRepeat);
     }
 
     if (pParent)
@@ -201,8 +201,8 @@ void populateTree(
     {
         orcus::xml_structure_tree::entity_name aAttrName = *it;
         SvLBoxEntry* pAttr = rTreeCtrl.InsertEntry(OUString(aAttrName.name.get(), aAttrName.name.size(), RTL_TEXTENCODING_UTF8), pEntry);
-        rTreeCtrl.SetExpandedEntryBmp(pAttr, rImgElemAttr);
-        rTreeCtrl.SetCollapsedEntryBmp(pAttr, rImgElemAttr);
+        rTreeCtrl.SetExpandedEntryBmp(pAttr, rParam.maImgAttribute);
+        rTreeCtrl.SetCollapsedEntryBmp(pAttr, rParam.maImgAttribute);
     }
     rTreeCtrl.Expand(pEntry);
 
@@ -211,7 +211,7 @@ void populateTree(
     for (it = aNames.begin(), itEnd = aNames.end(); it != itEnd; ++it)
     {
         orcus::xml_structure_tree::element aElem = rWalker.descend(*it);
-        populateTree(rTreeCtrl, rWalker, *it, aElem.repeat, rImgRepeatElem, rImgElemAttr, pEntry);
+        populateTree(rTreeCtrl, rWalker, *it, aElem.repeat, pEntry, rParam);
         rWalker.ascend();
     }
 }
@@ -234,8 +234,7 @@ public:
 }
 
 bool ScOrcusFiltersImpl::loadXMLStructure(
-   SvTreeListBox& rTreeCtrl, const rtl::OUString& rPath,
-   const Image& rImgDefaultElem, const Image& rImgRepeatElem, const Image& rImgElemAttr) const
+   SvTreeListBox& rTreeCtrl, const rtl::OUString& rPath, ScOrcusXMLTreeParam& rParam) const
 {
     INetURLObject aURL(rPath);
     OString aSysPath = rtl::OUStringToOString(aURL.getFSysPath(SYSTEM_PATH), RTL_TEXTENCODING_UTF8);
@@ -256,14 +255,14 @@ bool ScOrcusFiltersImpl::loadXMLStructure(
 
         TreeUpdateSwitch aSwitch(rTreeCtrl);
         rTreeCtrl.Clear();
-        rTreeCtrl.SetDefaultCollapsedEntryBmp(rImgDefaultElem);
-        rTreeCtrl.SetDefaultExpandedEntryBmp(rImgDefaultElem);
+        rTreeCtrl.SetDefaultCollapsedEntryBmp(rParam.maImgElementDefault);
+        rTreeCtrl.SetDefaultExpandedEntryBmp(rParam.maImgElementDefault);
 
         orcus::xml_structure_tree::walker aWalker = aXmlTree.get_walker();
 
         // Root element.
         orcus::xml_structure_tree::element aElem = aWalker.root();
-        populateTree(rTreeCtrl, aWalker, aElem.name, aElem.repeat, rImgRepeatElem, rImgElemAttr, NULL);
+        populateTree(rTreeCtrl, aWalker, aElem.name, aElem.repeat, NULL, rParam);
     }
     catch (const std::exception&)
     {

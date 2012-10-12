@@ -16,6 +16,7 @@
 
 #include "expftext.hxx"
 #include "anyrefdg.hxx"
+#include "orcusxml.hxx"
 
 #include <boost/scoped_ptr.hpp>
 
@@ -45,14 +46,13 @@ class ScXMLSourceDlg : public ScAnyRefDlg
     CancelButton maBtnCancel;
 
     Image maImgFileOpen;
-    Image maImgElemDefault;
-    Image maImgElemRepeat;
-    Image maImgElemAttribute;
 
     rtl::OUString maStrCellLink;
     rtl::OUString maStrRangeLink;
 
     rtl::OUString maSrcPath;
+
+    ScOrcusXMLTreeParam maXMLParam;
 
     ScDocument* mpDoc;
 
