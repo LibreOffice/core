@@ -200,7 +200,7 @@ endef
 else # !SYSTEM_JPEG
 
 $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
-	jpeglib \
+	jpeg \
 ))
 
 define gb_LinkTarget__use_jpeg
@@ -210,7 +210,7 @@ $(call gb_LinkTarget_set_include,$(1),\
 )
 
 $(call gb_LinkTarget_use_static_libraries,$(1),\
-	jpeglib \
+	jpeg \
 )
 
 endef

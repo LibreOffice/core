@@ -193,11 +193,7 @@ MINIZIP3RDLIB=$(MINIZIP_LIBS)
 # internally, minizip is included in zlib
 MINIZIP3RDLIB=
 .ENDIF
-.IF "$(SYSTEM_JPEG)"=="YES"
 JPEG3RDLIB=-ljpeg
-.ELSE
-JPEG3RDLIB=-ljpeglib
-.ENDIF
 .IF "$(SYSTEM_DB)" == "YES"
 BERKELEYLIB=-l$(DB_LIB)
 .ELIF "$(GUI)$(COM)"=="WNTGCC"
@@ -445,7 +441,7 @@ CLUCENELIB=iclucene.lib
 EXPAT3RDLIB=expat_xmltok.lib expat_xmlparse.lib
 EXPATASCII3RDLIB=expat_xmltok.lib ascii_expat_xmlparse.lib
 ZLIB3RDLIB=zlib.lib
-JPEG3RDLIB=jpeglib.lib
+JPEG3RDLIB=jpeg.lib
 BERKELEYLIB=libdb47.lib
 CURLLIB=libcurl.lib
 CHAOSLIB=ichaos.lib

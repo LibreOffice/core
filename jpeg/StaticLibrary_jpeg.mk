@@ -7,13 +7,13 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_StaticLibrary_StaticLibrary,jpeglib))
+$(eval $(call gb_StaticLibrary_StaticLibrary,jpeg))
 
-$(eval $(call gb_StaticLibrary_set_warnings_not_errors,jpeglib))
+$(eval $(call gb_StaticLibrary_set_warnings_not_errors,jpeg))
 
-$(eval $(call gb_StaticLibrary_use_unpacked,jpeglib,jpeg))
+$(eval $(call gb_StaticLibrary_use_unpacked,jpeg,jpeg))
 
-$(eval $(call gb_StaticLibrary_add_generated_cobjects,jpeglib,\
+$(eval $(call gb_StaticLibrary_add_generated_cobjects,jpeg,\
     UnpackedTarball/jpeg/jaricom \
     UnpackedTarball/jpeg/jcapimin \
     UnpackedTarball/jpeg/jcapistd \
