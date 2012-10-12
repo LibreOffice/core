@@ -898,14 +898,12 @@ void SAL_CALL Job::disposing( const css::lang::EventObject& aEvent ) throw(css::
         m_xDesktop = css::uno::Reference< css::frame::XDesktop >();
         m_bListenOnDesktop = sal_False;
     }
-    else
-    if (m_xFrame.is() && aEvent.Source == m_xFrame)
+    else if (m_xFrame.is() && aEvent.Source == m_xFrame)
     {
         m_xFrame = css::uno::Reference< css::frame::XFrame >();
         m_bListenOnFrame = sal_False;
     }
-    else
-    if (m_xModel.is() && aEvent.Source == m_xModel)
+    else if (m_xModel.is() && aEvent.Source == m_xModel)
     {
         m_xModel = css::uno::Reference< css::frame::XModel >();
         m_bListenOnModel = sal_False;
