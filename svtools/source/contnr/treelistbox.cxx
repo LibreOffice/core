@@ -602,8 +602,8 @@ SvTreeListBox::SvTreeListBox( Window* pParent, WinBits nWinStyle  ) :
     pModel->InsertView( this );
     pHdlEntry = 0;
     pEdCtrl = 0;
-    SetSelectionMode( SINGLE_SELECTION );  // check if TreeListBox is called
-    SetDragDropMode( SV_DRAGDROP_NONE );
+    eSelMode = SINGLE_SELECTION;
+    nDragDropMode = SV_DRAGDROP_NONE;
     SetType(WINDOW_TREELISTBOX);
 
     InitTreeView();
