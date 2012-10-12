@@ -267,7 +267,7 @@ $(call gb_Output_announce,$(2).c,$(true),C  ,3)
 $(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) $(dir $(4)) && \
 	unset INCLUDE && \
-	$(gb_CC) \
+	$(if $(filter YES,$(COBJECT_X64)), $(CXX_X64_BINARY), $(gb_CC)) \
 		$(DEFS) \
 		$(if $(filter Library,$(TARGETTYPE)),$(gb_COMPILER_LTOFLAGS)) \
 		$(T_CFLAGS) \
@@ -276,6 +276,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(gb_COMPILERDEPFLAGS) \
 		-I$(dir $(3)) \
 		$(INCLUDE) \
+		$(if $(filter YES,$(COBJECT_X64)), -U_X86_ -D_AMD64_,) \
 		-c $(3) \
 		-Fo$(1)) $(call gb_create_deps,$(4),$(1),$(3))
 endef
