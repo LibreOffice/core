@@ -26,7 +26,8 @@ class ScCondFormatHelper
 public:
     static SC_DLLPUBLIC rtl::OUString GetExpression(const ScConditionalFormat& rFormat, const ScAddress& rPos);
 
-    static SC_DLLPUBLIC rtl::OUString GetExpression( ScCondFormatEntryType eType, sal_Int32 nIndex );
+    static SC_DLLPUBLIC rtl::OUString GetExpression( ScCondFormatEntryType eType, sal_Int32 nIndex,
+            rtl::OUString aStr1 = rtl::OUString(), rtl::OUString aStr2 = rtl::OUString() );
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

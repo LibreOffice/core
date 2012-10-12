@@ -91,7 +91,7 @@ rtl::OUString ScCondFormatHelper::GetExpression(const ScConditionalFormat& rForm
                             aBuffer.append(rtl::OUString(" and "));
                             aBuffer.append(pEntry->GetExpression(rPos, 1));
                         }
-                        else
+                        else if(eMode <= SC_COND_NOTEQUAL)
                         {
                             aBuffer.append(pEntry->GetExpression(rPos, 0));
                         }
@@ -110,12 +110,27 @@ rtl::OUString ScCondFormatHelper::GetExpression(const ScConditionalFormat& rForm
     return aBuffer.makeStringAndClear();
 }
 
-rtl::OUString ScCondFormatHelper::GetExpression( ScCondFormatEntryType eType, sal_Int32 nIndex )
+rtl::OUString ScCondFormatHelper::GetExpression( ScCondFormatEntryType eType, sal_Int32 nIndex,
+        rtl::OUString aStr1, rtl::OUString aStr2 )
 {
     rtl::OUStringBuffer aBuffer(getTextForType(eType));
     aBuffer.append(rtl::OUString(" "));
     if(eType == CONDITION)
+    {
         aBuffer.append(getExpression(nIndex));
+        if(nIndex <= 7)
+        {
+            aBuffer.append(" ").append(aStr1);
+            if(nIndex == 6 || nIndex == 7)
+            {
+                aBuffer.append(" and ").append(aStr2);
+            }
+        }
+    }
+    else if(eType == FORMULA)
+    {
+        aBuffer.append(" ").append(aStr1);
+    }
 
     return aBuffer.makeStringAndClear();
 }

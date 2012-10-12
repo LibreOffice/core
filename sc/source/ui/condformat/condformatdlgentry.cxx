@@ -289,7 +289,7 @@ ScFormatEntry* ScConditionFrmtEntry::createConditionEntry() const
 
 rtl::OUString ScConditionFrmtEntry::GetExpressionString()
 {
-    return ScCondFormatHelper::GetExpression(CONDITION, maLbCondType.GetSelectEntryPos());
+    return ScCondFormatHelper::GetExpression(CONDITION, maLbCondType.GetSelectEntryPos(), maEdVal1.GetText(), maEdVal2.GetText());
 }
 
 ScFormatEntry* ScConditionFrmtEntry::GetEntry() const
@@ -483,7 +483,7 @@ ScFormatEntry* ScFormulaFrmtEntry::GetEntry() const
 
 rtl::OUString ScFormulaFrmtEntry::GetExpressionString()
 {
-    return ScCondFormatHelper::GetExpression(FORMULA, 0);
+    return ScCondFormatHelper::GetExpression(FORMULA, 0, maEdFormula.GetText());
 }
 
 void ScFormulaFrmtEntry::SetActive()
