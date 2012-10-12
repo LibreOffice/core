@@ -79,6 +79,8 @@ bool UnusedVariableCheck::VisitNamedDecl( NamedDecl* declaration )
             {
             if( const ParmVarDecl* param = dyn_cast< ParmVarDecl >( var ))
                 {
+                if( !param->getDeclName())
+                    return true; // unnamed parameter -> unused
                 // If this declaration does not have a body, then the parameter is indeed not used,
                 // so ignore.
                 if( const FunctionDecl* func = dyn_cast< FunctionDecl >( param->getParentFunctionOrMethod()))
