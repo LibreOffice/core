@@ -284,7 +284,7 @@ SW_DLLPUBLIC const char * dbg_out(const SfxPoolItem * pItem)
                    String("(nil)", RTL_TEXTENCODING_ASCII_US));
 }
 
-SW_DLLPUBLIC static const String lcl_dbg_out(const SfxItemSet & rSet)
+static const String lcl_dbg_out(const SfxItemSet & rSet)
 {
     SfxItemIter aIter(rSet);
     const SfxPoolItem * pItem;
