@@ -123,7 +123,6 @@ IMPL_ABSTDLG_BASE(AbstractScTabBgColorDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractScImportOptionsDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractScTextImportOptionsDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractTabDialog_Impl);
-IMPL_ABSTDLG_BASE(AbstractScXMLSourceDlg_Impl);
 
 // ScAbstractTabDialog_Impl begin
 void ScAbstractTabDialog_Impl::SetCurPageId( sal_uInt16 nId )

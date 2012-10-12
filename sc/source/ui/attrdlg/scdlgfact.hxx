@@ -64,7 +64,6 @@ class ScImportOptionsDlg;
 class SfxTabDialog;
 class ScTextImportOptionsDlg;
 class ScCondFormatManagerDlg;
-class ScXMLSourceDlg;
 
 #define DECL_ABSTDLG_BASE(Class,DialogClass)        \
     DialogClass*        pDlg;                       \
