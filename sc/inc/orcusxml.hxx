@@ -25,6 +25,8 @@ struct ScOrcusXMLTreeParam
     struct TreeEntryUserData
     {
         EntryType meType;
+
+        TreeEntryUserData(EntryType eType);
     };
 
     typedef boost::ptr_vector<TreeEntryUserData> UserDataStoreType;

@@ -165,7 +165,7 @@ void ScXMLSourceDlg::LoadSourceFileStructure(const OUString& rPath)
     if (!pOrcus)
         return;
 
-    pOrcus->loadXMLStructure(maLbTree, rPath, maXMLParam);
+    pOrcus->loadXMLStructure(rPath, maLbTree, maXMLParam);
 }
 
 void ScXMLSourceDlg::HandleGetFocus(Control* pCtrl)

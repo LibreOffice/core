@@ -221,6 +221,7 @@ $(eval $(call gb_Library_add_exception_objects,scfilt,\
 	sc/source/filter/oox/worksheethelper \
 	sc/source/filter/oox/worksheetsettings \
 	sc/source/filter/orcus/orcusfiltersimpl \
+        sc/source/filter/orcus/orcusxml \
 ))
 
 ifeq ($(SYSTEM_ZLIB),YES)

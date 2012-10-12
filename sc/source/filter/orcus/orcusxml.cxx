@@ -7,20 +7,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef __SCFILT_ORCUSFILTERSIMPL_HXX__
-#define __SCFILT_ORCUSFILTERSIMPL_HXX__
+#include "orcusxml.hxx"
 
-#include "orcusfilters.hxx"
-
-class ScOrcusFiltersImpl : public ScOrcusFilters
-{
-public:
-    virtual bool importCSV(ScDocument& rDoc, const rtl::OUString& rPath) const;
-
-    virtual bool loadXMLStructure(
-        const rtl::OUString& rPath, SvTreeListBox& rTreeCtrl, ScOrcusXMLTreeParam& rParam) const;
-};
-
-#endif
+ScOrcusXMLTreeParam::TreeEntryUserData::TreeEntryUserData(EntryType eType) :
+    meType(eType) {}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

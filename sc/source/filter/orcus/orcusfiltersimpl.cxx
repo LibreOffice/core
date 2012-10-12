@@ -176,6 +176,13 @@ bool ScOrcusFiltersImpl::importCSV(ScDocument& rDoc, const OUString& rPath) cons
 
 namespace {
 
+void setUserDataToEntry(
+    SvLBoxEntry& rEntry, ScOrcusXMLTreeParam::UserDataStoreType& rStore, ScOrcusXMLTreeParam::EntryType eType)
+{
+    rStore.push_back(new ScOrcusXMLTreeParam::TreeEntryUserData(eType));
+    rEntry.SetUserData(&rStore.back());
+}
+
 void populateTree(
    SvTreeListBox& rTreeCtrl, orcus::xml_structure_tree::walker& rWalker,
    const orcus::xml_structure_tree::entity_name& rElemName, bool bRepeat,
@@ -183,8 +190,17 @@ void populateTree(
 {
     OUString aName(rElemName.name.get(), rElemName.name.size(), RTL_TEXTENCODING_UTF8);
     SvLBoxEntry* pEntry = rTreeCtrl.InsertEntry(aName, pParent);
+    if (!pEntry)
+        // Can this ever happen!?
+        return;
+
+    setUserDataToEntry(
+        *pEntry, rParam.maUserDataStore,
+        bRepeat ? ScOrcusXMLTreeParam::ElementRepeat : ScOrcusXMLTreeParam::ElementDefault);
+
     if (bRepeat)
     {
+        // Recurring elements use different icon.
         rTreeCtrl.SetExpandedEntryBmp(pEntry, rParam.maImgElementRepeat);
         rTreeCtrl.SetCollapsedEntryBmp(pEntry, rParam.maImgElementRepeat);
     }
@@ -194,13 +210,20 @@ void populateTree(
 
     orcus::xml_structure_tree::entity_names_type aNames;
 
+    // Insert attributes.
     rWalker.get_attributes(aNames);
     orcus::xml_structure_tree::entity_names_type::const_iterator it = aNames.begin();
     orcus::xml_structure_tree::entity_names_type::const_iterator itEnd = aNames.end();
     for (; it != itEnd; ++it)
     {
         orcus::xml_structure_tree::entity_name aAttrName = *it;
-        SvLBoxEntry* pAttr = rTreeCtrl.InsertEntry(OUString(aAttrName.name.get(), aAttrName.name.size(), RTL_TEXTENCODING_UTF8), pEntry);
+        SvLBoxEntry* pAttr = rTreeCtrl.InsertEntry(
+            OUString(aAttrName.name.get(), aAttrName.name.size(), RTL_TEXTENCODING_UTF8), pEntry);
+
+        if (!pAttr)
+            continue;
+
+        setUserDataToEntry(*pAttr, rParam.maUserDataStore, ScOrcusXMLTreeParam::Attribute);
         rTreeCtrl.SetExpandedEntryBmp(pAttr, rParam.maImgAttribute);
         rTreeCtrl.SetCollapsedEntryBmp(pAttr, rParam.maImgAttribute);
     }
@@ -208,6 +231,7 @@ void populateTree(
 
     rWalker.get_children(aNames);
 
+    // Insert child elements recursively.
     for (it = aNames.begin(), itEnd = aNames.end(); it != itEnd; ++it)
     {
         orcus::xml_structure_tree::element aElem = rWalker.descend(*it);
@@ -234,8 +258,10 @@ public:
 }
 
 bool ScOrcusFiltersImpl::loadXMLStructure(
-   SvTreeListBox& rTreeCtrl, const rtl::OUString& rPath, ScOrcusXMLTreeParam& rParam) const
+   const rtl::OUString& rPath, SvTreeListBox& rTreeCtrl, ScOrcusXMLTreeParam& rParam) const
 {
+    rParam.maUserDataStore.clear();
+
     INetURLObject aURL(rPath);
     OString aSysPath = rtl::OUStringToOString(aURL.getFSysPath(SYSTEM_PATH), RTL_TEXTENCODING_UTF8);
     const char* path = aSysPath.getStr();
