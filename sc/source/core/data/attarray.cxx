@@ -1208,31 +1208,6 @@ void ScAttrArray::ApplyBlockFrame( const SvxBoxItem* pLineOuter, const SvxBoxInf
     }
 }
 
-
-static long lcl_LineSize( const SvxBorderLine& rLine )
-{
-    // only one line -> half width, min. 20
-    // double line   -> half line spacing + (per min. 20)
-
-    long nTotal = 0;
-    sal_uInt16 nWidth = Max( rLine.GetOutWidth(), rLine.GetInWidth() );
-    sal_uInt16 nDist = rLine.GetDistance();
-    if (nDist)
-    {
-        OSL_ENSURE( rLine.GetOutWidth() && rLine.GetInWidth(),
-                        "Line has a distance, but only a width?" );
-
-        nTotal += ( nDist > 20 ) ? nDist : 20;
-        nTotal += ( nWidth > 20 ) ? nWidth : 20;
-    }
-    else if (nWidth)
-        nTotal += ( nWidth > 20 ) ? nWidth  : 20;
-
-        // also halved ?
-
-    return nTotal;
-}
-
 // Test if field contains specific attribute
 
 bool ScAttrArray::HasAttrib( SCROW nRow1, SCROW nRow2, sal_uInt16 nMask ) const
