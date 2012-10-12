@@ -153,7 +153,7 @@ CONFIGURE_FLAGS+=--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)
 .IF "$(OS)" == "MACOSX"
 CONFIGURE_FLAGS += \
     --prefix=/@.__________________________________________________$(EXTRPATH)
-.END
+.ENDIF
 
 BUILD_ACTION=chmod 777 xslt-config && $(GNUMAKE)
 BUILD_FLAGS+= -j$(EXTMAXPROCESS)
