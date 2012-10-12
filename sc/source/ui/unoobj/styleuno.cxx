@@ -77,7 +77,7 @@ using namespace ::com::sun::star;
 
 //------------------------------------------------------------------------
 
-const SfxItemPropertySet* lcl_GetCellStyleSet()
+static const SfxItemPropertySet* lcl_GetCellStyleSet()
 {
     static SfxItemPropertyMapEntry aCellStyleMap_Impl[] =
     {
@@ -175,7 +175,7 @@ const SfxItemPropertySet* lcl_GetCellStyleSet()
 
 //  Map mit allen Seitenattributen, incl. Kopf-/Fusszeilenattribute
 
-const SfxItemPropertySet * lcl_GetPageStyleSet()
+static const SfxItemPropertySet * lcl_GetPageStyleSet()
 {
     static SfxItemPropertyMapEntry aPageStyleMap_Impl[] =
     {
@@ -295,7 +295,7 @@ const SfxItemPropertySet * lcl_GetPageStyleSet()
 
 //  Map mit Inhalten des Header-Item-Sets
 
-const SfxItemPropertyMap* lcl_GetHeaderStyleMap()
+static const SfxItemPropertyMap* lcl_GetHeaderStyleMap()
 {
     static SfxItemPropertyMapEntry aHeaderStyleMap_Impl[] =
     {
@@ -334,7 +334,7 @@ const SfxItemPropertyMap* lcl_GetHeaderStyleMap()
 
 //  Map mit Inhalten des Footer-Item-Sets
 
-const SfxItemPropertyMap* lcl_GetFooterStyleMap()
+static const SfxItemPropertyMap* lcl_GetFooterStyleMap()
 {
     static SfxItemPropertyMapEntry aFooterStyleMap_Impl[] =
     {
@@ -421,7 +421,7 @@ struct ScDisplayNameMap
     String  aProgName;
 };
 
-const ScDisplayNameMap* lcl_GetStyleNameMap( sal_uInt16 nType )
+static const ScDisplayNameMap* lcl_GetStyleNameMap( sal_uInt16 nType )
 {
     if ( nType == SFX_STYLE_FAMILY_PARA )
     {
@@ -478,7 +478,7 @@ const ScDisplayNameMap* lcl_GetStyleNameMap( sal_uInt16 nType )
 #define SC_SUFFIX_USER      " (user)"
 #define SC_SUFFIX_USER_LEN  7
 
-sal_Bool lcl_EndsWithUser( const String& rString )
+static sal_Bool lcl_EndsWithUser( const String& rString )
 {
     const sal_Unicode *pChar = rString.GetBuffer();
     xub_StrLen nLen = rString.Len();
@@ -545,7 +545,7 @@ String ScStyleNameConversion::ProgrammaticToDisplayName( const String& rProgName
 
 //------------------------------------------------------------------------
 
-sal_Bool lcl_AnyTabProtected( ScDocument& rDoc )
+static sal_Bool lcl_AnyTabProtected( ScDocument& rDoc )
 {
     SCTAB nTabCount = rDoc.GetTableCount();
     for (SCTAB i=0; i<nTabCount; i++)

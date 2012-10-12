@@ -308,7 +308,7 @@ handle_r1c1:
     }
 }
 
-void lcl_Replace( EditView* pView, const String& rNewStr, const ESelection& rOldSel )
+static void lcl_Replace( EditView* pView, const String& rNewStr, const ESelection& rOldSel )
 {
     if ( pView )
     {
@@ -394,12 +394,12 @@ inline String GetEditText(EditEngine* pEng)
     return ScEditUtil::GetSpaceDelimitedString(*pEng);
 }
 
-void lcl_RemoveTabs(rtl::OUString& rStr)
+static void lcl_RemoveTabs(rtl::OUString& rStr)
 {
     removeChars(rStr, sal_Unicode('\t'));
 }
 
-void lcl_RemoveLineEnd(rtl::OUString& rStr)
+static void lcl_RemoveLineEnd(rtl::OUString& rStr)
 {
     rStr = convertLineEnd(rStr, LINEEND_LF);
     removeChars(rStr, sal_Unicode('\n'));
@@ -1237,7 +1237,7 @@ void ScInputHandler::NextFormulaEntry( bool bBack )
         pActiveView->ShowCursor();
 }
 
-void lcl_CompleteFunction( EditView* pView, const String& rInsert, bool& rParInserted )
+static void lcl_CompleteFunction( EditView* pView, const String& rInsert, bool& rParInserted )
 {
     if (pView)
     {
@@ -1309,7 +1309,7 @@ void ScInputHandler::PasteFunctionData()
 //      Selektion berechnen und als Tip-Hilfe anzeigen
 //
 
-String lcl_Calculate( const String& rFormula, ScDocument* pDoc, const ScAddress &rPos )
+static String lcl_Calculate( const String& rFormula, ScDocument* pDoc, const ScAddress &rPos )
 {
     //!     mit ScFormulaDlg::CalcValue zusammenfassen und ans Dokument verschieben !!!!
     //!     (Anfuehrungszeichen bei Strings werden nur hier eingefuegt)
@@ -2098,7 +2098,7 @@ bool ScInputHandler::StartTable( sal_Unicode cTyped, bool bFromCommand, bool bIn
     return bNewTable;
 }
 
-void lcl_SetTopSelection( EditView* pEditView, ESelection& rSel )
+static void lcl_SetTopSelection( EditView* pEditView, ESelection& rSel )
 {
     OSL_ENSURE( rSel.nStartPara==0 && rSel.nEndPara==0, "SetTopSelection: Para != 0" );
 
@@ -2454,7 +2454,7 @@ void ScInputHandler::SetMode( ScInputMode eNewMode )
 
 //  lcl_IsNumber - true, wenn nur Ziffern (dann keine Autokorrektur)
 
-bool lcl_IsNumber(const String& rString)
+static bool lcl_IsNumber(const String& rString)
 {
     xub_StrLen nLen = rString.Len();
     for (xub_StrLen i=0; i<nLen; i++)
@@ -2466,7 +2466,7 @@ bool lcl_IsNumber(const String& rString)
     return true;
 }
 
-void lcl_SelectionToEnd( EditView* pView )
+static void lcl_SelectionToEnd( EditView* pView )
 {
     if ( pView )
     {

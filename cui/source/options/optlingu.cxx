@@ -261,7 +261,7 @@ void DicUserData::SetChecked( sal_Bool bVal )
 
 // class BrwString_Impl -------------------------------------------------
 
-void lcl_SetCheckButton( SvLBoxEntry* pEntry, sal_Bool bCheck )
+static void lcl_SetCheckButton( SvLBoxEntry* pEntry, sal_Bool bCheck )
 {
     SvLBoxButton* pItem = (SvLBoxButton*)(pEntry->GetFirstItem(SV_ITEM_ID_LBOXBUTTON));
 
@@ -566,7 +566,7 @@ public:
 };
 
 
-sal_Int32 lcl_SeqGetIndex( const Sequence< OUString > &rSeq, const OUString &rTxt )
+static sal_Int32 lcl_SeqGetIndex( const Sequence< OUString > &rSeq, const OUString &rTxt )
 {
     sal_Int32 nRes = -1;
     sal_Int32 nLen = rSeq.getLength();
@@ -644,7 +644,7 @@ ServiceInfo_Impl * SvxLinguData_Impl::GetInfoByImplName( const OUString &rSvcImp
 
 //-----------------------------------------------------------------------------
 
-void lcl_MergeLocales(Sequence< Locale >& aAllLocales, const Sequence< Locale >& rAdd)
+static void lcl_MergeLocales(Sequence< Locale >& aAllLocales, const Sequence< Locale >& rAdd)
 {
     const Locale* pAdd = rAdd.getConstArray();
     Sequence<Locale> aLocToAdd(rAdd.getLength());
@@ -672,7 +672,7 @@ void lcl_MergeLocales(Sequence< Locale >& aAllLocales, const Sequence< Locale >&
         pAllLocales2[nLength++] = pLocToAdd[i];
 }
 
-void lcl_MergeDisplayArray(
+static void lcl_MergeDisplayArray(
         SvxLinguData_Impl &rData,
         const ServiceInfo_Impl &rToAdd )
 {
@@ -1195,14 +1195,14 @@ SfxTabPage* SvxLinguTabPage::Create( Window* pParent,
 
 //------------------------------------------------------------------------
 
-Any lcl_Bool2Any(sal_Bool bVal)
+static Any lcl_Bool2Any(sal_Bool bVal)
 {
     Any aRet(&bVal, ::getBooleanCppuType());
     return aRet;
 }
 
 
-sal_Bool lcl_Bool2Any(Any& rVal)
+static sal_Bool lcl_Bool2Any(Any& rVal)
 {
     return *(sal_Bool*)rVal.getValue();
 }
@@ -2120,7 +2120,7 @@ IMPL_LINK( SvxEditModulesDlg, BoxCheckButtonHdl_Impl, SvTreeListBox *, pBox )
     return 0;
 }
 
-OUString lcl_GetServiceName(sal_uInt8 nType)
+static OUString lcl_GetServiceName(sal_uInt8 nType)
 {
     switch(nType)
     {

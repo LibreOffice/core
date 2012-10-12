@@ -52,14 +52,14 @@ const static rtl::OUString STYPE( RTL_CONSTASCII_USTRINGPARAM(  SC_UNONAME_TYPE 
 const static rtl::OUString SHOWLIST( RTL_CONSTASCII_USTRINGPARAM(  SC_UNONAME_SHOWLIST  ) );
 const static rtl::OUString ALERTSTYLE( RTL_CONSTASCII_USTRINGPARAM(  SC_UNONAME_ERRALSTY  ) );
 
-void
+static void
 lcl_setValidationProps( const uno::Reference< table::XCellRange >& xRange, const uno::Reference< beans::XPropertySet >& xProps )
 {
     uno::Reference< beans::XPropertySet > xRangeProps( xRange, uno::UNO_QUERY_THROW );
     xRangeProps->setPropertyValue( VALIDATION , uno::makeAny( xProps ) );
 }
 
-uno::Reference< beans::XPropertySet >
+static uno::Reference< beans::XPropertySet >
 lcl_getValidationProps( const uno::Reference< table::XCellRange >& xRange )
 {
     uno::Reference< beans::XPropertySet > xProps( xRange, uno::UNO_QUERY_THROW );

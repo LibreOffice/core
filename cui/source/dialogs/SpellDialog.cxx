@@ -1925,7 +1925,7 @@ struct LanguagePosition_Impl
 };
 typedef std::vector<LanguagePosition_Impl> LanguagePositions_Impl;
 
-void lcl_InsertBreakPosition_Impl(
+static void lcl_InsertBreakPosition_Impl(
         LanguagePositions_Impl& rBreakPositions, sal_uInt16 nInsert, LanguageType eLanguage)
 {
     LanguagePositions_Impl::iterator aStart = rBreakPositions.begin();

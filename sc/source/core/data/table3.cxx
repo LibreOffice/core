@@ -867,7 +867,7 @@ void ScTable::RemoveSubTotals( ScSubTotalParam& rParam )
 
 //  harte Zahlenformate loeschen (fuer Ergebnisformeln)
 
-void lcl_RemoveNumberFormat( ScTable* pTab, SCCOL nCol, SCROW nRow )
+static void lcl_RemoveNumberFormat( ScTable* pTab, SCCOL nCol, SCROW nRow )
 {
     const ScPatternAttr* pPattern = pTab->GetPattern( nCol, nRow );
     if ( pPattern->GetItemSet().GetItemState( ATTR_VALUE_FORMAT, false )

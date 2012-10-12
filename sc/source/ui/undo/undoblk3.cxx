@@ -1457,7 +1457,7 @@ sal_Bool ScUndoRefreshLink::CanRepeat(SfxRepeatTarget& /* rTarget */) const
     return false;
 }
 
-ScAreaLink* lcl_FindAreaLink( sfx2::LinkManager* pLinkManager, const String& rDoc,
+static ScAreaLink* lcl_FindAreaLink( sfx2::LinkManager* pLinkManager, const String& rDoc,
                             const String& rFlt, const String& rOpt,
                             const String& rSrc, const ScRange& rDest )
 {

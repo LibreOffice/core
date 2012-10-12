@@ -743,7 +743,7 @@ SfxPoolItem* ScPageHFItem::Clone( SfxItemPool* ) const
 
 //------------------------------------------------------------------------
 
-void lcl_SetSpace( String& rStr, const ESelection& rSel )
+static void lcl_SetSpace( String& rStr, const ESelection& rSel )
 {
     // Text durch ein Leerzeichen ersetzen, damit Positionen stimmen:
 
@@ -752,7 +752,7 @@ void lcl_SetSpace( String& rStr, const ESelection& rSel )
     rStr.SetChar( rSel.nStartPos, ' ' );
 }
 
-bool lcl_ConvertFields(EditEngine& rEng, const String* pCommands)
+static bool lcl_ConvertFields(EditEngine& rEng, const String* pCommands)
 {
     bool bChange = false;
     sal_uInt16 nParCnt = rEng.GetParagraphCount();

@@ -63,7 +63,7 @@ using namespace ::com::sun::star;
 
 // -----------------------------------------------------------------------
 
-void lcl_GetChartParameters( const uno::Reference< chart2::XChartDocument >& xChartDoc,
+static void lcl_GetChartParameters( const uno::Reference< chart2::XChartDocument >& xChartDoc,
             rtl::OUString& rRanges, chart::ChartDataRowSource& rDataRowSource,
             bool& rHasCategories, bool& rFirstCellAsLabel )
 {
@@ -97,7 +97,7 @@ void lcl_GetChartParameters( const uno::Reference< chart2::XChartDocument >& xCh
     }
 }
 
-void lcl_SetChartParameters( const uno::Reference< chart2::data::XDataReceiver >& xReceiver,
+static void lcl_SetChartParameters( const uno::Reference< chart2::data::XDataReceiver >& xReceiver,
             const rtl::OUString& rRanges, chart::ChartDataRowSource eDataRowSource,
             bool bHasCategories, bool bFirstCellAsLabel )
 {

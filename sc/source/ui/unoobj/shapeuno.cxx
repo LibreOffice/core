@@ -60,7 +60,7 @@ DECLARE_STL_USTRINGACCESS_MAP( uno::Sequence< sal_Int8 > *,  ScShapeImplementati
 
 static ScShapeImplementationIdMap aImplementationIdMap;
 
-const SfxItemPropertyMapEntry* lcl_GetShapeMap()
+static const SfxItemPropertyMapEntry* lcl_GetShapeMap()
 {
     static SfxItemPropertyMapEntry aShapeMap_Impl[] =
     {
@@ -87,7 +87,7 @@ const SvEventDescription* ScShapeObj::GetSupportedMacroItems()
     return aMacroDescriptionsImpl;
 }
 // #i66550 HLINK_FOR_SHAPES
-ScMacroInfo* lcl_getShapeHyperMacroInfo( ScShapeObj* pShape, sal_Bool bCreate = false )
+ScMacroInfo* ScShapeObj_getShapeHyperMacroInfo( ScShapeObj* pShape, sal_Bool bCreate = false )
 {
         if( pShape )
             if( SdrObject* pObj = pShape->GetSdrObject() )
@@ -205,7 +205,7 @@ void ScShapeObj::GetShapePropertyState()
     }
 }
 
-uno::Reference<lang::XComponent> lcl_GetComponent( const uno::Reference<uno::XAggregation>& xAgg )
+static uno::Reference<lang::XComponent> lcl_GetComponent( const uno::Reference<uno::XAggregation>& xAgg )
 {
     uno::Reference<lang::XComponent> xRet;
     if ( xAgg.is() )
@@ -213,7 +213,7 @@ uno::Reference<lang::XComponent> lcl_GetComponent( const uno::Reference<uno::XAg
     return xRet;
 }
 
-uno::Reference<text::XText> lcl_GetText( const uno::Reference<uno::XAggregation>& xAgg )
+static uno::Reference<text::XText> lcl_GetText( const uno::Reference<uno::XAggregation>& xAgg )
 {
     uno::Reference<text::XText> xRet;
     if ( xAgg.is() )
@@ -221,7 +221,7 @@ uno::Reference<text::XText> lcl_GetText( const uno::Reference<uno::XAggregation>
     return xRet;
 }
 
-uno::Reference<text::XSimpleText> lcl_GetSimpleText( const uno::Reference<uno::XAggregation>& xAgg )
+static uno::Reference<text::XSimpleText> lcl_GetSimpleText( const uno::Reference<uno::XAggregation>& xAgg )
 {
     uno::Reference<text::XSimpleText> xRet;
     if ( xAgg.is() )
@@ -229,7 +229,7 @@ uno::Reference<text::XSimpleText> lcl_GetSimpleText( const uno::Reference<uno::X
     return xRet;
 }
 
-uno::Reference<text::XTextRange> lcl_GetTextRange( const uno::Reference<uno::XAggregation>& xAgg )
+static uno::Reference<text::XTextRange> lcl_GetTextRange( const uno::Reference<uno::XAggregation>& xAgg )
 {
     uno::Reference<text::XTextRange> xRet;
     if ( xAgg.is() )
@@ -259,7 +259,7 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScShapeObj::getPropertySetInfo(
     return mxPropSetInfo;
 }
 
-sal_Bool lcl_GetPageNum( SdrPage* pPage, SdrModel& rModel, SCTAB& rNum )
+static sal_Bool lcl_GetPageNum( SdrPage* pPage, SdrModel& rModel, SCTAB& rNum )
 {
     sal_uInt16 nCount = rModel.GetPageCount();
     for (sal_uInt16 i=0; i<nCount; i++)
@@ -272,7 +272,7 @@ sal_Bool lcl_GetPageNum( SdrPage* pPage, SdrModel& rModel, SCTAB& rNum )
     return false;
 }
 
-sal_Bool lcl_GetCaptionPoint( uno::Reference< drawing::XShape >& xShape, awt::Point& rCaptionPoint )
+static sal_Bool lcl_GetCaptionPoint( uno::Reference< drawing::XShape >& xShape, awt::Point& rCaptionPoint )
 {
     sal_Bool bReturn = false;
     rtl::OUString sType(xShape->getShapeType());
@@ -289,7 +289,7 @@ sal_Bool lcl_GetCaptionPoint( uno::Reference< drawing::XShape >& xShape, awt::Po
     return bReturn;
 }
 
-ScRange lcl_GetAnchorCell( uno::Reference< drawing::XShape >& xShape, ScDocument* pDoc, SCTAB nTab,
+static ScRange lcl_GetAnchorCell( uno::Reference< drawing::XShape >& xShape, ScDocument* pDoc, SCTAB nTab,
                           awt::Point& rUnoPoint, awt::Size& rUnoSize, awt::Point& rCaptionPoint )
 {
     ScRange aReturn;
@@ -324,7 +324,7 @@ ScRange lcl_GetAnchorCell( uno::Reference< drawing::XShape >& xShape, ScDocument
     return aReturn;
 }
 
-awt::Point lcl_GetRelativePos( uno::Reference< drawing::XShape >& xShape, ScDocument* pDoc, SCTAB nTab, ScRange& rRange,
+static awt::Point lcl_GetRelativePos( uno::Reference< drawing::XShape >& xShape, ScDocument* pDoc, SCTAB nTab, ScRange& rRange,
                               awt::Size& rUnoSize, awt::Point& rCaptionPoint)
 {
     awt::Point aUnoPoint;
@@ -645,7 +645,7 @@ void SAL_CALL ScShapeObj::setPropertyValue(
                aNameString.EqualsAscii( SC_UNONAME_URL) )
     {
         rtl::OUString sHlink;
-        ScMacroInfo* pInfo = lcl_getShapeHyperMacroInfo(this, true);
+        ScMacroInfo* pInfo = ScShapeObj_getShapeHyperMacroInfo(this, true);
         if ( ( aValue >>= sHlink ) && pInfo )
             pInfo->SetHlink( sHlink );
     }
@@ -830,7 +830,7 @@ uno::Any SAL_CALL ScShapeObj::getPropertyValue( const rtl::OUString& aPropertyNa
               aNameString.EqualsAscii( SC_UNONAME_URL ) )
     {
         rtl::OUString sHlink;
-        if ( ScMacroInfo* pInfo = lcl_getShapeHyperMacroInfo(this) )
+        if ( ScMacroInfo* pInfo = ScShapeObj_getShapeHyperMacroInfo(this) )
             sHlink = pInfo->GetHlink();
         aAny <<= sHlink;
     }
@@ -1102,7 +1102,7 @@ void SAL_CALL ScShapeObj::removeEventListener(
 // XText
 // (special handling for ScCellFieldObj)
 
-void lcl_CopyOneProperty( beans::XPropertySet& rDest, beans::XPropertySet& rSource, const sal_Char* pName )
+static void lcl_CopyOneProperty( beans::XPropertySet& rDest, beans::XPropertySet& rSource, const sal_Char* pName )
 {
     rtl::OUString aNameStr(rtl::OUString::createFromAscii(pName));
     try
@@ -1375,7 +1375,7 @@ private:
 
     ScMacroInfo* getInfo( sal_Bool bCreate = false )
     {
-        return lcl_getShapeHyperMacroInfo( mpShape, bCreate );
+        return ScShapeObj_getShapeHyperMacroInfo( mpShape, bCreate );
     }
 
 public:

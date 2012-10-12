@@ -230,7 +230,7 @@ void ScTabOpDlg::RaiseError( ScTabOpErr eError )
 
 //----------------------------------------------------------------------------
 
-sal_Bool lcl_Parse( const String& rString, ScDocument* pDoc, SCTAB nCurTab,
+static sal_Bool lcl_Parse( const String& rString, ScDocument* pDoc, SCTAB nCurTab,
                 ScRefAddress& rStart, ScRefAddress& rEnd )
 {
     sal_Bool bRet = false;

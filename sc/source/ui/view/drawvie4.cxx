@@ -67,7 +67,7 @@ Point aDragStartDiff;
 
 // -----------------------------------------------------------------------
 
-void lcl_CheckOle( const SdrMarkList& rMarkList, sal_Bool& rAnyOle, sal_Bool& rOneOle )
+void ScDrawView::CheckOle( const SdrMarkList& rMarkList, sal_Bool& rAnyOle, sal_Bool& rOneOle )
 {
     rAnyOle = rOneOle = false;
     sal_uLong nCount = rMarkList.GetMarkCount();
@@ -115,7 +115,7 @@ sal_Bool ScDrawView::BeginDrag( Window* pWindow, const Point& rStartPos )
 
         sal_Bool bAnyOle, bOneOle;
         const SdrMarkList& rMarkList = GetMarkedObjectList();
-        lcl_CheckOle( rMarkList, bAnyOle, bOneOle );
+        CheckOle( rMarkList, bAnyOle, bOneOle );
 
         ScDocShellRef aDragShellRef;
         if (bAnyOle)
@@ -157,7 +157,7 @@ void ScDrawView::DoCopy()
 {
     sal_Bool bAnyOle, bOneOle;
     const SdrMarkList& rMarkList = GetMarkedObjectList();
-    lcl_CheckOle( rMarkList, bAnyOle, bOneOle );
+    CheckOle( rMarkList, bAnyOle, bOneOle );
 
     // update ScGlobal::pDrawClipDocShellRef
     ScDrawLayer::SetGlobalDrawPersist( ScTransferObj::SetDrawClipDoc( bAnyOle ) );
@@ -193,7 +193,7 @@ uno::Reference<datatransfer::XTransferable> ScDrawView::CopyToTransferable()
 {
     sal_Bool bAnyOle, bOneOle;
     const SdrMarkList& rMarkList = GetMarkedObjectList();
-    lcl_CheckOle( rMarkList, bAnyOle, bOneOle );
+    CheckOle( rMarkList, bAnyOle, bOneOle );
 
     // update ScGlobal::pDrawClipDocShellRef
     ScDrawLayer::SetGlobalDrawPersist( ScTransferObj::SetDrawClipDoc( bAnyOle ) );

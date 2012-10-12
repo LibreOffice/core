@@ -595,7 +595,7 @@ void ScDrawTextObjectBar::ExecuteToggle( SfxRequest &rReq )
     pViewData->GetScDrawView()->InvalidateDrawTextAttrs();
 }
 
-void lcl_RemoveFields( OutlinerView& rOutView )
+static void lcl_RemoveFields( OutlinerView& rOutView )
 {
     //! Outliner should have RemoveFields with a selection
 

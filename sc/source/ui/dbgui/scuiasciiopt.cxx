@@ -69,7 +69,7 @@ using ::rtl::OUString;
 
 // ============================================================================
 
-void lcl_FillCombo( ComboBox& rCombo, const String& rList, sal_Unicode cSelect )
+static void lcl_FillCombo( ComboBox& rCombo, const String& rList, sal_Unicode cSelect )
 {
     xub_StrLen i;
     xub_StrLen nCount = comphelper::string::getTokenCount(rList, '\t');
@@ -89,7 +89,7 @@ void lcl_FillCombo( ComboBox& rCombo, const String& rList, sal_Unicode cSelect )
     }
 }
 
-sal_Unicode lcl_CharFromCombo( ComboBox& rCombo, const String& rList )
+static sal_Unicode lcl_CharFromCombo( ComboBox& rCombo, const String& rList )
 {
     sal_Unicode c = 0;
     String aStr = rCombo.GetText();

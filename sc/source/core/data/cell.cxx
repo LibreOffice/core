@@ -1986,7 +1986,7 @@ ScDetectiveRefIter::ScDetectiveRefIter( ScFormulaCell* pCell )
     aPos = pCell->aPos;
 }
 
-bool lcl_ScDetectiveRefIter_SkipRef( ScToken* p )
+static bool lcl_ScDetectiveRefIter_SkipRef( ScToken* p )
 {
     ScSingleRefData& rRef1 = p->GetSingleRef();
     if ( rRef1.IsColDeleted() || rRef1.IsRowDeleted() || rRef1.IsTabDeleted()

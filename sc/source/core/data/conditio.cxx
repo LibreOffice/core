@@ -80,7 +80,7 @@ void ScFormatEntry::endRendering()
 {
 }
 
-bool lcl_HasRelRef( ScDocument* pDoc, ScTokenArray* pFormula, sal_uInt16 nRecursion = 0 )
+static bool lcl_HasRelRef( ScDocument* pDoc, ScTokenArray* pFormula, sal_uInt16 nRecursion = 0 )
 {
     if (pFormula)
     {
@@ -499,7 +499,7 @@ void ScConditionEntry::SetFormula2( const ScTokenArray& rArray )
     }
 }
 
-void lcl_CondUpdateInsertTab( ScTokenArray& rCode, SCTAB nInsTab, SCTAB nPosTab, bool& rChanged, SCTAB nTabs )
+static void lcl_CondUpdateInsertTab( ScTokenArray& rCode, SCTAB nInsTab, SCTAB nPosTab, bool& rChanged, SCTAB nTabs )
 {
     //  Insert table: only update absolute table references.
     //  (Similar to ScCompiler::UpdateInsertTab with bIsName=true, result is the same as for named ranges)
@@ -595,7 +595,7 @@ void ScConditionEntry::UpdateMoveTab( SCTAB nOldPos, SCTAB nNewPos )
 
 //! als Vergleichsoperator ans TokenArray ???
 
-bool lcl_IsEqual( const ScTokenArray* pArr1, const ScTokenArray* pArr2 )
+static bool lcl_IsEqual( const ScTokenArray* pArr1, const ScTokenArray* pArr2 )
 {
     //  verglichen wird nur das nicht-UPN Array
 

@@ -152,7 +152,7 @@ sal_uInt8 GetCharTypeForCompression( xub_Unicode cChar )
     }
 }
 
-void lcl_DrawRedLines(
+static void lcl_DrawRedLines(
     OutputDevice* pOutDev,
     long nFontHeight,
     const Point& rPnt,
@@ -238,7 +238,7 @@ void lcl_DrawRedLines(
     }
 }
 
-Point lcl_ImplCalcRotatedPos( Point rPos, Point rOrigin, double nSin, double nCos )
+static Point lcl_ImplCalcRotatedPos( Point rPos, Point rOrigin, double nSin, double nCos )
 {
     Point aRotatedPos;
     // Translation...

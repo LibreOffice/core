@@ -208,7 +208,7 @@ void ScCornerButton::MouseButtonDown( const MouseEvent& rMEvt )
 
 //==================================================================
 
-bool lcl_HasColOutline( const ScViewData& rViewData )
+static bool lcl_HasColOutline( const ScViewData& rViewData )
 {
     const ScOutlineTable* pTable = rViewData.GetDocument()->GetOutlineTable(rViewData.GetTabNo());
     if (pTable)
@@ -220,7 +220,7 @@ bool lcl_HasColOutline( const ScViewData& rViewData )
     return false;
 }
 
-bool lcl_HasRowOutline( const ScViewData& rViewData )
+static bool lcl_HasRowOutline( const ScViewData& rViewData )
 {
     const ScOutlineTable* pTable = rViewData.GetDocument()->GetOutlineTable(rViewData.GetTabNo());
     if (pTable)
@@ -309,7 +309,7 @@ IMPL_LINK_NOARG(ScTabView, TimerHdl)
 
 // --- Resize ---------------------------------------------------------------------
 
-void lcl_SetPosSize( Window& rWindow, const Point& rPos, const Size& rSize,
+static void lcl_SetPosSize( Window& rWindow, const Point& rPos, const Size& rSize,
                         long nTotalWidth, bool bLayoutRTL )
 {
     Point aNewPos = rPos;
@@ -1400,7 +1400,7 @@ void ScTabView::ScrollLines( long nDeltaX, long nDeltaY )
         ScrollY(nDeltaY,WhichV(eWhich));
 }
 
-SCROW lcl_LastVisible( ScViewData& rViewData )
+static SCROW lcl_LastVisible( ScViewData& rViewData )
 {
     //  wenn am Dokumentende viele Zeilen ausgeblendet sind (welcher Trottel macht sowas?),
     //  soll dadurch nicht auf breite Zeilenkoepfe geschaltet werden
@@ -1983,7 +1983,7 @@ Point ScTabView::GetMousePosPixel()
     return aPos;
 }
 
-sal_Bool lcl_MouseIsOverWin( const Point& rScreenPosPixel, Window* pWin )
+static sal_Bool lcl_MouseIsOverWin( const Point& rScreenPosPixel, Window* pWin )
 {
     if (pWin)
     {

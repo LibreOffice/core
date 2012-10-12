@@ -620,7 +620,7 @@ void ScFormulaReferenceHelper::EnableSpreadsheets(sal_Bool bFlag, sal_Bool bChil
 
 
 
-void lcl_InvalidateWindows()
+static void lcl_InvalidateWindows()
 {
     TypeId aType(TYPE(ScDocShell));
     ScDocShell* pDocShell = (ScDocShell*)SfxObjectShell::GetFirst(&aType);
@@ -653,7 +653,7 @@ void lcl_InvalidateWindows()
 }
 //----------------------------------------------------------------------------
 
-void lcl_HideAllReferences()
+static void lcl_HideAllReferences()
 {
     TypeId aScType = TYPE(ScTabViewShell);
     SfxViewShell* pSh = SfxViewShell::GetFirst( &aScType );

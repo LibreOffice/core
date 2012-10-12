@@ -132,7 +132,7 @@ OUString Model::getDefaultServiceNameForNode( const XNode_t& xNode )
 }
 
 
-void lcl_OutPosition( OUStringBuffer& rBuffer,
+static void lcl_OutPosition( OUStringBuffer& rBuffer,
                       const Reference<XNode>& xNode )
 {
     OSL_ENSURE( xNode->getParentNode().is(), "need parent" );
@@ -167,7 +167,7 @@ void lcl_OutPosition( OUStringBuffer& rBuffer,
     }
 }
 
-void lcl_OutName( OUStringBuffer& rBuffer,
+static void lcl_OutName( OUStringBuffer& rBuffer,
                   const Reference<XNode>& xNode )
 {
     rBuffer.insert( 0, xNode->getNodeName() );
@@ -179,7 +179,7 @@ void lcl_OutName( OUStringBuffer& rBuffer,
     }
 }
 
-void lcl_OutInstance( OUStringBuffer& rBuffer,
+static void lcl_OutInstance( OUStringBuffer& rBuffer,
                       const Reference<XNode>& xNode,
                       Model* pModel )
 {
@@ -275,7 +275,7 @@ OUString Model::getDefaultBindingExpressionForNode( const XNode_t& xNode )
     return getDefaultBindingExpressionForNode( xNode, getEvaluationContext() );
 }
 
-bool lcl_isWhitespace( const OUString& rString )
+static bool lcl_isWhitespace( const OUString& rString )
 {
     sal_Int32 nLength = rString.getLength();
     const sal_Unicode* pStr = rString.getStr();
@@ -442,7 +442,7 @@ Model::XDocument_t Model::newInstance( const rtl::OUString& sName,
     return xInstance;
 }
 
-sal_Int32 lcl_findProp( const PropertyValue* pValues,
+static sal_Int32 lcl_findProp( const PropertyValue* pValues,
                         sal_Int32 nLength,
                         const rtl::OUString& rName )
 {
@@ -519,7 +519,7 @@ void Model::removeInstance( const rtl::OUString& sName )
         mpInstances->removeItem( mpInstances->getItem( nPos ) );
 }
 
-Reference<XNameContainer> lcl_getModels(
+static Reference<XNameContainer> lcl_getModels(
     const Reference<com::sun::star::frame::XModel>& xComponent )
 {
     Reference<XNameContainer> xRet;
@@ -769,7 +769,7 @@ void Model::removeBindingForNode( const XNode_t& )
     // determine whether suitable binding is still used
 }
 
-OUString lcl_serializeForDisplay( const Reference< XAttr >& _rxAttrNode )
+static OUString lcl_serializeForDisplay( const Reference< XAttr >& _rxAttrNode )
 {
     ::rtl::OUString sResult;
     OSL_ENSURE( _rxAttrNode.is(), "lcl_serializeForDisplay( attr ): invalid argument!" );
@@ -791,7 +791,7 @@ OUString lcl_serializeForDisplay( const Reference< XAttr >& _rxAttrNode )
     return sResult;
 }
 
-OUString lcl_serializeForDisplay( const Reference<XNodeList>& xNodes )
+static OUString lcl_serializeForDisplay( const Reference<XNodeList>& xNodes )
 {
     ::rtl::OUString sResult;
 
@@ -879,7 +879,7 @@ OUString lcl_serializeForDisplay( const Reference<XNodeList>& xNodes )
     return sResult;
 }
 
-OUString lcl_serializeForDisplay( const Reference<XXPathObject>& xResult )
+static OUString lcl_serializeForDisplay( const Reference<XXPathObject>& xResult )
 {
     // error handling first
     if( ! xResult.is() )

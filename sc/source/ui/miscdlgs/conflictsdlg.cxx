@@ -698,28 +698,28 @@ IMPL_LINK_NOARG(ScConflictsDlg, KeepAllOthersHandle)
     return 0;
 }
 
-void lcl_MoveControlX( Window& rWindow, long nDelta )
+static void lcl_MoveControlX( Window& rWindow, long nDelta )
 {
     Point aPos( rWindow.GetPosPixel() );
     aPos.X() += nDelta;
     rWindow.SetPosPixel( aPos );
 }
 
-void lcl_MoveControlY( Window& rWindow, long nDelta )
+static void lcl_MoveControlY( Window& rWindow, long nDelta )
 {
     Point aPos( rWindow.GetPosPixel() );
     aPos.Y() += nDelta;
     rWindow.SetPosPixel( aPos );
 }
 
-void lcl_ChangeControlWidth( Window& rWindow, long nDelta )
+static void lcl_ChangeControlWidth( Window& rWindow, long nDelta )
 {
     Size aSize( rWindow.GetSizePixel() );
     aSize.Width() += nDelta;
     rWindow.SetSizePixel( aSize );
 }
 
-void lcl_ChangeControlHeight( Window& rWindow, long nDelta )
+static void lcl_ChangeControlHeight( Window& rWindow, long nDelta )
 {
     Size aSize( rWindow.GetSizePixel() );
     aSize.Height() += nDelta;

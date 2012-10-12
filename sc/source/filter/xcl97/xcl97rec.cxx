@@ -678,7 +678,7 @@ void XclObjDropDown::WriteSubRecs( XclExpStream& rStrm )
 
 // --- class XclTxo --------------------------------------------------
 
-sal_uInt8 lcl_GetHorAlignFromItemSet( const SfxItemSet& rItemSet )
+static sal_uInt8 lcl_GetHorAlignFromItemSet( const SfxItemSet& rItemSet )
 {
     sal_uInt8 nHorAlign = EXC_OBJ_HOR_LEFT;
 
@@ -693,7 +693,7 @@ sal_uInt8 lcl_GetHorAlignFromItemSet( const SfxItemSet& rItemSet )
     return nHorAlign;
 }
 
-sal_uInt8 lcl_GetVerAlignFromItemSet( const SfxItemSet& rItemSet )
+static sal_uInt8 lcl_GetVerAlignFromItemSet( const SfxItemSet& rItemSet )
 {
     sal_uInt8 nVerAlign = EXC_OBJ_VER_TOP;
 

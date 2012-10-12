@@ -542,7 +542,7 @@ IMPL_LINK( SfxSaveTabPage, AutoClickHdl_Impl, CheckBox *, pBox )
     return 0;
 }
 
-OUString lcl_ExtracUIName(const Sequence<PropertyValue> rProperties)
+static OUString lcl_ExtracUIName(const Sequence<PropertyValue> rProperties)
 {
     OUString sRet;
     const PropertyValue* pProperties = rProperties.getConstArray();

@@ -473,7 +473,7 @@ void SAL_CALL ScVbaBorders::setColorIndex( const uno::Any& _colorindex ) throw (
     }
 }
 
-bool
+static bool
 lcl_areAllLineWidthsSame( const table::TableBorder& maTableBorder, bool bIsCell )
 {
 

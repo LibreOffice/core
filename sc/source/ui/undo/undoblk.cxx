@@ -1712,7 +1712,7 @@ sal_Bool ScUndoEnterMatrix::CanRepeat(SfxRepeatTarget& rTarget) const
     return (rTarget.ISA(ScTabViewTarget));
 }
 
-ScRange lcl_GetMultiMarkRange( const ScMarkData& rMark )
+static ScRange lcl_GetMultiMarkRange( const ScMarkData& rMark )
 {
     OSL_ENSURE( rMark.IsMultiMarked(), "wrong mark type" );
 
@@ -2078,7 +2078,7 @@ void ScUndoRemoveMerge::SetCurTab()
 }
 
 /** set only border, for ScRangeList (StarOne) */
-ScRange lcl_TotalRange( const ScRangeList& rRanges )
+static ScRange lcl_TotalRange( const ScRangeList& rRanges )
 {
     ScRange aTotal;
     if ( !rRanges.empty() )

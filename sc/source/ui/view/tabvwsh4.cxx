@@ -1139,7 +1139,7 @@ IMPL_LINK_NOARG(ScTabViewShell, SimpleRefClose)
 
 // handlers to call UNO listeners:
 
-ScTabViewObj* lcl_GetViewObj( ScTabViewShell& rShell )
+static ScTabViewObj* lcl_GetViewObj( ScTabViewShell& rShell )
 {
     ScTabViewObj* pRet = NULL;
     SfxViewFrame* pViewFrame = rShell.GetViewFrame();

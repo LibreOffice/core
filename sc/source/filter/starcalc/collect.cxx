@@ -43,7 +43,7 @@ ScDataObject::~ScDataObject()
 // Collection
 //------------------------------------------------------------------------
 
-void lcl_DeleteScDataObjects( ScDataObject** p, sal_uInt16 nCount )
+static void lcl_DeleteScDataObjects( ScDataObject** p, sal_uInt16 nCount )
 {
     if ( p )
     {

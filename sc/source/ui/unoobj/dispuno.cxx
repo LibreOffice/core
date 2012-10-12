@@ -50,7 +50,7 @@ static const char* cURLDocDataSource = ".uno:DataSourceBrowser/DocumentDataSourc
 
 //------------------------------------------------------------------------
 
-uno::Reference<view::XSelectionSupplier> lcl_GetSelectionSupplier( SfxViewShell* pViewShell )
+static uno::Reference<view::XSelectionSupplier> lcl_GetSelectionSupplier( SfxViewShell* pViewShell )
 {
     if ( pViewShell )
     {
@@ -256,7 +256,7 @@ void SAL_CALL ScDispatch::dispatch( const util::URL& aURL,
         throw uno::RuntimeException();
 }
 
-void lcl_FillDataSource( frame::FeatureStateEvent& rEvent, const ScImportParam& rParam )
+static void lcl_FillDataSource( frame::FeatureStateEvent& rEvent, const ScImportParam& rParam )
 {
     rEvent.IsEnabled = rParam.bImport;
 

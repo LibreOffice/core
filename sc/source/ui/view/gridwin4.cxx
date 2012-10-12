@@ -75,7 +75,7 @@
 
 //------------------------------------------------------------------------
 
-void lcl_LimitRect( Rectangle& rRect, const Rectangle& rVisible )
+static void lcl_LimitRect( Rectangle& rRect, const Rectangle& rVisible )
 {
     if ( rRect.Top()    < rVisible.Top()-1 )    rRect.Top()    = rVisible.Top()-1;
     if ( rRect.Bottom() > rVisible.Bottom()+1 ) rRect.Bottom() = rVisible.Bottom()+1;
@@ -85,7 +85,7 @@ void lcl_LimitRect( Rectangle& rRect, const Rectangle& rVisible )
     // Wenn's weit daneben liegt, wird lcl_DrawOneFrame erst gar nicht gerufen.
 }
 
-void lcl_DrawOneFrame( OutputDevice* pDev, const Rectangle& rInnerPixel,
+static void lcl_DrawOneFrame( OutputDevice* pDev, const Rectangle& rInnerPixel,
                         const String& rTitle, const Color& rColor, sal_Bool bTextBelow,
                         double nPPTX, double nPPTY, const Fraction& rZoomY,
                         ScDocument* pDoc, ScViewData* pButtonViewData, sal_Bool bLayoutRTL )
@@ -185,7 +185,7 @@ void lcl_DrawOneFrame( OutputDevice* pDev, const Rectangle& rInnerPixel,
     pDev->DrawRect( aOuter );
 }
 
-void lcl_DrawScenarioFrames( OutputDevice* pDev, ScViewData* pViewData, ScSplitPos eWhich,
+static void lcl_DrawScenarioFrames( OutputDevice* pDev, ScViewData* pViewData, ScSplitPos eWhich,
                             SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2 )
 {
     ScDocument* pDoc = pViewData->GetDocument();
@@ -262,7 +262,7 @@ void lcl_DrawScenarioFrames( OutputDevice* pDev, ScViewData* pViewData, ScSplitP
 
 //------------------------------------------------------------------------
 
-void lcl_DrawHighlight( ScOutputData& rOutputData, ScViewData* pViewData,
+static void lcl_DrawHighlight( ScOutputData& rOutputData, ScViewData* pViewData,
                         const std::vector<ScHighlightEntry>& rHighlightRanges )
 {
     SCTAB nTab = pViewData->GetTabNo();

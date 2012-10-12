@@ -152,7 +152,7 @@ OfaAutoCorrDlg::OfaAutoCorrDlg(Window* pParent, const SfxItemSet* _pSet ) :
         SetCurPageId( RID_OFAPAGE_SMARTTAG_OPTIONS );
 }
 
-sal_Bool lcl_FindEntry( ListBox& rLB, const String& rEntry,
+static sal_Bool lcl_FindEntry( ListBox& rLB, const String& rEntry,
                     CollatorWrapper& rCmpClass )
 {
     sal_uInt16 nCount = rLB.GetEntryCount();
@@ -1342,7 +1342,7 @@ IMPL_LINK(OfaAutocorrReplacePage, ModifyHdl, Edit*, pEdt)
     return 0;
 }
 
-sal_Bool lcl_FindInArray(std::vector<rtl::OUString>& rStrings, const String& rString)
+static sal_Bool lcl_FindInArray(std::vector<rtl::OUString>& rStrings, const String& rString)
 {
     for(std::vector<rtl::OUString>::iterator i = rStrings.begin(); i != rStrings.end(); ++i)
     {

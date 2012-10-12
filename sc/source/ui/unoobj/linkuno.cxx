@@ -60,7 +60,7 @@ using ::std::vector;
 //------------------------------------------------------------------------
 
 //  fuer Sheet- und Area-Links benutzt:
-const SfxItemPropertyMapEntry* lcl_GetSheetLinkMap()
+static const SfxItemPropertyMapEntry* lcl_GetSheetLinkMap()
 {
     static SfxItemPropertyMapEntry aSheetLinkMap_Impl[] =
     {
@@ -591,7 +591,7 @@ uno::Sequence<rtl::OUString> SAL_CALL ScSheetLinksObj::getElementNames() throw(u
 
 //------------------------------------------------------------------------
 
-ScAreaLink* lcl_GetAreaLink( ScDocShell* pDocShell, sal_uInt16 nPos )
+static ScAreaLink* lcl_GetAreaLink( ScDocShell* pDocShell, sal_uInt16 nPos )
 {
     if (pDocShell)
     {
@@ -1090,7 +1090,7 @@ void ScDDELinkObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 
 // XNamed
 
-String lcl_BuildDDEName( const String& rAppl, const String& rTopic, const String& rItem )
+static String lcl_BuildDDEName( const String& rAppl, const String& rTopic, const String& rItem )
 {
     //  Appl|Topic!Item (wie Excel)
     String aRet = rAppl;

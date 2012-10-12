@@ -69,7 +69,7 @@ static OString lcl_DateTimeToOString( const DateTime& rDateTime )
 //___________________________________________________________________
 // local functions
 
-void lcl_WriteDateTime( XclExpStream& rStrm, const DateTime& rDateTime )
+static void lcl_WriteDateTime( XclExpStream& rStrm, const DateTime& rDateTime )
 {
     rStrm.SetSliceSize( 7 );
     rStrm   << (sal_uInt16) rDateTime.GetYear()
@@ -83,7 +83,7 @@ void lcl_WriteDateTime( XclExpStream& rStrm, const DateTime& rDateTime )
 
 // write string and fill rest of <nLength> with zero bytes
 // <nLength> is without string header
-void lcl_WriteFixedString( XclExpStream& rStrm, const XclExpString& rString, sal_Size nLength )
+static void lcl_WriteFixedString( XclExpStream& rStrm, const XclExpString& rString, sal_Size nLength )
 {
     sal_Size nStrBytes = rString.GetBufferSize();
     OSL_ENSURE( nLength >= nStrBytes, "lcl_WriteFixedString - String too long" );
@@ -93,13 +93,13 @@ void lcl_WriteFixedString( XclExpStream& rStrm, const XclExpString& rString, sal
         rStrm.WriteZeroBytes( nLength - nStrBytes );
 }
 
-inline void lcl_GenerateGUID( sal_uInt8* pGUID, sal_Bool& rValidGUID )
+static inline void lcl_GenerateGUID( sal_uInt8* pGUID, sal_Bool& rValidGUID )
 {
     rtl_createUuid( pGUID, rValidGUID ? pGUID : NULL, false );
     rValidGUID = sal_True;
 }
 
-inline void lcl_WriteGUID( XclExpStream& rStrm, const sal_uInt8* pGUID )
+static inline void lcl_WriteGUID( XclExpStream& rStrm, const sal_uInt8* pGUID )
 {
     rStrm.SetSliceSize( 16 );
     for( sal_Size nIndex = 0; nIndex < 16; nIndex++ )

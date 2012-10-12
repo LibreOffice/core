@@ -78,7 +78,7 @@ void XMLTableShapeImportHelper::SetLayer(uno::Reference<drawing::XShape>& rShape
 
 // Attempt to find the topmost parent of the group, this is the one we apply
 // offsets to
-uno::Reference< drawing::XShape > lcl_getTopLevelParent( const uno::Reference< drawing::XShape >& rShape )
+static uno::Reference< drawing::XShape > lcl_getTopLevelParent( const uno::Reference< drawing::XShape >& rShape )
 {
     uno::Reference< container::XChild > xChild( rShape, uno::UNO_QUERY );
     uno::Reference< drawing::XShape > xParent( xChild->getParent(), uno::UNO_QUERY );

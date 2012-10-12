@@ -1615,7 +1615,7 @@ void ScModule::SetRefDialog( sal_uInt16 nId, sal_Bool bVis, SfxViewFrame* pViewF
     }
 }
 
-SfxChildWindow* lcl_GetChildWinFromAnyView( sal_uInt16 nId )
+static SfxChildWindow* lcl_GetChildWinFromAnyView( sal_uInt16 nId )
 {
     //  first try the current view
 
@@ -1747,7 +1747,7 @@ sal_Bool ScModule::IsFormulaMode()
     return bIsFormula;
 }
 
-void lcl_MarkedTabs( const ScMarkData& rMark, SCTAB& rStartTab, SCTAB& rEndTab )
+static void lcl_MarkedTabs( const ScMarkData& rMark, SCTAB& rStartTab, SCTAB& rEndTab )
 {
     if (rMark.GetSelectCount() > 1)
     {
@@ -1862,7 +1862,7 @@ void ScModule::AnythingChanged()
     nIdleCount = 0;
 }
 
-void lcl_CheckNeedsRepaint( ScDocShell* pDocShell )
+static void lcl_CheckNeedsRepaint( ScDocShell* pDocShell )
 {
     SfxViewFrame* pFrame = SfxViewFrame::GetFirst( pDocShell );
     while ( pFrame )

@@ -479,7 +479,7 @@ Reference< XResultSetMetaData > ORowSetCache::getMetaData(  )
     return m_xMetaData;
 }
 
-Any lcl_getBookmark(ORowSetValue& i_aValue,OCacheSet* i_pCacheSet)
+static Any lcl_getBookmark(ORowSetValue& i_aValue,OCacheSet* i_pCacheSet)
 {
     switch ( i_aValue.getTypeKind() )
     {

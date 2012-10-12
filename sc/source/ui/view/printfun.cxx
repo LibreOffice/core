@@ -172,7 +172,7 @@ size_t ScPageRowEntry::CountVisible() const
 
 //------------------------------------------------------------------------
 
-long lcl_LineTotal(const ::editeng::SvxBorderLine* pLine)
+static long lcl_LineTotal(const ::editeng::SvxBorderLine* pLine)
 {
     return pLine ? ( pLine->GetOutWidth() + pLine->GetInWidth() + pLine->GetDistance() ) : 0;
 }
@@ -370,7 +370,7 @@ void ScPrintFunc::SetDrawView( FmFormView* pNew )
     pDrawView = pNew;
 }
 
-void lcl_HidePrint( ScTableInfo& rTabInfo, SCCOL nX1, SCCOL nX2 )
+static void lcl_HidePrint( ScTableInfo& rTabInfo, SCCOL nX1, SCCOL nX2 )
 {
     for (SCSIZE nArrY=1; nArrY+1<rTabInfo.mnArrCount; nArrY++)
     {
@@ -597,7 +597,7 @@ void ScPrintFunc::DrawToDev( ScDocument* pDoc, OutputDevice* pDev, double /* nPr
 //          Drucken
 //
 
-void lcl_FillHFParam( ScPrintHFParam& rParam, const SfxItemSet* pHFSet )
+static void lcl_FillHFParam( ScPrintHFParam& rParam, const SfxItemSet* pHFSet )
 {
     //  nDistance muss vorher unterschiedlich initalisiert sein
 
@@ -1075,7 +1075,7 @@ void ScPrintFunc::SetDateTime( const Date& rDate, const Time& rTime )
     aFieldData.aTime = rTime;
 }
 
-void lcl_DrawGraphic( const Graphic &rGraphic, OutputDevice *pOut,
+static void lcl_DrawGraphic( const Graphic &rGraphic, OutputDevice *pOut,
                       const Rectangle &rGrf, const Rectangle &rOut )
 {
     const bool bNotInside = !rOut.IsInside( rGrf );
@@ -1091,7 +1091,7 @@ void lcl_DrawGraphic( const Graphic &rGraphic, OutputDevice *pOut,
         pOut->Pop();
 }
 
-void lcl_DrawGraphic( const SvxBrushItem &rBrush, OutputDevice *pOut, OutputDevice* pRefDev,
+static void lcl_DrawGraphic( const SvxBrushItem &rBrush, OutputDevice *pOut, OutputDevice* pRefDev,
                         const Rectangle &rOrg, const Rectangle &rOut )
 {
     Size aGrfSize(0,0);
@@ -2911,7 +2911,7 @@ void ScPrintFunc::ResetBreaks( SCTAB nTab )         // Breaks fuer Anzeige richt
     pDoc->UpdatePageBreaks( nTab, NULL );
 }
 
-void lcl_SetHidden( ScDocument* pDoc, SCTAB nPrintTab, ScPageRowEntry& rPageRowEntry,
+static void lcl_SetHidden( ScDocument* pDoc, SCTAB nPrintTab, ScPageRowEntry& rPageRowEntry,
                     SCCOL nStartCol, const SCCOL* pPageEndX )
 {
     size_t nPagesX   = rPageRowEntry.GetPagesX();

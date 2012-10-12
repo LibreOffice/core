@@ -102,7 +102,7 @@ void SC_DLLPUBLIC ScLimitSizeOnDrawPage( Size& rSize, Point& rPos, const Size& r
 
 //------------------------------------------------------------------------
 
-void lcl_InsertGraphic( const Graphic& rGraphic,
+static void lcl_InsertGraphic( const Graphic& rGraphic,
                         const String& rFileName, const String& rFilterName, sal_Bool bAsLink, sal_Bool bApi,
                         ScTabViewShell* pViewSh, Window* pWindow, SdrView* pView )
 {
@@ -160,7 +160,7 @@ void lcl_InsertGraphic( const Graphic& rGraphic,
 
 //------------------------------------------------------------------------
 
-void lcl_InsertMedia( const ::rtl::OUString& rMediaURL, bool bApi,
+static void lcl_InsertMedia( const ::rtl::OUString& rMediaURL, bool bApi,
                       ScTabViewShell* pViewSh, Window* pWindow, SdrView* pView,
                       const Size& rPrefSize, bool const bLink )
 {

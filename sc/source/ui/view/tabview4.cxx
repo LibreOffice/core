@@ -358,7 +358,7 @@ long ScTabView::GetScrollBarPos( ScrollBar& rScroll, bool bLayoutRTL )
 
 //  UpdateScrollBars - sichtbaren Bereich und Scrollweite der Scrollbars einstellen
 
-long lcl_UpdateBar( ScrollBar& rScroll, SCCOLROW nSize )        // Size = (komplette) Zellen
+static long lcl_UpdateBar( ScrollBar& rScroll, SCCOLROW nSize )        // Size = (komplette) Zellen
 {
     long nOldPos;
     long nNewPos;
@@ -373,7 +373,7 @@ long lcl_UpdateBar( ScrollBar& rScroll, SCCOLROW nSize )        // Size = (kompl
     return nNewPos - nOldPos;
 }
 
-long lcl_GetScrollRange( SCCOLROW nDocEnd, SCCOLROW nPos, SCCOLROW nVis, SCCOLROW nMax, SCCOLROW nStart )
+static long lcl_GetScrollRange( SCCOLROW nDocEnd, SCCOLROW nPos, SCCOLROW nVis, SCCOLROW nMax, SCCOLROW nStart )
 {
     // get the end (positive) of a scroll bar range that always starts at 0
 

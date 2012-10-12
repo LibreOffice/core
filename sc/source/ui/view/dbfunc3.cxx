@@ -566,7 +566,7 @@ void ScDBFunc::Consolidate( const ScConsolidateParam& rParam, sal_Bool bRecord )
 //          Pivot
 //
 
-String lcl_MakePivotTabName( const String& rPrefix, SCTAB nNumber )
+static String lcl_MakePivotTabName( const String& rPrefix, SCTAB nNumber )
 {
     String aName = rPrefix;
     aName += String::CreateFromInt32( nNumber );
@@ -1651,7 +1651,7 @@ void ScDBFunc::DataPilotInput( const ScAddress& rPos, const rtl::OUString& rStri
     }
 }
 
-void lcl_MoveToEnd( ScDPSaveDimension& rDim, const String& rItemName )
+static void lcl_MoveToEnd( ScDPSaveDimension& rDim, const String& rItemName )
 {
     ScDPSaveMember* pNewMember = NULL;
     const ScDPSaveMember* pOldMember = rDim.GetExistingMemberByName( rItemName );

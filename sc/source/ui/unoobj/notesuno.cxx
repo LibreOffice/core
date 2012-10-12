@@ -63,7 +63,7 @@ using namespace com::sun::star;
 
 //------------------------------------------------------------------------
 
-const SvxItemPropertySet* lcl_GetAnnotationPropertySet()
+static const SvxItemPropertySet* lcl_GetAnnotationPropertySet()
 {
     static SfxItemPropertyMapEntry aAnnotationPropertyMap_Impl[] =
     {

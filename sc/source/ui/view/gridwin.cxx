@@ -343,7 +343,7 @@ Window* ScFilterFloatingWindow::GetPreferredKeyInputWindow()
 
 // ============================================================================
 
-sal_Bool lcl_IsEditableMatrix( ScDocument* pDoc, const ScRange& rRange )
+static sal_Bool lcl_IsEditableMatrix( ScDocument* pDoc, const ScRange& rRange )
 {
     //  wenn es ein editierbarer Bereich ist, und rechts unten eine Matrix-Zelle
     //  mit Origin links oben liegt, enthaelt der Bereich genau die Matrix.
@@ -360,7 +360,7 @@ sal_Bool lcl_IsEditableMatrix( ScDocument* pDoc, const ScRange& rRange )
 
 }
 
-void lcl_UnLockComment( ScDrawView* pView, SdrPageView* pPV, SdrModel* pDrDoc, const Point& rPos, ScViewData* pViewData )
+static void lcl_UnLockComment( ScDrawView* pView, SdrPageView* pPV, SdrModel* pDrDoc, const Point& rPos, ScViewData* pViewData )
 {
     if (!pView && !pPV && !pDrDoc && !pViewData)
         return;
@@ -379,7 +379,7 @@ void lcl_UnLockComment( ScDrawView* pView, SdrPageView* pPV, SdrModel* pDrDoc, c
     }
 }
 
-sal_Bool lcl_GetHyperlinkCell(ScDocument* pDoc, SCCOL& rPosX, SCROW& rPosY, SCTAB nTab, ScBaseCell*& rpCell )
+static sal_Bool lcl_GetHyperlinkCell(ScDocument* pDoc, SCCOL& rPosX, SCROW& rPosY, SCTAB nTab, ScBaseCell*& rpCell )
 {
     sal_Bool bFound = false;
     do
@@ -2664,7 +2664,7 @@ void ScGridWindow::MouseMove( const MouseEvent& rMEvt )
         return;
 }
 
-void lcl_InitMouseEvent( ::com::sun::star::awt::MouseEvent& rEvent, const MouseEvent& rEvt )
+static void lcl_InitMouseEvent( ::com::sun::star::awt::MouseEvent& rEvent, const MouseEvent& rEvt )
 {
     rEvent.Modifiers = 0;
     if ( rEvt.IsShift() )
@@ -2839,7 +2839,7 @@ void ScGridWindow::StartDrag( sal_Int8 /* nAction */, const Point& rPosPixel )
             pViewData->GetView()->GetSelEngine()->Command( aDragEvent );
 }
 
-void lcl_SetTextCursorPos( ScViewData* pViewData, ScSplitPos eWhich, Window* pWin )
+static void lcl_SetTextCursorPos( ScViewData* pViewData, ScSplitPos eWhich, Window* pWin )
 {
     SCCOL nCol = pViewData->GetCurX();
     SCROW nRow = pViewData->GetCurY();
@@ -3437,7 +3437,7 @@ bool ScGridWindow::DropScroll( const Point& rMousePos )
     return false;
 }
 
-sal_Bool lcl_TestScenarioRedliningDrop( ScDocument* pDoc, const ScRange& aDragRange)
+static sal_Bool lcl_TestScenarioRedliningDrop( ScDocument* pDoc, const ScRange& aDragRange)
 {
     //  Testet, ob bei eingeschalteten RedLining,
     //  bei einem Drop ein Scenario betroffen ist.
@@ -3467,7 +3467,7 @@ sal_Bool lcl_TestScenarioRedliningDrop( ScDocument* pDoc, const ScRange& aDragRa
     return bReturn;
 }
 
-ScRange lcl_MakeDropRange( SCCOL nPosX, SCROW nPosY, SCTAB nTab, const ScRange& rSource )
+static ScRange lcl_MakeDropRange( SCCOL nPosX, SCROW nPosY, SCTAB nTab, const ScRange& rSource )
 {
     SCCOL nCol1 = nPosX;
     SCCOL nCol2 = nCol1 + ( rSource.aEnd.Col() - rSource.aStart.Col() );
@@ -3867,7 +3867,7 @@ sal_Int8 ScGridWindow::AcceptDrop( const AcceptDropEvent& rEvt )
     return nRet;
 }
 
-sal_uLong lcl_GetDropFormatId( const uno::Reference<datatransfer::XTransferable>& xTransfer, bool bPreferText = false )
+static sal_uLong lcl_GetDropFormatId( const uno::Reference<datatransfer::XTransferable>& xTransfer, bool bPreferText = false )
 {
     TransferableDataHelper aDataHelper( xTransfer );
 
@@ -3952,7 +3952,7 @@ sal_uLong lcl_GetDropFormatId( const uno::Reference<datatransfer::XTransferable>
     return nFormatId;
 }
 
-sal_uLong lcl_GetDropLinkId( const uno::Reference<datatransfer::XTransferable>& xTransfer )
+static sal_uLong lcl_GetDropLinkId( const uno::Reference<datatransfer::XTransferable>& xTransfer )
 {
     TransferableDataHelper aDataHelper( xTransfer );
 
@@ -4818,7 +4818,7 @@ bool ScGridWindow::HitRangeFinder( const Point& rMouse, bool& rCorner,
 #define SCE_RIGHT   8
 #define SCE_ALL     15
 
-void lcl_PaintOneRange( ScDocShell* pDocSh, const ScRange& rRange, sal_uInt16 nEdges )
+static void lcl_PaintOneRange( ScDocShell* pDocSh, const ScRange& rRange, sal_uInt16 nEdges )
 {
     //  der Range ist immer richtigherum
 
@@ -4877,7 +4877,7 @@ void lcl_PaintOneRange( ScDocShell* pDocSh, const ScRange& rRange, sal_uInt16 nE
         pDocSh->PostPaint( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2, PAINT_MARKS );
 }
 
-void lcl_PaintRefChanged( ScDocShell* pDocSh, const ScRange& rOldUn, const ScRange& rNewUn )
+static void lcl_PaintRefChanged( ScDocShell* pDocSh, const ScRange& rOldUn, const ScRange& rNewUn )
 {
     //  Repaint fuer die Teile des Rahmens in Old, die bei New nicht mehr da sind
 

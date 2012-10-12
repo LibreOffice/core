@@ -120,7 +120,7 @@ IMPL_LINK_NOARG(ScNoteMarker, TimeHdl)
     return 0;
 }
 
-void lcl_DrawWin( SdrObject* pObject, Window* pWindow, const MapMode& rMap )
+static void lcl_DrawWin( SdrObject* pObject, Window* pWindow, const MapMode& rMap )
 {
     MapMode aOld = pWindow->GetMapMode();
     pWindow->SetMapMode( rMap );
@@ -138,7 +138,7 @@ void lcl_DrawWin( SdrObject* pObject, Window* pWindow, const MapMode& rMap )
     pWindow->SetMapMode( aOld );
 }
 
-MapMode lcl_MoveMapMode( const MapMode& rMap, const Size& rMove )
+static MapMode lcl_MoveMapMode( const MapMode& rMap, const Size& rMove )
 {
     MapMode aNew = rMap;
     Point aOrigin = aNew.GetOrigin();

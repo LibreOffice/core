@@ -186,13 +186,13 @@ inline void ReverseTwipsToMM( long& nVal )
     nVal = HmmToTwips (nVal);
 }
 
-void lcl_ReverseTwipsToMM( Point& rPoint )
+static void lcl_ReverseTwipsToMM( Point& rPoint )
 {
     ReverseTwipsToMM( rPoint.X() );
     ReverseTwipsToMM( rPoint.Y() );
 }
 
-void lcl_ReverseTwipsToMM( Rectangle& rRect )
+static void lcl_ReverseTwipsToMM( Rectangle& rRect )
 {
     ReverseTwipsToMM( rRect.Left() );
     ReverseTwipsToMM( rRect.Right() );
@@ -1281,7 +1281,7 @@ void ScDrawLayer::CopyToClip( ScDocument* pClipDoc, SCTAB nTab, const Rectangle&
     }
 }
 
-sal_Bool lcl_IsAllInRange( const ::std::vector< ScRangeList >& rRangesVector, const ScRange& rClipRange )
+static sal_Bool lcl_IsAllInRange( const ::std::vector< ScRangeList >& rRangesVector, const ScRange& rClipRange )
 {
     //  check if every range of rRangesVector is completely in rClipRange
 
@@ -1302,7 +1302,7 @@ sal_Bool lcl_IsAllInRange( const ::std::vector< ScRangeList >& rRangesVector, co
     return sal_True;            // everything is fine
 }
 
-sal_Bool lcl_MoveRanges( ::std::vector< ScRangeList >& rRangesVector, const ScRange& rSourceRange, const ScAddress& rDestPos )
+static sal_Bool lcl_MoveRanges( ::std::vector< ScRangeList >& rRangesVector, const ScRange& rSourceRange, const ScAddress& rDestPos )
 {
     sal_Bool bChanged = false;
 

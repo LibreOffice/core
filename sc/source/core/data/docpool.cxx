@@ -679,7 +679,7 @@ SfxItemPool* ScDocumentPool::Clone() const
     return new SfxItemPool (*this, sal_True);
 }
 
-SfxItemPresentation lcl_HFPresentation
+static SfxItemPresentation lcl_HFPresentation
 (
     const SfxPoolItem&  rItem,
     SfxItemPresentation ePresentation,

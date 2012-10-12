@@ -56,7 +56,7 @@ using namespace com::sun::star::util;
 
 using namespace std;
 
-bool lcl_I18nCompareString(const rtl::OUString& rStr1, const rtl::OUString& rStr2)
+static bool lcl_I18nCompareString(const rtl::OUString& rStr1, const rtl::OUString& rStr2)
 {
     const vcl::I18nHelper& rI18nHelper = Application::GetSettings().GetUILocaleI18nHelper();
     return rI18nHelper.CompareString( rStr1, rStr2 ) < 0 ? true : false;

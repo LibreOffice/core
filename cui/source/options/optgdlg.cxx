@@ -1359,7 +1359,7 @@ SfxTabPage* OfaLanguagesTabPage::Create( Window* pParent, const SfxItemSet& rAtt
     return new OfaLanguagesTabPage(pParent, rAttrSet);
 }
 
-LanguageType lcl_LangStringToLangType(const OUString& rLang)
+static LanguageType lcl_LangStringToLangType(const OUString& rLang)
 {
     Locale aLocale;
     sal_Int32 nSep = rLang.indexOf('-');
@@ -1375,7 +1375,7 @@ LanguageType lcl_LangStringToLangType(const OUString& rLang)
     return eLangType;
 }
 
-void lcl_UpdateAndDelete(SfxVoidItem* pInvalidItems[], SfxBoolItem* pBoolItems[], sal_uInt16 nCount)
+static void lcl_UpdateAndDelete(SfxVoidItem* pInvalidItems[], SfxBoolItem* pBoolItems[], sal_uInt16 nCount)
 {
     SfxViewFrame* pCurrentFrm = SfxViewFrame::Current();
     SfxViewFrame* pViewFrm = SfxViewFrame::GetFirst();

@@ -658,7 +658,7 @@ void ScDrawTransferObj::SetDrawPersist( const SfxObjectShellRef& rRef )
     aDrawPersistRef = rRef;
 }
 
-void lcl_InitMarks( SdrMarkView& rDest, const SdrMarkView& rSource, SCTAB nTab )
+static void lcl_InitMarks( SdrMarkView& rDest, const SdrMarkView& rSource, SCTAB nTab )
 {
     rDest.ShowSdrPage(rDest.GetModel()->GetPage(nTab));
     SdrPageView* pDestPV = rDest.GetSdrPageView();

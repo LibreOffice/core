@@ -3077,7 +3077,7 @@ void ScInterpreter::ScMissing()
 
 #ifndef DISABLE_SCRIPTING
 
-uno::Any lcl_getSheetModule( const uno::Reference<table::XCellRange>& xCellRange, ScDocument* pDok )
+static uno::Any lcl_getSheetModule( const uno::Reference<table::XCellRange>& xCellRange, ScDocument* pDok )
 {
     uno::Reference< sheet::XSheetCellRange > xSheetRange( xCellRange, uno::UNO_QUERY_THROW );
     uno::Reference< beans::XPropertySet > xProps( xSheetRange->getSpreadsheet(), uno::UNO_QUERY_THROW );
@@ -3107,7 +3107,7 @@ uno::Any lcl_getSheetModule( const uno::Reference<table::XCellRange>& xCellRange
     return uno::makeAny( xIf );
 }
 
-bool
+static bool
 lcl_setVBARange( ScRange& aRange, ScDocument* pDok, SbxVariable* pPar )
 {
     bool bOk = false;

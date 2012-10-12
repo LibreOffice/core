@@ -882,7 +882,7 @@ void ScColumn::MixMarked( const ScMarkData& rMark, sal_uInt16 nFunction,
 
 //  Ergebnis in rVal1
 
-sal_Bool lcl_DoFunction( double& rVal1, double nVal2, sal_uInt16 nFunction )
+static sal_Bool lcl_DoFunction( double& rVal1, double nVal2, sal_uInt16 nFunction )
 {
     sal_Bool bOk = false;
     switch (nFunction)
@@ -905,7 +905,7 @@ sal_Bool lcl_DoFunction( double& rVal1, double nVal2, sal_uInt16 nFunction )
 }
 
 
-void lcl_AddCode( ScTokenArray& rArr, ScFormulaCell* pCell )
+static void lcl_AddCode( ScTokenArray& rArr, ScFormulaCell* pCell )
 {
     rArr.AddOpCode(ocOpen);
 

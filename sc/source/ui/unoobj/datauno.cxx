@@ -70,7 +70,7 @@ using namespace com::sun::star;
 
 //  alles ohne Which-ID, Map nur fuer PropertySetInfo
 
-const SfxItemPropertyMapEntry* lcl_GetSubTotalPropertyMap()
+static const SfxItemPropertyMapEntry* lcl_GetSubTotalPropertyMap()
 {
     // some old property names are for 5.2 compatibility
 
@@ -93,7 +93,7 @@ const SfxItemPropertyMapEntry* lcl_GetSubTotalPropertyMap()
     return aSubTotalPropertyMap_Impl;
 }
 
-const SfxItemPropertyMapEntry* lcl_GetFilterPropertyMap()
+static const SfxItemPropertyMapEntry* lcl_GetFilterPropertyMap()
 {
     static SfxItemPropertyMapEntry aFilterPropertyMap_Impl[] =
     {
@@ -111,7 +111,7 @@ const SfxItemPropertyMapEntry* lcl_GetFilterPropertyMap()
     return aFilterPropertyMap_Impl;
 }
 
-const SfxItemPropertyMapEntry* lcl_GetDBRangePropertyMap()
+static const SfxItemPropertyMapEntry* lcl_GetDBRangePropertyMap()
 {
     static SfxItemPropertyMapEntry aDBRangePropertyMap_Impl[] =
     {

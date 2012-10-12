@@ -82,7 +82,7 @@ extern sal_uInt16 nScFillModeMouseModifier;     // global.cxx
 
 // -----------------------------------------------------------------------
 
-short lcl_DecompValueString( String& aValue, sal_Int32& nVal, sal_uInt16* pMinDigits = NULL )
+static short lcl_DecompValueString( String& aValue, sal_Int32& nVal, sal_uInt16* pMinDigits = NULL )
 {
     if ( !aValue.Len() )
     {
@@ -137,7 +137,7 @@ short lcl_DecompValueString( String& aValue, sal_Int32& nVal, sal_uInt16* pMinDi
     return 0;
 }
 
-String lcl_ValueString( sal_Int32 nValue, sal_uInt16 nMinDigits )
+static String lcl_ValueString( sal_Int32 nValue, sal_uInt16 nMinDigits )
 {
     if ( nMinDigits <= 1 )
         return String::CreateFromInt32( nValue );           // simple case...

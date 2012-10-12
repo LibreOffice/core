@@ -189,23 +189,23 @@ const double fExtraWidth = 182.0 / 256.0;
 //    * 1 point = 1/72 inch = 20 twips
 //    * 1 inch = 72 points = 1440 twips
 //    * 1 cm = 567 twips
-double lcl_hmmToPoints( double nVal ) { return ( (double)((nVal /1000 ) * 567 ) / 20 ); }
+static double lcl_hmmToPoints( double nVal ) { return ( (double)((nVal /1000 ) * 567 ) / 20 ); }
 
 static const sal_Int16 supportedIndexTable[] = {  excel::XlBordersIndex::xlEdgeLeft, excel::XlBordersIndex::xlEdgeTop, excel::XlBordersIndex::xlEdgeBottom, excel::XlBordersIndex::xlEdgeRight, excel::XlBordersIndex::xlDiagonalDown, excel::XlBordersIndex::xlDiagonalUp, excel::XlBordersIndex::xlInsideVertical, excel::XlBordersIndex::xlInsideHorizontal };
 
-sal_uInt16 lcl_pointsToTwips( double nVal )
+static sal_uInt16 lcl_pointsToTwips( double nVal )
 {
     nVal = nVal * static_cast<double>(20);
     short nTwips = static_cast<short>(nVal);
     return nTwips;
 }
-double lcl_TwipsToPoints( sal_uInt16 nVal )
+static double lcl_TwipsToPoints( sal_uInt16 nVal )
 {
     double nPoints = nVal;
     return nPoints / 20;
 }
 
-double lcl_Round2DecPlaces( double nVal )
+static double lcl_Round2DecPlaces( double nVal )
 {
     nVal  = (nVal * (double)100);
     long tmp = static_cast<long>(nVal);
@@ -216,13 +216,13 @@ double lcl_Round2DecPlaces( double nVal )
     return nVal;
 }
 
-uno::Any lcl_makeRange( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Any aAny, bool bIsRows, bool bIsColumns )
+static uno::Any lcl_makeRange( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Any aAny, bool bIsRows, bool bIsColumns )
 {
     uno::Reference< table::XCellRange > xCellRange( aAny, uno::UNO_QUERY_THROW );
     return uno::makeAny( uno::Reference< excel::XRange >( new ScVbaRange( xParent, xContext, xCellRange, bIsRows, bIsColumns ) ) );
 }
 
-uno::Reference< excel::XRange > lcl_makeXRangeFromSheetCellRanges( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< sheet::XSheetCellRanges >& xLocSheetCellRanges, ScDocShell* pDoc )
+static uno::Reference< excel::XRange > lcl_makeXRangeFromSheetCellRanges( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< sheet::XSheetCellRanges >& xLocSheetCellRanges, ScDocShell* pDoc )
 {
     uno::Reference< excel::XRange > xRange;
     uno::Sequence< table::CellRangeAddress  > sAddresses = xLocSheetCellRanges->getRangeAddresses();
@@ -1423,7 +1423,7 @@ table::CellRangeAddress getCellRangeAddressForVBARange( const uno::Any& aParam, 
     return lclGetRangeAddress( xRangeParam );
 }
 
-uno::Reference< XCollection >
+static uno::Reference< XCollection >
 lcl_setupBorders( const uno::Reference< excel::XRange >& xParentRange, const uno::Reference<uno::XComponentContext>& xContext,  const uno::Reference< table::XCellRange >& xRange  ) throw( uno::RuntimeException )
 {
     uno::Reference< XHelperInterface > xParent( xParentRange, uno::UNO_QUERY_THROW );
@@ -4198,7 +4198,7 @@ ScVbaRange::ApplicationRange( const uno::Reference< uno::XComponentContext >& xC
 }
 
 // Helper functions for AutoFilter
-ScDBData* lcl_GetDBData_Impl( ScDocShell* pDocShell, sal_Int16 nSheet )
+static ScDBData* lcl_GetDBData_Impl( ScDocShell* pDocShell, sal_Int16 nSheet )
 {
     ScDBData* pRet = NULL;
     if (pDocShell)
@@ -4208,7 +4208,7 @@ ScDBData* lcl_GetDBData_Impl( ScDocShell* pDocShell, sal_Int16 nSheet )
     return pRet;
 }
 
-void lcl_SelectAll( ScDocShell* pDocShell, ScQueryParam& aParam )
+static void lcl_SelectAll( ScDocShell* pDocShell, ScQueryParam& aParam )
 {
     if ( pDocShell )
     {
@@ -4221,7 +4221,7 @@ void lcl_SelectAll( ScDocShell* pDocShell, ScQueryParam& aParam )
     }
 }
 
-ScQueryParam lcl_GetQueryParam( ScDocShell* pDocShell, sal_Int16 nSheet )
+static ScQueryParam lcl_GetQueryParam( ScDocShell* pDocShell, sal_Int16 nSheet )
 {
     ScDBData* pDBData = lcl_GetDBData_Impl( pDocShell, nSheet );
     ScQueryParam aParam;
@@ -4232,7 +4232,7 @@ ScQueryParam lcl_GetQueryParam( ScDocShell* pDocShell, sal_Int16 nSheet )
     return aParam;
 }
 
-void lcl_SetAllQueryForField( ScDocShell* pDocShell, SCCOLROW nField, sal_Int16 nSheet )
+static void lcl_SetAllQueryForField( ScDocShell* pDocShell, SCCOLROW nField, sal_Int16 nSheet )
 {
     ScQueryParam aParam = lcl_GetQueryParam( pDocShell, nSheet );
     aParam.RemoveEntryByField(nField);
@@ -4240,7 +4240,7 @@ void lcl_SetAllQueryForField( ScDocShell* pDocShell, SCCOLROW nField, sal_Int16 
 }
 
 // Modifies sCriteria, and nOp depending on the value of sCriteria
-void lcl_setTableFieldsFromCriteria( rtl::OUString& sCriteria1, uno::Reference< beans::XPropertySet >& xDescProps, sheet::TableFilterField2& rFilterField )
+static void lcl_setTableFieldsFromCriteria( rtl::OUString& sCriteria1, uno::Reference< beans::XPropertySet >& xDescProps, sheet::TableFilterField2& rFilterField )
 {
     // #TODO make this more efficient and cycle through
     // sCriteria1 character by character to pick up <,<>,=, * etc.
@@ -5153,7 +5153,7 @@ ScVbaRange::Ungroup(  ) throw (script::BasicErrorException, uno::RuntimeExceptio
     groupUnGroup(true);
 }
 
-void lcl_mergeCellsOfRange( const uno::Reference< table::XCellRange >& xCellRange, sal_Bool _bMerge = sal_True ) throw ( uno::RuntimeException )
+static void lcl_mergeCellsOfRange( const uno::Reference< table::XCellRange >& xCellRange, sal_Bool _bMerge = sal_True ) throw ( uno::RuntimeException )
 {
         uno::Reference< util::XMergeable > xMergeable( xCellRange, uno::UNO_QUERY_THROW );
         xMergeable->merge(_bMerge);
@@ -5366,7 +5366,7 @@ ScVbaRange::SpecialCells( const uno::Any& _oType, const uno::Any& _oValue) throw
     return pRangeToUse->SpecialCellsImpl( nType, _oValue );
 }
 
-sal_Int32 lcl_getFormulaResultFlags(const uno::Any& aType) throw ( script::BasicErrorException )
+static sal_Int32 lcl_getFormulaResultFlags(const uno::Any& aType) throw ( script::BasicErrorException )
 {
     sal_Int32 nType = excel::XlSpecialCellsValue::xlNumbers;
     aType >>= nType;

@@ -132,7 +132,7 @@ bool ScAreaLinkSaveCollection::IsEqual( const ScDocument* pDoc ) const
     return true;
 }
 
-ScAreaLink* lcl_FindLink( const ::sfx2::SvBaseLinks& rLinks, const ScAreaLinkSaver& rSaver )
+static ScAreaLink* lcl_FindLink( const ::sfx2::SvBaseLinks& rLinks, const ScAreaLinkSaver& rSaver )
 {
     sal_uInt16 nLinkCount = rLinks.size();
     for (sal_uInt16 i=0; i<nLinkCount; i++)

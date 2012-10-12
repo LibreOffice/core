@@ -96,7 +96,7 @@ friend class ScDocument;                // for FillInfo
 friend class ScDocumentIterator;
 friend class ScAttrIterator;
 friend class ScHorizontalAttrIterator;
-friend void lcl_IterGetNumberFormat( sal_uLong& nFormat,
+friend void ScAttrArray_IterGetNumberFormat( sal_uLong& nFormat,
         const ScAttrArray*& rpArr, SCROW& nAttrEndRow,
         const ScAttrArray* pNewArr, SCROW nRow, ScDocument* pDoc );
 

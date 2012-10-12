@@ -284,7 +284,7 @@ Point ScAccessibleCsvControl::implGetAbsPos( const Point& rPos ) const
 // Ruler ======================================================================
 
 /** Converts a ruler cursor position to API text index. */
-sal_Int32 lcl_GetApiPos( sal_Int32 nRulerPos )
+static sal_Int32 lcl_GetApiPos( sal_Int32 nRulerPos )
 {
     sal_Int32 nApiPos = nRulerPos;
     sal_Int32 nStart = (nRulerPos - 1) / 10;
@@ -298,7 +298,7 @@ sal_Int32 lcl_GetApiPos( sal_Int32 nRulerPos )
 }
 
 /** Converts an API text index to a ruler cursor position. */
-sal_Int32 lcl_GetRulerPos( sal_Int32 nApiPos )
+static sal_Int32 lcl_GetRulerPos( sal_Int32 nApiPos )
 {
     sal_Int32 nDiv = 10;
     sal_Int32 nExp = 10;
@@ -318,7 +318,7 @@ sal_Int32 lcl_GetRulerPos( sal_Int32 nApiPos )
 }
 
 /** Expands the sequence's size and returns the base index of the new inserted elements. */
-inline sal_Int32 lcl_ExpandSequence( Sequence< PropertyValue >& rSeq, sal_Int32 nExp )
+static inline sal_Int32 lcl_ExpandSequence( Sequence< PropertyValue >& rSeq, sal_Int32 nExp )
 {
     OSL_ENSURE( nExp > 0, "lcl_ExpandSequence - invalid value" );
     rSeq.realloc( rSeq.getLength() + nExp );
@@ -326,14 +326,14 @@ inline sal_Int32 lcl_ExpandSequence( Sequence< PropertyValue >& rSeq, sal_Int32 
 }
 
 /** Fills the property value rVal with the specified name and value from the item. */
-inline void lcl_FillProperty( PropertyValue& rVal, const OUString& rPropName, const SfxPoolItem& rItem, sal_uInt8 nMID )
+static inline void lcl_FillProperty( PropertyValue& rVal, const OUString& rPropName, const SfxPoolItem& rItem, sal_uInt8 nMID )
 {
     rVal.Name = rPropName;
     rItem.QueryValue( rVal.Value, nMID );
 }
 
 /** Fills the sequence with all font attributes of rFont. */
-void lcl_FillFontAttributes( Sequence< PropertyValue >& rSeq, const Font& rFont )
+static void lcl_FillFontAttributes( Sequence< PropertyValue >& rSeq, const Font& rFont )
 {
     SvxFontItem aFontItem( rFont.GetFamily(), rFont.GetName(), rFont.GetStyleName(), rFont.GetPitch(), rFont.GetCharSet(), ATTR_FONT );
     SvxFontHeightItem aHeightItem( rFont.GetSize().Height(), 100, ATTR_FONT_HEIGHT );
@@ -885,13 +885,13 @@ sal_Int32 ScAccessibleCsvRuler::implGetLastEqualFormatted( sal_Int32 nApiPos )
 // Grid =======================================================================
 
 /** Converts a grid columnm index to an API column index. */
-inline sal_Int32 lcl_GetApiColumn( sal_uInt32 nGridColumn )
+static inline sal_Int32 lcl_GetApiColumn( sal_uInt32 nGridColumn )
 {
     return (nGridColumn != CSV_COLUMN_HEADER) ? static_cast< sal_Int32 >( nGridColumn + 1 ) : 0;
 }
 
 /** Converts an API columnm index to a ScCsvGrid column index. */
-inline sal_uInt32 lcl_GetGridColumn( sal_Int32 nApiColumn )
+static inline sal_uInt32 lcl_GetGridColumn( sal_Int32 nApiColumn )
 {
     return (nApiColumn > 0) ? static_cast< sal_uInt32 >( nApiColumn - 1 ) : CSV_COLUMN_HEADER;
 }

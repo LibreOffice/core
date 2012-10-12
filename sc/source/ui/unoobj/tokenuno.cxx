@@ -56,7 +56,7 @@ using namespace ::com::sun::star;
 
 // ============================================================================
 
-const SfxItemPropertyMapEntry* lcl_GetFormulaParserMap()
+static const SfxItemPropertyMapEntry* lcl_GetFormulaParserMap()
 {
     static SfxItemPropertyMapEntry aFormulaParserMap_Impl[] =
     {
@@ -295,7 +295,7 @@ SC_IMPL_DUMMY_PROPERTY_LISTENER( ScFormulaParserObj )
 
 // ============================================================================
 
-void lcl_ExternalRefToApi( sheet::SingleReference& rAPI, const ScSingleRefData& rRef )
+static void lcl_ExternalRefToApi( sheet::SingleReference& rAPI, const ScSingleRefData& rRef )
 {
     rAPI.Column         = rRef.nCol;
     rAPI.Row            = rRef.nRow;
@@ -314,7 +314,7 @@ void lcl_ExternalRefToApi( sheet::SingleReference& rAPI, const ScSingleRefData& 
     rAPI.Flags = nFlags;
 }
 
-void lcl_SingleRefToApi( sheet::SingleReference& rAPI, const ScSingleRefData& rRef )
+static void lcl_SingleRefToApi( sheet::SingleReference& rAPI, const ScSingleRefData& rRef )
 {
     rAPI.Column         = rRef.nCol;
     rAPI.Row            = rRef.nRow;

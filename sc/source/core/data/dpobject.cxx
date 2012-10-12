@@ -265,7 +265,7 @@ void DBConnector::getValue(long nCol, ScDPItemData &rData, short& rNumType) cons
 
 }
 
-sal_uInt16 lcl_GetDataGetOrientation( const uno::Reference<sheet::XDimensionsSupplier>& xSource )
+static sal_uInt16 lcl_GetDataGetOrientation( const uno::Reference<sheet::XDimensionsSupplier>& xSource )
 {
     long nRet = sheet::DataPilotFieldOrientation_HIDDEN;
     if ( xSource.is() )
@@ -809,7 +809,7 @@ const ScRange ScDPObject::GetOutputRangeByType( sal_Int32 nType )
     return pOutput->GetOutputRange(nType);
 }
 
-sal_Bool lcl_HasButton( ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nTab )
+static sal_Bool lcl_HasButton( ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nTab )
 {
     return ((const ScMergeFlagAttr*)pDoc->GetAttr( nCol, nRow, nTab, ATTR_MERGE_FLAG ))->HasButton();
 }
@@ -1324,7 +1324,7 @@ void ScDPObject::GetMemberResultNames(ScDPUniqueStringSet& rNames, long nDimensi
     pOutput->GetMemberResultNames(rNames, nDimension);    // used only with table data -> level not needed
 }
 
-bool lcl_Dequote( const String& rSource, xub_StrLen nStartPos, xub_StrLen& rEndPos, String& rResult )
+static bool lcl_Dequote( const String& rSource, xub_StrLen nStartPos, xub_StrLen& rEndPos, String& rResult )
 {
     // nStartPos has to point to opening quote
 
@@ -1373,7 +1373,7 @@ struct ScGetPivotDataFunctionEntry
     sheet::GeneralFunction  eFunc;
 };
 
-bool lcl_ParseFunction( const String& rList, xub_StrLen nStartPos, xub_StrLen& rEndPos, sheet::GeneralFunction& rFunc )
+static bool lcl_ParseFunction( const String& rList, xub_StrLen nStartPos, xub_StrLen& rEndPos, sheet::GeneralFunction& rFunc )
 {
     static const ScGetPivotDataFunctionEntry aFunctions[] =
     {
@@ -1437,7 +1437,7 @@ bool lcl_ParseFunction( const String& rList, xub_StrLen nStartPos, xub_StrLen& r
     return bFound;
 }
 
-bool lcl_IsAtStart( const String& rList, const String& rSearch, sal_Int32& rMatched,
+static bool lcl_IsAtStart( const String& rList, const String& rSearch, sal_Int32& rMatched,
                     bool bAllowBracket, sheet::GeneralFunction* pFunc )
 {
     sal_Int32 nMatchList = 0;
@@ -1870,7 +1870,7 @@ void ScDPObject::ToggleDetails(const DataPilotTableHeaderData& rElemDesc, ScDPOb
     }
 }
 
-long lcl_FindName( const rtl::OUString& rString, const uno::Reference<container::XNameAccess>& xCollection )
+static long lcl_FindName( const rtl::OUString& rString, const uno::Reference<container::XNameAccess>& xCollection )
 {
     if ( xCollection.is() )
     {
@@ -1884,7 +1884,7 @@ long lcl_FindName( const rtl::OUString& rString, const uno::Reference<container:
     return -1;      // not found
 }
 
-sal_uInt16 lcl_FirstSubTotal( const uno::Reference<beans::XPropertySet>& xDimProp )     // PIVOT_FUNC mask
+static sal_uInt16 lcl_FirstSubTotal( const uno::Reference<beans::XPropertySet>& xDimProp )     // PIVOT_FUNC mask
 {
     uno::Reference<sheet::XHierarchiesSupplier> xDimSupp( xDimProp, uno::UNO_QUERY );
     if ( xDimProp.is() && xDimSupp.is() )
@@ -1933,7 +1933,7 @@ sal_uInt16 lcl_FirstSubTotal( const uno::Reference<beans::XPropertySet>& xDimPro
     return 0;
 }
 
-sal_uInt16 lcl_CountBits( sal_uInt16 nBits )
+static sal_uInt16 lcl_CountBits( sal_uInt16 nBits )
 {
     if (!nBits) return 0;
 
@@ -1964,7 +1964,7 @@ public:
 
 }
 
-void lcl_FillOldFields(
+static void lcl_FillOldFields(
     vector<PivotField>& rFields,
     const uno::Reference<sheet::XDimensionsSupplier>& xSource,
     sal_uInt16 nOrient, bool bAddData )
@@ -2151,7 +2151,7 @@ bool ScDPObject::FillOldParam(ScPivotParam& rParam) const
     return true;
 }
 
-void lcl_FillLabelData( ScDPLabelData& rData, const uno::Reference< beans::XPropertySet >& xDimProp )
+static void lcl_FillLabelData( ScDPLabelData& rData, const uno::Reference< beans::XPropertySet >& xDimProp )
 {
     uno::Reference<sheet::XHierarchiesSupplier> xDimSupp( xDimProp, uno::UNO_QUERY );
     if (!xDimProp.is() || !xDimSupp.is())

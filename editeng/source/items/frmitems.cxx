@@ -3588,12 +3588,12 @@ sal_uInt16 SvxBrushItem::GetVersion( sal_uInt16 /*nFileVersion*/ ) const
 }
 
 // -----------------------------------------------------------------------
-inline sal_Int8 lcl_PercentToTransparency(long nPercent)
+static inline sal_Int8 lcl_PercentToTransparency(long nPercent)
 {
     //0xff must not be returned!
     return sal_Int8(nPercent ? (50 + 0xfe * nPercent) / 100 : 0);
 }
-inline sal_Int8 lcl_TransparencyToPercent(sal_Int32 nTrans)
+static inline sal_Int8 lcl_TransparencyToPercent(sal_Int32 nTrans)
 {
     return (sal_Int8)((nTrans * 100 + 127) / 254);
 }

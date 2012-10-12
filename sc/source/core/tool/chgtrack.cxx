@@ -1973,7 +1973,7 @@ void ScChangeActionContent::PutValueToDoc(
 }
 
 
-void lcl_InvalidateReference( ScToken& rTok, const ScBigAddress& rPos )
+static void lcl_InvalidateReference( ScToken& rTok, const ScBigAddress& rPos )
 {
     ScSingleRefData& rRef1 = rTok.GetSingleRef();
     if ( rPos.Col() < 0 || MAXCOL < rPos.Col() )

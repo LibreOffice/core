@@ -783,7 +783,7 @@ sal_Bool ScViewFunc::PasteOnDrawObject( const uno::Reference<datatransfer::XTran
     return bRet;
 }
 
-sal_Bool lcl_SelHasAttrib( ScDocument* pDoc, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
+static sal_Bool lcl_SelHasAttrib( ScDocument* pDoc, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                         const ScMarkData& rTabSelection, sal_uInt16 nMask )
 {
     ScMarkData::const_iterator itr = rTabSelection.begin(), itrEnd = rTabSelection.end();

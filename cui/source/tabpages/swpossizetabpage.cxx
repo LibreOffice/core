@@ -354,7 +354,7 @@ static FrmMap aVAsCharHtmlMap[] =
     {SwFPos::CENTER_VERT,   SwFPos::CENTER_VERT,    VertOrientation::LINE_CENTER,   LB_REL_ROW}
 };
 
-std::size_t lcl_GetFrmMapCount(const FrmMap* pMap)
+static std::size_t lcl_GetFrmMapCount(const FrmMap* pMap)
 {
     if( pMap )
     {
@@ -407,7 +407,7 @@ std::size_t lcl_GetFrmMapCount(const FrmMap* pMap)
     return 0;
 }
 
-SvxSwFramePosString::StringId lcl_ChangeResIdToVerticalOrRTL(
+static SvxSwFramePosString::StringId lcl_ChangeResIdToVerticalOrRTL(
             SvxSwFramePosString::StringId eStringId, sal_Bool bVertical, sal_Bool bRTL)
 {
     //special handling of STR_FROMLEFT
@@ -466,7 +466,7 @@ SvxSwFramePosString::StringId lcl_ChangeResIdToVerticalOrRTL(
 }
 // #i22341# - helper method in order to determine all possible
 // listbox relations in a relation map for a given relation
-sal_uLong lcl_GetLBRelationsForRelations( const sal_uInt16 _nRel )
+static sal_uLong lcl_GetLBRelationsForRelations( const sal_uInt16 _nRel )
 {
     sal_uLong nLBRelations = 0L;
 
@@ -483,7 +483,7 @@ sal_uLong lcl_GetLBRelationsForRelations( const sal_uInt16 _nRel )
 
 // #i22341# - helper method on order to determine all possible
 // listbox relations in a relation map for a given string ID
-sal_uLong lcl_GetLBRelationsForStrID( const FrmMap* _pMap,
+static sal_uLong lcl_GetLBRelationsForStrID( const FrmMap* _pMap,
                                   const SvxSwFramePosString::StringId _eStrId,
                                   const bool _bUseMirrorStr )
 {

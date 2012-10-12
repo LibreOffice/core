@@ -154,7 +154,7 @@ void ScTabViewShell::ExecuteObject( SfxRequest& rReq )
     }
 }
 
-uno::Reference < embed::XEmbeddedObject > lcl_GetSelectedObj( SdrView* pDrView )       //! Member von ScDrawView?
+static uno::Reference < embed::XEmbeddedObject > lcl_GetSelectedObj( SdrView* pDrView )       //! Member von ScDrawView?
 {
     uno::Reference < embed::XEmbeddedObject > xRet;
     if (pDrView)

@@ -75,7 +75,7 @@ static sal_uInt16 pRanges[] =
 };
 
 // -----------------------------------------------------------------------
-void lcl_SetDecimalDigitsTo1(MetricField& rField)
+static void lcl_SetDecimalDigitsTo1(MetricField& rField)
 {
     sal_Int64 nMin = rField.Denormalize( rField.GetMin( FUNIT_TWIP ) );
     rField.SetDecimalDigits(1);

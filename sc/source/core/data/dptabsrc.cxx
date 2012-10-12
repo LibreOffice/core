@@ -101,14 +101,14 @@ SC_SIMPLE_SERVICE_INFO( ScDPMember,      "ScDPMember",      "com.sun.star.sheet.
 // -----------------------------------------------------------------------
 
 //! move to a header?
-sal_Bool lcl_GetBoolFromAny( const uno::Any& aAny )
+static sal_Bool lcl_GetBoolFromAny( const uno::Any& aAny )
 {
     if ( aAny.getValueTypeClass() == uno::TypeClass_BOOLEAN )
         return *(sal_Bool*)aAny.getValue();
     return false;
 }
 
-void lcl_SetBoolInAny( uno::Any& rAny, sal_Bool bValue )
+static void lcl_SetBoolInAny( uno::Any& rAny, sal_Bool bValue )
 {
     rAny.setValue( &bValue, getBooleanCppuType() );
 }
@@ -218,7 +218,7 @@ long ScDPSource::GetPosition(long nColumn)
     return 0;
 }
 
-sal_Bool lcl_TestSubTotal( sal_Bool& rAllowed, long nColumn, long* pArray, long nCount, ScDPSource* pSource )
+static sal_Bool lcl_TestSubTotal( sal_Bool& rAllowed, long nColumn, long* pArray, long nCount, ScDPSource* pSource )
 {
     for (long i=0; i<nCount; i++)
         if (pArray[i] == nColumn)
@@ -252,7 +252,7 @@ sal_Bool ScDPSource::SubTotalAllowed(long nColumn)
     return bAllowed;
 }
 
-void lcl_RemoveDim( long nRemove, long* pDims, long& rCount )
+static void lcl_RemoveDim( long nRemove, long* pDims, long& rCount )
 {
     for (long i=0; i<rCount; i++)
         if ( pDims[i] == nRemove )
@@ -531,7 +531,7 @@ void ScDPSource::disposeData()
     bResultOverflow = false;
 }
 
-long lcl_CountMinMembers(const vector<ScDPDimension*>& ppDim, const vector<ScDPLevel*>& ppLevel, long nLevels )
+static long lcl_CountMinMembers(const vector<ScDPDimension*>& ppDim, const vector<ScDPLevel*>& ppLevel, long nLevels )
 {
     //  Calculate the product of the member count for those consecutive levels that
     //  have the "show all" flag, one following level, and the data layout dimension.
@@ -592,7 +592,7 @@ long lcl_CountMinMembers(const vector<ScDPDimension*>& ppDim, const vector<ScDPL
     return nTotal;
 }
 
-long lcl_GetIndexFromName( const rtl::OUString rName, const uno::Sequence<rtl::OUString>& rElements )
+static long lcl_GetIndexFromName( const rtl::OUString rName, const uno::Sequence<rtl::OUString>& rElements )
 {
     long nCount = rElements.getLength();
     const rtl::OUString* pArray = rElements.getConstArray();

@@ -346,7 +346,7 @@ void ScInterpreter::ScChoseJump()
         aCode.Jump( pJump[ nJumpCount ], pJump[ nJumpCount ] );
 }
 
-void lcl_AdjustJumpMatrix( ScJumpMatrix* pJumpM, ScMatrixRef& pResMat, SCSIZE nParmCols, SCSIZE nParmRows )
+static void lcl_AdjustJumpMatrix( ScJumpMatrix* pJumpM, ScMatrixRef& pResMat, SCSIZE nParmCols, SCSIZE nParmRows )
 {
     SCSIZE nJumpCols, nJumpRows;
     SCSIZE nResCols, nResRows;
@@ -2146,13 +2146,13 @@ void ScInterpreter::ScType()
 }
 
 
-inline bool lcl_FormatHasNegColor( const SvNumberformat* pFormat )
+static inline bool lcl_FormatHasNegColor( const SvNumberformat* pFormat )
 {
     return pFormat && pFormat->GetColor( 1 );
 }
 
 
-inline bool lcl_FormatHasOpenPar( const SvNumberformat* pFormat )
+static inline bool lcl_FormatHasOpenPar( const SvNumberformat* pFormat )
 {
     return pFormat && (pFormat->GetFormatstring().indexOf('(') != -1);
 }
@@ -3184,7 +3184,7 @@ void ScInterpreter::ScValue()
 
 
 //2do: this should be a proper unicode string method
-inline bool lcl_ScInterpreter_IsPrintable( sal_Unicode c )
+static inline bool lcl_ScInterpreter_IsPrintable( sal_Unicode c )
 {
     return 0x20 <= c && c != 0x7f;
 }

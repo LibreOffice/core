@@ -60,7 +60,7 @@ using namespace com::sun::star;
 
 //------------------------------------------------------------------------
 
-const SvxItemPropertySet * lcl_GetHdFtPropertySet()
+static const SvxItemPropertySet * lcl_GetHdFtPropertySet()
 {
     static SfxItemPropertyMapEntry aHdFtPropertyMap_Impl[] =
     {

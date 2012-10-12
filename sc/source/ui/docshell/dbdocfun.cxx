@@ -1184,7 +1184,7 @@ sal_Bool ScDBDocFunc::DoSubTotals( SCTAB nTab, const ScSubTotalParam& rParam,
 
 //==================================================================
 
-sal_Bool lcl_EmptyExcept( ScDocument* pDoc, const ScRange& rRange, const ScRange& rExcept )
+static sal_Bool lcl_EmptyExcept( ScDocument* pDoc, const ScRange& rRange, const ScRange& rExcept )
 {
     ScCellIterator aIter( pDoc, rRange );
     ScBaseCell* pCell = aIter.GetFirst();

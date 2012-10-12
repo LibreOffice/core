@@ -200,7 +200,7 @@ public:
 };
 
 // defined in docfunc.cxx ( really this needs a new name )
-script::ModuleInfo lcl_InitModuleInfo( SfxObjectShell& rDocSh, String& sModule );
+static script::ModuleInfo lcl_InitModuleInfo( SfxObjectShell& rDocSh, String& sModule );
 
 ImportExcel8::ImportExcel8( XclImpRootData& rImpData, SvStream& rStrm ) :
     ImportExcel( rImpData, rStrm )

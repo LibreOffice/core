@@ -666,7 +666,7 @@ void ScTabView::RemoveHintWindow()
 
 
 // find window that should not be over the cursor
-Window* lcl_GetCareWin(SfxViewFrame* pViewFrm)
+static Window* lcl_GetCareWin(SfxViewFrame* pViewFrm)
 {
     //! auch Spelling ??? (dann beim Aufruf Membervariable setzen)
 

@@ -635,7 +635,7 @@ sal_uInt16 ScColumn::GetOptimalColWidth( OutputDevice* pDev, double nPPTX, doubl
         return nOldWidth;
 }
 
-sal_uInt16 lcl_GetAttribHeight( const ScPatternAttr& rPattern, sal_uInt16 nFontHeightId )
+static sal_uInt16 lcl_GetAttribHeight( const ScPatternAttr& rPattern, sal_uInt16 nFontHeightId )
 {
     sal_uInt16 nHeight = (sal_uInt16) ((const SvxFontHeightItem&) rPattern.GetItem(nFontHeightId)).GetHeight();
     const SvxMarginItem* pMargin = (const SvxMarginItem*) &rPattern.GetItem(ATTR_MARGIN);
@@ -1633,7 +1633,7 @@ void ScColumn::CompileColRowNameFormula()
         }
 }
 
-void lcl_UpdateSubTotal( ScFunctionData& rData, ScBaseCell* pCell )
+static void lcl_UpdateSubTotal( ScFunctionData& rData, ScBaseCell* pCell )
 {
     double nValue = 0.0;
     bool bVal = false;

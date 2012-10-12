@@ -899,7 +899,7 @@ bool ScAttrArray::SetAttrEntries(ScAttrEntry* pNewData, SCSIZE nSize)
     return true;
 }
 
-void lcl_MergeDeep( SfxItemSet& rMergeSet, const SfxItemSet& rSource )
+static void lcl_MergeDeep( SfxItemSet& rMergeSet, const SfxItemSet& rSource )
 {
     const SfxPoolItem* pNewItem;
     const SfxPoolItem* pOldItem;
@@ -986,7 +986,7 @@ void ScAttrArray::MergePatternArea( SCROW nStartRow, SCROW nEndRow,
 
 // assemble border
 
-bool lcl_TestAttr( const SvxBorderLine* pOldLine, const SvxBorderLine* pNewLine,
+static bool lcl_TestAttr( const SvxBorderLine* pOldLine, const SvxBorderLine* pNewLine,
                             sal_uInt8& rModified, const SvxBorderLine*& rpNew )
 {
     if (rModified == SC_LINE_DONTCARE)
@@ -1018,7 +1018,7 @@ bool lcl_TestAttr( const SvxBorderLine* pOldLine, const SvxBorderLine* pNewLine,
 }
 
 
-void lcl_MergeToFrame( SvxBoxItem* pLineOuter, SvxBoxInfoItem* pLineInner,
+static void lcl_MergeToFrame( SvxBoxItem* pLineOuter, SvxBoxInfoItem* pLineInner,
                                 ScLineFlags& rFlags, const ScPatternAttr* pPattern,
                                 bool bLeft, SCCOL nDistRight, bool bTop, SCROW nDistBottom )
 {
@@ -1209,7 +1209,7 @@ void ScAttrArray::ApplyBlockFrame( const SvxBoxItem* pLineOuter, const SvxBoxInf
 }
 
 
-long lcl_LineSize( const SvxBorderLine& rLine )
+static long lcl_LineSize( const SvxBorderLine& rLine )
 {
     // only one line -> half width, min. 20
     // double line   -> half line spacing + (per min. 20)

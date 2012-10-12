@@ -56,7 +56,7 @@ using ::com::sun::star::uno::Any;
 
 //------------------------------------------------------------------------
 
-const SfxItemPropertyMapEntry* lcl_GetNamedRangeMap()
+static const SfxItemPropertyMapEntry* lcl_GetNamedRangeMap()
 {
     static SfxItemPropertyMapEntry aNamedRangeMap_Impl[] =
     {
@@ -69,7 +69,7 @@ const SfxItemPropertyMapEntry* lcl_GetNamedRangeMap()
     return aNamedRangeMap_Impl;
 }
 
-const SfxItemPropertyMapEntry* lcl_GetNamedRangesMap()
+static const SfxItemPropertyMapEntry* lcl_GetNamedRangesMap()
 {
     static SfxItemPropertyMapEntry aNamedRangesMap_Impl[] =
     {
@@ -87,7 +87,7 @@ SC_SIMPLE_SERVICE_INFO( ScLabelRangeObj, "ScLabelRangeObj", "com.sun.star.sheet.
 SC_SIMPLE_SERVICE_INFO( ScLabelRangesObj, "ScLabelRangesObj", "com.sun.star.sheet.LabelRanges" )
 SC_SIMPLE_SERVICE_INFO( ScNamedRangesObj, "ScNamedRangesObj", "com.sun.star.sheet.NamedRanges" )
 
-bool lcl_UserVisibleName(const ScRangeData& rData)
+static bool lcl_UserVisibleName(const ScRangeData& rData)
 {
     //! als Methode an ScRangeData
 

@@ -100,16 +100,16 @@ struct SvxBackgroundPage_Impl
         pLoadTimer(NULL), bIsImportDlgInExecute(sal_False) {}
 };
 
-inline sal_uInt8 lcl_PercentToTransparency(long nPercent)
+static inline sal_uInt8 lcl_PercentToTransparency(long nPercent)
 {
     //0xff must not be returned!
     return sal_uInt8(nPercent ? (50 + 0xfe * nPercent) / 100 : 0);
 }
-inline sal_uInt8 lcl_TransparencyToPercent(sal_uInt8 nTrans)
+static inline sal_uInt8 lcl_TransparencyToPercent(sal_uInt8 nTrans)
 {
     return (nTrans * 100 + 127) / 254;
 }
-void lcl_SetTransparency(SvxBrushItem& rBrush, long nTransparency)
+static void lcl_SetTransparency(SvxBrushItem& rBrush, long nTransparency)
 {
     uno::Any aTransparency;
     aTransparency <<= (sal_Int8)nTransparency;

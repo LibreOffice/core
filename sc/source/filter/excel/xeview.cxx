@@ -422,7 +422,7 @@ static void lcl_WriteSelection( XclExpXmlStream& rStrm, const XclTabViewData& rD
         XclExpSelection( rData, nPane ).SaveXml( rStrm );
 }
 
-OString lcl_GetZoom( sal_uInt16 nZoom )
+static OString lcl_GetZoom( sal_uInt16 nZoom )
 {
     if( nZoom )
         return OString::valueOf( (sal_Int32)nZoom );

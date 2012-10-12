@@ -48,7 +48,7 @@ using namespace com::sun::star;
 
 //  SfxItemPropertyMapEntry nur fuer GetPropertySetInfo
 
-const SfxItemPropertyMapEntry* lcl_GetSearchPropertyMap()
+static const SfxItemPropertyMapEntry* lcl_GetSearchPropertyMap()
 {
     static SfxItemPropertyMapEntry aSearchPropertyMap_Impl[] =
     {

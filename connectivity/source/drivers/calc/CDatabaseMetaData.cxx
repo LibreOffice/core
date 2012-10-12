@@ -284,7 +284,7 @@ sal_Int32 SAL_CALL OCalcDatabaseMetaData::getMaxColumnsInTable(  ) throw(SQLExce
 
 // -------------------------------------------------------------------------
 
-sal_Bool lcl_IsEmptyOrHidden( const Reference<XSpreadsheets>& xSheets, const ::rtl::OUString& rName )
+static sal_Bool lcl_IsEmptyOrHidden( const Reference<XSpreadsheets>& xSheets, const ::rtl::OUString& rName )
 {
     Any aAny = xSheets->getByName( rName );
     Reference<XSpreadsheet> xSheet;
@@ -326,7 +326,7 @@ sal_Bool lcl_IsEmptyOrHidden( const Reference<XSpreadsheets>& xSheets, const ::r
     return sal_False;
 }
 
-sal_Bool lcl_IsUnnamed( const Reference<XDatabaseRanges>& xRanges, const ::rtl::OUString& rName )
+static sal_Bool lcl_IsUnnamed( const Reference<XDatabaseRanges>& xRanges, const ::rtl::OUString& rName )
 {
     sal_Bool bUnnamed = sal_False;
 

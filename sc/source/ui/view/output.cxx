@@ -650,7 +650,7 @@ void ScOutputData::FindRotated()
 
 //  ----------------------------------------------------------------------------
 
-sal_uInt16 lcl_GetRotateDir( ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nTab )
+static sal_uInt16 lcl_GetRotateDir( ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nTab )
 {
     const ScPatternAttr* pPattern = pDoc->GetPattern( nCol, nRow, nTab );
     const SfxItemSet* pCondSet = pDoc->GetCondResult( nCol, nRow, nTab );
@@ -683,7 +683,7 @@ sal_uInt16 lcl_GetRotateDir( ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nTa
     return nRet;
 }
 
-const SvxBrushItem* lcl_FindBackground( ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nTab )
+static const SvxBrushItem* lcl_FindBackground( ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nTab )
 {
     const ScPatternAttr* pPattern = pDoc->GetPattern( nCol, nRow, nTab );
     const SfxItemSet* pCondSet = pDoc->GetCondResult( nCol, nRow, nTab );
@@ -723,7 +723,7 @@ const SvxBrushItem* lcl_FindBackground( ScDocument* pDoc, SCCOL nCol, SCROW nRow
 
 //  ----------------------------------------------------------------------------
 
-sal_Bool lcl_EqualBack( const RowInfo& rFirst, const RowInfo& rOther,
+static sal_Bool lcl_EqualBack( const RowInfo& rFirst, const RowInfo& rOther,
                     SCCOL nX1, SCCOL nX2, sal_Bool bShowProt, sal_Bool bPagebreakMode )
 {
     if ( rFirst.bChanged   != rOther.bChanged ||
@@ -1384,7 +1384,7 @@ void ScOutputData::DrawFrame()
 
 //  Linie unter der Zelle
 
-const ::editeng::SvxBorderLine* lcl_FindHorLine( ScDocument* pDoc,
+static const ::editeng::SvxBorderLine* lcl_FindHorLine( ScDocument* pDoc,
                         SCCOL nCol, SCROW nRow, SCTAB nTab, sal_uInt16 nRotDir,
                         sal_Bool bTopLine )
 {
@@ -1438,7 +1438,7 @@ const ::editeng::SvxBorderLine* lcl_FindHorLine( ScDocument* pDoc,
 }
 
 
-long lcl_getRotate( ScDocument* pDoc, SCTAB nTab, SCCOL nX, SCROW nY )
+static long lcl_getRotate( ScDocument* pDoc, SCTAB nTab, SCCOL nX, SCROW nY )
 {
     long nRotate = 0;
 

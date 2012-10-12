@@ -210,7 +210,7 @@ void ScSheetSaveData::StoreLoadedNamespaces( const SvXMLNamespaceMap& rNamespace
     }
 }
 
-bool lcl_NameInHash( const NameSpaceHash& rNameHash, const rtl::OUString& rName )
+static bool lcl_NameInHash( const NameSpaceHash& rNameHash, const rtl::OUString& rName )
 {
     NameSpaceHash::const_iterator aIter = rNameHash.begin(), aEnd = rNameHash.end();
     while (aIter != aEnd)

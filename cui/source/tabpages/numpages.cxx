@@ -101,14 +101,14 @@ static const sal_Char cSuffix[] = "Suffix";
 static const sal_Char cBulletChar[] = "BulletChar";
 static const sal_Char cBulletFontName[] = "BulletFontName";
 
-Reference<XDefaultNumberingProvider> lcl_GetNumberingProvider()
+static Reference<XDefaultNumberingProvider> lcl_GetNumberingProvider()
 {
     Reference<XComponentContext>         xContext( ::comphelper::getProcessComponentContext() );
     Reference<XDefaultNumberingProvider> xRet = text::DefaultNumberingProvider::create(xContext);
     return xRet;
 }
 
-SvxNumSettings_Impl* lcl_CreateNumSettingsPtr(const Sequence<PropertyValue>& rLevelProps)
+static SvxNumSettings_Impl* lcl_CreateNumSettingsPtr(const Sequence<PropertyValue>& rLevelProps)
 {
     const PropertyValue* pValues = rLevelProps.getConstArray();
     SvxNumSettings_Impl* pNew = new SvxNumSettings_Impl;
@@ -154,7 +154,7 @@ static sal_Char const aNumChar[] =
 };
 
 // Is one of the masked formats set?
-sal_Bool lcl_IsNumFmtSet(SvxNumRule* pNum, sal_uInt16 nLevelMask)
+static sal_Bool lcl_IsNumFmtSet(SvxNumRule* pNum, sal_uInt16 nLevelMask)
 {
     sal_Bool bRet = sal_False;
     sal_uInt16 nMask = 1;
@@ -167,7 +167,7 @@ sal_Bool lcl_IsNumFmtSet(SvxNumRule* pNum, sal_uInt16 nLevelMask)
     return bRet;
 }
 
-Font& lcl_GetDefaultBulletFont()
+static Font& lcl_GetDefaultBulletFont()
 {
     static sal_Bool bInit = 0;
     static Font aDefBulletFont( rtl::OUString("StarSymbol"),
@@ -2257,7 +2257,7 @@ IMPL_LINK( SvxNumOptionsTabPage, EditModifyHdl_Impl, Edit *, pEdit )
     return 0;
 }
 
-sal_uInt16 lcl_DrawGraphic(VirtualDevice* pVDev, const SvxNumberFormat &rFmt, sal_uInt16 nXStart,
+static sal_uInt16 lcl_DrawGraphic(VirtualDevice* pVDev, const SvxNumberFormat &rFmt, sal_uInt16 nXStart,
                         sal_uInt16 nYStart, sal_uInt16 nDivision)
 {
     const SvxBrushItem* pBrushItem = rFmt.GetBrush();
@@ -2279,7 +2279,7 @@ sal_uInt16 lcl_DrawGraphic(VirtualDevice* pVDev, const SvxNumberFormat &rFmt, sa
 
 }
 
-sal_uInt16 lcl_DrawBullet(VirtualDevice* pVDev,
+static sal_uInt16 lcl_DrawBullet(VirtualDevice* pVDev,
             const SvxNumberFormat& rFmt, sal_uInt16 nXStart,
             sal_uInt16 nYStart, const Size& rSize)
 {

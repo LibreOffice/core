@@ -152,7 +152,7 @@ void ScAppOptions::SetLRUFuncList( const sal_uInt16* pList, const sal_uInt16 nCo
 //  Config Item containing app options
 //==================================================================
 
-void lcl_SetLastFunctions( ScAppOptions& rOpt, const Any& rValue )
+static void lcl_SetLastFunctions( ScAppOptions& rOpt, const Any& rValue )
 {
     Sequence<sal_Int32> aSeq;
     if ( rValue >>= aSeq )
@@ -172,7 +172,7 @@ void lcl_SetLastFunctions( ScAppOptions& rOpt, const Any& rValue )
     }
 }
 
-void lcl_GetLastFunctions( Any& rDest, const ScAppOptions& rOpt )
+static void lcl_GetLastFunctions( Any& rDest, const ScAppOptions& rOpt )
 {
     long nCount = rOpt.GetLRUFuncListCount();
     sal_uInt16* pUShorts = rOpt.GetLRUFuncList();
@@ -188,7 +188,7 @@ void lcl_GetLastFunctions( Any& rDest, const ScAppOptions& rOpt )
         rDest <<= Sequence<sal_Int32>(0);   // empty
 }
 
-void lcl_SetSortList( const Any& rValue )
+static void lcl_SetSortList( const Any& rValue )
 {
     Sequence<OUString> aSeq;
     if ( rValue >>= aSeq )
@@ -217,7 +217,7 @@ void lcl_SetSortList( const Any& rValue )
     }
 }
 
-void lcl_GetSortList( Any& rDest )
+static void lcl_GetSortList( Any& rDest )
 {
     const ScUserList* pUserList = ScGlobal::GetUserList();
     if (pUserList)

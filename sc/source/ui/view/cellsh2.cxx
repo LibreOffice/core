@@ -71,7 +71,7 @@
 
 using namespace com::sun::star;
 
-bool lcl_GetTextToColumnsRange( const ScViewData* pData, ScRange& rRange )
+static bool lcl_GetTextToColumnsRange( const ScViewData* pData, ScRange& rRange )
 {
     OSL_ENSURE( pData, "lcl_GetTextToColumnsRange: pData is null!" );
 
@@ -111,7 +111,7 @@ bool lcl_GetTextToColumnsRange( const ScViewData* pData, ScRange& rRange )
     return bRet;
 }
 
-sal_Bool lcl_GetSortParam( const ScViewData* pData, ScSortParam& rSortParam )
+static sal_Bool lcl_GetSortParam( const ScViewData* pData, ScSortParam& rSortParam )
 {
     ScTabViewShell* pTabViewShell   = pData->GetViewShell();
     ScDBData*   pDBData             = pTabViewShell->GetDBData();

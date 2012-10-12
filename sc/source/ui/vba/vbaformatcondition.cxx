@@ -32,7 +32,7 @@
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
-ScVbaFormatConditions*
+static ScVbaFormatConditions*
 lcl_getScVbaFormatConditionsPtr( const uno::Reference< excel::XFormatConditions >& xFormatConditions ) throw ( script::BasicErrorException )
 {
     ScVbaFormatConditions* pFormatConditions = static_cast< ScVbaFormatConditions* >( xFormatConditions.get() );

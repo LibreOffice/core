@@ -1803,7 +1803,7 @@ void ScCompiler::SetError(sal_uInt16 nError)
 }
 
 
-sal_Unicode* lcl_UnicodeStrNCpy( sal_Unicode* pDst, const sal_Unicode* pSrc, xub_StrLen nMax )
+static sal_Unicode* lcl_UnicodeStrNCpy( sal_Unicode* pDst, const sal_Unicode* pSrc, xub_StrLen nMax )
 {
     const sal_Unicode* const pStop = pDst + nMax;
     while ( *pSrc && pDst < pStop )
@@ -3522,7 +3522,7 @@ void ScCompiler::AutoCorrectParsedSymbol()
     }
 }
 
-inline bool lcl_UpperAsciiOrI18n( String& rUpper, const String& rOrg, FormulaGrammar::Grammar eGrammar )
+static inline bool lcl_UpperAsciiOrI18n( String& rUpper, const String& rOrg, FormulaGrammar::Grammar eGrammar )
 {
     if (FormulaGrammar::isODFF( eGrammar ))
     {
@@ -4145,7 +4145,7 @@ bool ScCompiler::HasModifiedRange()
 //---------------------------------------------------------------------------
 
 template< typename T, typename S >
-S lcl_adjval( S& n, T pos, T max, bool bRel )
+static S lcl_adjval( S& n, T pos, T max, bool bRel )
 {
     max++;
     if( bRel )

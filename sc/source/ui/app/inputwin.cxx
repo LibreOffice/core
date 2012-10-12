@@ -159,7 +159,7 @@ SfxChildWinInfo ScInputWindowWrapper::GetInfo() const
 //==================================================================
 
 #define IMAGE(id) pImgMgr->SeekImage(id)
-bool lcl_isExperimentalMode()
+static bool lcl_isExperimentalMode()
 {
     // make inputbar feature on by default, leave the switch for the
     // moment in case we need to back it out easily
@@ -170,7 +170,7 @@ bool lcl_isExperimentalMode()
 //  class ScInputWindow
 //==================================================================
 
-ScTextWndBase* lcl_chooseRuntimeImpl( Window* pParent, SfxBindings* pBind )
+static ScTextWndBase* lcl_chooseRuntimeImpl( Window* pParent, SfxBindings* pBind )
 {
     ScTabViewShell* pViewSh = NULL;
     SfxDispatcher* pDisp = pBind->GetDispatcher();
@@ -1291,7 +1291,7 @@ void ScMultiTextWnd::StartEditEngine()
         pViewFrm->GetBindings().Invalidate( SID_ATTR_INSERT );
 }
 
-void lcl_ExtendEditFontAttribs( SfxItemSet& rSet )
+static void lcl_ExtendEditFontAttribs( SfxItemSet& rSet )
 {
     const SfxPoolItem& rFontItem = rSet.Get( EE_CHAR_FONTINFO );
     rSet.Put( rFontItem, EE_CHAR_FONTINFO_CJK );
@@ -1310,7 +1310,7 @@ void lcl_ExtendEditFontAttribs( SfxItemSet& rSet )
     rSet.Put( rLangItem, EE_CHAR_LANGUAGE_CTL );
 }
 
-void lcl_ModifyRTLDefaults( SfxItemSet& rSet )
+static void lcl_ModifyRTLDefaults( SfxItemSet& rSet )
 {
     rSet.Put( SvxAdjustItem( SVX_ADJUST_RIGHT, EE_PARA_JUST ) );
 
@@ -1325,7 +1325,7 @@ void lcl_ModifyRTLDefaults( SfxItemSet& rSet )
     rSet.Put( aItem );
 }
 
-void lcl_ModifyRTLVisArea( EditView* pEditView )
+static void lcl_ModifyRTLVisArea( EditView* pEditView )
 {
     Rectangle aVisArea = pEditView->GetVisArea();
     Size aPaper = pEditView->GetEditEngine()->GetPaperSize();
@@ -2231,7 +2231,7 @@ void ScPosWnd::HideTip()
     }
 }
 
-ScNameInputType lcl_GetInputType( const String& rText )
+static ScNameInputType lcl_GetInputType( const String& rText )
 {
     ScNameInputType eRet = SC_NAME_INPUT_BAD_NAME;      // the more general error
 

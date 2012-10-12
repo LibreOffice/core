@@ -110,7 +110,7 @@ using namespace com::sun::star;
 //  alles ohne Which-ID, Map nur fuer PropertySetInfo
 
 //! umbenennen, sind nicht mehr nur Options
-const SfxItemPropertyMapEntry* lcl_GetDocOptPropertyMap()
+static const SfxItemPropertyMapEntry* lcl_GetDocOptPropertyMap()
 {
     static SfxItemPropertyMapEntry aDocOptPropertyMap_Impl[] =
     {
@@ -162,7 +162,7 @@ const SfxItemPropertyMapEntry* lcl_GetDocOptPropertyMap()
 
 //! StandardDecimals als Property und vom NumberFormatter ????????
 
-const SfxItemPropertyMapEntry* lcl_GetColumnsPropertyMap()
+static const SfxItemPropertyMapEntry* lcl_GetColumnsPropertyMap()
 {
     static SfxItemPropertyMapEntry aColumnsPropertyMap_Impl[] =
     {
@@ -176,7 +176,7 @@ const SfxItemPropertyMapEntry* lcl_GetColumnsPropertyMap()
     return aColumnsPropertyMap_Impl;
 }
 
-const SfxItemPropertyMapEntry* lcl_GetRowsPropertyMap()
+static const SfxItemPropertyMapEntry* lcl_GetRowsPropertyMap()
 {
     static SfxItemPropertyMapEntry aRowsPropertyMap_Impl[] =
     {
@@ -650,7 +650,7 @@ uno::Reference<container::XNameAccess> SAL_CALL ScModelObj::getStyleFamilies()
 
 // XRenderable
 
-OutputDevice* lcl_GetRenderDevice( const uno::Sequence<beans::PropertyValue>& rOptions )
+static OutputDevice* lcl_GetRenderDevice( const uno::Sequence<beans::PropertyValue>& rOptions )
 {
     OutputDevice* pRet = NULL;
     const beans::PropertyValue* pPropArray = rOptions.getConstArray();
@@ -677,7 +677,7 @@ OutputDevice* lcl_GetRenderDevice( const uno::Sequence<beans::PropertyValue>& rO
     return pRet;
 }
 
-bool lcl_ParseTarget( const String& rTarget, ScRange& rTargetRange, Rectangle& rTargetRect,
+static bool lcl_ParseTarget( const String& rTarget, ScRange& rTargetRange, Rectangle& rTargetRect,
                         bool& rIsSheet, ScDocument* pDoc, SCTAB nSourceTab )
 {
     // test in same order as in SID_CURRENTCELL execute
@@ -967,7 +967,7 @@ sal_Int32 SAL_CALL ScModelObj::getRendererCount( const uno::Any& aSelection,
     return nSelectCount;
 }
 
-sal_Int32 lcl_GetRendererNum( sal_Int32 nSelRenderer, const String& rPagesStr, sal_Int32 nTotalPages )
+static sal_Int32 lcl_GetRendererNum( sal_Int32 nSelRenderer, const String& rPagesStr, sal_Int32 nTotalPages )
 {
     if ( !rPagesStr.Len() )
         return nSelRenderer;

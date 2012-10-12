@@ -2162,7 +2162,7 @@ VectorOfNodes OfaTreeOptionsDialog::LoadNodes(
     return aOutNodeList;
 }
 
-sal_uInt16 lcl_getGroupId( const rtl::OUString& rGroupName, const SvTreeListBox& rTreeLB )
+static sal_uInt16 lcl_getGroupId( const rtl::OUString& rGroupName, const SvTreeListBox& rTreeLB )
 {
     String sGroupName( rGroupName );
     sal_uInt16 nRet = 0;
@@ -2182,7 +2182,7 @@ sal_uInt16 lcl_getGroupId( const rtl::OUString& rGroupName, const SvTreeListBox&
     return USHRT_MAX;
 }
 
-void lcl_insertLeaf(
+static void lcl_insertLeaf(
     OfaTreeOptionsDialog* pDlg, OptionsNode* pNode, OptionsLeaf* pLeaf, const SvTreeListBox& rTreeLB )
 {
     sal_uInt16 nGrpId = lcl_getGroupId( pNode->m_sLabel, rTreeLB );

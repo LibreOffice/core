@@ -78,7 +78,7 @@ using namespace ::com::sun::star;
 
 //  AutoFormat-Map nur fuer PropertySetInfo, ohne Which-IDs
 
-const SfxItemPropertyMapEntry* lcl_GetAutoFormatMap()
+static const SfxItemPropertyMapEntry* lcl_GetAutoFormatMap()
 {
     static SfxItemPropertyMapEntry aAutoFormatMap_Impl[] =
     {
@@ -96,7 +96,7 @@ const SfxItemPropertyMapEntry* lcl_GetAutoFormatMap()
 //! Zahlformat (String/Language) ??? (in XNumberFormat nur ReadOnly)
 //! table::TableBorder ??!?
 
-const SfxItemPropertyMapEntry* lcl_GetAutoFieldMap()
+static const SfxItemPropertyMapEntry* lcl_GetAutoFieldMap()
 {
     static SfxItemPropertyMapEntry aAutoFieldMap_Impl[] =
     {
@@ -162,7 +162,7 @@ SC_SIMPLE_SERVICE_INFO( ScAutoFormatsObj, "ScAutoFormatsObj", SCAUTOFORMATSOBJ_S
 
 //------------------------------------------------------------------------
 
-bool lcl_FindAutoFormatIndex( const ScAutoFormat& rFormats, const rtl::OUString& rName, sal_uInt16& rOutIndex )
+static bool lcl_FindAutoFormatIndex( const ScAutoFormat& rFormats, const rtl::OUString& rName, sal_uInt16& rOutIndex )
 {
     ScAutoFormat::const_iterator itBeg = rFormats.begin(), itEnd = rFormats.end();
     for (ScAutoFormat::const_iterator it = itBeg; it != itEnd; ++it)

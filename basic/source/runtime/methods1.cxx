@@ -915,7 +915,7 @@ RTLFUNC(FindPropertyObject)
 
 
 
-sal_Bool lcl_WriteSbxVariable( const SbxVariable& rVar, SvStream* pStrm,
+static sal_Bool lcl_WriteSbxVariable( const SbxVariable& rVar, SvStream* pStrm,
     sal_Bool bBinary, short nBlockLen, sal_Bool bIsArray )
 {
     sal_uIntPtr nFPos = pStrm->Tell();
@@ -1001,7 +1001,7 @@ sal_Bool lcl_WriteSbxVariable( const SbxVariable& rVar, SvStream* pStrm,
     return pStrm->GetErrorCode() ? sal_False : sal_True;
 }
 
-sal_Bool lcl_ReadSbxVariable( SbxVariable& rVar, SvStream* pStrm,
+static sal_Bool lcl_ReadSbxVariable( SbxVariable& rVar, SvStream* pStrm,
     sal_Bool bBinary, short nBlockLen, sal_Bool bIsArray )
 {
     (void)bBinary;
@@ -1111,7 +1111,7 @@ sal_Bool lcl_ReadSbxVariable( SbxVariable& rVar, SvStream* pStrm,
 
 
 // nCurDim = 1...n
-sal_Bool lcl_WriteReadSbxArray( SbxDimArray& rArr, SvStream* pStrm,
+static sal_Bool lcl_WriteReadSbxArray( SbxDimArray& rArr, SvStream* pStrm,
     sal_Bool bBinary, short nCurDim, short* pOtherDims, sal_Bool bWrite )
 {
     DBG_ASSERT( nCurDim > 0,"Bad Dim");

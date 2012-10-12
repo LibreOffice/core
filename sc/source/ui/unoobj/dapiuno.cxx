@@ -256,7 +256,7 @@ void ScDataPilotConversion::FillGroupInfo( DataPilotFieldGroupInfo& rInfo, const
 
 //------------------------------------------------------------------------
 
-ScDPObject* lcl_GetDPObject( ScDocShell* pDocShell, SCTAB nTab, const OUString& rName )
+static ScDPObject* lcl_GetDPObject( ScDocShell* pDocShell, SCTAB nTab, const OUString& rName )
 {
     if (pDocShell)
     {
@@ -277,7 +277,7 @@ ScDPObject* lcl_GetDPObject( ScDocShell* pDocShell, SCTAB nTab, const OUString& 
     return NULL;    // nicht gefunden
 }
 
-String lcl_CreatePivotName( ScDocShell* pDocShell )
+static String lcl_CreatePivotName( ScDocShell* pDocShell )
 {
     if (pDocShell)
     {
@@ -289,7 +289,7 @@ String lcl_CreatePivotName( ScDocShell* pDocShell )
     return String();                    // sollte nicht vorkommen
 }
 
-sal_Int32 lcl_GetObjectIndex( ScDPObject* pDPObj, const ScFieldIdentifier& rFieldId )
+static sal_Int32 lcl_GetObjectIndex( ScDPObject* pDPObj, const ScFieldIdentifier& rFieldId )
 {
     // used for items - nRepeat in identifier can be ignored
     if ( pDPObj )
@@ -379,7 +379,7 @@ Reference<XDataPilotDescriptor> SAL_CALL ScDataPilotTablesObj::createDataPilotDe
     return NULL;
 }
 
-bool lcl_IsDuplicated( const Reference<XPropertySet> xDimProps )
+static bool lcl_IsDuplicated( const Reference<XPropertySet> xDimProps )
 {
     try
     {
@@ -393,7 +393,7 @@ bool lcl_IsDuplicated( const Reference<XPropertySet> xDimProps )
     return false;
 }
 
-OUString lcl_GetOriginalName( const Reference< XNamed > xDim )
+static OUString lcl_GetOriginalName( const Reference< XNamed > xDim )
 {
     Reference< XNamed > xOriginal;
 
@@ -1587,7 +1587,7 @@ ScDataPilotFieldsObj::~ScDataPilotFieldsObj()
 {
 }
 
-sal_Int32 lcl_GetFieldCount( const Reference<XDimensionsSupplier>& rSource, const Any& rOrient )
+static sal_Int32 lcl_GetFieldCount( const Reference<XDimensionsSupplier>& rSource, const Any& rOrient )
 {
     if (!rSource.is())
         throw RuntimeException();
@@ -1624,7 +1624,7 @@ sal_Int32 lcl_GetFieldCount( const Reference<XDimensionsSupplier>& rSource, cons
     return nRet;
 }
 
-sal_Bool lcl_GetFieldDataByIndex( const Reference<XDimensionsSupplier>& rSource,
+static sal_Bool lcl_GetFieldDataByIndex( const Reference<XDimensionsSupplier>& rSource,
                                 const Any& rOrient, SCSIZE nIndex, ScFieldIdentifier& rFieldId )
 {
     if (!rSource.is())
@@ -1711,7 +1711,7 @@ sal_Bool lcl_GetFieldDataByIndex( const Reference<XDimensionsSupplier>& rSource,
     return bOk;
 }
 
-sal_Bool lcl_GetFieldDataByName( ScDPObject* pDPObj, const OUString& rFieldName, ScFieldIdentifier& rFieldId )
+static sal_Bool lcl_GetFieldDataByName( ScDPObject* pDPObj, const OUString& rFieldName, ScFieldIdentifier& rFieldId )
 {
     // "By name" is always the first match.
     // The name "Data" always refers to the data layout field.

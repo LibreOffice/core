@@ -971,7 +971,7 @@ IMPL_LINK( ScHTMLLayoutParser, HTMLImportHdl, ImportInfo*, pInfo )
 
 // Groesster Gemeinsamer Teiler nach Euklid (Kettendivision)
 // Sonderfall: 0 und irgendwas geben 1
-SCROW lcl_GGT( SCROW a, SCROW b )
+static SCROW lcl_GGT( SCROW a, SCROW b )
 {
     if ( !a || !b )
         return 1;
@@ -987,7 +987,7 @@ SCROW lcl_GGT( SCROW a, SCROW b )
 
 
 // Kleinstes Gemeinsames Vielfaches: a * b / GGT(a,b)
-SCROW lcl_KGV( SCROW a, SCROW b )
+static SCROW lcl_KGV( SCROW a, SCROW b )
 {
     if ( a > b )    // Ueberlauf unwahrscheinlicher machen
         return (a / lcl_GGT(a,b)) * b;

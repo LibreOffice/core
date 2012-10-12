@@ -2291,7 +2291,7 @@ sal_Bool        SvxAsianTabPage::FillItemSet( SfxItemSet& rSet )
     return bRet;
 }
 
-void lcl_SetBox(const SfxItemSet& rSet, sal_uInt16 nSlotId, TriStateBox& rBox)
+static void lcl_SetBox(const SfxItemSet& rSet, sal_uInt16 nSlotId, TriStateBox& rBox)
 {
     sal_uInt16 _nWhich = rSet.GetPool()->GetWhich(nSlotId);
     SfxItemState eState = rSet.GetItemState(_nWhich, sal_True);

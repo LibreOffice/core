@@ -602,7 +602,7 @@ sal_Bool ScXMLImportWrapper::Import(sal_Bool bStylesOnly, ErrCode& nError)
     return false;
 }
 
-bool lcl_HasValidStream(ScDocument& rDoc)
+static bool lcl_HasValidStream(ScDocument& rDoc)
 {
     SfxObjectShell* pObjSh = rDoc.GetDocumentShell();
     if ( pObjSh->IsDocShared() )

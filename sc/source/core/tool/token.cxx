@@ -298,7 +298,7 @@ bool ScRawToken::IsValidReference() const
 }
 
 
-sal_uInt16 lcl_ScRawTokenOffset()
+sal_uInt16 ScRawToken::sbyteOffset()
 {
     // offset of sbyte in ScRawToken
     // offsetof(ScRawToken, sbyte) gives a warning with gcc, because ScRawToken is no POD
@@ -319,7 +319,7 @@ ScRawToken* ScRawToken::Clone() const
     }
     else
     {
-        static sal_uInt16 nOffset = lcl_ScRawTokenOffset();     // offset of sbyte
+        static sal_uInt16 nOffset = sbyteOffset();     // offset of sbyte
         sal_uInt16 n = nOffset;
 
         switch( eType )
@@ -448,14 +448,14 @@ void ScRawToken::Delete()
 
 // --- class ScToken --------------------------------------------------------
 
-ScSingleRefData lcl_ScToken_InitSingleRef()
+static ScSingleRefData lcl_ScToken_InitSingleRef()
 {
     ScSingleRefData aRef;
     aRef.InitAddress( ScAddress() );
     return aRef;
 }
 
-ScComplexRefData lcl_ScToken_InitDoubleRef()
+static ScComplexRefData lcl_ScToken_InitDoubleRef()
 {
     ScComplexRefData aRef;
     aRef.Ref1 = lcl_ScToken_InitSingleRef();

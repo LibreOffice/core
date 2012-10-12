@@ -52,7 +52,7 @@ using namespace ::formula;
 
 //  Map nur fuer PropertySetInfo
 
-const SfxItemPropertyMapEntry* lcl_GetValidatePropertyMap()
+static const SfxItemPropertyMapEntry* lcl_GetValidatePropertyMap()
 {
     static SfxItemPropertyMapEntry aValidatePropertyMap_Impl[] =
     {
@@ -79,7 +79,7 @@ SC_SIMPLE_SERVICE_INFO( ScTableValidationObj, "ScTableValidationObj", "com.sun.s
 
 //------------------------------------------------------------------------
 
-sal_Int32 lcl_ConditionModeToOperatorNew( ScConditionMode eMode )
+static sal_Int32 lcl_ConditionModeToOperatorNew( ScConditionMode eMode )
 {
     sal_Int32 eOper = sheet::ConditionOperator2::NONE;
     switch (eMode)
@@ -102,7 +102,7 @@ sal_Int32 lcl_ConditionModeToOperatorNew( ScConditionMode eMode )
     return eOper;
 }
 
-sheet::ConditionOperator lcl_ConditionModeToOperator( ScConditionMode eMode )
+static sheet::ConditionOperator lcl_ConditionModeToOperator( ScConditionMode eMode )
 {
     sheet::ConditionOperator eOper = sheet::ConditionOperator_NONE;
     switch (eMode)
@@ -124,7 +124,7 @@ sheet::ConditionOperator lcl_ConditionModeToOperator( ScConditionMode eMode )
     return eOper;
 }
 
-ScConditionMode lcl_ConditionOperatorToMode( sheet::ConditionOperator eOper )
+static ScConditionMode lcl_ConditionOperatorToMode( sheet::ConditionOperator eOper )
 {
     ScConditionMode eMode = SC_COND_NONE;
     switch (eOper)
@@ -430,7 +430,7 @@ sal_Bool SAL_CALL ScTableConditionalFormat::hasElements() throw(uno::RuntimeExce
 //  conditional format entries have no real names
 //  -> generate name from index
 
-rtl::OUString lcl_GetEntryNameFromIndex( sal_Int32 nIndex )
+static rtl::OUString lcl_GetEntryNameFromIndex( sal_Int32 nIndex )
 {
     rtl::OUString aRet( RTL_CONSTASCII_USTRINGPARAM( "Entry" ) );
     aRet += rtl::OUString::valueOf( nIndex );

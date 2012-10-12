@@ -820,7 +820,7 @@ double ScOutputData::GetStretch()
 //  output strings
 //
 
-void lcl_DoHyperlinkResult( OutputDevice* pDev, const Rectangle& rRect, ScBaseCell* pCell )
+static void lcl_DoHyperlinkResult( OutputDevice* pDev, const Rectangle& rRect, ScBaseCell* pCell )
 {
     vcl::PDFExtOutDevData* pPDFData = PTR_CAST( vcl::PDFExtOutDevData, pDev->GetExtOutDevData() );
 
@@ -866,7 +866,7 @@ void ScOutputData::SetSyntaxColor( Font* pFont, ScBaseCell* pCell )
     }
 }
 
-void lcl_SetEditColor( EditEngine& rEngine, const Color& rColor )
+static void lcl_SetEditColor( EditEngine& rEngine, const Color& rColor )
 {
     ESelection aSel( 0, 0, rEngine.GetParagraphCount(), 0 );
     SfxItemSet aSet( rEngine.GetEmptyItemSet() );
@@ -1050,7 +1050,7 @@ inline sal_Bool StringDiffer( const ScPatternAttr*& rpOldPattern, const ScPatter
     }
 }
 
-inline void lcl_CreateInterpretProgress( sal_Bool& bProgress, ScDocument* pDoc,
+static inline void lcl_CreateInterpretProgress( sal_Bool& bProgress, ScDocument* pDoc,
         ScFormulaCell* pFCell )
 {
     if ( !bProgress && pFCell->GetDirty() )
@@ -2021,7 +2021,7 @@ ScFieldEditEngine* ScOutputData::CreateOutputEditEngine()
     return pEngine;
 }
 
-void lcl_ClearEdit( EditEngine& rEngine )       // Text und Attribute
+static void lcl_ClearEdit( EditEngine& rEngine )       // Text und Attribute
 {
     rEngine.SetUpdateMode( false );
 
@@ -2033,7 +2033,7 @@ void lcl_ClearEdit( EditEngine& rEngine )       // Text und Attribute
                     SfxItemSet( *rPara.GetPool(), rPara.GetRanges() ) );
 }
 
-sal_Bool lcl_SafeIsValue( ScBaseCell* pCell )
+static sal_Bool lcl_SafeIsValue( ScBaseCell* pCell )
 {
     if (!pCell)
         return false;
@@ -2059,7 +2059,7 @@ sal_Bool lcl_SafeIsValue( ScBaseCell* pCell )
     return bRet;
 }
 
-void lcl_ScaleFonts( EditEngine& rEngine, long nPercent )
+static void lcl_ScaleFonts( EditEngine& rEngine, long nPercent )
 {
     sal_Bool bUpdateMode = rEngine.GetUpdateMode();
     if ( bUpdateMode )
@@ -2100,7 +2100,7 @@ void lcl_ScaleFonts( EditEngine& rEngine, long nPercent )
         rEngine.SetUpdateMode( sal_True );
 }
 
-long lcl_GetEditSize( EditEngine& rEngine, sal_Bool bWidth, sal_Bool bSwap, long nAttrRotate )
+static long lcl_GetEditSize( EditEngine& rEngine, sal_Bool bWidth, sal_Bool bSwap, long nAttrRotate )
 {
     if ( bSwap )
         bWidth = !bWidth;

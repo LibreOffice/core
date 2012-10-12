@@ -488,7 +488,7 @@ sal_Int64 SAL_CALL Submission::getSomething(
 }
 
 
-OUString lcl_message( const OUString& rID, const OUString& rText )
+static OUString lcl_message( const OUString& rID, const OUString& rText )
 {
     OUStringBuffer aMessage;
     aMessage.append( OUSTRING("XForms submission '") );

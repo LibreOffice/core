@@ -40,7 +40,7 @@ using namespace formula;
 
 // -----------------------------------------------------------------------
 
-sal_Bool lcl_FillRangeFromName( ScRange& rRange, ScDocShell* pDocSh, const String& rName )
+static sal_Bool lcl_FillRangeFromName( ScRange& rRange, ScDocShell* pDocSh, const String& rName )
 {
     if (pDocSh)
     {

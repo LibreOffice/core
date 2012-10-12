@@ -82,7 +82,7 @@ inline const ::editeng::SvxBorderLine* GetNullOrLine( const SvxBoxItem* pBox, Fi
 
 //  aehnlich wie in output.cxx
 
-void lcl_GetMergeRange( SCsCOL nX, SCsROW nY, SCSIZE nArrY,
+static void lcl_GetMergeRange( SCsCOL nX, SCsROW nY, SCSIZE nArrY,
                             ScDocument* pDoc, RowInfo* pRowInfo,
                             SCCOL nX1, SCROW nY1, SCCOL /* nX2 */, SCROW /* nY2 */, SCTAB nTab,
                             SCsCOL& rStartX, SCsROW& rStartY, SCsCOL& rEndX, SCsROW& rEndY )

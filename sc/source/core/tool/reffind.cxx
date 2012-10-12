@@ -218,7 +218,7 @@ ScRefFinder::~ScRefFinder()
 {
 }
 
-sal_uInt16 lcl_NextFlags( sal_uInt16 nOld )
+static sal_uInt16 lcl_NextFlags( sal_uInt16 nOld )
 {
     sal_uInt16 nNew = nOld & 7;                 // die drei Abs-Flags
     nNew = ( nNew - 1 ) & 7;                // weiterzaehlen

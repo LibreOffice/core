@@ -569,7 +569,7 @@ void ScTabEditEngine::Init( const ScPatternAttr& rPattern )
 //      Zahlen aus \sw\source\core\doc\numbers.cxx
 //
 
-String lcl_GetCharStr( sal_Int32 nNo )
+static String lcl_GetCharStr( sal_Int32 nNo )
 {
     OSL_ENSURE( nNo, "0 ist eine ungueltige Nummer !!" );
     String aStr;
@@ -589,7 +589,7 @@ String lcl_GetCharStr( sal_Int32 nNo )
     return aStr;
 }
 
-String lcl_GetNumStr( sal_Int32 nNo, SvxNumType eType )
+static String lcl_GetNumStr( sal_Int32 nNo, SvxNumType eType )
 {
     String aTmpStr(rtl::OUString('0'));
     if( nNo )

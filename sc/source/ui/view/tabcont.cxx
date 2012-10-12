@@ -468,7 +468,7 @@ void ScTabControl::DoDrag( const Region& /* rRegion */ )
     pTransferObj->StartDrag( pWindow, DND_ACTION_COPYMOVE | DND_ACTION_LINK );
 }
 
-sal_uInt16 lcl_DocShellNr( ScDocument* pDoc )
+static sal_uInt16 lcl_DocShellNr( ScDocument* pDoc )
 {
     sal_uInt16 nShellCnt = 0;
     SfxObjectShell* pShell = SfxObjectShell::GetFirst();

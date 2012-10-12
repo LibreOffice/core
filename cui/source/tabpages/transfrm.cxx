@@ -80,7 +80,7 @@ static sal_uInt16 pSlantRanges[] =
     0
 };
 
-void lcl_ConvertRect(basegfx::B2DRange& rRange, const sal_uInt16 nDigits, const MapUnit ePoolUnit, const FieldUnit eDlgUnit)
+static void lcl_ConvertRect(basegfx::B2DRange& rRange, const sal_uInt16 nDigits, const MapUnit ePoolUnit, const FieldUnit eDlgUnit)
 {
     const basegfx::B2DPoint aTopLeft(
         (double)MetricField::ConvertValue(basegfx::fround(rRange.getMinX()), nDigits, ePoolUnit, eDlgUnit),
@@ -92,7 +92,7 @@ void lcl_ConvertRect(basegfx::B2DRange& rRange, const sal_uInt16 nDigits, const 
     rRange = basegfx::B2DRange(aTopLeft, aBottomRight);
 }
 
-void lcl_ScaleRect(basegfx::B2DRange& rRange, const Fraction aUIScale)
+static void lcl_ScaleRect(basegfx::B2DRange& rRange, const Fraction aUIScale)
 {
     const double fFactor(1.0 / double(aUIScale));
     rRange = basegfx::B2DRange(rRange.getMinimum() * fFactor, rRange.getMaximum() * fFactor);
