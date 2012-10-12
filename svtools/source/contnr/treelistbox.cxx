@@ -1651,6 +1651,12 @@ void SvTreeListBox::InitTreeView()
 SvTreeListBox::~SvTreeListBox()
 {
     DBG_DTOR(SvTreeListBox,0);
+
+    pImp->CallEventListeners( VCLEVENT_OBJECT_DYING );
+    delete pImp;
+    delete pLBoxImpl->m_pLink;
+    ClearTabList();
+
     delete pEdCtrl;
     pEdCtrl = 0;
     pModel->RemoveView( this );
@@ -1668,11 +1674,6 @@ SvTreeListBox::~SvTreeListBox()
     if( this == pDDTarget )
         pDDTarget = 0;
     delete pLBoxImpl;
-
-    pImp->CallEventListeners( VCLEVENT_OBJECT_DYING );
-    delete pImp;
-    delete pLBoxImpl->m_pLink;
-    ClearTabList();
 }
 
 void SvTreeListBox::SetExtendedWinBits( ExtendedWinBits _nBits )
