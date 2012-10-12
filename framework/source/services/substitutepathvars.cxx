@@ -1161,8 +1161,6 @@ void SubstitutePathVariables::SetPredefinedPathVariables( PredefinedPathVariable
         aPreDefPathVariables.m_FixedVar[PREDEFVAR_BRANDBASEURL]);
 
     Any             aAny;
-    ::rtl::OUString aTmp;
-    String          aResult;
 
     // Get inspath and userpath from bootstrap mechanism in every case as file URL
     ::utl::Bootstrap::PathStatus aState;
@@ -1235,6 +1233,7 @@ void SubstitutePathVariables::SetPredefinedPathVariables( PredefinedPathVariable
     aPreDefPathVariables.m_FixedVar[ PREDEFVAR_PATH ] = GetPathVariableValue();
 
     // Set $(temp)
+    OUString aTmp;
     osl::FileBase::getTempDirURL( aTmp );
     aPreDefPathVariables.m_FixedVar[ PREDEFVAR_TEMP ] = ConvertOSLtoUCBURL( aTmp );
 }

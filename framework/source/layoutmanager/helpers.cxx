@@ -218,7 +218,7 @@ WindowAlign ImplConvertAlignment( sal_Int16 aAlignment )
     {
         sal_Int32       nIndex = 0;
         ::rtl::OUString aPathPart   = aResourceURL.copy( aUIResourceURL.getLength() );
-        ::rtl::OUString aUIResource = aPathPart.getToken( 0, (sal_Unicode)'/', nIndex );
+        aPathPart.getToken( 0, (sal_Unicode)'/', nIndex );
 
         return aPathPart.getToken( 0, (sal_Unicode)'/', nIndex );
     }
@@ -233,7 +233,7 @@ void parseResourceURL( const rtl::OUString& aResourceURL, rtl::OUString& aElemen
     {
         sal_Int32       nIndex = 0;
         ::rtl::OUString aPathPart   = aResourceURL.copy( aUIResourceURL.getLength() );
-        ::rtl::OUString aUIResource = aPathPart.getToken( 0, (sal_Unicode)'/', nIndex );
+        aPathPart.getToken( 0, (sal_Unicode)'/', nIndex );
 
         aElementType = aPathPart.getToken( 0, (sal_Unicode)'/', nIndex );
         aElementName = aPathPart.getToken( 0, (sal_Unicode)'/', nIndex );
