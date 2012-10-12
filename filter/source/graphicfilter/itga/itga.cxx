@@ -123,10 +123,14 @@ TGAReader::TGAReader(SvStream &rTGA)
 
 TGAReader::~TGAReader()
 {
-    delete[] mpColorMap;
-    delete mpFileHeader;
-    delete mpExtension;
-    delete mpFileFooter;
+    if (mpColorMap != NULL)
+        delete[] mpColorMap;
+    if (mpFileHeader != NULL)
+        delete mpFileHeader;
+    if (mpExtension != NULL)
+        delete mpExtension;
+    if (mpFileFooter != NULL)
+        delete mpFileFooter;
 }
 
 // -------------------------------------------------------------------------------------------
@@ -182,6 +186,9 @@ sal_Bool TGAReader::ImplReadHeader()
             mpFileHeader->nColorMapXOrigin >> mpFileHeader->nColorMapYOrigin >> mpFileHeader->nImageWidth >>
                 mpFileHeader->nImageHeight >> mpFileHeader->nPixelDepth >> mpFileHeader->nImageDescriptor;
 
+    if ( !m_rTGA.good())
+        return sal_False;
+
     if ( mpFileHeader->nColorMapType > 1 )
         return sal_False;
     if ( mpFileHeader->nColorMapType == 1 )
@@ -200,6 +207,10 @@ sal_Bool TGAReader::ImplReadHeader()
             mpFileFooter->nSignature[0] >> mpFileFooter->nSignature[1] >> mpFileFooter->nSignature[2] >>
                 mpFileFooter->nSignature[3] >> mpFileFooter->nPadByte >> mpFileFooter->nStringTerminator;
 
+
+        if ( !m_rTGA.good())
+            return sal_False;
+
         // check for sal_True, VISI, ON-X, FILE in the signatures
         if ( mpFileFooter->nSignature[ 0 ] == (('T'<<24)|('R'<<16)|('U'<<8)|'E') &&
              mpFileFooter->nSignature[ 1 ] == (('V'<<24)|('I'<<16)|('S'<<8)|'I') &&
@@ -211,6 +222,8 @@ sal_Bool TGAReader::ImplReadHeader()
             {
                 m_rTGA.Seek( mpFileFooter->nExtensionFileOffset );
                 m_rTGA >> mpExtension->nExtensionSize;
+                if ( !m_rTGA.good())
+                    return sal_False;
                 if ( mpExtension->nExtensionSize >= SizeOfTGAExtension )
                 {
                     mnTGAVersion = 2;
@@ -228,6 +241,8 @@ sal_Bool TGAReader::ImplReadHeader()
                                     >> mpExtension->nPostageStampOffset >> mpExtension->nScanLineOffset
                                         >> mpExtension->nAttributesType;
 
+                    if ( !m_rTGA.good())
+                        return sal_False;
                 }
             }
         }
@@ -309,6 +324,8 @@ sal_Bool TGAReader::ImplReadBody()
                     while ( nYCount < mpFileHeader->nImageHeight )
                     {
                         m_rTGA >> nRunCount;
+                        if ( !m_rTGA.good())
+                            return sal_False;
                         if ( nRunCount & 0x80 )     // a run length packet
                         {
                             m_rTGA >> nRGB16;
@@ -317,6 +334,8 @@ sal_Bool TGAReader::ImplReadBody()
                             nRed = (sal_uInt8)( mpColorMap[ nRGB16 ] >> 16 );
                             nGreen = (sal_uInt8)( mpColorMap[ nRGB16 ] >> 8 );
                             nBlue = (sal_uInt8)( mpColorMap[ nRGB16 ] );
+                            if ( !m_rTGA.good())
+                                return sal_False;
                             for ( sal_uInt16 i = 0; i < ( ( nRunCount & 0x7f ) + 1 ); i++ )
                             {
                                 mpAcc->SetPixel( nY, nX, BitmapColor( nRed, nGreen, nBlue ) );
@@ -339,11 +358,15 @@ sal_Bool TGAReader::ImplReadBody()
                             for ( sal_uInt16 i = 0; i < ( ( nRunCount & 0x7f ) + 1 ); i++ )
                             {
                                 m_rTGA >> nRGB16;
+                                if ( !m_rTGA.good())
+                                    return sal_False;
                                 if ( nRGB16 >= mpFileHeader->nColorMapLength )
                                     return sal_False;
                                 nRed = (sal_uInt8)( mpColorMap[ nRGB16 ] >> 16 );
                                 nGreen = (sal_uInt8)( mpColorMap[ nRGB16 ] >> 8 );
                                 nBlue = (sal_uInt8)( mpColorMap[ nRGB16 ] );
+                                if ( !m_rTGA.good())
+                                    return sal_False;
                                 mpAcc->SetPixel( nY, nX, BitmapColor( nRed, nGreen, nBlue ) );
                                 nX += nXAdd;
                                 nXCount++;
@@ -367,9 +390,13 @@ sal_Bool TGAReader::ImplReadBody()
                     while ( nYCount < mpFileHeader->nImageHeight )
                     {
                         m_rTGA >> nRunCount;
+                        if ( !m_rTGA.good())
+                            return sal_False;
                         if ( nRunCount & 0x80 )     // a run length packet
                         {
                             m_rTGA >> nDummy;
+                            if ( !m_rTGA.good())
+                                return sal_False;
                             if ( nDummy >= mpFileHeader->nColorMapLength )
                                 return sal_False;
                             for ( sal_uInt16 i = 0; i < ( ( nRunCount & 0x7f ) + 1 ); i++ )
@@ -395,6 +422,8 @@ sal_Bool TGAReader::ImplReadBody()
                             {
 
                                 m_rTGA >> nDummy;
+                                if ( !m_rTGA.good())
+                                    return sal_False;
                                 if ( nDummy >= mpFileHeader->nColorMapLength )
                                     return sal_False;
                                 mpAcc->SetPixel( nY, nX, (sal_uInt8)nDummy );
@@ -428,9 +457,13 @@ sal_Bool TGAReader::ImplReadBody()
                         while ( nYCount < mpFileHeader->nImageHeight )
                         {
                             m_rTGA >> nRunCount;
+                            if ( !m_rTGA.good())
+                                return sal_False;
                             if ( nRunCount & 0x80 )     // a run length packet
                             {
                                 m_rTGA >> nBlue >> nGreen >> nRed >> nDummy;
+                                if ( !m_rTGA.good())
+                                    return sal_False;
                                 for ( sal_uInt16 i = 0; i < ( ( nRunCount & 0x7f ) + 1 ); i++ )
                                 {
                                     mpAcc->SetPixel( nY, nX, BitmapColor( nRed, nGreen, nBlue ) );
@@ -453,6 +486,8 @@ sal_Bool TGAReader::ImplReadBody()
                                 for ( sal_uInt16 i = 0; i < ( ( nRunCount & 0x7f ) + 1 ); i++ )
                                 {
                                     m_rTGA >> nBlue >> nGreen >> nRed >> nDummy;
+                                    if ( !m_rTGA.good())
+                                        return sal_False;
                                     mpAcc->SetPixel( nY, nX, BitmapColor( nRed, nGreen, nBlue ) );
                                     nX += nXAdd;
                                     nXCount++;
@@ -477,9 +512,13 @@ sal_Bool TGAReader::ImplReadBody()
                     while ( nYCount < mpFileHeader->nImageHeight )
                     {
                         m_rTGA >> nRunCount;
+                        if ( !m_rTGA.good())
+                            return sal_False;
                         if ( nRunCount & 0x80 )     // a run length packet
                         {
                             m_rTGA >> nBlue >> nGreen >> nRed;
+                            if ( !m_rTGA.good())
+                                return sal_False;
                             for ( sal_uInt16 i = 0; i < ( ( nRunCount & 0x7f ) + 1 ); i++ )
                             {
                                 mpAcc->SetPixel( nY, nX, BitmapColor( nRed, nGreen, nBlue ) );
@@ -502,6 +541,8 @@ sal_Bool TGAReader::ImplReadBody()
                             for ( sal_uInt16 i = 0; i < ( ( nRunCount & 0x7f ) + 1 ); i++ )
                             {
                                 m_rTGA >> nBlue >> nGreen >> nRed;
+                                if ( !m_rTGA.good())
+                                    return sal_False;
                                 mpAcc->SetPixel( nY, nX, BitmapColor( nRed, nGreen, nBlue ) );
                                 nX += nXAdd;
                                 nXCount++;
@@ -525,9 +566,13 @@ sal_Bool TGAReader::ImplReadBody()
                     while ( nYCount < mpFileHeader->nImageHeight )
                     {
                         m_rTGA >> nRunCount;
+                        if ( !m_rTGA.good())
+                            return sal_False;
                         if ( nRunCount & 0x80 )     // a run length packet
                         {
                             m_rTGA >> nRGB16;
+                            if ( !m_rTGA.good())
+                                return sal_False;
                             nRed = (sal_uInt8)( nRGB16 >> 7 ) & 0xf8;
                             nGreen = (sal_uInt8)( nRGB16 >> 2 ) & 0xf8;
                             nBlue = (sal_uInt8)( nRGB16 << 3 ) & 0xf8;
@@ -553,6 +598,8 @@ sal_Bool TGAReader::ImplReadBody()
                             for ( sal_uInt16 i = 0; i < ( ( nRunCount & 0x7f ) + 1 ); i++ )
                             {
                                 m_rTGA >> nRGB16;
+                                if ( !m_rTGA.good())
+                                    return sal_False;
                                 nRed = (sal_uInt8)( nRGB16 >> 7 ) & 0xf8;
                                 nGreen = (sal_uInt8)( nRGB16 >> 2 ) & 0xf8;
                                 nBlue = (sal_uInt8)( nRGB16 << 3 ) & 0xf8;
@@ -595,6 +642,8 @@ sal_Bool TGAReader::ImplReadBody()
                         for (;nXCount < mpFileHeader->nImageWidth; nXCount++, nX += nXAdd )
                         {
                             m_rTGA >> nRGB16;
+                            if ( !m_rTGA.good())
+                                return sal_False;
                             if ( nRGB16 >= mpFileHeader->nColorMapLength )
                                 return sal_False;
                             nRed = (sal_uInt8)( mpColorMap[ nRGB16 ] >> 16 );
@@ -609,6 +658,8 @@ sal_Bool TGAReader::ImplReadBody()
                         for (;nXCount < mpFileHeader->nImageWidth; nXCount++, nX += nXAdd )
                         {
                             m_rTGA >> nDummy;
+                            if ( !m_rTGA.good())
+                                return sal_False;
                             if ( nDummy >= mpFileHeader->nColorMapLength )
                                 return sal_False;
                             mpAcc->SetPixel( nY, nX, (sal_uInt8)nDummy );
@@ -628,6 +679,8 @@ sal_Bool TGAReader::ImplReadBody()
                             for (;nXCount < mpFileHeader->nImageWidth; nXCount++, nX += nXAdd )
                             {
                                 m_rTGA >> nBlue >> nGreen >> nRed >> nDummy;
+                                if ( !m_rTGA.good())
+                                    return sal_False;
                                 mpAcc->SetPixel( nY, nX, BitmapColor( nRed, nGreen, nBlue ) );
                             }
                         }
@@ -638,6 +691,8 @@ sal_Bool TGAReader::ImplReadBody()
                         for (;nXCount < mpFileHeader->nImageWidth; nXCount++, nX += nXAdd )
                         {
                             m_rTGA >> nBlue >> nGreen >> nRed;
+                            if ( !m_rTGA.good())
+                                return sal_False;
                             mpAcc->SetPixel( nY, nX, BitmapColor( nRed, nGreen, nBlue ) );
                         }
                         break;
@@ -647,6 +702,8 @@ sal_Bool TGAReader::ImplReadBody()
                         for (;nXCount < mpFileHeader->nImageWidth; nXCount++, nX += nXAdd )
                         {
                             m_rTGA >> nRGB16;
+                            if ( !m_rTGA.good())
+                                return sal_False;
                             nRed = (sal_uInt8)( nRGB16 >> 7 ) & 0xf8;
                             nGreen = (sal_uInt8)( nRGB16 >> 2 ) & 0xf8;
                             nBlue = (sal_uInt8)( nRGB16 << 3 ) & 0xf8;
@@ -713,6 +770,8 @@ sal_Bool TGAReader::ImplReadPalette()
                     {
                         sal_uInt16 nTemp;
                         m_rTGA >> nTemp;
+                        if ( !m_rTGA.good() )
+                            return sal_False;
                         mpColorMap[ i ] = ( ( nTemp & 0x7c00 ) << 9 ) + ( ( nTemp & 0x01e0 ) << 6 ) +
                             ( ( nTemp & 0x1f ) << 3 );
                     }
