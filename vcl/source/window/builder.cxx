@@ -785,7 +785,7 @@ Window *VclBuilder::makeObject(Window *pParent, const OString &name, const OStri
                 pWindow = (*pFunction)(pParent, rMap);
         }
     }
-    SAL_WARN_IF(!pWindow, "vcl.layout", "problably need to implement " << name.getStr() << "or add a make" << name.getStr() << " function");
+    SAL_WARN_IF(!pWindow, "vcl.layout", "probably need to implement " << name.getStr() << " or add a make" << name.getStr() << " function");
     if (pWindow)
     {
         pWindow->SetHelpId(m_sHelpRoot + id);
