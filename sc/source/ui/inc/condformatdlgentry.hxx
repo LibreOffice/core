@@ -52,6 +52,8 @@ protected:
     void Select();
     void Deselect();
 
+    virtual rtl::OUString GetExpressionString() = 0;
+
 public:
     ScCondFrmtEntry( Window* pParent, ScDocument* pDoc, const ScAddress& rPos );
     virtual ~ScCondFrmtEntry();
@@ -83,6 +85,7 @@ class ScConditionFrmtEntry : public ScCondFrmtEntry
 
     ScFormatEntry* createConditionEntry() const;
 
+    virtual rtl::OUString GetExpressionString();
     void Init();
     DECL_LINK( StyleSelectHdl, void* );
     DECL_LINK( ConditionTypeSelectHdl, void* );
@@ -105,6 +108,7 @@ class ScFormulaFrmtEntry : public ScCondFrmtEntry
     formula::RefEdit maEdFormula;
 
     ScFormatEntry* createFormulaEntry() const;
+    virtual rtl::OUString GetExpressionString();
     void Init();
 
     DECL_LINK( StyleSelectHdl, void* );
@@ -136,6 +140,7 @@ class ScColorScale2FrmtEntry : public ScCondFrmtEntry
 
     ScFormatEntry* createColorscaleEntry() const;
 
+    virtual rtl::OUString GetExpressionString();
     void Init();
 
     DECL_LINK( EntryTypeHdl, ListBox* );
@@ -168,6 +173,7 @@ class ScColorScale3FrmtEntry : public ScCondFrmtEntry
 
     ScFormatEntry* createColorscaleEntry() const;
 
+    virtual rtl::OUString GetExpressionString();
     void Init();
 
     DECL_LINK( EntryTypeHdl, ListBox* );
@@ -196,6 +202,7 @@ class ScDataBarFrmtEntry : public ScCondFrmtEntry
 
     ScFormatEntry* createDatabarEntry() const;
 
+    virtual rtl::OUString GetExpressionString();
     void Init();
 
     DECL_LINK( OptionBtnHdl, void* );

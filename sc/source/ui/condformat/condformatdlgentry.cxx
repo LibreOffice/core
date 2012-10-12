@@ -103,7 +103,7 @@ void ScCondFrmtEntry::Select()
 
 void ScCondFrmtEntry::Deselect()
 {
-    rtl::OUString maCondText("deselected");// = ScCondFormatHelper::GetExpression(CONDITION, maLbCondType.GetSelectEntryPos());
+    rtl::OUString maCondText = GetExpressionString();
     maFtCondition.SetText(maCondText);
     maFtCondition.Show();
     maLbType.Hide();
@@ -285,6 +285,11 @@ ScFormatEntry* ScConditionFrmtEntry::createConditionEntry() const
     ScFormatEntry* pEntry = new ScCondFormatEntry(eMode, aExpr1, aExpr2, mpDoc, maPos, maLbStyle.GetSelectEntry());
 
     return pEntry;
+}
+
+rtl::OUString ScConditionFrmtEntry::GetExpressionString()
+{
+    return ScCondFormatHelper::GetExpression(CONDITION, maLbCondType.GetSelectEntryPos());
 }
 
 ScFormatEntry* ScConditionFrmtEntry::GetEntry() const
@@ -476,6 +481,11 @@ ScFormatEntry* ScFormulaFrmtEntry::GetEntry() const
     return createFormulaEntry();
 }
 
+rtl::OUString ScFormulaFrmtEntry::GetExpressionString()
+{
+    return ScCondFormatHelper::GetExpression(FORMULA, 0);
+}
+
 void ScFormulaFrmtEntry::SetActive()
 {
     maWdPreview.Show();
@@ -654,6 +664,11 @@ ScFormatEntry* ScColorScale2FrmtEntry::createColorscaleEntry() const
     return pColorScale;
 }
 
+rtl::OUString ScColorScale2FrmtEntry::GetExpressionString()
+{
+    return ScCondFormatHelper::GetExpression( COLORSCALE, 0 );
+}
+
 ScFormatEntry* ScColorScale2FrmtEntry::GetEntry() const
 {
     return createColorscaleEntry();
@@ -821,6 +836,11 @@ ScFormatEntry* ScColorScale3FrmtEntry::createColorscaleEntry() const
         pColorScale->AddEntry(createColorScaleEntry(maLbEntryTypeMiddle, maLbColMiddle, maEdMiddle, mpDoc, maPos));
     pColorScale->AddEntry(createColorScaleEntry(maLbEntryTypeMax, maLbColMax, maEdMax, mpDoc, maPos));
     return pColorScale;
+}
+
+rtl::OUString ScColorScale3FrmtEntry::GetExpressionString()
+{
+    return ScCondFormatHelper::GetExpression( COLORSCALE, 0 );
 }
 
 ScFormatEntry* ScColorScale3FrmtEntry::GetEntry() const
@@ -992,6 +1012,11 @@ ScFormatEntry* ScDataBarFrmtEntry::createDatabarEntry() const
     ScDataBarFormat* pDataBar = new ScDataBarFormat(mpDoc);
     pDataBar->SetDataBarData(new ScDataBarFormatData(*mpDataBarData.get()));
     return pDataBar;
+}
+
+rtl::OUString ScDataBarFrmtEntry::GetExpressionString()
+{
+    return ScCondFormatHelper::GetExpression( DATABAR, 0 );
 }
 
 void ScDataBarFrmtEntry::SetActive()
