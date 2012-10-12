@@ -48,25 +48,29 @@ ModelessDialog RID_SCDLG_XML_SOURCE
         Text [ en-US ] = "Map to document";
     };
 
-    FixedText FT_MAPPED_CELL_TITLE
+    FixedText FT_TREE_ITEM_NAME
     {
         Pos = MAP_APPFONT( 12, 52 );
         Size = MAP_APPFONT ( 100 , 8 ) ;
+    };
 
-        Text [ en-US ] = "";
+    FixedText FT_MAPPED_CELL_TITLE
+    {
+        Pos = MAP_APPFONT( 12, 67 );
+        Size = MAP_APPFONT ( 100 , 8 ) ;
     };
 
     Edit ED_MAPPED_CELL
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 66 ) ;
+        Pos = MAP_APPFONT ( 12 , 81 ) ;
         Size = MAP_APPFONT ( 69 , 12 ) ;
         TabStop = TRUE ;
     };
 
     ImageButton BTN_MAPPED_CELL
     {
-        Pos = MAP_APPFONT ( 83 , 65 ) ;
+        Pos = MAP_APPFONT ( 83 , 80 ) ;
         Size = MAP_APPFONT ( 13 , 15 ) ;
         TabStop = FALSE ;
         QuickHelpText [ en-US ] = "Shrink" ;

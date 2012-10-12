@@ -36,6 +36,7 @@ ScXMLSourceDlg::ScXMLSourceDlg(
     maBtnSelectSource(this, ScResId(BTN_SELECT_SOURCE_FILE)),
     maFtSourceFile(this, ScResId(FT_SOURCE_FILE)),
     maFtMapXmlDoc(this, ScResId(FL_MAP_XML_TO_DOCUMENT)),
+    maFtTreeItemName(this, ScResId(FT_TREE_ITEM_NAME)),
     maFtMappedCellTitle(this, ScResId(FT_MAPPED_CELL_TITLE)),
     maEdit(this, this, ScResId(ED_MAPPED_CELL)),
     maBtnRb(this, ScResId(BTN_MAPPED_CELL), &maEdit, this),
@@ -186,8 +187,7 @@ void ScXMLSourceDlg::TreeItemSelected()
 {
     SvLBoxEntry* pEntry = maLbTree.GetCurEntry();
     OUString aName = maLbTree.GetEntryText(pEntry);
-    fprintf(stdout, "ScXMLSourceDlg::TreeItemSelected:   name = '%s'\n",
-            rtl::OUStringToOString(aName, RTL_TEXTENCODING_UTF8).getStr());
+    maFtTreeItemName.SetText(aName);
 }
 
 IMPL_LINK(ScXMLSourceDlg, GetFocusHdl, Control*, pCtrl)
