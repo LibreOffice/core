@@ -1112,6 +1112,14 @@ $(call gb_LinkTarget_get_external_headers_target,$(1)) :| $(call gb_UnpackedTarb
 
 endef
 
+# Use artifacts from ExternalProject (i. e. configure) of an external project
+# example in expat: StaticLibrary depends on ExternalProject outcome
+define gb_LinkTarget_use_external_project
+$(call gb_LinkTarget_get_external_headers_target,$(1)) :| $(call gb_ExternalProject_get_target,$(2))
+
+endef
+
+
 # this forwards to functions that must be defined in RepositoryExternal.mk.
 # $(eval $(call gb_LinkTarget_use_external,library,external))
 define gb_LinkTarget_use_external

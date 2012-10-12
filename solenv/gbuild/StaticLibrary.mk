@@ -120,6 +120,7 @@ $(eval $(foreach method,\
 	use_package \
 	use_packages \
 	use_unpacked \
+	use_external_project \
 	use_static_libraries \
 	add_sdi_headers \
 	set_warnings_not_errors \
