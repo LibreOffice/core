@@ -34,7 +34,7 @@
 #include <com/sun/star/ucb/UnsupportedDataSinkException.hpp>
 #include <com/sun/star/ucb/CommandFailedException.hpp>
 #include <com/sun/star/task/XInteractionAbort.hpp>
-#include <com/sun/star/uri/XUriReferenceFactory.hpp>
+#include <com/sun/star/uri/UriReferenceFactory.hpp>
 #include <com/sun/star/uri/XUriReference.hpp>
 #include <com/sun/star/ucb/PostCommandArgument2.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
@@ -705,13 +705,12 @@ sal_Bool MediaDescriptor::impl_openStreamWithURL( const ::rtl::OUString& sURL, s
        it parses the URL in another way. It's main part isnt enough
        and it's complete part contains the jumpmark (fragment) parameter ...
     */
-    static ::rtl::OUString SERVICENAME_URIREFERENCEFACTORY( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.uri.UriReferenceFactory" ));
 
     try
     {
-        css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR      = ::comphelper::getProcessServiceFactory();
-        css::uno::Reference< css::uri::XUriReferenceFactory >  xUriFactory(xSMGR->createInstance(SERVICENAME_URIREFERENCEFACTORY), css::uno::UNO_QUERY_THROW);
-        css::uno::Reference< css::uri::XUriReference >         xUriRef    = xUriFactory->parse(sURL);
+        css::uno::Reference< css::uno::XComponentContext >    xContext    = ::comphelper::getProcessComponentContext();
+        css::uno::Reference< css::uri::XUriReferenceFactory > xUriFactory = css::uri::UriReferenceFactory::create(xContext);;
+        css::uno::Reference< css::uri::XUriReference >        xUriRef     = xUriFactory->parse(sURL);
         if (xUriRef.is())
         {
             xUriRef->clearFragment();

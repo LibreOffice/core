@@ -37,7 +37,7 @@
 
 #ifndef OASIS_FILTER_OOO_1X
 // Used to parse Scripting Framework URLs
-#include <com/sun/star/uri/XUriReferenceFactory.hpp>
+#include <com/sun/star/uri/UriReferenceFactory.hpp>
 #include <com/sun/star/uri/XVndSunStarScriptUrl.hpp>
 #include <comphelper/processfactory.hxx>
 #endif
@@ -197,52 +197,44 @@ bool ParseURL(
 #ifdef OASIS_FILTER_OOO_1X
     return ParseURLAsString( rAttrValue, pName, pLocation );
 #else
-    Reference< com::sun::star::lang::XMultiServiceFactory >
-        xSMgr = ::comphelper::getProcessServiceFactory();
+    Reference< com::sun::star::uno::XComponentContext >
+        xContext = ::comphelper::getProcessComponentContext();
 
-    Reference< com::sun::star::uri::XUriReferenceFactory >
-        xFactory( xSMgr->createInstance( OUString(
-            "com.sun.star.uri.UriReferenceFactory" ) ), UNO_QUERY );
+    Reference< com::sun::star::uri::XUriReferenceFactory > xFactory =
+        com::sun::star::uri::UriReferenceFactory::create(xContext);
 
-    if ( xFactory.is() )
+    Reference< com::sun::star::uri::XVndSunStarScriptUrl > xUrl (
+        xFactory->parse( rAttrValue ), UNO_QUERY );
+
+    if ( xUrl.is() )
     {
-        Reference< com::sun::star::uri::XVndSunStarScriptUrl > xUrl (
-            xFactory->parse( rAttrValue ), UNO_QUERY );
-
-        if ( xUrl.is() )
+        OUString aLanguageKey = GetXMLToken( XML_LANGUAGE );
+        if ( xUrl.is() && xUrl->hasParameter( aLanguageKey ) )
         {
-            OUString aLanguageKey = GetXMLToken( XML_LANGUAGE );
-            if ( xUrl.is() && xUrl->hasParameter( aLanguageKey ) )
+            OUString aLanguage = xUrl->getParameter( aLanguageKey );
+
+            if ( aLanguage.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("basic")) )
             {
-                OUString aLanguage = xUrl->getParameter( aLanguageKey );
+                *pName = xUrl->getName();
 
-                if ( aLanguage.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("basic")) )
+                OUString tmp =
+                    xUrl->getParameter( GetXMLToken( XML_LOCATION ) );
+
+                OUString doc = GetXMLToken( XML_DOCUMENT );
+
+                if ( tmp.equalsIgnoreAsciiCase( doc ) )
                 {
-                    *pName = xUrl->getName();
-
-                    OUString tmp =
-                        xUrl->getParameter( GetXMLToken( XML_LOCATION ) );
-
-                    OUString doc = GetXMLToken( XML_DOCUMENT );
-
-                    if ( tmp.equalsIgnoreAsciiCase( doc ) )
-                    {
-                        *pLocation = doc;
-                    }
-                    else
-                    {
-                        *pLocation = GetXMLToken( XML_APPLICATION );
-                    }
-                    return sal_True;
+                    *pLocation = doc;
                 }
+                else
+                {
+                    *pLocation = GetXMLToken( XML_APPLICATION );
+                }
+                return sal_True;
             }
         }
-        return sal_False;
     }
-    else
-    {
-        return ParseURLAsString( rAttrValue, pName, pLocation );
-    }
+    return sal_False;
 #endif
 }
 

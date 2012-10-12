@@ -25,7 +25,7 @@
 #include "doceventnotifier.hxx"
 #include "documentenumeration.hxx"
 
-#include <com/sun/star/uri/XUriReferenceFactory.hpp>
+#include <com/sun/star/uri/UriReferenceFactory.hpp>
 #include <com/sun/star/util/XMacroExpander.hpp>
 #include <com/sun/star/document/MacroExecMode.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
@@ -88,6 +88,7 @@ namespace basctl
     using ::com::sun::star::uno::makeAny;
     using ::com::sun::star::script::XLibraryContainer2;
     using ::com::sun::star::lang::XMultiServiceFactory;
+    using ::com::sun::star::uri::UriReferenceFactory;
     using ::com::sun::star::uri::XUriReferenceFactory;
     using ::com::sun::star::uri::XUriReference;
     using ::com::sun::star::uno::XComponentContext;
@@ -934,14 +935,8 @@ namespace basctl
             if ( !xLibContainer->hasByName( _rLibName ) || !xLibContainer->isLibraryLink( _rLibName ) )
                 return false;
             OUString aFileURL;
-            Reference< XMultiServiceFactory > xMSF( ::comphelper::getProcessServiceFactory() );
-            Reference< XUriReferenceFactory > xUriFac;
-            if ( xMSF.is() )
-            {
-                xUriFac.set(
-                    xMSF->createInstance( "com.sun.star.uri.UriReferenceFactory" ),
-                    UNO_QUERY_THROW );
-            }
+            Reference< XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
+            Reference< XUriReferenceFactory > xUriFac = UriReferenceFactory::create(xContext);
 
             OUString aLinkURL( xLibContainer->getLibraryLinkURL( _rLibName ) );
             Reference< XUriReference > xUriRef( xUriFac->parse( aLinkURL ), UNO_QUERY_THROW );
@@ -958,8 +953,6 @@ namespace basctl
                 {
                     OUString aDecodedURL( aAuthority.copy( sizeof ( "vnd.sun.star.expand:" ) - 1 ) );
                     aDecodedURL = ::rtl::Uri::decode( aDecodedURL, rtl_UriDecodeWithCharset, RTL_TEXTENCODING_UTF8 );
-                    Reference< XComponentContext > xContext(
-                        comphelper::getComponentContext( xMSF ) );
                     Reference< XMacroExpander > xMacroExpander(
                         xContext->getValueByName(
                         "/singletons/com.sun.star.util.theMacroExpander" ),

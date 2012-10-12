@@ -56,7 +56,7 @@
 #include <com/sun/star/frame/XDispatchRecorderSupplier.hpp>
 #include <com/sun/star/document/UpdateDocMode.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/uri/XUriReferenceFactory.hpp>
+#include <com/sun/star/uri/UriReferenceFactory.hpp>
 #include <com/sun/star/uri/XVndSunStarScriptUrl.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/embed/EmbedStates.hpp>
@@ -2620,29 +2620,26 @@ void SfxViewFrame::AddDispatchMacroToBasic_Impl( const ::rtl::OUString& sMacro )
         String aModuleName;
         String aMacroName;
         String aLocation;
-        Reference< XMultiServiceFactory > xSMgr = ::comphelper::getProcessServiceFactory();
-        Reference< com::sun::star::uri::XUriReferenceFactory > xFactory( xSMgr->createInstance(
-            ::rtl::OUString("com.sun.star.uri.UriReferenceFactory") ), UNO_QUERY );
-        if ( xFactory.is() )
+        Reference< XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+        Reference< com::sun::star::uri::XUriReferenceFactory > xFactory =
+            com::sun::star::uri::UriReferenceFactory::create( xContext );
+        Reference< com::sun::star::uri::XVndSunStarScriptUrl > xUrl( xFactory->parse( aScriptURL ), UNO_QUERY );
+        if ( xUrl.is() )
         {
-            Reference< com::sun::star::uri::XVndSunStarScriptUrl > xUrl( xFactory->parse( aScriptURL ), UNO_QUERY );
-            if ( xUrl.is() )
-            {
-                // get name
-                ::rtl::OUString aName = xUrl->getName();
-                sal_Unicode cTok = '.';
-                sal_Int32 nIndex = 0;
-                aLibName = aName.getToken( 0, cTok, nIndex );
-                if ( nIndex != -1 )
-                    aModuleName = aName.getToken( 0, cTok, nIndex );
-                if ( nIndex != -1 )
-                    aMacroName = aName.getToken( 0, cTok, nIndex );
+            // get name
+            ::rtl::OUString aName = xUrl->getName();
+            sal_Unicode cTok = '.';
+            sal_Int32 nIndex = 0;
+            aLibName = aName.getToken( 0, cTok, nIndex );
+            if ( nIndex != -1 )
+                aModuleName = aName.getToken( 0, cTok, nIndex );
+            if ( nIndex != -1 )
+                aMacroName = aName.getToken( 0, cTok, nIndex );
 
-                // get location
-                ::rtl::OUString aLocKey("location");
-                if ( xUrl->hasParameter( aLocKey ) )
-                    aLocation = xUrl->getParameter( aLocKey );
-            }
+            // get location
+            ::rtl::OUString aLocKey("location");
+            if ( xUrl->hasParameter( aLocKey ) )
+                aLocation = xUrl->getParameter( aLocKey );
         }
 
         BasicManager* pBasMgr = 0;

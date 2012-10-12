@@ -43,7 +43,9 @@
 #include <com/sun/star/lang/WrappedTargetException.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XEnumeration.hpp>
+#include <com/sun/star/uri/UriReferenceFactory.hpp>
 
+#include <comphelper/componentcontext.hxx>
 #include <ucbhelper/content.hxx>
 #include <osl/mutex.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -70,12 +72,12 @@ const sal_Int32 PROTOCOL_LENGTH     = 19;
 //  constructor
 //*****************************************************************************************************************
 PopupMenuDispatcher::PopupMenuDispatcher(
-    const uno::Reference< XMultiServiceFactory >& xFactory )
+    const uno::Reference< XComponentContext >& xContext )
         //  Init baseclasses first
         :   ThreadHelpBase          ( &Application::GetSolarMutex()  )
         ,   OWeakObject             (                                )
         // Init member
-        ,   m_xFactory              ( xFactory                       )
+        ,   m_xContext              ( xContext                       )
         ,   m_aListenerContainer    ( m_aLock.getShareableOslMutex() )
         ,   m_bAlreadyDisposed      ( sal_False                      )
         ,   m_bActivateListener     ( sal_False                      )
@@ -116,10 +118,61 @@ DEFINE_XTYPEPROVIDER_7  (   PopupMenuDispatcher ,
                             XFrameActionListener
                         )
 
-DEFINE_XSERVICEINFO_MULTISERVICE( PopupMenuDispatcher                    ,
-                                  ::cppu::OWeakObject                    ,
-                                  SERVICENAME_PROTOCOLHANDLER            ,
-                                  IMPLEMENTATIONNAME_POPUPMENUDISPATCHER )
+::rtl::OUString SAL_CALL PopupMenuDispatcher::getImplementationName() throw( css::uno::RuntimeException )
+{
+    return impl_getStaticImplementationName();
+}
+
+sal_Bool SAL_CALL PopupMenuDispatcher::supportsService( const ::rtl::OUString& sServiceName )
+  throw( css::uno::RuntimeException )
+{
+    return ::comphelper::findValue(getSupportedServiceNames(), sServiceName, sal_True).getLength() != 0;
+}
+
+css::uno::Sequence< ::rtl::OUString > SAL_CALL PopupMenuDispatcher::getSupportedServiceNames()
+  throw( css::uno::RuntimeException )
+{
+    return impl_getStaticSupportedServiceNames();
+}
+
+css::uno::Sequence< ::rtl::OUString > PopupMenuDispatcher::impl_getStaticSupportedServiceNames()
+{
+    css::uno::Sequence< ::rtl::OUString > seqServiceNames( 1 );
+    seqServiceNames.getArray() [0] = SERVICENAME_PROTOCOLHANDLER;
+    return seqServiceNames;
+}
+
+::rtl::OUString PopupMenuDispatcher::impl_getStaticImplementationName()
+{
+    return IMPLEMENTATIONNAME_POPUPMENUDISPATCHER;
+}
+
+css::uno::Reference< css::uno::XInterface >
+SAL_CALL PopupMenuDispatcher::impl_createInstance( const css::uno::Reference< css::lang::XMultiServiceFactory >& xServiceManager )
+throw( css::uno::Exception )
+{
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework","Ocke.Janssen@sun.com",U2B(IMPLEMENTATIONNAME_POPUPMENUDISPATCHER).getStr());
+    /* create new instance of service */
+    PopupMenuDispatcher* pClass = new PopupMenuDispatcher( comphelper::getComponentContext(xServiceManager) );
+    /* hold it alive by increasing his ref count!!! */
+    css::uno::Reference< css::uno::XInterface > xService( static_cast< ::cppu::OWeakObject* >(pClass), css::uno::UNO_QUERY );
+    /* initialize new service instance ... he can use his own refcount ... we hold it! */
+    pClass->impl_initService();
+    /* return new created service as reference */
+    return xService;
+}
+
+css::uno::Reference< css::lang::XSingleServiceFactory >
+PopupMenuDispatcher::impl_createFactory( const css::uno::Reference< css::lang::XMultiServiceFactory >& xServiceManager )
+{
+    css::uno::Reference< css::lang::XSingleServiceFactory > xReturn (
+       cppu::createSingleFactory ( xServiceManager,
+                                PopupMenuDispatcher::impl_getStaticImplementationName()   ,
+                                PopupMenuDispatcher::impl_createInstance                  ,
+                                PopupMenuDispatcher::impl_getStaticSupportedServiceNames() )
+                                                                    );
+    return xReturn;
+}
 
 DEFINE_INIT_SERVICE(PopupMenuDispatcher,
 {
@@ -333,7 +386,7 @@ SAL_CALL PopupMenuDispatcher::disposing( const EventObject& ) throw( RuntimeExce
         }
 
         // Forget our factory.
-        m_xFactory = uno::Reference< XMultiServiceFactory >();
+        m_xContext = uno::Reference< XComponentContext >();
     }
 }
 
@@ -379,13 +432,7 @@ void PopupMenuDispatcher::impl_CreateUriRefFactory()
 {
     if ( !m_xUriRefFactory.is() )
     {
-        rtl::OUString aUriRefFactoryService(
-            RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.uri.UriReferenceFactory" ));
-
-        m_xUriRefFactory = css::uno::Reference< css::uri::XUriReferenceFactory >(
-                                m_xFactory->createInstance( aUriRefFactoryService ),
-                                css::uno::UNO_QUERY);
-
+        m_xUriRefFactory = css::uri::UriReferenceFactory::create( m_xContext );
     }
 }
 

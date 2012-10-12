@@ -53,7 +53,7 @@
 #include <com/sun/star/frame/XConfigManager.hpp>
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
 #include <com/sun/star/util/XMacroExpander.hpp>
-#include <com/sun/star/uri/XUriReferenceFactory.hpp>
+#include <com/sun/star/uri/UriReferenceFactory.hpp>
 #include <com/sun/star/uri/XVndSunStarExpandUrl.hpp>
 #include <com/sun/star/script/XInvocation.hpp>
 #include <comphelper/locale.hxx>
@@ -94,22 +94,9 @@ rtl::OUString Databases::expandURL( const rtl::OUString& aURL, Reference< uno::X
     static Reference< util::XMacroExpander > xMacroExpander;
     static Reference< uri::XUriReferenceFactory > xFac;
 
-    if( !xContext.is() )
-        return rtl::OUString();
-
     if( !xMacroExpander.is() || !xFac.is() )
     {
-        Reference< XMultiComponentFactory > xSMgr( xContext->getServiceManager(), UNO_QUERY );
-
-        xFac = Reference< uri::XUriReferenceFactory >(
-            xSMgr->createInstanceWithContext( rtl::OUString(
-            "com.sun.star.uri.UriReferenceFactory"), xContext ) , UNO_QUERY );
-        if( !xFac.is() )
-        {
-            throw RuntimeException(
-                ::rtl::OUString( "Databases::expand(), could not instatiate UriReferenceFactory." ),
-                Reference< XInterface >() );
-        }
+        xFac = uri::UriReferenceFactory::create( xContext );
 
         xMacroExpander = Reference< util::XMacroExpander >(
             xContext->getValueByName(

@@ -38,7 +38,7 @@
 #include <comphelper/stl_types.hxx>
 
 #include <com/sun/star/uri/XUriReference.hpp>
-#include <com/sun/star/uri/XUriReferenceFactory.hpp>
+#include <com/sun/star/uri/UriReferenceFactory.hpp>
 #include <com/sun/star/rdf/Statement.hpp>
 #include <com/sun/star/rdf/URIs.hpp>
 #include <com/sun/star/rdf/URI.hpp>
@@ -99,12 +99,8 @@ getRelativeReference(SvXMLExport const& rExport, ::rtl::OUString const& rURI)
 
     uno::Reference<uno::XComponentContext> const xContext(
         rExport.GetComponentContext());
-    uno::Reference<lang::XMultiComponentFactory> const xServiceFactory(
-        xContext->getServiceManager(), uno::UNO_SET_THROW);
-    uno::Reference<uri::XUriReferenceFactory> const xUriFactory(
-        xServiceFactory->createInstanceWithContext(
-            ::rtl::OUString( "com.sun.star.uri.UriReferenceFactory"), xContext),
-        uno::UNO_QUERY_THROW);
+    uno::Reference<uri::XUriReferenceFactory> const xUriFactory =
+        uri::UriReferenceFactory::create( xContext );
 
     uno::Reference< uri::XUriReference > const xBaseURI(
         xUriFactory->parse(baseURI), uno::UNO_SET_THROW );

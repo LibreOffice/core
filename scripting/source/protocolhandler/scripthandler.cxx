@@ -49,7 +49,7 @@
 
 #include "com/sun/star/uno/XComponentContext.hpp"
 #include "com/sun/star/uri/XUriReference.hpp"
-#include "com/sun/star/uri/XUriReferenceFactory.hpp"
+#include "com/sun/star/uri/UriReferenceFactory.hpp"
 #include "com/sun/star/uri/XVndSunStarScriptUrl.hpp"
 
 using namespace ::com::sun::star;
@@ -102,19 +102,14 @@ Reference< XDispatch > SAL_CALL ScriptProtocolHandler::queryDispatch(
     Reference< XDispatch > xDispatcher;
     // get scheme of url
 
-    Reference< uri::XUriReferenceFactory > xFac (
-         m_xFactory->createInstance( rtl::OUString(
-            "com.sun.star.uri.UriReferenceFactory") ) , UNO_QUERY );
-    if ( xFac.is() )
+    Reference< uri::XUriReferenceFactory > xFac = uri::UriReferenceFactory::create( comphelper::getComponentContext(m_xFactory) );
+    Reference<  uri::XUriReference > uriRef(
+        xFac->parse( aURL.Complete ), UNO_QUERY );
+    if ( uriRef.is() )
     {
-        Reference<  uri::XUriReference > uriRef(
-            xFac->parse( aURL.Complete ), UNO_QUERY );
-        if ( uriRef.is() )
+        if ( uriRef->getScheme().equals( ::rtl::OUString::createFromAscii( ::scripting_protocolhandler::MYSCHEME ) ) )
         {
-            if ( uriRef->getScheme().equals( ::rtl::OUString::createFromAscii( ::scripting_protocolhandler::MYSCHEME ) ) )
-            {
-                xDispatcher = this;
-            }
+            xDispatcher = this;
         }
     }
 

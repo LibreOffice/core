@@ -40,7 +40,7 @@
 #include <comphelper/processfactory.hxx>
 #include "com/sun/star/deployment/thePackageManagerFactory.hpp"
 #include <com/sun/star/util/XMacroExpander.hpp>
-#include <com/sun/star/uri/XUriReferenceFactory.hpp>
+#include <com/sun/star/uri/UriReferenceFactory.hpp>
 #include <com/sun/star/uri/XVndSunStarExpandUrl.hpp>
 #include <comphelper/locale.hxx>
 #include <comphelper/string.hxx>
@@ -1292,17 +1292,7 @@ rtl::OUString TreeFileIterator::expandURL( const rtl::OUString& aURL )
 
     if( !xMacroExpander.is() || !xFac.is() )
     {
-        Reference< XMultiComponentFactory > xSMgr( m_xContext->getServiceManager(), UNO_QUERY );
-
-        xFac = Reference< uri::XUriReferenceFactory >(
-            xSMgr->createInstanceWithContext( rtl::OUString(
-            "com.sun.star.uri.UriReferenceFactory"), m_xContext ) , UNO_QUERY );
-        if( !xFac.is() )
-        {
-            throw RuntimeException(
-                ::rtl::OUString( "Databases::expand(), could not instatiate UriReferenceFactory." ),
-                Reference< XInterface >() );
-        }
+        xFac = uri::UriReferenceFactory::create( m_xContext );
 
         xMacroExpander = Reference< util::XMacroExpander >(
             m_xContext->getValueByName(

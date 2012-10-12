@@ -56,7 +56,7 @@
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <comphelper/processfactory.hxx>
-#include <com/sun/star/uri/XUriReferenceFactory.hpp>
+#include <com/sun/star/uri/UriReferenceFactory.hpp>
 #include <com/sun/star/uri/XVndSunStarScriptUrl.hpp>
 #include <basic/basmgr.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
@@ -527,34 +527,28 @@ sal_Bool SfxApplication::IsXScriptURL( const String& rScriptURL )
     (void) rScriptURL;
 #else
     ::com::sun::star::uno::Reference
-        < ::com::sun::star::lang::XMultiServiceFactory > xSMgr =
-            ::comphelper::getProcessServiceFactory();
+        < ::com::sun::star::uno::XComponentContext > xContext =
+            ::comphelper::getProcessComponentContext();
 
     ::com::sun::star::uno::Reference
         < ::com::sun::star::uri::XUriReferenceFactory >
-            xFactory( xSMgr->createInstance(
-                ::rtl::OUString(
-                    "com.sun.star.uri.UriReferenceFactory" ) ),
-                ::com::sun::star::uno::UNO_QUERY );
+            xFactory = ::com::sun::star::uri::UriReferenceFactory::create( xContext );
 
-    if ( xFactory.is() )
+    try
     {
-        try
-        {
-            ::com::sun::star::uno::Reference
-                < ::com::sun::star::uri::XVndSunStarScriptUrl >
-                    xUrl( xFactory->parse( rScriptURL ),
-                        ::com::sun::star::uno::UNO_QUERY );
+        ::com::sun::star::uno::Reference
+            < ::com::sun::star::uri::XVndSunStarScriptUrl >
+                xUrl( xFactory->parse( rScriptURL ),
+                    ::com::sun::star::uno::UNO_QUERY );
 
-            if ( xUrl.is() )
-            {
-                result = sal_True;
-            }
-        }
-        catch (const ::com::sun::star::uno::RuntimeException&)
+        if ( xUrl.is() )
         {
-            // ignore, will just return FALSE
+            result = sal_True;
         }
+    }
+    catch (const ::com::sun::star::uno::RuntimeException&)
+    {
+        // ignore, will just return FALSE
     }
 #endif
     return result;

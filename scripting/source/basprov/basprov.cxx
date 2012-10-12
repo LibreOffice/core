@@ -24,6 +24,7 @@
 #include <com/sun/star/script/browse/BrowseNodeTypes.hpp>
 #include <com/sun/star/script/provider/ScriptFrameworkErrorType.hpp>
 #include <com/sun/star/document/XEmbeddedScripts.hpp>
+#include <com/sun/star/uri/UriReferenceFactory.hpp>
 
 #include <cppuhelper/implementationentry.hxx>
 #include <rtl/uri.hxx>
@@ -135,40 +136,31 @@ namespace basprov
             ::rtl::OUString aFileURL;
             if ( m_xContext.is() )
             {
-                Reference< uri::XUriReferenceFactory > xUriFac;
-                Reference< lang::XMultiComponentFactory > xSMgr( m_xContext->getServiceManager() );
-                if ( xSMgr.is() )
-                {
-                    xUriFac.set( xSMgr->createInstanceWithContext( ::rtl::OUString(
-                        "com.sun.star.uri.UriReferenceFactory" ), m_xContext ), UNO_QUERY );
-                }
+                Reference< uri::XUriReferenceFactory > xUriFac( uri::UriReferenceFactory::create( m_xContext ) );
 
-                if ( xUriFac.is() )
-                {
-                    ::rtl::OUString aLinkURL( xLibContainer->getLibraryLinkURL( rLibName ) );
-                    Reference<  uri::XUriReference > xUriRef( xUriFac->parse( aLinkURL ), UNO_QUERY );
+                ::rtl::OUString aLinkURL( xLibContainer->getLibraryLinkURL( rLibName ) );
+                Reference<  uri::XUriReference > xUriRef( xUriFac->parse( aLinkURL ), UNO_QUERY );
 
-                    if ( xUriRef.is() )
+                if ( xUriRef.is() )
+                {
+                    ::rtl::OUString aScheme = xUriRef->getScheme();
+                    if ( aScheme.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("file")) )
                     {
-                        ::rtl::OUString aScheme = xUriRef->getScheme();
-                        if ( aScheme.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("file")) )
+                        aFileURL = aLinkURL;
+                    }
+                    else if ( aScheme.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("vnd.sun.star.pkg")) )
+                    {
+                        ::rtl::OUString aAuthority = xUriRef->getAuthority();
+                        if ( aAuthority.matchIgnoreAsciiCaseAsciiL( RTL_CONSTASCII_STRINGPARAM( "vnd.sun.star.expand:" ) ) )
                         {
-                            aFileURL = aLinkURL;
-                        }
-                        else if ( aScheme.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("vnd.sun.star.pkg")) )
-                        {
-                            ::rtl::OUString aAuthority = xUriRef->getAuthority();
-                            if ( aAuthority.matchIgnoreAsciiCaseAsciiL( RTL_CONSTASCII_STRINGPARAM( "vnd.sun.star.expand:" ) ) )
-                            {
-                                ::rtl::OUString aDecodedURL( aAuthority.copy( sizeof ( "vnd.sun.star.expand:" ) - 1 ) );
-                                aDecodedURL = ::rtl::Uri::decode( aDecodedURL, rtl_UriDecodeWithCharset, RTL_TEXTENCODING_UTF8 );
-                                Reference<util::XMacroExpander> xMacroExpander(
-                                    m_xContext->getValueByName(
-                                    ::rtl::OUString("/singletons/com.sun.star.util.theMacroExpander") ),
-                                    UNO_QUERY );
-                                if ( xMacroExpander.is() )
-                                    aFileURL = xMacroExpander->expandMacros( aDecodedURL );
-                            }
+                            ::rtl::OUString aDecodedURL( aAuthority.copy( sizeof ( "vnd.sun.star.expand:" ) - 1 ) );
+                            aDecodedURL = ::rtl::Uri::decode( aDecodedURL, rtl_UriDecodeWithCharset, RTL_TEXTENCODING_UTF8 );
+                            Reference<util::XMacroExpander> xMacroExpander(
+                                m_xContext->getValueByName(
+                                ::rtl::OUString("/singletons/com.sun.star.util.theMacroExpander") ),
+                                UNO_QUERY );
+                            if ( xMacroExpander.is() )
+                                aFileURL = xMacroExpander->expandMacros( aDecodedURL );
                         }
                     }
                 }
@@ -325,18 +317,7 @@ namespace basprov
         SolarMutexGuard aGuard;
 
         Reference< provider::XScript > xScript;
-        Reference< lang::XMultiComponentFactory > xMcFac ( m_xContext->getServiceManager() );
-        Reference< uri::XUriReferenceFactory > xFac (
-            xMcFac->createInstanceWithContext( rtl::OUString(
-            "com.sun.star.uri.UriReferenceFactory"), m_xContext ) , UNO_QUERY );
-
-        if ( !xFac.is() )
-        {
-            throw provider::ScriptFrameworkErrorException(
-                OUSTR( "Failed to instantiate UriReferenceFactory" ), Reference< XInterface >(),
-                scriptURI, OUSTR("Basic"),
-                provider::ScriptFrameworkErrorType::UNKNOWN );
-        }
+        Reference< uri::XUriReferenceFactory > xFac ( uri::UriReferenceFactory::create( m_xContext )  );
 
         Reference<  uri::XUriReference > uriRef(
             xFac->parse( scriptURI ), UNO_QUERY );

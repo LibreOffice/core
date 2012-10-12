@@ -61,7 +61,7 @@
 
 #include <unotools/ucbhelper.hxx>
 #include <com/sun/star/uri/XUriReference.hpp>
-#include <com/sun/star/uri/XUriReferenceFactory.hpp>
+#include <com/sun/star/uri/UriReferenceFactory.hpp>
 #include <com/sun/star/uri/XVndSunStarPkgUrlReferenceFactory.hpp>
 
 
@@ -147,13 +147,8 @@ uno::Reference<rdf::XURI> createBaseURI(
         }
     }
 
-    const uno::Reference<lang::XMultiComponentFactory> xServiceFactory(
-        i_xContext->getServiceManager(), uno::UNO_SET_THROW);
-    const uno::Reference<uri::XUriReferenceFactory> xUriFactory(
-        xServiceFactory->createInstanceWithContext(
-            ::rtl::OUString(
-                "com.sun.star.uri.UriReferenceFactory"), i_xContext),
-        uno::UNO_QUERY_THROW);
+    const uno::Reference<uri::XUriReferenceFactory> xUriFactory =
+        uri::UriReferenceFactory::create( i_xContext);
     uno::Reference< uri::XUriReference > xBaseURI;
 
     const uno::Reference< uri::XUriReference > xPkgURI(
