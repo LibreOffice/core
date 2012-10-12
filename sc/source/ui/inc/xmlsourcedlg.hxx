@@ -12,7 +12,7 @@
 
 #include "vcl/button.hxx"
 #include "vcl/fixed.hxx"
-#include "svtools/svtreebx.hxx"
+#include "svtools/treelistbox.hxx"
 
 #include "expftext.hxx"
 #include "anyrefdg.hxx"

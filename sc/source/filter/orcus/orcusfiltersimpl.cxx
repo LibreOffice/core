@@ -12,7 +12,7 @@
 #include "document.hxx"
 
 #include "tools/urlobj.hxx"
-#include "svtools/svtreebx.hxx"
+#include "svtools/treelistbox.hxx"
 
 #define __ORCUS_STATIC_LIB
 #include <orcus/spreadsheet/import_interface.hpp>
