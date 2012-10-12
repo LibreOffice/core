@@ -237,6 +237,8 @@ $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
 	ascii_expat_xmlparse \
 	expat_xmlparse \
 	expat_xmltok \
+	expat_xmlparse_x64 \
+	expat_xmltok_x64 \
 ))
 
 define gb_LinkTarget__use_expat
