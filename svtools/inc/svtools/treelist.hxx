@@ -389,9 +389,7 @@ class SVT_DLLPUBLIC SvListView
     SVT_DLLPRIVATE void ClearTable();
     SVT_DLLPRIVATE void RemoveViewData( SvListEntry* pParent );
 
-protected:
     SvDataTable maDataTable;  // Mapping SvListEntry -> ViewData
-    SvTreeList*         pModel;
 
     void                ActionMoving( SvListEntry* pEntry,SvListEntry* pTargetPrnt,sal_uLong nChildPos);
     void                ActionMoved( SvListEntry* pEntry,SvListEntry* pTargetPrnt,sal_uLong nChildPos);
@@ -401,8 +399,10 @@ protected:
     void                ActionRemoved( SvListEntry* pEntry );
     void                ActionClear();
 
-public:
+protected:
+    SvTreeList* pModel;
 
+public:
                         SvListView();   // !!! setzt das Model auf 0
     virtual             ~SvListView();
     void                Clear();
