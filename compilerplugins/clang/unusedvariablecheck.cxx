@@ -87,11 +87,11 @@ bool UnusedVariableCheck::VisitNamedDecl( NamedDecl* declaration )
                     if( !func->doesThisDeclarationHaveABody())
                         return true;
                 report( DiagnosticsEngine::Warning, "unused parameter %0 [loplugin]",
-                    var->getLocStart()) << var->getDeclName();
+                    var->getLocation()) << var->getDeclName();
                 }
             else
                 report( DiagnosticsEngine::Warning, "unused variable %0 [loplugin]",
-                    var->getLocStart()) << var->getDeclName();
+                    var->getLocation()) << var->getDeclName();
             }
         }
     return true;

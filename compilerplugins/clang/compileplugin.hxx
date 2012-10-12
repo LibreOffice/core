@@ -33,7 +33,7 @@ class Plugin
 inline
 bool Plugin::ignoreLocation( const Decl* decl )
     {
-    return ignoreLocation( decl->getLocStart());
+    return ignoreLocation( decl->getLocation());
     }
 
 inline
