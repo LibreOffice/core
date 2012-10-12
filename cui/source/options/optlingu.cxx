@@ -2107,19 +2107,6 @@ IMPL_LINK( SvxEditModulesDlg, BoxCheckButtonHdl_Impl, SvTreeListBox *, pBox )
     return 0;
 }
 
-static OUString lcl_GetServiceName(sal_uInt8 nType)
-{
-    switch(nType)
-    {
-        case  TYPE_SPELL    : return OUString(cSpell);
-        case  TYPE_GRAMMAR  : return OUString(cGrammar);
-        case  TYPE_HYPH     : return OUString(cHyph);
-        case  TYPE_THES     : return OUString(cThes);
-    }
-    return OUString();
-}
-
-
 IMPL_LINK( SvxEditModulesDlg, LangSelectHdl_Impl, ListBox *, pBox )
 {
     LanguageType  eCurLanguage = aLanguageLB.GetSelectLanguage();
