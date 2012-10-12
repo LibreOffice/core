@@ -52,6 +52,7 @@ class SfxInfoBarWindow : public Window
         ~SfxInfoBarWindow( );
 
         virtual void Paint( const Rectangle& );
+        virtual void Resize( );
 
     private:
         DECL_LINK( CloseHandler, void* );
@@ -69,6 +70,8 @@ class SfxInfoBarContainerWindow : public Window
 
         void appendInfoBar( const rtl::OUString& sMessage, std::vector< PushButton* > aButtons );
         void removeInfoBar( SfxInfoBarWindow* pInfoBar );
+
+        virtual void Resize( );
 };
 
 

@@ -180,6 +180,27 @@ void SfxInfoBarWindow::Paint( const Rectangle& rPaintRect )
     Window::Paint( rPaintRect );
 }
 
+void SfxInfoBarWindow::Resize( )
+{
+    long nWidth = GetSizePixel().getWidth();
+    m_pCloseBtn->SetPosSizePixel( Point( nWidth - 25, 15 ), Size( 10, 10 ) );
+
+    // Reparent the buttons and place them on the right of the bar
+    long nX = m_pCloseBtn->GetPosPixel( ).getX( ) - 15;
+    long nBtnGap = 5;
+    for ( vector< PushButton* >::iterator it = m_aActionBtns.begin( );
+            it != m_aActionBtns.end( ); ++it )
+    {
+        PushButton* pBtn = *it;
+        long nBtnWidth = pBtn->GetSizePixel( ).getWidth();
+        nX -= nBtnWidth;
+        pBtn->SetPosSizePixel( Point( nX, 5 ), Size( nBtnWidth, 30 ) );
+        nX -= nBtnGap;
+    }
+
+    m_pMessage->SetPosSizePixel( Point( 10, 10 ), Size( nX - 20, 20 ) );
+}
+
 IMPL_LINK_NOARG( SfxInfoBarWindow, CloseHandler )
 {
     ((SfxInfoBarContainerWindow*)GetParent())->removeInfoBar( this );
@@ -245,6 +266,20 @@ void SfxInfoBarContainerWindow::removeInfoBar( SfxInfoBarWindow* pInfoBar )
     m_pChildWin->Update( );
 }
 
+void SfxInfoBarContainerWindow::Resize( )
+{
+    // Only need to change the width of the infobars
+    long nWidth = GetSizePixel( ).getWidth( );
+    for ( vector< SfxInfoBarWindow * >::iterator it = m_pInfoBars.begin( );
+            it != m_pInfoBars.end( ); ++it )
+    {
+        SfxInfoBarWindow* pInfoBar = *it;
+        Size aSize = pInfoBar->GetSizePixel( );
+        aSize.setWidth( nWidth );
+        pInfoBar->SetSizePixel( aSize );
+        pInfoBar->Resize( );
+    }
+}
 
 SFX_IMPL_POS_CHILDWINDOW_WITHID( SfxInfoBarContainerChild, SID_INFOBARCONTAINER, SFX_OBJECTBAR_OBJECT );
 
