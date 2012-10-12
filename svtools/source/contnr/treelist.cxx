@@ -1526,7 +1526,7 @@ SvListView::SvListView()
 SvListView::~SvListView()
 {
     DBG_DTOR(SvListView,0);
-    ClearTable();
+    maDataTable.clear();
 }
 
 void SvListView::InitTable()
@@ -1570,15 +1570,9 @@ SvViewData* SvListView::CreateViewData( SvListEntry* )
     return new SvViewData;
 }
 
-void SvListView::ClearTable()
-{
-    DBG_CHKTHIS(SvListView,0);
-    maDataTable.clear();
-}
-
 void SvListView::Clear()
 {
-    ClearTable();
+    maDataTable.clear();
     nSelectionCount = 0;
     nVisibleCount = 0;
     bVisPositionsValid = sal_False;

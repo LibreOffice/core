@@ -386,7 +386,6 @@ class SVT_DLLPUBLIC SvListView
     sal_Bool            bVisPositionsValid;
 
     SVT_DLLPRIVATE void InitTable();
-    SVT_DLLPRIVATE void ClearTable();
     SVT_DLLPRIVATE void RemoveViewData( SvListEntry* pParent );
 
     SvDataTable maDataTable;  // Mapping SvListEntry -> ViewData
