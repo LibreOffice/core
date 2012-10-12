@@ -29,7 +29,6 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 
-#define NULLABLE_UNDEFINED  99
 //**************************************************************
 //************ Class: java.sql.ResultSetMetaData
 //**************************************************************
