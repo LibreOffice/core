@@ -1120,10 +1120,10 @@ void FmFilterString::InitViewData( SvTreeListBox* pView,SvLBoxEntry* pEntry, SvV
     Font aOldFont( pView->GetFont());
     Font aFont( aOldFont );
     aFont.SetWeight(WEIGHT_BOLD);
-    pView->SetFont( aFont );
+    pView->Control::SetFont( aFont );
 
     Size aSize(pView->GetTextWidth(m_aName), pView->GetTextHeight());
-    pView->SetFont( aOldFont );
+    pView->Control::SetFont( aOldFont );
     aSize.Width() += pView->GetTextWidth(GetText()) + nxD;
     pViewData->aSize = aSize;
 }

@@ -85,9 +85,9 @@ void SvLBoxFontString::InitViewData( SvTreeListBox* pView, SvLBoxEntry* pEntry, 
 {
     DBG_CHKTHIS( SvLBoxFontString, 0 );
     Font aOldFont( pView->GetFont() );
-    pView->SetFont( maFont );
+    pView->Control::SetFont( maFont );
     SvLBoxString::InitViewData( pView, pEntry, pViewData);
-    pView->SetFont( aOldFont );
+    pView->Control::SetFont( aOldFont );
 }
 
 
