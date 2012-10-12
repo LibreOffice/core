@@ -79,7 +79,8 @@ struct lcl_ApplyCellToData : public ::std::unary_function< SchXMLCell, void >
     lcl_ApplyCellToData( Sequence< double > & rOutData ) :
             m_rData( rOutData ),
             m_nIndex( 0 ),
-            m_nSize( rOutData.getLength())
+            m_nSize( rOutData.getLength()),
+            m_fNaN( 0.0 )
     {
         ::rtl::math::setNan( &m_fNaN );
     }
