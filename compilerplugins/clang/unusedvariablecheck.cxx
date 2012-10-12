@@ -47,6 +47,8 @@ bool UnusedVariableCheck::VisitNamedDecl( NamedDecl* declaration )
     const VarDecl* var = cast< VarDecl >( declaration );
     if( var->isReferenced() || var->isUsed())
         return true;
+    if( var->isDefinedOutsideFunctionOrMethod())
+        return true;
     if( CXXRecordDecl* type = var->getType()->getAsCXXRecordDecl())
         {
         bool warn_unused = false;
