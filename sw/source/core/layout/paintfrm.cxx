@@ -1362,13 +1362,6 @@ static long lcl_MinHeightDist( const long nDist )
     return ::lcl_AlignHeight( Max( nDist, nMinDistPixelH ));
 }
 
-static long lcl_MinWidthDist( const long nDist )
-{
-    if ( aScaleX < aMinDistScale || aScaleY < aMinDistScale )
-        return nDist;
-    return ::lcl_AlignWidth( Max( nDist, nMinDistPixelW ));
-}
-
 //Calculate PrtArea plus surrounding plus shadow.
 static void lcl_CalcBorderRect( SwRect &rRect, const SwFrm *pFrm,
                                         const SwBorderAttrs &rAttrs,
