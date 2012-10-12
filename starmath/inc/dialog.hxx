@@ -44,7 +44,7 @@ class SubsetMap;
 
 /**************************************************************************/
 
-void            SetFontStyle(const XubString &rStyleName, Font &rFont);
+void SetFontStyle(const OUString &rStyleName, Font &rFont);
 
 /**************************************************************************/
 
@@ -382,7 +382,7 @@ public:
             SmSymbolManager &rSymbolMgr, SmViewShell &rViewShell, bool bFreeRes = true);
     virtual ~SmSymbolDialog();
 
-    bool    SelectSymbolSet(const XubString &rSymbolSetName);
+    bool    SelectSymbolSet(const OUString &rSymbolSetName);
     void    SelectSymbol(sal_uInt16 nSymbolPos);
     sal_uInt16  GetSelectedSymbol() const   { return aSymbolSetDisplay.GetSelectSymbol(); }
 };
@@ -462,16 +462,16 @@ class SmSymDefineDialog : public ModalDialog
     void    FillStyles(bool bDeleteText = true);
 
     void    SetSymbolSetManager(const SmSymbolManager &rMgr);
-    void    SetFont(const XubString &rFontName, const XubString &rStyleName);
-    void    SetOrigSymbol(const SmSym *pSymbol, const XubString &rSymbolSetName);
+    void    SetFont(const OUString &rFontName, const OUString &rStyleName);
+    void    SetOrigSymbol(const SmSym *pSymbol, const OUString &rSymbolSetName);
     void    UpdateButtons();
 
-    bool    SelectSymbolSet(ComboBox &rComboBox, const XubString &rSymbolSetName,
+    bool    SelectSymbolSet(ComboBox &rComboBox, const OUString &rSymbolSetName,
                             bool bDeleteText);
-    bool    SelectSymbol(ComboBox &rComboBox, const XubString &rSymbolName,
+    bool    SelectSymbol(ComboBox &rComboBox, const OUString &rSymbolName,
                             bool bDeleteText);
-    bool    SelectFont(const XubString &rFontName, bool bApplyFont);
-    bool    SelectStyle(const XubString &rStyleName, bool bApplyFont);
+    bool    SelectFont(const OUString &rFontName, bool bApplyFont);
+    bool    SelectStyle(const OUString &rStyleName, bool bApplyFont);
 
     SmSym       * GetSymbol(const ComboBox &rComboBox);
     const SmSym * GetSymbol(const ComboBox &rComboBox) const
@@ -492,28 +492,28 @@ public:
     // Dialog
     virtual short   Execute();
 
-    bool SelectOldSymbolSet(const XubString &rSymbolSetName)
+    bool SelectOldSymbolSet(const OUString &rSymbolSetName)
     {
         return SelectSymbolSet(aOldSymbolSets, rSymbolSetName, false);
     }
 
-    bool SelectOldSymbol(const XubString &rSymbolName)
+    bool SelectOldSymbol(const OUString &rSymbolName)
     {
         return SelectSymbol(aOldSymbols, rSymbolName, false);
     }
 
-    bool SelectSymbolSet(const XubString &rSymbolSetName)
+    bool SelectSymbolSet(const OUString &rSymbolSetName)
     {
         return SelectSymbolSet(aSymbolSets, rSymbolSetName, false);
     }
 
-    bool SelectSymbol(const XubString &rSymbolName)
+    bool SelectSymbol(const OUString &rSymbolName)
     {
         return SelectSymbol(aSymbols, rSymbolName, false);
     }
 
-    bool        SelectFont(const XubString &rFontName)   { return SelectFont(rFontName, true); }
-    bool        SelectStyle(const XubString &rStyleName) { return SelectStyle(rStyleName, true); };
+    bool        SelectFont(const OUString &rFontName)   { return SelectFont(rFontName, true); }
+    bool        SelectStyle(const OUString &rStyleName) { return SelectStyle(rStyleName, true); };
     void        SelectChar(xub_Unicode cChar);
 };
 

@@ -78,9 +78,12 @@ public:
     void ClearPortionInfo();
 
     // StyleSheet support
-    bool ChangeStyleSheets(const XubString& rOldName, SfxStyleFamily eOldFamily, const XubString& rNewName, SfxStyleFamily eNewFamily);
-    void ChangeStyleSheetName(SfxStyleFamily eFamily, const XubString& rOldName, const XubString& rNewName);
-    void SetStyleSheets(sal_uInt16 nLevel, const XubString rNewName, const SfxStyleFamily& rNewFamily);
+    bool ChangeStyleSheets(const OUString& rOldName, SfxStyleFamily eOldFamily,
+        const OUString& rNewName, SfxStyleFamily eNewFamily);
+    void ChangeStyleSheetName(SfxStyleFamily eFamily, const OUString& rOldName,
+        const OUString& rNewName);
+    void SetStyleSheets(sal_uInt16 nLevel, const OUString rNewName,
+        const SfxStyleFamily& rNewFamily);
 };
 
 //////////////////////////////////////////////////////////////////////////////

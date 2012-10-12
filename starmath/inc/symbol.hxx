@@ -40,24 +40,24 @@
 
 ////////////////////////////////////////////////////////////////////////////////
 
-inline const String GetExportSymbolName( const String &rUiSymbolName )
+inline const OUString GetExportSymbolName( const OUString &rUiSymbolName )
 {
     return SM_MOD()->GetLocSymbolData().GetExportSymbolName( rUiSymbolName );
 }
 
 
-inline const String GetUiSymbolName( const String &rExportSymbolName )
+inline const OUString GetUiSymbolName( const OUString &rExportSymbolName )
 {
     return SM_MOD()->GetLocSymbolData().GetUiSymbolName( rExportSymbolName );
 }
 
-inline const String GetExportSymbolSetName( const String &rUiSymbolSetName )
+inline const OUString GetExportSymbolSetName( const OUString &rUiSymbolSetName )
 {
     return SM_MOD()->GetLocSymbolData().GetExportSymbolSetName( rUiSymbolSetName );
 }
 
 
-inline const String GetUiSymbolSetName( const String &rExportSymbolSetName )
+inline const OUString GetUiSymbolSetName( const OUString &rExportSymbolSetName )
 {
     return SM_MOD()->GetLocSymbolData().GetUiSymbolSetName( rExportSymbolSetName );
 }
@@ -68,37 +68,33 @@ class SmSym
 {
 private:
     SmFace              m_aFace;
-    String              m_aName;
-    String              m_aExportName;
-    String              m_aSetName;
+    OUString            m_aName;
+    OUString            m_aExportName;
+    OUString            m_aSetName;
     sal_UCS4            m_cChar;
     bool                m_bPredefined;
     bool                m_bDocSymbol;
 
 public:
     SmSym();
-    SmSym(const String& rName, const Font& rFont, sal_UCS4 cChar,
-          const String& rSet, bool bIsPredefined = false);
+    SmSym(const OUString& rName, const Font& rFont, sal_UCS4 cChar,
+          const OUString& rSet, bool bIsPredefined = false);
     SmSym(const SmSym& rSymbol);
 
     SmSym&      operator = (const SmSym& rSymbol);
 
     const Font&     GetFace() const { return m_aFace; }
     sal_UCS4        GetCharacter() const { return m_cChar; }
-    const String&   GetName() const { return m_aName; }
+    const OUString&   GetName() const { return m_aName; }
 
     void            SetFace( const Font& rFont )        { m_aFace = rFont; }
     void            SetCharacter( sal_UCS4 cChar )   { m_cChar = cChar; }
 
-//! since the symbol name is also used as key in the map it should not be possible to change the name
-//! because ten the key would not be the same as its supposed copy here
-//    void            SetName( const String &rTxt )       { m_aName = rTxt; }
-
     bool            IsPredefined() const        { return m_bPredefined; }
-    const String &  GetSymbolSetName() const    { return m_aSetName; }
-    void            SetSymbolSetName( const String &rName )     { m_aSetName = rName; }
-    const String &  GetExportName() const       { return m_aExportName; }
-    void            SetExportName( const String &rName )        { m_aExportName = rName; }
+    const OUString& GetSymbolSetName() const    { return m_aSetName; }
+    void            SetSymbolSetName( const OUString &rName )     { m_aSetName = rName; }
+    const OUString& GetExportName() const       { return m_aExportName; }
+    void            SetExportName( const OUString &rName )        { m_aExportName = rName; }
 
     bool            IsDocSymbol() const         { return m_bDocSymbol; }
     void            SetDocSymbol( bool bVal )   { m_bDocSymbol = bVal; }
@@ -107,20 +103,8 @@ public:
     bool            IsEqualInUI( const SmSym& rSymbol ) const;
 };
 
-/**************************************************************************/
-
-struct lt_String
-{
-    bool operator()( const String &r1, const String &r2 ) const
-    {
-        // r1 < r2 ?
-        return r1.CompareTo( r2 ) == COMPARE_LESS;
-    }
-};
-
-
 // type of the actual container to hold the symbols
-typedef std::map< String, SmSym, lt_String >    SymbolMap_t;
+typedef std::map< OUString, SmSym >    SymbolMap_t;
 
 // vector of pointers to the actual symbols in the above container
 typedef std::vector< const SmSym * >            SymbolPtrVec_t;
@@ -151,16 +135,16 @@ public:
     SmSymbolManager &   operator = (const SmSymbolManager& rSymbolSetManager);
 
     // symbol sets are for UI purpose only, thus we assemble them here
-    std::set< String >      GetSymbolSetNames() const;
-    const SymbolPtrVec_t    GetSymbolSet(  const String& rSymbolSetName );
+    std::set< OUString >      GetSymbolSetNames() const;
+    const SymbolPtrVec_t    GetSymbolSet(  const OUString& rSymbolSetName );
 
     sal_uInt16                  GetSymbolCount() const  { return static_cast< sal_uInt16 >(m_aSymbols.size()); }
     const SymbolPtrVec_t    GetSymbols() const;
     bool                    AddOrReplaceSymbol( const SmSym & rSymbol, bool bForceChange = false );
-    void                    RemoveSymbol( const String & rSymbolName );
+    void                    RemoveSymbol( const OUString & rSymbolName );
 
-    SmSym       *   GetSymbolByName(const String& rSymbolName);
-    const SmSym *   GetSymbolByName(const String& rSymbolName) const
+    SmSym       *   GetSymbolByName(const OUString& rSymbolName);
+    const SmSym *   GetSymbolByName(const OUString& rSymbolName) const
     {
         return ((SmSymbolManager *) this)->GetSymbolByName(rSymbolName);
     }

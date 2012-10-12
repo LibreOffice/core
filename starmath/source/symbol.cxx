@@ -47,8 +47,8 @@ using namespace ::rtl;
 /**************************************************************************/
 
 SmSym::SmSym() :
-    m_aName(rtl::OUString("unknown")),
-    m_aSetName(rtl::OUString("unknown")),
+    m_aName(OUString("unknown")),
+    m_aSetName(OUString("unknown")),
     m_cChar('\0'),
     m_bPredefined(false),
     m_bDocSymbol(false)
@@ -65,8 +65,8 @@ SmSym::SmSym(const SmSym& rSymbol)
 }
 
 
-SmSym::SmSym(const String& rName, const Font& rFont, sal_UCS4 cChar,
-             const String& rSet, bool bIsPredefined)
+SmSym::SmSym(const OUString& rName, const Font& rFont, sal_UCS4 cChar,
+             const OUString& rSet, bool bIsPredefined)
 {
     m_aName     = m_aExportName   = rName;
 
@@ -141,7 +141,7 @@ SmSymbolManager& SmSymbolManager::operator = (const SmSymbolManager& rSymbolSetM
 }
 
 
-SmSym *SmSymbolManager::GetSymbolByName(const String& rSymbolName)
+SmSym *SmSymbolManager::GetSymbolByName(const OUString& rSymbolName)
 {
     SmSym *pRes = NULL;
     SymbolMap_t::iterator aIt( m_aSymbols.find( rSymbolName ) );
@@ -166,8 +166,8 @@ bool SmSymbolManager::AddOrReplaceSymbol( const SmSym &rSymbol, bool bForceChang
 {
     bool bAdded = false;
 
-    const String aSymbolName( rSymbol.GetName() );
-    if (aSymbolName.Len() > 0 && rSymbol.GetSymbolSetName().Len() > 0)
+    const OUString aSymbolName( rSymbol.GetName() );
+    if (aSymbolName.getLength() > 0 && rSymbol.GetSymbolSetName().getLength() > 0)
     {
         const SmSym *pFound = GetSymbolByName( aSymbolName );
         const bool bSymbolConflict = pFound && !pFound->IsEqualInUI( rSymbol );
@@ -198,9 +198,9 @@ bool SmSymbolManager::AddOrReplaceSymbol( const SmSym &rSymbol, bool bForceChang
 }
 
 
-void SmSymbolManager::RemoveSymbol( const String & rSymbolName )
+void SmSymbolManager::RemoveSymbol( const OUString & rSymbolName )
 {
-    if (rSymbolName.Len() > 0)
+    if (rSymbolName.getLength() > 0)
     {
         size_t nOldSize = m_aSymbols.size();
         m_aSymbols.erase( rSymbolName );
@@ -209,9 +209,9 @@ void SmSymbolManager::RemoveSymbol( const String & rSymbolName )
 }
 
 
-std::set< String > SmSymbolManager::GetSymbolSetNames() const
+std::set< OUString > SmSymbolManager::GetSymbolSetNames() const
 {
-    std::set< String >  aRes;
+    std::set< OUString >  aRes;
     SymbolMap_t::const_iterator aIt( m_aSymbols.begin() );
     for ( ; aIt != m_aSymbols.end(); ++aIt )
         aRes.insert( aIt->second.GetSymbolSetName() );
@@ -219,10 +219,10 @@ std::set< String > SmSymbolManager::GetSymbolSetNames() const
 }
 
 
-const SymbolPtrVec_t SmSymbolManager::GetSymbolSet( const String& rSymbolSetName )
+const SymbolPtrVec_t SmSymbolManager::GetSymbolSet( const OUString& rSymbolSetName )
 {
     SymbolPtrVec_t aRes;
-    if (rSymbolSetName.Len() > 0)
+    if (rSymbolSetName.getLength() > 0)
     {
         SymbolMap_t::const_iterator aIt( m_aSymbols.begin() );
         for ( ; aIt != m_aSymbols.end(); ++aIt )
@@ -246,8 +246,8 @@ void SmSymbolManager::Load()
     for (size_t i = 0;  i < nSymbolCount;  ++i)
     {
         const SmSym &rSym = aSymbols[i];
-        OSL_ENSURE( rSym.GetName().Len() > 0, "symbol without name!" );
-        if (rSym.GetName().Len() > 0)
+        OSL_ENSURE( rSym.GetName().getLength() > 0, "symbol without name!" );
+        if (rSym.GetName().getLength() > 0)
             AddOrReplaceSymbol( rSym );
     }
     m_bModified = true;
@@ -260,9 +260,9 @@ void SmSymbolManager::Load()
 
     // now add a %i... symbol to the 'iGreek' set for every symbol found in the 'Greek' set.
     SmLocalizedSymbolData   aLocalizedData;
-    const String aGreekSymbolSetName( aLocalizedData.GetUiSymbolSetName( OUString::createFromAscii( "Greek" ) ));
+    const OUString aGreekSymbolSetName(aLocalizedData.GetUiSymbolSetName(OUString("Greek")));
     const SymbolPtrVec_t    aGreekSymbols( GetSymbolSet( aGreekSymbolSetName ) );
-    String aSymbolSetName = rtl::OUString('i');
+    String aSymbolSetName = OUString('i');
     aSymbolSetName += aGreekSymbolSetName;
     size_t nSymbols = aGreekSymbols.size();
     for (size_t i = 0;  i < nSymbols;  ++i)
@@ -272,7 +272,7 @@ void SmSymbolManager::Load()
         Font aFont( rSym.GetFace() );
         OSL_ENSURE( aFont.GetItalic() == ITALIC_NONE, "expected Font with ITALIC_NONE, failed." );
         aFont.SetItalic( ITALIC_NORMAL );
-        String aSymbolName = rtl::OUString('i');
+        String aSymbolName = OUString('i');
         aSymbolName += rSym.GetName();
         SmSym aSymbol( aSymbolName, aFont, rSym.GetCharacter(),
                 aSymbolSetName, true /*bIsPredefined*/ );
@@ -289,8 +289,8 @@ void SmSymbolManager::Save()
 
         // prepare to skip symbols from iGreek on saving
         SmLocalizedSymbolData   aLocalizedData;
-        String aSymbolSetName = rtl::OUString('i');
-        aSymbolSetName += aLocalizedData.GetUiSymbolSetName( OUString::createFromAscii( "Greek" ));
+        OUString aSymbolSetName('i');
+        aSymbolSetName += aLocalizedData.GetUiSymbolSetName(OUString("Greek"));
 
         SymbolPtrVec_t aTmp( GetSymbols() );
         std::vector< SmSym > aSymbols;

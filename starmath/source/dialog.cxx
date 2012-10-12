@@ -59,18 +59,18 @@ using ::rtl::OUString;
 
 class SmFontStyles
 {
-    String  aNormal;
-    String  aBold;
-    String  aItalic;
-    String  aBoldItalic;
-    String  aEmpty;
+    OUString aNormal;
+    OUString aBold;
+    OUString aItalic;
+    OUString aBoldItalic;
+    OUString aEmpty;
 
 public:
     SmFontStyles();
 
     sal_uInt16          GetCount() const    { return 4; }
-    const String &  GetStyleName( const Font &rFont ) const;
-    const String &  GetStyleName( sal_uInt16 nIdx ) const;
+    const OUString&  GetStyleName( const Font &rFont ) const;
+    const OUString&  GetStyleName( sal_uInt16 nIdx ) const;
 };
 
 
@@ -81,12 +81,12 @@ SmFontStyles::SmFontStyles() :
 {
 
     aBoldItalic = aBold;
-    aBoldItalic.AppendAscii( ", " );
+    aBoldItalic += ", ";
     aBoldItalic += aItalic;
 }
 
 
-const String & SmFontStyles::GetStyleName( const Font &rFont ) const
+const OUString& SmFontStyles::GetStyleName( const Font &rFont ) const
 {
     //! compare also SmSpecialNode::Prepare
     bool bBold   = IsBold( rFont ),
@@ -98,12 +98,11 @@ const String & SmFontStyles::GetStyleName( const Font &rFont ) const
         return aItalic;
     else if (bBold)
         return aBold;
-    else
-        return aNormal;
+    return aNormal;
 }
 
 
-const String & SmFontStyles::GetStyleName( sal_uInt16 nIdx ) const
+const OUString& SmFontStyles::GetStyleName( sal_uInt16 nIdx ) const
 {
     // 0 = "normal",  1 = "italic",
     // 2 = "bold",    3 = "bold italic"
@@ -130,17 +129,17 @@ const SmFontStyles & GetFontStyles()
 
 /////////////////////////////////////////////////////////////////
 
-void SetFontStyle(const XubString &rStyleName, Font &rFont)
+void SetFontStyle(const OUString &rStyleName, Font &rFont)
 {
     // Find index related to StyleName. For an empty StyleName it's assumed to be
     // 0 (neither bold nor italic).
     sal_uInt16  nIndex = 0;
-    if (rStyleName.Len())
+    if (!rStyleName.isEmpty())
     {
         sal_uInt16 i;
         const SmFontStyles &rStyles = GetFontStyles();
-        for (i = 0;  i < rStyles.GetCount();  i++)
-            if (rStyleName.CompareTo( rStyles.GetStyleName(i) ) == COMPARE_EQUAL)
+        for (i = 0;  i < rStyles.GetCount(); ++i)
+            if (rStyleName == rStyles.GetStyleName(i))
                 break;
 #if OSL_DEBUG_LEVEL > 1
         OSL_ENSURE(i < rStyles.GetCount(), "style-name unknown");
@@ -242,7 +241,7 @@ void SmShowFont::Paint(const Rectangle& rRect )
 {
     Control::Paint( rRect );
 
-    XubString   Text (GetFont().GetName());
+    OUString   Text (GetFont().GetName());
     Size    TextSize(GetTextWidth(Text), GetTextHeight());
 
     DrawText(Point((GetOutputSize().Width()  - TextSize.Width())  / 2,
@@ -801,10 +800,7 @@ void SmDistanceDialog::SetHelpId(MetricField &rField, const rtl::OString& sHelpI
     // HelpIDs which are explicitly set in this way have to be defined in the
     // util directory in the file "hidother.src" with the help of "hidspecial"!
 
-    const XubString aEmptyText;
-#if OSL_DEBUG_LEVEL > 1
-    OSL_ENSURE(aEmptyText.Len() == 0, "Sm: Ooops...");
-#endif
+    const OUString aEmptyText;
 
     rField.SetHelpId(sHelpId);
     rField.SetHelpText(aEmptyText);
@@ -1360,7 +1356,7 @@ void SmShowSymbol::Paint(const Rectangle &rRect)
 {
     Control::Paint( rRect );
 
-    const XubString &rText = GetText();
+    const OUString &rText = GetText();
     Size            aTextSize(GetTextWidth(rText), GetTextHeight());
 
     DrawText(Point((GetOutputSize().Width()  - aTextSize.Width())  / 2,
@@ -1407,8 +1403,8 @@ void SmSymbolDialog::FillSymbolSets(bool bDeleteText)
     if (bDeleteText)
         aSymbolSets.SetNoSelection();
 
-    std::set< String >  aSybolSetNames( rSymbolMgr.GetSymbolSetNames() );
-    std::set< String >::const_iterator aIt( aSybolSetNames.begin() );
+    std::set< OUString >  aSybolSetNames( rSymbolMgr.GetSymbolSetNames() );
+    std::set< OUString >::const_iterator aIt( aSybolSetNames.begin() );
     for ( ; aIt != aSybolSetNames.end(); ++aIt)
         aSymbolSets.InsertEntry( *aIt );
 }
@@ -1447,7 +1443,7 @@ IMPL_LINK( SmSymbolDialog, EditClickHdl, Button *, EMPTYARG pButton )
     SmSymDefineDialog *pDialog = new SmSymDefineDialog(this, pFontListDev, rSymbolMgr);
 
     // set current symbol and SymbolSet for the new dialog
-    const XubString  aSymSetName (aSymbolSets.GetSelectEntry()),
+    const OUString  aSymSetName (aSymbolSets.GetSelectEntry()),
                     aSymName    (aSymbolName.GetText());
     pDialog->SelectOldSymbolSet(aSymSetName);
     pDialog->SelectOldSymbol(aSymName);
@@ -1455,7 +1451,7 @@ IMPL_LINK( SmSymbolDialog, EditClickHdl, Button *, EMPTYARG pButton )
     pDialog->SelectSymbol(aSymName);
 
     // remember old SymbolSet
-    XubString  aOldSymbolSet (aSymbolSets.GetSelectEntry());
+    OUString  aOldSymbolSet (aSymbolSets.GetSelectEntry());
 
     sal_uInt16 nSymPos = GetSelectedSymbol();
 
@@ -1625,7 +1621,7 @@ void SmSymbolDialog::DataChanged( const DataChangedEvent& rDCEvt )
 }
 
 
-bool SmSymbolDialog::SelectSymbolSet(const XubString &rSymbolSetName)
+bool SmSymbolDialog::SelectSymbolSet(const OUString &rSymbolSetName)
 {
     bool    bRet = false;
     sal_uInt16  nPos = aSymbolSets.GetEntryPos(rSymbolSetName);
@@ -1663,7 +1659,7 @@ void SmSymbolDialog::SelectSymbol(sal_uInt16 nSymbolNo)
 
     aSymbolSetDisplay.SelectSymbol(nSymbolNo);
     aSymbolDisplay.SetSymbol(pSym);
-    aSymbolName.SetText(pSym ? pSym->GetName() : XubString());
+    aSymbolName.SetText(pSym ? pSym->GetName() : OUString());
 }
 
 
@@ -1751,8 +1747,8 @@ void SmSymDefineDialog::FillSymbolSets(ComboBox &rComboBox, bool bDeleteText)
     if (bDeleteText)
         rComboBox.SetText(rtl::OUString());
 
-    const std::set< String >  aSymbolSetNames( aSymbolMgrCopy.GetSymbolSetNames() );
-    std::set< String >::const_iterator aIt( aSymbolSetNames.begin() );
+    const std::set< OUString >  aSymbolSetNames( aSymbolMgrCopy.GetSymbolSetNames() );
+    std::set< OUString >::const_iterator aIt( aSymbolSetNames.begin() );
     for ( ;  aIt != aSymbolSetNames.end();  ++aIt)
         rComboBox.InsertEntry( *aIt );
 }
@@ -1782,8 +1778,8 @@ void SmSymDefineDialog::FillStyles(bool bDeleteText)
     if (bDeleteText)
         aStyles.SetText(rtl::OUString());
 
-    XubString aText (aFonts.GetSelectEntry());
-    if (aText.Len() != 0)
+    OUString aText (aFonts.GetSelectEntry());
+    if (!aText.isEmpty())
     {
         // use own StyleNames
         const SmFontStyles &rStyles = GetFontStyles();
@@ -2040,16 +2036,16 @@ void SmSymDefineDialog::UpdateButtons()
     bool  bAdd    = false,
           bChange = false,
           bDelete = false;
-    XubString aTmpSymbolName    (aSymbols.GetText()),
+    OUString aTmpSymbolName    (aSymbols.GetText()),
               aTmpSymbolSetName (aSymbolSets.GetText());
 
-    if (aTmpSymbolName.Len() > 0  &&  aTmpSymbolSetName.Len() > 0)
+    if (aTmpSymbolName.getLength() > 0  &&  aTmpSymbolSetName.getLength() > 0)
     {
         // are all settings equal?
         //! (Font-, Style- und SymbolSet name comparison is not case sensitive)
         bool bEqual = pOrigSymbol
-                    && aTmpSymbolSetName.EqualsIgnoreCaseAscii(aOldSymbolSetName.GetText())
-                    && aTmpSymbolName.Equals(pOrigSymbol->GetName())
+                    && aTmpSymbolSetName.equalsIgnoreAsciiCase(aOldSymbolSetName.GetText())
+                    && aTmpSymbolName.equals(pOrigSymbol->GetName())
                     && aFonts.GetSelectEntry().EqualsIgnoreCaseAscii(
                             pOrigSymbol->GetFace().GetName())
                     && aStyles.GetText().EqualsIgnoreCaseAscii(
@@ -2245,7 +2241,7 @@ void SmSymDefineDialog::SetSymbolSetManager(const SmSymbolManager &rMgr)
 
 
 bool SmSymDefineDialog::SelectSymbolSet(ComboBox &rComboBox,
-        const XubString &rSymbolSetName, bool bDeleteText)
+        const OUString &rSymbolSetName, bool bDeleteText)
 {
 #if OSL_DEBUG_LEVEL > 1
     OSL_ENSURE(&rComboBox == &aOldSymbolSets  ||  &rComboBox == &aSymbolSets,
@@ -2253,7 +2249,7 @@ bool SmSymDefineDialog::SelectSymbolSet(ComboBox &rComboBox,
 #endif
 
     // trim SymbolName (no leading and trailing blanks)
-    XubString  aNormName (rSymbolSetName);
+    OUString  aNormName (rSymbolSetName);
     aNormName = comphelper::string::stripStart(aNormName, ' ');
     aNormName = comphelper::string::stripEnd(aNormName, ' ');
     // and remove possible deviations within the input
@@ -2283,7 +2279,7 @@ bool SmSymDefineDialog::SelectSymbolSet(ComboBox &rComboBox,
     // display a valid respectively no symbol when changing the SymbolSets
     if (bIsOld)
     {
-        XubString  aTmpOldSymbolName;
+        OUString  aTmpOldSymbolName;
         if (aOldSymbols.GetEntryCount() > 0)
             aTmpOldSymbolName = aOldSymbols.GetEntry(0);
         SelectSymbol(aOldSymbols, aTmpOldSymbolName, true);
@@ -2296,13 +2292,13 @@ bool SmSymDefineDialog::SelectSymbolSet(ComboBox &rComboBox,
 
 
 void SmSymDefineDialog::SetOrigSymbol(const SmSym *pSymbol,
-                                      const XubString &rSymbolSetName)
+                                      const OUString &rSymbolSetName)
 {
     // clear old symbol
     delete pOrigSymbol;
     pOrigSymbol = 0;
 
-    XubString   aSymName,
+    OUString   aSymName,
                 aSymSetName;
     if (pSymbol)
     {
@@ -2324,7 +2320,7 @@ void SmSymDefineDialog::SetOrigSymbol(const SmSym *pSymbol,
 
 
 bool SmSymDefineDialog::SelectSymbol(ComboBox &rComboBox,
-        const XubString &rSymbolName, bool bDeleteText)
+        const OUString &rSymbolName, bool bDeleteText)
 {
 #if OSL_DEBUG_LEVEL > 1
     OSL_ENSURE(&rComboBox == &aOldSymbols  ||  &rComboBox == &aSymbols,
@@ -2332,7 +2328,7 @@ bool SmSymDefineDialog::SelectSymbol(ComboBox &rComboBox,
 #endif
 
     // trim SymbolName (no blanks)
-    XubString  aNormName(comphelper::string::remove(rSymbolName, ' '));
+    OUString  aNormName(comphelper::string::remove(rSymbolName, ' '));
     // and remove possible deviations within the input
     rComboBox.SetText(aNormName);
 
@@ -2379,7 +2375,7 @@ bool SmSymDefineDialog::SelectSymbol(ComboBox &rComboBox,
     {
         // if there's a change of the old symbol, show only the available ones, otherwise show none
         const SmSym *pOldSymbol = NULL;
-        XubString     aTmpOldSymbolSetName;
+        OUString     aTmpOldSymbolSetName;
         if (nPos != COMBOBOX_ENTRY_NOTFOUND)
         {
             pOldSymbol        = aSymbolMgrCopy.GetSymbolByName(aNormName);
@@ -2396,7 +2392,7 @@ bool SmSymDefineDialog::SelectSymbol(ComboBox &rComboBox,
 }
 
 
-void SmSymDefineDialog::SetFont(const XubString &rFontName, const XubString &rStyleName)
+void SmSymDefineDialog::SetFont(const OUString &rFontName, const OUString &rStyleName)
 {
     // get Font (FontInfo) matching name and style
     FontInfo aFI;
@@ -2432,7 +2428,7 @@ void SmSymDefineDialog::SetFont(const XubString &rFontName, const XubString &rSt
 }
 
 
-bool SmSymDefineDialog::SelectFont(const XubString &rFontName, bool bApplyFont)
+bool SmSymDefineDialog::SelectFont(const OUString &rFontName, bool bApplyFont)
 {
     bool   bRet = false;
     sal_uInt16 nPos = aFonts.GetEntryPos(rFontName);
@@ -2460,7 +2456,7 @@ bool SmSymDefineDialog::SelectFont(const XubString &rFontName, bool bApplyFont)
 }
 
 
-bool SmSymDefineDialog::SelectStyle(const XubString &rStyleName, bool bApplyFont)
+bool SmSymDefineDialog::SelectStyle(const OUString &rStyleName, bool bApplyFont)
 {
     bool   bRet = false;
     sal_uInt16 nPos = aStyles.GetEntryPos(rStyleName);
