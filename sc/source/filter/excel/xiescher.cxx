@@ -3200,7 +3200,7 @@ String XclImpObjectManager::GetOleNameOverride( SCTAB nTab, sal_uInt16 nObjId )
     rtl::OUString sOleName;
     String sCodeName = GetExtDocOptions().GetCodeName( nTab );
 
-    if (  mxOleCtrlNameOverride->hasByName( sCodeName ) )
+    if (mxOleCtrlNameOverride.is() && mxOleCtrlNameOverride->hasByName(sCodeName))
     {
         Reference< XIndexContainer > xIdToOleName;
         mxOleCtrlNameOverride->getByName( sCodeName ) >>= xIdToOleName;
