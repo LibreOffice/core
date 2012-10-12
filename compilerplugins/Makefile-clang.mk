@@ -50,7 +50,7 @@ $(CLANGOUTDIR):
 CLANGOBJS=
 
 define clangbuildsrc
-$(3): $(2) $(SRCDIR)/compilerplugins/Makefile-clang.mk
+$(3): $(2) $(SRCDIR)/compilerplugins/Makefile-clang.mk $(CLANGOUTDIR)/clang-timestamp
 	$(CXX) $(CLANGCXXFLAGS) $(CLANGDEFS) $(CLANGINCLUDES) $(2) -fPIC -c -o $(3) -MMD -MT $(3) -MP -MF $(CLANGOUTDIR)/$(1).d
 
 -include $(CLANGOUTDIR)/$(1).d
@@ -63,5 +63,9 @@ $(foreach src, $(CLANGSRC), $(eval $(call clangbuildsrc,$(src),$(CLANGINDIR)/$(s
 
 $(CLANGOUTDIR)/compileplugin.so: $(CLANGOBJS)
 	$(CXX) -shared $(CLANGOBJS) -o $@
+
+# Clang most probably doesn't maintain binary compatibility, so rebuild when clang changes.
+$(CLANGOUTDIR)/clang-timestamp: $(CLANGBUILD)/bin/clang
+	touch $@ -r $^
 
 # vim: set noet sw=4 ts=4:
