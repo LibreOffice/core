@@ -39,7 +39,7 @@
 #include <com/sun/star/security/SerialNumberAdapter.hpp>
 #include <com/sun/star/security/XDocumentDigitalSignatures.hpp>
 #include <com/sun/star/xml/dom/XDocumentBuilder.hpp>
-#include <com/sun/star/packages/manifest/XManifestReader.hpp>
+#include <com/sun/star/packages/manifest/ManifestReader.hpp>
 
 
 #include <rtl/ustrbuf.hxx>
@@ -268,9 +268,8 @@ void DigitalSignaturesDialog::SetStorage( const com::sun::star::uno::Reference <
     mxStore = rxStore;
     maSignatureHelper.SetStorage( mxStore, m_sODFVersion);
 
-    Reference < css::packages::manifest::XManifestReader > xReader(
-        mxCtx->getServiceManager()->createInstanceWithContext(
-        OUSTR("com.sun.star.packages.manifest.ManifestReader"), mxCtx), UNO_QUERY_THROW);
+    Reference < css::packages::manifest::XManifestReader > xReader =
+        css::packages::manifest::ManifestReader::create(mxCtx);
 
     //Get the manifest.xml
     Reference < css::embed::XStorage > xSubStore(rxStore->openStorageElement(
