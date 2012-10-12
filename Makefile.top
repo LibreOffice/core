@@ -73,6 +73,7 @@ editeng\
 embeddedobj\
 embedserv\
 eventattacher\
+expat\
 extensions\
 extras\
 fileaccess\
@@ -210,7 +211,6 @@ cppunit\
 crashrep\
 curl\
 epm\
-expat\
 external\
 gdk-pixbuf\
 gettext\

@@ -6926,9 +6926,11 @@ if test "$with_system_expat" = "yes"; then
 else
     AC_MSG_RESULT([internal])
     SYSTEM_EXPAT=NO
+    EXPAT_TARBALL="dd7dab7a5fea97d2a6a43f511449b7cd-expat-2.1.0.tar.gz"
     BUILD_TYPE="$BUILD_TYPE EXPAT"
 fi
 AC_SUBST(SYSTEM_EXPAT)
+AC_SUBST(EXPAT_TARBALL)
 AC_SUBST([MINGW_EXPAT_DLL])
 
 dnl ===================================================================

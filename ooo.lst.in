@@ -25,7 +25,7 @@ d70951c80dabecc2892c919ff5d07172-db-4.7.25.NC-custom.tar.gz
 e0707ff896045731ff99e99799606441-README_db-4.7.25.NC-custom.txt
 e81c2f0953aa60f8062c05a4673f2be0-Python-2.6.1.tar.bz2
 e61d0364a30146aaa3001296f853b2b9-libxslt-1.1.26.tar.gz
-dd7dab7a5fea97d2a6a43f511449b7cd-expat-2.1.0.tar.gz
+@EXPAT_TARBALL@
 fca8706f2c4619e2fa3f8f42f8fc1e9d-rasqal-0.9.16.tar.gz
 0981bda6548a8c8233ffce2b6e4b2a23-mysql-connector-c++-1.1.0.tar.gz
 @POSTGRESQL_TARBALL@

@@ -1047,6 +1047,12 @@ define gb_LinkTarget_add_generated_cobjects
 $(foreach obj,$(2),$(call gb_LinkTarget_add_generated_c_object,$(1),$(obj),$(3),$(4)))
 endef
 
+#only useful for building x64 libraries on windows
+define gb_LinkTarget_add_x64_generated_cobjects
+$(foreach obj,$(2),$(call gb_LinkTarget_add_generated_c_object,$(1),$(obj),$(3),$(4)))
+$(foreach obj,$(2),$(eval $(call gb_GenCObject_get_target,$(obj)) : COBJECT_X64 := YES))
+endef
+
 define gb_LinkTarget_add_generated_cxxobjects
 $(foreach obj,$(2),$(call gb_LinkTarget_add_generated_cxx_object,$(1),$(obj),$(3)))
 endef
@@ -1154,6 +1160,14 @@ define gb_LinkTarget_use_unpacked
 $(call gb_LinkTarget_get_external_headers_target,$(1)) :| $(call gb_UnpackedTarball_get_final_target,$(2))
 
 endef
+
+# Use artifacts from ExternalProject (i. e. configure) of an external project
+# example in expat: StaticLibrary depends on ExternalProject outcome
+define gb_LinkTarget_use_external_project
+$(call gb_LinkTarget_get_external_headers_target,$(1)) :| $(call gb_ExternalProject_get_target,$(2))
+
+endef
+
 
 # this forwards to functions that must be defined in RepositoryExternal.mk.
 # $(eval $(call gb_LinkTarget_use_external,library,external))
