@@ -2651,10 +2651,7 @@ void ImpEditEngine::SeekCursor( ContentNode* pNode, sal_uInt16 nPos, SvxFont& rF
         // ugly on the screen!
         OutputDevice* pDev = pOut ? pOut : GetRefDevice();
         rFont.SetPhysFont( pDev );
-        FontMetric aMetric( pDev->GetFontMetric() );
-        // For the height do not consider the metrics, because it will go
-        // wrong at Superscript/Subscript.
-        Size aRealSz( aMetric.GetSize().Width(), rFont.GetSize().Height() );
+        Size aRealSz( rFont.GetSize().Width(), rFont.GetSize().Height() );
         if ( aStatus.DoStretch() )
         {
             if ( nStretchY != 100 )
