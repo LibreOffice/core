@@ -114,7 +114,6 @@ public:
     std::string &getColumn( int oid );
 
     void retrieveLists(std::set<std::string>& lists);
-    void getRecordKeys4List(std::string& listName, std::vector<std::string>& records);
     void getRecordKeysForListTable(std::string& listName, std::set<int>& records);
 
     void dump();

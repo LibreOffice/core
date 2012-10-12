@@ -636,53 +636,6 @@ void MorkParser::retrieveLists(std::set<std::string>& lists)
     }
 }
 
-void MorkParser::getRecordKeys4List(std::string& listName, std::vector<std::string>& records)
-{
-    MorkTableMap* tables = getTables(defaultScope_);
-    if (!tables) return;
-    for (MorkTableMap::iterator TableIter = tables->begin();
-         TableIter != tables->end(); TableIter++ )
-    {
-#ifdef VERBOSE
-        std::cout    << "\t Table:"
-        << ( ( int ) TableIter->first < 0 ? "-" : " " )
-        << std::hex << std::uppercase << TableIter->first << std::endl;
-#endif
-        MorkRowMap* rows = getRows( 0x81, &TableIter->second );
-        if (!rows) return;
-        for ( MorkRowMap::iterator RowIter = rows->begin();
-             RowIter != rows->end(); RowIter++ )
-        {
-#ifdef VERBOSE
-            std::cout    << "\t\t\t Row Id:"
-            << ( ( int ) RowIter->first < 0 ? "-" : " ")
-            << std::hex << std::uppercase << RowIter->first << std::endl;
-            std::cout << "\t\t\t\t Cells:\r\n";
-#endif
-            // Get cells
-            bool listFound = false;
-            for ( MorkCells::iterator cellsIter = RowIter->second.begin();
-                 cellsIter != RowIter->second.end(); cellsIter++ )
-            {
-                if (listFound)
-                {
-                    if (cellsIter->first >= 0xC7)
-                    {
-                        std::string value = getValue(cellsIter->second);
-                        records.push_back(value);
-                    }
-                }
-                else if ((cellsIter->first == 0xC1) &&
-                         listName == getValue( cellsIter->second ))
-                {
-                    listFound = true;
-                }
-            }
-
-        }
-    }
-}
-
 void MorkParser::getRecordKeysForListTable(std::string& listName, std::set<int>& records)
 {
     MorkTableMap* tables = getTables(defaultScope_);
