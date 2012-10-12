@@ -64,8 +64,6 @@ using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::ui::dialogs;
 
-static void lcl_createTemplate(uno::Reference<XComponentLoader> xDesktop, const FILTER_APPLICATION eApp);
-
 static bool lcl_getServiceName (const OUString &rFileURL, OUString &rName );
 
 static std::vector<OUString> lcl_getAllFactoryURLs ();
