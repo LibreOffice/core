@@ -4060,7 +4060,7 @@ uno::Reference<accessibility::XAccessibleEditableText>
     return uno::Reference< accessibility::XAccessibleEditableText >();
 }
 
-uno::Reference<accessibility::XAccessibleEditableText> lcl_GetxText()
+static uno::Reference<accessibility::XAccessibleEditableText> lcl_GetxText()
 {
     uno::Reference<accessibility::XAccessibleEditableText> xText;
     Window* pFocusWin = ImplGetSVData()->maWinData.mpFocusWin;

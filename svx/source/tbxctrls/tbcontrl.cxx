@@ -98,8 +98,8 @@
 // don't make more than 15 entries visible at once
 #define MAX_STYLES_ENTRIES          static_cast< sal_uInt16 >( 15 )
 
-void lcl_ResizeValueSet( Window &rWin, ValueSet &rValueSet );
-void lcl_CalcSizeValueSet( Window &rWin, ValueSet &rValueSet, const Size &aItemSize );
+static void lcl_ResizeValueSet( Window &rWin, ValueSet &rValueSet );
+static void lcl_CalcSizeValueSet( Window &rWin, ValueSet &rValueSet, const Size &aItemSize );
 
 // namespaces
 using ::rtl::OUString;
@@ -1307,7 +1307,7 @@ sal_Bool SvxFrameWindow_Impl::Close()
 //========================================================================
 // class SvxLineWindow_Impl --------------------------------------------------
 //========================================================================
-Color lcl_mediumColor( Color aMain, Color /*aDefault*/ )
+static Color lcl_mediumColor( Color aMain, Color /*aDefault*/ )
 {
     return SvxBorderLine::threeDMediumColor( aMain );
 }
@@ -2627,7 +2627,7 @@ void SvxSimpleUndoRedoController::StateChanged( sal_uInt16, SfxItemState eState,
 
 //========================================================================
 
-void lcl_ResizeValueSet( Window &rWin, ValueSet &rValueSet )
+static void lcl_ResizeValueSet( Window &rWin, ValueSet &rValueSet )
 {
     Size aSize = rWin.GetOutputSizePixel();
     aSize.Width()  -= 4;
@@ -2637,7 +2637,7 @@ void lcl_ResizeValueSet( Window &rWin, ValueSet &rValueSet )
 
 // -----------------------------------------------------------------------
 
-void lcl_CalcSizeValueSet( Window &rWin, ValueSet &rValueSet, const Size &aItemSize )
+static void lcl_CalcSizeValueSet( Window &rWin, ValueSet &rValueSet, const Size &aItemSize )
 {
     Size aSize = rValueSet.CalcWindowSizePixel( aItemSize );
     aSize.Width()  += 4;

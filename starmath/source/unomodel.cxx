@@ -231,7 +231,7 @@ enum SmModelPropertyHandles
     HANDLE_BASELINE
 };
 
-PropertySetInfo * lcl_createModelPropertyInfo ()
+static PropertySetInfo * lcl_createModelPropertyInfo ()
 {
     static PropertyMapEntry aModelPropertyInfoMap[] =
     {
@@ -387,7 +387,7 @@ sal_Int64 SAL_CALL SmModel::getSomething( const uno::Sequence< sal_Int8 >& rId )
     return SfxBaseModel::getSomething( rId );
 }
 
-sal_Int16 lcl_AnyToINT16(const uno::Any& rAny)
+static sal_Int16 lcl_AnyToINT16(const uno::Any& rAny)
 {
     uno::TypeClass eType = rAny.getValueType().getTypeClass();
 

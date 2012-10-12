@@ -1769,7 +1769,7 @@ void SAL_CALL ControlContainerBase::changesOccurred( const ChangesEvent& ) throw
     if ( mxTabController.is() && !mbDesignMode )
         mxTabController->activateTabOrder();
 }
-void lcl_ApplyResolverToNestedContainees(  const Reference< resource::XStringResourceResolver >& xStringResourceResolver, const Reference< XControlContainer >& xContainer )
+static void lcl_ApplyResolverToNestedContainees(  const Reference< resource::XStringResourceResolver >& xStringResourceResolver, const Reference< XControlContainer >& xContainer )
 {
     rtl::OUString aPropName( PROPERTY_RESOURCERESOLVER );
 

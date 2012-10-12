@@ -238,7 +238,7 @@ void ImplSmartWindowCreated( Window* pNewWindow )
 }
 */
 
-sal_Bool lcl_ImplIsParent( Window* pParentWindow, Window* pPossibleChild )
+static sal_Bool lcl_ImplIsParent( Window* pParentWindow, Window* pPossibleChild )
 {
     Window* pWindow = ( pPossibleChild != pParentWindow ) ? pPossibleChild : NULL;
     while ( pWindow && ( pWindow != pParentWindow ) )

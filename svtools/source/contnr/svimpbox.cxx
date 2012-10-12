@@ -2934,7 +2934,7 @@ void SvImpLBox::PaintDDCursor( SvLBoxEntry* pInsertionPos )
 }
 
 // Delete all submenus of a PopupMenu, recursively
-void lcl_DeleteSubPopups(PopupMenu* pPopup)
+static void lcl_DeleteSubPopups(PopupMenu* pPopup)
 {
     for(sal_uInt16 i = 0; i < pPopup->GetItemCount(); i++)
     {

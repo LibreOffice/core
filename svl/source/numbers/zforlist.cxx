@@ -3458,7 +3458,7 @@ void SvNumberFormatter::GetCompatibilityCurrency( String& rSymbol, String& rAbbr
 }
 
 
-void lcl_CheckCurrencySymbolPosition( const NfCurrencyEntry& rCurr )
+static void lcl_CheckCurrencySymbolPosition( const NfCurrencyEntry& rCurr )
 {
     switch ( rCurr.GetPositiveFormat() )
     {
@@ -4043,7 +4043,7 @@ sal_uInt16 NfCurrencyEntry::GetEffectivePositiveFormat(
 
 
 //! Call this only if nCurrFormat is really with parentheses!
-sal_uInt16 lcl_MergeNegativeParenthesisFormat( sal_uInt16 nIntlFormat, sal_uInt16 nCurrFormat )
+static sal_uInt16 lcl_MergeNegativeParenthesisFormat( sal_uInt16 nIntlFormat, sal_uInt16 nCurrFormat )
 {
     short nSign = 0;        // -1:=Klammer 0:=links, 1:=mitte, 2:=rechts
     switch ( nIntlFormat )

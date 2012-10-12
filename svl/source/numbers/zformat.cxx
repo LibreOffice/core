@@ -547,7 +547,7 @@ SvNumberformat::SvNumberformat( SvNumberformat& rFormat, ImpSvNumberformatScan& 
     ImpCopyNumberformat( rFormat );
 }
 
-bool lcl_SvNumberformat_IsBracketedPrefix( short nSymbolType )
+static bool lcl_SvNumberformat_IsBracketedPrefix( short nSymbolType )
 {
     if ( nSymbolType > 0  )
         return true;        // conditions
@@ -4507,7 +4507,7 @@ Color* SvNumberformat::GetColor( sal_uInt16 nNumFor ) const
     return NumFor[nNumFor].GetColor();
 }
 
-void lcl_SvNumberformat_AddLimitStringImpl( String& rStr,
+static void lcl_SvNumberformat_AddLimitStringImpl( String& rStr,
             SvNumberformatLimitOps eOp, double fLimit, const String& rDecSep )
 {
     if ( eOp != NUMBERFORMAT_OP_NO )

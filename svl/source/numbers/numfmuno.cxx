@@ -66,7 +66,7 @@ using namespace com::sun::star;
 
 //  alles ohne Which-ID, Map nur fuer PropertySetInfo
 
-const SfxItemPropertyMapEntry* lcl_GetNumberFormatPropertyMap()
+static const SfxItemPropertyMapEntry* lcl_GetNumberFormatPropertyMap()
 {
     static SfxItemPropertyMapEntry aNumberFormatPropertyMap_Impl[] =
     {
@@ -88,7 +88,7 @@ const SfxItemPropertyMapEntry* lcl_GetNumberFormatPropertyMap()
     return aNumberFormatPropertyMap_Impl;
 }
 
-const SfxItemPropertyMapEntry* lcl_GetNumberSettingsPropertyMap()
+static const SfxItemPropertyMapEntry* lcl_GetNumberSettingsPropertyMap()
 {
     static SfxItemPropertyMapEntry aNumberSettingsPropertyMap_Impl[] =
     {
@@ -103,7 +103,7 @@ const SfxItemPropertyMapEntry* lcl_GetNumberSettingsPropertyMap()
 
 //----------------------------------------------------------------------------------------
 
-LanguageType lcl_GetLanguage( const lang::Locale& rLocale )
+static LanguageType lcl_GetLanguage( const lang::Locale& rLocale )
 {
     //  empty language -> LANGUAGE_SYSTEM
     if ( rLocale.Language.isEmpty() )

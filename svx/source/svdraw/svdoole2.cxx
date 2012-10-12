@@ -94,7 +94,7 @@
 using namespace ::rtl;
 using namespace ::com::sun::star;
 
-uno::Reference < beans::XPropertySet > lcl_getFrame_throw(const SdrOle2Obj* _pObject)
+static uno::Reference < beans::XPropertySet > lcl_getFrame_throw(const SdrOle2Obj* _pObject)
 {
     uno::Reference < beans::XPropertySet > xFrame;
     if ( _pObject )

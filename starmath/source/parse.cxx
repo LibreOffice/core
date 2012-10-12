@@ -1901,7 +1901,7 @@ void SmParser::Font()
 
 // gets number used as arguments in Math formulas (e.g. 'size' command)
 // Format: no negative numbers, must start with a digit, no exponent notation, ...
-bool lcl_IsNumber(const rtl::OUString& rText)
+static bool lcl_IsNumber(const rtl::OUString& rText)
 {
     bool bPoint = false;
     const sal_Unicode* pBuffer = rText.getStr();

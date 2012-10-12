@@ -48,7 +48,7 @@ namespace
         : public rtl::Static<Link, CurrencyChangeLink> {};
 }
 
-com::sun::star::lang::Locale lcl_str_to_locale( const ::rtl::OUString rStr )
+static com::sun::star::lang::Locale lcl_str_to_locale( const ::rtl::OUString rStr )
 {
     com::sun::star::lang::Locale aRet;
     if ( !rStr.isEmpty() )

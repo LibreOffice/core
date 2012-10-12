@@ -414,7 +414,7 @@ PointerStyles styles[] = {
 
 };
 
-long lcl_loPointerToMsoPointer( PointerStyle eType )
+static long lcl_loPointerToMsoPointer( PointerStyle eType )
 {
     long nRet = msforms::fmMousePointer::fmMousePointerDefault;
     for ( int i = 0, nElems = SAL_N_ELEMENTS( styles ); i < nElems; ++i )
@@ -428,7 +428,7 @@ long lcl_loPointerToMsoPointer( PointerStyle eType )
     return nRet;
 }
 
-Pointer lcl_msoPointerToLOPointer( long msoPointerStyle )
+static Pointer lcl_msoPointerToLOPointer( long msoPointerStyle )
 {
     Pointer aPointer( POINTER_ARROW );
     for ( int i = 0, nElems = SAL_N_ELEMENTS( styles ); i < nElems; ++i )

@@ -40,8 +40,6 @@
 
 using namespace ::com::sun::star;
 
-extern WorkWindow* lcl_GetDefaultWindow();
-
 //  ----------------------------------------------------
 //  class UnoControlHolder
 //  ----------------------------------------------------

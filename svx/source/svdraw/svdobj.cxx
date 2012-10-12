@@ -2194,7 +2194,7 @@ void SdrObject::NbcApplyNotPersistAttr(const SfxItemSet& rAttr)
     }
 }
 
-void lcl_SetItem(SfxItemSet& rAttr, bool bMerge, const SfxPoolItem& rItem)
+static void lcl_SetItem(SfxItemSet& rAttr, bool bMerge, const SfxPoolItem& rItem)
 {
     if (bMerge) rAttr.MergeValue(rItem,true);
     else rAttr.Put(rItem);

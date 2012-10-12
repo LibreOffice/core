@@ -358,7 +358,7 @@ SvxSearchDialog::~SvxSearchDialog()
     delete pMoreBtn;
 }
 
-void lcl_MoveDown( Window& rWindow, sal_Int32 nOffset )
+static void lcl_MoveDown( Window& rWindow, sal_Int32 nOffset )
 {
     Point aPos(rWindow.GetPosPixel());
     aPos.Y() += nOffset;

@@ -99,7 +99,7 @@ struct ColumnInfo
     }
 };
 
-void lcl_addToList( SvTreeListBox& _rListBox, const uno::Reference< container::XNameAccess>& i_xColumns )
+static void lcl_addToList( SvTreeListBox& _rListBox, const uno::Reference< container::XNameAccess>& i_xColumns )
 {
     uno::Sequence< ::rtl::OUString > aEntries = i_xColumns->getElementNames();
     const ::rtl::OUString* pEntries = aEntries.getConstArray();

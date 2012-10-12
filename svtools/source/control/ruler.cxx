@@ -806,7 +806,7 @@ static void ImplCenterTabPos( Point& rPos, sal_uInt16 nTabStyle )
 }
 
 // -----------------------------------------------------------------------
-void lcl_RotateRect_Impl(Rectangle& rRect, const long nReference, sal_Bool bRightAligned)
+static void lcl_RotateRect_Impl(Rectangle& rRect, const long nReference, sal_Bool bRightAligned)
 {
     if(!rRect.IsEmpty())
     {

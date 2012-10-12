@@ -302,7 +302,7 @@ uno::Reference<io::XInputStream> SdrMediaObj::GetInputStream()
 }
 
 /// copy a stream from XStorage to temp file
-bool lcl_HandlePackageURL(
+static bool lcl_HandlePackageURL(
         ::rtl::OUString const & rURL,
         SdrModel *const pModel,
         ::rtl::OUString & o_rTempFileURL)

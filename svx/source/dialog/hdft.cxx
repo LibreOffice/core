@@ -955,7 +955,7 @@ IMPL_LINK_NOARG(SvxHFPage, RangeHdl)
     return 0;
 }
 
-void lcl_Move(Window& rWin, sal_Int32 nDiff)
+static void lcl_Move(Window& rWin, sal_Int32 nDiff)
 {
     Point aPos(rWin.GetPosPixel());
     aPos.Y() -= nDiff;

@@ -2860,7 +2860,7 @@ void SmAttributNode::CreateTextFromNode(String &rText)
 
 /**************************************************************************/
 
-bool lcl_IsFromGreekSymbolSet( const String &rTokenText )
+static bool lcl_IsFromGreekSymbolSet( const String &rTokenText )
 {
     bool bRes = false;
 
