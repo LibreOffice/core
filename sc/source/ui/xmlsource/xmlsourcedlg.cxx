@@ -336,6 +336,11 @@ bool ScXMLSourceDlg::IsParentDirty(SvLBoxEntry* pEntry) const
             // This parent is already linked.
             return true;
         }
+        if (pUserData->meType == ScOrcusXMLTreeParam::ElementRepeat)
+        {
+            // This is a repeat element.
+            return true;
+        }
         pParent = maLbTree.GetParent(pParent);
     }
     return false;

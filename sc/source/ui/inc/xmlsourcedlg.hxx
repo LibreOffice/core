@@ -82,6 +82,9 @@ private:
     void SetSingleLinkable();
     void SetRangeLinkable();
 
+    /**
+     * Check if any of its parents is linked or repeated.
+     */
     bool IsParentDirty(SvLBoxEntry* pEntry) const;
 
     DECL_LINK(GetFocusHdl, Control*);
