@@ -187,7 +187,7 @@ public class NumberFormatter
     {
         try
         {
-            XPropertySet xNumberFormat = _oNumberFormatter.xNumberFormats.getByKey(_FormatKey); //CurDBField.DBFormatKey);
+            XPropertySet xNumberFormat = _oNumberFormatter.xNumberFormats.getByKey(_FormatKey);
             String FormatString = AnyConverter.toString(Helper.getUnoPropertyValue(xNumberFormat, "FormatString"));
             Locale oLocale = (Locale) Helper.getUnoPropertyValue(xNumberFormat, "Locale");
             int NewFormatKey = defineNumberFormat(FormatString, oLocale);

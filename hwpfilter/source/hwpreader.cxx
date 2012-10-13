@@ -94,16 +94,16 @@ struct HwpReaderPrivate
 {
     HwpReaderPrivate()
     {
-        bFirstPara = sal_True;
-        bInBody = sal_False;
-        bInHeader = sal_False;
+        bFirstPara = true;
+        bInBody = false;
+        bInHeader = false;
         nPnPos = 0;
         pPn = 0L;
 
     }
-    sal_Bool bFirstPara;
-    sal_Bool bInBody;
-    sal_Bool bInHeader;
+    bool bFirstPara;
+    bool bInBody;
+    bool bInHeader;
     ShowPageNum *pPn;
     int nPnPos;
 };
@@ -196,10 +196,10 @@ void HwpReader::makeBody()
     rstartEl(ascii("office:body"), rList);
     makeTextDecls();
     HWPPara *hwppara = hwpfile.GetFirstPara();
-    d->bInBody = sal_True;
+    d->bInBody = true;
     parsePara(hwppara);
     rendEl(ascii("office:body"));
-    d->bInBody = sal_False;
+    d->bInBody = false;
 }
 
 
@@ -371,20 +371,14 @@ void HwpReader::makeMeta()
 static struct
 {
     const char *name;
-    sal_Bool bMade;
+    bool bMade;
 }
-
-
 ArrowShape[] =
 {
-    { "", sal_False },
-    {
-        "Arrow", sal_False
-    },
-    { "Line Arrow", sal_False },
-    {
-        "Square", sal_False
-    }
+    { "", false },
+    { "Arrow", false },
+    { "Line Arrow", false },
+    { "Square", false }
 };
 
 static struct
@@ -449,7 +443,7 @@ void HwpReader::makeDrawMiscStyle( HWPDrawingObject *hdo )
         {
             if( prop->line_tstyle && !ArrowShape[prop->line_tstyle].bMade  )
             {
-                ArrowShape[prop->line_tstyle].bMade = sal_True;
+                ArrowShape[prop->line_tstyle].bMade = true;
                 padd(ascii("draw:name"), sXML_CDATA,
                     ascii(ArrowShape[prop->line_tstyle].name));
                 if( prop->line_tstyle == 1 )
@@ -473,7 +467,7 @@ void HwpReader::makeDrawMiscStyle( HWPDrawingObject *hdo )
             }
             if( prop->line_hstyle && !ArrowShape[prop->line_hstyle].bMade)
             {
-                ArrowShape[prop->line_hstyle].bMade = sal_True;
+                ArrowShape[prop->line_hstyle].bMade = true;
                 padd(ascii("draw:name"), sXML_CDATA,
                     ascii(ArrowShape[prop->line_hstyle].name));
                 if( prop->line_hstyle == 1 )
@@ -927,7 +921,7 @@ struct PageSetting
         footer_odd = 0L;
         footer_even = 0L;
         pagenumber=0L;
-        bIsSet = sal_False;
+        bIsSet = false;
     }
     HeaderFooter *header ;
     HeaderFooter *header_odd ;
@@ -936,7 +930,7 @@ struct PageSetting
     HeaderFooter *footer_odd ;
     HeaderFooter *footer_even ;
     ShowPageNum *pagenumber;
-    sal_Bool bIsSet;
+    bool bIsSet;
 };
 
 void HwpReader::makeMasterStyles()
@@ -951,12 +945,12 @@ void HwpReader::makeMasterStyles()
     {
         ShowPageNum *pn = hwpfile.getPageNumber(i);
         pSet[pn->m_nPageNumber].pagenumber = pn;
-        pSet[pn->m_nPageNumber].bIsSet = sal_True;
+        pSet[pn->m_nPageNumber].bIsSet = true;
     }
     for( i = 0 ; i < hwpfile.getHeaderFooterCount() ; i++ )
     {
         HeaderFooter* hf = hwpfile.getHeaderFooter(i);
-        pSet[hf->m_nPageNumber].bIsSet = sal_True;
+        pSet[hf->m_nPageNumber].bIsSet = true;
         if( hf->type == 0 )                       // header
         {
             switch( hf->where )
@@ -1109,11 +1103,11 @@ void HwpReader::makeMasterStyles()
             rstartEl(ascii("style:header"), rList);
             if( pPage->pagenumber && pPage->pagenumber->where < 4 )
             {
-                d->bInHeader = sal_True;
+                d->bInHeader = true;
                 d->pPn = pPage->pagenumber;
             }
             parsePara(pPage->header->plist.front());
-            d->bInHeader = sal_False;
+            d->bInHeader = false;
             d->pPn = 0L;
             rendEl(ascii("style:header"));
         }
@@ -1123,12 +1117,12 @@ void HwpReader::makeMasterStyles()
             if( pPage->pagenumber && ( pPage->pagenumber->where < 4
                 || pPage->pagenumber->where == 7 ) )
             {
-                d->bInHeader = sal_True;
+                d->bInHeader = true;
                 d->pPn = pPage->pagenumber;
                 d->nPnPos = 3;
             }
             parsePara(pPage->header_even->plist.front());
-            d->bInHeader = sal_False;
+            d->bInHeader = false;
             d->pPn = 0L;
             d->nPnPos = 0;
             rendEl(ascii("style:header"));
@@ -1158,12 +1152,12 @@ void HwpReader::makeMasterStyles()
             if( pPage->pagenumber && ( pPage->pagenumber->where < 4
                 || pPage->pagenumber->where == 7 ) )
             {
-                d->bInHeader = sal_True;
+                d->bInHeader = true;
                 d->nPnPos = 1;
                 d->pPn = pPage->pagenumber;
             }
             parsePara(pPage->header_odd->plist.front());
-            d->bInHeader = sal_False;
+            d->bInHeader = false;
             d->pPn = 0L;
             d->nPnPos = 0;
             rendEl(ascii("style:header-left"));
@@ -1210,11 +1204,11 @@ void HwpReader::makeMasterStyles()
             if( pPage->pagenumber && pPage->pagenumber->where >= 4
                 && pPage->pagenumber->where != 7 )
             {
-                d->bInHeader = sal_True;
+                d->bInHeader = true;
                 d->pPn = pPage->pagenumber;
             }
             parsePara(pPage->footer->plist.front());
-            d->bInHeader = sal_False;
+            d->bInHeader = false;
             d->pPn = 0L;
             rendEl(ascii("style:footer"));
         }
@@ -1224,12 +1218,12 @@ void HwpReader::makeMasterStyles()
             if( pPage->pagenumber && pPage->pagenumber->where >= 4
                 && pPage->pagenumber->where != 7 )
             {
-                d->bInHeader = sal_True;
+                d->bInHeader = true;
                 d->pPn = pPage->pagenumber;
                 d->nPnPos = 3;
             }
             parsePara(pPage->footer_even->plist.front());
-            d->bInHeader = sal_False;
+            d->bInHeader = false;
             d->pPn = 0L;
             d->nPnPos = 0;
             rendEl(ascii("style:footer"));
@@ -1259,12 +1253,12 @@ void HwpReader::makeMasterStyles()
             if( pPage->pagenumber && pPage->pagenumber->where >= 4
                 && pPage->pagenumber->where != 7 )
             {
-                d->bInHeader = sal_True;
+                d->bInHeader = true;
                 d->pPn = pPage->pagenumber;
                 d->nPnPos = 1;
             }
             parsePara(pPage->footer_odd->plist.front());
-            d->bInHeader = sal_False;
+            d->bInHeader = false;
             d->pPn = 0L;
             d->nPnPos = 0;
             rendEl(ascii("style:footer-left"));
@@ -2722,12 +2716,12 @@ void HwpReader::make_text_p0(HWPPara * para, sal_Bool bParaStart)
         rstartEl(ascii("text:bookmark"), rList);
         pList->clear();
         rendEl(ascii("text:bookmark"));
-        d->bFirstPara = sal_False;
+        d->bFirstPara = false;
     }
     if( d->bInHeader )
     {
         makeShowPageNum();
-        d->bInHeader = sal_False;
+        d->bInHeader = false;
     }
     padd(ascii("text:style-name"), sXML_CDATA,
         ascii(getTStyleName(para->cshape.index, buf)));
@@ -2793,12 +2787,12 @@ void HwpReader::make_text_p1(HWPPara * para,sal_Bool bParaStart)
         rstartEl(ascii("text:bookmark"), rList);
         pList->clear();
         rendEl(ascii("text:bookmark"));
-        d->bFirstPara = sal_False;
+        d->bFirstPara = false;
     }
     if( d->bInHeader )
     {
         makeShowPageNum();
-        d->bInHeader = sal_False;
+        d->bInHeader = false;
     }
     padd(ascii("text:style-name"), sXML_CDATA,
         ascii(getTStyleName(curr, buf)));
@@ -2871,14 +2865,14 @@ void HwpReader::make_text_p3(HWPPara * para,sal_Bool bParaStart)
         rstartEl(ascii("text:bookmark"), rList);
         pList->clear();
         rendEl(ascii("text:bookmark"));
-        d->bFirstPara = sal_False;
+        d->bFirstPara = false;
     }
     if( d->bInHeader )
     {
         if( !pstart )
             STARTP;
         makeShowPageNum();
-        d->bInHeader = sal_False;
+        d->bInHeader = false;
     }
 
     for (n = 0; n < para->nch && para->hhstr[n]->hh;
@@ -4811,12 +4805,12 @@ void HwpReader::parsePara(HWPPara * para, sal_Bool bParaStart)
                 rstartEl(ascii("text:bookmark"), rList);
                 pList->clear();
                 rendEl(ascii("text:bookmark"));
-                d->bFirstPara = sal_False;
+                d->bFirstPara = false;
             }
             if( d->bInHeader )
             {
                 makeShowPageNum();
-                d->bInHeader = sal_False;
+                d->bInHeader = false;
             }
 
             rendEl( ascii("text:p") );

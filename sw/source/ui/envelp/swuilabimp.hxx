@@ -76,7 +76,6 @@ class SwLabPage : public SfxTabPage
 
     using TabPage::ActivatePage;
     using TabPage::DeactivatePage;
-    using Window::GetParent;
 
 public:
 
@@ -88,7 +87,7 @@ public:
     virtual sal_Bool FillItemSet(SfxItemSet& rSet);
     virtual void Reset(const SfxItemSet& rSet);
 
-    SwLabDlg* GetParent() {return (SwLabDlg*) SfxTabPage::GetParent()->GetParent();}
+    SwLabDlg* GetParentSwLabDlg() {return (SwLabDlg*) GetParentDialog();}
 
     void    SetToBusinessCard();
 

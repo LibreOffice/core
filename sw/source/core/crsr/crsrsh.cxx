@@ -491,7 +491,7 @@ sal_Bool SwCrsrShell::LRMargin( sal_Bool bLeft, sal_Bool bAPI)
     if( pBlockCrsr )
         pBlockCrsr->clearPoints();
 
-    const sal_Bool bWasAtLM =
+    const bool bWasAtLM =
             ( 0 == _GetCrsr()->GetPoint()->nContent.GetIndex() );
 
     sal_Bool bRet = pTmpCrsr->LeftRightMargin( bLeft, bAPI );
@@ -607,7 +607,7 @@ sal_Bool SwCrsrShell::MoveSection( SwWhichSection fnWhichSect,
 // position cursor
 
 
-SwFrm* lcl_IsInHeaderFooter( const SwNodeIndex& rIdx, Point& rPt )
+static SwFrm* lcl_IsInHeaderFooter( const SwNodeIndex& rIdx, Point& rPt )
 {
     SwFrm* pFrm = 0;
     SwCntntNode* pCNd = rIdx.GetNode().GetCntntNode();
@@ -1160,11 +1160,11 @@ void SwCrsrShell::Paint( const Rectangle &rRect)
     // always switch off all cursors when painting
     SwRect aRect( rRect );
 
-    sal_Bool bVis = sal_False;
+    bool bVis = false;
     // if a cursor is visible then hide the SV cursor
     if( pVisCrsr->IsVisible() && !aRect.IsOver( aCharRect ) )
     {
-        bVis = sal_True;
+        bVis = true;
         pVisCrsr->Hide();
     }
 
@@ -1194,10 +1194,10 @@ void SwCrsrShell::Paint( const Rectangle &rRect)
 void SwCrsrShell::VisPortChgd( const SwRect & rRect )
 {
     SET_CURR_SHELL( this );
-    sal_Bool bVis; // switch off all cursors when scrolling
+    bool bVis; // switch off all cursors when scrolling
 
     // if a cursor is visible then hide the SV cursor
-    if( sal_True == ( bVis = pVisCrsr->IsVisible() ))
+    if( ( bVis = pVisCrsr->IsVisible() ) )
         pVisCrsr->Hide();
 
     bVisPortChgd = sal_True;
@@ -1512,7 +1512,7 @@ void SwCrsrShell::UpdateCrsr( sal_uInt16 eFlags, sal_Bool bIdleEnd )
     // are we perhaps in a protected / hidden Section ?
     {
         SwShellCrsr* pShellCrsr = getShellCrsr( true );
-        sal_Bool bChgState = sal_True;
+        bool bChgState = true;
         const SwSectionNode* pSectNd = pShellCrsr->GetNode()->FindSectionNode();
         if( pSectNd && ( pSectNd->GetSection().IsHiddenFlag() ||
             ( !IsReadOnlyAvailable() &&
@@ -1526,7 +1526,7 @@ void SwCrsrShell::UpdateCrsr( sal_uInt16 eFlags, sal_Bool bIdleEnd )
                 // everything protected/hidden -> special mode
                 if( bAllProtect && !IsReadOnlyAvailable() &&
                     pSectNd->GetSection().IsProtectFlag() )
-                    bChgState = sal_False;
+                    bChgState = false;
                 else
                 {
                     eMvState = MV_NONE;     // state for cursor travelling
@@ -1590,15 +1590,15 @@ void SwCrsrShell::UpdateCrsr( sal_uInt16 eFlags, sal_Bool bIdleEnd )
 
 
     SwRect aOld( aCharRect );
-    sal_Bool bFirst = sal_True;
+    bool bFirst = true;
     SwCntntFrm *pFrm;
     int nLoopCnt = 100;
     SwShellCrsr* pShellCrsr = getShellCrsr( true );
 
     do {
-        sal_Bool bAgainst;
+        bool bAgainst;
         do {
-            bAgainst = sal_False;
+            bAgainst = false;
             pFrm = pShellCrsr->GetCntntNode()->getLayoutFrm( GetLayout(),
                         &pShellCrsr->GetPtPos(), pShellCrsr->GetPoint(), sal_False );
             // if the Frm doesn't exist anymore, the complete Layout has to be
@@ -1624,13 +1624,13 @@ void SwCrsrShell::UpdateCrsr( sal_uInt16 eFlags, sal_Bool bIdleEnd )
                  !pDoc->GetDocShell()->IsReadOnly() || bAllProtect ) )
             {
                 // look for a valid position
-                sal_Bool bChgState = sal_True;
+                bool bChgState = true;
                 if( !FindValidCntntNode(!HasDrawView() ||
                     0 == Imp()->GetDrawView()->GetMarkedObjectList().GetMarkCount()))
                 {
                     // everything is protected / hidden -> special Mode
                     if( bAllProtect )
-                        bChgState = sal_False;
+                        bChgState = false;
                     else
                     {
                         eMvState = MV_NONE;     // state for crusor travelling
@@ -1655,7 +1655,7 @@ void SwCrsrShell::UpdateCrsr( sal_uInt16 eFlags, sal_Bool bIdleEnd )
                         CallChgLnk();       // notify UI!
                     }
                     bAllProtect = sal_False;
-                    bAgainst = sal_True; // look for the right Frm again
+                    bAgainst = true; // look for the right Frm again
                 }
             }
         } while( bAgainst );
@@ -1710,7 +1710,7 @@ void SwCrsrShell::UpdateCrsr( sal_uInt16 eFlags, sal_Bool bIdleEnd )
             break;
         }
         aOld = aCharRect;
-        bFirst = sal_False;
+        bFirst = false;
 
         // update cursor Points to the new Positions
         pShellCrsr->GetPtPos().X() = aCharRect.Left();
@@ -2317,7 +2317,7 @@ sal_Bool SwCrsrShell::SetVisCrsr( const Point &rPt )
             aCrsrHeight.Y() = aCharRect.Height();
         }
 
-        pVisCrsr->SetDragCrsr( sal_True );
+        pVisCrsr->SetDragCrsr( true );
         pVisCrsr->Show(); // show again
     }
     return bRet;
@@ -2418,7 +2418,7 @@ void SwCrsrShell::_ParkPams( SwPaM* pDelRg, SwShellCrsr** ppDelRing )
     SwPaM *pTmpDel = 0, *pTmp = *ppDelRing;
 
     // search over the whole ring
-    sal_Bool bGoNext;
+    bool bGoNext;
     do {
         const SwPosition *pTmpStt = pTmp->Start(),
                         *pTmpEnd = pTmp->GetPoint() == pTmpStt ?
@@ -2435,7 +2435,7 @@ void SwCrsrShell::_ParkPams( SwPaM* pDelRg, SwShellCrsr** ppDelRing )
             if( *pStt < *pTmpEnd )
                 pTmpDel = pTmp;
 
-        bGoNext = sal_True;
+        bGoNext = true;
         if( pTmpDel ) // is the pam in area -> delete
         {
             sal_Bool bDelete = sal_True;
@@ -2445,7 +2445,7 @@ void SwCrsrShell::_ParkPams( SwPaM* pDelRg, SwShellCrsr** ppDelRing )
                 {
                     if( sal_True == ( bDelete = GoNextCrsr() ))
                     {
-                        bGoNext = sal_False;
+                        bGoNext = false;
                         pTmp = (SwPaM*)pTmp->GetNext();
                     }
                 }
@@ -3113,7 +3113,7 @@ void SwCrsrShell::SetSelection( const SwPaM& rCrsr )
     EndAction();
 }
 
-void lcl_RemoveMark( SwPaM* pPam )
+static void lcl_RemoveMark( SwPaM* pPam )
 {
     OSL_ENSURE( pPam->HasMark(), "Don't remove pPoint!" );
     pPam->GetMark()->nContent.Assign( 0, 0 );
@@ -3121,7 +3121,7 @@ void lcl_RemoveMark( SwPaM* pPam )
     pPam->DeleteMark();
 }
 
-const SwStartNode* lcl_NodeContext( const SwNode& rNode )
+static const SwStartNode* lcl_NodeContext( const SwNode& rNode )
 {
     const SwStartNode *pRet = rNode.StartOfSectionNode();
     while( pRet->IsSectionNode() || pRet->IsTableNode() ||
@@ -3138,7 +3138,7 @@ const SwStartNode* lcl_NodeContext( const SwNode& rNode )
 
    @param aPos the position to check.
 */
-bool lcl_PosOk(const SwPosition & aPos)
+bool sw_PosOk(const SwPosition & aPos)
 {
     return NULL != aPos.nNode.GetNode().GetCntntNode() &&
            aPos.nContent.GetIdxReg();
@@ -3152,8 +3152,8 @@ bool lcl_PosOk(const SwPosition & aPos)
 */
 static bool lcl_CrsrOk(SwPaM & aPam)
 {
-    return lcl_PosOk(*aPam.GetPoint()) && (! aPam.HasMark()
-        || lcl_PosOk(*aPam.GetMark()));
+    return sw_PosOk(*aPam.GetPoint()) && (! aPam.HasMark()
+        || sw_PosOk(*aPam.GetMark()));
 }
 
 void SwCrsrShell::ClearUpCrsrs()
@@ -3181,12 +3181,12 @@ void SwCrsrShell::ClearUpCrsrs()
         pCrsr = pTmpCrsr;
     }
 
-    if( pStartCrsr->HasMark() && !lcl_PosOk( *pStartCrsr->GetMark() ) )
+    if( pStartCrsr->HasMark() && !sw_PosOk( *pStartCrsr->GetMark() ) )
     {
         lcl_RemoveMark( pStartCrsr );
         bChanged = true;
     }
-    if( !lcl_PosOk( *pStartCrsr->GetPoint() ) )
+    if( !sw_PosOk( *pStartCrsr->GetPoint() ) )
     {
         SwNodes & aNodes = GetDoc()->GetNodes();
         const SwNode* pStart = lcl_NodeContext( pStartCrsr->GetPoint()->nNode.GetNode() );
@@ -3235,7 +3235,7 @@ String SwCrsrShell::GetCrsrDescr() const
 
 // SMARTTAGS
 
-void lcl_FillRecognizerData( uno::Sequence< rtl::OUString >& rSmartTagTypes,
+static void lcl_FillRecognizerData( uno::Sequence< rtl::OUString >& rSmartTagTypes,
                              uno::Sequence< uno::Reference< container::XStringKeyMap > >& rStringKeyMaps,
                              const SwWrongList& rSmartTagList, xub_StrLen nCurrent )
 {
@@ -3276,7 +3276,7 @@ void lcl_FillRecognizerData( uno::Sequence< rtl::OUString >& rSmartTagTypes,
     }
 }
 
-void lcl_FillTextRange( uno::Reference<text::XTextRange>& rRange,
+static void lcl_FillTextRange( uno::Reference<text::XTextRange>& rRange,
                    SwTxtNode& rNode, xub_StrLen nBegin, xub_StrLen nLen )
 {
     // create SwPosition for nStartIndex

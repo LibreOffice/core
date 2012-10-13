@@ -56,9 +56,6 @@ class SVT_DLLPUBLIC SvtToolPanelOptions: public utl::detail::Options
         SvtToolPanelOptions();
         virtual ~SvtToolPanelOptions();
 
-        void AddListenerLink( const Link& rLink );
-        void RemoveListenerLink( const Link& rLink );
-
         bool GetVisibleImpressView() const;
         void SetVisibleImpressView( bool bVisible );
         bool GetVisibleOutlineView() const;

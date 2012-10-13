@@ -222,14 +222,6 @@ SvStream& operator>>( SvStream& rIn, DffRecordHeader& rRec )
     return rIn;
 }
 
-// measurements  dashed lines
-#define LLEN_MIDDLE         (450)
-#define LLEN_SPACE_MIDDLE   (360)
-#define LLEN_LONG           (LLEN_MIDDLE * 2)
-#define LLEN_SPACE_LONG     (LLEN_SPACE_MIDDLE + 20)
-#define LLEN_POINT          (LLEN_MIDDLE / 4)
-#define LLEN_SPACE_POINT    (LLEN_SPACE_MIDDLE / 4)
-
 SvStream& operator>>( SvStream& rIn, DffPropSet& rRec )
 {
     rRec.InitializePropSet();

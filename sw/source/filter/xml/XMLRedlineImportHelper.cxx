@@ -64,7 +64,7 @@ using ::com::sun::star::beans::XPropertySetInfo;
 // a few helper functions
 //
 
-SwDoc* lcl_GetDocViaTunnel( Reference<XTextCursor> & rCursor )
+static SwDoc* lcl_GetDocViaTunnel( Reference<XTextCursor> & rCursor )
 {
     Reference<XUnoTunnel> xTunnel( rCursor, UNO_QUERY);
     OSL_ENSURE(xTunnel.is(), "missing XUnoTunnel for XTextCursor");
@@ -74,7 +74,7 @@ SwDoc* lcl_GetDocViaTunnel( Reference<XTextCursor> & rCursor )
     return (pXCursor) ? pXCursor->GetDoc() : 0;
 }
 
-SwDoc* lcl_GetDocViaTunnel( Reference<XTextRange> & rRange )
+static SwDoc* lcl_GetDocViaTunnel( Reference<XTextRange> & rRange )
 {
     Reference<XUnoTunnel> xTunnel(rRange, UNO_QUERY);
     OSL_ENSURE(xTunnel.is(), "missing XUnoTunnel for XTextRange");

@@ -85,7 +85,7 @@ HDDEDATA CALLBACK DdeInternal::CliCallback(
                     if( (DWORD)(*iter)->nId == nInfo1 )
                     {
                         nCode = (*iter)->nType & (XCLASS_MASK | XTYP_MASK);
-                        (*iter)->bBusy = sal_False;
+                        (*iter)->bBusy = false;
                         (*iter)->Done( 0 != hData );
                         bFound = sal_True;
                     }
@@ -266,7 +266,7 @@ DdeTransaction::DdeTransaction( DdeConnection& d, const String& rItemName,
     nTime = n;
     nId   = 0;
     nType = 0;
-    bBusy = sal_False;
+    bBusy = false;
 
     rDde.aTransactions.push_back( this );
 }
@@ -329,7 +329,7 @@ void DdeTransaction::Execute()
         if ( nId && rDde.pImp->hConv )
             DdeAbandonTransaction( pInst->hDdeInstCli, rDde.pImp->hConv, nId);
         nId = 0;
-        bBusy = sal_True;
+        bBusy = true;
         HDDEDATA hRet = DdeClientTransaction( (unsigned char*)pData, nData,
                                             rDde.pImp->hConv, hItem, nExtFmt,
                                             (UINT)nType, TIMEOUT_ASYNC,

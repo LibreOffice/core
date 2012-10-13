@@ -133,6 +133,8 @@ sal_Bool OOdbcLibWrapper::load(const sal_Char* _pLibPath)
     // load the module
     m_pOdbcLib = osl_loadModule(m_sLibPath.pData, SAL_LOADMODULE_NOW);
     return (NULL != m_pOdbcLib);
+#else
+    return sal_False;
 #endif
 }
 
@@ -289,6 +291,8 @@ void OOdbcEnumeration::getDatasourceNames(StringBag& _rNames)
             _rNames.insert(aCurrentDsn);
         }
     }
+#else
+    (void) _rNames;
 #endif
 }
 

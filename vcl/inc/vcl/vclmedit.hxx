@@ -34,15 +34,15 @@
 #include <vcl/dllapi.h>
 
 
-class ImpSvMEdit;
+class ImpVclMEdit;
 class Timer;
 class ExtTextEngine;
 class ExtTextView;
 
-class VCL_DLLPUBLIC VCLMultiLineEdit : public Edit
+class VCL_DLLPUBLIC VclMultiLineEdit : public Edit
 {
 private:
-    ImpSvMEdit*     pImpSvMEdit;
+    ImpVclMEdit*    pImpVclMEdit;
 
     XubString       aSaveValue;
     Link            aModifyHdlLink;
@@ -66,9 +66,9 @@ protected:
     ScrollBar*      GetVScrollBar() const;
 
 public:
-                    VCLMultiLineEdit( Window* pParent, WinBits nWinStyle = WB_LEFT | WB_BORDER );
-                    VCLMultiLineEdit( Window* pParent, const ResId& rResId );
-                    virtual ~VCLMultiLineEdit();
+                    VclMultiLineEdit( Window* pParent, WinBits nWinStyle = WB_LEFT | WB_BORDER );
+                    VclMultiLineEdit( Window* pParent, const ResId& rResId );
+                    virtual ~VclMultiLineEdit();
 
 
     virtual void    Modify();
@@ -139,7 +139,7 @@ public:
     void            SetTextSelectable( sal_Bool bTextSelectable );
 };
 
-inline sal_uLong VCLMultiLineEdit::IsUpdateDataEnabled() const
+inline sal_uLong VclMultiLineEdit::IsUpdateDataEnabled() const
 {
     return pUpdateDataTimer ? pUpdateDataTimer->GetTimeout() : 0;
 }

@@ -401,16 +401,6 @@ WindowsCustomAction gid_Customaction_SortTree
     Assignment1 = ("ControlEvent", "CustomSetup", "Tree", "DoAction", "SortTree", "1", "1");
 End
 
-WindowsCustomAction gid_Customaction_RebaseLibrariesonproperties
-	Name = "RebaseLibrariesOnProperties";
-	Typ = "65";
-	Source = "rebase.dll";
-	Target = "RebaseLibrariesOnProperties";
-	Inbinarytable = 1;
-	Assignment1 = ("InstallExecuteSequence", "VersionNT < 600 And Not REMOVE=\"ALL\"", "end");
-	Assignment2 = ("AdminExecuteSequence", "VersionNT < 600 And Not REMOVE=\"ALL\"", "end");
-End
-
 WindowsCustomAction gid_Customaction_LookForRegisteredExtensions
 	Name = "LookForRegisteredExtensions";
 	Typ = "65";

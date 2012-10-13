@@ -22,7 +22,7 @@
 
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>
-#include <com/sun/star/xml/sax/XParser.hpp>
+#include <com/sun/star/xml/sax/Parser.hpp>
 
 #include <comphelper/componentcontext.hxx>
 #include <cppuhelper/implbase1.hxx>
@@ -55,6 +55,7 @@ namespace dbaccess
     using ::com::sun::star::io::XStream;
     using ::com::sun::star::io::XOutputStream;
     using ::com::sun::star::io::XActiveDataSource;
+    using ::com::sun::star::xml::sax::Parser;
     using ::com::sun::star::xml::sax::XParser;
     using ::com::sun::star::xml::sax::InputSource;
     /** === end UNO using === **/
@@ -163,7 +164,7 @@ namespace dbaccess
         :StorageInputStream( i_rContext, i_rParentStorage, i_rStreamName )
         ,m_pData( new StorageXMLInputStream_Data )
     {
-        m_pData->xParser.set( i_rContext.createComponent( "com.sun.star.xml.sax.Parser" ), UNO_QUERY_THROW );
+        m_pData->xParser.set( Parser::create(i_rContext.getUNOContext()) );
     }
 
     //------------------------------------------------------------------------------------------------------------------

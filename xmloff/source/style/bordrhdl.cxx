@@ -101,7 +101,7 @@ static sal_uInt16 const aBorderWidths[] =
     DEF_LINE_WIDTH_2
 };
 
-void lcl_frmitems_setXMLBorderStyle( table::BorderLine2 & rBorderLine, sal_uInt16 nStyle )
+static void lcl_frmitems_setXMLBorderStyle( table::BorderLine2 & rBorderLine, sal_uInt16 nStyle )
 {
     sal_Int16 eStyle = -1; // None
     if ( nStyle != API_LINE_NONE )

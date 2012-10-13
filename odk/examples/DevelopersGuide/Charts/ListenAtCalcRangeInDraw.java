@@ -58,7 +58,6 @@ import com.sun.star.uno.Exception;
 /** Create a spreadsheet add some data.
     Create a presentation and add a chart.
     Connect the chart to a calc range via a listener
-    @author Bj&ouml;rn Milcke
  */
 public class ListenAtCalcRangeInDraw implements XChartDataChangeEventListener
 {

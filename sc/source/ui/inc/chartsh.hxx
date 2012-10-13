@@ -23,7 +23,6 @@
 #include <sfx2/shell.hxx>
 #include "shellids.hxx"
 #include <sfx2/module.hxx>
-#include <svx/svdmark.hxx>
 
 class ScViewData;
 
@@ -39,6 +38,8 @@ public:
                 ScChartShell(ScViewData* pData);
     virtual     ~ScChartShell();
 
+    void    ExecuteExportAsGraphic(SfxRequest& rReq);
+    void    GetExportAsGraphicState(SfxItemSet &rSet);
 };
 
 #endif

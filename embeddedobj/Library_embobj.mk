@@ -27,6 +27,10 @@
 
 $(eval $(call gb_Library_Library,embobj))
 
+$(eval $(call gb_Library_use_packages,embobj,\
+	tools_inc \
+))
+
 $(eval $(call gb_Library_set_componentfile,embobj,embeddedobj/util/embobj))
 
 $(eval $(call gb_Library_set_include,embobj,\

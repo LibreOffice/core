@@ -81,7 +81,7 @@ void ScReferenceList::AddEntry( SCCOL nCol, SCROW nRow, SCTAB nTab )
 }
 
 template< typename T >
-void lcl_AddString( String**& pData, T& nCount, const String& rInsert )
+static void lcl_AddString( String**& pData, T& nCount, const String& rInsert )
 {
     String** pOldData = pData;
     pData = new String*[ nCount+1 ];
@@ -342,7 +342,7 @@ void ScConsData::AddName( const String& rName )
 
                                 // rCount < 0 <=> Fehler aufgetreten
 
-void lcl_UpdateArray( ScSubTotalFunc eFunc,
+static void lcl_UpdateArray( ScSubTotalFunc eFunc,
                          double& rCount, double& rSum, double& rSumSqr, double nVal )
 {
     if (rCount < 0.0)
@@ -396,7 +396,7 @@ void lcl_UpdateArray( ScSubTotalFunc eFunc,
     }
 }
 
-void lcl_InitArray( ScSubTotalFunc eFunc,
+static void lcl_InitArray( ScSubTotalFunc eFunc,
                        double& rCount, double& rSum, double& rSumSqr, double nVal )
 {
     rCount = 1.0;
@@ -427,7 +427,7 @@ void lcl_InitArray( ScSubTotalFunc eFunc,
     }
 }
 
-double lcl_CalcData( ScSubTotalFunc eFunc,
+static double lcl_CalcData( ScSubTotalFunc eFunc,
                         double fCount, double fSum, double fSumSqr)
 {
     if (fCount < 0.0)

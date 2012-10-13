@@ -68,10 +68,7 @@
 #define FRIB_MTAG_CHARSTYLE     3
 #define FRIB_MTAG_ATTRIBUTE     4
 #define FRIB_MTAG_LANGUAGE      5
-#define FRIB_MTAG_CHARBORDER    6
-#define FRIB_MTAG_AMIKAKE       7
 #define FRIB_MTAG_CODEPAGE      8
-#define FRIB_MTAG_STXLINK       9       // SmarText; do not #ifdef out
 
 #define FT_MAXIMUM      30
 
@@ -106,13 +103,8 @@ enum
     FRIB_TAG_SOFTHYPHEN,    // FT_SOFTHYPHEN
     FRIB_TAG_PARANUMBER,    // FT_PARANUMBER
     FRIB_TAG_UNICODE,       // FT_UNICODE
-#ifdef KANJI
-    FRIB_TAG_KANJI,         // FT_KANJI
-    FRIB_TAG_HKATAKANA,     // FT_HKATAKANA
-#else
     FRIB_TAG_UNICODE2,      // FT_UNICODE
     FRIB_TAG_UNICODE3,      // FT_UNICODE
-#endif
     FRIB_TAG_SEPARATOR,     // FT_SEPARATOR
     FRIB_TAG_SECTION,       // FT_SECTION
     FRIB_TAG_TOMBSTONE,     // FT_TOMBSTONE
@@ -124,13 +116,9 @@ enum
     FRIB_TAG_DDE,           // FT_DDE
     FRIB_TAG_FIELD,         // FT_FIELD
     FRIB_TAG_CHBLOCK,       // FT_CHBLOCK
-//#ifdef RUBY
     FRIB_TAG_FLOWBREAK,     // FT_FLOWBREAK
     FRIB_TAG_RUBYMARKER,    // FT_RUBYMARKER
     FRIB_TAG_RUBYFRAME      // FT_RUBYFRAME
-//#else
-//  FRIB_TAG_FLOWBREAK      // FT_FLOWBREAK
-//#endif
 };
 
 #endif

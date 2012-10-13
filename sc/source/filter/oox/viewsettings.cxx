@@ -652,7 +652,7 @@ void ViewSettings::finalizeImport()
             aWinExtent[ 1 ] = aPos.Y;
             aWinExtent[ 2 ] = aPos.X + aSize.Width;
             aWinExtent[ 3 ] = aPos.Y + aSize.Height;
-            getBaseFilter().getMediaDescriptor()[ CREATE_OUSTRING( "WinExtent" ) ] <<= aWinExtent;
+            getBaseFilter().getMediaDescriptor()[ "WinExtent" ] <<= aWinExtent;
         }
     }
 }

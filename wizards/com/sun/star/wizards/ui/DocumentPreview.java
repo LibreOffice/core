@@ -30,9 +30,6 @@ import com.sun.star.util.XCloseable;
 import com.sun.star.wizards.common.Properties;
 import com.sun.star.wizards.common.PropertyNames;
 
-/**
- * @author rpiterman
- */
 public class DocumentPreview
 {
 
@@ -63,10 +60,7 @@ public class DocumentPreview
     public DocumentPreview(XMultiServiceFactory xmsf, Object control) throws Exception
     {
 
-        //((XWindow)UnoRuntime.queryInterface(XWindow.class,control)).addPaintListener(this);
         xControl = UnoRuntime.queryInterface(XControl.class, control);
-        //register this object as a listener, to close the frame when disposing.
-        //((XComponent) UnoRuntime.queryInterface(XComponent.class, control)).addEventListener(this);
 
         createPreviewFrame(xmsf, xControl);
     }
@@ -96,7 +90,6 @@ public class DocumentPreview
     {
         closeFrame();
         createPreviewFrame(xmsf, xControl);
-        //System.out.println(xControl);
         setDocument(url, loadArgs);
     }
 
@@ -155,8 +148,6 @@ public class DocumentPreview
         xWindow = UnoRuntime.queryInterface(XWindow.class, xPeer);
         Object frame = xmsf.createInstance("com.sun.star.frame.Frame");
         xFrame = UnoRuntime.queryInterface(XFrame.class, frame);
-//      XFrame xF = (XFrame) UnoRuntime.queryInterface(XFrame.class, Desktop.getDesktop(xmsf));
-//      xFrame = xF.findFrame("_blank", 0);
         xFrame.initialize(xWindow);
         xWindow.setVisible(true);
     }

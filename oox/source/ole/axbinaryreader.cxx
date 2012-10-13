@@ -218,15 +218,6 @@ void AxBinaryPropertyReader::readStringProperty( OUString& orValue )
     }
 }
 
-void AxBinaryPropertyReader::readStringArrayProperty( AxStringArray& orArray )
-{
-    if( startNextProperty() )
-    {
-        sal_uInt32 nSize = maInStrm.readAligned< sal_uInt32 >();
-        maLargeProps.push_back( ComplexPropVector::value_type( new StringArrayProperty( orArray, nSize ) ) );
-    }
-}
-
 void AxBinaryPropertyReader::readGuidProperty( ::rtl::OUString& orGuid )
 {
     if( startNextProperty() )

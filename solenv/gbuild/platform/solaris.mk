@@ -301,10 +301,14 @@ gb_Executable_LAYER := \
 	$(foreach exe,$(gb_Executable_NONE),$(exe):NONE) \
 
 
-define gb_Executable_get_rpath
-'-Wl,-rpath,$(call gb_LinkTarget__get_rpath_for_layer,$(call gb_Executable_get_layer,$(1)))' \
--L$(gb_Library_OUTDIRLOCATION)
+define gb_Executable__get_rpath
+$(strip $(if $(1),'-Wl$(COMMA)-rpath$(COMMA)$(1)') \
+-L$(gb_Library_OUTDIRLOCATION))
 #JAD#-Wl,-rpath-link,$(gb_Library_OUTDIRLOCATION)
+endef
+
+define gb_Executable_get_rpath
+$(call gb_Executable__get_rpath,$(call gb_LinkTarget__get_rpath_for_layer,$(call gb_Executable_get_layer,$(1))))
 endef
 
 define gb_Executable_Executable_platform
@@ -395,6 +399,14 @@ gb_ExtensionTarget_LICENSEFILE_DEFAULT := $(OUTDIR)/bin/osl/LICENSE
 # UnpackedTarget class
 
 gb_UnpackedTarget_TARFILE_LOCATION := $(TARFILE_LOCATION)
+
+# UnoApiHeadersTarget class
+
+ifeq ($(DISABLE_DYNLOADING),TRUE)
+gb_UnoApiHeadersTarget_select_variant = $(if $(filter udkapi,$(1)),comprehensive,$(2))
+else
+gb_UnoApiHeadersTarget_select_variant = $(2)
+endif
 
 # Python
 gb_PYTHON_PRECOMMAND := $(gb_Helper_set_ld_path) PYTHONHOME=$(OUTDIR)/lib/python PYTHONPATH=$(OUTDIR)/lib/python:$(OUTDIR)/lib/python/lib-dynload

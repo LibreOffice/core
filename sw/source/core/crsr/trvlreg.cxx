@@ -148,7 +148,7 @@ sal_Bool GotoCurrRegion( SwPaM& rCurCrsr, SwPosRegion fnPosRegion,
         return sal_False;
 
     SwPosition* pPos = rCurCrsr.GetPoint();
-    sal_Bool bMoveBackward = fnPosRegion == fnMoveBackward;
+    bool bMoveBackward = fnPosRegion == fnMoveBackward;
 
     SwCntntNode* pCNd;
     if( bMoveBackward )
@@ -182,7 +182,7 @@ sal_Bool GotoCurrRegionAndSkip( SwPaM& rCurCrsr, SwPosRegion fnPosRegion,
 
     SwPosition* pPos = rCurCrsr.GetPoint();
     xub_StrLen nCurrCnt = pPos->nContent.GetIndex();
-    sal_Bool bMoveBackward = fnPosRegion == fnMoveBackward;
+    bool bMoveBackward = fnPosRegion == fnMoveBackward;
 
     do {
         SwCntntNode* pCNd;

@@ -81,7 +81,7 @@ void SwEnvPreview::Paint(const Rectangle &)
     const StyleSettings& rSettings = GetSettings().GetStyleSettings();
 
     const SwEnvItem& rItem =
-        ((SwEnvDlg*) GetParent()->GetParent()->GetParent())->aEnvItem;
+        ((SwEnvDlg*) GetParentDialog())->aEnvItem;
 
     sal_uInt16 nPageW = (sal_uInt16) Max(rItem.lWidth, rItem.lHeight),
            nPageH = (sal_uInt16) Min(rItem.lWidth, rItem.lHeight);
@@ -220,7 +220,7 @@ SwEnvPage::SwEnvPage(Window* pParent, const SfxItemSet& rSet) :
 {
     FreeResource();
     SetExchangeSupport();
-    pSh = GetParent()->pSh;
+    pSh = GetParentSwEnvDlg()->pSh;
 
     // Install handlers
     aDatabaseLB    .SetSelectHdl(LINK(this, SwEnvPage, DatabaseHdl     ));
@@ -279,7 +279,7 @@ IMPL_LINK_NOARG(SwEnvPage, FieldHdl)
 IMPL_LINK_NOARG(SwEnvPage, SenderHdl)
 {
     const sal_Bool bEnable = aSenderBox.IsChecked();
-    GetParent()->aEnvItem.bSend = bEnable;
+    GetParentSwEnvDlg()->aEnvItem.bSend = bEnable;
     aSenderEdit.Enable(bEnable);
     if ( bEnable )
     {
@@ -324,13 +324,13 @@ SfxTabPage* SwEnvPage::Create(Window* pParent, const SfxItemSet& rSet)
 void SwEnvPage::ActivatePage(const SfxItemSet& rSet)
 {
     SfxItemSet aSet(rSet);
-    aSet.Put(GetParent()->aEnvItem);
+    aSet.Put(GetParentSwEnvDlg()->aEnvItem);
     Reset(aSet);
 }
 
 int SwEnvPage::DeactivatePage(SfxItemSet* _pSet)
 {
-    FillItem(GetParent()->aEnvItem);
+    FillItem(GetParentSwEnvDlg()->aEnvItem);
     if( _pSet )
         FillItemSet(*_pSet);
     return SfxTabPage::LEAVE_PAGE;
@@ -345,8 +345,8 @@ void SwEnvPage::FillItem(SwEnvItem& rItem)
 
 sal_Bool SwEnvPage::FillItemSet(SfxItemSet& rSet)
 {
-    FillItem(GetParent()->aEnvItem);
-    rSet.Put(GetParent()->aEnvItem);
+    FillItem(GetParentSwEnvDlg()->aEnvItem);
+    rSet.Put(GetParentSwEnvDlg()->aEnvItem);
     return sal_True;
 }
 

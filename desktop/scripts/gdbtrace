@@ -1,5 +1,6 @@
 set pagination off
 echo log will be saved as gdbtrace.log, this will take some time, patience...\n
+handle SIGPIPE SIGXCPU SIG33 SIG35 SIGPWR nostop noprint
 set logging redirect on
 set logging file gdbtrace.log
 set logging on

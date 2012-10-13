@@ -51,7 +51,7 @@
 using namespace ::com::sun::star;
 
 
-CharSet lcl_GetDefaultTextEncodingForRTF()
+static CharSet lcl_GetDefaultTextEncodingForRTF()
 {
 
     ::com::sun::star::lang::Locale aLocale;

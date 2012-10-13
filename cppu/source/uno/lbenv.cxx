@@ -1054,7 +1054,7 @@ static bool loadEnv(OUString const  & cLibStem,
 {
 #ifdef DISABLE_DYNLOADING
     oslModule hMod;
-    uno_initEnvironmentFunc fpInit = NULL;
+    uno_initEnvironmentFunc fpInit;
 
     if ( cLibStem == CPPU_CURRENT_LANGUAGE_BINDING_NAME "_uno" )
         fpInit = CPPU_ENV_uno_initEnvironment;
@@ -1083,13 +1083,13 @@ static bool loadEnv(OUString const  & cLibStem,
     OUString aSymbolName(RTL_CONSTASCII_USTRINGPARAM(UNO_INIT_ENVIRONMENT));
     uno_initEnvironmentFunc fpInit = (uno_initEnvironmentFunc)
         ::osl_getFunctionSymbol( hMod, aSymbolName.pData );
-#endif
 
     if (!fpInit)
     {
         ::osl_unloadModule( hMod );
         return false;
     }
+#endif
 
     (*fpInit)( pEnv ); // init of environment
     ::rtl_registerModuleForUnloading( hMod );

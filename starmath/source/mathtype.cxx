@@ -1995,7 +1995,7 @@ sal_uInt8 MathType::HandleNodes(SmNode *pNode,int nLevel)
             SmTextNode *pText=(SmTextNode *)pNode;
             //if the token str and the result text are the same then this
             //is to be seen as text, else assume its a mathchar
-            if (pText->GetText() == pText->GetToken().aText)
+            if (pText->GetText() == OUString(pText->GetToken().aText))
                 HandleText(pText,nLevel);
             else
                 HandleMath(pText,nLevel);
@@ -3078,16 +3078,16 @@ void MathType::HandleMath(SmNode *pNode, int /*nLevel*/)
         return;
     }
     SmMathSymbolNode *pTemp=(SmMathSymbolNode *)pNode;
-    for(xub_StrLen i=0;i<pTemp->GetText().Len();i++)
+    for(sal_Int32 i=0;i<pTemp->GetText().getLength();i++)
     {
-        sal_Unicode nArse = SmTextNode::ConvertSymbolToUnicode(pTemp->GetText().GetChar(i));
+        sal_Unicode nArse = SmTextNode::ConvertSymbolToUnicode(pTemp->GetText()[i]);
         if ((nArse == 0x2224) || (nArse == 0x2288) || (nArse == 0x2285) ||
             (nArse == 0x2289))
         {
             *pS << sal_uInt8(CHAR|0x20);
         }
         else if ((nPendingAttributes) &&
-                (i == ((pTemp->GetText().Len()+1)/2)-1))
+                (i == ((pTemp->GetText().getLength()+1)/2)-1))
             {
                 *pS << sal_uInt8(0x22);
             }
@@ -3209,7 +3209,7 @@ void MathType::HandleAttributes(SmNode *pNode,int nLevel)
         case TOVERLINE: //If the next node is not text
                         //or text with more than one char
             if ((pIsText->GetToken().eType != TTEXT) ||
-                (pIsText->GetText().Len() > 1))
+                (pIsText->GetText().getLength() > 1))
                 nOldPending = StartTemplate(0x11);
             break;
         default:
@@ -3229,7 +3229,7 @@ void MathType::HandleAttributes(SmNode *pNode,int nLevel)
             break;
         case TOVERLINE:
             if ((pIsText->GetToken().eType != TTEXT) ||
-                (pIsText->GetText().Len() > 1))
+                (pIsText->GetText().getLength() > 1))
                 EndTemplate(nOldPending);
             break;
         default:
@@ -3276,7 +3276,7 @@ void MathType::HandleAttributes(SmNode *pNode,int nLevel)
                 break;
             case TOVERLINE:
                 if ((pIsText->GetToken().eType == TTEXT) &&
-                    (pIsText->GetText().Len() == 1))
+                    (pIsText->GetText().getLength() == 1))
                     *pS << sal_uInt8(17);
                 break;
             case TBREVE:
@@ -3302,10 +3302,10 @@ void MathType::HandleAttributes(SmNode *pNode,int nLevel)
 void MathType::HandleText(SmNode *pNode, int /*nLevel*/)
 {
     SmTextNode *pTemp=(SmTextNode *)pNode;
-    for(xub_StrLen i=0;i<pTemp->GetText().Len();i++)
+    for(sal_Int32 i=0;i<pTemp->GetText().getLength();i++)
     {
         if ((nPendingAttributes) &&
-            (i == ((pTemp->GetText().Len()+1)/2)-1))
+            (i == ((pTemp->GetText().getLength()+1)/2)-1))
         {
             *pS << sal_uInt8(0x22);     //char, with attributes right
                                 //after the character
@@ -3319,7 +3319,7 @@ void MathType::HandleText(SmNode *pNode, int /*nLevel*/)
         else if (pNode->GetFont().GetWeight() == WEIGHT_BOLD)
             nFace = 0x7;
         *pS << sal_uInt8(nFace+128); //typeface
-        sal_uInt16 nChar = pTemp->GetText().GetChar(i);
+        sal_uInt16 nChar = pTemp->GetText()[i];
         *pS << SmTextNode::ConvertSymbolToUnicode(nChar);
 
         //Mathtype can only have these sort of character
@@ -3335,7 +3335,7 @@ void MathType::HandleText(SmNode *pNode, int /*nLevel*/)
         //entities which cannot occur in mathtype e.g. a Summation
         //symbol so these attributes may be lost
         if ((nPendingAttributes) &&
-            (i == ((pTemp->GetText().Len()+1)/2)-1))
+            (i == ((pTemp->GetText().getLength()+1)/2)-1))
         {
             *pS << sal_uInt8(EMBEL);
             while (nPendingAttributes)

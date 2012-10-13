@@ -58,9 +58,10 @@
 #include <com/sun/star/xml/sax/XEntityResolver.hpp>
 #include <com/sun/star/xml/sax/InputSource.hpp>
 #include <com/sun/star/xml/sax/XDTDHandler.hpp>
-#include <com/sun/star/xml/sax/XParser.hpp>
+#include <com/sun/star/xml/sax/Parser.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>
 #include <com/sun/star/io/XActiveDataControl.hpp>
+#include <comphelper/componentcontext.hxx>
 #include <comphelper/genericpropertyset.hxx>
 #include <comphelper/propertysetinfo.hxx>
 #include <unotools/saveopt.hxx>
@@ -228,12 +229,7 @@ sal_Int32 ReadThroughComponent(
     aParserInput.aInputStream = xInputStream;
 
     // get parser
-    Reference< xml::sax::XParser > xParser(
-        rFactory->createInstance("com.sun.star.xml.sax.Parser" ),
-        UNO_QUERY );
-    DBG_ASSERT( xParser.is(), "Can't create parser" );
-    if( !xParser.is() )
-        return SD_XML_READERROR;
+    Reference< xml::sax::XParser > xParser = xml::sax::Parser::create(comphelper::getComponentContext(rFactory));
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "parser created" );
 
     // get filter

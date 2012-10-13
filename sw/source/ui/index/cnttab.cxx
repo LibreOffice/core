@@ -99,7 +99,7 @@ static const sal_Unicode aDeliEnd    = ']'; // for the form
 
 #define IDX_FILE_EXTENSION rtl::OUString("*.sdi")
 
-String lcl_CreateAutoMarkFileDlg( const String& rURL,
+static String lcl_CreateAutoMarkFileDlg( const String& rURL,
                                 const String& rFileString, sal_Bool bOpen )
 {
     String sRet;
@@ -1006,7 +1006,7 @@ sal_Bool SwTOXSelectTabPage::FillItemSet( SfxItemSet& )
     return sal_True;
 }
 
-long lcl_TOXTypesToUserData(CurTOXType eType)
+static long lcl_TOXTypesToUserData(CurTOXType eType)
 {
     sal_uInt16 nRet = TOX_INDEX;
     switch(eType.eType)
@@ -1038,7 +1038,7 @@ void SwTOXSelectTabPage::SelectType(TOXTypes eSet)
     TOXTypeHdl(&aTypeLB);
 }
 
-CurTOXType lcl_UserData2TOXTypes(sal_uInt16 nData)
+static CurTOXType lcl_UserData2TOXTypes(sal_uInt16 nData)
 {
     CurTOXType eRet;
 
@@ -2078,14 +2078,14 @@ void SwTOXEntryTabPage::Reset( const SfxItemSet& )
     aCommaSeparatedCB.Check(m_pCurrentForm->IsCommaSeparated());
 }
 
-void lcl_ChgWidth(Window& rWin, long nDiff)
+static void lcl_ChgWidth(Window& rWin, long nDiff)
 {
  Size aTempSz(rWin.GetSizePixel());
     aTempSz.Width() += nDiff;
     rWin.SetSizePixel(aTempSz);
 }
 
-void lcl_ChgXPos(Window& rWin, long nDiff)
+static void lcl_ChgXPos(Window& rWin, long nDiff)
 {
     Point aTempPos(rWin.GetPosPixel());
     aTempPos.X() += nDiff;
@@ -3425,12 +3425,6 @@ IMPL_LINK(SwTokenWindow, ScrollHdl, ImageButton*, pBtn )
 
         pCtrl = *(aControlList.rbegin());
         aRightScrollWin.Enable((pCtrl->GetPosPixel().X() + pCtrl->GetSizePixel().Width()) > nSpace);
-
-#if OSL_DEBUG_LEVEL > 1
-        sMessage.AppendAscii("Move: ");
-        sMessage += String::CreateFromInt32(nMove);
-        GetParent()->GetParent()->GetParent()->SetText(sMessage);
-#endif
     }
 
     return 0;

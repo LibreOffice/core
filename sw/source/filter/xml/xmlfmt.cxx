@@ -422,7 +422,7 @@ void SwXMLTextStyleContext_Impl::Finish( sal_Bool bOverwrite )
         SwStyleNameMapper::FillUIName( aDisplayName,
                                       aString,
                                       nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL,
-                                      sal_True);
+                                      true);
         sName = aString;
         SwTxtFmtColl* pCondColl = pDoc->FindTxtFmtCollByName( sName );
         OSL_ENSURE( pCondColl,
@@ -657,7 +657,7 @@ void SwXMLItemSetStyleContext_Impl::ConnectPageDesc()
     SwStyleNameMapper::FillUIName( sName,
                                    sName,
                                    nsSwGetPoolIdFromName::GET_POOLID_PAGEDESC,
-                                   sal_True);
+                                   true);
     SwPageDesc *pPageDesc = pDoc->FindPageDescByName( sName );
     if( !pPageDesc )
     {

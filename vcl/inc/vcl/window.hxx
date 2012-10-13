@@ -126,8 +126,6 @@ namespace dnd {
 
 namespace vcl {
     struct ControlLayoutData;
-    class WindowArranger;
-    struct ExtWindowImpl;
 }
 
 namespace svt { class PopupWindowControllerImpl; }
@@ -484,10 +482,7 @@ public:
     SAL_DLLPRIVATE sal_Bool                ImplUpdatePos();
     SAL_DLLPRIVATE void                ImplUpdateSysObjPos();
     SAL_DLLPRIVATE WindowImpl*         ImplGetWindowImpl() const { return mpWindowImpl; }
-    SAL_DLLPRIVATE void                ImplFreeExtWindowImpl();
-    // creates ExtWindowImpl on demand, but may return NULL (e.g. if mbInDtor)
-    SAL_DLLPRIVATE vcl::ExtWindowImpl* ImplGetExtWindowImpl() const;
-    SAL_DLLPRIVATE void                ImplDeleteOwnedChildren();
+
     /** check whether a font is suitable for UI
 
     The font to be tested will be checked whether it could display a
@@ -550,7 +545,6 @@ public:
     SAL_DLLPRIVATE sal_Bool        ImplRegisterAccessibleNativeFrame();
     SAL_DLLPRIVATE void        ImplRevokeAccessibleNativeFrame();
     SAL_DLLPRIVATE void        ImplCallResize();
-    SAL_DLLPRIVATE void        ImplExtResize();
     SAL_DLLPRIVATE void        ImplCallMove();
     SAL_DLLPRIVATE Rectangle   ImplOutputToUnmirroredAbsoluteScreenPixel( const Rectangle& rRect ) const;
     SAL_DLLPRIVATE void        ImplMirrorFramePos( Point &pt ) const;
@@ -600,6 +594,9 @@ protected:
      * akin to gtk_widget_queue_resize
      */
     SAL_DLLPRIVATE void queue_resize();
+
+    sal_Int32 get_height_request() const;
+    sal_Int32 get_width_request() const;
 
     // FIXME: this is a hack to workaround missing layout functionality
     SAL_DLLPRIVATE void ImplAdjustNWFSizes();
@@ -1310,41 +1307,6 @@ public:
 
     virtual rtl::OUString GetSurroundingText() const;
     virtual Selection GetSurroundingTextSelection() const;
-
-    // ExtImpl
-
-    // layouting
-    boost::shared_ptr< vcl::WindowArranger > getLayout();
-
-    /* add a child Window
-       addWindow will do the following things
-       - insert the passed window into the child list (equivalent to i_pWin->SetParent( this ))
-       - mark the window as "owned", meaning that the added Window will be destroyed by
-         the parent's desctructor.
-         This means: do not pass in member windows or stack objects here. Do not cause
-         the destructor of the added window to be called in any way.
-
-         to avoid ownership pass i_bTakeOwnership as "false"
-    */
-    void addWindow( Window* i_pWin, bool i_bTakeOwnership = true );
-
-    /* return the identifier of this window
-    */
-    const rtl::OUString& getIdentifier() const;
-
-    /* returns the first found descendant that matches
-       the passed identifier or NULL
-    */
-    Window* findWindow( const rtl::OUString& ) const;
-
-    /* get/set properties
-       this will contain window properties (like visible, enabled)
-       as well as properties of derived classes (e.g. text of Edit fields)
-    */
-    virtual com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > getProperties() const;
-    /*
-    */
-    virtual void setProperties( const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& );
 };
 
 

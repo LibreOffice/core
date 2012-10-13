@@ -964,7 +964,7 @@ void SchXMLStockContext::StartElement( const uno::Reference< xml::sax::XAttribut
 
 // ========================================
 
-void lcl_setErrorBarSequence ( const uno::Reference< chart2::XChartDocument > &xDoc,
+static void lcl_setErrorBarSequence ( const uno::Reference< chart2::XChartDocument > &xDoc,
                                const uno::Reference< beans::XPropertySet > &xBarProp,
                                const rtl::OUString &aRange,
                                bool bPositiveValue, bool bYError )

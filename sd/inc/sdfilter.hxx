@@ -57,8 +57,9 @@ protected:
     SdDrawDocument&             mrDocument;
     sal_Bool                    mbIsDraw : 1;
     sal_Bool                    mbShowProgress : 1;
-
+#ifndef DISABLE_DYNLOADING
     ::osl::Module*              OpenLibrary( const ::rtl::OUString& rLibraryName ) const;
+#endif
     void                        CreateStatusIndicator();
 
 private:

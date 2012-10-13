@@ -53,9 +53,7 @@ import com.sun.star.awt.Size;
 
 // __________ Implementation __________
 
-/** FillStyle and LineStyle demo
-    @author Sven Jacobi
- */
+// FillStyle and LineStyle demo
 
 public class FillAndLineStyleDemo
 {

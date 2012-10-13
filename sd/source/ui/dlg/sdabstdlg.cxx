@@ -35,10 +35,19 @@
 
 typedef SdAbstractDialogFactory* (__LOADONCALLAPI *SdFuncPtrCreateDialogFactory)();
 
+#ifndef DISABLE_DYNLOADING
+
 extern "C" { static void SAL_CALL thisModule() {} }
+
+#else
+
+extern "C" SdAbstractDialogFactory* SdCreateDialogFactory();
+
+#endif
 
 SdAbstractDialogFactory* SdAbstractDialogFactory::Create()
 {
+#ifndef DISABLE_DYNLOADING
     SdFuncPtrCreateDialogFactory fp = 0;
     static ::osl::Module aDialogLibrary;
     static const ::rtl::OUString sLibName(::vcl::unohelper::CreateLibraryName("sdui", sal_True));
@@ -48,6 +57,9 @@ SdAbstractDialogFactory* SdAbstractDialogFactory::Create()
     if ( fp )
         return fp();
     return 0;
+#else
+    return SdCreateDialogFactory();
+#endif
 }
 
 

@@ -25,10 +25,6 @@ import javax.swing.event.ListDataEvent;
 
 import org.w3c.dom.*;
 
-/**
- *
- * @author  rpiterman
- */
 public class ConfigSet implements ConfigNode, XMLProvider, ListModel
 {
 

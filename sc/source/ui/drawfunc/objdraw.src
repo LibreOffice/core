@@ -527,6 +527,7 @@ Menu RID_POPUP_GRAPHIC
         MN_EDITLNK
         MN_DELLNK
         MenuItem { ITEM_OPEN_HYPERLINK };
+        MenuItem { ITEM_COMPRESS_GRAPHIC };
         MenuItem { ITEM_EXTERNAL_EDIT };
     };
 };
@@ -618,6 +619,12 @@ Menu RID_POPUP_CHART
         MenuItem { Separator = TRUE ; };
          //------------------------------
         ITEM_GROUP_MENU
+        MenuItem
+        {
+            Identifier = SID_EXPORT_AS_GRAPHIC ;
+            Command = ".uno:ExportAsGraphic" ;
+            Text [ en-US ] = "Export as graphic.." ;
+        };
     };
 };
 

@@ -37,6 +37,7 @@ $(eval $(call gb_Module_add_moduledirs,tail_end,\
 	basegfx \
 	basic \
 	bean \
+	$(call gb_Helper_optional,BSH,beanshell) \
 	binaryurp \
 	$(call gb_Helper_optional,BLUEZ,bluez_bluetooth) \
 	bridges \
@@ -80,6 +81,7 @@ $(eval $(call gb_Module_add_moduledirs,tail_end,\
 	$(call gb_Helper_optional,DESKTOP,idlc) \
 	io \
 	javaunohelper \
+	$(call gb_Helper_optional,JFREEREPORT,jfreereport) \
 	jurt \
 	jvmaccess \
 	jvmfwk \
@@ -87,6 +89,7 @@ $(eval $(call gb_Module_add_moduledirs,tail_end,\
 	libcmis \
 	libmspub \
 	liborcus \
+	$(call gb_Helper_optional,LIBRSVG,librsvg) \
 	libvisio \
 	libwpd \
 	libwpg \
@@ -119,6 +122,7 @@ $(eval $(call gb_Module_add_moduledirs,tail_end,\
 	remotebridges \
 	reportbuilder \
 	reportdesign \
+	$(call gb_Helper_optional,RHINO,rhino) \
 	ridljar \
 	rsc \
 	salhelper \

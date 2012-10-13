@@ -494,7 +494,7 @@ void clearNativeObjectWrapperVector( void )
     GaNativeObjectWrapperVector::get().clear();
 }
 
-sal_uInt32 lcl_registerNativeObjectWrapper( SbxObject* pNativeObj )
+static sal_uInt32 lcl_registerNativeObjectWrapper( SbxObject* pNativeObj )
 {
     NativeObjectWrapperVector &rNativeObjectWrapperVector = GaNativeObjectWrapperVector::get();
     sal_uInt32 nIndex = rNativeObjectWrapperVector.size();
@@ -502,7 +502,7 @@ sal_uInt32 lcl_registerNativeObjectWrapper( SbxObject* pNativeObj )
     return nIndex;
 }
 
-SbxObject* lcl_getNativeObject( sal_uInt32 nIndex )
+static SbxObject* lcl_getNativeObject( sal_uInt32 nIndex )
 {
     SbxObjectRef xRetObj;
     NativeObjectWrapperVector &rNativeObjectWrapperVector = GaNativeObjectWrapperVector::get();
@@ -4552,7 +4552,7 @@ typedef std::vector< StarBasicDisposeItem* > DisposeItemVector;
 
 static DisposeItemVector GaDisposeItemVector;
 
-DisposeItemVector::iterator lcl_findItemForBasic( StarBASIC* pBasic )
+static DisposeItemVector::iterator lcl_findItemForBasic( StarBASIC* pBasic )
 {
     DisposeItemVector::iterator it;
     for( it = GaDisposeItemVector.begin() ; it != GaDisposeItemVector.end() ; ++it )
@@ -4564,7 +4564,7 @@ DisposeItemVector::iterator lcl_findItemForBasic( StarBASIC* pBasic )
     return GaDisposeItemVector.end();
 }
 
-StarBasicDisposeItem* lcl_getOrCreateItemForBasic( StarBASIC* pBasic )
+static StarBasicDisposeItem* lcl_getOrCreateItemForBasic( StarBASIC* pBasic )
 {
     DisposeItemVector::iterator it = lcl_findItemForBasic( pBasic );
     StarBasicDisposeItem* pItem = (it != GaDisposeItemVector.end()) ? *it : NULL;

@@ -21,10 +21,6 @@ import com.sun.star.wizards.common.Resource;
 import com.sun.star.wizards.report.IReportDefinitionReadAccess;
 import com.sun.star.wizards.ui.*;
 
-/**
- *
- * @author ll93751
- */
 public class ColumnarThreeColumns extends ColumnarTwoColumns
 {
 

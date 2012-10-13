@@ -58,7 +58,8 @@
 #include <com/sun/star/embed/EmbedMapUnits.hpp>
 #include <com/sun/star/embed/XVisualObject.hpp>
 #include <com/sun/star/document/MacroExecMode.hpp>
-#include <com/sun/star/task/XInteractionHandler.hpp>
+#include <com/sun/star/task/InteractionHandler.hpp>
+#include <comphelper/processfactory.hxx>
 #include <osl/diagnose.h>
 #include <rtl/process.h>
 
@@ -113,10 +114,8 @@ void DocumentHolder::LoadDocInFrame( sal_Bool bPluginMode )
         m_xFrame,uno::UNO_QUERY);
     if( xComponentLoader.is() && m_xDocument.is() )
     {
-        uno::Reference< task::XInteractionHandler > xHandler(
-            m_xFactory->createInstance(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.task.InteractionHandler" ) ) ),
-            uno::UNO_QUERY );
+        uno::Reference< task::XInteractionHandler2 > xHandler(
+            task::InteractionHandler::createWithParent(comphelper::getComponentContext(m_xFactory), 0) );
 
         uno::Any aAny;
         sal_Int32 nLen = 3;
@@ -159,25 +158,22 @@ void DocumentHolder::LoadDocInFrame( sal_Bool bPluginMode )
                 beans::PropertyState_DIRECT_VALUE);
         }
 
-        if ( xHandler.is() )
-        {
-            aSeq.realloc( nLen+=2 );
-            aAny <<= xHandler;
-            aSeq[nLen-2] = beans::PropertyValue(
-                rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM("InteractionHandler")),
-                -1,
-                aAny,
-                beans::PropertyState_DIRECT_VALUE);
+        aSeq.realloc( nLen+=2 );
+        aAny <<= xHandler;
+        aSeq[nLen-2] = beans::PropertyValue(
+            rtl::OUString(
+                RTL_CONSTASCII_USTRINGPARAM("InteractionHandler")),
+            -1,
+            aAny,
+            beans::PropertyState_DIRECT_VALUE);
 
-            aAny <<= m_nMacroExecMode;
-            aSeq[nLen-1] = beans::PropertyValue(
-                rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM("MacroExecutionMode")),
-                -1,
-                aAny,
-                beans::PropertyState_DIRECT_VALUE);
-        }
+        aAny <<= m_nMacroExecMode;
+        aSeq[nLen-1] = beans::PropertyValue(
+            rtl::OUString(
+                RTL_CONSTASCII_USTRINGPARAM("MacroExecutionMode")),
+            -1,
+            aAny,
+            beans::PropertyState_DIRECT_VALUE);
 
         xComponentLoader->loadComponentFromURL(
             rtl::OUString(

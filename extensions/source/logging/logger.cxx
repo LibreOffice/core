@@ -28,8 +28,6 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/logging/XLoggerPool.hpp>
 
-#include <tools/diagnose_ex.h>
-
 #include <comphelper/componentcontext.hxx>
 
 #include <cppuhelper/basemutex.hxx>

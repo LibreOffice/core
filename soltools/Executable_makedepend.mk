@@ -20,6 +20,10 @@ $(eval $(call gb_Executable_add_defs,makedepend,\
 ))
 
 ifeq ($(COM),MSC)
+$(eval $(call gb_Executable_use_packages,makedepend,\
+    soltools_inc \
+))
+
 $(eval $(call gb_Executable_add_defs,makedepend,\
     -wd4100 \
     -wd4131 \

@@ -75,12 +75,12 @@ static sal_uInt16 pPageTableRanges[] =
     0
 };
 
-sal_Bool lcl_PutVObjModeItem( sal_uInt16            nWhich,
+static sal_Bool lcl_PutVObjModeItem( sal_uInt16            nWhich,
                           SfxItemSet&       rCoreSet,
                           const SfxItemSet& rOldSet,
                           const CheckBox&   rBtn );
 
-sal_Bool lcl_PutScaleItem( sal_uInt16               nWhich,
+static sal_Bool lcl_PutScaleItem( sal_uInt16               nWhich,
                        SfxItemSet&          rCoreSet,
                        const SfxItemSet&    rOldSet,
                        const ListBox&       rListBox,
@@ -88,7 +88,7 @@ sal_Bool lcl_PutScaleItem( sal_uInt16               nWhich,
                        const SpinField&     rEd,
                        sal_uInt16               nValue );
 
-sal_Bool lcl_PutScaleItem2( sal_uInt16               nWhich,
+static sal_Bool lcl_PutScaleItem2( sal_uInt16               nWhich,
                        SfxItemSet&          rCoreSet,
                        const SfxItemSet&    rOldSet,
                        const ListBox&       rListBox,
@@ -96,7 +96,7 @@ sal_Bool lcl_PutScaleItem2( sal_uInt16               nWhich,
                        const NumericField&  rEd1,
                        const NumericField&  rEd2 );
 
-sal_Bool lcl_PutBoolItem( sal_uInt16            nWhich,
+static sal_Bool lcl_PutBoolItem( sal_uInt16            nWhich,
                       SfxItemSet&       rCoreSet,
                       const SfxItemSet& rOldSet,
                       sal_Bool              bIsChecked,
@@ -472,7 +472,7 @@ IMPL_LINK_NOARG(ScTablePage, ScaleHdl)
 // Hilfsfunktionen fuer FillItemSet:
 //========================================================================
 
-sal_Bool lcl_PutBoolItem( sal_uInt16            nWhich,
+static sal_Bool lcl_PutBoolItem( sal_uInt16            nWhich,
                      SfxItemSet&        rCoreSet,
                      const SfxItemSet&  rOldSet,
                      sal_Bool               bIsChecked,
@@ -491,7 +491,7 @@ sal_Bool lcl_PutBoolItem( sal_uInt16            nWhich,
 
 //------------------------------------------------------------------------
 
-sal_Bool lcl_PutVObjModeItem( sal_uInt16            nWhich,
+static sal_Bool lcl_PutVObjModeItem( sal_uInt16            nWhich,
                          SfxItemSet&        rCoreSet,
                          const SfxItemSet&  rOldSet,
                          const CheckBox&    rBtn )
@@ -512,7 +512,7 @@ sal_Bool lcl_PutVObjModeItem( sal_uInt16            nWhich,
 
 //------------------------------------------------------------------------
 
-sal_Bool lcl_PutScaleItem( sal_uInt16               nWhich,
+static sal_Bool lcl_PutScaleItem( sal_uInt16               nWhich,
                       SfxItemSet&           rCoreSet,
                       const SfxItemSet&     rOldSet,
                       const ListBox&        rListBox,
@@ -534,7 +534,7 @@ sal_Bool lcl_PutScaleItem( sal_uInt16               nWhich,
 }
 
 
-sal_Bool lcl_PutScaleItem2( sal_uInt16               nWhich,
+static sal_Bool lcl_PutScaleItem2( sal_uInt16               nWhich,
                       SfxItemSet&           rCoreSet,
                       const SfxItemSet&     rOldSet,
                       const ListBox&        rListBox,

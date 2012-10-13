@@ -53,6 +53,7 @@ $(eval $(call gb_StaticLibrary_set_include,pdfimport_s,\
 ))
 
 $(eval $(call gb_StaticLibrary_add_defs,pdfimport_s,\
+	-DBASEGFX_STATIC_LIBRARY \
     -DBOOST_SPIRIT_USE_OLD_NAMESPACE \
     -DPDFI_IMPL_IDENTIFIER=\"com.sun.star.PDFImport-$(PLATFORMID)\" \
 ))

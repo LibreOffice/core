@@ -24,10 +24,6 @@
 
 package integration.forms;
 
-/**
- *
- * @author  fs93730
- */
 public class BooleanValidator extends integration.forms.ControlValidator
 {
     private boolean                         m_preventChecked;

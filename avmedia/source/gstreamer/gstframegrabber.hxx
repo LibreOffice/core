@@ -21,7 +21,7 @@
 #define _FRAMEGRABBER_HXX
 
 #include "gstplayer.hxx"
-#include "com/sun/star/media/XFrameGrabber.hdl"
+#include <com/sun/star/media/XFrameGrabber.hpp>
 #include <cppuhelper/implbase2.hxx>
 
 namespace avmedia { namespace gstreamer {

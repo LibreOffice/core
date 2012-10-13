@@ -26,7 +26,7 @@
  *
  ************************************************************************/
 
-#include <svtools/svlbox.hxx>
+#include <svtools/treelistbox.hxx>
 #include <svtools/svlbitm.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/button.hxx>
@@ -219,7 +219,7 @@ sal_uInt16 SvLBoxString::IsA()
     return SV_ITEM_ID_LBOXSTRING;
 }
 
-void SvLBoxString::Paint( const Point& rPos, SvLBox& rDev, sal_uInt16 /* nFlags */,
+void SvLBoxString::Paint( const Point& rPos, SvTreeListBox& rDev, sal_uInt16 /* nFlags */,
     SvLBoxEntry* _pEntry)
 {
     DBG_CHKTHIS(SvLBoxString,0);
@@ -247,8 +247,8 @@ void SvLBoxString::Clone( SvLBoxItem* pSource )
     maText = ((SvLBoxString*)pSource)->maText;
 }
 
-void SvLBoxString::InitViewData( SvLBox* pView,SvLBoxEntry* pEntry,
-    SvViewDataItem* pViewData)
+void SvLBoxString::InitViewData(
+    SvTreeListBox* pView, SvLBoxEntry* pEntry, SvViewDataItem* pViewData)
 {
     DBG_CHKTHIS(SvLBoxString,0);
     if( !pViewData )
@@ -278,7 +278,7 @@ sal_uInt16 SvLBoxBmp::IsA()
     return SV_ITEM_ID_LBOXBMP;
 }
 
-void SvLBoxBmp::InitViewData( SvLBox* pView,SvLBoxEntry* pEntry,
+void SvLBoxBmp::InitViewData( SvTreeListBox* pView,SvLBoxEntry* pEntry,
     SvViewDataItem* pViewData)
 {
     DBG_CHKTHIS(SvLBoxBmp,0);
@@ -287,7 +287,7 @@ void SvLBoxBmp::InitViewData( SvLBox* pView,SvLBoxEntry* pEntry,
     pViewData->aSize = aBmp.GetSizePixel();
 }
 
-void SvLBoxBmp::Paint( const Point& rPos, SvLBox& rDev, sal_uInt16 /* nFlags */,
+void SvLBoxBmp::Paint( const Point& rPos, SvTreeListBox& rDev, sal_uInt16 /* nFlags */,
                         SvLBoxEntry* )
 {
     DBG_CHKTHIS(SvLBoxBmp,0);
@@ -344,7 +344,7 @@ sal_uInt16 SvLBoxButton::IsA()
     return SV_ITEM_ID_LBOXBUTTON;
 }
 
-sal_Bool SvLBoxButton::ClickHdl( SvLBox*, SvLBoxEntry* pEntry )
+sal_Bool SvLBoxButton::ClickHdl( SvTreeListBox*, SvLBoxEntry* pEntry )
 {
     DBG_CHKTHIS(SvLBoxButton,0);
     if ( CheckModification() )
@@ -359,7 +359,7 @@ sal_Bool SvLBoxButton::ClickHdl( SvLBox*, SvLBoxEntry* pEntry )
     return sal_False;
 }
 
-void SvLBoxButton::Paint( const Point& rPos, SvLBox& rDev, sal_uInt16 /* nFlags */,
+void SvLBoxButton::Paint( const Point& rPos, SvTreeListBox& rDev, sal_uInt16 /* nFlags */,
                             SvLBoxEntry* /*pEntry*/ )
 {
     DBG_CHKTHIS(SvLBoxButton,0);
@@ -444,7 +444,7 @@ void SvLBoxButton::ImplAdjustBoxSize( Size& io_rSize, ControlType i_eType, Windo
     }
 }
 
-void SvLBoxButton::InitViewData( SvLBox* pView,SvLBoxEntry* pEntry,
+void SvLBoxButton::InitViewData( SvTreeListBox* pView,SvLBoxEntry* pEntry,
     SvViewDataItem* pViewData )
 {
     DBG_CHKTHIS(SvLBoxButton,0);
@@ -527,7 +527,7 @@ Image& SvLBoxContextBmp::implGetImageStore( sal_Bool _bFirst )
     return _bFirst ? m_pImpl->m_aImage1 : m_pImpl->m_aImage2;
 }
 
-void SvLBoxContextBmp::InitViewData( SvLBox* pView,SvLBoxEntry* pEntry,
+void SvLBoxContextBmp::InitViewData( SvTreeListBox* pView,SvLBoxEntry* pEntry,
     SvViewDataItem* pViewData)
 {
     DBG_CHKTHIS(SvLBoxContextBmp,0);
@@ -536,7 +536,7 @@ void SvLBoxContextBmp::InitViewData( SvLBox* pView,SvLBoxEntry* pEntry,
     pViewData->aSize = m_pImpl->m_aImage1.GetSizePixel();
 }
 
-void SvLBoxContextBmp::Paint( const Point& _rPos, SvLBox& _rDev,
+void SvLBoxContextBmp::Paint( const Point& _rPos, SvTreeListBox& _rDev,
     sal_uInt16 _nViewDataEntryFlags, SvLBoxEntry* _pEntry )
 {
     DBG_CHKTHIS(SvLBoxContextBmp,0);

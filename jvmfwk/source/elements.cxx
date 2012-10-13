@@ -909,9 +909,6 @@ void CNodeJavaInfo::writeToNode(xmlDoc* pDoc,
 
 {
     OSL_ASSERT(pJavaInfoNode && pDoc);
-    rtl::OString sExcMsg("[Java framework] Error in function NodeJavaInfo::writeToNode "
-                         "(elements.cxx).");
-
     //write the attribute vendorSettings
 
     //javaInfo@vendorUpdate
@@ -1031,7 +1028,7 @@ JavaInfo * CNodeJavaInfo::makeJavaInfo() const
 
 //================================================================================
 MergedSettings::MergedSettings():
-    m_bEnabled(sal_False),
+    m_bEnabled(false),
     m_sClassPath(),
     m_vmParams(),
     m_JRELocations(),
@@ -1078,7 +1075,7 @@ void MergedSettings::merge(const NodeJava & share, const NodeJava & user)
         m_JRELocations = * share.getJRELocations();
 }
 
-sal_Bool MergedSettings::getEnabled() const
+bool MergedSettings::getEnabled() const
 {
     return m_bEnabled;
 }

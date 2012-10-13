@@ -35,7 +35,7 @@
 // header for class SvTabListBox
 #include <svtools/svtabbx.hxx>
 // header for class SvTreeListBox
-#include <svtools/svtreebx.hxx>
+#include <svtools/treelistbox.hxx>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/XDiagram.hpp>
 #include <com/sun/star/chart2/data/XDataProvider.hpp>

@@ -149,7 +149,7 @@ static const char cUserSuffix[] = " (user)";
 #define USER_LEN 12
 #define USER_AND_SUFFIXLEN 19
 
-void lcl_ConvertTOUNameToProgrammaticName(OUString& rTmp)
+static void lcl_ConvertTOUNameToProgrammaticName(OUString& rTmp)
 {
     ShellResource* pShellRes = ViewShell::GetShellRes();
 
@@ -763,7 +763,7 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
         {
             String aString;
             SwStyleNameMapper::FillUIName(lcl_AnyToString(rValue),
-                aString, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT, sal_True);
+                aString, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT, true);
             rTOXBase.SetMainEntryCharStyle( aString );
         }
         break;
@@ -799,7 +799,7 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
         {
             String aString;
             SwStyleNameMapper::FillUIName( lcl_AnyToString(rValue),
-                aString, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL, sal_True);
+                aString, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL, true);
             bForm = sal_True;
             // Header is on Pos 0
             aForm.SetTemplate( 0, aString );
@@ -814,7 +814,7 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
             String aString;
             bForm = sal_True;
             SwStyleNameMapper::FillUIName( lcl_AnyToString(rValue),
-                aString, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL, sal_True);
+                aString, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL, true);
             aForm.SetTemplate( 1, aString );
         }
         break;
@@ -838,7 +838,7 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
             const sal_uInt16 nLPos = rTOXBase.GetType() == TOX_INDEX ? 2 : 1;
             String aString;
             SwStyleNameMapper::FillUIName( lcl_AnyToString(rValue),
-                aString, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL, sal_True);
+                aString, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL, true);
             aForm.SetTemplate(nLPos + pEntry->nWID - WID_PARA_LEV1, aString );
         }
         break;
@@ -1100,7 +1100,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
                         pTOXBase->GetMainEntryCharStyle(),
                         aString,
                         nsSwGetPoolIdFromName::GET_POOLID_CHRFMT,
-                        sal_True);
+                        true);
                 aRet <<= OUString( aString );
             }
             break;
@@ -1140,7 +1140,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
                 //Header steht an Pos 0
                 String aString;
                 SwStyleNameMapper::FillProgName(rForm.GetTemplate( 0 ), aString,
-                        nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL, sal_True );
+                        nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL, true );
                 aRet <<= OUString( aString );
             }
             break;
@@ -1151,7 +1151,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
                         rForm.GetTemplate( 1 ),
                         aString,
                         nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL,
-                        sal_True);
+                        true);
                 aRet <<= OUString( aString );
             }
             break;
@@ -1173,7 +1173,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
                         rForm.GetTemplate(nLPos + pEntry->nWID - WID_PARA_LEV1),
                         aString,
                         nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL,
-                        sal_True);
+                        true);
                 aRet <<= OUString( aString );
             }
             break;
@@ -1340,25 +1340,6 @@ SwXDocumentIndex::getAnchor() throw (uno::RuntimeException)
             *aPaM.GetMark(), aPaM.GetPoint());
     }
     return xRet;
-}
-
-void lcl_RemoveChildSections(SwSectionFmt& rParentFmt)
-{
-    SwSections aTmpArr;
-    SwDoc *const pDoc = rParentFmt.GetDoc();
-    const sal_uInt16 nCnt = rParentFmt.GetChildSections(aTmpArr, SORTSECT_POS);
-    if( nCnt )
-    {
-        for( sal_uInt16 n = 0; n < nCnt; ++n )
-        {
-            if( aTmpArr[n]->GetFmt()->IsInNodesArr() )
-            {
-                SwSectionFmt* pFmt = aTmpArr[n]->GetFmt();
-                lcl_RemoveChildSections(*pFmt);
-                pDoc->DelSectionFmt( pFmt );
-            }
-        }
-    }
 }
 
 void SAL_CALL SwXDocumentIndex::dispose() throw (uno::RuntimeException)
@@ -2626,7 +2607,7 @@ throw (lang::IllegalArgumentException, lang::IndexOutOfBoundsException,
             sSetStyles += TOX_STYLE_DELIMITER;
         }
         SwStyleNameMapper::FillUIName(pStyles[i], aString,
-                nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL, sal_True);
+                nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL, true);
         sSetStyles +=  aString;
     }
     rTOXBase.SetStyleNames(sSetStyles, static_cast<sal_uInt16>(nIndex));
@@ -2664,7 +2645,7 @@ throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException,
             rStyles.GetToken(i, TOX_STYLE_DELIMITER),
             aString,
             nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL,
-            sal_True);
+            true);
         pStyles[i] = OUString( aString );
     }
     uno::Any aRet(&aStyles, ::getCppuType((uno::Sequence<OUString>*)0));
@@ -2800,7 +2781,7 @@ throw (lang::IllegalArgumentException, lang::IndexOutOfBoundsException,
                         lcl_AnyToString(pProperties[j].Value),
                         sCharStyleName,
                         nsSwGetPoolIdFromName::GET_POOLID_CHRFMT,
-                        sal_True);
+                        true);
                 aToken.sCharStyleName = sCharStyleName;
                 aToken.nPoolId = SwStyleNameMapper::GetPoolIdFromUIName (
                     sCharStyleName, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT );
@@ -2974,7 +2955,7 @@ throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException,
                         aToken.sCharStyleName,
                         aString,
                         nsSwGetPoolIdFromName::GET_POOLID_CHRFMT,
-                        sal_True );
+                        true );
         const OUString aProgCharStyle( aString );
         switch(aToken.eTokenType)
         {

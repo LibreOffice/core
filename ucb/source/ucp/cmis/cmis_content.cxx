@@ -30,6 +30,7 @@
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/beans/PropertyValues.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/io/XActiveDataSink.hpp>
 #include <com/sun/star/io/XActiveDataStreamer.hpp>
@@ -88,6 +89,123 @@ namespace
         unoTime.HundredthSeconds = hundredthSeconds;
 
         return unoTime;
+    }
+
+    uno::Any lcl_cmisPropertyToUno( libcmis::PropertyPtr pProperty )
+    {
+        uno::Any aValue;
+        bool bMultiValued = pProperty->getPropertyType( )->isMultiValued( );
+        switch ( pProperty->getPropertyType( )->getType( ) )
+        {
+            default:
+            case libcmis::PropertyType::String:
+                {
+                    vector< string > aCmisStrings = pProperty->getStrings( );
+                    if ( bMultiValued )
+                    {
+                        uno::Sequence< rtl::OUString > aStrings( aCmisStrings.size( ) );
+                        rtl::OUString* aStringsArr = aStrings.getArray( );
+                        sal_Int32 i = 0;
+                        for ( vector< string >::iterator it = aCmisStrings.begin( );
+                                it != aCmisStrings.end( ); ++it, ++i )
+                        {
+                            string str = *it;
+                            aStringsArr[i] = STD_TO_OUSTR( str );
+                        }
+                        aValue <<= aStrings;
+                    }
+                    else if ( !aCmisStrings.empty( ) )
+                    {
+                        aValue <<= STD_TO_OUSTR( aCmisStrings.front( ) );
+                    }
+                }
+                break;
+            case libcmis::PropertyType::Integer:
+                {
+                    vector< long > aCmisLongs = pProperty->getLongs( );
+                    if ( bMultiValued )
+                    {
+                        uno::Sequence< sal_Int64 > aLongs( aCmisLongs.size( ) );
+                        sal_Int64* aLongsArr = aLongs.getArray( );
+                        sal_Int32 i = 0;
+                        for ( vector< long >::iterator it = aCmisLongs.begin( );
+                                it != aCmisLongs.end( ); ++it, ++i )
+                        {
+                            aLongsArr[i] = *it;
+                        }
+                        aValue <<= aLongs;
+                    }
+                    else if ( !aCmisLongs.empty( ) )
+                    {
+                        aValue <<= aCmisLongs.front( );
+                    }
+                }
+                break;
+            case libcmis::PropertyType::Decimal:
+                {
+                    vector< double > aCmisDoubles = pProperty->getDoubles( );
+                    if ( bMultiValued )
+                    {
+                        uno::Sequence< double > aDoubles( aCmisDoubles.size( ) );
+                        double* aDoublesArr = aDoubles.getArray( );
+                        sal_Int32 i = 0;
+                        for ( vector< double >::iterator it = aCmisDoubles.begin( );
+                                it != aCmisDoubles.end( ); ++it, ++i )
+                        {
+                            aDoublesArr[i] = *it;
+                        }
+                        aValue <<= aDoubles;
+                    }
+                    else if ( !aCmisDoubles.empty( ) )
+                    {
+                        aValue <<= aCmisDoubles.front( );
+                    }
+                }
+                break;
+            case libcmis::PropertyType::Bool:
+                {
+                    vector< bool > aCmisBools = pProperty->getBools( );
+                    if ( bMultiValued )
+                    {
+                        uno::Sequence< sal_Bool > aBools( aCmisBools.size( ) );
+                        sal_Bool* aBoolsArr = aBools.getArray( );
+                        sal_Int32 i = 0;
+                        for ( vector< bool >::iterator it = aCmisBools.begin( );
+                                it != aCmisBools.end( ); ++it, ++i )
+                        {
+                            aBoolsArr[i] = *it;
+                        }
+                        aValue <<= aBools;
+                    }
+                    else if ( !aCmisBools.empty( ) )
+                    {
+                        aValue <<= sal_Bool( aCmisBools.front( ) );
+                    }
+                }
+                break;
+            case libcmis::PropertyType::DateTime:
+                {
+                    vector< boost::posix_time::ptime > aCmisTimes = pProperty->getDateTimes( );
+                    if ( bMultiValued )
+                    {
+                        uno::Sequence< util::DateTime > aTimes( aCmisTimes.size( ) );
+                        util::DateTime* aTimesArr = aTimes.getArray( );
+                        sal_Int32 i = 0;
+                        for ( vector< boost::posix_time::ptime >::iterator it = aCmisTimes.begin( );
+                                it != aCmisTimes.end( ); ++it, ++i )
+                        {
+                            aTimesArr[i] = lcl_boostToUnoTime( *it );
+                        }
+                        aValue <<= aTimes;
+                    }
+                    else if ( !aCmisTimes.empty( ) )
+                    {
+                        aValue <<= lcl_boostToUnoTime( aCmisTimes.front( ) );
+                    }
+                }
+                break;
+        }
+        return aValue;
     }
 }
 
@@ -156,6 +274,11 @@ namespace cmis
                         rUsername, rPassword, OUSTR_TO_STDSTR( m_aURL.getRepositoryId( ) ) );
                 m_pProvider->registerSession( sSessionId, m_pSession );
             }
+            else
+            {
+                // Silently fail as the user cancelled the authentication
+                throw uno::RuntimeException( );
+            }
         }
         return m_pSession;
     }
@@ -204,7 +327,7 @@ namespace cmis
                                 ucb::IOErrorCode_GENERAL,
                                 uno::Sequence< uno::Any >( 0 ),
                                 xEnv,
-                                rtl::OUString::createFromAscii( e.what() ) );
+                                rtl::OUString::createFromAscii( e.what( ) ) );
         }
         return bIsFolder;
     }
@@ -368,6 +491,53 @@ namespace cmis
                             xRow->appendString( rProp, STD_TO_OUSTR( document->getContentType() ) );
                         else
                             xRow->appendVoid( rProp );
+                    }
+                    catch ( const libcmis::Exception& )
+                    {
+                        xRow->appendVoid( rProp );
+                    }
+                }
+                else if ( rProp.Name == "CmisPropertiesValues" )
+                {
+                    try
+                    {
+                        libcmis::ObjectPtr object = getObject( xEnv );
+                        map< string, libcmis::PropertyPtr >& aProperties = object->getProperties( );
+                        beans::PropertyValues aCmisProperties( aProperties.size( ) );
+                        beans::PropertyValue* pCmisProps = aCmisProperties.getArray( );
+                        sal_Int32 i = 0;
+                        for ( map< string, libcmis::PropertyPtr >::iterator it = aProperties.begin();
+                                it != aProperties.end( ); ++it, ++i )
+                        {
+                            string name = it->first;
+                            pCmisProps[i].Name = STD_TO_OUSTR( name );
+                            pCmisProps[i].Value = lcl_cmisPropertyToUno( it->second );
+                        }
+                        xRow->appendObject( rProp.Name, uno::makeAny( aCmisProperties ) );
+                    }
+                    catch ( const libcmis::Exception& )
+                    {
+                        xRow->appendVoid( rProp );
+                    }
+                }
+                else if ( rProp.Name == "CmisPropertiesDisplayNames" )
+                {
+                    try
+                    {
+                        libcmis::ObjectPtr object = getObject( xEnv );
+                        map< string, libcmis::PropertyPtr >& aProperties = object->getProperties( );
+                        beans::PropertyValues aCmisProperties( aProperties.size( ) );
+                        beans::PropertyValue* pCmisProps = aCmisProperties.getArray( );
+                        sal_Int32 i = 0;
+                        for ( map< string, libcmis::PropertyPtr >::iterator it = aProperties.begin();
+                                it != aProperties.end( ); ++it, ++i )
+                        {
+                            string name = it->first;
+                            string displayName = it->second->getPropertyType()->getDisplayName( );
+                            pCmisProps[i].Name = STD_TO_OUSTR( name );
+                            pCmisProps[i].Value = uno::makeAny( STD_TO_OUSTR( displayName ) );
+                        }
+                        xRow->appendObject( rProp.Name, uno::makeAny( aCmisProperties ) );
                     }
                     catch ( const libcmis::Exception& )
                     {
@@ -798,6 +968,12 @@ namespace cmis
             beans::Property( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "MediaType" ) ),
                 -1, getCppuType( static_cast< const rtl::OUString * >( 0 ) ),
                 beans::PropertyAttribute::BOUND ),
+            beans::Property( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CmisPropertiesValues" ) ),
+                -1, getCppuType( static_cast< const beans::PropertyValues * >( 0 ) ),
+                beans::PropertyAttribute::BOUND ),
+            beans::Property( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CmisPropertiesDisplayNames" ) ),
+                -1, getCppuType( static_cast< const beans::PropertyValues * >( 0 ) ),
+                beans::PropertyAttribute::BOUND ),
         };
 
         const int nProps = SAL_N_ELEMENTS(aGenericProperties);
@@ -833,6 +1009,9 @@ namespace cmis
             ucb::CommandInfo
             ( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "open" ) ),
               -1, getCppuType( static_cast<ucb::OpenCommandArgument2 * >( 0 ) ) ),
+
+            // Mandatory CMIS-only commands
+            ucb::CommandInfo ( rtl::OUString( "checkout" ), -1, getCppuVoidType() ),
 
             // Folder Only, omitted if not a folder
             ucb::CommandInfo
@@ -1005,6 +1184,49 @@ namespace cmis
                     libcmis::Folder* folder = dynamic_cast< libcmis::Folder* >( getObject( xEnv ).get() );
                     folder->removeTree( );
                 }
+            }
+            catch ( const libcmis::Exception& e )
+            {
+                SAL_INFO( "cmisucp", "Unexpected libcmis exception: " << e.what( ) );
+                ucbhelper::cancelCommandExecution(
+                                    ucb::IOErrorCode_GENERAL,
+                                    uno::Sequence< uno::Any >( 0 ),
+                                    xEnv,
+                                    rtl::OUString::createFromAscii( e.what() ) );
+            }
+        }
+        else if ( aCommand.Name == "checkout" )
+        {
+            try
+            {
+                // Checkout the document if possible
+                libcmis::DocumentPtr pDoc = boost::dynamic_pointer_cast< libcmis::Document >( getObject( xEnv ) );
+                if ( pDoc.get( ) == NULL )
+                {
+                    ucbhelper::cancelCommandExecution(
+                                        ucb::IOErrorCode_GENERAL,
+                                        uno::Sequence< uno::Any >( 0 ),
+                                        xEnv,
+                                        "Checkout only supported by documents" );
+                }
+                libcmis::DocumentPtr pPwc = pDoc->checkOut( );
+
+                // Compute the URL of the Private Working Copy (PWC)
+                URL aCmisUrl( m_sURL );
+                vector< string > aPaths = pPwc->getPaths( );
+                if ( !aPaths.empty() )
+                {
+                    string sPath = aPaths.front( );
+                    aCmisUrl.setObjectPath( STD_TO_OUSTR( sPath ) );
+                }
+                else
+                {
+                    // We may have unfiled PWC depending on the server, those
+                    // won't have any path, use their ID instead
+                    string sId = pPwc->getId( );
+                    aCmisUrl.setObjectId( STD_TO_OUSTR( sId ) );
+                }
+                aRet <<= aCmisUrl.asString( );
             }
             catch ( const libcmis::Exception& e )
             {

@@ -59,7 +59,7 @@
 
 #define RTF_NUMRULE_NAME "RTF_Num"
 
-void lcl_ExpandNumFmts( SwNumRule& rRule )
+static void lcl_ExpandNumFmts( SwNumRule& rRule )
 {
     // dann noch das NumFormat in alle Ebenen setzen
     for( sal_uInt8 n = 1; n < MAXLEVEL; ++n )
@@ -414,7 +414,7 @@ void SwRTFParser::ReadListTable()
     SkipToken( -1 );        // die schliesende Klammer wird "oben" ausgewertet
 }
 
-sal_Bool lcl_IsEqual( SwNumRule* pOrigRule, SwNumRule* pRule )
+static sal_Bool lcl_IsEqual( SwNumRule* pOrigRule, SwNumRule* pRule )
 {
     sal_Bool bRet = 0;
     if( pOrigRule && pRule )

@@ -24,8 +24,6 @@
 package com.sun.star.wizards.web;
 
 /**
- * @author rp143992
- *
  * TODO To change the template for this generated type comment go to
  * Window - Preferences - Java - Code Generation - Code and Comments
  */
@@ -100,7 +98,6 @@ public interface WWHID
     public static final int HID7_TXT_ZIP = 34200 + 65;
     public static final int HID7_BTN_ZIP = 34200 + 66;
     public static final int HID7_CHK_PUBLISH_FTP = 34200 + 67;
-    //public static final int   HID7_TXT_FTP                =  34200 + 68 ;
     public static final int HID7_BTN_FTP = 34200 + 69;
     public static final int HID7_CHK_SAVE = 34200 + 70;
     public static final int HID7_TXT_SAVE = 34200 + 71;//   web wizard backgrounds dialog

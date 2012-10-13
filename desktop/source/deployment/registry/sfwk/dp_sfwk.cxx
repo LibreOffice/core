@@ -37,6 +37,7 @@
 #include "svl/inettype.hxx"
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/script/provider/XScriptProviderFactory.hpp>
+#include <com/sun/star/xml/sax/Parser.hpp>
 #include <memory>
 
 
@@ -252,10 +253,7 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
                     Reference<XComponentContext>
                         xContext( getComponentContext() );
 
-                    Reference< xml::sax::XParser > xParser(
-                      xContext->getServiceManager()->createInstanceWithContext(
-                            OUSTR("com.sun.star.xml.sax.Parser"), xContext ),
-                                UNO_QUERY_THROW );
+                    Reference< xml::sax::XParser > xParser = xml::sax::Parser::create(xContext);
 
                     xParser->setDocumentHandler( xDocHandler );
                     xml::sax::InputSource source;

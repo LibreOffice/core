@@ -42,8 +42,8 @@
 static sal_uInt16 aWndFunc(
     Window *pWin,            // Parent des Dialoges
     sal_uInt16 nFlags,
-    const String &rErr,      // Fehlertext
-    const String &rAction)   // Actiontext
+    const OUString &rErr,      // Fehlertext
+    const OUString &rAction)   // Actiontext
 
 /*  [Beschreibung]
 
@@ -175,7 +175,7 @@ SfxErrorHandler::~SfxErrorHandler()
 //-------------------------------------------------------------------------
 
 sal_Bool SfxErrorHandler::CreateString(
-    const ErrorInfo *pErr, String &rStr, sal_uInt16& nFlags) const
+    const ErrorInfo *pErr, OUString &rStr, sal_uInt16& nFlags) const
 
 /*  [Beschreibung]
 
@@ -192,14 +192,7 @@ sal_Bool SfxErrorHandler::CreateString(
     {
         if(GetMessageString(nErrCode, rStr, nFlags))
         {
-            for (xub_StrLen i = 0; i < rStr.Len();)
-            {
-                i = rStr.SearchAndReplace(rtl::OUString("$(ARG1)"),
-                                          pMsgInfo->GetMessageArg(), i);
-                if (i == STRING_NOTFOUND)
-                    break;
-                i = i + pMsgInfo->GetMessageArg().Len();
-            }
+            rStr = rStr.replaceAll("$(ARG1)", pMsgInfo->GetMessageArg());
             return sal_True;
         }
     }
@@ -207,35 +200,19 @@ sal_Bool SfxErrorHandler::CreateString(
     {
         StringErrorInfo *pStringInfo=PTR_CAST(StringErrorInfo,pErr);
         if(pStringInfo)
-            for (xub_StrLen i = 0; i < rStr.Len();)
-            {
-                i = rStr.SearchAndReplace(rtl::OUString("$(ARG1)"),
-                                          pStringInfo->GetErrorString(), i);
-                if (i == STRING_NOTFOUND)
-                    break;
-                i = i + pStringInfo->GetErrorString().Len();
-            }
+        {
+            rStr = rStr.replaceAll(rtl::OUString("$(ARG1)"),
+                                      pStringInfo->GetErrorString());
+        }
         else
         {
             TwoStringErrorInfo * pTwoStringInfo = PTR_CAST(TwoStringErrorInfo,
                                                            pErr);
             if (pTwoStringInfo)
-                for (sal_uInt16 i = 0; i < rStr.Len();)
-                {
-                    sal_uInt16 nArg1Pos = rStr.Search(rtl::OUString("$(ARG1)"), i);
-                    sal_uInt16 nArg2Pos = rStr.Search(rtl::OUString("$(ARG2)"), i);
-                    if (nArg1Pos < nArg2Pos)
-                    {
-                        rStr.Replace(nArg1Pos, 7, pTwoStringInfo->GetArg1());
-                        i = nArg1Pos + pTwoStringInfo->GetArg1().Len();
-                    }
-                    else if (nArg2Pos < nArg1Pos)
-                    {
-                        rStr.Replace(nArg2Pos, 7, pTwoStringInfo->GetArg2());
-                        i = nArg2Pos + pTwoStringInfo->GetArg2().Len();
-                    }
-                    else break;
-                }
+            {
+                rStr = rStr.replaceAll("$(ARG1)", pTwoStringInfo->GetArg1());
+                rStr = rStr.replaceAll("$(ARG2)", pTwoStringInfo->GetArg2());
+            }
         }
         return sal_True;
     }
@@ -329,7 +306,7 @@ sal_Bool SfxErrorHandler::GetClassString(sal_uLong lClassId, String &rStr) const
 //-------------------------------------------------------------------------
 
 sal_Bool SfxErrorHandler::GetMessageString(
-    sal_uLong lErrId, String &rStr, sal_uInt16 &nFlags) const
+    sal_uLong lErrId, OUString &rStr, sal_uInt16 &nFlags) const
 
 /*  [Beschreibung]
 
@@ -359,7 +336,7 @@ sal_Bool SfxErrorHandler::GetMessageString(
 //-------------------------------------------------------------------------
 
 sal_Bool SfxErrorHandler::GetErrorString(
-    sal_uLong lErrId, String &rStr, sal_uInt16 &nFlags) const
+    sal_uLong lErrId, OUString &rStr, sal_uInt16 &nFlags) const
 
 /*  [Beschreibung]
     Erzeugt den Fehlerstring fuer den eigentlichen Fehler ohne
@@ -383,7 +360,7 @@ sal_Bool SfxErrorHandler::GetErrorString(
             sal_uInt16 nResFlags = aErrorString.GetFlags();
             if ( nResFlags )
                 nFlags = nResFlags;
-            rStr.SearchAndReplace(rtl::OUString("$(ERROR)"), aErrorString.GetString());
+            rStr = rStr.replaceAll(rtl::OUString("$(ERROR)"), aErrorString.GetString());
             bRet = sal_True;
         }
         else
@@ -397,7 +374,7 @@ sal_Bool SfxErrorHandler::GetErrorString(
                        aErrStr);
         if(aErrStr.Len())
             aErrStr += rtl::OUString(".\n");
-        rStr.SearchAndReplace(rtl::OUString("$(CLASS)"),aErrStr);
+        rStr = rStr.replaceAll(rtl::OUString("$(CLASS)"),aErrStr);
     }
 
     return bRet;
@@ -427,7 +404,7 @@ SfxErrorContext::SfxErrorContext(
 
 //-------------------------------------------------------------------------
 
-sal_Bool SfxErrorContext::GetString(sal_uLong nErrId, String &rStr)
+sal_Bool SfxErrorContext::GetString(sal_uLong nErrId, OUString &rStr)
 
 /*  [Beschreibung]
 
@@ -452,7 +429,7 @@ sal_Bool SfxErrorContext::GetString(sal_uLong nErrId, String &rStr)
         if ( aTestEr )
         {
             rStr = ( (ResString)aTestEr ).GetString();
-            rStr.SearchAndReplace(rtl::OUString("$(ARG1)"), aArg1 );
+            rStr = rStr.replaceAll(rtl::OUString("$(ARG1)"), aArg1 );
             bRet = true;
         }
         else
@@ -466,7 +443,7 @@ sal_Bool SfxErrorContext::GetString(sal_uLong nErrId, String &rStr)
             sal_uInt16 nId = ( nErrId & ERRCODE_WARNING_MASK ) ? ERRCTX_WARNING : ERRCTX_ERROR;
             ResId aSfxResId( RID_ERRCTX, *pMgr );
             ErrorResource_Impl aEr( aSfxResId, nId );
-            rStr.SearchAndReplace( rtl::OUString("$(ERR)"), ( (ResString)aEr ).GetString() );
+            rStr = rStr.replaceAll( rtl::OUString("$(ERR)"), ( (ResString)aEr ).GetString() );
         }
     }
 

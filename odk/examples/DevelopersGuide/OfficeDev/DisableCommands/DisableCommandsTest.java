@@ -41,8 +41,6 @@ import com.sun.star.frame.XComponentLoader;
 import com.sun.star.text.XTextDocument;
 
 /*
- *
- * @author  Carsten Driesner
  * Provides example code how to enable/disable
  * commands.
  */

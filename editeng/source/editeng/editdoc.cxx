@@ -1034,6 +1034,21 @@ sal_Bool operator != ( const EditLine& r1,  const EditLine& r2  )
     return !( r1 == r2 );
 }
 
+void EditLine::SetHeight( sal_uInt16 nH, sal_uInt16 nTxtH, sal_uInt16 nCrsrH )
+{
+    nHeight = nH;
+    nTxtHeight = ( nTxtH ? nTxtH : nH );
+    nCrsrHeight = ( nCrsrH ? nCrsrH : nTxtHeight );
+}
+
+void EditLine::SetStartPosX( long start )
+{
+    if (start > 0)
+        nStartPosX = start;
+    else
+        nStartPosX = 0;
+}
+
 Size EditLine::CalcTextSize( ParaPortion& rParaPortion )
 {
     Size aSz;

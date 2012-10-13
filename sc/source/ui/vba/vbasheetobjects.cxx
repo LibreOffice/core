@@ -39,7 +39,6 @@
 #include <com/sun/star/form/XForm.hpp>
 #include <com/sun/star/form/XFormComponent.hpp>
 #include <com/sun/star/form/XFormsSupplier.hpp>
-#include <oox/helper/helper.hxx>
 #include "vbasheetobject.hxx"
 
 using ::rtl::OUString;
@@ -243,7 +242,7 @@ sal_Bool SAL_CALL ScVbaObjectContainer::hasElements() throw (uno::RuntimeExcepti
 OUString ScVbaObjectContainer::implGetShapeName( const uno::Reference< drawing::XShape >& rxShape ) const throw (uno::RuntimeException)
 {
     uno::Reference< beans::XPropertySet > xPropSet( rxShape, uno::UNO_QUERY_THROW );
-    return xPropSet->getPropertyValue( CREATE_OUSTRING( "Name" ) ).get< OUString >();
+    return xPropSet->getPropertyValue( "Name" ).get< OUString >();
 }
 
 void ScVbaObjectContainer::implOnShapeCreated( const uno::Reference< drawing::XShape >& /*rxShape*/ ) throw (uno::RuntimeException)
@@ -404,14 +403,14 @@ uno::Reference< container::XIndexContainer > ScVbaControlContainer::createForm()
     {
         uno::Reference< form::XFormsSupplier > xFormsSupp( mxShapes, uno::UNO_QUERY_THROW );
         uno::Reference< container::XNameContainer > xFormsNC( xFormsSupp->getForms(), uno::UNO_SET_THROW );
-        OUString aFormName = CREATE_OUSTRING( "Standard" );
+        OUString aFormName = "Standard";
         if( xFormsNC->hasByName( aFormName ) )
         {
             mxFormIC.set( xFormsNC->getByName( aFormName ), uno::UNO_QUERY_THROW );
         }
         else
         {
-            uno::Reference< form::XForm > xForm( mxFactory->createInstance( CREATE_OUSTRING( "com.sun.star.form.component.Form" ) ), uno::UNO_QUERY_THROW );
+            uno::Reference< form::XForm > xForm( mxFactory->createInstance( "com.sun.star.form.component.Form" ), uno::UNO_QUERY_THROW );
             xFormsNC->insertByName( aFormName, uno::Any( xForm ) );
             mxFormIC.set( xForm, uno::UNO_QUERY_THROW );
         }
@@ -426,7 +425,7 @@ bool ScVbaControlContainer::implPickShape( const uno::Reference< drawing::XShape
         uno::Reference< drawing::XControlShape > xControlShape( rxShape, uno::UNO_QUERY_THROW );
         uno::Reference< beans::XPropertySet > xModelProps( xControlShape->getControl(), uno::UNO_QUERY_THROW );
         sal_Int16 nClassId = -1;
-        return lclGetProperty( nClassId, xModelProps, CREATE_OUSTRING( "ClassId" ) ) &&
+        return lclGetProperty( nClassId, xModelProps, "ClassId" ) &&
             (nClassId == mnComponentType) && implCheckProperties( xModelProps );
     }
     catch( uno::Exception& )
@@ -437,7 +436,7 @@ bool ScVbaControlContainer::implPickShape( const uno::Reference< drawing::XShape
 
 OUString ScVbaControlContainer::implGetShapeServiceName() const
 {
-    return CREATE_OUSTRING( "com.sun.star.drawing.ControlShape" );
+    return OUString( "com.sun.star.drawing.ControlShape" );
 }
 
 bool ScVbaControlContainer::implCheckProperties( const uno::Reference< beans::XPropertySet >& /*rxModelProps*/ ) const
@@ -494,7 +493,7 @@ ScVbaButtonContainer::ScVbaButtonContainer(
     ScVbaControlContainer(
         rxParent, rxContext, rxModel, rxSheet,
         excel::XButton::static_type( 0 ),
-        CREATE_OUSTRING( "com.sun.star.form.component.CommandButton" ),
+        "com.sun.star.form.component.CommandButton",
         form::FormComponentType::COMMANDBUTTON )
 {
 }
@@ -509,7 +508,7 @@ bool ScVbaButtonContainer::implCheckProperties( const uno::Reference< beans::XPr
 {
     // do not insert toggle buttons into the 'Buttons' collection
     bool bToggle = false;
-    return lclGetProperty( bToggle, rxModelProps, CREATE_OUSTRING( "Toggle" ) ) && !bToggle;
+    return lclGetProperty( bToggle, rxModelProps, "Toggle" ) && !bToggle;
 }
 
 // ============================================================================

@@ -66,7 +66,7 @@ TypeReader SpecialTypeManager::getTypeReader(const OString& name)
 
     if ( (blopSize = getTypeBlop( name.getStr(), &pBlop)) > 0 )
     {
-        reader = TypeReader(pBlop, blopSize, sal_True);
+        reader = TypeReader(pBlop, blopSize, true);
     }
 
     if ( pBlop )

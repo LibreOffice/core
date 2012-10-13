@@ -17,10 +17,6 @@
  */
 package com.sun.star.wizards.common;
 
-/**
- *
- * @author Ocke Janssen
- */
 public class PropertyNames
 {
 

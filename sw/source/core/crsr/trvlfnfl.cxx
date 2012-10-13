@@ -86,13 +86,13 @@ sal_Bool SwCrsrShell::GotoFtnTxt()
             const SwFrm *pFrm = pTxtNd->getLayoutFrm( GetLayout(), &_GetCrsr()->GetSttPos(),
                                                  _GetCrsr()->Start() );
             const SwFtnBossFrm* pFtnBoss;
-            sal_Bool bSkip = pFrm && pFrm->IsInFtn();
+            bool bSkip = pFrm && pFrm->IsInFtn();
             while( pFrm && 0 != ( pFtnBoss = pFrm->FindFtnBossFrm() ) )
             {
                 if( 0 != ( pFrm = pFtnBoss->FindFtnCont() ) )
                 {
                     if( bSkip )
-                        bSkip = sal_False;
+                        bSkip = false;
                     else
                     {
                         const SwCntntFrm* pCnt = static_cast<const SwLayoutFrm*>

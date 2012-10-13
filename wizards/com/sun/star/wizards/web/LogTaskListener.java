@@ -26,7 +26,6 @@ import com.sun.star.wizards.ui.event.TaskListener;
 
 /**
  * used for debugging.
- * @author rpiterman
  */
 public class LogTaskListener implements TaskListener, ErrorHandler
 {

@@ -31,7 +31,7 @@ set -o posix
 # Change these to taste
 FirstLine='/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */'
 LastLine='/* vim:set shiftwidth=4 softtabstop=4 expandtab: */'
-SourceFiles='*.cxx *.cpp *.hxx *.hpp *.c *.h *.m *.mm *.idl'
+SourceFiles='*.cxx *.cpp *.hxx *.hpp *.c *.h *.m *.mm *.idl *.src *.hrc'
 
 # Set defaults (don't change these)
 ModelineReplace="false"

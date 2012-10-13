@@ -37,7 +37,6 @@
 #include "ucbhelper/content.hxx"
 #include "comphelper/servicedecl.hxx"
 #include "svl/inettype.hxx"
-#include "svtools/javainteractionhandler.hxx"
 #include "uno/current_context.hxx"
 #include "unotools/pathoptions.hxx"
 

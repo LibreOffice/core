@@ -28,8 +28,6 @@ import java.io.OutputStream;
  * <code>OutputStream</code>.  This allows users to access
  * an <code>XOutputStream</code> as if it were an
  * <code>OutputStream</code>.
- *
- * @author  Brian Cameron
  */
 public class XOutputStreamToOutputStreamAdapter extends OutputStream {
 

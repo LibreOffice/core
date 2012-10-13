@@ -71,7 +71,7 @@ using ::std::auto_ptr;
 #define SC_DPSAVEMODE_YES 1
 #define SC_DPSAVEMODE_DONTKNOW 2
 
-void lcl_SetBoolProperty( const uno::Reference<beans::XPropertySet>& xProp,
+static void lcl_SetBoolProperty( const uno::Reference<beans::XPropertySet>& xProp,
                             const rtl::OUString& rName, sal_Bool bValue )
 {
     //! move to ScUnoHelpFunctions?
@@ -1067,7 +1067,7 @@ void ScDPSaveData::SetDrillDown(bool bSet)
     bDrillDown = bSet;
 }
 
-void lcl_ResetOrient( const uno::Reference<sheet::XDimensionsSupplier>& xSource )
+static void lcl_ResetOrient( const uno::Reference<sheet::XDimensionsSupplier>& xSource )
 {
     sheet::DataPilotFieldOrientation eOrient = sheet::DataPilotFieldOrientation_HIDDEN;
 

@@ -161,3 +161,15 @@ String STR_REPAIREDDOCUMENT
 {
     Text [ en-US ] = " (repaired document)" ;
 };
+
+String STR_NONCHECKEDOUT_DOCUMENT
+{
+    Text [ en-US ] = "Document is not checked out on server" ;
+};
+
+PushButton BT_CHECKOUT
+{
+    Pos = MAP_APPFONT( 0 , 0 );
+    Size = MAP_APPFONT( 30 , 0 );
+    Text[ en-US ] = "Check out";
+};

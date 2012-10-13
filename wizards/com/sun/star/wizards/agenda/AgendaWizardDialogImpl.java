@@ -57,7 +57,6 @@ import com.sun.star.uno.XInterface;
  * there is not much business logic here - but mostley
  * event methods.
  * Some event methods are also implemented in TopicsControl and TopicsControl.ControlRow.
- * @author rp143992
  */
 public class AgendaWizardDialogImpl extends AgendaWizardDialog
 {
@@ -238,7 +237,6 @@ public class AgendaWizardDialogImpl extends AgendaWizardDialog
         setControlProperty("listPageDesign", PropertyNames.STRING_ITEM_LIST, agendaTemplates[0]);
 
         checkSavePath();
-        //setFilename(agenda.cp_TemplatePath);
 
         UnoDataAware.attachListBox( agenda, "cp_AgendaType", listPageDesign , null, true ).updateUI();
         UnoDataAware.attachCheckBox( agenda, "cp_IncludeMinutes", chkMinutes, null, true).updateUI();
@@ -289,16 +287,6 @@ public class AgendaWizardDialogImpl extends AgendaWizardDialog
     }
 
 
-    /*
-    private void initializePaths() {
-        try {
-
-            sUserTemplatePath = FileAccess.getOfficePath(xMSF, "Template", "user");
-            sBitmapPath = FileAccess.combinePaths(xMSF, sTemplatePath, "/../wizard/bitmap");
-        } catch (NoValidPathException e) {
-            e.printStackTrace();
-        }
-    }*/
 
     /**
      * read the available agenda wizard templates.
@@ -309,7 +297,6 @@ public class AgendaWizardDialogImpl extends AgendaWizardDialog
             XPropertySet xPropertySet = UnoRuntime.queryInterface(XPropertySet.class, xPathInterface);
             sTemplatePath = ((String[]) xPropertySet.getPropertyValue("Template_user"))[0];
 
-            //sCurrentNorm = Norms[getCurrentLetter().cp_Norm];
             String sAgendaPath = FileAccess.combinePaths(xMSF, sTemplatePath, "/../common/wizard/agenda" );
 
             agendaTemplates = FileAccess.getFolderTitles(xMSF, "aw" , sAgendaPath);
@@ -482,7 +469,6 @@ public class AgendaWizardDialogImpl extends AgendaWizardDialog
             bSaveSuccess = OfficeDocument.store(xMSF, xTextDocument, sPath , "writer8_template", false );
         } catch (Exception e) {
             SystemDialog.showMessageBox(xMSF, xControl.getPeer(), "ErrorBox", VclWindowPeerAttribute.OK, resources.resErrSaveTemplate);
-            //e.printStackTrace();
         }
 
         if (bSaveSuccess) {
@@ -504,22 +490,8 @@ public class AgendaWizardDialogImpl extends AgendaWizardDialog
             //document, but it is already stored, written down by a code above. The
             //reason this piece is malfunctioning, because the agendaTemplate.document
             //is read-only (At least as my tests indicated.).
-            /*
-            * try {
-            *     XStorable xStoreable = UnoRuntime.queryInterface(XStorable.class, agendaTemplate.document);
-            *     xStoreable.store();
-            * }
-            * catch (Exception ex) {
-            *     SystemDialog.showMessageBox(xMSF, "ErrorBox", VclWindowPeerAttribute.OK, resources.resErrSaveTemplate);
-            *     ex.printStackTrace();
-            * }
-            */
 
-            //xWindow.setVisible(false);
-            //running = false;
             agendaTemplate.xTextDocument.unlockControllers();
-            //closeDocument();
-            //removeTerminateListener();
 
             PropertyValue loadValues[] = new PropertyValue[2];
             loadValues[0] = new PropertyValue();
@@ -534,10 +506,8 @@ public class AgendaWizardDialogImpl extends AgendaWizardDialog
             try {
                 loadValues[1].Value = UnoRuntime.queryInterface(XInteractionHandler.class, xMSF.createInstance("com.sun.star.comp.uui.UUIInteractionHandler"));
             } catch (Exception e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
-            //Object oDoc = OfficeDocument.load(Desktop.getDesktop(xMSF), agenda.cp_TemplatePath, "_default", new PropertyValue[0]);
             Object oDoc = OfficeDocument.load(Desktop.getDesktop(xMSF), sPath, "_default", new PropertyValue[0]);
                         xTextDocument = (com.sun.star.text.XTextDocument) oDoc;
             XMultiServiceFactory xDocMSF = UnoRuntime.queryInterface(XMultiServiceFactory.class, xTextDocument);
@@ -559,7 +529,6 @@ public class AgendaWizardDialogImpl extends AgendaWizardDialog
 
     private void closeDocument() {
         try {
-            //xComponent.dispose();
             XCloseable xCloseable = UnoRuntime.queryInterface(XCloseable.class, agendaTemplate.xFrame);
             xCloseable.close(false);
         } catch (CloseVetoException e) {

@@ -19,7 +19,7 @@
 #ifndef _FLDREFTREELISTBOX_HXX
 #define _FLDREFTREELISTBOX_HXX
 
-#include <svtools/svtreebx.hxx>
+#include <svtools/treelistbox.hxx>
 
 class SwFldRefTreeListBox : public SvTreeListBox
 {

@@ -66,7 +66,7 @@ using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::util;
 
 
-void lcl_UpdateArea( const Reference<XCellRange>& xUsedRange, sal_Int32& rEndCol, sal_Int32& rEndRow )
+static void lcl_UpdateArea( const Reference<XCellRange>& xUsedRange, sal_Int32& rEndCol, sal_Int32& rEndRow )
 {
     //RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "calc", "Ocke.Janssen@sun.com", "OCalcTable::lcl_UpdateArea" );
     //  update rEndCol, rEndRow if any non-empty cell in xUsedRange is right/below
@@ -90,7 +90,7 @@ void lcl_UpdateArea( const Reference<XCellRange>& xUsedRange, sal_Int32& rEndCol
     }
 }
 
-void lcl_GetDataArea( const Reference<XSpreadsheet>& xSheet, sal_Int32& rColumnCount, sal_Int32& rRowCount )
+static void lcl_GetDataArea( const Reference<XSpreadsheet>& xSheet, sal_Int32& rColumnCount, sal_Int32& rRowCount )
 {
     //RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "calc", "Ocke.Janssen@sun.com", "OCalcTable::lcl_GetDataArea" );
     Reference<XSheetCellCursor> xCursor = xSheet->createCursor();
@@ -140,7 +140,7 @@ void lcl_GetDataArea( const Reference<XSpreadsheet>& xSheet, sal_Int32& rColumnC
     rRowCount = nEndRow;            // first row (headers) is not counted
 }
 
-CellContentType lcl_GetContentOrResultType( const Reference<XCell>& xCell )
+static CellContentType lcl_GetContentOrResultType( const Reference<XCell>& xCell )
 {
     //RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "calc", "Ocke.Janssen@sun.com", "OCalcTable::lcl_GetContentOrResultType" );
     CellContentType eCellType = xCell->getType();
@@ -160,7 +160,7 @@ CellContentType lcl_GetContentOrResultType( const Reference<XCell>& xCell )
     return eCellType;
 }
 
-Reference<XCell> lcl_GetUsedCell( const Reference<XSpreadsheet>& xSheet, sal_Int32 nDocColumn, sal_Int32 nDocRow )
+static Reference<XCell> lcl_GetUsedCell( const Reference<XSpreadsheet>& xSheet, sal_Int32 nDocColumn, sal_Int32 nDocRow )
 {
     //RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "calc", "Ocke.Janssen@sun.com", "OCalcTable::lcl_GetUsedCell" );
     Reference<XCell> xCell = xSheet->getCellByPosition( nDocColumn, nDocRow );
@@ -198,7 +198,7 @@ Reference<XCell> lcl_GetUsedCell( const Reference<XSpreadsheet>& xSheet, sal_Int
     return xCell;
 }
 
-bool lcl_HasTextInColumn( const Reference<XSpreadsheet>& xSheet, sal_Int32 nDocColumn, sal_Int32 nDocRow )
+static bool lcl_HasTextInColumn( const Reference<XSpreadsheet>& xSheet, sal_Int32 nDocColumn, sal_Int32 nDocRow )
 {
     //RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "calc", "Ocke.Janssen@sun.com", "OCalcTable::lcl_HasTextInColumn" );
     // look for any text cell or text result in the column
@@ -226,7 +226,7 @@ bool lcl_HasTextInColumn( const Reference<XSpreadsheet>& xSheet, sal_Int32 nDocC
     return false;
 }
 
-void lcl_GetColumnInfo( const Reference<XSpreadsheet>& xSheet, const Reference<XNumberFormats>& xFormats,
+static void lcl_GetColumnInfo( const Reference<XSpreadsheet>& xSheet, const Reference<XNumberFormats>& xFormats,
                         sal_Int32 nDocColumn, sal_Int32 nStartRow, sal_Bool bHasHeaders,
                         ::rtl::OUString& rName, sal_Int32& rDataType, sal_Bool& rCurrency )
 {
@@ -314,7 +314,7 @@ void lcl_GetColumnInfo( const Reference<XSpreadsheet>& xSheet, const Reference<X
 
 // -------------------------------------------------------------------------
 
-void lcl_SetValue( ORowSetValue& rValue, const Reference<XSpreadsheet>& xSheet,
+static void lcl_SetValue( ORowSetValue& rValue, const Reference<XSpreadsheet>& xSheet,
                     sal_Int32 nStartCol, sal_Int32 nStartRow, sal_Bool bHasHeaders,
                     const ::Date& rNullDate,
                     sal_Int32 nDBRow, sal_Int32 nDBColumn, sal_Int32 nType )
@@ -431,7 +431,7 @@ void lcl_SetValue( ORowSetValue& rValue, const Reference<XSpreadsheet>& xSheet,
 
 // -------------------------------------------------------------------------
 
-::rtl::OUString lcl_GetColumnStr( sal_Int32 nColumn )
+static ::rtl::OUString lcl_GetColumnStr( sal_Int32 nColumn )
 {
     //RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "calc", "Ocke.Janssen@sun.com", "OCalcTable::lcl_GetColumnStr" );
     if ( nColumn < 26 )

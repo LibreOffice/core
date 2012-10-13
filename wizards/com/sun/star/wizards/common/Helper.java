@@ -24,10 +24,8 @@ import java.util.Calendar;
 import com.sun.star.beans.Property;
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.beans.XPropertySet;
-// import com.sun.star.i18n.NumberFormatIndex;
 import com.sun.star.lang.Locale;
 import com.sun.star.lang.XMultiServiceFactory;
-// import com.sun.star.uno.Any;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.RuntimeException;
 import com.sun.star.uno.UnoRuntime;
@@ -153,7 +151,6 @@ public class Helper
                 }
             }
         }
-        //  System.out.println("Property not found: " + PropertyName);
         return null;
     }
 
@@ -176,7 +173,6 @@ public class Helper
                     }
                 }
             }
-            //  System.out.println("Property not found: " + PropertyName);
             return null;
         }
         catch (Exception exception)
@@ -193,7 +189,6 @@ public class Helper
             if (oUnoObject != null)
             {
                 XPropertySet xPSet = UnoRuntime.queryInterface(XPropertySet.class, oUnoObject);
-                // Property[] aProps = xPSet.getPropertySetInfo().getProperties();
                 return xPSet.getPropertyValue(PropertyName);
             }
         }
@@ -259,7 +254,6 @@ public class Helper
             {
                 for (int i = 0; i < PropertyNames.length; i++)
                 {
-                    //System.out.println(PropertyNames[i] + "=" + PropertyValues[i]);
                     setUnoPropertyValue(oUnoObject, PropertyNames[i], PropertyValues[i]);
                 }
             }
@@ -271,7 +265,6 @@ public class Helper
     }
 
     /**
-     * @author bc93774
      * checks if the value of an object that represents an array is null.
      * check beforehand if the Object is really an array with "AnyConverter.IsArray(oObject)
      * @param oValue the paramter that has to represent an object

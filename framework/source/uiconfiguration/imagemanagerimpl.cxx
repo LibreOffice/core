@@ -47,6 +47,7 @@
 #include <vcl/svapp.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <osl/mutex.hxx>
+#include <comphelper/componentcontext.hxx>
 #include <comphelper/sequence.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/ucbstreamhelper.hxx>
@@ -492,7 +493,7 @@ sal_Bool ImageManagerImpl::implts_loadUserImages(
             uno::Reference< XInputStream > xInputStream = xStream->getInputStream();
 
             ImageListsDescriptor aUserImageListInfo;
-            ImagesConfiguration::LoadImages( m_xServiceManager,
+            ImagesConfiguration::LoadImages( comphelper::getComponentContext(m_xServiceManager),
                                              xInputStream,
                                              aUserImageListInfo );
             if (( aUserImageListInfo.pImageList != 0 ) &&

@@ -52,7 +52,7 @@ namespace
     };
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory( char const * implName, void * serviceManager, void * registryKey)
+extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL cui_component_getFactory( char const * implName, void * serviceManager, void * registryKey)
 {
     return cppu::component_getFactoryHelper(implName, serviceManager, registryKey, entries);
 }

@@ -391,9 +391,14 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
 
         m_aTableProperties->Insert( PROP_TABLE_BORDER_DISTANCES, false, uno::makeAny( aDistances ) );
 
+        // Set table above/bottom spacing to 0.
+        // TODO: handle 'Around' text wrapping mode
+        m_aTableProperties->Insert( PROP_TOP_MARGIN, true, uno::makeAny( sal_Int32( 0 ) ) );
+        m_aTableProperties->Insert( PROP_BOTTOM_MARGIN, true, uno::makeAny( sal_Int32( 0 ) ) );
+
         //table border settings
         table::TableBorder aTableBorder;
-        table::BorderLine2 aBorderLine;
+        table::BorderLine2 aBorderLine, aLeftBorder;
 
         if (lcl_extractTableBorderProperty(m_aTableProperties, PROP_TOP_BORDER, rInfo, aBorderLine))
         {
@@ -405,10 +410,11 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
             aTableBorder.BottomLine = aBorderLine;
             aTableBorder.IsBottomLineValid = sal_True;
         }
-        if (lcl_extractTableBorderProperty(m_aTableProperties, PROP_LEFT_BORDER, rInfo, aBorderLine))
+        if (lcl_extractTableBorderProperty(m_aTableProperties, PROP_LEFT_BORDER, rInfo, aLeftBorder))
         {
-            aTableBorder.LeftLine = aBorderLine;
+            aTableBorder.LeftLine = aLeftBorder;
             aTableBorder.IsLeftLineValid = sal_True;
+            rInfo.nLeftBorderDistance += aLeftBorder.LineWidth * 0.5;
         }
         if (lcl_extractTableBorderProperty(m_aTableProperties, PROP_RIGHT_BORDER, rInfo, aBorderLine))
         {
@@ -435,23 +441,17 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
         lcl_debug_TableBorder(aTableBorder);
 #endif
 
-        // Mimic Office behavior : if tlbInd is defined, use it place table.
-        // Otherwise, top-level table's position depends w:tblCellMar attribute (but not nested tables)
-        if (nLeftMargin)
+        // Table position in Office is computed in 2 different ways :
+        // - top level tables: the goal is to have in-cell text starting at table indent pos (tblInd),
+        //   so table's position depends on table's cells margin
+        // - nested tables: the goal is to have left-most border starting at table_indent pos
+        if (rInfo.nNestLevel > 1)
         {
-            m_aTableProperties->Insert( PROP_LEFT_MARGIN, false, uno::makeAny( nLeftMargin - nGapHalf));
+            m_aTableProperties->Insert( PROP_LEFT_MARGIN, false, uno::makeAny( nLeftMargin - nGapHalf ));
         }
         else
         {
-            // TODO: top-level position depends on w:tblCellMar attribute, not w:cellMar
-            if (rInfo.nNestLevel > 1)
-            {
-                m_aTableProperties->Insert( PROP_LEFT_MARGIN, false, uno::makeAny( - nGapHalf));
-            }
-            else
-            {
-                m_aTableProperties->Insert( PROP_LEFT_MARGIN, false, uno::makeAny( - nGapHalf - rInfo.nLeftBorderDistance));
-            }
+            m_aTableProperties->Insert( PROP_LEFT_MARGIN, false, uno::makeAny( nLeftMargin - nGapHalf - rInfo.nLeftBorderDistance ));
         }
 
         m_aTableProperties->getValue( TablePropertyMap::TABLE_WIDTH, nTableWidth );
@@ -545,19 +545,19 @@ CellPropertyValuesSeq_t DomainMapperTableHandler::endTableGetCellProperties(Tabl
                 if ( rInfo.pTableDefaults->size( ) )
                     pAllCellProps->insert( rInfo.pTableDefaults );
 
-                    // Fill the cell properties with the ones of the style
-                    sal_Int32 nCellStyleMask = 0;
-                    const PropertyMap::iterator aCnfStyleIter =
+                // Fill the cell properties with the ones of the style
+                sal_Int32 nCellStyleMask = 0;
+                const PropertyMap::iterator aCnfStyleIter =
                     aCellIterator->get()->find( PropertyDefinition( PROP_CNF_STYLE, false ) );
-                    if ( aCnfStyleIter != aCellIterator->get( )->end( ) )
-                    {
-                        if ( rInfo.pTableStyle ) {
-                            OUString sMask;
-                            aCnfStyleIter->second >>= sMask;
-                            nCellStyleMask = sMask.toInt32( 2 );
-                        }
-                        aCellIterator->get( )->erase( aCnfStyleIter );
+                if ( aCnfStyleIter != aCellIterator->get( )->end( ) )
+                {
+                    if ( rInfo.pTableStyle ) {
+                        OUString sMask;
+                        aCnfStyleIter->second >>= sMask;
+                        nCellStyleMask = sMask.toInt32( 2 );
                     }
+                    aCellIterator->get( )->erase( aCnfStyleIter );
+                }
 
                 if ( rInfo.pTableStyle )
                 {

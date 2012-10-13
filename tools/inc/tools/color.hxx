@@ -89,7 +89,7 @@ typedef sal_uInt32 ColorData;
 
 // Color
 
-class TOOLS_DLLPUBLIC Color
+class TOOLS_DLLPUBLIC SAL_WARN_UNUSED Color
 {
 protected:
     ColorData           mnColor;

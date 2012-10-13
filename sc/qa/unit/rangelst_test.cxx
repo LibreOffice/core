@@ -36,6 +36,8 @@ public:
     void testDeleteArea_2Ranges_Case8();
     void testDeleteArea_1Range();
     void testDeleteArea_0Ranges();
+    void testJoin_Case1();
+    void testJoin_Case2();
 
     void testUpdateReference_DeleteRow();
     void testUpdateReference_DeleteCol();
@@ -57,6 +59,8 @@ public:
     CPPUNIT_TEST(testDeleteArea_2Ranges_Case8);
     CPPUNIT_TEST(testDeleteArea_1Range);
     CPPUNIT_TEST(testDeleteArea_0Ranges);
+    CPPUNIT_TEST(testJoin_Case1);
+    CPPUNIT_TEST(testJoin_Case2);
     CPPUNIT_TEST(testUpdateReference_DeleteRow);
     CPPUNIT_TEST(testUpdateReference_DeleteCol);
     CPPUNIT_TEST_SUITE_END();
@@ -382,6 +386,29 @@ void Test::testDeleteArea_0Ranges()
     aList2.DeleteArea(0,0,0,4,4,0);
 
     CPPUNIT_ASSERT(aList.empty());
+}
+
+void Test::testJoin_Case1()
+{
+    ScRangeList aList;
+    aList.push_back(new ScRange(1,1,0,3,3,0));
+    aList.Join(ScRange(4,1,0,6,3,0));
+
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aList.size());
+    CPPUNIT_ASSERT( ScRange(1,1,0,6,3,0) == *aList[0]);
+}
+
+void Test::testJoin_Case2()
+{
+    ScRangeList aList;
+    aList.push_back(new ScRange(1,1,0,3,3,0));
+    aList.push_back(new ScRange(4,1,0,6,3,0));
+    aList.push_back(new ScRange(7,1,0,9,3,0));
+
+    aList.Join(*aList[2], true);
+
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aList.size());
+    CPPUNIT_ASSERT(ScRange(1,1,0,9,3,0) == *aList[0]);
 }
 
 void Test::testUpdateReference_DeleteRow()

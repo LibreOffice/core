@@ -123,8 +123,4 @@ void Communicator::disposeListener()
     }
 }
 
-Transmitter* Communicator::getTransmitter()
-{
-    return pTransmitter;
-}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

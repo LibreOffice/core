@@ -467,7 +467,7 @@ void ScDocShell::RefreshPivotTables( const ScRange& rSource )
     }
 }
 
-rtl::OUString lcl_GetAreaName( ScDocument* pDoc, ScArea* pArea )
+static rtl::OUString lcl_GetAreaName( ScDocument* pDoc, ScArea* pArea )
 {
     rtl::OUString aName;
     sal_Bool bOk = false;

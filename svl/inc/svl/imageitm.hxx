@@ -42,8 +42,8 @@ public:
 
     void                    SetRotation( long nValue );
     long                    GetRotation() const;
-    void                    SetMirrored( sal_Bool bSet );
-    sal_Bool                    IsMirrored() const;
+    void                    SetMirrored( bool bSet );
+    bool                    IsMirrored() const;
 };
 
 #endif // _SFX_IMAGEITM_HXX

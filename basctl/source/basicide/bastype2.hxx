@@ -24,7 +24,7 @@
 #include <memory>
 #include "tools/solar.h"
 
-#include <svtools/svtreebx.hxx>
+#include <svtools/treelistbox.hxx>
 #include <svl/lstner.hxx>
 #include <basic/sbstar.hxx>
 #include <sbxitem.hxx>
@@ -91,28 +91,28 @@ public:
 class LibEntry : public DocumentEntry
 {
 private:
-    rtl::OUString m_aLibName;
+    OUString m_aLibName;
 
 public:
     LibEntry (
         ScriptDocument const& rDocument,
         LibraryLocation eLocation,
-        rtl::OUString const& rLibName,
+        OUString       const& rLibName,
         EntryType eType = OBJ_TYPE_LIBRARY
     );
     virtual ~LibEntry ();
 
-    rtl::OUString const& GetLibName () const { return m_aLibName; }
+    OUString const& GetLibName () const { return m_aLibName; }
 };
 
 class EntryDescriptor
 {
     ScriptDocument   m_aDocument;
     LibraryLocation  m_eLocation;
-    rtl::OUString    m_aLibName;
-    rtl::OUString    m_aLibSubName;  // for vba entry:  Document Objects, Class Modules, Forms and Normal Modules
-    rtl::OUString    m_aName;
-    rtl::OUString    m_aMethodName;
+    OUString         m_aLibName;
+    OUString         m_aLibSubName;  // for vba entry:  Document Objects, Class Modules, Forms and Normal Modules
+    OUString         m_aName;
+    OUString         m_aMethodName;
     EntryType        m_eType;
 
 public:
@@ -120,41 +120,41 @@ public:
     EntryDescriptor (
         ScriptDocument const& rDocument,
         LibraryLocation eLocation,
-        rtl::OUString const& rLibName,
-        rtl::OUString const& rLibSubName,
-        rtl::OUString const& rName,
+        OUString      const& rLibName,
+        OUString      const& rLibSubName,
+        OUString      const& rName,
         EntryType eType
     );
     EntryDescriptor (
         ScriptDocument const& rDocument,
         LibraryLocation eLocation,
-        rtl::OUString const& rLibName,
-        rtl::OUString const& rLibSubName,
-        rtl::OUString const& rName,
-        rtl::OUString const& rMethodName,
+        OUString      const& rLibName,
+        OUString      const& rLibSubName,
+        OUString      const& rName,
+        OUString      const& rMethodName,
         EntryType eType
     );
     virtual ~EntryDescriptor ();
 
     bool operator == (EntryDescriptor const& rDesc) const;
 
-    ScriptDocument const& GetDocument() const { return m_aDocument; }
-    void                  SetDocument( const ScriptDocument& rDocument ) { m_aDocument = rDocument; }
+    ScriptDocument const&   GetDocument() const { return m_aDocument; }
+    void                    SetDocument( const ScriptDocument& rDocument ) { m_aDocument = rDocument; }
 
     LibraryLocation         GetLocation() const { return m_eLocation; }
     void                    SetLocation( LibraryLocation eLocation ) { m_eLocation = eLocation; }
 
-    const ::rtl::OUString&  GetLibName() const { return m_aLibName; }
-    void                    SetLibName( const ::rtl::OUString& aLibName ) { m_aLibName = aLibName; }
+    const OUString&         GetLibName() const { return m_aLibName; }
+    void                    SetLibName( const OUString& aLibName ) { m_aLibName = aLibName; }
 
-    const ::rtl::OUString&  GetLibSubName() const { return m_aLibSubName; }
-    void                    SetLibSubName( const ::rtl::OUString& aLibSubName ) { m_aLibSubName = aLibSubName; }
+    const OUString&         GetLibSubName() const { return m_aLibSubName; }
+    void                    SetLibSubName( const OUString& aLibSubName ) { m_aLibSubName = aLibSubName; }
 
-    const ::rtl::OUString&  GetName() const { return m_aName; }
-    void                    SetName( const ::rtl::OUString& aName ) { m_aName = aName; }
+    const OUString&         GetName() const { return m_aName; }
+    void                    SetName( const OUString& aName ) { m_aName = aName; }
 
-    const ::rtl::OUString&           GetMethodName() const { return m_aMethodName; }
-    void                    SetMethodName( const ::rtl::OUString& aMethodName ) { m_aMethodName = aMethodName; }
+    const OUString&         GetMethodName() const { return m_aMethodName; }
+    void                    SetMethodName( const OUString& aMethodName ) { m_aMethodName = aMethodName; }
 
     EntryType               GetType() const { return m_eType; }
     void                    SetType( EntryType eType ) { m_eType = eType; }
@@ -188,10 +188,10 @@ protected:
     virtual long            ExpandingHdl();
 
     void                    ImpCreateLibEntries( SvLBoxEntry* pShellRootEntry, const ScriptDocument& rDocument, LibraryLocation eLocation );
-    void                    ImpCreateLibSubEntries( SvLBoxEntry* pLibRootEntry, const ScriptDocument& rDocument, const ::rtl::OUString& rLibName );
-    void                    ImpCreateLibSubEntriesInVBAMode( SvLBoxEntry* pLibRootEntry, const ScriptDocument& rDocument, const ::rtl::OUString& rLibName );
-    void                    ImpCreateLibSubSubEntriesInVBAMode( SvLBoxEntry* pLibSubRootEntry, const ScriptDocument& rDocument, const ::rtl::OUString& rLibName );
-    SvLBoxEntry*            ImpFindEntry( SvLBoxEntry* pParent, const ::rtl::OUString& rText );
+    void                    ImpCreateLibSubEntries( SvLBoxEntry* pLibRootEntry, const ScriptDocument& rDocument, const OUString& rLibName );
+    void                    ImpCreateLibSubEntriesInVBAMode( SvLBoxEntry* pLibRootEntry, const ScriptDocument& rDocument, const OUString& rLibName );
+    void                    ImpCreateLibSubSubEntriesInVBAMode( SvLBoxEntry* pLibSubRootEntry, const ScriptDocument& rDocument, const OUString& rLibName );
+    SvLBoxEntry*            ImpFindEntry( SvLBoxEntry* pParent, const OUString& rText );
 
     // DocumentEventListener
     virtual void onDocumentCreated( const ScriptDocument& _rDocument );
@@ -220,7 +220,7 @@ public:
     SbModule*       FindModule( SvLBoxEntry* pEntry );
     SbxVariable*    FindVariable( SvLBoxEntry* pEntry );
     SvLBoxEntry*    FindRootEntry( const ScriptDocument& rDocument, LibraryLocation eLocation );
-    SvLBoxEntry*    FindEntry( SvLBoxEntry* pParent, const ::rtl::OUString& rText, EntryType eType );
+    SvLBoxEntry*    FindEntry( SvLBoxEntry* pParent, const OUString& rText, EntryType eType );
 
     EntryDescriptor GetEntryDescriptor( SvLBoxEntry* pEntry );
 
@@ -228,14 +228,14 @@ public:
     bool            IsValidEntry( SvLBoxEntry* pEntry );
 
     SvLBoxEntry*    AddEntry(
-        const ::rtl::OUString& rText, const Image& rImage,
+        const OUString& rText, const Image& rImage,
         SvLBoxEntry* pParent, bool bChildrenOnDemand,
         std::auto_ptr<Entry> aUserData
     );
     void            RemoveEntry (SvLBoxEntry*);
     void            RemoveEntry (ScriptDocument const&);
 
-    ::rtl::OUString GetRootEntryName( const ScriptDocument& rDocument, LibraryLocation eLocation ) const;
+    OUString GetRootEntryName( const ScriptDocument& rDocument, LibraryLocation eLocation ) const;
     void            GetRootEntryBitmaps( const ScriptDocument& rDocument, Image& rImage );
 
     void            SetCurrentEntry (EntryDescriptor&);

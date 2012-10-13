@@ -67,8 +67,8 @@ using rtl::OUString;
 
 
 // helper functions; implemented below
-Reference<XNode> lcl_createDomInstance();
-Reference<XNode> lcl_createElement( SvXMLImport& rImport,
+static Reference<XNode> lcl_createDomInstance();
+static Reference<XNode> lcl_createElement( SvXMLImport& rImport,
                                     sal_uInt16 nPrefix,
                                     const OUString rLocalName,
                                     Reference<XNode> xParent);
@@ -193,7 +193,7 @@ void DomBuilderContext::Characters( const OUString& rCharacters )
 // helper function implementations
 //
 
-Reference<XNode> lcl_createDomInstance()
+static Reference<XNode> lcl_createDomInstance()
 {
     Reference<XComponentContext> xContext = comphelper::getProcessComponentContext();
     DBG_ASSERT( xContext.is(), "can't get service factory" );
@@ -203,7 +203,7 @@ Reference<XNode> lcl_createDomInstance()
     return Reference<XNode>( xBuilder->newDocument(), UNO_QUERY_THROW );
 }
 
-Reference<XNode> lcl_createElement( SvXMLImport& rImport,
+static Reference<XNode> lcl_createElement( SvXMLImport& rImport,
                                     sal_uInt16 nPrefix,
                                     const OUString rLocalName,
                                     Reference<XNode> xParent)

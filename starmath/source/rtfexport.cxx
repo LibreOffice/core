@@ -73,9 +73,9 @@ void SmRtfExport::HandleText(const SmNode* pNode, int /*nLevel*/)
 
     SmTextNode* pTemp=(SmTextNode* )pNode;
     SAL_INFO("starmath.rtf", "Text: " << pTemp->GetText());
-    for (xub_StrLen i = 0; i < pTemp->GetText().Len(); i++)
+    for (sal_Int32 i = 0; i < pTemp->GetText().getLength(); i++)
     {
-        sal_uInt16 nChar = pTemp->GetText().GetChar(i);
+        sal_uInt16 nChar = pTemp->GetText()[i];
         OUString aValue(SmTextNode::ConvertSymbolToUnicode(nChar));
         m_pBuffer->append(msfilter::rtfutil::OutString(aValue, m_nEncoding));
     }
@@ -197,10 +197,10 @@ OString mathSymbolToString(const SmNode* node, rtl_TextEncoding nEncoding)
 {
     assert(node->GetType() == NMATH);
     const SmTextNode* txtnode = static_cast<const SmTextNode*>(node);
-    if (txtnode->GetText().Len() == 0)
+    if (txtnode->GetText().isEmpty())
         return OString();
-    assert(txtnode->GetText().Len() == 1);
-    sal_Unicode chr = SmTextNode::ConvertSymbolToUnicode(txtnode->GetText().GetChar(0));
+    assert(txtnode->GetText().getLength() == 1);
+    sal_Unicode chr = SmTextNode::ConvertSymbolToUnicode(txtnode->GetText()[0]);
     OUString aValue(chr);
     return msfilter::rtfutil::OutString(aValue, nEncoding);
 }

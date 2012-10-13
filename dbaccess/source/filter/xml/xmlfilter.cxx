@@ -33,7 +33,7 @@
 #include <xmloff/nmspmap.hxx>
 #include <rtl/logfile.hxx>
 #include <com/sun/star/xml/sax/InputSource.hpp>
-#include <com/sun/star/xml/sax/XParser.hpp>
+#include <com/sun/star/xml/sax/Parser.hpp>
 #include <xmloff/ProgressBarHelper.hxx>
 #include <sfx2/docfile.hxx>
 #include <com/sun/star/io/XInputStream.hpp>
@@ -55,6 +55,7 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/diagnose_ex.h>
 #include <osl/diagnose.h>
+#include <comphelper/processfactory.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/mimeconfighelper.hxx>
 #include <comphelper/documentconstants.hxx>
@@ -213,12 +214,12 @@ namespace dbaxml
 sal_Int32 ReadThroughComponent(
     const uno::Reference<XInputStream>& xInputStream,
     const uno::Reference<XComponent>& xModelComponent,
-    const uno::Reference<XMultiServiceFactory> & rFactory,
+    const uno::Reference<XComponentContext> & rxContext,
     const uno::Reference< XDocumentHandler >& _xFilter )
 {
     OSL_ENSURE(xInputStream.is(), "input stream missing");
     OSL_ENSURE(xModelComponent.is(), "document missing");
-    OSL_ENSURE(rFactory.is(), "factory missing");
+    OSL_ENSURE(rxContext.is(), "factory missing");
 
     RTL_LOGFILE_CONTEXT_AUTHOR( aLog, "dbaxml", "oj", "ReadThroughComponent" );
 
@@ -227,13 +228,7 @@ sal_Int32 ReadThroughComponent(
     aParserInput.aInputStream = xInputStream;
 
     // get parser
-    uno::Reference< XParser > xParser(
-        rFactory->createInstance(
-        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Parser"))),
-        UNO_QUERY );
-    OSL_ENSURE( xParser.is(), "Can't create parser" );
-    if( !xParser.is() )
-        return 1;
+    uno::Reference< XParser > xParser = Parser::create(rxContext);
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "parser created" );
 
     // get filter
@@ -294,7 +289,7 @@ sal_Int32 ReadThroughComponent(
     const uno::Reference<XComponent>& xModelComponent,
     const sal_Char* pStreamName,
     const sal_Char* pCompatibilityStreamName,
-    const uno::Reference<XMultiServiceFactory> & rFactory,
+    const uno::Reference<XComponentContext> & rxContext,
     const uno::Reference< XDocumentHandler >& _xFilter)
 {
     OSL_ENSURE( xStorage.is(), "Need storage!");
@@ -350,7 +345,7 @@ sal_Int32 ReadThroughComponent(
         // read from the stream
         return ReadThroughComponent( xInputStream
                                     ,xModelComponent
-                                    ,rFactory
+                                    ,rxContext
                                     ,_xFilter );
     }
 
@@ -462,7 +457,7 @@ sal_Bool ODBFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
                                     ,xModel
                                     ,"settings.xml"
                                     ,"Settings.xml"
-                                    ,getServiceFactory()
+                                    ,comphelper::getComponentContext(getServiceFactory())
                                     ,this
                                     );
 
@@ -471,7 +466,7 @@ sal_Bool ODBFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
                                     ,xModel
                                     ,"content.xml"
                                     ,"Content.xml"
-                                    ,getServiceFactory()
+                                    ,comphelper::getComponentContext(getServiceFactory())
                                     ,this
                                     );
 

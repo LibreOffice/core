@@ -33,7 +33,6 @@ import com.sun.star.wizards.web.data.CGPublish;
 import com.sun.star.wizards.web.data.CGSettings;
 
 /**
- * @author rpiterman
  * This class implements general methods, used by different sub-classes (either WWD_Sturtup, or WWD_Events)
  * or both.
  */
@@ -83,7 +82,6 @@ public abstract class WWD_General extends WebWizardDialog
      */
     protected SystemDialog getDocAddDialog()
     {
-        //if (docAddDialog == null) {
         docAddDialog = SystemDialog.createOpenDialog(xMSF);
         for (int i = 0; i < settings.cp_Filters.getSize(); i++)
         {
@@ -91,11 +89,6 @@ public abstract class WWD_General extends WebWizardDialog
             docAddDialog.addFilter(
                     JavaTools.replaceSubString(f.cp_Name, resources.prodName, "%PRODNAME"), f.cp_Filter, i == 0);
         }
-        //docAddDialog.addFilter(resources.resSODocs, "*.oxt;*.sxw;*.sxc;*.sxd;*.sxi;*.sdw;*.sdc;*.sdd;*.sdi;*.sda;*.sdp"  ,true); 
-        //docAddDialog.addFilter(resources.resMSDocs, "*.doc;*.xls;*.ppt;*.pps",false);
-        //docAddDialog.addFilter(resources.resImages, "*.jpg;*.gif;*.png;*.bmp;*.tiff;*.jpeg;*.jpe",false);
-        //docAddDialog.addFilter(resources.resAllFiles,"*.*",false);
-        //}
         return docAddDialog;
     }
 
@@ -324,7 +317,6 @@ public abstract class WWD_General extends WebWizardDialog
     }
 
     /**
-     * 
      * @return false either if publishing input is wrong or there
      * are no publishing targets chosen. returns true when at least 
      * one target is chosen, *and* all

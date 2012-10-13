@@ -10,7 +10,6 @@
 $(eval $(call gb_UI_UI,sw))
 
 $(eval $(call gb_UI_add_uifiles,sw,\
-	sw/uiconfig/sw/ui/20705 \
 	sw/uiconfig/sw/ui/20872 \
 	sw/uiconfig/sw/ui/20876 \
 ))

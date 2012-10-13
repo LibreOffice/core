@@ -58,7 +58,7 @@ using namespace ::com::sun::star::i18n::ScriptType;
  * (for justified alignment).
  *************************************************************************/
 
-sal_uInt16 lcl_AddSpace( const SwTxtSizeInfo &rInf, const XubString* pStr,
+static sal_uInt16 lcl_AddSpace( const SwTxtSizeInfo &rInf, const XubString* pStr,
                      const SwLinePortion& rPor )
 {
     xub_StrLen nPos, nEnd;
@@ -295,7 +295,7 @@ void SwTxtPortion::BreakUnderflow( SwTxtFormatInfo &rInf )
  *                      SwTxtPortion::_Format()
  *************************************************************************/
 
-sal_Bool lcl_HasContent( const SwFldPortion& rFld, SwTxtFormatInfo &rInf )
+static sal_Bool lcl_HasContent( const SwFldPortion& rFld, SwTxtFormatInfo &rInf )
 {
     String aTxt;
     return rFld.GetExpTxt( rInf, aTxt ) && aTxt.Len();

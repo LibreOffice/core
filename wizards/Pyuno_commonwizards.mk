@@ -46,6 +46,7 @@ $(eval $(call gb_Pyuno_add_files,wizards,\
     common/HelpIds.py \
     common/NumberFormatter.py \
     common/PropertySetHelper.py \
+    common/TextElement.py \
     document/__init__.py \
     document/OfficeDocument.py \
     text/__init__.py \
@@ -59,7 +60,6 @@ $(eval $(call gb_Pyuno_add_files,wizards,\
     ui/PathSelection.py \
     ui/UIConsts.py \
     ui/UnoDialog.py \
-    ui/XPathSelectionListener.py \
     ui/DocumentPreview.py \
     ui/PeerConfig.py \
     ui/UIConsts.py \

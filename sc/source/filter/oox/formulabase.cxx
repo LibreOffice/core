@@ -894,12 +894,12 @@ void FunctionProviderImpl::initFunc( const FunctionData& rFuncData, sal_uInt8 nM
     {
         OSL_ENSURE( !xFuncInfo->maOoxFuncName.isEmpty(), "FunctionProviderImpl::initFunc - missing OOXML function name" );
         OSL_ENSURE( !getFlag( rFuncData.mnFlags, FUNCFLAG_MACROCALLODF ), "FunctionProviderImpl::initFunc - unexpected flag FUNCFLAG_MACROCALLODF" );
-        xFuncInfo->maBiffMacroName = CREATE_OUSTRING( "_xlfn." ) + xFuncInfo->maOoxFuncName;
+        xFuncInfo->maBiffMacroName = "_xlfn." + xFuncInfo->maOoxFuncName;
     }
     else if( getFlag( rFuncData.mnFlags, FUNCFLAG_MACROCALLODF ) )
     {
         OSL_ENSURE( !xFuncInfo->maOdfFuncName.isEmpty(), "FunctionProviderImpl::initFunc - missing ODF function name" );
-        xFuncInfo->maBiffMacroName = CREATE_OUSTRING( "_xlfnodf." ) + xFuncInfo->maOdfFuncName;
+        xFuncInfo->maBiffMacroName = "_xlfnodf." + xFuncInfo->maOdfFuncName;
     }
 
     xFuncInfo->meFuncLibType = FUNCFLAGS_TO_FUNCLIB( rFuncData.mnFlags );
@@ -1030,7 +1030,7 @@ OpCodeProviderImpl::OpCodeProviderImpl( const FunctionInfoVector& rFuncInfos,
     if( rxModelFactory.is() ) try
     {
         Reference< XFormulaOpCodeMapper > xMapper( rxModelFactory->createInstance(
-            CREATE_OUSTRING( "com.sun.star.sheet.FormulaOpCodeMapper" ) ), UNO_QUERY_THROW );
+            "com.sun.star.sheet.FormulaOpCodeMapper" ), UNO_QUERY_THROW );
 
         // op-codes provided as attributes
         OPCODE_UNKNOWN = xMapper->getOpCodeUnknown();
@@ -1316,7 +1316,7 @@ ApiParserWrapper::ApiParserWrapper(
 {
     if( rxModelFactory.is() ) try
     {
-        mxParser.set( rxModelFactory->createInstance( CREATE_OUSTRING( "com.sun.star.sheet.FormulaParser" ) ), UNO_QUERY_THROW );
+        mxParser.set( rxModelFactory->createInstance( "com.sun.star.sheet.FormulaParser" ), UNO_QUERY_THROW );
     }
     catch( Exception& )
     {
@@ -1477,7 +1477,7 @@ OUString FormulaProcessorBase::generateApiString( const OUString& rString )
     OUString aRetString = rString;
     sal_Int32 nQuotePos = aRetString.getLength();
     while( (nQuotePos = aRetString.lastIndexOf( '"', nQuotePos )) >= 0 )
-        aRetString = aRetString.replaceAt( nQuotePos, 1, CREATE_OUSTRING( "\"\"" ) );
+        aRetString = aRetString.replaceAt( nQuotePos, 1, OUString( "\"\"" ) );
     return OUStringBuffer().append( sal_Unicode( '"' ) ).append( aRetString ).append( sal_Unicode( '"' ) ).makeStringAndClear();
 }
 

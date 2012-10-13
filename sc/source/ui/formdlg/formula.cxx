@@ -32,7 +32,7 @@
 #include <sfx2/objsh.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/stritem.hxx>
-#include <svtools/svtreebx.hxx>
+#include <svtools/treelistbox.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/mnemonic.hxx>

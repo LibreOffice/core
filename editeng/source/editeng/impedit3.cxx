@@ -152,7 +152,7 @@ sal_uInt8 GetCharTypeForCompression( xub_Unicode cChar )
     }
 }
 
-void lcl_DrawRedLines(
+static void lcl_DrawRedLines(
     OutputDevice* pOutDev,
     long nFontHeight,
     const Point& rPnt,
@@ -238,7 +238,7 @@ void lcl_DrawRedLines(
     }
 }
 
-Point lcl_ImplCalcRotatedPos( Point rPos, Point rOrigin, double nSin, double nCos )
+static Point lcl_ImplCalcRotatedPos( Point rPos, Point rOrigin, double nSin, double nCos )
 {
     Point aRotatedPos;
     // Translation...
@@ -2651,10 +2651,7 @@ void ImpEditEngine::SeekCursor( ContentNode* pNode, sal_uInt16 nPos, SvxFont& rF
         // ugly on the screen!
         OutputDevice* pDev = pOut ? pOut : GetRefDevice();
         rFont.SetPhysFont( pDev );
-        FontMetric aMetric( pDev->GetFontMetric() );
-        // For the height do not consider the metrics, because it will go
-        // wrong at Superscript/Subscript.
-        Size aRealSz( aMetric.GetSize().Width(), rFont.GetSize().Height() );
+        Size aRealSz( rFont.GetSize().Width(), rFont.GetSize().Height() );
         if ( aStatus.DoStretch() )
         {
             if ( nStretchY != 100 )

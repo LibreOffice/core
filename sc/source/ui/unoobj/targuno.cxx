@@ -57,7 +57,7 @@ sal_uInt16 nTypeResIds[SC_LINKTARGETTYPE_COUNT] =
     SCSTR_CONTENT_DBAREA        // SC_LINKTARGETTYPE_DBAREA
 };
 
-const SfxItemPropertyMapEntry* lcl_GetLinkTargetMap()
+static const SfxItemPropertyMapEntry* lcl_GetLinkTargetMap()
 {
     static SfxItemPropertyMapEntry aLinkTargetMap_Impl[] =
     {

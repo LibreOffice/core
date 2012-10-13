@@ -67,7 +67,7 @@ HTMLOutContext::~HTMLOutContext()
     rtl_destroyUnicodeToTextConverter( m_hConv );
 }
 
-const sal_Char *lcl_svhtml_GetEntityForChar( sal_Unicode c,
+static const sal_Char *lcl_svhtml_GetEntityForChar( sal_Unicode c,
                                              rtl_TextEncoding eDestEnc )
 {
     const sal_Char* pStr = 0;
@@ -400,7 +400,7 @@ const sal_Char *lcl_svhtml_GetEntityForChar( sal_Unicode c,
     return pStr;
 }
 
-rtl::OString lcl_ConvertCharToHTML( sal_Unicode c,
+static rtl::OString lcl_ConvertCharToHTML( sal_Unicode c,
                             HTMLOutContext& rContext,
                             String *pNonConvertableChars )
 {
@@ -487,7 +487,7 @@ rtl::OString lcl_ConvertCharToHTML( sal_Unicode c,
     return aDest.makeStringAndClear();
 }
 
-rtl::OString lcl_FlushToAscii( HTMLOutContext& rContext )
+static rtl::OString lcl_FlushToAscii( HTMLOutContext& rContext )
 {
     rtl::OStringBuffer aDest;
 

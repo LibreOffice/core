@@ -69,7 +69,7 @@ sal_Bool SwTxtCursor::bRightMargin = sal_False;
  * this function allows to find the coordinates of a position (defined
  * in pCMS->pSpecialPos) inside a special portion (e.g., a field)
  *************************************************************************/
-void lcl_GetCharRectInsideField( SwTxtSizeInfo& rInf, SwRect& rOrig,
+static void lcl_GetCharRectInsideField( SwTxtSizeInfo& rInf, SwRect& rOrig,
                                  const SwCrsrMoveState& rCMS,
                                  const SwLinePortion& rPor )
 {

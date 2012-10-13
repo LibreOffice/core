@@ -141,7 +141,7 @@ sal_Bool ScDetectiveFunc::bColorsInitialized = false;
 
 //------------------------------------------------------------------------
 
-sal_Bool lcl_HasThickLine( SdrObject& rObj )
+static sal_Bool lcl_HasThickLine( SdrObject& rObj )
 {
     // thin lines get width 0 -> everything greater 0 is a thick line
 
@@ -386,7 +386,7 @@ Rectangle ScDetectiveFunc::GetDrawRect( SCCOL nCol, SCROW nRow ) const
     return GetDrawRect( nCol, nRow, nCol, nRow );
 }
 
-sal_Bool lcl_IsOtherTab( const basegfx::B2DPolyPolygon& rPolyPolygon )
+static sal_Bool lcl_IsOtherTab( const basegfx::B2DPolyPolygon& rPolyPolygon )
 {
     //  test if rPolygon is the line end for "other table" (rectangle)
     if(1L == rPolyPolygon.count())

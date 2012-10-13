@@ -2458,11 +2458,11 @@ void SmTextNode::AdjustFontDesc()
             nTok = pEntry->eType;
             nFontDesc = FNT_FUNCTION;
         } else {
-            sal_Unicode firstChar = aText.GetChar(0);
+            sal_Unicode firstChar = aText[0];
             if( ('0' <= firstChar && firstChar <= '9') || firstChar == '.' || firstChar == ',') {
                 nFontDesc = FNT_NUMBER;
                 nTok = TNUMBER;
-            } else if (aText.Len() > 1) {
+            } else if (aText.getLength() > 1) {
                 nFontDesc = FNT_VARIABLE;
                 nTok = TIDENT;
             } else {
@@ -2734,9 +2734,9 @@ void SmMathSymbolNode::Prepare(const SmFormat &rFormat, const SmDocShell &rDocSh
 
 void SmMathSymbolNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
 {
-    const XubString &rText = GetText();
+    const OUString &rText = GetText();
 
-    if (rText.Len() == 0  ||  rText.GetChar(0) == xub_Unicode('\0'))
+    if (rText.isEmpty() || rText[0] == '\0')
     {   SmRect::operator = (SmRect());
         return;
     }
@@ -2860,7 +2860,7 @@ void SmAttributNode::CreateTextFromNode(String &rText)
 
 /**************************************************************************/
 
-bool lcl_IsFromGreekSymbolSet( const String &rTokenText )
+static bool lcl_IsFromGreekSymbolSet( const String &rTokenText )
 {
     bool bRes = false;
 
@@ -2869,7 +2869,7 @@ bool lcl_IsFromGreekSymbolSet( const String &rTokenText )
     {
         String aName( rTokenText.Copy(1) );
         SmSym *pSymbol = SM_MOD()->GetSymbolManager().GetSymbolByName( aName );
-        if (pSymbol && GetExportSymbolSetName( pSymbol->GetSymbolSetName() ).EqualsAscii( "Greek" ) )
+        if (pSymbol && GetExportSymbolSetName(pSymbol->GetSymbolSetName()) == "Greek")
             bRes = true;
     }
 
@@ -2902,7 +2902,7 @@ void SmSpecialNode::Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell
     if (NULL != (pSym = pp->GetSymbolManager().GetSymbolByName( aName )))
     {
         sal_UCS4 cChar = pSym->GetCharacter();
-        String aTmp( OUString( &cChar, 1 ) );
+        OUString aTmp( &cChar, 1 );
         SetText( aTmp );
         GetFont() = pSym->GetFace();
     }
@@ -2928,7 +2928,7 @@ void SmSpecialNode::Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell
 
     if (bIsFromGreekSymbolSet)
     {
-        OSL_ENSURE( GetText().Len() == 1, "a symbol should only consist of 1 char!" );
+        OSL_ENSURE( GetText().getLength() == 1, "a symbol should only consist of 1 char!" );
         bool bItalic = false;
         sal_Int16 nStyle = rFormat.GetGreekCharStyle();
         OSL_ENSURE( nStyle >= 0 && nStyle <= 2, "unexpected value for GreekCharStyle" );
@@ -2936,12 +2936,12 @@ void SmSpecialNode::Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell
             bItalic = true;
         else if (nStyle == 2)
         {
-            String aTmp( GetText() );
-            if (aTmp.Len() > 0)
+            const OUString& rTmp(GetText());
+            if (rTmp.isEmpty())
             {
                 const sal_Unicode cUppercaseAlpha = 0x0391;
                 const sal_Unicode cUppercaseOmega = 0x03A9;
-                sal_Unicode cChar = aTmp.GetBuffer()[0];
+                sal_Unicode cChar = rTmp[0];
                 // uppercase letters should be straight and lowercase letters italic
                 bItalic = !(cUppercaseAlpha <= cChar && cChar <= cUppercaseOmega);
             }
@@ -3023,7 +3023,7 @@ void SmErrorNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
     SmTmpDevice  aTmpDev ((OutputDevice &) rDev, true);
     aTmpDev.SetFont(GetFont());
 
-    const XubString &rText = GetText();
+    const OUString &rText = GetText();
     SmRect::operator = (SmRect(aTmpDev, &rFormat, rText, GetFont().GetBorderWidth()));
 }
 

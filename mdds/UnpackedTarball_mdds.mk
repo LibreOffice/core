@@ -11,6 +11,8 @@ $(eval $(call gb_UnpackedTarball_UnpackedTarball,mdds))
 
 $(eval $(call gb_UnpackedTarball_set_tarball,mdds,$(MDDS_TARBALL)))
 
+$(eval $(call gb_UnpackedTarball_set_patchlevel,mdds,3))
+
 $(eval $(call gb_UnpackedTarball_add_patches,mdds,\
 	mdds/mdds_0.6.0.patch \
 	mdds/0001-Workaround-for-gcc-bug.patch \

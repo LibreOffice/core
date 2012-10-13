@@ -66,8 +66,15 @@ using namespace ::com::sun::star::frame;
 // - Typedefs -
 // ------------
 
-typedef sal_uInt32 ( __LOADONCALLAPI *ImportCGM )( ::rtl::OUString&, Reference< XModel >&, sal_uInt32, Reference< XStatusIndicator >& );
-typedef sal_Bool ( __LOADONCALLAPI *ExportCGM )( ::rtl::OUString&, Reference< XModel >&, Reference< XStatusIndicator >&, void* );
+
+typedef sal_uInt32 ( __LOADONCALLAPI *ImportCGMPointer )( ::rtl::OUString&, Reference< XModel >&, sal_uInt32, Reference< XStatusIndicator >& );
+typedef sal_Bool ( __LOADONCALLAPI *ExportCGMPointer )( ::rtl::OUString&, Reference< XModel >&, Reference< XStatusIndicator >&, void* );
+
+#ifdef DISABLE_DYNLOADING
+
+extern "C" sal_uInt32 ImportCGM( ::rtl::OUString&, Reference< XModel >&, sal_uInt32, Reference< XStatusIndicator >& );
+
+#endif
 
 // ---------------
 // - SdPPTFilter -
@@ -88,12 +95,22 @@ SdCGMFilter::~SdCGMFilter()
 
 sal_Bool SdCGMFilter::Import()
 {
+#ifndef DISABLE_DYNLOADING
     ::osl::Module* pLibrary = OpenLibrary( mrMedium.GetFilter()->GetUserData() );
+#endif
     sal_Bool        bRet = sal_False;
 
-    if( pLibrary && mxModel.is() )
+    if(
+#ifndef DISABLE_DYNLOADING
+       pLibrary &&
+#endif
+       mxModel.is() )
     {
-        ImportCGM       FncImportCGM = reinterpret_cast< ImportCGM >( pLibrary->getFunctionSymbol(  "ImportCGM" ) );
+#ifndef DISABLE_DYNLOADING
+        ImportCGMPointer FncImportCGM = reinterpret_cast< ImportCGMPointer >( pLibrary->getFunctionSymbol(  "ImportCGM" ) );
+#else
+        ImportCGMPointer FncImportCGM = ImportCGM;
+#endif
         ::rtl::OUString aFileURL( mrMedium.GetURLObject().GetMainURL( INetURLObject::NO_DECODE ) );
         sal_uInt32          nRetValue;
 
@@ -122,9 +139,9 @@ sal_Bool SdCGMFilter::Import()
             }
         }
     }
-
+#ifndef DISABLE_DYNLOADING
     delete pLibrary;
-
+#endif
     return bRet;
 }
 
@@ -132,12 +149,16 @@ sal_Bool SdCGMFilter::Import()
 
 sal_Bool SdCGMFilter::Export()
 {
+#ifdef DISABLE_DYNLOADING
+    // No ExportCGM function exists(!)
+    return sal_False;
+#else
     ::osl::Module* pLibrary = OpenLibrary( mrMedium.GetFilter()->GetUserData() );
     sal_Bool        bRet = sal_False;
 
     if( pLibrary && mxModel.is() )
     {
-        ExportCGM FncCGMExport = reinterpret_cast< ExportCGM >( pLibrary->getFunctionSymbol( "ExportCGM" ) );
+        ExportCGMPointer FncCGMExport = reinterpret_cast< ExportCGMPointer >( pLibrary->getFunctionSymbol( "ExportCGM" ) );
 
         if( FncCGMExport )
         {
@@ -149,8 +170,8 @@ sal_Bool SdCGMFilter::Export()
     }
 
     delete pLibrary;
-
     return bRet;
+#endif
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -68,7 +68,7 @@
 #include "intercept.hxx"
 #include <com/sun/star/sdb/ErrorCondition.hpp>
 #include <com/sun/star/sdb/XInteractionDocumentSave.hpp>
-#include <com/sun/star/task/XInteractionHandler.hpp>
+#include <com/sun/star/task/InteractionHandler.hpp>
 #include <com/sun/star/sdb/DocumentSaveRequest.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/MacroExecMode.hpp>
@@ -1301,9 +1301,8 @@ sal_Bool ODocumentDefinition::save(sal_Bool _bApprove)
             pRequest->addContinuation(pAbort);
 
             // create the handler, let it handle the request
-            Reference< XInteractionHandler > xHandler( m_aContext.createComponent( (::rtl::OUString)SERVICE_TASK_INTERACTION_HANDLER ), UNO_QUERY );
-            if ( xHandler.is() )
-                xHandler->handle(xRequest);
+            Reference< XInteractionHandler2 > xHandler( InteractionHandler::createWithParent(m_aContext.getUNOContext(), 0) );
+            xHandler->handle(xRequest);
 
             if ( pAbort->wasSelected() )
                 return sal_False;
@@ -1376,9 +1375,8 @@ sal_Bool ODocumentDefinition::saveAs()
             pRequest->addContinuation(pAbort);
 
             // create the handler, let it handle the request
-            Reference< XInteractionHandler > xHandler(m_aContext.createComponent(::rtl::OUString(SERVICE_TASK_INTERACTION_HANDLER)), UNO_QUERY);
-            if ( xHandler.is() )
-                xHandler->handle(xRequest);
+            Reference< XInteractionHandler2 > xHandler( InteractionHandler::createWithParent(m_aContext.getUNOContext(), 0) );
+            xHandler->handle(xRequest);
 
             if ( pAbort->wasSelected() )
                 return sal_False;

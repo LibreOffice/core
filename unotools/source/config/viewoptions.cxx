@@ -266,6 +266,8 @@ class SvtViewOptionsBase_Impl
 {
     //-------------------------------------------------------------------------------------------------------------
     public:
+        enum State { STATE_NONE, STATE_FALSE, STATE_TRUE };
+
                                                         SvtViewOptionsBase_Impl ( const ::rtl::OUString&                                sList    );
         virtual                                        ~SvtViewOptionsBase_Impl (                                                                );
         sal_Bool                                        Exists                  ( const ::rtl::OUString&                                sName    );
@@ -279,7 +281,7 @@ class SvtViewOptionsBase_Impl
         sal_Int32                                       GetPageID               ( const ::rtl::OUString&                                sName    );
         void                                            SetPageID               ( const ::rtl::OUString&                                sName    ,
                                                                                         sal_Int32                                       nID      );
-        sal_Bool                                        GetVisible              ( const ::rtl::OUString&                                sName    );
+        State                                           GetVisible              ( const ::rtl::OUString&                                sName    );
         void                                            SetVisible              ( const ::rtl::OUString&                                sName    ,
                                                                                         sal_Bool                                        bVisible );
         css::uno::Any                                   GetUserItem             ( const ::rtl::OUString&                                sName    ,
@@ -682,28 +684,33 @@ void SvtViewOptionsBase_Impl::SetPageID( const ::rtl::OUString& sName ,
 }
 
 //*****************************************************************************************************************
-sal_Bool SvtViewOptionsBase_Impl::GetVisible( const ::rtl::OUString& sName )
+SvtViewOptionsBase_Impl::State SvtViewOptionsBase_Impl::GetVisible( const ::rtl::OUString& sName )
 {
     #ifdef DEBUG_VIEWOPTIONS
     ++m_nReadCount;
     #endif
 
-    sal_Bool bVisible = sal_False;
+    State eState = STATE_NONE;
     try
     {
         css::uno::Reference< css::beans::XPropertySet > xNode(
             impl_getSetNode(sName, sal_False),
             css::uno::UNO_QUERY);
         if (xNode.is())
-            xNode->getPropertyValue(PROPERTY_VISIBLE) >>= bVisible;
+        {
+            sal_Bool bVisible = sal_False;
+            if (xNode->getPropertyValue(PROPERTY_VISIBLE) >>= bVisible)
+            {
+                eState = bVisible ? STATE_TRUE : STATE_FALSE;
+            }
+        }
     }
     catch(const css::uno::Exception& ex)
         {
-            bVisible = sal_False;
             SVTVIEWOPTIONS_LOG_UNEXPECTED_EXCEPTION(ex)
         }
 
-    return bVisible;
+    return eState;
 }
 
 //*****************************************************************************************************************
@@ -1055,7 +1062,7 @@ sal_Bool SvtViewOptions::IsVisible() const
 
     sal_Bool bState = sal_False;
     if( m_eViewType == E_WINDOW )
-        bState = m_pDataContainer_Windows->GetVisible( m_sViewName );
+        bState = m_pDataContainer_Windows->GetVisible( m_sViewName ) == SvtViewOptionsBase_Impl::STATE_TRUE;
 
     return bState;
 }
@@ -1074,6 +1081,25 @@ void SvtViewOptions::SetVisible( sal_Bool bState )
 
     if( m_eViewType == E_WINDOW )
         m_pDataContainer_Windows->SetVisible( m_sViewName, bState );
+}
+
+//*****************************************************************************************************************
+//  public method
+//*****************************************************************************************************************
+bool SvtViewOptions::HasVisible() const
+{
+    // Ready for multithreading
+    ::osl::MutexGuard aGuard( GetOwnStaticMutex() );
+
+    // Safe impossible cases.
+    // These call isn't allowed for dialogs, tab-dialogs or tab-pages!
+    OSL_ENSURE( !(m_eViewType==E_DIALOG||m_eViewType==E_TABDIALOG||m_eViewType==E_TABPAGE), "SvtViewOptions::IsVisible()\nCall not allowed for Dialogs, TabDialogs or TabPages! I do nothing!\n" );
+
+    bool bState = false;
+    if( m_eViewType == E_WINDOW )
+        bState = m_pDataContainer_Windows->GetVisible( m_sViewName ) != SvtViewOptionsBase_Impl::STATE_NONE;
+
+    return bState;
 }
 
 //*****************************************************************************************************************

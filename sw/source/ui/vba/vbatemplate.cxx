@@ -38,7 +38,7 @@
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
-String lcl_CheckGroupName( const String& rGroupName )
+static String lcl_CheckGroupName( const String& rGroupName )
 {
     String sRet;
     //group name should contain only A-Z and a-z and spaces

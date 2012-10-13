@@ -22,6 +22,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
+#include <com/sun/star/task/InteractionHandler.hpp>
 #include <com/sun/star/ucb/CommandAbortedException.hpp>
 #include <com/sun/star/ucb/IllegalIdentifierException.hpp>
 #include <com/sun/star/ucb/NameClash.hpp>
@@ -168,9 +169,9 @@ uno::Sequence< OUString > SfxContentHelper::GetHelpTreeViewContents( const Strin
     StringList_Impl* pProperties = NULL;
     try
     {
-        uno::Reference< lang::XMultiServiceFactory > xFactory = ::comphelper::getProcessServiceFactory();
-        uno::Reference< task::XInteractionHandler > xInteractionHandler = uno::Reference< task::XInteractionHandler > (
-                    xFactory->createInstance( "com.sun.star.task.InteractionHandler" ), uno::UNO_QUERY );
+        uno::Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+        uno::Reference< task::XInteractionHandler > xInteractionHandler(
+            task::InteractionHandler::createWithParent(xContext, 0), uno::UNO_QUERY_THROW );
 
         ::ucbhelper::Content aCnt( rURL, new ::ucbhelper::CommandEnvironment( xInteractionHandler, uno::Reference< ucb::XProgressHandler >() ), comphelper::getProcessComponentContext() );
         uno::Reference< sdbc::XResultSet > xResultSet;
@@ -252,9 +253,9 @@ String SfxContentHelper::GetActiveHelpString( const String& rURL )
     String aRet;
     try
     {
-        uno::Reference< lang::XMultiServiceFactory > xFactory = ::comphelper::getProcessServiceFactory();
-        uno::Reference< task::XInteractionHandler > xInteractionHandler = uno::Reference< task::XInteractionHandler > (
-                    xFactory->createInstance( "com.sun.star.task.InteractionHandler" ), uno::UNO_QUERY );
+        uno::Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+        uno::Reference< task::XInteractionHandler > xInteractionHandler(
+            task::InteractionHandler::createWithParent(xContext, 0), uno::UNO_QUERY_THROW );
         ::ucbhelper::Content aCnt( rURL, new ::ucbhelper::CommandEnvironment( xInteractionHandler, uno::Reference< ucb::XProgressHandler >() ), comphelper::getProcessComponentContext() );
         // open the "active help" stream
         uno::Reference< io::XInputStream > xStream = aCnt.openStream();

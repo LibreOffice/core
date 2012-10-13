@@ -111,6 +111,7 @@ gb_Library_DLLFILENAMES := $(patsubst ssl:ssl%,ssl:ssleay32%,$(gb_Library_DLLFIL
 else # $(COM) != GCC
 
 gb_Library_FILENAMES := $(patsubst cairo:icairo%,cairo:cairo%,$(gb_Library_FILENAMES))
+gb_Library_FILENAMES := $(patsubst croco-0.6-3:icroco-0.6-3%,croco-0.6-3:libcroco-0.6-3%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst comphelper:icomphelper%,comphelper:icomphelp%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst cppunit:icppunit%,cppunit:icppunit_dll%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst crypto:icrypto%,crypto:libeay32%,$(gb_Library_FILENAMES))
@@ -133,12 +134,18 @@ gb_Library_FILENAMES := $(patsubst z:z%,z:zlib%,$(gb_Library_FILENAMES))
 
 # change the names of all import libraries that don't have an "i" prefix as in our standard naming schema
 gb_Library_NOILIBFILENAMES := \
+    gdk_pixbuf-2.0 \
+    gio-2.0 \
     glib-2.0 \
     gmodule-2.0 \
+    gobject-2.0 \
+    gthread-2.0 \
     graphite2_off \
     icudt icuin icule icuuc \
     langtag \
     lcms2 \
+    pango-1.0 \
+    pangocairo-1.0 \
     nspr4 \
     nss3 \
     smime3 \

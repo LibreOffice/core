@@ -9,6 +9,12 @@
 
 $(eval $(call gb_Executable_Executable,checkdll))
 
+ifeq ($(COM),MSC)
+$(eval $(call gb_Executable_use_packages,checkdll,\
+    soltools_inc \
+))
+endif
+
 $(eval $(call gb_Executable_add_cobjects,checkdll,\
     soltools/checkdll/checkdll \
 ))

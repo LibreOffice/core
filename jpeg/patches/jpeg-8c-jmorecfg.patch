@@ -1,0 +1,29 @@
+--- misc/jpeg-8c/jmorecfg.h	2009-11-20 09:01:24.000000000 +0100
++++ misc/build/jpeg-8c/jmorecfg.h	2011-03-24 21:29:02.073761750 +0100
+@@ -21,7 +21,7 @@
+  * We do not support run-time selection of data precision, sorry.
+  */
+ 
+-#define BITS_IN_JSAMPLE  8	/* use 8 or 12 */
++#define BITS_IN_JSAMPLE  8	/* use 8                                                                                                                                                                                                                             or 12 */
+ 
+ 
+ /*
+@@ -158,7 +158,8 @@
+ 
+ /* INT32 must hold at least signed 32-bit values. */
+ 
+-#ifndef XMD_H			/* X11/xmd.h correctly defines INT32 */
++#ifndef XMD_H           /* X11/xmd.h correctly defines INT32 */
++#ifndef _SOLAR_H
+ #ifndef _BASETSD_H_		/* Microsoft defines it in basetsd.h */
+ #ifndef _BASETSD_H		/* MinGW is slightly different */
+ #ifndef QGLOBAL_H		/* Qt defines it in qglobal.h */
+@@ -166,6 +167,7 @@
+ #endif
+ #endif
+ #endif
++#endif
+ #endif
+ 
+ /* Datatype used for image dimensions.  The JPEG standard only supports

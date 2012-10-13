@@ -37,9 +37,6 @@ import com.sun.star.uno.XComponentContext;
 import com.sun.star.lang.XMultiComponentFactory;
 import com.sun.star.util.XStringSubstitution;
 
-/*
- * @author  Carsten Driesner
- */
 public class PathSubstitutionTest extends java.lang.Object {
 
     /*

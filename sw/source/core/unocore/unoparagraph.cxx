@@ -96,7 +96,7 @@ SwParaSelection::~SwParaSelection()
 /******************************************************************
  * forward declarations
  ******************************************************************/
-beans::PropertyState lcl_SwXParagraph_getPropertyState(
+static beans::PropertyState lcl_SwXParagraph_getPropertyState(
                             const SwTxtNode& rTxtNode,
                             const SwAttrSet** ppSet,
                             const SfxItemPropertySimpleEntry& rEntry,
@@ -849,7 +849,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
     OSL_FAIL("SwXParagraph::removeVetoableChangeListener(): not implemented");
 }
 
-beans::PropertyState lcl_SwXParagraph_getPropertyState(
+static beans::PropertyState lcl_SwXParagraph_getPropertyState(
 //                          SwUnoCrsr& rUnoCrsr,
                             const SwTxtNode& rTxtNode,
                             const SwAttrSet** ppSet,
@@ -1027,7 +1027,7 @@ throw (beans::UnknownPropertyException, uno::RuntimeException)
             SwPosition aStart( *aCursor.Start() );
             SwPosition aEnd  ( *aCursor.End()   );
             ::std::auto_ptr<SwUnoCrsr> pTemp(
-                aCursor.GetDoc()->CreateUnoCrsr(aStart, sal_False) );
+                aCursor.GetDoc()->CreateUnoCrsr(aStart, false) );
             if(!SwUnoCursorHelper::IsStartOfPara(*pTemp))
             {
                 pTemp->MovePara(fnParaCurr, fnParaStart);

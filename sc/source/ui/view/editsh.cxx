@@ -134,7 +134,7 @@ void ScEditShell::SetEditView(EditView* pView)
     SetUndoManager( &pEditView->GetEditEngine()->GetUndoManager() );
 }
 
-void lcl_RemoveAttribs( EditView& rEditView )
+static void lcl_RemoveAttribs( EditView& rEditView )
 {
     ScEditEngineDefaulter* pEngine = static_cast<ScEditEngineDefaulter*>(rEditView.GetEditEngine());
 
@@ -622,7 +622,7 @@ void ScEditShell::Execute( SfxRequest& rReq )
         pHdl->SetSelIsRef(sal_True);
 }
 
-void lcl_DisableAll( SfxItemSet& rSet )    // disable all slots
+static void lcl_DisableAll( SfxItemSet& rSet )    // disable all slots
 {
     SfxWhichIter aIter( rSet );
     sal_uInt16 nWhich = aIter.FirstWhich();
@@ -804,7 +804,7 @@ void ScEditShell::GetClipState( SfxItemSet& rSet )
     }
 }
 
-void lcl_InvalidateUnder( SfxBindings& rBindings )
+static void lcl_InvalidateUnder( SfxBindings& rBindings )
 {
     rBindings.Invalidate( SID_ATTR_CHAR_UNDERLINE );
     rBindings.Invalidate( SID_ULINE_VAL_NONE );

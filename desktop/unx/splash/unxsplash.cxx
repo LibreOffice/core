@@ -28,10 +28,7 @@
  ************************************************************************/
 #include "unxsplash.hxx"
 #include <stdio.h>
-#include <unotools/bootstrap.hxx>
 #include <osl/process.h>
-#include <tools/stream.hxx>
-#include <sfx2/sfx.hrc>
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #include <cppuhelper/implementationentry.hxx>
 #include <rtl/logfile.hxx>

@@ -676,8 +676,8 @@ const JobSetup* SwDoc::getJobsetup() const
 
 void SwDoc::setJobsetup(/*[in]*/ const JobSetup &rJobSetup )
 {
-    sal_Bool bCheckPageDescs = 0 == pPrt;
-    sal_Bool bDataChanged = sal_False;
+    bool bCheckPageDescs = 0 == pPrt;
+    bool bDataChanged = false;
 
     if ( pPrt )
     {
@@ -686,7 +686,7 @@ void SwDoc::setJobsetup(/*[in]*/ const JobSetup &rJobSetup )
             if ( pPrt->GetJobSetup() != rJobSetup )
             {
                 pPrt->SetJobSetup( rJobSetup );
-                bDataChanged = sal_True;
+                bDataChanged = true;
             }
         }
         else
@@ -708,7 +708,7 @@ void SwDoc::setJobsetup(/*[in]*/ const JobSetup &rJobSetup )
         else
         {
             pPrt = p;
-            bDataChanged = sal_True;
+            bDataChanged = true;
         }
     }
     if ( bDataChanged && !get(IDocumentSettingAccess::USE_VIRTUAL_DEVICE) )
@@ -1224,7 +1224,7 @@ sal_uInt16 _PostItFld::GetPageNo(
     return 0;
 }
 
-bool lcl_GetPostIts(
+bool sw_GetPostIts(
     IDocumentFieldsAccess* pIDFA,
     _SetGetExpFlds * pSrtLst )
 {
@@ -1979,7 +1979,7 @@ void SwDoc::ReRead( SwPaM& rPam, const String& rGrfName,
     }
 }
 
-sal_Bool lcl_SpellAndGrammarAgain( const SwNodePtr& rpNd, void* pArgs )
+static sal_Bool lcl_SpellAndGrammarAgain( const SwNodePtr& rpNd, void* pArgs )
 {
     SwTxtNode *pTxtNode = (SwTxtNode*)rpNd->GetTxtNode();
     sal_Bool bOnlyWrong = *(sal_Bool*)pArgs;
@@ -2007,7 +2007,7 @@ sal_Bool lcl_SpellAndGrammarAgain( const SwNodePtr& rpNd, void* pArgs )
     return sal_True;
 }
 
-sal_Bool lcl_CheckSmartTagsAgain( const SwNodePtr& rpNd, void*  )
+static sal_Bool lcl_CheckSmartTagsAgain( const SwNodePtr& rpNd, void*  )
 {
     SwTxtNode *pTxtNode = (SwTxtNode*)rpNd->GetTxtNode();
 //  sal_Bool bOnlyWrong = *(sal_Bool*)pArgs;
@@ -2128,7 +2128,7 @@ void SwDoc::Summary( SwDoc* pExtDoc, sal_uInt8 nLevel, sal_uInt8 nPara, sal_Bool
         while( aIndx < aEndOfDoc )
         {
             SwNode *pNode;
-            sal_Bool bDelete = sal_False;
+            bool bDelete = false;
             if( (pNode = &aIndx.GetNode())->IsTxtNode() )
             {
                 SwTxtNode *pNd = (SwTxtNode*)pNode;
@@ -2148,7 +2148,7 @@ void SwDoc::Summary( SwDoc* pExtDoc, sal_uInt8 nLevel, sal_uInt8 nPara, sal_Bool
                 if( !pNd->Len() &&
                     pNd->StartOfSectionIndex()+2 < pNd->EndOfSectionIndex() )
                 {
-                    bDelete = sal_True;
+                    bDelete = true;
                     pExtDoc->GetNodes().Delete( aIndx );
                 }
             }
@@ -2162,7 +2162,7 @@ void SwDoc::Summary( SwDoc* pExtDoc, sal_uInt8 nLevel, sal_uInt8 nPara, sal_Bool
 // Remove the invisible content from the document e.g. hidden areas, hidden paragraphs
 bool SwDoc::RemoveInvisibleContent()
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     GetIDocumentUndoRedo().StartUndo( UNDO_UI_DELETE_INVISIBLECNTNT, NULL );
 
     {
@@ -2175,7 +2175,7 @@ bool SwDoc::RemoveInvisibleContent()
                 pTxtNd->GetpSwpHints() && pTxtNd->HasHiddenParaField() &&
                 &pTxtNd->GetNodes() == &GetNodes() )
             {
-                bRet = sal_True;
+                bRet = true;
                 SwPaM aPam( *pTxtNd, 0, *pTxtNd, pTxtNd->GetTxt().Len() );
 
                 // Remove hidden paragraph or delete contents:
@@ -2211,7 +2211,7 @@ bool SwDoc::RemoveInvisibleContent()
             if ( pTxtNd->HasHiddenCharAttribute( true ) )
             {
                 bRemoved = sal_True;
-                bRet = sal_True;
+                bRet = true;
 
                 // Remove hidden paragraph or delete contents:
                 // Delete contents if
@@ -2234,7 +2234,7 @@ bool SwDoc::RemoveInvisibleContent()
             else if ( pTxtNd->HasHiddenCharAttribute( false ) )
             {
                 bRemoved = sal_True;
-                bRet = sal_True;
+                bRet = true;
                 SwScriptInfo::DeleteHiddenRanges( *pTxtNd );
             }
 
@@ -2290,7 +2290,7 @@ bool SwDoc::RemoveInvisibleContent()
                 SwSectionNode* pSectNd = pSectFmt->GetSectionNode();
                 if( pSectNd )
                 {
-                    bRet = sal_True;
+                    bRet = true;
                     SwPaM aPam( *pSectNd );
 
                     if( pSectNd->StartOfSectionNode()->StartOfSectionIndex() ==
@@ -2332,11 +2332,11 @@ bool SwDoc::RemoveInvisibleContent()
 
 bool SwDoc::HasInvisibleContent() const
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
 
     SwClientIter aIter( *GetSysFldType( RES_HIDDENPARAFLD ) );
     if( aIter.First( TYPE( SwFmtFld ) ) )
-        bRet = sal_True;
+        bRet = true;
 
     //
     // Search for any hidden paragraph (hidden text attribute)
@@ -2351,7 +2351,7 @@ bool SwDoc::HasInvisibleContent() const
                 SwPaM aPam( *pTxtNd, 0, *pTxtNd, pTxtNd->GetTxt().Len() );
                 if( pTxtNd->HasHiddenCharAttribute( true ) ||  ( pTxtNd->HasHiddenCharAttribute( false ) ) )
                 {
-                    bRet = sal_True;
+                    bRet = true;
                 }
             }
         }
@@ -2370,7 +2370,7 @@ bool SwDoc::HasInvisibleContent() const
                 continue;
             SwSection* pSect = pSectFmt->GetSection();
             if( pSect->IsHidden() )
-                bRet = sal_True;
+                bRet = true;
         }
     }
     return bRet;
@@ -2391,9 +2391,9 @@ bool SwDoc::RestoreInvisibleContent()
 }
 
 
-sal_Bool SwDoc::ConvertFieldsToText()
+bool SwDoc::ConvertFieldsToText()
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     LockExpFlds();
     GetIDocumentUndoRedo().StartUndo( UNDO_UI_REPLACE, NULL );
 
@@ -2499,7 +2499,7 @@ bool SwDoc::LinksUpdated() const
 }
 
 // embedded alle lokalen Links (Bereiche/Grafiken)
-::sfx2::SvBaseLink* lcl_FindNextRemovableLink( const ::sfx2::SvBaseLinks& rLinks, sfx2::LinkManager& rLnkMgr )
+static ::sfx2::SvBaseLink* lcl_FindNextRemovableLink( const ::sfx2::SvBaseLinks& rLinks, sfx2::LinkManager& rLnkMgr )
 {
     for( sal_uInt16 n = 0; n < rLinks.size(); ++n )
     {
@@ -2524,7 +2524,7 @@ bool SwDoc::LinksUpdated() const
 }
 bool SwDoc::EmbedAllLinks()
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     sfx2::LinkManager& rLnkMgr = GetLinkManager();
     const ::sfx2::SvBaseLinks& rLinks = rLnkMgr.GetLinks();
     if( !rLinks.empty() )
@@ -2542,7 +2542,7 @@ bool SwDoc::EmbedAllLinks()
             if( xLink.Is() )
                 rLnkMgr.Remove( xLink );
 
-            bRet = sal_True;
+            bRet = true;
         }
 
         GetIDocumentUndoRedo().DelAllUndoObj();
@@ -2675,7 +2675,7 @@ bool SwDoc::ContainsHiddenChars() const
     return false;
 }
 
-SwUnoCrsr* SwDoc::CreateUnoCrsr( const SwPosition& rPos, sal_Bool bTblCrsr )
+SwUnoCrsr* SwDoc::CreateUnoCrsr( const SwPosition& rPos, bool bTblCrsr )
 {
     SwUnoCrsr* pNew;
     if( bTblCrsr )

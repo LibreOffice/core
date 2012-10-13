@@ -33,7 +33,6 @@ import com.sun.star.wizards.web.data.CGLayout;
 import com.sun.star.wizards.web.data.CGSettings;
 
 /**
- * @author rpiterman
  * This class both copies necessary files to
  * a temporary directory, generates a temporary TOC page,
  * and opens the generated html document in a web browser, 
@@ -96,7 +95,7 @@ public class TOCPreview
         Task task = new Task(PropertyNames.EMPTY_STRING, PropertyNames.EMPTY_STRING, 10000);
         Process.generate(xmsf, layout, doc, fileAccess, tempDir, task);
         Process.copyLayoutFiles(ucb, fileAccess, settings, layout, tempDir);
-        xDispatch.dispatch(openHyperlink, loadArgs); //Dispatch.dispatch(openHyperlink, loadArgs);      
+        xDispatch.dispatch(openHyperlink, loadArgs);
     }
 
     private PropertyValue[] loadArgs(String url)

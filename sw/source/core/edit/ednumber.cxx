@@ -577,7 +577,7 @@ sal_Bool SwEditShell::IsProtectedOutlinePara() const
  * 2) outline must not be within table
  * 3) if bCopy is set, outline must not be write protected
  */
-sal_Bool lcl_IsOutlineMoveAndCopyable( const SwDoc* pDoc, sal_uInt16 nIdx, bool bCopy )
+static sal_Bool lcl_IsOutlineMoveAndCopyable( const SwDoc* pDoc, sal_uInt16 nIdx, bool bCopy )
 {
     const SwNodes& rNds = pDoc->GetNodes();
     const SwNode* pNd = rNds.GetOutLineNds()[ nIdx ];

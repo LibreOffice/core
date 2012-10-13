@@ -54,10 +54,10 @@ const sal_Unicode cRelKennung = '';        // CTRL-R
 
 const sal_uInt16 cMAXSTACKSIZE = 50;
 
-const SwFrm* lcl_GetBoxFrm( const SwTableBox& rBox );
-long lcl_GetLongBoxNum( String& rStr );
-const SwTableBox* lcl_RelToBox( const SwTable&, const SwTableBox*, const String& );
-String lcl_BoxNmToRel( const SwTable&, const SwTableNode&,
+static const SwFrm* lcl_GetBoxFrm( const SwTableBox& rBox );
+static long lcl_GetLongBoxNum( String& rStr );
+static const SwTableBox* lcl_RelToBox( const SwTable&, const SwTableBox*, const String& );
+static String lcl_BoxNmToRel( const SwTable&, const SwTableNode&,
                         const String& , const String& , bool );
 
 
@@ -713,7 +713,7 @@ const SwTable* SwTableFormula::FindTable( SwDoc& rDoc, const String& rNm ) const
     return pRet;
 }
 
-const SwFrm* lcl_GetBoxFrm( const SwTableBox& rBox )
+static const SwFrm* lcl_GetBoxFrm( const SwTableBox& rBox )
 {
     SwNodeIndex aIdx( *rBox.GetSttNd() );
     SwCntntNode* pCNd = aIdx.GetNodes().GoNext( &aIdx );
@@ -722,7 +722,7 @@ const SwFrm* lcl_GetBoxFrm( const SwTableBox& rBox )
     return pCNd->getLayoutFrm( pCNd->GetDoc()->GetCurrentLayout(), &aPt, NULL, sal_False );
 }
 
-long lcl_GetLongBoxNum( String& rStr )
+static long lcl_GetLongBoxNum( String& rStr )
 {
     sal_uInt16 nPos;
     long nRet;
@@ -739,7 +739,7 @@ long lcl_GetLongBoxNum( String& rStr )
     return nRet;
 }
 
-const SwTableBox* lcl_RelToBox( const SwTable& rTbl,
+static const SwTableBox* lcl_RelToBox( const SwTable& rTbl,
                                     const SwTableBox* pRefBox,
                                     const String& rGetName )
 {
@@ -825,7 +825,7 @@ const SwTableBox* lcl_RelToBox( const SwTable& rTbl,
     return pBox;
 }
 
-String lcl_BoxNmToRel( const SwTable& rTbl, const SwTableNode& rTblNd,
+static String lcl_BoxNmToRel( const SwTable& rTbl, const SwTableNode& rTblNd,
                             const String& rRefBoxNm, const String& rGetStr,
                             bool bExtrnlNm )
 {

@@ -49,7 +49,7 @@
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
-#include <com/sun/star/task/XInteractionHandler.hpp>
+#include <com/sun/star/task/InteractionHandler.hpp>
 #include <com/sun/star/ucb/XProgressHandler.hpp>
 #include "UITools.hxx"
 #include <unotools/localfilehelper.hxx>
@@ -71,6 +71,7 @@
 #endif //_ADO_DATALINK_BROWSE_
 
 #include <com/sun/star/mozilla/XMozillaBootstrap.hpp>
+#include <comphelper/componentcontext.hxx>
 #include <comphelper/processfactory.hxx>
 
 
@@ -522,8 +523,8 @@ DBG_NAME(OConnectionHelper)
         ::ucbhelper::Content aCheckExistence;
         sal_Bool bExists = sal_False;
         IS_PATH_EXIST eExists = PATH_NOT_EXIST;
-        Reference< ::com::sun::star::task::XInteractionHandler > xInteractionHandler = Reference< ::com::sun::star::task::XInteractionHandler >(
-            m_xORB->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.task.InteractionHandler") ) ), UNO_QUERY );
+        Reference< ::com::sun::star::task::XInteractionHandler > xInteractionHandler(
+            task::InteractionHandler::createWithParent(comphelper::getComponentContext(m_xORB), 0), UNO_QUERY );
         OFilePickerInteractionHandler* pHandler = new OFilePickerInteractionHandler(xInteractionHandler);
         xInteractionHandler = pHandler;
 

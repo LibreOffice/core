@@ -40,7 +40,7 @@ ProgressDialog::ProgressDialog( Window* pParent,
         maProgressBar( this, PaResId( RID_PROGRESS_STATUSBAR ) ),
         mnMax( nMax ),
         mnMin( nMin ),
-        mbCanceled( sal_False )
+        mbCanceled( false )
 {
     maFilename.SetStyle( maFilename.GetStyle() | WB_PATHELLIPSIS );
     if( ! bCancelable )
@@ -64,7 +64,7 @@ void ProgressDialog::startOperation( const String& rOperation )
 {
     maOperation.SetText( rOperation );
     maProgressBar.SetValue( 0 );
-    mbCanceled = sal_False;
+    mbCanceled = false;
     if( ! IsVisible() )
         Show( sal_True );
 }
@@ -86,7 +86,7 @@ IMPL_LINK( ProgressDialog, ClickBtnHdl, Button*, pButton )
 {
     if( pButton == &maCancelButton )
     {
-        mbCanceled = sal_True;
+        mbCanceled = true;
     }
     return 0;
 }

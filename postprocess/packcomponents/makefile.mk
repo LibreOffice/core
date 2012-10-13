@@ -145,9 +145,14 @@ my_components += \
     component/connectivity/source/dbtools/dbtools \
     component/connectivity/source/drivers/flat/flat \
     component/connectivity/source/drivers/mysql/mysql \
-    component/connectivity/source/drivers/odbc/odbc \
     component/connectivity/source/manager/sdbc2 \
     component/shell/source/backends/localebe/localebe1 \
+
+.IF "$(OS)" != "ANDROID" && "$(OS)" != "IOS"
+my_components += \
+    component/connectivity/source/drivers/odbc/odbc \
+
+.ENDIF
 
 .ENDIF
 
@@ -231,7 +236,7 @@ my_components += component/embeddedobj/source/msole/emboleobj
 .END
 
 .IF "$(DISABLE_NEON)" != "TRUE"
-my_components += component/ucb/source/ucp/webdav/ucpdav1
+my_components += component/ucb/source/ucp/webdav-neon/ucpdav1
 .END
 
 .IF "$(ENABLE_CAIRO_CANVAS)" == "TRUE"

@@ -44,6 +44,9 @@
 
 SFX_IMPL_MODELESSDIALOG_WITHID(ScNameDlgWrapper, FID_DEFINE_NAME )
 SFX_IMPL_MODELESSDIALOG_WITHID(ScNameDefDlgWrapper, FID_ADD_NAME )
+SFX_IMPL_MODELESSDIALOG_WITHID(ScCondFormatConditionDlgWrapper, SID_OPENDLG_CONDFRMT )
+SFX_IMPL_MODELESSDIALOG_WITHID(ScCondFormatColorScaleDlgWrapper, SID_OPENDLG_COLORSCALE )
+SFX_IMPL_MODELESSDIALOG_WITHID(ScCondFormatDataBarDlgWrapper, SID_OPENDLG_DATABAR )
 SFX_IMPL_MODELESSDIALOG_WITHID(ScSolverDlgWrapper, SID_OPENDLG_SOLVE )
 SFX_IMPL_MODELESSDIALOG_WITHID(ScOptSolverDlgWrapper, SID_OPENDLG_OPTSOLVER )
 SFX_IMPL_MODELESSDIALOG_WITHID(ScPivotLayoutWrapper, SID_OPENDLG_PIVOTTABLE )
@@ -114,6 +117,24 @@ IMPL_CHILD_CTOR( ScNameDlgWrapper, FID_DEFINE_NAME )
 //-------------------------------------------------------------------------
 
 IMPL_CHILD_CTOR( ScNameDefDlgWrapper, FID_ADD_NAME )
+
+//-------------------------------------------------------------------------
+// ScCondFormatConditionDlgWrapper
+//-------------------------------------------------------------------------
+
+IMPL_CHILD_CTOR( ScCondFormatConditionDlgWrapper, SID_OPENDLG_CONDFRMT )
+
+//-------------------------------------------------------------------------
+// ScCondFormatColorScaleDlgWrapper
+//-------------------------------------------------------------------------
+
+IMPL_CHILD_CTOR( ScCondFormatColorScaleDlgWrapper, SID_OPENDLG_COLORSCALE )
+
+//-------------------------------------------------------------------------
+// ScCondFormatDataBarDlgWrapper
+//-------------------------------------------------------------------------
+
+IMPL_CHILD_CTOR( ScCondFormatDataBarDlgWrapper, SID_OPENDLG_DATABAR )
 
 //-------------------------------------------------------------------------
 // ScSolverDlgWrapper

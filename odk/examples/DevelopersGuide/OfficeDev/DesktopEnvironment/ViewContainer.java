@@ -46,7 +46,6 @@ import java.util.*;
  * some global functionality - like termination of
  * this demo application.
  *
- * @author     Andreas Schl&uuml;ns
  */
 public class ViewContainer extends Thread
 {

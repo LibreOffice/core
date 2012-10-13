@@ -318,8 +318,8 @@ sal_Bool SwXMLTableFrmFmtsSort_Impl::AddRow( SwFrmFmt& rFrmFmt,
     return bInsert;
 }
 
-void lcl_GetTblBoxColStr( sal_uInt16 nCol, String& rNm );
-void lcl_xmltble_appendBoxPrefix( OUStringBuffer& rBuffer,
+void sw_GetTblBoxColStr( sal_uInt16 nCol, String& rNm );
+static void lcl_xmltble_appendBoxPrefix( OUStringBuffer& rBuffer,
                                   const OUString& rNamePrefix,
                                   sal_uInt32 nCol, sal_uInt32 nRow, sal_Bool bTop )
 {
@@ -328,7 +328,7 @@ void lcl_xmltble_appendBoxPrefix( OUStringBuffer& rBuffer,
     if( bTop )
     {
         String sTmp;
-        lcl_GetTblBoxColStr( (sal_uInt16)nCol, sTmp );
+        sw_GetTblBoxColStr( (sal_uInt16)nCol, sTmp );
         rBuffer.append( sTmp );
     }
     else
@@ -640,7 +640,7 @@ void SwXMLExport::ExportTableLinesAutoStyles( const SwTableLines& rLines,
                 if( bTop )
                 {
                     String sTmp;
-                    lcl_GetTblBoxColStr( nColumn, sTmp );
+                    sw_GetTblBoxColStr( nColumn, sTmp );
                     sBuffer.append( sTmp );
                 }
                 else

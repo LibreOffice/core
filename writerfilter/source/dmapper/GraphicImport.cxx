@@ -339,6 +339,15 @@ public:
     {
         return bYSizeValid;
     }
+
+    void applyMargins(uno::Reference< beans::XPropertySet > xGraphicObjectProperties) const
+    {
+        PropertyNameSupplier& rPropNameSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
+        xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_LEFT_MARGIN ), uno::makeAny(nLeftMargin));
+        xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_RIGHT_MARGIN ), uno::makeAny(nRightMargin));
+        xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_TOP_MARGIN ), uno::makeAny(nTopMargin));
+        xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_BOTTOM_MARGIN ), uno::makeAny(nBottomMargin));
+    }
 };
 
 
@@ -922,6 +931,10 @@ void GraphicImport::lcl_attribute(Id nName, Value & val)
                                    uno::makeAny( aSize.Height ) );
                             xGraphProps->setPropertyValue("Width",
                                    uno::makeAny( aSize.Width ) );
+
+                            // We need to drop the shape here somehow
+                            uno::Reference< lang::XComponent > xShapeComponent( xShape, uno::UNO_QUERY );
+                            xShapeComponent->dispose( );
                         }
                     }
                     catch( const beans::UnknownPropertyException & )
@@ -965,10 +978,17 @@ void GraphicImport::lcl_attribute(Id nName, Value & val)
             }
         break;
         case NS_ooxml::LN_CT_Inline_distT:
+            m_pImpl->nTopMargin = ConversionHelper::convertTwipToMM100(nIntValue);
+        break;
         case NS_ooxml::LN_CT_Inline_distB:
+            m_pImpl->nBottomMargin = ConversionHelper::convertTwipToMM100(nIntValue);
+        break;
         case NS_ooxml::LN_CT_Inline_distL:
+            m_pImpl->nLeftMargin = ConversionHelper::convertTwipToMM100(nIntValue);
+        break;
         case NS_ooxml::LN_CT_Inline_distR:
-            //TODO: need to be handled
+            m_pImpl->nRightMargin = ConversionHelper::convertTwipToMM100(nIntValue);
+        break;
         break;
         case NS_ooxml::LN_CT_GraphicalObjectData_uri:
             val.getString();
@@ -1449,14 +1469,7 @@ uno::Reference< text::XTextContent > GraphicImport::createGraphicObject( const b
                     uno::makeAny(m_pImpl->bContour));
                 xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_CONTOUR_OUTSIDE ),
                     uno::makeAny(m_pImpl->bContourOutside));
-                xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_LEFT_MARGIN ),
-                    uno::makeAny(m_pImpl->nLeftMargin));
-                xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_RIGHT_MARGIN ),
-                    uno::makeAny(m_pImpl->nRightMargin));
-                xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_TOP_MARGIN ),
-                    uno::makeAny(m_pImpl->nTopMargin));
-                xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_BOTTOM_MARGIN ),
-                    uno::makeAny(m_pImpl->nBottomMargin));
+                m_pImpl->applyMargins(xGraphicObjectProperties);
 
                 if( m_pImpl->eColorMode == drawing::ColorMode_STANDARD &&
                     m_pImpl->nContrast == -70 &&
@@ -1546,6 +1559,7 @@ uno::Reference< text::XTextContent > GraphicImport::createGraphicObject( const b
                 if( m_pImpl->getXSize() && m_pImpl->getYSize() )
                     xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName(PROP_SIZE),
                         uno::makeAny( awt::Size( m_pImpl->getXSize(), m_pImpl->getYSize() )));
+                m_pImpl->applyMargins(xGraphicObjectProperties);
                 try
                 {
                     if( !m_pImpl->sName.isEmpty() )

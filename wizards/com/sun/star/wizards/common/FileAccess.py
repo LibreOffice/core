@@ -17,6 +17,7 @@
 #
 import traceback
 import types
+from collections import OrderedDict
 from os import path as osPath
 from .NoValidPathException import NoValidPathException
 
@@ -36,11 +37,6 @@ These Convenince methods include mainly Exception-handling.
 '''
 
 class FileAccess(object):
-    '''
-    @param xMSF
-    @param sPath
-    @param sAddPath
-    '''
 
     @classmethod
     def addOfficePath(self, xMSF, sPath, sAddPath):
@@ -311,63 +307,36 @@ class FileAccess(object):
             return False
 
     @classmethod
-    def getFolderTitles(self, xMSF, FilterName, FolderName):
-        LocLayoutFiles = [[2],[]]
+    def getFolderTitles(self, xMSF, FilterName, FolderName, resDict):
+        #Returns and ordered dict containing the template's name and path
+        
+        LocLayoutFiles = {}
         try:
             xDocInterface = xMSF.createInstance(
                 "com.sun.star.document.DocumentProperties")
             xInterface = xMSF.createInstance(
                 "com.sun.star.ucb.SimpleFileAccess")
             nameList = xInterface.getFolderContents(FolderName, False)
-            TitleVector = []
-            NameVector = []
             if FilterName is None or FilterName == "":
                 FilterName = None
             else:
-                FilterName = FilterName + "-"
-            fileName = ""
-            NameVectorAppend = NameVector.append
-            TitleVectorAppend = TitleVector.append
+                FilterName += "-"
+            
             for i in nameList:
                 fileName = self.getFilename(i)
                 if FilterName is None or fileName.startswith(FilterName):
                     xDocInterface.loadFromMedium(i, tuple())
-                    NameVectorAppend(i)
-                    TitleVectorAppend(xDocInterface.Title)
-
-            LocLayoutFiles[1] = NameVector
-            LocLayoutFiles[0] = TitleVector
+                    if xDocInterface.Title in resDict:
+                        # localise string at runtime
+                        title = resDict[xDocInterface.Title]
+                    else:
+                        title = xDocInterface.Title
+                    LocLayoutFiles[title] = i
 
         except Exception, exception:
             traceback.print_exc()
 
-        return self.__bubblesortList(LocLayoutFiles)
-
-    '''
-    This function bubble sorts an array of with 2 dimensions.
-    The default sorting order is the first dimension
-    Only if sort2ndValue is True the second dimension is
-    the relevant for the sorting order
-    '''
-
-    @classmethod
-    def __bubblesortList(self, SortList):
-        SortCount = len(SortList[0])
-        DimCount = len(SortList)
-        for i in xrange(SortCount):
-            for t in xrange(SortCount - i - 1):
-                if SortList[0][t] > SortList[0][t + 1]:
-                    for k in xrange(DimCount):
-                        DisplayDummy = SortList[k][t];
-                        SortList[k][t] = SortList[k][t + 1];
-                        SortList[k][t + 1] = DisplayDummy
-        return SortList
-    '''
-    We search in all given path for a given file
-    @param _sPath
-    @param _sPath2
-    @return
-    '''
+        return OrderedDict(sorted(LocLayoutFiles.items(), key=lambda t: t[0]))
 
     @classmethod
     def addPath(self, _sPath, _sPath2):

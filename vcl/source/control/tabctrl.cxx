@@ -80,7 +80,6 @@ struct ImplTabCtrlData
     Point                           maItemsOffset;       // offset of the tabitems
     std::vector< ImplTabItem >      maItemList;
     ListBox*                        mpListBox;
-    Size                            maMinSize;
 };
 
 // -----------------------------------------------------------------------
@@ -2180,40 +2179,40 @@ Point TabControl::GetItemsOffset() const
 Size TabControl::calculateRequisition() const
 {
     Size aOptimalPageSize(0, 0);
-    long nTabLabelsBottom = 0;
-    long nTotalTabLabelWidths = 0;
 
     for( std::vector< ImplTabItem >::const_iterator it = mpTabCtrlData->maItemList.begin();
          it != mpTabCtrlData->maItemList.end(); ++it )
     {
-        Size aPageSize;
         const TabPage *pPage = it->mpTabPage;
         //it's a real nuisance if the page is not inserted yet :-(
-        if (pPage)
-            aPageSize = pPage->GetOptimalSize(WINDOWSIZE_PREFERRED);
+        if (!pPage)
+            continue;
+
+        Size aPageSize(pPage->GetOptimalSize(WINDOWSIZE_PREFERRED));
 
         if (aPageSize.Width() > aOptimalPageSize.Width())
             aOptimalPageSize.Width() = aPageSize.Width();
         if (aPageSize.Height() > aOptimalPageSize.Height())
             aOptimalPageSize.Height() = aPageSize.Height();
+    }
 
+    long nTabLabelsBottom = 0, nTabLabelsRight = 0;
+    for( std::vector< ImplTabItem >::const_iterator it = mpTabCtrlData->maItemList.begin();
+         it != mpTabCtrlData->maItemList.end(); ++it )
+    {
         TabControl* pThis = const_cast<TabControl*>(this);
 
         sal_uInt16 nPos = it - mpTabCtrlData->maItemList.begin();
-        Rectangle aTabRect = pThis->ImplGetTabRect(nPos, LONG_MAX, LONG_MAX);
+        Rectangle aTabRect = pThis->ImplGetTabRect(nPos, aOptimalPageSize.Width(), LONG_MAX);
         if (aTabRect.Bottom() > nTabLabelsBottom)
             nTabLabelsBottom = aTabRect.Bottom();
-
-        ImplTabItem* pItem = const_cast<ImplTabItem*>(&(*it));
-        Size aTabSize = pThis->ImplGetItemSize(pItem, LONG_MAX);
-        nTotalTabLabelWidths += aTabSize.Width();
+        if (aTabRect.Right() > nTabLabelsRight)
+            nTabLabelsRight = aTabRect.Right();
     }
 
     Size aOptimalSize(aOptimalPageSize);
     aOptimalSize.Height() += nTabLabelsBottom;
-
-    if (nTotalTabLabelWidths > aOptimalSize.Width())
-        aOptimalSize.Width() = nTotalTabLabelWidths;
+    aOptimalSize.Width() = std::max(nTabLabelsRight, aOptimalSize.Width());
 
     aOptimalSize.Width() += TAB_OFFSET * 2;
     aOptimalSize.Height() += TAB_OFFSET * 2;
@@ -2224,17 +2223,11 @@ Size TabControl::calculateRequisition() const
 Size TabControl::GetOptimalSize(WindowSizeType eType) const
 {
     if (eType == WINDOWSIZE_MINIMUM)
-        return mpTabCtrlData ? mpTabCtrlData->maMinSize : Size();
+        return Size();
     return calculateRequisition();
 }
 
 // -----------------------------------------------------------------------
-
-void TabControl::SetMinimumSizePixel( const Size& i_rSize )
-{
-    if( mpTabCtrlData )
-        mpTabCtrlData->maMinSize = i_rSize;
-}
 
 void TabControl::ReassignPageId(sal_uInt16 nOldId, sal_uInt16 nNewId)
 {

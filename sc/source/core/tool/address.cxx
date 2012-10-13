@@ -134,7 +134,7 @@ sal_Unicode_strtol ( const sal_Unicode*  p,
     return is_neg ? -accum : accum;
 }
 
-const sal_Unicode* lcl_eatWhiteSpace( const sal_Unicode* p )
+static const sal_Unicode* lcl_eatWhiteSpace( const sal_Unicode* p )
 {
     if ( p )
     {
@@ -339,7 +339,7 @@ lcl_XL_ParseSheetRef( const sal_Unicode* start,
     TRUE in all other cases, also when there is no index sequence or the input
     name is not numeric.
  */
-bool lcl_XL_getExternalDoc( const sal_Unicode** ppErrRet, String& rExternDocName,
+static bool lcl_XL_getExternalDoc( const sal_Unicode** ppErrRet, String& rExternDocName,
         const uno::Sequence< const sheet::ExternalLinkInfo > * pExternalLinks)
 {
     // 1-based, sequence starts with an empty element.

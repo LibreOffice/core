@@ -21,8 +21,6 @@
 #define DBAUI_DBTREEMODEL_HXX
 
 #include <com/sun/star/container/XNameAccess.hpp>
-#include <svtools/svlbox.hxx>
-#include <svtools/svlbitm.hxx>
 #include "unodatbr.hxx"
 #include "commontypes.hxx"
 

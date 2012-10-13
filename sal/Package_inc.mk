@@ -67,6 +67,7 @@ $(eval $(call gb_Package_add_file,sal_inc,inc/osl/detail/file.h,osl/detail/file.
 $(eval $(call gb_Package_add_file,sal_inc,inc/osl/detail/android_native_app_glue.h,osl/detail/android_native_app_glue.h))
 $(eval $(call gb_Package_add_file,sal_inc,inc/osl/detail/android-bootstrap.h,osl/detail/android-bootstrap.h))
 $(eval $(call gb_Package_add_file,sal_inc,inc/osl/detail/ios-bootstrap.h,osl/detail/ios-bootstrap.h))
+$(eval $(call gb_Package_add_file,sal_inc,inc/osl/detail/component-mapping.h,osl/detail/component-mapping.h))
 $(eval $(call gb_Package_add_file,sal_inc,inc/rtl/allocator.hxx,rtl/allocator.hxx))
 $(eval $(call gb_Package_add_file,sal_inc,inc/rtl/alloc.h,rtl/alloc.h))
 $(eval $(call gb_Package_add_file,sal_inc,inc/rtl/bootstrap.h,rtl/bootstrap.h))

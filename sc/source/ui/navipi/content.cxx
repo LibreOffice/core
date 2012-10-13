@@ -39,6 +39,7 @@
 #include <vcl/svapp.hxx>
 #include <tools/urlobj.hxx>
 #include <svl/urlbmk.hxx>
+#include "svtools/svlbitm.hxx"
 #include <stdlib.h>
 
 #include "content.hxx"
@@ -257,7 +258,7 @@ sal_uLong ScContentTree::GetChildIndex( SvLBoxEntry* pEntry ) const
     return nChild;
 }
 
-String lcl_GetDBAreaRange( ScDocument* pDoc, const String& rDBName )
+static String lcl_GetDBAreaRange( ScDocument* pDoc, const String& rDBName )
 {
     String aRet;
     if (pDoc)
@@ -850,7 +851,7 @@ const ScAreaLink* ScContentTree::GetLink( sal_uLong nIndex )
     return NULL;
 }
 
-String lcl_NoteString( const ScPostIt& rNote )
+static String lcl_NoteString( const ScPostIt& rNote )
 {
     String aText = rNote.GetText();
     xub_StrLen nAt;
@@ -1004,7 +1005,7 @@ sal_Bool ScContentTree::DrawNamesChanged( sal_uInt16 nType )
     return !bEqual;
 }
 
-bool lcl_GetRange( ScDocument* pDoc, sal_uInt16 nType, const String& rName, ScRange& rRange )
+static bool lcl_GetRange( ScDocument* pDoc, sal_uInt16 nType, const String& rName, ScRange& rRange )
 {
     bool bFound = false;
 
@@ -1039,7 +1040,7 @@ bool lcl_GetRange( ScDocument* pDoc, sal_uInt16 nType, const String& rName, ScRa
     return bFound;
 }
 
-void lcl_DoDragObject( ScDocShell* pSrcShell, const String& rName, sal_uInt16 nType, Window* pWin )
+static void lcl_DoDragObject( ScDocShell* pSrcShell, const String& rName, sal_uInt16 nType, Window* pWin )
 {
     ScDocument* pSrcDoc = pSrcShell->GetDocument();
     ScDrawLayer* pModel = pSrcDoc->GetDrawLayer();
@@ -1077,7 +1078,7 @@ void lcl_DoDragObject( ScDocShell* pSrcShell, const String& rName, sal_uInt16 nT
     }
 }
 
-void lcl_DoDragCells( ScDocShell* pSrcShell, const ScRange& rRange, sal_uInt16 nFlags, Window* pWin )
+static void lcl_DoDragCells( ScDocShell* pSrcShell, const ScRange& rRange, sal_uInt16 nFlags, Window* pWin )
 {
     ScMarkData aMark;
     aMark.SelectTable( rRange.aStart.Tab(), sal_True );

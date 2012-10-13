@@ -19,9 +19,6 @@ package com.sun.star.wizards.web;
 
 import com.sun.star.awt.VclWindowPeerAttribute;
 
-/**
- * @author rpiterman
- */
 public interface ErrorHandler
 {
 

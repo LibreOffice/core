@@ -717,7 +717,7 @@ void ScOutlineWindow::Paint( const Rectangle& /* rRect */ )
 
 /** Increments or decrements a value and wraps at the specified limits.
     @return  true = value wrapped. */
-bool lcl_RotateValue( size_t& rnValue, size_t nMin, size_t nMax, bool bForward )
+static bool lcl_RotateValue( size_t& rnValue, size_t nMin, size_t nMax, bool bForward )
 {
     OSL_ENSURE( nMin <= nMax, "lcl_RotateValue - invalid range" );
     OSL_ENSURE( nMax < static_cast< size_t >( -1 ), "lcl_RotateValue - range overflow" );

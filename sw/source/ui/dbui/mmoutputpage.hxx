@@ -118,7 +118,6 @@ class SwMailMergeOutputPage : public svt::OWizardPage
 
     //some dialog data
     Printer*        m_pTempPrinter;
-    SfxPrinter*     m_pDocumentPrinterCopy;
     String          m_sCC;
     String          m_sBCC;
 

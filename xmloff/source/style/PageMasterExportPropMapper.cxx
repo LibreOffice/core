@@ -44,7 +44,7 @@ using namespace ::xmloff::token;
 
 //______________________________________________________________________________
 
-inline sal_Bool lcl_HasSameLineWidth( const table::BorderLine2& rLine1, const table::BorderLine2& rLine2 )
+static inline sal_Bool lcl_HasSameLineWidth( const table::BorderLine2& rLine1, const table::BorderLine2& rLine2 )
 {
     return  (rLine1.InnerLineWidth == rLine2.InnerLineWidth) &&
             (rLine1.OuterLineWidth == rLine2.OuterLineWidth) &&
@@ -59,20 +59,20 @@ inline sal_Bool operator==( const table::BorderLine2& rLine1, const table::Borde
             ( rLine1.LineStyle == rLine2.LineStyle );
 }
 
-inline void lcl_RemoveState( XMLPropertyState* pState )
+static inline void lcl_RemoveState( XMLPropertyState* pState )
 {
     pState->mnIndex = -1;
     pState->maValue.clear();
 }
 
-void lcl_RemoveStateIfZero16( XMLPropertyState* pState )
+static void lcl_RemoveStateIfZero16( XMLPropertyState* pState )
 {
     sal_Int16   nValue = sal_Int16();
     if( (pState->maValue >>= nValue) && !nValue )
         lcl_RemoveState( pState );
 }
 
-void lcl_AddState(::std::vector< XMLPropertyState >& rPropState, sal_Int32 nIndex, const rtl::OUString& rProperty, uno::Reference< beans::XPropertySet >& xProps)
+static void lcl_AddState(::std::vector< XMLPropertyState >& rPropState, sal_Int32 nIndex, const rtl::OUString& rProperty, uno::Reference< beans::XPropertySet >& xProps)
 {
     if(::cppu::any2bool(xProps->getPropertyValue(rProperty)))
         rPropState.push_back(XMLPropertyState (nIndex, cppu::bool2any(sal_True)));

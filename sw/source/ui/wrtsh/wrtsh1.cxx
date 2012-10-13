@@ -144,7 +144,7 @@ using namespace com::sun::star;
         mbRetainSelection = sal_False;
 
 
-SvxAutoCorrect* lcl_IsAutoCorr()
+static SvxAutoCorrect* lcl_IsAutoCorr()
 {
     SvxAutoCorrect* pACorr = SvxAutoCorrCfg::Get().GetAutoCorrect();
     if( pACorr && !pACorr->IsAutoCorrFlag( CptlSttSntnc | CptlSttWrd |

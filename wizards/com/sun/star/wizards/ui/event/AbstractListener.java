@@ -37,7 +37,6 @@ import java.util.HashMap;
  * <li>Write the methods which should be performed when the event occures.</li>
  * <li>call the "add" method, to define a component-event-action mapping.</li>
  * </list>
- * @author  rpiterman
  */
 public class AbstractListener
 {

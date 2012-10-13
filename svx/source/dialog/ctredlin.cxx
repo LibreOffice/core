@@ -31,6 +31,7 @@
 #include <sfx2/app.hxx>
 #include <sfx2/module.hxx>
 #include <svtools/txtcmp.hxx>
+#include <svtools/svlbitm.hxx>
 #include <unotools/charclass.hxx>
 
 #include <editeng/unolingu.hxx>
@@ -120,7 +121,7 @@ SvLBoxItem* SvLBoxColorString::Create() const
     return new SvLBoxColorString;
 }
 
-void SvLBoxColorString::Paint( const Point& rPos, SvLBox& rDev,
+void SvLBoxColorString::Paint( const Point& rPos, SvTreeListBox& rDev,
                              sal_uInt16 nFlags, SvLBoxEntry* pEntry )
 /* [Description]
 

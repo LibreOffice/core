@@ -147,7 +147,7 @@ SchXMLAxisContext::SchXMLAxisContext( SchXMLImportHelper& rImpHelper,
 SchXMLAxisContext::~SchXMLAxisContext()
 {}
 
-Reference< chart::XAxis > lcl_getChartAxis( SchXMLAxis aCurrentAxis, const Reference< chart::XDiagram > xDiagram )
+static Reference< chart::XAxis > lcl_getChartAxis( SchXMLAxis aCurrentAxis, const Reference< chart::XDiagram > xDiagram )
 {
     Reference< chart::XAxis > xAxis;
     Reference< chart::XAxisSupplier > xAxisSuppl( xDiagram, uno::UNO_QUERY );

@@ -40,8 +40,8 @@
 #include <docary.hxx>
 #include <sortopt.hxx>
 
-extern void lcl_JoinText( SwPaM& rPam, sal_Bool bJoinPrev );
-extern void lcl_GetJoinFlags( SwPaM& rPam, sal_Bool& rJoinTxt, sal_Bool& rJoinPrev );
+extern void sw_JoinText( SwPaM& rPam, sal_Bool bJoinPrev );
+extern void sw_GetJoinFlags( SwPaM& rPam, sal_Bool& rJoinTxt, sal_Bool& rJoinPrev );
 
 SwUndoRedline::SwUndoRedline( SwUndoId nUsrId, const SwPaM& rRange )
     : SwUndo( UNDO_REDLINE ), SwUndRng( rRange ),
@@ -429,12 +429,12 @@ void SwUndoCompDoc::UndoImpl(::sw::UndoRedoContext & rContext)
             pPam->Exchange();
 
         sal_Bool bJoinTxt, bJoinPrev;
-        ::lcl_GetJoinFlags( *pPam, bJoinTxt, bJoinPrev );
+        sw_GetJoinFlags( *pPam, bJoinTxt, bJoinPrev );
 
         pUnDel = new SwUndoDelete( *pPam, sal_False );
 
         if( bJoinTxt )
-            ::lcl_JoinText( *pPam, bJoinPrev );
+            sw_JoinText( *pPam, bJoinPrev );
 
         if( pCSttNd && !pCEndNd)
         {

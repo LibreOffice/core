@@ -883,7 +883,7 @@ ScVbaApplication::Calculate() throw(  script::BasicErrorException , uno::Runtime
     xCalculatable->calculateAll();
 }
 
-uno::Reference< beans::XPropertySet > lcl_getPathSettingsService( const uno::Reference< uno::XComponentContext >& xContext ) throw ( uno::RuntimeException )
+static uno::Reference< beans::XPropertySet > lcl_getPathSettingsService( const uno::Reference< uno::XComponentContext >& xContext ) throw ( uno::RuntimeException )
 {
     static uno::Reference< beans::XPropertySet >  xPathSettings;
     if ( !xPathSettings.is() )

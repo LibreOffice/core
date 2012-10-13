@@ -32,7 +32,6 @@ import com.sun.star.comp.loader.FactoryHelper;
  * The <code>ConstantInstanceProvider</code> is a component
  * that implements the <code>XInstanceProvider</code> Interface.
  * <p>
- * @author      Kay Ramme
  * @see         com.sun.star.bridge.XBridge
  * @see         com.sun.star.bridge.XBridgeFactory
  * @see         com.sun.star.bridge.XInstanceProvider

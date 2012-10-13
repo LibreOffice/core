@@ -61,7 +61,7 @@ static const rtl::OUString BACKCOLOR( RTL_CONSTASCII_USTRINGPARAM( "CellBackColo
 static const rtl::OUString PATTERN( RTL_CONSTASCII_USTRINGPARAM( "Pattern" ) );
 static const rtl::OUString PATTERNCOLOR( RTL_CONSTASCII_USTRINGPARAM( "PatternColor" ) );
 
-PatternMap lcl_getPatternMap()
+static PatternMap lcl_getPatternMap()
 {
     PatternMap aPatternMap;
     aPatternMap.insert( PatternPair( xlPatternAutomatic, 0 ) );

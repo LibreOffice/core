@@ -44,6 +44,8 @@ class UserDrawEvent;
 class VCL_DLLPUBLIC FixedText : public Control
 {
 private:
+    sal_Int32 m_nMaxWidthChars;
+
     using Control::ImplInitSettings;
     using Window::ImplInit;
     SAL_DLLPRIVATE void    ImplInit( Window* pParent, WinBits nStyle );
@@ -71,10 +73,14 @@ public:
     virtual void    StateChanged( StateChangedType nType );
     virtual void    DataChanged( const DataChangedEvent& rDCEvt );
 
-    static Size     CalcMinimumTextSize( Control const* pControl, long nMaxWidth = 0 );
-    Size            CalcMinimumSize( long nMaxWidth = 0 ) const;
+    void setMaxWidthChars(sal_Int32 nWidth);
+    sal_Int32 getMaxWidthChars() const { return m_nMaxWidthChars; }
+    static Size     CalcMinimumTextSize(Control const* pControl, long nMaxWidth = 0x7fffffff);
+    static Size     getTextDimensions(Control const *pControl, const OUString &rTxt, long nMaxWidth);
+    Size            CalcMinimumSize(long nMaxWidth = 0x7fffffff) const;
     virtual Size    GetOptimalSize(WindowSizeType eType) const;
     virtual void take_properties(Window &rOther);
+    virtual bool set_property(const rtl::OString &rKey, const rtl::OString &rValue);
 };
 
 // -------------

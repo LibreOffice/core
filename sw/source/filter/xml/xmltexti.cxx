@@ -207,7 +207,7 @@ sal_Bool SwXMLTextImportHelper::IsInHeaderFooter() const
     return pDoc && pDoc->IsInHeaderFooter( pTxtCrsr->GetPaM()->GetPoint()->nNode );
 }
 
-SwOLENode *lcl_GetOLENode( const SwFrmFmt *pFrmFmt )
+static SwOLENode *lcl_GetOLENode( const SwFrmFmt *pFrmFmt )
 {
     SwOLENode *pOLENd = 0;
     if( pFrmFmt )

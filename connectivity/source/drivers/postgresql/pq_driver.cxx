@@ -342,7 +342,7 @@ static struct cppu::ImplementationEntry g_entries[] =
 extern "C"
 {
 
-SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
+SAL_DLLPUBLIC_EXPORT void * SAL_CALL postgresql_sdbc_component_getFactory(
     const sal_Char * pImplName, void * pServiceManager, void * )
 {
     // need to extract the defaultcontext, because the way, sdbc

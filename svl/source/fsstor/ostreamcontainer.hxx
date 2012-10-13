@@ -52,9 +52,9 @@ class OFSStreamContainer : public cppu::OWeakObject,
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XTruncate >             m_xTruncate;
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XAsyncOutputMonitor >   m_xAsyncOutputMonitor;
 
-    sal_Bool m_bDisposed;
-    sal_Bool m_bInputClosed;
-    sal_Bool m_bOutputClosed;
+    bool m_bDisposed;
+    bool m_bInputClosed;
+    bool m_bOutputClosed;
 
     ::cppu::OInterfaceContainerHelper* m_pListenersContainer; // list of listeners
     ::cppu::OTypeCollection* m_pTypeCollection;

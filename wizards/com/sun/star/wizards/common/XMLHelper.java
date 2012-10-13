@@ -25,10 +25,6 @@ package com.sun.star.wizards.common;
 
 import org.w3c.dom.*;
 
-/**
- *
- * @author  rpiterman
- */
 public class XMLHelper
 {
 

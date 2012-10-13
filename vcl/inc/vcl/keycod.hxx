@@ -101,8 +101,8 @@ inline KeyCode::KeyCode( sal_uInt16 nKey, sal_Bool bShift, sal_Bool bMod1, sal_B
         nCode |= KEY_MOD1;
     if( bMod2 )
         nCode |= KEY_MOD2;
-        if( bMod3 )
-                nCode |= KEY_MOD3;
+    if( bMod3 )
+        nCode |= KEY_MOD3;
     eFunc = KEYFUNC_DONTKNOW;
 }
 

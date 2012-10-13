@@ -63,6 +63,7 @@ using namespace com::sun::star;
 
 #include <comphelper/string.hxx>
 
+#include "date.hxx"
 #include "stdobj.hxx"
 #include <basic/sbstdobj.hxx>
 #include "rtlproto.hxx"
@@ -102,9 +103,6 @@ SbxVariable* getDefaultProp( SbxVariable* pRef );
 #endif
 
 #ifndef DISABLE_SCRIPTING
-
-// forward decl.
-bool implDateSerial( sal_Int16 nYear, sal_Int16 nMonth, sal_Int16 nDay, double& rdRet );
 
 // from source/classes/sbxmod.cxx
 uno::Reference< frame::XModel > getDocumentModel( StarBASIC* );
@@ -1701,8 +1699,6 @@ sal_Int16 implGetDateMonth( double aDate )
     return nRet;
 }
 
-sal_Int16 implGetDateYear( double aDate );
-
 // Function to convert date to ISO 8601 date format
 RTLFUNC(CDateToIso)
 {
@@ -1955,8 +1951,6 @@ RTLFUNC(Hour)
         rPar.Get(0)->PutInteger( nHour );
     }
 }
-
-sal_Int16 implGetMinute( double dDate );
 
 RTLFUNC(Minute)
 {

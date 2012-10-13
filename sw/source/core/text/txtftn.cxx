@@ -187,7 +187,7 @@ sal_Bool SwTxtFrm::CalcPrepFtnAdjust()
  * for the footnote.
  *************************************************************************/
 
-SwTwips lcl_GetFtnLower( const SwTxtFrm* pFrm, SwTwips nLower )
+static SwTwips lcl_GetFtnLower( const SwTxtFrm* pFrm, SwTwips nLower )
 {
     // nLower is an absolute value. It denotes the bottom of the line
     // containing the footnote.

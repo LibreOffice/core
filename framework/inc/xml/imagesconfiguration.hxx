@@ -37,6 +37,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <vector>
 #include <boost/ptr_container/ptr_vector.hpp>
@@ -100,7 +101,7 @@ class ImagesConfiguration
 {
     public:
         static sal_Bool LoadImages(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
             const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& rInputStream,
             ImageListsDescriptor& rItems );
 

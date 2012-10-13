@@ -127,7 +127,7 @@ void InsertBookmarkAsPage_FindDuplicateLayouts::operator()( SdDrawDocument& rDoc
 |*
 \************************************************************************/
 
-void lcl_IterateBookmarkPages( SdDrawDocument &rDoc, SdDrawDocument* pBookmarkDoc,
+static void lcl_IterateBookmarkPages( SdDrawDocument &rDoc, SdDrawDocument* pBookmarkDoc,
                                const std::vector<rtl::OUString> &rBookmarkList, sal_uInt16 nBMSdPageCount,
                                InsertBookmarkAsPage_FindDuplicateLayouts& rPageIterator )
 {

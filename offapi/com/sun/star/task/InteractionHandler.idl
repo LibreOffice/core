@@ -21,8 +21,8 @@
 #define __com_sun_star_task_InteractionHandler_idl__
 
 module com { module sun { module star {
-    module lang { published interface XInitialization; };
-    module task { published interface XInteractionHandler; };
+    module task { published interface XInteractionHandler2; };
+    module awt { published interface XWindow; };
 }; }; };
 
 module com { module sun { module star { module task {
@@ -147,28 +147,24 @@ module com { module sun { module star { module task {
     that the types you specify are general enough to cover all requests you want to handle, but also specific
     enough to not cover requests which other handlers might be interested in.</p>
  */
-published service InteractionHandler
+published service InteractionHandler : XInteractionHandler2
 {
-    /** Handle an interaction request.
-     */
-    interface com::sun::star::task::XInteractionHandler;
+    /** Creates an instance.
 
-    /** Initialize the interaction handler.
+        @param parent denotes the parent window for any GUI dialogs the
+        interaction handler pops up; may be null.
+    */
+    createWithParent([in] com::sun::star::awt::XWindow parent);
 
-        <P>The arguments must be a sequence of
-        <type scope="com::sun::star::beans">PropertyValue</type>s.  The
-        currently supported properties are:
-        <UL>
-            <LI><code>"Parent"</code> of type
-            <type scope="com::sun::star::awt">XWindow</type> denotes the
-            parent window for any GUI dialogs the interaction handler pops up;
-            it is strongly recommended that this property is supplied;</LI>
-            <LI><code>"Context"</code> of type <atom>string</atom> is a
-            textual description of the current context (used, e.g., as a first
-            line of text in error boxes); this property is optional.</LI>
-        </UL></P>
-     */
-    interface com::sun::star::lang::XInitialization;
+    /** Creates an instance with an additional context.
+
+        @param parent denotes the parent window for any GUI dialogs the
+        interaction handler pops up; may be null.
+
+        @param context is a textual description of the current context (used,
+        e.g., as a first line of text in error boxes).
+    */
+    createWithParentAndContext([in] com::sun::star::awt::XWindow parent, [in] string context);
 };
 
 }; }; }; };

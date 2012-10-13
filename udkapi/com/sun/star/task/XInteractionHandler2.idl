@@ -34,7 +34,7 @@
 
    @since OOo 3.2
  */
-/* published */ interface XInteractionHandler2 : com::sun::star::task::XInteractionHandler
+published interface XInteractionHandler2 : com::sun::star::task::XInteractionHandler
 {
     /** Handle an interaction request.
 

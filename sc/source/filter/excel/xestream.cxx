@@ -1130,7 +1130,7 @@ bool XclExpXmlStream::exportDocument() throw()
     if( pShell->GetViewData() )
         pShell->GetViewData()->WriteExtOptions( mpRoot->GetExtDocOptions() );
 
-    OUString const workbook = CREATE_OUSTRING( "xl/workbook.xml" );
+    OUString const workbook = "xl/workbook.xml";
     PushStream( CreateOutputStream( workbook, workbook,
                                     Reference <XOutputStream>(),
                                     "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml",
@@ -1165,7 +1165,7 @@ OUString XlsxExport_getImplementationName()
 
 OUString XclExpXmlStream::implGetImplementationName() const
 {
-    return CREATE_OUSTRING( "TODO" );
+    return OUString( "TODO" );
 }
 
 

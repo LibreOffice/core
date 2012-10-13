@@ -67,7 +67,7 @@ typedef sal_Bool (*GoNd)( SwNode*, SwIndex*, sal_uInt16 );
 typedef SwCntntNode* (*GoNds)( SwNodeIndex*, sal_Bool );
 typedef void (*GoDoc)( SwPosition* );
 typedef void (*GoSection)( SwPosition* );
-typedef sal_Bool (SwPosition:: *CmpOp)( const SwPosition& ) const;
+typedef bool (SwPosition:: *CmpOp)( const SwPosition& ) const;
 typedef const SwTxtAttr* (*GetHint)( const SwpHints&, sal_uInt16&, xub_StrLen );
 typedef int (utl::TextSearch:: *SearchTxt)( const String&, xub_StrLen*,
                     xub_StrLen*, ::com::sun::star::util::SearchResult* );

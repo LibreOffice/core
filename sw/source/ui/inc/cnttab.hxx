@@ -35,7 +35,7 @@
 #include <toxmgr.hxx>
 #include <svx/checklbx.hxx>
 #include <tools/resary.hxx>
-#include <svtools/svtreebx.hxx>
+#include <svtools/treelistbox.hxx>
 #include <vcl/menubtn.hxx>
 #include <svx/langbox.hxx>
 

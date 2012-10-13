@@ -722,13 +722,15 @@ static void bootstrap(
             OUString(),
             OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.stoc.JavaVirtualMachine")),
             xSMgr,
-            Reference< XRegistryKey > () );
+            Reference< XRegistryKey > (),
+            "javavm" );
         Reference< XInterface > r2 = loadSharedLibComponentFactory(
             OUString(RTL_CONSTASCII_USTRINGPARAM("javaloader.uno" SAL_DLLEXTENSION)),
             OUString(),
             OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.stoc.JavaComponentLoader")),
             xSMgr,
-            Reference< XRegistryKey > () );
+            Reference< XRegistryKey > (),
+            "javaloader" );
         Reference <XSet> xSet( xSMgr, UNO_QUERY );
         if( r.is() && r2.is() && xSet.is() )
         {

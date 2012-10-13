@@ -48,6 +48,8 @@ $(eval $(call gb_UnpackedTarball_UnpackedTarball,boost))
 
 $(eval $(call gb_UnpackedTarball_set_tarball,boost,$(BOOST_TARBALL)))
 
+$(eval $(call gb_UnpackedTarball_set_patchlevel,boost,3))
+
 $(eval $(call gb_UnpackedTarball_add_patches,boost,\
 	$(foreach patch,$(boost_patches),boost/$(patch)) \
 ))

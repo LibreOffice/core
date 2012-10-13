@@ -34,15 +34,14 @@ class OFSInputStreamContainer : public cppu::WeakImplHelper2 < ::com::sun::star:
                                                             ,::com::sun::star::embed::XExtendedStorageStream >
                             , public ::com::sun::star::io::XSeekable
 {
-protected:
     ::osl::Mutex m_aMutex;
 
     ::com::sun::star::uno::Reference < ::com::sun::star::io::XInputStream > m_xInputStream;
     ::com::sun::star::uno::Reference < ::com::sun::star::io::XSeekable > m_xSeekable;
 
-    sal_Bool m_bSeekable;
+    bool m_bSeekable;
 
-    sal_Bool m_bDisposed;
+    bool m_bDisposed;
 
     ::cppu::OInterfaceContainerHelper* m_pListenersContainer; // list of listeners
 

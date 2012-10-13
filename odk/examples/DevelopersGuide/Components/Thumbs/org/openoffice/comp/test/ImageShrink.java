@@ -41,12 +41,6 @@ package org.openoffice.comp.test;
  * Created on 4. Mai 2002, 20:25
  */
 
-
-/**
- *
- * @author  dschulten
- */
-
 import com.sun.star.lang.XSingleServiceFactory;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.comp.loader.FactoryHelper;

@@ -65,7 +65,7 @@ void ScSheetEventsObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
     }
 }
 
-sal_Int32 lcl_GetEventFromName( const rtl::OUString& aName )
+static sal_Int32 lcl_GetEventFromName( const rtl::OUString& aName )
 {
     for (sal_Int32 nEvent=0; nEvent<SC_SHEETEVENT_COUNT; ++nEvent)
         if ( aName == ScSheetEvents::GetEventName(nEvent) )

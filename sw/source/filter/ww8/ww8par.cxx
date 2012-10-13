@@ -959,7 +959,7 @@ long GetListFirstLineIndent(const SwNumFmt &rFmt)
     return nReverseListIndented;
 }
 
-long lcl_GetTrueMargin(const SvxLRSpaceItem &rLR, const SwNumFmt &rFmt,
+static long lcl_GetTrueMargin(const SvxLRSpaceItem &rLR, const SwNumFmt &rFmt,
     long &rFirstLinePos)
 {
     OSL_ENSURE( rFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_WIDTH_AND_POSITION,
@@ -4208,7 +4208,7 @@ void SwWW8ImplReader::ReadDocInfo()
     }
 }
 
-void lcl_createTemplateToProjectEntry( const uno::Reference< container::XNameContainer >& xPrjNameCache, const rtl::OUString& sTemplatePathOrURL, const rtl::OUString& sVBAProjName )
+static void lcl_createTemplateToProjectEntry( const uno::Reference< container::XNameContainer >& xPrjNameCache, const rtl::OUString& sTemplatePathOrURL, const rtl::OUString& sVBAProjName )
 {
     if ( xPrjNameCache.is() )
     {

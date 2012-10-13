@@ -36,7 +36,7 @@
 #include <svx/drawitem.hxx>
 #include <vcl/msgbox.hxx>
 
-ScDataBarSettingsDlg::ScDataBarSettingsDlg(Window* pWindow, ScDocument* pDoc):
+ScDataBarSettingsDlg::ScDataBarSettingsDlg(Window* pWindow, ScDocument* pDoc, const ScAddress& rPos):
     ModalDialog( pWindow, ScResId( RID_SCDLG_DATABAR ) ),
     maBtnOk( this, ScResId( BTN_OK ) ),
     maBtnCancel( this, ScResId( BTN_CANCEL ) ),
@@ -57,84 +57,45 @@ ScDataBarSettingsDlg::ScDataBarSettingsDlg(Window* pWindow, ScDocument* pDoc):
     maLbAxisPos( this, ScResId( LB_AXIS_POSITION ) ),
     maEdMin( this, ScResId( ED_MIN ) ),
     maEdMax( this, ScResId( ED_MAX ) ),
-    mpNumberFormatter( pDoc->GetFormatTable() )
+    mpNumberFormatter( pDoc->GetFormatTable() ),
+    mpDoc(pDoc),
+    maPos(rPos)
 {
     Init();
     FreeResource();
 
     maLbTypeMin.SelectEntryPos(0);
-    maLbTypeMax.SelectEntryPos(1);
+    maLbTypeMax.SelectEntryPos(0);
     maLbAxisPos.SelectEntryPos(0);
 }
 
 namespace {
 
-void SetType(const ScColorScaleEntry* pEntry, ListBox& aLstBox)
+void SetType(const ScColorScaleEntry* pEntry, ListBox& rLstBox)
 {
-    switch(pEntry->GetType())
-    {
-        case COLORSCALE_MIN:
-            aLstBox.SelectEntryPos(0);
-            break;
-        case COLORSCALE_MAX:
-            aLstBox.SelectEntryPos(1);
-            break;
-        case COLORSCALE_PERCENTILE:
-            aLstBox.SelectEntryPos(2);
-            break;
-        case COLORSCALE_PERCENT:
-            aLstBox.SelectEntryPos(3);
-            break;
-        case COLORSCALE_FORMULA:
-            aLstBox.SelectEntryPos(5);
-            break;
-        case COLORSCALE_VALUE:
-            aLstBox.SelectEntryPos(4);
-            break;
-        case COLORSCALE_AUTOMIN:
-            aLstBox.SelectEntryPos(6);
-            break;
-        case COLORSCALE_AUTOMAX:
-            aLstBox.SelectEntryPos(7);
-            break;
-    }
+    rLstBox.SelectEntryPos(pEntry->GetType());
 }
 
-void GetType(const ListBox& rLstBox, const Edit& rEd, ScColorScaleEntry* pEntry, SvNumberFormatter* pNumberFormatter )
+void GetType(const ListBox& rLstBox, const Edit& rEd, ScColorScaleEntry* pEntry, SvNumberFormatter* pNumberFormatter,
+        ScDocument* pDoc, const ScAddress& rPos )
 {
     double nVal = 0;
     sal_uInt32 nIndex = 0;
+    pEntry->SetType(static_cast<ScColorScaleEntryType>(rLstBox.GetSelectEntryPos()));
     switch(rLstBox.GetSelectEntryPos())
     {
-        case 0:
-            pEntry->SetType(COLORSCALE_MIN);
+        case COLORSCALE_AUTO:
+        case COLORSCALE_MIN:
+        case COLORSCALE_MAX:
             break;
-        case 1:
-            pEntry->SetType(COLORSCALE_MAX);
-            break;
-        case 2:
-            pEntry->SetType(COLORSCALE_PERCENTILE);
+        case COLORSCALE_PERCENTILE:
+        case COLORSCALE_VALUE:
+        case COLORSCALE_PERCENT:
             pNumberFormatter->IsNumberFormat( rEd.GetText(), nIndex, nVal );
             pEntry->SetValue(nVal);
             break;
-        case 3:
-            pEntry->SetType(COLORSCALE_PERCENT);
-            pNumberFormatter->IsNumberFormat( rEd.GetText(), nIndex, nVal );
-            pEntry->SetValue(nVal);
-            break;
-        case 4:
-            pNumberFormatter->IsNumberFormat( rEd.GetText(), nIndex, nVal );
-            pEntry->SetType(COLORSCALE_VALUE);
-            pEntry->SetValue(nVal);
-            break;
-        case 5:
-            //TODO: moggi
-            break;
-        case 6:
-            pEntry->SetType(COLORSCALE_AUTOMIN);
-            break;
-        case 7:
-            pEntry->SetType(COLORSCALE_AUTOMAX);
+        case COLORSCALE_FORMULA:
+            pEntry->SetFormula(rEd.GetText(), pDoc, rPos);
             break;
     }
 }
@@ -151,7 +112,7 @@ void SetValue( ScColorScaleEntry* pEntry, Edit& aEdit)
 
 }
 
-ScDataBarSettingsDlg::ScDataBarSettingsDlg(Window* pWindow, const ScDataBarFormatData& rData, ScDocument* pDoc):
+ScDataBarSettingsDlg::ScDataBarSettingsDlg(Window* pWindow, const ScDataBarFormatData& rData, ScDocument* pDoc, const ScAddress& rPos):
     ModalDialog( pWindow, ScResId( RID_SCDLG_DATABAR ) ),
     maBtnOk( this, ScResId( BTN_OK ) ),
     maBtnCancel( this, ScResId( BTN_CANCEL ) ),
@@ -173,7 +134,9 @@ ScDataBarSettingsDlg::ScDataBarSettingsDlg(Window* pWindow, const ScDataBarForma
     maEdMin( this, ScResId( ED_MIN ) ),
     maEdMax( this, ScResId( ED_MAX ) ),
     maStrWarnSameValue( SC_RESSTR( STR_WARN_SAME_VALUE ) ),
-    mpNumberFormatter( pDoc->GetFormatTable() )
+    mpNumberFormatter( pDoc->GetFormatTable() ),
+    mpDoc(pDoc),
+    maPos(rPos)
 {
     Init();
     FreeResource();
@@ -282,8 +245,8 @@ ScDataBarFormatData* ScDataBarSettingsDlg::GetData()
     pData->mpLowerLimit.reset(new ScColorScaleEntry());
     pData->maAxisColor = maLbAxisCol.GetSelectEntryColor();
 
-    ::GetType(maLbTypeMin, maEdMin, pData->mpLowerLimit.get(), mpNumberFormatter);
-    ::GetType(maLbTypeMax, maEdMax, pData->mpUpperLimit.get(), mpNumberFormatter);
+    ::GetType(maLbTypeMin, maEdMin, pData->mpLowerLimit.get(), mpNumberFormatter, mpDoc, maPos);
+    ::GetType(maLbTypeMax, maEdMax, pData->mpUpperLimit.get(), mpNumberFormatter, mpDoc, maPos);
     GetAxesPosition(pData, maLbAxisPos);
 
     return pData;
@@ -294,15 +257,15 @@ IMPL_LINK_NOARG( ScDataBarSettingsDlg, OkBtnHdl )
     //check that min < max
     bool bWarn = false;
     sal_Int32 nSelectMin = maLbTypeMin.GetSelectEntryPos();
-    if( nSelectMin == 1 || nSelectMin == 7)
+    if( nSelectMin == COLORSCALE_MAX )
         bWarn = true;
     sal_Int32 nSelectMax = maLbTypeMax.GetSelectEntryPos();
-    if( nSelectMax == 0 || nSelectMax == 6 )
+    if( nSelectMax == COLORSCALE_MIN )
         bWarn = true;
 
     if(!bWarn && maLbTypeMin.GetSelectEntryPos() == maLbTypeMax.GetSelectEntryPos())
     {
-        if(maLbTypeMax.GetSelectEntryPos() != 5)
+        if(maLbTypeMax.GetSelectEntryPos() != COLORSCALE_FORMULA)
         {
             rtl::OUString aMinString = maEdMin.GetText();
             rtl::OUString aMaxString = maEdMax.GetText();
@@ -333,14 +296,14 @@ IMPL_LINK_NOARG( ScDataBarSettingsDlg, OkBtnHdl )
 IMPL_LINK_NOARG( ScDataBarSettingsDlg, TypeSelectHdl )
 {
     sal_Int32 nSelectMin = maLbTypeMin.GetSelectEntryPos();
-    if( nSelectMin == 0 || nSelectMin == 1 || nSelectMin == 6 || nSelectMin == 7)
+    if( nSelectMin <= COLORSCALE_MAX)
         maEdMin.Disable();
     else
     {
         maEdMin.Enable();
         if(!maEdMin.GetText().Len())
         {
-            if(nSelectMin == 2 || nSelectMin == 3)
+            if(nSelectMin == COLORSCALE_PERCENTILE || nSelectMin == COLORSCALE_PERCENT)
                 maEdMin.SetText(rtl::OUString::valueOf(static_cast<sal_Int32>(50)));
             else
                 maEdMin.SetText(rtl::OUString::valueOf(static_cast<sal_Int32>(0)));
@@ -348,14 +311,14 @@ IMPL_LINK_NOARG( ScDataBarSettingsDlg, TypeSelectHdl )
     }
 
     sal_Int32 nSelectMax = maLbTypeMax.GetSelectEntryPos();
-    if(nSelectMax == 0 || nSelectMax == 1 || nSelectMax == 6 || nSelectMax == 7)
+    if(nSelectMax <= COLORSCALE_MAX)
         maEdMax.Disable();
     else
     {
         maEdMax.Enable();
         if(!maEdMax.GetText().Len())
         {
-            if(nSelectMax == 2 || nSelectMax == 3)
+            if(nSelectMax == COLORSCALE_PERCENTILE || nSelectMax == COLORSCALE_PERCENT)
                 maEdMax.SetText(rtl::OUString::valueOf(static_cast<sal_Int32>(50)));
             else
                 maEdMax.SetText(rtl::OUString::valueOf(static_cast<sal_Int32>(0)));

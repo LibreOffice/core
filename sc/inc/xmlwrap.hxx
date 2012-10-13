@@ -38,7 +38,7 @@ namespace com { namespace sun { namespace star {
     namespace uno { class XInterface; }
     namespace embed { class XStorage; }
     namespace xml {
-        namespace sax { struct InputSource; } }
+        namespace sax { struct InputSource; class XParser; } }
 } } }
 
 class ScXMLImportWrapper
@@ -51,7 +51,7 @@ class ScXMLImportWrapper
 
     sal_uInt32 ImportFromComponent(com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory>& xServiceFactory,
         com::sun::star::uno::Reference<com::sun::star::frame::XModel>& xModel,
-        com::sun::star::uno::Reference<com::sun::star::uno::XInterface>& xXMLParser,
+        com::sun::star::uno::Reference<com::sun::star::xml::sax::XParser>& xParser,
         com::sun::star::xml::sax::InputSource& aParserInput,
         const rtl::OUString& sComponentName, const rtl::OUString& sDocName, const rtl::OUString& sOldDocName,
         com::sun::star::uno::Sequence<com::sun::star::uno::Any>& aArgs,

@@ -15,6 +15,8 @@ $(eval $(call gb_CliUnoApi_set_assembly_version,cli_uretypes,$(CLI_URETYPES_NEW_
 
 $(eval $(call gb_CliUnoApi_set_configfile,cli_uretypes,cli_ure/unotypes/cli_uretypes_config))
 
+$(eval $(call gb_CliUnoApi_set_keyfile,cli_uretypes,$(SRCDIR)/cli_ure/source/cliuno.snk))
+
 $(eval $(call gb_CliUnoApi_set_policy,cli_uretypes,$(CLI_URETYPES_POLICY_ASSEMBLY),$(CLI_URETYPES_POLICY_VERSION)))
 
 $(eval $(call gb_CliUnoApi_wrap_api,cli_uretypes,udkapi))

@@ -45,6 +45,7 @@
 #include <unotools/transliterationwrapper.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>
+#include <comphelper/componentcontext.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/string.hxx>
@@ -58,7 +59,7 @@
 #include "vcl/window.hxx"
 #include <helpid.hrc>
 #include <com/sun/star/xml/sax/InputSource.hpp>
-#include <com/sun/star/xml/sax/XParser.hpp>
+#include <com/sun/star/xml/sax/Parser.hpp>
 #include <unotools/streamwrap.hxx>
 #include <SvXMLAutoCorrectImport.hxx>
 #include <SvXMLAutoCorrectExport.hxx>
@@ -2003,21 +2004,11 @@ void SvxAutoCorrectLanguageLists::LoadXMLExceptList_Imp(
                 xStrm->SetBufferSize( 8 * 1024 );
                 aParserInput.aInputStream = new utl::OInputStreamWrapper( *xStrm );
 
-                // get parser
-                uno::Reference< XInterface > xXMLParser = xServiceFactory->createInstance(
-                    OUString("com.sun.star.xml.sax.Parser") );
-                OSL_ENSURE( xXMLParser.is(),
-                    "XMLReader::Read: com.sun.star.xml.sax.Parser service missing" );
-                if( !xXMLParser.is() )
-                {
-                    // Maybe throw an exception?
-                }
-
                 // get filter
                 uno::Reference< xml::sax::XDocumentHandler > xFilter = new SvXMLExceptionListImport ( xServiceFactory, *rpLst );
 
                 // connect parser and filter
-                uno::Reference< xml::sax::XParser > xParser( xXMLParser, UNO_QUERY );
+                uno::Reference< xml::sax::XParser > xParser = xml::sax::Parser::create( comphelper::getComponentContext(xServiceFactory) );
                 xParser->setDocumentHandler( xFilter );
 
                 // parse
@@ -2130,26 +2121,22 @@ SvxAutocorrWordList* SvxAutoCorrectLanguageLists::LoadAutocorrWordList()
         String aXMLWordListName( pXMLImplAutocorr_ListStr, RTL_TEXTENCODING_MS_1252 );
         uno::Reference < io::XStream > xStrm = xStg->openStreamElement( aXMLWordListName, embed::ElementModes::READ );
         uno::Reference< lang::XMultiServiceFactory > xServiceFactory = comphelper::getProcessServiceFactory();
+        uno::Reference< uno::XComponentContext > xContext = comphelper::getProcessComponentContext();
 
         xml::sax::InputSource aParserInput;
         aParserInput.sSystemId = aXMLWordListName;
         aParserInput.aInputStream = xStrm->getInputStream();
 
         // get parser
-        uno::Reference< XInterface > xXMLParser = xServiceFactory->createInstance( OUString("com.sun.star.xml.sax.Parser") );
-        OSL_ENSURE( xXMLParser.is(), "XMLReader::Read: com.sun.star.xml.sax.Parser service missing" );
-        if( xXMLParser.is() )
-        {
-            RTL_LOGFILE_PRODUCT_CONTEXT( aLog, "AutoCorrect Import" );
-            uno::Reference< xml::sax::XDocumentHandler > xFilter = new SvXMLAutoCorrectImport( xServiceFactory, pAutocorr_List, rAutoCorrect, xStg );
+        uno::Reference< xml::sax::XParser > xParser = xml::sax::Parser::create(xContext);
+        RTL_LOGFILE_PRODUCT_CONTEXT( aLog, "AutoCorrect Import" );
+        uno::Reference< xml::sax::XDocumentHandler > xFilter = new SvXMLAutoCorrectImport( xServiceFactory, pAutocorr_List, rAutoCorrect, xStg );
 
-            // connect parser and filter
-            uno::Reference< xml::sax::XParser > xParser( xXMLParser, UNO_QUERY );
-            xParser->setDocumentHandler( xFilter );
+        // connect parser and filter
+        xParser->setDocumentHandler( xFilter );
 
-            // parse
-            xParser->parseStream( aParserInput );
-        }
+        // parse
+        xParser->parseStream( aParserInput );
     }
     catch ( const uno::Exception& )
     {

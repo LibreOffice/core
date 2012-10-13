@@ -270,6 +270,7 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/system,\
 	SystemShellExecute \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/task,\
+	InteractionHandler \
 	InteractionRequestStringResolver \
 	JobExecutor \
 	OfficeRestartManager \
@@ -316,6 +317,7 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/xml/dom,\
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/xml/sax,\
 	FastShapeContextHandler \
 	FastTokenHandler \
+	Parser \
 ))
 
 
@@ -657,7 +659,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/drawing
 	HatchTable \
 	Layer \
 	LayerManager \
-	LineCap \
 	LineProperties \
 	LineShape \
 	MarkerTable \
@@ -1218,7 +1219,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/table,\
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/task,\
 	AsyncJob \
-	InteractionHandler \
 	Job \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/text,\
@@ -2131,6 +2131,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/document,\
 	UpdateDocMode \
 	XActionLockable \
 	XBinaryStreamResolver \
+	XCmisDocument \
 	XCodeNameQuery \
 	XCompatWriterDocProperties \
 	XDocumentEventBroadcaster \
@@ -2221,6 +2222,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/drawing,\
 	HomogenMatrixLine4 \
 	HorizontalDimensioning \
 	LayerType \
+	LineCap \
 	LineDash \
 	LineEndType \
 	LineJoint \

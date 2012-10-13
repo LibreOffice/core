@@ -113,12 +113,12 @@ public:
     void                Paste();
     void                Delete();
     void                SelectAll();
-    void                InsertText(const String &rText);
+    void                InsertText(const OUString &rText);
     void                InsertCommand(sal_uInt16 nCommand);
     void                MarkError(const Point &rPos);
     void                SelNextMark();
     void                SelPrevMark();
-    bool                HasMark(const String &rText) const;
+    bool                HasMark(const OUString &rText) const;
 
     void                Flush();
     void                DeleteEditView( SmViewShell &rView );

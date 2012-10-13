@@ -18,10 +18,6 @@
 
 import com.sun.star.beans.*;
 
-/**
- *
- * @author  fs@openoffice.org
- */
 public class ControlValidation extends DocumentBasedExample
 {
     /** Creates a new instance of ControlValidation */

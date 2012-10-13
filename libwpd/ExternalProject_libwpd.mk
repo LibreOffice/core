@@ -17,11 +17,22 @@ $(eval $(call gb_ExternalProject_register_targets,libwpd,\
 
 ifeq ($(OS)$(COM),WNTMSC)
 
+ifeq ($(VCVER),90)
 $(call gb_ExternalProject_get_state_target,libwpd,build) :
 	cd $(EXTERNAL_WORKDIR)/build/win32 \
 	&& $(COMPATH)/vcpackages/vcbuild.exe libwpd.vcproj "Release|Win32" \
 	&& touch $@
-
+else ifeq ($(VCVER),100)
+$(call gb_ExternalProject_get_state_target,libwpd,build) :
+	cd $(EXTERNAL_WORKDIR)/build/win32 \
+	&& msbuild.exe libwpd.vcxproj /p:Configuration=Release \
+	&& touch $@
+else
+$(call gb_ExternalProject_get_state_target,libwpd,build) :
+	cd $(EXTERNAL_WORKDIR)/build/win32 \
+	&& msbuild.exe libwpd.vcxproj /p:PlatformToolset=v110 /p:TargetName=libwpd-0.9 /p:Configuration=Release \
+	&& touch $@
+endif
 else
 
 $(call gb_ExternalProject_get_state_target,libwpd,build) :

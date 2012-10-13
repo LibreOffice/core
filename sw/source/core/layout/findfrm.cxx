@@ -293,7 +293,7 @@ bool SwLayoutFrm::IsBefore( const SwLayoutFrm* _pCheckRefLayFrm ) const
 // Local helper functions for GetNextLayoutLeaf
 //
 
-const SwFrm* lcl_FindLayoutFrame( const SwFrm* pFrm, bool bNext )
+static const SwFrm* lcl_FindLayoutFrame( const SwFrm* pFrm, bool bNext )
 {
     const SwFrm* pRet = 0;
     if ( pFrm->IsFlyFrm() )
@@ -304,7 +304,7 @@ const SwFrm* lcl_FindLayoutFrame( const SwFrm* pFrm, bool bNext )
     return pRet;
 }
 
-const SwFrm* lcl_GetLower( const SwFrm* pFrm, bool bFwd )
+static const SwFrm* lcl_GetLower( const SwFrm* pFrm, bool bFwd )
 {
     if ( !pFrm->IsLayoutFrm() )
         return 0;
@@ -654,7 +654,7 @@ const SwAttrSet* SwFrm::GetAttrSet() const
 
 // This helper function is an equivalent to the ImplGetNextCntntFrm() method,
 // besides ContentFrames this function also returns TabFrms and SectionFrms.
-SwFrm* lcl_NextFrm( SwFrm* pFrm )
+static SwFrm* lcl_NextFrm( SwFrm* pFrm )
 {
     SwFrm *pRet = 0;
     sal_Bool bGoingUp = sal_False;
@@ -1248,7 +1248,7 @@ void SwFrm::InvalidateNextPrtArea()
 |* but not if it sits in a table which itself sits in a section with columns.
 |*************************************************************************/
 
-sal_Bool lcl_IsInColSct( const SwFrm *pUp )
+static sal_Bool lcl_IsInColSct( const SwFrm *pUp )
 {
     sal_Bool bRet = sal_False;
     while( pUp )
@@ -1454,7 +1454,7 @@ SwLayoutFrm* SwFrm::GetPrevCellLeaf( MakePageType )
     return ((SwCellFrm*)pTmpFrm)->GetPreviousCell();
 }
 
-SwCellFrm* lcl_FindCorrespondingCellFrm( const SwRowFrm& rOrigRow,
+static SwCellFrm* lcl_FindCorrespondingCellFrm( const SwRowFrm& rOrigRow,
                                          const SwCellFrm& rOrigCell,
                                          const SwRowFrm& rCorrRow,
                                          bool bInFollow )

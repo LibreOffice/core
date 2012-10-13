@@ -56,13 +56,12 @@ using namespace ::chart::ContainerHelper;
 
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
-using ::rtl::OUString;
 
 // ----------------------------------------
 
 namespace
 {
-const OUString lcl_aLabelRole( RTL_CONSTASCII_USTRINGPARAM( "label" ));
+const OUString lcl_aLabelRole( "label" );
 
 struct lcl_ChartTypeToSeriesCnt : ::std::unary_function<
         Reference< XChartType >, Reference< XDataSeriesContainer > >
@@ -83,21 +82,21 @@ OUString lcl_ConvertRole( const OUString & rRoleString, bool bFromInternalToUI )
 
     if( aTranslationMap.empty() )
     {
-        aTranslationMap[ C2U( "categories" ) ] =   OUString( String( ::chart::SchResId( STR_DATA_ROLE_CATEGORIES )));
-        aTranslationMap[ C2U( "error-bars-x" ) ] = OUString( String( ::chart::SchResId( STR_DATA_ROLE_X_ERROR )));
-        aTranslationMap[ C2U( "error-bars-x-positive" ) ] = OUString( String( ::chart::SchResId( STR_DATA_ROLE_X_ERROR_POSITIVE )));
-        aTranslationMap[ C2U( "error-bars-x-negative" ) ] = OUString( String( ::chart::SchResId( STR_DATA_ROLE_X_ERROR_NEGATIVE )));
-        aTranslationMap[ C2U( "error-bars-y" ) ] = OUString( String( ::chart::SchResId( STR_DATA_ROLE_Y_ERROR )));
-        aTranslationMap[ C2U( "error-bars-y-positive" ) ] = OUString( String( ::chart::SchResId( STR_DATA_ROLE_Y_ERROR_POSITIVE )));
-        aTranslationMap[ C2U( "error-bars-y-negative" ) ] = OUString( String( ::chart::SchResId( STR_DATA_ROLE_Y_ERROR_NEGATIVE )));
-        aTranslationMap[ C2U( "label" ) ] =        OUString( String( ::chart::SchResId( STR_DATA_ROLE_LABEL )));
-        aTranslationMap[ C2U( "values-first" ) ] = OUString( String( ::chart::SchResId( STR_DATA_ROLE_FIRST )));
-        aTranslationMap[ C2U( "values-last" ) ] =  OUString( String( ::chart::SchResId( STR_DATA_ROLE_LAST )));
-        aTranslationMap[ C2U( "values-max" ) ] =   OUString( String( ::chart::SchResId( STR_DATA_ROLE_MAX )));
-        aTranslationMap[ C2U( "values-min" ) ] =   OUString( String( ::chart::SchResId( STR_DATA_ROLE_MIN )));
-        aTranslationMap[ C2U( "values-x" ) ] =     OUString( String( ::chart::SchResId( STR_DATA_ROLE_X )));
-        aTranslationMap[ C2U( "values-y" ) ] =     OUString( String( ::chart::SchResId( STR_DATA_ROLE_Y )));
-        aTranslationMap[ C2U( "values-size" ) ] =  OUString( String( ::chart::SchResId( STR_DATA_ROLE_SIZE )));
+        aTranslationMap[ "categories" ] =   OUString( String( ::chart::SchResId( STR_DATA_ROLE_CATEGORIES )));
+        aTranslationMap[ "error-bars-x" ] = OUString( String( ::chart::SchResId( STR_DATA_ROLE_X_ERROR )));
+        aTranslationMap[ "error-bars-x-positive" ] = OUString( String( ::chart::SchResId( STR_DATA_ROLE_X_ERROR_POSITIVE )));
+        aTranslationMap[ "error-bars-x-negative" ] = OUString( String( ::chart::SchResId( STR_DATA_ROLE_X_ERROR_NEGATIVE )));
+        aTranslationMap[ "error-bars-y" ] = OUString( String( ::chart::SchResId( STR_DATA_ROLE_Y_ERROR )));
+        aTranslationMap[ "error-bars-y-positive" ] = OUString( String( ::chart::SchResId( STR_DATA_ROLE_Y_ERROR_POSITIVE )));
+        aTranslationMap[ "error-bars-y-negative" ] = OUString( String( ::chart::SchResId( STR_DATA_ROLE_Y_ERROR_NEGATIVE )));
+        aTranslationMap[ "label" ] =        OUString( String( ::chart::SchResId( STR_DATA_ROLE_LABEL )));
+        aTranslationMap[ "values-first" ] = OUString( String( ::chart::SchResId( STR_DATA_ROLE_FIRST )));
+        aTranslationMap[ "values-last" ] =  OUString( String( ::chart::SchResId( STR_DATA_ROLE_LAST )));
+        aTranslationMap[ "values-max" ] =   OUString( String( ::chart::SchResId( STR_DATA_ROLE_MAX )));
+        aTranslationMap[ "values-min" ] =   OUString( String( ::chart::SchResId( STR_DATA_ROLE_MIN )));
+        aTranslationMap[ "values-x" ] =     OUString( String( ::chart::SchResId( STR_DATA_ROLE_X )));
+        aTranslationMap[ "values-y" ] =     OUString( String( ::chart::SchResId( STR_DATA_ROLE_Y )));
+        aTranslationMap[ "values-size" ] =  OUString( String( ::chart::SchResId( STR_DATA_ROLE_SIZE )));
     }
 
     if( bFromInternalToUI )
@@ -124,28 +123,28 @@ OUString lcl_ConvertRole( const OUString & rRoleString, bool bFromInternalToUI )
     return aResult;
 }
 
-typedef ::std::map< ::rtl::OUString, sal_Int32 > lcl_tRoleIndexMap;
+typedef ::std::map< OUString, sal_Int32 > lcl_tRoleIndexMap;
 
 void lcl_createRoleIndexMap( lcl_tRoleIndexMap & rOutMap )
 {
     rOutMap.clear();
     sal_Int32 nIndex = 0;
 
-    rOutMap[ C2U( "label" ) ] =                 ++nIndex;
-    rOutMap[ C2U( "categories" ) ] =            ++nIndex;
-    rOutMap[ C2U( "values-x" ) ] =              ++nIndex;
-    rOutMap[ C2U( "values-y" ) ] =              ++nIndex;
-    rOutMap[ C2U( "error-bars-x" ) ] =          ++nIndex;
-    rOutMap[ C2U( "error-bars-x-positive" ) ] = ++nIndex;
-    rOutMap[ C2U( "error-bars-x-negative" ) ] = ++nIndex;
-    rOutMap[ C2U( "error-bars-y" ) ] =          ++nIndex;
-    rOutMap[ C2U( "error-bars-y-positive" ) ] = ++nIndex;
-    rOutMap[ C2U( "error-bars-y-negative" ) ] = ++nIndex;
-    rOutMap[ C2U( "values-first" ) ] =          ++nIndex;
-    rOutMap[ C2U( "values-min" ) ] =            ++nIndex;
-    rOutMap[ C2U( "values-max" ) ] =            ++nIndex;
-    rOutMap[ C2U( "values-last" ) ] =           ++nIndex;
-    rOutMap[ C2U( "values-size" ) ] =           ++nIndex;
+    rOutMap[ "label" ] =                 ++nIndex;
+    rOutMap[ "categories" ] =            ++nIndex;
+    rOutMap[ "values-x" ] =              ++nIndex;
+    rOutMap[ "values-y" ] =              ++nIndex;
+    rOutMap[ "error-bars-x" ] =          ++nIndex;
+    rOutMap[ "error-bars-x-positive" ] = ++nIndex;
+    rOutMap[ "error-bars-x-negative" ] = ++nIndex;
+    rOutMap[ "error-bars-y" ] =          ++nIndex;
+    rOutMap[ "error-bars-y-positive" ] = ++nIndex;
+    rOutMap[ "error-bars-y-negative" ] = ++nIndex;
+    rOutMap[ "values-first" ] =          ++nIndex;
+    rOutMap[ "values-min" ] =            ++nIndex;
+    rOutMap[ "values-max" ] =            ++nIndex;
+    rOutMap[ "values-last" ] =           ++nIndex;
+    rOutMap[ "values-size" ] =           ++nIndex;
 }
 
 struct lcl_DataSeriesContainerAppend : public
@@ -164,7 +163,7 @@ struct lcl_DataSeriesContainerAppend : public
             if( xVal.is())
             {
                 Sequence< Reference< XDataSeries > > aSeq( xVal->getDataSeries());
-                OUString aRole( RTL_CONSTASCII_USTRINGPARAM("values-y"));
+                OUString aRole( "values-y" );
                 Reference< XChartType > xCT( xVal, uno::UNO_QUERY );
                 if( xCT.is())
                     aRole = xCT->getRoleOfSequenceForSeriesLabel();
@@ -187,6 +186,7 @@ struct lcl_DataSeriesContainerAppend : public
     lcl_DataSeriesContainerAppend & operator* ()     { return *this; }
     lcl_DataSeriesContainerAppend & operator++ ()    { return *this; }
     lcl_DataSeriesContainerAppend & operator++ (int) { return *this; }
+    lcl_DataSeriesContainerAppend & operator= ( lcl_DataSeriesContainerAppend& ) { return *this; }
 
 private:
     tContainerType & m_rDestCnt;
@@ -198,7 +198,7 @@ struct lcl_RolesWithRangeAppend : public
     typedef ::chart::DialogModel::tRolesWithRanges tContainerType;
 
     explicit lcl_RolesWithRangeAppend( tContainerType & rCnt,
-                                       const ::rtl::OUString & aLabelRole )
+                                       const OUString & aLabelRole )
             : m_rDestCnt( rCnt ),
               m_aRoleForLabelSeq( aLabelRole )
     {}
@@ -215,7 +215,7 @@ struct lcl_RolesWithRangeAppend : public
                 {
                     OUString aRole;
                     Reference< beans::XPropertySet > xProp( xSeq, uno::UNO_QUERY_THROW );
-                    if( xProp->getPropertyValue( C2U("Role")) >>= aRole )
+                    if( xProp->getPropertyValue( "Role") >>= aRole )
                     {
                         m_rDestCnt.insert(
                             tContainerType::value_type(
@@ -245,6 +245,7 @@ struct lcl_RolesWithRangeAppend : public
     lcl_RolesWithRangeAppend & operator* ()     { return *this; }
     lcl_RolesWithRangeAppend & operator++ ()    { return *this; }
     lcl_RolesWithRangeAppend & operator++ (int) { return *this; }
+    lcl_RolesWithRangeAppend & operator= ( lcl_RolesWithRangeAppend& ) { return *this; }
 
 private:
     tContainerType & m_rDestCnt;
@@ -257,7 +258,7 @@ void lcl_SetSequenceRole(
 {
     Reference< beans::XPropertySet > xProp( xSeq, uno::UNO_QUERY );
     if( xProp.is())
-        xProp->setPropertyValue( C2U("Role"), uno::makeAny( rRole ));
+        xProp->setPropertyValue( "Role" , uno::makeAny( rRole ));
 }
 
 Reference< XDataSeries > lcl_CreateNewSeries(
@@ -272,7 +273,7 @@ Reference< XDataSeries > lcl_CreateNewSeries(
     // create plain series
     Reference< XDataSeries > xResult(
         xContext->getServiceManager()->createInstanceWithContext(
-            C2U( "com.sun.star.chart2.DataSeries" ),
+            "com.sun.star.chart2.DataSeries" ,
             xContext ), uno::UNO_QUERY );
     if( xTemplate.is())
     {
@@ -283,8 +284,7 @@ Reference< XDataSeries > lcl_CreateNewSeries(
             // without setting it as hard attribute
             Reference< XColorScheme > xColorScheme( xDiagram->getDefaultColorScheme());
             if( xColorScheme.is())
-                xResultProp->setPropertyValue(
-                    C2U("Color"), uno::makeAny( xColorScheme->getColorByIndex( nNewSeriesIndex )));
+                xResultProp->setPropertyValue( "Color" , uno::makeAny( xColorScheme->getColorByIndex( nNewSeriesIndex )));
         }
         sal_Int32 nGroupIndex=0;
         if( xChartType.is())
@@ -456,7 +456,7 @@ Reference< data::XDataProvider > DialogModel::getDataProvider() const
 
 DialogModel::tRolesWithRanges DialogModel::getRolesWithRanges(
     const Reference< XDataSeries > & xSeries,
-    const ::rtl::OUString & aRoleOfSequenceForLabel,
+    const OUString & aRoleOfSequenceForLabel,
     const Reference< chart2::XChartType > & xChartType ) const
 {
     DialogModel::tRolesWithRanges aResult;
@@ -724,7 +724,7 @@ OUString DialogModel::GetRoleDataLabel()
     return OUString( String( ::chart::SchResId( STR_OBJECT_DATALABELS )));
 }
 
-sal_Int32 DialogModel::GetRoleIndexForSorting( const ::rtl::OUString & rInternalRoleString )
+sal_Int32 DialogModel::GetRoleIndexForSorting( const OUString & rInternalRoleString )
 {
     static lcl_tRoleIndexMap aRoleIndexMap;
 
@@ -776,8 +776,8 @@ void DialogModel::applyInterpretedData(
                             // without setting it as hard attribute
                             Reference< XColorScheme > xColorScheme( xDiagram->getDefaultColorScheme());
                             if( xColorScheme.is())
-                                xSeriesProp->setPropertyValue(
-                                    C2U("Color"), uno::makeAny( xColorScheme->getColorByIndex( nSeriesCounter )));
+                                xSeriesProp->setPropertyValue( "Color" ,
+                                    uno::makeAny( xColorScheme->getColorByIndex( nSeriesCounter )));
                         }
                         m_xTemplate->applyStyle( aSeries[nSeries], nGroup, nNewSeriesIndex++, nSeriesInGroup );
                     }

@@ -83,7 +83,7 @@ using namespace nsSwDocInfoSubType;
 
 extern sal_Bool bNoInterrupt;       // in mainwn.cxx
 
-String& lcl_AppendRedlineStr( String& rStr, sal_uInt16 nRedlId )
+static String& lcl_AppendRedlineStr( String& rStr, sal_uInt16 nRedlId )
 {
     sal_uInt16 nResId = 0;
     switch( nRedlId )

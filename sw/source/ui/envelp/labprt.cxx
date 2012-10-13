@@ -142,7 +142,7 @@ void SwLabPrtPage::FillItem(SwLabItem& rItem)
 sal_Bool SwLabPrtPage::FillItemSet(SfxItemSet& rSet)
 {
     SwLabItem aItem;
-    GetParent()->GetLabItem(aItem);
+    GetParentSwLabDlg()->GetLabItem(aItem);
     FillItem(aItem);
     rSet.Put(aItem);
 
@@ -152,7 +152,7 @@ sal_Bool SwLabPrtPage::FillItemSet(SfxItemSet& rSet)
 void SwLabPrtPage::Reset(const SfxItemSet& )
 {
     SwLabItem aItem;
-    GetParent()->GetLabItem(aItem);
+    GetParentSwLabDlg()->GetLabItem(aItem);
 
     aColField.SetValue   (aItem.nCol);
     aRowField.SetValue   (aItem.nRow);

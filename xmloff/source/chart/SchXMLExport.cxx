@@ -1163,7 +1163,7 @@ void SchXMLExportHelper_Impl::exportChart( Reference< chart::XChartDocument > rC
     DBG_ASSERT( maAutoStyleNameQueue.empty(), "There are still remaining autostyle names in the queue" );
 }
 
-::rtl::OUString lcl_GetStringFromNumberSequence( const ::com::sun::star::uno::Sequence< sal_Int32 >& rSequenceMapping, bool bRemoveOneFromEachIndex /*should be true if having categories*/ )
+static ::rtl::OUString lcl_GetStringFromNumberSequence( const ::com::sun::star::uno::Sequence< sal_Int32 >& rSequenceMapping, bool bRemoveOneFromEachIndex /*should be true if having categories*/ )
 {
     const sal_Int32* pArray = rSequenceMapping.getConstArray();
     const sal_Int32 nSize = rSequenceMapping.getLength();
@@ -1622,7 +1622,7 @@ void SchXMLExportHelper_Impl::parseDocument( Reference< chart::XChartDocument >&
         delete pElChart;
 }
 
-void lcl_exportComplexLabel( const Sequence< uno::Any >& rComplexLabel, SvXMLExport& rExport )
+static void lcl_exportComplexLabel( const Sequence< uno::Any >& rComplexLabel, SvXMLExport& rExport )
 {
     sal_Int32 nLength = rComplexLabel.getLength();
     if( nLength<=1 )

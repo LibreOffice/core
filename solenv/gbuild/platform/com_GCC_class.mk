@@ -60,6 +60,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(if $(filter Library,$(TARGETTYPE)),$(gb_Library_LTOFLAGS)) \
 		$(if $(VISIBILITY),,$(gb_VISIBILITY_FLAGS)) \
 		$(if $(WARNINGS_NOT_ERRORS),,$(gb_CFLAGS_WERROR)) \
+		$(if $(COMPILER_PLUGINS),$(gb_COMPILER_PLUGINS)) \
 		$(T_CFLAGS) \
 		-c $(3) \
 		-o $(1) \
@@ -82,6 +83,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(if $(filter Library,$(TARGETTYPE)),$(gb_Library_LTOFLAGS)) \
 		$(if $(VISIBILITY),,$(gb_VISIBILITY_FLAGS)) \
 		$(if $(WARNINGS_NOT_ERRORS),,$(gb_CXXFLAGS_WERROR)) \
+		$(if $(COMPILER_PLUGINS),$(gb_COMPILER_PLUGINS)) \
 		$(T_CXXFLAGS) \
 		-c $(3) \
 		-o $(1) \

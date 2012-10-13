@@ -162,7 +162,7 @@ sal_uInt16 DynamicErrorInfo::GetDialogMask() const
 }
 
 StringErrorInfo::StringErrorInfo(
-    sal_uIntPtr UserId, const String& aStringP,  sal_uInt16 nFlags)
+    sal_uIntPtr UserId, const OUString& aStringP,  sal_uInt16 nFlags)
 : DynamicErrorInfo(UserId, nFlags), aString(aStringP)
 {
 }
@@ -172,10 +172,10 @@ class ErrHdl_Impl
 public:
     ErrorHandler        *pNext;
     static sal_Bool         CreateString(const ErrorHandler *pStart,
-                                     const ErrorInfo*, String&, sal_uInt16&);
+                                     const ErrorInfo*, OUString&, sal_uInt16&);
 };
 
-static void aDspFunc(const String &rErr, const String &rAction)
+static void aDspFunc(const OUString &rErr, const OUString &rAction)
 {
     rtl::OStringBuffer aErr(RTL_CONSTASCII_STRINGPARAM("Aktion: "));
     aErr.append(rtl::OUStringToOString(rAction, RTL_TEXTENCODING_ASCII_US));
@@ -261,10 +261,10 @@ void ErrorHandler::RegisterDisplay(BasicDisplayErrorFunc *aDsp)
     @return ???
 */
 sal_uInt16 ErrorHandler::HandleError_Impl(
-    sal_uIntPtr lId, sal_uInt16 nFlags, sal_Bool bJustCreateString, String & rError)
+    sal_uIntPtr lId, sal_uInt16 nFlags, sal_Bool bJustCreateString, OUString & rError)
 {
-    String aErr;
-    String aAction;
+    OUString aErr;
+    OUString aAction;
     if(!lId || lId == ERRCODE_ABORT)
         return 0;
     EDcrData *pData=EDcrData::GetData();
@@ -346,7 +346,7 @@ sal_uInt16 ErrorHandler::HandleError_Impl(
 }
 
 // static
-sal_Bool ErrorHandler::GetErrorString(sal_uIntPtr lId, String& rStr)
+sal_Bool ErrorHandler::GetErrorString(sal_uIntPtr lId, OUString& rStr)
 {
     return (sal_Bool)HandleError_Impl( lId, USHRT_MAX, sal_True, rStr );
 }
@@ -357,12 +357,12 @@ sal_Bool ErrorHandler::GetErrorString(sal_uIntPtr lId, String& rStr)
 */
 sal_uInt16 ErrorHandler::HandleError(sal_uIntPtr lId, sal_uInt16 nFlags)
 {
-    String aDummy;
+    OUString aDummy;
     return HandleError_Impl( lId, nFlags, sal_False, aDummy );
 }
 
 sal_Bool ErrHdl_Impl::CreateString( const ErrorHandler *pStart,
-                                    const ErrorInfo* pInfo, String& pStr,
+                                    const ErrorInfo* pInfo, OUString& pStr,
                                     sal_uInt16 &rFlags)
 {
     for(const ErrorHandler *pHdl=pStart;pHdl;pHdl=pHdl->pImpl->pNext)
@@ -374,7 +374,7 @@ sal_Bool ErrHdl_Impl::CreateString( const ErrorHandler *pStart,
 }
 
 sal_Bool SimpleErrorHandler::CreateString(
-    const ErrorInfo *pInfo, String &rStr, sal_uInt16 &) const
+    const ErrorInfo *pInfo, OUString &rStr, sal_uInt16 &) const
 {
     sal_uIntPtr nId = pInfo->GetErrorCode();
     rtl::OStringBuffer aStr(RTL_CONSTASCII_STRINGPARAM("Id "));

@@ -52,7 +52,7 @@
 #include <com/sun/star/sdb/SQLContext.hpp>
 #include <com/sun/star/sdbc/SQLWarning.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
-#include <com/sun/star/task/XInteractionHandler.hpp>
+#include <com/sun/star/task/InteractionHandler.hpp>
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>
@@ -847,15 +847,17 @@ void AssignmentPersistentData::Commit()
         m_aDatasource.SaveValue();
 
         // create an interaction handler (may be needed for connecting)
-        const rtl::OUString sInteractionHandlerServiceName("com.sun.star.task.InteractionHandler");
         Reference< XInteractionHandler > xHandler;
         try
         {
-            xHandler = Reference< XInteractionHandler >(m_xORB->createInstance(sInteractionHandlerServiceName), UNO_QUERY);
+            xHandler.set(
+                InteractionHandler::createWithParent(comphelper::getComponentContext(m_xORB), 0),
+                UNO_QUERY_THROW );
         }
         catch(Exception&) { }
         if (!xHandler.is())
         {
+            const rtl::OUString sInteractionHandlerServiceName("com.sun.star.task.InteractionHandler");
             ShowServiceNotAvailableError(this, sInteractionHandlerServiceName, sal_True);
             return;
         }

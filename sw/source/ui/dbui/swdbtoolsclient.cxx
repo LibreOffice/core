@@ -94,7 +94,15 @@ SwDbtoolsClient::~SwDbtoolsClient()
     }
 }
 
+#ifndef DISABLE_DYNLOADING
+
 extern "C" { static void SAL_CALL thisModule() {} }
+
+#else
+
+extern "C" void * createDataAccessToolsFactory();
+
+#endif
 
 void SwDbtoolsClient::registerClient()
 {
@@ -104,6 +112,7 @@ void SwDbtoolsClient::registerClient()
         OSL_ENSURE(NULL == getDbToolsClientModule(), "SwDbtoolsClient::registerClient: inconsistence: already have a module!");
         OSL_ENSURE(NULL == getDbToolsClientFactoryFunction(), "SwDbtoolsClient::registerClient: inconsistence: already have a factory function!");
 
+#ifndef DISABLE_DYNLOADING
         const ::rtl::OUString sModuleName(RTL_CONSTASCII_USTRINGPARAM(SVLIBRARY("dbtools")));
 
         // load the dbtools library
@@ -125,6 +134,9 @@ void SwDbtoolsClient::registerClient()
                 getDbToolsClientModule() = NULL;
             }
         }
+#else
+        getDbToolsClientFactoryFunction() = createDataAccessToolsFactory;
+#endif
     }
 }
 
@@ -133,9 +145,11 @@ void SwDbtoolsClient::revokeClient()
     ::osl::MutexGuard aGuard(getDbtoolsClientMutex());
     if (0 == --getDbToolsClientClients())
     {
+#ifndef DISABLE_DYNLOADING
         getDbToolsClientFactoryFunction() = NULL;
         if (getDbToolsClientModule())
             osl_unloadModule(getDbToolsClientModule());
+#endif
         getDbToolsClientModule() = NULL;
     }
 }

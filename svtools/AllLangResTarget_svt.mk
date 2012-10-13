@@ -40,6 +40,7 @@ $(eval $(call gb_SrsTarget_use_packages,svt/res,\
     i18npool_inc \
     svl_inc \
     svtools_inc \
+    vcl_inc \
     tools_inc \
 ))
 
@@ -65,12 +66,12 @@ $(eval $(call gb_SrsTarget_add_files,svt/res,\
     svtools/source/dialogs/prnsetup.src \
     svtools/source/dialogs/so3res.src \
     svtools/source/dialogs/wizardmachine.src \
-    svtools/source/filter/exportdialog.src \
     svtools/source/java/javaerror.src \
     svtools/source/misc/ehdl.src \
     svtools/source/misc/helpagent.src \
     svtools/source/misc/imagemgr.src \
     svtools/source/misc/langtab.src \
+    svtools/source/misc/svtools.src \
     svtools/source/misc/undo.src \
     svtools/source/toolpanel/toolpanel.src \
 ))

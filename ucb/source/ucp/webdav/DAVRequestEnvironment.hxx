@@ -1,38 +1,31 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*************************************************************************
+/*
+ * This file is part of the LibreOffice project.
  *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * This file incorporates work covered by the following license notice:
  *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+
 #ifndef _DAVREQUESTENVIRONMENT_HXX_
 #define _DAVREQUESTENVIRONMENT_HXX_
 
 #include <vector>
 #include <rtl/ref.hxx>
-#include "DAVAuthListener.hxx"
+#include <DAVAuthListener.hxx>
 
-namespace webdav_ucp
+namespace http_dav_ucp
 {
     typedef std::pair< rtl::OUString, rtl::OUString > DAVRequestHeader;
     typedef std::vector< DAVRequestHeader > DAVRequestHeaders;
@@ -44,12 +37,12 @@ struct DAVRequestEnvironment
 //    rtl::Reference< DAVStatusListener >   m_xStatusListener;
 //    rtl::Reference< DAVProgressListener > m_xStatusListener;
     DAVRequestHeaders                     m_aRequestHeaders;
-    uno::Reference< ucb::XCommandEnvironment > m_xEnv;
+    com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment > m_xEnv;
 
 DAVRequestEnvironment( const rtl::OUString & rRequestURI,
-                           const rtl::Reference< DAVAuthListener > & xListener,
-                           const DAVRequestHeaders & rRequestHeaders,
-                           const uno::Reference< ucb::XCommandEnvironment > & xEnv)
+                       const rtl::Reference< DAVAuthListener > & xListener,
+                       const DAVRequestHeaders & rRequestHeaders,
+                       const com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment > & xEnv)
     : m_aRequestURI( rRequestURI ),
       m_xAuthListener( xListener ),
       m_aRequestHeaders( rRequestHeaders ),
@@ -58,7 +51,7 @@ DAVRequestEnvironment( const rtl::OUString & rRequestURI,
     DAVRequestEnvironment() {}
 };
 
-} // namespace webdav_ucp
+} // namespace http_dav_ucp
 
 #endif // _DAVREQUESTENVIRONMENT_HXX_
 

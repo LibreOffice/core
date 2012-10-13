@@ -33,6 +33,7 @@
 #define CB_SHARED       20
 #define FL_FRAME        21
 #define CB_DYNSPACING   22
+#define CB_SHARED_FIRST 23
 
 #define WN_BSP          30
 

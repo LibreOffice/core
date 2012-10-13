@@ -35,16 +35,10 @@
 #include <tools/link.hxx>
 
 #include <vcl/image.hxx>
-#include <svtools/svlbox.hxx>
+#include <svtools/treelistbox.hxx>
 
 class SvLBoxEntry;
 
-#define SV_ITEM_ID_LBOXSTRING       1
-#define SV_ITEM_ID_LBOXBMP          2
-#define SV_ITEM_ID_LBOXBUTTON       3
-#define SV_ITEM_ID_LBOXCONTEXTBMP   4
-
-enum SvButtonState { SV_BUTTON_UNCHECKED, SV_BUTTON_CHECKED, SV_BUTTON_TRISTATE };
 
 #define SV_BMP_UNCHECKED        0
 #define SV_BMP_CHECKED          1
@@ -129,10 +123,10 @@ public:
                     SvLBoxString();
     virtual         ~SvLBoxString();
     virtual sal_uInt16  IsA();
-    virtual void    InitViewData(SvLBox*, SvLBoxEntry*, SvViewDataItem*);
+    virtual void    InitViewData(SvTreeListBox*, SvLBoxEntry*, SvViewDataItem*);
     rtl::OUString   GetText() const { return maText; }
     void            SetText( const rtl::OUString& rText ) { maText = rText; }
-    virtual void    Paint( const Point&, SvLBox& rDev, sal_uInt16 nFlags,SvLBoxEntry* );
+    virtual void    Paint( const Point&, SvTreeListBox& rDev, sal_uInt16 nFlags,SvLBoxEntry* );
     virtual SvLBoxItem* Create() const;
     virtual void    Clone( SvLBoxItem* pSource );
 };
@@ -144,8 +138,8 @@ public:
                     SvLBoxBmp();
     virtual         ~SvLBoxBmp();
     virtual sal_uInt16  IsA();
-    virtual void    InitViewData( SvLBox*,SvLBoxEntry*,SvViewDataItem* );
-    virtual void    Paint( const Point&, SvLBox& rView, sal_uInt16 nFlags,SvLBoxEntry* );
+    virtual void    InitViewData( SvTreeListBox*,SvLBoxEntry*,SvViewDataItem* );
+    virtual void    Paint( const Point&, SvTreeListBox& rView, sal_uInt16 nFlags,SvLBoxEntry* );
     virtual SvLBoxItem* Create() const;
     virtual void    Clone( SvLBoxItem* pSource );
 };
@@ -156,13 +150,6 @@ public:
 #define SV_ITEMSTATE_TRISTATE           0x0004
 #define SV_ITEMSTATE_HILIGHTED          0x0008
 #define SV_STATE_MASK 0xFFF8  // zum Loeschen von UNCHECKED,CHECKED,TRISTATE
-
-enum SvLBoxButtonKind
-{
-    SvLBoxButtonKind_enabledCheckbox,
-    SvLBoxButtonKind_disabledCheckbox,
-    SvLBoxButtonKind_staticImage
-};
 
 class SVT_DLLPUBLIC SvLBoxButton : public SvLBoxItem
 {
@@ -183,10 +170,10 @@ public:
                                   SvLBoxButtonData* pBData );
                     SvLBoxButton();
     virtual         ~SvLBoxButton();
-    virtual void    InitViewData( SvLBox*,SvLBoxEntry*,SvViewDataItem* );
+    virtual void    InitViewData( SvTreeListBox*,SvLBoxEntry*,SvViewDataItem* );
     virtual sal_uInt16  IsA();
-    virtual sal_Bool    ClickHdl(SvLBox* pView, SvLBoxEntry* );
-    virtual void    Paint( const Point&, SvLBox& rView, sal_uInt16 nFlags,SvLBoxEntry* );
+    virtual sal_Bool    ClickHdl(SvTreeListBox* pView, SvLBoxEntry* );
+    virtual void    Paint( const Point&, SvTreeListBox& rView, sal_uInt16 nFlags,SvLBoxEntry* );
     virtual SvLBoxItem* Create() const;
     virtual void    Clone( SvLBoxItem* pSource );
     sal_uInt16          GetButtonFlags() const { return nItemFlags; }
@@ -243,8 +230,8 @@ public:
                     SvLBoxContextBmp();
     virtual         ~SvLBoxContextBmp();
     virtual sal_uInt16  IsA();
-    virtual void    InitViewData( SvLBox*,SvLBoxEntry*,SvViewDataItem* );
-    virtual void    Paint( const Point&, SvLBox& rView, sal_uInt16 nFlags,SvLBoxEntry* );
+    virtual void    InitViewData( SvTreeListBox*,SvLBoxEntry*,SvViewDataItem* );
+    virtual void    Paint( const Point&, SvTreeListBox& rView, sal_uInt16 nFlags,SvLBoxEntry* );
     virtual SvLBoxItem* Create() const;
     virtual void    Clone( SvLBoxItem* pSource );
 

@@ -79,7 +79,8 @@ struct lcl_ApplyCellToData : public ::std::unary_function< SchXMLCell, void >
     lcl_ApplyCellToData( Sequence< double > & rOutData ) :
             m_rData( rOutData ),
             m_nIndex( 0 ),
-            m_nSize( rOutData.getLength())
+            m_nSize( rOutData.getLength()),
+            m_fNaN( 0.0 )
     {
         ::rtl::math::setNan( &m_fNaN );
     }
@@ -763,7 +764,7 @@ void SchXMLTableCellContext::EndElement()
 
 // ========================================
 
-void lcl_ApplyCellToComplexLabel( const SchXMLCell& rCell, Sequence< uno::Any >& rComplexLabel )
+static void lcl_ApplyCellToComplexLabel( const SchXMLCell& rCell, Sequence< uno::Any >& rComplexLabel )
 {
     if( rCell.eType == SCH_CELL_TYPE_STRING )
     {

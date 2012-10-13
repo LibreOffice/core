@@ -805,8 +805,7 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Frame::findFrame( const ::rtl
     //  It doesn't matter if we have a valid parent or not. User ask for him and get it.
     //  An empty result is a valid result too.
     //-----------------------------------------------------------------------------------------------------
-    else
-    if ( sTargetFrameName==SPECIALTARGET_PARENT )
+    else if ( sTargetFrameName==SPECIALTARGET_PARENT )
     {
         xTarget = xParent;
     }
@@ -816,13 +815,11 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Frame::findFrame( const ::rtl
     //  If we are not the top frame in this hierarchy, we must forward request to our parent.
     //  Otherwhise we must return ourself.
     //-----------------------------------------------------------------------------------------------------
-    else
-    if ( sTargetFrameName==SPECIALTARGET_TOP )
+    else if ( sTargetFrameName==SPECIALTARGET_TOP )
     {
         if (bIsTopFrame)
             xTarget = this;
-        else
-        if (xParent.is()) // If we are not top - the parent MUST exist. But may it's better to check it again .-)
+        else if (xParent.is()) // If we are not top - the parent MUST exist. But may it's better to check it again .-)
             xTarget = xParent->findFrame(SPECIALTARGET_TOP,0);
     }
 
@@ -830,8 +827,7 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Frame::findFrame( const ::rtl
     // I.IV) "_self", ""
     //  This mean this frame in every case.
     //-----------------------------------------------------------------------------------------------------
-    else
-    if (
+    else if (
         ( sTargetFrameName==SPECIALTARGET_SELF ) ||
         ( sTargetFrameName.isEmpty()           )
        )
@@ -845,8 +841,7 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Frame::findFrame( const ::rtl
     //  or create it there if it not already exists.
     //  Note: Such beamer exists for task(top) frames only!
     //-----------------------------------------------------------------------------------------------------
-    else
-    if ( sTargetFrameName==SPECIALTARGET_BEAMER )
+    else if ( sTargetFrameName==SPECIALTARGET_BEAMER )
     {
         // We are a task => search or create the beamer
         if (bIsTopWindow)
@@ -862,8 +857,7 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Frame::findFrame( const ::rtl
             }
         }
         // We arent a task => forward request to our parent or ignore it.
-        else
-        if (xParent.is())
+        else if (xParent.is())
             xTarget = xParent->findFrame(SPECIALTARGET_BEAMER,0);
     }
 
@@ -1410,7 +1404,8 @@ sal_Bool SAL_CALL Frame::setComponent(  const   css::uno::Reference< css::awt::X
                 xDisposable->dispose();
             }
             catch(const css::lang::DisposedException&)
-                {}
+            {
+            }
         }
         xOldComponentWindow = NULL;
     }
@@ -1431,8 +1426,7 @@ sal_Bool SAL_CALL Frame::setComponent(  const   css::uno::Reference< css::awt::X
     // notifies all interest listener, that current component was changed or a new one was loaded
     if (bIsConnected && bWasConnected)
         implts_sendFrameActionEvent( css::frame::FrameAction_COMPONENT_REATTACHED );
-    else
-    if (bIsConnected && !bWasConnected)
+    else if (bIsConnected && !bWasConnected)
         implts_sendFrameActionEvent( css::frame::FrameAction_COMPONENT_ATTACHED   );
 
     //_____________________________________________________________________________________________________
@@ -3118,12 +3112,11 @@ void Frame::impl_checkMenuCloser()
         // Because it's set at the special member aAnalyzer.m_xBackingComponent ... :-)
         xNewCloserFrame = aAnalyzer.m_lOtherVisibleFrames[0];
     }
-    else
     // -----------------------------
     // b)
     // There is no other frame ... means no other document frame. The help module
     // will be handled seperatly and must(!) be ignored here ... excepting weself includes the help.
-    if (
+    else if (
         (aAnalyzer.m_lOtherVisibleFrames.getLength()==0) &&
         (!aAnalyzer.m_bReferenceIsHelp                 ) &&
         (!aAnalyzer.m_bReferenceIsHidden               ) &&

@@ -10,6 +10,8 @@
 #include <rtl/ustring.hxx>
 #include "conditio.hxx"
 
+#include "global.hxx"
+
 enum ScCondFormatEntryType
 {
     CONDITION,
@@ -22,9 +24,10 @@ enum ScCondFormatEntryType
 class ScCondFormatHelper
 {
 public:
-    static rtl::OUString GetExpression(const ScConditionalFormat& rFormat, const ScAddress& rPos);
+    static SC_DLLPUBLIC rtl::OUString GetExpression(const ScConditionalFormat& rFormat, const ScAddress& rPos);
 
-    static rtl::OUString GetExpression( ScCondFormatEntryType eType, sal_Int32 nIndex );
+    static SC_DLLPUBLIC rtl::OUString GetExpression( ScCondFormatEntryType eType, sal_Int32 nIndex,
+            rtl::OUString aStr1 = rtl::OUString(), rtl::OUString aStr2 = rtl::OUString() );
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

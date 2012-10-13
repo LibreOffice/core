@@ -35,8 +35,6 @@ import com.actionbarsherlock.view.MenuItem;
  * <p>This class will manage interaction with a custom action bar based on the
  * Android 4.0 source code. The exposed API mirrors that of its native
  * counterpart and you should refer to its documentation for instruction.</p>
- *
- * @author Jake Wharton <jakewharton@gmail.com>
  */
 public abstract class ActionBarSherlock {
     protected static final String TAG = "ActionBarSherlock";

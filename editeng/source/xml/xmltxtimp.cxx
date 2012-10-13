@@ -29,7 +29,7 @@
 #include <com/sun/star/io/Pipe.hpp>
 #include <com/sun/star/io/XActiveDataControl.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>
-#include <com/sun/star/xml/sax/XParser.hpp>
+#include <com/sun/star/xml/sax/Parser.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/text/XText.hpp>
@@ -170,18 +170,14 @@ void SvxReadXML( EditEngine& rEditEngine, SvStream& rStream, const ESelection& r
         do
         {
             uno::Reference<lang::XMultiServiceFactory> xServiceFactory( ::comphelper::getProcessServiceFactory() );
+            uno::Reference<uno::XComponentContext> xContext( ::comphelper::getProcessComponentContext() );
             if( !xServiceFactory.is() )
             {
                 OSL_FAIL( "SvxXMLXTableImport::load: got no service manager" );
                 break;
             }
 
-            uno::Reference< xml::sax::XParser > xParser( xServiceFactory->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.xml.sax.Parser" ) ) ), uno::UNO_QUERY );
-            if( !xParser.is() )
-            {
-                OSL_FAIL( "com.sun.star.xml.sax.Parser service missing" );
-                break;
-            }
+            uno::Reference< xml::sax::XParser > xParser = xml::sax::Parser::create( xContext );
 
             uno::Reference<io::XInputStream> xInputStream = new utl::OInputStreamWrapper( rStream );
 

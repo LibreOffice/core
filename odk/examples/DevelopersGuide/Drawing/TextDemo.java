@@ -56,9 +56,7 @@ import com.sun.star.style.ParagraphAdjust;
 
 // __________ Implementation __________
 
-/** text demo
-    @author Sven Jacobi
- */
+// text demo
 
 public class TextDemo
 {

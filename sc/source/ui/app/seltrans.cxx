@@ -50,7 +50,7 @@ using namespace com::sun::star;
 
 // -----------------------------------------------------------------------
 
-sal_Bool lcl_IsURLButton( SdrObject* pObject )
+static sal_Bool lcl_IsURLButton( SdrObject* pObject )
 {
     sal_Bool bRet = false;
 
@@ -325,9 +325,6 @@ void ScSelectionTransferObj::CreateCellData()
     OSL_ENSURE( pCellData, "can't create CellData" );
 }
 
-//! make static member of ScDrawView
-extern void lcl_CheckOle( const SdrMarkList& rMarkList, sal_Bool& rAnyOle, sal_Bool& rOneOle );
-
 void ScSelectionTransferObj::CreateDrawData()
 {
     OSL_ENSURE( !pDrawData, "CreateDrawData twice" );
@@ -340,7 +337,7 @@ void ScSelectionTransferObj::CreateDrawData()
         {
             sal_Bool bAnyOle, bOneOle;
             const SdrMarkList& rMarkList = pDrawView->GetMarkedObjectList();
-            lcl_CheckOle( rMarkList, bAnyOle, bOneOle );
+            ScDrawView::CheckOle( rMarkList, bAnyOle, bOneOle );
 
             //---------------------------------------------------------
             ScDocShellRef aDragShellRef;

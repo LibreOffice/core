@@ -126,6 +126,9 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
             case FID_INSERT_NAME:
             case SID_SPELL_DIALOG:
             case SID_HANGUL_HANJA_CONVERSION:
+            case SID_OPENDLG_CONDFRMT:
+            case SID_OPENDLG_COLORSCALE:
+            case SID_OPENDLG_DATABAR:
 
             pScMod->InputEnterHandler();
             pTabViewShell->UpdateInputHandler();
@@ -1762,6 +1765,32 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
             }
             break;
 
+        case SID_OPENDLG_CONDFRMT:
+        case SID_OPENDLG_COLORSCALE:
+        case SID_OPENDLG_DATABAR:
+            {
+                sal_uInt16 nId = 0;
+                switch( nSlot )
+                {
+                    case SID_OPENDLG_CONDFRMT:
+                        nId = ScCondFormatConditionDlgWrapper::GetChildWindowId();
+                        break;
+                    case SID_OPENDLG_COLORSCALE:
+                        nId = ScCondFormatColorScaleDlgWrapper::GetChildWindowId();
+                        break;
+                    case SID_OPENDLG_DATABAR:
+                        nId = ScCondFormatDataBarDlgWrapper::GetChildWindowId();
+                        break;
+                    default:
+                        break;
+                }
+                SfxViewFrame* pViewFrm = pTabViewShell->GetViewFrame();
+                SfxChildWindow* pWnd = pViewFrm->GetChildWindow( nId );
+
+                pScMod->SetRefDialog( nId, pWnd ? false : sal_True );
+            }
+            break;
+
         case SID_DEFINE_COLROWNAMERANGES:
             {
 
@@ -2034,52 +2063,6 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
             }
             break;
 
-        case SID_OPENDLG_CONDFRMT:
-            {
-                ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-                OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
-
-                ScRangeList aRangeList;
-                ScViewData* pData = GetViewData();
-                pData->GetMarkData().FillRangeListWithMarks(&aRangeList, false);
-                ScDocument* pDoc = pData->GetDocument();
-
-                if(pDoc->IsTabProtected(pData->GetTabNo()))
-                {
-                    pTabViewShell->ErrorMessage( STR_ERR_CONDFORMAT_PROTECTED );
-                    break;
-                }
-
-                ScAddress aPos(pData->GetCurX(), pData->GetCurY(), pData->GetTabNo());
-                if(aRangeList.empty())
-                {
-                    ScRange* pRange = new ScRange(aPos);
-                    aRangeList.push_back(pRange);
-                }
-
-                AbstractScCondFormatDlg* pDlg = NULL;
-                const ScConditionalFormat* pCondFormat = pDoc->GetCondFormat(aPos.Col(), aPos.Row(), aPos.Tab());
-                if(pCondFormat)
-                {
-                    pDlg = pFact->CreateScCondFormatDlg( pTabViewShell->GetDialogParent(), pDoc, pCondFormat, pCondFormat->GetRange(), pCondFormat->GetRange().GetTopLeftCorner(), RID_SCDLG_CONDFORMAT );
-                }
-                else
-                {
-                    pDlg = pFact->CreateScCondFormatDlg( pTabViewShell->GetDialogParent(), pDoc, NULL, aRangeList, aRangeList.GetTopLeftCorner(), RID_SCDLG_CONDFORMAT );
-                }
-
-                if(pDlg->Execute() == RET_OK)
-                {
-                    ScConditionalFormat* pFormat = pDlg->GetConditionalFormat();
-                    sal_uLong nOldIndex = 0;
-                    if(pCondFormat)
-                        nOldIndex = pCondFormat->GetKey();
-                    pData->GetDocShell()->GetDocFunc().ReplaceConditionalFormat( nOldIndex, pFormat, pData->GetTabNo(), pFormat->GetRange() );
-                }
-                delete pDlg;
-            }
-            break;
-
         case SID_OPENDLG_CONDFRMT_MANAGER:
             {
                 ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
@@ -2097,41 +2080,12 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 ScAddress aPos(pData->GetCurX(), pData->GetCurY(), pData->GetTabNo());
 
                 ScConditionalFormatList* pList = pDoc->GetCondFormList( aPos.Tab() );
-                AbstractScCondFormatManagerDlg* pDlg = pFact->CreateScCondFormatMgrDlg( pTabViewShell->GetDialogParent(), pDoc, pList, aPos, RID_SCDLG_COND_FORMAT_MANAGER);
-                if(pDlg->Execute() == RET_OK)
+                boost::scoped_ptr<AbstractScCondFormatManagerDlg> pDlg(pFact->CreateScCondFormatMgrDlg( pTabViewShell->GetDialogParent(), pDoc, pList, aPos, RID_SCDLG_COND_FORMAT_MANAGER));
+                if(pDlg->Execute() == RET_OK && pDlg->CondFormatsChanged())
                 {
-                    pDoc->SetCondFormList(pDlg->GetConditionalFormatList(), aPos.Tab());
+                    ScConditionalFormatList* pCondFormatList = pDlg->GetConditionalFormatList();
+                    pData->GetDocShell()->GetDocFunc().SetConditionalFormatList(pCondFormatList, aPos.Tab());
                 }
-                delete pDlg;
-            }
-            break;
-
-        case SID_COLORSCALE:
-            {
-                ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-                OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
-
-                ScDocument* pDoc = GetViewData()->GetDocument();
-                AbstractScDataBarSettingsDlg* pDlg = pFact->CreateScDataBarSetttingsDlg( pTabViewShell->GetDialogParent(), pDoc, RID_SCDLG_DATABAR );
-                OSL_ENSURE(pDlg, "Dialog create fail!");
-                pDlg->Execute();
-                delete pDlg;
-            }
-            break;
-
-        case SID_DATABAR:
-            {
-                ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-                OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
-
-                ScDocument* pDoc = GetViewData()->GetDocument();
-                AbstractScDataBarSettingsDlg* pDlg = pFact->CreateScDataBarSetttingsDlg( pTabViewShell->GetDialogParent(), pDoc, RID_SCDLG_DATABAR );
-                OSL_ENSURE(pDlg, "Dialog create fail!");
-                if(pDlg->Execute() == RET_OK)
-                {
-                    //add here code that handles the data bar inserting
-                }
-                delete pDlg;
             }
             break;
 

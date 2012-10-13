@@ -363,7 +363,7 @@ public:
     void NewWord() { nWordAdd = nWordWidth = 0; }
 };
 
-sal_Bool lcl_MinMaxString( SwMinMaxArgs& rArg, SwFont* pFnt, const XubString &rTxt,
+static sal_Bool lcl_MinMaxString( SwMinMaxArgs& rArg, SwFont* pFnt, const XubString &rTxt,
     xub_StrLen nIdx, xub_StrLen nEnd )
 {
     sal_Bool bRet = sal_False;

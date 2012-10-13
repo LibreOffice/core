@@ -279,7 +279,7 @@ void SvxSearchItem::Commit()
 {
 }
 
-void SvxSearchItem::SetMatchFullHalfWidthForms( sal_Bool bVal )
+void SvxSearchItem::SetMatchFullHalfWidthForms( bool bVal )
 {
     if (bVal)
         aSearchOpt.transliterateFlags |=  TransliterationModules_IGNORE_WIDTH;
@@ -288,7 +288,7 @@ void SvxSearchItem::SetMatchFullHalfWidthForms( sal_Bool bVal )
 }
 
 
-void SvxSearchItem::SetWordOnly( sal_Bool bVal )
+void SvxSearchItem::SetWordOnly( bool bVal )
 {
     if (bVal)
         aSearchOpt.searchFlag |=  SearchFlags::NORM_WORD_ONLY;
@@ -297,7 +297,7 @@ void SvxSearchItem::SetWordOnly( sal_Bool bVal )
 }
 
 
-void SvxSearchItem::SetExact( sal_Bool bVal )
+void SvxSearchItem::SetExact( bool bVal )
 {
     if (!bVal)
         aSearchOpt.transliterateFlags |=  TransliterationModules_IGNORE_CASE;
@@ -306,7 +306,7 @@ void SvxSearchItem::SetExact( sal_Bool bVal )
 }
 
 
-void SvxSearchItem::SetSelection( sal_Bool bVal )
+void SvxSearchItem::SetSelection( bool bVal )
 {
     if (bVal)
     {
@@ -321,7 +321,7 @@ void SvxSearchItem::SetSelection( sal_Bool bVal )
 }
 
 
-void SvxSearchItem::SetRegExp( sal_Bool bVal )
+void SvxSearchItem::SetRegExp( bool bVal )
 {
     if ( bVal )
         aSearchOpt.algorithmType = SearchAlgorithms_REGEXP;
@@ -330,7 +330,7 @@ void SvxSearchItem::SetRegExp( sal_Bool bVal )
 }
 
 
-void SvxSearchItem::SetLEVRelaxed( sal_Bool bVal )
+void SvxSearchItem::SetLEVRelaxed( bool bVal )
 {
     if (bVal)
         aSearchOpt.searchFlag |=  SearchFlags::LEV_RELAXED;
@@ -339,7 +339,7 @@ void SvxSearchItem::SetLEVRelaxed( sal_Bool bVal )
 }
 
 
-void SvxSearchItem::SetLevenshtein( sal_Bool bVal )
+void SvxSearchItem::SetLevenshtein( bool bVal )
 {
     if ( bVal )
         aSearchOpt.algorithmType = SearchAlgorithms_APPROXIMATE;

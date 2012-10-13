@@ -90,7 +90,7 @@ const sal_uInt32 HTML_FRMOPTS_IMG_CONTROL_CSS1 =
 
 
 
-void lcl_html_outEvents( SvStream& rStrm,
+static void lcl_html_outEvents( SvStream& rStrm,
                          const uno::Reference< form::XFormComponent > rFormComp,
                          sal_Bool bCfgStarBasic,
                          rtl_TextEncoding eDestEnc,
@@ -210,7 +210,7 @@ void lcl_html_outEvents( SvStream& rStrm,
     }
 }
 
-sal_Bool lcl_html_isHTMLControl( sal_Int16 nClassId )
+static sal_Bool lcl_html_isHTMLControl( sal_Int16 nClassId )
 {
     sal_Bool bRet = sal_False;
 

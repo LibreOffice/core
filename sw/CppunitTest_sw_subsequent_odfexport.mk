@@ -84,6 +84,7 @@ $(eval $(call gb_CppunitTest_use_components,sw_subsequent_odfexport,\
     ucb/source/ucp/file/ucpfile1 \
     unotools/util/utl \
     unoxml/source/service/unoxml \
+    uui/util/uui \
     $(if $(filter DESKTOP,$(BUILD_TYPE)),xmlhelp/util/ucpchelp1) \
 ))
 

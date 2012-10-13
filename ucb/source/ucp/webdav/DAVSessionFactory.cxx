@@ -1,37 +1,32 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*************************************************************************
+/*
+ * This file is part of the LibreOffice project.
  *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * This file incorporates work covered by the following license notice:
  *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
 
+
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_ucb.hxx"
 #include "DAVSessionFactory.hxx"
-#include "NeonSession.hxx"
-#include "NeonUri.hxx"
+#include "SerfSession.hxx"
+#include "SerfUri.hxx"
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
-using namespace webdav_ucp;
+using namespace http_dav_ucp;
 using namespace com::sun::star;
 
 DAVSessionFactory::~DAVSessionFactory()
@@ -40,7 +35,6 @@ DAVSessionFactory::~DAVSessionFactory()
 
 rtl::Reference< DAVSession > DAVSessionFactory::createDAVSession(
                 const ::rtl::OUString & inUri,
-                const uno::Sequence< beans::NamedValue >& rFlags,
                 const uno::Reference< lang::XMultiServiceFactory > & rxSMgr )
     throw( DAVException )
 {
@@ -56,7 +50,7 @@ rtl::Reference< DAVSession > DAVSessionFactory::createDAVSession(
 
     while ( aIt != aEnd )
     {
-        if ( (*aIt).second->CanUse( inUri, rFlags ) )
+        if ( (*aIt).second->CanUse( inUri ) )
             break;
 
         ++aIt;
@@ -64,33 +58,33 @@ rtl::Reference< DAVSession > DAVSessionFactory::createDAVSession(
 
     if ( aIt == aEnd )
     {
-        NeonUri aURI( inUri );
+        SerfUri aURI( inUri );
 
         std::auto_ptr< DAVSession > xElement(
-            new NeonSession( this, inUri, rFlags, *m_xProxyDecider.get() ) );
+            new SerfSession( this, inUri, *m_xProxyDecider.get() ) );
 
         aIt = m_aMap.insert( Map::value_type( inUri, xElement.get() ) ).first;
         aIt->second->m_aContainerIt = aIt;
         xElement.release();
         return aIt->second;
     }
-    else if ( osl_atomic_increment( &aIt->second->m_nRefCount ) > 1 )
+    else if ( osl_incrementInterlockedCount( &aIt->second->m_nRefCount ) > 1 )
     {
         rtl::Reference< DAVSession > xElement( aIt->second );
-        osl_atomic_decrement( &aIt->second->m_nRefCount );
+        osl_decrementInterlockedCount( &aIt->second->m_nRefCount );
         return xElement;
     }
     else
     {
-        osl_atomic_decrement( &aIt->second->m_nRefCount );
+        osl_decrementInterlockedCount( &aIt->second->m_nRefCount );
         aIt->second->m_aContainerIt = m_aMap.end();
 
         // If URL scheme is different from http or https we definitely
         // have to use a proxy and therefore can optimize the getProxy
         // call a little:
-        NeonUri aURI( inUri );
+        SerfUri aURI( inUri );
 
-        aIt->second = new NeonSession( this, inUri, rFlags, *m_xProxyDecider.get() );
+        aIt->second = new SerfSession( this, inUri, *m_xProxyDecider.get() );
         aIt->second->m_aContainerIt = aIt;
         return aIt->second;
     }

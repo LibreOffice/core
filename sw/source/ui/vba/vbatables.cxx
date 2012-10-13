@@ -13,7 +13,7 @@
 using namespace ::ooo::vba;
 using namespace css;
 
-uno::Reference< container::XIndexAccess > lcl_getTables( const uno::Reference< frame::XModel >& xDoc )
+static uno::Reference< container::XIndexAccess > lcl_getTables( const uno::Reference< frame::XModel >& xDoc )
 {
     uno::Reference< container::XIndexAccess > xTables;
     uno::Reference< text::XTextTablesSupplier > xSupp( xDoc, uno::UNO_QUERY );
@@ -22,7 +22,7 @@ uno::Reference< container::XIndexAccess > lcl_getTables( const uno::Reference< f
     return xTables;
 }
 
-uno::Any lcl_createTable( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< frame::XModel >& xDocument, const uno::Any& aSource )
+static uno::Any lcl_createTable( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< frame::XModel >& xDocument, const uno::Any& aSource )
 {
     uno::Reference< text::XTextTable > xTextTable( aSource, uno::UNO_QUERY_THROW );
     uno::Reference< text::XTextDocument > xTextDocument( xDocument, uno::UNO_QUERY_THROW );
@@ -30,7 +30,7 @@ uno::Any lcl_createTable( const uno::Reference< XHelperInterface >& xParent, con
     return uno::makeAny( xTable );
 }
 
-sal_Bool lcl_isInHeaderFooter( const uno::Reference< text::XTextTable >& xTable )
+static sal_Bool lcl_isInHeaderFooter( const uno::Reference< text::XTextTable >& xTable )
 {
     uno::Reference< text::XTextContent > xTextContent( xTable, uno::UNO_QUERY_THROW );
     uno::Reference< text::XText > xText = xTextContent->getAnchor()->getText();

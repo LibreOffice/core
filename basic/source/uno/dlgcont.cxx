@@ -18,7 +18,7 @@
  */
 
 #include <com/sun/star/container/XNameContainer.hpp>
-#include <com/sun/star/xml/sax/XParser.hpp>
+#include <com/sun/star/xml/sax/Parser.hpp>
 #include <com/sun/star/xml/sax/InputSource.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
@@ -32,6 +32,7 @@
 #include "com/sun/star/document/XGraphicObjectResolver.hpp"
 #include "dlgcont.hxx"
 #include "sbmodule.hxx"
+#include <comphelper/componentcontext.hxx>
 #include <comphelper/processfactory.hxx>
 #include <unotools/streamwrap.hxx>
 #include <osl/mutex.hxx>
@@ -122,12 +123,7 @@ bool writeOasis2OOoLibraryElement(
     Reference< lang::XMultiComponentFactory > xSMgr(
         xContext->getServiceManager() );
 
-    Reference< xml::sax::XParser > xParser(
-        xSMgr->createInstanceWithContext(
-            OUString( RTL_CONSTASCII_USTRINGPARAM(
-                "com.sun.star.xml.sax.Parser" ) ),
-            xContext ),
-        UNO_QUERY );
+    Reference< xml::sax::XParser > xParser =  xml::sax::Parser::create(xContext);
 
     Reference< xml::sax::XExtendedDocumentHandler > xWriter(
         xSMgr->createInstanceWithContext(
@@ -139,7 +135,7 @@ bool writeOasis2OOoLibraryElement(
     Reference< io::XActiveDataSource > xSource( xWriter, UNO_QUERY );
     xSource->setOutputStream( xOutput );
 
-    if ( !xParser.is() || !xWriter.is() )
+    if ( !xWriter.is() )
     {
         return sal_False;
     }
@@ -297,13 +293,7 @@ Any SAL_CALL SfxDialogLibraryContainer::importLibraryElement
     //  return aRetAny;
     //}
 
-    Reference< XParser > xParser( mxMSF->createInstance(
-        OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Parser") ) ), UNO_QUERY );
-    if( !xParser.is() )
-    {
-        OSL_FAIL( "### couldn't create sax parser component\n" );
-        return aRetAny;
-    }
+    Reference< XParser > xParser = xml::sax::Parser::create( comphelper::getComponentContext(mxMSF) );
 
     Reference< XNameContainer > xDialogModel( mxMSF->createInstance
         ( OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControlDialogModel" ) ) ), UNO_QUERY );

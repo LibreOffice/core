@@ -18,9 +18,6 @@
 
 package com.sun.star.wizards.web.status;
 
-/**
- * @author rpiterman
- */
 public interface ErrorReporter
 {
 

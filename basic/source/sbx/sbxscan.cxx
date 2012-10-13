@@ -39,6 +39,7 @@
 #include <svtools/svtools.hrc>
 
 #include "basrid.hxx"
+#include "date.hxx"
 #include "runtime.hxx"
 
 #include <rtl/strbuf.hxx>
@@ -688,13 +689,6 @@ VbaFormatInfo* getFormatInfo( const String& rFmt )
 #define VBAFORMAT_Y                 "y"
 #define VBAFORMAT_LOWERCASE         "<"
 #define VBAFORMAT_UPPERCASE         ">"
-
-// From methods1.cxx
-sal_Int16 implGetWeekDay( double aDate, bool bFirstDayParam = false, sal_Int16 nFirstDay = 0 );
-// from methods.cxx
-sal_Int16 implGetMinute( double dDate );
-sal_Int16 implGetDateYear( double aDate );
-bool implDateSerial( sal_Int16 nYear, sal_Int16 nMonth, sal_Int16 nDay, double& rdRet );
 
 void SbxValue::Format( XubString& rRes, const XubString* pFmt ) const
 {

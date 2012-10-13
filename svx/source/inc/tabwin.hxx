@@ -19,7 +19,7 @@
 #ifndef _SVX_TABWIN_HXX
 #define _SVX_TABWIN_HXX
 
-#include <svtools/svtreebx.hxx>
+#include <svtools/treelistbox.hxx>
 #include <vcl/floatwin.hxx>
 #include <sfx2/basedlgs.hxx>
 #include <sfx2/childwin.hxx>
@@ -51,10 +51,10 @@ protected:
     // DragSourceHelper
     virtual void StartDrag( sal_Int8 nAction, const Point& rPosPixel );
 
-    // SvLBox
+    // SvTreeListBox
     virtual sal_Bool DoubleClickHdl();
 
-    using SvLBox::ExecuteDrop;
+    using SvTreeListBox::ExecuteDrop;
 };
 
 //========================================================================

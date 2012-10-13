@@ -148,7 +148,7 @@ bool SwCrsrShell::GoNextBookmark()
             pMarkAccess->getBookmarksBegin(),
             pMarkAccess->getBookmarksEnd(),
             *GetCrsr()->GetPoint(),
-            bind(&::sw::mark::IMark::StartsAfter, _2, _1)), // finds the first that is starting after
+            boost::bind(&::sw::mark::IMark::StartsAfter, _2, _1)), // finds the first that is starting after
         pMarkAccess->getBookmarksEnd(),
         back_inserter(vCandidates),
         &lcl_IsInvisibleBookmark);
@@ -184,7 +184,7 @@ bool SwCrsrShell::GoPrevBookmark()
             pMarkAccess->getBookmarksBegin(),
             pMarkAccess->getBookmarksEnd(),
             *GetCrsr()->GetPoint(),
-            bind(&::sw::mark::IMark::StartsAfter, _2, _1)),
+            boost::bind(&::sw::mark::IMark::StartsAfter, _2, _1)),
         back_inserter(vCandidates),
         &lcl_IsInvisibleBookmark);
     sort(

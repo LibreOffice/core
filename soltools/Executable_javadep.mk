@@ -9,6 +9,12 @@
 
 $(eval $(call gb_Executable_Executable,javadep))
 
+ifeq ($(COM),MSC)
+$(eval $(call gb_Executable_use_packages,javadep,\
+    soltools_inc \
+))
+endif
+
 $(eval $(call gb_Executable_add_cobjects,javadep,\
     soltools/javadep/javadep \
 ))

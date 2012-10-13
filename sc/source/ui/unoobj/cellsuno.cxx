@@ -156,7 +156,7 @@ public:
 //  Left/Right/Top/BottomBorder are mapped directly to the core items,
 //  not collected/applied to the borders of a range -> ATTR_BORDER can be used directly
 
-const SfxItemPropertySet* lcl_GetCellsPropertySet()
+static const SfxItemPropertySet* lcl_GetCellsPropertySet()
 {
     static SfxItemPropertyMapEntry aCellsPropertyMap_Impl[] =
     {
@@ -264,7 +264,7 @@ const SfxItemPropertySet* lcl_GetCellsPropertySet()
 //  CellRange enthaelt alle Eintraege von Cells, zusaetzlich eigene Eintraege
 //  mit Which-ID 0 (werden nur fuer getPropertySetInfo benoetigt).
 
-const SfxItemPropertySet* lcl_GetRangePropertySet()
+static const SfxItemPropertySet* lcl_GetRangePropertySet()
 {
     static SfxItemPropertyMapEntry aRangePropertyMap_Impl[] =
     {
@@ -374,7 +374,7 @@ const SfxItemPropertySet* lcl_GetRangePropertySet()
 //  Cell enthaelt alle Eintraege von CellRange, zusaetzlich eigene Eintraege
 //  mit Which-ID 0 (werden nur fuer getPropertySetInfo benoetigt).
 
-const SfxItemPropertySet* lcl_GetCellPropertySet()
+static const SfxItemPropertySet* lcl_GetCellPropertySet()
 {
     static SfxItemPropertyMapEntry aCellPropertyMap_Impl[] =
     {
@@ -487,7 +487,7 @@ const SfxItemPropertySet* lcl_GetCellPropertySet()
 //  Column und Row enthalten alle Eintraege von CellRange, zusaetzlich eigene Eintraege
 //  mit Which-ID 0 (werden nur fuer getPropertySetInfo benoetigt).
 
-const SfxItemPropertySet* lcl_GetColumnPropertySet()
+static const SfxItemPropertySet* lcl_GetColumnPropertySet()
 {
     static SfxItemPropertyMapEntry aColumnPropertyMap_Impl[] =
     {
@@ -599,7 +599,7 @@ const SfxItemPropertySet* lcl_GetColumnPropertySet()
     return &aColumnPropertySet;
 }
 
-const SfxItemPropertySet* lcl_GetRowPropertySet()
+static const SfxItemPropertySet* lcl_GetRowPropertySet()
 {
     static SfxItemPropertyMapEntry aRowPropertyMap_Impl[] =
     {
@@ -712,7 +712,7 @@ const SfxItemPropertySet* lcl_GetRowPropertySet()
     return &aRowPropertySet;
 }
 
-const SfxItemPropertySet* lcl_GetSheetPropertySet()
+static const SfxItemPropertySet* lcl_GetSheetPropertySet()
 {
     static SfxItemPropertyMapEntry aSheetPropertyMap_Impl[] =
     {
@@ -836,7 +836,7 @@ const SfxItemPropertySet* lcl_GetSheetPropertySet()
     return &aSheetPropertySet;
 }
 
-const SfxItemPropertyMapEntry* lcl_GetEditPropertyMap()
+static const SfxItemPropertyMapEntry* lcl_GetEditPropertyMap()
 {
     static SfxItemPropertyMapEntry aEditPropertyMap_Impl[] =
     {
@@ -850,7 +850,7 @@ const SfxItemPropertyMapEntry* lcl_GetEditPropertyMap()
     };
     return aEditPropertyMap_Impl;
 }
-const SvxItemPropertySet* lcl_GetEditPropertySet()
+static const SvxItemPropertySet* lcl_GetEditPropertySet()
 {
     static SvxItemPropertySet aEditPropertySet( lcl_GetEditPropertyMap(), SdrObject::GetGlobalDrawObjectItemPool() );
     return &aEditPropertySet;
@@ -898,7 +898,7 @@ void ScLinkListener::Notify( SvtBroadcaster&, const SfxHint& rHint )
 
 //------------------------------------------------------------------------
 
-void lcl_CopyProperties( beans::XPropertySet& rDest, beans::XPropertySet& rSource )
+static void lcl_CopyProperties( beans::XPropertySet& rDest, beans::XPropertySet& rSource )
 {
     uno::Reference<beans::XPropertySetInfo> xInfo(rSource.getPropertySetInfo());
     if (xInfo.is())
@@ -914,7 +914,7 @@ void lcl_CopyProperties( beans::XPropertySet& rDest, beans::XPropertySet& rSourc
     }
 }
 
-SCTAB lcl_FirstTab( const ScRangeList& rRanges )
+static SCTAB lcl_FirstTab( const ScRangeList& rRanges )
 {
     OSL_ENSURE(rRanges.size() >= 1, "was fuer Ranges ?!?!");
     const ScRange* pFirst = rRanges[ 0 ];
@@ -924,7 +924,7 @@ SCTAB lcl_FirstTab( const ScRangeList& rRanges )
     return 0;   // soll nicht sein
 }
 
-sal_Bool lcl_WholeSheet( const ScRangeList& rRanges )
+static sal_Bool lcl_WholeSheet( const ScRangeList& rRanges )
 {
     if ( rRanges.size() == 1 )
     {
@@ -938,7 +938,7 @@ sal_Bool lcl_WholeSheet( const ScRangeList& rRanges )
 
 //------------------------------------------------------------------------
 
-ScSubTotalFunc lcl_SummaryToSubTotal( sheet::GeneralFunction eSummary )
+static ScSubTotalFunc lcl_SummaryToSubTotal( sheet::GeneralFunction eSummary )
 {
     ScSubTotalFunc eSubTotal;
     switch (eSummary)
@@ -1153,7 +1153,7 @@ void ScHelperFunctions::ApplyBorder( ScDocShell* pDocShell, const ScRangeList& r
 //! move lcl_PutDataArray to docfunc?
 //! merge loop with ScFunctionAccess::callFunction
 
-sal_Bool lcl_PutDataArray( ScDocShell& rDocShell, const ScRange& rRange,
+static sal_Bool lcl_PutDataArray( ScDocShell& rDocShell, const ScRange& rRange,
                         const uno::Sequence< uno::Sequence<uno::Any> >& aData )
 {
     ScDocument* pDoc = rDocShell.GetDocument();
@@ -1269,7 +1269,7 @@ sal_Bool lcl_PutDataArray( ScDocShell& rDocShell, const ScRange& rRange,
     return !bError;
 }
 
-sal_Bool lcl_PutFormulaArray( ScDocShell& rDocShell, const ScRange& rRange,
+static sal_Bool lcl_PutFormulaArray( ScDocShell& rDocShell, const ScRange& rRange,
         const uno::Sequence< uno::Sequence<rtl::OUString> >& aData,
         const ::rtl::OUString& rFormulaNmsp, const formula::FormulaGrammar::Grammar eGrammar )
 {
@@ -1356,7 +1356,7 @@ sal_Bool lcl_PutFormulaArray( ScDocShell& rDocShell, const ScRange& rRange,
 }
 
 //  used in ScCellRangeObj::getFormulaArray and ScCellObj::GetInputString_Impl
-String lcl_GetInputString( ScDocument* pDoc, const ScAddress& rPosition, sal_Bool bEnglish )
+static String lcl_GetInputString( ScDocument* pDoc, const ScAddress& rPosition, sal_Bool bEnglish )
 {
     rtl::OUString aVal;
     if ( pDoc )
@@ -1876,7 +1876,7 @@ const SfxItemPropertyMap& ScCellRangesBase::GetItemPropertyMap()
     return pPropSet->getPropertyMap();
 }
 
-void lcl_GetPropertyWhich( const SfxItemPropertySimpleEntry* pEntry,
+static void lcl_GetPropertyWhich( const SfxItemPropertySimpleEntry* pEntry,
                                                 sal_uInt16& rItemWhich )
 {
     //  Which-ID des betroffenen Items, auch wenn das Item die Property
@@ -2151,7 +2151,7 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScCellRangesBase::getPropertySe
     return aRef;
 }
 
-void lcl_SetCellProperty( const SfxItemPropertySimpleEntry& rEntry, const uno::Any& rValue,
+static void lcl_SetCellProperty( const SfxItemPropertySimpleEntry& rEntry, const uno::Any& rValue,
                             ScPatternAttr& rPattern, ScDocument* pDoc,
                             sal_uInt16& rFirstItemId, sal_uInt16& rSecondItemId )
 {
@@ -2412,11 +2412,8 @@ void ScCellRangesBase::SetOnePropertyValue( const SfxItemPropertySimpleEntry* pE
                                 ScConditionalFormat* pNew = new ScConditionalFormat( 0, pDoc );    // Index wird beim Einfuegen gesetzt
                                 pFormat->FillFormat( *pNew, pDoc, eGrammar );
                                 pNew->AddRange( aRanges );
-                                sal_uLong nIndex = pDoc->AddCondFormat( pNew, aRanges.front()->aStart.Tab() );
-
-                                ScPatternAttr aPattern( pDoc->GetPool() );
-                                aPattern.GetItemSet().Put( SfxUInt32Item( ATTR_CONDITIONAL, nIndex ) );
-                                pDocShell->GetDocFunc().ApplyAttributes( *GetMarkData(), aPattern, sal_True, sal_True );
+                                SCTAB nTab = aRanges.front()->aStart.Tab();
+                                pDocShell->GetDocFunc().ReplaceConditionalFormat( 0, pNew, nTab, aRanges );
                             }
                         }
                     }
@@ -2572,8 +2569,11 @@ void ScCellRangesBase::GetOnePropertyValue( const SfxItemPropertySimpleEntry* pE
                             formula::FormulaGrammar::Grammar eGrammar = (bXML ?
                                     pDoc->GetStorageGrammar() :
                                    formula::FormulaGrammar::mapAPItoGrammar( bEnglish, bXML));
-                            sal_uLong nIndex = ((const SfxUInt32Item&)
-                                    pPattern->GetItem(ATTR_CONDITIONAL)).GetValue();
+                            const std::vector<sal_uInt32>& rIndex = ((const ScCondFormatItem&)
+                                    pPattern->GetItem(ATTR_CONDITIONAL)).GetCondFormatData();
+                            sal_uLong nIndex = 0;
+                            if(!rIndex.empty())
+                                nIndex = rIndex[0];
                             rAny <<= uno::Reference<sheet::XSheetConditionalEntries>(
                                     new ScTableConditionalFormat( pDoc, nIndex, aRanges.front()->aStart.Tab(), eGrammar ));
                         }
@@ -4350,7 +4350,7 @@ void SAL_CALL ScCellRangesObj::addRangeAddress( const table::CellRangeAddress& r
     AddRange(aRange, bMergeRanges);
 }
 
-void lcl_RemoveNamedEntry( ScNamedEntryArr_Impl& rNamedEntries, const ScRange& rRange )
+static void lcl_RemoveNamedEntry( ScNamedEntryArr_Impl& rNamedEntries, const ScRange& rRange )
 {
     sal_uInt16 nCount = rNamedEntries.size();
     for ( sal_uInt16 n=nCount; n--; )
@@ -4446,7 +4446,7 @@ void SAL_CALL ScCellRangesObj::removeRangeAddresses( const uno::Sequence<table::
 
 // XNameContainer
 
-void lcl_RemoveNamedEntry( ScNamedEntryArr_Impl& rNamedEntries, const String& rName )
+static void lcl_RemoveNamedEntry( ScNamedEntryArr_Impl& rNamedEntries, const String& rName )
 {
     sal_uInt16 nCount = rNamedEntries.size();
     for ( sal_uInt16 n=nCount; n--; )
@@ -4510,7 +4510,7 @@ void SAL_CALL ScCellRangesObj::insertByName( const rtl::OUString& aName, const u
     }
 }
 
-sal_Bool lcl_FindRangeByName( const ScRangeList& rRanges, ScDocShell* pDocSh,
+static sal_Bool lcl_FindRangeByName( const ScRangeList& rRanges, ScDocShell* pDocSh,
                             const String& rName, size_t& rIndex )
 {
     if (pDocSh)
@@ -4530,7 +4530,7 @@ sal_Bool lcl_FindRangeByName( const ScRangeList& rRanges, ScDocShell* pDocSh,
     return false;   // nicht gefunden
 }
 
-sal_Bool lcl_FindRangeOrEntry( const ScNamedEntryArr_Impl& rNamedEntries,
+static sal_Bool lcl_FindRangeOrEntry( const ScNamedEntryArr_Impl& rNamedEntries,
                             const ScRangeList& rRanges, ScDocShell* pDocSh,
                             const String& rName, ScRange& rFound )
 {
@@ -4686,7 +4686,7 @@ uno::Any SAL_CALL ScCellRangesObj::getByName( const rtl::OUString& aName )
     return aRet;
 }
 
-sal_Bool lcl_FindEntryName( const ScNamedEntryArr_Impl& rNamedEntries,
+static sal_Bool lcl_FindEntryName( const ScNamedEntryArr_Impl& rNamedEntries,
                         const ScRange& rRange, String& rName )
 {
     sal_uInt16 nCount = rNamedEntries.size();

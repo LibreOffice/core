@@ -453,11 +453,9 @@ private:
 class SmNodeToTextVisitor : public SmVisitor
 {
 public:
-    SmNodeToTextVisitor( SmNode* pNode, String &rText )
-        : rCmdText( rText ) {
-        pNode->Accept( this );
-    }
+    SmNodeToTextVisitor( SmNode* pNode, OUString &rText );
     virtual ~SmNodeToTextVisitor() {}
+
     void Visit( SmTableNode* pNode );
     void Visit( SmBraceNode* pNode );
     void Visit( SmBracebodyNode* pNode );
@@ -493,19 +491,16 @@ private:
             pNode->Accept( this );
         Separate( );
     }
-    inline void Append( const sal_Char* pCharStr ) {
-        rCmdText.AppendAscii( pCharStr );
-    }
-    inline void Append( const String &rText ) {
-        rCmdText.Append( rText );
+    void Append( const OUString &rText ) {
+        aCmdText.append( rText );
     }
     /** Append a blank for separation, if needed */
     inline void Separate( ){
-        if( !rCmdText.Len() || rCmdText.GetChar( rCmdText.Len( ) - 1 ) != ' ' )
-            rCmdText.AppendAscii( RTL_CONSTASCII_STRINGPARAM( " " ) );
+        if( !aCmdText.getLength() || aCmdText[ aCmdText.getLength() - 1 ] != ' ' )
+            aCmdText.append(' ');
     }
     /** Output text generated from the pNodes */
-    String &rCmdText;
+    OUStringBuffer aCmdText;
 };
 
 #endif /* SMVISITORS_H */

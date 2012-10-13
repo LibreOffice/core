@@ -86,7 +86,7 @@ struct EmbedImpl
     uno::WeakReference < uno::XInterface > m_xModel;
     //EmbeddedObjectContainerNameMap maTempObjectContainer;
     //uno::Reference < embed::XStorage > mxTempStorage;
-    sal_Bool bOwnsStorage;
+    bool bOwnsStorage;
 
     const uno::Reference < embed::XStorage >& GetReplacements();
 };
@@ -117,7 +117,7 @@ EmbeddedObjectContainer::EmbeddedObjectContainer()
 {
     pImpl = new EmbedImpl;
     pImpl->mxStorage = ::comphelper::OStorageHelper::GetTemporaryStorage();
-    pImpl->bOwnsStorage = sal_True;
+    pImpl->bOwnsStorage = true;
     pImpl->mpTempObjectContainer = 0;
 }
 
@@ -125,7 +125,7 @@ EmbeddedObjectContainer::EmbeddedObjectContainer( const uno::Reference < embed::
 {
     pImpl = new EmbedImpl;
     pImpl->mxStorage = rStor;
-    pImpl->bOwnsStorage = sal_False;
+    pImpl->bOwnsStorage = false;
     pImpl->mpTempObjectContainer = 0;
 }
 
@@ -133,7 +133,7 @@ EmbeddedObjectContainer::EmbeddedObjectContainer( const uno::Reference < embed::
 {
     pImpl = new EmbedImpl;
     pImpl->mxStorage = rStor;
-    pImpl->bOwnsStorage = sal_False;
+    pImpl->bOwnsStorage = false;
     pImpl->mpTempObjectContainer = 0;
     pImpl->m_xModel = xModel;
 }
@@ -146,7 +146,7 @@ void EmbeddedObjectContainer::SwitchPersistence( const uno::Reference < embed::X
         pImpl->mxStorage->dispose();
 
     pImpl->mxStorage = rStor;
-    pImpl->bOwnsStorage = sal_False;
+    pImpl->bOwnsStorage = false;
 }
 
 sal_Bool EmbeddedObjectContainer::CommitImageSubStorage()

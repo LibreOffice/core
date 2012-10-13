@@ -527,7 +527,7 @@ Model* Binding::getModelImpl( const Model_t& xModel ) const
     return pModel;
 }
 
-void lcl_addListenerToNode( Reference<XNode> xNode,
+static void lcl_addListenerToNode( Reference<XNode> xNode,
                             Reference<XEventListener> xListener )
 {
     Reference<XEventTarget> xTarget( xNode, UNO_QUERY );
@@ -548,7 +548,7 @@ void lcl_addListenerToNode( Reference<XNode> xNode,
     }
 }
 
-void lcl_removeListenerFromNode( Reference<XNode> xNode,
+static void lcl_removeListenerFromNode( Reference<XNode> xNode,
                                  Reference<XEventListener> xListener )
 {
     Reference<XEventTarget> xTarget( xNode, UNO_QUERY );
@@ -691,7 +691,7 @@ void Binding::bind( bool bForceRebind )
 
 
 // helper for Binding::valueModified
-void lcl_modified( const Binding::XModifyListener_t xListener,
+static void lcl_modified( const Binding::XModifyListener_t xListener,
                    const Reference<XInterface> xSource )
 {
     OSL_ENSURE( xListener.is(), "no listener?" );
@@ -699,7 +699,7 @@ void lcl_modified( const Binding::XModifyListener_t xListener,
 }
 
 // helper for Binding::valueModified
-void lcl_listentry( const Binding::XListEntryListener_t xListener,
+static void lcl_listentry( const Binding::XListEntryListener_t xListener,
                     const Reference<XInterface> xSource )
 {
     OSL_ENSURE( xListener.is(), "no listener?" );
@@ -708,7 +708,7 @@ void lcl_listentry( const Binding::XListEntryListener_t xListener,
 }
 
 // helper for Binding::valueModified
-void lcl_validate( const Binding::XValidityConstraintListener_t xListener,
+static void lcl_validate( const Binding::XValidityConstraintListener_t xListener,
                    const Reference<XInterface> xSource )
 {
     OSL_ENSURE( xListener.is(), "no listener?" );
@@ -886,7 +886,7 @@ void Binding::clear()
 }
 
 
-void lcl_removeOtherNamespaces( const Binding::XNameContainer_t& xFrom,
+static void lcl_removeOtherNamespaces( const Binding::XNameContainer_t& xFrom,
                                 Binding::XNameContainer_t& xTo )
 {
     OSL_ENSURE( xFrom.is(), "no source" );
@@ -913,7 +913,7 @@ void lcl_removeOtherNamespaces( const Binding::XNameContainer_t& xFrom,
  * @param bFromSource true: use elements from source
  *                    false: use only elements from target
  */
-void lcl_copyNamespaces( const Binding::XNameContainer_t& xFrom,
+static void lcl_copyNamespaces( const Binding::XNameContainer_t& xFrom,
                          Binding::XNameContainer_t& xTo,
                          bool bOverwrite )
 {
@@ -1132,7 +1132,7 @@ sal_Int32 Binding::getListEntryCount()
     return maBindingExpression.getNodeList().size();
 }
 
-void lcl_getString( const Reference<XNode>& xNode, OUStringBuffer& rBuffer )
+static void lcl_getString( const Reference<XNode>& xNode, OUStringBuffer& rBuffer )
 {
     if( xNode->getNodeType() == NodeType_TEXT_NODE
         || xNode->getNodeType() == NodeType_ATTRIBUTE_NODE )
@@ -1150,7 +1150,7 @@ void lcl_getString( const Reference<XNode>& xNode, OUStringBuffer& rBuffer )
     }
 }
 
-OUString lcl_getString( const Reference<XNode>& xNode )
+static OUString lcl_getString( const Reference<XNode>& xNode )
 {
     OUStringBuffer aBuffer;
     lcl_getString( xNode, aBuffer );

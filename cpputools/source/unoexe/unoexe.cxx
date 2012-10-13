@@ -257,29 +257,25 @@ void createInstance(
                     Reference< XMultiServiceFactory > xSF( xMgr, UNO_QUERY );
                     // acceptor
                     xSet->insert( makeAny( loadSharedLibComponentFactory(
-                        OUString( RTL_CONSTASCII_USTRINGPARAM(
-                                      "acceptor.uno" SAL_DLLEXTENSION) ),
+                        OUString( "acceptor.uno" SAL_DLLEXTENSION ),
                         OUString(),
-                        OUString( RTL_CONSTASCII_USTRINGPARAM(
-                                      "com.sun.star.comp.io.Acceptor") ),
-                        xSF, Reference< XRegistryKey >() ) ) );
+                        OUString( "com.sun.star.comp.io.Acceptor" ),
+                        xSF, Reference< XRegistryKey >(),
+                        "acceptor" ) ) );
                     // connector
                     xSet->insert( makeAny( loadSharedLibComponentFactory(
-                        OUString( RTL_CONSTASCII_USTRINGPARAM(
-                                      "connector.uno" SAL_DLLEXTENSION) ),
+                        OUString( "connector.uno" SAL_DLLEXTENSION ),
                         OUString(),
-                        OUString( RTL_CONSTASCII_USTRINGPARAM(
-                                      "com.sun.star.comp.io.Connector") ),
-                        xSF, Reference< XRegistryKey >() ) ) );
+                        OUString( "com.sun.star.comp.io.Connector" ),
+                        xSF, Reference< XRegistryKey >(),
+                        "connector" ) ) );
                     // bridge factory
                     xSet->insert( makeAny( loadSharedLibComponentFactory(
-                        OUString( RTL_CONSTASCII_USTRINGPARAM(
-                                      "binaryurp.uno" SAL_DLLEXTENSION) ),
+                        OUString( "binaryurp.uno" SAL_DLLEXTENSION ),
                         OUString(),
-                        OUString(
-                            RTL_CONSTASCII_USTRINGPARAM(
-                                "com.sun.star.comp.bridge.BridgeFactory") ),
-                        xSF, Reference< XRegistryKey >() ) ) );
+                        OUString( "com.sun.star.comp.bridge.BridgeFactory" ),
+                        xSF, Reference< XRegistryKey >(),
+                        "binaryurp" ) ) );
                 }
                 s_bSet = sal_True;
             }

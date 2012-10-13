@@ -138,7 +138,7 @@ String InsertLabEnvText( SwWrtShell& rSh, SwFldMgr& rFldMgr, const String& rText
     return sRet;
 }
 
-void lcl_CopyCollAttr(SwWrtShell* pOldSh, SwWrtShell* pNewSh, sal_uInt16 nCollId)
+static void lcl_CopyCollAttr(SwWrtShell* pOldSh, SwWrtShell* pNewSh, sal_uInt16 nCollId)
 {
     sal_uInt16 nCollCnt = pOldSh->GetTxtFmtCollCount();
     SwTxtFmtColl* pColl;

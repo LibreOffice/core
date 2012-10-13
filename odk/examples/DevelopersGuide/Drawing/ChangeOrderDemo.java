@@ -51,9 +51,7 @@ import com.sun.star.drawing.XDrawPage;
 
 // __________ Implementation __________
 
-/** ChangeOrderDemo
-    @author Sven Jacobi
- */
+// ChangeOrderDemo
 
 public class ChangeOrderDemo
 {

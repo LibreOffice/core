@@ -358,9 +358,6 @@ private:
 
     bool                bIsEmbedded;                    // display/adjust Embedded area?
 
-    // no SetDirty for ScFormulaCell::CompileTokenArray but at the end of
-    // ScDocument::CompileAll[WithFormats], CopyScenario, CopyBlockFromClip
-    bool                bNoSetDirty;
     // no broadcast, construct no listener during insert from a different
     // Doc (per filter or the like ), not until CompileAll / CalcAfterLoad
     bool                bInsertingFromOtherDoc;
@@ -1155,6 +1152,8 @@ public:
     SC_DLLPUBLIC const ScPatternAttr*    GetMostUsedPattern( SCCOL nCol, SCROW nStartRow, SCROW nEndRow, SCTAB nTab ) const;
     const ScPatternAttr*    GetSelectionPattern( const ScMarkData& rMark, bool bDeep = true );
     ScPatternAttr*          CreateSelectionPattern( const ScMarkData& rMark, bool bDeep = true );
+    SC_DLLPUBLIC void AddCondFormatData( const ScRangeList& rRange, SCTAB nTab, sal_uInt32 nIndex );
+    void RemoveCondFormatData( const ScRangeList& rRange, SCTAB nTab, sal_uInt32 nIndex );
 
     SC_DLLPUBLIC ScConditionalFormat* GetCondFormat( SCCOL nCol, SCROW nRow, SCTAB nTab ) const;
     SC_DLLPUBLIC const SfxItemSet*  GetCondResult( SCCOL nCol, SCROW nRow, SCTAB nTab ) const;
@@ -1189,7 +1188,6 @@ public:
 
     SC_DLLPUBLIC sal_uLong AddCondFormat( ScConditionalFormat* pNew, SCTAB nTab );
     void DeleteConditionalFormat( sal_uLong nIndex, SCTAB nTab );
-    SC_DLLPUBLIC void           FindConditionalFormat( sal_uLong nKey, ScRangeList& rRanges, SCTAB nTab );
     void            ConditionalChanged( sal_uLong nKey, SCTAB nTab );
 
     void SetCondFormList( ScConditionalFormatList* pList, SCTAB nTab );
@@ -1549,8 +1547,6 @@ public:
     SC_DLLPUBLIC sal_uInt32      GetRangeOverflowType() const            { return nRangeOverflowType; }
 
     // for broadcasting/listening
-    void            SetNoSetDirty( bool bVal ) { bNoSetDirty = bVal; }
-    bool            GetNoSetDirty() const { return bNoSetDirty; }
     void            SetInsertingFromOtherDoc( bool bVal ) { bInsertingFromOtherDoc = bVal; }
     bool            IsInsertingFromOtherDoc() const { return bInsertingFromOtherDoc; }
     void            SetLoadingMedium( bool bVal );

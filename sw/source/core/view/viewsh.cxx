@@ -717,7 +717,7 @@ void ViewShell::LayoutIdle()
 }
 
 
-void lcl_InvalidateAllCntnt( ViewShell& rSh, sal_uInt8 nInv )
+static void lcl_InvalidateAllCntnt( ViewShell& rSh, sal_uInt8 nInv )
 {
     sal_Bool bCrsr = rSh.ISA(SwCrsrShell);
     if ( bCrsr )
@@ -737,7 +737,7 @@ void lcl_InvalidateAllCntnt( ViewShell& rSh, sal_uInt8 nInv )
  *  objects (Writer fly frame and drawing objects), which are anchored
  *  to paragraph or to character. #i11860#
  */
-void lcl_InvalidateAllObjPos( ViewShell &_rSh )
+static void lcl_InvalidateAllObjPos( ViewShell &_rSh )
 {
     const bool bIsCrsrShell = _rSh.ISA(SwCrsrShell);
     if ( bIsCrsrShell )

@@ -29,9 +29,6 @@ import com.sun.star.uno.UnoRuntime;
 import com.sun.star.wizards.common.Helper;
 import com.sun.star.wizards.common.PropertyNames;
 
-/**
- * @author rpiterman
- */
 public class PeerConfig implements XWindowListener
 {
 
@@ -152,7 +149,6 @@ public class PeerConfig implements XWindowListener
     }
 
     /**
-     * 
      * @param oAPIControl an API control that the interface XControl can be derived from
      * @param _saccessname 
      */
@@ -180,7 +176,6 @@ public class PeerConfig implements XWindowListener
     }
 
     /**
-     * 
      * @param oAPIControl an API control that the interface XControl can be derived from
      * @param _propnames 
      * @param _propvalues 

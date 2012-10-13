@@ -42,10 +42,6 @@ import com.sun.star.wizards.web.data.CGDocument;
 import com.sun.star.wizards.web.data.CGExporter;
 import com.sun.star.wizards.web.data.TypeDetection;
 
-/**
- *
- * @author  rpiterman
- */
 public abstract class AbstractExporter implements Exporter
 {
 
@@ -119,9 +115,6 @@ public abstract class AbstractExporter implements Exporter
 
     protected void closeDocument(Object doc, XMultiServiceFactory xmsf)
     {
-        /*OfficeDocument.dispose(
-        xmsf,
-        (XComponent) UnoRuntime.queryInterface(XComponent.class, doc));*/
         try
         {
             XCloseable xc = UnoRuntime.queryInterface(XCloseable.class, doc);

@@ -24,6 +24,8 @@
 #include <algorithm>
 #include <functional>
 
+#define MAX_BSPLINE_DEGREE 15
+
 //.............................................................................
 namespace chart
 {
@@ -691,7 +693,9 @@ void SplineCalculater::CalculateBSplines(
     // ODF1.2 spec variable p
     OSL_ASSERT( nResolution > 1 );
     OSL_ASSERT( nDegree >= 1 );
-    sal_uInt32 p = nDegree;
+
+    // limit the b-spline degree to prevent insanely large sets of points
+    sal_uInt32 p = std::min<sal_uInt32>(nDegree, MAX_BSPLINE_DEGREE);
 
     rResult.SequenceX.realloc(0);
     rResult.SequenceY.realloc(0);

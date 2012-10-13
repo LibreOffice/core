@@ -73,7 +73,7 @@ typedef std::vector< uno::Reference< sheet::XSpreadsheet > >  SheetMap;
 // #FIXME #TODO the implementation of the Sheets collections sucks,
 // e.g. there is no support for tracking sheets added/removed from the collection
 
-uno::Reference< uno::XInterface >
+static uno::Reference< uno::XInterface >
 lcl_getModulAsUnoObject( const uno::Reference< sheet::XSpreadsheet >& xSheet, const uno::Reference< frame::XModel >& xModel ) throw ( uno::RuntimeException )
 {
     uno::Reference< uno::XInterface > xRet;

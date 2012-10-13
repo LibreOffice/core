@@ -38,7 +38,6 @@
  * Listener interface to get information about application shutdown
  * if java virtual machine dies.
  *
- * @author     Andreas Schl&uuml;ns
  */
 public interface IShutdownListener
 {

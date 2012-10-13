@@ -20,7 +20,7 @@ $(eval $(call gb_ExternalProject_register_targets,tomcat,\
 
 $(call gb_ExternalProject_get_state_target,tomcat,build) :
 	cd "$(call gb_UnpackedTarball_get_dir,tomcat)/jakarta-servletapi-5" && \
-	"$(ANT)" \
+	$(ICECREAM_RUN) "$(ANT)" \
 		-q \
 		-f build.xml \
 		-Dbuild.label="build-$(RSCREVISION)" \

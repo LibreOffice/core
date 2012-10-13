@@ -118,7 +118,7 @@ SwImplShellAction::~SwImplShellAction()
                     possibly fill Style
  --------------------------------------------------------------------*/
 
-SwCharFmt* lcl_FindCharFmt( SwDoc& rDoc,
+static SwCharFmt* lcl_FindCharFmt( SwDoc& rDoc,
                             const String& rName,
                             SwDocStyleSheet* pStyle = 0,
                             sal_Bool bCreate = sal_True )
@@ -164,7 +164,7 @@ SwCharFmt* lcl_FindCharFmt( SwDoc& rDoc,
                     fill Style
  --------------------------------------------------------------------*/
 
-SwTxtFmtColl* lcl_FindParaFmt(  SwDoc& rDoc,
+static SwTxtFmtColl* lcl_FindParaFmt(  SwDoc& rDoc,
                                 const String& rName,
                                 SwDocStyleSheet* pStyle = 0,
                                 sal_Bool bCreate = sal_True )
@@ -207,7 +207,7 @@ SwTxtFmtColl* lcl_FindParaFmt(  SwDoc& rDoc,
  --------------------------------------------------------------------*/
 
 
-SwFrmFmt* lcl_FindFrmFmt(   SwDoc& rDoc,
+static SwFrmFmt* lcl_FindFrmFmt(   SwDoc& rDoc,
                             const String& rName,
                             SwDocStyleSheet* pStyle = 0,
                             sal_Bool bCreate = sal_True )
@@ -245,7 +245,7 @@ SwFrmFmt* lcl_FindFrmFmt(   SwDoc& rDoc,
  --------------------------------------------------------------------*/
 
 
-const SwPageDesc* lcl_FindPageDesc( SwDoc&  rDoc,
+static const SwPageDesc* lcl_FindPageDesc( SwDoc&  rDoc,
                                     const String&    rName,
                                     SwDocStyleSheet* pStyle = 0,
                                     sal_Bool bCreate = sal_True )
@@ -279,7 +279,7 @@ const SwPageDesc* lcl_FindPageDesc( SwDoc&  rDoc,
     return pDesc;
 }
 
-const SwNumRule* lcl_FindNumRule(   SwDoc&  rDoc,
+static const SwNumRule* lcl_FindNumRule(   SwDoc&  rDoc,
                                     const String&    rName,
                                     SwDocStyleSheet* pStyle = 0,
                                     sal_Bool bCreate = sal_True )
@@ -311,7 +311,7 @@ const SwNumRule* lcl_FindNumRule(   SwDoc&  rDoc,
 }
 
 
-sal_uInt16 lcl_FindName(const SwPoolFmtList& rLst, SfxStyleFamily eFam,
+static sal_uInt16 lcl_FindName(const SwPoolFmtList& rLst, SfxStyleFamily eFam,
     const rtl::OUString& rName)
 {
     if(!rLst.empty())
@@ -530,19 +530,19 @@ const String&  SwDocStyleSheet::GetFollow() const
  --------------------------------------------------------------------*/
 
 
-sal_Bool  SwDocStyleSheet::HasFollowSupport() const
+bool  SwDocStyleSheet::HasFollowSupport() const
 {
     switch(nFamily)
     {
         case SFX_STYLE_FAMILY_PARA :
-        case SFX_STYLE_FAMILY_PAGE : return sal_True;
+        case SFX_STYLE_FAMILY_PAGE : return true;
         case SFX_STYLE_FAMILY_FRAME:
         case SFX_STYLE_FAMILY_CHAR :
-        case SFX_STYLE_FAMILY_PSEUDO: return sal_False;
+        case SFX_STYLE_FAMILY_PSEUDO: return false;
         default:
             OSL_ENSURE(!this, "unknown style family");
     }
-    return sal_False;
+    return false;
 }
 
 /*--------------------------------------------------------------------
@@ -550,28 +550,28 @@ sal_Bool  SwDocStyleSheet::HasFollowSupport() const
  --------------------------------------------------------------------*/
 
 
-sal_Bool  SwDocStyleSheet::HasParentSupport() const
+bool  SwDocStyleSheet::HasParentSupport() const
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     switch(nFamily)
     {
         case SFX_STYLE_FAMILY_CHAR :
         case SFX_STYLE_FAMILY_PARA :
-        case SFX_STYLE_FAMILY_FRAME: bRet = sal_True;
+        case SFX_STYLE_FAMILY_FRAME: bRet = true;
         default:; //prevent warning
     }
     return bRet;
 }
 
 
-sal_Bool  SwDocStyleSheet::HasClearParentSupport() const
+bool  SwDocStyleSheet::HasClearParentSupport() const
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     switch(nFamily)
     {
         case SFX_STYLE_FAMILY_PARA :
         case SFX_STYLE_FAMILY_CHAR :
-        case SFX_STYLE_FAMILY_FRAME: bRet = sal_True;
+        case SFX_STYLE_FAMILY_FRAME: bRet = true;
         default:; //prevent warning
     }
     return bRet;
@@ -758,20 +758,20 @@ String  SwDocStyleSheet::GetDescription()
  --------------------------------------------------------------------*/
 
 
-sal_Bool  SwDocStyleSheet::SetName( const String& rStr)
+bool  SwDocStyleSheet::SetName( const String& rStr)
 {
     if( !rStr.Len() )
-        return sal_False;
+        return false;
 
     if( aName != rStr )
     {
         if( !SfxStyleSheetBase::SetName( rStr ))
-            return sal_False;
+            return false;
     }
     else if(!bPhysical)
         FillStyleSheet( FillPhysical );
 
-    int bChg = sal_False;
+    int bChg = false;
     switch(nFamily)
     {
         case SFX_STYLE_FAMILY_CHAR :
@@ -780,7 +780,7 @@ sal_Bool  SwDocStyleSheet::SetName( const String& rStr)
             if( pCharFmt && pCharFmt->GetName() != rStr )
             {
                 pCharFmt->SetName( rStr );
-                bChg = sal_True;
+                bChg = true;
             }
             break;
         }
@@ -794,7 +794,7 @@ sal_Bool  SwDocStyleSheet::SetName( const String& rStr)
                 else
                     pColl->SetName(rStr);
 
-                bChg = sal_True;
+                bChg = true;
             }
             break;
         }
@@ -808,7 +808,7 @@ sal_Bool  SwDocStyleSheet::SetName( const String& rStr)
                 else
                     pFrmFmt->SetName( rStr );
 
-                bChg = sal_True;
+                bChg = true;
             }
             break;
         }
@@ -830,7 +830,7 @@ sal_Bool  SwDocStyleSheet::SetName( const String& rStr)
                 rDoc.GetIDocumentUndoRedo().DoUndo(bDoesUndo);
 
                 rDoc.SetModified();
-                bChg = sal_True;
+                bChg = true;
             }
             break;
         case SFX_STYLE_FAMILY_PSEUDO:
@@ -848,7 +848,7 @@ sal_Bool  SwDocStyleSheet::SetName( const String& rStr)
                         pNumRule = rDoc.FindNumRulePtr(rStr);
                         rDoc.SetModified();
 
-                        bChg = sal_True;
+                        bChg = true;
                     }
                 }
                 else
@@ -857,7 +857,7 @@ sal_Bool  SwDocStyleSheet::SetName( const String& rStr)
                     ((SwNumRule*)pNumRule)->SetName( rStr, rDoc );
                     rDoc.SetModified();
 
-                    bChg = sal_True;
+                    bChg = true;
                 }
             }
 
@@ -875,7 +875,7 @@ sal_Bool  SwDocStyleSheet::SetName( const String& rStr)
         if( pSh )
             pSh->CallChgLnk();
     }
-    return sal_True;
+    return true;
 }
 
 /*--------------------------------------------------------------------
@@ -883,7 +883,7 @@ sal_Bool  SwDocStyleSheet::SetName( const String& rStr)
  --------------------------------------------------------------------*/
 
 
-sal_Bool   SwDocStyleSheet::SetParent( const String& rStr)
+bool   SwDocStyleSheet::SetParent( const String& rStr)
 {
     SwFmt* pFmt = 0, *pParent = 0;
     switch(nFamily)
@@ -913,7 +913,7 @@ sal_Bool   SwDocStyleSheet::SetParent( const String& rStr)
             OSL_ENSURE(!this, "unknown style family");
     }
 
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     if( pFmt && pFmt->DerivedFrom() &&
         pFmt->DerivedFrom()->GetName() != rStr )
     {
@@ -938,10 +938,10 @@ sal_Bool   SwDocStyleSheet::SetParent( const String& rStr)
  --------------------------------------------------------------------*/
 
 
-sal_Bool   SwDocStyleSheet::SetFollow( const String& rStr)
+bool   SwDocStyleSheet::SetFollow( const String& rStr)
 {
     if( rStr.Len() && !SfxStyleSheetBase::SetFollow( rStr ))
-        return sal_False;
+        return false;
 
     SwImplShellAction aTmpSh( rDoc );
     switch(nFamily)
@@ -987,7 +987,7 @@ sal_Bool   SwDocStyleSheet::SetFollow( const String& rStr)
         OSL_ENSURE(!this, "unknwown style family");
     }
 
-    return sal_True;
+    return true;
 }
 
 /*--------------------------------------------------------------------
@@ -1371,7 +1371,7 @@ void SwDocStyleSheet::SetItemSet( const SfxItemSet& rSet,
     }
 }
 
-void lcl_SaveStyles( sal_uInt16 nFamily, std::vector<void*>& rArr, SwDoc& rDoc )
+static void lcl_SaveStyles( sal_uInt16 nFamily, std::vector<void*>& rArr, SwDoc& rDoc )
 {
     switch( nFamily )
     {
@@ -1429,7 +1429,7 @@ static bool lcl_Contains(const std::vector<void*>& rArr, const void* p)
     return std::find( rArr.begin(), rArr.end(), p ) != rArr.end();
 }
 
-void lcl_DeleteInfoStyles( sal_uInt16 nFamily, std::vector<void*>& rArr, SwDoc& rDoc )
+static void lcl_DeleteInfoStyles( sal_uInt16 nFamily, std::vector<void*>& rArr, SwDoc& rDoc )
 {
     sal_uInt16 n, nCnt;
     switch( nFamily )
@@ -1843,7 +1843,7 @@ SwFrmFmt* SwDocStyleSheet::GetFrmFmt()
     return pFrmFmt;
 }
 
-sal_Bool  SwDocStyleSheet::IsUsed() const
+bool  SwDocStyleSheet::IsUsed() const
 {
     if( !bPhysical )
     {
@@ -1852,7 +1852,7 @@ sal_Bool  SwDocStyleSheet::IsUsed() const
     }
 
     if( !bPhysical )
-        return sal_False;
+        return false;
 
     const SwModify* pMod;
     switch( nFamily )
@@ -1863,11 +1863,11 @@ sal_Bool  SwDocStyleSheet::IsUsed() const
     case SFX_STYLE_FAMILY_PAGE : pMod = pDesc;      break;
 
     case SFX_STYLE_FAMILY_PSEUDO:
-            return pNumRule ? rDoc.IsUsed( *pNumRule ) : sal_False;
+            return pNumRule ? rDoc.IsUsed( *pNumRule ) : false;
 
     default:
         OSL_ENSURE(!this, "unknown style family");
-        return sal_False;
+        return false;
     }
     return rDoc.IsUsed( *pMod );
 }
@@ -2230,7 +2230,7 @@ void SwDocStyleSheetPool::Remove( SfxStyleSheetBase* pStyle)
 
 
 
-sal_Bool  SwDocStyleSheetPool::SetParent( SfxStyleFamily eFam,
+bool  SwDocStyleSheetPool::SetParent( SfxStyleFamily eFam,
                                 const String &rStyle, const String &rParent )
 {
     SwFmt* pFmt = 0, *pParent = 0;
@@ -2259,7 +2259,7 @@ sal_Bool  SwDocStyleSheetPool::SetParent( SfxStyleFamily eFam,
         OSL_ENSURE(!this, "unknown style family");
     }
 
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     if( pFmt && pFmt->DerivedFrom() &&
         pFmt->DerivedFrom()->GetName() != rParent )
     {

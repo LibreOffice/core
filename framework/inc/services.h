@@ -80,7 +80,6 @@ namespace framework{
 #define SERVICENAME_GLOBALACCELERATORCONFIGURATION              DECLARE_ASCII("com.sun.star.ui.GlobalAcceleratorConfiguration")
 #define SERVICENAME_MODULEACCELERATORCONFIGURATION              DECLARE_ASCII("com.sun.star.ui.ModuleAcceleratorConfiguration")
 #define SERVICENAME_DOCUMENTACCELERATORCONFIGURATION            DECLARE_ASCII("com.sun.star.ui.DocumentAcceleratorConfiguration")
-#define SERVICENAME_SAXPARSER                                   DECLARE_ASCII("com.sun.star.xml.sax.Parser"                         )
 #define SERVICENAME_SAXWRITER                                   DECLARE_ASCII("com.sun.star.xml.sax.Writer"                         )
 #define SERVICENAME_STORAGEFACTORY                              DECLARE_ASCII("com.sun.star.embed.StorageFactory"                   )
 #define SERVICENAME_FILESYSTEMSTORAGEFACTORY                    DECLARE_ASCII("com.sun.star.embed.FileSystemStorageFactory"         )

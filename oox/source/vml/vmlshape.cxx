@@ -667,8 +667,8 @@ Reference< XShape > BezierShape::implConvertAndInsert( const Reference< XShapes 
             // Parse VML path string and convert to absolute coordinates
             ConversionHelper::decodeVmlPath( aCoordLists, aFlagLists, maShapeModel.maVmlPath );
 
-            for ( SubPathList::iterator aListIt = aCoordLists.begin(); aListIt != aCoordLists.end(); aListIt++ )
-                for ( ::std::vector< Point >::iterator aPointIt = (*aListIt).begin(); aPointIt != (*aListIt).end(); aPointIt++)
+            for ( SubPathList::iterator aListIt = aCoordLists.begin(); aListIt != aCoordLists.end(); ++aListIt )
+                for ( ::std::vector< Point >::iterator aPointIt = (*aListIt).begin(); aPointIt != (*aListIt).end(); ++aPointIt)
                 {
                     (*aPointIt) = lclGetAbsPoint( (*aPointIt), rShapeRect, aCoordSys );
                 }

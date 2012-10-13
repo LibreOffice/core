@@ -171,7 +171,7 @@ static SdTypesCache gImplTypesCache;
         { 0,0,0,0,0,0}
 
 
-    const SfxItemPropertyMapEntry* lcl_GetImpress_SdXShapePropertyGraphicMap_Impl()
+    static const SfxItemPropertyMapEntry* lcl_GetImpress_SdXShapePropertyGraphicMap_Impl()
     {
 
         static const SfxItemPropertyMapEntry aImpress_SdXShapePropertyGraphicMap_Impl[] =
@@ -182,7 +182,7 @@ static SdTypesCache gImplTypesCache;
         return aImpress_SdXShapePropertyGraphicMap_Impl;
     }
 
-    const SfxItemPropertyMapEntry* lcl_GetImpress_SdXShapePropertySimpleMap_Impl()
+    static const SfxItemPropertyMapEntry* lcl_GetImpress_SdXShapePropertySimpleMap_Impl()
     {
 
         static const SfxItemPropertyMapEntry aImpress_SdXShapePropertySimpleMap_Impl[] =
@@ -199,7 +199,7 @@ static SdTypesCache gImplTypesCache;
         { MAP_CHAR_LEN("NavigationOrder"),          WID_NAVORDER,        &::getCppuType((const sal_Int32*)0),                       0, 0},\
         { 0,0,0,0,0,0}
 
-    const SfxItemPropertyMapEntry* lcl_GetDraw_SdXShapePropertySimpleMap_Impl()
+    static const SfxItemPropertyMapEntry* lcl_GetDraw_SdXShapePropertySimpleMap_Impl()
     {
         static const SfxItemPropertyMapEntry aDraw_SdXShapePropertyMap_Impl[] =
         {
@@ -207,7 +207,7 @@ static SdTypesCache gImplTypesCache;
         };
         return aDraw_SdXShapePropertyMap_Impl;
     }
-    const SfxItemPropertyMapEntry* lcl_GetDraw_SdXShapePropertyGraphicMap_Impl()
+    static const SfxItemPropertyMapEntry* lcl_GetDraw_SdXShapePropertyGraphicMap_Impl()
     {
         static const SfxItemPropertyMapEntry aDraw_SdXShapePropertyGraphicMap_Impl[] =
         {
@@ -216,7 +216,7 @@ static SdTypesCache gImplTypesCache;
         };
         return aDraw_SdXShapePropertyGraphicMap_Impl;
     }
-    const SfxItemPropertyMapEntry* lcl_ImplGetShapePropertyMap( sal_Bool bImpress, sal_Bool bGraphicObj )
+    static const SfxItemPropertyMapEntry* lcl_ImplGetShapePropertyMap( sal_Bool bImpress, sal_Bool bGraphicObj )
     {
         const SfxItemPropertyMapEntry* pRet = 0;
         if( bImpress )
@@ -236,7 +236,7 @@ static SdTypesCache gImplTypesCache;
         return pRet;
 
     }
-    const SvxItemPropertySet* lcl_ImplGetShapePropertySet( sal_Bool bImpress, sal_Bool bGraphicObj )
+    static const SvxItemPropertySet* lcl_ImplGetShapePropertySet( sal_Bool bImpress, sal_Bool bGraphicObj )
     {
         const SvxItemPropertySet* pRet = 0;
         if( bImpress )
@@ -267,7 +267,7 @@ static SdTypesCache gImplTypesCache;
         }
         return pRet;
     }
-    const SfxItemPropertyMapEntry* lcl_GetEmpty_SdXShapePropertyMap_Impl()
+    static const SfxItemPropertyMapEntry* lcl_GetEmpty_SdXShapePropertyMap_Impl()
     {
         static SfxItemPropertyMapEntry aEmpty_SdXShapePropertyMap_Impl[] =
         {

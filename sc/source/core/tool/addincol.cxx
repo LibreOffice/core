@@ -343,7 +343,7 @@ void ScUnoAddInCollection::Initialize()
 }
 // -----------------------------------------------------------------------------
 
-sal_uInt16 lcl_GetCategory( const ::rtl::OUString& rName )
+static sal_uInt16 lcl_GetCategory( const ::rtl::OUString& rName )
 {
     static const sal_Char* aFuncNames[SC_FUNCGROUP_COUNT] =
     {
@@ -689,7 +689,7 @@ inline sal_Bool IsTypeName( const rtl::OUString& rName, const uno::Type& rType )
     return rName == rType.getTypeName();
 }
 
-sal_Bool lcl_ValidReturnType( const uno::Reference<reflection::XIdlClass>& xClass )
+static sal_Bool lcl_ValidReturnType( const uno::Reference<reflection::XIdlClass>& xClass )
 {
     //  this must match with ScUnoAddInCall::SetResult
 
@@ -737,7 +737,7 @@ sal_Bool lcl_ValidReturnType( const uno::Reference<reflection::XIdlClass>& xClas
     }
 }
 
-ScAddInArgumentType lcl_GetArgType( const uno::Reference<reflection::XIdlClass>& xClass )
+static ScAddInArgumentType lcl_GetArgType( const uno::Reference<reflection::XIdlClass>& xClass )
 {
     if (!xClass.is())
         return SC_ADDINARG_NONE;
@@ -1019,7 +1019,7 @@ void ScUnoAddInCollection::ReadFromAddIn( const uno::Reference<uno::XInterface>&
     }
 }
 
-void lcl_UpdateFunctionList( ScFunctionList& rFunctionList, const ScUnoAddInFuncData& rFuncData )
+static void lcl_UpdateFunctionList( ScFunctionList& rFunctionList, const ScUnoAddInFuncData& rFuncData )
 {
     ::rtl::OUString aCompare = rFuncData.GetUpperLocal();    // as used in FillFunctionDescFromData
 
@@ -1035,7 +1035,7 @@ void lcl_UpdateFunctionList( ScFunctionList& rFunctionList, const ScUnoAddInFunc
     }
 }
 
-const ScAddInArgDesc* lcl_FindArgDesc( const ScUnoAddInFuncData& rFuncData, const ::rtl::OUString& rArgIntName )
+static const ScAddInArgDesc* lcl_FindArgDesc( const ScUnoAddInFuncData& rFuncData, const ::rtl::OUString& rArgIntName )
 {
     long nArgCount = rFuncData.GetArgumentCount();
     const ScAddInArgDesc* pArguments = rFuncData.GetArguments();

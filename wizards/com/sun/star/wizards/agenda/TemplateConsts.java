@@ -17,10 +17,6 @@
  */
 package com.sun.star.wizards.agenda;
 
-/**
- * @author rpiterman
- *
- */
 public interface TemplateConsts
 {
 
@@ -135,7 +131,6 @@ public interface TemplateConsts
     public final static String FILLIN_MINUTE_RESPONSIBLE = "<mresponsible>";
     public final static String FILLIN_MINUTE_TIME = "<mtime>";
 
-//
     public final static String FILLIN_DATETITLE = "#datetitle#";
     public final static String FILLIN_TIMETITLE = "#timetitle#";
     public final static String FILLIN_LOCATIONTITLE = "#locationtitle#";
@@ -151,5 +146,4 @@ public interface TemplateConsts
     public final static String FILLIN_TO_DO = "#to-do#";
     public final static String FILLIN_RESPONSIBLE_PARTY = "#responsible-party#";
     public final static String FILLIN_DEADLINE = "#deadline#";
-//
 }

@@ -885,17 +885,18 @@ void XclExpCF::SaveXml( XclExpXmlStream& rStrm )
     mxImpl->SaveXml( rStrm );
 }
 
-XclExpCfvo::XclExpCfvo(const XclExpRoot& rRoot, const ScColorScaleEntry& rEntry, const ScAddress& rAddr):
+XclExpCfvo::XclExpCfvo(const XclExpRoot& rRoot, const ScColorScaleEntry& rEntry, const ScAddress& rAddr, bool bFirst):
     XclExpRecord(),
     XclExpRoot( rRoot ),
     mrEntry(rEntry),
-    maSrcPos(rAddr)
+    maSrcPos(rAddr),
+    mbFirst(bFirst)
 {
 }
 
 namespace {
 
-rtl::OString getColorScaleType( const ScColorScaleEntry& rEntry )
+rtl::OString getColorScaleType( const ScColorScaleEntry& rEntry, bool bFirst )
 {
     switch(rEntry.GetType())
     {
@@ -907,10 +908,11 @@ rtl::OString getColorScaleType( const ScColorScaleEntry& rEntry )
             return "percent";
         case COLORSCALE_FORMULA:
             return "formula";
-        case COLORSCALE_AUTOMIN:
-            return "min";
-        case COLORSCALE_AUTOMAX:
-            return "max";
+        case COLORSCALE_AUTO:
+            if(bFirst)
+                return "min";
+            else
+                return "max";
         case COLORSCALE_PERCENTILE:
             return "percentile";
         default:
@@ -938,7 +940,7 @@ void XclExpCfvo::SaveXml( XclExpXmlStream& rStrm )
     }
 
     rWorksheet->startElement( XML_cfvo,
-            XML_type, getColorScaleType(mrEntry).getStr(),
+            XML_type, getColorScaleType(mrEntry, mbFirst).getStr(),
             XML_val, aValue.getStr(),
             FSEND );
 
@@ -973,8 +975,7 @@ XclExpCondfmt::XclExpCondfmt( const XclExpRoot& rRoot, const ScConditionalFormat
     XclExpRecord( EXC_ID_CONDFMT ),
     XclExpRoot( rRoot )
 {
-    ScRangeList aScRanges;
-    GetDoc().FindConditionalFormat( rCondFormat.GetKey(), aScRanges, GetCurrScTab() );
+    ScRangeList aScRanges = rCondFormat.GetRange();
     GetAddressConverter().ConvertRangeList( maXclRanges, aScRanges, true );
     if( !maXclRanges.empty() )
     {
@@ -1116,8 +1117,8 @@ XclExpDataBar::XclExpDataBar( const XclExpRoot& rRoot, const ScDataBarFormat& rF
     const ScRange* pRange = rFormat.GetRange().front();
     ScAddress aAddr = pRange->aStart;
     // exact position is not important, we allow only absolute refs
-    mpCfvoLowerLimit.reset( new XclExpCfvo( GetRoot(), *mrFormat.GetDataBarData()->mpLowerLimit.get(), aAddr ) );
-    mpCfvoUpperLimit.reset( new XclExpCfvo( GetRoot(), *mrFormat.GetDataBarData()->mpUpperLimit.get(), aAddr ) );
+    mpCfvoLowerLimit.reset( new XclExpCfvo( GetRoot(), *mrFormat.GetDataBarData()->mpLowerLimit.get(), aAddr, true ) );
+    mpCfvoUpperLimit.reset( new XclExpCfvo( GetRoot(), *mrFormat.GetDataBarData()->mpUpperLimit.get(), aAddr, false ) );
 
     mpCol.reset( new XclExpColScaleCol( GetRoot(), mrFormat.GetDataBarData()->maPositiveColor ) );
     if(xExtLst.get())
@@ -1693,7 +1694,7 @@ XclExpWebQueryBuffer::XclExpWebQueryBuffer( const XclExpRoot& rRoot )
     if( !aModelProp.Is() ) return;
 
     Reference< XAreaLinks > xAreaLinks;
-    aModelProp.GetProperty( xAreaLinks, CREATE_OUSTRING( SC_UNO_AREALINKS ) );
+    aModelProp.GetProperty( xAreaLinks, SC_UNO_AREALINKS );
     Reference< XIndexAccess > xLinksIA( xAreaLinks, UNO_QUERY );
     if( !xLinksIA.is() ) return;
 
@@ -1707,16 +1708,16 @@ XclExpWebQueryBuffer::XclExpWebQueryBuffer( const XclExpRoot& rRoot )
             {
                 ScfPropertySet aLinkProp( xAreaLink );
                 OUString aFilter;
-                if( aLinkProp.GetProperty( aFilter, CREATE_OUSTRING( SC_UNONAME_FILTER ) ) &&
-                    (aFilter == CREATE_OUSTRING( EXC_WEBQRY_FILTER )) )
+                if( aLinkProp.GetProperty( aFilter, SC_UNONAME_FILTER ) &&
+                    (aFilter == EXC_WEBQRY_FILTER) )
                 {
                     // get properties
                     OUString /*aFilterOpt,*/ aUrl;
                     sal_Int32 nRefresh = 0;
 
-//                  aLinkProp.GetProperty( aFilterOpt, CREATE_OUSTRING( SC_UNONAME_FILTOPT ) );
-                    aLinkProp.GetProperty( aUrl, CREATE_OUSTRING( SC_UNONAME_LINKURL ) );
-                    aLinkProp.GetProperty( nRefresh, CREATE_OUSTRING( SC_UNONAME_REFDELAY ) );
+//                  aLinkProp.GetProperty( aFilterOpt, SC_UNONAME_FILTOPT );
+                    aLinkProp.GetProperty( aUrl, SC_UNONAME_LINKURL );
+                    aLinkProp.GetProperty( nRefresh, SC_UNONAME_REFDELAY );
 
                     String aAbsDoc( ScGlobal::GetAbsDocName( aUrl, pShell ) );
                     INetURLObject aUrlObj( aAbsDoc );

@@ -77,7 +77,9 @@ using ::rtl::OUStringToOString;
  *  static helpers
  */
 
+#if defined( UNX ) && !( defined( QUARTZ ) || defined( IOS )  || defined( ANDROID ) )
 static oslModule driverLib                  = NULL;
+#endif
 extern "C"
 {
 typedef int(*setupFunction)(PrinterInfo&);
@@ -107,7 +109,7 @@ static rtl::OUString getPdfDir( const PrinterInfo& rInfo )
 
 static void getPaLib()
 {
-#if defined( UNX ) && !( defined( QUARTZ ) || defined( IOS ) )
+#if defined( UNX ) && !( defined( QUARTZ ) || defined( IOS )  || defined( ANDROID ) )
     if( ! driverLib )
     {
         OUString aLibName( RTL_CONSTASCII_USTRINGPARAM( _XSALSET_LIBNAME ) );

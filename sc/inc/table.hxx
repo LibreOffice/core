@@ -543,6 +543,8 @@ public:
     void        SetPattern( SCCOL nCol, SCROW nRow, const ScPatternAttr& rAttr, bool bPutToPool = false );
     void        ApplyPatternIfNumberformatIncompatible( const ScRange& rRange,
                             const ScPatternAttr& rPattern, short nNewType );
+    void        AddCondFormatData( const ScRangeList& rRange, sal_uInt32 nIndex );
+    void        RemoveCondFormatData( const ScRangeList& rRange, sal_uInt32 nIndex );
 
     void        ApplyStyle( SCCOL nCol, SCROW nRow, const ScStyleSheet& rStyle );
     void        ApplyStyleArea( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow, const ScStyleSheet& rStyle );
@@ -776,8 +778,6 @@ public:
     xub_StrLen  GetMaxNumberStringLen( sal_uInt16& nPrecision,
                                        SCCOL nCol,
                                        SCROW nRowStart, SCROW nRowEnd ) const;
-
-    void        FindConditionalFormat( sal_uLong nKey, ScRangeList& rRanges ) const;
 
     void        IncRecalcLevel();
     void        DecRecalcLevel( bool bUpdateNoteCaptionPos = true );

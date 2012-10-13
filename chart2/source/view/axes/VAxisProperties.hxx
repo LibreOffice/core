@@ -70,10 +70,10 @@ struct AxisLabelProperties
 
     AxisLabelStaggering  eStaggering;
 
-    sal_Bool             bLineBreakAllowed;
-    sal_Bool             bOverlapAllowed;
+    bool                 bLineBreakAllowed;
+    bool                 bOverlapAllowed;
 
-    sal_Bool             bStackCharacters;
+    bool                 bStackCharacters;
     double               fRotationAngleDegree;
 
     sal_Int32   nRhythm; //show only each nth label with n==nRhythm
@@ -83,7 +83,7 @@ struct AxisLabelProperties
     void init( const ::com::sun::star::uno::Reference<
                 ::com::sun::star::chart2::XAxis >&  xAxisModel );
 
-    sal_Bool            getIsStaggered() const;
+    bool getIsStaggered() const;
 };
 
 struct AxisProperties
@@ -109,7 +109,7 @@ struct AxisProperties
     //this direction is used to indicate in which direction inner tickmarks are to be drawn
     double          m_fInnerDirectionSign;
     LabelAlignment  m_aLabelAlignment;
-    sal_Bool        m_bDisplayLabels;
+    bool            m_bDisplayLabels;
 
     sal_Int32       m_nNumberFormatKey;
 

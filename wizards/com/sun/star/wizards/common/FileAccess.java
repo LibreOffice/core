@@ -21,7 +21,6 @@ import com.sun.star.beans.XPropertySet;
 import com.sun.star.lang.Locale;
 import com.sun.star.uno.Exception;
 import com.sun.star.util.XMacroExpander;
-// import com.sun.star.wizards.common.NoValidPathException;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -30,7 +29,6 @@ import java.util.Vector;
 import com.sun.star.awt.VclWindowPeerAttribute;
 import com.sun.star.io.XActiveDataSink;
 import com.sun.star.io.XInputStream;
-// import com.sun.star.io.XStream;
 import com.sun.star.io.XTextInputStream;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.ucb.*;
@@ -69,7 +67,6 @@ public class FileAccess
         String[] PathList = JavaTools.ArrayoutofString(ResultPath, PropertyNames.SEMI_COLON);
         int MaxIndex = PathList.length - 1;
         String CompCurPath;
-        //  sAddPath.replace(null, (char) 47);
         String CompAddPath = JavaTools.replaceSubString(sAddPath, PropertyNames.EMPTY_STRING, "/");
         String CurPath;
         for (int i = 0; i <= MaxIndex; i++)
@@ -208,28 +205,19 @@ public class FileAccess
     {
         //This method currently only works with sPath="Template"
 
-        // String ResultPath = PropertyNames.EMPTY_STRING;
         ArrayList<String> aPathList = new ArrayList<String>();
         String Template_writable = PropertyNames.EMPTY_STRING;
         String[] Template_internal;
         String[] Template_user;
 
-        // String [] ReadPaths = null;
-
-        // boolean bexists = false;
         try
         {
             XInterface xPathInterface = (XInterface) xMSF.createInstance("com.sun.star.util.PathSettings");
             XPropertySet xPropertySet = UnoRuntime.queryInterface(XPropertySet.class, xPathInterface);
-            // String WritePath = PropertyNames.EMPTY_STRING;
-            // XInterface xUcbInterface = (XInterface) xMSF.createInstance("com.sun.star.ucb.SimpleFileAccess");
-            // XSimpleFileAccess xSimpleFileAccess = (XSimpleFileAccess) com.sun.star.uno.UnoRuntime.queryInterface(XSimpleFileAccess.class, xUcbInterface);
-
             Template_writable = (String) xPropertySet.getPropertyValue(_sPath + "_writable");
             Template_internal = (String[]) xPropertySet.getPropertyValue(_sPath + "_internal");
             Template_user = (String[]) xPropertySet.getPropertyValue(_sPath + "_user");
 
-            // int iNumEntries = Template_user.length + Template_internal.length + 1;
             for (int i = 0; i < Template_internal.length; i++)
             {
                 String sPath = Template_internal[i];
@@ -248,41 +236,12 @@ public class FileAccess
             }
             aPathList.addAll(Arrays.asList(Template_user));
             aPathList.add(Template_writable);
-        // WritePath = Template_writable;
-
-//            if (sType.equalsIgnoreCase("user"))
-//            {
-//                ResultPath = WritePath;
-//                bexists = true;
-//            }
-
         // There was a bug here, because we have to search through the whole list of paths
-//            else
-//            {
-//                //find right path using the search sub path
-//                for (int i = 0; i<ReadPaths.length; i++)
-//                {
-//                    String tmpPath = ReadPaths[i]+sSearchDir;
-//                    if (xSimpleFileAccess.exists(tmpPath))
-//                    {
-//                        ResultPath = ReadPaths[i];
-//                        bexists = true;
-//                        break;
-//                    }
-//                }
-//            }
-//            ResultPath = deleteLastSlashfromUrl(ResultPath);
         }
         catch (Exception exception)
         {
             exception.printStackTrace(System.err);
-        // ResultPath = PropertyNames.EMPTY_STRING;
         }
-//        if (bexists == false)
-//        {
-//            throw new NoValidPathException(xMSF, PropertyNames.EMPTY_STRING);
-//        }
-//        return ResultPath;
         return aPathList;
     }
 
@@ -350,8 +309,6 @@ public class FileAccess
                 return sPath;
             }
 
-        // java.util.Locale jl = new java.util.Locale(
-        //        l.Language , l.Country, l.Variant );
         }
         catch (com.sun.star.uno.Exception e)
         {
@@ -360,48 +317,6 @@ public class FileAccess
         return _sPath;
     }
 
-    /*
-    public static String getOfficePath(XMultiServiceFactory xMSF, String sPath, String sType) throws NoValidPathException {
-    String ResultPath = PropertyNames.EMPTY_STRING;
-    Object oPathSettings;
-    int iPathCount;
-    String[] PathList;
-    boolean bexists = false;
-    try {
-    XInterface xUcbInterface = (XInterface) xMSF.createInstance("com.sun.star.ucb.SimpleFileAccess");
-    XSimpleFileAccess xSimpleFileAccess = (XSimpleFileAccess) com.sun.star.uno.UnoRuntime.queryInterface(XSimpleFileAccess.class, xUcbInterface);
-    ResultPath = getOfficePath(xMSF, sPath, xSimpleFileAccess);
-    PathList = JavaTools.ArrayoutofString(ResultPath, PropertyNames.SEMI_COLON);
-    if (!sType.equals(PropertyNames.EMPTY_STRING)) {
-    ResultPath = PropertyNames.EMPTY_STRING;
-    String CurPath = PropertyNames.EMPTY_STRING;
-    String EndString = "/" + sType;
-    int EndLength = EndString.length();
-    sType = "/" + sType + "/";
-    int MaxIndex = PathList.length - 1;
-    int iPos;
-    for (int i = 0; i <= MaxIndex; i++) {
-    CurPath = PathList[i];
-    iPos = CurPath.length() - EndLength;
-    if ((CurPath.indexOf(sType) > 0) || (CurPath.indexOf(EndString) == iPos)) {
-    ResultPath = deleteLastSlashfromUrl(CurPath);
-    if (xSimpleFileAccess.exists(ResultPath))
-    break;
-    }
-    }
-    } else
-    ResultPath = PathList[0];
-    if (ResultPath.equals(PropertyNames.EMPTY_STRING) == false)
-    bexists = xSimpleFileAccess.exists(ResultPath);
-    } catch (Exception exception) {
-    exception.printStackTrace(System.err);
-    ResultPath = PropertyNames.EMPTY_STRING;
-    }
-    if (bexists == false)
-    throw new NoValidPathException(xMSF);
-    return ResultPath;
-    }
-     **/
     public static void combinePaths(XMultiServiceFactory xMSF, ArrayList<String> _aFirstPath, String _sSecondPath) throws NoValidPathException
     {
         for (int i = 0; i < _aFirstPath.size(); ++i)
@@ -588,7 +503,7 @@ public class FileAccess
      */
     public static String[][] getFolderTitles(com.sun.star.lang.XMultiServiceFactory xMSF, String FilterName, String FolderName)
     {
-        String[][] LocLayoutFiles = new String[2][]; //{PropertyNames.EMPTY_STRING,PropertyNames.EMPTY_STRING}{PropertyNames.EMPTY_STRING};
+        String[][] LocLayoutFiles = new String[2][];
         try
         {
             java.util.Vector<String> TitleVector = null;
@@ -716,7 +631,7 @@ public class FileAccess
     public static String[][] getFolderTitles(com.sun.star.lang.XMultiServiceFactory xMSF, String _sStartFilterName, ArrayList<String> FolderName, String _sEndFilterName)
             throws NoValidPathException
     {
-        String[][] LocLayoutFiles = new String[2][]; //{PropertyNames.EMPTY_STRING,PropertyNames.EMPTY_STRING}{PropertyNames.EMPTY_STRING};
+        String[][] LocLayoutFiles = new String[2][];
         if (FolderName.size() == 0)
         {
             throw new NoValidPathException(null, "Path not given.");
@@ -827,7 +742,6 @@ public class FileAccess
     }
 
     /**
-     * @author rpiterman
      * @param filename
      * @return the extension of the given filename.
      */
@@ -850,7 +764,6 @@ public class FileAccess
     }
 
     /**
-     * @author rpiterman
      * @param s
      * @return
      */
@@ -873,7 +786,6 @@ public class FileAccess
     }
 
     /**
-     * @author rpiterman
      * @param filename
      * @param def what to return in case of an exception
      * @return true if the given file exists or not.
@@ -896,7 +808,6 @@ public class FileAccess
     }
 
     /**
-     * @author rpiterman
      * @param filename
      * @return
      */
@@ -918,7 +829,6 @@ public class FileAccess
 
     /**
      * lists the files in a given directory
-     * @author rpiterman
      * @param dir
      * @param includeFolders
      * @return
@@ -940,7 +850,6 @@ public class FileAccess
     }
 
     /**
-     * @author rpiterman
      * @param file
      * @return
      */
@@ -964,7 +873,6 @@ public class FileAccess
     }
 
     /**
-     * @author rpiterman
      * @param path
      * @return
      */
@@ -984,7 +892,6 @@ public class FileAccess
     }
 
     /**
-     * @author rpiterman
      * @param path 
      * @param pathSeparator
      * @return
@@ -1003,7 +910,6 @@ public class FileAccess
     }
 
     /**
-     * @author rpiterman
      * @param source
      * @param target
      * @return
@@ -1041,7 +947,6 @@ public class FileAccess
     }
 
     /**
-     * 
      * @param url 
      * @return the parent dir of the given url.
      * if the path points to file, gives the directory in which the file is.

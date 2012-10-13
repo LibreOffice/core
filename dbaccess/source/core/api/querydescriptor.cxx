@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <string.h>
 
 #include "querydescriptor.hxx"
 #include "apitools.hxx"
@@ -154,7 +155,7 @@ sal_Int64 SAL_CALL OQueryDescriptor_Base::getSomething( const Sequence< sal_Int8
     if (_rIdentifier.getLength() != 16)
         return 0;
 
-    if (0 == rtl_compareMemory(getImplementationId().getConstArray(),  _rIdentifier.getConstArray(), 16 ) )
+    if (0 == memcmp(getImplementationId().getConstArray(),  _rIdentifier.getConstArray(), 16 ) )
         return reinterpret_cast<sal_Int64>(this);
 
     return 0;

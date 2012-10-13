@@ -85,20 +85,20 @@ ScStyleSheet::~ScStyleSheet()
 
 //------------------------------------------------------------------------
 
-sal_Bool ScStyleSheet::HasFollowSupport() const
+bool ScStyleSheet::HasFollowSupport() const
 {
     return false;
 }
 
 //------------------------------------------------------------------------
 
-sal_Bool ScStyleSheet::HasParentSupport () const
+bool ScStyleSheet::HasParentSupport () const
 {
-    sal_Bool bHasParentSupport = false;
+    bool bHasParentSupport = false;
 
     switch ( GetFamily() )
     {
-        case SFX_STYLE_FAMILY_PARA: bHasParentSupport = sal_True;   break;
+        case SFX_STYLE_FAMILY_PARA: bHasParentSupport = true;   break;
         case SFX_STYLE_FAMILY_PAGE: bHasParentSupport = false;  break;
         default:
         {
@@ -111,9 +111,9 @@ sal_Bool ScStyleSheet::HasParentSupport () const
 
 //------------------------------------------------------------------------
 
-sal_Bool ScStyleSheet::SetParent( const String& rParentName )
+bool ScStyleSheet::SetParent( const String& rParentName )
 {
-    sal_Bool bResult = false;
+    bool bResult = false;
     String aEffName = rParentName;
     SfxStyleSheetBase* pStyle = pPool->Find( aEffName, nFamily );
     if (!pStyle)
@@ -263,7 +263,7 @@ SfxItemSet& ScStyleSheet::GetItemSet()
 
 //------------------------------------------------------------------------
 
-sal_Bool ScStyleSheet::IsUsed() const
+bool ScStyleSheet::IsUsed() const
 {
     if ( GetFamily() == SFX_STYLE_FAMILY_PARA )
     {
@@ -277,7 +277,7 @@ sal_Bool ScStyleSheet::IsUsed() const
         return eUsage == USED;
     }
     else
-        return sal_True;
+        return true;
 }
 
 //------------------------------------------------------------------------
@@ -332,7 +332,7 @@ const String& ScStyleSheet::GetFollow() const
 //! Flag gesetzt und abgefragt werden.
 //! Die ganze Abfrage muss raus, wenn fuer eine neue Datei-Version die Namens-Umsetzung wegfaellt.
 
-sal_Bool ScStyleSheet::SetName( const String& rNew )
+bool ScStyleSheet::SetName( const String& rNew )
 {
     String aFileStdName = rtl::OUString(STRING_STANDARD);
     if ( rNew == aFileStdName && aFileStdName != ScGlobal::GetRscString(STR_STYLENAME_STANDARD) )

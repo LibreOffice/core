@@ -750,12 +750,6 @@ public:
     // is the whole document protected/hidden (for UI...)
     sal_Bool IsAllProtect() const { return bAllProtect; }
 
-#ifdef SW_CRSR_TIMER
-    // Set flag at VisCrsr. Is it triggered by Timer (TRUE) or directly (FALSE).
-    // Default is triggert by Timer.
-    sal_Bool ChgCrsrTimerFlag( sal_Bool bTimerOn = sal_True );
-#endif
-
     sal_Bool BasicActionPend() const    { return nBasicActionCnt != nStartAction; }
 
     sal_Bool GotoRegion( const String& rName );
@@ -907,7 +901,7 @@ inline SwPaM* SwCrsrShell::GetTblCrs()
 inline void SwCrsrShell::UnSetVisCrsr()
 {
     pVisCrsr->Hide();
-    pVisCrsr->SetDragCrsr( sal_False );
+    pVisCrsr->SetDragCrsr( false );
 }
 
 #endif  // _CRSRSH_HXX

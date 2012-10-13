@@ -91,3 +91,8 @@ String SV_BUTTONTEXT_DELETE
 {
     Text [ en-US ] = "~Delete";
 };
+
+String SV_BUTTONTEXT_REMOVE
+{
+    Text [ en-US ] = "~Remove";
+};

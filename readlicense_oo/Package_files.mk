@@ -20,6 +20,6 @@ $(eval $(call gb_Package_add_file,readlicense_oo_files,bin/osl/LICENSE.odt,odt/L
 $(eval $(call gb_Package_add_file,readlicense_oo_files,bin/LICENSE.odt,odt/LICENSE.odt))
 $(eval $(call gb_Package_add_file,readlicense_oo_files,bin/CREDITS.odt,odt/CREDITS.odt))
 
-$(eval $(call gb_Package_add_file,readlicense_oo_files,bin/THIRDPARTYLICENSEREADME.html,html/THIRDPARTYLICENSEREADME.html))
+$(eval $(call gb_Package_add_file,readlicense_oo_files,bin/LICENSE.html,html/LICENSE.html))
 
 # vim: set noet sw=4 ts=4:

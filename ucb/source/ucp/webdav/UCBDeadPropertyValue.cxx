@@ -1,39 +1,34 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*************************************************************************
+/*
+ * This file is part of the LibreOffice project.
  *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * This file incorporates work covered by the following license notice:
  *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
 
+
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_ucb.hxx"
 
 #include <string.h>
-#include <ne_xml.h>
+//#include <ne_xml.h>
 #include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>
 #include "UCBDeadPropertyValue.hxx"
 
-using namespace webdav_ucp;
+using namespace http_dav_ucp;
 using namespace com::sun::star;
 
 //////////////////////////////////////////////////////////////////////////
@@ -48,20 +43,32 @@ struct UCBDeadPropertyValueParseContext
 };
 
 // static
-const rtl::OUString UCBDeadPropertyValue::aTypeString("string");
-const rtl::OUString UCBDeadPropertyValue::aTypeLong("long");
-const rtl::OUString UCBDeadPropertyValue::aTypeShort("short");
-const rtl::OUString UCBDeadPropertyValue::aTypeBoolean("boolean");
-const rtl::OUString UCBDeadPropertyValue::aTypeChar("char");
-const rtl::OUString UCBDeadPropertyValue::aTypeByte("byte");
-const rtl::OUString UCBDeadPropertyValue::aTypeHyper("hyper");
-const rtl::OUString UCBDeadPropertyValue::aTypeFloat("float");
-const rtl::OUString UCBDeadPropertyValue::aTypeDouble("double");
+const rtl::OUString UCBDeadPropertyValue::aTypeString
+    = rtl::OUString::createFromAscii( "string" );
+const rtl::OUString UCBDeadPropertyValue::aTypeLong
+    = rtl::OUString::createFromAscii( "long" );
+const rtl::OUString UCBDeadPropertyValue::aTypeShort
+    = rtl::OUString::createFromAscii( "short" );
+const rtl::OUString UCBDeadPropertyValue::aTypeBoolean
+    = rtl::OUString::createFromAscii( "boolean" );
+const rtl::OUString UCBDeadPropertyValue::aTypeChar
+    = rtl::OUString::createFromAscii( "char" );
+const rtl::OUString UCBDeadPropertyValue::aTypeByte
+    = rtl::OUString::createFromAscii( "byte" );
+const rtl::OUString UCBDeadPropertyValue::aTypeHyper
+    = rtl::OUString::createFromAscii( "hyper" );
+const rtl::OUString UCBDeadPropertyValue::aTypeFloat
+    = rtl::OUString::createFromAscii( "float" );
+const rtl::OUString UCBDeadPropertyValue::aTypeDouble
+    = rtl::OUString::createFromAscii( "double" );
 
 // static
-const rtl::OUString UCBDeadPropertyValue::aXMLPre("<ucbprop><type>");
-const rtl::OUString UCBDeadPropertyValue::aXMLMid("</type><value>");
-const rtl::OUString UCBDeadPropertyValue::aXMLEnd("</value></ucbprop>");
+const rtl::OUString UCBDeadPropertyValue::aXMLPre
+    = rtl::OUString::createFromAscii( "<ucbprop><type>" );
+const rtl::OUString UCBDeadPropertyValue::aXMLMid
+    = rtl::OUString::createFromAscii( "</type><value>" );
+const rtl::OUString UCBDeadPropertyValue::aXMLEnd
+    = rtl::OUString::createFromAscii( "</value></ucbprop>" );
 
 #define STATE_TOP (1)
 
@@ -69,11 +76,12 @@ const rtl::OUString UCBDeadPropertyValue::aXMLEnd("</value></ucbprop>");
 #define STATE_TYPE      (STATE_TOP + 1)
 #define STATE_VALUE     (STATE_TOP + 2)
 
+/*
 //////////////////////////////////////////////////////////////////////////
 extern "C" int UCBDeadPropertyValue_startelement_callback(
     void *,
     int parent,
-    const char * /*nspace*/,
+    const char * nspace,
     const char *name,
     const char ** )
 {
@@ -157,6 +165,7 @@ extern "C" int UCBDeadPropertyValue_endelement_callback(
     }
     return 0; // zero to continue, non-zero to abort parsing
 }
+*/
 
 //////////////////////////////////////////////////////////////////////////
 static rtl::OUString encodeValue( const rtl::OUString & rValue )
@@ -191,9 +200,10 @@ static rtl::OUString encodeValue( const rtl::OUString & rValue )
         else
             aResult.append( c );
     }
-    return aResult.makeStringAndClear();
+    return rtl::OUString( aResult );
 }
 
+/*
 //////////////////////////////////////////////////////////////////////////
 static rtl::OUString decodeValue( const rtl::OUString & rValue )
 {
@@ -213,7 +223,8 @@ static rtl::OUString decodeValue( const rtl::OUString & rValue )
 
             if ( nPos == nEnd )
             {
-                OSL_FAIL( "UCBDeadPropertyValue::decodeValue - syntax error!" );
+                OSL_ENSURE( sal_False,
+                    "UCBDeadPropertyValue::decodeValue - syntax error!" );
                 return rtl::OUString();
             }
 
@@ -225,7 +236,8 @@ static rtl::OUString decodeValue( const rtl::OUString & rValue )
 
                 if ( nPos > nEnd - 4 )
                 {
-                    OSL_FAIL( "UCBDeadPropertyValue::decodeValue - syntax error!" );
+                    OSL_ENSURE( sal_False,
+                        "UCBDeadPropertyValue::decodeValue - syntax error!" );
                     return rtl::OUString();
                 }
 
@@ -240,7 +252,8 @@ static rtl::OUString decodeValue( const rtl::OUString & rValue )
                 }
                 else
                 {
-                    OSL_FAIL( "UCBDeadPropertyValue::decodeValue - syntax error!" );
+                    OSL_ENSURE( sal_False,
+                        "UCBDeadPropertyValue::decodeValue - syntax error!" );
                     return rtl::OUString();
                 }
             }
@@ -250,7 +263,8 @@ static rtl::OUString decodeValue( const rtl::OUString & rValue )
 
                 if ( nPos > nEnd - 3 )
                 {
-                    OSL_FAIL( "UCBDeadPropertyValue::decodeValue - syntax error!" );
+                    OSL_ENSURE( sal_False,
+                        "UCBDeadPropertyValue::decodeValue - syntax error!" );
                     return rtl::OUString();
                 }
 
@@ -263,7 +277,8 @@ static rtl::OUString decodeValue( const rtl::OUString & rValue )
                 }
                 else
                 {
-                    OSL_FAIL( "UCBDeadPropertyValue::decodeValue - syntax error!" );
+                    OSL_ENSURE( sal_False,
+                        "UCBDeadPropertyValue::decodeValue - syntax error!" );
                     return rtl::OUString();
                 }
             }
@@ -273,7 +288,8 @@ static rtl::OUString decodeValue( const rtl::OUString & rValue )
 
                 if ( nPos > nEnd - 3 )
                 {
-                    OSL_FAIL( "UCBDeadPropertyValue::decodeValue - syntax error!" );
+                    OSL_ENSURE( sal_False,
+                        "UCBDeadPropertyValue::decodeValue - syntax error!" );
                     return rtl::OUString();
                 }
 
@@ -286,13 +302,15 @@ static rtl::OUString decodeValue( const rtl::OUString & rValue )
                 }
                 else
                 {
-                    OSL_FAIL( "UCBDeadPropertyValue::decodeValue - syntax error!" );
+                    OSL_ENSURE( sal_False,
+                        "UCBDeadPropertyValue::decodeValue - syntax error!" );
                     return rtl::OUString();
                 }
             }
             else
             {
-                OSL_FAIL( "UCBDeadPropertyValue::decodeValue - syntax error!" );
+                OSL_ENSURE( sal_False,
+                    "UCBDeadPropertyValue::decodeValue - syntax error!" );
                 return rtl::OUString();
             }
         }
@@ -302,8 +320,9 @@ static rtl::OUString decodeValue( const rtl::OUString & rValue )
         nPos++;
     }
 
-    return aResult.makeStringAndClear();
+    return rtl::OUString( aResult );
 }
+*/
 
 //////////////////////////////////////////////////////////////////////////
 // static
@@ -335,11 +354,12 @@ bool UCBDeadPropertyValue::supportsType( const uno::Type & rType )
 
 //////////////////////////////////////////////////////////////////////////
 // static
-bool UCBDeadPropertyValue::createFromXML( const rtl::OString & rInData,
-                                          uno::Any & rOutData )
+bool UCBDeadPropertyValue::createFromXML( const rtl::OString & /*rInData*/,
+                                          uno::Any & /*rOutData*/ )
 {
     bool success = false;
 
+    /*
     ne_xml_parser * parser = ne_xml_create();
     if ( parser )
     {
@@ -377,7 +397,7 @@ bool UCBDeadPropertyValue::createFromXML( const rtl::OString & rInData,
                 else if ( aCtx.pType->equalsIgnoreAsciiCase( aTypeBoolean ) )
                 {
                     if ( aStringValue.equalsIgnoreAsciiCase(
-                            rtl::OUString("true") ) )
+                            rtl::OUString::createFromAscii( "true" ) ) )
                         rOutData <<= sal_Bool( sal_True );
                     else
                         rOutData <<= sal_Bool( sal_False );
@@ -404,7 +424,8 @@ bool UCBDeadPropertyValue::createFromXML( const rtl::OString & rInData,
                 }
                 else
                 {
-                    OSL_FAIL( "UCBDeadPropertyValue::createFromXML - "
+                    OSL_ENSURE( sal_False,
+                                "UCBDeadPropertyValue::createFromXML - "
                                 "Unsupported property type!" );
                     success = false;
                 }
@@ -413,7 +434,7 @@ bool UCBDeadPropertyValue::createFromXML( const rtl::OString & rInData,
                 success = false;
         }
     }
-
+    */
     return success;
 }
 
@@ -502,7 +523,8 @@ bool UCBDeadPropertyValue::toXML( const uno::Any & rInData,
     }
     else
     {
-        OSL_FAIL( "UCBDeadPropertyValue::toXML - "
+        OSL_ENSURE( sal_False,
+                    "UCBDeadPropertyValue::toXML - "
                     "Unsupported property type!" );
         return false;
     }
@@ -510,12 +532,11 @@ bool UCBDeadPropertyValue::toXML( const uno::Any & rInData,
     // Encode value! It must not contain XML reserved chars!
     aStringValue = encodeValue( aStringValue );
 
-        rOutData =  aXMLPre;
+    rOutData =  aXMLPre;
     rOutData += aStringType;
     rOutData += aXMLMid;
     rOutData += aStringValue;
     rOutData += aXMLEnd;
-
     return true;
 }
 

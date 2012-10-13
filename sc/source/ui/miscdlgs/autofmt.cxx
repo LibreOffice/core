@@ -98,7 +98,7 @@ ScAutoFmtPreview::~ScAutoFmtPreview()
 
 //------------------------------------------------------------------------
 
-void lcl_SetFontProperties(
+static void lcl_SetFontProperties(
         Font& rFont,
         const SvxFontItem& rFontItem,
         const SvxWeightItem& rWeightItem,

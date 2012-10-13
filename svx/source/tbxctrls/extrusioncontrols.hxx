@@ -30,7 +30,7 @@
 
 #include "svx/svxdllapi.h"
 
-#include <svtools/svtreebx.hxx>
+#include <svtools/treelistbox.hxx>
 #include <vcl/button.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/field.hxx>

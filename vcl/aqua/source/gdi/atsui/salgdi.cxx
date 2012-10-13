@@ -354,8 +354,6 @@ AquaSalGraphics::AquaSalGraphics()
 {
     // create the style object for font attributes
     ATSUCreateStyle( &maATSUStyle );
-
-    ResetFontStyle();
 }
 
 // -----------------------------------------------------------------------
@@ -581,29 +579,6 @@ bool AquaSalGraphics::AddTempDevFont( ImplDevFontList*,
 
 // -----------------------------------------------------------------------
 
-void AquaSalGraphics::ResetFontStyle()
-{
-    ATSUClearStyle(maATSUStyle);
-
-    // Set justification attributes
-    ATSJustPriorityWidthDeltaOverrides nPriorityJustOverrides;
-    memset(nPriorityJustOverrides, 0, sizeof(nPriorityJustOverrides));
-
-    nPriorityJustOverrides[kJUSTLetterPriority].growFlags = kJUSTOverrideLimits;
-    nPriorityJustOverrides[kJUSTLetterPriority].shrinkFlags = kJUSTOverrideLimits;
-
-    ATSUAttributeTag        theTag = kATSUPriorityJustOverrideTag;
-    ByteCount               theSize = sizeof(ATSJustPriorityWidthDeltaOverrides);
-    ATSUAttributeValuePtr   thePtr = &nPriorityJustOverrides;
-    OSStatus eStatus = ATSUSetAttributes(maATSUStyle, 1, &theTag, &theSize, &thePtr);
-    if (eStatus != noErr)
-    {
-        DBG_WARNING("AquaSalGraphics::ResetFontStyle() : Could not override justification attributes!\n");
-    }
-}
-
-// -----------------------------------------------------------------------
-
 // callbacks from ATSUGlyphGetCubicPaths() fore GetGlyphOutline()
 struct GgoData { basegfx::B2DPolygon maPolygon; basegfx::B2DPolyPolygon* mpPolyPoly; };
 
@@ -723,7 +698,7 @@ sal_uInt16 AquaSalGraphics::SetFont( FontSelectPattern* pReqFont, int /*nFallbac
 {
     if( !pReqFont )
     {
-        ResetFontStyle();
+        ATSUClearStyle( maATSUStyle );
         mpMacFontData = NULL;
         return 0;
     }
@@ -809,7 +784,7 @@ sal_uInt16 AquaSalGraphics::SetFont( FontSelectPattern* pReqFont, int /*nFallbac
     if( eStatus != noErr )
     {
         DBG_WARNING( "AquaSalGraphics::SetFont() : Could not set font attributes!\n");
-        ResetFontStyle();
+        ATSUClearStyle( maATSUStyle );
         mpMacFontData = NULL;
         return 0;
     }

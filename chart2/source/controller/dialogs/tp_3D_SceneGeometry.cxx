@@ -122,12 +122,12 @@ ThreeD_SceneGeometry_TabPage::ThreeD_SceneGeometry_TabPage( Window* pWindow
     m_aMFZRotation.SetModifyHdl( aAngleEditedLink );
 
     drawing::ProjectionMode aProjectionMode = drawing::ProjectionMode_PERSPECTIVE;
-    m_xSceneProperties->getPropertyValue( C2U("D3DScenePerspective")) >>= aProjectionMode;
+    m_xSceneProperties->getPropertyValue( "D3DScenePerspective" ) >>= aProjectionMode;
     m_aCbxPerspective.Check( aProjectionMode == drawing::ProjectionMode_PERSPECTIVE );
     m_aCbxPerspective.SetToggleHdl( LINK( this, ThreeD_SceneGeometry_TabPage, PerspectiveToggled ));
 
     sal_Int32 nPerspectivePercentage = 20;
-    m_xSceneProperties->getPropertyValue( C2U("Perspective")) >>= nPerspectivePercentage;
+    m_xSceneProperties->getPropertyValue( "Perspective" ) >>= nPerspectivePercentage;
     m_aMFPerspective.SetValue( nPerspectivePercentage );
 
     m_aMFPerspective.EnableUpdateData( nTimeout );
@@ -143,7 +143,7 @@ ThreeD_SceneGeometry_TabPage::ThreeD_SceneGeometry_TabPage( Window* pWindow
     if( ChartTypeHelper::isSupportingRightAngledAxes(
             DiagramHelper::getChartTypeByIndex( xDiagram, 0 ) ) )
     {
-        m_xSceneProperties->getPropertyValue( C2U("RightAngledAxes")) >>= bRightAngledAxes;
+        m_xSceneProperties->getPropertyValue( "RightAngledAxes" ) >>= bRightAngledAxes;
         m_aCbxRightAngledAxes.SetToggleHdl( LINK( this, ThreeD_SceneGeometry_TabPage, RightAngledAxesToggled ));
         m_aCbxRightAngledAxes.Check( bRightAngledAxes );
     }
@@ -216,8 +216,8 @@ void ThreeD_SceneGeometry_TabPage::applyPerspectiveToModel()
 
     try
     {
-        m_xSceneProperties->setPropertyValue( C2U("D3DScenePerspective"), uno::makeAny( aMode ));
-        m_xSceneProperties->setPropertyValue( C2U("Perspective"), uno::makeAny( (sal_Int32)m_aMFPerspective.GetValue() ));
+        m_xSceneProperties->setPropertyValue( "D3DScenePerspective" , uno::makeAny( aMode ));
+        m_xSceneProperties->setPropertyValue( "Perspective" , uno::makeAny( (sal_Int32)m_aMFPerspective.GetValue() ));
     }
     catch( const uno::Exception & ex )
     {

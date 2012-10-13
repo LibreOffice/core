@@ -35,10 +35,6 @@
 import com.sun.star.frame.TerminationVetoException;
 import com.sun.star.frame.XTerminateListener;
 
-/**
- *
- * @author  dschulten
- */
 public class TerminateListener implements XTerminateListener {
 
     public void notifyTermination(com.sun.star.lang.EventObject eventObject) {

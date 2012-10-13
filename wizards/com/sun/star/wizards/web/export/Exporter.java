@@ -22,10 +22,6 @@ import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.wizards.ui.event.Task;
 import com.sun.star.wizards.web.data.*;
 
-/**
- *
- * @author  rpiterman
- */
 public interface Exporter
 {
 

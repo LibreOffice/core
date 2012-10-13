@@ -31,7 +31,7 @@
 #include <com/sun/star/document/XExporter.hpp>
 #include <com/sun/star/document/XDocumentInfoSupplier.hpp>
 #include <com/sun/star/document/XDocumentInfo.hpp>
-#include <com/sun/star/task/XInteractionHandler.hpp>
+#include <com/sun/star/task/InteractionHandler.hpp>
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
@@ -440,10 +440,7 @@ void ModelData_Impl::CheckInteractionHandler()
     {
         try {
             m_aMediaDescrHM[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("InteractionHandler")) ]
-                <<= uno::Reference< task::XInteractionHandler >(
-                            m_pOwner->GetServiceFactory()->createInstance(
-                                            DEFINE_CONST_UNICODE("com.sun.star.task.InteractionHandler") ),
-                            uno::UNO_QUERY );
+                <<= task::InteractionHandler::createWithParent(comphelper::getComponentContext(m_pOwner->GetServiceFactory()), 0);
         }
         catch( const uno::Exception& )
         {

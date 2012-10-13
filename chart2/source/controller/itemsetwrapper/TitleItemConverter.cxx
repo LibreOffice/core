@@ -90,7 +90,7 @@ FormattedStringsConverter::FormattedStringsConverter(
                 m_aConverters.push_back( new CharacterPropertyItemConverter(
                                              xProp, rItemPool,
                                              ::std::auto_ptr< awt::Size >( new awt::Size( *pRefSize )),
-                                             C2U( "ReferencePageSize" ),
+                                             "ReferencePageSize" ,
                                              xParentProp ));
             else
                 m_aConverters.push_back( new CharacterPropertyItemConverter( xProp, rItemPool ));
@@ -201,12 +201,12 @@ bool TitleItemConverter::ApplySpecialItem(
                     rItemSet.Get( nWhichId )).GetValue()) / 100.0;
             double fOldVal = 0.0;
             bool bPropExisted =
-                ( GetPropertySet()->getPropertyValue( C2U( "TextRotation" )) >>= fOldVal );
+                ( GetPropertySet()->getPropertyValue( "TextRotation" ) >>= fOldVal );
 
             if( ! bPropExisted ||
                 ( bPropExisted && fOldVal != fVal ))
             {
-                GetPropertySet()->setPropertyValue( C2U( "TextRotation" ), uno::makeAny( fVal ));
+                GetPropertySet()->setPropertyValue( "TextRotation" , uno::makeAny( fVal ));
                 bChanged = true;
             }
         }
@@ -227,7 +227,7 @@ void TitleItemConverter::FillSpecialItem(
             // convert double to int (times 100)
             double fVal = 0;
 
-            if( GetPropertySet()->getPropertyValue( C2U( "TextRotation" )) >>= fVal )
+            if( GetPropertySet()->getPropertyValue( "TextRotation" ) >>= fVal )
             {
                 rOutItemSet.Put( SfxInt32Item( nWhichId, static_cast< sal_Int32 >(
                                                    ::rtl::math::round( fVal * 100.0 ) ) ));

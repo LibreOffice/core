@@ -929,7 +929,7 @@ void ScPatternAttr::ClearItems( const sal_uInt16* pWhich )
         rSet.ClearItem(pWhich[i]);
 }
 
-SfxStyleSheetBase* lcl_CopyStyleToPool
+static SfxStyleSheetBase* lcl_CopyStyleToPool
     (
         SfxStyleSheetBase*      pSrcStyle,
         SfxStyleSheetBasePool*  pSrcPool,

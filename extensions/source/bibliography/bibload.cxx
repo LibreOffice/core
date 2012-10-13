@@ -212,7 +212,7 @@ Sequence< rtl::OUString > BibliographyLoader::getSupportedServiceNames_Static(vo
 
 extern "C"
 {
-    SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
+    SAL_DLLPUBLIC_EXPORT void * SAL_CALL bib_component_getFactory(
         const sal_Char * pImplName, XMultiServiceFactory * pServiceManager, void * /*pRegistryKey*/ )
     {
         void * pRet = 0;
@@ -458,7 +458,7 @@ Reference< XResultSet >  BibliographyLoader::GetDataCursor() const
     return m_xCursor;
 }
 
-rtl::OUString lcl_AddProperty(Reference< XNameAccess >  xColumns,
+static rtl::OUString lcl_AddProperty(Reference< XNameAccess >  xColumns,
         const Mapping* pMapping, const String& rColumnName)
 {
     String sColumnName(rColumnName);

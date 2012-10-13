@@ -446,7 +446,7 @@ IMPL_LINK_NOARG(SoundHandler, implts_PlayerNotify)
 
 } // namespace framework
 
-extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL component_getFactory(const sal_Char* pImplementationName, void* pServiceManager, void* /*pRegistryKey*/ )
+extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL avmedia_component_getFactory(const sal_Char* pImplementationName, void* pServiceManager, void* /*pRegistryKey*/ )
 {
     void* pReturn = NULL;
     if  (pServiceManager !=  NULL )

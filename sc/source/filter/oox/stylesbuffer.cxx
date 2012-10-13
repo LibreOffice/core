@@ -676,7 +676,7 @@ ApiScriptFontName::ApiScriptFontName() :
 
 ApiFontData::ApiFontData() :
     maDesc(
-        CREATE_OUSTRING( "Calibri" ),
+        "Calibri",
         220,                                            // height 11 points
         0,
         OUString(),
@@ -2849,9 +2849,9 @@ void CellStyleBuffer::finalizeImport()
     if (mxDefStyle)
     {
         Reference<XNameAccess> xNA(getStyleFamily(false), UNO_QUERY_THROW);
-        if (xNA->hasByName(CREATE_OUSTRING("Default")))
+        if (xNA->hasByName("Default"))
         {
-            PropertySet aPropSet(xNA->getByName(CREATE_OUSTRING("Default")));
+            PropertySet aPropSet(xNA->getByName("Default"));
             getStyles().writeStyleXfToPropertySet(aPropSet, mxDefStyle->getModel().mnXfId);
         }
     }
@@ -3172,7 +3172,7 @@ OUString StylesBuffer::createDxfStyle( sal_Int32 nDxfId ) const
     {
         if( Dxf* pDxf = maDxfs.get( nDxfId ).get() )
         {
-            rStyleName = OUStringBuffer( CREATE_OUSTRING( "ConditionalStyle_" ) ).append( nDxfId + 1 ).makeStringAndClear();
+            rStyleName = OUStringBuffer( "ConditionalStyle_" ).append( nDxfId + 1 ).makeStringAndClear();
             // create the style sheet (this may change rStyleName if such a style already exists)
             Reference< XStyle > xStyle = createStyleObject( rStyleName, false );
             // write style formatting properties

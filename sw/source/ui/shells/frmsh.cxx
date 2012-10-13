@@ -90,8 +90,8 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
 // Prototypen ------------------------------------------------------------
-void lcl_FrmGetMaxLineWidth(const SvxBorderLine* pBorderLine, SvxBorderLine& rBorderLine);
-const SwFrmFmt* lcl_GetFrmFmtByName(SwWrtShell& rSh, const String& rName)
+static void lcl_FrmGetMaxLineWidth(const SvxBorderLine* pBorderLine, SvxBorderLine& rBorderLine);
+static const SwFrmFmt* lcl_GetFrmFmtByName(SwWrtShell& rSh, const String& rName)
 {
     sal_uInt16 nCount = rSh.GetFlyCount(FLYCNTTYPE_FRM);
     for( sal_uInt16 i = 0; i < nCount; i++)
@@ -1072,7 +1072,7 @@ void SwFrameShell::ExecFrameStyle(SfxRequest& rReq)
 
 }
 
-void lcl_FrmGetMaxLineWidth(const SvxBorderLine* pBorderLine, SvxBorderLine& rBorderLine)
+static void lcl_FrmGetMaxLineWidth(const SvxBorderLine* pBorderLine, SvxBorderLine& rBorderLine)
 {
     if(pBorderLine->GetWidth() > rBorderLine.GetWidth())
         rBorderLine.SetWidth(pBorderLine->GetWidth());

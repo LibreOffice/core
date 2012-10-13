@@ -17,11 +17,6 @@
  */
 
 
-
-/**
- *
- * @author  fs@openoffice.org
- */
 public class DateValidator extends ControlValidator
 {
 

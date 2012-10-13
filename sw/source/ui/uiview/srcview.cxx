@@ -127,7 +127,7 @@ SFX_IMPL_INTERFACE( SwSrcView, SfxViewShell, SW_RES(0) )
 
 TYPEINIT1(SwSrcView, SfxViewShell)
 
-void lcl_PrintHeader( OutputDevice &rOutDev, sal_uInt16 nPages, sal_uInt16 nCurPage, const String& rTitle )
+static void lcl_PrintHeader( OutputDevice &rOutDev, sal_uInt16 nPages, sal_uInt16 nCurPage, const String& rTitle )
 {
     short nLeftMargin   = LMARGPRN;
     Size aSz = rOutDev.GetOutputSize();
@@ -181,7 +181,7 @@ void lcl_PrintHeader( OutputDevice &rOutDev, sal_uInt16 nPages, sal_uInt16 nCurP
     rOutDev.SetFillColor( aOldFillColor );
 }
 
-rtl_TextEncoding lcl_GetStreamCharSet(rtl_TextEncoding eLoadEncoding)
+static rtl_TextEncoding lcl_GetStreamCharSet(rtl_TextEncoding eLoadEncoding)
 {
     rtl_TextEncoding eRet = eLoadEncoding;
     if(RTL_TEXTENCODING_DONTKNOW == eRet)
@@ -194,7 +194,7 @@ rtl_TextEncoding lcl_GetStreamCharSet(rtl_TextEncoding eLoadEncoding)
     return eRet;
 }
 
-void lcl_ConvertTabsToSpaces( String& rLine )
+static void lcl_ConvertTabsToSpaces( String& rLine )
 {
     if ( rLine.Len() )
     {

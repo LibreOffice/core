@@ -69,7 +69,7 @@ const sal_Char *SwHTMLWriter::GetNumFormat( sal_uInt16 nFmt )
     return pFmtStr;
 }
 
-extern sal_Bool lcl_css1atr_equalFontItems( const SfxPoolItem& r1, const SfxPoolItem& r2 );
+extern sal_Bool swhtml_css1atr_equalFontItems( const SfxPoolItem& r1, const SfxPoolItem& r2 );
 static Writer& OutHTML_SwField( Writer& rWrt, const SwField* pFld,
                                  const SwTxtNode& rTxtNd, xub_StrLen nFldPos )
 {
@@ -396,7 +396,7 @@ static Writer& OutHTML_SwField( Writer& rWrt, const SwField* pFld,
                     const SfxPoolItem *pItem =
                         aScriptItemSet.GetItem( pWhichIds[i] );
                     if( pRefItem && pItem &&
-                        !(0==i ? lcl_css1atr_equalFontItems( *pRefItem, *pItem )
+                        !(0==i ? swhtml_css1atr_equalFontItems( *pRefItem, *pItem )
                                : *pRefItem == *pItem) )
                     {
                         Out( aHTMLAttrFnTab, *pItem, rHTMLWrt );

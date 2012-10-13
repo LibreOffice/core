@@ -43,7 +43,6 @@
 #include <cppuhelper/implbase3.hxx>
 #include <cppuhelper/compbase3.hxx>
 #include <ucbhelper/content.hxx>
-#include <xmlscript/xmllib_imexp.hxx>
 
 namespace com { namespace sun { namespace star {
     namespace uno {

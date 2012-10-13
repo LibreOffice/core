@@ -51,7 +51,7 @@ namespace
 CertificateViewer::CertificateViewer(
         Window* _pParent,
         const cssu::Reference< dcss::xml::crypto::XSecurityEnvironment >& _rxSecurityEnvironment,
-        const cssu::Reference< dcss::security::XCertificate >& _rXCert, sal_Bool bCheckForPrivateKey )
+        const cssu::Reference< dcss::security::XCertificate >& _rXCert, bool bCheckForPrivateKey )
     :TabDialog      ( _pParent, XMLSEC_RES( RID_XMLSECDLG_CERTVIEWER ) )
     ,maTabCtrl      ( this, XMLSEC_RES( 1 ) )
     ,maOkBtn        ( this, XMLSEC_RES( BTN_OK ) )
@@ -171,9 +171,9 @@ CertificateViewerGeneralTP::CertificateViewerGeneralTP( Window* _pParent, Certif
     utl::typeConvert( xCert->getNotValidBefore(), aDateTimeStart );
     utl::typeConvert( xCert->getNotValidAfter(), aDateTimeEnd );
     OUString sText = maValidDateFI.GetText();
-    sText.replaceFirst( "%SDATE%",
+    sText = sText.replaceFirst( "%SDATE%",
         GetSettings().GetUILocaleDataWrapper().getDate( aDateTimeStart.GetDate() ) );
-    sText.replaceFirst( "%EDATE%",
+    sText = sText.replaceFirst( "%EDATE%",
         GetSettings().GetUILocaleDataWrapper().getDate( aDateTimeEnd.GetDate() ) );
     maValidDateFI.SetText( sText );
 
@@ -456,7 +456,7 @@ IMPL_LINK_NOARG(CertificateViewerCertPathTP, ViewCertHdl)
     SvLBoxEntry* pEntry = maCertPathLB.FirstSelected();
     if( pEntry )
     {
-        CertificateViewer aViewer( this, mpDlg->mxSecurityEnvironment, ((CertPath_UserData*)pEntry->GetUserData())->mxCert, sal_False );
+        CertificateViewer aViewer( this, mpDlg->mxSecurityEnvironment, ((CertPath_UserData*)pEntry->GetUserData())->mxCert, false );
         aViewer.Execute();
     }
 

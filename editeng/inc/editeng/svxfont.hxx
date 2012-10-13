@@ -82,7 +82,7 @@ public:
     inline sal_Bool IsEsc() const { return 0 != nEsc; }
 
     // Consider Upper case, Lower case letters etc.
-    String CalcCaseMap( const String &rTxt ) const;
+    OUString CalcCaseMap(const OUString &rTxt) const;
 
 // The following section is not needed by anyone, so it can be excluded.
 #ifndef REDUCEDSVXFONT

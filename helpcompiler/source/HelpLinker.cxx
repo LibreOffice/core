@@ -1,30 +1,21 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*************************************************************************
+/*
+ * This file is part of the LibreOffice project.
  *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * This file incorporates work covered by the following license notice:
  *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
 
 #include <helpcompiler/HelpCompiler.hxx>
 #include <helpcompiler/HelpLinker.hxx>
@@ -194,28 +185,6 @@ public:
         data.append(id);
     }
 
-    void dump(DB* table)
-    {
-        DataHashtable::const_iterator aEnd = _hash.end();
-        for (DataHashtable::const_iterator aIter = _hash.begin(); aIter != aEnd; ++aIter)
-        {
-            const std::string &keystr = aIter->first;
-            DBT key;
-            memset(&key, 0, sizeof(key));
-            key.data = const_cast<char*>(keystr.c_str());
-            key.size = keystr.length();
-
-            const Data &data = aIter->second;
-            std::string str = data.getString();
-            DBT value;
-            memset(&value, 0, sizeof(value));
-            value.data = const_cast<char*>(str.c_str());
-            value.size = str.length();
-
-            table->put(table, NULL, &key, &value, 0);
-        }
-    }
-
     void dump_DBHelp( const fs::path& rFileName )
     {
 #ifdef WNT     //We need _wfopen to support long file paths on Windows XP
@@ -257,7 +226,7 @@ namespace URLEncoder
     }
 }
 
-void HelpLinker::addBookmark( DB* dbBase, FILE* pFile_DBHelp, std::string thishid,
+void HelpLinker::addBookmark( FILE* pFile_DBHelp, std::string thishid,
         const std::string& fileB, const std::string& anchorB,
         const std::string& jarfileB, const std::string& titleB)
 {
@@ -265,11 +234,6 @@ void HelpLinker::addBookmark( DB* dbBase, FILE* pFile_DBHelp, std::string thishi
         fileB << " " << anchorB << " " << jarfileB << " " << titleB << std::endl);
 
     thishid = URLEncoder::encode(thishid);
-
-    DBT key;
-    memset(&key, 0, sizeof(key));
-    key.data = const_cast<char*>(thishid.c_str());
-    key.size = thishid.length();
 
     int fileLen = fileB.length();
     if (!anchorB.empty())
@@ -294,14 +258,6 @@ void HelpLinker::addBookmark( DB* dbBase, FILE* pFile_DBHelp, std::string thishi
     dataB[i++] = static_cast<unsigned char>(titleB.length());
     for (size_t j = 0; j < titleB.length(); ++j)
         dataB[i++] = titleB[j];
-
-    DBT data;
-    memset(&data, 0, sizeof(data));
-    data.data = &dataB[0];
-    data.size = dataB.size();
-
-    if( dbBase != NULL )
-        dbBase->put(dbBase, NULL, &key, &data, 0);
 
     if( pFile_DBHelp != NULL )
     {
@@ -337,10 +293,6 @@ void HelpLinker::link() throw( HelpProcessingException )
         fs::create_directory(indexDirParentName);
     }
 
-#ifdef CMC_DEBUG
-    std::cerr << "will not delete tmpdir of " << indexDirParentName.native_file_string().c_str() << std::endl;
-#endif
-
     std::string mod = module;
     std::transform (mod.begin(), mod.end(), mod.begin(), tocharlower);
 
@@ -352,18 +304,8 @@ void HelpLinker::link() throw( HelpProcessingException )
         appl = appl.substr(1);
 
     bool bUse_ = true;
-#ifdef DBHELP_ONLY
     if( !bExtensionMode )
         bUse_ = false;
-#endif
-
-    DB* helpText(0);
-#ifndef DBHELP_ONLY
-    fs::path helpTextFileName(indexDirParentName / (mod + ".ht"));
-    db_create(&helpText,0,0);
-    helpText->open(helpText, NULL, helpTextFileName.native_file_string().c_str(), NULL, DB_BTREE,
-        DB_CREATE | DB_TRUNCATE, 0644);
-#endif
 
     fs::path helpTextFileName_DBHelp(indexDirParentName / (mod + (bUse_ ? ".ht_" : ".ht")));
 #ifdef WNT
@@ -375,13 +317,6 @@ void HelpLinker::link() throw( HelpProcessingException )
     FILE* pFileHelpText_DBHelp = fopen
         ( helpTextFileName_DBHelp.native_file_string().c_str(), "wb" );
 #endif
-    DB* dbBase(0);
-#ifndef DBHELP_ONLY
-    fs::path dbBaseFileName(indexDirParentName / (mod + ".db"));
-    db_create(&dbBase,0,0);
-    dbBase->open(dbBase, NULL, dbBaseFileName.native_file_string().c_str(), NULL, DB_BTREE,
-        DB_CREATE | DB_TRUNCATE, 0644);
-#endif
 
     fs::path dbBaseFileName_DBHelp(indexDirParentName / (mod + (bUse_ ? ".db_" : ".db")));
 #ifdef WNT
@@ -391,14 +326,6 @@ void HelpLinker::link() throw( HelpProcessingException )
 #else
     FILE* pFileDbBase_DBHelp = fopen
         ( dbBaseFileName_DBHelp.native_file_string().c_str(), "wb" );
-#endif
-
-#ifndef DBHELP_ONLY
-    DB* keyWord(0);
-    fs::path keyWordFileName(indexDirParentName / (mod + ".key"));
-    db_create(&keyWord,0,0);
-    keyWord->open(keyWord, NULL, keyWordFileName.native_file_string().c_str(), NULL, DB_BTREE,
-        DB_CREATE | DB_TRUNCATE, 0644);
 #endif
 
     fs::path keyWordFileName_DBHelp(indexDirParentName / (mod + (bUse_ ? ".key_" : ".key")));
@@ -484,11 +411,7 @@ void HelpLinker::link() throw( HelpProcessingException )
         std::string& titleB = documentTitle;
 
         // add once this as its own id.
-        addBookmark(dbBase, pFileDbBase_DBHelp, documentPath, fileB, std::string(), jarfileB, titleB);
-
-        // first the database *.db
-        // ByteArrayInputStream bais = null;
-        // ObjectInputStream ois = null;
+        addBookmark( pFileDbBase_DBHelp, documentPath, fileB, std::string(), jarfileB, titleB);
 
         const HashSet *hidlist = streamTable.appl_hidlist;
         if (!hidlist)
@@ -509,7 +432,7 @@ void HelpLinker::link() throw( HelpProcessingException )
                     anchorB = thishid.substr(1 + index);
                     thishid = thishid.substr(0, index);
                 }
-                addBookmark(dbBase, pFileDbBase_DBHelp, thishid, fileB, anchorB, jarfileB, titleB);
+                addBookmark( pFileDbBase_DBHelp, thishid, fileB, anchorB, jarfileB, titleB);
             }
         }
 
@@ -525,8 +448,8 @@ void HelpLinker::link() throw( HelpProcessingException )
                 enumer != aEnd; ++enumer)
             {
                 const std::string &anchor = enumer->first;
-                addBookmark(dbBase, pFileDbBase_DBHelp, documentPath, fileB,
-                    anchor, jarfileB, titleB);
+                addBookmark(pFileDbBase_DBHelp, documentPath, fileB,
+                            anchor, jarfileB, titleB);
                 std::string totalId = fakedHid + "#" + anchor;
                 // std::cerr << hzipFileName << std::endl;
                 const LinkedList& ll = enumer->second;
@@ -555,19 +478,6 @@ void HelpLinker::link() throw( HelpProcessingException )
 
                 helpTextId = URLEncoder::encode(helpTextId);
 
-                DBT keyDbt;
-                memset(&keyDbt, 0, sizeof(keyDbt));
-                keyDbt.data = const_cast<char*>(helpTextId.c_str());
-                keyDbt.size = helpTextId.length();
-
-                DBT textDbt;
-                memset(&textDbt, 0, sizeof(textDbt));
-                textDbt.data = const_cast<char*>(helpTextText.c_str());
-                textDbt.size = helpTextText.length();
-
-                if( helpText != NULL )
-                    helpText->put(helpText, NULL, &keyDbt, &textDbt, 0);
-
                 if( pFileHelpText_DBHelp != NULL )
                     writeKeyValue_DBHelp( pFileHelpText_DBHelp, helpTextId, helpTextText );
             }
@@ -594,11 +504,6 @@ void HelpLinker::link() throw( HelpProcessingException )
     catch( const HelpProcessingException& )
     {
         // catch HelpProcessingException to avoid locking data bases
-#ifndef DBHELP_ONLY
-        helpText->close(helpText, 0);
-        dbBase->close(dbBase, 0);
-        keyWord->close(keyWord, 0);
-#endif
         if( pFileHelpText_DBHelp != NULL )
             fclose( pFileHelpText_DBHelp );
         if( pFileDbBase_DBHelp != NULL )
@@ -606,12 +511,6 @@ void HelpLinker::link() throw( HelpProcessingException )
         throw;
     }
 
-#ifndef DBHELP_ONLY
-    helpText->close(helpText, 0);
-    dbBase->close(dbBase, 0);
-    helpKeyword.dump(keyWord);
-    keyWord->close(keyWord, 0);
-#endif
     if( pFileHelpText_DBHelp != NULL )
         fclose( pFileHelpText_DBHelp );
     if( pFileDbBase_DBHelp != NULL )

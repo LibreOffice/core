@@ -39,7 +39,6 @@
 #include "rtl/string.hxx"
 #include "rtl/ustrbuf.hxx"
 #include "rtl/uri.hxx"
-#include "rtl/memory.h"
 #include "osl/file.hxx"
 #include "cppuhelper/exc_hlp.hxx"
 #include "ucbhelper/content.hxx"
@@ -640,7 +639,7 @@ OUString replaceOrigin(
 
         if ((write_pos + index) > filtered.getLength())
             filtered.realloc( (filtered.getLength() + index) * 2 );
-        rtl_copyMemory( filtered.getArray() + write_pos, pBytes, index );
+        memcpy( filtered.getArray() + write_pos, pBytes, index );
         write_pos += index;
         pBytes += index;
         nBytes -= index;
@@ -679,7 +678,7 @@ OUString replaceOrigin(
         }
         if ((write_pos + nAdd) > filtered.getLength())
             filtered.realloc( (filtered.getLength() + nAdd) * 2 );
-        rtl_copyMemory( filtered.getArray() + write_pos, pAdd, nAdd );
+        memcpy( filtered.getArray() + write_pos, pAdd, nAdd );
         write_pos += nAdd;
     }
     if (!use_filtered)

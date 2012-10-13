@@ -2009,7 +2009,7 @@ uno::Sequence< sal_Int8 > implGetDialogData( SbxObject* pDialog )
     uno::Sequence< sal_Int8 > aData( nLen );
     sal_Int8* pDestData = aData.getArray();
     const sal_Int8* pSrcData = (const sal_Int8*)aMemStream.GetData();
-    rtl_copyMemory( pDestData, pSrcData, nLen );
+    memcpy( pDestData, pSrcData, nLen );
     return aData;
 }
 

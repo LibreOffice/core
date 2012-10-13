@@ -96,20 +96,6 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkComboBoxText" id="targetfrmlb">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="entry_text_column">0</property>
-                    <property name="id_column">1</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">1</property>
-                    <property name="top_attach">3</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
-                  </packing>
-                </child>
-                <child>
                   <object class="GtkEntry" id="urled">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
@@ -182,6 +168,26 @@
                 </child>
                 <child>
                   <placeholder/>
+                </child>
+                <child>
+                  <object class="GtkComboBoxText" id="targetfrmlb">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="has_entry">True</property>
+                    <property name="entry_text_column">0</property>
+                    <property name="id_column">1</property>
+                    <child internal-child="entry">
+                      <object class="GtkEntry" id="comboboxtext-entry">
+                        <property name="can_focus">False</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="top_attach">3</property>
+                    <property name="width">1</property>
+                    <property name="height">1</property>
+                  </packing>
                 </child>
               </object>
             </child>

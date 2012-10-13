@@ -275,7 +275,7 @@ private:
 
     void merge(const NodeJava & share, const NodeJava & user);
 
-    sal_Bool m_bEnabled;
+    bool m_bEnabled;
 
     ::rtl::OUString m_sClassPath;
 
@@ -291,7 +291,7 @@ public:
 
     /** the default is true.
      */
-    sal_Bool getEnabled() const;
+    bool getEnabled() const;
 
     const ::rtl::OUString & getUserClassPath() const;
 

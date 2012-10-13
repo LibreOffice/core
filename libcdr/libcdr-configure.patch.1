@@ -1,0 +1,432 @@
+--- cdr/configure	2012-10-05 21:47:11.246958344 +0200
++++ cdr/configure	2012-10-05 22:05:33.913874511 +0200
+@@ -637,6 +617,7 @@
+ DOXYGEN
+ STATIC_TOOLS_FALSE
+ STATIC_TOOLS_TRUE
++LIBCDR_LIBS
+ LIBCDR_CXXFLAGS
+ DEBUG_CXXFLAGS
+ WINDRES
+@@ -658,8 +639,12 @@
+ CDR_MAJOR_VERSION
+ ZLIB_LIBS
+ ZLIB_CFLAGS
+-LIBCDR_LIBS
+-LIBCDR_CFLAGS
++LCMS2_LIBS
++LCMS2_CFLAGS
++WPG_LIBS
++WPG_CFLAGS
++WPD_LIBS
++WPD_CFLAGS
+ PKG_CONFIG_LIBDIR
+ PKG_CONFIG_PATH
+ PKG_CONFIG
+@@ -816,8 +801,12 @@
+ PKG_CONFIG
+ PKG_CONFIG_PATH
+ PKG_CONFIG_LIBDIR
+-LIBCDR_CFLAGS
+-LIBCDR_LIBS
++WPD_CFLAGS
++WPD_LIBS
++WPG_CFLAGS
++WPG_LIBS
++LCMS2_CFLAGS
++LCMS2_LIBS
+ ZLIB_CFLAGS
+ ZLIB_LIBS'
+ 
+@@ -1481,9 +1472,13 @@
+               directories to add to pkg-config's search path
+   PKG_CONFIG_LIBDIR
+               path overriding pkg-config's built-in search path
+-  LIBCDR_CFLAGS
+-              C compiler flags for LIBCDR, overriding pkg-config
+-  LIBCDR_LIBS linker flags for LIBCDR, overriding pkg-config
++  WPD_CFLAGS  C compiler flags for WPD, overriding pkg-config
++  WPD_LIBS    linker flags for WPD, overriding pkg-config
++  WPG_CFLAGS  C compiler flags for WPG, overriding pkg-config
++  WPG_LIBS    linker flags for WPG, overriding pkg-config
++  LCMS2_CFLAGS
++              C compiler flags for LCMS2, overriding pkg-config
++  LCMS2_LIBS  linker flags for LCMS2, overriding pkg-config
+   ZLIB_CFLAGS C compiler flags for ZLIB, overriding pkg-config
+   ZLIB_LIBS   linker flags for ZLIB, overriding pkg-config
+ 
+@@ -16098,33 +16094,27 @@
+ # ====================
+ 
+ pkg_failed=no
+-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for LIBCDR" >&5
+-$as_echo_n "checking for LIBCDR... " >&6; }
++{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for WPD" >&5
++$as_echo_n "checking for WPD... " >&6; }
+ 
+-if test -n "$LIBCDR_CFLAGS"; then
+-    pkg_cv_LIBCDR_CFLAGS="$LIBCDR_CFLAGS"
++if test -n "$WPD_CFLAGS"; then
++    pkg_cv_WPD_CFLAGS="$WPD_CFLAGS"
+  elif test -n "$PKG_CONFIG"; then
+     if test -n "$PKG_CONFIG" && \
+     { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"
+ 	libwpd-0.9
+ 	libwpd-stream-0.9
+-	libwpg-0.2
+-	lcms2
+ \""; } >&5
+   ($PKG_CONFIG --exists --print-errors "
+ 	libwpd-0.9
+ 	libwpd-stream-0.9
+-	libwpg-0.2
+-	lcms2
+ ") 2>&5
+   ac_status=$?
+   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+   test $ac_status = 0; }; then
+-  pkg_cv_LIBCDR_CFLAGS=`$PKG_CONFIG --cflags "
++  pkg_cv_WPD_CFLAGS=`$PKG_CONFIG --cflags "
+ 	libwpd-0.9
+ 	libwpd-stream-0.9
+-	libwpg-0.2
+-	lcms2
+ " 2>/dev/null`
+ 		      test "x$?" != "x0" && pkg_failed=yes
+ else
+@@ -16133,30 +16123,24 @@
+  else
+     pkg_failed=untried
+ fi
+-if test -n "$LIBCDR_LIBS"; then
+-    pkg_cv_LIBCDR_LIBS="$LIBCDR_LIBS"
++if test -n "$WPD_LIBS"; then
++    pkg_cv_WPD_LIBS="$WPD_LIBS"
+  elif test -n "$PKG_CONFIG"; then
+     if test -n "$PKG_CONFIG" && \
+     { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"
+ 	libwpd-0.9
+ 	libwpd-stream-0.9
+-	libwpg-0.2
+-	lcms2
+ \""; } >&5
+   ($PKG_CONFIG --exists --print-errors "
+ 	libwpd-0.9
+ 	libwpd-stream-0.9
+-	libwpg-0.2
+-	lcms2
+ ") 2>&5
+   ac_status=$?
+   $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+   test $ac_status = 0; }; then
+-  pkg_cv_LIBCDR_LIBS=`$PKG_CONFIG --libs "
++  pkg_cv_WPD_LIBS=`$PKG_CONFIG --libs "
+ 	libwpd-0.9
+ 	libwpd-stream-0.9
+-	libwpg-0.2
+-	lcms2
+ " 2>/dev/null`
+ 		      test "x$?" != "x0" && pkg_failed=yes
+ else
+@@ -16178,37 +16162,251 @@
+         _pkg_short_errors_supported=no
+ fi
+         if test $_pkg_short_errors_supported = yes; then
+-	        LIBCDR_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "
++	        WPD_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "
+ 	libwpd-0.9
+ 	libwpd-stream-0.9
+-	libwpg-0.2
+-	lcms2
+ " 2>&1`
+         else
+-	        LIBCDR_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "
++	        WPD_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "
+ 	libwpd-0.9
+ 	libwpd-stream-0.9
+-	libwpg-0.2
+-	lcms2
+ " 2>&1`
+         fi
+ 	# Put the nasty error message in config.log where it belongs
+-	echo "$LIBCDR_PKG_ERRORS" >&5
++	echo "$WPD_PKG_ERRORS" >&5
+ 
+ 	as_fn_error $? "Package requirements (
+ 	libwpd-0.9
+ 	libwpd-stream-0.9
++) were not met:
++
++$WPD_PKG_ERRORS
++
++Consider adjusting the PKG_CONFIG_PATH environment variable if you
++installed software in a non-standard prefix.
++
++Alternatively, you may set the environment variables WPD_CFLAGS
++and WPD_LIBS to avoid the need to call pkg-config.
++See the pkg-config man page for more details." "$LINENO" 5
++elif test $pkg_failed = untried; then
++     	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
++$as_echo "no" >&6; }
++	{ { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
++$as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
++as_fn_error $? "The pkg-config script could not be found or is too old.  Make sure it
++is in your PATH or set the PKG_CONFIG environment variable to the full
++path to pkg-config.
++
++Alternatively, you may set the environment variables WPD_CFLAGS
++and WPD_LIBS to avoid the need to call pkg-config.
++See the pkg-config man page for more details.
++
++To get pkg-config, see <http://pkg-config.freedesktop.org/>.
++See \`config.log' for more details" "$LINENO" 5; }
++else
++	WPD_CFLAGS=$pkg_cv_WPD_CFLAGS
++	WPD_LIBS=$pkg_cv_WPD_LIBS
++        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
++$as_echo "yes" >&6; }
++
++fi
++
++
++pkg_failed=no
++{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for WPG" >&5
++$as_echo_n "checking for WPG... " >&6; }
++
++if test -n "$WPG_CFLAGS"; then
++    pkg_cv_WPG_CFLAGS="$WPG_CFLAGS"
++ elif test -n "$PKG_CONFIG"; then
++    if test -n "$PKG_CONFIG" && \
++    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"
++	libwpg-0.2
++\""; } >&5
++  ($PKG_CONFIG --exists --print-errors "
++	libwpg-0.2
++") 2>&5
++  ac_status=$?
++  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
++  test $ac_status = 0; }; then
++  pkg_cv_WPG_CFLAGS=`$PKG_CONFIG --cflags "
++	libwpg-0.2
++" 2>/dev/null`
++		      test "x$?" != "x0" && pkg_failed=yes
++else
++  pkg_failed=yes
++fi
++ else
++    pkg_failed=untried
++fi
++if test -n "$WPG_LIBS"; then
++    pkg_cv_WPG_LIBS="$WPG_LIBS"
++ elif test -n "$PKG_CONFIG"; then
++    if test -n "$PKG_CONFIG" && \
++    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"
++	libwpg-0.2
++\""; } >&5
++  ($PKG_CONFIG --exists --print-errors "
++	libwpg-0.2
++") 2>&5
++  ac_status=$?
++  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
++  test $ac_status = 0; }; then
++  pkg_cv_WPG_LIBS=`$PKG_CONFIG --libs "
++	libwpg-0.2
++" 2>/dev/null`
++		      test "x$?" != "x0" && pkg_failed=yes
++else
++  pkg_failed=yes
++fi
++ else
++    pkg_failed=untried
++fi
++
++
++
++if test $pkg_failed = yes; then
++   	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
++$as_echo "no" >&6; }
++
++if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
++        _pkg_short_errors_supported=yes
++else
++        _pkg_short_errors_supported=no
++fi
++        if test $_pkg_short_errors_supported = yes; then
++	        WPG_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "
++	libwpg-0.2
++" 2>&1`
++        else
++	        WPG_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "
++	libwpg-0.2
++" 2>&1`
++        fi
++	# Put the nasty error message in config.log where it belongs
++	echo "$WPG_PKG_ERRORS" >&5
++
++	as_fn_error $? "Package requirements (
+ 	libwpg-0.2
++) were not met:
++
++$WPG_PKG_ERRORS
++
++Consider adjusting the PKG_CONFIG_PATH environment variable if you
++installed software in a non-standard prefix.
++
++Alternatively, you may set the environment variables WPG_CFLAGS
++and WPG_LIBS to avoid the need to call pkg-config.
++See the pkg-config man page for more details." "$LINENO" 5
++elif test $pkg_failed = untried; then
++     	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
++$as_echo "no" >&6; }
++	{ { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
++$as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
++as_fn_error $? "The pkg-config script could not be found or is too old.  Make sure it
++is in your PATH or set the PKG_CONFIG environment variable to the full
++path to pkg-config.
++
++Alternatively, you may set the environment variables WPG_CFLAGS
++and WPG_LIBS to avoid the need to call pkg-config.
++See the pkg-config man page for more details.
++
++To get pkg-config, see <http://pkg-config.freedesktop.org/>.
++See \`config.log' for more details" "$LINENO" 5; }
++else
++	WPG_CFLAGS=$pkg_cv_WPG_CFLAGS
++	WPG_LIBS=$pkg_cv_WPG_LIBS
++        { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
++$as_echo "yes" >&6; }
++
++fi
++
++
++pkg_failed=no
++{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for LCMS2" >&5
++$as_echo_n "checking for LCMS2... " >&6; }
++
++if test -n "$LCMS2_CFLAGS"; then
++    pkg_cv_LCMS2_CFLAGS="$LCMS2_CFLAGS"
++ elif test -n "$PKG_CONFIG"; then
++    if test -n "$PKG_CONFIG" && \
++    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"
++	lcms2
++\""; } >&5
++  ($PKG_CONFIG --exists --print-errors "
++	lcms2
++") 2>&5
++  ac_status=$?
++  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
++  test $ac_status = 0; }; then
++  pkg_cv_LCMS2_CFLAGS=`$PKG_CONFIG --cflags "
++	lcms2
++" 2>/dev/null`
++		      test "x$?" != "x0" && pkg_failed=yes
++else
++  pkg_failed=yes
++fi
++ else
++    pkg_failed=untried
++fi
++if test -n "$LCMS2_LIBS"; then
++    pkg_cv_LCMS2_LIBS="$LCMS2_LIBS"
++ elif test -n "$PKG_CONFIG"; then
++    if test -n "$PKG_CONFIG" && \
++    { { $as_echo "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"
++	lcms2
++\""; } >&5
++  ($PKG_CONFIG --exists --print-errors "
++	lcms2
++") 2>&5
++  ac_status=$?
++  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
++  test $ac_status = 0; }; then
++  pkg_cv_LCMS2_LIBS=`$PKG_CONFIG --libs "
++	lcms2
++" 2>/dev/null`
++		      test "x$?" != "x0" && pkg_failed=yes
++else
++  pkg_failed=yes
++fi
++ else
++    pkg_failed=untried
++fi
++
++
++
++if test $pkg_failed = yes; then
++   	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
++$as_echo "no" >&6; }
++
++if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
++        _pkg_short_errors_supported=yes
++else
++        _pkg_short_errors_supported=no
++fi
++        if test $_pkg_short_errors_supported = yes; then
++	        LCMS2_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "
++	lcms2
++" 2>&1`
++        else
++	        LCMS2_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "
++	lcms2
++" 2>&1`
++        fi
++	# Put the nasty error message in config.log where it belongs
++	echo "$LCMS2_PKG_ERRORS" >&5
++
++	as_fn_error $? "Package requirements (
+ 	lcms2
+ ) were not met:
+ 
+-$LIBCDR_PKG_ERRORS
++$LCMS2_PKG_ERRORS
+ 
+ Consider adjusting the PKG_CONFIG_PATH environment variable if you
+ installed software in a non-standard prefix.
+ 
+-Alternatively, you may set the environment variables LIBCDR_CFLAGS
+-and LIBCDR_LIBS to avoid the need to call pkg-config.
++Alternatively, you may set the environment variables LCMS2_CFLAGS
++and LCMS2_LIBS to avoid the need to call pkg-config.
+ See the pkg-config man page for more details." "$LINENO" 5
+ elif test $pkg_failed = untried; then
+      	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+@@ -16219,15 +16417,15 @@
+ is in your PATH or set the PKG_CONFIG environment variable to the full
+ path to pkg-config.
+ 
+-Alternatively, you may set the environment variables LIBCDR_CFLAGS
+-and LIBCDR_LIBS to avoid the need to call pkg-config.
++Alternatively, you may set the environment variables LCMS2_CFLAGS
++and LCMS2_LIBS to avoid the need to call pkg-config.
+ See the pkg-config man page for more details.
+ 
+ To get pkg-config, see <http://pkg-config.freedesktop.org/>.
+ See \`config.log' for more details" "$LINENO" 5; }
+ else
+-	LIBCDR_CFLAGS=$pkg_cv_LIBCDR_CFLAGS
+-	LIBCDR_LIBS=$pkg_cv_LIBCDR_LIBS
++	LCMS2_CFLAGS=$pkg_cv_LCMS2_CFLAGS
++	LCMS2_LIBS=$pkg_cv_LCMS2_LIBS
+         { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+ $as_echo "yes" >&6; }
+ 
+@@ -16574,7 +16772,7 @@
+   IFS=$as_save_IFS
+   test -z "$as_dir" && as_dir=.
+     for ac_exec_ext in '' $ac_executable_extensions; do
+-  if as_fn_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
++  if { test -f "$as_dir/$ac_word$ac_exec_ext" && $as_test_x "$as_dir/$ac_word$ac_exec_ext"; }; then
+     ac_cv_prog_ac_ct_WINDRES="windres"
+     $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
+     break 2
+@@ -16678,7 +16876,9 @@
+ 	DEBUG_CXXFLAGS="-DNDEBUG"
+ 
+ fi
+-LIBCDR_CXXFLAGS="$LIBCDR_CFLAGS"
++LIBCDR_CXXFLAGS="${WPD_CFLAGS} ${WPG_CFLAGS} ${LCMS2_CFLAGS}"
++LIBCDR_LIBS="${WPD_LIBS} ${WPG_LIBS} ${LCMS2_LIBS}"
++
+ 
+ 
+ 

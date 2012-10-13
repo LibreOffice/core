@@ -14,7 +14,7 @@
 #include <vcl/button.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/field.hxx>
-#include <svtools/svtreebx.hxx>
+#include <svtools/treelistbox.hxx>
 
 #include "RemoteDialogClientBox.hxx"
 

@@ -886,7 +886,7 @@ SwFieldType* SwDocInfoFieldType::Copy() const
     return pTyp;
 }
 
-void lcl_GetLocalDataWrapper( sal_uLong nLang,
+static void lcl_GetLocalDataWrapper( sal_uLong nLang,
                               const LocaleDataWrapper **ppAppLocalData,
                               const LocaleDataWrapper **ppLocalData )
 {
@@ -1061,14 +1061,14 @@ SwDocInfoField::SwDocInfoField(SwDocInfoFieldType* pTyp, sal_uInt16 nSub, const 
 
 
 template<class T>
-double lcl_TimeToDouble( const T& rTime )
+static double lcl_TimeToDouble( const T& rTime )
 {
     const double fMilliSecondsPerDay = 86400000.0;
     return ((rTime.Hours*3600000)+(rTime.Minutes*60000)+(rTime.Seconds*1000)+(rTime.HundredthSeconds*10)) / fMilliSecondsPerDay;
 }
 
 template<class D>
-double lcl_DateToDouble( const D& rDate, const Date& rNullDate )
+static double lcl_DateToDouble( const D& rDate, const Date& rNullDate )
 {
     long nDate = Date::DateToDays( rDate.Day, rDate.Month, rDate.Year );
     long nNullDate = Date::DateToDays( rNullDate.GetDay(), rNullDate.GetMonth(), rNullDate.GetYear() );

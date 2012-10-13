@@ -29,7 +29,7 @@
 
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <com/sun/star/xml/sax/InputSource.hpp>
-#include <com/sun/star/xml/sax/XParser.hpp>
+#include <com/sun/star/xml/sax/Parser.hpp>
 #include <com/sun/star/xml/sax/SAXParseException.hpp>
 #include <com/sun/star/io/IOException.hpp>
 #include <cppuhelper/implbase1.hxx>
@@ -323,10 +323,7 @@ void load_config( const OUString& rPath )
         aParserInput.aInputStream = xInputStream;
 
         // get parser
-        Reference< XParser > xParser(
-            comphelper::getProcessServiceFactory()->createInstance(
-                OUString("com.sun.star.xml.sax.Parser") ),
-            UNO_QUERY_THROW );
+        Reference< XParser > xParser = Parser::create(comphelper::getProcessComponentContext());
 
         // get filter
         ConfigHandler* pConfigHandler = new ConfigHandler();

@@ -35,10 +35,6 @@ import java.io.File;
 
 import com.sun.star.util.CloseVetoException;
 
-/**
- *
- * @author fs93730
- */
 public class HsqlDatabase
 {
     XComponentContext       m_context;

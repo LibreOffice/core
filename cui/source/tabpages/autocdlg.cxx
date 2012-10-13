@@ -1,30 +1,21 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*************************************************************************
+/*
+ * This file is part of the LibreOffice project.
  *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * This file incorporates work covered by the following license notice:
  *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
 
 #include <vcl/msgbox.hxx>
 #include <vcl/field.hxx>
@@ -161,7 +152,7 @@ OfaAutoCorrDlg::OfaAutoCorrDlg(Window* pParent, const SfxItemSet* _pSet ) :
         SetCurPageId( RID_OFAPAGE_SMARTTAG_OPTIONS );
 }
 
-sal_Bool lcl_FindEntry( ListBox& rLB, const String& rEntry,
+static sal_Bool lcl_FindEntry( ListBox& rLB, const String& rEntry,
                     CollatorWrapper& rCmpClass )
 {
     sal_uInt16 nCount = rLB.GetEntryCount();
@@ -342,11 +333,11 @@ public:
     OfaImpBrwString( SvLBoxEntry* pEntry, sal_uInt16 nFlags,
         const String& rStr ) : SvLBoxString(pEntry,nFlags,rStr){}
 
-    virtual void Paint( const Point& rPos, SvLBox& rDev, sal_uInt16 nFlags,
+    virtual void Paint( const Point& rPos, SvTreeListBox& rDev, sal_uInt16 nFlags,
                                             SvLBoxEntry* pEntry);
 };
 
-void OfaImpBrwString::Paint( const Point& rPos, SvLBox& rDev, sal_uInt16 /*nFlags*/,
+void OfaImpBrwString::Paint( const Point& rPos, SvTreeListBox& rDev, sal_uInt16 /*nFlags*/,
     SvLBoxEntry* pEntry )
 {
     rDev.DrawText( rPos, GetText() );
@@ -945,7 +936,7 @@ sal_Bool OfaAutocorrReplacePage::FillItemSet( SfxItemSet& )
 {
     SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get().GetAutoCorrect();
 
-    for (StringChangeTable::reverse_iterator it = aChangesTable.rbegin(); it != aChangesTable.rend(); it++)
+    for (StringChangeTable::reverse_iterator it = aChangesTable.rbegin(); it != aChangesTable.rend(); ++it)
     {
         LanguageType eCurrentLang = it->first;
         StringChangeList& rStringChangeList = it->second;
@@ -1351,7 +1342,7 @@ IMPL_LINK(OfaAutocorrReplacePage, ModifyHdl, Edit*, pEdt)
     return 0;
 }
 
-sal_Bool lcl_FindInArray(std::vector<rtl::OUString>& rStrings, const String& rString)
+static sal_Bool lcl_FindInArray(std::vector<rtl::OUString>& rStrings, const String& rString)
 {
     for(std::vector<rtl::OUString>::iterator i = rStrings.begin(); i != rStrings.end(); ++i)
     {
@@ -1389,8 +1380,7 @@ OfaAutocorrExceptPage::OfaAutocorrExceptPage( Window* pParent,
 
     ::com::sun::star::lang::Locale aLcl( SvxCreateLocale(eLastDialogLanguage ));
     pCompareClass = new CollatorWrapper( GetProcessFact() );
-    pCompareClass->loadDefaultCollator( aLcl, ::com::sun::star::i18n::
-                            CollatorOptions::CollatorOptions_IGNORE_CASE );
+    pCompareClass->loadDefaultCollator( aLcl, 0 );
 
     aNewAbbrevPB.SetClickHdl(LINK(this, OfaAutocorrExceptPage, NewDelHdl));
     aDelAbbrevPB.SetClickHdl(LINK(this, OfaAutocorrExceptPage, NewDelHdl));
@@ -1564,9 +1554,7 @@ void OfaAutocorrExceptPage::SetLanguage(LanguageType eSet)
         eLastDialogLanguage = eSet;
         delete pCompareClass;
         pCompareClass = new CollatorWrapper( GetProcessFact() );
-        pCompareClass->loadDefaultCollator( SvxCreateLocale( eLastDialogLanguage ),
-                        ::com::sun::star::i18n::
-                            CollatorOptions::CollatorOptions_IGNORE_CASE );
+        pCompareClass->loadDefaultCollator( SvxCreateLocale( eLastDialogLanguage ), 0 );
         ModifyHdl(&aAbbrevED);
         ModifyHdl(&aDoubleCapsED);
     }

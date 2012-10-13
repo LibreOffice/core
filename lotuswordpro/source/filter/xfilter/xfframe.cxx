@@ -59,7 +59,6 @@
  ************************************************************************/
 #include    "xfframe.hxx"
 #include    "xfparagraph.hxx"
-#define     ZINDEX_MAX 0x7fffffff
 #define     ZINDEX_MIN 0
 XFFrame::XFFrame()
 {

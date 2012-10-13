@@ -36,20 +36,20 @@ public:
         class Visibility Name: public SfxHint \
         { \
             Type* pObj; \
-            sal_Bool  bIsOwner; \
+            bool  bIsOwner; \
         \
         public: \
             TYPEINFO(); \
-            Name( Type* Object, sal_Bool bOwnedByHint = sal_False ); \
+            Name( Type* Object, bool bOwnedByHint = false ); \
             ~Name(); \
         \
             Type* GetObject() const { return pObj; } \
-            sal_Bool  IsOwner() const { return bIsOwner; } \
+            bool  IsOwner() const { return bIsOwner; } \
         }
 
 #define IMPL_PTRHINT(Name, Type) \
         TYPEINIT1(Name, SfxHint);   \
-        Name::Name( Type* pObject, sal_Bool bOwnedByHint ) \
+        Name::Name( Type* pObject, bool bOwnedByHint ) \
             { pObj = pObject; bIsOwner = bOwnedByHint; } \
         Name::~Name() {}
 

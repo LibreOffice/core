@@ -81,6 +81,10 @@ gb_CXXFLAGS_COMMON := \
 	-fno-common \
 	-pipe \
 
+ifneq ($(HAVE_THREADSAFE_STATICS),TRUE)
+gb_CXXFLAGS_COMMON += -fno-threadsafe-statics
+endif
+
 ifeq ($(HAVE_GCC_VISIBILITY_FEATURE),TRUE)
 gb_VISIBILITY_FLAGS := -DHAVE_GCC_VISIBILITY_FEATURE -fvisibility=hidden
 ifneq ($(HAVE_GCC_VISIBILITY_BROKEN),TRUE)
@@ -148,6 +152,12 @@ gb_DEBUG_CXXFLAGS := $(FNO_DEFAULT_INLINE)
 
 gb_LinkTarget_INCLUDE := $(filter-out %/stl, $(subst -I. , ,$(SOLARINC)))
 gb_LinkTarget_INCLUDE_STL := $(filter %/stl, $(subst -I. , ,$(SOLARINC)))
+
+ifeq ($(COM_GCC_IS_CLANG),TRUE)
+gb_COMPILER_PLUGINS :=-Xclang -load -Xclang $(SRCDIR)/compilerplugins/obj/compileplugin.so -Xclang -add-plugin -Xclang loplugin
+else
+gb_COMPILER_PLUGINS :=
+endif
 
 # Executable class
 

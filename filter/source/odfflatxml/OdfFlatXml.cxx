@@ -28,6 +28,7 @@
  */
 
 
+#include <comphelper/processfactory.hxx>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/servicefactory.hxx>
 #include <cppuhelper/implbase3.hxx>
@@ -44,7 +45,7 @@
 
 #include <com/sun/star/xml/XImportFilter.hpp>
 #include <com/sun/star/xml/XExportFilter.hpp>
-#include <com/sun/star/xml/sax/XParser.hpp>
+#include <com/sun/star/xml/sax/Parser.hpp>
 #include <com/sun/star/xml/sax/InputSource.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
@@ -141,14 +142,7 @@ OdfFlatXml::importer(
     if (!inputStream.is())
         return sal_False;
 
-    OUString SAX_PARSER_SERVICE(
-                                RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Parser"));
-    Reference<XParser> saxParser(m_rServiceFactory->createInstance(
-                                                                   SAX_PARSER_SERVICE), UNO_QUERY);
-
-    OSL_ASSERT(saxParser.is());
-    if (!saxParser.is())
-        return sal_False;
+    Reference<XParser> saxParser = Parser::create(comphelper::getComponentContext(m_rServiceFactory));
 
     InputSource inputSource;
     inputSource.sSystemId = url;

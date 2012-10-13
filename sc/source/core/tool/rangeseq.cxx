@@ -42,7 +42,7 @@ using namespace com::sun::star;
 
 //------------------------------------------------------------------------
 
-bool lcl_HasErrors( ScDocument* pDoc, const ScRange& rRange )
+static bool lcl_HasErrors( ScDocument* pDoc, const ScRange& rRange )
 {
     // no need to look at empty cells - just use ScCellIterator
     ScCellIterator aIter( pDoc, rRange );
@@ -56,7 +56,7 @@ bool lcl_HasErrors( ScDocument* pDoc, const ScRange& rRange )
     return false;   // no error found
 }
 
-long lcl_DoubleToLong( double fVal )
+static long lcl_DoubleToLong( double fVal )
 {
     double fInt = (fVal >= 0.0) ? ::rtl::math::approxFloor( fVal ) :
                                   ::rtl::math::approxCeil( fVal );
@@ -252,7 +252,7 @@ sal_Bool ScRangeToSequence::FillStringArray( uno::Any& rAny, const ScMatrix* pMa
 
 //------------------------------------------------------------------------
 
-double lcl_GetValueFromCell( ScBaseCell& rCell )
+static double lcl_GetValueFromCell( ScBaseCell& rCell )
 {
     //! ScBaseCell member function?
 

@@ -55,7 +55,6 @@ import com.sun.star.wizards.ui.event.Task;
  * the value read from the document.
  * The *cp_title* "overrides" *title*, if exists. if not, *title* is used.
  * The same is valid for *description* and *author*.
- * @author  rpiterman
  */
 public class CGDocument extends ConfigSetItem implements XMLProvider
 {
@@ -144,8 +143,6 @@ public class CGDocument extends ConfigSetItem implements XMLProvider
 
         task.advance(true); //1
 
-        //System.out.println(Properties.getPropertyValue(mediaDescriptor,"UIName"));
-
         analyzeFileType(mediaDescriptor);
 
         task.advance(true); //2
@@ -231,12 +228,9 @@ public class CGDocument extends ConfigSetItem implements XMLProvider
                 ? PropertyNames.EMPTY_STRING : (String) Properties.getPropertyValue(mediaDescriptor, PropertyNames.PROPERTY_NAME);
         appType = getDocType(media);
 
-        //System.out.println(appType);
-
         isSOOpenable =
                 (appType.equals(TypeDetection.WRITER_DOC) || appType.equals(TypeDetection.CALC_DOC) || appType.equals(TypeDetection.IMPRESS_DOC) || appType.equals(TypeDetection.DRAW_DOC)) || appType.equals(TypeDetection.HTML_DOC);
 
-//        String[] parts = media.split("_");    // line removed because of compatibility to JDK13
         String[] parts = JavaTools.ArrayoutofString(media, "_");
 
 
@@ -385,7 +379,6 @@ public class CGDocument extends ConfigSetItem implements XMLProvider
 
     private String getIcon(String appType)
     {
-        //System.out.println("Getting Icon for: " + appType);
         return appType + ".gif";
     }
 

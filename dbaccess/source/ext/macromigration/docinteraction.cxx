@@ -21,6 +21,7 @@
 #include "docinteraction.hxx"
 
 #include <com/sun/star/frame/XModel.hpp>
+#include <com/sun/star/task/InteractionHandler.hpp>
 #include <com/sun/star/task/DocumentPasswordRequest.hpp>
 
 #include <comphelper/componentcontext.hxx>
@@ -65,7 +66,7 @@ namespace dbmm
         }
 
         InteractionHandler_Data( const ::comphelper::ComponentContext& _rContext )
-            :xHandler( _rContext.createComponent( "com.sun.star.task.InteractionHandler" ), UNO_QUERY_THROW )
+            :xHandler( ::com::sun::star::task::InteractionHandler::createWithParent(_rContext.getUNOContext(), 0), UNO_QUERY )
         {
         }
     };

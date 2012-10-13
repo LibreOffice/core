@@ -391,7 +391,7 @@ protected:
     // Format next frame of table frame to assure keeping attributes.
     // In case of nested tables method <SwFrm::MakeAll()> is called to
     // avoid formating of superior table frame.
-    friend SwFrm* lcl_FormatNextCntntForKeep( SwTabFrm* pTabFrm );
+    friend SwFrm* sw_FormatNextCntntForKeep( SwTabFrm* pTabFrm );
 
     virtual void MakeAll() = 0;
     // adjust frames of a page

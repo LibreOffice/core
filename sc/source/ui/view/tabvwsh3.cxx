@@ -83,7 +83,7 @@ using ::std::auto_ptr;
 
 /** Try to parse the given range using Calc-style syntax first, then
     Excel-style if that fails. */
-sal_uInt16 lcl_ParseRange(ScRange& rScRange, const String& aAddress, ScDocument* pDoc, sal_uInt16 /* nSlot */)
+static sal_uInt16 lcl_ParseRange(ScRange& rScRange, const String& aAddress, ScDocument* pDoc, sal_uInt16 /* nSlot */)
 {
     sal_uInt16 nResult = rScRange.Parse(aAddress, pDoc);
     if ( (nResult & SCA_VALID) )
@@ -94,7 +94,7 @@ sal_uInt16 lcl_ParseRange(ScRange& rScRange, const String& aAddress, ScDocument*
 
 /** Try to parse the given address using Calc-style syntax first, then
     Excel-style if that fails. */
-sal_uInt16 lcl_ParseAddress(ScAddress& rScAddress, const String& aAddress, ScDocument* pDoc, sal_uInt16 /* nSlot */)
+static sal_uInt16 lcl_ParseAddress(ScAddress& rScAddress, const String& aAddress, ScDocument* pDoc, sal_uInt16 /* nSlot */)
 {
     sal_uInt16 nResult = rScAddress.Parse(aAddress, pDoc);
     if ( (nResult & SCA_VALID) )

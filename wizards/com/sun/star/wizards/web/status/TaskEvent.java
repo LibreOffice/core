@@ -20,9 +20,6 @@ package com.sun.star.wizards.web.status;
 
 import java.util.EventObject;
 
-/**
- * @author rpiterman
- */
 public class TaskEvent extends EventObject
 {
 

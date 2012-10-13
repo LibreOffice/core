@@ -23,7 +23,6 @@ import com.sun.star.wizards.common.PropertyNames;
 import com.sun.star.wizards.web.data.CGStyle;
 
 /**
- * @author rpiterman
  * the style preview, which is a OOo Document Preview in 
  * an Image Control.
  * This class copies the files needed for this

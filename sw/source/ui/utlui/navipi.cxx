@@ -128,7 +128,7 @@ void SwNavigationPI::MoveOutline(sal_uInt16 nSource, sal_uInt16 nTarget,
 ------------------------------------------------------------------------*/
 
 
-void lcl_UnSelectFrm(SwWrtShell *pSh)
+static void lcl_UnSelectFrm(SwWrtShell *pSh)
 {
     if (pSh->IsFrmSelected())
     {

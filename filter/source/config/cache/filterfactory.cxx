@@ -1,30 +1,21 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*************************************************************************
+/*
+ * This file is part of the LibreOffice project.
  *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * This file incorporates work covered by the following license notice:
  *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
 
 
 #include "filterfactory.hxx"
@@ -44,20 +35,6 @@ namespace filter{
 namespace css = ::com::sun::star;
 
 
-/** @short  can be used to query for filters related to its application module.
- */
-#define BASE_QUERY_ALL          "_query_all"
-#define BASE_QUERY_WRITER       "_query_Writer"
-#define BASE_QUERY_WEB          "_query_web"
-#define BASE_QUERY_GLOBAL       "_query_global"
-#define BASE_QUERY_CHART        "_query_chart"
-#define BASE_QUERY_CALC         "_query_calc"
-#define BASE_QUERY_IMPRESS      "_query_impress"
-#define BASE_QUERY_DRAW         "_query_draw"
-#define BASE_QUERY_MATH         "_query_math"
-
-//_______________________________________________
-
 /** @short  define all possible parts of a filter query.
 
     @descr  syntax: "<query>[:<param>[=<value>]]"
@@ -73,22 +50,6 @@ namespace css = ::com::sun::star;
             default_first                   set default filter on top of return list        false
             case_sensitive                  compare "sort_prop" case sensitive              false
  */
-#define SEPERATOR_QUERYPARAM                            ((sal_Unicode)':')
-#define SEPERATOR_QUERYPARAMVALUE                       ((sal_Unicode)'=')
-
-#define QUERYPARAM_IFLAGS                               ::rtl::OUString( "iflags" )
-#define QUERYPARAM_EFLAGS                               ::rtl::OUString( "eflags" )
-#define QUERYPARAM_SORT_PROP                            ::rtl::OUString( "sort_prop" )
-
-#define QUERYPARAM_DESCENDING                           ::rtl::OUString( "descending" )
-#define QUERYPARAM_USE_ORDER                            ::rtl::OUString( "use_order" )
-#define QUERYPARAM_DEFAULT_FIRST                        ::rtl::OUString( "default_first" )
-#define QUERYPARAM_CASE_SENSITIVE                       ::rtl::OUString( "case_sensitive" )
-
-#define QUERYPARAMVALUE_SORT_PROP_NAME                  ::rtl::OUString( "name" )
-#define QUERYPARAMVALUE_SORT_PROP_UINAME                ::rtl::OUString( "uiname" )
-
-
 
 FilterFactory::FilterFactory(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR)
 {

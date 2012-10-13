@@ -30,11 +30,22 @@
 #include "framework/ViewShellWrapper.hxx"
 #include "framework/Pane.hxx"
 #include "taskpane/ToolPanelViewShell.hxx"
+#include "sdpage.hxx"
 #include "ViewShell.hxx"
 #include "Window.hxx"
 
+#include "SlideSorter.hxx"
+#include "SlideSorterViewShell.hxx"
+#include "controller/SlsPageSelector.hxx"
+#include "controller/SlsCurrentSlideManager.hxx"
+#include "controller/SlideSorterController.hxx"
+#include "model/SlsPageEnumerationProvider.hxx"
+#include "model/SlideSorterModel.hxx"
+#include "model/SlsPageDescriptor.hxx"
+
 #include <com/sun/star/drawing/framework/XPane.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 
 #include <toolkit/helper/vclunohelper.hxx>
 #include <comphelper/sequence.hxx>
@@ -64,17 +75,11 @@ ViewShellWrapper::ViewShellWrapper (
     const Reference<awt::XWindow>& rxWindow)
     : ViewShellWrapperInterfaceBase(MutexOwner::maMutex),
       mpViewShell(pViewShell),
+      mpSlideSorterViewShell(
+          ::boost::dynamic_pointer_cast< ::sd::slidesorter::SlideSorterViewShell >( pViewShell )),
       mxViewId(rxViewId),
       mxWindow(rxWindow)
 {
-    if (rxWindow.is())
-    {
-        rxWindow->addWindowListener(this);
-        if (pViewShell != NULL)
-        {
-            pViewShell->Resize();
-        }
-    }
 }
 
 
@@ -102,6 +107,20 @@ void SAL_CALL ViewShellWrapper::disposing (void)
     mpViewShell.reset();
 }
 
+uno::Any SAL_CALL ViewShellWrapper::queryInterface( const uno::Type & rType ) throw(uno::RuntimeException)
+{
+    if( mpSlideSorterViewShell &&
+        rType == ::getCppuType( static_cast< uno::Reference< view::XSelectionSupplier > * >( 0 ) ) )
+    {
+        uno::Any aAny;
+        uno::Reference<view::XSelectionSupplier> xSupplier( this );
+        aAny <<= xSupplier;
+
+        return aAny;
+    }
+    else
+        return ViewShellWrapperInterfaceBase::queryInterface( rType );
+}
 
 
 
@@ -131,6 +150,70 @@ sal_Bool SAL_CALL ViewShellWrapper::isAnchorOnly (void)
 }
 
 
+//----- XSelectionSupplier --------------------------------------------------
+
+sal_Bool SAL_CALL ViewShellWrapper::select( const ::com::sun::star::uno::Any& aSelection ) throw(lang::IllegalArgumentException, uno::RuntimeException)
+{
+    bool bOk = true;
+
+    ::sd::slidesorter::controller::SlideSorterController& rSlideSorterController
+        = mpSlideSorterViewShell->GetSlideSorter().GetController();
+    ::sd::slidesorter::controller::PageSelector& rSelector (rSlideSorterController.GetPageSelector());
+    rSelector.DeselectAllPages();
+    Sequence<Reference<drawing::XDrawPage> > xPages;
+    aSelection >>= xPages;
+    const sal_uInt32 nCount = xPages.getLength();
+    for (sal_uInt32 nIndex=0; nIndex<nCount; ++nIndex)
+    {
+        Reference<beans::XPropertySet> xSet (xPages[nIndex], UNO_QUERY);
+        if (xSet.is())
+        {
+            try
+            {
+                Any aNumber = xSet->getPropertyValue("Number");
+                sal_Int32 nPageNumber = 0;
+                aNumber >>= nPageNumber;
+                nPageNumber -=1; // Transform 1-based page numbers to 0-based ones.
+                rSelector.SelectPage(nPageNumber);
+            }
+            catch (const RuntimeException&)
+            {
+            }
+        }
+    }
+
+    return bOk;
+}
+
+uno::Any SAL_CALL ViewShellWrapper::getSelection() throw(uno::RuntimeException)
+{
+    Any aResult;
+
+    slidesorter::model::PageEnumeration aSelectedPages (
+        slidesorter::model::PageEnumerationProvider::CreateSelectedPagesEnumeration(
+            mpSlideSorterViewShell->GetSlideSorter().GetModel()));
+    int nSelectedPageCount (
+        mpSlideSorterViewShell->GetSlideSorter().GetController().GetPageSelector().GetSelectedPageCount());
+
+    Sequence<Reference<XInterface> > aPages(nSelectedPageCount);
+    int nIndex = 0;
+    while (aSelectedPages.HasMoreElements() && nIndex<nSelectedPageCount)
+    {
+        slidesorter::model::SharedPageDescriptor pDescriptor (aSelectedPages.GetNextElement());
+        aPages[nIndex++] = pDescriptor->GetPage()->getUnoPage();
+    }
+    aResult <<= aPages;
+
+    return aResult;
+}
+
+void SAL_CALL ViewShellWrapper::addSelectionChangeListener( const uno::Reference< view::XSelectionChangeListener >& ) throw(uno::RuntimeException)
+{
+}
+
+void SAL_CALL ViewShellWrapper::removeSelectionChangeListener( const uno::Reference< view::XSelectionChangeListener >& ) throw(uno::RuntimeException)
+{
+}
 
 
 //----- XRelocatableResource --------------------------------------------------

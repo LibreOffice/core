@@ -13,6 +13,8 @@ $(eval $(call gb_CliLibrary_CliLibrary,cli_ure))
 
 $(eval $(call gb_CliLibrary_set_configfile,cli_ure,cli_ure/source/ure/cli_ure_config))
 
+$(eval $(call gb_CliLibrary_set_keyfile,cli_ure,$(SRCDIR)/cli_ure/source/cliuno.snk))
+
 $(eval $(call gb_CliLibrary_set_policy,cli_ure,$(CLI_URE_POLICY_ASSEMBLY),$(CLI_URE_POLICY_VERSION)))
 
 $(eval $(call gb_CliLibrary_use_assemblies,cli_ure,\

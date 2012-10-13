@@ -33,6 +33,7 @@
 #include <vcl/combobox.hxx>
 #include <svtools/headbar.hxx>
 #include <svtools/svtabbx.hxx>
+#include "svtools/svlbitm.hxx"
 #include <vcl/lstbox.hxx>
 #include <vcl/tabpage.hxx>
 #include <vcl/field.hxx>
@@ -86,7 +87,7 @@ public:
                     SvLBoxColorString();
                     ~SvLBoxColorString();
 
-    void            Paint( const Point&, SvLBox& rDev, sal_uInt16 nFlags,SvLBoxEntry* );
+    void            Paint( const Point&, SvTreeListBox& rDev, sal_uInt16 nFlags,SvLBoxEntry* );
     SvLBoxItem*     Create() const;
 };
 

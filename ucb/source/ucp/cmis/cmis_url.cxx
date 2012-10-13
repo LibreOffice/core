@@ -89,6 +89,12 @@ namespace cmis
         m_sId = rtl::OUString( );
     }
 
+    void URL::setObjectId( rtl::OUString sId )
+    {
+        m_sPath = rtl::OUString( );
+        m_sId = sId;
+    }
+
     rtl::OUString URL::asString( )
     {
         rtl::OUString sUrl;

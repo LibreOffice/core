@@ -42,7 +42,7 @@
 
 //==================================================================
 
-String lcl_MetricString( long nTwips, const String& rText )
+static String lcl_MetricString( long nTwips, const String& rText )
 {
     if ( nTwips <= 0 )
         return ScGlobal::GetRscString(STR_TIP_HIDE);

@@ -37,10 +37,6 @@ import com.sun.star.util.Date;
 import com.sun.star.util.DateTime;
 import com.sun.star.util.Time;
 
-/**
- *
- * @author frank.schoenheit@sun.com
- */
 public class ResultSet implements XResultSet, XRow
 {
     private final XResultSet    m_resultSet;

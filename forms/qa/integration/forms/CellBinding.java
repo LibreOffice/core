@@ -38,10 +38,6 @@ import com.sun.star.sheet.XCellRangeFormula;
 import com.sun.star.table.CellRangeAddress;
 import com.sun.star.text.XTextRange;
 
-/**
- *
- * @author  fs93730
- */
 public class CellBinding extends complexlib.ComplexTestCase
 {
     /** the test document our form layer lives in */

@@ -39,8 +39,6 @@
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 
-#include <tools/diagnose_ex.h>
-
 #include <comphelper/componentcontext.hxx>
 
 #include <cppuhelper/compbase3.hxx>

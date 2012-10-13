@@ -84,12 +84,14 @@
 #include <com/sun/star/sdbcx/XDrop.hpp>
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #include <com/sun/star/sdbcx/XViewsSupplier.hpp>
+#include <com/sun/star/task/InteractionHandler.hpp>
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 #include <com/sun/star/util/XFlushable.hpp>
 #include <com/sun/star/document/MacroExecMode.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/ui/XContextMenuInterceptor.hpp>
 
+#include <comphelper/processfactory.hxx>
 #include <comphelper/extract.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/types.hxx>
@@ -104,7 +106,7 @@
 #include <svl/intitem.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <svtools/svlbitm.hxx>
-#include <svtools/svtreebx.hxx>
+#include <svtools/treelistbox.hxx>
 #include <svx/algitem.hxx>
 #include <svx/dataaccessdescriptor.hxx>
 #include <svx/databaseregistrationui.hxx>
@@ -3528,11 +3530,8 @@ void SbaTableQueryBrowser::implAdministrate( SvLBoxEntry* _pApplyTo )
 
             if ( xDocumentModel.is() )
             {
-                Reference< XInteractionHandler > xInteractionHandler(
-                    getORB()->createInstance(
-                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.task.InteractionHandler" ) ) ),
-                        UNO_QUERY );
-                OSL_ENSURE( xInteractionHandler.is(), "SbaTableQueryBrowser::implAdministrate: no interaction handler available!" );
+                Reference< XInteractionHandler2 > xInteractionHandler(
+                    InteractionHandler::createWithParent(comphelper::getComponentContext(getORB()), 0) );
 
                 ::comphelper::NamedValueCollection aLoadArgs;
                 aLoadArgs.put( "Model", xDocumentModel );

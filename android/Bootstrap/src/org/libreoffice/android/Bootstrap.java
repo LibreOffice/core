@@ -62,20 +62,8 @@ public class Bootstrap extends NativeActivity
                                         String apkFile,
                                         String[] ld_library_path);
 
-    public static native boolean setup(int lo_main_ptr,
-                                       Object lo_main_argument,
+    public static native boolean setup(Object lo_main_argument,
                                        int lo_main_delay);
-
-    // This is not just a wrapper for the C library dlopen(), but also
-    // loads recursively dependent libraries.
-    public static native int dlopen(String library);
-
-    // This is just a wrapper for the C library dlsym().
-    public static native int dlsym(int handle, String symbol);
-
-    // To be called after you are sure libgnustl_shared.so
-    // has been loaded
-    static native void patch_libgnustl_shared();
 
     // Extracts files in the .apk that need to be extraced into the app's tree
     static native void extract_files();
@@ -148,11 +136,6 @@ public class Bootstrap extends NativeActivity
         if (!setup(dataDir, activity.getApplication().getPackageResourcePath(), llpa))
             return;
 
-        // We build LO code against the shared GNU C++ library
-        dlopen("libgnustl_shared.so");
-        // and need to patch it.
-        patch_libgnustl_shared();
-
         // Extract files from the .apk that can't be used mmapped directly from it
         extract_files();
 
@@ -224,35 +207,8 @@ public class Bootstrap extends NativeActivity
         System.arraycopy(argv, 0, newargv, 1, argv.length);
         argv = newargv;
 
-        // Load the LO "program" here and look up lo_main
-        int loLib = dlopen(mainLibrary);
-
-        if (loLib == 0) {
-            Log.i(TAG, String.format("Error: could not load %s", mainLibrary));
-            mainLibrary = "libmergedlo.so";
-            loLib = dlopen(mainLibrary);
-            if (loLib == 0) {
-                Log.i(TAG, String.format("Error: could not load fallback %s", mainLibrary));
-                return;
-            }
-        }
-
-        int lo_main = dlsym(loLib, "lo_main");
-        if (lo_main == 0) {
-            Log.i(TAG, String.format("No lo_main in %s", mainLibrary));
-            return;
-        }
-
-        // Get extra libraries to load early, so that it's easier to debug
-        // them even with a buggy ndk-gdb that doesn't grok debugging
-        // information from libraries loaded after it has been attached to the
-        // process.
-        String extraLibs = getIntent().getStringExtra("lo-extra-libs");
-        if (extraLibs != null) {
-            for (String lib : extraLibs.split(":")) {
-                dlopen(lib);
-            }
-        }
+        // Load the LO "program" here
+        System.loadLibrary(mainLibrary);
 
         // Start a strace on ourself if requested.
 
@@ -272,7 +228,7 @@ public class Bootstrap extends NativeActivity
             delay = Integer.parseInt(sdelay);
 
         // Tell lo-bootstrap.c the stuff it needs to know
-        if (!setup(lo_main, argv, delay))
+        if (!setup(argv, delay))
             return;
 
         // Finally, call our super-class, NativeActivity's onCreate(),
@@ -286,14 +242,12 @@ public class Bootstrap extends NativeActivity
         super.onCreate(savedInstanceState);
     }
 
-    // This is used to load the 'lo-bootstrap' library on application
-    // startup. The library has already been unpacked into
-    // /data/data/<app name>/lib/liblo-bootstrap.so at installation
-    // time by the package manager.
+    // Now with static loading we always have all native code in one native
+    // library which we always call liblo-native-code.so, regardless of the
+    // app. The library has already been unpacked into /data/data/<app
+    // name>/lib at installation time by the package manager.
     static {
-        System.loadLibrary("lo-bootstrap");
-        System.loadLibrary("gnustl_shared");
-        System.loadLibrary("libotouchlo");
+        System.loadLibrary("lo-native-code");
     }
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

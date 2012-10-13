@@ -801,31 +801,6 @@ public: // direct access needed for legacy VML drawing controls
 
 // ============================================================================
 
-/** Model for a Forms 2.0 tabstrip control. */
-class OOX_DLLPUBLIC AxTabStripModel : public AxFontDataModel
-{
-public:
-    explicit            AxTabStripModel();
-
-    virtual bool        importBinaryModel( BinaryInputStream& rInStrm );
-
-    virtual ApiControlType getControlType() const;
-    virtual void        convertProperties( PropertyMap& rPropMap, const ControlConverter& rConv ) const;
-
-private:
-    AxStringArray       maCaptions;         ///< Captions of all tabs.
-    sal_uInt32          mnBackColor;        ///< Fill color.
-    sal_uInt32          mnTextColor;        ///< Text color.
-    sal_uInt32          mnFlags;            ///< Various flags.
-    sal_Int32           mnSelectedTab;      ///< The index of the selected tab.
-    sal_uInt32          mnTabStyle;         ///< Visual style of the tabs.
-    sal_Int32           mnTabFlagCount;     ///< Number of entries in tab flag array.
-};
-
-typedef ::boost::shared_ptr< AxTabStripModel > AxTabStripModelRef;
-
-// ============================================================================
-
 typedef ::std::vector< ::rtl::OUString > AxClassTable;
 
 /** Base class for ActiveX container controls. */
@@ -881,33 +856,6 @@ public:
 
 // ============================================================================
 
-/** Model for a Forms 2.0 formpage control (a single page in a multipage control). */
-class OOX_DLLPUBLIC AxFormPageModel : public AxContainerModelBase
-{
-public:
-    explicit            AxFormPageModel();
-
-    virtual ApiControlType getControlType() const;
-    virtual void        convertProperties( PropertyMap& rPropMap, const ControlConverter& rConv ) const;
-};
-
-// ============================================================================
-
-/** Model for a Forms 2.0 multipage control. Contains the tabstrip control
-    (class AxTabStripModel) and the single pages (class AxFormPageModel). */
-class OOX_DLLPUBLIC AxMultiPageModel : public AxContainerModelBase
-{
-public:
-    explicit            AxMultiPageModel();
-
-    virtual ApiControlType getControlType() const;
-    virtual void        convertProperties( PropertyMap& rPropMap, const ControlConverter& rConv ) const;
-
-private:
-    AxTabStripModelRef  mxTabStrip;
-};
-
-// ============================================================================
 
 /** Model for a Forms 2.0 user form. */
 class OOX_DLLPUBLIC AxUserFormModel : public AxContainerModelBase

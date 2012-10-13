@@ -62,7 +62,7 @@ private:
     CancelButton        maCancelBtn;
     HelpButton          maHelpBtn;
 
-    sal_Bool                mbInitialized;
+    bool                mbInitialized;
 
     sal_uInt16              GetSelectedEntryPos( void ) const;
     DECL_LINK(ViewButtonHdl, void *);

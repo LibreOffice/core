@@ -247,15 +247,6 @@ void SwView::GetState(SfxItemSet &rSet)
                 rSet.Put((const SvxLanguageItem&)
                     pWrtShell->GetDefault(RES_CHRATR_CTL_LANGUAGE), RES_CHRATR_CTL_LANGUAGE);
             break;
-            case FN_HYPHENATE_OPT_DLG:
-            {
-                sal_Bool bCheck = sal_False;
-
-                if (pWrtShell->GetSelectionType() & (nsSelectionType::SEL_DRW_TXT|nsSelectionType::SEL_DRW))
-                    bCheck = IsDrawTextHyphenate();
-                rSet.Put(SfxBoolItem(nWhich, bCheck));
-            }
-            break;
             case FN_REDLINE_ON:
                 rSet.Put( SfxBoolItem( nWhich, GetDocShell()->IsChangeRecording() ) );
             break;

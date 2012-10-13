@@ -42,6 +42,7 @@
 #include <com/sun/star/sdb/DatabaseContext.hpp>
 #include <com/sun/star/sdb/XQueriesSupplier.hpp>
 #include <com/sun/star/sdb/XCompletedConnection.hpp>
+#include <com/sun/star/task/InteractionHandler.hpp>
 
 using namespace com::sun::star;
 
@@ -54,7 +55,6 @@ using namespace com::sun::star;
 
 //-------------------------------------------------------------------------
 
-#define SC_SERVICE_INTHANDLER       "com.sun.star.task.InteractionHandler"
 
 //  entries in the "type" ListBox
 #define DP_TYPELIST_TABLE   0
@@ -165,9 +165,8 @@ void ScDataPilotDatabaseDlg::FillObjects()
         if ( !xSource.is() ) return;
 
         uno::Reference<task::XInteractionHandler> xHandler(
-                comphelper::getProcessServiceFactory()->createInstance(
-                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SC_SERVICE_INTHANDLER )) ),
-                uno::UNO_QUERY);
+            task::InteractionHandler::createWithParent(comphelper::getProcessComponentContext(), 0),
+            uno::UNO_QUERY_THROW);
 
         uno::Reference<sdbc::XConnection> xConnection = xSource->connectWithCompletion( xHandler );
 

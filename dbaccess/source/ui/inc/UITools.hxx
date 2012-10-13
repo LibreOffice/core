@@ -80,7 +80,7 @@ namespace dbaui
     /** creates a new connection and appends the eventlistener
         @param  _rsDataSourceName       name of the datasource
         @param  _xDatabaseContext       the database context
-        @param  _rMF                    the multi service factory
+        @param  _rxContext              the UNO component context
         @param  _rEvtLst                the eventlistener which will be added to the new created connection
         @param  _rOUTConnection         this parameter will be filled with the new created connection
         @return SQLExceptionInfo        contains a SQLException, SQLContext or a SQLWarning when they araised else .isValid() will return false
@@ -88,19 +88,19 @@ namespace dbaui
     ::dbtools::SQLExceptionInfo createConnection(
                                     const ::rtl::OUString& _rsDataSourceName,
                                      const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _xDatabaseContext,
-                                    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rMF,
+                                    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,
                                     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener>& _rEvtLst,
                                     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _rOUTConnection );
     /** creates a new connection and appends the eventlistener
         @param  _xDataSource            the datasource
-        @param  _rMF                    the multi service factory
+        @param  _rxContext              the UNO component context
         @param  _rEvtLst                the eventlistener which will be added to the new created connection
         @param  _rOUTConnection         this parameter will be filled with the new created connection
         @return SQLExceptionInfo        contains a SQLException, SQLContext or a SQLWarning when they araised else .isValid() will return false
     */
     ::dbtools::SQLExceptionInfo createConnection(
                                      const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _xDataSource,
-                                    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rMF,
+                                    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,
                                     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener>& _rEvtLst,
                                     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _rOUTConnection );
 

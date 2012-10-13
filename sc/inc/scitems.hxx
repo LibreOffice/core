@@ -117,53 +117,52 @@
 #define ATTR_SHADOW             152
 #define ATTR_VALIDDATA          153
 #define ATTR_CONDITIONAL        154
-#define ATTR_COLORSCALE         155
 
-#define ATTR_PATTERN_END        155     // end cell-attribute-pattern
+#define ATTR_PATTERN_END        154     // end cell-attribute-pattern
 
-#define ATTR_PATTERN            156
+#define ATTR_PATTERN            155
                                         // page attributes
-#define ATTR_LRSPACE            157     // editor: PageDesc-TabPage
-#define ATTR_ULSPACE            158
-#define ATTR_PAGE               159
-#define ATTR_PAGE_PAPERTRAY     160
-#define ATTR_PAGE_PAPERBIN      161
-#define ATTR_PAGE_SIZE          162
-#define ATTR_PAGE_MAXSIZE       163
-#define ATTR_PAGE_HORCENTER     164
-#define ATTR_PAGE_VERCENTER     165
+#define ATTR_LRSPACE            156     // editor: PageDesc-TabPage
+#define ATTR_ULSPACE            157
+#define ATTR_PAGE               158
+#define ATTR_PAGE_PAPERTRAY     159
+#define ATTR_PAGE_PAPERBIN      160
+#define ATTR_PAGE_SIZE          161
+#define ATTR_PAGE_MAXSIZE       162
+#define ATTR_PAGE_HORCENTER     163
+#define ATTR_PAGE_VERCENTER     164
 
-#define ATTR_PAGE_ON            166     // editor: header/footer-page
-#define ATTR_PAGE_DYNAMIC       167
-#define ATTR_PAGE_SHARED        168
+#define ATTR_PAGE_ON            165     // editor: header/footer-page
+#define ATTR_PAGE_DYNAMIC       166
+#define ATTR_PAGE_SHARED        167
 
-#define ATTR_PAGE_NOTES         169     // editor: table
-#define ATTR_PAGE_GRID          170
-#define ATTR_PAGE_HEADERS       171
-#define ATTR_PAGE_CHARTS        172
-#define ATTR_PAGE_OBJECTS       173
-#define ATTR_PAGE_DRAWINGS      174
-#define ATTR_PAGE_TOPDOWN       175
-#define ATTR_PAGE_SCALE         176
-#define ATTR_PAGE_SCALETOPAGES  177
-#define ATTR_PAGE_FIRSTPAGENO   178
+#define ATTR_PAGE_NOTES         168     // editor: table
+#define ATTR_PAGE_GRID          169
+#define ATTR_PAGE_HEADERS       170
+#define ATTR_PAGE_CHARTS        171
+#define ATTR_PAGE_OBJECTS       172
+#define ATTR_PAGE_DRAWINGS      173
+#define ATTR_PAGE_TOPDOWN       174
+#define ATTR_PAGE_SCALE         175
+#define ATTR_PAGE_SCALETOPAGES  176
+#define ATTR_PAGE_FIRSTPAGENO   177
 
-#define ATTR_PAGE_PRINTAREA     179     // editor: print areas
-#define ATTR_PAGE_REPEATROW     180
-#define ATTR_PAGE_REPEATCOL     181
-#define ATTR_PAGE_PRINTTABLES   182
+#define ATTR_PAGE_PRINTAREA     178     // editor: print areas
+#define ATTR_PAGE_REPEATROW     179
+#define ATTR_PAGE_REPEATCOL     180
+#define ATTR_PAGE_PRINTTABLES   181
 
-#define ATTR_PAGE_HEADERLEFT    183     // contents of header/
-#define ATTR_PAGE_FOOTERLEFT    184     // footer (left)
-#define ATTR_PAGE_HEADERRIGHT   185     // contents of header/
-#define ATTR_PAGE_FOOTERRIGHT   186     // footer (right)
-#define ATTR_PAGE_HEADERSET     187     // the corresponding sets
-#define ATTR_PAGE_FOOTERSET     188
+#define ATTR_PAGE_HEADERLEFT    182     // contents of header/
+#define ATTR_PAGE_FOOTERLEFT    183     // footer (left)
+#define ATTR_PAGE_HEADERRIGHT   184     // contents of header/
+#define ATTR_PAGE_FOOTERRIGHT   185     // footer (right)
+#define ATTR_PAGE_HEADERSET     186     // the corresponding sets
+#define ATTR_PAGE_FOOTERSET     187
 
-#define ATTR_PAGE_FORMULAS      189
-#define ATTR_PAGE_NULLVALS      190
+#define ATTR_PAGE_FORMULAS      188
+#define ATTR_PAGE_NULLVALS      189
 
-#define ATTR_PAGE_SCALETO       191     // #i8868# scale printout to width/height
+#define ATTR_PAGE_SCALETO       190     // #i8868# scale printout to width/height
 
 #define ATTR_ENDINDEX           ATTR_PAGE_SCALETO        // end of pool-range
 

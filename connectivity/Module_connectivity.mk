@@ -45,8 +45,9 @@ $(eval $(call gb_Module_add_targets,connectivity,\
 	Library_file \
 	Library_flat \
 	Library_mysql \
-	Library_odbc \
-	Library_odbcbase \
+	$(if $(filter ANDROID IOS,$(OS)),, \
+		Library_odbc \
+		Library_odbcbase) \
 	Library_sdbc2 \
 	Package_generated \
 	Package_inc \
@@ -129,12 +130,16 @@ $(eval $(call gb_Module_add_targets,connectivity,\
 ))
 endif
 
-else ifneq ($(filter-out ANDROID IOS,$(OS)),)
+else ifneq (,$(filter DESKTOP,$(BUILD_TYPE)))
 
 $(eval $(call gb_Module_add_targets,connectivity,\
 	Configuration_mork \
 	Executable_mork_helper \
 	Library_mork \
+))
+
+$(eval $(call gb_Module_add_check_targets,connectivity,\
+	CppunitTest_connectivity_mork \
 ))
 
 endif
@@ -144,7 +149,7 @@ $(eval $(call gb_Module_add_subsequentcheck_targets,connectivity,\
 	Jar_ConnectivityTools \
 ))
 # FIXME: Does not work. Convert to JUnit.
-	# JunitTest_complex \
+# JunitTest_complex \
 
 endif
 

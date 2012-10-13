@@ -237,7 +237,7 @@ void SmEditWindow::DataChanged( const DataChangedEvent& )
         // forces new settings to be used
         // unfortunately this resets the whole edit engine
         // thus we need to save at least the text
-        String aTxt( pEditEngine->GetText( LINEEND_LF ) );
+        OUString aTxt( pEditEngine->GetText( LINEEND_LF ) );
         pEditEngine->Clear();   //incorrect font size
         pEditEngine->SetText( aTxt );
     }
@@ -686,8 +686,8 @@ bool SmEditWindow::IsAllSelected() const
         sal_Int32 nParaCnt = pEditEngine->GetParagraphCount();
         if (!(nParaCnt - 1))
         {
-            String Text( pEditEngine->GetText( LINEEND_LF ) );
-            bRes = !eSelection.nStartPos && (eSelection.nEndPos == Text.Len () - 1);
+            sal_uInt16 nTextLen = pEditEngine->GetText( LINEEND_LF ).Len();
+            bRes = !eSelection.nStartPos && (eSelection.nEndPos == nTextLen - 1);
         }
         else
         {
@@ -719,7 +719,7 @@ void SmEditWindow::InsertCommand(sal_uInt16 nCommand)
         aSelection.nEndPara = aSelection.nStartPara;
 
         OSL_ENSURE( pEditView, "NULL pointer" );
-        String  aText = String(SmResId(nCommand));
+        OUString aText = SM_RESSTR(nCommand);
         pEditView->InsertText(aText);
 
         if (HasMark(aText))
@@ -729,7 +729,7 @@ void SmEditWindow::InsertCommand(sal_uInt16 nCommand)
         }
         else
         {   // set selection after inserted text
-            aSelection.nEndPos    = aSelection.nEndPos + sal::static_int_cast< xub_StrLen >(aText.Len());
+            aSelection.nEndPos += aText.getLength();
             aSelection.nStartPos  = aSelection.nEndPos;
             pEditView->SetSelection(aSelection);
         }
@@ -761,23 +761,21 @@ void SmEditWindow::SelNextMark()
     if (pEditEngine  &&  pEditView)
     {
         ESelection eSelection = pEditView->GetSelection();
-        sal_uInt16     Pos        = eSelection.nEndPos;
-        rtl::OUString aMark("<?>");
-        String     aText;
+        sal_Int32 nPos = eSelection.nEndPos;
         sal_uInt16     nCounts    = pEditEngine->GetParagraphCount();
 
         while (eSelection.nEndPara < nCounts)
         {
-            aText = pEditEngine->GetText( eSelection.nEndPara );
-            Pos   = aText.Search(aMark, Pos);
-
-            if (Pos != STRING_NOTFOUND)
+            OUString aText = pEditEngine->GetText(eSelection.nEndPara);
+            nPos = aText.indexOf("<?>", nPos);
+            if (nPos != -1)
             {
-                pEditView->SetSelection(ESelection (eSelection.nEndPara, Pos, eSelection.nEndPara, Pos + 3));
+                pEditView->SetSelection(ESelection(
+                    eSelection.nEndPara, nPos, eSelection.nEndPara, nPos + 3));
                 break;
             }
 
-            Pos = 0;
+            nPos = 0;
             eSelection.nEndPara++;
         }
     }
@@ -791,43 +789,43 @@ void SmEditWindow::SelPrevMark()
     if (pEditEngine  &&  pEditView)
     {
         ESelection eSelection = pEditView->GetSelection();
-        sal_uInt16     Pos        = STRING_NOTFOUND;
-        xub_StrLen Max        = eSelection.nStartPos;
-        String     Text( pEditEngine->GetText( eSelection.nStartPara ) );
-        rtl::OUString aMark("<?>");
+        sal_Int32 nPos = -1;
+        sal_Int32 nMax = eSelection.nStartPos;
+        OUString aText(pEditEngine->GetText(eSelection.nStartPara));
+        OUString aMark("<?>");
         sal_uInt16     nCounts    = pEditEngine->GetParagraphCount();
 
         do
         {
-            sal_uInt16 Fnd = Text.Search(aMark, 0);
-
-            while ((Fnd < Max) && (Fnd != STRING_NOTFOUND))
+            sal_Int32 nMarkIndex = aText.indexOf(aMark);
+            while ((nMarkIndex < nMax) && (nMarkIndex != -1))
             {
-                Pos = Fnd;
-                Fnd = Text.Search(aMark, Fnd + 1);
+                nPos = nMarkIndex;
+                nMarkIndex = aText.indexOf(aMark, nMarkIndex + 1);
             }
 
-            if (Pos == STRING_NOTFOUND)
+            if (nPos == -1)
             {
                 eSelection.nStartPara--;
-                Text = pEditEngine->GetText( eSelection.nStartPara );
-                Max = Text.Len();
+                aText = pEditEngine->GetText(eSelection.nStartPara);
+                nMax = aText.getLength();
             }
         }
         while ((eSelection.nStartPara < nCounts) &&
-            (Pos == STRING_NOTFOUND));
+            (nPos == -1));
 
-        if (Pos != STRING_NOTFOUND)
+        if (nPos != -1)
         {
-            pEditView->SetSelection(ESelection (eSelection.nStartPara, Pos, eSelection.nStartPara, Pos + 3));
+            pEditView->SetSelection(ESelection(
+                eSelection.nStartPara, nPos, eSelection.nStartPara, nPos + 3));
         }
     }
 }
 
-bool SmEditWindow::HasMark(const String& rText) const
+bool SmEditWindow::HasMark(const OUString& rText) const
     // returns true iff 'rText' contains a mark
 {
-    return rText.SearchAscii("<?>", 0) != STRING_NOTFOUND;
+    return rText.indexOf("<?>") != -1;
 }
 
 void SmEditWindow::MouseMove(const MouseEvent &rEvt)
@@ -914,12 +912,12 @@ void SmEditWindow::Delete()
     }
 }
 
-void SmEditWindow::InsertText(const String& Text)
+void SmEditWindow::InsertText(const OUString& rText)
 {
     OSL_ENSURE( pEditView, "EditView missing" );
     if (pEditView)
     {
-        pEditView->InsertText(Text);
+        pEditView->InsertText(rText);
         aModifyTimer.Start();
         StartCursorMove();
     }

@@ -751,7 +751,7 @@ void DigitalSignaturesDialog::ImplShowSignaturesDetails()
         DBG_ASSERT( xCert.is(), "Error getting cCertificate!" );
         if ( xCert.is() )
         {
-            CertificateViewer aViewer( this, maSignatureHelper.GetSecurityEnvironment(), xCert, sal_False );
+            CertificateViewer aViewer( this, maSignatureHelper.GetSecurityEnvironment(), xCert, false );
             aViewer.Execute();
         }
     }

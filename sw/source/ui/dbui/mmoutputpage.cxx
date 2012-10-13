@@ -80,7 +80,7 @@ using namespace svt;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
-String lcl_GetExtensionForDocType(sal_uLong nDocType)
+static String lcl_GetExtensionForDocType(sal_uLong nDocType)
 {
     rtl::OUString sExtension;
     switch( nDocType )
@@ -94,7 +94,7 @@ String lcl_GetExtensionForDocType(sal_uLong nDocType)
     return sExtension;
 }
 
-::rtl::OUString lcl_GetColumnValueOf(const ::rtl::OUString& rColumn, Reference < container::XNameAccess>& rxColAccess )
+static ::rtl::OUString lcl_GetColumnValueOf(const ::rtl::OUString& rColumn, Reference < container::XNameAccess>& rxColAccess )
 {
     ::rtl::OUString sRet;
     try
@@ -330,8 +330,7 @@ SwMailMergeOutputPage::SwMailMergeOutputPage( SwMailMergeWizard* _pParent) :
 #endif
     m_bCancelSaving( false ),
     m_pWizard(_pParent),
-    m_pTempPrinter( 0 ),
-    m_pDocumentPrinterCopy(0)
+    m_pTempPrinter( 0 )
 {
     FreeResource();
 
@@ -383,7 +382,6 @@ SwMailMergeOutputPage::SwMailMergeOutputPage( SwMailMergeWizard* _pParent) :
 SwMailMergeOutputPage::~SwMailMergeOutputPage()
 {
     delete m_pTempPrinter;
-    delete m_pDocumentPrinterCopy;
 }
 
 void SwMailMergeOutputPage::ActivatePage()
@@ -409,7 +407,6 @@ void SwMailMergeOutputPage::ActivatePage()
         m_aPrinterLB.SelectEntry( pPrinter->GetName() );
         m_aToNF.SetValue( rConfigItem.GetMergedDocumentCount() );
         m_aToNF.SetMax( rConfigItem.GetMergedDocumentCount() );
-        m_pDocumentPrinterCopy = pTargetView->GetWrtShell().getIDocumentDeviceAccess()->getPrinter( true )->Clone();
     }
     m_aPrinterLB.SelectEntry( rConfigItem.GetSelectedPrinter() );
 
@@ -852,7 +849,10 @@ IMPL_LINK(SwMailMergeOutputPage, SaveOutputHdl_Impl, PushButton*, pButton)
 
 IMPL_LINK(SwMailMergeOutputPage, PrinterChangeHdl_Impl, ListBox*, pBox)
 {
-    if( m_pDocumentPrinterCopy && pBox->GetSelectEntryPos() != LISTBOX_ENTRY_NOTFOUND )
+    SwView *const pTargetView = m_pWizard->GetConfigItem().GetTargetView();
+    SfxPrinter *const pDocumentPrinter = pTargetView->GetWrtShell()
+        .getIDocumentDeviceAccess()->getPrinter(true);
+    if (pDocumentPrinter && pBox->GetSelectEntryPos() != LISTBOX_ENTRY_NOTFOUND)
     {
         const QueueInfo* pInfo = Printer::GetQueueInfo( pBox->GetSelectEntry(), false );
 
@@ -860,9 +860,11 @@ IMPL_LINK(SwMailMergeOutputPage, PrinterChangeHdl_Impl, ListBox*, pBox)
         {
             if ( !m_pTempPrinter )
             {
-                if( (m_pDocumentPrinterCopy->GetName() == pInfo->GetPrinterName()) &&
-                     (m_pDocumentPrinterCopy->GetDriverName() == pInfo->GetDriver()) )
-                    m_pTempPrinter = new Printer( m_pDocumentPrinterCopy->GetJobSetup() );
+                if ((pDocumentPrinter->GetName() == pInfo->GetPrinterName()) &&
+                    (pDocumentPrinter->GetDriverName() == pInfo->GetDriver()))
+                {
+                    m_pTempPrinter = new Printer(pDocumentPrinter->GetJobSetup());
+                }
                 else
                     m_pTempPrinter = new Printer( *pInfo );
             }
@@ -922,8 +924,11 @@ IMPL_LINK_NOARG(SwMailMergeOutputPage, PrintHdl_Impl)
     pTargetView->SetMailMergeConfigItem(&rConfigItem, 0, sal_False);
     if(m_pTempPrinter)
     {
-        m_pDocumentPrinterCopy->SetPrinterProps(m_pTempPrinter);
-        pTargetView->SetPrinter(m_pDocumentPrinterCopy->Clone());
+        SfxPrinter *const pDocumentPrinter = pTargetView->GetWrtShell()
+            .getIDocumentDeviceAccess()->getPrinter(true);
+        pDocumentPrinter->SetPrinterProps(m_pTempPrinter);
+        // this should be able to handle setting its own printer
+        pTargetView->SetPrinter(pDocumentPrinter);
     }
 
     SfxObjectShell* pObjSh = pTargetView->GetViewFrame()->GetObjectShell();

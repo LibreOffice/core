@@ -1,30 +1,21 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*************************************************************************
+/*
+ * This file is part of the LibreOffice project.
  *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * This file incorporates work covered by the following license notice:
  *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
 #ifndef _SVX_INSDLG_HXX
 #define _SVX_INSDLG_HXX
 
@@ -42,6 +33,8 @@
 #include <svtools/svmedit.hxx>  // MultiLineEdit
 #include <comphelper/embeddedobjectcontainer.hxx>
 
+class VclFrame;
+
 class INetURLObject;
 
 class InsertObjectDialog_Impl : public ModalDialog
@@ -52,6 +45,9 @@ protected:
     comphelper::EmbeddedObjectContainer aCnt;
 
     InsertObjectDialog_Impl( Window * pParent, const ResId & rResId, const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& xStorage );
+    InsertObjectDialog_Impl(Window * pParent, const OString& rID,
+        const OUString& rUIXMLDescription,
+        const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& xStorage);
 public:
     com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject > GetObject()
                         { return m_xObj; }
@@ -61,38 +57,37 @@ public:
 
 class SvInsertOleDlg : public InsertObjectDialog_Impl
 {
-    RadioButton aRbNewObject;
-    RadioButton aRbObjectFromfile;
-    FixedLine aGbObject;
-    ListBox aLbObjecttype;
-    Edit aEdFilepath;
-    PushButton aBtnFilepath;
-    CheckBox aCbFilelink;
-    OKButton aOKButton1;
-    CancelButton aCancelButton1;
-    HelpButton aHelpButton1;
-    String aStrFile;
-    String      _aOldStr;
+    RadioButton* m_pRbNewObject;
+    RadioButton* m_pRbObjectFromfile;
+    VclFrame* m_pObjectTypeFrame;
+    ListBox* m_pLbObjecttype;
+    VclFrame* m_pFileFrame;
+    Edit* m_pEdFilepath;
+    PushButton* m_pBtnFilepath;
+    CheckBox* m_pCbFilelink;
     const SvObjectServerList* m_pServers;
 
     ::com::sun::star::uno::Sequence< sal_Int8 > m_aIconMetaFile;
-    ::rtl::OUString m_aIconMediaType;
+    OUString m_aIconMediaType;
 
-    DECL_LINK(          DoubleClickHdl, void* );
+    DECL_LINK(DoubleClickHdl, void*);
     DECL_LINK(BrowseHdl, void *);
     DECL_LINK(RadioHdl, void *);
-    void                SelectDefault();
-    ListBox&            GetObjectTypes()
-                        { return aLbObjecttype; }
-    String              GetFilePath() const { return aEdFilepath.GetText(); }
-    sal_Bool                IsLinked() const    { return aCbFilelink.IsChecked(); }
-    sal_Bool                IsCreateNew() const { return aRbNewObject.IsChecked(); }
+    void SelectDefault();
+    ListBox& GetObjectTypes()
+        { return *m_pLbObjecttype; }
+    OUString GetFilePath() const
+        { return m_pEdFilepath->GetText(); }
+    sal_Bool IsLinked() const
+        { return m_pCbFilelink->IsChecked(); }
+    sal_Bool IsCreateNew() const
+        { return m_pRbNewObject->IsChecked(); }
 
 public:
-                        SvInsertOleDlg( Window* pParent,
-                            const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& xStorage,
-                            const SvObjectServerList* pServers = NULL );
-    virtual short       Execute();
+    SvInsertOleDlg( Window* pParent,
+        const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& xStorage,
+        const SvObjectServerList* pServers = NULL );
+    virtual short Execute();
 
     /// get replacement for the iconified embedded object and the mediatype of the replacement
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > GetIconIfIconified( ::rtl::OUString* pGraphicMediaType );
@@ -101,28 +96,21 @@ public:
 class SvInsertPlugInDialog : public InsertObjectDialog_Impl
 {
 private:
-    FixedLine aGbFileurl;
-    Edit aEdFileurl;
-    PushButton aBtnFileurl;
-    FixedLine aGbPluginsOptions;
-    MultiLineEdit aEdPluginsOptions;
-    OKButton aOKButton1;
-    CancelButton aCancelButton1;
-    HelpButton aHelpButton1;
-    INetURLObject*      m_pURL;
-    String              m_aCommands;
+    Edit* m_pEdFileurl;
+    PushButton* m_pBtnFileurl;
+    VclMultiLineEdit* m_pEdPluginsOptions;
+    INetURLObject* m_pURL;
+    OUString m_aCommands;
 
     DECL_LINK(BrowseHdl, void *);
-    String              GetPlugInFile() const { return aEdFileurl.GetText(); }
-    String              GetPlugInOptions() const { return aEdPluginsOptions.GetText(); }
+    OUString GetPlugInFile() const { return m_pEdFileurl->GetText(); }
+    OUString GetPlugInOptions() const { return m_pEdPluginsOptions->GetText(); }
 
 public:
-                        SvInsertPlugInDialog( Window* pParent,
-                            const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& xStorage );
-
-                        ~SvInsertPlugInDialog();
-
-    virtual short       Execute();
+    SvInsertPlugInDialog(Window* pParent,
+        const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& xStorage);
+    ~SvInsertPlugInDialog();
+    virtual short Execute();
 };
 
 class SfxInsertFloatingFrameDialog : public InsertObjectDialog_Impl

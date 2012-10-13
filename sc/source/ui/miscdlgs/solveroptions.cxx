@@ -85,10 +85,10 @@ public:
     void      SetDoubleValue( double fNew ) { mbIsDouble = true; mfDoubleValue = fNew; }
     void      SetIntValue( sal_Int32 nNew ) { mbIsDouble = false; mnIntValue = nNew; }
 
-    virtual void Paint( const Point& rPos, SvLBox& rDev, sal_uInt16 nFlags, SvLBoxEntry* pEntry );
+    virtual void Paint( const Point& rPos, SvTreeListBox& rDev, sal_uInt16 nFlags, SvLBoxEntry* pEntry );
 };
 
-void ScSolverOptionsString::Paint( const Point& rPos, SvLBox& rDev, sal_uInt16, SvLBoxEntry* /* pEntry */ )
+void ScSolverOptionsString::Paint( const Point& rPos, SvTreeListBox& rDev, sal_uInt16, SvLBoxEntry* /* pEntry */ )
 {
     //! move position? (SvxLinguTabPage: aPos.X() += 20)
     String aNormalStr( GetText() );

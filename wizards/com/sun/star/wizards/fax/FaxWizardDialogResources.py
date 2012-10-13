@@ -35,17 +35,13 @@ class FaxWizardDialogResources(Resource):
     resConsist2PlaceHolder = "#consist2#"
     resConsist3PlaceHolder = "#consist3#"
 
-
     def __init__(self, xmsf):
         super(FaxWizardDialogResources,self).__init__(xmsf,
             FaxWizardDialogResources.MODULE_NAME)
-        self.RoadmapLabels = ()
-        self.SalutationLabels = ()
-        self.GreetingLabels = ()
-        self.CommunicationLabels = ()
-
-        #Delete the String, uncomment the self.getResText method
-
+        self.RoadmapLabels = []
+        self.SalutationLabels = []
+        self.GreetingLabels = []
+        self.CommunicationLabels = []
 
         self.resFaxWizardDialog_title = self.getResText(
             FaxWizardDialogResources.RID_FAXWIZARDDIALOG_START + 1)
@@ -144,41 +140,58 @@ class FaxWizardDialogResources(Resource):
             FaxWizardDialogResources.RID_FAXWIZARDDIALOG_START + 47),
         FaxWizardDialogResources.resConsist3PlaceHolder : self.getResText(
             FaxWizardDialogResources.RID_FAXWIZARDDIALOG_START + 48)}
+
+        #Create a dictionary for localising the private template
+        self.dictPrivateTemplate = {
+        "Bottle" : self.getResText(
+            FaxWizardDialogResources.RID_FAXWIZARDDIALOG_START + 49),
+        "Lines" : self.getResText(
+            FaxWizardDialogResources.RID_FAXWIZARDDIALOG_START + 50),
+        "Marine" : self.getResText(
+            FaxWizardDialogResources.RID_FAXWIZARDDIALOG_START + 51)}
+
+        #Create a dictionary for localising the business template
+        self.dictBusinessTemplate = {
+        "Classic Fax" : self.getResText(
+            FaxWizardDialogResources.RID_FAXWIZARDDIALOG_START + 52),
+        "Classic Fax from Private" : self.getResText(
+            FaxWizardDialogResources.RID_FAXWIZARDDIALOG_START + 53),
+        "Modern Fax" : self.getResText(
+            FaxWizardDialogResources.RID_FAXWIZARDDIALOG_START + 54),
+        "Modern Fax from Private" : self.getResText(
+            FaxWizardDialogResources.RID_FAXWIZARDDIALOG_START + 55)}
+        
+        #Common Resources
+        self.resOverwriteWarning = self.getResText(
+            FaxWizardDialogResources.RID_RID_COMMON_START + 19)
+        self.resTemplateDescription = self.getResText(
+            FaxWizardDialogResources.RID_RID_COMMON_START + 20)
         
         self.loadRoadmapResources()
         self.loadSalutationResources()
         self.loadGreetingResources()
         self.loadCommunicationResources()
-        self.loadCommonResources()
-
-    def loadCommonResources(self):
-        self.resOverwriteWarning = self.getResText(
-            FaxWizardDialogResources.RID_RID_COMMON_START + 19)
-        self.resTemplateDescription = self.getResText(
-            FaxWizardDialogResources.RID_RID_COMMON_START + 20)
 
     def loadRoadmapResources(self):
         for i in xrange(5):
-            self.RoadmapLabels = self.RoadmapLabels + ((self.getResText(
+            self.RoadmapLabels.append(self.getResText(
                 FaxWizardDialogResources.RID_FAXWIZARDROADMAP_START + \
-                + i + 1)),)
+                + i + 1))
 
     def loadSalutationResources(self):
-        i = 1
         for i in xrange(4):
-            self.SalutationLabels = self.SalutationLabels + ((self.getResText(
+            self.SalutationLabels.append(self.getResText(
                 FaxWizardDialogResources.RID_FAXWIZARDSALUTATION_START + \
-                i + 1)),)
+                i + 1))
 
     def loadGreetingResources(self):
         for i in xrange(4):
-            self.GreetingLabels = self.GreetingLabels + ((self.getResText(
+            self.GreetingLabels.append(self.getResText(
                 FaxWizardDialogResources.RID_FAXWIZARDGREETING_START + \
-                i +1 )),)
+                i + 1))
 
     def loadCommunicationResources(self):
         for i in xrange(3):
-            self.CommunicationLabels = \
-            self.CommunicationLabels + ((self.getResText(
+            self.CommunicationLabels.append(self.getResText(
                 FaxWizardDialogResources.RID_FAXWIZARDCOMMUNICATION_START + \
-                i + 1)),)
+                i + 1))

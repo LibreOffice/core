@@ -274,7 +274,7 @@ void ScPreviewLocationData::GetDrawRange( sal_uInt16 nPos, Rectangle& rPixelRect
     }
 }
 
-ScPreviewLocationEntry* lcl_GetEntryByAddress( const boost::ptr_list<ScPreviewLocationEntry> &rEntries,
+static ScPreviewLocationEntry* lcl_GetEntryByAddress( const boost::ptr_list<ScPreviewLocationEntry> &rEntries,
                                                const ScAddress& rPos, ScPreviewLocationType eType )
 {
     boost::ptr_list<ScPreviewLocationEntry>::const_iterator it;

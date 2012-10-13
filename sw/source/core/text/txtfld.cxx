@@ -64,7 +64,7 @@
  *************************************************************************/
 
 
-sal_Bool lcl_IsInBody( SwFrm *pFrm )
+static sal_Bool lcl_IsInBody( SwFrm *pFrm )
 {
     if ( pFrm->IsInDocBody() )
         return sal_True;
@@ -294,7 +294,7 @@ SwExpandPortion *SwTxtFormatter::NewFldPortion( SwTxtFormatInfo &rInf,
  *                      SwTxtFormatter::TryNewNoLengthPortion()
  *************************************************************************/
 
-SwFldPortion * lcl_NewMetaPortion(SwTxtAttr & rHint, const bool bPrefix)
+static SwFldPortion * lcl_NewMetaPortion(SwTxtAttr & rHint, const bool bPrefix)
 {
     ::sw::Meta *const pMeta(
         static_cast<SwFmtMeta &>(rHint.GetAttr()).GetMeta() );

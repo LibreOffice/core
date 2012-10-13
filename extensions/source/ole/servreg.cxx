@@ -72,7 +72,7 @@ Reference<XInterface> SAL_CALL OleServer_CreateInstance( const Reference<XMultiS
 }
 } // end namespace
 
-extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
+extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL oleautobridge_component_getFactory(
     const sal_Char * pImplName, void * pServiceManager, void * /*pRegistryKey*/ )
 {
     void * pRet = 0;
@@ -119,7 +119,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
 }
 
 extern "C"  SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL
-component_canUnload( TimeValue* libUnused)
+oleautobridge_component_canUnload( TimeValue* libUnused)
 {
     return globalModuleCount.canUnload( &globalModuleCount, libUnused);
 }

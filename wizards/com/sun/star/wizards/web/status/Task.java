@@ -21,9 +21,6 @@ package com.sun.star.wizards.web.status;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * @author rpiterman
- */
 public class Task
 {
 
@@ -135,17 +132,11 @@ public class Task
         }
     }
 
-    /**
-     * @return
-     */
     public String getSubtaskName()
     {
         return subtaskName;
     }
 
-    /**
-     * @return
-     */
     public String getTaskName()
     {
         return taskName;
@@ -160,17 +151,11 @@ public class Task
         fireSubtaskNameChanged();
     }
 
-    /**
-     * @return
-     */
     public int getFailed()
     {
         return failed;
     }
 
-    /**
-     * @return
-     */
     public int getSuccessfull()
     {
         return successfull;

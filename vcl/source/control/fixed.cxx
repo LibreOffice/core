@@ -154,16 +154,18 @@ void FixedText::ImplInitSettings( sal_Bool bFont,
 
 // -----------------------------------------------------------------------
 
-FixedText::FixedText( Window* pParent, WinBits nStyle ) :
-    Control( WINDOW_FIXEDTEXT )
+FixedText::FixedText( Window* pParent, WinBits nStyle )
+    : Control(WINDOW_FIXEDTEXT)
+    , m_nMaxWidthChars(-1)
 {
     ImplInit( pParent, nStyle );
 }
 
 // -----------------------------------------------------------------------
 
-FixedText::FixedText( Window* pParent, const ResId& rResId ) :
-    Control( WINDOW_FIXEDTEXT )
+FixedText::FixedText( Window* pParent, const ResId& rResId )
+    : Control(WINDOW_FIXEDTEXT)
+    , m_nMaxWidthChars(-1)
 {
     rResId.SetRT( RSC_TEXT );
     WinBits nStyle = ImplInitRes( rResId );
@@ -188,8 +190,9 @@ void FixedText::take_properties(Window &rOther)
 
 // -----------------------------------------------------------------------
 
-FixedText::FixedText( Window* pParent, const ResId& rResId, bool bDisableAccessibleLabelForRelation ) :
-    Control( WINDOW_FIXEDTEXT )
+FixedText::FixedText( Window* pParent, const ResId& rResId, bool bDisableAccessibleLabelForRelation )
+    : Control( WINDOW_FIXEDTEXT )
+    , m_nMaxWidthChars(-1)
 {
     rResId.SetRT( RSC_TEXT );
     WinBits nStyle = ImplInitRes( rResId );
@@ -397,14 +400,20 @@ void FixedText::DataChanged( const DataChangedEvent& rDCEvt )
 
 // -----------------------------------------------------------------------
 
-Size FixedText::CalcMinimumTextSize( Control const *pControl, long nMaxWidth )
+Size FixedText::getTextDimensions(Control const *pControl, const OUString &rTxt, long nMaxWidth)
 {
     sal_uInt16 nStyle = ImplGetTextStyle( pControl->GetStyle() );
     if ( !( pControl->GetStyle() & WB_NOLABEL ) )
         nStyle |= TEXT_DRAW_MNEMONIC;
 
-    Size aSize = pControl->GetTextRect( Rectangle( Point(), Size( (nMaxWidth ? nMaxWidth : 0x7fffffff), 0x7fffffff ) ),
-                                       pControl->GetText(), nStyle ).GetSize();
+    return pControl->GetTextRect(Rectangle( Point(), Size(nMaxWidth, 0x7fffffff)),
+                                       rTxt, nStyle).GetSize();
+}
+
+
+Size FixedText::CalcMinimumTextSize( Control const *pControl, long nMaxWidth )
+{
+    Size aSize = getTextDimensions(pControl, pControl->GetText(), nMaxWidth);
 
     if ( pControl->GetStyle() & WB_EXTRAOFFSET )
         aSize.Width() += 2;
@@ -426,20 +435,45 @@ Size FixedText::CalcMinimumSize( long nMaxWidth ) const
 
 Size FixedText::GetOptimalSize(WindowSizeType eType) const
 {
-    switch (eType) {
-    case WINDOWSIZE_MINIMUM:
-        return CalcMinimumSize();
-    default:
-        return Control::GetOptimalSize( eType );
+    switch (eType)
+    {
+        case WINDOWSIZE_MINIMUM:
+        {
+            sal_Int32 nMaxAvailWidth = 0x7fffffff;
+            const OUString &rTxt = GetText();
+            if (m_nMaxWidthChars != -1 && m_nMaxWidthChars < rTxt.getLength())
+            {
+                nMaxAvailWidth = getTextDimensions(this,
+                    rTxt.copy(0, m_nMaxWidthChars), 0x7fffffff).Width();
+            }
+            return CalcMinimumSize(nMaxAvailWidth);
+        }
+        default:
+            return Control::GetOptimalSize( eType );
     }
 }
 
 // -----------------------------------------------------------------------
 
-void  FixedText::FillLayoutData() const
+void FixedText::FillLayoutData() const
 {
     mpControlData->mpLayoutData = new vcl::ControlLayoutData();
     ImplDraw( const_cast<FixedText*>(this), 0, Point(), GetOutputSizePixel(), true );
+}
+
+void FixedText::setMaxWidthChars(sal_Int32 nWidth)
+{
+    m_nMaxWidthChars = nWidth;
+    queue_resize();
+}
+
+bool FixedText::set_property(const rtl::OString &rKey, const rtl::OString &rValue)
+{
+    if (rKey == "max-width-chars")
+        setMaxWidthChars(rValue.toInt32());
+    else
+        return Control::set_property(rKey, rValue);
+    return true;
 }
 
 // =======================================================================
@@ -705,7 +739,7 @@ Size FixedLine::GetOptimalSize(WindowSizeType eType) const
 {
     switch (eType) {
     case WINDOWSIZE_MINIMUM:
-        return CalcWindowSize( FixedText::CalcMinimumTextSize ( this ) );
+        return CalcWindowSize( FixedText::CalcMinimumTextSize ( this, 0x7fffffff ) );
     default:
         return Control::GetOptimalSize( eType );
     }
@@ -949,7 +983,7 @@ WinBits FixedImage::ImplInitStyle( WinBits nStyle )
 void FixedImage::ImplInitSettings()
 {
     Window* pParent = GetParent();
-    if ( pParent->IsChildTransparentModeEnabled() && !IsControlBackground() )
+    if ( pParent && pParent->IsChildTransparentModeEnabled() && !IsControlBackground() )
     {
         EnableChildTransparentMode( sal_True );
         SetParentClipMode( PARENTCLIPMODE_NOCLIP );
@@ -964,7 +998,7 @@ void FixedImage::ImplInitSettings()
 
         if ( IsControlBackground() )
             SetBackground( GetControlBackground() );
-        else
+        else if ( pParent )
             SetBackground( pParent->GetBackground() );
     }
 }

@@ -52,9 +52,12 @@ namespace editeng {
     // values from ::com::sun::star::table::BorderLineStyle
     typedef sal_Int16 SvxBorderStyle;
 
+    // convert border style between Word formats and LO
+    SvxBorderStyle EDITENG_DLLPUBLIC ConvertBorderStyleFromWord(int);
     /// convert border width in twips between Word formats and LO
     double EDITENG_DLLPUBLIC ConvertBorderWidthToWord(SvxBorderStyle, double);
-    double EDITENG_DLLPUBLIC ConvertBorderWidthFromWord(SvxBorderStyle, double);
+    double EDITENG_DLLPUBLIC ConvertBorderWidthFromWord(SvxBorderStyle,
+            double, int);
 
     class EDITENG_DLLPUBLIC SvxBorderLine
     {

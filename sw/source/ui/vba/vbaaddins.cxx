@@ -36,7 +36,7 @@
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
-uno::Reference< container::XIndexAccess > lcl_getAddinCollection( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext )
+static uno::Reference< container::XIndexAccess > lcl_getAddinCollection( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext )
 {
     XNamedObjectCollectionHelper< word::XAddin >::XNamedVec maAddins;
 

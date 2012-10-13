@@ -600,9 +600,6 @@ protected :
     virtual sal_Bool ShapeHasText(sal_uLong nShapeId, sal_uLong nFilePos) const;
 
 public:
-    void*               pSvxMSDffDummy1;
-    void*               pSvxMSDffDummy2;
-    void*               pSvxMSDffDummy3;
     std::map<sal_uInt32,rtl::OString> aEscherBlipCache;
 
     DffRecordManager    maShapeRecords;

@@ -30,6 +30,7 @@
 #define SVX_FONTLB_HXX
 
 #include <svtools/svtabbx.hxx>
+#include <svtools/svlbitm.hxx>
 #include <vcl/virdev.hxx>
 #include "svx/svxdllapi.h"
 
@@ -56,12 +57,12 @@ public:
     /** Creates a new empty list box item. */
     virtual SvLBoxItem*         Create() const;
 
-    void            InitViewData( SvLBox*,SvLBoxEntry*,SvViewDataItem* );
+    void            InitViewData( SvTreeListBox*,SvLBoxEntry*,SvViewDataItem* );
 
     /** Paints this entry to the specified position, using the own font settings. */
     void                        Paint(
                                     const Point& rPos,
-                                    SvLBox& rDev,
+                                    SvTreeListBox& rDev,
                                     sal_uInt16 nFlags,
                                     SvLBoxEntry* pEntry );
 };

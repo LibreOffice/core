@@ -80,6 +80,11 @@ interface DrawView
         ExecMethod = FuTemporary ;
         StateMethod = GetMenuState ;
     ]
+    SID_EXTERNAL_EDIT
+    [
+        ExecMethod = FuTemporary ;
+        StateMethod = GetMenuState ;
+    ]
     SID_CUT // ole : no, status : ?
     [
         ExecMethod = FuSupport ;

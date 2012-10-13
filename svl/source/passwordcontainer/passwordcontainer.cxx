@@ -22,9 +22,11 @@
 
 #include <unotools/pathoptions.hxx>
 #include <cppuhelper/factory.hxx>
+#include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 #include <com/sun/star/registry/XSimpleRegistry.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/task/InteractionHandler.hpp>
 #include <com/sun/star/task/MasterPasswordRequest.hpp>
 #include <com/sun/star/task/NoMasterException.hpp>
 
@@ -258,7 +260,7 @@ PassMap StorageItem::getInfo()
 
 //-------------------------------------------------------------------------
 
-void StorageItem::setUseStorage( sal_Bool bUse )
+void StorageItem::setUseStorage( bool bUse )
 {
     Sequence< ::rtl::OUString > sendNames(1);
     Sequence< uno::Any > sendVals(1);
@@ -273,7 +275,7 @@ void StorageItem::setUseStorage( sal_Bool bUse )
 
 //-------------------------------------------------------------------------
 
-sal_Bool StorageItem::useStorage()
+bool StorageItem::useStorage()
 {
     Sequence< ::rtl::OUString > aNodeNames( 1 );
     aNodeNames[0] = ::rtl::OUString("UseStorage");
@@ -286,7 +288,7 @@ sal_Bool StorageItem::useStorage()
         return sal_False;
     }
 
-    sal_Bool aResult = false;
+    bool aResult = false;
     aPropertyValues[0] >>= aResult;
 
     return aResult;
@@ -294,12 +296,12 @@ sal_Bool StorageItem::useStorage()
 
 //-------------------------------------------------------------------------
 
-sal_Bool StorageItem::getEncodedMP( ::rtl::OUString& aResult )
+bool StorageItem::getEncodedMP( ::rtl::OUString& aResult )
 {
     if( hasEncoded )
     {
         aResult = mEncoded;
-        return sal_True;
+        return true;
     }
 
     Sequence< ::rtl::OUString > aNodeNames( 2 );
@@ -311,7 +313,7 @@ sal_Bool StorageItem::getEncodedMP( ::rtl::OUString& aResult )
     if( aPropertyValues.getLength() != aNodeNames.getLength() )
     {
         OSL_ENSURE( aPropertyValues.getLength() == aNodeNames.getLength(), "Problems during reading\n" );
-        return sal_False;
+        return false;
     }
 
     aPropertyValues[0] >>= hasEncoded;
@@ -324,7 +326,7 @@ sal_Bool StorageItem::getEncodedMP( ::rtl::OUString& aResult )
 
 //-------------------------------------------------------------------------
 
-void StorageItem::setEncodedMP( const ::rtl::OUString& aEncoded, sal_Bool bAcceptEmpty )
+void StorageItem::setEncodedMP( const ::rtl::OUString& aEncoded, bool bAcceptEmpty )
 {
     Sequence< ::rtl::OUString > sendNames(2);
     Sequence< uno::Any > sendVals(2);
@@ -598,7 +600,7 @@ vector< ::rtl::OUString > PasswordContainer::DecodePasswords( const ::rtl::OUStr
 
 //-------------------------------------------------------------------------
 
-void PasswordContainer::UpdateVector( const ::rtl::OUString& aURL, list< NamePassRecord >& toUpdate, NamePassRecord& aRecord, sal_Bool writeFile ) throw(RuntimeException)
+void PasswordContainer::UpdateVector( const ::rtl::OUString& aURL, list< NamePassRecord >& toUpdate, NamePassRecord& aRecord, bool writeFile ) throw(RuntimeException)
 {
     for( list< NamePassRecord >::iterator aNPIter = toUpdate.begin(); aNPIter != toUpdate.end(); ++aNPIter )
         if( aNPIter->GetUserName().equals( aRecord.GetUserName() ) )
@@ -632,7 +634,7 @@ void PasswordContainer::UpdateVector( const ::rtl::OUString& aURL, list< NamePas
 
 //-------------------------------------------------------------------------
 
-UserRecord PasswordContainer::CopyToUserRecord( const NamePassRecord& aRecord, sal_Bool& io_bTryToDecode, const Reference< XInteractionHandler >& aHandler )
+UserRecord PasswordContainer::CopyToUserRecord( const NamePassRecord& aRecord, bool& io_bTryToDecode, const Reference< XInteractionHandler >& aHandler )
 {
     ::std::vector< ::rtl::OUString > aPasswords;
     if( aRecord.HasPasswords( MEMORY_RECORD ) )
@@ -648,7 +650,7 @@ UserRecord PasswordContainer::CopyToUserRecord( const NamePassRecord& aRecord, s
         catch( NoMasterException& )
         {
             // if master password could not be detected the entry will be just ignored
-            io_bTryToDecode = sal_False;
+            io_bTryToDecode = false;
         }
     }
 
@@ -661,7 +663,7 @@ Sequence< UserRecord > PasswordContainer::CopyToUserRecordSequence( const list< 
 {
     Sequence< UserRecord >     aResult( original.size() );
     sal_uInt32 nInd = 0;
-    sal_Bool bTryToDecode = sal_True;
+    bool bTryToDecode = true;
 
     for( list< NamePassRecord >::const_iterator aNPIter = original.begin();
          aNPIter != original.end();
@@ -754,7 +756,7 @@ Sequence< UserRecord > PasswordContainer::FindUsr( const list< NamePassRecord >&
         if( aNPIter->GetUserName().equals( aName ) )
         {
             Sequence< UserRecord > aResult(1);
-            sal_Bool bTryToDecode = sal_True;
+            bool bTryToDecode = true;
             aResult[0] = CopyToUserRecord( *aNPIter, bTryToDecode, aHandler );
 
             return aResult;
@@ -1124,7 +1126,8 @@ sal_Bool SAL_CALL PasswordContainer::authorizateWithMasterPassword( const uno::R
             if ( !xTmpHandler.is() )
             {
                 uno::Reference< lang::XMultiServiceFactory > xFactory( mComponent, uno::UNO_QUERY_THROW );
-                xTmpHandler.set( xFactory->createInstance( ::rtl::OUString( "com.sun.star.task.InteractionHandler"  ) ), uno::UNO_QUERY_THROW );
+                uno::Reference< uno::XComponentContext > xContext( comphelper::getComponentContext(xFactory) );
+                xTmpHandler.set( InteractionHandler::createWithParent(xContext, 0), uno::UNO_QUERY_THROW );
             }
 
             if ( !m_aMasterPasswd.isEmpty() )
@@ -1168,7 +1171,8 @@ sal_Bool SAL_CALL PasswordContainer::changeMasterPassword( const uno::Reference<
         if ( !xTmpHandler.is() )
         {
             uno::Reference< lang::XMultiServiceFactory > xFactory( mComponent, uno::UNO_QUERY_THROW );
-            xTmpHandler.set( xFactory->createInstance( ::rtl::OUString( "com.sun.star.task.InteractionHandler"  ) ), uno::UNO_QUERY_THROW );
+            uno::Reference< uno::XComponentContext > xContext( comphelper::getComponentContext(xFactory) );
+            xTmpHandler.set( InteractionHandler::createWithParent(xContext, 0), uno::UNO_QUERY_THROW );
         }
 
         sal_Bool bCanChangePassword = sal_True;
@@ -1284,7 +1288,8 @@ void SAL_CALL PasswordContainer::removeMasterPassword()
         if ( !xTmpHandler.is() )
         {
             uno::Reference< lang::XMultiServiceFactory > xFactory( mComponent, uno::UNO_QUERY_THROW );
-            xTmpHandler.set( xFactory->createInstance( ::rtl::OUString( "com.sun.star.task.InteractionHandler"  ) ), uno::UNO_QUERY_THROW );
+            uno::Reference< uno::XComponentContext > xContext( comphelper::getComponentContext(xFactory) );
+            xTmpHandler.set( InteractionHandler::createWithParent(xContext, 0), uno::UNO_QUERY_THROW );
         }
 
         sal_Bool bCanChangePassword = sal_True;

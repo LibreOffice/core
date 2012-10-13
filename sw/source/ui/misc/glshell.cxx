@@ -74,7 +74,7 @@ SFX_IMPL_INTERFACE( SwWebGlosDocShell, SwWebDocShell, SW_RES(0) )
 TYPEINIT1( SwGlosDocShell, SwDocShell );
 TYPEINIT1( SwWebGlosDocShell, SwWebDocShell );
 
-void lcl_Execute( SwDocShell& rSh, SfxRequest& rReq )
+static void lcl_Execute( SwDocShell& rSh, SfxRequest& rReq )
 {
     if ( rReq.GetSlot() == SID_SAVEDOC )
     {
@@ -93,7 +93,7 @@ void lcl_Execute( SwDocShell& rSh, SfxRequest& rReq )
     }
 }
 
-void lcl_GetState( SwDocShell& rSh, SfxItemSet& rSet )
+static void lcl_GetState( SwDocShell& rSh, SfxItemSet& rSet )
 {
     if( SFX_ITEM_AVAILABLE >= rSet.GetItemState( SID_SAVEDOC, sal_False ))
     {
@@ -104,7 +104,7 @@ void lcl_GetState( SwDocShell& rSh, SfxItemSet& rSet )
     }
 }
 
-sal_Bool lcl_Save( SwWrtShell& rSh, const String& rGroupName,
+static sal_Bool lcl_Save( SwWrtShell& rSh, const String& rGroupName,
                 const String& rShortNm, const String& rLongNm )
 {
     const SvxAutoCorrCfg& rCfg = SvxAutoCorrCfg::Get();

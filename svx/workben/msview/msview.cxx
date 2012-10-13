@@ -47,7 +47,7 @@
 #include <tools/urlobj.hxx>
 #include <osl/file.hxx>
 #include <vcl/unohelp2.hxx>
-#include <svtools/svtreebx.hxx>
+#include <svtools/treelistbox.hxx>
 #include <svtools/svmedit.hxx>
 #include <sfx2/filedlghelper.hxx>
 

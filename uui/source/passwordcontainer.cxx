@@ -23,7 +23,7 @@
 #include "com/sun/star/lang/XMultiServiceFactory.hpp"
 #include "com/sun/star/task/NoMasterException.hpp"
 #include "com/sun/star/task/PasswordContainer.hpp"
-#include "com/sun/star/task/XInteractionHandler.hpp"
+#include "com/sun/star/task/XInteractionHandler2.hpp"
 #include "com/sun/star/ucb/AuthenticationRequest.hpp"
 #include "com/sun/star/ucb/URLAuthenticationRequest.hpp"
 #include "com/sun/star/ucb/XInteractionSupplyAuthentication.hpp"
@@ -120,9 +120,11 @@ bool PasswordContainerHelper::handleAuthenticationRequest(
     uno::Reference< ucb::XInteractionSupplyAuthentication > const &
         xSupplyAuthentication,
     rtl::OUString const & rURL,
-    uno::Reference< task::XInteractionHandler > const & xIH )
+    uno::Reference< task::XInteractionHandler2 > const & xIH )
         SAL_THROW((uno::RuntimeException))
 {
+    uno::Reference< task::XInteractionHandler > xIH1(xIH, uno::UNO_QUERY);
+
     // Is continuation even a XInteractionSupplyAuthentication2, which
     // is derived from XInteractionSupplyAuthentication?
     uno::Reference< ucb::XInteractionSupplyAuthentication2 >
@@ -167,12 +169,12 @@ bool PasswordContainerHelper::handleAuthenticationRequest(
             {
                 task::UrlRecord aRec;
                 if ( !rURL.isEmpty() )
-                    aRec = m_xPasswordContainer->find(rURL, xIH);
+                    aRec = m_xPasswordContainer->find(rURL, xIH1);
 
                 if ( aRec.UserList.getLength() == 0 )
                 {
                     // compat: try server name.
-                    aRec = m_xPasswordContainer->find(rRequest.ServerName, xIH);
+                    aRec = m_xPasswordContainer->find(rRequest.ServerName, xIH1);
                 }
 
                 if ( fillContinuation( false,
@@ -191,13 +193,13 @@ bool PasswordContainerHelper::handleAuthenticationRequest(
                 task::UrlRecord aRec;
                 if ( !rURL.isEmpty() )
                     aRec = m_xPasswordContainer->findForName(
-                        rURL, rRequest.UserName, xIH);
+                        rURL, rRequest.UserName, xIH1);
 
                 if ( aRec.UserList.getLength() == 0 )
                 {
                     // compat: try server name.
                     aRec = m_xPasswordContainer->findForName(
-                        rRequest.ServerName, rRequest.UserName, xIH);
+                        rRequest.ServerName, rRequest.UserName, xIH1);
                 }
 
                 if ( fillContinuation( false,
@@ -223,10 +225,12 @@ bool PasswordContainerHelper::addRecord(
     rtl::OUString const & rURL,
     rtl::OUString const & rUsername,
     uno::Sequence< rtl::OUString > const & rPasswords,
-    uno::Reference< task::XInteractionHandler > const & xIH,
+    uno::Reference< task::XInteractionHandler2 > const & xIH,
     bool bPersist )
         SAL_THROW((uno::RuntimeException))
 {
+    uno::Reference< task::XInteractionHandler > xIH1(xIH, uno::UNO_QUERY);
+
     try
     {
         if ( !rUsername.isEmpty() )
@@ -246,13 +250,13 @@ bool PasswordContainerHelper::addRecord(
                 m_xPasswordContainer->addPersistent( rURL,
                                                      rUsername,
                                                      rPasswords,
-                                                     xIH );
+                                                     xIH1 );
             }
             else
                 m_xPasswordContainer->add( rURL,
                                            rUsername,
                                            rPasswords,
-                                           xIH );
+                                           xIH1 );
         }
         else
         {
@@ -346,7 +350,7 @@ PasswordContainerInteractionHandler::getSupportedServiceNames_Static()
 
 //=========================================================================
 //
-// XInteractionHandler methods.
+// XInteractionHandler2 methods.
 //
 //=========================================================================
 
@@ -356,14 +360,23 @@ PasswordContainerInteractionHandler::handle(
         const uno::Reference< task::XInteractionRequest >& rRequest )
     throw ( uno::RuntimeException )
 {
+    handleInteractionRequest( rRequest );
+}
+
+// virtual
+sal_Bool SAL_CALL
+PasswordContainerInteractionHandler::handleInteractionRequest(
+        const uno::Reference< task::XInteractionRequest >& rRequest )
+    throw ( uno::RuntimeException )
+{
     if ( !rRequest.is() )
-        return;
+        return false;
 
     uno::Any aAnyRequest( rRequest->getRequest() );
 
     ucb::AuthenticationRequest aAuthenticationRequest;
     if ( !( aAnyRequest >>= aAuthenticationRequest ) )
-        return;
+        return false;
 
     rtl::OUString aURL;
     ucb::URLAuthenticationRequest aURLAuthenticationRequest;
@@ -386,7 +399,7 @@ PasswordContainerInteractionHandler::handle(
     }
 
     if ( !xSupplyAuthentication.is() )
-        return;
+        return false;
 
     // Try to obtain credentials from password container.
     if ( m_aPwContainerHelper.
@@ -401,7 +414,9 @@ PasswordContainerInteractionHandler::handle(
     {
         // successfully handled
         xSupplyAuthentication->select();
+        return true;
     }
+    return false;
 }
 
 //=========================================================================

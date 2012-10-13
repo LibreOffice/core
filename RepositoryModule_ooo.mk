@@ -30,25 +30,31 @@ $(eval $(call gb_Module_Module,ooo))
 
 $(eval $(call gb_Module_add_moduledirs,ooo,\
     accessibility \
+	$(call gb_Helper_optional,AFMS,afms) \
     animations \
-    autodoc \
+	$(call gb_Helper_optional,APACHE_COMMONS,apache-commons) \
     apple_remote \
+    autodoc \
     avmedia \
     basctl \
     basebmp \
     basegfx \
     basic \
     bean \
+	$(call gb_Helper_optional,BSH,beanshell) \
     binaryurp \
-    bluez_bluetooth \
+	$(call gb_Helper_optional,BLUEZ,bluez_bluetooth) \
 	boost \
+	bridges \
     canvas \
     chart2 \
-    clucene \
-    codemaker \
+	cli_ure \
+	$(call gb_Helper_optional,CLUCENE,clucene) \
+	$(call gb_Helper_optional,DESKTOP,codemaker) \
     comphelper \
     configmgr \
     connectivity \
+    cosv \
     cppcanvas \
     cppu \
     cppuhelper \
@@ -56,6 +62,7 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
     cui \
     dbaccess \
     desktop \
+	$(call gb_Helper_optional,DICTIONARIES,dictionaries) \
     drawinglayer \
     dtrans \
     editeng \
@@ -70,23 +77,28 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
     formula \
     fpicker \
     framework \
-	hsqldb \
+	$(call gb_Helper_optional,DESKTOP,helpcompiler) \
+	$(call gb_Helper_optional,HSQLDB,hsqldb) \
     hwpfilter \
     i18npool \
     i18nutil \
     idl \
-    idlc \
+	$(call gb_Helper_optional,DESKTOP,idlc) \
     io \
     javaunohelper \
+	$(call gb_Helper_optional,JFREEREPORT,jfreereport) \
     jurt \
+    $(call gb_Helper_optional,JPEG,jpeg) \
     jvmaccess \
     jvmfwk \
-    l10ntools \
+	$(call gb_Helper_optional,DESKTOP,l10ntools) \
+	$(call gb_Helper_optional,LANGUAGETOOL,languagetool) \
 	libcdr \
 	libcmis \
 	libmspub \
 	liborcus \
 	libpng \
+	$(call gb_Helper_optional,LIBRSVG,librsvg) \
 	libvisio \
 	libwpd \
 	libwpg \
@@ -97,8 +109,9 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
     MathMLDTD \
 	mdds \
     Mesa \
-	neon \
-    nlpsolver \
+	$(call gb_Helper_optional,MORE_FONTS,more_fonts) \
+	$(call gb_Helper_optional,NEON,neon) \
+	$(call gb_Helper_optional,NLPSOLVER,nlpsolver) \
     np_sdk \
     o3tl \
     offapi \
@@ -109,25 +122,29 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
     packimages \
     padmin \
     psprint_config \
+	$(call gb_Helper_optional,PYUNO,pyuno) \
 	$(if $(strip $(OOO_JUNIT_JAR)),\
 		qadevOOo \
 	) \
-    rdbmaker \
+	$(call gb_Helper_optional,DESKTOP,rdbmaker) \
+	readlicense_oo \
     regexp \
     registry \
     remotebridges \
     reportbuilder \
     reportdesign \
+	$(call gb_Helper_optional,RHINO,rhino) \
     ridljar \
     rsc \
     sal \
     salhelper \
     sane \
     sax \
+	$(call gb_Helper_optional,SAXON,saxon) \
     sc \
     scaddins \
     sccomp \
-    scp2 \
+	$(call gb_Helper_optional,DESKTOP,scp2) \
     scripting \
     sd \
     sdext \
@@ -147,17 +164,18 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
     swext \
     test \
     testtools \
+	$(call gb_Helper_optional,TOMCAT,tomcat) \
     toolkit \
     tools \
 	touch \
-	$(if $(filter TRANSLATIONS,$(BUILD_TYPE)),\
-		translations \
-	) \
+	$(call gb_Helper_optional,TRANSLATIONS,translations) \
 	tubes \
     twain \
     ucb \
     ucbhelper \
+	$(call gb_Helper_optional,UCPP,ucpp) \
     udkapi \
+	udm \
     unixODBC \
     UnoControls \
     unodevtools \
@@ -173,12 +191,9 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
     wizards \
     writerfilter \
     writerperfect \
-	$(if $(filter X11_EXTENSIONS,$(BUILD_TYPE)),\
-		x11_extensions \
-	) \
+	$(call gb_Helper_optional,X11_EXTENSIONS,x11_extensions) \
     xmerge \
-    xml2cmp \
-    xmlhelp \
+	$(call gb_Helper_optional,DESKTOP,xmlhelp) \
     xmloff \
     xmlreader \
     xmlscript \

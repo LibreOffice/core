@@ -203,7 +203,7 @@ IMPL_LINK_NOARG(MacroSecurityTrustedSourcesTP, ViewCertPBHdl)
 
         if ( xCert.is() )
         {
-            CertificateViewer aViewer( this, mpDlg->mxSecurityEnvironment, xCert, sal_False );
+            CertificateViewer aViewer( this, mpDlg->mxSecurityEnvironment, xCert, false );
             aViewer.Execute();
         }
     }

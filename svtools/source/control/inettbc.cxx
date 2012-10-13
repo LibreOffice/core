@@ -725,7 +725,6 @@ void SvtURLBox::TryAutoComplete( sal_Bool bForce )
 {
     if( Application::AnyInput( VCL_INPUT_KEYBOARD ) ) return;
 
-    String aMatchString;
     String aCurText = GetText();
     Selection aSelection( GetSelection() );
     if( aSelection.Max() != aCurText.Len() && !bForce )

@@ -76,7 +76,6 @@ $(eval $(call gb_Helper_register_executables,NONE, \
     uiex \
     ulfconv \
     ulfex \
-    xml2cmp \
     xpdfimport \
     xrmex \
 ))
@@ -219,7 +218,6 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_NONE, \
 endif
 
 $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
-    PptImporter \
     abp \
     acc \
 	adabas \
@@ -469,6 +467,7 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
     pyuno \
     pyuno_wrapper \
     recentfile \
+	librsvg-2-2 \
     scriptframe \
     sdbc2 \
     smoketest \
@@ -520,12 +519,6 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
     so_activex \
     so_activex_x64 \
     sysdtrans \
-))
-endif
-
-ifeq ($(OS),IOS)
-$(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
-    gcc3_uno \
 ))
 endif
 
@@ -661,6 +654,7 @@ $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
     codemaker_java \
     cosv \
     dtobj \
+	findsofficepath \
     headless \
     libeay32 \
     npsoenv \

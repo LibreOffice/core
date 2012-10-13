@@ -1,0 +1,10 @@
+GdkPixbuf is a library for image loading and pixel buffer manipulation.
+And it's provides a number of features:
+
+	- Image loading saving facilities.
+	- Rendering of a GdkPixBuf into various formats:
+	  drawables (windows, pixmaps), GdkRGB buffers.
+                - Fast scaling and compositing of pixbufs.
+                - Simple animation loading (ie. animated GIFs)
+
+See Also [ http://developer.gnome.org/gdk-pixbuf/stable/ ]

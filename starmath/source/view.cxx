@@ -1466,8 +1466,6 @@ bool SmViewShell::Insert( SfxMedium& rMedium )
     RTL_LOGFILE_CONTEXT( aLog, "starmath: SmViewShell::Insert" );
 
     SmDocShell *pDoc = GetDoc();
-    String aText( pDoc->GetText() );
-    String aTemp = aText;
     bool bRet = false;
 
     uno::Reference < embed::XStorage > xStorage = rMedium.GetStorage();
@@ -1485,15 +1483,13 @@ bool SmViewShell::Insert( SfxMedium& rMedium )
 
     if( bRet )
     {
-        aText = pDoc->GetText();
+        OUString aText = pDoc->GetText();
         SmEditWindow *pEditWin = GetEditWindow();
         if (pEditWin)
             pEditWin->InsertText( aText );
         else
         {
             OSL_FAIL( "EditWindow missing" );
-            aTemp += aText;
-            aText  = aTemp;
         }
 
         pDoc->Parse();
@@ -1514,8 +1510,6 @@ bool SmViewShell::InsertFrom(SfxMedium &rMedium)
     bool        bSuccess = false;
     SmDocShell *pDoc = GetDoc();
     SvStream   *pStream = rMedium.GetInStream();
-    String      aText( pDoc->GetText() );
-    String      aTemp = aText;
 
     if (pStream)
     {
@@ -1530,15 +1524,13 @@ bool SmViewShell::InsertFrom(SfxMedium &rMedium)
 
     if( bSuccess )
     {
-        aText = pDoc->GetText();
+        OUString aText = pDoc->GetText();
         SmEditWindow *pEditWin = GetEditWindow();
         if (pEditWin)
             pEditWin->InsertText( aText );
         else
         {
             OSL_FAIL( "EditWindow missing" );
-            aTemp += aText;
-            aText  = aTemp;
         }
 
         pDoc->Parse();

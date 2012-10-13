@@ -43,7 +43,7 @@
 #include "tox.hxx"
 #include <toxmgr.hxx>
 #include <svx/checklbx.hxx>
-#include <svtools/svtreebx.hxx>
+#include <svtools/treelistbox.hxx>
 #include <vcl/menubtn.hxx>
 #include <svx/langbox.hxx>
 #include <cnttab.hxx>

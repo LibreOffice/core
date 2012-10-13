@@ -51,7 +51,7 @@
 #include <list>
 #include <boost/foreach.hpp>
 
-void lcl_CpyBox( const SwTable& rCpyTbl, const SwTableBox* pCpyBox,
+static void lcl_CpyBox( const SwTable& rCpyTbl, const SwTableBox* pCpyBox,
                     SwTable& rDstTbl, SwTableBox* pDstBox,
                     sal_Bool bDelCntnt, SwUndoTblCpyTbl* pUndo );
 
@@ -517,7 +517,7 @@ namespace
 // a "BaseLine".
 // If there's no Line anymore, put it also into the last Box
 // of a "BaseLine".
-void lcl_CpyBox( const SwTable& rCpyTbl, const SwTableBox* pCpyBox,
+static void lcl_CpyBox( const SwTable& rCpyTbl, const SwTableBox* pCpyBox,
                     SwTable& rDstTbl, SwTableBox* pDstBox,
                     sal_Bool bDelCntnt, SwUndoTblCpyTbl* pUndo )
 {

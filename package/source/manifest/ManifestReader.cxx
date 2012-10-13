@@ -19,10 +19,11 @@
 
 #include <ManifestReader.hxx>
 #include <ManifestImport.hxx>
+#include <comphelper/processfactory.hxx>
 #include <cppuhelper/factory.hxx>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <com/sun/star/xml/sax/SAXParseException.hpp>
-#include <com/sun/star/xml/sax/XParser.hpp>
+#include <com/sun/star/xml/sax/Parser.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <vector>
@@ -49,34 +50,31 @@ Sequence< Sequence< PropertyValue > > SAL_CALL ManifestReader::readManifestSeque
     throw (::com::sun::star::uno::RuntimeException)
 {
     Sequence < Sequence < PropertyValue > > aManifestSequence;
-    Reference < XParser > xParser (xFactory->createInstance ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.xml.sax.Parser" ) ) ), UNO_QUERY );
-    if (xParser.is())
+    Reference < XParser > xParser  = Parser::create(comphelper::getComponentContext(xFactory));
+    try
     {
-        try
-        {
-            vector < Sequence < PropertyValue > > aManVector;
-            Reference < XDocumentHandler > xFilter = new ManifestImport( aManVector );
-            InputSource aParserInput;
-            aParserInput.aInputStream = rStream;
-            aParserInput.sSystemId = OUString ( RTL_CONSTASCII_USTRINGPARAM ( "META-INF/manifest.xml" ) );
-            xParser->setDocumentHandler ( xFilter );
-            xParser->parseStream( aParserInput );
-            aManifestSequence.realloc ( aManVector.size() );
-            Sequence < PropertyValue > * pSequence = aManifestSequence.getArray();
-            ::std::vector < Sequence < PropertyValue > >::const_iterator aIter = aManVector.begin();
-            ::std::vector < Sequence < PropertyValue > >::const_iterator aEnd = aManVector.end();
-            while( aIter != aEnd )
-                *pSequence++ = (*aIter++);
-        }
-        catch (SAXParseException& )
-        {
-        }
-        catch (SAXException& )
-        {
-        }
-        catch (IOException& )
-        {
-        }
+        vector < Sequence < PropertyValue > > aManVector;
+        Reference < XDocumentHandler > xFilter = new ManifestImport( aManVector );
+        InputSource aParserInput;
+        aParserInput.aInputStream = rStream;
+        aParserInput.sSystemId = OUString ( RTL_CONSTASCII_USTRINGPARAM ( "META-INF/manifest.xml" ) );
+        xParser->setDocumentHandler ( xFilter );
+        xParser->parseStream( aParserInput );
+        aManifestSequence.realloc ( aManVector.size() );
+        Sequence < PropertyValue > * pSequence = aManifestSequence.getArray();
+        ::std::vector < Sequence < PropertyValue > >::const_iterator aIter = aManVector.begin();
+        ::std::vector < Sequence < PropertyValue > >::const_iterator aEnd = aManVector.end();
+        while( aIter != aEnd )
+            *pSequence++ = (*aIter++);
+    }
+    catch (SAXParseException& )
+    {
+    }
+    catch (SAXException& )
+    {
+    }
+    catch (IOException& )
+    {
     }
     xParser->setDocumentHandler ( Reference < XDocumentHandler > () );
     return aManifestSequence;

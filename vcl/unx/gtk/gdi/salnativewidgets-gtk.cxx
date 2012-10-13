@@ -2236,13 +2236,23 @@ static void NWPaintOneEditBox(    SalX11Screen nScreen,
 
     NWSetWidgetState( widget, nState, stateType );
 
-    /* This doesn't seem to be necessary, and it causes some weird glitch in
-     * murrine (with the elementary theme for instance) but it fixes some issue
-     * with Orta, so... */
+    gint xborder = widget->style->xthickness;
+    gint yborder = widget->style->ythickness;
+    gint bInteriorFocus, nFocusLineWidth;
+    gtk_widget_style_get( widget,
+        "interior-focus",   &bInteriorFocus,
+        "focus-line-width", &nFocusLineWidth,
+        (char *)NULL);
+    if ( !bInteriorFocus )
+    {
+        xborder += nFocusLineWidth;
+        yborder += nFocusLineWidth;
+    }
+
     gtk_paint_flat_box( widget->style, gdkDrawable, stateType, GTK_SHADOW_NONE,
                         gdkRect, widget, "entry_bg",
-                        aEditBoxRect.Left(), aEditBoxRect.Top(),
-                        aEditBoxRect.GetWidth(), aEditBoxRect.GetHeight() );
+                        aEditBoxRect.Left() + xborder, aEditBoxRect.Top() + yborder,
+                        aEditBoxRect.GetWidth() - 2*xborder, aEditBoxRect.GetHeight() - 2*yborder );
     gtk_paint_shadow( widget->style, gdkDrawable, GTK_STATE_NORMAL, GTK_SHADOW_IN,
                       gdkRect, widget, "entry",
                       aEditBoxRect.Left(), aEditBoxRect.Top(),
@@ -3736,13 +3746,14 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
     // text colors
     Color aTextColor = getColor( pStyle->text[GTK_STATE_NORMAL] );
     aStyleSet.SetDialogTextColor( aTextColor );
+    aStyleSet.SetWindowTextColor( aTextColor );
+    aStyleSet.SetFieldTextColor( aTextColor );
+    aTextColor = getColor( pStyle->fg[GTK_STATE_NORMAL] );
     aStyleSet.SetButtonTextColor( aTextColor );
     aStyleSet.SetRadioCheckTextColor( aTextColor );
     aStyleSet.SetGroupTextColor( aTextColor );
     aStyleSet.SetLabelTextColor( aTextColor );
     aStyleSet.SetInfoTextColor( aTextColor );
-    aStyleSet.SetWindowTextColor( aTextColor );
-    aStyleSet.SetFieldTextColor( aTextColor );
 
     // Tooltip colors
     GtkStyle* pTooltipStyle = gtk_widget_get_style( gWidgetData[m_nXScreen].gTooltipPopup );

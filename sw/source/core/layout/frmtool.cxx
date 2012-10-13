@@ -85,7 +85,7 @@
 #include <switerator.hxx>
 
 // ftnfrm.cxx:
-void lcl_RemoveFtns( SwFtnBossFrm* pBoss, sal_Bool bPageOnly, sal_Bool bEndNotes );
+void sw_RemoveFtns( SwFtnBossFrm* pBoss, sal_Bool bPageOnly, sal_Bool bEndNotes );
 
 using namespace ::com::sun::star;
 
@@ -437,7 +437,7 @@ SwLayNotify::SwLayNotify( SwLayoutFrm *pLayFrm ) :
 // OD 2004-05-11 #i28701# - local method to invalidate the position of all
 // frames inclusive its floating screen objects, which are lowers of the given
 // layout frame
-void lcl_InvalidatePosOfLowers( SwLayoutFrm& _rLayoutFrm )
+static void lcl_InvalidatePosOfLowers( SwLayoutFrm& _rLayoutFrm )
 {
     if( _rLayoutFrm.IsFlyFrm() && _rLayoutFrm.GetDrawObjs() )
     {
@@ -1105,7 +1105,7 @@ void AppendObjs( const SwFrmFmts *pTbl, sal_uLong nIndex,
     }
 }
 
-bool lcl_ObjConnected( SwFrmFmt *pFmt, const SwFrm* pSib )
+static bool lcl_ObjConnected( SwFrmFmt *pFmt, const SwFrm* pSib )
 {
     SwIterator<SwFlyFrm,SwFmt> aIter( *pFmt );
     if ( RES_FLYFRMFMT == pFmt->Which() )
@@ -1134,7 +1134,7 @@ bool lcl_ObjConnected( SwFrmFmt *pFmt, const SwFrm* pSib )
 
     @author OD
 */
-bool lcl_InHeaderOrFooter( SwFrmFmt& _rFmt )
+static bool lcl_InHeaderOrFooter( SwFrmFmt& _rFmt )
 {
     bool bRetVal = false;
 
@@ -1203,7 +1203,7 @@ void AppendAllObjs( const SwFrmFmts *pTbl, const SwFrm* pSib )
 
     @author OD
 */
-void lcl_SetPos( SwFrm&             _rNewFrm,
+static void lcl_SetPos( SwFrm&             _rNewFrm,
                  const SwLayoutFrm& _rLayFrm )
 {
     SWRECTFN( (&_rLayFrm) )
@@ -1929,7 +1929,7 @@ long SwBorderAttrs::CalcRight( const SwFrm* pCaller ) const
 }
 
 /// Tries to detect if this paragraph has a floating table attached.
-bool lcl_hasTabFrm(const SwTxtFrm* pTxtFrm)
+static bool lcl_hasTabFrm(const SwTxtFrm* pTxtFrm)
 {
     if (pTxtFrm->GetDrawObjs())
     {
@@ -2405,7 +2405,7 @@ const SdrObject *SwOrderIter::Prev()
 
 // #115759# - 'remove' also drawing object from page and
 // at-fly anchored objects from page
-void lcl_RemoveObjsFromPage( SwFrm* _pFrm )
+static void lcl_RemoveObjsFromPage( SwFrm* _pFrm )
 {
     OSL_ENSURE( _pFrm->GetDrawObjs(), "Keine DrawObjs fuer lcl_RemoveFlysFromPage." );
     SwSortedObjs &rObjs = *_pFrm->GetDrawObjs();
@@ -2458,7 +2458,7 @@ void lcl_RemoveObjsFromPage( SwFrm* _pFrm )
 SwFrm *SaveCntnt( SwLayoutFrm *pLay, SwFrm *pStart )
 {
     if( pLay->IsSctFrm() && pLay->Lower() && pLay->Lower()->IsColumnFrm() )
-        lcl_RemoveFtns( (SwColumnFrm*)pLay->Lower(), sal_True, sal_True );
+        sw_RemoveFtns( (SwColumnFrm*)pLay->Lower(), sal_True, sal_True );
 
     SwFrm *pSav;
     if ( 0 == (pSav = pLay->ContainsAny()) )
@@ -2568,7 +2568,7 @@ SwFrm *SaveCntnt( SwLayoutFrm *pLay, SwFrm *pStart )
 
 // #115759# - add also drawing objects to page and at-fly
 // anchored objects to page
-void lcl_AddObjsToPage( SwFrm* _pFrm, SwPageFrm* _pPage )
+static void lcl_AddObjsToPage( SwFrm* _pFrm, SwPageFrm* _pPage )
 {
     OSL_ENSURE( _pFrm->GetDrawObjs(), "Keine DrawObjs fuer lcl_AddFlysToPage." );
     SwSortedObjs &rObjs = *_pFrm->GetDrawObjs();
@@ -2742,10 +2742,28 @@ SwPageFrm * InsertNewPage( SwPageDesc &rDesc, SwFrm *pUpper,
     SwPageFrm *pRet;
     SwDoc *pDoc = ((SwLayoutFrm*)pUpper)->GetFmt()->GetDoc();
     SwFrmFmt *pFmt = 0;
-    // rDesc can't know if the first page will be 'left' or 'right', so if
-    // first is shared, let's ignore first here.
-    if (bFirst && !rDesc.IsFirstShared())
+    if (bFirst)
+    {
+        if (rDesc.IsFirstShared())
+        {
+            // We need to fallback to left or right page format, decide it now.
+            if (bOdd)
+            {
+                rDesc.GetFirst().SetFmtAttr( rDesc.GetMaster().GetHeader() );
+                rDesc.GetFirst().SetFmtAttr( rDesc.GetMaster().GetFooter() );
+            }
+            else
+            {
+                rDesc.GetFirst().SetFmtAttr( rDesc.GetLeft().GetHeader() );
+                rDesc.GetFirst().SetFmtAttr( rDesc.GetLeft().GetFooter() );
+            }
+        }
         pFmt = rDesc.GetFirstFmt();
+        if (!pFmt)
+        {
+            pFmt = bOdd ? rDesc.GetRightFmt() : rDesc.GetLeftFmt();
+        }
+    }
     else
         pFmt = bOdd ? rDesc.GetRightFmt() : rDesc.GetLeftFmt();
     //Wenn ich kein FrmFmt fuer die Seite gefunden habe, muss ich eben
@@ -2781,7 +2799,7 @@ SwPageFrm * InsertNewPage( SwPageDesc &rDesc, SwFrm *pUpper,
 |*
 |*************************************************************************/
 
-void lcl_Regist( SwPageFrm *pPage, const SwFrm *pAnch )
+static void lcl_Regist( SwPageFrm *pPage, const SwFrm *pAnch )
 {
     SwSortedObjs *pObjs = (SwSortedObjs*)pAnch->GetDrawObjs();
     for ( sal_uInt16 i = 0; i < pObjs->Count(); ++i )
@@ -2928,7 +2946,7 @@ void Notify( SwFlyFrm *pFly, SwPageFrm *pOld, const SwRect &rOld,
 
 /*************************************************************************/
 
-void lcl_CheckFlowBack( SwFrm* pFrm, const SwRect &rRect )
+static void lcl_CheckFlowBack( SwFrm* pFrm, const SwRect &rRect )
 {
     SwTwips nBottom = rRect.Bottom();
     while( pFrm )
@@ -2949,7 +2967,7 @@ void lcl_CheckFlowBack( SwFrm* pFrm, const SwRect &rRect )
     }
 }
 
-void lcl_NotifyCntnt( const SdrObject *pThis, SwCntntFrm *pCnt,
+static void lcl_NotifyCntnt( const SdrObject *pThis, SwCntntFrm *pCnt,
     const SwRect &rRect, const PrepareHint eHint )
 {
     if ( pCnt->IsTxtFrm() )
@@ -3281,7 +3299,7 @@ sal_Bool IsFrmInSameKontext( const SwFrm *pInnerFrm, const SwFrm *pFrm )
 
 //---------------------------------
 
-SwTwips lcl_CalcCellRstHeight( SwLayoutFrm *pCell )
+static SwTwips lcl_CalcCellRstHeight( SwLayoutFrm *pCell )
 {
     if ( pCell->Lower()->IsCntntFrm() || pCell->Lower()->IsSctFrm() )
     {

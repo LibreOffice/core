@@ -19,14 +19,21 @@ APP_DATA_PATH=/data/data/$(APP_PACKAGE)
 SODEST=libs/$(ANDROID_APP_ABI)
 OBJLOCAL=obj/local/$(ANDROID_APP_ABI)
 
-define COPYSO
-cp $(1) $(SODEST)$(if $(2),/$(2)) && $(STRIP) --strip-debug $(SODEST)$(if $(2),/$(2),/$(notdir $(1))) && \
-cp $(1) $(OBJLOCAL)$(if $(2),/$(2))
-endef
-
 define COPYJAR
 cp $(1) libs
 endef
+
+LIBS = \
+  -Wl,--start-group \
+  $(wildcard $(OUTDIR)/lib/lib*.a) \
+  -Wl,--end-group
+
+WHOLELIBS = \
+  -Wl,--whole-archive \
+  $(addprefix -l,$(strip \
+	juh \
+  )) \
+  -Wl,--no-whole-archive
 
 # The default target just builds.
 
@@ -39,87 +46,16 @@ properties:
 	echo "APP_ABI := $(ANDROID_APP_ABI)" >>jni/Application.mk
 	echo "APP_PLATFORM := android-14" >>jni/Application.mk
 
+link-so:
+# Build the single .so for this app
+	mkdir -p $(OBJLOCAL)
+	$(CXX) -Wl,--stats -Wl,--no-keep-files-mapped -Wl,--no-undefined -DANDROID -DDISABLE_DYNLOADING -shared -o $(OBJLOCAL)/liblo-native-code.so -I$(OUTDIR)/inc native-code.cxx -L$(OUTDIR)/lib $(WHOLELIBS) $(LIBS) -lgnustl_static -landroid -llog -lz
+	mkdir -p $(SODEST)
+	cp $(OBJLOCAL)/liblo-native-code.so $(SODEST)
+	$(STRIP) --strip-debug $(SODEST)/liblo-native-code.so
+
 copy-stuff:
-# First always clean
-	rm -rf libs $(OBJLOCAL)
-	mkdir -p $(SODEST) $(OBJLOCAL)
-#
-# Copy shared libraries (including UNO components) we need to
-# libs/$(ANDROID_APP_ABI) so that ant will include them in the .apk.
-#
-# Copy them to obj/local/$(ANDROID_APP_ABI), too, where gdb will look for
-# them.
-#
-	for F in $(strip \
-		   basegfxlo \
-		   bootstrap.uno \
-		   comphelpgcc3 \
-		   dbaxmllo \
-		   dbtoolslo \
-		   expwrap.uno \
-		   frmlo \
-		   gcc3_uno \
-		   i18nisolang1gcc3 \
-		   icudatalo \
-		   icui18nlo \
-		   iculelo \
-		   icuuclo \
-		   introspection.uno \
-		   java_uno \
-		   juh \
-		   juhx \
-		   jvmaccessgcc3 \
-		   jvmfwk \
-		   libotouchlo \
-		   lo-bootstrap \
-		   localedata_en \
-		   localedata_others \
-		   lwpftlo \
-		   mergedlo \
-		   msfilterlo \
-		   mswordlo \
-		   ooxlo \
-		   reflection.uno \
-		   reg \
-		   sclo \
-		   scdlo \
-		   scfiltlo \
-		   sddlo \
-		   smdlo \
-		   stocservices.uno \
-		   store \
-		   svgfilterlo \
-		   swdlo \
-		   swlo \
-		   t602filterlo \
-		   textinstream.uno \
-		   tllo \
-		   ucbhelper4gcc3 \
-		   ucppkg1 \
-		   uno_cppu \
-		   uno_cppuhelpergcc3 \
-		   uno_sal \
-		   uno_salhelpergcc3 \
-		   uno_cppuhelpergcc3 \
-		   unordflo \
-		   unoxmllo \
-		   vbahelperlo \
-		   vbaswobj.uno \
-		   wpftdrawlo \
-		   wpftwriterlo \
-		   xml2 \
-		   xmlfdlo \
-		   xmlreader \
-		   xmlsecurity \
-		   xslt \
-		  ); do \
-	    $(call COPYSO,$(OUTDIR)/lib/lib$${F}.so); \
-	done
-#
-# Then the shared GNU C++ library
-	$(call COPYSO,$(ANDROID_NDK_HOME)/sources/cxx-stl/gnu-libstdc++/$(ANDROID_NDK_TOOLCHAIN_VERSION_SUBDIR)libs/$(ANDROID_APP_ABI)/libgnustl_shared.so)
-#
-# Then other "assets". Let the directory structure under assets mimic
+# Then "assets". Let the directory structure under assets mimic
 # that under solver for now.
 #
 # Please note that I have no idea what all of this is really necessary and for
@@ -216,10 +152,11 @@ copy-stuff:
 #
 # Then gdbserver and gdb.setup so that we can debug with ndk-gdb.
 #
+	mkdir -p $(SODEST)
 	cp $(ANDROID_NDK_GDBSERVER) $(SODEST)
 	echo set solib-search-path ./obj/local/$(ANDROID_APP_ABI) >$(SODEST)/gdb.setup
 
-build-ant: copy-stuff properties
+build-ant: copy-stuff link-so properties
 #
 # Copy jar files we need
 #
@@ -246,7 +183,6 @@ uninstall:
 	$(ANDROID_SDK_HOME)/platform-tools/adb uninstall $(APP_PACKAGE)
 
 run:
-# /data/local/tmp/sample-document.odt
 	adb shell am start -n org.libreoffice.android.examples/.DocumentLoader -e input /assets/test1.odt
 
 

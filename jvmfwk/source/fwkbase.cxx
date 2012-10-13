@@ -294,7 +294,6 @@ OUString VendorSettings::getPluginLibrary(const OUString& sVendor)
     OSL_ASSERT(!sVendor.isEmpty());
 
     OString sExcMsg("[Java framework] Error in function getPluginLibrary (fwkbase.cxx).");
-    OString sVendorsPath = getVendorSettingsPath(m_xmlDocVendorSettingsFileUrl);
     OUStringBuffer usBuffer(256);
     usBuffer.appendAscii("/jf:javaSelection/jf:plugins/jf:library[@vendor=\"");
     usBuffer.append(sVendor);

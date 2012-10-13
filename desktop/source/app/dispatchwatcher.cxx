@@ -41,7 +41,7 @@
 #include <comphelper/synchronousdispatch.hxx>
 #include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/util/CloseVetoException.hpp>
-#include <com/sun/star/task/XInteractionHandler.hpp>
+#include <com/sun/star/task/InteractionHandler.hpp>
 #include <com/sun/star/util/URL.hpp>
 #include <com/sun/star/frame/XDesktop.hpp>
 #include <com/sun/star/container/XEnumeration.hpp>
@@ -73,6 +73,7 @@ using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::view;
+using namespace ::com::sun::star::task;
 
 namespace desktop
 {
@@ -226,9 +227,8 @@ sal_Bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatch
         }
         else
         {
-            Reference < com::sun::star::task::XInteractionHandler > xInteraction(
-                ::comphelper::getProcessServiceFactory()->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.task.InteractionHandler")) ),
-                com::sun::star::uno::UNO_QUERY );
+            Reference < XInteractionHandler2 > xInteraction(
+                InteractionHandler::createWithParent(::comphelper::getProcessComponentContext(), 0) );
 
             aArgs[1].Name = OUString(RTL_CONSTASCII_USTRINGPARAM( "InteractionHandler" ));
             aArgs[1].Value <<= xInteraction;

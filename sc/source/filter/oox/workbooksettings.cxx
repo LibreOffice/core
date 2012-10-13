@@ -209,10 +209,10 @@ void WorkbookSettings::finalizeImport()
     // write protection
     if( maFileSharing.mbRecommendReadOnly || (maFileSharing.mnPasswordHash != 0) ) try
     {
-        getBaseFilter().getMediaDescriptor()[ CREATE_OUSTRING( "ReadOnly" ) ] <<= true;
+        getBaseFilter().getMediaDescriptor()[ "ReadOnly" ] <<= true;
 
         Reference< XPropertySet > xDocumentSettings( getBaseFilter().getModelFactory()->createInstance(
-            CREATE_OUSTRING( "com.sun.star.document.Settings" ) ), UNO_QUERY_THROW );
+            "com.sun.star.document.Settings" ), UNO_QUERY_THROW );
         PropertySet aSettingsProp( xDocumentSettings );
         if( maFileSharing.mbRecommendReadOnly )
             aSettingsProp.setProperty( PROP_LoadReadonly, true );

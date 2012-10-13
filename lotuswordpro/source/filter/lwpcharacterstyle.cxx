@@ -124,7 +124,6 @@ void LwpTextStyle::ReadCommon()
 
     m_pLangOverride->Read(m_pObjStrm);
     m_pTxtAttrOverride->Read(m_pObjStrm);
-//#ifdef AMIKAKE
     if (LwpFileHeader::m_nFileRevision < 0x000B)
     {
         m_pCharacterBorderOverride->Read(m_pObjStrm);
@@ -135,7 +134,6 @@ void LwpTextStyle::ReadCommon()
         m_CharacterBorder.ReadIndexed(m_pObjStrm);
         m_Amikake.ReadIndexed(m_pObjStrm);
     }
-//#endif
     sal_uInt16 nCount = 6;
     if (LwpFileHeader::m_nFileRevision > 0x0005)
         nCount = m_pObjStrm->QuickReaduInt16();

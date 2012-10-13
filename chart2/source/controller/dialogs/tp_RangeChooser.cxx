@@ -252,12 +252,12 @@ void RangeChooserTabPage::changeDialogModelAccordingToControls()
                 m_aRB_Columns.IsChecked(), bFirstCellAsLabel, bHasCategories ) );
 
         // only if range is valid
-        if( m_aLastValidRangeString.equals( m_aED_Range.GetText()))
+        if( m_aLastValidRangeString.equals(m_aED_Range.GetText()))
         {
             m_rDialogModel.setTemplate( m_xCurrentChartTypeTemplate );
             aArguments.realloc( aArguments.getLength() + 1 );
             aArguments[aArguments.getLength() - 1] =
-                beans::PropertyValue( C2U("CellRangeRepresentation"), -1,
+                beans::PropertyValue( "CellRangeRepresentation" , -1,
                                       uno::makeAny( m_aLastValidRangeString ),
                                       beans::PropertyState_DIRECT_VALUE );
             m_rDialogModel.setData( aArguments );
@@ -271,7 +271,7 @@ void RangeChooserTabPage::changeDialogModelAccordingToControls()
 
 bool RangeChooserTabPage::isValid()
 {
-    ::rtl::OUString aRange( m_aED_Range.GetText());
+    OUString aRange( m_aED_Range.GetText());
     sal_Bool bFirstCellAsLabel = ( m_aCB_FirstColumnAsLabel.IsChecked() && !m_aRB_Columns.IsChecked() )
         || ( m_aCB_FirstRowAsLabel.IsChecked()    && !m_aRB_Rows.IsChecked() );
     sal_Bool bHasCategories = ( m_aCB_FirstColumnAsLabel.IsChecked() && m_aRB_Columns.IsChecked() )
@@ -352,9 +352,9 @@ IMPL_LINK_NOARG(RangeChooserTabPage, ControlChangedHdl)
 
 IMPL_LINK_NOARG(RangeChooserTabPage, ChooseRangeHdl)
 {
-    rtl::OUString aRange = m_aED_Range.GetText();
+    OUString aRange = m_aED_Range.GetText();
     // using assignment for broken gcc 3.3
-    rtl::OUString aTitle = String( SchResId( STR_PAGE_DATA_RANGE ) );
+    OUString aTitle = String( SchResId( STR_PAGE_DATA_RANGE ) );
 
     lcl_enableRangeChoosing( true, m_pParentDialog );
     m_rDialogModel.getRangeSelectionHelper()->chooseRange( aRange, aTitle, *this );
@@ -363,11 +363,11 @@ IMPL_LINK_NOARG(RangeChooserTabPage, ChooseRangeHdl)
 }
 
 
-void RangeChooserTabPage::listeningFinished( const ::rtl::OUString & rNewRange )
+void RangeChooserTabPage::listeningFinished( const OUString & rNewRange )
 {
     //user has selected a new range
 
-    rtl::OUString aRange( rNewRange );
+    OUString aRange( rNewRange );
 
     m_rDialogModel.startControllerLockTimer();
 

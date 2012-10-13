@@ -1,31 +1,26 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*************************************************************************
+/*
+ * This file is part of the LibreOffice project.
  *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * This file incorporates work covered by the following license notice:
  *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
 
+
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_ucb.hxx"
 /**************************************************************************
                                TODO
  **************************************************************************
@@ -44,7 +39,6 @@
 #include <com/sun/star/ucb/TransferInfo.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/util/DateTime.hpp>
-#include <com/sun/star/ucb/Link.hpp>
 #include <com/sun/star/ucb/Lock.hpp>
 #include <com/sun/star/ucb/LockEntry.hpp>
 #include "webdavcontent.hxx"
@@ -53,7 +47,7 @@
 #include "ContentProperties.hxx"
 
 using namespace com::sun::star;
-using namespace webdav_ucp;
+using namespace http_dav_ucp;
 
 //=========================================================================
 //
@@ -239,14 +233,6 @@ bool ContentProvider::getProperty(
 
             m_pProps->insert(
                 beans::Property(
-                    DAVProperties::SOURCE,
-                    -1,
-                    getCppuType( static_cast<
-                                    const uno::Sequence< ucb::Link > * >( 0 ) ),
-                    beans::PropertyAttribute::BOUND ) );
-
-            m_pProps->insert(
-                beans::Property(
                     DAVProperties::SUPPORTEDLOCK,
                     -1,
                     getCppuType( static_cast<
@@ -302,10 +288,8 @@ uno::Sequence< beans::Property > Content::getProperties(
     const uno::Reference< ucb::XCommandEnvironment > & xEnv )
 {
     sal_Bool bTransient;
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     std::auto_ptr< DAVResourceAccess > xResAccess;
     std::auto_ptr< ContentProperties > xCachedProps;
-    SAL_WNODEPRECATED_DECLARATIONS_POP
     rtl::Reference< ContentProvider >  xProvider;
 
     {
@@ -384,43 +368,64 @@ uno::Sequence< beans::Property > Content::getProperties(
             {
                 bHasGetContentLength = sal_True;
             }
-            else if ( !bHasContentType && (*it) == "ContentType" )
+            else if ( !bHasContentType &&
+                      (*it).equalsAsciiL(
+                            RTL_CONSTASCII_STRINGPARAM( "ContentType" ) ) )
             {
                 bHasContentType = sal_True;
             }
-            else if ( !bHasIsDocument && (*it) == "IsDocument" )
+            else if ( !bHasIsDocument &&
+                      (*it).equalsAsciiL(
+                            RTL_CONSTASCII_STRINGPARAM( "IsDocument" ) ) )
             {
                 bHasIsDocument = sal_True;
             }
-            else if ( !bHasIsFolder && (*it) == "IsFolder" )
+            else if ( !bHasIsFolder &&
+                      (*it).equalsAsciiL(
+                            RTL_CONSTASCII_STRINGPARAM( "IsFolder" ) ) )
             {
                 bHasIsFolder = sal_True;
             }
-            else if ( !bHasTitle && (*it) == "Title" )
+            else if ( !bHasTitle &&
+                      (*it).equalsAsciiL(
+                            RTL_CONSTASCII_STRINGPARAM( "Title" ) ) )
             {
                 bHasTitle = sal_True;
             }
-            else if ( !bHasBaseURI && (*it) == "BaseURI" )
+            else if ( !bHasBaseURI &&
+                      (*it).equalsAsciiL(
+                            RTL_CONSTASCII_STRINGPARAM( "BaseURI" ) ) )
             {
                 bHasBaseURI = sal_True;
             }
-            else if ( !bHasDateCreated && (*it) == "DateCreated" )
+            else if ( !bHasDateCreated &&
+                      (*it).equalsAsciiL(
+                            RTL_CONSTASCII_STRINGPARAM( "DateCreated" ) ) )
             {
                 bHasDateCreated = sal_True;
             }
-            else if ( !bHasDateModified && (*it) == "DateModified" )
+            else if ( !bHasDateModified &&
+                      (*it).equalsAsciiL(
+                            RTL_CONSTASCII_STRINGPARAM( "DateModified" ) ) )
             {
                 bHasDateModified = sal_True;
             }
-            else if ( !bHasMediaType && (*it) == "MediaType" )
+            else if ( !bHasMediaType &&
+                      (*it).equalsAsciiL(
+                            RTL_CONSTASCII_STRINGPARAM( "MediaType" ) ) )
             {
                 bHasMediaType = sal_True;
             }
-            else if ( !bHasSize && (*it) == "Size" )
+            else if ( !bHasSize &&
+                      (*it).equalsAsciiL(
+                            RTL_CONSTASCII_STRINGPARAM( "Size" ) ) )
             {
                 bHasSize = sal_True;
             }
-            else if ( !bHasCreatableInfos && (*it) == "CreatableContentsInfo" )
+            else if ( !bHasCreatableInfos &&
+                      (*it).equalsAsciiL(
+                            RTL_CONSTASCII_STRINGPARAM(
+                                "CreatableContentsInfo" ) ) )
             {
                 bHasCreatableInfos = sal_True;
             }
@@ -484,10 +489,8 @@ uno::Sequence< beans::Property > Content::getProperties(
         const std::set< rtl::OUString >::const_iterator set_end
             = aPropSet.end();
 
-        SAL_WNODEPRECATED_DECLARATIONS_PUSH
         const std::auto_ptr< PropertyValueMap > & xProps
             = xCachedProps->getProperties();
-        SAL_WNODEPRECATED_DECLARATIONS_POP
 
         PropertyValueMap::const_iterator       map_it  = xProps->begin();
         const PropertyValueMap::const_iterator map_end = xProps->end();

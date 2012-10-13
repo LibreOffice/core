@@ -1135,7 +1135,7 @@ void ScInterpreter::ScMatTrans()
     For a row or column vector to be replicated the larger matrix dimension is
     returned, else the smaller dimension.
  */
-inline SCSIZE lcl_GetMinExtent( SCSIZE n1, SCSIZE n2 )
+static inline SCSIZE lcl_GetMinExtent( SCSIZE n1, SCSIZE n2 )
 {
     if (n1 == 1)
         return n2;
@@ -1148,7 +1148,7 @@ inline SCSIZE lcl_GetMinExtent( SCSIZE n1, SCSIZE n2 )
 }
 
 template<class _Function>
-ScMatrixRef lcl_MatrixCalculation(
+static ScMatrixRef lcl_MatrixCalculation(
    const ScMatrix& rMat1, const ScMatrix& rMat2, ScInterpreter* pInterpreter)
 {
     static _Function Op;
@@ -1216,7 +1216,7 @@ ScMatrixRef ScInterpreter::MatConcat(const ScMatrixRef& pMat1, const ScMatrixRef
 
 
 // for DATE, TIME, DATETIME
-void lcl_GetDiffDateTimeFmtType( short& nFuncFmt, short nFmt1, short nFmt2 )
+static void lcl_GetDiffDateTimeFmtType( short& nFuncFmt, short nFmt1, short nFmt2 )
 {
     if ( nFmt1 != NUMBERFORMAT_UNDEFINED || nFmt2 != NUMBERFORMAT_UNDEFINED )
     {

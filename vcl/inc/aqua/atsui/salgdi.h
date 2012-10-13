@@ -353,7 +353,6 @@ private:
     bool GetRawFontData( const PhysicalFontFace* pFontData,
                          std::vector<unsigned char>& rBuffer,
                          bool* pJustCFF );
-    void ResetFontStyle();
 };
 
 // --- some trivial inlines

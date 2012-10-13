@@ -85,6 +85,7 @@ SdFilter::~SdFilter()
 
 // -----------------------------------------------------------------------------
 
+#ifndef DISABLE_DYNLOADING
 extern "C" { static void SAL_CALL thisModule() {} }
 
 ::osl::Module* SdFilter::OpenLibrary( const ::rtl::OUString& rLibraryName ) const
@@ -94,6 +95,8 @@ extern "C" { static void SAL_CALL thisModule() {} }
                              SAL_LOADMODULE_GLOBAL | SAL_LOADMODULE_LAZY)
         ? mod.release() : 0;
 }
+
+#endif
 
 // -----------------------------------------------------------------------------
 

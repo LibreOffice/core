@@ -27,12 +27,13 @@
 #include <com/sun/star/lang/XComponent.hpp>
 
 #include <com/sun/star/xml/sax/SAXParseException.hpp>
-#include <com/sun/star/xml/sax/XParser.hpp>
+#include <com/sun/star/xml/sax/Parser.hpp>
 #include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
 
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>
 
+#include <comphelper/processfactory.hxx>
 #include <cppuhelper/servicefactory.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase3.hxx>
@@ -322,46 +323,36 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
     // parser demo
     // read xml from a file and count elements
     //--------------------------------
-    Reference< XInterface > x = xSMgr->createInstance(
-        OUString("com.sun.star.xml.sax.Parser") );
+    Reference< XParser > rParser = Parser::create(comphelper::getComponentContext(xSMgr));
+
     int nError = 0;
-    if( x.is() )
+    // create and connect the document handler to the parser
+    TestDocumentHandler *pDocHandler = new TestDocumentHandler( argv[1], argv[3]);
+
+    Reference < XDocumentHandler >  rDocHandler( (XDocumentHandler *) pDocHandler );
+    Reference< XEntityResolver > rEntityResolver( (XEntityResolver *) pDocHandler );
+
+    rParser->setDocumentHandler( rDocHandler );
+    rParser->setEntityResolver( rEntityResolver );
+
+    // create the input stream
+    InputSource source;
+    source.aInputStream = createStreamFromFile( argv[2] );
+    source.sSystemId    = OUString::createFromAscii( argv[2] );
+
+    try
     {
-        Reference< XParser > rParser( x , UNO_QUERY );
-
-        // create and connect the document handler to the parser
-        TestDocumentHandler *pDocHandler = new TestDocumentHandler( argv[1], argv[3]);
-
-        Reference < XDocumentHandler >  rDocHandler( (XDocumentHandler *) pDocHandler );
-        Reference< XEntityResolver > rEntityResolver( (XEntityResolver *) pDocHandler );
-
-        rParser->setDocumentHandler( rDocHandler );
-        rParser->setEntityResolver( rEntityResolver );
-
-        // create the input stream
-        InputSource source;
-        source.aInputStream = createStreamFromFile( argv[2] );
-        source.sSystemId    = OUString::createFromAscii( argv[2] );
-
-        try
-        {
-            // start parsing
-            rParser->parseStream( source );
-        }
-
-        catch( const Exception & e )
-        {
-            OString o1 = OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8 );
-            printf( "Exception during parsing : %s\n" ,  o1.getStr() );
-            exit(1);
-        }
-        nError = pDocHandler->nError;
+        // start parsing
+        rParser->parseStream( source );
     }
-    else
+
+    catch( const Exception & e )
     {
-        printf( "couldn't create sax-parser component\n" );
+        OString o1 = OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8 );
+        printf( "Exception during parsing : %s\n" ,  o1.getStr() );
         exit(1);
     }
+    nError = pDocHandler->nError;
 
     return nError;
 }

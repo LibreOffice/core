@@ -1,2 +1,0 @@
-xc  xml2cmp : solenv NULL
-xc  xml2cmp\prj nmake -	all xc_prj NULL

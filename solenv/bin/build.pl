@@ -556,9 +556,10 @@ sub expand_dependencies {
 sub get_tail_build_modules {
     my $tail_build_prj = shift;
     my $make = $ENV{'GNUMAKE'};
+    my $build_type = $ENV{'BUILD_TYPE'};
 
     my $tail_build_mk = "$tail_build_module_dir/Module_$tail_build_prj.mk";
-    my $modules_str = `$make --no-print-directory -r -f $tail_build_modules_mk get_modules TAIL_BUILD_MK=$tail_build_mk`;
+    my $modules_str = `$make --no-print-directory -r -f $tail_build_modules_mk get_modules TAIL_BUILD_MK=$tail_build_mk BUILD_TYPE='$build_type'`;
     chomp $modules_str;
 
     my %modules = ();

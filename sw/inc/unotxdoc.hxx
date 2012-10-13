@@ -77,7 +77,6 @@
 #include <cppuhelper/implbase2.hxx> // helper for implementations
 #include <cppuhelper/implbase4.hxx> // helper for implementations
 #include <RefreshListenerContainer.hxx>
-#include <oox/mathml/import.hxx>
 
 #include <viewopt.hxx>
 

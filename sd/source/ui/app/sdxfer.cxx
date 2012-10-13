@@ -388,7 +388,7 @@ static sal_Bool lcl_HasOnlyControls( SdrModel* pModel )
 
 // -----------------------------------------------------------------------------
 
-bool lcl_HasOnlyOneTable( SdrModel* pModel )
+static bool lcl_HasOnlyOneTable( SdrModel* pModel )
 {
     if ( pModel )
     {

@@ -79,7 +79,7 @@ SwUnoTableCrsr * SwUnoTableCrsr::Clone() const
 {
     SwUnoTableCrsr * pNewCrsr = dynamic_cast<SwUnoTableCrsr*>(
         GetDoc()->CreateUnoCrsr(
-            *GetPoint(), sal_True /* create SwUnoTableCrsr */ ) );
+            *GetPoint(), true /* create SwUnoTableCrsr */ ) );
     OSL_ENSURE(pNewCrsr, "Clone: cannot create SwUnoTableCrsr?");
     if (HasMark())
     {
@@ -117,8 +117,8 @@ sal_Bool SwUnoCrsr::IsSelOvr( int eFlags )
                     *pNewSttNd = rPtIdx.GetNode().StartOfSectionNode();
         if( pOldSttNd != pNewSttNd )
         {
-            sal_Bool bMoveDown = GetSavePos()->nNode < rPtIdx.GetIndex();
-            sal_Bool bValidPos = sal_False;
+            bool bMoveDown = GetSavePos()->nNode < rPtIdx.GetIndex();
+            bool bValidPos = false;
 
             // search the correct surrounded start node - which the index
             // can't leave.
@@ -172,7 +172,7 @@ sal_Bool SwUnoCrsr::IsSelOvr( int eFlags )
                         }
                     }
                     else
-                        bValidPos = sal_True;
+                        bValidPos = true;
                 } while ( pInvalidNode );
             }
 

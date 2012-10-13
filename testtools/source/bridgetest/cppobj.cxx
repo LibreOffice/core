@@ -130,8 +130,8 @@ class Test_Impl :
 {
     TestData _aData, _aStructData;
     sal_Int32 m_nLastCallId;
-    sal_Bool m_bFirstCall;
-    sal_Bool m_bSequenceOfCallTestPassed;
+    bool m_bFirstCall;
+    bool m_bSequenceOfCallTestPassed;
     Mutex m_mutex;
 
     Sequence<sal_Bool> _arBool;
@@ -155,8 +155,8 @@ class Test_Impl :
 
 public:
     Test_Impl() : m_nLastCallId( 0 ),
-                  m_bFirstCall( sal_True ),
-                  m_bSequenceOfCallTestPassed( sal_True )
+                  m_bFirstCall( true ),
+                  m_bSequenceOfCallTestPassed( true )
         {}
     virtual ~Test_Impl()
         {
@@ -514,7 +514,7 @@ void Test_Impl::call( sal_Int32 nCallId , sal_Int32 nWaitMUSEC ) throw(::com::su
     wait(nWaitMUSEC);
     if( m_bFirstCall )
     {
-        m_bFirstCall = sal_False;
+        m_bFirstCall = false;
     }
     else
     {

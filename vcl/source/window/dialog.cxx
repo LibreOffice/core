@@ -466,8 +466,9 @@ void Dialog::ImplInitSettings()
 
 // -----------------------------------------------------------------------
 
-Dialog::Dialog( WindowType nType ) :
-    SystemWindow( nType )
+Dialog::Dialog( WindowType nType )
+    : SystemWindow( nType )
+    , mbIsDefferedInit(false)
 {
     ImplInitDialogData();
 }
@@ -514,11 +515,13 @@ void Dialog::doDeferredInit(bool bResizable)
     Window *pParent = mpDialogParent;
     mpDialogParent = NULL;
     ImplInit(pParent, nBits);
+    mbIsDefferedInit = false;
 }
 
 Dialog::Dialog(Window* pParent, const rtl::OString& rID, const rtl::OUString& rUIXMLDescription)
     : SystemWindow( WINDOW_DIALOG )
     , mpDialogParent(pParent) //will be unset in doDeferredInit
+    , mbIsDefferedInit(true)
 {
     ImplInitDialogData();
     m_pUIBuilder = new VclBuilder(this, getUIRootDir(), rUIXMLDescription, rID);
@@ -527,6 +530,7 @@ Dialog::Dialog(Window* pParent, const rtl::OString& rID, const rtl::OUString& rU
 Dialog::Dialog(Window* pParent, const rtl::OString& rID, const rtl::OUString& rUIXMLDescription, WindowType nType)
     : SystemWindow( nType )
     , mpDialogParent(pParent) //will be unset in doDeferredInit
+    , mbIsDefferedInit(true)
 {
     ImplInitDialogData();
     m_pUIBuilder = new VclBuilder(this, getUIRootDir(), rUIXMLDescription, rID);
@@ -535,21 +539,12 @@ Dialog::Dialog(Window* pParent, const rtl::OString& rID, const rtl::OUString& rU
 
 // -----------------------------------------------------------------------
 
-Dialog::Dialog( Window* pParent, WinBits nStyle ) :
-    SystemWindow( WINDOW_DIALOG )
+Dialog::Dialog( Window* pParent, WinBits nStyle )
+    : SystemWindow( WINDOW_DIALOG )
+    , mbIsDefferedInit(false)
 {
     ImplInitDialogData();
     ImplInit( pParent, nStyle );
-}
-
-// -----------------------------------------------------------------------
-
-Dialog::Dialog( Window* pParent, const ResId& rResId ) :
-    SystemWindow( WINDOW_DIALOG )
-{
-    ImplInitDialogData();
-    rResId.SetRT( RSC_DIALOG );
-    init(pParent, rResId);
 }
 
 VclBuilder* VclBuilderContainer::overrideResourceWithUIXML(Window *pWindow, const ResId& rResId)

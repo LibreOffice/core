@@ -38,7 +38,6 @@
 #include "vcl/wall.hxx"
 #include "vcl/status.hxx"
 #include "vcl/decoview.hxx"
-#include "vcl/arrange.hxx"
 #include "vcl/configsettings.hxx"
 #include "vcl/help.hxx"
 #include "vcl/decoview.hxx"
@@ -1269,11 +1268,6 @@ void PrintDialog::setPreviewText( sal_Int32 )
 {
     rtl::OUString aNewText( searchAndReplace( maPageStr, "%n", 2, rtl::OUString::valueOf( mnCachedPages )  ) );
     mpNumPagesText->SetText( aNewText );
-
-    // if layout is already established the refresh layout of
-    // preview controls since text length may have changes
-    if( mxPreviewCtrls.get() )
-        mxPreviewCtrls->setManagedArea( mxPreviewCtrls->getManagedArea() );
 }
 
 void PrintDialog::preparePreview( bool i_bNewPage, bool i_bMayUseCache )

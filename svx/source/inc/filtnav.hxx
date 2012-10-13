@@ -41,7 +41,7 @@
 #include <sfx2/dockwin.hxx>
 #include <sfx2/ctrlitem.hxx>
 #include <vcl/image.hxx>
-#include <svtools/svtreebx.hxx>
+#include <svtools/treelistbox.hxx>
 
 #include <vcl/dialog.hxx>
 #include <vcl/group.hxx>

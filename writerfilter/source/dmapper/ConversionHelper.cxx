@@ -133,81 +133,21 @@ void MakeBorderLine( sal_Int32 nLineThickness,   sal_Int32 nLineType,
     if(!bIsOOXML && sal::static_int_cast<sal_uInt32>(nLineColor) < SAL_N_ELEMENTS(aBorderDefColor))
         nLineColor = aBorderDefColor[nLineColor];
 
-    sal_Int16 nLineStyle = NONE;
     // Map to our border types, we should use of one equal line
     // thickness, or one of smaller thickness. If too small we
     // can make the defecit up in additional white space or
     // object size
-    switch(nLineType)
-    {
-        // First the single lines
-        case  1:
-        case  2:
-        case  5:
-            nLineStyle = SOLID;
-            break;
-        // Dotted and dashed lines
-        case  6:
-            nLineStyle = DOTTED;
-            break;
-        case  7:
-        case 22:
-            nLineStyle = DASHED;
-            break;
-        // and the unsupported special cases which we map to a single line
-        case  8:
-        case  9:
-        case 20:
-            nLineStyle = SOLID;
-            break;
-        // Double line
-        case 3:
-        case 10: //Don't have tripple so use double
-        case 21:
-        case 23:
-            nLineStyle = DOUBLE;
-            break;
-        case 11:
-        case 13: //Don't have thin thick thin, so use thick thin
-            nLineStyle = THINTHICK_SMALLGAP;
-            break;
-        case 12:
-            nLineStyle = THICKTHIN_SMALLGAP;
-            break;
-        case 14:
-            nLineStyle = THINTHICK_MEDIUMGAP;
-            break;
-        case 15:
-        case 16: //Don't have thin thick thin, so use thick thin
-            nLineStyle = THICKTHIN_MEDIUMGAP;
-            break;
-        case 17:
-            nLineStyle = THINTHICK_LARGEGAP;
-            break;
-        case 18:
-        case 19: //Don't have thin thick thin, so use thick thin
-            nLineStyle = THICKTHIN_LARGEGAP;
-            break;
-        // Embossed and engraved lines
-        case 24:
-            nLineStyle = EMBOSSED;
-            break;
-        case 25:
-            nLineStyle = ENGRAVED;
-            break;
-        case 0:
-        case 255:
-        default:
-            break;
-    }
-
+    ::editeng::SvxBorderStyle const nLineStyle(
+            ::editeng::ConvertBorderStyleFromWord(nLineType));
     rToFill.LineStyle = nLineStyle;
     double const fConverted( (NONE == nLineStyle) ? 0.0 :
-        ::editeng::ConvertBorderWidthFromWord(nLineStyle, nLineThickness));
+        ::editeng::ConvertBorderWidthFromWord(nLineStyle, nLineThickness,
+            nLineType));
     rToFill.LineWidth = convertTwipToMM100(fConverted);
     rToFill.Color = nLineColor;
 }
 
+namespace {
 void lcl_SwapQuotesInField(OUString &rFmt)
 {
     //Swap unescaped " and ' with ' and "
@@ -232,6 +172,7 @@ bool lcl_IsNotAM(OUString& rFmt, sal_Int32 nPos)
             (rFmt[nPos+1] != 'm')
             )
         );
+}
 }
 
 OUString ConvertMSFormatStringToSO(

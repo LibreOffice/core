@@ -34,7 +34,6 @@ import com.sun.star.registry.XRegistryKey;
  * It is useful for <code>Thread</code> communication
  * in one Process.
  * <p>
- * @author      Kay Ramme
  * @see         com.sun.star.connection.XConnection
  * @see         com.sun.star.comp.loader.JavaLoader
  * @since       UDK1.0

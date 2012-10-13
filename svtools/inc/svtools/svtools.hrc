@@ -50,6 +50,16 @@
 #define STR_SVT_FILEVIEW_COLUMN_TYPE    (RID_SVTOOLS_START + 29)
 #define STR_FILTERNAME_ALL              (RID_SVTOOLS_START + 30)
 #define RID_FILEVIEW_CONTEXTMENU        (RID_SVTOOLS_START + 31)
+#define STR_1BIT_THRESHOLD              (RID_SVTOOLS_START + 32)
+#define STR_1BIT_DITHERED               (RID_SVTOOLS_START + 33)
+#define STR_4BIT_GRAYSCALE              (RID_SVTOOLS_START + 34)
+#define STR_4BIT_COLOR_PALETTE          (RID_SVTOOLS_START + 35)
+#define STR_8BIT_GRAYSCALE              (RID_SVTOOLS_START + 36)
+#define STR_8BIT_COLOR_PALETTE          (RID_SVTOOLS_START + 37)
+#define STR_24BIT_TRUE_COLOR            (RID_SVTOOLS_START + 38)
+#define STR_ESTIMATED_SIZE_PIX_1        (RID_SVTOOLS_START + 39)
+#define STR_ESTIMATED_SIZE_PIX_2        (RID_SVTOOLS_START + 40)
+#define STR_ESTIMATED_SIZE_VEC          (RID_SVTOOLS_START + 41)
 
 // doc template dialog
 #define DLG_DOCTEMPLATE                 (RID_SVTOOLS_START+50)
@@ -216,9 +226,6 @@
 
 //.............................................................................
 // dialogs
-#define DLG_EXPORT_START                (STR_ARR_SVT_LANGUAGE_TABLE_END + 1)
-#define DLG_EXPORT                      (DLG_EXPORT_START)
-#define DLG_EXPORT_TITLE                (DLG_EXPORT_START+1)
 
 #define DLG_LOGIN                       (RID_SVTOOLS_START+113)
 #define DLG_ADDRESSBOOKSOURCE           (RID_SVTOOLS_START+114)
@@ -262,7 +269,7 @@
 #define IMG_TRIANGLE_RIGHT              (RID_SVTOOLS_START + 18)
 #define IMG_TRIANGLE_DOWN               (RID_SVTOOLS_START + 20)
 
-#define IMG_SVT_FOLDER                  (RID_SVTOOLS_START + 40)
+#define IMG_SVT_FOLDER                  (RID_SVTOOLS_START + 42)
 
 #define IMG_SVT_NEWDOC                  (RID_SVTOOLS_START + 52)
 #define IMG_SVT_MYDOCS                  (RID_SVTOOLS_START + 53)

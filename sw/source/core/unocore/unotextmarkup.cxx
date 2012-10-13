@@ -231,7 +231,7 @@ void SAL_CALL SwXTextMarkup::commitTextMarkup(
 }
 
 
-void lcl_commitGrammarMarkUp(
+static void lcl_commitGrammarMarkUp(
     const ModelToViewHelper& rConversionMap,
     SwGrammarMarkUp* pWList,
     ::sal_Int32 nType,

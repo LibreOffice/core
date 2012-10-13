@@ -31,6 +31,7 @@
 
 #include <comphelper/processfactory.hxx>
 #include <unotools/intlwrapper.hxx>
+#include <svtools/svlbitm.hxx>
 
 // SvxSimpleTableContainer  ------------------------------------------------------
 

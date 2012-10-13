@@ -43,6 +43,8 @@
 
 extern "C" {
 
+#ifndef DISABLE_DYNLOADING
+
 oslModule SAL_CALL osl_loadModuleRelative(
     oslGenericFunction const baseModule, rtl_uString * const relativePath,
     sal_Int32 const mode)
@@ -66,6 +68,8 @@ oslModule SAL_CALL osl_loadModuleRelative(
     }
     return ::osl_loadModule(abs.pData, mode);
 }
+
+#endif // !DISABLE_DYNLOADING
 
 }
 

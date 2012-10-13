@@ -45,16 +45,18 @@ class ScFormulaCell;
 class ScTokenArray;
 struct ScDataBarInfo;
 
+// don't change the order
+// they are also used in the dialog to determine the position
+// in the list box
 enum ScColorScaleEntryType
 {
-    COLORSCALE_VALUE,
+    COLORSCALE_AUTO,
     COLORSCALE_MIN,
     COLORSCALE_MAX,
-    COLORSCALE_PERCENT,
     COLORSCALE_PERCENTILE,
+    COLORSCALE_VALUE,
+    COLORSCALE_PERCENT,
     COLORSCALE_FORMULA,
-    COLORSCALE_AUTOMIN,
-    COLORSCALE_AUTOMAX
 };
 
 class SC_DLLPUBLIC ScColorScaleEntry
@@ -189,10 +191,24 @@ public:
     virtual void DataChanged(const ScRange& rRange) = 0;
     virtual void SetParent(ScConditionalFormat* pParent);
 
+    virtual void startRendering();
+    virtual void endRendering();
+
 protected:
-    void getValues( std::vector<double>& rValues ) const;
+    std::vector<double>& getValues() const;
+
+    double getMinValue() const;
+    double getMaxValue() const;
 
     ScConditionalFormat* mpParent;
+
+private:
+
+    struct ScColorFormatCache
+    {
+        std::vector<double> maValues;
+    };
+    mutable boost::scoped_ptr<ScColorFormatCache> mpCache;
 };
 
 class SC_DLLPUBLIC ScColorScaleFormat : public ScColorFormat

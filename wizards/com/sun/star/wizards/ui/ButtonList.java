@@ -36,10 +36,6 @@ import javax.swing.ListModel;
 import javax.swing.event.ListDataEvent;
 import com.sun.star.wizards.common.HelpIds;
 
-/**
- *
- * @author  rpiterman,ll93751
- */
 public class ButtonList implements XItemEventBroadcaster, XActionListener
 {
 
@@ -70,7 +66,7 @@ public class ButtonList implements XItemEventBroadcaster, XActionListener
     private IImageRenderer renderer;
     private ListModel listModel;
     public IRenderer counterRenderer = new SimpleCounterRenderer();
-    private final static int LINE_HEIGHT = 8;    //private MethodInvocation METHOD_MOUSE_ENTER_IMAGE;
+    private final static int LINE_HEIGHT = 8;
 
     /** Getter for property m_aButtonSize.
      * @return Value of property m_aButtonSize.
@@ -93,10 +89,8 @@ public class ButtonList implements XItemEventBroadcaster, XActionListener
         this.m_aButtonSize = imageSize;
     }
 
-//    @Override
     public void disposing(EventObject arg0)
     {
-        // throw new UnsupportedOperationException("Not supported yet.");
     }
 
     public void create(UnoDialog2 dialog)
@@ -301,11 +295,9 @@ public class ButtonList implements XItemEventBroadcaster, XActionListener
                 else if (oResources.length == 2)
                 {
                     oUnoDialog.getPeerConfiguration().setImageUrl(m_aButtons[i].getModel(), oResources[0], oResources[1]);
-//                    Helper.setUnoPropertyValue(m_aButtons[i].getModel(), PropertyNames.PROPERTY_IMAGEURL, oResources[0]);
                 }
                 boolean bTabStop = Boolean.TRUE; // focusable ? Boolean.TRUE : Boolean.FALSE;
                 Helper.setUnoPropertyValue(m_aButtons[i].getModel(), "Tabstop", bTabStop);
-                // Object aEnabled = Helper.getUnoPropertyValue(m_aButtons[i].getModel(), PropertyNames.PROPERTY_ENABLED);
                 if (refreshOverNull)
                 {
                     setVisible(m_aButtons[i], true);
@@ -313,7 +305,6 @@ public class ButtonList implements XItemEventBroadcaster, XActionListener
                 focusable = false;
             }
         }
-//        refreshSelection();
     }
 
     private void refreshCounterText()
@@ -343,7 +334,6 @@ public class ButtonList implements XItemEventBroadcaster, XActionListener
     }
 
     /**
-     * 
      * @param i
      * @return the Object in the list model corresponding to the given image index.
      */
@@ -361,7 +351,6 @@ public class ButtonList implements XItemEventBroadcaster, XActionListener
     }
 
     /**
-     * 
      * @param i
      * @return the index in the listModel for the given image index.
      */
@@ -377,14 +366,6 @@ public class ButtonList implements XItemEventBroadcaster, XActionListener
 
     public void contentsChanged(ListDataEvent event)
     {
-        /*//if the content that was changed is in the displayed range, refresh...
-        if (  (event.getIndex1() <  getIndexFor(0)) // range is before...
-        || event.getIndex0() > getIndexFor( cols*rows - 1)) ; //do nothing
-        else
-        refreshImages();
-         */        //m_nCurrentSelection = 0;
-        //pageStart = 0;
-        //if (event.refreshImages();
     }
 
     public void intervalAdded(ListDataEvent event)
@@ -404,14 +385,11 @@ public class ButtonList implements XItemEventBroadcaster, XActionListener
 
     public void intervalRemoved(ListDataEvent event)
     {
-        //contentsChanged(event);
     }
 
     /** Registers ItemListener to receive events.
      * @param listener The listener to register.
-     *
      */
-    // @Override
     public synchronized void addItemListener(XItemListener listener)
     {
         if (m_aItemListenerList == null)
@@ -423,7 +401,6 @@ public class ButtonList implements XItemEventBroadcaster, XActionListener
 
     /** Removes ItemListener from the list of listeners.
      * @param listener The listener to remove.
-     *
      */
     public synchronized void removeItemListener(XItemListener listener)
     {
@@ -439,8 +416,6 @@ public class ButtonList implements XItemEventBroadcaster, XActionListener
     @SuppressWarnings("unchecked")
     private void fireItemSelected()
     {
-//      java.awt.event.ItemEvent event = new java.awt.event.ItemEvent(this, 0, 
-//          getSelectedObject(), java.awt.event.ItemEvent.SELECTED);
         java.util.ArrayList<XItemListener> list;
         synchronized(this)
         {
@@ -456,97 +431,61 @@ public class ButtonList implements XItemEventBroadcaster, XActionListener
         }
     }
 
-    /**
-     * @return
-     */
     public int getCols()
     {
         return cols;
     }
 
-    /**
-     * @return
-     */
     public Size getGap()
     {
         return gap;
     }
 
-    /**
-     * @return
-     */
     public ListModel getListModel()
     {
         return listModel;
     }
 
-    /**
-     * @return
-     */
     public Short getStep()
     {
         return step;
     }
 
-    /**
-     * @return
-     */
     public int getPageStart()
     {
         return pageStart;
     }
 
-    /**
-     * @return
-     */
     public Size getPos()
     {
         return pos;
     }
 
-    /**
-     * @return
-     */
     public IImageRenderer getRenderer()
     {
         return renderer;
     }
 
-    /**
-     * @return
-     */
     public int getRows()
     {
         return rows;
     }
 
-    /**
-     * @return
-     */
     public int getSelected()
     {
         return m_nCurrentSelection;
     }
 
-    /**
-     * @return
-     */
     public Size getSelectionGap()
     {
         return selectionGap;
     }
 
-    /**
-     * @return
-     */
     public boolean isShowButtons()
     {
         return showButtons;
     }
 
-    /**
-     * @param i
-     */
     public void setCols(int i)
     {
         cols = i;
@@ -633,28 +572,6 @@ public class ButtonList implements XItemEventBroadcaster, XActionListener
         fireItemSelected();
     }
 
-/*
- public void setSelected(Object object)
-    {
-        if (object == null)
-        {
-            setSelected(-1);
-        }
-        else
-        {
-            for (int i = 0; i < getListModel().getSize(); i++)
-            {
-                if (getListModel().getElementAt(i).equals(object))
-                {
-                    setSelected(i);
-                    return;
-                }
-            }
-        }
-        setSelected(-1);
-
-    }
-*/
 
     /**
      * set the text under the button list
@@ -723,8 +640,6 @@ public class ButtonList implements XItemEventBroadcaster, XActionListener
     private void setBorder(Object control, Short border)
     {
         Helper.setUnoPropertyValue(getModel(control), PropertyNames.PROPERTY_BORDER, border);
-    //XWindowPeer peer = ((XControl)UnoRuntime.queryInterface(XControl.class,control)).getPeer();
-    //peer.invalidate(InvalidateStyle.CHILDREN);
     }
 
 
@@ -737,13 +652,10 @@ public class ButtonList implements XItemEventBroadcaster, XActionListener
     }
 
 
-    /**
-     */
     public static interface IImageRenderer extends IRenderer
     {
 
         /**
-         * 
          * @param listItem
          * @return two resource ids for an image referenced in the imaglist resourcefile of the 
          * wizards project; The second one of them is designed to be used for High Contrast Mode.
@@ -754,7 +666,6 @@ public class ButtonList implements XItemEventBroadcaster, XActionListener
     private static class SimpleCounterRenderer implements IRenderer
     {
 
-        // @Override
         public String render(Object counter)
         {
             return PropertyNames.EMPTY_STRING + ((Counter) counter).start + ".." + ((Counter) counter).end + "/" + ((Counter) counter).max;
@@ -803,9 +714,6 @@ public class ButtonList implements XItemEventBroadcaster, XActionListener
         setPageStart(ps);
     }
 
-    /**
-     * @return
-     */
     public boolean isenabled()
     {
         return benabled;
@@ -821,7 +729,6 @@ public class ButtonList implements XItemEventBroadcaster, XActionListener
         {
             UnoDialog2.setEnabled(m_aButtons[i], b);
         }
-//         UnoDialog2.setEnabled(grbxSelectedImage, b);
         UnoDialog2.setEnabled(lblImageText, b);
         if (showButtons)
         {
@@ -863,10 +770,8 @@ public class ButtonList implements XItemEventBroadcaster, XActionListener
  * will call if a button from the m_aButtonList is pressed.
  * @param actionEvent
  */
-//    @Override
     public void actionPerformed(com.sun.star.awt.ActionEvent actionEvent)
     {
-        // bStopProcess = true;
         XControlModel xModel = (XControlModel)UnoDialog2.getModel(actionEvent.Source);
         PropertySetHelper aHelper = new PropertySetHelper(xModel);
 
@@ -882,11 +787,9 @@ public class ButtonList implements XItemEventBroadcaster, XActionListener
         final String sButton = sControlName.substring(7 + m_aControlName.length());
         int nButton = Integer.parseInt(sButton);
 
-        // int image = getImageFromEvent(event);
         int index = getIndexFor(nButton);
         if (index < listModel.getSize())
         {
-            // focus(image);
             setSelected(index);
         }
 

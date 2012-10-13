@@ -366,20 +366,20 @@ void SvxNumberFormatShell::MakeFormat( String& rFormat,
 
         if(rErrPos==0)
         {
-            pFormatter->GenerateFormat( rFormat, nCurFormatKey,
-                                        eCurLanguage,
-                                        bThousand, bNegRed,
-                                        nPrecision, nLeadingZeroes );
+            rFormat = pFormatter->GenerateFormat(nCurFormatKey,
+                                                 eCurLanguage,
+                                                 bThousand, bNegRed,
+                                                 nPrecision, nLeadingZeroes);
         }
         for ( std::vector<String*>::const_iterator it(aFmtEList.begin()); it != aFmtEList.end(); ++it )
             delete *it;
     }
     else
     {
-        pFormatter->GenerateFormat( rFormat, nCurFormatKey,
-                                    eCurLanguage,
-                                    bThousand, bNegRed,
-                                    nPrecision, nLeadingZeroes );
+        rFormat = pFormatter->GenerateFormat(nCurFormatKey,
+                                             eCurLanguage,
+                                             bThousand, bNegRed,
+                                             nPrecision, nLeadingZeroes);
     }
 }
 
@@ -1696,7 +1696,7 @@ sal_uInt16 SvxNumberFormatShell::FindCurrencyTableEntry( const String& rFmtStrin
     sal_uInt16 nCount=rCurrencyTable.size();
 
     const SvNumberformat* pFormat;
-    String aSymbol, aExtension;
+    OUString aSymbol, aExtension;
     sal_uInt32 nFound = pFormatter->TestNewString( rFmtString, eCurLanguage );
     if ( nFound != NUMBERFORMAT_ENTRY_NOT_FOUND &&
             ((pFormat = pFormatter->GetEntry( nFound )) != 0) &&

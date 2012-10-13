@@ -175,9 +175,9 @@ class SW_DLLPUBLIC SwAnchoredObject
         void _CheckTopOfLine( const SwFmtAnchor& _rAnch,
                               const SwTxtFrm& _rAnchorCharFrm );
 
-        // method <lcl_HideObj(..)> sets needed data structure values for the
+        // method <sw_HideObj(..)> sets needed data structure values for the
         // object positioning
-        friend bool lcl_HideObj( const SwTxtFrm& _rFrm,
+        friend bool sw_HideObj( const SwTxtFrm& _rFrm,
                                  const RndStdIds _eAnchorType,
                                  const xub_StrLen _nObjAnchorPos,
                                  SwAnchoredObject* _pAnchoredObj );

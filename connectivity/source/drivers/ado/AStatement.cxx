@@ -510,20 +510,6 @@ sal_Int32 OStatement_Base::getMaxRows() const throw(SQLException, RuntimeExcepti
 sal_Int32 OStatement_Base::getResultSetConcurrency() const throw(SQLException, RuntimeException)
 {
     return m_eLockType;
-#if 0 // Huh?
-    sal_Int32 nValue=0;
-    switch(m_eLockType)
-    {
-        case adLockReadOnly:
-            nValue = ResultSetConcurrency::READ_ONLY;
-            break;
-        default:
-            nValue = ResultSetConcurrency::UPDATABLE;
-            break;
-    }
-
-    return nValue;
-#endif
 }
 //------------------------------------------------------------------------------
 sal_Int32 OStatement_Base::getResultSetType() const throw(SQLException, RuntimeException)
@@ -633,7 +619,6 @@ void OStatement_Base::setFetchSize(sal_Int32 _par0) throw(SQLException, RuntimeE
 
 
     m_nFetchSize = _par0;
-    //  m_RecordSet.put_CacheSize(_par0);
 }
 //------------------------------------------------------------------------------
 void OStatement_Base::setMaxFieldSize(sal_Int32 /*_par0*/) throw(SQLException, RuntimeException)
@@ -830,6 +815,5 @@ void SAL_CALL OStatement::release() throw()
 {
     return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());
 }
-// -----------------------------------------------------------------------------
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

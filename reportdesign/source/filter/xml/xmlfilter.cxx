@@ -1,35 +1,27 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*************************************************************************
+/*
+ * This file is part of the LibreOffice project.
  *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * This file incorporates work covered by the following license notice:
  *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
 #include <com/sun/star/packages/zip/ZipIOException.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/sdb/XOfficeDatabaseDocument.hpp>
 #include <com/sun/star/util/MeasureUnit.hpp>
+#include <com/sun/star/xml/sax/Parser.hpp>
 #include "xmlfilter.hxx"
 #include "xmlGroup.hxx"
 #include "xmlReport.hxx"
@@ -47,6 +39,7 @@
 #include <com/sun/star/xml/sax/XParser.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 
+#include <comphelper/processfactory.hxx>
 #include <comphelper/genericpropertyset.hxx>
 #include <comphelper/mediadescriptor.hxx>
 #include <xmloff/ProgressBarHelper.hxx>
@@ -133,13 +126,13 @@ sal_Int32 ReadThroughComponent(
     const uno::Reference<XInputStream>& xInputStream,
     const uno::Reference<XComponent>& xModelComponent,
     const sal_Char* /*pStreamName*/,
-    const uno::Reference<XMultiServiceFactory> & rFactory,
+    const uno::Reference<XComponentContext> & rContext,
     const uno::Reference< XDocumentHandler >& _xFilter,
     sal_Bool /*bEncrypted*/ )
 {
     OSL_ENSURE(xInputStream.is(), "input stream missing");
     OSL_ENSURE(xModelComponent.is(), "document missing");
-    OSL_ENSURE(rFactory.is(), "factory missing");
+    OSL_ENSURE(rContext.is(), "factory missing");
 
     RTL_LOGFILE_CONTEXT_AUTHOR( aLog, "rptxml", "oj", "ReadThroughComponent" );
 
@@ -148,13 +141,7 @@ sal_Int32 ReadThroughComponent(
     aParserInput.aInputStream = xInputStream;
 
     // get parser
-    uno::Reference< XParser > xParser(
-        rFactory->createInstance(
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Parser"))),
-        UNO_QUERY );
-    OSL_ENSURE( xParser.is(), "Can't create parser" );
-    if( !xParser.is() )
-        return 1;
+    uno::Reference< XParser > xParser = xml::sax::Parser::create(rContext);
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "parser created" );
 
     // get filter
@@ -298,7 +285,7 @@ sal_Int32 ReadThroughComponent(
         return ReadThroughComponent( xInputStream
                                     ,xModelComponent
                                     ,pStreamName
-                                    ,rFactory
+                                    ,comphelper::getComponentContext(rFactory)
                                     ,xDocHandler
                                     ,bEncrypted );
     }

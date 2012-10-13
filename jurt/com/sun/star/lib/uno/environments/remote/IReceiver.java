@@ -21,7 +21,6 @@ package com.sun.star.lib.uno.environments.remote;
 /**
  * An abstraction for giving back a reply for a request.
  *
- * @author Kay Ramme
  * @see com.sun.star.uno.IQueryInterface
  */
 public interface IReceiver {

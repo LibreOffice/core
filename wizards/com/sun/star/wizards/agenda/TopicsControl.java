@@ -44,7 +44,6 @@ import com.sun.star.wizards.ui.event.EventNames;
 import com.sun.star.wizards.ui.event.MethodInvocation;
 
 /**
- * @author rpiterman
  * This class implements the UI functionality of the topics scroller control.
  * <br/>
  * During developement, there has been a few changes which were not *fully* done -
@@ -405,16 +404,6 @@ public class TopicsControl extends ControlScroller implements XFocusListener
         ((AgendaWizardDialogImpl)CurUnoDialog).agendaTemplate.refreshTopicConstants();
     }
 
-    private void lockDoc()
-    {
-        //((AgendaWizardDialogImpl)CurUnoDialog).agendaTemplate.xTextDocument.lockControllers();
-    }
-
-    private void unlockDoc()
-    {
-        //((AgendaWizardDialogImpl)CurUnoDialog).agendaTemplate.xTextDocument.unlockControllers();
-    }
-
     /**
      * Removes the current row.
      * See general class documentation explanation about the
@@ -422,7 +411,6 @@ public class TopicsControl extends ControlScroller implements XFocusListener
      */
     public void removeRow()
     {
-        lockDoc();
         for (int i = lastFocusRow; i < scrollfields.size() - 1; i++)
         {
             PropertyValue[] pv1 = scrollfields.get(i);
@@ -446,8 +434,6 @@ public class TopicsControl extends ControlScroller implements XFocusListener
 
         // the focus should return to the edit control
         focus(lastFocusControl);
-
-        unlockDoc();
     }
 
     /**
@@ -457,7 +443,6 @@ public class TopicsControl extends ControlScroller implements XFocusListener
      */
     public void insertRow()
     {
-        lockDoc();
         insertRowAtEnd();
         for (int i = scrollfields.size() - 2; i > lastFocusRow; i--)
         {
@@ -488,8 +473,6 @@ public class TopicsControl extends ControlScroller implements XFocusListener
         fillupControls(lastFocusRow - nscrollvalue);
 
         focus(lastFocusControl);
-
-        unlockDoc();
     }
 
     /**
@@ -1083,8 +1066,6 @@ public class TopicsControl extends ControlScroller implements XFocusListener
     };
 
     /**
-     *
-     * @author rp143992
      * A class represting a single GUI row.
      * Note that the instance methods of this class
      * are being called and handle controls of

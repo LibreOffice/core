@@ -108,15 +108,16 @@ void TextParagraph::insertAt(
         float fCharacterSize = nCharHeight > 0 ? GetFontHeight( nCharHeight ) :  18;
         if ( pTextParagraphStyle.get() )
         {
-            pTextParagraphStyle->pushToPropSet( &rFilterBase, xProps, aioBulletList, NULL, sal_True, fCharacterSize, true );
+            TextParagraphProperties aParaProp;
+            aParaProp.apply( *pTextParagraphStyle );
+            aParaProp.apply( maProperties );
+            aParaProp.pushToPropSet( &rFilterBase, xProps, aioBulletList, &pTextParagraphStyle->getBulletList(), sal_True, fCharacterSize, true );
             fCharacterSize = pTextParagraphStyle->getCharHeightPoints( fCharacterSize );
 
             // bullets have same color as following texts by default
             if( !aioBulletList.hasProperty( PROP_BulletColor ) && maRuns.size() > 0
                 && (*maRuns.begin())->getTextCharacterProperties().maCharColor.isUsed() )
                 aioBulletList[ PROP_BulletColor ] <<= (*maRuns.begin())->getTextCharacterProperties().maCharColor.getColor( rFilterBase.getGraphicHelper() );
-
-            maProperties.pushToPropSet( &rFilterBase, xProps, aioBulletList, &pTextParagraphStyle->getBulletList(), sal_True, fCharacterSize );
         }
 
         // empty paragraphs do not have bullets in ppt

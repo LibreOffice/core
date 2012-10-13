@@ -40,7 +40,7 @@ static RscCompiler * pRscCompiler = NULL;
         delete pRscCompiler;
 }
 
-RscVerbosity lcl_determineVerbosity( int argc, char ** argv )
+static RscVerbosity lcl_determineVerbosity( int argc, char ** argv )
 {
     for ( int i = 0; i < argc; ++i )
     {

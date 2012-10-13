@@ -51,9 +51,10 @@ void XclExpExtAxisColor::SaveXml( XclExpXmlStream& rStrm )
                                                 FSEND );
 }
 
-XclExpExtCfvo::XclExpExtCfvo( const XclExpRoot& rRoot, const ScColorScaleEntry& rEntry, const ScAddress& rSrcPos ):
+XclExpExtCfvo::XclExpExtCfvo( const XclExpRoot& rRoot, const ScColorScaleEntry& rEntry, const ScAddress& rSrcPos, bool bFirst ):
     XclExpRoot(rRoot),
-    meType(rEntry.GetType())
+    meType(rEntry.GetType()),
+    mbFirst(bFirst)
 {
     if( rEntry.GetType() == COLORSCALE_FORMULA )
     {
@@ -66,7 +67,7 @@ XclExpExtCfvo::XclExpExtCfvo( const XclExpRoot& rRoot, const ScColorScaleEntry& 
 
 namespace {
 
-const char* getColorScaleType( ScColorScaleEntryType eType )
+const char* getColorScaleType( ScColorScaleEntryType eType, bool bFirst )
 {
     switch(eType)
     {
@@ -78,10 +79,11 @@ const char* getColorScaleType( ScColorScaleEntryType eType )
             return "percent";
         case COLORSCALE_FORMULA:
             return "formula";
-        case COLORSCALE_AUTOMIN:
-            return "autoMin";
-        case COLORSCALE_AUTOMAX:
-            return "autoMax";
+        case COLORSCALE_AUTO:
+            if(bFirst)
+                return "autoMin";
+            else
+                return "autoMax";
         case COLORSCALE_PERCENTILE:
             return "percentile";
         default:
@@ -96,7 +98,7 @@ void XclExpExtCfvo::SaveXml( XclExpXmlStream& rStrm )
 {
     sax_fastparser::FSHelperPtr& rWorksheet = rStrm.GetCurrentStream();
     rWorksheet->singleElementNS( XML_x14, XML_cfvo,
-                                XML_type, getColorScaleType(meType),
+                                XML_type, getColorScaleType(meType, mbFirst),
                                 XML_value, maValue.getStr(),
                                 FSEND );
 }
@@ -105,8 +107,8 @@ XclExpExtDataBar::XclExpExtDataBar( const XclExpRoot& rRoot, const ScDataBarForm
     XclExpRoot(rRoot)
 {
     const ScDataBarFormatData& rFormatData = *rFormat.GetDataBarData();
-    mpLowerLimit.reset( new XclExpExtCfvo( *this, *rFormatData.mpLowerLimit.get(), rPos ) );
-    mpUpperLimit.reset( new XclExpExtCfvo( *this, *rFormatData.mpUpperLimit.get(), rPos ) );
+    mpLowerLimit.reset( new XclExpExtCfvo( *this, *rFormatData.mpLowerLimit.get(), rPos, true ) );
+    mpUpperLimit.reset( new XclExpExtCfvo( *this, *rFormatData.mpUpperLimit.get(), rPos, false ) );
     if(rFormatData.mpNegativeColor.get())
         mpNegativeColor.reset( new XclExpExtNegativeColor( *rFormatData.mpNegativeColor.get() ) );
     else

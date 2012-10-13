@@ -36,8 +36,8 @@ TARGET=so_lcms2
 
 # --- Files --------------------------------------------------------
 
-TARFILE_NAME=lcms2-2.3
-TARFILE_MD5=327348d67c979c88c2dec59a23a17d85
+TARFILE_NAME=lcms2-2.4
+TARFILE_MD5=861ef15fa0bc018f9ddc932c4ad8b6dd
 
 PATCH_FILES = lcms2.patch
 
@@ -48,16 +48,20 @@ PATCH_FILES = lcms2.patch
 
 .IF "$(GUI)$(COM)"=="WNTMSC"
 
-PATCH_FILES += lcms2-windows-export.patch
+PATCH_FILES += lcms2-2.4-windows.patch
 
 CONFIGURE_DIR=.
 
 CONFIGURE_ACTION =
-BUILD_DIR=Projects/VC2010/lcms2_DLL
 
-.IF "$(CCNUMVER)" >= "001600000000"
+.IF "$(CCNUMVER)" >= "001700000000"
+BUILD_DIR=Projects/VC2010/lcms2_DLL
+BUILD_ACTION=MSBuild.exe lcms2_DLL.vcxproj /p:Configuration=Release /p:Platform=Win32 /p:TargetName=lcms2 /p:PlatformToolset=v110
+.ELIF "$(CCNUMVER)" >= "001600000000"
+BUILD_DIR=Projects/VC2010/lcms2_DLL
 BUILD_ACTION=MSBuild.exe lcms2_DLL.vcxproj /p:Configuration=Release /p:Platform=Win32 /p:TargetName=lcms2
 .ELSE
+BUILD_DIR=Projects/VC2008/lcms2_DLL
 BUILD_ACTION=$(COMPATH)$/vcpackages$/vcbuild.exe lcms2_DLL.vcproj "Release|Win32"
 .ENDIF
 

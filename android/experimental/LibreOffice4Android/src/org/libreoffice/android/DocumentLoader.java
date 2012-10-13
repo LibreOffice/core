@@ -961,12 +961,6 @@ public class DocumentLoader
             // Avoid all the old style OSL_TRACE calls especially in vcl
             Bootstrap.putenv("SAL_LOG=+WARN+INFO-INFO.legacy.osl");
 
-            // Load a lot of shlibs here explicitly in advance because that
-            // makes debugging work better, sigh
-            Bootstrap.dlopen("libmergedlo.so");
-            Bootstrap.dlopen("libswdlo.so");
-            Bootstrap.dlopen("libswlo.so");
-            
             // Log.i(TAG, "Sleeping NOW");
             // Thread.sleep(20000);
 

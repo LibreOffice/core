@@ -27,6 +27,8 @@ namespace rtl { class OUString; }
 
 namespace cppu { namespace detail {
 
+#ifndef DISABLE_DYNLOADING
+
 /** Load a module.
 
     @param name
@@ -37,6 +39,8 @@ namespace cppu { namespace detail {
     the handle returned by osl_loadModule.
 */
 ::oslModule loadModule(::rtl::OUString const & name);
+
+#endif
 
 } }
 

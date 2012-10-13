@@ -627,7 +627,7 @@ throw (container::NoSuchElementException, lang::WrappedTargetException,
         SwPosition* pStart = pUnoCrsr->Start();
         SAL_WNODEPRECATED_DECLARATIONS_PUSH
         const ::std::auto_ptr<SwUnoCrsr> aNewCrsr(
-            pUnoCrsr->GetDoc()->CreateUnoCrsr(*pStart, sal_False) );
+            pUnoCrsr->GetDoc()->CreateUnoCrsr(*pStart, false) );
         SAL_WNODEPRECATED_DECLARATIONS_POP
         // one may also go into tables here
         if ((CURSOR_TBLTEXT != m_eCursorType) &&
@@ -1184,7 +1184,7 @@ SwXTextRange::CreateXTextRange(
             ::sw::CreateParentXText(rDoc, rPos));
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
     const ::std::auto_ptr<SwUnoCrsr> pNewCrsr(
-            rDoc.CreateUnoCrsr(rPos, sal_False));
+            rDoc.CreateUnoCrsr(rPos, false));
     SAL_WNODEPRECATED_DECLARATIONS_POP
     if(pMark)
     {
@@ -1320,7 +1320,7 @@ throw (uno::RuntimeException)
     const SwPosition aPos(GetDoc()->GetNodes().GetEndOfContent());
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
     const ::std::auto_ptr<SwUnoCrsr> pNewCrsr(
-            m_pImpl->m_rDoc.CreateUnoCrsr(aPos, sal_False));
+            m_pImpl->m_rDoc.CreateUnoCrsr(aPos, false));
     SAL_WNODEPRECATED_DECLARATIONS_POP
     if (!GetPositions(*pNewCrsr))
     {
@@ -1344,7 +1344,7 @@ SwXTextRange::createEnumeration() throw (uno::RuntimeException)
     const SwPosition aPos(GetDoc()->GetNodes().GetEndOfContent());
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
     ::std::auto_ptr<SwUnoCrsr> pNewCrsr(
-            m_pImpl->m_rDoc.CreateUnoCrsr(aPos, sal_False));
+            m_pImpl->m_rDoc.CreateUnoCrsr(aPos, false));
     SAL_WNODEPRECATED_DECLARATIONS_POP
     if (!GetPositions(*pNewCrsr))
     {
@@ -1751,7 +1751,7 @@ public:
     FrameDependList_t m_Frames;
 
     Impl(SwPaM const & rPaM)
-        : SwClient(rPaM.GetDoc()->CreateUnoCrsr(*rPaM.GetPoint(), sal_False))
+        : SwClient(rPaM.GetDoc()->CreateUnoCrsr(*rPaM.GetPoint(), false))
     {
         if (rPaM.HasMark())
         {

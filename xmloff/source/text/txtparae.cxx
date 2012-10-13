@@ -600,7 +600,7 @@ void XMLTextParagraphExport::Add( sal_uInt16 nFamily,
     }
 }
 
-bool lcl_validPropState( const XMLPropertyState& rState )
+static bool lcl_validPropState( const XMLPropertyState& rState )
 {
     return rState.mnIndex != -1;
 }
@@ -2576,7 +2576,7 @@ void XMLTextParagraphExport::exportTextMark(
     // else: no styles. (see above)
 }
 
-sal_Bool lcl_txtpara_isBoundAsChar(
+static sal_Bool lcl_txtpara_isBoundAsChar(
         const Reference < XPropertySet > & rPropSet,
         const Reference < XPropertySetInfo > & rPropSetInfo )
 {

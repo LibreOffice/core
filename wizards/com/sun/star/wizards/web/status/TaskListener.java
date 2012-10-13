@@ -20,9 +20,6 @@ package com.sun.star.wizards.web.status;
 
 import java.util.EventListener;
 
-/**
- * @author rpiterman
- */
 public interface TaskListener extends EventListener
 {
 

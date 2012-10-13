@@ -88,7 +88,7 @@ void ScDocShell::SetVisArea( const Rectangle & rVisArea )
     SetVisAreaOrSize( rVisArea, sal_True );
 }
 
-void lcl_SetTopRight( Rectangle& rRect, const Point& rPos )
+static void lcl_SetTopRight( Rectangle& rRect, const Point& rPos )
 {
     Size aSize = rRect.GetSize();
     rRect.Right() = rPos.X();
@@ -239,7 +239,7 @@ SfxStyleSheetBasePool* ScDocShell::GetStyleSheetPool()
 //  muessen die SetItems (ATTR_PAGE_HEADERSET, ATTR_PAGE_FOOTERSET) auf den richtigen
 //  Pool umgesetzt werden, bevor der Quell-Pool geloescht wird.
 
-void lcl_AdjustPool( SfxStyleSheetBasePool* pStylePool )
+static void lcl_AdjustPool( SfxStyleSheetBasePool* pStylePool )
 {
     pStylePool->SetSearchMask(SFX_STYLE_FAMILY_PAGE, 0xffff);
     SfxStyleSheetBase *pStyle = pStylePool->First();

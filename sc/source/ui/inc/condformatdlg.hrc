@@ -46,13 +46,25 @@
 #define FT_STYLE 21
 #define LB_COLOR_FORMAT 22
 
-#define LB_COL_SCALE2 23
-#define LB_COL_SCALE3 24
-#define LB_TYPE_COL_SCALE 25
-#define ED_COL_SCALE 28
 #define WD_PREVIEW 26
-#define LB_COL 27
 #define BTN_OPTIONS 30
 #define STR_CONDITION 31
 
+#define FT_RANGE 32
+#define ED_RANGE 33
+#define RB_RANGE 34
+
+#define ED_FORMULA 35
+
+#define ED_COL_SCALE_MIN 36
+#define ED_COL_SCALE_MIDDLE 37
+#define ED_COL_SCALE_MAX 38
+
+#define LB_COL_MIN 39
+#define LB_COL_MIDDLE 40
+#define LB_COL_MAX 41
+
+#define LB_TYPE_COL_SCALE_MIN 42
+#define LB_TYPE_COL_SCALE_MIDDLE 43
+#define LB_TYPE_COL_SCALE_MAX 44
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -96,12 +96,12 @@ ThemeBuffer::ThemeBuffer( const WorkbookHelper& rHelper ) :
     {
         case FILTER_OOXML:
             //! TODO: locale dependent font name
-            mxDefFontModel->maName = CREATE_OUSTRING( "Cambria" );
+            mxDefFontModel->maName = "Cambria";
             mxDefFontModel->mfHeight = 11.0;
         break;
         case FILTER_BIFF:
             //! TODO: BIFF dependent font name
-            mxDefFontModel->maName = CREATE_OUSTRING( "Arial" );
+            mxDefFontModel->maName = "Arial";
             mxDefFontModel->mfHeight = 10.0;
         break;
         case FILTER_UNKNOWN: break;

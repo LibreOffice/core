@@ -198,26 +198,26 @@ void SwTabFrm::RegistFlys()
 |*  Some prototypes
 |*************************************************************************/
 void SwInvalidateAll( SwFrm *pFrm, long nBottom );
-void lcl_RecalcRow( SwRowFrm& rRow, long nBottom );
-sal_Bool lcl_ArrangeLowers( SwLayoutFrm *pLay, long lYStart, sal_Bool bInva );
+static void lcl_RecalcRow( SwRowFrm& rRow, long nBottom );
+static sal_Bool lcl_ArrangeLowers( SwLayoutFrm *pLay, long lYStart, sal_Bool bInva );
 // #i26945# - add parameter <_bOnlyRowsAndCells> to control
 // that only row and cell frames are formatted.
-sal_Bool lcl_InnerCalcLayout( SwFrm *pFrm,
+static sal_Bool lcl_InnerCalcLayout( SwFrm *pFrm,
                                       long nBottom,
                                       bool _bOnlyRowsAndCells = false );
 // OD 2004-02-18 #106629# - correct type of 1st parameter
 // #i26945# - add parameter <_bConsiderObjs> in order to
 // control, if floating screen objects have to be considered for the minimal
 // cell height.
-SwTwips lcl_CalcMinRowHeight( const SwRowFrm *pRow,
+static SwTwips lcl_CalcMinRowHeight( const SwRowFrm *pRow,
                                           const sal_Bool _bConsiderObjs );
-SwTwips lcl_CalcTopAndBottomMargin( const SwLayoutFrm&, const SwBorderAttrs& );
+static SwTwips lcl_CalcTopAndBottomMargin( const SwLayoutFrm&, const SwBorderAttrs& );
 
 /*************************************************************************
 |*  START: local helper functions for repeated headlines
 |*************************************************************************/
 
-SwTwips lcl_GetHeightOfRows( const SwFrm* pStart, long nCount )
+static SwTwips lcl_GetHeightOfRows( const SwFrm* pStart, long nCount )
 {
     if ( !nCount || !pStart)
         return 0;
@@ -245,7 +245,7 @@ SwTwips lcl_GetHeightOfRows( const SwFrm* pStart, long nCount )
 //
 // Local helper function to insert a new follow flow line
 //
-SwRowFrm* lcl_InsertNewFollowFlowLine( SwTabFrm& rTab, const SwFrm& rTmpRow, bool bRowSpanLine )
+static SwRowFrm* lcl_InsertNewFollowFlowLine( SwTabFrm& rTab, const SwFrm& rTmpRow, bool bRowSpanLine )
 {
     OSL_ENSURE( rTmpRow.IsRowFrm(), "No row frame to copy for FollowFlowLine" );
     const SwRowFrm& rRow = (SwRowFrm&)rTmpRow;
@@ -261,7 +261,7 @@ SwRowFrm* lcl_InsertNewFollowFlowLine( SwTabFrm& rTab, const SwFrm& rTmpRow, boo
 // #i26945# - local helper function to invalidate all lower
 // objects. By parameter <_bMoveObjsOutOfRange> it can be controlled, if
 // additionally the objects are moved 'out of range'.
-void lcl_InvalidateLowerObjs( SwLayoutFrm& _rLayoutFrm,
+static void lcl_InvalidateLowerObjs( SwLayoutFrm& _rLayoutFrm,
                               const bool _bMoveObjsOutOfRange = false,
                               SwPageFrm* _pPageFrm = 0L )
 {
@@ -340,7 +340,7 @@ void lcl_InvalidateLowerObjs( SwLayoutFrm& _rLayoutFrm,
 //
 // Local helper function to shrink all lowers of rRow to 0 height
 //
-void lcl_ShrinkCellsAndAllContent( SwRowFrm& rRow )
+static void lcl_ShrinkCellsAndAllContent( SwRowFrm& rRow )
 {
     SwCellFrm* pCurrMasterCell = static_cast<SwCellFrm*>(rRow.Lower());
     SWRECTFN( pCurrMasterCell )
@@ -407,7 +407,7 @@ void lcl_ShrinkCellsAndAllContent( SwRowFrm& rRow )
 // The content is inserted behind the last content in the corresponding
 // cell in rDestLine.
 //
-void lcl_MoveRowContent( SwRowFrm& rSourceLine, SwRowFrm& rDestLine )
+static void lcl_MoveRowContent( SwRowFrm& rSourceLine, SwRowFrm& rDestLine )
 {
     SwCellFrm* pCurrDestCell = (SwCellFrm*)rDestLine.Lower();
     SwCellFrm* pCurrSourceCell = (SwCellFrm*)rSourceLine.Lower();
@@ -473,7 +473,7 @@ void lcl_MoveRowContent( SwRowFrm& rSourceLine, SwRowFrm& rDestLine )
 // Local helper function to move all footnotes in rRowFrm from
 // the footnote boss of rSource to the footnote boss of rDest.
 //
-void lcl_MoveFootnotes( SwTabFrm& rSource, SwTabFrm& rDest, SwLayoutFrm& rRowFrm )
+static void lcl_MoveFootnotes( SwTabFrm& rSource, SwTabFrm& rDest, SwLayoutFrm& rRowFrm )
 {
     if ( !rSource.GetFmt()->GetDoc()->GetFtnIdxs().empty() )
     {
@@ -486,7 +486,7 @@ void lcl_MoveFootnotes( SwTabFrm& rSource, SwTabFrm& rDest, SwLayoutFrm& rRowFrm
 //
 // Local helper function to handle nested table cells before the split process
 //
-void lcl_PreprocessRowsInCells( SwTabFrm& rTab, SwRowFrm& rLastLine,
+static void lcl_PreprocessRowsInCells( SwTabFrm& rTab, SwRowFrm& rLastLine,
                                 SwRowFrm& rFollowFlowLine, SwTwips nRemain )
 {
     SwCellFrm* pCurrLastLineCell = (SwCellFrm*)rLastLine.Lower();
@@ -608,7 +608,7 @@ void lcl_PreprocessRowsInCells( SwTabFrm& rTab, SwRowFrm& rLastLine,
 //
 // Local helper function to handle nested table cells after the split process
 //
-void lcl_PostprocessRowsInCells( SwTabFrm& rTab, SwRowFrm& rLastLine )
+static void lcl_PostprocessRowsInCells( SwTabFrm& rTab, SwRowFrm& rLastLine )
 {
     SwCellFrm* pCurrMasterCell = (SwCellFrm*)rLastLine.Lower();
     while ( pCurrMasterCell )
@@ -645,7 +645,7 @@ void lcl_PostprocessRowsInCells( SwTabFrm& rTab, SwRowFrm& rLastLine )
 inline void TableSplitRecalcLock( SwFlowFrm *pTab ) { pTab->LockJoin(); }
 inline void TableSplitRecalcUnlock( SwFlowFrm *pTab ) { pTab->UnlockJoin(); }
 
-bool lcl_RecalcSplitLine( SwRowFrm& rLastLine, SwRowFrm& rFollowLine,
+static bool lcl_RecalcSplitLine( SwRowFrm& rLastLine, SwRowFrm& rFollowLine,
                           SwTwips nRemainingSpaceForLastRow )
 {
     bool bRet = true;
@@ -813,7 +813,7 @@ bool lcl_RecalcSplitLine( SwRowFrm& rLastLine, SwRowFrm& rFollowLine,
 //
 // Sets the correct height for all spanned cells
 //
-void lcl_AdjustRowSpanCells( SwRowFrm* pRow )
+static void lcl_AdjustRowSpanCells( SwRowFrm* pRow )
 {
     SWRECTFN( pRow )
     SwCellFrm* pCellFrm = static_cast<SwCellFrm*>(pRow->GetLower());
@@ -836,7 +836,7 @@ void lcl_AdjustRowSpanCells( SwRowFrm* pRow )
 //
 // Returns the maximum layout row span of the row
 // Looking for the next row that contains no covered cells:
-long lcl_GetMaximumLayoutRowSpan( const SwRowFrm& rRow )
+static long lcl_GetMaximumLayoutRowSpan( const SwRowFrm& rRow )
 {
     long nRet = 1;
 
@@ -945,7 +945,7 @@ bool SwTabFrm::RemoveFollowFlowLine()
 }
 
 // #i26945# - Floating screen objects are no longer searched.
-bool lcl_FindSectionsInRow( const SwRowFrm& rRow )
+static bool lcl_FindSectionsInRow( const SwRowFrm& rRow )
 {
     bool bRet = false;
     SwCellFrm* pLower = (SwCellFrm*)rRow.Lower();
@@ -1441,7 +1441,7 @@ void SwInvalidateAll( SwFrm *pFrm, long nBottom )
 }
 
 // #i29550#
-void lcl_InvalidateAllLowersPrt( SwLayoutFrm* pLayFrm )
+static void lcl_InvalidateAllLowersPrt( SwLayoutFrm* pLayFrm )
 {
     pLayFrm->_InvalidatePrt();
     pLayFrm->_InvalidateSize();
@@ -1556,7 +1556,7 @@ bool SwCntntFrm::CalcLowers( SwLayoutFrm* pLay, const SwLayoutFrm* pDontLeave,
 
 // #i26945# - add parameter <_bOnlyRowsAndCells> to control
 // that only row and cell frames are formatted.
-sal_Bool lcl_InnerCalcLayout( SwFrm *pFrm,
+static sal_Bool lcl_InnerCalcLayout( SwFrm *pFrm,
                                       long nBottom,
                                       bool _bOnlyRowsAndCells )
 {
@@ -1599,7 +1599,7 @@ sal_Bool lcl_InnerCalcLayout( SwFrm *pFrm,
     return bRet;
 }
 
-void lcl_RecalcRow( SwRowFrm& rRow, long nBottom )
+static void lcl_RecalcRow( SwRowFrm& rRow, long nBottom )
 {
     // #i26945# - For correct appliance of the 'straightforward
     // object positioning process, it's needed to notify that the page frame,
@@ -1696,7 +1696,7 @@ void lcl_RecalcRow( SwRowFrm& rRow, long nBottom )
         pPageFrm->SetLayoutInProgress( false );
 }
 
-void lcl_RecalcTable( SwTabFrm& rTab,
+static void lcl_RecalcTable( SwTabFrm& rTab,
                                   SwLayoutFrm *pFirstRow,
                                   SwLayNotify &rNotify )
 {
@@ -1715,7 +1715,7 @@ void lcl_RecalcTable( SwTabFrm& rTab,
 // This is a new function to check the first condition whether
 // a tab frame may move backward. It replaces the formerly used
 // GetIndPrev(), which did not work correctly for #i5947#
-bool lcl_NoPrev( const SwFrm& rFrm )
+static bool lcl_NoPrev( const SwFrm& rFrm )
 {
     // #i79774#
     // skip empty sections on investigation of direct previous frame.
@@ -1770,7 +1770,7 @@ bool lcl_NoPrev( const SwFrm& rFrm )
 // a table frame and format it to assure keep attribute.
 // method return true, if a next content frame is formatted.
 // Precondition: The given table frame hasn't a follow and isn't a follow.
-SwFrm* lcl_FormatNextCntntForKeep( SwTabFrm* pTabFrm )
+SwFrm* sw_FormatNextCntntForKeep( SwTabFrm* pTabFrm )
 {
     // find next content, table or section
     SwFrm* pNxt = pTabFrm->FindNext();
@@ -2090,7 +2090,7 @@ void SwTabFrm::MakeAll()
                         // Thus, find next content, table or section
                         // and, if a section is found, get its first
                         // content.
-                        if ( 0 != lcl_FormatNextCntntForKeep( this ) && !GetNext() )
+                        if ( 0 != sw_FormatNextCntntForKeep( this ) && !GetNext() )
                         {
                             bValidPos = sal_False;
                         }
@@ -2259,7 +2259,7 @@ void SwTabFrm::MakeAll()
                     // it has to be avoided, that superior table is formatted.
                     // Thus, find next content, table or section and, if a section
                     // is found, get its first content.
-                    const SwFrm* pTmpNxt = lcl_FormatNextCntntForKeep( this );
+                    const SwFrm* pTmpNxt = sw_FormatNextCntntForKeep( this );
 
                     pAccess= new SwBorderAttrAccess( SwFrm::GetCache(), this );
                     pAttrs = pAccess->Get();
@@ -3867,7 +3867,7 @@ long CalcHeightWidthFlys( const SwFrm *pFrm )
     return nHeight;
 }
 
-SwTwips lcl_CalcTopAndBottomMargin( const SwLayoutFrm& rCell, const SwBorderAttrs& rAttrs )
+static SwTwips lcl_CalcTopAndBottomMargin( const SwLayoutFrm& rCell, const SwBorderAttrs& rAttrs )
 {
     const SwTabFrm* pTab = rCell.FindTabFrm();
     SwTwips nTopSpace = 0;
@@ -3901,7 +3901,7 @@ SwTwips lcl_CalcTopAndBottomMargin( const SwLayoutFrm& rCell, const SwBorderAttr
 // #i26945# - add parameter <_bConsiderObjs> in order to
 // control, if floating screen objects have to be considered for the minimal
 // cell height.
-SwTwips lcl_CalcMinCellHeight( const SwLayoutFrm *_pCell,
+static SwTwips lcl_CalcMinCellHeight( const SwLayoutFrm *_pCell,
                                            const sal_Bool _bConsiderObjs,
                                            const SwBorderAttrs *pAttrs = 0 )
 {
@@ -3958,7 +3958,7 @@ SwTwips lcl_CalcMinCellHeight( const SwLayoutFrm *_pCell,
 // OD 2004-02-18 #106629# - correct type of 1st parameter
 // #i26945# - add parameter <_bConsiderObjs> in order to control,
 // if floating screen objects have to be considered for the minimal cell height
-SwTwips lcl_CalcMinRowHeight( const SwRowFrm* _pRow,
+static SwTwips lcl_CalcMinRowHeight( const SwRowFrm* _pRow,
                                           const sal_Bool _bConsiderObjs )
 {
     SWRECTFN( _pRow )
@@ -4016,7 +4016,7 @@ SwTwips lcl_CalcMinRowHeight( const SwRowFrm* _pRow,
 // #i29550#
 
 // Calculate the maximum of (TopLineSize + TopLineDist) over all lowers:
-sal_uInt16 lcl_GetTopSpace( const SwRowFrm& rRow )
+static sal_uInt16 lcl_GetTopSpace( const SwRowFrm& rRow )
 {
     sal_uInt16 nTopSpace = 0;
     for ( SwCellFrm* pCurrLower = (SwCellFrm*)rRow.Lower(); pCurrLower;
@@ -4037,7 +4037,7 @@ sal_uInt16 lcl_GetTopSpace( const SwRowFrm& rRow )
 }
 
 // Calculate the maximum of TopLineDist over all lowers:
-sal_uInt16 lcl_GetTopLineDist( const SwRowFrm& rRow )
+static sal_uInt16 lcl_GetTopLineDist( const SwRowFrm& rRow )
 {
     sal_uInt16 nTopLineDist = 0;
     for ( SwCellFrm* pCurrLower = (SwCellFrm*)rRow.Lower(); pCurrLower;
@@ -4058,7 +4058,7 @@ sal_uInt16 lcl_GetTopLineDist( const SwRowFrm& rRow )
 }
 
 // Calculate the maximum of BottomLineSize over all lowers:
-sal_uInt16 lcl_GetBottomLineSize( const SwRowFrm& rRow )
+static sal_uInt16 lcl_GetBottomLineSize( const SwRowFrm& rRow )
 {
     sal_uInt16 nBottomLineSize = 0;
     for ( SwCellFrm* pCurrLower = (SwCellFrm*)rRow.Lower(); pCurrLower;
@@ -4083,7 +4083,7 @@ sal_uInt16 lcl_GetBottomLineSize( const SwRowFrm& rRow )
 }
 
 // Calculate the maximum of BottomLineDist over all lowers:
-sal_uInt16 lcl_GetBottomLineDist( const SwRowFrm& rRow )
+static sal_uInt16 lcl_GetBottomLineDist( const SwRowFrm& rRow )
 {
     sal_uInt16 nBottomLineDist = 0;
     for ( SwCellFrm* pCurrLower = (SwCellFrm*)rRow.Lower(); pCurrLower;
@@ -4686,7 +4686,7 @@ SwCellFrm::~SwCellFrm()
 |*  SwCellFrm::Format()
 |*
 |*************************************************************************/
-sal_Bool lcl_ArrangeLowers( SwLayoutFrm *pLay, long lYStart, sal_Bool bInva )
+static sal_Bool lcl_ArrangeLowers( SwLayoutFrm *pLay, long lYStart, sal_Bool bInva )
 {
     sal_Bool bRet = sal_False;
     SwFrm *pFrm = pLay->Lower();
@@ -5369,7 +5369,7 @@ bool SwTabFrm::IsCollapsingBorders() const
 //
 // Local helper function to calculate height of first text row
 //
-SwTwips lcl_CalcHeightOfFirstContentLine( const SwRowFrm& rSourceLine )
+static SwTwips lcl_CalcHeightOfFirstContentLine( const SwRowFrm& rSourceLine )
 {
     // Find corresponding split line in master table
     const SwTabFrm* pTab = rSourceLine.FindTabFrm();

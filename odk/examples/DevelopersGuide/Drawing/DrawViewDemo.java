@@ -53,9 +53,7 @@ import com.sun.star.frame.XController;
 
 // __________ Implementation __________
 
-/** text demo
-    @author Sven Jacobi
- */
+// text demo
 
 public class DrawViewDemo
 {

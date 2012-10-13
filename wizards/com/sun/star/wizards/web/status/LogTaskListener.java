@@ -20,9 +20,6 @@ package com.sun.star.wizards.web.status;
 
 import java.io.PrintStream;
 
-/**
- * @author rpiterman
- */
 public class LogTaskListener implements TaskListener
 {
 

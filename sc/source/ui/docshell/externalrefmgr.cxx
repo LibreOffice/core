@@ -2429,7 +2429,7 @@ const OUString* ScExternalRefManager::getRealRangeName(sal_uInt16 nFileId, const
 }
 
 template<typename MapContainer>
-void lcl_removeByFileId(sal_uInt16 nFileId, MapContainer& rMap)
+static void lcl_removeByFileId(sal_uInt16 nFileId, MapContainer& rMap)
 {
     typename MapContainer::iterator itr = rMap.find(nFileId);
     if (itr != rMap.end())

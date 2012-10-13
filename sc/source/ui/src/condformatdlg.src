@@ -28,7 +28,7 @@
 
 #include "condformatdlg.hrc"
 
-ModalDialog RID_SCDLG_CONDFORMAT
+ModelessDialog RID_SCDLG_CONDFORMAT
 {
     OutputSize = TRUE;
     Hide = TRUE;
@@ -50,14 +50,14 @@ ModalDialog RID_SCDLG_CONDFORMAT
     };
     PushButton BTN_ADD
     {
-        Pos = MAP_APPFONT( 5, 255 );
+        Pos = MAP_APPFONT( 5, 245 );
         Size = MAP_APPFONT( 50, 14 );
         Text [ en-US ] = "Add";
         TabStop = TRUE;
     };
     PushButton BTN_REMOVE
     {
-        Pos = MAP_APPFONT( 60, 255 );
+        Pos = MAP_APPFONT( 60, 245 );
         Size = MAP_APPFONT( 50, 14 );
         Text [ en-US ] = "Remove";
         TabStop = TRUE;
@@ -66,6 +66,24 @@ ModalDialog RID_SCDLG_CONDFORMAT
     {
         Pos = MAP_APPFONT( 5, 20 );
         Size = MAP_APPFONT( 290, 220 );
+        Border = TRUE;
+    };
+    FixedText FT_RANGE
+    {
+        Pos = MAP_APPFONT( 5, 262 );
+        Size = MAP_APPFONT( 50, 16 );
+        Text [ en-US ] = "Range:";
+    };
+    Edit ED_RANGE
+    {
+        Pos = MAP_APPFONT( 60, 262 );
+        Size = MAP_APPFONT( 182, 14 );
+        Border = TRUE;
+    };
+    ImageButton RB_RANGE
+    {
+        Pos = MAP_APPFONT( 245, 262 );
+        Size = MAP_APPFONT( 14, 14 );
         Border = TRUE;
     };
 };
@@ -131,6 +149,12 @@ Control RID_COND_ENTRY
         Size = MAP_APPFONT( 50, 12 );
         Border = TRUE;
     };
+    Edit ED_FORMULA
+    {
+        Pos = MAP_APPFONT( 90, 15 );
+        Size = MAP_APPFONT( 135, 12 );
+        Border = TRUE;
+    };
     Edit ED_VAL2
     {
         Pos = MAP_APPFONT( 230, 15 );
@@ -167,7 +191,7 @@ Control RID_COND_ENTRY
             "New Style...";
         };
     };
-    ListBox LB_TYPE_COL_SCALE
+    ListBox LB_TYPE_COL_SCALE_MIN
     {
         Pos = MAP_APPFONT( 5, 32 );
         Size = MAP_APPFONT( 80, 60 );
@@ -175,14 +199,47 @@ Control RID_COND_ENTRY
         DropDown = TRUE;
         StringList [ en-US ] =
         {
+            "Automatic";
             "Min";
             "Max";
             "Percentile";
             "Value";
             "Percent";
             "Formula";
-            "AutoMin";
-            "AutoMax";
+        };
+    };
+    ListBox LB_TYPE_COL_SCALE_MIDDLE
+    {
+        Pos = MAP_APPFONT( 100, 32 );
+        Size = MAP_APPFONT( 80, 60 );
+        Border = TRUE;
+        DropDown = TRUE;
+        StringList [ en-US ] =
+        {
+            "Automatic";
+            "Min";
+            "Max";
+            "Percentile";
+            "Value";
+            "Percent";
+            "Formula";
+        };
+    };
+    ListBox LB_TYPE_COL_SCALE_MAX
+    {
+        Pos = MAP_APPFONT( 195, 32 );
+        Size = MAP_APPFONT( 80, 60 );
+        Border = TRUE;
+        DropDown = TRUE;
+        StringList [ en-US ] =
+        {
+            "Automatic";
+            "Min";
+            "Max";
+            "Percentile";
+            "Value";
+            "Percent";
+            "Formula";
         };
     };
     Window WD_PREVIEW
@@ -192,16 +249,44 @@ Control RID_COND_ENTRY
         Text [ en-US ] = "Example";
         Border = TRUE;
     };
-    Edit ED_COL_SCALE
+    Edit ED_COL_SCALE_MIN
     {
         Pos = MAP_APPFONT( 5, 48 );
-        Size = MAP_APPFONT( 60, 12 );
+        Size = MAP_APPFONT( 80, 12 );
         Border = TRUE;
     };
-    ListBox LB_COL
+    Edit ED_COL_SCALE_MIDDLE
+    {
+        Pos = MAP_APPFONT( 100, 48 );
+        Size = MAP_APPFONT( 80, 12 );
+        Border = TRUE;
+    };
+    Edit ED_COL_SCALE_MAX
+    {
+        Pos = MAP_APPFONT( 195, 48 );
+        Size = MAP_APPFONT( 80, 12 );
+        Border = TRUE;
+    };
+    ListBox LB_COL_MIN
     {
         Pos = MAP_APPFONT( 5, 62 );
-        Size = MAP_APPFONT( 60, 40 );
+        Size = MAP_APPFONT( 80, 40 );
+        Border = TRUE;
+        DropDown = TRUE;
+        DDExtraWidth = TRUE;
+    };
+    ListBox LB_COL_MIDDLE
+    {
+        Pos = MAP_APPFONT( 100, 62 );
+        Size = MAP_APPFONT( 80, 40 );
+        Border = TRUE;
+        DropDown = TRUE;
+        DDExtraWidth = TRUE;
+    };
+    ListBox LB_COL_MAX
+    {
+        Pos = MAP_APPFONT( 195, 62 );
+        Size = MAP_APPFONT( 80, 40 );
         Border = TRUE;
         DropDown = TRUE;
         DDExtraWidth = TRUE;

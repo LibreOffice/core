@@ -208,7 +208,7 @@ public:
 };
 
 
-uno::Reference<container::XIndexAccess >
+static uno::Reference<container::XIndexAccess >
 lcl_controlsWrapper( const uno::Reference< awt::XControl >& xDlg )
 {
     return new ControlArrayWrapper( xDlg );

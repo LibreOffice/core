@@ -13,7 +13,7 @@ ifeq ($(SYSTEM_LIBCDR),NO)
 
 $(eval $(call gb_Module_add_targets,libcdr,\
 	ExternalPackage_libcdr \
-	StaticLibrary_cdr \
+	ExternalProject_libcdr \
 	UnpackedTarball_cdr \
 ))
 

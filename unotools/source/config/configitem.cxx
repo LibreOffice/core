@@ -54,7 +54,7 @@ using namespace com::sun::star::configuration;
 #include <cppuhelper/implbase1.hxx> // helper for implementations
 
 #ifdef DBG_UTIL
-inline void lcl_CFG_DBG_EXCEPTION(const sal_Char* cText, const Exception& rEx)
+static inline void lcl_CFG_DBG_EXCEPTION(const sal_Char* cText, const Exception& rEx)
 {
     OString sMsg(cText);
     sMsg += OString(rEx.Message.getStr(), rEx.Message.getLength(), RTL_TEXTENCODING_ASCII_US);
@@ -161,7 +161,7 @@ ConfigChangeListener_Impl::~ConfigChangeListener_Impl()
 {
 }
 
-sal_Bool lcl_Find(
+static sal_Bool lcl_Find(
         const rtl::OUString& rTemp,
         const OUString* pCheckPropertyNames,
         sal_Int32 nLength)
@@ -646,7 +646,7 @@ void ConfigItem::RemoveChangesListener()
     }
 }
 
-void lcl_normalizeLocalNames(Sequence< OUString >& _rNames, ConfigNameFormat _eFormat, Reference<XInterface> const& _xParentNode)
+static void lcl_normalizeLocalNames(Sequence< OUString >& _rNames, ConfigNameFormat _eFormat, Reference<XInterface> const& _xParentNode)
 {
     switch (_eFormat)
     {

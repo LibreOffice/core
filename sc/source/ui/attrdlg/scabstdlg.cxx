@@ -36,10 +36,19 @@ using ::rtl::OUStringBuffer;
 
 typedef ScAbstractDialogFactory* (__LOADONCALLAPI *ScFuncPtrCreateDialogFactory)();
 
+#ifndef DISABLE_DYNLOADING
+
 extern "C" { static void SAL_CALL thisModule() {} }
+
+#else
+
+extern "C" ScAbstractDialogFactory* ScCreateDialogFactory();
+
+#endif
 
 ScAbstractDialogFactory* ScAbstractDialogFactory::Create()
 {
+#ifndef DISABLE_DYNLOADING
     ScFuncPtrCreateDialogFactory fp = 0;
     static ::osl::Module aDialogLibrary;
 
@@ -53,6 +62,9 @@ ScAbstractDialogFactory* ScAbstractDialogFactory::Create()
     if ( fp )
         return fp();
     return 0;
+#else
+    return ScCreateDialogFactory();
+#endif
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

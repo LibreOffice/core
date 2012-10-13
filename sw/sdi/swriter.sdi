@@ -3528,7 +3528,7 @@ SfxVoidItem Hyphenate FN_HYPHENATE_OPT_DLG
     HasCoreId = FALSE,
     HasDialog = TRUE,
     ReadOnlyDoc = FALSE,
-    Toggle = TRUE,
+    Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;

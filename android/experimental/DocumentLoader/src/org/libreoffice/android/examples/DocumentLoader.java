@@ -597,6 +597,7 @@ public class DocumentLoader
                           final int level,
                           final int location)
     {
+        Log.i(TAG, "renderPage(" + number + ", " + level + ", " + location + ")");
         try {
             // Use dummySmallDevice with no scale or offset just to find out
             // the paper size of this page.
@@ -726,6 +727,8 @@ public class DocumentLoader
             protected Integer doInBackground(Integer... params)
             {
                 int number = params[0];
+
+                Log.i(TAG, "doInBackground(" + number + ")");
 
                 if (number >= pageCount)
                     return -1;
@@ -929,13 +932,7 @@ public class DocumentLoader
             Bootstrap.setup(this);
 
             // Avoid all the old style OSL_TRACE calls especially in vcl
-            Bootstrap.putenv("SAL_LOG=+WARN+INFO-INFO.legacy.osl");
-
-            // Load a lot of shlibs here explicitly in advance because that
-            // makes debugging work better, sigh
-            Bootstrap.dlopen("libmergedlo.so");
-            Bootstrap.dlopen("libswdlo.so");
-            Bootstrap.dlopen("libswlo.so");
+            Bootstrap.putenv("SAL_LOG=+WARN+INFO");
 
             // Log.i(TAG, "Sleeping NOW");
             // Thread.sleep(20000);

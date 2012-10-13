@@ -1,36 +1,28 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*************************************************************************
+/*
+ * This file is part of the LibreOffice project.
  *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * This file incorporates work covered by the following license notice:
  *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
 
 #include <com/sun/star/xml/sax/InputSource.hpp>
-#include <com/sun/star/xml/sax/XParser.hpp>
+#include <com/sun/star/xml/sax/Parser.hpp>
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 
+#include <comphelper/processfactory.hxx>
 #include "typedetectionimport.hxx"
 #include "xmlfiltersettingsdialog.hxx"
 
@@ -70,21 +62,19 @@ void TypeDetectionImporter::doImport( Reference< XMultiServiceFactory >& xMSF, R
 {
     try
     {
-        Reference< XParser > xParser( xMSF->createInstance(OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.xml.sax.Parser" )) ), UNO_QUERY );
-        if( xParser.is() )
-        {
-            TypeDetectionImporter* pImporter = new TypeDetectionImporter( xMSF );
-            Reference < XDocumentHandler > xDocHandler( pImporter );
-            xParser->setDocumentHandler( xDocHandler );
+        Reference< XParser > xParser = xml::sax::Parser::create( comphelper::getComponentContext(xMSF) );
 
-            InputSource source;
-            source.aInputStream = xIS;
+        TypeDetectionImporter* pImporter = new TypeDetectionImporter( xMSF );
+        Reference < XDocumentHandler > xDocHandler( pImporter );
+        xParser->setDocumentHandler( xDocHandler );
 
-            // start parsing
-            xParser->parseStream( source );
+        InputSource source;
+        source.aInputStream = xIS;
 
-            pImporter->fillFilterVector( rFilters );
-        }
+        // start parsing
+        xParser->parseStream( source );
+
+        pImporter->fillFilterVector( rFilters );
     }
     catch( const Exception& /* e */ )
     {

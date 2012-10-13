@@ -39,6 +39,7 @@
 #include "patattr.hxx"
 #include "scrdata.hxx"
 #include "poolhelp.hxx"
+#include "attrib.hxx"
 
 using namespace com::sun::star;
 
@@ -168,7 +169,7 @@ sal_uInt8 ScDocument::GetScriptType( SCCOL nCol, SCROW nRow, SCTAB nTab, ScBaseC
     const ScPatternAttr* pPattern = GetPattern( nCol, nRow, nTab );
     if (!pPattern) return 0;
     const SfxItemSet* pCondSet = NULL;
-    if ( ((const SfxUInt32Item&)pPattern->GetItem(ATTR_CONDITIONAL)).GetValue() )
+    if ( !((const ScCondFormatItem&)pPattern->GetItem(ATTR_CONDITIONAL)).GetCondFormatData().empty() )
         pCondSet = GetCondResult( nCol, nRow, nTab );
 
     sal_uLong nFormat = pPattern->GetNumberFormat( xPoolHelper->GetFormTable(), pCondSet );

@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
+#include <string.h>
 #include "composertools.hxx"
 #include "core_resource.hrc"
 #include "core_resource.hxx"
@@ -318,7 +318,7 @@ IMPLEMENT_PROPERTYCONTAINER_DEFAULTS(OSingleSelectQueryComposer)
 sal_Int64 SAL_CALL OSingleSelectQueryComposer::getSomething( const Sequence< sal_Int8 >& rId ) throw(RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OSingleSelectQueryComposer::getSomething" );
-    if (rId.getLength() == 16 && 0 == rtl_compareMemory(getImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
+    if (rId.getLength() == 16 && 0 == memcmp(getImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
         return reinterpret_cast<sal_Int64>(this);
 
     return sal_Int64(0);

@@ -179,7 +179,6 @@ for i in $filelist ; do
 done
 
 if [ "$COM" = "MSC" ]; then
-    downloaditem "http://download.microsoft.com/download/A/6/A/A6AC035D-DA3F-4F0C-ADA4-37C8E5D34E3D/setup/WinSDKDebuggingTools/" "dbg_x86.msi" "2bd67a7b00507ad93539e138a4a6a2bf"
     downloaditem "http://download.microsoft.com/download/E/9/F/E9FCA9E9-9908-4D8F-B491-8E8A4C294C01/" "WindowsXP-KB958911-x86-ENU.exe" "ff084c5815b0672d54628158b820f5b1"
 fi
 
@@ -215,6 +214,9 @@ if [ "$COM" = "MSC" -a -n "$md5sum" ]; then
     # This can be run only on Windows itself (Cygwin)
     TMPUNPACK=`cygpath -d $TARFILE_LOCATION/tmp`
     chmod a+w $TARFILE_LOCATION/tmp
+    if [ ! -f ./external/dbghelp/dbghelp.dll -a -f $TARFILE_LOCATION/$DBGHELP_DLL ]; then
+	    cp $TARFILE_LOCATION/$DBGHELP_DLL ./external/dbghelp/dbghelp.dll
+	fi
     if [ ! -f ./external/dbghelp/dbghelp.dll -a -f $TARFILE_LOCATION/dbg_x86.msi ]; then
         msiexec /a `cygpath -d $TARFILE_LOCATION/dbg_x86.msi` /qn TARGETDIR=$TMPUNPACK SHORTFILENAMES=1
 		dbghelp_dll_path=PFiles/DbgTools/dbghelp.dll

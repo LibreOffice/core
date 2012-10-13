@@ -592,6 +592,8 @@ void SfxTabDialog::Init_Impl( sal_Bool bFmtFlag, const String* pUserButtonText, 
             LINK( this, SfxTabDialog, ActivatePageHdl ) );
     m_pTabCtrl->SetDeactivatePageHdl(
             LINK( this, SfxTabDialog, DeactivatePageHdl ) );
+    m_pActionArea->Show();
+    m_pVBox->Show();
     m_pTabCtrl->Show();
     m_pOKBtn->Show();
     m_pCancelBtn->Show();

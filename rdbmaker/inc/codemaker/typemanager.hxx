@@ -94,14 +94,14 @@ struct RegistryTypeManagerImpl
     RegistryTypeManagerImpl()
         : m_pMergedRegistry(NULL)
         , m_base("/")
-        , m_isMerged(sal_False)
+        , m_isMerged(false)
         {}
 
     T2TypeClassMap  m_t2TypeClass;
     RegistryList    m_registries;
     Registry*       m_pMergedRegistry;
     ::rtl::OString  m_base;
-    sal_Bool        m_isMerged;
+    bool            m_isMerged;
 };
 
 class RegistryTypeManager : public TypeManager

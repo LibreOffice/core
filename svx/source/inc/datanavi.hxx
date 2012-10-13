@@ -38,7 +38,7 @@
 #include <vcl/toolbox.hxx>
 #include <svtools/inettbc.hxx>
 #include <svtools/svmedit.hxx>
-#include <svtools/svtreebx.hxx>
+#include <svtools/treelistbox.hxx>
 #include <sfx2/dockwin.hxx>
 #include <sfx2/ctrlitem.hxx>
 #include <svx/simptabl.hxx>

@@ -36,11 +36,6 @@
 #include "rangelst.hxx"
 #include "rangeutl.hxx"
 #include "docfunc.hxx"
-#include "markdata.hxx"
-#include "docpool.hxx"
-#include "scitems.hxx"
-#include "patattr.hxx"
-#include "svl/intitem.hxx"
 #include "XMLConverter.hxx"
 
 
@@ -137,14 +132,11 @@ void ScXMLConditionalFormatContext::EndElement()
 {
     ScDocument* pDoc = GetScImport().GetDocument();
 
-    sal_uLong nIndex = pDoc->AddCondFormat(mpFormat, GetScImport().GetTables().GetCurrentSheet());
+    SCTAB nTab = GetScImport().GetTables().GetCurrentSheet();
+    sal_uLong nIndex = pDoc->AddCondFormat(mpFormat, nTab);
     mpFormat->SetKey(nIndex);
 
-    ScPatternAttr aPattern( pDoc->GetPool() );
-    aPattern.GetItemSet().Put( SfxUInt32Item( ATTR_CONDITIONAL, nIndex ) );
-    ScMarkData aMarkData;
-    aMarkData.MarkFromRangeList(mpFormat->GetRange(), true);
-    pDoc->ApplySelectionPattern( aPattern , aMarkData);
+    pDoc->AddCondFormatData( mpFormat->GetRange(), nTab, nIndex);
 }
 
 ScXMLColorScaleFormatContext::ScXMLColorScaleFormatContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
@@ -444,11 +436,9 @@ void setColorEntryType(const rtl::OUString& rType, ScColorScaleEntry* pEntry, co
         pEntry->SetFormula(rFormula, rImport.GetDocument(), ScAddress(0,0,rImport.GetTables().GetCurrentSheet()), formula::FormulaGrammar::GRAM_ODFF);
     }
     else if(rType == "auto-minimum")
-        pEntry->SetType(COLORSCALE_AUTOMIN);
+        pEntry->SetType(COLORSCALE_AUTO);
     else if(rType == "auto-maximum")
-        pEntry->SetType(COLORSCALE_AUTOMAX);
-
-    //TODO: add formulas
+        pEntry->SetType(COLORSCALE_AUTO);
 }
 
 }

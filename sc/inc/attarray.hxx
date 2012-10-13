@@ -96,7 +96,7 @@ friend class ScDocument;                // for FillInfo
 friend class ScDocumentIterator;
 friend class ScAttrIterator;
 friend class ScHorizontalAttrIterator;
-friend void lcl_IterGetNumberFormat( sal_uLong& nFormat,
+friend void ScAttrArray_IterGetNumberFormat( sal_uLong& nFormat,
         const ScAttrArray*& rpArr, SCROW& nAttrEndRow,
         const ScAttrArray* pNewArr, SCROW nRow, ScDocument* pDoc );
 
@@ -137,6 +137,9 @@ public:
     bool    SetAttrEntries(ScAttrEntry* pNewData, SCSIZE nSize);
     void    ApplyLineStyleArea( SCROW nStartRow, SCROW nEndRow,
                                 const ::editeng::SvxBorderLine* pLine, bool bColorOnly );
+
+    void    AddCondFormat( SCROW nStartRow, SCROW nEndRow, sal_uInt32 nIndex );
+    void    RemoveCondFormat( SCROW nStartRow, SCROW nEndRow, sal_uInt32 nIndex );
 
     void    ClearItems( SCROW nStartRow, SCROW nEndRow, const sal_uInt16* pWhich );
     void    ChangeIndent( SCROW nStartRow, SCROW nEndRow, bool bIncrement );

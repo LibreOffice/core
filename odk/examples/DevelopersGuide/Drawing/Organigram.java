@@ -49,10 +49,6 @@ import com.sun.star.uno.XComponentContext;
  * Created on 6. Juli 2002, 10:25
  */
 
-/**
- *
- * @author  dschulten
- */
 public class Organigram {
 
     private XComponentContext xRemoteContext = null;

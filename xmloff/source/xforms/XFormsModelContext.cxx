@@ -78,7 +78,7 @@ XFormsModelContext::XFormsModelContext( SvXMLImport& rImport,
                                         sal_uInt16 nPrefix,
                                         const OUString& rLocalName ) :
     TokenContext( rImport, nPrefix, rLocalName, aAttributes, aChildren ),
-    mxModel( lcl_createXFormsModel() )
+    mxModel( xforms_createXFormsModel() )
 {
 }
 
@@ -156,7 +156,7 @@ void XFormsModelContext::EndElement()
         xUpdate->update();
 
     GetImport().initXForms();
-    lcl_addXFormsModel( GetImport().GetModel(), getModel() );
+    xforms_addXFormsModel( GetImport().GetModel(), getModel() );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

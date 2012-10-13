@@ -46,7 +46,6 @@ import com.sun.star.wizards.web.data.CGSettings;
 import com.sun.star.wizards.web.export.Exporter;
 
 /**
- * @author rpiterman
  * This class is used to process a CGSession object
  * and generate a site. </br>
  * it does the following: <br/>
@@ -257,29 +256,6 @@ public class Process implements WebWizardConst, ProcessErrors
         return b;
     }
 
-//  /**
-//   * deletes the given directory
-//   * @param dir the directory to delete
-//   * @return true if should continue
-//   */
-//  private boolean cleanup(String dir) {
-//      
-//      boolean success = true;
-//
-//      if (dir != null && fileAccess.exists(dir,false)) {
-//
-//          String[] files = fileAccess.listFiles(dir,true);
-//          
-//          for (int i = 0; i < files.length; i++) {
-//              if (fileAccess.isDirectory(files[i]))
-//                  success = success && cleanup(files[i]);
-//              else
-//                  success = success && fileAccess.delete(files[i]);
-//
-//          }
-//      }
-//      return success && fileAccess.delete(dir);
-//  }
     /**
      * This method is used to copy style files to a target 
      * Directory: css and background.
@@ -389,7 +365,6 @@ public class Process implements WebWizardConst, ProcessErrors
     {
         try
         {
-            //copy.deleteDirContent(publish.url);
             task.advance(true);
             copy.copy(dir, publish.url);
             task.advance(true);
@@ -401,7 +376,6 @@ public class Process implements WebWizardConst, ProcessErrors
             return error(e, publish, ERROR_PUBLISH, ErrorHandler.ERROR_NORMAL_IGNORE);
         }
     }
-    //GENERATING METHODS
     /**
      * Generates the TOC pages for the current session.
      * @param targetDir generating to this directory.

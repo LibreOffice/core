@@ -52,7 +52,7 @@ namespace com { namespace sun { namespace star {
     namespace task {
         class FutureDocumentVersionProductUpdateRequest;
         class XInteractionContinuation;
-        class XInteractionHandler;
+        class XInteractionHandler2;
         class XInteractionRequest;
     }
     namespace ucb {
@@ -88,7 +88,8 @@ class UUIInteractionHelper
 private:
     mutable osl::Mutex                                                                      m_aPropertyMutex;
             ::com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >  m_xServiceFactory;
-            ::com::sun::star::uno::Sequence< com::sun::star::uno::Any >                     m_aProperties;
+            ::com::sun::star::uno::Reference< com::sun::star::awt::XWindow >                m_xWindowParam;
+            const OUString                                                                  m_aContextParam;
             StringHashMap                                                                   m_aTypedCustomHandlers;
     UUIInteractionHelper(UUIInteractionHelper &); // not implemented
     void operator =(UUIInteractionHelper); // not implemented
@@ -97,8 +98,9 @@ public:
     UUIInteractionHelper(
         com::sun::star::uno::Reference<
             com::sun::star::lang::XMultiServiceFactory > const & rServiceFactory,
-        com::sun::star::uno::Sequence<
-            com::sun::star::uno::Any > const & rArguments)
+        com::sun::star::uno::Reference<
+            com::sun::star::awt::XWindow > const & rxWindow,
+        const OUString & rContextParam)
         SAL_THROW(());
     UUIInteractionHelper(
         com::sun::star::uno::Reference<
@@ -159,7 +161,7 @@ private:
     getContextProperty()
         SAL_THROW(());
 
-    com::sun::star::uno::Reference< com::sun::star::task::XInteractionHandler >
+    com::sun::star::uno::Reference< com::sun::star::task::XInteractionHandler2 >
     getInteractionHandler()
         SAL_THROW((com::sun::star::uno::RuntimeException));
 

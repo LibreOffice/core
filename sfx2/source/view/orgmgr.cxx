@@ -467,7 +467,7 @@ sal_Bool    SfxOrganizeMgr::Delete(SfxOrganizeListBox_Impl *pCaller,
     {
         // deleting of a group
 
-        SvLBoxEntry *pGroupToDelete = pCaller->SvLBox::GetEntry(nRegion);
+        SvLBoxEntry *pGroupToDelete = pCaller->GetEntry(nRegion);
         if ( pGroupToDelete )
         {
             sal_uInt16 nItemNum = (sal_uInt16)( pCaller->GetModel()->GetChildCount( pGroupToDelete ) );
@@ -481,7 +481,7 @@ sal_Bool    SfxOrganizeMgr::Delete(SfxOrganizeListBox_Impl *pCaller,
                 if ( pTemplates->Delete( nRegion, nInd ) )
                 {
                     bModified = 1;
-                    pEntriesToDelete.push_back( pCaller->SvLBox::GetEntry( pGroupToDelete, nInd ) );
+                    pEntriesToDelete.push_back( pCaller->GetEntry( pGroupToDelete, nInd ) );
                 }
             }
 
@@ -504,7 +504,7 @@ sal_Bool    SfxOrganizeMgr::Delete(SfxOrganizeListBox_Impl *pCaller,
         {
             bModified = 1;
                 // Entry to be deleted.
-            SvLBoxEntry *pEntryToDelete = pCaller->SvLBox::GetEntry(pCaller->SvLBox::GetEntry(nRegion), nIdx);
+            SvLBoxEntry *pEntryToDelete = pCaller->GetEntry(pCaller->GetEntry(nRegion), nIdx);
 
             pCaller->GetModel()->Remove(pEntryToDelete);
         }

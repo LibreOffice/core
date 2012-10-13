@@ -145,7 +145,7 @@ namespace
             pMarkAccess->getBookmarksBegin(),
             pMarkAccess->getBookmarksEnd(),
             aEndOfPara,
-            bind(&::sw::mark::IMark::StartsAfter, _2, _1)); // finds the first that starts after
+            boost::bind(&::sw::mark::IMark::StartsAfter, _2, _1)); // finds the first that starts after
 
         // search for all bookmarks that start or end in this paragraph
         const SwNodeIndex nOwnNode = rUnoCrsr.GetPoint()->nNode;
@@ -255,7 +255,7 @@ SwXTextPortionEnumeration::SwXTextPortionEnumeration(
     : m_Portions()
 {
     SwUnoCrsr* pUnoCrsr =
-       rParaCrsr.GetDoc()->CreateUnoCrsr(*rParaCrsr.GetPoint(), sal_False);
+       rParaCrsr.GetDoc()->CreateUnoCrsr(*rParaCrsr.GetPoint(), false);
     pUnoCrsr->Add(this);
 
     OSL_ENSURE(nEnd == -1 || (nStart <= nEnd &&
@@ -274,7 +274,7 @@ SwXTextPortionEnumeration::SwXTextPortionEnumeration(
     : m_Portions( rPortions )
 {
     SwUnoCrsr* const pUnoCrsr =
-       rParaCrsr.GetDoc()->CreateUnoCrsr(*rParaCrsr.GetPoint(), sal_False);
+       rParaCrsr.GetDoc()->CreateUnoCrsr(*rParaCrsr.GetPoint(), false);
     pUnoCrsr->Add(this);
 }
 
@@ -890,7 +890,7 @@ lcl_ExportHints(
     return xRef;
 }
 
-void lcl_MoveCursor( SwUnoCrsr * const pUnoCrsr,
+static void lcl_MoveCursor( SwUnoCrsr * const pUnoCrsr,
     const xub_StrLen nCurrentIndex,
     const sal_Int32 nNextFrameIndex, const sal_Int32 nNextPortionIndex,
     const sal_Int32 nNextAttrIndex,  const sal_Int32 nNextFieldMarkIndex,

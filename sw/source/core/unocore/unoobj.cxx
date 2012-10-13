@@ -237,7 +237,7 @@ throw (lang::IllegalArgumentException)
         }
         String sStyle;
         SwStyleNameMapper::FillUIName(uStyle, sStyle,
-                nsSwGetPoolIdFromName::GET_POOLID_CHRFMT, sal_True);
+                nsSwGetPoolIdFromName::GET_POOLID_CHRFMT, true);
         SwDocStyleSheet *const pStyle = static_cast<SwDocStyleSheet*>(
             pDocSh->GetStyleSheetPool()->Find(sStyle, SFX_STYLE_FAMILY_CHAR));
         if (!pStyle)
@@ -288,7 +288,7 @@ throw (lang::IllegalArgumentException)
     rAny >>= uStyle;
     String sStyle;
     SwStyleNameMapper::FillUIName(uStyle, sStyle,
-            nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL, sal_True );
+            nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL, true );
     SwDocStyleSheet *const pStyle = static_cast<SwDocStyleSheet*>(
             pDocSh->GetStyleSheetPool()->Find(sStyle, SFX_STYLE_FAMILY_PARA));
     if (!pStyle)
@@ -331,7 +331,7 @@ SwUnoCursorHelper::SetPageDesc(
     }
     String sDescName;
     SwStyleNameMapper::FillUIName(uDescName, sDescName,
-            nsSwGetPoolIdFromName::GET_POOLID_PAGEDESC, sal_True);
+            nsSwGetPoolIdFromName::GET_POOLID_PAGEDESC, true);
     if (!pNewDesc->GetPageDesc() ||
         (pNewDesc->GetPageDesc()->GetName() != sDescName))
     {
@@ -428,7 +428,7 @@ lcl_setDropcapCharStyle(SwPaM & rPam, SfxItemSet & rItemSet,
     }
     String sStyle;
     SwStyleNameMapper::FillUIName(uStyle, sStyle,
-            nsSwGetPoolIdFromName::GET_POOLID_CHRFMT, sal_True);
+            nsSwGetPoolIdFromName::GET_POOLID_CHRFMT, true);
     SwDoc *const pDoc = rPam.GetDoc();
     //default character style must not be set as default format
     SwDocStyleSheet *const pStyle = static_cast<SwDocStyleSheet*>(
@@ -482,7 +482,7 @@ lcl_setRubyCharstyle(SfxItemSet & rItemSet, uno::Any const& rValue)
     }
     String sStyle;
     SwStyleNameMapper::FillUIName(sTmp, sStyle,
-            nsSwGetPoolIdFromName::GET_POOLID_CHRFMT, sal_True );
+            nsSwGetPoolIdFromName::GET_POOLID_CHRFMT, true );
     pRuby->SetCharFmtName(sStyle);
     pRuby->SetCharFmtId(0);
     if (sStyle.Len() > 0)
@@ -726,7 +726,7 @@ public:
             const enum CursorType eType,
             uno::Reference<text::XText> xParent,
             SwPosition const& rPoint, SwPosition const*const pMark)
-        : SwClient(rDoc.CreateUnoCrsr(rPoint, sal_False))
+        : SwClient(rDoc.CreateUnoCrsr(rPoint, false))
         , m_rPropSet(*aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXT_CURSOR))
         , m_eType(eType)
         , m_xParentText(xParent)
@@ -2035,7 +2035,7 @@ lcl_SelectParaAndReset( SwPaM &rPaM, SwDoc & rDoc,
     SwPosition aStart = *rPaM.Start();
     SwPosition aEnd = *rPaM.End();
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    ::std::auto_ptr< SwUnoCrsr > pTemp ( rDoc.CreateUnoCrsr(aStart, sal_False) );
+    ::std::auto_ptr< SwUnoCrsr > pTemp ( rDoc.CreateUnoCrsr(aStart, false) );
     SAL_WNODEPRECATED_DECLARATIONS_POP
     if(!SwUnoCursorHelper::IsStartOfPara(*pTemp))
     {

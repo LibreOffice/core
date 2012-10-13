@@ -1,0 +1,46 @@
+Compiler plugins.
+
+== Overview ==
+
+This directory contains code for compiler plugins. These are used to perform
+additional actions during compilation (such as additional warnings) and
+also to perform mass code refactoring.
+
+Currently only the Clang compiler is supported (http://clang.llvm.org).
+
+== Usage ==
+
+Compiler plugins are enabled automatically by --enable-dbgutil if Clang headers
+are found or explicitly using --enable-compiler-plugins.
+
+
+== Functionality ==
+
+=== Compile plugin ===
+
+The compile plugin is used during normal compilation to perform additional checks.
+All warnings and errors are marked '[loplugin]' in the message.
+
+==== Unused variable check ====
+
+- unused parameter 'foo' [loplugin]
+- unused variable 'foo' [loplugin]
+
+Additional check for unused variables.
+
+==== Body of if/while/for not in {} ====
+
+- statement aligned as second statement in if/while/for body but not in a statement block [loplugin]
+
+Warn about the following construct:
+
+    if( a != 0 )
+        b = 2;
+        c = 3;
+        
+Here either both statements should be inside {} or the second statement in indented wrong.
+
+
+== Code documentation / howtos ==
+
+TBD

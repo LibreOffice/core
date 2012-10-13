@@ -33,7 +33,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/componentcontext.hxx>
 #include <com/sun/star/xml/sax/InputSource.hpp>
-#include <com/sun/star/xml/sax/XParser.hpp>
+#include <com/sun/star/xml/sax/Parser.hpp>
 #include <com/sun/star/io/XActiveDataControl.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
 #include <com/sun/star/container/XChild.hpp>
@@ -95,7 +95,7 @@ using namespace ::com::sun::star::lang;
 using ::rtl::OUString;
 
 
-void lcl_EnsureValidPam( SwPaM& rPam )
+static void lcl_EnsureValidPam( SwPaM& rPam )
 {
     if( rPam.GetCntntNode() != NULL )
     {
@@ -158,13 +158,7 @@ sal_Int32 ReadThroughComponent(
     aParserInput.aInputStream = xInputStream;
 
     // get parser
-    uno::Reference< xml::sax::XParser > xParser(
-        rFactory->createInstance(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Parser"))),
-        UNO_QUERY );
-    OSL_ENSURE( xParser.is(), "Can't create parser" );
-    if( !xParser.is() )
-        return ERR_SWG_READ_ERROR;
+    uno::Reference< xml::sax::XParser > xParser = xml::sax::Parser::create(comphelper::getComponentContext(rFactory));
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "parser created" );
 
     // get filter
@@ -406,7 +400,7 @@ sal_Int32 ReadThroughComponent(
 }
 
 // #i44177#
-void lcl_AdjustOutlineStylesForOOo( SwDoc& _rDoc )
+static void lcl_AdjustOutlineStylesForOOo( SwDoc& _rDoc )
 {
     // array containing the names of the default outline styles ('Heading 1',
     // 'Heading 2', ..., 'Heading 10')
@@ -485,7 +479,7 @@ void lcl_AdjustOutlineStylesForOOo( SwDoc& _rDoc )
 
 }
 
-void lcl_ConvertSdrOle2ObjsToSdrGrafObjs( SwDoc& _rDoc )
+static void lcl_ConvertSdrOle2ObjsToSdrGrafObjs( SwDoc& _rDoc )
 {
     if ( _rDoc.GetDrawModel() &&
          _rDoc.GetDrawModel()->GetPage( 0 ) )
@@ -1067,6 +1061,8 @@ size_t XMLReader::GetSectionList( SfxMedium& rMedium,
 {
     uno::Reference< lang::XMultiServiceFactory > xServiceFactory =
             comphelper::getProcessServiceFactory();
+    uno::Reference< uno::XComponentContext > xContext =
+            comphelper::getProcessComponentContext();
     OSL_ENSURE( xServiceFactory.is(),
             "XMLReader::Read: got no service manager" );
     uno::Reference < embed::XStorage > xStg2;
@@ -1082,23 +1078,15 @@ size_t XMLReader::GetSectionList( SfxMedium& rMedium,
             uno::Reference < io::XStream > xStm = xStg2->openStreamElement( sDocName, embed::ElementModes::READ );
             aParserInput.aInputStream = xStm->getInputStream();
 
-            // get parser
-            uno::Reference< XInterface > xXMLParser = xServiceFactory->createInstance(
-                OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Parser")) );
-            OSL_ENSURE( xXMLParser.is(),
-                "XMLReader::Read: com.sun.star.xml.sax.Parser service missing" );
-            if( xXMLParser.is() )
-            {
-                // get filter
-                uno::Reference< xml::sax::XDocumentHandler > xFilter = new SwXMLSectionList( xServiceFactory, rStrings );
+            // get filter
+            uno::Reference< xml::sax::XDocumentHandler > xFilter = new SwXMLSectionList( xServiceFactory, rStrings );
 
-                // connect parser and filter
-                uno::Reference< xml::sax::XParser > xParser( xXMLParser, UNO_QUERY );
-                xParser->setDocumentHandler( xFilter );
+            // connect parser and filter
+            uno::Reference< xml::sax::XParser > xParser = xml::sax::Parser::create(xContext);
+            xParser->setDocumentHandler( xFilter );
 
-                // parse
-                xParser->parseStream( aParserInput );
-            }
+            // parse
+            xParser->parseStream( aParserInput );
         }
         catch( xml::sax::SAXParseException&  )
         {

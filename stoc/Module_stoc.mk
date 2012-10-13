@@ -28,7 +28,6 @@
 $(eval $(call gb_Module_Module,stoc))
 
 $(eval $(call gb_Module_add_targets,stoc,\
-    InternalUnoApi_bootstrap \
     Library_bootstrap \
     Library_introspection \
     Library_invocadapt \

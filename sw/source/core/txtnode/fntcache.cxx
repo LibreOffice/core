@@ -179,7 +179,7 @@ void SwFntObj::CreatePrtFont( const OutputDevice& rPrt )
  *
  *************************************************************************/
 
-bool lcl_IsFontAdjustNecessary( const OutputDevice& rOutDev,
+static bool lcl_IsFontAdjustNecessary( const OutputDevice& rOutDev,
                                 const OutputDevice& rRefDev )
 {
     return &rRefDev != &rOutDev &&
@@ -220,7 +220,7 @@ struct CalcLinePosData
    from the DrawText-method (for underlining misspelled words or smarttag terms).
 */
 
-void lcl_calcLinePos( const CalcLinePosData &rData,
+static void lcl_calcLinePos( const CalcLinePosData &rData,
     Point &rStart, Point &rEnd, xub_StrLen nStart, xub_StrLen nWrLen )
 {
    long nBlank = 0;
@@ -632,7 +632,7 @@ void SwFntObj::SetDevFont( const ViewShell *pSh, OutputDevice& rOut )
  *
  *************************************************************************/
 
-sal_uInt8 lcl_WhichPunctuation( xub_Unicode cChar )
+static sal_uInt8 lcl_WhichPunctuation( xub_Unicode cChar )
 {
     if ( ( cChar < 0x3001 || cChar > 0x3002 ) &&
             ( cChar < 0x3008 || cChar > 0x3011 ) &&
@@ -2333,7 +2333,7 @@ SwCacheObj *SwFntAccess::NewObj( )
     return new SwFntObj( *(SwSubFont *)pOwner, ++pMagicNo, pShell );
 }
 
-extern xub_StrLen lcl_CalcCaseMap( const SwFont& rFnt,
+extern xub_StrLen sw_CalcCaseMap( const SwFont& rFnt,
                                    const XubString& rOrigString,
                                    xub_StrLen nOfst,
                                    xub_StrLen nLen,
@@ -2481,7 +2481,7 @@ xub_StrLen SwFont::GetTxtBreak( SwDrawTextInfo& rInf, long nTextWidth )
         if ( bTextReplaced && STRING_LEN != nTxtBreak )
         {
             if ( nTmpLen != nLn )
-                nTxtBreak = lcl_CalcCaseMap( *this, rInf.GetText(),
+                nTxtBreak = sw_CalcCaseMap( *this, rInf.GetText(),
                                              rInf.GetIdx(), nLn, nTxtBreak );
             else
                 nTxtBreak = nTxtBreak + rInf.GetIdx();

@@ -1194,6 +1194,29 @@ void SAL_CALL IMPL_RTL_STRINGNAME( newFromStr_WithLength )( IMPL_RTL_STRINGDATA*
 
 /* ----------------------------------------------------------------------- */
 
+void SAL_CALL IMPL_RTL_STRINGNAME( newFromSubString )( IMPL_RTL_STRINGDATA** ppThis,
+                                                       const IMPL_RTL_STRINGDATA* pFrom,
+                                                       sal_Int32 beginIndex,
+                                                       sal_Int32 count )
+    SAL_THROW_EXTERN_C()
+{
+    if ( beginIndex == 0 && count == pFrom->length )
+    {
+        IMPL_RTL_STRINGNAME( assign )( ppThis, const_cast< IMPL_RTL_STRINGDATA * >( pFrom ) );
+        return;
+    }
+    if ( count < 0 || beginIndex < 0 || beginIndex + count > pFrom->length )
+    {
+        OSL_FAIL( "Out of bounds substring access" );
+        IMPL_RTL_STRINGNAME( newFromLiteral )( ppThis, "!!br0ken!!", 10, 0 );
+        return;
+    }
+
+    IMPL_RTL_STRINGNAME( newFromStr_WithLength )( ppThis, pFrom->buffer + beginIndex, count );
+}
+
+/* ----------------------------------------------------------------------- */
+
 // Used when creating from string literals.
 void SAL_CALL IMPL_RTL_STRINGNAME( newFromLiteral )( IMPL_RTL_STRINGDATA** ppThis,
                                                      const sal_Char* pCharStr,

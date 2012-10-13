@@ -157,6 +157,7 @@ gb_CXXFLAGS := \
 	-wd4351 \
 	-wd4355 \
 	-wd4365 \
+	-wd4435 \
 	-wd4503 \
 	-wd4505 \
 	-wd4511 \
@@ -340,6 +341,13 @@ gb_LinkTarget_INCLUDE_STL := $(filter %/stl, $(subst -I. , ,$(SOLARINC)))
 
 gb_LinkTarget_get_pdbfile = $(call gb_LinkTarget_get_target,)pdb/$(1).pdb
 
+# avoid fatal error LNK1170 for Library_merged
+define gb_LinkTarget_MergedResponseFile
+cut -f -1000 -d ' ' $${RESPONSEFILE} > $${RESPONSEFILE}.1 && \
+cut -f 1001- -d ' ' $${RESPONSEFILE} >> $${RESPONSEFILE}.1 && \
+mv $${RESPONSEFILE}.1 $${RESPONSEFILE} &&
+endef
+
 define gb_LinkTarget__command
 $(call gb_Output_announce,$(2),$(true),LNK,4)
 $(call gb_Helper_abbreviate_dirs,\
@@ -353,6 +361,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(foreach object,$(ASMOBJECTS),$(call gb_AsmObject_get_target,$(object))) \
 		$(foreach extraobjectlist,$(EXTRAOBJECTLISTS),$(shell cat $(extraobjectlist))) \
 		$(NATIVERES)) && \
+		$(if $(filter $(call gb_Library_get_linktargetname,merged),$(2)),$(call gb_LinkTarget_MergedResponseFile)) \
 	unset INCLUDE && \
 	$(if $(filter YES,$(LIBRARY_X64)), $(LINK_X64_BINARY), $(gb_LINK)) \
 		$(if $(filter Library CppunitTest,$(TARGETTYPE)),$(gb_Library_TARGETTYPEFLAGS)) \
@@ -360,7 +369,8 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(if $(filter Executable,$(TARGETTYPE)),$(gb_Executable_TARGETTYPEFLAGS)) \
 		$(if $(filter YES,$(TARGETGUI)), -SUBSYSTEM:WINDOWS, -SUBSYSTEM:CONSOLE) \
 		$(if $(filter YES,$(LIBRARY_X64)), -MACHINE:X64, -MACHINE:IX86) \
-		$(if $(filter YES,$(LIBRARY_X64)), -LIBPATH:$(OUTDIR)/lib/x64 -LIBPATH:$(COMPATH)/lib/amd64 -LIBPATH:$(WINDOWS_SDK_HOME)/lib/x64,) \
+		$(if $(filter YES,$(LIBRARY_X64)), -LIBPATH:$(OUTDIR)/lib/x64 -LIBPATH:$(COMPATH)/lib/amd64 -LIBPATH:$(WINDOWS_SDK_HOME)/lib/x64 \
+		$(if $(filter 80,$(WINDOWS_SDK_VERSION)),-LIBPATH:$(WINDOWS_SDK_HOME)/lib/win8/um/x64,),) \
 		$(T_LDFLAGS) \
 		@$${RESPONSEFILE} \
 		$(foreach lib,$(LINKED_LIBS),$(call gb_Library_get_filename,$(lib))) \
@@ -712,6 +722,14 @@ gb_ExtensionTarget_LICENSEFILE_DEFAULT := $(OUTDIR)/bin/osl/license.txt
 # UnpackedTarget class
 
 gb_UnpackedTarget_TARFILE_LOCATION := $(shell cygpath -u $(TARFILE_LOCATION))
+
+# UnoApiHeadersTarget class
+
+ifeq ($(DISABLE_DYNLOADING),TRUE)
+gb_UnoApiHeadersTarget_select_variant = $(if $(filter udkapi,$(1)),comprehensive,$(2))
+else
+gb_UnoApiHeadersTarget_select_variant = $(2)
+endif
 
 # Python
 gb_PYTHON_PRECOMMAND := $(gb_Helper_set_ld_path) PYTHONHOME="$(OUTDIR_FOR_BUILD)/lib/python" PYTHONPATH="$(OUTDIR_FOR_BUILD)/lib/python;$(OUTDIR_FOR_BUILD)/lib/python/lib-dynload"

@@ -443,16 +443,16 @@ public:
  */
 class SmTextNode : public SmVisibleNode
 {
-    XubString   aText;
+    OUString   aText;
     sal_uInt16      nFontDesc;
     /** Index within text where the selection starts
      * @remarks Only valid if SmNode::IsSelected() is true
      */
-    xub_StrLen  nSelectionStart;
+    sal_Int32  nSelectionStart;
     /** Index within text where the selection ends
      * @remarks Only valid if SmNode::IsSelected() is true
      */
-    xub_StrLen  nSelectionEnd;
+    sal_Int32  nSelectionEnd;
 
 protected:
     SmTextNode(SmNodeType eNodeType, const SmToken &rNodeToken, sal_uInt16 nFontDescP );
@@ -461,10 +461,10 @@ public:
     SmTextNode(const SmToken &rNodeToken, sal_uInt16 nFontDescP );
 
     sal_uInt16              GetFontDesc() const { return nFontDesc; }
-    void                SetText(const XubString &rText) { aText = rText; }
-    const XubString &   GetText() const { return aText; }
+    void                SetText(const OUString &rText) { aText = rText; }
+    const OUString &    GetText() const { return aText; }
     /** Change the text of this node, including the underlying token */
-    void                ChangeText(const XubString &rText) {
+    void                ChangeText(const OUString &rText) {
         aText = rText;
         SmToken token = GetToken();
         token.aText = rText;
@@ -476,15 +476,15 @@ public:
     /** Index within GetText() where the selection starts
      * @remarks Only valid of SmNode::IsSelected() is true
      */
-    xub_StrLen          GetSelectionStart() const {return nSelectionStart;}
+    sal_Int32           GetSelectionStart() const {return nSelectionStart;}
     /** Index within GetText() where the selection end
      * @remarks Only valid of SmNode::IsSelected() is true
      */
-    xub_StrLen          GetSelectionEnd() const {return nSelectionEnd;}
+    sal_Int32           GetSelectionEnd() const {return nSelectionEnd;}
     /** Set the index within GetText() where the selection starts */
-    void                SetSelectionStart(xub_StrLen index) {nSelectionStart = index;}
+    void                SetSelectionStart(sal_Int32 index) {nSelectionStart = index;}
     /** Set the index within GetText() where the selection end */
-    void                SetSelectionEnd(xub_StrLen index) {nSelectionEnd = index;}
+    void                SetSelectionEnd(sal_Int32 index) {nSelectionEnd = index;}
 
     virtual void Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell);
     virtual void Arrange(const OutputDevice &rDev, const SmFormat &rFormat);

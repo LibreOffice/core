@@ -26,7 +26,7 @@
 // header for class SvTabListBox
 #include <svtools/svtabbx.hxx>
 // header for class SvTreeListBox
-#include <svtools/svtreebx.hxx>
+#include <svtools/treelistbox.hxx>
 
 namespace chart
 {

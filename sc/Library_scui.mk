@@ -38,6 +38,7 @@ $(eval $(call gb_Library_use_external,scui,mdds_headers))
 $(eval $(call gb_Library_use_libraries,scui,\
 	comphelper \
 	cppu \
+	cppuhelper \
 	editeng \
 	for \
 	forui \
@@ -62,9 +63,6 @@ $(eval $(call gb_Library_add_exception_objects,scui,\
     sc/source/ui/attrdlg/scuiexp \
     sc/source/ui/attrdlg/tabpages \
     sc/source/ui/cctrl/editfield \
-    sc/source/ui/condformat/colorformat \
-    sc/source/ui/condformat/condformatdlg \
-    sc/source/ui/condformat/condformathelper \
     sc/source/ui/condformat/condformatmgr \
     sc/source/ui/dbgui/dapidata \
     sc/source/ui/dbgui/dapitype \

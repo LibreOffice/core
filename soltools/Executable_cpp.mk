@@ -9,6 +9,12 @@
 
 $(eval $(call gb_Executable_Executable,cpp))
 
+ifeq ($(COM),MSC)
+$(eval $(call gb_Executable_use_packages,cpp,\
+    soltools_inc \
+))
+endif
+
 $(eval $(call gb_Executable_add_cobjects,cpp,\
     soltools/cpp/_cpp \
     soltools/cpp/_eval \

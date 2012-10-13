@@ -917,7 +917,7 @@ void SAL_CALL SwAccessibleParagraph::grabFocus()
 }
 
 // #i71385#
-bool lcl_GetBackgroundColor( Color & rColor,
+static bool lcl_GetBackgroundColor( Color & rColor,
                              const SwFrm* pFrm,
                              SwCrsrShell* pCrsrSh )
 {

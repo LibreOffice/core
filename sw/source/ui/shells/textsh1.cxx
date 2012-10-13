@@ -126,7 +126,7 @@
 
 using namespace ::com::sun::star;
 
-void lcl_CharDialog( SwWrtShell &rWrtSh, sal_Bool bUseDialog, sal_uInt16 nSlot,const SfxItemSet *pArgs, SfxRequest *pReq )
+void sw_CharDialog( SwWrtShell &rWrtSh, sal_Bool bUseDialog, sal_uInt16 nSlot,const SfxItemSet *pArgs, SfxRequest *pReq )
 {
     FieldUnit eMetric = ::GetDfltMetric(0 != PTR_CAST(SwWebView, &rWrtSh.GetView()));
     SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, static_cast< sal_uInt16 >(eMetric)));
@@ -255,7 +255,7 @@ void lcl_CharDialog( SwWrtShell &rWrtSh, sal_Bool bUseDialog, sal_uInt16 nSlot,c
     delete pDlg;
 }
 
-short lcl_AskRedlineMode(Window *pWin)
+static short lcl_AskRedlineMode(Window *pWin)
 {
     MessBox aQBox( pWin, 0,
                     String( SW_RES( STR_REDLINE_TITLE ) ),
@@ -532,7 +532,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                 OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
-                AbstractSwBreakDlg* pDlg = pFact->CreateSwBreakDlg( GetView().GetWindow(), rWrtSh, DLG_BREAK );
+                AbstractSwBreakDlg* pDlg = pFact->CreateSwBreakDlg(GetView().GetWindow(), rWrtSh);
                 OSL_ENSURE(pDlg, "Dialogdiet fail!");
                 if ( pDlg->Execute() == RET_OK )
                 {
@@ -827,14 +827,14 @@ void SwTextShell::Execute(SfxRequest &rReq)
         }
         case SID_CHAR_DLG:
         {
-            lcl_CharDialog( rWrtSh, bUseDialog, nSlot, pArgs, &rReq );
+            sw_CharDialog( rWrtSh, bUseDialog, nSlot, pArgs, &rReq );
         }
         break;
         case SID_CHAR_DLG_FOR_PARAGRAPH:
         {
             rWrtSh.Push();          //save current cursor
             SwLangHelper::SelectCurrentPara( rWrtSh );
-            lcl_CharDialog( rWrtSh, bUseDialog, nSlot, pArgs, &rReq );
+            sw_CharDialog( rWrtSh, bUseDialog, nSlot, pArgs, &rReq );
             rWrtSh.Pop( sal_False );    //restore old cursor
         }
         break;

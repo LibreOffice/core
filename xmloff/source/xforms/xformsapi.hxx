@@ -47,41 +47,41 @@ class SvXMLNamespaceMap;
 
 #define OUSTRING(msg) rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(msg))
 
-com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> lcl_createXFormsModel();
+com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> xforms_createXFormsModel();
 
-void lcl_addXFormsModel(
+void xforms_addXFormsModel(
     const com::sun::star::uno::Reference<com::sun::star::frame::XModel>& xDocument,
     const com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet>& xModel );
 
-com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> lcl_findXFormsBinding( com::sun::star::uno::Reference<com::sun::star::frame::XModel>&, const rtl::OUString& );
+com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> xforms_findXFormsBinding( com::sun::star::uno::Reference<com::sun::star::frame::XModel>&, const rtl::OUString& );
 
-com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> lcl_findXFormsSubmission( com::sun::star::uno::Reference<com::sun::star::frame::XModel>&, const rtl::OUString& );
+com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> xforms_findXFormsSubmission( com::sun::star::uno::Reference<com::sun::star::frame::XModel>&, const rtl::OUString& );
 
-void lcl_setValue(
+void xforms_setValue(
     com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet>& xPropSet,
     const rtl::OUString& rName,
     const com::sun::star::uno::Any rAny );
 
 template<typename T>
-void lcl_setValue(
+void xforms_setValue(
     com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet>& xPropSet,
     const rtl::OUString& rName,
     T& aValue )
 {
-    lcl_setValue( xPropSet, rName, com::sun::star::uno::makeAny( aValue ) );
+    xforms_setValue( xPropSet, rName, com::sun::star::uno::makeAny( aValue ) );
 }
 
-sal_uInt16 lcl_getTypeClass(
+sal_uInt16 xforms_getTypeClass(
     const com::sun::star::uno::Reference<com::sun::star::xforms::XDataTypeRepository>& xRepository,
     const SvXMLNamespaceMap& rNamespaceMap,
     const rtl::OUString& rXMLName );
 
-rtl::OUString lcl_getTypeName(
+rtl::OUString xforms_getTypeName(
     const com::sun::star::uno::Reference<com::sun::star::xforms::XDataTypeRepository>& xRepository,
     const SvXMLNamespaceMap& rNamespaceMap,
     const rtl::OUString& rXMLName );
 
-rtl::OUString lcl_getBasicTypeName(
+rtl::OUString xforms_getBasicTypeName(
     const com::sun::star::uno::Reference<com::sun::star::xforms::XDataTypeRepository>& xRepository,
     const SvXMLNamespaceMap& rNamespaceMap,
     const rtl::OUString& rXMLName );

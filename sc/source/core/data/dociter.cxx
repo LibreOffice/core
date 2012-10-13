@@ -225,7 +225,7 @@ void ScDocumentIterator::GetPos( SCCOL& rCol, SCROW& rRow, SCTAB& rTab )
 
 //------------------------------------------------------------------------
 //------------------------------------------------------------------------
-void lcl_IterGetNumberFormat( sal_uLong& nFormat, const ScAttrArray*& rpArr,
+void ScAttrArray_IterGetNumberFormat( sal_uLong& nFormat, const ScAttrArray*& rpArr,
         SCROW& nAttrEndRow, const ScAttrArray* pNewArr, SCROW nRow,
         ScDocument* pDoc )
 {
@@ -332,7 +332,7 @@ bool ScValueIterator::GetThis(double& rValue, sal_uInt16& rErr)
                         --nRow;
                         if ( bCalcAsShown )
                         {
-                            lcl_IterGetNumberFormat( nNumFormat, pAttrArray,
+                            ScAttrArray_IterGetNumberFormat( nNumFormat, pAttrArray,
                                 nAttrEndRow, pCol->pAttrArray, nRow, pDoc );
                             rValue = pDoc->RoundValueAsShown( rValue, nNumFormat );
                         }
@@ -350,7 +350,7 @@ bool ScValueIterator::GetThis(double& rValue, sal_uInt16& rErr)
                             bNextValid = true;
                             if ( bCalcAsShown )
                             {
-                                lcl_IterGetNumberFormat( nNumFormat, pAttrArray,
+                                ScAttrArray_IterGetNumberFormat( nNumFormat, pAttrArray,
                                     nAttrEndRow, pCol->pAttrArray, nNextRow, pDoc );
                                 fNextValue = pDoc->RoundValueAsShown( fNextValue, nNumFormat );
                             }
@@ -594,7 +594,7 @@ bool ScDBQueryDataIterator::DataAccessInternal::getCurrent(Value& rValue)
                             {
                                 const ScAttrArray* pNewAttrArray =
                                     ScDBQueryDataIterator::GetAttrArrayByCol(*mpDoc, nTab, nCol);
-                                lcl_IterGetNumberFormat( nNumFormat, pAttrArray,
+                                ScAttrArray_IterGetNumberFormat( nNumFormat, pAttrArray,
                                     nAttrEndRow, pNewAttrArray, nRow, mpDoc );
                                 rValue.mfValue = mpDoc->RoundValueAsShown( rValue.mfValue, nNumFormat );
                             }
@@ -1868,7 +1868,7 @@ bool ScHorizontalValueIterator::GetNext( double& rValue, sal_uInt16& rErr )
                         if ( bCalcAsShown )
                         {
                             ScColumn* pCol = &pDoc->maTabs[nCurTab]->aCol[nCurCol];
-                            lcl_IterGetNumberFormat( nNumFormat, pAttrArray,
+                            ScAttrArray_IterGetNumberFormat( nNumFormat, pAttrArray,
                                     nAttrEndRow, pCol->pAttrArray, nCurRow, pDoc );
                             rValue = pDoc->RoundValueAsShown( rValue, nNumFormat );
                         }

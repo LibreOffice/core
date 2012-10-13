@@ -1,5 +1,5 @@
---- misc/build/graphite2-1.0.3/src/makefile.mk  Fri Mar  4 10:20:30 2011 +0700
-+++ misc/build/graphite2-1.0.3/src/makefile.mk  Fri Mar  4 10:20:30 2011 +0700
+--- misc/build/graphite2-1.2.0/src/makefile.mk  Fri Mar  4 10:20:30 2011 +0700
++++ misc/build/graphite2-1.2.0/src/makefile.mk  Fri Mar  4 10:20:30 2011 +0700
 @@ -1,1 +1,38 @@
 -dummy
 +EXTERNAL_WARNINGS_NOT_ERRORS := TRUE

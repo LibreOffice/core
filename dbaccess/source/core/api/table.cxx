@@ -18,6 +18,8 @@
  */
 
 
+#include <string.h>
+
 #include "table.hxx"
 #include <definitioncolumn.hxx>
 #include "dbastrings.hrc"
@@ -343,7 +345,7 @@ sal_Int64 SAL_CALL ODBTable::getSomething( const Sequence< sal_Int8 >& rId ) thr
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ODBTable::getSomething" );
     sal_Int64 nRet(0);
-    if (rId.getLength() == 16 && 0 == rtl_compareMemory(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
+    if (rId.getLength() == 16 && 0 == memcmp(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
         nRet = reinterpret_cast<sal_Int64>(this);
     else
         nRet = OTable_Base::getSomething(rId);

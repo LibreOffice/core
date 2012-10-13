@@ -41,7 +41,7 @@ using ::rtl::OUStringBuffer;
 using namespace ::com::sun::star::uno;
 using namespace ::xmloff::token;
 
-void lcl_xmloff_setAny( Any& rValue, sal_Int32 nValue, sal_Int8 nBytes )
+static void lcl_xmloff_setAny( Any& rValue, sal_Int32 nValue, sal_Int8 nBytes )
 {
     switch( nBytes )
     {
@@ -65,7 +65,7 @@ void lcl_xmloff_setAny( Any& rValue, sal_Int32 nValue, sal_Int8 nBytes )
     }
 }
 
-sal_Bool lcl_xmloff_getAny( const Any& rValue, sal_Int32& nValue,
+static sal_Bool lcl_xmloff_getAny( const Any& rValue, sal_Int32& nValue,
                             sal_Int8 nBytes )
 {
     sal_Bool bRet = sal_False;

@@ -20,6 +20,7 @@
 #include "optHeaderTabListbox.hxx"
 #include <vcl/svapp.hxx>
 #include <svtools/headbar.hxx>
+#include <svtools/svlbitm.hxx>
 
 namespace svx
 {
@@ -31,12 +32,12 @@ public:
     OptLBoxString_Impl( SvLBoxEntry* pEntry, sal_uInt16 nFlags, const String& rTxt ) :
         SvLBoxString( pEntry, nFlags, rTxt ) {}
 
-    virtual void Paint( const Point& rPos, SvLBox& rDev, sal_uInt16 nFlags, SvLBoxEntry* pEntry );
+    virtual void Paint( const Point& rPos, SvTreeListBox& rDev, sal_uInt16 nFlags, SvLBoxEntry* pEntry );
 };
 
 // -----------------------------------------------------------------------
 
-void OptLBoxString_Impl::Paint( const Point& rPos, SvLBox& rDev, sal_uInt16, SvLBoxEntry* pEntry )
+void OptLBoxString_Impl::Paint( const Point& rPos, SvTreeListBox& rDev, sal_uInt16, SvLBoxEntry* pEntry )
 {
     Font aOldFont( rDev.GetFont() );
     Font aFont( aOldFont );

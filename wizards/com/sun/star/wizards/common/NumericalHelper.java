@@ -17,7 +17,6 @@
  */
 package com.sun.star.wizards.common;
 
-// import com.sun.star.beans.XPropertySet;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.TypeClass;
 
@@ -92,7 +91,6 @@ public class NumericalHelper
     {
 
         byte retValue = 0;
-        // boolean hasConversionWarning = false;
         TypeObject aTypeObject = getTypeObject(aValue);
         switch (aTypeObject.iType)
         {
@@ -396,97 +394,7 @@ public class NumericalHelper
         }
         return false;
     }
-//    public static int toIntWithErrorMessage(Object _aValue) throws com.sun.star.script.BasicErrorException{
-//    try {
-//        return toInt(_aValue);
-//    }
-//    catch(com.sun.star.lang.IllegalArgumentException e) {
-//        DebugHelper.exception(BasicErrorCode.SbERR_CONVERSION, PropertyNames.EMPTY_STRING);
-//        return 0;
-//    }}
-//    
-//    
-//    public static String toStringWithErrorMessage(Object _aValue) throws com.sun.star.script.BasicErrorException{
-//    try {
-//        return toString(_aValue);
-//    }
-//    catch(com.sun.star.lang.IllegalArgumentException e) {
-//        DebugHelper.exception(BasicErrorCode.SbERR_CONVERSION, PropertyNames.EMPTY_STRING);
-//        return PropertyNames.EMPTY_STRING;
-//    }}
-//
-//    
-//    public static int toIntWithErrorMessage(Object _aValue, int _ndefaultValue) throws com.sun.star.script.BasicErrorException{
-//    try {
-//        return toInt(_aValue, _ndefaultValue);
-//    }
-//    catch(com.sun.star.uno.Exception e) {
-//        DebugHelper.exception(BasicErrorCode.SbERR_CONVERSION, PropertyNames.EMPTY_STRING);
-//        return 0;
-//    }}
-//
-//    public static boolean toBooleanWithErrorMessage(Object _oObject, int _nTrueField, int _nFalseField) throws com.sun.star.script.BasicErrorException{
-//        return toBooleanWithErrorMessage(_oObject, new int[]{_nTrueField}, new int[]{_nFalseField});
-//    }
-//    
-//    
-//    public static boolean toBooleanWithErrorMessage(Object _oObject) throws com.sun.star.script.BasicErrorException{
-//        try{
-//            return toBoolean(_oObject);
-//        }
-//        catch (java.lang.Exception e){
-//           DebugHelper.exception(BasicErrorCode.SbERR_BAD_ARGUMENT, PropertyNames.EMPTY_STRING);
-//           return false;
-//        }
-//    }
-//
-//
-//    public static boolean toBooleanWithErrorMessage(Object _oObject, int[] _nTrueFields, int[] _nFalseFields) throws com.sun.star.script.BasicErrorException{
-//    try{
-//        int nValue = NumericalHelper.toIntWithErrorMessage(_oObject);
-//        if (ContainerUtilities.FieldInIntTable(_nTrueFields, nValue) > -1){
-//            return true;
-//        }
-//        else if (ContainerUtilities.FieldInIntTable(_nFalseFields, nValue) > -1){
-//           return false;
-//        }
-//        else{
-//            DebugHelper.exception(BasicErrorCode.SbERR_OUT_OF_RANGE, PropertyNames.EMPTY_STRING);
-//            return false;
-//        }
-//    }catch (java.lang.Exception e){
-//       DebugHelper.exception(BasicErrorCode.SbERR_OUT_OF_RANGE, PropertyNames.EMPTY_STRING);
-//        return false;
-//    }}
-//        
-//    
-//    public static boolean toBooleanWithErrorMessage(Object _oObject, int _nTrueField, int _nFalseField, boolean _bdefaultValue) throws com.sun.star.script.BasicErrorException{
-//        return toBooleanWithErrorMessage(_oObject, new int[]{_nTrueField}, new int[]{_nFalseField}, _bdefaultValue);
-//    }
-//    
-//    
-//    public static boolean toBooleanWithErrorMessage(Object _oObject, int[] _nTrueFields, int[] _nFalseFields, boolean _bdefaultValue) throws com.sun.star.script.BasicErrorException{
-//    try{
-//        if ((_oObject == null) || (AnyConverter.isVoid(_oObject))){
-//            return _bdefaultValue;
-//        }
-//        else{
-//            int nValue = NumericalHelper.toIntWithErrorMessage(_oObject);
-//            if (ContainerUtilities.FieldInIntTable(_nTrueFields, nValue) > -1){
-//                return true;
-//            }
-//            else if (ContainerUtilities.FieldInIntTable(_nFalseFields, nValue) > -1){
-//               return false;
-//            }
-//            else{
-//                DebugHelper.exception(BasicErrorCode.SbERR_OUT_OF_RANGE, PropertyNames.EMPTY_STRING);
-//                return false;
-//            }
-//        }
-//    }catch (java.lang.Exception e){
-//       DebugHelper.exception(BasicErrorCode.SbERR_OUT_OF_RANGE, PropertyNames.EMPTY_STRING);
-//        return false;
-//    }}
+
     /**
      * get an int value from the object
      * @param aValue 
@@ -1484,26 +1392,6 @@ public class NumericalHelper
         return destObject;
     }
 
-//    public static boolean isObjectNumericRepresentation(Object _oValue, NumberFormatter _oNumberFormatter, XPropertySet _xPropertySet) throws com.sun.star.script.BasicErrorException{
-//    try{
-//        int nNumberFormat = AnyConverter.toInt(_xPropertySet.getPropertyValue("NumberFormat"));        
-//        if (AnyConverter.isString(_oValue)){
-//            String sCellContent = AnyConverter.toString(_oValue);
-//            try{
-//                _oNumberFormatter.convertStringToNumber(nNumberFormat, sCellContent);
-//                return true;
-//            }catch (Exception e){
-//                return false;
-//            }
-//        }
-//        else{
-//            return true;
-//        }
-//    }
-//    catch (com.sun.star.uno.Exception e){
-//        DebugHelper.exception(1 /*BasicErrorCode.SbERR_METHOD_FAILED*/, PropertyNames.EMPTY_STRING);
-//        return false;
-//    }} 
     /**
      * Helper class for roman numbering
      */

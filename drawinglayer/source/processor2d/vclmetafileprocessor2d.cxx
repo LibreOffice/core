@@ -1704,26 +1704,6 @@ namespace drawinglayer
                     RenderModifiedColorPrimitive2D(static_cast< const primitive2d::ModifiedColorPrimitive2D& >(rCandidate));
                     break;
                 }
-                case PRIMITIVE2D_ID_HIDDENGEOMETRYPRIMITIVE2D :
-                {
-                    // HiddenGeometryPrimitive2D; to rebuilt the old MetaFile creation, it is necessary to
-                    // not ignore them (as it was thought), but to add a MetaFile entry for them.
-                    basegfx::B2DRange aInvisibleRange(rCandidate.getB2DRange(getViewInformation2D()));
-
-                    if(!aInvisibleRange.isEmpty())
-                    {
-                        aInvisibleRange.transform(maCurrentTransformation);
-                        const Rectangle aRectLogic(
-                            (sal_Int32)floor(aInvisibleRange.getMinX()), (sal_Int32)floor(aInvisibleRange.getMinY()),
-                            (sal_Int32)ceil(aInvisibleRange.getMaxX()), (sal_Int32)ceil(aInvisibleRange.getMaxY()));
-
-                        mpOutputDevice->SetFillColor();
-                        mpOutputDevice->SetLineColor();
-                        mpOutputDevice->DrawRect(aRectLogic);
-                    }
-
-                    break;
-                }
                 case PRIMITIVE2D_ID_UNIFIEDTRANSPARENCEPRIMITIVE2D :
                 {
                     // for metafile: Need to examine what the pure vcl version is doing here actually

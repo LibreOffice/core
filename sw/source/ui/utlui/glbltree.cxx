@@ -1234,7 +1234,7 @@ void SwGlobalTree::InitEntry(SvLBoxEntry* pEntry,
     pEntry->ReplaceItem( pStr, nColToHilite );
 }
 
-void SwLBoxString::Paint( const Point& rPos, SvLBox& rDev, sal_uInt16 nFlags,
+void SwLBoxString::Paint( const Point& rPos, SvTreeListBox& rDev, sal_uInt16 nFlags,
     SvLBoxEntry* pEntry )
 {
     SwGlblDocContent* pCont = (SwGlblDocContent*)pEntry->GetUserData();

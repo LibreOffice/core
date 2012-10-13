@@ -20,7 +20,7 @@
 #include "scriptcont.hxx"
 #include "sbmodule.hxx"
 #include <com/sun/star/container/XNameContainer.hpp>
-#include <com/sun/star/xml/sax/XParser.hpp>
+#include <com/sun/star/xml/sax/Parser.hpp>
 #include <com/sun/star/xml/sax/InputSource.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
@@ -32,6 +32,7 @@
 #include <com/sun/star/embed/XTransactedObject.hpp>
 #include <com/sun/star/task/ErrorCodeIOException.hpp>
 #include <com/sun/star/script/ModuleType.hpp>
+#include <comphelper/componentcontext.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <unotools/streamwrap.hxx>
@@ -238,14 +239,7 @@ Any SAL_CALL SfxScriptLibraryContainer::importLibraryElement
 {
     Any aRetAny;
 
-    Reference< XParser > xParser( mxMSF->createInstance(
-        OUString( "com.sun.star.xml.sax.Parser" ) ), UNO_QUERY );
-    if( !xParser.is() )
-    {
-        OSL_FAIL( "### couldn't create sax parser component\n" );
-        return aRetAny;
-    }
-
+    Reference< XParser > xParser = xml::sax::Parser::create( comphelper::getComponentContext(mxMSF) );
 
     // Read from storage?
     sal_Bool bStorage = xInStream.is();
@@ -639,7 +633,7 @@ sal_Bool SfxScriptLibraryContainer::implStorePasswordLibrary( SfxLibrary* pLib, 
                     sal_Int32 nSize = (sal_Int32)aMemStream.Tell();
                     Sequence< sal_Int8 > aBinSeq( nSize );
                     sal_Int8* pData = aBinSeq.getArray();
-                    ::rtl_copyMemory( pData, aMemStream.GetData(), nSize );
+                    memcpy( pData, aMemStream.GetData(), nSize );
 
                        Reference< XOutputStream > xOut = xCodeStream->getOutputStream();
                     if ( !xOut.is() )
@@ -775,7 +769,7 @@ sal_Bool SfxScriptLibraryContainer::implStorePasswordLibrary( SfxLibrary* pLib, 
                         sal_Int32 nSize = (sal_Int32)aMemStream.Tell();
                         Sequence< sal_Int8 > aBinSeq( nSize );
                         sal_Int8* pData = aBinSeq.getArray();
-                        ::rtl_copyMemory( pData, aMemStream.GetData(), nSize );
+                        memcpy( pData, aMemStream.GetData(), nSize );
 
                         Reference< XOutputStream > xOut = xCodeStream->getOutputStream();
                         if ( xOut.is() )

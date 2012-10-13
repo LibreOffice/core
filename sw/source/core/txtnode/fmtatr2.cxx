@@ -127,7 +127,7 @@ bool SwFmtCharFmt::QueryValue( uno::Any& rVal, sal_uInt8 ) const
 {
     String sCharFmtName;
     if(GetCharFmt())
-        SwStyleNameMapper::FillProgName(GetCharFmt()->GetName(), sCharFmtName,  nsSwGetPoolIdFromName::GET_POOLID_CHRFMT, sal_True );
+        SwStyleNameMapper::FillProgName(GetCharFmt()->GetName(), sCharFmtName,  nsSwGetPoolIdFromName::GET_POOLID_CHRFMT, true );
     rVal <<= OUString( sCharFmtName );
     return true;
 }
@@ -321,14 +321,14 @@ bool SwFmtINetFmt::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
             if( !sVal.Len() && nVisitedId != 0 )
                 SwStyleNameMapper::FillUIName( nVisitedId, sVal );
             if( sVal.Len() )
-                SwStyleNameMapper::FillProgName( sVal, sVal, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT, sal_True );
+                SwStyleNameMapper::FillProgName( sVal, sVal, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT, true );
         break;
         case MID_URL_UNVISITED_FMT:
             sVal = aINetFmt;
             if( !sVal.Len() && nINetId != 0 )
                 SwStyleNameMapper::FillUIName( nINetId, sVal );
             if( sVal.Len() )
-                SwStyleNameMapper::FillProgName( sVal, sVal, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT, sal_True );
+                SwStyleNameMapper::FillProgName( sVal, sVal, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT, true );
         break;
         case MID_URL_HYPERLINKEVENTS:
         {
@@ -395,7 +395,7 @@ bool SwFmtINetFmt::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId  )
             case MID_URL_VISITED_FMT:
             {
                 String aString;
-                SwStyleNameMapper::FillUIName( sVal, aString, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT, sal_True );
+                SwStyleNameMapper::FillUIName( sVal, aString, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT, true );
                 aVisitedFmt = OUString ( aString );
                 nVisitedId = SwStyleNameMapper::GetPoolIdFromUIName( aVisitedFmt,
                                                nsSwGetPoolIdFromName::GET_POOLID_CHRFMT );
@@ -404,7 +404,7 @@ bool SwFmtINetFmt::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId  )
             case MID_URL_UNVISITED_FMT:
             {
                 String aString;
-                SwStyleNameMapper::FillUIName( sVal, aString, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT, sal_True );
+                SwStyleNameMapper::FillUIName( sVal, aString, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT, true );
                 aINetFmt = OUString ( aString );
                 nINetId = SwStyleNameMapper::GetPoolIdFromUIName( aINetFmt, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT );
             }
@@ -484,7 +484,7 @@ bool SwFmtRuby::QueryValue( uno::Any& rVal,
         case MID_RUBY_CHARSTYLE:
         {
             String aString;
-            SwStyleNameMapper::FillProgName(sCharFmtName, aString, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT, sal_True );
+            SwStyleNameMapper::FillProgName(sCharFmtName, aString, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT, true );
             rVal <<= OUString ( aString );
         }
         break;

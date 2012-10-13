@@ -30,10 +30,14 @@
 #include "tools/string.hxx"
 #include <sfx2/app.hxx>
 
+#ifndef DISABLE_DYNLOADING
 //copy from core\bastyp\swtypes.cxx
 String aEmptyStr; // constant strings
 
 ResMgr* pSwResMgr=0;
+#else
+static ResMgr *pSwResMgr;
+#endif
 
 ResMgr* SwDialogsResMgr::GetResMgr()
 {

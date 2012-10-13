@@ -1059,7 +1059,7 @@ void SwDrawContact::NotifyBackgrdOfAllVirtObjs( const Rectangle* pOldBoundRect )
 }
 
 // OD 2004-04-08 #i26791# - local method to notify the background for a drawing object
-void lcl_NotifyBackgroundOfObj( SwDrawContact& _rDrawContact,
+static void lcl_NotifyBackgroundOfObj( SwDrawContact& _rDrawContact,
                                 const SdrObject& _rObj,
                                 const Rectangle* _pOldObjRect )
 {
@@ -1754,7 +1754,7 @@ void SwDrawContact::DisconnectObjFromLayout( SdrObject* _pDrawObj )
 |*  SwDrawContact::ConnectToLayout()
 |*
 |*************************************************************************/
-SwTxtFrm* lcl_GetFlyInCntntAnchor( SwTxtFrm* _pProposedAnchorFrm,
+static SwTxtFrm* lcl_GetFlyInCntntAnchor( SwTxtFrm* _pProposedAnchorFrm,
                                    const xub_StrLen _nTxtOfs )
 {
     SwTxtFrm* pAct = _pProposedAnchorFrm;

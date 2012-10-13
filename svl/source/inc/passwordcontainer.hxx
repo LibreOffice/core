@@ -49,18 +49,18 @@
 
 class NamePassRecord
 {
-    ::rtl::OUString                                     m_aName;
+    ::rtl::OUString                                       m_aName;
 
     // there are two lists of passwords, memory passwords and persistent passwords
-    sal_Bool                                              m_bHasMemPass;
+    bool                                                  m_bHasMemPass;
     ::std::vector< ::rtl::OUString >                      m_aMemPass;
 
     // persistent passwords are encrypted in one string
-    sal_Bool                                              m_bHasPersPass;
+    bool                                                  m_bHasPersPass;
     ::rtl::OUString                                       m_aPersPass;
 
-    void InitArrays( sal_Bool bHasMemoryList, const ::std::vector< ::rtl::OUString >& aMemoryList,
-                     sal_Bool bHasPersistentList, const ::rtl::OUString& aPersistentList )
+    void InitArrays( bool bHasMemoryList, const ::std::vector< ::rtl::OUString >& aMemoryList,
+                     bool bHasPersistentList, const ::rtl::OUString& aPersistentList )
     {
         m_bHasMemPass = bHasMemoryList;
         if ( bHasMemoryList )
@@ -75,30 +75,30 @@ public:
 
     NamePassRecord( const ::rtl::OUString& aName )
         : m_aName( aName )
-        , m_bHasMemPass( sal_False )
-        , m_bHasPersPass( sal_False )
+        , m_bHasMemPass( false )
+        , m_bHasPersPass( false )
     {
     }
 
     NamePassRecord( const ::rtl::OUString& aName, const ::std::vector< ::rtl::OUString >& aMemoryList )
         : m_aName( aName )
-        , m_bHasMemPass( sal_True )
+        , m_bHasMemPass( true )
         , m_aMemPass( aMemoryList )
-        , m_bHasPersPass( sal_False )
+        , m_bHasPersPass( false )
     {
     }
 
     NamePassRecord( const ::rtl::OUString& aName, const ::rtl::OUString& aPersistentList )
         : m_aName( aName )
-        , m_bHasMemPass( sal_False )
-        , m_bHasPersPass( sal_True )
+        , m_bHasMemPass( false )
+        , m_bHasPersPass( true )
         , m_aPersPass( aPersistentList )
     {
     }
 
     NamePassRecord( const ::rtl::OUString& aName,
-                    sal_Bool bHasMemoryList, const ::std::vector< ::rtl::OUString >& aMemoryList,
-                    sal_Bool bHasPersistentList, const ::rtl::OUString aPersistentList )
+                    bool bHasMemoryList, const ::std::vector< ::rtl::OUString >& aMemoryList,
+                    bool bHasPersistentList, const ::rtl::OUString aPersistentList )
         : m_aName( aName )
         , m_bHasMemPass( bHasMemoryList )
         , m_bHasPersPass( bHasPersistentList )
@@ -108,8 +108,8 @@ public:
 
     NamePassRecord( const NamePassRecord& aRecord )
         : m_aName( aRecord.m_aName )
-        , m_bHasMemPass( sal_False )
-        , m_bHasPersPass( sal_False )
+        , m_bHasMemPass( false )
+        , m_bHasPersPass( false )
     {
         InitArrays( aRecord.m_bHasMemPass, aRecord.m_aMemPass, aRecord.m_bHasPersPass, aRecord.m_aPersPass );
     }
@@ -130,7 +130,7 @@ public:
         return m_aName;
     }
 
-    sal_Bool HasPasswords( sal_Int8 nStatus ) const
+    bool HasPasswords( sal_Int8 nStatus ) const
     {
         if ( nStatus == MEMORY_RECORD )
             return m_bHasMemPass;
@@ -159,25 +159,25 @@ public:
     void SetMemPasswords( const ::std::vector< ::rtl::OUString >& aMemList )
     {
         m_aMemPass = aMemList;
-        m_bHasMemPass = sal_True;
+        m_bHasMemPass = true;
     }
 
     void SetPersPasswords( const ::rtl::OUString& aPersList )
     {
         m_aPersPass = aPersList;
-        m_bHasPersPass = sal_True;
+        m_bHasPersPass = true;
     }
 
     void RemovePasswords( sal_Int8 nStatus )
     {
         if ( nStatus == MEMORY_RECORD )
         {
-            m_bHasMemPass = sal_False;
+            m_bHasMemPass = false;
             m_aMemPass.clear();
         }
         else if ( nStatus == PERSISTENT_RECORD )
         {
-            m_bHasPersPass = sal_False;
+            m_bHasPersPass = false;
             m_aPersPass = ::rtl::OUString();
         }
     }
@@ -194,14 +194,14 @@ typedef ::std::map< ::rtl::OUString, ::std::list< NamePassRecord > > PassMap;
 class PasswordContainer;
 
 class StorageItem : public ::utl::ConfigItem {
-    PasswordContainer*  mainCont;
-    sal_Bool            hasEncoded;
+    PasswordContainer*     mainCont;
+    bool                   hasEncoded;
     ::rtl::OUString        mEncoded;
 public:
     StorageItem( PasswordContainer* point, const ::rtl::OUString& path ) :
         ConfigItem( path, CONFIG_MODE_IMMEDIATE_UPDATE ),
         mainCont( point ),
-        hasEncoded( sal_False )
+        hasEncoded( false )
     {
         ::com::sun::star::uno::Sequence< ::rtl::OUString > aNode( 1 );
         *aNode.getArray()  = path;
@@ -214,10 +214,10 @@ public:
     void remove( const ::rtl::OUString& url, const ::rtl::OUString& rec );
     void clear();
 
-    sal_Bool getEncodedMP( ::rtl::OUString& aResult );
-    void setEncodedMP( const ::rtl::OUString& aResult, sal_Bool bAcceptEnmpty = sal_False );
-    void setUseStorage( sal_Bool bUse );
-    sal_Bool useStorage();
+    bool getEncodedMP( ::rtl::OUString& aResult );
+    void setEncodedMP( const ::rtl::OUString& aResult, bool bAcceptEnmpty = false );
+    void setUseStorage( bool bUse );
+    bool useStorage();
 
     virtual void            Notify( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aPropertyNames );
     virtual void            Commit();
@@ -251,7 +251,7 @@ private:
 
     ::com::sun::star::task::UserRecord CopyToUserRecord(
                                         const NamePassRecord& aRecord,
-                                        sal_Bool& io_bTryToDecode,
+                                        bool& io_bTryToDecode,
                                         const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& aHandler );
 
     ::com::sun::star::uno::Sequence< ::com::sun::star::task::UserRecord > FindUsr(
@@ -282,7 +282,7 @@ bool createUrlRecord(
     ::rtl::OUString GetMasterPassword( const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& Handler )
                                                         throw(::com::sun::star::uno::RuntimeException);
 
-    void UpdateVector( const ::rtl::OUString& url, ::std::list< NamePassRecord >& toUpdate, NamePassRecord& rec, sal_Bool writeFile )
+    void UpdateVector( const ::rtl::OUString& url, ::std::list< NamePassRecord >& toUpdate, NamePassRecord& rec, bool writeFile )
                                                         throw(::com::sun::star::uno::RuntimeException);
 
     void PrivateAdd( const ::rtl::OUString& aUrl,

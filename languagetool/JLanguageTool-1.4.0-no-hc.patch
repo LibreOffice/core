@@ -1,4 +1,4 @@
---- misc/JLanguageTool-1.7.0/build.xml	2012-02-29 22:18:05.118789546 +0100
+--- misc/build/JLanguageTool-1.7.0/build.xml	2012-02-29 22:18:05.118789546 +0100
 +++ misc/build/JLanguageTool-1.7.0/build.xml	2012-02-29 22:17:02.385235706 +0100
 @@ -82,7 +82,6 @@
                                  <include name="openoffice/Linguistic.xcu"/>
@@ -8,7 +8,7 @@
  				<include name="openoffice/images/LanguageToolBig.png"/>
  				<include name="openoffice/images/LanguageToolSmall.png"/>
  				<include name="openoffice/images/dialog.png"/>
---- misc/JLanguageTool-1.7.0/openoffice/Linguistic.xcu	2011-06-26 20:29:43.000000000 +0200
+--- misc/build/JLanguageTool-1.7.0/openoffice/Linguistic.xcu	2011-06-26 20:29:43.000000000 +0200
 +++ misc/build/JLanguageTool-1.7.0/openoffice/Linguistic.xcu	2012-02-29 22:17:25.551071099 +0100
 @@ -27,9 +27,6 @@
                  <prop oor:name="SpellAndGrammarDialogImage" oor:type="xs:string">

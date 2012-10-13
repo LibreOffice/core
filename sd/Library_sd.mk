@@ -257,7 +257,6 @@ $(eval $(call gb_Library_add_exception_objects,sd,\
     sd/source/ui/framework/module/ImpressModule \
     sd/source/ui/framework/module/ModuleController \
     sd/source/ui/framework/module/PresentationModule \
-    sd/source/ui/framework/module/ReadOnlyModeObserver \
     sd/source/ui/framework/module/ResourceManager \
     sd/source/ui/framework/module/ShellStackGuard \
     sd/source/ui/framework/module/SlideSorterModule \

@@ -26,7 +26,7 @@
 #include <svtools/svmedit.hxx>
 #include <vcl/tabpage.hxx>
 #include <vcl/tabctrl.hxx>
-#include <svtools/svtreebx.hxx>
+#include <svtools/treelistbox.hxx>
 #include "formula/IFunctionDescription.hxx"
 #include "formula/omoduleclient.hxx"
 

@@ -42,6 +42,7 @@
 #include <com/sun/star/sdb/CommandType.hpp>
 #include <com/sun/star/sdbc/SQLWarning.hpp>
 #include <com/sun/star/sdb/SQLContext.hpp>
+#include <com/sun/star/task/InteractionHandler.hpp>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/types.hxx>
 #include <connectivity/dbtools.hxx>
@@ -514,16 +515,17 @@ namespace dbp
     //---------------------------------------------------------------------
     Reference< XInteractionHandler > OControlWizard::getInteractionHandler(Window* _pWindow) const
     {
-        const ::rtl::OUString sInteractionHandlerServiceName("com.sun.star.task.InteractionHandler");
         Reference< XInteractionHandler > xHandler;
         try
         {
-            if (getServiceFactory().is())
-                xHandler = Reference< XInteractionHandler >(getServiceFactory()->createInstance(sInteractionHandlerServiceName), UNO_QUERY);
+            xHandler = Reference< XInteractionHandler >( InteractionHandler::createWithParent(comphelper::getComponentContext(getServiceFactory()), 0), UNO_QUERY_THROW );
         }
         catch(const Exception&) { }
         if (!xHandler.is())
+        {
+            const ::rtl::OUString sInteractionHandlerServiceName("com.sun.star.task.InteractionHandler");
             ShowServiceNotAvailableError(_pWindow, sInteractionHandlerServiceName, sal_True);
+        }
         return xHandler;
     }
     //---------------------------------------------------------------------

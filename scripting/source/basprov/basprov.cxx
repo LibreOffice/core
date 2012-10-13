@@ -586,7 +586,7 @@ namespace basprov
 
 extern "C"
 {
-    SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
+    SAL_DLLPUBLIC_EXPORT void * SAL_CALL basprov_component_getFactory(
         const sal_Char * pImplName, lang::XMultiServiceFactory * pServiceManager,
         registry::XRegistryKey * pRegistryKey )
     {

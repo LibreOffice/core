@@ -42,6 +42,8 @@ mkdir: %_DEST%\inc\external\wine
 ..\msvcp90\Microsoft.VC90.CRT.manifest %_DEST%\bin\Microsoft.VC90.CRT.manifest
 ..\msvcp90\Microsoft.VC90.DebugCRT.manifest %_DEST%\bin\Microsoft.VC90.DebugCRT.manifest
 ..\msm90\*.msm %_DEST%\bin
+..\msm100\*.msm %_DEST%\bin
+..\msm110\*.msm %_DEST%\bin
 
 ..\unowinreg\unowinreg.dll %_DEST%\bin\unowinreg.dll
 

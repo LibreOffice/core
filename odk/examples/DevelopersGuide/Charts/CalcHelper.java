@@ -60,9 +60,8 @@ import com.sun.star.container.NoSuchElementException;
 
 // __________ Implementation __________
 
-/** Helper for accessing a calc document
-    @author Bj&ouml;rn Milcke
- */
+// Helper for accessing a calc document
+
 public class CalcHelper
 {
     public CalcHelper( XSpreadsheetDocument aDoc )

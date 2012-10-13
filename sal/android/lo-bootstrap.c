@@ -43,8 +43,6 @@
 
 #include <jni.h>
 
-#include <linux/elf.h>
-
 #include <android/log.h>
 
 #include "uthash.h"
@@ -299,40 +297,8 @@ engine_handle_cmd(struct android_app* state,
     }
 }
 
-static char *
-read_section(int fd,
-             Elf32_Shdr *shdr)
-{
-    char *result;
-
-    result = malloc(shdr->sh_size);
-    if (lseek(fd, shdr->sh_offset, SEEK_SET) < 0) {
-        close(fd);
-        free(result);
-        return NULL;
-    }
-    if (read(fd, result, shdr->sh_size) < (int) shdr->sh_size) {
-        close(fd);
-        free(result);
-        return NULL;
-    }
-
-    return result;
-}
-
-static void
-free_ptrarray(void **pa)
-{
-    void **rover = pa;
-
-    while (*rover != NULL)
-        free(*rover++);
-
-    free(pa);
-}
-
-/* The lo-bootstrap shared library is always loaded from Java, so
- * this is always called by JNI first.
+/* The lo-native-code shared library is always loaded from Java, so this is
+ * always called by JNI first.
  */
 __attribute__ ((visibility("default")))
 jint
@@ -343,133 +309,6 @@ JNI_OnLoad(JavaVM* vm, void* reserved)
     the_java_vm = vm;
 
     return JNI_VERSION_1_2;
-}
-
-__attribute__ ((visibility("default")))
-jobjectArray
-Java_org_libreoffice_android_Bootstrap_dlneeds(JNIEnv* env,
-                                               jobject clazz,
-                                               jstring library)
-{
-    char **needed;
-    int n_needed;
-    const char *libName;
-    jclass String;
-    jobjectArray result;
-
-    (void) clazz;
-
-    libName = (*env)->GetStringUTFChars(env, library, NULL);
-
-    needed = lo_dlneeds(libName);
-
-    (*env)->ReleaseStringUTFChars(env, library, libName);
-
-    if (needed == NULL)
-        return NULL;
-
-    n_needed = 0;
-    while (needed[n_needed] != NULL)
-        n_needed++;
-
-    /* Allocate return value */
-
-    String = (*env)->FindClass(env, "java/lang/String");
-    if (String == NULL) {
-        LOGE("Could not find the String class");
-        free_ptrarray((void **) needed);
-        return NULL;
-    }
-
-    result = (*env)->NewObjectArray(env, n_needed, String, NULL);
-    if (result == NULL) {
-        LOGE("Could not create the String array");
-        free_ptrarray((void **) needed);
-        return NULL;
-    }
-
-    for (n_needed = 0; needed[n_needed] != NULL; n_needed++)
-        (*env)->SetObjectArrayElement(env, result, n_needed, (*env)->NewStringUTF(env, needed[n_needed]));
-
-    free_ptrarray((void **) needed);
-
-    return result;
-}
-
-__attribute__ ((visibility("default")))
-jint
-Java_org_libreoffice_android_Bootstrap_dlopen(JNIEnv* env,
-                                              jobject clazz,
-                                              jstring library)
-{
-    const char *libName;
-    void *p;
-
-    (void) clazz;
-
-    libName = (*env)->GetStringUTFChars(env, library, NULL);
-    p = lo_dlopen (libName);
-    (*env)->ReleaseStringUTFChars(env, library, libName);
-
-    return (jint) p;
-}
-
-__attribute__ ((visibility("default")))
-jint
-Java_org_libreoffice_android_Bootstrap_dlsym(JNIEnv* env,
-                                             jobject clazz,
-                                             jint handle,
-                                             jstring symbol)
-{
-    const char *symName;
-    void *p;
-
-    (void) clazz;
-
-    symName = (*env)->GetStringUTFChars(env, symbol, NULL);
-    p = lo_dlsym ((void *) handle, symName);
-    (*env)->ReleaseStringUTFChars(env, symbol, symName);
-
-    return (jint) p;
-}
-
-__attribute__ ((visibility("default")))
-jint
-Java_org_libreoffice_android_Bootstrap_dlcall(JNIEnv* env,
-                                              jobject clazz,
-                                              jint function,
-                                              jobject argument)
-{
-    jclass StringArray;
-
-    (void) clazz;
-
-    StringArray = (*env)->FindClass(env, "[Ljava/lang/String;");
-    if (StringArray == NULL) {
-        LOGE("Could not find String[] class");
-        return 0;
-    }
-
-    if ((*env)->IsInstanceOf(env, argument, StringArray)) {
-        int argc = (*env)->GetArrayLength(env, argument);
-        const char **argv = malloc(sizeof(char *) * (argc+1));
-        int i, result;
-        for (i = 0; i < argc; i++) {
-            argv[i] = (*env)->GetStringUTFChars(env, (*env)->GetObjectArrayElement(env, argument, i), NULL);
-            /* LOGI("argv[%d] = %s", i, argv[i]); */
-        }
-        argv[argc] = NULL;
-
-        result = lo_dlcall_argc_argv((void *) function, argc, argv);
-
-        for (i = 0; i < argc; i++)
-            (*env)->ReleaseStringUTFChars(env, (*env)->GetObjectArrayElement(env, argument, i), argv[i]);
-
-        free(argv);
-        return result;
-    }
-
-    return 0;
 }
 
 // public static native boolean setup(String dataDir,
@@ -591,21 +430,17 @@ get_jni_string_array(JNIEnv *env,
 }
 
 
-// public static native boolean setup(int lo_main_ptr,
-//                                    Object lo_main_argument,
+// public static native boolean setup(Object lo_main_argument,
 //                                    int lo_main_delay);
 
 __attribute__ ((visibility("default")))
 jboolean
-Java_org_libreoffice_android_Bootstrap_setup__ILjava_lang_Object_2I(JNIEnv* env,
+Java_org_libreoffice_android_Bootstrap_setup__Ljava_lang_Object_2I(JNIEnv* env,
                                                                     jobject clazz,
-                                                                    void *lo_main_ptr,
                                                                     jobject lo_main_argument,
                                                                     jint lo_main_delay)
 {
     (void) clazz;
-
-    lo_main = lo_main_ptr;
 
     if (!get_jni_string_array(env, "setup: lo_main_argument", lo_main_argument, &lo_main_argc, &lo_main_argv))
         return JNI_FALSE;
@@ -668,344 +503,16 @@ Java_org_libreoffice_android_Bootstrap_putenv(JNIEnv* env,
 
     putenv(s);
 
+    {
+        static int beenhere=0;
+        if (!beenhere) {
+            LOGI("lo-bootstrap: Sleeping for 20 seconds, start ndk-gdb NOW if that is your intention");
+            sleep(20);
+            beenhere = 1;
+        }
+    }
+
     (*env)->ReleaseStringUTFChars(env, string, s);
-}
-
-__attribute__ ((visibility("default")))
-char **
-lo_dlneeds(const char *library)
-{
-    int i, fd;
-    int n_needed;
-    char **result;
-    char *shstrtab;
-    char *dynstr = NULL;
-    Elf32_Ehdr hdr;
-    Elf32_Shdr shdr;
-    Elf32_Dyn dyn;
-
-    /* Open library and read ELF header */
-
-    fd = open(library, O_RDONLY);
-
-    if (fd == -1) {
-        LOGE("lo_dlneeds: Could not open library %s: %s", library, strerror(errno));
-        return NULL;
-    }
-
-    if (read(fd, &hdr, sizeof(hdr)) < (int) sizeof(hdr)) {
-        LOGE("lo_dlneeds: Could not read ELF header of %s", library);
-        close(fd);
-        return NULL;
-    }
-
-    /* Read in .shstrtab */
-
-    if (lseek(fd, hdr.e_shoff + hdr.e_shstrndx * sizeof(shdr), SEEK_SET) < 0) {
-        LOGE("lo_dlneeds: Could not seek to .shstrtab section header of %s", library);
-        close(fd);
-        return NULL;
-    }
-    if (read(fd, &shdr, sizeof(shdr)) < (int) sizeof(shdr)) {
-        LOGE("lo_dlneeds: Could not read section header of %s", library);
-        close(fd);
-        return NULL;
-    }
-
-    shstrtab = read_section(fd, &shdr);
-    if (shstrtab == NULL)
-        return NULL;
-
-    /* Read section headers, looking for .dynstr section */
-
-    if (lseek(fd, hdr.e_shoff, SEEK_SET) < 0) {
-        LOGE("lo_dlneeds: Could not seek to section headers of %s", library);
-        close(fd);
-        return NULL;
-    }
-    for (i = 0; i < hdr.e_shnum; i++) {
-        if (read(fd, &shdr, sizeof(shdr)) < (int) sizeof(shdr)) {
-            LOGE("lo_dlneeds: Could not read section header of %s", library);
-            close(fd);
-            return NULL;
-        }
-        if (shdr.sh_type == SHT_STRTAB &&
-            strcmp(shstrtab + shdr.sh_name, ".dynstr") == 0) {
-            dynstr = read_section(fd, &shdr);
-            if (dynstr == NULL) {
-                free(shstrtab);
-                return NULL;
-            }
-            break;
-        }
-    }
-
-    if (i == hdr.e_shnum) {
-        LOGE("lo_dlneeds: No .dynstr section in %s", library);
-        close(fd);
-        return NULL;
-    }
-
-    /* Read section headers, looking for .dynamic section */
-
-    if (lseek(fd, hdr.e_shoff, SEEK_SET) < 0) {
-        LOGE("lo_dlneeds: Could not seek to section headers of %s", library);
-        close(fd);
-        return NULL;
-    }
-    for (i = 0; i < hdr.e_shnum; i++) {
-        if (read(fd, &shdr, sizeof(shdr)) < (int) sizeof(shdr)) {
-            LOGE("lo_dlneeds: Could not read section header of %s", library);
-            close(fd);
-            return NULL;
-        }
-        if (shdr.sh_type == SHT_DYNAMIC) {
-            size_t dynoff;
-
-            /* Count number of DT_NEEDED entries */
-            n_needed = 0;
-            if (lseek(fd, shdr.sh_offset, SEEK_SET) < 0) {
-                LOGE("lo_dlneeds: Could not seek to .dynamic section of %s", library);
-                close(fd);
-                return NULL;
-            }
-            for (dynoff = 0; dynoff < shdr.sh_size; dynoff += sizeof(dyn)) {
-                if (read(fd, &dyn, sizeof(dyn)) < (int) sizeof(dyn)) {
-                    LOGE("lo_dlneeds: Could not read .dynamic entry of %s", library);
-                    close(fd);
-                    return NULL;
-                }
-                if (dyn.d_tag == DT_NEEDED)
-                    n_needed++;
-            }
-
-            /* LOGI("Found %d DT_NEEDED libs", n_needed); */
-
-            result = malloc((n_needed+1) * sizeof(char *));
-
-            n_needed = 0;
-            if (lseek(fd, shdr.sh_offset, SEEK_SET) < 0) {
-                LOGE("lo_dlneeds: Could not seek to .dynamic section of %s", library);
-                close(fd);
-                free(result);
-                return NULL;
-            }
-            for (dynoff = 0; dynoff < shdr.sh_size; dynoff += sizeof(dyn)) {
-                if (read(fd, &dyn, sizeof(dyn)) < (int) sizeof(dyn)) {
-                    LOGE("lo_dlneeds: Could not read .dynamic entry in %s", library);
-                    close(fd);
-                    free(result);
-                    return NULL;
-                }
-                if (dyn.d_tag == DT_NEEDED) {
-                    /* LOGI("needs: %s\n", dynstr + dyn.d_un.d_val); */
-                    result[n_needed] = strdup(dynstr + dyn.d_un.d_val);
-                    n_needed++;
-                }
-            }
-
-            close(fd);
-            if (dynstr)
-                free(dynstr);
-            free(shstrtab);
-            result[n_needed] = NULL;
-            return result;
-        }
-    }
-
-    LOGE("lo_dlneeds: Could not find .dynamic section in %s", library);
-    close(fd);
-    return NULL;
-}
-
-__attribute__ ((visibility("default")))
-void *
-lo_dlopen(const char *library)
-{
-    /*
-     * We should *not* try to just dlopen() the bare library name
-     * first, as the stupid dynamic linker remembers for each library
-     * basename if loading it has failed. Thus if you try loading it
-     * once, and it fails because of missing needed libraries, and
-     * your load those, and then try again, it fails with an
-     * infuriating message "failed to load previously" in the log.
-     *
-     * We *must* first dlopen() all needed libraries, recursively. It
-     * shouldn't matter if we dlopen() a library that already is
-     * loaded, dlopen() just returns the same value then.
-     */
-
-    typedef struct loadedLib {
-        const char *name;
-        void *handle;
-        struct loadedLib *next;
-    } *loadedLib;
-    static loadedLib loaded_libraries = NULL;
-
-    loadedLib rover;
-    loadedLib new_loaded_lib;
-
-    struct stat st;
-    void *p;
-    char *full_name;
-    char **needed;
-    int i;
-    int found;
-
-    struct timeval tv0, tv1, tvdiff;
-
-    rover = loaded_libraries;
-    while (rover != NULL &&
-           strcmp(rover->name, library) != 0)
-        rover = rover->next;
-
-    if (rover != NULL)
-        return rover->handle;
-
-    /* LOGI("lo_dlopen(%s)", library); */
-
-    found = 0;
-    if (library[0] == '/') {
-        full_name = strdup(library);
-
-        if (stat(full_name, &st) == 0 &&
-            S_ISREG(st.st_mode))
-            found = 1;
-        else
-            free(full_name);
-    } else {
-        for (i = 0; !found && library_locations[i] != NULL; i++) {
-            full_name = malloc(strlen(library_locations[i]) + 1 + strlen(library) + 1);
-            strcpy(full_name, library_locations[i]);
-            strcat(full_name, "/");
-            strcat(full_name, library);
-
-            if (stat(full_name, &st) == 0 &&
-                S_ISREG(st.st_mode))
-                found = 1;
-            else
-                free(full_name);
-        }
-    }
-
-    if (!found) {
-        LOGE("lo_dlopen: Library %s not found", library);
-        return NULL;
-    }
-
-    needed = lo_dlneeds(full_name);
-    if (needed == NULL) {
-        free(full_name);
-        return NULL;
-    }
-
-    for (i = 0; needed[i] != NULL; i++) {
-        if (lo_dlopen(needed[i]) == NULL) {
-            free_ptrarray((void **) needed);
-            free(full_name);
-            return NULL;
-        }
-    }
-    free_ptrarray((void **) needed);
-
-    gettimeofday(&tv0, NULL);
-    p = dlopen(full_name, RTLD_LOCAL);
-    gettimeofday(&tv1, NULL);
-    timersub(&tv1, &tv0, &tvdiff);
-    LOGI("dlopen(%s) = %p, %ld.%03lds",
-         full_name, p,
-         (long) tvdiff.tv_sec, (long) tvdiff.tv_usec / 1000);
-    free(full_name);
-    if (p == NULL)
-        LOGE("lo_dlopen: Error from dlopen(%s): %s", library, dlerror());
-
-    new_loaded_lib = malloc(sizeof(*new_loaded_lib));
-    new_loaded_lib->name = strdup(library);
-    new_loaded_lib->handle = p;
-
-    new_loaded_lib->next = loaded_libraries;
-    loaded_libraries = new_loaded_lib;
-
-    return p;
-}
-
-__attribute__ ((visibility("default")))
-void *
-lo_dlsym(void *handle,
-         const char *symbol)
-{
-    void *p = dlsym(handle, symbol);
-    /* LOGI("dlsym(%p, %s) = %p", handle, symbol, p); */
-    if (p == NULL)
-        LOGE("lo_dlsym: %s", dlerror());
-    return p;
-}
-
-__attribute__ ((visibility("default")))
-int
-lo_dladdr(void *addr,
-          Dl_info *info)
-{
-    FILE *maps;
-    char line[200];
-    int result;
-    int found;
-
-    result = dladdr(addr, info);
-    if (result == 0) {
-        /* LOGI("dladdr(%p) = 0", addr); */
-        return 0;
-    }
-
-    maps = fopen("/proc/self/maps", "r");
-    if (maps == NULL) {
-        LOGE("lo_dladdr: Could not open /proc/self/maps: %s", strerror(errno));
-        return 0;
-    }
-
-    found = 0;
-    while (fgets(line, sizeof(line), maps) != NULL &&
-           line[strlen(line)-1] == '\n') {
-        void *lo, *hi;
-        char file[sizeof(line)];
-        file[0] = '\0';
-        if (sscanf(line, "%x-%x %*s %*x %*x:%*x %*d %[^\n]", (unsigned *) &lo, (unsigned *) &hi, file) == 3) {
-            /* LOGI("got %p-%p: %s", lo, hi, file); */
-            if (addr >= lo && addr < hi) {
-                if (info->dli_fbase != lo) {
-                    LOGE("lo_dladdr: Base for %s in /proc/self/maps %p doesn't match what dladdr() said", file, lo);
-                    fclose(maps);
-                    return 0;
-                }
-                /* LOGI("dladdr(%p) = { %s:%p, %s:%p }: %s",
-                     addr,
-                     info->dli_fname, info->dli_fbase,
-                     info->dli_sname ? info->dli_sname : "(none)", info->dli_saddr,
-                     file); */
-                info->dli_fname = strdup(file);
-                found = 1;
-                break;
-            }
-        }
-    }
-    if (!found)
-        LOGE("lo_dladdr: Did not find %p in /proc/self/maps", addr);
-    fclose(maps);
-
-    return result;
-}
-
-__attribute__ ((visibility("default")))
-int
-lo_dlclose(void *handle)
-{
-    /* As we don't know when the reference count for a dlopened shared
-     * object drops to zero, we wouldn't know when to remove it from
-     * our list, so we can't call dlclose().
-     */
-    LOGI("lo_dlclose(%p)", handle);
-
-    return 0;
 }
 
 __attribute__ ((visibility("default")))
@@ -1235,195 +742,6 @@ lo_dlcall_argc_argv(void *function,
     return result;
 }
 
-#ifdef ARM
-
-/* There is a bug in std::type_info::operator== and
- * std::type_info::before() in libgnustl_shared.so in NDK r7 at
- * least. They compare the type name pointers instead of comparing the
- * type name strings. See
- * http://code.google.com/p/android/issues/detail?id=22165 . So patch
- * that, poke in jumps to our own code snippets below instead.
- */
-
-/* Replacement std::type_info::operator== */
-
-__asm("    .arm\n"
-      "    .global replacement_operator_equals_arm\n"
-      "replacement_operator_equals_arm:\n"
-      "    push {lr}\n"
-
-      /* Load name pointers into r0 and r1 */
-      "    ldr r0, [r0, #4]\n"
-      "    ldr r1, [r1, #4]\n"
-
-      /* First compare pointers */
-      "    cmp r0, r1\n"
-
-      /* If equal, return true */
-      "    beq .L.equals.1\n"
-
-      /* Otherwise call strcmp */
-      "    bl strcmp\n"
-
-      /* And return true or false */
-      "    cmp r0, #0\n"
-      "    moveq r0, #1\n"
-      "    movne r0, #0\n"
-      "    b .L.equals.9\n"
-
-      ".L.equals.1:\n"
-      "    mov r0, #1\n"
-
-      ".L.equals.9:\n"
-      "    pop {pc}\n"
-      );
-
-extern unsigned int replacement_operator_equals_arm;
-
-/* The ARM (not Thumb) code of the operator== in NDK r7 */
-static unsigned int expected_operator_equals_r7_code[] = {
-    0xe5903004, /* ldr r3, [r0, #4] */
-    0xe5910004, /* ldr r0, [r1, #4] */
-    0xe1530000, /* cmp r3, r0 */
-    0x13a00000, /* movne, #0 */
-    0x03a00001, /* moveq r0, #1 */
-    0xe12fff1e  /* bx lr */
-};
-
-/* Ditto for  std::type_info::before() */
-
-__asm("    .arm\n"
-      "    .global replacement_method_before_arm\n"
-      "replacement_method_before_arm:\n"
-      "    push {lr}\n"
-
-      /* Load name pointers into r0 and r1 */
-      "    ldr r0, [r0, #4]\n"
-      "    ldr r1, [r1, #4]\n"
-
-      /* First compare pointers */
-      "    cmp r0, r1\n"
-
-      /* If equal, return false */
-      "    beq .L.before.1\n"
-
-      /* Otherwise call strcmp */
-      "    bl strcmp\n"
-
-      /* And return true or false */
-      "    cmp r0, #0\n"
-      "    movlt r0, #1\n"
-      "    movge r0, #0\n"
-      "    b .L.before.9\n"
-
-      ".L.before.1:\n"
-      "    mov r0, #0\n"
-
-      ".L.before.9:\n"
-      "    pop {pc}\n"
-      );
-
-extern unsigned int replacement_method_before_arm;
-
-static unsigned int expected_method_before_r7_code[] = {
-    0xe5903004, /* ldr r3, [r0, #4] */
-    0xe5910004, /* ldr r0, [r1, #4] */
-    0xe1530000, /* cmp r3, r0 */
-    0x23a00000, /* movcs r0, #0 */
-    0x33a00001, /* movcc r0, #1 */
-    0xe12fff1e  /* bx lr */
-};
-
-static void
-patch(const char *symbol,
-      const char *plaintext,
-      unsigned *expected_code,
-      size_t expected_code_size,
-      unsigned *replacement_code)
-{
-
-    void *libgnustl_shared;
-    void *code;
-
-    void *base;
-    size_t size;
-
-    /* libgnustl_shared.so should be already loaded as we build
-     * all LO code against it, so as we have loaded the .so
-     * containing lo_main() already, libgnustl_shared.so will have
-     * been brought in, too.
-     */
-    libgnustl_shared = dlopen("libgnustl_shared.so", RTLD_LOCAL);
-    if (libgnustl_shared == NULL) {
-        LOGF("android_main: libgnustl_shared.so not mapped??");
-        exit(0);
-    }
-
-    code = dlsym(libgnustl_shared, symbol);
-    if (code == NULL) {
-        LOGF("android_main: %s not found!?", plaintext);
-        exit(0);
-    }
-    /* LOGI("%s is at %p", plaintext, operator_equals); */
-
-    if ((((unsigned) code) & 0x03) != 0) {
-        LOGE("android_main: Address of %s is not at word boundary, huh?", plaintext);
-        return;
-    }
-
-    if ((((unsigned) &replacement_code) & 0x03) != 0) {
-        LOGE("android_main: Address of replacement %s is not at word boundary, huh?", plaintext);
-        return;
-    }
-
-    if (memcmp(code, expected_code, expected_code_size) != 0) {
-        LOGI("android_main: Code for %s does not match that in NDK r7; not patching it", plaintext);
-        return;
-    }
-
-    base = ROUND_DOWN(code, getpagesize());
-    size = code + sizeof(expected_code_size) - ROUND_DOWN(code, getpagesize());
-    if (mprotect(base, size, PROT_READ|PROT_WRITE|PROT_EXEC) == -1) {
-        LOGE("android_main: mprotect() failed: %s", strerror(errno));
-        return;
-    }
-
-    /* Poke in a jump to replacement_code instead */
-    ((unsigned *) code)[0] = 0xe51ff004; /* ldr pc, [pc, #-4] */
-    ((unsigned *) code)[1] = (unsigned) replacement_code;
-}
-
-static void
-patch_libgnustl_shared(void)
-{
-    patch("_ZNKSt9type_infoeqERKS_",
-          "std::type_info::operator==",
-          expected_operator_equals_r7_code,
-          sizeof(expected_operator_equals_r7_code),
-          &replacement_operator_equals_arm);
-
-    patch("_ZNKSt9type_info6beforeERKS_",
-          "std::type_info::before()",
-          expected_method_before_r7_code,
-          sizeof(expected_method_before_r7_code),
-          &replacement_method_before_arm);
-}
-#endif // ARM
-
-// static native void patch_libgnustl_shared();
-__attribute__ ((visibility("default")))
-void
-Java_org_libreoffice_android_Bootstrap_patch_1libgnustl_1shared(JNIEnv* env,
-                                                                jobject clazz)
-{
-    (void) env;
-    (void) clazz;
-
-#ifdef ARM
-    patch_libgnustl_shared();
-#endif
-}
-
 #define UNPACK_TREE "/assets/unpack"
 
 static int
@@ -1551,33 +869,29 @@ Java_org_libreoffice_android_Bootstrap_extract_1files(JNIEnv* env,
 }
 
 /* Android's JNI works only to libraries loaded through Java's
- * System.loadLibrary(), it seems. Not to functions loaded by a dlopen() call
- * in native code. For instance, to call a function in libvcllo.so, we need to
- * have its JNI wrapper here, and then call the VCL function from it. Oh well,
- * one could say it's clean to have all the Android-specific JNI functions
- * here in this file.
+ * System.loadLibrary(), it seems. But now with just one big app-specific .so
+ * on Android, that would not be a problem, but for historical reasons, we
+ * have JNI wrappers here, and then call the VCL etc function from them. Oh
+ * well, one could say it's clean to have all the Android-specific JNI
+ * functions here in this file.
  */
 
 // public static native void initVCL();
+
+extern void InitVCLWrapper(void);
 
 __attribute__ ((visibility("default")))
 void
 Java_org_libreoffice_android_Bootstrap_initVCL(JNIEnv* env,
                                                jobject clazz)
 {
-    void (*InitVCLWrapper)(void);
     (void) env;
     (void) clazz;
 
-    /* This obviously should be called only after libvcllo.so has been loaded */
-
-    InitVCLWrapper = dlsym(RTLD_DEFAULT, "InitVCLWrapper");
-    if (InitVCLWrapper == NULL) {
-        LOGE("InitVCL: InitVCLWrapper not found");
-        return;
-    }
-    (*InitVCLWrapper)();
+    InitVCLWrapper();
 }
+
+extern void osl_setCommandArgs(int, char **);
 
 __attribute__ ((visibility("default")))
 void
@@ -1588,14 +902,13 @@ Java_org_libreoffice_android_Bootstrap_setCommandArgs(JNIEnv* env,
     char **c_argv;
     int c_argc;
     Dl_info lo_bootstrap_info;
-    void (*osl_setCommandArgs)(int, char **);
 
     (void) clazz;
 
     if (!get_jni_string_array(env, "setCommandArgs :argv", argv, &c_argc, (const char ***) &c_argv))
         return;
 
-    if (lo_dladdr(Java_org_libreoffice_android_Bootstrap_setCommandArgs, &lo_bootstrap_info) != 0) {
+    if (dladdr(Java_org_libreoffice_android_Bootstrap_setCommandArgs, &lo_bootstrap_info) != 0) {
         char *new_argv0 = malloc(strlen(lo_bootstrap_info.dli_fname) + strlen(c_argv[0]));
         char *slash;
         strcpy(new_argv0, lo_bootstrap_info.dli_fname);
@@ -1611,30 +924,20 @@ Java_org_libreoffice_android_Bootstrap_setCommandArgs(JNIEnv* env,
         c_argv[0] = new_argv0;
     }
 
-    osl_setCommandArgs = dlsym(RTLD_DEFAULT, "osl_setCommandArgs");
-    if (osl_setCommandArgs == NULL) {
-        LOGE("setCommandArgs: osl_setCommandArgs not found");
-        return;
-    }
-    (*osl_setCommandArgs)(c_argc, c_argv);
+    osl_setCommandArgs(c_argc, c_argv);
 }
+
+extern int createWindowFoo(void);
 
 __attribute__ ((visibility("default")))
 jint
 Java_org_libreoffice_android_Bootstrap_createWindowFoo(JNIEnv* env,
                                                        jobject clazz)
 {
-    int (*createWindowFoo)(void);
     (void) env;
     (void) clazz;
 
-    lo_dlopen("libvcllo.so");
-    createWindowFoo = dlsym(RTLD_DEFAULT, "createWindowFoo");
-    if (createWindowFoo == NULL) {
-        LOGE("createWindowFoo: createWindowFoo not found");
-        return 0;
-    }
-    return (*createWindowFoo)();
+    return createWindowFoo();
 }
 
 
@@ -1956,6 +1259,10 @@ lo_get_app(void)
     return app;
 }
 
+/* Note that android_main() is used only in NativeActivity-based apps.  Only
+ * the android/qa/sc unit test app is such, and it is unclear whether there is
+ * any reason to continue maintaining that buildable.
+ */
 __attribute__ ((visibility("default")))
 void
 android_main(struct android_app* state)
@@ -1986,7 +1293,12 @@ android_main(struct android_app* state)
     state->userData = &engine;
     state->onAppCmd = engine_handle_cmd;
 
-    if (lo_dladdr(lo_main, &lo_main_info) != 0) {
+    /* Look up lo_main() dynamically even if it is in the same .so as this code,
+     * but that is only in the case for code built to be used in a NativeActivity-based app.
+     */
+    lo_main = dlsym(RTLD_DEFAULT, "lo_main");
+
+    if (dladdr(lo_main, &lo_main_info) != 0) {
         lo_main_argv[0] = lo_main_info.dli_fname;
     }
 

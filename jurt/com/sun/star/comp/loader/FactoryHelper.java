@@ -42,7 +42,6 @@ import com.sun.star.uno.Type;
  * This class has default implementations for <code>getServiceFactory</code>
  * and <code>writeRegistryServiceInfo</code>.
  * <p>
- * @author      Kay Ramme
  * @see         com.sun.star.lang.XMultiServiceFactory
  * @see         com.sun.star.lang.XServiceInfo
  * @see         com.sun.star.lang.XSingleServiceFactory

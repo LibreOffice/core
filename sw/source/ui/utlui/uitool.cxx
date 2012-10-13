@@ -164,6 +164,7 @@ void FillHdFt(SwFrmFmt* pFmt, const  SfxItemSet& rSet)
 void ItemSetToPageDesc( const SfxItemSet& rSet, SwPageDesc& rPageDesc )
 {
     SwFrmFmt& rMaster = rPageDesc.GetMaster();
+    int nFirstShare = -1;
 
     // alle allgemeinen Rahmen-Attribute uebertragen
     //
@@ -219,8 +220,12 @@ void ItemSetToPageDesc( const SfxItemSet& rSet, SwPageDesc& rPageDesc )
 
             rPageDesc.ChgHeaderShare(((const SfxBoolItem&)
                         rHeaderSet.Get(SID_ATTR_PAGE_SHARED)).GetValue());
-            rPageDesc.ChgFirstShare(((const SfxBoolItem&)
-                        rHeaderSet.Get(SID_ATTR_PAGE_SHARED_FIRST)).GetValue());
+            if (nFirstShare < 0)
+            {
+                rPageDesc.ChgFirstShare(((const SfxBoolItem&)
+                            rHeaderSet.Get(SID_ATTR_PAGE_SHARED_FIRST)).GetValue());
+                nFirstShare = rPageDesc.IsFirstShared();
+            }
         }
         else
         {   // Header ausschalten
@@ -257,6 +262,12 @@ void ItemSetToPageDesc( const SfxItemSet& rSet, SwPageDesc& rPageDesc )
 
             rPageDesc.ChgFooterShare(((const SfxBoolItem&)
                         rFooterSet.Get(SID_ATTR_PAGE_SHARED)).GetValue());
+            if (nFirstShare < 0)
+            {
+                rPageDesc.ChgFirstShare(((const SfxBoolItem&)
+                            rFooterSet.Get(SID_ATTR_PAGE_SHARED_FIRST)).GetValue());
+                nFirstShare = rPageDesc.IsFirstShared();
+            }
         }
         else
         {   // Footer ausschalten
@@ -439,6 +450,8 @@ void PageDescToItemSet( const SwPageDesc& rPageDesc, SfxItemSet& rSet)
         //
         SfxBoolItem aShared(SID_ATTR_PAGE_SHARED, rPageDesc.IsFooterShared());
         aFooterSet.Put(aShared);
+        SfxBoolItem aFirstShared(SID_ATTR_PAGE_SHARED_FIRST, rPageDesc.IsFirstShared());
+        aFooterSet.Put(aFirstShared);
 
         // Groesse
         SvxSizeItem aSize(SID_ATTR_PAGE_SIZE, Size(rFrmSize.GetSize()));

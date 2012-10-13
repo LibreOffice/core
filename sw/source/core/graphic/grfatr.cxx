@@ -72,13 +72,13 @@ int SwMirrorGrf::operator==( const SfxPoolItem& rItem) const
             ((SwMirrorGrf&)rItem).IsGrfToggle() == IsGrfToggle();
 }
 
-sal_Bool lcl_IsHoriOnEvenPages(int nEnum, sal_Bool bToggle)
+static sal_Bool lcl_IsHoriOnEvenPages(int nEnum, sal_Bool bToggle)
 {
     sal_Bool bEnum = nEnum == RES_MIRROR_GRAPH_VERT ||
                    nEnum == RES_MIRROR_GRAPH_BOTH;
             return bEnum != bToggle;
 }
-sal_Bool lcl_IsHoriOnOddPages(int nEnum)
+static sal_Bool lcl_IsHoriOnOddPages(int nEnum)
 {
     sal_Bool bEnum = nEnum == RES_MIRROR_GRAPH_VERT ||
                    nEnum == RES_MIRROR_GRAPH_BOTH;

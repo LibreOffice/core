@@ -128,7 +128,7 @@ IMPL_LINK( ScDocFunc, NotifyDrawUndo, SdrUndoAction*, pUndoAction )
 
 //  Zeile ueber dem Range painten (fuer Linien nach AdjustRowHeight)
 
-void lcl_PaintAbove( ScDocShell& rDocShell, const ScRange& rRange )
+static void lcl_PaintAbove( ScDocShell& rDocShell, const ScRange& rRange )
 {
     SCROW nRow = rRange.aStart.Row();
     if ( nRow > 0 )
@@ -1008,7 +1008,7 @@ sal_Bool ScDocFunc::PutData( const ScAddress& rPos, ScEditEngineDefaulter& rEngi
 }
 
 
-ScTokenArray* lcl_ScDocFunc_CreateTokenArrayXML( const String& rText, const String& rFormulaNmsp, const formula::FormulaGrammar::Grammar eGrammar )
+static ScTokenArray* lcl_ScDocFunc_CreateTokenArrayXML( const String& rText, const String& rFormulaNmsp, const formula::FormulaGrammar::Grammar eGrammar )
 {
     ScTokenArray* pCode = new ScTokenArray;
     pCode->AddStringXML( rText );
@@ -2626,7 +2626,7 @@ uno::Reference< uno::XInterface > GetDocModuleObject( SfxObjectShell& rDocSh, St
 
 }
 
-script::ModuleInfo lcl_InitModuleInfo( SfxObjectShell& rDocSh, String& sModule )
+static script::ModuleInfo lcl_InitModuleInfo( SfxObjectShell& rDocSh, String& sModule )
 {
     script::ModuleInfo sModuleInfo;
     sModuleInfo.ModuleType = script::ModuleType::DOCUMENT;
@@ -3080,7 +3080,7 @@ bool ScDocFunc::SetTabBgColor(
 //! - Optimale Hoehe fuer Edit-Zellen ist unterschiedlich zwischen Drucker und Bildschirm
 //! - Optimale Breite braucht Selektion, um evtl. nur selektierte Zellen zu beruecksichtigen
 
-sal_uInt16 lcl_GetOptimalColWidth( ScDocShell& rDocShell, SCCOL nCol, SCTAB nTab, sal_Bool bFormula )
+static sal_uInt16 lcl_GetOptimalColWidth( ScDocShell& rDocShell, SCCOL nCol, SCTAB nTab, sal_Bool bFormula )
 {
     sal_uInt16 nTwips = 0;
 
@@ -5059,6 +5059,21 @@ sal_Bool ScDocFunc::InsertAreaLink( const String& rFile, const String& rFilter,
     return sal_True;
 }
 
+namespace {
+
+void RemoveCondFormatAttributes(ScDocument* pDoc, const ScConditionalFormat* pFormat, SCTAB nTab)
+{
+    const ScRangeList& rRangeList = pFormat->GetRange();
+    pDoc->RemoveCondFormatData( rRangeList, nTab, pFormat->GetKey() );
+}
+
+void SetConditionalFormatAttributes(ScDocument* pDoc, const ScRangeList& rRanges, sal_uLong nIndex, SCTAB nTab)
+{
+    pDoc->AddCondFormatData( rRanges, nTab, nIndex );
+}
+
+}
+
 void ScDocFunc::ReplaceConditionalFormat( sal_uLong nOldFormat, ScConditionalFormat* pFormat, SCTAB nTab, const ScRangeList& rRanges )
 {
     ScDocShellModificator aModificator(rDocShell);
@@ -5066,23 +5081,65 @@ void ScDocFunc::ReplaceConditionalFormat( sal_uLong nOldFormat, ScConditionalFor
     if(pDoc->IsTabProtected(nTab))
         return;
 
+    boost::scoped_ptr<ScRange> pRepaintRange;
     if(nOldFormat)
     {
+        ScConditionalFormat* pOldFormat = pDoc->GetCondFormList(nTab)->GetFormat(nOldFormat);
+        pRepaintRange.reset(new ScRange( pOldFormat->GetRange().Combine() ));
+        if(pOldFormat)
+        {
+            RemoveCondFormatAttributes(pDoc, pOldFormat, nTab);
+        }
+
         pDoc->DeleteConditionalFormat(nOldFormat, nTab);
+        pDoc->SetStreamValid(nTab, false);
     }
     if(pFormat)
     {
+        if(pRepaintRange)
+            pRepaintRange->ExtendTo(rRanges.Combine());
+        else
+            pRepaintRange.reset(new ScRange(rRanges.Combine()));
+
 	sal_uLong nIndex = pDoc->AddCondFormat(pFormat, nTab);
 
-	ScPatternAttr aPattern( pDoc->GetPool() );
-	aPattern.GetItemSet().Put( SfxUInt32Item( ATTR_CONDITIONAL, nIndex ) );
-	ScMarkData aMarkData;
-	aMarkData.MarkFromRangeList(rRanges, true);
-	pDoc->ApplySelectionPattern( aPattern , aMarkData );
-	size_t n = rRanges.size();
-	for(size_t i = 0; i < n; ++i)
-	    pFormat->DoRepaint(rRanges[i]);
+        SetConditionalFormatAttributes(pDoc, rRanges, nIndex, nTab);
+        pDoc->SetStreamValid(nTab, false);
     }
+
+    if(pRepaintRange)
+        rDocShell.PostPaint(*pRepaintRange, PAINT_GRID);
+
+    aModificator.SetDocumentModified();
+    SFX_APP()->Broadcast(SfxSimpleHint(SC_HINT_AREAS_CHANGED));
+}
+
+void ScDocFunc::SetConditionalFormatList( ScConditionalFormatList* pList, SCTAB nTab )
+{
+    ScDocShellModificator aModificator(rDocShell);
+    ScDocument* pDoc = rDocShell.GetDocument();
+    if(pDoc->IsTabProtected(nTab))
+        return;
+
+    // first remove all old entries
+    ScConditionalFormatList* pOldList = pDoc->GetCondFormList(nTab);
+    for(ScConditionalFormatList::const_iterator itr = pOldList->begin(), itrEnd = pOldList->end(); itr != itrEnd; ++itr)
+    {
+        RemoveCondFormatAttributes(pDoc, &(*itr), nTab);
+    }
+
+    // then set new entries
+    for(ScConditionalFormatList::iterator itr = pList->begin(); itr != pList->end(); ++itr)
+    {
+        sal_uLong nIndex = itr->GetKey();
+        const ScRangeList& rRange = itr->GetRange();
+        SetConditionalFormatAttributes(pDoc, rRange, nIndex, nTab);
+    }
+
+    pDoc->SetCondFormList(pList, nTab);
+    rDocShell.PostPaintGridAll();
+
+    pDoc->SetStreamValid(nTab, false);
     aModificator.SetDocumentModified();
     SFX_APP()->Broadcast(SfxSimpleHint(SC_HINT_AREAS_CHANGED));
 }

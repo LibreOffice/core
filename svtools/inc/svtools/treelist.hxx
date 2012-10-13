@@ -211,13 +211,13 @@ struct SvSortData
     SvListEntry* pRight;
 };
 
-typedef ::std::vector< SvListView* > SvListView_impl;
-
 class SVT_DLLPUBLIC SvTreeList
 {
+    typedef std::vector<SvListView*> ListViewsType;
+
     friend class        SvListView;
 
-    SvListView_impl     aViewList;
+    ListViewsType       aViewList;
     sal_uLong           nEntryCount;
 
     Link                aCloneLink;
@@ -386,12 +386,9 @@ class SVT_DLLPUBLIC SvListView
     sal_Bool            bVisPositionsValid;
 
     SVT_DLLPRIVATE void InitTable();
-    SVT_DLLPRIVATE void ClearTable();
     SVT_DLLPRIVATE void RemoveViewData( SvListEntry* pParent );
 
-protected:
     SvDataTable maDataTable;  // Mapping SvListEntry -> ViewData
-    SvTreeList*         pModel;
 
     void                ActionMoving( SvListEntry* pEntry,SvListEntry* pTargetPrnt,sal_uLong nChildPos);
     void                ActionMoved( SvListEntry* pEntry,SvListEntry* pTargetPrnt,sal_uLong nChildPos);
@@ -401,8 +398,10 @@ protected:
     void                ActionRemoved( SvListEntry* pEntry );
     void                ActionClear();
 
-public:
+protected:
+    SvTreeList* pModel;
 
+public:
                         SvListView();   // !!! setzt das Model auf 0
     virtual             ~SvListView();
     void                Clear();

@@ -174,14 +174,18 @@ ScCondFormatManagerDlg::ScCondFormatManagerDlg(Window* pParent, ScDocument* pDoc
     mpFormatList( pFormatList ? new ScConditionalFormatList(*pFormatList) : NULL),
     maCtrlManager(this, pDoc, mpFormatList, rPos),
     mpDoc(pDoc),
-    maPos(rPos)
+    maPos(rPos),
+    mbModified(false)
 {
     FreeResource();
 
     maBtnRemove.SetClickHdl(LINK(this, ScCondFormatManagerDlg, RemoveBtnHdl));
     maBtnEdit.SetClickHdl(LINK(this, ScCondFormatManagerDlg, EditBtnHdl));
+    maBtnAdd.SetClickHdl(LINK(this, ScCondFormatManagerDlg, AddBtnHdl));
     maCtrlManager.GetListControl().SetDoubleClickHdl(LINK(this, ScCondFormatManagerDlg, EditBtnHdl));
-    maBtnAdd.Hide();
+
+    maBtnAdd.Disable();
+    maBtnEdit.Disable();
 }
 
 ScCondFormatManagerDlg::~ScCondFormatManagerDlg()
@@ -196,9 +200,15 @@ ScConditionalFormatList* ScCondFormatManagerDlg::GetConditionalFormatList()
     return pList;
 }
 
+bool ScCondFormatManagerDlg::CondFormatsChanged()
+{
+    return mbModified;
+}
+
 IMPL_LINK_NOARG(ScCondFormatManagerDlg, RemoveBtnHdl)
 {
     maCtrlManager.DeleteSelection();
+    mbModified = true;
     return 0;
 }
 
@@ -209,8 +219,8 @@ IMPL_LINK_NOARG(ScCondFormatManagerDlg, EditBtnHdl)
     if(!pFormat)
         return 0;
 
-    ScCondFormatDlg* pDlg = new ScCondFormatDlg(this, mpDoc, pFormat, pFormat->GetRange(),
-                                                pFormat->GetRange().GetTopLeftCorner());
+    boost::scoped_ptr<ScCondFormatDlg> pDlg;//(new ScCondFormatDlg(this, mpDoc, pFormat, pFormat->GetRange(),
+                                              //  pFormat->GetRange().GetTopLeftCorner(), condformat::dialog::NONE));
     if(pDlg->Execute() == RET_OK)
     {
         sal_Int32 nKey = pFormat->GetKey();
@@ -220,9 +230,48 @@ IMPL_LINK_NOARG(ScCondFormatManagerDlg, EditBtnHdl)
         mpFormatList->InsertNew(pNewFormat);
         maCtrlManager.Update();
     }
-    delete pDlg;
+
+    mbModified = true;
 
     return 0;
 }
+
+namespace {
+
+sal_uInt32 FindKey(ScConditionalFormatList* pFormatList)
+{
+    sal_uInt32 nKey = 0;
+    for(ScConditionalFormatList::const_iterator itr = pFormatList->begin(), itrEnd = pFormatList->end();
+            itr != itrEnd; ++itr)
+    {
+        if(itr->GetKey() > nKey)
+            nKey = itr->GetKey();
+    }
+
+    return nKey + 1;
+}
+
+}
+
+IMPL_LINK_NOARG(ScCondFormatManagerDlg, AddBtnHdl)
+{
+    boost::scoped_ptr<ScCondFormatDlg> pDlg;//(new ScCondFormatDlg(this, mpDoc, NULL, ScRangeList(),
+                                              //  maPos, condformat::dialog::CONDITION));
+    if(pDlg->Execute() == RET_OK)
+    {
+        ScConditionalFormat* pNewFormat = pDlg->GetConditionalFormat();
+        if(!pNewFormat)
+            return 0;
+
+        mpFormatList->InsertNew(pNewFormat);
+        pNewFormat->SetKey(FindKey(mpFormatList));
+        maCtrlManager.Update();
+
+        mbModified = true;
+    }
+
+    return 0;
+}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

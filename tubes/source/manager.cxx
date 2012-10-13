@@ -269,26 +269,23 @@ void TeleManager_fileReceived( const OUString& rStr, const OString& rUuid )
     }
     TeleManager::setCurrentUuid( sUuid );
 
-    css::uno::Reference< css::lang::XMultiServiceFactory > rFactory =
-        ::comphelper::getProcessServiceFactory();
-
-    // Should happen only for unit test
-    if (rFactory == NULL)
-        return;
-
-    css::uno::Sequence < css::beans::PropertyValue > args(0);
     try
     {
+        css::uno::Reference< css::lang::XMultiServiceFactory > rFactory =
+            comphelper::getProcessServiceFactory();
+
         css::uno::Reference < css::frame::XComponentLoader > xLoader(
                 ::comphelper::getProcessServiceFactory()->createInstance(
                         "com.sun.star.frame.Desktop" ),
                         css::uno::UNO_QUERY_THROW );
+        css::uno::Sequence < css::beans::PropertyValue > args(0);
         css::uno::Reference < css::util::XCloseable > xDoc(
                 xLoader->loadComponentFromURL( rStr, "_blank", 0, args ),
                 css::uno::UNO_QUERY_THROW );
     }
     catch ( const css::uno::Exception& e )
     {
+        // Expected to happen for unit test
         SAL_WARN( "tubes", "TeleManager_fileReceived: exception when loading: " << e.Message );
     }
 }

@@ -189,7 +189,7 @@ sal_Bool FuDraw::MouseButtonUp(const MouseEvent& rMEvt)
 |*
 \************************************************************************/
 
-sal_Bool lcl_KeyEditMode( SdrObject* pObj, ScTabViewShell* pViewShell, const KeyEvent* pInitialKey )
+static sal_Bool lcl_KeyEditMode( SdrObject* pObj, ScTabViewShell* pViewShell, const KeyEvent* pInitialKey )
 {
     sal_Bool bReturn = false;
     if ( pObj && pObj->ISA(SdrTextObj) && !pObj->ISA(SdrUnoObj) )
@@ -701,7 +701,7 @@ void FuDraw::Deactivate()
 |*
 \************************************************************************/
 
-sal_Bool lcl_UrlHit( SdrView* pView, const Point& rPosPixel, Window* pWindow )
+static sal_Bool lcl_UrlHit( SdrView* pView, const Point& rPosPixel, Window* pWindow )
 {
     SdrViewEvent aVEvt;
     MouseEvent aMEvt( rPosPixel, 1, 0, MOUSE_LEFT );

@@ -405,7 +405,7 @@ void SwPageFrm::CheckDirection( sal_Bool bVert )
 |*      generischen Cntnt
 |*
 |*************************************************************************/
-void lcl_FormatLay( SwLayoutFrm *pLay )
+static void lcl_FormatLay( SwLayoutFrm *pLay )
 {
     //Alle LayoutFrms - nicht aber Tables, Flys o.ae. - formatieren.
 
@@ -420,7 +420,7 @@ void lcl_FormatLay( SwLayoutFrm *pLay )
     pLay->Calc();
 }
 
-void lcl_MakeObjs( const SwFrmFmts &rTbl, SwPageFrm *pPage )
+static void lcl_MakeObjs( const SwFrmFmts &rTbl, SwPageFrm *pPage )
 {
     //Anlegen bzw. registrieren von Flys und Drawobjekten.
     //Die Formate stehen in der SpzTbl (vom Dokument).
@@ -1011,7 +1011,7 @@ void SwPageFrm::Paste( SwFrm* pParent, SwFrm* pSibling )
 |*  SwPageFrm::PrepareRegisterChg()
 |*
 |*************************************************************************/
-void lcl_PrepFlyInCntRegister( SwCntntFrm *pFrm )
+static void lcl_PrepFlyInCntRegister( SwCntntFrm *pFrm )
 {
     pFrm->Prepare( PREP_REGISTER );
     if( pFrm->GetDrawObjs() )
@@ -1970,9 +1970,9 @@ void SwRootFrm::UnoRestoreAllActions()
 }
 
 // PAGES01: Helper functions for SwRootFrm::CheckViewLayout
-void lcl_MoveAllLowers( SwFrm* pFrm, const Point& rOffset );
+static void lcl_MoveAllLowers( SwFrm* pFrm, const Point& rOffset );
 
-void lcl_MoveAllLowerObjs( SwFrm* pFrm, const Point& rOffset )
+static void lcl_MoveAllLowerObjs( SwFrm* pFrm, const Point& rOffset )
 {
     SwSortedObjs* pSortedObj = 0;
     const bool bPage = pFrm->IsPageFrm();
@@ -2056,7 +2056,7 @@ void lcl_MoveAllLowerObjs( SwFrm* pFrm, const Point& rOffset )
     }
 }
 
-void lcl_MoveAllLowers( SwFrm* pFrm, const Point& rOffset )
+static void lcl_MoveAllLowers( SwFrm* pFrm, const Point& rOffset )
 {
     const SwRect aFrm( pFrm->Frm() );
 

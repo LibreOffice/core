@@ -22,10 +22,6 @@
  * Created on June 23, 2003, 3:19 PM
  */
 
-/**
- *
- * @author  oj93728
- */
 package complex.connectivity.hsqldb;
 import complex.connectivity.HsqlDriverTest;
 import java.sql.*;

@@ -45,7 +45,6 @@ private:
 
     void sendNotes( sal_uInt32 aSlideNumber );
     rtl::OString prepareNotes( sal_uInt32 aSlideNumber );
-    rtl::OString notesToHtml( sal_uInt32 aSlideNumber );
 };
 
 }

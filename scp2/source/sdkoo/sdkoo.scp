@@ -97,6 +97,13 @@ File gid_File_Txt_License
     Styles = (PACKED, SCPZIP_REPLACE);
 End
 
+File gid_File_Html_License
+    TXT_FILE_BODY;
+    Dir = gid_Dir_Share_Readme_Sdk;
+    Name = "LICENSE.html";
+    Styles = (PACKED, SCPZIP_REPLACE);
+End
+
 File gid_File_Txt_Readme
     TXT_FILE_BODY;
     Dir = gid_Dir_Share_Readme_Sdk;

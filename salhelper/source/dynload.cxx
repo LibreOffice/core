@@ -43,6 +43,13 @@ ORealDynamicLoader* ORealDynamicLoader::newInstance(ORealDynamicLoader ** ppSetT
                                   const rtl::OUString& moduleName,
                                   const rtl::OUString& initFunction)
 {
+#ifdef DISABLE_DYNLOADING
+    (void) ppSetToZeroInDestructor;
+    (void) moduleName;
+    (void) initFunction;
+
+    return NULL;
+#else
     ApiInitFunction initFunc;
     oslModule pModule = osl_loadModule(moduleName.pData, SAL_LOADMODULE_DEFAULT);
 
@@ -64,6 +71,7 @@ ORealDynamicLoader* ORealDynamicLoader::newInstance(ORealDynamicLoader ** ppSetT
                                  initFunction,
                                  initFunc(),
                                  pModule));
+#endif
 }
 
 ORealDynamicLoader::~ORealDynamicLoader()
@@ -74,7 +82,9 @@ ORealDynamicLoader::~ORealDynamicLoader()
 
     if (m_pModule)
     {
+#ifndef DISABLE_DYNLOADING
         osl_unloadModule(m_pModule);
+#endif
         m_pModule = NULL;
     }
 }

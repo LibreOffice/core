@@ -59,7 +59,7 @@ using sc::TwipsToEvenHMM;
 
 //------------------------------------------------------------------------
 
-sal_uInt16 lcl_GetDefaultTabDist()
+static sal_uInt16 lcl_GetDefaultTabDist()
 {
     if ( ScOptionsUtil::IsMetricSystem() )
         return 709;                 // 1,25 cm

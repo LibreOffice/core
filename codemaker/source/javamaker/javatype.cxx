@@ -171,7 +171,6 @@ SpecialType translateUnoTypeToDescriptor(
     }
     if (sort == codemaker::UnoType::SORT_COMPLEX) {
         //TODO: check that nucleus is a valid (Java-modified UTF-8) identifier
-        rtl::OString superClass;
         if (typeClass == RT_TYPE_INTERFACE
             && (nucleus
                 == rtl::OString(

@@ -73,13 +73,6 @@
 #define BTN_FILEPATH            11
 #define CB_FILELINK             12
 
-#define MD_INSERT_OBJECT_PLUGIN 32008
-#define ED_FILEURL              10
-#define BTN_FILEURL             11
-#define GB_FILEURL              12
-#define ED_PLUGINS_OPTIONS      20
-#define GB_PLUGINS_OPTIONS      21
-
 #define MD_INSERT_OBJECT_APPLET 32009
 #define FT_CLASSFILE            10
 #define ED_CLASSFILE            11
@@ -89,13 +82,6 @@
 #define GB_CLASS                14
 #define ED_APPLET_OPTIONS       20
 #define GB_APPLET_OPTIONS       21
-
-#define MD_INSERT_OLEOBJECT     32010
-#define RB_NEW_OBJECT           10
-#define RB_OBJECT_FROMFILE      11
-#define LB_OBJECTTYPE           12
-#define GB_OBJECT               13
-#define STR_FILE                14
 
 #define MD_INSERT_OBJECT_IFRAME 32011
 #define FT_FRAMENAME                    3

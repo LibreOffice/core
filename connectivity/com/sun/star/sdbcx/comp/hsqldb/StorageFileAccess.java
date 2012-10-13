@@ -25,10 +25,6 @@ package com.sun.star.sdbcx.comp.hsqldb;
 import org.hsqldb.lib.FileAccess;
 import org.hsqldb.lib.FileSystemRuntimeException;
 
-/**
- *
- * @author  oj93728
- */
 public class StorageFileAccess implements org.hsqldb.lib.FileAccess{
     static { NativeLibraries.load(); }
 

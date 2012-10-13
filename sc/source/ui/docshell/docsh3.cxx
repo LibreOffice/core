@@ -745,7 +745,7 @@ void ScDocShell::CompareDocument( ScDocument& rOtherDoc )
 //
 //---------------------------------------------------------------------
 
-inline sal_Bool lcl_Equal( const ScChangeAction* pA, const ScChangeAction* pB, sal_Bool bIgnore100Sec )
+static inline sal_Bool lcl_Equal( const ScChangeAction* pA, const ScChangeAction* pB, sal_Bool bIgnore100Sec )
 {
     return pA && pB &&
         pA->GetActionNumber() == pB->GetActionNumber() &&
@@ -757,7 +757,7 @@ inline sal_Bool lcl_Equal( const ScChangeAction* pA, const ScChangeAction* pB, s
     //  State nicht vergleichen, falls eine alte Aenderung akzeptiert wurde
 }
 
-bool lcl_FindAction( ScDocument* pDoc, const ScChangeAction* pAction, ScDocument* pSearchDoc, const ScChangeAction* pFirstSearchAction, const ScChangeAction* pLastSearchAction, sal_Bool bIgnore100Sec )
+static bool lcl_FindAction( ScDocument* pDoc, const ScChangeAction* pAction, ScDocument* pSearchDoc, const ScChangeAction* pFirstSearchAction, const ScChangeAction* pLastSearchAction, sal_Bool bIgnore100Sec )
 {
     if ( !pDoc || !pAction || !pSearchDoc || !pFirstSearchAction || !pLastSearchAction )
     {

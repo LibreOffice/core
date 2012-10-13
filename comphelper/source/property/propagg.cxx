@@ -226,11 +226,11 @@ sal_Bool OPropertyArrayAggregationHelper::getPropertyByHandle( sal_Int32 _nHandl
 }
 
 //------------------------------------------------------------------------------
-sal_Bool OPropertyArrayAggregationHelper::fillAggregatePropertyInfoByHandle(
+bool OPropertyArrayAggregationHelper::fillAggregatePropertyInfoByHandle(
             ::rtl::OUString* _pPropName, sal_Int32* _pOriginalHandle, sal_Int32 _nHandle) const
 {
     ConstPropertyAccessorMapIterator i = m_aPropertyAccessors.find(_nHandle);
-    sal_Bool bRet = i != m_aPropertyAccessors.end() && (*i).second.bAggregate;
+    bool bRet = i != m_aPropertyAccessors.end() && (*i).second.bAggregate;
     if (bRet)
     {
         if (_pOriginalHandle)

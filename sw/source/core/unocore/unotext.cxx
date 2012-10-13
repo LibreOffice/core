@@ -2558,7 +2558,7 @@ throw (uno::RuntimeException)
     SwPosition aPos(rNode);
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
     ::std::auto_ptr<SwUnoCrsr> pUnoCursor(
-        GetDoc()->CreateUnoCrsr(aPos, sal_False));
+        GetDoc()->CreateUnoCrsr(aPos, false));
     SAL_WNODEPRECATED_DECLARATIONS_POP
     pUnoCursor->Move(fnMoveBackward, fnGoDoc);
     const uno::Reference< container::XEnumeration > xRet
@@ -2836,7 +2836,7 @@ throw (uno::RuntimeException)
     SwPosition aPos(rNode);
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
     ::std::auto_ptr<SwUnoCrsr> pUnoCursor(
-        GetDoc()->CreateUnoCrsr(aPos, sal_False));
+        GetDoc()->CreateUnoCrsr(aPos, false));
     SAL_WNODEPRECATED_DECLARATIONS_POP
     pUnoCursor->Move(fnMoveForward, fnGoNode);
     aRef = new SwXParagraphEnumeration(this, pUnoCursor,

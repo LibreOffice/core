@@ -80,6 +80,7 @@ $(eval $(call gb_CppunitTest_use_components,sw_filters_test,\
     framework/util/fwk \
     i18npool/util/i18npool \
     package/util/package2 \
+    sax/source/expatwrap/expwrap \
     sfx2/util/sfx \
     svtools/util/svt \
     sw/util/msword \

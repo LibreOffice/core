@@ -29,29 +29,19 @@
 
 #ifndef ANDROID_BOOSTRAP_H
 #define ANDROID_BOOSTRAP_H
+
 #if defined(ANDROID)
 
 #include <jni.h>
-#include <dlfcn.h>
 #include <dirent.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
+#include <osl/detail/component-mapping.h>
+
 typedef struct lo_apk_dir lo_apk_dir;
-
-char **lo_dlneeds(const char *library);
-
-void *lo_dlopen(const char *library);
-
-void *lo_dlsym(void *handle,
-               const char *symbol);
-
-int lo_dladdr(void *addr,
-              Dl_info *info);
-
-int lo_dlclose(void *handle);
 
 void *lo_apkentry(const char *filename,
                   size_t *size);
@@ -77,6 +67,7 @@ struct android_app *lo_get_app(void);
 #endif
 
 #endif // ANDROID
+
 #endif // ANDROID_BOOTSTRAP_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

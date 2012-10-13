@@ -377,7 +377,7 @@ const SwLineLayout *SwTxtIter::TwipsToLine( const SwTwips y)
 //
 // Local helper function to check, if pCurr needs a field rest portion:
 //
-sal_Bool lcl_NeedsFieldRest( const SwLineLayout* pCurr )
+static sal_Bool lcl_NeedsFieldRest( const SwLineLayout* pCurr )
 {
     const SwLinePortion *pPor = pCurr->GetPortion();
     sal_Bool bRet = sal_False;

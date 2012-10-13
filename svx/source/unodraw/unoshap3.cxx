@@ -36,7 +36,6 @@
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/serviceinfohelper.hxx>
 
-#include <rtl/memory.h>
 #include <svx/svdpool.hxx>
 #include <svx/unoshape.hxx>
 #include <svx/unopage.hxx>

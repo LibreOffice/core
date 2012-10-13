@@ -55,6 +55,7 @@ sub print_syntax()
     print "   --msvs-productdir       - print productdir\n";
     print "   --dotnetsdk-dir         - print .NET SDK path\n";
     print "   --csc-compilerdir       - print .NET SDK compiler path\n";
+	print "   --al-home    			  - print AL.exe install dir\n";
     print "   --windows-sdk-home      - print Windows SDK install dir\n";
     print "   --jdk-home              - print the jdk install dir\n";
     print "   --help                  - print this message\n";
@@ -99,11 +100,15 @@ sub print_windows_sdk_home()
 {
     my ($value, $key);
 
-    $value = reg_get_value ('HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Microsoft SDKs/Windows/CurrentInstallFolder');
-
+    $value = reg_get_value ('HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Windows Kits/Installed Roots/KitsRoot');
+	
+	if (!defined $value) {
+        $value = reg_get_value ('HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Microsoft SDKs/Windows/CurrentInstallFolder');
+    }
     if (!defined $value) {
         $value = reg_get_value ('HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/MicrosoftSDK/Directories/Install Dir');
     }
+	
 
     if (!defined $value) {
         $key = reg_find_key ('HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/MicrosoftSDK/InstalledSDKs/*/Install Dir');
@@ -111,6 +116,16 @@ sub print_windows_sdk_home()
     }
 
     defined $value || die "Windows SDK not found";
+
+    print cygpath ($value, 'w', $output_format);
+}
+
+sub print_al_home()
+{
+    my ($value, $key);
+
+        $key = reg_find_key ('HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Microsoft SDKs/Windows/*/WinSDK-NetFx40Tools/InstallationFolder');
+        $value = reg_get_value ($key);
 
     print cygpath ($value, 'w', $output_format);
 }
@@ -295,11 +310,14 @@ sub msvc_copy_dlls($)
     }
 }
 
-sub msvc_find_msms_vc100()
+sub msvc_find_msms()
 {
-    my $msm_path = (cygpath reg_get_value ("HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/VisualStudio/9.0/Setup/VS/MSMDir"), 'w', $output_format);
+    my $ver = find_msvc();
+    my $msm_path = (cygpath reg_get_value ("HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/VisualStudio/9.0/Setup/VS/MSMDir"), 'w', $output_format) ||
+	(cygpath reg_get_value ("HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/VisualStudio/10.0/Setup/VS/MSMDir"), 'w', $output_format) ||
+	(cygpath reg_get_value ("HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/VisualStudio/11.0/Setup/VS/MSMDir"), 'w', $output_format);
     defined $msm_path || die "MSMDir not found";
-    return -e "$msm_path/Microsoft_VC100_CRT_x86.msm" ? 0 : 1;
+    return -e "$msm_path/Microsoft_VC".$ver->{'dll_suffix'}."_CRT_x86.msm" ? 0 : 1;
 }
 
 sub msvc_copy_msms($$)
@@ -308,18 +326,33 @@ sub msvc_copy_msms($$)
     my ($dest, $postfix) = @_;
 
     my $ver = find_msvc();
-    (defined $ver && ($ver->{'ver'} eq '9.0')) || return;
+    defined $ver || return;
 
-    my $msm_path = (cygpath reg_get_value ("HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/VisualStudio/9.0/Setup/VS/MSMDir"), 'w', $output_format);
+    my $msm_path = (cygpath reg_get_value ("HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/VisualStudio/9.0/Setup/VS/MSMDir"), 'w', $output_format) ||
+	(cygpath reg_get_value ("HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/VisualStudio/10.0/Setup/VS/MSMDir"), 'w', $output_format) ||
+	(cygpath reg_get_value ("HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/VisualStudio/11.0/Setup/VS/MSMDir"), 'w', $output_format);
     defined $msm_path || die "MSMDir not found";
+	if ($ver->{'dll_suffix'} == 90) {
+	if ( $postfix eq "_x86" ) {
+	$postfix = ""
+	}
     foreach $fname ("Microsoft_VC90_CRT_x86$postfix.msm", "policy_9_0_Microsoft_VC90_CRT_x86$postfix.msm") {
         print STDERR "Copying $msm_path/$fname to $dest\n";
         copy ("$msm_path/$fname", $dest) || die "copy failed: $!";
     }
-    foreach $fname ("Microsoft_VC100_CRT_x86$postfix.msm") {
+	}
+	elsif ($ver->{'dll_suffix'} == 100) {
+    foreach $fname ("Microsoft_VC100_CRT$postfix.msm") {
         print STDERR "Copying $msm_path/$fname to $dest\n";
         copy ("$msm_path/$fname", $dest) || print "copy failed: $!\n";
     }
+	}
+	else {
+	foreach $fname ("Microsoft_VC110_CRT$postfix.msm") {
+        print STDERR "Copying $msm_path/$fname to $dest\n";
+        copy ("$msm_path/$fname", $dest) || print "copy failed: $!\n";
+    }
+	}
 }
 
 if (!@ARGV) {
@@ -349,12 +382,12 @@ while (@commands) {
         my $dest = shift @commands;
         defined $dest || die "copy-dlls requires a destination directory";
         msvc_copy_dlls( $dest );
-    } elsif ($opt eq '--msvc-find-msms-vc100') {
-        exit msvc_find_msms_vc100();
+    } elsif ($opt eq '--msvc-find-msms') {
+        exit msvc_find_msms();
     } elsif ($opt eq '--msvc-copy-msms') {
         my $dest = shift @commands;
         defined $dest || die "copy-msms requires a destination directory";
-        msvc_copy_msms( $dest, '' );
+        msvc_copy_msms( $dest, '_x86' );
     } elsif ($opt eq '--msvc-copy-msms-64') {
         my $dest = shift @commands;
         defined $dest || die "copy-msms-64 requires a destination directory";
@@ -369,6 +402,8 @@ while (@commands) {
         print_csc_compiler_dir();
     } elsif ($opt eq '--windows-sdk-home') {
         print_windows_sdk_home();
+	} elsif ($opt eq '--al-home') {
+        print_al_home();
     } elsif ($opt eq '--jdk-home') {
         print_jdk_dir();
     } elsif ($opt eq '--help' || $opt eq '/?') {

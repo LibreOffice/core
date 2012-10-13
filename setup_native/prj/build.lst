@@ -1,11 +1,10 @@
-pk	setup_native	:	TRANSLATIONS:translations DESKTOP:l10ntools soltools sal NATIVE:xml2cmp NULL
+pk	setup_native	:	TRANSLATIONS:translations DESKTOP:l10ntools soltools sal NULL
 pk  setup_native                                          usr1    - all  sn_mkout NULL
 pk  setup_native\scripts\source                           nmake   -  u   sn_source NULL
 pk  setup_native\scripts                                  nmake   -  u   sn_scripts sn_source.u NULL
 pk  setup_native\source\mac                               nmake   -  u   sn_mac NULL
 pk  setup_native\source\packinfo                          nmake   -  w   sn_packinfo NULL
 pk  setup_native\source\win32\customactions\tools         nmake   -  w   sn_tools NULL
-pk  setup_native\source\win32\customactions\rebase        nmake   -  w   sn_rebase NULL
 pk  setup_native\source\win32\customactions\regactivex    nmake   -  w   sn_regactivex NULL
 pk  setup_native\source\win32\customactions\regpatchactivex nmake -  w   sn_regpatchactivex NULL
 pk  setup_native\source\win32\customactions\reg4allmsdoc  nmake   -  w   sn_reg4allmsdoc NULL

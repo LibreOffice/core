@@ -38,7 +38,6 @@ import com.sun.star.util.XChangesBatch;
  * NOTE: not yet supported, but sometime later, 
  * If you will ommit the "parent" parameter, then the "name" parameter must be in hierarchy form from 
  * the root of the registry.
- * @author  rpiterman
  */
 public abstract class Configuration
 {
@@ -220,8 +219,6 @@ public abstract class Configuration
     public static Locale getOfficeLocale(XMultiServiceFactory xMSF)
     {
         Locale aLocLocale = new Locale();
-        // Object oMasterKey = getConfigurationRoot(xMSF, "org.openoffice.Setup/L10N/", false);
-        // String sLocale = (String) Helper.getUnoObjectbyName(oMasterKey, "ooLocale");
         String sLocale = getOfficeLocaleString(xMSF);
         String[] sLocaleList = JavaTools.ArrayoutofString(sLocale, "-");
         aLocLocale.Language = sLocaleList[0];
@@ -271,9 +268,6 @@ public abstract class Configuration
         }
         else
         {
-
-            /*if (xNameContainer.hasByName(name))
-            xNameContainer.removeByName(name);*/
 
             // create a new detached set element (instance of DataSourceDescription)
             XSingleServiceFactory xElementFactory = UnoRuntime.queryInterface(XSingleServiceFactory.class, configView);

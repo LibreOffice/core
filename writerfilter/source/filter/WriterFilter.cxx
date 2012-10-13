@@ -51,7 +51,7 @@ static struct ::cppu::ImplementationEntry s_component_entries [] =
     { 0, 0, 0, 0, 0, 0 } // terminate with NULL
 };
 
-SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(sal_Char const * implName, ::com::sun::star::lang::XMultiServiceFactory * xMgr, ::com::sun::star::registry::XRegistryKey * xRegistry )
+SAL_DLLPUBLIC_EXPORT void * SAL_CALL writerfilter_component_getFactory(sal_Char const * implName, ::com::sun::star::lang::XMultiServiceFactory * xMgr, ::com::sun::star::registry::XRegistryKey * xRegistry )
 {
     return ::cppu::component_getFactoryHelper(implName, xMgr, xRegistry, s_component_entries );
 }

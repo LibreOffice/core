@@ -45,7 +45,6 @@ $(eval $(call gb_Library_use_libraries,merged,\
 
 $(eval $(call gb_Library_use_externals,merged,\
 	cups \
-	icui18n \
 	icule \
 	icuuc \
 	jpeg \
@@ -117,10 +116,23 @@ $(eval $(call gb_Library_use_system_win32_libs,merged,\
 	oleaut32 \
 	shell32 \
 	user32 \
+	usp10 \
 	uuid \
 	version \
 	winmm \
 	winspool \
+))
+# prevent warning spamming
+$(eval $(call gb_Library_add_ldflags,merged,\
+	/ignore:4049 \
+	/ignore:4217 \
+))
+$(eval $(call gb_Library_use_externals,merged,\
+	icuin \
+))
+else
+$(eval $(call gb_Library_use_externals,merged,\
+	icui18n \
 ))
 endif
 

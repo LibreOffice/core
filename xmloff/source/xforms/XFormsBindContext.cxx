@@ -71,7 +71,7 @@ static struct SvXMLTokenMapEntry aAttributeMap[] =
 };
 
 // helper function; see below
-void lcl_fillNamespaceContainer( const SvXMLNamespaceMap&,
+static void lcl_fillNamespaceContainer( const SvXMLNamespaceMap&,
                                  Reference<XNameContainer>& );
 
 XFormsBindContext::XFormsBindContext(
@@ -99,29 +99,29 @@ void XFormsBindContext::HandleAttribute( sal_uInt16 nToken,
     switch( nToken )
     {
     case XML_NODESET:
-        lcl_setValue( mxBinding, OUSTRING("BindingExpression"), rValue );
+        xforms_setValue( mxBinding, OUSTRING("BindingExpression"), rValue );
         break;
     case XML_ID:
-        lcl_setValue( mxBinding, OUSTRING("BindingID"), rValue );
+        xforms_setValue( mxBinding, OUSTRING("BindingID"), rValue );
         break;
     case XML_READONLY:
-        lcl_setValue( mxBinding, OUSTRING("ReadonlyExpression"), rValue );
+        xforms_setValue( mxBinding, OUSTRING("ReadonlyExpression"), rValue );
         break;
     case XML_RELEVANT:
-        lcl_setValue( mxBinding, OUSTRING("RelevantExpression"), rValue );
+        xforms_setValue( mxBinding, OUSTRING("RelevantExpression"), rValue );
         break;
     case XML_REQUIRED:
-        lcl_setValue( mxBinding, OUSTRING("RequiredExpression"), rValue );
+        xforms_setValue( mxBinding, OUSTRING("RequiredExpression"), rValue );
         break;
     case XML_CONSTRAINT:
-        lcl_setValue( mxBinding, OUSTRING("ConstraintExpression"), rValue );
+        xforms_setValue( mxBinding, OUSTRING("ConstraintExpression"), rValue );
         break;
     case XML_CALCULATE:
-        lcl_setValue( mxBinding, OUSTRING("CalculateExpression"), rValue );
+        xforms_setValue( mxBinding, OUSTRING("CalculateExpression"), rValue );
         break;
     case XML_TYPE:
-        lcl_setValue( mxBinding, OUSTRING("Type"),
-                      makeAny( lcl_getTypeName( mxModel->getDataTypeRepository(),
+        xforms_setValue( mxBinding, OUSTRING("Type"),
+                      makeAny( xforms_getTypeName( mxModel->getDataTypeRepository(),
                                        GetImport().GetNamespaceMap(),
                                        rValue ) ) );
         break;
@@ -159,7 +159,7 @@ SvXMLImportContext* XFormsBindContext::HandleChild(
 }
 
 
-void lcl_fillNamespaceContainer(
+static void lcl_fillNamespaceContainer(
     const SvXMLNamespaceMap& aMap,
     Reference<XNameContainer>& xContainer )
 {

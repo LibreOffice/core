@@ -123,7 +123,7 @@ void lclAppendWebQueryTableIndex( OUStringBuffer& rTables, sal_Int32 nTableIndex
 OUString lclBuildWebQueryTables( const WebPrModel::TablesVector& rTables )
 {
     if( rTables.empty() )
-        return CREATE_OUSTRING( "HTML_tables" );
+        return OUString( "HTML_tables" );
 
     OUStringBuffer aTables;
     for( WebPrModel::TablesVector::const_iterator aIt = rTables.begin(), aEnd = rTables.end(); aIt != aEnd; ++aIt )
@@ -276,12 +276,12 @@ void QueryTable::finalizeImport()
                     {
                         CellAddress aDestPos( aDestRange.Sheet, aDestRange.StartColumn, aDestRange.StartRow );
                         // find tables mode: entire document, all tables, or specific tables
-                        OUString aTables = pWebPr->mbHtmlTables ? lclBuildWebQueryTables( pWebPr->maTables ) : CREATE_OUSTRING( "HTML_all" );
+                        OUString aTables = pWebPr->mbHtmlTables ? lclBuildWebQueryTables( pWebPr->maTables ) : "HTML_all";
                         if( !aTables.isEmpty() ) try
                         {
                             PropertySet aDocProps( getDocument() );
                             Reference< XAreaLinks > xAreaLinks( aDocProps.getAnyProperty( PROP_AreaLinks ), UNO_QUERY_THROW );
-                            OUString aFilterName = CREATE_OUSTRING( "calc_HTML_WebQuery" );
+                            OUString aFilterName = "calc_HTML_WebQuery";
                             OUString aFilterOptions;
                             xAreaLinks->insertAtPosition( aDestPos, aFileUrl, aTables, aFilterName, aFilterOptions );
                             // set refresh interval (convert minutes to seconds)

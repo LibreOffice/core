@@ -54,14 +54,6 @@ public:
     */
     void SetPage (const model::SharedPageDescriptor& rpPage);
 
-    /** Show a previously set default help text.
-    */
-    void ShowDefaultHelpText (void);
-
-    /** Show a temporary help text.
-    */
-    void ShowHelpText (const ::rtl::OUString& rsHelpText);
-
     /** Hide the tool tip.
         @return
             Returns whether the tool tip was visible at the time this method

@@ -41,7 +41,6 @@ import java.awt.event.*;
  * Makes it possible to change some states of currently loaded
  * document (e.g. enable/disable menubar, toolbar, objectbar)
  *
- * @author     Andreas Schl&uuml;ns
  */
 public class CustomizeView extends    JPanel
                            implements IShutdownListener

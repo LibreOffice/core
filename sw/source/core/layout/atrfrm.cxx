@@ -121,7 +121,7 @@ TYPEINIT1_AUTOFACTORY(SwFmtLineNumber, SfxPoolItem);
 /* --------------------------------------------------
  *  Conversation for QueryValue
  * --------------------------------------------------*/
-sal_Int16 lcl_RelToINT(sal_Int16 eRelation)
+static sal_Int16 lcl_RelToINT(sal_Int16 eRelation)
 {
     sal_Int16 nRet = text::RelOrientation::FRAME;
     switch(eRelation)
@@ -141,7 +141,7 @@ sal_Int16 lcl_RelToINT(sal_Int16 eRelation)
     return nRet;
 }
 
-sal_Int16 lcl_IntToRelation(const uno::Any& rVal)
+static sal_Int16 lcl_IntToRelation(const uno::Any& rVal)
 {
     sal_Int16 eRet = text::RelOrientation::FRAME;
     sal_Int16 nVal = 0;
@@ -747,7 +747,7 @@ bool SwFmtPageDesc::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
                 if( pDesc )
                 {
                     String aString;
-                    SwStyleNameMapper::FillProgName(pDesc->GetName(), aString, nsSwGetPoolIdFromName::GET_POOLID_PAGEDESC, sal_True );
+                    SwStyleNameMapper::FillProgName(pDesc->GetName(), aString, nsSwGetPoolIdFromName::GET_POOLID_PAGEDESC, true );
                     rVal <<= OUString( aString );
                 }
                 else
@@ -1752,7 +1752,7 @@ void SwFmtURL::SetMap( const ImageMap *pM )
     delete pMap;
     pMap = pM ? new ImageMap( *pM ) : 0;
 }
-extern const SvEventDescription* lcl_GetSupportedMacroItems();
+extern const SvEventDescription* sw_GetSupportedMacroItems();
 
 bool SwFmtURL::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
@@ -1781,12 +1781,12 @@ bool SwFmtURL::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
             uno::Reference< uno::XInterface > xInt;
             if(pMap)
             {
-                xInt = SvUnoImageMap_createInstance( *pMap, lcl_GetSupportedMacroItems() );
+                xInt = SvUnoImageMap_createInstance( *pMap, sw_GetSupportedMacroItems() );
             }
             else
             {
                 ImageMap aEmptyMap;
-                xInt = SvUnoImageMap_createInstance( aEmptyMap, lcl_GetSupportedMacroItems() );
+                xInt = SvUnoImageMap_createInstance( aEmptyMap, sw_GetSupportedMacroItems() );
             }
             uno::Reference< container::XIndexContainer > xCont(xInt, uno::UNO_QUERY);
             rVal <<= xCont;

@@ -1,6 +1,8 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 #include  "collectdircontent.hxx"
 
+using namespace std;
+
 PathFilePair IncludesCollection::split_path(const string& filePath) {
     string sepU = "/";
     string sepW = "\\";
@@ -12,7 +14,7 @@ PathFilePair IncludesCollection::split_path(const string& filePath) {
         return PathFilePair(dirName, filePath.substr(pos + 1, filePath.length()));
     } else
         return PathFilePair(".", filePath);
-};
+}
 
 void IncludesCollection::add_to_collection(const string& dirPath) {
     DirContent dirContent;
@@ -45,7 +47,7 @@ void IncludesCollection::add_to_collection(const string& dirPath) {
     closedir(pdir);
 #endif // defined( WNT )
     allIncludes.insert(EntriesPair(dirPath, dirContent));
-};
+}
 
 bool IncludesCollection::exists(string filePath) {
 #if defined( WNT )
@@ -66,7 +68,7 @@ bool IncludesCollection::exists(string filePath) {
     } else {
         return true;
     };
-};
+}
 
 extern "C" {
 

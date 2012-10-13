@@ -282,8 +282,7 @@ static void lcl_setScalesToColumns(ScDocument& rDoc, const vector<long>& rScales
         pOldEntry->GetFormatSpecialInfo(bThousand, bNegRed, nPrecision, nLeading);
 
         nPrecision = static_cast<sal_uInt16>(rScales[i]);
-        String aNewPicture;
-        pFormatter->GenerateFormat(aNewPicture, nOldFormat, eLang,
+        String aNewPicture = pFormatter->GenerateFormat(nOldFormat, eLang,
                                    bThousand, bNegRed, nPrecision, nLeading);
 
         sal_uInt32 nNewFormat = pFormatter->GetEntryKey(aNewPicture, eLang);

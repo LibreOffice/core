@@ -32,9 +32,6 @@ import android.graphics.Shader.TileMode;
 
 /**
  * This adapter provides reflected images from linked adapter.
- *
- * @author potiuk
- *
  */
 public class ReflectingImageAdapter extends AbstractCoverFlowImageAdapter {
 

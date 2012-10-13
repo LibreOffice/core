@@ -58,7 +58,7 @@ using namespace util;
 
 String *ReplaceBackReferences( const SearchOptions& rSearchOpt, SwPaM* pPam );
 
-String& lcl_CleanStr( const SwTxtNode& rNd, xub_StrLen nStart, xub_StrLen& rEnd,
+static String& lcl_CleanStr( const SwTxtNode& rNd, xub_StrLen nStart, xub_StrLen& rEnd,
                       std::vector<sal_uLong> &rArr, String& rRet,
                       bool bRemoveSoftHyphen )
 {
@@ -138,7 +138,7 @@ String& lcl_CleanStr( const SwTxtNode& rNd, xub_StrLen nStart, xub_StrLen& rEnd,
                         // simply removed if first. If at the end, we keep the
                         // replacement and remove afterwards all at a string's
                         // end (might be normal 0x7f).
-                        sal_Bool bEmpty = RES_TXTATR_FIELD != pHt->Which() ||
+                        bool bEmpty = RES_TXTATR_FIELD != pHt->Which() ||
                             !(static_cast<SwTxtFld const*>(pHt)
                                 ->GetFld().GetFld()->ExpandField(true).Len());
                         if ( bEmpty && nStart == nAkt )
@@ -636,7 +636,7 @@ sal_uLong SwCursor::Find( const SearchOptions& rSearchOpt, sal_Bool bSearchInNot
         pDoc->GetIDocumentUndoRedo().StartUndo( UNDO_REPLACE, NULL );
     }
 
-    sal_Bool bSearchSel = 0 != (rSearchOpt.searchFlag & SearchFlags::REG_NOT_BEGINOFLINE);
+    bool bSearchSel = 0 != (rSearchOpt.searchFlag & SearchFlags::REG_NOT_BEGINOFLINE);
     if( bSearchSel )
         eFndRngs = (FindRanges)(eFndRngs | FND_IN_SEL);
     SwFindParaText aSwFindParaText( rSearchOpt, bSearchInNotes, bReplace, *this );

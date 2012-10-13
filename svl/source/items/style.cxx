@@ -162,7 +162,7 @@ const XubString& SfxStyleSheetBase::GetName() const
     return aName;
 }
 
-sal_Bool SfxStyleSheetBase::SetName( const XubString& rName )
+bool SfxStyleSheetBase::SetName( const XubString& rName )
 {
     if(rName.Len() == 0)
         return sal_False;
@@ -214,10 +214,10 @@ const XubString& SfxStyleSheetBase::GetParent() const
     return aParent;
 }
 
-sal_Bool SfxStyleSheetBase::SetParent( const XubString& rName )
+bool SfxStyleSheetBase::SetParent( const XubString& rName )
 {
     if ( rName == aName )
-        return sal_False;
+        return false;
 
     if( aParent != rName )
     {
@@ -225,20 +225,20 @@ sal_Bool SfxStyleSheetBase::SetParent( const XubString& rName )
         if( rName.Len() && !pIter )
         {
             OSL_FAIL( "StyleSheet-Parent nicht gefunden" );
-            return sal_False;
+            return false;
         }
         // rekursive Verknuepfungen verhindern
         if( aName.Len() )
             while(pIter)
             {
                 if(pIter->GetName() == aName)
-                    return sal_False;
+                    return false;
                 pIter = pPool->Find(pIter->GetParent(), nFamily);
             }
         aParent = rName;
     }
     pPool->Broadcast( SfxStyleSheetHint( SFX_STYLESHEET_MODIFIED, *this ) );
-    return sal_True;
+    return true;
 }
 
 // Follow aendern
@@ -248,19 +248,19 @@ const XubString& SfxStyleSheetBase::GetFollow() const
     return aFollow;
 }
 
-sal_Bool SfxStyleSheetBase::SetFollow( const XubString& rName )
+bool SfxStyleSheetBase::SetFollow( const XubString& rName )
 {
     if( aFollow != rName )
     {
         if( !pPool->Find( rName, nFamily ) )
         {
             OSL_FAIL( "StyleSheet-Follow nicht gefunden" );
-            return sal_False;
+            return false;
         }
         aFollow = rName;
     }
     pPool->Broadcast( SfxStyleSheetHint( SFX_STYLESHEET_MODIFIED, *this ) );
-    return sal_True;
+    return true;
 }
 
 // Itemset setzen. Die Dflt-Implementation legt ein neues Set an.
@@ -291,30 +291,30 @@ void SfxStyleSheetBase::SetHelpId( const String& rFile, sal_uLong nId )
 
 // Folgevorlage m"oglich? Default: Ja
 
-sal_Bool SfxStyleSheetBase::HasFollowSupport() const
+bool SfxStyleSheetBase::HasFollowSupport() const
 {
-    return sal_True;
+    return true;
 }
 
 // Basisvorlage m"oglich? Default: Ja
 
-sal_Bool SfxStyleSheetBase::HasParentSupport() const
+bool SfxStyleSheetBase::HasParentSupport() const
 {
-    return sal_True;
+    return true;
 }
 
 // Basisvorlage uf NULL setzen m"oglich? Default: Nein
 
-sal_Bool SfxStyleSheetBase::HasClearParentSupport() const
+bool SfxStyleSheetBase::HasClearParentSupport() const
 {
-    return sal_False;
+    return false;
 }
 
 // Defaultmaessig sind alle StyleSheets Used
 
-sal_Bool SfxStyleSheetBase::IsUsed() const
+bool SfxStyleSheetBase::IsUsed() const
 {
-    return sal_True;
+    return true;
 }
 
 // eingestellte Attribute ausgeben
@@ -361,17 +361,17 @@ SfxStyleFamily SfxStyleSheetIterator::GetSearchFamily() const
     return nSearchFamily;
 }
 
-inline sal_Bool SfxStyleSheetIterator::IsTrivialSearch()
+inline bool SfxStyleSheetIterator::IsTrivialSearch()
 {
     return nMask == 0xFFFF && GetSearchFamily() == SFX_STYLE_FAMILY_ALL;
 }
 
-sal_Bool SfxStyleSheetIterator::DoesStyleMatch(SfxStyleSheetBase *pStyle)
+bool SfxStyleSheetIterator::DoesStyleMatch(SfxStyleSheetBase *pStyle)
 {
     return ((GetSearchFamily() == SFX_STYLE_FAMILY_ALL) ||
             ( pStyle->GetFamily() == GetSearchFamily() ))
         && (( pStyle->GetMask() & ( GetSearchMask() & ~SFXSTYLEBIT_USED )) ||
-            ( bSearchUsed ? pStyle->IsUsed() : sal_False ) ||
+            ( bSearchUsed ? pStyle->IsUsed() : false ) ||
             GetSearchMask() == SFXSTYLEBIT_ALL );
 }
 
@@ -581,16 +581,15 @@ SfxStyleSheetBasePool::~SfxStyleSheetBasePool()
     delete pImp;
 }
 
-sal_Bool SfxStyleSheetBasePool::SetParent(SfxStyleFamily eFam, const XubString& rStyle, const XubString& rParent)
+bool SfxStyleSheetBasePool::SetParent(SfxStyleFamily eFam, const XubString& rStyle, const XubString& rParent)
 {
     SfxStyleSheetIterator aIter(this,eFam,SFXSTYLEBIT_ALL);
-    SfxStyleSheetBase *pStyle =
-        aIter.Find(rStyle);
+    SfxStyleSheetBase *pStyle = aIter.Find(rStyle);
     OSL_ENSURE(pStyle, "Vorlage nicht gefunden. Writer mit Solar <2541??");
     if(pStyle)
         return pStyle->SetParent(rParent);
     else
-        return sal_False;
+        return false;
 }
 
 
@@ -807,7 +806,7 @@ void SfxStyleSheetBasePool::Clear()
 
 void SfxStyleSheetBasePool::ChangeParent(const XubString& rOld,
                                          const XubString& rNew,
-                                         sal_Bool bVirtual)
+                                         bool bVirtual)
 {
     const sal_uInt16 nTmpMask = GetSearchMask();
     SetSearchMask(GetSearchFamily(), 0xffff);
@@ -865,10 +864,10 @@ SfxStyleSheet::~SfxStyleSheet()
 }
 
 
-sal_Bool SfxStyleSheet::SetParent( const XubString& rName )
+bool SfxStyleSheet::SetParent( const XubString& rName )
 {
     if(aParent == rName)
-        return sal_True;
+        return true;
     const XubString aOldParent(aParent);
     if(SfxStyleSheetBase::SetParent(rName)) {
             // aus der Benachrichtigungskette des alten
@@ -885,9 +884,9 @@ sal_Bool SfxStyleSheet::SetParent( const XubString& rName )
             if(pParent)
                 StartListening(*pParent);
         }
-        return sal_True;
+        return true;
     }
-    return sal_False;
+    return false;
 }
 
 // alle Zuhoerer benachtichtigen

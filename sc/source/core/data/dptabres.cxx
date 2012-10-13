@@ -276,7 +276,7 @@ void ScDPInitState::RemoveMember()
 
 // -----------------------------------------------------------------------
 
-void lcl_DumpRow( const String& rType, const String& rName, const ScDPAggData* pAggData,
+static void lcl_DumpRow( const String& rType, const String& rName, const ScDPAggData* pAggData,
                     ScDocument* pDoc, ScAddress& rPos )
 {
     SCCOL nCol = rPos.Col();
@@ -292,7 +292,7 @@ void lcl_DumpRow( const String& rType, const String& rName, const ScDPAggData* p
     rPos.SetRow( nRow + 1 );
 }
 
-void lcl_Indent( ScDocument* pDoc, SCROW nStartRow, const ScAddress& rPos )
+static void lcl_Indent( ScDocument* pDoc, SCROW nStartRow, const ScAddress& rPos )
 {
     SCCOL nCol = rPos.Col();
     SCTAB nTab = rPos.Tab();
@@ -675,7 +675,7 @@ ScDPRowTotals::~ScDPRowTotals()
 {
 }
 
-ScDPAggData* lcl_GetChildTotal( ScDPAggData* pFirst, long nMeasure )
+static ScDPAggData* lcl_GetChildTotal( ScDPAggData* pFirst, long nMeasure )
 {
     OSL_ENSURE( nMeasure >= 0, "GetColTotal: no measure" );
 
@@ -1859,7 +1859,7 @@ void ScDPDataMember::InitFrom( const ScDPResultDimension* pDim )
 const long SC_SUBTOTALPOS_AUTO = -1;    // default
 const long SC_SUBTOTALPOS_SKIP = -2;    // don't use
 
-long lcl_GetSubTotalPos( const ScDPSubTotalState& rSubState )
+static long lcl_GetSubTotalPos( const ScDPSubTotalState& rSubState )
 {
     if ( rSubState.nColSubTotalFunc >= 0 && rSubState.nRowSubTotalFunc >= 0 &&
          rSubState.nColSubTotalFunc != rSubState.nRowSubTotalFunc )

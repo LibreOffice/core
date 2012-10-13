@@ -376,7 +376,7 @@ sal_uInt16 SwFEShell::GetVirtPageNum( const sal_Bool bCalcFrm )
 |*
 *************************************************************************/
 
-void lcl_SetAPageOffset( sal_uInt16 nOffset, SwPageFrm* pPage, SwFEShell* pThis )
+static void lcl_SetAPageOffset( sal_uInt16 nOffset, SwPageFrm* pPage, SwFEShell* pThis )
 {
     pThis->StartAllAction();
     OSL_ENSURE( pPage->FindFirstBodyCntnt(),

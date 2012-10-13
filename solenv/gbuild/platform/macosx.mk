@@ -87,10 +87,6 @@ ifeq ($(HAVE_GCC_NO_LONG_DOUBLE),TRUE)
 gb_CXXFLAGS += -Wno-long-double
 endif
 
-ifneq ($(HAVE_THREADSAFE_STATICS),TRUE)
-gb_CXXFLAGS += -fno-threadsafe-statics
-endif
-
 # these are to get g++ to switch to Objective-C++ mode
 # (see toolkit module for a case where it is necessary to do it this way)
 gb_OBJCXXFLAGS := -x objective-c++ -fobjc-exceptions
@@ -212,10 +208,10 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(foreach object,$(GENCOBJECTS),$(call gb_GenCObject_get_target,$(object))) \
 		$(foreach object,$(GENCXXOBJECTS),$(call gb_GenCxxObject_get_target,$(object))) \
 		$(foreach extraobjectlist,$(EXTRAOBJECTLISTS),`cat $(extraobjectlist)`) \
-		$(foreach lib,$(LINKED_STATIC_LIBS),$(call gb_StaticLibrary_get_target,$(lib))) \
+		`cat $${DYLIB_FILE}` \
 		$(LIBS) \
-		-o $(if $(SOVERSION),$(1).$(SOVERSION),$(1)) \
-		`cat $${DYLIB_FILE}` && \
+		$(foreach lib,$(LINKED_STATIC_LIBS),$(call gb_StaticLibrary_get_target,$(lib))) \
+		-o $(if $(SOVERSION),$(1).$(SOVERSION),$(1)) && \
 	$(if $(SOVERSION),ln -sf $(notdir $(1)).$(SOVERSION) $(1),:) && \
     $(if $(filter Executable,$(TARGETTYPE)), \
         $(PERL) $(SOLARENV)/bin/macosx-change-install-names.pl Executable \
@@ -412,6 +408,18 @@ gb_ExtensionTarget_LICENSEFILE_DEFAULT := $(OUTDIR)/bin/osl/LICENSE
 # UnpackedTarget class
 
 gb_UnpackedTarget_TARFILE_LOCATION := $(TARFILE_LOCATION)
+
+# UnoApiHeadersTarget class
+
+# It seems that when using the latest Xcode and Clang for OS X, we
+# also neeed to always generate comprehensive headers for
+# udkapi. Otherwise we get assertion failures in saxparser when doing
+# i18npool, at least.
+ifneq ($(filter TRUE,$(COM_GCC_IS_CLANG) $(DISABLE_DYNLOADING)),)
+gb_UnoApiHeadersTarget_select_variant = $(if $(filter udkapi,$(1)),comprehensive,$(2))
+else
+gb_UnoApiHeadersTarget_select_variant = $(2)
+endif
 
 # Python
 gb_PYTHON_PRECOMMAND := DYLD_LIBRARY_PATH=$(OUTDIR)/lib

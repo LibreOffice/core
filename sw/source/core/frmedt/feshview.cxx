@@ -111,7 +111,7 @@ SwFlyFrm *GetFlyFromMarked( const SdrMarkList *pLst, ViewShell *pSh )
     return 0;
 }
 
-void lcl_GrabCursor( SwFEShell* pSh, SwFlyFrm* pOldSelFly)
+static void lcl_GrabCursor( SwFEShell* pSh, SwFlyFrm* pOldSelFly)
 {
     const SwFrmFmt *pFlyFmt = pSh->SelFlyGrabCrsr();
     if( pFlyFmt && !pSh->ActionPend() &&
@@ -770,7 +770,7 @@ const SwFrmFmt* SwFEShell::SelFlyGrabCrsr()
 |*
 *************************************************************************/
 
-void lcl_NotifyNeighbours( const SdrMarkList *pLst )
+static void lcl_NotifyNeighbours( const SdrMarkList *pLst )
 {
     // Rules for evasion have changed.
     // 1. The environment of the fly and everything inside should be notified
@@ -1252,7 +1252,7 @@ sal_Bool SwFEShell::ShouldObjectBeSelected(const Point& rPt)
  * Does the object include a control or groups,
  * which comprise only controls
  * --------------------------------------------------*/
-sal_Bool lcl_IsControlGroup( const SdrObject *pObj )
+static sal_Bool lcl_IsControlGroup( const SdrObject *pObj )
 {
     sal_Bool bRet = sal_False;
     if(pObj->ISA(SdrUnoObj))

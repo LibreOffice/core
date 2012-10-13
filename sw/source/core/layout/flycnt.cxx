@@ -581,7 +581,7 @@ public:
           !rTwo.nSub || nSub <= rTwo.nSub ) ); }
 };
 
-const SwFrm * lcl_CalcDownDist( SwDistance &rRet,
+static const SwFrm * lcl_CalcDownDist( SwDistance &rRet,
                                          const Point &rPt,
                                          const SwCntntFrm *pCnt )
 {
@@ -896,7 +896,7 @@ const SwFrm * lcl_CalcDownDist( SwDistance &rRet,
     return 0;
 }
 
-sal_uLong lcl_FindCntDiff( const Point &rPt, const SwLayoutFrm *pLay,
+static sal_uLong lcl_FindCntDiff( const Point &rPt, const SwLayoutFrm *pLay,
                           const SwCntntFrm *& rpCnt,
                           const sal_Bool bBody, const sal_Bool bFtn )
 {
@@ -961,7 +961,7 @@ sal_uLong lcl_FindCntDiff( const Point &rPt, const SwLayoutFrm *pLay,
     return nDistance;
 }
 
-const SwCntntFrm * lcl_FindCnt( const Point &rPt, const SwCntntFrm *pCnt,
+static const SwCntntFrm * lcl_FindCnt( const Point &rPt, const SwCntntFrm *pCnt,
                                   const sal_Bool bBody, const sal_Bool bFtn )
 {
     //Starting from pCnt searches the CntntFrm whose left upper corner is the
@@ -1044,7 +1044,7 @@ const SwCntntFrm * lcl_FindCnt( const Point &rPt, const SwCntntFrm *pCnt,
         return pRet;
 }
 
-void lcl_PointToPrt( Point &rPoint, const SwFrm *pFrm )
+static void lcl_PointToPrt( Point &rPoint, const SwFrm *pFrm )
 {
     SwRect aTmp( pFrm->Prt() );
     aTmp += pFrm->Frm().Pos();

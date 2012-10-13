@@ -38,6 +38,7 @@
 #include <com/sun/star/sdbc/XRowSet.hpp>
 #include <com/sun/star/sdbc/XResultSetMetaDataSupplier.hpp>
 #include <com/sun/star/sdbcx/XRowLocate.hpp>
+#include <com/sun/star/task/InteractionHandler.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
@@ -66,7 +67,6 @@
 using namespace com::sun::star;
 
 #define SC_SERVICE_ROWSET           "com.sun.star.sdb.RowSet"
-#define SC_SERVICE_INTHANDLER       "com.sun.star.task.InteractionHandler"
 
 //! move to a header file?
 #define SC_DBPROP_DATASOURCENAME    "DataSourceName"
@@ -252,9 +252,8 @@ bool ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
                 if ( xExecute.is() )
                 {
                     uno::Reference<task::XInteractionHandler> xHandler(
-                            comphelper::getProcessServiceFactory()->createInstance(
-                                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SC_SERVICE_INTHANDLER )) ),
-                            uno::UNO_QUERY);
+                        task::InteractionHandler::createWithParent(comphelper::getProcessComponentContext(), 0),
+                        uno::UNO_QUERY_THROW);
                     xExecute->executeWithCompletion( xHandler );
                 }
                 else

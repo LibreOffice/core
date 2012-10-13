@@ -78,8 +78,8 @@
 #endif
 
 #ifdef DBG_UTIL
-    void lcl_DebugRedline( const SwDoc* pDoc ); // docredln.cxx
-    #define _DEBUG_REDLINE( pDoc ) lcl_DebugRedline( pDoc );
+    void sw_DebugRedline( const SwDoc* pDoc ); // docredln.cxx
+    #define _DEBUG_REDLINE( pDoc ) sw_DebugRedline( pDoc );
 #else
     #define _DEBUG_REDLINE( pDoc )
 #endif
@@ -1562,7 +1562,7 @@ void SwUndoTblNdsChg::SaveNewBoxes( const SwTableNode& rTblNd,
         pNewSttNds->insert( _BoxMove(rTblBoxes[ i ]->GetSttIdx()) );
 }
 
-SwTableLine* lcl_FindTableLine( const SwTable& rTable,
+static SwTableLine* lcl_FindTableLine( const SwTable& rTable,
                                 const SwTableBox& rBox )
 {
     SwTableLine* pRet = NULL;
@@ -1577,7 +1577,7 @@ SwTableLine* lcl_FindTableLine( const SwTable& rTable,
     return pRet;
 }
 
-const SwTableLines& lcl_FindParentLines( const SwTable& rTable,
+static const SwTableLines& lcl_FindParentLines( const SwTable& rTable,
                                        const SwTableBox& rBox )
 {
     const SwTableLines& rRet =

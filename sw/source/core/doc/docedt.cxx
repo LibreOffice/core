@@ -165,14 +165,14 @@ struct _SaveRedline
 
 typedef boost::ptr_vector< _SaveRedline > _SaveRedlines;
 
-bool lcl_MayOverwrite( const SwTxtNode *pNode, const xub_StrLen nPos )
+static bool lcl_MayOverwrite( const SwTxtNode *pNode, const xub_StrLen nPos )
 {
     sal_Unicode cChr = pNode->GetTxt().GetChar( nPos );
     return !( ( CH_TXTATR_BREAKWORD == cChr || CH_TXTATR_INWORD == cChr ) &&
               (0 != pNode->GetTxtAttrForCharAt( nPos ) ) );
 }
 
-void lcl_SkipAttr( const SwTxtNode *pNode, SwIndex &rIdx, xub_StrLen &rStart )
+static void lcl_SkipAttr( const SwTxtNode *pNode, SwIndex &rIdx, xub_StrLen &rStart )
 {
     if( !lcl_MayOverwrite( pNode, rStart ) )
     {
@@ -354,7 +354,7 @@ void DelFlyInRange( const SwNodeIndex& rMkNdIdx,
     }
 }
 
-bool lcl_SaveFtn( const SwNodeIndex& rSttNd, const SwNodeIndex& rEndNd,
+static bool lcl_SaveFtn( const SwNodeIndex& rSttNd, const SwNodeIndex& rEndNd,
                  const SwNodeIndex& rInsPos,
                  SwFtnIdxs& rFtnArr, SwFtnIdxs& rSaveArr,
                  const SwIndex* pSttCnt = 0, const SwIndex* pEndCnt = 0 )
@@ -469,7 +469,7 @@ bool lcl_SaveFtn( const SwNodeIndex& rSttNd, const SwNodeIndex& rEndNd,
     return bUpdateFtn;
 }
 
-void lcl_SaveRedlines( const SwPaM& aPam, _SaveRedlines& rArr )
+static void lcl_SaveRedlines( const SwPaM& aPam, _SaveRedlines& rArr )
 {
     SwDoc* pDoc = aPam.GetNode()->GetDoc();
 
@@ -537,7 +537,7 @@ void lcl_SaveRedlines( const SwPaM& aPam, _SaveRedlines& rArr )
     pDoc->SetRedlineMode_intern( eOld );
 }
 
-void lcl_RestoreRedlines( SwDoc* pDoc, const SwPosition& rPos, _SaveRedlines& rArr )
+static void lcl_RestoreRedlines( SwDoc* pDoc, const SwPosition& rPos, _SaveRedlines& rArr )
 {
     RedlineMode_t eOld = pDoc->GetRedlineMode();
     pDoc->SetRedlineMode_intern( (RedlineMode_t)(( eOld & ~nsRedlineMode_t::REDLINE_IGNORE) | nsRedlineMode_t::REDLINE_ON ));
@@ -551,7 +551,7 @@ void lcl_RestoreRedlines( SwDoc* pDoc, const SwPosition& rPos, _SaveRedlines& rA
     pDoc->SetRedlineMode_intern( eOld );
 }
 
-void lcl_SaveRedlines( const SwNodeRange& rRg, _SaveRedlines& rArr )
+static void lcl_SaveRedlines( const SwNodeRange& rRg, _SaveRedlines& rArr )
 {
     SwDoc* pDoc = rRg.aStart.GetNode().GetDoc();
     sal_uInt16 nRedlPos;
@@ -637,7 +637,7 @@ void lcl_SaveRedlines( const SwNodeRange& rRg, _SaveRedlines& rArr )
     pDoc->SetRedlineMode_intern( eOld );
 }
 
-void lcl_RestoreRedlines( SwDoc* pDoc, sal_uInt32 nInsPos, _SaveRedlines& rArr )
+static void lcl_RestoreRedlines( SwDoc* pDoc, sal_uInt32 nInsPos, _SaveRedlines& rArr )
 {
     RedlineMode_t eOld = pDoc->GetRedlineMode();
     pDoc->SetRedlineMode_intern( (RedlineMode_t)(( eOld & ~nsRedlineMode_t::REDLINE_IGNORE) | nsRedlineMode_t::REDLINE_ON ));
@@ -1233,7 +1233,7 @@ bool SwDoc::MoveNodeRange( SwNodeRange& rRange, SwNodeIndex& rPos,
 }
 
 // Convert list of ranges of whichIds to a corresponding list of whichIds
-std::vector<sal_uInt16> * lcl_RangesToVector(sal_uInt16 * pRanges)
+static std::vector<sal_uInt16> * lcl_RangesToVector(sal_uInt16 * pRanges)
 {
     std::vector<sal_uInt16> * pResult = new std::vector<sal_uInt16>();
 
@@ -1251,7 +1251,7 @@ std::vector<sal_uInt16> * lcl_RangesToVector(sal_uInt16 * pRanges)
     return pResult;
 }
 
-bool lcl_StrLenOverFlow( const SwPaM& rPam )
+static bool lcl_StrLenOverFlow( const SwPaM& rPam )
 {
     // If we try to merge two paragraph we have to test if afterwards
     // the string doesn't exceed the allowed string length
@@ -1271,7 +1271,7 @@ bool lcl_StrLenOverFlow( const SwPaM& rPam )
     return bRet;
 }
 
-void lcl_GetJoinFlags( SwPaM& rPam, sal_Bool& rJoinTxt, sal_Bool& rJoinPrev )
+void sw_GetJoinFlags( SwPaM& rPam, sal_Bool& rJoinTxt, sal_Bool& rJoinPrev )
 {
     rJoinTxt = sal_False;
     rJoinPrev = sal_False;
@@ -1296,13 +1296,13 @@ void lcl_GetJoinFlags( SwPaM& rPam, sal_Bool& rJoinTxt, sal_Bool& rJoinPrev )
                     pEndNd->GetTxt().Len() != pEnd->nContent.GetIndex()
                     ? rPam.GetPoint()->nNode < rPam.GetMark()->nNode
                     : rPam.GetPoint()->nNode > rPam.GetMark()->nNode,
-                    "lcl_GetJoinFlags");
+                    "sw_GetJoinFlags");
             }
         }
     }
 }
 
-void lcl_JoinText( SwPaM& rPam, sal_Bool bJoinPrev )
+void sw_JoinText( SwPaM& rPam, sal_Bool bJoinPrev )
 {
     SwNodeIndex aIdx( rPam.GetPoint()->nNode );
     SwTxtNode *pTxtNd = aIdx.GetNode().GetTxtNode();
@@ -1316,7 +1316,7 @@ void lcl_JoinText( SwPaM& rPam, sal_Bool bJoinPrev )
         {
             // We do not need to handle xmlids in this case, because
             // it is only invoked if one paragraph is completely empty
-            // (see lcl_GetJoinFlags)
+            // (see sw_GetJoinFlags)
             {
                 // If PageBreaks are deleted/set, it must not be added to the Undo history!
                 // Also, deleteing the Node is not added to the Undo histroy!
@@ -1456,7 +1456,7 @@ lcl_CalcBreaks( ::std::vector<xub_StrLen> & rBreaks, SwPaM const & rPam )
     }
 }
 
-bool lcl_DoWithBreaks(SwDoc & rDoc, SwPaM & rPam,
+static bool lcl_DoWithBreaks(SwDoc & rDoc, SwPaM & rPam,
         bool (SwDoc::*pFunc)(SwPaM&, bool), const bool bForceJoinNext = false)
 {
     ::std::vector<xub_StrLen> Breaks;
@@ -1564,7 +1564,7 @@ bool SwDoc::DeleteAndJoinImpl( SwPaM & rPam,
                                const bool bForceJoinNext )
 {
     sal_Bool bJoinTxt, bJoinPrev;
-    lcl_GetJoinFlags( rPam, bJoinTxt, bJoinPrev );
+    sw_GetJoinFlags( rPam, bJoinTxt, bJoinPrev );
     // #i100466#
     if ( bForceJoinNext )
     {
@@ -1579,7 +1579,7 @@ bool SwDoc::DeleteAndJoinImpl( SwPaM & rPam,
 
     if( bJoinTxt )
     {
-        lcl_JoinText( rPam, bJoinPrev );
+        sw_JoinText( rPam, bJoinPrev );
     }
 
     return true;
@@ -1820,7 +1820,7 @@ bool SwDoc::DeleteRange( SwPaM & rPam )
 }
 
 
-void lcl_syncGrammarError( SwTxtNode &rTxtNode, linguistic2::ProofreadingResult& rResult,
+static void lcl_syncGrammarError( SwTxtNode &rTxtNode, linguistic2::ProofreadingResult& rResult,
     xub_StrLen /*nBeginGrammarCheck*/, const ModelToViewHelper &rConversionMap )
 {
     if( rTxtNode.IsGrammarCheckDirty() )
@@ -2100,7 +2100,7 @@ void SwHyphArgs::SetPam( SwPaM *pPam ) const
 }
 
 // Returns sal_True if we can proceed.
-sal_Bool lcl_HyphenateNode( const SwNodePtr& rpNd, void* pArgs )
+static sal_Bool lcl_HyphenateNode( const SwNodePtr& rpNd, void* pArgs )
 {
     // Hyphenate returns true if there is a hyphenation point and sets pPam
     SwTxtNode *pNode = rpNd->GetTxtNode();
@@ -2154,7 +2154,7 @@ uno::Reference< XHyphenatedWord >  SwDoc::Hyphenate(
     return aHyphArg.GetHyphWord();  // will be set by lcl_HyphenateNode
 }
 
-sal_Bool lcl_GetTokenToParaBreak( String& rStr, String& rRet, sal_Bool bRegExpRplc )
+static sal_Bool lcl_GetTokenToParaBreak( String& rStr, String& rRet, sal_Bool bRegExpRplc )
 {
     sal_Bool bRet = sal_False;
     if( bRegExpRplc )
@@ -2271,7 +2271,7 @@ bool SwDoc::ReplaceRangeImpl( SwPaM& rPam, const String& rStr,
         return false;
 
     sal_Bool bJoinTxt, bJoinPrev;
-    lcl_GetJoinFlags( rPam, bJoinTxt, bJoinPrev );
+    sw_GetJoinFlags( rPam, bJoinTxt, bJoinPrev );
 
     {
         // Create a copy of the Cursor in order to move all Pams from
@@ -2489,7 +2489,7 @@ SetRedlineMode( eOld );
     }
 
     if( bJoinTxt )
-        lcl_JoinText( rPam, bJoinPrev );
+        sw_JoinText( rPam, bJoinPrev );
 
     SetModified();
     return true;

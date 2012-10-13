@@ -135,7 +135,7 @@ static String lcl_getFieldCode( const IFieldmark* pFieldmark ) {
     }
 }
 
-ww::eField lcl_getFieldId( const IFieldmark* pFieldmark ) {
+static ww::eField lcl_getFieldId( const IFieldmark* pFieldmark ) {
     OSL_ENSURE(pFieldmark!=NULL, "where is my fieldmark???");
     if ( !pFieldmark ) {
         return ww::eUNKNOWN;
@@ -385,7 +385,7 @@ xub_StrLen SwWW8AttrIter::SearchNext( xub_StrLen nStartPos )
     return nMinPos;
 }
 
-bool lcl_isFontsizeItem( const SfxPoolItem& rItem )
+static bool lcl_isFontsizeItem( const SfxPoolItem& rItem )
 {
     return ( rItem.Which( ) == RES_CHRATR_FONTSIZE ||
             rItem.Which( ) == RES_CHRATR_CJK_FONTSIZE ||

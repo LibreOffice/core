@@ -173,7 +173,7 @@ void SwTableBox::setDummyFlag( bool bDummy )
 }
 
 //JP 15.09.98: Bug 55741 - Keep tabs (front and rear)
-String& lcl_TabToBlankAtSttEnd( String& rTxt )
+static String& lcl_TabToBlankAtSttEnd( String& rTxt )
 {
     sal_Unicode c;
     xub_StrLen n;
@@ -187,7 +187,7 @@ String& lcl_TabToBlankAtSttEnd( String& rTxt )
     return rTxt;
 }
 
-String& lcl_DelTabsAtSttEnd( String& rTxt )
+static String& lcl_DelTabsAtSttEnd( String& rTxt )
 {
     sal_Unicode c;
     xub_StrLen n;
@@ -438,7 +438,7 @@ void SwTable::AdjustWidths( const long nOld, const long nNew )
 |*  SwTable::GetTabCols()
 |*
 |*************************************************************************/
-void lcl_RefreshHidden( SwTabCols &rToFill, sal_uInt16 nPos )
+static void lcl_RefreshHidden( SwTabCols &rToFill, sal_uInt16 nPos )
 {
     for ( sal_uInt16 i = 0; i < rToFill.Count(); ++i )
     {
@@ -450,7 +450,7 @@ void lcl_RefreshHidden( SwTabCols &rToFill, sal_uInt16 nPos )
     }
 }
 
-void lcl_SortedTabColInsert( SwTabCols &rToFill, const SwTableBox *pBox,
+static void lcl_SortedTabColInsert( SwTabCols &rToFill, const SwTableBox *pBox,
                    const SwFrmFmt *pTabFmt, const sal_Bool bHidden,
                    const bool bRefreshHidden )
 {
@@ -560,7 +560,7 @@ void lcl_SortedTabColInsert( SwTabCols &rToFill, const SwTableBox *pBox,
     }
 }
 
-void lcl_ProcessBoxGet( const SwTableBox *pBox, SwTabCols &rToFill,
+static void lcl_ProcessBoxGet( const SwTableBox *pBox, SwTabCols &rToFill,
                         const SwFrmFmt *pTabFmt, bool bRefreshHidden )
 {
     if ( !pBox->GetTabLines().empty() )
@@ -576,7 +576,7 @@ void lcl_ProcessBoxGet( const SwTableBox *pBox, SwTabCols &rToFill,
         ::lcl_SortedTabColInsert( rToFill, pBox, pTabFmt, sal_False, bRefreshHidden );
 }
 
-void lcl_ProcessLineGet( const SwTableLine *pLine, SwTabCols &rToFill,
+static void lcl_ProcessLineGet( const SwTableLine *pLine, SwTabCols &rToFill,
                          const SwFrmFmt *pTabFmt )
 {
     for ( sal_uInt16 i = 0; i < pLine->GetTabBoxes().size(); ++i )
@@ -695,16 +695,16 @@ struct Parm
     {}
 };
 
-void lcl_ProcessBoxSet( SwTableBox *pBox, Parm &rParm );
+static void lcl_ProcessBoxSet( SwTableBox *pBox, Parm &rParm );
 
-void lcl_ProcessLine( SwTableLine *pLine, Parm &rParm )
+static void lcl_ProcessLine( SwTableLine *pLine, Parm &rParm )
 {
     SwTableBoxes &rBoxes = pLine->GetTabBoxes();
     for ( int i = rBoxes.size()-1; i >= 0; --i )
         ::lcl_ProcessBoxSet( rBoxes[ static_cast< sal_uInt16 >(i) ], rParm );
 }
 
-void lcl_ProcessBoxSet( SwTableBox *pBox, Parm &rParm )
+static void lcl_ProcessBoxSet( SwTableBox *pBox, Parm &rParm )
 {
     if ( !pBox->GetTabLines().empty() )
     {   SwTableLines &rLines = pBox->GetTabLines();
@@ -848,7 +848,7 @@ void lcl_ProcessBoxSet( SwTableBox *pBox, Parm &rParm )
     }
 }
 
-void lcl_ProcessBoxPtr( SwTableBox *pBox, std::deque<SwTableBox*> &rBoxArr,
+static void lcl_ProcessBoxPtr( SwTableBox *pBox, std::deque<SwTableBox*> &rBoxArr,
                            sal_Bool bBefore )
 {
     if ( !pBox->GetTabLines().empty() )
@@ -867,9 +867,9 @@ void lcl_ProcessBoxPtr( SwTableBox *pBox, std::deque<SwTableBox*> &rBoxArr,
         rBoxArr.push_back( pBox );
 }
 
-void lcl_AdjustBox( SwTableBox *pBox, const long nDiff, Parm &rParm );
+static void lcl_AdjustBox( SwTableBox *pBox, const long nDiff, Parm &rParm );
 
-void lcl_AdjustLines( SwTableLines &rLines, const long nDiff, Parm &rParm )
+static void lcl_AdjustLines( SwTableLines &rLines, const long nDiff, Parm &rParm )
 {
     for ( sal_uInt16 i = 0; i < rLines.size(); ++i )
     {
@@ -879,7 +879,7 @@ void lcl_AdjustLines( SwTableLines &rLines, const long nDiff, Parm &rParm )
     }
 }
 
-void lcl_AdjustBox( SwTableBox *pBox, const long nDiff, Parm &rParm )
+static void lcl_AdjustBox( SwTableBox *pBox, const long nDiff, Parm &rParm )
 {
     if ( !pBox->GetTabLines().empty() )
         ::lcl_AdjustLines( pBox->GetTabLines(), nDiff, rParm );
@@ -1875,7 +1875,7 @@ void SwTableBox::ChgFrmFmt( SwTableBoxFmt* pNewFmt )
 |*      resulting from the position in the lines/boxes/tables.
 |*
 |*************************************************************************/
-void lcl_GetTblBoxColStr( sal_uInt16 nCol, String& rNm )
+void sw_GetTblBoxColStr( sal_uInt16 nCol, String& rNm )
 {
     const sal_uInt16 coDiff = 52;   // 'A'-'Z' 'a' - 'z'
     sal_uInt16 nCalc;
@@ -1923,7 +1923,7 @@ String SwTableBox::GetName() const
         if( 0 != ( pBox = pLine->GetUpper()) )
             sNm.Insert( aDotStr, 0 ).Insert( sTmp, 0 );
         else
-            ::lcl_GetTblBoxColStr( nPos, sNm );
+            sw_GetTblBoxColStr( nPos, sNm );
 
     } while( pBox );
     return sNm;

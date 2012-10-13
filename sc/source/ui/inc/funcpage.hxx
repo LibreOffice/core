@@ -30,7 +30,7 @@
 
 #include <vcl/tabctrl.hxx>
 #include "parawin.hxx"
-#include <svtools/svtreebx.hxx>
+#include <svtools/treelistbox.hxx>
 #include "compiler.hxx"
 #include "cell.hxx"
 

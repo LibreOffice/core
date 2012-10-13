@@ -38,7 +38,6 @@
 #include <ooo/vba/excel/XlPlacement.hpp>
 #include <rtl/ustrbuf.hxx>
 #include <filter/msfilter/msvbahelper.hxx>
-#include <oox/helper/helper.hxx>
 #include <svx/unoshape.hxx>
 #include "vbafont.hxx"
 #include "drwlayer.hxx"
@@ -155,12 +154,12 @@ VBAHELPER_IMPL_XHELPERINTERFACE( ScVbaButtonCharacters, "ooo.vba.excel.Character
 
 OUString ScVbaButtonCharacters::getFullString() const throw (uno::RuntimeException)
 {
-    return mxPropSet->getPropertyValue( CREATE_OUSTRING( "Label" ) ).get< OUString >();
+    return mxPropSet->getPropertyValue( "Label" ).get< OUString >();
 }
 
 void ScVbaButtonCharacters::setFullString( const OUString& rString ) throw (uno::RuntimeException)
 {
-    mxPropSet->setPropertyValue( CREATE_OUSTRING( "Label" ), uno::Any( rString ) );
+    mxPropSet->setPropertyValue( "Label", uno::Any( rString ) );
 }
 
 // ============================================================================
@@ -230,12 +229,12 @@ void SAL_CALL ScVbaSheetObjectBase::setHeight( double fHeight ) throw (uno::Runt
 
 OUString SAL_CALL ScVbaSheetObjectBase::getName() throw (uno::RuntimeException)
 {
-    return mxShapeProps->getPropertyValue( CREATE_OUSTRING( "Name" ) ).get< OUString >();
+    return mxShapeProps->getPropertyValue( "Name" ).get< OUString >();
 }
 
 void SAL_CALL ScVbaSheetObjectBase::setName( const OUString& rName ) throw (uno::RuntimeException)
 {
-    mxShapeProps->setPropertyValue( CREATE_OUSTRING( "Name" ), uno::Any( rName ) );
+    mxShapeProps->setPropertyValue( "Name", uno::Any( rName ) );
 }
 
 sal_Int32 SAL_CALL ScVbaSheetObjectBase::getPlacement() throw (uno::RuntimeException)
@@ -319,24 +318,24 @@ ScVbaControlObjectBase::ScVbaControlObjectBase(
     switch( eListenerType )
     {
         case LISTENER_ACTION:
-            maListenerType = CREATE_OUSTRING( "XActionListener" );
-            maEventMethod = CREATE_OUSTRING( "actionPerformed" );
+            maListenerType = "XActionListener";
+            maEventMethod = "actionPerformed";
         break;
         case LISTENER_MOUSE:
-            maListenerType = CREATE_OUSTRING( "XMouseListener" );
-            maEventMethod = CREATE_OUSTRING( "mouseReleased" );
+            maListenerType = "XMouseListener";
+            maEventMethod = "mouseReleased";
         break;
         case LISTENER_TEXT:
-            maListenerType = CREATE_OUSTRING( "XTextListener" );
-            maEventMethod = CREATE_OUSTRING( "textChanged" );
+            maListenerType = "XTextListener";
+            maEventMethod = "textChanged";
         break;
         case LISTENER_VALUE:
-            maListenerType = CREATE_OUSTRING( "XAdjustmentListener" );
-            maEventMethod = CREATE_OUSTRING( "adjustmentValueChanged" );
+            maListenerType = "XAdjustmentListener";
+            maEventMethod = "adjustmentValueChanged";
         break;
         case LISTENER_CHANGE:
-            maListenerType = CREATE_OUSTRING( "XChangeListener" );
-            maEventMethod = CREATE_OUSTRING( "changed" );
+            maListenerType = "XChangeListener";
+            maEventMethod = "changed";
         break;
         // no default, to let the compiler complain about missing case
     }
@@ -346,12 +345,12 @@ ScVbaControlObjectBase::ScVbaControlObjectBase(
 
 OUString SAL_CALL ScVbaControlObjectBase::getName() throw (uno::RuntimeException)
 {
-    return mxControlProps->getPropertyValue( CREATE_OUSTRING( "Name" ) ).get< OUString >();
+    return mxControlProps->getPropertyValue( "Name" ).get< OUString >();
 }
 
 void SAL_CALL ScVbaControlObjectBase::setName( const OUString& rName ) throw (uno::RuntimeException)
 {
-    mxControlProps->setPropertyValue( CREATE_OUSTRING( "Name" ), uno::Any( rName ) );
+    mxControlProps->setPropertyValue( "Name", uno::Any( rName ) );
 }
 
 OUString SAL_CALL ScVbaControlObjectBase::getOnAction() throw (uno::RuntimeException)
@@ -363,7 +362,7 @@ OUString SAL_CALL ScVbaControlObjectBase::getOnAction() throw (uno::RuntimeExcep
     {
         const script::ScriptEventDescriptor* pEvent = aEvents.getConstArray();
         const script::ScriptEventDescriptor* pEventEnd = pEvent + aEvents.getLength();
-        const OUString aScriptType = CREATE_OUSTRING( "Script" );
+        const OUString aScriptType = "Script";
         for( ; pEvent < pEventEnd; ++pEvent )
             if( (pEvent->ListenerType == maListenerType) && (pEvent->EventMethod == maEventMethod) && (pEvent->ScriptType == aScriptType) )
                 return extractMacroName( pEvent->ScriptCode );
@@ -388,7 +387,7 @@ void SAL_CALL ScVbaControlObjectBase::setOnAction( const OUString& rMacroName ) 
         script::ScriptEventDescriptor aDescriptor;
         aDescriptor.ListenerType = maListenerType;
         aDescriptor.EventMethod = maEventMethod;
-        aDescriptor.ScriptType = CREATE_OUSTRING( "Script" );
+        aDescriptor.ScriptType = "Script";
         aDescriptor.ScriptCode = makeMacroURL( aResolvedMacro.msResolvedMacro );
         xEventMgr->registerScriptEvent( nIndex, aDescriptor );
     }
@@ -396,12 +395,12 @@ void SAL_CALL ScVbaControlObjectBase::setOnAction( const OUString& rMacroName ) 
 
 sal_Bool SAL_CALL ScVbaControlObjectBase::getPrintObject() throw (uno::RuntimeException)
 {
-    return mxControlProps->getPropertyValue( CREATE_OUSTRING( "Printable" ) ).get< sal_Bool >();
+    return mxControlProps->getPropertyValue( "Printable" ).get< sal_Bool >();
 }
 
 void SAL_CALL ScVbaControlObjectBase::setPrintObject( sal_Bool bPrintObject ) throw (uno::RuntimeException)
 {
-    mxControlProps->setPropertyValue( CREATE_OUSTRING( "Printable" ), uno::Any( bPrintObject ) );
+    mxControlProps->setPropertyValue( "Printable", uno::Any( bPrintObject ) );
 }
 
 // XControlObject attributes
@@ -446,12 +445,12 @@ ScVbaButton::ScVbaButton(
 
 OUString SAL_CALL ScVbaButton::getCaption() throw (uno::RuntimeException)
 {
-    return mxControlProps->getPropertyValue( CREATE_OUSTRING( "Label" ) ).get< OUString >();
+    return mxControlProps->getPropertyValue( "Label" ).get< OUString >();
 }
 
 void SAL_CALL ScVbaButton::setCaption( const OUString& rCaption ) throw (uno::RuntimeException)
 {
-    mxControlProps->setPropertyValue( CREATE_OUSTRING( "Label" ), uno::Any( rCaption ) );
+    mxControlProps->setPropertyValue( "Label", uno::Any( rCaption ) );
 }
 
 uno::Reference< excel::XFont > SAL_CALL ScVbaButton::getFont() throw (uno::RuntimeException)
@@ -466,7 +465,7 @@ void SAL_CALL ScVbaButton::setFont( const uno::Reference< excel::XFont >& /*rxFo
 
 sal_Int32 SAL_CALL ScVbaButton::getHorizontalAlignment() throw (uno::RuntimeException)
 {
-    switch( mxControlProps->getPropertyValue( CREATE_OUSTRING( "Align" ) ).get< sal_Int16 >() )
+    switch( mxControlProps->getPropertyValue( "Align" ).get< sal_Int16 >() )
     {
         case awt::TextAlign::LEFT:      return excel::Constants::xlLeft;
         case awt::TextAlign::RIGHT:     return excel::Constants::xlRight;
@@ -485,12 +484,12 @@ void SAL_CALL ScVbaButton::setHorizontalAlignment( sal_Int32 nAlign ) throw (uno
         case excel::Constants::xlCenter:    nAwtAlign = awt::TextAlign::CENTER; break;
     }
     // form controls expect short value
-    mxControlProps->setPropertyValue( CREATE_OUSTRING( "Align" ), uno::Any( static_cast< sal_Int16 >( nAwtAlign ) ) );
+    mxControlProps->setPropertyValue( "Align", uno::Any( static_cast< sal_Int16 >( nAwtAlign ) ) );
 }
 
 sal_Int32 SAL_CALL ScVbaButton::getVerticalAlignment() throw (uno::RuntimeException)
 {
-    switch( mxControlProps->getPropertyValue( CREATE_OUSTRING( "VerticalAlign" ) ).get< style::VerticalAlignment >() )
+    switch( mxControlProps->getPropertyValue( "VerticalAlign" ).get< style::VerticalAlignment >() )
     {
         case style::VerticalAlignment_TOP:      return excel::Constants::xlTop;
         case style::VerticalAlignment_BOTTOM:   return excel::Constants::xlBottom;
@@ -509,7 +508,7 @@ void SAL_CALL ScVbaButton::setVerticalAlignment( sal_Int32 nAlign ) throw (uno::
         case excel::Constants::xlBottom:    eAwtAlign = style::VerticalAlignment_BOTTOM;    break;
         case excel::Constants::xlCenter:    eAwtAlign = style::VerticalAlignment_MIDDLE;    break;
     }
-    mxControlProps->setPropertyValue( CREATE_OUSTRING( "VerticalAlign" ), uno::Any( eAwtAlign ) );
+    mxControlProps->setPropertyValue( "VerticalAlign", uno::Any( eAwtAlign ) );
 }
 
 sal_Int32 SAL_CALL ScVbaButton::getOrientation() throw (uno::RuntimeException)
@@ -538,7 +537,7 @@ VBAHELPER_IMPL_XHELPERINTERFACE( ScVbaButton, "ooo.vba.excel.Button" )
 
 OUString ScVbaButton::implGetBaseName() const
 {
-    return CREATE_OUSTRING( "Button" );
+    return OUString( "Button" );
 }
 
 void ScVbaButton::implSetDefaultProperties() throw (uno::RuntimeException)

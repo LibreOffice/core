@@ -1,30 +1,21 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*************************************************************************
+/*
+ * This file is part of the LibreOffice project.
  *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * This file incorporates work covered by the following license notice:
  *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
 
 #include <tools/shl.hxx>
 #include <svl/eitem.hxx>
@@ -61,9 +52,7 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::container;
 using namespace comphelper;
-using rtl::OUString;
 
-#define C2U(cChar)                  OUString::createFromAscii(cChar)
 #define C2S(cChar)                  String( RTL_CONSTASCII_USTRINGPARAM(cChar) )
 #define CFG_PAGE_AND_GROUP          C2S("General"), C2S("LoadSave")
 // !! you have to update these index, if you changed the list of the child windows !!
@@ -424,7 +413,7 @@ void SfxSaveTabPage::Reset( const SfxItemSet& )
         {
             Reference< XMultiServiceFactory > xMSF = comphelper::getProcessServiceFactory();
             pImpl->xFact = Reference<XNameContainer>(
-                    xMSF->createInstance(C2U("com.sun.star.document.FilterFactory")), UNO_QUERY);
+                    xMSF->createInstance("com.sun.star.document.FilterFactory"), UNO_QUERY);
 
             DBG_ASSERT(pImpl->xFact.is(), "service com.sun.star.document.FilterFactory unavailable");
             Reference< XContainerQuery > xQuery(pImpl->xFact, UNO_QUERY);
@@ -434,21 +423,21 @@ void SfxSaveTabPage::Reset( const SfxItemSet& )
                 {
                     long nData = (long) aDocTypeLB.GetEntryData(n);
                     OUString sCommand;
-                    sCommand = C2U("matchByDocumentService=%1:iflags=");
+                    sCommand = "matchByDocumentService=%1:iflags=";
                     sCommand += String::CreateFromInt32(SFX_FILTER_IMPORT|SFX_FILTER_EXPORT);
-                    sCommand += C2U(":eflags=");
+                    sCommand += ":eflags=";
                     sCommand += String::CreateFromInt32(SFX_FILTER_NOTINFILEDLG);
-                    sCommand += C2U(":default_first");
+                    sCommand += ":default_first";
                     String sReplace;
                     switch(nData)
                     {
-                        case  APP_WRITER        : sReplace = C2U("com.sun.star.text.TextDocument");  break;
-                        case  APP_WRITER_WEB    : sReplace = C2U("com.sun.star.text.WebDocument");   break;
-                        case  APP_WRITER_GLOBAL : sReplace = C2U("com.sun.star.text.GlobalDocument");   break;
-                        case  APP_CALC          : sReplace = C2U("com.sun.star.sheet.SpreadsheetDocument");break;
-                        case  APP_IMPRESS       : sReplace = C2U("com.sun.star.presentation.PresentationDocument");break;
-                        case  APP_DRAW          : sReplace = C2U("com.sun.star.drawing.DrawingDocument");break;
-                        case  APP_MATH          : sReplace = C2U("com.sun.star.formula.FormulaProperties");break;
+                        case  APP_WRITER        : sReplace = "com.sun.star.text.TextDocument";  break;
+                        case  APP_WRITER_WEB    : sReplace = "com.sun.star.text.WebDocument";   break;
+                        case  APP_WRITER_GLOBAL : sReplace = "com.sun.star.text.GlobalDocument";   break;
+                        case  APP_CALC          : sReplace = "com.sun.star.sheet.SpreadsheetDocument";break;
+                        case  APP_IMPRESS       : sReplace = "com.sun.star.presentation.PresentationDocument";break;
+                        case  APP_DRAW          : sReplace = "com.sun.star.drawing.DrawingDocument";break;
+                        case  APP_MATH          : sReplace = "com.sun.star.formula.FormulaProperties";break;
                         default: OSL_FAIL("illegal user data");
                     }
                     String sTmp(sCommand);
@@ -553,7 +542,7 @@ IMPL_LINK( SfxSaveTabPage, AutoClickHdl_Impl, CheckBox *, pBox )
     return 0;
 }
 
-OUString lcl_ExtracUIName(const Sequence<PropertyValue> rProperties)
+static OUString lcl_ExtracUIName(const Sequence<PropertyValue> rProperties)
 {
     OUString sRet;
     const PropertyValue* pProperties = rProperties.getConstArray();

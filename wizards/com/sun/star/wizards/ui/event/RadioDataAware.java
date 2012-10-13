@@ -21,9 +21,6 @@ import com.sun.star.awt.XItemListener;
 import com.sun.star.awt.XRadioButton;
 import com.sun.star.uno.UnoRuntime;
 
-/**
- * @author rpiterman
- */
 public class RadioDataAware extends DataAware
 {
 

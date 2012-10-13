@@ -35,7 +35,7 @@
 //------------------------------------------------------------------------
 
 template< typename R, typename S, typename U >
-bool lcl_MoveStart( R& rRef, U nStart, S nDelta, U nMask )
+static bool lcl_MoveStart( R& rRef, U nStart, S nDelta, U nMask )
 {
     bool bCut = false;
     if ( rRef >= nStart )
@@ -56,7 +56,7 @@ bool lcl_MoveStart( R& rRef, U nStart, S nDelta, U nMask )
 }
 
 template< typename R, typename S, typename U >
-bool lcl_MoveEnd( R& rRef, U nStart, S nDelta, U nMask )
+static bool lcl_MoveEnd( R& rRef, U nStart, S nDelta, U nMask )
 {
     bool bCut = false;
     if ( rRef >= nStart )
@@ -77,7 +77,7 @@ bool lcl_MoveEnd( R& rRef, U nStart, S nDelta, U nMask )
 }
 
 template< typename R, typename S, typename U >
-bool lcl_MoveReorder( R& rRef, U nStart, U nEnd, S nDelta )
+static bool lcl_MoveReorder( R& rRef, U nStart, U nEnd, S nDelta )
 {
     if ( rRef >= nStart && rRef <= nEnd )
     {
@@ -112,7 +112,7 @@ bool lcl_MoveReorder( R& rRef, U nStart, U nEnd, S nDelta )
 }
 
 template< typename R, typename S, typename U >
-bool lcl_MoveItCut( R& rRef, S nDelta, U nMask )
+static bool lcl_MoveItCut( R& rRef, S nDelta, U nMask )
 {
     bool bCut = false;
     rRef = sal::static_int_cast<R>( rRef + nDelta );
@@ -130,7 +130,7 @@ bool lcl_MoveItCut( R& rRef, S nDelta, U nMask )
 }
 
 template< typename R, typename S, typename U >
-void lcl_MoveItWrap( R& rRef, S nDelta, U nMask )
+static void lcl_MoveItWrap( R& rRef, S nDelta, U nMask )
 {
     rRef = sal::static_int_cast<R>( rRef + nDelta );
     if ( rRef < 0 )
@@ -140,7 +140,7 @@ void lcl_MoveItWrap( R& rRef, S nDelta, U nMask )
 }
 
 template< typename R, typename S, typename U >
-bool lcl_MoveRefPart( R& rRef1Val, bool& rRef1Del, bool bDo1,
+static bool lcl_MoveRefPart( R& rRef1Val, bool& rRef1Del, bool bDo1,
                       R& rRef2Val, bool& rRef2Del, bool bDo2,
                       U nStart, U nEnd, S nDelta, U nMask )
 {
@@ -223,7 +223,7 @@ void Expand( R& n1, R& n2, U nStart, S nD )
 }
 
 
-bool lcl_IsWrapBig( sal_Int32 nRef, sal_Int32 nDelta )
+static bool lcl_IsWrapBig( sal_Int32 nRef, sal_Int32 nDelta )
 {
     if ( nRef > 0 && nDelta > 0 )
         return nRef + nDelta <= 0;
@@ -233,7 +233,7 @@ bool lcl_IsWrapBig( sal_Int32 nRef, sal_Int32 nDelta )
 }
 
 
-bool lcl_MoveBig( sal_Int32& rRef, sal_Int32 nStart, sal_Int32 nDelta )
+static bool lcl_MoveBig( sal_Int32& rRef, sal_Int32 nStart, sal_Int32 nDelta )
 {
     bool bCut = false;
     if ( rRef >= nStart )
@@ -248,7 +248,7 @@ bool lcl_MoveBig( sal_Int32& rRef, sal_Int32 nStart, sal_Int32 nDelta )
     return bCut;
 }
 
-bool lcl_MoveItCutBig( sal_Int32& rRef, sal_Int32 nDelta )
+static bool lcl_MoveItCutBig( sal_Int32& rRef, sal_Int32 nDelta )
 {
     bool bCut = lcl_IsWrapBig( rRef, nDelta );
     rRef += nDelta;

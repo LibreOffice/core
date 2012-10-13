@@ -35,7 +35,7 @@ using namespace ::com::sun::star;
 
 //------------------------------------------------------------------------
 
-rtl::Reference<SvxForbiddenCharactersTable> lcl_GetForbidden( ScDocShell* pDocSh )
+static rtl::Reference<SvxForbiddenCharactersTable> lcl_GetForbidden( ScDocShell* pDocSh )
 {
     rtl::Reference<SvxForbiddenCharactersTable> xRet;
     if ( pDocSh )

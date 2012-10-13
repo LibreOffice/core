@@ -58,6 +58,7 @@ private:
     sal_Bool            mbOldSaveBack;
     sal_Bool            mbInClose;
     sal_Bool            mbModalMode;
+    bool            mbIsDefferedInit;
     Timer           maLayoutTimer;
 
     SAL_DLLPRIVATE void    ImplInitDialogData();
@@ -81,6 +82,7 @@ public:
     SAL_DLLPRIVATE sal_Bool    IsInClose() const { return mbInClose; }
     SAL_DLLPRIVATE bool hasPendingLayout() const { return maLayoutTimer.IsActive(); }
     SAL_DLLPRIVATE void doDeferredInit(bool bResizable);
+    SAL_DLLPRIVATE bool isDeferredInit() const { return mbIsDefferedInit; }
 
 protected:
                     Dialog( WindowType nType );
@@ -89,7 +91,6 @@ protected:
 
 public:
                     Dialog( Window* pParent, WinBits nStyle = WB_STDDIALOG );
-                    Dialog( Window* pParent, const ResId& rResId );
                     Dialog( Window* pParent, const rtl::OString& rID, const rtl::OUString& rUIXMLDescription );
     virtual         ~Dialog();
 

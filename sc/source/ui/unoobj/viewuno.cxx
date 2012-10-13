@@ -86,7 +86,7 @@ using namespace com::sun::star;
 
 //  alles ohne Which-ID, Map nur fuer PropertySetInfo
 
-const SfxItemPropertyMapEntry* lcl_GetViewOptPropertyMap()
+static const SfxItemPropertyMapEntry* lcl_GetViewOptPropertyMap()
 {
     static SfxItemPropertyMapEntry aViewOptPropertyMap_Impl[] =
     {
@@ -527,7 +527,7 @@ void SAL_CALL ScTabViewObj::release() throw()
     SfxBaseController::release();
 }
 
-void lcl_CallActivate( ScDocShell* pDocSh, SCTAB nTab, sal_Int32 nEvent )
+static void lcl_CallActivate( ScDocShell* pDocSh, SCTAB nTab, sal_Int32 nEvent )
 {
     ScDocument* pDoc = pDocSh->GetDocument();
     // when deleting a sheet, nPreviousTab can be invalid
@@ -654,7 +654,7 @@ uno::Sequence<sal_Int8> SAL_CALL ScTabViewObj::getImplementationId()
 
 // XDocumentView
 
-sal_Bool lcl_TabInRanges( SCTAB nTab, const ScRangeList& rRanges )
+static sal_Bool lcl_TabInRanges( SCTAB nTab, const ScRangeList& rRanges )
 {
     for (size_t i = 0, nCount = rRanges.size(); i < nCount; ++i)
     {
@@ -665,7 +665,7 @@ sal_Bool lcl_TabInRanges( SCTAB nTab, const ScRangeList& rRanges )
     return false;
 }
 
-void lcl_ShowObject( ScTabViewShell& rViewSh, ScDrawView& rDrawView, SdrObject* pSelObj )
+static void lcl_ShowObject( ScTabViewShell& rViewSh, ScDrawView& rDrawView, SdrObject* pSelObj )
 {
     sal_Bool bFound = false;
     SCTAB nObjectTab = 0;

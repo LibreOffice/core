@@ -74,12 +74,12 @@ struct SW_DLLPUBLIC SwPosition
     */
     SwDoc * GetDoc() const;
 
-    sal_Bool operator < (const SwPosition &) const;
-    sal_Bool operator > (const SwPosition &) const;
-    sal_Bool operator <=(const SwPosition &) const;
-    sal_Bool operator >=(const SwPosition &) const;
-    sal_Bool operator ==(const SwPosition &) const;
-    sal_Bool operator !=(const SwPosition &) const;
+    bool operator < (const SwPosition &) const;
+    bool operator > (const SwPosition &) const;
+    bool operator <=(const SwPosition &) const;
+    bool operator >=(const SwPosition &) const;
+    bool operator ==(const SwPosition &) const;
+    bool operator !=(const SwPosition &) const;
 };
 
 

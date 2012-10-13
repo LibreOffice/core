@@ -118,7 +118,7 @@ rtl::OUString ScUndoModifyStyle::GetComment() const
     return ScGlobal::GetRscString( nId );
 }
 
-void lcl_DocStyleChanged( ScDocument* pDoc, SfxStyleSheetBase* pStyle, sal_Bool bRemoved )
+static void lcl_DocStyleChanged( ScDocument* pDoc, SfxStyleSheetBase* pStyle, sal_Bool bRemoved )
 {
     //! move to document or docshell
 

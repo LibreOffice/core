@@ -20,7 +20,7 @@
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>
-#include <com/sun/star/xml/sax/XParser.hpp>
+#include <com/sun/star/xml/sax/Parser.hpp>
 
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/implbase1.hxx>
@@ -105,14 +105,7 @@ void SAL_CALL importDialogModel(
             Reference< XInterface >() );
     }
 
-    Reference< xml::sax::XParser > xParser( xSMgr->createInstanceWithContext(
-        "com.sun.star.xml.sax.Parser", xContext ), UNO_QUERY );
-    OSL_ASSERT( xParser.is() );
-    if (! xParser.is())
-    {
-        throw RuntimeException("could not create sax-parser component!",
-            Reference< XInterface >() );
-    }
+    Reference< xml::sax::XParser > xParser = xml::sax::Parser::create( xContext );
 
     // error handler, entity resolver omitted for this helper function
     xParser->setDocumentHandler( importDialogModel( xDialogModel, xContext, xDocument ) );

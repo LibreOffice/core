@@ -493,7 +493,7 @@ void SwHTMLWriter::OutFootEndNoteSym( const SwFmtFtn& rFmtFtn,
     HTMLOutFuncs::Out_AsciiTag( Strm(), OOO_STRING_SVTOOLS_HTML_anchor, sal_False );
 }
 
-sal_uInt16 lcl_html_fillEndNoteInfo( const SwEndNoteInfo& rInfo,
+static sal_uInt16 lcl_html_fillEndNoteInfo( const SwEndNoteInfo& rInfo,
                                  String *pParts,
                                  sal_Bool bEndNote  )
 {
@@ -527,7 +527,7 @@ sal_uInt16 lcl_html_fillEndNoteInfo( const SwEndNoteInfo& rInfo,
     return nParts;
 }
 
-void lcl_html_outFootEndNoteInfo( Writer& rWrt, String *pParts,
+static void lcl_html_outFootEndNoteInfo( Writer& rWrt, String *pParts,
                                   sal_uInt16 nParts, const sal_Char *pName )
 {
     SwHTMLWriter& rHTMLWrt = (SwHTMLWriter&)rWrt;

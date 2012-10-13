@@ -24,7 +24,7 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-//--------------------------------------------------------------------------
+
 SfxVoidItem AcceptChanges FID_CHG_ACCEPT
 ()
 [
@@ -1070,6 +1070,56 @@ SfxVoidItem CommentChange FID_CHG_COMMENT
 
 //--------------------------------------------------------------------------
 SfxVoidItem ConditionalFormatDialog SID_OPENDLG_CONDFRMT
+()
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = TRUE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_FORMAT;
+]
+
+//--------------------------------------------------------------------------
+SfxVoidItem ColorScaleFormatDialog SID_OPENDLG_COLORSCALE
+()
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = TRUE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_FORMAT;
+]
+
+//--------------------------------------------------------------------------
+SfxVoidItem DataBarFormatDialog SID_OPENDLG_DATABAR
 ()
 [
     /* flags: */
@@ -2869,10 +2919,10 @@ SfxVoidItem SolverDialog SID_OPENDLG_OPTSOLVER
     Synchron;
 
     /* config: */
-	AccelConfig = FALSE,
-	MenuConfig = FALSE,
-	StatusBarConfig = FALSE,
-	ToolBoxConfig = FALSE,
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = FALSE,
     GroupId = GID_OPTIONS;
 ]
 
@@ -8291,4 +8341,28 @@ SfxVoidItem EnterString SID_ENTER_STRING
     StatusBarConfig = FALSE,
     ToolBoxConfig = FALSE,
     GroupId = GID_INTERN;
+]
+
+SfxVoidItem ExportAsGraphic SID_EXPORT_AS_GRAPHIC
+()
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_CHART;
 ]

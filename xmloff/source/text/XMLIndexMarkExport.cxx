@@ -190,7 +190,7 @@ void XMLIndexMarkExport::ExportTOCMarkAttributes(
                              sBuf.makeStringAndClear());
 }
 
-void lcl_ExportPropertyString( SvXMLExport& rExport,
+static void lcl_ExportPropertyString( SvXMLExport& rExport,
                                const Reference<XPropertySet> & rPropSet,
                                const OUString & sProperty,
                                XMLTokenEnum eToken,
@@ -208,7 +208,7 @@ void lcl_ExportPropertyString( SvXMLExport& rExport,
     }
 }
 
-void lcl_ExportPropertyBool( SvXMLExport& rExport,
+static void lcl_ExportPropertyBool( SvXMLExport& rExport,
                              const Reference<XPropertySet> & rPropSet,
                              const OUString & sProperty,
                              XMLTokenEnum eToken,

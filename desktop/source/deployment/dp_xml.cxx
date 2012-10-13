@@ -31,7 +31,7 @@
 #include "dp_xml.h"
 #include "rtl/ustrbuf.hxx"
 #include "ucbhelper/content.hxx"
-#include "com/sun/star/xml/sax/XParser.hpp"
+#include "com/sun/star/xml/sax/Parser.hpp"
 
 
 using namespace ::com::sun::star;
@@ -48,9 +48,7 @@ void xml_parse(
     Reference<XComponentContext> const & xContext )
 {
     // raise sax parser:
-    Reference<xml::sax::XParser> xParser(
-        xContext->getServiceManager()->createInstanceWithContext(
-            OUSTR("com.sun.star.xml.sax.Parser"), xContext ), UNO_QUERY_THROW );
+    Reference<xml::sax::XParser> xParser = xml::sax::Parser::create(xContext);
 
     // error handler, entity resolver omitted
     xParser->setDocumentHandler( xDocHandler );

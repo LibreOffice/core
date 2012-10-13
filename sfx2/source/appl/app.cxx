@@ -468,16 +468,21 @@ void SfxApplication::Invalidate( sal_uInt16 nId )
         Invalidate_Impl( pFrame->GetBindings(), nId );
 }
 
-#define DOSTRING( x )                       #x
-#define STRING( x )                         DOSTRING( x )
-
 #ifndef DISABLE_SCRIPTING
 
+#ifndef DISABLE_DYNLOADING
+
 typedef long (SAL_CALL *basicide_handle_basic_error)(void*);
-typedef rtl_uString* (SAL_CALL *basicide_choose_macro)(void*, sal_Bool, rtl_uString*);
 typedef void* (SAL_CALL *basicide_macro_organizer)(sal_Int16);
 
 extern "C" { static void SAL_CALL thisModule() {} }
+
+#else
+
+extern "C" long basicide_handle_basic_error(void*);
+extern "C" void *basicide_macro_organizer(sal_Int16);
+
+#endif
 
 #endif
 
@@ -487,6 +492,8 @@ IMPL_LINK( SfxApplication, GlobalBasicErrorHdl_Impl, StarBASIC*, pStarBasic )
     (void) pStarBasic;
     return 0;
 #else
+
+#ifndef DISABLE_DYNLOADING
     // get basctl dllname
     static ::rtl::OUString aLibName( SVLIBRARY( "basctl"  ) );
 
@@ -501,7 +508,14 @@ IMPL_LINK( SfxApplication, GlobalBasicErrorHdl_Impl, StarBASIC*, pStarBasic )
     // call basicide_handle_basic_error in basctl
     long nRet = pSymbol ? pSymbol( pStarBasic ) : 0;
 
+#else
+
+    long nRet = basicide_handle_basic_error( pStarBasic );
+
+#endif
+
     return nRet;
+
 #endif
 }
 
@@ -586,6 +600,8 @@ void SfxApplication::MacroOrganizer( sal_Int16 nTabId )
 #ifdef DISABLE_SCRIPTING
     (void) nTabId;
 #else
+
+#ifndef DISABLE_DYNLOADING
     // get basctl dllname
     static ::rtl::OUString aLibName( SVLIBRARY( "basctl"  ) );
 
@@ -597,8 +613,15 @@ void SfxApplication::MacroOrganizer( sal_Int16 nTabId )
     ::rtl::OUString aSymbol( "basicide_macro_organizer"  );
     basicide_macro_organizer pSymbol = (basicide_macro_organizer) osl_getFunctionSymbol( handleMod, aSymbol.pData );
 
-    // call basicide_choose_macro in basctl
+    // call basicide_macro_organizer in basctl
     pSymbol( nTabId );
+
+#else
+
+    basicide_macro_organizer( nTabId );
+
+#endif
+
 #endif
 }
 

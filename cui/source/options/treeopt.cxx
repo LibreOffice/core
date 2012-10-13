@@ -1,30 +1,21 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*************************************************************************
+/*
+ * This file is part of the LibreOffice project.
  *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * This file incorporates work covered by the following license notice:
  *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
 
 #include "cuires.hrc"
 #include "helpid.hrc"
@@ -118,12 +109,6 @@ using namespace ::com::sun::star::linguistic2;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
 
-#ifdef C2U
-    #error  "Who define C2U before! I use it to create const ascii strings ..."
-#else
-    #define C2U(cChar)      rtl::OUString( cChar  )
-#endif
-
 #define EXPAND_PROTOCOL         "vnd.sun.star.expand:"
 
 LastPageSaver* OfaTreeOptionsDialog::pLastPageSaver = NULL;
@@ -212,19 +197,19 @@ static String getGroupName( const rtl::OUString& rModule, bool bForced )
         if ( !pPageRes )
             pPageRes = new OfaPageResource;
 
-        if ( rModule == C2U("Writer") )
+        if ( rModule == "Writer" )
             sGroupName = pPageRes->GetTextArray().GetString(0);
-        else if ( rModule == C2U("WriterWeb") )
+        else if ( rModule == "WriterWeb" )
             sGroupName = pPageRes->GetHTMLArray().GetString(0);
-        else if ( rModule == C2U("Calc") )
+        else if ( rModule == "Calc" )
             sGroupName = pPageRes->GetCalcArray().GetString(0);
-        else if ( rModule == C2U("Impress") )
+        else if ( rModule == "Impress" )
             sGroupName = pPageRes->GetImpressArray().GetString(0);
-        else if ( rModule == C2U("Draw") )
+        else if ( rModule == "Draw" )
             sGroupName = pPageRes->GetDrawArray().GetString(0);
-        else if ( rModule == C2U("Math") )
+        else if ( rModule == "Math" )
             sGroupName = pPageRes->GetStarMathArray().GetString(0);
-        else if ( rModule == C2U("Base") )
+        else if ( rModule == "Base" )
             sGroupName = pPageRes->GetDatasourcesArray().GetString(0);
     }
     return sGroupName;
@@ -273,11 +258,11 @@ public:
 };
 
 MailMergeCfg_Impl::MailMergeCfg_Impl() :
-    utl::ConfigItem(C2U("Office.Writer/MailMergeWizard")),
+    utl::ConfigItem("Office.Writer/MailMergeWizard"),
     bIsEmailSupported(sal_False)
 {
     Sequence<rtl::OUString> aNames(1);
-    aNames.getArray()[0] = C2U("EMailSupported");
+    aNames.getArray()[0] = "EMailSupported";
     const Sequence< Any > aValues = GetProperties(aNames);
     const Any* pValues = aValues.getConstArray();
     if(aValues.getLength() && pValues[0].hasValue())
@@ -1092,7 +1077,7 @@ void OfaTreeOptionsDialog::SelectHdl_Impl()
             Reference < XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
             m_xContainerWinProvider = Reference < awt::XContainerWindowProvider >(
                 xFactory->createInstance(
-                C2U("com.sun.star.awt.ContainerWindowProvider") ), UNO_QUERY );
+                "com.sun.star.awt.ContainerWindowProvider" ), UNO_QUERY );
             DBG_ASSERT( m_xContainerWinProvider.is(), "service com.sun.star.awt.ContainerWindowProvider could not be loaded" );
         }
 
@@ -1286,7 +1271,7 @@ SfxItemSet* OfaTreeOptionsDialog::CreateItemSet( sal_uInt16 nId )
                 pRet = new SfxItemSet( SFX_APP()->GetPool(),
                                 SID_BASIC_ENABLED, SID_BASIC_ENABLED,
                 //SID_OPTIONS_START - ..END
-                                SID_OPTIONS_START, SID_INET_PROXY_PORT,
+                                SID_INET_PROXY_PORT,
                                 SID_SAVEREL_INET, SID_SAVEREL_FSYS,
                                 SID_INET_SMTPSERVER, SID_INET_SMTPSERVER,
                                 SID_INET_NOPROXY, SID_INET_SOCKS_PROXY_PORT,
@@ -1529,7 +1514,7 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
     if ( !lcl_isOptionHidden( SID_GENERAL_OPTIONS, aOptionsDlgOpt ) )
     {
         ResStringArray& rGeneralArray = aDlgResource.GetGeneralArray();
-        setGroupName( C2U("ProductName"), rGeneralArray.GetString(0) );
+        setGroupName( "ProductName", rGeneralArray.GetString(0) );
         nGroup = AddGroup( rGeneralArray.GetString(0), 0, 0, SID_GENERAL_OPTIONS );
         sal_uInt16 nEnd = static_cast< sal_uInt16 >( rGeneralArray.Count() );
         String sPageTitle;
@@ -1544,7 +1529,7 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
             // Disable Online Update page if service not installed
             if( RID_SVXPAGE_ONLINEUPDATE == nPageId )
             {
-                const ::rtl::OUString sService = C2U("com.sun.star.setup.UpdateCheck");
+                const ::rtl::OUString sService = "com.sun.star.setup.UpdateCheck";
 
                 try
                 {
@@ -1567,7 +1552,7 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
     if ( !lcl_isOptionHidden( SID_FILTER_DLG, aOptionsDlgOpt ) )
     {
         ResStringArray& rFilterArray = aDlgResource.GetFilterArray();
-        setGroupName( C2U("LoadSave"), rFilterArray.GetString(0) );
+        setGroupName( "LoadSave", rFilterArray.GetString(0) );
         nGroup = AddGroup( rFilterArray.GetString(0), 0, 0, SID_FILTER_DLG );
         for ( i = 1; i < rFilterArray.Count(); ++i )
         {
@@ -1582,7 +1567,7 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
     if ( !lcl_isOptionHidden( SID_LANGUAGE_OPTIONS, aOptionsDlgOpt ) )
     {
         ResStringArray& rLangArray = aDlgResource.GetLangArray();
-        setGroupName( C2U("LanguageSettings"), rLangArray.GetString(0) );
+        setGroupName( "LanguageSettings", rLangArray.GetString(0) );
         nGroup = AddGroup( rLangArray.GetString(0), 0, 0, SID_LANGUAGE_OPTIONS );
         for ( i = 1; i < rLangArray.Count(); ++i )
         {
@@ -1615,9 +1600,9 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
             if ( !lcl_isOptionHidden( SID_SW_EDITOPTIONS, aOptionsDlgOpt ) )
             {
                 if ( aFactory == "com.sun.star.text.WebDocument" )
-                    setGroupName( C2U("WriterWeb"), rTextArray.GetString(0) );
+                    setGroupName( "WriterWeb", rTextArray.GetString(0) );
                 else
-                    setGroupName( C2U("Writer"), rTextArray.GetString(0) );
+                    setGroupName( "Writer", rTextArray.GetString(0) );
                 nGroup = AddGroup(rTextArray.GetString(0), pSwMod, pSwMod, SID_SW_EDITOPTIONS );
                 for ( i = 1; i < rTextArray.Count(); ++i )
                 {
@@ -1661,7 +1646,7 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
             {
                 ResStringArray& rCalcArray = aDlgResource.GetCalcArray();
                 SfxModule* pScMod = ( *( SfxModule** ) GetAppData( SHL_CALC ) );
-                setGroupName( C2U("Calc"), rCalcArray.GetString(0) );
+                setGroupName( "Calc", rCalcArray.GetString(0) );
                 nGroup = AddGroup( rCalcArray.GetString( 0 ), pScMod, pScMod, SID_SC_EDITOPTIONS );
                 const sal_uInt16 nCount = static_cast< const sal_uInt16 >( rCalcArray.Count() );
                 for ( i = 1; i < nCount; ++i )
@@ -1687,7 +1672,7 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
             if ( !lcl_isOptionHidden( SID_SD_EDITOPTIONS, aOptionsDlgOpt ) )
             {
                 ResStringArray& rImpressArray = aDlgResource.GetImpressArray();
-                setGroupName( C2U("Impress"), rImpressArray.GetString(0) );
+                setGroupName( "Impress", rImpressArray.GetString(0) );
                 nGroup = AddGroup( rImpressArray.GetString( 0 ), pSdMod, pSdMod, SID_SD_EDITOPTIONS );
                 const sal_Bool bCTL = aLanguageOptions.IsCTLFontEnabled();
                 const sal_uInt16 nCount = static_cast< const sal_uInt16 >( rImpressArray.Count() );
@@ -1711,7 +1696,7 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
             if ( !lcl_isOptionHidden( SID_SD_GRAPHIC_OPTIONS, aOptionsDlgOpt ) )
             {
                 ResStringArray& rDrawArray = aDlgResource.GetDrawArray();
-                setGroupName( C2U("Draw"), rDrawArray.GetString(0) );
+                setGroupName( "Draw", rDrawArray.GetString(0) );
                 nGroup = AddGroup( rDrawArray.GetString( 0 ), pSdMod, pSdMod, SID_SD_GRAPHIC_OPTIONS );
                 const sal_Bool bCTL = aLanguageOptions.IsCTLFontEnabled();
                 const sal_uInt16 nCount = static_cast< const sal_uInt16 >( rDrawArray.Count() );
@@ -1736,7 +1721,7 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
             {
                 ResStringArray& rStarMathArray = aDlgResource.GetStarMathArray();
                 SfxModule* pSmMod = (*(SfxModule**) GetAppData(SHL_SM));
-                setGroupName( C2U("Math"), rStarMathArray.GetString(0) );
+                setGroupName( "Math", rStarMathArray.GetString(0) );
                 nGroup = AddGroup(rStarMathArray.GetString(0), pSmMod, pSmMod, SID_SM_EDITOPTIONS );
                 for ( i = 1; i < rStarMathArray.Count(); ++i )
                 {
@@ -1756,7 +1741,7 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
         ) )
     {
         ResStringArray& rDSArray = aDlgResource.GetDatasourcesArray();
-        setGroupName( C2U("Base"), rDSArray.GetString(0) );
+        setGroupName( "Base", rDSArray.GetString(0) );
         nGroup = AddGroup( rDSArray.GetString(0), 0, NULL, SID_SB_STARBASEOPTIONS );
         for ( i = 1; i < rDSArray.Count(); ++i )
         {
@@ -1770,7 +1755,7 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
     if ( !lcl_isOptionHidden( SID_SCH_EDITOPTIONS, aOptionsDlgOpt ) )
     {
         ResStringArray& rChartArray = aDlgResource.GetChartArray();
-        setGroupName( C2U("Charts"), rChartArray.GetString(0) );
+        setGroupName( "Charts", rChartArray.GetString(0) );
         nGroup = AddGroup( rChartArray.GetString(0), 0, 0, SID_SCH_EDITOPTIONS );
         for ( i = 1; i < rChartArray.Count(); ++i )
         {
@@ -1784,7 +1769,7 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
     if ( !lcl_isOptionHidden( SID_INET_DLG, aOptionsDlgOpt ) )
     {
         ResStringArray& rInetArray = aDlgResource.GetInetArray();
-        setGroupName( C2U("Internet"), rInetArray.GetString(0) );
+        setGroupName( "Internet", rInetArray.GetString(0) );
         nGroup = AddGroup(rInetArray.GetString(0), 0, 0, SID_INET_DLG );
 
         for ( i = 1; i < rInetArray.Count(); ++i )
@@ -1946,7 +1931,7 @@ rtl::OUString OfaTreeOptionsDialog::GetModuleIdentifier(
     if ( !xCurrentFrame.is() )
     {
         Reference < XDesktop > xDesktop( xMFac->createInstance(
-            C2U("com.sun.star.frame.Desktop") ), UNO_QUERY );
+            "com.sun.star.frame.Desktop" ), UNO_QUERY );
         if ( xDesktop.is() )
             xCurrentFrame = xDesktop->getCurrentFrame();
     }
@@ -1992,7 +1977,7 @@ Module* OfaTreeOptionsDialog::LoadModule(
             {
                 // load the nodes of this module
                 Reference< XNameAccess > xNodeAccess;
-                xModAccess->getByName( C2U("Nodes") ) >>= xNodeAccess;
+                xModAccess->getByName( "Nodes" ) >>= xNodeAccess;
                 if ( xNodeAccess.is() )
                 {
                     Sequence< rtl::OUString > xTemp = xNodeAccess->getElementNames();
@@ -2003,7 +1988,7 @@ Module* OfaTreeOptionsDialog::LoadModule(
                         xNodeAccess->getByName( xTemp[x] ) >>= xAccess;
                         if ( xAccess.is() )
                         {
-                            xAccess->getByName( C2U("Index") ) >>= nIndex;
+                            xAccess->getByName( "Index" ) >>= nIndex;
                             if ( nIndex < 0 )
                                 // append nodes with index < 0
                                 pModule->m_aNodeList.push_back(
@@ -2055,11 +2040,11 @@ VectorOfNodes OfaTreeOptionsDialog::LoadNodes(
             sal_Int32 nGroupIndex = 0;
 
             sNodeId = seqNames[i];
-            xNodeAccess->getByName( C2U("Label") ) >>= sLabel;
-            xNodeAccess->getByName( C2U("OptionsPage") ) >>= sPageURL;
-            xNodeAccess->getByName( C2U("AllModules") ) >>= bAllModules;
-            xNodeAccess->getByName( C2U("GroupId") ) >>= sGroupId;
-            xNodeAccess->getByName( C2U("GroupIndex") ) >>= nGroupIndex;
+            xNodeAccess->getByName( "Label" ) >>= sLabel;
+            xNodeAccess->getByName( "OptionsPage" ) >>= sPageURL;
+            xNodeAccess->getByName( "AllModules" ) >>= bAllModules;
+            xNodeAccess->getByName( "GroupId" ) >>= sGroupId;
+            xNodeAccess->getByName( "GroupIndex" ) >>= nGroupIndex;
 
             if ( sLabel.isEmpty() )
                 sLabel = sGroupName;
@@ -2076,7 +2061,7 @@ VectorOfNodes OfaTreeOptionsDialog::LoadNodes(
             }
 
             Reference< XNameAccess > xLeavesSet;
-            xNodeAccess->getByName( C2U( "Leaves" ) ) >>= xLeavesSet;
+            xNodeAccess->getByName( "Leaves" ) >>= xLeavesSet;
             if ( xLeavesSet.is() )
             {
                 Sequence< rtl::OUString > seqLeaves = xLeavesSet->getElementNames();
@@ -2090,12 +2075,12 @@ VectorOfNodes OfaTreeOptionsDialog::LoadNodes(
                         rtl::OUString sId, sLeafLabel, sEventHdl, sLeafURL, sLeafGrpId;
                         sal_Int32 nLeafGrpIdx = 0;
 
-                        xLeaveAccess->getByName( C2U("Id") ) >>= sId;
-                        xLeaveAccess->getByName( C2U("Label") ) >>= sLeafLabel;
-                        xLeaveAccess->getByName( C2U("OptionsPage") ) >>= sLeafURL;
-                        xLeaveAccess->getByName( C2U("EventHandlerService") ) >>= sEventHdl;
-                        xLeaveAccess->getByName( C2U("GroupId") ) >>= sLeafGrpId;
-                        xLeaveAccess->getByName( C2U("GroupIndex") ) >>= nLeafGrpIdx;
+                        xLeaveAccess->getByName( "Id" ) >>= sId;
+                        xLeaveAccess->getByName( "Label" ) >>= sLeafLabel;
+                        xLeaveAccess->getByName( "OptionsPage" ) >>= sLeafURL;
+                        xLeaveAccess->getByName( "EventHandlerService" ) >>= sEventHdl;
+                        xLeaveAccess->getByName( "GroupId" ) >>= sLeafGrpId;
+                        xLeaveAccess->getByName( "GroupIndex" ) >>= nLeafGrpIdx;
 
                         if ( rExtensionId.isEmpty() || sId == rExtensionId )
                         {
@@ -2177,7 +2162,7 @@ VectorOfNodes OfaTreeOptionsDialog::LoadNodes(
     return aOutNodeList;
 }
 
-sal_uInt16 lcl_getGroupId( const rtl::OUString& rGroupName, const SvTreeListBox& rTreeLB )
+static sal_uInt16 lcl_getGroupId( const rtl::OUString& rGroupName, const SvTreeListBox& rTreeLB )
 {
     String sGroupName( rGroupName );
     sal_uInt16 nRet = 0;
@@ -2197,7 +2182,7 @@ sal_uInt16 lcl_getGroupId( const rtl::OUString& rGroupName, const SvTreeListBox&
     return USHRT_MAX;
 }
 
-void lcl_insertLeaf(
+static void lcl_insertLeaf(
     OfaTreeOptionsDialog* pDlg, OptionsNode* pNode, OptionsLeaf* pLeaf, const SvTreeListBox& rTreeLB )
 {
     sal_uInt16 nGrpId = lcl_getGroupId( pNode->m_sLabel, rTreeLB );
@@ -2349,7 +2334,7 @@ sal_Bool ExtensionsTabPage::DispatchAction( const rtl::OUString& rAction )
     {
         try
         {
-            bRet = m_xEventHdl->callHandlerMethod( m_xPage, makeAny( rAction ), C2U("external_event") );
+            bRet = m_xEventHdl->callHandlerMethod( m_xPage, makeAny( rAction ), "external_event" );
         }
         catch ( Exception& )
         {
@@ -2376,7 +2361,7 @@ void ExtensionsTabPage::ActivatePage()
             m_xPage->setPosSize( aPos.X() + 1, aPos.Y() + 1,
                                  aSize.Width() - 2, aSize.Height() - 2, awt::PosSize::POSSIZE );
             if ( !m_sEventHdl.isEmpty() )
-                DispatchAction( C2U("initialize") );
+                DispatchAction( "initialize" );
         }
     }
 
@@ -2401,7 +2386,7 @@ void ExtensionsTabPage::DeactivatePage()
 
 void ExtensionsTabPage::ResetPage()
 {
-    DispatchAction( C2U("back") );
+    DispatchAction( "back" );
     ActivatePage();
 }
 
@@ -2409,7 +2394,7 @@ void ExtensionsTabPage::ResetPage()
 
 void ExtensionsTabPage::SavePage()
 {
-    DispatchAction( C2U("ok") );
+    DispatchAction( "ok" );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -46,7 +46,6 @@
 namespace basctl
 {
 
-using ::rtl::OUString;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
@@ -71,7 +70,7 @@ public:
 class DllInstance : public comphelper::scoped_disposing_solar_mutex_reset_ptr<Dll>
 {
 public:
-    DllInstance() : comphelper::scoped_disposing_solar_mutex_reset_ptr<Dll>(::com::sun::star::uno::Reference<com::sun::star::lang::XComponent>(comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop"))), ::com::sun::star::uno::UNO_QUERY_THROW), new Dll)
+    DllInstance() : comphelper::scoped_disposing_solar_mutex_reset_ptr<Dll>(::com::sun::star::uno::Reference<com::sun::star::lang::XComponent>(comphelper::getProcessServiceFactory()->createInstance(OUString("com.sun.star.frame.Desktop")), ::com::sun::star::uno::UNO_QUERY_THROW), new Dll)
     { }
 };
 
@@ -137,7 +136,7 @@ Dll::Dll () :
     SfxModule* pMod = Module::Get();
 
     SfxObjectFactory& rFactory = DocShell::Factory();
-    rFactory.SetDocumentServiceName( rtl::OUString("com.sun.star.script.BasicIDE") );
+    rFactory.SetDocumentServiceName( "com.sun.star.script.BasicIDE" );
 
     DocShell::RegisterInterface( pMod );
     Shell::RegisterFactory( SVX_INTERFACE_BASIDE_VIEWSH );
@@ -198,7 +197,7 @@ IMPL_LINK(ExtraData, GlobalBasicBreakHdl, StarBASIC *, pBasic )
             OSL_ENSURE( aDocument.isValid(), "basctl::ExtraData::GlobalBasicBreakHdl: no document for the basic manager!" );
             if ( aDocument.isValid() )
             {
-                ::rtl::OUString aOULibName( pBasic->GetName() );
+                OUString aOULibName( pBasic->GetName() );
                 Reference< script::XLibraryContainer > xModLibContainer( aDocument.getLibraryContainer( E_SCRIPTS ), UNO_QUERY );
                 if ( xModLibContainer.is() && xModLibContainer->hasByName( aOULibName ) )
                 {

@@ -51,7 +51,7 @@
     <TimePM>LK</TimePM>
     <MeasurementSystem>metric</MeasurementSystem>
   </LC_CTYPE>
-  <LC_FORMAT replaceFrom="[CURRENCY]" replaceTo="[$CFA-63A]">
+  <LC_FORMAT replaceFrom="[CURRENCY]" replaceTo="[$CFA-661]">
     <DateAcceptancePattern>D/M</DateAcceptancePattern>
     <FormatElement msgid="FixedFormatskey1" default="true" type="medium" usage="FIXED_NUMBER" formatindex="0">
       <FormatCode>General</FormatCode>

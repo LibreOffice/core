@@ -20,10 +20,6 @@ package com.sun.star.wizards.ui.event;
 import com.sun.star.awt.*;
 import com.sun.star.lang.EventObject;
 
-/**
- *
- * @author  rpiterman
- */
 public class CommonListener extends AbstractListener implements XActionListener, XItemListener, XTextListener, EventNames, XWindowListener, XMouseListener, XFocusListener, XKeyListener
 {
 

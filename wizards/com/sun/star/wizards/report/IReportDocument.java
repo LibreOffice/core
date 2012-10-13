@@ -27,8 +27,6 @@ import java.util.ArrayList;
 /**
  * New Interface which gives us the possibility to switch on the fly between the old
  * Wizard and the new Sun Report Builder Wizard, which use the same UI.
- * 
- * @author ll93751
  */
 public interface IReportDocument
 {
@@ -121,7 +119,6 @@ public interface IReportDocument
     public boolean liveupdate_addGroupNametoDocument(String[] GroupNames, String CurGroupTitle, ArrayList<String> GroupFieldVector, ArrayList<String> ReportPath, int iSelCount);
 
     public void refreshGroupFields(String[] _sNewNames);
-    // public boolean isGroupField(String _FieldName);
     /**
      * Called by press ('less then') Removes an already set Groupname out of the list
      * @param NewSelGroupNames

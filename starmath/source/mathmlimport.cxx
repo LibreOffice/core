@@ -26,7 +26,7 @@ one go*/
 #include <com/sun/star/xml/sax/XEntityResolver.hpp>
 #include <com/sun/star/xml/sax/InputSource.hpp>
 #include <com/sun/star/xml/sax/XDTDHandler.hpp>
-#include <com/sun/star/xml/sax/XParser.hpp>
+#include <com/sun/star/xml/sax/Parser.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>
 #include <com/sun/star/io/XActiveDataControl.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
@@ -38,6 +38,7 @@ one go*/
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/uno/Any.h>
 
+#include <comphelper/componentcontext.hxx>
 #include <comphelper/genericpropertyset.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/servicehelper.hxx>
@@ -171,8 +172,7 @@ sal_uLong SmXMLImportWrapper::Import(SfxMedium &rMedium)
     sal_Int32 nProgressRange(nSteps);
     if (xStatusIndicator.is())
     {
-        xStatusIndicator->start(String(SmResId(STR_STATSTR_READING)),
-            nProgressRange);
+        xStatusIndicator->start(SM_RESSTR(STR_STATSTR_READING), nProgressRange);
     }
 
     nSteps=0;
@@ -274,13 +274,7 @@ sal_uLong SmXMLImportWrapper::ReadThroughComponent(
     aParserInput.aInputStream = xInputStream;
 
     // get parser
-    Reference< xml::sax::XParser > xParser(
-        rFactory->createInstance(
-            "com.sun.star.xml.sax.Parser"),
-        UNO_QUERY );
-    OSL_ENSURE( xParser.is(), "Can't create parser" );
-    if ( !xParser.is() )
-        return nError;
+    Reference< xml::sax::XParser > xParser = xml::sax::Parser::create(comphelper::getComponentContext(rFactory));
 
     Sequence<Any> aArgs( 1 );
     aArgs[0] <<= rPropSet;
@@ -543,7 +537,7 @@ sal_Int64 SAL_CALL SmXMLImport::getSomething(
 throw(uno::RuntimeException)
 {
     if ( rId.getLength() == 16 &&
-        0 == rtl_compareMemory( getUnoTunnelId().getConstArray(),
+        0 == memcmp( getUnoTunnelId().getConstArray(),
         rId.getConstArray(), 16 ) )
     return sal::static_int_cast< sal_Int64 >(reinterpret_cast< sal_uIntPtr >(this));
 

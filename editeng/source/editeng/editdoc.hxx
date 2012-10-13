@@ -513,11 +513,7 @@ public:
     sal_uInt16          GetEndPortion() const           { return nEndPortion; }
     sal_uInt16&         GetEndPortion()                 { return nEndPortion; }
 
-    void            SetHeight( sal_uInt16 nH, sal_uInt16 nTxtH = 0, sal_uInt16 nCrsrH = 0 )
-                    {   nHeight = nH;
-                        nTxtHeight = ( nTxtH ? nTxtH : nH );
-                        nCrsrHeight = ( nCrsrH ? nCrsrH : nTxtHeight );
-                    }
+    void            SetHeight( sal_uInt16 nH, sal_uInt16 nTxtH = 0, sal_uInt16 nCrsrH = 0 );
     sal_uInt16          GetHeight() const               { return nHeight; }
     sal_uInt16          GetTxtHeight() const            { return nTxtHeight; }
     sal_uInt16          GetCrsrHeight() const           { return nCrsrHeight; }
@@ -534,8 +530,7 @@ public:
     sal_uInt16          GetLen() const                  { return nEnd - nStart; }
 
     sal_uInt16          GetStartPosX() const            { return nStartPosX; }
-    void            SetStartPosX( long start )      { if (start > 0) nStartPosX = start; else nStartPosX = 0; }
-
+    void            SetStartPosX( long start );
     Size            CalcTextSize( ParaPortion& rParaPortion );
 
     bool            IsInvalid() const               { return bInvalid; }

@@ -60,6 +60,7 @@ TYPEINIT1(ScPageHFItem,         SfxPoolItem);
 TYPEINIT1(ScViewObjectModeItem, SfxEnumItem);
 TYPEINIT1(ScDoubleItem,         SfxPoolItem);
 TYPEINIT1(ScPageScaleToItem,    SfxPoolItem);
+TYPEINIT1(ScCondFormatItem,    SfxPoolItem);
 
 //------------------------------------------------------------------------
 
@@ -742,7 +743,7 @@ SfxPoolItem* ScPageHFItem::Clone( SfxItemPool* ) const
 
 //------------------------------------------------------------------------
 
-void lcl_SetSpace( String& rStr, const ESelection& rSel )
+static void lcl_SetSpace( String& rStr, const ESelection& rSel )
 {
     // Text durch ein Leerzeichen ersetzen, damit Positionen stimmen:
 
@@ -751,7 +752,7 @@ void lcl_SetSpace( String& rStr, const ESelection& rSel )
     rStr.SetChar( rSel.nStartPos, ' ' );
 }
 
-bool lcl_ConvertFields(EditEngine& rEng, const String* pCommands)
+static bool lcl_ConvertFields(EditEngine& rEng, const String* pCommands)
 {
     bool bChange = false;
     sal_uInt16 nParCnt = rEng.GetParagraphCount();
@@ -1221,6 +1222,52 @@ bool ScPageScaleToItem::PutValue( const uno::Any& rAny, sal_uInt8 nMemberId )
 }
 
 // ============================================================================
+
+ScCondFormatItem::ScCondFormatItem():
+    SfxPoolItem( ATTR_CONDITIONAL )
+{
+}
+
+ScCondFormatItem::ScCondFormatItem( sal_uInt32 nIndex ):
+    SfxPoolItem( ATTR_CONDITIONAL )
+{
+    maIndex.push_back(nIndex);
+}
+
+ScCondFormatItem::ScCondFormatItem( const std::vector<sal_uInt32>& rIndex ):
+    SfxPoolItem( ATTR_CONDITIONAL ),
+    maIndex( rIndex )
+{
+}
+
+ScCondFormatItem::~ScCondFormatItem()
+{
+}
+
+int ScCondFormatItem::operator==( const SfxPoolItem& rCmp ) const
+{
+    return maIndex == static_cast<const ScCondFormatItem&>(rCmp).maIndex;
+}
+
+ScCondFormatItem* ScCondFormatItem::Clone(SfxItemPool*) const
+{
+    return new ScCondFormatItem(maIndex);
+}
+
+const std::vector<sal_uInt32>& ScCondFormatItem::GetCondFormatData() const
+{
+    return maIndex;
+}
+
+void ScCondFormatItem::AddCondFormatData( sal_uInt32 nIndex )
+{
+    maIndex.push_back(nIndex);
+}
+
+void ScCondFormatItem::SetCondFormatData( const std::vector<sal_uInt32>& rIndex )
+{
+    maIndex = rIndex;
+}
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

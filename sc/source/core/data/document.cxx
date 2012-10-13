@@ -1035,7 +1035,7 @@ void ScDocument::LimitChartIfAll( ScRangeListRef& rRangeList )
 }
 
 
-void lcl_GetFirstTabRange( SCTAB& rTabRangeStart, SCTAB& rTabRangeEnd, const ScMarkData* pTabMark, SCTAB aMaxTab )
+static void lcl_GetFirstTabRange( SCTAB& rTabRangeStart, SCTAB& rTabRangeEnd, const ScMarkData* pTabMark, SCTAB aMaxTab )
 {
     // without ScMarkData, leave start/end unchanged
     if ( pTabMark )
@@ -1053,7 +1053,7 @@ void lcl_GetFirstTabRange( SCTAB& rTabRangeStart, SCTAB& rTabRangeEnd, const ScM
     }
 }
 
-bool lcl_GetNextTabRange( SCTAB& rTabRangeStart, SCTAB& rTabRangeEnd, const ScMarkData* pTabMark, SCTAB aMaxTab )
+static bool lcl_GetNextTabRange( SCTAB& rTabRangeStart, SCTAB& rTabRangeEnd, const ScMarkData* pTabMark, SCTAB aMaxTab )
 {
     if ( pTabMark )
     {
@@ -1477,7 +1477,7 @@ void ScDocument::DeleteCol( const ScRange& rRange, ScDocument* pRefUndoDoc, bool
 //  (ohne Paint)
 
 
-void lcl_GetInsDelRanges( const ScRange& rOld, const ScRange& rNew,
+static void lcl_GetInsDelRanges( const ScRange& rOld, const ScRange& rNew,
                             ScRange& rColRange, bool& rInsCol, bool& rDelCol,
                             ScRange& rRowRange, bool& rInsRow, bool& rDelRow )
 {
@@ -4209,6 +4209,28 @@ void ScDocument::ApplyPatternIfNumberformatIncompatible( const ScRange& rRange,
     for (; itr != itrEnd && *itr < nMax; ++itr)
         if (maTabs[*itr])
             maTabs[*itr]->ApplyPatternIfNumberformatIncompatible( rRange, rPattern, nNewType );
+}
+
+void ScDocument::AddCondFormatData( const ScRangeList& rRange, SCTAB nTab, sal_uInt32 nIndex )
+{
+    if(!(static_cast<size_t>(nTab) < maTabs.size()))
+        return;
+
+    if(!maTabs[nTab])
+        return;
+
+    maTabs[nTab]->AddCondFormatData(rRange, nIndex);
+}
+
+void ScDocument::RemoveCondFormatData( const ScRangeList& rRange, SCTAB nTab, sal_uInt32 nIndex )
+{
+    if(!(static_cast<size_t>(nTab) < maTabs.size()))
+        return;
+
+    if(!maTabs[nTab])
+        return;
+
+    maTabs[nTab]->RemoveCondFormatData(rRange, nIndex);
 }
 
 

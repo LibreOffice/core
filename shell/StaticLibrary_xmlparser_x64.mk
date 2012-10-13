@@ -34,10 +34,6 @@ $(eval $(call gb_StaticLibrary_set_include,shell_xmlparser_x64,\
 	$$(INCLUDE) \
 ))
 
-$(eval $(call gb_StaticLibrary_add_defs,shell_xmlparser_x64,\
-	-DXML_UNICODE \
-))
-
 $(eval $(call gb_StaticLibrary_use_externals,shell_xmlparser_x64,\
 	expat_utf16 \
 ))

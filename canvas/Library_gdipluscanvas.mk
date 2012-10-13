@@ -43,6 +43,12 @@ $(eval $(call gb_Library_add_defs,gdipluscanvas,\
 	-UNOMINMAX \
 ))
 
+ifeq ($(WINDOWS_SDK_VERSION),80)
+$(eval $(call gb_Library_add_defs,gdipluscanvas,\
+	-DWIN8_SDK=1 \
+))
+endif
+
 ifneq ($(strip $(VERBOSE)$(verbose)),)
 $(eval $(call gb_Library_add_defs,gdipluscanvas,\
 	-DVERBOSE \

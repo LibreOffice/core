@@ -44,17 +44,17 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::io;
 
-DialogWindow* Shell::CreateDlgWin( const ScriptDocument& rDocument, const ::rtl::OUString& rLibName, const ::rtl::OUString& rDlgName )
+DialogWindow* Shell::CreateDlgWin( const ScriptDocument& rDocument, const OUString& rLibName, const OUString& rDlgName )
 {
     bCreatingWindow = true;
 
     sal_uLong nKey = 0;
     DialogWindow* pWin = 0;
-    ::rtl::OUString aLibName( rLibName );
-    ::rtl::OUString aDlgName( rDlgName );
+    OUString aLibName( rLibName );
+    OUString aDlgName( rDlgName );
 
     if ( aLibName.isEmpty() )
-        aLibName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Standard"));
+        aLibName = "Standard" ;
 
     rDocument.getOrCreateLibrary( E_DIALOGS, aLibName );
 
@@ -79,7 +79,7 @@ DialogWindow* Shell::CreateDlgWin( const ScriptDocument& rDocument, const ::rtl:
                 // create dialog model
                 Reference< lang::XMultiServiceFactory > xMSF = getProcessServiceFactory();
                 Reference< container::XNameContainer > xDialogModel( xMSF->createInstance
-                    ( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControlDialogModel" ) ) ), UNO_QUERY );
+                    ( "com.sun.star.awt.UnoControlDialogModel" ), UNO_QUERY );
                 Reference< XInputStream > xInput( xISP->createInputStream() );
                 Reference< XComponentContext > xContext(
                     comphelper::getComponentContext( xMSF ) );
@@ -120,7 +120,7 @@ DialogWindow* Shell::CreateDlgWin( const ScriptDocument& rDocument, const ::rtl:
 
 DialogWindow* Shell::FindDlgWin (
     ScriptDocument const& rDocument,
-    rtl::OUString const& rLibName, rtl::OUString const& rName,
+    OUString const& rLibName, OUString const& rName,
     bool bCreateIfNotExist, bool bFindSuspended
 )
 {

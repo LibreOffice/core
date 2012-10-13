@@ -103,7 +103,7 @@ extern       SwTxtFrm  *pLinguFrm;
  * only for deleted redlines
  */
 
-sal_uInt16 lcl_MaskRedlines( const SwTxtNode& rNode, XubString& rText,
+static sal_uInt16 lcl_MaskRedlines( const SwTxtNode& rNode, XubString& rText,
                          const xub_StrLen nStt, const xub_StrLen nEnd,
                          const xub_Unicode cChar )
 {
@@ -148,7 +148,7 @@ sal_uInt16 lcl_MaskRedlines( const SwTxtNode& rNode, XubString& rText,
  * Used for spell checking. Deleted redlines and hidden characters are masked
  */
 
-sal_uInt16 lcl_MaskRedlinesAndHiddenText( const SwTxtNode& rNode, XubString& rText,
+static sal_uInt16 lcl_MaskRedlinesAndHiddenText( const SwTxtNode& rNode, XubString& rText,
                                       const xub_StrLen nStt, const xub_StrLen nEnd,
                                       const xub_Unicode cChar = CH_TXTATR_INWORD,
                                       bool bCheckShowHiddenChar = true )

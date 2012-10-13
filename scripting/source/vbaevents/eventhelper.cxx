@@ -631,13 +631,13 @@ private:
 
     Reference< XComponentContext > m_xContext;
     Reference< frame::XModel > m_xModel;
-    sal_Bool m_bDocClosed;
+    bool m_bDocClosed;
     SfxObjectShell* mpShell;
     rtl::OUString msProject;
 };
 
 EventListener::EventListener( const Reference< XComponentContext >& rxContext ) :
-OPropertyContainer(GetBroadcastHelper()), m_xContext( rxContext ), m_bDocClosed(sal_False), mpShell( 0 )
+OPropertyContainer(GetBroadcastHelper()), m_xContext( rxContext ), m_bDocClosed(false), mpShell( 0 )
 {
     registerProperty( EVENTLSTNR_PROPERTY_MODEL, EVENTLSTNR_PROPERTY_ID_MODEL,
         beans::PropertyAttribute::TRANSIENT, &m_xModel, ::getCppuType( &m_xModel ) );
@@ -731,7 +731,7 @@ EventListener::queryClosing( const lang::EventObject& /*Source*/, ::sal_Bool /*G
 void SAL_CALL
 EventListener::notifyClosing( const lang::EventObject& /*Source*/ ) throw (uno::RuntimeException)
 {
-    m_bDocClosed = sal_True;
+    m_bDocClosed = true;
     uno::Reference< util::XCloseBroadcaster > xCloseBroadcaster( m_xModel, uno::UNO_QUERY );
     if (xCloseBroadcaster.is())
     {

@@ -30,9 +30,6 @@ import com.sun.star.wizards.ui.ImageList;
 import com.sun.star.wizards.web.data.CGImage;
 import com.sun.star.wizards.web.data.CGSettings;
 
-/**
- * @author rpiterman
- */
 public class BackgroundsDialog extends ImageListDialog
 {
 

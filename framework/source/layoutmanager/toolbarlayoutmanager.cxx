@@ -783,9 +783,6 @@ bool ToolbarLayoutManager::dockAllToolbars()
 {
     std::vector< ::rtl::OUString > aToolBarNameVector;
 
-    ::rtl::OUString aElementType;
-    ::rtl::OUString aElementName;
-
     ReadGuard aReadLock( m_aLock );
     UIElementVector::iterator pIter;
     for ( pIter = m_aUIElements.begin(); pIter != m_aUIElements.end(); ++pIter )
@@ -981,7 +978,6 @@ void ToolbarLayoutManager::implts_createAddonsToolBars()
     if (isPreviewFrame())
         return; // no addon toolbars for preview frame!
 
-    UIElementVector aUIElementVector;
     uno::Sequence< uno::Sequence< beans::PropertyValue > > aAddonToolBarData;
     uno::Reference< ui::XUIElement >                       xUIElement;
 

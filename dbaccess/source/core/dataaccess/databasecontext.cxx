@@ -44,6 +44,7 @@
 #include <com/sun/star/task/InteractionClassification.hpp>
 #include <com/sun/star/ucb/InteractiveIOException.hpp>
 #include <com/sun/star/ucb/IOErrorCode.hpp>
+#include <com/sun/star/task/InteractionHandler.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
 
 #include <basic/basmgr.hxx>
@@ -362,7 +363,7 @@ Reference< XInterface > ODatabaseContext::loadObjectFromURL(const ::rtl::OUStrin
         ::comphelper::NamedValueCollection aArgs;
         aArgs.put( "URL", _sURL );
         aArgs.put( "MacroExecutionMode", MacroExecMode::USE_CONFIG );
-        aArgs.put( "InteractionHandler", m_aContext.createComponent( "com.sun.star.task.InteractionHandler" ) );
+        aArgs.put( "InteractionHandler", task::InteractionHandler::createWithParent(m_aContext.getUNOContext(), 0) );
 
         Sequence< PropertyValue > aResource( aArgs.getPropertyValues() );
         xLoad->load( aResource );
@@ -720,7 +721,7 @@ void ODatabaseContext::databaseDocumentURLChange( const ::rtl::OUString& _rOldUR
 
 sal_Int64 SAL_CALL ODatabaseContext::getSomething( const Sequence< sal_Int8 >& rId ) throw(RuntimeException)
 {
-    if (rId.getLength() == 16 && 0 == rtl_compareMemory(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
+    if (rId.getLength() == 16 && 0 == memcmp(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
         return reinterpret_cast<sal_Int64>(this);
 
     return 0;

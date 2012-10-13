@@ -43,7 +43,7 @@ using ::rtl::OUStringBuffer;
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 
-const SvXMLEnumMapEntry* lcl_getFontFamilyGenericMapping()
+static const SvXMLEnumMapEntry* lcl_getFontFamilyGenericMapping()
 {
     static SvXMLEnumMapEntry const aFontFamilyGenericMapping[] =
     {

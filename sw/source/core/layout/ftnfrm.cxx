@@ -61,7 +61,7 @@
 
 #define ENDNOTE 0x80000000
 
-sal_uLong lcl_FindFtnPos( const SwDoc *pDoc, const SwTxtFtn *pAttr )
+static sal_uLong lcl_FindFtnPos( const SwDoc *pDoc, const SwTxtFtn *pAttr )
 {
     const SwFtnIdxs &rFtnIdxs = pDoc->GetFtnIdxs();
 
@@ -95,7 +95,7 @@ sal_Bool SwFtnFrm::operator<( const SwTxtFtn* pTxtFtn ) const
 |*
 |*************************************************************************/
 
-sal_Bool lcl_NextFtnBoss( SwFtnBossFrm* &rpBoss, SwPageFrm* &rpPage,
+static sal_Bool lcl_NextFtnBoss( SwFtnBossFrm* &rpBoss, SwPageFrm* &rpPage,
     sal_Bool bDontLeave )
 {
     if( rpBoss->IsColumnFrm() )
@@ -144,7 +144,7 @@ sal_Bool lcl_NextFtnBoss( SwFtnBossFrm* &rpBoss, SwPageFrm* &rpPage,
 |*
 |*************************************************************************/
 
-sal_uInt16 lcl_ColumnNum( const SwFrm* pBoss )
+static sal_uInt16 lcl_ColumnNum( const SwFrm* pBoss )
 {
     sal_uInt16 nRet = 0;
     if( !pBoss->IsColumnFrm() )
@@ -189,7 +189,7 @@ SwFtnContFrm::SwFtnContFrm( SwFrmFmt *pFmt, SwFrm* pSib ):
 // lcl_Undersize(..) klappert einen SwFrm und dessen Inneres ab
 // und liefert die Summe aller TxtFrm-Vergroesserungswuensche
 
-long lcl_Undersize( const SwFrm* pFrm )
+static long lcl_Undersize( const SwFrm* pFrm )
 {
     long nRet = 0;
     SWRECTFN( pFrm )
@@ -964,7 +964,7 @@ void SwRootFrm::UpdateFtnNums()
 |*
 |*************************************************************************/
 
-void lcl_RemoveFtns( SwFtnBossFrm* pBoss, sal_Bool bPageOnly, sal_Bool bEndNotes )
+void sw_RemoveFtns( SwFtnBossFrm* pBoss, sal_Bool bPageOnly, sal_Bool bEndNotes )
 {
     do
     {
@@ -1007,7 +1007,7 @@ void lcl_RemoveFtns( SwFtnBossFrm* pBoss, sal_Bool bPageOnly, sal_Bool bEndNotes
                         ((SwSectionFrm*)pLow)->IsAnyNoteAtEnd() ) &&
                         ((SwSectionFrm*)pLow)->Lower() &&
                         ((SwSectionFrm*)pLow)->Lower()->IsColumnFrm() )
-                        lcl_RemoveFtns( (SwColumnFrm*)((SwSectionFrm*)pLow)->Lower(),
+                        sw_RemoveFtns( (SwColumnFrm*)((SwSectionFrm*)pLow)->Lower(),
                             bPageOnly, bEndNotes );
                     pLow = pLow->GetNext();
                 }
@@ -1031,7 +1031,7 @@ void SwRootFrm::RemoveFtns( SwPageFrm *pPage, sal_Bool bPageOnly, sal_Bool bEndN
             pBoss = (SwFtnBossFrm*)pBody->Lower(); // die erste Spalte
         else
             pBoss = pPage; // keine Spalten
-        lcl_RemoveFtns( pBoss, bPageOnly, bEndNotes );
+        sw_RemoveFtns( pBoss, bPageOnly, bEndNotes );
         if ( !bPageOnly )
         {
             if ( pPage->IsFtnPage() &&

@@ -71,12 +71,12 @@ protected:
 //template< class T > double lcl_IterateInverse( const T& rFunction, double x0, double x1, bool& rConvError )
 
 /** u*w<0.0 fails for values near zero */
-inline bool lcl_HasChangeOfSign( double u, double w )
+static inline bool lcl_HasChangeOfSign( double u, double w )
 {
     return (u < 0.0 && w > 0.0) || (u > 0.0 && w < 0.0);
 }
 
-double lcl_IterateInverse( const ScDistFunc& rFunction, double fAx, double fBx, bool& rConvError )
+static double lcl_IterateInverse( const ScDistFunc& rFunction, double fAx, double fBx, bool& rConvError )
 {
     rConvError = false;
     const double fYEps = 1.0E-307;
@@ -492,7 +492,7 @@ double ScInterpreter::BinomKoeff(double n, double k)
 // in math library from http://www.boost.org
 /** you must ensure fZ>0
     Uses a variant of the Lanczos sum with a rational function. */
-double lcl_getLanczosSum(double fZ)
+static double lcl_getLanczosSum(double fZ)
 {
     const double fNum[13] ={
         23531376880.41075968857200767445163675473,
@@ -560,7 +560,7 @@ double lcl_getLanczosSum(double fZ)
 // The algorithm is based on tgamma in gamma.hpp
 // in math library from http://www.boost.org
 /** You must ensure fZ>0; fZ>171.624376956302 will overflow. */
-double lcl_GetGammaHelper(double fZ)
+static double lcl_GetGammaHelper(double fZ)
 {
     double fGamma = lcl_getLanczosSum(fZ);
     const double fg = 6.024680040776729583740234375;
@@ -578,7 +578,7 @@ double lcl_GetGammaHelper(double fZ)
 // The algorithm is based on tgamma in gamma.hpp
 // in math library from http://www.boost.org
 /** You must ensure fZ>0 */
-double lcl_GetLogGammaHelper(double fZ)
+static double lcl_GetLogGammaHelper(double fZ)
 {
     const double fg = 6.024680040776729583740234375;
     double fZgHelp = fZ + fg - 0.5;
@@ -907,7 +907,7 @@ double ScInterpreter::GetBetaDistPDF(double fX, double fA, double fB)
     I_x(a,b) = ----------------  * result of ContFrac
                 a * Beta(a,b)
 */
-double lcl_GetBetaHelperContFrac(double fX, double fA, double fB)
+static double lcl_GetBetaHelperContFrac(double fX, double fA, double fB)
 {   // like old version
     double a1, b1, a2, b2, fnorm, apl2m, d2m, d2m1, cfnew, cf;
     a1 = 1.0; b1 = 1.0;
@@ -1676,7 +1676,7 @@ void ScInterpreter::ScPoissonDist()
 
 /** Local function used in the calculation of the hypergeometric distribution.
  */
-void lcl_PutFactorialElements( ::std::vector< double >& cn, double fLower, double fUpper, double fBase )
+static void lcl_PutFactorialElements( ::std::vector< double >& cn, double fLower, double fUpper, double fBase )
 {
     for ( double i = fLower; i <= fUpper; ++i )
     {

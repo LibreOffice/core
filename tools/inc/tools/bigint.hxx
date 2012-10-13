@@ -36,7 +36,7 @@ namespace binfilter { class SbxINT64Converter; }
 
 class Fraction;
 
-class TOOLS_DLLPUBLIC BigInt
+class TOOLS_DLLPUBLIC SAL_WARN_UNUSED BigInt
 {
 #ifdef _TLBIGINT_INT64
     friend class ::binfilter::SbxINT64Converter;

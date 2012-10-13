@@ -52,7 +52,7 @@ using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdbcx;
 
-void lcl_Move(Control* pCtrl, long nYOffset)
+static void lcl_Move(Control* pCtrl, long nYOffset)
 {
     Point aPos(pCtrl->GetPosPixel());
     aPos.Y() += nYOffset;

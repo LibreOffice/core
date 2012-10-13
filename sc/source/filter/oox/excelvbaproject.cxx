@@ -60,7 +60,7 @@ using ::rtl::OUStringBuffer;
 // ============================================================================
 
 ExcelVbaProject::ExcelVbaProject( const Reference< XComponentContext >& rxContext, const Reference< XSpreadsheetDocument >& rxDocument ) :
-    ::oox::ole::VbaProject( rxContext, Reference< XModel >( rxDocument, UNO_QUERY ), CREATE_OUSTRING( "Calc" ) ),
+    ::oox::ole::VbaProject( rxContext, Reference< XModel >( rxDocument, UNO_QUERY ), "Calc" ),
     mxDocument( rxDocument )
 {
 }
@@ -111,7 +111,7 @@ void ExcelVbaProject::prepareImport()
             else
             {
                 // TODO: once we have chart sheets we need a switch/case on sheet type ('SheetNNN' vs. 'ChartNNN')
-                aCodeNameInfos.push_back( SheetCodeNameInfo( aSheetProp, CREATE_OUSTRING( "Sheet" ) ) );
+                aCodeNameInfos.push_back( SheetCodeNameInfo( aSheetProp, "Sheet" ) );
             }
         }
         catch( Exception& )

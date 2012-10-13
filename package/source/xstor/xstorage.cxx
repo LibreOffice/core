@@ -595,7 +595,7 @@ void OStorage_Impl::ReadRelInfoIfNecessary()
             m_aRelInfo = ::comphelper::OFOPXMLHelper::ReadRelationsInfoSequence(
                                     xRelInfoStream,
                                     ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "_rels/.rels" ) ),
-                                    m_xFactory );
+                                    comphelper::getComponentContext(m_xFactory) );
 
         m_nRelInfoStatus = RELINFO_READ;
     }
@@ -608,7 +608,7 @@ void OStorage_Impl::ReadRelInfoIfNecessary()
                 m_aRelInfo = ::comphelper::OFOPXMLHelper::ReadRelationsInfoSequence(
                                         m_xNewRelInfoStream,
                                         ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "_rels/.rels" ) ),
-                                        m_xFactory );
+                                        comphelper::getComponentContext(m_xFactory) );
 
             m_nRelInfoStatus = RELINFO_CHANGED_STREAM_READ;
         }

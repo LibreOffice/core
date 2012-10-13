@@ -34,7 +34,7 @@
 #include <vcl/btndlg.hxx>
 #include <vcl/image.hxx>
 #include <vcl/bitmap.hxx>
-class VCLMultiLineEdit;
+class VclMultiLineEdit;
 class FixedImage;
 class CheckBox;
 
@@ -67,7 +67,7 @@ class CheckBox;
 class VCL_DLLPUBLIC MessBox : public ButtonDialog
 {
 protected:
-    VCLMultiLineEdit*   mpVCLMultiLineEdit;
+    VclMultiLineEdit*   mpVCLMultiLineEdit;
     FixedImage*         mpFixedImage;
     XubString           maMessText;
     Image               maImage;

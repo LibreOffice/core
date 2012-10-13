@@ -36,19 +36,7 @@
 extern "C" {
 #endif
 
-/* On iOS static linking is used. In order to get the needed UNO
- * coponent linked in, the "main" code for an app needs to implement
- * the lo_get_libmap() function to map UNO component library names as
- * produced in a build for iOS (like configmgr.uno.a or libsclo.a) to
- * the corresponding component_getFactory functions.
- */
-
-typedef struct {
-    const char *lib;
-    void * (*component_getFactory_function)(const char *, void *, void *);
-} lib_to_component_mapping;
-
-const lib_to_component_mapping *lo_get_libmap(void);
+#include <osl/detail/component-mapping.h>
 
 #ifdef __cplusplus
 }

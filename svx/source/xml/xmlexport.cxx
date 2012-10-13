@@ -29,7 +29,7 @@
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <com/sun/star/xml/sax/InputSource.hpp>
-#include <com/sun/star/xml/sax/XParser.hpp>
+#include <com/sun/star/xml/sax/Parser.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
@@ -190,6 +190,7 @@ sal_Bool SvxDrawingLayerImport( SdrModel* pModel, const uno::Reference<io::XInpu
     {
         // Get service factory
         Reference< lang::XMultiServiceFactory > xServiceFactory = comphelper::getProcessServiceFactory();
+        Reference< uno::XComponentContext > xContext = comphelper::getProcessComponentContext();
         DBG_ASSERT( xServiceFactory.is(), "XMLReader::Read: got no service manager" );
 
         if( !xServiceFactory.is() )
@@ -226,8 +227,7 @@ sal_Bool SvxDrawingLayerImport( SdrModel* pModel, const uno::Reference<io::XInpu
             aParserInput.aInputStream = xInputStream;
 
             // get parser
-            Reference< xml::sax::XParser > xParser( xServiceFactory->createInstance( OUString("com.sun.star.xml.sax.Parser") ), UNO_QUERY );
-            DBG_ASSERT( xParser.is(), "Can't create parser" );
+            Reference< xml::sax::XParser > xParser = xml::sax::Parser::create( xContext );
 
             // prepare filter arguments
             Sequence<Any> aFilterArgs( 2 );

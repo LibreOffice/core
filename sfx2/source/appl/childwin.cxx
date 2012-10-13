@@ -352,7 +352,7 @@ void SfxChildWindow::InitializeChildWinFactory_Impl( sal_uInt16 nId, SfxChildWin
     // load configuration
     SvtViewOptions aWinOpt( E_WINDOW, String::CreateFromInt32( nId ) );
 
-    if ( aWinOpt.Exists() )
+    if ( aWinOpt.Exists() && aWinOpt.HasVisible() )
         rInfo.bVisible  = aWinOpt.IsVisible(); // set state from configuration. Can be overwritten by UserData, see below
 
     ::com::sun::star::uno::Sequence < ::com::sun::star::beans::NamedValue > aSeq = aWinOpt.GetUserData();

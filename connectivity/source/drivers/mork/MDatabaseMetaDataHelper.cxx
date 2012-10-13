@@ -31,6 +31,8 @@ static ::osl::Mutex m_aMetaMutex;
 #include <com/sun/star/sdb/ErrorCondition.hpp>
 #include <comphelper/processfactory.hxx>
 
+#include "MorkParser.hxx"
+
 using namespace connectivity;
 using namespace connectivity::mork;
 
@@ -52,11 +54,21 @@ sal_Bool MDatabaseMetaDataHelper::getTableStrings( OConnection*                 
     ::rtl::OString                              sAbURIString;
 
     SAL_INFO("connectivity.mork", "=> MDatabaseMetaDataHelper::getTableStrings()");
-    _pCon->getMorkParser();
-    // TODO: retrieve Tables from MorkParser
-    // only put for now the private adress book
-    rtl::OUString table = rtl::OUString::createFromAscii( "AddressBook");
+
+    /* add default table */
+    OUString table = "AddressBook";
     _rStrings.push_back(table);
+
+    /* retrieve list table names */
+    std::set<std::string> lists;
+    _pCon->getMorkParser()->retrieveLists(lists);
+    for (::std::set<std::string>::iterator iter = lists.begin(); iter != lists.end(); ++iter) {
+        OUString groupTableName = OStringToOUString((*iter).c_str(), RTL_TEXTENCODING_UTF8);
+        SAL_INFO("connectivity.mork", "add Table " << groupTableName);
+
+        _rStrings.push_back(groupTableName);
+    }
+
     return( sal_True );
 }
 
@@ -70,14 +82,14 @@ sal_Bool MDatabaseMetaDataHelper::getTables( OConnection* _pCon,
     static ODatabaseMetaDataResultSet::ORows    aRows;
 
     SAL_INFO("connectivity.mork", "=> MDatabaseMetaDataHelper::getTables()" );
+    SAL_INFO("connectivity.mork", "tableNamePattern : " << tableNamePattern);
     ::osl::MutexGuard aGuard( m_aMetaMutex );
 
     ODatabaseMetaDataResultSet::ORows().swap(aRows); // this makes real clear where memory is freed as well
     aRows.clear();
 
     ::std::vector< ::rtl::OUString > tables;
-//    ::std::vector< ::rtl::OUString > tabletypes;
-    ::rtl::OUString matchAny = rtl::OUString::createFromAscii("%");
+    OUString matchAny = "%";
 
     if ( !getTableStrings( _pCon, tables ) )
         return sal_False;
@@ -86,27 +98,20 @@ sal_Bool MDatabaseMetaDataHelper::getTables( OConnection* _pCon,
         ODatabaseMetaDataResultSet::ORow aRow(3);
 
         ::rtl::OUString aTableName  = tables[i];
-        //::rtl::OUString aTableType      = tabletypes[i];
         SAL_INFO("connectivity.mork", "TableName: " << aTableName );
 
 
         // return tables to caller
         if (match( tableNamePattern, aTableName, '\0' ))
-#if 0
- &&
-                       0 != ::comphelper::findValue( types, aTableType, sal_True ).getLength() ||
-                       0 != ::comphelper::findValue( types, matchAny, sal_True ).getLength()))
-#endif
-    {
+        {
             if ( aTableName.isEmpty() ) {
-                aTableName = rtl::OUString::createFromAscii("AddressBook");
+                aTableName = "AddressBook";
             }
 
             SAL_INFO("connectivity.mork", "TableName: " << aTableName);
 
             aRow.push_back( new ORowSetValueDecorator( aTableName ) ); // Table name
-//            aRow.push_back( new ORowSetValueDecorator( aTableType ) ); // Table type
-            aRow.push_back( new ORowSetValueDecorator( rtl::OUString::createFromAscii("TABLE") ) ); // Table type
+            aRow.push_back( new ORowSetValueDecorator( OUString::createFromAscii("TABLE") ) ); // Table type
             aRow.push_back( ODatabaseMetaDataResultSet::getEmptyValue() ); // Remarks
             aRows.push_back(aRow);
         }

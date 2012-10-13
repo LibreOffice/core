@@ -21,7 +21,7 @@
 #include <com/sun/star/beans/StringPair.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>
-#include <com/sun/star/xml/sax/XParser.hpp>
+#include <com/sun/star/xml/sax/Parser.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 
@@ -37,20 +37,20 @@ using namespace ::com::sun::star;
 namespace comphelper {
 
 // -----------------------------------
-uno::Sequence< uno::Sequence< beans::StringPair > > SAL_CALL OFOPXMLHelper::ReadRelationsInfoSequence( const uno::Reference< io::XInputStream >& xInStream, const ::rtl::OUString aStreamName, const uno::Reference< lang::XMultiServiceFactory > xFactory )
+uno::Sequence< uno::Sequence< beans::StringPair > > SAL_CALL OFOPXMLHelper::ReadRelationsInfoSequence( const uno::Reference< io::XInputStream >& xInStream, const ::rtl::OUString aStreamName, const uno::Reference< uno::XComponentContext > xContext )
     throw( uno::Exception )
 {
     ::rtl::OUString aStringID = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "_rels/" ) );
     aStringID += aStreamName;
-    return ReadSequence_Impl( xInStream, aStringID, RELATIONINFO_FORMAT, xFactory );
+    return ReadSequence_Impl( xInStream, aStringID, RELATIONINFO_FORMAT, xContext );
 }
 
 // -----------------------------------
-uno::Sequence< uno::Sequence< beans::StringPair > > SAL_CALL OFOPXMLHelper::ReadContentTypeSequence( const uno::Reference< io::XInputStream >& xInStream, const uno::Reference< lang::XMultiServiceFactory > xFactory )
+uno::Sequence< uno::Sequence< beans::StringPair > > SAL_CALL OFOPXMLHelper::ReadContentTypeSequence( const uno::Reference< io::XInputStream >& xInStream, const uno::Reference< uno::XComponentContext > xContext )
     throw( uno::Exception )
 {
     ::rtl::OUString aStringID = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "[Content_Types].xml" ) );
-    return ReadSequence_Impl( xInStream, aStringID, CONTENTTYPE_FORMAT, xFactory );
+    return ReadSequence_Impl( xInStream, aStringID, CONTENTTYPE_FORMAT, xContext );
 }
 
 // -----------------------------------
@@ -186,15 +186,15 @@ void SAL_CALL OFOPXMLHelper::WriteContentSequence( const uno::Reference< io::XOu
 // ==================================================================================
 
 // -----------------------------------
-uno::Sequence< uno::Sequence< beans::StringPair > > SAL_CALL OFOPXMLHelper::ReadSequence_Impl( const uno::Reference< io::XInputStream >& xInStream, const ::rtl::OUString& aStringID, sal_uInt16 nFormat, const uno::Reference< lang::XMultiServiceFactory > xFactory )
+uno::Sequence< uno::Sequence< beans::StringPair > > SAL_CALL OFOPXMLHelper::ReadSequence_Impl( const uno::Reference< io::XInputStream >& xInStream, const ::rtl::OUString& aStringID, sal_uInt16 nFormat, const uno::Reference< uno::XComponentContext > xContext )
     throw( uno::Exception )
 {
-    if ( !xFactory.is() || !xInStream.is() || nFormat > FORMAT_MAX_ID )
+    if ( !xContext.is() || !xInStream.is() || nFormat > FORMAT_MAX_ID )
         throw uno::RuntimeException();
 
     uno::Sequence< uno::Sequence< beans::StringPair > > aResult;
 
-    uno::Reference< xml::sax::XParser > xParser( xFactory->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.xml.sax.Parser" ) ) ), uno::UNO_QUERY_THROW );
+    uno::Reference< xml::sax::XParser > xParser = xml::sax::Parser::create( xContext );
 
     OFOPXMLHelper* pHelper = new OFOPXMLHelper( nFormat );
     uno::Reference< xml::sax::XDocumentHandler > xHelper( static_cast< xml::sax::XDocumentHandler* >( pHelper ) );

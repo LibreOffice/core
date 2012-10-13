@@ -139,10 +139,7 @@
     <property name="build.debuglevel" value="source,lines,vars"/>
     <property name="build.deprecation" value="true"/>
     <property name="build.optimize" value="true"/>
-    <property name="build.compiler.source" value="1.4"/>
-    <property name="build.compiler.target" value="1.4"/>
-    <property name="build.s9api.compiler.source" value="1.5"/>
-    <property name="build.s9api.compiler.target" value="1.5"/>
+    <property name="build.compiler.source" value="1.5"/>
     <property name="build.compress" value="false"/>
 
     <!-- following properties can be switched to determine whether to build from patch source
@@ -380,8 +377,7 @@ http\://www.w3.org/2001/XMLSchema: com.saxonica.jaxp.SchemaFactoryImpl
         <mkdir dir="${classes-j.dir}"/>
         <javac encoding="ISO-8859-1" debug="${build.debug}" debuglevel="${build.debuglevel}"
             deprecation="${build.deprecation}" destdir="${classes-j.dir}"
-            optimize="${build.optimize}" srcdir="${temp-src-j.dir}" source="${build.compiler.source}"
-            target="${build.compiler.target}">
+            optimize="${build.optimize}" srcdir="${temp-src-j.dir}" source="${build.compiler.source}">
 
             <include name="net/**"/>
             <exclude name="**/dom/**"/>
@@ -408,8 +404,7 @@ http\://www.w3.org/2001/XMLSchema: com.saxonica.jaxp.SchemaFactoryImpl
         <mkdir dir="${classes-j.dir}"/>
         <javac debug="${build.debug}"  debuglevel="${build.debuglevel}"
             deprecation="${build.deprecation}" destdir="${classes-j.dir}"
-            optimize="${build.optimize}" srcdir="${temp-src-j.dir}" source="${build.compiler.source}"
-            target="${build.compiler.target}">
+            optimize="${build.optimize}" srcdir="${temp-src-j.dir}" source="${build.compiler.source}">
 
             <include name="com/saxonica/**"/>
             <include name="net/sf/saxon/ant/**"/>
@@ -427,8 +422,7 @@ http\://www.w3.org/2001/XMLSchema: com.saxonica.jaxp.SchemaFactoryImpl
              it will be compiled in 1.5 mode because the classes are referenced from the s9api package -->
         <javac debug="${build.debug}" debuglevel="${build.debuglevel}"
             deprecation="${build.deprecation}" destdir="${classes-j.dir}"
-            optimize="${build.optimize}" srcdir="${temp-src-j.dir}" source="${build.s9api.compiler.source}"
-            target="${build.s9api.compiler.target}">
+            optimize="${build.optimize}" srcdir="${temp-src-j.dir}" source="${build.compiler.source}">
 
             <include name="**/s9api/**"/>
             <classpath>
@@ -441,8 +435,7 @@ http\://www.w3.org/2001/XMLSchema: com.saxonica.jaxp.SchemaFactoryImpl
         <mkdir dir="${classes-n.dir}"/>
         <javac debug="${build.debug}" debuglevel="${build.debuglevel}"
             deprecation="${build.deprecation}" destdir="${classes-n.dir}"
-            optimize="${build.optimize}" srcdir="${temp-src-nj.dir}" source="${build.compiler.source}"
-            target="${build.compiler.target}">
+            optimize="${build.optimize}" srcdir="${temp-src-nj.dir}" source="${build.compiler.source}">
 
             <include name="net/**"/>
             <exclude name="**/s9api/**"/>
@@ -456,8 +449,7 @@ http\://www.w3.org/2001/XMLSchema: com.saxonica.jaxp.SchemaFactoryImpl
         <mkdir dir="${classes-n.dir}"/>
         <javac debug="${build.debug}"  debuglevel="${build.debuglevel}"
             deprecation="${build.deprecation}" destdir="${classes-n.dir}"
-            optimize="${build.optimize}" srcdir="${temp-src-nj.dir}" source="${build.compiler.source}"
-            target="${build.compiler.target}">
+            optimize="${build.optimize}" srcdir="${temp-src-nj.dir}" source="${build.compiler.source}">
 
             <include name="com/saxonica/**"/>
             <exclude name="com/saxonica/validate/JavaVerifier.java"/>
@@ -789,8 +781,7 @@ http\://www.w3.org/2001/XMLSchema: com.saxonica.jaxp.SchemaFactoryImpl
                         <javac debug="true" debuglevel="source, lines"
                               destdir="${product.dir}/resources/samples/java/classes"
             srcdir="${product.dir}/resources/samples/java"
-            source="${build.compiler.source}"
-            target="${build.compiler.target}">
+            source="${build.compiler.source}">
         <include name="*.java"/>
         <classpath>
             <path refid="classpath-samples"/>

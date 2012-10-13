@@ -15,7 +15,7 @@ VclContainer::VclContainer(Window *pParent)
     : Window(WINDOW_CONTAINER)
     , m_bLayoutDirty(true)
 {
-    ImplInit(pParent, 0, NULL);
+    ImplInit(pParent, WB_HIDE, NULL);
 }
 
 Size VclContainer::GetOptimalSize(WindowSizeType eType) const
@@ -54,8 +54,8 @@ void VclContainer::SetPosSizePixel(const Point& rAllocPos, const Size& rAllocati
     Window::SetPosSizePixel(rAllocPos, rAllocation);
     if (m_bLayoutDirty || bSizeChanged)
     {
-        setAllocation(rAllocation);
         m_bLayoutDirty = false;
+        setAllocation(rAllocation);
     }
 }
 
@@ -81,8 +81,8 @@ void VclContainer::SetSizePixel(const Size& rAllocation)
         Window::SetSizePixel(aAllocation);
     if (m_bLayoutDirty || bSizeChanged)
     {
-        setAllocation(aAllocation);
         m_bLayoutDirty = false;
+        setAllocation(aAllocation);
     }
 }
 
@@ -427,6 +427,14 @@ VclGrid::array_type VclGrid::assembleGrid() const
         for (sal_Int32 y = 0; y < nMaxY; ++y)
         {
             ExtendedGridEntry &rSpan = A[x][y];
+            //cell x/y is spanned by the widget at cell rSpan.x/rSpan.y,
+            //just points back to itself if there's no cell spanning
+            if ((rSpan.x == -1) || (rSpan.y == -1))
+            {
+                //there is no entry for this cell, i.e. this is a cell
+                //with no widget in it, or spanned by any other widget
+                continue;
+            }
             ExtendedGridEntry &rEntry = A[rSpan.x][rSpan.y];
             if (aNonEmptyCols[x] == false)
                 --rEntry.nSpanWidth;
@@ -475,6 +483,7 @@ void VclGrid::calcMaxs(const array_type &A, std::vector<Value> &rWidths, std::ve
     rWidths.resize(nMaxX);
     rHeights.resize(nMaxY);
 
+    //first use the non spanning entries to set default width/heights
     for (sal_Int32 x = 0; x < nMaxX; ++x)
     {
         for (sal_Int32 y = 0; y < nMaxY; ++y)
@@ -483,20 +492,102 @@ void VclGrid::calcMaxs(const array_type &A, std::vector<Value> &rWidths, std::ve
             const Window *pChild = rEntry.pChild;
             if (!pChild)
                 continue;
-            Size aChildSize = getLayoutRequisition(*pChild);
 
             sal_Int32 nWidth = rEntry.nSpanWidth;
+            sal_Int32 nHeight = rEntry.nSpanHeight;
+
             for (sal_Int32 nSpanX = 0; nSpanX < nWidth; ++nSpanX)
-            {
-                rWidths[x+nSpanX].m_nValue = std::max(rWidths[x+nSpanX].m_nValue, aChildSize.Width()/nWidth);
                 rWidths[x+nSpanX].m_bExpand = rWidths[x+nSpanX].m_bExpand | pChild->get_hexpand();
+
+            for (sal_Int32 nSpanY = 0; nSpanY < nHeight; ++nSpanY)
+                rHeights[y+nSpanY].m_bExpand = rHeights[y+nSpanY].m_bExpand | pChild->get_vexpand();
+
+            if (nWidth == 1 || nHeight == 1)
+            {
+                Size aChildSize = getLayoutRequisition(*pChild);
+                if (nWidth == 1)
+                    rWidths[x].m_nValue = std::max(rWidths[x].m_nValue, aChildSize.Width());
+                if (nHeight == 1)
+                    rHeights[y].m_nValue = std::max(rHeights[y].m_nValue, aChildSize.Height());
+            }
+        }
+    }
+
+    //now use the spanning entries and split any extra sizes across expanding rows/cols
+    //where possible
+    for (sal_Int32 x = 0; x < nMaxX; ++x)
+    {
+        for (sal_Int32 y = 0; y < nMaxY; ++y)
+        {
+            const GridEntry &rEntry = A[x][y];
+            const Window *pChild = rEntry.pChild;
+            if (!pChild)
+                continue;
+
+            sal_Int32 nWidth = rEntry.nSpanWidth;
+            sal_Int32 nHeight = rEntry.nSpanHeight;
+
+            if (nWidth == 1 && nHeight == 1)
+                continue;
+
+            Size aChildSize = getLayoutRequisition(*pChild);
+
+            if (nWidth > 1)
+            {
+                sal_Int32 nExistingWidth = 0;
+                for (sal_Int32 nSpanX = 0; nSpanX < nWidth; ++nSpanX)
+                    nExistingWidth += rWidths[x+nSpanX].m_nValue;
+
+                sal_Int32 nExtraWidth = aChildSize.Width() - nExistingWidth;
+
+                if (nExtraWidth > 0)
+                {
+                    bool bForceExpandAll = false;
+                    sal_Int32 nExpandables = 0;
+                    for (sal_Int32 nSpanX = 0; nSpanX < nWidth; ++nSpanX)
+                        if (rWidths[x+nSpanX].m_bExpand)
+                            ++nExpandables;
+                    if (nExpandables == 0)
+                    {
+                        nExpandables = nWidth;
+                        bForceExpandAll = true;
+                    }
+
+                    for (sal_Int32 nSpanX = 0; nSpanX < nWidth; ++nSpanX)
+                    {
+                        if (rWidths[x+nSpanX].m_bExpand || bForceExpandAll)
+                            rWidths[x+nSpanX].m_nValue += nExtraWidth/nExpandables;
+                    }
+                }
             }
 
-            sal_Int32 nHeight = rEntry.nSpanHeight;
-            for (sal_Int32 nSpanY = 0; nSpanY < nHeight; ++nSpanY)
+            if (nHeight > 1)
             {
-                rHeights[y+nSpanY].m_nValue = std::max(rHeights[y+nSpanY].m_nValue, aChildSize.Height()/nHeight);
-                rHeights[y+nSpanY].m_bExpand = rHeights[y+nSpanY].m_bExpand | pChild->get_vexpand();
+                sal_Int32 nExistingHeight = 0;
+                for (sal_Int32 nSpanY = 0; nSpanY < nHeight; ++nSpanY)
+                    nExistingHeight += rHeights[y+nSpanY].m_nValue;
+
+                sal_Int32 nExtraHeight = aChildSize.Height() - nExistingHeight;
+
+                if (nExtraHeight > 0)
+                {
+                    bool bForceExpandAll = false;
+                    sal_Int32 nExpandables = 0;
+                    for (sal_Int32 nSpanY = 0; nSpanY < nHeight; ++nSpanY)
+                        if (rWidths[y+nSpanY].m_bExpand)
+                            ++nExpandables;
+                    if (nExpandables == 0)
+                    {
+                        nExpandables = nHeight;
+                        bForceExpandAll = true;
+                    }
+
+                    for (sal_Int32 nSpanY = 0; nSpanY < nHeight; ++nSpanY)
+                    {
+                        if (rHeights[y+nSpanY].m_bExpand || bForceExpandAll)
+                            rHeights[y+nSpanY].m_nValue += nExtraHeight/nExpandables;
+                    }
+                }
             }
         }
     }
@@ -829,12 +920,23 @@ void VclFrame::setAllocation(const Size &rAllocation)
         setLayoutAllocation(*pChild, aChildPos, aAllocation);
 }
 
+const Window *VclFrame::get_label_widget() const
+{
+    //The label widget is the last (of two) children
+    const Window *pChild = get_child();
+    const WindowImpl* pWindowImpl = ImplGetWindowImpl();
+    return pChild != pWindowImpl->mpLastChild ? pWindowImpl->mpLastChild : NULL;
+}
+
+Window *VclFrame::get_label_widget()
+{
+    return const_cast<Window*>(const_cast<const VclFrame*>(this)->get_label_widget());
+}
+
 void VclFrame::set_label(const rtl::OUString &rLabel)
 {
     //The label widget is the last (of two) children
-    Window *pChild = get_child();
-    WindowImpl* pWindowImpl = ImplGetWindowImpl();
-    Window *pLabel = pChild != pWindowImpl->mpLastChild ? pWindowImpl->mpLastChild : NULL;
+    Window *pLabel = get_label_widget();
     assert(pLabel);
     pLabel->SetText(rLabel);
 }

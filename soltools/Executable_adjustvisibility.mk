@@ -9,6 +9,12 @@
 
 $(eval $(call gb_Executable_Executable,adjustvisibility))
 
+ifeq ($(COM),MSC)
+$(eval $(call gb_Executable_use_packages,adjustvisibility,\
+    soltools_inc \
+))
+endif
+
 $(eval $(call gb_Executable_add_exception_objects,adjustvisibility,\
     soltools/adjustvisibility/adjustvisibility \
 ))

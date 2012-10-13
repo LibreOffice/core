@@ -100,14 +100,14 @@ protected:
     long            nTime;
     Link            aData;
     Link            aDone;
-    sal_Bool            bBusy;
+    bool            bBusy;
 
                     DdeTransaction( DdeConnection&, SAL_UNUSED_PARAMETER const String&, SAL_UNUSED_PARAMETER long = 0 );
 
 public:
     virtual        ~DdeTransaction();
 
-    sal_Bool            IsBusy() { return bBusy; }
+    bool            IsBusy() { return bBusy; }
     const rtl::OUString GetName() const;
 
     void            Execute();

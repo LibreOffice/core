@@ -71,7 +71,7 @@ using ::rtl::OUString;
 
 static ResMgr* pSolverResMgr = NULL;
 
-OUString lcl_GetResourceString( sal_uInt32 nId )
+static OUString lcl_GetResourceString( sal_uInt32 nId )
 {
     if (!pSolverResMgr)
         pSolverResMgr = ResMgr::CreateResMgr("solver");
@@ -123,7 +123,7 @@ typedef boost::unordered_map< table::CellAddress, std::vector<double>, ScSolverC
 
 // -----------------------------------------------------------------------
 
-uno::Reference<table::XCell> lcl_GetCell( const uno::Reference<sheet::XSpreadsheetDocument>& xDoc,
+static uno::Reference<table::XCell> lcl_GetCell( const uno::Reference<sheet::XSpreadsheetDocument>& xDoc,
                                           const table::CellAddress& rPos )
 {
     uno::Reference<container::XIndexAccess> xSheets( xDoc->getSheets(), uno::UNO_QUERY );
@@ -131,13 +131,13 @@ uno::Reference<table::XCell> lcl_GetCell( const uno::Reference<sheet::XSpreadshe
     return xSheet->getCellByPosition( rPos.Column, rPos.Row );
 }
 
-void lcl_SetValue( const uno::Reference<sheet::XSpreadsheetDocument>& xDoc,
+static void lcl_SetValue( const uno::Reference<sheet::XSpreadsheetDocument>& xDoc,
                    const table::CellAddress& rPos, double fValue )
 {
     lcl_GetCell( xDoc, rPos )->setValue( fValue );
 }
 
-double lcl_GetValue( const uno::Reference<sheet::XSpreadsheetDocument>& xDoc,
+static double lcl_GetValue( const uno::Reference<sheet::XSpreadsheetDocument>& xDoc,
                      const table::CellAddress& rPos )
 {
     return lcl_GetCell( xDoc, rPos )->getValue();

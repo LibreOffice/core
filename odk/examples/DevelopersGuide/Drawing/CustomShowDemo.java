@@ -61,9 +61,7 @@ import com.sun.star.presentation.XCustomPresentationSupplier;
 
 // __________ Implementation __________
 
-/** presentation demo
-    @author Sven Jacobi
- */
+// presentation demo
 
 // This demo will demonstrate how to create a CustomShow
 

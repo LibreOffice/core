@@ -444,7 +444,7 @@ void SwFormatClipboard::Copy( SwWrtShell& rWrtShell, SfxItemPool& rPool, bool bP
 typedef boost::shared_ptr< SfxPoolItem > SfxPoolItemSharedPtr;
 typedef std::vector< SfxPoolItemSharedPtr > ItemVector;
 // collect all PoolItems from the applied styles
-void lcl_AppendSetItems( ItemVector& rItemVector, const SfxItemSet& rStyleAttrSet )
+static void lcl_AppendSetItems( ItemVector& rItemVector, const SfxItemSet& rStyleAttrSet )
 {
     const sal_uInt16*  pRanges = rStyleAttrSet.GetRanges();
     while( *pRanges )
@@ -461,7 +461,7 @@ void lcl_AppendSetItems( ItemVector& rItemVector, const SfxItemSet& rStyleAttrSe
     }
 }
 // remove all items that are inherited from the styles
-void lcl_RemoveEqualItems( SfxItemSet& rTemplateItemSet, const ItemVector& rItemVector )
+static void lcl_RemoveEqualItems( SfxItemSet& rTemplateItemSet, const ItemVector& rItemVector )
 {
     ItemVector::const_iterator aEnd = rItemVector.end();
     ItemVector::const_iterator aIter = rItemVector.begin();

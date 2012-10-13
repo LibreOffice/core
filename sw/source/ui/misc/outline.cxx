@@ -159,7 +159,7 @@ SwNumNamesDlg::SwNumNamesDlg(Window *pParent)
 
 SwNumNamesDlg::~SwNumNamesDlg() {}
 
-sal_uInt16 lcl_BitToLevel(sal_uInt16 nActLevel)
+static sal_uInt16 lcl_BitToLevel(sal_uInt16 nActLevel)
 {
     sal_uInt16 nTmp = nActLevel;
     sal_uInt16 nTmpLevel = 0;
@@ -875,7 +875,7 @@ void SwOutlineSettingsTabPage::CheckForStartValue_Impl(sal_uInt16 nNumberingType
         aStartEdit.GetModifyHdl().Call(&aStartEdit);
 }
 
-sal_uInt16 lcl_DrawBullet(VirtualDevice* pVDev,
+static sal_uInt16 lcl_DrawBullet(VirtualDevice* pVDev,
             const SwNumFmt& rFmt, sal_uInt16 nXStart,
             sal_uInt16 nYStart, const Size& rSize)
 {
@@ -893,7 +893,7 @@ sal_uInt16 lcl_DrawBullet(VirtualDevice* pVDev,
     return nRet;
 }
 
-sal_uInt16 lcl_DrawGraphic(VirtualDevice* pVDev, const SwNumFmt &rFmt, sal_uInt16 nXStart,
+static sal_uInt16 lcl_DrawGraphic(VirtualDevice* pVDev, const SwNumFmt &rFmt, sal_uInt16 nXStart,
                         sal_uInt16 nYStart, sal_uInt16 nDivision)
 {
     const SvxBrushItem* pBrushItem = rFmt.GetBrush();

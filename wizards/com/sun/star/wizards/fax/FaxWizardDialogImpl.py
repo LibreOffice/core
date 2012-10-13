@@ -103,7 +103,7 @@ class FaxWizardDialogImpl(FaxWizardDialog):
             self.initializeCommunication()
             self.__initializePaths()
 
-            #special Control fFrameor setting the save Path:
+            #special Control for setting the save Path:
             self.insertPathSelectionControl()
 
             self.initializeTemplates(xMSF)
@@ -157,7 +157,7 @@ class FaxWizardDialogImpl(FaxWizardDialog):
         try:
             fileAccess = FileAccess(self.xMSF)
             self.sPath = self.myPathSelection.getSelectedPath()
-            if self.sPath == "":
+            if not self.sPath:
                 self.myPathSelection.triggerPathPicker()
                 self.sPath = self.myPathSelection.getSelectedPath()
 
@@ -180,9 +180,9 @@ class FaxWizardDialogImpl(FaxWizardDialog):
                 self.resources.resFaxWizardDialog_title,
                 self.resources.resTemplateDescription)
             self.myFaxDoc.killEmptyUserFields()
-            self.myFaxDoc.keepLogoFrame = (self.chkUseLogo.State is not 0)
+            self.myFaxDoc.keepLogoFrame = bool(self.chkUseLogo.State)
             self.myFaxDoc.keepTypeFrame = \
-                (self.chkUseCommunicationType.State is not 0)
+                bool(self.chkUseCommunicationType.State)
             self.myFaxDoc.killEmptyFrames()
             self.bSaveSuccess = OfficeDocument.store(self.xMSF,
                 TextDocument.xTextDocument, self.sPath, "writer8_template")
@@ -279,8 +279,7 @@ class FaxWizardDialogImpl(FaxWizardDialog):
         self.myPathSelection.sDefaultDirectory = self.UserTemplatePath
         self.myPathSelection.sDefaultName = "myFaxTemplate.ott"
         self.myPathSelection.sDefaultFilter = "writer8_template"
-        self.myPathSelection.addSelectionListener( \
-            self.myPathSelectionListener())
+        self.myPathSelection.addSelectionListener(self)
 
     def __initializePaths(self):
         try:
@@ -299,18 +298,18 @@ class FaxWizardDialogImpl(FaxWizardDialog):
                 "/wizard/fax")
             self.sWorkPath = FileAccess.getOfficePath2(xMSF, "Work", "", "")
             self.BusinessFiles = FileAccess.getFolderTitles(xMSF, "bus",
-                self.sFaxPath)
+                self.sFaxPath, self.resources.dictBusinessTemplate)
             self.PrivateFiles = FileAccess.getFolderTitles(xMSF, "pri",
-                self.sFaxPath)
+                self.sFaxPath, self.resources.dictPrivateTemplate)
+            
             self.setControlProperty("lstBusinessStyle", "StringItemList",
-                tuple(self.BusinessFiles[0]))
+                tuple(self.BusinessFiles.keys()))
             self.setControlProperty("lstPrivateStyle", "StringItemList",
-                tuple(self.PrivateFiles[0]))
+                tuple(self.PrivateFiles.keys()))
             self.setControlProperty("lstBusinessStyle", "SelectedItems", (0,))
             self.setControlProperty("lstPrivateStyle", "SelectedItems" , (0,))
             return True
         except NoValidPathException, e:
-            # TODO Auto-generated catch block
             traceback.print_exc()
             return False
 
@@ -327,25 +326,28 @@ class FaxWizardDialogImpl(FaxWizardDialog):
         self.myFaxDoc.updateDateFields()
 
     def initializeSalutation(self):
+        #'Saludation' listbox
         self.setControlProperty("lstSalutation", "StringItemList",
-            self.resources.SalutationLabels)
+            tuple(self.resources.SalutationLabels))
 
     def initializeGreeting(self):
+        #'Complimentary Close' listbox
         self.setControlProperty("lstGreeting", "StringItemList",
-            self.resources.GreetingLabels)
+            tuple(self.resources.GreetingLabels))
 
     def initializeCommunication(self):
+        #'Type of message' listbox
         self.setControlProperty("lstCommunicationType", "StringItemList",
-            self.resources.CommunicationLabels)
+            tuple(self.resources.CommunicationLabels))
 
     def __setDefaultForGreetingAndSalutationAndCommunication(self):
-        if self.lstSalutation.Text == "":
+        if not self.lstSalutation.Text:
             self.lstSalutation.setText(self.resources.SalutationLabels[0])
 
-        if self.lstGreeting.Text == "":
+        if not self.lstGreeting.Text:
             self.lstGreeting.setText(self.resources.GreetingLabels[0])
 
-        if self.lstCommunicationType.Text == "":
+        if not self.lstCommunicationType.Text:
             self.lstCommunicationType.setText( \
                 self.resources.CommunicationLabels[0])
 
@@ -454,7 +456,7 @@ class FaxWizardDialogImpl(FaxWizardDialog):
         if FaxWizardDialogImpl.lstBusinessStylePos is not selectedItemPos:
             FaxWizardDialogImpl.lstBusinessStylePos = selectedItemPos
             TextDocument.xTextDocument = self.myFaxDoc.loadAsPreview(
-                self.BusinessFiles[1][selectedItemPos], False)
+                self.BusinessFiles.values()[selectedItemPos], False)
             self.initializeElements()
             self.setElements()
             self.drawConstants()
@@ -479,7 +481,7 @@ class FaxWizardDialogImpl(FaxWizardDialog):
         if FaxWizardDialogImpl.lstPrivateStylePos is not selectedItemPos:
             FaxWizardDialogImpl.lstPrivateStylePos = selectedItemPos
             TextDocument.xTextDocument = self.myFaxDoc.loadAsPreview(
-                self.PrivateFiles[1][selectedItemPos], False)
+                self.PrivateFiles.values()[selectedItemPos], False)
             self.initializeElements()
             self.setElements()
 
@@ -599,36 +601,36 @@ class FaxWizardDialogImpl(FaxWizardDialog):
     def chkUseLogoItemChanged(self):
         if self.myFaxDoc.hasElement("Company Logo"):
             self.myFaxDoc.switchElement("Company Logo",
-                (self.chkUseLogo.State is not 0))
+                bool(self.chkUseLogo.State))
 
     def chkUseSubjectItemChanged(self):
         if self.myFaxDoc.hasElement("Subject Line"):
             self.myFaxDoc.switchElement("Subject Line",
-                (self.chkUseSubject.State is not 0))
+                bool(self.chkUseSubject.State))
 
     def chkUseDateItemChanged(self):
         if self.myFaxDoc.hasElement("Date"):
             self.myFaxDoc.switchElement("Date",
-                (self.chkUseDate.State is not 0))
+                bool(self.chkUseDate.State))
 
     def chkUseFooterItemChanged(self):
         try:
-            bFooterPossible = (self.chkUseFooter.State is not 0) \
+            bFooterPossible = bool(self.chkUseFooter.State) \
                 and bool(self.getControlProperty("chkUseFooter",
                     PropertyNames.PROPERTY_ENABLED))
-            if self.chkFooterNextPages.State is not 0:
+            if bool(self.chkFooterNextPages.State):
                 self.myFaxDoc.switchFooter("First Page", False,
-                    (self.chkFooterPageNumbers.State is not 0),
+                    bool(self.chkFooterPageNumbers.State),
                         self.txtFooter.Text)
                 self.myFaxDoc.switchFooter("Standard", bFooterPossible,
-                    (self.chkFooterPageNumbers.State is not 0),
+                    bool(self.chkFooterPageNumbers.State),
                     self.txtFooter.Text)
             else:
                 self.myFaxDoc.switchFooter("First Page", bFooterPossible,
-                    (self.chkFooterPageNumbers.State is not 0),
+                    bool(self.chkFooterPageNumbers.State),
                     self.txtFooter.Text)
                 self.myFaxDoc.switchFooter("Standard", bFooterPossible,
-                    (self.chkFooterPageNumbers.State is not 0),
+                    bool(self.chkFooterPageNumbers.State),
                     self.txtFooter.Text)
 
             #enable/disable roadmap item for footer page
@@ -647,43 +649,43 @@ class FaxWizardDialogImpl(FaxWizardDialog):
 
     def txtFooterTextChanged(self):
         self.myFaxDoc.switchFooter("First Page", True,
-                    (self.chkFooterPageNumbers.State is not 0),
+                    bool(self.chkFooterPageNumbers.State),
                     self.txtFooter.Text)
 
     def chkUseSalutationItemChanged(self):
         self.myFaxDoc.switchUserField("Salutation",
-            self.lstSalutation.Text, (self.chkUseSalutation.State is not 0))
+            self.lstSalutation.Text, bool(self.chkUseSalutation.State))
         self.setControlProperty("lstSalutation",
             PropertyNames.PROPERTY_ENABLED,
-            self.chkUseSalutation.State is not 0)
+            bool(self.chkUseSalutation.State))
 
     def lstSalutationItemChanged(self):
         self.myFaxDoc.switchUserField("Salutation",
-            self.lstSalutation.Text, (self.chkUseSalutation.State is not 0))
+            self.lstSalutation.Text, bool(self.chkUseSalutation.State))
 
     def chkUseCommunicationItemChanged(self):
         self.myFaxDoc.switchUserField("CommunicationType",
             self.lstCommunicationType.Text,
-            (self.chkUseCommunicationType.State is not 0))
+            bool(self.chkUseCommunicationType.State))
         self.setControlProperty("lstCommunicationType",
             PropertyNames.PROPERTY_ENABLED,
-            self.chkUseCommunicationType.State is not 0)
+            bool(self.chkUseCommunicationType.State))
 
     def lstCommunicationItemChanged(self):
         self.myFaxDoc.switchUserField("CommunicationType",
             self.lstCommunicationType.Text,
-            (self.chkUseCommunicationType.State is not 0))
+            bool(self.chkUseCommunicationType.State))
 
     def chkUseGreetingItemChanged(self):
         self.myFaxDoc.switchUserField("Greeting",
-            self.lstGreeting.Text, (self.chkUseGreeting.State is not 0))
+            self.lstGreeting.Text, bool(self.chkUseGreeting.State))
         self.setControlProperty("lstGreeting",
             PropertyNames.PROPERTY_ENABLED,
-            (self.chkUseGreeting.State is not 0))
+            bool(self.chkUseGreeting.State))
 
     def lstGreetingItemChanged(self):
         self.myFaxDoc.switchUserField("Greeting", self.lstGreeting.Text,
-            (self.chkUseGreeting.State is not 0))
+            bool(self.chkUseGreeting.State))
 
     def __setPossibleFooter(self, bState):
         self.setControlProperty("chkUseFooter",
@@ -705,3 +707,8 @@ class FaxWizardDialogImpl(FaxWizardDialog):
         Helper.setUnoPropertyValue(BPaperItem,
             PropertyNames.PROPERTY_ENABLED, False)
 
+
+    def validatePath(self):
+        if self.myPathSelection.usedPathPicker:
+                self.filenameChanged = True
+        self.myPathSelection.usedPathPicker = False

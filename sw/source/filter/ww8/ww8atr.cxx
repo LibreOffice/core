@@ -1739,7 +1739,7 @@ static void InsertSpecialChar( WW8Export& rWrt, sal_uInt8 c,
     rWrt.pChpPlc->AppendFkpEntry(rWrt.Strm().Tell(), aItems.size(), aItems.data());
 }
 
-String lcl_GetExpandedField(const SwField &rFld)
+static String lcl_GetExpandedField(const SwField &rFld)
 {
     String sRet(rFld.ExpandField(true));
 
@@ -1956,7 +1956,7 @@ sal_uInt16 MSWordExportBase::GetId( const SwTOXType& rTOXType )
 //                 2 - TabStop before PageNum,
 //                 3 - Text before PageNum - rTxt hold the text
 //                 4 - no Text and no TabStop before PageNum
-int lcl_CheckForm( const SwForm& rForm, sal_uInt8 nLvl, String& rText )
+static int lcl_CheckForm( const SwForm& rForm, sal_uInt8 nLvl, String& rText )
 {
     int nRet = 4;
     rText.Erase();
@@ -2006,7 +2006,7 @@ int lcl_CheckForm( const SwForm& rForm, sal_uInt8 nLvl, String& rText )
     return nRet;
 }
 
-bool lcl_IsHyperlinked(const SwForm& rForm, sal_uInt16 nTOXLvl)
+static bool lcl_IsHyperlinked(const SwForm& rForm, sal_uInt16 nTOXLvl)
 {
     bool bRes = false;
     for (sal_uInt16 nI = 1; nI < nTOXLvl; ++nI)
@@ -4866,7 +4866,7 @@ static void ParaTabStopAdd( WW8Export& rWrt, const SvxTabStopItem& rTStops,
     aTab.PutAll( rWrt );
 }
 
-bool lcl_IsEqual(long nOneLeft, const SvxTabStop &rOne,
+static bool lcl_IsEqual(long nOneLeft, const SvxTabStop &rOne,
     long nTwoLeft, const SvxTabStop &rTwo)
 {
     return(

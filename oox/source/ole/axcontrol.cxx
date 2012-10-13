@@ -2263,64 +2263,6 @@ void AxScrollBarModel::convertFromProperties( PropertySet& rPropSet, const Contr
 
 // ============================================================================
 
-AxTabStripModel::AxTabStripModel() :
-    AxFontDataModel( false ),   // no support for alignment properties
-    mnBackColor( AX_SYSCOLOR_BUTTONFACE ),
-    mnTextColor( AX_SYSCOLOR_BUTTONTEXT ),
-    mnFlags( AX_TABSTRIP_DEFFLAGS ),
-    mnSelectedTab( -1 ),
-    mnTabStyle( AX_TABSTRIP_TABS ),
-    mnTabFlagCount( 0 )
-{
-}
-
-bool AxTabStripModel::importBinaryModel( BinaryInputStream& rInStrm )
-{
-    AxBinaryPropertyReader aReader( rInStrm );
-    aReader.readIntProperty< sal_Int32 >( mnSelectedTab );
-    aReader.readIntProperty< sal_uInt32 >( mnBackColor );
-    aReader.readIntProperty< sal_uInt32 >( mnTextColor );
-    aReader.skipUndefinedProperty();
-    aReader.readPairProperty( maSize );
-    aReader.readStringArrayProperty( maCaptions );
-    aReader.skipIntProperty< sal_uInt8 >(); // mouse pointer
-    aReader.skipUndefinedProperty();
-    aReader.skipIntProperty< sal_uInt32 >(); // tab orientation
-    aReader.readIntProperty< sal_uInt32 >( mnTabStyle );
-    aReader.skipBoolProperty(); // multiple rows
-    aReader.skipIntProperty< sal_uInt32 >(); // fixed width
-    aReader.skipIntProperty< sal_uInt32 >(); // fixed height
-    aReader.skipBoolProperty(); // tooltips
-    aReader.skipUndefinedProperty();
-    aReader.skipStringArrayProperty(); // tooltip strings
-    aReader.skipUndefinedProperty();
-    aReader.skipStringArrayProperty(); // tab names
-    aReader.readIntProperty< sal_uInt32 >( mnFlags );
-    aReader.skipBoolProperty(); // new version
-    aReader.skipIntProperty< sal_uInt32 >(); // tabs allocated
-    aReader.skipStringArrayProperty(); // tags
-    aReader.readIntProperty< sal_uInt32 >( mnTabFlagCount );
-    aReader.skipStringArrayProperty(); // accelerators
-    aReader.skipPictureProperty(); // mouse icon
-    return aReader.finalizeImport() && AxFontDataModel::importBinaryModel( rInStrm );
-}
-
-ApiControlType AxTabStripModel::getControlType() const
-{
-    return API_CONTROL_TABSTRIP;
-}
-
-void AxTabStripModel::convertProperties( PropertyMap& rPropMap, const ControlConverter& rConv ) const
-{
-    rPropMap.setProperty( PROP_Decoration, mnTabStyle != AX_TABSTRIP_NONE );
-    // adjust for openoffice ( 1 based )
-    rPropMap.setProperty( PROP_MultiPageValue, mnSelectedTab + 1);
-    rConv.convertColor( rPropMap, PROP_BackgroundColor, mnBackColor );
-    AxFontDataModel::convertProperties( rPropMap, rConv );
-}
-
-// ============================================================================
-
 AxContainerModelBase::AxContainerModelBase( bool bFontSupport ) :
     AxFontDataModel( false ),   // no support for alignment properties
     maLogicalSize( AX_CONTAINER_DEFWIDTH, AX_CONTAINER_DEFHEIGHT ),
@@ -2443,44 +2385,6 @@ void AxFrameModel::convertProperties( PropertyMap& rPropMap, const ControlConver
 #if SCROLLABLEFRAME
     rConv.convertScrollabilitySettings( rPropMap, maScrollPos, maLogicalSize, mnScrollBars );
 #endif
-    AxContainerModelBase::convertProperties( rPropMap, rConv );
-}
-
-// ============================================================================
-
-AxFormPageModel::AxFormPageModel()
-{
-}
-
-ApiControlType AxFormPageModel::getControlType() const
-{
-    return API_CONTROL_PAGE;
-}
-
-void AxFormPageModel::convertProperties( PropertyMap& rPropMap, const ControlConverter& rConv ) const
-{
-    rPropMap.setProperty( PROP_Title, maCaption );
-    rPropMap.setProperty( PROP_Enabled, getFlag( mnFlags, AX_CONTAINER_ENABLED ) );
-    rConv.convertColor( rPropMap, PROP_BackgroundColor, mnBackColor );
-    AxContainerModelBase::convertProperties( rPropMap, rConv );
-}
-
-// ============================================================================
-
-AxMultiPageModel::AxMultiPageModel()
-{
-}
-
-ApiControlType AxMultiPageModel::getControlType() const
-{
-    return API_CONTROL_MULTIPAGE;
-}
-
-void AxMultiPageModel::convertProperties( PropertyMap& rPropMap, const ControlConverter& rConv ) const
-{
-    rPropMap.setProperty( PROP_Enabled, getFlag( mnFlags, AX_CONTAINER_ENABLED ) );
-    if( mxTabStrip.get() )
-        mxTabStrip->convertProperties( rPropMap, rConv );
     AxContainerModelBase::convertProperties( rPropMap, rConv );
 }
 

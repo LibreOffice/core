@@ -912,7 +912,7 @@ void SwLineRects::LockLines( sal_Bool bLock )
        (*it).Lock( bLock );
 }
 
-void lcl_DrawDashedRect( OutputDevice * pOut, SwLineRect & rLRect )
+static void lcl_DrawDashedRect( OutputDevice * pOut, SwLineRect & rLRect )
 {
     double nHalfLWidth = rLRect.Height(  );
     if ( nHalfLWidth > 1 )
@@ -1281,7 +1281,7 @@ void SwAlignRect( SwRect &rRect, const ViewShell *pSh )
 
     @author OD
 */
-void lcl_CompPxPosAndAdjustPos( const OutputDevice&  _rOut,
+static void lcl_CompPxPosAndAdjustPos( const OutputDevice&  _rOut,
                                 const Point&         _rRefPt,
                                 Point&               _rCompPt,
                                 const sal_Bool       _bChkXPos,
@@ -1331,7 +1331,7 @@ void SwAlignGrfRect( SwRect *pGrfRect, const OutputDevice &rOut )
     pGrfRect->SSize( rOut.PixelToLogic( aPxRect.GetSize() ) );
 }
 
-long lcl_AlignWidth( const long nWidth )
+static long lcl_AlignWidth( const long nWidth )
 {
     if ( nWidth )
     {
@@ -1343,7 +1343,7 @@ long lcl_AlignWidth( const long nWidth )
     return nWidth;
 }
 
-long lcl_AlignHeight( const long nHeight )
+static long lcl_AlignHeight( const long nHeight )
 {
     if ( nHeight )
     {
@@ -1355,22 +1355,15 @@ long lcl_AlignHeight( const long nHeight )
     return nHeight;
 }
 
-long lcl_MinHeightDist( const long nDist )
+static long lcl_MinHeightDist( const long nDist )
 {
     if ( aScaleX < aMinDistScale || aScaleY < aMinDistScale )
         return nDist;
     return ::lcl_AlignHeight( Max( nDist, nMinDistPixelH ));
 }
 
-long lcl_MinWidthDist( const long nDist )
-{
-    if ( aScaleX < aMinDistScale || aScaleY < aMinDistScale )
-        return nDist;
-    return ::lcl_AlignWidth( Max( nDist, nMinDistPixelW ));
-}
-
 //Calculate PrtArea plus surrounding plus shadow.
-void lcl_CalcBorderRect( SwRect &rRect, const SwFrm *pFrm,
+static void lcl_CalcBorderRect( SwRect &rRect, const SwFrm *pFrm,
                                         const SwBorderAttrs &rAttrs,
                                         const sal_Bool bShadow )
 {
@@ -1465,7 +1458,7 @@ void lcl_CalcBorderRect( SwRect &rRect, const SwFrm *pFrm,
     ::SwAlignRect( rRect, pGlobalShell );
 }
 
-void lcl_ExtendLeftAndRight( SwRect&                _rRect,
+static void lcl_ExtendLeftAndRight( SwRect&                _rRect,
                                          const SwFrm&           _rFrm,
                                          const SwBorderAttrs&   _rAttrs,
                                          const SwRectFn&        _rRectFn )
@@ -1484,7 +1477,7 @@ void lcl_ExtendLeftAndRight( SwRect&                _rRect,
     }
 }
 
-void lcl_SubtractFlys( const SwFrm *pFrm, const SwPageFrm *pPage,
+static void lcl_SubtractFlys( const SwFrm *pFrm, const SwPageFrm *pPage,
                            const SwRect &rRect, SwRegionRects &rRegion )
 {
     const SwSortedObjs& rObjs = *pPage->GetSortedObjs();
@@ -1687,7 +1680,7 @@ void lcl_SubtractFlys( const SwFrm *pFrm, const SwPageFrm *pPage,
     @param _bBackgrdAlreadyDrawn
     boolean (optional; default: false) indicating, if the background is already drawn.
 */
-void lcl_implDrawGraphicBackgrd( const SvxBrushItem& _rBackgrdBrush,
+static void lcl_implDrawGraphicBackgrd( const SvxBrushItem& _rBackgrdBrush,
                                  OutputDevice* _pOut,
                                  const SwRect& _rAlignedPaintRect,
                                  const GraphicObject& _rGraphicObj )
@@ -1736,7 +1729,7 @@ void lcl_implDrawGraphicBackgrd( const SvxBrushItem& _rBackgrdBrush,
     }
 }
 
-inline void lcl_DrawGraphicBackgrd( const SvxBrushItem& _rBackgrdBrush,
+static inline void lcl_DrawGraphicBackgrd( const SvxBrushItem& _rBackgrdBrush,
                                     OutputDevice* _pOut,
                                     const SwRect& _rAlignedPaintRect,
                                     const GraphicObject& _rGraphicObj,
@@ -1766,7 +1759,7 @@ inline void lcl_DrawGraphicBackgrd( const SvxBrushItem& _rBackgrdBrush,
 /// Outsource code for drawing background of the graphic
 ///     with a background color in method <lcl_DrawGraphicBackgrd>
 ///     Also, change type of <bGrfNum> and <bClip> from <sal_Bool> to <bool>.
-void lcl_DrawGraphic( const SvxBrushItem& rBrush, OutputDevice *pOut,
+static void lcl_DrawGraphic( const SvxBrushItem& rBrush, OutputDevice *pOut,
                       ViewShell &rSh, const SwRect &rGrf, const SwRect &rOut,
                       bool bClip, bool bGrfNum,
                       bool bBackgrdAlreadyDrawn = false )
@@ -2136,7 +2129,7 @@ void DrawGraphic( const SvxBrushItem *pBrush,
 
     @author OD
 */
-void lcl_AdjustRectToPixelSize( SwRect& io_aSwRect, const OutputDevice &aOut )
+static void lcl_AdjustRectToPixelSize( SwRect& io_aSwRect, const OutputDevice &aOut )
 {
     /// local constant object of class <Size> to determine number of Twips
     /// representing a pixel.
@@ -3285,7 +3278,7 @@ SwRootFrm::Paint(SwRect const& rRect, SwPrintData const*const pPrintData) const
 |*
 |*************************************************************************/
 
-void lcl_EmergencyFormatFtnCont( SwFtnContFrm *pCont )
+static void lcl_EmergencyFormatFtnCont( SwFtnContFrm *pCont )
 {
     //It's possible that the Cont will get destroyed.
     SwCntntFrm *pCnt = pCont->ContainsCntnt();
@@ -3457,7 +3450,7 @@ void SwLayoutFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
     }
 }
 
-drawinglayer::primitive2d::Primitive2DSequence lcl_CreateDashedIndicatorPrimitive(
+static drawinglayer::primitive2d::Primitive2DSequence lcl_CreateDashedIndicatorPrimitive(
         basegfx::B2DPoint aStart, basegfx::B2DPoint aEnd,
         basegfx::BColor aColor )
 {
@@ -4437,7 +4430,7 @@ void SwFrm::PaintBorderLine( const SwRect& rRect,
 // printer output device.
 // NOTE: For printer output device left/right border rectangle <_iorRect>
 //       has to be already non-overlapping the outer top/bottom border rectangle.
-void lcl_SubTopBottom( SwRect&              _iorRect,
+static void lcl_SubTopBottom( SwRect&              _iorRect,
                                    const SvxBoxItem&    _rBox,
                                    const SwBorderAttrs& _rAttrs,
                                    const SwFrm&         _rFrm,
@@ -4546,7 +4539,7 @@ void lcl_SubTopBottom( SwRect&              _iorRect,
     }
 }
 
-sal_uInt16 lcl_GetLineWidth( const SvxBorderLine* pLine )
+static sal_uInt16 lcl_GetLineWidth( const SvxBorderLine* pLine )
 {
     sal_uInt16 result = 0;
 
@@ -4556,7 +4549,7 @@ sal_uInt16 lcl_GetLineWidth( const SvxBorderLine* pLine )
     return result;
 }
 
-double lcl_GetExtent( const SvxBorderLine* pSideLine, const SvxBorderLine* pOppositeLine )
+static double lcl_GetExtent( const SvxBorderLine* pSideLine, const SvxBorderLine* pOppositeLine )
 {
     double nExtent = 0.0;
 
@@ -4662,7 +4655,7 @@ lcl_MakeBorderLine(SwRect const& rRect,
 
 // OD 19.05.2003 #109667# - merge <lcl_PaintLeftLine> and <lcl_PaintRightLine>
 // into new method <lcl_PaintLeftRightLine(..)>
-void lcl_PaintLeftRightLine( const sal_Bool         _bLeft,
+static void lcl_PaintLeftRightLine( const sal_Bool         _bLeft,
                              const SwFrm&           _rFrm,
                              const SwPageFrm&       /*_rPage*/,
                              const SwRect&          _rOutRect,
@@ -4731,7 +4724,7 @@ void lcl_PaintLeftRightLine( const sal_Bool         _bLeft,
 
 // OD 19.05.2003 #109667# - merge <lcl_PaintTopLine> and <lcl_PaintBottomLine>
 // into <lcl_PaintTopLine>
-void lcl_PaintTopBottomLine( const sal_Bool         _bTop,
+static void lcl_PaintTopBottomLine( const sal_Bool         _bTop,
                              const SwFrm&           ,
                              const SwPageFrm&       /*_rPage*/,
                              const SwRect&          _rOutRect,
@@ -4784,7 +4777,7 @@ void lcl_PaintTopBottomLine( const sal_Bool         _bTop,
 |*
 |*************************************************************************/
 
-const SwFrm* lcl_HasNextCell( const SwFrm& rFrm )
+static const SwFrm* lcl_HasNextCell( const SwFrm& rFrm )
 {
     OSL_ENSURE( rFrm.IsCellFrm(),
             "lcl_HasNextCell( const SwFrm& rFrm ) should be called with SwCellFrm" );
@@ -4832,7 +4825,7 @@ const SwFrm* lcl_HasNextCell( const SwFrm& rFrm )
     @return constant pointer to cell frame, for which the border attributes has
     to be used
 */
-const SwFrm* lcl_GetCellFrmForBorderAttrs( const SwFrm*         _pCellFrm,
+static const SwFrm* lcl_GetCellFrmForBorderAttrs( const SwFrm*         _pCellFrm,
                                            const SwBorderAttrs& _rCellBorderAttrs,
                                            const bool           _bTop )
 {
@@ -5680,7 +5673,7 @@ sal_Bool SwPageFrm::IsLeftShadowNeeded() const
 enum PaintArea {LEFT, RIGHT, TOP, BOTTOM};
 
 /// Wrapper around pOut->DrawBitmapEx.
-void lcl_paintBitmapExToRect(OutputDevice *pOut, Point aPoint, BitmapEx& rBitmapEx, PaintArea eArea)
+static void lcl_paintBitmapExToRect(OutputDevice *pOut, Point aPoint, BitmapEx& rBitmapEx, PaintArea eArea)
 {
     // The problem is that if we get called multiple times and the color is
     // partly transparent, then the result will get darker and darker. To avoid
@@ -6354,7 +6347,7 @@ SizePtr pWidth = &Size::nA;
 SizePtr pHeight = &Size::nB;
 
 // OD 18.11.2002 #99672# - new parameter <_pSubsLines>
-void lcl_RefreshLine( const SwLayoutFrm *pLay,
+static void lcl_RefreshLine( const SwLayoutFrm *pLay,
                                   const SwPageFrm *pPage,
                                   const Point &rP1,
                                   const Point &rP2,
@@ -6453,7 +6446,7 @@ void lcl_RefreshLine( const SwLayoutFrm *pLay,
     }
 }
 
-drawinglayer::primitive2d::Primitive2DSequence lcl_CreatePageAreaDelimiterPrimitives(
+static drawinglayer::primitive2d::Primitive2DSequence lcl_CreatePageAreaDelimiterPrimitives(
         const SwRect& rRect )
 {
     drawinglayer::primitive2d::Primitive2DSequence aSeq( 4 );
@@ -6487,7 +6480,7 @@ drawinglayer::primitive2d::Primitive2DSequence lcl_CreatePageAreaDelimiterPrimit
     return aSeq;
 }
 
-drawinglayer::primitive2d::Primitive2DSequence lcl_CreateRectangleDelimiterPrimitives (
+static drawinglayer::primitive2d::Primitive2DSequence lcl_CreateRectangleDelimiterPrimitives (
         const SwRect& rRect )
 {
     drawinglayer::primitive2d::Primitive2DSequence aSeq( 1 );
@@ -6508,7 +6501,7 @@ drawinglayer::primitive2d::Primitive2DSequence lcl_CreateRectangleDelimiterPrimi
     return aSeq;
 }
 
-drawinglayer::primitive2d::Primitive2DSequence lcl_CreateColumnAreaDelimiterPrimitives(
+static drawinglayer::primitive2d::Primitive2DSequence lcl_CreateColumnAreaDelimiterPrimitives(
         const SwRect& rRect )
 {
     drawinglayer::primitive2d::Primitive2DSequence aSeq( 4 );

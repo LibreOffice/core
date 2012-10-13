@@ -28,6 +28,7 @@
 #include <com/sun/star/util/XCloseBroadcaster.hpp>
 #include <com/sun/star/util/XCloseListener.hpp>
 #include <com/sun/star/util/CloseVetoException.hpp>
+#include <com/sun/star/document/XCmisDocument.hpp>
 #include <com/sun/star/document/XViewDataSupplier.hpp>
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase2.hxx>
@@ -58,8 +59,11 @@
 #include <sfx2/unoctitm.hxx>
 #include <sfx2/childwin.hxx>
 #include <sfx2/sfxsids.hrc>
+#include <sfx2/sfx.hrc>
+#include <sfx2/sfxresid.hxx>
 #include <workwin.hxx>
 #include <sfx2/objface.hxx>
+#include <sfx2/infobar.hxx>
 
 #include <osl/mutex.hxx>
 #include <tools/diagnose_ex.h>
@@ -581,6 +585,7 @@ void SAL_CALL SfxBaseController::attachFrame( const REFERENCE< XFRAME >& xFrame 
         if ( m_pData->m_pViewShell )
         {
             ConnectSfxFrame_Impl( E_CONNECT );
+            ShowInfoBars( );
 
             // attaching the frame to the controller is the last step in the creation of a new view, so notify this
             SfxViewEventHint aHint( SFX_EVENT_VIEWCREATED, GlobalEventConfig::GetEventName( STR_EVENT_VIEWCREATED ), m_pData->m_pViewShell->GetObjectShell(), uno::Reference< frame::XController2 >( this ) );
@@ -1427,6 +1432,65 @@ void SfxBaseController::ConnectSfxFrame_Impl( const ConnectSfxFrame i_eConnect )
     if ( nViewNo != USHRT_MAX )
         pViewFrame->GetBindings().Invalidate( nViewNo + SID_VIEWSHELL0 );
 }
+
+void SfxBaseController::ShowInfoBars( )
+{
+    if ( m_pData->m_pViewShell )
+    {
+        // CMIS verifications
+        REFERENCE< document::XCmisDocument > xCmisDoc( m_pData->m_pViewShell->GetObjectShell()->GetModel(), uno::UNO_QUERY );
+        beans::PropertyValues aCmisProperties = xCmisDoc->getCmisPropertiesValues( );
+
+        if ( aCmisProperties.hasElements( ) )
+        {
+            // Loop over the CMIS Properties to find cmis:isVersionSeriesCheckedOut
+            bool bFoundCheckedout = false;
+            sal_Bool bCheckedOut = sal_False;
+            for ( sal_Int32 i = 0; i < aCmisProperties.getLength() && !bFoundCheckedout; ++i )
+            {
+                if ( aCmisProperties[i].Name == "cmis:isVersionSeriesCheckedOut" )
+                {
+                    bFoundCheckedout = true;
+                    aCmisProperties[i].Value >>= bCheckedOut;
+                }
+            }
+
+            if ( !bCheckedOut )
+            {
+                // Get the Frame and show the InfoBar if not checked out
+                SfxViewFrame* pViewFrame = m_pData->m_pViewShell->GetFrame();
+                std::vector< PushButton* > aButtons;
+                PushButton* pBtn = new PushButton( &pViewFrame->GetWindow(), SfxResId( BT_CHECKOUT ) );
+                pBtn->SetClickHdl( LINK( this, SfxBaseController, CheckOutHandler ) );
+                aButtons.push_back( pBtn );
+                pViewFrame->AppendInfoBar( SfxResId( STR_NONCHECKEDOUT_DOCUMENT ), aButtons );
+            }
+        }
+    }
+}
+
+IMPL_LINK( SfxBaseController, CheckOutHandler, PushButton*, pBtn )
+{
+    if ( m_pData->m_pViewShell )
+    {
+        try
+        {
+            REFERENCE< document::XCmisDocument > xCmisDoc( m_pData->m_pViewShell->GetObjectShell()->GetModel(), uno::UNO_QUERY_THROW );
+            xCmisDoc->checkOut( );
+
+            // Remove the info bar
+            SfxInfoBarWindow* pInfoBar = ( SfxInfoBarWindow* )pBtn->GetParent( );
+            SfxViewFrame* pViewFrame = m_pData->m_pViewShell->GetFrame();
+            pViewFrame->RemoveInfoBar( pInfoBar );
+        }
+        catch ( const uno::RuntimeException& )
+        {
+            // TODO Handle the problem in some way?
+        }
+    }
+    return 0;
+}
+
 
 //=============================================================================
 css::uno::Reference< css::frame::XTitle > SfxBaseController::impl_getTitleHelper ()

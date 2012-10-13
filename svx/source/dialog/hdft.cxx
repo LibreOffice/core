@@ -171,6 +171,7 @@ SvxHFPage::SvxHFPage( Window* pParent, sal_uInt16 nResId, const SfxItemSet& rAtt
     aFrm            ( this, SVX_RES( FL_FRAME ) ),
     aTurnOnBox      ( this, SVX_RES( CB_TURNON ) ),
     aCntSharedBox   ( this, SVX_RES( CB_SHARED ) ),
+    aCntSharedFirstBox   ( this, SVX_RES( CB_SHARED_FIRST ) ),
     aLMLbl          ( this, SVX_RES( FT_LMARGIN ) ),
     aLMEdit         ( this, SVX_RES( ED_LMARGIN ) ),
     aRMLbl          ( this, SVX_RES( FT_RMARGIN ) ),
@@ -207,6 +208,7 @@ SvxHFPage::SvxHFPage( Window* pParent, sal_uInt16 nResId, const SfxItemSet& rAtt
 
     aTurnOnBox.SetAccessibleRelationMemberOf( &aFrm );
     aCntSharedBox.SetAccessibleRelationMemberOf( &aFrm );
+    aCntSharedFirstBox.SetAccessibleRelationMemberOf( &aFrm );
     aLMLbl.SetAccessibleRelationMemberOf( &aFrm );
     aLMEdit.SetAccessibleRelationMemberOf( &aFrm );
     aRMLbl.SetAccessibleRelationMemberOf( &aFrm );
@@ -267,7 +269,7 @@ sal_Bool SvxHFPage::FillItemSet( SfxItemSet& rSet )
     aSet.Put( SfxBoolItem( nWOn,      aTurnOnBox.IsChecked() ) );
     aSet.Put( SfxBoolItem( nWDynamic, aHeightDynBtn.IsChecked() ) );
     aSet.Put( SfxBoolItem( nWShared,  aCntSharedBox.IsChecked() ) );
-    aSet.Put( SfxBoolItem( nWSharedFirst, sal_True) );
+    aSet.Put( SfxBoolItem( nWSharedFirst,  aCntSharedFirstBox.IsChecked() ) );
     if(aDynSpacingCB.IsVisible() && SFX_WHICH_MAX > nWDynSpacing)
     {
         SfxBoolItem* pBoolItem = (SfxBoolItem*)pPool->GetDefaultItem(nWDynSpacing).Clone();
@@ -359,6 +361,9 @@ void SvxHFPage::Reset( const SfxItemSet& rSet )
                 (const SfxBoolItem&)rHeaderSet.Get( GetWhich( SID_ATTR_PAGE_DYNAMIC ) );
             const SfxBoolItem& rShared =
                 (const SfxBoolItem&)rHeaderSet.Get( GetWhich( SID_ATTR_PAGE_SHARED ) );
+            const SfxBoolItem* pSharedFirst = 0;
+            if (rHeaderSet.HasItem(GetWhich(SID_ATTR_PAGE_SHARED_FIRST)))
+                pSharedFirst = (const SfxBoolItem*)&rHeaderSet.Get( GetWhich( SID_ATTR_PAGE_SHARED_FIRST ) );
             const SvxSizeItem& rSize =
                 (const SvxSizeItem&)rHeaderSet.Get( GetWhich( SID_ATTR_PAGE_SIZE ) );
             const SvxULSpaceItem& rUL =
@@ -388,6 +393,10 @@ void SvxHFPage::Reset( const SfxItemSet& rSet )
             SetMetricValue( aLMEdit, rLR.GetLeft(), eUnit );
             SetMetricValue( aRMEdit, rLR.GetRight(), eUnit );
             aCntSharedBox.Check(rShared.GetValue());
+            if (pSharedFirst)
+                aCntSharedFirstBox.Check(pSharedFirst->GetValue());
+            else
+                aCntSharedFirstBox.Hide();
         }
         else
             pSetItem = 0;
@@ -411,6 +420,7 @@ void SvxHFPage::Reset( const SfxItemSet& rSet )
         aTurnOnBox.Check( sal_False );
         aHeightDynBtn.Check( sal_True );
         aCntSharedBox.Check( sal_True );
+        aCntSharedFirstBox.Check( sal_True );
     }
 
     TurnOnHdl(0);
@@ -477,7 +487,10 @@ IMPL_LINK( SvxHFPage, TurnOnHdl, CheckBox *, pBox )
         if( nUsage == SVX_PAGE_RIGHT || nUsage == SVX_PAGE_LEFT )
             aCntSharedBox.Disable();
         else
+        {
             aCntSharedBox.Enable();
+            aCntSharedFirstBox.Enable();
+        }
         aBackgroundBtn.Enable();
     }
     else
@@ -747,7 +760,10 @@ void SvxHFPage::ActivatePage( const SfxItemSet& rSet )
     if ( SVX_PAGE_RIGHT == nUsage || SVX_PAGE_LEFT == nUsage )
         aCntSharedBox.Disable();
     else
+    {
         aCntSharedBox.Enable();
+        aCntSharedFirstBox.Enable();
+    }
     pItem = GetItem( rSet, SID_ATTR_PAGE_SIZE );
 
     if ( pItem )
@@ -794,7 +810,10 @@ void SvxHFPage::ActivatePage( const SfxItemSet& rSet )
         aBspWin.SetHeader( sal_False );
 
         if ( SID_ATTR_PAGE_HEADERSET == nId )
+        {
             aCntSharedBox.Disable();
+            aCntSharedFirstBox.Disable();
+        }
     }
     pSetItem = 0;
 
@@ -831,7 +850,10 @@ void SvxHFPage::ActivatePage( const SfxItemSet& rSet )
         aBspWin.SetFooter( sal_False );
 
         if ( SID_ATTR_PAGE_FOOTERSET == nId )
+        {
             aCntSharedBox.Disable();
+            aCntSharedFirstBox.Disable();
+        }
     }
 
     pItem = GetItem( rSet, SID_ATTR_PAGE_EXT1 );
@@ -933,7 +955,7 @@ IMPL_LINK_NOARG(SvxHFPage, RangeHdl)
     return 0;
 }
 
-void lcl_Move(Window& rWin, sal_Int32 nDiff)
+static void lcl_Move(Window& rWin, sal_Int32 nDiff)
 {
     Point aPos(rWin.GetPosPixel());
     aPos.Y() -= nDiff;

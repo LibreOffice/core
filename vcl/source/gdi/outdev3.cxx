@@ -7624,58 +7624,6 @@ xub_StrLen OutputDevice::ValidateKashidas ( const String& rTxt,
     return nDropped;
 }
 
-
-
-// -----------------------------------------------------------------------
-
-
-// TODO: best is to get rid of this method completely
-sal_uLong OutputDevice::GetKerningPairCount() const
-{
-    OSL_TRACE( "OutputDevice::GetKerningPairCount()" );
-    DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
-
-    if( mbNewFont && !ImplNewFont() )
-        return 0;
-    if( mbInitFont )
-        ImplInitFont();
-
-    if( mpPDFWriter && mpPDFWriter->isBuiltinFont( mpFontEntry->maFontSelData.mpFontData ) )
-        return 0;
-
-    // get the kerning pair count from the device layer
-    int nKernPairs = mpGraphics->GetKernPairs( 0, NULL );
-    return nKernPairs;
-}
-
-// -----------------------------------------------------------------------
-
-inline bool CmpKernData( const KerningPair& a, const KerningPair& b )
-{
-    return (a.nChar1 < b.nChar1) || ((a.nChar1 == b.nChar1) && (a.nChar2 < b.nChar2));
-}
-
-// TODO: best is to get rid of this method completely
-void OutputDevice::GetKerningPairs( sal_uLong nRequestedPairs, KerningPair* pKernPairs ) const
-{
-    OSL_TRACE( "OutputDevice::GetKerningPairs()" );
-    DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
-
-    if( mbNewFont && !ImplNewFont() )
-        return;
-    if( mbInitFont )
-        ImplInitFont();
-
-    if( mpPDFWriter && mpPDFWriter->isBuiltinFont( mpFontEntry->maFontSelData.mpFontData ) )
-        return;
-
-    // get the kerning pairs directly from the device layer
-    int nKernPairs = mpGraphics->GetKernPairs( nRequestedPairs, (ImplKernPairData*)pKernPairs );
-
-    // sort kerning pairs
-    std::sort( pKernPairs, pKernPairs+nKernPairs, CmpKernData );
-}
-
 // -----------------------------------------------------------------------
 
 sal_Bool OutputDevice::GetGlyphBoundRects( const Point& rOrigin, const String& rStr,

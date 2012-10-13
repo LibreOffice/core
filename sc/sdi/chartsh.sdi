@@ -16,7 +16,16 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
- // ===========================================================================
+interface ChartSelection
+{
+    SID_EXPORT_AS_GRAPHIC
+    [
+        ExecMethod = ExecuteExportAsGraphic;
+        StateMethod = GetExportAsGraphicState;
+    ]
+}
+
 shell ScChartShell : ScDrawShell
 {
+    import ChartSelection;
 }

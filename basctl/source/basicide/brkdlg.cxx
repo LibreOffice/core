@@ -38,15 +38,15 @@ namespace basctl
 namespace
 {
 
-bool lcl_ParseText(rtl::OUString const &rText, size_t& rLineNr )
+bool lcl_ParseText(OUString const &rText, size_t& rLineNr )
 {
     // aText should look like "# n" where
     // n > 0 && n < std::numeric_limits< sal_uInt16 >::max().
     // All spaces are ignored, so there can even be spaces within the
     // number n.  (Maybe it would be better to ignore all whitespace instead
     // of just spaces.)
-    rtl::OUString aText(
-        rText.replaceAll(" ", rtl::OUString()));
+    OUString aText(
+        rText.replaceAll(" ", OUString()));
     sal_Unicode cFirst = aText[0];
     if (cFirst != '#' && !(cFirst >= '0' && cFirst <= '9'))
         return false;
@@ -82,7 +82,7 @@ BreakPointDialog::BreakPointDialog( Window* pParent, BreakPointList& rBrkPntList
     for ( size_t i = 0, n = m_aModifiedBreakPointList.size(); i < n; ++i )
     {
         BreakPoint* pBrk = m_aModifiedBreakPointList.at( i );
-        String aEntryStr( RTL_CONSTASCII_USTRINGPARAM( "# " ) );
+        OUString aEntryStr( "# " );
         aEntryStr += String::CreateFromInt32( pBrk->nLine );
         aComboBox.InsertEntry( aEntryStr, COMBOBOX_APPEND );
     }
@@ -111,7 +111,7 @@ BreakPointDialog::BreakPointDialog( Window* pParent, BreakPointList& rBrkPntList
 
 void BreakPointDialog::SetCurrentBreakPoint( BreakPoint* pBrk )
 {
-    String aStr( RTL_CONSTASCII_USTRINGPARAM( "# " ) );
+    String aStr( "# " );
     aStr += String::CreateFromInt32( pBrk->nLine );
     aComboBox.SetText( aStr );
     UpdateFields( pBrk );
@@ -200,7 +200,7 @@ IMPL_LINK( BreakPointDialog, ButtonHdl, Button *, pButton )
             pBrk->bEnabled = aCheckBox.IsChecked();
             pBrk->nStopAfter = (size_t) aNumericField.GetValue();
             m_aModifiedBreakPointList.InsertSorted( pBrk );
-            String aEntryStr( RTL_CONSTASCII_USTRINGPARAM( "# " ) );
+            OUString aEntryStr( "# " );
             aEntryStr += String::CreateFromInt32( pBrk->nLine );
             aComboBox.InsertEntry( aEntryStr, COMBOBOX_APPEND );
             if (SfxDispatcher* pDispatcher = GetDispatcher())

@@ -240,19 +240,22 @@ void OutlinerParaObject::ClearPortionInfo()
     mpImplOutlinerParaObject->mpEditTextObject->ClearPortionInfo();
 }
 
-bool OutlinerParaObject::ChangeStyleSheets(const XubString& rOldName, SfxStyleFamily eOldFamily, const XubString& rNewName, SfxStyleFamily eNewFamily)
+bool OutlinerParaObject::ChangeStyleSheets(const OUString& rOldName,
+    SfxStyleFamily eOldFamily, const OUString& rNewName, SfxStyleFamily eNewFamily)
 {
     ImplMakeUnique();
     return mpImplOutlinerParaObject->mpEditTextObject->ChangeStyleSheets(rOldName, eOldFamily, rNewName, eNewFamily);
 }
 
-void OutlinerParaObject::ChangeStyleSheetName(SfxStyleFamily eFamily, const XubString& rOldName, const XubString& rNewName)
+void OutlinerParaObject::ChangeStyleSheetName(SfxStyleFamily eFamily,
+    const OUString& rOldName, const OUString& rNewName)
 {
     ImplMakeUnique();
     mpImplOutlinerParaObject->mpEditTextObject->ChangeStyleSheetName(eFamily, rOldName, rNewName);
 }
 
-void OutlinerParaObject::SetStyleSheets(sal_uInt16 nLevel, const XubString rNewName, const SfxStyleFamily& rNewFamily)
+void OutlinerParaObject::SetStyleSheets(sal_uInt16 nLevel, const OUString rNewName,
+    const SfxStyleFamily& rNewFamily)
 {
     const sal_uInt32 nCount(mpImplOutlinerParaObject->maParagraphDataVector.size());
 

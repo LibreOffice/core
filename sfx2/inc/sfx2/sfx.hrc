@@ -155,7 +155,7 @@
 #define STR_STANDARD                        (RID_SFX_START+104)
 #define STR_READONLY                        (RID_SFX_START+105)
 
-#define STR_SFX_FILTERNAME_ALL                  (RID_SFX_START+106)
+#define STR_SFX_FILTERNAME_ALL              (RID_SFX_START+106)
 #define STR_EDIT                            (RID_SFX_START+108)
 #define STR_QUERY_SAVE_DOCUMENT             (RID_SFX_START+110)
 #define STR_BYTES                           (RID_SFX_START+111)
@@ -166,10 +166,14 @@
 
 #define STR_STANDARD_SHORTCUT               (RID_SFX_START+117)
 #define STR_REPAIREDDOCUMENT                (RID_SFX_START+118)
-
 #define STR_ERRUNOEVENTBINDUNG              (RID_SFX_START+119)
 #define STR_SHARED                          (RID_SFX_START+120)
 #define RID_XMLSEC_DOCUMENTSIGNED           (RID_SFX_START+121)
+#define STR_PASSWD                          (RID_SFX_START+122)
+#define STR_PASSWD_EMPTY                    (RID_SFX_START+123)
+#define STR_PASSWD_MIN_LEN                  (RID_SFX_START+124)
+#define STR_NONCHECKEDOUT_DOCUMENT          (RID_SFX_START+125)
+#define BT_CHECKOUT                         (RID_SFX_START+126)
 #define STR_ACCTITLE_PRODUCTIVITYTOOLS      (RID_SFX_START+157)
 
 //=========================================================================

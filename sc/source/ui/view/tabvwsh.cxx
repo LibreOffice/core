@@ -35,6 +35,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/app.hxx>
+#include <sfx2/infobar.hxx>
 
 #include "tabvwsh.hxx"
 #include "docsh.hxx"
@@ -59,10 +60,14 @@ SFX_IMPL_INTERFACE(ScTabViewShell,SfxViewShell,ScResId(SCSTR_TABVIEWSHELL))
 
     SFX_CHILDWINDOW_REGISTRATION(FID_INPUTLINE_STATUS);
     SFX_CHILDWINDOW_REGISTRATION(SfxTemplateDialogWrapper::GetChildWindowId());
+    SFX_CHILDWINDOW_REGISTRATION(SfxInfoBarContainerChild::GetChildWindowId());
     SFX_CHILDWINDOW_CONTEXT_REGISTRATION(SID_NAVIGATOR);
     SFX_CHILDWINDOW_REGISTRATION(SID_TASKPANE);
     SFX_CHILDWINDOW_REGISTRATION(ScNameDlgWrapper::GetChildWindowId());
     SFX_CHILDWINDOW_REGISTRATION(ScNameDefDlgWrapper::GetChildWindowId());
+    SFX_CHILDWINDOW_REGISTRATION(ScCondFormatConditionDlgWrapper::GetChildWindowId());
+    SFX_CHILDWINDOW_REGISTRATION(ScCondFormatColorScaleDlgWrapper::GetChildWindowId());
+    SFX_CHILDWINDOW_REGISTRATION(ScCondFormatDataBarDlgWrapper::GetChildWindowId());
     SFX_CHILDWINDOW_REGISTRATION(ScSolverDlgWrapper::GetChildWindowId());
     SFX_CHILDWINDOW_REGISTRATION(ScOptSolverDlgWrapper::GetChildWindowId());
     SFX_CHILDWINDOW_REGISTRATION(ScPivotLayoutWrapper::GetChildWindowId());

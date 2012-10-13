@@ -29,7 +29,7 @@
 #define _GLOSSARY_HXX
 
 #include <vcl/edit.hxx>
-#include <svtools/svtreebx.hxx>
+#include <svtools/treelistbox.hxx>
 #include <svx/stddlg.hxx>
 
 #include <vcl/button.hxx>

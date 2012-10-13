@@ -37,20 +37,20 @@ private:
 public:
 
     // bDontLoad is for referencing purposes only
-    SvtCTLOptions( sal_Bool bDontLoad = sal_False );
+    SvtCTLOptions( bool bDontLoad = false );
     virtual ~SvtCTLOptions();
 
-    void            SetCTLFontEnabled( sal_Bool _bEnabled );
-    sal_Bool        IsCTLFontEnabled() const;
+    void        SetCTLFontEnabled( bool _bEnabled );
+    bool        IsCTLFontEnabled() const;
 
-    void            SetCTLSequenceChecking( sal_Bool _bEnabled );
-    sal_Bool        IsCTLSequenceChecking() const;
+    void        SetCTLSequenceChecking( bool _bEnabled );
+    bool        IsCTLSequenceChecking() const;
 
-    void            SetCTLSequenceCheckingRestricted( sal_Bool _bEnable );
-    sal_Bool        IsCTLSequenceCheckingRestricted( void ) const;
+    void        SetCTLSequenceCheckingRestricted( bool _bEnable );
+    bool        IsCTLSequenceCheckingRestricted( void ) const;
 
-    void            SetCTLSequenceCheckingTypeAndReplace( sal_Bool _bEnable );
-    sal_Bool        IsCTLSequenceCheckingTypeAndReplace() const;
+    void        SetCTLSequenceCheckingTypeAndReplace( bool _bEnable );
+    bool        IsCTLSequenceCheckingTypeAndReplace() const;
 
     enum CursorMovement
     {
@@ -79,7 +79,7 @@ public:
         E_CTLSEQUENCECHECKINGRESTRICTED,
         E_CTLSEQUENCECHECKINGTYPEANDREPLACE
     };
-    sal_Bool IsReadOnly(EOption eOption) const;
+    bool IsReadOnly(EOption eOption) const;
 };
 
 #endif // _SVTOOLS_CTLOPTIONS_HXX

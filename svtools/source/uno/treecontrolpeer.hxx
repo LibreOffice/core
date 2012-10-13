@@ -42,16 +42,22 @@
 
 #include <tools/contnr.hxx>
 
+#include <map>
+
+namespace com { namespace sun { namespace star { namespace awt { namespace tree {
+
+class XTreeNode;
+
+}}}}}
+
 class UnoTreeListEntry;
 class TreeControlPeer;
 class UnoTreeListBoxImpl;
-class TreeNodeMap;
 
-//  ----------------------------------------------------
-//  class TreeControlPeer
-//  ----------------------------------------------------
 class TreeControlPeer : public ::cppu::ImplInheritanceHelper2< VCLXWindow, ::com::sun::star::awt::tree::XTreeControl, ::com::sun::star::awt::tree::XTreeDataModelListener >
 {
+    typedef std::map<com::sun::star::uno::Reference<com::sun::star::awt::tree::XTreeNode>, UnoTreeListEntry*> TreeNodeMap;
+
     friend class UnoTreeListBoxImpl;
     friend class UnoTreeListEntry;
 public:

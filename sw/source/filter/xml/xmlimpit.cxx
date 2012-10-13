@@ -474,32 +474,32 @@ sal_Bool SvXMLImportItemMapper::PutXMLValue(
 
                     Color aColor( COL_BLACK );
 
-                    if( !lcl_frmitems_parseXMLBorder( rValue, rUnitConverter,
+                    if( !sw_frmitems_parseXMLBorder( rValue, rUnitConverter,
                                                       bHasStyle, nStyle,
                                                       bHasWidth, nWidth, nNamedWidth,
                                                       bHasColor, aColor ) )
                         return sal_False;
 
                     if( TOP_BORDER == nMemberId || ALL_BORDER == nMemberId )
-                        lcl_frmitems_setXMLBorder( pTop,
+                        sw_frmitems_setXMLBorder( pTop,
                                                    bHasStyle, nStyle,
                                                    bHasWidth, nWidth, nNamedWidth,
                                                    bHasColor, aColor );
 
                     if( BOTTOM_BORDER == nMemberId || ALL_BORDER == nMemberId )
-                        lcl_frmitems_setXMLBorder( pBottom,
+                        sw_frmitems_setXMLBorder( pBottom,
                                                    bHasStyle, nStyle,
                                                    bHasWidth, nWidth, nNamedWidth,
                                                    bHasColor, aColor );
 
                     if( LEFT_BORDER == nMemberId || ALL_BORDER == nMemberId )
-                        lcl_frmitems_setXMLBorder( pLeft,
+                        sw_frmitems_setXMLBorder( pLeft,
                                                    bHasStyle, nStyle,
                                                    bHasWidth, nWidth, nNamedWidth,
                                                    bHasColor, aColor );
 
                     if( RIGHT_BORDER == nMemberId || ALL_BORDER == nMemberId )
-                        lcl_frmitems_setXMLBorder( pRight,
+                        sw_frmitems_setXMLBorder( pRight,
                                                    bHasStyle, nStyle,
                                                    bHasWidth, nWidth, nNamedWidth,
                                                    bHasColor, aColor );
@@ -539,28 +539,28 @@ sal_Bool SvXMLImportItemMapper::PutXMLValue(
 
                     if( TOP_BORDER_LINE_WIDTH == nMemberId ||
                         ALL_BORDER_LINE_WIDTH == nMemberId )
-                        lcl_frmitems_setXMLBorder( pTop, nWidth,
+                        sw_frmitems_setXMLBorder( pTop, nWidth,
                                 static_cast< sal_uInt16 >( nOutWidth ),
                                 static_cast< sal_uInt16 >( nInWidth ),
                                 static_cast< sal_uInt16 >( nDistance ) );
 
                     if( BOTTOM_BORDER_LINE_WIDTH == nMemberId ||
                         ALL_BORDER_LINE_WIDTH == nMemberId )
-                        lcl_frmitems_setXMLBorder( pBottom, nWidth,
+                        sw_frmitems_setXMLBorder( pBottom, nWidth,
                                 static_cast< sal_uInt16 >( nOutWidth ),
                                 static_cast< sal_uInt16 >( nInWidth ),
                                 static_cast< sal_uInt16 >( nDistance ) );
 
                     if( LEFT_BORDER_LINE_WIDTH == nMemberId ||
                         ALL_BORDER_LINE_WIDTH == nMemberId )
-                        lcl_frmitems_setXMLBorder( pLeft, nWidth,
+                        sw_frmitems_setXMLBorder( pLeft, nWidth,
                                 static_cast< sal_uInt16 >( nOutWidth ),
                                 static_cast< sal_uInt16 >( nInWidth ),
                                 static_cast< sal_uInt16 >( nDistance ) );
 
                     if( RIGHT_BORDER_LINE_WIDTH == nMemberId ||
                         ALL_BORDER_LINE_WIDTH == nMemberId )
-                        lcl_frmitems_setXMLBorder( pRight, nWidth,
+                        sw_frmitems_setXMLBorder( pRight, nWidth,
                                 static_cast< sal_uInt16 >( nOutWidth ),
                                 static_cast< sal_uInt16 >( nInWidth ),
                                 static_cast< sal_uInt16 >( nDistance ) );
@@ -717,7 +717,7 @@ sal_Bool SvXMLImportItemMapper::PutXMLValue(
                                 {
                                     eTmp = nPrc < 25 ? GPOS_LT:
                                                (nPrc < 75 ? GPOS_LM : GPOS_LB);
-                                    lcl_frmitems_MergeXMLVertPos( ePos, eTmp );
+                                    sw_frmitems_MergeXMLVertPos( ePos, eTmp );
                                     bVert = sal_True;
                                 }
                             }
@@ -730,9 +730,9 @@ sal_Bool SvXMLImportItemMapper::PutXMLValue(
                         else if( IsXMLToken( aToken, XML_CENTER ) )
                         {
                             if( bHori )
-                                lcl_frmitems_MergeXMLVertPos( ePos, GPOS_MM );
+                                sw_frmitems_MergeXMLVertPos( ePos, GPOS_MM );
                             else if ( bVert )
-                                lcl_frmitems_MergeXMLHoriPos( ePos, GPOS_MM );
+                                sw_frmitems_MergeXMLHoriPos( ePos, GPOS_MM );
                             else
                                 ePos = GPOS_MM;
                         }
@@ -740,7 +740,7 @@ sal_Bool SvXMLImportItemMapper::PutXMLValue(
                                                          psXML_BrushHoriPos ) )
                         {
                             if( bVert )
-                                lcl_frmitems_MergeXMLHoriPos(
+                                sw_frmitems_MergeXMLHoriPos(
                                     ePos, (SvxGraphicPosition)nTmp );
                             else if( !bHori )
                                 ePos = (SvxGraphicPosition)nTmp;
@@ -752,7 +752,7 @@ sal_Bool SvXMLImportItemMapper::PutXMLValue(
                                                          psXML_BrushVertPos ) )
                         {
                             if( bHori )
-                                lcl_frmitems_MergeXMLVertPos(
+                                sw_frmitems_MergeXMLVertPos(
                                     ePos, (SvxGraphicPosition)nTmp );
                             else if( !bVert )
                                 ePos = (SvxGraphicPosition)nTmp;

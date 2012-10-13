@@ -40,108 +40,30 @@
 
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <boost/scoped_ptr.hpp>
+#include "anyrefdg.hxx"
 
 class ScDocument;
 class ScConditionalFormat;
 class ScFormatEntry;
 class ScConditionalFormat;
 struct ScDataBarFormatData;
+class ScCondFrmtEntry;
 
-class ScCondFrmtEntry : public Control
+namespace condformat {
+
+namespace dialog {
+
+enum ScCondFormatDialogType
 {
-private:
-    bool mbActive;
-    ScCondFormatEntryType meType;
-
-    Link maClickHdl;
-
-    //general ui elements
-    ListBox maLbType;
-    FixedText maFtCondNr;
-    FixedText maFtCondition;
-
-    //cond format ui elements
-    ListBox maLbCondType;
-    Edit maEdVal1;
-    Edit maEdVal2;
-    FixedText maFtStyle;
-    ListBox maLbStyle;
-    SvxFontPrevWindow maWdPreview;
-
-    //color format ui elements
-    ListBox maLbColorFormat;
-    //color scale ui elements
-    ListBox maLbColScale2;
-    ListBox maLbColScale3;
-
-    ListBox maLbEntryTypeMin;
-    ListBox maLbEntryTypeMiddle;
-    ListBox maLbEntryTypeMax;
-
-    Edit maEdMin;
-    Edit maEdMiddle;
-    Edit maEdMax;
-
-    ColorListBox maLbColMin;
-    ColorListBox maLbColMiddle;
-    ColorListBox maLbColMax;
-
-    //data bar ui elements
-    ListBox maLbDataBarMinType;
-    ListBox maLbDataBarMaxType;
-    Edit maEdDataBarMin;
-    Edit maEdDataBarMax;
-    PushButton maBtOptions;
-
-    boost::scoped_ptr<ScDataBarFormatData> mpDataBarData;
-
-    //
-    void SwitchToType(ScCondFormatEntryType eType);
-    void SetCondType();
-    void SetColorScaleType();
-    void SetDataBarType();
-    void SetFormulaType();
-    void HideCondElements();
-    void HideColorScaleElements();
-    void HideDataBarElements();
-
-    void SetHeight();
-    void Init();
-
-    ScFormatEntry* createConditionEntry() const;
-    ScFormatEntry* createColorscaleEntry() const;
-    ScFormatEntry* createDatabarEntry() const;
-    ScFormatEntry* createFormulaEntry() const;
-
-    ScDocument* mpDoc;
-    ScAddress maPos;
-    sal_Int32 mnIndex;
-    rtl::OUString maStrCondition;
-
-    DECL_LINK( TypeListHdl, void*);
-    DECL_LINK( ColFormatTypeHdl, void*);
-    DECL_LINK( StyleSelectHdl, void* );
-    DECL_LINK( OptionBtnHdl, void* );
-    DECL_LINK( DataBarTypeSelectHdl, void* );
-    DECL_LINK( ConditionTypeSelectHdl, void* );
-    DECL_LINK( EntryTypeHdl, ListBox* );
-    DECL_LINK( EdModifyHdl, Edit* );
-
-public:
-    ScCondFrmtEntry( Window* pParent, ScDocument* pDoc, const ScAddress& rPos );
-    ScCondFrmtEntry( Window* pParent, ScDocument* pDoc, const ScFormatEntry* pFormatEntry, const ScAddress& rPos );
-    virtual ~ScCondFrmtEntry();
-
-    virtual long Notify( NotifyEvent& rNEvt );
-
-    void Select();
-    void Deselect();
-
-    bool IsSelected() const;
-    void SetIndex(sal_Int32 nIndex);
-
-    ScFormatEntry* GetEntry() const;
+    NONE,
+    CONDITION,
+    COLORSCALE,
+    DATABAR
 };
+
+}
+
+}
 
 class ScCondFormatList : public Control
 {
@@ -158,8 +80,10 @@ private:
 
     void RecalcAll();
     void DoScroll(long nDiff);
+
 public:
-    ScCondFormatList( Window* pParent, const ResId& rResId, ScDocument* pDoc, const ScConditionalFormat* pFormat, const ScRangeList& rRanges, const ScAddress& rPos);
+    ScCondFormatList( Window* pParent, const ResId& rResId, ScDocument* pDoc, const ScConditionalFormat* pFormat,
+            const ScRangeList& rRanges, const ScAddress& rPos, condformat::dialog::ScCondFormatDialogType eType);
 
     ScConditionalFormat* GetConditionalFormat() const;
 
@@ -168,24 +92,58 @@ public:
     DECL_LINK( ScrollHdl, void* );
     DECL_LINK( EntrySelectHdl, ScCondFrmtEntry* );
 
+    DECL_LINK( TypeListHdl, ListBox*);
+    DECL_LINK( ColFormatTypeHdl, ListBox*);
 };
 
-class ScCondFormatDlg : public ModalDialog
+class ScCondFormatDlg : public ScAnyRefDlg
 {
 private:
     PushButton maBtnAdd;
     PushButton maBtnRemove;
     OKButton maBtnOk;
     CancelButton maBtnCancel;
+    FixedText maFtRange;
+    formula::RefEdit maEdRange;
+    formula::RefButton maRbRange;
 
     ScCondFormatList maCondFormList;
 
     ScAddress maPos;
+    ScDocument* mpDoc;
+
+    const ScConditionalFormat* mpFormat;
+
+    formula::RefEdit* mpLastEdit;
+
+    condformat::dialog::ScCondFormatDialogType meType;
+
+    DECL_LINK( EdRangeModifyHdl, Edit* );
+    DECL_LINK( OkBtnHdl, void* );
+    DECL_LINK( CancelBtnHdl, void* );
+
+    virtual sal_Bool Close();
+protected:
+
+    virtual void RefInputDone( sal_Bool bForced = false );
+
 
 public:
-    ScCondFormatDlg(Window* pWindow, ScDocument* pDoc, const ScConditionalFormat* pFormat, const ScRangeList& rRange, const ScAddress& rPos);
+    ScCondFormatDlg(SfxBindings* pB, SfxChildWindow* pSW, Window* pWindow, ScDocument* pDoc, const ScConditionalFormat* pFormat,
+            const ScRangeList& rRange, const ScAddress& rPos, condformat::dialog::ScCondFormatDialogType eType);
+    virtual ~ScCondFormatDlg();
 
-    ScConditionalFormat* GetConditionalFormat() const;
+    SC_DLLPUBLIC ScConditionalFormat* GetConditionalFormat() const;
+
+    virtual void SetReference(const ScRange&, ScDocument*);
+    virtual sal_Bool IsRefInputMode() const;
+    virtual void SetActive();
+    virtual sal_Bool IsTableLocked() const;
+
+    void InvalidateRefData();
+
+    DECL_LINK( RangeGetFocusHdl, formula::RefEdit* );
+    DECL_LINK( RangeLoseFocusHdl, void* );
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1,0 +1,40 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+#ifndef __com_sun_star_document_XCmisDataSupplier_idl__
+#define __com_sun_star_document_XCmisDataSupplier_idl__
+
+#include <com/sun/star/beans/PropertyValues.idl>
+#include <com/sun/star/uno/XInterface.idl>
+
+module com {   module sun {   module star {   module document {
+
+/** The document can provide access to CMIS properties and versions
+    through this interface.
+  */
+interface XCmisDocument : com::sun::star::uno::XInterface
+{
+    /** Check out the document into a private working copy on the
+        server, and update the loaded document to reflect this change.
+     */
+    void checkOut( );
+
+    /** Contains the properties values named after their CMIS ID.
+     */
+    [attribute] com::sun::star::beans::PropertyValues CmisPropertiesValues;
+
+    /** Contains the property names to show to the user from their CMIS id.
+     */
+    [attribute] com::sun::star::beans::PropertyValues CmisPropertiesDisplayNames;
+};
+
+}; }; }; };
+
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

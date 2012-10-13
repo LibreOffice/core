@@ -53,6 +53,7 @@
 #include <com/sun/star/sdb/XSingleSelectQueryComposer.hpp>
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #include <com/sun/star/sdb/XQueriesSupplier.hpp>
+#include <com/sun/star/task/InteractionHandler.hpp>
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <swunohelper.hxx>
@@ -99,7 +100,7 @@ struct AddressUserData_Impl
         {}
 };
 
-::rtl::OUString lcl_getFlatURL( uno::Reference<beans::XPropertySet>& xSourceProperties )
+static ::rtl::OUString lcl_getFlatURL( uno::Reference<beans::XPropertySet>& xSourceProperties )
 {
     ::rtl::OUString sURL;
     if(xSourceProperties.is())
@@ -559,9 +560,8 @@ void SwAddressListDialog::DetectTablesAndQueries(
             m_xDBContext->getByName(m_aDBData.sDataSource) >>= xComplConnection;
             pUserData->xSource = uno::Reference<XDataSource>(xComplConnection, UNO_QUERY);
 
-            uno::Reference< XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
-            uno::Reference< XInteractionHandler > xHandler(
-                xMgr->createInstance( C2U( "com.sun.star.task.InteractionHandler" )), UNO_QUERY);
+            uno::Reference< XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
+            uno::Reference< XInteractionHandler > xHandler( InteractionHandler::createWithParent(xContext, 0), UNO_QUERY );
             pUserData->xConnection = SharedConnection( xComplConnection->connectWithCompletion( xHandler ) );
         }
         if(pUserData->xConnection.is())

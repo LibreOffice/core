@@ -511,10 +511,10 @@ Reference< XStyle > WorkbookGlobals::createStyleObject( OUString& orStyleName, b
 
 void WorkbookGlobals::initialize( bool bWorkbookFile )
 {
-    maCellStyles = CREATE_OUSTRING( "CellStyles" );
-    maPageStyles = CREATE_OUSTRING( "PageStyles" );
-    maCellStyleServ = CREATE_OUSTRING( "com.sun.star.style.CellStyle" );
-    maPageStyleServ = CREATE_OUSTRING( "com.sun.star.style.PageStyle" );
+    maCellStyles = "CellStyles";
+    maPageStyles = "PageStyles";
+    maCellStyleServ = "com.sun.star.style.CellStyle";
+    maPageStyleServ = "com.sun.star.style.PageStyle";
     mnCurrSheet = -1;
     mbWorkbook = bWorkbookFile;
     meTextEnc = osl_getThreadTextEncoding();
@@ -562,7 +562,7 @@ void WorkbookGlobals::initialize( bool bWorkbookFile )
             xLockable->addActionLock();
 
         //! TODO: localize progress bar text
-        mxProgressBar.reset( new SegmentProgressBar( mrBaseFilter.getStatusIndicator(), CREATE_OUSTRING( "Loading..." ) ) );
+        mxProgressBar.reset( new SegmentProgressBar( mrBaseFilter.getStatusIndicator(), "Loading..." ) );
         mxFmlaParser.reset( new FormulaParser( *this ) );
 
         //prevent unnecessary broadcasts and "half way listeners" as
@@ -572,7 +572,7 @@ void WorkbookGlobals::initialize( bool bWorkbookFile )
     else if( mrBaseFilter.isExportFilter() )
     {
         //! TODO: localize progress bar text
-        mxProgressBar.reset( new SegmentProgressBar( mrBaseFilter.getStatusIndicator(), CREATE_OUSTRING( "Saving..." ) ) );
+        mxProgressBar.reset( new SegmentProgressBar( mrBaseFilter.getStatusIndicator(), "Saving..." ) );
     }
     // filter specific
     switch( getFilterType() )
@@ -692,7 +692,7 @@ void WorkbookHelper::finalizeWorkbookImport()
         number 1). Otherwise hidden sheets (e.g. for scenarios) which have
         'Default' page style will break automatic page numbering for following
         sheets. Automatic numbering is set by passing the value 0. */
-    PropertySet aDefPageStyle( getStyleObject( CREATE_OUSTRING( "Default" ), true ) );
+    PropertySet aDefPageStyle( getStyleObject( "Default", true ) );
     aDefPageStyle.setProperty< sal_Int16 >( PROP_FirstPageNumber, 0 );
 
     /*  Import the VBA project (after finalizing workbook settings which

@@ -58,10 +58,6 @@ import com.sun.star.drawing.XDrawPagesSupplier;
 import com.sun.star.drawing.XDrawPageSupplier;
 import com.sun.star.drawing.XDrawPage;
 
-/**
- *
- * @author  dschulten
- */
 public class HelloTextTableShape {
 
     private XComponentContext xRemoteContext = null;

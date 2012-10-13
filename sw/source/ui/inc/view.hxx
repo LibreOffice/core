@@ -159,9 +159,6 @@ struct SwApplyTemplate
  --------------------------------------------------------------------*/
 class SW_DLLPUBLIC SwView: public SfxViewShell
 {
-    // exhibition hack (MA,MBA)
-    friend void lcl_SelectShellForDrop( SwView &rView );
-
     friend class SwHHCWrapper;
     friend class SwHyphWrapper;
     friend class SwView_Impl;
@@ -657,6 +654,9 @@ public:
 
     SwPostItMgr* GetPostItMgr() { return mpPostItMgr;}
     const SwPostItMgr* GetPostItMgr() const { return mpPostItMgr;}
+
+    // exhibition hack (MA,MBA)
+    void SelectShellForDrop();
 };
 
 // ----------------- inline Methoden ----------------------

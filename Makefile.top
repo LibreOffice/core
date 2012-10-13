@@ -44,6 +44,7 @@ basebmp\
 basegfx\
 basic\
 bean\
+beanshell\
 binaryurp\
 bluez_bluetooth\
 boost\
@@ -88,15 +89,19 @@ idl\
 idlc\
 io\
 javaunohelper\
+jfreereport\
+jpeg\
 jurt\
 jvmaccess\
 jvmfwk\
 l10ntools\
+languagetool\
 libcdr\
 libcmis\
 libmspub\
 liborcus\
 libpng\
+librsvg\
 libvisio\
 libwpd\
 libwpg\
@@ -120,13 +125,14 @@ padmin\
 psprint_config\
 pyuno\
 qadevOOo\
+rdbmaker\
 readlicense_oo\
 regexp\
 registry\
 remotebridges\
 reportbuilder\
 reportdesign\
-rdbmaker\
+rhino\
 ridljar\
 rsc\
 sal\
@@ -187,7 +193,6 @@ writerfilter\
 writerperfect\
 x11_extensions\
 xmerge\
-xml2cmp\
 xmlhelp\
 xmloff\
 xmlreader\
@@ -196,7 +201,6 @@ xmlsecurity\
 xsltml\
 
 dmake_modules:=\
-beanshell\
 berkeleydb\
 binfilter \
 cairo\
@@ -218,14 +222,10 @@ hunspell\
 hyphen\
 icu\
 instsetoo_native\
-jfreereport\
-jpeg\
-languagetool\
 libcroco\
 libexttextcat\
 libgsf\
 liblangtag\
-librsvg\
 libxml2\
 libxmlsec\
 libxslt\
@@ -245,7 +245,6 @@ postgresql\
 postprocess\
 python\
 redland\
-rhino\
 setup_native\
 stax\
 stlport\
@@ -256,7 +255,7 @@ zlib\
 export gb_TAILBUILDTARGET=all slowcheck
 
 define gbuild_module_rules
-.PHONY: $(1) $(1).all $(1).clean $(1).deliver
+.PHONY: $(1) $(1).all $(1).build $(1).check $(1).clean $(1).subsequentcheck $(1).deliver
 
 $(1): bootstrap fetch
 	cd $(1) && $(GNUMAKE) -j $(GMAKE_PARALLELISM) $(GMAKE_OPTIONS) gb_PARTIALBUILD=T
@@ -269,6 +268,12 @@ $(1).all: bootstrap fetch
 		cd $(1) && unset MAKEFLAGS && \
 	) \
 	$(SOLARENV)/bin/build.pl -P$(BUILD_NCPUS) --all -- -P$(GMAKE_PARALLELISM)
+
+$(1).build:
+	cd $(1) && $(GNUMAKE) -j $(CHECK_PARALLELISM) $(GMAKE_OPTIONS) build gb_PARTIALBUILD=T
+
+$(1).check:
+	cd $(1) && $(GNUMAKE) -j $(CHECK_PARALLELISM) $(GMAKE_OPTIONS) check gb_PARTIALBUILD=T
 
 $(1).clean:
 	cd $(1) && $(GNUMAKE) -j $(GMAKE_PARALLELISM) $(GMAKE_OPTIONS) clean gb_PARTIALBUILD=T
@@ -337,6 +342,7 @@ endif
 	rm -fr $(OUTDIR)
 	rm -fr $(WORKDIR)
 	rm -fr $(SRCDIR)/*/$(INPATH)
+	rm -fr $(SRCDIR)/solenv/$(OUTPATH)
 	rm -fr install
 
 clean-build:
@@ -345,10 +351,12 @@ ifeq ($(CROSS_COMPILING),YES)
 	rm -rf $(SRCDIR)/*/$(INPATH_FOR_BUILD)
 endif
 
+include $(SRCDIR)/compilerplugins/Makefile.mk
+
 #
 # Distclean
 #
-distclean : clean
+distclean : clean compilerplugins-clean
 ifeq ($(BUILD_DMAKE),YES)
 	(if [ -f dmake/Makefile ] ; then $(GNUMAKE) -j $(GMAKE_PARALLELISM) -C dmake distclean; fi) && \
 	rm -f solenv/*/bin/dmake*
@@ -356,7 +364,8 @@ endif
 	rm -fr config_host.mk config_build.mk aclocal.m4 autom4te.cache \
     bin/repo-list config.log config.status configure \
 	ooo.lst post_download post_download.log \
-	config_host.mk.last set_soenv.stamp src.downloaded warn
+	config_host.mk.last set_soenv.stamp src.downloaded warn \
+	solenv/bin/concat-deps.exe solenv/bin/concat-deps
 	find $(SOLARENV)/gdb -name "*.pyc" -exec rm {} \;
 
 #
@@ -384,7 +393,7 @@ endif
 #
 # Bootstap
 #
-bootstrap: $(WORKDIR)/bootstrap
+bootstrap: $(WORKDIR)/bootstrap compilerplugins
 
 $(WORKDIR)/bootstrap: solenv/bin/concat-deps.c
 	@cd $(SRCDIR) && ./bootstrap

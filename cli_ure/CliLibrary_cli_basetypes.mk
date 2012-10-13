@@ -13,6 +13,8 @@ $(eval $(call gb_CliLibrary_CliLibrary,cli_basetypes))
 
 $(eval $(call gb_CliLibrary_set_configfile,cli_basetypes,cli_ure/source/basetypes/cli_basetypes_config))
 
+$(eval $(call gb_CliLibrary_set_keyfile,cli_basetypes,$(SRCDIR)/cli_ure/source/cliuno.snk))
+
 $(eval $(call gb_CliLibrary_set_policy,cli_basetypes,$(CLI_BASETYPES_POLICY_ASSEMBLY),$(CLI_BASETYPES_POLICY_VERSION)))
 
 $(eval $(call gb_CliLibrary_add_csfiles,cli_basetypes,\

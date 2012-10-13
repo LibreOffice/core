@@ -604,7 +604,6 @@ void Window::ImplInitWindowData( WindowType nType )
     mpWindowImpl->mpDlgCtrlDownWindow = NULL;         // window for dialog control
     mpWindowImpl->mpFirstDel          = NULL;         // Dtor notification list
     mpWindowImpl->mpUserData          = NULL;         // user data
-    mpWindowImpl->mpExtImpl           = NULL;         // extended implementation data
     mpWindowImpl->mpCursor            = NULL;         // cursor
     mpWindowImpl->mpControlFont       = NULL;         // font propertie
     mpWindowImpl->mpVCLXWindow        = NULL;
@@ -1180,8 +1179,6 @@ void Window::ImplCallResize()
     // #88419# Most classes don't call the base class in Resize() and Move(),
     // => Call ImpleResize/Move instead of Resize/Move directly...
     ImplCallEventListeners( VCLEVENT_WINDOW_RESIZE );
-
-    ImplExtResize();
 }
 
 // -----------------------------------------------------------------------
@@ -4258,8 +4255,6 @@ namespace
 
 Window::~Window()
 {
-    ImplFreeExtWindowImpl();
-
     vcl::LazyDeletor<Window>::Undelete( this );
 
     DBG_DTOR( Window, ImplDbgCheckWindow );
@@ -8890,7 +8885,10 @@ sal_uInt16 Window::GetAccessibleRole() const
 
             case WINDOW_HELPTEXTWINDOW: nRole = accessibility::AccessibleRole::TOOL_TIP; break;
 
-            case WINDOW_RULER:          nRole = accessibility::AccessibleRole::RULER; break;
+            case WINDOW_RULER: nRole = accessibility::AccessibleRole::RULER; break;
+
+            case WINDOW_SCROLLWINDOW: nRole = accessibility::AccessibleRole::SCROLL_PANE; break;
+
             case WINDOW_WINDOW:
             case WINDOW_CONTROL:
             case WINDOW_BORDERWINDOW:

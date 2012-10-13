@@ -448,7 +448,7 @@ void SwEditShell::MoveLeftMargin( sal_Bool bRight, sal_Bool bModulus )
 }
 
 
-inline sal_uInt16 lcl_SetScriptFlags( sal_uInt16 nType )
+static inline sal_uInt16 lcl_SetScriptFlags( sal_uInt16 nType )
 {
     sal_uInt16 nRet;
        switch( nType )
@@ -461,7 +461,7 @@ inline sal_uInt16 lcl_SetScriptFlags( sal_uInt16 nType )
     return nRet;
 }
 
-sal_Bool lcl_IsNoEndTxtAttrAtPos( const SwTxtNode& rTNd, xub_StrLen nPos,
+static sal_Bool lcl_IsNoEndTxtAttrAtPos( const SwTxtNode& rTNd, xub_StrLen nPos,
                             sal_uInt16 &rScrpt, sal_Bool bInSelection, sal_Bool bNum )
 {
     sal_Bool bRet = sal_False;

@@ -144,7 +144,7 @@ struct SpellState
             }
 };
 
-void lcl_LeaveDrawText(SwWrtShell& rSh)
+static void lcl_LeaveDrawText(SwWrtShell& rSh)
 {
     if(rSh.GetDrawView())
     {

@@ -112,7 +112,7 @@ void OWizTypeSelectControl::CellModified(long nRow, sal_uInt16 nColId )
     {
         case FIELD_PRPOERTY_COLUMNNAME:
             {
-                OCopyTableWizard* pWiz = static_cast<OCopyTableWizard*>(GetParent()->GetParent());
+                OCopyTableWizard* pWiz = static_cast<OCopyTableWizard*>(GetParentDialog());
                 // first we have to check if this name already exists
                 sal_Bool bDoubleName = sal_False;
                 sal_Bool bCase = sal_True;

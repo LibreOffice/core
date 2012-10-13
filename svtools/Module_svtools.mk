@@ -33,6 +33,7 @@ $(eval $(call gb_Module_add_targets,svtools,\
     Library_hatchwindowfactory \
     Library_svt \
     Package_inc \
+    UI_svt \
 ))
 
 ifneq ($(CROSS_COMPILING),YES)

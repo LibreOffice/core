@@ -82,7 +82,7 @@ CharacterPropertyItemConverter::CharacterPropertyItemConverter(
     const uno::Reference< beans::XPropertySet > & rPropertySet,
     SfxItemPool& rItemPool,
     ::std::auto_ptr< awt::Size > pRefSize,
-    const ::rtl::OUString & rRefSizePropertyName,
+    const OUString & rRefSizePropertyName,
     const uno::Reference< beans::XPropertySet > & rRefSizePropSet ) :
         ItemConverter( rPropertySet, rItemPool ),
         m_pRefSize( pRefSize ),
@@ -121,23 +121,23 @@ void CharacterPropertyItemConverter::FillSpecialItem(
         case EE_CHAR_FONTINFO_CJK:
         case EE_CHAR_FONTINFO_CTL:
         {
-            ::rtl::OUString aPostfix;
+            OUString aPostfix;
             if( nWhichId == EE_CHAR_FONTINFO_CJK )
-                aPostfix = C2U( "Asian" );
+                aPostfix = "Asian";
             else if( nWhichId == EE_CHAR_FONTINFO_CTL )
-                aPostfix = C2U( "Complex" );
+                aPostfix = "Complex";
 
             SvxFontItem aItem( nWhichId );
 
-            aItem.PutValue( GetPropertySet()->getPropertyValue( C2U( "CharFontName" ) + aPostfix),
+            aItem.PutValue( GetPropertySet()->getPropertyValue( "CharFontName" + aPostfix),
                             MID_FONT_FAMILY_NAME );
-            aItem.PutValue( GetPropertySet()->getPropertyValue( C2U( "CharFontFamily" ) + aPostfix),
+            aItem.PutValue( GetPropertySet()->getPropertyValue( "CharFontFamily" + aPostfix),
                             MID_FONT_FAMILY );
-            aItem.PutValue( GetPropertySet()->getPropertyValue( C2U( "CharFontStyleName" ) + aPostfix),
+            aItem.PutValue( GetPropertySet()->getPropertyValue( "CharFontStyleName" + aPostfix),
                             MID_FONT_STYLE_NAME );
-            aItem.PutValue( GetPropertySet()->getPropertyValue( C2U( "CharFontCharSet" ) + aPostfix),
+            aItem.PutValue( GetPropertySet()->getPropertyValue( "CharFontCharSet" + aPostfix),
                             MID_FONT_CHAR_SET );
-            aItem.PutValue( GetPropertySet()->getPropertyValue( C2U( "CharFontPitch" ) + aPostfix),
+            aItem.PutValue( GetPropertySet()->getPropertyValue( "CharFontPitch" + aPostfix),
                             MID_FONT_PITCH );
 
             rOutItemSet.Put( aItem );
@@ -149,14 +149,14 @@ void CharacterPropertyItemConverter::FillSpecialItem(
             SvxUnderlineItem aItem(UNDERLINE_NONE, EE_CHAR_UNDERLINE);
             bool bModified = false;
 
-            uno::Any aValue( GetPropertySet()->getPropertyValue( C2U( "CharUnderline" )));
+            uno::Any aValue( GetPropertySet()->getPropertyValue( "CharUnderline" ));
             if( aValue.hasValue())
             {
                 aItem.PutValue( aValue, MID_TL_STYLE );
                 bModified = true;
             }
 
-            aValue = GetPropertySet()->getPropertyValue( C2U( "CharUnderlineHasColor" ));
+            aValue = GetPropertySet()->getPropertyValue( "CharUnderlineHasColor" );
             if( aValue.hasValue() &&
                 ( *reinterpret_cast< const sal_Bool * >( aValue.getValue()) != sal_False ))
             {
@@ -164,7 +164,7 @@ void CharacterPropertyItemConverter::FillSpecialItem(
                 bModified = true;
             }
 
-            aValue = GetPropertySet()->getPropertyValue( C2U( "CharUnderlineColor" ));
+            aValue = GetPropertySet()->getPropertyValue( "CharUnderlineColor" );
             if( aValue.hasValue())
             {
                 aItem.PutValue( aValue, MID_TL_COLOR );
@@ -181,14 +181,14 @@ void CharacterPropertyItemConverter::FillSpecialItem(
             SvxOverlineItem aItem( UNDERLINE_NONE, EE_CHAR_OVERLINE );
             bool bModified = false;
 
-            uno::Any aValue( GetPropertySet()->getPropertyValue( C2U( "CharOverline" ) ) );
+            uno::Any aValue( GetPropertySet()->getPropertyValue( "CharOverline" ) );
             if ( aValue.hasValue() )
             {
                 aItem.PutValue( aValue, MID_TL_STYLE );
                 bModified = true;
             }
 
-            aValue = GetPropertySet()->getPropertyValue( C2U( "CharOverlineHasColor" ) );
+            aValue = GetPropertySet()->getPropertyValue( "CharOverlineHasColor" );
             if ( aValue.hasValue() &&
                  ( *reinterpret_cast< const sal_Bool* >( aValue.getValue() ) != sal_False ) )
             {
@@ -196,7 +196,7 @@ void CharacterPropertyItemConverter::FillSpecialItem(
                 bModified = true;
             }
 
-            aValue = GetPropertySet()->getPropertyValue( C2U( "CharOverlineColor" ) );
+            aValue = GetPropertySet()->getPropertyValue( "CharOverlineColor" );
             if ( aValue.hasValue() )
             {
                 aItem.PutValue( aValue, MID_TL_COLOR );
@@ -214,15 +214,15 @@ void CharacterPropertyItemConverter::FillSpecialItem(
         case EE_CHAR_ITALIC_CJK:
         case EE_CHAR_ITALIC_CTL:
         {
-            ::rtl::OUString aPostfix;
+            OUString aPostfix;
             if( nWhichId == EE_CHAR_ITALIC_CJK )
-                aPostfix = C2U( "Asian" );
+                aPostfix = "Asian";
             else if( nWhichId == EE_CHAR_ITALIC_CTL )
-                aPostfix = C2U( "Complex" );
+                aPostfix = "Complex";
 
             SvxPostureItem aItem( ITALIC_NONE, nWhichId );
 
-            uno::Any aValue( GetPropertySet()->getPropertyValue( C2U( "CharPosture" ) + aPostfix));
+            uno::Any aValue( GetPropertySet()->getPropertyValue( "CharPosture" + aPostfix));
             if( aValue.hasValue())
             {
                 aItem.PutValue( aValue, MID_POSTURE );
@@ -235,15 +235,15 @@ void CharacterPropertyItemConverter::FillSpecialItem(
         case EE_CHAR_WEIGHT_CJK:
         case EE_CHAR_WEIGHT_CTL:
         {
-            ::rtl::OUString aPostfix;
+            OUString aPostfix;
             if( nWhichId == EE_CHAR_WEIGHT_CJK )
-                aPostfix = C2U( "Asian" );
+                aPostfix = "Asian";
             else if( nWhichId == EE_CHAR_WEIGHT_CTL )
-                aPostfix = C2U( "Complex" );
+                aPostfix = "Complex";
 
             SvxWeightItem aItem( WEIGHT_NORMAL, nWhichId );
 
-            uno::Any aValue( GetPropertySet()->getPropertyValue( C2U( "CharWeight" ) + aPostfix));
+            uno::Any aValue( GetPropertySet()->getPropertyValue( "CharWeight" + aPostfix));
             if( aValue.hasValue())
             {
                 aItem.PutValue( aValue, MID_WEIGHT );
@@ -256,17 +256,17 @@ void CharacterPropertyItemConverter::FillSpecialItem(
         case EE_CHAR_FONTHEIGHT_CJK:
         case EE_CHAR_FONTHEIGHT_CTL:
         {
-            ::rtl::OUString aPostfix;
+            OUString aPostfix;
             if( nWhichId == EE_CHAR_FONTHEIGHT_CJK )
-                aPostfix = C2U( "Asian" );
+                aPostfix = "Asian";
             else if( nWhichId == EE_CHAR_FONTHEIGHT_CTL )
-                aPostfix = C2U( "Complex" );
+                aPostfix = "Complex";
 
             SvxFontHeightItem aItem( 240, 100, nWhichId );
 
             try
             {
-                uno::Any aValue( GetPropertySet()->getPropertyValue( C2U( "CharHeight" ) + aPostfix ));
+                uno::Any aValue( GetPropertySet()->getPropertyValue( "CharHeight" + aPostfix ));
                 float fHeight;
                 if( aValue >>= fHeight )
                 {
@@ -298,11 +298,11 @@ void CharacterPropertyItemConverter::FillSpecialItem(
             uno::Reference< chart2::XFormattedString > xFormattedString( GetPropertySet(), uno::UNO_QUERY );
             if( xFormattedString.is() )
             {
-                ::rtl::OUString aString = xFormattedString->getString();
+                OUString aString = xFormattedString->getString();
                 rOutItemSet.Put( SfxStringItem( nWhichId, aString ) );
             }
             else
-                rOutItemSet.Put( SfxStringItem( nWhichId, C2U( "" ) ) );
+                rOutItemSet.Put( SfxStringItem( nWhichId, OUString("") ) );
         }
         break;
 
@@ -326,11 +326,11 @@ bool CharacterPropertyItemConverter::ApplySpecialItem(
         case EE_CHAR_FONTINFO_CJK:
         case EE_CHAR_FONTINFO_CTL:
         {
-            ::rtl::OUString aPostfix;
+            OUString aPostfix;
             if( nWhichId == EE_CHAR_FONTINFO_CJK )
-                aPostfix = C2U( "Asian" );
+                aPostfix = "Asian";
             else if( nWhichId == EE_CHAR_FONTINFO_CTL )
-                aPostfix = C2U( "Complex" );
+                aPostfix = "Complex";
 
             const SvxFontItem & rItem =
                 static_cast< const SvxFontItem & >(
@@ -338,41 +338,41 @@ bool CharacterPropertyItemConverter::ApplySpecialItem(
 
             if( rItem.QueryValue( aValue, MID_FONT_FAMILY_NAME ))
             {
-                if( aValue != GetPropertySet()->getPropertyValue( C2U( "CharFontName" ) + aPostfix ))
+                if( aValue != GetPropertySet()->getPropertyValue( "CharFontName" + aPostfix ))
                 {
-                    GetPropertySet()->setPropertyValue( C2U( "CharFontName" ) + aPostfix, aValue );
+                    GetPropertySet()->setPropertyValue( "CharFontName" + aPostfix, aValue );
                     bChanged = true;
                 }
             }
             if( rItem.QueryValue( aValue, MID_FONT_FAMILY ))
             {
-                if( aValue != GetPropertySet()->getPropertyValue( C2U( "CharFontFamily" ) + aPostfix ))
+                if( aValue != GetPropertySet()->getPropertyValue( "CharFontFamily" + aPostfix ))
                 {
-                    GetPropertySet()->setPropertyValue( C2U( "CharFontFamily" ) + aPostfix, aValue );
+                    GetPropertySet()->setPropertyValue( "CharFontFamily" + aPostfix, aValue );
                     bChanged = true;
                 }
             }
             if( rItem.QueryValue( aValue, MID_FONT_STYLE_NAME ))
             {
-                if( aValue != GetPropertySet()->getPropertyValue( C2U( "CharFontStyleName" ) + aPostfix ))
+                if( aValue != GetPropertySet()->getPropertyValue( "CharFontStyleName" + aPostfix ))
                 {
-                    GetPropertySet()->setPropertyValue( C2U( "CharFontStyleName" ) + aPostfix, aValue );
+                    GetPropertySet()->setPropertyValue( "CharFontStyleName" + aPostfix, aValue );
                     bChanged = true;
                 }
             }
             if( rItem.QueryValue( aValue, MID_FONT_CHAR_SET ))
             {
-                if( aValue != GetPropertySet()->getPropertyValue( C2U( "CharFontCharSet" ) + aPostfix ))
+                if( aValue != GetPropertySet()->getPropertyValue( "CharFontCharSet" + aPostfix ))
                 {
-                    GetPropertySet()->setPropertyValue( C2U( "CharFontCharSet" ) + aPostfix, aValue );
+                    GetPropertySet()->setPropertyValue( "CharFontCharSet" + aPostfix, aValue );
                     bChanged = true;
                 }
             }
             if( rItem.QueryValue( aValue, MID_FONT_PITCH ))
             {
-                if( aValue != GetPropertySet()->getPropertyValue( C2U( "CharFontPitch" ) + aPostfix ))
+                if( aValue != GetPropertySet()->getPropertyValue( "CharFontPitch" + aPostfix ))
                 {
-                    GetPropertySet()->setPropertyValue( C2U( "CharFontPitch" ) + aPostfix, aValue );
+                    GetPropertySet()->setPropertyValue( "CharFontPitch" + aPostfix, aValue );
                     bChanged = true;
                 }
             }
@@ -387,27 +387,27 @@ bool CharacterPropertyItemConverter::ApplySpecialItem(
 
             if( rItem.QueryValue( aValue, MID_TL_STYLE ))
             {
-                if( aValue != GetPropertySet()->getPropertyValue( C2U( "CharUnderline" ) ))
+                if( aValue != GetPropertySet()->getPropertyValue( "CharUnderline" ))
                 {
-                    GetPropertySet()->setPropertyValue( C2U( "CharUnderline" ), aValue );
+                    GetPropertySet()->setPropertyValue( "CharUnderline" , aValue );
                     bChanged = true;
                 }
             }
 
             if( rItem.QueryValue( aValue, MID_TL_COLOR ))
             {
-                if( aValue != GetPropertySet()->getPropertyValue( C2U( "CharUnderlineColor" ) ))
+                if( aValue != GetPropertySet()->getPropertyValue( "CharUnderlineColor" ))
                 {
-                    GetPropertySet()->setPropertyValue( C2U( "CharUnderlineColor" ), aValue );
+                    GetPropertySet()->setPropertyValue( "CharUnderlineColor" , aValue );
                     bChanged = true;
                 }
             }
 
             if( rItem.QueryValue( aValue, MID_TL_HASCOLOR ))
             {
-                if( aValue != GetPropertySet()->getPropertyValue( C2U( "CharUnderlineHasColor" ) ))
+                if( aValue != GetPropertySet()->getPropertyValue( "CharUnderlineHasColor" ))
                 {
-                    GetPropertySet()->setPropertyValue( C2U( "CharUnderlineHasColor" ), aValue );
+                    GetPropertySet()->setPropertyValue( "CharUnderlineHasColor" , aValue );
                     bChanged = true;
                 }
             }
@@ -420,27 +420,27 @@ bool CharacterPropertyItemConverter::ApplySpecialItem(
 
             if ( rItem.QueryValue( aValue, MID_TL_STYLE ) )
             {
-                if ( aValue != GetPropertySet()->getPropertyValue( C2U( "CharOverline" ) ) )
+                if ( aValue != GetPropertySet()->getPropertyValue( "CharOverline" ) )
                 {
-                    GetPropertySet()->setPropertyValue( C2U( "CharOverline" ), aValue );
+                    GetPropertySet()->setPropertyValue( "CharOverline" , aValue );
                     bChanged = true;
                 }
             }
 
             if ( rItem.QueryValue( aValue, MID_TL_COLOR ) )
             {
-                if ( aValue != GetPropertySet()->getPropertyValue( C2U( "CharOverlineColor" ) ) )
+                if ( aValue != GetPropertySet()->getPropertyValue( "CharOverlineColor" ) )
                 {
-                    GetPropertySet()->setPropertyValue( C2U( "CharOverlineColor" ), aValue );
+                    GetPropertySet()->setPropertyValue( "CharOverlineColor" , aValue );
                     bChanged = true;
                 }
             }
 
             if ( rItem.QueryValue( aValue, MID_TL_HASCOLOR ) )
             {
-                if ( aValue != GetPropertySet()->getPropertyValue( C2U( "CharOverlineHasColor" ) ) )
+                if ( aValue != GetPropertySet()->getPropertyValue( "CharOverlineHasColor" ) )
                 {
-                    GetPropertySet()->setPropertyValue( C2U( "CharOverlineHasColor" ), aValue );
+                    GetPropertySet()->setPropertyValue( "CharOverlineHasColor" , aValue );
                     bChanged = true;
                 }
             }
@@ -451,11 +451,11 @@ bool CharacterPropertyItemConverter::ApplySpecialItem(
         case EE_CHAR_ITALIC_CJK:
         case EE_CHAR_ITALIC_CTL:
         {
-            ::rtl::OUString aPostfix;
+            OUString aPostfix;
             if( nWhichId == EE_CHAR_ITALIC_CJK )
-                aPostfix = C2U( "Asian" );
+                aPostfix = "Asian";
             else if( nWhichId == EE_CHAR_ITALIC_CTL )
-                aPostfix = C2U( "Complex" );
+                aPostfix = "Complex";
 
             const SvxPostureItem & rItem =
                 static_cast< const SvxPostureItem & >(
@@ -463,9 +463,9 @@ bool CharacterPropertyItemConverter::ApplySpecialItem(
 
             if( rItem.QueryValue( aValue, MID_POSTURE ))
             {
-                if( aValue != GetPropertySet()->getPropertyValue( C2U( "CharPosture" ) + aPostfix))
+                if( aValue != GetPropertySet()->getPropertyValue( "CharPosture" + aPostfix))
                 {
-                    GetPropertySet()->setPropertyValue( C2U( "CharPosture" ) + aPostfix, aValue );
+                    GetPropertySet()->setPropertyValue( "CharPosture" + aPostfix, aValue );
                     bChanged = true;
                 }
             }
@@ -476,11 +476,11 @@ bool CharacterPropertyItemConverter::ApplySpecialItem(
         case EE_CHAR_WEIGHT_CJK:
         case EE_CHAR_WEIGHT_CTL:
         {
-            ::rtl::OUString aPostfix;
+            OUString aPostfix;
             if( nWhichId == EE_CHAR_WEIGHT_CJK )
-                aPostfix = C2U( "Asian" );
+                aPostfix = "Asian" ;
             else if( nWhichId == EE_CHAR_WEIGHT_CTL )
-                aPostfix = C2U( "Complex" );
+                aPostfix = "Complex";
 
             const SvxWeightItem & rItem =
                 static_cast< const SvxWeightItem & >(
@@ -488,9 +488,9 @@ bool CharacterPropertyItemConverter::ApplySpecialItem(
 
             if( rItem.QueryValue( aValue, MID_WEIGHT ))
             {
-                if( aValue != GetPropertySet()->getPropertyValue( C2U( "CharWeight" ) + aPostfix))
+                if( aValue != GetPropertySet()->getPropertyValue( "CharWeight" + aPostfix))
                 {
-                    GetPropertySet()->setPropertyValue( C2U( "CharWeight" ) + aPostfix, aValue );
+                    GetPropertySet()->setPropertyValue( "CharWeight" + aPostfix, aValue );
                     bChanged = true;
                 }
             }
@@ -501,11 +501,11 @@ bool CharacterPropertyItemConverter::ApplySpecialItem(
         case EE_CHAR_FONTHEIGHT_CJK:
         case EE_CHAR_FONTHEIGHT_CTL:
         {
-            ::rtl::OUString aPostfix;
+            OUString aPostfix;
             if( nWhichId == EE_CHAR_FONTHEIGHT_CJK )
-                aPostfix = C2U( "Asian" );
+                aPostfix = "Asian";
             else if( nWhichId == EE_CHAR_FONTHEIGHT_CTL )
-                aPostfix = C2U( "Complex" );
+                aPostfix = "Complex";
 
             const SvxFontHeightItem & rItem =
                 static_cast< const SvxFontHeightItem & >(
@@ -516,7 +516,7 @@ bool CharacterPropertyItemConverter::ApplySpecialItem(
                 if( rItem.QueryValue( aValue, MID_FONTHEIGHT ) )
                 {
                     bool bSetValue = false;
-                    if( aValue != GetPropertySet()->getPropertyValue( C2U( "CharHeight" ) + aPostfix ))
+                    if( aValue != GetPropertySet()->getPropertyValue( "CharHeight" + aPostfix ))
                         bSetValue = true;
                     else
                     {
@@ -542,7 +542,7 @@ bool CharacterPropertyItemConverter::ApplySpecialItem(
                                                                     uno::makeAny( *m_pRefSize ));
                         }
 
-                        GetPropertySet()->setPropertyValue( C2U( "CharHeight" ) + aPostfix, aValue );
+                        GetPropertySet()->setPropertyValue( "CharHeight" + aPostfix, aValue );
                         bChanged = true;
                     }
                 }

@@ -243,10 +243,6 @@ struct FilterErrorEx
 {
     sal_uLong   nFilterError;
     sal_uLong   nStreamError;
-    long    nDummy1;
-    long    nDummy2;
-    long    nDummy3;
-    long    nDummy4;
 
             FilterErrorEx() : nFilterError( 0UL ), nStreamError( 0UL ) {}
 };
@@ -274,14 +270,7 @@ protected:
     FilterErrorEx*      pErrorEx;
     sal_Bool            bAbort;
     sal_Bool            bUseConfig;
-    sal_Bool            bDummy1;
-    sal_Bool            bDummy2;
-    sal_Bool            bDummy3;
-    sal_Bool            bDummy4;
     long                nExpGraphHint;
-    long                nDummy2;
-    void*               pDummy1;
-    void*               pDummy2;
 
 public:
 

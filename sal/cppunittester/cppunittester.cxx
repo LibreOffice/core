@@ -224,15 +224,17 @@ SAL_IMPLEMENT_MAIN() {
         modules.push_back(new osl::Module(lib, SAL_LOADMODULE_GLOBAL));
         oslGenericFunction fn = modules.back().getFunctionSymbol(sym);
 #else
-        oslGenericFunction fn;
+        oslGenericFunction fn = 0;
         if (sym == "unoexceptionprotector")
             fn = (oslGenericFunction) unoexceptionprotector;
         else if (sym == "unobootstrapprotector")
             fn = (oslGenericFunction) unobootstrapprotector;
         else
         {
-            fprintf(stderr, "Only unoexceptionprotector or unobootstrapprotector protectors allowed\n");
-            assert(!"unrecognized protector");
+            std::cerr
+                << "Only unoexceptionprotector or unobootstrapprotector protectors allowed"
+                << std::endl;
+            std::exit(EXIT_FAILURE);
         }
 #endif
         CppUnit::Protector *protector = fn == 0

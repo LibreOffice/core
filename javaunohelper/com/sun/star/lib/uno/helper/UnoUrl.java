@@ -48,8 +48,6 @@ import java.util.ArrayList;
  * <code>
  *   UnoUrl url = UnoUrl.parseUnoUrl("socket,host=localhost,port=2002;urp;StarOffice.ServiceManager");
  * </code>
- *
- * @author Joerg Brunsmann
  */
 public class UnoUrl {
 

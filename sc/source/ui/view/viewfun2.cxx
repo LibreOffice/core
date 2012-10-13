@@ -218,7 +218,7 @@ enum ScAutoSum
 };
 
 
-ScAutoSum lcl_IsAutoSumData( ScDocument* pDoc, SCCOL nCol, SCROW nRow,
+static ScAutoSum lcl_IsAutoSumData( ScDocument* pDoc, SCCOL nCol, SCROW nRow,
         SCTAB nTab, ScDirection eDir, SCCOLROW& nExtend )
 {
     ScBaseCell* pCell;
@@ -245,7 +245,7 @@ ScAutoSum lcl_IsAutoSumData( ScDocument* pDoc, SCCOL nCol, SCROW nRow,
 
 #define SC_AUTOSUM_MAXCOUNT     20
 
-ScAutoSum lcl_SeekAutoSumData( ScDocument* pDoc, SCCOL& nCol, SCROW& nRow,
+static ScAutoSum lcl_SeekAutoSumData( ScDocument* pDoc, SCCOL& nCol, SCROW& nRow,
         SCTAB nTab, ScDirection eDir, SCCOLROW& nExtend )
 {
     sal_uInt16 nCount = 0;
@@ -278,7 +278,7 @@ ScAutoSum lcl_SeekAutoSumData( ScDocument* pDoc, SCCOL& nCol, SCROW& nRow,
 
 //----------------------------------------------------------------------------
 
-bool lcl_FindNextSumEntryInColumn( ScDocument* pDoc, SCCOL nCol, SCROW& nRow,
+static bool lcl_FindNextSumEntryInColumn( ScDocument* pDoc, SCCOL nCol, SCROW& nRow,
                                    SCTAB nTab, SCCOLROW& nExtend, SCROW nMinRow )
 {
     const SCROW nTmp = nRow;
@@ -297,7 +297,7 @@ bool lcl_FindNextSumEntryInColumn( ScDocument* pDoc, SCCOL nCol, SCROW& nRow,
 
 //----------------------------------------------------------------------------
 
-bool lcl_FindNextSumEntryInRow( ScDocument* pDoc, SCCOL& nCol, SCROW nRow,
+static bool lcl_FindNextSumEntryInRow( ScDocument* pDoc, SCCOL& nCol, SCROW nRow,
                                 SCTAB nTab, SCCOLROW& nExtend, SCROW nMinCol )
 {
     const SCCOL nTmp = nCol;
@@ -316,7 +316,7 @@ bool lcl_FindNextSumEntryInRow( ScDocument* pDoc, SCCOL& nCol, SCROW nRow,
 
 //----------------------------------------------------------------------------
 
-bool lcl_GetAutoSumForColumnRange( ScDocument* pDoc, ScRangeList& rRangeList, const ScRange& rRange )
+static bool lcl_GetAutoSumForColumnRange( ScDocument* pDoc, ScRangeList& rRangeList, const ScRange& rRange )
 {
     const ScAddress aStart = rRange.aStart;
     const ScAddress aEnd = rRange.aEnd;
@@ -360,7 +360,7 @@ bool lcl_GetAutoSumForColumnRange( ScDocument* pDoc, ScRangeList& rRangeList, co
 
 //----------------------------------------------------------------------------
 
-bool lcl_GetAutoSumForRowRange( ScDocument* pDoc, ScRangeList& rRangeList, const ScRange& rRange )
+static bool lcl_GetAutoSumForRowRange( ScDocument* pDoc, ScRangeList& rRangeList, const ScRange& rRange )
 {
     const ScAddress aStart = rRange.aStart;
     const ScAddress aEnd = rRange.aEnd;

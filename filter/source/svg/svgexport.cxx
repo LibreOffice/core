@@ -89,6 +89,7 @@ static const char    aOOOAttrDateTimeField[] = NSPREFIX "date-time-field";
 static const char    aOOOAttrFooterField[] = NSPREFIX "footer-field";
 static const char    aOOOAttrHeaderField[] = NSPREFIX "header-field";
 static const char    aOOOAttrHasTransition[] = NSPREFIX "has-transition";
+static const char    aOOOAttrIdList[] = NSPREFIX "id-list";
 
 // ooo xml attributes for pages and shapes
 static const char    aOOOAttrName[] = NSPREFIX "name";
@@ -329,12 +330,13 @@ SVGExport::SVGExport(
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
     const Reference< XDocumentHandler >& rxHandler,
     const Sequence< PropertyValue >& rFilterData )
-        : SvXMLExport( util::MeasureUnit::MM_100TH, xServiceFactory )
+    : SvXMLExport( util::MeasureUnit::MM_100TH,
+                   xServiceFactory,
+                   xmloff::token::XML_TOKEN_INVALID,
+                   EXPORT_META|EXPORT_PRETTY )
         , mrFilterData( rFilterData )
 {
     SetDocHandler( rxHandler );
-    sal_uInt16 nExportFlags = getExportFlags() | EXPORT_PRETTY;
-    setExportFlags( nExportFlags );
     GetDocHandler()->startDocument();
 }
 
@@ -351,7 +353,7 @@ sal_Bool SVGExport::IsUseTinyProfile() const
 {
     sal_Bool bRet = sal_False;
 
-    if( mrFilterData.getLength() > 0 )
+    if( IsUsePositionedCharacters() && mrFilterData.getLength() > 0 )
         mrFilterData[ 0 ].Value >>= bRet;
 
     return bRet;
@@ -363,7 +365,7 @@ sal_Bool SVGExport::IsEmbedFonts() const
 {
     sal_Bool bRet = sal_False;
 
-    if( mrFilterData.getLength() > 1 )
+    if( IsUsePositionedCharacters() && mrFilterData.getLength() > 1 )
         mrFilterData[ 1 ].Value >>= bRet;
 
     return bRet;
@@ -392,6 +394,18 @@ sal_Bool SVGExport::IsUseOpacity() const
 
     return bRet;
 }
+
+// -----------------------------------------------------------------------------
+
+sal_Bool SVGExport::IsUsePositionedCharacters() const
+{
+    sal_Bool bRet = sal_False;
+    if( mrFilterData.getLength() > 6 )
+        mrFilterData[ 6 ].Value >>= bRet;
+
+    return bRet;
+}
+
 
 // ------------------------
 // - ObjectRepresentation -
@@ -446,6 +460,102 @@ sal_Bool ObjectRepresentation::operator==( const ObjectRepresentation& rPresenta
     return( ( mxObject == rPresentation.mxObject ) &&
             ( *mpMtf == *rPresentation.mpMtf ) );
 }
+
+// -----------------------------------------------------------------------------
+
+sal_uLong GetBitmapChecksum( const MetaAction* pAction )
+{
+    sal_uLong nChecksum = 0;
+    const sal_uInt16 nType = pAction->GetType();
+
+    switch( nType )
+    {
+        case( META_BMPSCALE_ACTION ):
+        {
+            const MetaBmpScaleAction* pA = (const MetaBmpScaleAction*) pAction;
+            if( pA  )
+                nChecksum = pA->GetBitmap().GetChecksum();
+            else
+                OSL_FAIL( "GetBitmapChecksum: MetaBmpScaleAction pointer is null." );
+        }
+        break;
+        case( META_BMPEXSCALE_ACTION ):
+        {
+            const MetaBmpExScaleAction* pA = (const MetaBmpExScaleAction*) pAction;
+            if( pA )
+                nChecksum = pA->GetBitmapEx().GetChecksum();
+            else
+                OSL_FAIL( "GetBitmapChecksum: MetaBmpExScaleAction pointer is null." );
+        }
+        break;
+    }
+    return nChecksum;
+}
+// -----------------------------------------------------------------------------
+
+void MetaBitmapActionGetPoint( const MetaAction* pAction, Point& rPt )
+{
+    const sal_uInt16 nType = pAction->GetType();
+    switch( nType )
+    {
+        case( META_BMPSCALE_ACTION ):
+        {
+            const MetaBmpScaleAction* pA = (const MetaBmpScaleAction*) pAction;
+            if( pA  )
+                rPt = pA->GetPoint();
+            else
+                OSL_FAIL( "MetaBitmapActionGetPoint: MetaBmpScaleAction pointer is null." );
+        }
+        break;
+        case( META_BMPEXSCALE_ACTION ):
+        {
+            const MetaBmpExScaleAction* pA = (const MetaBmpExScaleAction*) pAction;
+            if( pA )
+                rPt = pA->GetPoint();
+            else
+                OSL_FAIL( "MetaBitmapActionGetPoint: MetaBmpExScaleAction pointer is null." );
+        }
+        break;
+    }
+
+}
+
+// -----------------------------------------------------------------------------
+
+size_t HashBitmap::operator()( const ObjectRepresentation& rObjRep ) const
+{
+    const GDIMetaFile& aMtf = rObjRep.GetRepresentation();
+    if( aMtf.GetActionSize() == 1 )
+    {
+        return static_cast< size_t >( GetBitmapChecksum( aMtf.GetAction( 0 ) ) );
+    }
+    else
+    {
+        OSL_FAIL( "HashBitmap: metafile should have a single action." );
+        return 0;
+    }
+}
+
+// -----------------------------------------------------------------------------
+
+bool EqualityBitmap::operator()( const ObjectRepresentation& rObjRep1,
+                                     const ObjectRepresentation& rObjRep2 ) const
+{
+    const GDIMetaFile& aMtf1 = rObjRep1.GetRepresentation();
+    const GDIMetaFile& aMtf2 = rObjRep2.GetRepresentation();
+    if( aMtf1.GetActionSize() == 1 && aMtf2.GetActionSize() == 1 )
+    {
+        sal_uLong nChecksum1 = GetBitmapChecksum( aMtf1.GetAction( 0 ) );
+        sal_uLong nChecksum2 = GetBitmapChecksum( aMtf2.GetAction( 0 ) );
+        return ( nChecksum1 == nChecksum2 );
+    }
+    else
+    {
+        OSL_FAIL( "EqualityBitmap: metafile should have a single action." );
+        return false;
+    }
+}
+
 
 // -------------
 // - SVGFilter -
@@ -629,7 +739,6 @@ Reference< XDocumentHandler > SVGFilter::implCreateExportDocumentHandler( const 
 
 // -----------------------------------------------------------------------------
 
-inline
 sal_Bool SVGFilter::implLookForFirstVisiblePage()
 {
     sal_Int32 nCurPage = 0, nLastPage = mSelectedPages.getLength() - 1;
@@ -672,7 +781,6 @@ sal_Bool SVGFilter::implExportDocument()
 
     mbSinglePage = (nLastPage == 0) || !bExperimentalMode;
     mnVisiblePage = -1;
-//    mnVisibleMasterPage = -1;
 
     const Reference< XPropertySet >             xDefaultPagePropertySet( mxDefaultPage, UNO_QUERY );
     const Reference< XExtendedDocumentHandler > xExtDocHandler( mpSVGExport->GetDocHandler(), UNO_QUERY );
@@ -727,21 +835,9 @@ sal_Bool SVGFilter::implExportDocument()
     // standard line width is based on 1 pixel on a 90 DPI device (0.28222mmm)
     mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "stroke-width", OUString::valueOf( 28.222 ) );
     mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "stroke-linejoin", B2UCONST( "round" ) );
-
-    if( !mbSinglePage )
-    {
-        mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "xmlns:ooo", B2UCONST( "http://xml.openoffice.org/svg/export" ) );
-    }
-
-
     mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "xmlns", B2UCONST( "http://www.w3.org/2000/svg" ) );
+    mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "xmlns:ooo", B2UCONST( "http://xml.openoffice.org/svg/export" ) );
     mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "xmlns:xlink", B2UCONST( "http://www.w3.org/1999/xlink" ) );
-
-    mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "xmlns:draw", B2UCONST( "urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" ) );
-    mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "xmlns:presentation", B2UCONST( "urn:oasis:names:tc:opendocument:xmlns:presentation:1.0" ) );
-    mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "xmlns:smil", B2UCONST( "urn:oasis:names:tc:opendocument:xmlns:smil-compatible:1.0" ) );
-    mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "xmlns:anim", B2UCONST( "urn:oasis:names:tc:opendocument:xmlns:animation:1.0" ) );
-
     mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "xml:space", B2UCONST( "preserve" ) );
 
     mpSVGDoc = new SvXMLElementExport( *mpSVGExport, XML_NAMESPACE_NONE, "svg", sal_True, sal_True );
@@ -793,12 +889,16 @@ sal_Bool SVGFilter::implExportDocument()
             mpSVGFontExport = new SVGFontExport( *mpSVGExport, aObjects );
             mpSVGWriter = new SVGActionWriter( *mpSVGExport, *mpSVGFontExport );
 
-
             if( mpSVGExport->IsEmbedFonts() )
             {
                 mpSVGFontExport->EmbedFonts();
             }
-
+            if( !mpSVGExport->IsUsePositionedCharacters() )
+            {
+                implExportTextShapeIndex();
+                implEmbedBulletGlyphs();
+                implExportTextEmbeddedBitmaps();
+            }
             implExportMasterPages( mMasterPageTargets, 0, mMasterPageTargets.getLength() - 1 );
             implExportDrawPages( mSelectedPages, 0, nLastPage );
 
@@ -1018,7 +1118,8 @@ sal_Bool SVGFilter::implGenerateMetaData()
                         // We look for a slide transition.
                         // Transition properties are exported together with animations.
                         sal_Int16 nTransitionType(0);
-                        if( xPropSet->getPropertyValue( B2UCONST( "TransitionType" ) )  >>= nTransitionType )
+                        if( xPropSet->getPropertySetInfo()->hasPropertyByName( "TransitionType" ) &&
+                            (xPropSet->getPropertyValue( "TransitionType" ) >>= nTransitionType) )
                         {
                             sal_Int16 nTransitionSubType(0);
                             if( xPropSet->getPropertyValue( B2UCONST( "TransitionSubtype" ) )  >>= nTransitionSubType )
@@ -1045,10 +1146,14 @@ sal_Bool SVGFilter::implGenerateMetaData()
                     sElemId += OUString::valueOf( i );
                     mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "id", sElemId );
                     aFieldSet[i]->elementExport( mpSVGExport );
-
-                    aFieldSet[i]->growCharSet( mTextFieldCharSets );
                 }
-
+                if( mpSVGExport->IsEmbedFonts() && mpSVGExport->IsUsePositionedCharacters() )
+                {
+                    for( sal_Int32 i = 0, nSize = aFieldSet.size(); i < nSize; ++i )
+                    {
+                        aFieldSet[i]->growCharSet( mTextFieldCharSets );
+                    }
+                }
             }
             // text fields are used only for generating meta info so we don't need them anymore
             for( sal_uInt32 i = 0; i < aFieldSet.size(); ++i )
@@ -1078,7 +1183,7 @@ sal_Bool SVGFilter::implExportAnimations()
     {
         Reference< XPropertySet > xProps( mSelectedPages[i], UNO_QUERY );
 
-        if( xProps.is() )
+        if( xProps.is() && xProps->getPropertySetInfo()->hasPropertyByName( "TransitionType" ) )
         {
             sal_Int16 nTransition = 0;
             xProps->getPropertyValue(  B2UCONST( "TransitionType" ) )  >>= nTransition;
@@ -1131,6 +1236,155 @@ sal_Bool SVGFilter::implExportAnimations()
     return bRet;
 }
 
+// -----------------------------------------------------------------------------
+
+void SVGFilter::implExportTextShapeIndex()
+{
+    mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "class", B2UCONST( "TextShapeIndex" )  );
+    SvXMLElementExport aDefsContainerElem( *mpSVGExport, XML_NAMESPACE_NONE, "defs", sal_True, sal_True );
+
+    sal_Int32 nCount = mSelectedPages.getLength();
+    for( sal_Int32 i = 0; i < nCount; ++i )
+    {
+        const Reference< XDrawPage > & xDrawPage = mSelectedPages[i];
+        if( mTextShapeIdListMap.find( xDrawPage ) != mTextShapeIdListMap.end() )
+        {
+            OUString sTextShapeIdList = mTextShapeIdListMap[xDrawPage].trim();
+
+            Reference< XInterface > xRef( xDrawPage, UNO_QUERY );
+            const OUString& rPageId = implGetValidIDFromInterface( xRef );
+            if( !rPageId.isEmpty() && !sTextShapeIdList.isEmpty() )
+            {
+                mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, aOOOAttrSlide, rPageId  );
+                mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, aOOOAttrIdList, sTextShapeIdList );
+                SvXMLElementExport aGElem( *mpSVGExport, XML_NAMESPACE_NONE, "g", sal_True, sal_True );
+            }
+        }
+    }
+}
+
+// -----------------------------------------------------------------------------
+
+void SVGFilter::implEmbedBulletGlyphs()
+{
+    mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "class", B2UCONST( "EmbeddedBulletChars" )  );
+    SvXMLElementExport aDefsContainerElem( *mpSVGExport, XML_NAMESPACE_NONE, "defs", sal_True, sal_True );
+
+    OUString sPathData =  B2UCONST( "M 580,1141 L 1163,571 580,0 -4,571 580,1141 Z" );
+    implEmbedBulletGlyph( 57356, sPathData );
+    sPathData =  B2UCONST( "M 8,1128 L 1137,1128 1137,0 8,0 8,1128 Z" );
+    implEmbedBulletGlyph( 57354, sPathData );
+    sPathData =  B2UCONST( "M 174,0 L 602,739 174,1481 1456,739 174,0 Z M 1358,739 L 309,1346 659,739 1358,739 Z" );
+    implEmbedBulletGlyph( 10146, sPathData );
+    sPathData =  B2UCONST( "M 2015,739 L 1276,0 717,0 1260,543 174,543 174,936 1260,936 717,1481 1274,1481 2015,739 Z" );
+    implEmbedBulletGlyph( 10132, sPathData );
+    sPathData =  B2UCONST( "M 0,-2 C -7,14 -16,27 -25,37 L 356,567 C 262,823 215,952 215,954 215,979 228,992 255,992 264,992 276,990 289,987 310,991 331,999 354,1012 L 381,999 492,748 772,1049 836,1024 860,1049 C 881,1039 901,1025 922,1006 886,937 835,863 770,784 769,783 710,716 594,584 L 774,223 C 774,196 753,168 711,139 L 727,119 C 717,90 699,76 672,76 641,76 570,178 457,381 L 164,-76 C 142,-110 111,-127 72,-127 30,-127 9,-110 8,-76 1,-67 -2,-52 -2,-32 -2,-23 -1,-13 0,-2 Z" );
+    implEmbedBulletGlyph( 10007, sPathData );
+    sPathData =  B2UCONST( "M 285,-33 C 182,-33 111,30 74,156 52,228 41,333 41,471 41,549 55,616 82,672 116,743 169,778 240,778 293,778 328,747 346,684 L 369,508 C 377,444 397,411 428,410 L 1163,1116 C 1174,1127 1196,1133 1229,1133 1271,1133 1292,1118 1292,1087 L 1292,965 C 1292,929 1282,901 1262,881 L 442,47 C 390,-6 338,-33 285,-33 Z" );
+    implEmbedBulletGlyph( 10004, sPathData );
+    sPathData =  B2UCONST( "M 813,0 C 632,0 489,54 383,161 276,268 223,411 223,592 223,773 276,916 383,1023 489,1130 632,1184 813,1184 992,1184 1136,1130 1245,1023 1353,916 1407,772 1407,592 1407,412 1353,268 1245,161 1136,54 992,0 813,0 Z" );
+    implEmbedBulletGlyph( 9679, sPathData );
+    sPathData =  B2UCONST( "M 346,457 C 273,457 209,483 155,535 101,586 74,649 74,723 74,796 101,859 155,911 209,963 273,989 346,989 419,989 480,963 531,910 582,859 608,796 608,723 608,648 583,586 532,535 482,483 420,457 346,457 Z" );
+    implEmbedBulletGlyph( 8226, sPathData );
+    sPathData =  B2UCONST( "M -4,459 L 1135,459 1135,606 -4,606 -4,459 Z" );
+    implEmbedBulletGlyph( 8211, sPathData );
+}
+
+// -----------------------------------------------------------------------------
+
+void SVGFilter::implEmbedBulletGlyph( sal_Unicode cBullet, const ::rtl::OUString & sPathData )
+{
+    OUString sId = B2UCONST( "bullet-char-template(" );
+    sId += OUString::valueOf( (sal_Int32)cBullet );
+    sId += B2UCONST( ")" );
+    mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "id", sId );
+
+    double fFactor = 1.0 / 2048;
+    OUString sFactor = OUString::valueOf( fFactor );
+    OUString sTransform = B2UCONST( "scale(" );
+    sTransform += sFactor; sTransform += B2UCONST( ",-" ); sTransform += sFactor;
+    sTransform += B2UCONST( ")" );
+    mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "transform", sTransform );
+
+    SvXMLElementExport aGElem( *mpSVGExport, XML_NAMESPACE_NONE, "g", sal_True, sal_True );
+
+    mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "d", sPathData );
+    SvXMLElementExport aPathElem( *mpSVGExport, XML_NAMESPACE_NONE, "path", sal_True, sal_True );
+
+}
+
+// -----------------------------------------------------------------------------
+
+/** SVGFilter::implExportTextEmbeddedBitmaps
+ *  We export bitmaps embedded into text shapes, such as those used by list
+ *  items with image style, only once in a specic <defs> element.
+ */
+sal_Bool SVGFilter::implExportTextEmbeddedBitmaps()
+{
+    mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "class", B2UCONST( "TextEmbeddedBitmaps" )  );
+    SvXMLElementExport aDefsContainerElem( *mpSVGExport, XML_NAMESPACE_NONE, "defs", sal_True, sal_True );
+
+    OUString sId;
+
+    MetaBitmapActionSet::const_iterator it = mEmbeddedBitmapActionSet.begin();
+    MetaBitmapActionSet::const_iterator end = mEmbeddedBitmapActionSet.end();
+    for( ; it != end; ++it)
+    {
+        const GDIMetaFile& aMtf = it->GetRepresentation();
+
+        if( aMtf.GetActionSize() == 1 )
+        {
+            MetaAction* pAction = aMtf.GetAction( 0 );
+            if( pAction )
+            {
+                sal_uLong nId = GetBitmapChecksum( pAction );
+                sId = B2UCONST( "bitmap(" );
+                sId += OUString::valueOf( (sal_Int64)nId );
+                sId += B2UCONST( ")" );
+                mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "id", sId );
+
+                const Reference< XShape >& rxShape = (const Reference< XShape >&)( it->GetObject() );
+                Reference< XPropertySet > xShapePropSet( rxShape, UNO_QUERY );
+                ::com::sun::star::awt::Rectangle    aBoundRect;
+                if( xShapePropSet.is() && ( xShapePropSet->getPropertyValue( B2UCONST( "BoundRect" ) ) >>= aBoundRect ) )
+                {
+                    // Origin of the coordinate device must be (0,0).
+                    const Point aTopLeft;
+                    const Size  aSize( aBoundRect.Width, aBoundRect.Height );
+
+                    Point aPt;
+                    MetaBitmapActionGetPoint( pAction, aPt );
+                    // The image must be exported with x, y attribute set to 0,
+                    // on the contrary when referenced by a <use> element,
+                    // specifying the wanted position, they will result
+                    // misplaced.
+                    pAction->Move( -aPt.X(), -aPt.Y() );
+                    mpSVGWriter->WriteMetaFile( aTopLeft, aSize, aMtf, SVGWRITER_WRITE_ALL, NULL );
+                    // We reset to the original values so that when the <use>
+                    // element is created the x, y attributes are correct.
+                    pAction->Move( aPt.X(), aPt.Y() );
+                }
+                else
+                {
+                    OSL_FAIL( "implExportTextEmbeddedBitmaps: no shape bounding box." );
+                    return sal_False;
+                }
+            }
+            else
+            {
+                OSL_FAIL( "implExportTextEmbeddedBitmaps: metafile should have MetaBmpExScaleAction only." );
+                return sal_False;
+            }
+        }
+        else
+        {
+            OSL_FAIL( "implExportTextEmbeddedBitmaps: metafile should have a single action." );
+            return sal_False;
+        }
+
+    }
+    return sal_True;
+}
 
 // -----------------------------------------------------------------------------
 
@@ -1562,12 +1816,21 @@ sal_Bool SVGFilter::implExportShape( const Reference< XShape >& rxShape )
                     if( !rShapeId.isEmpty() )
                     {
                         mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "id", rShapeId );
-                        //mpSVGExport->AddAttributeIdLegacy( XML_NAMESPACE_DRAW, rShapeId );
+                    }
+
+                    const GDIMetaFile* pEmbeddedBitmapsMtf = NULL;
+                    if( mEmbeddedBitmapActionMap.find( rxShape ) !=  mEmbeddedBitmapActionMap.end() )
+                    {
+                        pEmbeddedBitmapsMtf = &( mEmbeddedBitmapActionMap[ rxShape ].GetRepresentation() );
                     }
 
                     {
                         SvXMLElementExport aExp2( *mpSVGExport, XML_NAMESPACE_NONE, "g", sal_True, sal_True );
-                        mpSVGWriter->WriteMetaFile( aTopLeft, aSize, rMtf, SVGWRITER_WRITE_ALL, pElementId );
+                        mpSVGWriter->WriteMetaFile( aTopLeft, aSize, rMtf,
+                                                    SVGWRITER_WRITE_ALL,
+                                                    pElementId,
+                                                    &rxShape,
+                                                    pEmbeddedBitmapsMtf );
                     }
                 }
 
@@ -1597,7 +1860,7 @@ sal_Bool SVGFilter::implCreateObjects()
             Reference< XShapes > xShapes( xMasterPage, UNO_QUERY );
 
             if( xShapes.is() )
-                implCreateObjectsFromShapes( xShapes );
+                implCreateObjectsFromShapes( xMasterPage, xShapes );
         }
     }
 
@@ -1632,7 +1895,7 @@ sal_Bool SVGFilter::implCreateObjects()
             Reference< XShapes > xShapes( xDrawPage, UNO_QUERY );
 
             if( xShapes.is() )
-                implCreateObjectsFromShapes( xShapes );
+                implCreateObjectsFromShapes( xDrawPage, xShapes );
         }
     }
     return sal_True;
@@ -1640,7 +1903,7 @@ sal_Bool SVGFilter::implCreateObjects()
 
 // -----------------------------------------------------------------------------
 
-sal_Bool SVGFilter::implCreateObjectsFromShapes( const Reference< XShapes >& rxShapes )
+sal_Bool SVGFilter::implCreateObjectsFromShapes( const Reference< XDrawPage > & rxPage, const Reference< XShapes >& rxShapes )
 {
     Reference< XShape > xShape;
     sal_Bool            bRet = sal_False;
@@ -1648,7 +1911,7 @@ sal_Bool SVGFilter::implCreateObjectsFromShapes( const Reference< XShapes >& rxS
     for( sal_Int32 i = 0, nCount = rxShapes->getCount(); i < nCount; ++i )
     {
         if( ( rxShapes->getByIndex( i ) >>= xShape ) && xShape.is() )
-            bRet = implCreateObjectsFromShape( xShape ) || bRet;
+            bRet = implCreateObjectsFromShape( rxPage, xShape ) || bRet;
 
         xShape = NULL;
     }
@@ -1658,7 +1921,7 @@ sal_Bool SVGFilter::implCreateObjectsFromShapes( const Reference< XShapes >& rxS
 
 // -----------------------------------------------------------------------------
 
-sal_Bool SVGFilter::implCreateObjectsFromShape( const Reference< XShape >& rxShape )
+sal_Bool SVGFilter::implCreateObjectsFromShape( const Reference< XDrawPage > & rxPage, const Reference< XShape >& rxShape )
 {
     sal_Bool bRet = sal_False;
     if( rxShape->getShapeType().lastIndexOf( B2UCONST( "drawing.GroupShape" ) ) != -1 )
@@ -1666,7 +1929,7 @@ sal_Bool SVGFilter::implCreateObjectsFromShape( const Reference< XShape >& rxSha
         Reference< XShapes > xShapes( rxShape, UNO_QUERY );
 
         if( xShapes.is() )
-            bRet = implCreateObjectsFromShapes( xShapes );
+            bRet = implCreateObjectsFromShapes( rxPage, xShapes );
     }
     else
     {
@@ -1691,8 +1954,83 @@ sal_Bool SVGFilter::implCreateObjectsFromShape( const Reference< XShape >& rxSha
                     (*mpObjects)[ rxShape ] = ObjectRepresentation( rxShape, aMtf );
                 }
                 else
-                    (*mpObjects)[ rxShape ] = ObjectRepresentation( rxShape, aGraphic.GetGDIMetaFile() );
+                {
+                    if( aGraphic.GetGDIMetaFile().GetActionSize() )
+                    {
+                        Reference< XText > xText( rxShape, UNO_QUERY );
+                        sal_Bool bIsTextShape = xText.is();
 
+                        if( !mpSVGExport->IsUsePositionedCharacters() && bIsTextShape )
+                        {
+                            Reference< XPropertySet >   xShapePropSet( rxShape, UNO_QUERY );
+
+                            if( xShapePropSet.is() )
+                            {
+                                sal_Bool bHideObj = sal_False;
+
+                                if( mbPresentation )
+                                {
+                                    xShapePropSet->getPropertyValue( B2UCONST( "IsEmptyPresentationObject" ) )  >>= bHideObj;
+                                }
+
+                                if( !bHideObj )
+                                {
+                                    // We create a map of text shape ids.
+                                    implRegisterInterface( rxShape );
+                                    Reference< XInterface > xRef( rxShape, UNO_QUERY );
+                                    const OUString& rShapeId = implGetValidIDFromInterface( xRef );
+                                    if( !rShapeId.isEmpty() )
+                                    {
+                                        mTextShapeIdListMap[rxPage] += rShapeId;
+                                        mTextShapeIdListMap[rxPage] += B2UCONST( " " );
+                                    }
+
+                                    // We create a set of bitmaps embedded into text shape.
+                                    GDIMetaFile   aMtf;
+                                    const Point   aNullPt;
+                                    const Size    aSize( pObj->GetCurrentBoundRect().GetSize() );
+                                    MetaAction*   pAction;
+                                    sal_Bool bIsTextShapeStarted = sal_False;
+                                    const GDIMetaFile& rMtf = aGraphic.GetGDIMetaFile();
+                                    sal_uLong nCount = rMtf.GetActionSize();
+                                    for( sal_uLong nCurAction = 0; nCurAction < nCount; ++nCurAction )
+                                    {
+                                        pAction = rMtf.GetAction( nCurAction );
+                                        const sal_uInt16    nType = pAction->GetType();
+
+                                        if( nType == META_COMMENT_ACTION )
+                                        {
+                                            const MetaCommentAction* pA = (const MetaCommentAction*) pAction;
+                                            if( ( pA->GetComment().equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("XTEXT_PAINTSHAPE_BEGIN")) ) )
+                                            {
+                                                bIsTextShapeStarted = sal_True;
+                                            }
+                                            else if( ( pA->GetComment().equalsIgnoreAsciiCaseL( RTL_CONSTASCII_STRINGPARAM( "XTEXT_PAINTSHAPE_END" ) ) ) )
+                                            {
+                                                bIsTextShapeStarted = sal_False;
+                                            }
+                                        }
+                                        if( bIsTextShapeStarted && ( nType == META_BMPSCALE_ACTION  || nType == META_BMPEXSCALE_ACTION ) )
+                                        {
+                                            GDIMetaFile aEmbeddedBitmapMtf;
+                                            pAction->Duplicate();
+                                            aEmbeddedBitmapMtf.AddAction( pAction );
+                                            aEmbeddedBitmapMtf.SetPrefSize( aSize );
+                                            aEmbeddedBitmapMtf.SetPrefMapMode( MAP_100TH_MM );
+                                            mEmbeddedBitmapActionSet.insert( ObjectRepresentation( rxShape, aEmbeddedBitmapMtf ) );
+                                            pAction->Duplicate();
+                                            aMtf.AddAction( pAction );
+                                        }
+                                    }
+                                    aMtf.SetPrefSize( aSize );
+                                    aMtf.SetPrefMapMode( MAP_100TH_MM );
+                                    mEmbeddedBitmapActionMap[ rxShape ] = ObjectRepresentation( rxShape, aMtf );
+                                }
+                            }
+                        }
+                    }
+                    (*mpObjects)[ rxShape ] = ObjectRepresentation( rxShape, aGraphic.GetGDIMetaFile() );
+                }
                 bRet = sal_True;
             }
         }
@@ -1766,7 +2104,6 @@ OUString SVGFilter::implGetClassFromShape( const Reference< XShape >& rxShape )
 
 // -----------------------------------------------------------------------------
 
-//inline
 void SVGFilter::implRegisterInterface( const Reference< XInterface >& rxIf )
 {
     if( rxIf.is() )
@@ -1775,12 +2112,10 @@ void SVGFilter::implRegisterInterface( const Reference< XInterface >& rxIf )
 
 // -----------------------------------------------------------------------------
 
-//inline
 const ::rtl::OUString & SVGFilter::implGetValidIDFromInterface( const Reference< XInterface >& rxIf )
 {
    return (mpSVGExport->getInterfaceToIdentifierMapper()).getIdentifier( rxIf );
 }
-
 
 // -----------------------------------------------------------------------------
 
@@ -1799,170 +2134,183 @@ OUString SVGFilter::implGetInterfaceName( const Reference< XInterface >& rxIf )
 
 IMPL_LINK( SVGFilter, CalcFieldHdl, EditFieldInfo*, pInfo )
 {
-    sal_Bool       bFieldProcessed = sal_False;
+    sal_Bool bFieldProcessed = sal_False;
     if( pInfo && mbPresentation )
     {
         bFieldProcessed = true;
         OUString   aRepresentation = B2UCONST("");
         if( !mbSinglePage )
         {
-            // to notify to the SVGActionWriter::ImplWriteText method
-            // that we are dealing with a placeholder shape
-            aRepresentation = sPlaceholderTag;
+            if( mpSVGExport->IsEmbedFonts() && mpSVGExport->IsUsePositionedCharacters() )
+            {
+                // to notify to the SVGActionWriter::ImplWriteText method
+                // that we are dealing with a placeholder shape
+                aRepresentation = sPlaceholderTag;
 
-            if( !mCreateOjectsCurrentMasterPage.is() )
-            {
-                OSL_FAIL( "error: !mCreateOjectsCurrentMasterPage.is()" );
-                return 0;
-            }
-            sal_Bool bHasCharSetMap = !( mTextFieldCharSets.find( mCreateOjectsCurrentMasterPage ) == mTextFieldCharSets.end() );
-
-            static const ::rtl::OUString aHeaderId( B2UCONST( aOOOAttrHeaderField ) );
-            static const ::rtl::OUString aFooterId( B2UCONST( aOOOAttrFooterField ) );
-            static const ::rtl::OUString aDateTimeId( B2UCONST( aOOOAttrDateTimeField ) );
-            static const ::rtl::OUString aVariableDateTimeId( B2UCONST( aOOOAttrDateTimeField ) + B2UCONST( "-variable" ) );
-
-            const UCharSet * pCharSet = NULL;
-            UCharSetMap * pCharSetMap = NULL;
-            if( bHasCharSetMap )
-            {
-                pCharSetMap = &( mTextFieldCharSets[ mCreateOjectsCurrentMasterPage ] );
-            }
-            const SvxFieldData* pField = pInfo->GetField().GetField();
-            if( bHasCharSetMap && ( pField->GetClassId() == text::textfield::Type::PRESENTATION_HEADER ) && ( pCharSetMap->find( aHeaderId ) != pCharSetMap->end() ) )
-            {
-                pCharSet = &( (*pCharSetMap)[ aHeaderId ] );
-            }
-            else if( bHasCharSetMap && ( pField->GetClassId() == text::textfield::Type::PRESENTATION_FOOTER ) && ( pCharSetMap->find( aFooterId ) != pCharSetMap->end() ) )
-            {
-                pCharSet = &( (*pCharSetMap)[ aFooterId ] );
-            }
-            else if( pField->GetClassId() == text::textfield::Type::PRESENTATION_DATE_TIME )
-            {
-                if( bHasCharSetMap && ( pCharSetMap->find( aDateTimeId ) != pCharSetMap->end() ) )
+                if( !mCreateOjectsCurrentMasterPage.is() )
                 {
-                    pCharSet = &( (*pCharSetMap)[ aDateTimeId ] );
+                    OSL_FAIL( "error: !mCreateOjectsCurrentMasterPage.is()" );
+                    return 0;
                 }
-                if( bHasCharSetMap && ( pCharSetMap->find( aVariableDateTimeId ) != pCharSetMap->end() ) && !(*pCharSetMap)[ aVariableDateTimeId ].empty() )
+                sal_Bool bHasCharSetMap = !( mTextFieldCharSets.find( mCreateOjectsCurrentMasterPage ) == mTextFieldCharSets.end() );
+
+                static const ::rtl::OUString aHeaderId( B2UCONST( aOOOAttrHeaderField ) );
+                static const ::rtl::OUString aFooterId( B2UCONST( aOOOAttrFooterField ) );
+                static const ::rtl::OUString aDateTimeId( B2UCONST( aOOOAttrDateTimeField ) );
+                static const ::rtl::OUString aVariableDateTimeId( B2UCONST( aOOOAttrDateTimeField ) + B2UCONST( "-variable" ) );
+
+                const UCharSet * pCharSet = NULL;
+                UCharSetMap * pCharSetMap = NULL;
+                if( bHasCharSetMap )
                 {
-                    SvxDateFormat eDateFormat = SVXDATEFORMAT_B, eCurDateFormat;
-                    const UCharSet & aCharSet = (*pCharSetMap)[ aVariableDateTimeId ];
-                    UCharSet::const_iterator aChar = aCharSet.begin();
-                    // we look for the most verbose date format
-                    for( ; aChar != aCharSet.end(); ++aChar )
+                    pCharSetMap = &( mTextFieldCharSets[ mCreateOjectsCurrentMasterPage ] );
+                }
+                const SvxFieldData* pField = pInfo->GetField().GetField();
+                if( bHasCharSetMap && ( pField->GetClassId() == text::textfield::Type::PRESENTATION_HEADER ) && ( pCharSetMap->find( aHeaderId ) != pCharSetMap->end() ) )
+                {
+                    pCharSet = &( (*pCharSetMap)[ aHeaderId ] );
+                }
+                else if( bHasCharSetMap && ( pField->GetClassId() == text::textfield::Type::PRESENTATION_FOOTER ) && ( pCharSetMap->find( aFooterId ) != pCharSetMap->end() ) )
+                {
+                    pCharSet = &( (*pCharSetMap)[ aFooterId ] );
+                }
+                else if( pField->GetClassId() == text::textfield::Type::PRESENTATION_DATE_TIME )
+                {
+                    if( bHasCharSetMap && ( pCharSetMap->find( aDateTimeId ) != pCharSetMap->end() ) )
                     {
-                        eCurDateFormat = (SvxDateFormat)( (int)( *aChar ) & 0x0f );
-                        switch( eDateFormat )
+                        pCharSet = &( (*pCharSetMap)[ aDateTimeId ] );
+                    }
+                    if( bHasCharSetMap && ( pCharSetMap->find( aVariableDateTimeId ) != pCharSetMap->end() ) && !(*pCharSetMap)[ aVariableDateTimeId ].empty() )
+                    {
+                        SvxDateFormat eDateFormat = SVXDATEFORMAT_B, eCurDateFormat;
+                        const UCharSet & aCharSet = (*pCharSetMap)[ aVariableDateTimeId ];
+                        UCharSet::const_iterator aChar = aCharSet.begin();
+                        // we look for the most verbose date format
+                        for( ; aChar != aCharSet.end(); ++aChar )
                         {
-                            case SVXDATEFORMAT_STDSMALL: ;
-                            case SVXDATEFORMAT_A: ;     // 13.02.96
-                            case SVXDATEFORMAT_B:       // 13.02.1996
-                                switch( eCurDateFormat )
-                                {
-                                    case SVXDATEFORMAT_C: ;     // 13.Feb 1996
-                                    case SVXDATEFORMAT_D:       // 13.February 1996
-                                    case SVXDATEFORMAT_E: ;     // Tue, 13.February 1996
-                                    case SVXDATEFORMAT_STDBIG: ;
-                                    case SVXDATEFORMAT_F:       // Tuesday, 13.February 1996
-                                        eDateFormat = eCurDateFormat;
-                                        break;
-                                    default:
-                                        break;
-                                }
-                            case SVXDATEFORMAT_C: ;     // 13.Feb 1996
-                            case SVXDATEFORMAT_D:       // 13.February 1996
-                                switch( eCurDateFormat )
-                                {
-                                    case SVXDATEFORMAT_E: ;     // Tue, 13.February 1996
-                                    case SVXDATEFORMAT_STDBIG: ;
-                                    case SVXDATEFORMAT_F:       // Tuesday, 13.February 1996
-                                        eDateFormat = eCurDateFormat;
-                                        break;
-                                    default:
-                                        break;
-                                }
-                                break;
-                            default:
-                                break;
+                            eCurDateFormat = (SvxDateFormat)( (int)( *aChar ) & 0x0f );
+                            switch( eDateFormat )
+                            {
+                                case SVXDATEFORMAT_STDSMALL: ;
+                                case SVXDATEFORMAT_A: ;     // 13.02.96
+                                case SVXDATEFORMAT_B:       // 13.02.1996
+                                    switch( eCurDateFormat )
+                                    {
+                                        case SVXDATEFORMAT_C: ;     // 13.Feb 1996
+                                        case SVXDATEFORMAT_D:       // 13.February 1996
+                                        case SVXDATEFORMAT_E: ;     // Tue, 13.February 1996
+                                        case SVXDATEFORMAT_STDBIG: ;
+                                        case SVXDATEFORMAT_F:       // Tuesday, 13.February 1996
+                                            eDateFormat = eCurDateFormat;
+                                            break;
+                                        default:
+                                            break;
+                                    }
+                                case SVXDATEFORMAT_C: ;     // 13.Feb 1996
+                                case SVXDATEFORMAT_D:       // 13.February 1996
+                                    switch( eCurDateFormat )
+                                    {
+                                        case SVXDATEFORMAT_E: ;     // Tue, 13.February 1996
+                                        case SVXDATEFORMAT_STDBIG: ;
+                                        case SVXDATEFORMAT_F:       // Tuesday, 13.February 1996
+                                            eDateFormat = eCurDateFormat;
+                                            break;
+                                        default:
+                                            break;
+                                    }
+                                    break;
+                                default:
+                                    break;
+                            }
+                        }
+                        // Independently of the date format, we always put all these characters by default.
+                        // They should be enough to cover every time format.
+                        aRepresentation += B2UCONST( "0123456789.:/-APM" );
+
+                        if( eDateFormat )
+                        {
+                            String sDate;
+                            LanguageType eLang = pInfo->GetOutliner()->GetLanguage( pInfo->GetPara(), pInfo->GetPos() );
+                            SvNumberFormatter * pNumberFormatter = new SvNumberFormatter( ::comphelper::getProcessServiceFactory(), LANGUAGE_SYSTEM );
+                            // We always collect the characters obtained by using the SVXDATEFORMAT_B (as: 13.02.1996)
+                            // so we are sure to include any unusual day|month|year separator.
+                            Date aDate( 1, 1, 1996 );
+                            sDate += SvxDateField::GetFormatted( aDate, SVXDATEFORMAT_B, *pNumberFormatter, eLang );
+                            switch( eDateFormat )
+                            {
+                                case SVXDATEFORMAT_E: ;     // Tue, 13.February 1996
+                                case SVXDATEFORMAT_STDBIG: ;
+                                case SVXDATEFORMAT_F:       // Tuesday, 13.February 1996
+                                    for( sal_uInt16 i = 1; i <= 7; ++i )  // we get all days in a week
+                                    {
+                                        aDate.SetDay( i );
+                                        sDate += SvxDateField::GetFormatted( aDate, eDateFormat, *pNumberFormatter, eLang );
+                                    }
+                                    // No break here! We need months too!
+                                case SVXDATEFORMAT_C: ;     // 13.Feb 1996
+                                case SVXDATEFORMAT_D:       // 13.February 1996
+                                    for( sal_uInt16 i = 1; i <= 12; ++i ) // we get all months in a year
+                                    {
+                                        aDate.SetMonth( i );
+                                        sDate += SvxDateField::GetFormatted( aDate, eDateFormat, *pNumberFormatter, eLang );
+                                    }
+                                    break;
+                                case SVXDATEFORMAT_STDSMALL: ;
+                                case SVXDATEFORMAT_A: ;     // 13.02.96
+                                case SVXDATEFORMAT_B: ;     // 13.02.1996
+                                default:
+                                    // nothing to do here, we always collect the characters needed for these cases.
+                                    break;
+                            }
+                            aRepresentation += sDate;
                         }
                     }
-                    // Independently of the date format, we always put all these characters by default.
-                    // They should be enough to cover every time format.
-                    aRepresentation += B2UCONST( "0123456789.:/-APM" );
-
-                    if( eDateFormat )
+                }
+                else if( pField->GetClassId() == text::textfield::Type::PAGE )
+                {
+                    switch( mVisiblePagePropSet.nPageNumberingType )
                     {
-                        String sDate;
-                        LanguageType eLang = pInfo->GetOutliner()->GetLanguage( pInfo->GetPara(), pInfo->GetPos() );
-                        SvNumberFormatter * pNumberFormatter = new SvNumberFormatter( ::comphelper::getProcessServiceFactory(), LANGUAGE_SYSTEM );
-                        // We always collect the characters obtained by using the SVXDATEFORMAT_B (as: 13.02.1996)
-                        // so we are sure to include any unusual day|month|year separator.
-                        Date aDate( 1, 1, 1996 );
-                        sDate += SvxDateField::GetFormatted( aDate, SVXDATEFORMAT_B, *pNumberFormatter, eLang );
-                        switch( eDateFormat )
-                        {
-                            case SVXDATEFORMAT_E: ;     // Tue, 13.February 1996
-                            case SVXDATEFORMAT_STDBIG: ;
-                            case SVXDATEFORMAT_F:       // Tuesday, 13.February 1996
-                                for( sal_uInt16 i = 1; i <= 7; ++i )  // we get all days in a week
-                                {
-                                    aDate.SetDay( i );
-                                    sDate += SvxDateField::GetFormatted( aDate, eDateFormat, *pNumberFormatter, eLang );
-                                }
-                                // No break here! We need months too!
-                            case SVXDATEFORMAT_C: ;     // 13.Feb 1996
-                            case SVXDATEFORMAT_D:       // 13.February 1996
-                                for( sal_uInt16 i = 1; i <= 12; ++i ) // we get all months in a year
-                                {
-                                    aDate.SetMonth( i );
-                                    sDate += SvxDateField::GetFormatted( aDate, eDateFormat, *pNumberFormatter, eLang );
-                                }
-                                break;
-                            case SVXDATEFORMAT_STDSMALL: ;
-                            case SVXDATEFORMAT_A: ;     // 13.02.96
-                            case SVXDATEFORMAT_B: ;     // 13.02.1996
-                            default:
-                                // nothing to do here, we always collect the characters needed for these cases.
-                                break;
-                        }
-                        aRepresentation += sDate;
+                        case SVX_CHARS_UPPER_LETTER:
+                            aRepresentation += B2UCONST( "QWERTYUIOPASDFGHJKLZXCVBNM" );
+                            break;
+                        case SVX_CHARS_LOWER_LETTER:
+                            aRepresentation += B2UCONST( "qwertyuiopasdfghjklzxcvbnm" );
+                            break;
+                        case SVX_ROMAN_UPPER:
+                            aRepresentation += B2UCONST( "IVXLCDM" );
+                            break;
+                        case SVX_ROMAN_LOWER:
+                            aRepresentation += B2UCONST( "ivxlcdm" );
+                            break;
+                        // arabic numbering type is the default
+                        case SVX_ARABIC: ;
+                        // in case the numbering type is not handled we fall back on arabic numbering
+                        default:
+                            aRepresentation += B2UCONST( "0123456789" );
+                            break;
                     }
                 }
-            }
-            else if( pField->GetClassId() == text::textfield::Type::PAGE )
-            {
-                switch( mVisiblePagePropSet.nPageNumberingType )
+                else
                 {
-                    case SVX_CHARS_UPPER_LETTER:
-                        aRepresentation += B2UCONST( "QWERTYUIOPASDFGHJKLZXCVBNM" );
-                        break;
-                    case SVX_CHARS_LOWER_LETTER:
-                        aRepresentation += B2UCONST( "qwertyuiopasdfghjklzxcvbnm" );
-                        break;
-                    case SVX_ROMAN_UPPER:
-                        aRepresentation += B2UCONST( "IVXLCDM" );
-                        break;
-                    case SVX_ROMAN_LOWER:
-                        aRepresentation += B2UCONST( "ivxlcdm" );
-                        break;
-                    // arabic numbering type is the default
-                    case SVX_ARABIC: ;
-                    // in case the numbering type is not handled we fall back on arabic numbering
-                    default:
-                        aRepresentation += B2UCONST( "0123456789" );
-                        break;
+                    bFieldProcessed = sal_False;
+                }
+                if( bFieldProcessed )
+                {
+                    if( pCharSet != NULL )
+                    {
+                        UCharSet::const_iterator aChar = pCharSet->begin();
+                        for( ; aChar != pCharSet->end(); ++aChar )
+                        {
+                            aRepresentation += OUString::valueOf( *aChar );
+                        }
+                    }
+                    pInfo->SetRepresentation( aRepresentation );
                 }
             }
-
-            if( pCharSet != NULL )
+            else
             {
-                UCharSet::const_iterator aChar = pCharSet->begin();
-                for( ; aChar != pCharSet->end(); ++aChar )
-                {
-                    aRepresentation += OUString::valueOf( *aChar );
-                }
+                bFieldProcessed = sal_False;
             }
-            pInfo->SetRepresentation( aRepresentation );
         }
         else  // single page case
         {
@@ -2007,8 +2355,16 @@ IMPL_LINK( SVGFilter, CalcFieldHdl, EditFieldInfo*, pInfo )
                             break;
                     }
                 }
+                else
+                {
+                    bFieldProcessed = sal_False;
+                }
+                if( bFieldProcessed )
+                {
+                    pInfo->SetRepresentation( aRepresentation );
+                }
             }
-            pInfo->SetRepresentation( aRepresentation );
+
         }
     }
     return ( bFieldProcessed ? 0 : maOldFieldHdl.Call( pInfo ) );

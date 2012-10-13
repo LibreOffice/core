@@ -206,7 +206,7 @@ public:
     sal_Bool RemoveInvisibleContent();
 
     /// Replace fields by text - mailmerge support.
-    sal_Bool ConvertFieldsToText();
+    bool ConvertFieldsToText();
 
     /// Set all numbering start points to a fixed value - mailmerge support.
     void SetNumberingRestart();

@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
+#include <string.h>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/util/XNumberFormatter.hpp>
 #include <com/sun/star/sdbc/ColumnSearch.hpp>
@@ -115,7 +115,7 @@ Sequence< sal_Int8 > SAL_CALL OQueryComposer::getImplementationId() throw (Runti
 sal_Int64 SAL_CALL OQueryComposer::getSomething( const Sequence< sal_Int8 >& rId ) throw(RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OQueryComposer::getSomething" );
-    if (rId.getLength() == 16 && 0 == rtl_compareMemory(getImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
+    if (rId.getLength() == 16 && 0 == memcmp(getImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
         return reinterpret_cast<sal_Int64>(this);
 
     return 0;

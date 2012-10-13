@@ -53,7 +53,6 @@ public:
         , m_bHomogeneous(bHomogeneous)
         , m_nSpacing(nSpacing)
     {
-        Show();
     }
     void set_spacing(int nSpacing)
     {
@@ -315,6 +314,11 @@ private:
     {
         int x;
         int y;
+        ExtendedGridEntry()
+            : x(-1)
+            , y(-1)
+        {
+        }
     };
 
     typedef boost::multi_array<ExtendedGridEntry, 2> ext_array_type;
@@ -339,7 +343,6 @@ public:
         , m_bRowHomogeneous(false), m_bColumnHomogeneous(false)
         , m_nRowSpacing(0), m_nColumnSpacing(0)
     {
-        Show();
     }
     void set_row_homogeneous(bool bHomogeneous)
     {
@@ -394,6 +397,8 @@ class VCL_DLLPUBLIC VclFrame : public VclBin
 public:
     VclFrame(Window *pParent) : VclBin(pParent) {}
     void set_label(const rtl::OUString &rLabel);
+    Window *get_label_widget();
+    const Window *get_label_widget() const;
 protected:
     virtual Size calculateRequisition() const;
     virtual void setAllocation(const Size &rAllocation);

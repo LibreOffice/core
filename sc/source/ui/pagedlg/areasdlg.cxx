@@ -74,9 +74,9 @@ using ::rtl::OUString;
 
 // globale Funktionen (->am Ende der Datei):
 
-bool lcl_CheckRepeatString( const String& rStr, ScDocument* pDoc, bool bIsRow, ScRange* pRange );
-void lcl_GetRepeatRangeString( const ScRange* pRange, ScDocument* pDoc, bool bIsRow, String& rStr );
-void lcl_GetRepeatRangeString( const ScRange* pRange, ScDocument* pDoc, bool bIsRow, OUString& rStr )
+static bool lcl_CheckRepeatString( const String& rStr, ScDocument* pDoc, bool bIsRow, ScRange* pRange );
+static void lcl_GetRepeatRangeString( const ScRange* pRange, ScDocument* pDoc, bool bIsRow, String& rStr );
+static void lcl_GetRepeatRangeString( const ScRange* pRange, ScDocument* pDoc, bool bIsRow, OUString& rStr )
 {
     String aStr;
     lcl_GetRepeatRangeString(pRange, pDoc, bIsRow, aStr);
@@ -698,7 +698,7 @@ IMPL_LINK( ScPrintAreasDlg, Impl_ModifyHdl, formula::RefEdit*, pEd )
 
 // TODO: It might make sense to move these functions to address.?xx. -kohei
 
-bool lcl_CheckOne_OOO( const String& rStr, bool bIsRow, SCCOLROW& rVal )
+static bool lcl_CheckOne_OOO( const String& rStr, bool bIsRow, SCCOLROW& rVal )
 {
     // Zulaessige Syntax fuer rStr:
     // Row: [$]1-MAXTAB
@@ -740,13 +740,13 @@ bool lcl_CheckOne_OOO( const String& rStr, bool bIsRow, SCCOLROW& rVal )
     return bStrOk;
 }
 
-bool lcl_CheckOne_XL_A1( const String& rStr, bool bIsRow, SCCOLROW& rVal )
+static bool lcl_CheckOne_XL_A1( const String& rStr, bool bIsRow, SCCOLROW& rVal )
 {
     // XL A1 style is identical to OOO one for print range formats.
     return lcl_CheckOne_OOO(rStr, bIsRow, rVal);
 }
 
-bool lcl_CheckOne_XL_R1C1( const String& rStr, bool bIsRow, SCCOLROW& rVal )
+static bool lcl_CheckOne_XL_R1C1( const String& rStr, bool bIsRow, SCCOLROW& rVal )
 {
     xub_StrLen nLen = rStr.Len();
     if (nLen <= 1)
@@ -774,7 +774,7 @@ bool lcl_CheckOne_XL_R1C1( const String& rStr, bool bIsRow, SCCOLROW& rVal )
     return true;
 }
 
-bool lcl_CheckRepeatOne( const String& rStr, formula::FormulaGrammar::AddressConvention eConv, bool bIsRow, SCCOLROW& rVal )
+static bool lcl_CheckRepeatOne( const String& rStr, formula::FormulaGrammar::AddressConvention eConv, bool bIsRow, SCCOLROW& rVal )
 {
     switch (eConv)
     {
@@ -792,7 +792,7 @@ bool lcl_CheckRepeatOne( const String& rStr, formula::FormulaGrammar::AddressCon
     return false;
 }
 
-bool lcl_CheckRepeatString( const String& rStr, ScDocument* pDoc, bool bIsRow, ScRange* pRange )
+static bool lcl_CheckRepeatString( const String& rStr, ScDocument* pDoc, bool bIsRow, ScRange* pRange )
 {
     // Row: [valid row] rsep [valid row]
     // Col: [valid col] rsep [valid col]
@@ -879,7 +879,7 @@ bool lcl_CheckRepeatString( const String& rStr, ScDocument* pDoc, bool bIsRow, S
 
 // ----------------------------------------------------------------------------
 
-void lcl_GetRepeatRangeString( const ScRange* pRange, ScDocument* pDoc, bool bIsRow, String& rStr )
+static void lcl_GetRepeatRangeString( const ScRange* pRange, ScDocument* pDoc, bool bIsRow, String& rStr )
 {
     rStr.Erase();
     if (!pRange)

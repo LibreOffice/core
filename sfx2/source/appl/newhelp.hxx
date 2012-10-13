@@ -40,7 +40,7 @@ namespace com { namespace sun { namespace star { namespace text { class XTextRan
 #include <vcl/button.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/dialog.hxx>
-#include <svtools/svtreebx.hxx>
+#include <svtools/treelistbox.hxx>
 #include <unotools/moduleoptions.hxx>
 
 #include "srchdlg.hxx"
@@ -598,7 +598,7 @@ public:
 };
 
 /// Appends ?Language=xy&System=abc to the help URL in rURL
-void AppendConfigToken( String& rURL, sal_Bool bQuestionMark, const rtl::OUString &rLang = rtl::OUString() );
+void AppendConfigToken(OUStringBuffer& rURL, sal_Bool bQuestionMark, const OUString &rLang = rtl::OUString());
 
 #endif // #ifndef INCLUDED_SFX_NEWHELP_HXX
 

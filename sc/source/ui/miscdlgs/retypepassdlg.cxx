@@ -292,7 +292,7 @@ void ScRetypePassDlg::ResetTableRows()
         SetTableData(i, static_cast< SCTAB >( i + nScrollPos ));
 }
 
-bool lcl_IsInGoodStatus(ScPassHashProtectable* pProtected, ScPasswordHash eDesiredHash)
+static bool lcl_IsInGoodStatus(ScPassHashProtectable* pProtected, ScPasswordHash eDesiredHash)
 {
     if (!pProtected || !pProtected->isProtected())
         // Not protected.

@@ -45,7 +45,6 @@ import java.util.Vector;
  * of oneway request. Because the source and the target of this call-link knows,
  * which method was used and which parameters must be handled.
  *
- * @author     Andreas Schl&uuml;ns
  */
 class OnewayExecutor extends Thread
 {

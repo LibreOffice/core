@@ -28,7 +28,7 @@
 #ifndef _SVX_CHECKLBX_HXX
 #define _SVX_CHECKLBX_HXX
 
-#include <svtools/svtreebx.hxx>
+#include <svtools/treelistbox.hxx>
 #include <svtools/svlbitm.hxx>
 
 #include <vcl/lstbox.hxx>

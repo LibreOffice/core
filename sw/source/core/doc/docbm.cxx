@@ -136,7 +136,7 @@ namespace
             rMarks.begin(),
             rMarks.end(),
             rPos,
-            bind(&IMark::StartsAfter, _2, _1)); // finds the first that is starting after
+            boost::bind(&IMark::StartsAfter, _2, _1)); // finds the first that is starting after
         if(pMarkAfter == rMarks.end()) return NULL;
         return pMarkAfter->get();
     };
@@ -150,14 +150,14 @@ namespace
             rMarks.begin(),
             rMarks.end(),
             rPos,
-            bind(&IMark::StartsAfter, _2, _1));
+            boost::bind(&IMark::StartsAfter, _2, _1));
         vCandidates.reserve(pCandidatesEnd - rMarks.begin());
         // only marks ending before are candidates
         remove_copy_if(
             rMarks.begin(),
             pCandidatesEnd,
             back_inserter(vCandidates),
-            bind(logical_not<bool>(), bind(&IMark::EndsBefore, _1, rPos)));
+            boost::bind(logical_not<bool>(), boost::bind(&IMark::EndsBefore, _1, rPos)));
         // no candidate left => we are in front of the first mark or there are none
         if(!vCandidates.size()) return NULL;
         // return the highest (last) candidate using mark end ordering
@@ -214,7 +214,7 @@ namespace
         for(IDocumentMarkAccess::iterator_t ppCurrentMark = lower_bound(
                 rMarks.begin(), rMarks.end(),
                 rPos,
-                bind(&IMark::StartsBefore, _1, _2));
+                boost::bind(&IMark::StartsBefore, _1, _2));
             ppCurrentMark != rMarks.end();
             ++ppCurrentMark)
         {
@@ -242,7 +242,7 @@ namespace
         return find_if(
             ppMarksBegin,
             ppMarksEnd,
-            bind(&::rtl::OUString::equals, bind(&IMark::GetName, _1), rName));
+            boost::bind(&::rtl::OUString::equals, boost::bind(&IMark::GetName, _1), rName));
     }
 
 #if 0
@@ -742,7 +742,7 @@ namespace sw { namespace mark
         iterator_t pMarkLow = lower_bound(
             m_vMarks.begin(), m_vMarks.end(),
             pMark->GetMarkStart(),
-            bind(&IMark::StartsBefore, _1, _2));
+            boost::bind(&IMark::StartsBefore, _1, _2));
         // finds the first Mark that pMark is starting before
         // (pMark < pMarkHigh)
         //iterator_t pMarkHigh = upper_bound(
@@ -754,7 +754,7 @@ namespace sw { namespace mark
         iterator_t pMarkHigh = m_vMarks.end();
         iterator_t pMarkFound = find_if(
             pMarkLow, pMarkHigh,
-            bind(equal_to<const IMark*>(), bind(&boost::shared_ptr<IMark>::get, _1), pMark));
+            boost::bind(equal_to<const IMark*>(), boost::bind(&boost::shared_ptr<IMark>::get, _1), pMark));
         if(pMarkFound != pMarkHigh)
             deleteMark(pMarkFound);
     }
@@ -808,7 +808,7 @@ namespace sw { namespace mark
         const_iterator_t pFieldmark = find_if(
             m_vFieldmarks.begin(),
             m_vFieldmarks.end( ),
-            bind(&IMark::IsCoveringPosition, _1, rPos));
+            boost::bind(&IMark::IsCoveringPosition, _1, rPos));
         if(pFieldmark == m_vFieldmarks.end()) return NULL;
         return dynamic_cast<IFieldmark*>(pFieldmark->get());
     }

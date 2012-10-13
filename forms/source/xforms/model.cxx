@@ -144,7 +144,7 @@ Model::~Model() throw()
     mpSubmissions = NULL;
 }
 
-Model* lcl_getModel( const Reference<XUnoTunnel>& xTunnel )
+static Model* lcl_getModel( const Reference<XUnoTunnel>& xTunnel )
 {
     Model* pModel = NULL;
     if( xTunnel.is() )

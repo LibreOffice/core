@@ -37,7 +37,7 @@ namespace padmin {
         ProgressBar                     maProgressBar;
 
         int mnMax, mnMin;
-        sal_Bool mbCanceled;
+        bool mbCanceled;
 
     public:
         ProgressDialog( Window*, sal_Bool bCancelable = sal_True, int nMin = 0, int nMax = 100 );
@@ -50,7 +50,7 @@ namespace padmin {
         void startOperation( const String& );
         void setFilename( const String& );
 
-        sal_Bool isCanceled() { return mbCanceled; }
+        bool isCanceled() { return mbCanceled; }
     };
 
 } // namespace

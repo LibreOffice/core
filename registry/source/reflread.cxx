@@ -53,9 +53,9 @@ class BlopObject
 public:
     const sal_uInt8* m_pBuffer;
     sal_uInt32      m_bufferLen;
-    sal_Bool        m_isCopied;
+    bool            m_isCopied;
 
-    BlopObject(const sal_uInt8* buffer, sal_uInt32 len, sal_Bool copyBuffer);
+    BlopObject(const sal_uInt8* buffer, sal_uInt32 len, bool copyBuffer);
         // throws std::bad_alloc
 
     ~BlopObject();
@@ -124,7 +124,7 @@ public:
     }
 };
 
-BlopObject::BlopObject(const sal_uInt8* buffer, sal_uInt32 len, sal_Bool copyBuffer)
+BlopObject::BlopObject(const sal_uInt8* buffer, sal_uInt32 len, bool copyBuffer)
     : m_bufferLen(len)
     , m_isCopied(copyBuffer)
 {

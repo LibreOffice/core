@@ -229,7 +229,7 @@ void ScStyleSheetPool::CopyStdStylesFrom( ScStyleSheetPool* pSrcPool )
 
 //------------------------------------------------------------------------
 
-void lcl_CheckFont( SfxItemSet& rSet, LanguageType eLang, sal_uInt16 nFontType, sal_uInt16 nItemId )
+static void lcl_CheckFont( SfxItemSet& rSet, LanguageType eLang, sal_uInt16 nFontType, sal_uInt16 nItemId )
 {
     if ( eLang != LANGUAGE_NONE && eLang != LANGUAGE_DONTKNOW && eLang != LANGUAGE_SYSTEM )
     {

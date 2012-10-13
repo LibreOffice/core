@@ -1291,9 +1291,9 @@ namespace
     /** helper which takes complete care for creating the needed text primitives. It
         takes care of decorated stuff and all the geometry adaptions needed
      */
-    void proccessMetaTextAction(
+    void processMetaTextAction(
         const Point& rTextStartPosition,
-        const XubString& rText,
+        const OUString& rText,
         sal_uInt16 nTextStart,
         sal_uInt16 nTextLength,
         const ::std::vector< double >& rDXArray,
@@ -1994,7 +1994,7 @@ namespace
                     if(nTextLength && rPropertyHolders.Current().getTextColorActive())
                     {
                         const std::vector< double > aDXArray;
-                        proccessMetaTextAction(
+                        processMetaTextAction(
                             pA->GetPoint(),
                             pA->GetText(),
                             nTextIndex,
@@ -2035,7 +2035,7 @@ namespace
                             }
                         }
 
-                        proccessMetaTextAction(
+                        processMetaTextAction(
                             pA->GetPoint(),
                             pA->GetText(),
                             nTextIndex,
@@ -2098,7 +2098,7 @@ namespace
                             }
                         }
 
-                        proccessMetaTextAction(
+                        processMetaTextAction(
                             pA->GetPoint(),
                             pA->GetText(),
                             nTextIndex,

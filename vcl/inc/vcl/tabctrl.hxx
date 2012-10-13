@@ -121,7 +121,6 @@ public:
     virtual long        DeactivatePage();
 
     virtual Size GetOptimalSize(WindowSizeType eType) const;
-    void                SetMinimumSizePixel( const Size& );
 
     void                SetTabPageSizePixel( const Size& rSize );
     Size                GetTabPageSizePixel() const;

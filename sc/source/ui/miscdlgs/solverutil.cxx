@@ -46,7 +46,7 @@ using namespace com::sun::star;
 
 #define SCSOLVER_SERVICE "com.sun.star.sheet.Solver"
 
-uno::Reference<sheet::XSolver> lcl_CreateSolver( const uno::Reference<uno::XInterface>& xIntFac,
+static uno::Reference<sheet::XSolver> lcl_CreateSolver( const uno::Reference<uno::XInterface>& xIntFac,
                                                  const uno::Reference<uno::XComponentContext>& xCtx )
 {
     uno::Reference<sheet::XSolver> xSolver;

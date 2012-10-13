@@ -915,7 +915,9 @@ class ImpFilterLibCache;
 struct ImpFilterLibCacheEntry
 {
     ImpFilterLibCacheEntry* mpNext;
+#ifndef DISABLE_DYNLOADING
     osl::Module             maLibrary;
+#endif
     String                  maFiltername;
     PFilterCall             mpfnImport;
     PFilterDlgCall          mpfnImportDlg;
@@ -930,19 +932,67 @@ struct ImpFilterLibCacheEntry
 
 ImpFilterLibCacheEntry::ImpFilterLibCacheEntry( const String& rPathname, const String& rFiltername ) :
         mpNext          ( NULL ),
+#ifndef DISABLE_DYNLOADING
         maLibrary       ( rPathname ),
+#endif
         maFiltername    ( rFiltername ),
         mpfnImport      ( NULL ),
         mpfnImportDlg   ( NULL )
 {
+#ifdef DISABLE_DYNLOADING
+    (void) rPathname;
+#endif
 }
 
 // ------------------------------------------------------------------------
 
+#ifdef DISABLE_DYNLOADING
+
+extern "C" sal_Bool icdGraphicImport( SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pConfigItem, sal_Bool );
+extern "C" sal_Bool idxGraphicImport( SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pConfigItem, sal_Bool );
+extern "C" sal_Bool imeGraphicImport( SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pConfigItem, sal_Bool );
+extern "C" sal_Bool ipbGraphicImport( SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pConfigItem, sal_Bool );
+extern "C" sal_Bool ipdGraphicImport( SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pConfigItem, sal_Bool );
+extern "C" sal_Bool ipsGraphicImport( SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pConfigItem, sal_Bool );
+extern "C" sal_Bool iptGraphicImport( SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pConfigItem, sal_Bool );
+extern "C" sal_Bool ipxGraphicImport( SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pConfigItem, sal_Bool );
+extern "C" sal_Bool iraGraphicImport( SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pConfigItem, sal_Bool );
+extern "C" sal_Bool itgGraphicImport( SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pConfigItem, sal_Bool );
+extern "C" sal_Bool itiGraphicImport( SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pConfigItem, sal_Bool );
+
+#endif
+
 PFilterCall ImpFilterLibCacheEntry::GetImportFunction()
 {
     if( !mpfnImport )
+    {
+#ifndef DISABLE_DYNLOADING
         mpfnImport = (PFilterCall) maLibrary.getFunctionSymbol(rtl::OUString(IMPORT_FUNCTION_NAME));
+#else
+        if( maFiltername.EqualsAscii( "icd" ) )
+            mpfnImport = icdGraphicImport;
+        else if( maFiltername.EqualsAscii( "idx" ) )
+            mpfnImport = idxGraphicImport;
+        else if( maFiltername.EqualsAscii( "ime" ) )
+            mpfnImport = imeGraphicImport;
+        else if( maFiltername.EqualsAscii( "ipb" ) )
+            mpfnImport = ipbGraphicImport;
+        else if( maFiltername.EqualsAscii( "ipd" ) )
+            mpfnImport = ipdGraphicImport;
+        else if( maFiltername.EqualsAscii( "ips" ) )
+            mpfnImport = ipsGraphicImport;
+        else if( maFiltername.EqualsAscii( "ipt" ) )
+            mpfnImport = iptGraphicImport;
+        else if( maFiltername.EqualsAscii( "ipx" ) )
+            mpfnImport = ipxGraphicImport;
+        else if( maFiltername.EqualsAscii( "ira" ) )
+            mpfnImport = iraGraphicImport;
+        else if( maFiltername.EqualsAscii( "itg" ) )
+            mpfnImport = itgGraphicImport;
+        else if( maFiltername.EqualsAscii( "iti" ) )
+            mpfnImport = itiGraphicImport;
+#endif
+    }
 
     return mpfnImport;
 }
@@ -1003,19 +1053,22 @@ ImpFilterLibCacheEntry* ImpFilterLibCache::GetFilter( const String& rFilterPath,
     {
         String aPhysicalName( ImpCreateFullFilterPath( rFilterPath, rFilterName ) );
         pEntry = new ImpFilterLibCacheEntry( aPhysicalName, rFilterName );
-
+#ifndef DISABLE_DYNLOADING
         if ( pEntry->maLibrary.is() )
+#endif
         {
             if( !mpFirst )
                 mpFirst = mpLast = pEntry;
             else
                 mpLast = mpLast->mpNext = pEntry;
         }
+#ifndef DISABLE_DYNLOADING
         else
         {
             delete pEntry;
             pEntry = NULL;
         }
+#endif
     }
     return pEntry;
 };
@@ -1735,6 +1788,21 @@ sal_uInt16 GraphicFilter::ExportGraphic( const Graphic& rGraphic, const INetURLO
 
 // ------------------------------------------------------------------------
 
+#ifdef DISABLE_DYNLOADING
+
+extern "C" sal_Bool egiGraphicExport( SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pConfigItem, sal_Bool );
+extern "C" sal_Bool emeGraphicExport( SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pConfigItem, sal_Bool );
+extern "C" sal_Bool epbGraphicExport( SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pConfigItem, sal_Bool );
+extern "C" sal_Bool epgGraphicExport( SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pConfigItem, sal_Bool );
+extern "C" sal_Bool eppGraphicExport( SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pConfigItem, sal_Bool );
+extern "C" sal_Bool epsGraphicExport( SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pConfigItem, sal_Bool );
+extern "C" sal_Bool eptGraphicExport( SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pConfigItem, sal_Bool );
+extern "C" sal_Bool eraGraphicExport( SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pConfigItem, sal_Bool );
+extern "C" sal_Bool etiGraphicExport( SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pConfigItem, sal_Bool );
+extern "C" sal_Bool expGraphicExport( SvStream& rStream, Graphic& rGraphic, FilterConfigItem* pConfigItem, sal_Bool );
+
+#endif
+
 sal_uInt16 GraphicFilter::ExportGraphic( const Graphic& rGraphic, const String& rPath,
     SvStream& rOStm, sal_uInt16 nFormat, const uno::Sequence< beans::PropertyValue >* pFilterData )
 {
@@ -1959,7 +2027,7 @@ sal_uInt16 GraphicFilter::ExportGraphic( const Graphic& rGraphic, const String& 
                                                 if ( nChunkLen )
                                                 {
                                                     aChunkData.aData.resize( nChunkLen );
-                                                    rtl_copyMemory( &aChunkData.aData[ 0 ], aByteSeq.getConstArray(), nChunkLen );
+                                                    memcpy( &aChunkData.aData[ 0 ], aByteSeq.getConstArray(), nChunkLen );
                                                 }
                                                 std::vector< vcl::PNGWriter::ChunkData >::iterator aIter = rChunkData.end() - 1;
                                                 rChunkData.insert( aIter, aChunkData );
@@ -2050,11 +2118,35 @@ sal_uInt16 GraphicFilter::ExportGraphic( const Graphic& rGraphic, const String& 
             sal_Int32 i, nTokenCount = getTokenCount(aFilterPath, ';');
             for ( i = 0; i < nTokenCount; i++ )
             {
+#ifndef DISABLE_DYNLOADING
                 String aPhysicalName( ImpCreateFullFilterPath( getToken(aFilterPath, i, ';'), aFilterName ) );
                 osl::Module aLibrary( aPhysicalName );
 
                 PFilterCall pFunc = (PFilterCall) aLibrary.getFunctionSymbol(rtl::OUString(EXPORT_FUNCTION_NAME));
                 // Dialog in DLL ausfuehren
+#else
+                PFilterCall pFunc = NULL;
+                if( aFilterName.EqualsAscii( "egi" ) )
+                    pFunc = egiGraphicExport;
+                else if( aFilterName.EqualsAscii( "eme" ) )
+                    pFunc = emeGraphicExport;
+                else if( aFilterName.EqualsAscii( "epb" ) )
+                    pFunc = epbGraphicExport;
+                else if( aFilterName.EqualsAscii( "epg" ) )
+                    pFunc = epgGraphicExport;
+                else if( aFilterName.EqualsAscii( "epp" ) )
+                    pFunc = eppGraphicExport;
+                else if( aFilterName.EqualsAscii( "eps" ) )
+                    pFunc = epsGraphicExport;
+                else if( aFilterName.EqualsAscii( "ept" ) )
+                    pFunc = eptGraphicExport;
+                else if( aFilterName.EqualsAscii( "era" ) )
+                    pFunc = eraGraphicExport;
+                else if( aFilterName.EqualsAscii( "eti" ) )
+                    pFunc = etiGraphicExport;
+                else if( aFilterName.EqualsAscii( "exp" ) )
+                    pFunc = expGraphicExport;
+#endif
                 if( pFunc )
                 {
                     if ( !(*pFunc)( rOStm, aGraphic, &aConfigItem, sal_False ) )

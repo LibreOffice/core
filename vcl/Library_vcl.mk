@@ -242,7 +242,6 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/window/abstdlg \
     vcl/source/window/accel \
     vcl/source/window/accmgr \
-    vcl/source/window/arrange \
     vcl/source/window/brdwin \
     vcl/source/window/btndlg \
     vcl/source/window/builder \
@@ -282,7 +281,6 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/window/toolbox \
     vcl/source/window/window2 \
     vcl/source/window/window3 \
-    vcl/source/window/window4 \
     vcl/source/window/window \
     vcl/source/window/winproc \
     vcl/source/window/wrkwin \

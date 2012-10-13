@@ -263,7 +263,7 @@ public:
     /** Parse rBuffer to formula tree */
     SmNode      *Parse(const String &rBuffer);
     /** Parse rBuffer to formula subtree that constitutes an expression */
-    SmNode      *ParseExpression(const String &rBuffer);
+    SmNode      *ParseExpression(const OUString &rBuffer);
 
     const String & GetText() const { return m_aBufferString; };
 

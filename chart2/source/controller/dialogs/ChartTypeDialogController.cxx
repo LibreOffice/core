@@ -62,7 +62,7 @@ ChartTypeParameter::ChartTypeParameter()
                     , nSplineOrder(3)
                     , nGeometry3D(DataPointGeometry3D::CUBOID)
                     , eThreeDLookScheme(ThreeDLookScheme_Realistic)
-                    , bSortByXValues(sal_False)
+                    , bSortByXValues(false)
 {
 }
 
@@ -81,7 +81,7 @@ ChartTypeParameter::ChartTypeParameter( sal_Int32 SubTypeIndex, bool HasXAxisWit
                     , nSplineOrder(3)
                     , nGeometry3D(DataPointGeometry3D::CUBOID)
                     , eThreeDLookScheme(ThreeDLookScheme_Realistic)
-                    , bSortByXValues(sal_False)
+                    , bSortByXValues(false)
 {
 }
 ChartTypeParameter::~ChartTypeParameter()
@@ -129,7 +129,7 @@ Image ChartTypeDialogController::getImage()
 {
     return Image();
 }
-bool ChartTypeDialogController::isSubType( const rtl::OUString& rServiceName )
+bool ChartTypeDialogController::isSubType( const OUString& rServiceName )
 {
     const tTemplateServiceChartTypeParameterMap& rTemplateMap = this->getTemplateMap();
     tTemplateServiceChartTypeParameterMap::const_iterator aIt( rTemplateMap.find( rServiceName ));
@@ -138,7 +138,7 @@ bool ChartTypeDialogController::isSubType( const rtl::OUString& rServiceName )
     return false;
 }
 ChartTypeParameter ChartTypeDialogController::getChartTypeParameterForService(
-                                                    const rtl::OUString& rServiceName
+                                                    const OUString& rServiceName
                                                     , const uno::Reference< beans::XPropertySet >& xTemplateProps )
 {
     ChartTypeParameter aRet;
@@ -150,9 +150,9 @@ ChartTypeParameter ChartTypeDialogController::getChartTypeParameterForService(
     {
         try
         {
-            xTemplateProps->getPropertyValue( C2U( "CurveStyle" )) >>= aRet.eCurveStyle;
-            xTemplateProps->getPropertyValue( C2U( "CurveResolution" )) >>= aRet.nCurveResolution;
-            xTemplateProps->getPropertyValue( C2U( "SplineOrder" )) >>= aRet.nSplineOrder;
+            xTemplateProps->getPropertyValue( "CurveStyle" ) >>= aRet.eCurveStyle;
+            xTemplateProps->getPropertyValue( "CurveResolution" ) >>= aRet.nCurveResolution;
+            xTemplateProps->getPropertyValue( "SplineOrder" ) >>= aRet.nSplineOrder;
         }
         catch( uno::Exception & ex )
         {
@@ -162,7 +162,7 @@ ChartTypeParameter ChartTypeDialogController::getChartTypeParameterForService(
 
         try
         {
-            xTemplateProps->getPropertyValue( C2U( "Geometry3D" )) >>= aRet.nGeometry3D;
+            xTemplateProps->getPropertyValue( "Geometry3D" ) >>= aRet.nGeometry3D;
         }
         catch( uno::Exception& ex )
         {
@@ -218,7 +218,7 @@ void ChartTypeDialogController::adjustParameterToMainType( ChartTypeParameter& r
                 sal_Int32        nSplineOrder = rParameter.nSplineOrder;
                 CurveStyle       eCurveStyle = rParameter.eCurveStyle;
                 sal_Int32        nGeometry3D = rParameter.nGeometry3D;
-                sal_Bool         bSortByXValues = rParameter.bSortByXValues;
+                bool             bSortByXValues = rParameter.bSortByXValues;
 
                 rParameter = (*aIter).second;
 
@@ -243,7 +243,7 @@ void ChartTypeDialogController::adjustParameterToMainType( ChartTypeParameter& r
             rParameter = ChartTypeParameter();
     }
 }
-rtl::OUString ChartTypeDialogController::getServiceNameForParameter( const ChartTypeParameter& rParameter ) const
+OUString ChartTypeDialogController::getServiceNameForParameter( const ChartTypeParameter& rParameter ) const
 {
     ChartTypeParameter aParameter(rParameter);
     if( aParameter.bXAxisWithValues )
@@ -268,7 +268,7 @@ rtl::OUString ChartTypeDialogController::getServiceNameForParameter( const Chart
                 return (*aIter).first;
         }
     }
-    return ::rtl::OUString();
+    return OUString();
 }
 uno::Reference< XChartTypeTemplate > ChartTypeDialogController::getCurrentTemplate(
     const ChartTypeParameter& rParameter
@@ -276,7 +276,7 @@ uno::Reference< XChartTypeTemplate > ChartTypeDialogController::getCurrentTempla
 {
     uno::Reference< XChartTypeTemplate > xTemplate(0);
 
-    rtl::OUString aServiceName( this->getServiceNameForParameter( rParameter ) );
+    OUString aServiceName( this->getServiceNameForParameter( rParameter ) );
     if(!aServiceName.isEmpty())
     {
         xTemplate.set( xTemplateManager->createInstance( aServiceName ), uno::UNO_QUERY );
@@ -287,9 +287,9 @@ uno::Reference< XChartTypeTemplate > ChartTypeDialogController::getCurrentTempla
             {
                 try
                 {
-                    xTemplateProps->setPropertyValue( C2U( "CurveStyle" ), uno::makeAny(rParameter.eCurveStyle) );
-                    xTemplateProps->setPropertyValue( C2U( "CurveResolution" ), uno::makeAny(rParameter.nCurveResolution) );
-                    xTemplateProps->setPropertyValue( C2U( "SplineOrder" ), uno::makeAny(rParameter.nSplineOrder) );
+                    xTemplateProps->setPropertyValue( "CurveStyle" , uno::makeAny(rParameter.eCurveStyle) );
+                    xTemplateProps->setPropertyValue( "CurveResolution" , uno::makeAny(rParameter.nCurveResolution) );
+                    xTemplateProps->setPropertyValue( "SplineOrder" , uno::makeAny(rParameter.nSplineOrder) );
                 }
                 catch( uno::Exception & ex )
                 {
@@ -298,7 +298,7 @@ uno::Reference< XChartTypeTemplate > ChartTypeDialogController::getCurrentTempla
                 }
                 try
                 {
-                    xTemplateProps->setPropertyValue( C2U( "Geometry3D" ), uno::makeAny(rParameter.nGeometry3D) );
+                    xTemplateProps->setPropertyValue( "Geometry3D" , uno::makeAny(rParameter.nGeometry3D) );
                 }
                 catch( uno::Exception & ex )
                 {
@@ -345,7 +345,7 @@ bool ChartTypeDialogController::commitToModel( const ChartTypeParameter& rParame
         {
             uno::Reference< beans::XPropertySet > xDiaProp( xDiagram, uno::UNO_QUERY );
             if( xDiaProp.is() )
-                xDiaProp->setPropertyValue( C2U( "SortByXValues" ), uno::makeAny( rParameter.bSortByXValues ) );
+                xDiaProp->setPropertyValue( "SortByXValues" , uno::makeAny( rParameter.bSortByXValues ) );
         }
     }
     return false;
@@ -440,13 +440,13 @@ const tTemplateServiceChartTypeParameterMap& ColumnChartDialogController::getTem
 {
     static tTemplateServiceChartTypeParameterMap m_aTemplateMap =
     tTemplateServiceChartTypeParameterMap
-        ( C2U( "com.sun.star.chart2.template.Column" ),                         ChartTypeParameter(1,false,false,GlobalStackMode_NONE) )
-        ( C2U( "com.sun.star.chart2.template.StackedColumn" ),                  ChartTypeParameter(2,false,false,GlobalStackMode_STACK_Y) )
-        ( C2U( "com.sun.star.chart2.template.PercentStackedColumn" ),           ChartTypeParameter(3,false,false,GlobalStackMode_STACK_Y_PERCENT) )
-        ( C2U( "com.sun.star.chart2.template.ThreeDColumnFlat" ),               ChartTypeParameter(1,false,true,GlobalStackMode_NONE) )
-        ( C2U( "com.sun.star.chart2.template.StackedThreeDColumnFlat" ),        ChartTypeParameter(2,false,true,GlobalStackMode_STACK_Y) )
-        ( C2U( "com.sun.star.chart2.template.PercentStackedThreeDColumnFlat" ), ChartTypeParameter(3,false,true,GlobalStackMode_STACK_Y_PERCENT) )
-        ( C2U( "com.sun.star.chart2.template.ThreeDColumnDeep" ),               ChartTypeParameter(4,false,true,GlobalStackMode_STACK_Z) )
+        ( "com.sun.star.chart2.template.Column" ,                         ChartTypeParameter(1,false,false,GlobalStackMode_NONE) )
+        ( "com.sun.star.chart2.template.StackedColumn" ,                  ChartTypeParameter(2,false,false,GlobalStackMode_STACK_Y) )
+        ( "com.sun.star.chart2.template.PercentStackedColumn" ,           ChartTypeParameter(3,false,false,GlobalStackMode_STACK_Y_PERCENT) )
+        ( "com.sun.star.chart2.template.ThreeDColumnFlat" ,               ChartTypeParameter(1,false,true,GlobalStackMode_NONE) )
+        ( "com.sun.star.chart2.template.StackedThreeDColumnFlat" ,        ChartTypeParameter(2,false,true,GlobalStackMode_STACK_Y) )
+        ( "com.sun.star.chart2.template.PercentStackedThreeDColumnFlat" , ChartTypeParameter(3,false,true,GlobalStackMode_STACK_Y_PERCENT) )
+        ( "com.sun.star.chart2.template.ThreeDColumnDeep" ,               ChartTypeParameter(4,false,true,GlobalStackMode_STACK_Z) )
         ;
     return m_aTemplateMap;
 }
@@ -517,13 +517,13 @@ const tTemplateServiceChartTypeParameterMap& BarChartDialogController::getTempla
 {
     static tTemplateServiceChartTypeParameterMap m_aTemplateMap =
     tTemplateServiceChartTypeParameterMap
-        ( C2U( "com.sun.star.chart2.template.Bar" ),                         ChartTypeParameter(1,false,false,GlobalStackMode_NONE) )
-        ( C2U( "com.sun.star.chart2.template.StackedBar" ),                  ChartTypeParameter(2,false,false,GlobalStackMode_STACK_Y) )
-        ( C2U( "com.sun.star.chart2.template.PercentStackedBar" ),           ChartTypeParameter(3,false,false,GlobalStackMode_STACK_Y_PERCENT) )
-        ( C2U( "com.sun.star.chart2.template.ThreeDBarFlat" ),               ChartTypeParameter(1,false,true,GlobalStackMode_NONE) )
-        ( C2U( "com.sun.star.chart2.template.StackedThreeDBarFlat" ),        ChartTypeParameter(2,false,true,GlobalStackMode_STACK_Y) )
-        ( C2U( "com.sun.star.chart2.template.PercentStackedThreeDBarFlat" ), ChartTypeParameter(3,false,true,GlobalStackMode_STACK_Y_PERCENT) )
-        ( C2U( "com.sun.star.chart2.template.ThreeDBarDeep" ),               ChartTypeParameter(4,false,true,GlobalStackMode_STACK_Z) )
+        ( "com.sun.star.chart2.template.Bar" ,                         ChartTypeParameter(1,false,false,GlobalStackMode_NONE) )
+        ( "com.sun.star.chart2.template.StackedBar" ,                  ChartTypeParameter(2,false,false,GlobalStackMode_STACK_Y) )
+        ( "com.sun.star.chart2.template.PercentStackedBar" ,           ChartTypeParameter(3,false,false,GlobalStackMode_STACK_Y_PERCENT) )
+        ( "com.sun.star.chart2.template.ThreeDBarFlat" ,               ChartTypeParameter(1,false,true,GlobalStackMode_NONE) )
+        ( "com.sun.star.chart2.template.StackedThreeDBarFlat" ,        ChartTypeParameter(2,false,true,GlobalStackMode_STACK_Y) )
+        ( "com.sun.star.chart2.template.PercentStackedThreeDBarFlat" , ChartTypeParameter(3,false,true,GlobalStackMode_STACK_Y_PERCENT) )
+        ( "com.sun.star.chart2.template.ThreeDBarDeep" ,               ChartTypeParameter(4,false,true,GlobalStackMode_STACK_Z) )
         ;
     return m_aTemplateMap;
 }
@@ -593,14 +593,14 @@ const tTemplateServiceChartTypeParameterMap& PieChartDialogController::getTempla
 {
     static tTemplateServiceChartTypeParameterMap m_aTemplateMap =
     tTemplateServiceChartTypeParameterMap
-    ( C2U( "com.sun.star.chart2.template.Pie" ),                    ChartTypeParameter(1,false,false) )
-    ( C2U( "com.sun.star.chart2.template.PieAllExploded" ),         ChartTypeParameter(2,false,false) )
-    ( C2U( "com.sun.star.chart2.template.Donut" ),                  ChartTypeParameter(3,false,false) )
-    ( C2U( "com.sun.star.chart2.template.DonutAllExploded" ),       ChartTypeParameter(4,false,false) )
-    ( C2U( "com.sun.star.chart2.template.ThreeDPie" ),              ChartTypeParameter(1,false,true) )
-    ( C2U( "com.sun.star.chart2.template.ThreeDPieAllExploded" ),   ChartTypeParameter(2,false,true) )
-    ( C2U( "com.sun.star.chart2.template.ThreeDDonut" ),            ChartTypeParameter(3,false,true) )
-    ( C2U( "com.sun.star.chart2.template.ThreeDDonutAllExploded" ), ChartTypeParameter(4,false,true) )
+    ( "com.sun.star.chart2.template.Pie" ,                    ChartTypeParameter(1,false,false) )
+    ( "com.sun.star.chart2.template.PieAllExploded" ,         ChartTypeParameter(2,false,false) )
+    ( "com.sun.star.chart2.template.Donut" ,                  ChartTypeParameter(3,false,false) )
+    ( "com.sun.star.chart2.template.DonutAllExploded" ,       ChartTypeParameter(4,false,false) )
+    ( "com.sun.star.chart2.template.ThreeDPie" ,              ChartTypeParameter(1,false,true) )
+    ( "com.sun.star.chart2.template.ThreeDPieAllExploded" ,   ChartTypeParameter(2,false,true) )
+    ( "com.sun.star.chart2.template.ThreeDDonut" ,            ChartTypeParameter(3,false,true) )
+    ( "com.sun.star.chart2.template.ThreeDDonutAllExploded" , ChartTypeParameter(4,false,true) )
     ;
     return m_aTemplateMap;
 }
@@ -657,19 +657,19 @@ const tTemplateServiceChartTypeParameterMap& LineChartDialogController::getTempl
     static tTemplateServiceChartTypeParameterMap m_aTemplateMap =
     tTemplateServiceChartTypeParameterMap
     //-------------------------------------------------------
-    ( C2U( "com.sun.star.chart2.template.Symbol" ),                     ChartTypeParameter(1,false,false,GlobalStackMode_NONE,true,false) )
-    ( C2U( "com.sun.star.chart2.template.StackedSymbol" ),              ChartTypeParameter(1,false,false,GlobalStackMode_STACK_Y,true,false) )
-    ( C2U( "com.sun.star.chart2.template.PercentStackedSymbol" ),       ChartTypeParameter(1,false,false,GlobalStackMode_STACK_Y_PERCENT,true,false) )
-    ( C2U( "com.sun.star.chart2.template.LineSymbol" ),                 ChartTypeParameter(2,false,false,GlobalStackMode_NONE,true,true) )
-    ( C2U( "com.sun.star.chart2.template.StackedLineSymbol" ),          ChartTypeParameter(2,false,false,GlobalStackMode_STACK_Y,true,true) )
-    ( C2U( "com.sun.star.chart2.template.PercentStackedLineSymbol" ),   ChartTypeParameter(2,false,false,GlobalStackMode_STACK_Y_PERCENT,true,true) )
-    ( C2U( "com.sun.star.chart2.template.Line" ),                       ChartTypeParameter(3,false,false,GlobalStackMode_NONE,false,true) )
-    ( C2U( "com.sun.star.chart2.template.StackedLine" ),                ChartTypeParameter(3,false,false,GlobalStackMode_STACK_Y,false,true) )
-    ( C2U( "com.sun.star.chart2.template.PercentStackedLine" ),         ChartTypeParameter(3,false,false,GlobalStackMode_STACK_Y_PERCENT,false,true) )
+    ( "com.sun.star.chart2.template.Symbol" ,                     ChartTypeParameter(1,false,false,GlobalStackMode_NONE,true,false) )
+    ( "com.sun.star.chart2.template.StackedSymbol" ,              ChartTypeParameter(1,false,false,GlobalStackMode_STACK_Y,true,false) )
+    ( "com.sun.star.chart2.template.PercentStackedSymbol" ,       ChartTypeParameter(1,false,false,GlobalStackMode_STACK_Y_PERCENT,true,false) )
+    ( "com.sun.star.chart2.template.LineSymbol" ,                 ChartTypeParameter(2,false,false,GlobalStackMode_NONE,true,true) )
+    ( "com.sun.star.chart2.template.StackedLineSymbol" ,          ChartTypeParameter(2,false,false,GlobalStackMode_STACK_Y,true,true) )
+    ( "com.sun.star.chart2.template.PercentStackedLineSymbol" ,   ChartTypeParameter(2,false,false,GlobalStackMode_STACK_Y_PERCENT,true,true) )
+    ( "com.sun.star.chart2.template.Line" ,                       ChartTypeParameter(3,false,false,GlobalStackMode_NONE,false,true) )
+    ( "com.sun.star.chart2.template.StackedLine" ,                ChartTypeParameter(3,false,false,GlobalStackMode_STACK_Y,false,true) )
+    ( "com.sun.star.chart2.template.PercentStackedLine" ,         ChartTypeParameter(3,false,false,GlobalStackMode_STACK_Y_PERCENT,false,true) )
     //-------------------------------------------------------
-    ( C2U( "com.sun.star.chart2.template.StackedThreeDLine" ),          ChartTypeParameter(4,false,true,GlobalStackMode_STACK_Y,false,true) )
-    ( C2U( "com.sun.star.chart2.template.PercentStackedThreeDLine" ),   ChartTypeParameter(4,false,true,GlobalStackMode_STACK_Y_PERCENT,false,true) )
-    ( C2U( "com.sun.star.chart2.template.ThreeDLineDeep" ),             ChartTypeParameter(4,false,true,GlobalStackMode_STACK_Z,false,true) )
+    ( "com.sun.star.chart2.template.StackedThreeDLine" ,          ChartTypeParameter(4,false,true,GlobalStackMode_STACK_Y,false,true) )
+    ( "com.sun.star.chart2.template.PercentStackedThreeDLine" ,   ChartTypeParameter(4,false,true,GlobalStackMode_STACK_Y_PERCENT,false,true) )
+    ( "com.sun.star.chart2.template.ThreeDLineDeep" ,             ChartTypeParameter(4,false,true,GlobalStackMode_STACK_Z,false,true) )
     //-------------------------------------------------------
     ;
     return m_aTemplateMap;
@@ -789,10 +789,10 @@ const tTemplateServiceChartTypeParameterMap& XYChartDialogController::getTemplat
     static tTemplateServiceChartTypeParameterMap m_aTemplateMap =
     tTemplateServiceChartTypeParameterMap
     //-------------------------------------------------------
-    ( C2U( "com.sun.star.chart2.template.ScatterSymbol" ),              ChartTypeParameter(1,true,false,GlobalStackMode_NONE,true,false) )
-    ( C2U( "com.sun.star.chart2.template.ScatterLineSymbol" ),          ChartTypeParameter(2,true,false,GlobalStackMode_NONE,true,true) )
-    ( C2U( "com.sun.star.chart2.template.ScatterLine" ),                ChartTypeParameter(3,true,false,GlobalStackMode_NONE,false,true) )
-    ( C2U( "com.sun.star.chart2.template.ThreeDScatter" ),              ChartTypeParameter(4,true,true,GlobalStackMode_NONE,false,true) )
+    ( "com.sun.star.chart2.template.ScatterSymbol" ,              ChartTypeParameter(1,true,false,GlobalStackMode_NONE,true,false) )
+    ( "com.sun.star.chart2.template.ScatterLineSymbol" ,          ChartTypeParameter(2,true,false,GlobalStackMode_NONE,true,true) )
+    ( "com.sun.star.chart2.template.ScatterLine" ,                ChartTypeParameter(3,true,false,GlobalStackMode_NONE,false,true) )
+    ( "com.sun.star.chart2.template.ThreeDScatter" ,              ChartTypeParameter(4,true,true,GlobalStackMode_NONE,false,true) )
     ;
     return m_aTemplateMap;
 }
@@ -879,12 +879,12 @@ const tTemplateServiceChartTypeParameterMap& AreaChartDialogController::getTempl
 {
     static tTemplateServiceChartTypeParameterMap m_aTemplateMap =
     tTemplateServiceChartTypeParameterMap
-    ( C2U( "com.sun.star.chart2.template.Area" ),                     ChartTypeParameter(1,false,false,GlobalStackMode_NONE) )
-    ( C2U( "com.sun.star.chart2.template.ThreeDArea" ),               ChartTypeParameter(1,false,true,GlobalStackMode_STACK_Z) )
-    ( C2U( "com.sun.star.chart2.template.StackedArea" ),              ChartTypeParameter(2,false,false,GlobalStackMode_STACK_Y) )
-    ( C2U( "com.sun.star.chart2.template.StackedThreeDArea" ),        ChartTypeParameter(2,false,true,GlobalStackMode_STACK_Y) )
-    ( C2U( "com.sun.star.chart2.template.PercentStackedArea" ),       ChartTypeParameter(3,false,false,GlobalStackMode_STACK_Y_PERCENT) )
-    ( C2U( "com.sun.star.chart2.template.PercentStackedThreeDArea" ), ChartTypeParameter(3,false,true,GlobalStackMode_STACK_Y_PERCENT) )
+    ( "com.sun.star.chart2.template.Area" ,                     ChartTypeParameter(1,false,false,GlobalStackMode_NONE) )
+    ( "com.sun.star.chart2.template.ThreeDArea" ,               ChartTypeParameter(1,false,true,GlobalStackMode_STACK_Z) )
+    ( "com.sun.star.chart2.template.StackedArea" ,              ChartTypeParameter(2,false,false,GlobalStackMode_STACK_Y) )
+    ( "com.sun.star.chart2.template.StackedThreeDArea" ,        ChartTypeParameter(2,false,true,GlobalStackMode_STACK_Y) )
+    ( "com.sun.star.chart2.template.PercentStackedArea" ,       ChartTypeParameter(3,false,false,GlobalStackMode_STACK_Y_PERCENT) )
+    ( "com.sun.star.chart2.template.PercentStackedThreeDArea" , ChartTypeParameter(3,false,true,GlobalStackMode_STACK_Y_PERCENT) )
     ;
     return m_aTemplateMap;
 }
@@ -963,21 +963,21 @@ const tTemplateServiceChartTypeParameterMap& NetChartDialogController::getTempla
     static tTemplateServiceChartTypeParameterMap m_aTemplateMap =
     tTemplateServiceChartTypeParameterMap
     //@todo need templates with symbols only
-    ( C2U( "com.sun.star.chart2.template.NetSymbol" ),              ChartTypeParameter(1,false,false,GlobalStackMode_NONE,true,false) )
-    ( C2U( "com.sun.star.chart2.template.StackedNetSymbol" ),       ChartTypeParameter(1,false,false,GlobalStackMode_STACK_Y,true,false) )
-    ( C2U( "com.sun.star.chart2.template.PercentStackedNetSymbol" ),ChartTypeParameter(1,false,false,GlobalStackMode_STACK_Y_PERCENT,true,false) )
+    ( "com.sun.star.chart2.template.NetSymbol" ,              ChartTypeParameter(1,false,false,GlobalStackMode_NONE,true,false) )
+    ( "com.sun.star.chart2.template.StackedNetSymbol" ,       ChartTypeParameter(1,false,false,GlobalStackMode_STACK_Y,true,false) )
+    ( "com.sun.star.chart2.template.PercentStackedNetSymbol" ,ChartTypeParameter(1,false,false,GlobalStackMode_STACK_Y_PERCENT,true,false) )
 
-    ( C2U( "com.sun.star.chart2.template.Net" ),                    ChartTypeParameter(2,false,false,GlobalStackMode_NONE,true,true) )
-    ( C2U( "com.sun.star.chart2.template.StackedNet" ),             ChartTypeParameter(2,false,false,GlobalStackMode_STACK_Y,true,true) )
-    ( C2U( "com.sun.star.chart2.template.PercentStackedNet" ),      ChartTypeParameter(2,false,false,GlobalStackMode_STACK_Y_PERCENT,true,true) )
+    ( "com.sun.star.chart2.template.Net" ,                    ChartTypeParameter(2,false,false,GlobalStackMode_NONE,true,true) )
+    ( "com.sun.star.chart2.template.StackedNet" ,             ChartTypeParameter(2,false,false,GlobalStackMode_STACK_Y,true,true) )
+    ( "com.sun.star.chart2.template.PercentStackedNet" ,      ChartTypeParameter(2,false,false,GlobalStackMode_STACK_Y_PERCENT,true,true) )
 
-    ( C2U( "com.sun.star.chart2.template.NetLine" ),                ChartTypeParameter(3,false,false,GlobalStackMode_NONE,false,true) )
-    ( C2U( "com.sun.star.chart2.template.StackedNetLine" ),         ChartTypeParameter(3,false,false,GlobalStackMode_STACK_Y,false,true) )
-    ( C2U( "com.sun.star.chart2.template.PercentStackedNetLine" ),  ChartTypeParameter(3,false,false,GlobalStackMode_STACK_Y_PERCENT,false,true) )
+    ( "com.sun.star.chart2.template.NetLine" ,                ChartTypeParameter(3,false,false,GlobalStackMode_NONE,false,true) )
+    ( "com.sun.star.chart2.template.StackedNetLine" ,         ChartTypeParameter(3,false,false,GlobalStackMode_STACK_Y,false,true) )
+    ( "com.sun.star.chart2.template.PercentStackedNetLine" ,  ChartTypeParameter(3,false,false,GlobalStackMode_STACK_Y_PERCENT,false,true) )
 
-    ( C2U( "com.sun.star.chart2.template.FilledNet" ),            ChartTypeParameter(4,false,false,GlobalStackMode_NONE,false,false) )
-    ( C2U( "com.sun.star.chart2.template.StackedFilledNet" ),     ChartTypeParameter(4,false,false,GlobalStackMode_STACK_Y,false,false) )
-    ( C2U( "com.sun.star.chart2.template.PercentStackedFilledNet" ),ChartTypeParameter(4,false,false,GlobalStackMode_STACK_Y_PERCENT,false,false) )
+    ( "com.sun.star.chart2.template.FilledNet" ,              ChartTypeParameter(4,false,false,GlobalStackMode_NONE,false,false) )
+    ( "com.sun.star.chart2.template.StackedFilledNet" ,       ChartTypeParameter(4,false,false,GlobalStackMode_STACK_Y,false,false) )
+    ( "com.sun.star.chart2.template.PercentStackedFilledNet" ,ChartTypeParameter(4,false,false,GlobalStackMode_STACK_Y_PERCENT,false,false) )
     ;
     return m_aTemplateMap;
 }
@@ -1054,10 +1054,10 @@ const tTemplateServiceChartTypeParameterMap& StockChartDialogController::getTemp
 {
     static tTemplateServiceChartTypeParameterMap m_aTemplateMap =
     tTemplateServiceChartTypeParameterMap
-    ( C2U( "com.sun.star.chart2.template.StockLowHighClose" ),          ChartTypeParameter(1) )
-    ( C2U( "com.sun.star.chart2.template.StockOpenLowHighClose" ),      ChartTypeParameter(2) )
-    ( C2U( "com.sun.star.chart2.template.StockVolumeLowHighClose" ),    ChartTypeParameter(3) )
-    ( C2U( "com.sun.star.chart2.template.StockVolumeOpenLowHighClose" ),ChartTypeParameter(4) )
+    ( "com.sun.star.chart2.template.StockLowHighClose" ,          ChartTypeParameter(1) )
+    ( "com.sun.star.chart2.template.StockOpenLowHighClose" ,      ChartTypeParameter(2) )
+    ( "com.sun.star.chart2.template.StockVolumeLowHighClose" ,    ChartTypeParameter(3) )
+    ( "com.sun.star.chart2.template.StockVolumeOpenLowHighClose" ,ChartTypeParameter(4) )
     ;
     return m_aTemplateMap;
 }
@@ -1109,8 +1109,8 @@ const tTemplateServiceChartTypeParameterMap& CombiColumnLineChartDialogControlle
 {
     static tTemplateServiceChartTypeParameterMap m_aTemplateMap =
     tTemplateServiceChartTypeParameterMap
-    ( C2U( "com.sun.star.chart2.template.ColumnWithLine" ),             ChartTypeParameter(1) )
-    ( C2U( "com.sun.star.chart2.template.StackedColumnWithLine" ),      ChartTypeParameter(2,false,false,GlobalStackMode_STACK_Y) )
+    ( "com.sun.star.chart2.template.ColumnWithLine" ,             ChartTypeParameter(1) )
+    ( "com.sun.star.chart2.template.StackedColumnWithLine" ,      ChartTypeParameter(2,false,false,GlobalStackMode_STACK_Y) )
     ;
     return m_aTemplateMap;
 }
@@ -1185,7 +1185,7 @@ void CombiColumnLineChartDialogController::fillExtraControls( const ChartTypePar
     if(xTemplateProps.is())
     try
     {
-        xTemplateProps->getPropertyValue( C2U("NumberOfLines") ) >>= nNumLines;
+        xTemplateProps->getPropertyValue( "NumberOfLines" ) >>= nNumLines;
     }
     catch( const uno::Exception & ex )
     {
@@ -1206,7 +1206,7 @@ void CombiColumnLineChartDialogController::setTemplateProperties( const uno::Ref
     if( xTemplateProps.is() )
     {
         sal_Int32 nNumLines = static_cast< sal_Int32 >( m_pMF_NumberOfLines->GetValue());
-        xTemplateProps->setPropertyValue( C2U( "NumberOfLines" ), uno::makeAny(nNumLines) );
+        xTemplateProps->setPropertyValue( "NumberOfLines" , uno::makeAny(nNumLines) );
     }
 }
 
@@ -1251,7 +1251,7 @@ const tTemplateServiceChartTypeParameterMap& BubbleChartDialogController::getTem
 {
     static tTemplateServiceChartTypeParameterMap m_aTemplateMap =
     tTemplateServiceChartTypeParameterMap
-        ( C2U( "com.sun.star.chart2.template.Bubble" ),          ChartTypeParameter(1,true) ) ;
+        ( "com.sun.star.chart2.template.Bubble" ,          ChartTypeParameter(1,true) ) ;
     return m_aTemplateMap;
 }
 void BubbleChartDialogController::fillSubTypeList( ValueSet& rSubTypeList, const ChartTypeParameter& /*rParameter*/ )

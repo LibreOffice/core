@@ -112,11 +112,11 @@ using ::rtl::OUString;
 using ::editeng::SvxBorderLine;
 
 // from swtable.cxx
-extern void lcl_GetTblBoxColStr( sal_uInt16 nCol, String& rNm );
+extern void sw_GetTblBoxColStr( sal_uInt16 nCol, String& rNm );
 
 #define UNO_TABLE_COLUMN_SUM    10000
 
-sal_Bool lcl_LineToSvxLine(const table::BorderLine& rLine, SvxBorderLine& rSvxLine)
+static sal_Bool lcl_LineToSvxLine(const table::BorderLine& rLine, SvxBorderLine& rSvxLine)
 {
     rSvxLine.SetColor(Color(rLine.Color));
 
@@ -129,7 +129,7 @@ sal_Bool lcl_LineToSvxLine(const table::BorderLine& rLine, SvxBorderLine& rSvxLi
     return bRet;
 }
 
-void lcl_SetSpecialProperty(SwFrmFmt* pFmt, const SfxItemPropertySimpleEntry* pEntry, const uno::Any& aValue)
+static void lcl_SetSpecialProperty(SwFrmFmt* pFmt, const SfxItemPropertySimpleEntry* pEntry, const uno::Any& aValue)
     throw (lang::IllegalArgumentException)
 {
     //Sonderbehandlung fuer "Nicht-Items"
@@ -198,7 +198,7 @@ void lcl_SetSpecialProperty(SwFrmFmt* pFmt, const SfxItemPropertySimpleEntry* pE
             const SwPageDesc* pDesc = 0;
             if(sPageStyle.Len())
             {
-                SwStyleNameMapper::FillUIName(sPageStyle, sPageStyle, nsSwGetPoolIdFromName::GET_POOLID_PAGEDESC, sal_True );
+                SwStyleNameMapper::FillUIName(sPageStyle, sPageStyle, nsSwGetPoolIdFromName::GET_POOLID_PAGEDESC, true );
                 pDesc = ::GetPageDescByName_Impl(*pFmt->GetDoc(), sPageStyle);
             }
             SwFmtPageDesc aDesc( pDesc );
@@ -210,7 +210,7 @@ void lcl_SetSpecialProperty(SwFrmFmt* pFmt, const SfxItemPropertySimpleEntry* pE
     }
 }
 
-uno::Any lcl_GetSpecialProperty(SwFrmFmt* pFmt, const SfxItemPropertySimpleEntry* pEntry )
+static uno::Any lcl_GetSpecialProperty(SwFrmFmt* pFmt, const SfxItemPropertySimpleEntry* pEntry )
 {
     uno::Any aRet;
     switch(pEntry->nWID)
@@ -319,7 +319,7 @@ uno::Any lcl_GetSpecialProperty(SwFrmFmt* pFmt, const SfxItemPropertySimpleEntry
 //
 // Sample for naming scheme of cell in a single row (in groups a 26):
 // A1..Z1, a1..z1, AA1..AZ1, Aa1..Az1, BA1..BZ1, Ba1..Bz1, ...
-void lcl_GetCellPosition( const String &rCellName,
+void sw_GetCellPosition( const String &rCellName,
         sal_Int32 &rColumn, sal_Int32 &rRow)
 {
     rColumn = rRow = -1;    // default return values indicating failure
@@ -372,11 +372,11 @@ void lcl_GetCellPosition( const String &rCellName,
 //
 // Note: this function probably also make sense only
 //      for cell names of non-complex tables
-int lcl_CompareCellsByRowFirst( const String &rCellName1, const String &rCellName2 )
+int sw_CompareCellsByRowFirst( const String &rCellName1, const String &rCellName2 )
 {
     sal_Int32 nCol1 = -1, nRow1 = -1, nCol2 = -1, nRow2 = -1;
-    lcl_GetCellPosition( rCellName1, nCol1, nRow1 );
-    lcl_GetCellPosition( rCellName2, nCol2, nRow2 );
+    sw_GetCellPosition( rCellName1, nCol1, nRow1 );
+    sw_GetCellPosition( rCellName2, nCol2, nRow2 );
 
     if (nRow1 < nRow2 || (nRow1 == nRow2 && nCol1 < nCol2))
         return -1;
@@ -394,11 +394,11 @@ int lcl_CompareCellsByRowFirst( const String &rCellName1, const String &rCellNam
 //
 // Note: this function probably also make sense only
 //      for cell names of non-complex tables
-int lcl_CompareCellsByColFirst( const String &rCellName1, const String &rCellName2 )
+int sw_CompareCellsByColFirst( const String &rCellName1, const String &rCellName2 )
 {
     sal_Int32 nCol1 = -1, nRow1 = -1, nCol2 = -1, nRow2 = -1;
-    lcl_GetCellPosition( rCellName1, nCol1, nRow1 );
-    lcl_GetCellPosition( rCellName2, nCol2, nRow2 );
+    sw_GetCellPosition( rCellName1, nCol1, nRow1 );
+    sw_GetCellPosition( rCellName2, nCol2, nRow2 );
 
     if (nCol1 < nCol2 || (nCol1 == nCol2 && nRow1 < nRow2))
         return -1;
@@ -416,13 +416,13 @@ int lcl_CompareCellsByColFirst( const String &rCellName1, const String &rCellNam
 //
 // Note: this function probably also make sense only
 //      for cell names of non-complex tables
-int lcl_CompareCellRanges(
+int sw_CompareCellRanges(
         const String &rRange1StartCell, const String &rRange1EndCell,
         const String &rRange2StartCell, const String &rRange2EndCell,
         sal_Bool bCmpColsFirst )
 {
     int (*pCompareCells)( const String &, const String & ) =
-            bCmpColsFirst ? &lcl_CompareCellsByColFirst : &lcl_CompareCellsByRowFirst;
+            bCmpColsFirst ? &sw_CompareCellsByColFirst : &sw_CompareCellsByRowFirst;
 
     int nCmpResStartCells = pCompareCells( rRange1StartCell, rRange2StartCell );
     if ((-1 == nCmpResStartCells ) ||
@@ -438,26 +438,26 @@ int lcl_CompareCellRanges(
 
 // returns the cell name for the cell at the specified position
 // (note that the indices nColumn and nRow are 0 based here)
-String lcl_GetCellName( sal_Int32 nColumn, sal_Int32 nRow )
+String sw_GetCellName( sal_Int32 nColumn, sal_Int32 nRow )
 {
 #if OSL_DEBUG_LEVEL > 0
     {
         sal_Int32 nCol, nRow2;
-        lcl_GetCellPosition( rtl::OUString("z1"), nCol, nRow2);
-        OSL_ENSURE( nCol == 51, "lcl_GetCellPosition failed" );
-        lcl_GetCellPosition( rtl::OUString("AA1"), nCol, nRow2);
-        OSL_ENSURE( nCol == 52, "lcl_GetCellPosition failed" );
-        lcl_GetCellPosition( rtl::OUString("AB1"), nCol, nRow2);
-        OSL_ENSURE( nCol == 53, "lcl_GetCellPosition failed" );
-        lcl_GetCellPosition( rtl::OUString("BB1"), nCol, nRow2);
-        OSL_ENSURE( nCol == 105, "lcl_GetCellPosition failed" );
+        sw_GetCellPosition( rtl::OUString("z1"), nCol, nRow2);
+        OSL_ENSURE( nCol == 51, "sw_GetCellPosition failed" );
+        sw_GetCellPosition( rtl::OUString("AA1"), nCol, nRow2);
+        OSL_ENSURE( nCol == 52, "sw_GetCellPosition failed" );
+        sw_GetCellPosition( rtl::OUString("AB1"), nCol, nRow2);
+        OSL_ENSURE( nCol == 53, "sw_GetCellPosition failed" );
+        sw_GetCellPosition( rtl::OUString("BB1"), nCol, nRow2);
+        OSL_ENSURE( nCol == 105, "sw_GetCellPosition failed" );
     }
 #endif
 
     String sCellName;
     if (nColumn < 0 || nRow < 0)
         return sCellName;
-    lcl_GetTblBoxColStr( static_cast< sal_uInt16 >(nColumn), sCellName );
+    sw_GetTblBoxColStr( static_cast< sal_uInt16 >(nColumn), sCellName );
     sCellName += String::CreateFromInt32( nRow + 1 );
     return sCellName;
 }
@@ -501,17 +501,17 @@ const SwTableBox* lcl_FindCornerTableBox(const SwTableLines& rTableLines, const 
 // I.e. from the four possible representation
 //      A1:C5, C5:A1, A5:C1, C1:A5
 // only A1:C5 is the one to use
-void lcl_NormalizeRange(
+void sw_NormalizeRange(
     String &rCell1,     // will hold the upper-left cell of the range upon return
     String &rCell2 )    // will hold the lower-right cell of the range upon return
 {
     sal_Int32 nCol1 = -1, nRow1 = -1, nCol2 = -1, nRow2 = -1;
-    lcl_GetCellPosition( rCell1, nCol1, nRow1 );
-    lcl_GetCellPosition( rCell2, nCol2, nRow2 );
+    sw_GetCellPosition( rCell1, nCol1, nRow1 );
+    sw_GetCellPosition( rCell2, nCol2, nRow2 );
     if (nCol2 < nCol1 || nRow2 < nRow1)
     {
-        rCell1  = lcl_GetCellName( Min(nCol1, nCol2), Min(nRow1, nRow2) );
-        rCell2  = lcl_GetCellName( Max(nCol1, nCol2), Max(nRow1, nRow2) );
+        rCell1  = sw_GetCellName( Min(nCol1, nCol2), Min(nRow1, nRow2) );
+        rCell2  = sw_GetCellName( Max(nCol1, nCol2), Max(nRow1, nRow2) );
     }
 
 }
@@ -532,10 +532,10 @@ void SwRangeDescriptor::Normalize()
     }
 }
 
-SwXCell* lcl_CreateXCell(SwFrmFmt* pFmt, sal_Int32 nColumn, sal_Int32 nRow)
+static SwXCell* lcl_CreateXCell(SwFrmFmt* pFmt, sal_Int32 nColumn, sal_Int32 nRow)
 {
     SwXCell* pXCell = 0;
-    String sCellName = lcl_GetCellName(nColumn, nRow);
+    String sCellName = sw_GetCellName(nColumn, nRow);
     SwTable* pTable = SwTable::FindTable( pFmt );
     SwTableBox* pBox = (SwTableBox*)pTable->GetTblBox( sCellName );
     if(pBox)
@@ -545,7 +545,7 @@ SwXCell* lcl_CreateXCell(SwFrmFmt* pFmt, sal_Int32 nColumn, sal_Int32 nRow)
     return pXCell;
 }
 
-void lcl_InspectLines(SwTableLines& rLines, std::vector<String*>& rAllNames)
+static void lcl_InspectLines(SwTableLines& rLines, std::vector<String*>& rAllNames)
 {
     for( sal_uInt16 i = 0; i < rLines.size(); i++ )
     {
@@ -565,7 +565,7 @@ void lcl_InspectLines(SwTableLines& rLines, std::vector<String*>& rAllNames)
     }
 }
 
-void lcl_FormatTable(SwFrmFmt* pTblFmt)
+static void lcl_FormatTable(SwFrmFmt* pTblFmt)
 {
     SwIterator<SwFrm,SwFmt> aIter( *pTblFmt );
     for( SwFrm* pFrm = aIter.First(); pFrm; pFrm = aIter.Next() )
@@ -581,7 +581,7 @@ void lcl_FormatTable(SwFrmFmt* pTblFmt)
     }
 }
 
-void lcl_CrsrSelect(SwPaM* pCrsr, sal_Bool bExpand)
+static void lcl_CrsrSelect(SwPaM* pCrsr, sal_Bool bExpand)
 {
     if(bExpand)
     {
@@ -593,7 +593,7 @@ void lcl_CrsrSelect(SwPaM* pCrsr, sal_Bool bExpand)
 
 }
 
-void lcl_GetTblSeparators(uno::Any& rRet, SwTable* pTable, SwTableBox* pBox, sal_Bool bRow)
+static void lcl_GetTblSeparators(uno::Any& rRet, SwTable* pTable, SwTableBox* pBox, sal_Bool bRow)
 {
     SwTabCols aCols;
     aCols.SetLeftMin ( 0 );
@@ -622,7 +622,7 @@ void lcl_GetTblSeparators(uno::Any& rRet, SwTable* pTable, SwTableBox* pBox, sal
 
 }
 
-void lcl_SetTblSeparators(const uno::Any& rVal, SwTable* pTable, SwTableBox* pBox, sal_Bool bRow, SwDoc* pDoc)
+static void lcl_SetTblSeparators(const uno::Any& rVal, SwTable* pTable, SwTableBox* pBox, sal_Bool bRow, SwDoc* pDoc)
 {
     SwTabCols aOldCols;
 
@@ -666,14 +666,14 @@ void lcl_SetTblSeparators(const uno::Any& rVal, SwTable* pTable, SwTableBox* pBo
     }
 }
 
-inline rtl::OUString lcl_getString( SwXCell &rCell )
+static inline rtl::OUString lcl_getString( SwXCell &rCell )
 {
     // getString is a member function of the base class...
     return rCell.getString();
 }
 
 /*  non UNO function call to set string in SwXCell */
-void lcl_setString( SwXCell &rCell, const rtl::OUString &rTxt,
+void sw_setString( SwXCell &rCell, const rtl::OUString &rTxt,
         sal_Bool bKeepNumberFmt )
 {
     if(rCell.IsValid())
@@ -690,7 +690,7 @@ void lcl_setString( SwXCell &rCell, const rtl::OUString &rTxt,
 }
 
 /* non UNO function call to get value from SwXCell */
-double lcl_getValue( SwXCell &rCell )
+double sw_getValue( SwXCell &rCell )
 {
     double fRet;
     if(rCell.IsValid() && !rCell.getString().isEmpty())
@@ -701,14 +701,14 @@ double lcl_getValue( SwXCell &rCell )
 }
 
 /* non UNO function call to set value in SwXCell */
-void lcl_setValue( SwXCell &rCell, double nVal )
+void sw_setValue( SwXCell &rCell, double nVal )
 {
     if(rCell.IsValid())
     {
         // Der Text mu? zunaechst (vielleicht) geloescht werden
         sal_uLong nNdPos = rCell.pBox->IsValidNumTxtNd( sal_True );
         if(ULONG_MAX != nNdPos)
-            lcl_setString( rCell, OUString(), sal_True );   // sal_True == keep number format
+            sw_setString( rCell, OUString(), sal_True );   // sal_True == keep number format
         SwDoc* pDoc = rCell.GetDoc();
         UnoActionContext aAction(pDoc);
         SwFrmFmt* pBoxFmt = rCell.pBox->ClaimFrmFmt();
@@ -898,7 +898,7 @@ void SwXCell::setFormula(const OUString& rFormula) throw( uno::RuntimeException 
         // Der Text mu? zunaechst (vielleicht) geloescht werden
         sal_uInt32 nNdPos = pBox->IsValidNumTxtNd( sal_True );
         if(USHRT_MAX == nNdPos)
-            lcl_setString( *this, OUString(), sal_True );
+            sw_setString( *this, OUString(), sal_True );
         String sFml(comphelper::string::stripStart(rFormula, ' '));
         if( sFml.Len() && '=' == sFml.GetChar( 0 ) )
                     sFml.Erase( 0, 1 );
@@ -925,7 +925,7 @@ double SwXCell::getValue(void) throw( uno::RuntimeException )
 {
     SolarMutexGuard aGuard;
 
-    double const fRet = lcl_getValue( *this );
+    double const fRet = sw_getValue( *this );
     // #i112652# a table cell may contain NaN as a value, do not filter that
     return fRet;
 }
@@ -933,7 +933,7 @@ double SwXCell::getValue(void) throw( uno::RuntimeException )
 void SwXCell::setValue(double rValue) throw( uno::RuntimeException )
 {
     SolarMutexGuard aGuard;
-    lcl_setValue( *this, rValue );
+    sw_setValue( *this, rValue );
 }
 
 table::CellContentType SwXCell::getType(void) throw( uno::RuntimeException )
@@ -957,7 +957,7 @@ table::CellContentType SwXCell::getType(void) throw( uno::RuntimeException )
 void SwXCell::setString(const OUString& aString) throw( uno::RuntimeException )
 {
     SolarMutexGuard aGuard;
-    lcl_setString( *this, aString );
+    sw_setString( *this, aString );
 }
 
 sal_Int32 SwXCell::getError(void) throw( uno::RuntimeException )
@@ -1166,7 +1166,7 @@ uno::Reference< container::XEnumeration >  SwXCell::createEnumeration(void) thro
         const SwStartNode* pSttNd = pBox->GetSttNd();
         SwPosition aPos(*pSttNd);
         ::std::auto_ptr<SwUnoCrsr> pUnoCursor(
-            GetDoc()->CreateUnoCrsr(aPos, sal_False));
+            GetDoc()->CreateUnoCrsr(aPos, false));
         pUnoCursor->Move(fnMoveForward, fnGoNode);
 
         // remember table and start node for later travelling
@@ -1499,7 +1499,7 @@ SwXTextTableCursor::SwXTextTableCursor(SwFrmFmt* pFmt, SwTableBox* pBox) :
     SwDoc* pDoc = pFmt->GetDoc();
     const SwStartNode* pSttNd = pBox->GetSttNd();
     SwPosition aPos(*pSttNd);
-    SwUnoCrsr* pUnoCrsr = pDoc->CreateUnoCrsr(aPos, sal_True);
+    SwUnoCrsr* pUnoCrsr = pDoc->CreateUnoCrsr(aPos, true);
     pUnoCrsr->Move( fnMoveForward, fnGoNode );
     pUnoCrsr->Add(&aCrsrDepend);
     SwUnoTableCrsr* pTblCrsr = dynamic_cast<SwUnoTableCrsr*>(pUnoCrsr);
@@ -1511,7 +1511,7 @@ SwXTextTableCursor::SwXTextTableCursor(SwFrmFmt& rTableFmt, const SwTableCursor*
     aCrsrDepend(this, 0),
     m_pPropSet(aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXT_TABLE_CURSOR))
 {
-    SwUnoCrsr* pUnoCrsr = pTableSelection->GetDoc()->CreateUnoCrsr(*pTableSelection->GetPoint(), sal_True);
+    SwUnoCrsr* pUnoCrsr = pTableSelection->GetDoc()->CreateUnoCrsr(*pTableSelection->GetPoint(), true);
     if(pTableSelection->HasMark())
     {
         pUnoCrsr->SetMark();
@@ -1980,7 +1980,7 @@ void    SwTableProperties_Impl::ApplyTblAttr(const SwTable& rTbl, SwDoc& rDoc)
         String sPageStyle = uTmp;
         if(sPageStyle.Len())
         {
-            SwStyleNameMapper::FillUIName(sPageStyle, sPageStyle, nsSwGetPoolIdFromName::GET_POOLID_PAGEDESC, sal_True );
+            SwStyleNameMapper::FillUIName(sPageStyle, sPageStyle, nsSwGetPoolIdFromName::GET_POOLID_PAGEDESC, true );
             const SwPageDesc* pDesc = ::GetPageDescByName_Impl(rDoc, sPageStyle);
             if(pDesc)
             {
@@ -2427,7 +2427,7 @@ uno::Reference< table::XCellRange >  SwXTextTable::GetRangeByName(SwFrmFmt* pFmt
         const SwStartNode* pSttNd = pTLBox->GetSttNd();
         SwPosition aPos(*pSttNd);
         // Cursor in die obere linke Zelle des Ranges setzen
-        SwUnoCrsr* pUnoCrsr = pFmt->GetDoc()->CreateUnoCrsr(aPos, sal_True);
+        SwUnoCrsr* pUnoCrsr = pFmt->GetDoc()->CreateUnoCrsr(aPos, true);
         pUnoCrsr->Move( fnMoveForward, fnGoNode );
         pUnoCrsr->SetRemainInSection( sal_False );
         const SwTableBox* pBRBox = pTable->GetTblBox( sBRName );
@@ -2467,8 +2467,8 @@ uno::Reference< table::XCellRange >  SwXTextTable::getCellRangeByPosition(sal_In
             aDesc.nBottom = nBottom;
             aDesc.nLeft   = nLeft;
             aDesc.nRight  = nRight;
-            String sTLName = lcl_GetCellName(aDesc.nLeft, aDesc.nTop);
-            String sBRName = lcl_GetCellName(aDesc.nRight, aDesc.nBottom);
+            String sTLName = sw_GetCellName(aDesc.nLeft, aDesc.nTop);
+            String sBRName = sw_GetCellName(aDesc.nRight, aDesc.nBottom);
 
             // please note that according to the 'if' statement at the begin
             // sTLName:sBRName already denotes the normalized range string
@@ -2499,8 +2499,8 @@ uno::Reference< table::XCellRange >  SwXTextTable::getCellRangeByName(const OUSt
                 throw uno::RuntimeException();
             SwRangeDescriptor aDesc;
             aDesc.nTop = aDesc.nLeft = aDesc.nBottom = aDesc.nRight = -1;
-            lcl_GetCellPosition(sTLName, aDesc.nLeft, aDesc.nTop );
-            lcl_GetCellPosition(sBRName, aDesc.nRight, aDesc.nBottom );
+            sw_GetCellPosition(sTLName, aDesc.nLeft, aDesc.nTop );
+            sw_GetCellPosition(sBRName, aDesc.nRight, aDesc.nBottom );
 
             // we should normalize the range now (e.g. A5:C1 will become A1:C5)
             // since (depending on what is done later) it will be troublesome
@@ -2565,7 +2565,7 @@ uno::Sequence< uno::Sequence< uno::Any > > SAL_CALL SwXTextTable::getDataArray()
                     if(!bIsNum/*bIsText*/)
                         pColArray[nCol] <<= lcl_getString(*pXCell);
                     else
-                        pColArray[nCol] <<= lcl_getValue(*pXCell);
+                        pColArray[nCol] <<= sw_getValue(*pXCell);
                 }
             }
             pRowArray[nRow] = aColSeq;
@@ -2626,16 +2626,16 @@ void SAL_CALL SwXTextTable::setDataArray(
                 {
                     const uno::Any &rAny = pColArray[nCol];
                     if (uno::TypeClass_STRING == rAny.getValueTypeClass())
-                        lcl_setString( *pXCell, *(rtl::OUString *) rAny.getValue() );
+                        sw_setString( *pXCell, *(rtl::OUString *) rAny.getValue() );
                     else
                     {
                         double d = 0;
                         // #i20067# don't throw exception just do nothing if
                         // there is no value set
                         if( (rAny >>= d) )
-                            lcl_setValue( *pXCell, d );
+                            sw_setValue( *pXCell, d );
                         else
-                            lcl_setString( *pXCell, OUString(), sal_True );
+                            sw_setString( *pXCell, OUString(), sal_True );
 
                     }
                 }
@@ -3111,7 +3111,7 @@ void SwXTextTable::setPropertyValue(const OUString& rPropertyName,
                     const SwStartNode* pSttNd = pTLBox->GetSttNd();
                     SwPosition aPos(*pSttNd);
                     // set cursor to top left cell
-                    SwUnoCrsr* pUnoCrsr = pDoc->CreateUnoCrsr(aPos, sal_True);
+                    SwUnoCrsr* pUnoCrsr = pDoc->CreateUnoCrsr(aPos, true);
                     pUnoCrsr->Move( fnMoveForward, fnGoNode );
                     pUnoCrsr->SetRemainInSection( sal_False );
 
@@ -3299,7 +3299,7 @@ uno::Any SwXTextTable::getPropertyValue(const OUString& rPropertyName) throw( be
                     const SwStartNode* pSttNd = pTLBox->GetSttNd();
                     SwPosition aPos(*pSttNd);
                     // set cursor to top left cell
-                    SwUnoCrsr* pUnoCrsr = pDoc->CreateUnoCrsr(aPos, sal_True);
+                    SwUnoCrsr* pUnoCrsr = pDoc->CreateUnoCrsr(aPos, true);
                     pUnoCrsr->Move( fnMoveForward, fnGoNode );
                     pUnoCrsr->SetRemainInSection( sal_False );
 
@@ -3758,8 +3758,8 @@ uno::Reference< table::XCellRange >  SwXCellRange::getCellRangeByPosition(
             aNewDesc.nLeft   = nLeft + aRgDesc.nLeft;
             aNewDesc.nRight  = nRight + aRgDesc.nLeft;
             aNewDesc.Normalize();
-            String sTLName = lcl_GetCellName(aNewDesc.nLeft, aNewDesc.nTop);
-            String sBRName = lcl_GetCellName(aNewDesc.nRight, aNewDesc.nBottom);
+            String sTLName = sw_GetCellName(aNewDesc.nLeft, aNewDesc.nTop);
+            String sBRName = sw_GetCellName(aNewDesc.nRight, aNewDesc.nBottom);
             const SwTableBox* pTLBox = pTable->GetTblBox( sTLName );
             if(pTLBox)
             {
@@ -3768,7 +3768,7 @@ uno::Reference< table::XCellRange >  SwXCellRange::getCellRangeByPosition(
                 const SwStartNode* pSttNd = pTLBox->GetSttNd();
                 SwPosition aPos(*pSttNd);
                 // Cursor in die obere linke Zelle des Ranges setzen
-                SwUnoCrsr* pUnoCrsr = pFmt->GetDoc()->CreateUnoCrsr(aPos, sal_True);
+                SwUnoCrsr* pUnoCrsr = pFmt->GetDoc()->CreateUnoCrsr(aPos, true);
                 pUnoCrsr->Move( fnMoveForward, fnGoNode );
                 pUnoCrsr->SetRemainInSection( sal_False );
                 const SwTableBox* pBRBox = pTable->GetTblBox( sBRName );
@@ -3805,8 +3805,8 @@ uno::Reference< table::XCellRange >  SwXCellRange::getCellRangeByName(const OUSt
         throw uno::RuntimeException();
     SwRangeDescriptor aDesc;
     aDesc.nTop = aDesc.nLeft = aDesc.nBottom = aDesc.nRight = -1;
-    lcl_GetCellPosition( sTLName, aDesc.nLeft, aDesc.nTop );
-    lcl_GetCellPosition( sBRName, aDesc.nRight, aDesc.nBottom );
+    sw_GetCellPosition( sTLName, aDesc.nLeft, aDesc.nTop );
+    sw_GetCellPosition( sBRName, aDesc.nRight, aDesc.nBottom );
     aDesc.Normalize();
     return getCellRangeByPosition(aDesc.nLeft - aRgDesc.nLeft, aDesc.nTop - aRgDesc.nTop,
                 aDesc.nRight - aRgDesc.nLeft, aDesc.nBottom - aRgDesc.nTop);
@@ -4128,7 +4128,7 @@ void SwXCellRange::GetDataSequence(
                         if (!bIsNum/* && ULONG_MAX == nNdPos*/)
                             pAnyData[nDtaCnt++] <<= lcl_getString(*pXCell);
                         else
-                            pAnyData[nDtaCnt++] <<= lcl_getValue(*pXCell);
+                            pAnyData[nDtaCnt++] <<= sw_getValue(*pXCell);
                     }
                     else if (pTxtData)
                         pTxtData[nDtaCnt++] = lcl_getString(*pXCell);
@@ -4136,7 +4136,7 @@ void SwXCellRange::GetDataSequence(
                     {
                         double fVal = fNan;
                         if (!bForceNumberResults || table::CellContentType_TEXT != pXCell->getType())
-                            fVal = lcl_getValue(*pXCell);
+                            fVal = sw_getValue(*pXCell);
                         else
                         {
                             OSL_ENSURE( table::CellContentType_TEXT == pXCell->getType(),
@@ -4253,7 +4253,7 @@ uno::Sequence< uno::Sequence< uno::Any > > SAL_CALL SwXCellRange::getDataArray()
                     if(!bIsNum/*bIsText*/)
                         pColArray[nCol] <<= lcl_getString(*pXCell);
                     else
-                        pColArray[nCol] <<= lcl_getValue(*pXCell);
+                        pColArray[nCol] <<= sw_getValue(*pXCell);
                 }
             }
             pRowArray[nRow] = aColSeq;
@@ -4311,16 +4311,16 @@ void SAL_CALL SwXCellRange::setDataArray(
                 {
                     const uno::Any &rAny = pColArray[nCol];
                     if (uno::TypeClass_STRING == rAny.getValueTypeClass())
-                        lcl_setString( *pXCell, *(rtl::OUString *) rAny.getValue() );
+                        sw_setString( *pXCell, *(rtl::OUString *) rAny.getValue() );
                     else
                     {
                         double d = 0;
                         // #i20067# don't throw exception just do nothing if
                         // there is no value set
                         if( (rAny >>= d) )
-                            lcl_setValue( *pXCell, d );
+                            sw_setValue( *pXCell, d );
                         else
-                            lcl_setString( *pXCell, OUString(), sal_True );
+                            sw_setString( *pXCell, OUString(), sal_True );
                     }
                 }
             }
@@ -4759,7 +4759,7 @@ void SwXTableRows::insertByIndex(sal_Int32 nIndex, sal_Int32 nCount) throw( uno:
                 throw aExcept;
             }
 
-            String sTLName = lcl_GetCellName(0, nIndex);
+            String sTLName = sw_GetCellName(0, nIndex);
             const SwTableBox* pTLBox = pTable->GetTblBox( sTLName );
             sal_Bool bAppend = sal_False;
             if(!pTLBox)
@@ -4777,7 +4777,7 @@ void SwXTableRows::insertByIndex(sal_Int32 nIndex, sal_Int32 nCount) throw( uno:
                 SwPosition aPos(*pSttNd);
                 // Cursor in die obere linke Zelle des Ranges setzen
                 UnoActionContext aAction(pFrmFmt->GetDoc());
-                SwUnoCrsr* pUnoCrsr = pFrmFmt->GetDoc()->CreateUnoCrsr(aPos, sal_True);
+                SwUnoCrsr* pUnoCrsr = pFrmFmt->GetDoc()->CreateUnoCrsr(aPos, true);
                 pUnoCrsr->Move( fnMoveForward, fnGoNode );
 
                 {
@@ -4806,7 +4806,7 @@ void SwXTableRows::removeByIndex(sal_Int32 nIndex, sal_Int32 nCount) throw( uno:
         SwTable* pTable = SwTable::FindTable( pFrmFmt );
         if(!pTable->IsTblComplex())
         {
-            String sTLName = lcl_GetCellName(0, nIndex);
+            String sTLName = sw_GetCellName(0, nIndex);
             const SwTableBox* pTLBox = pTable->GetTblBox( sTLName );
             if(pTLBox)
             {
@@ -4817,10 +4817,10 @@ void SwXTableRows::removeByIndex(sal_Int32 nIndex, sal_Int32 nCount) throw( uno:
                 const SwStartNode* pSttNd = pTLBox->GetSttNd();
                 SwPosition aPos(*pSttNd);
                 // Cursor in die obere linke Zelle des Ranges setzen
-                SwUnoCrsr* pUnoCrsr = pFrmFmt->GetDoc()->CreateUnoCrsr(aPos, sal_True);
+                SwUnoCrsr* pUnoCrsr = pFrmFmt->GetDoc()->CreateUnoCrsr(aPos, true);
                 pUnoCrsr->Move( fnMoveForward, fnGoNode );
                 pUnoCrsr->SetRemainInSection( sal_False );
-                String sBLName = lcl_GetCellName(0, nIndex + nCount - 1);
+                String sBLName = sw_GetCellName(0, nIndex + nCount - 1);
                 const SwTableBox* pBLBox = pTable->GetTblBox( sBLName );
                 if(pBLBox)
                 {
@@ -4971,7 +4971,7 @@ void SwXTableColumns::insertByIndex(sal_Int32 nIndex, sal_Int32 nCount) throw( u
                 throw aExcept;
             }
 
-            String sTLName = lcl_GetCellName(nIndex, 0);
+            String sTLName = sw_GetCellName(nIndex, 0);
             const SwTableBox* pTLBox = pTable->GetTblBox( sTLName );
             sal_Bool bAppend = sal_False;
             if(!pTLBox)
@@ -4986,7 +4986,7 @@ void SwXTableColumns::insertByIndex(sal_Int32 nIndex, sal_Int32 nCount) throw( u
                 const SwStartNode* pSttNd = pTLBox->GetSttNd();
                 SwPosition aPos(*pSttNd);
                 UnoActionContext aAction(pFrmFmt->GetDoc());
-                SwUnoCrsr* pUnoCrsr = pFrmFmt->GetDoc()->CreateUnoCrsr(aPos, sal_True);
+                SwUnoCrsr* pUnoCrsr = pFrmFmt->GetDoc()->CreateUnoCrsr(aPos, true);
                 pUnoCrsr->Move( fnMoveForward, fnGoNode );
 
                 {
@@ -5015,7 +5015,7 @@ void SwXTableColumns::removeByIndex(sal_Int32 nIndex, sal_Int32 nCount) throw( u
         SwTable* pTable = SwTable::FindTable( pFrmFmt );
         if(!pTable->IsTblComplex())
         {
-            String sTLName = lcl_GetCellName(nIndex, 0);
+            String sTLName = sw_GetCellName(nIndex, 0);
             const SwTableBox* pTLBox = pTable->GetTblBox( sTLName );
             if(pTLBox)
             {
@@ -5026,10 +5026,10 @@ void SwXTableColumns::removeByIndex(sal_Int32 nIndex, sal_Int32 nCount) throw( u
                 const SwStartNode* pSttNd = pTLBox->GetSttNd();
                 SwPosition aPos(*pSttNd);
                 // Cursor in die obere linke Zelle des Ranges setzen
-                SwUnoCrsr* pUnoCrsr = pFrmFmt->GetDoc()->CreateUnoCrsr(aPos, sal_True);
+                SwUnoCrsr* pUnoCrsr = pFrmFmt->GetDoc()->CreateUnoCrsr(aPos, true);
                 pUnoCrsr->Move( fnMoveForward, fnGoNode );
                 pUnoCrsr->SetRemainInSection( sal_False );
-                String sTRName = lcl_GetCellName(nIndex + nCount - 1, 0);
+                String sTRName = sw_GetCellName(nIndex + nCount - 1, 0);
                 const SwTableBox* pTRBox = pTable->GetTblBox( sTRName );
                 if(pTRBox)
                 {

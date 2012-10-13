@@ -82,7 +82,7 @@ sal_Bool SwSdrHdl::IsFocusHdl() const
     return SdrHdl::IsFocusHdl();
 }
 
-const SwFrm *lcl_FindAnchor( const SdrObject *pObj, sal_Bool bAll )
+static const SwFrm *lcl_FindAnchor( const SdrObject *pObj, sal_Bool bAll )
 {
     const SwVirtFlyDrawObj *pVirt = pObj->ISA(SwVirtFlyDrawObj) ?
                                             (SwVirtFlyDrawObj*)pObj : 0;
@@ -354,7 +354,7 @@ SdrObject* SwDrawView::GetMaxToBtmObj(SdrObject* pObj) const
 |*
 *************************************************************************/
 
-inline sal_Bool lcl_IsChild( SdrObject *pParent, SdrObject *pChild )
+static inline sal_Bool lcl_IsChild( SdrObject *pParent, SdrObject *pChild )
 {
     if ( pParent->ISA(SwVirtFlyDrawObj) )
     {
@@ -367,7 +367,7 @@ inline sal_Bool lcl_IsChild( SdrObject *pParent, SdrObject *pChild )
     return sal_False;
 }
 
-inline SdrObject *lcl_FindParent( SdrObject *pObj )
+static inline SdrObject *lcl_FindParent( SdrObject *pObj )
 {
     const SwFrm *pAnch = lcl_FindAnchor( pObj, sal_False );
     if ( pAnch && pAnch->IsInFly() )

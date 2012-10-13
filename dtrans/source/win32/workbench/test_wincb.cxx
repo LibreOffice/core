@@ -182,7 +182,7 @@ Any SAL_CALL CTransferable::getTransferData( const DataFlavor& aFlavor )
 
         Sequence< sal_Int8 > textStream( text.getLength( ) + 1 );
 
-        rtl_copyMemory( textStream.getArray( ), text.getStr( ), textStream.getLength( ) );
+        memcpy( textStream.getArray( ), text.getStr( ), textStream.getLength( ) );
 
         anyData = makeAny( textStream );
     }

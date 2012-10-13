@@ -24,7 +24,7 @@
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
-#include <svtools/svtreebx.hxx>
+#include <svtools/treelistbox.hxx>
 #include <vcl/timer.hxx>
 
 #include <set>

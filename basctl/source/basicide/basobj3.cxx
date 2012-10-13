@@ -83,20 +83,20 @@ SbMethod* CreateMacro( SbModule* pModule, const String& rMacroName )
     if ( pModule->GetMethods()->Find( rMacroName, SbxCLASS_METHOD ) )
         return 0;
 
-    String aMacroName( rMacroName );
-    if ( aMacroName.Len() == 0 )
+    OUString aMacroName( rMacroName );
+    if ( aMacroName.getLength() == 0 )
     {
         if ( !pModule->GetMethods()->Count() )
-            aMacroName = String( RTL_CONSTASCII_USTRINGPARAM( "Main" ) );
+            aMacroName = "Main" ;
         else
         {
             bool bValid = false;
-            String aStdMacroText( RTL_CONSTASCII_USTRINGPARAM( "Macro" ) );
-            sal_uInt16 nMacro = 1;
+            OUString aStdMacroText( "Macro" );
+            sal_Int32 nMacro = 1;
             while ( !bValid )
             {
                 aMacroName = aStdMacroText;
-                aMacroName += String::CreateFromInt32( nMacro );
+                aMacroName += OUString::valueOf( nMacro );
                 // test whether existing...
                 bValid = pModule->GetMethods()->Find( aMacroName, SbxCLASS_METHOD ) ? false : true;
                 nMacro++;
@@ -104,7 +104,7 @@ SbMethod* CreateMacro( SbModule* pModule, const String& rMacroName )
         }
     }
 
-    ::rtl::OUString aOUSource( pModule->GetSource32() );
+    OUString aOUSource( pModule->GetSource32() );
 
     // don't produce too many empty lines...
     sal_Int32 nSourceLen = aOUSource.getLength();
@@ -112,17 +112,17 @@ SbMethod* CreateMacro( SbModule* pModule, const String& rMacroName )
     {
         const sal_Unicode* pStr = aOUSource.getStr();
         if ( pStr[ nSourceLen - 1 ]  != LINE_SEP )
-            aOUSource += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "\n\n" ) );
+            aOUSource += "\n\n" ;
         else if ( pStr[ nSourceLen - 2 ] != LINE_SEP )
-            aOUSource += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "\n" ) );
+            aOUSource += "\n" ;
         else if ( pStr[ nSourceLen - 3 ] == LINE_SEP )
             aOUSource = aOUSource.copy( 0, nSourceLen-1 );
     }
 
-    ::rtl::OUString aSubStr;
-    aSubStr = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Sub " ) );
+    OUString aSubStr;
+    aSubStr = "Sub " ;
     aSubStr += aMacroName;
-    aSubStr += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "\n\nEnd Sub" ) );
+    aSubStr += "\n\nEnd Sub" ;
 
     aOUSource += aSubStr;
 
@@ -165,9 +165,9 @@ SbMethod* CreateMacro( SbModule* pModule, const String& rMacroName )
 bool RenameDialog (
     Window* pErrorParent,
     ScriptDocument const& rDocument,
-    rtl::OUString const& rLibName,
-    rtl::OUString const& rOldName,
-    rtl::OUString const& rNewName
+    OUString const& rLibName,
+    OUString const& rOldName,
+    OUString const& rNewName
 )
     throw(ElementExistException, NoSuchElementException)
 {
@@ -228,7 +228,7 @@ bool RenameDialog (
 
 //----------------------------------------------------------------------------
 
-bool RemoveDialog( const ScriptDocument& rDocument, const ::rtl::OUString& rLibName, const ::rtl::OUString& rDlgName )
+bool RemoveDialog( const ScriptDocument& rDocument, const OUString& rLibName, const OUString& rDlgName )
 {
     if (Shell* pShell = GetShell())
     {
@@ -267,9 +267,9 @@ BasicManager* FindBasicManager( StarBASIC* pLib )
         if ( !pBasicMgr )
             continue;
 
-        Sequence< ::rtl::OUString > aLibNames( doc->getLibraryNames() );
+        Sequence< OUString > aLibNames( doc->getLibraryNames() );
         sal_Int32 nLibCount = aLibNames.getLength();
-        const ::rtl::OUString* pLibNames = aLibNames.getConstArray();
+        const OUString* pLibNames = aLibNames.getConstArray();
 
         for ( sal_Int32 i = 0 ; i < nLibCount ; i++ )
         {
@@ -431,7 +431,7 @@ long HandleBasicError( StarBASIC* pBasic )
             OSL_ENSURE( aDocument.isValid(), "basctl::HandleBasicError: no document for the given BasicManager!" );
             if ( aDocument.isValid() )
             {
-                ::rtl::OUString aOULibName( pBasic->GetName() );
+                OUString aOULibName( pBasic->GetName() );
                 Reference< script::XLibraryContainer > xModLibContainer( aDocument.getLibraryContainer( E_SCRIPTS ) );
                 if ( xModLibContainer.is() && xModLibContainer->hasByName( aOULibName ) )
                 {

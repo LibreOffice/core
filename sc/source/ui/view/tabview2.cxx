@@ -1067,7 +1067,7 @@ void ScTabView::DeselectAllTables()
     rBind.Invalidate( FID_TAB_DESELECTALL );
 }
 
-bool lcl_FitsInWindow( double fScaleX, double fScaleY, sal_uInt16 nZoom,
+static bool lcl_FitsInWindow( double fScaleX, double fScaleY, sal_uInt16 nZoom,
                         long nWindowX, long nWindowY, ScDocument* pDoc, SCTAB nTab,
                         SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow,
                         SCCOL nFixPosX, SCROW nFixPosY )

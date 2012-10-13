@@ -41,7 +41,7 @@
 #include <acceleratorconst.h>
 #include <services.h>
 
-#include <com/sun/star/xml/sax/XParser.hpp>
+#include <com/sun/star/xml/sax/Parser.hpp>
 #include <com/sun/star/xml/sax/InputSource.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
@@ -56,6 +56,7 @@
 #include <com/sun/star/awt/KeyModifier.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/util/XChangesNotifier.hpp>
+#include <comphelper/componentcontext.hxx>
 #include <comphelper/configurationhelper.hxx>
 #include <unotools/configpaths.hxx>
 #include <rtl/logfile.hxx>
@@ -522,7 +523,7 @@ void XMLBasedAcceleratorConfiguration::impl_ts_load(const css::uno::Reference< c
     css::uno::Reference< css::xml::sax::XDocumentHandler > xFilter (static_cast< ::cppu::OWeakObject* >(pFilter), css::uno::UNO_QUERY_THROW);
 
     // connect parser, filter and stream
-    css::uno::Reference< css::xml::sax::XParser > xParser(xSMGR->createInstance(SERVICENAME_SAXPARSER), css::uno::UNO_QUERY_THROW);
+    css::uno::Reference< css::xml::sax::XParser > xParser = css::xml::sax::Parser::create(comphelper::getComponentContext(xSMGR));
     xParser->setDocumentHandler(xFilter);
 
     css::xml::sax::InputSource aSource;

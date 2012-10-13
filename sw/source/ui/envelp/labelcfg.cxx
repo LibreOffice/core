@@ -57,7 +57,7 @@ void    SwLabelConfig::Commit()
 
 void SwLabelConfig::Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& ) {}
 
-Sequence<OUString> lcl_CreatePropertyNames(const OUString& rPrefix)
+static Sequence<OUString> lcl_CreatePropertyNames(const OUString& rPrefix)
 {
     Sequence<OUString> aProperties(2);
     OUString* pProperties = aProperties.getArray();
@@ -69,7 +69,7 @@ Sequence<OUString> lcl_CreatePropertyNames(const OUString& rPrefix)
     return aProperties;
 }
 
-SwLabRec* lcl_CreateSwLabRec(Sequence<Any>& rValues, const OUString& rManufacturer)
+static SwLabRec* lcl_CreateSwLabRec(Sequence<Any>& rValues, const OUString& rManufacturer)
 {
     SwLabRec* pNewRec = new SwLabRec;
     const Any* pValues = rValues.getConstArray();
@@ -125,7 +125,7 @@ SwLabRec* lcl_CreateSwLabRec(Sequence<Any>& rValues, const OUString& rManufactur
     return pNewRec;
 }
 
-Sequence<PropertyValue> lcl_CreateProperties(
+static Sequence<PropertyValue> lcl_CreateProperties(
     Sequence<OUString>& rPropNames, const SwLabRec& rRec)
 {
     const OUString* pNames = rPropNames.getConstArray();
@@ -216,7 +216,7 @@ sal_Bool    SwLabelConfig::HasLabel(const rtl::OUString& rManufacturer, const rt
     return sal_False;
 }
 
-sal_Bool lcl_Exists(const OUString& rNode, const Sequence<OUString>& rLabels)
+static sal_Bool lcl_Exists(const OUString& rNode, const Sequence<OUString>& rLabels)
 {
     const OUString* pLabels = rLabels.getConstArray();
     for(sal_Int32 i = 0; i < rLabels.getLength(); i++)

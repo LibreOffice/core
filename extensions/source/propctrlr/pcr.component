@@ -26,7 +26,7 @@
 *
 **********************************************************************-->
 
-<component loader="com.sun.star.loader.SharedLibrary"
+<component loader="com.sun.star.loader.SharedLibrary" prefix="pcr"
     xmlns="http://openoffice.org/2010/uno-components">
   <implementation name="StringRepresentation">
     <service name="com.sun.star.inspection.StringRepresentation"/>

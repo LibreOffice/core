@@ -52,116 +52,116 @@ class XclRoot;
 // Property names =============================================================
 
 // service names
-#define SERVICE_DRAWING_BITMAPTABLE         CREATE_OUSTRING( "com.sun.star.drawing.BitmapTable" )
-#define SERVICE_DRAWING_DASHTABLE           CREATE_OUSTRING( "com.sun.star.drawing.DashTable" )
-#define SERVICE_DRAWING_GRADIENTTABLE       CREATE_OUSTRING( "com.sun.star.drawing.GradientTable" )
-#define SERVICE_DRAWING_HATCHTABLE          CREATE_OUSTRING( "com.sun.star.drawing.HatchTable" )
+#define SERVICE_DRAWING_BITMAPTABLE         "com.sun.star.drawing.BitmapTable"
+#define SERVICE_DRAWING_DASHTABLE           "com.sun.star.drawing.DashTable"
+#define SERVICE_DRAWING_GRADIENTTABLE       "com.sun.star.drawing.GradientTable"
+#define SERVICE_DRAWING_HATCHTABLE          "com.sun.star.drawing.HatchTable"
 
-#define SERVICE_CHART2_AXIS                 CREATE_OUSTRING( "com.sun.star.chart2.Axis" )
-#define SERVICE_CHART2_CARTESIANCOORDSYS2D  CREATE_OUSTRING( "com.sun.star.chart2.CartesianCoordinateSystem2d" )
-#define SERVICE_CHART2_CARTESIANCOORDSYS3D  CREATE_OUSTRING( "com.sun.star.chart2.CartesianCoordinateSystem3d" )
-#define SERVICE_CHART2_DATAPROVIDER         CREATE_OUSTRING( "com.sun.star.chart2.data.DataProvider" )
-#define SERVICE_CHART2_DATASERIES           CREATE_OUSTRING( "com.sun.star.chart2.DataSeries" )
-#define SERVICE_CHART2_DIAGRAM              CREATE_OUSTRING( "com.sun.star.chart2.Diagram" )
-#define SERVICE_CHART2_ERRORBAR             CREATE_OUSTRING( "com.sun.star.chart2.ErrorBar" )
-#define SERVICE_CHART2_EXPREGCURVE          CREATE_OUSTRING( "com.sun.star.chart2.ExponentialRegressionCurve" )
-#define SERVICE_CHART2_FORMATTEDSTRING      CREATE_OUSTRING( "com.sun.star.chart2.FormattedString" )
-#define SERVICE_CHART2_LABELEDDATASEQ       CREATE_OUSTRING( "com.sun.star.chart2.data.LabeledDataSequence" )
-#define SERVICE_CHART2_LEGEND               CREATE_OUSTRING( "com.sun.star.chart2.Legend" )
-#define SERVICE_CHART2_LINEARREGCURVE       CREATE_OUSTRING( "com.sun.star.chart2.LinearRegressionCurve" )
-#define SERVICE_CHART2_LINEARSCALING        CREATE_OUSTRING( "com.sun.star.chart2.LinearScaling" )
-#define SERVICE_CHART2_LOGREGCURVE          CREATE_OUSTRING( "com.sun.star.chart2.LogarithmicRegressionCurve" )
-#define SERVICE_CHART2_LOGSCALING           CREATE_OUSTRING( "com.sun.star.chart2.LogarithmicScaling" )
-#define SERVICE_CHART2_POLARCOORDSYS2D      CREATE_OUSTRING( "com.sun.star.chart2.PolarCoordinateSystem2d" )
-#define SERVICE_CHART2_POLARCOORDSYS3D      CREATE_OUSTRING( "com.sun.star.chart2.PolarCoordinateSystem3d" )
-#define SERVICE_CHART2_POTREGCURVE          CREATE_OUSTRING( "com.sun.star.chart2.PotentialRegressionCurve" )
-#define SERVICE_CHART2_TITLE                CREATE_OUSTRING( "com.sun.star.chart2.Title" )
+#define SERVICE_CHART2_AXIS                 "com.sun.star.chart2.Axis"
+#define SERVICE_CHART2_CARTESIANCOORDSYS2D  "com.sun.star.chart2.CartesianCoordinateSystem2d"
+#define SERVICE_CHART2_CARTESIANCOORDSYS3D  "com.sun.star.chart2.CartesianCoordinateSystem3d"
+#define SERVICE_CHART2_DATAPROVIDER         "com.sun.star.chart2.data.DataProvider"
+#define SERVICE_CHART2_DATASERIES           "com.sun.star.chart2.DataSeries"
+#define SERVICE_CHART2_DIAGRAM              "com.sun.star.chart2.Diagram"
+#define SERVICE_CHART2_ERRORBAR             "com.sun.star.chart2.ErrorBar"
+#define SERVICE_CHART2_EXPREGCURVE          "com.sun.star.chart2.ExponentialRegressionCurve"
+#define SERVICE_CHART2_FORMATTEDSTRING      "com.sun.star.chart2.FormattedString"
+#define SERVICE_CHART2_LABELEDDATASEQ       "com.sun.star.chart2.data.LabeledDataSequence"
+#define SERVICE_CHART2_LEGEND               "com.sun.star.chart2.Legend"
+#define SERVICE_CHART2_LINEARREGCURVE       "com.sun.star.chart2.LinearRegressionCurve"
+#define SERVICE_CHART2_LINEARSCALING        "com.sun.star.chart2.LinearScaling"
+#define SERVICE_CHART2_LOGREGCURVE          "com.sun.star.chart2.LogarithmicRegressionCurve"
+#define SERVICE_CHART2_LOGSCALING           "com.sun.star.chart2.LogarithmicScaling"
+#define SERVICE_CHART2_POLARCOORDSYS2D      "com.sun.star.chart2.PolarCoordinateSystem2d"
+#define SERVICE_CHART2_POLARCOORDSYS3D      "com.sun.star.chart2.PolarCoordinateSystem3d"
+#define SERVICE_CHART2_POTREGCURVE          "com.sun.star.chart2.PotentialRegressionCurve"
+#define SERVICE_CHART2_TITLE                "com.sun.star.chart2.Title"
 
 // property names
-#define EXC_CHPROP_ADDITIONALSHAPES         CREATE_OUSTRING( "AdditionalShapes" )
-#define EXC_CHPROP_ANCHORPOSITION           CREATE_OUSTRING( "AnchorPosition" )
-#define EXC_CHPROP_ARRANGEORDER             CREATE_OUSTRING( "ArrangeOrder" )
-#define EXC_CHPROP_ATTAXISINDEX             CREATE_OUSTRING( "AttachedAxisIndex" )
-#define EXC_CHPROP_ATTRIBDATAPOINTS         CREATE_OUSTRING( "AttributedDataPoints" )
-#define EXC_CHPROP_BLACKDAY                 CREATE_OUSTRING( "BlackDay" )
-#define EXC_CHPROP_COLOR                    CREATE_OUSTRING( "Color" )
-#define EXC_CHPROP_CONNECTBARS              CREATE_OUSTRING( "ConnectBars" )
-#define EXC_CHPROP_CROSSOVERPOSITION        CREATE_OUSTRING( "CrossoverPosition" )
-#define EXC_CHPROP_CROSSOVERVALUE           CREATE_OUSTRING( "CrossoverValue" )
-#define EXC_CHPROP_CURVESTYLE               CREATE_OUSTRING( "CurveStyle" )
-#define EXC_CHPROP_D3DSCENEAMBIENTCOLOR     CREATE_OUSTRING( "D3DSceneAmbientColor" )
-#define EXC_CHPROP_D3DSCENELIGHTON1         CREATE_OUSTRING( "D3DSceneLightOn1" )
-#define EXC_CHPROP_D3DSCENELIGHTCOLOR2      CREATE_OUSTRING( "D3DSceneLightColor2" )
-#define EXC_CHPROP_D3DSCENELIGHTDIR2        CREATE_OUSTRING( "D3DSceneLightDirection2" )
-#define EXC_CHPROP_D3DSCENELIGHTON2         CREATE_OUSTRING( "D3DSceneLightOn2" )
-#define EXC_CHPROP_D3DSCENEPERSPECTIVE      CREATE_OUSTRING( "D3DScenePerspective" )
-#define EXC_CHPROP_D3DSCENESHADEMODE        CREATE_OUSTRING( "D3DSceneShadeMode" )
-#define EXC_CHPROP_DISPLAYLABELS            CREATE_OUSTRING( "DisplayLabels" )
-#define EXC_CHPROP_ERRORBARSTYLE            CREATE_OUSTRING( "ErrorBarStyle" )
-#define EXC_CHPROP_ERRORBARX                CREATE_OUSTRING( "ErrorBarX" )
-#define EXC_CHPROP_ERRORBARY                CREATE_OUSTRING( "ErrorBarY" )
-#define EXC_CHPROP_EXPANSION                CREATE_OUSTRING( "Expansion" )
-#define EXC_CHPROP_EXPTIMEINCREMENT         CREATE_OUSTRING( "ExplicitTimeIncrement" )
-#define EXC_CHPROP_GAPWIDTHSEQ              CREATE_OUSTRING( "GapwidthSequence" )
-#define EXC_CHPROP_GEOMETRY3D               CREATE_OUSTRING( "Geometry3D" )
-#define EXC_CHPROP_INCLUDEHIDDENCELLS       CREATE_OUSTRING( "IncludeHiddenCells" )
-#define EXC_CHPROP_JAPANESE                 CREATE_OUSTRING( "Japanese" )
-#define EXC_CHPROP_LABEL                    CREATE_OUSTRING( "Label" )
-#define EXC_CHPROP_LABELPLACEMENT           CREATE_OUSTRING( "LabelPlacement" )
-#define EXC_CHPROP_LABELPOSITION            CREATE_OUSTRING( "LabelPosition" )
-#define EXC_CHPROP_LABELSEPARATOR           CREATE_OUSTRING( "LabelSeparator" )
-#define EXC_CHPROP_MAJORTICKS               CREATE_OUSTRING( "MajorTickmarks" )
-#define EXC_CHPROP_MARKPOSITION             CREATE_OUSTRING( "MarkPosition" )
-#define EXC_CHPROP_MINORTICKS               CREATE_OUSTRING( "MinorTickmarks" )
-#define EXC_CHPROP_MISSINGVALUETREATMENT    CREATE_OUSTRING( "MissingValueTreatment" )
-#define EXC_CHPROP_NEGATIVEERROR            CREATE_OUSTRING( "NegativeError" )
-#define EXC_CHPROP_NUMBERFORMAT             CREATE_OUSTRING( "NumberFormat" )
-#define EXC_CHPROP_OFFSET                   CREATE_OUSTRING( "Offset" )
-#define EXC_CHPROP_OVERLAPSEQ               CREATE_OUSTRING( "OverlapSequence" )
-#define EXC_CHPROP_PERCENTAGENUMFMT         CREATE_OUSTRING( "PercentageNumberFormat" )
-#define EXC_CHPROP_PERCENTDIAGONAL          CREATE_OUSTRING( "PercentDiagonal" )
-#define EXC_CHPROP_PERSPECTIVE              CREATE_OUSTRING( "Perspective" )
-#define EXC_CHPROP_POSITIVEERROR            CREATE_OUSTRING( "PositiveError" )
-#define EXC_CHPROP_RELATIVEPOSITION         CREATE_OUSTRING( "RelativePosition" )
-#define EXC_CHPROP_RELATIVESIZE             CREATE_OUSTRING( "RelativeSize" )
-#define EXC_CHPROP_RIGHTANGLEDAXES          CREATE_OUSTRING( "RightAngledAxes" )
-#define EXC_CHPROP_ROLE                     CREATE_OUSTRING( "Role" )
-#define EXC_CHPROP_ROTATIONHORIZONTAL       CREATE_OUSTRING( "RotationHorizontal" )
-#define EXC_CHPROP_ROTATIONVERTICAL         CREATE_OUSTRING( "RotationVertical" )
-#define EXC_CHPROP_SHOW                     CREATE_OUSTRING( "Show" )
-#define EXC_CHPROP_SHOWCORRELATION          CREATE_OUSTRING( "ShowCorrelationCoefficient" )
-#define EXC_CHPROP_SHOWEQUATION             CREATE_OUSTRING( "ShowEquation" )
-#define EXC_CHPROP_SHOWFIRST                CREATE_OUSTRING( "ShowFirst" )
-#define EXC_CHPROP_SHOWHIGHLOW              CREATE_OUSTRING( "ShowHighLow" )
-#define EXC_CHPROP_SHOWNEGATIVEERROR        CREATE_OUSTRING( "ShowNegativeError" )
-#define EXC_CHPROP_SHOWPOSITIVEERROR        CREATE_OUSTRING( "ShowPositiveError" )
-#define EXC_CHPROP_STACKCHARACTERS          CREATE_OUSTRING( "StackCharacters" )
-#define EXC_CHPROP_STACKINGDIR              CREATE_OUSTRING( "StackingDirection" )
-#define EXC_CHPROP_STARTINGANGLE            CREATE_OUSTRING( "StartingAngle" )
-#define EXC_CHPROP_SWAPXANDYAXIS            CREATE_OUSTRING( "SwapXAndYAxis" )
-#define EXC_CHPROP_SYMBOL                   CREATE_OUSTRING( "Symbol" )
-#define EXC_CHPROP_TEXTBREAK                CREATE_OUSTRING( "TextBreak" )
-#define EXC_CHPROP_TEXTOVERLAP              CREATE_OUSTRING( "TextOverlap" )
-#define EXC_CHPROP_TEXTROTATION             CREATE_OUSTRING( "TextRotation" )
-#define EXC_CHPROP_USERINGS                 CREATE_OUSTRING( "UseRings" )
-#define EXC_CHPROP_VARYCOLORSBY             CREATE_OUSTRING( "VaryColorsByPoint" )
-#define EXC_CHPROP_WEIGHT                   CREATE_OUSTRING( "Weight" )
-#define EXC_CHPROP_WHITEDAY                 CREATE_OUSTRING( "WhiteDay" )
+#define EXC_CHPROP_ADDITIONALSHAPES         "AdditionalShapes"
+#define EXC_CHPROP_ANCHORPOSITION           "AnchorPosition"
+#define EXC_CHPROP_ARRANGEORDER             "ArrangeOrder"
+#define EXC_CHPROP_ATTAXISINDEX             "AttachedAxisIndex"
+#define EXC_CHPROP_ATTRIBDATAPOINTS         "AttributedDataPoints"
+#define EXC_CHPROP_BLACKDAY                 "BlackDay"
+#define EXC_CHPROP_COLOR                    "Color"
+#define EXC_CHPROP_CONNECTBARS              "ConnectBars"
+#define EXC_CHPROP_CROSSOVERPOSITION        "CrossoverPosition"
+#define EXC_CHPROP_CROSSOVERVALUE           "CrossoverValue"
+#define EXC_CHPROP_CURVESTYLE               "CurveStyle"
+#define EXC_CHPROP_D3DSCENEAMBIENTCOLOR     "D3DSceneAmbientColor"
+#define EXC_CHPROP_D3DSCENELIGHTON1         "D3DSceneLightOn1"
+#define EXC_CHPROP_D3DSCENELIGHTCOLOR2      "D3DSceneLightColor2"
+#define EXC_CHPROP_D3DSCENELIGHTDIR2        "D3DSceneLightDirection2"
+#define EXC_CHPROP_D3DSCENELIGHTON2         "D3DSceneLightOn2"
+#define EXC_CHPROP_D3DSCENEPERSPECTIVE      "D3DScenePerspective"
+#define EXC_CHPROP_D3DSCENESHADEMODE        "D3DSceneShadeMode"
+#define EXC_CHPROP_DISPLAYLABELS            "DisplayLabels"
+#define EXC_CHPROP_ERRORBARSTYLE            "ErrorBarStyle"
+#define EXC_CHPROP_ERRORBARX                "ErrorBarX"
+#define EXC_CHPROP_ERRORBARY                "ErrorBarY"
+#define EXC_CHPROP_EXPANSION                "Expansion"
+#define EXC_CHPROP_EXPTIMEINCREMENT         "ExplicitTimeIncrement"
+#define EXC_CHPROP_GAPWIDTHSEQ              "GapwidthSequence"
+#define EXC_CHPROP_GEOMETRY3D               "Geometry3D"
+#define EXC_CHPROP_INCLUDEHIDDENCELLS       "IncludeHiddenCells"
+#define EXC_CHPROP_JAPANESE                 "Japanese"
+#define EXC_CHPROP_LABEL                    "Label"
+#define EXC_CHPROP_LABELPLACEMENT           "LabelPlacement"
+#define EXC_CHPROP_LABELPOSITION            "LabelPosition"
+#define EXC_CHPROP_LABELSEPARATOR           "LabelSeparator"
+#define EXC_CHPROP_MAJORTICKS               "MajorTickmarks"
+#define EXC_CHPROP_MARKPOSITION             "MarkPosition"
+#define EXC_CHPROP_MINORTICKS               "MinorTickmarks"
+#define EXC_CHPROP_MISSINGVALUETREATMENT    "MissingValueTreatment"
+#define EXC_CHPROP_NEGATIVEERROR            "NegativeError"
+#define EXC_CHPROP_NUMBERFORMAT             "NumberFormat"
+#define EXC_CHPROP_OFFSET                   "Offset"
+#define EXC_CHPROP_OVERLAPSEQ               "OverlapSequence"
+#define EXC_CHPROP_PERCENTAGENUMFMT         "PercentageNumberFormat"
+#define EXC_CHPROP_PERCENTDIAGONAL          "PercentDiagonal"
+#define EXC_CHPROP_PERSPECTIVE              "Perspective"
+#define EXC_CHPROP_POSITIVEERROR            "PositiveError"
+#define EXC_CHPROP_RELATIVEPOSITION         "RelativePosition"
+#define EXC_CHPROP_RELATIVESIZE             "RelativeSize"
+#define EXC_CHPROP_RIGHTANGLEDAXES          "RightAngledAxes"
+#define EXC_CHPROP_ROLE                     "Role"
+#define EXC_CHPROP_ROTATIONHORIZONTAL       "RotationHorizontal"
+#define EXC_CHPROP_ROTATIONVERTICAL         "RotationVertical"
+#define EXC_CHPROP_SHOW                     "Show"
+#define EXC_CHPROP_SHOWCORRELATION          "ShowCorrelationCoefficient"
+#define EXC_CHPROP_SHOWEQUATION             "ShowEquation"
+#define EXC_CHPROP_SHOWFIRST                "ShowFirst"
+#define EXC_CHPROP_SHOWHIGHLOW              "ShowHighLow"
+#define EXC_CHPROP_SHOWNEGATIVEERROR        "ShowNegativeError"
+#define EXC_CHPROP_SHOWPOSITIVEERROR        "ShowPositiveError"
+#define EXC_CHPROP_STACKCHARACTERS          "StackCharacters"
+#define EXC_CHPROP_STACKINGDIR              "StackingDirection"
+#define EXC_CHPROP_STARTINGANGLE            "StartingAngle"
+#define EXC_CHPROP_SWAPXANDYAXIS            "SwapXAndYAxis"
+#define EXC_CHPROP_SYMBOL                   "Symbol"
+#define EXC_CHPROP_TEXTBREAK                "TextBreak"
+#define EXC_CHPROP_TEXTOVERLAP              "TextOverlap"
+#define EXC_CHPROP_TEXTROTATION             "TextRotation"
+#define EXC_CHPROP_USERINGS                 "UseRings"
+#define EXC_CHPROP_VARYCOLORSBY             "VaryColorsByPoint"
+#define EXC_CHPROP_WEIGHT                   "Weight"
+#define EXC_CHPROP_WHITEDAY                 "WhiteDay"
 
 // data series roles
-#define EXC_CHPROP_ROLE_CATEG               CREATE_OUSTRING( "categories" )
-#define EXC_CHPROP_ROLE_ERRORBARS_NEGX      CREATE_OUSTRING( "error-bars-x-negative" )
-#define EXC_CHPROP_ROLE_ERRORBARS_NEGY      CREATE_OUSTRING( "error-bars-y-negative" )
-#define EXC_CHPROP_ROLE_ERRORBARS_POSX      CREATE_OUSTRING( "error-bars-x-positive" )
-#define EXC_CHPROP_ROLE_ERRORBARS_POSY      CREATE_OUSTRING( "error-bars-y-positive" )
-#define EXC_CHPROP_ROLE_LABEL               CREATE_OUSTRING( "label" )
-#define EXC_CHPROP_ROLE_XVALUES             CREATE_OUSTRING( "values-x" )
-#define EXC_CHPROP_ROLE_YVALUES             CREATE_OUSTRING( "values-y" )
-#define EXC_CHPROP_ROLE_OPENVALUES          CREATE_OUSTRING( "values-first" )
-#define EXC_CHPROP_ROLE_CLOSEVALUES         CREATE_OUSTRING( "values-last" )
-#define EXC_CHPROP_ROLE_LOWVALUES           CREATE_OUSTRING( "values-min" )
-#define EXC_CHPROP_ROLE_HIGHVALUES          CREATE_OUSTRING( "values-max" )
-#define EXC_CHPROP_ROLE_SIZEVALUES          CREATE_OUSTRING( "values-size" )
+#define EXC_CHPROP_ROLE_CATEG               "categories"
+#define EXC_CHPROP_ROLE_ERRORBARS_NEGX      "error-bars-x-negative"
+#define EXC_CHPROP_ROLE_ERRORBARS_NEGY      "error-bars-y-negative"
+#define EXC_CHPROP_ROLE_ERRORBARS_POSX      "error-bars-x-positive"
+#define EXC_CHPROP_ROLE_ERRORBARS_POSY      "error-bars-y-positive"
+#define EXC_CHPROP_ROLE_LABEL               "label"
+#define EXC_CHPROP_ROLE_XVALUES             "values-x"
+#define EXC_CHPROP_ROLE_YVALUES             "values-y"
+#define EXC_CHPROP_ROLE_OPENVALUES          "values-first"
+#define EXC_CHPROP_ROLE_CLOSEVALUES         "values-last"
+#define EXC_CHPROP_ROLE_LOWVALUES           "values-min"
+#define EXC_CHPROP_ROLE_HIGHVALUES          "values-max"
+#define EXC_CHPROP_ROLE_SIZEVALUES          "values-size"
 
 // Constants and Enumerations =================================================
 

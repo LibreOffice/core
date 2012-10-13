@@ -44,6 +44,7 @@
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/text/MailMergeEvent.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
+#include <com/sun/star/task/InteractionHandler.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/ui/dialogs/XFilePicker.hpp>
 #include <com/sun/star/ui/dialogs/XFilterManager.hpp>
@@ -101,6 +102,7 @@
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/sdbc/ResultSetType.hpp>
 #include <com/sun/star/mail/MailAttachment.hpp>
+#include <comphelper/componentcontext.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/property.hxx>
 #include <comphelper/string.hxx>
@@ -234,7 +236,7 @@ struct SwNewDBMgr_Impl
         {}
 };
 
-void lcl_InitNumberFormatter(SwDSParam& rParam, uno::Reference<XDataSource> xSource)
+static void lcl_InitNumberFormatter(SwDSParam& rParam, uno::Reference<XDataSource> xSource)
 {
     uno::Reference<XComponentContext> xContext = ::comphelper::getProcessComponentContext();
     rParam.xFormatter = uno::Reference<util::XNumberFormatter>(util::NumberFormatter::create(xContext), UNO_QUERY);
@@ -261,7 +263,7 @@ void lcl_InitNumberFormatter(SwDSParam& rParam, uno::Reference<XDataSource> xSou
     }
 }
 
-sal_Bool lcl_MoveAbsolute(SwDSParam* pParam, long nAbsPos)
+static sal_Bool lcl_MoveAbsolute(SwDSParam* pParam, long nAbsPos)
 {
     sal_Bool bRet = sal_False;
     try
@@ -281,7 +283,7 @@ sal_Bool lcl_MoveAbsolute(SwDSParam* pParam, long nAbsPos)
     return bRet;
 }
 
-sal_Bool lcl_GetColumnCnt(SwDSParam* pParam,
+static sal_Bool lcl_GetColumnCnt(SwDSParam* pParam,
     const String& rColumnName, long nLanguage, rtl::OUString& rResult, double* pNumber)
 {
     uno::Reference< XColumnsSupplier > xColsSupp( pParam->xResultSet, UNO_QUERY );
@@ -501,7 +503,7 @@ void SwNewDBMgr::ImportFromConnection(  SwWrtShell* pSh )
     }
 }
 
-String  lcl_FindColumn(const String& sFormatStr,sal_uInt16  &nUsedPos, sal_uInt8 &nSeparator)
+static String  lcl_FindColumn(const String& sFormatStr,sal_uInt16  &nUsedPos, sal_uInt8 &nSeparator)
 {
     String sReturn;
     sal_uInt16 nLen = sFormatStr.Len();
@@ -748,7 +750,7 @@ SwNewDBMgr::~SwNewDBMgr()
 /*--------------------------------------------------------------------
     Description:    save bulk letters as single documents
  --------------------------------------------------------------------*/
-String lcl_FindUniqueName(SwWrtShell* pTargetShell, const String& rStartingPageDesc, sal_uLong nDocNo )
+static String lcl_FindUniqueName(SwWrtShell* pTargetShell, const String& rStartingPageDesc, sal_uLong nDocNo )
 {
     do
     {
@@ -760,7 +762,7 @@ String lcl_FindUniqueName(SwWrtShell* pTargetShell, const String& rStartingPageD
     }while(true);
 }
 
-void lcl_CopyDynamicDefaults( const SwDoc& rSource, SwDoc& rTarget )
+static void lcl_CopyDynamicDefaults( const SwDoc& rSource, SwDoc& rTarget )
 {
     sal_uInt16 aRangeOfDefaults[] = {
         RES_FRMATR_BEGIN, RES_FRMATR_END-1,
@@ -789,7 +791,7 @@ void lcl_CopyDynamicDefaults( const SwDoc& rSource, SwDoc& rTarget )
         rTarget.SetDefault( aNewDefaults );
 }
 
-void lcl_CopyFollowPageDesc(
+static void lcl_CopyFollowPageDesc(
                             SwWrtShell& rTargetShell,
                             const SwPageDesc& rSourcePageDesc,
                             const SwPageDesc& rTargetPageDesc,
@@ -812,7 +814,7 @@ void lcl_CopyFollowPageDesc(
     }
 }
 
-void lcl_RemoveSectionLinks( SwWrtShell& rWorkShell )
+static void lcl_RemoveSectionLinks( SwWrtShell& rWorkShell )
 {
     //reset all links of the sections of synchronized labels
     sal_uInt16 nSections = rWorkShell.GetSectionFmtCount();
@@ -1571,7 +1573,6 @@ uno::Reference< sdbc::XConnection> SwNewDBMgr::GetConnection(const String& rData
                                                     uno::Reference<XDataSource>& rxSource)
 {
     Reference< sdbc::XConnection> xConnection;
-    Reference< XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
     Reference< XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
     try
     {
@@ -1579,9 +1580,8 @@ uno::Reference< sdbc::XConnection> SwNewDBMgr::GetConnection(const String& rData
         if ( xComplConnection.is() )
         {
             rxSource.set(xComplConnection,UNO_QUERY);
-            Reference< XInteractionHandler > xHandler(
-                    xMgr->createInstance( C2U( "com.sun.star.task.InteractionHandler" )), UNO_QUERY);
-                xConnection = xComplConnection->connectWithCompletion( xHandler );
+            Reference< XInteractionHandler > xHandler( InteractionHandler::createWithParent(xContext, 0), UNO_QUERY_THROW );
+            xConnection = xComplConnection->connectWithCompletion( xHandler );
         }
     }
     catch(const Exception&)
@@ -2661,7 +2661,7 @@ uno::Reference<XResultSet> SwNewDBMgr::createCursor(const ::rtl::OUString& _sDat
 
                 if ( xRowSet.is() )
                 {
-                    uno::Reference< XInteractionHandler > xHandler(xMgr->createInstance(C2U("com.sun.star.task.InteractionHandler")), UNO_QUERY);
+                    uno::Reference< XInteractionHandler > xHandler( InteractionHandler::createWithParent(comphelper::getComponentContext(xMgr), 0), UNO_QUERY_THROW );
                     xRowSet->executeWithCompletion(xHandler);
                 }
                 xResultSet = uno::Reference<XResultSet>(xRowSet, UNO_QUERY);

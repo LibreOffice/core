@@ -208,8 +208,6 @@ private:
     Timer*                  mpSwapOutTimer;
     GrfSimpleCacheObj*      mpSimpleCache;
     sal_uLong               mnAnimationLoopCount;
-    void*                   mpDummy1;
-    void*                   mpDummy2;
     sal_Bool                mbAutoSwapped   : 1;
     sal_Bool                mbTransparent   : 1;
     sal_Bool                mbAnimated      : 1;
@@ -217,7 +215,6 @@ private:
     sal_Bool                mbIsInSwapIn    : 1;
     sal_Bool                mbIsInSwapOut   : 1;
     sal_Bool                mbAlpha         : 1;
-    sal_Bool                mbDummyFlag8    : 1;
     sal_Bool                mbIsRenderGraphic   : 1;
     sal_Bool                mbHasRenderGraphic  : 1;
 

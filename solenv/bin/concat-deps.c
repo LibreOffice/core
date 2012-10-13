@@ -109,9 +109,9 @@
 #define FALSE 0
 #endif
 
-static char* base_dir_var = "$(SRCDIR)";
-#define kBASE_DIR_VAR_LENGTH 9
+int internal_boost = 0;
 static char* base_dir;
+static char* out_dir;
 
 #ifdef __GNUC__
 #define clz __builtin_clz
@@ -710,11 +710,76 @@ static inline void eat_space(char ** token)
     }
 }
 
+/*
+ * Find substring in bounded length string
+ */
+static inline const char *find_substr(const char *key, int key_len,
+                                      const char *substr, int substr_len)
+{
+}
+
+/*
+ * Prune LibreOffice specific duplicate dependencies to improve
+ * gnumake startup time, and shrink the disk-space footprint.
+ */
+static inline int elide_dependency(const char* key, int key_len, int *boost_count)
+{
+#if 0
+    {
+        int i;
+        fprintf (stderr, "elide?%d!: '", internal_boost);
+        for (i = 0; i < key_len; i++) {
+            fprintf (stderr, "%c", key[i]);
+        }
+        fprintf (stderr, "'\n");
+    }
+#endif
+
+    /* .hdl files are always matched by .hpp */
+    if (key_len > 4 && !strncmp(key + key_len - 4, ".hdl", 4))
+        return 1;
+
+    /* boost brings a plague of header files */
+    if (internal_boost)
+    {
+        int i;
+        int hit = 0;
+        /* walk down path elements */
+        for (i = 0; i < key_len - 1; i++)
+        {
+            if (key[i] == '/')
+            {
+                if (!strncmp(key + i + 1, "solver/", 7))
+                    hit++;
+                if (hit > 0 && !strncmp(key + i + 1, "inc/external/boost/", 19))
+                {
+                    if (boost_count)
+                        (*boost_count)++;
+                    return 1;
+                }
+            }
+        }
+    }
+
+    return 0;
+}
+
+/*
+ * We collapse tens of internal boost headers to a single one, such
+ * that you can re-compile / install boost and all is well.
+ */
+static void emit_single_boost_header(void)
+{
+#define BOOST_HEADER "/inc/external/boost/bind.hpp"
+    fprintf(stdout, "%s" BOOST_HEADER " ", out_dir);
+}
+
 /* prefix paths to absolute */
 static inline void print_fullpaths(char* line)
 {
-char* token;
-char* end;
+    char* token;
+    char* end;
+    int boost_count = 0;
 
     token = line;
     eat_space(&token);
@@ -724,22 +789,36 @@ char* end;
         while (*end && (' ' != *end) && ('\t' != *end)) {
             ++end;
         }
-        if(*token == ':' || *token == '\\' || *token == '/' || *token == '$'
-            || ':' == token[1])
+        int token_len = end - token;
+        if(elide_dependency(token, token_len, &boost_count))
         {
-            fwrite(token, end - token, 1, stdout);
+            if (boost_count == 1)
+                emit_single_boost_header();
+            else
+            {
+                /* don't output, and swallow trailing \\\n if any */
+                token = end;
+                eat_space(&token);
+                if (token[0] == '\\' && token[1] == '\n')
+                    end = token + 2;
+            }
+        }
+        else if(*token == ':' || *token == '\\' || *token == '/' ||
+                *token == '$' || ':' == token[1])
+        {
+            fwrite(token, token_len, 1, stdout);
+            fputc(' ', stdout);
         }
         else
         {
-            fputs(base_dir_var, stdout);
-            fputc('/', stdout);
             fwrite(token, end - token, 1, stdout);
+            fputc(' ', stdout);
         }
-        fputc(' ', stdout);
         token = end;
         eat_space(&token);
     }
 }
+
 
 static int _process(struct hash* dep_hash, char* fn)
 {
@@ -795,7 +874,9 @@ off_t size;
                              * these are the one for which we want to filter
                              * duplicate out
                              */
-                            if(hash_store(dep_hash, base, (int)(cursor_out - base)))
+                            int key_len = cursor_out - base;
+                            if(!elide_dependency(base,key_len - 1, NULL) &&
+                               hash_store(dep_hash, base, key_len))
                             {
                                 /* DO NOT modify base after it has been added
                                    as key by hash_store */
@@ -860,6 +941,17 @@ static void _usage(void)
 
 #define kDEFAULT_HASH_SIZE 4096
 
+static int get_var(char **var, const char *name)
+{
+    *var = (char *)getenv(name);
+    if(!*var)
+    {
+        fprintf(stderr,"Error: %s is missing in the environement\n", name);
+        return 1;
+    }
+    return 0;
+}
+
 int main(int argc, char** argv)
 {
 int rc = 0;
@@ -868,18 +960,18 @@ char* in_list;
 char* in_list_cursor;
 char* in_list_base;
 struct hash* dep_hash;
+const char *env_str;
 
     if(argc < 2)
     {
         _usage();
         return 1;
     }
-    base_dir = getenv("SRCDIR");
-    if(!base_dir)
-    {
-        fputs("Error: SRCDIR is missing in the environement\n", stderr);
+    if(get_var(&base_dir, "SRCDIR") || get_var(&out_dir, "OUTDIR"))
         return 1;
-    }
+
+    env_str = getenv("SYSTEM_BOOST");
+    internal_boost = !env_str || strcmp(env_str,"TRUE");
 
     in_list = file_load(argv[1], &in_list_size, &rc);
     if(!rc)

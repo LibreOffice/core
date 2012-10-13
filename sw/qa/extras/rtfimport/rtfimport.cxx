@@ -109,6 +109,7 @@ public:
     void testFdo52389();
     void testFdo49655();
     void testFdo52475();
+    void testFdo55493();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -161,6 +162,7 @@ public:
     CPPUNIT_TEST(testFdo52389);
     CPPUNIT_TEST(testFdo49655);
     CPPUNIT_TEST(testFdo52475);
+    CPPUNIT_TEST(testFdo55493);
 #endif
     CPPUNIT_TEST_SUITE_END();
 
@@ -850,6 +852,16 @@ void Test::testFdo52475()
     // The problem was that \chcbpat0 resulted in no color, instead of COL_AUTO.
     load("fdo52475.rtf");
     CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), getProperty<sal_Int32>(getRun(getParagraph(1), 3), "CharBackColor"));
+}
+
+void Test::testFdo55493()
+{
+    // The problem was that the width of the PNG was detected as 15,24cm, instead of 3.97cm
+    load("fdo55493.rtf");
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShape(xDraws->getByIndex(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3969), xShape->getSize().Width);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);

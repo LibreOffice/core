@@ -110,10 +110,11 @@ void SvxFont::DrawArrow( OutputDevice &rOut, const Rectangle& rRect,
 }
 
 
-XubString SvxFont::CalcCaseMap( const XubString &rTxt ) const
+OUString SvxFont::CalcCaseMap(const OUString &rTxt) const
 {
-    if( !IsCaseMap() || !rTxt.Len() ) return rTxt;
-    XubString aTxt( rTxt );
+    if (!IsCaseMap() || rTxt.isEmpty())
+        return rTxt;
+    OUString aTxt(rTxt);
     // I still have to get the language
     const LanguageType eLng = LANGUAGE_DONTKNOW == eLang
                             ? LANGUAGE_SYSTEM : eLang;
@@ -139,21 +140,20 @@ XubString SvxFont::CalcCaseMap( const XubString &rTxt ) const
             // Every beginning of a word is capitalized,  the rest of the word
             // is taken over as is.
             // Bug: if the attribute starts in the middle of the word.
-            sal_Bool bBlank = sal_True;
+            bool bBlank = true;
 
-            for( sal_uInt16 i = 0; i < aTxt.Len(); ++i )
+            for (sal_Int32 i = 0; i < aTxt.getLength(); ++i)
             {
-                if( sal_Unicode(' ') == aTxt.GetChar(i) || sal_Unicode('\t') == aTxt.GetChar(i) )
-                    bBlank = sal_True;
+                if( aTxt[i] == ' ' || aTxt[i] == '\t')
+                    bBlank = true;
                 else
                 {
-                    if( bBlank )
+                    if (bBlank)
                     {
-                        rtl::OUString aTemp(aTxt.GetChar(i));
-                        aTemp = aCharClass.uppercase( aTemp );
-                        aTxt.Replace( i, 1, aTemp );
+                        OUString sTitle(aCharClass.uppercase(OUString(aTxt[i])));
+                        aTxt = aTxt.replaceAt(i, 1, sTitle);
                     }
-                    bBlank = sal_False;
+                    bBlank = false;
                 }
             }
             break;

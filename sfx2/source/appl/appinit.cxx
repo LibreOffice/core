@@ -166,7 +166,15 @@ typedef bool ( *PFunc_getSpecialCharsForEdit)( Window* i_pParent, const Font& i_
 // a library above us.
 //====================================================================
 
+#ifndef DISABLE_DYNLOADING
+
 extern "C" { static void SAL_CALL thisModule() {} }
+
+#else
+
+extern "C" bool GetSpecialCharsForEdit( Window* i_pParent, const Font& i_rFont, String& o_rOutString );
+
+#endif
 
 String GetSpecialCharsForEdit(Window* pParent, const Font& rFont)
 {
@@ -178,6 +186,7 @@ String GetSpecialCharsForEdit(Window* pParent, const Font& rFont)
     {
         bDetermineFunction = true;
 
+#ifndef DISABLE_DYNLOADING
         static ::rtl::OUString aLibName( SVLIBRARY( "cui"  ) );
         oslModule handleMod = osl_loadModuleRelative(
             &thisModule, aLibName.pData, 0 );
@@ -186,6 +195,9 @@ String GetSpecialCharsForEdit(Window* pParent, const Font& rFont)
         ::rtl::OUString aSymbol( "GetSpecialCharsForEdit"  );
         pfunc_getSpecialCharsForEdit = (PFunc_getSpecialCharsForEdit)osl_getFunctionSymbol( handleMod, aSymbol.pData );
         DBG_ASSERT( pfunc_getSpecialCharsForEdit, "GetSpecialCharsForEdit() not found!" );
+#else
+        pfunc_getSpecialCharsForEdit = GetSpecialCharsForEdit;
+#endif
     }
 
     String aRet;

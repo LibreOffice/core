@@ -127,20 +127,21 @@ void XMLTextMasterPageExport::exportMasterPageContent(
     else
     {
         aAny = rPropSet->getPropertyValue( sHeaderOn );
-        sal_Bool bHeader = *(sal_Bool *)aAny.getValue();
+        sal_Bool bHeader = sal_False;
+        aAny >>= bHeader;
 
         sal_Bool bHeaderFirst = sal_False;
         if( bHeader )
         {
             aAny = rPropSet->getPropertyValue( sFirstShareContent );
-            bHeaderFirst = !*(sal_Bool *)aAny.getValue();
+            aAny >>= bHeaderFirst;
         }
 
         sal_Bool bHeaderLeft = sal_False;
         if( bHeader )
         {
             aAny = rPropSet->getPropertyValue( sHeaderShareContent );
-            bHeaderLeft = !*(sal_Bool *)aAny.getValue();
+            aAny >>= bHeaderLeft;
         }
 
         if( xHeaderText.is() )
@@ -174,20 +175,21 @@ void XMLTextMasterPageExport::exportMasterPageContent(
         }
 
         aAny = rPropSet->getPropertyValue( sFooterOn );
-        sal_Bool bFooter = *(sal_Bool *)aAny.getValue();
+        sal_Bool bFooter = sal_False;
+        aAny >>= bFooter;
 
         sal_Bool bFooterFirst = sal_False;
         if( bFooter )
         {
             aAny = rPropSet->getPropertyValue( sFirstShareContent );
-            bFooterFirst = !*(sal_Bool *)aAny.getValue();
+            aAny >>= bFooterFirst;
         }
 
         sal_Bool bFooterLeft = sal_False;
         if( bFooter )
         {
             aAny = rPropSet->getPropertyValue( sFooterShareContent );
-            bFooterLeft = !*(sal_Bool *)aAny.getValue();
+            aAny >>= bFooterLeft;
         }
 
         if( xFooterText.is() )

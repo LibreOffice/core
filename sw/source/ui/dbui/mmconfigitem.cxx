@@ -369,7 +369,7 @@ void SwMailMergeConfigItem_Impl::SetCurrentAddressBlockIndex( sal_Int32 nSet )
     }
 }
 
-OUString lcl_CreateNodeName(Sequence<OUString>& rAssignments )
+static OUString lcl_CreateNodeName(Sequence<OUString>& rAssignments )
 {
     const OUString* pNames = rAssignments.getConstArray();
     sal_Int32 nStart = rAssignments.getLength();
@@ -398,7 +398,7 @@ OUString lcl_CreateNodeName(Sequence<OUString>& rAssignments )
     return sNewName;
 }
 
-void lcl_ConvertToNumbers(OUString& rBlock, const ResStringArray& rHeaders )
+static void lcl_ConvertToNumbers(OUString& rBlock, const ResStringArray& rHeaders )
 {
     //convert the strings used for UI to numbers used for the configuration
     String sBlock(rBlock);
@@ -415,7 +415,7 @@ void lcl_ConvertToNumbers(OUString& rBlock, const ResStringArray& rHeaders )
     rBlock = sBlock;
 }
 
-void lcl_ConvertFromNumbers(OUString& rBlock, const ResStringArray& rHeaders)
+static void lcl_ConvertFromNumbers(OUString& rBlock, const ResStringArray& rHeaders)
 {
     //convert the numbers used for the configuration to strings used for UI to numbers
     //doesn't use ReplaceAll to prevent expansion of numbers inside of the headers
@@ -1662,7 +1662,7 @@ sal_uInt32 SwMailMergeConfigItem::GetMergedDocumentCount() const
     return m_pImpl->aMergeInfos.size();
 }
 
-SwView* lcl_ExistsView(SwView* pView)
+static SwView* lcl_ExistsView(SwView* pView)
 {
     const TypeId aType(TYPE(SwView));
     SfxViewShell* pViewShell = SfxViewShell::GetFirst( &aType, sal_False );

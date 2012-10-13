@@ -34,6 +34,7 @@
 #include "com/sun/star/task/ErrorCodeIOException.hpp"
 #include "com/sun/star/task/ErrorCodeRequest.hpp"
 #include "com/sun/star/task/FutureDocumentVersionProductUpdateRequest.hpp"
+#include "com/sun/star/task/InteractionHandler.hpp"
 #include "com/sun/star/task/XInteractionAbort.hpp"
 #include "com/sun/star/task/XInteractionApprove.hpp"
 #include "com/sun/star/task/XInteractionAskLater.hpp"
@@ -72,6 +73,7 @@
 #include "vcl/svapp.hxx"
 #include "unotools/configmgr.hxx"
 #include "toolkit/helper/vclunohelper.hxx"
+#include "comphelper/processfactory.hxx"
 #include "comphelper/namedvaluecollection.hxx"
 #include "typelib/typedescription.hxx"
 #include "unotools/confignode.hxx"
@@ -99,6 +101,7 @@ using ::com::sun::star::task::FutureDocumentVersionProductUpdateRequest;
 using ::com::sun::star::uno::XInterface;
 using ::com::sun::star::lang::XInitialization;
 using ::com::sun::star::uno::UNO_QUERY_THROW;
+using ::com::sun::star::task::InteractionHandler;
 using ::com::sun::star::task::XInteractionHandler2;
 using ::com::sun::star::uno::Exception;
 using ::com::sun::star::uno::Any;
@@ -129,10 +132,12 @@ public:
 
 UUIInteractionHelper::UUIInteractionHelper(
     uno::Reference< lang::XMultiServiceFactory > const & rServiceFactory,
-    uno::Sequence< uno::Any > const & rArguments)
+    uno::Reference< awt::XWindow > const & rxWindowParam,
+    const OUString & rContextParam)
     SAL_THROW(()):
         m_xServiceFactory(rServiceFactory),
-        m_aProperties(rArguments)
+        m_xWindowParam(rxWindowParam),
+        m_aContextParam(rContextParam)
 {
 }
 
@@ -1092,59 +1097,23 @@ uno::Reference< awt::XWindow>
 UUIInteractionHelper::getParentXWindow() const
     SAL_THROW(())
 {
-    osl::MutexGuard aGuard(m_aPropertyMutex);
-    ::comphelper::NamedValueCollection aProperties( m_aProperties );
-    if ( aProperties.has( "Parent" ) )
-    {
-        uno::Reference< awt::XWindow > xWindow;
-        OSL_VERIFY( aProperties.get( "Parent" ) >>= xWindow );
-        return xWindow;
-    }
-    return 0;
+    return m_xWindowParam;
 }
 
 rtl::OUString
 UUIInteractionHelper::getContextProperty()
     SAL_THROW(())
 {
-    osl::MutexGuard aGuard(m_aPropertyMutex);
-    for (sal_Int32 i = 0; i < m_aProperties.getLength(); ++i)
-    {
-        beans::PropertyValue aProperty;
-        if ((m_aProperties[i] >>= aProperty) && aProperty.Name == "Context" )
-        {
-            rtl::OUString aContext;
-            aProperty.Value >>= aContext;
-            return aContext;
-        }
-    }
-    return rtl::OUString();
+    return m_aContextParam;
 }
 
-uno::Reference< task::XInteractionHandler >
+uno::Reference< task::XInteractionHandler2 >
 UUIInteractionHelper::getInteractionHandler()
     SAL_THROW((uno::RuntimeException))
 {
-    uno::Reference< task::XInteractionHandler > xIH;
-    try
-    {
-        xIH.set(m_xServiceFactory->createInstanceWithArguments(
-                    rtl::OUString(
-                        RTL_CONSTASCII_USTRINGPARAM(
-                            "com.sun.star.task.InteractionHandler")),
-                    m_aProperties),
-                uno::UNO_QUERY);
-    }
-    catch (uno::Exception const &)
-    {}
-
-    if (!xIH.is())
-        throw uno::RuntimeException(
-            rtl::OUString(
-                RTL_CONSTASCII_USTRINGPARAM(
-                    "unable to instanciate Interaction Handler service")),
-            uno::Reference< uno::XInterface >());
-    return xIH;
+    return InteractionHandler::createWithParentAndContext(
+        comphelper::getComponentContext(m_xServiceFactory), m_xWindowParam,
+        m_aContextParam);
 }
 
 namespace {
@@ -1274,7 +1243,7 @@ UUIInteractionHelper::handleGenericErrorRequest(
         bHasErrorString = isInformationalErrorMessageRequest(rContinuations);
         if (bHasErrorString)
         {
-            String aErrorString;
+            OUString aErrorString;
             ErrorHandler::GetErrorString(nErrorCode, aErrorString);
             rErrorString = aErrorString;
         }
@@ -1295,7 +1264,7 @@ UUIInteractionHelper::handleGenericErrorRequest(
              || nError == ERRCODE_SFX_INCOMPLETE_ENCRYPTION )
         {
             // the security warning box needs a special title
-            String aErrorString;
+            OUString aErrorString;
             ErrorHandler::GetErrorString( nErrorCode, aErrorString );
 
             boost::scoped_ptr< ResMgr > xManager(

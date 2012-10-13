@@ -90,9 +90,6 @@ struct TransferableObjectDescriptor
     String              maTypeName;
     String              maDisplayName;
     sal_Bool            mbCanLink;
-    void*               mpDummy1;
-    void*               mpDummy2;
-    sal_Bool            mbDummy1;
 
     SVT_DLLPUBLIC friend SvStream&  operator>>( SvStream& rIStm, TransferableObjectDescriptor& rObjDesc );
     SVT_DLLPUBLIC friend SvStream&  operator<<( SvStream& rOStm, const TransferableObjectDescriptor& rObjDesc );
@@ -109,9 +106,6 @@ struct AcceptDropEvent
     const ::com::sun::star::datatransfer::dnd::DropTargetDragEvent  maDragEvent;
     sal_Bool                                                        mbLeaving;
     sal_Bool                                                        mbDefault;
-    sal_Bool                                                        mbDummy1;
-    sal_Bool                                                        mbDummy2;
-    sal_Bool                                                        mbDummy3;
 
     AcceptDropEvent() :
         mnAction( DND_ACTION_NONE ),
@@ -139,9 +133,6 @@ struct ExecuteDropEvent
     Point                                                           maPosPixel;
     const ::com::sun::star::datatransfer::dnd::DropTargetDropEvent  maDropEvent;
     sal_Bool                                                        mbDefault;
-    sal_Bool                                                        mbDummy1;
-    sal_Bool                                                        mbDummy2;
-    sal_Bool                                                        mbDummy3;
 
     ExecuteDropEvent() :
         mnAction( DND_ACTION_NONE ),
@@ -193,7 +184,6 @@ private:
 
 private:
 
-    DataFlavorExList                                                                                    maDummy;
     ::com::sun::star::uno::Any                                                                          maAny;
     ::rtl::OUString                                                                                     maLastFormat;
     mutable ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboard >   mxClipboard;
@@ -314,7 +304,6 @@ private:
     DataFlavorExVector*                                                                         mpFormats;
     TransferableObjectDescriptor*                                                               mpObjDesc;
     TransferableDataHelper_Impl*                                                                mpImpl;
-    void*                                                                                       mpDummy4;
 
 protected:
     void                        InitFormats();
@@ -439,8 +428,6 @@ private:
 
     ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::dnd::XDragGestureRecognizer > mxDragGestureRecognizer;
     ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::dnd::XDragGestureListener >   mxDragGestureListener;
-    void*                                                                                           mpDummy1;
-    void*                                                                                           mpDummy2;
 
                         // not available
                         DragSourceHelper();
@@ -494,13 +481,9 @@ private:
 
 private:
 
-    DataFlavorExList                                                                                maDummy;
     ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::dnd::XDropTarget >            mxDropTarget;
     ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::dnd::XDropTargetListener >    mxDropTargetListener;
     DataFlavorExVector*                                                                             mpFormats;
-    void*                                                                                           mpDummy1;
-    void*                                                                                           mpDummy2;
-    void*                                                                                           mpDummy3;
 
                         // not available
                         DropTargetHelper();

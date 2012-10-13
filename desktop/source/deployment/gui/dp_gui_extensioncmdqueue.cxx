@@ -36,7 +36,6 @@
 
 #include <cstddef>
 
-#include "com/sun/star/beans/PropertyValue.hpp"
 #include "com/sun/star/beans/NamedValue.hpp"
 
 #include "com/sun/star/deployment/DependencyException.hpp"
@@ -50,6 +49,7 @@
 #include "com/sun/star/deployment/UpdateInformationProvider.hpp"
 #include "com/sun/star/deployment/XPackage.hpp"
 
+#include "com/sun/star/task/InteractionHandler.hpp"
 #include "com/sun/star/task/XAbortChannel.hpp"
 #include "com/sun/star/task/XInteractionAbort.hpp"
 #include "com/sun/star/task/XInteractionApprove.hpp"
@@ -133,7 +133,7 @@ class ProgressCmdEnv
                                       task::XInteractionHandler,
                                       ucb::XProgressHandler >
 {
-    uno::Reference< task::XInteractionHandler> m_xHandler;
+    uno::Reference< task::XInteractionHandler2> m_xHandler;
     uno::Reference< uno::XComponentContext > m_xContext;
     uno::Reference< task::XAbortChannel> m_xAbortChannel;
 
@@ -532,14 +532,7 @@ void ProgressCmdEnv::handle( uno::Reference< task::XInteractionRequest > const &
         // forward to UUI handler:
         if (! m_xHandler.is()) {
             // late init:
-            uno::Sequence< uno::Any > handlerArgs( 1 );
-            handlerArgs[ 0 ] <<= beans::PropertyValue(
-                OUSTR("Context"), -1, uno::Any( m_sTitle ),
-                beans::PropertyState_DIRECT_VALUE );
-             m_xHandler.set( m_xContext->getServiceManager()
-                            ->createInstanceWithArgumentsAndContext(
-                                OUSTR("com.sun.star.uui.InteractionHandler"),
-                                handlerArgs, m_xContext ), uno::UNO_QUERY_THROW );
+            m_xHandler = task::InteractionHandler::createWithParentAndContext(m_xContext, NULL, m_sTitle);
         }
         m_xHandler->handle( xRequest );
     }

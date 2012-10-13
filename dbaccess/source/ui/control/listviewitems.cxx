@@ -28,7 +28,7 @@ namespace dbaui
     // class OBoldListboxString
     //========================================================================
     //------------------------------------------------------------------------
-    void OBoldListboxString::InitViewData( SvLBox* pView,SvLBoxEntry* pEntry, SvViewDataItem* _pViewData)
+    void OBoldListboxString::InitViewData( SvTreeListBox* pView,SvLBoxEntry* pEntry, SvViewDataItem* _pViewData)
     {
         SvLBoxString::InitViewData( pView, pEntry, _pViewData );
         if ( !m_bEmphasized )
@@ -38,7 +38,7 @@ namespace dbaui
         pView->Push(PUSH_ALL);
         Font aFont( pView->GetFont());
         aFont.SetWeight(WEIGHT_BOLD);
-        pView->SetFont( aFont );
+        pView->Control::SetFont( aFont );
         _pViewData->aSize = Size(pView->GetTextWidth(GetText()), pView->GetTextHeight());
         pView->Pop();
     }
@@ -50,7 +50,7 @@ namespace dbaui
     }
 
     //------------------------------------------------------------------------
-    void OBoldListboxString::Paint(const Point& rPos, SvLBox& rDev, sal_uInt16 nFlags, SvLBoxEntry* pEntry )
+    void OBoldListboxString::Paint(const Point& rPos, SvTreeListBox& rDev, sal_uInt16 nFlags, SvLBoxEntry* pEntry )
     {
         if (m_bEmphasized)
         {

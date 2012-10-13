@@ -2021,7 +2021,7 @@ void ScXMLExport::AddStyleFromRow(const uno::Reference<beans::XPropertySet>& xRo
     }
 }
 
-uno::Any lcl_GetEnumerated( uno::Reference<container::XEnumerationAccess> xEnumAccess, sal_Int32 nIndex )
+static uno::Any lcl_GetEnumerated( uno::Reference<container::XEnumerationAccess> xEnumAccess, sal_Int32 nIndex )
 {
     uno::Any aRet;
     uno::Reference<container::XEnumeration> xEnum( xEnumAccess->createEnumeration() );
@@ -3784,7 +3784,7 @@ void ScXMLExport::WriteNamedRange(ScRangeName* pRangeName)
 
 namespace {
 
-rtl::OUString getCondFormatEntryType(const ScColorScaleEntry& rEntry)
+rtl::OUString getCondFormatEntryType(const ScColorScaleEntry& rEntry, bool bFirst = true)
 {
     switch(rEntry.GetType())
     {
@@ -3800,10 +3800,12 @@ rtl::OUString getCondFormatEntryType(const ScColorScaleEntry& rEntry)
             return rtl::OUString("formula");
         case COLORSCALE_VALUE:
             return rtl::OUString("number");
-        case COLORSCALE_AUTOMIN:
-            return rtl::OUString("auto-minimum");
-        case COLORSCALE_AUTOMAX:
-            return rtl::OUString("auto-maximum");
+        case COLORSCALE_AUTO:
+            // only important for data bars
+            if(bFirst)
+                return rtl::OUString("auto-minimum");
+            else
+                return rtl::OUString("auto-maximum");
     }
     return rtl::OUString();
 }
@@ -3977,7 +3979,7 @@ void ScXMLExport::ExportConditionalFormat(SCTAB nTab)
                             }
                             else
                                 AddAttribute(XML_NAMESPACE_CALC_EXT, XML_VALUE, rtl::OUString::valueOf(pFormatData->mpLowerLimit->GetValue()));
-                            AddAttribute(XML_NAMESPACE_CALC_EXT, XML_TYPE, getCondFormatEntryType(*pFormatData->mpLowerLimit));
+                            AddAttribute(XML_NAMESPACE_CALC_EXT, XML_TYPE, getCondFormatEntryType(*pFormatData->mpLowerLimit, true));
                             SvXMLElementExport aElementDataBarEntryLower(*this, XML_NAMESPACE_CALC_EXT, XML_DATA_BAR_ENTRY, true, true);
                         }
 
@@ -3989,7 +3991,7 @@ void ScXMLExport::ExportConditionalFormat(SCTAB nTab)
                             }
                             else
                                 AddAttribute(XML_NAMESPACE_CALC_EXT, XML_VALUE, rtl::OUString::valueOf(pFormatData->mpUpperLimit->GetValue()));
-                            AddAttribute(XML_NAMESPACE_CALC_EXT, XML_TYPE, getCondFormatEntryType(*pFormatData->mpUpperLimit));
+                            AddAttribute(XML_NAMESPACE_CALC_EXT, XML_TYPE, getCondFormatEntryType(*pFormatData->mpUpperLimit, false));
                             SvXMLElementExport aElementDataBarEntryUpper(*this, XML_NAMESPACE_CALC_EXT, XML_DATA_BAR_ENTRY, true, true);
                         }
                     }

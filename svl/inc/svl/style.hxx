@@ -85,11 +85,11 @@ protected:
     rtl::OUString           maDisplayName;
     String                  aHelpFile;      // Name der Hilfedatei
     SfxItemSet*             pSet;           // ItemSet
-    sal_uInt16                  nMask;          // Flags
+    sal_uInt16              nMask;          // Flags
 
-    sal_uLong                   nHelpId;        // Hilfe-ID
+    sal_uLong               nHelpId;        // Hilfe-ID
 
-    sal_Bool                    bMySet;         // sal_True: Set loeschen im dtor
+    bool                    bMySet;         // sal_True: Set loeschen im dtor
 
     SfxStyleSheetBase( const UniString&, SfxStyleSheetBasePool*, SfxStyleFamily eFam, sal_uInt16 mask );
     SfxStyleSheetBase( const SfxStyleSheetBase& );
@@ -104,7 +104,7 @@ public:
     virtual const UniString& GetName() const;
 
     // sets the internal name of this style
-    virtual sal_Bool SetName( const UniString& );
+    virtual bool SetName( const UniString& );
 
     /** returns the display name of this style, it is used at the user interface.
         If the display name is empty, this method returns the internal name. */
@@ -114,13 +114,13 @@ public:
     virtual void SetDisplayName( const rtl::OUString& );
 
     virtual const UniString& GetParent() const;
-    virtual sal_Bool SetParent( const UniString& );
+    virtual bool SetParent( const UniString& );
     virtual const UniString& GetFollow() const;
-    virtual sal_Bool SetFollow( const UniString& );
-    virtual sal_Bool HasFollowSupport() const;      // Default sal_True
-    virtual sal_Bool HasParentSupport() const;      // Default sal_True
-    virtual sal_Bool HasClearParentSupport() const; // Default sal_False
-    virtual sal_Bool IsUsed() const;                // Default sal_True
+    virtual bool SetFollow( const UniString& );
+    virtual bool HasFollowSupport() const;      // Default true
+    virtual bool HasParentSupport() const;      // Default true
+    virtual bool HasClearParentSupport() const; // Default false
+    virtual bool IsUsed() const;                // Default true
         // Default aus dem Itemset; entweder dem uebergebenen
         // oder aus dem per GetItemSet() zurueckgelieferten Set
     virtual UniString GetDescription();
@@ -130,8 +130,8 @@ public:
     SfxStyleFamily GetFamily() const     { return nFamily; }
     sal_uInt16   GetMask() const     { return nMask; }
     void     SetMask( sal_uInt16 mask) { nMask = mask; }
-    sal_Bool   IsUserDefined() const
-           { return sal_Bool( ( nMask & SFXSTYLEBIT_USERDEF) != 0 ); }
+    bool     IsUserDefined() const
+           { return ( nMask & SFXSTYLEBIT_USERDEF) != 0; }
 
     virtual sal_uLong GetHelpId( String& rFile );
     virtual void   SetHelpId( const String& r, sal_uLong nId );
@@ -171,17 +171,18 @@ protected:
 
     SfxStyleSheetBasePool*  pBasePool;
     SfxStyleFamily          nSearchFamily;
-    sal_uInt16                  nMask;
-    sal_Bool                    SearchUsed() const { return bSearchUsed; }
+    sal_uInt16              nMask;
+
+    bool                    SearchUsed() const { return bSearchUsed; }
 
 private:
-    sal_uInt16                  GetPos(){return nAktPosition;}
-    SVL_DLLPRIVATE sal_Bool                     IsTrivialSearch();
-    SVL_DLLPRIVATE sal_Bool                     DoesStyleMatch(SfxStyleSheetBase *pStyle);
+    sal_uInt16                  GetPos() { return nAktPosition; }
+    SVL_DLLPRIVATE bool         IsTrivialSearch();
+    SVL_DLLPRIVATE bool         DoesStyleMatch(SfxStyleSheetBase *pStyle);
 
     SfxStyleSheetBase*      pAktStyle;
-    sal_uInt16                  nAktPosition;
-    sal_Bool                    bSearchUsed;
+    sal_uInt16              nAktPosition;
+    bool                    bSearchUsed;
 
 friend class SfxStyleSheetBasePool;
 };
@@ -207,7 +208,7 @@ protected:
     sal_uInt16                      nMask;
 
     SfxStyleSheetBase&          Add( SfxStyleSheetBase& );
-    void                        ChangeParent( const UniString&, const UniString&, sal_Bool bVirtual = sal_True );
+    void                        ChangeParent( const UniString&, const UniString&, bool bVirtual = true );
     virtual SfxStyleSheetBase*  Create( const UniString&, SfxStyleFamily, sal_uInt16 );
     virtual SfxStyleSheetBase*  Create( const SfxStyleSheetBase& );
 
@@ -247,7 +248,7 @@ public:
     virtual SfxStyleSheetBase*  Next();
     virtual SfxStyleSheetBase*  Find( const UniString&, SfxStyleFamily eFam, sal_uInt16 n=0xFFFF );
 
-    virtual sal_Bool                SetParent(SfxStyleFamily eFam,
+    virtual bool                SetParent(SfxStyleFamily eFam,
                                           const UniString &rStyle,
                                           const UniString &rParent);
 
@@ -271,7 +272,7 @@ public:
                         SfxStyleSheet( const SfxStyleSheet& );
 
     virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
-    virtual sal_Bool        SetParent( const UniString& );
+    virtual bool        SetParent( const UniString& );
 
 protected:
     SfxStyleSheet() // do not use! needed by MSVC at compile time to satisfy ImplInheritanceHelper2

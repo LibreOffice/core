@@ -103,7 +103,7 @@ AxisItemConverter::AxisItemConverter(
                                  xNamedPropertyContainerFactory,
                                  GraphicPropertyItemConverter::LINE_PROPERTIES ));
     m_aConverters.push_back( new CharacterPropertyItemConverter( rPropertySet, rItemPool, pRefSize,
-                                                                 C2U( "ReferencePageSize" ) ));
+                                                                 "ReferencePageSize" ));
 
     m_xAxis.set( Reference< chart2::XAxis >( rPropertySet, uno::UNO_QUERY ) );
     OSL_ASSERT( m_xAxis.is());
@@ -348,7 +348,7 @@ void AxisItemConverter::FillSpecialItem( sal_uInt16 nWhichId, SfxItemSet & rOutI
         case SCHATTR_AXIS_POSITION:
         {
             ::com::sun::star::chart::ChartAxisPosition eAxisPos( ::com::sun::star::chart::ChartAxisPosition_ZERO );
-            GetPropertySet()->getPropertyValue(C2U( "CrossoverPosition" )) >>= eAxisPos;
+            GetPropertySet()->getPropertyValue( "CrossoverPosition" ) >>= eAxisPos;
             rOutItemSet.Put( SfxInt32Item( nWhichId, eAxisPos ) );
         }
         break;
@@ -356,7 +356,7 @@ void AxisItemConverter::FillSpecialItem( sal_uInt16 nWhichId, SfxItemSet & rOutI
         case SCHATTR_AXIS_POSITION_VALUE:
         {
             double fValue = 0.0;
-            if( GetPropertySet()->getPropertyValue(C2U( "CrossoverValue" )) >>= fValue )
+            if( GetPropertySet()->getPropertyValue( "CrossoverValue" ) >>= fValue )
                 rOutItemSet.Put( SvxDoubleItem( fValue, nWhichId ) );
         }
         break;
@@ -381,7 +381,7 @@ void AxisItemConverter::FillSpecialItem( sal_uInt16 nWhichId, SfxItemSet & rOutI
         case SCHATTR_AXIS_LABEL_POSITION:
         {
             ::com::sun::star::chart::ChartAxisLabelPosition ePos( ::com::sun::star::chart::ChartAxisLabelPosition_NEAR_AXIS );
-            GetPropertySet()->getPropertyValue(C2U( "LabelPosition" )) >>= ePos;
+            GetPropertySet()->getPropertyValue( "LabelPosition" ) >>= ePos;
             rOutItemSet.Put( SfxInt32Item( nWhichId, ePos ) );
         }
         break;
@@ -389,7 +389,7 @@ void AxisItemConverter::FillSpecialItem( sal_uInt16 nWhichId, SfxItemSet & rOutI
         case SCHATTR_AXIS_MARK_POSITION:
         {
             ::com::sun::star::chart::ChartAxisMarkPosition ePos( ::com::sun::star::chart::ChartAxisMarkPosition_AT_LABELS_AND_AXIS );
-            GetPropertySet()->getPropertyValue(C2U( "MarkPosition" )) >>= ePos;
+            GetPropertySet()->getPropertyValue( "MarkPosition" ) >>= ePos;
             rOutItemSet.Put( SfxInt32Item( nWhichId, ePos ) );
         }
         break;
@@ -399,7 +399,7 @@ void AxisItemConverter::FillSpecialItem( sal_uInt16 nWhichId, SfxItemSet & rOutI
             // convert double to int (times 100)
             double fVal = 0;
 
-            if( GetPropertySet()->getPropertyValue( C2U( "TextRotation" )) >>= fVal )
+            if( GetPropertySet()->getPropertyValue( "TextRotation" ) >>= fVal )
             {
                 rOutItemSet.Put( SfxInt32Item( nWhichId, static_cast< sal_Int32 >(
                                                    ::rtl::math::round( fVal * 100.0 ) ) ));
@@ -425,7 +425,7 @@ void AxisItemConverter::FillSpecialItem( sal_uInt16 nWhichId, SfxItemSet & rOutI
 
         case SID_ATTR_NUMBERFORMAT_SOURCE:
         {
-            bool bNumberFormatIsSet = ( GetPropertySet()->getPropertyValue( C2U( "NumberFormat" )).hasValue());
+            bool bNumberFormatIsSet = ( GetPropertySet()->getPropertyValue( "NumberFormat" ).hasValue());
             rOutItemSet.Put( SfxBoolItem( nWhichId, ! bNumberFormatIsSet ));
         }
         break;
@@ -744,11 +744,11 @@ bool AxisItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet 
                                 double fValue = 0.0;
                                 if( aValue >>= fValue )
                                 {
-                                    xCrossingMainAxis->setPropertyValue( C2U( "CrossoverPosition" ), uno::makeAny( ::com::sun::star::chart::ChartAxisPosition_VALUE ));
-                                    xCrossingMainAxis->setPropertyValue( C2U( "CrossoverValue" ), uno::makeAny( fValue ));
+                                    xCrossingMainAxis->setPropertyValue( "CrossoverPosition" , uno::makeAny( ::com::sun::star::chart::ChartAxisPosition_VALUE ));
+                                    xCrossingMainAxis->setPropertyValue( "CrossoverValue" , uno::makeAny( fValue ));
                                 }
                                 else
-                                    xCrossingMainAxis->setPropertyValue( C2U( "CrossoverPosition" ), uno::makeAny( ::com::sun::star::chart::ChartAxisPosition_START ));
+                                    xCrossingMainAxis->setPropertyValue( "CrossoverPosition" , uno::makeAny( ::com::sun::star::chart::ChartAxisPosition_START ));
                             }
                         }
                     }
@@ -764,11 +764,11 @@ bool AxisItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet 
                 static_cast< const SfxInt32Item & >( rItemSet.Get( nWhichId )).GetValue();
 
             ::com::sun::star::chart::ChartAxisPosition eOldAxisPos( ::com::sun::star::chart::ChartAxisPosition_ZERO );
-            bool bPropExisted = ( GetPropertySet()->getPropertyValue(C2U( "CrossoverPosition" )) >>= eOldAxisPos );
+            bool bPropExisted = ( GetPropertySet()->getPropertyValue( "CrossoverPosition" ) >>= eOldAxisPos );
 
             if( !bPropExisted || ( eOldAxisPos != eAxisPos ))
             {
-                GetPropertySet()->setPropertyValue( C2U( "CrossoverPosition" ), uno::makeAny( eAxisPos ));
+                GetPropertySet()->setPropertyValue( "CrossoverPosition" , uno::makeAny( eAxisPos ));
                 bChangedOtherwise = true;
 
                 //move the parallel axes to the other side if necessary
@@ -778,7 +778,7 @@ bool AxisItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet 
                     if( xParallelAxis.is() )
                     {
                         ::com::sun::star::chart::ChartAxisPosition eOtherPos;
-                        if( xParallelAxis->getPropertyValue( C2U( "CrossoverPosition" ) ) >>= eOtherPos )
+                        if( xParallelAxis->getPropertyValue( "CrossoverPosition" ) >>= eOtherPos )
                         {
                             if( eOtherPos == eAxisPos )
                             {
@@ -786,7 +786,7 @@ bool AxisItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet 
                                     (eAxisPos==::com::sun::star::chart::ChartAxisPosition_START)
                                     ? ::com::sun::star::chart::ChartAxisPosition_END
                                     : ::com::sun::star::chart::ChartAxisPosition_START;
-                                xParallelAxis->setPropertyValue( C2U( "CrossoverPosition" ), uno::makeAny( eOppositePos ));
+                                xParallelAxis->setPropertyValue( "CrossoverPosition" , uno::makeAny( eOppositePos ));
                             }
                         }
                     }
@@ -800,11 +800,11 @@ bool AxisItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet 
             double fValue = static_cast< const SvxDoubleItem & >( rItemSet.Get( nWhichId )).GetValue();
 
             double fOldValue = 0.0;
-            bool bPropExisted = ( GetPropertySet()->getPropertyValue(C2U( "CrossoverValue" )) >>= fOldValue );
+            bool bPropExisted = ( GetPropertySet()->getPropertyValue( "CrossoverValue" ) >>= fOldValue );
 
             if( !bPropExisted || ( fOldValue != fValue ))
             {
-                GetPropertySet()->setPropertyValue( C2U( "CrossoverValue" ), uno::makeAny( fValue ));
+                GetPropertySet()->setPropertyValue( "CrossoverValue" , uno::makeAny( fValue ));
                 bChangedOtherwise = true;
 
                 //keep old and new settings for axis positioning in sync somehow
@@ -836,11 +836,11 @@ bool AxisItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet 
                 static_cast< const SfxInt32Item & >( rItemSet.Get( nWhichId )).GetValue();
 
             ::com::sun::star::chart::ChartAxisLabelPosition eOldPos( ::com::sun::star::chart::ChartAxisLabelPosition_NEAR_AXIS );
-            bool bPropExisted = ( GetPropertySet()->getPropertyValue(C2U( "LabelPosition" )) >>= eOldPos );
+            bool bPropExisted = ( GetPropertySet()->getPropertyValue( "LabelPosition" ) >>= eOldPos );
 
             if( !bPropExisted || ( eOldPos != ePos ))
             {
-                GetPropertySet()->setPropertyValue( C2U( "LabelPosition" ), uno::makeAny( ePos ));
+                GetPropertySet()->setPropertyValue( "LabelPosition" , uno::makeAny( ePos ));
                 bChangedOtherwise = true;
 
                 //move the parallel axes to the other side if necessary
@@ -850,7 +850,7 @@ bool AxisItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet 
                     if( xParallelAxis.is() )
                     {
                         ::com::sun::star::chart::ChartAxisLabelPosition eOtherPos;
-                        if( xParallelAxis->getPropertyValue( C2U( "LabelPosition" ) ) >>= eOtherPos )
+                        if( xParallelAxis->getPropertyValue( "LabelPosition" ) >>= eOtherPos )
                         {
                             if( eOtherPos == ePos )
                             {
@@ -858,7 +858,7 @@ bool AxisItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet 
                                     (ePos==::com::sun::star::chart::ChartAxisLabelPosition_OUTSIDE_START)
                                     ? ::com::sun::star::chart::ChartAxisLabelPosition_OUTSIDE_END
                                     : ::com::sun::star::chart::ChartAxisLabelPosition_OUTSIDE_START;
-                                xParallelAxis->setPropertyValue( C2U( "LabelPosition" ), uno::makeAny( eOppositePos ));
+                                xParallelAxis->setPropertyValue( "LabelPosition" , uno::makeAny( eOppositePos ));
                             }
                         }
                     }
@@ -874,11 +874,11 @@ bool AxisItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet 
                 static_cast< const SfxInt32Item & >( rItemSet.Get( nWhichId )).GetValue();
 
             ::com::sun::star::chart::ChartAxisMarkPosition eOldPos( ::com::sun::star::chart::ChartAxisMarkPosition_AT_LABELS_AND_AXIS );
-            bool bPropExisted = ( GetPropertySet()->getPropertyValue(C2U( "MarkPosition" )) >>= eOldPos );
+            bool bPropExisted = ( GetPropertySet()->getPropertyValue( "MarkPosition" ) >>= eOldPos );
 
             if( !bPropExisted || ( eOldPos != ePos ))
             {
-                GetPropertySet()->setPropertyValue( C2U( "MarkPosition" ), uno::makeAny( ePos ));
+                GetPropertySet()->setPropertyValue( "MarkPosition" , uno::makeAny( ePos ));
                 bChangedOtherwise = true;
             }
         }
@@ -892,12 +892,12 @@ bool AxisItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet 
                     rItemSet.Get( nWhichId )).GetValue()) / 100.0;
             double fOldVal = 0.0;
             bool bPropExisted =
-                ( GetPropertySet()->getPropertyValue( C2U( "TextRotation" )) >>= fOldVal );
+                ( GetPropertySet()->getPropertyValue( "TextRotation" ) >>= fOldVal );
 
             if( ! bPropExisted ||
                 ( bPropExisted && fOldVal != fVal ))
             {
-                GetPropertySet()->setPropertyValue( C2U( "TextRotation" ), uno::makeAny( fVal ));
+                GetPropertySet()->setPropertyValue( "TextRotation" , uno::makeAny( fVal ));
                 bChangedOtherwise = true;
             }
         }
@@ -918,9 +918,9 @@ bool AxisItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet 
                             rItemSet.Get( nWhichId )).GetValue());
 
                     aValue = uno::makeAny(nFmt);
-                    if( GetPropertySet()->getPropertyValue( C2U( "NumberFormat" )) != aValue )
+                    if( GetPropertySet()->getPropertyValue( "NumberFormat" ) != aValue )
                     {
-                        GetPropertySet()->setPropertyValue( C2U( "NumberFormat" ), aValue );
+                        GetPropertySet()->setPropertyValue( "NumberFormat" , aValue );
                         bChangedOtherwise = true;
                     }
                 }
@@ -933,7 +933,7 @@ bool AxisItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet 
             bool bUseSourceFormat =
                 (static_cast< const SfxBoolItem & >(
                     rItemSet.Get( nWhichId )).GetValue() );
-            bool bNumberFormatIsSet = ( GetPropertySet()->getPropertyValue( C2U( "NumberFormat" )).hasValue());
+            bool bNumberFormatIsSet = ( GetPropertySet()->getPropertyValue( "NumberFormat").hasValue());
 
             bChangedOtherwise = (bUseSourceFormat == bNumberFormatIsSet);
             if( bChangedOtherwise )
@@ -961,7 +961,7 @@ bool AxisItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet 
                     }
                 }
                 // else set a void Any
-                GetPropertySet()->setPropertyValue( C2U( "NumberFormat" ), aValue );
+                GetPropertySet()->setPropertyValue( "NumberFormat" , aValue );
             }
         }
         break;

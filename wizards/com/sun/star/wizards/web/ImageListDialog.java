@@ -53,8 +53,6 @@ import com.sun.star.wizards.ui.ImageList.Counter;
  * <br/>
  * the consturctor should recieve, among others, an Array of String resources - see 
  * constructor documentation for details.
- * 
- * @author rpiterman
  */
 public abstract class ImageListDialog extends UnoDialog2 implements UIConsts
 {
@@ -87,7 +85,6 @@ public abstract class ImageListDialog extends UnoDialog2 implements UIConsts
     private int hid;
 
     /**
-     * 
      * @param xmsf
      * @param resources_ a string array with the following strings :
      * dialog title, label text, ok, cancel, help, deselect, other.
@@ -191,11 +188,6 @@ public abstract class ImageListDialog extends UnoDialog2 implements UIConsts
         il.tabIndex = 1;
         il.create(this);
 
-        /*lblContainer = insertLabel("lblContainer", 
-        new String[] {PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH},
-        new Object[] { 176,"lblContainer",6,17,new Short((short)5),214}
-        );*/
-
         lblTitle = insertLabel("lblTitle",
                 new String[]
                 {
@@ -246,7 +238,6 @@ public abstract class ImageListDialog extends UnoDialog2 implements UIConsts
      * The counter renderer, which uses a template.
      * The template replaces the Strings "%START", "%END" and
      * "%TOTAL" with the respective values.
-     * @author rpiterman
      *
      */
     public static class ARenderer implements IRenderer

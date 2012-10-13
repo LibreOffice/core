@@ -24,6 +24,7 @@
 
 #include <com/sun/star/embed/XHierarchicalStorageAccess.hpp>
 #include <com/sun/star/uri/UriReferenceFactory.hpp>
+#include <com/sun/star/xml/sax/Parser.hpp>
 
 //#define DEBUG_STREAM
 
@@ -267,16 +268,7 @@ uno::Reference<io::XInputStream> OOXMLStreamImpl::getStorageStream()
 
 uno::Reference<xml::sax::XParser> OOXMLStreamImpl::getParser()
 {
-    uno::Reference<lang::XMultiComponentFactory> xFactory =
-        uno::Reference<lang::XMultiComponentFactory>
-        (mxContext->getServiceManager());
-
-    uno::Reference<xml::sax::XParser> xParser
-        (xFactory->createInstanceWithContext
-        ( OUString("com.sun.star.xml.sax.Parser"),
-          mxContext ),
-        uno::UNO_QUERY );
-
+    uno::Reference<xml::sax::XParser> xParser = xml::sax::Parser::create(mxContext);
     return xParser;
 }
 

@@ -68,7 +68,7 @@ ScVbaFont::~ScVbaFont()
 }
 
 
-uno::Reference< beans::XPropertySet > lcl_TextProperties( uno::Reference< table::XCell >& xIf ) throw ( uno::RuntimeException )
+static uno::Reference< beans::XPropertySet > lcl_TextProperties( uno::Reference< table::XCell >& xIf ) throw ( uno::RuntimeException )
 {
     uno::Reference< text::XTextRange > xTxtRange( xIf, uno::UNO_QUERY_THROW );
     uno::Reference< text::XSimpleText > xTxt( xTxtRange->getText(), uno::UNO_QUERY_THROW ) ;

@@ -316,6 +316,72 @@ function mouseHandlerDispatch( aEvt, anAction )
 document.onmouseup = function( aEvt ) { return mouseHandlerDispatch( aEvt, MOUSE_UP ); };
 //document.onmousemove = function( aEvt ) { return mouseHandlerDispatch( aEvt, MOUSE_MOVE ); };
 
+
+/** mouseClickHelper
+ *
+ * @return {Object}
+ *   a mouse click handler
+ */
+function mouseClickHelper( aEvt )
+{
+    // In case text is selected we stay on the current slide.
+    // Anyway if we are dealing with Firefox there is an issue:
+    // Firefox supports a naive way of selecting svg text, if you click
+    // on text the current selection is set to the whole text fragment
+    // wrapped by the related <tspan> element.
+    // That means until you click on text you never move to the next slide.
+    // In order to avoid this case we do not test the status of current
+    // selection, when the presentation is running on a mozilla browser.
+    if( !Detect.isMozilla )
+    {
+        var aWindowObject = document.defaultView;
+        if( aWindowObject )
+        {
+            var aTextSelection = aWindowObject.getSelection();
+            var sSelectedText =  aTextSelection.toString();
+            if( sSelectedText )
+            {
+                DBGLOG( 'text selection: ' + sSelectedText );
+                if( sLastSelectedText !== sSelectedText )
+                {
+                    bTextHasBeenSelected = true;
+                    sLastSelectedText = sSelectedText;
+                }
+                else
+                {
+                    bTextHasBeenSelected = false;
+                }
+                return null;
+            }
+            else if( bTextHasBeenSelected )
+            {
+                bTextHasBeenSelected = false;
+                sLastSelectedText = '';
+                return null;
+            }
+        }
+        else
+        {
+            log( 'error: HyperlinkElement.handleClick: invalid window object.' );
+        }
+    }
+
+    var aSlideAnimationsHandler = theMetaDoc.aMetaSlideSet[nCurSlide].aSlideAnimationsHandler;
+    if( aSlideAnimationsHandler )
+    {
+        var aCurrentEventMultiplexer = aSlideAnimationsHandler.aEventMultiplexer;
+        if( aCurrentEventMultiplexer )
+        {
+            if( aCurrentEventMultiplexer.hasRegisteredMouseClickHandlers() )
+            {
+                return aCurrentEventMultiplexer.notifyMouseClick( aEvt );
+            }
+        }
+    }
+    return slideOnMouseUp( aEvt );
+}
+
+
 /** Function to supply the default mouse handler dictionary.
  *
  *  @returns default mouse handler dictionary
@@ -329,10 +395,11 @@ function getDefaultMouseHandlerDictionary()
 
     // slide mode
     mouseHandlerDict[SLIDE_MODE][MOUSE_UP]
+        = mouseClickHelper;
         //= function( aEvt ) { return slideOnMouseDown( aEvt ); };
-        = function( aEvt ) { return ( aSlideShow.aEventMultiplexer ) ?
-                                        aSlideShow.aEventMultiplexer.notifyMouseClick( aEvt )
-                                        : slideOnMouseUp( aEvt ); };
+//        = function( aEvt ) { return ( aSlideShow.aEventMultiplexer ) ?
+//                                        aSlideShow.aEventMultiplexer.notifyMouseClick( aEvt )
+//                                        : slideOnMouseUp( aEvt ); };
 
     mouseHandlerDict[SLIDE_MODE][MOUSE_WHEEL]
         = function( aEvt ) { return slideOnMouseWheel( aEvt ); };
@@ -613,6 +680,152 @@ PathTools.arcAsBezier = function( last, rx, ry, xRotg, large, sweep, x, y )
     }
     return result;	// Array
 };
+
+
+function has( name )
+{
+    return has.cache[name];
+}
+
+has.cache = {};
+
+has.add = function( name, test )
+{
+    has.cache[name] = test;
+};
+
+function configureDetectionTools()
+{
+    if( !navigator )
+    {
+        log( 'error: configureDetectionTools: configuration failed' );
+        return null;
+    }
+
+    var n = navigator,
+    dua = n.userAgent,
+    dav = n.appVersion,
+    tv = parseFloat(dav);
+
+    has.add('air', dua.indexOf('AdobeAIR') >= 0),
+    has.add('khtml', dav.indexOf('Konqueror') >= 0 ? tv : undefined);
+    has.add('webkit', parseFloat(dua.split('WebKit/')[1]) || undefined);
+    has.add('chrome', parseFloat(dua.split('Chrome/')[1]) || undefined);
+    has.add('safari', dav.indexOf('Safari')>=0 && !has('chrome') ? parseFloat(dav.split('Version/')[1]) : undefined);
+    has.add('mac', dav.indexOf('Macintosh') >= 0);
+    has.add('quirks', document.compatMode == 'BackCompat');
+    has.add('ios', /iPhone|iPod|iPad/.test(dua));
+    has.add('android', parseFloat(dua.split('Android ')[1]) || undefined);
+
+    if(!has('webkit')){
+        // Opera
+        if(dua.indexOf('Opera') >= 0){
+            // see http://dev.opera.com/articles/view/opera-ua-string-changes and http://www.useragentstring.com/pages/Opera/
+            // 9.8 has both styles; <9.8, 9.9 only old style
+            has.add('opera', tv >= 9.8 ? parseFloat(dua.split('Version/')[1]) || tv : tv);
+        }
+
+        // Mozilla and firefox
+        if(dua.indexOf('Gecko') >= 0 && !has('khtml') && !has('webkit')){
+            has.add('mozilla', tv);
+        }
+        if(has('mozilla')){
+            //We really need to get away from this. Consider a sane isGecko approach for the future.
+            has.add('ff', parseFloat(dua.split('Firefox/')[1] || dua.split('Minefield/')[1]) || undefined);
+        }
+
+        // IE
+        if(document.all && !has('opera')){
+            var isIE = parseFloat(dav.split('MSIE ')[1]) || undefined;
+
+            //In cases where the page has an HTTP header or META tag with
+            //X-UA-Compatible, then it is in emulation mode.
+            //Make sure isIE reflects the desired version.
+            //document.documentMode of 5 means quirks mode.
+            //Only switch the value if documentMode's major version
+            //is different from isIE's major version.
+            var mode = document.documentMode;
+            if(mode && mode != 5 && Math.floor(isIE) != mode){
+                isIE = mode;
+            }
+
+            has.add('ie', isIE);
+        }
+
+        // Wii
+        has.add('wii', typeof opera != 'undefined' && opera.wiiremote);
+    }
+
+    var detect =
+    {
+		// isFF: Number|undefined
+		//		Version as a Number if client is FireFox. undefined otherwise. Corresponds to
+		//		major detected FireFox version (1.5, 2, 3, etc.)
+		isFF: has('ff'),
+
+		// isIE: Number|undefined
+		//		Version as a Number if client is MSIE(PC). undefined otherwise. Corresponds to
+		//		major detected IE version (6, 7, 8, etc.)
+		isIE: has('ie'),
+
+		// isKhtml: Number|undefined
+		//		Version as a Number if client is a KHTML browser. undefined otherwise. Corresponds to major
+		//		detected version.
+		isKhtml: has('khtml'),
+
+		// isWebKit: Number|undefined
+		//		Version as a Number if client is a WebKit-derived browser (Konqueror,
+		//		Safari, Chrome, etc.). undefined otherwise.
+		isWebKit: has('webkit'),
+
+		// isMozilla: Number|undefined
+		//		Version as a Number if client is a Mozilla-based browser (Firefox,
+		//		SeaMonkey). undefined otherwise. Corresponds to major detected version.
+		isMozilla: has('mozilla'),
+		// isMoz: Number|undefined
+		//		Version as a Number if client is a Mozilla-based browser (Firefox,
+		//		SeaMonkey). undefined otherwise. Corresponds to major detected version.
+		isMoz: has('mozilla'),
+
+		// isOpera: Number|undefined
+		//		Version as a Number if client is Opera. undefined otherwise. Corresponds to
+		//		major detected version.
+		isOpera: has('opera'),
+
+		// isSafari: Number|undefined
+		//		Version as a Number if client is Safari or iPhone. undefined otherwise.
+		isSafari: has('safari'),
+
+		// isChrome: Number|undefined
+		//		Version as a Number if client is Chrome browser. undefined otherwise.
+		isChrome: has('chrome'),
+
+		// isMac: Boolean
+		//		True if the client runs on Mac
+		isMac: has('mac'),
+
+		// isIos: Boolean
+		//		True if client is iPhone, iPod, or iPad
+		isIos: has('ios'),
+
+		// isAndroid: Number|undefined
+		//		Version as a Number if client is android browser. undefined otherwise.
+		isAndroid: has('android'),
+
+		// isWii: Boolean
+		//		True if client is Wii
+		isWii: has('wii'),
+
+		// isQuirks: Boolean
+		//		Page is in quirks mode.
+		isQuirks: has('quirks'),
+
+		// isAir: Boolean
+		//		True if client is Adobe Air
+		isAir: has('air')
+    };
+    return detect;
+}
 
 
 
@@ -937,6 +1150,24 @@ function PriorityQueue( aCompareFunc )
     this.aCompareFunc = aCompareFunc;
 }
 
+PriorityQueue.prototype.clone = function()
+{
+    var aCopy = new PriorityQueue( this.aCompareFunc );
+    var src = this.aSequence;
+    var dest = [];
+    var i, l;
+    for( i = 0, l = src.length; i < l; ++i )
+    {
+        if( i in src )
+        {
+            dest.push( src[i] );
+        }
+    }
+    aCopy.aSequence = dest;
+
+    return aCopy;
+};
+
 PriorityQueue.prototype.top = function()
 {
     return this.aSequence[0];
@@ -1098,6 +1329,7 @@ var aPresentationClipPathId = 'presentation_clip_path';
 var aOOOAttrNumberOfSlides = 'number-of-slides';
 var aOOOAttrStartSlideNumber= 'start-slide-number';
 var aOOOAttrNumberingType = 'page-numbering-type';
+var aOOOAttrListItemNumberingType= 'numbering-type';
 
 var aOOOAttrSlide = 'slide';
 var aOOOAttrMaster = 'master';
@@ -1170,11 +1402,15 @@ var INDEX_COLUMNS_DEFAULT = 3;
 var INDEX_OFFSET = 0;
 
 // Initialization.
+var Detect = configureDetectionTools();
 var theMetaDoc;
 var theSlideIndexPage;
 var currentMode = SLIDE_MODE;
 var processingEffect = false;
 var nCurSlide = undefined;
+var bTextHasBeenSelected = false;
+var sLastSelectedText = '';
+
 
 // Initialize char and key code dictionaries.
 var charCodeDictionary = getDefaultCharCodeDictionary();
@@ -1239,6 +1475,7 @@ function instantiate( TemplateClass, BaseType )
     return TemplateClass.instanceSet[ nSize ].instance;
 }
 
+
 // ------------------------------------------------------------------------------------------ //
 /**********************************
  ** Helper functions and classes **
@@ -1283,11 +1520,19 @@ function warning( bCondition, sMessage )
 function getNSAttribute( sNSPrefix, aElem, sAttrName )
 {
     if( !aElem ) return null;
-    if( aElem.hasAttributeNS( NSS[sNSPrefix], sAttrName ) )
+    if( 'getAttributeNS' in aElem )
     {
         return aElem.getAttributeNS( NSS[sNSPrefix], sAttrName );
     }
-    return null;
+    else
+    {
+        return aElem.getAttribute( sNSPrefix + ':' + sAttrName );
+    }
+//    if( aElem.hasAttributeNS( NSS[sNSPrefix], sAttrName ) )
+//    {
+//        return aElem.getAttributeNS( NSS[sNSPrefix], sAttrName );
+//    }
+//    return null;
 }
 
 function getOOOAttribute( aElem, sAttrName )
@@ -1359,6 +1604,34 @@ function getClassAttribute(  aElem )
     if( aElem )
         return aElem.getAttribute( 'class' );
     return '';
+}
+
+function createElementGroup( aParentElement, aElementList, nFrom, nCount, sGroupClass, sGroupId )
+{
+    var nTo = nFrom + nCount;
+    if( nCount < 1 || aElementList.length < nTo )
+    {
+        log( 'createElementGroup: not enough elements available.' );
+        return;
+    }
+    var firstElement = aElementList[nFrom];
+    if( !firstElement )
+    {
+        log( 'createElementGroup: element not found.' );
+        return;
+    }
+    var aGroupElement = document.createElementNS( NSS['svg'], 'g' );
+    if( sGroupId )
+        aGroupElement.setAttribute( 'id', sGroupId );
+    if( sGroupClass )
+        aGroupElement.setAttribute( 'class', sGroupClass );
+    aParentElement.insertBefore( aGroupElement, firstElement );
+    var i = nFrom;
+    for( ; i < nTo; ++i )
+    {
+        aParentElement.removeChild( aElementList[i] );
+        aGroupElement.appendChild( aElementList[i] );
+    }
 }
 
 function initVisibilityProperty( aElement )
@@ -1437,6 +1710,10 @@ DebugPrinter.prototype.print = function( sMessage, nTime )
 
 
 // - Debug Printers -
+var aGenericDebugPrinter = new DebugPrinter();
+aGenericDebugPrinter.on();
+var DBGLOG = bind2( DebugPrinter.prototype.print, aGenericDebugPrinter );
+
 var NAVDBG = new DebugPrinter();
 NAVDBG.off();
 
@@ -1690,6 +1967,12 @@ function MetaSlide( sMetaSlideId, aMetaDoc )
     if( false && this.aSlideAnimationsHandler.aRootNode )
         log( this.aSlideAnimationsHandler.aRootNode.info( true ) );
 
+    // We collect text shapes included in this slide .
+    this.aTextShapeSet = this.collectTextShapes();
+
+    // We initialize hyperlinks
+    this.aHyperlinkSet = this.initHyperlinks();
+
 }
 
 MetaSlide.prototype =
@@ -1820,6 +2103,74 @@ initFixedTextFieldContentProvider : function( aOOOAttribute )
     return this.theMetaDoc.aTextFieldContentProviderSet[ nIndex ];
 },
 
+collectTextShapes : function()
+{
+    var aTextShapeSet = new Array();
+    var aTextShapeIndexElem = getElementByClassName( document, 'TextShapeIndex' );
+    if( aTextShapeIndexElem )
+    {
+        var aIndexEntryList = getElementChildren( aTextShapeIndexElem );
+        var i;
+        for( i = 0; i < aIndexEntryList.length; ++i )
+        {
+            var sSlideId = getOOOAttribute( aIndexEntryList[i], 'slide' );
+            if( sSlideId === this.slideId )
+            {
+                var sTextShapeIds = getOOOAttribute( aIndexEntryList[i], 'id-list' );
+                if( sTextShapeIds )
+                {
+                    //log( 'slide id: ' + this.slideId + ' text shape id list: ' + sTextShapeIds );
+                    var aTextShapeIdSet =  sTextShapeIds.split( ' ' );
+                    var j;
+                    for( j = 0; j < aTextShapeIdSet.length; ++j )
+                    {
+                        var aTextShapeElem = document.getElementById( aTextShapeIdSet[j] );
+                        if( aTextShapeElem )
+                        {
+                            aTextShapeSet.push( aTextShapeElem );
+                        }
+                        else
+                        {
+                            log( 'warning: MetaSlide.collectTextShapes: text shape with id <' + aTextShapeIdSet[j] + '> is not valid.'  );
+                        }
+                    }
+                }
+                break;
+            }
+        }
+    }
+    return aTextShapeSet;
+},
+
+initHyperlinks : function()
+{
+    var aHyperlinkSet = new Object();
+    var i;
+    for( i = 0; i < this.aTextShapeSet.length; ++i )
+    {
+        if( this.aTextShapeSet[i] )
+        {
+            var aHyperlinkIdList = getElementByClassName( this.aTextShapeSet[i], 'HyperlinkIdList' );
+            if( aHyperlinkIdList )
+            {
+                var sHyperlinkIds = aHyperlinkIdList.textContent;
+                if( sHyperlinkIds )
+                {
+                    var aHyperlinkIdSet = sHyperlinkIds.trim().split( ' ' );
+                    var j;
+                    for( j = 0; j < aHyperlinkIdSet.length; ++j )
+                    {
+                        var sId = aHyperlinkIdSet[j];
+                        //log( 'initHyperlinks: j=' + j + ' id: <' + sId + '>' );
+                        aHyperlinkSet[ sId ] = new HyperlinkElement( sId, this.aSlideAnimationsHandler.aEventMultiplexer );
+                    }
+                }
+            }
+        }
+    }
+    return aHyperlinkSet;
+},
+
 getSlideAnimationsRoot : function()
 {
     return this.theMetaDoc.aSlideAnimationsMap[ this.slideId ];
@@ -1890,6 +2241,47 @@ function MasterPage( sMasterPageId )
     {
         this.backgroundObjectsId = this.backgroundObjects.getAttribute( 'id' );
         this.backgroundObjectsVisibility = initVisibilityProperty( this.backgroundObjects );
+
+        if( this.backgroundObjectsVisibility != HIDDEN )
+        {
+            var aBackgroundObjectList = getElementChildren( this.backgroundObjects );
+            var nFrom = 0;
+            var nCount = 0;
+            var nSubGroupId = 1;
+            var sClass;
+            var sId = '';
+            this.aBackgroundObjectSubGroupIdList = new Array();
+            var i = 0;
+            for( ; i < aBackgroundObjectList.length; ++i )
+            {
+                sClass = aBackgroundObjectList[i].getAttribute( 'class' );
+                if( !sClass || ( ( sClass !== aDateTimeClassName ) && ( sClass !== aFooterClassName )
+                                     && ( sClass !== aHeaderClassName ) && ( sClass !== aSlideNumberClassName ) ) )
+                {
+                    if( nCount === 0 )
+                    {
+                        nFrom = i;
+                        sId = this.backgroundObjectsId + '.' + nSubGroupId;
+                        ++nSubGroupId;
+                        this.aBackgroundObjectSubGroupIdList.push( sId );
+                    }
+                    ++nCount;
+                }
+                else
+                {
+                    this.aBackgroundObjectSubGroupIdList.push( sClass );
+                    if( nCount !== 0 )
+                    {
+                        createElementGroup( this.backgroundObjects, aBackgroundObjectList, nFrom, nCount, 'BackgroundObjectSubgroup', sId );
+                        nCount = 0;
+                    }
+                }
+            }
+            if( nCount !== 0 )
+            {
+                createElementGroup( this.backgroundObjects, aBackgroundObjectList, nFrom, nCount, 'BackgroundObjectSubgroup', sId );
+            }
+        }
     }
     else
     {
@@ -2000,6 +2392,24 @@ PlaceholderShape.prototype.init = function()
                 this.element = aTextFieldElement;
                 this.textElement = aPlaceholderElement;
             }
+
+            // We remove all text lines but the first one used as placeholder.
+            var aTextLineGroupElem = this.textElement.parentNode.parentNode;
+            if( aTextLineGroupElem )
+            {
+                // Just to be sure it is the element we are looking for.
+                var sFontFamilyAttr = aTextLineGroupElem.getAttribute( 'font-family' );
+                if( sFontFamilyAttr )
+                {
+                    var aChildSet = getElementChildren( aTextLineGroupElem );
+                    if( aChildSet.length > 1  )
+                    var i = 1;
+                    for( ; i < aChildSet.length; ++i )
+                    {
+                        aTextLineGroupElem.removeChild( aChildSet[i] );
+                    }
+                }
+            }
         }
     }
 };
@@ -2014,15 +2424,14 @@ PlaceholderShape.prototype.init = function()
  *  <g class='MasterPageView'>
  *      <use class='Background'>               // reference to master page background element
  *      <g class='BackgroundObjects'>
- *          <g class='BackgroundFields'>
- *              <g class='Slide_Number'>       // a cloned element
+ *          <use class='BackgroundObjectSubGroup'>     // reference to the group of shapes on the master page that are below text fields
+ *          <g class='Slide_Number'>                   // a cloned element
  *                  ...
- *              </g>
- *              <use class='Date/Time'>        // reference to a clone
- *              <use class='Footer'>
- *              <use class='Header'>
  *          </g>
- *          <use class='BackgroundShapes'>     // reference to the group of shapes on the master page
+ *          <use class='Date/Time'>                    // reference to a clone
+ *          <use class='Footer'>
+ *          <use class='Header'>
+ *          <use class='BackgroundObjectSubGroup'>     // reference to the group of shapes on the master page that are above text fields
  *      </g>
  *  </g>
  *
@@ -2117,11 +2526,9 @@ MasterPageView.prototype.createElement = function()
         this.aBackgroundObjectsElement = theDocument.createElementNS( NSS['svg'], 'g' );
         this.aBackgroundObjectsElement.setAttribute( 'class', 'BackgroundObjects' );
 
-        // create background fields group
-        this.aBackgroundFieldsElement = theDocument.createElementNS( NSS['svg'], 'g' );
-        this.aBackgroundFieldsElement.setAttribute( 'class', 'BackgroundFields' );
-
         // clone and initialize text field elements
+        var aBackgroundObjectSubGroupIdList = this.aMasterPage.aBackgroundObjectSubGroupIdList;
+        this.aBackgroundSubGroupElementSet = new Array();
         var aPlaceholderShapeSet = this.aMasterPage.aPlaceholderShapeSet;
         var aTextFieldContentProviderSet = this.aMetaSlide.aTextFieldContentProviderSet;
         // where cloned elements are appended
@@ -2129,58 +2536,76 @@ MasterPageView.prototype.createElement = function()
         var aTextFieldHandlerSet = this.aMetaSlide.theMetaDoc.aTextFieldHandlerSet;
         var sMasterSlideId = this.aMasterPage.id;
 
-        // Slide Number Field
-        // The cloned element is appended directly to the field group element
-        // since there is no slide number field content shared between two slide
-        // (because the slide number of two slide is always different).
-        if( aPlaceholderShapeSet[aSlideNumberClassName] &&
-            aPlaceholderShapeSet[aSlideNumberClassName].isValid() &&
-            this.aMetaSlide.nIsPageNumberVisible &&
-            aTextFieldContentProviderSet[aSlideNumberClassName] )
+        var i = 0;
+        var sId;
+        for( ; i < aBackgroundObjectSubGroupIdList.length; ++i )
         {
-            this.aSlideNumberFieldHandler =
-            new SlideNumberFieldHandler( aPlaceholderShapeSet[aSlideNumberClassName],
-                                         aTextFieldContentProviderSet[aSlideNumberClassName] );
-            this.aSlideNumberFieldHandler.update( this.aMetaSlide.nSlideNumber );
-            this.aSlideNumberFieldHandler.appendTo( this.aBackgroundFieldsElement );
+            sId = aBackgroundObjectSubGroupIdList[i];
+            if( sId === aSlideNumberClassName )
+            {
+                // Slide Number Field
+                // The cloned element is appended directly to the field group element
+                // since there is no slide number field content shared between two slide
+                // (because the slide number of two slide is always different).
+                if( aPlaceholderShapeSet[aSlideNumberClassName] &&
+                    aPlaceholderShapeSet[aSlideNumberClassName].isValid() &&
+                    this.aMetaSlide.nIsPageNumberVisible &&
+                    aTextFieldContentProviderSet[aSlideNumberClassName] )
+                {
+                    this.aSlideNumberFieldHandler =
+                    new SlideNumberFieldHandler( aPlaceholderShapeSet[aSlideNumberClassName],
+                                                 aTextFieldContentProviderSet[aSlideNumberClassName] );
+                    this.aSlideNumberFieldHandler.update( this.aMetaSlide.nSlideNumber );
+                    this.aSlideNumberFieldHandler.appendTo( this.aBackgroundObjectsElement );
+                }
+            }
+            else if( sId === aDateTimeClassName )
+            {
+                // Date/Time field
+                if( this.aMetaSlide.nIsDateTimeVisible )
+                {
+                    this.aDateTimeFieldHandler =
+                    this.initTextFieldHandler( aDateTimeClassName, aPlaceholderShapeSet,
+                                               aTextFieldContentProviderSet, aDefsElement,
+                                               aTextFieldHandlerSet, sMasterSlideId );
+                }
+            }
+            else if( sId === aFooterClassName )
+            {
+                // Footer Field
+                if( this.aMetaSlide.nIsFooterVisible )
+                {
+                    this.aFooterFieldHandler =
+                    this.initTextFieldHandler( aFooterClassName, aPlaceholderShapeSet,
+                                               aTextFieldContentProviderSet, aDefsElement,
+                                               aTextFieldHandlerSet, sMasterSlideId );
+                }
+            }
+            else if( sId === aHeaderClassName )
+            {
+                // Header Field
+                if( this.aMetaSlide.nIsHeaderVisible )
+                {
+                    this.aHeaderFieldHandler =
+                    this.initTextFieldHandler( aHeaderClassName, aPlaceholderShapeSet,
+                                               aTextFieldContentProviderSet, aDefsElement,
+                                               aTextFieldHandlerSet, sMasterSlideId );
+                }
+            }
+            else
+            {
+                // init BackgroundObjectSubGroup elements
+                var aBackgroundSubGroupElement = theDocument.createElementNS( NSS['svg'], 'use' );
+                aBackgroundSubGroupElement.setAttribute( 'class', 'BackgroundObjectSubGroup' );
+                setNSAttribute( 'xlink', aBackgroundSubGroupElement,
+                                'href', '#' + sId );
+                this.aBackgroundSubGroupElementSet.push( aBackgroundSubGroupElement );
+                // node linking
+                this.aBackgroundObjectsElement.appendChild( aBackgroundSubGroupElement );
+            }
+
         }
-
-        // Date/Time field
-        if( this.aMetaSlide.nIsDateTimeVisible )
-        {
-            this.aDateTimeFieldHandler =
-            this.initTextFieldHandler( aDateTimeClassName, aPlaceholderShapeSet,
-                                       aTextFieldContentProviderSet, aDefsElement,
-                                       aTextFieldHandlerSet, sMasterSlideId );
-        }
-
-        // Footer Field
-        if( this.aMetaSlide.nIsFooterVisible )
-        {
-            this.aFooterFieldHandler =
-            this.initTextFieldHandler( aFooterClassName, aPlaceholderShapeSet,
-                                       aTextFieldContentProviderSet, aDefsElement,
-                                       aTextFieldHandlerSet, sMasterSlideId );
-        }
-
-        // Header Field
-        if( this.aMetaSlide.nIsHeaderVisible )
-        {
-            this.aHeaderFieldHandler =
-            this.initTextFieldHandler( aHeaderClassName, aPlaceholderShapeSet,
-                                       aTextFieldContentProviderSet, aDefsElement,
-                                       aTextFieldHandlerSet, sMasterSlideId );
-        }
-
-        // init BackgroundShapes element
-        this.aBackgroundShapesElement = theDocument.createElementNS( NSS['svg'], 'use' );
-        this.aBackgroundShapesElement.setAttribute( 'class', 'BackgroundShapes' );
-        setNSAttribute( 'xlink', this.aBackgroundShapesElement,
-                        'href', '#' + this.aMasterPage.backgroundObjectsId );
-
         // node linking
-        this.aBackgroundObjectsElement.appendChild( this.aBackgroundFieldsElement );
-        this.aBackgroundObjectsElement.appendChild( this.aBackgroundShapesElement );
         aMasterPageViewElement.appendChild( this.aBackgroundObjectsElement );
     }
 
@@ -2220,7 +2645,7 @@ function( sClassName, aPlaceholderShapeSet, aTextFieldContentProviderSet,
         setNSAttribute( 'xlink', aTextFieldElement,
                         'href', '#' + aTextFieldHandler.sId );
         // node linking
-        this.aBackgroundFieldsElement.appendChild( aTextFieldElement );
+        this.aBackgroundObjectsElement.appendChild( aTextFieldElement );
     }
     return aTextFieldHandler;
 };
@@ -5708,6 +6133,7 @@ function AnimationBaseNode( aAnimElem, aParentNode, aNodeContext )
     this.sClassName = 'AnimationBaseNode';
     this.bIsContainer = false;
     this.aTargetElement = null;
+    this.bIsTargetTextElement = false
     this.aAnimatedElement = null;
     this.aActivity = null;
 
@@ -5735,6 +6161,10 @@ AnimationBaseNode.prototype.parseElement = function()
         this.eCurrentState = INVALID_NODE;
         log( 'AnimationBaseNode.parseElement: target element not found: ' + sTargetElementAttr );
     }
+
+    // sub-item attribute for text animated element
+    var sSubItemAttr = aAnimElem.getAttribute( 'sub-item' );
+    this.bIsTargetTextElement = ( sSubItemAttr && ( sSubItemAttr === 'text' ) );
 
     // additive attribute
     var sAdditiveAttr = aAnimElem.getAttribute( 'additive' );
@@ -5765,8 +6195,16 @@ AnimationBaseNode.prototype.parseElement = function()
         // create animated element
         if( !this.aNodeContext.aAnimatedElementMap[ sTargetElementAttr ] )
         {
-            this.aNodeContext.aAnimatedElementMap[ sTargetElementAttr ]
+            if( this.bIsTargetTextElement )
+            {
+                this.aNodeContext.aAnimatedElementMap[ sTargetElementAttr ]
+                    = new AnimatedTextElement( this.aTargetElement );
+            }
+            else
+            {
+                this.aNodeContext.aAnimatedElementMap[ sTargetElementAttr ]
                     = new AnimatedElement( this.aTargetElement );
+            }
         }
         this.aAnimatedElement = this.aNodeContext.aAnimatedElementMap[ sTargetElementAttr ];
 
@@ -7414,6 +7852,7 @@ ClippingAnimation.prototype.end = function()
     {
         this.aAnimatableElement.cleanClipPath();
         this.bAnimationStarted = false;
+        this.aAnimatableElement.notifyAnimationEnd();
     }
 };
 
@@ -7468,7 +7907,10 @@ GenericAnimation.prototype.start = function( aAnimatableElement )
 GenericAnimation.prototype.end = function()
 {
     if( this.bAnimationStarted )
+    {
         this.bAnimationStarted = false;
+        this.aAnimatableElement.notifyAnimationEnd();
+    }
 };
 
 GenericAnimation.prototype.perform = function( aValue )
@@ -8650,6 +9092,8 @@ function AnimatedElement( aElement )
         log( 'AnimatedElement constructor: element is not valid' );
     }
 
+    this.aSlideShowContext = null;
+
     this.aBaseElement = aElement.cloneNode( true );
     this.aActiveElement = aElement;
     this.sElementId = this.aActiveElement.getAttribute( 'id' );
@@ -8769,14 +9213,25 @@ AnimatedElement.prototype.setToElement = function( aElement )
     return true;
 };
 
-AnimatedElement.prototype.notifySlideStart = function()
+AnimatedElement.prototype.notifySlideStart = function( aSlideShowContext )
 {
+    if( !aSlideShowContext )
+    {
+        log( 'AnimatedElement.notifySlideStart: slideshow context is not valid' );
+    }
+    this.aSlideShowContext = aSlideShowContext;
+
     var aClone = this.aBaseElement.cloneNode( true );
     this.aActiveElement.parentNode.replaceChild( aClone, this.aActiveElement );
     this.aActiveElement = aClone;
 
     this.initElement();
     this.DBG( '.notifySlideStart invoked' );
+};
+
+AnimatedElement.prototype.notifySlideEnd = function()
+{
+    // empty body
 };
 
 AnimatedElement.prototype.notifyAnimationStart = function()
@@ -9201,6 +9656,291 @@ AnimatedElement.prototype.setFontColor = function( sValue )
 AnimatedElement.prototype.DBG = function( sMessage, nTime )
 {
     aAnimatedElementDebugPrinter.print( 'AnimatedElement(' + this.getId() + ')' + sMessage, nTime );
+};
+
+// ------------------------------------------------------------------------------------------ //
+function AnimatedTextElement( aElement, aEventMultiplexer )
+{
+    var theDocument = document;
+
+    var sTextType = aElement.getAttribute( 'class' );
+    var bIsListItem = ( sTextType === 'ListItem' );
+    if( ( sTextType !== 'TextParagraph' ) && !bIsListItem )
+    {
+        log( 'AnimatedTextElement: passed element is not a paragraph.' );
+        return;
+    }
+    var aTextShapeElement = aElement.parentNode;
+    sTextType = aTextShapeElement.getAttribute( 'class' );
+    if( sTextType !== 'TextShape' )
+    {
+        log( 'AnimatedTextElement: element parent is not a text shape.' );
+        return;
+    }
+    var aTextShapeGroup = aTextShapeElement.parentNode;
+    // We search for the helper group element used for inserting
+    // the element copy to be animated; if it doesn't exist we create it.
+    var aAnimatedElementGroup = getElementByClassName( aTextShapeGroup, 'AnimatedElements' );
+    if( !aAnimatedElementGroup )
+    {
+        aAnimatedElementGroup = theDocument.createElementNS( NSS['svg'], 'g' );
+        aAnimatedElementGroup.setAttribute( 'class', 'AnimatedElements' );
+        aTextShapeGroup.appendChild( aAnimatedElementGroup );
+    }
+
+    // Create element used on animating
+    var aAnimatableElement = theDocument.createElementNS( NSS['svg'], 'g' );
+    var aTextElement = theDocument.createElementNS( NSS['svg'], 'text' );
+    // Clone paragraph element <tspan>
+    var aParagraphElement = aElement.cloneNode( true );
+
+    // We create a group element for wrapping bullets, bitmaps
+    // and text decoration
+    this.aGraphicGroupElement = theDocument.createElementNS( NSS['svg'], 'g' );
+    this.aGraphicGroupElement.setAttribute( 'class', 'GraphicGroup' );
+
+    // In case we are dealing with a list item that utilizes a bullet char
+    // we need to clone the related bullet char too.
+    var aBulletCharClone = null;
+    var aBulletCharElem = null;
+    var bIsBulletCharStyle =
+        ( aElement.getAttributeNS( NSS['ooo'], aOOOAttrListItemNumberingType ) === 'bullet-style' );
+    if( bIsBulletCharStyle )
+    {
+        var aBulletCharGroupElem = getElementByClassName( aTextShapeGroup, 'BulletChars' );
+        if( aBulletCharGroupElem )
+        {
+            var aBulletPlaceholderElem = getElementByClassName( aElement.firstElementChild, 'BulletPlaceholder' );
+            if( aBulletPlaceholderElem )
+            {
+                var sId = aBulletPlaceholderElem.getAttribute( 'id' );
+                sId = 'bullet-char(' + sId + ')';
+                aBulletCharElem = theDocument.getElementById( sId );
+                if( aBulletCharElem )
+                {
+                    aBulletCharClone = aBulletCharElem.cloneNode( true );
+                }
+                else
+                {
+                    log( 'AnimatedTextElement: ' + sId + ' not found.' );
+                }
+            }
+            else
+            {
+                log( 'AnimatedTextElement: no bullet placeholder found' );
+            }
+        }
+        else
+        {
+            log( 'AnimatedTextElement: no bullet char group found' );
+        }
+    }
+
+    // In case there are embedded bitmaps we need to clone them
+    var aBitmapElemSet = new Array();
+    var aBitmapCloneSet = new Array();
+    var aBitmapPlaceholderSet = getElementsByClassName( aElement, 'BitmapPlaceholder' );
+    if( aBitmapPlaceholderSet )
+    {
+        var i;
+        for( i = 0; i < aBitmapPlaceholderSet.length; ++i )
+        {
+            sId = aBitmapPlaceholderSet[i].getAttribute( 'id' );
+            var sBitmapChecksum = sId.substring( 'bitmap-placeholder'.length + 1, sId.length - 1 );
+            sId = 'embedded-bitmap(' + sBitmapChecksum + ')';
+            aBitmapElemSet[i] = theDocument.getElementById( sId );
+            if( aBitmapElemSet[i] )
+            {
+                aBitmapCloneSet[i] = aBitmapElemSet[i].cloneNode( true );
+            }
+            else
+            {
+                log( 'AnimatedTextElement: ' + sId + ' not found.' );
+            }
+        }
+    }
+
+
+    // Change clone element id.
+    this.sParagraphId = sId = aParagraphElement.getAttribute( 'id' );
+    aParagraphElement.removeAttribute( 'id' );
+    aAnimatableElement.setAttribute( 'id', sId +'.a' );
+    if( aBulletCharClone )
+        aBulletCharClone.removeAttribute( 'id' );
+    for( i = 0; i < aBitmapCloneSet.length; ++i )
+    {
+        if( aBitmapCloneSet[i] )
+            aBitmapCloneSet[i].removeAttribute( 'id' );
+    }
+
+    // Set up visibility
+    var sVisibilityAttr = aElement.getAttribute( 'visibility' );
+    if( !sVisibilityAttr )
+        sVisibilityAttr = 'inherit';
+    aAnimatableElement.setAttribute( 'visibility', sVisibilityAttr );
+    aParagraphElement.setAttribute( 'visibility', 'inherit' );
+    this.aGraphicGroupElement.setAttribute( 'visibility', 'inherit' );
+    if( aBulletCharElem )
+        aBulletCharElem.setAttribute( 'visibility', 'hidden' );
+    for( i = 0; i < aBitmapCloneSet.length; ++i )
+    {
+        if( aBitmapElemSet[i] )
+            aBitmapElemSet[i].setAttribute( 'visibility', 'hidden' );
+    }
+
+    // Append each element to its parent.
+    // <g class='AnimatedElements'>
+    //   <g>
+    //     <text>
+    //       <tspan class='TextParagraph'> ... </tspan>
+    //     </text>
+    //     <g class='GraphicGroup'>
+    //       [<g class='BulletChar'>...</g>]
+    //       [<g class='EmbeddedBitmap'>...</g>]
+    //       .
+    //       .
+    //       [<g class='EmbeddedBitmap'>...</g>]
+    //     </g>
+    //   </g>
+    // </g>
+
+    aTextElement.appendChild( aParagraphElement );
+    aAnimatableElement.appendChild( aTextElement );
+
+    if( aBulletCharClone )
+        this.aGraphicGroupElement.appendChild( aBulletCharClone );
+    for( i = 0; i < aBitmapCloneSet.length; ++i )
+    {
+        if( aBitmapCloneSet[i] )
+            this.aGraphicGroupElement.appendChild( aBitmapCloneSet[i] );
+    }
+    aAnimatableElement.appendChild( this.aGraphicGroupElement );
+    aAnimatedElementGroup.appendChild( aAnimatableElement );
+
+    this.aParentTextElement = aElement.parentNode;
+    this.aParagraphElement = aElement;
+    this.aAnimatedElementGroup = aAnimatedElementGroup;
+    this.nRunningAnimations = 0;
+
+    // we collect all hyperlink ids
+    this.aHyperlinkIdSet = new Array();
+    var aHyperlinkElementSet = getElementsByClassName( this.aParagraphElement, 'UrlField' );
+    var i = 0;
+    var sHyperlinkId;
+    for( ; i < aHyperlinkElementSet.length; ++i )
+    {
+        sHyperlinkId = aHyperlinkElementSet[i].getAttribute( 'id' );
+        if( sHyperlinkId )
+           this.aHyperlinkIdSet.push( sHyperlinkId );
+        else
+            log( 'error: AnimatedTextElement constructor: hyperlink element has no id' );
+    }
+
+
+    AnimatedTextElement.superclass.constructor.call( this, aAnimatableElement, aEventMultiplexer );
+
+}
+extend( AnimatedTextElement, AnimatedElement );
+
+
+AnimatedTextElement.prototype.setToElement = function( aElement )
+{
+    var bRet = AnimatedTextElement.superclass.setToElement.call( this, aElement );
+    if( bRet )
+    {
+        this.aGraphicGroupElement = getElementByClassName( this.aActiveElement, 'GraphicGroup' );
+    }
+    return ( bRet && this.aGraphicGroupElement );
+};
+
+AnimatedTextElement.prototype.notifySlideStart = function( aSlideShowContext )
+{
+    DBGLOG( 'AnimatedTextElement.notifySlideStart' );
+    AnimatedTextElement.superclass.notifySlideStart.call( this, aSlideShowContext );
+    this.aGraphicGroupElement = getElementByClassName( this.aActiveElement, 'GraphicGroup' );
+    this.restoreBaseTextParagraph();
+};
+
+AnimatedTextElement.prototype.notifySlideEnd = function()
+{
+    DBGLOG( 'AnimatedTextElement.notifySlideEnd' );
+    this.aGraphicGroupElement.setAttribute( 'visibility', 'inherit' );
+};
+
+AnimatedTextElement.prototype.restoreBaseTextParagraph = function()
+{
+    var aActiveParagraphElement = this.aActiveElement.firstElementChild.firstElementChild;
+    if( aActiveParagraphElement )
+    {
+        var sVisibilityAttr = this.aActiveElement.getAttribute( 'visibility' );
+        if( !sVisibilityAttr || ( sVisibilityAttr === 'visible' ) )
+            sVisibilityAttr = 'inherit';
+        if( sVisibilityAttr === 'inherit' )
+            this.aGraphicGroupElement.setAttribute( 'visibility', 'visible' );
+        else
+            this.aGraphicGroupElement.setAttribute( 'visibility', 'hidden' );
+
+        var aParagraphClone = aActiveParagraphElement.cloneNode( true );
+        aParagraphClone.setAttribute( 'id', this.sParagraphId );
+        aParagraphClone.setAttribute( 'visibility', sVisibilityAttr );
+        this.aParentTextElement.replaceChild( aParagraphClone, this.aParagraphElement );
+        this.aParagraphElement = aParagraphClone;
+
+
+        var aEventMultiplexer = this.aSlideShowContext.aEventMultiplexer;
+        var aHyperlinkIdSet = this.aHyperlinkIdSet;
+        var aHyperlinkElementSet = getElementsByClassName( this.aParagraphElement, 'UrlField' );
+        var i = 0;
+        for( ; i < aHyperlinkIdSet.length; ++i )
+        {
+            aEventMultiplexer.notifyElementChangedEvent( aHyperlinkIdSet[i], aHyperlinkElementSet[i] );
+        }
+    }
+    this.aActiveElement.setAttribute( 'visibility', 'hidden' );
+};
+
+AnimatedTextElement.prototype.notifyAnimationStart = function()
+{
+    DBGLOG( 'AnimatedTextElement.notifyAnimationStart' );
+    if( this.nRunningAnimations === 0 )
+    {
+        var sVisibilityAttr = this.aParagraphElement.getAttribute( 'visibility' );
+        if( !sVisibilityAttr )
+            sVisibilityAttr = 'inherit';
+        this.aActiveElement.setAttribute( 'visibility', sVisibilityAttr );
+        this.aGraphicGroupElement.setAttribute( 'visibility', 'inherit' );
+        this.aParagraphElement.setAttribute( 'visibility', 'hidden' );
+    }
+    ++this.nRunningAnimations;
+};
+
+AnimatedTextElement.prototype.notifyAnimationEnd = function()
+{
+    DBGLOG( 'AnimatedTextElement.notifyAnimationEnd' );
+    --this.nRunningAnimations;
+    if( this.nRunningAnimations === 0 )
+    {
+        this.restoreBaseTextParagraph();
+    }
+};
+
+AnimatedTextElement.prototype.saveState = function( nAnimationNodeId )
+{
+    if( this.nRunningAnimations === 0 )
+    {
+        var sVisibilityAttr = this.aParagraphElement.getAttribute( 'visibility' );
+        this.aActiveElement.setAttribute( 'visibility', sVisibilityAttr );
+        this.aGraphicGroupElement.setAttribute( 'visibility', 'inherit' );
+    }
+    AnimatedTextElement.superclass.saveState.call( this, nAnimationNodeId );
+};
+
+AnimatedTextElement.prototype.restoreState = function( nAnimationNodeId )
+{
+    var bRet = AnimatedTextElement.superclass.restoreState.call( this, nAnimationNodeId );
+    if( bRet )
+        this.restoreBaseTextParagraph();
+    return bRet;
 };
 
 
@@ -9925,6 +10665,124 @@ SourceEventElement.prototype.setDefaultCursor = function()
     this.aElement.setAttribute( 'style', 'cursor: default' );
 };
 
+// ------------------------------------------------------------------------------------------ //
+
+function HyperlinkElement( sId, aEventMultiplexer )
+{
+    var aElement = document.getElementById( sId );
+    if( !aElement )
+    {
+        log( 'error: HyperlinkElement: no element with id: <' + sId + '> found' );
+        return;
+    }
+    if( !aEventMultiplexer )
+    {
+        log( 'AnimatedElement constructor: event multiplexer is not valid' );
+    }
+
+    this.sId = sId;
+    this.aElement = aElement;
+    this.aEventMultiplexer = aEventMultiplexer;
+    this.nTargetSlideIndex = undefined;
+
+    this.sURL = getNSAttribute( 'xlink', this.aElement, 'href' );
+    if( this.sURL )
+    {
+        if( this.sURL[0] === '#' )
+        {
+            if( this.sURL.substr(1, 5) === 'Slide' )
+            {
+                var sSlideIndex = this.sURL.split( ' ' )[1];
+                this.nTargetSlideIndex = parseInt( sSlideIndex ) - 1;
+            }
+        }
+
+        this.aEventMultiplexer.registerElementChangedHandler( this.sId, bind2( HyperlinkElement.prototype.onElementChanged, this) );
+        this.aEventMultiplexer.registerMouseClickHandler( this, 1100 );
+
+        this.bIsPointerOver = false;
+        this.mouseEnterHandler = bind2( HyperlinkElement.prototype.onMouseEnter, this);
+        this.mouseLeaveHandler = bind2( HyperlinkElement.prototype.onMouseLeave, this);
+        this.aElement.addEventListener( 'mouseover', this.mouseEnterHandler, false );
+        this.aElement.addEventListener( 'mouseout', this.mouseLeaveHandler, false );
+    }
+    else
+    {
+        log( 'warning: HyperlinkElement(' + this.sId + '): url is empty' );
+    }
+}
+
+HyperlinkElement.prototype.onElementChanged = function( aElement )
+{
+    //var aElement = document.getElementById( this.sId );
+    if( !aElement )
+    {
+        log( 'error: HyperlinkElement: passed element is not valid' );
+        return;
+    }
+
+    if( this.sURL )
+    {
+        this.aElement.removeEventListener( 'mouseover', this.mouseEnterHandler, false );
+        this.aElement.removeEventListener( 'mouseout', this.mouseLeaveHandler, false );
+        this.aElement = aElement;
+        this.aElement.addEventListener( 'mouseover', this.mouseEnterHandler, false );
+        this.aElement.addEventListener( 'mouseout', this.mouseLeaveHandler, false );
+    }
+};
+
+HyperlinkElement.prototype.onMouseEnter = function()
+{
+    this.bIsPointerOver = true;
+    this.setPointerCursor();
+};
+
+HyperlinkElement.prototype.onMouseLeave = function()
+{
+    this.bIsPointerOver = false;
+    this.setDefaultCursor();
+};
+
+HyperlinkElement.prototype.handleClick = function( aMouseEvent )
+{
+    if( !this.bIsPointerOver ) return false;
+
+    //log( 'hyperlink: ' + this.sURL );
+
+    if( this.nTargetSlideIndex !== undefined )
+    {
+        aSlideShow.displaySlide( this.nTargetSlideIndex, true );
+    }
+    else
+    {
+        var aWindowObject = document.defaultView;
+        if( aWindowObject )
+        {
+            aWindowObject.open( this.sURL, this.sId );
+        }
+        else
+        {
+            log( 'error: HyperlinkElement.handleClick: invalid window object.' );
+        }
+    }
+
+
+    return true;
+};
+
+HyperlinkElement.prototype.setPointerCursor = function()
+{
+    if( this.bClickHandled )
+        return;
+
+    this.aElement.setAttribute( 'style', 'cursor: pointer' );
+};
+
+HyperlinkElement.prototype.setDefaultCursor = function()
+{
+    this.aElement.setAttribute( 'style', 'cursor: default' );
+};
+
 
 // ------------------------------------------------------------------------------------------ //
 function InteractiveAnimationSequence( nId )
@@ -10016,9 +10874,11 @@ PriorityEntry.compare = function( aLhsEntry, aRhsEntry )
     return ( aLhsEntry.nPriority < aRhsEntry.nPriority );
 };
 
+
 // ------------------------------------------------------------------------------------------ //
 function EventMultiplexer( aTimerEventQueue )
 {
+    this.nId = EventMultiplexer.getUniqueId();
     this.aTimerEventQueue = aTimerEventQueue;
     this.aEventMap = new Object();
     this.aSkipEffectEndHandlerSet = new Array();
@@ -10030,6 +10890,26 @@ function EventMultiplexer( aTimerEventQueue )
     this.aRewindRunningInteractiveEffectEventSet = new Object();
     this.aRewindEndedInteractiveEffectEventSet = new Object();
     this.aRewindedEffectHandlerSet = new Object();
+    this.aElementChangedHandlerSet = new Object();
+}
+
+EventMultiplexer.CURR_UNIQUE_ID = 0;
+
+EventMultiplexer.getUniqueId = function()
+{
+    ++EventMultiplexer.CURR_UNIQUE_ID;
+    return EventMultiplexer.CURR_UNIQUE_ID;
+};
+
+EventMultiplexer.prototype.getId = function()
+{
+    return this.nId;
+}
+
+EventMultiplexer.prototype.hasRegisteredMouseClickHandlers = function()
+{
+    var nSize = this.aMouseClickHandlerSet.size();
+    return ( nSize > 0 );
 }
 
 EventMultiplexer.prototype.registerMouseClickHandler = function( aHandler, nPriority )
@@ -10040,11 +10920,11 @@ EventMultiplexer.prototype.registerMouseClickHandler = function( aHandler, nPrio
 
 EventMultiplexer.prototype.notifyMouseClick = function( aMouseEvent )
 {
-    var aMouseClickHandlerSet = this.aMouseClickHandlerSet;
-    var nSize = aMouseClickHandlerSet.size();
-    for( var i = 0; i < nSize; ++i )
+    var aMouseClickHandlerSet = this.aMouseClickHandlerSet.clone();
+    while( !aMouseClickHandlerSet.isEmpty() )
     {
-        var aHandlerEntry = aMouseClickHandlerSet.aSequence[i];
+        var aHandlerEntry = aMouseClickHandlerSet.top();
+        aMouseClickHandlerSet.pop();
         if( aHandlerEntry.aValue.handleClick( aMouseEvent ) )
             break;
     }
@@ -10191,6 +11071,18 @@ EventMultiplexer.prototype.notifyRewindedEffectEvent = function( aNotifierId )
     }
 };
 
+EventMultiplexer.prototype.registerElementChangedHandler = function( aNotifierId, aHandler )
+{
+    this.aElementChangedHandlerSet[ aNotifierId ] = aHandler;
+}
+
+EventMultiplexer.prototype.notifyElementChangedEvent = function( aNotifierId, aElement )
+{
+    if( this.aElementChangedHandlerSet[ aNotifierId ] )
+    {
+        (this.aElementChangedHandlerSet[ aNotifierId ])( aElement );
+    }
+};
 
 EventMultiplexer.DEBUG = aEventMultiplexerDebugPrinter.isEnabled();
 
@@ -11831,7 +12723,7 @@ SlideShow.prototype.notifyNextEffectEnd = function()
     this.aStartedEffectList[ this.aStartedEffectIndexMap[ -1 ] ].end();
 };
 
-SlideShow.prototype.notifySlideStart = function( nSlideIndex )
+SlideShow.prototype.notifySlideStart = function( nNewSlideIndex, nOldSlideIndex )
 {
     this.nCurrentEffect = 0;
     this.bIsRewinding = false;
@@ -11842,10 +12734,18 @@ SlideShow.prototype.notifySlideStart = function( nSlideIndex )
     this.aStartedEffectIndexMap = new Object();
     this.aStartedEffectIndexMap[ -1 ] = undefined;
 
+    var aAnimatedElementMap;
+    var sId;
+    if( nOldSlideIndex !== undefined )
+    {
+        aAnimatedElementMap = theMetaDoc.aMetaSlideSet[nOldSlideIndex].aSlideAnimationsHandler.aAnimatedElementMap;
+        for( sId in aAnimatedElementMap )
+            aAnimatedElementMap[ sId ].notifySlideEnd();
+    }
 
-    var aAnimatedElementMap = theMetaDoc.aMetaSlideSet[nSlideIndex].aSlideAnimationsHandler.aAnimatedElementMap;
-    for( var sId in aAnimatedElementMap )
-        aAnimatedElementMap[ sId ].notifySlideStart();
+    aAnimatedElementMap = theMetaDoc.aMetaSlideSet[nNewSlideIndex].aSlideAnimationsHandler.aAnimatedElementMap;
+    for( sId in aAnimatedElementMap )
+        aAnimatedElementMap[ sId ].notifySlideStart( this.aContext );
 };
 
 SlideShow.prototype.notifyTransitionEnd = function( nSlideIndex )
@@ -12196,7 +13096,7 @@ SlideShow.prototype.displaySlide = function( nNewSlide, bSkipSlideTransition )
         }
     }
 
-    this.notifySlideStart( nNewSlide );
+    this.notifySlideStart( nNewSlide, nOldSlide );
 
     if( this.isEnabled() && !bSkipSlideTransition  )
     {

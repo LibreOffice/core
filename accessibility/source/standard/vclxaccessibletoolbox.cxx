@@ -16,6 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+#include <string.h>
 
 #include <accessibility/standard/vclxaccessibletoolbox.hxx>
 #include <accessibility/standard/vclxaccessibletoolboxitem.hxx>
@@ -164,7 +165,7 @@ namespace
     sal_Int64 SAL_CALL OToolBoxWindowItem::getSomething( const Sequence< sal_Int8 >& _rId ) throw (RuntimeException)
     {
         if  (   ( 16 == _rId.getLength() )
-            &&  ( 0 == rtl_compareMemory( getUnoTunnelImplementationId().getConstArray(),  _rId.getConstArray(), 16 ) )
+            &&  ( 0 == memcmp( getUnoTunnelImplementationId().getConstArray(),  _rId.getConstArray(), 16 ) )
             )
             return reinterpret_cast< sal_Int64>( this );
 

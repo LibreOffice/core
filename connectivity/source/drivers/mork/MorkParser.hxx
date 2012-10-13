@@ -38,6 +38,8 @@
 
 #include <string>
 #include <map>
+#include <set>
+#include <vector>
 
 #include "dllapi.h"
 
@@ -110,6 +112,9 @@ public:
     /// Return value of specified column oid
 
     std::string &getColumn( int oid );
+
+    void retrieveLists(std::set<std::string>& lists);
+    void getRecordKeysForListTable(std::string& listName, std::set<int>& records);
 
     void dump();
 

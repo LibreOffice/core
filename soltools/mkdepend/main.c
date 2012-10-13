@@ -195,18 +195,18 @@ int main(argc, argv)
 
         nargc = 1;
         if ((afd = open(argv[1]+1, O_RDONLY)) < 0)
-        fatalerr("cannot open \"%s\"\n", argv[1]+1);
+            fatalerr("cannot open \"%s\"\n", argv[1]+1);
         fstat(afd, &ast);
         args = (char *)malloc(ast.st_size + 1);
         if ((ast.st_size = read(afd, args, (size_t) ast.st_size)) < 0)
-        fatalerr("failed to read %s\n", argv[1]+1);
+            fatalerr("failed to read %s\n", argv[1]+1);
         args[ast.st_size] = '\0';
         close(afd);
         for (p = args; *p; p++) {
         if (quotechar) {
-            if (quotechar == '\\' ||
-            (*p == quotechar && p[-1] != '\\'))
-            quotechar = '\0';
+            if (quotechar == '\\'
+                || (*p == quotechar && p[-1] != '\\'))
+                quotechar = '\0';
             continue;
         }
         switch (*p) {
@@ -219,18 +219,18 @@ int main(argc, argv)
         case '\n':
             *p = '\0';
             if (p > args && p[-1])
-            nargc++;
+                nargc++;
             break;
         }
         }
         if (p[-1])
-        nargc++;
+            nargc++;
         nargv = (char **)malloc(nargc * sizeof(char *));
         nargv[0] = argv[0];
         argc = 1;
         for (p = args; argc < nargc; p += strlen(p) + 1)
-        if (*p) nargv[argc++] = p;
-        argv = nargv;
+            if (*p) nargv[argc++] = p;
+                argv = nargv;
     }
     for(argc--, argv++; argc; argc--, argv++) {
             /* if looking for endmarker then check before parsing */
@@ -364,16 +364,16 @@ int main(argc, argv)
         *incp++ = PREINCDIR;
 #endif
         if (incp >= includedirs + MAXDIRS)
-        fatalerr("Too many -I flags.\n");
+            fatalerr("Too many -I flags.\n");
         *incp++ = INCLUDEDIR;
 #ifdef POSTINCDIR
         if (incp >= includedirs + MAXDIRS)
-        fatalerr("Too many -I flags.\n");
+            fatalerr("Too many -I flags.\n");
         *incp++ = POSTINCDIR;
 #endif
     } else if (*defincdir) {
         if (incp >= includedirs + MAXDIRS)
-        fatalerr("Too many -I flags.\n");
+            fatalerr("Too many -I flags.\n");
         *incp++ = defincdir;
     }
 
@@ -709,8 +709,8 @@ void redirect(line, makefile)
     }
     if (!found) {
         if (verbose)
-        warning("Adding new delimiting line \"%s\" and dependencies...\n",
-            line);
+            warning("Adding new delimiting line \"%s\" and dependencies...\n",
+                line);
         puts(line); /* same as fputs(fdout); but with newline */
     } else if (append) {
         while (fgets(buf, BUFSIZ, fdin)) {

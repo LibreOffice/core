@@ -23,7 +23,6 @@
 
 #include <osl/interlck.h>
 #include <rtl/alloc.h>
-#include <rtl/memory.h>
 #include <rtl/tencinfo.h>
 #include <rtl/instance.hxx>
 #include <tools/string.hxx>

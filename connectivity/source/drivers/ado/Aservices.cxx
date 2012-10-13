@@ -75,7 +75,7 @@ struct ProviderRequest
 };
 
 //---------------------------------------------------------------------------------------
-extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment(
+extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL ado_component_getImplementationEnvironment(
                 const sal_Char **ppEnvTypeName,
                 uno_Environment        ** /*ppEnv*/)
 {
@@ -83,7 +83,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnviron
 }
 
 //---------------------------------------------------------------------------------------
-extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL component_getFactory(
+extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL ado_component_getFactory(
                     const sal_Char* pImplementationName,
                     void* pServiceManager,
                     void* /*pRegistryKey*/)

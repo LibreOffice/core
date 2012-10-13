@@ -192,7 +192,6 @@ public abstract class WWD_Events extends WWD_Startup
         }
         catch (Exception e)
         {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }
@@ -245,10 +244,6 @@ public abstract class WWD_Events extends WWD_Startup
                     Helper.setUnoPropertyValue(getModel(btnDelSession), PropertyNames.PROPERTY_ENABLED, Boolean.FALSE);                // select...
                 }
                 Helper.setUnoPropertyValue(getModel(lstLoadSettings), PropertyNames.SELECTED_ITEMS, nextSelected);
-
-            //ListModelBinder.fillComboBox(cbSaveSettings, settings.savedSessions.items(), null);
-
-
             }
             catch (Exception ex)
             {
@@ -273,11 +268,6 @@ public abstract class WWD_Events extends WWD_Startup
     }
     private static String[] EMPTY_STRING_ARRAY = new String[0];
 
-    /*  public void loadSessionSelected() {
-    UIHelper.setEnabled(btnLoadSession,true);
-    UIHelper.setEnabled(btnDelSession,true);
-    }
-     */
     /**
      * when the user clicks another document
      * in the listbox, this method is called,
@@ -333,7 +323,7 @@ public abstract class WWD_Events extends WWD_Startup
         {
             StatusDialog sd = getStatusDialog();
             sd.setLabel(resources.resValidatingDocuments);
-            sd.execute(this, task, resources.prodName); // new LoadDocs( sd.xControl, files, task )
+            sd.execute(this, task, resources.prodName);
             LoadDocs oLoadDocs = new LoadDocs(this.xControl, files, task);
             oLoadDocs.loadDocuments();
             task.removeTaskListener(sd);
@@ -1190,10 +1180,6 @@ public abstract class WWD_Events extends WWD_Startup
 
         try
         {
-            //XCloseable xCloseable = (XCloseable) UnoRuntime.queryInterface(XCloseable.class, myDocument);
-            //if (xCloseable != null)
-            //    xCloseable.close(false);
-
             XCloseable xCloseable = UnoRuntime.queryInterface(XCloseable.class, myFrame);
             if (xCloseable != null)
             {
@@ -1223,11 +1209,6 @@ public abstract class WWD_Events extends WWD_Startup
 
         public void loadDocuments()
         {
-            //LogTaskListener lts = new LogTaskListener();
-            //task.addTaskListener(lts);
-
-//            task.start();
-
             // where the documents are added to in the list (offset)
             int offset = (getSelectedDoc().length > 0 ? selectedDoc[0] + 1 : getDocsCount());
 

@@ -627,6 +627,13 @@ LIBO_UDK_3.6 { # symbols available in >= LibO 3.6
 	rtl_uStringBuffer_makeStringAndClear;
 } UDK_3.10;
 
+LIBO_UDK_3.7 { # symbols available in >= LibO 3.7
+    global:
+        rtl_string_newFromSubString;
+        rtl_uString_newFromSubString;
+        rtl_uString_newReplaceAllFromIndex;
+} LIBO_UDK_3.6;
+
 PRIVATE_1.0 {
     global:
         osl_detail_ObjectRegistry_storeAddresses;

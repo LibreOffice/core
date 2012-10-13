@@ -17,8 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <editeng/eeitem.hxx>
-#include <svx/fontwork.hxx>
+#include <svx/svdoole2.hxx>
+#include <svx/svdobj.hxx>
+#include <svx/graphichelper.hxx>
+
 #include <svl/srchitem.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/objface.hxx>
@@ -34,15 +36,13 @@
 #include "docpool.hxx"
 #include "drawview.hxx"
 #include "scresid.hxx"
-#include <svx/svdobj.hxx>
 
 #define ScChartShell
 #include "scslots.hxx"
 
-
 SFX_IMPL_INTERFACE(ScChartShell, ScDrawShell, ScResId(SCSTR_CHARTSHELL) )
 {
-    SFX_OBJECTBAR_REGISTRATION( SFX_OBJECTBAR_OBJECT|SFX_VISIBILITY_STANDARD|SFX_VISIBILITY_SERVER,
+    SFX_OBJECTBAR_REGISTRATION( SFX_OBJECTBAR_OBJECT | SFX_VISIBILITY_STANDARD | SFX_VISIBILITY_SERVER,
                                 ScResId(RID_DRAW_OBJECTBAR) );
     SFX_POPUPMENU_REGISTRATION( ScResId(RID_POPUP_CHART) );
 }
@@ -52,14 +52,55 @@ TYPEINIT1( ScChartShell, ScDrawShell );
 ScChartShell::ScChartShell(ScViewData* pData) :
     ScDrawShell(pData)
 {
-    SetHelpId(HID_SCSHELL_CHARTSH);
-    SetName(rtl::OUString("ChartObject"));
+    SetHelpId( HID_SCSHELL_CHARTSH );
+    SetName( OUString("ChartObject") );
 }
 
 ScChartShell::~ScChartShell()
 {
 }
 
+void ScChartShell::GetExportAsGraphicState( SfxItemSet& rSet )
+{
+    ScDrawView* pView = GetViewData()->GetScDrawView();
+    const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
+    bool bEnable = false;
+    if( rMarkList.GetMarkCount() == 1 )
+    {
+        SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
+
+        if( pObj && pObj->ISA( SdrOle2Obj ) )
+            bEnable = true;
+    }
+
+    if( !bEnable )
+        rSet.DisableItem( SID_EXPORT_AS_GRAPHIC );
+}
+
+void ScChartShell::ExecuteExportAsGraphic( SfxRequest& )
+{
+    ScDrawView* pView = GetViewData()->GetScDrawView();
+    const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
+
+    if( rMarkList.GetMarkCount() == 1 )
+    {
+        SdrObject* pObject = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
+
+        if( pObject && pObject->ISA( SdrOle2Obj ) )
+        {
+            SdrOle2Obj* aOle2Object = ((SdrOle2Obj*) pObject)->Clone();
+            aOle2Object->NbcResize(Point(), Fraction(1,1), Fraction(1,1));
+            Graphic* pGraphic = aOle2Object->GetGraphic();
+            if( pGraphic != NULL )
+            {
+                String sGrfNm, sFilterNm;
+                GraphicHelper::ExportGraphic( *pGraphic,  String("") );
+            }
+        }
+    }
+
+    Invalidate();
+}
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -65,6 +65,7 @@
 #include "com/sun/star/frame/XDesktop.hpp"
 
 #include "com/sun/star/lang/XMultiServiceFactory.hpp"
+#include "com/sun/star/task/InteractionHandler.hpp"
 #include "com/sun/star/task/InteractionRequestStringResolver.hpp"
 
 #include <com/sun/star/resource/XResourceBundleLoader.hpp>
@@ -449,13 +450,9 @@ void SAL_CALL UpdateHandler::handle( uno::Reference< task::XInteractionRequest >
         if( !xServiceManager.is() )
             throw uno::RuntimeException( UNISTRING( "UpdateHandler: unable to obtain service manager from component context" ), *this );
 
-        mxInteractionHdl = uno::Reference<task::XInteractionHandler> (
-                                xServiceManager->createInstanceWithContext(
-                                    UNISTRING( "com.sun.star.task.InteractionHandler" ),
-                                    mxContext),
-                                uno::UNO_QUERY_THROW);
-        if( !mxInteractionHdl.is() )
-            throw uno::RuntimeException( UNISTRING( "UpdateHandler:: could not get default interaction handler" ), *this );
+        mxInteractionHdl.set(
+            task::InteractionHandler::createWithParent(mxContext, 0),
+            uno::UNO_QUERY_THROW);
     }
     uno::Reference< task::XInteractionRequestStringResolver > xStrResolver =
             task::InteractionRequestStringResolver::create( mxContext );

@@ -40,6 +40,7 @@ $(eval $(call gb_Library_use_libraries,odfflatxml,\
 	xo \
 	tl \
 	ucbhelper \
+	comphelper \
 	cppuhelper \
 	cppu \
 	sal \

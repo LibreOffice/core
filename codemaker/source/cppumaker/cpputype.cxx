@@ -152,8 +152,8 @@ CppuType::CppuType(typereg::Reader& typeReader,
                    const OString& typeName,
                    const TypeManager& typeMgr)
     : m_inheritedMemberCount(0)
-    , m_cppuTypeLeak(sal_False)
-    , m_cppuTypeDynamic(sal_True)
+    , m_cppuTypeLeak(false)
+    , m_cppuTypeDynamic(true)
     , m_indentLength(0)
     , m_typeName(typeName)
     , m_name(typeName.copy(typeName.lastIndexOf('/') + 1))
@@ -294,9 +294,9 @@ sal_Bool CppuType::dump(CppuOptions* pOptions)
         // meaningful (getCppuType is just a forward to cppu::UnoType::get now),
         // and -CS is handled the same way as -C now:
         if (pOptions->isValid("-L"))
-            m_cppuTypeLeak = sal_True;
+            m_cppuTypeLeak = true;
         if (pOptions->isValid("-C") || pOptions->isValid("-CS"))
-            m_cppuTypeDynamic = sal_False;
+            m_cppuTypeDynamic = false;
     }
 
     OString outPath;
@@ -1360,8 +1360,8 @@ InterfaceType::InterfaceType(typereg::Reader& typeReader,
     : CppuType(typeReader, typeName, typeMgr)
 {
     m_inheritedMemberCount = 0;
-    m_hasAttributes = sal_False;
-    m_hasMethods = sal_False;
+    m_hasAttributes = false;
+    m_hasMethods = false;
 }
 
 InterfaceType::~InterfaceType()
@@ -2320,7 +2320,7 @@ sal_Bool ConstantsType::dump(CppuOptions* pOptions)
     addSpecialDependencies();
 
     if (pOptions->isValid("-U"))
-        m_cppuTypeDynamic = sal_True;
+        m_cppuTypeDynamic = true;
 
     OString outPath;
     if (pOptions->isValid("-O"))

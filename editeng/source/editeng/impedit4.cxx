@@ -290,7 +290,7 @@ sal_Bool ImpEditEngine::WriteItemListAsRTF( ItemList& rLst, SvStream& rOutput, s
     return ( rLst.Count() ? sal_True : sal_False );
 }
 
-void lcl_FindValidAttribs( ItemList& rLst, ContentNode* pNode, sal_uInt16 nIndex, sal_uInt16 nScriptType )
+static void lcl_FindValidAttribs( ItemList& rLst, ContentNode* pNode, sal_uInt16 nIndex, sal_uInt16 nScriptType )
 {
     sal_uInt16 nAttr = 0;
     EditCharAttrib* pAttr = GetAttrib( pNode->GetCharAttribs().GetAttribs(), nAttr );

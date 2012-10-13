@@ -30,8 +30,6 @@ import com.sun.star.wizards.common.PropertyNames;
 import com.sun.star.wizards.db.FieldColumn;
 
 /**
- * @author Administrator
- *
  * To change the template for this generated type comment go to
  * Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and Comments
  */
@@ -39,14 +37,10 @@ public class DatabaseControl extends Control
 {
 
     private int m_nFieldType;
-    // private int iMemofieldwidth = IIMGFIELDWIDTH;
-    // private int iMemofieldheight = -1;
-    // private FieldColumn m_FieldColumn;
 
     public DatabaseControl(GridControl _oGridControl, FieldColumn _curfieldcolumn)
     {
         super();
-        // m_FieldColumn = _curfieldcolumn;
         if (_curfieldcolumn.getFieldType() != DataType.TIMESTAMP)
         {
             createGridColumn(_oGridControl, _curfieldcolumn, _curfieldcolumn.getFieldType(), _curfieldcolumn.getFieldTitle());
@@ -56,7 +50,6 @@ public class DatabaseControl extends Control
     public DatabaseControl(GridControl _oGridControl, FieldColumn _curfieldcolumn, int _fieldtype, String _columntitle)
     {
         super();
-        // m_FieldColumn = _curfieldcolumn;
         createGridColumn(_oGridControl, _curfieldcolumn, _fieldtype, _columntitle);
     }
 
@@ -150,14 +143,12 @@ public class DatabaseControl extends Control
     {
         if (getControlType() == FormHandler.SOIMAGECONTROL)
         {
-            // return oFormHandler.getImageControlHeight();
             return oFormHandler.getControlReferenceHeight() * 4;
         }
         else
         {
             if (getFieldType() == DataType.LONGVARCHAR)
             {
-                // Helper.setUnoPropertyValue(xControlModel, PropertyNames.PROPERTY_MULTILINE, Boolean.TRUE);
                 return oFormHandler.getControlReferenceHeight() * 4;
             }
             else if (getControlType() == FormHandler.SOCHECKBOX)
@@ -199,21 +190,6 @@ public class DatabaseControl extends Control
             if (getControlType() == FormHandler.SONUMERICCONTROL)
             {
                 xPropertySet.setPropertyValue("TreatAsNumber", Boolean.TRUE);
-                // Math.
-                // 2^63 - 1 = 9223372036854775807
-                // int nIntMax = 0x7fffffff;
-                // int nIntMin = -0x80000000;
-                // long nLongMax = nIntMax;
-                // nLongMax <<= (4*4);
-                // nLongMax |= 0xffff;
-                // nLongMax <<= (4*4);
-                // nLongMax |= 0xffff;
-
-                // long nLongMin = nIntMin;
-                // nLongMin <<= (8*4);
-
-                // long nLong2 = (long)9223372036854775807;
-
                 switch (getFieldType())
                 {
                     case DataType.BIGINT:
@@ -240,9 +216,6 @@ public class DatabaseControl extends Control
                         break;
                 }
             }
-            // else if (getControlType() == FormHandler.SOTEXTBOX)
-            // {     // com.sun.star.sdbc.DataType.CHAR, com.sun.star.sdbc.DataType.VARCHAR, com.sun.star.sdbc.DataType.LONGVARCHAR
-            // }
             else if (getControlType() == FormHandler.SOIMAGECONTROL)
             {
                 xPropertySet.setPropertyValue("ScaleMode", com.sun.star.awt.ImageScaleMode.Isotropic);

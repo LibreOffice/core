@@ -316,13 +316,11 @@ IMPL_LINK( ImpPathDialog, ClickHdl, Button*, pBtn )
             }
         }
     }
-    else
-    if ( pBtn == pCancelBtn )
+    else if ( pBtn == pCancelBtn )
     {
         GetPathDialog()->EndDialog( sal_False );
     }
-    else
-    if ( pBtn == pHomeBtn )
+    else if ( pBtn == pHomeBtn )
     {
         ::rtl::OUString aHomeDir;
         osl::Security aSecurity;
@@ -336,8 +334,7 @@ IMPL_LINK( ImpPathDialog, ClickHdl, Button*, pBtn )
             }
         }
     }
-    else
-    if ( pBtn == pNewDirBtn )
+    else if ( pBtn == pNewDirBtn )
     {
         DirEntry aFile( pEdit->GetText() );
         if( ! aFile.Exists() && ! FileStat( aFile ).IsKind( FSYS_KIND_WILD ) )

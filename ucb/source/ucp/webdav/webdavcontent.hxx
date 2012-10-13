@@ -1,30 +1,23 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*************************************************************************
+/*
+ * This file is part of the LibreOffice project.
  *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * This file incorporates work covered by the following license notice:
  *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+
 
 #ifndef _WEBDAV_UCP_CONTENT_HXX
 #define _WEBDAV_UCP_CONTENT_HXX
@@ -52,12 +45,12 @@ namespace com { namespace sun { namespace star { namespace sdbc {
 } } } }
 
 namespace com { namespace sun { namespace star { namespace ucb {
-    struct OpenCommandArgument3;
+    struct OpenCommandArgument2;
     struct PostCommandArgument2;
     struct TransferInfo;
 } } } }
 
-namespace webdav_ucp
+namespace http_dav_ucp
 {
 
 //=========================================================================
@@ -77,7 +70,6 @@ class Content : public ::ucbhelper::ContentImplHelper,
     enum ResourceType
     {
         UNKNOWN,
-        FTP,
         NON_DAV,
         DAV
     };
@@ -128,27 +120,23 @@ private:
     exchangeIdentity( const ::com::sun::star::uno::Reference<
                           ::com::sun::star::ucb::XContentIdentifier >& xNewId );
 
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     const rtl::OUString
     getBaseURI( const std::auto_ptr< DAVResourceAccess > & rResAccess );
-    SAL_WNODEPRECATED_DECLARATIONS_POP
 
     const ResourceType &
     getResourceType( const ::com::sun::star::uno::Reference<
                          ::com::sun::star::ucb::XCommandEnvironment >& xEnv )
         throw ( ::com::sun::star::uno::Exception );
 
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     const ResourceType &
     getResourceType( const ::com::sun::star::uno::Reference<
                           ::com::sun::star::ucb::XCommandEnvironment >& xEnv,
                      const std::auto_ptr< DAVResourceAccess > & rResAccess )
         throw ( ::com::sun::star::uno::Exception );
-    SAL_WNODEPRECATED_DECLARATIONS_POP
 
     // Command "open"
     com::sun::star::uno::Any open(
-                const com::sun::star::ucb::OpenCommandArgument3 & rArg,
+                const com::sun::star::ucb::OpenCommandArgument2 & rArg,
                 const com::sun::star::uno::Reference<
                     com::sun::star::ucb::XCommandEnvironment > & xEnv )
         throw( ::com::sun::star::uno::Exception );

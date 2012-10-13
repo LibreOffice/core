@@ -338,7 +338,7 @@ void SmCursor::InsertNodes(SmNodeList* pNewNodes){
         if(newIt == pNewNodes->begin())
             patchIt = insIt;
         if((*newIt)->GetType() == NTEXT)
-            PosAfterInsert = SmCaretPos(*newIt, ((SmTextNode*)*newIt)->GetText().Len());
+            PosAfterInsert = SmCaretPos(*newIt, ((SmTextNode*)*newIt)->GetText().getLength());
         else
             PosAfterInsert = SmCaretPos(*newIt, 1);
     }
@@ -362,12 +362,12 @@ SmNodeList::iterator SmCursor::FindPositionInLineList(SmNodeList* pLineList, SmC
                 //Split textnode if needed
                 if(aCaretPos.Index > 0){
                     SmTextNode* pText = (SmTextNode*)aCaretPos.pSelectedNode;
-                    XubString str1 = pText->GetText().Copy(0, aCaretPos.Index);
-                    XubString str2 = pText->GetText().Copy(aCaretPos.Index);
+                    OUString str1 = pText->GetText().copy(0, aCaretPos.Index);
+                    OUString str2 = pText->GetText().copy(aCaretPos.Index);
                     pText->ChangeText(str1);
                     ++it;
                     //Insert str2 as new text node
-                    if(str2.Len() > 0){
+                    if(!str2.isEmpty()){
                         SmTextNode* pNewText = new SmTextNode(pText->GetToken(), pText->GetFontDesc());
                         pNewText->ChangeText(str2);
                         it = pLineList->insert(it, pNewText);
@@ -405,8 +405,8 @@ SmCaretPos SmCursor::PatchLineList(SmNodeList* pLineList, SmNodeList::iterator a
           next->GetToken().eType == TNUMBER) ){
         SmTextNode *pText = (SmTextNode*)prev,
                    *pOldN = (SmTextNode*)next;
-        SmCaretPos retval(pText, pText->GetText().Len());
-        String newText;
+        SmCaretPos retval(pText, pText->GetText().getLength());
+        OUString newText;
         newText += pText->GetText();
         newText += pOldN->GetText();
         pText->ChangeText(newText);
@@ -426,14 +426,14 @@ SmCaretPos SmCursor::PatchLineList(SmNodeList* pLineList, SmNodeList::iterator a
         if(aIter == pLineList->begin())
             return SmCaretPos();
         if((*aIter)->GetType() == NTEXT)
-            return SmCaretPos(*aIter, ((SmTextNode*)*aIter)->GetText().Len());
+            return SmCaretPos(*aIter, ((SmTextNode*)*aIter)->GetText().getLength());
         return SmCaretPos(*aIter, 1);
     }
     if(prev && next && next->GetType() == NPLACE && !SmNodeListParser::IsOperator(prev->GetToken())){
         aIter = pLineList->erase(aIter);
         delete next;
         if(prev->GetType() == NTEXT)
-            return SmCaretPos(prev, ((SmTextNode*)prev)->GetText().Len());
+            return SmCaretPos(prev, ((SmTextNode*)prev)->GetText().getLength());
         return SmCaretPos(prev, 1);
     }
 
@@ -441,7 +441,7 @@ SmCaretPos SmCursor::PatchLineList(SmNodeList* pLineList, SmNodeList::iterator a
     if(!prev) //return an invalid to indicate we're in front of line
         return SmCaretPos();
     if(prev->GetType() == NTEXT)
-        return SmCaretPos(prev, ((SmTextNode*)prev)->GetText().Len());
+        return SmCaretPos(prev, ((SmTextNode*)prev)->GetText().getLength());
     return SmCaretPos(prev, 1);
 }
 
@@ -454,19 +454,19 @@ SmNodeList::iterator SmCursor::TakeSelectedNodesFromList(SmNodeList *pLineList,
             //Split text nodes
             if((*it)->GetType() == NTEXT) {
                 SmTextNode* pText = (SmTextNode*)*it;
-                String aText = pText->GetText();
+                OUString aText = pText->GetText();
                 //Start and lengths of the segments, 2 is the selected segment
                 int start2 = pText->GetSelectionStart(),
                     start3 = pText->GetSelectionEnd(),
                     len1 = start2 - 0,
                     len2 = start3 - start2,
-                    len3 = aText.Len() - start3;
+                    len3 = aText.getLength() - start3;
                 SmToken aToken = pText->GetToken();
                 sal_uInt16 eFontDesc = pText->GetFontDesc();
                 //If we need make segment 1
                 if(len1 > 0) {
                     int start1 = 0;
-                    String str = aText.Copy(start1, len1);
+                    OUString str = aText.copy(start1, len1);
                     pText->ChangeText(str);
                     ++it;
                 } else {//Remove it if not needed
@@ -477,14 +477,14 @@ SmNodeList::iterator SmCursor::TakeSelectedNodesFromList(SmNodeList *pLineList,
                 retval = it;
                 //if we need make segment 3
                 if(len3 > 0) {
-                    String str = aText.Copy(start3, len3);
+                    OUString str = aText.copy(start3, len3);
                     SmTextNode* pSeg3 = new SmTextNode(aToken, eFontDesc);
                     pSeg3->ChangeText(str);
                     retval = pLineList->insert(it, pSeg3);
                 }
                 //If we need to save the selected text
                 if(pSelectedNodes && len2 > 0) {
-                    String str = aText.Copy(start2, len2);
+                    OUString str = aText.copy(start2, len2);
                     SmTextNode* pSeg2 = new SmTextNode(aToken, eFontDesc);
                     pSeg2->ChangeText(str);
                     pSelectedNodes->push_back(pSeg2);
@@ -1156,12 +1156,12 @@ void SmCursor::InsertCommand(sal_uInt16 nCommand) {
                 InsertLimit(CSUP, true);
             break;
         default:
-            InsertCommandText(SmResId(nCommand));
+            InsertCommandText(SM_RESSTR(nCommand));
             break;
     }
 }
 
-void SmCursor::InsertCommandText(XubString aCommandText) {
+void SmCursor::InsertCommandText(OUString aCommandText) {
     //Parse the the sub expression
     SmNode* pSubExpr = SmParser().ParseExpression(aCommandText);
 
@@ -1203,7 +1203,7 @@ void SmCursor::Copy(){
             SmTextNode *pClone = new SmTextNode( pText->GetToken(), pText->GetFontDesc() );
             int start  = pText->GetSelectionStart(),
                 length = pText->GetSelectionEnd() - pText->GetSelectionStart();
-            pClone->ChangeText(pText->GetText().Copy(start, length));
+            pClone->ChangeText(pText->GetText().copy(start, length));
             pClone->SetScaleMode(pText->GetScaleMode());
             pList->push_front(pClone);
         } else {
@@ -1323,7 +1323,7 @@ SmNodeList* SmCursor::CloneLineToList(SmStructureNode* pLine, bool bOnlyIfSelect
                 SmTextNode *pClone = new SmTextNode( it->GetToken(), pText->GetFontDesc() );
                 int start = pText->GetSelectionStart(),
                     length = pText->GetSelectionEnd() - pText->GetSelectionStart();
-                pClone->ChangeText(pText->GetText().Copy(start, length));
+                pClone->ChangeText(pText->GetText().copy(start, length));
                 pClone->SetScaleMode(pText->GetScaleMode());
                 pList->push_back(pClone);
             } else
@@ -1462,7 +1462,7 @@ void SmCursor::EndEdit(){
     RequestRepaint();
 
     //Update the edit engine and text of the document
-    String formula;
+    OUString formula;
     SmNodeToTextVisitor(pTree, formula);
     //pTree->CreateTextFromNode(formula);
     pDocShell->aText = formula;
@@ -1490,7 +1490,7 @@ bool SmCursor::IsAtTailOfBracket(SmBracketType eBracketType, SmBraceNode** ppBra
 
     if (pNode->GetType() == NTEXT) {
         SmTextNode* pTextNode = static_cast<SmTextNode*>(pNode);
-        if (pos.Index < pTextNode->GetText().Len()) {
+        if (pos.Index < pTextNode->GetText().getLength()) {
             // The cursor is on a text node and at the middle of it.
             return false;
         }

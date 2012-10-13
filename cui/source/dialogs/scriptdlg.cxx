@@ -1,30 +1,21 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/**********************************************************************
+/*
+ * This file is part of the LibreOffice project.
  *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * This file incorporates work covered by the following license notice:
  *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
 
 #include <memory>
 
@@ -436,9 +427,9 @@ void SFTreeListBox::ExpandedHdl()
 }
 
 // ----------------------------------------------------------------------------
-// InputDialog ------------------------------------------------------------
+// CuiInputDialog ------------------------------------------------------------
 // ----------------------------------------------------------------------------
-InputDialog::InputDialog(Window * pParent, sal_uInt16 nMode )
+CuiInputDialog::CuiInputDialog(Window * pParent, sal_uInt16 nMode )
     : ModalDialog( pParent, CUI_RES( RID_DLG_NEWLIB ) ),
         aText( this, CUI_RES( FT_NEWLIB ) ),
         aEdit( this, CUI_RES( ED_LIBNAME ) ),
@@ -493,7 +484,7 @@ InputDialog::InputDialog(Window * pParent, sal_uInt16 nMode )
 
 }
 
-InputDialog::~InputDialog()
+CuiInputDialog::~CuiInputDialog()
 {
 }
 // ----------------------------------------------------------------------------
@@ -942,7 +933,7 @@ void SvxScriptOrgDialog::createEntry( SvLBoxEntry* pEntry )
         }
 
         SAL_WNODEPRECATED_DECLARATIONS_PUSH
-        std::auto_ptr< InputDialog > xNewDlg( new InputDialog( static_cast<Window*>(this), nMode ) );
+        std::auto_ptr< CuiInputDialog > xNewDlg( new CuiInputDialog( static_cast<Window*>(this), nMode ) );
         SAL_WNODEPRECATED_DECLARATIONS_POP
         xNewDlg->SetObjectName( aNewName );
 
@@ -1074,7 +1065,7 @@ void SvxScriptOrgDialog::renameEntry( SvLBoxEntry* pEntry )
         sal_uInt16 nMode = INPUTMODE_RENAME;
 
         SAL_WNODEPRECATED_DECLARATIONS_PUSH
-        std::auto_ptr< InputDialog > xNewDlg( new InputDialog( static_cast<Window*>(this), nMode ) );
+        std::auto_ptr< CuiInputDialog > xNewDlg( new CuiInputDialog( static_cast<Window*>(this), nMode ) );
         SAL_WNODEPRECATED_DECLARATIONS_POP
         xNewDlg->SetObjectName( aNewName );
 

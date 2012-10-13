@@ -46,7 +46,6 @@ import java.awt.*;
  * Use JNI functions on already visible canvas objects only!
  * Otherwise they can make some trouble.
  *
- * @author  Andreas Schl&uuml;ns
  */
 
 public class NativeView extends java.awt.Canvas

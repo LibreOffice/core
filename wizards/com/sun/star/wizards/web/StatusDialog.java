@@ -32,7 +32,6 @@ import com.sun.star.wizards.ui.event.TaskEvent;
 import com.sun.star.wizards.ui.event.TaskListener;
 
 /**
- * @author rpiterman
  * A Class which displays a Status Dialog with status bars.
  * This can display an X number of bars, to enable the
  * status display of more complex tasks.
@@ -68,7 +67,6 @@ public class StatusDialog extends UnoDialog2 implements TaskListener
         if (res.length != 6)
         {
             throw new IllegalArgumentException("The resources argument should contain 6 Strings, see Javadoc on constructor.");        //display a close button?
-        // if enableBreak == false and closeOnFinsih == false;
         }
         boolean b = !enableBreak && !closeOnFinish;
 
@@ -126,9 +124,6 @@ public class StatusDialog extends UnoDialog2 implements TaskListener
                     });
         }
 
-//      xWindow.addWindowListener((XWindowListener)guiEventListener);
-//      guiEventListener.add("StatusDialog" ,EVENT_WINDOW_SHOWN, "performRunnable",this);
-
     }
 
     private void initProgressBar(Task t)
@@ -149,7 +144,6 @@ public class StatusDialog extends UnoDialog2 implements TaskListener
 
     public void setLabel(String s)
     {
-//      lblTaskName.setText(s);
         Helper.setUnoPropertyValue(UnoDialog.getModel(lblTaskName), PropertyNames.PROPERTY_LABEL, s);
         xReschedule.reschedule();
     }
@@ -185,13 +179,11 @@ public class StatusDialog extends UnoDialog2 implements TaskListener
         finished = true;
         if (closeOnFinish)
         {
-//          xDialog.endExecute();
             parent.xWindow.setEnable(true);
             try
             {
                 xWindow.setVisible(false);
                 xComponent.dispose();
-            //System.out.println("disposed");
             }
             catch (Exception ex)
             {

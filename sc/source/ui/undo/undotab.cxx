@@ -311,7 +311,7 @@ void ScUndoDeleteTab::SetChangeTrack()
         nStartChangeAction = nEndChangeAction = 0;
 }
 
-SCTAB lcl_GetVisibleTabBefore( ScDocument& rDoc, SCTAB nTab )
+static SCTAB lcl_GetVisibleTabBefore( ScDocument& rDoc, SCTAB nTab )
 {
     while ( nTab > 0 && !rDoc.IsVisible( nTab ) )
         --nTab;

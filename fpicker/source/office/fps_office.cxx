@@ -44,7 +44,7 @@ static cppu::ImplementationEntry g_entries[] =
 
 extern "C"
 {
-SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
+SAL_DLLPUBLIC_EXPORT void * SAL_CALL fps_office_component_getFactory(
     const sal_Char * pImplementationName, void * pServiceManager, void * pRegistryKey)
 {
     return cppu::component_getFactoryHelper (

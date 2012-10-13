@@ -20,7 +20,6 @@ package com.sun.star.wizards.web;
 import com.sun.star.wizards.common.UCB;
 
 /**
- * @author rpiterman
  * Verifies all String that do not end with
  * the given extension.
  * This is used to exclude from a copy all the

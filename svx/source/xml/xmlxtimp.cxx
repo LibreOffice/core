@@ -31,7 +31,7 @@
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/io/XActiveDataControl.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>
-#include <com/sun/star/xml/sax/XParser.hpp>
+#include <com/sun/star/xml/sax/Parser.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
@@ -393,13 +393,14 @@ bool SvxXMLXTableImport::load( const rtl::OUString &rPath,
     try
     {
         uno::Reference<lang::XMultiServiceFactory> xServiceFactory( ::comphelper::getProcessServiceFactory() );
+        uno::Reference<uno::XComponentContext> xContext( ::comphelper::getProcessComponentContext() );
         if( !xServiceFactory.is() )
         {
             OSL_FAIL( "SvxXMLXTableImport::load: got no service manager" );
             return false;
         }
 
-        uno::Reference< xml::sax::XParser > xParser( xServiceFactory->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.xml.sax.Parser" ) ) ), uno::UNO_QUERY_THROW );
+        uno::Reference< xml::sax::XParser > xParser = xml::sax::Parser::create( xContext );
 
         xml::sax::InputSource aParserInput;
         comphelper::LifecycleProxy aNasty;

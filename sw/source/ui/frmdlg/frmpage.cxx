@@ -394,7 +394,7 @@ static sal_uInt16 aAddPgRg[] = {
     0
 };
 
-size_t lcl_GetFrmMapCount( const FrmMap* pMap)
+static size_t lcl_GetFrmMapCount( const FrmMap* pMap)
 {
     if ( pMap )
     {
@@ -444,7 +444,7 @@ size_t lcl_GetFrmMapCount( const FrmMap* pMap)
     return 0;
 }
 
-void lcl_InsertVectors(ListBox& rBox,
+static void lcl_InsertVectors(ListBox& rBox,
     const ::std::vector< String >& rPrev, const ::std::vector< String >& rThis,
     const ::std::vector< String >& rNext, const ::std::vector< String >& rRemain)
 {
@@ -472,7 +472,7 @@ void lcl_InsertVectors(ListBox& rBox,
 
 // --> OD 2009-08-31 #mongolianlayout#
 // add input parameter
-SvxSwFramePosString::StringId lcl_ChangeResIdToVerticalOrRTL(SvxSwFramePosString::StringId eStringId, sal_Bool bVertical, sal_Bool bVerticalL2R, sal_Bool bRTL)
+static SvxSwFramePosString::StringId lcl_ChangeResIdToVerticalOrRTL(SvxSwFramePosString::StringId eStringId, sal_Bool bVertical, sal_Bool bVerticalL2R, sal_Bool bRTL)
 {
     //special handling of STR_FROMLEFT
     if ( SwFPos::FROMLEFT == eStringId )
@@ -567,7 +567,7 @@ SvxSwFramePosString::StringId lcl_ChangeResIdToVerticalOrRTL(SvxSwFramePosString
 
 // helper method in order to determine all possible
 // listbox relations in a relation map for a given relation
-sal_uLong lcl_GetLBRelationsForRelations( const sal_uInt16 _nRel )
+static sal_uLong lcl_GetLBRelationsForRelations( const sal_uInt16 _nRel )
 {
     sal_uLong nLBRelations = 0L;
 
@@ -585,9 +585,9 @@ sal_uLong lcl_GetLBRelationsForRelations( const sal_uInt16 _nRel )
 
 // helper method on order to determine all possible
 // listbox relations in a relation map for a given string ID
-sal_uLong lcl_GetLBRelationsForStrID( const FrmMap* _pMap,
-                                  const SvxSwFramePosString::StringId _eStrId,
-                                  const bool _bUseMirrorStr )
+static sal_uLong lcl_GetLBRelationsForStrID( const FrmMap* _pMap,
+                                             const SvxSwFramePosString::StringId _eStrId,
+                                             const bool _bUseMirrorStr )
 {
     sal_uLong nLBRelations = 0L;
 
@@ -775,11 +775,15 @@ void SwFrmPage::EnableGraficMode( void )
     }
 }
 
+SwWrtShell *SwFrmPage::getFrmDlgParentShell()
+{
+    return ((SwFrmDlg*)GetParentDialog())->GetWrtShell();
+}
+
 void SwFrmPage::Reset( const SfxItemSet &rSet )
 {
-
     SwWrtShell* pSh = bFormat ? ::GetActiveWrtShell() :
-            ((SwFrmDlg*)GetParent()->GetParent())->GetWrtShell();
+            getFrmDlgParentShell();
 
     nHtmlMode = ::GetHtmlMode(pSh->GetView().GetDocShell());
     bHtmlMode = nHtmlMode & HTMLMODE_ON ? sal_True : sal_False;
@@ -951,7 +955,7 @@ sal_Bool SwFrmPage::FillItemSet(SfxItemSet &rSet)
 {
     sal_Bool bRet = sal_False;
     SwWrtShell* pSh = bFormat ? ::GetActiveWrtShell()
-                        : ((SwFrmDlg*)GetParent()->GetParent())->GetWrtShell();
+                        : getFrmDlgParentShell();
     OSL_ENSURE( pSh , "shell not found");
     const SfxItemSet& rOldSet = GetItemSet();
     const SfxPoolItem* pOldItem = 0;
@@ -1619,7 +1623,7 @@ int SwFrmPage::DeactivatePage(SfxItemSet * _pSet)
         //FillItemSet doesn't set the anchor into the set when it matches
         //the original. But for the other pages we need the current anchor.
         SwWrtShell* pSh = bFormat ? ::GetActiveWrtShell()
-                            : ((SwFrmDlg*)GetParent()->GetParent())->GetWrtShell();
+                            : getFrmDlgParentShell();
         RndStdIds eAnchorId = (RndStdIds)GetAnchor();
         SwFmtAnchor aAnc( eAnchorId, pSh->GetPhyPageNum() );
         _pSet->Put( aAnc );
@@ -1674,7 +1678,7 @@ IMPL_LINK_NOARG(SwFrmPage, RangeModifyHdl)
         return 0;
 
     SwWrtShell* pSh = bFormat ? ::GetActiveWrtShell()
-                        :((SwFrmDlg*)GetParent()->GetParent())->GetWrtShell();
+                        : getFrmDlgParentShell();
     OSL_ENSURE(pSh , "shell not found");
     SwFlyFrmAttrMgr aMgr( bNew, pSh, (const SwAttrSet&)GetItemSet() );
     SvxSwFrameValidation        aVal;
@@ -2045,7 +2049,7 @@ void SwFrmPage::Init(const SfxItemSet& rSet, sal_Bool bReset)
 {
     if(!bFormat)
     {
-        SwWrtShell* pSh = ((SwFrmDlg*)GetParent()->GetParent())->GetWrtShell();
+        SwWrtShell* pSh = getFrmDlgParentShell();
 
         // size
         const sal_Bool bSizeFixed = pSh->IsSelObjProtected( FLYPROTECT_FIXED );
@@ -2140,7 +2144,7 @@ void SwFrmPage::Init(const SfxItemSet& rSet, sal_Bool bReset)
 
         if ( !bFormat )
         {
-            SwWrtShell* pSh = ((SwFrmDlg*)GetParent()->GetParent())->GetWrtShell();
+            SwWrtShell* pSh = getFrmDlgParentShell();
             const SwFrmFmt* pFmt = pSh->GetFlyFrmFmt();
             if( pFmt && pFmt->GetChain().GetNext() )
                 aAutoHeightCB.Enable( sal_False );
@@ -2736,7 +2740,7 @@ IMPL_LINK_NOARG(SwFrmURLPage, InsertFileHdl)
     return 0;
 }
 
-void lcl_Move(Window& rWin, sal_Int32 nDiff)
+static void lcl_Move(Window& rWin, sal_Int32 nDiff)
 {
     Point aPos(rWin.GetPosPixel());
     aPos.Y() -= nDiff;

@@ -16,10 +16,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-/** base class for components validating the content of form controls
- *
- * @author  fs@openoffice.org
- */
+// base class for components validating the content of form controls
+
 public abstract class ControlValidator implements com.sun.star.form.validation.XValidator
 {
 

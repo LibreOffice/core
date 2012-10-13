@@ -23,11 +23,6 @@
 
 package com.sun.star.sdbcx.comp.hsqldb;
 
-/**
- *
- * @author  oj93728
- */
-
 public class NativeStorageAccess {
     static { NativeLibraries.load(); }
 

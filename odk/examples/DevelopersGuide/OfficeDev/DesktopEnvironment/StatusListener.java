@@ -61,7 +61,6 @@ import com.sun.star.uno.UnoRuntime;
  * And it's not allowed to call back synchronously there.
  * So we must start threads for updating something internaly.
  *
- * @author     Andreas Schl&uuml;ns
  */
 class StatusListener implements com.sun.star.frame.XStatusListener,
                                 com.sun.star.frame.XFrameActionListener,

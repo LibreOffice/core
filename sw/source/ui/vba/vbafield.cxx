@@ -276,7 +276,7 @@ bool _ReadFieldParams::GetTokenSttFromTo(sal_uInt16* pFrom, sal_uInt16* pTo, sal
 
 // *** SwVbaFields ***********************************************
 
-uno::Any lcl_createField( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< frame::XModel >& xModel, const uno::Any& aSource )
+static uno::Any lcl_createField( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< frame::XModel >& xModel, const uno::Any& aSource )
 {
     uno::Reference< text::XTextField > xTextField( aSource, uno::UNO_QUERY_THROW );
     uno::Reference< text::XTextDocument > xTextDocument( xModel, uno::UNO_QUERY_THROW );

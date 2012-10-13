@@ -2547,7 +2547,7 @@ Size SwFlyFrm::CalcRel( const SwFmtFrmSize &rSz ) const
 |*
 |*************************************************************************/
 
-SwTwips lcl_CalcAutoWidth( const SwLayoutFrm& rFrm )
+static SwTwips lcl_CalcAutoWidth( const SwLayoutFrm& rFrm )
 {
     SwTwips nRet = 0;
     SwTwips nMin = 0;

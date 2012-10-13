@@ -153,11 +153,9 @@ css::uno::Sequence< rtl::OUString > ModuleManager::getSupportedServiceNames()
     ::rtl::OUString sModule;
     if (xModel.is())
         sModule = implts_identify(xModel);
-    else
-    if (xController.is())
+    else if (xController.is())
         sModule = implts_identify(xController);
-    else
-    if (xWindow.is())
+    else if (xWindow.is())
         sModule = implts_identify(xWindow);
 
     if (sModule.isEmpty())

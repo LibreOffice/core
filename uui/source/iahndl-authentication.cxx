@@ -186,7 +186,7 @@ void getRememberModes(
 void
 handleAuthenticationRequest_(
     Window * pParent,
-    uno::Reference< task::XInteractionHandler > const & xIH,
+    uno::Reference< task::XInteractionHandler2 > const & xIH,
     uno::Reference< lang::XMultiServiceFactory > const & xServiceFactory,
     ucb::AuthenticationRequest const & rRequest,
     uno::Sequence< uno::Reference< task::XInteractionContinuation > > const &

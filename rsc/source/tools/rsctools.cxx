@@ -36,7 +36,6 @@
 
 #include <osl/file.h>
 #include <rtl/alloc.h>
-#include <rtl/memory.h>
 
 using ::rtl::OUString;
 using ::rtl::OUStringToOString;
@@ -97,7 +96,7 @@ char* rsc_strdup( const char* pStr )
 {
     int nLen = strlen( pStr );
     char* pBuffer = (char*)rtl_allocateMemory( nLen+1 );
-    rtl_copyMemory( pBuffer, pStr, nLen+1 );
+    memcpy( pBuffer, pStr, nLen+1 );
     return pBuffer;
 }
 
@@ -405,7 +404,7 @@ void RscWriteRc :: PutUTF8( char * pStr )
         n++;
 
     sal_uInt32  nOldLen = IncSize( n );
-    rtl_copyMemory( GetPointer( nOldLen ), pStr, nStrLen );
+    memcpy( GetPointer( nOldLen ), pStr, nStrLen );
     // 0 terminated
     pMem[ nOldLen + nStrLen ] = '\0';
 }

@@ -66,7 +66,7 @@ namespace basprov
         ,m_sScriptingContext( sScriptingContext )
         ,m_pMethod( pMethod )
         ,m_bIsAppScript( isAppScript )
-        ,m_bEditable( sal_True )
+        ,m_bEditable( true )
     {
         if ( m_pMethod )
         {

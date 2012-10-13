@@ -23,10 +23,6 @@
 
 package com.sun.star.sdbcx.comp.hsqldb;
 
-/**
- *
- * @author  Ocke
- */
 public class NativeInputStreamHelper extends java.io.InputStream{
     private String key;
     private String file;

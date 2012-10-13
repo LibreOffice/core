@@ -17,8 +17,6 @@
  */
 package com.sun.star.wizards.ui;
 
-// import com.sun.star.awt.*;
-
 import com.sun.star.awt.Key;
 import com.sun.star.awt.KeyEvent;
 import com.sun.star.awt.MouseEvent;
@@ -38,24 +36,13 @@ import com.sun.star.wizards.common.HelpIds;
 import com.sun.star.wizards.common.IRenderer;
 import com.sun.star.wizards.common.PropertyNames;
 import com.sun.star.wizards.ui.event.*;
-
-
-//import com.sun.star.awt.ItemEvent;
-//import com.sun.star.awt.XItemListener;
-
-
 import javax.swing.ListModel;
 import javax.swing.event.ListDataEvent;
 import javax.swing.event.ListDataListener;
 
-/**
- *
- * @author  rpiterman
- */
 public class ImageList implements XItemEventBroadcaster, ListDataListener
 {
 
-    // private XControl imgContainer;
     private XFixedText lblImageText;
     private XFixedText grbxSelectedImage;
     private XButton btnBack;
@@ -88,11 +75,10 @@ public class ImageList implements XItemEventBroadcaster, ListDataListener
     public IRenderer counterRenderer = new SimpleCounterRenderer();
     private Object dialogModel;
     private ImageKeyListener imageKeyListener;
-    private static final Integer BACKGROUND_COLOR = 16777216;  //new Integer(SystemColor.window.getRGB() + 16777216);
+    private static final Integer BACKGROUND_COLOR = 16777216;
     private final static Short HIDE_PAGE = new Short((short) 99);
     private final static Integer TRANSPARENT = new Integer(-1);
-    private final static int LINE_HEIGHT = 8;    //private MethodInvocation METHOD_MOUSE_ENTER_IMAGE;
-    //private MethodInvocation METHOD_MOUSE_EXIT_IMAGE;
+    private final static int LINE_HEIGHT = 8;
     private MethodInvocation METHOD_MOUSE_PRESSED;
 
     /** Getter for property imageSize.
@@ -180,12 +166,6 @@ public class ImageList implements XItemEventBroadcaster, ListDataListener
                     Boolean.TRUE
                 });
 
-        //XWindow win = (XWindow)UnoRuntime.queryInterface(XWindow.class,lblContainer);
-        /*dialog.xWindow.addWindowListener(uiEventListener);
-        String dName = (String)Helper.getUnoPropertyValue(dialog.xDialogModel,PropertyNames.PROPERTY_NAME);
-        
-        uiEventListener.add(dName,EventNames.EVENT_WINDOW_SHOWN,"disableContainerMouseEvents",this);
-         */
         int selectionWidth = rowSelect ?
             (imageSize.Width + gap.Width) * cols - gap.Width + (selectionGap.Width * 2) :
             imageSize.Width + (selectionGap.Width * 2);
@@ -295,8 +275,6 @@ public class ImageList implements XItemEventBroadcaster, ListDataListener
 
         try
         {
-            //METHOD_MOUSE_ENTER_IMAGE = new MethodInvocation("mouseEnterImage",this,Object.class);
-            //METHOD_MOUSE_EXIT_IMAGE = new MethodInvocation("mouseExitImage",this,Object.class);
             METHOD_MOUSE_PRESSED = new MethodInvocation("mousePressed", this, Object.class);
         }
         catch (NoSuchMethodException e)
@@ -360,8 +338,6 @@ public class ImageList implements XItemEventBroadcaster, ListDataListener
         XWindow win = UnoRuntime.queryInterface(XWindow.class, image);
         win.addMouseListener(uiEventListener);
         win.addKeyListener(imageKeyListener);
-        //uiEventListener.add(imageName,EventNames.EVENT_MOUSE_ENTERED,METHOD_MOUSE_ENTER_IMAGE);
-        //uiEventListener.add(imageName,EventNames.EVENT_MOUSE_EXITED,METHOD_MOUSE_EXIT_IMAGE);
         uiEventListener.add(imageName, EventNames.EVENT_MOUSE_PRESSED, METHOD_MOUSE_PRESSED);
 
         return image;
@@ -461,7 +437,6 @@ public class ImageList implements XItemEventBroadcaster, ListDataListener
 
     private void moveSelection(int image)
     {
-        //System.out.println(image);
         setVisible(grbxSelectedImage, false);
 
         int row = image / cols;
@@ -585,13 +560,10 @@ public class ImageList implements XItemEventBroadcaster, ListDataListener
     }
 
     /** Notifies all registered listeners about the event.
-     *
      */
     @SuppressWarnings("unchecked")
     private void fireItemSelected()
     {
-//      java.awt.event.ItemEvent event = new java.awt.event.ItemEvent(this, 0, 
-//          getSelectedObject(), java.awt.event.ItemEvent.SELECTED);
         java.util.ArrayList<XItemListener> list;
         synchronized(this)
         {
@@ -615,121 +587,76 @@ public class ImageList implements XItemEventBroadcaster, ListDataListener
         return cols;
     }
 
-    /**
-     * @return
-     */
     public Size getGap()
     {
         return gap;
     }
 
-    /**
-     * @return
-     */
     public ListModel getListModel()
     {
         return listModel;
     }
 
-    /**
-     * @return
-     */
     public Short getStep()
     {
         return step;
     }
 
-    /**
-     * @return
-     */
     public int getPageStart()
     {
         return pageStart;
     }
 
-    /**
-     * @return
-     */
     public Size getPos()
     {
         return pos;
     }
 
-    /**
-     * @return
-     */
     public IImageRenderer getRenderer()
     {
         return renderer;
     }
 
-    /**
-     * @return
-     */
     public int getRows()
     {
         return rows;
     }
 
-    /**
-     * @return
-     */
     public int getSelected()
     {
         return selected;
     }
 
-    /**
-     * @return
-     */
     public Size getSelectionGap()
     {
         return selectionGap;
     }
 
-    /**
-     * @return
-     */
     public boolean isShowButtons()
     {
         return showButtons;
     }
 
-    /**
-     * @param i
-     */
     public void setCols(int i)
     {
         cols = i;
     }
 
-    /**
-     * @param size
-     */
     public void setGap(Size size)
     {
         gap = size;
     }
 
-    /**
-     * @param model
-     */
     public void setListModel(ListModel model)
     {
         listModel = model;
     }
 
-    /**
-     * @param short1
-     */
     public void setStep(Short short1)
     {
         step = short1;
     }
 
-    /**
-     * @param i
-     */
     public void setPageStart(int i)
     {
         if (i == pageStart)
@@ -741,33 +668,21 @@ public class ImageList implements XItemEventBroadcaster, ListDataListener
         refreshImages();
     }
 
-    /**
-     * @param size
-     */
     public void setPos(Size size)
     {
         pos = size;
     }
 
-    /**
-     * @param renderer
-     */
     public void setRenderer(IImageRenderer renderer)
     {
         this.renderer = renderer;
     }
 
-    /**
-     * @param i
-     */
     public void setRows(int i)
     {
         rows = i;
     }
 
-    /**
-     * @param i
-     */
     public void setSelected(int i)
     {
         if (rowSelect && (i >= 0))
@@ -811,17 +726,11 @@ public class ImageList implements XItemEventBroadcaster, ListDataListener
         Helper.setUnoPropertyValue(getModel(lblImageText), PropertyNames.PROPERTY_LABEL, PropertyNames.SPACE + renderer.render(item));
     }
 
-    /**
-     * @param size
-     */
     public void setSelectionGap(Size size)
     {
         selectionGap = size;
     }
 
-    /**
-     * @param b
-     */
     public void setShowButtons(boolean b)
     {
         showButtons = b;
@@ -865,28 +774,10 @@ public class ImageList implements XItemEventBroadcaster, ListDataListener
         return UnoRuntime.queryInterface(XControl.class, control).getModel();
     }
 
-    /*
-    public void mouseEnterImage(Object event) {
-    System.out.println("mouse enter");
-    int i = getImageFromEvent(event);
     //TODO what is when the image does not display an image?
-    if (getIndexFor(i) != selected) 
-    setBorder(m_aImages[i],imageBorderMO);
-    }
-    
-    public void mouseExitImage(Object event) {
-    //System.out.println("mouse exit");
-    int i = getImageFromEvent(event);
-    //TODO what is when the image does not display an image?
-    if (getIndexFor(i) != selected) 
-    setBorder(m_aImages[i],imageBorder);
-    }
-     */
     private void setBorder(Object control, Short border)
     {
         Helper.setUnoPropertyValue(getModel(control), PropertyNames.PROPERTY_BORDER, border);
-    //XWindowPeer peer = ((XControl)UnoRuntime.queryInterface(XControl.class,control)).getPeer();
-    //peer.invalidate(InvalidateStyle.CHILDREN);
     }
 
     private int getImageFromEvent(Object event)
@@ -916,13 +807,10 @@ public class ImageList implements XItemEventBroadcaster, ListDataListener
                 };
     }
 
-    /**
-     */
     public static interface IImageRenderer extends IRenderer
     {
 
         /**
-         * 
          * @param listItem
          * @return two resource ids for an image referenced in the imaglist resourcefile of the 
          * wizards project; The second one of them is designed to be used for High Contrast Mode.
@@ -1094,17 +982,11 @@ public class ImageList implements XItemEventBroadcaster, ListDataListener
         setPageStart(ps);
     }
 
-    /**
-     * @return
-     */
     public boolean isenabled()
     {
         return benabled;
     }
 
-    /**
-     * @param b
-     */
     public void setenabled(boolean b)
     {
 

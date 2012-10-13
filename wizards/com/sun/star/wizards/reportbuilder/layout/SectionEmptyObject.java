@@ -19,10 +19,6 @@ package com.sun.star.wizards.reportbuilder.layout;
 
 import com.sun.star.awt.FontDescriptor;
 
-/**
- *
- * @author ll93751
- */
 public class SectionEmptyObject extends SectionObject
 {
 

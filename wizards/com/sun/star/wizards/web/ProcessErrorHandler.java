@@ -24,7 +24,6 @@ import com.sun.star.wizards.web.data.CGDocument;
 import com.sun.star.wizards.web.data.CGPublish;
 
 /**
- * @author rpiterman
  * used to interact error accuring when generating the
  * web-site to the user.
  * This class renders the different errors,

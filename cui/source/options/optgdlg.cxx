@@ -1,30 +1,21 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*************************************************************************
+/*
+ * This file is part of the LibreOffice project.
  *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * This file incorporates work covered by the following license notice:
  *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
 
 #include <svl/zforlist.hxx>
 #include <svtools/grfmgr.hxx>
@@ -106,8 +97,6 @@ using namespace ::com::sun::star::util;
 using namespace ::utl;
 using ::rtl::OString;
 using ::rtl::OUString;
-
-#define C2U(cChar) OUString::createFromAscii(cChar)
 
 // class OfaMiscTabPage --------------------------------------------------
 
@@ -1370,7 +1359,7 @@ SfxTabPage* OfaLanguagesTabPage::Create( Window* pParent, const SfxItemSet& rAtt
     return new OfaLanguagesTabPage(pParent, rAttrSet);
 }
 
-LanguageType lcl_LangStringToLangType(const OUString& rLang)
+static LanguageType lcl_LangStringToLangType(const OUString& rLang)
 {
     Locale aLocale;
     sal_Int32 nSep = rLang.indexOf('-');
@@ -1386,7 +1375,7 @@ LanguageType lcl_LangStringToLangType(const OUString& rLang)
     return eLangType;
 }
 
-void lcl_UpdateAndDelete(SfxVoidItem* pInvalidItems[], SfxBoolItem* pBoolItems[], sal_uInt16 nCount)
+static void lcl_UpdateAndDelete(SfxVoidItem* pInvalidItems[], SfxBoolItem* pBoolItems[], sal_uInt16 nCount)
 {
     SfxViewFrame* pCurrentFrm = SfxViewFrame::Current();
     SfxViewFrame* pViewFrm = SfxViewFrame::GetFirst();
@@ -1505,7 +1494,7 @@ sal_Bool OfaLanguagesTabPage::FillItemSet( SfxItemSet& rSet )
             sNewLang = aLocale.Language;
             if ( !aLocale.Country.isEmpty() )
             {
-                sNewLang += C2U("-");
+                sNewLang += "-";
                 sNewLang += aLocale.Country;
             }
         }
@@ -1558,7 +1547,7 @@ sal_Bool OfaLanguagesTabPage::FillItemSet( SfxItemSet& rSet )
             Any aValue;
             Locale aLocale = MsLangId::convertLanguageToLocale( eSelectLang, false );
             aValue <<= aLocale;
-            OUString aPropName( C2U("DefaultLocale") );
+            OUString aPropName( "DefaultLocale" );
             pLangConfig->aLinguConfig.SetProperty( aPropName, aValue );
             if (xLinguProp.is())
                 xLinguProp->setPropertyValue( aPropName, aValue );
@@ -1578,7 +1567,7 @@ sal_Bool OfaLanguagesTabPage::FillItemSet( SfxItemSet& rSet )
             Any aValue;
             Locale aLocale = MsLangId::convertLanguageToLocale( eSelectLang, false );
             aValue <<= aLocale;
-            OUString aPropName( C2U("DefaultLocale_CJK") );
+            OUString aPropName( "DefaultLocale_CJK" );
             pLangConfig->aLinguConfig.SetProperty( aPropName, aValue );
             if (xLinguProp.is())
                 xLinguProp->setPropertyValue( aPropName, aValue );
@@ -1598,7 +1587,7 @@ sal_Bool OfaLanguagesTabPage::FillItemSet( SfxItemSet& rSet )
             Any aValue;
             Locale aLocale = MsLangId::convertLanguageToLocale( eSelectLang, false );
             aValue <<= aLocale;
-            OUString aPropName( C2U("DefaultLocale_CTL") );
+            OUString aPropName( "DefaultLocale_CTL" );
             pLangConfig->aLinguConfig.SetProperty( aPropName, aValue );
             if (xLinguProp.is())
                 xLinguProp->setPropertyValue( aPropName, aValue );
@@ -1722,18 +1711,18 @@ void OfaLanguagesTabPage::Reset( const SfxItemSet& rSet )
     Any aCTLLang;
     try
     {
-        aWestLang = pLangConfig->aLinguConfig.GetProperty(C2U("DefaultLocale"));
+        aWestLang = pLangConfig->aLinguConfig.GetProperty("DefaultLocale");
         Locale aLocale;
         aWestLang >>= aLocale;
 
         eCurLang = MsLangId::convertLocaleToLanguage( aLocale );
 
-        aCJKLang = pLangConfig->aLinguConfig.GetProperty(C2U("DefaultLocale_CJK"));
+        aCJKLang = pLangConfig->aLinguConfig.GetProperty("DefaultLocale_CJK");
         aLocale = Locale();
         aCJKLang >>= aLocale;
         eCurLangCJK = MsLangId::convertLocaleToLanguage( aLocale );
 
-        aCTLLang = pLangConfig->aLinguConfig.GetProperty(C2U("DefaultLocale_CTL"));
+        aCTLLang = pLangConfig->aLinguConfig.GetProperty("DefaultLocale_CTL");
         aLocale = Locale();
         aCTLLang >>= aLocale;
         eCurLangCTL = MsLangId::convertLocaleToLanguage( aLocale );
@@ -1788,7 +1777,7 @@ void OfaLanguagesTabPage::Reset( const SfxItemSet& rSet )
     aComplexLanguageLB.SaveValue();
     aCurrentDocCB.SaveValue();
 
-    sal_Bool bEnable = !pLangConfig->aLinguConfig.IsReadOnly( C2U("DefaultLocale") );
+    sal_Bool bEnable = !pLangConfig->aLinguConfig.IsReadOnly( "DefaultLocale" );
     aWesternLanguageFT.Enable( bEnable );
     aWesternLanguageLB.Enable( bEnable );
 
@@ -1797,11 +1786,11 @@ void OfaLanguagesTabPage::Reset( const SfxItemSet& rSet )
 
     // #i15812# controls for CJK/CTL already enabled/disabled from LocaleSettingHdl
 #if 0
-    bEnable = ( !pLangConfig->aLinguConfig.IsReadOnly( C2U("DefaultLocale_CJK") ) && aAsianSupportCB.IsChecked() );
+    bEnable = ( !pLangConfig->aLinguConfig.IsReadOnly( "DefaultLocale_CJK" ) && aAsianSupportCB.IsChecked() );
     aAsianLanguageFT.Enable( bEnable );
     aAsianLanguageLB.Enable( bEnable );
 
-    bEnable = ( !pLangConfig->aLinguConfig.IsReadOnly( C2U("DefaultLocale_CTL") ) && aCTLSupportCB.IsChecked() );
+    bEnable = ( !pLangConfig->aLinguConfig.IsReadOnly( "DefaultLocale_CTL" ) && aCTLSupportCB.IsChecked() );
     aComplexLanguageFT.Enable( bEnable );
     aComplexLanguageLB.Enable( bEnable );
 #endif
@@ -1823,7 +1812,7 @@ IMPL_LINK(  OfaLanguagesTabPage, SupportHdl, CheckBox*, pBox )
     sal_Bool bCheck = pBox->IsChecked();
     if ( &aAsianSupportCB == pBox )
     {
-        sal_Bool bReadonly = pLangConfig->aLinguConfig.IsReadOnly( C2U("DefaultLocale_CJK"));
+        sal_Bool bReadonly = pLangConfig->aLinguConfig.IsReadOnly("DefaultLocale_CJK");
         bCheck = ( bCheck && !bReadonly );
         aAsianLanguageFT.Enable( bCheck );
         aAsianLanguageLB.Enable( bCheck );
@@ -1833,7 +1822,7 @@ IMPL_LINK(  OfaLanguagesTabPage, SupportHdl, CheckBox*, pBox )
     }
     else if ( &aCTLSupportCB == pBox )
     {
-        sal_Bool bReadonly = pLangConfig->aLinguConfig.IsReadOnly( C2U("DefaultLocale_CTL"));
+        sal_Bool bReadonly = pLangConfig->aLinguConfig.IsReadOnly("DefaultLocale_CTL");
         bCheck = ( bCheck && !bReadonly  );
         aComplexLanguageFT.Enable( bCheck );
         aComplexLanguageLB.Enable( bCheck );

@@ -892,7 +892,7 @@ RecovDocListEntry::RecovDocListEntry(      SvLBoxEntry* pEntry,
 
 //===============================================
 void RecovDocListEntry::Paint(const Point&       aPos   ,
-                                    SvLBox&      aDevice,
+                                    SvTreeListBox&      aDevice,
                                     sal_uInt16       /*nFlags */,
                                     SvLBoxEntry* pEntry )
 {

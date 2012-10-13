@@ -39,7 +39,7 @@
 
 //========================================================================
 
-void lcl_InvalidateOutliner( SfxBindings* pBindings )
+static void lcl_InvalidateOutliner( SfxBindings* pBindings )
 {
     if ( pBindings )
     {
@@ -56,7 +56,7 @@ void lcl_InvalidateOutliner( SfxBindings* pBindings )
 
 //! PaintWidthHeight zur DocShell verschieben?
 
-void lcl_PaintWidthHeight( ScDocShell& rDocShell, SCTAB nTab,
+static void lcl_PaintWidthHeight( ScDocShell& rDocShell, SCTAB nTab,
                                     sal_Bool bColumns, SCCOLROW nStart, SCCOLROW nEnd )
 {
     ScDocument* pDoc = rDocShell.GetDocument();

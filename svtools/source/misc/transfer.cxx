@@ -32,7 +32,6 @@
 #include <shlobj.h>
 #endif
 #include <osl/mutex.hxx>
-#include <rtl/memory.h>
 #include <rtl/uri.hxx>
 #include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
@@ -610,7 +609,7 @@ sal_Int64 SAL_CALL TransferableHelper::getSomething( const Sequence< sal_Int8 >&
     sal_Int64 nRet;
 
     if( ( rId.getLength() == 16 ) &&
-        ( 0 == rtl_compareMemory( getUnoTunnelId().getConstArray(), rId.getConstArray(), 16 ) ) )
+        ( 0 == memcmp( getUnoTunnelId().getConstArray(), rId.getConstArray(), 16 ) ) )
     {
         nRet = sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_IntPtr>(this));
     }
@@ -791,7 +790,7 @@ sal_Bool TransferableHelper::SetString( const ::rtl::OUString& rString, const Da
         const rtl::OString aByteStr(rtl::OUStringToOString(rString, osl_getThreadTextEncoding()));
         Sequence< sal_Int8 >    aSeq( aByteStr.getLength() + 1 );
 
-        rtl_copyMemory( aSeq.getArray(), aByteStr.getStr(), aByteStr.getLength() );
+        memcpy( aSeq.getArray(), aByteStr.getStr(), aByteStr.getLength() );
         aSeq[ aByteStr.getLength() ] = 0;
         maAny <<= aSeq;
     }

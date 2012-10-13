@@ -175,14 +175,13 @@ static void ImplMakeSearchStringFromName( XubString& rStr )
 
 // -----------------------------------------------------------------------
 
-ImplFontListNameInfo* FontList::ImplFind( const XubString& rSearchName, sal_uLong* pIndex ) const
+ImplFontListNameInfo* FontList::ImplFind(const OUString& rSearchName, sal_uLong* pIndex) const
 {
     // Wenn kein Eintrag in der Liste oder der Eintrag groesser ist als
     // der Letzte, dann hinten dranhaengen. Wir vergleichen erst mit dem
     // letzten Eintrag, da die Liste von VCL auch sortiert zurueckkommt
     // und somit die Wahrscheinlichkeit das hinten angehaengt werden muss
     // sehr gross ist.
-    StringCompare eComp;
     sal_uLong nCnt = maEntries.size();
     if ( !nCnt )
     {
@@ -193,14 +192,14 @@ ImplFontListNameInfo* FontList::ImplFind( const XubString& rSearchName, sal_uLon
     else
     {
         const ImplFontListNameInfo* pCmpData = &maEntries[nCnt-1];
-        eComp = rSearchName.CompareTo( pCmpData->maSearchName );
-        if ( eComp == COMPARE_GREATER )
+        sal_Int32 nComp = rSearchName.compareTo( pCmpData->maSearchName );
+        if (nComp > 0)
         {
             if ( pIndex )
                 *pIndex = ULONG_MAX;
             return NULL;
         }
-        else if ( eComp == COMPARE_EQUAL )
+        else if (nComp == 0)
             return const_cast<ImplFontListNameInfo*>(pCmpData);
     }
 
@@ -215,8 +214,8 @@ ImplFontListNameInfo* FontList::ImplFind( const XubString& rSearchName, sal_uLon
     {
         nMid = (nLow + nHigh) / 2;
         pCompareData = &maEntries[nMid];
-        eComp = rSearchName.CompareTo( pCompareData->maSearchName );
-        if ( eComp == COMPARE_LESS )
+        sal_Int32 nComp = rSearchName.compareTo(pCompareData->maSearchName);
+        if (nComp < 0)
         {
             if ( !nMid )
                 break;
@@ -224,7 +223,7 @@ ImplFontListNameInfo* FontList::ImplFind( const XubString& rSearchName, sal_uLon
         }
         else
         {
-            if ( eComp == COMPARE_GREATER )
+            if (nComp > 0)
                 nLow = nMid + 1;
             else
             {
@@ -237,8 +236,8 @@ ImplFontListNameInfo* FontList::ImplFind( const XubString& rSearchName, sal_uLon
 
     if ( pIndex )
     {
-        eComp = rSearchName.CompareTo( pCompareData->maSearchName );
-        if ( eComp == COMPARE_GREATER )
+        sal_Int32 nComp = rSearchName.compareTo(pCompareData->maSearchName);
+        if (nComp > 0)
             *pIndex = (nMid+1);
         else
             *pIndex = nMid;
@@ -249,7 +248,7 @@ ImplFontListNameInfo* FontList::ImplFind( const XubString& rSearchName, sal_uLon
 
 // -----------------------------------------------------------------------
 
-ImplFontListNameInfo* FontList::ImplFindByName( const XubString& rStr ) const
+ImplFontListNameInfo* FontList::ImplFindByName(const OUString& rStr) const
 {
     XubString aSearchName = rStr;
     ImplMakeSearchStringFromName( aSearchName );
@@ -425,7 +424,7 @@ FontList* FontList::Clone() const
 
 // -----------------------------------------------------------------------
 
-const XubString& FontList::GetStyleName( FontWeight eWeight, FontItalic eItalic ) const
+const OUString& FontList::GetStyleName(FontWeight eWeight, FontItalic eItalic) const
 {
     if ( eWeight > WEIGHT_BOLD )
     {
@@ -466,41 +465,40 @@ const XubString& FontList::GetStyleName( FontWeight eWeight, FontItalic eItalic 
 
 // -----------------------------------------------------------------------
 
-XubString FontList::GetStyleName( const FontInfo& rInfo ) const
+OUString FontList::GetStyleName(const FontInfo& rInfo) const
 {
-    XubString   aStyleName = rInfo.GetStyleName();
-    FontWeight  eWeight = rInfo.GetWeight();
-    FontItalic  eItalic = rInfo.GetItalic();
+    OUString aStyleName = rInfo.GetStyleName();
+    FontWeight eWeight = rInfo.GetWeight();
+    FontItalic eItalic = rInfo.GetItalic();
 
     // Nur wenn kein StyleName gesetzt ist, geben wir einen syntetischen
     // Namen zurueck
-    if ( !aStyleName.Len() )
-        aStyleName = GetStyleName( eWeight, eItalic );
+    if (aStyleName.isEmpty())
+        aStyleName = GetStyleName(eWeight, eItalic);
     else
     {
         // Translate StyleName to localized name
-        XubString aCompareStyleName = aStyleName;
-        aCompareStyleName.ToLowerAscii();
+        OUString aCompareStyleName = aStyleName.toAsciiLowerCase();
         aCompareStyleName = comphelper::string::remove(aCompareStyleName, ' ');
-        if ( aCompareStyleName.EqualsAscii( "bold" ) )
+        if (aCompareStyleName == "bold")
             aStyleName = maBold;
-        else if ( aCompareStyleName.EqualsAscii( "bolditalic" ) )
+        else if (aCompareStyleName == "bolditalic")
             aStyleName = maBoldItalic;
-        else if ( aCompareStyleName.EqualsAscii( "italic" ) )
+        else if (aCompareStyleName == "italic")
             aStyleName = maNormalItalic;
-        else if ( aCompareStyleName.EqualsAscii( "standard" ) )
+        else if (aCompareStyleName == "standard")
             aStyleName = maNormal;
-        else if ( aCompareStyleName.EqualsAscii( "regular" ) )
+        else if (aCompareStyleName == "regular")
             aStyleName = maNormal;
-        else if ( aCompareStyleName.EqualsAscii( "medium" ) )
+        else if (aCompareStyleName == "medium")
             aStyleName = maNormal;
-        else if ( aCompareStyleName.EqualsAscii( "light" ) )
+        else if (aCompareStyleName == "light")
             aStyleName = maLight;
-        else if ( aCompareStyleName.EqualsAscii( "lightitalic" ) )
+        else if (aCompareStyleName == "lightitalic")
             aStyleName = maLightItalic;
-        else if ( aCompareStyleName.EqualsAscii( "black" ) )
+        else if (aCompareStyleName == "black")
             aStyleName = maBlack;
-        else if ( aCompareStyleName.EqualsAscii( "blackitalic" ) )
+        else if (aCompareStyleName == "blackitalic")
             aStyleName = maBlackItalic;
 
         // fix up StyleName, because the PS Printer driver from
@@ -517,83 +515,6 @@ XubString FontList::GetStyleName( const FontInfo& rInfo ) const
     }
 
     return aStyleName;
-}
-
-// -----------------------------------------------------------------------
-
-XubString FontList::GetFontMapText( const FontInfo& rInfo ) const
-{
-    if ( !rInfo.GetName().Len() )
-    {
-        XubString aEmptryStr;
-        return aEmptryStr;
-    }
-
-    // Search Fontname
-    ImplFontListNameInfo* pData = ImplFindByName( rInfo.GetName() );
-    if ( !pData )
-    {
-        if ( !maMapNotAvailable.Len() )
-            ((FontList*)this)->maMapNotAvailable = SVT_RESSTR(STR_SVT_FONTMAP_NOTAVAILABLE);
-        return maMapNotAvailable;
-    }
-
-    // search for synthetic style
-    sal_uInt16              nType       = pData->mnType;
-    const XubString&    rStyleName  = rInfo.GetStyleName();
-    if ( rStyleName.Len() )
-    {
-        sal_Bool                    bNotSynthetic = sal_False;
-        sal_Bool                    bNoneAvailable = sal_False;
-        FontWeight              eWeight = rInfo.GetWeight();
-        FontItalic              eItalic = rInfo.GetItalic();
-        ImplFontListFontInfo*   pFontInfo = pData->mpFirst;
-        while ( pFontInfo )
-        {
-            if ( (eWeight == pFontInfo->GetWeight()) &&
-                 (eItalic == pFontInfo->GetItalic()) )
-            {
-                bNotSynthetic = sal_True;
-                break;
-            }
-
-            pFontInfo = pFontInfo->mpNext;
-        }
-
-        if ( bNoneAvailable )
-        {
-            XubString aEmptryStr;
-            return aEmptryStr;
-        }
-        else if ( !bNotSynthetic )
-        {
-            if ( !maMapStyleNotAvailable.Len() )
-                ((FontList*)this)->maMapStyleNotAvailable = SVT_RESSTR(STR_SVT_FONTMAP_STYLENOTAVAILABLE);
-            return maMapStyleNotAvailable;
-        }
-    }
-
-    // Only Printer-Font?
-    if ( (nType & (FONTLIST_FONTNAMETYPE_PRINTER | FONTLIST_FONTNAMETYPE_SCREEN)) == FONTLIST_FONTNAMETYPE_PRINTER )
-    {
-        if ( !maMapPrinterOnly.Len() )
-            ((FontList*)this)->maMapPrinterOnly = SVT_RESSTR(STR_SVT_FONTMAP_PRINTERONLY);
-        return maMapPrinterOnly;
-    }
-    // Only Screen-Font?
-    else if ( (nType & (FONTLIST_FONTNAMETYPE_PRINTER | FONTLIST_FONTNAMETYPE_SCREEN)) == FONTLIST_FONTNAMETYPE_SCREEN
-            && rInfo.GetType() == TYPE_RASTER )
-    {
-        if ( !maMapScreenOnly.Len() )
-            ((FontList*)this)->maMapScreenOnly = SVT_RESSTR(STR_SVT_FONTMAP_SCREENONLY);
-        return maMapScreenOnly;
-    }
-    else
-    {
-        if ( !maMapBoth.Len() )
-            ((FontList*)this)->maMapBoth = SVT_RESSTR(STR_SVT_FONTMAP_BOTH);
-        return maMapBoth;
-    }
 }
 
 namespace
@@ -621,7 +542,7 @@ namespace
     }
 }
 
-FontInfo FontList::Get( const XubString& rName, const XubString& rStyleName ) const
+FontInfo FontList::Get(const OUString& rName, const OUString& rStyleName) const
 {
     ImplFontListNameInfo* pData = ImplFindByName( rName );
     ImplFontListFontInfo* pFontInfo = NULL;
@@ -633,7 +554,7 @@ FontInfo FontList::Get( const XubString& rName, const XubString& rStyleName ) co
         pSearchInfo = pData->mpFirst;
         while ( pSearchInfo )
         {
-            if ( rStyleName.EqualsIgnoreCaseAscii( GetStyleName( *pSearchInfo ) ) )
+            if (rStyleName.equalsIgnoreAsciiCase(GetStyleName(*pSearchInfo)))
             {
                 pFontInfo = pSearchInfo;
                 break;
@@ -705,8 +626,8 @@ FontInfo FontList::Get( const XubString& rName, const XubString& rStyleName ) co
 
 // -----------------------------------------------------------------------
 
-FontInfo FontList::Get( const XubString& rName,
-                        FontWeight eWeight, FontItalic eItalic ) const
+FontInfo FontList::Get(const OUString& rName,
+                        FontWeight eWeight, FontItalic eItalic) const
 {
     ImplFontListNameInfo* pData = ImplFindByName( rName );
     ImplFontListFontInfo* pFontInfo = NULL;
@@ -744,7 +665,7 @@ FontInfo FontList::Get( const XubString& rName,
 
 // -----------------------------------------------------------------------
 
-sal_Bool FontList::IsAvailable( const XubString& rName ) const
+sal_Bool FontList::IsAvailable(const OUString& rName) const
 {
     return (ImplFindByName( rName ) != 0);
 }
@@ -769,7 +690,7 @@ sal_uInt16 FontList::GetFontNameType( sal_uInt16 nFont ) const
 
 // -----------------------------------------------------------------------
 
-sal_Handle FontList::GetFirstFontInfo( const XubString& rName ) const
+sal_Handle FontList::GetFirstFontInfo(const OUString& rName) const
 {
     ImplFontListNameInfo* pData = ImplFindByName( rName );
     if ( !pData )

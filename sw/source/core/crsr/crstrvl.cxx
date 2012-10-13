@@ -599,7 +599,7 @@ const SwTOXMark& SwCrsrShell::GotoTOXMark( const SwTOXMark& rStart,
 }
 
 /// jump to next/previous field type
-void lcl_MakeFldLst( _SetGetExpFlds& rLst, const SwFieldType& rFldType,
+static void lcl_MakeFldLst( _SetGetExpFlds& rLst, const SwFieldType& rFldType,
                         sal_uInt16 nSubType, sal_Bool bInReadOnly,
                         sal_Bool bChkInpFlag = sal_False )
 {
@@ -686,7 +686,7 @@ sal_Bool SwCrsrShell::MoveFldType( const SwFieldType* pFldType, sal_Bool bNext,
         SwTxtFld * pTxtFld = static_cast<SwTxtFld *>(
             pTNd->GetTxtAttrForCharAt(rPos.nContent.GetIndex(),
                 RES_TXTATR_FIELD));
-        sal_Bool bDelFld = 0 == pTxtFld;
+        bool bDelFld = 0 == pTxtFld;
         if( bDelFld )
         {
             SwFmtFld* pFmtFld = new SwFmtFld( SwDateTimeField(
@@ -1026,7 +1026,7 @@ sal_Bool SwCrsrShell::GetContentAtPos( const Point& rPt,
             if( pONd )
             {
                 rCntntAtPos.eCntntAtPos = SwContentAtPos::SW_OUTLINE;
-                rCntntAtPos.sStr = pONd->GetExpandTxt( 0, STRING_LEN, true );
+                rCntntAtPos.sStr = pONd->GetExpandTxt( 0, STRING_LEN, true, true );
                 bRet = sal_True;
             }
         }
@@ -1957,7 +1957,7 @@ const SwRedline* SwCrsrShell::GotoRedline( sal_uInt16 nArrPos, sal_Bool bSelect 
         sal_uInt16 nSeqNo = pTmp->GetSeqNo();
         if( nSeqNo && bSelect )
         {
-            sal_Bool bCheck = sal_False;
+            bool bCheck = false;
             int nLoopCnt = 2;
             sal_uInt16 nArrSavPos = nArrPos;
 
@@ -1979,7 +1979,7 @@ const SwRedline* SwCrsrShell::GotoRedline( sal_uInt16 nArrPos, sal_Bool bSelect 
                         const SwPosition *pNStt = pNextPam->Start(),
                                          *pNEnd = pNextPam->End();
 
-                        sal_Bool bDel = sal_True;
+                        bool bDel = true;
                         switch( ::ComparePosition( *pCStt, *pCEnd,
                                                    *pNStt, *pNEnd ))
                         {
@@ -2014,7 +2014,7 @@ const SwRedline* SwCrsrShell::GotoRedline( sal_uInt16 nArrPos, sal_Bool bSelect 
                             break;
 
                         default:
-                            bDel = sal_False;
+                            bDel = false;
                         }
 
                         if( bDel )
@@ -2039,7 +2039,7 @@ const SwRedline* SwCrsrShell::GotoRedline( sal_uInt16 nArrPos, sal_Bool bSelect 
                     {
                         // create new cursor
                         CreateCrsr();
-                        bCheck = sal_True;
+                        bCheck = true;
                     }
                     nArrPos = nFndPos;
                 }

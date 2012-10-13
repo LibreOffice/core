@@ -450,8 +450,6 @@ NS_IMETHODIMP nsProfile::GetProfileDir(const PRUnichar *profileName, nsIFile **p
     NS_ENSURE_ARG_POINTER(profileDir);
     *profileDir = nsnull;
 
-    nsresult rv = NS_OK;
-
     // PRUnichar != sal_Unicode in mingw
     rtl::OUString path = xMozillaBootstrap->getProfilePath(xMozillaBootstrap->getCurrentProduct(),reinterpret_cast_mingw_only<const sal_Unicode *>(profileName));
 
@@ -459,7 +457,7 @@ NS_IMETHODIMP nsProfile::GetProfileDir(const PRUnichar *profileName, nsIFile **p
     // PRUnichar != sal_Unicode in mingw
     nsAutoString filePath(reinterpret_cast_mingw_only<const PRUnichar *>(path.getStr()));
 
-    rv = NS_NewLocalFile(filePath, PR_TRUE,
+    nsresult rv = NS_NewLocalFile(filePath, PR_TRUE,
                                    getter_AddRefs(localFile));
     if (localFile && NS_SUCCEEDED(rv))
         return localFile->QueryInterface(NS_GET_IID(nsIFile), (void**)profileDir);

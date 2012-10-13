@@ -45,7 +45,6 @@ namespace sd
             Communicator( BufferedStreamSocket *pSocket );
             ~Communicator();
 
-            Transmitter* getTransmitter();
             void presentationStarted( const css::uno::Reference<
                 css::presentation::XSlideShowController > &rController );
             void informListenerDestroyed();

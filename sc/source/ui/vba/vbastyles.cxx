@@ -33,7 +33,7 @@ using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
 static rtl::OUString SDEFAULTCELLSTYLENAME( RTL_CONSTASCII_USTRINGPARAM("Default") );
-css::uno::Any
+static css::uno::Any
 lcl_createAPIStyleToVBAObject( const css::uno::Any& aObject, const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< frame::XModel >& xModel )
 {
     uno::Reference< beans::XPropertySet > xStyleProps( aObject, uno::UNO_QUERY_THROW );

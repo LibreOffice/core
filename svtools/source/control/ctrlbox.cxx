@@ -397,7 +397,7 @@ long BorderWidthImpl::GetGap( long nWidth ) const
     return result;
 }
 
-double lcl_getGuessedWidth( long nTested, double nRate, bool nChanging )
+static double lcl_getGuessedWidth( long nTested, double nRate, bool nChanging )
 {
     double nWidth = -1.0;
     if ( nChanging )
@@ -832,7 +832,7 @@ sal_uInt16 LineListBox::InsertEntry( const XubString& rStr, sal_uInt16 nPos )
         if ( nPos < pLineList->size() ) {
             ImpLineList::iterator it = pLineList->begin();
             ::std::advance( it, nPos );
-            pLineList->insert( it, NULL );
+            pLineList->insert( it, reinterpret_cast<ImpLineListData *>(NULL) );
         } else {
             pLineList->push_back( NULL );
         }
@@ -1598,7 +1598,7 @@ void FontStyleBox::Fill( const XubString& rName, const FontList* pList )
     sal_Handle hFontInfo = pList->GetFirstFontInfo( rName );
     if ( hFontInfo )
     {
-        XubString   aStyleText;
+        OUString aStyleText;
         FontWeight  eLastWeight = WEIGHT_DONTKNOW;
         FontItalic  eLastItalic = ITALIC_NONE;
         FontWidth   eLastWidth = WIDTH_DONTKNOW;
@@ -1657,11 +1657,11 @@ void FontStyleBox::Fill( const XubString& rName, const FontList* pList )
                 {
                     // If we have two names for the same attributes
                     // we prefer the translated standard names
-                    const XubString& rAttrStyleText = pList->GetStyleName( eWeight, eItalic );
-                    if ( rAttrStyleText != aStyleText )
+                    const OUString& rAttrStyleText = pList->GetStyleName( eWeight, eItalic );
+                    if (rAttrStyleText != aStyleText)
                     {
-                        XubString aTempStyleText = pList->GetStyleName( aInfo );
-                        if ( rAttrStyleText == aTempStyleText )
+                        OUString aTempStyleText = pList->GetStyleName( aInfo );
+                        if (rAttrStyleText == aTempStyleText)
                             aStyleText = rAttrStyleText;
                         bInsert = GetEntryPos( aStyleText ) == LISTBOX_ENTRY_NOTFOUND;
                     }

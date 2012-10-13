@@ -95,9 +95,9 @@ class AbstractSwInsertAbstractDlg_Impl : public AbstractSwInsertAbstractDlg
 
 // add for SwAddrDlg, SwDropCapsDlg, SwBackgroundDlg SwNumFmtDlg  SwWrapDlg SwBorderDlg, SwFldEditDlg  begin
 class SfxSingleTabDialog;
-class AbstractSfxDialog_Impl :public SfxAbstractDialog
+class SwAbstractSfxDialog_Impl :public SfxAbstractDialog
 {
-    DECL_ABSTDLG_BASE(AbstractSfxDialog_Impl,SfxModalDialog)
+    DECL_ABSTDLG_BASE(SwAbstractSfxDialog_Impl,SfxModalDialog)
     virtual const SfxItemSet*   GetOutputItemSet() const;
     virtual void        SetText( const XubString& rStr );
     virtual String      GetText() const;
@@ -445,7 +445,7 @@ public:
     virtual AbstractSwAsciiFilterDlg*  CreateSwAsciiFilterDlg ( Window* pParent, SwDocShell& rDocSh,
                                                                 SvStream* pStream, int nResId ); //add for SwAsciiFilterDlg
     virtual VclAbstractDialog * CreateSwInsertBookmarkDlg( Window *pParent, SwWrtShell &rSh, SfxRequest& rReq, int nResId );//add for SwInsertBookmarkDlg
-    virtual AbstractSwBreakDlg * CreateSwBreakDlg ( Window *pParent, SwWrtShell &rSh,int nResId ); // add for SwBreakDlg
+    virtual AbstractSwBreakDlg * CreateSwBreakDlg(Window *pParent, SwWrtShell &rSh); // add for SwBreakDlg
     virtual VclAbstractDialog   * CreateSwChangeDBDlg( SwView& rVw, int nResId  ); //add for SwChangeDBDlg
     virtual SfxAbstractTabDialog *  CreateSwCharDlg( Window* pParent, SwView& pVw, const SfxItemSet& rCoreSet, int nResId, // add for SwCharDlg
                                                 const String* pFmtStr = 0, sal_Bool bIsDrwTxtDlg = sal_False);

@@ -15,8 +15,7 @@ SODEST=libs/$(ANDROID_APP_ABI)
 OBJLOCAL=obj/local/$(ANDROID_APP_ABI)
 
 define COPYSO
-cp $(1) $(SODEST)$(if $(2),/$(2)) && $(STRIP) --strip-debug $(SODEST)$(if $(2),/$(2),/$(notdir $(1))) && \
-cp $(1) $(OBJLOCAL)$(if $(2),/$(2))
+       $(error COPYSO should not be used now with DISABLE_DYNLOADING)
 endef
 
 define COPYJAR

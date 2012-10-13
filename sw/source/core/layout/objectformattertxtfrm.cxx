@@ -653,7 +653,7 @@ bool SwObjectFormatterTxtFrm::CheckMovedFwdCondition(
 // #i40140# - helper method to format layout frames used by
 // method <SwObjectFormatterTxtFrm::_FormatAnchorFrmForCheckMoveFwd()>
 // #i44049# - format till a certain lower frame, if provided.
-void lcl_FormatCntntOfLayoutFrm( SwLayoutFrm* pLayFrm,
+static void lcl_FormatCntntOfLayoutFrm( SwLayoutFrm* pLayFrm,
                                  SwFrm* pLastLowerFrm = 0L )
 {
     SwFrm* pLowerFrm = pLayFrm->GetLower();

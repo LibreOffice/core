@@ -30,9 +30,9 @@
 #define _BGFX_RASTER_BPIXELRASTER_HXX
 
 #include <algorithm>
+#include <string.h>
 #include <sal/types.h>
 #include <basegfx/pixel/bpixel.hxx>
-#include <rtl/memory.h>
 #include <basegfx/basegfxdllapi.h>
 
 //////////////////////////////////////////////////////////////////////////////
@@ -59,7 +59,7 @@ namespace basegfx
         // reset
         void reset()
         {
-            rtl_zeroMemory(mpContent, sizeof(BPixel) * mnCount);
+            memset(mpContent, 0, sizeof(BPixel) * mnCount);
         }
 
         // constructor/destructor

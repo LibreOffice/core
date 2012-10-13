@@ -1241,6 +1241,27 @@ void DrawingML::WriteText( Reference< XInterface > rXIface  )
         }
     }
 
+    if ( GETA( CustomShapeGeometry ) )
+    {
+        Sequence< PropertyValue > aProps;
+        if ( mAny >>= aProps )
+        {
+            for ( sal_Int32 i = 0, nElems = aProps.getLength(); i < nElems; ++i )
+            {
+                sal_Int32 nTextRotateAngle = 0;
+                if ( aProps[ i ].Name.equals( "TextPreRotateAngle" ) && ( aProps[ i ].Value >>= nTextRotateAngle ) )
+                {
+                    if ( nTextRotateAngle == -90 )
+                    {
+                        sWritingMode = "vert";
+                        bVertical = sal_True;
+                    }
+                    break;
+                }
+            }
+        }
+    }
+
     TextHorizontalAdjust eHorizontalAlignment( TextHorizontalAdjust_CENTER );
     bool bHorizontalCenter = false;
     GET( eHorizontalAlignment, TextHorizontalAdjust );

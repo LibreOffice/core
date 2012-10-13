@@ -81,7 +81,7 @@ void bindXFormsValueBinding(
         aPair.first,
         UNO_QUERY );
     Reference<XValueBinding> xBinding(
-        lcl_findXFormsBinding( xModel, aPair.second ),
+        xforms_findXFormsBinding( xModel, aPair.second ),
         UNO_QUERY );
 
     if( xBindable.is() && xBinding.is() )
@@ -106,7 +106,7 @@ void bindXFormsListBinding(
         aPair.first,
         UNO_QUERY );
     Reference<XListEntrySource> xListEntrySource(
-        lcl_findXFormsBinding( xModel, aPair.second ),
+        xforms_findXFormsBinding( xModel, aPair.second ),
         UNO_QUERY );
 
     if( xListEntrySink.is() && xListEntrySource.is() )
@@ -129,7 +129,7 @@ void bindXFormsSubmission(
 {
     Reference<XSubmissionSupplier> xSubmissionSupp( aPair.first, UNO_QUERY );
     Reference<XSubmission> xSubmission(
-        lcl_findXFormsSubmission( xModel, aPair.second ),
+        xforms_findXFormsSubmission( xModel, aPair.second ),
         UNO_QUERY );
 
     if( xSubmissionSupp.is() && xSubmission.is() )

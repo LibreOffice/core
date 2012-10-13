@@ -1,0 +1,284 @@
+--- cdr/src/lib/CDRCollector.h
++++ cdr/src/lib/CDRCollector.h
+@@ -103,7 +103,7 @@ public:
+   virtual void collectOutlId(unsigned id) = 0;
+   virtual void collectFild(unsigned id, unsigned short fillType, const CDRColor &color1, const CDRColor &color2, const CDRGradient &gradient, const CDRImageFill &imageFill) = 0;
+   virtual void collectOutl(unsigned id, unsigned short lineType, unsigned short capsType, unsigned short joinType, double lineWidth,
+-                           double stretch, double angle, const CDRColor &color, const std::vector<unsigned short> &dashArray,
++                           double stretch, double angle, const CDRColor &color, const std::vector<unsigned> &dashArray,
+                            unsigned startMarkerId, unsigned endMarkerId) = 0;
+   virtual void collectRotate(double angle, double cx, double cy) = 0;
+   virtual void collectFlags(unsigned flags, bool considerFlags) = 0;
+--- cdr/src/lib/CDRContentCollector.h
++++ cdr/src/lib/CDRContentCollector.h
+@@ -67,7 +67,7 @@ public:
+   void collectOutlId(unsigned id);
+   void collectFild(unsigned, unsigned short, const CDRColor &, const CDRColor &, const CDRGradient &, const CDRImageFill &) {}
+   void collectOutl(unsigned, unsigned short, unsigned short, unsigned short, double, double, double, const CDRColor &,
+-                   const std::vector<unsigned short> &, unsigned, unsigned) {}
++                   const std::vector<unsigned> &, unsigned, unsigned) {}
+   void collectRotate(double angle, double cx, double cy);
+   void collectFlags(unsigned flags, bool considerFlags);
+   void collectPageSize(double, double, double, double) {}
+--- cdr/src/lib/CDRParser.cpp
++++ cdr/src/lib/CDRParser.cpp
+@@ -1376,7 +1376,7 @@ void libcdr::CDRParser::readWaldoOutl(WPXInputStream *input)
+   input->seek(7, WPX_SEEK_CUR);
+   unsigned short numDash = readU8(input);
+   int fixPosition = input->tell();
+-  std::vector<unsigned short> dashArray;
++  std::vector<unsigned> dashArray;
+   for (unsigned short i = 0; i < numDash; ++i)
+     dashArray.push_back(readU8(input));
+   input->seek(fixPosition + 10, WPX_SEEK_SET);
+@@ -1870,7 +1870,7 @@ void libcdr::CDRParser::readOutl(WPXInputStream *input, unsigned length)
+     input->seek(16, WPX_SEEK_CUR);
+   unsigned short numDash = readU16(input);
+   int fixPosition = input->tell();
+-  std::vector<unsigned short> dashArray;
++  std::vector<unsigned> dashArray;
+   for (unsigned short i = 0; i < numDash; ++i)
+     dashArray.push_back(readU16(input));
+   if (m_version < 600)
+--- cdr/src/lib/CDRStylesCollector.cpp
++++ cdr/src/lib/CDRStylesCollector.cpp
+@@ -56,7 +56,7 @@ void libcdr::CDRStylesCollector::collectFild(unsigned id, unsigned short fillTyp
+ }
+ 
+ void libcdr::CDRStylesCollector::collectOutl(unsigned id, unsigned short lineType, unsigned short capsType, unsigned short joinType, double lineWidth,
+-    double stretch, double angle, const CDRColor &color, const std::vector<unsigned short> &dashArray,
++    double stretch, double angle, const CDRColor &color, const std::vector<unsigned> &dashArray,
+     unsigned startMarkerId, unsigned endMarkerId)
+ {
+   m_ps.m_lineStyles[id] = CDRLineStyle(lineType, capsType, joinType, lineWidth, stretch, angle, color, dashArray, startMarkerId, endMarkerId);
+--- cdr/src/lib/CDRStylesCollector.h
++++ cdr/src/lib/CDRStylesCollector.h
+@@ -68,7 +68,7 @@ public:
+   void collectOutlId(unsigned) {}
+   void collectFild(unsigned id, unsigned short fillType, const CDRColor &color1, const CDRColor &color2, const CDRGradient &gradient, const CDRImageFill &imageFill);
+   void collectOutl(unsigned id, unsigned short lineType, unsigned short capsType, unsigned short joinType, double lineWidth,
+-                   double stretch, double angle, const CDRColor &color, const std::vector<unsigned short> &dashArray,
++                   double stretch, double angle, const CDRColor &color, const std::vector<unsigned> &dashArray,
+                    unsigned startMarkerId, unsigned endMarkerId);
+   void collectRotate(double,double,double) {}
+   void collectFlags(unsigned, bool) {}
+--- cdr/src/lib/CDRTypes.h
++++ cdr/src/lib/CDRTypes.h
+@@ -136,7 +136,7 @@ struct CDRLineStyle
+   double stretch;
+   double angle;
+   CDRColor color;
+-  std::vector<unsigned short> dashArray;
++  std::vector<unsigned> dashArray;
+   unsigned startMarkerId;
+   unsigned endMarkerId;
+   CDRLineStyle()
+@@ -144,7 +144,7 @@ struct CDRLineStyle
+       stretch(0.0), angle(0.0), color(), dashArray(),
+       startMarkerId(0), endMarkerId(0) {}
+   CDRLineStyle(unsigned short lt, unsigned short ct, unsigned short jt,
+-               double lw, double st, double a, const CDRColor &c, const std::vector<unsigned short> &da,
++               double lw, double st, double a, const CDRColor &c, const std::vector<unsigned> &da,
+                unsigned smi, unsigned emi)
+     : lineType(lt), capsType(ct), joinType(jt), lineWidth(lw),
+       stretch(st), angle(a), color(c), dashArray(da),
+--- cdr/build/win32/cdr2raw.vcproj	2012-10-06 06:45:36.436443100 +0200
++++ cdr/build/win32/cdr2raw.vcproj	2012-10-06 06:46:42.153510700 +0200
+@@ -69,7 +69,7 @@
+ 			/>
+ 			<Tool
+ 				Name="VCLinkerTool"
+-				AdditionalDependencies="libcdr-0.2.lib libwpd-stream-0.9.lib libwpd-0.9.lib"
++				AdditionalDependencies="libcdr-0.0.lib libwpd-stream-0.9.lib libwpd-0.9.lib"
+ 				OutputFile="Debug\bin\cdr2raw.exe"
+ 				LinkIncremental="2"
+ 				SuppressStartupBanner="true"
+@@ -157,7 +157,7 @@
+ 			/>
+ 			<Tool
+ 				Name="VCLinkerTool"
+-				AdditionalDependencies="libcdr-0.2.lib libwpd-stream-0.9.lib libwpd-0.9.lib"
++				AdditionalDependencies="libcdr-0.0.lib libwpd-stream-0.9.lib libwpd-0.9.lib"
+ 				OutputFile="Release\bin\cdr2raw.exe"
+ 				LinkIncremental="1"
+ 				SuppressStartupBanner="true"
+--- cdr/build/win32/cdr2raw.vcxproj	2012-10-06 06:45:36.436443100 +0200
++++ cdr/build/win32/cdr2raw.vcxproj	2012-10-06 06:46:42.153510700 +0200
+@@ -68,7 +68,7 @@
+       <Culture>0x0409</Culture>
+     </ResourceCompile>
+     <Link>
+-      <AdditionalDependencies>libcdr-0.2.lib;libwpd-stream-0.9.lib;libwpd-0.9.lib;%(AdditionalDependencies)</AdditionalDependencies>
++      <AdditionalDependencies>libcdr-0.0.lib;libwpd-stream-0.9.lib;libwpd-0.9.lib;%(AdditionalDependencies)</AdditionalDependencies>
+       <OutputFile>Debug\bin\cdr2raw.exe</OutputFile>
+       <SuppressStartupBanner>true</SuppressStartupBanner>
+       <AdditionalLibraryDirectories>Debug\lib;$(LIBWPD_LIB_DIR);$(LCMS2_LIB_DIR);$(ZLIB_LIB_DIR);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+@@ -109,7 +109,7 @@
+       <Culture>0x0409</Culture>
+     </ResourceCompile>
+     <Link>
+-      <AdditionalDependencies>libcdr-0.2.lib;libwpd-stream-0.9.lib;libwpd-0.9.lib;%(AdditionalDependencies)</AdditionalDependencies>
++      <AdditionalDependencies>libcdr-0.0.lib;libwpd-stream-0.9.lib;libwpd-0.9.lib;%(AdditionalDependencies)</AdditionalDependencies>
+       <OutputFile>Release\bin\cdr2raw.exe</OutputFile>
+       <SuppressStartupBanner>true</SuppressStartupBanner>
+       <AdditionalLibraryDirectories>Release\lib;$(LIBWPD_LIB_DIR);$(LCMS2_LIB_DIR);$(ZLIB_LIB_DIR);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+--- cdr/build/win32/cdr2xhtml.vcproj	2012-10-06 06:45:36.436443100 +0200
++++ cdr/build/win32/cdr2xhtml.vcproj	2012-10-06 06:46:42.169135300 +0200
+@@ -67,7 +67,7 @@
+ 			/>
+ 			<Tool
+ 				Name="VCLinkerTool"
+-				AdditionalDependencies="libcdr-0.2.lib libwpd-stream-0.9.lib libwpd-0.9.lib"
++				AdditionalDependencies="libcdr-0.0.lib libwpd-stream-0.9.lib libwpd-0.9.lib"
+ 				OutputFile="Release\bin\cdr2xhtml.exe"
+ 				LinkIncremental="1"
+ 				SuppressStartupBanner="true"
+@@ -156,7 +156,7 @@
+ 			/>
+ 			<Tool
+ 				Name="VCLinkerTool"
+-				AdditionalDependencies="libcdr-0.2.lib libwpd-stream-0.9.lib libwpd-0.9.lib"
++				AdditionalDependencies="libcdr-0.0.lib libwpd-stream-0.9.lib libwpd-0.9.lib"
+ 				OutputFile="Debug\bin\cdr2xhtml.exe"
+ 				LinkIncremental="2"
+ 				SuppressStartupBanner="true"
+--- cdr/build/win32/cdr2xhtml.vcxproj	2012-10-06 06:45:36.452067700 +0200
++++ cdr/build/win32/cdr2xhtml.vcxproj	2012-10-06 06:46:42.169135300 +0200
+@@ -66,7 +66,7 @@
+       <Culture>0x0409</Culture>
+     </ResourceCompile>
+     <Link>
+-      <AdditionalDependencies>libcdr-0.2.lib;libwpd-stream-0.9.lib;libwpd-0.9.lib;%(AdditionalDependencies)</AdditionalDependencies>
++      <AdditionalDependencies>libcdr-0.0.lib;libwpd-stream-0.9.lib;libwpd-0.9.lib;%(AdditionalDependencies)</AdditionalDependencies>
+       <OutputFile>Release\bin\cdr2xhtml.exe</OutputFile>
+       <SuppressStartupBanner>true</SuppressStartupBanner>
+       <AdditionalLibraryDirectories>Release\lib;$(LIBWPD_LIB_DIR);$(LCMS2_LIB_DIR);$(ZLIB_LIB_DIR);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+@@ -108,7 +108,7 @@
+       <Culture>0x0409</Culture>
+     </ResourceCompile>
+     <Link>
+-      <AdditionalDependencies>libcdr-0.2.lib;libwpd-stream-0.9.lib;libwpd-0.9.lib;%(AdditionalDependencies)</AdditionalDependencies>
++      <AdditionalDependencies>libcdr-0.0.lib;libwpd-stream-0.9.lib;libwpd-0.9.lib;%(AdditionalDependencies)</AdditionalDependencies>
+       <OutputFile>Debug\bin\cdr2xhtml.exe</OutputFile>
+       <SuppressStartupBanner>true</SuppressStartupBanner>
+       <AdditionalLibraryDirectories>Debug\lib;$(LIBWPD_LIB_DIR);$(LCMS2_LIB_DIR);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+--- cdr/build/win32/cmx2raw.vcproj	2012-10-06 06:45:36.452067700 +0200
++++ cdr/build/win32/cmx2raw.vcproj	2012-10-06 06:46:42.169135300 +0200
+@@ -69,7 +69,7 @@
+ 			/>
+ 			<Tool
+ 				Name="VCLinkerTool"
+-				AdditionalDependencies="libcdr-0.2.lib libwpd-stream-0.9.lib libwpd-0.9.lib"
++				AdditionalDependencies="libcdr-0.0.lib libwpd-stream-0.9.lib libwpd-0.9.lib"
+ 				OutputFile="Debug\bin\cmx2raw.exe"
+ 				LinkIncremental="2"
+ 				SuppressStartupBanner="true"
+@@ -157,7 +157,7 @@
+ 			/>
+ 			<Tool
+ 				Name="VCLinkerTool"
+-				AdditionalDependencies="libcdr-0.2.lib libwpd-stream-0.9.lib libwpd-0.9.lib"
++				AdditionalDependencies="libcdr-0.0.lib libwpd-stream-0.9.lib libwpd-0.9.lib"
+ 				OutputFile="Release\bin\cmx2raw.exe"
+ 				LinkIncremental="1"
+ 				SuppressStartupBanner="true"
+--- cdr/build/win32/cmx2raw.vcxproj	2012-10-06 06:45:36.452067700 +0200
++++ cdr/build/win32/cmx2raw.vcxproj	2012-10-06 06:46:42.184759900 +0200
+@@ -68,7 +68,7 @@
+       <Culture>0x0409</Culture>
+     </ResourceCompile>
+     <Link>
+-      <AdditionalDependencies>libcdr-0.2.lib;libwpd-stream-0.9.lib;libwpd-0.9.lib;%(AdditionalDependencies)</AdditionalDependencies>
++      <AdditionalDependencies>libcdr-0.0.lib;libwpd-stream-0.9.lib;libwpd-0.9.lib;%(AdditionalDependencies)</AdditionalDependencies>
+       <OutputFile>Debug\bin\cmx2raw.exe</OutputFile>
+       <SuppressStartupBanner>true</SuppressStartupBanner>
+       <AdditionalLibraryDirectories>Debug\lib;$(LIBWPD_LIB_DIR);$(LCMS2_LIB_DIR);$(ZLIB_LIB_DIR);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+@@ -109,7 +109,7 @@
+       <Culture>0x0409</Culture>
+     </ResourceCompile>
+     <Link>
+-      <AdditionalDependencies>libcdr-0.2.lib;libwpd-stream-0.9.lib;libwpd-0.9.lib;%(AdditionalDependencies)</AdditionalDependencies>
++      <AdditionalDependencies>libcdr-0.0.lib;libwpd-stream-0.9.lib;libwpd-0.9.lib;%(AdditionalDependencies)</AdditionalDependencies>
+       <OutputFile>Release\bin\cmx2raw.exe</OutputFile>
+       <SuppressStartupBanner>true</SuppressStartupBanner>
+       <AdditionalLibraryDirectories>Release\lib;$(LIBWPD_LIB_DIR);$(LCMS2_LIB_DIR);$(ZLIB_LIB_DIR);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+--- cdr/build/win32/cmx2xhtml.vcproj	2012-10-06 06:45:36.452067700 +0200
++++ cdr/build/win32/cmx2xhtml.vcproj	2012-10-06 06:46:42.184759900 +0200
+@@ -69,7 +69,7 @@
+ 			/>
+ 			<Tool
+ 				Name="VCLinkerTool"
+-				AdditionalDependencies="libcdr-0.2.lib libwpd-stream-0.9.lib libwpd-0.9.lib"
++				AdditionalDependencies="libcdr-0.0.lib libwpd-stream-0.9.lib libwpd-0.9.lib"
+ 				OutputFile="Debug\bin\cmx2xhtml.exe"
+ 				LinkIncremental="2"
+ 				SuppressStartupBanner="true"
+@@ -157,7 +157,7 @@
+ 			/>
+ 			<Tool
+ 				Name="VCLinkerTool"
+-				AdditionalDependencies="libcdr-0.2.lib libwpd-stream-0.9.lib libwpd-0.9.lib"
++				AdditionalDependencies="libcdr-0.0.lib libwpd-stream-0.9.lib libwpd-0.9.lib"
+ 				OutputFile="Release\bin\cmx2xhtml.exe"
+ 				LinkIncremental="1"
+ 				SuppressStartupBanner="true"
+--- cdr/build/win32/cmx2xhtml.vcxproj	2012-10-06 06:45:36.467692300 +0200
++++ cdr/build/win32/cmx2xhtml.vcxproj	2012-10-06 06:46:42.184759900 +0200
+@@ -68,7 +68,7 @@
+       <Culture>0x0409</Culture>
+     </ResourceCompile>
+     <Link>
+-      <AdditionalDependencies>libcdr-0.2.lib;libwpd-stream-0.9.lib;libwpd-0.9.lib;%(AdditionalDependencies)</AdditionalDependencies>
++      <AdditionalDependencies>libcdr-0.0.lib;libwpd-stream-0.9.lib;libwpd-0.9.lib;%(AdditionalDependencies)</AdditionalDependencies>
+       <OutputFile>Debug\bin\cmx2xhtml.exe</OutputFile>
+       <SuppressStartupBanner>true</SuppressStartupBanner>
+       <AdditionalLibraryDirectories>Debug\lib;$(LIBWPD_LIB_DIR);$(LCMS2_LIB_DIR);$(ZLIB_LIB_DIR);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+@@ -109,7 +109,7 @@
+       <Culture>0x0409</Culture>
+     </ResourceCompile>
+     <Link>
+-      <AdditionalDependencies>libcdr-0.2.lib;libwpd-stream-0.9.lib;libwpd-0.9.lib;%(AdditionalDependencies)</AdditionalDependencies>
++      <AdditionalDependencies>libcdr-0.0.lib;libwpd-stream-0.9.lib;libwpd-0.9.lib;%(AdditionalDependencies)</AdditionalDependencies>
+       <OutputFile>Release\bin\cmx2xhtml.exe</OutputFile>
+       <SuppressStartupBanner>true</SuppressStartupBanner>
+       <AdditionalLibraryDirectories>Release\lib;$(LIBWPD_LIB_DIR);$(LCMS2_LIB_DIR);$(ZLIB_LIB_DIR);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+--- cdr/build/win32/libcdr.vcproj	2012-10-06 06:45:36.483316900 +0200
++++ cdr/build/win32/libcdr.vcproj	2012-10-06 06:46:42.216009100 +0200
+@@ -67,7 +67,7 @@
+ 			/>
+ 			<Tool
+ 				Name="VCLibrarianTool"
+-				OutputFile="Debug\lib\libcdr-0.2.lib"
++				OutputFile="Debug\lib\libcdr-0.0.lib"
+ 				SuppressStartupBanner="true"
+ 			/>
+ 			<Tool
+@@ -141,7 +141,7 @@
+ 			/>
+ 			<Tool
+ 				Name="VCLibrarianTool"
+-				OutputFile="Release\lib\libcdr-0.2.lib"
++				OutputFile="Release\lib\libcdr-0.0.lib"
+ 				SuppressStartupBanner="true"
+ 			/>
+ 			<Tool
+--- cdr/build/win32/libcdr.vcxproj	2012-10-06 06:45:36.483316900 +0200
++++ cdr/build/win32/libcdr.vcxproj	2012-10-06 06:46:42.231633700 +0200
+@@ -61,7 +61,7 @@
+       <Culture>0x0409</Culture>
+     </ResourceCompile>
+     <Lib>
+-      <OutputFile>Debug\lib\libcdr-0.2.lib</OutputFile>
++      <OutputFile>Debug\lib\libcdr-0.0.lib</OutputFile>
+       <SuppressStartupBanner>true</SuppressStartupBanner>
+     </Lib>
+     <Bscmake>
+@@ -91,7 +91,7 @@
+       <Culture>0x0409</Culture>
+     </ResourceCompile>
+     <Lib>
+-      <OutputFile>Release\lib\libcdr-0.2.lib</OutputFile>
++      <OutputFile>Release\lib\libcdr-0.0.lib</OutputFile>
+       <SuppressStartupBanner>true</SuppressStartupBanner>
+     </Lib>
+     <Bscmake>

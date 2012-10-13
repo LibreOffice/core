@@ -153,7 +153,7 @@ void ScTempDocCache::Clear()
 //! merge this with ScAreaLink::Refresh
 //! copy directly without a clipboard document?
 
-sal_Bool lcl_CopyData( ScDocument* pSrcDoc, const ScRange& rSrcRange,
+static sal_Bool lcl_CopyData( ScDocument* pSrcDoc, const ScRange& rSrcRange,
                     ScDocument* pDestDoc, const ScAddress& rDestPos )
 {
     SCTAB nSrcTab = rSrcRange.aStart.Tab();
@@ -349,7 +349,7 @@ SC_IMPL_DUMMY_PROPERTY_LISTENER( ScFunctionAccess )
 
 // XFunctionAccess
 
-sal_Bool lcl_AddFunctionToken( ScTokenArray& rArray, const rtl::OUString& rName,const ScCompiler& rCompiler )
+static sal_Bool lcl_AddFunctionToken( ScTokenArray& rArray, const rtl::OUString& rName,const ScCompiler& rCompiler )
 {
     // function names are always case-insensitive
     rtl::OUString aUpper = ScGlobal::pCharClass->uppercase(rName);
@@ -385,7 +385,7 @@ sal_Bool lcl_AddFunctionToken( ScTokenArray& rArray, const rtl::OUString& rName,
     return false;       // no valid function name
 }
 
-void lcl_AddRef( ScTokenArray& rArray, long nStartRow, long nColCount, long nRowCount )
+static void lcl_AddRef( ScTokenArray& rArray, long nStartRow, long nColCount, long nRowCount )
 {
     ScComplexRefData aRef;
     aRef.InitFlags();

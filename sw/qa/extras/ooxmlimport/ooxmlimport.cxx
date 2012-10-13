@@ -47,8 +47,12 @@
 #include <com/sun/star/text/XTextFrame.hpp>
 #include <com/sun/star/text/XTextFramesSupplier.hpp>
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
+#include <com/sun/star/style/BreakType.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/table/ShadowFormat.hpp>
+#include <com/sun/star/view/XSelectionSupplier.hpp>
+#include <com/sun/star/table/BorderLine2.hpp>
+
 
 #include <vcl/svapp.hxx>
 
@@ -91,12 +95,16 @@ public:
     void testInk();
     void testN779834();
     void testN779627();
+    void testN779941();
+    void testN779957();
     void testFdo55187();
     void testN780563();
     void testN780853();
     void testN780843();
     void testShadow();
     void testN782061();
+    void testN782345();
+    void testN783638();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -134,12 +142,16 @@ public:
     CPPUNIT_TEST(testInk);
     CPPUNIT_TEST(testN779834);
     CPPUNIT_TEST(testN779627);
+    CPPUNIT_TEST(testN779941);
+    CPPUNIT_TEST(testN779957);
     CPPUNIT_TEST(testFdo55187);
     CPPUNIT_TEST(testN780563);
     CPPUNIT_TEST(testN780853);
     CPPUNIT_TEST(testN780843);
     CPPUNIT_TEST(testShadow);
     CPPUNIT_TEST(testN782061);
+    CPPUNIT_TEST(testN782345);
+    CPPUNIT_TEST(testN783638);
 #endif
     CPPUNIT_TEST_SUITE_END();
 
@@ -802,7 +814,7 @@ void Test::testN777345()
     Graphic aGraphic(xGraphic);
     // If this changes later, feel free to update it, but make sure it's not
     // the checksum of a white/transparent placeholder rectangle.
-    CPPUNIT_ASSERT_EQUAL(sal_uLong(2404338915U), aGraphic.GetChecksum());
+    CPPUNIT_ASSERT_EQUAL(sal_uLong(3816010727U), aGraphic.GetChecksum());
 }
 
 void Test::testN777337()
@@ -980,7 +992,7 @@ void Test::testShadow()
 
     table::ShadowFormat aShadow;
     xPropertySet->getPropertyValue("ShadowFormat") >>= aShadow;
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(273), sal_Int32(aShadow.ShadowWidth));
+    CPPUNIT_ASSERT(sal_Int32(aShadow.ShadowWidth) > 0);
 }
 
 void Test::testN782061()
@@ -991,6 +1003,91 @@ void Test::testN782061()
     load("n782061.docx");
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(-9), getProperty<sal_Int32>(getRun(getParagraph(1), 2), "CharEscapement"));
+}
+
+void Test::testN782345()
+{
+    /*
+     * The problem was that the page break was inserted before the 3rd para, instead of before the 2nd para.
+     */
+    load("n782345.docx");
+
+    CPPUNIT_ASSERT_EQUAL(style::BreakType_PAGE_BEFORE, getProperty<style::BreakType>(getParagraph(2), "BreakType"));
+}
+
+void Test::testN779941()
+{
+    /*
+     * Make sure top/bottom margins of tables are set to 0 (problem was: bottom margin set to 0.35cm)
+     */
+    load("n779941.docx");
+    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables( ), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xTableProperties(xTables->getByIndex(0), uno::UNO_QUERY);
+    {
+        uno::Any aValue = xTableProperties->getPropertyValue("TopMargin");
+        sal_Int32 nTopMargin;
+        aValue >>= nTopMargin;
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), nTopMargin);
+    }
+    {
+        uno::Any aValue = xTableProperties->getPropertyValue("BottomMargin");
+        sal_Int32 nBottomMargin;
+        aValue >>= nBottomMargin;
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), nBottomMargin);
+    }
+}
+
+void Test::testN779957()
+{
+    /*
+     * n779957.docx contains 4 tables. This test verifies their X position.
+     * We compare cursor position in LibreOffice to table indentation in Office, because it's
+     * where text starts in tables.
+     */
+    sal_Int32 xCoordsFromOffice[] = { 2500, -1000, 0, 0 };
+    sal_Int32 cellLeftMarginFromOffice[] = { 250, 100, 0, 0 };
+
+    load("n779957.docx");
+    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables( ), uno::UNO_QUERY);
+
+    for (int i=0; i<4; i++) {
+        uno::Reference<text::XTextTable> xTable1 (xTables->getByIndex(i), uno::UNO_QUERY);
+        // Verify X coord
+        uno::Reference<view::XSelectionSupplier> xCtrl(xModel->getCurrentController(), uno::UNO_QUERY);
+        xCtrl->select(uno::makeAny(xTable1));
+        uno::Reference<text::XTextViewCursorSupplier> xTextViewCursorSupplier(xCtrl, uno::UNO_QUERY);
+        uno::Reference<text::XTextViewCursor> xCursor(xTextViewCursorSupplier->getViewCursor(), uno::UNO_QUERY);
+        awt::Point pos = xCursor->getPosition();
+        CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Incorrect X coord computed from docx",
+            xCoordsFromOffice[i], pos.X, 1);
+
+        // Verify left margin of 1st cell :
+        //  * Office left margins are measured relative to the right of the border
+        //  * LO left spacing is measured from the center of the border
+        uno::Reference<table::XCell> xCell = xTable1->getCellByName("A1");
+        uno::Reference< beans::XPropertySet > xPropSet(xCell, uno::UNO_QUERY_THROW);
+        sal_Int32 aLeftMargin = -1;
+        xPropSet->getPropertyValue("LeftBorderDistance") >>= aLeftMargin;
+        uno::Any aLeftBorder = xPropSet->getPropertyValue("LeftBorder");
+        table::BorderLine2 aLeftBorderLine;
+        aLeftBorder >>= aLeftBorderLine;
+        CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Incorrect left spacing computed from docx cell margin",
+            cellLeftMarginFromOffice[i], aLeftMargin - 0.5 * aLeftBorderLine.LineWidth, 1);
+    }
+}
+
+void Test::testN783638()
+{
+    // The problem was that the margins of inline images were not zero.
+    load("n783638.docx");
+
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPropertySet(xDraws->getByIndex(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xPropertySet, "LeftMargin"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);

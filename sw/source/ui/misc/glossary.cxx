@@ -92,7 +92,7 @@ using namespace ::ucbhelper;
 using ::rtl::OUString;
 using namespace ::sfx2;
 
-String lcl_GetValidShortCut( const String& rName )
+static String lcl_GetValidShortCut( const String& rName )
 {
     const sal_uInt16 nSz = rName.Len();
 

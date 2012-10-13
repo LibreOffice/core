@@ -59,7 +59,7 @@ namespace
             try
             {
                 uno::Reference< beans::XPropertySet > xDiaProp( xChartDoc->getFirstDiagram(), uno::UNO_QUERY_THROW );
-                xDiaProp->getPropertyValue( C2U( "SortByXValues" ) ) >>= bRet;
+                xDiaProp->getPropertyValue( "SortByXValues" ) >>= bRet;
             }
             catch( const uno::Exception & ex )
             {
@@ -840,7 +840,7 @@ ChartTypeTabPage::ChartTypeTabPage( Window* pParent
     {
         try
         {
-            xProps->getPropertyValue( C2U( "DisableComplexChartTypes" ) ) >>= bDisableComplexChartTypes;
+            xProps->getPropertyValue( "DisableComplexChartTypes" ) >>= bDisableComplexChartTypes;
         }
         catch( const uno::Exception& e )
         {
@@ -1089,7 +1089,7 @@ void ChartTypeTabPage::initializePage()
     uno::Reference< XDiagram > xDiagram( ChartModelHelper::findDiagram( xModel ) );
     DiagramHelper::tTemplateWithServiceName aTemplate =
         DiagramHelper::getTemplateForDiagram( xDiagram, xTemplateManager );
-    ::rtl::OUString aServiceName( aTemplate.second );
+    OUString aServiceName( aTemplate.second );
 
     bool bFound = false;
 

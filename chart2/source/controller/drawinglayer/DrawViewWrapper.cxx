@@ -192,8 +192,8 @@ SdrObject* DrawViewWrapper::getHitObject( const Point& rPnt ) const
     if( pRet )
     {
         //ignore some special shapes
-        rtl::OUString aShapeName = pRet->GetName();
-        if( aShapeName.match(C2U("PlotAreaIncludingAxes")) || aShapeName.match(C2U("PlotAreaExcludingAxes")) )
+        OUString aShapeName = pRet->GetName();
+        if( aShapeName.match("PlotAreaIncludingAxes") || aShapeName.match("PlotAreaExcludingAxes") )
         {
             pRet->SetMarkProtect( true );
             return getHitObject( rPnt );
@@ -300,7 +300,7 @@ SfxItemSet DrawViewWrapper::getPositionAndSizeItemSetFromMarkedObject() const
     return aFullSet;
 }
 
-SdrObject* DrawViewWrapper::getNamedSdrObject( const rtl::OUString& rName ) const
+SdrObject* DrawViewWrapper::getNamedSdrObject( const OUString& rName ) const
 {
     if(rName.isEmpty())
         return 0;

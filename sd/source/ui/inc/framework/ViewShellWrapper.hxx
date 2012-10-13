@@ -23,18 +23,20 @@
 #include "MutexOwner.hxx"
 #include <com/sun/star/drawing/framework/XView.hpp>
 #include <com/sun/star/drawing/framework/XRelocatableResource.hpp>
+#include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <osl/mutex.hxx>
-#include <cppuhelper/compbase4.hxx>
+#include <cppuhelper/compbase5.hxx>
 #include <cppuhelper/implbase1.hxx>
 
 #include <boost/shared_ptr.hpp>
 
 namespace {
 
-typedef ::cppu::WeakComponentImplHelper4    <   ::com::sun::star::lang::XUnoTunnel
+typedef ::cppu::WeakComponentImplHelper5    <   ::com::sun::star::lang::XUnoTunnel
                                             ,   ::com::sun::star::awt::XWindowListener
+                                            ,   ::com::sun::star::view::XSelectionSupplier
                                             ,   ::com::sun::star::drawing::framework::XRelocatableResource
                                             ,   ::com::sun::star::drawing::framework::XView
                                             >   ViewShellWrapperInterfaceBase;
@@ -42,6 +44,7 @@ typedef ::cppu::WeakComponentImplHelper4    <   ::com::sun::star::lang::XUnoTunn
 } // end of anonymous namespace.
 
 namespace sd { class ViewShell; }
+namespace sd { namespace slidesorter { class SlideSorterViewShell; } }
 
 namespace sd { namespace framework {
 
@@ -72,6 +75,7 @@ public:
     virtual ~ViewShellWrapper (void);
 
     virtual void SAL_CALL disposing (void);
+    virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
 
     static const ::com::sun::star::uno::Sequence<sal_Int8>& getUnoTunnelId (void);
 
@@ -95,6 +99,12 @@ public:
     virtual sal_Bool SAL_CALL isAnchorOnly (void)
         throw (com::sun::star::uno::RuntimeException);
 
+    // XSelectionSupplier
+
+    virtual sal_Bool SAL_CALL select( const ::com::sun::star::uno::Any& aSelection ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Any SAL_CALL getSelection(  ) throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL addSelectionChangeListener( const ::com::sun::star::uno::Reference< ::com::sun::star::view::XSelectionChangeListener >& xListener ) throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removeSelectionChangeListener( const ::com::sun::star::uno::Reference< ::com::sun::star::view::XSelectionChangeListener >& xListener ) throw(::com::sun::star::uno::RuntimeException);
 
     // XRelocatableResource
 
@@ -131,6 +141,7 @@ public:
 
 private:
     ::boost::shared_ptr< ViewShell >                                                            mpViewShell;
+    ::boost::shared_ptr< ::sd::slidesorter::SlideSorterViewShell >                              mpSlideSorterViewShell;
     const ::com::sun::star::uno::Reference< com::sun::star::drawing::framework::XResourceId >   mxViewId;
     ::com::sun::star::uno::Reference<com::sun::star::awt::XWindow >                             mxWindow;
 };

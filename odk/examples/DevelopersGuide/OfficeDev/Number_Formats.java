@@ -50,7 +50,6 @@ import com.sun.star.uno.XComponentContext;
 
 /** Create a spreadsheet document and provide access to a sheet framework that
     is then used to modify some number formats.
-    @author Eike Rathke
  */
 public class Number_Formats
 {

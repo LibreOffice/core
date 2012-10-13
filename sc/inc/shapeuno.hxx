@@ -72,7 +72,7 @@ class ScShapeObj    :public ScShapeObj_Base
                     ,public ScShapeObj_TextBase
 {
 private:
-friend  ScMacroInfo* lcl_getShapeHyperMacroInfo( ScShapeObj* pShape, sal_Bool bCreate );
+    friend ScMacroInfo* ScShapeObj_getShapeHyperMacroInfo( ScShapeObj* pShape, sal_Bool bCreate );
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XAggregation > mxShapeAgg;
     // cached pointers to avoid repeated queryAggregation calls:
     ::com::sun::star::beans::XPropertySet*                                  pShapePropertySet;

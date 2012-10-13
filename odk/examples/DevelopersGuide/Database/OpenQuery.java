@@ -45,10 +45,6 @@ import com.sun.star.beans.XPropertySet;
  * Created on 6. Juli 2002, 10:25
  */
 
-/**
- *
- * @author  dschulten
- */
 public class OpenQuery {
 
     private XComponentContext xContext = null;

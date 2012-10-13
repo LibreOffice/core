@@ -446,7 +446,17 @@
             </node>
             <node oor:name=".uno:ConditionalFormatDialog" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">Conditional Formatting...</value>
+                    <value xml:lang="en-US">Condition...</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:ColorScaleFormatDialog" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">Color Scale...</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:DataBarFormatDialog" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">Data Bar...</value>
                 </prop>
             </node>
             <node oor:name=".uno:ConditionalFormatManagerDialog" oor:op="replace">

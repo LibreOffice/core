@@ -442,7 +442,7 @@ public:
 
     void            SetDoubleClickHdl(const Link &rLink) { aDoubleClickLink = rLink; }
     void            SetDropHdl(const Link &rLink) { aDropLink = rLink; }
-        using SvLBox::GetParent;
+    using SvTreeListBox::GetParent;
     const String&   GetParent() const { return aParent; }
     const String&   GetStyle() const { return aStyle; }
     void            MakeExpanded_Impl(ExpandedEntries_t& rEntries) const;
@@ -2497,7 +2497,7 @@ IMPL_LINK_INLINE_START( SfxTemplateDialog_Impl, ToolBoxLSelect, ToolBox *, pBox 
 IMPL_LINK_INLINE_END( SfxTemplateDialog_Impl, ToolBoxLSelect, ToolBox *, pBox )
 
 //-------------------------------------------------------------------------
-::rtl::OUString lcl_GetLabel(uno::Any& rAny)
+static ::rtl::OUString lcl_GetLabel(uno::Any& rAny)
 {
     ::rtl::OUString sRet;
     uno::Sequence< beans::PropertyValue >aPropSeq;

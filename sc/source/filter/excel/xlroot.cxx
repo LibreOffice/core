@@ -151,7 +151,7 @@ XclRootData::XclRootData( XclBiff eBiff, SfxMedium& rMedium,
     try
     {
         Reference< XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory(), UNO_SET_THROW );
-        Reference< XFramesSupplier > xFramesSupp( xFactory->createInstance( CREATE_OUSTRING( "com.sun.star.frame.Desktop" ) ), UNO_QUERY_THROW );
+        Reference< XFramesSupplier > xFramesSupp( xFactory->createInstance( "com.sun.star.frame.Desktop" ), UNO_QUERY_THROW );
         Reference< XFrame > xFrame( xFramesSupp->getActiveFrame(), UNO_SET_THROW );
         Reference< XDevice > xDevice( xFrame->getContainerWindow(), UNO_QUERY_THROW );
         DeviceInfo aDeviceInfo = xDevice->getInfo();
@@ -182,7 +182,6 @@ XclRoot::XclRoot( XclRootData& rRootData ) :
 #endif
 
     // filter tracer
-    // do not use CREATE_OUSTRING for conditional expression
     mrData.mxTracer.reset( new XclTracer( GetDocUrl() ) );
 }
 

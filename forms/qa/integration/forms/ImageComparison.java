@@ -24,10 +24,6 @@
 
 package integration.forms;
 
-/**
- *
- * @author  fs93730
- */
 public final class ImageComparison implements com.sun.star.awt.XImageConsumer
 {
 

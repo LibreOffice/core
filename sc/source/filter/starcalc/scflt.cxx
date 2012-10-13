@@ -338,7 +338,7 @@ static void lcl_ReadChartTypeData(SvStream& rStream, Sc10ChartTypeData& rTypeDat
     rStream.Read(&rTypeData.Reserved, sizeof(rTypeData.Reserved));
 }
 
-double lcl_PascalToDouble(sal_Char* tp6)
+static double lcl_PascalToDouble(sal_Char* tp6)
 {
     sal_uInt8* pnUnsigned = reinterpret_cast< sal_uInt8* >( tp6 );
     // biased exponent
@@ -386,7 +386,7 @@ static void lcl_ChangeColor( sal_uInt16 nIndex, Color& rColor )
     rColor.SetColor( aCol );
 }
 
-String lcl_MakeOldPageStyleFormatName( sal_uInt16 i )
+static String lcl_MakeOldPageStyleFormatName( sal_uInt16 i )
 {
     String  aName = ScGlobal::GetRscString( STR_PAGESTYLE );
     aName.AppendAscii( " " );

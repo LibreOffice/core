@@ -1020,7 +1020,7 @@ void LookString( SwHash** ppTbl, sal_uInt16 nSize, const String& rName,
         rRet.Erase();
 }
 
-String lcl_GetDBVarName( SwDoc& rDoc, SwDBNameInfField& rDBFld )
+static String lcl_GetDBVarName( SwDoc& rDoc, SwDBNameInfField& rDBFld )
 {
     SwDBData aDBData( rDBFld.GetDBData( &rDoc ));
     String sDBNumNm;
@@ -1038,7 +1038,7 @@ String lcl_GetDBVarName( SwDoc& rDoc, SwDBNameInfField& rDBFld )
     return sDBNumNm;
 }
 
-void lcl_CalcFld( SwDoc& rDoc, SwCalc& rCalc, const _SetGetExpFld& rSGEFld,
+static void lcl_CalcFld( SwDoc& rDoc, SwCalc& rCalc, const _SetGetExpFld& rSGEFld,
                         SwNewDBMgr* pMgr )
 {
     const SwTxtFld* pTxtFld = rSGEFld.GetFld();
@@ -1684,7 +1684,7 @@ void SwDoc::SetInitDBFields( sal_Bool b )
 /*--------------------------------------------------------------------
     Description: Get all databases that are used by fields
  --------------------------------------------------------------------*/
-String lcl_DBDataToString(const SwDBData& rData)
+static String lcl_DBDataToString(const SwDBData& rData)
 {
     String sRet = rData.sDataSource;
     sRet += DB_DELIM;

@@ -235,7 +235,7 @@ sal_Bool SwFEShell::Copy( SwDoc* pClpDoc, const String* pNewClpTxt )
     return bRet;
 }
 
-const Point &lcl_FindBasePos( const SwFrm *pFrm, const Point &rPt )
+static const Point &lcl_FindBasePos( const SwFrm *pFrm, const Point &rPt )
 {
     const SwFrm *pF = pFrm;
     while ( pF && !pF->Frm().IsInside( rPt ) )
@@ -251,7 +251,7 @@ const Point &lcl_FindBasePos( const SwFrm *pFrm, const Point &rPt )
         return pFrm->Frm().Pos();
 }
 
-sal_Bool lcl_SetAnchor( const SwPosition& rPos, const SwNode& rNd, SwFlyFrm* pFly,
+static sal_Bool lcl_SetAnchor( const SwPosition& rPos, const SwNode& rNd, SwFlyFrm* pFly,
                 const Point& rInsPt, SwFEShell& rDestShell, SwFmtAnchor& rAnchor,
                 Point& rNewPos, sal_Bool bCheckFlyRecur )
 {
@@ -1303,7 +1303,7 @@ sal_Bool SwFEShell::GetDrawObjGraphic( sal_uLong nFmt, Graphic& rGrf ) const
 
 // #i50824#
 // replace method <lcl_RemoveOleObjsFromSdrModel> by <lcl_ConvertSdrOle2ObjsToSdrGrafObjs>
-void lcl_ConvertSdrOle2ObjsToSdrGrafObjs( SdrModel* _pModel )
+static void lcl_ConvertSdrOle2ObjsToSdrGrafObjs( SdrModel* _pModel )
 {
     for ( sal_uInt16 nPgNum = 0; nPgNum < _pModel->GetPageCount(); ++nPgNum )
     {

@@ -16,7 +16,6 @@
  * This code is base on the Android Gallery widget and was Created
  * by Neil Davies neild001 'at' gmail dot com to be a Coverflow widget
  *
- * @author Neil Davies
  */
 package pl.polidea.coverflow;
 

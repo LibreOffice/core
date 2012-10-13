@@ -1,55 +1,61 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*************************************************************************
+/*
+ * This file is part of the LibreOffice project.
  *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * This file incorporates work covered by the following license notice:
  *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
 
+
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_ucb.hxx"
 
 #include <string.h>
 #include "DAVProperties.hxx"
 
-using namespace webdav_ucp;
+using namespace http_dav_ucp;
 
-const ::rtl::OUString DAVProperties::CREATIONDATE("DAV:creationdate");
-const ::rtl::OUString DAVProperties::DISPLAYNAME("DAV:displayname");
-const ::rtl::OUString DAVProperties::GETCONTENTLANGUAGE("DAV:getcontentlanguage");
-const ::rtl::OUString DAVProperties::GETCONTENTLENGTH("DAV:getcontentlength");
-const ::rtl::OUString DAVProperties::GETCONTENTTYPE("DAV:getcontenttype");
-const ::rtl::OUString DAVProperties::GETETAG("DAV:getetag");
-const ::rtl::OUString DAVProperties::GETLASTMODIFIED("DAV:getlastmodified");
-const ::rtl::OUString DAVProperties::LOCKDISCOVERY("DAV:lockdiscovery");
-const ::rtl::OUString DAVProperties::RESOURCETYPE("DAV:resourcetype");
-const ::rtl::OUString DAVProperties::SOURCE("DAV:source");
-const ::rtl::OUString DAVProperties::SUPPORTEDLOCK("DAV:supportedlock");
+const ::rtl::OUString DAVProperties::CREATIONDATE =
+                ::rtl::OUString::createFromAscii( "DAV:creationdate" );
+const ::rtl::OUString DAVProperties::DISPLAYNAME =
+                ::rtl::OUString::createFromAscii( "DAV:displayname" );
+const ::rtl::OUString DAVProperties::GETCONTENTLANGUAGE =
+                ::rtl::OUString::createFromAscii( "DAV:getcontentlanguage" );
+const ::rtl::OUString DAVProperties::GETCONTENTLENGTH =
+                ::rtl::OUString::createFromAscii( "DAV:getcontentlength" );
+const ::rtl::OUString DAVProperties::GETCONTENTTYPE =
+                ::rtl::OUString::createFromAscii( "DAV:getcontenttype" );
+const ::rtl::OUString DAVProperties::GETETAG =
+                ::rtl::OUString::createFromAscii( "DAV:getetag" );
+const ::rtl::OUString DAVProperties::GETLASTMODIFIED =
+                ::rtl::OUString::createFromAscii( "DAV:getlastmodified" );
+const ::rtl::OUString DAVProperties::LOCKDISCOVERY =
+                ::rtl::OUString::createFromAscii( "DAV:lockdiscovery" );
+const ::rtl::OUString DAVProperties::RESOURCETYPE =
+                ::rtl::OUString::createFromAscii( "DAV:resourcetype" );
+const ::rtl::OUString DAVProperties::SUPPORTEDLOCK =
+                ::rtl::OUString::createFromAscii( "DAV:supportedlock" );
 
-const ::rtl::OUString DAVProperties::EXECUTABLE("http://apache.org/dav/props/executable");
+const ::rtl::OUString DAVProperties::EXECUTABLE =
+                ::rtl::OUString::createFromAscii(
+                                "http://apache.org/dav/props/executable" );
 
 // -------------------------------------------------------------------
 // static
-void DAVProperties::createNeonPropName( const rtl::OUString & rFullName,
-                                        NeonPropName & rName )
+void DAVProperties::createSerfPropName( const rtl::OUString & rFullName,
+                                        SerfPropName & rName )
 {
     if ( rFullName.compareToAscii( RTL_CONSTASCII_STRINGPARAM( "DAV:" ) ) == 0 )
     {
@@ -57,7 +63,7 @@ void DAVProperties::createNeonPropName( const rtl::OUString & rFullName,
         rName.name
             = strdup( rtl::OUStringToOString(
                         rFullName.copy( RTL_CONSTASCII_LENGTH( "DAV:" ) ),
-                        RTL_TEXTENCODING_UTF8 ).getStr() );
+                                        RTL_TEXTENCODING_UTF8 ) );
     }
     else if ( rFullName.compareToAscii( RTL_CONSTASCII_STRINGPARAM(
                 "http://apache.org/dav/props/" ) ) == 0 )
@@ -68,7 +74,7 @@ void DAVProperties::createNeonPropName( const rtl::OUString & rFullName,
                         rFullName.copy(
                             RTL_CONSTASCII_LENGTH(
                                 "http://apache.org/dav/props/" ) ),
-                        RTL_TEXTENCODING_UTF8 ).getStr() );
+                            RTL_TEXTENCODING_UTF8 ) );
     }
     else if ( rFullName.compareToAscii( RTL_CONSTASCII_STRINGPARAM(
                 "http://ucb.openoffice.org/dav/props/" ) ) == 0 )
@@ -79,7 +85,7 @@ void DAVProperties::createNeonPropName( const rtl::OUString & rFullName,
                         rFullName.copy(
                             RTL_CONSTASCII_LENGTH(
                                 "http://ucb.openoffice.org/dav/props/" ) ),
-                        RTL_TEXTENCODING_UTF8 ).getStr() );
+                            RTL_TEXTENCODING_UTF8 ) );
     }
     else if ( rFullName.compareToAscii( RTL_CONSTASCII_STRINGPARAM(
                 "<prop:" ) ) == 0 )
@@ -93,11 +99,11 @@ void DAVProperties::createNeonPropName( const rtl::OUString & rFullName,
 
         sal_Int32 nStart = RTL_CONSTASCII_LENGTH( "<prop:" );
         sal_Int32 nLen = aFullName.indexOf( ' ' ) - nStart;
-        rName.name = strdup( aFullName.copy( nStart, nLen ).getStr() );
+        rName.name = strdup( aFullName.copy( nStart, nLen ) );
 
         nStart = aFullName.indexOf( '=', nStart + nLen ) + 2; // after ="
         nLen = aFullName.getLength() - RTL_CONSTASCII_LENGTH( "\">" ) - nStart;
-        rName.nspace = strdup( aFullName.copy( nStart, nLen ).getStr() );
+        rName.nspace = strdup( aFullName.copy( nStart, nLen ) );
     }
     else
     {
@@ -105,7 +111,7 @@ void DAVProperties::createNeonPropName( const rtl::OUString & rFullName,
         rName.nspace = "http://ucb.openoffice.org/dav/props/";
         rName.name
             = strdup( rtl::OUStringToOString( rFullName,
-                                              RTL_TEXTENCODING_UTF8 ).getStr() );
+                                              RTL_TEXTENCODING_UTF8 ) );
     }
 }
 
@@ -120,7 +126,7 @@ void DAVProperties::createUCBPropName( const char * nspace,
     rtl::OUString aName
         = rtl::OStringToOUString( name,   RTL_TEXTENCODING_UTF8 );
 
-    if ( aNameSpace.isEmpty() )
+    if ( !aNameSpace.getLength() )
     {
         // Some servers send XML without proper namespaces. Assume "DAV:"
         // in this case, if name is a well-known dav property name.
@@ -135,9 +141,10 @@ void DAVProperties::createUCBPropName( const char * nspace,
              DAVProperties::GETCONTENTLENGTH.matchIgnoreAsciiCase( aName, 4 ) ||
              DAVProperties::GETCONTENTTYPE.matchIgnoreAsciiCase( aName, 4 ) ||
              DAVProperties::GETETAG.matchIgnoreAsciiCase( aName, 4 ) ||
-             DAVProperties::GETLASTMODIFIED.matchIgnoreAsciiCase( aName, 4 ) ||
-             DAVProperties::SOURCE.matchIgnoreAsciiCase( aName, 4 ) )
-            aNameSpace = rtl::OUString(  "DAV:"  );
+             DAVProperties::GETLASTMODIFIED.matchIgnoreAsciiCase( aName, 4 ) )
+        {
+            aNameSpace = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DAV:" ) );
+        }
     }
 
     // Note: Concatenating strings BEFORE comparing against known namespaces
@@ -166,17 +173,17 @@ void DAVProperties::createUCBPropName( const char * nspace,
     else
     {
         // Create property name that encodes, namespace and name ( XML ).
-        rFullName  = rtl::OUString("<prop:");
+        rFullName  = rtl::OUString::createFromAscii( "<prop:" );
         rFullName += aName;
-        rFullName += rtl::OUString( " xmlns:prop=\"" );
+        rFullName += rtl::OUString::createFromAscii( " xmlns:prop=\"" );
         rFullName += aNameSpace;
-        rFullName += rtl::OUString( "\">" );
+        rFullName += rtl::OUString::createFromAscii( "\">" );
     }
 }
 
 // -------------------------------------------------------------------
 // static
-bool DAVProperties::isUCBDeadProperty( const NeonPropName & rName )
+bool DAVProperties::isUCBDeadProperty( const SerfPropName & rName )
 {
     return ( rName.nspace &&
              ( rtl_str_compareIgnoreAsciiCase(

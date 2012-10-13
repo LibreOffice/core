@@ -67,7 +67,7 @@ ScEditWindow* GetScEditWindow ()
 
 //========================================================================
 
-void lcl_GetFieldData( ScHeaderFieldData& rData )
+static void lcl_GetFieldData( ScHeaderFieldData& rData )
 {
     SfxViewShell* pShell = SfxViewShell::Current();
     if (pShell)

@@ -258,7 +258,10 @@ void ScDLL::Init()
     ScSolverDlgWrapper          ::RegisterChildWindow(false, pMod);
     ScOptSolverDlgWrapper       ::RegisterChildWindow(false, pMod);
     ScNameDlgWrapper            ::RegisterChildWindow(false, pMod);
-    ScNameDefDlgWrapper            ::RegisterChildWindow(false, pMod);
+    ScNameDefDlgWrapper         ::RegisterChildWindow(false, pMod);
+    ScCondFormatConditionDlgWrapper ::RegisterChildWindow(false, pMod);
+    ScCondFormatColorScaleDlgWrapper ::RegisterChildWindow(false, pMod);
+    ScCondFormatDataBarDlgWrapper ::RegisterChildWindow(false, pMod);
     ScPivotLayoutWrapper        ::RegisterChildWindow(false, pMod);
     ScTabOpDlgWrapper           ::RegisterChildWindow(false, pMod);
     ScFilterDlgWrapper          ::RegisterChildWindow(false, pMod);

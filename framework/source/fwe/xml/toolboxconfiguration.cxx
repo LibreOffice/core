@@ -32,7 +32,7 @@
 #include <xml/saxnamespacefilter.hxx>
 #include <services.h>
 
-#include <com/sun/star/xml/sax/XParser.hpp>
+#include <com/sun/star/xml/sax/Parser.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -51,10 +51,10 @@ namespace framework
 {
 
 static Reference< XParser > GetSaxParser(
-    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory
+    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext
     )
 {
-    return Reference< XParser >( xServiceFactory->createInstance( SERVICENAME_SAXPARSER), UNO_QUERY);
+    return Parser::create(rxContext);
 }
 
 static Reference< XDocumentHandler > GetSaxWriter(
@@ -65,11 +65,11 @@ static Reference< XDocumentHandler > GetSaxWriter(
 }
 
 sal_Bool ToolBoxConfiguration::LoadToolBox(
-    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
+    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
     const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& rInputStream,
     const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer >& rToolbarConfiguration )
 {
-    Reference< XParser > xParser( GetSaxParser( xServiceFactory ) );
+    Reference< XParser > xParser( GetSaxParser( rxContext ) );
 
     // connect stream to input stream to the parser
     InputSource aInputSource;

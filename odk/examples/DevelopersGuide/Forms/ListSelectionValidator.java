@@ -16,10 +16,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-/**
- *
- * @author  fs@openoffice.org
- */
 public class ListSelectionValidator extends ControlValidator
 {
     /** Creates a new instance of ListSelectionValidator */

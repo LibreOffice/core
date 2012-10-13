@@ -332,6 +332,8 @@ void ScrollBar::ImplCalc( sal_Bool bUpdate )
     Rectangle& maTrackRect = mpData->maTrackRect;  // TODO: remove when maTrackRect is no longer in mpData
     if ( mbCalcSize )
     {
+        Size aOldSize = GetOptimalSize(WINDOWSIZE_PREFERRED);
+
         const Rectangle aControlRegion( Point(0,0), aSize );
         Rectangle aBtn1Region, aBtn2Region, aTrackRegion, aBoundingRegion;
 
@@ -422,6 +424,12 @@ void ScrollBar::ImplCalc( sal_Bool bUpdate )
             maThumbRect.SetEmpty();
 
         mbCalcSize = sal_False;
+
+        Size aNewSize = GetOptimalSize(WINDOWSIZE_PREFERRED);
+        if (aOldSize != aNewSize)
+        {
+            queue_resize();
+        }
     }
 
     if ( mnThumbPixRange )
@@ -1498,6 +1506,17 @@ void ScrollBar::SetVisibleSize( long nNewSize )
             mnThumbPos = mnMinRange;
         StateChanged( STATE_CHANGE_DATA );
     }
+}
+
+Size ScrollBar::GetOptimalSize(WindowSizeType) const
+{
+    Rectangle aCtrlRegion;
+    aCtrlRegion.Union(maBtn1Rect);
+    aCtrlRegion.Union(maBtn2Rect);
+    aCtrlRegion.Union(maPage1Rect);
+    aCtrlRegion.Union(maPage2Rect);
+    aCtrlRegion.Union(maThumbRect);
+    return aCtrlRegion.GetSize();
 }
 
 // =======================================================================

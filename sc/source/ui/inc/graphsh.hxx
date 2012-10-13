@@ -47,6 +47,9 @@ public:
 
     void    ExecuteExternalEdit(SfxRequest& rReq);
     void    GetExternalEditState(SfxItemSet &rSet);
+
+    void    ExecuteCompressGraphic(SfxRequest& rReq);
+    void    GetCompressGraphicState(SfxItemSet &rSet);
 };
 
 #endif

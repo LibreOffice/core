@@ -80,8 +80,6 @@ const sal_uInt16 nRulerRole         = AccessibleRole::TEXT;
 const sal_uInt16 nGridRole          = AccessibleRole::TABLE;
 const sal_uInt16 nCellRole          = AccessibleRole::TEXT;
 
-#define CREATE_OUSTRING( name )     OUString( RTL_CONSTASCII_USTRINGPARAM( name ) )
-
 #define RULER_IMPL_NAME             "ScAccessibleCsvRuler"
 #define GRID_IMPL_NAME              "ScAccessibleCsvGrid"
 #define CELL_IMPL_NAME              "ScAccessibleCsvCell"
@@ -286,7 +284,7 @@ Point ScAccessibleCsvControl::implGetAbsPos( const Point& rPos ) const
 // Ruler ======================================================================
 
 /** Converts a ruler cursor position to API text index. */
-sal_Int32 lcl_GetApiPos( sal_Int32 nRulerPos )
+static sal_Int32 lcl_GetApiPos( sal_Int32 nRulerPos )
 {
     sal_Int32 nApiPos = nRulerPos;
     sal_Int32 nStart = (nRulerPos - 1) / 10;
@@ -300,7 +298,7 @@ sal_Int32 lcl_GetApiPos( sal_Int32 nRulerPos )
 }
 
 /** Converts an API text index to a ruler cursor position. */
-sal_Int32 lcl_GetRulerPos( sal_Int32 nApiPos )
+static sal_Int32 lcl_GetRulerPos( sal_Int32 nApiPos )
 {
     sal_Int32 nDiv = 10;
     sal_Int32 nExp = 10;
@@ -320,7 +318,7 @@ sal_Int32 lcl_GetRulerPos( sal_Int32 nApiPos )
 }
 
 /** Expands the sequence's size and returns the base index of the new inserted elements. */
-inline sal_Int32 lcl_ExpandSequence( Sequence< PropertyValue >& rSeq, sal_Int32 nExp )
+static inline sal_Int32 lcl_ExpandSequence( Sequence< PropertyValue >& rSeq, sal_Int32 nExp )
 {
     OSL_ENSURE( nExp > 0, "lcl_ExpandSequence - invalid value" );
     rSeq.realloc( rSeq.getLength() + nExp );
@@ -328,27 +326,27 @@ inline sal_Int32 lcl_ExpandSequence( Sequence< PropertyValue >& rSeq, sal_Int32 
 }
 
 /** Fills the property value rVal with the specified name and value from the item. */
-inline void lcl_FillProperty( PropertyValue& rVal, const OUString& rPropName, const SfxPoolItem& rItem, sal_uInt8 nMID )
+static inline void lcl_FillProperty( PropertyValue& rVal, const OUString& rPropName, const SfxPoolItem& rItem, sal_uInt8 nMID )
 {
     rVal.Name = rPropName;
     rItem.QueryValue( rVal.Value, nMID );
 }
 
 /** Fills the sequence with all font attributes of rFont. */
-void lcl_FillFontAttributes( Sequence< PropertyValue >& rSeq, const Font& rFont )
+static void lcl_FillFontAttributes( Sequence< PropertyValue >& rSeq, const Font& rFont )
 {
     SvxFontItem aFontItem( rFont.GetFamily(), rFont.GetName(), rFont.GetStyleName(), rFont.GetPitch(), rFont.GetCharSet(), ATTR_FONT );
     SvxFontHeightItem aHeightItem( rFont.GetSize().Height(), 100, ATTR_FONT_HEIGHT );
     SvxLanguageItem aLangItem( rFont.GetLanguage(), ATTR_FONT_LANGUAGE );
 
     sal_Int32 nIndex = lcl_ExpandSequence( rSeq, 7 );
-    lcl_FillProperty( rSeq[ nIndex++ ], CREATE_OUSTRING( "CharFontName" ),      aFontItem,   MID_FONT_FAMILY_NAME );
-    lcl_FillProperty( rSeq[ nIndex++ ], CREATE_OUSTRING( "CharFontFamily" ),    aFontItem,   MID_FONT_FAMILY );
-    lcl_FillProperty( rSeq[ nIndex++ ], CREATE_OUSTRING( "CharFontStyleName" ), aFontItem,   MID_FONT_STYLE_NAME );
-    lcl_FillProperty( rSeq[ nIndex++ ], CREATE_OUSTRING( "CharFontCharSet" ),   aFontItem,   MID_FONT_PITCH );
-    lcl_FillProperty( rSeq[ nIndex++ ], CREATE_OUSTRING( "CharFontPitch" ),     aFontItem,   MID_FONT_CHAR_SET );
-    lcl_FillProperty( rSeq[ nIndex++ ], CREATE_OUSTRING( "CharHeight" ),        aHeightItem, MID_FONTHEIGHT );
-    lcl_FillProperty( rSeq[ nIndex++ ], CREATE_OUSTRING( "CharLocale" ),        aLangItem,   MID_LANG_LOCALE );
+    lcl_FillProperty( rSeq[ nIndex++ ], "CharFontName",      aFontItem,   MID_FONT_FAMILY_NAME );
+    lcl_FillProperty( rSeq[ nIndex++ ], "CharFontFamily",    aFontItem,   MID_FONT_FAMILY );
+    lcl_FillProperty( rSeq[ nIndex++ ], "CharFontStyleName", aFontItem,   MID_FONT_STYLE_NAME );
+    lcl_FillProperty( rSeq[ nIndex++ ], "CharFontCharSet",   aFontItem,   MID_FONT_PITCH );
+    lcl_FillProperty( rSeq[ nIndex++ ], "CharFontPitch",     aFontItem,   MID_FONT_CHAR_SET );
+    lcl_FillProperty( rSeq[ nIndex++ ], "CharHeight",        aHeightItem, MID_FONTHEIGHT );
+    lcl_FillProperty( rSeq[ nIndex++ ], "CharLocale",        aLangItem,   MID_LANG_LOCALE );
 }
 
 
@@ -757,7 +755,7 @@ void SAL_CALL ScAccessibleCsvRuler::release() throw ()
 
 OUString SAL_CALL ScAccessibleCsvRuler::getImplementationName() throw( RuntimeException )
 {
-    return CREATE_OUSTRING( RULER_IMPL_NAME );
+    return OUString( RULER_IMPL_NAME );
 }
 
 
@@ -887,13 +885,13 @@ sal_Int32 ScAccessibleCsvRuler::implGetLastEqualFormatted( sal_Int32 nApiPos )
 // Grid =======================================================================
 
 /** Converts a grid columnm index to an API column index. */
-inline sal_Int32 lcl_GetApiColumn( sal_uInt32 nGridColumn )
+static inline sal_Int32 lcl_GetApiColumn( sal_uInt32 nGridColumn )
 {
     return (nGridColumn != CSV_COLUMN_HEADER) ? static_cast< sal_Int32 >( nGridColumn + 1 ) : 0;
 }
 
 /** Converts an API columnm index to a ScCsvGrid column index. */
-inline sal_uInt32 lcl_GetGridColumn( sal_Int32 nApiColumn )
+static inline sal_uInt32 lcl_GetGridColumn( sal_Int32 nApiColumn )
 {
     return (nApiColumn > 0) ? static_cast< sal_uInt32 >( nApiColumn - 1 ) : CSV_COLUMN_HEADER;
 }
@@ -1267,7 +1265,7 @@ void SAL_CALL ScAccessibleCsvGrid::release() throw ()
 
 OUString SAL_CALL ScAccessibleCsvGrid::getImplementationName() throw( RuntimeException )
 {
-    return CREATE_OUSTRING( GRID_IMPL_NAME );
+    return OUString( GRID_IMPL_NAME );
 }
 
 
@@ -1564,7 +1562,7 @@ IMPLEMENT_FORWARD_XTYPEPROVIDER2( ScAccessibleCsvCell, ScAccessibleCsvControl, A
 
 OUString SAL_CALL ScAccessibleCsvCell::getImplementationName() throw( RuntimeException )
 {
-    return CREATE_OUSTRING( CELL_IMPL_NAME );
+    return OUString( CELL_IMPL_NAME );
 }
 
 // helpers --------------------------------------------------------------------

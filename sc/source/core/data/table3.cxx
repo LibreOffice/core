@@ -387,10 +387,14 @@ short ScTable::CompareCell( sal_uInt16 nSort,
     if (pCell1)
     {
         eType1 = pCell1->GetCellType();
+        if (eType1 == CELLTYPE_NOTE)
+            pCell1 = NULL;
     }
     if (pCell2)
     {
         eType2 = pCell2->GetCellType();
+        if (eType2 == CELLTYPE_NOTE)
+            pCell2 = NULL;
     }
 
     if (pCell1)
@@ -863,7 +867,7 @@ void ScTable::RemoveSubTotals( ScSubTotalParam& rParam )
 
 //  harte Zahlenformate loeschen (fuer Ergebnisformeln)
 
-void lcl_RemoveNumberFormat( ScTable* pTab, SCCOL nCol, SCROW nRow )
+static void lcl_RemoveNumberFormat( ScTable* pTab, SCCOL nCol, SCROW nRow )
 {
     const ScPatternAttr* pPattern = pTab->GetPattern( nCol, nRow );
     if ( pPattern->GetItemSet().GetItemState( ATTR_VALUE_FORMAT, false )
@@ -2300,23 +2304,6 @@ void ScTable::UpdateSelectionFunction( ScFunctionData& rData,
         for (nCol=nStartCol; nCol<=nEndCol && !rData.bError; nCol++)
             if ( !pColFlags || !ColHidden(nCol) )
                 aCol[nCol].UpdateAreaFunction( rData, *mpHiddenRows, nStartRow, nEndRow );
-}
-
-void ScTable::FindConditionalFormat( sal_uLong nKey, ScRangeList& rList ) const
-{
-    SCROW nStartRow = 0, nEndRow = 0;
-    for (SCCOL nCol=0; nCol<=MAXCOL; nCol++)
-    {
-        ScAttrIterator* pIter = aCol[nCol].CreateAttrIterator( 0, MAXROW );
-        const ScPatternAttr* pPattern = pIter->Next( nStartRow, nEndRow );
-        while (pPattern)
-        {
-            if (((SfxUInt32Item&)pPattern->GetItem(ATTR_CONDITIONAL)).GetValue() == nKey)
-                rList.Join( ScRange(nCol,nStartRow,nTab, nCol,nEndRow,nTab) );
-            pPattern = pIter->Next( nStartRow, nEndRow );
-        }
-        delete pIter;
-    }
 }
 
 void ScTable::IncRecalcLevel()

@@ -20,6 +20,7 @@
 #include "fpsmartcontent.hxx"
 
 #include <com/sun/star/container/XChild.hpp>
+#include <com/sun/star/task/InteractionHandler.hpp>
 #include <com/sun/star/ucb/ContentInfo.hpp>
 #include <com/sun/star/ucb/ContentInfoAttribute.hpp>
 #include <com/sun/star/ucb/XContent.hpp>
@@ -79,9 +80,9 @@ namespace svt
     //--------------------------------------------------------------------
     void SmartContent::enableOwnInteractionHandler(::svt::OFilePickerInteractionHandler::EInterceptedInteractions eInterceptions)
     {
-        Reference< XMultiServiceFactory > xFactory = ::comphelper::getProcessServiceFactory();
-        Reference< XInteractionHandler >  xGlobalInteractionHandler = Reference< XInteractionHandler >(
-            xFactory->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.task.InteractionHandler") ) ), UNO_QUERY );
+        Reference< XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+        Reference< XInteractionHandler > xGlobalInteractionHandler(
+            InteractionHandler::createWithParent(xContext, 0), UNO_QUERY_THROW );
 
         m_pOwnInteraction = new ::svt::OFilePickerInteractionHandler(xGlobalInteractionHandler);
         m_pOwnInteraction->enableInterceptions(eInterceptions);
@@ -98,9 +99,9 @@ namespace svt
         m_pOwnInteraction = NULL;
         m_xOwnInteraction = Reference< XInteractionHandler >();
 
-        Reference< XMultiServiceFactory > xFactory = ::comphelper::getProcessServiceFactory();
-        Reference< XInteractionHandler >  xGlobalInteractionHandler = Reference< XInteractionHandler >(
-            xFactory->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.task.InteractionHandler") ) ), UNO_QUERY );
+        Reference< XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+        Reference< XInteractionHandler > xGlobalInteractionHandler(
+            InteractionHandler::createWithParent(xContext, 0), UNO_QUERY_THROW );
         m_xCmdEnv = new ucbhelper::CommandEnvironment( xGlobalInteractionHandler, Reference< XProgressHandler >() );
     }
 

@@ -114,7 +114,7 @@ const PatternIni aPatternIni[] =
     {USHRT_MAX, USHRT_MAX, USHRT_MAX, USHRT_MAX, USHRT_MAX}
 };
 
-SwFormTokens lcl_GetAuthPattern(sal_uInt16 nTypeId)
+static SwFormTokens lcl_GetAuthPattern(sal_uInt16 nTypeId)
 {
     SwFormTokens aRet;
 

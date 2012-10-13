@@ -268,7 +268,7 @@ inline void PrepareUnlock( SwFlowFrm *pTab )
 }
 
 // hopefully, one day this function simply will return 'false'
-bool lcl_IsCalcUpperAllowed( const SwFrm& rFrm )
+static bool lcl_IsCalcUpperAllowed( const SwFrm& rFrm )
 {
     return !rFrm.GetUpper()->IsSctFrm() &&
            !rFrm.GetUpper()->IsFooterFrm() &&
@@ -490,7 +490,7 @@ void SwFrm::PrepareCrsr()
 |*************************************************************************/
 
 // Here we return GetPrev(); however we will ignore empty SectionFrms
-SwFrm* lcl_Prev( SwFrm* pFrm, sal_Bool bSectPrv = sal_True )
+static SwFrm* lcl_Prev( SwFrm* pFrm, sal_Bool bSectPrv = sal_True )
 {
     SwFrm* pRet = pFrm->GetPrev();
     if( !pRet && pFrm->GetUpper() && pFrm->GetUpper()->IsSctFrm() &&
@@ -502,7 +502,7 @@ SwFrm* lcl_Prev( SwFrm* pFrm, sal_Bool bSectPrv = sal_True )
     return pRet;
 }
 
-SwFrm* lcl_NotHiddenPrev( SwFrm* pFrm )
+static SwFrm* lcl_NotHiddenPrev( SwFrm* pFrm )
 {
     SwFrm *pRet = pFrm;
     do
@@ -656,7 +656,7 @@ void SwFrm::MakePos()
 |*
 |*************************************************************************/
 // #i28701# - new type <SwSortedObjs>
-void lcl_CheckObjects( SwSortedObjs* pSortedObjs, SwFrm* pFrm, long& rBot )
+static void lcl_CheckObjects( SwSortedObjs* pSortedObjs, SwFrm* pFrm, long& rBot )
 {
     // And then there can be paragraph anchored frames that sit below their paragraph.
     long nMax = 0;
@@ -1813,7 +1813,7 @@ void MakeNxt( SwFrm *pFrm, SwFrm *pNxt )
 // This routine checks whether there are no other FtnBosses
 // between the pFrm's FtnBoss and the pNxt's FtnBoss.
 
-sal_Bool lcl_IsNextFtnBoss( const SwFrm *pFrm, const SwFrm* pNxt )
+static sal_Bool lcl_IsNextFtnBoss( const SwFrm *pFrm, const SwFrm* pNxt )
 {
     OSL_ENSURE( pFrm && pNxt, "lcl_IsNextFtnBoss: No Frames?" );
     pFrm = pFrm->FindFtnBossFrm();

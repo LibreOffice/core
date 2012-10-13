@@ -26,10 +26,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map.Entry;
 
-/**
- *
- * @author frank.schoenheit@sun.com
- */
 public class NamedValueCollection
 {
     final private HashMap< String, Object >    m_values = new HashMap< String, Object >();

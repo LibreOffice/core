@@ -111,7 +111,6 @@ public class FormattedTextLayoutController
             variablesGet.setAttribute(JFreeReportInfo.REPORT_NAMESPACE,
                     Element.NAMESPACE_ATTRIBUTE, OfficeNamespaces.TEXT_NS);
             variablesGet.setAttribute(OfficeNamespaces.TEXT_NS, "name", name);
-            //variablesGet.setAttribute(OfficeNamespaces.TEXT_NS, "display", "value");
 
             final String dataStyleName = computeValueStyle();
             if (dataStyleName != null)

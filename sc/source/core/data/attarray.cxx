@@ -273,6 +273,106 @@ const ScPatternAttr* ScAttrArray::GetPatternRange( SCROW& rStartRow,
     return NULL;
 }
 
+void ScAttrArray::AddCondFormat( SCROW nStartRow, SCROW nEndRow, sal_uInt32 nIndex )
+{
+    if(!VALIDROW(nStartRow) || !VALIDROW(nEndRow))
+        return;
+
+    if(nEndRow < nStartRow)
+        return;
+
+    SCROW nTempStartRow = nStartRow;
+    SCROW nTempEndRow = nEndRow;
+
+    do
+    {
+        const ScPatternAttr* pPattern = GetPattern(nTempStartRow);
+
+        ScPatternAttr aPattern( pDocument->GetPool() );
+        if(pPattern)
+        {
+            SCROW nPatternStartRow;
+            SCROW nPatternEndRow;
+            GetPatternRange( nPatternStartRow, nPatternEndRow, nTempStartRow );
+
+            nTempEndRow = std::min<SCROW>( nPatternEndRow, nEndRow );
+            const SfxPoolItem* pItem = NULL;
+            pPattern->GetItemSet().GetItemState( ATTR_CONDITIONAL, true, &pItem );
+            std::vector< sal_uInt32 > aCondFormatData;
+            if(pItem)
+                aCondFormatData = static_cast<const ScCondFormatItem*>(pItem)->GetCondFormatData();
+            aCondFormatData.push_back(nIndex);
+
+            ScCondFormatItem aItem;
+            aItem.SetCondFormatData( aCondFormatData );
+            aPattern.GetItemSet().Put( aItem );
+        }
+        else
+        {
+            ScCondFormatItem aItem;
+            aItem.AddCondFormatData(nIndex);
+            aPattern.GetItemSet().Put( aItem );
+            nTempEndRow = nEndRow;
+        }
+
+        SetPatternArea( nTempStartRow, nTempEndRow, &aPattern, true );
+        nTempStartRow = nTempEndRow + 1;
+    }
+    while(nTempEndRow < nEndRow);
+
+}
+
+void ScAttrArray::RemoveCondFormat( SCROW nStartRow, SCROW nEndRow, sal_uInt32 nIndex )
+{
+    if(!VALIDROW(nStartRow) || !VALIDROW(nEndRow))
+        return;
+
+    if(nEndRow < nStartRow)
+        return;
+
+    SCROW nTempStartRow = nStartRow;
+    SCROW nTempEndRow = nEndRow;
+
+    do
+    {
+        const ScPatternAttr* pPattern = GetPattern(nTempStartRow);
+
+        ScPatternAttr aPattern( pDocument->GetPool() );
+        if(pPattern)
+        {
+            SCROW nPatternStartRow;
+            SCROW nPatternEndRow;
+            GetPatternRange( nPatternStartRow, nPatternEndRow, nTempStartRow );
+
+            nTempEndRow = std::min<SCROW>( nPatternEndRow, nEndRow );
+            const SfxPoolItem* pItem = NULL;
+            pPattern->GetItemSet().GetItemState( ATTR_CONDITIONAL, true, &pItem );
+            if(pItem)
+            {
+                std::vector< sal_uInt32 > aCondFormatData = static_cast<const ScCondFormatItem*>(pItem)->GetCondFormatData();
+                std::vector<sal_uInt32>::iterator itr = std::find(aCondFormatData.begin(), aCondFormatData.end(), nIndex);
+                if(itr != aCondFormatData.end())
+                {
+                    ScCondFormatItem aItem;
+                    aCondFormatData.erase(itr);
+                    aItem.SetCondFormatData( aCondFormatData );
+                    aPattern.GetItemSet().Put( aItem );
+                    SetPatternArea( nTempStartRow, nTempEndRow, &aPattern, true );
+                }
+
+            }
+        }
+        else
+        {
+            return;
+        }
+
+        nTempStartRow = nTempEndRow + 1;
+    }
+    while(nTempEndRow < nEndRow);
+
+}
+
 //------------------------------------------------------------------------
 
 void ScAttrArray::SetPattern( SCROW nRow, const ScPatternAttr* pPattern, bool bPutToPool )
@@ -799,7 +899,7 @@ bool ScAttrArray::SetAttrEntries(ScAttrEntry* pNewData, SCSIZE nSize)
     return true;
 }
 
-void lcl_MergeDeep( SfxItemSet& rMergeSet, const SfxItemSet& rSource )
+static void lcl_MergeDeep( SfxItemSet& rMergeSet, const SfxItemSet& rSource )
 {
     const SfxPoolItem* pNewItem;
     const SfxPoolItem* pOldItem;
@@ -886,7 +986,7 @@ void ScAttrArray::MergePatternArea( SCROW nStartRow, SCROW nEndRow,
 
 // assemble border
 
-bool lcl_TestAttr( const SvxBorderLine* pOldLine, const SvxBorderLine* pNewLine,
+static bool lcl_TestAttr( const SvxBorderLine* pOldLine, const SvxBorderLine* pNewLine,
                             sal_uInt8& rModified, const SvxBorderLine*& rpNew )
 {
     if (rModified == SC_LINE_DONTCARE)
@@ -918,7 +1018,7 @@ bool lcl_TestAttr( const SvxBorderLine* pOldLine, const SvxBorderLine* pNewLine,
 }
 
 
-void lcl_MergeToFrame( SvxBoxItem* pLineOuter, SvxBoxInfoItem* pLineInner,
+static void lcl_MergeToFrame( SvxBoxItem* pLineOuter, SvxBoxInfoItem* pLineInner,
                                 ScLineFlags& rFlags, const ScPatternAttr* pPattern,
                                 bool bLeft, SCCOL nDistRight, bool bTop, SCROW nDistBottom )
 {
@@ -1108,31 +1208,6 @@ void ScAttrArray::ApplyBlockFrame( const SvxBoxItem* pLineOuter, const SvxBoxInf
     }
 }
 
-
-long lcl_LineSize( const SvxBorderLine& rLine )
-{
-    // only one line -> half width, min. 20
-    // double line   -> half line spacing + (per min. 20)
-
-    long nTotal = 0;
-    sal_uInt16 nWidth = Max( rLine.GetOutWidth(), rLine.GetInWidth() );
-    sal_uInt16 nDist = rLine.GetDistance();
-    if (nDist)
-    {
-        OSL_ENSURE( rLine.GetOutWidth() && rLine.GetInWidth(),
-                        "Line has a distance, but only a width?" );
-
-        nTotal += ( nDist > 20 ) ? nDist : 20;
-        nTotal += ( nWidth > 20 ) ? nWidth : 20;
-    }
-    else if (nWidth)
-        nTotal += ( nWidth > 20 ) ? nWidth  : 20;
-
-        // also halved ?
-
-    return nTotal;
-}
-
 // Test if field contains specific attribute
 
 bool ScAttrArray::HasAttrib( SCROW nRow1, SCROW nRow2, sal_uInt16 nMask ) const
@@ -1180,9 +1255,9 @@ bool ScAttrArray::HasAttrib( SCROW nRow1, SCROW nRow2, sal_uInt16 nMask ) const
         }
         if ( nMask & HASATTR_CONDITIONAL )
         {
-            const SfxUInt32Item* pConditional =
-                    (const SfxUInt32Item*) &pPattern->GetItem( ATTR_CONDITIONAL );
-            if ( pConditional->GetValue() != 0 )
+            bool bContainsCondFormat =
+                    !static_cast<const ScCondFormatItem&>(pPattern->GetItem( ATTR_CONDITIONAL )).GetCondFormatData().empty();
+            if ( bContainsCondFormat )
                 bFound = true;
         }
         if ( nMask & HASATTR_PROTECTED )
@@ -1193,9 +1268,9 @@ bool ScAttrArray::HasAttrib( SCROW nRow1, SCROW nRow2, sal_uInt16 nMask ) const
             if ( pProtect->GetProtection() || pProtect->GetHideCell() )
                 bFoundTemp = true;
 
-            const SfxUInt32Item* pConditional =
-                    (const SfxUInt32Item*) &pPattern->GetItem( ATTR_CONDITIONAL );
-            if ( pConditional->GetValue() != 0 )
+            bool bContainsCondFormat =
+                    !static_cast<const ScCondFormatItem&>(pPattern->GetItem( ATTR_CONDITIONAL )).GetCondFormatData().empty();
+            if ( bContainsCondFormat )
             {
                 SCROW nRowStartCond = std::max<SCROW>( nRow1, i ? pData[i-1].nRow + 1: 0 );
                 SCROW nRowEndCond = std::min<SCROW>( nRow2, pData[i].nRow );

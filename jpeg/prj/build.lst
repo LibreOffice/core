@@ -1,2 +1,2 @@
-jg	jpeg : 	soltools NULL
-jg	jpeg	nmake	-	all	jg_mkout NULL
+jg	jpeg :          soltools NULL
+jg	jpeg\prj        nmake	-       all	jg_mkout NULL

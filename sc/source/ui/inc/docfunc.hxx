@@ -53,6 +53,7 @@ struct ScTabOpParam;
 class ScTableProtection;
 struct ScCellMergeOption;
 class ScConditionalFormat;
+class ScConditionalFormatList;
 
 // ---------------------------------------------------------------------------
 
@@ -212,6 +213,14 @@ public:
      * @param pFormat if NULL only delete an old format
      */
     virtual void ReplaceConditionalFormat( sal_uLong nOldIndex, ScConditionalFormat* pFormat, SCTAB nTab, const ScRangeList& rRanges );
+
+    /**
+     * Sets or replaces the conditional format list of a table
+     *
+     * @param pList the new ScConditionalFormatList, method takes ownership
+     * @param nTab the tab to which the conditional format list belongs
+     */
+    virtual void SetConditionalFormatList( ScConditionalFormatList* pList, SCTAB nTab );
 };
 
 class ScDocFuncDirect : public ScDocFunc

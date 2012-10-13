@@ -2603,7 +2603,7 @@
             </node>
             <node oor:name=".uno:InsertObjectFloatingFrame" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">Float~ing Frame</value>
+                    <value xml:lang="en-US">Float~ing Frame...</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
                     <value>1</value>

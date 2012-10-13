@@ -25,9 +25,9 @@ using namespace ::com::sun::star;
 
 //-----------------------------------------------
 OFSStreamContainer::OFSStreamContainer( const uno::Reference < io::XStream >& xStream )
-: m_bDisposed( sal_False )
-, m_bInputClosed( sal_False )
-, m_bOutputClosed( sal_False )
+: m_bDisposed( false )
+, m_bInputClosed( false )
+, m_bOutputClosed( false )
 , m_pListenersContainer( NULL )
 , m_pTypeCollection( NULL )
 {
@@ -261,13 +261,13 @@ void SAL_CALL OFSStreamContainer::dispose()
     if ( m_xInputStream.is() && !m_bInputClosed )
     {
         m_xInputStream->closeInput();
-        m_bInputClosed = sal_True;
+        m_bInputClosed = true;
     }
 
     if ( m_xOutputStream.is() && !m_bOutputClosed )
     {
         m_xOutputStream->closeOutput();
-        m_bOutputClosed = sal_True;
+        m_bOutputClosed = true;
     }
 
     if ( m_pListenersContainer )
@@ -276,7 +276,7 @@ void SAL_CALL OFSStreamContainer::dispose()
         m_pListenersContainer->disposeAndClear( aSource );
     }
 
-    m_bDisposed = sal_True;
+    m_bDisposed = true;
 }
 
 //-----------------------------------------------
@@ -448,7 +448,7 @@ void SAL_CALL OFSStreamContainer::closeInput()
     if ( m_xInputStream.is() )
     {
         m_xInputStream->closeInput();
-        m_bInputClosed = sal_True;
+        m_bInputClosed = true;
     }
 
     if ( m_bOutputClosed )
@@ -510,7 +510,7 @@ void SAL_CALL OFSStreamContainer::closeOutput()
     if ( m_xOutputStream.is() )
     {
         m_xOutputStream->closeOutput();
-        m_bOutputClosed = sal_True;
+        m_bOutputClosed = true;
     }
 
     if ( m_bInputClosed )

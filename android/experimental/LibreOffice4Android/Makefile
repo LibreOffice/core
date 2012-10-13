@@ -1,102 +1,36 @@
 include ../../../config_host.mk
-include ../../Bootstrap/Makefile.shared
 
-# The package of this app
-APP_PACKAGE=org.libreoffice
+LIBS = \
+  -Wl,--start-group \
+  $(wildcard $(OUTDIR)/lib/lib*.a) \
+  -Wl,--end-group
+
+WHOLELIBS = \
+  -Wl,--whole-archive \
+  $(addprefix -l,$(strip \
+	juh \
+  )) \
+  -Wl,--no-whole-archive
 
 # The default target just builds.
 
 all: build-ant
 
+include ../../Bootstrap/Makefile.shared
+
+# The package of this app
+APP_PACKAGE=org.libreoffice
+
+link-so:
+# Build the single .so for this app
+	mkdir -p $(OBJLOCAL)
+	$(CXX) -Wl,--stats -Wl,--no-keep-files-mapped -Wl,--no-undefined -DANDROID -DDISABLE_DYNLOADING -shared -o $(OBJLOCAL)/liblo-native-code.so -I$(OUTDIR)/inc native-code.cxx -L$(OUTDIR)/lib $(WHOLELIBS) $(LIBS) -lgnustl_static -landroid -llog -lz
+	mkdir -p $(SODEST)
+	cp $(OBJLOCAL)/liblo-native-code.so $(SODEST)
+	$(STRIP) --strip-debug $(SODEST)/liblo-native-code.so
+
 copy-stuff:
-# First always clean
-	rm -rf libs $(OBJLOCAL)
-	mkdir -p $(SODEST) $(OBJLOCAL)
-#
-# Copy shared libraries (including UNO components) we need to
-# libs/$(ANDROID_APP_ABI) so that ant will include them in the .apk.
-#
-# Copy them to obj/local/$(ANDROID_APP_ABI), too, where gdb will look for
-# them.
-#
-	for F in $(strip \
-		   basegfxlo \
-		   bootstrap.uno \
-		   chartcontrollerlo \
-		   chartcorelo \
-		   comphelpgcc3 \
-		   dbaxmllo \
-		   dbtoolslo \
-		   expwrap.uno \
-		   frmlo \
-		   gcc3_uno \
-		   i18nisolang1gcc3 \
-		   icudatalo \
-		   icui18nlo \
-		   iculelo \
-		   icuuclo \
-		   introspection.uno \
-		   java_uno \
-		   juh \
-		   juhx \
-		   jvmaccessgcc3 \
-		   jvmfwk \
-		   libotouchlo \
-		   lo-bootstrap \
-		   localedata_en \
-		   localedata_es \
-		   localedata_euro \
-		   localedata_others \
-		   lwpftlo \
-		   mergedlo \
-		   msfilterlo \
-		   mswordlo \
-		   ooxlo \
-		   reflection.uno \
-		   reg \
-		   sclo \
-		   sclo \
-		   scdlo \
-		   scfiltlo \
-		   sdlo \
-		   sddlo \
-		   smdlo \
-		   stocservices.uno \
-		   store \
-		   svgfilterlo \
-		   swdlo \
-		   swlo \
-		   swdlo \
-		   t602filterlo \
-		   textinstream.uno \
-		   tllo \
-		   ucbhelper4gcc3 \
-		   ucppkg1 \
-		   uno_cppu \
-		   uno_cppuhelpergcc3 \
-		   uno_sal \
-		   uno_salhelpergcc3 \
-		   uno_cppuhelpergcc3 \
-		   unordflo \
-		   unoxmllo \
-		   vbahelperlo \
-		   vbaswobj.uno \
-		   wpftdrawlo \
-		   wpftwriterlo \
-		   xml2 \
-		   xmlfdlo \
-		   xmlreader \
-		   xmlsecurity \
-		   xoflo \
-		   xslt \
-		  ); do \
-	    $(call COPYSO,$(OUTDIR)/lib/lib$${F}.so); \
-	done
-#
-# Then the shared GNU C++ library
-	$(call COPYSO,$(ANDROID_NDK_HOME)/sources/cxx-stl/gnu-libstdc++/$(ANDROID_NDK_TOOLCHAIN_VERSION_SUBDIR)libs/$(ANDROID_APP_ABI)/libgnustl_shared.so)
-#
-# Then other "assets". Let the directory structure under assets mimic
+# Then "assets". Let the directory structure under assets mimic
 # that under solver for now.
 #
 # Please note that I have no idea what all of this is really necessary and for
@@ -195,10 +129,11 @@ copy-stuff:
 #
 # Then gdbserver and gdb.setup so that we can debug with ndk-gdb.
 #
+	mkdir -p $(SODEST)
 	cp $(ANDROID_NDK_GDBSERVER) $(SODEST)
 	echo set solib-search-path ./obj/local/$(ANDROID_APP_ABI) >$(SODEST)/gdb.setup
 
-build-ant: copy-stuff properties
+build-ant: copy-stuff link-so properties
 	echo sdk.dir=$(ANDROID_SDK_HOME) >../../abs-lib/local.properties
 # ActionBarSherlock uses the v4 support library, apparently one needs to copy
 # it like this for it to be found
@@ -221,6 +156,4 @@ build-ant: copy-stuff properties
 	unset JAVA_HOME && $(ANT) debug
 
 run:
-# /data/local/tmp/sample-document.odt
-# add -e lo-strace to strace
-	adb shell am start -n $(APP_PACKAGE)/.ui.LibreOfficeUIActivity  -e lo-strace -e input /assets/test1.odt
+	adb shell am start -n $(APP_PACKAGE)/.ui.LibreOfficeUIActivity -e input /assets/test1.odt

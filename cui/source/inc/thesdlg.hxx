@@ -22,25 +22,149 @@
 
 #include <com/sun/star/linguistic2/XThesaurus.hpp>
 
-#include "svx/stddlg.hxx"
-#include "svx/svxdllapi.h"
+#include <svx/checklbx.hxx>
+#include <svx/stddlg.hxx>
+#include <vcl/button.hxx>
+#include <vcl/combobox.hxx>
+#include <vcl/fixed.hxx>
+#include <vcl/menubtn.hxx>
 
 #include <memory>
 
+using namespace ::com::sun::star;
 
-/////////////////////////////////////////////////////////////////
+class SvxThesaurusDialog;
 
-struct SvxThesaurusDialog_Impl;
+class LookUpComboBox : public ComboBox
+{
+    Timer                       m_aModifyTimer;
+    Selection                   m_aSelection;
+    SvxThesaurusDialog*         m_pDialog;
+
+    /// disable copy ctor and assignment operator
+    LookUpComboBox( const LookUpComboBox & );
+    LookUpComboBox& operator = ( const LookUpComboBox & );
+
+public:
+    LookUpComboBox(Window *pParent);
+    virtual ~LookUpComboBox();
+
+    DECL_LINK( ModifyTimer_Hdl, Timer * );
+
+    void init(SvxThesaurusDialog *pDialog);
+
+    // ComboBox
+    virtual void        Modify();
+};
+
+class AlternativesExtraData
+{
+    String  sText;
+    bool    bHeader;
+
+public:
+    AlternativesExtraData() : bHeader( false ) {}
+    AlternativesExtraData( const String &rText, bool bIsHeader ) :
+        sText(rText),
+        bHeader(bIsHeader)
+        {
+        }
+
+    bool  IsHeader() const          { return bHeader; }
+    const String& GetText() const   { return sText; }
+};
+
+class ThesaurusAlternativesCtrl
+    : public SvxCheckListBox
+{
+    SvxThesaurusDialog*     m_pDialog;
+
+    typedef std::map< const SvLBoxEntry *, AlternativesExtraData >  UserDataMap_t;
+    UserDataMap_t           m_aUserData;
+
+    /// disable copy ctor and assignment operator
+    ThesaurusAlternativesCtrl( const ThesaurusAlternativesCtrl & );
+    ThesaurusAlternativesCtrl & operator = ( const ThesaurusAlternativesCtrl & );
+
+public:
+    ThesaurusAlternativesCtrl(Window* pParent);
+
+    void init(SvxThesaurusDialog *pDialog);
+    virtual ~ThesaurusAlternativesCtrl();
+
+
+    SvLBoxEntry *   AddEntry( sal_Int32 nVal, const String &rText, bool bIsHeader );
+
+    void            ClearExtraData();
+    void            SetExtraData( const SvLBoxEntry *pEntry, const AlternativesExtraData &rData );
+    AlternativesExtraData * GetExtraData( const SvLBoxEntry *pEntry );
+
+    virtual void    KeyInput( const KeyEvent& rKEvt );
+    virtual void    Paint( const Rectangle& rRect );
+};
+
+class ReplaceEdit : public Edit
+{
+    Button *                    m_pBtn;
+
+    /// disable copy ctor and assignment operator
+    ReplaceEdit( const ReplaceEdit & );
+    ReplaceEdit & operator = ( const ReplaceEdit & );
+
+public:
+    ReplaceEdit(Window *pParent);
+    virtual ~ReplaceEdit();
+
+    void init(Button *pBtn)  { m_pBtn = pBtn; }
+
+    // Edit
+    virtual void        Modify();
+    virtual void        SetText( const XubString& rStr );
+    virtual void        SetText( const XubString& rStr, const Selection& rNewSelection );
+};
 
 class SvxThesaurusDialog : public SvxStandardDialog
 {
-    std::auto_ptr< SvxThesaurusDialog_Impl > m_pImpl;
+    PushButton*             m_pLeftBtn;
+    LookUpComboBox*         m_pWordCB;
+    ThesaurusAlternativesCtrl* m_pAlternativesCT;
+    ReplaceEdit*            m_pReplaceEdit;
+    MenuButton*             m_pLangMBtn;
 
-    SVX_DLLPRIVATE virtual void     Apply();
+    OUString                m_aErrStr;
+
+    uno::Reference< linguistic2::XThesaurus >   xThesaurus;
+    OUString                aLookUpText;
+    LanguageType            nLookUpLanguage;
+    std::stack< OUString >  aLookUpHistory;
+    bool                    m_bWordFound;
+
+public:
+    bool                    WordFound() const { return m_bWordFound; }
+    OUString                getErrStr() const { return m_aErrStr; }
+
+    // Handler
+    DECL_LINK( ReplaceBtnHdl_Impl, Button * );
+    DECL_LINK( LeftBtnHdl_Impl, Button * );
+    DECL_LINK( LanguageHdl_Impl, MenuButton * );
+    DECL_LINK( LookUpHdl_Impl, Button * );
+    DECL_LINK( WordSelectHdl_Impl, ComboBox * );
+    DECL_LINK( AlternativesSelectHdl_Impl, SvxCheckListBox * );
+    DECL_LINK( AlternativesDoubleClickHdl_Impl, SvxCheckListBox * );
+
+    DECL_STATIC_LINK( SvxThesaurusDialog, SelectFirstHdl_Impl, SvxCheckListBox * );
+
+    uno::Sequence< uno::Reference< linguistic2::XMeaning > >
+            queryMeanings_Impl( ::rtl::OUString& rTerm, const lang::Locale& rLocale, const beans::PropertyValues& rProperties ) throw(lang::IllegalArgumentException, uno::RuntimeException);
+
+    bool    UpdateAlternativesBox_Impl();
+    void    LookUp( const String &rText );
+    void    LookUp_Impl();
+    virtual void     Apply();
 
 public:
     SvxThesaurusDialog( Window* pParent,
-                        ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XThesaurus >  xThesaurus,
+                        uno::Reference< linguistic2::XThesaurus >  xThesaurus,
                         const String &rWord, LanguageType nLanguage );
     ~SvxThesaurusDialog();
 

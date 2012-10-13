@@ -63,17 +63,17 @@ class SVL_DLLPUBLIC SvxSearchItem :
     // Calc-Spezifische Daten
     sal_uInt16      nCellType;          // Suche in Formeln/Werten/Notizen
     sal_uInt16      nAppFlag;           // Fuer welche Applikation ist der Dialog ueberhaupt
-    sal_Bool        bRowDirection;      // Suchrichtung Zeilenweise/Spaltenweise
-    sal_Bool        bAllTables;         // in alle Tabellen suchen
-    sal_Bool        bSearchFiltered;      // search filtered cells.
+    bool            bRowDirection;      // Suchrichtung Zeilenweise/Spaltenweise
+    bool            bAllTables;         // in alle Tabellen suchen
+    bool            bSearchFiltered;      // search filtered cells.
 
     // Writer-spezifisch
-    sal_Bool        bNotes;
+    bool            bNotes;
 
-    sal_Bool        bBackward;          // Suche Rueckwaerts
-    sal_Bool        bPattern;           // Suche nach Vorlagen
-    sal_Bool        bContent;           // Suche im Inhalt
-    sal_Bool        bAsianOptions;      // use asian options?
+    bool            bBackward;          // Suche Rueckwaerts
+    bool            bPattern;           // Suche nach Vorlagen
+    bool            bContent;           // Suche im Inhalt
+    bool            bAsianOptions;      // use asian options?
 
 public:
     TYPEINFO();
@@ -104,54 +104,54 @@ public:
     inline  const String    GetReplaceString() const;
     inline  void            SetReplaceString(const String& rNewString);
 
-    inline  sal_Bool        GetWordOnly() const;
-            void            SetWordOnly(sal_Bool bNewWordOnly);
+    inline  bool            GetWordOnly() const;
+            void            SetWordOnly(bool bNewWordOnly);
 
-    inline  sal_Bool        GetExact() const;
-            void            SetExact(sal_Bool bNewExact);
+    inline  bool            GetExact() const;
+            void            SetExact(bool bNewExact);
 
-            sal_Bool        GetBackward() const { return bBackward; }
-            void            SetBackward(sal_Bool bNewBackward) { bBackward = bNewBackward; }
+            bool            GetBackward() const { return bBackward; }
+            void            SetBackward(bool bNewBackward) { bBackward = bNewBackward; }
 
-    inline sal_Bool         GetSelection() const;
-            void            SetSelection(sal_Bool bNewSelection);
+    inline  bool            GetSelection() const;
+            void            SetSelection(bool bNewSelection);
 
-    inline  sal_Bool        GetRegExp() const;
-            void            SetRegExp( sal_Bool bVal );
+    inline  bool            GetRegExp() const;
+            void            SetRegExp( bool bVal );
 
-            sal_Bool        GetPattern() const { return bPattern; }
-            void            SetPattern(sal_Bool bNewPattern) { bPattern = bNewPattern; }
+            bool            GetPattern() const { return bPattern; }
+            void            SetPattern(bool bNewPattern) { bPattern = bNewPattern; }
 
-            sal_Bool        IsContent() const { return bContent; }
-            void            SetContent( sal_Bool bNew ) { bContent = bNew; }
+            bool            IsContent() const { return bContent; }
+            void            SetContent( bool bNew ) { bContent = bNew; }
 
             SfxStyleFamily  GetFamily() const { return eFamily; }
             void            SetFamily( SfxStyleFamily eNewFamily )
                                 { eFamily = eNewFamily; }
 
-            sal_Bool        GetRowDirection() const { return bRowDirection; }
-            void            SetRowDirection(sal_Bool bNewRowDirection) { bRowDirection = bNewRowDirection; }
+            bool            GetRowDirection() const { return bRowDirection; }
+            void            SetRowDirection(bool bNewRowDirection) { bRowDirection = bNewRowDirection; }
 
-            sal_Bool        IsAllTables() const { return bAllTables; }
-            void            SetAllTables(sal_Bool bNew) { bAllTables = bNew; }
+            bool            IsAllTables() const { return bAllTables; }
+            void            SetAllTables(bool bNew) { bAllTables = bNew; }
 
-            sal_Bool        IsSearchFiltered() const { return bSearchFiltered; }
-            void            SetSearchFiltered(sal_Bool b) { bSearchFiltered = b; }
+            bool            IsSearchFiltered() const { return bSearchFiltered; }
+            void            SetSearchFiltered(bool b) { bSearchFiltered = b; }
 
             sal_uInt16      GetCellType() const { return nCellType; }
             void            SetCellType(sal_uInt16 nNewCellType) { nCellType = nNewCellType; }
 
-            sal_Bool        GetNotes() const { return bNotes; }
-            void            SetNotes(sal_Bool bNew) { bNotes = bNew; }
+            bool            GetNotes() const { return bNotes; }
+            void            SetNotes(bool bNew) { bNotes = bNew; }
 
             sal_uInt16      GetAppFlag() const { return nAppFlag; }
             void            SetAppFlag(sal_uInt16 nNewAppFlag) { nAppFlag = nNewAppFlag; }
 
-    inline  sal_Bool        IsLevenshtein() const;
-            void            SetLevenshtein( sal_Bool bVal );
+    inline  bool            IsLevenshtein() const;
+            void            SetLevenshtein( bool bVal );
 
-    inline  sal_Bool        IsLEVRelaxed() const;
-            void            SetLEVRelaxed(sal_Bool bSet);
+    inline  bool            IsLEVRelaxed() const;
+            void            SetLEVRelaxed(bool bSet);
 
     inline  sal_uInt16      GetLEVOther() const;
     inline  void            SetLEVOther(sal_uInt16 nSet);
@@ -169,11 +169,11 @@ public:
     inline  sal_Int32       GetTransliterationFlags() const;
             void            SetTransliterationFlags( sal_Int32 nFlags );
 
-    inline  sal_Bool        IsMatchFullHalfWidthForms() const;
-    void                    SetMatchFullHalfWidthForms( sal_Bool bVal );
+    inline  bool            IsMatchFullHalfWidthForms() const;
+    void                    SetMatchFullHalfWidthForms( bool bVal );
 
-    inline  sal_Bool        IsUseAsianOptions() const           { return bAsianOptions; }
-    inline  void            SetUseAsianOptions( sal_Bool bVal ) { bAsianOptions = bVal; }
+    inline  bool            IsUseAsianOptions() const           { return bAsianOptions; }
+    inline  void            SetUseAsianOptions( bool bVal ) { bAsianOptions = bVal; }
 };
 
 const String SvxSearchItem::GetSearchString() const
@@ -196,30 +196,30 @@ void SvxSearchItem::SetReplaceString(const String& rNewString)
     aSearchOpt.replaceString = rNewString;
 }
 
-sal_Bool SvxSearchItem::GetWordOnly() const
+bool SvxSearchItem::GetWordOnly() const
 {
     return 0 != (aSearchOpt.searchFlag &
                         com::sun::star::util::SearchFlags::NORM_WORD_ONLY);
 }
 
-sal_Bool SvxSearchItem::GetExact() const
+bool SvxSearchItem::GetExact() const
 {
     return 0 == (aSearchOpt.transliterateFlags &
                         com::sun::star::i18n::TransliterationModules_IGNORE_CASE);
 }
 
-sal_Bool SvxSearchItem::GetSelection() const
+bool SvxSearchItem::GetSelection() const
 {
     return 0 != (aSearchOpt.searchFlag &
                         com::sun::star::util::SearchFlags::REG_NOT_BEGINOFLINE);
 }
 
-sal_Bool SvxSearchItem::GetRegExp() const
+bool SvxSearchItem::GetRegExp() const
 {
     return aSearchOpt.algorithmType == com::sun::star::util::SearchAlgorithms_REGEXP ;
 }
 
-sal_Bool SvxSearchItem::IsLEVRelaxed() const
+bool SvxSearchItem::IsLEVRelaxed() const
 {
     return 0 != (aSearchOpt.searchFlag &
                         com::sun::star::util::SearchFlags::LEV_RELAXED);
@@ -255,7 +255,7 @@ void SvxSearchItem::SetLEVLonger( sal_uInt16 nVal )
     aSearchOpt.deletedChars = nVal;
 }
 
-sal_Bool SvxSearchItem::IsLevenshtein() const
+bool SvxSearchItem::IsLevenshtein() const
 {
     return aSearchOpt.algorithmType == com::sun::star::util::SearchAlgorithms_APPROXIMATE;
 }
@@ -275,7 +275,7 @@ sal_Int32 SvxSearchItem::GetTransliterationFlags() const
     return aSearchOpt.transliterateFlags;
 }
 
-sal_Bool SvxSearchItem::IsMatchFullHalfWidthForms() const
+bool SvxSearchItem::IsMatchFullHalfWidthForms() const
 {
     return 0 != (aSearchOpt.transliterateFlags &
                         com::sun::star::i18n::TransliterationModules_IGNORE_WIDTH);

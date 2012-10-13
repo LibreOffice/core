@@ -2227,7 +2227,7 @@ void ScInterpreter::ScStyle()
         PushIllegalParameter();
 }
 
-ScDdeLink* lcl_GetDdeLink( sfx2::LinkManager* pLinkMgr,
+static ScDdeLink* lcl_GetDdeLink( sfx2::LinkManager* pLinkMgr,
                                 const String& rA, const String& rT, const String& rI, sal_uInt8 nM )
 {
     sal_uInt16 nCount = pLinkMgr->GetLinks().size();
@@ -2615,7 +2615,7 @@ void ScInterpreter::ScRoman()
 }
 
 
-bool lcl_GetArabicValue( sal_Unicode cChar, sal_uInt16& rnValue, bool& rbIsDec )
+static bool lcl_GetArabicValue( sal_Unicode cChar, sal_uInt16& rnValue, bool& rbIsDec )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScBase" );
     switch( cChar )

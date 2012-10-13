@@ -720,7 +720,7 @@ static const sal_Unicode* lcl_ScanString( const sal_Unicode* p, String& rString,
     return p;
 }
 
-void lcl_UnescapeSylk( String & rString, SylkVersion eVersion )
+static void lcl_UnescapeSylk( String & rString, SylkVersion eVersion )
 {
     // Older versions didn't escape the semicolon.
     // Older versions quoted the string and doubled embedded quotes, but not
@@ -863,7 +863,7 @@ static void lcl_WriteString( SvStream& rStrm, String& rString, sal_Unicode cQuot
     ScImportExport::WriteUnicodeOrByteString( rStrm, rString );
 }
 
-inline void lcl_WriteSimpleString( SvStream& rStrm, const String& rString )
+static inline void lcl_WriteSimpleString( SvStream& rStrm, const String& rString )
 {
     ScImportExport::WriteUnicodeOrByteString( rStrm, rString );
 }
@@ -1218,7 +1218,7 @@ static bool lcl_PutString(
 }
 
 
-String lcl_GetFixed( const rtl::OUString& rLine, sal_Int32 nStart, sal_Int32 nNext,
+static String lcl_GetFixed( const rtl::OUString& rLine, sal_Int32 nStart, sal_Int32 nNext,
                      bool& rbIsQuoted, bool& rbOverflowCell )
 {
     sal_Int32 nLen = rLine.getLength();
@@ -2274,7 +2274,7 @@ ScFormatFilterPlugin &ScFormatFilter::Get()
 
 // Precondition: pStr is guaranteed to be non-NULL and points to a 0-terminated
 // array.
-inline const sal_Unicode* lcl_UnicodeStrChr( const sal_Unicode* pStr,
+static inline const sal_Unicode* lcl_UnicodeStrChr( const sal_Unicode* pStr,
         sal_Unicode c )
 {
     while (*pStr)

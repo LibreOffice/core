@@ -190,11 +190,6 @@ public class FirstLoadComponent {
 
 // import com.sun.star.uno.AnyConverter;
 
-
-// /**
-//  *
-//  * @author  dschulten
-//  */
 // public class FirstLoadComponent {
 
 //     /** Creates a new instance of FirstLoadComponent */

@@ -1,30 +1,21 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*************************************************************************
+/*
+ * This file is part of the LibreOffice project.
  *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * This file incorporates work covered by the following license notice:
  *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
 
 #include <map>
 #include <optasian.hxx>
@@ -52,8 +43,6 @@ using namespace com::sun::star::i18n;
 using namespace com::sun::star::frame;
 using namespace com::sun::star::beans;
 using rtl::OUString;
-
-#define C2U(cChar) rtl::OUString::createFromAscii(cChar)
 
 const sal_Char cIsKernAsianPunctuation[] = "IsKernAsianPunctuation";
 const sal_Char cCharacterCompressionType[] = "CharacterCompressionType";
@@ -180,7 +169,7 @@ sal_Bool SvxAsianLayoutPage::FillItemSet( SfxItemSet& )
     if(aCharKerningRB.IsChecked() != aCharKerningRB.GetSavedValue())
     {
         pImpl->aConfig.SetKerningWesternTextOnly(aCharKerningRB.IsChecked());
-        OUString sPunct(C2U(cIsKernAsianPunctuation));
+        OUString sPunct(cIsKernAsianPunctuation);
         if(pImpl->xPrSetInfo.is() && pImpl->xPrSetInfo->hasPropertyByName(sPunct))
         {
             Any aVal;
@@ -196,7 +185,7 @@ sal_Bool SvxAsianLayoutPage::FillItemSet( SfxItemSet& )
         sal_Int16 nSet = aNoCompressionRB.IsChecked() ? 0 :
                             aPunctCompressionRB.IsChecked() ? 1 : 2;
         pImpl->aConfig.SetCharDistanceCompression(nSet);
-        OUString sCompress(C2U(cCharacterCompressionType));
+        OUString sCompress(cCharacterCompressionType);
         if(pImpl->xPrSetInfo.is() && pImpl->xPrSetInfo->hasPropertyByName(sCompress))
         {
             Any aVal;
@@ -242,11 +231,11 @@ void SvxAsianLayoutPage::Reset( const SfxItemSet& )
     if(xFact.is())
     {
         pImpl->xPrSet = Reference<XPropertySet>(
-            xFact->createInstance(C2U("com.sun.star.document.Settings")), UNO_QUERY);
+            xFact->createInstance("com.sun.star.document.Settings"), UNO_QUERY);
     }
     if( pImpl->xPrSet.is() )
         pImpl->xPrSetInfo = pImpl->xPrSet->getPropertySetInfo();
-    OUString sForbidden(C2U("ForbiddenCharacters"));
+    OUString sForbidden("ForbiddenCharacters");
     sal_Bool bKernWesternText = pImpl->aConfig.IsKerningWesternTextOnly();
     sal_Int16 nCompress = pImpl->aConfig.GetCharDistanceCompression();
     if(pImpl->xPrSetInfo.is())
@@ -256,13 +245,13 @@ void SvxAsianLayoutPage::Reset( const SfxItemSet& )
             Any aForbidden = pImpl->xPrSet->getPropertyValue(sForbidden);
             aForbidden >>= pImpl->xForbidden;
         }
-        OUString sCompress(C2U(cCharacterCompressionType));
+        OUString sCompress(cCharacterCompressionType);
         if(pImpl->xPrSetInfo->hasPropertyByName(sCompress))
         {
             Any aVal = pImpl->xPrSet->getPropertyValue(sCompress);
             aVal >>= nCompress;
         }
-        OUString sPunct(C2U(cIsKernAsianPunctuation));
+        OUString sPunct(cIsKernAsianPunctuation);
         if(pImpl->xPrSetInfo->hasPropertyByName(sPunct))
         {
             Any aVal = pImpl->xPrSet->getPropertyValue(sPunct);

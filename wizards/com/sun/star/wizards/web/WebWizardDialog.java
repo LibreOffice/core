@@ -39,7 +39,6 @@ import com.sun.star.wizards.web.data.CGLayout;
 
 /**
  * This class is generated Automatically....
- * bla bla bla
  */
 public abstract class WebWizardDialog extends WizardDialog implements WebWizardConst, UIConsts, WWHID
 {
@@ -71,41 +70,6 @@ public abstract class WebWizardDialog extends WizardDialog implements WebWizardC
     XListBox lstDocTargetType;
     XFixedText lblLayoutTitle;
     XFixedText lblLayouts;
-    /*XFixedText Label1;
-    //Image Control
-    XControl ImageControl1;
-    //Image Control
-    XControl ImageControl3;
-    //Image Control
-    XControl ImageControl4;
-    //Image Control
-    XControl ImageControl5;
-    //Image Control
-    XControl ImageControl6;
-    XFixedText Label3;
-    //titled box 
-    XControl FrameControl1;   
-    //Image Control
-    XControl ImageControl2;
-    //Image Control
-    XControl ImageControl7;
-    //Image Control
-    XControl ImageControl8;
-    //Image Control
-    XControl ImageControl9;
-    //Image Control
-    XControl ImageControl10;
-    //Image Control
-    XControl ImageControl11;
-    //Image Control
-    XControl ImageControl12;
-    //Image Control
-    XControl ImageControl13;
-    //Image Control
-    XControl ImageControl14;
-    //Image Control
-    XControl ImageControl15;
-     */
     XCheckBox chbDocDesc;
     XCheckBox chkDocFilename;
     XCheckBox chbDocAuthor;
@@ -168,7 +132,7 @@ public abstract class WebWizardDialog extends WizardDialog implements WebWizardC
     FontDescriptor fontDescriptor4 = new FontDescriptor();
     FontDescriptor fontDescriptor5 = new FontDescriptor();
     FontDescriptor fontDescriptor6 = new FontDescriptor();
-    FontDescriptor fontDescriptor7 = new FontDescriptor();    //private static String[] PROPNAMES_LBL_NOFOCUS =     new String[] {PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_WIDTH};
+    FontDescriptor fontDescriptor7 = new FontDescriptor();
     private static String[] PROPNAMES_LBL = new String[]
     {
         PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
@@ -836,7 +800,6 @@ public abstract class WebWizardDialog extends WizardDialog implements WebWizardC
                     {
                         new Integer(-1), INTEGER_8, resources.reslblFTPDisabled, Boolean.TRUE, "lblFTPDisabled", 125, 136, INTEGERS[7], new Short(tabIndex++), 226
                     });
-        //FTP_STEP = 99;
         }
         //else
 
@@ -889,18 +852,11 @@ public abstract class WebWizardDialog extends WizardDialog implements WebWizardC
         ilLayouts.tabIndex = 31;
         ilLayouts.helpURL = HID3_IL_LAYOUTS_IMG1;
 
-    /*for (int i = 0; i<8; i++)
-    imgIconsPrev[i] = insertImage("imgIconPrev" + i, 
-    new String[] { "BackgroundColor",PropertyNames.PROPERTY_BORDER,PropertyNames.PROPERTY_HEIGHT,PropertyNames.PROPERTY_IMAGEURL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, "ScaleImage", PropertyNames.PROPERTY_STEP, "Tabstop", PropertyNames.PROPERTY_WIDTH},
-    new Object[] { new Integer(-1), new Short((short)0),14,"file:///c:/bludisk.gif", new Integer(97 + i * 20 + 7 ),147,Boolean.FALSE,INTEGERS[5],Boolean.FALSE,14});
-     */
     }
 
     /**
      * renders the images and titles of 
      * the layouts
-     * @author rpiterman
-    
      */
     private class LayoutRenderer implements ImageList.IImageRenderer
     {

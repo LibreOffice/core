@@ -191,7 +191,7 @@ void ErrorBarResources::SetChartDocumentForRangeChoosing(
         {
             try
             {
-                xProps->getPropertyValue( C2U( "DisableDataTableDialog" ) ) >>= m_bDisableDataTableDialog;
+                xProps->getPropertyValue( "DisableDataTableDialog" ) >>= m_bDisableDataTableDialog;
             }
             catch( const uno::Exception& e )
             {
@@ -455,7 +455,7 @@ IMPL_LINK( ErrorBarResources, ChooseRange, RangeSelectionButton *, pButton )
         return 0;
     OSL_ASSERT( m_pCurrentRangeChoosingField == 0 );
 
-    ::rtl::OUString aUIString;
+    OUString aUIString;
     if( pButton == &m_aIbRangePositive )
     {
         m_pCurrentRangeChoosingField = &m_aEdRangePositive;
@@ -697,14 +697,14 @@ void ErrorBarResources::FillValueSets()
 }
 
 void ErrorBarResources::listeningFinished(
-    const ::rtl::OUString & rNewRange )
+    const OUString & rNewRange )
 {
     OSL_ASSERT( m_apRangeSelectionHelper.get());
     if( ! m_apRangeSelectionHelper.get())
         return;
 
     // rNewRange becomes invalid after removing the listener
-    ::rtl::OUString aRange( rNewRange );
+    OUString aRange( rNewRange );
 
     // stop listening
     m_apRangeSelectionHelper->stopRangeListening();
@@ -740,7 +740,7 @@ void ErrorBarResources::disposingRangeSelection()
 
 bool ErrorBarResources::isRangeFieldContentValid( Edit & rEdit )
 {
-    ::rtl::OUString aRange( rEdit.GetText());
+    OUString aRange( rEdit.GetText());
     bool bIsValid = ( aRange.isEmpty() ) ||
         ( m_apRangeSelectionHelper.get() &&
           m_apRangeSelectionHelper->verifyCellRange( aRange ));

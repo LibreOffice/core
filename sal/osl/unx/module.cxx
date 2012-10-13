@@ -118,6 +118,9 @@ static sal_Bool getModulePathFromAddress(void * address, rtl_String ** path) {
     return result;
 }
 
+
+#ifndef DISABLE_DYNLOADING
+
 /*****************************************************************************/
 /* osl_loadModule */
 /*****************************************************************************/
@@ -157,7 +160,6 @@ oslModule SAL_CALL osl_loadModuleAscii(const sal_Char *pModuleName, sal_Int32 nR
         "sal.osl", "only either LAZY or NOW");
     if (pModuleName)
     {
-#ifndef DISABLE_DYNLOADING
 #ifdef ANDROID
         (void) nRtldMode;
         void *pLib = lo_dlopen(pModuleName);
@@ -173,11 +175,6 @@ oslModule SAL_CALL osl_loadModuleAscii(const sal_Char *pModuleName, sal_Int32 nR
                 << dlerror());
 #endif
         return ((oslModule)(pLib));
-
-#else   /* DISABLE_DYNLOADING */
-        (void) nRtldMode;
-        fprintf(stderr, "No DL Functions, osl_loadModuleAscii(%s) does nothing\n", pModuleName);
-#endif  /* DISABLE_DYNLOADING */
     }
     return NULL;
 }
@@ -212,6 +209,8 @@ oslModule osl_loadModuleRelativeAscii(
     }
 }
 
+#endif // !DISABLE_DYNLOADING
+
 /*****************************************************************************/
 /* osl_getModuleHandle */
 /*****************************************************************************/
@@ -227,6 +226,8 @@ osl_getModuleHandle(rtl_uString *, oslModule *pResult)
     return sal_True;
 }
 
+#ifndef DISABLE_DYNLOADING
+
 /*****************************************************************************/
 /* osl_unloadModule */
 /*****************************************************************************/
@@ -234,7 +235,6 @@ void SAL_CALL osl_unloadModule(oslModule hModule)
 {
     if (hModule)
     {
-#ifndef DISABLE_DYNLOADING
 #ifdef ANDROID
         int nRet = lo_dlclose(hModule);
 #else
@@ -242,9 +242,10 @@ void SAL_CALL osl_unloadModule(oslModule hModule)
 #endif
         SAL_INFO_IF(
             nRet != 0, "sal.osl", "dlclose(" << hModule << "): " << dlerror());
-#endif /* ifndef DISABLE_DYNLOADING */
     }
 }
+
+#endif // !DISABLE_DYNLOADING
 
 /*****************************************************************************/
 /* osl_getSymbol */

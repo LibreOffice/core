@@ -152,7 +152,7 @@ typedef vector< NamePair_Impl* > NameList_Impl;
 typedef vector< GroupData_Impl* > GroupList_Impl;
 
 //=============================================================================
-#include <com/sun/star/task/XInteractionHandler.hpp>
+#include <com/sun/star/task/InteractionHandler.hpp>
 #include <com/sun/star/ucb/XProgressHandler.hpp>
 
 class TplTaskEnvironment : public ::cppu::WeakImplHelper1< ucb::XCommandEnvironment >
@@ -389,12 +389,10 @@ public:
 //-----------------------------------------------------------------------------
 void SfxDocTplService_Impl::init_Impl()
 {
-    uno::Reference< lang::XMultiServiceFactory > xFactory = ::comphelper::getProcessServiceFactory();
-    if ( xFactory.is() )
-    {
-        uno::Reference < task::XInteractionHandler > xInteractionHandler( xFactory->createInstance( DEFINE_CONST_UNICODE("com.sun.star.task.InteractionHandler") ), uno::UNO_QUERY );
-        maCmdEnv = new TplTaskEnvironment( xInteractionHandler );
-    }
+    uno::Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+    uno::Reference < task::XInteractionHandler > xInteractionHandler(
+        task::InteractionHandler::createWithParent(xContext, 0), uno::UNO_QUERY_THROW );
+    maCmdEnv = new TplTaskEnvironment( xInteractionHandler );
 
     ::osl::ClearableMutexGuard aGuard( maMutex );
     sal_Bool bIsInitialized = sal_False;
@@ -620,12 +618,11 @@ void SfxDocTplService_Impl::getDirList()
 sal_Bool SfxDocTplService_Impl::needsUpdate()
 {
     OUString aPropName( PROPERTY_NEEDSUPDATE  );
-    sal_Bool bHasProperty = sal_False;
     sal_Bool bNeedsUpdate = sal_True;
     Any      aValue;
 
     // Get the template dir list
-    bHasProperty = getProperty( maRootContent, aPropName, aValue );
+    sal_Bool bHasProperty = getProperty( maRootContent, aPropName, aValue );
 
     if ( bHasProperty )
         aValue >>= bNeedsUpdate;
@@ -678,8 +675,6 @@ sal_Bool SfxDocTplService_Impl::getTitleFromURL( const OUString& rURL, OUString&
         }
         catch ( Exception& )
         {
-            // the document is not a StarOffice document
-            return sal_False;
         }
 
         try
@@ -1311,7 +1306,7 @@ uno::Sequence< beans::StringPair > SfxDocTplService_Impl::ReadUINamesForTemplate
         {
             uno::Reference< io::XInputStream > xLocStream = aLocContent.openStream();
             if ( xLocStream.is() )
-                aUINames = DocTemplLocaleHelper::ReadGroupLocalizationSequence( xLocStream, mxFactory );
+                aUINames = DocTemplLocaleHelper::ReadGroupLocalizationSequence( xLocStream, comphelper::getComponentContext(mxFactory) );
         }
         catch( uno::Exception& )
         {}
@@ -2014,7 +2009,6 @@ sal_Bool SfxDocTplService_Impl::addTemplate( const OUString& rGroupName,
     // Get the content type
     OUString aTitle, aType, aTargetURL2, aFullName;
 
-    // only StarOffice documents are acceptable
     sal_Bool bDocHasTitle = sal_False;
     if( !getTitleFromURL( rSourceURL, aTitle, aType, bDocHasTitle ) )
         return sal_False;
@@ -2573,7 +2567,6 @@ void SfxDocTplService_Impl::addFsysGroup( GroupList_Impl& rList,
                 if ( aChildTitle.compareToAscii( "sfx.tlx" ) == 0 || aChildTitle == "groupuinames.xml" )
                     continue;
 
-                // only StarOffice templates are accepted
                 sal_Bool bDocHasTitle = sal_False;
                 if( !getTitleFromURL( aTargetURL, aChildTitle, aType, bDocHasTitle ) )
                     continue;

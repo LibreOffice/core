@@ -1,30 +1,21 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*************************************************************************
+/*
+ * This file is part of the LibreOffice project.
  *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * This file incorporates work covered by the following license notice:
  *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
 
 
 #if defined(WNT)
@@ -35,6 +26,7 @@
 #include <osl/file.hxx>
 #include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
+#include <i18npool/languagetag.hxx>
 #include <i18npool/mslangid.hxx>
 #include <unotools/lingucfg.hxx>
 #include <unotools/pathoptions.hxx>
@@ -48,7 +40,6 @@
 #include <string.h>
 
 #include <lingutil.hxx>
-#include <dictmgr.hxx>
 
 #include <sal/macros.h>
 
@@ -148,57 +139,67 @@ std::vector< SvtLinguConfigDictionaryEntry > GetOldStyleDics( const char *pDicTy
     if (aFormatName.isEmpty() || aDicExtension.Len() == 0)
         return aRes;
 
-    // set of languages to remember the language where it is already
-    // decided to make use of the dictionary.
-    std::set< LanguageType > aDicLangInUse;
-
 #ifdef SYSTEM_DICTS
-   osl::Directory aSystemDicts(aSystemDir);
-   if (aSystemDicts.open() == osl::FileBase::E_None)
-   {
-       osl::DirectoryItem aItem;
-       osl::FileStatus aFileStatus(osl_FileStatus_Mask_FileURL);
-       while (aSystemDicts.getNextItem(aItem) == osl::FileBase::E_None)
-       {
-           aItem.getFileStatus(aFileStatus);
-           rtl::OUString sPath = aFileStatus.getFileURL();
-           if (sPath.lastIndexOf(aSystemSuffix) == sPath.getLength()-aSystemSuffix.getLength())
-           {
-               sal_Int32 nStartIndex = sPath.lastIndexOf(sal_Unicode('/')) + 1;
-               if (!sPath.match(aSystemPrefix, nStartIndex))
-                   continue;
-               rtl::OUString sChunk = sPath.copy(0, sPath.getLength() - aSystemSuffix.getLength());
-               sal_Int32 nIndex = nStartIndex + aSystemPrefix.getLength();
-               rtl::OUString sLang = sChunk.getToken( 0, '_', nIndex );
-               if (!sLang.getLength())
-                   continue;
-               rtl::OUString sRegion;
-               if (nIndex != -1)
-                   sRegion = sChunk.copy( nIndex, sChunk.getLength() - nIndex );
+    osl::Directory aSystemDicts(aSystemDir);
+    if (aSystemDicts.open() == osl::FileBase::E_None)
+    {
+        // set of languages to remember the language where it is already
+        // decided to make use of the dictionary.
+        std::set< OUString > aDicLangInUse;
 
-               // Thus we first get the language of the dictionary
-               LanguageType nLang = MsLangId::convertIsoNamesToLanguage(
-                  sLang, sRegion );
+        osl::DirectoryItem aItem;
+        osl::FileStatus aFileStatus(osl_FileStatus_Mask_FileURL);
+        while (aSystemDicts.getNextItem(aItem) == osl::FileBase::E_None)
+        {
+            aItem.getFileStatus(aFileStatus);
+            OUString sPath = aFileStatus.getFileURL();
+            if (sPath.lastIndexOf(aSystemSuffix) == sPath.getLength()-aSystemSuffix.getLength())
+            {
+                sal_Int32 nStartIndex = sPath.lastIndexOf(sal_Unicode('/')) + 1;
+                if (!sPath.match(aSystemPrefix, nStartIndex))
+                    continue;
+                OUString sChunk = sPath.copy(nStartIndex + aSystemPrefix.getLength(),
+                    sPath.getLength() - aSystemSuffix.getLength() -
+                    nStartIndex - aSystemPrefix.getLength());
+                if (sChunk.isEmpty())
+                    continue;
+                //We prefer (now) to use language tags
+                LanguageTag aLangTag(sChunk, true);
+                //On failure try older basic LANG_REGION scheme
+                if (!aLangTag.isValidBcp47())
+                {
+                    sal_Int32 nIndex = 0;
+                    OUString sLang = sChunk.getToken(0, '_', nIndex);
+                    if (!sLang.getLength())
+                        continue;
+                    OUString sRegion;
+                    if (nIndex != -1)
+                       sRegion = sChunk.copy(nIndex);
+                    aLangTag = LanguageTag(sLang, sRegion);
+                }
+                if (!aLangTag.isValidBcp47())
+                    continue;
 
-               if (aDicLangInUse.count( nLang ) == 0)
-               {
-                   // remember the new language in use
-                   aDicLangInUse.insert( nLang );
+                // Thus we first get the language of the dictionary
+                OUString aLocaleName(aLangTag.getBcp47());
 
-                   // add the dictionary to the resulting vector
-                   SvtLinguConfigDictionaryEntry aDicEntry;
-                   aDicEntry.aLocations.realloc(1);
-                   aDicEntry.aLocaleNames.realloc(1);
-                   rtl::OUString aLocaleName( MsLangId::convertLanguageToIsoString( nLang ) );
-                   aDicEntry.aLocations[0] = sPath;
-                   aDicEntry.aFormatName = aFormatName;
-                   aDicEntry.aLocaleNames[0] = aLocaleName;
-                   aRes.push_back( aDicEntry );
-               }
-           }
-       }
+                if (aDicLangInUse.count(aLocaleName) == 0)
+                {
+                    // remember the new language in use
+                    aDicLangInUse.insert(aLocaleName);
+
+                    // add the dictionary to the resulting vector
+                    SvtLinguConfigDictionaryEntry aDicEntry;
+                    aDicEntry.aLocations.realloc(1);
+                    aDicEntry.aLocaleNames.realloc(1);
+                    aDicEntry.aLocations[0] = sPath;
+                    aDicEntry.aFormatName = aFormatName;
+                    aDicEntry.aLocaleNames[0] = aLocaleName;
+                    aRes.push_back( aDicEntry );
+                }
+            }
+        }
     }
-
 #endif
 
     return aRes;

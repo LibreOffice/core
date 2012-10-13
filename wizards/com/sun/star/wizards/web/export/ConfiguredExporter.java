@@ -23,9 +23,6 @@ import java.util.Iterator;
 import com.sun.star.wizards.web.data.CGArgument;
 import com.sun.star.wizards.web.data.CGExporter;
 
-/**
- * @author rpiterman
- */
 public class ConfiguredExporter extends FilterExporter
 {
 

@@ -1,6 +1,15 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+-->
 <component xmlns="http://openoffice.org/2010/uno-components"
-        loader="com.sun.star.loader.SharedLibrary">
+        loader="com.sun.star.loader.SharedLibrary"
+	prefix="pptminimizer">
     <implementation name="com.sun.star.comp.PPPOptimizerImp">
         <service name="com.sun.star.comp.PPPOptimizer"/>
     </implementation>

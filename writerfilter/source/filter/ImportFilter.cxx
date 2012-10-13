@@ -64,7 +64,6 @@ sal_Bool WriterFilter::filter( const uno::Sequence< beans::PropertyValue >& aDes
     {
         MediaDescriptor aMediaDesc( aDescriptor );
         bool bRepairStorage = aMediaDesc.getUnpackedValueOrDefault( "RepairPackage", false );
-        OUString sFilterName = aMediaDesc.getUnpackedValueOrDefault( MediaDescriptor::PROP_FILTERNAME(), OUString() );
 
         uno::Reference< io::XInputStream > xInputStream;
         try

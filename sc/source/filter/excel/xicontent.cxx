@@ -650,19 +650,10 @@ void XclImpCondFormat::Apply()
     {
         ScDocument& rDoc = GetDoc();
 
-        sal_uLong nKey = rDoc.AddCondFormat( mxScCondFmt->Clone(), maRanges.front()->aStart.Tab() );
-        ScPatternAttr aPattern( rDoc.GetPool() );
-        aPattern.GetItemSet().Put( SfxUInt32Item( ATTR_CONDITIONAL, nKey ) );
+        SCTAB nTab = maRanges.front()->aStart.Tab();
+        sal_uLong nKey = rDoc.AddCondFormat( mxScCondFmt->Clone(), nTab );
 
-        // maRanges contains only valid cell ranges
-        for ( size_t i = 0, nRanges = maRanges.size(); i < nRanges; ++i )
-        {
-            const ScRange* pScRange = maRanges[ i ];
-            rDoc.ApplyPatternAreaTab(
-                pScRange->aStart.Col(), pScRange->aStart.Row(),
-                pScRange->aEnd.Col(), pScRange->aEnd.Row(),
-                pScRange->aStart.Tab(), aPattern );
-        }
+        rDoc.AddCondFormatData( maRanges, nTab, nKey );
     }
 }
 

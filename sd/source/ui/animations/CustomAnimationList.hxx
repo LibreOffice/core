@@ -30,7 +30,7 @@
 #define _SD_CUSTOMANIMATIONLIST_HXX
 
 #include <com/sun/star/drawing/XShape.hpp>
-#include <svtools/svtreebx.hxx>
+#include <svtools/treelistbox.hxx>
 #include <CustomAnimationEffect.hxx>
 #include "CustomAnimationPreset.hxx"
 #include "CustomAnimation.hrc"

@@ -51,17 +51,17 @@ public:
 
                         ScStyleSheet( const ScStyleSheet& rStyle );
 
-    virtual sal_Bool        SetParent        ( const String& rParentName );
+    virtual bool        SetParent        ( const String& rParentName );
     virtual SfxItemSet& GetItemSet       ();
-    virtual sal_Bool        IsUsed           () const;
-    virtual sal_Bool        HasFollowSupport () const;
-    virtual sal_Bool        HasParentSupport () const;
+    virtual bool        IsUsed           () const;
+    virtual bool        HasFollowSupport () const;
+    virtual bool        HasParentSupport () const;
 
     virtual const String& GetName() const;
     virtual const String& GetParent() const;
     virtual const String& GetFollow() const;
 
-    virtual sal_Bool SetName( const String& );
+    virtual bool SetName( const String& );
 
             void                SetUsage( ScStyleSheet::Usage eUse ) const
                                     { eUsage = eUse; }

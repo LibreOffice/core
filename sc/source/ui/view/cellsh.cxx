@@ -328,7 +328,7 @@ void ScCellShell::GetCellState( SfxItemSet& rSet )
     }
 }
 
-sal_Bool lcl_TestFormat( SvxClipboardFmtItem& rFormats, const TransferableDataHelper& rDataHelper,
+static sal_Bool lcl_TestFormat( SvxClipboardFmtItem& rFormats, const TransferableDataHelper& rDataHelper,
                         SotFormatStringId nFormatId )
 {
     if ( rDataHelper.HasFormat( nFormatId ) )
@@ -393,7 +393,7 @@ void ScCellShell::GetPossibleClipboardFormats( SvxClipboardFmtItem& rFormats )
 
 //  insert, insert contents
 
-sal_Bool lcl_IsCellPastePossible( const TransferableDataHelper& rData )
+static sal_Bool lcl_IsCellPastePossible( const TransferableDataHelper& rData )
 {
     sal_Bool bPossible = false;
     if ( ScTransferObj::GetOwnClipboard( NULL ) || ScDrawTransferObj::GetOwnClipboard( NULL ) )

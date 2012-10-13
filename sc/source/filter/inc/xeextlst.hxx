@@ -40,12 +40,13 @@ protected:
 class XclExpExtCfvo : public XclExpRecordBase, protected XclExpRoot
 {
 public:
-    XclExpExtCfvo( const XclExpRoot& rRoot, const ScColorScaleEntry& rEntry, const ScAddress& rPos );
+    XclExpExtCfvo( const XclExpRoot& rRoot, const ScColorScaleEntry& rEntry, const ScAddress& rPos, bool bFirst );
     virtual void SaveXml( XclExpXmlStream& rStrm );
 
 private:
     ScColorScaleEntryType meType;
     rtl::OString maValue;
+    bool mbFirst;
 };
 
 class XclExpExtNegativeColor

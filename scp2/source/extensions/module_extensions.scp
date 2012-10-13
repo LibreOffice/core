@@ -326,7 +326,7 @@ End
 
 /* ** Script provider for BeanShell ** */
 
-#if defined SOLAR_JAVA && !defined WITHOUT_EXTENSION_SCRIPTING_BEANSHELL
+#if defined SOLAR_JAVA && !defined WITHOUT_SCRIPTING_BEANSHELL
 
 Module gid_Module_Optional_Extensions_Script_Provider_For_Beanshell
     PackageInfo = "packinfo_extensions.txt";
@@ -345,7 +345,7 @@ End
 
 /* ** Script provider for JavaScript ** */
 
-#if defined SOLAR_JAVA && !defined WITHOUT_EXTENSION_SCRIPTING_JAVASCRIPT
+#if defined SOLAR_JAVA && !defined WITHOUT_SCRIPTING_JAVASCRIPT
 
 Module gid_Module_Optional_Extensions_Script_Provider_For_Javascript
     PackageInfo = "packinfo_extensions.txt";

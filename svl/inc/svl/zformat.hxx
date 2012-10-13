@@ -65,7 +65,7 @@ enum NfHackConversion
 
 struct ImpSvNumberformatInfo            // Struct for FormatInfo
 {
-    String* sStrArray;                  // Array of symbols
+    OUString* sStrArray;                // Array of symbols
     short* nTypeArray;                  // Array of infos
     sal_uInt16 nThousand;               // Count of group separator sequences
     sal_uInt16 nCntPre;                 // Count of digits before decimal point
@@ -146,7 +146,7 @@ public:
 
     // new SYMBOLTYPE_CURRENCY in subformat?
     bool HasNewCurrency() const;
-    bool GetNewCurrencySymbol( String& rSymbol, String& rExtension ) const;
+    bool GetNewCurrencySymbol( OUString& rSymbol, OUString& rExtension ) const;
     void SaveNewCurrencyMap( SvStream& rStream ) const;
     void LoadNewCurrencyMap( SvStream& rStream );
 
@@ -224,7 +224,7 @@ public:
     const OUString& GetFormatstring() const   { return sFormatstring; }
 
     // Build a format string of application defined keywords
-    String GetMappedFormatstring( const NfKeywordTable& rKeywords,
+    OUString GetMappedFormatstring( const NfKeywordTable& rKeywords,
                                     const LocaleDataWrapper& rLoc,
                                     bool bDontQuote = false ) const;
 
@@ -281,7 +281,7 @@ public:
     // Substring of a subformat code nNumFor (0..3)
     // nPos == 0xFFFF => last substring
     // bString==true: first/last SYMBOLTYPE_STRING or SYMBOLTYPE_CURRENCY
-    const String* GetNumForString( sal_uInt16 nNumFor, sal_uInt16 nPos,
+    const OUString* GetNumForString( sal_uInt16 nNumFor, sal_uInt16 nPos,
             bool bString = false ) const;
 
     // Subtype of a subformat code nNumFor (0..3)
@@ -344,7 +344,7 @@ public:
     // If a new SYMBOLTYPE_CURRENCY is contained if the format is of type
     // NUMBERFORMAT_CURRENCY, and if so the symbol xxx and the extension nnn
     // of [$xxx-nnn] are returned
-    bool GetNewCurrencySymbol( String& rSymbol, String& rExtension ) const;
+    bool GetNewCurrencySymbol( OUString& rSymbol, OUString& rExtension ) const;
 
     static bool HasStringNegativeSign( const String& rStr );
 
@@ -378,9 +378,9 @@ public:
                 sal_Unicode cQuote = '"',
                 sal_Unicode cEscIn = '\0', sal_Unicode cEscOut = '\\' );
 
-    void SetComment( const String& rStr )
+    void SetComment( const OUString& rStr )
         { sComment = rStr; }
-    const String& GetComment() const { return sComment; }
+    const OUString& GetComment() const { return sComment; }
 
     /** Insert the number of blanks into the string that is needed to simulate
         the width of character c for underscore formats */
@@ -421,13 +421,13 @@ public:
     /** Switches to the first non-"gregorian" calendar, but only if the current
         calendar is "gregorian"; original calendar name and date/time returned,
         but only if calendar switched and rOrgCalendar was empty. */
-    void SwitchToOtherCalendar( String& rOrgCalendar, double& fOrgDateTime ) const;
+    void SwitchToOtherCalendar( OUString& rOrgCalendar, double& fOrgDateTime ) const;
 
     /** Switches to the "gregorian" calendar, but only if the current calendar
         is non-"gregorian" and rOrgCalendar is not empty. Thus a preceding
         ImpSwitchToOtherCalendar() call should have been placed prior to
         calling this method. */
-    void SwitchToGregorianCalendar( const String& rOrgCalendar, double fOrgDateTime ) const;
+    void SwitchToGregorianCalendar( const OUString& rOrgCalendar, double fOrgDateTime ) const;
 
 #ifdef THE_FUTURE
     /** Switches to the first specified calendar, if any, in subformat nNumFor
@@ -438,7 +438,7 @@ public:
             <TRUE/> if a calendar was specified and switched to,
             <FALSE/> else.
      */
-    bool SwitchToSpecifiedCalendar( String& rOrgCalendar, double& fOrgDateTime,
+    bool SwitchToSpecifiedCalendar( OUString& rOrgCalendar, double& fOrgDateTime,
             sal_uInt16 nNumFor ) const
         {
             if ( nNumFor < 4 )
@@ -459,7 +459,7 @@ public:
 private:
     ImpSvNumFor NumFor[4];          // Array for the 4 subformats
     OUString sFormatstring;         // The format code string
-    String sComment;                // Comment, since number formatter version 6
+    OUString sComment;                // Comment, since number formatter version 6
     double fLimit1;                 // Value for first condition
     double fLimit2;                 // Value for second condition
     ImpSvNumberformatScan& rScan;   // Format code scanner
@@ -620,7 +620,7 @@ private:
     // know a "before" era (like zh_TW ROC or ja_JP Gengou). If switched and
     // rOrgCalendar was "gregorian" the string is emptied. If rOrgCalendar was
     // empty the previous calendar name and date/time are returned.
-    SVL_DLLPRIVATE bool ImpFallBackToGregorianCalendar( String& rOrgCalendar, double& fOrgDateTime );
+    SVL_DLLPRIVATE bool ImpFallBackToGregorianCalendar( OUString& rOrgCalendar, double& fOrgDateTime );
 
     // Append a "G" short era string of the given calendar. In the case of a
     // Gengou calendar this is a one character abbreviation, for other

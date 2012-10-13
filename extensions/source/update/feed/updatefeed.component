@@ -26,7 +26,7 @@
 *
 **********************************************************************-->
 
-<component loader="com.sun.star.loader.SharedLibrary"
+<component loader="com.sun.star.loader.SharedLibrary" prefix="updatefeed"
     xmlns="http://openoffice.org/2010/uno-components">
   <implementation name="vnd.sun.UpdateInformationProvider">
     <service name="com.sun.star.deployment.UpdateInformationProvider"/>

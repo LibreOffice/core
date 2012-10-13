@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <string.h>
 #include "ContentHelper.hxx"
 #include <ucbhelper/cancelcommandexecution.hxx>
 #include <comphelper/property.hxx>
@@ -590,7 +591,7 @@ void OContentHelper::notifyPropertiesChange( const Sequence< PropertyChangeEvent
 // com::sun::star::lang::XUnoTunnel
 sal_Int64 OContentHelper::getSomething( const Sequence< sal_Int8 > & rId ) throw (RuntimeException)
 {
-    if (rId.getLength() == 16 && 0 == rtl_compareMemory(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
+    if (rId.getLength() == 16 && 0 == memcmp(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
         return reinterpret_cast<sal_Int64>(this);
 
     return 0;

@@ -34,6 +34,8 @@
 #include <iostream>
 #endif
 
+#include <algorithm>
+
 ScColorScaleEntry::ScColorScaleEntry():
     mnVal(0),
     mpCell(NULL),
@@ -239,103 +241,6 @@ ScColorScaleEntryType ScColorScaleEntry::GetType() const
     return meType;
 }
 
-namespace {
-
-double getMinValue(const ScRange& rRange, ScDocument* pDoc)
-{
-    double aMinValue = std::numeric_limits<double>::max();
-    //iterate through columns
-    SCTAB nTab = rRange.aStart.Tab();
-    for(SCCOL nCol = rRange.aStart.Col(); nCol <= rRange.aEnd.Col(); ++nCol)
-    {
-        for(SCROW nRow = rRange.aStart.Row(); nRow <= rRange.aEnd.Row(); ++nRow)
-        {
-            ScAddress aAddr(nCol, nRow, rRange.aStart.Tab());
-            CellType eType = pDoc->GetCellType(aAddr);
-            if(eType == CELLTYPE_VALUE)
-            {
-                double aVal = pDoc->GetValue(nCol, nRow, nTab);
-                if( aVal < aMinValue )
-                    aMinValue = aVal;
-            }
-            else if(eType == CELLTYPE_FORMULA)
-            {
-                if(static_cast<ScFormulaCell*>(pDoc->GetCell(aAddr))->IsValue())
-                {
-                    double aVal = pDoc->GetValue(nCol, nRow, nTab);
-                    if( aVal < aMinValue )
-                        aMinValue = aVal;
-                }
-            }
-        }
-    }
-    return aMinValue;
-}
-
-double getMaxValue(const ScRange& rRange, ScDocument* pDoc)
-{
-    double aMaxValue = std::numeric_limits<double>::min();
-    //iterate through columns
-    SCTAB nTab = rRange.aStart.Tab();
-    for(SCCOL nCol = rRange.aStart.Col(); nCol <= rRange.aEnd.Col(); ++nCol)
-    {
-        for(SCROW nRow = rRange.aStart.Row(); nRow <= rRange.aEnd.Row(); ++nRow)
-        {
-            ScAddress aAddr(nCol, nRow, rRange.aStart.Tab());
-            CellType eType = pDoc->GetCellType(aAddr);
-            if(eType == CELLTYPE_VALUE)
-            {
-                double aVal = pDoc->GetValue(nCol, nRow, nTab);
-                if( aVal > aMaxValue )
-                    aMaxValue = aVal;
-            }
-            else if(eType == CELLTYPE_FORMULA)
-            {
-                if(static_cast<ScFormulaCell*>(pDoc->GetCell(aAddr))->IsValue())
-                {
-                    double aVal = pDoc->GetValue(nCol, nRow, nTab);
-                    if( aVal > aMaxValue )
-                        aMaxValue = aVal;
-                }
-            }
-        }
-    }
-    return aMaxValue;
-}
-
-double getMinValue(const ScRangeList& rList, ScDocument* pDoc)
-{
-    double aMinValue = std::numeric_limits<double>::max();
-
-    size_t n = rList.size();
-    for(size_t i = 0; i < n; ++i)
-    {
-        const ScRange* pRange = rList[i];
-        double aVal = getMinValue(*pRange, pDoc);
-        if( aVal < aMinValue )
-            aMinValue = aVal;
-    }
-    return aMinValue;
-}
-
-double getMaxValue(const ScRangeList& rList, ScDocument* pDoc)
-{
-    double aMaxVal = std::numeric_limits<double>::min();
-
-    size_t n = rList.size();
-    for(size_t i = 0; i < n; ++i)
-    {
-        const ScRange* pRange = rList[i];
-        double aVal = getMaxValue(*pRange, pDoc);
-        if( aVal > aMaxVal )
-            aMaxVal = aVal;
-    }
-
-    return aMaxVal;
-}
-
-}
-
 double ScColorScaleFormat::GetMinValue() const
 {
     const_iterator itr = maColorScales.begin();
@@ -344,7 +249,7 @@ double ScColorScaleFormat::GetMinValue() const
         return itr->GetValue();
     else
     {
-        return getMinValue(GetRange(), mpDoc);
+        return getMinValue();
     }
 }
 
@@ -356,7 +261,7 @@ double ScColorScaleFormat::GetMaxValue() const
         return itr->GetValue();
     else
     {
-        return getMaxValue(GetRange(), mpDoc);
+        return getMaxValue();
     }
 }
 
@@ -371,36 +276,72 @@ const ScRangeList& ScColorFormat::GetRange() const
     return mpParent->GetRange();
 }
 
-void ScColorFormat::getValues(std::vector<double>& rValues) const
+std::vector<double>& ScColorFormat::getValues() const
 {
-    size_t n = GetRange().size();
-    const ScRangeList& aRanges = GetRange();
-    for(size_t i = 0; i < n; ++i)
+    if(!mpCache)
     {
-        const ScRange* pRange = aRanges[i];
-        SCTAB nTab = pRange->aStart.Tab();
-        for(SCCOL nCol = pRange->aStart.Col(); nCol <= pRange->aEnd.Col(); ++nCol)
+        mpCache.reset(new ScColorFormatCache);
+        std::vector<double>& rValues = mpCache->maValues;
+
+        size_t n = GetRange().size();
+        const ScRangeList& aRanges = GetRange();
+        for(size_t i = 0; i < n; ++i)
         {
-            for(SCCOL nRow = pRange->aStart.Row(); nRow <= pRange->aEnd.Row(); ++nRow)
+            const ScRange* pRange = aRanges[i];
+            SCTAB nTab = pRange->aStart.Tab();
+            for(SCCOL nCol = pRange->aStart.Col(); nCol <= pRange->aEnd.Col(); ++nCol)
             {
-                ScAddress aAddr(nCol, nRow, nTab);
-                CellType eType = mpDoc->GetCellType(aAddr);
-                if(eType == CELLTYPE_VALUE)
+                for(SCCOL nRow = pRange->aStart.Row(); nRow <= pRange->aEnd.Row(); ++nRow)
                 {
-                    double aVal = mpDoc->GetValue(nCol, nRow, nTab);
-                    rValues.push_back(aVal);
-                }
-                else if(eType == CELLTYPE_FORMULA)
-                {
-                    if(static_cast<ScFormulaCell*>(mpDoc->GetCell(aAddr))->IsValue())
+                    ScAddress aAddr(nCol, nRow, nTab);
+                    CellType eType = mpDoc->GetCellType(aAddr);
+                    if(eType == CELLTYPE_VALUE)
                     {
                         double aVal = mpDoc->GetValue(nCol, nRow, nTab);
                         rValues.push_back(aVal);
                     }
+                    else if(eType == CELLTYPE_FORMULA)
+                    {
+                        if(static_cast<ScFormulaCell*>(mpDoc->GetCell(aAddr))->IsValue())
+                        {
+                            double aVal = mpDoc->GetValue(nCol, nRow, nTab);
+                            rValues.push_back(aVal);
+                        }
+                    }
                 }
             }
         }
+
+        std::sort(rValues.begin(), rValues.end());
     }
+
+    return mpCache->maValues;
+}
+
+double ScColorFormat::getMinValue() const
+{
+    std::vector<double>& rValues = getValues();
+    if(rValues.empty())
+        return 0;
+    return rValues[0];
+}
+
+double ScColorFormat::getMaxValue() const
+{
+    std::vector<double>& rValues = getValues();
+    if(rValues.empty())
+        return 0;
+    return rValues[rValues.size()-1];
+}
+
+void ScColorFormat::startRendering()
+{
+    mpCache.reset();
+}
+
+void ScColorFormat::endRendering()
+{
+    mpCache.reset();
 }
 
 namespace {
@@ -426,20 +367,22 @@ Color CalcColor( double nVal, double nVal1, const Color& rCol1, double nVal2, co
     return Color(nColRed, nColGreen, nColBlue);
 }
 
-double GetPercentile( std::vector<double>& rArray, double fPercentile )
+/**
+ * @param rVector sorted vector of the array
+ * @param fPercentile percentile
+ */
+double GetPercentile( const std::vector<double>& rArray, double fPercentile )
 {
     size_t nSize = rArray.size();
     size_t nIndex = (size_t)::rtl::math::approxFloor( fPercentile * (nSize-1));
     double fDiff = fPercentile * (nSize-1) - ::rtl::math::approxFloor( fPercentile * (nSize-1));
-    std::vector<double>::iterator iter = rArray.begin() + nIndex;
-    ::std::nth_element( rArray.begin(), iter, rArray.end());
+    std::vector<double>::const_iterator iter = rArray.begin() + nIndex;
     if (fDiff == 0.0)
         return *iter;
     else
     {
         double fVal = *iter;
         iter = rArray.begin() + nIndex+1;
-        ::std::nth_element( rArray.begin(), iter, rArray.end());
         return fVal + fDiff * (*iter - fVal);
     }
 }
@@ -454,22 +397,17 @@ double ScColorScaleFormat::CalcValue(double nMin, double nMax, ScColorScaleForma
             return nMin + (nMax-nMin)*(itr->GetValue()/100);
         case COLORSCALE_MIN:
             return nMin;
-        case COLORSCALE_AUTOMIN:
-            return std::min<double>(0, nMin);
         case COLORSCALE_MAX:
             return nMax;
-        case COLORSCALE_AUTOMAX:
-            return std::max<double>(0, nMax);
         case COLORSCALE_PERCENTILE:
         {
-            std::vector<double> aValues;
-            getValues(aValues);
-            if(aValues.size() == 1)
-                return aValues[0];
+            std::vector<double>& rValues = getValues();
+            if(rValues.size() == 1)
+                return rValues[0];
             else
             {
                 double fPercentile = itr->GetValue()/100.0;
-                return GetPercentile(aValues, fPercentile);
+                return GetPercentile(rValues, fPercentile);
             }
         }
 
@@ -584,8 +522,6 @@ bool ScColorScaleFormat::CheckEntriesForRel(const ScRange& rRange) const
         {
             case COLORSCALE_MIN:
             case COLORSCALE_MAX:
-            case COLORSCALE_AUTOMIN:
-            case COLORSCALE_AUTOMAX:
                 bNeedUpdate = true;
                 break;
             case COLORSCALE_FORMULA:
@@ -692,8 +628,7 @@ bool NeedUpdate(ScColorScaleEntry* pEntry)
         case COLORSCALE_MIN:
         case COLORSCALE_MAX:
         case COLORSCALE_FORMULA:
-        case COLORSCALE_AUTOMIN:
-        case COLORSCALE_AUTOMAX:
+        case COLORSCALE_AUTO:
             return true;
         default:
             return false;
@@ -736,7 +671,7 @@ double ScDataBarFormat::getMin(double nMin, double nMax) const
         case COLORSCALE_MIN:
             return nMin;
 
-        case COLORSCALE_AUTOMIN:
+        case COLORSCALE_AUTO:
             return std::min<double>(0, nMin);
 
         case COLORSCALE_PERCENT:
@@ -745,9 +680,8 @@ double ScDataBarFormat::getMin(double nMin, double nMax) const
         case COLORSCALE_PERCENTILE:
         {
             double fPercentile = mpFormatData->mpLowerLimit->GetValue()/100.0;
-            std::vector<double> aValues;
-            getValues(aValues);
-            return GetPercentile(aValues, fPercentile);
+            std::vector<double>& rValues = getValues();
+            return GetPercentile(rValues, fPercentile);
         }
 
         default:
@@ -763,16 +697,15 @@ double ScDataBarFormat::getMax(double nMin, double nMax) const
     {
         case COLORSCALE_MAX:
             return nMax;
-        case COLORSCALE_AUTOMAX:
+        case COLORSCALE_AUTO:
             return std::max<double>(0, nMax);
         case COLORSCALE_PERCENT:
             return nMin + (nMax-nMin)/100*mpFormatData->mpUpperLimit->GetValue();
         case COLORSCALE_PERCENTILE:
         {
             double fPercentile = mpFormatData->mpUpperLimit->GetValue()/100.0;
-            std::vector<double> aValues;
-            getValues(aValues);
-            return GetPercentile(aValues, fPercentile);
+            std::vector<double>& rValues = getValues();
+            return GetPercentile(rValues, fPercentile);
         }
 
         default:
@@ -796,8 +729,8 @@ ScDataBarInfo* ScDataBarFormat::GetDataBarInfo(const ScAddress& rAddr) const
 
     // now we have for sure a value
     //
-    double nValMin = getMinValue(GetRange(), mpDoc);
-    double nValMax = getMaxValue(GetRange(), mpDoc);
+    double nValMin = getMinValue();
+    double nValMax = getMaxValue();
     double nMin = getMin(nValMin, nValMax);
     double nMax = getMax(nValMin, nValMax);
 

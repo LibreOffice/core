@@ -1,31 +1,26 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*************************************************************************
+/*
+ * This file is part of the LibreOffice project.
  *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * This file incorporates work covered by the following license notice:
  *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
 
+
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_ucb.hxx"
 
 /**************************************************************************
                                 TODO
@@ -39,13 +34,15 @@
 #include "webdavdatasupplier.hxx"
 #include "webdavcontent.hxx"
 #include "ContentProperties.hxx"
+#ifndef _WEBDAV_SESSION_HXX
 #include "DAVSession.hxx"
-#include "NeonUri.hxx"
+#endif
+#include "SerfUri.hxx"
 
 using namespace com::sun::star;
-using namespace webdav_ucp;
+using namespace http_dav_ucp;
 
-namespace webdav_ucp
+namespace http_dav_ucp
 {
 
 //=========================================================================
@@ -63,7 +60,7 @@ struct ResultListEntry
     const ContentProperties*                  pData;
 
     ResultListEntry( const ContentProperties* pEntry ) : pData( pEntry ) {};
-     ~ResultListEntry() { delete pData; }
+    ~ResultListEntry() { delete pData; }
 };
 
 //=========================================================================
@@ -146,7 +143,7 @@ rtl::OUString DataSupplier::queryContentIdentifierString( sal_uInt32 nIndex )
     if ( nIndex < m_pImpl->m_aResults.size() )
     {
         rtl::OUString aId = m_pImpl->m_aResults[ nIndex ]->aId;
-        if ( !aId.isEmpty() )
+        if ( aId.getLength() )
         {
             // Already cached.
             return aId;
@@ -161,12 +158,12 @@ rtl::OUString DataSupplier::queryContentIdentifierString( sal_uInt32 nIndex )
                             = *( m_pImpl->m_aResults[ nIndex ]->pData );
 
         if ( ( aId.lastIndexOf( '/' ) + 1 ) != aId.getLength() )
-            aId += rtl::OUString("/");
+            aId += rtl::OUString::createFromAscii( "/" );
 
         aId += props.getEscapedTitle();
 
         if ( props.isTrailingSlash() )
-            aId += rtl::OUString("/");
+            aId += rtl::OUString::createFromAscii( "/" );
 
         m_pImpl->m_aResults[ nIndex ]->aId = aId;
         return aId;
@@ -193,7 +190,7 @@ DataSupplier::queryContentIdentifier( sal_uInt32 nIndex )
     }
 
     rtl::OUString aId = queryContentIdentifierString( nIndex );
-    if ( !aId.isEmpty() )
+    if ( aId.getLength() )
     {
         uno::Reference< ucb::XContentIdentifier > xId
             = new ::ucbhelper::ContentIdentifier( aId );
@@ -389,18 +386,18 @@ sal_Bool DataSupplier::getData()
                            propertyNames,
                            resources,
                            getResultSet()->getEnvironment() );
-          }
-          catch ( DAVException & )
+        }
+        catch ( DAVException & )
         {
-//          OSL_FAIL( "PROPFIND : DAVException" );
+//          OSL_ENSURE( sal_False, "PROPFIND : DAVException" );
             m_pImpl->m_bThrowException = sal_True;
-          }
+        }
 
         if ( !m_pImpl->m_bThrowException )
         {
             try
             {
-                NeonUri aURI(
+                SerfUri aURI(
                     m_pImpl->m_xContent->getResourceAccess().getURL() );
                 rtl::OUString aPath = aURI.GetPath();
 
@@ -408,7 +405,7 @@ sal_Bool DataSupplier::getData()
                      == sal_Unicode( '/' ) )
                     aPath = aPath.copy( 0, aPath.getLength() - 1 );
 
-                aPath = NeonUri::unescape( aPath );
+                aPath = SerfUri::unescape( aPath );
                 bool bFoundParent = false;
 
                 for ( sal_uInt32 n = 0; n < resources.size(); ++n )
@@ -421,7 +418,7 @@ sal_Bool DataSupplier::getData()
                     {
                         try
                         {
-                            NeonUri aCurrURI( rRes.uri );
+                            SerfUri aCurrURI( rRes.uri );
                             rtl::OUString aCurrPath = aCurrURI.GetPath();
                             if ( aCurrPath.getStr()[
                                      aCurrPath.getLength() - 1 ]
@@ -431,7 +428,7 @@ sal_Bool DataSupplier::getData()
                                         0,
                                         aCurrPath.getLength() - 1 );
 
-                            aCurrPath = NeonUri::unescape( aCurrPath );
+                            aCurrPath = SerfUri::unescape( aCurrPath );
                             if ( aPath == aCurrPath )
                             {
                                 bFoundParent = true;
@@ -456,7 +453,9 @@ sal_Bool DataSupplier::getData()
 
                             const uno::Any & rValue
                                 = pContentProperties->getValue(
-                                    rtl::OUString( "IsFolder"  ) );
+                                    rtl::OUString(
+                                        RTL_CONSTASCII_USTRINGPARAM(
+                                            "IsFolder" ) ) );
                             rValue >>= bFolder;
 
                             if ( !bFolder )
@@ -471,7 +470,9 @@ sal_Bool DataSupplier::getData()
 
                             const uno::Any & rValue
                                 = pContentProperties->getValue(
-                                    rtl::OUString( "IsDocument"  ) );
+                                    rtl::OUString(
+                                        RTL_CONSTASCII_USTRINGPARAM(
+                                            "IsDocument" ) ) );
                             rValue >>= bDocument;
 
                             if ( !bDocument )
@@ -494,7 +495,7 @@ sal_Bool DataSupplier::getData()
             }
         }
 
-          m_pImpl->m_bCountFinal = sal_True;
+        m_pImpl->m_bCountFinal = sal_True;
 
         // Callback possible, because listeners may be informed!
         aGuard.clear();

@@ -1211,22 +1211,6 @@ rtl::OUString SvtLinguConfig::GetSpellAndGrammarContextDictionaryImage(
     return aRes;
 }
 
-
-::rtl::OUString SvtLinguConfig::GetThesaurusDialogImage(
-    const ::rtl::OUString &rServiceImplName
-) const
-{
-    rtl::OUString   aRes;
-    if (!rServiceImplName.isEmpty())
-    {
-        rtl::OUString aImageName( A2OU( "ThesaurusDialogImage" ));
-        rtl::OUString aPath( GetVendorImageUrl_Impl( rServiceImplName, aImageName ) );
-        aRes = aPath;
-    }
-    return aRes;
-}
-
-
 ::rtl::OUString SvtLinguConfig::GetSynonymsContextImage(
     const ::rtl::OUString &rServiceImplName
 ) const
@@ -1240,48 +1224,6 @@ rtl::OUString SvtLinguConfig::GetSpellAndGrammarContextDictionaryImage(
     }
     return aRes;
 }
-
-
-bool SvtLinguConfig::HasVendorImages( const char *pImageName ) const
-{
-    bool bRes = false;
-    if (pImageName)
-    {
-        try
-        {
-            uno::Reference< container::XNameAccess > xNA( GetMainUpdateAccess(), uno::UNO_QUERY_THROW );
-            xNA.set( xNA->getByName( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Images")) ), uno::UNO_QUERY_THROW );
-            xNA.set( xNA->getByName( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VendorImages")) ), uno::UNO_QUERY_THROW );
-
-            uno::Sequence< rtl::OUString > aElementNames( xNA->getElementNames() );
-            sal_Int32 nVendors = aElementNames.getLength();
-            const rtl::OUString *pVendor = aElementNames.getConstArray();
-            for (sal_Int32 i = 0;  i < nVendors;  ++i)
-            {
-                uno::Reference< container::XNameAccess > xNA2( xNA->getByName( pVendor[i] ), uno::UNO_QUERY_THROW  );
-                uno::Sequence< rtl::OUString > aPropNames( xNA2->getElementNames() );
-                sal_Int32 nProps = aPropNames.getLength();
-                const rtl::OUString *pPropNames = aPropNames.getConstArray();
-                for (sal_Int32 k = 0;  k < nProps;  ++k)
-                {
-                    // for a quicker check we ignore the HC image names here
-                    const OUString &rName = pPropNames[k];
-                    if (rName.equalsAscii( pImageName ))
-                    {
-                        bRes = true;
-                        break;
-                    }
-                }
-            }
-        }
-        catch (uno::Exception &)
-        {
-            DBG_ASSERT( 0, "exception caught. HasVendorImages failed" );
-        }
-    }
-    return bRes;
-}
-
 
 bool SvtLinguConfig::HasGrammarChecker() const
 {

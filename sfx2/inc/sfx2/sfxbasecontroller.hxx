@@ -44,6 +44,8 @@
 #include <com/sun/star/awt/XMouseClickHandler.hpp>
 #include <com/sun/star/awt/XKeyHandler.hpp>
 #include <com/sun/star/awt/XUserInputInterception.hpp>
+#include <tools/link.hxx>
+#include <vcl/button.hxx>
 
 #include <sfx2/viewsh.hxx>
 #include <sfx2/sfxuno.hxx>
@@ -383,6 +385,9 @@ private:
     };
     SAL_DLLPRIVATE void ConnectSfxFrame_Impl( const ConnectSfxFrame i_eConnect );
     SAL_DLLPRIVATE SfxViewFrame& GetViewFrame_Impl() const;
+    SAL_DLLPRIVATE void ShowInfoBars( );
+
+    DECL_LINK( CheckOutHandler, PushButton * );
 
 //________________________________________________________________________________________________________
 //  private variables

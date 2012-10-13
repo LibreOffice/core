@@ -17,22 +17,20 @@
 
 #include <iostream>
 
-using namespace std;
-
-typedef set<string> DirContent;
-typedef map<string, DirContent> DirMap;
+typedef std::set<std::string> DirContent;
+typedef std::map<std::string, DirContent> DirMap;
 typedef DirMap::value_type EntriesPair;
-typedef pair<string, string> PathFilePair;
+typedef std::pair<std::string, std::string> PathFilePair;
 
 
 struct IncludesCollection {
     private:
     DirMap allIncludes;
-    PathFilePair split_path(const string& filePath);
-    void add_to_collection(const string& dirPath);
+    PathFilePair split_path(const std::string& filePath);
+    void add_to_collection(const std::string& dirPath);
 
     public:
-        bool exists(string filePath);
+    bool exists(std::string filePath);
 };
 
 #else

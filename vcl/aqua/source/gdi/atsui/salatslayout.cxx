@@ -437,7 +437,7 @@ void ATSLayout::DrawText( SalGraphics& rGraphics ) const
         {
             const SubPortion& rSubPortion = *it;
             // calculate sub-portion offset for rotated text
-            Fixed nXOfsFixed = 0, nYOfsFixed = 0;
+            Fixed nXOfsFixed = rSubPortion.mnXOffset, nYOfsFixed = 0;
             if( rAquaGraphics.mnATSUIRotation != 0 )
             {
                 const double fRadians = rAquaGraphics.mnATSUIRotation * (M_PI/0xB40000);

@@ -134,14 +134,13 @@ ModalDialog RID_SCDLG_DATABAR
         DropDown = TRUE;
         StringList [ en-US ] =
         {
+            "Automatic";
             "Minimum";
             "Maximum";
             "Percentile";
-            "Percent";
             "Value";
+            "Percent";
             "Formula";
-            "AutoMin";
-            "AutoMax";
         };
     };
     ListBox LB_AXIS_POSITION

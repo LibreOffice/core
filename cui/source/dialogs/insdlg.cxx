@@ -1,30 +1,21 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*************************************************************************
+/*
+ * This file is part of the LibreOffice project.
  *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * This file incorporates work covered by the following license notice:
  *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
 
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
@@ -38,7 +29,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/embed/XInsertObjectDialog.hpp>
 #include <com/sun/star/ucb/CommandAbortedException.hpp>
-#include <com/sun/star/task/XInteractionHandler.hpp>
+#include <com/sun/star/task/InteractionHandler.hpp>
 
 #include "insdlg.hxx"
 #include <dialmgr.hxx>
@@ -48,13 +39,14 @@
 #include <tools/urlobj.hxx>
 #include <tools/debug.hxx>
 #include <svl/urihelper.hxx>
-#include <svtools/svmedit.hxx>
 #include <vcl/button.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/group.hxx>
+#include <vcl/layout.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/vclmedit.hxx>
 #include <sot/clsids.hxx>
 #include <sfx2/frmdescr.hxx>
 #include <sfx2/viewsh.hxx>
@@ -107,6 +99,15 @@ InsertObjectDialog_Impl::InsertObjectDialog_Impl( Window * pParent, const ResId 
 {
 }
 
+InsertObjectDialog_Impl::InsertObjectDialog_Impl(Window * pParent, const OString& rID,
+    const OUString& rUIXMLDescription,
+    const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& xStorage)
+    : ModalDialog(pParent, rID, rUIXMLDescription)
+    , m_xStorage( xStorage )
+    , aCnt( m_xStorage )
+{
+}
+
 // -----------------------------------------------------------------------
 
 IMPL_LINK_NOARG_INLINE_START(SvInsertOleDlg, DoubleClickHdl)
@@ -151,7 +152,7 @@ IMPL_LINK_NOARG(SvInsertOleDlg, BrowseHdl)
             {
                 Sequence< OUString > aPathSeq( xFilePicker->getFiles() );
                 INetURLObject aObj( aPathSeq[0] );
-                aEdFilepath.SetText( aObj.PathToFileName() );
+                m_pEdFilepath->SetText( aObj.PathToFileName() );
             }
         }
     }
@@ -163,22 +164,15 @@ IMPL_LINK_NOARG(SvInsertOleDlg, BrowseHdl)
 
 IMPL_LINK_NOARG(SvInsertOleDlg, RadioHdl)
 {
-    if ( aRbNewObject.IsChecked() )
+    if ( m_pRbNewObject->IsChecked() )
     {
-        aLbObjecttype.Show();
-        aEdFilepath.Hide();
-        aBtnFilepath.Hide();
-        aCbFilelink.Hide();
-        aGbObject.SetText( _aOldStr );
+        m_pObjectTypeFrame->Show();
+        m_pFileFrame->Hide();
     }
     else
     {
-        aCbFilelink.Show();
-        aLbObjecttype.Hide();
-        aEdFilepath.Show();
-        aBtnFilepath.Show();
-        aCbFilelink.Show();
-        aGbObject.SetText( aStrFile );
+        m_pFileFrame->Show();
+        m_pObjectTypeFrame->Hide();
     }
     return 0;
 }
@@ -187,7 +181,7 @@ IMPL_LINK_NOARG(SvInsertOleDlg, RadioHdl)
 
 void SvInsertOleDlg::SelectDefault()
 {
-    aLbObjecttype.SelectEntryPos( 0 );
+    m_pLbObjecttype->SelectEntryPos(0);
 }
 
 // -----------------------------------------------------------------------
@@ -197,30 +191,25 @@ SvInsertOleDlg::SvInsertOleDlg
     const Reference < embed::XStorage >& xStorage,
     const SvObjectServerList* pServers
 )
-    : InsertObjectDialog_Impl( pParent, CUI_RES( MD_INSERT_OLEOBJECT ), xStorage ),
-    aRbNewObject( this, CUI_RES( RB_NEW_OBJECT ) ),
-    aRbObjectFromfile( this, CUI_RES( RB_OBJECT_FROMFILE ) ),
-    aGbObject( this, CUI_RES( GB_OBJECT ) ),
-    aLbObjecttype( this, CUI_RES( LB_OBJECTTYPE ) ),
-    aEdFilepath( this, CUI_RES( ED_FILEPATH ) ),
-    aBtnFilepath( this, CUI_RES( BTN_FILEPATH ) ),
-    aCbFilelink( this, CUI_RES( CB_FILELINK ) ),
-    aOKButton1( this, CUI_RES( 1 ) ),
-    aCancelButton1( this, CUI_RES( 1 ) ),
-    aHelpButton1( this, CUI_RES( 1 ) ),
-    aStrFile( CUI_RES( STR_FILE ) ),
+    : InsertObjectDialog_Impl( pParent, "InsertOLEObjectDialog", "cui/ui/insertoleobject.ui", xStorage ),
     m_pServers( pServers )
 {
-    FreeResource();
-    _aOldStr = aGbObject.GetText();
-    aLbObjecttype.SetDoubleClickHdl( LINK( this, SvInsertOleDlg, DoubleClickHdl ) );
-    aBtnFilepath.SetClickHdl( LINK( this, SvInsertOleDlg, BrowseHdl ) );
+    get(m_pRbNewObject, "createnew");
+    get(m_pRbObjectFromfile, "createfromfile");
+    get(m_pObjectTypeFrame, "objecttypeframe");
+    get(m_pLbObjecttype, "types");
+    get(m_pFileFrame, "fileframe");
+    get(m_pEdFilepath, "urled");
+    get(m_pBtnFilepath, "urlbtn");
+    get(m_pCbFilelink, "linktofile");
+    m_pLbObjecttype->SetDoubleClickHdl( LINK( this, SvInsertOleDlg, DoubleClickHdl ) );
+    m_pBtnFilepath->SetClickHdl( LINK( this, SvInsertOleDlg, BrowseHdl ) );
     Link aLink( LINK( this, SvInsertOleDlg, RadioHdl ) );
-    aRbNewObject.SetClickHdl( aLink );
-    aRbObjectFromfile.SetClickHdl( aLink );
-    aRbNewObject.Check( sal_True );
+    m_pRbNewObject->SetClickHdl( aLink );
+    m_pRbObjectFromfile->SetClickHdl( aLink );
+    m_pRbNewObject->Check( sal_True );
     RadioHdl( NULL );
-    aBtnFilepath.SetAccessibleRelationMemberOf(&aGbObject);
+    m_pBtnFilepath->SetAccessibleRelationMemberOf(m_pFileFrame->get_label_widget());
 }
 
 short SvInsertOleDlg::Execute()
@@ -341,24 +330,12 @@ short SvInsertOleDlg::Execute()
                 aMedium[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "URL" ) );
                 aMedium[0].Value <<= ::rtl::OUString( aFileName );
 
-                uno::Reference< task::XInteractionHandler > xInteraction;
-                uno::Reference< lang::XMultiServiceFactory > xFactory = ::comphelper::getProcessServiceFactory();
-                if ( xFactory.is() )
-                    xInteraction = uno::Reference< task::XInteractionHandler >(
-                        xFactory->createInstance(
-                            DEFINE_CONST_UNICODE("com.sun.star.task.InteractionHandler") ),
-                        uno::UNO_QUERY_THROW );
+                uno::Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+                uno::Reference< task::XInteractionHandler2 > xInteraction(
+                    task::InteractionHandler::createWithParent(xContext, 0) );
 
-                if ( xInteraction.is() )
-                {
-                       aMedium[1].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "InteractionHandler" ) );
-                       aMedium[1].Value <<= xInteraction;
-                }
-                else
-                {
-                    OSL_FAIL( "Can not get InteractionHandler!\n" );
-                    aMedium.realloc( 1 );
-                }
+               aMedium[1].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "InteractionHandler" ) );
+               aMedium[1].Value <<= xInteraction;
 
                 // create object from media descriptor
                 if ( bLink )
@@ -432,7 +409,7 @@ IMPL_LINK_NOARG(SvInsertPlugInDialog, BrowseHdl)
             {
                 Sequence< OUString > aPathSeq( xFilePicker->getFiles() );
                 INetURLObject aObj( aPathSeq[0] );
-                aEdFileurl.SetText( aObj.PathToFileName() );
+                m_pEdFileurl->SetText(aObj.PathToFileName());
             }
         }
     }
@@ -442,20 +419,15 @@ IMPL_LINK_NOARG(SvInsertPlugInDialog, BrowseHdl)
 
 // -----------------------------------------------------------------------
 
-SvInsertPlugInDialog::SvInsertPlugInDialog( Window* pParent, const uno::Reference < embed::XStorage >& xStorage )
-    : InsertObjectDialog_Impl( pParent, CUI_RES( MD_INSERT_OBJECT_PLUGIN ), xStorage ),
-    aGbFileurl( this, CUI_RES( GB_FILEURL ) ),
-    aEdFileurl( this, CUI_RES( ED_FILEURL ) ),
-    aBtnFileurl( this, CUI_RES( BTN_FILEURL ) ),
-    aGbPluginsOptions( this, CUI_RES( GB_PLUGINS_OPTIONS ) ),
-    aEdPluginsOptions( this, CUI_RES( ED_PLUGINS_OPTIONS ) ),
-    aOKButton1( this, CUI_RES( 1 ) ),
-    aCancelButton1( this, CUI_RES( 1 ) ),
-    aHelpButton1( this, CUI_RES( 1 ) ),
-    m_pURL(0)
+SvInsertPlugInDialog::SvInsertPlugInDialog(Window* pParent,
+    const uno::Reference < embed::XStorage >& xStorage)
+    : InsertObjectDialog_Impl(pParent, "InsertPluginDialog", "cui/ui/insertplugin.ui", xStorage)
+    , m_pURL(0)
 {
-    FreeResource();
-    aBtnFileurl.SetClickHdl( LINK( this, SvInsertPlugInDialog, BrowseHdl ) );
+    get(m_pEdFileurl, "urled");
+    get(m_pBtnFileurl, "urlbtn");
+    get(m_pEdPluginsOptions, "pluginoptions");
+    m_pBtnFileurl->SetClickHdl(LINK(this, SvInsertPlugInDialog, BrowseHdl));
 }
 
 SvInsertPlugInDialog::~SvInsertPlugInDialog()
@@ -485,7 +457,7 @@ static void Plugin_ImplFillCommandSequence( const String& aCommands, uno::Sequen
 short SvInsertPlugInDialog::Execute()
 {
     short nRet = RET_OK;
-    m_aCommands.Erase();
+    m_aCommands = OUString();
     DBG_ASSERT( m_xStorage.is(), "No storage!");
     if ( m_xStorage.is() && ( nRet = Dialog::Execute() ) == RET_OK )
     {

@@ -17,13 +17,23 @@ $(eval $(call gb_ExternalProject_register_targets,liborcus,\
 
 ifeq ($(OS)$(COM),WNTMSC)
 
+ifeq ($(VCVER),90)
 $(call gb_ExternalProject_get_state_target,liborcus,build) :
 	cd $(EXTERNAL_WORKDIR)/vsprojects/liborcus-static-nozip \
 	&& export BOOST_INCLUDE_DIR=$(OUTDIR)/inc/external \
 	&& export BOOST_LIB_DIR=$(OUTDIR)/lib \
 	&& $(COMPATH)/vcpackages/vcbuild.exe liborcus-static-nozip.vcproj "Release|Win32" \
 	&& touch $@
-
+else
+$(call gb_ExternalProject_get_state_target,liborcus,build) :
+	cd $(EXTERNAL_WORKDIR)/vsprojects/liborcus-static-nozip \
+	&& export BOOST_INCLUDE_DIR=$(OUTDIR)/inc/external \
+	&& export BOOST_LIB_DIR=$(OUTDIR)/lib \
+	&& $(COMPATH)/../Common7/Tools/vcupgrade.exe liborcus-static-nozip.vcproj \
+	&& MSBuild.exe liborcus-static-nozip.vcxproj /p:Configuration=Release /p:OutDir=Release /p:TargetName=orcus /p:WholeProgramOptimization=no \
+	&& touch $@
+endif
+	
 else
 
 $(call gb_ExternalProject_get_state_target,liborcus,build) :

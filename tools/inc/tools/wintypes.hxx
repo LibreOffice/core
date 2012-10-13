@@ -90,6 +90,7 @@ typedef sal_uInt16 WindowType;
 #define WINDOW_TIMEBOX              (WINDOW_FIRST + 0x3d)
 #define WINDOW_LONGCURRENCYFIELD    (WINDOW_FIRST + 0x3e)
 #define WINDOW_LONGCURRENCYBOX      (WINDOW_FIRST + 0x3f)
+#define WINDOW_SCROLLWINDOW         (WINDOW_FIRST + 0x40)
 #define WINDOW_TOOLBOX              (WINDOW_FIRST + 0x41)
 #define WINDOW_DOCKINGWINDOW        (WINDOW_FIRST + 0x42)
 #define WINDOW_STATUSBAR            (WINDOW_FIRST + 0x43)

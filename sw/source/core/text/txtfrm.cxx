@@ -503,7 +503,7 @@ void SwTxtFrm::HideFootnotes( xub_StrLen nStart, xub_StrLen nEnd )
 //     checked by checking certain compatibility options -,
 // (b) the paragraph is the last content in the document and
 // (c) the anchor character is an as-character anchored graphic.
-bool lcl_HideObj( const SwTxtFrm& _rFrm,
+bool sw_HideObj( const SwTxtFrm& _rFrm,
                   const RndStdIds _eAnchorType,
                   const xub_StrLen _nObjAnchorPos,
                   SwAnchoredObject* _pAnchoredObj )
@@ -581,7 +581,7 @@ void SwTxtFrm::HideAndShowObjects()
                 const RndStdIds eAnchorType( pContact->GetAnchorId() );
                 const xub_StrLen nObjAnchorPos = pContact->GetCntntAnchorIndex().GetIndex();
                 if ((eAnchorType != FLY_AT_CHAR) ||
-                    lcl_HideObj( *this, eAnchorType, nObjAnchorPos,
+                    sw_HideObj( *this, eAnchorType, nObjAnchorPos,
                                  (*GetDrawObjs())[i] ))
                 {
                     pContact->MoveObjToInvisibleLayer( pObj );
@@ -621,7 +621,7 @@ void SwTxtFrm::HideAndShowObjects()
                     // #120729# - hotfix
                     // under certain conditions
                     if ( nHiddenStart != STRING_LEN && bShouldBeHidden &&
-                         lcl_HideObj( *this, eAnchorType, nObjAnchorPos, (*GetDrawObjs())[i] ) )
+                         sw_HideObj( *this, eAnchorType, nObjAnchorPos, (*GetDrawObjs())[i] ) )
                         pContact->MoveObjToInvisibleLayer( pObj );
                     else
                         pContact->MoveObjToVisibleLayer( pObj );
@@ -831,7 +831,7 @@ void SwTxtFrm::CalcLineSpace()
     lcl_SetWrong( *this, nPos, nCnt, bMove ); \
 }
 
-void lcl_SetWrong( SwTxtFrm& rFrm, xub_StrLen nPos, long nCnt, bool bMove )
+static void lcl_SetWrong( SwTxtFrm& rFrm, xub_StrLen nPos, long nCnt, bool bMove )
 {
     if ( !rFrm.IsFollow() )
     {
@@ -904,13 +904,13 @@ void lcl_SetWrong( SwTxtFrm& rFrm, xub_StrLen nPos, long nCnt, bool bMove )
 #define SET_SCRIPT_INVAL( nPos )\
     lcl_SetScriptInval( *this, nPos );
 
-void lcl_SetScriptInval( SwTxtFrm& rFrm, xub_StrLen nPos )
+static void lcl_SetScriptInval( SwTxtFrm& rFrm, xub_StrLen nPos )
 {
     if( rFrm.GetPara() )
         rFrm.GetPara()->GetScriptInfo().SetInvalidity( nPos );
 }
 
-void lcl_ModifyOfst( SwTxtFrm* pFrm, xub_StrLen nPos, xub_StrLen nLen )
+static void lcl_ModifyOfst( SwTxtFrm* pFrm, xub_StrLen nPos, xub_StrLen nLen )
 {
     while( pFrm && pFrm->GetOfst() <= nPos )
         pFrm = pFrm->GetFollow();
@@ -1448,7 +1448,7 @@ void SwTxtFrm::PrepWidows( const MSHORT nNeed, sal_Bool bNotify )
  *                      SwTxtFrm::Prepare
  *************************************************************************/
 
-sal_Bool lcl_ErgoVadis( SwTxtFrm* pFrm, xub_StrLen &rPos, const PrepareHint ePrep )
+static sal_Bool lcl_ErgoVadis( SwTxtFrm* pFrm, xub_StrLen &rPos, const PrepareHint ePrep )
 {
     const SwFtnInfo &rFtnInfo = pFrm->GetNode()->GetDoc()->GetFtnInfo();
     if( ePrep == PREP_ERGOSUM )
@@ -2626,7 +2626,7 @@ const SwScriptInfo* SwTxtFrm::GetScriptInfo() const
  * Helper function for SwTxtFrm::CalcBasePosForFly()
  *************************************************************************/
 
-SwTwips lcl_CalcFlyBasePos( const SwTxtFrm& rFrm, SwRect aFlyRect,
+static SwTwips lcl_CalcFlyBasePos( const SwTxtFrm& rFrm, SwRect aFlyRect,
                             SwTxtFly& rTxtFly )
 {
     SWRECTFN( (&rFrm) )

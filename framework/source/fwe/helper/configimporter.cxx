@@ -41,11 +41,10 @@ namespace framework
 sal_Bool UIConfigurationImporterOOo1x::ImportCustomToolbars(
     const uno::Reference< ui::XUIConfigurationManager >& rContainerFactory,
     uno::Sequence< uno::Reference< container::XIndexContainer > >& rSeqContainer,
-    const uno::Reference< lang::XMultiServiceFactory >& rServiceManager,
+    const uno::Reference< uno::XComponentContext >& rxContext,
     const uno::Reference< embed::XStorage >& rToolbarStorage )
 {
     const char USERDEFTOOLBOX[] = "userdeftoolbox0.xml";
-    uno::Reference< lang::XMultiServiceFactory > rSrvMgr( rServiceManager );
 
     sal_Bool bResult ( sal_False );
     if ( rToolbarStorage.is() && rContainerFactory.is() )
@@ -66,7 +65,7 @@ sal_Bool UIConfigurationImporterOOo1x::ImportCustomToolbars(
                     if ( xInputStream.is() )
                     {
                         uno::Reference< container::XIndexContainer > xContainer = rContainerFactory->createSettings();
-                        if ( ToolBoxConfiguration::LoadToolBox( rSrvMgr, xInputStream, xContainer ))
+                        if ( ToolBoxConfiguration::LoadToolBox( rxContext, xInputStream, xContainer ))
                         {
                             sal_uInt32 nIndex = rSeqContainer.getLength();
                             rSeqContainer.realloc( nIndex+1 );

@@ -2750,7 +2750,7 @@ void SwWW8ImplReader::Read_SubF_Ruby( _ReadFieldParams& rReadParam)
 //        Verzeichnis-Felder
 //-----------------------------------------
 
-void lcl_toxMatchACSwitch(  SwWW8ImplReader& /*rReader*/,
+static void lcl_toxMatchACSwitch(  SwWW8ImplReader& /*rReader*/,
                             SwDoc& rDoc,
                             SwTOXBase& rBase,
                             _ReadFieldParams& rParam,
@@ -2823,7 +2823,7 @@ static void EnsureMaxLevelForTemplates(SwTOXBase& rBase)
     }
 }
 
-void lcl_toxMatchTSwitch(SwWW8ImplReader& rReader, SwTOXBase& rBase,
+static void lcl_toxMatchTSwitch(SwWW8ImplReader& rReader, SwTOXBase& rBase,
     _ReadFieldParams& rParam)
 {
     xub_StrLen n = rParam.GoToTokenParam();
@@ -2915,7 +2915,7 @@ bool wwSectionManager::WillHavePageDescHere(SwNodeIndex aIdx) const
     return bRet;
 }
 
-sal_uInt16 lcl_GetMaxValidWordTOCLevel(const SwForm &rForm)
+static sal_uInt16 lcl_GetMaxValidWordTOCLevel(const SwForm &rForm)
 {
     // GetFormMax() returns level + 1, hence the -1
     sal_uInt16 nRet = rForm.GetFormMax()-1;
@@ -3530,7 +3530,7 @@ eF_ResT SwWW8ImplReader::Read_F_Hyperlink( WW8FieldDesc* /*pF*/, String& rStr )
     return FLD_TEXT;
 }
 
-void lcl_ImportTox(SwDoc &rDoc, SwPaM &rPaM, const String &rStr, bool bIdx)
+static void lcl_ImportTox(SwDoc &rDoc, SwPaM &rPaM, const String &rStr, bool bIdx)
 {
     TOXTypes eTox = ( !bIdx ) ? TOX_CONTENT : TOX_INDEX;    // Default
 

@@ -75,7 +75,7 @@ DWORD passOutputToConsole(HANDLE readPipe, HANDLE console)
             dwRead++;
         //We must make sure that only complete wchar_t|s are written. WriteConsolse takes
         //the number of wchar_t|s as argument. ReadFile, however, reads bytes.
-        bIncompleteWchar = dwRead % 2 ? true : false;
+        bIncompleteWchar = (dwRead % 2) ? true : false;
         if (bIncompleteWchar)
         {
             //To test this case, give aBuffer a small odd size, e.g. aBuffer[3]

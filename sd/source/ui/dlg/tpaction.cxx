@@ -708,7 +708,7 @@ IMPL_LINK_NOARG(SdTPAction, CheckFileHdl)
 
         if( aMedium.IsStorage() )
         {
-            WaitObject aWait( GetParent()->GetParent() );
+            WaitObject aWait( GetParentDialog() );
 
             // ist es eine Draw-Datei?
             // mit READ oeffnen, sonst schreiben die Storages evtl. in die Datei!

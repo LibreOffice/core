@@ -57,7 +57,7 @@
     ( == AUTO ), if the anchor frame has be moved via _MoveNodes(..) and
     DelFrms(..)
 */
-void lcl_MakeAutoFrms( const SwFrmFmts& rSpzArr, sal_uLong nMovedIndex )
+static void lcl_MakeAutoFrms( const SwFrmFmts& rSpzArr, sal_uLong nMovedIndex )
 {
     if( !rSpzArr.empty() )
     {
@@ -711,7 +711,7 @@ SwRewriter SwUndoDelete::GetRewriter() const
 }
 
 // Every object, anchored "AtCntnt" will be reanchored at rPos
-void lcl_ReAnchorAtCntntFlyFrames( const SwFrmFmts& rSpzArr, SwPosition &rPos, sal_uLong nOldIdx )
+static void lcl_ReAnchorAtCntntFlyFrames( const SwFrmFmts& rSpzArr, SwPosition &rPos, sal_uLong nOldIdx )
 {
     if( !rSpzArr.empty() )
     {

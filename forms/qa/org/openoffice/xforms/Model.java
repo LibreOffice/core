@@ -29,10 +29,6 @@ import com.sun.star.xforms.XFormsUIHelper1;
 import com.sun.star.xforms.XModel;
 import com.sun.star.xml.dom.XNode;
 
-/** encapsulates an XForms model
- *
- * @author fs93730
- */
 public class Model
 {
     private XModel          m_model;

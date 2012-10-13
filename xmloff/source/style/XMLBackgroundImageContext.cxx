@@ -63,7 +63,7 @@ enum SvXMLTokenMapAttrs
     XML_TOK_BGIMG_OPACITY,
     XML_TOK_NGIMG_END=XML_TOK_UNKNOWN
 };
-const SvXMLTokenMapEntry* lcl_getBGImgAttributesAttrTokenMap()
+static const SvXMLTokenMapEntry* lcl_getBGImgAttributesAttrTokenMap()
 {
     static SvXMLTokenMapEntry aBGImgAttributesAttrTokenMap[] =
     {
@@ -96,7 +96,7 @@ static SvXMLEnumMapEntry psXML_BrushVertPos[] =
     { XML_TOKEN_INVALID,                    0           }
 };
 
-void lcl_xmlbic_MergeHoriPos( GraphicLocation& ePos,
+static void lcl_xmlbic_MergeHoriPos( GraphicLocation& ePos,
                                    GraphicLocation eHori )
 {
     DBG_ASSERT( GraphicLocation_LEFT_MIDDLE==eHori ||
@@ -136,7 +136,7 @@ void lcl_xmlbic_MergeHoriPos( GraphicLocation& ePos,
     }
 }
 
-void lcl_xmlbic_MergeVertPos( GraphicLocation& ePos,
+static void lcl_xmlbic_MergeVertPos( GraphicLocation& ePos,
                                                    GraphicLocation eVert )
 {
     DBG_ASSERT( GraphicLocation_MIDDLE_TOP==eVert ||

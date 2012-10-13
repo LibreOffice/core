@@ -280,7 +280,7 @@ sal_Bool ScViewFunc::SelectionEditable( bool* pOnlyNotBecauseOfMatrix /* = NULL 
 #define LRU_MAX 10
 #endif
 
-sal_Bool lcl_FunctionKnown( sal_uInt16 nOpCode )
+static sal_Bool lcl_FunctionKnown( sal_uInt16 nOpCode )
 {
     const ScFunctionList* pFuncList = ScGlobal::GetStarCalcFunctionList();
     if ( pFuncList )
@@ -293,7 +293,7 @@ sal_Bool lcl_FunctionKnown( sal_uInt16 nOpCode )
     return false;
 }
 
-sal_Bool lcl_AddFunction( ScAppOptions& rAppOpt, sal_uInt16 nOpCode )
+static sal_Bool lcl_AddFunction( ScAppOptions& rAppOpt, sal_uInt16 nOpCode )
 {
     sal_uInt16 nOldCount = rAppOpt.GetLRUFuncListCount();
     sal_uInt16* pOldList = rAppOpt.GetLRUFuncList();
@@ -2724,9 +2724,8 @@ void ScViewFunc::ChangeNumFmtDecimals( sal_Bool bIncrement )
 
     if (!bError)
     {
-        String aNewPicture;
-        pFormatter->GenerateFormat( aNewPicture, nOldFormat, eLanguage,
-                                    bThousand, bNegRed, nPrecision, nLeading );
+        String aNewPicture = pFormatter->GenerateFormat(nOldFormat, eLanguage,
+                                    bThousand, bNegRed, nPrecision, nLeading);
 
         nNewFormat = pFormatter->GetEntryKey( aNewPicture, eLanguage );
         if ( nNewFormat == NUMBERFORMAT_ENTRY_NOT_FOUND )

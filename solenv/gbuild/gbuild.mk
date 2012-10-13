@@ -188,18 +188,18 @@ include $(SRCDIR)/RepositoryFixes.mk
 # RepositoryExternal.mk ?
 ifeq ($(SYSTEM_LIBXSLT_FOR_BUILD),YES)
 gb_XSLTPROCTARGET :=
-gb_XSLTPROC := xsltproc
+gb_XSLTPROC := $(ICECREAM_RUN) xsltproc
 else
 gb_XSLTPROCTARGET := $(call gb_Executable_get_target_for_build,xsltproc)
-gb_XSLTPROC := $(gb_Helper_set_ld_path) $(gb_XSLTPROCTARGET)
+gb_XSLTPROC := $(gb_Helper_set_ld_path) $(ICECREAM_RUN) $(gb_XSLTPROCTARGET)
 endif
 
 ifeq ($(SYSTEM_LIBXML_FOR_BUILD),YES)
 gb_XMLLINTTARGET :=
-gb_XMLLINT := xsltproc
+gb_XMLLINT := $(ICECREAM_RUN) xsltproc
 else
 gb_XMLLINTTARGET := $(call gb_Executable_get_target_for_build,xsltproc)
-gb_XMLLINT := $(gb_Helper_set_ld_path) $(gb_XMLLINTTARGET)
+gb_XMLLINT := $(gb_Helper_set_ld_path) $(ICECREAM_RUN) $(gb_XMLLINTTARGET)
 endif
 
 ifeq ($(SYSTEM_PYTHON),YES)

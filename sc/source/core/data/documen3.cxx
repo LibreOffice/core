@@ -1654,7 +1654,7 @@ void ScDocument::ResetEmbedded()
     while result is less than nStopTwips.
     @return true if advanced at least one row.
  */
-bool lcl_AddTwipsWhile( long & rTwips, long nStopTwips, SCROW & rPosY, SCROW nEndRow, const ScTable * pTable )
+static bool lcl_AddTwipsWhile( long & rTwips, long nStopTwips, SCROW & rPosY, SCROW nEndRow, const ScTable * pTable )
 {
     SCROW nRow = rPosY;
     bool bAdded = false;
@@ -1779,7 +1779,7 @@ void ScDocument::SetEmbedded( const Rectangle& rRect )          // aus VisArea (
 
 //  VisArea auf Zellgrenzen anpassen
 
-void lcl_SnapHor( ScTable* pTable, long& rVal, SCCOL& rStartCol )
+static void lcl_SnapHor( ScTable* pTable, long& rVal, SCCOL& rStartCol )
 {
     SCCOL nCol = 0;
     long nTwips = (long) (rVal / HMM_PER_TWIPS);
@@ -1799,7 +1799,7 @@ void lcl_SnapHor( ScTable* pTable, long& rVal, SCCOL& rStartCol )
     rStartCol = nCol;
 }
 
-void lcl_SnapVer( ScTable* pTable, long& rVal, SCROW& rStartRow )
+static void lcl_SnapVer( ScTable* pTable, long& rVal, SCROW& rStartRow )
 {
     SCROW nRow = 0;
     long nTwips = (long) (rVal / HMM_PER_TWIPS);

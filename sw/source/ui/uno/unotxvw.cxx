@@ -97,7 +97,7 @@ using comphelper::HelperBaseNoState;
 
 using ::rtl::OUString;
 
-SwPaM* lcl_createPamCopy(const SwPaM& rPam)
+static SwPaM* lcl_createPamCopy(const SwPaM& rPam)
 {
     SwPaM *const pRet = new SwPaM(*rPam.GetPoint());
     ::sw::DeepCopyPaM(rPam, *pRet);
@@ -732,7 +732,7 @@ Sequence< Sequence< PropertyValue > > SwXTextView::getRubyList( sal_Bool /*bAuto
         pValues[1].Name = rtl::OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_RUBY_TEXT));
         pValues[1].Value <<= OUString(rAttr.GetText());
         pValues[2].Name = rtl::OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_RUBY_CHAR_STYLE_NAME));
-        SwStyleNameMapper::FillProgName(rAttr.GetCharFmtName(), aString, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT, sal_True );
+        SwStyleNameMapper::FillProgName(rAttr.GetCharFmtName(), aString, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT, true );
         pValues[2].Value <<= OUString( aString );
         pValues[3].Name = rtl::OUString::createFromAscii(SW_PROP_NAME_STR(UNO_NAME_RUBY_ADJUST));
         pValues[3].Value <<= (sal_Int16)rAttr.GetAdjustment();
@@ -787,7 +787,7 @@ void SAL_CALL SwXTextView::setRubyList(
                 if((pProperties[nProp].Value >>= sTmp))
                 {
                     String sName;
-                    SwStyleNameMapper::FillUIName(sTmp, sName, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT, sal_True );
+                    SwStyleNameMapper::FillUIName(sTmp, sName, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT, true );
                     sal_uInt16 nPoolId = sName.Len() ?
                         SwStyleNameMapper::GetPoolIdFromUIName( sName, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT ) : 0;
 

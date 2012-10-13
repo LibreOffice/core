@@ -211,6 +211,8 @@ struct IMPL_SfxBaseModel_DataContainer : public ::sfx2::IModifiableDocument
     css::uno::Reference< css::frame::XUntitledNumbers >     m_xNumberedControllers;
     uno::Reference< rdf::XDocumentMetadataAccess>           m_xDocumentMetadata;
     ::rtl::Reference< ::sfx2::DocumentUndoManager >         m_pDocumentUndoManager;
+    uno::Sequence< beans::PropertyValue>                    m_cmisPropertiesValues;
+    uno::Sequence< beans::PropertyValue>                    m_cmisPropertiesDisplayNames;
 
 
     IMPL_SfxBaseModel_DataContainer( ::osl::Mutex& rMutex, SfxObjectShell* pObjectShell )
@@ -229,6 +231,8 @@ struct IMPL_SfxBaseModel_DataContainer : public ::sfx2::IModifiableDocument
             ,   m_xNumberedControllers  ()
             ,   m_xDocumentMetadata     () // lazy
             ,   m_pDocumentUndoManager  ()
+            ,   m_cmisPropertiesValues  ()
+            ,   m_cmisPropertiesDisplayNames ()
     {
         // increase global instance counter.
         ++g_nInstanceCounter;
@@ -1997,6 +2001,8 @@ void SAL_CALL SfxBaseModel::load(   const uno::Sequence< beans::PropertyValue >&
             }
         }
 
+        loadCmisProperties( );
+
         sal_Bool bHidden = sal_False;
         SFX_ITEMSET_ARG( pMedium->GetItemSet(), pHidItem, SfxBoolItem, SID_HIDDEN, sal_False);
         if ( pHidItem )
@@ -2512,6 +2518,98 @@ void SAL_CALL SfxBaseModel::notifyDocumentEvent( const ::rtl::OUString&, const u
     throw ( lang::IllegalArgumentException, lang::NoSupportException, uno::RuntimeException )
 {
     throw lang::NoSupportException( ::rtl::OUString( "SfxBaseModel controlls all the sent notifications itself!"  ), uno::Reference< uno::XInterface >() );
+}
+
+uno::Sequence< beans::PropertyValue > SAL_CALL SfxBaseModel::getCmisPropertiesValues()
+    throw ( uno::RuntimeException )
+{
+    return m_pData->m_cmisPropertiesValues;
+}
+
+void SAL_CALL SfxBaseModel::setCmisPropertiesValues( const uno::Sequence< beans::PropertyValue >& _cmispropertiesvalues )
+    throw ( uno::RuntimeException )
+{
+    m_pData->m_cmisPropertiesValues = _cmispropertiesvalues;
+}
+
+uno::Sequence< beans::PropertyValue > SAL_CALL SfxBaseModel::getCmisPropertiesDisplayNames()
+    throw ( uno::RuntimeException )
+{
+    return m_pData->m_cmisPropertiesDisplayNames;
+}
+
+void SAL_CALL SfxBaseModel::setCmisPropertiesDisplayNames( const uno::Sequence< beans::PropertyValue >& _cmispropertiesdisplaynames )
+    throw ( uno::RuntimeException )
+{
+    m_pData->m_cmisPropertiesDisplayNames = _cmispropertiesdisplaynames;
+}
+
+void SAL_CALL SfxBaseModel::checkOut(  ) throw ( uno::RuntimeException )
+{
+    SfxMedium* pMedium = m_pData->m_pObjectShell->GetMedium();
+    if ( pMedium )
+    {
+        try
+        {
+            ::ucbhelper::Content aContent( pMedium->GetName(),
+                uno::Reference<ucb::XCommandEnvironment>(),
+                comphelper::getProcessComponentContext() );
+
+            uno::Any aResult = aContent.executeCommand( "checkout", uno::Any( ) );
+            rtl::OUString sURL;
+            aResult >>= sURL;
+
+            m_pData->m_pObjectShell->GetMedium( )->SwitchDocumentToFile( sURL );
+            m_pData->m_xDocumentProperties->setTitle( getTitle( ) );
+            uno::Sequence< beans::PropertyValue > aSequence ;
+            TransformItems( SID_OPENDOC, *pMedium->GetItemSet(), aSequence );
+            attachResource( sURL, aSequence );
+
+            // Reload the CMIS properties
+            loadCmisProperties( );
+        }
+        catch (const ucb::ContentCreationException &)
+        {
+        }
+        catch (const ucb::CommandAbortedException &)
+        {
+        }
+    }
+}
+
+void SfxBaseModel::loadCmisProperties( )
+{
+    SfxMedium* pMedium = m_pData->m_pObjectShell->GetMedium();
+    if ( pMedium )
+    {
+        try
+        {
+            ::ucbhelper::Content aContent( pMedium->GetName( ),
+                uno::Reference<ucb::XCommandEnvironment>(),
+                comphelper::getProcessComponentContext() );
+            com::sun::star::uno::Reference < beans::XPropertySetInfo > xProps = aContent.getProperties();
+            ::rtl::OUString aCmisPropsValues( "CmisPropertiesValues" );
+            ::rtl::OUString aCmisPropsNames( "CmisPropertiesDisplayNames" );
+            if ( xProps->hasPropertyByName( aCmisPropsValues ) )
+            {
+                beans::PropertyValues aCmisValues;
+                aContent.getPropertyValue( aCmisPropsValues ) >>= aCmisValues;
+                setCmisPropertiesValues( aCmisValues );
+            }
+            if ( xProps->hasPropertyByName( aCmisPropsNames ) )
+            {
+                beans::PropertyValues aPropNames;
+                aContent.getPropertyValue( aCmisPropsNames ) >>= aPropNames;
+                setCmisPropertiesDisplayNames( aPropNames );
+            }
+        }
+        catch (const ucb::ContentCreationException &)
+        {
+        }
+        catch (const ucb::CommandAbortedException &)
+        {
+        }
+    }
 }
 
 //________________________________________________________________________________________________________
@@ -3382,11 +3480,11 @@ uno::Reference< ui::XUIConfigurationManager > SAL_CALL SfxBaseModel::getUIConfig
                 xOOo1ConfigStorage = getDocumentSubStorage( aOOo1UIConfigFolderName, embed::ElementModes::READ );
                 if ( xOOo1ConfigStorage.is() )
                 {
-                    uno::Reference< lang::XMultiServiceFactory > xServiceMgr( ::comphelper::getProcessServiceFactory() );
+                    uno::Reference< uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
                     uno::Sequence< uno::Reference< container::XIndexContainer > > rToolbars;
 
                     sal_Bool bImported = framework::UIConfigurationImporterOOo1x::ImportCustomToolbars(
-                                            xNewUIConfMan, rToolbars, xServiceMgr, xOOo1ConfigStorage );
+                                            xNewUIConfMan, rToolbars, xContext, xOOo1ConfigStorage );
                     if ( bImported )
                     {
                         SfxObjectShell* pObjShell = SfxBaseModel::GetObjectShell();
@@ -3559,6 +3657,7 @@ void SAL_CALL SfxBaseModel::loadFromStorage( const uno::Reference< XSTORAGE >& x
                                             uno::Reference< uno::XInterface >(),
                                             nError ? nError : ERRCODE_IO_CANTREAD );
     }
+    loadCmisProperties( );
 }
 
 void SAL_CALL SfxBaseModel::storeToStorage( const uno::Reference< XSTORAGE >& xStorage,

@@ -461,11 +461,11 @@ void XclExpControlHelper::ConvertSheetLinks( Reference< XShape > xShape )
     if( xBindable.is() )
     {
         Reference< XServiceInfo > xServInfo( xBindable->getValueBinding(), UNO_QUERY );
-        if( xServInfo.is() && xServInfo->supportsService( CREATE_OUSTRING( SC_SERVICENAME_VALBIND ) ) )
+        if( xServInfo.is() && xServInfo->supportsService( SC_SERVICENAME_VALBIND ) )
         {
             ScfPropertySet aBindProp( xServInfo );
             CellAddress aApiAddress;
-            if( aBindProp.GetProperty( aApiAddress, CREATE_OUSTRING( SC_UNONAME_BOUNDCELL ) ) )
+            if( aBindProp.GetProperty( aApiAddress, SC_UNONAME_BOUNDCELL ) )
             {
                 ScAddress aCellLink;
                 ScUnoConversion::FillScAddress( aCellLink, aApiAddress );
@@ -481,11 +481,11 @@ void XclExpControlHelper::ConvertSheetLinks( Reference< XShape > xShape )
     if( xEntrySink.is() )
     {
         Reference< XServiceInfo > xServInfo( xEntrySink->getListEntrySource(), UNO_QUERY );
-        if( xServInfo.is() && xServInfo->supportsService( CREATE_OUSTRING( SC_SERVICENAME_LISTSOURCE ) ) )
+        if( xServInfo.is() && xServInfo->supportsService( SC_SERVICENAME_LISTSOURCE ) )
         {
             ScfPropertySet aSinkProp( xServInfo );
             CellRangeAddress aApiRange;
-            if( aSinkProp.GetProperty( aApiRange, CREATE_OUSTRING( SC_UNONAME_CELLRANGE ) ) )
+            if( aSinkProp.GetProperty( aApiRange, SC_UNONAME_CELLRANGE ) )
             {
                 ScRange aSrcRange;
                 ScUnoConversion::FillScRange( aSrcRange, aApiRange );
@@ -529,7 +529,7 @@ XclExpOcxControlObj::XclExpOcxControlObj( XclExpObjectManager& rObjMgr, Referenc
 
     // OBJ record flags
     SetLocked( sal_True );
-    SetPrintable( aCtrlProp.GetBoolProperty( CREATE_OUSTRING( "Printable" ) ) );
+    SetPrintable( aCtrlProp.GetBoolProperty( "Printable" ) );
     SetAutoFill( false );
     SetAutoLine( false );
 
@@ -544,7 +544,7 @@ XclExpOcxControlObj::XclExpOcxControlObj( XclExpObjectManager& rObjMgr, Referenc
 
     // #i51348# name of the control, may overwrite shape name
     OUString aCtrlName;
-    if( aCtrlProp.GetProperty( aCtrlName, CREATE_OUSTRING( "Name" ) ) && !aCtrlName.isEmpty() )
+    if( aCtrlProp.GetProperty( aCtrlName, "Name" ) && !aCtrlName.isEmpty() )
         aPropOpt.AddOpt( ESCHER_Prop_wzName, aCtrlName );
 
     // meta file
@@ -653,7 +653,7 @@ XclExpTbxControlObj::XclExpTbxControlObj( XclExpObjectManager& rRoot, Reference<
 
     // control type
     sal_Int16 nClassId = 0;
-    if( aCtrlProp.GetProperty( nClassId, CREATE_OUSTRING( "ClassId" ) ) )
+    if( aCtrlProp.GetProperty( nClassId, "ClassId" ) )
     {
         switch( nClassId )
         {
@@ -673,7 +673,7 @@ XclExpTbxControlObj::XclExpTbxControlObj( XclExpObjectManager& rRoot, Reference<
 
     // OBJ record flags
     SetLocked( sal_True );
-    SetPrintable( aCtrlProp.GetBoolProperty( CREATE_OUSTRING( "Printable" ) ) );
+    SetPrintable( aCtrlProp.GetBoolProperty( "Printable" ) );
     SetAutoFill( false );
     SetAutoLine( false );
 
@@ -681,7 +681,7 @@ XclExpTbxControlObj::XclExpTbxControlObj( XclExpObjectManager& rRoot, Reference<
     mrEscherEx.OpenContainer( ESCHER_SpContainer );
     mrEscherEx.AddShape( ESCHER_ShpInst_HostControl, SHAPEFLAG_HAVEANCHOR | SHAPEFLAG_HAVESPT );
     EscherPropertyContainer aPropOpt;
-    bool bVisible = aCtrlProp.GetBoolProperty( CREATE_OUSTRING( "EnableVisible" ) );
+    bool bVisible = aCtrlProp.GetBoolProperty( "EnableVisible" );
     aPropOpt.AddOpt( ESCHER_Prop_fPrint, bVisible ? 0x00080000 : 0x00080002 ); // visible flag
 
     aPropOpt.AddOpt( ESCHER_Prop_LockAgainstGrouping, 0x01000100 ); // bool field
@@ -693,7 +693,7 @@ XclExpTbxControlObj::XclExpTbxControlObj( XclExpObjectManager& rRoot, Reference<
 
     // #i51348# name of the control, may overwrite shape name
     OUString aCtrlName;
-    if( aCtrlProp.GetProperty( aCtrlName, CREATE_OUSTRING( "Name" ) ) && !aCtrlName.isEmpty() )
+    if( aCtrlProp.GetProperty( aCtrlName, "Name" ) && !aCtrlName.isEmpty() )
         aPropOpt.AddOpt( ESCHER_Prop_wzName, aCtrlName );
 
     // write DFF property set to stream
@@ -707,7 +707,7 @@ XclExpTbxControlObj::XclExpTbxControlObj( XclExpObjectManager& rRoot, Reference<
 
     // control label
     OUString aString;
-    if( aCtrlProp.GetProperty( aString, CREATE_OUSTRING( "Label" ) ) )
+    if( aCtrlProp.GetProperty( aString, "Label" ) )
     {
         /*  Be sure to construct the MSODRAWING record containing the
             ClientTextbox atom after the base OBJ's MSODRAWING record data is
@@ -733,7 +733,7 @@ XclExpTbxControlObj::XclExpTbxControlObj( XclExpObjectManager& rRoot, Reference<
     mrEscherEx.CloseContainer();  // ESCHER_SpContainer
 
     // other properties
-    aCtrlProp.GetProperty( mnLineCount, CREATE_OUSTRING( "LineCount" ) );
+    aCtrlProp.GetProperty( mnLineCount, "LineCount" );
 
     // border style
     sal_Int16 nApiButton = AwtVisualEffect::LOOK3D;
@@ -742,11 +742,11 @@ XclExpTbxControlObj::XclExpTbxControlObj( XclExpObjectManager& rRoot, Reference<
     {
         case FormCompType::LISTBOX:
         case FormCompType::COMBOBOX:
-            aCtrlProp.GetProperty( nApiBorder, CREATE_OUSTRING( "Border" ) );
+            aCtrlProp.GetProperty( nApiBorder, "Border" );
         break;
         case FormCompType::CHECKBOX:
         case FormCompType::RADIOBUTTON:
-            aCtrlProp.GetProperty( nApiButton, CREATE_OUSTRING( "VisualEffect" ) );
+            aCtrlProp.GetProperty( nApiButton, "VisualEffect" );
             nApiBorder = AwtVisualEffect::NONE;
         break;
         // Push button cannot be set to flat in Excel
@@ -774,7 +774,7 @@ XclExpTbxControlObj::XclExpTbxControlObj( XclExpObjectManager& rRoot, Reference<
 
     // control state
     sal_Int16 nApiState = 0;
-    if( aCtrlProp.GetProperty( nApiState, CREATE_OUSTRING( "State" ) ) )
+    if( aCtrlProp.GetProperty( nApiState, "State" ) )
     {
         switch( nApiState )
         {
@@ -789,9 +789,9 @@ XclExpTbxControlObj::XclExpTbxControlObj( XclExpObjectManager& rRoot, Reference<
     {
         case FormCompType::LISTBOX:
         {
-            mbMultiSel = aCtrlProp.GetBoolProperty( CREATE_OUSTRING( "MultiSelection" ) );
+            mbMultiSel = aCtrlProp.GetBoolProperty( "MultiSelection" );
             Sequence< sal_Int16 > aSelection;
-            if( aCtrlProp.GetProperty( aSelection, CREATE_OUSTRING( "SelectedItems" ) ) )
+            if( aCtrlProp.GetProperty( aSelection, "SelectedItems" ) )
             {
                 sal_Int32 nLen = aSelection.getLength();
                 if( nLen > 0 )
@@ -804,7 +804,7 @@ XclExpTbxControlObj::XclExpTbxControlObj( XclExpObjectManager& rRoot, Reference<
             }
 
             // convert listbox with dropdown button to Excel dropdown
-            if( aCtrlProp.GetBoolProperty( CREATE_OUSTRING( "Dropdown" ) ) )
+            if( aCtrlProp.GetBoolProperty( "Dropdown" ) )
                 mnObjType = EXC_OBJTYPE_DROPDOWN;
         }
         break;
@@ -813,8 +813,8 @@ XclExpTbxControlObj::XclExpTbxControlObj( XclExpObjectManager& rRoot, Reference<
         {
             Sequence< OUString > aStringList;
             OUString aDefText;
-            if( aCtrlProp.GetProperty( aStringList, CREATE_OUSTRING( "StringItemList" ) ) &&
-                aCtrlProp.GetProperty( aDefText, CREATE_OUSTRING( "Text" ) ) &&
+            if( aCtrlProp.GetProperty( aStringList, "StringItemList" ) &&
+                aCtrlProp.GetProperty( aDefText, "Text" ) &&
                 aStringList.getLength() && !aDefText.isEmpty() )
             {
                 const OUString* pBegin = aStringList.getConstArray();
@@ -827,7 +827,7 @@ XclExpTbxControlObj::XclExpTbxControlObj( XclExpObjectManager& rRoot, Reference<
             }
 
             // convert combobox without dropdown button to Excel listbox
-            if( !aCtrlProp.GetBoolProperty( CREATE_OUSTRING( "Dropdown" ) ) )
+            if( !aCtrlProp.GetBoolProperty( "Dropdown" ) )
                 mnObjType = EXC_OBJTYPE_LISTBOX;
         }
         break;
@@ -835,17 +835,17 @@ XclExpTbxControlObj::XclExpTbxControlObj( XclExpObjectManager& rRoot, Reference<
         case FormCompType::SCROLLBAR:
         {
             sal_Int32 nApiValue = 0;
-            if( aCtrlProp.GetProperty( nApiValue, CREATE_OUSTRING( "ScrollValueMin" ) ) )
+            if( aCtrlProp.GetProperty( nApiValue, "ScrollValueMin" ) )
                 mnScrollMin = limit_cast< sal_uInt16 >( nApiValue, EXC_OBJ_SCROLLBAR_MIN, EXC_OBJ_SCROLLBAR_MAX );
-            if( aCtrlProp.GetProperty( nApiValue, CREATE_OUSTRING( "ScrollValueMax" ) ) )
+            if( aCtrlProp.GetProperty( nApiValue, "ScrollValueMax" ) )
                 mnScrollMax = limit_cast< sal_uInt16 >( nApiValue, mnScrollMin, EXC_OBJ_SCROLLBAR_MIN );
-            if( aCtrlProp.GetProperty( nApiValue, CREATE_OUSTRING( "ScrollValue" ) ) )
+            if( aCtrlProp.GetProperty( nApiValue, "ScrollValue" ) )
                 mnScrollValue = limit_cast< sal_uInt16 >( nApiValue, mnScrollMin, mnScrollMax );
-            if( aCtrlProp.GetProperty( nApiValue, CREATE_OUSTRING( "LineIncrement" ) ) )
+            if( aCtrlProp.GetProperty( nApiValue, "LineIncrement" ) )
                 mnScrollStep = limit_cast< sal_uInt16 >( nApiValue, EXC_OBJ_SCROLLBAR_MIN, EXC_OBJ_SCROLLBAR_MAX );
-            if( aCtrlProp.GetProperty( nApiValue, CREATE_OUSTRING( "BlockIncrement" ) ) )
+            if( aCtrlProp.GetProperty( nApiValue, "BlockIncrement" ) )
                 mnScrollPage = limit_cast< sal_uInt16 >( nApiValue, EXC_OBJ_SCROLLBAR_MIN, EXC_OBJ_SCROLLBAR_MAX );
-            if( aCtrlProp.GetProperty( nApiValue, CREATE_OUSTRING( "Orientation" ) ) )
+            if( aCtrlProp.GetProperty( nApiValue, "Orientation" ) )
                 mbScrollHor = nApiValue == AwtScrollOrient::HORIZONTAL;
         }
         break;
@@ -853,15 +853,15 @@ XclExpTbxControlObj::XclExpTbxControlObj( XclExpObjectManager& rRoot, Reference<
         case FormCompType::SPINBUTTON:
         {
             sal_Int32 nApiValue = 0;
-            if( aCtrlProp.GetProperty( nApiValue, CREATE_OUSTRING( "SpinValueMin" ) ) )
+            if( aCtrlProp.GetProperty( nApiValue, "SpinValueMin" ) )
                 mnScrollMin = limit_cast< sal_uInt16 >( nApiValue, EXC_OBJ_SCROLLBAR_MIN, EXC_OBJ_SCROLLBAR_MAX );
-            if( aCtrlProp.GetProperty( nApiValue, CREATE_OUSTRING( "SpinValueMax" ) ) )
+            if( aCtrlProp.GetProperty( nApiValue, "SpinValueMax" ) )
                 mnScrollMax = limit_cast< sal_uInt16 >( nApiValue, mnScrollMin, EXC_OBJ_SCROLLBAR_MAX );
-            if( aCtrlProp.GetProperty( nApiValue, CREATE_OUSTRING( "SpinValue" ) ) )
+            if( aCtrlProp.GetProperty( nApiValue, "SpinValue" ) )
                 mnScrollValue = limit_cast< sal_uInt16 >( nApiValue, mnScrollMin, mnScrollMax );
-            if( aCtrlProp.GetProperty( nApiValue, CREATE_OUSTRING( "SpinIncrement" ) ) )
+            if( aCtrlProp.GetProperty( nApiValue, "SpinIncrement" ) )
                 mnScrollStep = limit_cast< sal_uInt16 >( nApiValue, EXC_OBJ_SCROLLBAR_MIN, EXC_OBJ_SCROLLBAR_MAX );
-            if( aCtrlProp.GetProperty( nApiValue, CREATE_OUSTRING( "Orientation" ) ) )
+            if( aCtrlProp.GetProperty( nApiValue, "Orientation" ) )
                 mbScrollHor = nApiValue == AwtScrollOrient::HORIZONTAL;
         }
         break;
@@ -1077,10 +1077,10 @@ XclExpChartObj::XclExpChartObj( XclExpObjectManager& rObjMgr, Reference< XShape 
     // create the chart substream object
     ScfPropertySet aShapeProp( xShape );
     Reference< XModel > xModel;
-    aShapeProp.GetProperty( xModel, CREATE_OUSTRING( "Model" ) );
+    aShapeProp.GetProperty( xModel, "Model" );
     mxChartDoc.set( xModel,UNO_QUERY );
     ::com::sun::star::awt::Rectangle aBoundRect;
-    aShapeProp.GetProperty( aBoundRect, CREATE_OUSTRING( "BoundRect" ) );
+    aShapeProp.GetProperty( aBoundRect, "BoundRect" );
     Rectangle aChartRect( Point( aBoundRect.X, aBoundRect.Y ), Size( aBoundRect.Width, aBoundRect.Height ) );
     mxChart.reset( new XclExpChart( GetRoot(), xModel, aChartRect ) );
 }
@@ -1132,7 +1132,7 @@ void XclExpChartObj::WriteChartObj( sax_fastparser::FSHelperPtr pDrawing, XclExp
     pDrawing->startElement(  FSNS( XML_xdr, XML_nvGraphicFramePr ), FSEND );
 
     // TODO: get the correct chart name chart id
-    OUString sName = CREATE_OUSTRING("Object 1");
+    OUString sName = "Object 1";
     Reference< XNamed > xNamed( mxShape, UNO_QUERY );
     if (xNamed.is())
     {

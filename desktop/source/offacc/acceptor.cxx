@@ -28,9 +28,6 @@
 
 
 #include "acceptor.hxx"
-#include <unotools/bootstrap.hxx>
-#include <tools/stream.hxx>
-#include <vcl/svapp.hxx>
 #include <com/sun/star/bridge/BridgeFactory.hpp>
 #include <com/sun/star/uno/XNamingService.hpp>
 #include <comphelper/processfactory.hxx>
@@ -293,7 +290,7 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL offacc_component_getFactory(const sal_Char 
         Reference< XMultiServiceFactory >  xServiceManager(
             reinterpret_cast< XMultiServiceFactory* >(pServiceManager));
 
-        if (Acceptor::impl_getImplementationName().compareToAscii( pImplementationName ) == COMPARE_EQUAL )
+        if (Acceptor::impl_getImplementationName().equalsAscii( pImplementationName ) )
         {
             xFactory = Reference< XSingleServiceFactory >( cppu::createSingleFactory(
                 xServiceManager, Acceptor::impl_getImplementationName(),

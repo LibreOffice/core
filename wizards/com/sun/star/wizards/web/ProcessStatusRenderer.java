@@ -23,7 +23,6 @@ import java.util.Map;
 import com.sun.star.wizards.common.IRenderer;
 
 /**
- * @author rpiterman
  * recieves status calls from the status dialog which
  * apears when the user clicks "create". 
  * allocates strings from the resources to
@@ -43,7 +42,6 @@ public class ProcessStatusRenderer implements IRenderer, WebWizardConst
         strings.put(TASK_GENERATE_PREPARE, res.resTaskGeneratePrepare);
         strings.put(TASK_GENERATE_XSL, res.resTaskGenerateXsl);
         strings.put(TASK_PREPARE, res.resTaskPrepare);
-        //strings.put(TASK_PUBLISH , res.resTaskPublish );
         strings.put(LOCAL_PUBLISHER, res.resTaskPublishLocal);
         strings.put(ZIP_PUBLISHER, res.resTaskPublishZip);
         strings.put(FTP_PUBLISHER, res.resTaskPublishFTP);

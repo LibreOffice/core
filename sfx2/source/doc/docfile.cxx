@@ -21,7 +21,7 @@
 #include "sfx2/signaturestate.hxx"
 
 #include <uno/mapping.hxx>
-#include <com/sun/star/task/XInteractionHandler.hpp>
+#include <com/sun/star/task/InteractionHandler.hpp>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/ucb/XContent.hpp>
 #include <com/sun/star/container/XChild.hpp>
@@ -325,6 +325,7 @@ SfxMedium_Impl::SfxMedium_Impl( SfxMedium* pAntiImplP ) :
     bIsStorage( false ),
     bUseInteractionHandler( true ),
     bAllowDefaultIntHdl( false ),
+    bDisposeStorage( false ),
     bStorageBasedOnInStream( false ),
     m_bSalvageMode( false ),
     m_bVersionsAlreadyLoaded( false ),
@@ -2526,14 +2527,10 @@ SfxMedium::GetInteractionHandler()
         return pImp->xInteraction;
 
     // create default handler and cache it!
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xFactory = ::comphelper::getProcessServiceFactory();
-    if ( xFactory.is() )
-    {
-        pImp->xInteraction = ::com::sun::star::uno::Reference< com::sun::star::task::XInteractionHandler >( xFactory->createInstance( DEFINE_CONST_UNICODE("com.sun.star.task.InteractionHandler") ), ::com::sun::star::uno::UNO_QUERY );
-        return pImp->xInteraction;
-    }
-
-    return ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >();
+    Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+    pImp->xInteraction.set(
+        task::InteractionHandler::createWithParent(xContext, 0), UNO_QUERY_THROW );
+    return pImp->xInteraction;
 }
 
 //----------------------------------------------------------------

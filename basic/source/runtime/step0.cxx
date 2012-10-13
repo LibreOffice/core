@@ -43,8 +43,8 @@ Reference< XInterface > createComListener( const Any& aControlAny, const ::rtl::
 
 // for a patch forward declaring these methods below makes sense
 // but, #FIXME lets really just move the methods to the top
-void lcl_clearImpl( SbxVariableRef& refVar, SbxDataType& eType );
-void lcl_eraseImpl( SbxVariableRef& refVar, bool bVBAEnabled );
+static void lcl_clearImpl( SbxVariableRef& refVar, SbxDataType& eType );
+static void lcl_eraseImpl( SbxVariableRef& refVar, bool bVBAEnabled );
 
 SbxVariable* getDefaultProp( SbxVariable* pRef );
 
@@ -972,7 +972,7 @@ void SbiRuntime::StepREDIMP_ERASE()
         refVar->SetType( SbxEMPTY );
 }
 
-void lcl_clearImpl( SbxVariableRef& refVar, SbxDataType& eType )
+static void lcl_clearImpl( SbxVariableRef& refVar, SbxDataType& eType )
 {
     sal_uInt16 nSavFlags = refVar->GetFlags();
     refVar->ResetFlag( SBX_FIXED );
@@ -981,7 +981,7 @@ void lcl_clearImpl( SbxVariableRef& refVar, SbxDataType& eType )
     refVar->Clear();
 }
 
-void lcl_eraseImpl( SbxVariableRef& refVar, bool bVBAEnabled )
+static void lcl_eraseImpl( SbxVariableRef& refVar, bool bVBAEnabled )
 {
     SbxDataType eType = refVar->GetType();
     if( eType & SbxARRAY )

@@ -30,10 +30,6 @@ import com.sun.star.awt.XControlModel;
 import com.sun.star.text.TextContentAnchorType;
 import com.sun.star.drawing.XDrawPage;
 
-/**
- *
- * @author  fs@openoffice.org
- */
 public class FormLayer
 {
     private DocumentHelper  m_document;

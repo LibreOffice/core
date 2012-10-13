@@ -60,7 +60,6 @@ import com.sun.star.view.XSelectionSupplier;
 // __________ Implementation __________
 
 /** ControlAndSelectDemo
-    @author Sven Jacobi
 
    A (GroupBox) ControlShape will be created.
    Finally the ControlShape will be inserted into a selection.

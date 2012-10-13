@@ -23,12 +23,12 @@
 #include <tools/diagnose_ex.h>
 #include "moduledbu.hxx"
 #include "dbu_dlg.hrc"
+#include <comphelper/processfactory.hxx>
 #include <comphelper/interaction.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <svtools/QueryFolderName.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -38,7 +38,7 @@
 #include <com/sun/star/container/XHierarchicalNameContainer.hpp>
 #include <com/sun/star/ucb/InteractiveAugmentedIOException.hpp>
 #include <com/sun/star/ucb/IOErrorCode.hpp>
-#include <com/sun/star/task/XInteractionHandler.hpp>
+#include <com/sun/star/task/InteractionHandler.hpp>
 #include <com/sun/star/task/InteractionClassification.hpp>
 #include <com/sun/star/sdbc/SQLException.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
@@ -169,23 +169,15 @@ IMPL_LINK_NOARG(OCollectionView, Save_Click)
                     InteractiveAugmentedIOException aException(sTemp,Reference<XInterface>(),eClass,eError,aValues);
 
 
-                    Reference<XInitialization> xIni(m_xORB->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.task.InteractionHandler"))),UNO_QUERY);
-                    if ( xIni.is() )
-                    {
-                        aValue.Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Parent"));
-                        aValue.Value <<= VCLUnoHelper::GetInterface( this );
-                        Sequence< Any > aArgs(1);
-                        aArgs[0] <<= makeAny(aValue);
-                        xIni->initialize(aArgs);
-                        OInteractionRequest* pRequest = new OInteractionRequest(makeAny(aException));
-                        Reference< XInteractionRequest > xRequest(pRequest);
+                    Reference<XInteractionHandler2> xHandler(
+                        InteractionHandler::createWithParent(comphelper::getComponentContext(m_xORB), VCLUnoHelper::GetInterface( this )));
+                    OInteractionRequest* pRequest = new OInteractionRequest(makeAny(aException));
+                    Reference< XInteractionRequest > xRequest(pRequest);
 
-                        OInteractionApprove* pApprove = new OInteractionApprove;
-                        pRequest->addContinuation(pApprove);
+                    OInteractionApprove* pApprove = new OInteractionApprove;
+                    pRequest->addContinuation(pApprove);
+                    xHandler->handle(xRequest);
 
-                        Reference< XInteractionHandler > xHandler(xIni,UNO_QUERY);
-                        xHandler->handle(xRequest);
-                    }
                     return 0;
                 }
             }

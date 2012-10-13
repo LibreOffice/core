@@ -62,7 +62,7 @@ bool SwDoc::isXForms() const
     return xXForms.is();
 }
 
-Reference<XInterface> lcl_createInstance( const sal_Char* pServiceName )
+static Reference<XInterface> lcl_createInstance( const sal_Char* pServiceName )
 {
     OSL_ENSURE( pServiceName != NULL, "no service name" );
     return comphelper::getProcessServiceFactory()->createInstance(

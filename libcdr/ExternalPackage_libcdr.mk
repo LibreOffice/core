@@ -7,13 +7,22 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_ExternalPackage_ExternalPackage,libcdr_inc,cdr))
+$(eval $(call gb_ExternalPackage_ExternalPackage,libcdr,cdr))
 
-$(eval $(call gb_ExternalPackage_add_unpacked_files,libcdr_inc,inc/external/libcdr,\
+$(eval $(call gb_ExternalPackage_add_unpacked_files,libcdr,inc/external/libcdr,\
 	src/lib/libcdr.h \
 	src/lib/CDRDocument.h \
 	src/lib/CDRStringVector.h \
 	src/lib/CMXDocument.h \
 ))
+
+$(eval $(call gb_ExternalPackage_use_external_project,libcdr,libcdr))
+
+ifeq ($(OS)$(COM),WNTMSC)
+$(eval $(call gb_ExternalPackage_add_file,libcdr,lib/cdr-0.0.lib,build/win32/Release/lib/libcdr-0.0.lib))
+else
+$(eval $(call gb_ExternalPackage_add_file,libcdr,lib/libcdr-0.0.a,src/lib/.libs/libcdr-0.0.a))
+endif
+
 
 # vim: set noet sw=4 ts=4:

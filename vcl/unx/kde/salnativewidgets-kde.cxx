@@ -476,7 +476,7 @@ sal_Bool WidgetPainter::drawStyledWidget( QWidget *pWidget,
     int nDepth, GC gc, ControlPart nPart )
 {
     if ( !pWidget )
-    return sal_False;
+        return sal_False;
 
     // Normalize the widget
     QPoint   qWidgetPos( pWidget->pos() );
@@ -502,156 +502,156 @@ sal_Bool WidgetPainter::drawStyledWidget( QWidget *pWidget,
     // Draw the widget to the pixmap
     if ( strcmp( QPushButton_String, pClassName ) == 0 )
     {
-    // Workaround for the Platinum style.
-    // Platinum takes the state directly from the widget, not from SFlags.
-    QPushButton *pPushButton = static_cast<QPushButton *>( pWidget->qt_cast( QPushButton_String ) );
-    if ( pPushButton )
-    {
-        pPushButton->setDown   ( nStyle & QStyle::Style_Down );
-        pPushButton->setOn     ( nStyle & QStyle::Style_On );
-        pPushButton->setEnabled( nStyle & QStyle::Style_Enabled );
-    }
+        // Workaround for the Platinum style.
+        // Platinum takes the state directly from the widget, not from SFlags.
+        QPushButton *pPushButton = static_cast<QPushButton *>( pWidget->qt_cast( QPushButton_String ) );
+        if ( pPushButton )
+        {
+            pPushButton->setDown   ( nStyle & QStyle::Style_Down );
+            pPushButton->setOn     ( nStyle & QStyle::Style_On );
+            pPushButton->setEnabled( nStyle & QStyle::Style_Enabled );
+        }
 
-    kapp->style().drawControl( QStyle::CE_PushButton,
-        &qPainter, pWidget, qRect,
-        pWidget->colorGroup(), nStyle );
+        kapp->style().drawControl( QStyle::CE_PushButton,
+            &qPainter, pWidget, qRect,
+            pWidget->colorGroup(), nStyle );
     }
     else if ( strcmp( QRadioButton_String, pClassName ) == 0 )
     {
-    // Bitblt from the screen, because the radio buttons are usually not
-    // rectangular, and there could be a bitmap under them
-    GC aTmpGC = XCreateGC( dpy, qPixmap.handle(), 0, NULL );
-    X11SalGraphics::CopyScreenArea(
-        dpy,
-        drawable, nXScreen, nDepth,
-        qPixmap.handle(), SalX11Screen( qPixmap.x11Screen() ), qPixmap.x11Depth(),
-        aTmpGC,
-        qWidgetPos.x(), qWidgetPos.y(), qRect.width(), qRect.height(),
-        0, 0 );
-    XFreeGC( dpy, aTmpGC );
+        // Bitblt from the screen, because the radio buttons are usually not
+        // rectangular, and there could be a bitmap under them
+        GC aTmpGC = XCreateGC( dpy, qPixmap.handle(), 0, NULL );
+        X11SalGraphics::CopyScreenArea(
+            dpy,
+            drawable, nXScreen, nDepth,
+            qPixmap.handle(), SalX11Screen( qPixmap.x11Screen() ), qPixmap.x11Depth(),
+            aTmpGC,
+            qWidgetPos.x(), qWidgetPos.y(), qRect.width(), qRect.height(),
+            0, 0 );
+        XFreeGC( dpy, aTmpGC );
 
-    kapp->style().drawControl( QStyle::CE_RadioButton,
-        &qPainter, pWidget, qRect,
-        pWidget->colorGroup(), nStyle );
+        kapp->style().drawControl( QStyle::CE_RadioButton,
+            &qPainter, pWidget, qRect,
+            pWidget->colorGroup(), nStyle );
     }
     else if ( strcmp( QCheckBox_String, pClassName ) == 0 )
     {
-    kapp->style().drawControl( QStyle::CE_CheckBox,
-        &qPainter, pWidget, qRect,
-        pWidget->colorGroup(), nStyle );
+        kapp->style().drawControl( QStyle::CE_CheckBox,
+            &qPainter, pWidget, qRect,
+            pWidget->colorGroup(), nStyle );
     }
     else if ( strcmp( QComboBox_String, pClassName ) == 0 )
     {
-    kapp->style().drawComplexControl( QStyle::CC_ComboBox,
-        &qPainter, pWidget, qRect,
-        pWidget->colorGroup(), nStyle );
+        kapp->style().drawComplexControl( QStyle::CC_ComboBox,
+            &qPainter, pWidget, qRect,
+            pWidget->colorGroup(), nStyle );
 
-    // Editable combo box uses the background of the associated edit box
-    QComboBox *pComboBox = static_cast<QComboBox *>( pWidget->qt_cast( QComboBox_String ) );
-    if ( pComboBox && pComboBox->editable() && pComboBox->lineEdit() )
-    {
-        QColorGroup::ColorRole eColorRole = ( pComboBox->isEnabled() )?
-        QColorGroup::Base: QColorGroup::Background;
-        qPainter.fillRect(
-            kapp->style().querySubControlMetrics( QStyle::CC_ComboBox,
-            pComboBox, QStyle::SC_ComboBoxEditField ),
-            pComboBox->lineEdit()->colorGroup().brush( eColorRole ) );
-    }
+        // Editable combo box uses the background of the associated edit box
+        QComboBox *pComboBox = static_cast<QComboBox *>( pWidget->qt_cast( QComboBox_String ) );
+        if ( pComboBox && pComboBox->editable() && pComboBox->lineEdit() )
+        {
+            QColorGroup::ColorRole eColorRole = ( pComboBox->isEnabled() )?
+            QColorGroup::Base: QColorGroup::Background;
+            qPainter.fillRect(
+                kapp->style().querySubControlMetrics( QStyle::CC_ComboBox,
+                pComboBox, QStyle::SC_ComboBoxEditField ),
+                pComboBox->lineEdit()->colorGroup().brush( eColorRole ) );
+        }
     }
     else if ( strcmp( QLineEdit_String, pClassName ) == 0 )
     {
-    kapp->style().drawPrimitive( QStyle::PE_PanelLineEdit,
-        &qPainter, qRect,
-        pWidget->colorGroup(), nStyle | QStyle::Style_Sunken );
+        kapp->style().drawPrimitive( QStyle::PE_PanelLineEdit,
+            &qPainter, qRect,
+            pWidget->colorGroup(), nStyle | QStyle::Style_Sunken );
     }
     else if ( strcmp( QSpinWidget_String, pClassName ) == 0 )
     {
-    const SpinbuttonValue *pValue = static_cast<const SpinbuttonValue *> ( &aValue );
+        const SpinbuttonValue *pValue = static_cast<const SpinbuttonValue *> ( &aValue );
 
-    // Is any of the buttons pressed?
-    QStyle::SCFlags eActive = QStyle::SC_None;
-    if ( pValue )
-    {
-        if ( pValue->mnUpperState & CTRL_STATE_PRESSED )
-        eActive = QStyle::SC_SpinWidgetUp;
-        else if ( pValue->mnLowerState & CTRL_STATE_PRESSED )
-        eActive = QStyle::SC_SpinWidgetDown;
-
-        // Update the enable/disable state of the widget
-        if ( ( nState & CTRL_STATE_ENABLED ) ||
-            ( pValue->mnUpperState & CTRL_STATE_ENABLED ) ||
-            ( pValue->mnLowerState & CTRL_STATE_ENABLED ) )
+        // Is any of the buttons pressed?
+        QStyle::SCFlags eActive = QStyle::SC_None;
+        if ( pValue )
         {
-        pWidget->setEnabled( true );
-        nStyle |= QStyle::Style_Enabled;
+            if ( pValue->mnUpperState & CTRL_STATE_PRESSED )
+                eActive = QStyle::SC_SpinWidgetUp;
+            else if ( pValue->mnLowerState & CTRL_STATE_PRESSED )
+                eActive = QStyle::SC_SpinWidgetDown;
+
+            // Update the enable/disable state of the widget
+            if ( ( nState & CTRL_STATE_ENABLED ) ||
+                ( pValue->mnUpperState & CTRL_STATE_ENABLED ) ||
+                ( pValue->mnLowerState & CTRL_STATE_ENABLED ) )
+            {
+                pWidget->setEnabled( true );
+                nStyle |= QStyle::Style_Enabled;
+            }
+            else
+                pWidget->setEnabled( false );
+
+            // Mouse-over effect
+            if ( (pValue->mnUpperState & CTRL_STATE_ROLLOVER) ||
+                (pValue->mnLowerState & CTRL_STATE_ROLLOVER) )
+            nStyle |= QStyle::Style_MouseOver;
         }
-        else
-        pWidget->setEnabled( false );
 
-        // Mouse-over effect
-        if ( (pValue->mnUpperState & CTRL_STATE_ROLLOVER) ||
-            (pValue->mnLowerState & CTRL_STATE_ROLLOVER) )
-        nStyle |= QStyle::Style_MouseOver;
-    }
+        // Spin widget uses the background of the associated edit box
+        QSpinWidget *pSpinWidget = static_cast<QSpinWidget *>( pWidget->qt_cast( QSpinWidget_String ) );
+        if ( pSpinWidget && pSpinWidget->editWidget() )
+        {
+            QColorGroup::ColorRole eColorRole = ( pSpinWidget->isEnabled() )?
+            QColorGroup::Base: QColorGroup::Background;
+            qPainter.fillRect(
+                kapp->style().querySubControlMetrics( QStyle::CC_SpinWidget,
+                pSpinWidget, QStyle::SC_SpinWidgetEditField ),
+                pSpinWidget->editWidget()->colorGroup().brush( eColorRole ) );
+        }
 
-    // Spin widget uses the background of the associated edit box
-    QSpinWidget *pSpinWidget = static_cast<QSpinWidget *>( pWidget->qt_cast( QSpinWidget_String ) );
-    if ( pSpinWidget && pSpinWidget->editWidget() )
-    {
-        QColorGroup::ColorRole eColorRole = ( pSpinWidget->isEnabled() )?
-        QColorGroup::Base: QColorGroup::Background;
-        qPainter.fillRect(
-            kapp->style().querySubControlMetrics( QStyle::CC_SpinWidget,
-            pSpinWidget, QStyle::SC_SpinWidgetEditField ),
-            pSpinWidget->editWidget()->colorGroup().brush( eColorRole ) );
-    }
+        // Adjust the frame (needed for Motif Plus style)
+        QRect qFrameRect = kapp->style().querySubControlMetrics( QStyle::CC_SpinWidget,
+            pWidget, QStyle::SC_SpinWidgetFrame );
 
-    // Adjust the frame (needed for Motif Plus style)
-    QRect qFrameRect = kapp->style().querySubControlMetrics( QStyle::CC_SpinWidget,
-        pWidget, QStyle::SC_SpinWidgetFrame );
-
-    kapp->style().drawComplexControl( QStyle::CC_SpinWidget,
-        &qPainter, pWidget, qFrameRect,
-        pWidget->colorGroup(), nStyle,
-        QStyle::SC_All, eActive );
+        kapp->style().drawComplexControl( QStyle::CC_SpinWidget,
+            &qPainter, pWidget, qFrameRect,
+            pWidget->colorGroup(), nStyle,
+            QStyle::SC_All, eActive );
     }
     else if ( strcmp( QTabBar_String, pClassName ) == 0 )
     {
-    const TabitemValue *pValue = static_cast<const TabitemValue *> ( &aValue );
+        const TabitemValue *pValue = static_cast<const TabitemValue *> ( &aValue );
 
-    QTab *pTab = NULL;
-    if ( pValue )
-    {
-        if ( ( pValue->isFirst() || pValue->isLeftAligned() ) && ( pValue->isLast() || pValue->isRightAligned() ) )
-        pTab = m_pTabAlone;
-        else if ( pValue->isFirst() || pValue->isLeftAligned() )
-        pTab = m_pTabLeft;
-        else if ( pValue->isLast() || pValue->isRightAligned() )
-        pTab = m_pTabRight;
-        else
-        pTab = m_pTabMiddle;
-    }
-    if ( !pTab )
-        return sal_False;
+        QTab *pTab = NULL;
+        if ( pValue )
+        {
+            if ( ( pValue->isFirst() || pValue->isLeftAligned() ) && ( pValue->isLast() || pValue->isRightAligned() ) )
+            pTab = m_pTabAlone;
+            else if ( pValue->isFirst() || pValue->isLeftAligned() )
+            pTab = m_pTabLeft;
+            else if ( pValue->isLast() || pValue->isRightAligned() )
+            pTab = m_pTabRight;
+            else
+            pTab = m_pTabMiddle;
+        }
+        if ( !pTab )
+            return sal_False;
 
-    pTab->setRect( qRect );
+        pTab->setRect( qRect );
 
-    kapp->style().drawControl( QStyle::CE_TabBarTab,
-        &qPainter, pWidget, qRect,
-        pWidget->colorGroup(), nStyle,
-        QStyleOption( pTab ) );
+        kapp->style().drawControl( QStyle::CE_TabBarTab,
+            &qPainter, pWidget, qRect,
+            pWidget->colorGroup(), nStyle,
+            QStyleOption( pTab ) );
     }
     else if ( strcmp( QTabWidget_String, pClassName ) == 0 )
     {
-    kapp->style().drawPrimitive( QStyle::PE_PanelTabWidget,
-        &qPainter, qRect,
-        pWidget->colorGroup(), nStyle );
+        kapp->style().drawPrimitive( QStyle::PE_PanelTabWidget,
+            &qPainter, qRect,
+            pWidget->colorGroup(), nStyle );
     }
     else if ( strcmp( QListView_String, pClassName ) == 0 )
     {
-    kapp->style().drawPrimitive( QStyle::PE_Panel,
-        &qPainter, qRect,
-        pWidget->colorGroup(), nStyle | QStyle::Style_Sunken );
+        kapp->style().drawPrimitive( QStyle::PE_Panel,
+            &qPainter, qRect,
+            pWidget->colorGroup(), nStyle | QStyle::Style_Sunken );
     }
     else if ( strcmp( QScrollBar_String, pClassName ) == 0 )
     {
@@ -665,31 +665,31 @@ sal_Bool WidgetPainter::drawStyledWidget( QWidget *pWidget,
         const char *pStyleName = kapp->style().className();
         if ( strcmp( QMotifPlusStyle_String, pStyleName ) == 0 )
         {
-        nStyle |= QStyle::Style_MouseOver;
-        if ( pValue->mnThumbState & CTRL_STATE_ROLLOVER )
-            eActive = QStyle::SC_ScrollBarSlider;
+            nStyle |= QStyle::Style_MouseOver;
+            if ( pValue->mnThumbState & CTRL_STATE_ROLLOVER )
+                eActive = QStyle::SC_ScrollBarSlider;
         }
         else if ( strcmp( QSGIStyle_String, pStyleName ) == 0 )
         {
-        nStyle |= QStyle::Style_MouseOver;
-        if ( pValue->mnButton1State & CTRL_STATE_ROLLOVER )
-            eActive = QStyle::SC_ScrollBarSubLine;
-        else if ( pValue->mnButton2State & CTRL_STATE_ROLLOVER )
-            eActive = QStyle::SC_ScrollBarAddLine;
-        else if ( pValue->mnThumbState & CTRL_STATE_ROLLOVER )
-            eActive = QStyle::SC_ScrollBarSlider;
+            nStyle |= QStyle::Style_MouseOver;
+            if ( pValue->mnButton1State & CTRL_STATE_ROLLOVER )
+                eActive = QStyle::SC_ScrollBarSubLine;
+            else if ( pValue->mnButton2State & CTRL_STATE_ROLLOVER )
+                eActive = QStyle::SC_ScrollBarAddLine;
+            else if ( pValue->mnThumbState & CTRL_STATE_ROLLOVER )
+                eActive = QStyle::SC_ScrollBarSlider;
         }
 
         if ( pValue->mnButton1State & CTRL_STATE_PRESSED )
-        eActive = QStyle::SC_ScrollBarSubLine;
+           eActive = QStyle::SC_ScrollBarSubLine;
         else if ( pValue->mnButton2State & CTRL_STATE_PRESSED )
-        eActive = QStyle::SC_ScrollBarAddLine;
+            eActive = QStyle::SC_ScrollBarAddLine;
         else if ( pValue->mnThumbState & CTRL_STATE_PRESSED )
-        eActive = QStyle::SC_ScrollBarSlider;
+            eActive = QStyle::SC_ScrollBarSlider;
         else if ( pValue->mnPage1State & CTRL_STATE_PRESSED )
-        eActive = QStyle::SC_ScrollBarSubPage;
+            eActive = QStyle::SC_ScrollBarSubPage;
         else if ( pValue->mnPage2State & CTRL_STATE_PRESSED )
-        eActive = QStyle::SC_ScrollBarAddPage;
+            eActive = QStyle::SC_ScrollBarAddPage;
 
         // Update the enable/disable state of the widget
         if ( ( nState & CTRL_STATE_ENABLED ) ||
@@ -699,11 +699,11 @@ sal_Bool WidgetPainter::drawStyledWidget( QWidget *pWidget,
             ( pValue->mnPage1State & CTRL_STATE_ENABLED ) ||
             ( pValue->mnPage2State & CTRL_STATE_ENABLED ) )
         {
-        pWidget->setEnabled( true );
-        nStyle |= QStyle::Style_Enabled;
+            pWidget->setEnabled( true );
+            nStyle |= QStyle::Style_Enabled;
         }
         else
-        pWidget->setEnabled( false );
+            pWidget->setEnabled( false );
     }
 
     // Is it a horizontal scroll bar?
@@ -820,7 +820,7 @@ sal_Bool WidgetPainter::drawStyledWidget( QWidget *pWidget,
             pWidget->colorGroup(), nStyle );
     }
     else
-    return sal_False;
+        return sal_False;
 
     // Bitblt it to the screen
     X11SalGraphics::CopyScreenArea(
@@ -840,7 +840,7 @@ QPushButton *WidgetPainter::pushButton( const Rectangle& rControlRegion,
     sal_Bool bDefault )
 {
     if ( !m_pPushButton )
-    m_pPushButton = new QPushButton( NULL, "push_button" );
+       m_pPushButton = new QPushButton( NULL, "push_button" );
 
     QRect qRect = region2QRect( rControlRegion );
 
@@ -850,20 +850,20 @@ QPushButton *WidgetPainter::pushButton( const Rectangle& rControlRegion,
     // FIXME Fix Keramik style to be consistant with Qt built-in styles. Aargh!
     if ( bDefault )
     {
-    QSize qContentsSize( 50, 50 );
-    m_pPushButton->setDefault( false );
-    QSize qNormalSize = kapp->style().sizeFromContents( QStyle::CT_PushButton,
-        m_pPushButton, qContentsSize );
-    m_pPushButton->setDefault( true );
-    QSize qDefSize = kapp->style().sizeFromContents( QStyle::CT_PushButton,
-        m_pPushButton, qContentsSize );
+        QSize qContentsSize( 50, 50 );
+        m_pPushButton->setDefault( false );
+        QSize qNormalSize = kapp->style().sizeFromContents( QStyle::CT_PushButton,
+            m_pPushButton, qContentsSize );
+        m_pPushButton->setDefault( true );
+        QSize qDefSize = kapp->style().sizeFromContents( QStyle::CT_PushButton,
+            m_pPushButton, qContentsSize );
 
-    int nIndicatorSize = kapp->style().pixelMetric(
-        QStyle::PM_ButtonDefaultIndicator, m_pPushButton );
-    if ( qNormalSize.width() == qDefSize.width() )
-        qRect.addCoords( nIndicatorSize, 0, -nIndicatorSize, 0 );
-    if ( qNormalSize.height() == qDefSize.height() )
-        qRect.addCoords( 0, nIndicatorSize, 0, -nIndicatorSize );
+        int nIndicatorSize = kapp->style().pixelMetric(
+            QStyle::PM_ButtonDefaultIndicator, m_pPushButton );
+        if ( qNormalSize.width() == qDefSize.width() )
+            qRect.addCoords( nIndicatorSize, 0, -nIndicatorSize, 0 );
+        if ( qNormalSize.height() == qDefSize.height() )
+            qRect.addCoords( 0, nIndicatorSize, 0, -nIndicatorSize );
     }
 
     m_pPushButton->move( qRect.topLeft() );
@@ -876,7 +876,7 @@ QPushButton *WidgetPainter::pushButton( const Rectangle& rControlRegion,
 QRadioButton *WidgetPainter::radioButton( const Rectangle& rControlRegion )
 {
     if ( !m_pRadioButton )
-    m_pRadioButton = new QRadioButton( NULL, "radio_button" );
+        m_pRadioButton = new QRadioButton( NULL, "radio_button" );
 
     QRect qRect = region2QRect( rControlRegion );
 
@@ -885,15 +885,15 @@ QRadioButton *WidgetPainter::radioButton( const Rectangle& rControlRegion )
     const char *pStyleName = kapp->style().className();
     if ( strcmp( "KThemeStyle", pStyleName ) == 0 )
     {
-    QRect qOldRect( qRect );
+        QRect qOldRect( qRect );
 
-    qRect.setWidth( kapp->style().pixelMetric(
-        QStyle::PM_ExclusiveIndicatorWidth, m_pRadioButton ) );
-    qRect.setHeight( kapp->style().pixelMetric(
-        QStyle::PM_ExclusiveIndicatorHeight, m_pRadioButton ) );
+        qRect.setWidth( kapp->style().pixelMetric(
+            QStyle::PM_ExclusiveIndicatorWidth, m_pRadioButton ) );
+        qRect.setHeight( kapp->style().pixelMetric(
+            QStyle::PM_ExclusiveIndicatorHeight, m_pRadioButton ) );
 
-    qRect.moveBy( ( qOldRect.width() - qRect.width() ) / 2,
-        ( qOldRect.height() - qRect.height() ) / 2 );
+        qRect.moveBy( ( qOldRect.width() - qRect.width() ) / 2,
+            ( qOldRect.height() - qRect.height() ) / 2 );
     }
 
     m_pRadioButton->move( qRect.topLeft() );
@@ -905,7 +905,7 @@ QRadioButton *WidgetPainter::radioButton( const Rectangle& rControlRegion )
 QCheckBox *WidgetPainter::checkBox( const Rectangle& rControlRegion )
 {
     if ( !m_pCheckBox )
-    m_pCheckBox = new QCheckBox( NULL, "check_box" );
+        m_pCheckBox = new QCheckBox( NULL, "check_box" );
 
     QRect qRect = region2QRect( rControlRegion );
 
@@ -914,15 +914,15 @@ QCheckBox *WidgetPainter::checkBox( const Rectangle& rControlRegion )
     const char *pStyleName = kapp->style().className();
     if ( strcmp( "KThemeStyle", pStyleName ) == 0 )
     {
-    QRect qOldRect( qRect );
+        QRect qOldRect( qRect );
 
-    qRect.setWidth( kapp->style().pixelMetric(
-        QStyle::PM_IndicatorWidth, m_pCheckBox ) );
-    qRect.setHeight( kapp->style().pixelMetric(
-        QStyle::PM_IndicatorHeight, m_pCheckBox ) );
+        qRect.setWidth( kapp->style().pixelMetric(
+            QStyle::PM_IndicatorWidth, m_pCheckBox ) );
+        qRect.setHeight( kapp->style().pixelMetric(
+            QStyle::PM_IndicatorHeight, m_pCheckBox ) );
 
-    qRect.moveBy( ( qOldRect.width() - qRect.width() ) / 2,
-        ( qOldRect.height() - qRect.height() ) / 2 );
+        qRect.moveBy( ( qOldRect.width() - qRect.width() ) / 2,
+            ( qOldRect.height() - qRect.height() ) / 2 );
     }
 
     m_pCheckBox->move( qRect.topLeft() );
@@ -937,15 +937,15 @@ QComboBox *WidgetPainter::comboBox( const Rectangle& rControlRegion,
     QComboBox *pComboBox = NULL;
     if ( bEditable )
     {
-    if ( !m_pEditableComboBox )
-        m_pEditableComboBox = new QComboBox( true, NULL, "combo_box_edit" );
-    pComboBox = m_pEditableComboBox;
+        if ( !m_pEditableComboBox )
+            m_pEditableComboBox = new QComboBox( true, NULL, "combo_box_edit" );
+        pComboBox = m_pEditableComboBox;
     }
     else
     {
-    if ( !m_pComboBox )
-        m_pComboBox = new QComboBox( false, NULL, "combo_box" );
-    pComboBox = m_pComboBox;
+        if ( !m_pComboBox )
+            m_pComboBox = new QComboBox( false, NULL, "combo_box" );
+        pComboBox = m_pComboBox;
     }
 
     QRect qRect = region2QRect( rControlRegion );
@@ -959,7 +959,7 @@ QComboBox *WidgetPainter::comboBox( const Rectangle& rControlRegion,
 QLineEdit *WidgetPainter::lineEdit( const Rectangle& rControlRegion )
 {
     if ( !m_pLineEdit )
-    m_pLineEdit = new QLineEdit( NULL, "line_edit" );
+        m_pLineEdit = new QLineEdit( NULL, "line_edit" );
 
     QRect qRect = region2QRect( rControlRegion );
 
@@ -973,10 +973,9 @@ QSpinWidget *WidgetPainter::spinWidget( const Rectangle& rControlRegion )
 {
     if ( !m_pSpinWidget )
     {
-    m_pSpinWidget = new QSpinWidget( NULL, "spin_widget" );
-
-    m_pSpinEdit = new QLineEdit( NULL, "line_edit_spin" );
-    m_pSpinWidget->setEditWidget( m_pSpinEdit );
+        m_pSpinWidget = new QSpinWidget( NULL, "spin_widget" );
+        m_pSpinEdit = new QLineEdit( NULL, "line_edit_spin" );
+        m_pSpinWidget->setEditWidget( m_pSpinEdit );
     }
 
     QRect qRect = region2QRect( rControlRegion );
@@ -992,19 +991,19 @@ QTabBar *WidgetPainter::tabBar( const Rectangle& rControlRegion )
 {
     if ( !m_pTabBar )
     {
-    if ( !m_pTabBarParent )
-        m_pTabBarParent = new QWidget( NULL, "tab_bar_parent" );
+        if ( !m_pTabBarParent )
+            m_pTabBarParent = new QWidget( NULL, "tab_bar_parent" );
 
-    m_pTabBar = new QTabBar( m_pTabBarParent, "tab_bar" );
+        m_pTabBar = new QTabBar( m_pTabBarParent, "tab_bar" );
 
-    m_pTabLeft = new QTab();
-    m_pTabMiddle = new QTab();
-    m_pTabRight = new QTab();
-    m_pTabAlone = new QTab();
+        m_pTabLeft = new QTab();
+        m_pTabMiddle = new QTab();
+        m_pTabRight = new QTab();
+        m_pTabAlone = new QTab();
 
-    m_pTabBar->addTab( m_pTabLeft );
-    m_pTabBar->addTab( m_pTabMiddle );
-    m_pTabBar->addTab( m_pTabRight );
+        m_pTabBar->addTab( m_pTabLeft );
+        m_pTabBar->addTab( m_pTabMiddle );
+        m_pTabBar->addTab( m_pTabRight );
     }
 
     QRect qRect = region2QRect( rControlRegion );
@@ -1020,7 +1019,7 @@ QTabBar *WidgetPainter::tabBar( const Rectangle& rControlRegion )
 QTabWidget *WidgetPainter::tabWidget( const Rectangle& rControlRegion )
 {
     if ( !m_pTabWidget )
-    m_pTabWidget = new QTabWidget( NULL, "tab_widget" );
+        m_pTabWidget = new QTabWidget( NULL, "tab_widget" );
 
     QRect qRect = region2QRect( rControlRegion );
     --qRect.rTop();
@@ -1034,7 +1033,7 @@ QTabWidget *WidgetPainter::tabWidget( const Rectangle& rControlRegion )
 QListView *WidgetPainter::listView( const Rectangle& rControlRegion )
 {
     if ( !m_pListView )
-    m_pListView = new QListView( NULL, "list_view" );
+        m_pListView = new QListView( NULL, "list_view" );
 
     QRect qRect = region2QRect( rControlRegion );
 
@@ -1049,9 +1048,9 @@ QScrollBar *WidgetPainter::scrollBar( const Rectangle& rControlRegion,
 {
     if ( !m_pScrollBar )
     {
-    m_pScrollBar = new QScrollBar( NULL, "scroll_bar" );
-    m_pScrollBar->setTracking( false );
-    m_pScrollBar->setLineStep( 1 );
+        m_pScrollBar = new QScrollBar( NULL, "scroll_bar" );
+        m_pScrollBar->setTracking( false );
+        m_pScrollBar->setLineStep( 1 );
     }
 
     QRect qRect = region2QRect( rControlRegion );
@@ -1063,10 +1062,10 @@ QScrollBar *WidgetPainter::scrollBar( const Rectangle& rControlRegion,
     const ScrollbarValue *pValue = static_cast<const ScrollbarValue *> ( &aValue );
     if ( pValue )
     {
-    m_pScrollBar->setMinValue( pValue->mnMin );
-    m_pScrollBar->setMaxValue( pValue->mnMax - pValue->mnVisibleSize );
-    m_pScrollBar->setValue( pValue->mnCur );
-    m_pScrollBar->setPageStep( pValue->mnVisibleSize );
+        m_pScrollBar->setMinValue( pValue->mnMin );
+        m_pScrollBar->setMaxValue( pValue->mnMax - pValue->mnVisibleSize );
+        m_pScrollBar->setValue( pValue->mnCur );
+        m_pScrollBar->setPageStep( pValue->mnVisibleSize );
     }
 
     return m_pScrollBar;

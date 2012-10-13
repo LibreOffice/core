@@ -62,7 +62,7 @@ TYPEINIT1(SwRedlineHint, SfxHint);
     // 1. make sure that pPos->nContent points into pPos->nNode
     //    (or into the 'special' no-content-node-IndexReg)
     // 2. check that position is valid and doesn't point behind text
-    void lcl_CheckPosition( const SwPosition* pPos )
+    static void lcl_CheckPosition( const SwPosition* pPos )
     {
         SwPosition aComparePos( *pPos );
         aComparePos.nContent.Assign(
@@ -85,7 +85,7 @@ TYPEINIT1(SwRedlineHint, SfxHint);
         }
     }
 
-    void lcl_CheckPam( const SwPaM* pPam )
+    static void lcl_CheckPam( const SwPaM* pPam )
     {
         OSL_ENSURE( pPam != NULL, _ERROR_PREFIX "illegal argument" );
         lcl_CheckPosition( pPam->GetPoint() );
@@ -94,7 +94,7 @@ TYPEINIT1(SwRedlineHint, SfxHint);
 
     // check validity of the redline table. Checks redline bounds, and make
     // sure the redlines are sorted and non-overlapping.
-    void lcl_CheckRedline( const SwDoc* pDoc )
+    static void lcl_CheckRedline( const SwDoc* pDoc )
     {
         const SwRedlineTbl& rTbl = pDoc->GetRedlineTbl();
 
@@ -128,7 +128,7 @@ TYPEINIT1(SwRedlineHint, SfxHint);
 
     #define _CHECK_REDLINE( pDoc ) lcl_CheckRedline( pDoc );
 
-    void lcl_DebugRedline( const SwDoc* pDoc )
+    void sw_DebugRedline( const SwDoc* pDoc )
     {
         static sal_uInt16 nWatch = 0;
         const SwRedlineTbl& rTbl = pDoc->GetRedlineTbl();
@@ -144,7 +144,7 @@ TYPEINIT1(SwRedlineHint, SfxHint);
         }
     }
 
-    #define _DEBUG_REDLINE( pDoc ) lcl_DebugRedline( pDoc );
+    #define _DEBUG_REDLINE( pDoc ) sw_DebugRedline( pDoc );
 
 
 #else
@@ -1570,7 +1570,7 @@ typedef sal_Bool (*Fn_AcceptReject)( SwRedlineTbl& rArr, sal_uInt16& rPos,
                         const SwPosition* pSttRng,
                         const SwPosition* pEndRng);
 
-sal_Bool lcl_AcceptRedline( SwRedlineTbl& rArr, sal_uInt16& rPos,
+static sal_Bool lcl_AcceptRedline( SwRedlineTbl& rArr, sal_uInt16& rPos,
                         sal_Bool bCallDelete,
                         const SwPosition* pSttRng = 0,
                         const SwPosition* pEndRng = 0 )
@@ -1729,7 +1729,7 @@ sal_Bool lcl_AcceptRedline( SwRedlineTbl& rArr, sal_uInt16& rPos,
     return bRet;
 }
 
-sal_Bool lcl_RejectRedline( SwRedlineTbl& rArr, sal_uInt16& rPos,
+static sal_Bool lcl_RejectRedline( SwRedlineTbl& rArr, sal_uInt16& rPos,
                         sal_Bool bCallDelete,
                         const SwPosition* pSttRng = 0,
                         const SwPosition* pEndRng = 0 )
@@ -1934,7 +1934,7 @@ sal_Bool lcl_RejectRedline( SwRedlineTbl& rArr, sal_uInt16& rPos,
 }
 
 
-const SwRedline* lcl_FindCurrRedline( const SwPosition& rSttPos,
+static const SwRedline* lcl_FindCurrRedline( const SwPosition& rSttPos,
                                         sal_uInt16& rPos,
                                         sal_Bool bNext = sal_True )
 {
@@ -1963,7 +1963,7 @@ const SwRedline* lcl_FindCurrRedline( const SwPosition& rSttPos,
     return pFnd;
 }
 
-int lcl_AcceptRejectRedl( Fn_AcceptReject fn_AcceptReject,
+static int lcl_AcceptRejectRedl( Fn_AcceptReject fn_AcceptReject,
                             SwRedlineTbl& rArr, sal_Bool bCallDelete,
                             const SwPaM& rPam)
 {
@@ -2008,7 +2008,7 @@ int lcl_AcceptRejectRedl( Fn_AcceptReject fn_AcceptReject,
     return nCount;
 }
 
-void lcl_AdjustRedlineRange( SwPaM& rPam )
+static void lcl_AdjustRedlineRange( SwPaM& rPam )
 {
     // The Selection is only in the ContentSection. If there are Redlines
     // to Non-ContentNodes before or after that, then the Selections

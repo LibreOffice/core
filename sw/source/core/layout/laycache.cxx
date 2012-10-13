@@ -682,7 +682,7 @@ sal_Bool SwLayHelper::CheckInsertPage()
 }
 
 //
-bool lcl_HasTextFrmAnchoredObjs( SwTxtFrm* p_pTxtFrm )
+static bool lcl_HasTextFrmAnchoredObjs( SwTxtFrm* p_pTxtFrm )
 {
     bool bHasTextFrmAnchoredObjs( false );
 
@@ -705,7 +705,7 @@ bool lcl_HasTextFrmAnchoredObjs( SwTxtFrm* p_pTxtFrm )
     return bHasTextFrmAnchoredObjs;
 }
 
-void lcl_ApplyWorkaroundForB6375613( SwFrm* p_pFirstFrmOnNewPage )
+static void lcl_ApplyWorkaroundForB6375613( SwFrm* p_pFirstFrmOnNewPage )
 {
     SwTxtFrm* pFirstTextFrmOnNewPage = dynamic_cast<SwTxtFrm*>(p_pFirstFrmOnNewPage);
     //

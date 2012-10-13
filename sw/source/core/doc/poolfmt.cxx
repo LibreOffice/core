@@ -103,7 +103,7 @@ static const sal_uInt16 aHeadlineSizes[ 2 * MAXLEVEL ] = {
     PT_7, PT_7, PT_7, PT_7, PT_7            // HTML mode
 };
 
-long lcl_GetRightMargin( SwDoc& rDoc )
+static long lcl_GetRightMargin( SwDoc& rDoc )
 {
     // Make sure that the printer settings are taken over to the standard
     // page template
@@ -144,7 +144,7 @@ void SetAllScriptItem( SfxItemSet& rSet, const SfxPoolItem& rItem )
         rSet.Put( rItem, nWhCTL );
 }
 
-void lcl_SetDfltFont( sal_uInt16 nFntType, SfxItemSet& rSet )
+static void lcl_SetDfltFont( sal_uInt16 nFntType, SfxItemSet& rSet )
 {
     static struct {
         sal_uInt16 nResLngId;
@@ -167,7 +167,7 @@ void lcl_SetDfltFont( sal_uInt16 nFntType, SfxItemSet& rSet )
     }
 }
 
-void lcl_SetDfltFont( sal_uInt16 nLatinFntType, sal_uInt16 nCJKFntType,
+static void lcl_SetDfltFont( sal_uInt16 nLatinFntType, sal_uInt16 nCJKFntType,
                         sal_uInt16 nCTLFntType, SfxItemSet& rSet )
 {
     static struct {
@@ -196,7 +196,7 @@ void lcl_SetDfltFont( sal_uInt16 nLatinFntType, sal_uInt16 nCJKFntType,
     }
 }
 
-void lcl_SetHeadline( SwDoc* pDoc, SwTxtFmtColl* pColl,
+static void lcl_SetHeadline( SwDoc* pDoc, SwTxtFmtColl* pColl,
                         SfxItemSet& rSet,
                         sal_uInt16 nOutLvlBits, sal_uInt8 nLevel, sal_Bool bItalic )
 {
@@ -256,7 +256,7 @@ void lcl_SetHeadline( SwDoc* pDoc, SwTxtFmtColl* pColl,
 
 
 
-void lcl_SetRegister( SwDoc* pDoc, SfxItemSet& rSet, sal_uInt16 nFact,
+static void lcl_SetRegister( SwDoc* pDoc, SfxItemSet& rSet, sal_uInt16 nFact,
                         sal_Bool bHeader, sal_Bool bTab )
 {
     SvxLRSpaceItem aLR( RES_LR_SPACE );
@@ -282,7 +282,7 @@ void lcl_SetRegister( SwDoc* pDoc, SfxItemSet& rSet, sal_uInt16 nFact,
 
 
 
-void lcl_SetNumBul( SwDoc* pDoc, SwTxtFmtColl* pColl,
+static void lcl_SetNumBul( SwDoc* pDoc, SwTxtFmtColl* pColl,
                         SfxItemSet& rSet,
                         sal_uInt16 nNxt, SwTwips nEZ, SwTwips nLeft,
                         SwTwips nUpper, SwTwips nLower )
@@ -1418,7 +1418,7 @@ bool SwDoc::IsPoolFmtUsed( sal_uInt16 nId ) const
 
 
 
-void lcl_GetStdPgSize( SwDoc* pDoc, SfxItemSet& rSet )
+static void lcl_GetStdPgSize( SwDoc* pDoc, SfxItemSet& rSet )
 {
     SwPageDesc* pStdPgDsc = pDoc->GetPageDescFromPool( RES_POOLPAGE_STANDARD );
     SwFmtFrmSize aFrmSz( pStdPgDsc->GetMaster().GetFrmSize() );

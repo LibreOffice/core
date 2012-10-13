@@ -1,0 +1,116 @@
+--- src/lib/VSDXContentCollector.cpp
++++ src/lib/VSDXContentCollector.cpp
+@@ -676,7 +676,6 @@ double libvisio::VSDXContentCollector::_linePropertiesMarkerScale(unsigned marke
+ 
+ void libvisio::VSDXContentCollector::_flushCurrentPath()
+ {
+-  WPXPropertyListVector path;
+   WPXPropertyList fillPathProps(m_styleProps);
+   fillPathProps.insert("draw:stroke", "none");
+   WPXPropertyList linePathProps(m_styleProps);
+@@ -695,6 +694,7 @@ void libvisio::VSDXContentCollector::_flushCurrentPath()
+   if (needsGroup)
+     m_shapeOutputDrawing->addStartLayer(WPXPropertyList());
+ 
++  std::vector<WPXPropertyList> tmpPath;
+   if (m_styleProps["draw:fill"] && m_styleProps["draw:fill"]->getStr() != "none")
+   {
+     bool firstPoint = true;
+@@ -708,39 +708,84 @@ void libvisio::VSDXContentCollector::_flushCurrentPath()
+       }
+       else if (m_currentFillGeometry[i]["libwpg:path-action"]->getStr() == "M")
+       {
+-        if (path.count() && !wasMove)
++        if (!tmpPath.empty())
+         {
+-          WPXPropertyList closedPath;
+-          closedPath.insert("libwpg:path-action", "Z");
+-          path.append(closedPath);
++          if (!wasMove)
++          {
++            WPXPropertyList closedPath;
++            closedPath.insert("libwpg:path-action", "Z");
++            tmpPath.push_back(closedPath);
++          }
++          else
++          {
++            tmpPath.pop_back();
++          }
+         }
+         wasMove = true;
+       }
+       else
+         wasMove = false;
+-      path.append(m_currentFillGeometry[i]);
++      tmpPath.push_back(m_currentFillGeometry[i]);
+     }
+-    if (path.count() && !wasMove)
++    if (!tmpPath.empty())
+     {
+-      WPXPropertyList closedPath;
+-      closedPath.insert("libwpg:path-action", "Z");
+-      path.append(closedPath);
++      if (!wasMove)
++      {
++        WPXPropertyList closedPath;
++        closedPath.insert("libwpg:path-action", "Z");
++        tmpPath.push_back(closedPath);
++      }
++      else
++        tmpPath.pop_back();
+     }
+-    if (path.count())
++    if (!tmpPath.empty())
+     {
++      WPXPropertyListVector path;
++      for (unsigned i = 0; i < tmpPath.size(); ++i)
++        path.append(tmpPath[i]);
+       m_shapeOutputDrawing->addStyle(fillPathProps, WPXPropertyListVector());
+       m_shapeOutputDrawing->addPath(path);
+     }
+   }
+   m_currentFillGeometry.clear();
+-  path = WPXPropertyListVector();
++  tmpPath.clear();
+ 
+   if (m_styleProps["draw:stroke"] && m_styleProps["draw:stroke"]->getStr() != "none")
+   {
++    bool firstPoint = true;
++    bool wasMove = false;
+     for (unsigned i = 0; i < m_currentLineGeometry.size(); i++)
+-      path.append(m_currentLineGeometry[i]);
+-    if (path.count())
+     {
++      if (firstPoint)
++      {
++        firstPoint = false;
++        wasMove = true;
++      }
++      else if (m_currentLineGeometry[i]["libwpg:path-action"]->getStr() == "M")
++      {
++        if (!tmpPath.empty())
++        {
++          if (wasMove)
++          {
++            tmpPath.pop_back();
++          }
++        }
++        wasMove = true;
++      }
++      else
++        wasMove = false;
++      tmpPath.push_back(m_currentLineGeometry[i]);
++    }
++    if (!tmpPath.empty())
++    {
++      if (wasMove)
++        tmpPath.pop_back();
++    }
++    if (!tmpPath.empty())
++    {
++      WPXPropertyListVector path;
++      for (unsigned i = 0; i < tmpPath.size(); ++i)
++        path.append(tmpPath[i]);
+       m_shapeOutputDrawing->addStyle(linePathProps, WPXPropertyListVector());
+       m_shapeOutputDrawing->addPath(path);
+     }

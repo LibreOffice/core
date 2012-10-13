@@ -231,7 +231,6 @@ bool FormControlHelper::processField(uno::Reference<text::XFormField> xFormField
             aAny <<= m_pFFData->getCheckboxChecked();
             if ( xPropSet.is() )
                 xPropSet->setPropertyValue("Checked", aAny);
-            OUString sName;
         }
         else if (m_pImpl->m_eFieldId == FIELD_FORMDROPDOWN )
         {

@@ -80,7 +80,7 @@ bool StgPage::IsPageGreater( const StgPage *pA, const StgPage *pB )
 // The disk cache holds the cached sectors. The sector type differ according
 // to their purpose.
 
-sal_Int32 lcl_GetPageCount( sal_uLong nFileSize, short nPageSize )
+static sal_Int32 lcl_GetPageCount( sal_uLong nFileSize, short nPageSize )
 {
 //    return (nFileSize >= 512) ? (nFileSize - 512) / nPageSize : 0;
     // #i61980# reallife: last page may be incomplete, return number of *started* pages
@@ -135,7 +135,7 @@ void StgCache::Erase( const rtl::Reference< StgPage > &xElem )
 {
     OSL_ENSURE( xElem.is(), "The pointer should not be NULL!" );
     if ( xElem.is() ) {
-        for ( LRUList::iterator it = maLRUPages.begin(); it != maLRUPages.end(); it++ ) {
+        for ( LRUList::iterator it = maLRUPages.begin(); it != maLRUPages.end(); ++it ) {
             if ( it->is() && (*it)->GetPage() == xElem->GetPage() ) {
                 it->clear();
                 break;
@@ -149,7 +149,7 @@ void StgCache::Erase( const rtl::Reference< StgPage > &xElem )
 void StgCache::Clear()
 {
     maDirtyPages.clear();
-    for ( LRUList::iterator it = maLRUPages.begin(); it != maLRUPages.end(); it++ )
+    for ( LRUList::iterator it = maLRUPages.begin(); it != maLRUPages.end(); ++it )
         it->clear();
 }
 
@@ -157,7 +157,7 @@ void StgCache::Clear()
 
 rtl::Reference< StgPage > StgCache::Find( sal_Int32 nPage )
 {
-    for ( LRUList::iterator it = maLRUPages.begin(); it != maLRUPages.end(); it++ )
+    for ( LRUList::iterator it = maLRUPages.begin(); it != maLRUPages.end(); ++it )
         if ( it->is() && (*it)->GetPage() == nPage )
             return *it;
     IndexToStgPage::iterator it2 = maDirtyPages.find( nPage );
@@ -216,12 +216,12 @@ sal_Bool StgCache::Commit()
     {
         std::vector< StgPage * > aToWrite;
         for ( IndexToStgPage::iterator aIt = maDirtyPages.begin();
-              aIt != maDirtyPages.end(); aIt++ )
+              aIt != maDirtyPages.end(); ++aIt )
             aToWrite.push_back( aIt->second.get() );
 
         std::sort( aToWrite.begin(), aToWrite.end(), StgPage::IsPageGreater );
         for ( std::vector< StgPage * >::iterator aWr = aToWrite.begin();
-              aWr != aToWrite.end(); aWr++)
+              aWr != aToWrite.end(); ++aWr)
         {
             const rtl::Reference< StgPage > &pPage = *aWr;
             if ( !Write( pPage->GetPage(), pPage->GetData(), 1 ) )

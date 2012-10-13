@@ -49,7 +49,6 @@ import java.lang.String;
  * "getConnection()" to open or use internal set connection which is created one
  * times only.
  *
- * @author      Andreas Schl&uuml;ns
  */
 public class OfficeConnect
 {

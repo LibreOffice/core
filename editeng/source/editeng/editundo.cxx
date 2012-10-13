@@ -40,7 +40,7 @@ DBG_NAME( EditUndo )
 #define NO_UNDO         0xFFFF
 #define GROUP_NOTFOUND  0xFFFF
 
-void lcl_DoSetSelection( EditView* pView, sal_uInt16 nPara )
+static void lcl_DoSetSelection( EditView* pView, sal_uInt16 nPara )
 {
     EPaM aEPaM( nPara, 0 );
     EditPaM aPaM( pView->GetImpEditEngine()->CreateEditPaM( aEPaM ) );

@@ -26,12 +26,6 @@
  *
  ************************************************************************/
 
-// LLA:
-// this file is converted to use with testshl2
-// original was placed in sal/test/textenc.cxx
-
-#include <stdio.h>
-
 #include <osl/file.h>
 #include <osl/process.h>
 #include <rtl/ustring.hxx>
@@ -119,20 +113,12 @@ void oldtestfile::test_file_001()
         OUString target;
         OUString rel = OUString::createFromAscii( aSource1[i] );
         oslFileError e = osl_getAbsoluteFileURL( base1.pData, rel.pData , &target.pData );
-        //fprintf(stderr, "%d : %s -- %s -- %s\n", i, aSource1[i], aSource1[i+1], OUStringToOString(target , RTL_TEXTENCODING_ASCII_US ).getStr() );
         CPPUNIT_ASSERT_MESSAGE("failure #1",  osl_File_E_None == e );
         if( osl_File_E_None == e )
         {
             CPPUNIT_ASSERT_MESSAGE("failure #1.1",  target.equalsAscii( aSource1[i+1] ) );
         }
-        OString o = OUStringToOString( target , RTL_TEXTENCODING_ASCII_US );
-        OString obase = OUStringToOString( base1 , RTL_TEXTENCODING_ASCII_US );
-        // fprintf( stderr, "%d %s + %s = %s\n" ,e, obase.getStr(), aSource1[i], o.pData->buffer );
     }
-
-    OUString err1( RTL_CONSTASCII_USTRINGPARAM( "../.." ) );
-    OUString target;
-    // CPPUNIT_ASSERT_MESSAGE("failure #11",  osl_File_E_None != osl_getAbsoluteFileURL( base1.pData , err1.pData , &target.pData ) );
 #endif
 }
 
@@ -146,14 +132,11 @@ void oldtestfile::test_file_002()
         OUString target;
         OUString rel = OUString::createFromAscii( aSource2[i] );
         oslFileError e = osl_getAbsoluteFileURL( base2.pData, rel.pData , &target.pData );
-        //fprintf(stderr, "%d : %s -- %s -- %s\n", i, aSource2[i], aSource2[i+1], OUStringToOString(target , RTL_TEXTENCODING_ASCII_US ).getStr() );
         CPPUNIT_ASSERT_MESSAGE("failure #2",  osl_File_E_None == e );
         if( osl_File_E_None == e )
         {
             CPPUNIT_ASSERT_MESSAGE("failure #2.1",  target.equalsAscii( aSource2[i+1] ) );
         }
-        OString o = OUStringToOString( target , RTL_TEXTENCODING_ASCII_US );
-        OString obase = OUStringToOString( base2 , RTL_TEXTENCODING_ASCII_US );
     }
 #endif
 }
@@ -173,9 +156,6 @@ void oldtestfile::test_file_004()
         {
             CPPUNIT_ASSERT_MESSAGE("failure #10.1",  target.equalsAscii( aSource1[i+1] ) );
         }
-        OString o = OUStringToOString( target , RTL_TEXTENCODING_ASCII_US );
-        OString obase = OUStringToOString( base4 , RTL_TEXTENCODING_ASCII_US );
-        //fprintf( stderr, "%d %s + %s = %s\n" ,e, obase.getStr(), aSource1[i], o.pData->buffer );
     }
 #endif
 }

@@ -1,1 +1,11 @@
 Filter registration and some simple filters (also descriptions).
+
+Desperate splitting of code into small shared libraries for historical
+reasons presumably (OS/2 and Windows 3.x). The libraries produced from
+the code in each subdirectory of filter/source/graphicfilter are
+graphic format import or export filters. But they don't have uniform
+API. Some have either an GraphicImport or GraphicExport entry point,
+and are loaded and used in a uniform fashion from code in
+svtools/source/filter/filter.cxx. Others have different API and are
+loaded from other places. For instance "icgm" has ImportCGM, and is
+loaded and used by sd/source/filter/cgm/sdcgmfilter.cxx (!).

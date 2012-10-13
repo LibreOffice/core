@@ -375,11 +375,9 @@ const rtl::OUString& SubstitutePathVariables_Impl::GetNTDomainName()
 
 const rtl::OUString& SubstitutePathVariables_Impl::GetHostName()
 {
-    if ( !m_bHostRetrieved )
+    if (!m_bHostRetrieved)
     {
-        rtl::OUString   aHostName;
         oslSocketResult aSocketResult;
-
         m_aHost = osl::SocketAddr::getLocalHostname( &aSocketResult ).toAsciiLowerCase();
     }
 
@@ -1133,8 +1131,8 @@ throw ( NoSuchElementException, RuntimeException )
                 aVariable = rVariable.copy( 2, rVariable.getLength() - 3 );
             else
             {
-                rtl::OUString aExceptionText( RTL_CONSTASCII_USTRINGPARAM( "Unknown variable!" ));
-                throw NoSuchElementException();
+                OUString aExceptionText("Unknown variable!");
+                throw NoSuchElementException(aExceptionText, (cppu::OWeakObject *)this);
             }
         }
         else
@@ -1148,8 +1146,8 @@ throw ( NoSuchElementException, RuntimeException )
             return pIter->second.aSubstValue;
         }
 
-        rtl::OUString aExceptionText( RTL_CONSTASCII_USTRINGPARAM( "Unknown variable!" ));
-        throw NoSuchElementException( aExceptionText, (cppu::OWeakObject *)this );
+        OUString aExceptionText("Unknown variable!");
+        throw NoSuchElementException(aExceptionText, (cppu::OWeakObject *)this);
     }
 }
 
@@ -1163,8 +1161,6 @@ void SubstitutePathVariables::SetPredefinedPathVariables( PredefinedPathVariable
         aPreDefPathVariables.m_FixedVar[PREDEFVAR_BRANDBASEURL]);
 
     Any             aAny;
-    ::rtl::OUString aTmp;
-    String          aResult;
 
     // Get inspath and userpath from bootstrap mechanism in every case as file URL
     ::utl::Bootstrap::PathStatus aState;
@@ -1237,6 +1233,7 @@ void SubstitutePathVariables::SetPredefinedPathVariables( PredefinedPathVariable
     aPreDefPathVariables.m_FixedVar[ PREDEFVAR_PATH ] = GetPathVariableValue();
 
     // Set $(temp)
+    OUString aTmp;
     osl::FileBase::getTempDirURL( aTmp );
     aPreDefPathVariables.m_FixedVar[ PREDEFVAR_TEMP ] = ConvertOSLtoUCBURL( aTmp );
 }

@@ -72,7 +72,7 @@ class SmGraphicAccessible :
     public SmGraphicAccessibleBaseClass
 {
     osl::Mutex                          aListenerMutex;
-    String                              aAccName;
+    OUString                            aAccName;
     /// client id in the AccessibleEventNotifier queue
     sal_uInt32                          nClientId;
 
@@ -84,7 +84,7 @@ class SmGraphicAccessible :
 
 protected:
     SmDocShell *    GetDoc_Impl();
-    String          GetAccessibleText_Impl();
+    OUString        GetAccessibleText_Impl();
 
 public:
     SmGraphicAccessible( SmGraphicWindow *pGraphicWin );
@@ -326,7 +326,7 @@ class SmEditAccessible :
     public SmEditAccessibleBaseClass
 {
     osl::Mutex                              aListenerMutex;
-    String                                  aAccName;
+    OUString                                aAccName;
     ::accessibility::AccessibleTextHelper    *pTextHelper;
     SmEditWindow                           *pWin;
 

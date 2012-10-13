@@ -29,6 +29,7 @@
 #include <viewopt.hxx>
 #include <globals.h>
 #include <sfx2/app.hxx>
+#include <sfx2/infobar.hxx>
 #include <sfx2/request.hxx>
 #include <svl/whiter.hxx>
 #include <svx/srchdlg.hxx>
@@ -100,6 +101,7 @@ SFX_IMPL_INTERFACE( SwView, SfxViewShell, SW_RES(RID_TOOLS_TOOLBOX) )
     SFX_CHILDWINDOW_CONTEXT_REGISTRATION(SID_NAVIGATOR);
     SFX_CHILDWINDOW_REGISTRATION(SID_TASKPANE);
     SFX_CHILDWINDOW_REGISTRATION(SfxTemplateDialogWrapper::GetChildWindowId());
+    SFX_CHILDWINDOW_REGISTRATION(SfxInfoBarContainerChild::GetChildWindowId());
     SFX_CHILDWINDOW_REGISTRATION(SvxSearchDialogWrapper::GetChildWindowId());
     SFX_CHILDWINDOW_REGISTRATION(SwSpellDialogChildWindow::GetChildWindowId());
     SFX_CHILDWINDOW_REGISTRATION(FN_REDLINE_ACCEPT);
@@ -158,13 +160,13 @@ sal_Bool SwView::IsMailMergeSourceView() const
     return pViewImpl->IsMailMergeSourceView();
 }
 
-sal_Bool lcl_IsViewMarks( const SwViewOption& rVOpt )
+static sal_Bool lcl_IsViewMarks( const SwViewOption& rVOpt )
 {
     return  rVOpt.IsHardBlank() &&
             rVOpt.IsSoftHyph() &&
             SwViewOption::IsFieldShadings();
 }
-void lcl_SetViewMarks(SwViewOption& rVOpt, sal_Bool bOn )
+static void lcl_SetViewMarks(SwViewOption& rVOpt, sal_Bool bOn )
 {
     rVOpt.SetHardBlank(bOn);
     rVOpt.SetSoftHyph(bOn);
@@ -172,7 +174,7 @@ void lcl_SetViewMarks(SwViewOption& rVOpt, sal_Bool bOn )
             VIEWOPT_FIELD_SHADINGS, bOn, sal_True);
 }
 
-void lcl_SetViewMetaChars( SwViewOption& rVOpt, sal_Bool bOn)
+static void lcl_SetViewMetaChars( SwViewOption& rVOpt, sal_Bool bOn)
 {
     rVOpt.SetViewMetaChars( bOn );
     if(bOn && !(rVOpt.IsParagraph()     ||

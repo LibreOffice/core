@@ -536,9 +536,9 @@ namespace chelp {
         com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >  m_xMSF;
         com::sun::star::uno::Reference< com::sun::star::ucb::XContentProvider >  m_xProvider;
         sal_Int32                           m_nRow;
-        sal_Bool                            m_nWasNull;
+        bool                                m_nWasNull;
         sal_Int32                           m_nOpenMode;
-        sal_Bool                            m_bRowCountFinal;
+        bool                                m_bRowCountFinal;
 
         typedef std::vector< com::sun::star::uno::Reference< com::sun::star::ucb::XContentIdentifier > > IdentSet;
         typedef std::vector< com::sun::star::uno::Reference< com::sun::star::sdbc::XRow > >              ItemSet;

@@ -1,30 +1,21 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*************************************************************************
+/*
+ * This file is part of the LibreOffice project.
  *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * This file incorporates work covered by the following license notice:
  *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
 
 #include <vcl/svapp.hxx>
 #include <sfx2/filedlghelper.hxx>
@@ -55,10 +46,6 @@ namespace lang = ::com::sun::star::lang;
 namespace uno = ::com::sun::star::uno;
 namespace util = ::com::sun::star::util;
 
-// define ----------------------------------------------------------------
-
-#define UNISTRING(s) rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(s))
-
 // class SvxOnlineUpdateTabPage --------------------------------------------------
 
 SvxOnlineUpdateTabPage::SvxOnlineUpdateTabPage( Window* pParent, const SfxItemSet& rSet ) :
@@ -86,11 +73,11 @@ SvxOnlineUpdateTabPage::SvxOnlineUpdateTabPage( Window* pParent, const SfxItemSe
     uno::Reference < lang::XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
 
     m_xUpdateAccess = uno::Reference < container::XNameReplace >(
-        xFactory->createInstance( UNISTRING( "com.sun.star.setup.UpdateCheckConfig" ) ),
+        xFactory->createInstance( "com.sun.star.setup.UpdateCheckConfig" ),
         uno::UNO_QUERY_THROW );
 
     sal_Bool bDownloadSupported = sal_False;
-    m_xUpdateAccess->getByName( UNISTRING( "DownloadSupported") ) >>= bDownloadSupported;
+    m_xUpdateAccess->getByName( "DownloadSupported" ) >>= bDownloadSupported;
 
     WinBits nStyle = m_aDestPath.GetStyle();
     nStyle |= WB_PATHELLIPSIS;
@@ -123,7 +110,7 @@ void SvxOnlineUpdateTabPage::UpdateLastCheckedText()
     rtl::OUString aText;
     sal_Int64 lastChecked = 0;
 
-    m_xUpdateAccess->getByName( UNISTRING( "LastCheck") ) >>= lastChecked;
+    m_xUpdateAccess->getByName("LastCheck") >>= lastChecked;
 
     if( lastChecked == 0 ) // never checked
     {
@@ -164,11 +151,11 @@ void SvxOnlineUpdateTabPage::UpdateLastCheckedText()
         delete pNumberFormatter;
 
         aText = m_aLastCheckedTemplate;
-        sal_Int32 nIndex = aText.indexOf( UNISTRING( "%DATE%" ) );
+        sal_Int32 nIndex = aText.indexOf( "%DATE%" );
         if ( nIndex != -1 )
             aText = aText.replaceAt( nIndex, 6, aDateStr );
 
-        nIndex = aText.indexOf( UNISTRING( "%TIME%" ) );
+        nIndex = aText.indexOf( "%TIME%" );
         if ( nIndex != -1 )
             aText = aText.replaceAt( nIndex, 6, aTimeStr );
     }
@@ -197,7 +184,7 @@ sal_Bool SvxOnlineUpdateTabPage::FillItemSet( SfxItemSet& )
     if( m_aAutoCheckCheckBox.GetSavedValue() != m_aAutoCheckCheckBox.IsChecked() )
     {
         bValue = (sal_True == m_aAutoCheckCheckBox.IsChecked());
-        m_xUpdateAccess->replaceByName( UNISTRING("AutoCheckEnabled"), uno::makeAny( bValue ) );
+        m_xUpdateAccess->replaceByName( "AutoCheckEnabled", uno::makeAny( bValue ) );
         bModified = sal_True;
     }
 
@@ -220,24 +207,24 @@ sal_Bool SvxOnlineUpdateTabPage::FillItemSet( SfxItemSet& )
 
     if( nValue > 0 )
     {
-        m_xUpdateAccess->replaceByName( UNISTRING("CheckInterval"), uno::makeAny( nValue ) );
+        m_xUpdateAccess->replaceByName( "CheckInterval", uno::makeAny( nValue ) );
         bModified = sal_True;
     }
 
     if( m_aAutoDownloadCheckBox.GetSavedValue() != m_aAutoDownloadCheckBox.IsChecked() )
     {
         bValue = (sal_True == m_aAutoDownloadCheckBox.IsChecked());
-        m_xUpdateAccess->replaceByName( UNISTRING("AutoDownloadEnabled"), uno::makeAny( bValue ) );
+        m_xUpdateAccess->replaceByName( "AutoDownloadEnabled", uno::makeAny( bValue ) );
         bModified = sal_True;
     }
 
     rtl::OUString sValue, aURL;
-    m_xUpdateAccess->getByName( UNISTRING("DownloadDestination") ) >>= sValue;
+    m_xUpdateAccess->getByName( "DownloadDestination" ) >>= sValue;
 
     if( ( osl::FileBase::E_None == osl::FileBase::getFileURLFromSystemPath(m_aDestPath.GetText(), aURL) ) &&
         ( ! aURL.equals( sValue ) ) )
     {
-        m_xUpdateAccess->replaceByName( UNISTRING("DownloadDestination"), uno::makeAny( aURL ) );
+        m_xUpdateAccess->replaceByName( "DownloadDestination", uno::makeAny( aURL ) );
         bModified = sal_True;
     }
 
@@ -253,7 +240,7 @@ sal_Bool SvxOnlineUpdateTabPage::FillItemSet( SfxItemSet& )
 void SvxOnlineUpdateTabPage::Reset( const SfxItemSet& )
 {
     sal_Bool bValue = sal_Bool();
-    m_xUpdateAccess->getByName( UNISTRING("AutoCheckEnabled") ) >>= bValue;
+    m_xUpdateAccess->getByName( "AutoCheckEnabled" ) >>= bValue;
 
     m_aAutoCheckCheckBox.Check(bValue);
     m_aEveryDayButton.Enable(bValue);
@@ -261,7 +248,7 @@ void SvxOnlineUpdateTabPage::Reset( const SfxItemSet& )
     m_aEveryMonthButton.Enable(bValue);
 
     sal_Int64 nValue = 0;
-    m_xUpdateAccess->getByName( UNISTRING("CheckInterval") ) >>= nValue;
+    m_xUpdateAccess->getByName( "CheckInterval" ) >>= nValue;
 
     if( nValue == 86400 )
         m_aEveryDayButton.Check();
@@ -275,14 +262,14 @@ void SvxOnlineUpdateTabPage::Reset( const SfxItemSet& )
     m_aEveryWeekButton.SaveValue();
     m_aEveryMonthButton.SaveValue();
 
-    m_xUpdateAccess->getByName( UNISTRING("AutoDownloadEnabled") ) >>= bValue;
+    m_xUpdateAccess->getByName( "AutoDownloadEnabled" ) >>= bValue;
     m_aAutoDownloadCheckBox.Check(bValue);
     m_aDestPathLabel.Enable(sal_True);
     m_aDestPath.Enable(sal_True);
     m_aChangePathButton.Enable(sal_True);
 
     rtl::OUString sValue, aPath;
-    m_xUpdateAccess->getByName( UNISTRING("DownloadDestination") ) >>= sValue;
+    m_xUpdateAccess->getByName( "DownloadDestination" ) >>= sValue;
 
     if( osl::FileBase::E_None == osl::FileBase::getSystemPathFromFileURL(sValue, aPath) )
         m_aDestPath.SetText(aPath);
@@ -348,19 +335,19 @@ IMPL_LINK_NOARG(SvxOnlineUpdateTabPage, CheckNowHdl_Impl)
                 comphelper::getProcessComponentContext() ) );
 
         beans::NamedValue aProperty;
-        aProperty.Name  = UNISTRING( "nodepath" );
-        aProperty.Value = uno::makeAny( UNISTRING("org.openoffice.Office.Addons/AddonUI/OfficeHelp/UpdateCheckJob") );
+        aProperty.Name  = "nodepath";
+        aProperty.Value = uno::makeAny( OUString("org.openoffice.Office.Addons/AddonUI/OfficeHelp/UpdateCheckJob") );
 
         uno::Sequence< uno::Any > aArgumentList( 1 );
         aArgumentList[0] = uno::makeAny( aProperty );
 
         uno::Reference< container::XNameAccess > xNameAccess(
             xConfigProvider->createInstanceWithArguments(
-                UNISTRING("com.sun.star.configuration.ConfigurationAccess"), aArgumentList ),
+                "com.sun.star.configuration.ConfigurationAccess", aArgumentList ),
             uno::UNO_QUERY_THROW );
 
         util::URL aURL;
-        xNameAccess->getByName(UNISTRING("URL")) >>= aURL.Complete;
+        xNameAccess->getByName("URL") >>= aURL.Complete;
 
         uno::Reference < util::XURLTransformer > xTransformer(
             util::URLTransformer::create( comphelper::getProcessComponentContext() ) );
@@ -368,7 +355,7 @@ IMPL_LINK_NOARG(SvxOnlineUpdateTabPage, CheckNowHdl_Impl)
         xTransformer->parseStrict(aURL);
 
         uno::Reference < frame::XDesktop > xDesktop(
-            xFactory->createInstance(  UNISTRING( "com.sun.star.frame.Desktop" ) ),
+            xFactory->createInstance( "com.sun.star.frame.Desktop" ),
             uno::UNO_QUERY_THROW );
 
         uno::Reference< frame::XDispatchProvider > xDispatchProvider(

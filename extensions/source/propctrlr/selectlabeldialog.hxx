@@ -21,7 +21,7 @@
 #define _EXTENSIONS_PROPCTRLR_SELECTLABELDIALOG_HXX_
 
 #include <vcl/fixed.hxx>
-#include <svtools/svtreebx.hxx>
+#include <svtools/treelistbox.hxx>
 #include <vcl/button.hxx>
 #include <vcl/image.hxx>
 #include <vcl/dialog.hxx>

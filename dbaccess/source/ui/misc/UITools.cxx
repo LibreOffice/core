@@ -42,7 +42,7 @@
 #include <com/sun/star/sdbc/XResultSetMetaDataSupplier.hpp>
 #include <com/sun/star/sdbc/XResultSetMetaData.hpp>
 #include <com/sun/star/sdbc/ColumnValue.hpp>
-#include <com/sun/star/task/XInteractionHandler.hpp>
+#include <com/sun/star/task/InteractionHandler.hpp>
 #include <com/sun/star/ucb/XContent.hpp>
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -138,7 +138,7 @@ using ::com::sun::star::frame::XModel;
 // -----------------------------------------------------------------------------
 SQLExceptionInfo createConnection(  const ::rtl::OUString& _rsDataSourceName,
                                      const Reference< ::com::sun::star::container::XNameAccess >& _xDatabaseContext,
-                                    const Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rMF,
+                                    const Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,
                                     Reference< ::com::sun::star::lang::XEventListener>& _rEvtLst,
                                     Reference< ::com::sun::star::sdbc::XConnection>& _rOUTConnection )
 {
@@ -152,11 +152,11 @@ SQLExceptionInfo createConnection(  const ::rtl::OUString& _rsDataSourceName,
     }
     SQLExceptionInfo aInfo;
 
-    return createConnection(xProp,_rMF,_rEvtLst,_rOUTConnection);
+    return createConnection(xProp,_rxContext,_rEvtLst,_rOUTConnection);
 }
 // -----------------------------------------------------------------------------
 SQLExceptionInfo createConnection(  const Reference< ::com::sun::star::beans::XPropertySet>& _xDataSource,
-                                    const Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rMF,
+                                    const Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,
                                     Reference< ::com::sun::star::lang::XEventListener>& _rEvtLst,
                                     Reference< ::com::sun::star::sdbc::XConnection>& _rOUTConnection )
 {
@@ -192,14 +192,8 @@ SQLExceptionInfo createConnection(  const Reference< ::com::sun::star::beans::XP
             }
             else
             {   // instantiate the default SDB interaction handler
-                Reference< XInteractionHandler > xHandler(_rMF->createInstance(SERVICE_TASK_INTERACTION_HANDLER), UNO_QUERY);
-                if (!xHandler.is())
-                {
-                    OSL_FAIL("createConnection: could not instantiate an interaction handler!");
-                        // TODO: a real parent!
-                }
-                else
-                    _rOUTConnection = xConnectionCompletion->connectWithCompletion(xHandler);
+                Reference< XInteractionHandler > xHandler( InteractionHandler::createWithParent(_rxContext, 0), UNO_QUERY);
+                _rOUTConnection = xConnectionCompletion->connectWithCompletion(xHandler);
             }
         }
         else

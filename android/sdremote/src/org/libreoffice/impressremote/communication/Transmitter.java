@@ -12,8 +12,6 @@ import android.graphics.Color;
 
 /**
  * Interface to send commands to the server.
- *
- * @author Andrzej J.R. Hunt
  */
 public class Transmitter {
 

@@ -41,7 +41,7 @@
 #include "svx/dlgutil.hxx"
 
 // local functions
-void    lcl_GetMinMax(MetricField& rField, long& nFirst, long& nLast, long& nMin, long& nMax)
+static void    lcl_GetMinMax(MetricField& rField, long& nFirst, long& nLast, long& nMin, long& nMax)
 {
     nFirst  = static_cast<long>(rField.Denormalize( rField.GetFirst( FUNIT_TWIP ) ));
     nLast = static_cast<long>(rField.Denormalize( rField.GetLast( FUNIT_TWIP ) ));
@@ -49,7 +49,7 @@ void    lcl_GetMinMax(MetricField& rField, long& nFirst, long& nLast, long& nMin
     nMax = static_cast<long>(rField.Denormalize( rField.GetMax( FUNIT_TWIP ) ));
 }
 
-void    lcl_SetMinMax(MetricField& rField, long nFirst, long nLast, long nMin, long nMax)
+static void    lcl_SetMinMax(MetricField& rField, long nFirst, long nLast, long nMin, long nMax)
 {
     rField.SetFirst( rField.Normalize( nFirst ), FUNIT_TWIP );
     rField.SetLast( rField.Normalize( nLast ), FUNIT_TWIP );

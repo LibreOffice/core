@@ -190,8 +190,8 @@ CntStaticPoolDefaults_Impl::CntStaticPoolDefaults_Impl( CntItemPool* /*pPool*/ )
   m_ppDefaults( new SfxPoolItem* [ m_nItems ] ),
   m_pItemInfos( new SfxItemInfo  [ m_nItems ] )
 {
-    rtl_zeroMemory( m_ppDefaults, sizeof( SfxPoolItem* ) * m_nItems );
-    rtl_zeroMemory( m_pItemInfos, sizeof( SfxItemInfo ) * m_nItems );
+    memset( m_ppDefaults, 0, sizeof( SfxPoolItem* ) * m_nItems );
+    memset( m_pItemInfos, 0, sizeof( SfxItemInfo ) * m_nItems );
     Insert(
         new SfxStringItem( WID_CHAOS_START, String() ),
         0,

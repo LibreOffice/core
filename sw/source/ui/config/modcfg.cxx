@@ -279,7 +279,7 @@ SwRevisionConfig::~SwRevisionConfig()
 {
 }
 
-sal_Int32 lcl_ConvertAttrToCfg(const AuthorCharAttr& rAttr)
+static sal_Int32 lcl_ConvertAttrToCfg(const AuthorCharAttr& rAttr)
 {
     sal_Int32 nRet = 0;
     switch(rAttr.nItemId)
@@ -331,7 +331,7 @@ void SwRevisionConfig::Commit()
     PutProperties(aNames, aValues);
 }
 
-void lcl_ConvertCfgToAttr(sal_Int32 nVal, AuthorCharAttr& rAttr, sal_Bool bDelete = sal_False)
+static void lcl_ConvertCfgToAttr(sal_Int32 nVal, AuthorCharAttr& rAttr, sal_Bool bDelete = sal_False)
 {
     rAttr.nItemId = rAttr.nAttr = 0;
     switch(nVal)
@@ -629,7 +629,7 @@ SwInsertConfig::~SwInsertConfig()
     delete pOLEMiscOpt;
 }
 
-void lcl_WriteOpt(const InsCaptionOpt& rOpt, Any* pValues, sal_Int32 nProp, sal_Int32 nOffset)
+static void lcl_WriteOpt(const InsCaptionOpt& rOpt, Any* pValues, sal_Int32 nProp, sal_Int32 nOffset)
 {
     switch(nOffset)
     {
@@ -829,7 +829,7 @@ void SwInsertConfig::Commit()
     PutProperties(aNames, aValues);
 }
 
-void lcl_ReadOpt(InsCaptionOpt& rOpt, const Any* pValues, sal_Int32 nProp, sal_Int32 nOffset)
+static void lcl_ReadOpt(InsCaptionOpt& rOpt, const Any* pValues, sal_Int32 nProp, sal_Int32 nOffset)
 {
     switch(nOffset)
     {

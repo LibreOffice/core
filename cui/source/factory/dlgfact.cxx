@@ -1,30 +1,21 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
-/*************************************************************************
+/*
+ * This file is part of the LibreOffice project.
  *
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * This file incorporates work covered by the following license notice:
  *
- * OpenOffice.org - a multi-platform office productivity suite
- *
- * This file is part of OpenOffice.org.
- *
- * OpenOffice.org is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License version 3
- * only, as published by the Free Software Foundation.
- *
- * OpenOffice.org is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License version 3 for more details
- * (a copy is included in the LICENSE file that accompanied this code).
- *
- * You should have received a copy of the GNU Lesser General Public License
- * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
- * for a copy of the LGPLv3 License.
- *
- ************************************************************************/
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
 
 #include "align.hxx" //add for SvxAlignmentTabPage
 #include "dlgfact.hxx"
@@ -109,10 +100,10 @@ using ::com::sun::star::uno::Reference;
 
 using namespace svx;
 // AbstractTabDialog implementations just forwards everything to the dialog
-IMPL_ABSTDLG_BASE(AbstractSfxDialog_Impl)
-IMPL_ABSTDLG_BASE(VclAbstractDialog_Impl)
+IMPL_ABSTDLG_BASE(CuiAbstractSfxDialog_Impl)
+IMPL_ABSTDLG_BASE(CuiVclAbstractDialog_Impl)
 IMPL_ABSTDLG_BASE(VclAbstractRefreshableDialog_Impl);
-IMPL_ABSTDLG_BASE(AbstractTabDialog_Impl);
+IMPL_ABSTDLG_BASE(CuiAbstractTabDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractSvxDistributeDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractHangulHanjaConversionDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractFmShowColsDialog_Impl);
@@ -200,47 +191,47 @@ IMPL_LINK( VclAbstractDialog2_Impl, EndDialogHdl, Dialog*, pDlg )
 
 //////////////////////////////////////////////////////////////////////////
 
-void AbstractTabDialog_Impl::SetCurPageId( sal_uInt16 nId )
+void CuiAbstractTabDialog_Impl::SetCurPageId( sal_uInt16 nId )
 {
     pDlg->SetCurPageId( nId );
 }
 
-const SfxItemSet* AbstractTabDialog_Impl::GetOutputItemSet() const
+const SfxItemSet* CuiAbstractTabDialog_Impl::GetOutputItemSet() const
 {
     return pDlg->GetOutputItemSet();
 }
 
-const sal_uInt16* AbstractTabDialog_Impl::GetInputRanges(const SfxItemPool& pItem )
+const sal_uInt16* CuiAbstractTabDialog_Impl::GetInputRanges(const SfxItemPool& pItem )
 {
     return pDlg->GetInputRanges( pItem );
 }
 
-void AbstractTabDialog_Impl::SetInputSet( const SfxItemSet* pInSet )
+void CuiAbstractTabDialog_Impl::SetInputSet( const SfxItemSet* pInSet )
 {
      pDlg->SetInputSet( pInSet );
 }
 //From class Window.
-void AbstractTabDialog_Impl::SetText( const XubString& rStr )
+void CuiAbstractTabDialog_Impl::SetText( const XubString& rStr )
 {
     pDlg->SetText( rStr );
 }
-String AbstractTabDialog_Impl::GetText() const
+String CuiAbstractTabDialog_Impl::GetText() const
 {
     return pDlg->GetText();
 }
 
 
-const SfxItemSet* AbstractSfxDialog_Impl::GetOutputItemSet() const
+const SfxItemSet* CuiAbstractSfxDialog_Impl::GetOutputItemSet() const
 {
     return pDlg->GetOutputItemSet();
 }
 
-void AbstractSfxDialog_Impl::SetText( const XubString& rStr )
+void CuiAbstractSfxDialog_Impl::SetText( const XubString& rStr )
 {
     pDlg->SetText( rStr );
 }
 
-String AbstractSfxDialog_Impl::GetText() const
+String CuiAbstractSfxDialog_Impl::GetText() const
 {
     return pDlg->GetText();
 }
@@ -1026,7 +1017,7 @@ VclAbstractDialog* AbstractDialogFactory_Impl::CreateVclDialog( Window* pParent,
     }
 
     if ( pDlg )
-        return new VclAbstractDialog_Impl( pDlg );
+        return new CuiVclAbstractDialog_Impl( pDlg );
     return 0;
 }
 
@@ -1054,7 +1045,7 @@ VclAbstractDialog* AbstractDialogFactory_Impl::CreateFrameDialog(
     }
 
     if ( pDlg )
-        return new VclAbstractDialog_Impl( pDlg );
+        return new CuiVclAbstractDialog_Impl( pDlg );
     else
         return NULL;
 }
@@ -1081,7 +1072,7 @@ SfxAbstractTabDialog* AbstractDialogFactory_Impl::CreateTabDialog( sal_uInt32 nR
     }
 
     if ( pDlg )
-        return new AbstractTabDialog_Impl( pDlg );
+        return new CuiAbstractTabDialog_Impl( pDlg );
     return 0;
 }
 
@@ -1110,7 +1101,7 @@ SfxAbstractTabDialog* AbstractDialogFactory_Impl::CreateTabDialog( sal_uInt32 nR
     }
 
     if ( pDlg )
-        return new AbstractTabDialog_Impl( pDlg );
+        return new CuiAbstractTabDialog_Impl( pDlg );
     return 0;
 }
 
@@ -1121,7 +1112,7 @@ SfxAbstractTabDialog* AbstractDialogFactory_Impl::CreateTextTabDialog( Window* p
                                             SdrModel* )
 {
     SfxTabDialog* pDlg = new SvxTextTabDialog( pParent, pAttrSet, pView );
-    return new AbstractTabDialog_Impl( pDlg );
+    return new CuiAbstractTabDialog_Impl( pDlg );
 }
 
 // TabDialog that use functionality of the drawing layer and add AnchorTypes -- for SvxCaptionTabDialog
@@ -1250,7 +1241,7 @@ VclAbstractDialog * AbstractDialogFactory_Impl::CreateSvxScriptOrgDialog( Window
     pDlg = new SvxScriptOrgDialog( pParent, rLanguage);
 
     if ( pDlg )
-        return new VclAbstractDialog_Impl( pDlg );
+        return new CuiVclAbstractDialog_Impl( pDlg );
     return 0;
 }
 
@@ -1308,7 +1299,7 @@ SfxAbstractDialog* AbstractDialogFactory_Impl::CreateSfxDialog( sal_uInt32,
                                             const SfxItemSet* pAttrSet )
 {
     SfxModalDialog* pDlg = new SvxCharacterMap( pParent, sal_True, pAttrSet );
-    return new AbstractSfxDialog_Impl( pDlg );
+    return new CuiAbstractSfxDialog_Impl( pDlg );
 }
 
 SfxAbstractTabDialog* AbstractDialogFactory_Impl::CreateTabItemDialog( Window* pParent,
@@ -1326,7 +1317,7 @@ SfxAbstractTabDialog* AbstractDialogFactory_Impl::CreateTabItemDialog( Window* p
     }
 
     if ( pDlg )
-        return new AbstractTabDialog_Impl( pDlg );
+        return new CuiAbstractTabDialog_Impl( pDlg );
     return 0;
 }
 
@@ -1335,7 +1326,7 @@ VclAbstractDialog*      AbstractDialogFactory_Impl::CreateSvxSearchAttributeDial
                                             const sal_uInt16* pWhRanges )
 {
     Dialog* pDlg = new SvxSearchAttributeDialog( pParent, rLst, pWhRanges);
-    return new VclAbstractDialog_Impl( pDlg );
+    return new CuiVclAbstractDialog_Impl( pDlg );
 }
 
 AbstractSvxSearchSimilarityDialog * AbstractDialogFactory_Impl::CreateSvxSearchSimilarityDialog( Window* pParent,
@@ -1355,7 +1346,7 @@ SfxAbstractTabDialog* AbstractDialogFactory_Impl::CreateSvxBorderBackgroundDlg( 
                                             sal_Bool bEnableSelector)
 {
     SfxTabDialog* pDlg = new SvxBorderBackgroundDlg( pParent, rCoreSet, bEnableSelector);
-    return new AbstractTabDialog_Impl( pDlg );
+    return new CuiAbstractTabDialog_Impl( pDlg );
 }
 
 AbstractSvxTransformTabDialog* AbstractDialogFactory_Impl::CreateSvxTransformTabDialog( Window* pParent,
@@ -1395,7 +1386,7 @@ SfxAbstractTabDialog* AbstractDialogFactory_Impl::CreateSchTransformTabDialog( W
     }
 
     if ( pDlg )
-        return new AbstractTabDialog_Impl( pDlg );
+        return new CuiAbstractTabDialog_Impl( pDlg );
     return 0;
 }
 
@@ -1448,7 +1439,7 @@ VclAbstractDialog*      AbstractDialogFactory_Impl::CreateSvxEditDictionaryDialo
     }
 
     if ( pDlg )
-        return new VclAbstractDialog_Impl( pDlg );
+        return new CuiVclAbstractDialog_Impl( pDlg );
     return 0;
 }
 
@@ -1611,7 +1602,7 @@ SfxAbstractTabDialog* AbstractDialogFactory_Impl::CreateSvxLineTabDialog( Window
                                                                 sal_Bool bHasObj)
 {
     SfxTabDialog* pDlg = new SvxLineTabDialog( pParent, pAttr, pModel,pObj,bHasObj );
-    return new AbstractTabDialog_Impl( pDlg );
+    return new CuiAbstractTabDialog_Impl( pDlg );
 }
 
 SfxAbstractDialog* AbstractDialogFactory_Impl::CreateSfxDialog( Window* pParent,
@@ -1637,7 +1628,7 @@ SfxAbstractDialog* AbstractDialogFactory_Impl::CreateSfxDialog( Window* pParent,
     }
 
     if ( pDlg )
-        return new AbstractSfxDialog_Impl( pDlg );
+        return new CuiAbstractSfxDialog_Impl( pDlg );
     return 0;
 }
 
@@ -1664,7 +1655,7 @@ SfxAbstractDialog* AbstractDialogFactory_Impl::CreateSfxDialog( Window* pParent,
     }
 
     if ( pDlg )
-        return new AbstractSfxDialog_Impl( pDlg );
+        return new CuiAbstractSfxDialog_Impl( pDlg );
     return 0;
 }
 
@@ -1898,7 +1889,7 @@ VclAbstractDialog* AbstractDialogFactory_Impl::CreateEditObjectDialog( Window* p
     {
         pDlg = new SfxInsertFloatingFrameDialog( pParent, xObj );
         pDlg->SetHelpId( rtl::OUStringToOString( rCommand, RTL_TEXTENCODING_UTF8 ) );
-        return new VclAbstractDialog_Impl( pDlg );
+        return new CuiVclAbstractDialog_Impl( pDlg );
     }
     return 0;
 }
@@ -1920,7 +1911,7 @@ SfxAbstractLinksDialog* AbstractDialogFactory_Impl::CreateLinksDialog( Window* p
 
 SfxAbstractTabDialog* AbstractDialogFactory_Impl::CreateSvxFormatCellsDialog( Window* pParent, const SfxItemSet* pAttr, SdrModel* pModel, const SdrObject* /*pObj*/ )
 {
-    return new AbstractTabDialog_Impl( new SvxFormatCellsDialog( pParent, pAttr, pModel ) );
+    return new CuiAbstractTabDialog_Impl( new SvxFormatCellsDialog( pParent, pAttr, pModel ) );
 }
 
 SvxAbstractSplittTableDialog* AbstractDialogFactory_Impl::CreateSvxSplittTableDialog( Window* pParent, bool bIsTableVertical, long nMaxVertical, long nMaxHorizontal )
@@ -1936,7 +1927,7 @@ SvxAbstractNewTableDialog* AbstractDialogFactory_Impl::CreateSvxNewTableDialog( 
 VclAbstractDialog* AbstractDialogFactory_Impl::CreateOptionsDialog(
     Window* pParent, const rtl::OUString& rExtensionId, const rtl::OUString& /*rApplicationContext*/ )
 {
-    return new VclAbstractDialog_Impl( new OfaTreeOptionsDialog( pParent, rExtensionId ) );
+    return new CuiVclAbstractDialog_Impl( new OfaTreeOptionsDialog( pParent, rExtensionId ) );
 }
 
 SvxAbstractInsRowColDlg* AbstractDialogFactory_Impl::CreateSvxInsRowColDlg( Window* pParent, bool bCol, const rtl::OString& sHelpId )

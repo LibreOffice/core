@@ -66,8 +66,6 @@ import com.sun.star.awt.XWindow;
  *
  * Note: This example does not work in StarOffice 6.0.  It will be available
  * in the StarOffice Accessibility release.
- *
- * @author Bj&ouml;rn Milcke
  */
 public class SelectionChangeListener implements XSelectionChangeListener {
     public static void main( String args[] ) {

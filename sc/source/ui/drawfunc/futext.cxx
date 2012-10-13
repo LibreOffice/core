@@ -57,7 +57,7 @@
 
 //------------------------------------------------------------------
 
-void lcl_InvalidateAttribs( SfxBindings& rBindings )
+static void lcl_InvalidateAttribs( SfxBindings& rBindings )
 {
     rBindings.Invalidate( SID_ATTR_CHAR_WEIGHT );
     rBindings.Invalidate( SID_ATTR_CHAR_POSTURE );
@@ -91,7 +91,7 @@ void lcl_InvalidateAttribs( SfxBindings& rBindings )
     rBindings.Invalidate( SID_ALIGN_ANY_JUSTIFIED );
 }
 
-void lcl_UpdateHyphenator( Outliner& rOutliner, SdrObject* pObj )
+static void lcl_UpdateHyphenator( Outliner& rOutliner, SdrObject* pObj )
 {
     // use hyphenator only if hyphenation attribute is set
     if ( pObj && ((const SfxBoolItem&)pObj->GetMergedItem(EE_PARA_HYPHENATE)).GetValue() ) {

@@ -35,10 +35,19 @@
 
 typedef SwAbstractDialogFactory* (__LOADONCALLAPI *SwFuncPtrCreateDialogFactory)();
 
+#ifndef DISABLE_DYNLOADING
+
 extern "C" { static void SAL_CALL thisModule() {} }
+
+#else
+
+extern "C" SwAbstractDialogFactory* SwCreateDialogFactory();
+
+#endif
 
 SwAbstractDialogFactory* SwAbstractDialogFactory::Create()
 {
+#ifndef DISABLE_DYNLOADING
     SwFuncPtrCreateDialogFactory fp = 0;
     static ::osl::Module aDialogLibrary;
     static const ::rtl::OUString sLibName(::vcl::unohelper::CreateLibraryName("swui", sal_True));
@@ -49,6 +58,9 @@ SwAbstractDialogFactory* SwAbstractDialogFactory::Create()
     if ( fp )
         return fp();
     return 0;
+#else
+    return SwCreateDialogFactory();
+#endif
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

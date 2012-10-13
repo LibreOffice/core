@@ -38,6 +38,7 @@
 #include "res_bmp.hrc"
 
 #include <vcl/svapp.hxx>
+#include "svtools/svlbitm.hxx"
 
 #include "dlgassim.hxx"
 

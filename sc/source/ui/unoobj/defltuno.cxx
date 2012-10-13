@@ -49,7 +49,7 @@ using namespace ::com::sun::star;
 
 //------------------------------------------------------------------------
 
-const SfxItemPropertyMapEntry* lcl_GetDocDefaultsMap()
+static const SfxItemPropertyMapEntry* lcl_GetDocDefaultsMap()
 {
     static SfxItemPropertyMapEntry aDocDefaultsMap_Impl[] =
     {

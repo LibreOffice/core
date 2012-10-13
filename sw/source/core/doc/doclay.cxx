@@ -1124,7 +1124,7 @@ void SwDoc::GetAllFlyFmts( SwPosFlyFrms& rPosFlyFmts,
 
    Otherwise the new set will not be changed.
 */
-void lcl_CpyAttr( SfxItemSet &rNewSet, const SfxItemSet &rOldSet, sal_uInt16 nWhich )
+static void lcl_CpyAttr( SfxItemSet &rNewSet, const SfxItemSet &rOldSet, sal_uInt16 nWhich )
 {
     const SfxPoolItem *pOldItem = NULL, *pNewItem = NULL;
 

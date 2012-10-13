@@ -73,7 +73,7 @@ SwToolbarConfigItem::~SwToolbarConfigItem()
 {
 }
 
-sal_Int32 lcl_getArrayIndex(int nSelType)
+static sal_Int32 lcl_getArrayIndex(int nSelType)
 {
     sal_Int32 nRet = -1;
     if(nSelType & nsSelectionType::SEL_NUM)

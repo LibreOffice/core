@@ -63,8 +63,6 @@ class ScTabBgColorDlg;
 class ScImportOptionsDlg;
 class SfxTabDialog;
 class ScTextImportOptionsDlg;
-class ScDataBarSettingsDlg;
-class ScCondFormatDlg;
 class ScCondFormatManagerDlg;
 
 #define DECL_ABSTDLG_BASE(Class,DialogClass)        \
@@ -110,9 +108,9 @@ long Class::GetResult()                             \
     return pDlg->GetResult();                       \
 }
 
-class VclAbstractDialog_Impl : public VclAbstractDialog //add for ScColOrRowDlg
+class ScVclAbstractDialog_Impl : public VclAbstractDialog //add for ScColOrRowDlg
 {
-    DECL_ABSTDLG_BASE(VclAbstractDialog_Impl,Dialog)
+    DECL_ABSTDLG_BASE(ScVclAbstractDialog_Impl,Dialog)
 };
 
 class AbstractScImportAsciiDlg_Impl : public AbstractScImportAsciiDlg  //add for ScImportAsciiDlg
@@ -136,23 +134,13 @@ class AbstractScColRowLabelDlg_Impl : public AbstractScColRowLabelDlg  //add for
     virtual sal_Bool IsRow();
 };
 
-class AbstractScCondFormatDlg_Impl : public AbstractScCondFormatDlg
-{
-    DECL_ABSTDLG_BASE(AbstractScCondFormatDlg_Impl, ScCondFormatDlg)
-
-    virtual ScConditionalFormat* GetConditionalFormat();
-};
-
 class AbstractScCondFormatManagerDlg_Impl : public AbstractScCondFormatManagerDlg
 {
     DECL_ABSTDLG_BASE(AbstractScCondFormatManagerDlg_Impl, ScCondFormatManagerDlg)
 
     virtual ScConditionalFormatList* GetConditionalFormatList();
-};
 
-class AbstractScDataBarSettingsDlg_Impl : public AbstractScDataBarSettingsDlg
-{
-    DECL_ABSTDLG_BASE(AbstractScDataBarSettingsDlg_Impl, ScDataBarSettingsDlg)
+    virtual bool CondFormatsChanged();
 };
 
 class AbstractScDataPilotDatabaseDlg_Impl  :public AbstractScDataPilotDatabaseDlg  //add for ScDataPilotDatabaseDlg
@@ -390,9 +378,9 @@ class AbstractScTextImportOptionsDlg_Impl : public AbstractScTextImportOptionsDl
 };
 
 //add for ScAttrDlg , ScHFEditDlg, ScStyleDlg, ScSubTotalDlg, ScCharDlg, ScParagraphDlg, ScValidationDlg, ScSortDlg
-class AbstractTabDialog_Impl : public SfxAbstractTabDialog
+class ScAbstractTabDialog_Impl : public SfxAbstractTabDialog
 {
-    DECL_ABSTDLG_BASE( AbstractTabDialog_Impl,SfxTabDialog )
+    DECL_ABSTDLG_BASE( ScAbstractTabDialog_Impl,SfxTabDialog )
     virtual void                SetCurPageId( sal_uInt16 nId );
     virtual const SfxItemSet*   GetOutputItemSet() const;
     virtual const sal_uInt16*       GetInputRanges( const SfxItemPool& pItem );
@@ -433,13 +421,8 @@ public:
 
     virtual VclAbstractDialog * CreateScSortWarningDlg( Window* pParent, const String& rExtendText, const String& rCurrentText, int nId );
 
-    virtual AbstractScCondFormatDlg* CreateScCondFormatDlg(Window* pParent, ScDocument* pDoc, const ScConditionalFormat* pFormat,
-                                                                const ScRangeList& rRange, const ScAddress& rPos, int nId ); //add for ScDataBarSettingsDlg
-
     virtual AbstractScCondFormatManagerDlg* CreateScCondFormatMgrDlg(Window* pParent, ScDocument* pDoc, const ScConditionalFormatList* pFormatList,
                                                                 const ScAddress& rPos, int nId );
-
-    virtual AbstractScDataBarSettingsDlg* CreateScDataBarSetttingsDlg (Window* pParent, ScDocument* pDoc, int nId ); //add for ScDataBarSettingsDlg
 
     virtual AbstractScDataPilotDatabaseDlg * CreateScDataPilotDatabaseDlg (Window* pParent ,int nId ); //add for ScDataPilotDatabaseDlg
 

@@ -104,7 +104,7 @@ namespace cppu
         to implement 1 till 12 interfaces in your component.
     */
     template< class Ifc1 >
-    class SAL_NO_VTABLE SAL_DLLPUBLIC_TEMPLATE WeakImplHelper1
+    class SAL_NO_VTABLE SAL_DLLPUBLIC_TEMPLATE SAL_DLLPUBLIC_EXPORT WeakImplHelper1
         : public OWeakObject
         , public com::sun::star::lang::XTypeProvider
         , public Ifc1

@@ -498,6 +498,16 @@ void ScColumn::ApplyPatternIfNumberformatIncompatible( const ScRange& rRange,
     }
 }
 
+void ScColumn::AddCondFormat( SCROW nStartRow, SCROW nEndRow, sal_uInt32 nIndex )
+{
+    pAttrArray->AddCondFormat( nStartRow, nEndRow, nIndex );
+}
+
+void ScColumn::RemoveCondFormat( SCROW nStartRow, SCROW nEndRow, sal_uInt32 nIndex )
+{
+    pAttrArray->RemoveCondFormat( nStartRow, nEndRow, nIndex );
+}
+
 
 void ScColumn::ApplyStyle( SCROW nRow, const ScStyleSheet& rStyle )
 {

@@ -78,7 +78,7 @@ static double getN10Exp( int nExp )
 }
 
 /** Approximation algorithm for erf for 0 < x < 0.65. */
-void lcl_Erf0065( double x, double& fVal )
+static void lcl_Erf0065( double x, double& fVal )
 {
     static const double pn[] = {
         1.12837916709551256,
@@ -107,7 +107,7 @@ void lcl_Erf0065( double x, double& fVal )
 }
 
 /** Approximation algorithm for erfc for 0.65 < x < 6.0. */
-void lcl_Erfc0600( double x, double& fVal )
+static void lcl_Erfc0600( double x, double& fVal )
 {
     double fPSum = 0.0;
     double fQSum = 0.0;
@@ -172,7 +172,7 @@ void lcl_Erfc0600( double x, double& fVal )
 
 /** Approximation algorithm for erfc for 6.0 < x < 26.54 (but used for all
     x > 6.0). */
-void lcl_Erfc2654( double x, double& fVal )
+static void lcl_Erfc2654( double x, double& fVal )
 {
     static const double pn[] = {
         5.64189583547756078E-1,

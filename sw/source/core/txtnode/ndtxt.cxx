@@ -287,7 +287,7 @@ xub_StrLen SwTxtNode::Len() const
  *  ftnfrms.
  * --------------------------------------------------------------------------*/
 
-void lcl_ChangeFtnRef( SwTxtNode &rNode )
+static void lcl_ChangeFtnRef( SwTxtNode &rNode )
 {
     SwpHints *pSwpHints = rNode.GetpSwpHints();
     if( pSwpHints && rNode.GetDoc()->GetCurrentViewShell() )    //swmod 071108//swmod 071225
@@ -826,10 +826,10 @@ void SwTxtNode::NewAttrSet( SwAttrPool& rPool )
     const SwFmtColl* pAnyFmtColl = &GetAnyFmtColl();
     const SwFmtColl* pFmtColl = GetFmtColl();
     String sVal;
-    SwStyleNameMapper::FillProgName( pAnyFmtColl->GetName(), sVal, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL, sal_True );
+    SwStyleNameMapper::FillProgName( pAnyFmtColl->GetName(), sVal, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL, true );
     SfxStringItem aAnyFmtColl( RES_FRMATR_STYLE_NAME, sVal );
     if ( pFmtColl != pAnyFmtColl )
-        SwStyleNameMapper::FillProgName( pFmtColl->GetName(), sVal, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL, sal_True );
+        SwStyleNameMapper::FillProgName( pFmtColl->GetName(), sVal, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL, true );
     SfxStringItem aFmtColl( RES_FRMATR_CONDITIONAL_STYLE_NAME, sVal );
     aNewAttrSet.Put( aAnyFmtColl );
     aNewAttrSet.Put( aFmtColl );
@@ -1251,7 +1251,7 @@ SwTxtNode::GetTxtAttrAt(xub_StrLen const nIndex, RES_TXTATR const nWhich,
  *                          CopyHint()
  *************************************************************************/
 
-SwCharFmt* lcl_FindCharFmt( const SwCharFmts* pCharFmts, const XubString& rName )
+static SwCharFmt* lcl_FindCharFmt( const SwCharFmts* pCharFmts, const XubString& rName )
 {
     if( rName.Len() )
     {
@@ -1267,7 +1267,7 @@ SwCharFmt* lcl_FindCharFmt( const SwCharFmts* pCharFmts, const XubString& rName 
     return NULL;
 }
 
-void lcl_CopyHint( const sal_uInt16 nWhich, const SwTxtAttr * const pHt,
+static void lcl_CopyHint( const sal_uInt16 nWhich, const SwTxtAttr * const pHt,
     SwTxtAttr *const pNewHt, SwDoc *const pOtherDoc, SwTxtNode *const pDest )
 {
     OSL_ENSURE( nWhich == pHt->Which(), "Falsche Hint-Id" );

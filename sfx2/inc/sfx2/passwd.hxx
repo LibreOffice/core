@@ -34,6 +34,7 @@
 #include <vcl/dialog.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/fixed.hxx>
+#include <vcl/layout.hxx>
 #include <sfx2/app.hxx>
 
 // defines ---------------------------------------------------------------
@@ -50,23 +51,23 @@
 class SFX2_DLLPUBLIC SfxPasswordDialog : public ModalDialog
 {
 private:
-    FixedLine       maPasswordBox;
-    FixedText       maUserFT;
-    Edit            maUserED;
-    FixedText       maPasswordFT;
-    Edit            maPasswordED;
-    FixedText       maConfirmFT;
-    Edit            maConfirmED;
-    FixedText       maMinLengthFT;
-    FixedLine       maPassword2Box;
-    FixedText       maPassword2FT;
-    Edit            maPassword2ED;
-    FixedText       maConfirm2FT;
-    Edit            maConfirm2ED;
+    VclFrame*       mpPassword1Box;
+    FixedText*      mpUserFT;
+    Edit*           mpUserED;
+    FixedText*      mpPassword1FT;
+    Edit*           mpPassword1ED;
+    FixedText*      mpConfirm1FT;
+    Edit*           mpConfirm1ED;
 
-    OKButton        maOKBtn;
-    CancelButton    maCancelBtn;
-    HelpButton      maHelpBtn;
+    VclFrame*       mpPassword2Box;
+    FixedText*      mpPassword2FT;
+    Edit*           mpPassword2ED;
+    FixedText*      mpConfirm2FT;
+    Edit*           mpConfirm2ED;
+
+    FixedText*      mpMinLengthFT;
+
+    OKButton*       mpOKBtn;
 
     String          maConfirmStr;
     String          maMinLenPwdStr;
@@ -76,28 +77,52 @@ private:
     sal_uInt16      mnExtras;
 
     bool            mbAsciiOnly;
-    DECL_DLLPRIVATE_LINK( EditModifyHdl, Edit* );
+    DECL_DLLPRIVATE_LINK(EditModifyHdl, Edit*);
     DECL_DLLPRIVATE_LINK(OKHdl, void *);
 
     void            SetPasswdText();
 
 public:
-    SfxPasswordDialog( Window* pParent, const String* pGroupText = NULL );
+    SfxPasswordDialog(Window* pParent, const String* pGroupText = NULL);
 
-    String          GetUser() const { return maUserED.GetText(); }
-    String          GetPassword() const { return maPasswordED.GetText(); }
-    String          GetConfirm() const { return maConfirmED.GetText(); }
-
-    String          GetPassword2() const { return maPassword2ED.GetText(); }
-    String          GetConfirm2() const { return maConfirm2ED.GetText(); }
-    void            SetGroup2Text( const String& i_rText ) { maPassword2Box.SetText( i_rText ); }
-
-    void            SetMinLen( sal_uInt16 Len );
-    void            SetEditHelpId( const rtl::OString& rId ) { maPasswordED.SetHelpId( rId ); }
-    void            ShowExtras( sal_uInt16 nExtras ) { mnExtras = nExtras; }
-    void            AllowAsciiOnly( bool i_bAsciiOnly = true ) { mbAsciiOnly = i_bAsciiOnly; }
-
-    virtual short   Execute();
+    String GetUser() const
+    {
+        return mpUserED->GetText();
+    }
+    String GetPassword() const
+    {
+        return mpPassword1ED->GetText();
+    }
+    String GetConfirm() const
+    {
+        return mpConfirm1ED->GetText();
+    }
+    String GetPassword2() const
+    {
+        return mpPassword2ED->GetText();
+    }
+    String GetConfirm2() const
+    {
+        return mpConfirm2ED->GetText();
+    }
+    void SetGroup2Text(const String& i_rText)
+    {
+        mpPassword2Box->set_label(i_rText);
+    }
+    void SetMinLen(sal_uInt16 Len);
+    void SetEditHelpId(const OString& rId)
+    {
+        mpPassword1ED->SetHelpId( rId );
+    }
+    void ShowExtras(sal_uInt16 nExtras)
+    {
+        mnExtras = nExtras;
+    }
+    void AllowAsciiOnly(bool i_bAsciiOnly = true)
+    {
+        mbAsciiOnly = i_bAsciiOnly;
+    }
+    virtual short Execute();
 };
 
 #endif // #ifndef _SFX_PASSWD_HXX

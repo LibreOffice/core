@@ -17,11 +17,6 @@ package com.polites.android;
 
 import android.graphics.PointF;
 
-
-/**
- * @author Jason Polites
- *
- */
 public class ZoomAnimation implements Animation {
 
 	private boolean firstFrame = true;

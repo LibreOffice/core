@@ -1312,7 +1312,7 @@ OUString XMLTextImportHelper::ConvertStarFonts( const OUString& rChars,
 /* Apply special case, that found list style equals the chapter numbering, also
    to the found list styles of the parent styles. (#i73973#)
 */
-sal_Bool lcl_HasListStyle( OUString sStyleName,
+static sal_Bool lcl_HasListStyle( OUString sStyleName,
                            const Reference < XNameContainer >& xParaStyles,
                            SvXMLImport& rImport,
                            const OUString& sNumberingStyleName,
