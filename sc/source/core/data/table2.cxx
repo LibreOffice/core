@@ -611,7 +611,7 @@ void ScTable::CopyToClip(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
             pTable->mpRangeName = new ScRangeName(*mpRangeName);
 
         // notes
-        pTable->maNotes = *maNotes.clone(pTable->pDocument, nCol1, nRow1, nCol2, nRow2, bCloneNoteCaptions, nTab);
+        maNotes.clone(pTable->pDocument, nCol1, nRow1, nCol2, nRow2, bCloneNoteCaptions, nTab, pTable->maNotes);
 
         SCCOL i;
 
