@@ -18,6 +18,7 @@
 #include <clang/Rewrite/Rewriter.h>
 
 #include "bodynotinblock.hxx"
+#include "sallogareas.hxx"
 #include "unusedvariablecheck.hxx"
 
 using namespace clang;
@@ -40,7 +41,10 @@ DiagnosticBuilder Plugin::report( DiagnosticsEngine::Level level, StringRef mess
     if( level == DiagnosticsEngine::Error && diag.getErrorsAsFatal())
         level = DiagnosticsEngine::Fatal;
 #endif
-    return diag.Report( loc, diag.getCustomDiagID( level, message ));
+    if( loc.isValid())
+        return diag.Report( loc, diag.getCustomDiagID( level, message ));
+    else
+        return diag.Report( diag.getCustomDiagID( level, message ));
     }
 
 bool Plugin::ignoreLocation( SourceLocation loc )
@@ -58,6 +62,7 @@ class PluginHandler
         explicit PluginHandler( ASTContext& context )
             : rewriter( context.getSourceManager(), context.getLangOpts())
             , bodyNotInBlock( context )
+            , salLogAreas( context )
             , unusedVariableCheck( context )
             {
             }
@@ -66,6 +71,7 @@ class PluginHandler
             if( context.getDiagnostics().hasErrorOccurred())
                 return;
             bodyNotInBlock.run();
+            salLogAreas.run();
             unusedVariableCheck.run();
             // TODO also LO header files? or a subdir?
            if( const RewriteBuffer* buf = rewriter.getRewriteBufferFor( context.getSourceManager().getMainFileID()))
@@ -75,6 +81,7 @@ class PluginHandler
     private:
         Rewriter rewriter;
         BodyNotInBlock bodyNotInBlock;
+        SalLogAreas salLogAreas;
         UnusedVariableCheck unusedVariableCheck;
     };
 

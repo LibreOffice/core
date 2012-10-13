@@ -38,13 +38,10 @@ void UnusedVariableCheck::run()
     TraverseDecl( context.getTranslationUnitDecl());
     }
 
-bool UnusedVariableCheck::VisitNamedDecl( NamedDecl* declaration )
+bool UnusedVariableCheck::VisitVarDecl( VarDecl* var )
     {
-    if( ignoreLocation( declaration ))
+    if( ignoreLocation( var ))
         return true;
-    if( !isa< VarDecl >( declaration ))
-        return true;
-    const VarDecl* var = cast< VarDecl >( declaration );
     if( var->isReferenced() || var->isUsed())
         return true;
     if( var->isDefinedOutsideFunctionOrMethod())

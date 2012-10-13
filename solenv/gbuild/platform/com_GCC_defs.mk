@@ -155,8 +155,10 @@ gb_LinkTarget_INCLUDE_STL := $(filter %/stl, $(subst -I. , ,$(SOLARINC)))
 
 ifeq ($(COM_GCC_IS_CLANG),TRUE)
 gb_COMPILER_PLUGINS :=-Xclang -load -Xclang $(SRCDIR)/compilerplugins/obj/compileplugin.so -Xclang -add-plugin -Xclang loplugin
+gb_COMPILER_PLUGINS_SETUP := ICECC_EXTRAFILES=$(SRCDIR)/sal/inc/sal/log-areas.dox
 else
 gb_COMPILER_PLUGINS :=
+gb_COMPILER_PLUGINS_SETUP :=
 endif
 
 # Executable class

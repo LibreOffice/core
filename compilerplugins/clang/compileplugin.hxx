@@ -23,7 +23,7 @@ class Plugin
     public:
         explicit Plugin( ASTContext& context );
     protected:
-        DiagnosticBuilder report( DiagnosticsEngine::Level level, StringRef message, SourceLocation loc );
+        DiagnosticBuilder report( DiagnosticsEngine::Level level, StringRef message, SourceLocation loc = SourceLocation());
         bool ignoreLocation( SourceLocation loc );
         bool ignoreLocation( const Decl* decl );
         bool ignoreLocation( const Stmt* stmt );

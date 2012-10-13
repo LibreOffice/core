@@ -1,3 +1,6 @@
+// NOTE: This file is also parsed by a compiler plugin. Make sure all
+// areas are marked with '@li @c'.
+
 /**
 @page sal_log_areas SAL debug areas
 
@@ -22,21 +25,126 @@ certain functionality.
 @li @c sal.rtl - SAL RTL library
 @li @c sal.textenc - the textencoding SAL library
 
+@section basctl
+
+@li @c basctl.basicide
+
+@section canvas
+
+@li @c canvas
+@li @c canvas.cairo
+
+@section connectivity
+
+@li @c connectivity.mork
+
+@section cui
+
+@li @c cui.customize
+@li @c cui.dialogs
+@li @c cui.factory
+@li @c cui.options
+@li @c cui.tabpages
+
 @section Calc
 
+@li @c sc.core
 @li @c sc.ui - Calc UI
 
+@section desktop
+
+@li @c desktop
+@li @c desktop.deployment
+
+@section Draw
+
+@li @c sd.fwk
+@li @c sd.sls
+@li @c sd.tools
+@li @c sd.view
+@li @c sdremote
+@li @c sdremote.bluetooth
+
+@section editeng
+
+@li @c editeng
+@li @c editeng.items
+
+@section extensions
+
+@li @c extensions.scanner
 
 @section Filter
 
 @li @c filter.ms - escher import/export
 @li @c oox.xmlstream - XmlStream class
 
+@section formula
+
+@li @c formula.core
+
+@section fpicker
+
+@li @c fpicker.office
+
+@section i18npool
+
+@li @c i18npool.langtag
 
 @section Math
 
+@li @c starmath.rtf
 @li @c starmath.ooxml - OOXML import/export
+@li @c starmath.wordbase
 
+@section sdext
+
+@li @c sdext.pdfimport
+@li @c sdext.presenter
+
+@section sfx2
+
+@li @c sfx2.appl
+@li @c sfx2.bastyp
+@li @c sfx2.config
+@li @c sfx2.dialog
+@li @c sfx2.doc
+@li @c sfx2.notify
+@li @c sfx2.view
+
+@section slideshow
+
+@li @c slideshow.opengl
+
+@section svtools
+
+@li @c svtools.config
+@li @c svtools.contnr
+@li @c svtools.control
+@li @c svtools.dialogs
+@li @c svtools.filter
+@li @c svtools.misc
+@li @c svtools.uno
+
+@section svx
+
+@li @c svx.dialog
+@li @c svx.form
+
+@section tools
+
+@li @c tools.debug
+@li @c tools.stream - SvStream class
+
+@section ucb
+
+@li @c cmisucp
+@li @c ucb.ucp
+
+@section unotools
+
+@li @c unotools.config
+@li @c unotools.i18n
 
 @section URE
 
@@ -46,9 +154,11 @@ certain functionality.
 
 @section VCL
 
+@li @c vcl.control
 @li @c vcl.gdi - the GDI part of VCL, devices, bitmaps, etc.
 @li @c vcl.gtk - Gtk+ 2/3 plugin
 @li @c vcl.layout - Widget layout
+@li @c vcl.sm
 
 
 @section Writer
@@ -57,6 +167,38 @@ certain functionality.
 @li @c sw.rtf - .rtf export filter
 @li @c sw.uno - Writer UNO interfaces
 @li @c sw.ww8 - .doc/.docx export filter, .doc import filter (not writerfilter)
+
+@section xmloff
+
+@li @c xmloff.core
+@li @c xmloff.forms
+@li @c xmloff.chart
+@li @c xmloff.style
+
+@section other
+
+@li @c accessibility
+@li @c avmedia
+@li @c basebmp
+@li @c basic
+@li @c binaryurp
+@li @c bridges
+@li @c comphelper
+@li @c configmgr
+@li @c cppcanvas
+@li @c cppuhelper
+@li @c cppu
+@li @c editeng
+@li @c helpcompiler
+@li @c linguistic
+@li @c oox
+@li @c rsc
+@li @c shell
+@li @c stoc
+@li @c ucbhelper
+@li @c writerfilter
+@li @c xmlhelp
+@li @c xmlreader
 
 */
 /* vim:set ft=cpp shiftwidth=4 softtabstop=4 expandtab: */

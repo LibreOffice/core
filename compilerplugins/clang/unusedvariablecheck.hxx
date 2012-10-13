@@ -23,7 +23,7 @@ class UnusedVariableCheck
     public:
         explicit UnusedVariableCheck( ASTContext& context );
         void run();
-        bool VisitNamedDecl( NamedDecl* declaration );
+        bool VisitVarDecl( VarDecl* var );
     };
 
 } // namespace
