@@ -92,7 +92,7 @@ SbMethod* CreateMacro( SbModule* pModule, const String& rMacroName )
         {
             bool bValid = false;
             OUString aStdMacroText( "Macro" );
-            sal_uInt16 nMacro = 1;
+            sal_Int32 nMacro = 1;
             while ( !bValid )
             {
                 aMacroName = aStdMacroText;
