@@ -1253,6 +1253,7 @@ ifeq ($(SYSTEM_GLIB),YES)
 
 define gb_LinkTarget__use_gthread
 $(call gb_LinkTarget_add_libs,$(1),$(GTHREAD_LIBS))
+
 endef
 
 else # !SYSTEM_GLIB
