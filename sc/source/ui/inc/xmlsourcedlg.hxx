@@ -83,9 +83,13 @@ private:
     void SetRangeLinkable();
 
     /**
-     * Check if any of its parents is linked or repeated.
+     * Check if any of its parents is linked or repeated.  The passed entry is
+     * not checked; its parent is the first one to be checked, then all its
+     * parents get checked all the way to the root.
      */
     bool IsParentDirty(SvLBoxEntry* pEntry) const;
+
+    bool IsChildrenDirty(SvLBoxEntry* pEntry) const;
 
     DECL_LINK(GetFocusHdl, Control*);
     DECL_LINK(LoseFocusHdl, Control*);

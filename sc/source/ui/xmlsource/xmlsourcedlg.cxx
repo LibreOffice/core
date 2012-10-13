@@ -267,12 +267,26 @@ void ScXMLSourceDlg::DefaultElementSelected(SvLBoxEntry& rEntry)
 
 void ScXMLSourceDlg::RepeatElementSelected(SvLBoxEntry& rEntry)
 {
-    // TODO: Check all its child elements / attributes and make sure non of
-    // them are linked or repeat elements.  In the future we will support
-    // range linking of repeat element who has another repeat elements. But
-    // first I need to support that in orcus.
+    // Check all its parents first.
 
-    SetNonLinkable();
+    if (IsParentDirty(&rEntry))
+    {
+        SetNonLinkable();
+        return;
+    }
+
+    // Check all its child elements / attributes and make sure non of them are
+    // linked or repeat elements.  In the future we will support range linking
+    // of repeat element who has another repeat elements. But first I need to
+    // support that scenario in orcus.
+
+    if (IsChildrenDirty(&rEntry))
+    {
+        SetNonLinkable();
+        return;
+    }
+
+    SetRangeLinkable();
 }
 
 void ScXMLSourceDlg::AttributeSelected(SvLBoxEntry& rEntry)
@@ -343,6 +357,32 @@ bool ScXMLSourceDlg::IsParentDirty(SvLBoxEntry* pEntry) const
         }
         pParent = maLbTree.GetParent(pParent);
     }
+    return false;
+}
+
+bool ScXMLSourceDlg::IsChildrenDirty(SvLBoxEntry* pEntry) const
+{
+    ScOrcusXMLTreeParam::EntryData* pUserData = NULL;
+    for (SvLBoxEntry* pChild = maLbTree.FirstChild(pEntry); pChild; pChild = maLbTree.NextSibling(pChild))
+    {
+        pUserData = ScOrcusXMLTreeParam::getUserData(*pChild);
+        OSL_ASSERT(pUserData);
+        if (pUserData->maLinkedPos.IsValid())
+            // Already linked.
+            return true;
+
+        if (pUserData->meType == ScOrcusXMLTreeParam::ElementRepeat)
+            // We don't support linking of nested repeat elements (yet).
+            return true;
+
+        if (pUserData->meType == ScOrcusXMLTreeParam::ElementDefault)
+        {
+            // Check recursively.
+            if (IsChildrenDirty(pChild))
+                return true;
+        }
+    }
+
     return false;
 }
 
