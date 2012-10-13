@@ -429,7 +429,7 @@ uno::Sequence< beans::Property > Content::getProperties(
             {
                 bHasCreatableInfos = sal_True;
             }
-            it++;
+            ++it;
         }
     }
 
