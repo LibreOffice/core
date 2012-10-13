@@ -2,7 +2,6 @@ FontSelectPattern::FontSelectPattern(PhysicalFontFace const&, Size const&, float
 RelatedMultipart::getIds()
 SanExtensionImpl::setCertExtn(unsigned char*, unsigned int, unsigned char*, unsigned int, unsigned char)
 ScCTB::ScCTB()
-ScCondFormatHelper::GetExpression(ScCondFormatEntryType, int)
 ScCondFormatItem::ScCondFormatItem(unsigned int)
 ScConditionalFormat::dumpInfo(rtl::OUStringBuffer&) const
 ScDataBarSettingsDlg::ScDataBarSettingsDlg(Window*, ScDocument*, ScAddress const&)

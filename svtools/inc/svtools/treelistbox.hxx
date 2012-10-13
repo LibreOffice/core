@@ -639,8 +639,6 @@ protected:
     void            EditItemText( SvLBoxEntry* pEntry, SvLBoxString* pItem,
                         const Selection& );
     void            EditedText( const XubString& );
-    void            EditingRequest( SvLBoxEntry* pEntry, SvLBoxItem* pItem,
-                        const Point& rMousePos );
 
     // berechnet abhaengig von TreeList-Style & Bitmap-Groessen
     // alle Tabulatoren neu; wird beim Einfuegen/Austauschen von

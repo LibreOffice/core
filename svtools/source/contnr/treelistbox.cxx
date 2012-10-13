@@ -2950,23 +2950,6 @@ void SvTreeListBox::EditedText( const XubString& rStr )
     }
 }
 
-void SvTreeListBox::EditingRequest( SvLBoxEntry* pEntry, SvLBoxItem* pItem,
-                                    const Point& )
-{
-    DBG_CHKTHIS(SvTreeListBox,0);
-    if( IsEditingActive() )
-        EndEditing();
-    if( pItem->IsA() == SV_ITEM_ID_LBOXSTRING )
-    {
-        Selection aSel( SELECTION_MIN, SELECTION_MAX );
-        if( EditingEntry( pEntry, aSel ) )
-        {
-            SelectAll( sal_False );
-            EditItemText( pEntry, (SvLBoxString*)pItem, aSel );
-        }
-    }
-}
-
 SvLBoxEntry* SvTreeListBox::GetDropTarget( const Point& rPos )
 {
     DBG_CHKTHIS(SvTreeListBox,0);
