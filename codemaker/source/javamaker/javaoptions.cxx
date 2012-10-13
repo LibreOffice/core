@@ -172,8 +172,7 @@ sal_Bool JavaOptions::initOptions(int ac, char* av[], sal_Bool bCmdFile)
 
                         m_options["-Gc"] = OString("");
                         break;
-                    } else
-                    if (av[i][2] != '\0')
+                    } else if (av[i][2] != '\0')
                     {
                         OString tmp("'-G', please check");
                         if (i <= ac - 1)

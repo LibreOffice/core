@@ -323,10 +323,10 @@ sal_uInt16 ErrorHandler::HandleError_Impl(
                 }
                 else
                 {
-                    if( nFlags != USHRT_MAX )
-                    nErrFlags = nFlags;
+                    if (nFlags != USHRT_MAX)
+                        nErrFlags = nFlags;
                     return (*(WindowDisplayErrorFunc*)pData->pDsp)(
-                    pParent, nErrFlags, aErr, aAction);
+                        pParent, nErrFlags, aErr, aAction);
                 }
             }
         }

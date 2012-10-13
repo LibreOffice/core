@@ -632,9 +632,6 @@ void XMLPropertiesTContext_Impl::StartElement(
 
 void XMLPropertiesTContext_Impl::Export()
 {
-    OUString aNewQName( GetTransformer().GetNamespaceMap().GetQNameByKey(
-                XML_NAMESPACE_STYLE,
-                ::xmloff::token::GetXMLToken( XML_PROPERTIES ) ) );
     GetTransformer().GetDocHandler()->startElement( GetExportQName(),
                                                     m_xAttrList );
     ExportContent();

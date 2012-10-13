@@ -841,8 +841,6 @@ XMLMutableAttributeList *XMLTransformerBase::ProcessAttrList(
                     break;
                 case XML_ATACTION_DECODE_ID:
                     {
-                        OUString aAttrValue;
-
                         const sal_Int32 nLen = rAttrValue.getLength();
                         OUStringBuffer aBuffer;
 

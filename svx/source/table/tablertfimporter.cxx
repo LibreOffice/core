@@ -282,8 +282,6 @@ void SdrTableRTFParser::FillTable()
                     if( xCellInfo->maItemSet.GetItemState(SDRATTR_TABLE_BORDER,sal_False,&pPoolItem)==SFX_ITEM_SET)
                         xCell->SetMergedItem( *pPoolItem );
 
-                    String sDebug = mpOutliner->GetText( mpOutliner->GetParagraph( xCellInfo->mnStartPara ), xCellInfo->mnParaCount );
-
                     OutlinerParaObject* pTextObject = mpOutliner->CreateParaObject( (sal_uInt16)xCellInfo->mnStartPara, (sal_uInt16)xCellInfo->mnParaCount );
                     if( pTextObject )
                     {

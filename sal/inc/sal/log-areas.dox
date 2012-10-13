@@ -189,16 +189,21 @@ certain functionality.
 @li @c cppuhelper
 @li @c cppu
 @li @c editeng
+@li @c framework
 @li @c helpcompiler
 @li @c linguistic
 @li @c oox
 @li @c rsc
 @li @c shell
 @li @c stoc
+@li @c svl
+@li @c svx
 @li @c ucbhelper
 @li @c writerfilter
 @li @c xmlhelp
+@li @c xmloff
 @li @c xmlreader
+@li @c xmlsecurity
 
 */
 /* vim:set ft=cpp shiftwidth=4 softtabstop=4 expandtab: */

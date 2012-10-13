@@ -236,7 +236,6 @@ const Sequence< sal_Int8>& SecurityEnvironment_NssImpl :: getUnoTunnelId() {
 
 ::rtl::OUString SecurityEnvironment_NssImpl::getSecurityEnvironmentInformation() throw( ::com::sun::star::uno::RuntimeException )
 {
-    rtl::OUString result;
     ::rtl::OUStringBuffer buff;
     for (CIT_SLOTS is = m_Slots.begin(); is != m_Slots.end(); is++)
     {
