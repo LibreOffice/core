@@ -225,6 +225,8 @@ public:
     void testFindAreaPosColRight();
     void testSort();
     void testSortWithFormulaRefs();
+    void testDeleteRow();
+    void testDeleteCol();
 
     CPPUNIT_TEST_SUITE(Test);
     CPPUNIT_TEST(testCollator);
@@ -275,6 +277,8 @@ public:
     CPPUNIT_TEST(testFindAreaPosColRight);
     CPPUNIT_TEST(testSort);
     CPPUNIT_TEST(testSortWithFormulaRefs);
+    CPPUNIT_TEST(testDeleteRow);
+    CPPUNIT_TEST(testDeleteCol);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -5027,6 +5031,44 @@ void Test::testSort()
     pNote = m_pDoc->GetNotes(0)->findByAddress( 1, 0 );
     CPPUNIT_ASSERT(pNote);
 
+    pDoc->DeleteTab(0);
+}
+
+void Test::testDeleteRow()
+{
+    ScDocument* pDoc = m_xDocShRef->GetDocument();
+    rtl::OUString aSheet1("Sheet1");
+    pDoc->InsertTab(0, aSheet1);
+
+    rtl::OUString aHello("Hello");
+    rtl::OUString aJimBob("Jim Bob");
+    ScAddress rAddr(1, 1, 0);
+    ScPostIt* pNote = m_pDoc->GetNotes(rAddr.Tab())->GetOrCreateNote(rAddr);
+    pNote->SetText(rAddr, aHello);
+    pNote->SetAuthor(aJimBob);
+
+    pDoc->DeleteRow(0, 0, MAXCOL, 0, 1, 1);
+
+    CPPUNIT_ASSERT(m_pDoc->GetNotes(0)->empty());
+    pDoc->DeleteTab(0);
+}
+
+void Test::testDeleteCol()
+{
+    ScDocument* pDoc = m_xDocShRef->GetDocument();
+    rtl::OUString aSheet1("Sheet1");
+    pDoc->InsertTab(0, aSheet1);
+
+    rtl::OUString aHello("Hello");
+    rtl::OUString aJimBob("Jim Bob");
+    ScAddress rAddr(1, 1, 0);
+    ScPostIt* pNote = m_pDoc->GetNotes(rAddr.Tab())->GetOrCreateNote(rAddr);
+    pNote->SetText(rAddr, aHello);
+    pNote->SetAuthor(aJimBob);
+
+    pDoc->DeleteCol(0, 0, MAXROW, 0, 1, 1);
+
+    CPPUNIT_ASSERT(m_pDoc->GetNotes(0)->empty());
     pDoc->DeleteTab(0);
 }
 
