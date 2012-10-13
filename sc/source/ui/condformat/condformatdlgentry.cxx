@@ -910,12 +910,20 @@ IMPL_LINK( ScColorScale3FrmtEntry, EntryTypeHdl, ListBox*, pBox )
 
 IMPL_LINK_NOARG( ScConditionFrmtEntry, ConditionTypeSelectHdl )
 {
-    if(maLbCondType.GetSelectEntryPos() == 6 || maLbCondType.GetSelectEntryPos() == 7)
+    sal_Int32 nSelectPos = maLbCondType.GetSelectEntryPos();
+    if(nSelectPos == 6 || nSelectPos == 7)
     {
+        maEdVal1.Show();
         maEdVal2.Show();
+    }
+    else if(nSelectPos == 8 || nSelectPos == 9)
+    {
+        maEdVal2.Hide();
+        maEdVal1.Hide();
     }
     else
     {
+        maEdVal1.Show();
         maEdVal2.Hide();
     }
 
