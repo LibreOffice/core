@@ -37,19 +37,15 @@ class ScXMLSourceDlg : public ScAnyRefDlg
 
     FixedLine maFtMapXmlDoc;
 
-    FixedText maFtTreeItemName;
     FixedText maFtMappedCellTitle;
-    formula::RefEdit   maEdit;
-    formula::RefButton maBtnRb;
+    formula::RefEdit   maRefEdit;
+    formula::RefButton maRefBtn;
 
     ScXMLSourceTree maLbTree;
 
     CancelButton maBtnCancel;
 
     Image maImgFileOpen;
-
-    rtl::OUString maStrCellLink;
-    rtl::OUString maStrRangeLink;
 
     rtl::OUString maSrcPath;
 
@@ -78,6 +74,13 @@ private:
     void HandleGetFocus(Control* pCtrl);
     void HandleLoseFocus(Control* pCtrl);
     void TreeItemSelected();
+    void DefaultElementSelected(SvLBoxEntry& rEntry);
+    void RepeatElementSelected(SvLBoxEntry& rEntry);
+    void AttributeSelected(SvLBoxEntry& rEntry);
+
+    void SetNonLinkable();
+    void SetSingleLinkable();
+    void SetRangeLinkable();
 
     DECL_LINK(GetFocusHdl, Control*);
     DECL_LINK(LoseFocusHdl, Control*);

@@ -206,6 +206,7 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
 	sc/source/core/tool/navicfg \
 	sc/source/core/tool/odffmap \
 	sc/source/core/tool/optutil \
+	sc/source/core/tool/orcusxml \
 	sc/source/core/tool/parclass \
 	sc/source/core/tool/printopt \
 	sc/source/core/tool/prnsave \

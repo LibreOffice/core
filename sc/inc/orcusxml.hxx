@@ -10,9 +10,12 @@
 #ifndef __SC_ORCUSXML_HXX__
 #define __SC_ORCUSXML_HXX__
 
+#include "scdllapi.h"
 #include "vcl/image.hxx"
 
 #include <boost/ptr_container/ptr_vector.hpp>
+
+class SvLBoxEntry;
 
 /**
  * Parameter used during call to ScOrcusFilters::loadXMLStructure().
@@ -22,14 +25,14 @@ struct ScOrcusXMLTreeParam
     enum EntryType { ElementDefault, ElementRepeat, Attribute };
 
     /** Custom data stored with each tree item. */
-    struct TreeEntryUserData
+    struct EntryData
     {
         EntryType meType;
 
-        TreeEntryUserData(EntryType eType);
+        SC_DLLPUBLIC EntryData(EntryType eType);
     };
 
-    typedef boost::ptr_vector<TreeEntryUserData> UserDataStoreType;
+    typedef boost::ptr_vector<EntryData> UserDataStoreType;
 
     Image maImgElementDefault;
     Image maImgElementRepeat;
@@ -40,6 +43,8 @@ struct ScOrcusXMLTreeParam
      * the life cycle of user datas.
      */
     UserDataStoreType maUserDataStore;
+
+    static SC_DLLPUBLIC EntryData* getUserData(SvLBoxEntry& rEntry);
 };
 
 #endif

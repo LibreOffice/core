@@ -36,17 +36,14 @@ ScXMLSourceDlg::ScXMLSourceDlg(
     maBtnSelectSource(this, ScResId(BTN_SELECT_SOURCE_FILE)),
     maFtSourceFile(this, ScResId(FT_SOURCE_FILE)),
     maFtMapXmlDoc(this, ScResId(FL_MAP_XML_TO_DOCUMENT)),
-    maFtTreeItemName(this, ScResId(FT_TREE_ITEM_NAME)),
     maFtMappedCellTitle(this, ScResId(FT_MAPPED_CELL_TITLE)),
-    maEdit(this, this, ScResId(ED_MAPPED_CELL)),
-    maBtnRb(this, ScResId(BTN_MAPPED_CELL), &maEdit, this),
+    maRefEdit(this, this, ScResId(ED_MAPPED_CELL)),
+    maRefBtn(this, ScResId(BTN_MAPPED_CELL), &maRefEdit, this),
     maLbTree(this, ScResId(LB_SOURCE_TREE)),
     maBtnCancel(this, ScResId(BTN_CANCEL)),
     maImgFileOpen(ScResId(IMG_FILE_OPEN)),
-    maStrCellLink(ScResId(STR_CELL_LINK).toString()),
-    maStrRangeLink(ScResId(STR_RANGE_LINK).toString()),
     mpDoc(pDoc),
-    mpActiveEdit(&maEdit),
+    mpActiveEdit(&maRefEdit),
     mbDlgLostFocus(false)
 {
     maXMLParam.maImgElementDefault = Image(ScResId(IMG_ELEMENT_DEFAULT));
@@ -59,15 +56,16 @@ ScXMLSourceDlg::ScXMLSourceDlg(
     maBtnSelectSource.SetClickHdl(LINK(this, ScXMLSourceDlg, BtnPressedHdl));
 
     Link aLink = LINK(this, ScXMLSourceDlg, GetFocusHdl);
-    maEdit.SetGetFocusHdl(aLink);
-    maBtnRb.SetGetFocusHdl(aLink);
+    maRefEdit.SetGetFocusHdl(aLink);
+    maRefBtn.SetGetFocusHdl(aLink);
     aLink = LINK(this, ScXMLSourceDlg, LoseFocusHdl);
-    maEdit.SetLoseFocusHdl(aLink);
-    maBtnRb.SetLoseFocusHdl(aLink);
+    maRefEdit.SetLoseFocusHdl(aLink);
+    maRefBtn.SetLoseFocusHdl(aLink);
 
     aLink = LINK(this, ScXMLSourceDlg, TreeItemSelectHdl);
     maLbTree.SetSelectHdl(aLink);
-    maFtMappedCellTitle.SetText(maStrCellLink);
+
+    SetNonLinkable();
 }
 
 ScXMLSourceDlg::~ScXMLSourceDlg()
@@ -172,8 +170,8 @@ void ScXMLSourceDlg::LoadSourceFileStructure(const OUString& rPath)
 void ScXMLSourceDlg::HandleGetFocus(Control* pCtrl)
 {
     mpActiveEdit = NULL;
-    if (pCtrl == &maEdit || pCtrl == &maBtnRb)
-        mpActiveEdit = &maEdit;
+    if (pCtrl == &maRefEdit || pCtrl == &maRefBtn)
+        mpActiveEdit = &maRefEdit;
 
     if (mpActiveEdit)
         mpActiveEdit->SetSelection(Selection(0, SELECTION_MAX));
@@ -186,8 +184,80 @@ void ScXMLSourceDlg::HandleLoseFocus(Control* /*pCtrl*/)
 void ScXMLSourceDlg::TreeItemSelected()
 {
     SvLBoxEntry* pEntry = maLbTree.GetCurEntry();
-    OUString aName = maLbTree.GetEntryText(pEntry);
-    maFtTreeItemName.SetText(aName);
+    if (!pEntry)
+        return;
+
+    ScOrcusXMLTreeParam::EntryData* pUserData = ScOrcusXMLTreeParam::getUserData(*pEntry);
+
+    if (!pUserData)
+        return;
+
+    switch (pUserData->meType)
+    {
+        case ScOrcusXMLTreeParam::Attribute:
+            AttributeSelected(*pEntry);
+        break;
+        case ScOrcusXMLTreeParam::ElementDefault:
+            DefaultElementSelected(*pEntry);
+        break;
+        case ScOrcusXMLTreeParam::ElementRepeat:
+            RepeatElementSelected(*pEntry);
+        break;
+        default:
+            ;
+    }
+}
+
+void ScXMLSourceDlg::DefaultElementSelected(SvLBoxEntry& rEntry)
+{
+    if (maLbTree.GetChildCount(&rEntry) > 0)
+    {
+        // Only an element with no child elements (leaf element) can be linked.
+        SetNonLinkable();
+        return;
+    }
+
+    // TODO: Check all its parents and make sure non of them are range-linked
+    // nor repeat elements.
+    SetSingleLinkable();
+}
+
+void ScXMLSourceDlg::RepeatElementSelected(SvLBoxEntry& rEntry)
+{
+    // TODO: Check all its child elements / attributes and make sure non of
+    // them are linked or repeat elements.  In the future we will support
+    // range linking of repeat element who has another repeat elements. But
+    // first I need to support that in orcus.
+
+    SetNonLinkable();
+}
+
+void ScXMLSourceDlg::AttributeSelected(SvLBoxEntry& rEntry)
+{
+    // TODO: Check all its parent elements and make sure non of them are
+    // range-linked nor repeat elements.
+    SetSingleLinkable();
+}
+
+void ScXMLSourceDlg::SetNonLinkable()
+{
+    maFtMappedCellTitle.Disable();
+    maRefEdit.Disable();
+    maRefBtn.Disable();
+}
+
+void ScXMLSourceDlg::SetSingleLinkable()
+{
+    maFtMappedCellTitle.Enable();
+    maRefEdit.Enable();
+    maRefBtn.Enable();
+}
+
+void ScXMLSourceDlg::SetRangeLinkable()
+{
+    maFtMappedCellTitle.Enable();
+    maRefEdit.Enable();
+    maRefBtn.Enable();
 }
 
 IMPL_LINK(ScXMLSourceDlg, GetFocusHdl, Control*, pCtrl)

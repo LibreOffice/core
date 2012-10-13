@@ -179,7 +179,7 @@ namespace {
 void setUserDataToEntry(
     SvLBoxEntry& rEntry, ScOrcusXMLTreeParam::UserDataStoreType& rStore, ScOrcusXMLTreeParam::EntryType eType)
 {
-    rStore.push_back(new ScOrcusXMLTreeParam::TreeEntryUserData(eType));
+    rStore.push_back(new ScOrcusXMLTreeParam::EntryData(eType));
     rEntry.SetUserData(&rStore.back());
 }
 

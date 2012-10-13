@@ -9,7 +9,14 @@
 
 #include "orcusxml.hxx"
 
-ScOrcusXMLTreeParam::TreeEntryUserData::TreeEntryUserData(EntryType eType) :
+#include "svtools/treelistbox.hxx"
+
+ScOrcusXMLTreeParam::EntryData::EntryData(EntryType eType) :
     meType(eType) {}
+
+ScOrcusXMLTreeParam::EntryData* ScOrcusXMLTreeParam::getUserData(SvLBoxEntry& rEntry)
+{
+    return static_cast<ScOrcusXMLTreeParam::EntryData*>(rEntry.GetUserData());
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
