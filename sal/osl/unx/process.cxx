@@ -243,7 +243,7 @@ static void ChildStatusProc(void *pData)
     if (socketpair(AF_UNIX, SOCK_STREAM, 0, channel) == -1)
     {
         status = errno;
-        SAL_WARN("sal", "executeProcess socketpair() errno " << status);
+        SAL_WARN("sal.osl", "executeProcess socketpair() errno " << status);
     }
 
     fcntl(channel[0], F_SETFD, FD_CLOEXEC);
@@ -254,21 +254,21 @@ static void ChildStatusProc(void *pData)
     {
         status = errno;
         assert(status != 0);
-        SAL_WARN("sal", "executeProcess pipe(stdInput) errno " << status);
+        SAL_WARN("sal.osl", "executeProcess pipe(stdInput) errno " << status);
     }
 
     if ( status == 0 && data.m_pOutputRead && pipe( stdOutput ) == -1 )
     {
         status = errno;
         assert(status != 0);
-        SAL_WARN("sal", "executeProcess pipe(stdOutput) errno " << status);
+        SAL_WARN("sal.osl", "executeProcess pipe(stdOutput) errno " << status);
     }
 
     if ( status == 0 && data.m_pErrorRead && pipe( stdError ) == -1 )
     {
         status = errno;
         assert(status != 0);
-        SAL_WARN("sal", "executeProcess pipe(stdError) errno " << status);
+        SAL_WARN("sal.osl", "executeProcess pipe(stdError) errno " << status);
     }
 
     if ( (status == 0) && ((pid = fork()) == 0) )

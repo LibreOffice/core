@@ -130,7 +130,7 @@ rtl_cache_hash_rescale (
         old_size  = cache->m_hash_size;
 
         // SAL_INFO(
-        //  "sal",
+        //  "sal.rtl",
         //  "rtl_cache_hash_rescale(" << cache->m_name << "): nbuf: "
         //      << (cache->m_slab_stats.m_alloc - cache->m_slab_stats.m_free)
         //      << " (ave: "
@@ -994,7 +994,7 @@ rtl_cache_deactivate (
     }
 
     // SAL_INFO(
-    //  "sal",
+    //  "sal.rtl",
     //  "rtl_cache_deactivate(" << cache->m_name << "): [slab]: allocs: "
     //      << cache->m_slab_stats.m_alloc << ", frees: "
     //      << cache->m_slab_stats.m_free << "; total: "
@@ -1010,7 +1010,7 @@ rtl_cache_deactivate (
     if (cache->m_slab_stats.m_alloc > cache->m_slab_stats.m_free)
     {
         // SAL_INFO(
-        //  "sal",
+        //  "sal.rtl",
         //  "rtl_cache_deactivate(" << cache->m_name << "): cleaning up "
         //      << (cache->m_slab_stats.m_alloc - cache->m_slab_stats.m_free)
         //      << " leaked buffer(s) [" << cache->m_slab_stats.m_mem_alloc
@@ -1501,7 +1501,7 @@ rtl_cache_wsupdate (
         RTL_MEMORY_LOCK_ACQUIRE(&(cache->m_depot_lock));
 
         // SAL_INFO(
-        //  "sal",
+        //  "sal.rtl",
         //  "rtl_cache_wsupdate(" << cache->m_name
         //      << ") [depot: count, curr_min, prev_min] full: "
         //      << cache->m_depot_full.m_mag_count << ", "
@@ -1653,7 +1653,7 @@ rtl_cache_init()
     }
 
     rtl_cache_wsupdate_init();
-    // SAL_INFO("sal", "rtl_cache_init completed");
+    // SAL_INFO("sal.rtl", "rtl_cache_init completed");
 }
 
 /* ================================================================= */
@@ -1696,7 +1696,7 @@ rtl_cache_fini()
         for (cache = head->m_cache_next; cache != head; cache = cache->m_cache_next)
         {
             // SAL_INFO(
-            //  "sal",
+            //  "sal.rtl",
             //  "rtl_cache_fini(" << cache->m_name << ") [slab]: allocs: "
             //      << cache->m_slab_stats.m_alloc << ", frees: "
             //      << cache->m_slab_stats.m_free << "; total: "
@@ -1712,7 +1712,7 @@ rtl_cache_fini()
         }
         RTL_MEMORY_LOCK_RELEASE(&(g_cache_list.m_lock));
     }
-    // SAL_INFO("sal", "rtl_cache_fini completed");
+    // SAL_INFO("sal.rtl", "rtl_cache_fini completed");
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

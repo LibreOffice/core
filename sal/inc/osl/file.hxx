@@ -732,7 +732,7 @@ public:
     inline Type getFileType() const
     {
         SAL_INFO_IF(
-            !isValid(osl_FileStatus_Mask_Type), "sal",
+            !isValid(osl_FileStatus_Mask_Type), "sal.osl",
             "no FileStatus Type determined");
         return isValid(osl_FileStatus_Mask_Type)
             ? static_cast< Type >(_aStatus.eType) : Unknown;
@@ -789,7 +789,7 @@ public:
     inline sal_uInt64 getAttributes() const
     {
         SAL_INFO_IF(
-            !isValid(osl_FileStatus_Mask_Attributes), "sal",
+            !isValid(osl_FileStatus_Mask_Attributes), "sal.osl",
             "no FileStatus Attributes determined");
         return _aStatus.uAttributes;
     }
@@ -804,7 +804,7 @@ public:
     inline TimeValue getCreationTime() const
     {
         SAL_INFO_IF(
-            !isValid(osl_FileStatus_Mask_CreationTime), "sal",
+            !isValid(osl_FileStatus_Mask_CreationTime), "sal.osl",
             "no FileStatus CreationTime determined");
         return _aStatus.aCreationTime;
     }
@@ -819,7 +819,7 @@ public:
     inline TimeValue getAccessTime() const
     {
         SAL_INFO_IF(
-            !isValid(osl_FileStatus_Mask_AccessTime), "sal",
+            !isValid(osl_FileStatus_Mask_AccessTime), "sal.osl",
             "no FileStatus AccessTime determined");
         return _aStatus.aAccessTime;
     }
@@ -834,7 +834,7 @@ public:
     inline TimeValue getModifyTime() const
     {
         SAL_INFO_IF(
-            !isValid(osl_FileStatus_Mask_ModifyTime), "sal",
+            !isValid(osl_FileStatus_Mask_ModifyTime), "sal.osl",
             "no FileStatus ModifyTime determined");
         return _aStatus.aModifyTime;
     }
@@ -848,7 +848,7 @@ public:
     inline sal_uInt64 getFileSize() const
     {
         SAL_INFO_IF(
-            !isValid(osl_FileStatus_Mask_FileSize), "sal",
+            !isValid(osl_FileStatus_Mask_FileSize), "sal.osl",
             "no FileStatus FileSize determined");
         return _aStatus.uFileSize;
     }
@@ -862,7 +862,7 @@ public:
     inline ::rtl::OUString getFileName() const
     {
         SAL_INFO_IF(
-            !isValid(osl_FileStatus_Mask_FileName), "sal",
+            !isValid(osl_FileStatus_Mask_FileName), "sal.osl",
             "no FileStatus FileName determined");
         return isValid(osl_FileStatus_Mask_FileName)
             ? rtl::OUString(_aStatus.ustrFileName) : rtl::OUString();
@@ -879,7 +879,7 @@ public:
     inline ::rtl::OUString getFileURL() const
     {
         SAL_INFO_IF(
-            !isValid(osl_FileStatus_Mask_FileURL), "sal",
+            !isValid(osl_FileStatus_Mask_FileURL), "sal.osl",
             "no FileStatus FileURL determined");
         return isValid(osl_FileStatus_Mask_FileURL)
             ? rtl::OUString(_aStatus.ustrFileURL) : rtl::OUString();
@@ -895,7 +895,7 @@ public:
     inline ::rtl::OUString getLinkTargetURL() const
     {
         SAL_INFO_IF(
-            !isValid(osl_FileStatus_Mask_LinkTargetURL), "sal",
+            !isValid(osl_FileStatus_Mask_LinkTargetURL), "sal.osl",
             "no FileStatus LinkTargetURL determined");
         return isValid(osl_FileStatus_Mask_LinkTargetURL)
             ? rtl::OUString(_aStatus.ustrLinkTargetURL) : rtl::OUString();

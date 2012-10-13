@@ -234,7 +234,7 @@ void rtl_memory_init()
         }
     }
 #endif
-    // SAL_INFO("sal", "rtl_memory_init completed");
+    // SAL_INFO("sal.rtl", "rtl_memory_init completed");
 }
 
 /* ================================================================= */
@@ -264,7 +264,7 @@ void rtl_memory_fini()
         gp_alloc_arena = 0;
     }
 #endif
-    // SAL_INFO("sal", "rtl_memory_fini completed");
+    // SAL_INFO("sal.rtl", "rtl_memory_fini completed");
 }
 
 /* ================================================================= *
@@ -297,7 +297,7 @@ void * SAL_CALL rtl_reallocateMemory_SYSTEM (void * p, sal_Size n)
 void* SAL_CALL rtl_allocateMemory (sal_Size n) SAL_THROW_EXTERN_C()
 {
     SAL_WARN_IF(
-        n >= SAL_MAX_INT32, "sal",
+        n >= SAL_MAX_INT32, "sal.rtl",
         "suspicious massive alloc " << n);
 #if !defined(FORCE_SYSALLOC)
     while (1)
@@ -320,7 +320,7 @@ void* SAL_CALL rtl_allocateMemory (sal_Size n) SAL_THROW_EXTERN_C()
 void* SAL_CALL rtl_reallocateMemory (void * p, sal_Size n) SAL_THROW_EXTERN_C()
 {
     SAL_WARN_IF(
-        n >= SAL_MAX_INT32, "sal",
+        n >= SAL_MAX_INT32, "sal.rtl",
         "suspicious massive alloc " << n);
 #if !defined(FORCE_SYSALLOC)
     while (1)

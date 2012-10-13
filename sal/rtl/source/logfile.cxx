@@ -106,7 +106,7 @@ OUString getFileUrl( const OUString &name )
          != osl_File_E_None )
     {
         SAL_WARN(
-            "sal", "osl_getFileURLFromSystemPath failed for \"" << name << '"');
+            "sal.rtl", "osl_getFileURLFromSystemPath failed for \"" << name << '"');
     }
 
     OUString aWorkingDirectory;
@@ -182,7 +182,7 @@ void init() {
                 else
                 {
                     SAL_WARN(
-                        "sal",
+                        "sal.rtl",
                         "Couldn't open logfile " << o << '(' << +e << ')');
                 }
             }

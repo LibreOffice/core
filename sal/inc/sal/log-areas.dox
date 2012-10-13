@@ -15,6 +15,12 @@ Please keep all entries sorted.
 This list should give you an overview of which areas to enable when debugging
 certain functionality.
 
+@section SAL
+
+@li @c sal.debug - SAL debugging functionality
+@li @c sal.osl - SAL OSL library
+@li @c sal.rtl - SAL RTL library
+@li @c sal.textenc - the textencoding SAL library
 
 @section Calc
 
