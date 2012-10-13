@@ -2243,7 +2243,7 @@ static void NWPaintOneEditBox(    SalX11Screen nScreen,
         "interior-focus",   &bInteriorFocus,
         "focus-line-width", &nFocusLineWidth,
         (char *)NULL);
-    if ( bInteriorFocus )
+    if ( !bInteriorFocus )
     {
         xborder += nFocusLineWidth;
         yborder += nFocusLineWidth;
