@@ -43,8 +43,4 @@ $(eval $(call gb_Module_add_check_targets,cppuhelper,\
 ))
 # CppunitTest_cppuhelper_qa_weak depends on module bridges
 
-# TODO ? (I don't think OOO_SUBSEQUENT_TESTS != "" can be true..
-# someone would have to do it on command line)
-#	qa/propertysetmixin/makefile.mk
-
 # vim: set noet sw=4 ts=4:
