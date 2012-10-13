@@ -2731,7 +2731,7 @@ void DomainMapper_Impl::CloseFieldCommand()
                     break;
                     case FIELD_COMMENTS     :
                     {
-                        OUString sParam = lcl_ExtractParameter(pContext->GetCommand(), sizeof(" COMMENTS") );
+                        // OUString sParam = lcl_ExtractParameter(pContext->GetCommand(), sizeof(" COMMENTS") );
                         // A parameter with COMMENTS shouldn't set fixed
                         // ( or at least the binary filter doesn't )
                         // If we set fixed then we wont export a field cmd.

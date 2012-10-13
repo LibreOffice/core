@@ -545,19 +545,19 @@ CellPropertyValuesSeq_t DomainMapperTableHandler::endTableGetCellProperties(Tabl
                 if ( rInfo.pTableDefaults->size( ) )
                     pAllCellProps->insert( rInfo.pTableDefaults );
 
-                    // Fill the cell properties with the ones of the style
-                    sal_Int32 nCellStyleMask = 0;
-                    const PropertyMap::iterator aCnfStyleIter =
+                // Fill the cell properties with the ones of the style
+                sal_Int32 nCellStyleMask = 0;
+                const PropertyMap::iterator aCnfStyleIter =
                     aCellIterator->get()->find( PropertyDefinition( PROP_CNF_STYLE, false ) );
-                    if ( aCnfStyleIter != aCellIterator->get( )->end( ) )
-                    {
-                        if ( rInfo.pTableStyle ) {
-                            OUString sMask;
-                            aCnfStyleIter->second >>= sMask;
-                            nCellStyleMask = sMask.toInt32( 2 );
-                        }
-                        aCellIterator->get( )->erase( aCnfStyleIter );
+                if ( aCnfStyleIter != aCellIterator->get( )->end( ) )
+                {
+                    if ( rInfo.pTableStyle ) {
+                        OUString sMask;
+                        aCnfStyleIter->second >>= sMask;
+                        nCellStyleMask = sMask.toInt32( 2 );
                     }
+                    aCellIterator->get( )->erase( aCnfStyleIter );
+                }
 
                 if ( rInfo.pTableStyle )
                 {

@@ -87,12 +87,6 @@ void ThemeTable::lcl_sprm(Sprm& rSprm)
 #endif
 
     sal_uInt32 nSprmId = rSprm.getId();
-    (void)nSprmId;
-
-    Value::Pointer_t pValue = rSprm.getValue();
-    sal_Int32 nIntValue = pValue->getInt();
-    (void)nIntValue;
-    OUString sStringValue = pValue->getString();
 
     switch(nSprmId)
     {
