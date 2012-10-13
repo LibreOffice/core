@@ -99,6 +99,7 @@ void ScXMLSourceDlg::SetReference(const ScRange& rRange, ScDocument* pDoc)
         return;
 
     pUserData->maLinkedPos = rRange.aStart;
+    pUserData->mbRangeParent = pUserData->meType == ScOrcusXMLTreeParam::ElementRepeat;
 }
 
 void ScXMLSourceDlg::Deactivate()
