@@ -989,7 +989,6 @@ void GraphicImport::lcl_attribute(Id nName, Value & val)
         case NS_ooxml::LN_CT_Inline_distR:
             m_pImpl->nRightMargin = ConversionHelper::convertTwipToMM100(nIntValue);
         break;
-        break;
         case NS_ooxml::LN_CT_GraphicalObjectData_uri:
             val.getString();
             //TODO: does it need to be handled?
