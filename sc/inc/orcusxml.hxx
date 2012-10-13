@@ -11,6 +11,7 @@
 #define __SC_ORCUSXML_HXX__
 
 #include "scdllapi.h"
+#include "address.hxx"
 #include "vcl/image.hxx"
 
 #include <boost/ptr_container/ptr_vector.hpp>
@@ -28,6 +29,7 @@ struct ScOrcusXMLTreeParam
     struct EntryData
     {
         EntryType meType;
+        ScAddress maLinkedPos; /// linked cell position (invalid if unlinked)
 
         SC_DLLPUBLIC EntryData(EntryType eType);
     };

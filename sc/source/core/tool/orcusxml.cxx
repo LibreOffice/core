@@ -12,7 +12,7 @@
 #include "svtools/treelistbox.hxx"
 
 ScOrcusXMLTreeParam::EntryData::EntryData(EntryType eType) :
-    meType(eType) {}
+    meType(eType), maLinkedPos(ScAddress::INITIALIZE_INVALID) {}
 
 ScOrcusXMLTreeParam::EntryData* ScOrcusXMLTreeParam::getUserData(SvLBoxEntry& rEntry)
 {

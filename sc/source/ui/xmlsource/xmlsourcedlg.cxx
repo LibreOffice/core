@@ -88,6 +88,17 @@ void ScXMLSourceDlg::SetReference(const ScRange& rRange, ScDocument* pDoc)
     OUString aStr;
     rRange.aStart.Format(aStr, SCA_ABS_3D, pDoc, pDoc->GetAddressConvention());
     mpActiveEdit->SetRefString(aStr);
+
+    // Set this address to currently selected tree item.
+    SvLBoxEntry* pEntry = maLbTree.GetCurEntry();
+    if (!pEntry)
+        return;
+
+    ScOrcusXMLTreeParam::EntryData* pUserData = ScOrcusXMLTreeParam::getUserData(*pEntry);
+    if (!pUserData)
+        return;
+
+    pUserData->maLinkedPos = rRange.aStart;
 }
 
 void ScXMLSourceDlg::Deactivate()
@@ -188,9 +199,18 @@ void ScXMLSourceDlg::TreeItemSelected()
         return;
 
     ScOrcusXMLTreeParam::EntryData* pUserData = ScOrcusXMLTreeParam::getUserData(*pEntry);
-
     if (!pUserData)
         return;
+
+    const ScAddress& rPos = pUserData->maLinkedPos;
+    if (rPos.IsValid())
+    {
+        OUString aStr;
+        rPos.Format(aStr, SCA_ABS_3D, mpDoc, mpDoc->GetAddressConvention());
+        maRefEdit.SetRefString(aStr);
+    }
+    else
+        maRefEdit.SetRefString(OUString());
 
     switch (pUserData->meType)
     {
