@@ -58,13 +58,13 @@ bool SalLogAreas::VisitCallExpr( CallExpr* call )
                     if( area->getKind() == StringLiteral::Ascii )
                         checkArea( area->getBytes(), area->getExprLoc());
                     else
-                        report( DiagnosticsEngine::Warning, "unsupported string literal kind (plugin needs fixing?) [loplugin] sallog",
+                        report( DiagnosticsEngine::Warning, "unsupported string literal kind (plugin needs fixing?) [loplugin]",
                             area->getLocStart());
                     return true;
                     }
                 if( inFunction->getQualifiedNameAsString() == "sal::detail::log" )
                     return true; // This function only forwards to sal_detail_log, so ok.
-                report( DiagnosticsEngine::Warning, "cannot analyse log area argument (plugin needs fixing?) [loplugin] sallog",
+                report( DiagnosticsEngine::Warning, "cannot analyse log area argument (plugin needs fixing?) [loplugin]",
                     call->getLocStart());
                 }
             }
@@ -78,7 +78,7 @@ void SalLogAreas::checkArea( StringRef area, SourceLocation location )
         readLogAreas();
     if( !logAreas.count( area ))
         {
-        report( DiagnosticsEngine::Warning, "unknown log area '%0' (check or extend sal/inc/sal/log-areas.dox) [loplugin] sallog",
+        report( DiagnosticsEngine::Warning, "unknown log area '%0' (check or extend sal/inc/sal/log-areas.dox) [loplugin]",
             location ) << area;
         }
     }
@@ -107,7 +107,7 @@ void SalLogAreas::readLogAreas()
         }
     // If you get this error message, you possibly have too old icecream (ICECC_EXTRAFILES is needed).
     if( logAreas.empty())
-        report( DiagnosticsEngine::Warning, "error reading log areas [loplugin] sallog" );
+        report( DiagnosticsEngine::Warning, "error reading log areas [loplugin]" );
     }
 
 } // namespace
