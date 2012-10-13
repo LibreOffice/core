@@ -30,6 +30,7 @@ struct ScOrcusXMLTreeParam
     {
         EntryType meType;
         ScAddress maLinkedPos; /// linked cell position (invalid if unlinked)
+        bool mbRangeParent;
 
         SC_DLLPUBLIC EntryData(EntryType eType);
     };

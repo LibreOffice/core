@@ -82,6 +82,8 @@ private:
     void SetSingleLinkable();
     void SetRangeLinkable();
 
+    bool IsParentDirty(SvLBoxEntry* pEntry) const;
+
     DECL_LINK(GetFocusHdl, Control*);
     DECL_LINK(LoseFocusHdl, Control*);
     DECL_LINK(BtnPressedHdl, Button*);

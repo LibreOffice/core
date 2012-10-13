@@ -199,8 +199,7 @@ void ScXMLSourceDlg::TreeItemSelected()
         return;
 
     ScOrcusXMLTreeParam::EntryData* pUserData = ScOrcusXMLTreeParam::getUserData(*pEntry);
-    if (!pUserData)
-        return;
+    OSL_ASSERT(pUserData);
 
     const ScAddress& rPos = pUserData->maLinkedPos;
     if (rPos.IsValid())
@@ -230,15 +229,39 @@ void ScXMLSourceDlg::TreeItemSelected()
 
 void ScXMLSourceDlg::DefaultElementSelected(SvLBoxEntry& rEntry)
 {
+    ScOrcusXMLTreeParam::EntryData* pUserData = NULL;
+
     if (maLbTree.GetChildCount(&rEntry) > 0)
     {
         // Only an element with no child elements (leaf element) can be linked.
+        bool bHasChild = false;
+        for (SvLBoxEntry* pChild = maLbTree.FirstChild(&rEntry); pChild; pChild = maLbTree.NextSibling(pChild))
+        {
+            pUserData = ScOrcusXMLTreeParam::getUserData(*pChild);
+            OSL_ASSERT(pUserData);
+            if (pUserData->meType != ScOrcusXMLTreeParam::Attribute)
+            {
+                // This child is not an attribute. Bail out.
+                bHasChild = true;
+                break;
+            }
+        }
+
+        if (bHasChild)
+        {
+            SetNonLinkable();
+            return;
+        }
+    }
+
+    // Check all its parents and make sure non of them are range-linked nor
+    // repeat elements.
+    if (IsParentDirty(&rEntry))
+    {
         SetNonLinkable();
         return;
     }
 
-    // TODO: Check all its parents and make sure non of them are range-linked
-    // nor repeat elements.
     SetSingleLinkable();
 }
 
@@ -254,8 +277,28 @@ void ScXMLSourceDlg::RepeatElementSelected(SvLBoxEntry& rEntry)
 
 void ScXMLSourceDlg::AttributeSelected(SvLBoxEntry& rEntry)
 {
-    // TODO: Check all its parent elements and make sure non of them are
-    // range-linked nor repeat elements.
+    // Check all its parent elements and make sure non of them are linked nor
+    // repeat elements.  In attribute's case, it's okay to have the immediate
+    // parent element linked (but not range-linked).
+
+    SvLBoxEntry* pParent = maLbTree.GetParent(&rEntry);
+    OSL_ASSERT(pParent); // attribute should have a parent element.
+
+    ScOrcusXMLTreeParam::EntryData* pUserData = ScOrcusXMLTreeParam::getUserData(*pParent);
+    OSL_ASSERT(pUserData);
+    if (pUserData->maLinkedPos.IsValid() && pUserData->mbRangeParent)
+    {
+        // Parent element is range-linked.  Bail out.
+        SetNonLinkable();
+        return;
+    }
+
+    if (IsParentDirty(pParent))
+    {
+        SetNonLinkable();
+        return;
+    }
+
     SetSingleLinkable();
 }
 
@@ -278,6 +321,24 @@ void ScXMLSourceDlg::SetRangeLinkable()
     maFtMappedCellTitle.Enable();
     maRefEdit.Enable();
     maRefBtn.Enable();
+}
+
+bool ScXMLSourceDlg::IsParentDirty(SvLBoxEntry* pEntry) const
+{
+    ScOrcusXMLTreeParam::EntryData* pUserData = NULL;
+    SvLBoxEntry* pParent = maLbTree.GetParent(pEntry);
+    while (pParent)
+    {
+        pUserData = ScOrcusXMLTreeParam::getUserData(*pParent);
+        OSL_ASSERT(pUserData);
+        if (pUserData->maLinkedPos.IsValid())
+        {
+            // This parent is already linked.
+            return true;
+        }
+        pParent = maLbTree.GetParent(pParent);
+    }
+    return false;
 }
 
 IMPL_LINK(ScXMLSourceDlg, GetFocusHdl, Control*, pCtrl)
