@@ -62,7 +62,7 @@ class ScFormulaReferenceHelper
     SfxBindings*        m_pBindings;
     ::std::auto_ptr<Accelerator>
                         pAccel;                 // for Enter/Escape
-    sal_Bool*               pHiddenMarks;           // Mark field for hidden Controls
+    bool*               pHiddenMarks;           // Mark field for hidden Controls
     SCTAB               nRefTab;                // used for ShowReference
 
     String              sOldDialogText;         // Original title of the dialog window
@@ -72,9 +72,9 @@ class ScFormulaReferenceHelper
     Point               aOldButtonPos;          // Original position of the button
     Window*             mpOldEditParent;        // Original parent of the edit field and the button
 
-    sal_Bool                bEnableColorRef;
-    sal_Bool                bHighLightRef;
-    sal_Bool                bAccInserted;
+    bool                bEnableColorRef;
+    bool                bHighLightRef;
+    bool                bAccInserted;
 
     DECL_LINK( AccelSelectHdl, Accelerator* );
 
@@ -89,25 +89,25 @@ public:
 
     void                ShowReference( const XubString& rStr );
     void                ReleaseFocus( formula::RefEdit* pEdit, formula::RefButton* pButton = NULL );
-    void                HideReference( sal_Bool bDoneRefMode = sal_True );
+    void                HideReference( bool bDoneRefMode = true );
     void                RefInputStart( formula::RefEdit* pEdit, formula::RefButton* pButton = NULL );
-    void                RefInputDone( sal_Bool bForced = false );
+    void                RefInputDone( bool bForced = false );
     void                ToggleCollapsed( formula::RefEdit* pEdit, formula::RefButton* pButton = NULL );
 
     inline void         SetWindow(Window* _pWindow) { m_pWindow = _pWindow; }
-    sal_Bool                DoClose( sal_uInt16 nId );
-    void                SetDispatcherLock( sal_Bool bLock );
-    void                EnableSpreadsheets( sal_Bool bFlag = sal_True, sal_Bool bChildren = sal_True );
+    bool                DoClose( sal_uInt16 nId );
+    void                SetDispatcherLock( bool bLock );
+    void                EnableSpreadsheets( bool bFlag = true, bool bChildren = true );
     void                ViewShellChanged( ScTabViewShell* pScViewShell );
 
-    static              void enableInput(sal_Bool _bInput);
+    static              void enableInput(bool _bInput);
 
 protected:
     Window      *       GetWindow(){ return m_pWindow; }
 
 public:
     bool                CanInputStart( const formula::RefEdit *pEdit ){ return !!pEdit; }
-    bool                CanInputDone( sal_Bool bForced ){   return pRefEdit && (bForced || !pRefBtn);   }
+    bool                CanInputDone( bool bForced ){   return pRefEdit && (bForced || !pRefBtn);   }
 };
 
 //============================================================================
@@ -139,7 +139,7 @@ private:
 protected:
     virtual sal_Bool        DoClose( sal_uInt16 nId );
 
-    void                SetDispatcherLock( sal_Bool bLock );
+    void                SetDispatcherLock( bool bLock );
 
     //Overwrite TWindow will implemented by ScRefHdlrImplBase
     //virtual long        PreNotify( NotifyEvent& rNEvt );

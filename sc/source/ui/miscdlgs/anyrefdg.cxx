@@ -76,14 +76,14 @@ ScFormulaReferenceHelper::~ScFormulaReferenceHelper()
     // common cleanup for ScAnyRefDlg and ScFormulaDlg is done here
 
     HideReference();
-    enableInput( sal_True );
+    enableInput( true );
 
     ScInputHandler* pInputHdl = SC_MOD()->GetInputHdl();
     if ( pInputHdl )
         pInputHdl->ResetDelayTimer();   // stop the timer for disabling the input line
 }
 // -----------------------------------------------------------------------------
-void ScFormulaReferenceHelper::enableInput( sal_Bool bEnable )
+void ScFormulaReferenceHelper::enableInput( bool bEnable )
 {
     TypeId aType(TYPE(ScDocShell));
     ScDocShell* pDocShell = (ScDocShell*)SfxObjectShell::GetFirst(&aType);
@@ -105,8 +105,8 @@ void ScFormulaReferenceHelper::enableInput( sal_Bool bEnable )
                         Window *pParent=pWin->GetParent();
                         if(pParent)
                         {
-                            pParent->EnableInput(bEnable,sal_True /* sal_False */);
-                            if(sal_True /*bChildren*/)
+                            pParent->EnableInput(bEnable,true /* sal_False */);
+                            if(true /*bChildren*/)
                                 pViewSh->EnableRefInput(bEnable);
                         }
                     }
@@ -123,7 +123,7 @@ void ScFormulaReferenceHelper::ShowSimpleReference( const XubString& rStr )
 {
     if( bEnableColorRef )
     {
-        bHighLightRef=sal_True;
+        bHighLightRef=true;
         ScViewData* pViewData=ScDocShell::GetViewData();
         if ( pViewData )
         {
@@ -183,7 +183,7 @@ void ScFormulaReferenceHelper::ShowFormulaReference( const XubString& rStr )
 {
     if( /*!pRefEdit &&*/ bEnableColorRef)
     {
-        bHighLightRef=sal_True;
+        bHighLightRef=true;
         ScViewData* pViewData=ScDocShell::GetViewData();
         if ( pViewData && pRefComp.get() )
         {
@@ -208,7 +208,7 @@ void ScFormulaReferenceHelper::ShowFormulaReference( const XubString& rStr )
 
                 while(pToken!=NULL)
                 {
-                    sal_Bool bDoubleRef=(pToken->GetType()==formula::svDoubleRef);
+                    bool bDoubleRef=(pToken->GetType()==formula::svDoubleRef);
 
 
                     if(pToken->GetType()==formula::svSingleRef || bDoubleRef)
@@ -240,7 +240,7 @@ void ScFormulaReferenceHelper::ShowFormulaReference( const XubString& rStr )
     }
 }
 // -----------------------------------------------------------------------------
-void ScFormulaReferenceHelper::HideReference( sal_Bool bDoneRefMode )
+void ScFormulaReferenceHelper::HideReference( bool bDoneRefMode )
 {
     ScViewData* pViewData=ScDocShell::GetViewData();
 
@@ -310,7 +310,7 @@ void ScFormulaReferenceHelper::ReleaseFocus( formula::RefEdit* pEdit, formula::R
                     pViewShell->MoveCursorAbs(  pRange->aStart.Col(),
                         pRange->aStart.Row(), SC_FOLLOW_JUMP, false, false );
                     pViewShell->MoveCursorAbs( pRange->aEnd.Col(),
-                        pRange->aEnd.Row(), SC_FOLLOW_JUMP, sal_True, false );
+                        pRange->aEnd.Row(), SC_FOLLOW_JUMP, true, false );
                     m_pDlg->SetReference( *pRange, pDoc );
                 }
             }
@@ -333,7 +333,7 @@ void ScFormulaReferenceHelper::Init()
         pRefCell.reset( new ScFormulaCell( pDoc, aCursorPos, rStrExp ) );
         pRefComp.reset( new ScCompiler( pDoc, aCursorPos) );
         pRefComp->SetGrammar( pDoc->GetGrammar() );
-        pRefComp->SetCompileForFAP(sal_True);
+        pRefComp->SetCompileForFAP(true);
 
         nRefTab = nTab;
     }
@@ -350,13 +350,13 @@ IMPL_LINK( ScFormulaReferenceHelper, AccelSelectHdl, Accelerator *, pSelAccel )
         case KEY_ESCAPE:
             if( pRefEdit )
                 pRefEdit->GrabFocus();
-            m_pDlg->RefInputDone( sal_True );
+            m_pDlg->RefInputDone( true );
         break;
     }
-    return sal_True;
+    return true;
 }
 //----------------------------------------------------------------------------
-void ScFormulaReferenceHelper::RefInputDone( sal_Bool bForced )
+void ScFormulaReferenceHelper::RefInputDone( bool bForced )
 {
     if ( CanInputDone( bForced ) )
     {
@@ -428,7 +428,7 @@ void ScFormulaReferenceHelper::RefInputStart( formula::RefEdit* pEdit, formula::
 
         // Alle Elemente ausser EditCell und Button verstecken
         sal_uInt16 nChildren = m_pWindow->GetChildCount();
-        pHiddenMarks = new sal_Bool [nChildren];
+        pHiddenMarks = new bool [nChildren];
         for (sal_uInt16 i = 0; i < nChildren; i++)
         {
             pHiddenMarks[i] = false;
@@ -442,7 +442,7 @@ void ScFormulaReferenceHelper::RefInputStart( formula::RefEdit* pEdit, formula::
                 ;   // do nothing
             else if (pWin->IsVisible())
             {
-                pHiddenMarks[i] = sal_True;
+                pHiddenMarks[i] = true;
                 pWin->Hide();
             }
         }
@@ -498,11 +498,11 @@ void ScFormulaReferenceHelper::ToggleCollapsed( formula::RefEdit* pEdit, formula
         if( pRefEdit == pEdit )                 // is this the active ref edit field?
         {
             pRefEdit->GrabFocus();              // before RefInputDone()
-            m_pDlg->RefInputDone( sal_True );               // finish ref input
+            m_pDlg->RefInputDone( true );               // finish ref input
         }
         else
         {
-            m_pDlg->RefInputDone( sal_True );               // another active ref edit?
+            m_pDlg->RefInputDone( true );               // another active ref edit?
             m_pDlg->RefInputStart( pEdit, pButton );    // start ref input
             // pRefEdit might differ from pEdit after RefInputStart() (i.e. ScFormulaDlg)
             if( pRefEdit )
@@ -511,7 +511,7 @@ void ScFormulaReferenceHelper::ToggleCollapsed( formula::RefEdit* pEdit, formula
     }
 }
 // -----------------------------------------------------------------------------
-sal_Bool ScFormulaReferenceHelper::DoClose( sal_uInt16 nId )
+bool ScFormulaReferenceHelper::DoClose( sal_uInt16 nId )
 {
     SfxApplication* pSfxApp = SFX_APP();
 
@@ -545,11 +545,11 @@ sal_Bool ScFormulaReferenceHelper::DoClose( sal_uInt16 nId )
 
     ScTabViewShell* pScViewShell = ScTabViewShell::GetActiveViewShell();
     if ( pScViewShell )
-        pScViewShell->UpdateInputHandler(sal_True);
+        pScViewShell->UpdateInputHandler(true);
 
-    return sal_True;
+    return true;
 }
-void ScFormulaReferenceHelper::SetDispatcherLock( sal_Bool bLock )
+void ScFormulaReferenceHelper::SetDispatcherLock( bool bLock )
 {
     //  lock / unlock only the dispatchers of Calc documents
 
@@ -580,7 +580,7 @@ void ScFormulaReferenceHelper::ViewShellChanged(ScTabViewShell* /* pScViewShell 
 
     EnableSpreadsheets();
 }
-void ScFormulaReferenceHelper::EnableSpreadsheets(sal_Bool bFlag, sal_Bool bChildren)
+void ScFormulaReferenceHelper::EnableSpreadsheets(bool bFlag, bool bChildren)
 {
     TypeId aType(TYPE(ScDocShell));
     ScDocShell* pDocShell = (ScDocShell*)SfxObjectShell::GetFirst(&aType);
@@ -824,7 +824,7 @@ sal_Bool ScRefHandler::DoClose( sal_uInt16 nId )
     return sal_True;
 }
 
-void ScRefHandler::SetDispatcherLock( sal_Bool bLock )
+void ScRefHandler::SetDispatcherLock( bool bLock )
 {
     m_aHelper.SetDispatcherLock( bLock );
 }
