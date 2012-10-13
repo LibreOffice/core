@@ -71,8 +71,8 @@ Reference< XFastContextHandler > Transform2DContext::createFastChildContext( sal
         {
             case A_TOKEN( off ):
                 {
-                    OUString sXValue = xAttribs->getOptionalValue( XML_x );
-                    OUString sYValue = xAttribs->getOptionalValue( XML_y );
+                    ::rtl::OUString sXValue = xAttribs->getOptionalValue( XML_x );
+                    ::rtl::OUString sYValue = xAttribs->getOptionalValue( XML_y );
                     if( !sXValue.isEmpty() )
                         mrShape.getTextBody()->getTextProperties().moTextOffX = GetCoordinate( sXValue.toInt32() - mrShape.getPosition().X );
                     if( !sYValue.isEmpty() )
