@@ -74,7 +74,7 @@ ScXMLSourceDlg::~ScXMLSourceDlg()
 
 sal_Bool ScXMLSourceDlg::IsRefInputMode() const
 {
-    return mpActiveEdit != NULL;
+    return mpActiveEdit != NULL && mpActiveEdit->IsEnabled();
 }
 
 void ScXMLSourceDlg::SetReference(const ScRange& rRange, ScDocument* pDoc)
