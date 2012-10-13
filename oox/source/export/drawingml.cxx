@@ -761,7 +761,7 @@ void DrawingML::WriteRunProperties( Reference< XPropertySet > rRun, sal_Bool bIs
         const char* typeface = NULL;
         const char* pitch = NULL;
         const char* charset = NULL;
-        OUString usTypeface, usPitch, usCharset;
+        OUString usTypeface;
 
         mAny >>= usTypeface;
         String aSubstName( GetSubsFontName( usTypeface, SUBSFONT_ONLYONE | SUBSFONT_MS ) );
@@ -781,7 +781,7 @@ void DrawingML::WriteRunProperties( Reference< XPropertySet > rRun, sal_Bool bIs
         const char* typeface = NULL;
         const char* pitch = NULL;
         const char* charset = NULL;
-        OUString usTypeface, usPitch, usCharset;
+        OUString usTypeface;
 
         mAny >>= usTypeface;
         String aSubstName( GetSubsFontName( usTypeface, SUBSFONT_ONLYONE | SUBSFONT_MS ) );

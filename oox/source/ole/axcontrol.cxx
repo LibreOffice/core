@@ -1856,7 +1856,7 @@ void AxListBoxModel::convertFromProperties( PropertySet& rPropSet, const Control
     bool bRes = false;
     if ( rPropSet.getProperty( bRes, PROP_MultiSelection ) )
 
-    rConv.convertToMSColor( rPropSet, PROP_BackgroundColor, mnBackColor );
+        rConv.convertToMSColor( rPropSet, PROP_BackgroundColor, mnBackColor );
 
     rConv.convertToAxBorder( rPropSet, mnBorderColor, mnBorderStyle, mnSpecialEffect );
     AxMorphDataModelBase::convertFromProperties( rPropSet, rConv );
@@ -2493,8 +2493,8 @@ HtmlTextBoxModel::HtmlTextBoxModel()
 bool
 HtmlTextBoxModel::importBinaryModel( BinaryInputStream& rInStrm )
 {
-    OUString sStringContents = rInStrm.readUnicodeArray( rInStrm.size() );
 #ifdef DEBUG
+    OUString sStringContents = rInStrm.readUnicodeArray( rInStrm.size() );
     // in msocximex ( where this is ported from, it appears *nothing* is read
     // from the control stream ), surely there is some useful info there ?
     OSL_TRACE("HtmlTextBoxModel::importBinaryModel - string contents of stream :");

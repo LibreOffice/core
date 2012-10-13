@@ -731,7 +731,7 @@ void ChartExport::_ExportContent()
                             aAny >>= msChartAddress;
                             //maExportHelper.SetChartRangeAddress( sChartAddress );
 
-                            OUString sTableNumberList;
+                            // OUString sTableNumberList;
                             aAny = xProp->getPropertyValue(
                                 OUString("TableNumberList"));
                             aAny >>= msTableNumberList;

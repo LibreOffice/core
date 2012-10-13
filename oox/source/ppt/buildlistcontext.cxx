@@ -46,7 +46,7 @@ namespace oox { namespace ppt {
         }
     }
 
-    ::oox::core::ContextHandlerRef BuildListContext::onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs )
+    ::oox::core::ContextHandlerRef BuildListContext::onCreateContext( sal_Int32 aElementToken, const AttributeList& /*rAttribs*/ )
     {
         switch( aElementToken )
         {
@@ -64,7 +64,7 @@ namespace oox { namespace ppt {
         case PPT_TOKEN( bldGraphic ):
         {
             mbInBldGraphic = true;
-            OUString sShapeId = rAttribs.getString( XML_spid, OUString() );
+//          OUString sShapeId = rAttribs.getString( XML_spid, OUString() );
 // TODO
 //      bool uiExpand = rAttribs.getBool( XML_uiExpand, true );
                 /* this is unsigned */
