@@ -339,7 +339,7 @@ sal_Bool SwDoc::SortText(const SwPaM& rPaM, const SwSortOptions& rOpt)
         sal_uLong nStart = pStart->nNode.GetIndex(),
                         nEnd = pEnd->nNode.GetIndex();
         while( nStart <= nEnd )
-            // Iterate over a selected Area
+            // Iterate over a selected range
             if( !GetNodes()[ nStart++ ]->IsTxtNode() )
                 return sal_False;
     }
@@ -368,12 +368,12 @@ sal_Bool SwDoc::SortText(const SwPaM& rPaM, const SwSortOptions& rOpt)
                 pRedlUndo = new SwUndoRedlineSort( *pRedlPam,rOpt );
                 GetIDocumentUndoRedo().DoUndo(false);
             }
-            // First copy the area
+            // First copy the range
             SwNodeIndex aEndIdx( pEnd->nNode, 1 );
             SwNodeRange aRg( pStart->nNode, aEndIdx );
             GetNodes()._Copy( aRg, aEndIdx );
 
-            // Area is new from pEnd->nNode+1 to aEndIdx
+            // range is new from pEnd->nNode+1 to aEndIdx
             DeleteRedline( *pRedlPam, true, USHRT_MAX );
 
             pRedlPam->GetMark()->nNode.Assign( pEnd->nNode.GetNode(), 1 );
@@ -406,7 +406,7 @@ sal_Bool SwDoc::SortText(const SwPaM& rPaM, const SwSortOptions& rOpt)
     SwSortTxtElements aSortSet;
     while( aStart <= pEnd->nNode )
     {
-        // Iterate over a selected Area
+        // Iterate over a selected range
         SwSortTxtElement* pSE = new SwSortTxtElement( aStart );
         aSortSet.insert(pSE);
         aStart++;
@@ -750,7 +750,7 @@ void MoveCell(SwDoc* pDoc, const SwTableBox* pSource, const SwTableBox* pTar,
     aRg.aEnd = *pNd->EndOfSectionNode();
 
     // If the Target is empty (there is one empty Node)
-    // -> delete it and move the Target
+    // -> move and delete it
     SwNodeIndex aTar( *pTar->GetSttNd() );
     pNd = pDoc->GetNodes().GoNext( &aTar );     // next ContentNode
     sal_uLong nCount = pNd->EndOfSectionIndex() - pNd->StartOfSectionIndex();
@@ -815,20 +815,19 @@ FlatFndBox::~FlatFndBox()
 }
 
 /*--------------------------------------------------------------------
-    Description: All Lines of a Box need to have as many Boxes
+    Description: All Lines of a Box need to have same number of Boxes
  --------------------------------------------------------------------*/
 sal_Bool FlatFndBox::CheckLineSymmetry(const _FndBox& rBox)
 {
     const _FndLines &rLines = rBox.GetLines();
     sal_uInt16 nBoxes(0);
 
-    // Iterate over Lines
     for(sal_uInt16 i=0; i < rLines.size(); ++i)
-    {   // A List's Box
+    {
         const _FndLine* pLn = &rLines[i];
         const _FndBoxes& rBoxes = pLn->GetBoxes();
 
-        // Amount of Boxes of all Lines is uneven -> no symmetry
+        // Number of Boxes of all Lines is unequal -> no symmetry
         if( i  && nBoxes != rBoxes.size())
             return sal_False;
 
@@ -841,20 +840,19 @@ sal_Bool FlatFndBox::CheckLineSymmetry(const _FndBox& rBox)
 
 /*--------------------------------------------------------------------
     Description: Check Box for symmetry
-                 All Boxes of a Line need to have as many Lines
+                 All Boxes of a Line need to have same number of Lines
  --------------------------------------------------------------------*/
 sal_Bool FlatFndBox::CheckBoxSymmetry(const _FndLine& rLn)
 {
     const _FndBoxes &rBoxes = rLn.GetBoxes();
     sal_uInt16 nLines(0);
 
-    // Iterate over Boxes
     for(sal_uInt16 i=0; i < rBoxes.size(); ++i)
-    {   // The Boxes of a Line
+    {
         _FndBox const*const pBox = &rBoxes[i];
         const _FndLines& rLines = pBox->GetLines();
 
-        // Amount of Boxes of all Lines is uneven -> no symmetry
+        // Number of Lines of all Boxes is unequal -> no symmetry
         if( i && nLines != rLines.size() )
             return sal_False;
 

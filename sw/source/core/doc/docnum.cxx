@@ -148,7 +148,7 @@ void SwDoc::SetOutlineNumRule( const SwNumRule& rRule )
     pOutlineRule->SetInvalidRule(sal_True);
     UpdateNumRule();
 
-    // update if we have foot notes && chapter-wise numbering
+    // update if we have foot notes && numbering by chapter
     if( !GetFtnIdxs().empty() && FTNNUM_CHAPTER == GetFtnInfo().eNum )
         GetFtnIdxs().UpdateAllFtn();
 
@@ -190,7 +190,7 @@ sal_Bool SwDoc::OutlineUpDown( const SwPaM& rPam, short nOffset )
     if( GetNodes().GetOutLineNds().empty() || !nOffset )
         return sal_False;
 
-    // calculate the area
+    // calculate the range
     const SwOutlineNodes& rOutlNds = GetNodes().GetOutLineNds();
     const SwNodePtr pSttNd = (SwNodePtr)&rPam.Start()->nNode.GetNode();
     const SwNodePtr pEndNd = (SwNodePtr)&rPam.End()->nNode.GetNode();
@@ -204,13 +204,13 @@ sal_Bool SwDoc::OutlineUpDown( const SwPaM& rPam, short nOffset )
     if( rOutlNds.Seek_Entry( pEndNd, &nEndPos ) )
         ++nEndPos;
 
-    // We now have the wanted area in the OutlineNodes array,
+    // We now have the wanted range in the OutlineNodes array,
     // so check now if we're not invalidating sublevels
     // (stepping over the limits)
     sal_uInt16 n;
 
     // Here we go:
-    // 1. Create the Template array:
+    // 1. Create the style array:
     SwTxtFmtColl* aCollArr[ MAXLEVEL ];
     memset( aCollArr, 0, sizeof( SwTxtFmtColl* ) * MAXLEVEL );
 
@@ -380,7 +380,7 @@ sal_Bool SwDoc::OutlineUpDown( const SwPaM& rPam, short nOffset )
         GetIDocumentUndoRedo().AppendUndo(pUndoOLR);
     }
 
-    // 2. Apply the new Template to all Nodes
+    // 2. Apply the new style to all Nodes
 
     n = nSttPos;
     while( n < nEndPos)
@@ -430,7 +430,7 @@ sal_Bool SwDoc::OutlineUpDown( const SwPaM& rPam, short nOffset )
 // Move up/down
 sal_Bool SwDoc::MoveOutlinePara( const SwPaM& rPam, short nOffset )
 {
-    // Do not move to special areas
+    // Do not move to special sections in the nodes array
     const SwPosition& rStt = *rPam.Start(),
                     & rEnd = &rStt == rPam.GetPoint() ? *rPam.GetMark()
                                                       : *rPam.GetPoint();
@@ -564,12 +564,11 @@ sal_Bool SwDoc::MoveOutlinePara( const SwPaM& rPam, short nOffset )
         return sal_False;
 
     OSL_ENSURE( aSttRg.GetIndex() > nNewPos || nNewPos >= aEndRg.GetIndex(),
-                "Position lies within MoveArea" );
+                "Position lies within Move range" );
 
-    // If a Position was calculated for the special area, we set it
-    // to document start instead.
-    // Areas or Tables at the document start will be moved to the
-    // back.
+    // If a Position inside the special nodes array sections was calculated,
+    // set it to document start instead.
+    // Sections or Tables at the document start will be pushed backwards.
     nNewPos = Max( nNewPos, GetNodes().GetEndOfExtras().GetIndex() + 2 );
 
     long nOffs = nNewPos - ( 0 < nOffset ? aEndRg.GetIndex() : aSttRg.GetIndex());
@@ -1741,10 +1740,10 @@ sal_Bool SwDoc::MoveParagraph( const SwPaM& rPam, long nOffset, sal_Bool bIsOutl
     if( bIsOutlMv )
     {
         // For moving chapters (outline) the following reason will deny the move:
-        // if a start node is inside the moved area and its end node outside or vice versa.
+        // if a start node is inside the moved range and its end node outside or vice versa.
         // If a start node is the first moved paragraph, its end node has to be within the moved
-        // area, too (e.g. as last node).
-        // If an end node is the last node of the moved area, its start node has to be a part of
+        // range, too (e.g. as last node).
+        // If an end node is the last node of the moved range, its start node has to be a part of
         // the moved section, too.
         pTmp1 = GetNodes()[ nStIdx ];
         if( pTmp1->IsStartNode() )
@@ -1765,7 +1764,7 @@ sal_Bool SwDoc::MoveParagraph( const SwPaM& rPam, long nOffset, sal_Bool bIsOutl
         }
         pTmp1 = pTmp1->StartOfSectionNode();
         if( pTmp1->GetIndex() >= nStIdx )
-            return sal_False; // A start node which ends behind the moved area => no.
+            return sal_False; // A start node which ends behind the moved range => no.
     }
 
     sal_uLong nInStIdx, nInEndIdx;
@@ -1836,7 +1835,7 @@ sal_Bool SwDoc::MoveParagraph( const SwPaM& rPam, long nOffset, sal_Bool bIsOutl
             aEndPos.nContent = pCNd ? pCNd->Len() : 1;
             sal_Bool bCheckDel = sal_True;
 
-            // There is a some Redline Delete Object for the Area
+            // There is a some Redline Delete Object for the range
             for( ; nRedlPos < GetRedlineTbl().size(); ++nRedlPos )
             {
                 const SwRedline* pTmp = GetRedlineTbl()[ nRedlPos ];
@@ -1859,7 +1858,7 @@ sal_Bool SwDoc::MoveParagraph( const SwPaM& rPam, long nOffset, sal_Bool bIsOutl
                         break;
 
                     case POS_OUTSIDE:           // Pos2 is completely inside Pos1
-                    case POS_EQUAL:             // Pos1 is as big as Pos2
+                    case POS_EQUAL:             // Pos1 is equal to Pos2
                     case POS_OVERLAP_BEFORE:    // Pos1 overlaps Pos2 in the beginning
                     case POS_OVERLAP_BEHIND:    // Pos1 overlaps Pos2 at the end
                         return sal_False;
@@ -1871,7 +1870,7 @@ sal_Bool SwDoc::MoveParagraph( const SwPaM& rPam, long nOffset, sal_Bool bIsOutl
 
     {
         // Send DataChanged before moving. We then can detect
-        // which objects are still in the Area.
+        // which objects are still in the range.
         // After the move they could come before/after the
         // Position.
         SwDataChanged aTmp( rPam );
@@ -1883,7 +1882,7 @@ sal_Bool SwDoc::MoveParagraph( const SwPaM& rPam, long nOffset, sal_Bool bIsOutl
     SwRedline* pOwnRedl = 0;
     if( IsRedlineOn() )
     {
-        // If the Area is completely in the own Redline, we can move it!
+        // If the range is completely in the own Redline, we can move it!
         sal_uInt16 nRedlPos = GetRedlinePos( pStt->nNode.GetNode(), nsRedlineType_t::REDLINE_INSERT );
         if( USHRT_MAX != nRedlPos )
         {
@@ -1891,7 +1890,7 @@ sal_Bool SwDoc::MoveParagraph( const SwPaM& rPam, long nOffset, sal_Bool bIsOutl
             const SwPosition *pRStt = pTmp->Start(), *pREnd = pTmp->End();
             SwRedline aTmpRedl( nsRedlineType_t::REDLINE_INSERT, rPam );
             const SwCntntNode* pCEndNd = pEnd->nNode.GetNode().GetCntntNode();
-            // Is completely in the Area and is the own Redline too?
+            // Is completely in the range and is the own Redline too?
             if( aTmpRedl.IsOwnRedline( *pTmp ) &&
                 (pRStt->nNode < pStt->nNode ||
                 (pRStt->nNode == pStt->nNode && !pRStt->nContent.GetIndex()) ) &&

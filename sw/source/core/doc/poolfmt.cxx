@@ -106,7 +106,7 @@ static const sal_uInt16 aHeadlineSizes[ 2 * MAXLEVEL ] = {
 static long lcl_GetRightMargin( SwDoc& rDoc )
 {
     // Make sure that the printer settings are taken over to the standard
-    // page template
+    // page style
     const SwFrmFmt& rPgDscFmt = rDoc.GetPageDesc( 0 ).GetMaster();
     const SvxLRSpaceItem& rLR = rPgDscFmt.GetLRSpace();
     const long nLeft = rLR.GetLeft();
@@ -303,7 +303,7 @@ static void lcl_SetNumBul( SwDoc* pDoc, SwTxtFmtColl* pColl,
 // Return the AutoCollection by it's Id. If it doesn't
 // exist yet, create it.
 // If the String pointer is defined, then only query for
-// the Attribute descriptions. It doesn't create a template!
+// the Attribute descriptions. It doesn't create a style!
 SvxFrameDirection GetDefaultFrameDirection(sal_uLong nLanguage)
 {
     SvxFrameDirection eResult = (MsLangId::isRightToLeft( static_cast<LanguageType>(nLanguage)) ?
@@ -498,7 +498,7 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool( sal_uInt16 nId, bool bRegardLanguage )
             break;
 
         case RES_POOLCOLL_GREETING:             // Greeting
-        case RES_POOLCOLL_REGISTER_BASE:        // Base directories
+        case RES_POOLCOLL_REGISTER_BASE:        // Base indexes
         case RES_POOLCOLL_SIGNATURE:            // Signatures
         case RES_POOLCOLL_TABLE:                // Tabele content
             {
@@ -539,7 +539,7 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool( sal_uInt16 nId, bool bRegardLanguage )
             break;
 
 
-        // Special areas:
+        // Special sections:
         // Header
         case RES_POOLCOLL_HEADER:
         case RES_POOLCOLL_HEADERL:
@@ -584,7 +584,7 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool( sal_uInt16 nId, bool bRegardLanguage )
             }
             break;
 
-        case RES_POOLCOLL_LABEL:                // Base label
+        case RES_POOLCOLL_LABEL:                // basic caption
             {
                 SvxULSpaceItem aUL( RES_UL_SPACE ); aUL.SetUpper( PT_6 ); aUL.SetLower( PT_6 );
                 aSet.Put( aUL );
@@ -596,13 +596,13 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool( sal_uInt16 nId, bool bRegardLanguage )
             break;
 
         case RES_POOLCOLL_FRAME:                // Frame content
-        case RES_POOLCOLL_LABEL_ABB:            // Label projection
-        case RES_POOLCOLL_LABEL_TABLE:          // Label table
-        case RES_POOLCOLL_LABEL_FRAME:          // Label frame
-        case RES_POOLCOLL_LABEL_DRAWING:        // Label drawing
+        case RES_POOLCOLL_LABEL_ABB:            // caption image
+        case RES_POOLCOLL_LABEL_TABLE:          // caption table
+        case RES_POOLCOLL_LABEL_FRAME:          // caption frame
+        case RES_POOLCOLL_LABEL_DRAWING:        // caption drawing
             break;
 
-        case RES_POOLCOLL_JAKETADRESS:          // Jaket address
+        case RES_POOLCOLL_JAKETADRESS:          // envelope address
             {
                 SvxULSpaceItem aUL( RES_UL_SPACE ); aUL.SetLower( PT_3 );
                 aSet.Put( aUL );
@@ -625,7 +625,7 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool( sal_uInt16 nId, bool bRegardLanguage )
             }
             break;
 
-        // User directories:
+        // User defined indexes:
         case RES_POOLCOLL_TOX_USERH:            // Header
             lcl_SetRegister( this, aSet, 0, sal_True, sal_False );
             {
@@ -664,7 +664,7 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool( sal_uInt16 nId, bool bRegardLanguage )
             lcl_SetRegister( this, aSet, 9, sal_False, sal_True );
             break;
 
-        // Index directories
+        // Index
         case RES_POOLCOLL_TOX_IDXH:         // Header
             lcl_SetRegister( this, aSet, 0, sal_True, sal_False );
             {
@@ -685,7 +685,7 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool( sal_uInt16 nId, bool bRegardLanguage )
             lcl_SetRegister( this, aSet, 0, sal_False, sal_False );
             break;
 
-        // Content directories
+        // Table of Content
         case RES_POOLCOLL_TOX_CNTNTH:       // Header
             lcl_SetRegister( this, aSet, 0, sal_True, sal_False );
             {
@@ -1445,7 +1445,7 @@ SwPageDesc* SwDoc::GetPageDescFromPool( sal_uInt16 nId, bool bRegardLanguage )
             return pNewPgDsc;
         }
 
-    // Fault: unknown Pool template
+    // error: unknown Pool style
     if( RES_POOLPAGE_BEGIN > nId ||  nId >= RES_POOLPAGE_END )
     {
         OSL_ENSURE( !this, "invalid Id" );
@@ -1491,7 +1491,7 @@ SwPageDesc* SwDoc::GetPageDescFromPool( sal_uInt16 nId, bool bRegardLanguage )
         break;
 
     case RES_POOLPAGE_FIRST:                // First page
-    case RES_POOLPAGE_REGISTER:             // Register
+    case RES_POOLPAGE_REGISTER:             // ToX
         {
             lcl_GetStdPgSize( this, aSet );
             aSet.Put( aLR );
@@ -1505,7 +1505,7 @@ SwPageDesc* SwDoc::GetPageDescFromPool( sal_uInt16 nId, bool bRegardLanguage )
         }
         break;
 
-    case RES_POOLPAGE_LEFT:                 // Link page
+    case RES_POOLPAGE_LEFT:                 // Left page
         {
             lcl_GetStdPgSize( this, aSet );
             aSet.Put( aLR );
@@ -1534,7 +1534,7 @@ SwPageDesc* SwDoc::GetPageDescFromPool( sal_uInt16 nId, bool bRegardLanguage )
         }
         break;
 
-    case RES_POOLPAGE_JAKET:                // Jaket
+    case RES_POOLPAGE_JAKET:                // envelope
         {
             aLR.SetLeft( 0 ); aLR.SetRight( 0 );
             aUL.SetUpper( 0 ); aUL.SetLower( 0 );
@@ -1625,7 +1625,7 @@ SwNumRule* SwDoc::GetNumRuleFromPool( sal_uInt16 nId )
             return pNewRule;
         }
 
-    // Fault: unknown Pool template
+    // error: unknown Pool style
     if( RES_POOLNUMRULE_BEGIN > nId ||  nId >= RES_POOLNUMRULE_END )
     {
         OSL_ENSURE( !this, "invalid Id" );
@@ -2294,7 +2294,7 @@ bool SwDoc::IsPoolPageDescUsed( sal_uInt16 nId ) const
     return !pNewPgDsc->GetInfo( aGetHt );
 }
 
-// See if the Paragraph/Character/Frame/Page Template is in use
+// See if the Paragraph/Character/Frame/Page style is in use
 sal_Bool SwDoc::IsUsed( const SwModify& rModify ) const
 {
     // Check if we have dependent ContentNodes in the Nodes array
@@ -2312,11 +2312,11 @@ sal_Bool SwDoc::IsUsed( const SwNumRule& rRule ) const
     return bUsed;
 }
 
-// Look for the Template name's position. If it doesn't exist,
+// Look for the style name's position. If it doesn't exist,
 // insert a anew
 sal_uInt16 SwDoc::SetDocPattern( const String& rPatternName )
 {
-    OSL_ENSURE( rPatternName.Len(), "no Document Template name" );
+    OSL_ENSURE( rPatternName.Len(), "no Document style name" );
 
     size_t nNewPos = aPatternNms.size();
     for(size_t n = 0; n < aPatternNms.size(); ++n)

@@ -530,7 +530,7 @@ SwDoc::~SwDoc()
     delete pLayouter;
     pLayouter = 0L;
 
-    // Deactivate Undo notification from the Draw
+    // Deactivate Undo notification from Draw
     if( pDrawModel )
     {
         DrawNotifyUndoHdl();
@@ -558,7 +558,7 @@ SwDoc::~SwDoc()
             pLinkMgr->Remove( 0, pLinkMgr->GetLinks().size() );
     }
 
-    // The ChapterNumbers/Numbers need to be deleted before the Templates
+    // The ChapterNumbers/Numbers need to be deleted before the styles
     // or we update all the time!
     m_pNodes->pOutlineNds->clear();
     SwNodes & rUndoNodes( GetUndoManager().GetUndoNodes() );
@@ -603,12 +603,10 @@ SwDoc::~SwDoc()
     BOOST_FOREACH( SwSectionFmt* pFmt, *pSectionFmtTbl )
         lcl_DelFmtIndizes( pFmt );
 
-    // The formattings that come hereafter depend on the default formattings.
-    // [Destroy] these only after destroying the FmtIndices, because the content
+    // The formats/styles that follow depend on the default formats.
+    // Destroy these only after destroying the FmtIndices, because the content
     // of headers/footers has to be deleted as well. If in the headers/footers
     // there are still Flys registered at that point, we have a problem.
-    // (This comment might have been translated incorrectly. Blame the bad
-    // German original)
     BOOST_FOREACH(SwPageDesc *pPageDesc, aPageDescs)
         delete pPageDesc;
     aPageDescs.clear();
@@ -631,7 +629,7 @@ SwDoc::~SwDoc()
 
     // Optimization: Based on the fact that Standard is always 2nd in the
     // array, we should delete it as the last. With this we avoid
-    // remangling the Formats all the time!
+    // reparenting the Formats all the time!
     if( 2 < pTxtFmtCollTbl->size() )
         DeleteAndDestroy(*pTxtFmtCollTbl, 2, pTxtFmtCollTbl->size());
     DeleteAndDestroy(*pTxtFmtCollTbl, 1, pTxtFmtCollTbl->size());
@@ -641,8 +639,6 @@ SwDoc::~SwDoc()
             "DefaultGrfCollection must always be at the start" );
 
     DeleteAndDestroy(*pGrfFmtCollTbl, 1, pGrfFmtCollTbl->size());
-    // Is the result anyway - no _DEL array!
-    //  pGrfFmtCollTbl->Remove( 0, n );
     delete pGrfFmtCollTbl;
 
     /*
@@ -654,7 +650,6 @@ SwDoc::~SwDoc()
     pFrmFmtTbl->erase( pFrmFmtTbl->begin() );
     pCharFmtTbl->erase( pCharFmtTbl->begin() );
 
-    // Delete for pPrt
     DELETEZ( pPrt );
     DELETEZ( pNewDBMgr );
 
@@ -665,15 +660,14 @@ SwDoc::~SwDoc()
 
     // Only now destroy the Model, the drawing objects - which are also
     // contained in the Undo - need to remove their attributes from the
-    // Model. Also, DrawContacts could exist before that.
+    // Model. Also, DrawContacts could exist before this.
     ReleaseDrawModel();
     // Destroy DrawModel before the LinkManager, because it's always set
     // in the DrawModel.
     DELETEZ( pLinkMgr );
 
-    // Clear the Tables before deleting them, or we crash due to
-    // definition dependencies.
-    // We also convert the arrays (due to includes) to pointers.
+    // Clear the Tables before deleting the defaults, or we crash due to
+    // dependencies on defaults.
     delete pFrmFmtTbl;
     delete pSpzFrmFmtTbl;
 
@@ -802,7 +796,7 @@ void SwDoc::ClearDoc()
     GetIDocumentUndoRedo().DelAllUndoObj();
     ::sw::UndoGuard const undoGuard(GetIDocumentUndoRedo());
 
-    // Deactivate Undo notification from the Draw
+    // Deactivate Undo notification from Draw
     if( pDrawModel )
     {
         DrawNotifyUndoHdl();
@@ -830,7 +824,7 @@ void SwDoc::ClearDoc()
     SwPageDesc* pDummyPgDsc = aPageDescs[ nDummyPgDsc ];
 
     SwNodeIndex aSttIdx( *GetNodes().GetEndOfContent().StartOfSectionNode(), 1 );
-    // create the first one over and over again (without Attribute/Templates etc.
+    // create the first one over and over again (without attributes/style etc.
     SwTxtNode* pFirstNd = GetNodes().MakeTxtNode( aSttIdx, pDfltTxtFmtColl );
 
     if( pCurrentView )  //swmod 071029//swmod 071225
@@ -875,7 +869,7 @@ void SwDoc::ClearDoc()
 
     // Optimization: Based on the fact that Standard is always 2nd in the
     // array, we should delete it as the last. With this we avoid
-    // remangling the Formats all the time!
+    // reparenting the Formats all the time!
     if( 2 < pTxtFmtCollTbl->size() )
         DeleteAndDestroy(*pTxtFmtCollTbl, 2, pTxtFmtCollTbl->size());
     DeleteAndDestroy(*pTxtFmtCollTbl, 1, pTxtFmtCollTbl->size());
