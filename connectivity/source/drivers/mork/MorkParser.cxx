@@ -604,7 +604,7 @@ void MorkParser::retrieveLists(std::set<std::string>& lists)
     MorkTableMap* tables = getTables(defaultScope_);
     if (!tables) return;
     for (MorkTableMap::iterator TableIter = tables->begin();
-         TableIter != tables->end(); TableIter++ )
+         TableIter != tables->end(); ++TableIter )
     {
 #ifdef VERBOSE
         std::cout    << "\t Table:"
@@ -614,7 +614,7 @@ void MorkParser::retrieveLists(std::set<std::string>& lists)
         MorkRowMap* rows = getRows( defaultListScope_, &TableIter->second );
         if (!rows) return;
         for ( MorkRowMap::iterator RowIter = rows->begin();
-             RowIter != rows->end(); RowIter++ )
+             RowIter != rows->end(); ++RowIter )
         {
 #ifdef VERBOSE
             std::cout    << "\t\t\t Row Id:"
@@ -624,7 +624,7 @@ void MorkParser::retrieveLists(std::set<std::string>& lists)
 #endif
             // Get cells
             for ( MorkCells::iterator cellsIter = RowIter->second.begin();
-                 cellsIter != RowIter->second.end(); cellsIter++ )
+                 cellsIter != RowIter->second.end(); ++cellsIter )
             {
                 if (cellsIter->first == 0xC1)
                 {
@@ -641,7 +641,7 @@ void MorkParser::getRecordKeysForListTable(std::string& listName, std::set<int>&
     MorkTableMap* tables = getTables(defaultScope_);
     if (!tables) return;
     for (MorkTableMap::iterator TableIter = tables->begin();
-         TableIter != tables->end(); TableIter++ )
+         TableIter != tables->end(); ++TableIter )
     {
 #ifdef VERBOSE
         std::cout    << "\t Table:"
@@ -651,7 +651,7 @@ void MorkParser::getRecordKeysForListTable(std::string& listName, std::set<int>&
         MorkRowMap* rows = getRows( 0x81, &TableIter->second );
         if (!rows) return;
         for ( MorkRowMap::iterator RowIter = rows->begin();
-             RowIter != rows->end(); RowIter++ )
+             RowIter != rows->end(); ++RowIter )
         {
 #ifdef VERBOSE
             std::cout    << "\t\t\t Row Id:"
@@ -662,7 +662,7 @@ void MorkParser::getRecordKeysForListTable(std::string& listName, std::set<int>&
             // Get cells
             bool listFound = false;
             for ( MorkCells::iterator cellsIter = RowIter->second.begin();
-                 cellsIter != RowIter->second.end(); cellsIter++ )
+                 cellsIter != RowIter->second.end(); ++cellsIter )
             {
                 if (listFound)
                 {
