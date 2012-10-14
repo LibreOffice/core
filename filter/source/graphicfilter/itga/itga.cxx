@@ -123,14 +123,10 @@ TGAReader::TGAReader(SvStream &rTGA)
 
 TGAReader::~TGAReader()
 {
-    if (mpColorMap != NULL)
-        delete[] mpColorMap;
-    if (mpFileHeader != NULL)
-        delete mpFileHeader;
-    if (mpExtension != NULL)
-        delete mpExtension;
-    if (mpFileFooter != NULL)
-        delete mpFileFooter;
+    delete[] mpColorMap;
+    delete mpFileHeader;
+    delete mpExtension;
+    delete mpFileFooter;
 }
 
 // -------------------------------------------------------------------------------------------
