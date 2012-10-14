@@ -15,9 +15,10 @@
 #   except in compliance with the License. You may obtain a copy of
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
-from .DataAware import *
-from .DataAware import *
-from ...common.Helper import *
+import uno
+from .CommonListener import ItemListenerProcAdapter, TextListenerProcAdapter
+from .DataAware import DataAware, PropertyNames
+from ...common.Helper import Helper
 
 '''
 @author rpiterman

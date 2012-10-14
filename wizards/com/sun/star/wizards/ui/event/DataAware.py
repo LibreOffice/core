@@ -17,8 +17,7 @@
 #
 import traceback
 from abc import ABCMeta, abstractmethod
-from .CommonListener import *
-from ...common.PropertyNames import *
+from ...common.PropertyNames import PropertyNames
 
 '''
 @author rpiterman
