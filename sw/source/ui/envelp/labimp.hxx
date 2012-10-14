@@ -91,7 +91,7 @@
 class SwLabRec
 {
 public:
-    SwLabRec() {}
+    SwLabRec(): lHDist(0), lVDist(0), lWidth(0), lHeight(0), lLeft(0), lUpper(0), lPWidth(0), lPHeight(0), nCols(0), nRows(0), bCont(false) {}
 
     void SetFromItem( const SwLabItem& rItem );
     void FillItem( SwLabItem& rItem ) const;
