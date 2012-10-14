@@ -75,19 +75,11 @@
 #define MAX_ARGS        255
 #define MAX_ENVS        255
 
-/******************************************************************************
- *
- *                  Data Type Definition
- *
- ******************************************************************************/
+namespace
+{
 
-typedef struct {
-    int  m_hPipe;
-    int  m_hConn;
-    sal_Char m_Name[PATH_MAX + 1];
-} Pipe;
-
-typedef struct {
+struct ProcessData
+{
     const sal_Char*  m_pszArgs[MAX_ARGS + 1];
     oslProcessOption m_options;
     const sal_Char*  m_pszDir;
@@ -100,27 +92,7 @@ typedef struct {
     oslFileHandle    *m_pInputWrite;
     oslFileHandle    *m_pOutputRead;
     oslFileHandle    *m_pErrorRead;
-} ProcessData;
-
-/******************************************************************************
- *
- *                  Function Declarations
- *
- *****************************************************************************/
-
-oslProcessError SAL_CALL osl_psz_executeProcess(sal_Char *pszImageName,
-                                                sal_Char *pszArguments[],
-                                                oslProcessOption Options,
-                                                oslSecurity Security,
-                                                sal_Char *pszDirectory,
-                                                sal_Char *pszEnvironments[],
-                                                oslProcess *pProcess,
-                                                oslFileHandle *pInputWrite,
-                                                oslFileHandle *pOutputRead,
-                                                oslFileHandle *pErrorRead );
-
-
-sal_Bool osl_getFullPath(const sal_Char* pszFilename, sal_Char* pszPath, sal_uInt32 MaxLen);
+};
 
 static oslProcessImpl* ChildList;
 static oslMutex        ChildListMutex;
@@ -185,6 +157,19 @@ static oslProcessError SAL_CALL osl_searchPath_impl(const sal_Char* pszName,
     return osl_Process_E_NotFound;
 }
 
+} //Anonymous namespace
+
+oslProcessError SAL_CALL osl_psz_executeProcess(sal_Char *pszImageName,
+                                                sal_Char *pszArguments[],
+                                                oslProcessOption Options,
+                                                oslSecurity Security,
+                                                sal_Char *pszDirectory,
+                                                sal_Char *pszEnvironments[],
+                                                oslProcess *pProcess,
+                                                oslFileHandle *pInputWrite,
+                                                oslFileHandle *pOutputRead,
+                                                oslFileHandle *pErrorRead );
+
 /******************************************************************************
  *
  *                  New io resource transfer functions
@@ -192,18 +177,10 @@ static oslProcessError SAL_CALL osl_searchPath_impl(const sal_Char* pszName,
  *****************************************************************************/
 
 
-/**********************************************
- osl_sendResourcePipe
- *********************************************/
-
 sal_Bool osl_sendResourcePipe(oslPipe /*pPipe*/, oslSocket /*pSocket*/)
 {
     return osl_Process_E_InvalidError;
 }
-
-/**********************************************
- osl_receiveResourcePipe
- *********************************************/
 
 oslSocket osl_receiveResourcePipe(oslPipe /*pPipe*/)
 {
@@ -490,10 +467,6 @@ static void ChildStatusProc(void *pData)
 
 }
 
-/**********************************************
- osl_executeProcess_WithRedirectedIO
- *********************************************/
-
 oslProcessError SAL_CALL osl_executeProcess_WithRedirectedIO(
                                             rtl_uString *ustrImageName,
                                             rtl_uString *ustrArguments[],
@@ -612,10 +585,6 @@ oslProcessError SAL_CALL osl_executeProcess_WithRedirectedIO(
     return Error;
 }
 
-/**********************************************
- osl_executeProcess
- *********************************************/
-
 oslProcessError SAL_CALL osl_executeProcess(
                                             rtl_uString *ustrImageName,
                                             rtl_uString *ustrArguments[],
@@ -643,10 +612,6 @@ oslProcessError SAL_CALL osl_executeProcess(
         NULL
         );
 }
-
-/**********************************************
- osl_psz_executeProcess
- *********************************************/
 
 oslProcessError SAL_CALL osl_psz_executeProcess(sal_Char *pszImageName,
                                                 sal_Char *pszArguments[],
@@ -761,17 +726,12 @@ oslProcessError SAL_CALL osl_psz_executeProcess(sal_Char *pszImageName,
     return osl_Process_E_Unknown;
 }
 
-
 /******************************************************************************
  *
  *                  Functions for processes
  *
  *****************************************************************************/
 
-
-/**********************************************
- osl_terminateProcess
- *********************************************/
 
 oslProcessError SAL_CALL osl_terminateProcess(oslProcess Process)
 {
@@ -795,10 +755,6 @@ oslProcessError SAL_CALL osl_terminateProcess(oslProcess Process)
 
     return osl_Process_E_None;
 }
-
-/**********************************************
- osl_getProcess
- *********************************************/
 
 oslProcess SAL_CALL osl_getProcess(oslProcessIdentifier Ident)
 {
@@ -849,10 +805,6 @@ oslProcess SAL_CALL osl_getProcess(oslProcessIdentifier Ident)
 
     return (pProcImpl);
 }
-
-/**********************************************
- osl_freeProcessHandle
- *********************************************/
 
 void SAL_CALL osl_freeProcessHandle(oslProcess Process)
 {
@@ -931,17 +883,10 @@ struct osl_procStat
     unsigned long kstkesp;    /* current value of 'esp' (stack pointer) */
     unsigned long kstkeip;    /* current value of 'eip' (instruction pointer) */
     /* mfe: Linux > 2.1.7x have more signals (88) */
-/*#ifdef LINUX */
     char signal[24];          /* pending signals */
     char blocked[24];         /* blocked signals */
     char sigignore[24];       /* ignored signals */
     char sigcatch[24];        /* catched signals */
-/*#else*/
-/*  long long signal;*/
-/*  long long blocked;*/
-/*  long long sigignore;*/
-/*  long long sigcatch;*/
-/*#endif */
     unsigned long wchan;      /* 'channel' the process is waiting in */
     unsigned long nswap;      /* ? */
     unsigned long cnswap;     /* ? */
@@ -964,10 +909,6 @@ struct osl_procStat
     unsigned long vm_lib;     /* library size */
 };
 
-/**********************************************
- osl_getProcStat
- *********************************************/
-
 sal_Bool osl_getProcStat(pid_t pid, struct osl_procStat* procstat)
 {
     int fd = 0;
@@ -983,7 +924,6 @@ sal_Bool osl_getProcStat(pid_t pid, struct osl_procStat* procstat)
         bRet = safeRead(fd, prstatbuf, 511);
 
         close(fd);
-        /*printf("%s\n\n",prstatbuf);*/
 
         if (!bRet)
             return sal_False;
@@ -1017,10 +957,6 @@ sal_Bool osl_getProcStat(pid_t pid, struct osl_procStat* procstat)
     return bRet;
 }
 
-/**********************************************
- osl_getProcStatus
- *********************************************/
-
 sal_Bool osl_getProcStatus(pid_t pid, struct osl_procStat* procstat)
 {
     int fd = 0;
@@ -1037,8 +973,6 @@ sal_Bool osl_getProcStatus(pid_t pid, struct osl_procStat* procstat)
         bRet = safeRead(fd, prstatusbuf, 511);
 
         close(fd);
-
-        /*      printf("\n\n%s\n\n",prstatusbuf);*/
 
         if (!bRet)
             return sal_False;
@@ -1088,10 +1022,6 @@ sal_Bool osl_getProcStatus(pid_t pid, struct osl_procStat* procstat)
 }
 
 #endif
-
-/**********************************************
- osl_getProcessInfo
- *********************************************/
 
 oslProcessError SAL_CALL osl_getProcessInfo(oslProcess Process, oslProcessData Fields, oslProcessInfo* pInfo)
 {
@@ -1313,10 +1243,6 @@ oslProcessError SAL_CALL osl_joinProcessWithTimeout(oslProcess Process, const Ti
     }
     return osl_error;
 }
-
-/**********************************************
- osl_joinProcess
- *********************************************/
 
 oslProcessError SAL_CALL osl_joinProcess(oslProcess Process)
 {
