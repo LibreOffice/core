@@ -105,7 +105,7 @@ class ExtTreeListBox : public TreeListBox
 {
 protected:
     virtual sal_Bool    EditingEntry( SvLBoxEntry* pEntry, Selection& rSel  );
-    virtual sal_Bool    EditedEntry( SvLBoxEntry* pEntry, const rtl::OUString& rNewText );
+    virtual sal_Bool    EditedEntry( SvLBoxEntry* pEntry, const OUString& rNewText );
 
     virtual DragDropMode    NotifyStartDrag( TransferDataContainer& rData, SvLBoxEntry* pEntry );
     virtual sal_Bool            NotifyAcceptDrop( SvLBoxEntry* pEntry );
@@ -142,7 +142,7 @@ public:
 
     virtual void    InitEntry( SvLBoxEntry*, const XubString&, const Image&, const Image&, SvLBoxButtonKind eButtonKind );
     virtual sal_Bool    EditingEntry( SvLBoxEntry* pEntry, Selection& rSel );
-    virtual sal_Bool    EditedEntry( SvLBoxEntry* pEntry, const rtl::OUString& rNewText );
+    virtual sal_Bool    EditedEntry( SvLBoxEntry* pEntry, const OUString& rNewText );
 
     void            SetDocument( const ScriptDocument& rDocument ) { m_aDocument = rDocument; }
 
@@ -165,7 +165,7 @@ public:
                     LibDialog( Window* pParent );
                     ~LibDialog();
 
-    void            SetStorageName( const ::rtl::OUString& rName );
+    void            SetStorageName( const OUString& rName );
 
     CheckBox&       GetLibBox()                 { return aLibBox; }
     bool            IsReference() const         { return aReferenceBox.IsChecked(); }
@@ -205,7 +205,7 @@ protected:
     DECL_LINK( BasicBoxHighlightHdl, TreeListBox * );
     DECL_LINK( ButtonHdl, Button * );
     void                CheckButtons();
-    bool                GetSelection( ScriptDocument& rDocument, ::rtl::OUString& rLibName );
+    bool                GetSelection( ScriptDocument& rDocument, OUString& rLibName );
     void                DeleteCurrent();
     void                NewModule();
     void                NewDialog();
@@ -274,7 +274,7 @@ public:
 
 // Helper functions
 SbModule* createModImpl( Window* pWin, const ScriptDocument& rDocument,
-    TreeListBox& rBasicBox, const ::rtl::OUString& rLibName, ::rtl::OUString aModName, bool bMain = false );
+    TreeListBox& rBasicBox, const OUString& rLibName, OUString aModName, bool bMain = false );
 void createLibImpl( Window* pWin, const ScriptDocument& rDocument,
                     CheckBox* pLibBox, TreeListBox* pBasicBox );
 
