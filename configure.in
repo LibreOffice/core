@@ -2611,7 +2611,10 @@ dnl Check / find MacOSX SDK and compiler, version checks
 dnl ===================================================================
 if test "$_os" = "Darwin"; then
 
-    if test "$enable_64_bit" = "" -o "$enable_64_bit" = "no"; then
+    if test "$build_cpu" = i386 -a "$host_cpu" = powerpc; then
+        # Cross-compiling for PPC from Intel
+        arch='-arch ppc'
+    elif test "$enable_64_bit" = "" -o "$enable_64_bit" = "no"; then
         bitness=-m32
     else
         bitness=-m64
@@ -2798,8 +2801,8 @@ if test "$_os" = "Darwin"; then
                 AC_MSG_ERROR([Cannot guess gcc location for this SDK])
                 ;;
             esac
-            CC="${gccprefix}gcc-4.0 -mmacosx-version-min=$with_macosx_version_min_required -isysroot $MACOSX_SDK_PATH"
-            CXX="${gccprefix}g++-4.0 -mmacosx-version-min=$with_macosx_version_min_required -isysroot $MACOSX_SDK_PATH"
+            CC="${gccprefix}gcc-4.0 $arch -mmacosx-version-min=$with_macosx_version_min_required -isysroot $MACOSX_SDK_PATH"
+            CXX="${gccprefix}g++-4.0 $arch -mmacosx-version-min=$with_macosx_version_min_required -isysroot $MACOSX_SDK_PATH"
             ;;
         10.6)
             # Is similar logic as above needed? Is it likely somebody
