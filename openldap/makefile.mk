@@ -37,6 +37,11 @@ PATCH_FILES=\
 CONFIGURE_DIR=
 CONFIGURE_ACTION=.$/configure
 CONFIGURE_FLAGS=--disable-slapd --with-pic --with-tls=moznss --without-cyrus-sasl --disable-shared --enable-static
+
+.IF "$(CROSS_COMPILING)"=="YES"
+CONFIGURE_FLAGS+=--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM) --with-yielding_select=yes
+.ENDIF
+
 .IF "$(SYSTEM_NSS)" == "YES"
 CONFIGURE_FLAGS+=CPPFLAGS="$(NSS_CFLAGS)" CFLAGS="$(NSS_CFLAGS)" LDFLAGS="$(NSS_LIBS)"
 .ELSE
@@ -44,6 +49,7 @@ CONFIGURE_FLAGS+=CPPFLAGS="-I $(SOLARVER)$/$(INPATH)$/inc$/mozilla$/nss -I $(SOL
 CONFIGURE_FLAGS+=CFLAGS="-I $(SOLARVER)$/$(INPATH)$/inc$/mozilla$/nss -I $(SOLARVER)$/$(INPATH)$/inc$/mozilla$/nspr"
 CONFIGURE_FLAGS+=LDFLAGS="-L$(SOLARVER)$/$(INPATH)$/lib"
 .ENDIF
+
 BUILD_FLAGS+= -j$(EXTMAXPROCESS)
 BUILD_DIR=$(CONFIGURE_DIR)
 BUILD_ACTION=$(GNUMAKE)
