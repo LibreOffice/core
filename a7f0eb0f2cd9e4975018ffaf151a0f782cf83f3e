@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAP3///9w\u003d",
+        "filename": "sd/source/filter/cgm/sdcgmfilter.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2012-10-14T11:50:19Z",
+      "side": 0,
+      "message": "these are information about the underlying format.\nthe fact that the code does not \u0027use\u0027 these yet is no reason to loose that information.\n\nyes normally these should com from an \u0027ImportCGM\u0027 header.\nbut for some reason that library is dynloaded, so a run-time dep\nnot a build time dep... including a header would create a buildtime dep... which i why, I suppose it was done that way...",
+      "revId": "a7f0eb0f2cd9e4975018ffaf151a0f782cf83f3e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAP3///9s\u003d",
+        "filename": "sd/source/filter/eppt/eppt.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1371,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2012-10-14T11:50:19Z",
+      "side": 0,
+      "message": "same artional: this document an external binary format. we should not loose that just because we do not actually use all features of the external object.",
+      "revId": "a7f0eb0f2cd9e4975018ffaf151a0f782cf83f3e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
