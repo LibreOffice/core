@@ -1838,7 +1838,7 @@
             </node>
             <node oor:name=".uno:SplitTable" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">Split Table</value>
+                    <value xml:lang="en-US">Split Table...</value>
                 </prop>
             </node>
             <node oor:name=".uno:WrapAnchorOnly" oor:op="replace">
