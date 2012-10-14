@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAP3///9k\u003d",
+        "filename": "sal/rtl/source/strimp.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2012-10-14T12:00:37Z",
+      "side": 0,
+      "message": "that sound like a useful but rarely activated macros used\ndo debug strings... should prolly stay",
+      "revId": "d0bf1510632801e15f1f498320c90efb6d773d6e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
