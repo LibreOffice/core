@@ -18,7 +18,7 @@
 from .FaxWizardDialogResources import FaxWizardDialogResources
 from .FaxWizardDialogConst import FaxWizardDialogConst, HIDMAIN
 from ..ui.WizardDialog import WizardDialog, uno, Helper, UIConsts, \
-	PropertyNames
+    PropertyNames
 
 from com.sun.star.awt.FontUnderline import SINGLE
 
@@ -70,8 +70,8 @@ class FaxWizardDialog(WizardDialog):
                 PropertyNames.PROPERTY_TABINDEX,
                 PropertyNames.PROPERTY_WIDTH),
             (8, FaxWizardDialogConst.OPTBUSINESSFAX_HID,
-				self.resources.resoptBusinessFax_value, 97, 28, 1, 1, 184),
-			self)
+                self.resources.resoptBusinessFax_value, 97, 28, 1, 1, 184),
+            self)
         self.lstBusinessStyle = self.insertListBox("lstBusinessStyle",
             FaxWizardDialogConst.LSTBUSINESSSTYLE_ACTION_PERFORMED,
             FaxWizardDialogConst.LSTBUSINESSSTYLE_ITEM_CHANGED,
@@ -83,7 +83,7 @@ class FaxWizardDialog(WizardDialog):
                 PropertyNames.PROPERTY_TABINDEX,
                 PropertyNames.PROPERTY_WIDTH),
             (True, 12, FaxWizardDialogConst.LSTBUSINESSSTYLE_HID,
-				180, 40, 1, 3, 74), self)
+                180, 40, 1, 3, 74), self)
         self.optPrivateFax = self.insertRadioButton("optPrivateFax",
             FaxWizardDialogConst.OPTPRIVATEFAX_ITEM_CHANGED,
             (PropertyNames.PROPERTY_HEIGHT,
@@ -95,7 +95,7 @@ class FaxWizardDialog(WizardDialog):
                 PropertyNames.PROPERTY_TABINDEX,
                 PropertyNames.PROPERTY_WIDTH),
             (8, FaxWizardDialogConst.OPTPRIVATEFAX_HID,
-				self.resources.resoptPrivateFax_value,97, 81, 1, 2, 184), self)
+                self.resources.resoptPrivateFax_value,97, 81, 1, 2, 184), self)
         self.lstPrivateStyle = self.insertListBox("lstPrivateStyle",
             FaxWizardDialogConst.LSTPRIVATESTYLE_ACTION_PERFORMED,
             FaxWizardDialogConst.LSTPRIVATESTYLE_ITEM_CHANGED,
@@ -107,7 +107,7 @@ class FaxWizardDialog(WizardDialog):
                 PropertyNames.PROPERTY_TABINDEX,
                 PropertyNames.PROPERTY_WIDTH),
             (True, 12, FaxWizardDialogConst.LSTPRIVATESTYLE_HID,
-				180, 95, 1, 4, 74), self)
+                180, 95, 1, 4, 74), self)
         self.insertLabel("lblBusinessStyle",
             (PropertyNames.PROPERTY_HEIGHT,
                 PropertyNames.PROPERTY_LABEL,
@@ -149,7 +149,7 @@ class FaxWizardDialog(WizardDialog):
                 PropertyNames.PROPERTY_TABINDEX,
                 PropertyNames.PROPERTY_WIDTH),
             (39, self.resources.reslblIntroduction_value,
-				True, 104, 145, 1, 55, 199))
+                True, 104, 145, 1, 55, 199))
         self.ImageControl3 = self.insertInfoImage(92, 145, 1)
 
     def buildStep2(self):
@@ -165,8 +165,8 @@ class FaxWizardDialog(WizardDialog):
                 PropertyNames.PROPERTY_TABINDEX,
                 PropertyNames.PROPERTY_WIDTH),
             (8, FaxWizardDialogConst.CHKUSELOGO_HID,
-				self.resources.reschkUseLogo_value, 97, 28, 0, 2, 5, 212),
-			self)
+                self.resources.reschkUseLogo_value, 97, 28, 0, 2, 5, 212),
+            self)
         self.chkUseDate = self.insertCheckBox("chkUseDate",
             FaxWizardDialogConst.CHKUSEDATE_ITEM_CHANGED,
             (PropertyNames.PROPERTY_HEIGHT,
@@ -179,8 +179,8 @@ class FaxWizardDialog(WizardDialog):
                 PropertyNames.PROPERTY_TABINDEX,
                 PropertyNames.PROPERTY_WIDTH),
             (8, FaxWizardDialogConst.CHKUSEDATE_HID,
-				self.resources.reschkUseDate_value, 97, 43, 0, 2, 6, 212),
-			self)
+                self.resources.reschkUseDate_value, 97, 43, 0, 2, 6, 212),
+            self)
         self.chkUseCommunicationType = self.insertCheckBox(
             "chkUseCommunicationType",
             FaxWizardDialogConst.CHKUSECOMMUNICATIONTYPE_ITEM_CHANGED,
@@ -195,7 +195,7 @@ class FaxWizardDialog(WizardDialog):
                 PropertyNames.PROPERTY_WIDTH),
             (8, FaxWizardDialogConst.CHKUSECOMMUNICATIONTYPE_HID,
                 self.resources.reschkUseCommunicationType_value,
-				97, 57, 0, 2, 7, 100), self)
+                97, 57, 0, 2, 7, 100), self)
         self.lstCommunicationType = self.insertComboBox(
             "lstCommunicationType",
             FaxWizardDialogConst.LSTCOMMUNICATIONTYPE_ACTION_PERFORMED,
@@ -209,7 +209,7 @@ class FaxWizardDialog(WizardDialog):
                 PropertyNames.PROPERTY_TABINDEX,
                 PropertyNames.PROPERTY_WIDTH),
                 (True, 12, FaxWizardDialogConst.LSTCOMMUNICATIONTYPE_HID,
-					105, 68, 2, 8, 174), self)
+                    105, 68, 2, 8, 174), self)
         self.chkUseSubject = self.insertCheckBox("chkUseSubject",
             FaxWizardDialogConst.CHKUSESUBJECT_ITEM_CHANGED,
             (PropertyNames.PROPERTY_HEIGHT,
@@ -222,8 +222,8 @@ class FaxWizardDialog(WizardDialog):
                 PropertyNames.PROPERTY_TABINDEX,
                 PropertyNames.PROPERTY_WIDTH),
             (8, FaxWizardDialogConst.CHKUSESUBJECT_HID,
-				self.resources.reschkUseSubject_value, 97, 87, 0, 2, 9, 212),
-			self)
+                self.resources.reschkUseSubject_value, 97, 87, 0, 2, 9, 212),
+            self)
         self.chkUseSalutation = self.insertCheckBox("chkUseSalutation",
             FaxWizardDialogConst.CHKUSESALUTATION_ITEM_CHANGED,
             (PropertyNames.PROPERTY_HEIGHT,
@@ -237,7 +237,7 @@ class FaxWizardDialog(WizardDialog):
                 PropertyNames.PROPERTY_WIDTH),
             (8, FaxWizardDialogConst.CHKUSESALUTATION_HID,
                 self.resources.reschkUseSalutation_value,
-				97, 102, 0, 2, 10, 100), self)
+                97, 102, 0, 2, 10, 100), self)
         self.lstSalutation = self.insertComboBox("lstSalutation",
             FaxWizardDialogConst.LSTSALUTATION_ACTION_PERFORMED,
             FaxWizardDialogConst.LSTSALUTATION_ITEM_CHANGED,
@@ -250,7 +250,7 @@ class FaxWizardDialog(WizardDialog):
                 PropertyNames.PROPERTY_TABINDEX,
                 PropertyNames.PROPERTY_WIDTH),
             (True, 12, FaxWizardDialogConst.LSTSALUTATION_HID,
-				105, 113, 2, 11, 174), self)
+                105, 113, 2, 11, 174), self)
         self.chkUseGreeting = self.insertCheckBox("chkUseGreeting",
             FaxWizardDialogConst.CHKUSEGREETING_ITEM_CHANGED,
             (PropertyNames.PROPERTY_HEIGHT,
@@ -277,7 +277,7 @@ class FaxWizardDialog(WizardDialog):
                 PropertyNames.PROPERTY_TABINDEX,
                 PropertyNames.PROPERTY_WIDTH),
             (True, 12, FaxWizardDialogConst.LSTGREETING_HID,
-				105, 143, 2, 13, 174), self)
+                105, 143, 2, 13, 174), self)
         self.chkUseFooter = self.insertCheckBox("chkUseFooter",
             FaxWizardDialogConst.CHKUSEFOOTER_ITEM_CHANGED,
             (PropertyNames.PROPERTY_HEIGHT,
@@ -330,7 +330,7 @@ class FaxWizardDialog(WizardDialog):
                 PropertyNames.PROPERTY_TABINDEX,
                 PropertyNames.PROPERTY_WIDTH),
             (8, FaxWizardDialogConst.OPTSENDERDEFINE_HID,
-				self.resources.resoptSenderDefine_value,
+                self.resources.resoptSenderDefine_value,
                 104, 54, 3, 16, 149), self)
         self.txtSenderName = self.insertTextField("txtSenderName",
             FaxWizardDialogConst.TXTSENDERNAME_TEXT_CHANGED,
@@ -342,7 +342,7 @@ class FaxWizardDialog(WizardDialog):
                 PropertyNames.PROPERTY_TABINDEX,
                 PropertyNames.PROPERTY_WIDTH),
             (12, FaxWizardDialogConst.TXTSENDERNAME_HID,
-				182, 67, 3, 17, 119), self)
+                182, 67, 3, 17, 119), self)
         self.txtSenderStreet = self.insertTextField("txtSenderStreet",
             FaxWizardDialogConst.TXTSENDERSTREET_TEXT_CHANGED,
             (PropertyNames.PROPERTY_HEIGHT,
@@ -353,7 +353,7 @@ class FaxWizardDialog(WizardDialog):
                 PropertyNames.PROPERTY_TABINDEX,
                 PropertyNames.PROPERTY_WIDTH),
             (12, FaxWizardDialogConst.TXTSENDERSTREET_HID,
-				182, 81, 3, 18, 119), self)
+                182, 81, 3, 18, 119), self)
         self.txtSenderPostCode = self.insertTextField("txtSenderPostCode",
             FaxWizardDialogConst.TXTSENDERPOSTCODE_TEXT_CHANGED,
             (PropertyNames.PROPERTY_HEIGHT,
@@ -364,7 +364,7 @@ class FaxWizardDialog(WizardDialog):
                 PropertyNames.PROPERTY_TABINDEX,
                 PropertyNames.PROPERTY_WIDTH),
             (12, FaxWizardDialogConst.TXTSENDERPOSTCODE_HID,
-				182, 95, 3, 19, 25), self)
+                182, 95, 3, 19, 25), self)
         self.txtSenderState = self.insertTextField("txtSenderState",
             FaxWizardDialogConst.TXTSENDERSTATE_TEXT_CHANGED,
             (PropertyNames.PROPERTY_HEIGHT,
@@ -375,7 +375,7 @@ class FaxWizardDialog(WizardDialog):
                 PropertyNames.PROPERTY_TABINDEX,
                 PropertyNames.PROPERTY_WIDTH),
             (12, FaxWizardDialogConst.TXTSENDERSTATE_HID,
-				211, 95, 3, 20, 21), self)
+                211, 95, 3, 20, 21), self)
         self.txtSenderCity = self.insertTextField("txtSenderCity",
             FaxWizardDialogConst.TXTSENDERCITY_TEXT_CHANGED,
             (PropertyNames.PROPERTY_HEIGHT,
@@ -386,7 +386,7 @@ class FaxWizardDialog(WizardDialog):
                 PropertyNames.PROPERTY_TABINDEX,
                 PropertyNames.PROPERTY_WIDTH),
             (12, FaxWizardDialogConst.TXTSENDERCITY_HID,
-				236, 95, 3, 21, 65), self)
+                236, 95, 3, 21, 65), self)
         self.txtSenderFax = self.insertTextField("txtSenderFax",
             FaxWizardDialogConst.TXTSENDERFAX_TEXT_CHANGED,
             (PropertyNames.PROPERTY_HEIGHT,
@@ -397,7 +397,7 @@ class FaxWizardDialog(WizardDialog):
                 PropertyNames.PROPERTY_TABINDEX,
                 PropertyNames.PROPERTY_WIDTH),
             (12, FaxWizardDialogConst.TXTSENDERFAX_HID,
-				182, 109, 3, 22, 119), self)
+                182, 109, 3, 22, 119), self)
         self.optReceiverPlaceholder = self.insertRadioButton(
             "optReceiverPlaceholder",
             FaxWizardDialogConst.OPTRECEIVERPLACEHOLDER_ITEM_CHANGED,
@@ -425,7 +425,7 @@ class FaxWizardDialog(WizardDialog):
                 PropertyNames.PROPERTY_WIDTH),
             (8, FaxWizardDialogConst.OPTRECEIVERDATABASE_HID,
                 self.resources.resoptReceiverDatabase_value,
-				104, 160, 3, 24, 200), self)
+                104, 160, 3, 24, 200), self)
         self.insertLabel("lblSenderAddress",
             (PropertyNames.PROPERTY_HEIGHT,
                 PropertyNames.PROPERTY_LABEL,
@@ -435,7 +435,7 @@ class FaxWizardDialog(WizardDialog):
                 PropertyNames.PROPERTY_TABINDEX,
                 PropertyNames.PROPERTY_WIDTH),
             (8, self.resources.reslblSenderAddress_value,
-				97, 28, 3, 46, 136))
+                97, 28, 3, 46, 136))
         self.insertFixedLine("FixedLine2", (PropertyNames.PROPERTY_HEIGHT,
                 PropertyNames.PROPERTY_POSITION_X,
                 PropertyNames.PROPERTY_POSITION_Y,
@@ -452,7 +452,7 @@ class FaxWizardDialog(WizardDialog):
                 PropertyNames.PROPERTY_TABINDEX,
                 PropertyNames.PROPERTY_WIDTH),
             (8, self.resources.reslblSenderName_value,
-				113, 69, 3, 52, 68))
+                113, 69, 3, 52, 68))
         self.insertLabel("lblSenderStreet",
             (PropertyNames.PROPERTY_HEIGHT,
                 PropertyNames.PROPERTY_LABEL,
@@ -462,7 +462,7 @@ class FaxWizardDialog(WizardDialog):
                 PropertyNames.PROPERTY_TABINDEX,
                 PropertyNames.PROPERTY_WIDTH),
             (8, self.resources.reslblSenderStreet_value,
-				113, 82, 3, 53, 68))
+                113, 82, 3, 53, 68))
         self.insertLabel("lblPostCodeCity",
             (PropertyNames.PROPERTY_HEIGHT,
                 PropertyNames.PROPERTY_LABEL,
@@ -472,7 +472,7 @@ class FaxWizardDialog(WizardDialog):
                 PropertyNames.PROPERTY_TABINDEX,
                 PropertyNames.PROPERTY_WIDTH),
             (8, self.resources.reslblPostCodeCity_value,
-				113, 97, 3, 54, 68))
+                113, 97, 3, 54, 68))
         self.insertLabel("lblTitle4",
             ("FontDescriptor",
                 PropertyNames.PROPERTY_HEIGHT,
@@ -516,7 +516,7 @@ class FaxWizardDialog(WizardDialog):
                 PropertyNames.PROPERTY_TABINDEX,
                 PropertyNames.PROPERTY_WIDTH),
             (47, FaxWizardDialogConst.TXTFOOTER_HID,
-				True, 97, 40, 4, 25, 203), self)
+                True, 97, 40, 4, 25, 203), self)
         self.chkFooterNextPages = self.insertCheckBox("chkFooterNextPages",
             FaxWizardDialogConst.CHKFOOTERNEXTPAGES_ITEM_CHANGED,
             (PropertyNames.PROPERTY_HEIGHT,
@@ -530,7 +530,7 @@ class FaxWizardDialog(WizardDialog):
                 PropertyNames.PROPERTY_WIDTH),
             (8, FaxWizardDialogConst.CHKFOOTERNEXTPAGES_HID,
                 self.resources.reschkFooterNextPages_value,
-				97, 92, 0, 4, 26, 202), self)
+                97, 92, 0, 4, 26, 202), self)
         self.chkFooterPageNumbers = self.insertCheckBox("chkFooterPageNumbers",
             FaxWizardDialogConst.CHKFOOTERPAGENUMBERS_ITEM_CHANGED,
             (PropertyNames.PROPERTY_HEIGHT,
@@ -544,7 +544,7 @@ class FaxWizardDialog(WizardDialog):
                 PropertyNames.PROPERTY_WIDTH),
             (8, FaxWizardDialogConst.CHKFOOTERPAGENUMBERS_HID,
                 self.resources.reschkFooterPageNumbers_value,
-				97, 106, 0, 4, 27, 201), self)
+                97, 106, 0, 4, 27, 201), self)
         self.insertLabel("lblFooter",
             ("FontDescriptor",
                 PropertyNames.PROPERTY_HEIGHT,
@@ -594,7 +594,7 @@ class FaxWizardDialog(WizardDialog):
                 PropertyNames.PROPERTY_TABINDEX,
                 PropertyNames.PROPERTY_WIDTH),
             (8, FaxWizardDialogConst.OPTCREATEFAX_HID,
-				self.resources.resoptCreateFax_value,
+                self.resources.resoptCreateFax_value,
                 104, 111, 5, 30, 198), self)
         self.optMakeChanges = self.insertRadioButton("optMakeChanges",
             FaxWizardDialogConst.OPTMAKECHANGES_ITEM_CHANGED,
@@ -607,7 +607,7 @@ class FaxWizardDialog(WizardDialog):
                 PropertyNames.PROPERTY_TABINDEX,
                 PropertyNames.PROPERTY_WIDTH),
             (8, FaxWizardDialogConst.OPTMAKECHANGES_HID,
-				self.resources.resoptMakeChanges_value,
+                self.resources.resoptMakeChanges_value,
                 104, 123, 5, 31, 198), self)
         self.insertLabel("lblFinalExplanation1",
             (PropertyNames.PROPERTY_HEIGHT,
@@ -640,7 +640,7 @@ class FaxWizardDialog(WizardDialog):
                 PropertyNames.PROPERTY_TABINDEX,
                 PropertyNames.PROPERTY_WIDTH),
             (33, self.resources.reslblFinalExplanation2_value,
-				True, 104, 145, 5, 36, 199))
+                True, 104, 145, 5, 36, 199))
         self.insertImage("ImageControl2",
             ("Border",
                 PropertyNames.PROPERTY_HEIGHT,
