@@ -40,6 +40,14 @@ Warn about the following construct:
         
 Here either both statements should be inside {} or the second statement in indented wrong.
 
+==== Sal log areas ====
+
+- unknown log area 'foo' (check or extend sal/inc/sal/log-areas.dox) [loplugin]
+
+Check area used in SAL_INFO/SAL_WARN macros against the list in sal/inc/sal/log-areas.dox and
+report if the area is not listed there. The fix is either use a proper area or add it to the list
+if appropriate.
+
 
 == Code documentation / howtos ==
 
