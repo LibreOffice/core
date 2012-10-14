@@ -176,7 +176,6 @@ class FontPrevWin_Impl
     bool m_bCTLEnabled;
 
 
-    void                _CheckScript();
 public:
     inline FontPrevWin_Impl() :
         pPrinter( NULL ), bDelPrinter( sal_False ),
@@ -213,12 +212,6 @@ public:
                             //  sets the 100%-Font-Widths
 };
 
-void FontPrevWin_Impl::CheckScript()
-{
-    if( aText != aScriptText )
-        _CheckScript();
-}
-
 inline void FontPrevWin_Impl::Invalidate100PercentFontWidth()
 {
     n100PercentFontWidth = n100PercentFontWidthCJK = n100PercentFontWidthCTL = -1;
@@ -237,15 +230,19 @@ inline sal_Bool FontPrevWin_Impl::Is100PercentFontWidthValid() const
 // class FontPrevWin_Impl -----------------------------------------------
 
 /*
- * void FontPrevWin_Impl::_CheckScript()
  * evalutates the scripttypes of the actual string.
  * Afterwards the positions of script change are notified in aScriptChg,
  * the scripttypes in aScriptType.
  * The aTextWidth array will be filled with zero.
  */
-
-void FontPrevWin_Impl::_CheckScript()
+void FontPrevWin_Impl::CheckScript()
 {
+    assert(aText.Len()); // must have a preview text here!
+    if (aText == aScriptText)
+    {
+        return; // already initialized
+    }
+
     aScriptText = aText;
 
     aScriptChg.clear();
@@ -258,6 +255,7 @@ void FontPrevWin_Impl::_CheckScript()
         xBreak = Reference< XBreakIterator >(xMSF->createInstance(
                 ::rtl::OUString("com.sun.star.i18n.BreakIterator") ),UNO_QUERY);
     }
+    assert(xBreak.is()); // no can do without breakiter
     if( xBreak.is() )
     {
         sal_uInt16 nScript = xBreak->getScriptType( aText, 0 );
