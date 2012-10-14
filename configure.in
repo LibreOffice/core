@@ -4470,11 +4470,11 @@ A := \$(wildcard *.a)
 
 .PHONY: all
 all: \$(A:.a=.b)
-	@echo survived bug20033. #dont kill these tabs, you will break the Makefile!!!!
+    @echo survived bug20033. #dont kill these tabs, you will break the Makefile!!!!
 
 .PHONY: setup
 setup:
-	@touch 1.a 2.a 3.a 4.a 5.a 6.a
+    @touch 1.a 2.a 3.a 4.a 5.a 6.a
 
 define d1
 @echo lala \$(1)
@@ -4487,9 +4487,9 @@ define d2
 endef
 
 %.b : %.a
-	\$(eval CHECKSUM := \$(word 1,\$(shell cat \$^ | $SHA1SUM))) \$(if \$(wildcard \$(CACHEDIR)/\$(CHECKSUM)),\
-	\$(call d1,\$(CHECKSUM)),\
-	\$(call d2,\$(CHECKSUM)))
+    \$(eval CHECKSUM := \$(word 1,\$(shell cat \$^ | $SHA1SUM))) \$(if \$(wildcard \$(CACHEDIR)/\$(CHECKSUM)),\
+    \$(call d1,\$(CHECKSUM)),\
+    \$(call d2,\$(CHECKSUM)))
 EOF
     if test -z "`(cd $TESTGMAKEBUG20033 && $GNUMAKE setup && $GNUMAKE -j)|grep survived`"; then
         no_parallelism_make="YES"
@@ -4510,7 +4510,7 @@ cat > $TESTGMAKEFILEFUNC/Makefile << EOF
 
 .PHONY: all
 all:
-	@cat test.txt
+    @cat test.txt
 
 EOF
 $GNUMAKE -C $TESTGMAKEFILEFUNC 2>/dev/null 1>&2
@@ -8338,12 +8338,38 @@ else
                 -e "$SRC_ROOT/moz/zipped/${OS}${COM}${CPU}runtime.zip"; then
             AC_MSG_RESULT([Found])
             PREBUILD_MOZAB="YES"
-            if test "$_os" = "WINNT"; then
-                AC_MSG_CHECKING([for MSVC 2005 runtime needed for prebuilt Mozilla])
-                if test -e "$SRC_ROOT/external/msvcp80/Microsoft.VC80.CRT.manifest" -a \
-                        -e "$SRC_ROOT/external/msvcp80/msvcp80.dll" -a \
-                        -e "$SRC_ROOT/external/msvcp80/msvcr80.dll"; then
-                    AC_MSG_RESULT([Found])
+        else
+            wget -P "$SRC_ROOT/moz/zipped" http://dev-www.libreoffice.org/mozilla/${OS}${COM}${CPU}inc.zip 2>/dev/null
+            wget -P "$SRC_ROOT/moz/zipped" http://dev-www.libreoffice.org/mozilla/${OS}${COM}${CPU}lib.zip 2>/dev/null
+            wget -P "$SRC_ROOT/moz/zipped" http://dev-www.libreoffice.org/mozilla/${OS}${COM}${CPU}runtime.zip 2>/dev/null
+
+            if test -e "$SRC_ROOT/moz/zipped/${OS}${COM}${CPU}inc.zip" -o \
+                    -e "$SRC_ROOT/moz/zipped/${OS}${COM}${CPU}lib.zip" -o \
+                    -e "$SRC_ROOT/moz/zipped/${OS}${COM}${CPU}runtime.zip"; then
+                AC_MSG_RESULT([Now Found])
+                PREBUILD_MOZAB="YES"
+            else
+                AC_MSG_RESULT([Not Found])
+                AC_MSG_ERROR([If you don't use system mozilla and also disable the build of internal mozilla, you must provided the appropriate libraries yourself.
+You need to copy $OS$COM$CPU{inc,lib,runtime}.zip into moz/zipped.
+These files can be found at <http://dev-www.libreoffice.org/mozilla/>
+])
+            fi
+        fi
+        if test -n "$PREBUILD_MOZAB" -a "$PREBUILD_MOZAB" = "YES" -a "$_os" = "WINNT"; then
+            AC_MSG_CHECKING([for MSVC 2005 runtime needed for prebuilt Mozilla])
+            if test -e "$SRC_ROOT/external/msvcp80/Microsoft.VC80.CRT.manifest" -a \
+                    -e "$SRC_ROOT/external/msvcp80/msvcp80.dll" -a \
+                    -e "$SRC_ROOT/external/msvcp80/msvcr80.dll"; then
+                AC_MSG_RESULT([Found])
+            else
+                #uwin-prefixed paths are with no quotes to allow for mask, and uwin to not have spaces, btw
+                uwin=`cygpath -d "$WINDIR"`
+                uwin=`cygpath -u "$uwin"`
+                if test -e $uwin/winsxs/x86_microsoft.vc80.crt_1fc8b3b9a1e18e3b_8.0.50727.4053* ; then
+                    cp $uwin/winsxs/x86_microsoft.vc80.crt_1fc8b3b9a1e18e3b_8.0.50727.4053*/* "$SRC_ROOT/external/msvcp80/"
+                    cp $uwin/winsxs/Manifests/x86_microsoft.vc80.crt_1fc8b3b9a1e18e3b_8.0.50727.4053_*.manifest "$SRC_ROOT/external/msvcp80/"
+                    AC_MSG_RESULT([Now Found])
                 else
                     AC_MSG_RESULT([Not Found])
                     AC_MSG_ERROR([For the pre-built Mozilla libraries, you need MSVC 2005 runtime files
@@ -8352,20 +8378,11 @@ in external/msvcp80.
 
 You can get them by installing:
 <http://download.microsoft.com/download/8/B/4/8B42259F-5D70-43F4-AC2E-4B208FD8D66A/vcredist_x86.EXE>
-and copying the abovementioned files from:
-c:/windows/winsxs/x86_Microsoft.VC80.CRT_1fc8b3b9a1e18e3b_8.0.50727.4053_x-ww_e6967989/
-and
-c:/windows/winsxs/manifests/x86_Microsoft.VC80.CRT_1fc8b3b9a1e18e3b_8.0.50727.4053_x-ww_e6967989.manifest
-])
+and rerunning ./autogen.sh])
                 fi
             fi
-        else
-            AC_MSG_RESULT([Not Found])
-            AC_MSG_ERROR([If you don't use system mozilla and also disable the build of internal mozilla, you must provided the appropriate libraries yourself.
-You need to copy $OS$COM$CPU{inc,lib,runtime}.zip into moz/zipped.
-These files can be found at <http://dev-www.libreoffice.org/mozilla/>
-])
         fi
+        
     fi
 fi
 
@@ -11531,7 +11548,7 @@ internal|fully-internal)
     ENABLE_LIBRSVG=INTERNAL
     SYSTEM_LIBRSVG=NO
     BUILD_TYPE="$BUILD_TYPE LIBRSVG"
-	LIBRSVG_TARBALL="d7a242ca43e33e1b63d3073f9d46a6a8-librsvg-2.32.1.tar.gz"
+    LIBRSVG_TARBALL="d7a242ca43e33e1b63d3073f9d46a6a8-librsvg-2.32.1.tar.gz"
     ;;
 
 no)
@@ -11817,7 +11834,7 @@ if test "$SYSTEM_LIBRSVG" = YES; then
     AC_MSG_RESULT([yes])
 elif test "$enable_librsvg" = fully-internal; then
     SYSTEM_LIBGSF=NO
-	
+    
     AC_MSG_RESULT([no])
 else
     case "$_os" in
