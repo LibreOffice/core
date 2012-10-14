@@ -650,7 +650,7 @@ void DocxAttributeOutput::WriteFFData(  const FieldInfos& rInfos )
     }
     else if ( rInfos.eType == ww::eFORMCHECKBOX )
     {
-        rtl::OUString sName, sDefault;
+        rtl::OUString sName;
         bool bChecked = false;
 
         FieldMarkParamsHelper params( rFieldmark );

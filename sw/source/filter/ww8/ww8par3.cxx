@@ -2183,8 +2183,8 @@ void WW8FormulaControl::FormulaRead(SwWw8ControlType nWhich,
     // xstzStatText
     sToolTip = read_uInt16_BeltAndBracesString(*pDataStream);
 
-    String sEntryMacro = read_uInt16_BeltAndBracesString(*pDataStream);
-    String sExitMcr = read_uInt16_BeltAndBracesString(*pDataStream);
+    /*String sEntryMacro =*/ read_uInt16_BeltAndBracesString(*pDataStream);
+    /*String sExitMcr =*/ read_uInt16_BeltAndBracesString(*pDataStream);
 
     if (nWhich == WW8_CT_DROPDOWN)
     {

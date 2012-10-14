@@ -529,7 +529,6 @@ SwFrmFmt* SwWW8ImplReader::ImportGraf(SdrTextObj* pTextObj,
             SdrObject* pObject = 0;
 
             WW8PicDesc aPD( aPic );
-            String aGrName;
             if (!pMSDffManager)
                 pMSDffManager = new SwMSDffManager(*this);
             /*
