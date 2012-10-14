@@ -485,7 +485,7 @@ class FaxWizardDialogImpl(FaxWizardDialog):
             self.initializeElements()
             self.setElements()
 
-    def txtTemplateTextChanged(self):
+    def txtTemplateNameTextChanged(self):
         # Change Template Title in Properties
         xDocProps = TextDocument.xTextDocument.DocumentProperties
         xDocProps.Title = self.txtTemplateName.Text
