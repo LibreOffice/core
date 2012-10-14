@@ -45,8 +45,8 @@ public:
     virtual sal_Bool MouseButtonUp(const MouseEvent& rMEvt);
     virtual sal_Bool MouseButtonDown(const MouseEvent& rMEvt);
 
-    virtual void Activate();           // Function aktivieren
-    virtual void Deactivate();         // Function deaktivieren
+    virtual void Activate();           // Activate function
+    virtual void Deactivate();         // Deactivate function
 
     virtual void SelectionHasChanged();
 
@@ -55,7 +55,7 @@ public:
 
     sal_Bool    AnimateObj(SdrObject* pObj, const Point& rPos);
 
-    /** is called when the currenct function should be aborted. <p>
+    /** is called when the current function should be aborted. <p>
         This is used when a function gets a KEY_ESCAPE but can also
         be called directly.
 

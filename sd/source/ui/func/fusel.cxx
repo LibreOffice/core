@@ -87,7 +87,7 @@ TYPEINIT1( FuSelection, FuDraw );
 
 /*************************************************************************
 |*
-|* Konstruktor
+|* Constructor
 |*
 \************************************************************************/
 
@@ -120,13 +120,13 @@ void FuSelection::DoExecute( SfxRequest& rReq )
 {
     FuDraw::DoExecute( rReq );
 
-    // Objektbar auswaehlen
+    // Select object bar
     SelectionHasChanged();
 }
 
 /*************************************************************************
 |*
-|* Destruktor
+|* Destructor
 |*
 \************************************************************************/
 
@@ -149,7 +149,7 @@ FuSelection::~FuSelection()
 
 sal_Bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
 {
-    // Hack fuer #?????#
+    // Hack for #?????#
     bHideAndAnimate = sal_False;
 
     pHdl = NULL;
@@ -185,7 +185,7 @@ sal_Bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
         && (mpView->IsFrameDragSingles() || !mpView->HasMarkablePoints()))
     {
         /******************************************************************
-        * KEIN BEZIER_EDITOR
+        * NO BEZIER_EDITOR
         ******************************************************************/
         mpWindow->CaptureMouse();
         pHdl = mpView->PickHandle(aMDPos);
@@ -200,8 +200,8 @@ sal_Bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
         if (!pHdl && mpView->Is3DRotationCreationActive())
         {
             /******************************************************************
-            * Wenn 3D-Rotationskoerper erstellt werden sollen, jetzt
-            * die Erstellung beenden
+            * If 3D-rotation bodies are about to be created,
+            * end creation now.
             ******************************************************************/
             bSuppressChangesOfSelection = sal_True;
             if(mpWindow)
@@ -230,7 +230,7 @@ sal_Bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
         {
             if (!pHdl && mpView->Is3DRotationCreationActive())
             {
-                // Wechsel Rotationskoerper -> Selektion
+                // Switch between 3D-rotation body -> selection
                 mpView->ResetCreationActive();
             }
             else if (bWaterCan)
@@ -241,7 +241,7 @@ sal_Bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
             }
             else
             {
-                // Handle oder markiertes Objekt getroffen
+                // Handle oder marked object hit
                 bFirstMouseMove = sal_True;
                 aDragTimer.Start();
             }
@@ -267,7 +267,7 @@ sal_Bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                      nSdrObjKind == OBJ_OUTLINETEXT ||
                      !aVEvt.pObj->IsEmptyPresObj()))
                 {
-                    // Seamless Editing: Verzweigen zur Texteingabe
+                    // Seamless Editing: branch to text input
                     if (!rMEvt.IsShift())
                         mpView->UnmarkAll();
 
@@ -275,7 +275,7 @@ sal_Bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                     mpViewShell->GetViewFrame()->GetDispatcher()->
                     Execute(SID_TEXTEDIT, SFX_CALLMODE_SYNCHRON |
                             SFX_CALLMODE_RECORD, &aItem, 0L);
-                    return bReturn; // VORSICHT, durch den synchronen Slot ist das objekt jetzt geloescht
+                    return bReturn; // CAUTION, due to the synchronous slot the object is deleted now
                 }
             }
             else if ( !rMEvt.IsMod2() && rMEvt.GetClicks() == 1 &&
@@ -290,13 +290,13 @@ sal_Bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
 
                 if (rMEvt.IsMod1())
                 {
-                    // Im neuen Frame oeffnen
+                    // Open in new frame
                     pFrame->GetDispatcher()->Execute(SID_OPENDOC, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD,
                                 &aStrItem, &aBrowseItem, &aReferer, 0L);
                 }
                 else
                 {
-                    // Im aktuellen Frame oeffnen
+                    // Open in current frame
                     SfxFrameItem aFrameItem(SID_DOCFRAME, pFrame);
                     pFrame->GetDispatcher()->Execute(SID_OPENDOC, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD,
                                 &aStrItem, &aFrameItem, &aBrowseItem, &aReferer, 0L);
@@ -318,14 +318,14 @@ sal_Bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                     {
                         if(rMEvt.GetClicks() == 1)
                         {
-                            // In die Gruppe hineinschauen
+                            // Look into the group
                             if (mpView->PickObj(aMDPos, mpView->getHitTolLog(), pObj, pPV, SDRSEARCH_ALSOONMASTER | SDRSEARCH_DEEP))
                                 bReturn = AnimateObj(pObj, aMDPos);
                         }
                         else if( !bReadOnly && rMEvt.GetClicks() == 2)
                         {
-                            // Neu: Doppelklick auf selektiertes Gruppenobjekt
-                            // Gruppe betreten
+                            // New: double click on selected Group object
+                            // enter group
                             if ( ! bSelectionOnly
                                 && pObj
                                 && pObj->GetPage() == pPV->GetPage())
@@ -372,7 +372,7 @@ sal_Bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
 
                         if (pIPClient && pIPClient->IsObjectInPlaceActive())
                         {
-                            // OLE-Objekt wird im nachfolgenden UnmarkAll() deaktiviert
+                            // OLE-Objekt gets deactivated in subsequent UnmarkAll()
                             bDeactivateOLE = sal_True;
                         }
 
@@ -393,7 +393,7 @@ sal_Bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
 
                             if (rMEvt.IsShift() && mpView->GetMarkedObjectList().GetMarkCount() > 1)
                             {
-                                // Bei Einfachselektion kein Toggle
+                                // No Toggle on single selection
                                 bToggle = sal_True;
                             }
 
@@ -408,7 +408,7 @@ sal_Bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                              (!rMEvt.IsShift() || mpView->IsMarkedHit(aMDPos, nHitLog)))
                         {
                             /**********************************************************
-                             * Objekt verschieben
+                             * Move object
                              **********************************************************/
                             aDragTimer.Start();
 
@@ -419,7 +419,7 @@ sal_Bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                         else
                         {
                             /**********************************************************
-                             * Objekt selektieren
+                             * Select object
                              **********************************************************/
                             if ( ! rMEvt.IsRight())
                                 mpView->BegMarkObj(aMDPos);
@@ -449,7 +449,7 @@ sal_Bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
         if (eHit == SDRHIT_HANDLE && aVEvt.pHdl->GetKind() == HDL_BWGT)
         {
             /******************************************************************
-            * Handle draggen
+            * Drag Handle
             ******************************************************************/
             if ( ! rMEvt.IsRight())
                 mpView->BegDragObj(aMDPos, (OutputDevice*) NULL, aVEvt.pHdl, nDrgLog);
@@ -457,14 +457,14 @@ sal_Bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
         else if (eHit == SDRHIT_MARKEDOBJECT && nEditMode == SID_BEZIER_INSERT)
         {
             /******************************************************************
-            * Klebepunkt einfuegen
+            * Insert glue point
             ******************************************************************/
             mpView->BegInsObjPoint(aMDPos, rMEvt.IsMod1());
         }
         else if (eHit == SDRHIT_MARKEDOBJECT && rMEvt.IsMod1())
         {
             /******************************************************************
-            * Klebepunkt selektieren
+            * Select glue point
             ******************************************************************/
             if (!rMEvt.IsShift())
                 mpView->UnmarkAllPoints();
@@ -475,7 +475,7 @@ sal_Bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
         else if (eHit == SDRHIT_MARKEDOBJECT && !rMEvt.IsShift() && !rMEvt.IsMod2())
         {
             /******************************************************************
-            * Objekt verschieben
+            * Move object
             ******************************************************************/
             if ( ! rMEvt.IsRight())
                 mpView->BegDragObj(aMDPos, (OutputDevice*) NULL, NULL, nDrgLog);
@@ -483,7 +483,7 @@ sal_Bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
         else if (eHit == SDRHIT_HANDLE)
         {
             /******************************************************************
-            * Klebepunkt selektieren
+            * Select glue point
             ******************************************************************/
             if (!mpView->IsPointMarked(*aVEvt.pHdl) || rMEvt.IsShift())
             {
@@ -514,7 +514,7 @@ sal_Bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
             }
             else
             {
-                // point IS marked and NO shift is pressed. Start
+                // Point IS marked and NO shift is pressed. Start
                 // dragging of selected point(s)
                 pHdl = mpView->PickHandle(aMDPos);
                 if(pHdl)
@@ -525,7 +525,7 @@ sal_Bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
         else
         {
             /******************************************************************
-            * Objekt selektieren oder draggen
+            * Select or drag object
             ******************************************************************/
             if (!rMEvt.IsShift() && !rMEvt.IsMod2() && eHit == SDRHIT_UNMARKEDOBJECT)
             {
@@ -549,14 +549,14 @@ sal_Bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
             if (bMarked &&
                 (!rMEvt.IsShift() || eHit == SDRHIT_MARKEDOBJECT))
             {
-                // Objekt verschieben
+                // Move object
                 if ( ! rMEvt.IsRight())
                     mpView->BegDragObj(aMDPos, (OutputDevice*) NULL, aVEvt.pHdl, nDrgLog);
             }
             else if (mpView->AreObjectsMarked())
             {
                 /**************************************************************
-                * Klebepunkt selektieren
+                * Select glue point
                 **************************************************************/
                 if (!rMEvt.IsShift())
                     mpView->UnmarkAllPoints();
@@ -567,7 +567,7 @@ sal_Bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
             else
             {
                 /**************************************************************
-                * Objekt selektieren
+                * Select object
                 **************************************************************/
                 if ( ! rMEvt.IsRight())
                     mpView->BegMarkObj(aMDPos);
@@ -645,7 +645,7 @@ sal_Bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
 
     if (bHideAndAnimate)
     {
-        // Animation laeuft noch -> sofort returnieren
+        // Animation is still running -> return immediately
         bHideAndAnimate = sal_False;
         pHdl = NULL;
         mpWindow->ReleaseMouse();
@@ -668,12 +668,12 @@ sal_Bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
     if (mpView->IsFrameDragSingles() || !mpView->HasMarkablePoints())
     {
         /**********************************************************************
-        * KEIN BEZIER_EDITOR
+        * NO BEZIER_EDITOR
         **********************************************************************/
         if ( mpView->IsDragObj() )
         {
             /******************************************************************
-            * Objekt wurde verschoben
+            * Object was moved
             ******************************************************************/
             FrameView* pFrameView = mpViewShell->GetFrameView();
             sal_Bool bDragWithCopy = (rMEvt.IsMod1() && pFrameView->IsDragWithCopy());
@@ -694,7 +694,7 @@ sal_Bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
                 Abs(aPnt.Y() - aMDPos.Y()) < nDrgLog)
             {
                 /**************************************************************
-                * Toggle zw. Selektion und Rotation
+                * Toggle between selection and rotation
                 **************************************************************/
                 SdrObject* pSingleObj = NULL;
                 sal_uLong nMarkCount = mpView->GetMarkedObjectList().GetMarkCount();
@@ -737,8 +737,8 @@ sal_Bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
                          pHdl->GetKind() != HDL_REF2 && mpView->Is3DRotationCreationActive())
                 {
                     /*********************************************************
-                    * Wenn 3D-Rotationskoerper erstellt werden sollen, jetzt
-                    * die Erstellung beenden
+                    * If 3D-rotation bodies are about to be created,
+                    * end creation now
                     **********************************************************/
                      long nAngle1  = GetAngle(aPnt - mpView->GetRef1());
                      nAngle1 -= 27000;
@@ -765,7 +765,7 @@ sal_Bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
             && Abs(aPnt.X() - aMDPos.X()) < nDrgLog
             && Abs(aPnt.Y() - aMDPos.Y()) < nDrgLog)
         {
-            // Gruppe betreten
+            // Enter group
             mpView->MarkObj(aPnt, nHitLog, rMEvt.IsShift(), rMEvt.IsMod1());
         }
 
@@ -778,7 +778,7 @@ sal_Bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
         {
             if( rMEvt.IsRight() )
             {
-                // Bei rechter Maustaste wird im Giesskannenmodus ein Undo ausgefuehrt
+                // In watering-can mode, on press onto right mouse button, a undo is executed
                 mpViewShell->GetViewFrame()->GetDispatcher()->Execute( SID_UNDO, SFX_CALLMODE_ASYNCHRON );
             }
             else if (pWaterCanCandidate != NULL)
@@ -849,7 +849,7 @@ sal_Bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
             mpWindow->ReleaseMouse();
             FuDraw::MouseButtonUp(rMEvt);
             mpViewShell->GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SFX_CALLMODE_SYNCHRON);
-            return bReturn; // VORSICHT, durch den synchronen Slot ist das objekt jetzt geloescht
+            return bReturn; // CAUTION, due to the synchronous slot, the object is deleted now.
         }
 
         FuDraw::MouseButtonUp(rMEvt);
@@ -894,7 +894,7 @@ sal_Bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
 
                     if (eHit == SDRHIT_NONE)
                     {
-                        // Klick auf der Stelle: deselektieren
+                        // Click on the same place - unselect
                         mpView->UnmarkAllObj();
                     }
                 }
@@ -904,7 +904,7 @@ sal_Bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
                  Abs(aPnt.X() - aMDPos.X()) < nDrgLog &&
                  Abs(aPnt.Y() - aMDPos.Y()) < nDrgLog)
         {
-            // Gruppe betreten
+            // Enter group
             mpView->MarkObj(aPnt, nHitLog, sal_False, rMEvt.IsMod1());
         }
 
@@ -921,10 +921,10 @@ sal_Bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
 
 /*************************************************************************
 |*
-|* Tastaturereignisse bearbeiten
+|* Process keyboard input
 |*
-|* Wird ein KeyEvent bearbeitet, so ist der Return-Wert sal_True, andernfalls
-|* sal_False.
+|* If a KeyEvent is being processed, the Return-Wert is sal_True,
+|* sal_False otherwise.
 |*
 \************************************************************************/
 
@@ -960,7 +960,7 @@ sal_Bool FuSelection::KeyInput(const KeyEvent& rKEvt)
 
 /*************************************************************************
 |*
-|* Function aktivieren
+|* Activate function
 |*
 \************************************************************************/
 
@@ -974,7 +974,7 @@ void FuSelection::Activate()
     {
         case SID_OBJECT_ROTATE:
         {
-            // (gemapter) Slot wird explizit auf Rotate gesetzt
+            // (mapped) Slot is explicitly set to rotate
             if( mpViewShell->ISA(DrawViewShell) )
             {
                 sal_uInt16* pSlotArray =
@@ -1107,7 +1107,7 @@ void FuSelection::Activate()
 
 /*************************************************************************
 |*
-|* Function deaktivieren
+|* Deactivate function
 |*
 \************************************************************************/
 
@@ -1119,7 +1119,7 @@ void FuSelection::Deactivate()
 
 /*************************************************************************
 |*
-|* Selektion hat sich geaendert
+|* Selection was changed
 |*
 \************************************************************************/
 
@@ -1131,7 +1131,7 @@ void FuSelection::SelectionHasChanged()
 
     if ((mpView->Is3DRotationCreationActive() && !bSuppressChangesOfSelection))
     {
-        // Wechsel Rotationskoerper -> Selektion
+        // Switch rotation body -> selection
         mpView->ResetCreationActive();
         nSlotId = SID_OBJECT_SELECT;
         Activate();
@@ -1144,7 +1144,7 @@ void FuSelection::SelectionHasChanged()
 
 /*************************************************************************
 |*
-|* Aktuellen Bezier-Editmodus setzen
+|* Set current bezier edit mode
 |*
 \************************************************************************/
 
@@ -1170,7 +1170,7 @@ void FuSelection::SetEditMode(sal_uInt16 nMode)
 
 /*************************************************************************
 |*
-|* Animation oder Interaktion ausfuehren
+|* Execute animation or interaction
 |*
 \************************************************************************/
 
@@ -1216,7 +1216,7 @@ sal_Bool FuSelection::AnimateObj(SdrObject* pObj, const Point& rPos)
 
             if ( pIMapObj && pIMapObj->GetURL().Len() )
             {
-                // Sprung zu Dokument
+                // Jump to Document
                 mpWindow->ReleaseMouse();
                 SfxStringItem aStrItem(SID_FILE_NAME, pIMapObj->GetURL());
                 SfxStringItem aReferer(SID_REFERER, mpDocSh->GetMedium()->GetName());
@@ -1236,7 +1236,7 @@ sal_Bool FuSelection::AnimateObj(SdrObject* pObj, const Point& rPos)
                  mpDoc->GetAnimationInfo(pObj))
         {
             /**********************************************************
-            * Animations-Objekt in der Mitte getroffen -> Interaktion
+            * Animation-object hit in the middle -> interaction
             **********************************************************/
             SdAnimationInfo* pInfo = mpDoc->GetAnimationInfo(pObj);
             DrawViewShell* pDrViewSh = static_cast<DrawViewShell*>(mpViewShell);
@@ -1246,7 +1246,7 @@ sal_Bool FuSelection::AnimateObj(SdrObject* pObj, const Point& rPos)
             {
                 case presentation::ClickAction_BOOKMARK:
                 {
-                     // Sprung zu Bookmark (Seite oder Objekt)
+                     // Jump to Bookmark (Page or Object)
                     SfxStringItem aItem(SID_NAVIGATOR_OBJECT, pInfo->GetBookmark());
                     mpViewShell->GetViewFrame()->GetDispatcher()->
                     Execute(SID_NAVIGATOR_OBJECT, SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD, &aItem, 0L);
@@ -1257,7 +1257,7 @@ sal_Bool FuSelection::AnimateObj(SdrObject* pObj, const Point& rPos)
                 case presentation::ClickAction_DOCUMENT:
                 {
                     String sBookmark( pInfo->GetBookmark() );
-                    // Sprung zu Dokument
+                    // Jump to document
                     if (sBookmark.Len())
                     {
                         SfxStringItem aReferer(SID_REFERER, mpDocSh->GetMedium()->GetName());
@@ -1276,7 +1276,7 @@ sal_Bool FuSelection::AnimateObj(SdrObject* pObj, const Point& rPos)
 
                 case presentation::ClickAction_PREVPAGE:
                 {
-                    // Sprung zur vorherigen Seite
+                    // Jump to the previous page
                     SfxUInt16Item aItem(SID_NAVIGATOR_PAGE, PAGE_PREVIOUS);
                     mpViewShell->GetViewFrame()->GetDispatcher()->
                     Execute(SID_NAVIGATOR_PAGE, SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD,
@@ -1287,7 +1287,7 @@ sal_Bool FuSelection::AnimateObj(SdrObject* pObj, const Point& rPos)
 
                 case presentation::ClickAction_NEXTPAGE:
                 {
-                    // Sprung zur naechsten Seite
+                    // Jump to the next page
                     SfxUInt16Item aItem(SID_NAVIGATOR_PAGE, PAGE_NEXT);
                     mpViewShell->GetViewFrame()->GetDispatcher()->
                     Execute(SID_NAVIGATOR_PAGE, SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD,
@@ -1298,7 +1298,7 @@ sal_Bool FuSelection::AnimateObj(SdrObject* pObj, const Point& rPos)
 
                 case presentation::ClickAction_FIRSTPAGE:
                 {
-                    // Sprung zu erster Seite
+                    // Jump to the first page
                     SfxUInt16Item aItem(SID_NAVIGATOR_PAGE, PAGE_FIRST);
                     mpViewShell->GetViewFrame()->GetDispatcher()->
                     Execute(SID_NAVIGATOR_PAGE, SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD,
@@ -1309,7 +1309,7 @@ sal_Bool FuSelection::AnimateObj(SdrObject* pObj, const Point& rPos)
 
                 case presentation::ClickAction_LASTPAGE:
                 {
-                    // Sprung zu letzter Seite
+                    // Jump to the last page
                     SfxUInt16Item aItem(SID_NAVIGATOR_PAGE, PAGE_LAST);
                     mpViewShell->GetViewFrame()->GetDispatcher()->
                     Execute(SID_NAVIGATOR_PAGE, SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD,
@@ -1334,7 +1334,7 @@ sal_Bool FuSelection::AnimateObj(SdrObject* pObj, const Point& rPos)
 
                 case presentation::ClickAction_VERB:
                 {
-                    // Verb zuweisen
+                    // Assign verb
                     mpView->UnmarkAll();
                     mpView->MarkObj(pObj, mpView->GetSdrPageView(), sal_False, sal_False);
                     pDrViewSh->DoVerb((sal_Int16)pInfo->mnVerb);
@@ -1369,7 +1369,7 @@ sal_Bool FuSelection::AnimateObj(SdrObject* pObj, const Point& rPos)
 
                 case presentation::ClickAction_MACRO:
                 {
-                    // Execute makro
+                    // Execute macro
                     String aMacro = pInfo->GetBookmark();
 
                     if ( SfxApplication::IsXScriptURL( aMacro ) )
@@ -1436,7 +1436,7 @@ sal_Bool FuSelection::AnimateObj(SdrObject* pObj, const Point& rPos)
             mpDoc->GetAnimationInfo(pObj))
         {
             /**********************************************************
-            * Effekt-Objekt in der Mitte getroffen -> Effekt abspielen
+            * Effect-Object hit in the middle -> Play effect
             **********************************************************/
             SdAnimationInfo* pInfo = mpDoc->GetAnimationInfo(pObj);
 
@@ -1458,7 +1458,7 @@ sal_Bool FuSelection::AnimateObj(SdrObject* pObj, const Point& rPos)
 
 
 
-/** is called when the currenct function should be aborted. <p>
+/** is called when the current function should be aborted. <p>
     This is used when a function gets a KEY_ESCAPE but can also
     be called directly.
 
