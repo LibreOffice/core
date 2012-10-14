@@ -70,7 +70,7 @@ sal_Bool ExtTreeListBox::EditingEntry( SvLBoxEntry* pEntry, Selection& )
         {
             EntryDescriptor aDesc = GetEntryDescriptor(pEntry);
             ScriptDocument aDocument( aDesc.GetDocument() );
-            ::rtl::OUString aLibName( aDesc.GetLibName() );
+            OUString aLibName( aDesc.GetLibName() );
             Reference< script::XLibraryContainer2 > xModLibContainer( aDocument.getLibraryContainer( E_SCRIPTS ), UNO_QUERY );
             Reference< script::XLibraryContainer2 > xDlgLibContainer( aDocument.getLibraryContainer( E_DIALOGS ), UNO_QUERY );
             if ( !( ( xModLibContainer.is() && xModLibContainer->hasByName( aLibName ) && xModLibContainer->isLibraryReadOnly( aLibName ) ) ||
@@ -85,7 +85,7 @@ sal_Bool ExtTreeListBox::EditingEntry( SvLBoxEntry* pEntry, Selection& )
     return bRet;
 }
 
-sal_Bool ExtTreeListBox::EditedEntry( SvLBoxEntry* pEntry, const rtl::OUString& rNewText )
+sal_Bool ExtTreeListBox::EditedEntry( SvLBoxEntry* pEntry, const OUString& rNewText )
 {
     if ( !IsValidSbxName(rNewText) )
     {
@@ -93,7 +93,7 @@ sal_Bool ExtTreeListBox::EditedEntry( SvLBoxEntry* pEntry, const rtl::OUString& 
         return false;
     }
 
-    rtl::OUString aCurText( GetEntryText( pEntry ) );
+    OUString aCurText( GetEntryText( pEntry ) );
     if ( aCurText == rNewText )
         // nothing to do
         return true;
@@ -103,7 +103,7 @@ sal_Bool ExtTreeListBox::EditedEntry( SvLBoxEntry* pEntry, const rtl::OUString& 
     DBG_ASSERT( aDocument.isValid(), "ExtTreeListBox::EditedEntry: no document!" );
     if ( !aDocument.isValid() )
         return false;
-    ::rtl::OUString aLibName( aDesc.GetLibName() );
+    OUString aLibName( aDesc.GetLibName() );
     EntryType eType = aDesc.GetType();
 
     bool bSuccess = eType == OBJ_TYPE_MODULE ?
@@ -145,7 +145,7 @@ DragDropMode ExtTreeListBox::NotifyStartDrag( TransferDataContainer&, SvLBoxEntr
             nMode_ = SV_DRAGDROP_CTRL_COPY;
             EntryDescriptor aDesc = GetEntryDescriptor(pEntry);
             ScriptDocument aDocument( aDesc.GetDocument() );
-            ::rtl::OUString aLibName( aDesc.GetLibName() );
+            OUString aLibName( aDesc.GetLibName() );
             // allow MOVE mode only for libraries, which are not readonly
             Reference< script::XLibraryContainer2 > xModLibContainer( aDocument.getLibraryContainer( E_SCRIPTS ), UNO_QUERY );
             Reference< script::XLibraryContainer2 > xDlgLibContainer( aDocument.getLibraryContainer( E_DIALOGS ), UNO_QUERY );
@@ -192,13 +192,13 @@ sal_Bool ExtTreeListBox::NotifyAcceptDrop( SvLBoxEntry* pEntry )
     {
         // get source module/dialog name
         EntryDescriptor aSourceDesc = GetEntryDescriptor(pSelected);
-        rtl::OUString aSourceName = aSourceDesc.GetName();
+        OUString aSourceName = aSourceDesc.GetName();
         EntryType eSourceType = aSourceDesc.GetType();
 
         // get target shell and target library name
         EntryDescriptor aDestDesc = GetEntryDescriptor(pEntry);
         ScriptDocument const& rDestDoc = aDestDesc.GetDocument();
-        rtl::OUString aDestLibName = aDestDesc.GetLibName();
+        OUString aDestLibName = aDestDesc.GetLibName();
 
         // check if module library is not loaded, readonly or password protected
         Reference< script::XLibraryContainer2 > xModLibContainer( rDestDoc.getLibraryContainer( E_SCRIPTS ), UNO_QUERY );
@@ -255,10 +255,10 @@ sal_Bool ExtTreeListBox::NotifyCopying( SvLBoxEntry* pTarget, SvLBoxEntry* pEntr
 void Shell::CopyDialogResources(
     Reference< io::XInputStreamProvider >& io_xISP,
     ScriptDocument const& rSourceDoc,
-    rtl::OUString const& rSourceLibName,
+    OUString const& rSourceLibName,
     ScriptDocument const& rDestDoc,
-    rtl::OUString const& rDestLibName,
-    rtl::OUString const& rDlgName
+    OUString const& rDestLibName,
+    OUString const& rDlgName
 )
 {
     if ( !io_xISP.is() )
@@ -285,7 +285,7 @@ void Shell::CopyDialogResources(
     // create dialog model
     Reference< lang::XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
     Reference< container::XNameContainer > xDialogModel = Reference< container::XNameContainer >( xMSF->createInstance
-        ( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControlDialogModel" ) ) ), UNO_QUERY );
+        ( "com.sun.star.awt.UnoControlDialogModel" ), UNO_QUERY );
     Reference< io::XInputStream > xInput( io_xISP->createInputStream() );
     Reference< XComponentContext > xContext(
         comphelper::getComponentContext( xMSF ) );
@@ -335,13 +335,13 @@ sal_Bool ExtTreeListBox::NotifyCopyingMoving( SvLBoxEntry* pTarget, SvLBoxEntry*
     // get target shell and target library name
     EntryDescriptor aDestDesc = GetEntryDescriptor(rpNewParent);
     const ScriptDocument& rDestDoc( aDestDesc.GetDocument() );
-    ::rtl::OUString aDestLibName( aDestDesc.GetLibName() );
+    OUString aDestLibName( aDestDesc.GetLibName() );
 
     // get source shell, library name and module/dialog name
     EntryDescriptor aSourceDesc = GetEntryDescriptor(FirstSelected());
     const ScriptDocument rSourceDoc( aSourceDesc.GetDocument() );
-    ::rtl::OUString aSourceLibName( aSourceDesc.GetLibName() );
-    ::rtl::OUString aSourceName( aSourceDesc.GetName() );
+    OUString aSourceLibName( aSourceDesc.GetLibName() );
+    OUString aSourceName( aSourceDesc.GetName() );
     EntryType eType = aSourceDesc.GetType();
 
     // get dispatcher
@@ -365,7 +365,7 @@ sal_Bool ExtTreeListBox::NotifyCopyingMoving( SvLBoxEntry* pTarget, SvLBoxEntry*
             if ( eType == OBJ_TYPE_MODULE ) // module
             {
                 // get module
-                ::rtl::OUString aModule;
+                OUString aModule;
                 if ( rSourceDoc.getModule( aSourceLibName, aSourceName, aModule ) )
                 {
                     // remove module from source library
@@ -412,7 +412,7 @@ sal_Bool ExtTreeListBox::NotifyCopyingMoving( SvLBoxEntry* pTarget, SvLBoxEntry*
             if ( eType == OBJ_TYPE_MODULE ) // module
             {
                 // get module
-                ::rtl::OUString aModule;
+                OUString aModule;
                 if ( rSourceDoc.getModule( aSourceLibName, aSourceName, aModule ) )
                 {
                     // insert module into target library
@@ -609,8 +609,8 @@ void ObjectPage::CheckButtons()
     SvLBoxEntry* pCurEntry = aBasicBox.GetCurEntry();
     EntryDescriptor aDesc = aBasicBox.GetEntryDescriptor(pCurEntry);
     ScriptDocument aDocument( aDesc.GetDocument() );
-    ::rtl::OUString aLibName( aDesc.GetLibName() );
-    ::rtl::OUString aLibSubName( aDesc.GetLibSubName() );
+    OUString aLibName( aDesc.GetLibName() );
+    OUString aLibSubName( aDesc.GetLibSubName() );
     bool bVBAEnabled = aDocument.isInVBAMode();
     sal_uInt16 nMode = aBasicBox.GetMode();
 
@@ -686,7 +686,7 @@ IMPL_LINK( ObjectPage, ButtonHdl, Button *, pButton )
             EntryDescriptor aDesc = aBasicBox.GetEntryDescriptor(pCurEntry);
             if ( pDispatcher )
             {
-                ::rtl::OUString aModName( aDesc.GetName() );
+                OUString aModName( aDesc.GetName() );
                 // extract the module name from the string like "Sheet1 (Example1)"
                 if( aDesc.GetLibSubName() == IDE_RESSTR(RID_STR_DOCUMENT_OBJECTS) )
                 {
@@ -710,7 +710,7 @@ IMPL_LINK( ObjectPage, ButtonHdl, Button *, pButton )
                     aDocument = pDocumentEntry->GetDocument();
             }
             SfxUsrAnyItem aDocItem( SID_BASICIDE_ARG_DOCUMENT_MODEL, makeAny( aDocument.getDocumentOrNull() ) );
-            ::rtl::OUString aLibName( aBasicBox.GetEntryText( pCurEntry ) );
+            OUString aLibName( aBasicBox.GetEntryText( pCurEntry ) );
             SfxStringItem aLibNameItem( SID_BASICIDE_ARG_LIBNAME, aLibName );
             if ( pDispatcher )
             {
@@ -731,7 +731,7 @@ IMPL_LINK( ObjectPage, ButtonHdl, Button *, pButton )
     return 0;
 }
 
-bool ObjectPage::GetSelection( ScriptDocument& rDocument, ::rtl::OUString& rLibName )
+bool ObjectPage::GetSelection( ScriptDocument& rDocument, OUString& rLibName )
 {
     bool bRet = false;
 
@@ -740,7 +740,7 @@ bool ObjectPage::GetSelection( ScriptDocument& rDocument, ::rtl::OUString& rLibN
     rDocument = aDesc.GetDocument();
     rLibName = aDesc.GetLibName();
     if ( rLibName.isEmpty() )
-        rLibName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Standard"));
+        rLibName = "Standard" ;
 
     DBG_ASSERT( rDocument.isAlive(), "ObjectPage::GetSelection: no or dead ScriptDocument in the selection!" );
     if ( !rDocument.isAlive() )
@@ -748,7 +748,7 @@ bool ObjectPage::GetSelection( ScriptDocument& rDocument, ::rtl::OUString& rLibN
 
     // check if the module library is loaded
     bool bOK = true;
-    ::rtl::OUString aLibName( rLibName );
+    OUString aLibName( rLibName );
     Reference< script::XLibraryContainer > xModLibContainer( rDocument.getLibraryContainer( E_SCRIPTS  ) );
     if ( xModLibContainer.is() && xModLibContainer->hasByName( aLibName ) && !xModLibContainer->isLibraryLoaded( aLibName ) )
     {
@@ -756,7 +756,7 @@ bool ObjectPage::GetSelection( ScriptDocument& rDocument, ::rtl::OUString& rLibN
         Reference< script::XLibraryContainerPassword > xPasswd( xModLibContainer, UNO_QUERY );
         if ( xPasswd.is() && xPasswd->isLibraryPasswordProtected( aLibName ) && !xPasswd->isLibraryPasswordVerified( aLibName ) )
         {
-            ::rtl::OUString aPassword;
+            OUString aPassword;
             bOK = QueryPassword( xModLibContainer, rLibName, aPassword );
         }
 
@@ -783,11 +783,11 @@ bool ObjectPage::GetSelection( ScriptDocument& rDocument, ::rtl::OUString& rLibN
 void ObjectPage::NewModule()
 {
     ScriptDocument aDocument( ScriptDocument::getApplicationScriptDocument() );
-    ::rtl::OUString aLibName;
+    OUString aLibName;
 
     if ( GetSelection( aDocument, aLibName ) )
     {
-        ::rtl::OUString aModName;
+        OUString aModName;
         createModImpl( static_cast<Window*>( this ), aDocument,
                     aBasicBox, aLibName, aModName, true );
     }
@@ -796,7 +796,7 @@ void ObjectPage::NewModule()
 void ObjectPage::NewDialog()
 {
     ScriptDocument aDocument( ScriptDocument::getApplicationScriptDocument() );
-    ::rtl::OUString aLibName;
+    OUString aLibName;
 
     if ( GetSelection( aDocument, aLibName ) )
     {
@@ -807,7 +807,7 @@ void ObjectPage::NewDialog()
 
         if (aNewDlg.Execute() != 0)
         {
-            rtl::OUString aDlgName = aNewDlg.GetObjectName();
+            OUString aDlgName = aNewDlg.GetObjectName();
             if (aDlgName.isEmpty())
                 aDlgName = aDocument.createObjectName( E_DIALOGS, aLibName);
 
@@ -869,8 +869,8 @@ void ObjectPage::DeleteCurrent()
     DBG_ASSERT( aDocument.isAlive(), "ObjectPage::DeleteCurrent: no document!" );
     if ( !aDocument.isAlive() )
         return;
-    ::rtl::OUString aLibName( aDesc.GetLibName() );
-    ::rtl::OUString aName( aDesc.GetName() );
+    OUString aLibName( aDesc.GetLibName() );
+    OUString aName( aDesc.GetName() );
     EntryType eType = aDesc.GetType();
 
     if ( ( eType == OBJ_TYPE_MODULE && QueryDelModule( aName, this ) ) ||
@@ -933,16 +933,16 @@ LibDialog::~LibDialog()
 {
 }
 
-void LibDialog::SetStorageName( const ::rtl::OUString& rName )
+void LibDialog::SetStorageName( const OUString& rName )
 {
-    ::rtl::OUString aName( IDE_RESSTR(RID_STR_FILENAME) );
+    OUString aName( IDE_RESSTR(RID_STR_FILENAME) );
     aName += rName;
     aStorageName.SetText( aName );
 }
 
 // Helper function
 SbModule* createModImpl( Window* pWin, const ScriptDocument& rDocument,
-    TreeListBox& rBasicBox, const ::rtl::OUString& rLibName, ::rtl::OUString aModName, bool bMain )
+    TreeListBox& rBasicBox, const OUString& rLibName, OUString aModName, bool bMain )
 {
     OSL_ENSURE( rDocument.isAlive(), "createModImpl: invalid document!" );
     if ( !rDocument.isAlive() )
@@ -950,9 +950,9 @@ SbModule* createModImpl( Window* pWin, const ScriptDocument& rDocument,
 
     SbModule* pModule = NULL;
 
-    ::rtl::OUString aLibName( rLibName );
+    OUString aLibName( rLibName );
     if ( aLibName.isEmpty() )
-        aLibName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Standard"));
+        aLibName = "Standard" ;
     rDocument.getOrCreateLibrary( E_SCRIPTS, aLibName );
     if ( aModName.isEmpty() )
         aModName = rDocument.createObjectName( E_SCRIPTS, aLibName );
@@ -967,7 +967,7 @@ SbModule* createModImpl( Window* pWin, const ScriptDocument& rDocument,
 
         try
         {
-            ::rtl::OUString sModuleCode;
+            OUString sModuleCode;
             // the module has existed
             if( rDocument.hasModule( aLibName, aModName ) )
                 return NULL;
