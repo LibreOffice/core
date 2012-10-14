@@ -298,9 +298,9 @@ $(call gb_ExtensionTarget_get_rootdir,$(1))/help/$(5).done : \
 ifneq ($(strip $(gb_WITH_LANG)),)
 ifneq ($(filter-out en-US,$(5)),)
 $(call gb_ExtensionTarget_get_workdir,$(1))/help/$(5)/$(3) : \
-	POFILE := $(gb_POLOCATION)/$(5)$(subst $(SRCDIR),,$(2))/$(subst /$(lastword $(subst /, ,$(3))),.po,$(3))
+	POFILE := $(gb_POLOCATION)/$(5)$(subst $(SRCDIR),,$(2))$(patsubst %/,/%.po,$(patsubst ./,.po,$(dir $(or $(4),$(3)))))
 $(call gb_ExtensionTarget_get_workdir,$(1))/help/$(5)/$(3) : \
-        $(gb_POLOCATION)/$(5)$(subst $(SRCDIR),,$(2))/$(subst /$(lastword $(subst /, ,$(3))),.po,$(3))
+        $(gb_POLOCATION)/$(5)$(subst $(SRCDIR),,$(2))$(patsubst %/,/%.po,$(patsubst ./,.po,$(dir $(or $(4),$(3)))))
 endif
 endif
 $(call gb_ExtensionTarget_get_workdir,$(1))/help/$(5)/$(3) : \
@@ -338,9 +338,9 @@ $(call gb_ExtensionTarget_get_rootdir,$(1))/help/$(5).done : \
 ifneq ($(strip $(gb_WITH_LANG)),)
 ifneq ($(filter-out en-US,$(5)),)
 $(call gb_ExtensionTarget_get_rootdir,$(1))/help/$(5)/$(3) : \
-	POFILE := $(gb_POLOCATION)/$(5)/$(subst $(SRCDIR),,$(2))/$(subst /$(lastword $(subst /, ,$(4))),.po,$(4))
+	POFILE := $(gb_POLOCATION)/$(5)$(subst $(SRCDIR),,$(2))$(patsubst %/,/%.po,$(patsubst ./,.po,$(dir $(or $(4),$(3)))))
 $(call gb_ExtensionTarget_get_rootdir,$(1))/help/$(5)/$(3) : \
-        $(gb_POLOCATION)/$(5)/$(subst $(SRCDIR),,$(2))/$(subst /$(lastword $(subst /, ,$(4))),.po,$(4))
+        $(gb_POLOCATION)/$(5)$(subst $(SRCDIR),,$(2))$(patsubst %/,/%.po,$(patsubst ./,.po,$(dir $(or $(4),$(3)))))
 endif
 endif
 $(call gb_ExtensionTarget_get_rootdir,$(1))/help/$(5)/$(3) : \
