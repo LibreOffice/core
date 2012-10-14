@@ -70,7 +70,7 @@ sub check       #04.02.2005 13:40
     my $file = shift;
     print "$path$file\n" if ((-e "$path$file") && $is_debug);
     # don't check dpc,flag,rpmflag,sdf [obj for UNX] files, or etc subdirectory
-    return if ( ($file =~ /.+\.(dpc|\w*?flag)/) || ($file =~ /.+\.obj/ && $ENV{GUI} eq 'UNX') || ($path =~ /.+etc/) || ($path =~ /.+logs/) || ($path =~ /.+sdf/) );
+    return if ( ($file =~ /.+\.(dpc|\w*?flag)/) || ($file =~ /.+\.obj/ && $ENV{GUI} eq 'UNX') || ($path =~ /.+etc/) || ($path =~ /.+logs/) || ($file =~ /.+sdf/) );
     if ( -z "$path$file" ) {
         print "Error: $path$file 0 Bytes!\n";
         $err++;
