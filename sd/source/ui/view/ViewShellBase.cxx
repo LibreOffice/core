@@ -489,7 +489,25 @@ void ViewShellBase::InitializeFramework (void)
 }
 
 
+String ViewShellBase::GetSelectionText(sal_Bool bCompleteWords)
+{
+    ::boost::shared_ptr<ViewShell> const pMainShell(GetMainViewShell());
+    DrawViewShell *const pDrawViewShell(
+            dynamic_cast<DrawViewShell*>(pMainShell.get()));
+    return (pDrawViewShell)
+        ?   pDrawViewShell->GetSelectionText(bCompleteWords)
+        :   SfxViewShell::GetSelectionText(bCompleteWords);
+}
 
+sal_Bool ViewShellBase::HasSelection(sal_Bool bText) const
+{
+    ::boost::shared_ptr<ViewShell> const pMainShell(GetMainViewShell());
+    DrawViewShell *const pDrawViewShell(
+            dynamic_cast<DrawViewShell*>(pMainShell.get()));
+    return (pDrawViewShell)
+        ?   pDrawViewShell->HasSelection(bText)
+        :   SfxViewShell::HasSelection(bText);
+}
 
 void ViewShellBase::InnerResizePixel (const Point& rOrigin, const Size &rSize)
 {

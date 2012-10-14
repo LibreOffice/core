@@ -123,6 +123,10 @@ public:
     */
     virtual void GetState (SfxItemSet& rSet);
 
+    /* override these from SfxViewShell */
+    virtual String GetSelectionText(sal_Bool);
+    virtual sal_Bool HasSelection(sal_Bool) const;
+
     SvBorder GetBorder (bool bOuterResize);
     virtual void InnerResizePixel (const Point& rOrigin, const Size& rSize);
     virtual void OuterResizePixel (const Point& rOrigin, const Size& rSize);
