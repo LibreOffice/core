@@ -55,7 +55,6 @@ ifeq ($(SOLAR_JAVA),TRUE)
 $(eval $(call gb_Module_add_targets,wizards,\
 	Jar_commonwizards \
 	Jar_agenda \
-	Jar_fax \
 	Jar_form \
 	Jar_letter \
 	Jar_query \

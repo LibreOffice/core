@@ -404,7 +404,7 @@
       </node>
       <node oor:name="m1" oor:op="replace" install:module="writer">
         <prop oor:name="URL"  oor:type="xs:string">
-          <value >service:com.sun.star.wizards.fax.CallWizard?start</value>
+          <value >service:com.sun.star.wizards.fax.CallWizard?insert</value>
         </prop>
         <prop oor:name="Title">
           <value xml:lang="en-US">~Fax...</value>

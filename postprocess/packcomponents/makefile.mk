@@ -195,6 +195,7 @@ my_components += \
     component/scripting/source/dlgprov/dlgprov \
     component/scripting/source/protocolhandler/protocolhandler \
     component/scripting/source/pyprov/mailmerge \
+    component/wizards/com/sun/star/wizards/fax/fax \
     component/scripting/source/stringresource/stringresource \
     component/scripting/source/vbaevents/vbaevents \
     component/scripting/util/scriptframe \
@@ -297,7 +298,6 @@ my_components += \
     component/scripting/java/ScriptFramework \
     component/scripting/java/ScriptProviderForJava \
     component/wizards/com/sun/star/wizards/agenda/agenda \
-    component/wizards/com/sun/star/wizards/fax/fax \
     component/wizards/com/sun/star/wizards/form/form \
     component/connectivity/source/drivers/hsqldb/hsqldb \
     component/connectivity/source/drivers/jdbc/jdbc \
