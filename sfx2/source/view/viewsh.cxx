@@ -2044,7 +2044,7 @@ sal_Bool SfxViewShell::TryContextMenuInterception( Menu& rIn, const ::rtl::OUStr
                     continue;
             }
         }
-        catch (const uno::RuntimeException&)
+        catch (...)
         {
             aIt.remove();
         }
