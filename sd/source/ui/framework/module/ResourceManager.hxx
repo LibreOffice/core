@@ -94,7 +94,6 @@ private:
     css::uno::Reference<css::drawing::framework::XResourceId> mxMainViewAnchorId;
 
     ::rtl::OUString msCurrentMainViewURL;
-    bool mbIsEnabled;
 
     void HandleMainViewSwitch (
         const ::rtl::OUString& rsViewURL,
