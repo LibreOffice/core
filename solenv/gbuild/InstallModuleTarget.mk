@@ -121,7 +121,7 @@ $(call gb_Output_announce,$(2),$(true),SUM,1)
 MERGEINPUT=`$(gb_MKTEMP)` && \
 echo $(SCP_POFILES) > $${MERGEINPUT} && \
 $(call gb_Helper_abbreviate_dirs,\
-	$(gb_ScpMergeTarget_COMMAND) -p scp2 -i $(3) -o $(1) -m $${MERGEINPUT} -l all ) && \
+	$(gb_ScpMergeTarget_COMMAND) -p scp2 -i $(SCP_SOURCE) -o $(1) -m $${MERGEINPUT} -l all ) && \
 rm -rf $${MERGEINPUT}
 
 endef
@@ -130,7 +130,7 @@ $(dir $(call gb_ScpMergeTarget_get_target,%))%/.dir :
 	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
 
 $(call gb_ScpMergeTarget_get_target,%) : $(gb_ScpMergeTarget_TARGET)
-	$(call gb_ScpMergeTarget__command,$@,$*,$(SCP_SOURCE))
+	$(call gb_ScpMergeTarget__command,$@,$*)
 
 .PHONY : $(call gb_ScpMergeTarget_get_clean_target,%)
 $(call gb_ScpMergeTarget_get_clean_target,%) :
