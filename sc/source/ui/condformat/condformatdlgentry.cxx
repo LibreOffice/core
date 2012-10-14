@@ -552,8 +552,6 @@ void SetColorScaleEntry( ScColorScaleEntry* pEntry, const ListBox& rType, const 
         case COLORSCALE_MIN:
         case COLORSCALE_MAX:
             break;
-            break;
-            break;
         case COLORSCALE_PERCENTILE:
         case COLORSCALE_VALUE:
         case COLORSCALE_PERCENT:
