@@ -435,7 +435,12 @@ build-nocheck : build
 
 cross-toolset: bootstrap fetch
 	cd cross_toolset && $(GNUMAKE) -j $(GMAKE_PARALLELISM) $(GMAKE_OPTIONS)
-
+ifneq (,$(filter DESKTOP,$(BUILD_TYPE)))
+ifneq (WNT,$(OS))
+# We need to build nss for nsinstall... See NSINSTALL=... in nss/makefile.mk
+	$(GNUMAKE) gb_Side=build nss
+endif
+endif
 
 #
 # Install

@@ -74,7 +74,13 @@ my_prefix=/@.__________________________________________________$(EXTRPATH)
 my_prefix=$(OUTDIR)
 .END
 
-CONFIGURE_ACTION=mozilla/nsprpub/configure --prefix=$(my_prefix) --includedir=$(OUTDIR)/inc/mozilla/nspr ; \
+CONFIGURE_ACTION=mozilla/nsprpub/configure --prefix=$(my_prefix) --includedir=$(OUTDIR)/inc/mozilla/nspr
+
+.IF "$(CROSS_COMPILING)"=="YES"
+CONFIGURE_ACTION+=--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)
+.ENDIF
+
+CONFIGURE_ACTION+= ; \
     sed -e 's\#@prefix@\#$(OUTDIR)\#' -e 's\#@includedir@\#$(OUTDIR)/inc/mozilla/nss\#' -e 's\#@MOD_MAJOR_VERSION@\#$(VER_MAJOR)\#' -e 's\#@MOD_MINOR_VERSION@\#$(VER_MINOR)\#' -e 's\#@MOD_PATCH_VERSION@\#$(VER_PATCH)\#' mozilla/security/nss/nss-config.in > mozilla/security/nss/nss-config ; \
     chmod a+x mozilla/security/nss/nss-config
 
@@ -114,6 +120,24 @@ OUT2BIN=config/nspr-config mozilla/security/nss/nss-config
 
 BUILD_DIR=mozilla/security/nss
 BUILD_ACTION= $(GNUMAKE) nss_build_all -j1
+
+.IF "$(CROSS_COMPILING)"=="YES"
+
+.IF "$(OS)-$(CPUNAME)"="MACOSX-POWERPC"
+# Hardcode this for now... need to add more when/if cross-compiling to
+# other desktop OSes, yeah, this is silly, but the nss build mechanism
+# is a bit messy, I could not figure out how to get it to get CPU_ARCH
+# automatically when cross-compiling
+BUILD_ACTION+= CPU_ARCH=ppc
+.ENDIF
+
+# When cross-compiling need to use a nsinstall built for the build
+# platform, so yeah, whole nss built for the build platform just for
+# that... But oh well, nss is small compared to LO;)
+BUILD_ACTION+= NSINSTALL=$(SRC_ROOT)/nss/$(INPATH_FOR_BUILD)/misc/build/$(TARFILE_ROOTDIR)/mozilla/security/coreconf/nsinstall/out/nsinstall
+
+.ENDIF
+
 #Note: with the new version the libfreebl3.so gets built in a way that does
 # not conflict with the system one on Linux automatically;
 # it is no longer necessary to add a workaround for #i105566# && moz#513024#
