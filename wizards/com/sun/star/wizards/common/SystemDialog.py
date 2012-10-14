@@ -37,9 +37,9 @@ class SystemDialog(object):
             self.systemDialog = xMSF.createInstance(ServiceName)
             self.xStringSubstitution = self.createStringSubstitution(xMSF)
 
-			# Add a name textbox to the filepicker
+            # Add a name textbox to the filepicker
             if self.systemDialog is not None:
-				self.systemDialog.initialize((Type,))
+                self.systemDialog.initialize((Type,))
 
         except Exception, exception:
             traceback.print_exc()
