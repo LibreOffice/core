@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAP3///84\u003d",
+        "filename": "sd/source/ui/func/fusel.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2012-10-14T20:58:17Z",
+      "side": 1,
+      "message": "just drop it entirely, doesn\u0027t help anyway",
+      "revId": "422eac4782b079679fb5099d91d8b2210ee42c7b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
