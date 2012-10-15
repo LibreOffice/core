@@ -105,6 +105,7 @@ public:
     void testN782061();
     void testN782345();
     void testN783638();
+    void testFdo52208();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -152,6 +153,7 @@ public:
     CPPUNIT_TEST(testN782061);
     CPPUNIT_TEST(testN782345);
     CPPUNIT_TEST(testN783638);
+    CPPUNIT_TEST(testFdo52208);
 #endif
     CPPUNIT_TEST_SUITE_END();
 
@@ -1088,6 +1090,17 @@ void Test::testN783638()
     uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xPropertySet(xDraws->getByIndex(0), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xPropertySet, "LeftMargin"));
+}
+
+void Test::testFdo52208()
+{
+    // The problem was that the document had 2 pages instead of 1.
+    load("fdo52208.docx");
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextViewCursorSupplier> xTextViewCursorSupplier(xModel->getCurrentController(), uno::UNO_QUERY);
+    uno::Reference<text::XPageCursor> xCursor(xTextViewCursorSupplier->getViewCursor(), uno::UNO_QUERY);
+    xCursor->jumpToLastPage();
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(1), xCursor->getPage());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);

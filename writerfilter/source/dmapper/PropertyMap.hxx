@@ -235,6 +235,7 @@ public:
     void SetPageNoRestart( bool bSet ) { m_bPageNoRestart = bSet; }
     void SetPageNumber( sal_Int32 nSet ) { m_nPageNumber = nSet; }
     void SetBreakType( sal_Int32 nSet ) { m_nBreakType = nSet; }
+    sal_Int32 GetBreakType( ) { return m_nBreakType; }
     void SetPaperBin( sal_Int32 nSet );
     void SetFirstPaperBin( sal_Int32 nSet );
 
