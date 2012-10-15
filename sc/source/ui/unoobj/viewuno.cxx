@@ -2121,7 +2121,10 @@ void ScTabViewObj::RangeSelDone( const String& rText )
     aEvent.Source.set(static_cast<cppu::OWeakObject*>(this));
     aEvent.RangeDescriptor = rtl::OUString( rText );
 
-    BOOST_FOREACH(const XRangeSelectionListenerUnoRef rListener, aRangeSelListeners)
+    // copy on the stack because listener could remove itself
+    XRangeSelectionListenerVector const listeners(aRangeSelListeners);
+
+    BOOST_FOREACH(const XRangeSelectionListenerUnoRef rListener, listeners)
         rListener->done( aEvent );
 }
 
@@ -2131,7 +2134,10 @@ void ScTabViewObj::RangeSelAborted( const String& rText )
     aEvent.Source.set(static_cast<cppu::OWeakObject*>(this));
     aEvent.RangeDescriptor = rtl::OUString( rText );
 
-    BOOST_FOREACH(const XRangeSelectionListenerUnoRef rListener, aRangeSelListeners)
+    // copy on the stack because listener could remove itself
+    XRangeSelectionListenerVector const listeners(aRangeSelListeners);
+
+    BOOST_FOREACH(const XRangeSelectionListenerUnoRef rListener, listeners)
         rListener->aborted( aEvent );
 }
 
@@ -2141,7 +2147,10 @@ void ScTabViewObj::RangeSelChanged( const String& rText )
     aEvent.Source.set(static_cast<cppu::OWeakObject*>(this));
     aEvent.RangeDescriptor = rtl::OUString( rText );
 
-    BOOST_FOREACH(const XRangeSelectionChangeListenerUnoRef rListener, aRangeChgListeners)
+    // copy on the stack because listener could remove itself
+    XRangeSelectionChangeListenerVector const listener(aRangeChgListeners);
+
+    BOOST_FOREACH(const XRangeSelectionChangeListenerUnoRef rListener, listener)
         rListener->descriptorChanged( aEvent );
 }
 
