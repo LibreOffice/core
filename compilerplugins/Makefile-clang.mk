@@ -13,6 +13,7 @@ CLANGSRC= \
     plugin.cxx \
     bodynotinblock.cxx \
     lclstaticfix.cxx \
+    postfixincrementfix.cxx \
     sallogareas.cxx \
     unusedvariablecheck.cxx \
 

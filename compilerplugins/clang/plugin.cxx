@@ -20,6 +20,7 @@
 
 #include "bodynotinblock.hxx"
 #include "lclstaticfix.hxx"
+#include "postfixincrementfix.hxx"
 #include "sallogareas.hxx"
 #include "unusedvariablecheck.hxx"
 
@@ -150,6 +151,7 @@ class PluginHandler
             , args( args )
             , bodyNotInBlock( context )
             , lclStaticFix( context, rewriter )
+            , postfixIncrementFix( context, rewriter )
             , salLogAreas( context )
             , unusedVariableCheck( context )
             {
@@ -160,6 +162,8 @@ class PluginHandler
                 return;
             if( isArg( "lclstaticfix" ))
                 lclStaticFix.run();
+            else if( isArg( "postfixincrementfix" ))
+                postfixIncrementFix.run();
             else if( args.empty())
                 {
                 bodyNotInBlock.run();
@@ -201,6 +205,7 @@ class PluginHandler
         vector< string > args;
         BodyNotInBlock bodyNotInBlock;
         LclStaticFix lclStaticFix;
+        PostfixIncrementFix postfixIncrementFix;
         SalLogAreas salLogAreas;
         UnusedVariableCheck unusedVariableCheck;
     };
