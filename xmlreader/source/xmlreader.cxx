@@ -96,19 +96,38 @@ XmlReader::XmlReader(rtl::OUString const & fileUrl)
              rtl::OUString::valueOf(static_cast< sal_Int32 >(e)) + ")"),
             css::uno::Reference< css::uno::XInterface >());
     }
+    init();
+    pos_ = static_cast< char * >(fileAddress_);
+    end_ = pos_ + fileSize_;
+}
+
+XmlReader::XmlReader(const char * str, sal_uInt64 len)
+    SAL_THROW(())
+    : fileHandle_(NULL)
+    , fileSize_(len)
+    , fileAddress_(NULL)
+{
+    init();
+    pos_ = str;
+    end_ = pos_ + fileSize_;
+}
+
+void XmlReader::init()
+{
     namespaceIris_.push_back(
         Span(
             RTL_CONSTASCII_STRINGPARAM(
                 "http://www.w3.org/XML/1998/namespace")));
     namespaces_.push_back(
         NamespaceData(Span(RTL_CONSTASCII_STRINGPARAM("xml")), NAMESPACE_XML));
-    pos_ = static_cast< char * >(fileAddress_);
-    end_ = pos_ + fileSize_;
     state_ = STATE_CONTENT;
     firstAttribute_ = true;
 }
 
 XmlReader::~XmlReader() {
+    if (!fileHandle_)
+        return;
+
     oslFileError e = osl_unmapMappedFile(fileHandle_, fileAddress_, fileSize_);
     if (e != osl_File_E_None) {
         SAL_WARN(
