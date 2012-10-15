@@ -44,7 +44,7 @@
 #include <sfx2/printer.hxx>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <editeng/scripttypeitem.hxx>
-#include <com/sun/star/i18n/XBreakIterator.hpp>
+#include <com/sun/star/i18n/BreakIterator.hpp>
 #include <comphelper/processfactory.hxx>
 
 #include "charatr.hxx"
@@ -411,34 +411,30 @@ void SwDropCapsPict::CheckScript( void )
     maScriptChanges.clear();
     if( !xBreak.is() )
     {
-        Reference< XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
-        xBreak = Reference< I18N::XBreakIterator >(xMSF->createInstance(
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.i18n.BreakIterator")) ),UNO_QUERY);
+        Reference< XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+        xBreak = I18N::BreakIterator::create(xContext);
     }
-    if( xBreak.is() )
+    sal_uInt16 nScript = xBreak->getScriptType( maText, 0 );
+    sal_uInt16 nChg = 0;
+    if( I18N_SCRIPTTYPE::WEAK == nScript )
     {
-        sal_uInt16 nScript = xBreak->getScriptType( maText, 0 );
-        sal_uInt16 nChg = 0;
-        if( I18N_SCRIPTTYPE::WEAK == nScript )
-        {
-            nChg = (xub_StrLen)xBreak->endOfScript( maText, nChg, nScript );
-            if( nChg < maText.Len() )
-                nScript = xBreak->getScriptType( maText, nChg );
-            else
-                nScript = I18N_SCRIPTTYPE::LATIN;
-        }
-
-        do
-        {
-            nChg = (xub_StrLen)xBreak->endOfScript( maText, nChg, nScript );
-            maScriptChanges.push_back( _ScriptInfo(0, nScript, nChg) );
-
-            if( nChg < maText.Len() )
-                nScript = xBreak->getScriptType( maText, nChg );
-            else
-                break;
-        } while( sal_True );
+        nChg = (xub_StrLen)xBreak->endOfScript( maText, nChg, nScript );
+        if( nChg < maText.Len() )
+            nScript = xBreak->getScriptType( maText, nChg );
+        else
+            nScript = I18N_SCRIPTTYPE::LATIN;
     }
+
+    do
+    {
+        nChg = (xub_StrLen)xBreak->endOfScript( maText, nChg, nScript );
+        maScriptChanges.push_back( _ScriptInfo(0, nScript, nChg) );
+
+        if( nChg < maText.Len() )
+            nScript = xBreak->getScriptType( maText, nChg );
+        else
+            break;
+    } while( sal_True );
 }
 
 Size SwDropCapsPict::CalcTextSize( void )

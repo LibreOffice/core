@@ -34,8 +34,9 @@
 
 #include <set>
 #include <map>
+#include <comphelper/processfactory.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
-#include <com/sun/star/i18n/XBreakIterator.hpp>
+#include <com/sun/star/i18n/BreakIterator.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <com/sun/star/i18n/UnicodeScript.hpp>
 #include <com/sun/star/i18n/XTextConversion.hpp>
@@ -614,38 +615,29 @@ namespace editeng
             try
             {
                 // get the break iterator service
-                ::rtl::OUString sBreakIteratorService( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.i18n.BreakIterator" ) );
-                Reference< XInterface > xBI( m_xORB->createInstance( ::rtl::OUString( sBreakIteratorService ) ) );
-                Reference< XBreakIterator > xBreakIter( xBI, UNO_QUERY );
-                if ( !xBreakIter.is() )
-                {
-                    ShowServiceNotAvailableError( m_pUIParent, sBreakIteratorService, sal_True );
-                }
-                else
-                {
-                    sal_Int32 nNextAsianScript = xBreakIter->beginOfScript( m_sCurrentPortion, m_nCurrentStartIndex, com::sun::star::i18n::ScriptType::ASIAN );
-                    if ( -1 == nNextAsianScript )
-                        nNextAsianScript = xBreakIter->nextScript( m_sCurrentPortion, m_nCurrentStartIndex, com::sun::star::i18n::ScriptType::ASIAN );
-                    if ( ( nNextAsianScript >= m_nCurrentStartIndex ) && ( nNextAsianScript < m_sCurrentPortion.getLength() ) )
-                    {   // found asian text
+                Reference< XBreakIterator > xBreakIter = BreakIterator::create( comphelper::getComponentContext(m_xORB) );
+                sal_Int32 nNextAsianScript = xBreakIter->beginOfScript( m_sCurrentPortion, m_nCurrentStartIndex, com::sun::star::i18n::ScriptType::ASIAN );
+                if ( -1 == nNextAsianScript )
+                    nNextAsianScript = xBreakIter->nextScript( m_sCurrentPortion, m_nCurrentStartIndex, com::sun::star::i18n::ScriptType::ASIAN );
+                if ( ( nNextAsianScript >= m_nCurrentStartIndex ) && ( nNextAsianScript < m_sCurrentPortion.getLength() ) )
+                {   // found asian text
 
-                        // determine if it's Hangul
-                        CharClass aCharClassificaton( m_xORB, m_aSourceLocale );
-                        sal_Int16 nScript = aCharClassificaton.getScript( m_sCurrentPortion, sal::static_int_cast< sal_uInt16 >(nNextAsianScript) );
-                        if  (   ( UnicodeScript_kHangulJamo == nScript )
-                            ||  ( UnicodeScript_kHangulCompatibilityJamo == nScript )
-                            ||  ( UnicodeScript_kHangulSyllable == nScript )
-                            )
-                        {
-                            rDirection = HHC::eHangulToHanja;
-                        }
-                        else
-                        {
-                            rDirection = HHC::eHanjaToHangul;
-                        }
-
-                        bSuccess = true;
+                    // determine if it's Hangul
+                    CharClass aCharClassificaton( m_xORB, m_aSourceLocale );
+                    sal_Int16 nScript = aCharClassificaton.getScript( m_sCurrentPortion, sal::static_int_cast< sal_uInt16 >(nNextAsianScript) );
+                    if  (   ( UnicodeScript_kHangulJamo == nScript )
+                        ||  ( UnicodeScript_kHangulCompatibilityJamo == nScript )
+                        ||  ( UnicodeScript_kHangulSyllable == nScript )
+                        )
+                    {
+                        rDirection = HHC::eHangulToHanja;
                     }
+                    else
+                    {
+                        rDirection = HHC::eHanjaToHangul;
+                    }
+
+                    bSuccess = true;
                 }
             }
             catch( const Exception& )

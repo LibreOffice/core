@@ -56,6 +56,7 @@
 #include <drawinglayer/primitive2d/textdecoratedprimitive2d.hxx>
 #include <comphelper/processfactory.hxx>
 #include <rtl/ustring.hxx>
+#include <com/sun/star/i18n/BreakIterator.hpp>
 #include <com/sun/star/i18n/CharacterIteratorMode.hpp>
 #include <com/sun/star/i18n/WordType.hpp>
 #include <drawinglayer/primitive2d/controlprimitive2d.hxx>
@@ -1097,46 +1098,43 @@ namespace drawinglayer
                         // support for TEXT_ MetaFile actions only for decorated texts
                         if(!mxBreakIterator.is())
                         {
-                            uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xMSF(::comphelper::getProcessServiceFactory());
-                            mxBreakIterator.set(xMSF->createInstance("com.sun.star.i18n.BreakIterator"), uno::UNO_QUERY);
+                            uno::Reference< uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
+                            mxBreakIterator = i18n::BreakIterator::create(xContext);
                         }
 
-                        if(mxBreakIterator.is())
+                        const rtl::OUString& rTxt = rTextCandidate.getText();
+                        const sal_Int32 nTextLength(rTextCandidate.getTextLength()); // rTxt.getLength());
+
+                        if(nTextLength)
                         {
-                            const rtl::OUString& rTxt = rTextCandidate.getText();
-                            const sal_Int32 nTextLength(rTextCandidate.getTextLength()); // rTxt.getLength());
+                            const ::com::sun::star::lang::Locale& rLocale = rTextCandidate.getLocale();
+                            const sal_Int32 nTextPosition(rTextCandidate.getTextPosition());
 
-                            if(nTextLength)
+                            sal_Int32 nDone;
+                            sal_Int32 nNextCellBreak(mxBreakIterator->nextCharacters(rTxt, nTextPosition, rLocale, ::com::sun::star::i18n::CharacterIteratorMode::SKIPCELL, 0, nDone));
+                            ::com::sun::star::i18n::Boundary nNextWordBoundary(mxBreakIterator->getWordBoundary(rTxt, nTextPosition, rLocale, ::com::sun::star::i18n::WordType::ANY_WORD, sal_True));
+                            sal_Int32 nNextSentenceBreak(mxBreakIterator->endOfSentence(rTxt, nTextPosition, rLocale));
+                            const rtl::OString aCommentStringA(RTL_CONSTASCII_STRINGPARAM("XTEXT_EOC"));
+                            const rtl::OString aCommentStringB(RTL_CONSTASCII_STRINGPARAM("XTEXT_EOW"));
+                            const rtl::OString aCommentStringC(RTL_CONSTASCII_STRINGPARAM("XTEXT_EOS"));
+
+                            for(sal_Int32 i(nTextPosition); i < nTextPosition + nTextLength; i++)
                             {
-                                const ::com::sun::star::lang::Locale& rLocale = rTextCandidate.getLocale();
-                                const sal_Int32 nTextPosition(rTextCandidate.getTextPosition());
-
-                                sal_Int32 nDone;
-                                sal_Int32 nNextCellBreak(mxBreakIterator->nextCharacters(rTxt, nTextPosition, rLocale, ::com::sun::star::i18n::CharacterIteratorMode::SKIPCELL, 0, nDone));
-                                ::com::sun::star::i18n::Boundary nNextWordBoundary(mxBreakIterator->getWordBoundary(rTxt, nTextPosition, rLocale, ::com::sun::star::i18n::WordType::ANY_WORD, sal_True));
-                                sal_Int32 nNextSentenceBreak(mxBreakIterator->endOfSentence(rTxt, nTextPosition, rLocale));
-                                const rtl::OString aCommentStringA(RTL_CONSTASCII_STRINGPARAM("XTEXT_EOC"));
-                                const rtl::OString aCommentStringB(RTL_CONSTASCII_STRINGPARAM("XTEXT_EOW"));
-                                const rtl::OString aCommentStringC(RTL_CONSTASCII_STRINGPARAM("XTEXT_EOS"));
-
-                                for(sal_Int32 i(nTextPosition); i < nTextPosition + nTextLength; i++)
+                                // create the entries for the respective break positions
+                                if(i == nNextCellBreak)
                                 {
-                                    // create the entries for the respective break positions
-                                    if(i == nNextCellBreak)
-                                    {
-                                        mpMetaFile->AddAction(new MetaCommentAction(aCommentStringA, i - nTextPosition));
-                                        nNextCellBreak = mxBreakIterator->nextCharacters(rTxt, i, rLocale, ::com::sun::star::i18n::CharacterIteratorMode::SKIPCELL, 1, nDone);
-                                    }
-                                    if(i == nNextWordBoundary.endPos)
-                                    {
-                                        mpMetaFile->AddAction(new MetaCommentAction(aCommentStringB, i - nTextPosition));
-                                        nNextWordBoundary = mxBreakIterator->getWordBoundary(rTxt, i + 1, rLocale, ::com::sun::star::i18n::WordType::ANY_WORD, sal_True);
-                                    }
-                                    if(i == nNextSentenceBreak)
-                                    {
-                                        mpMetaFile->AddAction(new MetaCommentAction(aCommentStringC, i - nTextPosition));
-                                        nNextSentenceBreak = mxBreakIterator->endOfSentence(rTxt, i + 1, rLocale);
-                                    }
+                                    mpMetaFile->AddAction(new MetaCommentAction(aCommentStringA, i - nTextPosition));
+                                    nNextCellBreak = mxBreakIterator->nextCharacters(rTxt, i, rLocale, ::com::sun::star::i18n::CharacterIteratorMode::SKIPCELL, 1, nDone);
+                                }
+                                if(i == nNextWordBoundary.endPos)
+                                {
+                                    mpMetaFile->AddAction(new MetaCommentAction(aCommentStringB, i - nTextPosition));
+                                    nNextWordBoundary = mxBreakIterator->getWordBoundary(rTxt, i + 1, rLocale, ::com::sun::star::i18n::WordType::ANY_WORD, sal_True);
+                                }
+                                if(i == nNextSentenceBreak)
+                                {
+                                    mpMetaFile->AddAction(new MetaCommentAction(aCommentStringC, i - nTextPosition));
+                                    nNextSentenceBreak = mxBreakIterator->endOfSentence(rTxt, i + 1, rLocale);
                                 }
                             }
                         }

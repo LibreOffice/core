@@ -36,7 +36,7 @@
 #include <com/sun/star/i18n/WordType.hpp>
 #include <drawinglayer/primitive2d/texteffectprimitive2d.hxx>
 #include <drawinglayer/primitive2d/shadowprimitive2d.hxx>
-#include <com/sun/star/i18n/XBreakIterator.hpp>
+#include <com/sun/star/i18n/BreakIterator.hpp>
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
 #include <drawinglayer/primitive2d/textlineprimitive2d.hxx>
 #include <drawinglayer/primitive2d/textstrikeoutprimitive2d.hxx>
@@ -206,11 +206,11 @@ namespace drawinglayer
 
             if(!xLocalBreakIterator.is())
             {
-                ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xMSF(::comphelper::getProcessServiceFactory());
-                xLocalBreakIterator.set(xMSF->createInstance("com.sun.star.i18n.BreakIterator"), ::com::sun::star::uno::UNO_QUERY);
+                ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > xContext(::comphelper::getProcessComponentContext());
+                xLocalBreakIterator = com::sun::star::i18n::BreakIterator::create(xContext);
             }
 
-            if(xLocalBreakIterator.is() && getTextLength())
+            if( getTextLength() )
             {
                 // init word iterator, get first word and truncate to possibilities
                 ::com::sun::star::i18n::Boundary aNextWordBoundary(xLocalBreakIterator->getWordBoundary(

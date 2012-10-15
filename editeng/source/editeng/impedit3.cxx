@@ -70,6 +70,7 @@
 #include <set>
 #include <math.h>
 #include <vcl/metric.hxx>
+#include <com/sun/star/i18n/BreakIterator.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <com/sun/star/text/CharacterCompressionType.hpp>
 #include <vcl/pdfextoutdevdata.hxx>
@@ -4318,8 +4319,8 @@ Reference < i18n::XBreakIterator > ImpEditEngine::ImplGetBreakIterator() const
 {
     if ( !xBI.is() )
     {
-        Reference< lang::XMultiServiceFactory > xMSF( ::comphelper::getProcessServiceFactory() );
-        xBI.set( xMSF->createInstance( OUString( "com.sun.star.i18n.BreakIterator" ) ), UNO_QUERY );
+        Reference< uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
+        xBI = i18n::BreakIterator::create( xContext );
     }
     return xBI;
 }

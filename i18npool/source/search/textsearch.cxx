@@ -33,6 +33,7 @@
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <comphelper/processfactory.hxx>
+#include <com/sun/star/i18n/BreakIterator.hpp>
 #include <com/sun/star/i18n/UnicodeType.hpp>
 #include <com/sun/star/util/SearchFlags.hpp>
 #include <com/sun/star/i18n/WordType.hpp>
@@ -150,12 +151,7 @@ void TextSearch::setOptions( const SearchOptions& rOptions ) throw( RuntimeExcep
 
     if ( !xBreak.is() )
     {
-        Reference < XInterface > xI = xMSF->createInstance(
-                OUString("com.sun.star.i18n.BreakIterator"));
-        if( xI.is() )
-            xI->queryInterface( ::getCppuType(
-                        (const Reference< XBreakIterator >*)0))
-                >>= xBreak;
+        xBreak = BreakIterator::create(comphelper::getComponentContext(xMSF));
     }
 
     sSrchStr = aSrchPara.searchString;

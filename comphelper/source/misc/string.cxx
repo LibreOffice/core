@@ -34,6 +34,7 @@
 #include <comphelper/stlunosequence.hxx>
 #include <comphelper/stl_types.hxx>
 
+#include <com/sun/star/i18n/BreakIterator.hpp>
 #include <com/sun/star/i18n/CharType.hpp>
 
 
@@ -349,9 +350,7 @@ NaturalStringSorter::NaturalStringSorter(
         rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.i18n.Collator")), rContext),
             uno::UNO_QUERY_THROW);
     m_xCollator->loadDefaultCollator(m_aLocale, 0);
-    m_xBI = uno::Reference< i18n::XBreakIterator >(xFactory->createInstanceWithContext(
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.i18n.BreakIterator")), rContext),
-            uno::UNO_QUERY_THROW);
+    m_xBI = i18n::BreakIterator::create( rContext );
 }
 
 namespace

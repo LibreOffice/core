@@ -46,7 +46,7 @@
 #include <osl/mutex.hxx>
 
 
-#include <com/sun/star/i18n/XBreakIterator.hpp>
+#include <com/sun/star/i18n/BreakIterator.hpp>
 #include <com/sun/star/i18n/CharacterIteratorMode.hpp>
 #include <com/sun/star/i18n/WordType.hpp>
 #include <cppuhelper/weak.hxx>
@@ -857,18 +857,8 @@ uno::Reference < i18n::XBreakIterator > Edit::ImplGetBreakIterator() const
     //!! since we don't want to become incompatible in the next minor update
     //!! where this code will get integrated into, xISC will be a local
     //!! variable instead of a class member!
-    uno::Reference < i18n::XBreakIterator > xBI;
-//    if ( !xBI.is() )
-    {
-        uno::Reference< lang::XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
-        uno::Reference < XInterface > xI = xMSF->createInstance( OUString("com.sun.star.i18n.BreakIterator") );
-        if ( xI.is() )
-        {
-            Any x = xI->queryInterface( ::getCppuType((const uno::Reference< i18n::XBreakIterator >*)0) );
-            x >>= xBI;
-        }
-    }
-    return xBI;
+    uno::Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+    return i18n::BreakIterator::create(xContext);
 }
 // -----------------------------------------------------------------------
 

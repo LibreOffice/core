@@ -42,7 +42,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <comphelper/processfactory.hxx>
 
-#include <com/sun/star/i18n/XBreakIterator.hpp>
+#include <com/sun/star/i18n/BreakIterator.hpp>
 #include <com/sun/star/i18n/XCharacterClassification.hpp>
 #include <com/sun/star/awt/XExtendedToolkit.hpp>
 #include <com/sun/star/accessibility/AccessibleEventObject.hpp>
@@ -136,18 +136,8 @@ uno::Reference< lang::XMultiServiceFactory > vcl::unohelper::GetMultiServiceFact
 
 uno::Reference < i18n::XBreakIterator > vcl::unohelper::CreateBreakIterator()
 {
-    uno::Reference < i18n::XBreakIterator > xB;
-    uno::Reference< lang::XMultiServiceFactory > xMSF = GetMultiServiceFactory();
-    if ( xMSF.is() )
-    {
-        uno::Reference < uno::XInterface > xI = xMSF->createInstance( ::rtl::OUString("com.sun.star.i18n.BreakIterator") );
-        if ( xI.is() )
-        {
-            uno::Any x = xI->queryInterface( ::getCppuType((const uno::Reference< i18n::XBreakIterator >*)0) );
-            x >>= xB;
-        }
-    }
-    return xB;
+    uno::Reference< uno::XComponentContext > xContext = comphelper::getComponentContext(GetMultiServiceFactory());
+    return i18n::BreakIterator::create(xContext);
 }
 
 uno::Reference < i18n::XCharacterClassification > vcl::unohelper::CreateCharacterClassification()

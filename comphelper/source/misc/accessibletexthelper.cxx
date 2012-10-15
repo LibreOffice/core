@@ -19,6 +19,7 @@
 
 #include <comphelper/accessibletexthelper.hxx>
 #include <com/sun/star/accessibility/AccessibleTextType.hpp>
+#include <com/sun/star/i18n/BreakIterator.hpp>
 #include <com/sun/star/i18n/CharacterIteratorMode.hpp>
 #include <com/sun/star/i18n/WordType.hpp>
 #include <com/sun/star/i18n/KCharacterType.hpp>
@@ -58,12 +59,8 @@ namespace comphelper
     {
         if ( !m_xBreakIter.is() )
         {
-            Reference< lang::XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
-            if ( xMSF.is() )
-            {
-                m_xBreakIter = Reference< i18n::XBreakIterator >
-                    ( xMSF->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.i18n.BreakIterator" ) ) ), UNO_QUERY );
-            }
+            Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+            m_xBreakIter = i18n::BreakIterator::create(xContext);
         }
 
         return m_xBreakIter;

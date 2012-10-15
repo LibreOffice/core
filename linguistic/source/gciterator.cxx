@@ -23,7 +23,7 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/container/XNameReplace.hpp>
-#include <com/sun/star/i18n/XBreakIterator.hpp>
+#include <com/sun/star/i18n/BreakIterator.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -749,13 +749,13 @@ sal_Int32 GrammarCheckingIterator::GetSuggestedEndOfSentence(
 {
     // internal method; will always be called with locked mutex
 
+    // FIXME! this is a bug, the xBreakIterator var is hiding an issue!
+    // But if I fix it, the sw/complex tests start failing.
     uno::Reference< i18n::XBreakIterator > xBreakIterator;
     if (!m_xBreakIterator.is())
     {
-        uno::Reference< lang::XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
-        if ( xMSF.is() )
-            xBreakIterator = uno::Reference < i18n::XBreakIterator >( xMSF->createInstance(
-                "com.sun.star.i18n.BreakIterator" ), uno::UNO_QUERY );
+        uno::Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+        xBreakIterator = i18n::BreakIterator::create(xContext);
     }
     sal_Int32 nTextLen = rText.getLength();
     sal_Int32 nEndPosition = nTextLen;

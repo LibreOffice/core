@@ -56,6 +56,7 @@
 #include <numeric>
 #include <algorithm>
 #include <comphelper/processfactory.hxx>
+#include <com/sun/star/i18n/BreakIterator.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -833,19 +834,14 @@ SdrObject* CreateSdrObjectFromParagraphOutlines( const FWData& rFWData, const Sd
     return pRet;
 }
 
-::com::sun::star::uno::Reference < ::com::sun::star::i18n::XBreakIterator > EnhancedCustomShapeFontWork::mxBreakIterator = 0;
+Reference < i18n::XBreakIterator > EnhancedCustomShapeFontWork::mxBreakIterator = 0;
 
 Reference < i18n::XBreakIterator > EnhancedCustomShapeFontWork::GetBreakIterator()
 {
     if ( !mxBreakIterator.is() )
     {
-        Reference< lang::XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
-        Reference < XInterface > xI = xMSF->createInstance( rtl::OUString("com.sun.star.i18n.BreakIterator") );
-        if ( xI.is() )
-        {
-            Any x = xI->queryInterface( ::getCppuType((const Reference< i18n::XBreakIterator >*)0) );
-            x >>= mxBreakIterator;
-        }
+        Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+        mxBreakIterator = i18n::BreakIterator::create(xContext);
     }
     return mxBreakIterator;
 }

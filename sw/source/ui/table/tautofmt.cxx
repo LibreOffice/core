@@ -32,7 +32,7 @@
 #include <vcl/svapp.hxx>
 #include <svl/zforlist.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/i18n/XBreakIterator.hpp>
+#include <com/sun/star/i18n/BreakIterator.hpp>
 #include <comphelper/processfactory.hxx>
 #include <svtools/scriptedtext.hxx>
 #include <svtools/accessibilityoptions.hxx>
@@ -559,10 +559,7 @@ AutoFmtPreview::AutoFmtPreview(Window* pParent) :
     OSL_ENSURE( m_xMSF.is(), "AutoFmtPreview: no MultiServiceFactory");
     if ( m_xMSF.is() )
     {
-        m_xBreak = uno::Reference< i18n::XBreakIterator >(
-            m_xMSF->createInstance (
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.i18n.BreakIterator")) ),
-            uno::UNO_QUERY);
+        m_xBreak = i18n::BreakIterator::create(comphelper::getComponentContext(m_xMSF));
     }
     pNumFmt = new SvNumberFormatter( m_xMSF, LANGUAGE_SYSTEM );
 
