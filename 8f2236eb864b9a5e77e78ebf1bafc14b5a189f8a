@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAP3///8E\u003d",
+        "filename": "filter/source/graphicfilter/idxf/dxftblrd.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 240,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2012-10-15T13:31:13Z",
+      "side": 1,
+      "message": "For readability I\u0027d prefer if these cases were not reordered by switch value. The previous order was more logical in the sense that it grouped the properties in x/y axes.",
+      "revId": "8f2236eb864b9a5e77e78ebf1bafc14b5a189f8a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
