@@ -187,13 +187,13 @@ bool SunVersion::init(const char *szVersion)
 #if defined(FREEBSD)
       if (m_preRelease == Rel_FreeBSD)
       {
-          pCur++; //elemnate `p'
+          pCur++; //eliminate 'p'
           if (pCur < pEnd && isdigit(*pCur))
               pCur ++;
-          int len = pCur - pLast -1; //elemenate `p'
+          int len = pCur - pLast -1; //eliminate 'p'
           if (len >= 127)
               return false;
-          strncpy(buf, (pLast+1), len); //elemenate `p'
+          strncpy(buf, (pLast+1), len); //eliminate 'p'
           buf[len] = 0;
           m_nUpdateSpecial = atoi(buf)+100; //hack for FBSD #i56953#
           return true;
