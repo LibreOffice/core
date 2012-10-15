@@ -65,10 +65,8 @@
     if(!nResID)
         return rtl::OUString();
 
-    XubString aStr(ImpGetResStr(nResID));
-    XubString aName(rObjectName);
-    aStr.SearchAndReplaceAscii("%1", aName);
-    return rtl::OUString(aStr);
+    OUString aStr(ImpGetResStr(nResID));
+    return aStr.replaceAll("%1", rObjectName);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
