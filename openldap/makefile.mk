@@ -39,7 +39,7 @@ CONFIGURE_ACTION=.$/configure
 CONFIGURE_FLAGS=--disable-slapd --with-pic --with-tls=moznss --without-cyrus-sasl --disable-shared --enable-static
 
 .IF "$(CROSS_COMPILING)"=="YES"
-CONFIGURE_FLAGS+=--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM) --with-yielding_select=yes
+CONFIGURE_FLAGS+=--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM) --with-yielding_select=yes ac_cv_func_memcmp_working=yes
 .ENDIF
 
 .IF "$(SYSTEM_NSS)" == "YES"
