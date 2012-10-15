@@ -89,7 +89,8 @@ public:
     DomainMapper(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext,
                                 ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > xInputStream,
                                 ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > xModel,
-                                SourceDocumentType eDocumentType );
+                                SourceDocumentType eDocumentType,
+                                bool bIsNewDoc = true);
     virtual ~DomainMapper();
 
     // Stream

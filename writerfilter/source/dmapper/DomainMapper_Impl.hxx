@@ -369,12 +369,15 @@ private:
                                                                 throw(::com::sun::star::uno::Exception);
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >       GetDocumentSettings();
 
+    bool m_bIsNewDoc;
+
 public:
     DomainMapper_Impl(
             DomainMapper& rDMapper,
             uno::Reference < uno::XComponentContext >  xContext,
             uno::Reference< lang::XComponent >  xModel,
-            SourceDocumentType eDocumentType );
+            SourceDocumentType eDocumentType,
+            bool bIsNewDoc );
     DomainMapper_Impl();
     virtual ~DomainMapper_Impl();
 
@@ -625,6 +628,8 @@ public:
     SectionPropertyMap * GetSectionContext();
     /// If the current paragraph has a numbering style associated, this method returns its character style
     com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> GetCurrentNumberingCharStyle();
+    /// If we're importing into a new document, or just pasting to an existing one.
+    bool IsNewDoc();
 };
 } //namespace dmapper
 } //namespace writerfilter
