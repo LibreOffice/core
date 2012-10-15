@@ -1,3 +1,2 @@
 vsd	libvisio	: libwpd libwpg BOOST:boost soltools NULL
-vsd	libvisio	usr1	-	all	vsd_mkout NULL
-vsd	libvisio	nmake	-	all	vsd_libvisio NULL
+vsd	libvisio\prj	nmake	-	all	vsd_libvisio NULL

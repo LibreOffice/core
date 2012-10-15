@@ -1,3 +1,2 @@
 vi      vigra : solenv NULL
-vi      vigra           usr1    -       all     vi_mkout NULL
-vi      vigra           nmake   -       all     vi_vigra NULL
+vi      vigra\prj           nmake   -       all     vi_vigra NULL

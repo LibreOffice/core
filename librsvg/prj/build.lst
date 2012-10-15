@@ -1,3 +1,2 @@
 rg	librsvg	: LIBXML2:libxml2 PANGO:pango LIBCROCO:libcroco LIBGSF:libgsf CAIRO:cairo GDK_PIXBUF:gdk-pixbuf GLIB:glib GETTEXT:gettext soltools NULL
-rg	librsvg			    usr1	-	all	rg_mkout NULL
-rg	librsvg			    nmake	-	all	rg_librsvg NULL
+rg	librsvg\prj			    nmake	-	all	rg_librsvg NULL

@@ -1,3 +1,2 @@
 orcus	liborcus	: solenv BOOST:boost mdds NULL
-orcus	liborcus	usr1	-	all	orcus_mkout NULL
-orcus	liborcus	nmake	-	all	orcus_liborcus NULL
+orcus	liborcus\prj	nmake	-	all	orcus_liborcus NULL
