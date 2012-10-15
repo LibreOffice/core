@@ -217,8 +217,6 @@ class GtkSalFrame : public SalFrame
     friend void on_registrar_available (GDBusConnection*, const gchar*, const gchar*, gpointer);
     friend void on_registrar_unavailable (GDBusConnection*, const gchar*, gpointer);
     guint                           m_nWatcherId;
-    guint                           m_nMenuExportId;
-    guint                           m_nActionGroupExportId;
 
     void Init( SalFrame* pParent, sal_uLong nStyle );
     void Init( SystemParentData* pSysData );
@@ -302,6 +300,9 @@ public:
 #endif
     GtkSalFrame( SalFrame* pParent, sal_uLong nStyle );
     GtkSalFrame( SystemParentData* pSysData );
+
+    guint                           m_nMenuExportId;
+    guint                           m_nActionGroupExportId;
 
     // dispatches an event, returns true if dispatched
     // and false else; if true was returned the event should

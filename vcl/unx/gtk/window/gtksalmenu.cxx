@@ -244,9 +244,9 @@ void RemoveUnusedCommands( GLOActionGroup* pActionGroup, GList* pOldCommandList,
 void GtkSalMenu::UpdateNativeMenu()
 {
     SolarMutexGuard aGuard;
+
     if( !PrepUpdate() )
         return;
-
 
     Menu* pVCLMenu = mpVCLMenu;
     GLOMenu* pLOMenu = G_LO_MENU( mpMenuModel );
@@ -431,7 +431,7 @@ void GtkSalMenu::RemoveItem( unsigned nPos )
     maItems.erase( maItems.begin() + nPos );
 }
 
-void GtkSalMenu::SetSubMenu( SalMenuItem* pSalMenuItem, SalMenu* pSubMenu, unsigned nPos )
+void GtkSalMenu::SetSubMenu( SalMenuItem* pSalMenuItem, SalMenu* pSubMenu, unsigned )
 {
     SolarMutexGuard aGuard;
     GtkSalMenuItem *pItem = static_cast< GtkSalMenuItem* >( pSalMenuItem );
@@ -455,23 +455,11 @@ void GtkSalMenu::SetFrame( const SalFrame* pFrame )
     // if we had a menu on the GtkSalMenu we have to free it as we generate a
     // full menu anyway and we might need to reuse an existing model and
     // actiongroup
-//    if(mpMenuModel)
-//    {
-//        g_object_unref(G_OBJECT(mpMenuModel));
-//        mpMenuModel = NULL;
-//    }
-
-//    if(mpActionGroup)
-//    {
-//        g_object_unref(G_OBJECT(mpActionGroup));
-//        mpActionGroup = NULL;
-//    }
     pFrameNonConst->SetMenu( this );
     mpFrame = static_cast< const GtkSalFrame* >( pFrame );
-    pFrameNonConst->EnsureAppMenuWatch();
 
     // Clean menu model and action group if needed.
-    GObject* pWindow = G_OBJECT( gtk_widget_get_window( GTK_WIDGET( pFrameNonConst->getWindow() ) ) );
+    GObject* pWindow = G_OBJECT( pFrameNonConst->getWindow() );
     GLOMenu* pMenuModel = G_LO_MENU( g_object_get_data( pWindow, "g-lo-menubar" ) );
     GLOActionGroup* pActionGroup = G_LO_ACTION_GROUP( g_object_get_data( pWindow, "g-lo-action-group" ) );
 
@@ -480,7 +468,6 @@ void GtkSalMenu::SetFrame( const SalFrame* pFrame )
 
     if ( pActionGroup )
         g_lo_action_group_clear( pActionGroup );
-
 
     // Generate the main menu structure.
     UpdateNativeMenu();

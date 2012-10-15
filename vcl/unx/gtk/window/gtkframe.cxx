@@ -512,15 +512,18 @@ static void ObjectDestroyedNotify( gpointer data )
     }
 }
 
-void ensure_dbus_setup( GdkWindow* gdkWindow, GtkSalFrame* pSalFrame )
+gboolean ensure_dbus_setup( gpointer data )
 {
+    GtkSalFrame* pSalFrame = reinterpret_cast< GtkSalFrame* >( data );
+    GdkWindow* gdkWindow = gtk_widget_get_window( pSalFrame->getWindow() );
+
     if ( gdkWindow != NULL && g_object_get_data( G_OBJECT( gdkWindow ), "g-lo-menubar" ) == NULL )
     {
         // Get a DBus session connection.
         if(!pSessionBus)
             pSessionBus = g_bus_get_sync (G_BUS_TYPE_SESSION, NULL, NULL);
-        if( pSessionBus == NULL )
-            return;
+        if( !pSessionBus )
+            return FALSE;
 
         // Create menu model and action group attached to this frame.
         GMenuModel* pMenuModel = G_MENU_MODEL( g_lo_menu_new() );
@@ -532,11 +535,6 @@ void ensure_dbus_setup( GdkWindow* gdkWindow, GtkSalFrame* pSalFrame )
         gchar* aDBusWindowPath = g_strdup_printf( "/window/%lu", windowId );
         gchar* aDBusMenubarPath = g_strdup_printf( "/window/%lu/menus/menubar", windowId );
 
-        // Publish the menu model and the action group.
-        SAL_INFO("vcl.unity", "exporting menu model at " << pMenuModel << " for window " << windowId);
-        pSalFrame->m_nMenuExportId = g_dbus_connection_export_menu_model (pSessionBus, aDBusMenubarPath, pMenuModel, NULL);
-        pSalFrame->m_nActionGroupExportId = g_dbus_connection_export_action_group( pSessionBus, aDBusPath, pActionGroup, NULL);
-
         // Set window properties.
         g_object_set_data_full( G_OBJECT(gdkWindow), "g-lo-menubar", pMenuModel, ObjectDestroyedNotify);
         g_object_set_data_full( G_OBJECT(gdkWindow), "g-lo-action-group", pActionGroup, ObjectDestroyedNotify);
@@ -546,10 +544,17 @@ void ensure_dbus_setup( GdkWindow* gdkWindow, GtkSalFrame* pSalFrame )
         gdk_x11_window_set_utf8_property ( gdkWindow, "_GTK_WINDOW_OBJECT_PATH", aDBusWindowPath );
         gdk_x11_window_set_utf8_property ( gdkWindow, "_GTK_MENUBAR_OBJECT_PATH", aDBusMenubarPath );
 
+        // Publish the menu model and the action group.
+        SAL_INFO("vcl.unity", "exporting menu model at " << pMenuModel << " for window " << windowId);
+        pSalFrame->m_nMenuExportId = g_dbus_connection_export_menu_model (pSessionBus, aDBusMenubarPath, pMenuModel, NULL);
+        pSalFrame->m_nActionGroupExportId = g_dbus_connection_export_action_group( pSessionBus, aDBusPath, pActionGroup, NULL);
+
         g_free( aDBusPath );
         g_free( aDBusWindowPath );
         g_free( aDBusMenubarPath );
     }
+
+    return FALSE;
 }
     
 void on_registrar_available( GDBusConnection * /*connection*/,
@@ -560,9 +565,6 @@ void on_registrar_available( GDBusConnection * /*connection*/,
     SolarMutexGuard aGuard;
 
     GtkSalFrame* pSalFrame = reinterpret_cast< GtkSalFrame* >( user_data );
-    GdkWindow* gdkWindow = gtk_widget_get_window( pSalFrame->getWindow() );
-
-    ensure_dbus_setup(gdkWindow, pSalFrame);
 
     SalMenu* pSalMenu = pSalFrame->GetMenu();
 
@@ -597,32 +599,28 @@ void on_registrar_unavailable( GDBusConnection * /*connection*/,
 
 void GtkSalFrame::EnsureAppMenuWatch()
 {
-    SolarMutexGuard aGuard;
-
-    if ( m_nWatcherId )
-        //g_bus_unwatch_name( m_nWatcherId );
-        return;
-
-
-    // Get a DBus session connection.
-    if ( pSessionBus == NULL )
+    if ( !m_nWatcherId )
     {
-        pSessionBus = g_bus_get_sync( G_BUS_TYPE_SESSION, NULL, NULL );
-
+        // Get a DBus session connection.
         if ( pSessionBus == NULL )
-            return;
+        {
+            pSessionBus = g_bus_get_sync( G_BUS_TYPE_SESSION, NULL, NULL );
+
+            if ( pSessionBus == NULL )
+                return;
+        }
+
+        // Publish the menu only if AppMenu registrar is available.
+        m_nWatcherId = g_bus_watch_name_on_connection( pSessionBus,
+                                                       "com.canonical.AppMenu.Registrar",
+                                                       G_BUS_NAME_WATCHER_FLAGS_NONE,
+                                                       on_registrar_available,
+                                                       on_registrar_unavailable,
+                                                       static_cast<GtkSalFrame*>(this),
+                                                       NULL );
     }
 
-    // Publish the menu only if AppMenu registrar is available.
-    m_nWatcherId = g_bus_watch_name_on_connection( pSessionBus,
-                                                   "com.canonical.AppMenu.Registrar",
-                                                   G_BUS_NAME_WATCHER_FLAGS_NONE,
-                                                   on_registrar_available,
-                                                   on_registrar_unavailable,
-                                                   static_cast<GtkSalFrame*>(this),
-                                                   NULL );
-
-    ensure_dbus_setup( gtk_widget_get_window(GTK_WIDGET(m_pWindow)), static_cast<GtkSalFrame*>(this) );
+    ensure_dbus_setup( this );
 }
 
 GtkSalFrame::~GtkSalFrame()
@@ -1120,6 +1118,10 @@ void GtkSalFrame::Init( SalFrame* pParent, sal_uLong nStyle )
 #if !GTK_CHECK_VERSION(3,0,0)
     if( eWinType == GTK_WINDOW_TOPLEVEL )
     {
+        // Enable DBus native menu if available.
+//        ensure_dbus_setup( this );
+        EnsureAppMenuWatch();
+
         guint32 nUserTime = 0;
         if( (nStyle & (SAL_FRAME_STYLE_OWNERDRAWDECORATION|SAL_FRAME_STYLE_TOOLWINDOW)) == 0 )
         {
