@@ -39,7 +39,7 @@
 #include <com/sun/star/ucb/ContentInfo.hpp>
 #include <com/sun/star/ucb/ContentInfoAttribute.hpp>
 #include <com/sun/star/beans/Property.hpp>
-#include <com/sun/star/packages/manifest/XManifestWriter.hpp>
+#include <com/sun/star/packages/manifest/ManifestWriter.hpp>
 #include <com/sun/star/packages/manifest/ManifestReader.hpp>
 #include <com/sun/star/ucb/InteractiveIOException.hpp>
 
@@ -2366,9 +2366,8 @@ sal_Int16 UCBStorage_Impl::Commit()
 
                             // create a manifest writer object that will fill the stream
                             Reference < ::com::sun::star::packages::manifest::XManifestWriter > xWriter =
-                                Reference< ::com::sun::star::packages::manifest::XManifestWriter >
-                                    ( ::comphelper::getProcessServiceFactory()->createInstance(
-                                        ::rtl::OUString("com.sun.star.packages.manifest.ManifestWriter")), UNO_QUERY) ;
+                                ::com::sun::star::packages::manifest::ManifestWriter::create(
+                                    ::comphelper::getProcessComponentContext() );
                             sal_Int32 nCount = GetObjectCount() + 1;
                             Sequence < Sequence < PropertyValue > > aProps( nCount );
                             sal_Int32 nProps = 0;

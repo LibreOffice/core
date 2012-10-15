@@ -30,7 +30,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/packages/zip/ZipConstants.hpp>
 #include <com/sun/star/packages/manifest/ManifestReader.hpp>
-#include <com/sun/star/packages/manifest/XManifestWriter.hpp>
+#include <com/sun/star/packages/manifest/ManifestWriter.hpp>
 #include <com/sun/star/io/TempFile.hpp>
 #include <com/sun/star/io/XStream.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
@@ -1012,48 +1012,35 @@ void ZipPackage::WriteMimetypeMagicFile( ZipOutputStream& aZipOut )
 void ZipPackage::WriteManifest( ZipOutputStream& aZipOut, const vector< uno::Sequence < PropertyValue > >& aManList )
 {
     // Write the manifest
-    uno::Reference < XOutputStream > xManOutStream;
-    uno::Reference < XManifestWriter > xWriter ( m_xFactory->createInstance("com.sun.star.packages.manifest.ManifestWriter"), UNO_QUERY );
-    if ( xWriter.is() )
+    uno::Reference < XManifestWriter > xWriter = ManifestWriter::create( comphelper::getComponentContext(m_xFactory) );
+    ZipEntry * pEntry = new ZipEntry;
+    ZipPackageBuffer *pBuffer = new ZipPackageBuffer( n_ConstBufferSize );
+    uno::Reference < XOutputStream > xManOutStream( *pBuffer, UNO_QUERY );
+
+    pEntry->sPath = "META-INF/manifest.xml";
+    pEntry->nMethod = DEFLATED;
+    pEntry->nCrc = -1;
+    pEntry->nSize = pEntry->nCompressedSize = -1;
+    pEntry->nTime = ZipOutputStream::getCurrentDosTime();
+
+    // Convert vector into a uno::Sequence
+    uno::Sequence < uno::Sequence < PropertyValue > > aManifestSequence ( aManList.size() );
+    sal_Int32 nInd = 0;
+    for ( vector < uno::Sequence < PropertyValue > >::const_iterator aIter = aManList.begin(), aEnd = aManList.end();
+         aIter != aEnd;
+         ++aIter, ++nInd )
     {
-        ZipEntry * pEntry = new ZipEntry;
-        ZipPackageBuffer *pBuffer = new ZipPackageBuffer( n_ConstBufferSize );
-        xManOutStream = uno::Reference < XOutputStream > ( *pBuffer, UNO_QUERY );
-
-        pEntry->sPath = "META-INF/manifest.xml";
-        pEntry->nMethod = DEFLATED;
-        pEntry->nCrc = -1;
-        pEntry->nSize = pEntry->nCompressedSize = -1;
-        pEntry->nTime = ZipOutputStream::getCurrentDosTime();
-
-        // Convert vector into a uno::Sequence
-        uno::Sequence < uno::Sequence < PropertyValue > > aManifestSequence ( aManList.size() );
-        sal_Int32 nInd = 0;
-        for ( vector < uno::Sequence < PropertyValue > >::const_iterator aIter = aManList.begin(), aEnd = aManList.end();
-             aIter != aEnd;
-             ++aIter, ++nInd )
-        {
-            aManifestSequence[nInd] = ( *aIter );
-        }
-        xWriter->writeManifestSequence ( xManOutStream,  aManifestSequence );
-
-        sal_Int32 nBufferLength = static_cast < sal_Int32 > ( pBuffer->getPosition() );
-        pBuffer->realloc( nBufferLength );
-
-        // the manifest.xml is never encrypted - so pass an empty reference
-        aZipOut.putNextEntry( *pEntry, NULL );
-        aZipOut.write( pBuffer->getSequence(), 0, nBufferLength );
-        aZipOut.closeEntry();
+        aManifestSequence[nInd] = ( *aIter );
     }
-    else
-    {
-                OSL_FAIL( "Couldn't get a ManifestWriter!" );
-        IOException aException;
-        throw WrappedTargetException(
-                OSL_LOG_PREFIX "Couldn't get a ManifestWriter!",
-                static_cast < OWeakObject * > ( this ),
-                makeAny( aException ) );
-    }
+    xWriter->writeManifestSequence ( xManOutStream,  aManifestSequence );
+
+    sal_Int32 nBufferLength = static_cast < sal_Int32 > ( pBuffer->getPosition() );
+    pBuffer->realloc( nBufferLength );
+
+    // the manifest.xml is never encrypted - so pass an empty reference
+    aZipOut.putNextEntry( *pEntry, NULL );
+    aZipOut.write( pBuffer->getSequence(), 0, nBufferLength );
+    aZipOut.closeEntry();
 }
 
 //--------------------------------------------------------

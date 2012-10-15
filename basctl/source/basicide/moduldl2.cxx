@@ -56,7 +56,7 @@
 #include <com/sun/star/ucb/XSimpleFileAccess2.hpp>
 #include "com/sun/star/ucb/XCommandEnvironment.hpp"
 #include <com/sun/star/ucb/NameClash.hpp>
-#include "com/sun/star/packages/manifest/XManifestWriter.hpp"
+#include "com/sun/star/packages/manifest/ManifestWriter.hpp"
 #include <unotools/pathoptions.hxx>
 #include <comphelper/processfactory.hxx>
 
@@ -1355,9 +1355,8 @@ void LibPage::ExportAsPackage( const String& aLibName )
         manifest.push_back( attribs );
 
         // write into pipe:
-        Reference<packages::manifest::XManifestWriter> xManifestWriter( xMSF->createInstance
-            ( DEFINE_CONST_UNICODE("com.sun.star.packages.manifest.ManifestWriter") ), UNO_QUERY );
-        Reference<io::XOutputStream> xPipe( io::Pipe::create(comphelper::getComponentContext(xMSF)), UNO_QUERY_THROW );
+        Reference<packages::manifest::XManifestWriter> xManifestWriter = packages::manifest::ManifestWriter::create( xContext );
+        Reference<io::XOutputStream> xPipe( io::Pipe::create( xContext ), UNO_QUERY_THROW );
         xManifestWriter->writeManifestSequence(
             xPipe, Sequence< Sequence<beans::PropertyValue> >(
                 &manifest[ 0 ], manifest.size() ) );
@@ -1384,7 +1383,6 @@ void LibPage::ExportAsPackage( const String& aLibName )
 void LibPage::ExportAsBasic( const String& aLibName )
 {
     // Folder picker
-    Reference< lang::XMultiServiceFactory > xMSF( ::comphelper::getProcessServiceFactory() );
     Reference< uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
     Reference< XFolderPicker2 > xFolderPicker = FolderPicker::create(xContext);
     Reference< task::XInteractionHandler2 > xHandler( task::InteractionHandler::createWithParent(xContext, 0) );
