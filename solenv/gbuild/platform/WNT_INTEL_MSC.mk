@@ -449,6 +449,13 @@ gb_Library_DLLFILENAMES :=\
 	$(foreach lib,$(gb_Library_UNOVERLIBS),$(lib):$(lib)$(gb_Library_UNOVEREXT)) \
 	$(foreach lib,$(gb_Library_EXTENSIONLIBS),$(lib):$(lib)$(gb_Library_UNOEXT)) \
 
+# An assembly is a special kind of library for CLI
+define gb_Library_Assembly
+$(call gb_Library_Library,$(1))
+$(call gb_LinkTarget_get_target,$(call gb_Library_get_linktargetname,$(1))) : NATIVERES :=
+
+endef
+
 define gb_Library_Library_platform
 $(call gb_LinkTarget_set_dlltarget,$(2),$(3))
 

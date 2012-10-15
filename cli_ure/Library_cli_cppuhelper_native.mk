@@ -7,7 +7,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Library_Library,cli_cppuhelper_native))
+$(eval $(call gb_Library_Assembly,cli_cppuhelper_native))
 
 # When compiling for CLR, disable "warning C4339: use of undefined type detected
 # in CLR meta-data - use of this type may lead to a runtime exception":
