@@ -985,7 +985,7 @@ IMPL_LINK_NOARG(SwEditRegionDlg, ChangeDismissHdl)
             aTree.GetModel()->Remove( pRemove );
     }
 
-    if ( (pEntry=aTree.FirstSelected()) == 0 )
+    if ( aTree.FirstSelected() == 0 )
     {
         aConditionFT.   Enable(sal_False);
         aConditionED.   Enable(sal_False);
