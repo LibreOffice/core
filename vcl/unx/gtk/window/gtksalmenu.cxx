@@ -474,9 +474,12 @@ void GtkSalMenu::SetFrame( const SalFrame* pFrame )
     mpFrame = static_cast< const GtkSalFrame* >( pFrame );
 
     // Clean menu model and action group if needed.
-    GObject* pWindow = G_OBJECT( pFrameNonConst->getWindow() );
-    GLOMenu* pMenuModel = G_LO_MENU( g_object_get_data( pWindow, "g-lo-menubar" ) );
-    GLOActionGroup* pActionGroup = G_LO_ACTION_GROUP( g_object_get_data( pWindow, "g-lo-action-group" ) );
+//    GObject* pWindow = G_OBJECT( pFrameNonConst->getWindow() );
+    GtkWidget* pWidget = pFrameNonConst->getWindow();
+    GdkWindow* gdkWindow = gtk_widget_get_window( pWidget );
+
+    GLOMenu* pMenuModel = G_LO_MENU( g_object_get_data( G_OBJECT( gdkWindow ), "g-lo-menubar" ) );
+    GLOActionGroup* pActionGroup = G_LO_ACTION_GROUP( g_object_get_data( G_OBJECT( gdkWindow ), "g-lo-action-group" ) );
 
     if ( pMenuModel && g_menu_model_get_n_items( G_MENU_MODEL( pMenuModel ) ) > 0 )
         g_lo_menu_remove( pMenuModel, 0 );
