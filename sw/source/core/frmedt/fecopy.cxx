@@ -818,7 +818,7 @@ sal_Bool SwFEShell::Paste( SwDoc* pClpDoc, sal_Bool bIncludingPageFrames )
                 aIndexBefore--;
                 pClpDoc->CopyRange( rCopy, rInsPos, false );
                 {
-                    aIndexBefore++;
+                    ++aIndexBefore;
                     SwPaM aPaM(SwPosition(aIndexBefore),
                                SwPosition(rInsPos.nNode));
                     aPaM.GetDoc()->MakeUniqueNumRules(aPaM);
@@ -1050,7 +1050,7 @@ sal_Bool SwFEShell::Paste( SwDoc* pClpDoc, sal_Bool bIncludingPageFrames )
                 pClpDoc->CopyRange( aCpyPam, rInsPos, false );
 
                 {
-                    aIndexBefore++;
+                    ++aIndexBefore;
                     SwPaM aPaM(SwPosition(aIndexBefore),
                                SwPosition(rInsPos.nNode));
 

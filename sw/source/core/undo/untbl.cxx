@@ -653,7 +653,7 @@ void SwUndoTblToTxt::RedoImpl(::sw::UndoRedoContext & rContext)
 
     rDoc.TableToText( pTblNd, cTrenner );
 
-    aSaveIdx++;
+    ++aSaveIdx;
     SwCntntNode* pCNd = aSaveIdx.GetNode().GetCntntNode();
     if( !pCNd && 0 == ( pCNd = rDoc.GetNodes().GoNext( &aSaveIdx ) ) &&
         0 == ( pCNd = rDoc.GetNodes().GoPrevious( &aSaveIdx )) )
@@ -2097,8 +2097,8 @@ void SwUndoTblMerge::MoveBoxCntnt( SwDoc* pDoc, SwNodeRange& rRg, SwNodeIndex& r
     pDoc->MoveNodeRange( rRg, rPos, (pSaveTbl->IsNewModel()) ?
         IDocumentContentOperations::DOC_NO_DELFRMS :
         IDocumentContentOperations::DOC_MOVEDEFAULT );
-    aTmp++;
-    aTmp2++;
+    ++aTmp;
+    ++aTmp2;
     pUndo->SetDestRange( aTmp2, rPos, aTmp );
 
     pMoves->push_back( pUndo );

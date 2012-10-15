@@ -2004,7 +2004,7 @@ sal_Bool SwDoc::DeleteRowCol( const SwSelBoxes& rBoxes, bool bColumn )
 
         // kein Fly ?? also Kopf- oder Fusszeile: dann immer einen
         // TextNode ueberig lassen.
-        aIdx++;
+        ++aIdx;
         if (GetIDocumentUndoRedo().DoesUndo())
         {
             GetIDocumentUndoRedo().ClearRedo();

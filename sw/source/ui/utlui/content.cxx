@@ -607,7 +607,7 @@ void    SwContentType::FillMemberList(sal_Bool* pbLevelOrVisibilityChanged)
             IDocumentMarkAccess* const pMarkAccess = pWrtShell->getIDocumentMarkAccess();
             for(IDocumentMarkAccess::const_iterator_t ppBookmark = pMarkAccess->getBookmarksBegin();
                 ppBookmark != pMarkAccess->getBookmarksEnd();
-                ppBookmark++)
+                ++ppBookmark)
             {
                 if(lcl_IsUiVisibleBookmark(*ppBookmark))
                 {

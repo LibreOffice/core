@@ -88,7 +88,7 @@ namespace
                 if( ( rNode.IsSectionNode() && rNode.EndOfSectionIndex() >= nEnd )
                     || ( rNode.IsEndNode() && rNode.StartOfSectionNode()->GetIndex() < nStart ) )
                     ++rDelCount;
-                rLastIdx++;
+                ++rLastIdx;
             }
             while( rLastIdx.GetIndex() < nNewIdx );
         }
@@ -146,7 +146,7 @@ namespace
         mark_vector_t vMarksToCopy;
         for(IDocumentMarkAccess::const_iterator_t ppMark = pSrcMarkAccess->getMarksBegin();
             ppMark != pSrcMarkAccess->getMarksEnd();
-            ppMark++)
+            ++ppMark)
         {
             const ::sw::mark::IMark* const pMark = ppMark->get();
             const SwPosition& rMarkStart = pMark->GetMarkStart();
@@ -836,7 +836,7 @@ static bool lcl_ContainsOnlyParagraphsInList( const SwPaM& rPam )
 
         do
         {
-            aIdx++;
+            ++aIdx;
             pTxtNd = aIdx.GetNode().GetTxtNode();
 
             if ( !pTxtNd || !pTxtNd->IsInList() )
@@ -1090,7 +1090,7 @@ bool SwDoc::CopyImpl( SwPaM& rPam, SwPosition& rPos,
             // If we didn't split a textnode, the PaM should start at the inserted table node
             if( rPos.nContent.GetIndex() == pDestTxtNd->Len() )
             {    // Insertion at the last position of a textnode (empty or not)
-                aInsPos++; // The table will be inserted behind the text node
+                ++aInsPos; // The table will be inserted behind the text node
             }
             else if( rPos.nContent.GetIndex() )
             {   // Insertion in the middle of a text node, it has to be split
@@ -1232,7 +1232,7 @@ bool SwDoc::CopyImpl( SwPaM& rPam, SwPosition& rPos,
             {
                 SwNodeIndex aSaveIdx( aInsPos, -1 );
                 CopyWithFlyInFly( aRg, 0,aInsPos, bMakeNewFrms, sal_False );
-                aSaveIdx++;
+                ++aSaveIdx;
                 pEnd->nNode = aSaveIdx;
                 pEnd->nContent.Assign( aSaveIdx.GetNode().GetTxtNode(), 0 );
             }
@@ -1324,7 +1324,7 @@ void SwDoc::CopyWithFlyInFly( const SwNodeRange& rRg, const xub_StrLen nEndConte
     SwNodeIndex aSavePos( rInsPos, -1 );
     sal_Bool bEndIsEqualEndPos = rInsPos == rRg.aEnd;
     GetNodes()._CopyNodes( rRg, rInsPos, bMakeNewFrms, sal_True );
-    aSavePos++;
+    ++aSavePos;
     if( bEndIsEqualEndPos )
         ((SwNodeIndex&)rRg.aEnd) = aSavePos;
 

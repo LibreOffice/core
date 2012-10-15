@@ -132,7 +132,7 @@ void SwDoc::_UpdateCharts( const SwTable& rTbl, ViewShell& rVSh ) const
     SwNodeIndex aIdx( *GetNodes().GetEndOfAutotext().StartOfSectionNode(), 1 );
     while( 0 != (pStNd = aIdx.GetNode().GetStartNode()) )
     {
-        aIdx++;
+        ++aIdx;
         if( 0 != ( pONd = aIdx.GetNode().GetOLENode() ) &&
             aName.Equals( pONd->GetChartTblName() ) &&
             pONd->getLayoutFrm( rVSh.GetLayout() ) )
@@ -189,7 +189,7 @@ void SwDoc::SetTableName( SwFrmFmt& rTblFmt, const String &rNewName )
     SwNodeIndex aIdx( *GetNodes().GetEndOfAutotext().StartOfSectionNode(), 1 );
     while ( 0 != (pStNd = aIdx.GetNode().GetStartNode()) )
     {
-        aIdx++;
+        ++aIdx;
         SwOLENode *pNd = aIdx.GetNode().GetOLENode();
         if( pNd && aOldName == pNd->GetChartTblName() )
         {
@@ -236,7 +236,7 @@ void SwDoc::CreateChartInternalDataProviders( const SwTable *pTable )
         SwNodeIndex aIdx( *GetNodes().GetEndOfAutotext().StartOfSectionNode(), 1 );
         while (0 != (pStNd = aIdx.GetNode().GetStartNode()))
         {
-            aIdx++;
+            ++aIdx;
             if( 0 != ( pONd = aIdx.GetNode().GetOLENode() ) &&
                 aName.Equals( pONd->GetChartTblName() ) /* OLE node is chart? */ &&
                 0 != (pONd->getLayoutFrm( GetCurrentLayout() )) /* chart frame is not hidden */ )

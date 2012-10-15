@@ -156,7 +156,7 @@ SwInsertBookmarkDlg::SwInsertBookmarkDlg( Window *pParent, SwWrtShell &rS, SfxRe
     sal_uInt16 nId = 0;
     for( IDocumentMarkAccess::const_iterator_t ppBookmark = pMarkAccess->getBookmarksBegin();
         ppBookmark != pMarkAccess->getBookmarksEnd();
-        ppBookmark++)
+        ++ppBookmark)
     {
         if(IDocumentMarkAccess::BOOKMARK == IDocumentMarkAccess::GetType(**ppBookmark))
             aBookmarkBox.InsertEntry( SwBoxEntry( ppBookmark->get()->GetName(), nId++ ) );

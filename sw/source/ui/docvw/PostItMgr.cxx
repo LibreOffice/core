@@ -572,7 +572,7 @@ void SwPostItMgr::LayoutPostIts()
                     long                    mlPageBorder = 0;
                     long                    mlPageEnd = 0;
 
-                    for(SwSidebarItem_iterator i = mPages[n]->mList->begin(); i!= mPages[n]->mList->end(); i++)
+                    for(SwSidebarItem_iterator i = mPages[n]->mList->begin(); i!= mPages[n]->mList->end(); ++i)
                     {
                         SwSidebarItem* pItem = (*i);
                         SwSidebarWin* pPostIt = pItem->pPostIt;
@@ -680,7 +680,7 @@ void SwPostItMgr::LayoutPostIts()
                                            - enlarge all notes till GetNextBorder(), as we resized to average value before
                                            */
                         //lets hide the ones which overlap the page
-                        for(SwSidebarWin_iterator i = aVisiblePostItList.begin(); i!= aVisiblePostItList.end() ; i++)
+                        for(SwSidebarWin_iterator i = aVisiblePostItList.begin(); i!= aVisiblePostItList.end() ; ++i)
                         {
                             if (mPages[n]->lOffset != 0)
                                 (*i)->TranslateTopPosition(mPages[n]->lOffset);
@@ -717,7 +717,7 @@ void SwPostItMgr::LayoutPostIts()
                     }
                     else
                     {
-                        for(SwSidebarWin_iterator i = aVisiblePostItList.begin(); i!= aVisiblePostItList.end() ; i++)
+                        for(SwSidebarWin_iterator i = aVisiblePostItList.begin(); i!= aVisiblePostItList.end() ; ++i)
                                                                 (*i)->SetPosAndSize();
 
                                                         bool bOldScrollbar = mPages[n]->bScrollbar;
@@ -736,7 +736,7 @@ void SwPostItMgr::LayoutPostIts()
             if (!ShowNotes())
             {       // we do not want to see the notes anymore -> Options-Writer-View-Notes
                 bool bRepair = false;
-                for(SwSidebarItem_iterator i = mvPostItFlds.begin(); i!= mvPostItFlds.end() ; i++)
+                for(SwSidebarItem_iterator i = mvPostItFlds.begin(); i!= mvPostItFlds.end() ; ++i)
                 {
                     SwSidebarItem* pItem = (*i);
                     if ( !pItem->UseElement() )
@@ -801,7 +801,7 @@ void SwPostItMgr::Scroll(const long lScroll,const unsigned long aPage)
     const bool bOldUp = ArrowEnabled(KEY_PAGEUP,aPage);
     const bool bOldDown = ArrowEnabled(KEY_PAGEDOWN,aPage);
     const long aSidebarheight = mpEditWin->PixelToLogic(Size(0,GetSidebarScrollerHeight())).Height();
-    for(SwSidebarItem_iterator i = mPages[aPage-1]->mList->begin(); i!= mPages[aPage-1]->mList->end(); i++)
+    for(SwSidebarItem_iterator i = mPages[aPage-1]->mList->begin(); i!= mPages[aPage-1]->mList->end(); ++i)
     {
         SwSidebarWin* pPostIt = (*i)->pPostIt;
         // if this is an answer, we should take the normal position and not the real, slightly moved position
@@ -872,7 +872,7 @@ void SwPostItMgr::MakeVisible(const SwSidebarWin* pPostIt,long aPage )
         {
             if (mPages[n]->mList->size()>0)
             {
-                for(SwSidebarItem_iterator i = mPages[n]->mList->begin(); i!= mPages[n]->mList->end(); i++)
+                for(SwSidebarItem_iterator i = mPages[n]->mList->begin(); i!= mPages[n]->mList->end(); ++i)
                 {
                     if ((*i)->pPostIt==pPostIt)
                     {
@@ -950,12 +950,12 @@ bool SwPostItMgr::LayoutByPage(std::list<SwSidebarWin*> &aVisiblePostItList,cons
             bScrollbars = true;
             lTopBorder += GetSidebarScrollerHeight() + 10;
             lBottomBorder -= (GetSidebarScrollerHeight() + 10);
-                for(SwSidebarWin_iterator i = aVisiblePostItList.begin(); i!= aVisiblePostItList.end() ; i++)
+                for(SwSidebarWin_iterator i = aVisiblePostItList.begin(); i!= aVisiblePostItList.end() ; ++i)
                     (*i)->SetSize(Size((*i)->VirtualSize().getWidth(),(*i)->GetMinimumSizeWithMeta()));
         }
         else
         {
-            for(SwSidebarWin_iterator i = aVisiblePostItList.begin(); i!= aVisiblePostItList.end() ; i++)
+            for(SwSidebarWin_iterator i = aVisiblePostItList.begin(); i!= aVisiblePostItList.end() ; ++i)
             {
                 if ( (*i)->VirtualSize().getHeight() > lAverageHeight)
                     (*i)->SetSize(Size((*i)->VirtualSize().getWidth(),lAverageHeight));
@@ -973,7 +973,7 @@ bool SwPostItMgr::LayoutByPage(std::list<SwSidebarWin*> &aVisiblePostItList,cons
             loop++;
               bDone = true;
             lSpaceUsed = lTopBorder + GetSpaceBetween();
-            for(SwSidebarWin_iterator i = aVisiblePostItList.begin(); i!= aVisiblePostItList.end() ; i++)
+            for(SwSidebarWin_iterator i = aVisiblePostItList.begin(); i!= aVisiblePostItList.end() ; ++i)
             {
                 SwSidebarWin_iterator aNextPostIt = i;
                 ++aNextPostIt;
@@ -1199,7 +1199,7 @@ void SwPostItMgr::Delete()
 }
 void SwPostItMgr::Hide( const String& rAuthor )
 {
-    for(SwSidebarItem_iterator i = mvPostItFlds.begin(); i!= mvPostItFlds.end() ; i++)
+    for(SwSidebarItem_iterator i = mvPostItFlds.begin(); i!= mvPostItFlds.end() ; ++i)
     {
         if ( (*i)->pPostIt && ((*i)->pPostIt->GetAuthor() == rAuthor) )
         {
@@ -1213,7 +1213,7 @@ void SwPostItMgr::Hide( const String& rAuthor )
 
 void SwPostItMgr::Hide()
 {
-    for(SwSidebarItem_iterator i = mvPostItFlds.begin(); i!= mvPostItFlds.end() ; i++)
+    for(SwSidebarItem_iterator i = mvPostItFlds.begin(); i!= mvPostItFlds.end() ; ++i)
     {
         (*i)->bShow = false;
         (*i)->pPostIt->HideNote();
@@ -1223,7 +1223,7 @@ void SwPostItMgr::Hide()
 
 void SwPostItMgr::Show()
 {
-    for(SwSidebarItem_iterator i = mvPostItFlds.begin(); i!= mvPostItFlds.end() ; i++)
+    for(SwSidebarItem_iterator i = mvPostItFlds.begin(); i!= mvPostItFlds.end() ; ++i)
     {
         (*i)->bShow = true;
     }
@@ -1268,7 +1268,7 @@ SwSidebarWin* SwPostItMgr::GetNextPostIt( sal_uInt16 aDirection,
 {
     if (mvPostItFlds.size()>1)
     {
-        for(SwSidebarItem_iterator i = mvPostItFlds.begin(); i!= mvPostItFlds.end() ; i++)
+        for(SwSidebarItem_iterator i = mvPostItFlds.begin(); i!= mvPostItFlds.end() ; ++i)
         {
             if ( (*i)->pPostIt ==aPostIt)
             {
@@ -1283,7 +1283,7 @@ SwSidebarWin* SwPostItMgr::GetNextPostIt( sal_uInt16 aDirection,
                 }
                 else
                 {
-                    iNextPostIt++;
+                    ++iNextPostIt;
                     if ( iNextPostIt==mvPostItFlds.end() )
                     {
                         return NULL;
@@ -1305,12 +1305,12 @@ long SwPostItMgr::GetNextBorder()
 {
     for (unsigned long n=0;n<mPages.size();n++)
     {
-        for(SwSidebarItem_iterator b = mPages[n]->mList->begin(); b!= mPages[n]->mList->end(); b++)
+        for(SwSidebarItem_iterator b = mPages[n]->mList->begin(); b!= mPages[n]->mList->end(); ++b)
         {
             if ((*b)->pPostIt == mpActivePostIt)
             {
                 SwSidebarItem_iterator aNext = b;
-                aNext++;
+                ++aNext;
                 bool bFollow = (aNext == mPages[n]->mList->end()) ? false : (*aNext)->pPostIt->IsFollow();
                 if ( mPages[n]->bScrollbar || bFollow )
                 {
@@ -1498,7 +1498,7 @@ void SwPostItMgr::CorrectPositions()
 
    // find first valid note
    SwSidebarWin *pFirstPostIt = 0;
-   for(SwSidebarItem_iterator i = mvPostItFlds.begin(); i!= mvPostItFlds.end() ; i++)
+   for(SwSidebarItem_iterator i = mvPostItFlds.begin(); i!= mvPostItFlds.end() ; ++i)
    {
        pFirstPostIt = (*i)->pPostIt;
        if (pFirstPostIt)
@@ -1523,7 +1523,7 @@ void SwPostItMgr::CorrectPositions()
         long aAnchorPosY = 0;
         for (unsigned long n=0;n<mPages.size();n++)
         {
-            for(SwSidebarItem_iterator i = mPages[n]->mList->begin(); i!= mPages[n]->mList->end(); i++)
+            for(SwSidebarItem_iterator i = mPages[n]->mList->begin(); i!= mPages[n]->mList->end(); ++i)
             {
                 // check, if anchor overlay object exists.
                 if ( (*i)->bShow && (*i)->pPostIt && (*i)->pPostIt->Anchor() )

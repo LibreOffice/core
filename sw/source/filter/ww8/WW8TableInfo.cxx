@@ -366,7 +366,7 @@ WW8TableNodeInfo::~WW8TableNodeInfo()
         WW8TableNodeInfoInner::Pointer_t pInner = aIt->second;
         sResult += pInner->toString();
 
-        aIt++;
+        ++aIt;
     }
     sResult += dbg_out(*mpNode);
     sResult += "</tableNodeInfo>";

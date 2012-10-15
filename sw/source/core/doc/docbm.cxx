@@ -485,7 +485,7 @@ namespace sw { namespace mark
         bool isSortingNeeded = false;
         for(iterator_t ppMark = m_vMarks.begin();
             ppMark != m_vMarks.end();
-            ppMark++)
+            ++ppMark)
         {
             // is on position ??
             bool bChangedPos = false, bChangedOPos = false;
@@ -521,7 +521,7 @@ namespace sw { namespace mark
         bool isSortingNeeded = false;
         for(iterator_t ppMark = m_vMarks.begin();
             ppMark != m_vMarks.end();
-            ppMark++)
+            ++ppMark)
         {
             // is on position ??
             bool bChangedPos = false, bChangedOPos = false;
@@ -566,7 +566,7 @@ namespace sw { namespace mark
         // reassignment is performed after the move
         for(iterator_t ppMark = m_vMarks.begin();
             ppMark != m_vMarks.end();
-            ppMark++)
+            ++ppMark)
         {
             // navigator marks should not be moved
             // TODO: Check if this might make them invalid

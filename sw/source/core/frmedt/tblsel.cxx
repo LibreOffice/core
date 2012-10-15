@@ -1380,7 +1380,7 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
                 pDoc->GetIDocumentUndoRedo().DoUndo(bUndo);
             }
             SwNodeRange aRg( aSttNdIdx, aPam.GetPoint()->nNode );
-            rInsPosNd++;
+            ++rInsPosNd;
             if( pUndo )
                 pUndo->MoveBoxCntnt( pDoc, aRg, rInsPosNd );
             else

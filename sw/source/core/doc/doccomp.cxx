@@ -1030,7 +1030,7 @@ sal_uLong SwCompareLine::GetHashValue() const
             {
                 if( aIdx.GetNode().IsTxtNode() )
                     nRet = GetTxtNodeHashValue( (SwTxtNode&)aIdx.GetNode(), nRet );
-                aIdx++;
+                ++aIdx;
             }
         }
         break;
@@ -1094,7 +1094,7 @@ namespace
                 }
                 sRet.Append( aIdx.GetNode().GetTxtNode()->GetExpandTxt() );
             }
-            aIdx++;
+            ++aIdx;
         }
         return sRet;
     }
@@ -1566,7 +1566,7 @@ void SwCompareData::ShowDelete( const CompareData& rData, sal_uLong nStt,
 
     ((SwCompareData&)rData).rDoc.CopyWithFlyInFly( aRg, 0, aInsPos );
     rDoc.SetModified();
-    aSavePos++;
+    ++aSavePos;
 
     // #i65201#: These SwPaMs are calculated when the (old) delete-redlines are hidden,
     // they will be inserted when the delete-redlines are shown again.
@@ -1905,7 +1905,7 @@ sal_uInt16 _SaveMergeRedlines::InsertRedline()
         pDoc->SetRedlineMode_intern( eOld );
 
         pDestRedl->SetMark();
-        aSaveNd++;
+        ++aSaveNd;
         pDestRedl->GetMark()->nNode = aSaveNd;
         pDestRedl->GetMark()->nContent.Assign( aSaveNd.GetNode().GetCntntNode(),
                                                 nSaveCnt );

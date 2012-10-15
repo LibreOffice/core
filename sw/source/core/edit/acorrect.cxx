@@ -397,7 +397,7 @@ sal_Bool SwAutoCorrDoc::ChgAutoCorrWord( xub_StrLen & rSttPos, xub_StrLen nEndPo
 
                 if( ppPara )
                 {
-                    (*pIdx)++;
+                    ++(*pIdx);
                     pTxtNd = pIdx->GetNode().GetTxtNode();
                 }
                 bRet = sal_True;

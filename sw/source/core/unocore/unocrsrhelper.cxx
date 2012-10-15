@@ -899,7 +899,7 @@ void InsertFile(SwUnoCrsr* pUnoCrsr,
 
             if(!nErrno)
             {
-                aSave++;
+                ++aSave;
                 pUnoCrsr->SetMark();
                 pUnoCrsr->GetMark()->nNode = aSave;
 

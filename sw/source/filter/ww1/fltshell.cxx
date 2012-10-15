@@ -441,12 +441,12 @@ static sal_Bool IterateNumrulePiece( const SwNodeIndex& rEnd,
 {
     while( ( rTmpStart <= rEnd )
            && !( rTmpStart.GetNode().IsTxtNode() ) )    // suche gueltigen Anfang
-        rTmpStart++;
+        ++rTmpStart;
 
     rTmpEnd = rTmpStart;
     while( ( rTmpEnd <= rEnd )
            && ( rTmpEnd.GetNode().IsTxtNode() ) )       // suche gueltiges Ende + 1
-        rTmpEnd++;
+        ++rTmpEnd;
 
     rTmpEnd--;                                      // gueltiges Ende
 
@@ -504,7 +504,7 @@ void SwFltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
                         pDoc->SetNumRule( aTmpPam, *pRul, false );
 
                         aTmpStart = aTmpEnd;    // Start fuer naechstes Teilstueck
-                        aTmpStart++;
+                        ++aTmpStart;
                     }
                 }
                 else

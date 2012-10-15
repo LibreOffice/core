@@ -178,7 +178,7 @@ static void lcl_SkipAttr( const SwTxtNode *pNode, SwIndex &rIdx, xub_StrLen &rSt
     {
         // skip all special attributes
         do {
-            rIdx++;
+            ++rIdx;
         } while( (rStart = rIdx.GetIndex()) < pNode->GetTxt().Len()
                && !lcl_MayOverwrite(pNode, rStart) );
     }
@@ -688,7 +688,7 @@ _SaveRedlEndPosForRestore::~_SaveRedlEndPosForRestore()
 
 void _SaveRedlEndPosForRestore::_Restore()
 {
-    (*pSavIdx)++;
+    ++(*pSavIdx);
     SwCntntNode* pNode = pSavIdx->GetNode().GetCntntNode();
     // If there's no content node at the remembered position, we will not restore the old position
     // This may happen if a table (or section?) will be inserted.
@@ -796,13 +796,13 @@ bool SwDoc::Overwrite( const SwPaM &rRg, const String &rStr )
         {
             // start behind the characters (to fix the attributes!)
             if( nStart < pNode->GetTxt().Len() )
-                rIdx++;
+                ++rIdx;
             pNode->InsertText( rtl::OUString(c), rIdx, INS_EMPTYEXPAND );
             if( nStart+1 < rIdx.GetIndex() )
             {
                 rIdx = nStart;
                 pNode->EraseText( rIdx, 1 );
-                rIdx++;
+                ++rIdx;
             }
         }
     }
@@ -845,7 +845,7 @@ bool SwDoc::MoveAndJoin( SwPaM& rPaM, SwPosition& rPos, SwMoveFlags eMvFlags )
     if( bRet && !bOneNode )
     {
         if( bJoinTxt )
-            aIdx++;
+            ++aIdx;
         SwTxtNode * pTxtNd = aIdx.GetNode().GetTxtNode();
         SwNodeIndex aNxtIdx( aIdx );
         if( pTxtNd && pTxtNd->CanJoinNext( &aNxtIdx ) )
@@ -1170,9 +1170,9 @@ bool SwDoc::MoveNodeRange( SwNodeRange& rRange, SwNodeIndex& rPos,
     sal_Bool bNoDelFrms = 0 != (DOC_NO_DELFRMS & eMvFlags);
     if( GetNodes()._MoveNodes( rRange, GetNodes(), rPos, !bNoDelFrms ) )
     {
-        aIdx++;     // again back to old position
+        ++aIdx;     // again back to old position
         if( pSaveInsPos )
-            (*pSaveInsPos)++;
+            ++(*pSaveInsPos);
     }
     else
     {
@@ -1733,7 +1733,7 @@ bool SwDoc::DeleteRangeImplImpl(SwPaM & rPam)
                 if( bOneNd )        // that's it
                     break;
 
-                aSttIdx++;
+                ++aSttIdx;
             }
             else
             {
@@ -2356,7 +2356,7 @@ bool SwDoc::ReplaceRangeImpl( SwPaM& rPam, const String& rStr,
 
                         SplitNode( *aDelPam.GetPoint(), false );
 
-                        aMkNd++;
+                        ++aMkNd;
                         aDelPam.GetMark()->nNode = aMkNd;
                         aDelPam.GetMark()->nContent.Assign(
                                     aMkNd.GetNode().GetCntntNode(), nMkCnt );
@@ -2373,7 +2373,7 @@ bool SwDoc::ReplaceRangeImpl( SwPaM& rPam, const String& rStr,
                 SwPaM aTmpRange( *aDelPam.GetPoint() );
                 aTmpRange.SetMark();
 
-                aPtNd++;
+                ++aPtNd;
                 aDelPam.GetPoint()->nNode = aPtNd;
                 aDelPam.GetPoint()->nContent.Assign( aPtNd.GetNode().GetCntntNode(),
                                                     nPtCnt);
@@ -2471,7 +2471,7 @@ SetRedlineMode( eOld );
 
             *rPam.GetMark() = *aDelPam.GetMark();
 
-            aPtNd++;
+            ++aPtNd;
             rPam.GetMark()->nNode = aPtNd;
             rPam.GetMark()->nContent.Assign( aPtNd.GetNode().GetCntntNode(),
                                                 nPtCnt );
@@ -2683,12 +2683,12 @@ void SwDoc::TransliterateText(
         SwNodeIndex aIdx( pStt->nNode );
         if( nSttCnt )
         {
-            aIdx++;
+            ++aIdx;
             if( pTNd )
                 pTNd->TransliterateText( rTrans, nSttCnt, pTNd->GetTxt().Len(), pUndo );
         }
 
-        for( ; aIdx.GetIndex() < nEndNd; aIdx++ )
+        for( ; aIdx.GetIndex() < nEndNd; ++aIdx )
         {
             if( 0 != ( pTNd = aIdx.GetNode().GetTxtNode() ))
                 pTNd->TransliterateText( rTrans, 0, pTNd->GetTxt().Len(), pUndo );
@@ -2759,12 +2759,12 @@ void SwDoc::CountWords( const SwPaM& rPaM, SwDocStat& rStat ) const
         SwNodeIndex aIdx( pStt->nNode );
         if( nSttCnt )
         {
-            aIdx++;
+            ++aIdx;
             if( pTNd )
                 pTNd->CountWords( rStat, nSttCnt, pTNd->GetTxt().Len() );
         }
 
-        for( ; aIdx.GetIndex() < nEndNd; aIdx++ )
+        for( ; aIdx.GetIndex() < nEndNd; ++aIdx )
             if( 0 != ( pTNd = aIdx.GetNode().GetTxtNode() ))
                 pTNd->CountWords( rStat, 0, pTNd->GetTxt().Len() );
 

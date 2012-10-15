@@ -128,7 +128,7 @@ static void lcl_FillSubRegionList( SwWrtShell& rSh, ComboBox& rSubRegions, Combo
     IDocumentMarkAccess* const pMarkAccess = rSh.getIDocumentMarkAccess();
     for( IDocumentMarkAccess::const_iterator_t ppMark = pMarkAccess->getMarksBegin();
         ppMark != pMarkAccess->getMarksEnd();
-        ppMark++)
+        ++ppMark)
     {
         const ::sw::mark::IMark* pBkmk = ppMark->get();
         if( pBkmk->IsExpanded() )

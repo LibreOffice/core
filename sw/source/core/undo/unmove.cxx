@@ -306,7 +306,7 @@ void SwUndoMove::RedoImpl(::sw::UndoRedoContext & rContext)
 
         if( nSttNode != nEndNode && bJoinTxt )
         {
-            aIdx++;
+            ++aIdx;
             SwTxtNode * pTxtNd = aIdx.GetNode().GetTxtNode();
             if( pTxtNd && pTxtNd->CanJoinNext() )
             {

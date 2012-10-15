@@ -453,7 +453,7 @@ void SwDoc::ResetAttrs( const SwPaM &rRg,
             }
         }
 
-        aTmpStt++;
+        ++aTmpStt;
     }
     if( pEnd->nContent.GetIndex() == pEnd->nNode.GetNode().GetCntntNode()->Len() )
          // set up a later, and all CharFmtAttr -> TxtFmtAttr
@@ -487,7 +487,7 @@ void SwDoc::ResetAttrs( const SwPaM &rRg,
     if( bTxtAttr )
     {
         if( bAdd )
-            aTmpEnd++;
+            ++aTmpEnd;
         GetNodes().ForEach( pStt->nNode, aTmpEnd, lcl_RstTxtAttr, &aPara );
     }
 
@@ -975,7 +975,7 @@ lcl_InsAttr(SwDoc *const pDoc, const SwPaM &rRg, const SfxItemSet& rChgSet,
         SFX_ITEM_SET == pCharSet->GetItemState( RES_TXTATR_CHARFMT, sal_False ) ||
         SFX_ITEM_SET == pCharSet->GetItemState( RES_TXTATR_INETFMT, sal_False ) );
 
-    for(; aSt < aEnd; aSt++ )
+    for(; aSt < aEnd; ++aSt )
     {
         pNode = aSt.GetNode().GetCntntNode();
         if( !pNode )
@@ -2275,7 +2275,7 @@ void SwDoc::MoveLeftMargin( const SwPaM& rPam, sal_Bool bRight, sal_Bool bModulu
             SwRegHistory aRegH( pTNd, *pTNd, pHistory );
             pTNd->SetAttr( aLS );
         }
-        aIdx++;
+        ++aIdx;
     }
     SetModified();
 }

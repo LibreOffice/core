@@ -266,7 +266,7 @@ sal_Bool SwEditShell::_CopySelToDoc( SwDoc* pInsDoc, SwNodeIndex* pSttNd )
 
     // die gemerkte Node-Position wieder auf den richtigen Node
     if( bRet && pSttNd )
-        (*pSttNd)++;
+        ++(*pSttNd);
 
 
     return bRet;

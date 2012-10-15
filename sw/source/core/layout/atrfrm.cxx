@@ -220,7 +220,7 @@ void DelHFFormat( SwClient *pToRemove, SwFrmFmt *pFmt )
                                 aIdx = nEnd-1;
                         }
                     }
-                    aIdx++;
+                    ++aIdx;
                     pNode = & aIdx.GetNode();
                 }
             }

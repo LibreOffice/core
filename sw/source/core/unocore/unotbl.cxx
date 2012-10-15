@@ -3547,7 +3547,7 @@ void SwXTextTable::setName(const OUString& rName) throw( uno::RuntimeException )
         SwNodeIndex aIdx( *pFmt->GetDoc()->GetNodes().GetEndOfAutotext().StartOfSectionNode(), 1 );
         while ( 0 != (pStNd = aIdx.GetNode().GetStartNode()) )
         {
-            aIdx++;
+            ++aIdx;
             SwNode *const pNd = & aIdx.GetNode();
             if ( pNd->IsOLENode() &&
                 aOldName == ((SwOLENode*)pNd)->GetChartTblName() )

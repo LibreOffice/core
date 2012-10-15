@@ -214,7 +214,7 @@ void SwUndoOverwrite::UndoImpl(::sw::UndoRedoContext & rContext)
         sal_Bool bOldExpFlg = pTxtNd->IsIgnoreDontExpand();
         pTxtNd->SetIgnoreDontExpand( sal_True );
 
-        rIdx++;
+        ++rIdx;
         for( xub_StrLen n = 0; n < aDelStr.Len(); n++  )
         {
             // do it individually, to keep the attributes!

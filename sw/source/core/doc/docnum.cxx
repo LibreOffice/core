@@ -482,7 +482,7 @@ sal_Bool SwDoc::MoveOutlinePara( const SwPaM& rPam, short nOffset )
     if( aEndRg == aSttRg )
     {
         OSL_FAIL( "Moving outlines: Surprising selection" );
-        aEndRg++;
+        ++aEndRg;
     }
 
     const SwNode* pNd;
@@ -499,7 +499,7 @@ sal_Bool SwDoc::MoveOutlinePara( const SwPaM& rPam, short nOffset )
             break;
         aSttRg--;
     }
-    aSttRg++;
+    ++aSttRg;
 
     aEndRg--;
     while( aEndRg.GetNode().IsStartNode() )
@@ -511,7 +511,7 @@ sal_Bool SwDoc::MoveOutlinePara( const SwPaM& rPam, short nOffset )
             break;
         aEndRg--;
     }
-    aEndRg++;
+    ++aEndRg;
 
     // calculation of the new position
     if( nOffset < 0 && nAktPos < sal_uInt16(-nOffset) )
@@ -556,7 +556,7 @@ sal_Bool SwDoc::MoveOutlinePara( const SwPaM& rPam, short nOffset )
         }
     }
     // We do not want to move into tables (at the moment)
-    aInsertPos++;
+    ++aInsertPos;
     pNd = &aInsertPos.GetNode();
     if( pNd->IsTableNode() )
         pNd = pNd->StartOfSectionNode();
@@ -1507,7 +1507,7 @@ static sal_Bool lcl_GotoNextPrevNum( SwPosition& rPos, sal_Bool bNext,
             break;
 
         if( bNext )
-            aIdx++;
+            ++aIdx;
         else
             aIdx--;
     }
@@ -1567,7 +1567,7 @@ const SwNumRule *  SwDoc::SearchNumRule(const SwPosition & rPos,
             if ( !bInvestigateStartNode )
             {
                 if (bForward)
-                    aIdx++;
+                    ++aIdx;
                 else
                     aIdx--;
             }
@@ -1605,7 +1605,7 @@ const SwNumRule *  SwDoc::SearchNumRule(const SwPosition & rPos,
             if ( bInvestigateStartNode )
             {
                 if (bForward)
-                    aIdx++;
+                    ++aIdx;
                 else
                     aIdx--;
             }

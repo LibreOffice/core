@@ -551,7 +551,7 @@ void SwNavigationPI::MakeMark()
     ::std::vector< ::rtl::OUString > vNavMarkNames;
     for(IDocumentMarkAccess::const_iterator_t ppMark = pMarkAccess->getMarksBegin();
         ppMark != pMarkAccess->getMarksEnd();
-        ppMark++)
+        ++ppMark)
         if( IDocumentMarkAccess::GetType(**ppMark) == IDocumentMarkAccess::NAVIGATOR_REMINDER )
             vNavMarkNames.push_back(ppMark->get()->GetName());
     ::std::sort(vNavMarkNames.begin(), vNavMarkNames.end());

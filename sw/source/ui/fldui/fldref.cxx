@@ -493,7 +493,7 @@ void SwFldRefPage::UpdateSubType()
             IDocumentMarkAccess* const pMarkAccess = pSh->getIDocumentMarkAccess();
             for(IDocumentMarkAccess::const_iterator_t ppMark = pMarkAccess->getBookmarksBegin();
                 ppMark != pMarkAccess->getBookmarksEnd();
-                ppMark++)
+                ++ppMark)
             {
                 const ::sw::mark::IMark* pBkmk = ppMark->get();
                 if(IDocumentMarkAccess::BOOKMARK == IDocumentMarkAccess::GetType(*pBkmk))

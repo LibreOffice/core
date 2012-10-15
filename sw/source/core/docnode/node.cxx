@@ -1180,7 +1180,7 @@ sal_Bool SwCntntNode::GoNext(SwIndex * pIdx, sal_uInt16 nMode ) const
     if( pIdx->GetIndex() < Len() )
     {
         if( !IsTxtNode() )
-            (*pIdx)++;
+            ++(*pIdx);
         else
         {
             const SwTxtNode& rTNd = *GetTxtNode();
@@ -1211,7 +1211,7 @@ sal_Bool SwCntntNode::GoNext(SwIndex * pIdx, sal_uInt16 nMode ) const
                     bRet = sal_False;
             }
             else if( nPos < rTNd.GetTxt().Len() )
-                (*pIdx)++;
+                ++(*pIdx);
             else
                 bRet = sal_False;
         }
@@ -1696,7 +1696,7 @@ int SwCntntNode::CanJoinNext( SwNodeIndex* pIdx ) const
     while( aIdx < rNds.Count()-1 &&
         (( pNd = &aIdx.GetNode())->IsSectionNode() ||
             ( pNd->IsEndNode() && pNd->StartOfSectionNode()->IsSectionNode() )))
-        aIdx++;
+        ++aIdx;
 
     if( pNd->GetNodeType() != nNdType || rNds.Count()-1 == aIdx.GetIndex() )
         return sal_False;

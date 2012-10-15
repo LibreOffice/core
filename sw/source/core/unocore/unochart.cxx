@@ -88,7 +88,7 @@ void SwChartHelper::DoUpdateAllCharts( SwDoc* pDoc )
     SwNodeIndex aIdx( *pDoc->GetNodes().GetEndOfAutotext().StartOfSectionNode(), 1 );
     while( 0 != (pStNd = aIdx.GetNode().GetStartNode()) )
     {
-        aIdx++;
+        ++aIdx;
         if (0 != ( pONd = aIdx.GetNode().GetOLENode() ) &&
             ChartPrettyPainter::IsChart( pONd->GetOLEObj().GetObject() ) )
         {
@@ -164,7 +164,7 @@ void SwChartLockController_Helper::LockUnlockAllCharts( sal_Bool bLock )
             SwNodeIndex aIdx( *pDoc->GetNodes().GetEndOfAutotext().StartOfSectionNode(), 1 );
             while( 0 != (pStNd = aIdx.GetNode().GetStartNode()) )
             {
-                aIdx++;
+                ++aIdx;
                 if (0 != ( pONd = aIdx.GetNode().GetOLENode() ) &&
                     pONd->GetChartTblName().Len() > 0 /* is chart object? */)
                 {

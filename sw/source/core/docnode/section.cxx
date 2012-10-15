@@ -1359,7 +1359,7 @@ int sw_FindDocShell( SfxObjectShellRef& xDocSh,
         aIdx--;
         DelFlyInRange( aIdx, aEndIdx );
         _DelBookmarks(aIdx, aEndIdx);
-        aIdx++;
+        ++aIdx;
 
         pDoc->GetNodes().Delete( aIdx, aEndIdx.GetIndex() - aIdx.GetIndex() );
     }
@@ -1485,7 +1485,7 @@ int sw_FindDocShell( SfxObjectShellRef& xDocSh,
                     SwTblNumFmtMerge aTNFM( *pSrcDoc, *pDoc );
 
                     pSrcDoc->CopyWithFlyInFly( *pCpyRg, 0, rInsPos, bCreateFrm );
-                    aSave++;
+                    ++aSave;
 
                     if( !bCreateFrm )
                         ::MakeFrms( pDoc, aSave, rInsPos );

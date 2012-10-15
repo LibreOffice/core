@@ -571,7 +571,7 @@ sal_Bool GotoNextTable( SwPaM& rCurCrsr, SwPosTable fnPosTbl,
     do {
         while( aIdx.GetIndex() < nLastNd &&
                 0 == ( pTblNd = aIdx.GetNode().GetTableNode()) )
-            aIdx++;
+            ++aIdx;
         if( pTblNd ) // any further table node?
         {
             if( fnPosTbl == fnMoveForward ) // at the beginning?

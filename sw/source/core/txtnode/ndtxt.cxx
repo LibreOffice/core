@@ -1032,7 +1032,7 @@ void SwTxtNode::Update( SwIndex const & rPos, const xub_StrLen nChangeLen,
         for(IDocumentMarkAccess::const_iterator_t ppMark =
                 pMarkAccess->getMarksBegin();
             ppMark != pMarkAccess->getMarksEnd();
-            ppMark++)
+            ++ppMark)
         {
             // Bookmarks must never grow to either side, when
             // editing (directly) to the left or right (#i29942#)!
@@ -3015,7 +3015,7 @@ sal_Bool SwTxtNode::GetExpandTxt( SwTxtNode& rDestNd, const SwIndex* pDestIdx,
                                 ->ExpandField(true));
                         if( aExpand.Len() )
                         {
-                            aDestIdx++;     // dahinter einfuegen;
+                            ++aDestIdx;     // dahinter einfuegen;
                             rDestNd.InsertText( aExpand, aDestIdx );
                             aDestIdx = nInsPos + nAttrStartIdx;
                             nInsPos = nInsPos + aExpand.Len();
@@ -3041,7 +3041,7 @@ sal_Bool SwTxtNode::GetExpandTxt( SwTxtNode& rDestNd, const SwIndex* pDestIdx,
                                                 GetNumStr( rFtn.GetNumber() );
                             if( sExpand.Len() )
                             {
-                                aDestIdx++;     // insert behind
+                                ++aDestIdx;     // insert behind
                                 SvxEscapementItem aItem(
                                         SVX_ESCAPEMENT_SUPERSCRIPT );
                                 rDestNd.InsertItem(aItem,
@@ -3339,7 +3339,7 @@ void SwTxtNode::ReplaceText( const SwIndex& rStart, const xub_StrLen nDelLen,
         // Dadurch wird die Attributierung des 1. Zeichen expandiert!
         m_Text.SetChar( nStartPos, rText.GetChar( 0 ) );
 
-        ((SwIndex&)rStart)++;
+        ++((SwIndex&)rStart);
         m_Text.Erase( rStart.GetIndex(), nLen - 1 );
         Update( rStart, nLen - 1, true );
 

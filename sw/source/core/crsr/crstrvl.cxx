@@ -1743,7 +1743,7 @@ sal_Bool SwCrsrShell::SetShadowCrsrPos( const Point& rPt, SwFillMode eFillMode )
                 while( aEnd.GetNode().IsEndNode() &&
                         (const SwNode*)&aEnd.GetNode() !=
                         pSectNd->EndOfSectionNode() )
-                    aEnd++;
+                    ++aEnd;
 
                 if( aEnd.GetNode().IsEndNode() &&
                     pCNd->Len() == aPos.nContent.GetIndex() )

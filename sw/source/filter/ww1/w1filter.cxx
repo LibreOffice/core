@@ -354,7 +354,7 @@ void Ww1Bookmarks::Start(Ww1Shell& rOut, Ww1Manager& rMan)
     if (rMan.Where() >= Where())
     {
         Out(rOut, rMan);
-        (*this)++;
+        ++(*this);
     }
 }
 
@@ -390,7 +390,7 @@ void Ww1Footnotes::Start(Ww1Shell& rOut, Ww1Manager& rMan)
             rOut.EndFootnote();
         }
         else
-            (*this)++;
+            ++(*this);
     }
 }
 
@@ -400,7 +400,7 @@ void Ww1Footnotes::Stop(Ww1Shell& /*rOut*/, Ww1Manager& rMan, sal_Unicode& c)
     {
         OSL_ENSURE(nPlcIndex < Count(), "Ww1Footnotes");
         c = ' ';
-        (*this)++;
+        ++(*this);
     }
 }
 
@@ -412,7 +412,7 @@ void Ww1Fields::Start(Ww1Shell& rOut, Ww1Manager& rMan)
         if (GetData()->chGet() == 19)
             Out(rOut, rMan);
         else
-            (*this)++; // ignore
+            ++(*this); // ignore
     }
 }
 
@@ -425,7 +425,7 @@ void Ww1Fields::Stop( Ww1Shell& rOut, Ww1Manager& rMan, sal_Unicode& c)
         {
             rMan.Fill( c );
             OSL_ENSURE(c==21, "Ww1Fields");
-            (*this)++;
+            ++(*this);
             c = ' ';
             if (pField)
             // haben wir ein fertiges feld da, das  eingefuegt werden soll?
@@ -575,7 +575,7 @@ void Ww1Fields::Out(Ww1Shell& rOut, Ww1Manager& rMan, sal_uInt16 nDepth)
         // zuende ist oder der ergebnisteil beginnt. dabei koennen
         // natuerlich neue felder beginnen (word unterstuetzt felder,
         // die wiederum felder beinhalten).
-            (*this)++;
+            ++(*this);
             pData = GetData();
             if (pData->chGet()==19) // nested field
             {
@@ -608,7 +608,7 @@ void Ww1Fields::Out(Ww1Shell& rOut, Ww1Manager& rMan, sal_uInt16 nDepth)
             c = rMan.Fill(sErgebnis, GetLength());
             if (!Ww1PlainText::IsChar(c))
                 sErgebnis += c; //~ mdt: sonderzeichenbenhandlung
-            (*this)++;
+            ++(*this);
             pData = GetData();
         }
         OSL_ENSURE(pData->chGet()==21, "Ww1PlainText");
@@ -982,7 +982,7 @@ oncemore:
             this->sErgebnis = sErgebnis;
     }
     else // oops: we are terribly wrong: skip this
-        (*this)++;
+        ++(*this);
 }
 
 sal_uLong Ww1Fields::GetLength()
@@ -1022,7 +1022,7 @@ void Ww1Sep::Start(Ww1Shell& rOut, Ww1Manager& rMan)
         Ww1SprmSep aSprm(rFib, SVBT32ToUInt32(pByte + 2));
         aSprm.Start(rOut, rMan);
         aSprm.Stop(rOut, rMan);
-        (*this)++;
+        ++(*this);
         aHdd.Start(rOut, rMan);
     }
 }
@@ -1041,7 +1041,7 @@ void Ww1Pap::Start(Ww1Shell& rOut, Ww1Manager& rMan)
         // und ausgeben:
             aSprm.Start(rOut, rMan);
         }
-        (*this)++;
+        ++(*this);
     }
 }
 
@@ -1162,7 +1162,7 @@ void Ww1Chp::Start(Ww1Shell& rOut, Ww1Manager& rMan)
                     aPic.Out(rOut, rMan);
             }
         }
-        (*this)++;
+        ++(*this);
     }
 }
 
@@ -1245,7 +1245,7 @@ sal_Unicode Ww1PlainText::Out( Ww1Shell& rOut, sal_uLong& ulEnd )
     while (ulSeek < ulEnd)
     {
         sal_Unicode c = (*this)[ulSeek];
-        (*this)++;
+        ++(*this);
         if (Ww1PlainText::IsChar(c))
             rOut << c;
         else
@@ -1263,7 +1263,7 @@ sal_Unicode Ww1PlainText::Out( String& rStr, sal_uLong ulEnd )
     while (ulSeek < ulEnd)
     {
         sal_Unicode c = (*this)[ulSeek];
-        (*this)++;
+        ++(*this);
         if( Ww1PlainText::IsChar(c) )
             rStr += c;
         else
@@ -1278,7 +1278,7 @@ sal_Unicode Ww1PlainText::Out( String& rStr, sal_uLong ulEnd )
 sal_Unicode Ww1PlainText::Out( sal_Unicode& rRead )
 {
     rRead = (*this)[ulSeek];
-    (*this)++;
+    ++(*this);
     return rRead;
 }
 
@@ -1933,7 +1933,7 @@ void Ww1HeaderFooter::Start(Ww1Shell& rOut, Ww1Manager& rMan)
 // noetig:
     if (!rMan.Pushed())
     {
-        while ((*this)++)
+        while (++(*this))
             switch (eHeaderFooterMode)
             {
             case FtnSep:

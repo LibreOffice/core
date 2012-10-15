@@ -98,7 +98,7 @@ SwNode* GoNextWithFrm(const SwNodes& rNodes, SwNodeIndex *pIdx)
         }
         if ( bFound )
                 break;
-        aTmp++;
+        ++aTmp;
     }
 
     if( aTmp == rNodes.Count()-1 )

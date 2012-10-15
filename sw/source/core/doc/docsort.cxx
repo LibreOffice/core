@@ -409,7 +409,7 @@ sal_Bool SwDoc::SortText(const SwPaM& rPaM, const SwSortOptions& rOpt)
         // Iterate over a selected range
         SwSortTxtElement* pSE = new SwSortTxtElement( aStart );
         aSortSet.insert(pSE);
-        aStart++;
+        ++aStart;
     }
 
     // Now comes the tricky part: Move Nodes (and always keep Undo in mind)

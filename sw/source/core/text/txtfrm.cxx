@@ -533,7 +533,7 @@ bool sw_HideObj( const SwTxtFrm& _rFrm,
                     if ( pFrmFmt->Which() == RES_FLYFRMFMT )
                     {
                         SwNodeIndex nCntntIndex = *(pFrmFmt->GetCntnt().GetCntntIdx());
-                        nCntntIndex++;
+                        ++nCntntIndex;
                         if ( nCntntIndex.GetNode().IsNoTxtNode() )
                         {
                             bRet = false;

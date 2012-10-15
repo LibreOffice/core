@@ -548,7 +548,7 @@ static void lcl_CpyBox( const SwTable& rCpyTbl, const SwTableBox* pCpyBox,
         pCpyDoc->CopyWithFlyInFly( *pRg, 0, aInsIdx, sal_False );
     else
         pDoc->GetNodes().MakeTxtNode( aInsIdx, (SwTxtFmtColl*)pDoc->GetDfltTxtFmtColl() );
-    aSavePos++;
+    ++aSavePos;
 
     SwTableLine* pLine = pDstBox->GetUpper();
     while( pLine->GetUpper() )

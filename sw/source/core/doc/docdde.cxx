@@ -58,7 +58,7 @@ namespace
         const ::rtl::OUString sNameLc = bCaseSensitive ? rName : GetAppCharClass().lowercase(rName);
         for(IDocumentMarkAccess::const_iterator_t ppMark = rMarkAccess.getMarksBegin();
             ppMark != rMarkAccess.getMarksEnd();
-            ppMark++)
+            ++ppMark)
         {
             if (::sw::mark::DdeBookmark* const pBkmk = dynamic_cast< ::sw::mark::DdeBookmark*>(ppMark->get()))
             {

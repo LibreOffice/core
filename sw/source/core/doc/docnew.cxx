@@ -1226,7 +1226,7 @@ void SwDoc::Paste( const SwDoc& rSource )
             rSource.CopyRange( aCpyPam, rInsPos, true );
 
             {
-                aIndexBefore++;
+                ++aIndexBefore;
                 SwPaM aPaM(SwPosition(aIndexBefore),
                            SwPosition(rInsPos.nNode));
 

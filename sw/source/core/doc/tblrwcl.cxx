@@ -2259,7 +2259,7 @@ sal_Bool SwTable::MakeCopy( SwDoc* pInsDoc, const SwPosition& rPos,
 
     SwNodeIndex aIdx( rPos.nNode, -1 );
     SwTableNode* pTblNd = aIdx.GetNode().FindTableNode();
-    aIdx++;
+    ++aIdx;
     OSL_ENSURE( pTblNd, "Where is the TableNode now?" );
 
     pTblNd->GetTable().SetRowsToRepeat( GetRowsToRepeat() );

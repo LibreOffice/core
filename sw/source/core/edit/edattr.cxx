@@ -583,7 +583,7 @@ sal_uInt16 SwEditShell::GetScriptType() const
             {
                 sal_uLong nEndIdx = pEnd->nNode.GetIndex();
                 SwNodeIndex aIdx( pStt->nNode );
-                for( ; aIdx.GetIndex() <= nEndIdx; aIdx++ )
+                for( ; aIdx.GetIndex() <= nEndIdx; ++aIdx )
                     if( aIdx.GetNode().IsTxtNode() )
                     {
                         const SwTxtNode* pTNd = aIdx.GetNode().GetTxtNode();

@@ -124,7 +124,7 @@ SwNodes::~SwNodes()
             if( pNode == pEndOfContent )
                 break;
 
-            aNdIdx++;
+            ++aNdIdx;
             delete pNode;
         }
     }
@@ -404,7 +404,7 @@ void SwNodes::ChgNode( SwNodeIndex& rDelPos, sal_uLong nSz,
                         ((SwCntntNode*)pFrmNd)->MakeFrms( *pCNd );
                     pFrmNd = pCNd;
                 }
-                aIdx++;
+                ++aIdx;
             }
     }
 }
@@ -758,7 +758,7 @@ sal_Bool SwNodes::_MoveNodes( const SwNodeRange& aRange, SwNodes & rNodes,
                     SwNodeIndex aTmpEIdx( aOrigInsPos.aEnd );
                     new SwEndNode( aTmpEIdx, *pTmpStt );
                     aTmpEIdx--;
-                    aTmpSIdx++;
+                    ++aTmpSIdx;
 
                     // setze die StartOfSection richtig
                     aRg.aEnd++;
@@ -1054,7 +1054,7 @@ void SwNodes::SectionUp(SwNodeRange *pRange)
                 if( pAktNode->IsStartNode() )
                     aTmpIdx = pAktNode->EndOfSectionIndex() + 1;
                 else
-                    aTmpIdx++;
+                    ++aTmpIdx;
             }
             return ;
         }
@@ -1108,7 +1108,7 @@ void SwNodes::SectionUpDown( const SwNodeIndex & aStart, const SwNodeIndex & aEn
 
     // durchlaufe bis der erste zu aendernde Start-Node gefunden wurde
     // ( Es wird vom eingefuegten EndNode bis nach vorne die Indexe gesetzt )
-    for( ;; aTmpIdx++ )
+    for( ;; ++aTmpIdx )
     {
         pAktNode = &aTmpIdx.GetNode();
         pAktNode->pStartOfSection = aSttNdStack[ aSttNdStack.size()-1 ];
@@ -1406,7 +1406,7 @@ SwCntntNode* SwNodes::GoNext(SwNodeIndex *pIdx) const
     SwNodeIndex aTmp(*pIdx, +1);
     SwNode* pNd = 0;
     while( aTmp < Count()-1 && 0 == ( pNd = &aTmp.GetNode())->IsCntntNode() )
-        aTmp++;
+        ++aTmp;
 
     if( aTmp == Count()-1 )
         pNd = 0;
@@ -1708,7 +1708,7 @@ void SwNodes::MoveRange( SwPaM & rPam, SwPosition & rPos, SwNodes& rNodes )
             return;
         }
 
-        aSttIdx++;
+        ++aSttIdx;
     }
     else if( pDestNd )
     {
@@ -1790,7 +1790,7 @@ void SwNodes::MoveRange( SwPaM & rPam, SwPosition & rPos, SwNodes& rNodes )
     {
         if ( pSrcNd && aEndIdx.GetNode().IsCntntNode() )
         {
-            aEndIdx++;
+            ++aEndIdx;
         }
         if( !bSplitDestNd )
         {
@@ -2014,7 +2014,7 @@ void SwNodes::_CopyNodes( const SwNodeRange& rRange,
             if( nLevel )                        // vollstaendige Section
             {
                 --nLevel;
-                aInsPos++;                      // EndNode schon vorhanden
+                ++aInsPos;                      // EndNode schon vorhanden
             }
             else if( !pAktNode->pStartOfSection->IsSectionNode() )
             {
@@ -2045,7 +2045,7 @@ void SwNodes::_CopyNodes( const SwNodeRange& rRange,
                 SwNode *const pTmpNd = & aInsPos.GetNode();
                 if( pTmpNd->IsSectionNode() ||
                     pTmpNd->StartOfSectionNode()->IsSectionNode() )
-                    aInsPos++;  // ueberspringen
+                    ++aInsPos;  // ueberspringen
             }
             else {
                 OSL_FAIL( "wie kommt diser Node ins Nodes-Array??" );
@@ -2067,7 +2067,7 @@ void SwNodes::_DelDummyNodes( const SwNodeRange& rRg )
         if( ND_SECTIONDUMMY == aIdx.GetNode().GetNodeType() )
             RemoveNode( aIdx.GetIndex(), 1, sal_True );
         else
-            aIdx++;
+            ++aIdx;
     }
 }
 
@@ -2140,7 +2140,7 @@ SwCntntNode* SwNodes::GoNextSection( SwNodeIndex * pIdx,
                 return (SwCntntNode*)pNd;
             }
         }
-        aTmp++;
+        ++aTmp;
         bFirst = sal_False;
     }
     return 0;
@@ -2319,7 +2319,7 @@ SwNode* SwNodes::FindPrvNxtFrmNode( SwNodeIndex& rFrmIdx,
                             if( rSect.IsHiddenFlag() )
                                 aIdx = aIdx.GetNode().EndOfSectionIndex()+1;
                             else
-                                aIdx++;
+                                ++aIdx;
                         }
                         if( aIdx.GetNode().IsTableNode() )
                         {

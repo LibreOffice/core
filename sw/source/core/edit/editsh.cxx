@@ -440,7 +440,7 @@ sal_Bool SwEditShell::HasOLEObj( const String &rName ) const
     SwNodeIndex aIdx( *GetNodes().GetEndOfAutotext().StartOfSectionNode(), 1 );
     while ( 0 != (pStNd = aIdx.GetNode().GetStartNode()) )
     {
-        aIdx++;
+        ++aIdx;
         SwNode& rNd = aIdx.GetNode();
         if( rNd.IsOLENode() &&
             rName == ((SwOLENode&)rNd).GetChartTblName() &&

@@ -218,7 +218,7 @@ SwDoc::InsertSwSection(SwPaM const& rRange, SwSectionData & rNewData,
             while( pPrvNd != aStt.GetNode().StartOfSectionNode() )
                 aStt--;
             while( pPrvNd != aEnd.GetNode().StartOfSectionNode() )
-                aEnd++;
+                ++aEnd;
 
             --aEnd;     // im InsertSection ist Ende inclusive
             pNewSectNode = GetNodes().InsertTextSection(
@@ -436,7 +436,7 @@ sal_uInt16 SwDoc::IsInsRegionAvailable( const SwPaM& rRange,
                     !( pNxtNd->StartOfSectionIndex() < nCmp &&
                         nCmp < aIdx.GetIndex() ) )
                 {
-                    aIdx++;
+                    ++aIdx;
                 }
                 if( !pNxtNd )
                     pNxtNd = pNd->EndOfSectionNode();
@@ -462,7 +462,7 @@ sal_uInt16 SwDoc::IsInsRegionAvailable( const SwPaM& rRange,
                         0 != aIdx.GetNode().FindSectionNode() )
                 {
                     do {
-                        aIdx++;
+                        ++aIdx;
                     } while( aIdx.GetNode().IsEndNode() &&
                                 0 != aIdx.GetNode().FindSectionNode() );
                     {
@@ -494,7 +494,7 @@ sal_uInt16 SwDoc::IsInsRegionAvailable( const SwPaM& rRange,
                         nRet = 1;
                         if( ppSttNd )
                         {
-                            aIdx++;
+                            ++aIdx;
                             *ppSttNd = &aIdx.GetNode();
                         }
                     }
@@ -826,20 +826,20 @@ SwSectionNode* SwNodes::InsertTextSection(SwNodeIndex const& rNdIdx,
                 do {
                     aInsPos--;
                 } while( aInsPos.GetNode().IsSectionNode() );
-                aInsPos++;
+                ++aInsPos;
             }
         }
         else
         {
             SwNode* pNd;
-            aInsPos++;
+            ++aInsPos;
             if (!lcl_IsTOXSection(rSectionData))
             {
                 while( aInsPos.GetIndex() < Count() - 1 &&
                         ( pNd = &aInsPos.GetNode())->IsEndNode() &&
                         pNd->StartOfSectionNode()->IsSectionNode())
                 {
-                    aInsPos++;
+                    ++aInsPos;
                 }
             }
         }
@@ -1353,7 +1353,7 @@ sal_Bool SwSectionNode::IsCntntHidden() const
                 return sal_False; // Nicht versteckter Inhalt wurde gefunden
             OSL_ENSURE( aTmp.GetNode().IsEndNode(), "EndNode expected" );
         }
-        aTmp++;
+        ++aTmp;
     }
     return sal_True; // Alles versteckt
 }

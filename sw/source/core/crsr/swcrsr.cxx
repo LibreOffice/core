@@ -560,7 +560,7 @@ GoNextCell:
         do {
             if( !IDX.GetNode().IsStartNode() )
                 break;
-            IDX++;
+            ++IDX;
             if( 0 == ( pCNd = IDX.GetNode().GetCntntNode() ))
                 pCNd = IDX.GetNodes().GoNext( &IDX );
             if( 0 == ( bProt = pCNd->IsProtect() ))
@@ -585,7 +585,7 @@ SetNextCrsr:
                              nsSwCursorSelOverFlags::SELOVER_CHANGEPOS );
         }
         // end of table, so go to next node
-        IDX++;
+        ++IDX;
         SwNode* pNd;
         if( ( pNd = &IDX.GetNode())->IsEndNode() || HasMark())
         {
@@ -1955,7 +1955,7 @@ sal_Bool SwCursor::GoPrevNextCell( sal_Bool bNext, sal_uInt16 nCnt )
         }
     }
 
-    rPtIdx++;
+    ++rPtIdx;
     if( !rPtIdx.GetNode().IsCntntNode() )
         GetDoc()->GetNodes().GoNextSection( &rPtIdx, sal_True, sal_False );
     GetPoint()->nContent.Assign( GetCntntNode(), 0 );

@@ -96,7 +96,7 @@ sal_Bool GotoNextRegion( SwPaM& rCurCrsr, SwPosRegion fnPosRegion,
     do {
         while( aIdx.GetIndex() < nEndCount &&
                 0 == ( pNd = aIdx.GetNode().GetSectionNode()) )
-            aIdx++;
+            ++aIdx;
 
         if( pNd ) // is there another section node?
         {
@@ -126,7 +126,7 @@ sal_Bool GotoNextRegion( SwPaM& rCurCrsr, SwPosRegion fnPosRegion,
                                                 sal_True, !bInReadOnly );
                 if( !pCNd )
                 {
-                    aIdx++;
+                    ++aIdx;
                     continue;
                 }
                 rCurCrsr.GetPoint()->nContent.Assign( pCNd, pCNd->Len() );
