@@ -121,6 +121,7 @@ gb_LinkTarget_LDFLAGS += \
 	-Wl,-z,combreloc \
 	-Wl,-z,defs \
 	$(subst -L../lib , ,$(SOLARLIB)) \
+	 \
 
 ifeq ($(HAVE_LD_HASH_STYLE),TRUE)
 gb_LinkTarget_LDFLAGS += \
@@ -172,6 +173,12 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(INCLUDE))
 endef
 
+# convert parametters filesystem root to native notation
+# does some real work only on windows, make sure not to
+# break the dummy implementations on unx*
+define gb_Helper_convert_native
+$(1)
+endef
 
 # CxxObject class
 
@@ -207,6 +214,12 @@ gb_LinkTarget__RPATHS := \
 
 gb_LinkTarget_CFLAGS := $(gb_CFLAGS) $(gb_CFLAGS_WERROR) $(gb_COMPILEROPTFLAGS)
 gb_LinkTarget_CXXFLAGS := $(gb_CXXFLAGS) $(gb_CXXFLAGS_WERROR)
+
+ifeq ($(gb_DEBUGLEVEL),0)
+gb_LinkTarget_LDFLAGS += -Wl,-O1
+endif
+
+gb_DEBUG_CFLAGS := -ggdb3 -finline-limit=0 -fno-inline -fno-default-inline
 
 ifeq ($(gb_DEBUGLEVEL),2)
 gb_LinkTarget_CXXFLAGS += -ggdb3 -finline-limit=0 -fno-inline -fno-default-inline
@@ -309,7 +322,7 @@ gb_Library_LAYER := \
 	$(foreach lib,$(gb_Library_UNOVERLIBS),$(lib):URELIB) \
 
 define gb_Library_get_rpath
-'-Wl,-rpath,$(call gb_LinkTarget__get_rpath_for_layer,$(call gb_Library_get_layer,$(1)))' \
+-Wl,-z,origin '-Wl,-rpath,$(call gb_LinkTarget__get_rpath_for_layer,$(call gb_Library_get_layer,$(1)))' \
 '-Wl,-rpath-link,$(gb_Library_OUTDIRLOCATION)'
 endef
 
@@ -409,6 +422,19 @@ gb_XSLTPROCPRECOMMAND := LD_LIBRARY_PATH=$(OUTDIR)/lib
 gb_Library_COMPONENTPREFIXES := \
     OOO:vnd.sun.star.expand:\dOOO_BASE_DIR/program/ \
     URELIB:vnd.sun.star.expand:\dURE_INTERNAL_LIB_DIR/ \
+    NONE:vnd.sun.star.expand:\dOOO_INBUILD_SHAREDLIB_DIR/ \
 
+# UnoApiTarget
+ 
+gb_UnoApiTarget_IDLCTARGET := $(OUTDIR)/bin/idlc
+gb_UnoApiTarget_IDLCCOMMAND := LD_LIBRARY_PATH=$(OUTDIR)/lib SOLARBINDIR=$(OUTDIR)/bin $(gb_UnoApiTarget_IDLCTARGET)
+gb_UnoApiTarget_REGMERGETARGET := $(OUTDIR)/bin/regmerge
+gb_UnoApiTarget_REGMERGECOMMAND := LD_LIBRARY_PATH=$(OUTDIR)/lib SOLARBINDIR=$(OUTDIR)/bin $(gb_UnoApiTarget_REGMERGETARGET)
+gb_UnoApiTarget_REGCOMPARETARGET := $(OUTDIR)/bin/regcompare
+gb_UnoApiTarget_REGCOMPARECOMMAND := LD_LIBRARY_PATH=$(OUTDIR)/lib SOLARBINDIR=$(OUTDIR)/bin $(gb_UnoApiTarget_REGCOMPARETARGET)
+gb_UnoApiTarget_CPPUMAKERTARGET := $(OUTDIR)/bin/cppumaker
+gb_UnoApiTarget_CPPUMAKERCOMMAND := LD_LIBRARY_PATH=$(OUTDIR)/lib SOLARBINDIR=$(OUTDIR)/bin $(gb_UnoApiTarget_CPPUMAKERTARGET)
+gb_UnoApiTarget_REGVIEWTARGET := $(OUTDIR)/bin/regview
+gb_UnoApiTarget_REGVIEWCOMMAND := LD_LIBRARY_PATH=$(OUTDIR)/lib SOLARBINDIR=$(OUTDIR)/bin $(gb_UnoApiTarget_REGVIEWTARGET)
 
 # vim: set noet sw=4 ts=4:
