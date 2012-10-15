@@ -79,7 +79,7 @@
           <object class="GtkLabel" id="1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Level</property>
+            <property name="label" translatable="yes">&lt;b&gt;Level&lt;/b&gt;</property>
             <property name="use_markup">True</property>
           </object>
         </child>
@@ -430,7 +430,7 @@
           <object class="GtkLabel" id="3">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Position and spacing</property>
+            <property name="label" translatable="yes">&lt;b&gt;Position and spacing&lt;/b&gt;</property>
             <property name="use_markup">True</property>
           </object>
         </child>

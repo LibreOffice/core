@@ -116,7 +116,7 @@
           <object class="GtkLabel" id="label4">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Contents</property>
+            <property name="label" translatable="yes">&lt;b&gt;Contents&lt;/b&gt;</property>
             <property name="use_markup">True</property>
           </object>
         </child>
@@ -156,7 +156,7 @@
           <object class="GtkLabel" id="label5">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Color</property>
+            <property name="label" translatable="yes">&lt;b&gt;Color&lt;/b&gt;</property>
             <property name="use_markup">True</property>
           </object>
         </child>
@@ -196,7 +196,7 @@
           <object class="GtkLabel" id="label6">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Pages</property>
+            <property name="label" translatable="yes">&lt;b&gt;Pages&lt;/b&gt;</property>
             <property name="use_markup">True</property>
           </object>
         </child>

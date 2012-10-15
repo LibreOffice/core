@@ -210,7 +210,7 @@
           <object class="GtkLabel" id="label20">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Position</property>
+            <property name="label" translatable="yes">&lt;b&gt;Position&lt;/b&gt;</property>
             <property name="use_markup">True</property>
           </object>
         </child>
@@ -370,7 +370,7 @@
               <object class="GtkLabel" id="rotateandscale">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Rotation / Scaling</property>
+                <property name="label" translatable="yes">&lt;b&gt;Rotation / Scaling&lt;/b&gt;</property>
                 <property name="use_markup">True</property>
               </object>
               <packing>
@@ -384,7 +384,8 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="xalign">0</property>
-                <property name="label" translatable="yes">Rotation</property>
+                <property name="label" translatable="yes">&lt;b&gt;Rotation&lt;/b&gt;</property>
+                <property name="use_markup">True</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -481,7 +482,7 @@
           <object class="GtkLabel" id="label22">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Spacing</property>
+            <property name="label" translatable="yes">&lt;b&gt;Spacing&lt;/b&gt;</property>
             <property name="use_markup">True</property>
           </object>
         </child>
@@ -516,7 +517,7 @@
           <object class="GtkLabel" id="label51">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Preview</property>
+            <property name="label" translatable="yes">&lt;b&gt;Preview&lt;/b&gt;</property>
             <property name="use_markup">True</property>
           </object>
         </child>

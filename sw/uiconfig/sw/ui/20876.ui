@@ -34,7 +34,7 @@
           <object class="GtkLabel" id="130">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Level</property>
+            <property name="label" translatable="yes">&lt;b&gt;Level&lt;/b&gt;</property>
             <property name="use_markup">True</property>
           </object>
         </child>
@@ -75,8 +75,8 @@
                           <object class="GtkLabel" id="20">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="xalign">0</property>
                             <property name="hexpand">True</property>
+                            <property name="xalign">0</property>
                             <property name="label" translatable="yes">Paragraph Style</property>
                           </object>
                           <packing>
@@ -326,7 +326,7 @@
           <object class="GtkLabel" id="30">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Numbering</property>
+            <property name="label" translatable="yes">&lt;b&gt;Numbering&lt;/b&gt;</property>
             <property name="use_markup">True</property>
           </object>
         </child>

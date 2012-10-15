@@ -187,7 +187,7 @@
                   <object class="GtkLabel" id="label4">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Current selection</property>
+                    <property name="label" translatable="yes">&lt;b&gt;Current selection&lt;/b&gt;</property>
                     <property name="use_markup">True</property>
                   </object>
                 </child>
@@ -322,7 +322,7 @@
                   <object class="GtkLabel" id="label8">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Whole document</property>
+                    <property name="label" translatable="yes">&lt;b&gt;Whole document&lt;/b&gt;</property>
                     <property name="use_markup">True</property>
                   </object>
                 </child>

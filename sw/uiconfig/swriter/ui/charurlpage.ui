@@ -155,21 +155,6 @@
                   </packing>
                 </child>
                 <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
                   <object class="GtkComboBoxText" id="targetfrmlb">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
@@ -189,6 +174,21 @@
                     <property name="height">1</property>
                   </packing>
                 </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
               </object>
             </child>
           </object>
@@ -197,7 +197,7 @@
           <object class="GtkLabel" id="label32">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Hyperlink</property>
+            <property name="label" translatable="yes">&lt;b&gt;Hyperlink&lt;/b&gt;</property>
             <property name="use_markup">True</property>
           </object>
         </child>
@@ -284,7 +284,7 @@
           <object class="GtkLabel" id="label33">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Character styles</property>
+            <property name="label" translatable="yes">&lt;b&gt;Character styles&lt;/b&gt;</property>
             <property name="use_markup">True</property>
           </object>
         </child>

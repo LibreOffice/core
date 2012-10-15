@@ -372,7 +372,7 @@
                           <object class="GtkLabel" id="label5">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">Printer</property>
+                            <property name="label" translatable="yes">&lt;b&gt;Printer&lt;/b&gt;</property>
                             <property name="use_markup">True</property>
                           </object>
                         </child>
@@ -712,7 +712,7 @@
                           <object class="GtkLabel" id="label13">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">Range and copies</property>
+                            <property name="label" translatable="yes">&lt;b&gt;Range and copies&lt;/b&gt;</property>
                             <property name="use_markup">True</property>
                           </object>
                         </child>
@@ -769,7 +769,7 @@
                           <object class="GtkLabel" id="label15">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">Print</property>
+                            <property name="label" translatable="yes">&lt;b&gt;Print&lt;/b&gt;</property>
                             <property name="use_markup">True</property>
                           </object>
                         </child>
@@ -897,7 +897,7 @@
                           <object class="GtkLabel" id="label11">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">Print</property>
+                            <property name="label" translatable="yes">&lt;b&gt;Print&lt;/b&gt;</property>
                             <property name="use_markup">True</property>
                           </object>
                         </child>
@@ -1292,7 +1292,7 @@
                           <object class="GtkLabel" id="label18">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">Layout</property>
+                            <property name="label" translatable="yes">&lt;b&gt;Layout&lt;/b&gt;</property>
                             <property name="use_markup">True</property>
                           </object>
                         </child>
@@ -1350,7 +1350,7 @@
                           <object class="GtkLabel" id="label3">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">Page sides</property>
+                            <property name="label" translatable="yes">&lt;b&gt;Page sides&lt;/b&gt;</property>
                             <property name="use_markup">True</property>
                           </object>
                         </child>
@@ -1453,7 +1453,7 @@
                       <object class="GtkLabel" id="label21">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">Options</property>
+                        <property name="label" translatable="yes">&lt;b&gt;Options&lt;/b&gt;</property>
                         <property name="use_markup">True</property>
                       </object>
                     </child>

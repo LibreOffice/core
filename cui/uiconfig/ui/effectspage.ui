@@ -617,7 +617,7 @@
           <object class="GtkLabel" id="label42">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Options</property>
+            <property name="label" translatable="yes">&lt;b&gt;Options&lt;/b&gt;</property>
             <property name="use_markup">True</property>
           </object>
         </child>
@@ -652,7 +652,7 @@
           <object class="GtkLabel" id="label50">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Preview</property>
+            <property name="label" translatable="yes">&lt;b&gt;Preview&lt;/b&gt;</property>
             <property name="use_markup">True</property>
           </object>
         </child>
