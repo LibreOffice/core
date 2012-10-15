@@ -39,17 +39,29 @@
 
 static sal_Bool bMenuVisibility = sal_False;
 
+/*
+ * This function generates an alternative command name to avoid name collisions
+ * or to give a valid command name to certain menu items.
+ */
 static gchar* GetCommandForSpecialItem( GtkSalMenuItem* pSalMenuItem )
 {
     gchar* aCommand = NULL;
 
     sal_uInt16 nId = pSalMenuItem->mnId;
+    Menu* pMenu = pSalMenuItem->mpVCLMenu;
 
     // If item belongs to window list, generate a command with "window-(id)" format.
     if ( ( nId >= START_ITEMID_WINDOWLIST ) && ( nId <= END_ITEMID_WINDOWLIST ) )
-    {
         aCommand = g_strdup_printf( "window-%d", nId );
-    }
+    else
+        if ( pMenu )
+        {
+            rtl::OUString aMenuCommand = pMenu->GetItemCommand( nId );
+            MenuItemBits nBits = pMenu->GetItemBits( nId );
+
+            if ( aMenuCommand.equalsAscii(".uno:Presentation") && nBits == 0 )
+                aCommand = g_strdup(".uno:Presentation2");
+        }
 
     return aCommand;
 }
@@ -303,7 +315,8 @@ void GtkSalMenu::UpdateNativeMenu()
         // Convert internal values to native values.
         gboolean bChecked = ( itemChecked == sal_True ) ? TRUE : FALSE;
         gboolean bEnabled = ( itemEnabled == sal_True ) ? TRUE : FALSE;
-        gchar* aNativeCommand = g_strdup( rtl::OUStringToOString( aCommand, RTL_TEXTENCODING_UTF8 ).getStr() );
+//        gchar* aNativeCommand = g_strdup( rtl::OUStringToOString( aCommand, RTL_TEXTENCODING_UTF8 ).getStr() );
+        gchar* aNativeCommand = GetCommandForSpecialItem( pSalMenuItem );
 
         // Store current item command in command list.
         gchar *aCurrentCommand = g_lo_menu_get_command_from_item_in_section( pLOMenu, nSection, nItemPos );
@@ -316,15 +329,17 @@ void GtkSalMenu::UpdateNativeMenu()
         NativeSetAccelerator( nSection, nItemPos, nAccelKey, nAccelKey.GetName( GetFrame()->GetWindow() ) );
 
         // Some items are special, so they have different commands.
-        if ( g_strcmp0( aNativeCommand, "" ) == 0 )
+//        if ( g_strcmp0( aNativeCommand, "" ) == 0 )
+        if ( !aNativeCommand )
         {
-            gchar *aSpecialItemCmd = GetCommandForSpecialItem( pSalMenuItem );
+//            gchar *aSpecialItemCmd = GetCommandForSpecialItem( pSalMenuItem );
+            aNativeCommand = g_strdup( rtl::OUStringToOString( aCommand, RTL_TEXTENCODING_UTF8 ).getStr() );
 
-            if ( aSpecialItemCmd != NULL )
-            {
-                g_free( aNativeCommand );
-                aNativeCommand = aSpecialItemCmd;
-            }
+//            if ( aSpecialItemCmd != NULL )
+//            {
+//                g_free( aNativeCommand );
+//                aNativeCommand = aSpecialItemCmd;
+//            }
         }
 
         if ( g_strcmp0( aNativeCommand, "" ) != 0 && pSalMenuItem->mpSubMenu == NULL )
