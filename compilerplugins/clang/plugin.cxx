@@ -52,6 +52,92 @@ bool Plugin::ignoreLocation( SourceLocation loc )
     return context.getSourceManager().isInSystemHeader( context.getSourceManager().getExpansionLoc( loc ));
     }
 
+
+RewritePlugin::RewritePlugin( ASTContext& context, Rewriter& rewriter )
+    : Plugin( context )
+    , rewriter( rewriter )
+    {
+    }
+
+bool RewritePlugin::insertText( SourceLocation Loc, StringRef Str, bool InsertAfter, bool indentNewLines )
+    {
+    if( rewriter.InsertText( Loc, Str, InsertAfter, indentNewLines ))
+        return reportEditFailure( Loc );
+    return true;
+    }
+
+bool RewritePlugin::insertTextAfter( SourceLocation Loc, StringRef Str )
+    {
+    if( rewriter.InsertTextAfter( Loc, Str ))
+        return reportEditFailure( Loc );
+    return true;
+    }
+
+bool RewritePlugin::insertTextAfterToken( SourceLocation Loc, StringRef Str )
+    {
+    if( rewriter.InsertTextAfterToken( Loc, Str ))
+        return reportEditFailure( Loc );
+    return true;
+    }
+
+bool RewritePlugin::insertTextBefore( SourceLocation Loc, StringRef Str )
+    {
+    if( rewriter.InsertTextBefore( Loc, Str ))
+        return reportEditFailure( Loc );
+    return true;
+    }
+
+bool RewritePlugin::removeText( SourceLocation Start, unsigned Length, RewriteOptions opts )
+    {
+    if( rewriter.RemoveText( Start, Length, opts ))
+        return reportEditFailure( Start );
+    return true;
+    }
+
+bool RewritePlugin::removeText( CharSourceRange range, RewriteOptions opts )
+    {
+    if( rewriter.RemoveText( range, opts ))
+        return reportEditFailure( range.getBegin());
+    return true;
+    }
+
+bool RewritePlugin::removeText( SourceRange range, RewriteOptions opts )
+    {
+    if( rewriter.RemoveText( range, opts ))
+        return reportEditFailure( range.getBegin());
+    return true;
+    }
+
+bool RewritePlugin::replaceText( SourceLocation Start, unsigned OrigLength, StringRef NewStr )
+    {
+    if( rewriter.ReplaceText( Start, OrigLength, NewStr ))
+        return reportEditFailure( Start );
+    return true;
+    }
+
+bool RewritePlugin::replaceText( SourceRange range, StringRef NewStr )
+    {
+    if( rewriter.ReplaceText( range, NewStr ))
+        return reportEditFailure( range.getBegin());
+    return true;
+    }
+
+bool RewritePlugin::replaceText( SourceRange range, SourceRange replacementRange )
+    {
+    if( rewriter.ReplaceText( range, replacementRange ))
+        return reportEditFailure( range.getBegin());
+    return true;
+    }
+
+bool RewritePlugin::reportEditFailure( SourceLocation loc )
+    {
+    DiagnosticsEngine& diag = context.getDiagnostics();
+    diag.Report( loc, diag.getCustomDiagID( DiagnosticsEngine::Warning,
+        "cannot perform source modification (macro expansion involved?) [loplugin]" ));
+    return false;
+    }
+
+
 /**
  Class that manages all LO modules.
 */

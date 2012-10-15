@@ -18,14 +18,12 @@ namespace loplugin
 
 class LclStaticFix
     : public RecursiveASTVisitor< LclStaticFix >
-    , public Plugin
+    , public RewritePlugin
     {
     public:
         explicit LclStaticFix( ASTContext& context, Rewriter& rewriter );
         void run();
         bool VisitFunctionDecl( FunctionDecl* declaration );
-    private:
-        Rewriter& rewriter;
     };
 
 } // namespace

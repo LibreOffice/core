@@ -39,7 +39,25 @@ class RewritePlugin
     public:
         explicit RewritePlugin( ASTContext& context, Rewriter& rewriter );
     protected:
+        typedef Rewriter::RewriteOptions RewriteOptions;
+        // These following insert/remove/replaceText functions map to functions
+        // in clang::Rewriter, with two differences:
+        // - they (more intuitively) return false on failure rather than true
+        // - they report a warning when the change cannot be done
+        bool insertText( SourceLocation Loc, StringRef Str,
+            bool InsertAfter = true, bool indentNewLines = false );
+        bool insertTextAfter( SourceLocation Loc, StringRef Str );
+        bool insertTextAfterToken( SourceLocation Loc, StringRef Str );
+        bool insertTextBefore( SourceLocation Loc, StringRef Str );
+        bool removeText( SourceLocation Start, unsigned Length, RewriteOptions opts = RewriteOptions());
+        bool removeText( CharSourceRange range, RewriteOptions opts = RewriteOptions());
+        bool removeText( SourceRange range, RewriteOptions opts = RewriteOptions());
+        bool replaceText( SourceLocation Start, unsigned OrigLength, StringRef NewStr );
+        bool replaceText( SourceRange range, StringRef NewStr );
+        bool replaceText( SourceRange range, SourceRange replacementRange );
         Rewriter& rewriter;
+    private:
+        bool reportEditFailure( SourceLocation loc );
     };
 
 inline

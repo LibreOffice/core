@@ -22,7 +22,7 @@ namespace loplugin
 {
 
 LclStaticFix::LclStaticFix( ASTContext& context, Rewriter& rewriter )
-    : Plugin( context ), rewriter( rewriter )
+    : RewritePlugin( context, rewriter )
     {
     }
 
@@ -46,12 +46,7 @@ bool LclStaticFix::VisitFunctionDecl( FunctionDecl* declaration )
         return true;
     if( name.compare( 0, 4, "lcl_" ) != 0 )
         return true;
-    if( rewriter.InsertText( declaration->getLocStart(), "static " ))
-        { // the logic is backwards, true here meant it failed, so report
-        report( DiagnosticsEngine::Warning,
-            "cannot fix lcl_ function (result of macro expansion?) [loplugin]",
-            declaration->getLocStart());
-        }
+    insertText( declaration->getLocStart(), "static " );
     return true;
     }
 
