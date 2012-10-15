@@ -67,8 +67,8 @@ class FaxWizardDialogImpl(FaxWizardDialog):
         self.sTemplatePath = ""
 
     @classmethod
-    def main(self, args):
-        #Call the wizard remotely
+    def main(self):
+        #Call the wizard remotely(see README)
         try:
             ConnectStr = \
                 "uno:socket,host=localhost,port=2002;urp;StarOffice.ComponentContext"
