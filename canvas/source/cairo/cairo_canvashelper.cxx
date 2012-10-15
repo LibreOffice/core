@@ -339,6 +339,22 @@ namespace cairocanvas
         return ::BitmapEx();
     }
 
+    static sal_uInt8 lcl_GetColor(BitmapColor const& rColor)
+    {
+        sal_uInt8 nTemp(0);
+        if (rColor.IsIndex())
+        {
+            nTemp = rColor.GetIndex();
+        }
+        else
+        {
+            nTemp = rColor.GetBlue();
+            // greyscale expected here, or what would non-grey colors mean?
+            assert(rColor.GetRed() == nTemp && rColor.GetGreen() == nTemp);
+        }
+        return nTemp;
+    }
+
     static bool readAlpha( BitmapReadAccess* pAlphaReadAcc, long nY, const long nWidth, unsigned char* data, long nOff )
     {
         bool bIsAlpha = false;
@@ -364,7 +380,10 @@ namespace cairocanvas
                 pReadScan = pAlphaReadAcc->GetScanline( nY );
                 for( nX = 0; nX < nWidth; nX++ )
                 {
-                    nAlpha = data[ nOff ] = 255 - ( pAlphaReadAcc->GetPaletteColor( *pReadScan++ ).GetIndex() );
+                    BitmapColor const& rColor(
+                        pAlphaReadAcc->GetPaletteColor(*pReadScan));
+                    pReadScan++;
+                    nAlpha = data[ nOff ] = 255 - lcl_GetColor(rColor);
                     if( nAlpha != 255 )
                         bIsAlpha = true;
                     nOff += 4;
