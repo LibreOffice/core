@@ -168,12 +168,6 @@ OUString SvxFont::CalcCaseMap(const OUString &rTxt) const
 }
 
 /*************************************************************************
-* Starting form here are the methods that can not be used in Writer,
-* so we put this section to be excluded by REDUCEDSVXFONT.
- *************************************************************************/
-#ifndef REDUCEDSVXFONT
-
-/*************************************************************************
  *                      class SvxDoCapitals
  * The virtual Method Do si called by SvxFont::DoOnCapitals alternately
  * the uppercase and lowercase parts. The derivate of SvxDoCapitals fills
@@ -766,8 +760,5 @@ void SvxFont::DrawCapital( OutputDevice *pOut,
     SvxDoDrawCapital aDo( (SvxFont *)this,pOut,rTxt,nIdx,nLen,rPos,nKern );
     DoOnCapitals( aDo );
 }
-
-#endif // !REDUCEDSVXFONT
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

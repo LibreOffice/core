@@ -84,8 +84,6 @@ public:
     // Consider Upper case, Lower case letters etc.
     OUString CalcCaseMap(const OUString &rTxt) const;
 
-// The following section is not needed by anyone, so it can be excluded.
-#ifndef REDUCEDSVXFONT
     // Handle upper case letters
     void DoOnCapitals( SvxDoCapitals &rDo,
                        const sal_uInt16 nPartLen = USHRT_MAX ) const;
@@ -116,7 +114,6 @@ public:
                    const Point &rPos, const String &rTxt,
                    const sal_uInt16 nIdx = 0, const sal_uInt16 nLen = STRING_LEN ) const;
 
-#endif // !REDUCEDSVXFONT
     static void DrawArrow( OutputDevice &rOut, const Rectangle& rRect,
         const Size& rSize, const Color& rCol, sal_Bool bLeft );
     SvxFont&    operator=( const SvxFont& rFont );
