@@ -11639,7 +11639,9 @@ else
     case "$_os" in
     WINNT|Darwin|iOS|Android)
         SYSTEM_GDKPIXBUF=NO
-        BUILD_TYPE="$BUILD_TYPE GDK_PIXBUF"
+        if test $_os != iOS -a $_os != Android; then
+            BUILD_TYPE="$BUILD_TYPE GDK_PIXBUF"
+        fi
         AC_MSG_RESULT([no])
         ;;
     *)
@@ -11766,7 +11768,9 @@ else
     case "$_os" in
     WINNT|Darwin|iOS|Android)
         SYSTEM_LIBCROCO=NO
-        BUILD_TYPE="$BUILD_TYPE LIBCROCO"
+        if test $_os != iOS -a $_os != Android; then
+            BUILD_TYPE="$BUILD_TYPE LIBCROCO"
+        fi
         AC_MSG_RESULT([no])
         ;;
     *)
@@ -11798,7 +11802,9 @@ else
     case "$_os" in
     WINNT|Darwin|iOS|Android)
         SYSTEM_PANGO=NO
-        BUILD_TYPE="$BUILD_TYPE PANGO"
+        if test $_os != iOS -a $_os != Android; then
+            BUILD_TYPE="$BUILD_TYPE PANGO"
+        fi
         AC_MSG_RESULT([no])
         ;;
     *)
@@ -11831,7 +11837,9 @@ else
     case "$_os" in
     WINNT|Darwin|iOS|Android)
         SYSTEM_LIBGSF=NO
-        BUILD_TYPE="$BUILD_TYPE LIBGSF"
+        if test $_os != iOS -a $_os != Android; then
+            BUILD_TYPE="$BUILD_TYPE LIBGSF"
+        fi
         AC_MSG_RESULT([no])
         ;;
     *)
