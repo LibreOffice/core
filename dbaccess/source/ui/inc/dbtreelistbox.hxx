@@ -56,7 +56,7 @@ namespace dbaui
         OScrollHelper               m_aScrollHelper;
         Timer                       m_aTimer; // is needed for table updates
         Point                       m_aMousePos;
-        ::std::set< SvListEntry* >  m_aSelectedEntries;
+        std::set<SvLBoxEntry*>      m_aSelectedEntries;
         SvLBoxEntry*                m_pDragedEntry;
         IControlActionListener*     m_pActionListener;
         IContextMenuProvider*

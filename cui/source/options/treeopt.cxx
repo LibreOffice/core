@@ -1841,10 +1841,10 @@ void OfaTreeOptionsDialog::ResizeTreeLB( void )
     SvLBoxTreeList* pTreeList = aTreeLB.GetModel();
     DBG_ASSERT( pTreeList, "-OfaTreeOptionsDialog::ResizeTreeLB(): no model, no cookies!" );
 
-    SvListEntry*        pEntry = pTreeList->First();
+    SvLBoxEntry* pEntry = pTreeList->First();
     while( pEntry )
     {
-        long n = aTreeLB.GetTextWidth( aTreeLB.GetEntryText( static_cast< SvLBoxEntry* >( pEntry ) ) );
+        long n = aTreeLB.GetTextWidth(aTreeLB.GetEntryText(pEntry));
         n += ((nDepth == 0) ? nIndent0 : nIndent1);
 
         if( n > nDelta )
