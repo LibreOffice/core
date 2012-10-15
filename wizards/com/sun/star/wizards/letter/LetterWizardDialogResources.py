@@ -33,7 +33,6 @@ class LetterWizardDialogResources(Resource):
         self.RoadmapLabels = []
         self.SalutationLabels = []
         self.GreetingLabels = []
-        self.LanguageLabels = []
 
         self.resLetterWizardDialog_title = \
             self.getResText(
@@ -210,6 +209,35 @@ class LetterWizardDialogResources(Resource):
             self.getResText(
                 LetterWizardDialogResources.RID_LETTERWIZARDDIALOG_START + 58)
 
+        #Create a dictionary for localising the bussiness templates
+        self.dictBusinessTemplate = {
+        "Elegant" : self.getResText(
+                LetterWizardDialogResources.RID_LETTERWIZARDDIALOG_START + 60),
+        "Modern" : self.getResText(
+                LetterWizardDialogResources.RID_LETTERWIZARDDIALOG_START + 61),
+        "Office" : self.getResText(
+                LetterWizardDialogResources.RID_LETTERWIZARDDIALOG_START + 62)}
+                
+        #Create a dictionary for localising the official templates
+        self.dictOfficialTemplate = {
+        "Elegant" : self.getResText(
+                LetterWizardDialogResources.RID_LETTERWIZARDDIALOG_START + 60),
+        "Modern" : self.getResText(
+                LetterWizardDialogResources.RID_LETTERWIZARDDIALOG_START + 61),
+        "Office" : self.getResText(
+                LetterWizardDialogResources.RID_LETTERWIZARDDIALOG_START + 62)}
+
+        #Create a dictionary for localising the private templates
+        self.dictPrivateTemplate = {                
+        "Bottle" : self.getResText(
+                LetterWizardDialogResources.RID_LETTERWIZARDDIALOG_START + 63),
+        "Mail" : self.getResText(
+                LetterWizardDialogResources.RID_LETTERWIZARDDIALOG_START + 64),
+        "Marine" : self.getResText(
+                LetterWizardDialogResources.RID_LETTERWIZARDDIALOG_START + 65),
+        "RedLine" : self.getResText(
+                LetterWizardDialogResources.RID_LETTERWIZARDDIALOG_START + 66)}
+
         #Common Resources
         self.resOverwriteWarning = \
             self.getResText(
@@ -221,7 +249,6 @@ class LetterWizardDialogResources(Resource):
         self.loadRoadmapResources()
         self.loadSalutationResources()
         self.loadGreetingResources()
-        self.loadCommonResources()
 
     def loadRoadmapResources(self):       
         for i in xrange(6):

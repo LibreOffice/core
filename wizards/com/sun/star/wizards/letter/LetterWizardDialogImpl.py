@@ -376,8 +376,7 @@ class LetterWizardDialogImpl(LetterWizardDialog):
             LetterWizardDialogImpl.lstBusinessStylePos = selectedItemPos
             TextDocument.xTextDocument = \
                 self.myLetterDoc.loadAsPreview(
-                    self.BusinessFiles[1][selectedItemPos],
-                    False)
+                    self.BusinessFiles.values()[selectedItemPos], False)
             self.myLetterDoc.xTextDocument.lockControllers()
             self.initializeElements()
             self.chkBusinessPaperItemChanged()
@@ -390,8 +389,7 @@ class LetterWizardDialogImpl(LetterWizardDialog):
             LetterWizardDialogImpl.lstPrivOfficialStylePos = selectedItemPos
             TextDocument.xTextDocument = \
                 self.myLetterDoc.loadAsPreview(
-                    self.OfficialFiles[1][selectedItemPos],
-                    False)
+                    self.OfficialFiles.values()[selectedItemPos], False)
             self.myLetterDoc.xTextDocument.lockControllers()
             self.initializeElements()
             self.setPossibleSenderData(True)
@@ -404,8 +402,7 @@ class LetterWizardDialogImpl(LetterWizardDialog):
             LetterWizardDialogImpl.lstPrivateStylePos = selectedItemPos
             TextDocument.xTextDocument = \
                 self.myLetterDoc.loadAsPreview(
-                    self.PrivateFiles[1][selectedItemPos],
-                    False)
+                    self.PrivateFiles.values()[selectedItemPos], False)
             self.myLetterDoc.xTextDocument.lockControllers()
             self.initializeElements()
             self.setElements(True)
@@ -906,20 +903,23 @@ class LetterWizardDialogImpl(LetterWizardDialog):
         sLetterPath = FileAccess.combinePaths(
             xMSF, self.sTemplatePath, "/../common/wizard/letter")
         self.BusinessFiles = \
-            FileAccess.getFolderTitles(xMSF, "bus", sLetterPath)
+            FileAccess.getFolderTitles(
+                xMSF, "bus", sLetterPath, self.resources.dictBusinessTemplate)
         self.OfficialFiles = \
-            FileAccess.getFolderTitles(xMSF, "off", sLetterPath)
+            FileAccess.getFolderTitles(
+                xMSF, "off", sLetterPath, self.resources.dictOfficialTemplate)
         self.PrivateFiles = \
-            FileAccess.getFolderTitles(xMSF, "pri", sLetterPath)
+            FileAccess.getFolderTitles(
+                xMSF, "pri", sLetterPath, self.resources.dictPrivateTemplate)
         self.setControlProperty(
             "lstBusinessStyle", "StringItemList",
-            tuple(self.BusinessFiles[0]))
+            tuple(self.BusinessFiles.keys()))
         self.setControlProperty(
             "lstPrivOfficialStyle", "StringItemList",
-            tuple(self.OfficialFiles[0]))
+            tuple(self.OfficialFiles.keys()))
         self.setControlProperty(
             "lstPrivateStyle", "StringItemList",
-            tuple(self.PrivateFiles[0]))
+            tuple(self.PrivateFiles.keys()))
         self.setControlProperty(
             "lstBusinessStyle", "SelectedItems", (0,))
         self.setControlProperty(
