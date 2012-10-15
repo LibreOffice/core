@@ -11,7 +11,9 @@
 
 extern "C"
 {
+    extern void * animcore_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * avmedia_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
+    extern void * dba_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * dbaxml_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * evtatt_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * fileacc_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
@@ -34,6 +36,7 @@ extern "C"
     extern void * sdd_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * sm_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * smd_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
+    extern void * spell_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * svgfilter_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * sw_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * swd_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
@@ -55,7 +58,9 @@ const lib_to_component_mapping *
 lo_get_libmap(void)
 {
     static lib_to_component_mapping map[] = {
+        { "libanimcorelo.a", animcore_component_getFactory },
         { "libavmedialo.a", avmedia_component_getFactory },
+        { "libdbalo.a", dba_component_getFactory },
         { "libdbaxmllo.a", dbaxml_component_getFactory },
         { "libevtattlo.a", evtatt_component_getFactory },
         { "libfileacc.a", fileacc_component_getFactory },
