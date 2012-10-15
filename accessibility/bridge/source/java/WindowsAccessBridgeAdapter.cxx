@@ -83,12 +83,12 @@ jmethodID g_jmRevokeTopWindow = 0;
 // functions
 //------------------------------------------------------------------------
 
-JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM *, void *)
+SAL_DLLPUBLIC_EXPORT jint JNICALL JNI_OnLoad(JavaVM *, void *)
 {
     return JNI_VERSION_1_2;
 }
 
-JNIEXPORT jbyteArray JNICALL
+SAL_DLLPUBLIC_EXPORT jbyteArray JNICALL
 Java_org_openoffice_accessibility_WindowsAccessBridgeAdapter_getProcessID(JNIEnv *pJNIEnv, jclass clazz)
 {
     // Initialize global class and method references
@@ -124,7 +124,7 @@ Java_org_openoffice_accessibility_WindowsAccessBridgeAdapter_getProcessID(JNIEnv
     return jbaProcessID;
 }
 
-JNIEXPORT jboolean JNICALL
+SAL_DLLPUBLIC_EXPORT jboolean JNICALL
 Java_org_openoffice_accessibility_WindowsAccessBridgeAdapter_createMapping(JNIEnv *, jclass, jlong pointer)
 {
     uno_Environment * pJava_environment = NULL;
@@ -180,7 +180,7 @@ Java_org_openoffice_accessibility_WindowsAccessBridgeAdapter_createMapping(JNIEn
     return JNI_TRUE;
 }
 
-JNIEXPORT void JNICALL JNI_OnUnload(JavaVM *jvm, void *)
+SAL_DLLPUBLIC_EXPORT void JNICALL JNI_OnUnload(JavaVM *jvm, void *)
 {
     ::Application::RemoveEventListener(g_aEventListenerLink);
 
