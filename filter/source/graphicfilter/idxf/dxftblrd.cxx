@@ -40,28 +40,42 @@ void DXFLType::Read(DXFGroupReader & rDGR)
     {
         switch (rDGR.GetG())
         {
-            case  2: strncpy( sName, rDGR.GetS(), DXF_MAX_STRING_LEN + 1 ); break;
-            case 70: nFlags=rDGR.GetI(); break;
-            case  3: strncpy( sDescription, rDGR.GetS(), DXF_MAX_STRING_LEN + 1 ); break;
-            case 73:
-                if (nDashIndex!=-1) {
-                    rDGR.SetError();
-                    return;
-                }
-                nDashCount=rDGR.GetI();
-                if (nDashCount>DXF_MAX_DASH_COUNT)
-                    nDashCount=DXF_MAX_DASH_COUNT;
-                nDashIndex=0;
-                break;
-            case 40: fPatternLength=rDGR.GetF(); break;
-            case 49:
-                if (nDashCount==-1) {
-                    rDGR.SetError();
-                    return;
-                }
-                if (nDashIndex<nDashCount)
-                    fDash[nDashIndex++]=rDGR.GetF();
-                break;
+        case  2:
+            strncpy( sName, rDGR.GetS(), DXF_MAX_STRING_LEN );
+            sName[DXF_MAX_STRING_LEN] = 0;
+            break;
+        case  3:
+            strncpy( sDescription, rDGR.GetS(), DXF_MAX_STRING_LEN );
+            sDescription[DXF_MAX_STRING_LEN] = 0;
+            break;
+        case 70:
+            nFlags=rDGR.GetI();
+            break;
+        case 73:
+            if (nDashIndex!=-1)
+            {
+                rDGR.SetError();
+                return;
+            }
+            nDashCount=rDGR.GetI();
+            if (nDashCount>DXF_MAX_DASH_COUNT)
+            {
+                nDashCount=DXF_MAX_DASH_COUNT;
+            }
+            nDashIndex=0;
+            break;
+        case 40: fPatternLength=rDGR.GetF(); break;
+        case 49:
+            if (nDashCount==-1)
+            {
+                rDGR.SetError();
+                return;
+            }
+            if (nDashIndex<nDashCount)
+            {
+                fDash[nDashIndex++]=rDGR.GetF();
+            }
+            break;
         }
     }
 }
@@ -79,12 +93,24 @@ DXFLayer::DXFLayer()
 
 void DXFLayer::Read(DXFGroupReader & rDGR)
 {
-    while (rDGR.Read()!=0) {
-        switch(rDGR.GetG()) {
-            case  2: strncpy( sName, rDGR.GetS(), DXF_MAX_STRING_LEN + 1 ); break;
-            case 70: nFlags=rDGR.GetI(); break;
-            case 62: nColor=rDGR.GetI(); break;
-            case  6: strncpy( sLineType, rDGR.GetS(), DXF_MAX_STRING_LEN + 1 ); break;
+    while (rDGR.Read()!=0)
+    {
+        switch(rDGR.GetG())
+        {
+        case  2:
+            strncpy( sName, rDGR.GetS(), DXF_MAX_STRING_LEN );
+            sName[DXF_MAX_STRING_LEN] = 0;
+            break;
+        case  6:
+            strncpy( sLineType, rDGR.GetS(), DXF_MAX_STRING_LEN );
+            sLineType[DXF_MAX_STRING_LEN] = 0;
+            break;
+        case 70:
+            nFlags=rDGR.GetI();
+            break;
+        case 62:
+            nColor=rDGR.GetI();
+            break;
         }
     }
 }
@@ -107,17 +133,40 @@ DXFStyle::DXFStyle()
 
 void DXFStyle::Read(DXFGroupReader & rDGR)
 {
-    while (rDGR.Read()!=0) {
-        switch(rDGR.GetG()) {
-            case  2: strncpy( sName, rDGR.GetS(), DXF_MAX_STRING_LEN + 1 ); break;
-            case 70: nFlags=rDGR.GetI(); break;
-            case 40: fHeight=rDGR.GetF(); break;
-            case 41: fWidthFak=rDGR.GetF(); break;
-            case 50: fOblAngle=rDGR.GetF(); break;
-            case 71: nTextGenFlags=rDGR.GetI(); break;
-            case 42: fLastHeightUsed=rDGR.GetF(); break;
-            case  3: strncpy( sPrimFontFile, rDGR.GetS(), DXF_MAX_STRING_LEN + 1 ); break;
-            case  4: strncpy( sBigFontFile, rDGR.GetS(), DXF_MAX_STRING_LEN + 1 ); break;
+    while (rDGR.Read()!=0)
+    {
+        switch(rDGR.GetG())
+        {
+        case  2:
+            strncpy( sName, rDGR.GetS(), DXF_MAX_STRING_LEN );
+            sName[DXF_MAX_STRING_LEN] = 0;
+            break;
+        case  3:
+            strncpy( sPrimFontFile, rDGR.GetS(), DXF_MAX_STRING_LEN );
+            sPrimFontFile[DXF_MAX_STRING_LEN] = 0;
+            break;
+        case  4:
+            strncpy( sBigFontFile, rDGR.GetS(), DXF_MAX_STRING_LEN );
+            sBigFontFile[DXF_MAX_STRING_LEN] = 0;
+            break;
+        case 70:
+            nFlags=rDGR.GetI();
+            break;
+        case 40:
+            fHeight=rDGR.GetF();
+            break;
+        case 41:
+            fWidthFak=rDGR.GetF();
+            break;
+        case 42:
+            fLastHeightUsed=rDGR.GetF();
+            break;
+        case 50:
+            fOblAngle=rDGR.GetF();
+            break;
+        case 71:
+            nTextGenFlags=rDGR.GetI();
+            break;
         }
     }
 }
@@ -164,44 +213,49 @@ DXFVPort::DXFVPort()
 
 void DXFVPort::Read(DXFGroupReader & rDGR)
 {
-    while (rDGR.Read()!=0) {
-        switch(rDGR.GetG()) {
-            case  2: strncpy( sName, rDGR.GetS(), DXF_MAX_STRING_LEN + 1); break;
-            case 70: nFlags=rDGR.GetI(); break;
-            case 10: fMinX=rDGR.GetF(); break;
-            case 20: fMinY=rDGR.GetF(); break;
-            case 11: fMaxX=rDGR.GetF(); break;
-            case 21: fMaxY=rDGR.GetF(); break;
-            case 12: fCenterX=rDGR.GetF(); break;
-            case 22: fCenterY=rDGR.GetF(); break;
-            case 13: fSnapBaseX=rDGR.GetF(); break;
-            case 23: fSnapBaseY=rDGR.GetF(); break;
-            case 14: fSnapSapcingX=rDGR.GetF(); break;
-            case 24: fSnapSpacingY=rDGR.GetF(); break;
-            case 15: fGridX=rDGR.GetF(); break;
-            case 25: fGridY=rDGR.GetF(); break;
-            case 16: aDirection.fx=rDGR.GetF(); break;
-            case 26: aDirection.fy=rDGR.GetF(); break;
-            case 36: aDirection.fz=rDGR.GetF(); break;
-            case 17: aTarget.fx=rDGR.GetF(); break;
-            case 27: aTarget.fy=rDGR.GetF(); break;
-            case 37: aTarget.fz=rDGR.GetF(); break;
-            case 40: fHeight=rDGR.GetF(); break;
-            case 41: fAspectRatio=rDGR.GetF(); break;
-            case 42: fLensLength=rDGR.GetF(); break;
-            case 43: fFrontClipPlane=rDGR.GetF(); break;
-            case 44: fBackClipPlane=rDGR.GetF(); break;
-            case 51: fTwistAngle=rDGR.GetF(); break;
-            case 68: nStatus=rDGR.GetI(); break;
-            case 69: nID=rDGR.GetI(); break;
-            case 71: nMode=rDGR.GetI(); break;
-            case 72: nCircleZoomPercent=rDGR.GetI(); break;
-            case 73: nFastZoom=rDGR.GetI(); break;
-            case 74: nUCSICON=rDGR.GetI(); break;
-            case 75: nSnap=rDGR.GetI(); break;
-            case 76: nGrid=rDGR.GetI(); break;
-            case 77: nSnapStyle=rDGR.GetI(); break;
-            case 78: nSnapIsopair=rDGR.GetI(); break;
+    while (rDGR.Read()!=0)
+    {
+        switch(rDGR.GetG())
+        {
+        case  2:
+            strncpy( sName, rDGR.GetS(), DXF_MAX_STRING_LEN);
+            sName[DXF_MAX_STRING_LEN] = 0;
+            break;
+        case 10: fMinX=rDGR.GetF(); break;
+        case 11: fMaxX=rDGR.GetF(); break;
+        case 12: fCenterX=rDGR.GetF(); break;
+        case 13: fSnapBaseX=rDGR.GetF(); break;
+        case 14: fSnapSapcingX=rDGR.GetF(); break;
+        case 15: fGridX=rDGR.GetF(); break;
+        case 16: aDirection.fx=rDGR.GetF(); break;
+        case 17: aTarget.fx=rDGR.GetF(); break;
+        case 20: fMinY=rDGR.GetF(); break;
+        case 21: fMaxY=rDGR.GetF(); break;
+        case 22: fCenterY=rDGR.GetF(); break;
+        case 23: fSnapBaseY=rDGR.GetF(); break;
+        case 24: fSnapSpacingY=rDGR.GetF(); break;
+        case 25: fGridY=rDGR.GetF(); break;
+        case 26: aDirection.fy=rDGR.GetF(); break;
+        case 27: aTarget.fy=rDGR.GetF(); break;
+        case 36: aDirection.fz=rDGR.GetF(); break;
+        case 37: aTarget.fz=rDGR.GetF(); break;
+        case 40: fHeight=rDGR.GetF(); break;
+        case 41: fAspectRatio=rDGR.GetF(); break;
+        case 42: fLensLength=rDGR.GetF(); break;
+        case 43: fFrontClipPlane=rDGR.GetF(); break;
+        case 44: fBackClipPlane=rDGR.GetF(); break;
+        case 51: fTwistAngle=rDGR.GetF(); break;
+        case 68: nStatus=rDGR.GetI(); break;
+        case 69: nID=rDGR.GetI(); break;
+        case 70: nFlags=rDGR.GetI(); break;
+        case 71: nMode=rDGR.GetI(); break;
+        case 72: nCircleZoomPercent=rDGR.GetI(); break;
+        case 73: nFastZoom=rDGR.GetI(); break;
+        case 74: nUCSICON=rDGR.GetI(); break;
+        case 75: nSnap=rDGR.GetI(); break;
+        case 76: nGrid=rDGR.GetI(); break;
+        case 77: nSnapStyle=rDGR.GetI(); break;
+        case 78: nSnapIsopair=rDGR.GetI(); break;
         }
     }
 }
