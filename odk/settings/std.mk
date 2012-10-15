@@ -56,7 +56,9 @@ JAVA_OPTIONS=
 ifneq "$(OO_SDK_JAVA_HOME)" ""
 JAVA_BITS := $(shell $(OO_SDK_JAVA_HOME)/$(JAVABIN)/java -version 2>&1 | tail -1 | cut -d " " -f3)
 ifeq "$(JAVA_BITS)" "64-Bit"
+ifneq "$(PLATFORM)" "linux"
 JAVA_OPTIONS=-d32
+endif
 endif
 endif
 
