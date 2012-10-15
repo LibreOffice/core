@@ -150,9 +150,6 @@ class FaxWizardDialogImpl(FaxWizardDialog):
 
     def finishWizard(self):
         self.switchToStep(self.getCurrentStep(), self.nMaxStep)
-        self.myFaxDoc.setWizardTemplateDocInfo( \
-            self.resources.resFaxWizardDialog_title,
-            self.resources.resTemplateDescription)
         endWizard = True
         try:
             fileAccess = FileAccess(self.xMSF)
@@ -299,7 +296,6 @@ class FaxWizardDialogImpl(FaxWizardDialog):
             self.sWorkPath = FileAccess.getOfficePath2(xMSF, "Work", "", "")
             self.BusinessFiles = FileAccess.getFolderTitles(xMSF, "bus",
                 self.sFaxPath, self.resources.dictBusinessTemplate)
-            print self.BusinessFiles
             self.PrivateFiles = FileAccess.getFolderTitles(xMSF, "pri",
                 self.sFaxPath, self.resources.dictPrivateTemplate)
             
