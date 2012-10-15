@@ -184,7 +184,8 @@ DomainMapper_Impl::DomainMapper_Impl(
             DomainMapper& rDMapper,
             uno::Reference < uno::XComponentContext >  xContext,
             uno::Reference< lang::XComponent >  xModel,
-            SourceDocumentType eDocumentType) :
+            SourceDocumentType eDocumentType,
+            bool bIsNewDoc) :
         m_eDocumentType( eDocumentType ),
         m_rDMapper( rDMapper ),
         m_xTextDocument( xModel, uno::UNO_QUERY ),
@@ -209,7 +210,8 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_bIsFirstParaInSection( true ),
         m_bIsLastParaInSection( false ),
         m_bParaSectpr( false ),
-        m_bUsingEnhancedFields( false )
+        m_bUsingEnhancedFields( false ),
+        m_bIsNewDoc(bIsNewDoc)
 {
     appendTableManager( );
     GetBodyText();
@@ -3677,6 +3679,11 @@ SectionPropertyMap * DomainMapper_Impl::GetSectionContext()
     }
 
     return pSectionContext;
+}
+
+bool DomainMapper_Impl::IsNewDoc()
+{
+    return m_bIsNewDoc;
 }
 
 }}
