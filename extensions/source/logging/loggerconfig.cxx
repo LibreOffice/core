@@ -25,6 +25,7 @@
 #include "precompiled_extensions.hxx"
 
 #include "loggerconfig.hxx"
+#include <stdio.h>
 
 /** === begin UNO includes === **/
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -40,6 +41,8 @@
 /** === end UNO includes === **/
 
 #include <tools/diagnose_ex.h>
+#include <osl/process.h>
+#include <rtl/ustrbuf.hxx>
 
 #include <comphelper/componentcontext.hxx>
 
@@ -104,9 +107,47 @@ namespace logging
             try { sLoggerName = _rxLogger->getName(); }
             catch( const Exception& ) { DBG_UNHANDLED_EXCEPTION(); }
 
+            TimeValue aTimeValue;
+            oslDateTime aDateTime;
+            OSL_VERIFY( osl_getSystemTime( &aTimeValue ) );
+            OSL_VERIFY( osl_getDateTimeFromTimeValue( &aTimeValue, &aDateTime ) );
+
+            char buffer[ 30 ];
+            const size_t buffer_size = sizeof( buffer );
+
+            snprintf( buffer, buffer_size, "%04i-%02i-%02i",
+                      (int)aDateTime.Year,
+                      (int)aDateTime.Month,
+                      (int)aDateTime.Day );
+            rtl::OUString sDate = rtl::OUString::createFromAscii( buffer );
+
+            snprintf( buffer, buffer_size, "%02i-%02i-%02i.%03i",
+                (int)aDateTime.Hours,
+                (int)aDateTime.Minutes,
+                (int)aDateTime.Seconds,
+                ::sal::static_int_cast< sal_Int16 >( aDateTime.NanoSeconds / 10000000 ) );
+            rtl::OUString sTime = rtl::OUString::createFromAscii( buffer );
+
+            rtl::OUStringBuffer aBuff;
+            aBuff.append( sDate );
+            aBuff.append( sal_Unicode( '.' ) );
+            aBuff.append( sTime );
+            rtl::OUString sDateTime = aBuff.makeStringAndClear();
+
+            oslProcessIdentifier aProcessId = 0;
+            oslProcessInfo info;
+            info.Size = sizeof (oslProcessInfo);
+            if ( osl_getProcessInfo ( 0, osl_Process_IDENTIFIER, &info ) == osl_Process_E_None)
+                aProcessId = info.Ident;
+            rtl::OUString aPID = rtl::OUString::valueOf( sal_Int64( aProcessId ) );
+
             Variable aVariables[] =
             {
-                Variable( RTL_CONSTASCII_USTRINGPARAM( "$(loggername)" ), sLoggerName )
+                Variable( RTL_CONSTASCII_USTRINGPARAM( "$(loggername)" ), sLoggerName ),
+                Variable( RTL_CONSTASCII_USTRINGPARAM( "$(date)" ), sDate ),
+                Variable( RTL_CONSTASCII_USTRINGPARAM( "$(time)" ), sTime ),
+                Variable( RTL_CONSTASCII_USTRINGPARAM( "$(datetime)" ), sDateTime ),
+                Variable( RTL_CONSTASCII_USTRINGPARAM( "$(pid)" ), aPID )
             };
 
             for ( size_t i = 0; i < sizeof( aVariables ) / sizeof( aVariables[0] ); ++i )
