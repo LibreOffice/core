@@ -67,7 +67,7 @@ bool UnusedVariableCheck::VisitVarDecl( VarDecl* var )
             }
         if( !warn_unused )
             {
-            std::string n = type->getQualifiedNameAsString();
+            string n = type->getQualifiedNameAsString();
             // Check some common non-LO types.
             if( n == "std::string" || n == "std::basic_string"
                 || n == "std::list" || n == "std::__debug::list"

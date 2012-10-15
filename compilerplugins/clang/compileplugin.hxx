@@ -14,6 +14,8 @@
 #include <clang/AST/RecursiveASTVisitor.h>
 
 using namespace clang;
+using namespace llvm;
+using namespace std;
 
 namespace loplugin
 {

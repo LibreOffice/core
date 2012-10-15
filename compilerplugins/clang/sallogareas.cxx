@@ -14,8 +14,6 @@
 
 #include <fstream>
 
-using namespace std;
-
 namespace loplugin
 {
 
@@ -50,7 +48,7 @@ bool SalLogAreas::VisitCallExpr( CallExpr* call )
         if( func->getNumParams() == 4 && func->getIdentifier() != NULL
             && ( func->getName() == "sal_detail_log" || func->getName() == "log" ))
             {
-            std::string qualifiedName = func->getQualifiedNameAsString();
+            string qualifiedName = func->getQualifiedNameAsString();
             if( qualifiedName == "sal_detail_log" || qualifiedName == "sal::detail::log" )
                 {
                 if( const StringLiteral* area = dyn_cast< StringLiteral >( call->getArg( 1 )->IgnoreParenImpCasts()))

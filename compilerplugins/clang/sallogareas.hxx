@@ -31,7 +31,7 @@ class SalLogAreas
         void checkArea( StringRef area, SourceLocation location );
         void readLogAreas();
         const FunctionDecl* inFunction;
-        std::set< std::string > logAreas;
+        set< string > logAreas;
     };
 
 } // namespace

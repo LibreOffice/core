@@ -21,8 +21,6 @@
 #include "sallogareas.hxx"
 #include "unusedvariablecheck.hxx"
 
-using namespace clang;
-
 namespace loplugin
 {
 

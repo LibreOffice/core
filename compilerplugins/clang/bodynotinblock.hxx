@@ -25,7 +25,7 @@ class BodyNotInBlock
         void run();
         bool VisitFunctionDecl( FunctionDecl* declaration );
     private:
-        typedef std::vector< const Stmt* > StmtParents;
+        typedef vector< const Stmt* > StmtParents;
         void traverseStatement( const Stmt* stmt, StmtParents& parents );
         void checkBody( const Stmt* body, const StmtParents& parents, int stmtType, bool dontGoUp = false );
     };
