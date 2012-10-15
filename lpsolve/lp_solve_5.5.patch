@@ -146,5 +146,5 @@
 +
 +$CC -I.. -I../bfp -I../bfp/bfp_LUSOL -I../bfp/bfp_LUSOL/LUSOL -I../colamd -I../shared $opts $def -DYY_NEVER_INTERACTIVE -DPARSER_LP -DINVERSE_ACTIVE=INVERSE_LUSOL -DRoleIsExternalInvEngine -c $src
 +ls -l
-+ar -r liblpsolve55.a $obj
++$AR -r liblpsolve55.a $obj
 +rm $obj
