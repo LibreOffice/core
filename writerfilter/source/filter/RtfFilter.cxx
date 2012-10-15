@@ -67,6 +67,7 @@ sal_Bool RtfFilter::filter( const uno::Sequence< beans::PropertyValue >& aDescri
     {
         MediaDescriptor aMediaDesc( aDescriptor );
         bool bRepairStorage = aMediaDesc.getUnpackedValueOrDefault( "RepairPackage", false );
+        bool bIsNewDoc = aMediaDesc.getUnpackedValueOrDefault( "IsNewDoc", true );
 #ifdef DEBUG_IMPORT
         OUString sURL = aMediaDesc.getUnpackedValueOrDefault( MediaDescriptor::PROP_URL(), OUString() );
         ::std::string sURLc = OUStringToOString(sURL, RTL_TEXTENCODING_ASCII_US).getStr();
@@ -88,7 +89,7 @@ sal_Bool RtfFilter::filter( const uno::Sequence< beans::PropertyValue >& aDescri
                 uno::Reference<task::XStatusIndicator>());
 
         writerfilter::Stream::Pointer_t pStream(
-                new writerfilter::dmapper::DomainMapper(m_xContext, xInputStream, m_xDstDoc, bRepairStorage, writerfilter::dmapper::DOCUMENT_RTF));
+                new writerfilter::dmapper::DomainMapper(m_xContext, xInputStream, m_xDstDoc, bRepairStorage, writerfilter::dmapper::DOCUMENT_RTF, bIsNewDoc));
         writerfilter::rtftok::RTFDocument::Pointer_t const pDocument(
                 writerfilter::rtftok::RTFDocumentFactory::createDocument(m_xContext, xInputStream, m_xDstDoc, xFrame, xStatusIndicator));
         pDocument->resolve(*pStream);

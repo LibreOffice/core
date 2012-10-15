@@ -373,12 +373,15 @@ private:
 
     std::map< sal_Int32, com::sun::star::uno::Any > deferredCharacterProperties;
 
+    bool m_bIsNewDoc;
+
 public:
     DomainMapper_Impl(
             DomainMapper& rDMapper,
             uno::Reference < uno::XComponentContext >  xContext,
             uno::Reference< lang::XComponent >  xModel,
-            SourceDocumentType eDocumentType );
+            SourceDocumentType eDocumentType,
+            bool bIsNewDoc );
     DomainMapper_Impl();
     virtual ~DomainMapper_Impl();
 
@@ -654,6 +657,9 @@ public:
 
     /// Get a property of the current numbering style's current level.
     sal_Int32 getCurrentNumberingProperty(OUString aProp);
+
+    /// If we're importing into a new document, or just pasting to an existing one.
+    bool IsNewDoc();
 };
 } //namespace dmapper
 } //namespace writerfilter

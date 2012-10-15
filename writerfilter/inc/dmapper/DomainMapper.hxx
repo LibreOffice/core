@@ -81,7 +81,8 @@ public:
                                 ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > xInputStream,
                                 ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > xModel,
                                 bool bRepairStorage,
-                                SourceDocumentType eDocumentType);
+                                SourceDocumentType eDocumentType,
+                                bool bIsNewDoc = true);
     virtual ~DomainMapper();
 
     // Stream
