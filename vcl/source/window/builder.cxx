@@ -308,6 +308,18 @@ namespace
         return bVertical;
     }
 
+    bool extractMarkup(VclBuilder::stringmap &rMap)
+    {
+        bool bUseMarkup = false;
+        VclBuilder::stringmap::iterator aFind = rMap.find(OString("use-markup"));
+        if (aFind != rMap.end())
+        {
+            bUseMarkup = toBool(aFind->second);
+            rMap.erase(aFind);
+        }
+        return bUseMarkup;
+    }
+
     bool extractInconsistent(VclBuilder::stringmap &rMap)
     {
         bool bInconsistent = false;
@@ -808,6 +820,47 @@ namespace
     {
         return pWindow->GetType() == WINDOW_TABPAGE;
     }
+
+    //super cheesy markup, just globally set bold and/or
+    //italic if any tag exists and return detagged string
+    OString handleMarkup(Window &rWindow, const OString &rLabel)
+    {
+        OStringBuffer aBuf;
+
+        xmlreader::XmlReader reader(rLabel.getStr(), rLabel.getLength());
+        xmlreader::Span name;
+        int nsId;
+
+        while(1)
+        {
+            xmlreader::XmlReader::Result res = reader.nextItem(
+                xmlreader::XmlReader::TEXT_RAW, &name, &nsId);
+
+            if (res == xmlreader::XmlReader::RESULT_BEGIN)
+            {
+                if (name.equals(RTL_CONSTASCII_STRINGPARAM("b")))
+                {
+                    Font aFont(rWindow.GetControlFont());
+                    aFont.SetWeight(WEIGHT_BOLD);
+                    rWindow.SetControlFont(aFont);
+                }
+                else if (name.equals(RTL_CONSTASCII_STRINGPARAM("i")))
+                {
+                    Font aFont(rWindow.GetControlFont());
+                    aFont.SetItalic(ITALIC_NORMAL);
+                    rWindow.SetControlFont(aFont);
+                }
+            }
+
+            if (res == xmlreader::XmlReader::RESULT_TEXT)
+                aBuf.append(name.begin, name.length);
+
+            if (res == xmlreader::XmlReader::RESULT_DONE)
+                break;
+        }
+
+        return aBuf.makeStringAndClear();
+    }
 }
 
 Window *VclBuilder::insertObject(Window *pParent, const OString &rClass, const OString &rID, stringmap &rMap)
@@ -844,6 +897,18 @@ Window *VclBuilder::insertObject(Window *pParent, const OString &rClass, const O
 
     if (pCurrentChild)
     {
+        //Support super-basic bold/italic hints
+        if (extractMarkup(rMap))
+        {
+            VclBuilder::stringmap::iterator aFind = rMap.find(OString("label"));
+            if (aFind != rMap.end())
+            {
+                OString &rLabel = aFind->second;
+                if (rLabel.indexOf('<') != -1)
+                    rLabel = handleMarkup(*pCurrentChild, aFind->second);
+            }
+        }
+
         for (stringmap::iterator aI = rMap.begin(), aEnd = rMap.end(); aI != aEnd; ++aI)
         {
             const OString &rKey = aI->first;
