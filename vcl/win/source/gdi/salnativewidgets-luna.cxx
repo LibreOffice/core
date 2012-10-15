@@ -1087,6 +1087,7 @@ sal_Bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
                             aBGRect.right = rMVal.getNumericVal();
                             aBGRect.left  = rMVal.maItemRect.Left();
                         }
+                        rc = aBGRect;
                     }
                     iState = (nState & CTRL_STATE_ENABLED) ? MCB_NORMAL : MCB_DISABLED;
                     ImplDrawTheme( hTheme, hDC, MENU_POPUPCHECKBACKGROUND, iState, aBGRect, aCaption );
