@@ -2051,7 +2051,8 @@ bool CffSubsetterContext::emitAsType1( Type1Emitter& rEmitter,
     if( !*pFontName ) {
         if( mnFontNameSID) {
             // get the fontname directly if available
-            strncpy( pFontName, getString( mnFontNameSID), sizeof(rEmitter.maSubsetName));
+            strncpy( pFontName, getString( mnFontNameSID), sizeof(rEmitter.maSubsetName) - 1);
+            pFontName[sizeof(rEmitter.maSubsetName) - 1] = 0;
         } else if( mnFullNameSID) {
             // approximate fontname as fullname-whitespace
             const char* pI = getString( mnFullNameSID);
