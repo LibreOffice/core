@@ -97,17 +97,6 @@ class Configuration(object):
         return aLocLocale
 
     @classmethod
-    def getOfficeLinguistic(self, xMSF):
-        try:
-            oMasterKey = self.getConfigurationRoot(xMSF,
-                "org.openoffice.Setup/L10N/", False)
-            sLinguistic = Helper.getUnoObjectbyName(oMasterKey, "ooLocale")
-            return sLinguistic
-        except Exception, exception:
-            traceback.print_exc()
-            return None
-
-    @classmethod
     def removeNode(self, configView, name, xmsf=None):
         commitChanges = False
         if xmsf is not None:

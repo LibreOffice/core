@@ -62,8 +62,6 @@ class LetterWizardDialogImpl(LetterWizardDialog):
         self.BusCompanyAddress = None
         self.BusCompanyAddressReceiver = None
         self.BusFooter = None
-        self.Norms = []
-        self.NormPaths = []
 
     @classmethod
     def main(self):
@@ -97,7 +95,6 @@ class LetterWizardDialogImpl(LetterWizardDialog):
             self.buildStep5()
             self.buildStep6()
             self.__initializePaths()
-            self.initializeNorms()
             self.initializeSalutation()
             self.initializeGreeting()
 
@@ -106,10 +103,6 @@ class LetterWizardDialogImpl(LetterWizardDialog):
 
             self.myConfig = CGLetterWizard()
 
-            oL = self.getOfficeLinguistic()
-            self.myConfig.cp_BusinessLetter.cp_Norm = oL
-            self.myConfig.cp_PrivateOfficialLetter.cp_Norm = oL
-            self.myConfig.cp_PrivateLetter.cp_Norm = oL
             self.initializeTemplates(xMSF)
 
             #load the last used settings
@@ -800,25 +793,6 @@ class LetterWizardDialogImpl(LetterWizardDialog):
             self.disableBusinessPaper()
             self.setPossibleSenderData(True)
 
-    def getOfficeLinguistic(self):
-        oL = 0
-        found = False
-        OfficeLinguistic = Configuration.getOfficeLinguistic(self.xMSF)
-        i = 0
-        for index, workwith in enumerate(self.Norms):
-            if workwith.lower() == OfficeLinguistic.lower():
-                oL = index
-                found = True
-                break
-
-        if not found:
-            for index, workwith in enumerate(self.Norms):
-                if workwith.lower() == "en-US".lower():
-                    oL = index
-                    found = True
-                    break
-        return oL
-
     def setPossibleSenderData(self, bState):
         self.setControlProperty(
             "optSenderDefine", PropertyNames.PROPERTY_ENABLED, bState)
@@ -898,18 +872,6 @@ class LetterWizardDialogImpl(LetterWizardDialog):
         except Exception:
             traceback.print_exc()
 
-    def lstLetterNormItemChanged(self):
-        sCurrentNorm = self.Norms[getCurrentLetter().cp_Norm]
-        initializeTemplates(xMSF)
-        if self.optBusinessLetter.State:
-            self.lstBusinessStyleItemChanged()
-
-        elif optPrivOfficialLetter.State:
-            self.lstPrivOfficialStyleItemChanged()
-
-        elif optPrivateLetter.State:
-            self.lstPrivateStyleItemChanged()
-
     def initializeSalutation(self):
         self.setControlProperty(
             "lstSalutation", "StringItemList",
@@ -918,55 +880,6 @@ class LetterWizardDialogImpl(LetterWizardDialog):
     def initializeGreeting(self):
         self.setControlProperty(
             "lstGreeting", "StringItemList", self.resources.GreetingLabels)
-
-    def initializeNorms(self):
-        lc = LocaleCodes(self.xmsf)
-        allLocales = lc.getIDs()
-        nameList = []
-        sLetterSubPath = "/wizard/letter/"
-        try:
-            self.sTemplatePath = \
-                FileAccess.deleteLastSlashfromUrl(self.sTemplatePath)
-            nuString = \
-                self.sTemplatePath[:self.sTemplatePath.rfind("/")] + "/"
-            sMainPath = FileAccess.deleteLastSlashfromUrl(nuString)
-            self.sLetterPath = sMainPath + sLetterSubPath
-            xInterface = \
-                self.xmsf.createInstance("com.sun.star.ucb.SimpleFileAccess")
-            nameList = xInterface.getFolderContents(self.sLetterPath, True)
-        except Exception, e:
-            traceback.print_exc()
-
-        found = False
-        cIsoCode = ""
-        MSID = ""
-        LanguageLabels = []
-
-        for i in nameList:
-            found = False
-            cIsoCode = FileAccess.getFilename(i)
-            for j in allLocales:
-                aLang = j.split(";")
-                if cIsoCode.lower() == aLang[1].lower():
-                    MSID = aLang[2]
-                    found = True
-                    break
-
-            if not found:
-                for j in allLocales:
-                    aLang = j.split(";")
-                    if cIsoCode.lower() == aLang[1][:2]:
-                        MSID = aLang[2]
-                        found = True
-                        break
-
-            if found:
-                self.Norms.append(cIsoCode)
-                self.NormPaths.append(i)
-                #LanguageLabels.append(lc.getLanguageString(MSID))
-
-        self.setControlProperty(
-            "lstLetterNorm", "StringItemList", tuple(LanguageLabels))
 
     def getCurrentLetter(self):
         if self.myConfig.cp_LetterType == 0:
@@ -985,15 +898,12 @@ class LetterWizardDialogImpl(LetterWizardDialog):
                     self.xMSF, "Template", "share", "/wizard")
             self.sUserTemplatePath = \
                 FileAccess.getOfficePath2(self.xMSF, "Template", "user", "")
-            self.sBitmapPath = \
-                FileAccess.combinePaths(
-                    self.xMSF, self.sTemplatePath, "/../wizard/bitmap")
         except NoValidPathException, e:
             traceback.print_exc()
 
     def initializeTemplates(self, xMSF):
-        self.sCurrentNorm = self.Norms[self.getCurrentLetter().cp_Norm]
-        sLetterPath = self.NormPaths[self.getCurrentLetter().cp_Norm]
+        sLetterPath = FileAccess.combinePaths(
+            xMSF, self.sTemplatePath, "/../common/wizard/letter")
         self.BusinessFiles = \
             FileAccess.getFolderTitles(xMSF, "bus", sLetterPath)
         self.OfficialFiles = \
@@ -1146,8 +1056,6 @@ class LetterWizardDialogImpl(LetterWizardDialog):
                 cgl, "cp_PaperFooter", self.chkPaperFooter, True).updateUI()
             UnoDataAware.attachNumericControl(
                 cgl, "cp_PaperFooterHeight", self.numFooterHeight, True).updateUI()
-            UnoDataAware.attachListBox(
-                cgl, "cp_Norm", self.lstLetterNorm, True).updateUI()
             UnoDataAware.attachCheckBox(
                 cgl, "cp_PrintCompanyLogo", self.chkUseLogo, True).updateUI()
             UnoDataAware.attachCheckBox(
@@ -1207,7 +1115,8 @@ class LetterWizardDialogImpl(LetterWizardDialog):
 
     def saveConfiguration(self):
         try:
-            root = Configuration.getConfigurationRoot(self.xMSF, "/org.openoffice.Office.Writer/Wizards/Letter", True)
+            root = Configuration.getConfigurationRoot(self.xMSF,
+                "/org.openoffice.Office.Writer/Wizards/Letter", True)
             self.myConfig.writeConfiguration(root, "cp_")
             root.commitChanges()
         except Exception, e:

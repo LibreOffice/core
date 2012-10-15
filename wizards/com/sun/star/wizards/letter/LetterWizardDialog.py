@@ -547,21 +547,6 @@ class LetterWizardDialog(WizardDialog):
                 "lblTitle2", 91, 8, 2, 91, 212))
 
     def buildStep3(self):
-        self.lstLetterNorm = self.insertListBox(
-            "lstLetterNorm",
-            LSTLETTERNORM_ACTION_PERFORMED,
-            LSTLETTERNORM_ITEM_CHANGED,
-            ("Dropdown",
-                PropertyNames.PROPERTY_HEIGHT,
-                PropertyNames.PROPERTY_HELPURL,
-                PropertyNames.PROPERTY_NAME,
-                PropertyNames.PROPERTY_POSITION_X,
-                PropertyNames.PROPERTY_POSITION_Y,
-                PropertyNames.PROPERTY_STEP,
-                PropertyNames.PROPERTY_TABINDEX,
-                PropertyNames.PROPERTY_WIDTH),
-            (True, 12, HelpIds.getHelpIdString(HID + 21),
-                "lstLetterNorm", 210, 34, 3, 21, 74), self)
         self.chkUseLogo = self.insertCheckBox(
             "chkUseLogo", CHKUSELOGO_ITEM_CHANGED,
             (PropertyNames.PROPERTY_HEIGHT,

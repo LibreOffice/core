@@ -34,9 +34,6 @@ class Resource(object):
                 raise Exception ("could not initialize ResourceIndexAccess")
 
             self.xStringIndexAccess = xResource.getByName("String")
-            self.xStringListIndexAccess = xResource.getByName("StringList")
-            if self.xStringListIndexAccess is None:
-                raise Exception ("could not initialize xStringListIndexAccess")
 
             if self.xStringIndexAccess is None:
                 raise Exception ("could not initialize xStringIndexAccess")
@@ -48,13 +45,6 @@ class Resource(object):
     def getResText(self, nID):
         try:
             return self.xStringIndexAccess.getByIndex(nID)
-        except Exception, exception:
-            traceback.print_exc()
-            raise ValueError("Resource with ID not " + str(nID) + " not found")
-
-    def getStringList(self, nID):
-        try:
-            return self.xStringListIndexAccess.getByIndex(nID)
         except Exception, exception:
             traceback.print_exc()
             raise ValueError("Resource with ID not " + str(nID) + " not found")
