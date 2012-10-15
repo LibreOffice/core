@@ -11633,11 +11633,13 @@ if test "$SYSTEM_LIBRSVG" = YES; then
     AC_MSG_RESULT([yes])
 elif test "$enable_librsvg" = fully-internal; then
     SYSTEM_GDKPIXBUF=NO
+    BUILD_TYPE="$BUILD_TYPE GDK_PIXBUF"
     AC_MSG_RESULT([no])
 else
     case "$_os" in
     WINNT|Darwin|iOS|Android)
         SYSTEM_GDKPIXBUF=NO
+        BUILD_TYPE="$BUILD_TYPE GDK_PIXBUF"
         AC_MSG_RESULT([no])
         ;;
     *)
@@ -11736,6 +11738,7 @@ if test "$with_system_gettext" = yes; then
     AC_MSG_RESULT([yes])
 elif test "$with_system_gettext" = no; then
     SYSTEM_GETTEXT=NO
+    BUILD_TYPE="$BUILD_TYPE GETTEXT"
     AC_MSG_RESULT([no])
 else
     AC_MSG_ERROR([bad --with-system-gettext=$with_system_gettext])
@@ -11757,11 +11760,13 @@ if test "$SYSTEM_LIBRSVG" = YES; then
     AC_MSG_RESULT([yes])
 elif test "$enable_librsvg" = fully-internal; then
     SYSTEM_LIBCROCO=NO
+    BUILD_TYPE="$BUILD_TYPE LIBCROCO"
     AC_MSG_RESULT([no])
 else
     case "$_os" in
     WINNT|Darwin|iOS|Android)
         SYSTEM_LIBCROCO=NO
+        BUILD_TYPE="$BUILD_TYPE LIBCROCO"
         AC_MSG_RESULT([no])
         ;;
     *)
@@ -11787,11 +11792,13 @@ if test "$SYSTEM_LIBRSVG" = YES; then
     AC_MSG_RESULT([yes])
 elif test "$enable_librsvg" = fully-internal; then
     SYSTEM_PANGO=NO
+    BUILD_TYPE="$BUILD_TYPE PANGO"
     AC_MSG_RESULT([no])
 else
     case "$_os" in
     WINNT|Darwin|iOS|Android)
         SYSTEM_PANGO=NO
+        BUILD_TYPE="$BUILD_TYPE PANGO"
         AC_MSG_RESULT([no])
         ;;
     *)
@@ -11817,12 +11824,14 @@ if test "$SYSTEM_LIBRSVG" = YES; then
     AC_MSG_RESULT([yes])
 elif test "$enable_librsvg" = fully-internal; then
     SYSTEM_LIBGSF=NO
+    BUILD_TYPE="$BUILD_TYPE LIBGSF"
 	
     AC_MSG_RESULT([no])
 else
     case "$_os" in
     WINNT|Darwin|iOS|Android)
         SYSTEM_LIBGSF=NO
+        BUILD_TYPE="$BUILD_TYPE LIBGSF"
         AC_MSG_RESULT([no])
         ;;
     *)
