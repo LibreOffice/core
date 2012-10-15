@@ -44,26 +44,6 @@ class SlideSorterView;
 
 namespace sd { namespace slidesorter { namespace controller {
 
-/** A collection of functions that are usefull when creating animations.
-    They are collected here until a better place is found.
-*/
-class AnimationFunction
-    : private ::boost::noncopyable
-{
-public:
-    /** Acceleration function that maps [0,1] to [0,1] linearly, ie it
-        returns the given time value unaltered.
-    */
-    static double Linear (const double nTime);
-
-    /** Blend two points together according to the given weight.
-    */
-    static double Blend (const double nStartValue, const double nEndValue, const double nWeight);
-};
-
-
-
-
 class AnimationBezierFunction
 {
 public:
