@@ -46,9 +46,21 @@
         </info>
         <prop oor:name="FileURL" oor:type="xs:string" oor:nillable="false">
           <info>
-            <desc>Specifies the file URL for the log handler. The default value here will expand to a file
-            with the same name as the logger for which the handler is used, with extension ".log".
-            It will be located in the user's OOo data folder.</desc>
+            <desc>Specifies the file URL for the log handler.
+                This URL will be resolved using the
+                ::com::sun::star::util::PathSubstitution service. That is, it is
+                allowed to include placeholders supported by that service,
+                such as $(userurl). Beside these, the following default
+                placeholders can also be included:
+                    $(loggername) - the name of the logger
+                    $(date) - the current date
+                    $(time) - the current time
+                    $(datetime) - the current date time
+                    $(pid) - the process identifier
+                The default value here will expand to a file with the same name
+                as the logger for which the handler is used, with extension &quot;.log&quot;.
+                It will be located in the user's OOo data folder.
+            </desc>
           </info>
           <value>$(userurl)/$(loggername).log</value>
         </prop>
