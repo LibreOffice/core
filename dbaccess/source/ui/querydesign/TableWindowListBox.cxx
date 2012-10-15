@@ -90,8 +90,8 @@ SvLBoxEntry* OTableWindowListBox::GetEntryFromText( const String& rEntryText )
 {
     //////////////////////////////////////////////////////////////////////
     // Liste durchiterieren
-    SvTreeList* pTreeList = GetModel();
-    SvLBoxEntry* pEntry = (SvLBoxEntry*)pTreeList->First();
+    SvLBoxTreeList* pTreeList = GetModel();
+    SvLBoxEntry* pEntry = pTreeList->First();
     OJoinDesignView* pView = m_pTabWin->getDesignView();
     OJoinController& rController = pView->getController();
 
@@ -111,7 +111,7 @@ SvLBoxEntry* OTableWindowListBox::GetEntryFromText( const String& rEntryText )
             {
                 return pEntry;
             }
-            pEntry = (SvLBoxEntry*)pTreeList->Next( pEntry );
+            pEntry = pTreeList->Next(pEntry);
         }
     }
     catch(SQLException&)

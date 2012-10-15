@@ -74,7 +74,7 @@ void PasswordTable::Resort( bool bForced )
             nBits |= HIB_UPARROW;
         }
         GetTheHeaderBar().SetItemBits( 1, nBits );
-        SvTreeList* pListModel = GetModel();
+        SvLBoxTreeList* pListModel = GetModel();
         pListModel->SetSortMode( eMode );
         pListModel->Resort();
     }
