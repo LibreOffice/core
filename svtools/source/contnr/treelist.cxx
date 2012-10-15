@@ -28,9 +28,6 @@
 
 #include <svtools/treelist.hxx>
 
-DBG_NAME(SvListEntry);
-
-
 SvTreeEntryList::SvTreeEntryList() {}
 
 void SvTreeEntryList::push_back( SvListEntry* pItem )
@@ -157,65 +154,6 @@ SvTreeEntryList::SvTreeEntryList(const SvTreeEntryList& rList)
     for ( size_t i = 0, n = rList.size(); i < n; ++i )
         maEntryList.push_back(const_cast<SvListEntry*>(rList[i]));
 }
-
-SvListEntry::SvListEntry()
-{
-    DBG_CTOR(SvListEntry,0);
-    pChildren     = 0;
-    pParent     = 0;
-    nListPos    = 0;
-    nAbsPos     = 0;
-}
-
-SvListEntry::SvListEntry( const SvListEntry& rEntry )
-{
-    DBG_CTOR(SvListEntry,0);
-    pChildren  = 0;
-    pParent  = 0;
-    nListPos &= 0x80000000;
-    nListPos |= ( rEntry.nListPos & 0x7fffffff);
-    nAbsPos  = rEntry.nAbsPos;
-}
-
-SvListEntry::~SvListEntry()
-{
-    DBG_DTOR(SvListEntry,0);
-    if ( pChildren )
-    {
-        pChildren->DestroyAll();
-        delete pChildren;
-    }
-#ifdef DBG_UTIL
-    pChildren     = 0;
-    pParent     = 0;
-#endif
-}
-
-void SvListEntry::Clone( SvListEntry* pSource)
-{
-    DBG_CHKTHIS(SvListEntry,0);
-    nListPos &= 0x80000000;
-    nListPos |= ( pSource->nListPos & 0x7fffffff);
-    nAbsPos     = pSource->nAbsPos;
-}
-
-void SvListEntry::SetListPositions()
-{
-    if( pChildren )
-    {
-        SvTreeEntryList::iterator it = pChildren->begin(), itEnd = pChildren->end();
-        sal_uLong nCur = 0;
-        for (; it != itEnd; ++it)
-        {
-            SvListEntry* pEntry = *it;
-            pEntry->nListPos &= 0x80000000;
-            pEntry->nListPos |= nCur;
-            ++nCur;
-        }
-    }
-    nListPos &= (~0x80000000);
-}
-
 
 DBG_NAME(SvViewData);
 

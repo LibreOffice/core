@@ -29,15 +29,16 @@
 #ifndef _SVTREELIST_HXX
 #define _SVTREELIST_HXX
 
-#include <limits.h>
 #include "svtools/svtdllapi.h"
+#include "svtools/treelistentry.hxx"
 #include <tools/solar.h>
-#include <vector>
-#include <boost/ptr_container/ptr_map.hpp>
-
 #include <tools/link.hxx>
 #include <tools/string.hxx>
 #include <tools/debug.hxx>
+
+#include <limits.h>
+#include <vector>
+#include <boost/ptr_container/ptr_map.hpp>
 
 #define LISTACTION_INSERTED         1
 #define LISTACTION_REMOVING         2
@@ -99,47 +100,6 @@ public:
     iterator end();
     SvListEntry* front();
     SvListEntry* back();
-};
-
-//=============================================================================
-
-class SVT_DLLPUBLIC SvListEntry
-{
-friend class SvTreeList;
-friend class SvListView;
-
-private:
-    SvListEntry*        pParent;
-    SvTreeEntryList*    pChildren;
-    sal_uLong           nAbsPos;
-    sal_uLong           nListPos;
-
-    void                SetListPositions();
-    void                InvalidateChildrensListPositions()
-    {
-        nListPos |= 0x80000000;
-    }
-
-public:
-                        SvListEntry();
-                        SvListEntry( const SvListEntry& );
-    virtual             ~SvListEntry();
-    sal_Bool            HasChildren() { return (sal_Bool)(pChildren!=0); }
-    sal_Bool            HasChildListPos() const
-    {
-        if( pParent && !(pParent->nListPos & 0x80000000) )
-            return sal_True;
-        else return sal_False;
-    }
-
-    sal_uLong           GetChildListPos() const
-    {
-        if( pParent && (pParent->nListPos & 0x80000000) )
-            pParent->SetListPositions();
-        return ( nListPos & 0x7fffffff );
-    }
-
-    virtual void        Clone( SvListEntry* pSource );
 };
 
 class SvListView;

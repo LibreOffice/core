@@ -139,6 +139,7 @@ $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/stdmenu.hxx,svtools/st
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/stringtransfer.hxx,svtools/stringtransfer.hxx))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/svlbitm.hxx,svtools/svlbitm.hxx))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/treelistbox.hxx,svtools/treelistbox.hxx))
+$(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/treelistentry.hxx,svtools/treelistentry.hxx))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/svmedit.hxx,svtools/svmedit.hxx))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/svmedit2.hxx,svtools/svmedit2.hxx))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/svparser.hxx,svtools/svparser.hxx))

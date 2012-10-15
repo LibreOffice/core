@@ -198,55 +198,6 @@ public:
     virtual void        Clone( SvLBoxItem* pSource ) = 0;
 };
 
-// Flags, die am Model haengen
-#define SV_ENTRYFLAG_CHILDREN_ON_DEMAND   0x0001
-#define SV_ENTRYFLAG_DISABLE_DROP       0x0002
-#define SV_ENTRYFLAG_IN_USE             0x0004
-// wird gesetzt, wenn RequestingChildren keine Children gestzt hat
-#define SV_ENTRYFLAG_NO_NODEBMP         0x0008
-// Eintrag hatte oder hat Kinder
-#define SV_ENTRYFLAG_HAD_CHILDREN       0x0010
-
-#define SV_ENTRYFLAG_USER_FLAGS         0xF000
-#define SV_ENTRYFLAG_SEMITRANSPARENT    0x8000      // draw semi-transparent entry bitmaps
-
-class SVT_DLLPUBLIC SvLBoxEntry : public SvListEntry
-{
-    friend class SvTreeListBox;
-
-    std::vector<SvLBoxItem*> aItems;
-    void*            pUserData;
-    sal_uInt16       nEntryFlags;
-    SVT_DLLPRIVATE void         DeleteItems_Impl();
-public:
-
-                SvLBoxEntry();
-    virtual     ~SvLBoxEntry();
-
-    sal_uInt16      ItemCount() const { return (sal_uInt16)aItems.size(); }
-    // DARF NUR GERUFEN WERDEN, WENN DER EINTRAG NOCH NICHT IM MODEL
-    // EINGEFUEGT IST, DA SONST FUER DAS ITEM KEINE VIEW-ABHAENGIGEN
-    // DATEN ALLOZIERT WERDEN!
-    void        AddItem( SvLBoxItem* pItem );
-    void        ReplaceItem( SvLBoxItem* pNewItem, sal_uInt16 nPos );
-    SvLBoxItem* GetItem( sal_uInt16 nPos ) const { return aItems[nPos]; }
-    SvLBoxItem* GetFirstItem( sal_uInt16 nId );
-    sal_uInt16      GetPos( SvLBoxItem* pItem ) const
-    {
-        std::vector<SvLBoxItem*>::const_iterator it = std::find( aItems.begin(), aItems.end(), pItem );
-        return it == aItems.end() ? USHRT_MAX : it - aItems.begin();
-    }
-    void*       GetUserData() const { return pUserData; }
-    void        SetUserData( void* pPtr ) { pUserData = pPtr; }
-    virtual void Clone( SvListEntry* pSource );
-    void        EnableChildrenOnDemand( sal_Bool bEnable=sal_True );
-    sal_Bool        HasChildrenOnDemand() const { return (sal_Bool)((nEntryFlags & SV_ENTRYFLAG_CHILDREN_ON_DEMAND)!=0); }
-    sal_Bool        HasInUseEmphasis() const    { return (sal_Bool)((nEntryFlags & SV_ENTRYFLAG_IN_USE)!=0); }
-
-    sal_uInt16      GetFlags() const { return nEntryFlags; }
-    void        SetFlags( sal_uInt16 nFlags ) { nEntryFlags = nFlags; }
-};
-
 class SVT_DLLPUBLIC SvLBoxTreeList : public SvTreeList
 {
 public:
