@@ -491,7 +491,7 @@ End
 File gid_File_Wizards_Fax
     Dir = gid_Dir_Wizards_Fax;
     ARCHIVE_TXT_FILE_BODY;
-    Name = "pyfax.zip";
+    Name = "fax.zip";
 End
 
 #endif
