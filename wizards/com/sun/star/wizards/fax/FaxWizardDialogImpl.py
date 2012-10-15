@@ -708,7 +708,6 @@ class FaxWizardDialogImpl(FaxWizardDialog):
         Helper.setUnoPropertyValue(BPaperItem,
             PropertyNames.PROPERTY_ENABLED, False)
 
-
     def validatePath(self):
         if self.myPathSelection.usedPathPicker:
                 self.filenameChanged = True

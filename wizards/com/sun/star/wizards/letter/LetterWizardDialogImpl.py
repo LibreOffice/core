@@ -1093,8 +1093,7 @@ class LetterWizardDialogImpl(LetterWizardDialog):
         self.myPathSelection.sDefaultDirectory = self.sUserTemplatePath
         self.myPathSelection.sDefaultName = "myLetterTemplate.ott"
         self.myPathSelection.sDefaultFilter = "writer8_template"
-        self.myPathSelection.addSelectionListener(
-            self.myPathSelectionListener())
+        self.myPathSelection.addSelectionListener(self)
 
     def initConfiguration(self):
         try:
@@ -1213,3 +1212,8 @@ class LetterWizardDialogImpl(LetterWizardDialog):
             root.commitChanges()
         except Exception, e:
             traceback.print_exc()
+
+    def validatePath(self):
+        if self.myPathSelection.usedPathPicker:
+                self.filenameChanged = True
+        self.myPathSelection.usedPathPicker = False
