@@ -239,24 +239,10 @@ SfxViewShell* ViewShellBase::CreateInstance (
     pBase->LateInit("");
     return pBase;
 }
-void ViewShellBase::RegisterFactory( sal_uInt16 nPrio )
-{
-    pFactory = new SfxViewFactory( &CreateInstance,nPrio,"Default" );
-    InitFactory();
-}
-void ViewShellBase::InitFactory()
-{
-    SFX_VIEW_REGISTRATION(DrawDocShell);
-}
-
-
 
 SFX_IMPL_INTERFACE(ViewShellBase, SfxViewShell, SdResId(0))
 {
 }
-
-
-
 
 ViewShellBase::ViewShellBase (
     SfxViewFrame* _pFrame,

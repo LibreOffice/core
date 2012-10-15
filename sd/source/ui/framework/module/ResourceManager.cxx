@@ -125,27 +125,6 @@ void SAL_CALL ResourceManager::disposing (void)
     }
 }
 
-
-
-
-void ResourceManager::Enable (void)
-{
-    mbIsEnabled = true;
-    UpdateForMainViewShell();
-}
-
-
-
-
-void ResourceManager::Disable (void)
-{
-    mbIsEnabled = false;
-    UpdateForMainViewShell();
-}
-
-
-
-
 void SAL_CALL ResourceManager::notifyConfigurationChange (
     const ConfigurationChangeEvent& rEvent)
     throw (RuntimeException)

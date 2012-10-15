@@ -36,27 +36,6 @@
 
 namespace sd { namespace slidesorter { namespace controller {
 
-
-double AnimationFunction::Linear (const double nTime)
-{
-    OSL_ASSERT(nTime>=0.0 && nTime<=1.0);
-    return nTime;
-}
-
-
-
-
-double AnimationFunction::Blend (
-    const double nStartValue,
-    const double nEndValue,
-    const double nTime)
-{
-    return nStartValue*(1-nTime) + nEndValue*nTime;
-}
-
-
-
-
 //===== AnimationBezierFunction ===============================================
 
 AnimationBezierFunction::AnimationBezierFunction (
