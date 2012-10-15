@@ -26,6 +26,32 @@
  RANLIB		= ranlib
  
  ifndef CPU_ARCH
+@@ -57,19 +57,25 @@
+ 
+ ifeq (,$(filter-out i%86,$(CPU_ARCH)))
+ ifdef USE_64
++ifeq (,$(findstring -arch ,$(CC)))
+ CC              += -arch x86_64
++endif
+ override CPU_ARCH	= x86_64
+ else
+ OS_REL_CFLAGS	= -Di386
++ifeq (,$(findstring -arch ,$(CC)))
+ CC              += -arch i386
++endif
+ override CPU_ARCH	= x86
+ endif
+ else
+ ifeq (arm,$(CPU_ARCH))
+ # Nothing set for arm currently.
+ else
+ OS_REL_CFLAGS	= -Dppc
++ifeq (,$(findstring -arch ,$(CC)))
+ CC              += -arch ppc
++endif
+ endif
+ endif
+ 
 --- misc/nss-3.13.5/mozilla/security/coreconf/FreeBSD.mk	2009-11-23 05:06:29.000000000 -0500
 +++ misc/build/nss-3.13.5/mozilla/security/coreconf/FreeBSD.mk	2012-08-28 20:27:20.000000000 -0400
 @@ -57,6 +57,7 @@
