@@ -66,19 +66,20 @@ class LetterWizardDialogImpl(LetterWizardDialog):
         self.NormPaths = []
 
     @classmethod
-    def main(self, args):
-        ConnectStr = \
-            "uno:socket,host=localhost,port=2002;urp;StarOffice.ComponentContext"
-        xLocMSF = None
+    def main(self):
+        #Call the wizard remotely(see README)
         try:
+            ConnectStr = \
+                "uno:socket,host=localhost,port=2002;urp;StarOffice.ComponentContext"
             xLocMSF = Desktop.connect(ConnectStr)
-        except Exception, e:
-            traceback.print_exc()
+            lw = LetterWizardDialogImpl(xLocMSF)
+            lw.startWizard(xLocMSF)
+        except Exception as e:
+            print ("Wizard failure exception " + str(type(e)) +
+                   " message " + str(e) + " args " + str(e.args) +
+                   traceback.format_exc())
 
-        lw = LetterWizardDialogImpl(xLocMSF)
-        lw.startWizard(xLocMSF, None)
-
-    def startWizard(self, xMSF, CurPropertyValue):
+    def startWizard(self, xMSF):
         self.running = True
         try:
             #Number of steps on WizardDialog
