@@ -18,6 +18,8 @@ namespace loplugin
 {
 
 /*
+This is a compile check.
+
 Check that areas used in SAL_LOG/SAL_WARN are listed in sal/inc/sal/log-areas.dox .
 */
 

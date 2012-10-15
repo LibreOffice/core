@@ -72,6 +72,22 @@ $(call gb_Helper_abbreviate_dirs,\
 		)
 endef
 
+# Used to run a compiler plugin tool.
+# $(call gb_CObject__tool_command,relative-source,source)
+define gb_CObject__tool_command
+$(call gb_Output_announce,$(1).c,$(true),C  ,3)
+$(call gb_Helper_abbreviate_dirs,\
+        ICECC=no \
+	$(gb_CC) \
+		$(DEFS) \
+		$(T_CFLAGS) \
+		-c $(2) \
+		-I$(dir $(2)) \
+		$(INCLUDE) \
+		$(gb_COMPILER_PLUGINS) \
+		)
+endef
+
 # CxxObject class
 
 # $(call gb_CxxObject__command,object,relative-source,source,dep-file)
@@ -93,6 +109,22 @@ $(call gb_Helper_abbreviate_dirs,\
 		-I$(dir $(3)) \
 		$(INCLUDE_STL) $(INCLUDE) \
 	    $(gb_cxx_dep_copy) \
+		)
+endef
+
+# Used to run a compiler plugin tool.
+# $(call gb_CxxObject__tool_command,relative-source,source)
+define gb_CxxObject__tool_command
+$(call gb_Output_announce,$(1).cxx,$(true),CXX,3)
+$(call gb_Helper_abbreviate_dirs,\
+        ICECC=no \
+	$(gb_CXX) \
+		$(DEFS) \
+		$(T_CXXFLAGS) \
+		-c $(2) \
+		-I$(dir $(2)) \
+		$(INCLUDE_STL) $(INCLUDE) \
+		$(gb_COMPILER_PLUGINS) \
 		)
 endef
 

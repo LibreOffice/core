@@ -13,7 +13,7 @@
 
 #include <set>
 
-#include "compileplugin.hxx"
+#include "plugin.hxx"
 
 namespace loplugin
 {

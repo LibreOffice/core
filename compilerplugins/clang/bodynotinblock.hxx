@@ -11,7 +11,7 @@
 #ifndef BODYNOTINBLOCK_H
 #define BODYNOTINBLOCK_H
 
-#include "compileplugin.hxx"
+#include "plugin.hxx"
 
 namespace loplugin
 {

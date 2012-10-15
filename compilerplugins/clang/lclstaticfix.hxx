@@ -8,24 +8,27 @@
  *
  */
 
-#ifndef UNUSEDVARIABLECHECK_H
-#define UNUSEDVARIABLECHECK_H
+#ifndef LCLSTATICFIX_H
+#define LCLSTATICFIX_H
 
 #include "plugin.hxx"
 
 namespace loplugin
 {
 
-class UnusedVariableCheck
-    : public RecursiveASTVisitor< UnusedVariableCheck >
+class LclStaticFix
+    : public RecursiveASTVisitor< LclStaticFix >
     , public Plugin
     {
     public:
-        explicit UnusedVariableCheck( ASTContext& context );
+        explicit LclStaticFix( ASTContext& context, Rewriter& rewriter );
         void run();
-        bool VisitVarDecl( VarDecl* var );
+        bool VisitFunctionDecl( FunctionDecl* declaration );
+    private:
+        Rewriter& rewriter;
     };
 
 } // namespace
 
-#endif // UNUSEDVARIABLECHECK_H
+#endif // POSTFIXINCREMENTFIX_H
+

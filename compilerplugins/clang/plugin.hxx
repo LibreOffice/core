@@ -8,10 +8,11 @@
  *
  */
 
-#ifndef COMPILEPLUGIN_H
-#define COMPILEPLUGIN_H
+#ifndef PLUGIN_H
+#define PLUGIN_H
 
 #include <clang/AST/RecursiveASTVisitor.h>
+#include <clang/Rewrite/Rewriter.h>
 
 using namespace clang;
 using namespace llvm;
@@ -30,6 +31,15 @@ class Plugin
         bool ignoreLocation( const Decl* decl );
         bool ignoreLocation( const Stmt* stmt );
         ASTContext& context;
+    };
+
+class RewritePlugin
+    : public Plugin
+    {
+    public:
+        explicit RewritePlugin( ASTContext& context, Rewriter& rewriter );
+    protected:
+        Rewriter& rewriter;
     };
 
 inline

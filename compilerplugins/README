@@ -1,5 +1,6 @@
 Compiler plugins.
 
+
 == Overview ==
 
 This directory contains code for compiler plugins. These are used to perform
@@ -7,6 +8,7 @@ additional actions during compilation (such as additional warnings) and
 also to perform mass code refactoring.
 
 Currently only the Clang compiler is supported (http://clang.llvm.org).
+
 
 == Usage ==
 
@@ -16,10 +18,16 @@ are found or explicitly using --enable-compiler-plugins.
 
 == Functionality ==
 
-=== Compile plugin ===
+There are two kinds of modules:
+- compile checks - these are run during normal compilation
+- rewriters - these must be run manually and modify source files
 
-The compile plugin is used during normal compilation to perform additional checks.
+
+=== Compile checks ===
+
+Used during normal compilation to perform additional checks.
 All warnings and errors are marked '[loplugin]' in the message.
+
 
 ==== Unused variable check ====
 
@@ -27,6 +35,7 @@ All warnings and errors are marked '[loplugin]' in the message.
 - unused variable 'foo' [loplugin]
 
 Additional check for unused variables.
+
 
 ==== Body of if/while/for not in {} ====
 
@@ -40,6 +49,7 @@ Warn about the following construct:
         
 Here either both statements should be inside {} or the second statement in indented wrong.
 
+
 ==== Sal log areas ====
 
 - unknown log area 'foo' (check or extend sal/inc/sal/log-areas.dox) [loplugin]
@@ -48,6 +58,12 @@ Check area used in SAL_INFO/SAL_WARN macros against the list in sal/inc/sal/log-
 report if the area is not listed there. The fix is either use a proper area or add it to the list
 if appropriate.
 
+
+=== Rewriters ===
+
+Rewriters analyse and possibly modify given source files.
+Usage: make COMPILER_PLUGIN_TOOL=<rewriter_name>
+Modifications will be written to files <source_file>.new .
 
 == Code documentation / howtos ==
 

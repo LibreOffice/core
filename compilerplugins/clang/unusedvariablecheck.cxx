@@ -16,6 +16,8 @@ namespace loplugin
 {
 
 /*
+This is a compile check.
+
 Check for unused classes where the compiler cannot decide (e.g. because of
 non-trivial or extern ctors) if a variable is unused if only its ctor/dtor
 are called and nothing else. For example std::vector is a class where

@@ -114,6 +114,9 @@ gb_Object__command_dep = \
  $(call gb_Output_error,gb_Object__command_dep is only for gb_FULLDEPS)
 endif
 
+# This one only exists to force .c/.cxx "rebuilds" when running a compiler tool.
+.PHONY: force_compiler_tool_run
+force_compiler_tool_run:
 
 # CObject class
 
@@ -121,8 +124,13 @@ gb_CObject_get_source = $(1)/$(2).c
 # defined by platform
 #  gb_CObject__command
 
+ifneq ($(COMPILER_PLUGIN_TOOL),)
+$(call gb_CObject_get_target,%) : $(call gb_CObject_get_source,$(SRCDIR),%) force_compiler_tool_run
+	$(call gb_CObject__tool_command,$*,$<)
+else
 $(call gb_CObject_get_target,%) : $(call gb_CObject_get_source,$(SRCDIR),%)
 	$(call gb_CObject__command,$@,$*,$<,$(call gb_CObject_get_dep_target,$*))
+endif
 
 ifeq ($(gb_FULLDEPS),$(true))
 $(call gb_CObject_get_dep_target,%) :
@@ -138,8 +146,13 @@ gb_CxxObject_get_source = $(1)/$(2).cxx
 # defined by platform
 #  gb_CxxObject__command
 
+ifneq ($(COMPILER_PLUGIN_TOOL),)
+$(call gb_CxxObject_get_target,%) : $(call gb_CxxObject_get_source,$(SRCDIR),%) force_compiler_tool_run
+	$(call gb_CxxObject__tool_command,$*,$<)
+else
 $(call gb_CxxObject_get_target,%) : $(call gb_CxxObject_get_source,$(SRCDIR),%)
 	$(call gb_CxxObject__command,$@,$*,$<,$(call gb_CxxObject_get_dep_target,$*))
+endif
 
 ifeq ($(gb_FULLDEPS),$(true))
 $(call gb_CxxObject_get_dep_target,%) :
@@ -252,6 +265,11 @@ gb_ObjCxxObject_get_source = $(1)/$(2).mm
 # defined by platform
 #  gb_ObjCxxObject__command
 
+ifneq ($(COMPILER_PLUGIN_TOOL),)
+$(call gb_ObjCxxObject_get_target,%) : $(call gb_ObjCxxObject_get_source,$(SRCDIR),%) force_compiler_tool_run
+	$(call gb_ObjCxxObject__tool_command,$*,$<)
+else
+
 $(call gb_ObjCxxObject_get_target,%) : $(call gb_ObjCxxObject_get_source,$(SRCDIR),%)
 	$(call gb_ObjCxxObject__command,$@,$*,$<,$(call gb_ObjCxxObject_get_dep_target,$*))
 
@@ -260,6 +278,7 @@ $(call gb_ObjCxxObject_get_dep_target,%) :
 	$(if $(wildcard $@),touch $@,\
 	  $(call gb_Object__command_dep,$@,$(call gb_ObjCxxObject_get_target,$*)))
 
+endif
 endif
 
 
@@ -270,6 +289,11 @@ gb_ObjCObject_get_source = $(1)/$(2).m
 # defined by platform
 #  gb_ObjCObject__command
 
+ifneq ($(COMPILER_PLUGIN_TOOL),)
+$(call gb_ObjCObject_get_target,%) : $(call gb_ObjCObject_get_source,$(SRCDIR),%) force_compiler_tool_run
+	$(call gb_ObjCObject__tool_command,$*,$<)
+else
+
 $(call gb_ObjCObject_get_target,%) : $(call gb_ObjCObject_get_source,$(SRCDIR),%)
 	$(call gb_ObjCObject__command,$@,$*,$<,$(call gb_ObjCObject_get_dep_target,$*))
 
@@ -278,6 +302,7 @@ $(call gb_ObjCObject_get_dep_target,%) :
 	$(if $(wildcard $@),touch $@,\
 	  $(call gb_Object__command_dep,$@,$(call gb_ObjCObject_get_target,$*)))
 
+endif
 endif
 
 

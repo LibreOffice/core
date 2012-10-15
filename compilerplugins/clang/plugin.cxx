@@ -8,16 +8,18 @@
  *
  */
 
-#include "compileplugin.hxx"
+#include "plugin.hxx"
 
 #include <clang/AST/ASTConsumer.h>
 #include <clang/AST/ASTContext.h>
+#include <clang/Basic/FileManager.h>
 #include <clang/Frontend/CompilerInstance.h>
 #include <clang/Frontend/FrontendAction.h>
 #include <clang/Frontend/FrontendPluginRegistry.h>
 #include <clang/Rewrite/Rewriter.h>
 
 #include "bodynotinblock.hxx"
+#include "lclstaticfix.hxx"
 #include "sallogareas.hxx"
 #include "unusedvariablecheck.hxx"
 
@@ -57,9 +59,11 @@ class PluginHandler
     : public ASTConsumer
     {
     public:
-        explicit PluginHandler( ASTContext& context )
+        explicit PluginHandler( ASTContext& context, const vector< string >& args )
             : rewriter( context.getSourceManager(), context.getLangOpts())
+            , args( args )
             , bodyNotInBlock( context )
+            , lclStaticFix( context, rewriter )
             , salLogAreas( context )
             , unusedVariableCheck( context )
             {
@@ -68,17 +72,49 @@ class PluginHandler
             {
             if( context.getDiagnostics().hasErrorOccurred())
                 return;
-            bodyNotInBlock.run();
-            salLogAreas.run();
-            unusedVariableCheck.run();
-            // TODO also LO header files? or a subdir?
-           if( const RewriteBuffer* buf = rewriter.getRewriteBufferFor( context.getSourceManager().getMainFileID()))
-                buf->write( llvm::outs());
-            // TODO else write out the original file?
+            if( isArg( "lclstaticfix" ))
+                lclStaticFix.run();
+            else if( args.empty())
+                {
+                bodyNotInBlock.run();
+                salLogAreas.run();
+                unusedVariableCheck.run();
+                }
+            else
+                {
+                DiagnosticsEngine& diag = context.getDiagnostics();
+                diag.Report( diag.getCustomDiagID( DiagnosticsEngine::Fatal,
+                    "unknown plugin tool %0 [loplugin]" )) << args.front();
+                }
+            for( Rewriter::buffer_iterator it = rewriter.buffer_begin();
+                 it != rewriter.buffer_end();
+                 ++it )
+                {
+                const FileEntry* e = context.getSourceManager().getFileEntryForID( it->first );
+                string filename = std::string( e->getName()) + ".new";
+                string error;
+                // TODO If there will be actually plugins also modifying headers,
+                // race conditions should be avoided here.
+                raw_fd_ostream ostream( filename.c_str(), error );
+                DiagnosticsEngine& diag = context.getDiagnostics();
+                if( !error.empty())
+                    diag.Report( diag.getCustomDiagID( DiagnosticsEngine::Error,
+                        "cannot write modified source to %0 (%1) [loplugin]" )) << filename << error;
+                else
+                    diag.Report( diag.getCustomDiagID( DiagnosticsEngine::Note,
+                        "modified source %0 [loplugin]" )) << filename;
+                it->second.write( ostream );
+                }
             }
     private:
+        bool isArg( const char* arg ) const
+            {
+            return find( args.begin(), args.end(), arg ) != args.end();
+            }
         Rewriter rewriter;
+        vector< string > args;
         BodyNotInBlock bodyNotInBlock;
+        LclStaticFix lclStaticFix;
         SalLogAreas salLogAreas;
         UnusedVariableCheck unusedVariableCheck;
     };
@@ -92,12 +128,15 @@ class LibreOfficeAction
     public:
         virtual ASTConsumer* CreateASTConsumer( CompilerInstance& Compiler, StringRef InFile )
             {
-            return new PluginHandler( Compiler.getASTContext());
+            return new PluginHandler( Compiler.getASTContext(), _args );
             }
-        virtual bool ParseArgs( const CompilerInstance& CI, const std::vector< std::string >& args )
+        virtual bool ParseArgs( const CompilerInstance& CI, const vector< string >& args )
             {
+            _args = args;
             return true;
             }
+    private:
+        vector< string > _args;
     };
 
 } // namespace
