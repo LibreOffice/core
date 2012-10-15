@@ -109,31 +109,31 @@ class LetterWizardDialogImpl(LetterWizardDialog):
             #from the registry and apply listeners to the controls:
             self.initConfiguration()
 
-            if self.myConfig.cp_BusinessLetter.cp_Greeting == "":
+            if self.myConfig.cp_BusinessLetter.cp_Greeting :
                 self.myConfig.cp_BusinessLetter.cp_Greeting = \
                     self.resources.GreetingLabels[0]
 
-            if self.myConfig.cp_BusinessLetter.cp_Salutation == "":
+            if self.myConfig.cp_BusinessLetter.cp_Salutation:
                 self.myConfig.cp_BusinessLetter.cp_Salutation = \
                     self.resources.SalutationLabels[0]
 
-            if self.myConfig.cp_PrivateOfficialLetter.cp_Greeting == "":
+            if self.myConfig.cp_PrivateOfficialLetter.cp_Greeting:
                 self.myConfig.cp_PrivateOfficialLetter.cp_Greeting = \
                     self.resources.GreetingLabels[1]
 
-            if self.myConfig.cp_PrivateOfficialLetter.cp_Salutation == "":
+            if self.myConfig.cp_PrivateOfficialLetter.cp_Salutation:
                 self.myConfig.cp_PrivateOfficialLetter.cp_Salutation = \
                     self.resources.SalutationLabels[1]
 
-            if self.myConfig.cp_PrivateLetter.cp_Greeting == "":
+            if self.myConfig.cp_PrivateLetter.cp_Greeting:
                 self.myConfig.cp_PrivateLetter.cp_Greeting = \
                     self.resources.GreetingLabels[2]
 
-            if self.myConfig.cp_PrivateLetter.cp_Salutation == "":
+            if self.myConfig.cp_PrivateLetter.cp_Salutation:
                 self.myConfig.cp_PrivateLetter.cp_Salutation = \
                     self.resources.SalutationLabels[2]
 
-            if self.myPathSelection.xSaveTextBox.Text.lower() == "":
+            if self.myPathSelection.xSaveTextBox.Text.lower():
                 self.myPathSelection.initializePath()
 
             xContainerWindow = self.myLetterDoc.xFrame.ContainerWindow
@@ -163,7 +163,7 @@ class LetterWizardDialogImpl(LetterWizardDialog):
         try:
             fileAccess = FileAccess(self.xMSF)
             self.sPath = self.myPathSelection.getSelectedPath()
-            if self.sPath == "":
+            if self.sPath:
                 self.myPathSelection.triggerPathPicker()
                 self.sPath = self.myPathSelection.getSelectedPath()
 
@@ -277,7 +277,7 @@ class LetterWizardDialogImpl(LetterWizardDialog):
         self.lstBusinessStyleItemChanged()
         self.enableSenderReceiver()
         self.setPossibleFooter(True)
-        if self.myPathSelection.xSaveTextBox.Text.lower() == "":
+        if self.myPathSelection.xSaveTextBox.Text.lower():
             self.myPathSelection.initializePath()
 
     def optPrivOfficialLetterItemChanged(self):
@@ -301,7 +301,7 @@ class LetterWizardDialogImpl(LetterWizardDialog):
         self.disableBusinessPaper()
         self.enableSenderReceiver()
         self.setPossibleFooter(True)
-        if self.myPathSelection.xSaveTextBox.Text.lower() == "":
+        if self.myPathSelection.xSaveTextBox.Text.lower():
             self.myPathSelection.initializePath()
 
     def optPrivateLetterItemChanged(self):
@@ -325,7 +325,7 @@ class LetterWizardDialogImpl(LetterWizardDialog):
         self.disableBusinessPaper()
         self.disableSenderReceiver()
         self.setPossibleFooter(False)
-        if self.myPathSelection.xSaveTextBox.Text.lower() == "":
+        if self.myPathSelection.xSaveTextBox.Text.lower():
             self.myPathSelection.initializePath()
 
     def optSenderPlaceholderItemChanged(self):
@@ -776,10 +776,10 @@ class LetterWizardDialogImpl(LetterWizardDialog):
             self.chkUseGreeting.State != 0)
 
     def setDefaultForGreetingAndSalutation(self):
-        if self.lstSalutation.Text == "":
+        if self.lstSalutation.Text:
             self.lstSalutation.Text = self.resources.SalutationLabels[0]
 
-        if self.lstGreeting.Text == "":
+        if self.lstGreeting.Text:
             self.lstGreeting.Text = self.resources.GreetingLabels[0]
 
     def lstGreetingItemChanged(self):
@@ -875,11 +875,12 @@ class LetterWizardDialogImpl(LetterWizardDialog):
     def initializeSalutation(self):
         self.setControlProperty(
             "lstSalutation", "StringItemList",
-            self.resources.SalutationLabels)
+            tuple(self.resources.SalutationLabels))
 
     def initializeGreeting(self):
         self.setControlProperty(
-            "lstGreeting", "StringItemList", self.resources.GreetingLabels)
+            "lstGreeting", "StringItemList",
+            tuple(self.resources.GreetingLabels))
 
     def getCurrentLetter(self):
         if self.myConfig.cp_LetterType == 0:
