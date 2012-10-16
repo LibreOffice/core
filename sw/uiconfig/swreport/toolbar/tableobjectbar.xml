@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE toolbar:toolbar PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "toolbar.dtd">
 <toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink" toolbar:id="toolbar">
- <toolbar:toolbaritem xlink:href=".uno:InsertTable" toolbar:helpid="helpid:20330"  />
- <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:LineStyle" toolbar:helpid="helpid:10200"  />
  <toolbar:toolbaritem xlink:href=".uno:FrameLineColor" toolbar:helpid="helpid:10201"  />
  <toolbar:toolbarseparator/>
