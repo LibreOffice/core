@@ -403,7 +403,7 @@ static INetURLObject::SchemeInfo const aSchemeInfoMap[INET_PROT_END]
           false, true },
         { "sftp", "sftp://", 22, true, true, false, true, true, true, true,
           true },
-        { "vnd.libreoffice.cmis+atom", "vnd.libreoffice.cmis+atom://", 0, true, true, false,
+        { "vnd.libreoffice.cmis", "vnd.libreoffice.cmis://", 0, true, true, false,
           false, true, false, true, true } };
 
 // static
@@ -916,7 +916,7 @@ bool INetURLObject::setAbsURIRef(rtl::OUString const & rTheAbsURIRef,
             }
 
             case INET_PROT_VND_SUN_STAR_PKG:
-            case INET_PROT_CMIS_ATOM:
+            case INET_PROT_CMIS:
             {
                 if (pEnd - pPos < 2 || *pPos++ != '/' || *pPos++ != '/')
                 {
@@ -2180,7 +2180,7 @@ INetURLObject::PrefixInfo const * INetURLObject::getPrefix(sal_Unicode const *& 
             { "telnet:", 0, INET_PROT_TELNET, PrefixInfo::OFFICIAL },
             { "vim:", "staroffice.vim:", INET_PROT_VIM,
               PrefixInfo::INTERNAL },
-            { "vnd.libreoffice.cmis+atom:", 0, INET_PROT_CMIS_ATOM, PrefixInfo::INTERNAL },
+            { "vnd.libreoffice.cmis:", 0, INET_PROT_CMIS, PrefixInfo::INTERNAL },
             { "vnd.sun.star.cmd:", 0, INET_PROT_VND_SUN_STAR_CMD,
               PrefixInfo::OFFICIAL },
             { "vnd.sun.star.expand:", 0, INET_PROT_VND_SUN_STAR_EXPAND,
@@ -2966,7 +2966,7 @@ bool INetURLObject::parsePath(INetProtocol eScheme,
         case INET_PROT_VND_SUN_STAR_WEBDAV:
         case INET_PROT_HTTPS:
         case INET_PROT_SMB:
-        case INET_PROT_CMIS_ATOM:
+        case INET_PROT_CMIS:
             if (pPos < pEnd && *pPos != '/')
                 return false;
             while (pPos < pEnd && *pPos != nQueryDelimiter

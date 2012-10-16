@@ -310,7 +310,7 @@ INetURLObject CmisDetailsContainer::getUrl( )
                 rtl_UriCharClassRelSegment,
                 rtl_UriEncodeKeepEscapes,
                 RTL_TEXTENCODING_UTF8 );
-        sUrl = "vnd.libreoffice.cmis+atom://" + sEncodedBinding;
+        sUrl = "vnd.libreoffice.cmis://" + sEncodedBinding;
     }
 
     return INetURLObject( sUrl );
@@ -318,7 +318,7 @@ INetURLObject CmisDetailsContainer::getUrl( )
 
 bool CmisDetailsContainer::setUrl( const INetURLObject& rUrl )
 {
-    bool bSuccess =  rUrl.GetProtocol() == INET_PROT_CMIS_ATOM;
+    bool bSuccess =  rUrl.GetProtocol() == INET_PROT_CMIS;
 
     if ( bSuccess )
     {
@@ -380,7 +380,7 @@ IMPL_LINK( CmisDetailsContainer, RefreshReposHdl, void *, EMPTYARG  )
                 rtl_UriCharClassRelSegment,
                 rtl_UriEncodeKeepEscapes,
                 RTL_TEXTENCODING_UTF8 );
-        sUrl = "vnd.libreoffice.cmis+atom://" + sEncodedBinding;
+        sUrl = "vnd.libreoffice.cmis://" + sEncodedBinding;
     }
 
     // Get the Content

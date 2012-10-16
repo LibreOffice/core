@@ -61,8 +61,8 @@ namespace ucbhelper
 namespace cmis
 {
 
-#define CMIS_FILE_TYPE   "application/vnd.sun.staroffice.cmis-file"
-#define CMIS_FOLDER_TYPE "application/vnd.sun.staroffice.cmis-folder"
+#define CMIS_FILE_TYPE   "application/vnd.libreoffice.cmis-file"
+#define CMIS_FOLDER_TYPE "application/vnd.libreoffice.cmis-folder"
 
 class ContentProvider;
 class Content : public ::ucbhelper::ContentImplHelper,
