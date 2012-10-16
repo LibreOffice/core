@@ -1569,10 +1569,17 @@ OString VclBuilder::get_by_window(const Window *pWindow) const
 
 sal_Int32 VclBuilder::get_window_packing_position(const Window *pWindow) const
 {
+    //We've stored the return of new Control, some of these get
+    //border windows placed around them which are what you get
+    //from GetChild, so scoot up a level if necessary to get the
+    //window whose position value we have
+    const Window *pPropHolder = pWindow->mpWindowImpl->mpClientWindow ?
+        pWindow->mpWindowImpl->mpClientWindow : pWindow;
+
     for (std::vector<WinAndId>::const_iterator aI = m_aChildren.begin(),
          aEnd = m_aChildren.end(); aI != aEnd; ++aI)
     {
-        if (aI->m_pWindow == pWindow)
+        if (aI->m_pWindow == pPropHolder)
             return aI->m_nPosition;
     }
 
