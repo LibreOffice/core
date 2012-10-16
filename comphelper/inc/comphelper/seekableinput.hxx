@@ -21,7 +21,7 @@
 
 #include <osl/mutex.hxx>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
 #include <cppuhelper/implbase2.hxx>
@@ -35,7 +35,7 @@ class COMPHELPER_DLLPUBLIC OSeekableInputWrapper : public ::cppu::WeakImplHelper
 {
     ::osl::Mutex    m_aMutex;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xFactory;
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > m_xContext;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > m_xOriginalStream;
 
@@ -48,13 +48,13 @@ private:
 public:
     OSeekableInputWrapper(
                 const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& xInStream,
-                const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xFactory );
+                const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext );
 
     virtual ~OSeekableInputWrapper();
 
     static ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > CheckSeekableCanWrap(
                         const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& xInStream,
-                        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xFactory );
+                        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext );
 
 // XInputStream
     virtual sal_Int32 SAL_CALL readBytes( ::com::sun::star::uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead ) throw (::com::sun::star::io::NotConnectedException, ::com::sun::star::io::BufferSizeExceededException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);

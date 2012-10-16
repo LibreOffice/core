@@ -144,7 +144,7 @@ uno::Reference< io::XInputStream > ZipPackageStream::GetOwnSeekStream()
         // The only exception is a nonseekable stream that is provided only for storing, if such a stream
         // is accessed before commit it MUST be wrapped.
         // Wrap the stream in case it is not seekable
-        xStream = ::comphelper::OSeekableInputWrapper::CheckSeekableCanWrap( xStream, m_xFactory );
+        xStream = ::comphelper::OSeekableInputWrapper::CheckSeekableCanWrap( xStream, comphelper::getComponentContext( m_xFactory ) );
         uno::Reference< io::XSeekable > xSeek( xStream, UNO_QUERY );
         if ( !xSeek.is() )
             throw RuntimeException( OSL_LOG_PREFIX "The stream must support XSeekable!",
@@ -625,7 +625,7 @@ void SAL_CALL ZipPackageStream::setRawStream( const uno::Reference< io::XInputSt
                 RuntimeException )
 {
     // wrap the stream in case it is not seekable
-    uno::Reference< io::XInputStream > xNewStream = ::comphelper::OSeekableInputWrapper::CheckSeekableCanWrap( aStream, m_xFactory );
+    uno::Reference< io::XInputStream > xNewStream = ::comphelper::OSeekableInputWrapper::CheckSeekableCanWrap( aStream, comphelper::getComponentContext( m_xFactory ) );
     uno::Reference< io::XSeekable > xSeek( xNewStream, UNO_QUERY );
     if ( !xSeek.is() )
         throw RuntimeException(OSL_LOG_PREFIX "The stream must support XSeekable!",

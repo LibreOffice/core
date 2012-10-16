@@ -33,6 +33,7 @@
 #include "com/sun/star/ucb/XWebDAVCommandEnvironment.hpp"
 
 #include "ucbhelper/simpleauthenticationrequest.hxx"
+#include "comphelper/processfactory.hxx"
 #include "comphelper/seekableinput.hxx"
 
 #include "DAVAuthListenerImpl.hxx"
@@ -597,7 +598,7 @@ void DAVResourceAccess::PUT(
     // Make stream seekable, if it not. Needed, if request must be retried.
     uno::Reference< io::XInputStream > xSeekableStream
         = comphelper::OSeekableInputWrapper::CheckSeekableCanWrap(
-            rStream, m_xSMgr );
+            rStream, comphelper::getComponentContext(m_xSMgr) );
 
     int errorCount = 0;
     bool bRetry = false;
@@ -646,7 +647,7 @@ uno::Reference< io::XInputStream > DAVResourceAccess::POST(
     // Make stream seekable, if it not. Needed, if request must be retried.
     uno::Reference< io::XInputStream > xSeekableStream
         = comphelper::OSeekableInputWrapper::CheckSeekableCanWrap(
-            rInputStream, m_xSMgr );
+            rInputStream, comphelper::getComponentContext(m_xSMgr) );
 
     uno::Reference< io::XInputStream > xStream;
     int errorCount = 0;
@@ -710,7 +711,7 @@ void DAVResourceAccess::POST(
     // Make stream seekable, if it not. Needed, if request must be retried.
     uno::Reference< io::XInputStream > xSeekableStream
         = comphelper::OSeekableInputWrapper::CheckSeekableCanWrap(
-            rInputStream, m_xSMgr );
+            rInputStream, comphelper::getComponentContext(m_xSMgr) );
 
     int errorCount = 0;
     bool bRetry  = false;

@@ -730,7 +730,7 @@ void SAL_CALL ZipPackage::initialize( const uno::Sequence< Any >& aArguments )
             if ( m_xContentStream.is() )
             {
                 // the stream must be seekable, if it is not it will be wrapped
-                m_xContentStream = ::comphelper::OSeekableInputWrapper::CheckSeekableCanWrap( m_xContentStream, m_xFactory );
+                m_xContentStream = ::comphelper::OSeekableInputWrapper::CheckSeekableCanWrap( m_xContentStream, comphelper::getComponentContext( m_xFactory ) );
                 m_xContentSeek = uno::Reference < XSeekable > ( m_xContentStream, UNO_QUERY );
                 if ( ! m_xContentSeek.is() )
                     throw com::sun::star::uno::Exception (OSL_LOG_PREFIX "The package component _requires_ an XSeekable interface!",
