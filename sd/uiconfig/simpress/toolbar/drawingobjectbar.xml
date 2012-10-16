@@ -18,4 +18,14 @@
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:FillShadow" toolbar:helpid="10299"/>
  <toolbar:toolbaritem xlink:href=".uno:ImageMapDialog" toolbar:visible="false" toolbar:helpid="10371"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:ToggleObjectRotateMode" toolbar:helpid="helpid:10129"  toolbar:style="radio" />
+ <toolbar:toolbaritem xlink:href=".uno:TransformDialog" toolbar:helpid="helpid:10087"  toolbar:visible="false" />
+ <toolbar:toolbaritem xlink:href=".uno:Mirror" toolbar:helpid="helpid:27085"  toolbar:visible="false" />
+ <toolbar:toolbaritem xlink:href=".uno:ObjectAlign" toolbar:helpid="helpid:10130"  toolbar:style="dropdown" />
+ <toolbar:toolbaritem xlink:href=".uno:ObjectPosition" toolbar:helpid="helpid:27022"  toolbar:style="dropdown" />
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:CustomAnimation" toolbar:helpid="helpid:27328"  toolbar:style="auto" toolbar:visible="false" />
+ <toolbar:toolbaritem xlink:href=".uno:AnimationEffects" toolbar:helpid="helpid:27063"  />
+ <toolbar:toolbaritem xlink:href=".uno:Window3D" toolbar:helpid="helpid:10644"  toolbar:style="auto" toolbar:visible="false" />
 </toolbar:toolbar>

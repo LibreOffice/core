@@ -32,18 +32,9 @@
  <toolbar:toolbaritem xlink:href=".uno:InsertGraphic" toolbar:helpid="helpid:10241"  />
  <toolbar:toolbaritem xlink:href=".uno:Gallery" toolbar:helpid="helpid:5960"  />
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:ToggleObjectRotateMode" toolbar:helpid="helpid:10129"  toolbar:style="radio" />
- <toolbar:toolbaritem xlink:href=".uno:TransformDialog" toolbar:helpid="helpid:10087"  toolbar:visible="false" />
- <toolbar:toolbaritem xlink:href=".uno:Mirror" toolbar:helpid="helpid:27085"  toolbar:visible="false" />
- <toolbar:toolbaritem xlink:href=".uno:ObjectAlign" toolbar:helpid="helpid:10130"  toolbar:style="dropdown" />
- <toolbar:toolbaritem xlink:href=".uno:ObjectPosition" toolbar:helpid="helpid:27022"  toolbar:style="dropdown" />
- <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:InsertToolbox" toolbar:helpid="helpid:27318"  toolbar:style="radio dropdown" toolbar:visible="false" />
  <toolbar:toolbaritem xlink:href=".uno:Config" toolbar:helpid="helpid:10593"  toolbar:style="dropdown" toolbar:visible="false" />
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:ExtrusionToggle" toolbar:helpid="10960"/>
- <toolbar:toolbaritem xlink:href=".uno:CustomAnimation" toolbar:helpid="helpid:27328"  toolbar:style="auto" toolbar:visible="false" />
- <toolbar:toolbaritem xlink:href=".uno:AnimationEffects" toolbar:helpid="helpid:27063"  />
  <toolbar:toolbaritem xlink:href=".uno:AnimationObjects" toolbar:helpid="helpid:27062"  toolbar:style="auto" toolbar:visible="false" />
- <toolbar:toolbaritem xlink:href=".uno:Window3D" toolbar:helpid="helpid:10644"  toolbar:style="auto" toolbar:visible="false" />
 </toolbar:toolbar>
