@@ -106,7 +106,7 @@ class ImagesConfiguration
             ImageListsDescriptor& rItems );
 
         static sal_Bool StoreImages(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
             const ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >& rOutputStream,
             const ImageListsDescriptor& rItems );
 };

@@ -43,6 +43,7 @@
 
 #include <com/sun/star/xml/sax/Parser.hpp>
 #include <com/sun/star/xml/sax/InputSource.hpp>
+#include <com/sun/star/xml/sax/Writer.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
@@ -562,12 +563,12 @@ void XMLBasedAcceleratorConfiguration::impl_ts_save(const css::uno::Reference< c
         xSeek->seek(0);
 
     // combine writer/cache/stream etcpp.
-    css::uno::Reference< css::xml::sax::XDocumentHandler > xWriter    (xSMGR->createInstance(SERVICENAME_SAXWRITER), css::uno::UNO_QUERY_THROW);
-    css::uno::Reference< css::io::XActiveDataSource>       xDataSource(xWriter                                     , css::uno::UNO_QUERY_THROW);
-    xDataSource->setOutputStream(xStream);
+    css::uno::Reference< css::xml::sax::XWriter > xWriter = css::xml::sax::Writer::create(comphelper::getComponentContext(xSMGR));
+    xWriter->setOutputStream(xStream);
 
     // write into the stream
-    AcceleratorConfigurationWriter aWriter(aCache, xWriter);
+    css::uno::Reference< css::xml::sax::XDocumentHandler > xHandler(xWriter, css::uno::UNO_QUERY_THROW);
+    AcceleratorConfigurationWriter aWriter(aCache, xHandler);
     aWriter.flush();
 
     // take over all changes into the original container
@@ -1111,12 +1112,12 @@ void SAL_CALL XCUBasedAcceleratorConfiguration::storeToStorage(const css::uno::R
     if (xSeek.is())
         xSeek->seek(0);
 
-    css::uno::Reference< css::xml::sax::XDocumentHandler > xWriter    (m_xSMGR->createInstance(SERVICENAME_SAXWRITER), css::uno::UNO_QUERY_THROW);
-    css::uno::Reference< css::io::XActiveDataSource>       xDataSource(xWriter                                     , css::uno::UNO_QUERY_THROW);
-    xDataSource->setOutputStream(xOut);
+    css::uno::Reference< css::xml::sax::XWriter > xWriter = css::xml::sax::Writer::create(comphelper::getComponentContext(m_xSMGR));
+    xWriter->setOutputStream(xOut);
 
     // write into the stream
-    AcceleratorConfigurationWriter aWriter(aCache, xWriter);
+    css::uno::Reference< css::xml::sax::XDocumentHandler > xHandler(xWriter, css::uno::UNO_QUERY_THROW);
+    AcceleratorConfigurationWriter aWriter(aCache, xHandler);
     aWriter.flush();
 }
 

@@ -33,6 +33,7 @@
 #include <services.h>
 
 #include <com/sun/star/xml/sax/Parser.hpp>
+#include <com/sun/star/xml/sax/Writer.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -50,26 +51,12 @@ using namespace ::com::sun::star::container;
 namespace framework
 {
 
-static Reference< XParser > GetSaxParser(
-    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext
-    )
-{
-    return Parser::create( xContext );
-}
-
-static Reference< XDocumentHandler > GetSaxWriter(
-    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory
-    )
-{
-    return Reference< XDocumentHandler >( xServiceFactory->createInstance( SERVICENAME_SAXWRITER), UNO_QUERY) ;
-}
-
 sal_Bool StatusBarConfiguration::LoadStatusBar(
     const Reference< XComponentContext >& rxContext,
     const Reference< XInputStream >& xInputStream,
     const Reference< XIndexContainer >& rStatusbarConfiguration )
 {
-    Reference< XParser > xParser( GetSaxParser( rxContext ) );
+    Reference< XParser > xParser = Parser::create(rxContext);
 
     // connect stream to input stream to the parser
     InputSource aInputSource;
@@ -102,17 +89,17 @@ sal_Bool StatusBarConfiguration::LoadStatusBar(
 }
 
 sal_Bool StatusBarConfiguration::StoreStatusBar(
-    const Reference< XMultiServiceFactory >& xServiceFactory,
+    const Reference< XComponentContext >& rxContext,
     const Reference< XOutputStream >& xOutputStream,
     const Reference< XIndexAccess >& rStatusbarConfiguration )
 {
-    Reference< XDocumentHandler > xWriter( GetSaxWriter( xServiceFactory ) );
-    Reference< ::com::sun::star::io::XActiveDataSource> xDataSource( xWriter , UNO_QUERY );
-    xDataSource->setOutputStream( xOutputStream );
+    Reference< XWriter > xWriter = Writer::create( rxContext );
+    xWriter->setOutputStream( xOutputStream );
 
     try
     {
-        OWriteStatusBarDocumentHandler aWriteStatusBarDocumentHandler( rStatusbarConfiguration, xWriter );
+        Reference< XDocumentHandler > xHandler(xWriter, UNO_QUERY_THROW);
+        OWriteStatusBarDocumentHandler aWriteStatusBarDocumentHandler( rStatusbarConfiguration, xHandler );
         aWriteStatusBarDocumentHandler.WriteStatusBarDocument();
         return sal_True;
     }

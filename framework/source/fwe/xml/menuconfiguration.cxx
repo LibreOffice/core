@@ -37,6 +37,7 @@
 #include <uielement/rootitemcontainer.hxx>
 
 #include <com/sun/star/xml/sax/Parser.hpp>
+#include <com/sun/star/xml/sax/Writer.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <comphelper/processfactory.hxx>
@@ -129,17 +130,13 @@ void MenuConfiguration::StoreMenuBarConfigurationToXML(
     Reference< XOutputStream >& rOutputStream )
 throw ( WrappedTargetException )
 {
-    Reference< XDocumentHandler > xWriter;
-
-    xWriter = Reference< XDocumentHandler >( m_rxServiceManager->createInstance(
-            SERVICENAME_SAXWRITER), UNO_QUERY) ;
-
-    Reference< XActiveDataSource> xDataSource( xWriter , UNO_QUERY );
-    xDataSource->setOutputStream( rOutputStream );
+    Reference< XWriter > xWriter = Writer::create(comphelper::getComponentContext(m_rxServiceManager));
+    xWriter->setOutputStream( rOutputStream );
 
     try
     {
-        OWriteMenuDocumentHandler aWriteMenuDocumentHandler( rMenuBarConfiguration, xWriter );
+        Reference< XDocumentHandler > xHandler(xWriter, UNO_QUERY_THROW);
+        OWriteMenuDocumentHandler aWriteMenuDocumentHandler( rMenuBarConfiguration, xHandler );
         aWriteMenuDocumentHandler.WriteMenuDocument();
     }
     catch ( const RuntimeException& e )

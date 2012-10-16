@@ -33,6 +33,7 @@
 #include <services.h>
 
 #include <com/sun/star/xml/sax/Parser.hpp>
+#include <com/sun/star/xml/sax/Writer.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -50,26 +51,12 @@ using namespace ::com::sun::star::container;
 namespace framework
 {
 
-static Reference< XParser > GetSaxParser(
-    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext
-    )
-{
-    return Parser::create(rxContext);
-}
-
-static Reference< XDocumentHandler > GetSaxWriter(
-    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory
-    )
-{
-    return Reference< XDocumentHandler >( xServiceFactory->createInstance( SERVICENAME_SAXWRITER), UNO_QUERY) ;
-}
-
 sal_Bool ToolBoxConfiguration::LoadToolBox(
     const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
     const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& rInputStream,
     const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer >& rToolbarConfiguration )
 {
-    Reference< XParser > xParser( GetSaxParser( rxContext ) );
+    Reference< XParser > xParser = Parser::create(rxContext);
 
     // connect stream to input stream to the parser
     InputSource aInputSource;
@@ -104,18 +91,17 @@ sal_Bool ToolBoxConfiguration::LoadToolBox(
 
 
 sal_Bool ToolBoxConfiguration::StoreToolBox(
-    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
+    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
     const ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >& rOutputStream,
     const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& rToolbarConfiguration )
 {
-    Reference< XDocumentHandler > xWriter( GetSaxWriter( xServiceFactory ) );
-
-    Reference< ::com::sun::star::io::XActiveDataSource> xDataSource( xWriter , UNO_QUERY );
-    xDataSource->setOutputStream( rOutputStream );
+    Reference< XWriter > xWriter = Writer::create(rxContext);
+    xWriter->setOutputStream( rOutputStream );
 
     try
     {
-        OWriteToolBoxDocumentHandler aWriteToolBoxDocumentHandler( rToolbarConfiguration, xWriter );
+        Reference< XDocumentHandler > xHandler( xWriter, UNO_QUERY_THROW );
+        OWriteToolBoxDocumentHandler aWriteToolBoxDocumentHandler( rToolbarConfiguration, xHandler );
         aWriteToolBoxDocumentHandler.WriteToolBoxDocument();
         return sal_True;
     }
