@@ -15,6 +15,7 @@ $(eval $(call gb_Module_add_targets,librsvg,\
 ))
 ifeq ($(OS),MACOSX)
 $(eval $(call gb_Module_add_targets,librsvg,\
+	ExternalPackage_librsvg \
 	ExternalProject_librsvg \
 ))
 else ifeq ($(OS),WNT)
