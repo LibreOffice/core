@@ -28,17 +28,13 @@ class ValueSet;
 
 class SwInsertGrfRulerDlg  : public SfxModalDialog
 {
-    FixedLine       aSelectionFL;
-    OKButton        aOkPB;
-    CancelButton    aCancelPB;
-    HelpButton      aHelpPB;
+    OKButton*        m_pOkPB;
+    SwRulerValueSet* m_pExampleVS;
 
     std::vector<String> aGrfNames;
     String          sSimple;
     String          sRulers;
     sal_uInt16          nSelPos;
-
-    SwRulerValueSet* pExampleVS;
 
 protected:
     DECL_LINK(SelectHdl, ValueSet*);

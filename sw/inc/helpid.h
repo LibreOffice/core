@@ -69,7 +69,6 @@
 #define HID_VS_BULLET                                           "SW_HID_VS_BULLET"
 #define HID_VS_NUMBMP                                           "SW_HID_VS_NUMBMP"
 #define HID_VS_RULER                                            "SW_HID_VS_RULER"
-#define HID_RULER_DIALOG                                        "SW_HID_RULER_DIALOG"
 #define HID_INSERT_ABSTRACT                                     "SW_HID_INSERT_ABSTRACT"
 #define HID_NAVI_TBX1                                           "SW_HID_NAVI_TBX1"
 #define HID_NAVI_TBX2                                           "SW_HID_NAVI_TBX2"

@@ -1243,22 +1243,11 @@ VclAbstractDialog * SwAbstractDialogFactory_Impl::CreateVclSwViewDialog( int nRe
     return 0;
 }
 
-AbstractInsertGrfRulerDlg * SwAbstractDialogFactory_Impl::CreateInsertGrfRulerDlg( int nResId,
-                                            Window * pParent ) //add for SwInsertGrfRulerDlg
+//add for SwInsertGrfRulerDlg
+AbstractInsertGrfRulerDlg * SwAbstractDialogFactory_Impl::CreateInsertGrfRulerDlg(Window * pParent)
 {
-    SwInsertGrfRulerDlg* pDlg=NULL;
-    switch ( nResId )
-    {
-        case DLG_INSERT_RULER :
-            pDlg = new SwInsertGrfRulerDlg( pParent );
-            break;
-        default:
-            break;
-    }
-
-    if ( pDlg )
-        return new AbstractInsertGrfRulerDlg_Impl( pDlg );
-    return 0;
+    SwInsertGrfRulerDlg* pDlg = new SwInsertGrfRulerDlg(pParent);
+    return new AbstractInsertGrfRulerDlg_Impl(pDlg);
 }
 
 AbstractInsTableDlg * SwAbstractDialogFactory_Impl::CreateInsTableDlg(SwView& rView) //add for SwInsTableDlg

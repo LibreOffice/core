@@ -523,8 +523,7 @@ public:
    virtual VclAbstractDialog *         CreateTitlePageDlg ( Window * pParent );
     virtual VclAbstractDialog *         CreateVclSwViewDialog( int nResId,
                                                 SwView& rView, sal_Bool bCol = sal_False ); //add for SwInsRowColDlg, SwLineNumberingDlg
-    virtual AbstractInsertGrfRulerDlg*      CreateInsertGrfRulerDlg( int nResId,
-                                                Window * pParent ); //add for SwInsertGrfRulerDlg
+    virtual AbstractInsertGrfRulerDlg*      CreateInsertGrfRulerDlg(Window * pParent); //add for SwInsertGrfRulerDlg
     virtual AbstractInsTableDlg*        CreateInsTableDlg(SwView& rView); //add for SwInsTableDlg
     virtual AbstractJavaEditDialog*     CreateJavaEditDialog( int nResId,
                                                 Window* pParent, SwWrtShell* pWrtSh ); //add for SwJavaEditDialog

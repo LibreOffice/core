@@ -655,6 +655,11 @@ String STR_COL
     Text [ en-US ] = "Column" ;
 };
 
+String STR_SIMPLE
+{
+    Text [ en-US ] = "Plain" ;
+};
+
 ToolBox RID_MODULE_TOOLBOX
 {
     HelpID = HID_MODULE_TOOLBOX ;

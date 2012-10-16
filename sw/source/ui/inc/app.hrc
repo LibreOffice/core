@@ -114,8 +114,9 @@
 #define STR_NUMERIC                     (RC_APP_BEGIN + 126)
 #define STR_COL                         (RC_APP_BEGIN + 127)
 #define STR_ROW                         (RC_APP_BEGIN + 128)
+#define STR_SIMPLE                      (RC_APP_BEGIN + 129)
 
-#define APP_ACT_END                     STR_ROW
+#define APP_ACT_END                     STR_SIMPLE
 
 #if APP_ACT_END > RC_APP_END
 #error Resource-Id Ueberlauf in #file, #line

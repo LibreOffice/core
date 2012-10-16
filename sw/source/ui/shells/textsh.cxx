@@ -660,8 +660,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
         {
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
             OSL_ENSURE(pFact, "Dialogdiet fail!");
-            AbstractInsertGrfRulerDlg* pDlg = pFact->CreateInsertGrfRulerDlg( DLG_INSERT_RULER,
-                                                        pParent );
+            AbstractInsertGrfRulerDlg* pDlg = pFact->CreateInsertGrfRulerDlg(pParent);
             OSL_ENSURE(pDlg, "Dialogdiet fail!");
             // MessageBox fuer fehlende Grafiken
             if(!pDlg->HasImages())

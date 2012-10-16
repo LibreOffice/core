@@ -31,7 +31,6 @@
 #define DLG_NUM_NAMES               (RC_MISC_BEGIN + 18)
 #define DLG_SORTING                 (RC_MISC_BEGIN + 19)
 #define DLG_RENAME_GLOS             (RC_MISC_BEGIN + 25)
-#define DLG_INSERT_RULER            (RC_MISC_BEGIN + 28)
 #define DLG_REDLINE_ACCEPT          (RC_MISC_BEGIN + 29)
 
 #define DLG_TAB_OUTLINE             (RC_MISC_BEGIN + 31)

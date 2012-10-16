@@ -37,49 +37,44 @@
 #include "docsh.hxx"
 #include "insrule.hxx"
 #include "swvset.hxx"
-#include "insrule.hrc"
+#include "app.hrc"
 #include "misc.hrc"
 #include "helpid.h"
 
-SwInsertGrfRulerDlg::SwInsertGrfRulerDlg( Window* pParent ) :
-    SfxModalDialog(pParent, SW_RES(DLG_INSERT_RULER)),
-    aSelectionFL(this, SW_RES(FL_SEL     )),
-    aOkPB       (this, SW_RES(PB_OK     )),
-    aCancelPB   (this, SW_RES(PB_CANCEL )),
-    aHelpPB     (this, SW_RES(PB_HELP   )),
-
-    sSimple (SW_RES(ST_SIMPLE)),
-    nSelPos(USHRT_MAX),
-    pExampleVS  (new SwRulerValueSet(this, SW_RES(VS_EXAMPLE )))
+SwInsertGrfRulerDlg::SwInsertGrfRulerDlg( Window* pParent )
+    : SfxModalDialog(pParent, "HorizontalRuleDialog", "modules/swriter/ui/horizontalrule.ui")
+    , sSimple(SW_RESSTR(STR_SIMPLE))
+    , nSelPos(USHRT_MAX)
 {
-    FreeResource();
-    pExampleVS->SetLineCount(6);
-    pExampleVS->SetColCount(1);
-    pExampleVS->SetSelectHdl(LINK(this, SwInsertGrfRulerDlg, SelectHdl));
-    pExampleVS->SetDoubleClickHdl(LINK(this, SwInsertGrfRulerDlg, DoubleClickHdl));
-    pExampleVS->GrabFocus();
+    get(m_pOkPB, "ok");
+    get(m_pExampleVS, "rulers");
+
+    m_pExampleVS->SetLineCount(6);
+    m_pExampleVS->SetColCount(1);
+    m_pExampleVS->SetSelectHdl(LINK(this, SwInsertGrfRulerDlg, SelectHdl));
+    m_pExampleVS->SetDoubleClickHdl(LINK(this, SwInsertGrfRulerDlg, DoubleClickHdl));
 
     // determine graphic name
     GalleryExplorer::BeginLocking(GALLERY_THEME_RULERS);
     GalleryExplorer::FillObjList( GALLERY_THEME_RULERS, aGrfNames );
-    pExampleVS->SetHelpId(HID_VS_RULER);
+    m_pExampleVS->SetHelpId(HID_VS_RULER);
     Color aColor(COL_WHITE);
-    pExampleVS->InsertItem( 1, 1);
-    pExampleVS->SetItemText( 1, sSimple);
+    m_pExampleVS->InsertItem( 1, 1);
+    m_pExampleVS->SetItemText( 1, sSimple);
 
     for(sal_uInt16 i = 1; i <= aGrfNames.size(); i++)
     {
-        pExampleVS->InsertItem( i + 1, i);
-        pExampleVS->SetItemText( i + 1, aGrfNames[i-1]);
+        m_pExampleVS->InsertItem( i + 1, i);
+        m_pExampleVS->SetItemText( i + 1, aGrfNames[i-1]);
     }
-    pExampleVS->Show();
 
+    m_pExampleVS->SelectItem(1);
+    m_pExampleVS->GrabFocus();
 }
 
 SwInsertGrfRulerDlg::~SwInsertGrfRulerDlg()
 {
     GalleryExplorer::EndLocking(GALLERY_THEME_RULERS);
-    delete pExampleVS;
 }
 
 String SwInsertGrfRulerDlg::GetGraphicName()
@@ -96,7 +91,7 @@ String SwInsertGrfRulerDlg::GetGraphicName()
 IMPL_LINK(SwInsertGrfRulerDlg, SelectHdl, ValueSet*, pVS)
 {
     nSelPos = pVS->GetSelectItemId();
-    aOkPB.Enable();
+    m_pOkPB->Enable();
     return 0;
 }
 
