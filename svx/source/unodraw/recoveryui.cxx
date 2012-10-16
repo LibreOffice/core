@@ -33,6 +33,7 @@
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <osl/file.hxx>
 #include <rtl/bootstrap.hxx>
+#include <comphelper/processfactory.hxx>
 #include <comphelper/configurationhelper.hxx>
 
 #include <vcl/svapp.hxx>
@@ -290,7 +291,7 @@ void RecoveryUI::impl_doRecovery()
 
     sal_Bool bCrashRepEnabled(sal_False);
     css::uno::Any aVal = ::comphelper::ConfigurationHelper::readDirectKey(
-                                m_xSMGR,
+                                comphelper::getComponentContext(m_xSMGR),
                                 CFG_PACKAGE_RECOVERY,
                                 CFG_PATH_CRASHREPORTER,
                                 CFG_ENTRY_ENABLED,

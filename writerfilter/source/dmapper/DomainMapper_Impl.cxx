@@ -76,14 +76,14 @@ using namespace ::rtl;
 namespace writerfilter {
 namespace dmapper{
 
-sal_Bool lcl_IsUsingEnhancedFields( const uno::Reference< lang::XMultiServiceFactory >& rFac )
+sal_Bool lcl_IsUsingEnhancedFields( const uno::Reference< uno::XComponentContext >& rxContext )
 {
     bool bResult(sal_False);
     try
     {
         OUString writerConfig = "org.openoffice.Office.Common";
 
-        uno::Reference< uno::XInterface > xCfgAccess = ::comphelper::ConfigurationHelper::openConfig( rFac, writerConfig, ::comphelper::ConfigurationHelper::E_READONLY );
+        uno::Reference< uno::XInterface > xCfgAccess = ::comphelper::ConfigurationHelper::openConfig( rxContext, writerConfig, ::comphelper::ConfigurationHelper::E_READONLY );
         ::comphelper::ConfigurationHelper::readRelativeKey( xCfgAccess, OUString( "Filter/Microsoft/Import"  ), OUString( "ImportWWFieldsAsEnhancedFields"  ) ) >>= bResult;
 
     }
@@ -198,7 +198,7 @@ DomainMapper_Impl::DomainMapper_Impl(
     getTableManager( ).setHandler(m_pTableHandler);
 
     getTableManager( ).startLevel();
-    m_bUsingEnhancedFields = lcl_IsUsingEnhancedFields( uno::Reference< lang::XMultiServiceFactory >( m_xComponentContext->getServiceManager(), uno::UNO_QUERY ) );
+    m_bUsingEnhancedFields = lcl_IsUsingEnhancedFields( m_xComponentContext );
 
 }
 

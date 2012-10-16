@@ -1002,7 +1002,7 @@ static ::rtl::OUString getConfigurationStringValue(
     try
     {
         ::comphelper::ConfigurationHelper::readDirectKey(
-            comphelper::getProcessServiceFactory(),
+            comphelper::getProcessComponentContext(),
             rPackage,
             rRelPath,
             rKey,

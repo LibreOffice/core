@@ -1036,7 +1036,7 @@ RecoveryDialog::RecoveryDialog(Window*       pParent,
 
     sal_Bool bCrashRepEnabled( sal_False );
     css::uno::Any aVal = ::comphelper::ConfigurationHelper::readDirectKey(
-                                pCore->getSMGR(),
+                                comphelper::getComponentContext(pCore->getSMGR()),
                                 CFG_PACKAGE_RECOVERY,
                                 CFG_PATH_CRASHREPORTER,
                                 CFG_ENTRY_ENABLED,

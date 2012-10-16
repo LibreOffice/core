@@ -143,7 +143,7 @@ bool IsSystemFileLockingUsed()
     {
 
         uno::Reference< uno::XInterface > xCommonConfig = ::comphelper::ConfigurationHelper::openConfig(
-                            ::comphelper::getProcessServiceFactory(),
+                            ::comphelper::getProcessComponentContext(),
                             ::rtl::OUString( "/org.openoffice.Office.Common"  ),
                             ::comphelper::ConfigurationHelper::E_STANDARD );
         if ( !xCommonConfig.is() )
@@ -170,7 +170,7 @@ bool IsOOoLockFileUsed()
     {
 
         uno::Reference< uno::XInterface > xCommonConfig = ::comphelper::ConfigurationHelper::openConfig(
-                            ::comphelper::getProcessServiceFactory(),
+                            ::comphelper::getProcessComponentContext(),
                             ::rtl::OUString( "/org.openoffice.Office.Common"  ),
                             ::comphelper::ConfigurationHelper::E_STANDARD );
         if ( !xCommonConfig.is() )

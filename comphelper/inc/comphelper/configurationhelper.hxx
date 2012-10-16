@@ -21,6 +21,7 @@
 #define _COMPHELPER_CONFIGURATIONHELPER_HXX_
 
 #include <com/sun/star/uno/XInterface.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
@@ -76,7 +77,7 @@ class COMPHELPER_DLLPUBLIC ConfigurationHelper
      *  configuration package is needed. The configuration access can be cached
      *  outside and used inbetween.
      *
-     *  @param  xSMGR
+     *  @param  rxContext
      *          the uno service manager, which should be used to create the
      *          configuration access.
      *
@@ -95,9 +96,9 @@ class COMPHELPER_DLLPUBLIC ConfigurationHelper
      *  @throw  Any exceptions the underlying configuration can throw.
      *          E.g. css::uno::Exception if the configuration could not be opened.
      */
-    static css::uno::Reference< css::uno::XInterface > openConfig(const css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR   ,
-                                                                  const ::rtl::OUString&                                       sPackage,
-                                                                        sal_Int32                                              eMode   );
+    static css::uno::Reference< css::uno::XInterface > openConfig(const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+                                                                  const ::rtl::OUString&                                    sPackage,
+                                                                        sal_Int32                                           eMode   );
 
     //-----------------------------------------------
     /** reads the value of an existing(!) configuration key,
@@ -217,7 +218,7 @@ class COMPHELPER_DLLPUBLIC ConfigurationHelper
      * So its not very usefull to use this method for reading multiple keys at the same time.
      * (Excepting these keys exists inside different configuration packages ...))
      */
-    static css::uno::Any readDirectKey(const css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR   ,
+    static css::uno::Any readDirectKey(const css::uno::Reference< css::uno::XComponentContext >&    rxContext,
                                        const ::rtl::OUString&                                       sPackage,
                                        const ::rtl::OUString&                                       sRelPath,
                                        const ::rtl::OUString&                                       sKey    ,
@@ -233,7 +234,7 @@ class COMPHELPER_DLLPUBLIC ConfigurationHelper
      * So its not very usefull to use this method for writing multiple keys at the same time.
      * (Excepting these keys exists inside different configuration packages ...))
      */
-    static void writeDirectKey(const css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR   ,
+    static void writeDirectKey(const css::uno::Reference< css::uno::XComponentContext >&    rxContext,
                                const ::rtl::OUString&                                       sPackage,
                                const ::rtl::OUString&                                       sRelPath,
                                const ::rtl::OUString&                                       sKey    ,

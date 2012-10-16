@@ -138,14 +138,14 @@ SvtHistoryOptions_Impl::SvtHistoryOptions_Impl()
     {
         m_xCfg = Reference< css::container::XNameAccess > (
             ::comphelper::ConfigurationHelper::openConfig(
-            ::comphelper::getProcessServiceFactory(),
+            ::comphelper::getProcessComponentContext(),
             rtl::OUString(s_sHistories),
             ::comphelper::ConfigurationHelper::E_STANDARD),
             css::uno::UNO_QUERY );
 
         m_xCommonXCU = Reference< css::container::XNameAccess > (
             ::comphelper::ConfigurationHelper::openConfig(
-            ::comphelper::getProcessServiceFactory(),
+            ::comphelper::getProcessComponentContext(),
             rtl::OUString(s_sCommonHistory),
             ::comphelper::ConfigurationHelper::E_STANDARD),
             css::uno::UNO_QUERY );

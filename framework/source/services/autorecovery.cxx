@@ -931,7 +931,7 @@ css::uno::Reference< css::container::XNameAccess > AutoRecovery::implts_openConf
 
     if (m_xRecoveryCFG.is())
         return m_xRecoveryCFG;
-    css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = m_xSMGR;
+    css::uno::Reference< css::uno::XComponentContext > xContext = comphelper::getComponentContext(m_xSMGR);
 
     aWriteLock.unlock();
     // <- SAFE ----------------------------------
@@ -939,7 +939,7 @@ css::uno::Reference< css::container::XNameAccess > AutoRecovery::implts_openConf
     rtl::OUString sCFG_PACKAGE_RECOVERY(RTL_CONSTASCII_USTRINGPARAM(CFG_PACKAGE_RECOVERY));
     // throws a RuntimeException if an error occure!
     css::uno::Reference< css::container::XNameAccess > xCFG(
-        ::comphelper::ConfigurationHelper::openConfig(xSMGR, sCFG_PACKAGE_RECOVERY, ::comphelper::ConfigurationHelper::E_STANDARD),
+        ::comphelper::ConfigurationHelper::openConfig(xContext, sCFG_PACKAGE_RECOVERY, ::comphelper::ConfigurationHelper::E_STANDARD),
         css::uno::UNO_QUERY);
 
     sal_Int32 nMinSpaceDocSave    = MIN_DISCSPACE_DOCSAVE;
@@ -948,13 +948,13 @@ css::uno::Reference< css::container::XNameAccess > AutoRecovery::implts_openConf
     try
     {
         rtl::OUString sCFG_PATH_AUTOSAVE(CFG_PATH_AUTOSAVE);
-        ::comphelper::ConfigurationHelper::readDirectKey(xSMGR,
+        ::comphelper::ConfigurationHelper::readDirectKey(xContext,
                                                          sCFG_PACKAGE_RECOVERY,
                                                          sCFG_PATH_AUTOSAVE,
                                                          rtl::OUString(CFG_ENTRY_MINSPACE_DOCSAVE),
                                                          ::comphelper::ConfigurationHelper::E_STANDARD) >>= nMinSpaceDocSave;
 
-        ::comphelper::ConfigurationHelper::readDirectKey(xSMGR,
+        ::comphelper::ConfigurationHelper::readDirectKey(xContext,
                                                          sCFG_PACKAGE_RECOVERY,
                                                          sCFG_PATH_AUTOSAVE,
                                                          rtl::OUString(CFG_ENTRY_MINSPACE_CONFIGSAVE),
@@ -1129,7 +1129,7 @@ void AutoRecovery::implts_specifyDefaultFilterAndExtension(AutoRecovery::TDocume
         {
             // open module config on demand and cache the update access
             xCFG = css::uno::Reference< css::container::XNameAccess >(
-                ::comphelper::ConfigurationHelper::openConfig(xSMGR, rtl::OUString(CFG_PACKAGE_MODULES),
+                ::comphelper::ConfigurationHelper::openConfig(comphelper::getComponentContext(xSMGR), rtl::OUString(CFG_PACKAGE_MODULES),
                 ::comphelper::ConfigurationHelper::E_STANDARD),
                 css::uno::UNO_QUERY_THROW);
 
@@ -2973,7 +2973,7 @@ void AutoRecovery::implts_doEmergencySave(const DispatchParams& aParams)
     // the error report tool is started too in case no recovery
     // documents exists and was saved.
     ::comphelper::ConfigurationHelper::writeDirectKey(
-        m_xSMGR,
+        comphelper::getComponentContext(m_xSMGR),
         rtl::OUString(CFG_PACKAGE_RECOVERY),
         rtl::OUString(CFG_PATH_RECOVERYINFO),
         rtl::OUString(CFG_ENTRY_CRASHED),
@@ -3034,7 +3034,7 @@ void AutoRecovery::implts_doRecovery(const DispatchParams& aParams)
 
     // Reset the configuration hint "we was crashed"!
     ::comphelper::ConfigurationHelper::writeDirectKey(
-        m_xSMGR,
+        comphelper::getComponentContext(m_xSMGR),
         rtl::OUString(CFG_PACKAGE_RECOVERY),
         rtl::OUString(CFG_PATH_RECOVERYINFO),
         rtl::OUString(CFG_ENTRY_CRASHED),
@@ -3101,7 +3101,7 @@ void AutoRecovery::implts_doSessionQuietQuit(const DispatchParams& /*aParams*/)
     // Write a hint for "stored session data" into the configuration, so
     // the on next startup we know what's happen last time
     ::comphelper::ConfigurationHelper::writeDirectKey(
-        m_xSMGR,
+        comphelper::getComponentContext(m_xSMGR),
         rtl::OUString(CFG_PACKAGE_RECOVERY),
         rtl::OUString(CFG_PATH_RECOVERYINFO),
         rtl::OUString(CFG_ENTRY_SESSIONDATA),
@@ -3138,7 +3138,7 @@ void AutoRecovery::implts_doSessionRestore(const DispatchParams& aParams)
     // Reset the configuration hint for "session save"!
     LOG_RECOVERY("... reset config key 'SessionData'")
     ::comphelper::ConfigurationHelper::writeDirectKey(
-        m_xSMGR,
+        comphelper::getComponentContext(m_xSMGR),
         rtl::OUString(CFG_PACKAGE_RECOVERY),
         rtl::OUString(CFG_PATH_RECOVERYINFO),
         rtl::OUString(CFG_ENTRY_SESSIONDATA),
@@ -3275,7 +3275,7 @@ void SAL_CALL AutoRecovery::getFastPropertyValue(css::uno::Any& aValue ,
                 {
                     sal_Bool bSessionData  = sal_False;
                     ::comphelper::ConfigurationHelper::readDirectKey(
-                                                    m_xSMGR,
+                                                    comphelper::getComponentContext(m_xSMGR),
                                                     rtl::OUString(CFG_PACKAGE_RECOVERY),
                                                     rtl::OUString(CFG_PATH_RECOVERYINFO),
                                                     rtl::OUString(CFG_ENTRY_SESSIONDATA),
@@ -3294,7 +3294,7 @@ void SAL_CALL AutoRecovery::getFastPropertyValue(css::uno::Any& aValue ,
 
         case AUTORECOVERY_PROPHANDLE_CRASHED :
                 aValue = ::comphelper::ConfigurationHelper::readDirectKey(
-                            m_xSMGR,
+                            comphelper::getComponentContext(m_xSMGR),
                             rtl::OUString(CFG_PACKAGE_RECOVERY),
                             rtl::OUString(CFG_PATH_RECOVERYINFO),
                             rtl::OUString(CFG_ENTRY_CRASHED),
@@ -3303,7 +3303,7 @@ void SAL_CALL AutoRecovery::getFastPropertyValue(css::uno::Any& aValue ,
 
         case AUTORECOVERY_PROPHANDLE_EXISTS_SESSIONDATA :
                 aValue = ::comphelper::ConfigurationHelper::readDirectKey(
-                            m_xSMGR,
+                            comphelper::getComponentContext(m_xSMGR),
                             rtl::OUString(CFG_PACKAGE_RECOVERY),
                             rtl::OUString(CFG_PATH_RECOVERYINFO),
                             rtl::OUString(CFG_ENTRY_SESSIONDATA),

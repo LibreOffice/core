@@ -132,7 +132,7 @@ class PersistentWindowState :   // interfaces
         //____________________________
         /** @short  retrieve the window state from the configuration.
 
-            @param  xSMGR
+            @param  rxContext
                     needed to create the configuration access.
 
             @param  sModuleName
@@ -142,8 +142,8 @@ class PersistentWindowState :   // interfaces
             @return [string]
                     contains the information about position and size.
          */
-        static ::rtl::OUString implst_getWindowStateFromConfig(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR      ,
-                                                               const ::rtl::OUString&                                        sModuleName);
+        static ::rtl::OUString implst_getWindowStateFromConfig(const css::uno::Reference< css::uno::XComponentContext >& rxContext      ,
+                                                               const ::rtl::OUString&                                    sModuleName);
 
         //____________________________
         /** @short  retrieve the window state from the container window.
@@ -161,7 +161,7 @@ class PersistentWindowState :   // interfaces
         //____________________________
         /** @short  restore the position and size on the container window.
 
-            @param  xSMGR
+            @param  rxContext
                     needed to create the configuration access.
 
             @param  sModuleName
@@ -171,9 +171,9 @@ class PersistentWindowState :   // interfaces
             @param  sWindowState
                     contains the information about position and size.
          */
-        static void implst_setWindowStateOnConfig(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR         ,
-                                                  const ::rtl::OUString&                                        sModuleName   ,
-                                                  const ::rtl::OUString&                                        sWindowState  );
+        static void implst_setWindowStateOnConfig(const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+                                                  const ::rtl::OUString&                                    sModuleName   ,
+                                                  const ::rtl::OUString&                                    sWindowState  );
 
         //____________________________
         /** @short  restore the position and size on the container window.

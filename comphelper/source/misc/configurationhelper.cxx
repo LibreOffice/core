@@ -32,13 +32,12 @@ namespace css = ::com::sun::star;
 
 
 //-----------------------------------------------
-css::uno::Reference< css::uno::XInterface > ConfigurationHelper::openConfig(const css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR   ,
-                                                                            const ::rtl::OUString&                                       sPackage,
-                                                                                  sal_Int32                                              eMode   )
+css::uno::Reference< css::uno::XInterface > ConfigurationHelper::openConfig(const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+                                                                            const ::rtl::OUString&                                    sPackage,
+                                                                                  sal_Int32                                           eMode   )
 {
     css::uno::Reference< css::lang::XMultiServiceFactory > xConfigProvider(
-        css::configuration::theDefaultProvider::get(
-            getComponentContext( xSMGR ) ) );
+        css::configuration::theDefaultProvider::get( rxContext ) );
 
     ::comphelper::SequenceAsVector< css::uno::Any > lParams;
     css::beans::PropertyValue                       aParam ;
@@ -160,25 +159,25 @@ css::uno::Reference< css::uno::XInterface > ConfigurationHelper::makeSureSetNode
 }
 
 //-----------------------------------------------
-css::uno::Any ConfigurationHelper::readDirectKey(const css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR   ,
+css::uno::Any ConfigurationHelper::readDirectKey(const css::uno::Reference< css::uno::XComponentContext >&    rxContext,
                                                  const ::rtl::OUString&                                       sPackage,
                                                  const ::rtl::OUString&                                       sRelPath,
                                                  const ::rtl::OUString&                                       sKey    ,
                                                        sal_Int32                                              eMode   )
 {
-    css::uno::Reference< css::uno::XInterface > xCFG = ConfigurationHelper::openConfig(xSMGR, sPackage, eMode);
+    css::uno::Reference< css::uno::XInterface > xCFG = ConfigurationHelper::openConfig(rxContext, sPackage, eMode);
     return ConfigurationHelper::readRelativeKey(xCFG, sRelPath, sKey);
 }
 
 //-----------------------------------------------
-void ConfigurationHelper::writeDirectKey(const css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR   ,
+void ConfigurationHelper::writeDirectKey(const css::uno::Reference< css::uno::XComponentContext >&    rxContext,
                                          const ::rtl::OUString&                                       sPackage,
                                          const ::rtl::OUString&                                       sRelPath,
                                          const ::rtl::OUString&                                       sKey    ,
                                          const css::uno::Any&                                         aValue  ,
                                                sal_Int32                                              eMode   )
 {
-    css::uno::Reference< css::uno::XInterface > xCFG = ConfigurationHelper::openConfig(xSMGR, sPackage, eMode);
+    css::uno::Reference< css::uno::XInterface > xCFG = ConfigurationHelper::openConfig(rxContext, sPackage, eMode);
     ConfigurationHelper::writeRelativeKey(xCFG, sRelPath, sKey, aValue);
     ConfigurationHelper::flush(xCFG);
 }

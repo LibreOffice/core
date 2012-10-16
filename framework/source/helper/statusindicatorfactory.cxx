@@ -420,7 +420,7 @@ void StatusIndicatorFactory::implts_makeParentVisibleIfAllowed()
     {
         bool bForceFrontAndFocus(false);
         ::comphelper::ConfigurationHelper::readDirectKey(
-            xSMGR,
+            comphelper::getComponentContext(xSMGR),
             ::rtl::OUString("org.openoffice.Office.Common/View"),
             ::rtl::OUString("NewDocumentHandling"),
             ::rtl::OUString("ForceFocusAndToFront"),

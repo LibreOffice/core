@@ -2327,7 +2327,7 @@ sal_Bool impl_maxOpenDocCountReached()
     {
         css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = ::comphelper::getProcessServiceFactory();
         css::uno::Any aVal = ::comphelper::ConfigurationHelper::readDirectKey(
-                                xSMGR,
+                                ::comphelper::getProcessComponentContext(),
                                 ::rtl::OUString("org.openoffice.Office.Common/"),
                                 ::rtl::OUString("Misc"),
                                 ::rtl::OUString("MaxOpenDocuments"),

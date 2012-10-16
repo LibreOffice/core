@@ -2466,7 +2466,7 @@ sal_Bool FilterCache::impl_isModuleInstalled(const ::rtl::OUString& sModule)
     {
         m_xModuleCfg = css::uno::Reference< css::container::XNameAccess >(
                             ::comphelper::ConfigurationHelper::openConfig(
-                                m_xSMGR,
+                                comphelper::getComponentContext(m_xSMGR),
                                 ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "org.openoffice.Setup/Office/Factories" )),
                                 ::comphelper::ConfigurationHelper::E_READONLY),
                             css::uno::UNO_QUERY_THROW);

@@ -335,7 +335,7 @@ SvtViewOptionsBase_Impl::SvtViewOptionsBase_Impl( const ::rtl::OUString& sList )
     {
         m_xRoot = css::uno::Reference< css::container::XNameAccess >(
                         ::comphelper::ConfigurationHelper::openConfig(
-                            ::comphelper::getProcessServiceFactory(),
+                            ::comphelper::getProcessComponentContext(),
                             PACKAGE_VIEWS,
                             ::comphelper::ConfigurationHelper::E_STANDARD),
                         css::uno::UNO_QUERY);

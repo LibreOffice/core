@@ -2170,7 +2170,7 @@ void SfxHelpTextWindow_Impl::InitOnStartupBox( bool bOnlyText )
 {
     sCurrentFactory = SfxHelp::GetCurrentModuleIdentifier();
 
-    Reference< XMultiServiceFactory > xMultiServiceFac = ::comphelper::getProcessServiceFactory();
+    Reference< XComponentContext > xContext = ::comphelper::getProcessComponentContext();
     Reference< XInterface > xConfig;
     ::rtl::OUString sPath( PATH_OFFICE_FACTORIES );
     sPath += sCurrentFactory;
@@ -2185,7 +2185,7 @@ void SfxHelpTextWindow_Impl::InitOnStartupBox( bool bOnlyText )
     try
     {
         xConfiguration = ConfigurationHelper::openConfig(
-            xMultiServiceFac, PACKAGE_SETUP, ConfigurationHelper::E_STANDARD );
+            xContext, PACKAGE_SETUP, ConfigurationHelper::E_STANDARD );
         if ( xConfiguration.is() )
         {
             Any aAny = ConfigurationHelper::readRelativeKey( xConfiguration, sPath, sKey );

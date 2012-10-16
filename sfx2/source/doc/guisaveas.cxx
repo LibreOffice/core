@@ -612,7 +612,7 @@ sal_Int8 ModelData_Impl::CheckSaveAcceptable( sal_Int8 nCurStatus )
         // check whether save is acceptable by the configuration
         // it is done only for documents that have persistence already
         uno::Reference< uno::XInterface > xCommonConfig = ::comphelper::ConfigurationHelper::openConfig(
-                            m_pOwner->GetServiceFactory(),
+                            comphelper::getComponentContext(m_pOwner->GetServiceFactory()),
                             ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/org.openoffice.Office.Common" ) ),
                             ::comphelper::ConfigurationHelper::E_STANDARD );
         if ( !xCommonConfig.is() )

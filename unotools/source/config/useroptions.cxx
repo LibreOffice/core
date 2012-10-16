@@ -146,7 +146,7 @@ SvtUserOptions::Impl::Impl() :
     {
         m_xCfg = uno::Reference<container::XNameAccess>(
             comphelper::ConfigurationHelper::openConfig(
-                comphelper::getProcessServiceFactory(),
+                comphelper::getProcessComponentContext(),
                 sData,
                 comphelper::ConfigurationHelper::E_STANDARD
             ),

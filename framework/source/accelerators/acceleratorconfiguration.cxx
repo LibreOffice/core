@@ -671,7 +671,7 @@ XCUBasedAcceleratorConfiguration::XCUBasedAcceleratorConfiguration(const css::un
 {
     const ::rtl::OUString CFG_ENTRY_ACCELERATORS("org.openoffice.Office.Accelerators");
     m_xCfg = css::uno::Reference< css::container::XNameAccess > (
-             ::comphelper::ConfigurationHelper::openConfig( m_xSMGR, CFG_ENTRY_ACCELERATORS, ::comphelper::ConfigurationHelper::E_ALL_LOCALES ),
+             ::comphelper::ConfigurationHelper::openConfig( comphelper::getComponentContext(m_xSMGR), CFG_ENTRY_ACCELERATORS, ::comphelper::ConfigurationHelper::E_ALL_LOCALES ),
              css::uno::UNO_QUERY );
 }
 
@@ -1173,14 +1173,14 @@ void SAL_CALL XCUBasedAcceleratorConfiguration::reset()
     if ( sConfig == "Global" )
     {
         m_xCfg = css::uno::Reference< css::container::XNameAccess > (
-            ::comphelper::ConfigurationHelper::openConfig( m_xSMGR, CFG_ENTRY_GLOBAL, ::comphelper::ConfigurationHelper::E_ALL_LOCALES ),
+            ::comphelper::ConfigurationHelper::openConfig( comphelper::getComponentContext(m_xSMGR), CFG_ENTRY_GLOBAL, ::comphelper::ConfigurationHelper::E_ALL_LOCALES ),
             css::uno::UNO_QUERY );
         XCUBasedAcceleratorConfiguration::reload();
     }
     else if ( sConfig == "Modules" )
     {
         m_xCfg = css::uno::Reference< css::container::XNameAccess > (
-            ::comphelper::ConfigurationHelper::openConfig( m_xSMGR, CFG_ENTRY_MODULES, ::comphelper::ConfigurationHelper::E_ALL_LOCALES ),
+            ::comphelper::ConfigurationHelper::openConfig( comphelper::getComponentContext(m_xSMGR), CFG_ENTRY_MODULES, ::comphelper::ConfigurationHelper::E_ALL_LOCALES ),
             css::uno::UNO_QUERY );
         XCUBasedAcceleratorConfiguration::reload();
     }

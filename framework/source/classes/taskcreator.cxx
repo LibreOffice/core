@@ -85,7 +85,8 @@ css::uno::Reference< css::frame::XFrame > TaskCreator::createTask( const ::rtl::
             ( TargetHelper::matchSpecialTarget(sName, TargetHelper::E_DEFAULT) )
            )
         {
-            ::comphelper::ConfigurationHelper::readDirectKey(xSMGR,
+            ::comphelper::ConfigurationHelper::readDirectKey(
+                comphelper::getComponentContext(xSMGR),
                 "org.openoffice.Office.TabBrowse",
                 "TaskCreatorService",
                 "ImplementationName",

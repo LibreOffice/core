@@ -949,9 +949,9 @@ void Edit::ImplInsertText( const rtl::OUString& rStr, const Selection* pNewSel, 
         // get access to the configuration of this office module
         try
         {
-            uno::Reference< lang::XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
+            uno::Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
             uno::Reference< container::XNameAccess > xModuleCfg( ::comphelper::ConfigurationHelper::openConfig(
-                                    xMSF,
+                                    xContext,
                                     sModule,
                                     ::comphelper::ConfigurationHelper::E_READONLY ),
                                 uno::UNO_QUERY );

@@ -194,7 +194,7 @@ void SAL_CALL ModuleManager::replaceByName(const ::rtl::OUString& sName ,
     // flush changes (because an error occurred) we will read them later. If we use a different config access
     // we can close it without a flush ... and our read data wont be affected .-)
     css::uno::Reference< css::uno::XInterface >         xCfg      = ::comphelper::ConfigurationHelper::openConfig(
-                                                                        xSMGR,
+                                                                        comphelper::getComponentContext(xSMGR),
                                                                         rtl::OUString(CFGPATH_FACTORIES),
                                                                         ::comphelper::ConfigurationHelper::E_STANDARD);
     css::uno::Reference< css::container::XNameAccess >  xModules (xCfg, css::uno::UNO_QUERY_THROW);
@@ -333,7 +333,7 @@ css::uno::Reference< css::container::XNameAccess > ModuleManager::implts_getConf
     try
     {
         xCfg = ::comphelper::ConfigurationHelper::openConfig(
-                    xSMGR,
+                    comphelper::getComponentContext(xSMGR),
                     rtl::OUString(CFGPATH_FACTORIES),
                     ::comphelper::ConfigurationHelper::E_READONLY);
     }
