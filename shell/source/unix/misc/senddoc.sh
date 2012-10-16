@@ -369,62 +369,18 @@ case `basename "$MAILER" | sed 's/-.*$//'` in
         /usr/bin/open -a "${MAILER}" ${ATTACH}
         ;;
 
-    "")
-
-        # DESKTOP_LAUNCH, see http://freedesktop.org/pipermail/xdg/2004-August/004489.html
-        if [ -n "$DESKTOP_LAUNCH" ]; then
-            while [ "$1" != "" ]; do
-                case $1 in
-                    --to)
-                        if [ "${TO}" != "" ]; then
-                            MAILTO="${MAILTO:-}${MAILTO:+&}to=$2"
-                        else
-                            TO="$2"
-                        fi
-                        shift
-                        ;;
-                    --cc)
-                        MAILTO="${MAILTO:-}${MAILTO:+&}cc="`echo "$2" | ${URI_ENCODE}`
-                        shift
-                        ;;
-                    --bcc)
-                        MAILTO="${MAILTO:-}${MAILTO:+&}bcc="`echo "$2" | ${URI_ENCODE}`
-                        shift
-                        ;;
-                    --subject)
-                        MAILTO="${MAILTO:-}${MAILTO:+&}subject="`echo "$2" | ${URI_ENCODE}`
-                        shift
-                        ;;
-                    --body)
-                        MAILTO="${MAILTO:-}${MAILTO:+&}body="`echo "$2" | ${URI_ENCODE}`
-                        shift
-                        ;;
-                    --attach)
-                        MAILTO="${MAILTO:-}${MAILTO:+&}attachment="`echo "$2" | ${URI_ENCODE}`
-                        shift
-                        ;;
-                    *)
-                        ;;
-                esac
-                shift;
-            done
-
-            MAILTO="mailto:${TO}?${MAILTO}"
-            ${DESKTOP_LAUNCH} "${MAILTO}" &
-        else
-            echo "Could not determine a mail client to use."
-            exit 2
-        fi
-        ;;
-
     *)
-        # LO is configured to use something we do not recognize.
+
+        # LO is configured to use something we do not recognize, or is not configured.
         # Try to be smart, and send the mail anyway, if we have the
         # possibility to do so.
 
-        if [ -n "$KDE_FULL_SESSION" -a -x /usr/bin/kde-open ] ; then
+        if [ -n "$DESKTOP_LAUNCH" ]; then
+            # http://lists.freedesktop.org/pipermail/xdg/2004-August/002873.html
+            MAILER=${DESKTOP_LAUNCH}
+        elif [ -n "$KDE_FULL_SESSION" -a -x /usr/bin/kde-open ] ; then
             MAILER=/usr/bin/kde-open
-        elif [ -x /usr/bin/gnome-open ] ; then
+        elif [ -n "$GNOME_DESKTOP_SESSION_ID" -a -x /usr/bin/gnome-open ] ; then
             MAILER=/usr/bin/gnome-open
         elif [ -x /usr/bin/xdg-open ] ; then
             MAILER=/usr/bin/xdg-open
@@ -460,7 +416,7 @@ case `basename "$MAILER" | sed 's/-.*$//'` in
                     shift
                     ;;
                 --attach)
-                    MAILTO="${MAILTO:-}${MAILTO:+&}attach="`echo "file://$2" | ${URI_ENCODE}`
+                    MAILTO="${MAILTO:-}${MAILTO:+&}attachment="`echo "file://$2" | ${URI_ENCODE}`
                     shift
                     ;;
                 *)
