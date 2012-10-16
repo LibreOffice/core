@@ -56,7 +56,7 @@
 #include <com/sun/star/ui/ItemType.hpp>
 #include <com/sun/star/ui/ImageType.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
-#include <com/sun/star/frame/XModuleManager.hpp>
+#include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/ui/XModuleUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/ui/ItemStyle.hpp>
@@ -1537,8 +1537,7 @@ void MenuBarManager::RetrieveShortcuts( std::vector< MenuItemHandler* >& aMenuSh
     if ( !m_bModuleIdentified )
     {
         m_bModuleIdentified = sal_True;
-        Reference< XModuleManager > xModuleManager;
-        xModuleManager = Reference< XModuleManager >( getServiceFactory()->createInstance( SERVICENAME_MODULEMANAGER ), UNO_QUERY_THROW );
+        Reference< XModuleManager2 > xModuleManager = ModuleManager::create( comphelper::getComponentContext( getServiceFactory() ) );
 
         try
         {
@@ -1657,9 +1656,9 @@ void MenuBarManager::RetrieveImageManagers()
         }
     }
 
-    Reference< XModuleManager > xModuleManager;
+    Reference< XModuleManager2 > xModuleManager;
     if ( m_aModuleIdentifier.isEmpty() )
-        xModuleManager.set( getServiceFactory()->createInstance( SERVICENAME_MODULEMANAGER ), UNO_QUERY_THROW );
+        xModuleManager.set( ModuleManager::create( comphelper::getComponentContext( getServiceFactory() ) ) );
 
     try
     {
@@ -1895,8 +1894,7 @@ void MenuBarManager::SetItemContainer( const Reference< XIndexAccess >& rItemCon
     if ( !m_bModuleIdentified )
     {
         m_bModuleIdentified = sal_True;
-        Reference< XModuleManager > xModuleManager;
-        xModuleManager = Reference< XModuleManager >( getServiceFactory()->createInstance( SERVICENAME_MODULEMANAGER ), UNO_QUERY_THROW );
+        Reference< XModuleManager2 > xModuleManager = ModuleManager::create( comphelper::getComponentContext(getServiceFactory()) );
 
         try
         {

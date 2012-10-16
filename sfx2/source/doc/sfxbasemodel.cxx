@@ -3833,12 +3833,13 @@ css::uno::Reference< css::frame::XTitle > SfxBaseModel::impl_getTitleHelper ()
 
     if ( ! m_pData->m_xTitleHelper.is ())
     {
-        css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR   = ::comphelper::getProcessServiceFactory ();
+        css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR    = ::comphelper::getProcessServiceFactory();
+        css::uno::Reference< css::uno::XComponentContext >     xContext = ::comphelper::getProcessComponentContext();
         const ::rtl::OUString SERVICENAME_DESKTOP("com.sun.star.frame.Desktop");
         css::uno::Reference< css::frame::XUntitledNumbers >    xDesktop(xSMGR->createInstance(SERVICENAME_DESKTOP), css::uno::UNO_QUERY_THROW);
         css::uno::Reference< css::frame::XModel >              xThis   (static_cast< css::frame::XModel* >(this), css::uno::UNO_QUERY_THROW);
 
-        ::framework::TitleHelper* pHelper = new ::framework::TitleHelper(xSMGR);
+        ::framework::TitleHelper* pHelper = new ::framework::TitleHelper(xContext);
         m_pData->m_xTitleHelper = css::uno::Reference< css::frame::XTitle >(static_cast< ::cppu::OWeakObject* >(pHelper), css::uno::UNO_QUERY_THROW);
         pHelper->setOwner                   (xThis   );
         pHelper->connectWithUntitledNumbers (xDesktop);

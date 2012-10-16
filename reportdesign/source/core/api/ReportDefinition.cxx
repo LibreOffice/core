@@ -2691,7 +2691,7 @@ uno::Reference< frame::XTitle > OReportDefinition::impl_getTitleHelper_throw()
                         ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.Desktop")) ,m_aProps->m_xContext),uno::UNO_QUERY_THROW);
         uno::Reference< frame::XModel >              xThis   (static_cast< frame::XModel* >(this), uno::UNO_QUERY_THROW);
 
-        ::framework::TitleHelper* pHelper = new ::framework::TitleHelper(uno::Reference< lang::XMultiServiceFactory >(m_aProps->m_xContext->getServiceManager(),uno::UNO_QUERY));
+        ::framework::TitleHelper* pHelper = new ::framework::TitleHelper( m_aProps->m_xContext );
         m_pImpl->m_xTitleHelper = uno::Reference< frame::XTitle >(static_cast< ::cppu::OWeakObject* >(pHelper), uno::UNO_QUERY_THROW);
         pHelper->setOwner                   (xThis   );
         pHelper->connectWithUntitledNumbers (xDesktop);

@@ -1383,7 +1383,7 @@ Reference< XTitle > OGenericUnoController::impl_getTitleHelper_throw()
         Reference< XUntitledNumbers > xUntitledProvider(getPrivateModel(), UNO_QUERY      );
         Reference< XController >      xThis(static_cast< XController* >(this), UNO_QUERY_THROW);
 
-        ::framework::TitleHelper* pHelper = new ::framework::TitleHelper(m_xServiceFactory);
+        ::framework::TitleHelper* pHelper = new ::framework::TitleHelper( comphelper::getComponentContext(m_xServiceFactory) );
         m_xTitleHelper.set( static_cast< ::cppu::OWeakObject* >(pHelper), UNO_QUERY_THROW);
 
         pHelper->setOwner                   (xThis            );

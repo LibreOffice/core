@@ -49,7 +49,7 @@
 #include <com/sun/star/ui/DockingArea.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
-#include <com/sun/star/frame/XModuleManager.hpp>
+#include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/ui/XUIElementSettings.hpp>
 #include <com/sun/star/ui/XUIConfigurationPersistence.hpp>
 #include <com/sun/star/ui/XModuleUIConfigurationManagerSupplier.hpp>
@@ -829,7 +829,7 @@ uno::Sequence< beans::PropertyValue > ToolBarManager::GetPropsForCommand( const 
     {
         if ( !m_bModuleIdentified )
         {
-            Reference< XModuleManager > xModuleManager( m_xServiceManager->createInstance( SERVICENAME_MODULEMANAGER ), UNO_QUERY_THROW );
+            Reference< XModuleManager2 > xModuleManager = ModuleManager::create( comphelper::getComponentContext(m_xServiceManager) );
             Reference< XInterface > xIfac( m_xFrame, UNO_QUERY );
 
             m_bModuleIdentified = sal_True;
@@ -1200,8 +1200,7 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
 
     sal_uInt16    nId( 1 );
 
-    Reference< XModuleManager > xModuleManager( Reference< XModuleManager >(
-                                                    m_xServiceManager->createInstance( SERVICENAME_MODULEMANAGER ), UNO_QUERY ));
+    Reference< XModuleManager2 > xModuleManager = ModuleManager::create( comphelper::getComponentContext(m_xServiceManager) );
     if ( !m_xDocImageManager.is() )
     {
         Reference< XModel > xModel( GetModelFromFrame() );
@@ -1221,8 +1220,7 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
 
     try
     {
-        if ( xModuleManager.is() )
-            m_aModuleIdentifier = xModuleManager->identify( Reference< XInterface >( m_xFrame, UNO_QUERY ) );
+        m_aModuleIdentifier = xModuleManager->identify( Reference< XInterface >( m_xFrame, UNO_QUERY ) );
     }
     catch (const Exception&)
     {

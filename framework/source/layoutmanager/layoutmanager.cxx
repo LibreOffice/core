@@ -44,6 +44,7 @@
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
+#include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/frame/FrameAction.hpp>
 #include <com/sun/star/frame/XUIControllerRegistration.hpp>
@@ -137,7 +138,7 @@ LayoutManager::LayoutManager( const Reference< XMultiServiceFactory >& xServiceM
         , m_bPreserveContentSize( false )
         , m_bMenuBarCloser( false )
         , m_pInplaceMenuBar( NULL )
-        , m_xModuleManager( Reference< XModuleManager >( xServiceManager->createInstance( SERVICENAME_MODULEMANAGER ), UNO_QUERY ))
+        , m_xModuleManager( ModuleManager::create( comphelper::getComponentContext(xServiceManager) ))
         , m_xUIElementFactoryManager( Reference< ui::XUIElementFactory >(
                 xServiceManager->createInstance( SERVICENAME_UIELEMENTFACTORYMANAGER ), UNO_QUERY ))
         , m_xPersistentWindowStateSupplier( Reference< XNameAccess >(

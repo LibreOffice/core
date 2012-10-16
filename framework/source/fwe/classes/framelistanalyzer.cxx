@@ -36,7 +36,7 @@
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/frame/XModuleManager.hpp>
+#include <com/sun/star/frame/ModuleManager.hpp>
 
 #include <comphelper/processfactory.hxx>
 #include <vcl/svapp.hxx>
@@ -132,10 +132,10 @@ void FrameListAnalyzer::impl_analyze()
     {
         try
         {
-            css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = ::comphelper::getProcessServiceFactory();
-            css::uno::Reference< css::frame::XModuleManager > xModuleMgr(xSMGR->createInstance(SERVICENAME_MODULEMANAGER), css::uno::UNO_QUERY_THROW);
+            css::uno::Reference< css::uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+            css::uno::Reference< css::frame::XModuleManager2 > xModuleMgr = css::frame::ModuleManager::create(xContext);
             ::rtl::OUString sModule = xModuleMgr->identify(m_xReferenceFrame);
-            m_bReferenceIsBacking = (sModule.equals(SERVICENAME_STARTMODULE));
+            m_bReferenceIsBacking = sModule.equals(SERVICENAME_STARTMODULE);
         }
         catch(const css::frame::UnknownModuleException&)
         {
@@ -207,8 +207,8 @@ void FrameListAnalyzer::impl_analyze()
             {
                 try
                 {
-                    css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = ::comphelper::getProcessServiceFactory();
-                    css::uno::Reference< css::frame::XModuleManager > xModuleMgr(xSMGR->createInstance(SERVICENAME_MODULEMANAGER), css::uno::UNO_QUERY);
+                    css::uno::Reference< css::uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
+                    css::uno::Reference< css::frame::XModuleManager2 > xModuleMgr = css::frame::ModuleManager::create(xContext);
                     ::rtl::OUString sModule = xModuleMgr->identify(xFrame);
                     if (sModule.equals(SERVICENAME_STARTMODULE))
                     {

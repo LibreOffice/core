@@ -117,7 +117,7 @@ class PersistentWindowState :   // interfaces
         /** @short  identify the application module, which  is used behind the component
                     of our frame.
 
-            @param  xSMGR
+            @param  rxContext
                     needed to create needed uno resources.
 
             @param  xFrame
@@ -126,7 +126,7 @@ class PersistentWindowState :   // interfaces
             @return [string]
                     a module identifier for the current frame component.
          */
-        static ::rtl::OUString implst_identifyModule(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR ,
+        static ::rtl::OUString implst_identifyModule(const css::uno::Reference< css::uno::XComponentContext >& rxContext,
                                                      const css::uno::Reference< css::frame::XFrame >&              xFrame);
 
         //____________________________

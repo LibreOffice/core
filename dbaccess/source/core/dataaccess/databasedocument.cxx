@@ -2067,7 +2067,7 @@ Reference< XTitle > ODatabaseDocument::impl_getTitleHelper_throw()
             UNO_QUERY_THROW );
         uno::Reference< frame::XModel > xThis   (getThis(), uno::UNO_QUERY_THROW);
 
-        ::framework::TitleHelper* pHelper = new ::framework::TitleHelper(m_pImpl->m_aContext.getLegacyServiceFactory());
+        ::framework::TitleHelper* pHelper = new ::framework::TitleHelper(m_pImpl->m_aContext.getUNOContext());
         m_xTitleHelper.set(static_cast< ::cppu::OWeakObject* >(pHelper), uno::UNO_QUERY_THROW);
         pHelper->setOwner                   (xThis   );
         pHelper->connectWithUntitledNumbers (xDesktop);

@@ -38,6 +38,7 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/container/XContainer.hpp>
+#include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 
 #include <rtl/ustrbuf.hxx>
@@ -394,7 +395,7 @@ UIElementFactoryManager::UIElementFactoryManager( const Reference< XMultiService
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "UIElementFactoryManager::UIElementFactoryManager" );
     m_pConfigAccess = new ConfigurationAccess_FactoryManager( m_xServiceManager,rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/org.openoffice.Office.UI.Factories/Registered/UIElementFactories" )) );
     m_pConfigAccess->acquire();
-    m_xModuleManager = Reference< XModuleManager >( m_xServiceManager->createInstance( SERVICENAME_MODULEMANAGER ), UNO_QUERY );
+    m_xModuleManager = ModuleManager::create( comphelper::getComponentContext(m_xServiceManager) );
 }
 
 UIElementFactoryManager::~UIElementFactoryManager()
@@ -436,7 +437,7 @@ throw ( ::com::sun::star::container::NoSuchElementException, ::com::sun::star::l
             Args[i].Value >>= xFrame;
     }
 
-    Reference< XModuleManager > xManager( m_xModuleManager );
+    Reference< XModuleManager2 > xManager( m_xModuleManager );
     aLock.unlock();
 
     // Determine the module identifier

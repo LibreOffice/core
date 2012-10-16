@@ -38,13 +38,14 @@
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
-#include <com/sun/star/frame/XModuleManager.hpp>
+#include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XMaterialHolder.hpp>
 #include <com/sun/star/frame/XTitleChangeBroadcaster.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 
+#include <comphelper/processfactory.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <unotools/configmgr.hxx>
 #include <unotools/bootstrap.hxx>
@@ -175,13 +176,8 @@ void TitleBarUpdate::impl_updateApplicationID(const css::uno::Reference< css::fr
         aReadLock.unlock();
         // <- SYNCHRONIZED
 
-        css::uno::Reference< css::frame::XModuleManager > xModuleManager(
-            xSMGR->createInstance(SERVICENAME_MODULEMANAGER),
-            css::uno::UNO_QUERY_THROW);
-
-        css::uno::Reference< css::container::XNameAccess > xConfig(
-            xModuleManager,
-            css::uno::UNO_QUERY_THROW);
+        css::uno::Reference< css::frame::XModuleManager2 > xModuleManager =
+            css::frame::ModuleManager::create( comphelper::getComponentContext(xSMGR) );
 
         rtl::OUString aModuleId = xModuleManager->identify(xFrame);
         rtl::OUString sDesktopName;
@@ -248,16 +244,11 @@ void TitleBarUpdate::impl_updateApplicationID(const css::uno::Reference< css::fr
 
     try
     {
-        css::uno::Reference< css::frame::XModuleManager > xModuleManager(
-            xSMGR->createInstance(SERVICENAME_MODULEMANAGER),
-            css::uno::UNO_QUERY_THROW);
+        css::uno::Reference< css::frame::XModuleManager2 > xModuleManager =
+            css::frame::ModuleManager::create( comphelper::getComponentContext(xSMGR) );
 
-        css::uno::Reference< css::container::XNameAccess > xConfig(
-            xModuleManager,
-            css::uno::UNO_QUERY_THROW);
-
-                                        rInfo.sID = xModuleManager->identify(xFrame);
-        ::comphelper::SequenceAsHashMap lProps    = xConfig->getByName (rInfo.sID);
+        rInfo.sID = xModuleManager->identify(xFrame);
+        ::comphelper::SequenceAsHashMap lProps    = xModuleManager->getByName (rInfo.sID);
 
         rInfo.sUIName = lProps.getUnpackedValueOrDefault (OFFICEFACTORY_PROPNAME_UINAME, ::rtl::OUString());
         rInfo.nIcon   = lProps.getUnpackedValueOrDefault (OFFICEFACTORY_PROPNAME_ICON  , INVALID_ICON_ID  );

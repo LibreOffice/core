@@ -38,7 +38,7 @@
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/DispatchResultState.hpp>
-#include <com/sun/star/frame/XModuleManager.hpp>
+#include <com/sun/star/frame/ModuleManager.hpp>
 
 #include <rtl/ustrbuf.hxx>
 #include <vcl/svapp.hxx>
@@ -129,10 +129,8 @@ void SAL_CALL JobDispatch::initialize( const css::uno::Sequence< css::uno::Any >
         {
             lArguments[a] >>= m_xFrame;
 
-            css::uno::Reference< css::frame::XModuleManager > xModuleManager(
-                m_xSMGR->createInstance(
-                    SERVICENAME_MODULEMANAGER ),
-                css::uno::UNO_QUERY_THROW );
+            css::uno::Reference< css::frame::XModuleManager2 > xModuleManager =
+                css::frame::ModuleManager::create(comphelper::getComponentContext(m_xSMGR));
             try
             {
                 m_sModuleIdentifier = xModuleManager->identify( m_xFrame );

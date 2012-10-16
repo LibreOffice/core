@@ -46,7 +46,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
-#include <com/sun/star/frame/XModuleManager.hpp>
+#include <com/sun/star/frame/XModuleManager2.hpp>
 
 #include <cppuhelper/implbase2.hxx>
 #include <rtl/ustring.hxx>
@@ -101,7 +101,7 @@ public:
         ModuleToCommandFileMap                                                              m_aModuleToCommandFileMap;
         UICommandsHashMap                                                                   m_aUICommandsHashMap;
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >        m_xGenericUICommands;
-        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModuleManager >         m_xModuleManager;
+        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModuleManager2 >        m_xModuleManager;
 };
 
 } // namespace framework

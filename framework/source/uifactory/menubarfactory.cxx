@@ -33,6 +33,7 @@
 #include <uielement/menubarwrapper.hxx>
 
 #include <com/sun/star/util/XURLTransformer.hpp>
+#include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
@@ -73,13 +74,13 @@ DEFINE_INIT_SERVICE                     (   MenuBarFactory, {} )
 MenuBarFactory::MenuBarFactory( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceManager ) :
     ThreadHelpBase()
     , m_xServiceManager( xServiceManager )
-    , m_xModuleManager( xServiceManager->createInstance( SERVICENAME_MODULEMANAGER ), UNO_QUERY )
+    , m_xModuleManager( ModuleManager::create( comphelper::getComponentContext(xServiceManager) ) )
 {
 }
 MenuBarFactory::MenuBarFactory( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceManager,bool ) :
     ThreadHelpBase(&Application::GetSolarMutex())
     , m_xServiceManager( xServiceManager )
-    , m_xModuleManager( xServiceManager->createInstance( SERVICENAME_MODULEMANAGER ), UNO_QUERY )
+    , m_xModuleManager( ModuleManager::create( comphelper::getComponentContext(xServiceManager) ) )
 {
 }
 
@@ -97,7 +98,7 @@ throw ( ::com::sun::star::container::NoSuchElementException, ::com::sun::star::l
     ResetableGuard aLock( m_aLock );
     MenuBarWrapper* pMenuBarWrapper = new MenuBarWrapper( m_xServiceManager );
     Reference< ::com::sun::star::ui::XUIElement > xMenuBar( (OWeakObject *)pMenuBarWrapper, UNO_QUERY );
-    Reference< ::com::sun::star::frame::XModuleManager > xModuleManager = m_xModuleManager;
+    Reference< ::com::sun::star::frame::XModuleManager2 > xModuleManager = m_xModuleManager;
     aLock.unlock();
     CreateUIElement(ResourceURL,Args,"MenuOnly","private:resource/menubar/",xMenuBar,xModuleManager,m_xServiceManager);
     return xMenuBar;
@@ -107,7 +108,7 @@ void MenuBarFactory::CreateUIElement(const ::rtl::OUString& ResourceURL
                                      ,const char* _pExtraMode
                                      ,const char* _pAsciiName
                                      ,const Reference< ::com::sun::star::ui::XUIElement >& _xMenuBar
-                                     ,const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModuleManager >& _xModuleManager
+                                     ,const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModuleManager2 >& _xModuleManager
                                      ,const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _xServiceManager)
 {
     Reference< XUIConfigurationManager > xCfgMgr;

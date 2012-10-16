@@ -36,6 +36,7 @@
 
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/container/XContainer.hpp>
@@ -662,7 +663,7 @@ UICommandDescription::~UICommandDescription()
 }
 void UICommandDescription::impl_fillElements(const sal_Char* _pName)
 {
-    m_xModuleManager.set( m_xServiceManager->createInstance( SERVICENAME_MODULEMANAGER ),UNO_QUERY );
+    m_xModuleManager.set( ModuleManager::create( comphelper::getComponentContext(m_xServiceManager) ) );
     Reference< XNameAccess > xNameAccess( m_xModuleManager, UNO_QUERY_THROW );
     Sequence< rtl::OUString > aElementNames = xNameAccess->getElementNames();
     Sequence< PropertyValue > aSeq;

@@ -31,6 +31,7 @@
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/XInterface.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/frame/XUntitledNumbers.hpp>
 #include <com/sun/star/frame/XTitle.hpp>
@@ -75,7 +76,7 @@ class FWE_DLLPUBLIC TitleHelper : private ::cppu::BaseMutex
         //---------------------------------------
         /** @short  lightweight constructor.
          */
-        TitleHelper(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR);
+        TitleHelper(const css::uno::Reference< css::uno::XComponentContext >& rxContext);
 
         //---------------------------------------
         /** @short  free all internaly used resources.
@@ -182,7 +183,7 @@ class FWE_DLLPUBLIC TitleHelper : private ::cppu::BaseMutex
     private:
 
         /** points to the global uno service manager. */
-        css::uno::Reference< css::lang::XMultiServiceFactory > m_xSMGR;
+        css::uno::Reference< css::uno::XComponentContext> m_xContext;
 
         /** reference to the outside UNO class using this helper. */
         css::uno::WeakReference< css::uno::XInterface > m_xOwner;

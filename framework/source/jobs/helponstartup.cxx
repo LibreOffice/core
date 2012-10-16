@@ -46,6 +46,7 @@
 //_______________________________________________
 // include interfaces
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
+#include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/frame/XFramesSupplier.hpp>
 #include <com/sun/star/frame/XDesktop.hpp>
 
@@ -90,9 +91,7 @@ DEFINE_INIT_SERVICE(HelpOnStartup,
                             see macro DEFINE_XSERVICEINFO_MULTISERVICE and "impl_initService()" for further informations!
                         */
                         // create some needed uno services and cache it
-                        m_xModuleManager = css::uno::Reference< css::frame::XModuleManager >(
-                            m_xSMGR->createInstance(SERVICENAME_MODULEMANAGER),
-                            css::uno::UNO_QUERY_THROW);
+                        m_xModuleManager = css::frame::ModuleManager::create( comphelper::getComponentContext(m_xSMGR) );
 
                         m_xDesktop = css::uno::Reference< css::frame::XFrame >(
                             m_xSMGR->createInstance(SERVICENAME_DESKTOP),
@@ -252,12 +251,9 @@ void SAL_CALL HelpOnStartup::disposing(const css::lang::EventObject& aEvent)
     // Classify it.
     // SAFE ->
     ResetableGuard aLock(m_aLock);
-    css::uno::Reference< css::frame::XModuleManager > xModuleManager = m_xModuleManager;
+    css::uno::Reference< css::frame::XModuleManager2 > xModuleManager = m_xModuleManager;
     aLock.unlock();
     // <- SAFE
-
-    if (!xModuleManager.is())
-        return ::rtl::OUString();
 
     ::rtl::OUString sModuleId;
     try

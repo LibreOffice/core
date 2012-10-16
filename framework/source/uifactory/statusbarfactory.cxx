@@ -76,7 +76,7 @@ throw ( ::com::sun::star::container::NoSuchElementException, ::com::sun::star::l
     ResetableGuard aLock( m_aLock );
     StatusBarWrapper* pWrapper = new StatusBarWrapper( m_xServiceManager );
     Reference< ::com::sun::star::ui::XUIElement > xMenuBar( (OWeakObject *)pWrapper, UNO_QUERY );
-    Reference< ::com::sun::star::frame::XModuleManager > xModuleManager = m_xModuleManager;
+    Reference< ::com::sun::star::frame::XModuleManager2 > xModuleManager = m_xModuleManager;
     aLock.unlock();
     MenuBarFactory::CreateUIElement(ResourceURL,Args,NULL,"private:resource/statusbar/",xMenuBar,xModuleManager,m_xServiceManager);
     return xMenuBar;

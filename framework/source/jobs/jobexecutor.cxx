@@ -42,6 +42,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XContainer.hpp>
+#include <com/sun/star/frame/ModuleManager.hpp>
 
 #include <unotools/configpaths.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -78,10 +79,7 @@ DEFINE_XSERVICEINFO_ONEINSTANCESERVICE( JobExecutor                   ,
 
 DEFINE_INIT_SERVICE( JobExecutor,
                      {
-                         m_xModuleManager = css::uno::Reference< css::frame::XModuleManager >(
-                             m_xSMGR->createInstance(
-                                 SERVICENAME_MODULEMANAGER ),
-                             css::uno::UNO_QUERY_THROW );
+                         m_xModuleManager = css::frame::ModuleManager::create( comphelper::getComponentContext(m_xSMGR) );
 
                          /*Attention
                              I think we don't need any mutex or lock here ... because we are called by our own static method impl_createInstance()

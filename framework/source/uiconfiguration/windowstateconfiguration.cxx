@@ -37,6 +37,7 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/container/XContainer.hpp>
+#include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/ui/DockingArea.hpp>
@@ -1363,14 +1364,12 @@ WindowStateConfiguration::WindowStateConfiguration( const Reference< XMultiServi
     ThreadHelpBase(),
     m_xServiceManager( xServiceManager )
 {
-    m_xModuleManager = Reference< XModuleManager >( m_xServiceManager->createInstance( SERVICENAME_MODULEMANAGER ),
-                                                    UNO_QUERY );
+    m_xModuleManager = ModuleManager::create( comphelper::getComponentContext(m_xServiceManager) );
     Reference< XNameAccess > xEmptyNameAccess;
-    Reference< XNameAccess > xNameAccess( m_xModuleManager, UNO_QUERY_THROW );
     Sequence< rtl::OUString > aElementNames;
     try
     {
-        aElementNames = xNameAccess->getElementNames();
+        aElementNames = m_xModuleManager->getElementNames();
     }
     catch (const ::com::sun::star::uno::RuntimeException &)
     {
@@ -1381,7 +1380,7 @@ WindowStateConfiguration::WindowStateConfiguration( const Reference< XMultiServi
     for ( sal_Int32 i = 0; i < aElementNames.getLength(); i++ )
     {
         aModuleIdentifier = aElementNames[i];
-        if ( xNameAccess->getByName( aModuleIdentifier ) >>= aSeq )
+        if ( m_xModuleManager->getByName( aModuleIdentifier ) >>= aSeq )
         {
             ::rtl::OUString aWindowStateFileStr;
             for ( sal_Int32 y = 0; y < aSeq.getLength(); y++ )

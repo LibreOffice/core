@@ -47,7 +47,7 @@
 #include <com/sun/star/ui/XUIElementFactoryRegistration.hpp>
 #include <com/sun/star/container/XContainerListener.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
-#include "com/sun/star/frame/XModuleManager.hpp"
+#include "com/sun/star/frame/XModuleManager2.hpp"
 
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase3.hxx>
@@ -134,7 +134,7 @@ class UIElementFactoryManager :  private ThreadHelpBase                         
 
         sal_Bool                                                                            m_bConfigRead;
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >    m_xServiceManager;
-        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModuleManager > m_xModuleManager;
+        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModuleManager2 >        m_xModuleManager;
         ConfigurationAccess_FactoryManager*                                        m_pConfigAccess;
 };
 

@@ -67,7 +67,7 @@ ModuleManager::impl_createFactory(
 css::uno::Sequence< rtl::OUString >
 ModuleManager::impl_getSupportedServiceNames() {
     css::uno::Sequence< rtl::OUString > s(1);
-    s[0] = SERVICENAME_MODULEMANAGER;
+    s[0] = DECLARE_ASCII("com.sun.star.frame.ModuleManager");
     return s;
 }
 

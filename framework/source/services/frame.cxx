@@ -599,7 +599,7 @@ void SAL_CALL Frame::initialize( const css::uno::Reference< css::awt::XWindow >&
     m_pWindowCommandDispatch = new WindowCommandDispatch(xSMGR, this);
 
     // Initialize title functionality
-    TitleHelper* pTitleHelper = new TitleHelper(xSMGR);
+    TitleHelper* pTitleHelper = new TitleHelper( comphelper::getComponentContext(xSMGR) );
     m_xTitleHelper = css::uno::Reference< css::frame::XTitle >(static_cast< ::cppu::OWeakObject* >(pTitleHelper), css::uno::UNO_QUERY_THROW);
     pTitleHelper->setOwner(xThis);
 }

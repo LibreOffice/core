@@ -38,7 +38,7 @@
 #include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/ui/UIElementType.hpp>
-#include <com/sun/star/frame/XModuleManager.hpp>
+#include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 
 #include <comphelper/processfactory.hxx>
@@ -147,10 +147,7 @@ void SAL_CALL MenuBarWrapper::initialize( const Sequence< Any >& aArguments ) th
                 pVCLMenuBar = new MenuBar();
             }
 
-            Reference< XModuleManager > xModuleManager;
-            xModuleManager = Reference< XModuleManager >(
-                m_xServiceFactory->createInstance(
-                    SERVICENAME_MODULEMANAGER ), UNO_QUERY_THROW );
+            Reference< XModuleManager2 > xModuleManager = ModuleManager::create( comphelper::getComponentContext(m_xServiceFactory) );
 
             try
             {

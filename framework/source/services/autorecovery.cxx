@@ -47,7 +47,7 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/frame/XLoadable.hpp>
 #include <com/sun/star/frame/XModel2.hpp>
-#include <com/sun/star/frame/XModuleManager.hpp>
+#include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/frame/XTitle.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
@@ -111,6 +111,7 @@ using ::com::sun::star::uno::Any;
 using ::com::sun::star::beans::PropertyValue;
 using ::com::sun::star::container::XEnumeration;
 using ::com::sun::star::document::XDocumentRecovery;
+using ::com::sun::star::frame::ModuleManager;
 using ::com::sun::star::frame::XModel2;
 using ::com::sun::star::frame::XModel;
 using ::com::sun::star::frame::XFrame;
@@ -1181,8 +1182,8 @@ void AutoRecovery::implts_specifyAppModuleAndFactory(AutoRecovery::TDocumentInfo
     aReadLock.unlock();
     // <- SAFE ----------------------------------
 
-    css::uno::Reference< css::frame::XModuleManager > xManager     (xSMGR->createInstance(SERVICENAME_MODULEMANAGER), css::uno::UNO_QUERY_THROW);
-    css::uno::Reference< css::container::XNameAccess > xModuleConfig(xManager                                        , css::uno::UNO_QUERY_THROW);
+    css::uno::Reference< css::frame::XModuleManager2 > xManager = ModuleManager::create( comphelper::getComponentContext(xSMGR) );
+    css::uno::Reference< css::container::XNameAccess > xModuleConfig(xManager, css::uno::UNO_QUERY_THROW);
 
     if (rInfo.AppModule.isEmpty())
         rInfo.AppModule = xManager->identify(rInfo.Document);

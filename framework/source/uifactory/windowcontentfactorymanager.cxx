@@ -36,6 +36,7 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/container/XContainer.hpp>
+#include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/awt/XToolkit.hpp>
 #include <com/sun/star/awt/XControlModel.hpp>
@@ -78,7 +79,7 @@ WindowContentFactoryManager::WindowContentFactoryManager( const uno::Reference< 
 {
     m_pConfigAccess = new ConfigurationAccess_FactoryManager( m_xServiceManager,rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/org.openoffice.Office.UI.WindowContentFactories/Registered/ContentFactories" )) );
     m_pConfigAccess->acquire();
-    m_xModuleManager = uno::Reference< frame::XModuleManager >( m_xServiceManager->createInstance( SERVICENAME_MODULEMANAGER ), uno::UNO_QUERY );
+    m_xModuleManager = frame::ModuleManager::create( comphelper::getComponentContext(m_xServiceManager) );
 }
 
 WindowContentFactoryManager::~WindowContentFactoryManager()
@@ -147,7 +148,7 @@ throw (uno::Exception, uno::RuntimeException)
         }
     }
 
-    uno::Reference< frame::XModuleManager > xModuleManager;
+    uno::Reference< frame::XModuleManager2 > xModuleManager;
     // SAFE
     {
         ResetableGuard aLock( m_aLock );

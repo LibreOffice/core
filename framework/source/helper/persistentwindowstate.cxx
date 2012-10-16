@@ -37,8 +37,9 @@
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
-#include <com/sun/star/frame/XModuleManager.hpp>
+#include <com/sun/star/frame/ModuleManager.hpp>
 
+#include <comphelper/processfactory.hxx>
 #include <comphelper/configurationhelper.hxx>
 #include <vcl/window.hxx>
 #include <vcl/syswin.hxx>
@@ -134,7 +135,7 @@ void SAL_CALL PersistentWindowState::frameAction(const css::frame::FrameActionEv
         return;
 
     // unknown module -> no configuration available!
-    ::rtl::OUString sModuleName = PersistentWindowState::implst_identifyModule(xSMGR, xFrame);
+    ::rtl::OUString sModuleName = PersistentWindowState::implst_identifyModule(comphelper::getComponentContext(xSMGR), xFrame);
     if (sModuleName.isEmpty())
         return;
 
@@ -181,14 +182,13 @@ void SAL_CALL PersistentWindowState::disposing(const css::lang::EventObject&)
 }
 
 //*****************************************************************************************************************
-::rtl::OUString PersistentWindowState::implst_identifyModule(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR ,
+::rtl::OUString PersistentWindowState::implst_identifyModule(const css::uno::Reference< css::uno::XComponentContext >& rxContext,
                                                              const css::uno::Reference< css::frame::XFrame >&              xFrame)
 {
     ::rtl::OUString sModuleName;
 
-    css::uno::Reference< css::frame::XModuleManager > xModuleManager(
-        xSMGR->createInstance(SERVICENAME_MODULEMANAGER),
-        css::uno::UNO_QUERY_THROW);
+    css::uno::Reference< css::frame::XModuleManager2 > xModuleManager =
+        css::frame::ModuleManager::create( rxContext );
 
     try
     {

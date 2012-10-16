@@ -72,7 +72,7 @@ throw ( ::com::sun::star::container::NoSuchElementException, ::com::sun::star::l
     ResetableGuard aLock( m_aLock );
     ToolBarWrapper* pWrapper = new ToolBarWrapper( m_xServiceManager );
     Reference< ::com::sun::star::ui::XUIElement > xMenuBar( (OWeakObject *)pWrapper, UNO_QUERY );
-    Reference< ::com::sun::star::frame::XModuleManager > xModuleManager = m_xModuleManager;
+    Reference< ::com::sun::star::frame::XModuleManager2 > xModuleManager = m_xModuleManager;
     aLock.unlock();
     CreateUIElement(ResourceURL,Args,"PopupMode","private:resource/toolbar/",xMenuBar,xModuleManager,m_xServiceManager);
     return xMenuBar;
