@@ -34,7 +34,7 @@ namespace drawinglayer { namespace attribute {
     class ImpSdrFillAttribute;
     class FillGradientAttribute;
     class FillHatchAttribute;
-    class SdrFillBitmapAttribute;
+    class SdrFillGraphicAttribute;
 }}
 
 //////////////////////////////////////////////////////////////////////////////
@@ -55,7 +55,7 @@ namespace drawinglayer
                 const basegfx::BColor& rColor,
                 const FillGradientAttribute& rGradient,
                 const FillHatchAttribute& rHatch,
-                const SdrFillBitmapAttribute& rBitmap);
+                const SdrFillGraphicAttribute& rFillGraphic);
             SdrFillAttribute();
             SdrFillAttribute(const SdrFillAttribute& rCandidate);
             SdrFillAttribute& operator=(const SdrFillAttribute& rCandidate);
@@ -72,7 +72,7 @@ namespace drawinglayer
             const basegfx::BColor& getColor() const;
             const FillGradientAttribute& getGradient() const;
             const FillHatchAttribute& getHatch() const;
-            const SdrFillBitmapAttribute& getBitmap() const;
+            const SdrFillGraphicAttribute& getFillGraphic() const;
         };
     } // end of namespace attribute
 } // end of namespace drawinglayer

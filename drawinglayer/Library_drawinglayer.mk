@@ -66,7 +66,7 @@ $(eval $(call gb_Library_add_exception_objects,drawinglayer,\
 	drawinglayer/source/animation/animationtiming \
 	drawinglayer/source/attribute/fillgradientattribute \
 	drawinglayer/source/attribute/fillhatchattribute \
-	drawinglayer/source/attribute/fillbitmapattribute \
+	drawinglayer/source/attribute/fillgraphicattribute \
 	drawinglayer/source/attribute/fontattribute \
 	drawinglayer/source/attribute/materialattribute3d \
 	drawinglayer/source/attribute/sdrallattribute3d \
@@ -78,7 +78,7 @@ $(eval $(call gb_Library_add_exception_objects,drawinglayer,\
 	drawinglayer/source/attribute/sdrlightattribute3d \
 	drawinglayer/source/attribute/sdrlightingattribute3d \
 	drawinglayer/source/attribute/sdrsceneattribute3d \
-	drawinglayer/source/attribute/sdrfillbitmapattribute \
+	drawinglayer/source/attribute/sdrfillgraphicattribute \
 	drawinglayer/source/attribute/lineattribute \
 	drawinglayer/source/attribute/linestartendattribute \
 	drawinglayer/source/attribute/strokeattribute \
@@ -96,9 +96,10 @@ $(eval $(call gb_Library_add_exception_objects,drawinglayer,\
 	drawinglayer/source/primitive2d/discreteshadowprimitive2d \
 	drawinglayer/source/primitive2d/embedded3dprimitive2d \
 	drawinglayer/source/primitive2d/epsprimitive2d \
-	drawinglayer/source/primitive2d/fillbitmapprimitive2d \
+	drawinglayer/source/primitive2d/fillgraphicprimitive2d \
 	drawinglayer/source/primitive2d/fillgradientprimitive2d \
 	drawinglayer/source/primitive2d/fillhatchprimitive2d \
+	drawinglayer/source/primitive2d/graphicprimitivehelper2d \
 	drawinglayer/source/primitive2d/graphicprimitive2d \
 	drawinglayer/source/primitive2d/gridprimitive2d \
 	drawinglayer/source/primitive2d/groupprimitive2d \
@@ -165,7 +166,6 @@ $(eval $(call gb_Library_add_exception_objects,drawinglayer,\
 	drawinglayer/source/processor2d/vclmetafileprocessor2d \
 	drawinglayer/source/processor2d/contourextractor2d \
 	drawinglayer/source/processor2d/linegeometryextractor2d \
-	drawinglayer/source/processor2d/canvasprocessor \
 	drawinglayer/source/processor2d/hittestprocessor2d \
 	drawinglayer/source/processor2d/textaspolygonextractor2d \
 	drawinglayer/source/processor2d/objectinfoextractor2d \

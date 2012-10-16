@@ -32,8 +32,8 @@
 #include <basegfx/polygon/b3dpolypolygon.hxx>
 #include <drawinglayer/primitive3d/polypolygonprimitive3d.hxx>
 #include <vcl/vclenum.hxx>
-#include <drawinglayer/attribute/fillbitmapattribute.hxx>
-#include <drawinglayer/attribute/sdrfillbitmapattribute.hxx>
+#include <drawinglayer/attribute/fillgraphicattribute.hxx>
+#include <drawinglayer/attribute/sdrfillgraphicattribute.hxx>
 #include <vcl/bmpacc.hxx>
 #include <basegfx/polygon/b3dpolypolygontools.hxx>
 #include <drawinglayer/primitive3d/textureprimitive3d.hxx>
@@ -208,7 +208,7 @@ namespace drawinglayer
                 // look for and evtl. build texture sub-group primitive
                 if(!rFill.getGradient().isDefault()
                     || !rFill.getHatch().isDefault()
-                    || !rFill.getBitmap().isDefault())
+                    || !rFill.getFillGraphic().isDefault())
                 {
                     bool bModulate(::com::sun::star::drawing::TextureMode_MODULATE == aSdr3DObjectAttribute.getTextureMode());
                     bool bFilter(aSdr3DObjectAttribute.getTextureFilter());
@@ -234,13 +234,13 @@ namespace drawinglayer
                             bModulate,
                             bFilter);
                     }
-                    else // if(!rFill.getBitmap().isDefault())
+                    else // if(!rFill.getFillGraphic().isDefault())
                     {
                         // create bitmapTexture3D with sublist, add to local aRetval
-                        basegfx::B2DRange aTexRange(0.0, 0.0, rTextureSize.getX(), rTextureSize.getY());
+                        const basegfx::B2DRange aTexRange(0.0, 0.0, rTextureSize.getX(), rTextureSize.getY());
 
                         pNewTexturePrimitive3D = new BitmapTexturePrimitive3D(
-                            rFill.getBitmap().getFillBitmapAttribute(aTexRange),
+                            rFill.getFillGraphic().createFillGraphicAttribute(aTexRange),
                             aRetval,
                             rTextureSize,
                             bModulate,
@@ -313,7 +313,7 @@ namespace drawinglayer
                 basegfx::BColor(),
                 attribute::FillGradientAttribute(),
                 attribute::FillHatchAttribute(),
-                attribute::SdrFillBitmapAttribute());
+                attribute::SdrFillGraphicAttribute());
 
             const Primitive3DReference aHidden(
                 new HiddenGeometryPrimitive3D(

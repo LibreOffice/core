@@ -21,13 +21,13 @@
 
 
 
-#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_FILLBITMAPPRIMITIVE2D_HXX
-#define INCLUDED_DRAWINGLAYER_PRIMITIVE2D_FILLBITMAPPRIMITIVE2D_HXX
+#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_FILLGRAPHICPRIMITIVE2D_HXX
+#define INCLUDED_DRAWINGLAYER_PRIMITIVE2D_FILLGRAPHICPRIMITIVE2D_HXX
 
 #include <drawinglayer/drawinglayerdllapi.h>
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
-#include <drawinglayer/attribute/fillbitmapattribute.hxx>
+#include <drawinglayer/attribute/fillgraphicattribute.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 // FillbitmapPrimitive2D class
@@ -36,10 +36,10 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        /** FillBitmapPrimitive2D class
+        /** FillGraphicPrimitive2D class
 
             This class defines a bitmap filling for a rectangular area. The
-            Range is defined by the Transformation, the fill by the FillBitmapAttribute.
+            Range is defined by the Transformation, the fill by the FillGraphicAttribute.
             There, the fill consists of a Bitmap (not transparent) defining the fill data
             and a Point/Vector pair defining the relative position/size [0.0 .. 1.0]
             inside the area where the bitmap is positioned. A flag defines then if this
@@ -49,14 +49,14 @@ namespace drawinglayer
             decomposition, but on pixel oututs the areas where the tiled pieces are
             aligned tend to show up (one overlapping or empty pixel)
          */
-        class DRAWINGLAYER_DLLPUBLIC FillBitmapPrimitive2D : public BufferedDecompositionPrimitive2D
+        class DRAWINGLAYER_DLLPUBLIC FillGraphicPrimitive2D : public BufferedDecompositionPrimitive2D
         {
         private:
             /// the geometric definition
             basegfx::B2DHomMatrix                       maTransformation;
 
             /// the fill attributes
-            attribute::FillBitmapAttribute              maFillBitmap;
+            attribute::FillGraphicAttribute             maFillGraphic;
 
         protected:
             /// local decomposition.
@@ -64,13 +64,13 @@ namespace drawinglayer
 
         public:
             /// constructor
-            FillBitmapPrimitive2D(
+            FillGraphicPrimitive2D(
                 const basegfx::B2DHomMatrix& rTransformation,
-                const attribute::FillBitmapAttribute& rFillBitmap);
+                const attribute::FillGraphicAttribute& rFillGraphic);
 
             /// data read access
             const basegfx::B2DHomMatrix& getTransformation() const { return maTransformation; }
-            const attribute::FillBitmapAttribute& getFillBitmap() const { return maFillBitmap; }
+            const attribute::FillGraphicAttribute& getFillGraphic() const { return maFillGraphic; }
 
             /// compare operator
             virtual bool operator==( const BasePrimitive2D& rPrimitive ) const;
@@ -86,7 +86,7 @@ namespace drawinglayer
 
 //////////////////////////////////////////////////////////////////////////////
 
-#endif //INCLUDED_DRAWINGLAYER_PRIMITIVE2D_FILLBITMAPPRIMITIVE2D_HXX
+#endif //INCLUDED_DRAWINGLAYER_PRIMITIVE2D_FILLGRAPHICPRIMITIVE2D_HXX
 
 //////////////////////////////////////////////////////////////////////////////
 // eof

@@ -414,6 +414,12 @@ sal_Bool XFillBitmapItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_
     if( bSetURL )
     {
         maGraphicObject  = GraphicObject::CreateGraphicObjectFromURL(aURL);
+
+        // #121194# Prefer GraphicObject over bitmap object if both are provided
+        if(bSetBitmap && GRAPHIC_NONE != maGraphicObject.GetType())
+        {
+            bSetBitmap = false;
+        }
     }
     if( bSetBitmap )
     {
