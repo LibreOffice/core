@@ -402,15 +402,25 @@ void  SvxNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
     pDev->SetLineColor(aOldColor);
 }
 
-SvxNumValueSet::SvxNumValueSet( Window* pParent, const ResId& rResId, sal_uInt16 nType ) :
-
-    ValueSet( pParent, rResId ),
-
-    aLineColor  ( COL_LIGHTGRAY ),
-    nPageType   ( nType ),
-    bHTMLMode   ( sal_False ),
-    pVDev       ( NULL )
+SvxNumValueSet::SvxNumValueSet( Window* pParent, const ResId& rResId, sal_uInt16 nType )
+    : ValueSet( pParent, rResId )
 {
+    init(nType);
+}
+
+SvxNumValueSet::SvxNumValueSet( Window* pParent, sal_uInt16 nType )
+    : ValueSet( pParent )
+{
+    init(nType);
+}
+
+void SvxNumValueSet::init(sal_uInt16 nType)
+{
+    aLineColor = COL_LIGHTGRAY;
+    nPageType = nType;
+    bHTMLMode = sal_False;
+    pVDev = NULL;
+
     SetColCount( 4 );
     SetLineCount( 2 );
     SetStyle( GetStyle() | WB_ITEMBORDER | WB_DOUBLEBORDER );
@@ -465,18 +475,28 @@ void SvxNumValueSet::SetOutlineNumberingSettings(
     }
 }
 
-SvxBmpNumValueSet::SvxBmpNumValueSet( Window* pParent, const ResId& rResId ) :
-
-    SvxNumValueSet( pParent, rResId, NUM_PAGETYPE_BMP ),
-    bGrfNotFound( sal_False )
-
+SvxBmpNumValueSet::SvxBmpNumValueSet( Window* pParent, const ResId& rResId )
+    : SvxNumValueSet( pParent, rResId, NUM_PAGETYPE_BMP )
 {
+    init();
+}
+
+SvxBmpNumValueSet::SvxBmpNumValueSet( Window* pParent )
+    : SvxNumValueSet( pParent, NUM_PAGETYPE_BMP )
+{
+    init();
+}
+
+void SvxBmpNumValueSet::init()
+{
+    bGrfNotFound = sal_False;
     GalleryExplorer::BeginLocking(GALLERY_THEME_BULLETS);
     SetStyle( GetStyle() | WB_VSCROLL );
     SetLineCount( 3 );
     aFormatTimer.SetTimeout(300);
     aFormatTimer.SetTimeoutHdl(LINK(this, SvxBmpNumValueSet, FormatHdl_Impl));
 }
+
 
 SvxBmpNumValueSet::~SvxBmpNumValueSet()
 {

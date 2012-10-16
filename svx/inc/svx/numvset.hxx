@@ -64,8 +64,12 @@ class SVX_DLLPUBLIC SvxNumValueSet : public ValueSet
     com::sun::star::uno::Sequence<
         com::sun::star::uno::Reference<
             com::sun::star::container::XIndexAccess> > aOutlineSettings;
+
+    void init(sal_uInt16 nType);
+
     public:
         SvxNumValueSet( Window* pParent, const ResId& rResId, sal_uInt16 nType );
+        SvxNumValueSet( Window* pParent, sal_uInt16 nType );
         ~SvxNumValueSet();
 
     virtual void    UserDraw( const UserDrawEvent& rUDEvt );
@@ -92,6 +96,8 @@ class SVX_DLLPUBLIC SvxBmpNumValueSet : public SvxNumValueSet
     Timer       aFormatTimer;
     sal_Bool        bGrfNotFound;
 
+    void init();
+
     protected:
         DECL_LINK(FormatHdl_Impl, void *);
 
@@ -101,7 +107,8 @@ class SVX_DLLPUBLIC SvxBmpNumValueSet : public SvxNumValueSet
     Timer&          GetFormatTimer() {return aFormatTimer;}
 
     public:
-        SvxBmpNumValueSet( Window* pParent, const ResId& rResId);
+        SvxBmpNumValueSet(Window* pParent, const ResId& rResId);
+        SvxBmpNumValueSet(Window* pParent);
         ~SvxBmpNumValueSet();
 
     virtual void    UserDraw( const UserDrawEvent& rUDEvt );

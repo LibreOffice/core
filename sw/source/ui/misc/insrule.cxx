@@ -100,10 +100,21 @@ IMPL_LINK(SwInsertGrfRulerDlg, SelectHdl, ValueSet*, pVS)
     return 0;
 }
 
-SwRulerValueSet::SwRulerValueSet(   Window* pParent, const ResId& rResId ) :
-    SvxBmpNumValueSet(pParent, rResId)
+SwRulerValueSet::SwRulerValueSet( Window* pParent, const ResId& rResId )
+    : SvxBmpNumValueSet(pParent, rResId)
 {
-    SetStyle(  GetStyle() & ~WB_ITEMBORDER     );
+    SetStyle(GetStyle() & ~WB_ITEMBORDER);
+}
+
+SwRulerValueSet::SwRulerValueSet(Window* pParent)
+    : SvxBmpNumValueSet(pParent)
+{
+    SetStyle(GetStyle() & ~WB_ITEMBORDER);
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSwRulerValueSet(Window *pParent, VclBuilder::stringmap &)
+{
+    return new SwRulerValueSet(pParent);
 }
 
 SwRulerValueSet::~SwRulerValueSet()
