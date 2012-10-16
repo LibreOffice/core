@@ -69,7 +69,7 @@ class SVX_DLLPUBLIC SvxNumValueSet : public ValueSet
 
     public:
         SvxNumValueSet( Window* pParent, const ResId& rResId, sal_uInt16 nType );
-        SvxNumValueSet( Window* pParent, sal_uInt16 nType );
+        SvxNumValueSet( Window* pParent, WinBits nWinStyle, sal_uInt16 nType );
         ~SvxNumValueSet();
 
     virtual void    UserDraw( const UserDrawEvent& rUDEvt );
@@ -108,7 +108,7 @@ class SVX_DLLPUBLIC SvxBmpNumValueSet : public SvxNumValueSet
 
     public:
         SvxBmpNumValueSet(Window* pParent, const ResId& rResId);
-        SvxBmpNumValueSet(Window* pParent);
+        SvxBmpNumValueSet(Window* pParent, WinBits nWinStyle);
         ~SvxBmpNumValueSet();
 
     virtual void    UserDraw( const UserDrawEvent& rUDEvt );

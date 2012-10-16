@@ -408,8 +408,8 @@ SvxNumValueSet::SvxNumValueSet( Window* pParent, const ResId& rResId, sal_uInt16
     init(nType);
 }
 
-SvxNumValueSet::SvxNumValueSet( Window* pParent, sal_uInt16 nType )
-    : ValueSet( pParent )
+SvxNumValueSet::SvxNumValueSet( Window* pParent, WinBits nWinStyle, sal_uInt16 nType )
+    : ValueSet( pParent, nWinStyle )
 {
     init(nType);
 }
@@ -481,8 +481,8 @@ SvxBmpNumValueSet::SvxBmpNumValueSet( Window* pParent, const ResId& rResId )
     init();
 }
 
-SvxBmpNumValueSet::SvxBmpNumValueSet( Window* pParent )
-    : SvxNumValueSet( pParent, NUM_PAGETYPE_BMP )
+SvxBmpNumValueSet::SvxBmpNumValueSet( Window* pParent, WinBits nWinStyle )
+    : SvxNumValueSet( pParent, nWinStyle, NUM_PAGETYPE_BMP )
 {
     init();
 }

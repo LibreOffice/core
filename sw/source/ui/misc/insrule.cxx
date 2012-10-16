@@ -43,33 +43,29 @@
 
 SwInsertGrfRulerDlg::SwInsertGrfRulerDlg( Window* pParent )
     : SfxModalDialog(pParent, "HorizontalRuleDialog", "modules/swriter/ui/horizontalrule.ui")
-    , sSimple(SW_RESSTR(STR_SIMPLE))
-    , nSelPos(USHRT_MAX)
+    , m_sSimple(SW_RESSTR(STR_SIMPLE))
 {
     get(m_pOkPB, "ok");
     get(m_pExampleVS, "rulers");
 
     m_pExampleVS->SetLineCount(6);
     m_pExampleVS->SetColCount(1);
-    m_pExampleVS->SetSelectHdl(LINK(this, SwInsertGrfRulerDlg, SelectHdl));
     m_pExampleVS->SetDoubleClickHdl(LINK(this, SwInsertGrfRulerDlg, DoubleClickHdl));
 
     // determine graphic name
     GalleryExplorer::BeginLocking(GALLERY_THEME_RULERS);
-    GalleryExplorer::FillObjList( GALLERY_THEME_RULERS, aGrfNames );
-    m_pExampleVS->SetHelpId(HID_VS_RULER);
+    GalleryExplorer::FillObjList(GALLERY_THEME_RULERS, m_aGrfNames);
     Color aColor(COL_WHITE);
-    m_pExampleVS->InsertItem( 1, 1);
-    m_pExampleVS->SetItemText( 1, sSimple);
+    m_pExampleVS->InsertItem(1, 1);
+    m_pExampleVS->SetItemText(1, m_sSimple);
 
-    for(sal_uInt16 i = 1; i <= aGrfNames.size(); i++)
+    for(sal_uInt16 i = 1; i <= m_aGrfNames.size(); ++i)
     {
         m_pExampleVS->InsertItem( i + 1, i);
-        m_pExampleVS->SetItemText( i + 1, aGrfNames[i-1]);
+        m_pExampleVS->SetItemText( i + 1, m_aGrfNames[i-1]);
     }
 
     m_pExampleVS->SelectItem(1);
-    m_pExampleVS->GrabFocus();
 }
 
 SwInsertGrfRulerDlg::~SwInsertGrfRulerDlg()
@@ -77,22 +73,22 @@ SwInsertGrfRulerDlg::~SwInsertGrfRulerDlg()
     GalleryExplorer::EndLocking(GALLERY_THEME_RULERS);
 }
 
-String SwInsertGrfRulerDlg::GetGraphicName()
+bool SwInsertGrfRulerDlg::IsSimpleLine() const
 {
-    String sRet;
-    sal_uInt16 nSel = nSelPos - 2; //align selection position with ValueSet index
-    if(nSel < aGrfNames.size())
-        sRet = URIHelper::SmartRel2Abs(
-            INetURLObject(), aGrfNames[nSel],
-            URIHelper::GetMaybeFileHdl());
-    return sRet;
+    return m_pExampleVS->GetSelectItemId() == 1;
 }
 
-IMPL_LINK(SwInsertGrfRulerDlg, SelectHdl, ValueSet*, pVS)
+OUString SwInsertGrfRulerDlg::GetGraphicName() const
 {
-    nSelPos = pVS->GetSelectItemId();
-    m_pOkPB->Enable();
-    return 0;
+    sal_uInt16 nSelPos = m_pExampleVS->GetSelectItemId();
+
+    sal_uInt16 nSel = nSelPos - 2; //align selection position with ValueSet index
+    if(nSel < m_aGrfNames.size())
+    {
+        return URIHelper::SmartRel2Abs(INetURLObject(), m_aGrfNames[nSel],
+            URIHelper::GetMaybeFileHdl());
+    }
+    return OUString();
 }
 
 SwRulerValueSet::SwRulerValueSet( Window* pParent, const ResId& rResId )
@@ -101,15 +97,15 @@ SwRulerValueSet::SwRulerValueSet( Window* pParent, const ResId& rResId )
     SetStyle(GetStyle() & ~WB_ITEMBORDER);
 }
 
-SwRulerValueSet::SwRulerValueSet(Window* pParent)
-    : SvxBmpNumValueSet(pParent)
+SwRulerValueSet::SwRulerValueSet(Window* pParent, WinBits nWinStyle)
+    : SvxBmpNumValueSet(pParent, nWinStyle)
 {
     SetStyle(GetStyle() & ~WB_ITEMBORDER);
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSwRulerValueSet(Window *pParent, VclBuilder::stringmap &)
 {
-    return new SwRulerValueSet(pParent);
+    return new SwRulerValueSet(pParent, WB_ITEMBORDER | WB_TABSTOP);
 }
 
 SwRulerValueSet::~SwRulerValueSet()
