@@ -112,7 +112,7 @@ $(call gb_ExtensionTarget_get_target,%) : \
 		$(call gb_ExtensionTarget__subst_platform,$(call gb_ExtensionTarget_get_workdir,$*)/description.xml,$(call gb_ExtensionTarget_get_rootdir,$*)/description.xml) && \
 		$(call gb_ExtensionTarget__subst_platform,$(LOCATION)/manifest.xml,$(call gb_ExtensionTarget_get_rootdir,$*)/META-INF/manifest.xml) && \
 		$(if $(LICENSE),cp -f $(LICENSE) $(call gb_ExtensionTarget_get_rootdir,$*)/registration &&) \
-		$(if $(and $(gb_WITH_LANG),$(DESCRIPTION)),cp $(foreach lang,$(gb_ExtensionTarget_TRANS_LANGS),$(call gb_ExtensionTarget_get_workdir,$*)/description-$(lang).txt) $(call gb_ExtensionTarget_get_rootdir,$*) &&) \
+		$(if $(and $(gb_ExtensionTarget_TRANS_LANGS),$(DESCRIPTION)),cp $(foreach lang,$(gb_ExtensionTarget_TRANS_LANGS),$(call gb_ExtensionTarget_get_workdir,$*)/description-$(lang).txt) $(call gb_ExtensionTarget_get_rootdir,$*) &&) \
 		cd $(call gb_ExtensionTarget_get_rootdir,$*) && \
 		$(gb_ExtensionTarget_ZIPCOMMAND) -rX --filesync \
 			$(call gb_ExtensionTarget_get_target,$*) \
