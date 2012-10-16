@@ -143,7 +143,7 @@ struct ParaRstFmt
  * Is need for selections at the beginning/end and with no SSelection.
  */
 
-static sal_Bool lcl_RstTxtAttr( const SwNodePtr& rpNd, void* pArgs )
+static bool lcl_RstTxtAttr( const SwNodePtr& rpNd, void* pArgs )
 {
     ParaRstFmt* pPara = (ParaRstFmt*)pArgs;
     SwTxtNode * pTxtNode = (SwTxtNode*)rpNd->GetTxtNode();
@@ -173,10 +173,10 @@ static sal_Bool lcl_RstTxtAttr( const SwNodePtr& rpNd, void* pArgs )
             pTxtNode->RstAttr( aSt, nEnd - aSt.GetIndex(), pPara->nWhich,
                                 pPara->pDelSet, pPara->bInclRefToxMark );
     }
-    return sal_True;
+    return true;
 }
 
-static sal_Bool lcl_RstAttr( const SwNodePtr& rpNd, void* pArgs )
+static bool lcl_RstAttr( const SwNodePtr& rpNd, void* pArgs )
 {
     ParaRstFmt* pPara = (ParaRstFmt*)pArgs;
     SwCntntNode* pNode = (SwCntntNode*)rpNd->GetCntntNode();
@@ -307,7 +307,7 @@ static sal_Bool lcl_RstAttr( const SwNodePtr& rpNd, void* pArgs )
                 pNode->UnlockModify();
         }
     }
-    return sal_True;
+    return true;
 }
 
 void SwDoc::RstTxtAttrs(const SwPaM &rRg, sal_Bool bInclRefToxMark )
@@ -1611,7 +1611,7 @@ void SwDoc::DelTxtFmtColl( SwTxtFmtColl *pColl, sal_Bool bBroadcast )
     DelTxtFmtColl( nFmt, bBroadcast );
 }
 
-static sal_Bool lcl_SetTxtFmtColl( const SwNodePtr& rpNode, void* pArgs )
+static bool lcl_SetTxtFmtColl( const SwNodePtr& rpNode, void* pArgs )
 {
     // ParaSetFmtColl * pPara = (ParaSetFmtColl*)pArgs;
     SwCntntNode* pCNd = (SwCntntNode*)rpNode->GetTxtNode();
@@ -1681,7 +1681,7 @@ static sal_Bool lcl_SetTxtFmtColl( const SwNodePtr& rpNode, void* pArgs )
 
         pPara->nWhich++;
     }
-    return sal_True;
+    return true;
 }
 
 sal_Bool SwDoc::SetTxtFmtColl( const SwPaM &rRg,

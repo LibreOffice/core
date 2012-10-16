@@ -1795,7 +1795,7 @@ public:
     sal_Bool DeleteSelection( SwDrawView& );
 
     /// Invalidates OnlineSpell-WrongLists.
-    void SpellItAgainSam( sal_Bool bInvalid, sal_Bool bOnlyWrong, sal_Bool bSmartTags );
+    void SpellItAgainSam( bool bInvalid, bool bOnlyWrong, bool bSmartTags );
     void InvalidateAutoCompleteFlag();
 
     void SetCalcFieldValueHdl(Outliner* pOutliner);

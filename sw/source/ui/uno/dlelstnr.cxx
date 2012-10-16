@@ -105,16 +105,16 @@ void SwLinguServiceEventListener::processDictionaryListEvent(
             DictionaryListEventFlags::DEL_NEG_ENTRY     |
             DictionaryListEventFlags::ACTIVATE_POS_DIC  |
             DictionaryListEventFlags::DEACTIVATE_NEG_DIC;
-    sal_Bool bIsSpellWrong  =  0 != (nEvt & nSpellWrongFlags);
+    bool bIsSpellWrong  =  0 != (nEvt & nSpellWrongFlags);
     sal_Int16 nSpellAllFlags =
             DictionaryListEventFlags::ADD_NEG_ENTRY     |
             DictionaryListEventFlags::DEL_POS_ENTRY     |
             DictionaryListEventFlags::ACTIVATE_NEG_DIC  |
             DictionaryListEventFlags::DEACTIVATE_POS_DIC;
-    sal_Bool bIsSpellAll    =  0 != (nEvt & nSpellAllFlags);
+    bool bIsSpellAll    =  0 != (nEvt & nSpellAllFlags);
 
     if (bIsSpellWrong || bIsSpellAll)
-        SW_MOD()->CheckSpellChanges( sal_False, bIsSpellWrong, bIsSpellAll, sal_False );
+        SW_MOD()->CheckSpellChanges( false, bIsSpellWrong, bIsSpellAll, false );
 }
 
 void SAL_CALL SwLinguServiceEventListener::processLinguServiceEvent(
@@ -123,13 +123,13 @@ void SAL_CALL SwLinguServiceEventListener::processLinguServiceEvent(
 {
     SolarMutexGuard aGuard;
 
-    sal_Bool bIsSpellWrong = 0 != (rLngSvcEvent.nEvent & SPELL_WRONG_WORDS_AGAIN);
-    sal_Bool bIsSpellAll   = 0 != (rLngSvcEvent.nEvent & SPELL_CORRECT_WORDS_AGAIN);
+    bool bIsSpellWrong = 0 != (rLngSvcEvent.nEvent & SPELL_WRONG_WORDS_AGAIN);
+    bool bIsSpellAll   = 0 != (rLngSvcEvent.nEvent & SPELL_CORRECT_WORDS_AGAIN);
     if (0 != (rLngSvcEvent.nEvent & PROOFREAD_AGAIN))
-        bIsSpellWrong = bIsSpellAll = sal_True;     // have all spelling and grammar checked...
+        bIsSpellWrong = bIsSpellAll = true;     // have all spelling and grammar checked...
     if (bIsSpellWrong || bIsSpellAll)
     {
-        SW_MOD()->CheckSpellChanges( sal_False, bIsSpellWrong, bIsSpellAll, sal_False );
+        SW_MOD()->CheckSpellChanges( false, bIsSpellWrong, bIsSpellAll, false );
     }
     if (rLngSvcEvent.nEvent & HYPHENATE_AGAIN)
     {

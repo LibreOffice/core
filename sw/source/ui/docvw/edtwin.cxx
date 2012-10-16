@@ -316,7 +316,7 @@ struct QuickHelpData
     }
 
     // Fills internal structures with hopefully helpful information.
-    void FillStrArr( SwWrtShell& rSh, const String& rWord, sal_Bool bIgnoreCurrentPos );
+    void FillStrArr( SwWrtShell& rSh, const String& rWord, bool bIgnoreCurrentPos );
     void SortAndFilter();
 };
 
@@ -5179,7 +5179,7 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
                         rSh.GetPrevAutoCorrWord( *pACorr, sWord ) )
                     {
                         // ... request for auto completion help to be shown.
-                        ShowAutoTextCorrectQuickHelp(sWord, &rACfg, pACorr, sal_True);
+                        ShowAutoTextCorrectQuickHelp(sWord, &rACfg, pACorr, true);
                     }
                 }
         }
@@ -5700,7 +5700,7 @@ void QuickHelpData::Stop( SwWrtShell& rSh )
     ClearCntnt();
 }
 
-void QuickHelpData::FillStrArr( SwWrtShell& rSh, const String& rWord, sal_Bool bIgnoreCurrentPos )
+void QuickHelpData::FillStrArr( SwWrtShell& rSh, const String& rWord, bool bIgnoreCurrentPos )
 {
     enum Capitalization { CASE_LOWER, CASE_UPPER, CASE_SENTENCE, CASE_OTHER };
 
@@ -5827,7 +5827,7 @@ void QuickHelpData::SortAndFilter()
 
 void SwEditWin::ShowAutoTextCorrectQuickHelp(
         const String& rWord, SvxAutoCorrCfg* pACfg, SvxAutoCorrect* pACorr,
-        sal_Bool bFromIME )
+        bool bFromIME )
 {
     SwWrtShell& rSh = rView.GetWrtShell();
     pQuickHlpData->ClearCntnt();

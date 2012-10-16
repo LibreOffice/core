@@ -91,7 +91,7 @@ public:
 
     // Returns all words matching a given prefix aMatch. If bIgnoreCurrentPos is set, the current
     // position within the tree is ignored and replaced by aMatch.
-    bool GetWordsMatching(String aMatch, std::vector<String>& aWords, sal_Bool bIgnoreCurrentPos) const;
+    bool GetWordsMatching(String aMatch, std::vector<String>& aWords, bool bIgnoreCurrentPos) const;
 };
 
 

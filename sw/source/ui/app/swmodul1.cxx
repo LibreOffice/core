@@ -613,11 +613,11 @@ void SwModule::ApplyLinkMode(sal_Int32 nNewLinkMode)
     pUsrPref->SetUpdateLinkMode(nNewLinkMode);
 }
 
-void SwModule::CheckSpellChanges( sal_Bool bOnlineSpelling,
-        sal_Bool bIsSpellWrongAgain, sal_Bool bIsSpellAllAgain, sal_Bool bSmartTags )
+void SwModule::CheckSpellChanges( bool bOnlineSpelling,
+        bool bIsSpellWrongAgain, bool bIsSpellAllAgain, bool bSmartTags )
 {
-    sal_Bool bOnlyWrong = bIsSpellWrongAgain && !bIsSpellAllAgain;
-    sal_Bool bInvalid = bOnlyWrong || bIsSpellAllAgain;
+    bool bOnlyWrong = bIsSpellWrongAgain && !bIsSpellAllAgain;
+    bool bInvalid = bOnlyWrong || bIsSpellAllAgain;
     if( bOnlineSpelling || bInvalid )
     {
         TypeId aType = TYPE(SwDocShell);

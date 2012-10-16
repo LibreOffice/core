@@ -1567,7 +1567,7 @@ struct HighLevel
 
 };
 
-sal_Bool _HighestLevel( const SwNodePtr& rpNode, void * pPara )
+static bool lcl_HighestLevel( const SwNodePtr& rpNode, void * pPara )
 {
     HighLevel * pHL = (HighLevel*)pPara;
     if( rpNode->GetStartNode() )
@@ -1576,14 +1576,14 @@ sal_Bool _HighestLevel( const SwNodePtr& rpNode, void * pPara )
         pHL->nLevel--;
     if( pHL->nTop > pHL->nLevel )
         pHL->nTop = pHL->nLevel;
-    return sal_True;
+    return true;
 
 }
 
 sal_uInt16 HighestLevel( SwNodes & rNodes, const SwNodeRange & rRange )
 {
     HighLevel aPara( rNodes.GetSectionLevel( rRange.aStart ));
-    rNodes.ForEach( rRange.aStart, rRange.aEnd, _HighestLevel, &aPara );
+    rNodes.ForEach( rRange.aStart, rRange.aEnd, lcl_HighestLevel, &aPara );
     return aPara.nTop;
 
 }

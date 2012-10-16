@@ -54,7 +54,7 @@ protected:
 typedef BigPtrEntry* ElementPtr;
 
 
-typedef sal_Bool (*FnForEach)( const ElementPtr&, void* pArgs );
+typedef bool (*FnForEach)( const ElementPtr&, void* pArgs );
 
 // 1000 entries per Block = a bit less then 4K
 #define MAXENTRY 1000

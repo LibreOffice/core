@@ -163,7 +163,7 @@ public:
     void AllInvalidateAutoCompleteWords() const;//swmod 080305
     void AllAddPaintRect() const;
     void AllRemoveFtns() ;//swmod 080305
-    void AllInvalidateSmartTagsOrSpelling(sal_Bool bSmartTags) const;//swmod 080307
+    void AllInvalidateSmartTagsOrSpelling(bool bSmartTags) const;//swmod 080307
     //Virtuelles Device ausgeben (z.B. wenn Animationen ins Spiel kommen)
     static sal_Bool FlushVout();
     //Clipping sparen, wenn im Vout eh genau das Cliprechteck ausgegeben wird

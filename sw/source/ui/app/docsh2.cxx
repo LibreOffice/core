@@ -1124,8 +1124,8 @@ void SwDocShell::Execute(SfxRequest& rReq)
             }
             break;
             case SID_SPELLCHECKER_CHANGED:
-                //! sal_False, sal_True, sal_True is on the save side but a probably overdone
-                SW_MOD()->CheckSpellChanges(sal_False, sal_True, sal_True, sal_False );
+                //! false, true, true is on the save side but a probably overdone
+                SW_MOD()->CheckSpellChanges(false, true, true, false );
             break;
 
         case SID_MAIL_PREPAREEXPORT:

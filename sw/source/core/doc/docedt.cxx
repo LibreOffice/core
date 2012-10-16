@@ -2100,7 +2100,7 @@ void SwHyphArgs::SetPam( SwPaM *pPam ) const
 }
 
 // Returns sal_True if we can proceed.
-static sal_Bool lcl_HyphenateNode( const SwNodePtr& rpNd, void* pArgs )
+static bool lcl_HyphenateNode( const SwNodePtr& rpNd, void* pArgs )
 {
     // Hyphenate returns true if there is a hyphenation point and sets pPam
     SwTxtNode *pNode = rpNd->GetTxtNode();
@@ -2129,12 +2129,12 @@ static sal_Bool lcl_HyphenateNode( const SwNodePtr& rpNd, void* pArgs )
             if( pNode->Hyphenate( *pHyphArgs ) )
             {
                 pHyphArgs->SetNode( rpNd );
-                return sal_False;
+                return false;
             }
         }
     }
     pHyphArgs->NextNode();
-    return sal_True;
+    return true;
 }
 
 uno::Reference< XHyphenatedWord >  SwDoc::Hyphenate(

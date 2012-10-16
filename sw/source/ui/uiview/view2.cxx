@@ -1054,7 +1054,7 @@ void SwView::Execute(SfxRequest &rReq)
                 xGCIterator->resetIgnoreRules();
             }
             // reset ignore lists
-            pDoc->SpellItAgainSam( sal_True, sal_False, sal_False );
+            pDoc->SpellItAgainSam( true, false, false );
             // clear ignore dictionary
             uno::Reference< linguistic2::XDictionary > xDictionary( SvxGetIgnoreAllList(), uno::UNO_QUERY );
             if( xDictionary.is() )

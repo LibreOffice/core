@@ -232,8 +232,8 @@ public:
     void    RemoveAttrPool();
 
     // Invalidates online spell-wrong-lists if necessary.
-    void    CheckSpellChanges( sal_Bool bOnlineSpelling,
-                    sal_Bool bIsSpellWrongAgain, sal_Bool bIsSpellAllAgain, sal_Bool bSmartTags );
+    void    CheckSpellChanges( bool bOnlineSpelling,
+                    bool bIsSpellWrongAgain, bool bIsSpellAllAgain, bool bSmartTags );
 
     inline ::com::sun::star::uno::Reference<
         ::com::sun::star::linguistic2::XLinguServiceEventListener >

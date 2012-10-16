@@ -1979,7 +1979,7 @@ void SwDoc::ReRead( SwPaM& rPam, const String& rGrfName,
     }
 }
 
-static sal_Bool lcl_SpellAndGrammarAgain( const SwNodePtr& rpNd, void* pArgs )
+static bool lcl_SpellAndGrammarAgain( const SwNodePtr& rpNd, void* pArgs )
 {
     SwTxtNode *pTxtNode = (SwTxtNode*)rpNd->GetTxtNode();
     sal_Bool bOnlyWrong = *(sal_Bool*)pArgs;
@@ -2004,10 +2004,10 @@ static sal_Bool lcl_SpellAndGrammarAgain( const SwNodePtr& rpNd, void* pArgs )
                 pTxtNode->GetGrammarCheck()->SetInvalid( 0, STRING_LEN );
         }
     }
-    return sal_True;
+    return true;
 }
 
-static sal_Bool lcl_CheckSmartTagsAgain( const SwNodePtr& rpNd, void*  )
+static bool lcl_CheckSmartTagsAgain( const SwNodePtr& rpNd, void*  )
 {
     SwTxtNode *pTxtNode = (SwTxtNode*)rpNd->GetTxtNode();
 //  sal_Bool bOnlyWrong = *(sal_Bool*)pArgs;
@@ -2022,18 +2022,16 @@ static sal_Bool lcl_CheckSmartTagsAgain( const SwNodePtr& rpNd, void*  )
                 pTxtNode->SetSmartTags( NULL );
         }
     }
-    return sal_True;
+    return true;
 }
 
 /*************************************************************************
- * SwDoc::SpellItAgainSam( sal_Bool bInvalid, sal_Bool bOnlyWrong )
- *
  * Re-triggers spelling in the idle handler.
- * If bInvalid is passed with sal_True, the WrongLists in all nodes are invalidated
+ * If bInvalid is passed with true, the WrongLists in all nodes are invalidated
  * and the SpellInvalid flag is set on all pages.
  * bOnlyWrong controls whether only the areas with wrong words are checked or the whole area.
  ************************************************************************/
-void SwDoc::SpellItAgainSam( sal_Bool bInvalid, sal_Bool bOnlyWrong, sal_Bool bSmartTags )
+void SwDoc::SpellItAgainSam( bool bInvalid, bool bOnlyWrong, bool bSmartTags )
 {
     std::set<SwRootFrm*> aAllLayouts = GetAllLayouts();//swmod 080307
     OSL_ENSURE( GetCurrentLayout(), "SpellAgain: Where's my RootFrm?" );
