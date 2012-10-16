@@ -27,6 +27,11 @@
 #include <rtftok/RTFDocument.hxx>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
+#ifdef DBG_COPYPASTE
+#include <unotools/localfilehelper.hxx>
+#include <tools/stream.hxx>
+#include <unotools/ucbstreamhelper.hxx>
+#endif
 
 using namespace ::rtl;
 using namespace ::cppu;
@@ -81,6 +86,17 @@ sal_Bool RtfFilter::filter( const uno::Sequence< beans::PropertyValue >& aDescri
 
         aMediaDesc.addInputStream();
         aMediaDesc[ MediaDescriptor::PROP_INPUTSTREAM() ] >>= xInputStream;
+
+#ifdef DBG_COPYPASTE
+        OUString aOutStr;
+        if (utl::LocalFileHelper::ConvertPhysicalNameToURL("/tmp/stream.rtf", aOutStr))
+        {
+            SvStream* pOut = utl::UcbStreamHelper::CreateStream(aOutStr, STREAM_WRITE);
+            SvStream* pIn = utl::UcbStreamHelper::CreateStream(xInputStream);
+            *pOut << *pIn;
+            delete pOut;
+        }
+#endif
 
         uno::Reference<frame::XFrame> xFrame = aMediaDesc.getUnpackedValueOrDefault(MediaDescriptor::PROP_FRAME(),
                 uno::Reference<frame::XFrame>());
