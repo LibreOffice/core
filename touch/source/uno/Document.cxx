@@ -11,7 +11,7 @@
 
 #include <com/sun/star/awt/XBitmap.hpp>
 #include <com/sun/star/awt/XDevice.hpp>
-#include <com/sun/star/awt/XToolkit2.hpp>
+#include <com/sun/star/awt/XToolkitExperimental.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/PropertyValues.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
@@ -40,7 +40,7 @@ private:
     OUString m_sURI;
     uno::Reference< uno::XComponentContext > m_rContext;
     uno::Reference< lang::XComponent > m_xComponent;
-    uno::Reference< awt::XToolkit2 > m_xToolkit;
+    uno::Reference< awt::XToolkitExperimental > m_xToolkit;
     uno::Reference< frame::XController > m_xController;
 
     // XRenderable.getRendererCount() and .render() need an XController in the
@@ -162,7 +162,7 @@ public:
 
             m_xComponent = componentLoader->loadComponentFromURL( m_sURI, "_blank", 0, loadProps );
 
-            m_xToolkit = uno::Reference< awt::XToolkit2 >(  m_rContext->getServiceManager()->createInstanceWithContext( "com.sun.star.awt.Toolkit2", m_rContext ), uno::UNO_QUERY_THROW );
+            m_xToolkit = uno::Reference< awt::XToolkitExperimental >(  m_rContext->getServiceManager()->createInstanceWithContext( "com.sun.star.awt.ToolkitExperimental", m_rContext ), uno::UNO_QUERY_THROW );
 
             m_xController = new MyXController();
         }
