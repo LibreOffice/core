@@ -38,7 +38,7 @@
 #include <sfx2/lnkbase.hxx>
 #include <sfx2/objsh.hxx>
 #include <editeng/boxitem.hxx>
-#include <svx/svxids.hrc>       // fuer die EventIds
+#include <svx/svxids.hrc>       // For the EventIds
 #include <sfx2/linkmgr.hxx>
 #include <svtools/soerr.hxx>
 #include <fmtfsize.hxx>
@@ -80,7 +80,7 @@ static void lcl_CallModify( SwGrfNode& rGrfNd, SfxPoolItem& rItem )
     for( int n = 0; n < 2; ++n )
     {
         SwClient * pLast = aIter.GoStart();
-        if( pLast )     // konnte zum Anfang gesprungen werden ??
+        if( pLast )     // Were we able to jump to the beginning?
         {
             do {
                 if( (0 == n) ^ ( 0 != pLast->ISA( SwCntntFrm )) )
@@ -97,7 +97,7 @@ static void lcl_CallModify( SwGrfNode& rGrfNd, SfxPoolItem& rItem )
 {
     if( !pCntntNode )
     {
-        OSL_ENSURE(!this, "DataChanged ohne ContentNode" );
+        OSL_ENSURE(!this, "DataChanged without ContentNode" );
         return ERROR_GENERAL;
     }
 
@@ -113,7 +113,7 @@ static void lcl_CallModify( SwGrfNode& rGrfNd, SfxPoolItem& rItem )
     if( pCntntNode->IsNoTxtNode() &&
         nFmt == sfx2::LinkManager::RegisterStatusInfoId() )
     {
-        // nur eine Statusaenderung - Events bedienen ?
+        // Only a status change - serve Events?
         ::rtl::OUString sState;
         if( rValue.hasValue() && ( rValue >>= sState ))
         {
@@ -133,7 +133,7 @@ static void lcl_CallModify( SwGrfNode& rGrfNd, SfxPoolItem& rItem )
                 pDoc->CallEvent( nEvent, aCallEvent );
             }
         }
-        return SUCCESS;         // das wars!
+        return SUCCESS; // That's it!
     }
 
     sal_Bool bUpdate = sal_False;
@@ -175,10 +175,9 @@ static void lcl_CallModify( SwGrfNode& rGrfNd, SfxPoolItem& rItem )
             if( bGraphicPieceArrived && GRAPHIC_DEFAULT != aGrf.GetType() &&
                 ( !aSz.Width() || !aSz.Height() ) )
             {
-                // wenn nur ein Teil ankommt, aber die Groesse nicht
-                // gesetzt ist, dann muss "unten" der Teil von
-                // bGraphicArrived durchlaufen werden!
-                // (ansonten wird die Grafik in deft. Size gepaintet)
+                // If only a part arrives, but the size is not set
+                // we need to go through bGraphicArrived down there.
+                // Or else the graphic is painted at its definitive size
                 bGraphicArrived = sal_True;
                 bGraphicPieceArrived = sal_False;
             }
@@ -186,12 +185,12 @@ static void lcl_CallModify( SwGrfNode& rGrfNd, SfxPoolItem& rItem )
             rGrfObj.SetGraphic( aGrf, rGrfObj.GetLink() );
             bUpdate = sal_True;
 
-            // Bug 33999: damit der Node den Transparent-Status
-            //      richtig gesetzt hat, ohne auf die Grafik
-            //      zugreifen zu muessen (sonst erfolgt ein SwapIn!).
+            // In order for the Node to have the right transparency status
+            // without having to access the graphic.
+            // Or else we cause a SwapIn.
             if( bGraphicArrived )
             {
-                // immer mit der korrekten Grafik-Size arbeiten
+                // Always use the correct graphic size
                 if( aGrfSz.Height() && aGrfSz.Width() &&
                     aSz.Height() && aSz.Width() &&
                     aGrfSz != aSz )
@@ -209,7 +208,7 @@ static void lcl_CallModify( SwGrfNode& rGrfNd, SfxPoolItem& rItem )
 
     if ( bUpdate && bGraphicPieceArrived && !(bSwapIn || bDontNotify) )
     {
-        //Hint ohne Actions verschicken, loest direktes Paint aus.
+        // Send hint without Actions; triggers direct paint
         if ( (!pSh || !pSh->ActionPend()) && (!pESh || !pESh->ActionPend()) )
         {
             SwMsgPoolItem aMsgHint( RES_GRAPHIC_PIECE_ARRIVED );
@@ -239,7 +238,7 @@ static void lcl_CallModify( SwGrfNode& rGrfNd, SfxPoolItem& rItem )
 
         if ( bGraphicArrived )
         {
-            //Alle benachrichtigen, die am gleichen Link horchen.
+            // Notify all who are listening at the same link
             bInNotifyLinks = sal_True;
 
             const ::sfx2::SvBaseLinks& rLnks = pDoc->GetLinkManager().GetLinks();
@@ -263,13 +262,13 @@ static void lcl_CallModify( SwGrfNode& rGrfNd, SfxPoolItem& rItem )
                         pGrfNd->SetGrafikArrived( ((SwGrfNode*)pCntntNode)->
                                                     IsGrafikArrived() );
 
-                        // Fly der Grafik anpassen !
+                        // Adjust the Fly's graphic
                         if( !::SetGrfFlySize( aGrfSz, aFrmFmtSz, pGrfNd ) )
                             ::lcl_CallModify( *pGrfNd, aMsgHint );
                     }
                     else if( pBLink == this &&
                             !::SetGrfFlySize( aGrfSz, aFrmFmtSz, pGrfNd ) )
-                        // Fly der Grafik anpassen !
+                        // Adjust the Fly's graphic
                         ::lcl_CallModify( *pGrfNd, aMsgHint );
                 }
             }
@@ -317,15 +316,15 @@ sal_Bool SetGrfFlySize( const Size& rGrfSz, const Size& rFrmSz, SwGrfNode* pGrfN
         {
             Size aCalcSz( aSz );
             if ( !aSz.Height() && aSz.Width() )
-                //passende Hoehe ausrechnen.
+                // Calculate the right height
                 aCalcSz.Height() = rFrmSz.Height() *
                         aSz.Width() / rFrmSz.Width();
             else if ( !aSz.Width() && aSz.Height() )
-                //passende Breite ausrechnen
+                // Calculate the right width
                 aCalcSz.Width() = rFrmSz.Width() *
                         aSz.Height() / rFrmSz.Height();
             else
-                //Hoehe und Breite uebernehmen
+                // Take over height and width
                 aCalcSz = rFrmSz;
 
             const SvxBoxItem     &rBox = pFmt->GetBox();
@@ -344,8 +343,8 @@ sal_Bool SetGrfFlySize( const Size& rGrfSz, const Size& rFrmSz, SwGrfNode* pGrfN
 
             if( !aSz.Width() )
             {
-                // Wenn die Grafik in einer Tabelle verankert ist, muess
-                // die Tabellen-Spalten neu berechnet werden
+                // If the graphic is anchored in a table, we need to recalculate
+                // the table rows
                 const SwDoc *pDoc = pGrfNd->GetDoc();
                 const SwPosition* pAPos = pFmt->GetAnchor().GetCntntAnchor();
                 SwNode *pANd;
@@ -372,8 +371,8 @@ sal_Bool SetGrfFlySize( const Size& rGrfSz, const Size& rFrmSz, SwGrfNode* pGrfN
             }
         }
 
-        // SetTwipSize skaliert ggf. eine ImageMap neu und
-        // braucht dazu das Frame-Format
+        // SetTwipSize rescales an ImageMap if needed for which
+        // it requires the Frame Format
         pGrfNd->SetTwipSize( rGrfSz );
     }
 
@@ -414,14 +413,13 @@ sal_Bool SwBaseLink::SwapIn( sal_Bool bWaitForData, sal_Bool bNativFormat )
 
         if( bWaitForData && !GetObj() )
         {
-            OSL_ENSURE( !this, "das SvxFileObject wurde in einem GetData geloescht!" );
+            OSL_ENSURE( !this, "The SvxFileObject was deleted in a GetData!" );
             bRes = sal_False;
         }
         else if( 0 != ( bRes = aValue.hasValue() ) )
         {
-            //JP 14.04.99: Bug 64820 - das Flag muss beim SwapIn natuerlich
-            //              zurueckgesetzt werden. Die Daten sollen ja neu
-            //              uebernommen werden
+            // The Flag needs to be reset on a SwapIn, because
+            // we want to reapply the data.
             bIgnoreDataChanged = sal_False;
             DataChanged( aMimeType, aValue );
         }
@@ -443,7 +441,7 @@ void SwBaseLink::Closed()
 {
     if( pCntntNode && !pCntntNode->GetDoc()->IsInDtor() )
     {
-        // wir heben die Verbindung auf
+        // Delete the connection
         if( pCntntNode->IsGrfNode() )
             ((SwGrfNode*)pCntntNode)->ReleaseLink();
     }
@@ -471,7 +469,7 @@ const SwNode* SwBaseLink::GetAnchor() const
         }
     }
 
-    OSL_ENSURE( !this, "GetAnchor nicht ueberlagert" );
+    OSL_ENSURE( !this, "GetAnchor is not shadowed" );
     return 0;
 }
 
@@ -480,9 +478,8 @@ sal_Bool SwBaseLink::IsRecursion( const SwBaseLink* pChkLnk ) const
     SwServerObjectRef aRef( (SwServerObject*)GetObj() );
     if( aRef.Is() )
     {
-        // es ist ein ServerObject, also frage nach allen darin
-        // befindlichen Links, ob wir darin enthalten sind. Ansonsten
-        // handelt es sich um eine Rekursion.
+        // As it's a ServerObject, we query all contained Links
+        // if we are contained in them. Else we have a recursion.
         return aRef->IsLinkInServer( pChkLnk );
     }
     return sal_False;
@@ -490,8 +487,8 @@ sal_Bool SwBaseLink::IsRecursion( const SwBaseLink* pChkLnk ) const
 
 sal_Bool SwBaseLink::IsInRange( sal_uLong, sal_uLong, xub_StrLen, xub_StrLen ) const
 {
-    // Grafik oder OLE-Links nicht,
-    // Felder oder Sections haben eigene Ableitung!
+    // Not Graphic or OLE Links
+    // Fields or Sections have their own derivation!
     return sal_False;
 }
 
