@@ -40,6 +40,7 @@ IDLFILES=\
     XSystemShellExecute.idl\
     SimpleMailClientFlags.idl\
     XSimpleMailMessage.idl\
+    XSimpleMailMessage2.idl\
     XSimpleMailClient.idl\
     XSimpleMailClientSupplier.idl\
     SimpleCommandMail.idl \

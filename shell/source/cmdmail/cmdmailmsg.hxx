@@ -29,7 +29,7 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 
 #ifndef _COM_SUN_STAR_SYS_SHELL_XSYSTEMSHELLEXECUTE_HPP_
-#include <com/sun/star/system/XSimpleMailMessage.hpp>
+#include <com/sun/star/system/XSimpleMailMessage2.hpp>
 #endif
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/uno/Reference.hxx>
@@ -40,9 +40,10 @@
 
 class CmdMailMsg :
     public  cppu::WeakImplHelper2<
-        ::com::sun::star::system::XSimpleMailMessage,
+        ::com::sun::star::system::XSimpleMailMessage2,
         ::com::sun::star::container::XNameAccess >
 {
+    ::rtl::OUString                                   m_aBody;
     ::rtl::OUString                                   m_aRecipient;
     ::rtl::OUString                                   m_aOriginator;
     ::rtl::OUString                                   m_aSubject;
@@ -59,6 +60,12 @@ public:
     //------------------------------------------------
     // XSimpleMailMessage
     //------------------------------------------------
+
+    virtual void SAL_CALL setBody( const ::rtl::OUString& aBody )
+        throw (::com::sun::star::uno::RuntimeException);
+
+    virtual ::rtl::OUString SAL_CALL getBody(  )
+        throw (::com::sun::star::uno::RuntimeException);
 
     virtual void SAL_CALL setRecipient( const ::rtl::OUString& aRecipient )
         throw (::com::sun::star::uno::RuntimeException);
@@ -96,7 +103,7 @@ public:
     virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getAttachement(  )
         throw (::com::sun::star::uno::RuntimeException);
 
-       //------------------------------------------------
+    //------------------------------------------------
     // XNameAccess
     //------------------------------------------------
 
@@ -109,7 +116,7 @@ public:
     virtual sal_Bool SAL_CALL hasByName( const ::rtl::OUString& aName )
         throw (::com::sun::star::uno::RuntimeException);
 
-       //------------------------------------------------
+    //------------------------------------------------
     // XElementAccess
     //------------------------------------------------
 

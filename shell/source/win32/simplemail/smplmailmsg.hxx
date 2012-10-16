@@ -31,20 +31,23 @@
 #include <cppuhelper/compbase1.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
-
-#ifndef _COM_SUN_STAR_SYS_SHELL_XSYSTEMSHELLEXECUTE_HPP_
-#include <com/sun/star/system/XSimpleMailMessage.hpp>
-#endif
+#include <com/sun/star/system/XSimpleMailMessage2.hpp>
 
 //----------------------------------------------------------
 // class declaration
 //----------------------------------------------------------
 
 class CSmplMailMsg :
-    public  cppu::WeakImplHelper1< com::sun::star::system::XSimpleMailMessage >
+    public  cppu::WeakImplHelper1< com::sun::star::system::XSimpleMailMessage2 >
 {
 public:
     CSmplMailMsg( );
+
+    virtual void SAL_CALL setBody( const ::rtl::OUString& aBody )
+        throw (::com::sun::star::uno::RuntimeException);
+
+    virtual ::rtl::OUString SAL_CALL getBody(  )
+        throw (::com::sun::star::uno::RuntimeException);
 
     //------------------------------------------------
     //
@@ -107,6 +110,7 @@ public:
         throw (::com::sun::star::uno::RuntimeException);
 
 private:
+    rtl::OUString                                   m_aBody;
     rtl::OUString                                   m_aRecipient;
     rtl::OUString                                   m_aOriginator;
     rtl::OUString                                   m_aSubject;

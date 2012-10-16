@@ -54,6 +54,7 @@ using com::sun::star::beans::PropertyValue;
 using com::sun::star::system::XSimpleMailClientSupplier;
 using com::sun::star::system::XSimpleMailClient;
 using com::sun::star::system::XSimpleMailMessage;
+using com::sun::star::system::XSimpleMailMessage2;
 using com::sun::star::container::XNameAccess;
 using com::sun::star::container::NoSuchElementException;
 using rtl::OUString;
@@ -217,6 +218,18 @@ void SAL_CALL CmdMailSuppl::sendSimpleMailMessage( const Reference< XSimpleMailM
         OSL_TRACE( "RuntimeException caught accessing configuration provider." );
         OSL_TRACE( OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US ).getStr() );
         throw e;
+    }
+
+    Reference< XSimpleMailMessage2 > xMessage( xSimpleMailMessage, UNO_QUERY );
+    if ( xMessage.is() )
+    {
+        rtl::OUString sBody = xMessage->getBody();
+        if ( sBody.getLength() > 0 )
+        {
+            aBuffer.append("--body \"");
+            aBuffer.append(OUStringToOString(sBody, osl_getThreadTextEncoding()));
+            aBuffer.append("\" ");
+        }
     }
 
     // Append originator if set in the message

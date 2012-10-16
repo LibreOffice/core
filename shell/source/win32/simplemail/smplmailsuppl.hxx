@@ -27,10 +27,7 @@
 #include <cppuhelper/compbase2.hxx>
 #include <osl/mutex.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-
-#ifndef _COM_SUN_STAR_SYS_SHELL_XSYSTEMSHELLEXECUTE_HPP_
 #include <com/sun/star/system/XSimpleMailClientSupplier.hpp>
-#endif
 
 #ifndef _SIMPLEMAPI_HXX_
 #include "simplemapi.hxx"
