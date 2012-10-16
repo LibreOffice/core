@@ -43,6 +43,18 @@ CSmplMailMsg::CSmplMailMsg( )
 {
 }
 
+void SAL_CALL CSmplMailMsg::setBody( const ::rtl::OUString& aBody )
+    throw (RuntimeException)
+{
+    m_aBody = aBody;
+}
+
+::rtl::OUString SAL_CALL CSmplMailMsg::getBody(  )
+    throw (RuntimeException)
+{
+    return m_aBody;
+}
+
 //------------------------------------------------
 
 void SAL_CALL CSmplMailMsg::setRecipient( const OUString& aRecipient )

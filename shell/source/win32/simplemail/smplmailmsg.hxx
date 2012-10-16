@@ -23,18 +23,23 @@
 #include <cppuhelper/compbase1.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
-
-#include <com/sun/star/system/XSimpleMailMessage.hpp>
+#include <com/sun/star/system/XSimpleMailMessage2.hpp>
 
 //----------------------------------------------------------
 // class declaration
 //----------------------------------------------------------
 
 class CSmplMailMsg :
-    public  cppu::WeakImplHelper1< com::sun::star::system::XSimpleMailMessage >
+    public  cppu::WeakImplHelper1< com::sun::star::system::XSimpleMailMessage2 >
 {
 public:
     CSmplMailMsg( );
+
+    virtual void SAL_CALL setBody( const ::rtl::OUString& aBody )
+        throw (::com::sun::star::uno::RuntimeException);
+
+    virtual ::rtl::OUString SAL_CALL getBody(  )
+        throw (::com::sun::star::uno::RuntimeException);
 
     //------------------------------------------------
 
@@ -85,6 +90,7 @@ public:
         throw (::com::sun::star::uno::RuntimeException);
 
 private:
+    OUString                                   m_aBody;
     OUString                                   m_aRecipient;
     OUString                                   m_aOriginator;
     OUString                                   m_aSubject;

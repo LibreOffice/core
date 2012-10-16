@@ -3582,6 +3582,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/system,\
 	XSimpleMailClient \
 	XSimpleMailClientSupplier \
 	XSimpleMailMessage \
+	XSimpleMailMessage2 \
 	XSystemShellExecute \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/table,\

@@ -17,16 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <osl/diagnose.h>
 #include "cmdmailmsg.hxx"
-#include <com/sun/star/uri/XExternalUriReferenceTranslator.hpp>
-#include <com/sun/star/uri/ExternalUriReferenceTranslator.hpp>
-#include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/RuntimeException.hpp>
-
-//------------------------------------------------------------------------
-// namespace directives
-//------------------------------------------------------------------------
 
 using com::sun::star::lang::IllegalArgumentException;
 using com::sun::star::lang::WrappedTargetException;
@@ -38,7 +29,19 @@ using namespace cppu;
 using namespace com::sun::star::uno;
 
 
-//------------------------------------------------
+void SAL_CALL CmdMailMsg::setBody( const OUString& aBody )
+    throw (RuntimeException)
+{
+    MutexGuard aGuard( m_aMutex );
+    m_aBody = aBody;
+}
+
+OUString SAL_CALL CmdMailMsg::getBody(  )
+    throw (RuntimeException)
+{
+    MutexGuard aGuard( m_aMutex );
+    return m_aBody;
+}
 
 void SAL_CALL CmdMailMsg::setRecipient( const OUString& aRecipient )
     throw (RuntimeException)
@@ -47,16 +50,12 @@ void SAL_CALL CmdMailMsg::setRecipient( const OUString& aRecipient )
     m_aRecipient = aRecipient;
 }
 
-//------------------------------------------------
-
 OUString SAL_CALL CmdMailMsg::getRecipient(  )
     throw (RuntimeException)
 {
     MutexGuard aGuard( m_aMutex );
     return m_aRecipient;
 }
-
-//------------------------------------------------
 
 void SAL_CALL CmdMailMsg::setCcRecipient( const Sequence< OUString >& aCcRecipient )
     throw (RuntimeException)
@@ -65,16 +64,12 @@ void SAL_CALL CmdMailMsg::setCcRecipient( const Sequence< OUString >& aCcRecipie
     m_CcRecipients = aCcRecipient;
 }
 
-//------------------------------------------------
-
 Sequence< OUString > SAL_CALL CmdMailMsg::getCcRecipient(  )
     throw (RuntimeException)
 {
     MutexGuard aGuard( m_aMutex );
     return m_CcRecipients;
 }
-
-//------------------------------------------------
 
 void SAL_CALL CmdMailMsg::setBccRecipient( const Sequence< OUString >& aBccRecipient )
     throw (RuntimeException)
@@ -83,16 +78,12 @@ void SAL_CALL CmdMailMsg::setBccRecipient( const Sequence< OUString >& aBccRecip
     m_BccRecipients = aBccRecipient;
 }
 
-//------------------------------------------------
-
 Sequence< OUString > SAL_CALL CmdMailMsg::getBccRecipient(  )
     throw (RuntimeException)
 {
     MutexGuard aGuard( m_aMutex );
     return m_BccRecipients;
 }
-
-//------------------------------------------------
 
 void SAL_CALL CmdMailMsg::setOriginator( const OUString& aOriginator )
     throw (RuntimeException)
@@ -101,16 +92,12 @@ void SAL_CALL CmdMailMsg::setOriginator( const OUString& aOriginator )
     m_aOriginator = aOriginator;
 }
 
-//------------------------------------------------
-
 OUString SAL_CALL CmdMailMsg::getOriginator(  )
     throw (RuntimeException)
 {
     MutexGuard aGuard( m_aMutex );
     return m_aOriginator;
 }
-
-//------------------------------------------------
 
 void SAL_CALL CmdMailMsg::setSubject( const OUString& aSubject )
     throw (RuntimeException)
@@ -119,16 +106,12 @@ void SAL_CALL CmdMailMsg::setSubject( const OUString& aSubject )
     m_aSubject = aSubject;
 }
 
-//------------------------------------------------
-
 OUString SAL_CALL CmdMailMsg::getSubject(  )
     throw (RuntimeException)
 {
     MutexGuard aGuard( m_aMutex );
     return m_aSubject;
 }
-
-//------------------------------------------------
 
 void SAL_CALL CmdMailMsg::setAttachement( const Sequence< OUString >& aAttachment )
     throw (IllegalArgumentException, RuntimeException)
@@ -137,8 +120,6 @@ void SAL_CALL CmdMailMsg::setAttachement( const Sequence< OUString >& aAttachmen
     m_Attachments = aAttachment;
 }
 
-//------------------------------------------------
-
 Sequence< OUString > SAL_CALL CmdMailMsg::getAttachement(  )
     throw (RuntimeException)
 {
@@ -146,12 +127,13 @@ Sequence< OUString > SAL_CALL CmdMailMsg::getAttachement(  )
     return m_Attachments;
 }
 
-//------------------------------------------------
-
 Any SAL_CALL CmdMailMsg::getByName( const OUString& aName )
     throw (NoSuchElementException, WrappedTargetException, RuntimeException)
 {
     MutexGuard aGuard( m_aMutex );
+
+    if( 0 == aName.compareToAscii( "body" ) &&  !m_aBody.isEmpty() )
+        return makeAny( m_aBody );
 
     if( 0 == aName.compareToAscii( "from" ) &&  !m_aOriginator.isEmpty() )
         return makeAny( m_aOriginator );
@@ -175,15 +157,16 @@ Any SAL_CALL CmdMailMsg::getByName( const OUString& aName )
         static_cast < XNameAccess * > (this) );
 }
 
-//------------------------------------------------
-
 Sequence< OUString > SAL_CALL CmdMailMsg::getElementNames(  )
     throw (::com::sun::star::uno::RuntimeException)
 {
     MutexGuard aGuard( m_aMutex );
 
     sal_Int32 nItems = 0;
-    Sequence< OUString > aRet( 6 );
+    Sequence< OUString > aRet( 7 );
+
+    if( !m_aBody.isEmpty() )
+        aRet[nItems++] = OUString("body");
 
     if( !m_aOriginator.isEmpty() )
         aRet[nItems++] = OUString("from");
@@ -207,12 +190,13 @@ Sequence< OUString > SAL_CALL CmdMailMsg::getElementNames(  )
     return aRet;
 }
 
-//------------------------------------------------
-
  sal_Bool SAL_CALL CmdMailMsg::hasByName( const OUString& aName )
     throw (RuntimeException)
 {
     MutexGuard aGuard( m_aMutex );
+
+    if( 0 == aName.compareToAscii( "body" ) &&  !m_aBody.isEmpty() )
+        return sal_True;
 
     if( 0 == aName.compareToAscii( "from" ) &&  !m_aOriginator.isEmpty() )
         return sal_True;
@@ -235,16 +219,12 @@ Sequence< OUString > SAL_CALL CmdMailMsg::getElementNames(  )
     return sal_False;
 }
 
-//------------------------------------------------
-
 Type SAL_CALL CmdMailMsg::getElementType(  )
     throw (RuntimeException)
 {
     // returning void for multi type container
     return Type();
 }
-
-//------------------------------------------------
 
 sal_Bool SAL_CALL CmdMailMsg::hasElements(  )
     throw (RuntimeException)

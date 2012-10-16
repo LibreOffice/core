@@ -23,6 +23,7 @@
 #include "smplmailclient.hxx"
 #include "smplmailmsg.hxx"
 #include <com/sun/star/system/SimpleMailClientFlags.hpp>
+#include <com/sun/star/system/XSimpleMailMessage2.hpp>
 #include <osl/file.hxx>
 
 #define WIN32_LEAN_AND_MEAN
@@ -38,6 +39,7 @@
 #include <process.h>
 #include <vector>
 
+using css::uno::UNO_QUERY;
 using css::uno::Reference;
 using css::uno::Exception;
 using css::uno::RuntimeException;
@@ -46,6 +48,7 @@ using css::lang::IllegalArgumentException;
 
 using css::system::XSimpleMailClient;
 using css::system::XSimpleMailMessage;
+using css::system::XSimpleMailMessage2;
 using css::system::SimpleMailClientFlags::NO_USER_INTERFACE;
 using css::system::SimpleMailClientFlags::NO_LOGON_DIALOG;
 
@@ -56,6 +59,7 @@ const OUString CC("--cc");
 const OUString BCC("--bcc");
 const OUString FROM("--from");
 const OUString SUBJECT("--subject");
+const OUString BODY("--body");
 const OUString ATTACH("--attach");
 const OUString FLAG_MAPI_DIALOG("--mapi-dialog");
 const OUString FLAG_MAPI_LOGON_UI("--mapi-logon-ui");
@@ -174,6 +178,17 @@ void CSmplMailClient::assembleCommandLine(
     sal_Int32 aFlag, StringList_t& rCommandArgs)
 {
     OSL_ENSURE(rCommandArgs.empty(), "Provided command argument buffer not empty");
+
+    Reference<XSimpleMailMessage2> xMessage( xSimpleMailMessage, UNO_QUERY );
+    if (xMessage.is())
+    {
+        OUString body = xMessage->getBody();
+        if (body.getLength()>0)
+        {
+            rCommandArgs.push_back(BODY);
+            rCommandArgs.push_back(body);
+        }
+    }
 
     OUString to = xSimpleMailMessage->getRecipient();
     if (to.getLength() > 0)

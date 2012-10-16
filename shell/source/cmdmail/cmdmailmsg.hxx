@@ -24,7 +24,7 @@
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 
-#include <com/sun/star/system/XSimpleMailMessage.hpp>
+#include <com/sun/star/system/XSimpleMailMessage2.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 
@@ -34,9 +34,10 @@
 
 class CmdMailMsg :
     public  cppu::WeakImplHelper2<
-        ::com::sun::star::system::XSimpleMailMessage,
+        ::com::sun::star::system::XSimpleMailMessage2,
         ::com::sun::star::container::XNameAccess >
 {
+    OUString                                   m_aBody;
     OUString                                   m_aRecipient;
     OUString                                   m_aOriginator;
     OUString                                   m_aSubject;
@@ -53,6 +54,12 @@ public:
     //------------------------------------------------
     // XSimpleMailMessage
     //------------------------------------------------
+
+    virtual void SAL_CALL setBody( const OUString& aBody )
+        throw (::com::sun::star::uno::RuntimeException);
+
+    virtual OUString SAL_CALL getBody(  )
+        throw (::com::sun::star::uno::RuntimeException);
 
     virtual void SAL_CALL setRecipient( const OUString& aRecipient )
         throw (::com::sun::star::uno::RuntimeException);
@@ -90,7 +97,7 @@ public:
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getAttachement(  )
         throw (::com::sun::star::uno::RuntimeException);
 
-       //------------------------------------------------
+    //------------------------------------------------
     // XNameAccess
     //------------------------------------------------
 
@@ -103,7 +110,7 @@ public:
     virtual sal_Bool SAL_CALL hasByName( const OUString& aName )
         throw (::com::sun::star::uno::RuntimeException);
 
-       //------------------------------------------------
+    //------------------------------------------------
     // XElementAccess
     //------------------------------------------------
 
