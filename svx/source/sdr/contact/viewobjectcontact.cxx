@@ -131,6 +131,12 @@ namespace
             case PRIMITIVE2D_ID_SDRPATHPRIMITIVE2D :
             case PRIMITIVE2D_ID_SDRRECTANGLEPRIMITIVE2D :
 
+            // #121194# With Graphic as Bitmap FillStyle, also check
+            // for primitives filled with animated graphics
+            case PRIMITIVE2D_ID_POLYPOLYGONGRAPHICPRIMITIVE2D:
+            case PRIMITIVE2D_ID_FILLGRAPHICPRIMITIVE2D:
+            case PRIMITIVE2D_ID_TRANSFORMPRIMITIVE2D:
+
             // decompose evtl. animated text contained in MaskPrimitive2D
             // or group rimitives
             case PRIMITIVE2D_ID_MASKPRIMITIVE2D :

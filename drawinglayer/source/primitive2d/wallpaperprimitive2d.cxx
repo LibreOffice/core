@@ -20,10 +20,12 @@
 #include <drawinglayer/primitive2d/wallpaperprimitive2d.hxx>
 #include <drawinglayer/primitive2d/bitmapprimitive2d.hxx>
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
-#include <drawinglayer/primitive2d/fillbitmapprimitive2d.hxx>
+#include <drawinglayer/primitive2d/fillgraphicprimitive2d.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <drawinglayer/primitive2d/maskprimitive2d.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <vcl/graph.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -175,26 +177,23 @@ namespace drawinglayer
                                 aRelativeTopLeft.setY(0.5 - aRelativeSize.getY());
                             }
 
-                            // prepare FillBitmapAttribute
-                            const attribute::FillBitmapAttribute aFillBitmapAttribute(
-                                getBitmapEx(),
-                                aRelativeTopLeft,
-                                aRelativeSize,
+                            // prepare FillGraphicAttribute
+                            const attribute::FillGraphicAttribute aFillGraphicAttribute(
+                                Graphic(getBitmapEx()),
+                                basegfx::B2DRange(aRelativeTopLeft, aRelativeTopLeft+ aRelativeSize),
                                 true);
 
                             // create ObjectTransform
-                            basegfx::B2DHomMatrix aObjectTransform;
-
-                            aObjectTransform.set(0, 0, getLocalObjectRange().getWidth());
-                            aObjectTransform.set(1, 1, getLocalObjectRange().getHeight());
-                            aObjectTransform.set(0, 2, getLocalObjectRange().getMinX());
-                            aObjectTransform.set(1, 2, getLocalObjectRange().getMinY());
+                            const basegfx::B2DHomMatrix aObjectTransform(
+                                basegfx::tools::createScaleTranslateB2DHomMatrix(
+                                    getLocalObjectRange().getRange(),
+                                    getLocalObjectRange().getMinimum()));
 
                             // create FillBitmapPrimitive
                             const drawinglayer::primitive2d::Primitive2DReference xFillBitmap(
-                                new drawinglayer::primitive2d::FillBitmapPrimitive2D(
+                                new drawinglayer::primitive2d::FillGraphicPrimitive2D(
                                     aObjectTransform,
-                                    aFillBitmapAttribute));
+                                    aFillGraphicAttribute));
                             aRetval = Primitive2DSequence(&xFillBitmap, 1);
 
                             // always embed tiled fill to clipping

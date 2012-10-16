@@ -34,6 +34,8 @@
 #include <vcl/bitmapex.hxx>
 #include <drawinglayer/attribute/sdrsceneattribute3d.hxx>
 #include <drawinglayer/attribute/sdrlightingattribute3d.hxx>
+#include <vcl/graph.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -210,21 +212,33 @@ namespace drawinglayer
                 boost::shared_ptr< texture::GeoTexSvx > pOldTex = mpGeoTexSvx;
 
                 // create texture
-                const attribute::FillBitmapAttribute& rFillBitmapAttribute = rPrimitive.getFillBitmapAttribute();
+                const attribute::FillGraphicAttribute& rFillGraphicAttribute = rPrimitive.getFillGraphicAttribute();
 
-                if(rFillBitmapAttribute.getTiling())
+                // #121194# For 3D texture we will use the BitmapRex representation
+                const BitmapEx aBitmapEx(rFillGraphicAttribute.getGraphic().GetBitmapEx());
+
+                // create range scaled by texture size
+                basegfx::B2DRange aGraphicRange(rFillGraphicAttribute.getGraphicRange());
+
+                aGraphicRange.transform(
+                    basegfx::tools::createScaleB2DHomMatrix(
+                        rPrimitive.getTextureSize()));
+
+                if(rFillGraphicAttribute.getTiling())
                 {
-                    mpGeoTexSvx.reset(new texture::GeoTexSvxBitmapTiled(
-                        rFillBitmapAttribute.getBitmapEx().GetBitmap(),
-                        rFillBitmapAttribute.getTopLeft() * rPrimitive.getTextureSize(),
-                        rFillBitmapAttribute.getSize() * rPrimitive.getTextureSize()));
+                    mpGeoTexSvx.reset(
+                        new texture::GeoTexSvxBitmapExTiled(
+                            aBitmapEx,
+                            aGraphicRange,
+                            rFillGraphicAttribute.getOffsetX(),
+                            rFillGraphicAttribute.getOffsetY()));
                 }
                 else
                 {
-                    mpGeoTexSvx.reset(new texture::GeoTexSvxBitmap(
-                        rFillBitmapAttribute.getBitmapEx().GetBitmap(),
-                        rFillBitmapAttribute.getTopLeft() * rPrimitive.getTextureSize(),
-                        rFillBitmapAttribute.getSize() * rPrimitive.getTextureSize()));
+                    mpGeoTexSvx.reset(
+                        new texture::GeoTexSvxBitmapEx(
+                            aBitmapEx,
+                            aGraphicRange));
                 }
 
                 // process sub-list

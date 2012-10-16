@@ -19,7 +19,7 @@
 
 #include <drawinglayer/attribute/sdrfillattribute.hxx>
 #include <basegfx/color/bcolor.hxx>
-#include <drawinglayer/attribute/sdrfillbitmapattribute.hxx>
+#include <drawinglayer/attribute/sdrfillgraphicattribute.hxx>
 #include <drawinglayer/attribute/fillhatchattribute.hxx>
 #include <drawinglayer/attribute/fillgradientattribute.hxx>
 #include <rtl/instance.hxx>
@@ -38,7 +38,7 @@ namespace drawinglayer
             basegfx::BColor                     maColor;            // fill color
             FillGradientAttribute               maGradient;         // fill gradient (if used)
             FillHatchAttribute                  maHatch;            // fill hatch (if used)
-            SdrFillBitmapAttribute              maBitmap;           // fill bitmap (if used)
+            SdrFillGraphicAttribute             maFillGraphic;      // fill graphic (if used)
 
         public:
             ImpSdrFillAttribute(
@@ -46,12 +46,12 @@ namespace drawinglayer
                 const basegfx::BColor& rColor,
                 const FillGradientAttribute& rGradient,
                 const FillHatchAttribute& rHatch,
-                const SdrFillBitmapAttribute& rBitmap)
+                const SdrFillGraphicAttribute& rFillGraphic)
             :   mfTransparence(fTransparence),
                 maColor(rColor),
                 maGradient(rGradient),
                 maHatch(rHatch),
-                maBitmap(rBitmap)
+                maFillGraphic(rFillGraphic)
             {
             }
 
@@ -60,7 +60,7 @@ namespace drawinglayer
                 maColor(basegfx::BColor()),
                 maGradient(FillGradientAttribute()),
                 maHatch(FillHatchAttribute()),
-                maBitmap(SdrFillBitmapAttribute())
+                maFillGraphic(SdrFillGraphicAttribute())
             {
             }
 
@@ -69,7 +69,7 @@ namespace drawinglayer
             const basegfx::BColor& getColor() const { return maColor; }
             const FillGradientAttribute& getGradient() const { return maGradient; }
             const FillHatchAttribute& getHatch() const { return maHatch; }
-            const SdrFillBitmapAttribute& getBitmap() const { return maBitmap; }
+            const SdrFillGraphicAttribute& getFillGraphic() const { return maFillGraphic; }
 
             // compare operator
             bool operator==(const ImpSdrFillAttribute& rCandidate) const
@@ -78,7 +78,7 @@ namespace drawinglayer
                     && getColor() == rCandidate.getColor()
                     && getGradient() == rCandidate.getGradient()
                     && getHatch() == rCandidate.getHatch()
-                    && getBitmap() == rCandidate.getBitmap());
+                    && getFillGraphic() == rCandidate.getFillGraphic());
             }
         };
 
@@ -93,9 +93,9 @@ namespace drawinglayer
             const basegfx::BColor& rColor,
             const FillGradientAttribute& rGradient,
             const FillHatchAttribute& rHatch,
-            const SdrFillBitmapAttribute& rBitmap)
+            const SdrFillGraphicAttribute& rFillGraphic)
         :   mpSdrFillAttribute(ImpSdrFillAttribute(
-                fTransparence, rColor, rGradient, rHatch, rBitmap))
+                fTransparence, rColor, rGradient, rHatch, rFillGraphic))
         {
         }
 
@@ -149,9 +149,9 @@ namespace drawinglayer
             return mpSdrFillAttribute->getHatch();
         }
 
-        const SdrFillBitmapAttribute& SdrFillAttribute::getBitmap() const
+        const SdrFillGraphicAttribute& SdrFillAttribute::getFillGraphic() const
         {
-            return mpSdrFillAttribute->getBitmap();
+            return mpSdrFillAttribute->getFillGraphic();
         }
     } // end of namespace attribute
 } // end of namespace drawinglayer

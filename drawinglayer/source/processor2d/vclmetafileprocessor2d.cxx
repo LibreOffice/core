@@ -615,7 +615,7 @@ namespace drawinglayer
             Even for XFillTransparenceItem it is used, thus it may need to be supported in
             UnifiedTransparencePrimitive2D, too, when interpreted as normally filled PolyPolygon.
             Implemented for:
-                PRIMITIVE2D_ID_POLYPOLYGONBITMAPPRIMITIVE2D,
+                PRIMITIVE2D_ID_POLYPOLYGONGRAPHICPRIMITIVE2D,
                 PRIMITIVE2D_ID_POLYPOLYGONHATCHPRIMITIVE2D,
                 PRIMITIVE2D_ID_POLYPOLYGONGRADIENTPRIMITIVE2D,
                 PRIMITIVE2D_ID_POLYPOLYGONCOLORPRIMITIVE2D,
@@ -1345,19 +1345,19 @@ namespace drawinglayer
                     RenderBitmapPrimitive2D(static_cast< const primitive2d::BitmapPrimitive2D& >(rCandidate));
                     break;
                 }
-                case PRIMITIVE2D_ID_POLYPOLYGONBITMAPPRIMITIVE2D :
+                case PRIMITIVE2D_ID_POLYPOLYGONGRAPHICPRIMITIVE2D :
                 {
-                    // need to handle PolyPolygonBitmapPrimitive2D here to support XPATHFILL_SEQ_BEGIN/XPATHFILL_SEQ_END
-                    const primitive2d::PolyPolygonBitmapPrimitive2D& rBitmapCandidate = static_cast< const primitive2d::PolyPolygonBitmapPrimitive2D& >(rCandidate);
+                    // need to handle PolyPolygonGraphicPrimitive2D here to support XPATHFILL_SEQ_BEGIN/XPATHFILL_SEQ_END
+                    const primitive2d::PolyPolygonGraphicPrimitive2D& rBitmapCandidate = static_cast< const primitive2d::PolyPolygonGraphicPrimitive2D& >(rCandidate);
                     basegfx::B2DPolyPolygon aLocalPolyPolygon(rBitmapCandidate.getB2DPolyPolygon());
 
                     if(fillPolyPolygonNeededToBeSplit(aLocalPolyPolygon))
                     {
                         // #i112245# Metafiles use tools Polygon and are not able to have more than 65535 points
                         // per polygon. If there are more use the splitted polygon and call recursively
-                        const primitive2d::PolyPolygonBitmapPrimitive2D aSplitted(
+                        const primitive2d::PolyPolygonGraphicPrimitive2D aSplitted(
                             aLocalPolyPolygon,
-                            rBitmapCandidate.getFillBitmap());
+                            rBitmapCandidate.getFillGraphic());
 
                         processBasePrimitive2D(aSplitted);
                     }
@@ -1367,46 +1367,41 @@ namespace drawinglayer
 
                         if(!mnSvtGraphicFillCount && aLocalPolyPolygon.count())
                         {
-                            aLocalPolyPolygon.transform(maCurrentTransformation);
-                            // calculate transformation. Get real object size, all values in FillBitmapAttribute
-                            // are relative to the unified object
-                            const attribute::FillBitmapAttribute& rFillBitmapAttribute = rBitmapCandidate .getFillBitmap();
-                            const basegfx::B2DRange aOutlineRange(basegfx::tools::getRange(aLocalPolyPolygon));
-                            const basegfx::B2DVector aOutlineSize(aOutlineRange.getRange());
+                            // #121194# Changed implementation and checked usages fo convert to metafile,
+                            // presentation start (uses SvtGraphicFill) and printing.
 
-                            // get absolute values
-                            const basegfx::B2DVector aFillBitmapSize(rFillBitmapAttribute.getSize() * aOutlineSize);
-                            const basegfx::B2DPoint aFillBitmapTopLeft(rFillBitmapAttribute.getTopLeft() * aOutlineSize);
+                            // calculate transformation. Get real object size, all values in FillGraphicAttribute
+                            // are relative to the unified object
+                            aLocalPolyPolygon.transform(maCurrentTransformation);
+                            const basegfx::B2DVector aOutlineSize(aLocalPolyPolygon.getB2DRange().getRange());
 
                             // the scaling needs scale from pixel to logic coordinate system
-                            const BitmapEx& rBitmapEx = rFillBitmapAttribute.getBitmapEx();
-                            Size aBmpSizePixel(rBitmapEx.GetSizePixel());
+                            const attribute::FillGraphicAttribute& rFillGraphicAttribute = rBitmapCandidate.getFillGraphic();
+                            const Size aBmpSizePixel(rFillGraphicAttribute.getGraphic().GetSizePixel());
 
-                            if(!aBmpSizePixel.Width())
-                            {
-                                aBmpSizePixel.Width() = 1;
-                            }
-
-                            if(!aBmpSizePixel.Height())
-                            {
-                                aBmpSizePixel.Height() = 1;
-                            }
+                            // setup transformation like in impgrfll. Multiply with aOutlineSize
+                            // to get from unit coordinates in rFillGraphicAttribute.getGraphicRange()
+                            // to object coordinates with object's top left being at (0,0). Divide
+                            // by pixel size so that scale from pixel to logic will work in SvtGraphicFill.
+                            const basegfx::B2DVector aTransformScale(
+                                rFillGraphicAttribute.getGraphicRange().getRange() /
+                                basegfx::B2DVector(
+                                    std::max(1.0, double(aBmpSizePixel.Width())),
+                                    std::max(1.0, double(aBmpSizePixel.Height()))) *
+                                aOutlineSize);
+                            const basegfx::B2DPoint aTransformPosition(
+                                rFillGraphicAttribute.getGraphicRange().getMinimum() * aOutlineSize);
 
                             // setup transformation like in impgrfll
                             SvtGraphicFill::Transform aTransform;
 
                             // scale values are divided by bitmap pixel sizes
-                            aTransform.matrix[0] = aFillBitmapSize.getX() / aBmpSizePixel.Width();
-                            aTransform.matrix[4] = aFillBitmapSize.getY() / aBmpSizePixel.Height();
+                            aTransform.matrix[0] = aTransformScale.getX();
+                            aTransform.matrix[4] = aTransformScale.getY();
 
                             // translates are absolute
-                            aTransform.matrix[2] = aFillBitmapTopLeft.getX();
-                            aTransform.matrix[5] = aFillBitmapTopLeft.getY();
-
-                            // setup fill graphic like in impgrfll
-                            Graphic aFillGraphic = Graphic(rBitmapEx);
-                            aFillGraphic.SetPrefMapMode(MapMode(MAP_PIXEL));
-                            aFillGraphic.SetPrefSize(aBmpSizePixel);
+                            aTransform.matrix[2] = aTransformPosition.getX();
+                            aTransform.matrix[5] = aTransformPosition.getY();
 
                             pSvtGraphicFill = new SvtGraphicFill(
                                 getFillPolyPolygon(aLocalPolyPolygon),
@@ -1415,14 +1410,14 @@ namespace drawinglayer
                                 SvtGraphicFill::fillEvenOdd,
                                 SvtGraphicFill::fillTexture,
                                 aTransform,
-                                rFillBitmapAttribute.getTiling(),
+                                rFillGraphicAttribute.getTiling(),
                                 SvtGraphicFill::hatchSingle,
                                 Color(),
                                 SvtGraphicFill::gradientLinear,
                                 Color(),
                                 Color(),
                                 0,
-                                aFillGraphic);
+                                rFillGraphicAttribute.getGraphic());
                         }
 
                         // Do use decomposition; encapsulate with SvtGraphicFill
@@ -1806,7 +1801,7 @@ namespace drawinglayer
                             }
 
                             // PolyPolygonGradientPrimitive2D, PolyPolygonHatchPrimitive2D and
-                            // PolyPolygonBitmapPrimitive2D are derived from PolyPolygonColorPrimitive2D.
+                            // PolyPolygonGraphicPrimitive2D are derived from PolyPolygonColorPrimitive2D.
                             // Check also for correct ID to exclude derived implementations
                             if(pPoPoColor && PRIMITIVE2D_ID_POLYPOLYGONCOLORPRIMITIVE2D == pPoPoColor->getPrimitive2DID())
                             {

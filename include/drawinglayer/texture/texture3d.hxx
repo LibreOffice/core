@@ -23,7 +23,7 @@
 #include <drawinglayer/drawinglayerdllapi.h>
 
 #include <drawinglayer/texture/texture.hxx>
-#include <vcl/bitmap.hxx>
+#include <vcl/bitmapex.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 // predeclarations
@@ -45,7 +45,9 @@ namespace drawinglayer
             double                                      mfOpacity;
 
         public:
-            GeoTexSvxMono(const basegfx::BColor& rSingleColor, double fOpacity);
+            GeoTexSvxMono(
+                const basegfx::BColor& rSingleColor,
+                double fOpacity);
 
             // compare operator
             virtual bool operator==(const GeoTexSvx& rGeoTexSvx) const;
@@ -61,22 +63,32 @@ namespace drawinglayer
 {
     namespace texture
     {
-        class DRAWINGLAYER_DLLPUBLIC GeoTexSvxBitmap : public GeoTexSvx
+        class DRAWINGLAYER_DLLPUBLIC GeoTexSvxBitmapEx : public GeoTexSvx
         {
         protected:
-            Bitmap                                      maBitmap;
-            BitmapReadAccess*                           mpRead;
+            BitmapEx                                    maBitmapEx;
+            BitmapReadAccess*                           mpReadBitmap;
+            Bitmap                                      maTransparence;
+            BitmapReadAccess*                           mpReadTransparence;
             basegfx::B2DPoint                           maTopLeft;
             basegfx::B2DVector                          maSize;
             double                                      mfMulX;
             double                                      mfMulY;
 
+            /// bitfield
+            bool                                        mbIsAlpha : 1;
+            bool                                        mbIsTransparent : 1;
+
             // helpers
             bool impIsValid(const basegfx::B2DPoint& rUV, sal_Int32& rX, sal_Int32& rY) const;
+            sal_uInt8 impGetTransparence(sal_Int32& rX, sal_Int32& rY) const;
 
         public:
-            GeoTexSvxBitmap(const Bitmap& rBitmap, const basegfx::B2DPoint& rTopLeft, const basegfx::B2DVector& rSize);
-            virtual ~GeoTexSvxBitmap();
+            GeoTexSvxBitmapEx(
+                const BitmapEx& rBitmapEx,
+                const basegfx::B2DRange& rRange);
+            virtual ~GeoTexSvxBitmapEx();
+
             virtual void modifyBColor(const basegfx::B2DPoint& rUV, basegfx::BColor& rBColor, double& rfOpacity) const;
             virtual void modifyOpacity(const basegfx::B2DPoint& rUV, double& rfOpacity) const;
         };
@@ -89,30 +101,26 @@ namespace drawinglayer
 {
     namespace texture
     {
-        class DRAWINGLAYER_DLLPUBLIC GeoTexSvxBitmapTiled : public GeoTexSvxBitmap
+        class DRAWINGLAYER_DLLPUBLIC GeoTexSvxBitmapExTiled : public GeoTexSvxBitmapEx
         {
         protected:
+            double                                      mfOffsetX;
+            double                                      mfOffsetY;
+
+            /// bitfield
+            bool                                        mbUseOffsetX : 1;
+            bool                                        mbUseOffsetY : 1;
+
             // helpers
-            basegfx::B2DPoint impGetCorrected(const basegfx::B2DPoint& rUV) const
-            {
-                double fX(fmod(rUV.getX() - maTopLeft.getX(), maSize.getX()));
-                double fY(fmod(rUV.getY() - maTopLeft.getY(), maSize.getY()));
-
-                if(fX < 0.0)
-                {
-                    fX += maSize.getX();
-                }
-
-                if(fY < 0.0)
-                {
-                    fY += maSize.getY();
-                }
-
-                return basegfx::B2DPoint(fX + maTopLeft.getX(), fY + maTopLeft.getY());
-            }
+            basegfx::B2DPoint impGetCorrected(const basegfx::B2DPoint& rUV) const;
 
         public:
-            GeoTexSvxBitmapTiled(const Bitmap& rBitmap, const basegfx::B2DPoint& rTopLeft, const basegfx::B2DVector& rSize);
+            GeoTexSvxBitmapExTiled(
+                const BitmapEx& rBitmapEx,
+                const basegfx::B2DRange& rRange,
+                double fOffsetX = 0.0,
+                double fOffsetY = 0.0);
+
             virtual void modifyBColor(const basegfx::B2DPoint& rUV, basegfx::BColor& rBColor, double& rfOpacity) const;
             virtual void modifyOpacity(const basegfx::B2DPoint& rUV, double& rfOpacity) const;
         };

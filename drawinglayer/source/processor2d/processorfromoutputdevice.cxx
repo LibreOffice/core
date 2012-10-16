@@ -26,7 +26,6 @@
 #include <drawinglayer/processor2d/processorfromoutputdevice.hxx>
 #include <drawinglayer/processor2d/vclmetafileprocessor2d.hxx>
 #include <drawinglayer/processor2d/vclpixelprocessor2d.hxx>
-#include <drawinglayer/processor2d/canvasprocessor.hxx>
 #include <vcl/window.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
@@ -53,38 +52,8 @@ namespace drawinglayer
             }
             else
             {
-#ifdef WIN32
-                // for a first AA incarnation VCL-PixelRenderer will be okay since
-                // simple (and fast) GDIPlus support over VCL will be used.
-                // Leaving the code below as a hint for what to do when we will
-                // use canvas renderers in the future
-
-                //static SvtOptionsDrawinglayer aSvtOptionsDrawinglayer;
-
-                //if(false && aSvtOptionsDrawinglayer.IsAntiAliasing())
-                //{
-                //  // for WIN32 AA, create cairo canvas processor
-                //  return new drawinglayer::processor2d::canvasProcessor2D(rViewInformation2D, rTargetOutDev);
-                //}
-                //else
-                //{
-                    // create Pixel Vcl-Processor
-                    return new drawinglayer::processor2d::VclPixelProcessor2D(rViewInformation2D, rTargetOutDev);
-                //}
-#else
-                static bool bTryTestCanvas(false);
-
-                if(bTryTestCanvas)
-                {
-                    // create test-cancas-Processor
-                    return new drawinglayer::processor2d::canvasProcessor2D(rViewInformation2D, rTargetOutDev);
-                }
-                else
-                {
-                    // create Pixel Vcl-Processor
-                    return new drawinglayer::processor2d::VclPixelProcessor2D(rViewInformation2D, rTargetOutDev);
-                }
-#endif
+                // create Pixel Vcl-Processor
+                return new drawinglayer::processor2d::VclPixelProcessor2D(rViewInformation2D, rTargetOutDev);
             }
         }
     } // end of namespace processor2d

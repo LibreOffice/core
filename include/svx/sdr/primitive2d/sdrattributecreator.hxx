@@ -35,7 +35,7 @@ namespace drawinglayer { namespace attribute {
     class SdrFillAttribute;
     class SdrTextAttribute;
     class FillGradientAttribute;
-    class SdrFillBitmapAttribute;
+    class SdrFillGraphicAttribute;
     class SdrShadowTextAttribute;
     class SdrLineShadowTextAttribute;
     class SdrLineFillShadowTextAttribute;
@@ -81,7 +81,7 @@ namespace drawinglayer
         attribute::FillGradientAttribute createNewTransparenceGradientAttribute(
             const SfxItemSet& rSet);
 
-        attribute::SdrFillBitmapAttribute createNewSdrFillBitmapAttribute(
+        attribute::SdrFillGraphicAttribute createNewSdrFillGraphicAttribute(
             const SfxItemSet& rSet);
 
         attribute::SdrShadowTextAttribute createNewSdrShadowTextAttribute(

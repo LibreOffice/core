@@ -24,9 +24,11 @@
 #include <drawinglayer/primitive2d/maskprimitive2d.hxx>
 #include <drawinglayer/primitive2d/fillhatchprimitive2d.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
-#include <drawinglayer/primitive2d/fillbitmapprimitive2d.hxx>
+#include <drawinglayer/primitive2d/fillgraphicprimitive2d.hxx>
 #include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <vcl/graph.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -404,56 +406,69 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        Primitive2DSequence PolyPolygonBitmapPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
+        Primitive2DSequence PolyPolygonGraphicPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
-            if(!getFillBitmap().isDefault())
+            if(!getFillGraphic().isDefault())
             {
-                // create SubSequence with FillBitmapPrimitive2D
-                const basegfx::B2DRange aPolyPolygonRange(getB2DPolyPolygon().getB2DRange());
-                basegfx::B2DHomMatrix aNewObjectTransform;
-                aNewObjectTransform.set(0, 0, aPolyPolygonRange.getWidth());
-                aNewObjectTransform.set(1, 1, aPolyPolygonRange.getHeight());
-                aNewObjectTransform.set(0, 2, aPolyPolygonRange.getMinX());
-                aNewObjectTransform.set(1, 2, aPolyPolygonRange.getMinY());
-                FillBitmapPrimitive2D* pNewBitmap = new FillBitmapPrimitive2D(aNewObjectTransform, getFillBitmap());
-                const Primitive2DReference xSubRef(pNewBitmap);
-                const Primitive2DSequence aSubSequence(&xSubRef, 1L);
+                const Graphic& rGraphic = getFillGraphic().getGraphic();
+                const GraphicType aType(rGraphic.GetType());
 
-                // create mask primitive
-                MaskPrimitive2D* pNewMask = new MaskPrimitive2D(getB2DPolyPolygon(), aSubSequence);
-                const Primitive2DReference xRef(pNewMask);
+                // is there a bitmap or a metafile (do we have content)?
+                if(GRAPHIC_BITMAP == aType || GRAPHIC_GDIMETAFILE == aType)
+                {
+                    const Size aPrefSize(rGraphic.GetPrefSize());
 
-                return Primitive2DSequence(&xRef, 1);
+                    // does content have a size?
+                    if(aPrefSize.Width() && aPrefSize.Height())
+                    {
+                        // create SubSequence with FillGraphicPrimitive2D based on polygon range
+                        const basegfx::B2DRange aPolyPolygonRange(getB2DPolyPolygon().getB2DRange());
+                        const basegfx::B2DHomMatrix aNewObjectTransform(
+                            basegfx::tools::createScaleTranslateB2DHomMatrix(
+                                aPolyPolygonRange.getRange(),
+                                aPolyPolygonRange.getMinimum()));
+                        const Primitive2DReference xSubRef(
+                            new FillGraphicPrimitive2D(
+                                aNewObjectTransform,
+                                getFillGraphic()));
+
+                        // embed to mask primitive
+                        const Primitive2DReference xRef(
+                            new MaskPrimitive2D(
+                                getB2DPolyPolygon(),
+                                Primitive2DSequence(&xSubRef, 1)));
+
+                        return Primitive2DSequence(&xRef, 1);
+                    }
+                }
             }
-            else
-            {
-                return Primitive2DSequence();
-            }
+
+            return Primitive2DSequence();
         }
 
-        PolyPolygonBitmapPrimitive2D::PolyPolygonBitmapPrimitive2D(
+        PolyPolygonGraphicPrimitive2D::PolyPolygonGraphicPrimitive2D(
             const basegfx::B2DPolyPolygon& rPolyPolygon,
-            const attribute::FillBitmapAttribute& rFillBitmap)
+            const attribute::FillGraphicAttribute& rFillGraphic)
         :   BufferedDecompositionPrimitive2D(),
             maPolyPolygon(rPolyPolygon),
-            maFillBitmap(rFillBitmap)
+            maFillGraphic(rFillGraphic)
         {
         }
 
-        bool PolyPolygonBitmapPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
+        bool PolyPolygonGraphicPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
         {
             if(BufferedDecompositionPrimitive2D::operator==(rPrimitive))
             {
-                const PolyPolygonBitmapPrimitive2D& rCompare = (PolyPolygonBitmapPrimitive2D&)rPrimitive;
+                const PolyPolygonGraphicPrimitive2D& rCompare = (PolyPolygonGraphicPrimitive2D&)rPrimitive;
 
-                return (getFillBitmap() == rCompare.getFillBitmap());
+                return (getFillGraphic() == rCompare.getFillGraphic());
             }
 
             return false;
         }
 
         // provide unique ID
-        ImplPrimitive2DIDBlock(PolyPolygonBitmapPrimitive2D, PRIMITIVE2D_ID_POLYPOLYGONBITMAPPRIMITIVE2D)
+        ImplPrimitive2DIDBlock(PolyPolygonGraphicPrimitive2D, PRIMITIVE2D_ID_POLYPOLYGONGRAPHICPRIMITIVE2D)
 
     } // end of namespace primitive2d
 } // end of namespace drawinglayer

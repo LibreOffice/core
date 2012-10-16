@@ -27,7 +27,7 @@
 #include <drawinglayer/attribute/strokeattribute.hxx>
 #include <drawinglayer/attribute/linestartendattribute.hxx>
 #include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
-#include <drawinglayer/attribute/sdrfillbitmapattribute.hxx>
+#include <drawinglayer/attribute/sdrfillgraphicattribute.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <drawinglayer/primitive2d/shadowprimitive2d.hxx>
 #include <svx/sdr/attribute/sdrtextattribute.hxx>
@@ -74,10 +74,10 @@ namespace drawinglayer
             {
                 pNewFillPrimitive = new PolyPolygonHatchPrimitive2D(aScaledPolyPolygon, rFill.getColor(), rFill.getHatch());
             }
-            else if(!rFill.getBitmap().isDefault())
+            else if(!rFill.getFillGraphic().isDefault())
             {
                 const basegfx::B2DRange aRange(basegfx::tools::getRange(aScaledPolyPolygon));
-                pNewFillPrimitive = new PolyPolygonBitmapPrimitive2D(aScaledPolyPolygon, rFill.getBitmap().getFillBitmapAttribute(aRange));
+                pNewFillPrimitive = new PolyPolygonGraphicPrimitive2D(aScaledPolyPolygon, rFill.getFillGraphic().createFillGraphicAttribute(aRange));
             }
             else
             {

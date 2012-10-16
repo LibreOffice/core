@@ -23,7 +23,7 @@
 #include <drawinglayer/drawinglayerdllapi.h>
 
 #include <drawinglayer/primitive3d/groupprimitive3d.hxx>
-#include <drawinglayer/attribute/fillbitmapattribute.hxx>
+#include <drawinglayer/attribute/fillgraphicattribute.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/vector/b2dvector.hxx>
 #include <drawinglayer/attribute/fillgradientattribute.hxx>
@@ -169,19 +169,19 @@ namespace drawinglayer
         {
         private:
             /// bitmap fill attribute
-            attribute::FillBitmapAttribute      maFillBitmapAttribute;
+            attribute::FillGraphicAttribute     maFillGraphicAttribute;
 
         public:
             /// constructor
             BitmapTexturePrimitive3D(
-                const attribute::FillBitmapAttribute& rFillBitmapAttribute,
+                const attribute::FillGraphicAttribute& rFillGraphicAttribute,
                 const Primitive3DSequence& rChildren,
                 const basegfx::B2DVector& rTextureSize,
                 bool bModulate,
                 bool bFilter);
 
             /// data read access
-            const attribute::FillBitmapAttribute& getFillBitmapAttribute() const { return maFillBitmapAttribute; }
+            const attribute::FillGraphicAttribute& getFillGraphicAttribute() const { return maFillGraphicAttribute; }
 
             /// compare operator
             virtual bool operator==(const BasePrimitive3D& rPrimitive) const;

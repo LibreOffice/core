@@ -24,7 +24,7 @@
 #include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
 #include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
 #include <drawinglayer/primitive2d/bitmapprimitive2d.hxx>
-#include <drawinglayer/primitive2d/fillbitmapprimitive2d.hxx>
+#include <drawinglayer/primitive2d/fillgraphicprimitive2d.hxx>
 #include <drawinglayer/primitive2d/metafileprimitive2d.hxx>
 #include <drawinglayer/primitive2d/maskprimitive2d.hxx>
 #include <drawinglayer/primitive2d/modifiedcolorprimitive2d.hxx>
@@ -179,10 +179,10 @@ namespace drawinglayer
                     RenderBitmapPrimitive2D(static_cast< const primitive2d::BitmapPrimitive2D& >(rCandidate));
                     break;
                 }
-                case PRIMITIVE2D_ID_FILLBITMAPPRIMITIVE2D :
+                case PRIMITIVE2D_ID_FILLGRAPHICPRIMITIVE2D :
                 {
                     // direct draw of fillBitmapPrimitive
-                    RenderFillBitmapPrimitive2D(static_cast< const primitive2d::FillBitmapPrimitive2D& >(rCandidate));
+                    RenderFillGraphicPrimitive2D(static_cast< const primitive2d::FillGraphicPrimitive2D& >(rCandidate));
                     break;
                 }
                 case PRIMITIVE2D_ID_POLYPOLYGONGRADIENTPRIMITIVE2D :
@@ -191,10 +191,10 @@ namespace drawinglayer
                     RenderPolyPolygonGradientPrimitive2D(static_cast< const primitive2d::PolyPolygonGradientPrimitive2D& >(rCandidate));
                     break;
                 }
-                case PRIMITIVE2D_ID_POLYPOLYGONBITMAPPRIMITIVE2D :
+                case PRIMITIVE2D_ID_POLYPOLYGONGRAPHICPRIMITIVE2D :
                 {
                     // direct draw of bitmap
-                    RenderPolyPolygonBitmapPrimitive2D(static_cast< const primitive2d::PolyPolygonBitmapPrimitive2D& >(rCandidate));
+                    RenderPolyPolygonGraphicPrimitive2D(static_cast< const primitive2d::PolyPolygonGraphicPrimitive2D& >(rCandidate));
                     break;
                 }
                 case PRIMITIVE2D_ID_POLYPOLYGONCOLORPRIMITIVE2D :

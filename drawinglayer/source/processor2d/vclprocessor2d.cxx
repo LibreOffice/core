@@ -28,8 +28,8 @@
 #include <vclhelperbitmaptransform.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <vclhelperbitmaprender.hxx>
-#include <drawinglayer/attribute/sdrfillbitmapattribute.hxx>
-#include <drawinglayer/primitive2d/fillbitmapprimitive2d.hxx>
+#include <drawinglayer/attribute/sdrfillgraphicattribute.hxx>
+#include <drawinglayer/primitive2d/fillgraphicprimitive2d.hxx>
 #include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
 #include <vclhelpergradient.hxx>
 #include <drawinglayer/primitive2d/metafileprimitive2d.hxx>
@@ -52,6 +52,7 @@
 #include <drawinglayer/primitive2d/svggradientprimitive2d.hxx>
 #include <basegfx/color/bcolor.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <vcl/graph.hxx>
 
 #include "getdigitlanguage.hxx"
 
@@ -474,122 +475,192 @@ namespace drawinglayer
             }
         }
 
-        void VclProcessor2D::RenderFillBitmapPrimitive2D(const primitive2d::FillBitmapPrimitive2D& rFillBitmapCandidate)
+        void VclProcessor2D::RenderFillGraphicPrimitive2D(const primitive2d::FillGraphicPrimitive2D& rFillBitmapCandidate)
         {
-            const attribute::FillBitmapAttribute& rFillBitmapAttribute(rFillBitmapCandidate.getFillBitmap());
+            const attribute::FillGraphicAttribute& rFillGraphicAttribute(rFillBitmapCandidate.getFillGraphic());
             bool bPrimitiveAccepted(false);
+            static bool bTryTilingDirect = true;
 
-            if(rFillBitmapAttribute.getTiling())
+            // #121194# when tiling is used and content is bitmap-based, do direct tiling in the
+            // renderer on pixel base to ensure tight fitting. Do not do this when
+            // the fill is rotated or sheared.
+
+            // ovveride static bool (for debug) and tiling is active
+            if(bTryTilingDirect && rFillGraphicAttribute.getTiling())
             {
-                // decompose matrix to check for shear, rotate and mirroring
-                basegfx::B2DHomMatrix aLocalTransform(maCurrentTransformation * rFillBitmapCandidate.getTransformation());
-                basegfx::B2DVector aScale, aTranslate;
-                double fRotate, fShearX;
-                aLocalTransform.decompose(aScale, aTranslate, fRotate, fShearX);
-
-                if(basegfx::fTools::equalZero(fRotate) && basegfx::fTools::equalZero(fShearX))
+                // content is bitmap(ex)
+                //
+                // for SVG support, force decomposition when SVG is present. This will lead to use
+                // the primitive representation of the svg directly.
+                //
+                // when graphic is animated, force decomposition to use the correct graphic, else
+                // fill style will not be animated
+                if(GRAPHIC_BITMAP == rFillGraphicAttribute.getGraphic().GetType()
+                    && !rFillGraphicAttribute.getGraphic().getSvgData().get()
+                    && !rFillGraphicAttribute.getGraphic().IsAnimated())
                 {
-                    // no shear or rotate, draw direct in pixel coordinates
-                    bPrimitiveAccepted = true;
-                    BitmapEx aBitmapEx(rFillBitmapAttribute.getBitmapEx());
-                    bool bPainted(false);
+                    // decompose matrix to check for shear, rotate and mirroring
+                    basegfx::B2DHomMatrix aLocalTransform(maCurrentTransformation * rFillBitmapCandidate.getTransformation());
+                    basegfx::B2DVector aScale, aTranslate;
+                    double fRotate, fShearX;
+                    aLocalTransform.decompose(aScale, aTranslate, fRotate, fShearX);
 
-                    if(maBColorModifierStack.count())
+                    // when nopt rotated/sheared
+                    if(basegfx::fTools::equalZero(fRotate) && basegfx::fTools::equalZero(fShearX))
                     {
-                        aBitmapEx = impModifyBitmapEx(maBColorModifierStack, aBitmapEx);
+                        // no shear or rotate, draw direct in pixel coordinates
+                        bPrimitiveAccepted = true;
 
-                        if(aBitmapEx.IsEmpty())
-                        {
-                            // color gets completely replaced, get it
-                            const basegfx::BColor aModifiedColor(maBColorModifierStack.getModifiedColor(basegfx::BColor()));
-                            basegfx::B2DPolygon aPolygon(basegfx::tools::createUnitPolygon());
-                            aPolygon.transform(aLocalTransform);
+                        // transform object range to device coordinates (pixels). Use
+                        // the device transformation for better accuracy
+                        basegfx::B2DRange aObjectRange(aTranslate, aTranslate + aScale);
+                        aObjectRange.transform(mpOutputDevice->GetViewTransformation());
 
-                            mpOutputDevice->SetFillColor(Color(aModifiedColor));
-                            mpOutputDevice->SetLineColor();
-                            mpOutputDevice->DrawPolygon(aPolygon);
-
-                            bPainted = true;
-                        }
-                    }
-
-                    if(!bPainted)
-                    {
-                        const basegfx::B2DPoint aObjTopLeft(aTranslate.getX(), aTranslate.getY());
-                        const basegfx::B2DPoint aObjBottomRight(aTranslate.getX() + aScale.getX(), aTranslate.getY() + aScale.getY());
-                        const Point aObjTL(mpOutputDevice->LogicToPixel(Point((sal_Int32)aObjTopLeft.getX(), (sal_Int32)aObjTopLeft.getY())));
-                        const Point aObjBR(mpOutputDevice->LogicToPixel(Point((sal_Int32)aObjBottomRight.getX(), (sal_Int32)aObjBottomRight.getY())));
-
-                        const basegfx::B2DPoint aBmpTopLeft(aLocalTransform * rFillBitmapAttribute.getTopLeft());
-                        const basegfx::B2DPoint aBmpBottomRight(aLocalTransform * basegfx::B2DPoint(rFillBitmapAttribute.getTopLeft() + rFillBitmapAttribute.getSize()));
-                        const Point aBmpTL(mpOutputDevice->LogicToPixel(Point((sal_Int32)aBmpTopLeft.getX(), (sal_Int32)aBmpTopLeft.getY())));
-                        const Point aBmpBR(mpOutputDevice->LogicToPixel(Point((sal_Int32)aBmpBottomRight.getX(), (sal_Int32)aBmpBottomRight.getY())));
-
-                        sal_Int32 nOWidth(aObjBR.X() - aObjTL.X());
-                        sal_Int32 nOHeight(aObjBR.Y() - aObjTL.Y());
+                        // extract discrete size of object
+                        const sal_Int32 nOWidth(basegfx::fround(aObjectRange.getWidth()));
+                        const sal_Int32 nOHeight(basegfx::fround(aObjectRange.getHeight()));
 
                         // only do something when object has a size in discrete units
                         if(nOWidth > 0 && nOHeight > 0)
                         {
-                            sal_Int32 nBWidth(aBmpBR.X() - aBmpTL.X());
-                            sal_Int32 nBHeight(aBmpBR.Y() - aBmpTL.Y());
+                            // transform graphic range to device coordinates (pixels). Use
+                            // the device transformation for better accuracy
+                            basegfx::B2DRange aGraphicRange(rFillGraphicAttribute.getGraphicRange());
+                            aGraphicRange.transform(mpOutputDevice->GetViewTransformation() * aLocalTransform);
+
+                            // extract discrete size of graphic
+                            const sal_Int32 nBWidth(basegfx::fround(aGraphicRange.getWidth()));
+                            const sal_Int32 nBHeight(basegfx::fround(aGraphicRange.getHeight()));
 
                             // only do something when bitmap fill has a size in discrete units
                             if(nBWidth > 0 && nBHeight > 0)
                             {
-                                sal_Int32 nBLeft(aBmpTL.X());
-                                sal_Int32 nBTop(aBmpTL.Y());
-
-                                if(nBLeft > aObjTL.X())
-                                {
-                                    nBLeft -= ((nBLeft / nBWidth) + 1L) * nBWidth;
-                                }
-
-                                if(nBLeft + nBWidth <= aObjTL.X())
-                                {
-                                    nBLeft -= (nBLeft / nBWidth) * nBWidth;
-                                }
-
-                                if(nBTop > aObjTL.Y())
-                                {
-                                    nBTop -= ((nBTop / nBHeight) + 1L) * nBHeight;
-                                }
-
-                                if(nBTop + nBHeight <= aObjTL.Y())
-                                {
-                                    nBTop -= (nBTop / nBHeight) * nBHeight;
-                                }
-
                                 // nBWidth, nBHeight is the pixel size of the neede bitmap. To not need to scale it
                                 // in vcl many times, create a size-optimized version
                                 const Size aNeededBitmapSizePixel(nBWidth, nBHeight);
+                                BitmapEx aBitmapEx(rFillGraphicAttribute.getGraphic().GetBitmapEx(
+                                    GraphicConversionParameters(
+                                        aNeededBitmapSizePixel, // get the correct size immediately
+                                        false, // no unlimited size
+                                        false, // Use AntiAliasing
+                                        false, //SnapHorVerLines
+                                        true // ScaleHighQuality
+                                        )));
+                                bool bPainted(false);
 
-                                if(aNeededBitmapSizePixel != aBitmapEx.GetSizePixel())
+                                if(maBColorModifierStack.count())
                                 {
-                                    aBitmapEx.Scale(aNeededBitmapSizePixel);
-                                }
+                                    // when color modifier, apply to bitmap
+                                    aBitmapEx = impModifyBitmapEx(maBColorModifierStack, aBitmapEx);
 
-                                // prepare OutDev
-                                const Point aEmptyPoint(0, 0);
-                                const Rectangle aVisiblePixel(aEmptyPoint, mpOutputDevice->GetOutputSizePixel());
-                                const bool bWasEnabled(mpOutputDevice->IsMapModeEnabled());
-                                mpOutputDevice->EnableMapMode(false);
-
-                                for(sal_Int32 nXPos(nBLeft); nXPos < aObjTL.X() + nOWidth; nXPos += nBWidth)
-                                {
-                                    for(sal_Int32 nYPos(nBTop); nYPos < aObjTL.Y() + nOHeight; nYPos += nBHeight)
+                                    // impModifyBitmapEx uses empty bitmap as sign to return that
+                                    // the content will be completely replaced to mono color, use shortcut
+                                    if(aBitmapEx.IsEmpty())
                                     {
-                                        const Rectangle aOutRectPixel(Point(nXPos, nYPos), aNeededBitmapSizePixel);
+                                        // color gets completely replaced, get it
+                                        const basegfx::BColor aModifiedColor(maBColorModifierStack.getModifiedColor(basegfx::BColor()));
+                                        basegfx::B2DPolygon aPolygon(basegfx::tools::createUnitPolygon());
+                                        aPolygon.transform(aLocalTransform);
 
-                                        if(aOutRectPixel.IsOver(aVisiblePixel))
-                                        {
-                                            mpOutputDevice->DrawBitmapEx(aOutRectPixel.TopLeft(), aBitmapEx);
-                                        }
+                                        mpOutputDevice->SetFillColor(Color(aModifiedColor));
+                                        mpOutputDevice->SetLineColor();
+                                        mpOutputDevice->DrawPolygon(aPolygon);
+
+                                        bPainted = true;
                                     }
                                 }
 
-                                // restore OutDev
-                                mpOutputDevice->EnableMapMode(bWasEnabled);
+                                if(!bPainted)
+                                {
+                                    sal_Int32 nBLeft(basegfx::fround(aGraphicRange.getMinX()));
+                                    sal_Int32 nBTop(basegfx::fround(aGraphicRange.getMinY()));
+                                    const sal_Int32 nOLeft(basegfx::fround(aObjectRange.getMinX()));
+                                    const sal_Int32 nOTop(basegfx::fround(aObjectRange.getMinY()));
+                                    sal_Int32 nPosX(0);
+                                    sal_Int32 nPosY(0);
+
+                                    if(nBLeft > nOLeft)
+                                    {
+                                        const sal_Int32 nDiff((nBLeft / nBWidth) + 1);
+
+                                        nPosX -= nDiff;
+                                        nBLeft -= nDiff * nBWidth;
+                                    }
+
+                                    if(nBLeft + nBWidth <= nOLeft)
+                                    {
+                                        const sal_Int32 nDiff(-nBLeft / nBWidth);
+
+                                        nPosX += nDiff;
+                                        nBLeft += nDiff * nBWidth;
+                                    }
+
+                                    if(nBTop > nOTop)
+                                    {
+                                        const sal_Int32 nDiff((nBTop / nBHeight) + 1);
+
+                                        nPosY -= nDiff;
+                                        nBTop -= nDiff * nBHeight;
+                                    }
+
+                                    if(nBTop + nBHeight <= nOTop)
+                                    {
+                                        const sal_Int32 nDiff(-nBTop / nBHeight);
+
+                                        nPosY += nDiff;
+                                        nBTop += nDiff * nBHeight;
+                                    }
+
+                                    // prepare OutDev
+                                    const Point aEmptyPoint(0, 0);
+                                    const Rectangle aVisiblePixel(aEmptyPoint, mpOutputDevice->GetOutputSizePixel());
+                                    const bool bWasEnabled(mpOutputDevice->IsMapModeEnabled());
+                                    mpOutputDevice->EnableMapMode(false);
+
+                                    // check if offset is used
+                                    const sal_Int32 nOffsetX(basegfx::fround(rFillGraphicAttribute.getOffsetX() * nBWidth));
+
+                                    if(nOffsetX)
+                                    {
+                                        // offset in X, so iterate over Y first and draw lines
+                                        for(sal_Int32 nYPos(nBTop); nYPos < nOTop + nOHeight; nYPos += nBHeight, nPosY++)
+                                        {
+                                            for(sal_Int32 nXPos(nPosY % 2 ? nBLeft - nBWidth + nOffsetX : nBLeft);
+                                                nXPos < nOLeft + nOWidth; nXPos += nBWidth)
+                                            {
+                                                const Rectangle aOutRectPixel(Point(nXPos, nYPos), aNeededBitmapSizePixel);
+
+                                                if(aOutRectPixel.IsOver(aVisiblePixel))
+                                                {
+                                                    mpOutputDevice->DrawBitmapEx(aOutRectPixel.TopLeft(), aBitmapEx);
+                                                }
+                                            }
+                                        }
+                                    }
+                                    else
+                                    {
+                                        // check if offset is used
+                                        const sal_Int32 nOffsetY(basegfx::fround(rFillGraphicAttribute.getOffsetY() * nBHeight));
+
+                                        // possible offset in Y, so iterate over X first and draw columns
+                                        for(sal_Int32 nXPos(nBLeft); nXPos < nOLeft + nOWidth; nXPos += nBWidth, nPosX++)
+                                        {
+                                            for(sal_Int32 nYPos(nPosX % 2 ? nBTop - nBHeight + nOffsetY : nBTop);
+                                                nYPos < nOTop + nOHeight; nYPos += nBHeight)
+                                            {
+                                                const Rectangle aOutRectPixel(Point(nXPos, nYPos), aNeededBitmapSizePixel);
+
+                                                if(aOutRectPixel.IsOver(aVisiblePixel))
+                                                {
+                                                    mpOutputDevice->DrawBitmapEx(aOutRectPixel.TopLeft(), aBitmapEx);
+                                                }
+                                            }
+                                        }
+                                    }
+
+                                    // restore OutDev
+                                    mpOutputDevice->EnableMapMode(bWasEnabled);
+                                }
                             }
                         }
                     }
@@ -641,89 +712,104 @@ namespace drawinglayer
             }
         }
 
-        // direct draw of bitmap
-        void VclProcessor2D::RenderPolyPolygonBitmapPrimitive2D(const primitive2d::PolyPolygonBitmapPrimitive2D& rPolygonCandidate)
+        // direct draw of Graphic
+        void VclProcessor2D::RenderPolyPolygonGraphicPrimitive2D(const primitive2d::PolyPolygonGraphicPrimitive2D& rPolygonCandidate)
         {
             bool bDone(false);
             const basegfx::B2DPolyPolygon& rPolyPolygon = rPolygonCandidate.getB2DPolyPolygon();
 
-            if(rPolyPolygon.count())
-            {
-                const attribute::FillBitmapAttribute& rFillBitmapAttribute = rPolygonCandidate.getFillBitmap();
-                const BitmapEx& rBitmapEx = rFillBitmapAttribute.getBitmapEx();
-
-                if(rBitmapEx.IsEmpty())
-                {
-                    // empty bitmap, done
-                    bDone = true;
-                }
-                else
-                {
-                    // try to catch cases where the bitmap will be color-modified to a single
-                    // color (e.g. shadow). This would NOT be optimizable with an transparence channel
-                    // at the Bitmap which we do not have here. When this should change, this
-                    // optimization has to be reworked accordingly.
-                    const sal_uInt32 nBColorModifierStackCount(maBColorModifierStack.count());
-
-                    if(nBColorModifierStackCount)
-                    {
-                        const basegfx::BColorModifier& rTopmostModifier = maBColorModifierStack.getBColorModifier(nBColorModifierStackCount - 1);
-
-                        if(basegfx::BCOLORMODIFYMODE_REPLACE == rTopmostModifier.getMode())
-                        {
-                            // the bitmap fill is in unified color, so we can replace it with
-                            // a single polygon fill. The form of the fill depends on tiling
-                            if(rFillBitmapAttribute.getTiling())
-                            {
-                                // with tiling, fill the whole PolyPolygon with the modifier color
-                                basegfx::B2DPolyPolygon aLocalPolyPolygon(rPolyPolygon);
-
-                                aLocalPolyPolygon.transform(maCurrentTransformation);
-                                mpOutputDevice->SetLineColor();
-                                mpOutputDevice->SetFillColor(Color(rTopmostModifier.getBColor()));
-                                mpOutputDevice->DrawPolyPolygon(aLocalPolyPolygon);
-                            }
-                            else
-                            {
-                                // without tiling, only the area common to the bitmap tile and the
-                                // PolyPolygon is filled. Create the bitmap tile area in object
-                                // coordinates. For this, the object transformation needs to be created
-                                // from the already scaled PolyPolygon. The tile area in object
-                                // coordinates wil always be non-rotated, so it's not necessary to
-                                // work with a polygon here
-                                basegfx::B2DRange aTileRange(rFillBitmapAttribute.getTopLeft(),
-                                    rFillBitmapAttribute.getTopLeft() + rFillBitmapAttribute.getSize());
-                                const basegfx::B2DRange aPolyPolygonRange(rPolyPolygon.getB2DRange());
-                                basegfx::B2DHomMatrix aNewObjectTransform;
-
-                                aNewObjectTransform.set(0, 0, aPolyPolygonRange.getWidth());
-                                aNewObjectTransform.set(1, 1, aPolyPolygonRange.getHeight());
-                                aNewObjectTransform.set(0, 2, aPolyPolygonRange.getMinX());
-                                aNewObjectTransform.set(1, 2, aPolyPolygonRange.getMinY());
-                                aTileRange.transform(aNewObjectTransform);
-
-                                // now clip the object polyPolygon against the tile range
-                                // to get the common area (OR)
-                                basegfx::B2DPolyPolygon aTarget = basegfx::tools::clipPolyPolygonOnRange(rPolyPolygon, aTileRange, true, false);
-
-                                if(aTarget.count())
-                                {
-                                    aTarget.transform(maCurrentTransformation);
-                                    mpOutputDevice->SetLineColor();
-                                    mpOutputDevice->SetFillColor(Color(rTopmostModifier.getBColor()));
-                                    mpOutputDevice->DrawPolyPolygon(aTarget);
-                                }
-                            }
-
-                            bDone = true;
-                        }
-                    }
-                }
-            }
-            else
+            // #121194# Todo: check if this works
+            if(!rPolyPolygon.count())
             {
                 // empty polyPolygon, done
                 bDone = true;
+            }
+            else
+            {
+                const attribute::FillGraphicAttribute& rFillGraphicAttribute = rPolygonCandidate.getFillGraphic();
+
+                // try to catch cases where the graphic will be color-modified to a single
+                // color (e.g. shadow)
+                switch(rFillGraphicAttribute.getGraphic().GetType())
+                {
+                    case GRAPHIC_GDIMETAFILE:
+                    {
+                        // metafiles are potentially transparent, cannot optimize´, not done
+                        break;
+                    }
+                    case GRAPHIC_BITMAP:
+                    {
+                        if(!rFillGraphicAttribute.getGraphic().IsTransparent() && !rFillGraphicAttribute.getGraphic().IsAlpha())
+                        {
+                            // bitmap is not transparent and has no alpha
+                            const sal_uInt32 nBColorModifierStackCount(maBColorModifierStack.count());
+
+                            if(nBColorModifierStackCount)
+                            {
+                                const basegfx::BColorModifier& rTopmostModifier = maBColorModifierStack.getBColorModifier(nBColorModifierStackCount - 1);
+
+                                if(basegfx::BCOLORMODIFYMODE_REPLACE == rTopmostModifier.getMode())
+                                {
+                                    // the bitmap fill is in unified color, so we can replace it with
+                                    // a single polygon fill. The form of the fill depends on tiling
+                                    if(rFillGraphicAttribute.getTiling())
+                                    {
+                                        // with tiling, fill the whole PolyPolygon with the modifier color
+                                        basegfx::B2DPolyPolygon aLocalPolyPolygon(rPolyPolygon);
+
+                                        aLocalPolyPolygon.transform(maCurrentTransformation);
+                                        mpOutputDevice->SetLineColor();
+                                        mpOutputDevice->SetFillColor(Color(rTopmostModifier.getBColor()));
+                                        mpOutputDevice->DrawPolyPolygon(aLocalPolyPolygon);
+                                    }
+                                    else
+                                    {
+                                        // without tiling, only the area common to the bitmap tile and the
+                                        // PolyPolygon is filled. Create the bitmap tile area in object
+                                        // coordinates. For this, the object transformation needs to be created
+                                        // from the already scaled PolyPolygon. The tile area in object
+                                        // coordinates wil always be non-rotated, so it's not necessary to
+                                        // work with a polygon here
+                                        basegfx::B2DRange aTileRange(rFillGraphicAttribute.getGraphicRange());
+                                        const basegfx::B2DRange aPolyPolygonRange(rPolyPolygon.getB2DRange());
+                                        const basegfx::B2DHomMatrix aNewObjectTransform(
+                                            basegfx::tools::createScaleTranslateB2DHomMatrix(
+                                                aPolyPolygonRange.getRange(),
+                                                aPolyPolygonRange.getMinimum()));
+
+                                        aTileRange.transform(aNewObjectTransform);
+
+                                        // now clip the object polyPolygon against the tile range
+                                        // to get the common area
+                                        basegfx::B2DPolyPolygon aTarget = basegfx::tools::clipPolyPolygonOnRange(
+                                            rPolyPolygon,
+                                            aTileRange,
+                                            true,
+                                            false);
+
+                                        if(aTarget.count())
+                                        {
+                                            aTarget.transform(maCurrentTransformation);
+                                            mpOutputDevice->SetLineColor();
+                                            mpOutputDevice->SetFillColor(Color(rTopmostModifier.getBColor()));
+                                            mpOutputDevice->DrawPolyPolygon(aTarget);
+                                        }
+                                    }
+
+                                    // simplified output executed, we are done
+                                    bDone = true;
+                                }
+                            }
+                        }
+                        break;
+                    }
+                    default: //GRAPHIC_NONE, GRAPHIC_DEFAULT
+                    {
+                        // empty graphic, we are done
+                        bDone = true;
+                        break;
+                    }
+                }
             }
 
             if(!bDone)

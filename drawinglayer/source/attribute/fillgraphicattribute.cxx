@@ -1,0 +1,156 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+
+#include <drawinglayer/attribute/fillgraphicattribute.hxx>
+#include <vcl/graph.hxx>
+
+//////////////////////////////////////////////////////////////////////////////
+
+namespace drawinglayer
+{
+    namespace attribute
+    {
+        class ImpFillGraphicAttribute
+        {
+        public:
+            // data definitions
+            Graphic                                 maGraphic;
+            basegfx::B2DRange                       maGraphicRange;
+
+            // bitfield
+            unsigned                                mbTiling : 1;
+
+            // tiling definitions, offsets in X/Y in percent for each 2nd row.
+            // If both are set, Y is ignored (X has precedence)
+            double                                  mfOffsetX;
+            double                                  mfOffsetY;
+
+            ImpFillGraphicAttribute(
+                const Graphic& rGraphic,
+                const basegfx::B2DRange& rGraphicRange,
+                bool bTiling,
+                double fOffsetX,
+                double fOffsetY)
+            :   maGraphic(rGraphic),
+                maGraphicRange(rGraphicRange),
+                mbTiling(bTiling),
+                mfOffsetX(fOffsetX),
+                mfOffsetY(fOffsetY)
+            {
+            }
+
+            ImpFillGraphicAttribute()
+            :   maGraphic(Graphic()),
+                maGraphicRange(basegfx::B2DRange()),
+                mbTiling(false),
+                mfOffsetX(0.0),
+                mfOffsetY(0.0)
+            {
+            }
+
+            // data read access
+            const Graphic& getGraphic() const { return maGraphic; }
+            const basegfx::B2DRange& getGraphicRange() const { return maGraphicRange; }
+            bool getTiling() const { return mbTiling; }
+            double getOffsetX() const { return mfOffsetX; }
+            double getOffsetY() const { return mfOffsetY; }
+
+            bool operator==(const ImpFillGraphicAttribute& rCandidate) const
+            {
+                return (getGraphic() == rCandidate.getGraphic()
+                    && getGraphicRange() == rCandidate.getGraphicRange()
+                    && getTiling() == rCandidate.getTiling()
+                    && getOffsetX() == rCandidate.getOffsetX()
+                    && getOffsetY() == rCandidate.getOffsetY());
+            }
+        };
+
+        namespace
+        {
+            struct theGlobalDefault :
+                public rtl::Static< FillGraphicAttribute::ImplType, theGlobalDefault > {};
+        }
+
+        FillGraphicAttribute::FillGraphicAttribute(
+            const Graphic& rGraphic,
+            const basegfx::B2DRange& rGraphicRange,
+            bool bTiling,
+            double fOffsetX,
+            double fOffsetY)
+        :   mpFillGraphicAttribute(ImpFillGraphicAttribute(
+                rGraphic, rGraphicRange, bTiling,
+                    basegfx::clamp(fOffsetX, 0.0, 1.0),
+                    basegfx::clamp(fOffsetY, 0.0, 1.0)))
+        {
+        }
+
+        FillGraphicAttribute::FillGraphicAttribute(const FillGraphicAttribute& rCandidate)
+        :   mpFillGraphicAttribute(rCandidate.mpFillGraphicAttribute)
+        {
+        }
+
+        FillGraphicAttribute::~FillGraphicAttribute()
+        {
+        }
+
+        bool FillGraphicAttribute::isDefault() const
+        {
+            return mpFillGraphicAttribute.same_object(theGlobalDefault::get());
+        }
+
+        FillGraphicAttribute& FillGraphicAttribute::operator=(const FillGraphicAttribute& rCandidate)
+        {
+            mpFillGraphicAttribute = rCandidate.mpFillGraphicAttribute;
+            return *this;
+        }
+
+        bool FillGraphicAttribute::operator==(const FillGraphicAttribute& rCandidate) const
+        {
+            return rCandidate.mpFillGraphicAttribute == mpFillGraphicAttribute;
+        }
+
+        const Graphic& FillGraphicAttribute::getGraphic() const
+        {
+            return mpFillGraphicAttribute->getGraphic();
+        }
+
+        const basegfx::B2DRange& FillGraphicAttribute::getGraphicRange() const
+        {
+            return mpFillGraphicAttribute->getGraphicRange();
+        }
+
+        bool FillGraphicAttribute::getTiling() const
+        {
+            return mpFillGraphicAttribute->getTiling();
+        }
+
+        double FillGraphicAttribute::getOffsetX() const
+        {
+            return mpFillGraphicAttribute->getOffsetX();
+        }
+
+        double FillGraphicAttribute::getOffsetY() const
+        {
+            return mpFillGraphicAttribute->getOffsetY();
+        }
+
+    } // end of namespace attribute
+} // end of namespace drawinglayer
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

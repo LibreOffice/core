@@ -23,7 +23,7 @@
 #include <drawinglayer/drawinglayerdllapi.h>
 
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
-#include <drawinglayer/attribute/fillbitmapattribute.hxx>
+#include <drawinglayer/attribute/fillgraphicattribute.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <drawinglayer/attribute/lineattribute.hxx>
 #include <drawinglayer/attribute/strokeattribute.hxx>
@@ -331,26 +331,26 @@ namespace drawinglayer
 } // end of namespace drawinglayer
 
 //////////////////////////////////////////////////////////////////////////////
-// PolyPolygonBitmapPrimitive2D class
+// PolyPolygonGraphicPrimitive2D class
 
 namespace drawinglayer
 {
     namespace primitive2d
     {
-        /** PolyPolygonBitmapPrimitive2D class
+        /** PolyPolygonGraphicPrimitive2D class
 
             This primitive defines a PolyPolygon filled with bitmap data
             (including transparence). The decomosition will create a MaskPrimitive2D
-            containing a FillBitmapPrimitive2D.
+            containing a FillGraphicPrimitive2D.
          */
-        class DRAWINGLAYER_DLLPUBLIC PolyPolygonBitmapPrimitive2D : public BufferedDecompositionPrimitive2D
+        class DRAWINGLAYER_DLLPUBLIC PolyPolygonGraphicPrimitive2D : public BufferedDecompositionPrimitive2D
         {
         private:
             /// the PolyPolygon geometry
             basegfx::B2DPolyPolygon                     maPolyPolygon;
 
             /// the bitmap fill definition (may include tiling)
-            attribute::FillBitmapAttribute              maFillBitmap;
+            attribute::FillGraphicAttribute             maFillGraphic;
 
         protected:
             /// local decomposition.
@@ -358,13 +358,13 @@ namespace drawinglayer
 
         public:
             /// constructor
-            PolyPolygonBitmapPrimitive2D(
+            PolyPolygonGraphicPrimitive2D(
                 const basegfx::B2DPolyPolygon& rPolyPolygon,
-                const attribute::FillBitmapAttribute& rFillBitmap);
+                const attribute::FillGraphicAttribute& rFillGraphic);
 
             /// data read access
             const basegfx::B2DPolyPolygon& getB2DPolyPolygon() const { return maPolyPolygon; }
-            const attribute::FillBitmapAttribute& getFillBitmap() const { return maFillBitmap; }
+            const attribute::FillGraphicAttribute& getFillGraphic() const { return maFillGraphic; }
 
             /// compare operator
             virtual bool operator==(const BasePrimitive2D& rPrimitive) const;

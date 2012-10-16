@@ -16,9 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-
-#ifndef INCLUDED_DRAWINGLAYER_ATTRIBUTE_SDRFILLATTRIBUTE_HXX
-#define INCLUDED_DRAWINGLAYER_ATTRIBUTE_SDRFILLATTRIBUTE_HXX
+#ifndef INCLUDED_DRAWINGLAYER_ATTRIBUTE_SDRFILLGRAPHICATTRIBUTE_HXX
+#define INCLUDED_DRAWINGLAYER_ATTRIBUTE_SDRFILLGRAPHICATTRIBUTE_HXX
 
 #include <drawinglayer/drawinglayerdllapi.h>
 #include <o3tl/cow_wrapper.hxx>
@@ -26,15 +25,16 @@
 //////////////////////////////////////////////////////////////////////////////
 // predefines
 
+class Graphic;
+
 namespace basegfx {
-    class BColor;
+    class B2DRange;
+    class B2DVector;
 }
 
 namespace drawinglayer { namespace attribute {
-    class ImpSdrFillAttribute;
-    class FillGradientAttribute;
-    class FillHatchAttribute;
-    class SdrFillGraphicAttribute;
+    class FillGraphicAttribute;
+    class ImpSdrFillGraphicAttribute;
 }}
 
 //////////////////////////////////////////////////////////////////////////////
@@ -43,45 +43,54 @@ namespace drawinglayer
 {
     namespace attribute
     {
-        class DRAWINGLAYER_DLLPUBLIC SdrFillAttribute
+        class DRAWINGLAYER_DLLPUBLIC SdrFillGraphicAttribute
         {
         public:
-            typedef o3tl::cow_wrapper< ImpSdrFillAttribute > ImplType;
+            typedef o3tl::cow_wrapper< ImpSdrFillGraphicAttribute > ImplType;
 
         private:
-            ImplType mpSdrFillAttribute;
+            ImplType mpSdrFillGraphicAttribute;
 
         public:
             /// constructors/assignmentoperator/destructor
-            SdrFillAttribute(
-                double fTransparence,
-                const basegfx::BColor& rColor,
-                const FillGradientAttribute& rGradient,
-                const FillHatchAttribute& rHatch,
-                const SdrFillGraphicAttribute& rFillGraphic);
-            SdrFillAttribute();
-            SdrFillAttribute(const SdrFillAttribute& rCandidate);
-            SdrFillAttribute& operator=(const SdrFillAttribute& rCandidate);
-            ~SdrFillAttribute();
+            SdrFillGraphicAttribute(
+                const Graphic& rFillGraphic,
+                const basegfx::B2DVector& rSize,
+                const basegfx::B2DVector& rOffset,
+                const basegfx::B2DVector& rOffsetPosition,
+                const basegfx::B2DVector& rRectPoint,
+                bool bTiling,
+                bool bStretch,
+                bool bLogSize);
+            SdrFillGraphicAttribute();
+            SdrFillGraphicAttribute(const SdrFillGraphicAttribute& rCandidate);
+            SdrFillGraphicAttribute& operator=(const SdrFillGraphicAttribute& rCandidate);
+            ~SdrFillGraphicAttribute();
 
             // checks if the incarnation is default constructed
             bool isDefault() const;
 
             // compare operator
-            bool operator==(const SdrFillAttribute& rCandidate) const;
+            bool operator==(const SdrFillGraphicAttribute& rCandidate) const;
 
             // data read access
-            double getTransparence() const;
-            const basegfx::BColor& getColor() const;
-            const FillGradientAttribute& getGradient() const;
-            const FillHatchAttribute& getHatch() const;
-            const SdrFillGraphicAttribute& getFillGraphic() const;
+            const Graphic& getFillGraphic() const;
+            const basegfx::B2DVector& getSize() const;
+            const basegfx::B2DVector& getOffset() const;
+            const basegfx::B2DVector& getOffsetPosition() const;
+            const basegfx::B2DVector& getRectPoint() const;
+            bool getTiling() const;
+            bool getStretch() const;
+            bool getLogSize() const;
+
+            // FillGraphicAttribute generator
+            FillGraphicAttribute createFillGraphicAttribute(const basegfx::B2DRange& rRange) const;
         };
     } // end of namespace attribute
 } // end of namespace drawinglayer
 
 //////////////////////////////////////////////////////////////////////////////
 
-#endif //INCLUDED_DRAWINGLAYER_ATTRIBUTE_SDRFILLATTRIBUTE_HXX
+#endif //INCLUDED_DRAWINGLAYER_ATTRIBUTE_SDRFILLGRAPHICATTRIBUTE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

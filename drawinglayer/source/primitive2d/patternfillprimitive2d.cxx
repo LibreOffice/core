@@ -50,7 +50,8 @@ namespace drawinglayer
                     {
                         // create tiling matrices
                         ::std::vector< basegfx::B2DHomMatrix > aMatrices;
-                        texture::GeoTexSvxTiled aTiling(getReferenceRange().getMinimum(), getReferenceRange().getRange());
+                        texture::GeoTexSvxTiled aTiling(getReferenceRange());
+
                         aTiling.appendTransformations(aMatrices);
 
                         // check if content needs to be clipped

@@ -52,17 +52,20 @@ private:
     unsigned        mbUnlimitedSize : 1;    // default is false
     unsigned        mbAntiAliase : 1;       // default is false
     unsigned        mbSnapHorVerLines : 1;  // default is false
+    unsigned        mbScaleHighQuality : 1; // default is false
 
 public:
     GraphicConversionParameters(
         const Size& rSizePixel = Size(),
         bool bUnlimitedSize = false,
         bool bAntiAliase = false,
-        bool bSnapHorVerLines = false)
+        bool bSnapHorVerLines = false,
+        bool bScaleHighQuality = false)
     :   maSizePixel(rSizePixel),
         mbUnlimitedSize(bUnlimitedSize),
         mbAntiAliase(bAntiAliase),
-        mbSnapHorVerLines(bSnapHorVerLines)
+        mbSnapHorVerLines(bSnapHorVerLines),
+        mbScaleHighQuality(bScaleHighQuality)
     {
     }
 
@@ -71,6 +74,7 @@ public:
     bool getUnlimitedSize() const { return mbUnlimitedSize; }
     bool getAntiAliase() const { return mbAntiAliase; }
     bool getSnapHorVerLines() const { return mbSnapHorVerLines; }
+    bool getScaleHighQuality() const { return mbScaleHighQuality; }
 };
 
 class VCL_DLLPUBLIC Graphic : public SvDataCopyStream

@@ -16,9 +16,8 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-
-#ifndef INCLUDED_DRAWINGLAYER_ATTRIBUTE_SDRFILLBITMAPATTRIBUTE_HXX
-#define INCLUDED_DRAWINGLAYER_ATTRIBUTE_SDRFILLBITMAPATTRIBUTE_HXX
+#ifndef INCLUDED_DRAWINGLAYER_ATTRIBUTE_FILLGRAPHICATTRIBUTE_HXX
+#define INCLUDED_DRAWINGLAYER_ATTRIBUTE_FILLGRAPHICATTRIBUTE_HXX
 
 #include <drawinglayer/drawinglayerdllapi.h>
 #include <o3tl/cow_wrapper.hxx>
@@ -26,16 +25,14 @@
 //////////////////////////////////////////////////////////////////////////////
 // predefines
 
-class BitmapEx;
+class Graphic;
 
 namespace basegfx {
     class B2DRange;
-    class B2DVector;
 }
 
 namespace drawinglayer { namespace attribute {
-    class FillBitmapAttribute;
-    class ImpSdrFillBitmapAttribute;
+    class ImpFillGraphicAttribute;
 }}
 
 //////////////////////////////////////////////////////////////////////////////
@@ -44,53 +41,45 @@ namespace drawinglayer
 {
     namespace attribute
     {
-        class DRAWINGLAYER_DLLPUBLIC SdrFillBitmapAttribute
+        class DRAWINGLAYER_DLLPUBLIC FillGraphicAttribute
         {
         public:
-            typedef o3tl::cow_wrapper< ImpSdrFillBitmapAttribute > ImplType;
+            typedef o3tl::cow_wrapper< ImpFillGraphicAttribute > ImplType;
 
         private:
-            ImplType mpSdrFillBitmapAttribute;
+            ImplType mpFillGraphicAttribute;
 
         public:
             /// constructors/assignmentoperator/destructor
-            SdrFillBitmapAttribute(
-                const BitmapEx& rBitmapEx,
-                const basegfx::B2DVector& rSize,
-                const basegfx::B2DVector& rOffset,
-                const basegfx::B2DVector& rOffsetPosition,
-                const basegfx::B2DVector& rRectPoint,
-                bool bTiling,
-                bool bStretch,
-                bool bLogSize);
-            SdrFillBitmapAttribute();
-            SdrFillBitmapAttribute(const SdrFillBitmapAttribute& rCandidate);
-            SdrFillBitmapAttribute& operator=(const SdrFillBitmapAttribute& rCandidate);
-            ~SdrFillBitmapAttribute();
+            FillGraphicAttribute(
+                const Graphic& rGraphic,
+                const basegfx::B2DRange& rGraphicRange,
+                bool bTiling = false,
+                double fOffsetX = 0.0,
+                double fOffsetY = 0.0);
+            FillGraphicAttribute();
+            FillGraphicAttribute(const FillGraphicAttribute& rCandidate);
+            FillGraphicAttribute& operator=(const FillGraphicAttribute& rCandidate);
+            ~FillGraphicAttribute();
 
             // checks if the incarnation is default constructed
             bool isDefault() const;
 
             // compare operator
-            bool operator==(const SdrFillBitmapAttribute& rCandidate) const;
+            bool operator==(const FillGraphicAttribute& rCandidate) const;
 
             // data read access
-            const BitmapEx& getBitmapEx() const;
-            const basegfx::B2DVector& getSize() const;
-            const basegfx::B2DVector& getOffset() const;
-            const basegfx::B2DVector& getOffsetPosition() const;
-            const basegfx::B2DVector& getRectPoint() const;
+            const Graphic& getGraphic() const;
+            const basegfx::B2DRange& getGraphicRange() const;
             bool getTiling() const;
-            bool getStretch() const;
-
-            // FillBitmapAttribute generator
-            FillBitmapAttribute getFillBitmapAttribute(const basegfx::B2DRange& rRange) const;
+            double getOffsetX() const;
+            double getOffsetY() const;
         };
     } // end of namespace attribute
 } // end of namespace drawinglayer
 
 //////////////////////////////////////////////////////////////////////////////
 
-#endif //INCLUDED_DRAWINGLAYER_ATTRIBUTE_SDRFILLBITMAPATTRIBUTE_HXX
+#endif //INCLUDED_DRAWINGLAYER_ATTRIBUTE_FILLGRAPHICATTRIBUTE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

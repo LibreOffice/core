@@ -41,7 +41,7 @@ $(eval $(call gb_Library_use_libraries,drawinglayer,\
 
 $(eval $(call gb_Library_add_exception_objects,drawinglayer,\
     drawinglayer/source/animation/animationtiming \
-    drawinglayer/source/attribute/fillbitmapattribute \
+    drawinglayer/source/attribute/fillgraphicattribute \
     drawinglayer/source/attribute/fillgradientattribute \
     drawinglayer/source/attribute/fillhatchattribute \
     drawinglayer/source/attribute/fontattribute \
@@ -50,7 +50,7 @@ $(eval $(call gb_Library_add_exception_objects,drawinglayer,\
     drawinglayer/source/attribute/materialattribute3d \
     drawinglayer/source/attribute/sdrallattribute3d \
     drawinglayer/source/attribute/sdrfillattribute \
-    drawinglayer/source/attribute/sdrfillbitmapattribute \
+    drawinglayer/source/attribute/sdrfillgraphicattribute \
     drawinglayer/source/attribute/sdrlightattribute3d \
     drawinglayer/source/attribute/sdrlightingattribute3d \
     drawinglayer/source/attribute/sdrlineattribute \
@@ -73,9 +73,10 @@ $(eval $(call gb_Library_add_exception_objects,drawinglayer,\
     drawinglayer/source/primitive2d/discreteshadowprimitive2d \
     drawinglayer/source/primitive2d/embedded3dprimitive2d \
     drawinglayer/source/primitive2d/epsprimitive2d \
-    drawinglayer/source/primitive2d/fillbitmapprimitive2d \
+    drawinglayer/source/primitive2d/fillgraphicprimitive2d \
     drawinglayer/source/primitive2d/fillgradientprimitive2d \
     drawinglayer/source/primitive2d/fillhatchprimitive2d \
+	drawinglayer/source/primitive2d/graphicprimitivehelper2d \
     drawinglayer/source/primitive2d/graphicprimitive2d \
     drawinglayer/source/primitive2d/gridprimitive2d \
     drawinglayer/source/primitive2d/groupprimitive2d \
@@ -133,7 +134,6 @@ $(eval $(call gb_Library_add_exception_objects,drawinglayer,\
     drawinglayer/source/primitive3d/textureprimitive3d \
     drawinglayer/source/primitive3d/transformprimitive3d \
     drawinglayer/source/processor2d/baseprocessor2d \
-    drawinglayer/source/processor2d/canvasprocessor \
     drawinglayer/source/processor2d/contourextractor2d \
     drawinglayer/source/processor2d/getdigitlanguage \
     drawinglayer/source/processor2d/helperwrongspellrenderer \

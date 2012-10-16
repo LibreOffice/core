@@ -579,7 +579,11 @@ BitmapEx ImpGraphic::ImplGetBitmapEx(const GraphicConversionParameters& rParamet
         aRetBmpEx = ( mpAnimation ? mpAnimation->GetBitmapEx() : maEx );
 
         if(rParameters.getSizePixel().Width() || rParameters.getSizePixel().Height())
-            aRetBmpEx.Scale(rParameters.getSizePixel());
+        {
+            aRetBmpEx.Scale(
+                rParameters.getSizePixel(),
+                rParameters.getScaleHighQuality() ? BMP_SCALE_INTERPOLATE : BMP_SCALE_FAST);
+        }
     }
     else if( ( meType != GRAPHIC_DEFAULT ) && ImplIsSupportedGraphic() )
     {

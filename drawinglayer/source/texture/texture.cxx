@@ -603,19 +603,16 @@ namespace drawinglayer
     namespace texture
     {
         GeoTexSvxTiled::GeoTexSvxTiled(
-            const basegfx::B2DPoint& rTopLeft,
-            const basegfx::B2DVector& rSize)
-        :   maTopLeft(rTopLeft),
-            maSize(rSize)
+            const basegfx::B2DRange& rRange,
+            double fOffsetX,
+            double fOffsetY)
+        :   maRange(rRange),
+            mfOffsetX(basegfx::clamp(fOffsetX, 0.0, 1.0)),
+            mfOffsetY(basegfx::clamp(fOffsetY, 0.0, 1.0))
         {
-            if(basegfx::fTools::lessOrEqual(maSize.getX(), 0.0))
+            if(!basegfx::fTools::equalZero(mfOffsetX))
             {
-                maSize.setX(1.0);
-            }
-
-            if(basegfx::fTools::lessOrEqual(maSize.getY(), 0.0))
-            {
-                maSize.setY(1.0);
+                mfOffsetY = 0.0;
             }
         }
 
@@ -626,48 +623,92 @@ namespace drawinglayer
         bool GeoTexSvxTiled::operator==(const GeoTexSvx& rGeoTexSvx) const
         {
             const GeoTexSvxTiled* pCompare = dynamic_cast< const GeoTexSvxTiled* >(&rGeoTexSvx);
+
             return (pCompare
-                && maTopLeft == pCompare->maTopLeft
-                && maSize == pCompare->maSize);
+                && maRange == pCompare->maRange
+                && mfOffsetX == pCompare->mfOffsetX
+                && mfOffsetY == pCompare->mfOffsetY);
         }
 
         void GeoTexSvxTiled::appendTransformations(::std::vector< basegfx::B2DHomMatrix >& rMatrices)
         {
-            double fStartX(maTopLeft.getX());
-            double fStartY(maTopLeft.getY());
+            const double fWidth(maRange.getWidth());
 
-            if(basegfx::fTools::more(fStartX, 0.0))
+            if(!basegfx::fTools::equalZero(fWidth))
             {
-                fStartX -= (floor(fStartX / maSize.getX()) + 1.0) * maSize.getX();
-            }
+                const double fHeight(maRange.getHeight());
 
-            if(basegfx::fTools::less(fStartX + maSize.getX(), 0.0))
-            {
-                fStartX += floor(-fStartX / maSize.getX()) * maSize.getX();
-            }
-
-            if(basegfx::fTools::more(fStartY, 0.0))
-            {
-                fStartY -= (floor(fStartY / maSize.getY()) + 1.0) * maSize.getY();
-            }
-
-            if(basegfx::fTools::less(fStartY + maSize.getY(), 0.0))
-            {
-                fStartY += floor(-fStartY / maSize.getY()) * maSize.getY();
-            }
-
-            for(double fPosY(fStartY); basegfx::fTools::less(fPosY, 1.0); fPosY += maSize.getY())
-            {
-                for(double fPosX(fStartX); basegfx::fTools::less(fPosX, 1.0); fPosX += maSize.getX())
+                if(!basegfx::fTools::equalZero(fHeight))
                 {
-                    basegfx::B2DHomMatrix aNew;
+                    double fStartX(maRange.getMinX());
+                    double fStartY(maRange.getMinY());
+                    sal_Int32 nPosX(0);
+                    sal_Int32 nPosY(0);
 
-                    aNew.set(0, 0, maSize.getX());
-                    aNew.set(1, 1, maSize.getY());
-                    aNew.set(0, 2, fPosX);
-                    aNew.set(1, 2, fPosY);
+                    if(basegfx::fTools::more(fStartX, 0.0))
+                    {
+                        const sal_Int32 nDiff(static_cast<sal_Int32>(floor(fStartX / fWidth)) + 1);
 
-                    rMatrices.push_back(aNew);
+                        nPosX -= nDiff;
+                        fStartX -= nDiff * fWidth;
+                    }
+
+                    if(basegfx::fTools::less(fStartX + fWidth, 0.0))
+                    {
+                        const sal_Int32 nDiff(static_cast<sal_Int32>(floor(-fStartX / fWidth)));
+
+                        nPosX += nDiff;
+                        fStartX += nDiff * fWidth;
+                    }
+
+                    if(basegfx::fTools::more(fStartY, 0.0))
+                    {
+                        const sal_Int32 nDiff(static_cast<sal_Int32>(floor(fStartY / fHeight)) + 1);
+
+                        nPosY -= nDiff;
+                        fStartY -= nDiff * fHeight;
+                    }
+
+                    if(basegfx::fTools::less(fStartY + fHeight, 0.0))
+                    {
+                        const sal_Int32 nDiff(static_cast<sal_Int32>(floor(-fStartY / fHeight)));
+
+                        nPosY += nDiff;
+                        fStartY += nDiff * fHeight;
+                    }
+
+                    if(!basegfx::fTools::equalZero(mfOffsetY))
+                    {
+                        for(double fPosX(fStartX); basegfx::fTools::less(fPosX, 1.0); fPosX += fWidth, nPosX++)
+                        {
+                            for(double fPosY(nPosX % 2 ? fStartY - fHeight + (mfOffsetY * fHeight) : fStartY);
+                                basegfx::fTools::less(fPosY, 1.0); fPosY += fHeight)
+                            {
+                                rMatrices.push_back(
+                                    basegfx::tools::createScaleTranslateB2DHomMatrix(
+                                        fWidth,
+                                        fHeight,
+                                        fPosX,
+                                        fPosY));
+                            }
+                        }
+                    }
+                    else
+                    {
+                        for(double fPosY(fStartY); basegfx::fTools::less(fPosY, 1.0); fPosY += fHeight, nPosY++)
+                        {
+                            for(double fPosX(nPosY % 2 ? fStartX - fWidth + (mfOffsetX * fWidth) : fStartX);
+                                basegfx::fTools::less(fPosX, 1.0); fPosX += fWidth)
+                            {
+                                rMatrices.push_back(
+                                    basegfx::tools::createScaleTranslateB2DHomMatrix(
+                                        fWidth,
+                                        fHeight,
+                                        fPosX,
+                                        fPosY));
+                            }
+                        }
+                    }
                 }
             }
         }

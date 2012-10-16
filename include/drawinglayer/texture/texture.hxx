@@ -306,16 +306,27 @@ namespace drawinglayer
 {
     namespace texture
     {
+        // This class applies a tiling to the unit range. The given range
+        // will be repeated inside the unit range in X and Y and for each
+        // tile a matrix will be created (by appendTransformations) that
+        // represents the needed transformation to map a filling in unit
+        // coordinates to that tile.
+        // When offsetX is given, every 2nd line will be ofsetted by the
+        // given percentage value (offsetX has to be 0.0 <= offsetX <= 1.0).
+        // Accordingly to offsetY. If both are given, offsetX is preferred
+        // and offsetY is ignored.
         class DRAWINGLAYER_DLLPUBLIC GeoTexSvxTiled : public GeoTexSvx
         {
         protected:
-            basegfx::B2DPoint                           maTopLeft;
-            basegfx::B2DVector                          maSize;
+            basegfx::B2DRange               maRange;
+            double                          mfOffsetX;
+            double                          mfOffsetY;
 
         public:
             GeoTexSvxTiled(
-                const basegfx::B2DPoint& rTopLeft,
-                const basegfx::B2DVector& rSize);
+                const basegfx::B2DRange& rRange,
+                double fOffsetX = 0.0,
+                double fOffsetY = 0.0);
             virtual ~GeoTexSvxTiled();
 
             // compare operator
