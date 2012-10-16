@@ -17,7 +17,6 @@
 #
 import traceback
 from .Configuration import Configuration
-from .SystemDialog import SystemDialog
 
 from com.sun.star.awt.VclWindowPeerAttribute import OK
 
@@ -63,9 +62,7 @@ class Resource(object):
 
     @classmethod
     def showCommonResourceError(self, xMSF):
-        ProductName = Configuration.getProductName(xMSF)
+        from .SystemDialog import SystemDialog
         sError = "The files required could not be found.\n" + \
-            "Please start the %PRODUCTNAME Setup and choose 'Repair'."
-        sError = sError.replace("%PRODUCTNAME", ProductName)
+            "Please start the LibreOffice Setup and choose 'Repair'."
         SystemDialog.showMessageBox(xMSF, "ErrorBox", OK, sError)
-

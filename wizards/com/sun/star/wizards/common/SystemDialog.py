@@ -16,7 +16,6 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 import traceback
-from .Configuration import Configuration
 from .Desktop import Desktop
 from .Helper import Helper
 
@@ -141,25 +140,12 @@ class SystemDialog(object):
             traceback.print_exc()
 
     '''
-    converts the name returned from getFilterUIName_(...) so the
-    product name is correct.
-    @param filterName
-    @return
-    '''
-
-    def getFilterUIName(self, filterName):
-        prodName = Configuration.getProductName(self.xMSF)
-        s = [[self.getFilterUIName_(filterName)]]
-        s[0][0] = s[0][0].replace("%productname%", prodName)
-        return s[0][0]
-
-    '''
     note the result should go through conversion of the product name.
     @param filterName
     @return the UI localized name of the given filter name.
     '''
 
-    def getFilterUIName_(self, filterName):
+    def getFilterUIName(self, filterName):
         try:
             oFactory = self.xMSF.createInstance(
                 "com.sun.star.document.FilterFactory")
@@ -167,7 +153,7 @@ class SystemDialog(object):
             xPropertyValue = list(oObject)
             for i in xPropertyValue:
                 if i is not None and i.Name == "UIName":
-                    return str(i.Value)
+                    return str(i.Value).replace("%productname%", "LibreOffice")
 
             raise NullPointerException(
                 "UIName property not found for Filter " + filterName);
@@ -178,10 +164,10 @@ class SystemDialog(object):
     @classmethod
     def showErrorBox(self, xMSF, ResName, ResPrefix,
             ResID, AddTag=None, AddString=None):
-        ProductName = Configuration.getProductName(xMSF)
+        from .Resource import Resource
         oResource = Resource(xMSF, ResPrefix)
         sErrorMessage = oResource.getResText(ResID)
-        sErrorMessage = sErrorMessage.replace( ProductName, "%PRODUCTNAME")
+        sErrorMessage = sErrorMessage.replace("%PRODUCTNAME", "LibreOffice" )
         sErrorMessage = sErrorMessage.replace(str(13), "<BR>")
         if AddTag and AddString:
             sErrorMessage = sErrorMessage.replace( AddString, AddTag)
