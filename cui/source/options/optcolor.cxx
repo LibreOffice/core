@@ -706,8 +706,8 @@ void ColorConfigWindow_Impl::CreateEntries (ResMgr& rResMgr)
     ExtendedColorConfig aExtConfig;
     if (unsigned const nExtGroupCount = aExtConfig.GetComponentCount())
     {
-        unsigned nLineNum = GetPosBehindLastChapter() /
-            LogicToPixel(Size(0, LINE_HEIGHT), MAP_APPFONT).Height();
+        unsigned nLineNum = ( GetPosBehindLastChapter() /
+            LogicToPixel(Size(0, LINE_HEIGHT), MAP_APPFONT).Height() ) + 1;
         for (unsigned j = 0; j != nExtGroupCount; ++j)
         {
             rtl::OUString const sComponentName = aExtConfig.GetComponentName(j);
