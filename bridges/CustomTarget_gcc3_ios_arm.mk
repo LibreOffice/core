@@ -10,12 +10,11 @@
 $(eval $(call gb_CustomTarget_CustomTarget,bridges/source/cpp_uno/gcc3_ios_arm))
 
 $(call gb_CustomTarget_get_target,bridges/source/cpp_uno/gcc3_ios_arm) : \
-	$(call gb_CustomTarget_get_workdir,bridges/source/cpp_uno/gcc3_ios_arm)/codesnippets.S \
-	| $(dir $(call gb_CustomTarget_get_target,bridges/source/cpp_uno/gcc3_ios_arm)).dir
+	$(call gb_CustomTarget_get_workdir,bridges/source/cpp_uno/gcc3_ios_arm)/codesnippets.S
 
 $(call gb_CustomTarget_get_workdir,bridges/source/cpp_uno/gcc3_ios_arm)/codesnippets.S : \
-	$(SRCDIR)/bridges/source/cpp_uno/gcc3_ios_arm/generate-snippets.pl
-	mkdir -p $(call gb_CustomTarget_get_workdir,bridges/source/cpp_uno/gcc3_ios_arm)
+	$(SRCDIR)/bridges/source/cpp_uno/gcc3_ios_arm/generate-snippets.pl \
+	| $(call gb_CustomTarget_get_workdir,bridges/source/cpp_uno/gcc3_ios_arm)/.dir
 	$(PERL) $< > $@
 
 # vim: set noet sw=4 ts=4:
