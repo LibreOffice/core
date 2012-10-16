@@ -15,9 +15,8 @@
 #   except in compliance with the License. You may obtain a copy of
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
-from wizards.common.ConfigGroup import *
-from wizards.common.ConfigGroup import *
-from CGPaperElementLocation import CGPaperElementLocation
+from .CGPaperElementLocation import CGPaperElementLocation
+from ..common.ConfigGroup import ConfigGroup
 
 class CGLetter(ConfigGroup):
 

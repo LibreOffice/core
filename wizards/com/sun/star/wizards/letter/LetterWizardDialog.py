@@ -15,10 +15,10 @@
 #   except in compliance with the License. You may obtain a copy of
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
-from wizards.ui.WizardDialog import *
-from wizards.ui.WizardDialog import *
-from LetterWizardDialogConst import *
-from LetterWizardDialogResources import LetterWizardDialogResources
+from .LetterWizardDialogConst import LetterWizardDialogConst, HIDMAIN, HID
+from .LetterWizardDialogResources import LetterWizardDialogResources
+from ..common.HelpIds import HelpIds
+from ..ui.WizardDialog import WizardDialog, uno, Helper, PropertyNames
 
 from com.sun.star.awt.FontUnderline import SINGLE
 
@@ -59,7 +59,8 @@ class LetterWizardDialog(WizardDialog):
 
     def buildStep1(self):
         self.optBusinessLetter = self.insertRadioButton(
-            "optBusinessLetter", OPTBUSINESSLETTER_ITEM_CHANGED,
+            "optBusinessLetter", 
+            LetterWizardDialogConst.OPTBUSINESSLETTER_ITEM_CHANGED,
             (PropertyNames.PROPERTY_HEIGHT,
                 PropertyNames.PROPERTY_HELPURL,
                 PropertyNames.PROPERTY_LABEL,
@@ -73,7 +74,8 @@ class LetterWizardDialog(WizardDialog):
                 self.resources.resoptBusinessLetter_value,
                 "optBusinessLetter", 97, 28, 1, 1, 184), self)
         self.optPrivOfficialLetter = self.insertRadioButton(
-            "optPrivOfficialLetter", OPTPRIVOFFICIALLETTER_ITEM_CHANGED,
+            "optPrivOfficialLetter",
+            LetterWizardDialogConst.OPTPRIVOFFICIALLETTER_ITEM_CHANGED,
             (PropertyNames.PROPERTY_HEIGHT,
                 PropertyNames.PROPERTY_HELPURL,
                 PropertyNames.PROPERTY_LABEL,
@@ -87,7 +89,8 @@ class LetterWizardDialog(WizardDialog):
                 self.resources.resoptPrivOfficialLetter_value,
                 "optPrivOfficialLetter", 97, 74, 1, 2, 184), self)
         self.optPrivateLetter = self.insertRadioButton(
-            "optPrivateLetter", OPTPRIVATELETTER_ITEM_CHANGED,
+            "optPrivateLetter",
+            LetterWizardDialogConst.OPTPRIVATELETTER_ITEM_CHANGED,
             (PropertyNames.PROPERTY_HEIGHT,
                 PropertyNames.PROPERTY_HELPURL,
                 PropertyNames.PROPERTY_LABEL,
@@ -101,8 +104,9 @@ class LetterWizardDialog(WizardDialog):
                 self.resources.resoptPrivateLetter_value,
                 "optPrivateLetter", 97, 106, 1, 3, 184), self)
         self.lstBusinessStyle = self.insertListBox(
-            "lstBusinessStyle", LSTBUSINESSSTYLE_ACTION_PERFORMED,
-                LSTBUSINESSSTYLE_ITEM_CHANGED,
+            "lstBusinessStyle",
+            LetterWizardDialogConst.LSTBUSINESSSTYLE_ACTION_PERFORMED,
+            LetterWizardDialogConst.LSTBUSINESSSTYLE_ITEM_CHANGED,
             ("Dropdown",
                 PropertyNames.PROPERTY_HEIGHT,
                 PropertyNames.PROPERTY_HELPURL,
@@ -116,7 +120,8 @@ class LetterWizardDialog(WizardDialog):
                 "lstBusinessStyle",
                 180, 40, 1, 4, 74), self)
         self.chkBusinessPaper = self.insertCheckBox(
-            "chkBusinessPaper", CHKBUSINESSPAPER_ITEM_CHANGED,
+            "chkBusinessPaper",
+            LetterWizardDialogConst.CHKBUSINESSPAPER_ITEM_CHANGED,
             (PropertyNames.PROPERTY_HEIGHT,
                 PropertyNames.PROPERTY_HELPURL,
                 PropertyNames.PROPERTY_LABEL,
@@ -131,8 +136,9 @@ class LetterWizardDialog(WizardDialog):
                 self.resources.reschkBusinessPaper_value,
                 "chkBusinessPaper", 110, 56, 0, 1, 5, 168), self)
         self.lstPrivOfficialStyle = self.insertListBox(
-            "lstPrivOfficialStyle", LSTPRIVOFFICIALSTYLE_ACTION_PERFORMED,
-                LSTPRIVOFFICIALSTYLE_ITEM_CHANGED,
+            "lstPrivOfficialStyle",
+            LetterWizardDialogConst.LSTPRIVOFFICIALSTYLE_ACTION_PERFORMED,
+            LetterWizardDialogConst.LSTPRIVOFFICIALSTYLE_ITEM_CHANGED,
             ("Dropdown",
                 PropertyNames.PROPERTY_HEIGHT,
                 PropertyNames.PROPERTY_HELPURL,
@@ -145,8 +151,9 @@ class LetterWizardDialog(WizardDialog):
             (True, 12, HelpIds.getHelpIdString(HID + 6),
                 "lstPrivOfficialStyle", 180, 86, 1, 6, 74), self)
         self.lstPrivateStyle = self.insertListBox(
-            "lstPrivateStyle", LSTPRIVATESTYLE_ACTION_PERFORMED,
-                LSTPRIVATESTYLE_ITEM_CHANGED,
+            "lstPrivateStyle",
+            LetterWizardDialogConst.LSTPRIVATESTYLE_ACTION_PERFORMED,
+            LetterWizardDialogConst.LSTPRIVATESTYLE_ITEM_CHANGED,
             ("Dropdown",
                 PropertyNames.PROPERTY_HEIGHT,
                 PropertyNames.PROPERTY_HELPURL,
@@ -223,7 +230,7 @@ class LetterWizardDialog(WizardDialog):
     def buildStep2(self):
         self.chkPaperCompanyLogo = self.insertCheckBox(
             "chkPaperCompanyLogo",
-            CHKPAPERCOMPANYLOGO_ITEM_CHANGED,
+            LetterWizardDialogConst.CHKPAPERCOMPANYLOGO_ITEM_CHANGED,
             (PropertyNames.PROPERTY_HEIGHT,
                 PropertyNames.PROPERTY_HELPURL,
                 PropertyNames.PROPERTY_LABEL,
@@ -239,7 +246,7 @@ class LetterWizardDialog(WizardDialog):
                 "chkPaperCompanyLogo", 97, 28, 0, 2, 8, 68), self)
         self.numLogoHeight = self.insertNumericField(
             "numLogoHeight",
-            NUMLOGOHEIGHT_TEXT_CHANGED,
+            LetterWizardDialogConst.NUMLOGOHEIGHT_TEXT_CHANGED,
             (PropertyNames.PROPERTY_HEIGHT,
                 PropertyNames.PROPERTY_HELPURL,
                 PropertyNames.PROPERTY_NAME,
@@ -254,7 +261,8 @@ class LetterWizardDialog(WizardDialog):
             (12, HelpIds.getHelpIdString(HID + 9),
                 "numLogoHeight", 138, 40, True, 2, True, 9, 3, 30), self)
         self.numLogoX = self.insertNumericField(
-            "numLogoX", NUMLOGOX_TEXT_CHANGED,
+            "numLogoX",
+            LetterWizardDialogConst.NUMLOGOX_TEXT_CHANGED,
             (PropertyNames.PROPERTY_HEIGHT,
                 PropertyNames.PROPERTY_HELPURL,
                 PropertyNames.PROPERTY_NAME,
@@ -268,7 +276,8 @@ class LetterWizardDialog(WizardDialog):
             (12, HelpIds.getHelpIdString(HID + 10),
             "numLogoX", 266, 40, True, 2, 10, 0, 30), self)
         self.numLogoWidth = self.insertNumericField(
-            "numLogoWidth", NUMLOGOWIDTH_TEXT_CHANGED,
+            "numLogoWidth",
+            LetterWizardDialogConst.NUMLOGOWIDTH_TEXT_CHANGED,
             (PropertyNames.PROPERTY_HEIGHT,
                 PropertyNames.PROPERTY_HELPURL,
                 PropertyNames.PROPERTY_NAME,
@@ -282,7 +291,8 @@ class LetterWizardDialog(WizardDialog):
             (12, HelpIds.getHelpIdString(HID + 11),
                 "numLogoWidth", 138, 56, True, 2, 11, 3.8, 30), self)
         self.numLogoY = self.insertNumericField(
-            "numLogoY", NUMLOGOY_TEXT_CHANGED,
+            "numLogoY",
+            LetterWizardDialogConst.NUMLOGOY_TEXT_CHANGED,
             (PropertyNames.PROPERTY_HEIGHT,
                 PropertyNames.PROPERTY_HELPURL,
                 PropertyNames.PROPERTY_NAME,
@@ -296,7 +306,8 @@ class LetterWizardDialog(WizardDialog):
             (12, HelpIds.getHelpIdString(HID + 12),
                 "numLogoY", 266, 56, True, 2, 12, -3.4, 30), self)
         self.chkPaperCompanyAddress = self.insertCheckBox(
-            "chkPaperCompanyAddress", CHKPAPERCOMPANYADDRESS_ITEM_CHANGED,
+            "chkPaperCompanyAddress",
+            LetterWizardDialogConst.CHKPAPERCOMPANYADDRESS_ITEM_CHANGED,
             (PropertyNames.PROPERTY_HEIGHT,
                 PropertyNames.PROPERTY_HELPURL,
                 PropertyNames.PROPERTY_LABEL,
@@ -311,7 +322,8 @@ class LetterWizardDialog(WizardDialog):
                 self.resources.reschkPaperCompanyAddress_value,
                 "chkPaperCompanyAddress", 98, 84, 0, 2, 13, 68), self)
         self.numAddressHeight = self.insertNumericField(
-                "numAddressHeight", NUMADDRESSHEIGHT_TEXT_CHANGED,
+                "numAddressHeight",
+                LetterWizardDialogConst.NUMADDRESSHEIGHT_TEXT_CHANGED,
             (PropertyNames.PROPERTY_HEIGHT,
                 PropertyNames.PROPERTY_HELPURL,
                 PropertyNames.PROPERTY_NAME,
@@ -326,7 +338,8 @@ class LetterWizardDialog(WizardDialog):
             (12, HelpIds.getHelpIdString(HID + 14),
                 "numAddressHeight", 138, 96, True, 2, True, 14, 3, 30), self)
         self.numAddressX = self.insertNumericField(
-                "numAddressX", NUMADDRESSX_TEXT_CHANGED,
+                "numAddressX",
+                LetterWizardDialogConst.NUMADDRESSX_TEXT_CHANGED,
             (PropertyNames.PROPERTY_HEIGHT,
                 PropertyNames.PROPERTY_HELPURL,
                 PropertyNames.PROPERTY_NAME,
@@ -340,7 +353,8 @@ class LetterWizardDialog(WizardDialog):
             (12, HelpIds.getHelpIdString(HID + 15),
                 "numAddressX", 266, 96, True, 2, 15, 3.8, 30), self)
         self.numAddressWidth = self.insertNumericField(
-                "numAddressWidth", NUMADDRESSWIDTH_TEXT_CHANGED,
+                "numAddressWidth",
+                LetterWizardDialogConst.NUMADDRESSWIDTH_TEXT_CHANGED,
             (PropertyNames.PROPERTY_HEIGHT,
                 PropertyNames.PROPERTY_HELPURL,
                 PropertyNames.PROPERTY_NAME,
@@ -354,7 +368,8 @@ class LetterWizardDialog(WizardDialog):
             (12, HelpIds.getHelpIdString(HID + 16),
                 "numAddressWidth", 138, 112, True, 2, 16, 13.8, 30), self)
         self.numAddressY = self.insertNumericField(
-                "numAddressY", NUMADDRESSY_TEXT_CHANGED,
+                "numAddressY",
+                LetterWizardDialogConst.NUMADDRESSY_TEXT_CHANGED,
             (PropertyNames.PROPERTY_HEIGHT,
                 PropertyNames.PROPERTY_HELPURL,
                 PropertyNames.PROPERTY_NAME,
@@ -368,7 +383,8 @@ class LetterWizardDialog(WizardDialog):
             (12, HelpIds.getHelpIdString(HID + 17),
                 "numAddressY", 266, 112, True, 2, 17, -3.4, 30), self)
         self.chkCompanyReceiver = self.insertCheckBox(
-            "chkCompanyReceiver", CHKCOMPANYRECEIVER_ITEM_CHANGED,
+            "chkCompanyReceiver",
+            LetterWizardDialogConst.CHKCOMPANYRECEIVER_ITEM_CHANGED,
             (PropertyNames.PROPERTY_HEIGHT,
                 PropertyNames.PROPERTY_HELPURL,
                 PropertyNames.PROPERTY_LABEL,
@@ -382,7 +398,8 @@ class LetterWizardDialog(WizardDialog):
                 self.resources.reschkCompanyReceiver_value,
                 "chkCompanyReceiver", 103, 131, 0, 2, 18, 185), self)
         self.chkPaperFooter = self.insertCheckBox(
-            "chkPaperFooter", CHKPAPERFOOTER_ITEM_CHANGED,
+            "chkPaperFooter",
+            LetterWizardDialogConst.CHKPAPERFOOTER_ITEM_CHANGED,
             (PropertyNames.PROPERTY_HEIGHT,
                 PropertyNames.PROPERTY_HELPURL,
                 PropertyNames.PROPERTY_LABEL,
@@ -397,7 +414,8 @@ class LetterWizardDialog(WizardDialog):
                 self.resources.reschkPaperFooter_value,
                 "chkPaperFooter", 97, 158, 0, 2, 19, 68), self)
         self.numFooterHeight = self.insertNumericField(
-            "numFooterHeight", NUMFOOTERHEIGHT_TEXT_CHANGED,
+            "numFooterHeight",
+            LetterWizardDialogConst.NUMFOOTERHEIGHT_TEXT_CHANGED,
             (PropertyNames.PROPERTY_HEIGHT,
                 PropertyNames.PROPERTY_HELPURL,
                 PropertyNames.PROPERTY_NAME,
@@ -548,7 +566,8 @@ class LetterWizardDialog(WizardDialog):
 
     def buildStep3(self):
         self.chkUseLogo = self.insertCheckBox(
-            "chkUseLogo", CHKUSELOGO_ITEM_CHANGED,
+            "chkUseLogo",
+            LetterWizardDialogConst.CHKUSELOGO_ITEM_CHANGED,
             (PropertyNames.PROPERTY_HEIGHT,
                 PropertyNames.PROPERTY_HELPURL,
                 PropertyNames.PROPERTY_LABEL,
@@ -564,7 +583,7 @@ class LetterWizardDialog(WizardDialog):
                 "chkUseLogo", 97, 54, 0, 3, 22, 212), self)
         self.chkUseAddressReceiver = self.insertCheckBox(
             "chkUseAddressReceiver",
-            CHKUSEADDRESSRECEIVER_ITEM_CHANGED,
+            LetterWizardDialogConst.CHKUSEADDRESSRECEIVER_ITEM_CHANGED,
             (PropertyNames.PROPERTY_HEIGHT,
                 PropertyNames.PROPERTY_HELPURL,
                 PropertyNames.PROPERTY_LABEL,
@@ -579,7 +598,8 @@ class LetterWizardDialog(WizardDialog):
                 self.resources.reschkUseAddressReceiver_value,
                 "chkUseAddressReceiver", 97, 69, 0, 3, 23, 212), self)
         self.chkUseSigns = self.insertCheckBox(
-            "chkUseSigns", CHKUSESIGNS_ITEM_CHANGED,
+            "chkUseSigns",
+            LetterWizardDialogConst.CHKUSESIGNS_ITEM_CHANGED,
             (PropertyNames.PROPERTY_HEIGHT,
                 PropertyNames.PROPERTY_HELPURL,
                 PropertyNames.PROPERTY_LABEL,
@@ -594,7 +614,8 @@ class LetterWizardDialog(WizardDialog):
                 self.resources.reschkUseSigns_value,
                 "chkUseSigns", 97, 82, 0, 3, 24, 212), self)
         self.chkUseSubject = self.insertCheckBox(
-            "chkUseSubject", CHKUSESUBJECT_ITEM_CHANGED,
+            "chkUseSubject",
+            LetterWizardDialogConst.CHKUSESUBJECT_ITEM_CHANGED,
             (PropertyNames.PROPERTY_HEIGHT,
                 PropertyNames.PROPERTY_HELPURL,
                 PropertyNames.PROPERTY_LABEL,
@@ -609,7 +630,8 @@ class LetterWizardDialog(WizardDialog):
                 self.resources.reschkUseSubject_value,
                 "chkUseSubject", 97, 98, 0, 3, 25, 212), self)
         self.chkUseSalutation = self.insertCheckBox(
-            "chkUseSalutation", CHKUSESALUTATION_ITEM_CHANGED,
+            "chkUseSalutation",
+            LetterWizardDialogConst.CHKUSESALUTATION_ITEM_CHANGED,
             (PropertyNames.PROPERTY_HEIGHT,
                 PropertyNames.PROPERTY_HELPURL,
                 PropertyNames.PROPERTY_LABEL,
@@ -625,9 +647,9 @@ class LetterWizardDialog(WizardDialog):
                 "chkUseSalutation", 97, 113, 0, 3, 26, 66), self)
         self.lstSalutation = self.insertComboBox(
             "lstSalutation",
-            LSTSALUTATION_ACTION_PERFORMED,
-            LSTSALUTATION_ITEM_CHANGED,
-            LSTSALUTATION_TEXT_CHANGED,
+            LetterWizardDialogConst.LSTSALUTATION_ACTION_PERFORMED,
+            LetterWizardDialogConst.LSTSALUTATION_ITEM_CHANGED,
+            LetterWizardDialogConst.LSTSALUTATION_TEXT_CHANGED,
             ("Dropdown",
                 PropertyNames.PROPERTY_HEIGHT,
                 PropertyNames.PROPERTY_HELPURL,
@@ -640,7 +662,8 @@ class LetterWizardDialog(WizardDialog):
             (True, 12, HelpIds.getHelpIdString(HID + 27),
                 "lstSalutation", 210, 110, 3, 27, 74), self)
         self.chkUseBendMarks = self.insertCheckBox(
-            "chkUseBendMarks", CHKUSEBENDMARKS_ITEM_CHANGED,
+            "chkUseBendMarks",
+            LetterWizardDialogConst.CHKUSEBENDMARKS_ITEM_CHANGED,
             (PropertyNames.PROPERTY_HEIGHT,
                 PropertyNames.PROPERTY_HELPURL,
                 PropertyNames.PROPERTY_LABEL,
@@ -655,7 +678,8 @@ class LetterWizardDialog(WizardDialog):
                 self.resources.reschkUseBendMarks_value,
                 "chkUseBendMarks", 97, 127, 0, 3, 28, 212), self)
         self.chkUseGreeting = self.insertCheckBox(
-            "chkUseGreeting", CHKUSEGREETING_ITEM_CHANGED,
+            "chkUseGreeting",
+            LetterWizardDialogConst.CHKUSEGREETING_ITEM_CHANGED,
             (PropertyNames.PROPERTY_HEIGHT,
                 PropertyNames.PROPERTY_HELPURL,
                 PropertyNames.PROPERTY_LABEL,
@@ -670,8 +694,10 @@ class LetterWizardDialog(WizardDialog):
                 self.resources.reschkUseGreeting_value,
                 "chkUseGreeting", 97, 142, 0, 3, 29, 66), self)
         self.lstGreeting = self.insertComboBox(
-            "lstGreeting", LSTGREETING_ACTION_PERFORMED,
-            LSTGREETING_ITEM_CHANGED, LSTGREETING_TEXT_CHANGED,
+            "lstGreeting",
+            LetterWizardDialogConst.LSTGREETING_ACTION_PERFORMED,
+            LetterWizardDialogConst.LSTGREETING_ITEM_CHANGED,
+            LetterWizardDialogConst.LSTGREETING_TEXT_CHANGED,
             ("Dropdown",
                 PropertyNames.PROPERTY_HEIGHT,
                 PropertyNames.PROPERTY_HELPURL,
@@ -684,7 +710,8 @@ class LetterWizardDialog(WizardDialog):
             (True, 12, HelpIds.getHelpIdString(HID + 30),
                 "lstGreeting", 210, 141, 3, 30, 74), self)
         self.chkUseFooter = self.insertCheckBox(
-            "chkUseFooter", CHKUSEFOOTER_ITEM_CHANGED,
+            "chkUseFooter",
+            LetterWizardDialogConst.CHKUSEFOOTER_ITEM_CHANGED,
             (PropertyNames.PROPERTY_HEIGHT,
                 PropertyNames.PROPERTY_HELPURL,
                 PropertyNames.PROPERTY_LABEL,
@@ -727,7 +754,8 @@ class LetterWizardDialog(WizardDialog):
 
     def buildStep4(self):
         self.optSenderPlaceholder = self.insertRadioButton(
-            "optSenderPlaceholder", OPTSENDERPLACEHOLDER_ITEM_CHANGED,
+            "optSenderPlaceholder",
+            LetterWizardDialogConst.OPTSENDERPLACEHOLDER_ITEM_CHANGED,
             (PropertyNames.PROPERTY_HEIGHT,
                 PropertyNames.PROPERTY_HELPURL,
                 PropertyNames.PROPERTY_LABEL,
@@ -741,7 +769,8 @@ class LetterWizardDialog(WizardDialog):
                 self.resources.resoptSenderPlaceholder_value,
                 "optSenderPlaceholder", 104, 42, 4, 32, 149), self)
         self.optSenderDefine = self.insertRadioButton(
-            "optSenderDefine", OPTSENDERDEFINE_ITEM_CHANGED,
+            "optSenderDefine",
+            LetterWizardDialogConst.OPTSENDERDEFINE_ITEM_CHANGED,
             (PropertyNames.PROPERTY_HEIGHT,
                 PropertyNames.PROPERTY_HELPURL,
                 PropertyNames.PROPERTY_LABEL,
@@ -755,7 +784,8 @@ class LetterWizardDialog(WizardDialog):
                 self.resources.resoptSenderDefine_value,
                 "optSenderDefine", 104, 54, 4, 33, 149), self)
         self.txtSenderName = self.insertTextField(
-            "txtSenderName", TXTSENDERNAME_TEXT_CHANGED,
+            "txtSenderName",
+            LetterWizardDialogConst.TXTSENDERNAME_TEXT_CHANGED,
             (PropertyNames.PROPERTY_HEIGHT,
                 PropertyNames.PROPERTY_HELPURL,
                 PropertyNames.PROPERTY_NAME,
@@ -767,7 +797,8 @@ class LetterWizardDialog(WizardDialog):
             (12, HelpIds.getHelpIdString(HID + 34),
                 "txtSenderName", 182, 67, 4, 34, 119), self)
         self.txtSenderStreet = self.insertTextField(
-            "txtSenderStreet", TXTSENDERSTREET_TEXT_CHANGED,
+            "txtSenderStreet",
+            LetterWizardDialogConst.TXTSENDERSTREET_TEXT_CHANGED,
             (PropertyNames.PROPERTY_HEIGHT,
                 PropertyNames.PROPERTY_HELPURL,
                 PropertyNames.PROPERTY_NAME,
@@ -779,7 +810,8 @@ class LetterWizardDialog(WizardDialog):
             (12, HelpIds.getHelpIdString(HID + 35),
                 "txtSenderStreet", 182, 81, 4, 35, 119), self)
         self.txtSenderPostCode = self.insertTextField(
-            "txtSenderPostCode", TXTSENDERPOSTCODE_TEXT_CHANGED,
+            "txtSenderPostCode",
+            LetterWizardDialogConst.TXTSENDERPOSTCODE_TEXT_CHANGED,
             (PropertyNames.PROPERTY_HEIGHT,
                 PropertyNames.PROPERTY_HELPURL,
                 PropertyNames.PROPERTY_NAME,
@@ -791,7 +823,8 @@ class LetterWizardDialog(WizardDialog):
             (12, HelpIds.getHelpIdString(HID + 36),
                 "txtSenderPostCode", 182, 95, 4, 36, 25), self)
         self.txtSenderState = self.insertTextField(
-            "txtSenderState", TXTSENDERSTATE_TEXT_CHANGED,
+            "txtSenderState",
+            LetterWizardDialogConst.TXTSENDERSTATE_TEXT_CHANGED,
             (PropertyNames.PROPERTY_HEIGHT,
                 PropertyNames.PROPERTY_HELPURL,
                 PropertyNames.PROPERTY_NAME,
@@ -803,7 +836,8 @@ class LetterWizardDialog(WizardDialog):
             (12, HelpIds.getHelpIdString(HID + 37),
                 "txtSenderState", 211, 95, 4, 37, 21), self)
         self.txtSenderCity = self.insertTextField(
-            "txtSenderCity", TXTSENDERCITY_TEXT_CHANGED,
+            "txtSenderCity",
+            LetterWizardDialogConst.TXTSENDERCITY_TEXT_CHANGED,
             (PropertyNames.PROPERTY_HEIGHT,
                 PropertyNames.PROPERTY_HELPURL,
                 PropertyNames.PROPERTY_NAME,
@@ -815,7 +849,8 @@ class LetterWizardDialog(WizardDialog):
             (12, HelpIds.getHelpIdString(HID + 38),
                 "txtSenderCity", 236, 95, 4, 38, 65), self)
         self.optReceiverPlaceholder = self.insertRadioButton(
-            "optReceiverPlaceholder", OPTRECEIVERPLACEHOLDER_ITEM_CHANGED,
+            "optReceiverPlaceholder",
+            LetterWizardDialogConst.OPTRECEIVERPLACEHOLDER_ITEM_CHANGED,
             (PropertyNames.PROPERTY_HEIGHT,
                 PropertyNames.PROPERTY_HELPURL,
                 PropertyNames.PROPERTY_LABEL,
@@ -829,7 +864,8 @@ class LetterWizardDialog(WizardDialog):
                 self.resources.resoptReceiverPlaceholder_value,
                 "optReceiverPlaceholder", 104, 145, 4, 39, 200), self)
         self.optReceiverDatabase = self.insertRadioButton(
-            "optReceiverDatabase", OPTRECEIVERDATABASE_ITEM_CHANGED,
+            "optReceiverDatabase",
+            LetterWizardDialogConst.OPTRECEIVERDATABASE_ITEM_CHANGED,
             (PropertyNames.PROPERTY_HEIGHT,
                 PropertyNames.PROPERTY_HELPURL,
                 PropertyNames.PROPERTY_LABEL,
@@ -923,7 +959,8 @@ class LetterWizardDialog(WizardDialog):
 
     def buildStep5(self):
         self.txtFooter = self.insertTextField(
-            "txtFooter", TXTFOOTER_TEXT_CHANGED,
+            "txtFooter",
+            LetterWizardDialogConst.TXTFOOTER_TEXT_CHANGED,
             (PropertyNames.PROPERTY_HEIGHT,
                 PropertyNames.PROPERTY_HELPURL,
                 PropertyNames.PROPERTY_MULTILINE,
@@ -936,7 +973,8 @@ class LetterWizardDialog(WizardDialog):
             (47, HelpIds.getHelpIdString(HID + 41), True,
                 "txtFooter", 97, 40, 5, 41, 203), self)
         self.chkFooterNextPages = self.insertCheckBox(
-            "chkFooterNextPages", CHKFOOTERNEXTPAGES_ITEM_CHANGED,
+            "chkFooterNextPages",
+            LetterWizardDialogConst.CHKFOOTERNEXTPAGES_ITEM_CHANGED,
             (PropertyNames.PROPERTY_HEIGHT,
                 PropertyNames.PROPERTY_HELPURL,
                 PropertyNames.PROPERTY_LABEL,
@@ -951,7 +989,8 @@ class LetterWizardDialog(WizardDialog):
                 self.resources.reschkFooterNextPages_value,
                 "chkFooterNextPages", 97, 92, 0, 5, 42, 202), self)
         self.chkFooterPageNumbers = self.insertCheckBox(
-            "chkFooterPageNumbers", CHKFOOTERPAGENUMBERS_ITEM_CHANGED,
+            "chkFooterPageNumbers",
+            LetterWizardDialogConst.CHKFOOTERPAGENUMBERS_ITEM_CHANGED,
             (PropertyNames.PROPERTY_HEIGHT,
                 PropertyNames.PROPERTY_HELPURL,
                 PropertyNames.PROPERTY_LABEL,
@@ -992,7 +1031,8 @@ class LetterWizardDialog(WizardDialog):
 
     def buildStep6(self):
         self.txtTemplateName = self.insertTextField(
-            "txtTemplateName", TXTTEMPLATENAME_TEXT_CHANGED,
+            "txtTemplateName",
+            LetterWizardDialogConst.TXTTEMPLATENAME_TEXT_CHANGED,
             (PropertyNames.PROPERTY_HEIGHT,
                 PropertyNames.PROPERTY_HELPURL,
                 PropertyNames.PROPERTY_NAME,
@@ -1006,7 +1046,8 @@ class LetterWizardDialog(WizardDialog):
                 "txtTemplateName", 202, 56, 6, 44,
                 self.resources.restxtTemplateName_value, 100), self)
         self.optCreateLetter = self.insertRadioButton(
-            "optCreateLetter", OPTCREATELETTER_ITEM_CHANGED,
+            "optCreateLetter",
+            LetterWizardDialogConst.OPTCREATELETTER_ITEM_CHANGED,
             (PropertyNames.PROPERTY_HEIGHT,
                 PropertyNames.PROPERTY_HELPURL,
                 PropertyNames.PROPERTY_LABEL,
@@ -1020,7 +1061,8 @@ class LetterWizardDialog(WizardDialog):
                 self.resources.resoptCreateLetter_value,
                 "optCreateLetter", 104, 111, 6, 50, 198), self)
         self.optMakeChanges = self.insertRadioButton(
-            "optMakeChanges", OPTMAKECHANGES_ITEM_CHANGED,
+            "optMakeChanges",
+            LetterWizardDialogConst.OPTMAKECHANGES_ITEM_CHANGED,
             (PropertyNames.PROPERTY_HEIGHT,
                 PropertyNames.PROPERTY_HELPURL,
                 PropertyNames.PROPERTY_LABEL,

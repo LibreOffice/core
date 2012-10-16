@@ -15,24 +15,30 @@
 #   except in compliance with the License. You may obtain a copy of
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
-from LetterWizardDialog import *
-from LetterWizardDialog import *
-from LetterDocument import *
-from wizards.common.NoValidPathException import NoValidPathException
-from wizards.common.FileAccess import FileAccess
-from LocaleCodes import LocaleCodes
-from wizards.ui.PathSelection import PathSelection
-from wizards.common.Configuration import Configuration
-from CGLetterWizard import CGLetterWizard
-from wizards.ui.event.UnoDataAware import UnoDataAware
-from wizards.ui.event.RadioDataAware import RadioDataAware
-from wizards.text.TextFieldHandler import TextFieldHandler
-from wizards.common.SystemDialog import SystemDialog
+import traceback
+from .LetterWizardDialog import LetterWizardDialog, Helper, \
+    PropertyNames, uno, HelpIds, HID
+from .LetterDocument import LetterDocument
+from .CGLetterWizard import CGLetterWizard
+from ..common.NoValidPathException import NoValidPathException
+from ..common.FileAccess import FileAccess
+from ..common.Configuration import Configuration
+from ..common.SystemDialog import SystemDialog
+from ..common.Desktop import Desktop
+from ..ui.PathSelection import PathSelection
+from ..ui.event.UnoDataAware import UnoDataAware
+from ..ui.event.RadioDataAware import RadioDataAware
+from ..text.TextDocument import TextDocument
+from ..text.ViewHandler import ViewHandler
+from ..text.TextFieldHandler import TextFieldHandler
 
 from com.sun.star.awt.VclWindowPeerAttribute import YES_NO, DEF_NO
+from com.sun.star.uno import RuntimeException
+from com.sun.star.util import CloseVetoException
 from com.sun.star.view.DocumentZoomType import OPTIMAL
 from com.sun.star.document.UpdateDocMode import FULL_UPDATE
 from com.sun.star.document.MacroExecMode import ALWAYS_EXECUTE
+
 
 class LetterWizardDialogImpl(LetterWizardDialog):
 
