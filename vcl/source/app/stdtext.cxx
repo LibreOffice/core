@@ -36,22 +36,25 @@
 
 // =======================================================================
 
-rtl::OUString GetStandardText( sal_uInt16 nStdText )
+OUString GetStandardText( sal_uInt16 nStdText )
 {
     ResMgr* pResMgr = ImplGetResMgr();
-    if( pResMgr )
-        return ResId(nStdText-STANDARD_TEXT_FIRST+SV_STDTEXT_FIRST, *pResMgr);
-    return rtl::OUString();
+    if (pResMgr)
+    {
+        return ResId(nStdText-STANDARD_TEXT_FIRST+SV_STDTEXT_FIRST, *pResMgr).
+            toString();
+    }
+    return OUString();
 }
 
 // =======================================================================
 
-void ShowServiceNotAvailableError( Window* pParent,
-                                   const XubString& rServiceName, sal_Bool bError )
+void ShowServiceNotAvailableError(Window* pParent,
+    const OUString& rServiceName, bool bError)
 {
-    XubString aText( GetStandardText( STANDARD_TEXT_SERVICE_NOT_AVAILABLE ) );
-    aText.SearchAndReplaceAscii( "%s", rServiceName );
-    if ( bError )
+    OUString aText  = GetStandardText(STANDARD_TEXT_SERVICE_NOT_AVAILABLE).
+        replaceAll("%s", rServiceName);
+    if (bError)
     {
         ErrorBox aBox( pParent, WB_OK | WB_DEF_OK, aText );
         aBox.Execute();
