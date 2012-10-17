@@ -56,7 +56,6 @@ namespace framework{
 #define SERVICENAME_DISPATCHRECORDERSUPPLIER                    DECLARE_ASCII("com.sun.star.frame.DispatchRecorderSupplier"         )
 #define SERVICENAME_DISPATCHRECORDER                            DECLARE_ASCII("com.sun.star.frame.DispatchRecorder"                 )
 #define SERVICENAME_PROTOCOLHANDLER                             DECLARE_ASCII("com.sun.star.frame.ProtocolHandler"                  )
-#define SERVICENAME_SUBSTITUTEPATHVARIABLES                     DECLARE_ASCII("com.sun.star.util.PathSubstitution"                  )
 #define SERVICENAME_PATHSETTINGS                                DECLARE_ASCII("com.sun.star.util.PathSettings"                      )
 #define SERVICENAME_DISPATCHHELPER                              DECLARE_ASCII("com.sun.star.frame.DispatchHelper"                   )
 #define SERVICENAME_DETECTORFACTORY                             DECLARE_ASCII("com.sun.star.document.ExtendedTypeDetectionFactory"  )
