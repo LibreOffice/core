@@ -15,8 +15,8 @@
    id="svg2"
    version="1.1"
    inkscape:version="0.48.3.1 r9886"
-   sodipodi:docname="lc_text.svg"
-   inkscape:export-filename="/home/alexander/libo/icon-themes/tango_testing/cmd/lc_text.png"
+   sodipodi:docname="lc_designerdialog.svg"
+   inkscape:export-filename="/home/alexander/tango_testing/cmd/lc_text.png"
    inkscape:export-xdpi="90"
    inkscape:export-ydpi="90">
   <defs
@@ -7434,11 +7434,11 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1"
-     inkscape:cx="13.500903"
-     inkscape:cy="1.2720939"
+     inkscape:zoom="16"
+     inkscape:cx="10.1895"
+     inkscape:cy="7.2211409"
      inkscape:document-units="px"
-     inkscape:current-layer="g5934"
+     inkscape:current-layer="layer1"
      showgrid="false"
      inkscape:snap-global="false"
      showborder="true"
@@ -7481,12 +7481,6 @@
         <g
            id="g7670"
            style="font-size:30.72760201px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:url(#linearGradient7714);fill-opacity:1;stroke:none;font-family:Nimbus Roman No9 L;-inkscape-font-specification:Nimbus Roman No9 L" />
-        <path
-           sodipodi:nodetypes="ccccccc"
-           inkscape:connector-curvature="0"
-           id="path7672"
-           d="m -67.375,1152.581 0,1 c 0,0 11.848818,0.125 15.6875,0.125 0.752589,0.9368 0.96875,4.0937 0.96875,4.0937 l 0.75,0 c -0.07722,-1.7397 -0.15625,-3.4777 -0.15625,-5.2187 z"
-           style="opacity:0.4;fill:#ffffff;fill-opacity:1;stroke:none" />
         <path
            transform="matrix(0.99280831,0,0,1.0072438,0.5625,0)"
            d="m -68.96875,1145.3438 a 0.90052722,0.90052722 0 0 0 -0.8125,0.9062 l 0,4.375 a 0.90052722,0.90052722 0 0 0 0.90625,0.9062 l 0.9375,0 a 0.90052722,0.90052722 0 0 0 0.90625,-0.7812 l 0.28125,-2.2188 c 0.286799,-0.035 0.479329,-0.061 0.96875,-0.094 0.739629,-0.05 1.702968,-0.089 2.78125,-0.094 l 0,14.5312 -2.15625,0.2812 a 0.90052722,0.90052722 0 0 0 -0.78125,0.9063 l 0,0.75 a 0.90052722,0.90052722 0 0 0 0.90625,0.9063 l 8.5625,0 a 0.90052722,0.90052722 0 0 0 0.90625,-0.9063 l 0,-0.75 a 0.90052722,0.90052722 0 0 0 -0.78125,-0.9063 l -2.15625,-0.2812 0,-14.5 c 0.432503,0 0.863048,0.016 1.28125,0.031 0.496408,0.01 0.980441,0.035 1.40625,0.063 a 0.90052722,0.90052722 0 0 0 0.03125,0 c 0.432333,0.018 0.799059,0.037 1.09375,0.062 l 0.28125,2.2188 a 0.90052722,0.90052722 0 0 0 0.90625,0.7812 l 0.9375,0 a 0.90052722,0.90052722 0 0 0 0.90625,-0.9062 l 0,-4.375 a 0.90052722,0.90052722 0 0 0 -0.90625,-0.9062 l -16.3125,0 a 0.90052722,0.90052722 0 0 0 -0.09375,0 z"
