@@ -2001,7 +2001,8 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
             m_aStates.top().aParagraphSprms = m_aDefaultState.aParagraphSprms;
             m_aStates.top().aParagraphAttributes = m_aDefaultState.aParagraphAttributes;
             m_aStates.top().resetFrame();
-            m_pCurrentBuffer = 0;
+            if (m_aStates.top().nDestinationState != DESTINATION_SHAPETEXT)
+                m_pCurrentBuffer = 0;
             break;
         case RTF_SECTD:
             m_aStates.top().aSectionSprms = m_aDefaultState.aSectionSprms;

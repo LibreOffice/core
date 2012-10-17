@@ -115,6 +115,7 @@ public:
     void testFdo52475();
     void testFdo55493();
     void testCopyPastePageStyle();
+    void testShptxtPard();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -169,6 +170,7 @@ public:
     CPPUNIT_TEST(testFdo52475);
     CPPUNIT_TEST(testFdo55493);
     CPPUNIT_TEST(testCopyPastePageStyle);
+    CPPUNIT_TEST(testShptxtPard);
 #endif
     CPPUNIT_TEST_SUITE_END();
 
@@ -891,6 +893,16 @@ void Test::testCopyPastePageStyle()
 
     uno::Reference<beans::XPropertySet> xPropertySet(getStyles("PageStyles")->getByName("Default"), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(21001), getProperty<sal_Int32>(xPropertySet, "Width")); // Was letter, i.e. 21590
+}
+
+void Test::testShptxtPard()
+{
+    // The problem was that \pard inside \shptxt caused loss of shape text
+    load("shptxt-pard.rtf");
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
+    uno::Reference<text::XText> xText(xDraws->getByIndex(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("shape text"), xText->getString());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
