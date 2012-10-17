@@ -353,14 +353,7 @@ void RTFSdrImport::resolve(RTFShape& rShape)
 
     // Send it to dmapper
     m_rImport.Mapper().startShape(xShape);
-    m_rImport.Mapper().startParagraphGroup();
-    if (m_rImport.replayShapetext())
-    {
-        m_rImport.Mapper().startCharacterGroup();
-        m_rImport.runBreak();
-        m_rImport.Mapper().endCharacterGroup();
-    }
-    m_rImport.Mapper().endParagraphGroup();
+    m_rImport.replayShapetext();
     m_rImport.Mapper().endShape();
 }
 

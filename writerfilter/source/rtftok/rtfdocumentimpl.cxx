@@ -3673,14 +3673,7 @@ int RTFDocumentImpl::popState()
             xPropertySet->setPropertyValue("FillTransparence", uno::makeAny(sal_Int32(100)));
 
         Mapper().startShape(xShape);
-        Mapper().startParagraphGroup();
-        if (replayShapetext())
-        {
-            Mapper().startCharacterGroup();
-            runBreak();
-            Mapper().endCharacterGroup();
-        }
-        Mapper().endParagraphGroup();
+        replayShapetext();
         Mapper().endShape();
     }
     break;
@@ -3983,11 +3976,17 @@ void RTFDocumentImpl::setDestinationText(OUString& rString)
     m_aStates.top().aDestinationText.append(rString);
 }
 
-bool RTFDocumentImpl::replayShapetext()
+void RTFDocumentImpl::replayShapetext()
 {
-    bool bRet = !m_aShapetextBuffer.empty();
-    replayBuffer(m_aShapetextBuffer);
-    return bRet;
+    Mapper().startParagraphGroup();
+    if (!m_aShapetextBuffer.empty())
+    {
+        replayBuffer(m_aShapetextBuffer);
+        Mapper().startCharacterGroup();
+        runBreak();
+        Mapper().endCharacterGroup();
+    }
+    Mapper().endParagraphGroup();
 }
 
 bool RTFDocumentImpl::getSkipUnknown()

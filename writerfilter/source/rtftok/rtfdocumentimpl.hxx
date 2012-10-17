@@ -428,8 +428,7 @@ namespace writerfilter {
                 void setDestinationText(rtl::OUString& rString);
                 /// Resolve a picture: If not inline, then anchored.
                 int resolvePict(bool bInline);
-                void runBreak();
-                bool replayShapetext();
+                void replayShapetext();
                 bool getSkipUnknown();
                 void setSkipUnknown(bool bSkipUnknown);
 
@@ -471,6 +470,7 @@ namespace writerfilter {
                 void singleChar(sal_uInt8 nValue, bool bRunProps = false);
                 // Sends run properties to dmapper, taking care of buffering.
                 void runProps();
+                void runBreak();
                 void parBreak();
                 void tableBreak();
                 void checkNeedPap();
