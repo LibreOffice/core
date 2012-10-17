@@ -31,7 +31,7 @@
 #include <general.h>
 #include <services.h>
 
-#include <com/sun/star/system/XSystemShellExecute.hpp>
+#include <com/sun/star/system/SystemShellExecute.hpp>
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
 #include <com/sun/star/frame/DispatchResultState.hpp>
 
@@ -60,7 +60,7 @@ DEFINE_XTYPEPROVIDER_5(MailToDispatcher              ,
                        css::frame::XNotifyingDispatch,
                        css::frame::XDispatch         )
 
-DEFINE_XSERVICEINFO_MULTISERVICE(MailToDispatcher                   ,
+DEFINE_XSERVICEINFO_MULTISERVICE_2(MailToDispatcher                   ,
                                  ::cppu::OWeakObject                ,
                                  SERVICENAME_PROTOCOLHANDLER        ,
                                  IMPLEMENTATIONNAME_MAILTODISPATCHER)
@@ -81,15 +81,15 @@ DEFINE_INIT_SERVICE(MailToDispatcher,
     @short      standard ctor
     @descr      These initialize a new instance of ths class with needed informations for work.
 
-    @param      xFactory
+    @param      rxContext
                     reference to uno servicemanager for creation of new services
 */
-MailToDispatcher::MailToDispatcher( const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory )
+MailToDispatcher::MailToDispatcher( const css::uno::Reference< css::uno::XComponentContext >& rxContext )
         //  Init baseclasses first
         : ThreadHelpBase( &Application::GetSolarMutex() )
         , OWeakObject   (                               )
         // Init member
-        , m_xFactory    ( xFactory                      )
+        , m_xContext    ( rxContext                     )
 {
 }
 
@@ -101,7 +101,7 @@ MailToDispatcher::MailToDispatcher( const css::uno::Reference< css::lang::XMulti
 */
 MailToDispatcher::~MailToDispatcher()
 {
-    m_xFactory = NULL;
+    m_xContext = NULL;
 }
 
 //_________________________________________________________________________________________________________________
@@ -228,29 +228,27 @@ sal_Bool MailToDispatcher::implts_dispatch( const css::util::URL&               
 {
     sal_Bool bSuccess = sal_False;
 
-    css::uno::Reference< css::lang::XMultiServiceFactory > xFactory;
+    css::uno::Reference< css::uno::XComponentContext > xContext;
     /* SAFE */{
         ReadGuard aReadLock( m_aLock );
-        xFactory = m_xFactory;
+        xContext = m_xContext;
     /* SAFE */}
 
-    css::uno::Reference< css::system::XSystemShellExecute > xSystemShellExecute( xFactory->createInstance(SERVICENAME_SYSTEMSHELLEXECUTE), css::uno::UNO_QUERY );
-    if (xSystemShellExecute.is())
+    css::uno::Reference< css::system::XSystemShellExecute > xSystemShellExecute = css::system::SystemShellExecute::create( xContext );
+
+    try
     {
-        try
-        {
-            // start mail client
-            // Because there is no notofocation about success - we use case of
-            // no detected exception as SUCCESS - FAILED otherwhise.
-            xSystemShellExecute->execute( aURL.Complete, ::rtl::OUString(), css::system::SystemShellExecuteFlags::URIS_ONLY );
-            bSuccess = sal_True;
-        }
-        catch (const css::lang::IllegalArgumentException&)
-        {
-        }
-        catch (const css::system::SystemShellExecuteException&)
-        {
-        }
+        // start mail client
+        // Because there is no notofocation about success - we use case of
+        // no detected exception as SUCCESS - FAILED otherwhise.
+        xSystemShellExecute->execute( aURL.Complete, ::rtl::OUString(), css::system::SystemShellExecuteFlags::URIS_ONLY );
+        bSuccess = sal_True;
+    }
+    catch (const css::lang::IllegalArgumentException&)
+    {
+    }
+    catch (const css::system::SystemShellExecuteException&)
+    {
     }
 
     return bSuccess;

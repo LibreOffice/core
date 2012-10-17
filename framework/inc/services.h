@@ -55,7 +55,6 @@ namespace framework{
 #define SERVICENAME_JOB                                         DECLARE_ASCII("com.sun.star.task.Job"                               )
 #define SERVICENAME_DISPATCHRECORDERSUPPLIER                    DECLARE_ASCII("com.sun.star.frame.DispatchRecorderSupplier"         )
 #define SERVICENAME_DISPATCHRECORDER                            DECLARE_ASCII("com.sun.star.frame.DispatchRecorder"                 )
-#define SERVICENAME_SYSTEMSHELLEXECUTE                          DECLARE_ASCII("com.sun.star.system.SystemShellExecute"              )
 #define SERVICENAME_PROTOCOLHANDLER                             DECLARE_ASCII("com.sun.star.frame.ProtocolHandler"                  )
 #define SERVICENAME_SUBSTITUTEPATHVARIABLES                     DECLARE_ASCII("com.sun.star.util.PathSubstitution"                  )
 #define SERVICENAME_PATHSETTINGS                                DECLARE_ASCII("com.sun.star.util.PathSettings"                      )

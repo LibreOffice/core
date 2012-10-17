@@ -913,9 +913,7 @@ UpdateCheck::install()
 {
     osl::MutexGuard aGuard(m_aMutex);
 
-    const uno::Reference< c3s::XSystemShellExecute > xShellExecute(
-        createService( UNISTRING( "com.sun.star.system.SystemShellExecute" ), m_xContext ),
-        uno::UNO_QUERY );
+    const uno::Reference< c3s::XSystemShellExecute > xShellExecute = c3s::SystemShellExecute::create( m_xContext );
 
     try {
         // Construct install command ??
@@ -927,29 +925,26 @@ UpdateCheck::install()
         aURL = getReleaseNote(m_aUpdateInfo, 4);
         storeReleaseNote(2, aURL);
 
-        if( xShellExecute.is() )
-        {
-            rtl::OUString aInstallImage(m_aImageName);
-            osl::FileBase::getSystemPathFromFileURL(aInstallImage, aInstallImage);
+        rtl::OUString aInstallImage(m_aImageName);
+        osl::FileBase::getSystemPathFromFileURL(aInstallImage, aInstallImage);
 
-            rtl::OUString aParameter;
-            sal_Int32 nFlags = c3s::SystemShellExecuteFlags::DEFAULTS;
+        rtl::OUString aParameter;
+        sal_Int32 nFlags = c3s::SystemShellExecuteFlags::DEFAULTS;
 #if ( defined LINUX || defined SOLARIS )
-            nFlags = 42;
-            aParameter = getBaseInstallation();
-            if( !aParameter.isEmpty() )
-                osl::FileBase::getSystemPathFromFileURL(aParameter, aParameter);
+        nFlags = 42;
+        aParameter = getBaseInstallation();
+        if( !aParameter.isEmpty() )
+            osl::FileBase::getSystemPathFromFileURL(aParameter, aParameter);
 
-            aParameter += UNISTRING(" &");
+        aParameter += UNISTRING(" &");
 #endif
 
-            rtl::Reference< UpdateCheckConfig > rModel = UpdateCheckConfig::get( m_xContext );
-            rModel->clearLocalFileName();
+        rtl::Reference< UpdateCheckConfig > rModel = UpdateCheckConfig::get( m_xContext );
+        rModel->clearLocalFileName();
 
-            xShellExecute->execute(aInstallImage, aParameter, nFlags);
-            ShutdownThread *pShutdownThread = new ShutdownThread( m_xContext );
-            (void) pShutdownThread;
-        }
+        xShellExecute->execute(aInstallImage, aParameter, nFlags);
+        ShutdownThread *pShutdownThread = new ShutdownThread( m_xContext );
+        (void) pShutdownThread;
     } catch(const uno::Exception&) {
         m_aUpdateHandler->setErrorMessage( m_aUpdateHandler->getDefaultInstErrMsg() );
     }
