@@ -2577,6 +2577,32 @@ void SAL_CALL SfxBaseModel::checkOut(  ) throw ( uno::RuntimeException )
     }
 }
 
+sal_Bool SAL_CALL SfxBaseModel::isVersionable( ) throw ( uno::RuntimeException )
+{
+    sal_Bool bVersionable = sal_False;
+    SfxMedium* pMedium = m_pData->m_pObjectShell->GetMedium();
+    if ( pMedium )
+    {
+        try
+        {
+            ::ucbhelper::Content aContent( pMedium->GetName( ),
+                uno::Reference<ucb::XCommandEnvironment>(),
+                comphelper::getProcessComponentContext() );
+            com::sun::star::uno::Reference < beans::XPropertySetInfo > xProps = aContent.getProperties();
+            ::rtl::OUString aIsVersionableProp( "IsVersionable" );
+            if ( xProps->hasPropertyByName( aIsVersionableProp ) )
+            {
+                aContent.getPropertyValue( aIsVersionableProp ) >>= bVersionable;
+            }
+        }
+        catch ( const uno::Exception & e )
+        {
+            throw uno::RuntimeException( e.Message, e.Context );
+        }
+    }
+    return bVersionable;
+}
+
 void SfxBaseModel::loadCmisProperties( )
 {
     SfxMedium* pMedium = m_pData->m_pObjectShell->GetMedium();

@@ -1442,7 +1442,7 @@ void SfxBaseController::ShowInfoBars( )
         REFERENCE< document::XCmisDocument > xCmisDoc( m_pData->m_pViewShell->GetObjectShell()->GetModel(), uno::UNO_QUERY );
         beans::PropertyValues aCmisProperties = xCmisDoc->getCmisPropertiesValues( );
 
-        if ( aCmisProperties.hasElements( ) )
+        if ( xCmisDoc->isVersionable( ) && aCmisProperties.hasElements( ) )
         {
             // Loop over the CMIS Properties to find cmis:isVersionSeriesCheckedOut
             bool bFoundCheckedout = false;

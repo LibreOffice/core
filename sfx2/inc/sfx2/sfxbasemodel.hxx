@@ -1423,6 +1423,8 @@ public:
 
     virtual void SAL_CALL checkOut(  ) throw ( ::com::sun::star::uno::RuntimeException );
 
+    virtual sal_Bool SAL_CALL isVersionable( ) throw ( ::com::sun::star::uno::RuntimeException );
+
     //____________________________________________________________________________________________________
     //  SfxListener
     //____________________________________________________________________________________________________

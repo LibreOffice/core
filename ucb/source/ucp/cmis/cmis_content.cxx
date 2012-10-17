@@ -544,6 +544,19 @@ namespace cmis
                         xRow->appendVoid( rProp );
                     }
                 }
+                else if ( rProp.Name == "IsVersionable" )
+                {
+                    try
+                    {
+                        libcmis::ObjectPtr object = getObject( xEnv );
+                        sal_Bool bIsVersionable = object->getTypeDescription( )->isVersionable( );
+                        xRow->appendBoolean( rProp, bIsVersionable );
+                    }
+                    catch ( const libcmis::Exception& )
+                    {
+                        xRow->appendVoid( rProp );
+                    }
+                }
                 else
                     SAL_INFO( "cmisucp", "Looking for unsupported property " << rProp.Name );
             }
@@ -975,6 +988,9 @@ namespace cmis
             beans::Property( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CmisPropertiesDisplayNames" ) ),
                 -1, getCppuType( static_cast< const beans::PropertyValues * >( 0 ) ),
                 beans::PropertyAttribute::BOUND ),
+            beans::Property( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsVersionable" ) ),
+                -1, getCppuBooleanType(),
+                beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
         };
 
         const int nProps = SAL_N_ELEMENTS(aGenericProperties);

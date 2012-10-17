@@ -24,6 +24,10 @@ interface XCmisDocument : com::sun::star::uno::XInterface
      */
     void checkOut( );
 
+    /** Tells whether a document can support versioning or not.
+     */
+    boolean isVersionable( );
+
     /** Contains the properties values named after their CMIS ID.
      */
     [attribute] com::sun::star::beans::PropertyValues CmisPropertiesValues;
