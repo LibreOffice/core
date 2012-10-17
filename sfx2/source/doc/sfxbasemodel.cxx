@@ -2570,11 +2570,9 @@ void SAL_CALL SfxBaseModel::checkOut(  ) throw ( uno::RuntimeException )
             // Reload the CMIS properties
             loadCmisProperties( );
         }
-        catch (const ucb::ContentCreationException &)
+        catch ( const uno::Exception & e )
         {
-        }
-        catch (const ucb::CommandAbortedException &)
-        {
+            throw uno::RuntimeException( e.Message, e.Context );
         }
     }
 }

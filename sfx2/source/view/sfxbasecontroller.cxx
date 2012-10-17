@@ -72,6 +72,7 @@
 #include <toolkit/helper/convert.hxx>
 #include <framework/titlehelper.hxx>
 #include <comphelper/processfactory.hxx>
+#include <vcl/msgbox.hxx>
 
 #include <boost/unordered_map.hpp>
 
@@ -1483,9 +1484,11 @@ IMPL_LINK( SfxBaseController, CheckOutHandler, PushButton*, pBtn )
             SfxViewFrame* pViewFrame = m_pData->m_pViewShell->GetFrame();
             pViewFrame->RemoveInfoBar( pInfoBar );
         }
-        catch ( const uno::RuntimeException& )
+        catch ( const uno::RuntimeException& e )
         {
-            // TODO Handle the problem in some way?
+            ErrorBox* pErrorBox = new ErrorBox( &m_pData->m_pViewShell->GetFrame()->GetWindow(), WB_OK, e.Message );
+            pErrorBox->Execute( );
+            delete pErrorBox;
         }
     }
     return 0;
