@@ -1324,6 +1324,7 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
             }
             break;
         case RTF_SHPTXT:
+        case RTF_DPTXBXTEXT:
             m_aStates.top().nDestinationState = DESTINATION_SHAPETEXT;
             dispatchFlag(RTF_PARD);
             m_bNeedPap = true;
@@ -2271,6 +2272,7 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
         case RTF_DPLINE:
         case RTF_DPRECT:
         case RTF_DPELLIPSE:
+        case RTF_DPTXBX:
                 {
                     sal_Int32 nType = 0;
                     switch (nKeyword)
@@ -2283,6 +2285,9 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
                             break;
                         case RTF_DPELLIPSE:
                             nType = ESCHER_ShpInst_Ellipse;
+                            break;
+                        case RTF_DPTXBX:
+                            nType = ESCHER_ShpInst_TextBox;
                             break;
                         default:
                             break;
@@ -3668,6 +3673,14 @@ int RTFDocumentImpl::popState()
             xPropertySet->setPropertyValue("FillTransparence", uno::makeAny(sal_Int32(100)));
 
         Mapper().startShape(xShape);
+        Mapper().startParagraphGroup();
+        if (replayShapetext())
+        {
+            Mapper().startCharacterGroup();
+            runBreak();
+            Mapper().endCharacterGroup();
+        }
+        Mapper().endParagraphGroup();
         Mapper().endShape();
     }
     break;
