@@ -1501,6 +1501,10 @@ void ScColumn::GetFilterEntries(SCROW nStartRow, SCROW nEndRow, std::vector<ScTy
             }
             break;
 
+            // skip broadcaster cells
+            case CELLTYPE_NOTE:
+                continue;
+
             default:
                 ;
         }
