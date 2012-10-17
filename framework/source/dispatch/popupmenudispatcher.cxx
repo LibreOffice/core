@@ -34,7 +34,6 @@
 #include <properties.h>
 
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
-#include <com/sun/star/awt/XToolkit.hpp>
 #include <com/sun/star/awt/WindowAttribute.hpp>
 #include <com/sun/star/awt/WindowDescriptor.hpp>
 #include <com/sun/star/awt/PosSize.hpp>

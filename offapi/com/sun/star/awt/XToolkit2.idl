@@ -16,22 +16,40 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef __com_sun_star_awt_Toolkit_idl__
-#define __com_sun_star_awt_Toolkit_idl__
+#ifndef __com_sun_star_awt_XToolkit2_idl__
+#define __com_sun_star_awt_XToolkit2_idl__
 
-#include <com/sun/star/awt/XToolkit2.idl>
+#include <com/sun/star/awt/XToolkit.idl>
+#include <com/sun/star/awt/XDataTransferProviderAccess.idl>
+#include <com/sun/star/awt/XSystemChildFactory.idl>
+#include <com/sun/star/awt/XMessageBoxFactory.idl>
+#include <com/sun/star/awt/XExtendedToolkit.idl>
+#include <com/sun/star/awt/XReschedule.idl>
+
 
 
 module com {  module sun {  module star {  module awt {
 
-/** describes a toolkit that creates windows on a screen.
 
-    <p>The design of the interfaces for the toolkit implementation
-    should be remote. This means that the calls to the interfaces
-    of the toolkit should be one-way. Too many synchronous calls kill the
-    remote performance.</p>
+/**
+  Provides a unified interface for the new-style service Toolkit to implement.
+
+  @since LibreOffice 3.7
  */
-published service Toolkit : XToolkit2;
+published interface XToolkit2
+{
+    interface XToolkit;
+
+    interface com::sun::star::awt::XDataTransferProviderAccess;
+
+    interface com::sun::star::awt::XSystemChildFactory;
+
+    interface com::sun::star::awt::XMessageBoxFactory;
+
+    interface com::sun::star::awt::XExtendedToolkit;
+
+    interface com::sun::star::awt::XReschedule;
+};
 
 
 }; }; }; };

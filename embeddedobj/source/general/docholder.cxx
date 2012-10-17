@@ -38,6 +38,7 @@
 #include <com/sun/star/frame/XControllerBorder.hpp>
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
 #include <com/sun/star/frame/XDispatchProviderInterception.hpp>
+#include <com/sun/star/awt/Toolkit.hpp>
 #include <com/sun/star/awt/XTopWindow.hpp>
 #include <com/sun/star/awt/PosSize.hpp>
 #include <com/sun/star/awt/XView.hpp>
@@ -454,11 +455,8 @@ sal_Bool DocumentHolder::ShowInplace( const uno::Reference< awt::XWindowPeer >& 
                                                 awt::Rectangle(),//aOwnRectangle,
                                                 awt::WindowAttribute::SHOW | awt::VclWindowPeerAttribute::CLIPCHILDREN );
 
-        uno::Reference< awt::XToolkit > xToolkit(
-                            m_xFactory->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.Toolkit" )) ),
-                            uno::UNO_QUERY );
-        if ( !xToolkit.is() )
-            throw uno::RuntimeException();
+        uno::Reference< awt::XToolkit2 > xToolkit =
+                            awt::Toolkit::create(comphelper::getComponentContext(m_xFactory));
 
         uno::Reference< awt::XWindowPeer > xNewWinPeer = xToolkit->createWindow( aOwnWinDescriptor );
         uno::Reference< awt::XWindow > xOwnWindow( xNewWinPeer, uno::UNO_QUERY );

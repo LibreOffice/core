@@ -21,6 +21,7 @@
 #include "DialogModelProvider.hxx"
 #include "dlgprov.hxx"
 #include "dlgevtatt.hxx"
+#include <com/sun/star/awt/Toolkit.hpp>
 #include <com/sun/star/awt/XControlContainer.hpp>
 #include <com/sun/star/awt/XWindowPeer.hpp>
 #include <com/sun/star/io/XInputStreamProvider.hpp>
@@ -519,10 +520,8 @@ static ::rtl::OUString aResourceResolverPropName("ResourceResolver");
                     }
 
                     // create a peer
-                    Reference< XToolkit> xToolkit( xSMgr->createInstanceWithContext(
-                        ::rtl::OUString( "com.sun.star.awt.Toolkit"  ), m_xContext ), UNO_QUERY );
-                    if ( xToolkit.is() )
-                        xDialogControl->createPeer( xToolkit, xPeer );
+                    Reference< XToolkit> xToolkit( Toolkit::create( m_xContext ), UNO_QUERY_THROW );
+                    xDialogControl->createPeer( xToolkit, xPeer );
                 }
             }
         }

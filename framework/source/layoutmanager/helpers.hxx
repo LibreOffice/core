@@ -34,6 +34,8 @@
 #include <properties.h>
 
 #include <com/sun/star/awt/XWindowPeer.hpp>
+#include <com/sun/star/awt/XToolkit2.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/ui/XUIElement.hpp>
@@ -66,7 +68,7 @@ SystemWindow* getTopSystemWindow( const ::com::sun::star::uno::Reference< ::com:
 bool equalRectangles( const css::awt::Rectangle& rRect1, const css::awt::Rectangle& rRect2 );
 void setZeroRectangle( ::Rectangle& rRect );
 bool lcl_checkUIElement(const ::com::sun::star::uno::Reference< ::com::sun::star::ui::XUIElement >& xUIElement,::com::sun::star::awt::Rectangle& _rPosSize, ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >& _xWindow);
-::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer > createToolkitWindow( const css::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rFactory, const css::uno::Reference< ::com::sun::star::awt::XWindowPeer >& rParent, const char* pService );
+::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer > createToolkitWindow( const css::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext, const css::uno::Reference< ::com::sun::star::awt::XWindowPeer >& rParent, const char* pService );
 WindowAlign ImplConvertAlignment( sal_Int16 aAlignment );
 ::rtl::OUString getElementTypeFromResourceURL( const ::rtl::OUString& aResourceURL );
 void parseResourceURL( const rtl::OUString& aResourceURL, rtl::OUString& aElementType, rtl::OUString& aElementName );
@@ -77,7 +79,7 @@ sal_Bool implts_isPreviewModel( const ::com::sun::star::uno::Reference< ::com::s
 sal_Bool implts_isFrameOrWindowTop( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& xFrame );
 void impl_setDockingWindowVisibility( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& rSMGR, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame, const ::rtl::OUString& rDockingWindowName, bool bVisible );
 void impl_addWindowListeners( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xThis, const ::com::sun::star::uno::Reference< css::ui::XUIElement >& xUIElement );
-::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer > implts_createToolkitWindow( const css::uno::Reference< ::com::sun::star::awt::XToolkit >& rToolkit, const css::uno::Reference< ::com::sun::star::awt::XWindowPeer >& rParent );
+::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer > implts_createToolkitWindow( const css::uno::Reference< ::com::sun::star::awt::XToolkit2 >& rToolkit, const css::uno::Reference< ::com::sun::star::awt::XWindowPeer >& rParent );
 
 }
 

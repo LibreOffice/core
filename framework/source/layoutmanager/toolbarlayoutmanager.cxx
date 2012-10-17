@@ -34,6 +34,7 @@
 #include <uiconfiguration/windowstateconfiguration.hxx>
 
 #include <com/sun/star/awt/PosSize.hpp>
+#include <com/sun/star/awt/Toolkit.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/ui/UIElementType.hpp>
 #include <com/sun/star/container/XNameReplace.hpp>
@@ -82,7 +83,7 @@ ToolbarLayoutManager::ToolbarLayoutManager(
     setZeroRectangle( m_aDockingArea );
 
     // create toolkit object
-    m_xToolkit = uno::Reference< awt::XToolkit >( m_xSMGR->createInstance( SERVICENAME_VCLTOOLKIT ), uno::UNO_QUERY );
+    m_xToolkit = awt::Toolkit::create( comphelper::getComponentContext(m_xSMGR) );
 }
 
 ToolbarLayoutManager::~ToolbarLayoutManager()
@@ -912,10 +913,10 @@ void ToolbarLayoutManager::setParentWindow(
 {
     static const char DOCKINGAREASTRING[] = "dockingarea";
 
-    uno::Reference< awt::XWindow > xTopDockWindow = uno::Reference< awt::XWindow >( createToolkitWindow( m_xSMGR, xParentWindow, DOCKINGAREASTRING ), uno::UNO_QUERY );
-    uno::Reference< awt::XWindow > xLeftDockWindow = uno::Reference< awt::XWindow >( createToolkitWindow( m_xSMGR, xParentWindow, DOCKINGAREASTRING ), uno::UNO_QUERY );
-    uno::Reference< awt::XWindow > xRightDockWindow = uno::Reference< awt::XWindow >( createToolkitWindow( m_xSMGR, xParentWindow, DOCKINGAREASTRING ), uno::UNO_QUERY );
-    uno::Reference< awt::XWindow > xBottomDockWindow = uno::Reference< awt::XWindow >( createToolkitWindow( m_xSMGR, xParentWindow, DOCKINGAREASTRING ), uno::UNO_QUERY );
+    uno::Reference< awt::XWindow > xTopDockWindow = uno::Reference< awt::XWindow >( createToolkitWindow( comphelper::getComponentContext(m_xSMGR), xParentWindow, DOCKINGAREASTRING ), uno::UNO_QUERY );
+    uno::Reference< awt::XWindow > xLeftDockWindow = uno::Reference< awt::XWindow >( createToolkitWindow( comphelper::getComponentContext(m_xSMGR), xParentWindow, DOCKINGAREASTRING ), uno::UNO_QUERY );
+    uno::Reference< awt::XWindow > xRightDockWindow = uno::Reference< awt::XWindow >( createToolkitWindow( comphelper::getComponentContext(m_xSMGR), xParentWindow, DOCKINGAREASTRING ), uno::UNO_QUERY );
+    uno::Reference< awt::XWindow > xBottomDockWindow = uno::Reference< awt::XWindow >( createToolkitWindow( comphelper::getComponentContext(m_xSMGR), xParentWindow, DOCKINGAREASTRING ), uno::UNO_QUERY );
 
     WriteGuard aWriteLock( m_aLock );
     m_xContainerWindow = uno::Reference< awt::XWindow2 >( xParentWindow, uno::UNO_QUERY );

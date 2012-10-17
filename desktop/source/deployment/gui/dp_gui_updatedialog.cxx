@@ -42,7 +42,7 @@
 #include "com/sun/star/awt/WindowAttribute.hpp"
 #include "com/sun/star/awt/WindowClass.hpp"
 #include "com/sun/star/awt/WindowDescriptor.hpp"
-#include "com/sun/star/awt/XToolkit.hpp"
+#include "com/sun/star/awt/Toolkit.hpp"
 #include "com/sun/star/awt/XWindow.hpp"
 #include "com/sun/star/awt/XWindowPeer.hpp"
 #include "com/sun/star/beans/NamedValue.hpp"
@@ -554,17 +554,9 @@ UpdateDialog::UpdateDialog(
 
     m_xExtensionManager = deployment::ExtensionManager::get( context );
 
-    uno::Reference< awt::XToolkit > toolkit;
+    uno::Reference< awt::XToolkit2 > toolkit;
     try {
-        toolkit = uno::Reference< awt::XToolkit >(
-            (uno::Reference< lang::XMultiComponentFactory >(
-                m_context->getServiceManager(),
-                uno::UNO_QUERY_THROW)->
-             createInstanceWithContext(
-                 rtl::OUString(
-                     RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.Toolkit")),
-                 m_context)),
-            uno::UNO_QUERY_THROW);
+        toolkit = awt::Toolkit::create(m_context);
     } catch (const uno::RuntimeException &) {
         throw;
     } catch (const uno::Exception & e) {

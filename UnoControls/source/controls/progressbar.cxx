@@ -42,8 +42,8 @@ namespace unocontrols{
 //  construct/destruct
 //____________________________________________________________________________________________________________
 
-ProgressBar::ProgressBar( const Reference< XMultiServiceFactory >& xFactory )
-    : BaseControl           (    xFactory                   )
+ProgressBar::ProgressBar( const Reference< XComponentContext >& rxContext )
+    : BaseControl           (    rxContext                   )
     , m_bHorizontal         (    PROGRESSBAR_DEFAULT_HORIZONTAL         )
     , m_aBlockSize          (    PROGRESSBAR_DEFAULT_BLOCKDIMENSION     )
     , m_nForegroundColor    (    PROGRESSBAR_DEFAULT_FOREGROUNDCOLOR    )

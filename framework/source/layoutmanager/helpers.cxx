@@ -31,6 +31,7 @@
 #include <services.h>
 
 #include <com/sun/star/ui/DockingArea.hpp>
+#include <com/sun/star/awt/Toolkit.hpp>
 #include <com/sun/star/awt/XTopWindow.hpp>
 #include <com/sun/star/frame/XDispatchHelper.hpp>
 #include <com/sun/star/awt/XDockableWindow.hpp>
@@ -38,6 +39,7 @@
 #include <com/sun/star/awt/XWindowListener.hpp>
 #include <com/sun/star/ui/XUIElement.hpp>
 
+#include <comphelper/processfactory.hxx>
 #include <comphelper/mediadescriptor.hxx>
 #include <vcl/svapp.hxx>
 #include <toolkit/unohlp.hxx>
@@ -169,29 +171,21 @@ bool lcl_checkUIElement(const uno::Reference< ui::XUIElement >& xUIElement, awt:
     return bRet;
 }
 
-uno::Reference< awt::XWindowPeer > createToolkitWindow( const uno::Reference< lang::XMultiServiceFactory >& rFactory, const uno::Reference< awt::XWindowPeer >& rParent, const char* pService )
+uno::Reference< awt::XWindowPeer > createToolkitWindow( const uno::Reference< uno::XComponentContext >& rxContext, const uno::Reference< awt::XWindowPeer >& rParent, const char* pService )
 {
-    const rtl::OUString aAWTToolkit( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.Toolkit" ));
+    uno::Reference< awt::XToolkit2 > xToolkit = awt::Toolkit::create( rxContext );
 
-    uno::Reference< awt::XWindowPeer > xPeer;
-    if ( rFactory.is() )
-    {
-        uno::Reference< awt::XToolkit > xToolkit( rFactory->createInstance( aAWTToolkit ), uno::UNO_QUERY_THROW );
-        if ( xToolkit.is() )
-        {
-            // describe window properties.
-            css::awt::WindowDescriptor aDescriptor;
-            aDescriptor.Type                =   awt::WindowClass_SIMPLE;
-            aDescriptor.WindowServiceName   =   ::rtl::OUString::createFromAscii( pService );
-            aDescriptor.ParentIndex         =   -1;
-            aDescriptor.Parent              =   uno::Reference< awt::XWindowPeer >( rParent, uno::UNO_QUERY );
-            aDescriptor.Bounds              =   awt::Rectangle(0,0,0,0);
-            aDescriptor.WindowAttributes    =   0;
+    // describe window properties.
+    css::awt::WindowDescriptor aDescriptor;
+    aDescriptor.Type                =   awt::WindowClass_SIMPLE;
+    aDescriptor.WindowServiceName   =   ::rtl::OUString::createFromAscii( pService );
+    aDescriptor.ParentIndex         =   -1;
+    aDescriptor.Parent              =   uno::Reference< awt::XWindowPeer >( rParent, uno::UNO_QUERY );
+    aDescriptor.Bounds              =   awt::Rectangle(0,0,0,0);
+    aDescriptor.WindowAttributes    =   0;
 
-            // create a awt window
-            xPeer = xToolkit->createWindow( aDescriptor );
-        }
-    }
+    // create a awt window
+    uno::Reference< awt::XWindowPeer > xPeer = xToolkit->createWindow( aDescriptor );
 
     return xPeer;
 }

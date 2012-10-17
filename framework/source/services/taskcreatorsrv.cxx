@@ -40,6 +40,7 @@
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/frame/XDesktop.hpp>
+#include <com/sun/star/awt/Toolkit.hpp>
 #include <com/sun/star/awt/XTopWindow.hpp>
 #include <com/sun/star/awt/WindowDescriptor.hpp>
 #include <com/sun/star/awt/WindowAttribute.hpp>
@@ -220,7 +221,7 @@ css::uno::Reference< css::awt::XWindow > TaskCreatorService::implts_createContai
     // <- SAFE
 
     // get toolkit to create task container window
-    css::uno::Reference< css::awt::XToolkit > xToolkit( xSMGR->createInstance( SERVICENAME_VCLTOOLKIT ), css::uno::UNO_QUERY_THROW);
+    css::uno::Reference< css::awt::XToolkit2 > xToolkit = css::awt::Toolkit::create( comphelper::getComponentContext(xSMGR) );
 
     // Check if child frames can be created realy. We need at least a valid window at the parent frame ...
     css::uno::Reference< css::awt::XWindowPeer > xParentWindowPeer;

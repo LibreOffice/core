@@ -54,6 +54,7 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/awt,\
 	MenuBar \
 	PopupMenu \
 	TabController \
+	Toolkit \
 	UnoControlDialogModelProvider \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/awt/grid,\
@@ -374,7 +375,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/awt,\
 	RoadmapItem \
 	SpinningProgressControlModel \
 	TabControllerModel \
-	Toolkit \
 	UnoControl \
 	UnoControlButton \
 	UnoControlButtonModel \
@@ -1822,6 +1822,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/awt,\
 	XTimeField \
 	XToggleButton \
 	XToolkit \
+	XToolkit2 \
 	XToolkitExperimental \
 	XTopWindow \
 	XTopWindow2 \

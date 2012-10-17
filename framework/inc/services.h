@@ -38,7 +38,6 @@ namespace framework{
 #define SERVICENAME_MEDIATYPEDETECTIONHELPER                    DECLARE_ASCII("com.sun.star.frame.MediaTypeDetectionHelper"         )
 #define SERVICENAME_LOGINDIALOG                                 DECLARE_ASCII("com.sun.star.framework.LoginDialog"                  )
 #define SERVICENAME_CONFIGURATION                               DECLARE_ASCII("com.sun.star.configuration.ConfigurationRegistry"    )
-#define SERVICENAME_VCLTOOLKIT                                  DECLARE_ASCII("com.sun.star.awt.Toolkit"                            )
 #define SERVICENAME_SIMPLEREGISTRY                              DECLARE_ASCII("com.sun.star.registry.SimpleRegistry"                )
 #define SERVICENAME_NESTEDREGISTRY                              DECLARE_ASCII("com.sun.star.registry.NestedRegistry"                )
 #define SERVICENAME_GENERICFRAMELOADER                          DECLARE_ASCII("com.sun.star.comp.office.FilterDetect"               )

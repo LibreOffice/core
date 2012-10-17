@@ -33,7 +33,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XSingleComponentFactory.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/awt/XToolkit.hpp>
+#include <com/sun/star/awt/XToolkit2.hpp>
 
 #include <cppuhelper/implbase2.hxx>
 #include <rtl/ustring.hxx>
@@ -57,7 +57,7 @@ class TabWinFactory :  protected ThreadHelpBase                                 
 
     private:
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xServiceManager;
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit >              m_xToolkit;
+        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit2 >             m_xToolkit;
 };
 
 }

@@ -33,6 +33,7 @@
 
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
+#include <com/sun/star/awt/Toolkit.hpp>
 #include <com/sun/star/awt/XTopWindow.hpp>
 #include <com/sun/star/awt/WindowAttribute.hpp>
 
@@ -90,7 +91,7 @@ throw ( css::uno::Exception, css::uno::RuntimeException )
 
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     ResetableGuard aLock( m_aLock );
-    css::uno::Reference< css::awt::XToolkit > xToolkit = m_xToolkit;
+    css::uno::Reference< css::awt::XToolkit2 > xToolkit = m_xToolkit;
     css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR( m_xServiceManager );
     aLock.unlock();
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
@@ -110,37 +111,31 @@ throw ( css::uno::Exception, css::uno::RuntimeException )
 
     if ( !xToolkit.is() && xSMGR.is() )
     {
-        xToolkit = css::uno::Reference< css::awt::XToolkit >( xSMGR->createInstance( SERVICENAME_VCLTOOLKIT ), css::uno::UNO_QUERY );
-        if ( xToolkit.is() )
-        {
-            /* SAFE AREA ----------------------------------------------------------------------------------------------- */
-            aLock.lock();
-            m_xToolkit = xToolkit;
-            aLock.unlock();
-            /* SAFE AREA ----------------------------------------------------------------------------------------------- */
-        }
+        xToolkit = css::awt::Toolkit::create( comphelper::getComponentContext(xSMGR) );
+        /* SAFE AREA ----------------------------------------------------------------------------------------------- */
+        aLock.lock();
+        m_xToolkit = xToolkit;
+        aLock.unlock();
+        /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     }
 
     if ( !xTopWindow.is() )
     {
-        if ( xToolkit.is() )
-        {
-            // describe window properties.
-            css::awt::WindowDescriptor aDescriptor;
-            aDescriptor.Type                =   css::awt::WindowClass_TOP                                           ;
-            aDescriptor.ParentIndex         =   -1                                                                  ;
-            aDescriptor.Parent              =   css::uno::Reference< css::awt::XWindowPeer >()                      ;
-            aDescriptor.Bounds              =   css::awt::Rectangle(0,0,0,0)                                        ;
-            aDescriptor.WindowAttributes    =   css::awt::WindowAttribute::BORDER|
-                                                css::awt::WindowAttribute::SIZEABLE|
-                                                css::awt::WindowAttribute::MOVEABLE|
-                                                css::awt::WindowAttribute::CLOSEABLE|
-                                                css::awt::WindowAttribute::MINSIZE;
+        // describe window properties.
+        css::awt::WindowDescriptor aDescriptor;
+        aDescriptor.Type                =   css::awt::WindowClass_TOP                                           ;
+        aDescriptor.ParentIndex         =   -1                                                                  ;
+        aDescriptor.Parent              =   css::uno::Reference< css::awt::XWindowPeer >()                      ;
+        aDescriptor.Bounds              =   css::awt::Rectangle(0,0,0,0)                                        ;
+        aDescriptor.WindowAttributes    =   css::awt::WindowAttribute::BORDER|
+                                            css::awt::WindowAttribute::SIZEABLE|
+                                            css::awt::WindowAttribute::MOVEABLE|
+                                            css::awt::WindowAttribute::CLOSEABLE|
+                                            css::awt::WindowAttribute::MINSIZE;
 
-            // create a parent window
-            xTopWindow = css::uno::Reference< css::awt::XTopWindow >(
-                            xToolkit->createWindow( aDescriptor ), css::uno::UNO_QUERY );
-        }
+        // create a parent window
+        xTopWindow = css::uno::Reference< css::awt::XTopWindow >(
+                        xToolkit->createWindow( aDescriptor ), css::uno::UNO_QUERY );
     }
 
     if ( xTopWindow.is() )

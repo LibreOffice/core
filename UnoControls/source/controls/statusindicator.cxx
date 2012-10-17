@@ -39,21 +39,21 @@ namespace unocontrols{
 //  construct/destruct
 //____________________________________________________________________________________________________________
 
-StatusIndicator::StatusIndicator( const Reference< XMultiServiceFactory >& xFactory )
-    : BaseContainerControl  ( xFactory  )
+StatusIndicator::StatusIndicator( const Reference< XComponentContext >& rxContext )
+    : BaseContainerControl  ( rxContext  )
 {
     // Its not allowed to work with member in this method (refcounter !!!)
     // But with a HACK (++refcount) its "OK" :-(
     ++m_refCount ;
 
     // Create instances for fixedtext and progress ...
-    m_xText         = Reference< XFixedText >   ( xFactory->createInstance( FIXEDTEXT_SERVICENAME ), UNO_QUERY );
-    m_xProgressBar  = Reference< XProgressBar > ( xFactory->createInstance( SERVICENAME_PROGRESSBAR ), UNO_QUERY );
+    m_xText         = Reference< XFixedText >   ( rxContext->getServiceManager()->createInstanceWithContext( FIXEDTEXT_SERVICENAME, rxContext ), UNO_QUERY );
+    m_xProgressBar  = Reference< XProgressBar > ( rxContext->getServiceManager()->createInstanceWithContext( SERVICENAME_PROGRESSBAR, rxContext ), UNO_QUERY );
     // ... cast controls to Reference< XControl > and set model ...
     // ( ProgressBar has no model !!! )
     Reference< XControl > xTextControl      ( m_xText       , UNO_QUERY );
     Reference< XControl > xProgressControl  ( m_xProgressBar, UNO_QUERY );
-    xTextControl->setModel( Reference< XControlModel >( xFactory->createInstance( FIXEDTEXT_MODELNAME ), UNO_QUERY ) );
+    xTextControl->setModel( Reference< XControlModel >( rxContext->getServiceManager()->createInstanceWithContext( FIXEDTEXT_MODELNAME, rxContext ), UNO_QUERY ) );
     // ... and add controls to basecontainercontrol!
     addControl( CONTROLNAME_TEXT, xTextControl    );
     addControl( CONTROLNAME_PROGRESSBAR, xProgressControl    );

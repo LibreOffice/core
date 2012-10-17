@@ -33,6 +33,7 @@
 #include <rtl/uri.hxx>
 #include <osl/file.hxx>
 #include <com/sun/star/lang/Locale.hpp>
+#include <com/sun/star/awt/Toolkit.hpp>
 #include <rtl/ustrbuf.hxx>
 #include "inputstream.hxx"
 #include <algorithm>
@@ -1208,24 +1209,17 @@ void Databases::cascadingStylesheet( const rtl::OUString& Language,
         if ( aCSS.compareToAscii( "default" ) == 0 )
         {
             // #i50760: "default" needs to adapt HC mode
-            uno::Reference< awt::XToolkit > xToolkit = uno::Reference< awt::XToolkit >(
-                    ::comphelper::getProcessServiceFactory()->createInstance( rtl::OUString( "com.sun.star.awt.Toolkit" ) ), uno::UNO_QUERY );
-            if ( xToolkit.is() )
+            uno::Reference< awt::XToolkit2 > xToolkit =
+                   awt::Toolkit::create( ::comphelper::getProcessComponentContext() );
+            uno::Reference< awt::XTopWindow > xTopWindow = xToolkit->getActiveTopWindow();
+            if ( xTopWindow.is() )
             {
-                uno::Reference< awt::XExtendedToolkit > xExtToolkit( xToolkit, uno::UNO_QUERY );
-                if ( xExtToolkit.is() )
+                uno::Reference< awt::XVclWindowPeer > xVclWindowPeer( xTopWindow, uno::UNO_QUERY );
+                if ( xVclWindowPeer.is() )
                 {
-                    uno::Reference< awt::XTopWindow > xTopWindow = xExtToolkit->getActiveTopWindow();
-                    if ( xTopWindow.is() )
-                    {
-                        uno::Reference< awt::XVclWindowPeer > xVclWindowPeer( xTopWindow, uno::UNO_QUERY );
-                        if ( xVclWindowPeer.is() )
-                        {
-                            uno::Any aHCMode = xVclWindowPeer->getProperty( rtl::OUString( "HighContrastMode" ) );
-                            if ( ( aHCMode >>= bHighContrastMode ) && bHighContrastMode )
-                                aCSS = rtl::OUString( "highcontrastblack" );
-                        }
-                    }
+                    uno::Any aHCMode = xVclWindowPeer->getProperty( rtl::OUString( "HighContrastMode" ) );
+                    if ( ( aHCMode >>= bHighContrastMode ) && bHighContrastMode )
+                        aCSS = rtl::OUString( "highcontrastblack" );
                 }
             }
         }

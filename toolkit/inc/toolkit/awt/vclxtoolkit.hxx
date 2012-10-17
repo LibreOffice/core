@@ -21,14 +21,10 @@
 #define _TOOLKIT_AWT_VCLXTOOLKIT_HXX_
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/awt/XSystemChildFactory.hpp>
 #include <com/sun/star/awt/XToolkitExperimental.hpp>
-#include <com/sun/star/awt/XDataTransferProviderAccess.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
-#include <com/sun/star/awt/XExtendedToolkit.hpp>
-#include <com/sun/star/awt/XReschedule.hpp>
 #include <com/sun/star/awt/XMessageBoxFactory.hpp>
-#include <cppuhelper/compbase7.hxx>
+#include <cppuhelper/compbase2.hxx>
 #include "cppuhelper/interfacecontainer.hxx"
 #include <osl/mutex.hxx>
 #include <osl/module.h>
@@ -69,14 +65,9 @@ protected:
 };
 
 class VCLXToolkit : public VCLXToolkit_Impl,
-                    public cppu::WeakComponentImplHelper7<
+                    public cppu::WeakComponentImplHelper2<
                     ::com::sun::star::awt::XToolkitExperimental,
-                    ::com::sun::star::lang::XServiceInfo,
-                    ::com::sun::star::awt::XSystemChildFactory,
-                    ::com::sun::star::awt::XMessageBoxFactory,
-                    ::com::sun::star::awt::XDataTransferProviderAccess,
-                    ::com::sun::star::awt::XExtendedToolkit,
-                    ::com::sun::star::awt::XReschedule >
+                    ::com::sun::star::lang::XServiceInfo >
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboard > mxClipboard;
     ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboard > mxSelection;

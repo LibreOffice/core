@@ -47,20 +47,21 @@ namespace unocontrols{
 //  construct/destruct
 //____________________________________________________________________________________________________________
 
-ProgressMonitor::ProgressMonitor( const Reference< XMultiServiceFactory >& xFactory )
-    : BaseContainerControl  ( xFactory  )
+ProgressMonitor::ProgressMonitor( const Reference< XComponentContext >& rxContext )
+    : BaseContainerControl  ( rxContext  )
 {
     // Its not allowed to work with member in this method (refcounter !!!)
     // But with a HACK (++refcount) its "OK" :-(
     ++m_refCount ;
 
     // Create instances for fixedtext, button and progress ...
-    m_xTopic_Top    = Reference< XFixedText >   ( xFactory->createInstance ( FIXEDTEXT_SERVICENAME ), UNO_QUERY ) ;
-    m_xText_Top     = Reference< XFixedText >   ( xFactory->createInstance ( FIXEDTEXT_SERVICENAME ), UNO_QUERY ) ;
-    m_xTopic_Bottom = Reference< XFixedText >   ( xFactory->createInstance ( FIXEDTEXT_SERVICENAME ), UNO_QUERY ) ;
-    m_xText_Bottom  = Reference< XFixedText >   ( xFactory->createInstance ( FIXEDTEXT_SERVICENAME ), UNO_QUERY ) ;
-    m_xButton       = Reference< XButton >      ( xFactory->createInstance ( BUTTON_SERVICENAME ), UNO_QUERY ) ;
-    m_xProgressBar  = Reference< XProgressBar > ( xFactory->createInstance ( SERVICENAME_PROGRESSBAR ), UNO_QUERY ) ;
+
+    m_xTopic_Top    = Reference< XFixedText >   ( rxContext->getServiceManager()->createInstanceWithContext( FIXEDTEXT_SERVICENAME, rxContext ), UNO_QUERY ) ;
+    m_xText_Top     = Reference< XFixedText >   ( rxContext->getServiceManager()->createInstanceWithContext( FIXEDTEXT_SERVICENAME, rxContext ), UNO_QUERY ) ;
+    m_xTopic_Bottom = Reference< XFixedText >   ( rxContext->getServiceManager()->createInstanceWithContext( FIXEDTEXT_SERVICENAME, rxContext ), UNO_QUERY ) ;
+    m_xText_Bottom  = Reference< XFixedText >   ( rxContext->getServiceManager()->createInstanceWithContext( FIXEDTEXT_SERVICENAME, rxContext ), UNO_QUERY ) ;
+    m_xButton       = Reference< XButton >      ( rxContext->getServiceManager()->createInstanceWithContext( BUTTON_SERVICENAME, rxContext ), UNO_QUERY ) ;
+    m_xProgressBar  = Reference< XProgressBar > ( rxContext->getServiceManager()->createInstanceWithContext( SERVICENAME_PROGRESSBAR, rxContext ), UNO_QUERY ) ;
 
     // ... cast controls to Reference< XControl >  (for "setModel"!) ...
     Reference< XControl >   xRef_Topic_Top      ( m_xTopic_Top    , UNO_QUERY ) ;
@@ -70,12 +71,13 @@ ProgressMonitor::ProgressMonitor( const Reference< XMultiServiceFactory >& xFact
     Reference< XControl >   xRef_Button         ( m_xButton       , UNO_QUERY ) ;
     Reference< XControl >   xRef_ProgressBar    ( m_xProgressBar  , UNO_QUERY ) ;
 
+
     // ... set models ...
-    xRef_Topic_Top->setModel    ( Reference< XControlModel > ( xFactory->createInstance ( FIXEDTEXT_MODELNAME ), UNO_QUERY ) ) ;
-    xRef_Text_Top->setModel     ( Reference< XControlModel > ( xFactory->createInstance ( FIXEDTEXT_MODELNAME ), UNO_QUERY ) ) ;
-    xRef_Topic_Bottom->setModel ( Reference< XControlModel > ( xFactory->createInstance ( FIXEDTEXT_MODELNAME ), UNO_QUERY ) ) ;
-    xRef_Text_Bottom->setModel  ( Reference< XControlModel > ( xFactory->createInstance ( FIXEDTEXT_MODELNAME ), UNO_QUERY ) ) ;
-    xRef_Button->setModel       ( Reference< XControlModel > ( xFactory->createInstance ( BUTTON_MODELNAME ), UNO_QUERY ) ) ;
+    xRef_Topic_Top->setModel    ( Reference< XControlModel > ( rxContext->getServiceManager()->createInstanceWithContext( FIXEDTEXT_MODELNAME, rxContext ), UNO_QUERY ) ) ;
+    xRef_Text_Top->setModel     ( Reference< XControlModel > ( rxContext->getServiceManager()->createInstanceWithContext( FIXEDTEXT_MODELNAME, rxContext ), UNO_QUERY ) ) ;
+    xRef_Topic_Bottom->setModel ( Reference< XControlModel > ( rxContext->getServiceManager()->createInstanceWithContext( FIXEDTEXT_MODELNAME, rxContext ), UNO_QUERY ) ) ;
+    xRef_Text_Bottom->setModel  ( Reference< XControlModel > ( rxContext->getServiceManager()->createInstanceWithContext( FIXEDTEXT_MODELNAME, rxContext ), UNO_QUERY ) ) ;
+    xRef_Button->setModel       ( Reference< XControlModel > ( rxContext->getServiceManager()->createInstanceWithContext( BUTTON_MODELNAME, rxContext ), UNO_QUERY ) ) ;
     // ProgressBar has no model !!!
 
     // ... and add controls to basecontainercontrol!

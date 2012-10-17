@@ -84,7 +84,7 @@ class StatusIndicator   : public ::com::sun::star::awt::XLayoutConstrains
             @onerror
         */
 
-        StatusIndicator( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xFactory );
+        StatusIndicator( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext );
 
         /**_______________________________________________________________________________________________________
             @short

@@ -63,6 +63,7 @@
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/ui/XUIElementFactory.hpp>
 #include <com/sun/star/ui/DockingArea.hpp>
+#include <com/sun/star/awt/XToolkit2.hpp>
 #include <com/sun/star/awt/XTopWindow2.hpp>
 #include <com/sun/star/awt/XWindow2.hpp>
 #include <com/sun/star/awt/XDockableWindow.hpp>
@@ -305,7 +306,7 @@ class ToolbarLayoutManager : public ::cppu::WeakImplHelper3< ::com::sun::star::a
         css::uno::Reference< ::com::sun::star::ui::XUIElementFactory >       m_xUIElementFactoryManager;
         css::uno::Reference< ::com::sun::star::ui::XUIConfigurationManager > m_xModuleCfgMgr;
         css::uno::Reference< ::com::sun::star::ui::XUIConfigurationManager > m_xDocCfgMgr;
-        css::uno::Reference< ::com::sun::star::awt::XToolkit >               m_xToolkit;
+        css::uno::Reference< ::com::sun::star::awt::XToolkit2 >              m_xToolkit;
         css::uno::Reference< ::com::sun::star::container::XNameAccess >      m_xPersistentWindowState;
         ILayoutNotifications*                                                m_pParentLayouter;
 

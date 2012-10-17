@@ -32,6 +32,7 @@
 #undef _LINUX_SOURCE_COMPAT
 #endif
 
+#include <com/sun/star/awt/Toolkit.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include <com/sun/star/ui/dialogs/CommonFilePickerElementIds.hpp>
@@ -975,7 +976,7 @@ sal_Int16 SAL_CALL SalGtkFilePicker::execute() throw( uno::RuntimeException )
     int btn = GTK_RESPONSE_NO;
 
     uno::Reference< awt::XExtendedToolkit > xToolkit(
-        createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.Toolkit")) ),
+        awt::Toolkit::create(m_xContext),
         UNO_QUERY_THROW );
 
     uno::Reference< frame::XDesktop > xDesktop(

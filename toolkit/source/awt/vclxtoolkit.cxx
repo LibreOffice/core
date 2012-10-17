@@ -463,14 +463,9 @@ static void SAL_CALL ToolkitWorkerFunction( void* pArgs )
 
 // contructor, which might initialize VCL
 VCLXToolkit::VCLXToolkit( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & rSMgr ):
-    cppu::WeakComponentImplHelper7<
+    cppu::WeakComponentImplHelper2<
     ::com::sun::star::awt::XToolkitExperimental,
-    ::com::sun::star::lang::XServiceInfo,
-    ::com::sun::star::awt::XSystemChildFactory,
-    ::com::sun::star::awt::XMessageBoxFactory,
-    ::com::sun::star::awt::XDataTransferProviderAccess,
-    ::com::sun::star::awt::XExtendedToolkit,
-    ::com::sun::star::awt::XReschedule>( GetMutex() ),
+    ::com::sun::star::lang::XServiceInfo>( GetMutex() ),
     m_aTopWindowListeners(rBHelper.rMutex),
     m_aKeyHandlers(rBHelper.rMutex),
     m_aFocusListeners(rBHelper.rMutex),
