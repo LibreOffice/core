@@ -31,6 +31,7 @@ class SalLogAreas
         void checkArea( StringRef area, SourceLocation location );
         void readLogAreas();
         const FunctionDecl* inFunction;
+        SourceLocation lastSalDetailLogStreamMacro;
         set< string > logAreas;
     };
 

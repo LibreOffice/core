@@ -31,6 +31,7 @@ SalLogAreas::SalLogAreas( ASTContext& context )
 void SalLogAreas::run()
     {
     inFunction = NULL;
+    lastSalDetailLogStreamMacro = SourceLocation();
     TraverseDecl( context.getTranslationUnitDecl());
     }
 
@@ -55,6 +56,13 @@ bool SalLogAreas::VisitCallExpr( CallExpr* call )
                 {
                 if( const StringLiteral* area = dyn_cast< StringLiteral >( call->getArg( 1 )->IgnoreParenImpCasts()))
                     {
+                    // The SAL_DETAIL_LOG_STREAM macro expands to two calls to sal::detail::log(),
+                    // so do not warn repeatedly about the same macro (the area->getLocStart() of all the calls
+                    // from the same macro should be the same).
+                    SourceLocation expansionLocation = context.getSourceManager().getExpansionLoc(area->getLocStart());
+                    if( expansionLocation == lastSalDetailLogStreamMacro )
+                        return true;
+                    lastSalDetailLogStreamMacro = expansionLocation;
                     if( area->getKind() == StringLiteral::Ascii )
                         checkArea( area->getBytes(), area->getExprLoc());
                     else
