@@ -22,6 +22,7 @@
 #include <com/sun/star/container/XSet.idl>
 #include <com/sun/star/document/XDocumentEventBroadcaster.idl>
 #include <com/sun/star/document/XDocumentEventListener.idl>
+#include <com/sun/star/document/XEventBroadcaster.idl>
 #include <com/sun/star/document/XEventsSupplier.idl>
 
 module com {  module sun {  module star {  module frame {
@@ -42,6 +43,8 @@ interface XGlobalEventBroadcaster
         /** access to bound event handlers
          */
         interface ::com::sun::star::document::XDocumentEventBroadcaster;
+
+        interface ::com::sun::star::document::XEventBroadcaster;
 
         interface ::com::sun::star::container::XSet;
 

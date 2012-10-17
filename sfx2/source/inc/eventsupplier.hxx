@@ -37,7 +37,7 @@
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase2.hxx>
-#include <cppuhelper/implbase4.hxx>
+#include <cppuhelper/implbase3.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/sequenceasvector.hxx>
 #include <sfx2/sfxuno.hxx>
@@ -172,9 +172,8 @@ class ModelCollectionEnumeration : public ModelCollectionMutexBase
 //=============================================================================
 //TODO: remove support of obsolete document::XEventBroadcaster/Listener
 class SfxGlobalEvents_Impl : public ModelCollectionMutexBase
-                           , public ::cppu::WeakImplHelper4< ::com::sun::star::lang::XServiceInfo
+                           , public ::cppu::WeakImplHelper3< ::com::sun::star::lang::XServiceInfo
                                                            , ::com::sun::star::frame::XGlobalEventBroadcaster
-                                                           , ::com::sun::star::document::XEventBroadcaster
                                                            , ::com::sun::star::document::XEventListener
                                                             >
 {

@@ -45,6 +45,7 @@
 
 #include <com/sun/star/ucb/NameClash.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
+#include <com/sun/star/frame/GlobalEventBroadcaster.hpp>
 #include <com/sun/star/frame/XLoadable.hpp>
 #include <com/sun/star/frame/XModel2.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
@@ -1365,7 +1366,7 @@ void AutoRecovery::implts_startListening()
     ReadGuard aReadLock(m_aLock);
     css::uno::Reference< css::lang::XMultiServiceFactory >  xSMGR               = m_xSMGR;
     css::uno::Reference< css::util::XChangesNotifier >      xCFG                (m_xRecoveryCFG, css::uno::UNO_QUERY);
-    css::uno::Reference< css::document::XEventBroadcaster > xBroadcaster        = m_xNewDocBroadcaster;
+    css::uno::Reference< css::frame::XGlobalEventBroadcaster > xBroadcaster        = m_xNewDocBroadcaster;
     sal_Bool                                                bListenForDocEvents = m_bListenForDocEvents;
     aReadLock.unlock();
     // <- SAFE ----------------------------------
@@ -1382,7 +1383,7 @@ void AutoRecovery::implts_startListening()
 
     if (!xBroadcaster.is())
     {
-        xBroadcaster = css::uno::Reference< css::document::XEventBroadcaster >(xSMGR->createInstance(SERVICENAME_GLOBALEVENTBROADCASTER), css::uno::UNO_QUERY_THROW);
+        xBroadcaster = css::frame::GlobalEventBroadcaster::create( comphelper::getComponentContext(xSMGR) );
         // SAFE -> ----------------------------------
         WriteGuard aWriteLock(m_aLock);
         m_xNewDocBroadcaster = xBroadcaster;

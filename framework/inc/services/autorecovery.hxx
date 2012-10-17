@@ -40,6 +40,7 @@
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/frame/GlobalEventBroadcaster.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/document/XEventListener.hpp>
@@ -344,7 +345,7 @@ class AutoRecovery  : public  css::lang::XTypeProvider
         /** @short  holds the global event broadcaster alive,
                     where we listen for new created documents.
           */
-        css::uno::Reference< css::document::XEventBroadcaster > m_xNewDocBroadcaster;
+        css::uno::Reference< css::frame::XGlobalEventBroadcaster > m_xNewDocBroadcaster;
 
         //---------------------------------------
         /** @short  proxy weak binding to forward Events to ourself without
