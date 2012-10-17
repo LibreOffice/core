@@ -28,6 +28,8 @@
 #include "../swmodeltestbase.hxx"
 #include "bordertest.hxx"
 
+#include <com/sun/star/document/XFilter.hpp>
+#include <com/sun/star/document/XImporter.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeSegment.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/graphic/GraphicType.hpp>
@@ -54,6 +56,8 @@
 #include <rtl/ustring.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/svapp.hxx>
+#include <unotools/ucbstreamhelper.hxx>
+#include <unotools/streamwrap.hxx>
 
 #define TWIP_TO_MM100(TWIP) ((TWIP) >= 0 ? (((TWIP)*127L+36L)/72L) : (((TWIP)*127L-36L)/72L))
 
@@ -110,6 +114,7 @@ public:
     void testFdo49655();
     void testFdo52475();
     void testFdo55493();
+    void testCopyPastePageStyle();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -163,6 +168,7 @@ public:
     CPPUNIT_TEST(testFdo49655);
     CPPUNIT_TEST(testFdo52475);
     CPPUNIT_TEST(testFdo55493);
+    CPPUNIT_TEST(testCopyPastePageStyle);
 #endif
     CPPUNIT_TEST_SUITE_END();
 
@@ -862,6 +868,29 @@ void Test::testFdo55493()
     uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
     uno::Reference<drawing::XShape> xShape(xDraws->getByIndex(0), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3969), xShape->getSize().Width);
+}
+
+void Test::testCopyPastePageStyle()
+{
+    // The problem was that RTF import during copy&paste did not ignore page styles.
+    load("copypaste-pagestyle.rtf");
+
+    // Once we have more copy&paste tests, makes sense to refactor this to some helper method.
+    uno::Reference<uno::XInterface> xInterface(m_xSFactory->createInstance("com.sun.star.comp.Writer.RtfFilter"), uno::UNO_QUERY_THROW);
+    uno::Reference<document::XImporter> xImporter(xInterface, uno::UNO_QUERY_THROW);
+    xImporter->setTargetDocument(mxComponent);
+    uno::Reference<document::XFilter> xFilter(xInterface, uno::UNO_QUERY_THROW);
+    uno::Sequence<beans::PropertyValue> aDescriptor(2);
+    aDescriptor[0].Name = "InputStream";
+    SvStream* pStream = utl::UcbStreamHelper::CreateStream(getURLFromSrc("/sw/qa/extras/rtfimport/data/") + "copypaste-pagestyle-paste.rtf", STREAM_WRITE);
+    uno::Reference<io::XStream> xStream(new utl::OStreamWrapper(*pStream));
+    aDescriptor[0].Value <<= xStream;
+    aDescriptor[1].Name = "IsNewDoc";
+    aDescriptor[1].Value <<= sal_False;
+    xFilter->filter(aDescriptor);
+
+    uno::Reference<beans::XPropertySet> xPropertySet(getStyles("PageStyles")->getByName("Default"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(21001), getProperty<sal_Int32>(xPropertySet, "Width")); // Was letter, i.e. 21590
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);

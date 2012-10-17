@@ -43,6 +43,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sw_subsequent_rtfimport, \
     unotest \
     vcl \
     tl \
+    utl \
 	$(gb_UWINAPI) \
 ))
 
