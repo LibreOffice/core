@@ -307,8 +307,18 @@ void XclImpFont::FillToItemSet( SfxItemSet& rItemSet, XclFontItemType eType, boo
         rtl_TextEncoding eTempTextEnc = (bEE && (eFontEnc == GetTextEncoding())) ?
             ScfTools::GetSystemTextEncoding() : eFontEnc;
 
-        SvxFontItem aFontItem( maData.GetScFamily( GetTextEncoding() ), maData.maName, EMPTY_STRING,
-                PITCH_DONTKNOW, eTempTextEnc, ATTR_FONT );
+        //add corresponding pitch for FontFamily
+        FontPitch ePitch = PITCH_DONTKNOW;
+        FontFamily eFtFamily = maData.GetScFamily( GetTextEncoding() );
+        switch( eFtFamily ) //refer http://msdn.microsoft.com/en-us/library/aa246306(v=VS.60).aspx
+        {
+            case FAMILY_ROMAN:              ePitch = PITCH_VARIABLE;        break;
+            case FAMILY_SWISS:              ePitch = PITCH_VARIABLE;        break;
+            case FAMILY_MODERN:             ePitch = PITCH_FIXED;           break;
+            default:                        break;
+         }
+        SvxFontItem aFontItem( eFtFamily , maData.maName, EMPTY_STRING, ePitch, eTempTextEnc, ATTR_FONT );
+
         // set only for valid script types
         if( mbHasWstrn )
             PUTITEM( aFontItem, ATTR_FONT,      EE_CHAR_FONTINFO );
