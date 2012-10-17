@@ -96,6 +96,7 @@ ScTpUserLists::ScTpUserLists( Window*               pParent,
 {
     SetExchangeSupport();
     Init();
+    Reset(rCoreAttrs);
     FreeResource();
 }
 
@@ -153,6 +154,7 @@ void ScTpUserLists::Init()
         aFtCopyFrom.Disable();
         aEdCopyFrom.Disable();
     }
+
 }
 
 // -----------------------------------------------------------------------
