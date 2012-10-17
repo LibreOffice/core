@@ -132,9 +132,9 @@ namespace drawinglayer
                 }
                 case TRANSPARENT_COLOR:
                 {
-                    const Color aColor(mpReadBitmap->GetColor(rY, rX));
+                    const BitmapColor aBitmapColor(mpReadBitmap->GetColor(rY, rX));
 
-                    if(maBitmapEx.GetTransparentColor() == aColor)
+                    if(maBitmapEx.GetTransparentColor() == Color(aBitmapColor))
                     {
                         return 255;
                     }
