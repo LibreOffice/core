@@ -40,7 +40,6 @@ namespace framework{
 #define SERVICENAME_NESTEDREGISTRY                              DECLARE_ASCII("com.sun.star.registry.NestedRegistry"                )
 #define SERVICENAME_GENERICFRAMELOADER                          DECLARE_ASCII("com.sun.star.comp.office.FilterDetect"               )
 #define SERVICENAME_TYPEDETECTION                               DECLARE_ASCII("com.sun.star.document.TypeDetection"                 )
-#define SERVICENAME_DOCUMENTPROPERTIES                          DECLARE_ASCII("com.sun.star.document.DocumentProperties"            )
 #define SERVICENAME_CFGREGISTRY                                 DECLARE_ASCII("com.sun.star.configuration.ConfigurationRegistry"    )   // describe simple registry service for read access to configuration
 #define SERVICENAME_CFGPROVIDER                                 DECLARE_ASCII("com.sun.star.configuration.ConfigurationProvider"    )   // describe cfg-provider service for fatoffice, network installation
 #define SERVICENAME_ADMINPROVIDER                               DECLARE_ASCII("com.sun.star.configuration.AdministrationProvider"   )   // describe cfg-provider service for sun webtop
