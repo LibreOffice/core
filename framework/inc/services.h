@@ -57,7 +57,6 @@ namespace framework{
 #define SERVICENAME_DISPATCHRECORDER                            DECLARE_ASCII("com.sun.star.frame.DispatchRecorder"                 )
 #define SERVICENAME_PROTOCOLHANDLER                             DECLARE_ASCII("com.sun.star.frame.ProtocolHandler"                  )
 #define SERVICENAME_PATHSETTINGS                                DECLARE_ASCII("com.sun.star.util.PathSettings"                      )
-#define SERVICENAME_DISPATCHHELPER                              DECLARE_ASCII("com.sun.star.frame.DispatchHelper"                   )
 #define SERVICENAME_DETECTORFACTORY                             DECLARE_ASCII("com.sun.star.document.ExtendedTypeDetectionFactory"  )
 #define SERVICENAME_SCRIPTCONVERTER                             DECLARE_ASCII("com.sun.star.script.Converter"                       )
 #define SERVICENAME_LAYOUTMANAGER                               DECLARE_ASCII("com.sun.star.frame.LayoutManager"             )

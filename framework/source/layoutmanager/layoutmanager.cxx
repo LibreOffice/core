@@ -63,7 +63,7 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/frame/LayoutManagerEvents.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
-#include <com/sun/star/frame/XDispatchHelper.hpp>
+#include <com/sun/star/frame/DispatchHelper.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 
@@ -1639,7 +1639,7 @@ throw (RuntimeException)
         uno::Reference< lang::XMultiServiceFactory > xSMGR( m_xSMGR );
         aWriteLock.unlock();
 
-        impl_setDockingWindowVisibility( xSMGR, xFrame, aElementName, false );
+        impl_setDockingWindowVisibility( comphelper::getComponentContext(xSMGR), xFrame, aElementName, false );
         bMustBeLayouted = false;
         bNotify         = false;
     }
@@ -1860,7 +1860,7 @@ throw (RuntimeException)
         uno::Reference< lang::XMultiServiceFactory > xSMGR( m_xSMGR );
         aReadGuard.unlock();
 
-        impl_setDockingWindowVisibility( xSMGR, xFrame, aElementName, true );
+        impl_setDockingWindowVisibility( comphelper::getComponentContext(xSMGR), xFrame, aElementName, true );
     }
     else if ( aElementType.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("toolpanel")))
     {
@@ -1950,7 +1950,7 @@ throw (RuntimeException)
         uno::Reference< lang::XMultiServiceFactory > xSMGR( m_xSMGR );
         aReadGuard.unlock();
 
-        impl_setDockingWindowVisibility( xSMGR, xFrame, aElementName, false );
+        impl_setDockingWindowVisibility( comphelper::getComponentContext(xSMGR), xFrame, aElementName, false );
     }
 
     if ( bMustLayout )
@@ -2670,8 +2670,7 @@ IMPL_LINK_NOARG(LayoutManager, MenuBarClose)
     if ( !xProvider.is())
         return 0;
 
-    uno::Reference< frame::XDispatchHelper > xDispatcher(
-        xSMGR->createInstance(SERVICENAME_DISPATCHHELPER), uno::UNO_QUERY_THROW);
+    uno::Reference< frame::XDispatchHelper > xDispatcher = frame::DispatchHelper::create( comphelper::getComponentContext( xSMGR ) );
 
     xDispatcher->executeDispatch(
         xProvider,

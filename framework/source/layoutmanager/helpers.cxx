@@ -33,7 +33,7 @@
 #include <com/sun/star/ui/DockingArea.hpp>
 #include <com/sun/star/awt/Toolkit.hpp>
 #include <com/sun/star/awt/XTopWindow.hpp>
-#include <com/sun/star/frame/XDispatchHelper.hpp>
+#include <com/sun/star/frame/DispatchHelper.hpp>
 #include <com/sun/star/awt/XDockableWindow.hpp>
 #include <com/sun/star/awt/XDockableWindowListener.hpp>
 #include <com/sun/star/awt/XWindowListener.hpp>
@@ -308,10 +308,9 @@ sal_Bool implts_isFrameOrWindowTop( const uno::Reference< frame::XFrame >& xFram
     return sal_False;
 }
 
-void impl_setDockingWindowVisibility( const css::uno::Reference< css::lang::XMultiServiceFactory>& rSMGR, const css::uno::Reference< css::frame::XFrame >& rFrame, const ::rtl::OUString& rDockingWindowName, bool bVisible )
+void impl_setDockingWindowVisibility( const css::uno::Reference< css::uno::XComponentContext>& rxContext, const css::uno::Reference< css::frame::XFrame >& rFrame, const ::rtl::OUString& rDockingWindowName, bool bVisible )
 {
     const ::rtl::OUString aDockWinPrefixCommand( RTL_CONSTASCII_USTRINGPARAM( "DockingWindow" ));
-    css::uno::WeakReference< css::frame::XDispatchHelper > xDispatchHelper;
 
     sal_Int32 nID    = rDockingWindowName.toInt32();
     sal_Int32 nIndex = nID - DOCKWIN_ID_BASE;
@@ -328,12 +327,7 @@ void impl_setDockingWindowVisibility( const css::uno::Reference< css::lang::XMul
         aArgs[0].Name  = aDockWinArgName;
         aArgs[0].Value = css::uno::makeAny( bVisible );
 
-        css::uno::Reference< css::frame::XDispatchHelper > xDispatcher( xDispatchHelper );
-        if ( !xDispatcher.is())
-        {
-            xDispatcher = css::uno::Reference< css::frame::XDispatchHelper >(
-                rSMGR->createInstance(SERVICENAME_DISPATCHHELPER), css::uno::UNO_QUERY_THROW);
-        }
+        css::uno::Reference< css::frame::XDispatchHelper > xDispatcher = css::frame::DispatchHelper::create( rxContext );
 
         aDockWinCommand = aDockWinCommand + aDockWinArgName;
         xDispatcher->executeDispatch(
