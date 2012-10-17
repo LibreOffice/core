@@ -23,6 +23,7 @@
 #include <sfx2/infobar.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <com/sun/star/document/MacroExecMode.hpp>
+#include <com/sun/star/frame/DispatchRecorderSupplier.hpp>
 #include <com/sun/star/frame/XLoadable.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
@@ -2833,14 +2834,14 @@ void SfxViewFrame::MiscExec_Impl( SfxRequest& rReq )
                 com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory > xFactory(
                         ::comphelper::getProcessServiceFactory(),
                         com::sun::star::uno::UNO_QUERY);
+                com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > xContext(
+                        ::comphelper::getProcessComponentContext());
 
                 xRecorder = com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorder >(
                         xFactory->createInstance(rtl::OUString("com.sun.star.frame.DispatchRecorder")),
                         com::sun::star::uno::UNO_QUERY);
 
-                xSupplier = com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorderSupplier >(
-                        xFactory->createInstance(rtl::OUString("com.sun.star.frame.DispatchRecorderSupplier")),
-                        com::sun::star::uno::UNO_QUERY);
+                xSupplier = com::sun::star::frame::DispatchRecorderSupplier::create( xContext );
 
                 xSupplier->setDispatchRecorder(xRecorder);
                 xRecorder->startRecording(xFrame);
