@@ -1,0 +1,4 @@
+Contains repositories which have been cloned.
+
+Most of LibreOffice source code is in the 'core' git repository, but few modules are in
+separate repository. 'translations', 'help', 'dictionaries' and 'binfilter'. 
