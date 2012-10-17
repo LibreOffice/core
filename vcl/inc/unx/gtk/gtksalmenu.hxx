@@ -45,6 +45,7 @@ private:
 
     sal_Bool                        mbMenuBar;
     Menu*                           mpVCLMenu;
+    GtkSalMenu*                     mpOldSalMenu;
     GtkSalMenu*                     mpParentSalMenu;
     const GtkSalFrame*              mpFrame;
 
@@ -102,7 +103,7 @@ public:
     void                        DispatchCommand( gint itemId, const gchar* aCommand );
     void                        Activate( const gchar* aMenuCommand );
     void                        Deactivate( const gchar* aMenuCommand );
-    void                        DisconnectFrame();
+//    void                        DisconnectFrame();
     void                        Display( sal_Bool bVisible );
     void UpdateNativeMenu();
 //    void UpdateNativeSubMenu();

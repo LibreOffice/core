@@ -125,6 +125,10 @@ void        g_lo_menu_set_submenu_to_item_in_section                    (GLOMenu
                                                                          gint         position,
                                                                          GMenuModel  *submenu);
 
+void        g_lo_menu_new_submenu_in_item_in_section                    (GLOMenu     *menu,
+                                                                         gint         section,
+                                                                         gint         position);
+
 GLOMenu *   g_lo_menu_get_submenu_from_item_in_section                  (GLOMenu     *menu,
                                                                          gint         section,
                                                                          gint         position);

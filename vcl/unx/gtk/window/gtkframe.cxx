@@ -571,7 +571,7 @@ void on_registrar_available( GDBusConnection * /*connection*/,
     if ( pSalMenu != NULL )
     {
         GtkSalMenu* pGtkSalMenu = static_cast<GtkSalMenu*>(pSalMenu);
-        pGtkSalMenu->UpdateNativeMenu();
+        //pGtkSalMenu->UpdateNativeMenu();
         pGtkSalMenu->Display( sal_True );
     }
 }
@@ -592,9 +592,15 @@ void on_registrar_unavailable( GDBusConnection * /*connection*/,
 
     if ( pSalMenu ) {
         GtkSalMenu* pGtkSalMenu = static_cast< GtkSalMenu* >( pSalMenu );
-        pGtkSalMenu->DisconnectFrame();
+//        pGtkSalMenu->DisconnectFrame();
         pGtkSalMenu->Display( sal_False );
     }
+}
+
+void GtkSalFrame::FlushConnection()
+{
+    if (pSessionBus)
+        g_dbus_connection_flush_sync( pSessionBus, NULL, NULL );
 }
 
 void GtkSalFrame::EnsureAppMenuWatch()
@@ -668,28 +674,26 @@ GtkSalFrame::~GtkSalFrame()
         SolarMutexGuard aGuard;
         if(m_nWatcherId)
             g_bus_unwatch_name(m_nWatcherId);
-        if(m_pSalMenu)
-            static_cast<GtkSalMenu*>(m_pSalMenu)->DisconnectFrame();
+//        if(m_pSalMenu)
+//            static_cast<GtkSalMenu*>(m_pSalMenu)->DisconnectFrame();
         if( m_pWindow )
         {
             g_object_set_data( G_OBJECT( m_pWindow ), "SalFrame", NULL );
-            if(m_nMenuExportId)
+
+            if ( pSessionBus )
             {
-                if(pSessionBus)
+                if(m_nMenuExportId)
                     g_dbus_connection_unexport_menu_model(pSessionBus, m_nMenuExportId);
-                GLOMenu* pMenuModel = G_LO_MENU(g_object_get_data( G_OBJECT( m_pWindow ), "g-lo-menubar" ));
-                if(pMenuModel)
-                    //g_lo_menu_remove(pMenuModel,0);
-                    g_object_unref( pMenuModel );
-            }
-            if(m_nActionGroupExportId)
-            {
-                if(pSessionBus)
+                //GLOMenu* pMenuModel = G_LO_MENU(g_object_get_data( G_OBJECT( m_pWindow ), "g-lo-menubar" ));
+                //if(pMenuModel)
+                //g_lo_menu_remove(pMenuModel,0);
+                //g_object_unref( pMenuModel );
+                if(m_nActionGroupExportId)
                     g_dbus_connection_unexport_action_group(pSessionBus, m_nActionGroupExportId);
-                GLOActionGroup* pActionGroup = G_LO_ACTION_GROUP(g_object_get_data( G_OBJECT( m_pWindow ), "g-lo-action-group" ));
-                if(pActionGroup)
-                    //g_lo_action_group_clear( pActionGroup );
-                    g_object_unref( pActionGroup );
+                //GLOActionGroup* pActionGroup = G_LO_ACTION_GROUP(g_object_get_data( G_OBJECT( m_pWindow ), "g-lo-action-group" ));
+                //if(pActionGroup)
+                //g_lo_action_group_clear( pActionGroup );
+                //g_object_unref( pActionGroup );
             }
             gtk_widget_destroy( m_pWindow );
         }
@@ -1462,10 +1466,10 @@ void GtkSalFrame::SetIcon( sal_uInt16 nIcon )
 
 void GtkSalFrame::SetMenu( SalMenu* pSalMenu )
 {
-    if(m_pSalMenu)
-    {
-        static_cast<GtkSalMenu*>(m_pSalMenu)->DisconnectFrame();
-    }
+//    if(m_pSalMenu)
+//    {
+//        static_cast<GtkSalMenu*>(m_pSalMenu)->DisconnectFrame();
+//    }
     m_pSalMenu = pSalMenu;
 }
 
