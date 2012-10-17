@@ -285,9 +285,11 @@ sal_Bool ScTabPageSortFields::FillItemSet( SfxItemSet& rArgSet )
 
 // -----------------------------------------------------------------------
 
-// for data exchange without dialogue detour: (still TODO!)
-void ScTabPageSortFields::ActivatePage()
+// for data exchange without dialogue detour:
+void ScTabPageSortFields::ActivatePage( const SfxItemSet& rSet )
 {
+    // Refresh local copy with shared data
+    aSortData = static_cast<const ScSortItem&>(rSet.Get( SCITEM_SORTDATA )).GetSortData();
     if ( pDlg )
     {
         if ( bHasHeader  != pDlg->GetHeaders()
@@ -765,9 +767,11 @@ sal_Bool ScTabPageSortOptions::FillItemSet( SfxItemSet& rArgSet )
 
 // -----------------------------------------------------------------------
 
-// for data exchange without dialogue detour: (still TODO!)
-void ScTabPageSortOptions::ActivatePage()
+// for data exchange without dialogue detour:
+void ScTabPageSortOptions::ActivatePage( const SfxItemSet& rSet )
 {
+    // Refresh local copy with shared data
+    aSortData = static_cast<const ScSortItem&>(rSet.Get( SCITEM_SORTDATA )).GetSortData();
     if ( pDlg )
     {
         if ( aBtnHeader.IsChecked() != pDlg->GetHeaders() )
