@@ -78,7 +78,6 @@ namespace framework{
 #define SERVICENAME_DOCUMENTACCELERATORCONFIGURATION            DECLARE_ASCII("com.sun.star.ui.DocumentAcceleratorConfiguration")
 #define SERVICENAME_STORAGEFACTORY                              DECLARE_ASCII("com.sun.star.embed.StorageFactory"                   )
 #define SERVICENAME_FILESYSTEMSTORAGEFACTORY                    DECLARE_ASCII("com.sun.star.embed.FileSystemStorageFactory"         )
-#define SERVICENAME_TEMPFILE                                    DECLARE_ASCII("com.sun.star.io.TempFile"                            )
 #define SERVICENAME_PACKAGESTRUCTURECREATOR                     DECLARE_ASCII("com.sun.star.embed.PackageStructureCreator"          )
 #define SERVICENAME_TOOLBARFACTORY                              DECLARE_ASCII("com.sun.star.ui.ToolBarFactory"               )
 #define SERVICENAME_TOOLBARCONTROLLERFACTORY                    DECLARE_ASCII("com.sun.star.frame.ToolBarControllerFactory"         )
