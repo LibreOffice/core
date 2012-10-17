@@ -74,7 +74,7 @@ PyRef ustring2PyUnicode( const OUString & str )
 PyRef ustring2PyString( const OUString &str )
 {
     OString o = OUStringToOString( str, osl_getThreadTextEncoding() );
-    return PyRef( PyString_FromString( o.getStr() ), SAL_NO_ACQUIRE );
+    return PyRef( PyBytes_FromString( o.getStr() ), SAL_NO_ACQUIRE );
 }
 
 OUString pyString2ustring( PyObject *pystr )
@@ -86,13 +86,13 @@ OUString pyString2ustring( PyObject *pystr )
     ret = OUString( (sal_Unicode * ) PyUnicode_AS_UNICODE( pystr ) );
 #else
     PyObject* pUtf8 = PyUnicode_AsUTF8String(pystr);
-    ret = OUString(PyString_AsString(pUtf8), PyString_Size(pUtf8), RTL_TEXTENCODING_UTF8);
+    ret = OUString(PyBytes_AsString(pUtf8), PyBytes_Size(pUtf8), RTL_TEXTENCODING_UTF8);
     Py_DECREF(pUtf8);
 #endif
     }
     else
     {
-        char *name = PyString_AsString(pystr );
+        char *name = PyBytes_AsString(pystr );
         ret = OUString( name, strlen(name), osl_getThreadTextEncoding() );
     }
     return ret;

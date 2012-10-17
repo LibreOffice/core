@@ -225,7 +225,7 @@ PyObject * extractOneStringArg( PyObject *args, char const *funcName )
         return NULL;
     }
     PyObject *obj = PyTuple_GetItem( args, 0 );
-    if( !PyString_Check( obj ) && ! PyUnicode_Check(obj))
+    if( !PyBytes_Check( obj ) && ! PyUnicode_Check(obj))
     {
         OStringBuffer buf;
         buf.append( funcName ).append( ": expecting one string argument" );
@@ -248,11 +248,11 @@ static PyObject *createUnoStructHelper(PyObject *, PyObject* args )
             PyObject *structName = PyTuple_GetItem( args,0 );
             PyObject *initializer = PyTuple_GetItem( args ,1 );
 
-            if( PyString_Check( structName ) )
+            if( PyBytes_Check( structName ) )
             {
                 if( PyTuple_Check( initializer ) )
                 {
-                    OUString typeName( OUString::createFromAscii(PyString_AsString(structName)));
+                    OUString typeName( OUString::createFromAscii(PyBytes_AsString(structName)));
                     RuntimeCargo *c = runtime.getImpl()->cargo;
                     Reference<XIdlClass> idl_class ( c->xCoreReflection->forName (typeName),UNO_QUERY);
                     if (idl_class.is ())
@@ -287,7 +287,7 @@ static PyObject *createUnoStructHelper(PyObject *, PyObject* args )
                     {
                         OStringBuffer buf;
                         buf.append( "UNO struct " );
-                        buf.append( PyString_AsString(structName) );
+                        buf.append( PyBytes_AsString(structName) );
                         buf.append( " is unkown" );
                         PyErr_SetString (PyExc_RuntimeError, buf.getStr());
                     }
@@ -463,7 +463,7 @@ static PyObject *getClass( PyObject *, PyObject *args )
     {
         Runtime runtime;
         PyRef ret = getClass(
-            OUString( PyString_AsString( obj), strlen(PyString_AsString(obj)),RTL_TEXTENCODING_ASCII_US),
+            OUString( PyBytes_AsString( obj), strlen(PyBytes_AsString(obj)),RTL_TEXTENCODING_ASCII_US),
             runtime );
         Py_XINCREF( ret.get() );
         return ret.get();
@@ -603,9 +603,9 @@ static PyObject * invoke ( PyObject *, PyObject * args )
     {
         PyObject *object = PyTuple_GetItem( args, 0 );
 
-        if( PyString_Check( PyTuple_GetItem( args, 1 ) ) )
+        if( PyBytes_Check( PyTuple_GetItem( args, 1 ) ) )
         {
-            const char *name = PyString_AsString( PyTuple_GetItem( args, 1 ) );
+            const char *name = PyBytes_AsString( PyTuple_GetItem( args, 1 ) );
             if( PyTuple_Check( PyTuple_GetItem( args , 2 )))
             {
                 ret = PyUNO_invoke( object, name , PyTuple_GetItem( args, 2 ) );
@@ -614,7 +614,7 @@ static PyObject * invoke ( PyObject *, PyObject * args )
             {
                 OStringBuffer buf;
                 buf.append( "uno.invoke expects a tuple as 3rd argument, got " );
-                buf.append( PyString_AsString( PyObject_Str( PyTuple_GetItem( args, 2) ) ) );
+                buf.append( PyBytes_AsString( PyObject_Str( PyTuple_GetItem( args, 2) ) ) );
                 PyErr_SetString( PyExc_RuntimeError, buf.makeStringAndClear() );
             }
         }
@@ -622,7 +622,7 @@ static PyObject * invoke ( PyObject *, PyObject * args )
         {
             OStringBuffer buf;
             buf.append( "uno.invoke expected a string as 2nd argument, got " );
-            buf.append( PyString_AsString( PyObject_Str( PyTuple_GetItem( args, 1) ) ) );
+            buf.append( PyBytes_AsString( PyObject_Str( PyTuple_GetItem( args, 1) ) ) );
             PyErr_SetString( PyExc_RuntimeError, buf.makeStringAndClear() );
         }
     }
@@ -672,7 +672,7 @@ static PyObject *setCurrentContext( PyObject *, PyObject * args )
             {
                 OStringBuffer buf;
                 buf.append( "uno.setCurrentContext expects an XComponentContext implementation, got " );
-                buf.append( PyString_AsString( PyObject_Str( PyTuple_GetItem( args, 0) ) ) );
+                buf.append( PyBytes_AsString( PyObject_Str( PyTuple_GetItem( args, 0) ) ) );
                 PyErr_SetString( PyExc_RuntimeError, buf.makeStringAndClear() );
             }
         }
@@ -717,6 +717,7 @@ struct PyMethodDef PyUNOModule_methods [] =
 extern "C" PY_DLLEXPORT void initpyuno()
 {
     // noop when called already, otherwise needed to allow multiple threads
+    // This has to be reworked for Python 3.
     PyEval_InitThreads();
     Py_InitModule (const_cast< char * >("pyuno"), PyUNOModule_methods);
 }

@@ -37,10 +37,19 @@
 #pragma warning(pop)
 #endif
 #endif // #ifdef Py_PYTHON_H
+
 // Compatibility for older system Python (2.6 and previous)
 #ifndef PyVarObject_HEAD_INIT
 #define PyVarObject_HEAD_INIT(type, size) \
     PyObject_HEAD_INIT(type) size,
+#endif
+// define PyBytes_* as the equivalent string type methods.
+#ifndef PyBytes_Check
+    #define PyBytes_Check               PyString_Check
+    #define PyBytes_AsString            PyString_AsString
+    #define PyBytes_FromString          PyString_FromString
+    #define PyBytes_Size                PyString_Size
+    #define PyBytes_FromStringAndSize   PyString_FromStringAndSize
 #endif
 
 #include <com/sun/star/uno/XComponentContext.hpp>

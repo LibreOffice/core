@@ -441,7 +441,7 @@ PyObject *PyUNO_str( PyObject * self )
         buf.append( OUStringToOString(s,RTL_TEXTENCODING_ASCII_US) );
     }
 
-    return PyString_FromString( buf.getStr());
+    return PyBytes_FromString( buf.getStr());
 }
 
 PyObject* PyUNO_getattr (PyObject* self, char* name)
@@ -647,7 +647,7 @@ static PyTypeObject PyUNOType =
     (printfunc) 0,
     (getattrfunc) PyUNO_getattr,
     (setattrfunc) PyUNO_setattr,
-    (cmpfunc) PyUNO_cmp,
+    PyUNO_cmp,
     (reprfunc) PyUNO_repr,
     0,
     0,
