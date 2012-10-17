@@ -42,11 +42,10 @@
 class FontList;
 class ImplColorListData;
 class ImpLineListData;
-class ImplFontNameListData;
 
 typedef ::std::vector< ImplColorListData*    > ImpColorList;
 typedef ::std::vector< ImpLineListData*      > ImpLineList;
-typedef ::std::vector< ImplFontNameListData* > ImplFontList;
+typedef ::std::vector< FontInfo              > ImplFontList;
 
 // FIXME: STYLE_* duplicate values from editeng::SvxBorderStyle,
 // which in turn duplicates values from com::sun::star::table::BorderLineStyle:
@@ -111,9 +110,7 @@ Erlaubt die Auswahl von Fonts. Die ListBox wird mit Fill gefuellt, wo
 ein Pointer auf eine FontList uebergeben werden muss.
 
 Mit EnableWYSIWYG() kann man einstellen, das die Fontnamen in Ihrer Schrift
-angezeigt werden und mit EnableSymbols() kann eingestellt werden, das
-vor dem Namen ueber ein Symbol angezeigt wird, ob es sich um eine
-Drucker oder Bildschirmschrift handelt.
+angezeigt werden.
 
 Querverweise
 
@@ -433,21 +430,15 @@ class SVT_DLLPUBLIC FontNameBox : public ComboBox
 {
 private:
     ImplFontList*   mpFontList;
-    Image           maImagePrinterFont;
-    Image           maImageBitmapFont;
-    Image           maImageScalableFont;
     sal_Bool        mbWYSIWYG;
-    sal_Bool        mbSymbols;
-    String         maFontMRUEntriesFile;
+    String          maFontMRUEntriesFile;
 
 #ifdef _CTRLBOX_CXX
     SVT_DLLPRIVATE void         ImplCalcUserItemSize();
     SVT_DLLPRIVATE void         ImplDestroyFontList();
 #endif
 
-    void            InitBitmaps( void );
 protected:
-    virtual void    DataChanged( const DataChangedEvent& rDCEvt );
     void            LoadMRUEntries( const String& aFontMRUEntriesFile, xub_Unicode cSep = ';' );
     void            SaveMRUEntries( const String& aFontMRUEntriesFile, xub_Unicode cSep = ';' ) const;
 public:
@@ -462,9 +453,6 @@ public:
 
     void            EnableWYSIWYG( sal_Bool bEnable = sal_True );
     sal_Bool            IsWYSIWYGEnabled() const { return mbWYSIWYG; }
-
-    void            EnableSymbols( sal_Bool bEnable = sal_True );
-    sal_Bool            IsSymbolsEnabled() const { return mbSymbols; }
 
 private:
     void            InitFontMRUEntriesFile();

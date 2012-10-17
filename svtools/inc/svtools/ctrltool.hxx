@@ -140,10 +140,6 @@ von der FontList, sollte deshalb das Array nicht mehr referenziert werden.
 
 #define FONTLIST_FONTINFO_NOTFOUND  ((sal_uInt16)0xFFFF)
 
-#define FONTLIST_FONTNAMETYPE_PRINTER           ((sal_uInt16)0x0001)
-#define FONTLIST_FONTNAMETYPE_SCREEN            ((sal_uInt16)0x0002)
-#define FONTLIST_FONTNAMETYPE_SCALABLE          ((sal_uInt16)0x0004)
-
 class SVT_DLLPUBLIC FontList
 {
 private:
@@ -202,7 +198,6 @@ public:
         return (sal_uInt16)maEntries.size();
     }
     const FontInfo&         GetFontName( sal_uInt16 nFont ) const;
-    sal_uInt16              GetFontNameType( sal_uInt16 nFont ) const;
     sal_Handle              GetFirstFontInfo( const OUString& rName ) const;
     sal_Handle              GetNextFontInfo( sal_Handle hFontInfo ) const;
     const FontInfo&         GetFontInfo( sal_Handle hFontInfo ) const;

@@ -58,7 +58,6 @@
 
 #include <stdio.h>
 
-#define IMGINNERTEXTSPACE 2
 #define IMGOUTERTEXTSPACE 5
 #define EXTRAFONTSIZE 5
 #define GAPTOEXTRAPREVIEW 10
@@ -1024,28 +1023,11 @@ void LineListBox::DataChanged( const DataChangedEvent& rDCEvt )
 // FontNameBox
 // ===================================================================
 
-class ImplFontNameListData
-{
-public:
-    FontInfo    maInfo;
-    sal_uInt16      mnType;
-
-                ImplFontNameListData( const FontInfo& rInfo,
-                                    sal_uInt16 nType ) :
-                    maInfo( rInfo ),
-                    mnType( nType )
-                {}
-};
-
-// -------------------------------------------------------------------
-
 FontNameBox::FontNameBox( Window* pParent, WinBits nWinStyle ) :
     ComboBox( pParent, nWinStyle )
 {
-    InitBitmaps();
     mpFontList = NULL;
     mbWYSIWYG = sal_False;
-    mbSymbols = sal_False;
     InitFontMRUEntriesFile();
 }
 
@@ -1054,10 +1036,8 @@ FontNameBox::FontNameBox( Window* pParent, WinBits nWinStyle ) :
 FontNameBox::FontNameBox( Window* pParent, const ResId& rResId ) :
     ComboBox( pParent, rResId )
 {
-    InitBitmaps();
     mpFontList = NULL;
     mbWYSIWYG = sal_False;
-    mbSymbols = sal_False;
     InitFontMRUEntriesFile();
 }
 
@@ -1079,16 +1059,6 @@ FontNameBox::~FontNameBox()
 {
     SaveMRUEntries (maFontMRUEntriesFile);
     ImplDestroyFontList();
-}
-
-// -------------------------------------------------------------------
-
-void FontNameBox::DataChanged( const DataChangedEvent& rDCEvt )
-{
-    ComboBox::DataChanged( rDCEvt );
-
-    if( rDCEvt.GetType() == DATACHANGED_SETTINGS && ( rDCEvt.GetFlags() & SETTINGS_STYLE ) )
-        InitBitmaps();
 }
 
 // -------------------------------------------------------------------
@@ -1155,25 +1125,9 @@ void FontNameBox::InitFontMRUEntriesFile()
 
 // -------------------------------------------------------------------
 
-void FontNameBox::InitBitmaps( void )
-{
-    maImagePrinterFont = Image( SvtResId( RID_IMG_PRINTERFONT ) );
-    maImageBitmapFont = Image( SvtResId( RID_IMG_BITMAPFONT ) );
-    maImageScalableFont = Image( SvtResId( RID_IMG_SCALABLEFONT ) );
-}
-
-// -------------------------------------------------------------------
-
 void FontNameBox::ImplDestroyFontList()
 {
-    if ( mpFontList )
-    {
-        for ( size_t i = 0, n = mpFontList->size(); i < n; ++i ) {
-            delete (*mpFontList)[ i ];
-        }
-        mpFontList->clear();
-        delete mpFontList;
-    }
+    delete mpFontList;
 }
 
 // -------------------------------------------------------------------
@@ -1197,14 +1151,12 @@ void FontNameBox::Fill( const FontList* pList )
         sal_uLong nIndex = InsertEntry( rFontInfo.GetName() );
         if ( nIndex != LISTBOX_ERROR )
         {
-            sal_uInt16 nType = pList->GetFontNameType( i );
-            ImplFontNameListData* pData = new ImplFontNameListData( rFontInfo, nType );
             if ( nIndex < mpFontList->size() ) {
                 ImplFontList::iterator it = mpFontList->begin();
                 ::std::advance( it, nIndex );
-                mpFontList->insert( it, pData );
+                mpFontList->insert( it, rFontInfo );
             } else {
-                mpFontList->push_back( pData );
+                mpFontList->push_back( rFontInfo );
             }
         }
     }
@@ -1228,19 +1180,7 @@ void FontNameBox::EnableWYSIWYG( sal_Bool bEnable )
     if ( bEnable != mbWYSIWYG )
     {
         mbWYSIWYG = bEnable;
-        EnableUserDraw( mbWYSIWYG | mbSymbols );
-        ImplCalcUserItemSize();
-    }
-}
-
-// -------------------------------------------------------------------
-
-void FontNameBox::EnableSymbols( sal_Bool bEnable )
-{
-    if ( bEnable != mbSymbols )
-    {
-        mbSymbols = bEnable;
-        EnableUserDraw( mbWYSIWYG | mbSymbols );
+        EnableUserDraw( mbWYSIWYG );
         ImplCalcUserItemSize();
     }
 }
@@ -1255,17 +1195,6 @@ void FontNameBox::ImplCalcUserItemSize()
         aUserItemSz = Size(MAXPREVIEWWIDTH, GetTextHeight() );
         aUserItemSz.Height() *= 16;
         aUserItemSz.Height() /= 10;
-    }
-    if ( mbSymbols )
-    {
-        Size aSz = maImageScalableFont.GetSizePixel();
-        aUserItemSz.Width() += aSz.Width() + IMGINNERTEXTSPACE;
-
-        if ( mbWYSIWYG && mpFontList )
-            aUserItemSz.Width() += IMGOUTERTEXTSPACE;
-
-        if ( aSz.Height() > aUserItemSz.Height() )
-            aUserItemSz.Height() = aSz.Height();
     }
     SetUserItemSize( aUserItemSz );
 }
@@ -1302,35 +1231,14 @@ namespace
 
 void FontNameBox::UserDraw( const UserDrawEvent& rUDEvt )
 {
-    ImplFontNameListData*   pData = (*mpFontList)[ rUDEvt.GetItemId() ];
-    const FontInfo&         rInfo = pData->maInfo;
-    sal_uInt16                  nType = pData->mnType;
-    Point                   aTopLeft = rUDEvt.GetRect().TopLeft();
-    long                    nX = aTopLeft.X();
-    long                    nH = rUDEvt.GetRect().GetHeight();
+    assert( mpFontList );
 
-    if ( mbSymbols )
-    {
-        nX += IMGINNERTEXTSPACE;
-        Image* pImg = NULL;
-        if ( (nType & (FONTLIST_FONTNAMETYPE_PRINTER | FONTLIST_FONTNAMETYPE_SCREEN)) == FONTLIST_FONTNAMETYPE_PRINTER )
-            pImg = &maImagePrinterFont;
-        else if ( nType & FONTLIST_FONTNAMETYPE_SCALABLE )
-            pImg = &maImageScalableFont;
-        else
-            pImg = &maImageBitmapFont;
+    FontInfo& rInfo = (*mpFontList)[ rUDEvt.GetItemId() ];
+    Point aTopLeft = rUDEvt.GetRect().TopLeft();
+    long nX = aTopLeft.X();
+    long nH = rUDEvt.GetRect().GetHeight();
 
-        if ( pImg )
-        {
-            Point aPos( nX, aTopLeft.Y() + (nH-pImg->GetSizePixel().Height())/2 );
-            rUDEvt.GetDevice()->DrawImage( aPos, *pImg );
-        }
-
-        // X immer um gleiche Breite aendern, auch wenn kein Image ausgegeben.
-        nX += maImagePrinterFont.GetSizePixel().Width();
-    }
-
-    if ( mbWYSIWYG && mpFontList )
+    if ( mbWYSIWYG )
     {
         nX += IMGOUTERTEXTSPACE;
 

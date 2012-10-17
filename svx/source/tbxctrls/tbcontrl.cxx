@@ -747,7 +747,6 @@ void SvxFontNameBox_Impl::EnableControls_Impl()
 
     bEnable = aFontOpt.IsFontWYSIWYGEnabled();
     EnableWYSIWYG( bEnable );
-    EnableSymbols( bEnable );
 }
 
 // -----------------------------------------------------------------------
