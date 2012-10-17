@@ -1723,6 +1723,8 @@ void SAL_CALL SfxBaseModel::storeAsURL( const   ::rtl::OUString&                
         TransformItems( SID_OPENDOC, *m_pData->m_pObjectShell->GetMedium()->GetItemSet(), aSequence );
         attachResource( rURL, aSequence );
 
+        loadCmisProperties( );
+
 #if OSL_DEBUG_LEVEL > 0
         SFX_ITEMSET_ARG( m_pData->m_pObjectShell->GetMedium()->GetItemSet(), pPasswdItem, SfxStringItem, SID_PASSWORD, sal_False);
         OSL_ENSURE( !pPasswdItem, "There should be no Password property in the document MediaDescriptor!" );
