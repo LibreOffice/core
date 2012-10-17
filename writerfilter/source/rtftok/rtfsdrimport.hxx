@@ -40,6 +40,7 @@ namespace writerfilter {
                 virtual ~RTFSdrImport();
 
                 void resolve(RTFShape& rShape);
+                void resolveDhgt(uno::Reference<beans::XPropertySet> xPropertySet, sal_Int32 nZOrder);
             private:
                 void createShape(rtl::OUString aService, uno::Reference<drawing::XShape>& xShape, uno::Reference<beans::XPropertySet>& xPropertySet);
 

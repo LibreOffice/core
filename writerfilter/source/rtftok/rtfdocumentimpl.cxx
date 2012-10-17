@@ -2310,6 +2310,7 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
                     std::vector<beans::PropertyValue>& rPendingProperties = m_aStates.top().aDrawingObject.aPendingProperties;
                     for (std::vector<beans::PropertyValue>::iterator i = rPendingProperties.begin(); i != rPendingProperties.end(); ++i)
                         m_aStates.top().aDrawingObject.xPropertySet->setPropertyValue(i->Name, i->Value);
+                    m_pSdrImport->resolveDhgt(m_aStates.top().aDrawingObject.xPropertySet, m_aStates.top().aDrawingObject.nDhgt);
                 }
                 break;
         case RTF_DOBXMARGIN:
@@ -3135,6 +3136,9 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                 if (nValue != -1)
                     lcl_putNestedAttribute(m_aStates.top().aTableCellSprms, NS_ooxml::LN_CT_TcPrBase_shd, NS_ooxml::LN_CT_Shd_val, RTFValue::Pointer_t(new RTFValue(nValue)));
             }
+            break;
+        case RTF_DODHGT:
+            m_aStates.top().aDrawingObject.nDhgt = nParam;
             break;
         default:
             SAL_INFO("writerfilter", OSL_THIS_FUNC << ": TODO handle value '" << lcl_RtfToString(nKeyword) << "'");
@@ -4122,7 +4126,8 @@ RTFDrawingObject::RTFDrawingObject()
     nFillColorR(0),
     nFillColorG(0),
     nFillColorB(0),
-    bHasFillColor(false)
+    bHasFillColor(false),
+    nDhgt(0)
 {
 }
 

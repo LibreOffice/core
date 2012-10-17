@@ -71,6 +71,14 @@ void RTFSdrImport::createShape(OUString aStr, uno::Reference<drawing::XShape>& x
     xPropertySet.set(xShape, uno::UNO_QUERY);
 }
 
+void RTFSdrImport::resolveDhgt(uno::Reference<beans::XPropertySet> xPropertySet, sal_Int32 nZOrder)
+{
+    writerfilter::dmapper::DomainMapper& rMapper = (writerfilter::dmapper::DomainMapper&)m_rImport.Mapper();
+    writerfilter::dmapper::GraphicZOrderHelper* pHelper = rMapper.graphicZOrderHelper();
+    xPropertySet->setPropertyValue("ZOrder", uno::makeAny(pHelper->findZOrder(nZOrder)));
+    pHelper->addItem(xPropertySet, nZOrder);
+}
+
 void RTFSdrImport::resolve(RTFShape& rShape)
 {
     int nType = -1;
@@ -281,13 +289,7 @@ void RTFSdrImport::resolve(RTFShape& rShape)
         else if ( i->first == "geoBottom" )
             aViewBox.Height = i->second.toInt32();
         else if ( i->first == "dhgt" )
-        {
-            writerfilter::dmapper::DomainMapper& rMapper = (writerfilter::dmapper::DomainMapper&)m_rImport.Mapper();
-            writerfilter::dmapper::GraphicZOrderHelper* pHelper = rMapper.graphicZOrderHelper();
-            sal_Int32 nZOrder = i->second.toInt32();
-            xPropertySet->setPropertyValue("ZOrder", uno::makeAny(pHelper->findZOrder(nZOrder)));
-            pHelper->addItem(xPropertySet, nZOrder);
-        }
+            resolveDhgt(xPropertySet, i->second.toInt32());
         else
             SAL_INFO("writerfilter", OSL_THIS_FUNC << ": TODO handle shape property '" <<
                     OUStringToOString( i->first, RTL_TEXTENCODING_UTF8 ).getStr() << "':'" <<

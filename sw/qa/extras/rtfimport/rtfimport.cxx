@@ -116,6 +116,7 @@ public:
     void testFdo55493();
     void testCopyPastePageStyle();
     void testShptxtPard();
+    void testDoDhgt();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -171,6 +172,7 @@ public:
     CPPUNIT_TEST(testFdo55493);
     CPPUNIT_TEST(testCopyPastePageStyle);
     CPPUNIT_TEST(testShptxtPard);
+    CPPUNIT_TEST(testDoDhgt);
 #endif
     CPPUNIT_TEST_SUITE_END();
 
@@ -903,6 +905,23 @@ void Test::testShptxtPard()
     uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
     uno::Reference<text::XText> xText(xDraws->getByIndex(0), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(OUString("shape text"), xText->getString());
+}
+
+void Test::testDoDhgt()
+{
+    load("do-dhgt.rtf");
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
+    for (int i = 0; i < xDraws->getCount(); ++i)
+    {
+        sal_Int32 nFillColor = getProperty<sal_Int32>(xDraws->getByIndex(i), "FillColor");
+        if (nFillColor == 0xc0504d) // red
+            CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xDraws->getByIndex(i), "ZOrder"));
+        else if (nFillColor == 0x9bbb59) // green
+            CPPUNIT_ASSERT_EQUAL(sal_Int32(1), getProperty<sal_Int32>(xDraws->getByIndex(i), "ZOrder"));
+        else if (nFillColor == 0x4f81bd) // blue
+            CPPUNIT_ASSERT_EQUAL(sal_Int32(2), getProperty<sal_Int32>(xDraws->getByIndex(i), "ZOrder"));
+    }
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
