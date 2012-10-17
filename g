@@ -19,7 +19,7 @@ usage()
     echo
     echo "Usage: g [options] [git (checkout|clone|fetch|grep|pull|push|reset) [git options/args..]]"
     echo ""
-    echo " -z restaure the git hooks and others sanity checks"
+    echo " -z restore the git hooks and do other sanity checks"
 }
 
 refresh_submodule_hooks()
@@ -323,8 +323,10 @@ case "$COMMAND" in
     tag)
 	do_git_cmd ${COMMAND} "$@"
 	;;
+	"")
+	;;
     *)
-	echo "./g does not support command:$COMMAND" 1>&2
+	echo "./g does not support command: $COMMAND" 1>&2
 	exit 1;
         ;;
 esac
