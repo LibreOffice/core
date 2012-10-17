@@ -34,7 +34,6 @@ namespace framework{
 #define SERVICENAME_FRAMELOADERFACTORY                          DECLARE_ASCII("com.sun.star.frame.FrameLoaderFactory"               )
 #define SERVICENAME_FILTERFACTORY                               DECLARE_ASCII("com.sun.star.document.FilterFactory"                 )
 #define SERVICENAME_PLUGINFRAME                                 DECLARE_ASCII("com.sun.star.mozilla.Plugin"                         )
-#define SERVICENAME_MEDIATYPEDETECTIONHELPER                    DECLARE_ASCII("com.sun.star.frame.MediaTypeDetectionHelper"         )
 #define SERVICENAME_LOGINDIALOG                                 DECLARE_ASCII("com.sun.star.framework.LoginDialog"                  )
 #define SERVICENAME_CONFIGURATION                               DECLARE_ASCII("com.sun.star.configuration.ConfigurationRegistry"    )
 #define SERVICENAME_SIMPLEREGISTRY                              DECLARE_ASCII("com.sun.star.registry.SimpleRegistry"                )
