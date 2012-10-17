@@ -4091,10 +4091,10 @@ elif test -n "$with_system_python" -o -n "$with_system_libs" && \
 	test "$with_system_python" != "no"; then
    with_system_python=yes
    AC_MSG_RESULT([external])
-   AM_PATH_PYTHON([2.2])
+   AM_PATH_PYTHON([2.3])
 
-   python_include=`$PYTHON -c "import distutils.sysconfig; print distutils.sysconfig.get_config_var('INCLUDEPY');"`
-   python_version=`$PYTHON -c "import distutils.sysconfig; print distutils.sysconfig.get_config_var('VERSION');"`
+   python_include=`$PYTHON -c "import distutils.sysconfig; print(distutils.sysconfig.get_config_var('INCLUDEPY'));"`
+   python_version=`$PYTHON -c "import distutils.sysconfig; print(distutils.sysconfig.get_config_var('VERSION'));"`
    PYTHON_CFLAGS="-I$python_include"
    PYTHON_LIBS="-lpython$python_version"
 fi
