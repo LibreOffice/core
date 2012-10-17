@@ -1418,7 +1418,8 @@ sal_Bool SfxDocTplService_Impl::WriteUINamesForTemplateDir_Impl( const ::rtl::OU
         aTargetContent.transferContent( aSourceContent,
                                         InsertOperation_COPY,
                                         ::rtl::OUString( "groupuinames.xml"  ),
-                                        ucb::NameClash::OVERWRITE );
+                                        ucb::NameClash::OVERWRITE,
+                                        ::rtl::OUString( "text/xml" ) );
         bResult = sal_True;
     }
     catch ( uno::Exception& )
@@ -2062,7 +2063,8 @@ sal_Bool SfxDocTplService_Impl::addTemplate( const OUString& rGroupName,
         if( ! aTargetGroup.transferContent( aSourceContent,
                                                 InsertOperation_COPY,
                                                 aNewTemplateTargetName,
-                                                NameClash::OVERWRITE ) )
+                                                NameClash::OVERWRITE,
+                                                aType ) )
             return sal_False;
 
         // allow to edit the added template

@@ -1925,7 +1925,7 @@ void SfxMedium::Transfer_Impl()
             ::ucbhelper::Content aTransferContent;
 
             // Get the parent URL from the XChild if possible: why would the URL necessarily have
-            // a hierarchical path? It's not the case for CMIS.
+            // a hierarchical path? It's not always the case for CMIS.
             ::ucbhelper::Content aDestContent;
             ::ucbhelper::Content::create( aDestURL, xComEnv, comphelper::getProcessComponentContext(), aDestContent );
             Reference< ::com::sun::star::container::XChild> xChild( aDestContent.get(), uno::UNO_QUERY );
@@ -1996,7 +1996,8 @@ void SfxMedium::Transfer_Impl()
 
                 try
                 {
-                    if (!aTransferContent.transferContent( aSourceContent, ::ucbhelper::InsertOperation_COPY, aFileName, nNameClash ))
+                    rtl::OUString aMimeType = GetFilter()->GetMimeType( );
+                    if (!aTransferContent.transferContent( aSourceContent, ::ucbhelper::InsertOperation_COPY, aFileName, nNameClash, aMimeType ))
                         pImp->m_eError = ERRCODE_IO_GENERAL;
                 }
                 catch ( const ::com::sun::star::ucb::CommandAbortedException& )
@@ -2060,10 +2061,12 @@ void SfxMedium::DoInternalBackup_Impl( const ::ucbhelper::Content& aOriginalCont
     {
         try
         {
+            rtl::OUString sMimeType = GetFilter()->GetMimeType( );
             if( aBackupCont.transferContent( aOriginalContent,
                                             ::ucbhelper::InsertOperation_COPY,
                                             aBackupName,
-                                            NameClash::OVERWRITE ) )
+                                            NameClash::OVERWRITE,
+                                            sMimeType ) )
             {
                 pImp->m_aBackupURL = aBackObj.GetMainURL( INetURLObject::NO_DECODE );
                 pImp->m_bRemoveBackup = true;
@@ -2146,10 +2149,12 @@ void SfxMedium::DoBackup_Impl()
                 try
                 {
                     // do the transfer ( copy source file to backup dir )
+                    rtl::OUString sMimeType = GetFilter()->GetMimeType( );
                     bSuccess = aContent.transferContent( aSourceContent,
                                                         ::ucbhelper::InsertOperation_COPY,
                                                         aFileName,
-                                                        NameClash::OVERWRITE );
+                                                        NameClash::OVERWRITE,
+                                                        sMimeType );
                     if( bSuccess )
                     {
                         pImp->m_aBackupURL = aDest.GetMainURL( INetURLObject::NO_DECODE );
@@ -3276,7 +3281,8 @@ void SfxMedium::CreateTempFile( sal_Bool bReplace )
                 if ( !aFileName.isEmpty() && aTmpURLObj.removeSegment() )
                 {
                     ::ucbhelper::Content aTargetContent( aTmpURLObj.GetMainURL( INetURLObject::NO_DECODE ), xComEnv, comphelper::getProcessComponentContext() );
-                    if ( aTargetContent.transferContent( pImp->aContent, ::ucbhelper::InsertOperation_COPY, aFileName, NameClash::OVERWRITE ) )
+                    rtl::OUString sMimeType = GetFilter()->GetMimeType( );
+                    if ( aTargetContent.transferContent( pImp->aContent, ::ucbhelper::InsertOperation_COPY, aFileName, NameClash::OVERWRITE, sMimeType ) )
                     {
                         SetWritableForUserOnly( aTmpURL );
                         bTransferSuccess = true;

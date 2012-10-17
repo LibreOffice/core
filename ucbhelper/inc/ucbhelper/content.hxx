@@ -669,7 +669,8 @@ public:
     transferContent( const Content& rSourceContent,
                      InsertOperation eOperation,
                      const ::rtl::OUString & rTitle,
-                     const sal_Int32 nNameClashAction )
+                     const sal_Int32 nNameClashAction,
+                     const ::rtl::OUString & rMimeType = ::rtl::OUString( ) )
         throw( ::com::sun::star::ucb::CommandAbortedException,
                ::com::sun::star::uno::RuntimeException,
                ::com::sun::star::uno::Exception );

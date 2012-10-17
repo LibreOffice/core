@@ -26,7 +26,7 @@
 #include <osl/diagnose.h>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
-#include <com/sun/star/ucb/GlobalTransferCommandArgument.hpp>
+#include <com/sun/star/ucb/GlobalTransferCommandArgument2.hpp>
 #include <com/sun/star/ucb/XCommandInfo.hpp>
 #include <com/sun/star/ucb/XContentProvider.hpp>
 #include <com/sun/star/ucb/XContentProviderSupplier.hpp>
@@ -654,16 +654,27 @@ Any SAL_CALL UniversalContentBroker::execute(
         // globalTransfer
         //////////////////////////////////////////////////////////////////
 
-        GlobalTransferCommandArgument aTransferArg;
+        GlobalTransferCommandArgument2 aTransferArg;
         if ( !( aCommand.Argument >>= aTransferArg ) )
         {
-            ucbhelper::cancelCommandExecution(
-                makeAny( IllegalArgumentException(
-                                OUString( "Wrong argument type!" ),
-                                static_cast< cppu::OWeakObject * >( this ),
-                                -1 ) ),
-                Environment );
-            // Unreachable
+            GlobalTransferCommandArgument aArg;
+            if ( !( aCommand.Argument >>= aArg ) )
+            {
+                ucbhelper::cancelCommandExecution(
+                    makeAny( IllegalArgumentException(
+                                    OUString( "Wrong argument type!" ),
+                                    static_cast< cppu::OWeakObject * >( this ),
+                                    -1 ) ),
+                    Environment );
+                // Unreachable
+            }
+
+            // Copy infos into the new stucture
+            aTransferArg.Operation = aArg.Operation;
+            aTransferArg.SourceURL = aArg.SourceURL;
+            aTransferArg.TargetURL = aArg.TargetURL;
+            aTransferArg.NewTitle = aArg.NewTitle;
+            aTransferArg.NameClash = aArg.NameClash;
         }
 
         globalTransfer( aTransferArg, Environment );

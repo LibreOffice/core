@@ -3801,10 +3801,12 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/ucb,\
 	FolderListCommand \
 	FolderListEntry \
 	GlobalTransferCommandArgument \
+	GlobalTransferCommandArgument2 \
 	HandleCookiesRequest \
 	IOErrorCode \
 	IllegalIdentifierException \
 	InsertCommandArgument \
+	InsertCommandArgument2 \
 	InteractiveAppException \
 	InteractiveAugmentedIOException \
 	InteractiveBadTransferURLException \
@@ -3870,6 +3872,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/ucb,\
 	SynchronizePolicy \
 	TransferCommandOperation \
 	TransferInfo \
+	TransferInfo2 \
 	TransferResult \
 	URLAuthenticationRequest \
 	UnsupportedCommandException \

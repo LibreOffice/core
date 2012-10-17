@@ -43,14 +43,14 @@
 #include <com/sun/star/ucb/CommandEnvironment.hpp>
 #include <com/sun/star/ucb/CommandFailedException.hpp>
 #include <com/sun/star/ucb/ContentInfoAttribute.hpp>
-#include <com/sun/star/ucb/GlobalTransferCommandArgument.hpp>
-#include <com/sun/star/ucb/InsertCommandArgument.hpp>
+#include <com/sun/star/ucb/GlobalTransferCommandArgument2.hpp>
+#include <com/sun/star/ucb/InsertCommandArgument2.hpp>
 #include <com/sun/star/ucb/InteractiveBadTransferURLException.hpp>
 #include <com/sun/star/ucb/NameClash.hpp>
 #include <com/sun/star/ucb/NameClashException.hpp>
 #include <com/sun/star/ucb/OpenCommandArgument2.hpp>
 #include <com/sun/star/ucb/OpenMode.hpp>
-#include <com/sun/star/ucb/TransferInfo.hpp>
+#include <com/sun/star/ucb/TransferInfo2.hpp>
 #include <com/sun/star/ucb/UnsupportedNameClashException.hpp>
 #include <com/sun/star/ucb/XCommandInfo.hpp>
 #include <com/sun/star/ucb/XContentAccess.hpp>
@@ -80,14 +80,14 @@ struct TransferCommandContext
     uno::Reference< ucb::XCommandProcessor >     xProcessor;
     uno::Reference< ucb::XCommandEnvironment >   xEnv;
     uno::Reference< ucb::XCommandEnvironment >   xOrigEnv;
-    ucb::GlobalTransferCommandArgument           aArg;
+    ucb::GlobalTransferCommandArgument2          aArg;
 
     TransferCommandContext(
         const uno::Reference< lang::XMultiServiceFactory > & rxSMgr,
         const uno::Reference< ucb::XCommandProcessor > & rxProcessor,
         const uno::Reference< ucb::XCommandEnvironment > & rxEnv,
         const uno::Reference< ucb::XCommandEnvironment > & rxOrigEnv,
-        const ucb::GlobalTransferCommandArgument & rArg )
+        const ucb::GlobalTransferCommandArgument2 & rArg )
     : xSMgr( rxSMgr ), xProcessor( rxProcessor ), xEnv( rxEnv ),
       xOrigEnv( rxOrigEnv ), aArg( rArg ) {}
 };
@@ -1171,7 +1171,7 @@ void handleNameClashRename(
                 }
             }
 
-            ucb::InsertCommandArgument aArg;
+            ucb::InsertCommandArgument2 aArg;
             aArg.Data = xInputStream;
             aArg.ReplaceExisting = sal_False;
 
@@ -1354,8 +1354,9 @@ void globalTransfer_(
     //
     //////////////////////////////////////////////////////////////////////
 
-    ucb::InsertCommandArgument aArg;
+    ucb::InsertCommandArgument2 aArg;
     aArg.Data = xInputStream;
+    aArg.MimeType = rContext.aArg.MimeType;
 
     switch ( rContext.aArg.NameClash )
     {
@@ -1599,13 +1600,14 @@ void globalTransfer_(
 
             if ( xResultSet->first() )
             {
-                ucb::GlobalTransferCommandArgument aTransArg(
-                        rContext.aArg.Operation,      // Operation
+                ucb::GlobalTransferCommandArgument2 aTransArg(
+                        rContext.aArg.Operation,
                         rtl::OUString(),              // SourceURL; filled later
                         xNew->getIdentifier()
                             ->getContentIdentifier(), // TargetURL
                         rtl::OUString(),              // NewTitle;
-                        rContext.aArg.NameClash );    // NameClash
+                        rContext.aArg.NameClash,
+                        rContext.aArg.MimeType );
 
                 TransferCommandContext aSubCtx(
                         rContext.xSMgr,
@@ -1685,7 +1687,7 @@ UniversalContentBroker::getCommandInfo()
 
 //=========================================================================
 void UniversalContentBroker::globalTransfer(
-            const ucb::GlobalTransferCommandArgument & rArg,
+            const ucb::GlobalTransferCommandArgument2 & rArg,
             const uno::Reference< ucb::XCommandEnvironment > & xEnv )
     throw( uno::Exception )
 {
@@ -1764,12 +1766,13 @@ void UniversalContentBroker::globalTransfer(
             // Unreachable
         }
 
-        ucb::TransferInfo aTransferArg(
+        ucb::TransferInfo2 aTransferArg(
             ( rArg.Operation
                 == ucb::TransferCommandOperation_MOVE ), // MoveData
-            rArg.SourceURL,   // SourceURL
-            rArg.NewTitle,    // NewTitle
-            rArg.NameClash ); // NameClash
+            rArg.SourceURL,
+            rArg.NewTitle,
+            rArg.NameClash,
+            rArg.MimeType );
 
         bool bRetry;
         do
@@ -1808,11 +1811,12 @@ void UniversalContentBroker::globalTransfer(
                     // NameClash::ERROR.
                     try
                     {
-                        ucb::TransferInfo aTransferArg1(
+                        ucb::TransferInfo2 aTransferArg1(
                             aTransferArg.MoveData,
                             aTransferArg.SourceURL,
                             aTransferArg.NewTitle,
-                            ucb::NameClash::ERROR );
+                            ucb::NameClash::ERROR,
+                            aTransferArg.MimeType );
 
                         ucb::Command aCommand1(
                             rtl::OUString("transfer"),

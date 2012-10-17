@@ -113,7 +113,8 @@ private:
             throw( com::sun::star::uno::Exception );
 
     void insert( const com::sun::star::uno::Reference< com::sun::star::io::XInputStream > & xInputStream,
-        sal_Bool bReplaceExisting, const com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment >& xEnv )
+        sal_Bool bReplaceExisting, const ::rtl::OUString & rMimeType,
+        const com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment >& xEnv )
             throw( com::sun::star::uno::Exception );
 
     void destroy( ) throw( com::sun::star::uno::Exception );

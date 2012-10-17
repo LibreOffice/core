@@ -36,7 +36,7 @@
 #include <com/sun/star/ucb/ContentAction.hpp>
 #include <com/sun/star/ucb/OpenCommandArgument2.hpp>
 #include <com/sun/star/ucb/InsertCommandArgument.hpp>
-#include <com/sun/star/ucb/GlobalTransferCommandArgument.hpp>
+#include <com/sun/star/ucb/GlobalTransferCommandArgument2.hpp>
 #include <com/sun/star/ucb/NameClash.hpp>
 #include <com/sun/star/ucb/OpenMode.hpp>
 #include <com/sun/star/ucb/XContentCreator.hpp>
@@ -961,7 +961,8 @@ sal_Bool Content::insertNewContent( const rtl::OUString& rContentType,
 sal_Bool Content::transferContent( const Content& rSourceContent,
                                    InsertOperation eOperation,
                                    const rtl::OUString & rTitle,
-                                   const sal_Int32 nNameClashAction )
+                                   const sal_Int32 nNameClashAction,
+                                   const rtl::OUString & rMimeType )
     throw( CommandAbortedException, RuntimeException, Exception )
 {
     Reference< XUniversalContentBroker > pBroker(
@@ -995,12 +996,13 @@ sal_Bool Content::transferContent( const Content& rSourceContent,
             // Unreachable
     }
 
-    GlobalTransferCommandArgument aTransferArg(
+    GlobalTransferCommandArgument2 aTransferArg(
                                         eTransOp,
                                         rSourceContent.getURL(), // SourceURL
                                         getURL(),   // TargetFolderURL,
                                         rTitle,
-                                        nNameClashAction );
+                                        nNameClashAction,
+                                        rMimeType );
     Command aCommand;
     aCommand.Name     = rtl::OUString("globalTransfer");
     aCommand.Handle   = -1; // n/a

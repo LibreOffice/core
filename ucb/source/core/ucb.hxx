@@ -49,7 +49,7 @@ namespace cppu { class OInterfaceContainerHelper; }
 
 namespace com { namespace sun { namespace star { namespace ucb {
     class XCommandInfo;
-    struct GlobalTransferCommandArgument;
+    struct GlobalTransferCommandArgument2;
 } } } }
 
 class UniversalContentBroker :
@@ -176,7 +176,7 @@ private:
 
     void
     globalTransfer(
-            const com::sun::star::ucb::GlobalTransferCommandArgument & rArg,
+            const com::sun::star::ucb::GlobalTransferCommandArgument2 & rArg,
             const com::sun::star::uno::Reference<
                  com::sun::star::ucb::XCommandEnvironment >& xEnv )
         throw( com::sun::star::uno::Exception );

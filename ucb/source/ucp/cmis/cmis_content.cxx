@@ -38,7 +38,7 @@
 #include <com/sun/star/task/InteractionClassification.hpp>
 #include <com/sun/star/ucb/ContentInfo.hpp>
 #include <com/sun/star/ucb/ContentInfoAttribute.hpp>
-#include <com/sun/star/ucb/InsertCommandArgument.hpp>
+#include <com/sun/star/ucb/InsertCommandArgument2.hpp>
 #include <com/sun/star/ucb/InteractiveBadTransferURLException.hpp>
 #include <com/sun/star/ucb/InteractiveAugmentedIOException.hpp>
 #include <com/sun/star/ucb/MissingInputStreamException.hpp>
@@ -668,7 +668,8 @@ namespace cmis
     }
 
     void Content::insert( const uno::Reference< io::XInputStream > & xInputStream,
-        sal_Bool bReplaceExisting, const uno::Reference< ucb::XCommandEnvironment >& xEnv )
+        sal_Bool bReplaceExisting, const rtl::OUString& rMimeType,
+        const uno::Reference< ucb::XCommandEnvironment >& xEnv )
             throw( uno::Exception )
     {
         if ( !xInputStream.is() )
@@ -740,7 +741,7 @@ namespace cmis
                         boost::shared_ptr< ostream > pOut( new ostringstream ( ios_base::binary | ios_base::in | ios_base::out ) );
                         uno::Reference < io::XOutputStream > xOutput = new ucbhelper::StdOutputStream( pOut );
                         copyData( xInputStream, xOutput );
-                        document->setContentStream( pOut, sMime, string( ), bReplaceExisting );
+                        document->setContentStream( pOut, sMime, OUSTR_TO_STDSTR( rMimeType ), bReplaceExisting );
                     }
                 }
                 else
@@ -759,7 +760,7 @@ namespace cmis
                         boost::shared_ptr< ostream > pOut( new ostringstream ( ios_base::binary | ios_base::in | ios_base::out ) );
                         uno::Reference < io::XOutputStream > xOutput = new ucbhelper::StdOutputStream( pOut );
                         copyData( xInputStream, xOutput );
-                        pFolder->createDocument( m_pObjectProps, pOut, string(), string() );
+                        pFolder->createDocument( m_pObjectProps, pOut, OUSTR_TO_STDSTR( rMimeType ), string() );
                         sNewPath = STD_TO_OUSTR( newPath );
                     }
                 }
@@ -1005,7 +1006,7 @@ namespace cmis
               -1, getCppuBooleanType() ),
             ucb::CommandInfo
             ( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "insert" ) ),
-              -1, getCppuType( static_cast<ucb::InsertCommandArgument * >( 0 ) ) ),
+              -1, getCppuType( static_cast<ucb::InsertCommandArgument2 * >( 0 ) ) ),
             ucb::CommandInfo
             ( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "open" ) ),
               -1, getCppuType( static_cast<ucb::OpenCommandArgument2 * >( 0 ) ) ),
@@ -1166,10 +1167,17 @@ namespace cmis
         }
         else if ( aCommand.Name == "insert" )
         {
-            ucb::InsertCommandArgument arg;
+            ucb::InsertCommandArgument2 arg;
             if ( !( aCommand.Argument >>= arg ) )
+            {
+                ucb::InsertCommandArgument insertArg;
+                if ( !( aCommand.Argument >>= insertArg ) )
                     ucbhelper::cancelCommandExecution ( getBadArgExcept (), xEnv );
-            insert( arg.Data, arg.ReplaceExisting, xEnv );
+
+                arg.Data = insertArg.Data;
+                arg.ReplaceExisting = insertArg.ReplaceExisting;
+            }
+            insert( arg.Data, arg.ReplaceExisting, arg.MimeType, xEnv );
         }
         else if ( aCommand.Name == "delete" )
         {
