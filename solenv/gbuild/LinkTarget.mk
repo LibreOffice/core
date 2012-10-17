@@ -662,15 +662,18 @@ endef
 
 define gb_LinkTarget_add_ldflags
 $(call gb_LinkTarget_get_target,$(1)) : T_LDFLAGS += $(2)
+
 endef
 
 # real use in RepositoryExternal.mk
 define gb_LinkTarget_set_ldflags
 $(call gb_LinkTarget_get_target,$(1)) : T_LDFLAGS := $(2)
+
 endef
 
 define gb_LinkTarget_add_libs
 $(call gb_LinkTarget_get_target,$(1)) : LIBS += $(2)
+
 endef
 
 # remove platform specific standard libraries for linktarget $(1)
@@ -678,6 +681,7 @@ endef
 # exceptional cases this disable method may be used
 define gb_LinkTarget_disable_standard_system_libs
 $(call gb_LinkTarget_get_target,$(1)) : LIBS := $$(filter-out $$(gb_STDLIBS),$$(LIBS))
+
 endef
 
 define gb_LinkTarget_add_api
@@ -1059,16 +1063,19 @@ endef
 define gb_LinkTarget_set_targettype
 $(call gb_LinkTarget_get_target,$(1)) \
 $(call gb_LinkTarget_get_dep_target,$(1)) : TARGETTYPE := $(2)
+
 endef
 
 define gb_LinkTarget_set_x64
 $(call gb_LinkTarget_get_target,$(1)) \
 $(call gb_LinkTarget_get_dep_target,$(1)) : LIBRARY_X64 := $(2)
+
 endef
 
 define gb_LinkTarget_set_dlltarget
 $(call gb_LinkTarget_get_clean_target,$(1)) \
 $(call gb_LinkTarget_get_target,$(1)) : DLLTARGET := $(2)
+
 endef
 
 define gb_LinkTarget_set_auxtargets
@@ -1113,6 +1120,7 @@ endef
 define gb_LinkTarget_add_sdi_headers
 $(call gb_LinkTarget__add_internal_headers,$(1),$(foreach sdi,$(2),$(call gb_SdiTarget_get_target,$(sdi))))
 $(call gb_LinkTarget_get_clean_target,$(1)) : $(foreach sdi,$(2),$(call gb_SdiTarget_get_clean_target,$(sdi)))
+
 endef
 
 define gb_LinkTarget_add_external_headers
