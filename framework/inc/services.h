@@ -51,7 +51,6 @@ namespace framework{
 #define SERVICENAME_CONTENTHANDLER                              DECLARE_ASCII("com.sun.star.frame.ContentHandler"                   )
 #define SERVICENAME_CONTENTHANDLERFACTORY                       DECLARE_ASCII("com.sun.star.frame.ContentHandlerFactory"            )
 #define SERVICENAME_STATUSINDICATORFACTORY                      DECLARE_ASCII("com.sun.star.task.StatusIndicatorFactory"            )
-#define SERVICENAME_UIINTERACTIONHANDLER                        DECLARE_ASCII("com.sun.star.task.InteractionHandler"                )
 #define SERVICENAME_JOBEXECUTOR                                 DECLARE_ASCII("com.sun.star.task.JobExecutor"                       )
 #define SERVICENAME_JOB                                         DECLARE_ASCII("com.sun.star.task.Job"                               )
 #define SERVICENAME_DISPATCHRECORDERSUPPLIER                    DECLARE_ASCII("com.sun.star.frame.DispatchRecorderSupplier"         )
