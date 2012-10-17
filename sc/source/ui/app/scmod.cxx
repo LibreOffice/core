@@ -2043,7 +2043,10 @@ SfxItemSet*  ScModule::CreateItemSet( sal_uInt16 nId )
 
         // TP_USERLISTS
         if ( pUL )
+        {
             aULItem.SetUserList( *pUL );
+            pRet->Put(aULItem);
+        }
 
         // TP_COMPATIBILITY
         pRet->Put( SfxUInt16Item( SID_SC_OPT_KEY_BINDING_COMPAT,
