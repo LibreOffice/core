@@ -1293,7 +1293,7 @@ namespace basctl
     {
         OUString aObjectName;
 
-        OUString aBaseName = _eType == E_SCRIPTS ? "Module" : "Dialog";
+        OUString aBaseName = _eType == E_SCRIPTS ? OUString("Module") : OUString("Dialog");
 
         Sequence< OUString > aUsedNames( getObjectNames( _eType, _rLibName ) );
         ::std::set< OUString > aUsedNamesCheck;
