@@ -187,19 +187,19 @@
         <value>Tahoma;Arial Unicode MS;Lucida Sans Unicode;DejaVu Sans;Albany AMT;Albany;Arial;Nimbus Sans L;Interface User;Geneva;Tahoma;Dialog;Lucida;Helvetica;Helmet;Interface System;Sans Serif</value>
      </prop>
      <prop oor:name="CTL_DISPLAY" oor:type="xs:string" oor:op="replace">
-        <value>Nachlieli CLM;Miriam CLM;Ellinia CLM;Aharoni CLM;Drugulin CLM;Miriam Mono CLM;Lucidasans;Lucida Sans;Arial Unicode MS</value>
+        <value>Nachlieli CLM;Miriam CLM;Ellinia CLM;Aharoni CLM;Drugulin CLM;Miriam Mono CLM;Lucida Sans Unicode;Arial Unicode MS</value>
      </prop>
      <prop oor:name="CTL_HEADING" oor:type="xs:string" oor:op="replace">
-        <value>Nachlieli CLM;Miriam CLM;Ellinia CLM;Aharoni CLM;Drugulin CLM;Miriam Mono CLM;Lucidasans;Lucida Sans;Arial Unicode MS</value>
+        <value>Nachlieli CLM;Miriam CLM;Ellinia CLM;Aharoni CLM;Drugulin CLM;Miriam Mono CLM;Lucida Sans Unicode;Arial Unicode MS</value>
      </prop>
      <prop oor:name="CTL_PRESENTATION" oor:type="xs:string" oor:op="replace">
-        <value>Nachlieli CLM;Miriam CLM;Ellinia CLM;Aharoni CLM;Drugulin CLM;Miriam Mono CLM;Lucidasans;Lucida Sans;Arial Unicode MS</value>
+        <value>Nachlieli CLM;Miriam CLM;Ellinia CLM;Aharoni CLM;Drugulin CLM;Miriam Mono CLM;Lucida Sans Unicode;Arial Unicode MS</value>
      </prop>
      <prop oor:name="CTL_SPREADSHEET" oor:type="xs:string" oor:op="replace">
-        <value>Nachlieli CLM;Miriam CLM;Ellinia CLM;Aharoni CLM;Drugulin CLM;Miriam Mono CLM;Lucidasans;Lucida Sans;Arial Unicode MS</value>
+        <value>Nachlieli CLM;Miriam CLM;Ellinia CLM;Aharoni CLM;Drugulin CLM;Miriam Mono CLM;Lucida Sans Unicode;Arial Unicode MS</value>
      </prop>
      <prop oor:name="CTL_TEXT" oor:type="xs:string" oor:op="replace">
-        <value>Nachlieli CLM;Miriam CLM;Ellinia CLM;Aharoni CLM;Drugulin CLM;Miriam Mono CLM;Lucidasans;Lucida Sans;Arial Unicode MS</value>
+        <value>Nachlieli CLM;Miriam CLM;Ellinia CLM;Aharoni CLM;Drugulin CLM;Miriam Mono CLM;Lucida Sans Unicode;Arial Unicode MS</value>
      </prop>
     </node>
     <node oor:name="th" oor:op="replace">
