@@ -1987,7 +1987,6 @@ sal_Bool SVGFilter::implCreateObjectsFromShape( const Reference< XDrawPage > & r
 
                                     // We create a set of bitmaps embedded into text shape.
                                     GDIMetaFile   aMtf;
-                                    const Point   aNullPt;
                                     const Size    aSize( pObj->GetCurrentBoundRect().GetSize() );
                                     MetaAction*   pAction;
                                     sal_Bool bIsTextShapeStarted = sal_False;

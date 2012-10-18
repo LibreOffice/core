@@ -6967,7 +6967,6 @@ sal_Bool SvxMSDffManager::ConvertToOle2( SvStream& rStm, sal_uInt32 nReadLen,
                         break;
                 }
 
-                String aShort, aFull;
                 if( pIds->nId )
                 {
                     // found!

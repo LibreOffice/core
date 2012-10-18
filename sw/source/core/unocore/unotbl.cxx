@@ -3229,7 +3229,6 @@ void SwXTextTable::setPropertyValue(const OUString& rPropertyName,
     }
     else if(bIsDescriptor)
     {
-        String aPropertyName(rPropertyName);
         pTableProps->SetProperty( pEntry->nWID, pEntry->nMemberId, aValue);
     }
     else
@@ -3463,7 +3462,6 @@ uno::Any SwXTextTable::getPropertyValue(const OUString& rPropertyName) throw( be
     else if(bIsDescriptor)
     {
         const uno::Any* pAny = 0;
-        String aPropertyName(rPropertyName);
         if(!pTableProps->GetProperty(pEntry->nWID, pEntry->nMemberId, pAny))
             throw lang::IllegalArgumentException();
         else if(pAny)
