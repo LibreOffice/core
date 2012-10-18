@@ -3471,7 +3471,9 @@ _PageMar::_PageMar()
 {
     header = footer = ConversionHelper::convertTwipToMM100(sal_Int32(720));
     top = bottom = ConversionHelper::convertTwipToMM100( sal_Int32(1440));
-    right = left = ConversionHelper::convertTwipToMM100( sal_Int32(1800));
+    // This is strange, the RTF spec says it's 1800, but it's clearly 1440 in Word
+    // OOXML seems not to specify a default value
+    right = left = ConversionHelper::convertTwipToMM100( sal_Int32(1440));
     gutter = 0;
 }
 

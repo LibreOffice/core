@@ -119,6 +119,7 @@ public:
     void testShptxtPard();
     void testDoDhgt();
     void testDplinehollow();
+    void testLeftmarginDefault();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -176,6 +177,7 @@ public:
     CPPUNIT_TEST(testShptxtPard);
     CPPUNIT_TEST(testDoDhgt);
     CPPUNIT_TEST(testDplinehollow);
+    CPPUNIT_TEST(testLeftmarginDefault);
 #endif
     CPPUNIT_TEST_SUITE_END();
 
@@ -934,6 +936,13 @@ void Test::testDplinehollow()
     uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xPropertySet(xDraws->getByIndex(0), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(drawing::LineStyle_NONE, getProperty<drawing::LineStyle>(xPropertySet, "LineStyle"));
+}
+
+void Test::testLeftmarginDefault()
+{
+    // The default left/right margin was incorrect when the top margin was set to zero.
+    load("leftmargin-default.rtf");
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2540), getProperty<sal_Int32>(getStyles("PageStyles")->getByName("Default"), "LeftMargin"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
