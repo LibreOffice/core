@@ -30,8 +30,6 @@
 #include "svtools/treelist.hxx"
 #include "svtools/treelistbox.hxx"
 
-#include "tools/debug.hxx"
-
 void SvTreeListEntry::SetListPositions()
 {
     if( pChildren )
@@ -56,7 +54,6 @@ void SvTreeListEntry::InvalidateChildrensListPositions()
 
 void SvTreeListEntry::DeleteItems_Impl()
 {
-    DBG_CHKTHIS(SvLBoxEntry,0);
     sal_uInt16 nCount = aItems.size();
     while( nCount )
     {
