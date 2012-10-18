@@ -282,6 +282,8 @@ void ScTabView::InitScrollBar( ScrollBar& rScrollBar, long nMaxVal )
 
     rScrollBar.SetScrollHdl( LINK(this, ScTabView, ScrollHdl) );
     rScrollBar.SetEndScrollHdl( LINK(this, ScTabView, EndScrollHdl) );
+
+    rScrollBar.EnableRTL( aViewData.GetDocument()->IsLayoutRTL( aViewData.GetTabNo() ) );
 }
 
 //  Scroll-Timer
@@ -1035,15 +1037,14 @@ IMPL_LINK( ScTabView, EndScrollHdl, ScrollBar*, pScroll )
 
             if ( pScroll == &aHScrollLeft || pScroll == &aHScrollRight )
             {
-                bool bMirror = aViewData.GetDocument()->IsLayoutRTL( aViewData.GetTabNo() ) != Application::GetSettings().GetLayoutRTL();
                 ScHSplitPos eWhich = (pScroll == &aHScrollLeft) ? SC_SPLIT_LEFT : SC_SPLIT_RIGHT;
-                long nDelta = GetScrollBarPos( *pScroll, bMirror ) + nScrollMin - aViewData.GetPosX(eWhich);
+                long nDelta = GetScrollBarPos( *pScroll ) + nScrollMin - aViewData.GetPosX(eWhich);
                 if (nDelta) ScrollX( nDelta, eWhich );
             }
             else                            // VScroll...
             {
                 ScVSplitPos eWhich = (pScroll == &aVScrollTop) ? SC_SPLIT_TOP : SC_SPLIT_BOTTOM;
-                long nDelta = GetScrollBarPos( *pScroll, false ) + nScrollMin - aViewData.GetPosY(eWhich);
+                long nDelta = GetScrollBarPos( *pScroll ) + nScrollMin - aViewData.GetPosY(eWhich);
                 if (nDelta) ScrollY( nDelta, eWhich );
             }
         }
@@ -1066,7 +1067,6 @@ IMPL_LINK( ScTabView, ScrollHdl, ScrollBar*, pScroll )
                                         SC_SPLIT_TOP : SC_SPLIT_BOTTOM );
 
     bool bLayoutRTL = aViewData.GetDocument()->IsLayoutRTL( aViewData.GetTabNo() );
-    bool bMirror = bHoriz && (bLayoutRTL != Application::GetSettings().GetLayoutRTL());
 
     ScrollType eType = pScroll->GetType();
     if ( eType == SCROLL_DRAG )
@@ -1104,7 +1104,7 @@ IMPL_LINK( ScTabView, ScrollHdl, ScrollBar*, pScroll )
                 nScrollMin = aViewData.GetFixPosX();
             if ( aViewData.GetVSplitMode()==SC_SPLIT_FIX && pScroll == &aVScrollBottom )
                 nScrollMin = aViewData.GetFixPosY();
-            long nScrollPos = GetScrollBarPos( *pScroll, bMirror ) + nScrollMin;
+            long nScrollPos = GetScrollBarPos( *pScroll ) + nScrollMin;
 
             String aHelpStr;
             Rectangle aRect;
@@ -1139,21 +1139,6 @@ IMPL_LINK( ScTabView, ScrollHdl, ScrollBar*, pScroll )
 
     if ( bOnlineScroll || eType != SCROLL_DRAG )
     {
-        if ( bMirror )
-        {
-            // change scroll type so visible/previous cells calculation below remains the same
-            switch ( eType )
-            {
-                case SCROLL_LINEUP:     eType = SCROLL_LINEDOWN;    break;
-                case SCROLL_LINEDOWN:   eType = SCROLL_LINEUP;      break;
-                case SCROLL_PAGEUP:     eType = SCROLL_PAGEDOWN;    break;
-                case SCROLL_PAGEDOWN:   eType = SCROLL_PAGEUP;      break;
-                default:
-                {
-                    // added to avoid warnings
-                }
-            }
-        }
         long nDelta = pScroll->GetDelta();
         switch ( eType )
         {
@@ -1188,7 +1173,7 @@ IMPL_LINK( ScTabView, ScrollHdl, ScrollBar*, pScroll )
                     if ( aViewData.GetVSplitMode()==SC_SPLIT_FIX && pScroll == &aVScrollBottom )
                         nScrollMin = aViewData.GetFixPosY();
 
-                    long nScrollPos = GetScrollBarPos( *pScroll, bMirror ) + nScrollMin;
+                    long nScrollPos = GetScrollBarPos( *pScroll ) + nScrollMin;
                     nDelta = nScrollPos - nViewPos;
                     if ( nScrollPos > nPrevDragPos )
                     {

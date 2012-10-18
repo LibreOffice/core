@@ -1794,6 +1794,7 @@ sal_Bool GtkSalGraphics::NWPaintGTKScrollbar( ControlType, ControlPart nPart,
     {
         unsigned int sliderHeight = slider_width + (trough_border * 2);
         vShim = (pixmapRect.GetHeight() - sliderHeight) / 2;
+        bool bRTLSwap = button11BoundRect.Left() > button22BoundRect.Left();
 
         scrollbarRect.Move( 0, vShim );
         scrollbarRect.SetSize( Size( scrollbarRect.GetWidth(), sliderHeight ) );
@@ -1801,8 +1802,8 @@ sal_Bool GtkSalGraphics::NWPaintGTKScrollbar( ControlType, ControlPart nPart,
         scrollbarWidget = GTK_SCROLLBAR( gWidgetData[m_nXScreen].gScrollHorizWidget );
         scrollbarOrientation = GTK_ORIENTATION_HORIZONTAL;
         scrollbarTag = scrollbarTagH;
-        button1Type = GTK_ARROW_LEFT;
-        button2Type = GTK_ARROW_RIGHT;
+        button1Type = bRTLSwap? GTK_ARROW_RIGHT: GTK_ARROW_LEFT;
+        button2Type = bRTLSwap? GTK_ARROW_LEFT: GTK_ARROW_RIGHT;
 
         if ( has_backward )
         {

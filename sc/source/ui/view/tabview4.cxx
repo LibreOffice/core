@@ -330,30 +330,16 @@ void ScTabView::SetScrollBar( ScrollBar& rScroll, long nRangeMax, long nVisible,
     if ( nVisible == 0 )
         nVisible = 1;       // #i59893# don't use visible size 0
 
-    //  RTL layout uses a negative range to simulate a mirrored scroll bar.
-    //  SetScrollBar/GetScrollBarPos hide this so outside of these functions normal cell
-    //  addresses can be used.
+    rScroll.SetRange( Range( 0, nRangeMax ) );
+    rScroll.SetVisibleSize( nVisible );
+    rScroll.SetThumbPos( nPos );
 
-    if ( bLayoutRTL )
-    {
-        rScroll.SetRange( Range( -nRangeMax, 0 ) );
-        rScroll.SetVisibleSize( nVisible );
-        rScroll.SetThumbPos( -nPos - nVisible );
-    }
-    else
-    {
-        rScroll.SetRange( Range( 0, nRangeMax ) );
-        rScroll.SetVisibleSize( nVisible );
-        rScroll.SetThumbPos( nPos );
-    }
+    rScroll.EnableRTL( bLayoutRTL );
 }
 
-long ScTabView::GetScrollBarPos( ScrollBar& rScroll, bool bLayoutRTL )
+long ScTabView::GetScrollBarPos( ScrollBar& rScroll )
 {
-    if ( bLayoutRTL )
-        return -rScroll.GetThumbPos() - rScroll.GetVisibleSize();
-    else
-        return rScroll.GetThumbPos();
+    return rScroll.GetThumbPos();
 }
 
 //  UpdateScrollBars - sichtbaren Bereich und Scrollweite der Scrollbars einstellen
@@ -393,7 +379,7 @@ void ScTabView::UpdateScrollBars()
     sal_Bool        bRight = ( aViewData.GetHSplitMode() != SC_SPLIT_NONE );
     ScDocument* pDoc = aViewData.GetDocument();
     SCTAB       nTab = aViewData.GetTabNo();
-    sal_Bool        bMirror = pDoc->IsLayoutRTL( nTab ) != Application::GetSettings().GetLayoutRTL();
+    bool        bLayoutRTL = pDoc->IsLayoutRTL( nTab );
     SCCOL       nUsedX;
     SCROW       nUsedY;
     pDoc->GetTableArea( nTab, nUsedX, nUsedY );     //! cachen !!!!!!!!!!!!!!!
@@ -412,24 +398,24 @@ void ScTabView::UpdateScrollBars()
 
     nVisXL = aViewData.VisibleCellsX( SC_SPLIT_LEFT );
     long nMaxXL = lcl_GetScrollRange( nUsedX, aViewData.GetPosX(SC_SPLIT_LEFT), nVisXL, MAXCOL, 0 );
-    SetScrollBar( aHScrollLeft, nMaxXL, nVisXL, aViewData.GetPosX( SC_SPLIT_LEFT ), bMirror );
+    SetScrollBar( aHScrollLeft, nMaxXL, nVisXL, aViewData.GetPosX( SC_SPLIT_LEFT ), bLayoutRTL );
 
     nVisYB = aViewData.VisibleCellsY( SC_SPLIT_BOTTOM );
     long nMaxYB = lcl_GetScrollRange( nUsedY, aViewData.GetPosY(SC_SPLIT_BOTTOM), nVisYB, MAXROW, nStartY );
-    SetScrollBar( aVScrollBottom, nMaxYB, nVisYB, aViewData.GetPosY( SC_SPLIT_BOTTOM ) - nStartY, false );
+    SetScrollBar( aVScrollBottom, nMaxYB, nVisYB, aViewData.GetPosY( SC_SPLIT_BOTTOM ) - nStartY, bLayoutRTL );
 
     if (bRight)
     {
         nVisXR = aViewData.VisibleCellsX( SC_SPLIT_RIGHT );
         long nMaxXR = lcl_GetScrollRange( nUsedX, aViewData.GetPosX(SC_SPLIT_RIGHT), nVisXR, MAXCOL, nStartX );
-        SetScrollBar( aHScrollRight, nMaxXR, nVisXR, aViewData.GetPosX( SC_SPLIT_RIGHT ) - nStartX, bMirror );
+        SetScrollBar( aHScrollRight, nMaxXR, nVisXR, aViewData.GetPosX( SC_SPLIT_RIGHT ) - nStartX, bLayoutRTL );
     }
 
     if (bTop)
     {
         nVisYT = aViewData.VisibleCellsY( SC_SPLIT_TOP );
         long nMaxYT = lcl_GetScrollRange( nUsedY, aViewData.GetPosY(SC_SPLIT_TOP), nVisYT, MAXROW, 0 );
-        SetScrollBar( aVScrollTop, nMaxYT, nVisYT, aViewData.GetPosY( SC_SPLIT_TOP ), false );
+        SetScrollBar( aVScrollTop, nMaxYT, nVisYT, aViewData.GetPosY( SC_SPLIT_TOP ), bLayoutRTL );
     }
 
     //      Bereich testen
