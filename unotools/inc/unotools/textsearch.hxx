@@ -71,22 +71,11 @@ private:
     long nTransliterationFlags;
 
 public:
-    SearchParam( const String &rText,
+    SearchParam( const rtl::OUString &rText,
                     SearchType eSrchType = SearchParam::SRCH_NORMAL,
                     sal_Bool bCaseSensitive = sal_True,
                     sal_Bool bWordOnly = sal_False,
                     sal_Bool bSearchInSelection = sal_False );
-
-    // Wrapper to use OUString as parameter
-    SearchParam( const ::rtl::OUString &rText,
-                    SearchType eSrchType = SearchParam::SRCH_NORMAL,
-                    sal_Bool bCaseSensitive = sal_True,
-                    sal_Bool bWordOnly = sal_False,
-                    sal_Bool bSearchInSelection = sal_False )
-    {
-        String rText2(rText);
-        SearchParam( rText2, eSrchType, bCaseSensitive, bWordOnly, bSearchInSelection );
-    }
 
     SearchParam( const SearchParam& );
 

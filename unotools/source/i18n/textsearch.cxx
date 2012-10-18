@@ -36,7 +36,7 @@ namespace utl
 {
 // ............................................................................
 
-SearchParam::SearchParam( const String &rText,
+SearchParam::SearchParam( const rtl::OUString &rText,
                                 SearchType eType,
                                 sal_Bool bCaseSensitive,
                                 sal_Bool bWrdOnly,
