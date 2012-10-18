@@ -26,7 +26,8 @@
  *
  ************************************************************************/
 
-#include "com/sun/star/frame/XComponentLoader.hpp"
+#include <com/sun/star/frame/AutoRecovery.hpp>
+#include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/document/XEventsSupplier.hpp>
 #include <com/sun/star/drawing/XMasterPageTarget.hpp>
@@ -2852,7 +2853,6 @@ void SlideshowImpl::setAutoSaveState( bool bOn)
 {
     try
     {
-        uno::Reference<lang::XMultiServiceFactory> xFac( ::comphelper::getProcessServiceFactory() );
         uno::Reference<uno::XComponentContext> xContext( ::comphelper::getProcessComponentContext() );
 
         uno::Reference< util::XURLTransformer > xParser(util::URLTransformer::create(xContext));
@@ -2864,9 +2864,7 @@ void SlideshowImpl::setAutoSaveState( bool bOn)
         aArgs[0].Name = "AutoSaveState";
         aArgs[0].Value <<= bOn ? sal_True : sal_False;
 
-        uno::Reference< frame::XDispatch > xAutoSave(
-            xFac->createInstance( "com.sun.star.frame.AutoRecovery" ),
-            uno::UNO_QUERY_THROW);
+        uno::Reference< frame::XDispatch > xAutoSave = frame::AutoRecovery::create(xContext);
         xAutoSave->dispatch(aURL, aArgs);
     }
     catch( Exception& )

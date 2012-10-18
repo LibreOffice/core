@@ -60,7 +60,6 @@
 #define RECOVERY_CMD_DO_ENTRY_CLEANUP               rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.autorecovery:/doEntryCleanUp"        ))
 
 #define SERVICENAME_PROGRESSFACTORY                 rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.task.StatusIndicatorFactory"))
-#define SERVICENAME_RECOVERYCORE                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.AutoRecovery"         ))
 #define SERVICENAME_DESKTOP                         rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.Desktop"              ))
 
 #define PROP_PARENTWINDOW                           rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Window"           ))
@@ -213,7 +212,7 @@ class RecoveryCore : public ::cppu::WeakImplHelper1< css::frame::XStatusListener
     private:
 
         /// TODO
-        css::uno::Reference< css::lang::XMultiServiceFactory > m_xSMGR;
+        css::uno::Reference< css::uno::XComponentContext > m_xContext;
 
         /// TODO
         css::uno::Reference< css::frame::XDispatch > m_xRealCore;
@@ -242,8 +241,8 @@ class RecoveryCore : public ::cppu::WeakImplHelper1< css::frame::XStatusListener
 
         //---------------------------------------
         /** @short  TODO */
-        RecoveryCore(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR         ,
-                           sal_Bool                                                bUsedForSaving);
+        RecoveryCore(const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+                           sal_Bool                                            bUsedForSaving);
 
         //---------------------------------------
         /** @short  TODO */
@@ -251,7 +250,7 @@ class RecoveryCore : public ::cppu::WeakImplHelper1< css::frame::XStatusListener
 
         //---------------------------------------
         /** @short  TODO */
-        virtual css::uno::Reference< css::lang::XMultiServiceFactory > getSMGR();
+        virtual css::uno::Reference< css::uno::XComponentContext > getComponentContext();
 
         //---------------------------------------
         /** @short  TODO */

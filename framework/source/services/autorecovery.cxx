@@ -427,7 +427,7 @@ DEFINE_XTYPEPROVIDER_6(AutoRecovery                 ,
 //-----------------------------------------------
 DEFINE_XSERVICEINFO_ONEINSTANCESERVICE(AutoRecovery                   ,
                                        ::cppu::OWeakObject            ,
-                                       SERVICENAME_AUTORECOVERY       ,
+                                       DECLARE_ASCII("com.sun.star.frame.AutoRecovery"),
                                        IMPLEMENTATIONNAME_AUTORECOVERY)
 
 //-----------------------------------------------

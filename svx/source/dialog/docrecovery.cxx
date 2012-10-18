@@ -53,6 +53,7 @@
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/util/URL.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
+#include <com/sun/star/frame/AutoRecovery.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/ui/dialogs/FolderPicker.hpp>
@@ -134,9 +135,9 @@ short TabDialog4Recovery::Execute()
 }
 
 //===============================================
-RecoveryCore::RecoveryCore(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR         ,
-                                 sal_Bool                                                bUsedForSaving)
-    : m_xSMGR           ( xSMGR        )
+RecoveryCore::RecoveryCore(const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+                                 sal_Bool                                            bUsedForSaving)
+    : m_xContext        ( rxContext    )
     , m_pListener       ( 0            )
     , m_bListenForSaving(bUsedForSaving)
 {
@@ -150,9 +151,9 @@ RecoveryCore::~RecoveryCore()
 }
 
 //===============================================
-css::uno::Reference< css::lang::XMultiServiceFactory > RecoveryCore::getSMGR()
+css::uno::Reference< css::uno::XComponentContext > RecoveryCore::getComponentContext()
 {
-    return m_xSMGR;
+    return m_xContext;
 }
 
 //===============================================
@@ -576,14 +577,14 @@ void RecoveryCore::impl_startListening()
     // listening already initialized ?
     if (m_xRealCore.is())
         return;
-    m_xRealCore = css::uno::Reference< css::frame::XDispatch >(m_xSMGR->createInstance(SERVICENAME_RECOVERYCORE), css::uno::UNO_QUERY_THROW);
+    m_xRealCore = css::frame::AutoRecovery::create(m_xContext);
 
     css::util::URL aURL;
     if (m_bListenForSaving)
         aURL.Complete = RECOVERY_CMD_DO_EMERGENCY_SAVE;
     else
         aURL.Complete = RECOVERY_CMD_DO_RECOVERY;
-    css::uno::Reference< css::util::XURLTransformer > xParser(css::util::URLTransformer::create(::comphelper::getComponentContext(m_xSMGR)));
+    css::uno::Reference< css::util::XURLTransformer > xParser(css::util::URLTransformer::create(m_xContext));
     xParser->parseStrict(aURL);
 
     /* Note: addStatusListener() call us synchronous back ... so we
@@ -603,7 +604,7 @@ void RecoveryCore::impl_stopListening()
         aURL.Complete = RECOVERY_CMD_DO_EMERGENCY_SAVE;
     else
         aURL.Complete = RECOVERY_CMD_DO_RECOVERY;
-    css::uno::Reference< css::util::XURLTransformer > xParser(css::util::URLTransformer::create(::comphelper::getComponentContext(m_xSMGR)));
+    css::uno::Reference< css::util::XURLTransformer > xParser(css::util::URLTransformer::create(m_xContext));
     xParser->parseStrict(aURL);
 
     m_xRealCore->removeStatusListener(static_cast< css::frame::XStatusListener* >(this), aURL);
@@ -616,7 +617,7 @@ css::util::URL RecoveryCore::impl_getParsedURL(const ::rtl::OUString& sURL)
     css::util::URL aURL;
     aURL.Complete = sURL;
 
-    css::uno::Reference< css::util::XURLTransformer > xParser(css::util::URLTransformer::create(::comphelper::getComponentContext(m_xSMGR)));
+    css::uno::Reference< css::util::XURLTransformer > xParser(css::util::URLTransformer::create(m_xContext));
     xParser->parseStrict(aURL);
 
     return aURL;
@@ -833,8 +834,8 @@ SaveProgressDialog::SaveProgressDialog(Window*       pParent,
     , m_pCore       ( pCore                                                      )
 {
     FreeResource();
-    PluginProgress* pProgress   = new PluginProgress( &m_aProgrParent, pCore->getSMGR() );
-                    m_xProgress = css::uno::Reference< css::task::XStatusIndicator >(static_cast< css::task::XStatusIndicator* >(pProgress), css::uno::UNO_QUERY_THROW);
+    PluginProgress* pProgress   = new PluginProgress( &m_aProgrParent, css::uno::Reference<css::lang::XMultiServiceFactory>(pCore->getComponentContext()->getServiceManager(), css::uno::UNO_QUERY_THROW) );
+    m_xProgress = css::uno::Reference< css::task::XStatusIndicator >(static_cast< css::task::XStatusIndicator* >(pProgress), css::uno::UNO_QUERY_THROW);
 }
 
 //===============================================
@@ -1036,7 +1037,7 @@ RecoveryDialog::RecoveryDialog(Window*       pParent,
 
     sal_Bool bCrashRepEnabled( sal_False );
     css::uno::Any aVal = ::comphelper::ConfigurationHelper::readDirectKey(
-                                comphelper::getComponentContext(pCore->getSMGR()),
+                                pCore->getComponentContext(),
                                 CFG_PACKAGE_RECOVERY,
                                 CFG_PATH_CRASHREPORTER,
                                 CFG_ENTRY_ENABLED,
@@ -1044,8 +1045,8 @@ RecoveryDialog::RecoveryDialog(Window*       pParent,
     aVal >>= bCrashRepEnabled;
     m_bRecoveryOnly = !bCrashRepEnabled;
 
-    PluginProgress* pProgress   = new PluginProgress( &m_aProgrParent, pCore->getSMGR() );
-                    m_xProgress = css::uno::Reference< css::task::XStatusIndicator >(static_cast< css::task::XStatusIndicator* >(pProgress), css::uno::UNO_QUERY_THROW);
+    PluginProgress* pProgress   = new PluginProgress( &m_aProgrParent, css::uno::Reference<css::lang::XMultiServiceFactory>(pCore->getComponentContext()->getServiceManager(), css::uno::UNO_QUERY_THROW) );
+    m_xProgress = css::uno::Reference< css::task::XStatusIndicator >(static_cast< css::task::XStatusIndicator* >(pProgress), css::uno::UNO_QUERY_THROW);
 
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
     Wallpaper aBackground( rStyleSettings.GetWindowColor() );
@@ -1549,7 +1550,7 @@ IMPL_LINK_NOARG(BrokenRecoveryDialog, SaveButtonHdl)
 void BrokenRecoveryDialog::impl_askForSavePath()
 {
     css::uno::Reference< css::ui::dialogs::XFolderPicker2 > xFolderPicker =
-        css::ui::dialogs::FolderPicker::create(::comphelper::getComponentContext(m_pCore->getSMGR()));
+        css::ui::dialogs::FolderPicker::create( m_pCore->getComponentContext() );
 
     INetURLObject aURL(m_sSavePath, INET_PROT_FILE);
     xFolderPicker->setDisplayDirectory(aURL.GetMainURL(INetURLObject::NO_DECODE));

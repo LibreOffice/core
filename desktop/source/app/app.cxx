@@ -43,6 +43,7 @@
 #include "migration.hxx"
 
 #include <svtools/javacontext.hxx>
+#include <com/sun/star/frame/AutoRecovery.hpp>
 #include <com/sun/star/frame/GlobalEventBroadcaster.hpp>
 #include <com/sun/star/frame/XSessionManagerListener.hpp>
 #include <com/sun/star/frame/XSynchronousDispatch.hpp>
@@ -2357,11 +2358,8 @@ void Desktop::OpenClients()
     {
         try
         {
-            Reference< XDispatch > xRecovery(
-                    ::comphelper::getProcessServiceFactory()->createInstance( OUString("com.sun.star.frame.AutoRecovery") ),
-                    ::com::sun::star::uno::UNO_QUERY_THROW );
-
-            Reference< css::util::XURLTransformer > xParser( css::util::URLTransformer::create(::comphelper::getProcessComponentContext()) );
+            Reference< XDispatch > xRecovery = css::frame::AutoRecovery::create( ::comphelper::getProcessComponentContext() );
+            Reference< css::util::XURLTransformer > xParser = css::util::URLTransformer::create( ::comphelper::getProcessComponentContext() );
 
             css::util::URL aCmd;
             aCmd.Complete = ::rtl::OUString("vnd.sun.star.autorecovery:/disableRecovery");

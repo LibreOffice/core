@@ -45,6 +45,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/PropertyState.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/frame/AutoRecovery.hpp>
 #include <com/sun/star/frame/XFramesSupplier.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
@@ -144,8 +145,8 @@ void SessionListener::StoreSession( sal_Bool bAsync )
         // on stop event m_rSessionManager->saveDone(this); in case of asynchronous call
         // in case of synchronous call the caller should do saveDone() call himself!
 
-        css::uno::Reference< XDispatch > xDispatch(m_xSMGR->createInstance(SERVICENAME_AUTORECOVERY), UNO_QUERY_THROW);
-        css::uno::Reference< XURLTransformer > xURLTransformer(URLTransformer::create(::comphelper::getComponentContext(m_xSMGR)));
+        css::uno::Reference< XDispatch > xDispatch = css::frame::AutoRecovery::create( ::comphelper::getComponentContext(m_xSMGR) );
+        css::uno::Reference< XURLTransformer > xURLTransformer = URLTransformer::create( ::comphelper::getComponentContext(m_xSMGR) );
         URL aURL;
         aURL.Complete = OUString("vnd.sun.star.autorecovery:/doSessionSave");
         xURLTransformer->parseStrict(aURL);
@@ -177,8 +178,8 @@ void SessionListener::QuitSessionQuietly()
         // xd->dispatch("vnd.sun.star.autorecovery:/doSessionQuietQuit, async=false
         // it is done synchronously to avoid conflict with normal quit process
 
-        css::uno::Reference< XDispatch > xDispatch(m_xSMGR->createInstance(SERVICENAME_AUTORECOVERY), UNO_QUERY_THROW);
-        css::uno::Reference< XURLTransformer > xURLTransformer(URLTransformer::create(::comphelper::getComponentContext(m_xSMGR)));
+        css::uno::Reference< XDispatch > xDispatch = css::frame::AutoRecovery::create( ::comphelper::getComponentContext(m_xSMGR) );
+        css::uno::Reference< XURLTransformer > xURLTransformer = URLTransformer::create( ::comphelper::getComponentContext(m_xSMGR) );
         URL aURL;
         aURL.Complete = OUString("vnd.sun.star.autorecovery:/doSessionQuietQuit");
         xURLTransformer->parseStrict(aURL);
@@ -257,7 +258,7 @@ sal_Bool SAL_CALL SessionListener::doRestore()
     ResetableGuard aGuard(m_aLock);
     m_bRestored = sal_False;
     try {
-        css::uno::Reference< XDispatch > xDispatch(m_xSMGR->createInstance(SERVICENAME_AUTORECOVERY), UNO_QUERY_THROW);
+        css::uno::Reference< XDispatch > xDispatch = css::frame::AutoRecovery::create( ::comphelper::getComponentContext(m_xSMGR) );
 
         URL aURL;
         aURL.Complete = OUString("vnd.sun.star.autorecovery:/doSessionRestore");

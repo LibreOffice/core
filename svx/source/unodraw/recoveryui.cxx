@@ -262,7 +262,7 @@ RecoveryUI::EJob RecoveryUI::impl_classifyJob(const css::util::URL& aURL)
 sal_Bool RecoveryUI::impl_doEmergencySave()
 {
     // create core service, which implements the real "emergency save" algorithm.
-    svxdr::RecoveryCore* pCore = new svxdr::RecoveryCore(m_xSMGR, sal_True);
+    svxdr::RecoveryCore* pCore = new svxdr::RecoveryCore(comphelper::getComponentContext(m_xSMGR), sal_True);
     css::uno::Reference< css::frame::XStatusListener > xCore(pCore);
 
     // create all needed dialogs for this operation
@@ -300,7 +300,7 @@ void RecoveryUI::impl_doRecovery()
     bRecoveryOnly = !bCrashRepEnabled;
 
     // create core service, which implements the real "emergency save" algorithm.
-    svxdr::RecoveryCore* pCore = new svxdr::RecoveryCore(m_xSMGR, sal_False);
+    svxdr::RecoveryCore* pCore = new svxdr::RecoveryCore(comphelper::getComponentContext(m_xSMGR), sal_False);
     css::uno::Reference< css::frame::XStatusListener > xCore(pCore);
 
     // create all needed dialogs for this operation
