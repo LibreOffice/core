@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAP3///54\u003d",
+        "filename": "oox/source/vml/vmlformatting.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 301,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2012-10-18T01:34:48Z",
+      "side": 1,
+      "message": "from the link given below I see\n\"Either commas or spaces may be used to delimit parameters for each command.  E.g. \"m 0,0\" and \"m0 0\" are both acceptable.\"\n\nHow is that taken into account ?",
+      "revId": "9cc362d8b210bfa06ad40e15dd3c8b37b10fa702",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
