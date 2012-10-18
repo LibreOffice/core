@@ -46,7 +46,8 @@ PATCH_FILES=lp_solve_5.5-windows.patch
 .ELSE
 PATCH_FILES=\
     lp_solve_5.5.patch \
-    lp_solve-aix.patch
+    lp_solve-aix.patch \
+    lp_solve-fixed-warn.patch
 ADDITIONAL_FILES=lpsolve55$/ccc.solaris lpsolve55$/ccc.static
 .ENDIF
 
