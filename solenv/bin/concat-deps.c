@@ -798,12 +798,12 @@ static inline void print_fullpaths(char* line)
         else if(*token == ':' || *token == '\\' || *token == '/' ||
                 *token == '$' || ':' == token[1])
         {
-            fwrite(token, token_len, 1, stdout);
+            assert(fwrite(token, token_len, 1, stdout) == 1);
             fputc(' ', stdout);
         }
         else
         {
-            fwrite(token, end - token, 1, stdout);
+            assert(fwrite(token, end - token, 1, stdout) == 1);
             fputc(' ', stdout);
         }
         token = end;
