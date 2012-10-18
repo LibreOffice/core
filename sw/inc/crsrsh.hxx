@@ -594,8 +594,8 @@ public:
     inline const  SwPaM* GetTblCrs() const;
     inline        SwPaM* GetTblCrs();
 
-    sal_Bool IsTblComplex() const;
-    sal_Bool IsTblComplexForChart();
+    bool IsTblComplex() const;
+    bool IsTblComplexForChart();
     // get current table selection as text
     String GetBoxNms() const;
 

@@ -939,7 +939,7 @@ bool SwDoc::MoveRange( SwPaM& rPaM, SwPosition& rPos, SwMoveFlags eMvFlags )
         pTNd = static_cast<SwTxtNode*>(pTNd->SplitCntntNode( rPos ));
 
         if( !aBkmkArr.empty() )
-            _RestoreCntntIdx( this, aBkmkArr, rPos.nNode.GetIndex()-1, 0, sal_True );
+            _RestoreCntntIdx( this, aBkmkArr, rPos.nNode.GetIndex()-1, 0, true );
 
         // correct the PaM!
         if( rPos.nNode == rPaM.GetMark()->nNode )

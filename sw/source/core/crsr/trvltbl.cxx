@@ -706,18 +706,18 @@ sal_Bool SwCrsrShell::MoveTable( SwWhichTable fnWhichTbl, SwPosTable fnPosTbl )
 }
 
 
-sal_Bool SwCrsrShell::IsTblComplex() const
+bool SwCrsrShell::IsTblComplex() const
 {
     SwFrm *pFrm = GetCurrFrm( sal_False );
     if ( pFrm && pFrm->IsInTab() )
         return pFrm->FindTabFrm()->GetTable()->IsTblComplex();
-    return sal_False;
+    return false;
 }
 
 
-sal_Bool SwCrsrShell::IsTblComplexForChart()
+bool SwCrsrShell::IsTblComplexForChart()
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
 
     // Here we may trigger table formatting so we better do that inside an action
     StartAction();

@@ -1125,12 +1125,12 @@ public:
     void SetGlossDoc( bool bGlssDc = true ) { mbGlossDoc = bGlssDc; }
     bool IsInsOnlyTextGlossary() const      { return mbInsOnlyTxtGlssry; }
 
-    void Summary( SwDoc* pExtDoc, sal_uInt8 nLevel, sal_uInt8 nPara, sal_Bool bImpress );
+    void Summary( SwDoc* pExtDoc, sal_uInt8 nLevel, sal_uInt8 nPara, bool bImpress );
 
     void ChangeAuthorityData(const SwAuthEntry* pNewData);
 
     bool IsInCallModified() const      { return mbInCallModified; }
-    sal_Bool IsInHeaderFooter( const SwNodeIndex& rIdx ) const;
+    bool IsInHeaderFooter( const SwNodeIndex& rIdx ) const;
     short GetTextDirection( const SwPosition& rPos,
                             const Point* pPt = 0 ) const;
     sal_Bool IsInVerticalText( const SwPosition& rPos,
@@ -1812,11 +1812,11 @@ public:
     const SwFmtINetFmt* FindINetAttr( const String& rName ) const;
 
     /// Call into intransparent Basic; expect possible Return String.
-    sal_Bool ExecMacro( const SvxMacro& rMacro, String* pRet = 0, SbxArray* pArgs = 0 );
+    bool ExecMacro( const SvxMacro& rMacro, String* pRet = 0, SbxArray* pArgs = 0 );
 
     /// Call into intransparent Basic / JavaScript.
     sal_uInt16 CallEvent( sal_uInt16 nEvent, const SwCallMouseEvent& rCallEvent,
-                        sal_Bool bChkPtr = sal_False, SbxArray* pArgs = 0,
+                        bool bChkPtr = false, SbxArray* pArgs = 0,
                         const Link* pCallBack = 0 );
 
     /** Adjust left margin via object bar (similar to adjustment of numerations).

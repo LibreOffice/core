@@ -2148,7 +2148,7 @@ void SwDoc::SetAllUniqueFlyNames()
         SetLoaded( sal_True );
 }
 
-sal_Bool SwDoc::IsInHeaderFooter( const SwNodeIndex& rIdx ) const
+bool SwDoc::IsInHeaderFooter( const SwNodeIndex& rIdx ) const
 {
     // If there's a Layout, use it!
     // That can also be a Fly in a Fly in the Header.
@@ -2170,9 +2170,9 @@ sal_Bool SwDoc::IsInHeaderFooter( const SwNodeIndex& rIdx ) const
                 pUp = pUp->GetUpper();
             }
             if ( pUp )
-                return sal_True;
+                return true;
 
-            return sal_False;
+            return false;
         }
     }
 
@@ -2192,7 +2192,7 @@ sal_Bool SwDoc::IsInHeaderFooter( const SwNodeIndex& rIdx ) const
                 if ((FLY_AT_PAGE == rAnchor.GetAnchorId()) ||
                     !rAnchor.GetCntntAnchor() )
                 {
-                    return sal_False;
+                    return false;
                 }
 
                 pNd = &rAnchor.GetCntntAnchor()->nNode.GetNode();
@@ -2203,7 +2203,7 @@ sal_Bool SwDoc::IsInHeaderFooter( const SwNodeIndex& rIdx ) const
         if( n >= GetSpzFrmFmts()->size() )
         {
             OSL_ENSURE( mbInReading, "Found a FlySection but not a Format!" );
-            return sal_False;
+            return false;
         }
     }
 

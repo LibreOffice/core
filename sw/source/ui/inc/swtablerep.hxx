@@ -38,13 +38,13 @@ class SW_DLLPUBLIC SwTableRep
     sal_uInt16      nColCount;
     sal_uInt16      nAllCols;
     sal_uInt16      nWidthPercent;
-    sal_Bool        bComplex : 1;
+    bool        bComplex : 1;
     sal_Bool        bLineSelected : 1;
     sal_Bool        bWidthChanged : 1;
     sal_Bool        bColsChanged : 1;
 
 public:
-    SwTableRep( const SwTabCols& rTabCol, sal_Bool bComplex );
+    SwTableRep( const SwTabCols& rTabCol, bool bComplex );
     ~SwTableRep();
 
     sal_Bool        FillTabCols( SwTabCols& rTabCol ) const;
@@ -64,7 +64,6 @@ public:
     sal_uInt16      GetAlign() const                {return nAlign;}
     void        SetAlign(sal_uInt16 nSet)           {nAlign = nSet;}
 
-    sal_Bool        IsComplex() const               {return bComplex;}
     sal_uInt16      GetColCount() const             {return nColCount;}
     sal_uInt16      GetAllColCount() const          {return nAllCols;}
 

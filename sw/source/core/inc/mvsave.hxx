@@ -93,7 +93,7 @@ void _SaveCntntIdx( SwDoc* pDoc, sal_uLong nNode, xub_StrLen nCntnt,
                     std::vector<sal_uLong>& rSaveArr, sal_uInt8 nSaveFly = 0 );
 void _RestoreCntntIdx( SwDoc* pDoc, std::vector<sal_uLong>& rSaveArr,
                         sal_uLong nNode, xub_StrLen nOffset = 0,
-                        sal_Bool bAuto = sal_False );
+                        bool bAuto = false );
 void _RestoreCntntIdx( std::vector<sal_uLong>& rSaveArr, const SwNode& rNd,
                         xub_StrLen nLen, xub_StrLen nCorrLen );
 

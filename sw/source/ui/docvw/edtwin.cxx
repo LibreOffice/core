@@ -4028,7 +4028,7 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
                     {
                         if( aLastCallEvent.HasEvent() )
                             rSh.CallEvent( SFX_EVENT_MOUSEOUT_OBJECT,
-                                            aLastCallEvent, sal_True );
+                                            aLastCallEvent, true );
                         // 0 says that the object doesn't have any table
                         if( !rSh.CallEvent( SFX_EVENT_MOUSEOVER_OBJECT,
                                         aSaveCallEvent ))
@@ -4039,7 +4039,7 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
                 {
                     // cursor was on an object
                     rSh.CallEvent( SFX_EVENT_MOUSEOUT_OBJECT,
-                                    aLastCallEvent, sal_True );
+                                    aLastCallEvent, true );
                 }
 
                 if( bTstShdwCrsr && bInsWin && !bIsDocReadOnly &&

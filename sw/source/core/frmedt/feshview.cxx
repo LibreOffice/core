@@ -1634,7 +1634,7 @@ sal_Bool SwFEShell::ImpEndCreate()
     // default for controls character bound, otherwise paragraph bound.
     SwFmtAnchor aAnch;
     const SwFrm *pAnch = 0;
-    sal_Bool bCharBound = sal_False;
+    bool bCharBound = false;
     if( rSdrObj.ISA( SdrUnoObj ) )
     {
         SwPosition aPos( GetDoc()->GetNodes() );
@@ -1650,7 +1650,7 @@ sal_Bool SwFEShell::ImpEndCreate()
             pAnch->GetCharRect( aTmp, aPos );
 
             // The crsr should not be too far away
-            bCharBound = sal_True;
+            bCharBound = true;
             Rectangle aRect( aTmp.SVRect() );
             aRect.Left()  -= MM50*2;
             aRect.Top()   -= MM50*2;
@@ -1658,7 +1658,7 @@ sal_Bool SwFEShell::ImpEndCreate()
             aRect.Bottom()+= MM50*2;
 
             if( !aRect.IsOver( rBound ) && !::GetHtmlMode( GetDoc()->GetDocShell() ))
-                bCharBound = sal_False;
+                bCharBound = false;
 
             // anchor in header/footer also not allowed.
             if( bCharBound )

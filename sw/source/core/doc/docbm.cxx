@@ -982,10 +982,10 @@ namespace
 
     static void lcl_ChkPaM( std::vector<sal_uLong> &rSaveArr, sal_uLong nNode, xub_StrLen nCntnt,
                     const SwPaM& rPam, _SwSaveTypeCountContent& rSave,
-                    sal_Bool bChkSelDirection )
+                    bool bChkSelDirection )
     {
         // Respect direction of selection
-        bool bBound1IsStart = !bChkSelDirection ? sal_True :
+        bool bBound1IsStart = !bChkSelDirection ? true :
                             ( *rPam.GetPoint() < *rPam.GetMark()
                                 ? rPam.GetPoint() == &rPam.GetBound()
                                 : rPam.GetMark() == &rPam.GetBound());
@@ -1182,11 +1182,11 @@ void _DelBookmarks(
                 pRStt->nContent = *pEndIdx;
             else
             {
-                sal_Bool bStt = sal_True;
+                bool bStt = true;
                 SwCntntNode* pCNd = pRStt->nNode.GetNode().GetCntntNode();
                 if( !pCNd && 0 == ( pCNd = pDoc->GetNodes().GoNext( &pRStt->nNode )) )
                 {
-                    bStt = sal_False;
+                    bStt = false;
                     pRStt->nNode = rStt;
                     if( 0 == ( pCNd = pDoc->GetNodes().GoPrevious( &pRStt->nNode )) )
                     {
@@ -1205,11 +1205,11 @@ void _DelBookmarks(
                 pREnd->nContent = *pSttIdx;
             else
             {
-                sal_Bool bStt = sal_False;
+                bool bStt = false;
                 SwCntntNode* pCNd = pREnd->nNode.GetNode().GetCntntNode();
                 if( !pCNd && 0 == ( pCNd = pDoc->GetNodes().GoPrevious( &pREnd->nNode )) )
                 {
-                    bStt = sal_True;
+                    bStt = true;
                     pREnd->nNode = rEnd;
                     if( 0 == ( pCNd = pDoc->GetNodes().GoNext( &pREnd->nNode )) )
                     {
@@ -1309,7 +1309,7 @@ void _SaveCntntIdx(SwDoc* pDoc,
 
             SwFrm* pFrm = pNode->getLayoutFrm( pDoc->GetCurrentLayout() );
 #if OSL_DEBUG_LEVEL > 1
-            static sal_Bool bViaDoc = sal_False;
+            static bool bViaDoc = false;
             if( bViaDoc )
                 pFrm = NULL;
 #endif
@@ -1403,14 +1403,14 @@ void _SaveCntntIdx(SwDoc* pDoc,
                 if( _pStkCrsr )
                 do {
                     lcl_ChkPaM( rSaveArr, nNode, nCntnt, *_pStkCrsr,
-                                aSave, sal_False );
+                                aSave, false );
                     aSave.IncCount();
                 } while ( (_pStkCrsr != 0 ) &&
                     ((_pStkCrsr=(SwPaM *)_pStkCrsr->GetNext()) != PCURSH->GetStkCrsr()) );
 
                 FOREACHPAM_START( PCURSH->_GetCrsr() )
                     lcl_ChkPaM( rSaveArr, nNode, nCntnt, *PCURCRSR,
-                                aSave, sal_False );
+                                aSave, false );
                     aSave.IncCount();
                 FOREACHPAM_END()
 
@@ -1425,7 +1425,7 @@ void _SaveCntntIdx(SwDoc* pDoc,
                 it != rTbl.end(); ++it)
         {
             FOREACHPAM_START( *it )
-                lcl_ChkPaM( rSaveArr, nNode, nCntnt, *PCURCRSR, aSave, sal_False );
+                lcl_ChkPaM( rSaveArr, nNode, nCntnt, *PCURCRSR, aSave, false );
                 aSave.IncCount();
             FOREACHPAM_END()
 
@@ -1434,7 +1434,7 @@ void _SaveCntntIdx(SwDoc* pDoc,
             if( pUnoTblCrsr )
             {
                 FOREACHPAM_START( &pUnoTblCrsr->GetSelRing() )
-                    lcl_ChkPaM( rSaveArr, nNode, nCntnt, *PCURCRSR, aSave, sal_False );
+                    lcl_ChkPaM( rSaveArr, nNode, nCntnt, *PCURCRSR, aSave, false );
                     aSave.IncCount();
                 FOREACHPAM_END()
             }
@@ -1447,7 +1447,7 @@ void _RestoreCntntIdx(SwDoc* pDoc,
     std::vector<sal_uLong> &rSaveArr,
     sal_uLong nNode,
     xub_StrLen nOffset,
-    sal_Bool bAuto)
+    bool bAuto)
 {
     SwCntntNode* pCNd = pDoc->GetNodes()[ nNode ]->GetCntntNode();
     const SwRedlineTbl& rRedlTbl = pDoc->GetRedlineTbl();

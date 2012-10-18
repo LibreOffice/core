@@ -1515,19 +1515,19 @@ SwTableBox* SwTable::GetTblBox( sal_uLong nSttIdx )
     return pRet;
 }
 
-sal_Bool SwTable::IsTblComplex() const
+bool SwTable::IsTblComplex() const
 {
-    // Returns sal_True for complex tables, i.e. tables that contain nestings,
+    // Returns true for complex tables, i.e. tables that contain nestings,
     // like containing boxes not part of the first line, e.g. results of
     // splits/merges which lead to more complex structures.
     for (size_t n = 0; n < m_TabSortContentBoxes.size(); ++n)
     {
         if (m_TabSortContentBoxes[ n ]->GetUpper()->GetUpper())
         {
-            return sal_True;
+            return true;
         }
     }
-    return sal_False;
+    return false;
 }
 
 

@@ -871,7 +871,7 @@ bool SwDoc::SplitNode( const SwPosition &rPos, bool bChkTableStart )
     {
         // move all bookmarks, TOXMarks, FlyAtCnt
         if( !aBkmkArr.empty() )
-            _RestoreCntntIdx( this, aBkmkArr, rPos.nNode.GetIndex()-1, 0, sal_True );
+            _RestoreCntntIdx( this, aBkmkArr, rPos.nNode.GetIndex()-1, 0, true );
 
         if( IsRedlineOn() || (!IsIgnoreRedline() && !pRedlineTbl->empty() ))
         {
@@ -2084,7 +2084,7 @@ const SwFmtINetFmt* SwDoc::FindINetAttr( const String& rName ) const
     return 0;
 }
 
-void SwDoc::Summary( SwDoc* pExtDoc, sal_uInt8 nLevel, sal_uInt8 nPara, sal_Bool bImpress )
+void SwDoc::Summary( SwDoc* pExtDoc, sal_uInt8 nLevel, sal_uInt8 nPara, bool bImpress )
 {
     const SwOutlineNodes& rOutNds = GetNodes().GetOutLineNds();
     if( pExtDoc && !rOutNds.empty() )
@@ -2418,12 +2418,12 @@ bool SwDoc::ConvertFieldsToText()
             // skip fields that are currently not in the document
             // e.g. fields in undo or redo array
 
-            sal_Bool bSkip = !pTxtFld ||
+            bool bSkip = !pTxtFld ||
                          !pTxtFld->GetpTxtNode()->GetNodes().IsDocNodes();
 
             if (!bSkip)
             {
-                sal_Bool bInHeaderFooter = IsInHeaderFooter(SwNodeIndex(*pTxtFld->GetpTxtNode()));
+                bool bInHeaderFooter = IsInHeaderFooter(SwNodeIndex(*pTxtFld->GetpTxtNode()));
                 const SwFmtFld& rFmtFld = pTxtFld->GetFld();
                 const SwField*  pField = rFmtFld.GetFld();
 

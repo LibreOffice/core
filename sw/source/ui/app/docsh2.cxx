@@ -992,7 +992,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                 SfxObjectShellLock xDocSh( new SwDocShell( pSmryDoc, SFX_CREATE_MODE_STANDARD));
                 xDocSh->DoInitNew( 0 );
 
-                sal_Bool bImpress = FN_ABSTRACT_STARIMPRESS == nWhich;
+                bool bImpress = FN_ABSTRACT_STARIMPRESS == nWhich;
                 pDoc->Summary( pSmryDoc, nLevel, nPara, bImpress );
                 if( bImpress )
                 {

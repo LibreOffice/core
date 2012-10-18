@@ -62,7 +62,7 @@ void SwTable::UpdateCharts() const
     GetFrmFmt()->GetDoc()->UpdateCharts( GetFrmFmt()->GetName() );
 }
 
-sal_Bool SwTable::IsTblComplexForChart( const String& rSelection ) const
+bool SwTable::IsTblComplexForChart( const String& rSelection ) const
 {
     const SwTableBox* pSttBox, *pEndBox;
     if( 2 < rSelection.Len() )
@@ -162,11 +162,9 @@ void SwDoc::UpdateCharts( const String &rName ) const
 
 void SwDoc::SetTableName( SwFrmFmt& rTblFmt, const String &rNewName )
 {
-//  sal_Bool bStop = 1;
-
     const String aOldName( rTblFmt.GetName() );
 
-    sal_Bool bNameFound = 0 == rNewName.Len();
+    bool bNameFound = 0 == rNewName.Len();
     if( !bNameFound )
     {
         SwFrmFmt* pFmt;
@@ -175,7 +173,7 @@ void SwDoc::SetTableName( SwFrmFmt& rTblFmt, const String &rNewName )
             if( !( pFmt = rTbl[ --i ] )->IsDefault() &&
                 pFmt->GetName() == rNewName && IsUsed( *pFmt ) )
             {
-                bNameFound = sal_True;
+                bNameFound = true;
                 break;
             }
     }
