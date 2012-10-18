@@ -96,7 +96,7 @@ protected:
 
     virtual void            Command( const CommandEvent& rCEvt );
 
-    virtual StringCompare   ColCompare(SvLBoxEntry*,SvLBoxEntry*);
+    virtual StringCompare   ColCompare(SvTreeListEntry*,SvTreeListEntry*);
 public:
 
     SvxSimpleTable(SvxSimpleTableContainer& rParent, WinBits nBits = WB_BORDER);
@@ -139,7 +139,7 @@ public:
     void            SortByCol(sal_uInt16,sal_Bool bDir=sal_True);
     sal_Bool            GetSortDirection(){ return bSortDirection;}
     sal_uInt16          GetSortedCol(){ return nSortCol;}
-    SvLBoxItem*     GetEntryAtPos( SvLBoxEntry* pEntry, sal_uInt16 nPos ) const;
+    SvLBoxItem*     GetEntryAtPos( SvTreeListEntry* pEntry, sal_uInt16 nPos ) const;
 
     CommandEvent    GetCommandEvent()const;
     inline sal_Bool IsFocusOnCellEnabled() const { return IsCellFocusEnabled(); }

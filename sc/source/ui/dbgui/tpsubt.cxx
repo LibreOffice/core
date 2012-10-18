@@ -406,7 +406,7 @@ IMPL_LINK( ScTpSubTotalGroup, CheckHdl, ListBox *, pLb )
 {
     if ( ((SvxCheckListBox*)pLb) == &aLbColumns )
     {
-        SvLBoxEntry* pEntry = aLbColumns.GetHdlEntry();
+        SvTreeListEntry* pEntry = aLbColumns.GetHdlEntry();
 
         if ( pEntry )
         {

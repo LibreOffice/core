@@ -370,7 +370,7 @@ void SaneDlg::InitFields()
                                );
     // fill OptionBox
     maOptionBox.Clear();
-    SvLBoxEntry* pParentEntry = 0;
+    SvTreeListEntry* pParentEntry = 0;
     sal_Bool bGroupRejected = sal_False;
     for( i = 1; i < mrSane.CountOptions(); i++ )
     {

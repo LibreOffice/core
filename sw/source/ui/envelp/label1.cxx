@@ -606,7 +606,7 @@ void SwLabPage::Reset(const SfxItemSet& rSet)
 
 void SwVisitingCardPage::ClearUserData()
 {
-    SvLBoxEntry* pEntry = aAutoTextLB.First();
+    SvTreeListEntry* pEntry = aAutoTextLB.First();
     while(pEntry)
     {
         delete (String*)pEntry->GetUserData();
@@ -619,7 +619,7 @@ void SwVisitingCardPage::SetUserData( sal_uInt32 nCnt,
 {
     for( sal_uInt32 i = 0; i < nCnt; ++i )
     {
-        SvLBoxEntry* pEntry = aAutoTextLB.InsertEntry( pNames[ i ] );
+        SvTreeListEntry* pEntry = aAutoTextLB.InsertEntry( pNames[ i ] );
         pEntry->SetUserData( new String( pValues[ i ] ));
     }
 }
@@ -689,7 +689,7 @@ sal_Bool SwVisitingCardPage::FillItemSet(SfxItemSet& rSet)
     if(pGroup)
         aLabItem.sGlossaryGroup = *pGroup;
 
-    SvLBoxEntry* pSelEntry = aAutoTextLB.FirstSelected();
+    SvTreeListEntry* pSelEntry = aAutoTextLB.FirstSelected();
     if(pSelEntry)
         aLabItem.sGlossaryBlockName = *(String*)pSelEntry->GetUserData();
     rSet.Put(aLabItem);
@@ -698,7 +698,7 @@ sal_Bool SwVisitingCardPage::FillItemSet(SfxItemSet& rSet)
 
 static void lcl_SelectBlock(SvTreeListBox& rAutoTextLB, const String& rBlockName)
 {
-    SvLBoxEntry* pEntry = rAutoTextLB.First();
+    SvTreeListEntry* pEntry = rAutoTextLB.First();
     while(pEntry)
     {
         if(*(String*)pEntry->GetUserData() == rBlockName)
@@ -713,7 +713,7 @@ static void lcl_SelectBlock(SvTreeListBox& rAutoTextLB, const String& rBlockName
 
 static sal_Bool lcl_FindBlock(SvTreeListBox& rAutoTextLB, const String& rBlockName)
 {
-    SvLBoxEntry* pEntry = rAutoTextLB.First();
+    SvTreeListEntry* pEntry = rAutoTextLB.First();
     while(pEntry)
     {
         if(*(String*)pEntry->GetUserData() == rBlockName)
@@ -760,7 +760,7 @@ void SwVisitingCardPage::Reset(const SfxItemSet& rSet)
         }
         if(lcl_FindBlock(aAutoTextLB, aLabItem.sGlossaryBlockName))
         {
-            SvLBoxEntry* pSelEntry = aAutoTextLB.FirstSelected();
+            SvTreeListEntry* pSelEntry = aAutoTextLB.FirstSelected();
             if( pSelEntry &&
                 *(String*)pSelEntry->GetUserData() != String(aLabItem.sGlossaryBlockName))
             {

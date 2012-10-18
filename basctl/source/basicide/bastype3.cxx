@@ -38,10 +38,10 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
 
 
-typedef std::deque< SvLBoxEntry* > EntryArray;
+typedef std::deque< SvTreeListEntry* > EntryArray;
 
 
-void TreeListBox::RequestingChildren( SvLBoxEntry* pEntry )
+void TreeListBox::RequestingChildren( SvTreeListEntry* pEntry )
 {
     EntryDescriptor aDesc = GetEntryDescriptor(pEntry);
     ScriptDocument aDocument = aDesc.GetDocument();
@@ -133,12 +133,12 @@ void TreeListBox::RequestingChildren( SvLBoxEntry* pEntry )
 
 void TreeListBox::ExpandedHdl()
 {
-    SvLBoxEntry* pEntry = GetHdlEntry();
+    SvTreeListEntry* pEntry = GetHdlEntry();
     DBG_ASSERT( pEntry, "Was wurde zugeklappt?" );
 
     if ( !IsExpanded( pEntry ) && pEntry->HasChildrenOnDemand() )
     {
-        SvLBoxEntry* pChild = FirstChild( pEntry );
+        SvTreeListEntry* pChild = FirstChild( pEntry );
         while ( pChild )
         {
             GetModel()->Remove( pChild );   // does also call the DTOR
@@ -163,7 +163,7 @@ void TreeListBox::ScanAllEntries()
     }
 }
 
-SbxVariable* TreeListBox::FindVariable( SvLBoxEntry* pEntry )
+SbxVariable* TreeListBox::FindVariable( SvTreeListEntry* pEntry )
 {
     if ( !pEntry )
         return 0;
@@ -199,7 +199,7 @@ SbxVariable* TreeListBox::FindVariable( SvLBoxEntry* pEntry )
     {
         for ( size_t n = 0; n < aEntries.size(); n++ )
         {
-            SvLBoxEntry* pLE = aEntries[n];
+            SvTreeListEntry* pLE = aEntries[n];
             DBG_ASSERT( pLE, "Can not find entry in array" );
             Entry* pBE = static_cast<Entry*>(pLE->GetUserData());
             DBG_ASSERT( pBE, "The data in the entry not found!" );
@@ -260,7 +260,7 @@ SbxVariable* TreeListBox::FindVariable( SvLBoxEntry* pEntry )
     return pVar;
 }
 
-EntryDescriptor TreeListBox::GetEntryDescriptor( SvLBoxEntry* pEntry )
+EntryDescriptor TreeListBox::GetEntryDescriptor( SvTreeListEntry* pEntry )
 {
     ScriptDocument aDocument( ScriptDocument::getApplicationScriptDocument() );
     LibraryLocation eLocation = LIBRARY_LOCATION_UNKNOWN;
@@ -306,7 +306,7 @@ EntryDescriptor TreeListBox::GetEntryDescriptor( SvLBoxEntry* pEntry )
     {
         for ( size_t n = 0; n < aEntries.size(); n++ )
         {
-            SvLBoxEntry* pLE = aEntries[n];
+            SvTreeListEntry* pLE = aEntries[n];
             DBG_ASSERT( pLE, "Entrie im Array nicht gefunden" );
             Entry* pBE = static_cast<Entry*>(pLE->GetUserData());
             DBG_ASSERT( pBE, "Keine Daten im Eintrag gefunden!" );
@@ -376,7 +376,7 @@ ItemType TreeListBox::ConvertType (EntryType eType)
     }
 }
 
-bool TreeListBox::IsValidEntry( SvLBoxEntry* pEntry )
+bool TreeListBox::IsValidEntry( SvTreeListEntry* pEntry )
 {
     bool bIsValid = false;
 
@@ -431,16 +431,16 @@ bool TreeListBox::IsValidEntry( SvLBoxEntry* pEntry )
     return bIsValid;
 }
 
-SbModule* TreeListBox::FindModule( SvLBoxEntry* pEntry )
+SbModule* TreeListBox::FindModule( SvTreeListEntry* pEntry )
 {
     return dynamic_cast<SbModule*>(FindVariable(pEntry));
 }
 
-SvLBoxEntry* TreeListBox::FindRootEntry( const ScriptDocument& rDocument, LibraryLocation eLocation )
+SvTreeListEntry* TreeListBox::FindRootEntry( const ScriptDocument& rDocument, LibraryLocation eLocation )
 {
     OSL_ENSURE( rDocument.isValid(), "basctl::TreeListBox::FindRootEntry: invalid document!" );
     sal_uLong nRootPos = 0;
-    SvLBoxEntry* pRootEntry = GetEntry( nRootPos );
+    SvTreeListEntry* pRootEntry = GetEntry( nRootPos );
     while ( pRootEntry )
     {
         DBG_ASSERT( static_cast<Entry*>(pRootEntry->GetUserData())->GetType() == OBJ_TYPE_DOCUMENT, "Kein Shelleintrag?" );

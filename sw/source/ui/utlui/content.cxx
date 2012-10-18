@@ -116,12 +116,12 @@ sal_Bool SwContentTree::bIsInDrag = sal_False;
 
 namespace
 {
-    static sal_Bool lcl_IsContent(SvLBoxEntry* pEntry)
+    static sal_Bool lcl_IsContent(SvTreeListEntry* pEntry)
     {
         return ((SwTypeNumber*)pEntry->GetUserData())->GetTypeId() == CTYPE_CNT;
     }
 
-    static sal_Bool lcl_IsContentType(SvLBoxEntry* pEntry)
+    static sal_Bool lcl_IsContentType(SvTreeListEntry* pEntry)
     {
         return ((SwTypeNumber*)pEntry->GetUserData())->GetTypeId() == CTYPE_CTT;
     }
@@ -941,7 +941,7 @@ static void* lcl_GetOutlineKey( SwContentTree* pTree, SwOutlineContent* pContent
 
 sal_Int8 SwContentTree::ExecuteDrop( const ExecuteDropEvent& rEvt )
 {
-    SvLBoxEntry* pEntry = pTargetEntry;
+    SvTreeListEntry* pEntry = pTargetEntry;
     if( pEntry && ( nRootType == CONTENT_TYPE_OUTLINE ) && lcl_IsContent( pEntry ) )
     {
         SwOutlineContent* pOutlineContent = ( SwOutlineContent* )( pEntry->GetUserData() );
@@ -952,7 +952,7 @@ sal_Int8 SwContentTree::ExecuteDrop( const ExecuteDropEvent& rEvt )
             {
                 while( pEntry->HasChildren() )
                 {
-                    SvLBoxEntry* pChildEntry = FirstChild( pEntry );
+                    SvTreeListEntry* pChildEntry = FirstChild( pEntry );
                     while( pChildEntry )
                     {
                         pEntry = pChildEntry;
@@ -1030,7 +1030,7 @@ PopupMenu* SwContentTree::CreateContextMenu( void )
     pPop->InsertItem(2, aContextStrings[ST_DRAGMODE - ST_CONTEXT_FIRST]);
     pPop->InsertItem(3, aContextStrings[ST_DISPLAY - ST_CONTEXT_FIRST]);
     //jetzt noch bearbeiten
-    SvLBoxEntry* pEntry = 0;
+    SvTreeListEntry* pEntry = 0;
     //Bearbeiten nur, wenn die angezeigten Inhalte aus der aktiven View kommen
     if((bIsActive || pActiveShell == pActiveView->GetWrtShellPtr())
             && 0 != (pEntry = FirstSelected()) && lcl_IsContent(pEntry))
@@ -1137,7 +1137,7 @@ PopupMenu* SwContentTree::CreateContextMenu( void )
 /***************************************************************************
     Beschreibung:   Einrueckung fuer outlines (und sections)
 ***************************************************************************/
-long    SwContentTree::GetTabPos( SvLBoxEntry* pEntry, SvLBoxTab* pTab)
+long    SwContentTree::GetTabPos( SvTreeListEntry* pEntry, SvLBoxTab* pTab)
 {
     sal_uInt16 nLevel = 0;
     if(lcl_IsContent(pEntry))
@@ -1160,7 +1160,7 @@ long    SwContentTree::GetTabPos( SvLBoxEntry* pEntry, SvLBoxTab* pTab)
 /***************************************************************************
     Beschreibung:   Inhalte werden erst auf Anforderung in die Box eingefuegt
 ***************************************************************************/
-void  SwContentTree::RequestingChildren( SvLBoxEntry* pParent )
+void  SwContentTree::RequestingChildren( SvTreeListEntry* pParent )
 {
     // ist es ein Inhaltstyp?
     if(lcl_IsContentType(pParent))
@@ -1176,7 +1176,7 @@ void  SwContentTree::RequestingChildren( SvLBoxEntry* pParent )
              ***************************************************************/
              if(pCntType->GetType() == CONTENT_TYPE_OUTLINE)
              {
-                 SvLBoxEntry* pChild = 0;
+                 SvTreeListEntry* pChild = 0;
                  for(sal_uInt16 i = 0; i < nCount; i++)
                  {
                      const SwContent* pCnt = pCntType->GetMember(i);
@@ -1236,7 +1236,7 @@ void  SwContentTree::RequestingChildren( SvLBoxEntry* pParent )
 /***************************************************************************
     Beschreibung:   Expand - Zustand fuer Inhaltstypen merken
 ***************************************************************************/
-sal_Bool  SwContentTree::Expand( SvLBoxEntry* pParent )
+sal_Bool  SwContentTree::Expand( SvTreeListEntry* pParent )
 {
     if(!bIsRoot || (((SwContentType*)pParent->GetUserData())->GetType() == CONTENT_TYPE_OUTLINE) ||
             (nRootType == CONTENT_TYPE_OUTLINE))
@@ -1258,7 +1258,7 @@ sal_Bool  SwContentTree::Expand( SvLBoxEntry* pParent )
 
                 SwWrtShell* pShell = GetWrtShell();
                 sal_Bool bBool = SvTreeListBox::Expand(pParent);
-                SvLBoxEntry* pChild = Next(pParent);
+                SvTreeListEntry* pChild = Next(pParent);
                 while(pChild && lcl_IsContent(pChild) && pParent->HasChildren())
                 {
                     if(pChild->HasChildren())
@@ -1294,7 +1294,7 @@ sal_Bool  SwContentTree::Expand( SvLBoxEntry* pParent )
 /***************************************************************************
     Beschreibung:   Collapse - Zustand fuer Inhaltstypen merken
 ***************************************************************************/
-sal_Bool  SwContentTree::Collapse( SvLBoxEntry* pParent )
+sal_Bool  SwContentTree::Collapse( SvTreeListEntry* pParent )
 {
     sal_Bool bRet;
     if(!bIsRoot || (((SwContentType*)pParent->GetUserData())->GetType() == CONTENT_TYPE_OUTLINE) ||
@@ -1334,7 +1334,7 @@ sal_Bool  SwContentTree::Collapse( SvLBoxEntry* pParent )
 ***************************************************************************/
 IMPL_LINK_NOARG(SwContentTree, ContentDoubleClickHdl)
 {
-    SvLBoxEntry* pEntry = GetCurEntry();
+    SvTreeListEntry* pEntry = GetCurEntry();
     // ist es ein Inhaltstyp?
     OSL_ENSURE(pEntry, "no current entry!");
     if(pEntry)
@@ -1370,7 +1370,7 @@ void SwContentTree::Display( sal_Bool bActive )
     }
     // erst den selektierten Eintrag auslesen, um ihn spaeter evtl. wieder
     // zu selektieren -> die UserDaten sind hier nicht mehr gueltig!
-    SvLBoxEntry* pOldSelEntry = FirstSelected();
+    SvTreeListEntry* pOldSelEntry = FirstSelected();
     String sEntryName;  // Name des Eintrags
     sal_uInt16 nEntryRelPos = 0; // rel. Pos zu seinem Parent
     sal_uInt32 nOldEntryCount = GetEntryCount();
@@ -1382,7 +1382,7 @@ void SwContentTree::Display( sal_Bool bActive )
             nOldScrollPos = pVScroll->GetThumbPos();
 
         sEntryName = GetEntryText(pOldSelEntry);
-        SvLBoxEntry* pParantEntry = pOldSelEntry;
+        SvTreeListEntry* pParantEntry = pOldSelEntry;
         while( GetParent(pParantEntry))
         {
             pParantEntry = GetParent(pParantEntry);
@@ -1412,7 +1412,7 @@ void SwContentTree::Display( sal_Bool bActive )
     }
     if(pShell)
     {
-        SvLBoxEntry* pSelEntry = 0;
+        SvTreeListEntry* pSelEntry = 0;
         if(nRootType == USHRT_MAX)
         {
             for(sal_uInt16 nCntType = CONTENT_TYPE_OUTLINE;
@@ -1425,7 +1425,7 @@ void SwContentTree::Display( sal_Bool bActive )
                     (*ppContentT) = new SwContentType(pShell, nCntType, nOutlineLevel );
 
                 String sEntry = (*ppContentT)->GetName();
-                SvLBoxEntry* pEntry;
+                SvTreeListEntry* pEntry;
                 const Image& rImage = aEntryImages.GetImage(SID_SW_START + nCntType);
                 sal_Bool bChOnDemand = 0 != (*ppContentT)->GetMemberCount();
                 pEntry = InsertEntry(sEntry, rImage, rImage,
@@ -1441,8 +1441,8 @@ void SwContentTree::Display( sal_Bool bActive )
                     if(nEntryRelPos && nCntType == nLastSelType)
                     {
                         // jetzt vielleicht noch ein Child selektieren
-                        SvLBoxEntry* pChild = pEntry;
-                        SvLBoxEntry* pTemp = 0;
+                        SvTreeListEntry* pChild = pEntry;
+                        SvTreeListEntry* pTemp = 0;
                         sal_uInt16 nPos = 1;
                         while(0 != (pChild = Next(pChild)))
                         {
@@ -1478,7 +1478,7 @@ void SwContentTree::Display( sal_Bool bActive )
             if(!(*ppRootContentT))
                 (*ppRootContentT) = new SwContentType(pShell, nRootType, nOutlineLevel );
             const Image& rImage = aEntryImages.GetImage(20000 + nRootType);
-            SvLBoxEntry* pParent = InsertEntry(
+            SvTreeListEntry* pParent = InsertEntry(
                     (*ppRootContentT)->GetName(), rImage, rImage,
                         0, sal_False, LIST_APPEND, *ppRootContentT);
 
@@ -1504,7 +1504,7 @@ void SwContentTree::Display( sal_Bool bActive )
             {
                 //feststellen, wo der Cursor steht
                 const sal_uInt16 nActPos = pShell->GetOutlinePos(MAXLEVEL);
-                SvLBoxEntry* pEntry = First();
+                SvTreeListEntry* pEntry = First();
 
                 while( 0 != (pEntry = Next(pEntry)) )
                 {
@@ -1519,8 +1519,8 @@ void SwContentTree::Display( sal_Bool bActive )
             else
             {
                 // jetzt vielleicht noch ein Child selektieren
-                SvLBoxEntry* pChild = pParent;
-                SvLBoxEntry* pTemp = 0;
+                SvTreeListEntry* pChild = pParent;
+                SvTreeListEntry* pTemp = 0;
                 sal_uInt16 nPos = 1;
                 while(0 != (pChild = Next(pChild)))
                 {
@@ -1571,7 +1571,7 @@ sal_Bool SwContentTree::FillTransferData( TransferDataContainer& rTransfer,
 {
     SwWrtShell* pWrtShell = GetWrtShell();
     OSL_ENSURE(pWrtShell, "no Shell!");
-    SvLBoxEntry* pEntry = GetCurEntry();
+    SvTreeListEntry* pEntry = GetCurEntry();
     if(!pEntry || lcl_IsContentType(pEntry) || !pWrtShell)
         return sal_False;
     String sEntry;
@@ -1713,7 +1713,7 @@ sal_Bool SwContentTree::ToggleToRoot()
 {
     if(!bIsRoot)
     {
-        SvLBoxEntry* pEntry = GetCurEntry();
+        SvTreeListEntry* pEntry = GetCurEntry();
         const SwContentType* pCntType;
         if(pEntry)
         {
@@ -1770,7 +1770,7 @@ sal_Bool SwContentTree::HasContentChanged()
     else if(bIsRoot)
     {
         sal_Bool bOutline = sal_False;
-        SvLBoxEntry* pEntry = First();
+        SvTreeListEntry* pEntry = First();
         if(!pEntry)
             bRepaint = sal_True;
         else
@@ -1784,7 +1784,7 @@ sal_Bool SwContentTree::HasContentChanged()
             {
                 sal_uInt16 nSelLevel = USHRT_MAX;
 
-                SvLBoxEntry* pFirstSel;
+                SvTreeListEntry* pFirstSel;
                 if(bOutline &&
                         0 != ( pFirstSel = FirstSelected()) &&
                             lcl_IsContent(pFirstSel))
@@ -1824,7 +1824,7 @@ sal_Bool SwContentTree::HasContentChanged()
         {
             //feststellen, wo der Cursor steht
             const sal_uInt16 nActPos = GetWrtShell()->GetOutlinePos(MAXLEVEL);
-            SvLBoxEntry* pFirstEntry = First();
+            SvTreeListEntry* pFirstEntry = First();
 
             while( 0 != (pFirstEntry = Next(pFirstEntry)) )
             {
@@ -1843,7 +1843,7 @@ sal_Bool SwContentTree::HasContentChanged()
     }
     else
     {
-        SvLBoxEntry* pEntry = First();
+        SvTreeListEntry* pEntry = First();
         while ( pEntry )
         {
             sal_Bool bNext = sal_True; // mindestens ein Next muss sein
@@ -1906,7 +1906,7 @@ sal_Bool SwContentTree::HasContentChanged()
                     }
                     else
                     {
-                        SvLBoxEntry* pChild = FirstChild(pEntry);
+                        SvTreeListEntry* pChild = FirstChild(pEntry);
                         for(sal_uInt16 j = 0; j < nChildCount; j++)
                         {
                             const SwContent* pCnt = pArrType->GetMember(j);
@@ -1920,8 +1920,8 @@ sal_Bool SwContentTree::HasContentChanged()
                     }
                     if(bRemoveChildren)
                     {
-                        SvLBoxEntry* pChild = FirstChild(pEntry);
-                        SvLBoxEntry* pRemove = pChild;
+                        SvTreeListEntry* pChild = FirstChild(pEntry);
+                        SvTreeListEntry* pRemove = pChild;
                         for(sal_uInt16 j = 0; j < nChildCount; j++)
                         {
                             pChild = Next(pRemove);
@@ -1962,12 +1962,12 @@ sal_Bool SwContentTree::HasContentChanged()
 ***************************************************************************/
 void SwContentTree::FindActiveTypeAndRemoveUserData()
 {
-    SvLBoxEntry* pEntry = FirstSelected();
+    SvTreeListEntry* pEntry = FirstSelected();
     if(pEntry)
     {
         // wird Clear ueber TimerUpdate gerufen, kann nur fuer die Root
         // die Gueltigkeit der UserData garantiert werden
-        SvLBoxEntry* pParent;
+        SvTreeListEntry* pParent;
         while(0 != (pParent = GetParent(pEntry)))
             pEntry = pParent;
         if(pEntry->GetUserData() && lcl_IsContentType(pEntry))
@@ -2071,7 +2071,7 @@ void SwContentTree::ExecCommand(sal_uInt16 nCmd, sal_Bool bModifier)
             SwWrtShell* pShell = GetWrtShell();
             sal_Int8 nActOutlineLevel = nOutlineLevel;
             sal_uInt16 nActPos = pShell->GetOutlinePos(nActOutlineLevel);
-            SvLBoxEntry* pFirstEntry = FirstSelected();
+            SvTreeListEntry* pFirstEntry = FirstSelected();
             if (pFirstEntry && lcl_IsContent(pFirstEntry))
             {
                 if ( (bIsRoot && nRootType == CONTENT_TYPE_OUTLINE) ||
@@ -2102,7 +2102,7 @@ void SwContentTree::ExecCommand(sal_uInt16 nCmd, sal_Bool bModifier)
                     else if(bModifier)
                     {
                         sal_uInt16 nActEndPos = nActPos;
-                        SvLBoxEntry* pEntry = pFirstEntry;
+                        SvTreeListEntry* pEntry = pFirstEntry;
                         sal_uInt16 nActLevel = ((SwOutlineContent*)
                                 pFirstEntry->GetUserData())->GetOutlineLevel();
                         pEntry = Next(pEntry);
@@ -2192,7 +2192,7 @@ void SwContentTree::ExecCommand(sal_uInt16 nCmd, sal_Bool bModifier)
                 if(!bIsRoot)
                 {
                     const sal_uInt16 nCurrPos = pShell->GetOutlinePos(MAXLEVEL);
-                    SvLBoxEntry* pFirst = First();
+                    SvTreeListEntry* pFirst = First();
 
                     while( 0 != (pFirst = Next(pFirst)) && lcl_IsContent(pFirst))
                     {
@@ -2265,7 +2265,7 @@ IMPL_LINK_NOARG(SwContentTree, TimerUpdate)
 
 DragDropMode SwContentTree::NotifyStartDrag(
                 TransferDataContainer& rContainer,
-                SvLBoxEntry* pEntry )
+                SvTreeListEntry* pEntry )
 {
     DragDropMode eMode = (DragDropMode)0;
     if( bIsActive && nRootType == CONTENT_TYPE_OUTLINE &&
@@ -2286,8 +2286,8 @@ DragDropMode SwContentTree::NotifyStartDrag(
     Beschreibung :  Nach dem Drag wird der aktuelle Absatz m i t
                     Children verschoben
 ***************************************************************************/
-sal_Bool  SwContentTree::NotifyMoving( SvLBoxEntry*  pTarget,
-        SvLBoxEntry*  pEntry, SvLBoxEntry*& , sal_uLong& )
+sal_Bool  SwContentTree::NotifyMoving( SvTreeListEntry*  pTarget,
+        SvTreeListEntry*  pEntry, SvTreeListEntry*& , sal_uLong& )
 {
     if(!bDocChgdInDragging)
     {
@@ -2300,7 +2300,7 @@ sal_Bool  SwContentTree::NotifyMoving( SvLBoxEntry*  pTarget,
         if( MAXLEVEL > nOutlineLevel && // werden nicht alle Ebenen angezeigt
                         nTargetPos != USHRT_MAX)
         {
-            SvLBoxEntry* pNext = Next(pTarget);
+            SvTreeListEntry* pNext = Next(pTarget);
             if(pNext)
                 nTargetPos = (( SwOutlineContent* )pNext->GetUserData())->GetPos() -1;
             else
@@ -2325,8 +2325,8 @@ sal_Bool  SwContentTree::NotifyMoving( SvLBoxEntry*  pTarget,
     Beschreibung :  Nach dem Drag wird der aktuelle Absatz o h n e
                     Children verschoben
 ***************************************************************************/
-sal_Bool  SwContentTree::NotifyCopying( SvLBoxEntry*  pTarget,
-        SvLBoxEntry*  pEntry, SvLBoxEntry*& , sal_uLong& )
+sal_Bool  SwContentTree::NotifyCopying( SvTreeListEntry*  pTarget,
+        SvTreeListEntry*  pEntry, SvTreeListEntry*& , sal_uLong& )
 {
     if(!bDocChgdInDragging)
     {
@@ -2340,7 +2340,7 @@ sal_Bool  SwContentTree::NotifyCopying( SvLBoxEntry*  pTarget,
         if( MAXLEVEL > nOutlineLevel && // werden nicht alle Ebenen angezeigt
                         nTargetPos != USHRT_MAX)
         {
-            SvLBoxEntry* pNext = Next(pTarget);
+            SvTreeListEntry* pNext = Next(pTarget);
             if(pNext)
                 nTargetPos = (( SwOutlineContent* )pNext->GetUserData())->GetPos() - 1;
             else
@@ -2362,7 +2362,7 @@ sal_Bool  SwContentTree::NotifyCopying( SvLBoxEntry*  pTarget,
 /***************************************************************************
     Beschreibung:   Kein Drop vor den ersten Eintrag - es ist ein SwContentType
 ***************************************************************************/
-sal_Bool  SwContentTree::NotifyAcceptDrop( SvLBoxEntry* pEntry)
+sal_Bool  SwContentTree::NotifyAcceptDrop( SvTreeListEntry* pEntry)
 {
     return pEntry != 0;
 }
@@ -2374,7 +2374,7 @@ sal_Bool  SwContentTree::NotifyAcceptDrop( SvLBoxEntry* pEntry)
 void  SwContentTree::MouseButtonDown( const MouseEvent& rMEvt )
 {
     Point aPos( rMEvt.GetPosPixel());
-    SvLBoxEntry* pEntry = GetEntry( aPos, sal_True );
+    SvTreeListEntry* pEntry = GetEntry( aPos, sal_True );
     if( !pEntry && rMEvt.IsLeft() && rMEvt.IsMod1() && (rMEvt.GetClicks() % 2) == 0)
         Control::MouseButtonDown( rMEvt );
     else
@@ -2413,7 +2413,7 @@ void  SwContentTree::KeyInput(const KeyEvent& rEvent)
     const KeyCode aCode = rEvent.GetKeyCode();
     if(aCode.GetCode() == KEY_RETURN)
     {
-        SvLBoxEntry* pEntry = FirstSelected();
+        SvTreeListEntry* pEntry = FirstSelected();
         if ( pEntry )
         {
             switch(aCode.GetModifier())
@@ -2441,7 +2441,7 @@ void  SwContentTree::KeyInput(const KeyEvent& rEvent)
     }
     else if(aCode.GetCode() == KEY_DELETE && 0 == aCode.GetModifier())
     {
-        SvLBoxEntry* pEntry = FirstSelected();
+        SvTreeListEntry* pEntry = FirstSelected();
         if(pEntry &&
             lcl_IsContent(pEntry) &&
                 ((SwContent*)pEntry->GetUserData())->GetParent()->IsDeletable() &&
@@ -2465,7 +2465,7 @@ void  SwContentTree::RequestHelp( const HelpEvent& rHEvt )
     if( rHEvt.GetMode() & HELPMODE_QUICK )
     {
         Point aPos( ScreenToOutputPixel( rHEvt.GetMousePosPixel() ));
-        SvLBoxEntry* pEntry = GetEntry( aPos );
+        SvTreeListEntry* pEntry = GetEntry( aPos );
         if( pEntry )
         {
             sal_uInt16 nType;
@@ -2576,7 +2576,7 @@ void  SwContentTree::RequestHelp( const HelpEvent& rHEvt )
 
 void    SwContentTree::ExcecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry )
 {
-    SvLBoxEntry* pFirst = FirstSelected();
+    SvTreeListEntry* pFirst = FirstSelected();
     switch( nSelectedPopupEntry )
     {
         //Outlinelevel
@@ -2707,12 +2707,12 @@ void SwContentTree::ShowActualView()
     Beschreibung: Hier sollen die Buttons zum Verschieben von
                   Outlines en-/disabled werden
 ***************************************************************************/
-sal_Bool  SwContentTree::Select( SvLBoxEntry* pEntry, sal_Bool bSelect )
+sal_Bool  SwContentTree::Select( SvTreeListEntry* pEntry, sal_Bool bSelect )
 {
     if(!pEntry)
         return sal_False;
     sal_Bool bEnable = sal_False;
-    SvLBoxEntry* pParentEntry = GetParent(pEntry);
+    SvTreeListEntry* pParentEntry = GetParent(pEntry);
     while(pParentEntry && (!lcl_IsContentType(pParentEntry)))
     {
         pParentEntry = GetParent(pParentEntry);
@@ -2747,7 +2747,7 @@ void SwContentType::RemoveNewline(String& rEntry)
     }
 }
 
-void SwContentTree::EditEntry(SvLBoxEntry* pEntry, sal_uInt8 nMode)
+void SwContentTree::EditEntry(SvTreeListEntry* pEntry, sal_uInt8 nMode)
 {
     SwContent* pCnt = (SwContent*)pEntry->GetUserData();
     GotoContent(pCnt);
@@ -3127,14 +3127,14 @@ sal_Bool NaviContentBookmark::Paste( TransferableDataHelper& rData )
 class SwContentLBoxString : public SvLBoxString
 {
 public:
-    SwContentLBoxString( SvLBoxEntry* pEntry, sal_uInt16 nFlags,
+    SwContentLBoxString( SvTreeListEntry* pEntry, sal_uInt16 nFlags,
         const String& rStr ) : SvLBoxString(pEntry,nFlags,rStr) {}
 
     virtual void Paint( const Point& rPos, SvTreeListBox& rDev, sal_uInt16 nFlags,
-        SvLBoxEntry* pEntry);
+        SvTreeListEntry* pEntry);
 };
 
-void SwContentTree::InitEntry(SvLBoxEntry* pEntry,
+void SwContentTree::InitEntry(SvTreeListEntry* pEntry,
         const XubString& rStr ,const Image& rImg1,const Image& rImg2,
         SvLBoxButtonKind eButtonKind)
 {
@@ -3146,7 +3146,7 @@ void SwContentTree::InitEntry(SvLBoxEntry* pEntry,
 }
 
 void SwContentLBoxString::Paint( const Point& rPos, SvTreeListBox& rDev, sal_uInt16 nFlags,
-    SvLBoxEntry* pEntry )
+    SvTreeListEntry* pEntry )
 {
     if(lcl_IsContent(pEntry) &&
             ((SwContent *)pEntry->GetUserData())->IsInvisible())

@@ -59,7 +59,7 @@ ExtTreeListBox::ExtTreeListBox (Window* pParent, ResId const& rRes) :
 ExtTreeListBox::~ExtTreeListBox ()
 { }
 
-sal_Bool ExtTreeListBox::EditingEntry( SvLBoxEntry* pEntry, Selection& )
+sal_Bool ExtTreeListBox::EditingEntry( SvTreeListEntry* pEntry, Selection& )
 {
     bool bRet = false;
 
@@ -85,7 +85,7 @@ sal_Bool ExtTreeListBox::EditingEntry( SvLBoxEntry* pEntry, Selection& )
     return bRet;
 }
 
-sal_Bool ExtTreeListBox::EditedEntry( SvLBoxEntry* pEntry, const OUString& rNewText )
+sal_Bool ExtTreeListBox::EditedEntry( SvTreeListEntry* pEntry, const OUString& rNewText )
 {
     if ( !IsValidSbxName(rNewText) )
     {
@@ -133,7 +133,7 @@ sal_Bool ExtTreeListBox::EditedEntry( SvLBoxEntry* pEntry, const OUString& rNewT
 }
 
 
-DragDropMode ExtTreeListBox::NotifyStartDrag( TransferDataContainer&, SvLBoxEntry* pEntry )
+DragDropMode ExtTreeListBox::NotifyStartDrag( TransferDataContainer&, SvTreeListEntry* pEntry )
 {
     DragDropMode nMode_ = SV_DRAGDROP_NONE;
 
@@ -173,14 +173,14 @@ DragDropMode ExtTreeListBox::NotifyStartDrag( TransferDataContainer&, SvLBoxEntr
 }
 
 
-sal_Bool ExtTreeListBox::NotifyAcceptDrop( SvLBoxEntry* pEntry )
+sal_Bool ExtTreeListBox::NotifyAcceptDrop( SvTreeListEntry* pEntry )
 {
     // don't drop on a BasicManager (nDepth == 0)
     sal_uInt16 nDepth = pEntry ? GetModel()->GetDepth( pEntry ) : 0;
     bool bValid = nDepth != 0;
 
     // don't drop in the same library
-    SvLBoxEntry* pSelected = FirstSelected();
+    SvTreeListEntry* pSelected = FirstSelected();
     if ( ( nDepth == 1 ) && ( pEntry == GetParent( pSelected ) ) )
         bValid = false;
     else if ( ( nDepth == 2 ) && ( GetParent( pEntry ) == GetParent( pSelected ) ) )
@@ -237,15 +237,15 @@ sal_Bool ExtTreeListBox::NotifyAcceptDrop( SvLBoxEntry* pEntry )
     return bValid;
 }
 
-sal_Bool ExtTreeListBox::NotifyMoving( SvLBoxEntry* pTarget, SvLBoxEntry* pEntry,
-                        SvLBoxEntry*& rpNewParent, sal_uLong& rNewChildPos )
+sal_Bool ExtTreeListBox::NotifyMoving( SvTreeListEntry* pTarget, SvTreeListEntry* pEntry,
+                        SvTreeListEntry*& rpNewParent, sal_uLong& rNewChildPos )
 {
     return NotifyCopyingMoving( pTarget, pEntry,
                                     rpNewParent, rNewChildPos, true );
 }
 
-sal_Bool ExtTreeListBox::NotifyCopying( SvLBoxEntry* pTarget, SvLBoxEntry* pEntry,
-                        SvLBoxEntry*& rpNewParent, sal_uLong& rNewChildPos )
+sal_Bool ExtTreeListBox::NotifyCopying( SvTreeListEntry* pTarget, SvTreeListEntry* pEntry,
+                        SvTreeListEntry*& rpNewParent, sal_uLong& rNewChildPos )
 {
 //  return false;   // how do I copy an SBX?!
     return NotifyCopyingMoving( pTarget, pEntry,
@@ -311,8 +311,8 @@ void Shell::CopyDialogResources(
 }
 
 
-sal_Bool ExtTreeListBox::NotifyCopyingMoving( SvLBoxEntry* pTarget, SvLBoxEntry* pEntry,
-                        SvLBoxEntry*& rpNewParent, sal_uLong& rNewChildPos, sal_Bool bMove )
+sal_Bool ExtTreeListBox::NotifyCopyingMoving( SvTreeListEntry* pTarget, SvTreeListEntry* pEntry,
+                        SvTreeListEntry*& rpNewParent, sal_uLong& rNewChildPos, sal_Bool bMove )
 {
     (void)pEntry;
     DBG_ASSERT( pEntry, "Kein Eintrag?" );  // ASS is ok here, should not be reached
@@ -606,7 +606,7 @@ void ObjectPage::DeactivatePage()
 void ObjectPage::CheckButtons()
 {
     // enable/disable edit button
-    SvLBoxEntry* pCurEntry = aBasicBox.GetCurEntry();
+    SvTreeListEntry* pCurEntry = aBasicBox.GetCurEntry();
     EntryDescriptor aDesc = aBasicBox.GetEntryDescriptor(pCurEntry);
     ScriptDocument aDocument( aDesc.GetDocument() );
     OUString aLibName( aDesc.GetLibName() );
@@ -679,7 +679,7 @@ IMPL_LINK( ObjectPage, ButtonHdl, Button *, pButton )
         SFX_APP()->ExecuteSlot( aRequest );
 
         SfxDispatcher* pDispatcher = GetDispatcher();
-        SvLBoxEntry* pCurEntry = aBasicBox.GetCurEntry();
+        SvTreeListEntry* pCurEntry = aBasicBox.GetCurEntry();
         DBG_ASSERT( pCurEntry, "Entry?!" );
         if ( aBasicBox.GetModel()->GetDepth( pCurEntry ) >= 2 )
         {
@@ -702,7 +702,7 @@ IMPL_LINK( ObjectPage, ButtonHdl, Button *, pButton )
         {
             DBG_ASSERT( aBasicBox.GetModel()->GetDepth( pCurEntry ) == 1, "Kein LibEntry?!" );
             ScriptDocument aDocument( ScriptDocument::getApplicationScriptDocument() );
-            SvLBoxEntry* pParentEntry = aBasicBox.GetParent( pCurEntry );
+            SvTreeListEntry* pParentEntry = aBasicBox.GetParent( pCurEntry );
             if ( pParentEntry )
             {
                 DocumentEntry* pDocumentEntry = (DocumentEntry*)pParentEntry->GetUserData();
@@ -735,7 +735,7 @@ bool ObjectPage::GetSelection( ScriptDocument& rDocument, OUString& rLibName )
 {
     bool bRet = false;
 
-    SvLBoxEntry* pCurEntry = aBasicBox.GetCurEntry();
+    SvTreeListEntry* pCurEntry = aBasicBox.GetCurEntry();
     EntryDescriptor aDesc = aBasicBox.GetEntryDescriptor(pCurEntry);
     rDocument = aDesc.GetDocument();
     rLibName = aDesc.GetLibName();
@@ -827,18 +827,18 @@ void ObjectPage::NewDialog()
                     pDispatcher->Execute( SID_BASICIDE_SBXINSERTED,
                                             SFX_CALLMODE_SYNCHRON, &aSbxItem, 0L );
                 LibraryLocation eLocation = aDocument.getLibraryLocation( aLibName );
-                SvLBoxEntry* pRootEntry = aBasicBox.FindRootEntry( aDocument, eLocation );
+                SvTreeListEntry* pRootEntry = aBasicBox.FindRootEntry( aDocument, eLocation );
                 if ( pRootEntry )
                 {
                     if ( !aBasicBox.IsExpanded( pRootEntry ) )
                         aBasicBox.Expand( pRootEntry );
-                    SvLBoxEntry* pLibEntry = aBasicBox.FindEntry( pRootEntry, aLibName, OBJ_TYPE_LIBRARY );
+                    SvTreeListEntry* pLibEntry = aBasicBox.FindEntry( pRootEntry, aLibName, OBJ_TYPE_LIBRARY );
                     DBG_ASSERT( pLibEntry, "Libeintrag nicht gefunden!" );
                     if ( pLibEntry )
                     {
                         if ( !aBasicBox.IsExpanded( pLibEntry ) )
                             aBasicBox.Expand( pLibEntry );
-                        SvLBoxEntry* pEntry = aBasicBox.FindEntry( pLibEntry, aDlgName, OBJ_TYPE_DIALOG );
+                        SvTreeListEntry* pEntry = aBasicBox.FindEntry( pLibEntry, aDlgName, OBJ_TYPE_DIALOG );
                         if ( !pEntry )
                         {
                             SAL_WNODEPRECATED_DECLARATIONS_PUSH
@@ -862,7 +862,7 @@ void ObjectPage::NewDialog()
 
 void ObjectPage::DeleteCurrent()
 {
-    SvLBoxEntry* pCurEntry = aBasicBox.GetCurEntry();
+    SvTreeListEntry* pCurEntry = aBasicBox.GetCurEntry();
     DBG_ASSERT( pCurEntry, "Kein aktueller Eintrag!" );
     EntryDescriptor aDesc( aBasicBox.GetEntryDescriptor( pCurEntry ) );
     ScriptDocument aDocument( aDesc.GetDocument() );
@@ -981,22 +981,22 @@ SbModule* createModImpl( Window* pWin, const ScriptDocument& rDocument,
                 pDispatcher->Execute( SID_BASICIDE_SBXINSERTED,
                                       SFX_CALLMODE_SYNCHRON, &aSbxItem, 0L );
             LibraryLocation eLocation = rDocument.getLibraryLocation( aLibName );
-            SvLBoxEntry* pRootEntry = rBasicBox.FindRootEntry( rDocument, eLocation );
+            SvTreeListEntry* pRootEntry = rBasicBox.FindRootEntry( rDocument, eLocation );
             if ( pRootEntry )
             {
                 if ( !rBasicBox.IsExpanded( pRootEntry ) )
                     rBasicBox.Expand( pRootEntry );
-                SvLBoxEntry* pLibEntry = rBasicBox.FindEntry( pRootEntry, aLibName, OBJ_TYPE_LIBRARY );
+                SvTreeListEntry* pLibEntry = rBasicBox.FindEntry( pRootEntry, aLibName, OBJ_TYPE_LIBRARY );
                 DBG_ASSERT( pLibEntry, "Libeintrag nicht gefunden!" );
                 if ( pLibEntry )
                 {
                     if ( !rBasicBox.IsExpanded( pLibEntry ) )
                         rBasicBox.Expand( pLibEntry );
-                    SvLBoxEntry* pSubRootEntry = pLibEntry;
+                    SvTreeListEntry* pSubRootEntry = pLibEntry;
                     if( pBasic && rDocument.isInVBAMode() )
                     {
                         // add the new module in the "Modules" entry
-                        SvLBoxEntry* pLibSubEntry = rBasicBox.FindEntry( pLibEntry, IDE_RESSTR(RID_STR_NORMAL_MODULES) , OBJ_TYPE_NORMAL_MODULES );
+                        SvTreeListEntry* pLibSubEntry = rBasicBox.FindEntry( pLibEntry, IDE_RESSTR(RID_STR_NORMAL_MODULES) , OBJ_TYPE_NORMAL_MODULES );
                         if( pLibSubEntry )
                         {
                             if( !rBasicBox.IsExpanded( pLibSubEntry ) )
@@ -1005,7 +1005,7 @@ SbModule* createModImpl( Window* pWin, const ScriptDocument& rDocument,
                         }
                     }
 
-                    SvLBoxEntry* pEntry = rBasicBox.FindEntry( pSubRootEntry, aModName, OBJ_TYPE_MODULE );
+                    SvTreeListEntry* pEntry = rBasicBox.FindEntry( pSubRootEntry, aModName, OBJ_TYPE_MODULE );
                     if ( !pEntry )
                     {
                         SAL_WNODEPRECATED_DECLARATIONS_PUSH

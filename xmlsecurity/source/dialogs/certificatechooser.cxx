@@ -46,7 +46,7 @@ sal_uInt16 CertificateChooser::GetSelectedEntryPos( void ) const
 {
     sal_uInt16  nSel = INVAL_SEL;
 
-    SvLBoxEntry* pSel = maCertLB.FirstSelected();
+    SvTreeListEntry* pSel = maCertLB.FirstSelected();
     if( pSel )
         nSel = (sal_uInt16) ( sal_uIntPtr ) pSel->GetUserData();
 
@@ -177,7 +177,7 @@ void CertificateChooser::ImplInitialize()
             sEntry.append( XmlSec::GetContentPart( maCerts[ nC ]->getIssuerName() ) );
             sEntry.append( '\t' );
             sEntry.append( XmlSec::GetDateString( maCerts[ nC ]->getNotValidAfter() ) );
-            SvLBoxEntry* pEntry = maCertLB.InsertEntry( sEntry.makeStringAndClear() );
+            SvTreeListEntry* pEntry = maCertLB.InsertEntry( sEntry.makeStringAndClear() );
             pEntry->SetUserData( ( void* )(sal_IntPtr)nC ); // missuse user data as index
         }
 

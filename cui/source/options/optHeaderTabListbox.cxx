@@ -29,15 +29,15 @@ namespace svx
 class OptLBoxString_Impl : public SvLBoxString
 {
 public:
-    OptLBoxString_Impl( SvLBoxEntry* pEntry, sal_uInt16 nFlags, const String& rTxt ) :
+    OptLBoxString_Impl( SvTreeListEntry* pEntry, sal_uInt16 nFlags, const String& rTxt ) :
         SvLBoxString( pEntry, nFlags, rTxt ) {}
 
-    virtual void Paint( const Point& rPos, SvTreeListBox& rDev, sal_uInt16 nFlags, SvLBoxEntry* pEntry );
+    virtual void Paint( const Point& rPos, SvTreeListBox& rDev, sal_uInt16 nFlags, SvTreeListEntry* pEntry );
 };
 
 // -----------------------------------------------------------------------
 
-void OptLBoxString_Impl::Paint( const Point& rPos, SvTreeListBox& rDev, sal_uInt16, SvLBoxEntry* pEntry )
+void OptLBoxString_Impl::Paint( const Point& rPos, SvTreeListBox& rDev, sal_uInt16, SvTreeListEntry* pEntry )
 {
     Font aOldFont( rDev.GetFont() );
     Font aFont( aOldFont );
@@ -57,7 +57,7 @@ OptHeaderTabListBox::OptHeaderTabListBox( Window* pParent, WinBits nWinStyle ) :
 }
 
 // -----------------------------------------------------------------------
-void OptHeaderTabListBox::InitEntry( SvLBoxEntry* pEntry, const XubString& rTxt,
+void OptHeaderTabListBox::InitEntry( SvTreeListEntry* pEntry, const XubString& rTxt,
                                      const Image& rImg1, const Image& rImg2,
                                      SvLBoxButtonKind eButtonKind )
 {

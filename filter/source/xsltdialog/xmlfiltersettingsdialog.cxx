@@ -196,7 +196,7 @@ void XMLFilterSettingsDialog::ShowWindow()
 
 void XMLFilterSettingsDialog::updateStates()
 {
-    SvLBoxEntry* pSelectedEntry = mpFilterListBox->FirstSelected();
+    SvTreeListEntry* pSelectedEntry = mpFilterListBox->FirstSelected();
 
     bool bHasSelection = pSelectedEntry != NULL;
 
@@ -261,7 +261,7 @@ void XMLFilterSettingsDialog::onNew()
 void XMLFilterSettingsDialog::onEdit()
 {
     // get selected filter entry
-    SvLBoxEntry* pEntry = mpFilterListBox->FirstSelected();
+    SvTreeListEntry* pEntry = mpFilterListBox->FirstSelected();
     if( pEntry )
     {
         // get its filter info
@@ -791,7 +791,7 @@ bool XMLFilterSettingsDialog::insertOrEdit( filter_info_impl* pNewInfo, const fi
 void XMLFilterSettingsDialog::onTest()
 {
     // get the first selected filter
-    SvLBoxEntry* pEntry = mpFilterListBox->FirstSelected();
+    SvTreeListEntry* pEntry = mpFilterListBox->FirstSelected();
     if( pEntry )
     {
         filter_info_impl* pInfo = (filter_info_impl*)pEntry->GetUserData();
@@ -805,7 +805,7 @@ void XMLFilterSettingsDialog::onTest()
 
 void XMLFilterSettingsDialog::onDelete()
 {
-    SvLBoxEntry* pEntry = mpFilterListBox->FirstSelected();
+    SvTreeListEntry* pEntry = mpFilterListBox->FirstSelected();
     if( pEntry )
     {
         filter_info_impl* pInfo = (filter_info_impl*)pEntry->GetUserData();
@@ -901,7 +901,7 @@ void XMLFilterSettingsDialog::onSave()
 
     int nFilters = 0;
 
-    SvLBoxEntry* pEntry = mpFilterListBox->FirstSelected();
+    SvTreeListEntry* pEntry = mpFilterListBox->FirstSelected();
     while( pEntry )
     {
         filter_info_impl* pInfo = (filter_info_impl*)pEntry->GetUserData();
@@ -1243,7 +1243,7 @@ void XMLFilterSettingsDialog::initFilterList()
         delete pTempFilter;
     }
 
-    SvLBoxEntry* pEntry = mpFilterListBox->GetEntry( 0 );
+    SvTreeListEntry* pEntry = mpFilterListBox->GetEntry( 0 );
     if( pEntry )
         mpFilterListBox->Select( pEntry );
 }
@@ -1516,7 +1516,7 @@ void XMLFilterListBox::changeEntry( const filter_info_impl* pInfo )
     sal_uLong nPos;
     for( nPos = 0; nPos < nCount; nPos++ )
     {
-        SvLBoxEntry* pEntry = GetEntry( nPos );
+        SvTreeListEntry* pEntry = GetEntry( nPos );
         if( (filter_info_impl*)pEntry->GetUserData() == pInfo )
         {
             XubString aEntryText( getEntryString( pInfo ) );

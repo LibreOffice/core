@@ -191,7 +191,7 @@ void WebConnectionInfoDialog::FillPasswordList()
                     ::rtl::OUString aUIEntry( aURLEntries[nURLInd].Url );
                     aUIEntry += ::rtl::OUString::valueOf( (sal_Unicode)'\t' );
                     aUIEntry += aURLEntries[nURLInd].UserList[nUserInd].UserName;
-                    SvLBoxEntry* pEntry = m_aPasswordsLB.InsertEntry( aUIEntry );
+                    SvTreeListEntry* pEntry = m_aPasswordsLB.InsertEntry( aUIEntry );
                     pEntry->SetUserData( (void*)(sal_IntPtr)(nCount++) );
                 }
             }
@@ -207,7 +207,7 @@ void WebConnectionInfoDialog::FillPasswordList()
                 ::rtl::OUString aUIEntry( aUrls[ nURLIdx ] );
                 aUIEntry += ::rtl::OUString::valueOf( (sal_Unicode)'\t' );
                 aUIEntry += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "*" ) );
-                SvLBoxEntry* pEntry = m_aPasswordsLB.InsertEntry( aUIEntry );
+                SvTreeListEntry* pEntry = m_aPasswordsLB.InsertEntry( aUIEntry );
                 pEntry->SetUserData( (void*)(sal_IntPtr)(nCount++) );
             }
         }
@@ -221,7 +221,7 @@ IMPL_LINK_NOARG(WebConnectionInfoDialog, RemovePasswordHdl)
 {
     try
     {
-        SvLBoxEntry* pEntry = m_aPasswordsLB.GetCurEntry();
+        SvTreeListEntry* pEntry = m_aPasswordsLB.GetCurEntry();
         if ( pEntry )
         {
             ::rtl::OUString aURL = m_aPasswordsLB.GetEntryText( pEntry, 0 );
@@ -277,7 +277,7 @@ IMPL_LINK_NOARG(WebConnectionInfoDialog, ChangePasswordHdl)
 {
     try
     {
-        SvLBoxEntry* pEntry = m_aPasswordsLB.GetCurEntry();
+        SvTreeListEntry* pEntry = m_aPasswordsLB.GetCurEntry();
         if ( pEntry )
         {
             ::rtl::OUString aURL = m_aPasswordsLB.GetEntryText( pEntry, 0 );
@@ -314,7 +314,7 @@ IMPL_LINK_NOARG(WebConnectionInfoDialog, ChangePasswordHdl)
 // -----------------------------------------------------------------------
 IMPL_LINK_NOARG(WebConnectionInfoDialog, EntrySelectedHdl)
 {
-    SvLBoxEntry* pEntry = m_aPasswordsLB.GetCurEntry();
+    SvTreeListEntry* pEntry = m_aPasswordsLB.GetCurEntry();
     if ( !pEntry )
     {
         m_aRemoveBtn.Enable( sal_False );

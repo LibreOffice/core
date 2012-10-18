@@ -205,7 +205,7 @@ sal_Bool OfaMSFilterTabPage2::FillItemSet( SfxItemSet& )
             InvalidCBEntry != pArr->eType; ++pArr, bFirst = !bFirst )
     {
         sal_uInt16 nCol = bFirst ? 1 : 2;
-        SvLBoxEntry* pEntry = GetEntry4Type( pArr->eType );
+        SvTreeListEntry* pEntry = GetEntry4Type( pArr->eType );
         if( pEntry )
         {
             SvLBoxButton* pItem = (SvLBoxButton*)(pEntry->GetItem( nCol ));
@@ -263,7 +263,7 @@ void OfaMSFilterTabPage2::Reset( const SfxItemSet& )
             InvalidCBEntry != pArr->eType; ++pArr, bFirst = !bFirst )
     {
         sal_uInt16 nCol = bFirst ? 1 : 2;
-        SvLBoxEntry* pEntry = GetEntry4Type( static_cast< sal_IntPtr >( pArr->eType ) );
+        SvTreeListEntry* pEntry = GetEntry4Type( static_cast< sal_IntPtr >( pArr->eType ) );
         if( pEntry )
         {
             SvLBoxButton* pItem = (SvLBoxButton*)(pEntry->GetItem( nCol ));
@@ -282,7 +282,7 @@ void OfaMSFilterTabPage2::Reset( const SfxItemSet& )
 
 void OfaMSFilterTabPage2::InsertEntry( const String& _rTxt, sal_IntPtr _nType )
 {
-    SvLBoxEntry* pEntry = new SvLBoxEntry;
+    SvTreeListEntry* pEntry = new SvTreeListEntry;
 
     if( !pCheckButtonData )
         pCheckButtonData = new SvLBoxButtonData( &aCheckLB );
@@ -298,9 +298,9 @@ void OfaMSFilterTabPage2::InsertEntry( const String& _rTxt, sal_IntPtr _nType )
     aCheckLB.Insert( pEntry );
 }
 
-SvLBoxEntry* OfaMSFilterTabPage2::GetEntry4Type( sal_IntPtr _nType ) const
+SvTreeListEntry* OfaMSFilterTabPage2::GetEntry4Type( sal_IntPtr _nType ) const
 {
-    SvLBoxEntry* pEntry = aCheckLB.First();
+    SvTreeListEntry* pEntry = aCheckLB.First();
     while ( pEntry )
     {
         if ( _nType == sal_IntPtr( pEntry->GetUserData() ) )
@@ -335,7 +335,7 @@ void OfaMSFilterTabPage2::MSFltrSimpleTable::HBarClick()
 }
 
 void OfaMSFilterTabPage2::MSFltrSimpleTable::SetCheckButtonState(
-                            SvLBoxEntry* pEntry, sal_uInt16 nCol, SvButtonState eState)
+                            SvTreeListEntry* pEntry, sal_uInt16 nCol, SvButtonState eState)
 {
     SvLBoxButton* pItem = (SvLBoxButton*)(pEntry->GetItem(nCol + 1));
 
@@ -361,7 +361,7 @@ void OfaMSFilterTabPage2::MSFltrSimpleTable::SetCheckButtonState(
 }
 
 SvButtonState OfaMSFilterTabPage2::MSFltrSimpleTable::GetCheckButtonState(
-                                    SvLBoxEntry* pEntry, sal_uInt16 nCol ) const
+                                    SvTreeListEntry* pEntry, sal_uInt16 nCol ) const
 {
     SvButtonState eState = SV_BUTTON_UNCHECKED;
     SvLBoxButton* pItem = (SvLBoxButton*)(pEntry->GetItem(nCol + 1));
@@ -395,7 +395,7 @@ void OfaMSFilterTabPage2::MSFltrSimpleTable::KeyInput( const KeyEvent& rKEvt )
         sal_uInt16 nCol = GetCurrentTabPos() - 1;
         if ( nCol < 2 )
         {
-            SvLBoxEntry* pEntry = GetEntry( nSelPos );
+            SvTreeListEntry* pEntry = GetEntry( nSelPos );
             sal_Bool bIsChecked = ( GetCheckButtonState( pEntry, nCol ) == SV_BUTTON_CHECKED );
             CheckEntryPos( nSelPos, nCol, !bIsChecked );
             CallImplEventListeners( VCLEVENT_CHECKBOX_TOGGLE, (void*)pEntry );

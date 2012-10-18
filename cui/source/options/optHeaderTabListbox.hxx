@@ -30,7 +30,7 @@ namespace svx
     public:
         OptHeaderTabListBox( Window* pParent, WinBits nBits );
 
-        virtual void    InitEntry( SvLBoxEntry*, const XubString&, const Image&, const Image&, SvLBoxButtonKind );
+        virtual void    InitEntry( SvTreeListEntry*, const XubString&, const Image&, const Image&, SvLBoxButtonKind );
     };
 } // svx
 #endif // SVX_OPTHEADERTABLISTBOX_HXX

@@ -207,7 +207,7 @@ void DictionaryList::refillFromDictionary( sal_Int32 nTextConversionOptions )
             nConversionPropertyType = xPropertyType->getPropertyType(aLeft, aRight);
 
         DictionaryEntry* pEntry = new DictionaryEntry( aLeft, aRight, nConversionPropertyType );
-        SvLBoxEntry* pLBEntry = InsertEntry( makeTabString( *pEntry ) );
+        SvTreeListEntry* pLBEntry = InsertEntry( makeTabString( *pEntry ) );
         pLBEntry->SetUserData( pEntry );
     }
 
@@ -232,7 +232,7 @@ DictionaryEntry* DictionaryList::getFirstSelectedEntry() const
 DictionaryEntry* DictionaryList::getEntryOnPos( sal_Int32 nPos ) const
 {
     DictionaryEntry* pEntry=0;
-    SvLBoxEntry* pLBEntry = GetEntryOnPos( nPos );
+    SvTreeListEntry* pLBEntry = GetEntryOnPos( nPos );
     if(pLBEntry)
         pEntry = (DictionaryEntry*)pLBEntry->GetUserData();
     return pEntry;
@@ -262,14 +262,14 @@ void DictionaryList::addEntry( const rtl::OUString& rTerm, const rtl::OUString& 
         return;
 
     DictionaryEntry* pEntry = new DictionaryEntry( rTerm, rMapping, nConversionPropertyType, sal_True );
-    SvLBoxEntry* pLBEntry = InsertEntryToColumn( makeTabString( *pEntry ), nPos );
+    SvTreeListEntry* pLBEntry = InsertEntryToColumn( makeTabString( *pEntry ), nPos );
     pLBEntry->SetUserData( pEntry );
     SelectRow( GetEntryPos( pLBEntry ) );
 }
 
 void DictionaryList::deleteEntryOnPos( sal_Int32 nPos  )
 {
-    SvLBoxEntry* pLBEntry = GetEntryOnPos( nPos );
+    SvTreeListEntry* pLBEntry = GetEntryOnPos( nPos );
     DictionaryEntry* pEntry = getEntryOnPos( nPos );
     if( pLBEntry )
         RemoveParentKeepChildren( pLBEntry );
@@ -291,7 +291,7 @@ sal_uIntPtr DictionaryList::deleteEntries( const rtl::OUString& rTerm )
         if( rTerm.equals( pCurEntry->m_aTerm ) )
         {
             nPos = nN;
-            SvLBoxEntry* pCurLBEntry = GetEntryOnPos( nN );
+            SvTreeListEntry* pCurLBEntry = GetEntryOnPos( nN );
             RemoveParentKeepChildren( pCurLBEntry );
             if( pCurEntry->m_bNewEntry )
                 delete pCurEntry;
@@ -375,12 +375,12 @@ sal_uInt16 DictionaryList::getSortColumn() const
 
 IMPL_LINK( DictionaryList, CompareHdl, SvSortData*, pData )
 {
-    SvLBoxEntry* pLeft = (SvLBoxEntry*)(pData->pLeft );
-    SvLBoxEntry* pRight = (SvLBoxEntry*)(pData->pRight );
+    SvTreeListEntry* pLeft = (SvTreeListEntry*)(pData->pLeft );
+    SvTreeListEntry* pRight = (SvTreeListEntry*)(pData->pRight );
     return (long) ColumnCompare(pLeft,pRight);
 }
 
-StringCompare DictionaryList::ColumnCompare( SvLBoxEntry* pLeft, SvLBoxEntry* pRight )
+StringCompare DictionaryList::ColumnCompare( SvTreeListEntry* pLeft, SvTreeListEntry* pRight )
 {
     StringCompare eCompare=COMPARE_EQUAL;
 
@@ -408,7 +408,7 @@ StringCompare DictionaryList::ColumnCompare( SvLBoxEntry* pLeft, SvLBoxEntry* pR
     return eCompare;
 }
 
-SvLBoxItem* DictionaryList::getItemAtColumn( SvLBoxEntry* pEntry, sal_uInt16 nColumn ) const
+SvLBoxItem* DictionaryList::getItemAtColumn( SvTreeListEntry* pEntry, sal_uInt16 nColumn ) const
 {
     SvLBoxItem* pItem = NULL;
     if( pEntry )

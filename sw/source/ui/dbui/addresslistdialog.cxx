@@ -231,7 +231,7 @@ SwAddressListDialog::SwAddressListDialog(SwMailMergeAddressBlockPage* pParent) :
     {
         if ( pNames[nName] == sBibliography )
             continue;
-        SvLBoxEntry* pEntry = m_aListLB.InsertEntry(pNames[nName]);
+        SvTreeListEntry* pEntry = m_aListLB.InsertEntry(pNames[nName]);
         AddressUserData_Impl* pUserData = new AddressUserData_Impl();
         pEntry->SetUserData(pUserData);
         if(pNames[nName] == rCurrentData.sDataSource)
@@ -270,7 +270,7 @@ SwAddressListDialog::SwAddressListDialog(SwMailMergeAddressBlockPage* pParent) :
 
 SwAddressListDialog::~SwAddressListDialog()
 {
-    SvLBoxEntry* pEntry = m_aListLB.First();
+    SvTreeListEntry* pEntry = m_aListLB.First();
     while(pEntry)
     {
         AddressUserData_Impl* pUserData = static_cast<AddressUserData_Impl*>(pEntry->GetUserData());
@@ -281,7 +281,7 @@ SwAddressListDialog::~SwAddressListDialog()
 
 IMPL_LINK_NOARG(SwAddressListDialog, FilterHdl_Impl)
 {
-    SvLBoxEntry* pSelect = m_aListLB.FirstSelected();
+    SvTreeListEntry* pSelect = m_aListLB.FirstSelected();
     uno::Reference< XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
     if(pSelect && xMgr.is())
     {
@@ -350,7 +350,7 @@ IMPL_LINK_NOARG(SwAddressListDialog, LoadHdl_Impl)
     String sNewSource = SwNewDBMgr::LoadAndRegisterDataSource();
     if(sNewSource.Len())
     {
-        SvLBoxEntry* pNewSource = m_aListLB.InsertEntry(sNewSource);
+        SvTreeListEntry* pNewSource = m_aListLB.InsertEntry(sNewSource);
         pNewSource->SetUserData(new AddressUserData_Impl());
         m_aListLB.Select(pNewSource);
     }
@@ -449,7 +449,7 @@ IMPL_LINK(SwAddressListDialog, CreateHdl_Impl, PushButton*, pButton)
 
 IMPL_LINK(SwAddressListDialog, EditHdl_Impl, PushButton*, pButton)
 {
-    SvLBoxEntry* pEntry = m_aListLB.FirstSelected();
+    SvTreeListEntry* pEntry = m_aListLB.FirstSelected();
     AddressUserData_Impl* pUserData = pEntry ? static_cast<AddressUserData_Impl*>(pEntry->GetUserData()) : 0;
     if(pUserData && !pUserData->sURL.isEmpty())
     {
@@ -481,13 +481,13 @@ IMPL_LINK(SwAddressListDialog, EditHdl_Impl, PushButton*, pButton)
 
 IMPL_LINK_NOARG(SwAddressListDialog, ListBoxSelectHdl_Impl)
 {
-    SvLBoxEntry* pSelect = m_aListLB.FirstSelected();
+    SvTreeListEntry* pSelect = m_aListLB.FirstSelected();
     Application::PostUserEvent( STATIC_LINK( this, SwAddressListDialog,
                                                 StaticListBoxSelectHdl_Impl ), pSelect );
     return 0;
 }
 
-IMPL_STATIC_LINK(SwAddressListDialog, StaticListBoxSelectHdl_Impl, SvLBoxEntry*, pSelect)
+IMPL_STATIC_LINK(SwAddressListDialog, StaticListBoxSelectHdl_Impl, SvTreeListEntry*, pSelect)
 {
     //prevent nested calls of the select handler
     if(pThis->m_bInSelectHdl)
@@ -547,7 +547,7 @@ IMPL_STATIC_LINK(SwAddressListDialog, StaticListBoxSelectHdl_Impl, SvLBoxEntry*,
 // detect the number of tables for a data source
 // if only one is available then set it at the entry
 void SwAddressListDialog::DetectTablesAndQueries(
-        SvLBoxEntry* pSelect,
+        SvTreeListEntry* pSelect,
         bool bWidthDialog)
 {
     try
@@ -645,7 +645,7 @@ void SwAddressListDialog::DetectTablesAndQueries(
 IMPL_LINK(SwAddressListDialog, TableSelectHdl_Impl, PushButton*, pButton)
 {
     EnterWait();
-    SvLBoxEntry* pSelect = m_aListLB.FirstSelected();
+    SvTreeListEntry* pSelect = m_aListLB.FirstSelected();
     if(pSelect)
     {
         AddressUserData_Impl* pUserData = static_cast<AddressUserData_Impl*>(pSelect->GetUserData());
@@ -671,7 +671,7 @@ IMPL_LINK_NOARG(SwAddressListDialog, OKHdl_Impl)
 uno::Reference< XDataSource>  SwAddressListDialog::GetSource()
 {
     uno::Reference< XDataSource>  xRet;
-    SvLBoxEntry* pSelect = m_aListLB.FirstSelected();
+    SvTreeListEntry* pSelect = m_aListLB.FirstSelected();
     if(pSelect)
     {
         AddressUserData_Impl* pUserData = static_cast<AddressUserData_Impl*>(pSelect->GetUserData());
@@ -684,7 +684,7 @@ uno::Reference< XDataSource>  SwAddressListDialog::GetSource()
 SharedConnection    SwAddressListDialog::GetConnection()
 {
     SharedConnection xRet;
-    SvLBoxEntry* pSelect = m_aListLB.FirstSelected();
+    SvTreeListEntry* pSelect = m_aListLB.FirstSelected();
     if(pSelect)
     {
         AddressUserData_Impl* pUserData = static_cast<AddressUserData_Impl*>(pSelect->GetUserData());
@@ -696,7 +696,7 @@ SharedConnection    SwAddressListDialog::GetConnection()
 uno::Reference< XColumnsSupplier> SwAddressListDialog::GetColumnsSupplier()
 {
     uno::Reference< XColumnsSupplier> xRet;
-    SvLBoxEntry* pSelect = m_aListLB.FirstSelected();
+    SvTreeListEntry* pSelect = m_aListLB.FirstSelected();
     if(pSelect)
     {
         AddressUserData_Impl* pUserData = static_cast<AddressUserData_Impl*>(pSelect->GetUserData());
@@ -708,7 +708,7 @@ uno::Reference< XColumnsSupplier> SwAddressListDialog::GetColumnsSupplier()
 ::rtl::OUString     SwAddressListDialog::GetFilter()
 {
     ::rtl::OUString sRet;
-    SvLBoxEntry* pSelect = m_aListLB.FirstSelected();
+    SvTreeListEntry* pSelect = m_aListLB.FirstSelected();
     if(pSelect)
     {
         AddressUserData_Impl* pUserData = static_cast<AddressUserData_Impl*>(pSelect->GetUserData());

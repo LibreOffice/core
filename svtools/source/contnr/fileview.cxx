@@ -206,7 +206,7 @@ public:
 
     virtual void    Resize();
     virtual void    KeyInput( const KeyEvent& rKEvt );
-    virtual sal_Bool EditedEntry( SvLBoxEntry* pEntry, const rtl::OUString& rNewText );
+    virtual sal_Bool EditedEntry( SvTreeListEntry* pEntry, const rtl::OUString& rNewText );
 
     void            ClearAll();
     HeaderBar*      GetHeaderBar() const { return mpHeaderBar; }
@@ -808,7 +808,7 @@ PopupMenu* ViewTabListBox_Impl::CreateContextMenu( void )
 
     if ( bEnableDelete || bEnableRename )
     {
-        SvLBoxEntry* pEntry = FirstSelected();
+        SvTreeListEntry* pEntry = FirstSelected();
         while ( pEntry )
         {
             ::ucbhelper::Content aCnt;
@@ -911,13 +911,13 @@ void ViewTabListBox_Impl::ClearAll()
 void ViewTabListBox_Impl::DeleteEntries()
 {
     svtools::QueryDeleteResult_Impl eResult = svtools::QUERYDELETE_YES;
-    SvLBoxEntry* pEntry = FirstSelected();
+    SvTreeListEntry* pEntry = FirstSelected();
     String aURL;
 
     rtl::OString sDialogPosition;
     while ( pEntry && ( eResult != svtools::QUERYDELETE_CANCEL ) )
     {
-        SvLBoxEntry *pCurEntry = pEntry;
+        SvTreeListEntry *pCurEntry = pEntry;
         pEntry = NextSelected( pEntry );
 
         if ( pCurEntry->GetUserData() )
@@ -978,7 +978,7 @@ void ViewTabListBox_Impl::DeleteEntries()
 }
 
 // -----------------------------------------------------------------------
-sal_Bool ViewTabListBox_Impl::EditedEntry( SvLBoxEntry* pEntry,
+sal_Bool ViewTabListBox_Impl::EditedEntry( SvTreeListEntry* pEntry,
                                  const rtl::OUString& rNewText )
 {
     sal_Bool bRet = sal_False;
@@ -1061,7 +1061,7 @@ void ViewTabListBox_Impl::DoQuickSearch( const xub_Unicode& rChar )
 
     if ( bFound )
     {
-        SvLBoxEntry* pEntry = GetEntry( mnSearchIndex );
+        SvTreeListEntry* pEntry = GetEntry( mnSearchIndex );
         if ( pEntry )
         {
             SelectAll( sal_False );
@@ -1099,7 +1099,7 @@ sal_Bool ViewTabListBox_Impl::DoubleClickHdl()
         const sal_uInt16 nColumnCount = GetColumnCount();
         if (nColumnCount > 0)
             nRow = _nPos / nColumnCount;
-        SvLBoxEntry* pEntry = GetEntry( nRow );
+        SvTreeListEntry* pEntry = GetEntry( nRow );
         if ( pEntry )
         {
             SvtContentEntry* pData = (SvtContentEntry*)pEntry->GetUserData();
@@ -1204,7 +1204,7 @@ SvtFileView::~SvtFileView()
 
 // -----------------------------------------------------------------------
 
-String SvtFileView::GetURL( SvLBoxEntry* pEntry ) const
+String SvtFileView::GetURL( SvTreeListEntry* pEntry ) const
 {
     String aURL;
     if ( pEntry && pEntry->GetUserData() )
@@ -1217,7 +1217,7 @@ String SvtFileView::GetURL( SvLBoxEntry* pEntry ) const
 String SvtFileView::GetCurrentURL() const
 {
     String aURL;
-    SvLBoxEntry* pEntry = mpImp->mpView->FirstSelected();
+    SvTreeListEntry* pEntry = mpImp->mpView->FirstSelected();
     if ( pEntry && pEntry->GetUserData() )
         aURL = ( (SvtContentEntry*)pEntry->GetUserData() )->maURL;
     return aURL;
@@ -1227,7 +1227,7 @@ String SvtFileView::GetCurrentURL() const
 void SvtFileView::CreatedFolder( const String& rUrl, const String& rNewFolder )
 {
     String sEntry = mpImp->FolderInserted( rUrl, rNewFolder );
-    SvLBoxEntry* pEntry = mpImp->mpView->InsertEntry( sEntry, mpImp->maFolderImage, mpImp->maFolderImage );
+    SvTreeListEntry* pEntry = mpImp->mpView->InsertEntry( sEntry, mpImp->maFolderImage, mpImp->maFolderImage );
     SvtContentEntry* pUserData = new SvtContentEntry( rUrl, sal_True );
     pEntry->SetUserData( pUserData );
     mpImp->mpView->MakeVisible( pEntry );
@@ -1447,14 +1447,14 @@ sal_uLong SvtFileView::GetSelectionCount() const
 
 // -----------------------------------------------------------------------
 
-SvLBoxEntry* SvtFileView::FirstSelected() const
+SvTreeListEntry* SvtFileView::FirstSelected() const
 {
     return mpImp->mpView->FirstSelected();
 }
 
 // -----------------------------------------------------------------------
 
-SvLBoxEntry* SvtFileView::NextSelected( SvLBoxEntry* pEntry ) const
+SvTreeListEntry* SvtFileView::NextSelected( SvTreeListEntry* pEntry ) const
 {
     return mpImp->mpView->NextSelected( pEntry );
 }
@@ -1993,7 +1993,7 @@ void SvtFileView_Impl::SetSelectHandler( const Link& _rHdl )
 void SvtFileView_Impl::InitSelection()
 {
     mpView->SelectAll( sal_False );
-    SvLBoxEntry* pFirst = mpView->First();
+    SvTreeListEntry* pFirst = mpView->First();
     if ( pFirst )
         mpView->SetCursor( pFirst, sal_True );
 }
@@ -2014,7 +2014,7 @@ void SvtFileView_Impl::OpenFolder_Impl()
             continue;
 
         // insert entry and set user data
-        SvLBoxEntry* pEntry = mpView->InsertEntry( (*aIt)->maDisplayText,
+        SvTreeListEntry* pEntry = mpView->InsertEntry( (*aIt)->maDisplayText,
                                                    (*aIt)->maImage,
                                                    (*aIt)->maImage );
 
@@ -2036,7 +2036,7 @@ void SvtFileView_Impl::OpenFolder_Impl()
 void SvtFileView_Impl::ResetCursor()
 {
     // deselect
-    SvLBoxEntry* pEntry = mpView->FirstSelected();
+    SvTreeListEntry* pEntry = mpView->FirstSelected();
     if ( pEntry )
         mpView->Select( pEntry, sal_False );
     // set cursor to the first entry
@@ -2280,7 +2280,7 @@ void SvtFileView_Impl::Resort_Impl( sal_Int16 nColumn, sal_Bool bAscending )
     mpView->ResetQuickSearch_Impl( NULL );
 
     String aEntryURL;
-    SvLBoxEntry* pEntry = mpView->GetCurEntry();
+    SvTreeListEntry* pEntry = mpView->GetCurEntry();
     if ( pEntry && pEntry->GetUserData() )
         aEntryURL = ( (SvtContentEntry*)pEntry->GetUserData() )->maURL;
 

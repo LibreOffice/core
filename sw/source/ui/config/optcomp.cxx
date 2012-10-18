@@ -137,7 +137,7 @@ SwCompatibilityOptPage::SwCompatibilityOptPage( Window* pParent, const SfxItemSe
              STR_USE_OBJPOSITIONING == nResId ||
              STR_USE_OURTEXTWRAPPING == nResId )
             ReplaceFormatName( sEntry );
-        SvLBoxEntry* pEntry = m_aOptionsLB.SvTreeListBox::InsertEntry( sEntry );
+        SvTreeListEntry* pEntry = m_aOptionsLB.SvTreeListBox::InsertEntry( sEntry );
         if ( pEntry )
         {
             m_aOptionsLB.SetCheckButtonState( pEntry, SV_BUTTON_UNCHECKED );

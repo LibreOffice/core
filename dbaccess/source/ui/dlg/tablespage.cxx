@@ -173,7 +173,7 @@ DBG_NAME(OTableSubscriptionPage)
         String aListBoxTable;
         ::rtl::OUString sCatalog, sSchema, sName;
 
-        SvLBoxEntry* pRootEntry = m_aTablesList.getAllObjectsEntry();
+        SvTreeListEntry* pRootEntry = m_aTablesList.getAllObjectsEntry();
         sal_Bool bAllTables = sal_False;
         sal_Bool bAllSchemas = sal_False;
 
@@ -189,7 +189,7 @@ DBG_NAME(OTableSubscriptionPage)
             bAllSchemas = (1 == sSchema.getLength()) && ('%' == sSchema[0]);
 
             // the catalog entry
-            SvLBoxEntry* pCatalog = m_aTablesList.GetEntryPosByName(sCatalog, pRootEntry);
+            SvTreeListEntry* pCatalog = m_aTablesList.GetEntryPosByName(sCatalog, pRootEntry);
             if (!(pCatalog || sCatalog.isEmpty()))
                 // the table (resp. its catalog) refered in this filter entry does not exist anymore
                 continue;
@@ -201,7 +201,7 @@ DBG_NAME(OTableSubscriptionPage)
             }
 
             // the schema entry
-            SvLBoxEntry* pSchema = m_aTablesList.GetEntryPosByName(sSchema, (pCatalog ? pCatalog : pRootEntry));
+            SvTreeListEntry* pSchema = m_aTablesList.GetEntryPosByName(sSchema, (pCatalog ? pCatalog : pRootEntry));
             if (!(pSchema || sSchema.isEmpty()))
                 // the table (resp. its schema) refered in this filter entry does not exist anymore
                 continue;
@@ -212,7 +212,7 @@ DBG_NAME(OTableSubscriptionPage)
                 continue;
             }
 
-            SvLBoxEntry* pEntry = m_aTablesList.GetEntryPosByName(sName, pSchema ? pSchema : (pCatalog ? pCatalog : pRootEntry) );
+            SvTreeListEntry* pEntry = m_aTablesList.GetEntryPosByName(sName, pSchema ? pSchema : (pCatalog ? pCatalog : pRootEntry) );
             if (pEntry)
                 m_aTablesList.SetCheckButtonState(pEntry, SV_BUTTON_CHECKED);
         }
@@ -384,7 +384,7 @@ DBG_NAME(OTableSubscriptionPage)
         implCompleteTablesCheck( aTableFilter );
 
         // expand the first entry by default
-        SvLBoxEntry* pExpand = m_aTablesList.getAllObjectsEntry();
+        SvTreeListEntry* pExpand = m_aTablesList.getAllObjectsEntry();
         while (pExpand)
         {
             m_aTablesList.Expand(pExpand);
@@ -401,7 +401,7 @@ DBG_NAME(OTableSubscriptionPage)
     void OTableSubscriptionPage::CheckAll( sal_Bool _bCheck )
     {
         SvButtonState eState = _bCheck ? SV_BUTTON_CHECKED : SV_BUTTON_UNCHECKED;
-        SvLBoxEntry* pEntry = m_aTablesList.First();
+        SvTreeListEntry* pEntry = m_aTablesList.First();
         while (pEntry)
         {
             m_aTablesList.SetCheckButtonState( pEntry, eState);
@@ -434,8 +434,8 @@ DBG_NAME(OTableSubscriptionPage)
     //------------------------------------------------------------------------
     IMPL_LINK( OTableSubscriptionPage, OnTreeEntryCompare, const SvSortData*, _pSortData )
     {
-        SvLBoxEntry* pLHS = static_cast<SvLBoxEntry*>(_pSortData->pLeft);
-        SvLBoxEntry* pRHS = static_cast<SvLBoxEntry*>(_pSortData->pRight);
+        SvTreeListEntry* pLHS = static_cast<SvTreeListEntry*>(_pSortData->pLeft);
+        SvTreeListEntry* pRHS = static_cast<SvTreeListEntry*>(_pSortData->pRight);
         OSL_ENSURE(pLHS && pRHS, "SbaTableQueryBrowser::OnTreeEntryCompare: invalid tree entries!");
 
         SvLBoxString* pLeftTextItem = static_cast<SvLBoxString*>(pLHS->GetFirstItem(SV_ITEM_ID_LBOXSTRING));
@@ -472,16 +472,16 @@ DBG_NAME(OTableSubscriptionPage)
         static const ::rtl::OUString sWildcard(RTL_CONSTASCII_USTRINGPARAM("%"));
 
         ::rtl::OUString sComposedName;
-        const SvLBoxEntry* pAllObjectsEntry = m_aTablesList.getAllObjectsEntry();
+        const SvTreeListEntry* pAllObjectsEntry = m_aTablesList.getAllObjectsEntry();
         if (!pAllObjectsEntry)
             return aTableFilter;
-        SvLBoxEntry* pEntry = m_aTablesList.GetModel()->Next(const_cast<SvLBoxEntry*>(pAllObjectsEntry));
+        SvTreeListEntry* pEntry = m_aTablesList.GetModel()->Next(const_cast<SvTreeListEntry*>(pAllObjectsEntry));
         while(pEntry)
         {
             sal_Bool bCatalogWildcard = sal_False;
             sal_Bool bSchemaWildcard =  sal_False;
-            SvLBoxEntry* pSchema = NULL;
-            SvLBoxEntry* pCatalog = NULL;
+            SvTreeListEntry* pSchema = NULL;
+            SvTreeListEntry* pCatalog = NULL;
 
             if (m_aTablesList.GetCheckButtonState(pEntry) == SV_BUTTON_CHECKED && !m_aTablesList.GetModel()->HasChildren(pEntry))
             {   // checked and a leaf, which means it's no catalog, no schema, but a real table
@@ -559,9 +559,9 @@ DBG_NAME(OTableSubscriptionPage)
     }
 
     //------------------------------------------------------------------------
-    SvLBoxEntry* OTableSubscriptionPage::implNextSibling(SvLBoxEntry* _pEntry) const
+    SvTreeListEntry* OTableSubscriptionPage::implNextSibling(SvTreeListEntry* _pEntry) const
     {
-        SvLBoxEntry* pReturn = NULL;
+        SvTreeListEntry* pReturn = NULL;
         if (_pEntry)
         {
             pReturn = m_aTablesList.NextSibling(_pEntry);

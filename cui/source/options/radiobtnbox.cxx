@@ -52,7 +52,7 @@ void SvxRadioButtonListBox::KeyInput( const KeyEvent& rKEvt )
 {
     if ( !rKEvt.GetKeyCode().GetModifier() && KEY_SPACE == rKEvt.GetKeyCode().GetCode() )
     {
-        SvLBoxEntry* pEntry = FirstSelected();
+        SvTreeListEntry* pEntry = FirstSelected();
         if ( GetCheckButtonState( pEntry ) == SV_BUTTON_UNCHECKED )
         {
             SetCheckButtonState( pEntry, SV_BUTTON_CHECKED );
@@ -64,7 +64,7 @@ void SvxRadioButtonListBox::KeyInput( const KeyEvent& rKEvt )
     SvxSimpleTable::KeyInput( rKEvt );
 }
 
-void SvxRadioButtonListBox::HandleEntryChecked( SvLBoxEntry* _pEntry )
+void SvxRadioButtonListBox::HandleEntryChecked( SvTreeListEntry* _pEntry )
 {
     Select( _pEntry, sal_True );
     SvButtonState eState = GetCheckButtonState( _pEntry );
@@ -72,7 +72,7 @@ void SvxRadioButtonListBox::HandleEntryChecked( SvLBoxEntry* _pEntry )
     if ( SV_BUTTON_CHECKED == eState )
     {
         // we have radio button behavior -> so uncheck the other entries
-        SvLBoxEntry* pEntry = First();
+        SvTreeListEntry* pEntry = First();
         while ( pEntry )
         {
             if ( pEntry != _pEntry )

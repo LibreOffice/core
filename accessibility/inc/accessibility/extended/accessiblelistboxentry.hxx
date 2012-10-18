@@ -47,7 +47,7 @@ namespace com { namespace sun { namespace star { namespace awt {
 } } } }
 
 class SvTreeListBox;
-class SvLBoxEntry;
+class SvTreeListEntry;
 
 //........................................................................
 namespace accessibility
@@ -119,7 +119,7 @@ namespace accessibility
             @param  _xParent
                 is our parent accessible object
         */
-        AccessibleListBoxEntry( SvTreeListBox& _rListBox, SvLBoxEntry* _pEntry,
+        AccessibleListBoxEntry( SvTreeListBox& _rListBox, SvTreeListEntry* _pEntry,
                                 const ::com::sun::star::uno::Reference<
                                     ::com::sun::star::accessibility::XAccessible >& _xParent );
 

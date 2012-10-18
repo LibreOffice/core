@@ -968,8 +968,8 @@ void OJoinTableView::SelectConn(OTableConnection* pConn)
             pSourceBox->SelectAll(sal_False);
             pDestBox->SelectAll(sal_False);
 
-            SvLBoxEntry* pFirstSourceVisible = pSourceBox->GetFirstEntryInView();
-            SvLBoxEntry* pFirstDestVisible = pDestBox->GetFirstEntryInView();
+            SvTreeListEntry* pFirstSourceVisible = pSourceBox->GetFirstEntryInView();
+            SvTreeListEntry* pFirstDestVisible = pDestBox->GetFirstEntryInView();
 
             const ::std::vector<OConnectionLine*>* pLines = pConn->GetConnLineList();
             ::std::vector<OConnectionLine*>::const_reverse_iterator aIter = pLines->rbegin();
@@ -977,14 +977,14 @@ void OJoinTableView::SelectConn(OTableConnection* pConn)
             {
                 if ((*aIter)->IsValid())
                 {
-                    SvLBoxEntry* pSourceEntry = pSourceBox->GetEntryFromText((*aIter)->GetData()->GetSourceFieldName());
+                    SvTreeListEntry* pSourceEntry = pSourceBox->GetEntryFromText((*aIter)->GetData()->GetSourceFieldName());
                     if (pSourceEntry)
                     {
                         pSourceBox->Select(pSourceEntry, sal_True);
                         pSourceBox->MakeVisible(pSourceEntry);
                     }
 
-                    SvLBoxEntry* pDestEntry = pDestBox->GetEntryFromText((*aIter)->GetData()->GetDestFieldName());
+                    SvTreeListEntry* pDestEntry = pDestBox->GetEntryFromText((*aIter)->GetData()->GetDestFieldName());
                     if (pDestEntry)
                     {
                         pDestBox->Select(pDestEntry, sal_True);

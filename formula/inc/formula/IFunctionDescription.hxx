@@ -28,7 +28,7 @@
 #include <com/sun/star/sheet/XFormulaParser.hpp>
 #include <com/sun/star/sheet/XFormulaOpCodeMapper.hpp>
 
-class SvLBoxEntry;
+class SvTreeListEntry;
 
 namespace formula
 {
@@ -115,11 +115,11 @@ namespace formula
     {
     public:
         IStructHelper(){}
-        virtual SvLBoxEntry*    InsertEntry(const XubString& rText, SvLBoxEntry* pParent,
+        virtual SvTreeListEntry*    InsertEntry(const XubString& rText, SvTreeListEntry* pParent,
                                 sal_uInt16 nFlag,sal_uLong nPos=0,IFormulaToken* pScToken=NULL) = 0;
 
-        virtual String          GetEntryText(SvLBoxEntry* pEntry) const = 0;
-        virtual SvLBoxEntry*    GetParent(SvLBoxEntry* pEntry) const = 0;
+        virtual String          GetEntryText(SvTreeListEntry* pEntry) const = 0;
+        virtual SvTreeListEntry*    GetParent(SvTreeListEntry* pEntry) const = 0;
 
     protected:
         ~IStructHelper() {}

@@ -120,7 +120,7 @@ void SwVisitingCardPage::InitFrameControl()
 
 IMPL_LINK_NOARG(SwVisitingCardPage, FrameControlInitializedHdl)
 {
-    SvLBoxEntry* pSel = aAutoTextLB.FirstSelected();
+    SvTreeListEntry* pSel = aAutoTextLB.FirstSelected();
     String sEntry;
     if( pSel )
         sEntry = *(String*)pSel->GetUserData();

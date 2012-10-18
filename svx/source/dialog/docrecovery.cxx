@@ -883,7 +883,7 @@ void SaveProgressDialog::end()
 }
 
 //===============================================
-RecovDocListEntry::RecovDocListEntry(      SvLBoxEntry* pEntry,
+RecovDocListEntry::RecovDocListEntry(      SvTreeListEntry* pEntry,
                                            sal_uInt16       nFlags,
                                      const String&      sText )
     : SvLBoxString( pEntry, nFlags, sText )
@@ -894,7 +894,7 @@ RecovDocListEntry::RecovDocListEntry(      SvLBoxEntry* pEntry,
 void RecovDocListEntry::Paint(const Point&       aPos   ,
                                     SvTreeListBox&      aDevice,
                                     sal_uInt16       /*nFlags */,
-                                    SvLBoxEntry* pEntry )
+                                    SvTreeListEntry* pEntry )
 {
     const Image*        pImg  = 0;
     const String*       pTxt  = 0;
@@ -970,7 +970,7 @@ RecovDocList::~RecovDocList()
 }
 
 //===============================================
-void RecovDocList::InitEntry(      SvLBoxEntry* pEntry ,
+void RecovDocList::InitEntry(      SvTreeListEntry* pEntry ,
                              const XubString&   sText  ,
                              const Image&       aImage1,
                              const Image&       aImage2,
@@ -1074,12 +1074,12 @@ RecoveryDialog::RecoveryDialog(Window*       pParent,
         String sName( rInfo.DisplayName );
         sName += '\t';
         sName += impl_getStatusString( rInfo );
-        SvLBoxEntry* pEntry = m_aFileListLB.InsertEntry(sName, rInfo.StandardImage, rInfo.StandardImage);
+        SvTreeListEntry* pEntry = m_aFileListLB.InsertEntry(sName, rInfo.StandardImage, rInfo.StandardImage);
         pEntry->SetUserData((void*)&rInfo);
     }
 
     // mark first item
-    SvLBoxEntry* pFirst = m_aFileListLB.First();
+    SvTreeListEntry* pFirst = m_aFileListLB.First();
     if (pFirst)
         m_aFileListLB.SetCursor(pFirst, sal_True);
 }
@@ -1332,7 +1332,7 @@ void RecoveryDialog::updateItems()
     sal_uIntPtr i = 0;
     for ( i=0; i<c; ++i )
     {
-        SvLBoxEntry* pEntry = m_aFileListLB.GetEntry(i);
+        SvTreeListEntry* pEntry = m_aFileListLB.GetEntry(i);
         if ( !pEntry )
             continue;
 
@@ -1356,7 +1356,7 @@ void RecoveryDialog::stepNext(TURLInfo* pItem)
     sal_uIntPtr i = 0;
     for (i=0; i<c; ++i)
     {
-        SvLBoxEntry* pEntry = m_aFileListLB.GetEntry(i);
+        SvTreeListEntry* pEntry = m_aFileListLB.GetEntry(i);
         if (!pEntry)
             continue;
 

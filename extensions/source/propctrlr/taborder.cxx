@@ -225,7 +225,7 @@ namespace pcr
         }
 
         // select first entry
-        SvLBoxEntry* pFirstEntry = aLB_Controls.GetEntry( 0 );
+        SvTreeListEntry* pFirstEntry = aLB_Controls.GetEntry( 0 );
         if ( pFirstEntry )
             aLB_Controls.Select( pFirstEntry );
     }
@@ -284,7 +284,7 @@ namespace pcr
 
         for (sal_uLong i=0; i < nEntryCount; i++)
         {
-            SvLBoxEntry* pEntry = aLB_Controls.GetEntry(i);
+            SvTreeListEntry* pEntry = aLB_Controls.GetEntry(i);
 
             for( sal_Int32 j=0; j<aControlModels.getLength(); j++ )
             {
@@ -326,7 +326,7 @@ namespace pcr
     }
 
     //------------------------------------------------------------------------
-    void TabOrderListBox::ModelHasMoved( SvListEntry* _pSource )
+    void TabOrderListBox::ModelHasMoved( SvTreeListEntry* _pSource )
     {
         SvTreeListBox::ModelHasMoved( _pSource );
 
@@ -346,16 +346,16 @@ namespace pcr
             // move entries
             if( nRelPos < 0 )
             {
-                SvLBoxEntry* pFirstSelected = FirstSelected();
+                SvTreeListEntry* pFirstSelected = FirstSelected();
                 if( !pFirstSelected ) return;
                 sal_uLong nFirstSelPos = GetModel()->GetAbsPos( pFirstSelected );
                 if( nFirstSelPos == 0 ) return;
 
-                SvLBoxEntry* pSelEntry = pFirstSelected;
+                SvTreeListEntry* pSelEntry = pFirstSelected;
                 while( pSelEntry )
                 {
                     sal_uLong nSelEntryPos = GetModel()->GetAbsPos( pSelEntry );
-                    SvLBoxEntry* pSelEntryPrev = GetEntry( nSelEntryPos-1 );
+                    SvTreeListEntry* pSelEntryPrev = GetEntry( nSelEntryPos-1 );
                     aSelEntryPrevText = GetEntryText( pSelEntryPrev );
                     aImage = GetExpandedEntryBmp(pSelEntryPrev);
                     void*  pData = pSelEntryPrev->GetUserData();
@@ -369,7 +369,7 @@ namespace pcr
 
             else if( nRelPos > 0 )
             {
-                SvLBoxEntry* pLastSelected = LastSelected();
+                SvTreeListEntry* pLastSelected = LastSelected();
                 if( !pLastSelected ) return;
                 sal_uLong nLastSelPos = GetModel()->GetAbsPos( pLastSelected );
 
@@ -381,11 +381,11 @@ namespace pcr
 #endif
 
 
-                SvLBoxEntry* pSelEntry = pLastSelected;
+                SvTreeListEntry* pSelEntry = pLastSelected;
                 while( pSelEntry )
                 {
                     sal_uLong nSelEntryPos = GetModel()->GetAbsPos( pSelEntry );
-                    SvLBoxEntry* pSelEntryNext = GetEntry( nSelEntryPos+1 );
+                    SvTreeListEntry* pSelEntryNext = GetEntry( nSelEntryPos+1 );
                     void* pData = pSelEntryNext->GetUserData();
 
                     aSelEntryNextText = GetEntryText( pSelEntryNext );

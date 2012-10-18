@@ -93,9 +93,9 @@ class SvxConfigFunctionListBox_Impl : public SvTreeListBox
 {
 friend class SvxConfigGroupListBox_Impl;
     Timer                           aTimer;
-    SvLBoxEntry*                    pCurEntry;
+    SvTreeListEntry*                    pCurEntry;
     SvxGroupInfoArr_Impl            aArr;
-    SvLBoxEntry*                    m_pDraggingEntry;
+    SvTreeListEntry*                    m_pDraggingEntry;
 
     DECL_LINK(TimerHdl, void *);
     virtual void                    MouseMove( const MouseEvent& rMEvt );
@@ -104,16 +104,16 @@ public:
                                     SvxConfigFunctionListBox_Impl( Window*, const ResId& );
                                     ~SvxConfigFunctionListBox_Impl();
     void                            ClearAll();
-    String                          GetHelpText( SvLBoxEntry *pEntry );
+    String                          GetHelpText( SvTreeListEntry *pEntry );
     using Window::GetHelpText;
-    SvLBoxEntry*                    GetLastSelectedEntry();
+    SvTreeListEntry*                    GetLastSelectedEntry();
     void                            FunctionSelected();
 
     // drag n drop methods
     virtual sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt );
 
     virtual DragDropMode    NotifyStartDrag(
-        TransferDataContainer&, SvLBoxEntry* );
+        TransferDataContainer&, SvTreeListEntry* );
 
     virtual void        DragFinished( sal_Int8 );
 };
@@ -152,13 +152,13 @@ class SvxConfigGroupListBox_Impl : public SvTreeListBox
 private:
     void    fillScriptList(
         const ::com::sun::star::uno::Reference< ::com::sun::star::script::browse::XBrowseNode >& _rxRootNode,
-        SvLBoxEntry* _pParentEntry,
+        SvTreeListEntry* _pParentEntry,
         bool _bCheapChildrenOnDemand
     );
 
 protected:
-    virtual void    RequestingChildren( SvLBoxEntry *pEntry);
-    virtual sal_Bool    Expand( SvLBoxEntry* pParent );
+    virtual void    RequestingChildren( SvTreeListEntry *pEntry);
+    virtual sal_Bool    Expand( SvTreeListEntry* pParent );
     using SvListView::Expand;
 
 public:
@@ -172,7 +172,7 @@ public:
             ~SvxConfigGroupListBox_Impl();
 
     void    Init();
-    void    Open( SvLBoxEntry*, sal_Bool );
+    void    Open( SvTreeListEntry*, sal_Bool );
     void    ClearAll();
     void    GroupSelected();
 

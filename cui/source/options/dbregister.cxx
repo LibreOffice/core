@@ -197,7 +197,7 @@ sal_Bool DbRegistrationOptionsPage::FillItemSet( SfxItemSet& rCoreSet )
     sal_uLong nCount = pPathBox->GetEntryCount();
     for ( sal_uLong i = 0; i < nCount; ++i )
     {
-        SvLBoxEntry* pEntry = pPathBox->GetEntry(i);
+        SvTreeListEntry* pEntry = pPathBox->GetEntry(i);
         DatabaseRegistration* pRegistration = static_cast< DatabaseRegistration* >( pEntry->GetUserData() );
         if ( pRegistration && !pRegistration->sLocation.isEmpty() )
         {
@@ -276,7 +276,7 @@ void DbRegistrationOptionsPage::FillUserData()
 
 IMPL_LINK_NOARG(DbRegistrationOptionsPage, DeleteHdl)
 {
-    SvLBoxEntry* pEntry = pPathBox->FirstSelected();
+    SvTreeListEntry* pEntry = pPathBox->FirstSelected();
     if ( pEntry )
     {
         QueryBox aQuery(this,CUI_RES(QUERY_DELETE_CONFIRM));
@@ -297,7 +297,7 @@ IMPL_LINK_NOARG(DbRegistrationOptionsPage, NewHdl)
 
 IMPL_LINK_NOARG(DbRegistrationOptionsPage, EditHdl)
 {
-    SvLBoxEntry* pEntry = pPathBox->GetCurEntry();
+    SvTreeListEntry* pEntry = pPathBox->GetCurEntry();
     if ( !pEntry )
         return 0L;
 
@@ -376,7 +376,7 @@ IMPL_LINK( DbRegistrationOptionsPage, HeaderEndDrag_Impl, HeaderBar*, pBar )
 
 IMPL_LINK_NOARG(DbRegistrationOptionsPage, PathSelect_Impl)
 {
-    SvLBoxEntry* pEntry = pPathBox->FirstSelected();
+    SvTreeListEntry* pEntry = pPathBox->FirstSelected();
 
     bool bReadOnly = true;
     if ( pEntry )
@@ -396,7 +396,7 @@ void DbRegistrationOptionsPage::insertNewEntry( const ::rtl::OUString& _sName,co
     aStr += '\t';
     aStr += String(_sLocation);
 
-    SvLBoxEntry* pEntry = NULL;
+    SvTreeListEntry* pEntry = NULL;
     if ( _bReadOnly )
     {
         Image aLocked( CUI_RES( RID_SVXBMP_LOCK ) );
@@ -411,7 +411,7 @@ void DbRegistrationOptionsPage::insertNewEntry( const ::rtl::OUString& _sName,co
 }
 
 // -----------------------------------------------------------------------------
-void DbRegistrationOptionsPage::openLinkDialog(const String& _sOldName,const String& _sOldLocation,SvLBoxEntry* _pEntry)
+void DbRegistrationOptionsPage::openLinkDialog(const String& _sOldName,const String& _sOldLocation,SvTreeListEntry* _pEntry)
 {
     ODocumentLinkDialog aDlg(this,_pEntry == NULL);
 
@@ -442,7 +442,7 @@ IMPL_LINK( DbRegistrationOptionsPage, NameValidator, String*, _pName )
         sal_uLong nCount = pPathBox->GetEntryCount();
         for ( sal_uLong i = 0; i < nCount; ++i )
         {
-            SvLBoxEntry* pEntry = pPathBox->GetEntry(i);
+            SvTreeListEntry* pEntry = pPathBox->GetEntry(i);
             if ( (!m_pCurEntry || m_pCurEntry != pEntry) && pPathBox->GetEntryText(pEntry,0) == *_pName )
                 return 0L;
         }

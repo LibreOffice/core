@@ -77,11 +77,11 @@ public:
 
     /** determines whether the given entry denotes a tables folder
     */
-    bool    isFolderEntry( const SvLBoxEntry* _pEntry ) const;
+    bool    isFolderEntry( const SvTreeListEntry* _pEntry ) const;
 
     /** determines whether the given entry denotes a table or view
     */
-    bool    isTableOrViewEntry( const SvLBoxEntry* _pEntry ) const
+    bool    isTableOrViewEntry( const SvTreeListEntry* _pEntry ) const
     {
         return !isFolderEntry( _pEntry );
     }
@@ -112,11 +112,11 @@ public:
     /** returns a NamedDatabaseObject record which describes the given entry
     */
     ::com::sun::star::sdb::application::NamedDatabaseObject
-            describeObject( SvLBoxEntry* _pEntry );
+            describeObject( SvTreeListEntry* _pEntry );
 
     /** to be used if a foreign instance added a table
     */
-    SvLBoxEntry* addedTable( const ::rtl::OUString& _rName );
+    SvTreeListEntry* addedTable( const ::rtl::OUString& _rName );
 
     /** to be used if a foreign instance removed a table
     */
@@ -126,37 +126,37 @@ public:
         @param _pEntry
             the entry whose name is to be obtained. Must not denote a folder entry.
     */
-    String getQualifiedTableName( SvLBoxEntry* _pEntry ) const;
+    String getQualifiedTableName( SvTreeListEntry* _pEntry ) const;
 
-    SvLBoxEntry*    getEntryByQualifiedName( const ::rtl::OUString& _rName );
+    SvTreeListEntry*    getEntryByQualifiedName( const ::rtl::OUString& _rName );
 
-    SvLBoxEntry*    getAllObjectsEntry() const;
+    SvTreeListEntry*    getAllObjectsEntry() const;
 
     /** does a wildcard check of the given entry
         <p>There are two different 'checked' states: If the user checks all children of an entry, this is different
         from checking the entry itself. The second is called 'wildcard' checking, 'cause in the resulting
         table filter it's represented by a wildcard.</p>
     */
-    void            checkWildcard(SvLBoxEntry* _pEntry);
+    void            checkWildcard(SvTreeListEntry* _pEntry);
 
     /** determine if the given entry is 'wildcard checked'
         @see checkWildcard
     */
-    sal_Bool        isWildcardChecked(SvLBoxEntry* _pEntry) const;
+    sal_Bool        isWildcardChecked(SvTreeListEntry* _pEntry) const;
 
 protected:
-    virtual void InitEntry(SvLBoxEntry* _pEntry, const XubString& _rString, const Image& _rCollapsedBitmap, const Image& _rExpandedBitmap, SvLBoxButtonKind _eButtonKind);
+    virtual void InitEntry(SvTreeListEntry* _pEntry, const XubString& _rString, const Image& _rCollapsedBitmap, const Image& _rExpandedBitmap, SvLBoxButtonKind _eButtonKind);
 
-    virtual void checkedButton_noBroadcast(SvLBoxEntry* _pEntry);
+    virtual void checkedButton_noBroadcast(SvTreeListEntry* _pEntry);
 
-    void implEmphasize(SvLBoxEntry* _pEntry, sal_Bool _bChecked, sal_Bool _bUpdateDescendants = sal_True, sal_Bool _bUpdateAncestors = sal_True);
+    void implEmphasize(SvTreeListEntry* _pEntry, sal_Bool _bChecked, sal_Bool _bUpdateDescendants = sal_True, sal_Bool _bUpdateAncestors = sal_True);
 
     /** adds the given entry to our list
         @precond
             our image provider must already have been reset to the connection to which the meta data
             belong.
     */
-    SvLBoxEntry* implAddEntry(
+    SvTreeListEntry* implAddEntry(
             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& _rxMeta,
             const ::rtl::OUString& _rTableName,
             sal_Bool _bCheckName = sal_True

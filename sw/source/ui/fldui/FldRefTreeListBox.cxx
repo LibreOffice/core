@@ -40,7 +40,7 @@ void SwFldRefTreeListBox::RequestHelp( const HelpEvent& rHEvt )
     if ( rHEvt.GetMode() & HELPMODE_QUICK )
     {
         Point aPos( ScreenToOutputPixel( rHEvt.GetMousePosPixel() ));
-        SvLBoxEntry* pEntry = GetEntry( aPos );
+        SvTreeListEntry* pEntry = GetEntry( aPos );
         if( pEntry )
         {
             String sEntry( GetEntryText( pEntry ) );

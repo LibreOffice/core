@@ -35,14 +35,14 @@ namespace dbaui
     {
         sal_Bool m_bReadOnly;
     protected:
-        virtual void InitEntry(SvLBoxEntry* pEntry, const String& rStr, const Image& rImg1, const Image& rImg2, SvLBoxButtonKind eButtonKind);
+        virtual void InitEntry(SvTreeListEntry* pEntry, const String& rStr, const Image& rImg1, const Image& rImg2, SvLBoxButtonKind eButtonKind);
 
     public:
         OColumnTreeBox( Window* pParent, const ResId& rResId );
 
         void FillListBox( const ODatabaseExport::TColumnVector& _rList);
         void SetReadOnly(sal_Bool _bRo=sal_True) { m_bReadOnly = _bRo; }
-        virtual sal_Bool Select( SvLBoxEntry* pEntry, sal_Bool bSelect=sal_True );
+        virtual sal_Bool Select( SvTreeListEntry* pEntry, sal_Bool bSelect=sal_True );
 
     private:
         using OMarkableTreeListBox::Select;

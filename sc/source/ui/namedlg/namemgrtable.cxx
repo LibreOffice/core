@@ -107,18 +107,18 @@ ScRangeManagerTable::~ScRangeManagerTable()
 
 void ScRangeManagerTable::addEntry(const ScRangeNameLine& rLine, bool bSetCurEntry)
 {
-    SvLBoxEntry* pEntry = InsertEntryToColumn( createEntryString(rLine), LIST_APPEND, 0xffff);
+    SvTreeListEntry* pEntry = InsertEntryToColumn( createEntryString(rLine), LIST_APPEND, 0xffff);
     if (bSetCurEntry)
         SetCurEntry(pEntry);
 }
 
 void ScRangeManagerTable::GetCurrentLine(ScRangeNameLine& rLine)
 {
-    SvLBoxEntry* pCurrentEntry = GetCurEntry();
+    SvTreeListEntry* pCurrentEntry = GetCurEntry();
     GetLine(rLine, pCurrentEntry);
 }
 
-void ScRangeManagerTable::GetLine(ScRangeNameLine& rLine, SvLBoxEntry* pEntry)
+void ScRangeManagerTable::GetLine(ScRangeNameLine& rLine, SvTreeListEntry* pEntry)
 {
     rLine.aName = GetEntryText( pEntry, 0);
     rLine.aExpression = GetEntryText(pEntry, 1);
@@ -166,9 +166,9 @@ const ScRangeData* ScRangeManagerTable::findRangeData(const ScRangeNameLine& rLi
 
 void ScRangeManagerTable::CheckForFormulaString()
 {
-    for (SvLBoxEntry* pEntry = GetFirstEntryInView(); pEntry ; pEntry = GetNextEntryInView(pEntry))
+    for (SvTreeListEntry* pEntry = GetFirstEntryInView(); pEntry ; pEntry = GetNextEntryInView(pEntry))
     {
-        std::map<SvLBoxEntry*, bool>::const_iterator itr = maCalculatedFormulaEntries.find(pEntry);
+        std::map<SvTreeListEntry*, bool>::const_iterator itr = maCalculatedFormulaEntries.find(pEntry);
         if (itr == maCalculatedFormulaEntries.end() || itr->second == false)
         {
             ScRangeNameLine aLine;
@@ -177,7 +177,7 @@ void ScRangeManagerTable::CheckForFormulaString()
             rtl::OUString aFormulaString;
             pData->GetSymbol(aFormulaString, maPos);
             SetEntryText(aFormulaString, pEntry, 1);
-            maCalculatedFormulaEntries.insert( std::pair<SvLBoxEntry*, bool>(pEntry, true) );
+            maCalculatedFormulaEntries.insert( std::pair<SvTreeListEntry*, bool>(pEntry, true) );
         }
 
     }
@@ -199,13 +199,13 @@ std::vector<ScRangeNameLine> ScRangeManagerTable::GetSelectedEntries()
     std::vector<ScRangeNameLine> aSelectedEntries;
     if (GetSelectionCount())
     {
-        for (SvLBoxEntry* pEntry = FirstSelected(); pEntry != LastSelected(); pEntry = NextSelected(pEntry))
+        for (SvTreeListEntry* pEntry = FirstSelected(); pEntry != LastSelected(); pEntry = NextSelected(pEntry))
         {
             ScRangeNameLine aLine;
             GetLine( aLine, pEntry );
             aSelectedEntries.push_back(aLine);
         }
-        SvLBoxEntry* pEntry = LastSelected();
+        SvTreeListEntry* pEntry = LastSelected();
         ScRangeNameLine aLine;
         GetLine( aLine, pEntry );
         aSelectedEntries.push_back(aLine);
@@ -215,7 +215,7 @@ std::vector<ScRangeNameLine> ScRangeManagerTable::GetSelectedEntries()
 
 void ScRangeManagerTable::SetEntry(const ScRangeNameLine& rLine)
 {
-    for (SvLBoxEntry* pEntry = First(); pEntry; pEntry = Next(pEntry))
+    for (SvTreeListEntry* pEntry = First(); pEntry; pEntry = Next(pEntry))
     {
         if (rLine.aName == rtl::OUString(GetEntryText(pEntry, 0))
                 && rLine.aScope == rtl::OUString(GetEntryText(pEntry, 2)))

@@ -67,7 +67,7 @@ public:
     void*           pData;
 };
 
-class SvxRedlinEntry : public SvLBoxEntry
+class SvxRedlinEntry : public SvTreeListEntry
 {
 public:
                     SvxRedlinEntry();
@@ -82,12 +82,12 @@ private:
     Color           aPrivColor;
 
 public:
-                    SvLBoxColorString( SvLBoxEntry*,sal_uInt16 nFlags,const XubString& rStr,
+                    SvLBoxColorString( SvTreeListEntry*,sal_uInt16 nFlags,const XubString& rStr,
                                     const Color& rCol);
                     SvLBoxColorString();
                     ~SvLBoxColorString();
 
-    void            Paint( const Point&, SvTreeListBox& rDev, sal_uInt16 nFlags,SvLBoxEntry* );
+    void            Paint( const Point&, SvTreeListBox& rDev, sal_uInt16 nFlags,SvTreeListEntry* );
     SvLBoxItem*     Create() const;
 };
 
@@ -115,8 +115,8 @@ private:
 
 protected:
 
-    virtual StringCompare   ColCompare(SvLBoxEntry*,SvLBoxEntry*);
-    virtual void            InitEntry(SvLBoxEntry*,const XubString&,const Image&,const Image&,SvLBoxButtonKind);
+    virtual StringCompare   ColCompare(SvTreeListEntry*,SvTreeListEntry*);
+    virtual void            InitEntry(SvTreeListEntry*,const XubString&,const Image&,const Image&,SvLBoxButtonKind);
 
 
 
@@ -148,14 +148,14 @@ public:
     sal_Bool            IsValidComment(const String* pComment);
     // }
 
-    SvLBoxEntry*    InsertEntry(const String& ,RedlinData *pUserData,
-                                SvLBoxEntry* pParent=NULL,sal_uIntPtr nPos=LIST_APPEND);
+    SvTreeListEntry*    InsertEntry(const String& ,RedlinData *pUserData,
+                                SvTreeListEntry* pParent=NULL,sal_uIntPtr nPos=LIST_APPEND);
 
-    SvLBoxEntry*    InsertEntry(const String& ,RedlinData *pUserData,const Color&,
-                                SvLBoxEntry* pParent=NULL,sal_uIntPtr nPos=LIST_APPEND);
+    SvTreeListEntry*    InsertEntry(const String& ,RedlinData *pUserData,const Color&,
+                                SvTreeListEntry* pParent=NULL,sal_uIntPtr nPos=LIST_APPEND);
 
 
-    virtual SvLBoxEntry* CreateEntry() const;
+    virtual SvTreeListEntry* CreateEntry() const;
 
     void            SetColCompareHdl(const Link& rLink ) { aColCompareLink = rLink; }
     const Link&     GetColCompareHdl() const { return aColCompareLink; }

@@ -490,13 +490,13 @@ void Atom::compare( Atom* pAtom )
 class AtomBoxString : public SvLBoxString
 {
 public:
-    AtomBoxString( SvLBoxEntry* pEntry, const String& rStr )
+    AtomBoxString( SvTreeListEntry* pEntry, const String& rStr )
         : SvLBoxString( pEntry, 0, rStr )
     { }
 
     ~AtomBoxString() { }
 
-    void Paint( const Point& rPos, SvLBox& rOutDev, USHORT nViewDataEntryFlags, SvLBoxEntry* pEntry )
+    void Paint( const Point& rPos, SvLBox& rOutDev, USHORT nViewDataEntryFlags, SvTreeListEntry* pEntry )
     {
         Color aOldTextColor = rOutDev.GetTextColor();
 
@@ -530,16 +530,16 @@ public:
     void            SetExpandingHdl(const Link& rNewHdl){maExpandingHdl=rNewHdl;}
     const Link&     GetExpandingHdl() const { return maExpandingHdl; }
 
-    virtual BOOL    Expand( SvLBoxEntry* pParent );
-    virtual BOOL    Collapse( SvLBoxEntry* pParent );
+    virtual BOOL    Expand( SvTreeListEntry* pParent );
+    virtual BOOL    Collapse( SvTreeListEntry* pParent );
 
-    SvLBoxEntry*    findAtom( Atom* pAtom );
+    SvTreeListEntry*    findAtom( Atom* pAtom );
 
-    virtual void InitEntry(SvLBoxEntry*,const XubString&,const Image&,const Image&);
+    virtual void InitEntry(SvTreeListEntry*,const XubString&,const Image&,const Image&);
     virtual void SetTabs();
 
 private:
-    void InsertAtom( const Atom* pAtom, SvLBoxEntry* pParent = 0 );
+    void InsertAtom( const Atom* pAtom, SvTreeListEntry* pParent = 0 );
     const Atom* mpRootAtom;
     ResMgr* mpResMgr;
     Image maImgFolder;
@@ -551,7 +551,7 @@ private:
     Link maExpandingHdl;
 };
 
-typedef std::pair< AtomContainerTreeListBox*, SvLBoxEntry* > AtomContainerEntryPair;
+typedef std::pair< AtomContainerTreeListBox*, SvTreeListEntry* > AtomContainerEntryPair;
 
 AtomContainerTreeListBox::AtomContainerTreeListBox( Window* pParent )
 : SvTreeListBox( pParent, WB_HASBUTTONS|WB_HASLINES|WB_HASBUTTONSATROOT|WB_3DLOOK|WB_BORDER ),
@@ -591,16 +591,16 @@ void AtomContainerTreeListBox::SetTabs()
     AddTab( nStartPos, SV_LBOXTAB_DYNAMIC|SV_LBOXTAB_ADJUST_LEFT | SV_LBOXTAB_SHOW_SELECTION );
 }
 
-void AtomContainerTreeListBox::InitEntry(SvLBoxEntry* pEntry,const XubString& aStr,const Image& aCollEntryBmp,const Image& aExpEntryBmp)
+void AtomContainerTreeListBox::InitEntry(SvTreeListEntry* pEntry,const XubString& aStr,const Image& aCollEntryBmp,const Image& aExpEntryBmp)
 {
     pEntry->AddItem( new SvLBoxContextBmp( pEntry,0, aCollEntryBmp,aExpEntryBmp, SVLISTENTRYFLAG_EXPANDED ) );
     pEntry->AddItem( new SvLBoxContextBmp( pEntry,0, maImgAtom, maImgAtom, SVLISTENTRYFLAG_EXPANDED ) );
     pEntry->AddItem( new AtomBoxString( pEntry, aStr ) );
 }
 
-SvLBoxEntry* AtomContainerTreeListBox::findAtom( Atom* pAtom )
+SvTreeListEntry* AtomContainerTreeListBox::findAtom( Atom* pAtom )
 {
-    SvLBoxEntry* pEntry = First();
+    SvTreeListEntry* pEntry = First();
     while( pEntry )
     {
         if( pEntry->GetUserData() == pAtom )
@@ -612,7 +612,7 @@ SvLBoxEntry* AtomContainerTreeListBox::findAtom( Atom* pAtom )
     return 0;
 }
 
-BOOL AtomContainerTreeListBox::Expand( SvLBoxEntry* pParent )
+BOOL AtomContainerTreeListBox::Expand( SvTreeListEntry* pParent )
 {
     BOOL bRet = FALSE;
     if( !mbRecursiveGuard )
@@ -627,7 +627,7 @@ BOOL AtomContainerTreeListBox::Expand( SvLBoxEntry* pParent )
     return bRet;
 }
 
-BOOL AtomContainerTreeListBox::Collapse( SvLBoxEntry* pParent )
+BOOL AtomContainerTreeListBox::Collapse( SvTreeListEntry* pParent )
 {
     BOOL bRet = FALSE;
     if( !mbRecursiveGuard )
@@ -648,7 +648,7 @@ void AtomContainerTreeListBox::SetRootAtom( const Atom* pAtom )
     InsertAtom( mpRootAtom );
 }
 
-void AtomContainerTreeListBox::InsertAtom( const Atom* pAtom, SvLBoxEntry* pParent /* = 0 */ )
+void AtomContainerTreeListBox::InsertAtom( const Atom* pAtom, SvTreeListEntry* pParent /* = 0 */ )
 {
     if( pAtom )
     {
@@ -671,7 +671,7 @@ void AtomContainerTreeListBox::InsertAtom( const Atom* pAtom, SvLBoxEntry* pPare
         sprintf( buffer, " (I: %lu L: %lu)", (UINT32)rHeader.nRecVer, (UINT32)rHeader.nRecLen );
         aText += String( rtl::OUString::createFromAscii( buffer ) );
 
-        SvLBoxEntry* pEntry = 0;
+        SvTreeListEntry* pEntry = 0;
         if( pAtom->isContainer() && pAtom->findFirstChildAtom() )
         {
             pEntry = InsertEntry( aText, maImgExpanded, maImgCollapsed, pParent );
@@ -959,7 +959,7 @@ static String GetAtomText( const Atom* pAtom )
 IMPL_LINK(MSViewerWorkWindow,implSelectHdl, AtomContainerTreeListBox*, pListBox )
 {
     int nPane = (pListBox == mpListBox[1]) ? 1 : 0;
-    SvLBoxEntry* pEntry = mpListBox[nPane]->FirstSelected();
+    SvTreeListEntry* pEntry = mpListBox[nPane]->FirstSelected();
     if( pEntry && pEntry->GetUserData() )
     {
         Atom* pAtom = static_cast<Atom*>( pEntry->GetUserData() );
@@ -986,7 +986,7 @@ void MSViewerWorkWindow::Sync( AtomContainerEntryPair* pPair, int nAction )
         Atom* pAtom = static_cast<Atom*>(pPair->second->GetUserData());
         if( pAtom && pAtom->getCompareAtom() )
         {
-            SvLBoxEntry* pEntry = pDestinationListBox->findAtom( pAtom->getCompareAtom() );
+            SvTreeListEntry* pEntry = pDestinationListBox->findAtom( pAtom->getCompareAtom() );
 
             if(pEntry )
             {
@@ -1009,7 +1009,7 @@ void MSViewerWorkWindow::Sync( AtomContainerEntryPair* pPair, int nAction )
 
 IMPL_LINK(MSViewerWorkWindow, implExpandingHdl, AtomContainerEntryPair*, pPair )
 {
-    SvLBoxEntry* pEntry = pPair->second;
+    SvTreeListEntry* pEntry = pPair->second;
     if( pEntry && pEntry->GetUserData() )
     {
         Atom* pAtom = static_cast<Atom*>( pEntry->GetUserData() );

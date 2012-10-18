@@ -229,7 +229,7 @@ namespace svxform
         // wenn es GENAU eine Form gibt, auch diese expandieren
         if (m_pRootEntry)
         {
-            SvLBoxEntry* pFirst = FirstChild(m_pRootEntry);
+            SvTreeListEntry* pFirst = FirstChild(m_pRootEntry);
             if (pFirst && !NextSibling(pFirst))
                 Expand(pFirst);
         }
@@ -239,7 +239,7 @@ namespace svxform
     sal_Bool NavigatorTree::implAllowExchange( sal_Int8 _nAction, sal_Bool* _pHasNonHidden )
     {
         RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "NavigatorTree::implAllowExchange" );
-        SvLBoxEntry* pCurEntry = GetCurEntry();
+        SvTreeListEntry* pCurEntry = GetCurEntry();
         if (!pCurEntry)
             return sal_False;
 
@@ -338,7 +338,7 @@ namespace svxform
                 if (rEvt.IsMouseEvent())
                 {
                     ptWhere = rEvt.GetMousePosPixel();
-                    SvLBoxEntry* ptClickedOn = GetEntry(ptWhere);
+                    SvTreeListEntry* ptClickedOn = GetEntry(ptWhere);
                     if (ptClickedOn == NULL)
                         break;
                     if ( !IsSelected(ptClickedOn) )
@@ -353,7 +353,7 @@ namespace svxform
                     if (m_arrCurrentSelection.empty()) // kann nur bei Kontextmenue ueber Tastatur passieren
                         break;
 
-                    SvLBoxEntry* pCurrent = GetCurEntry();
+                    SvTreeListEntry* pCurrent = GetCurEntry();
                     if (!pCurrent)
                         break;
                     ptWhere = GetEntryPosition(pCurrent);
@@ -500,7 +500,7 @@ namespace svxform
                         case SID_FM_TAB_DIALOG:
                         {
                             // dieser Slot galt bei genau einem selektierten Formular
-                            SvLBoxEntry* pSelectedForm = *m_arrCurrentSelection.begin();
+                            SvTreeListEntry* pSelectedForm = *m_arrCurrentSelection.begin();
                             DBG_ASSERT( IsFormEntry(pSelectedForm), "NavigatorTree::Command: Dieser Eintrag muss ein FormEntry sein." );
 
                             FmFormData* pFormData = (FmFormData*)pSelectedForm->GetUserData();
@@ -554,11 +554,11 @@ namespace svxform
     }
 
     //------------------------------------------------------------------------
-    SvLBoxEntry* NavigatorTree::FindEntry( FmEntryData* pEntryData )
+    SvTreeListEntry* NavigatorTree::FindEntry( FmEntryData* pEntryData )
     {
         RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "NavigatorTree::FindEntry" );
         if( !pEntryData ) return NULL;
-        SvLBoxEntry* pCurEntry = First();
+        SvTreeListEntry* pCurEntry = First();
         FmEntryData* pCurEntryData;
         while( pCurEntry )
         {
@@ -594,7 +594,7 @@ namespace svxform
         else if( rHint.ISA(FmNavModelReplacedHint) )
         {
             FmEntryData* pData = ((FmNavModelReplacedHint*)&rHint)->GetEntryData();
-            SvLBoxEntry* pEntry = FindEntry( pData );
+            SvTreeListEntry* pEntry = FindEntry( pData );
             if (pEntry)
             {   // das Image neu setzen
                 SetCollapsedEntryBmp( pEntry, pData->GetNormalImage() );
@@ -605,7 +605,7 @@ namespace svxform
         else if( rHint.ISA(FmNavNameChangedHint) )
         {
             FmNavNameChangedHint* pNameChangedHint = (FmNavNameChangedHint*)&rHint;
-            SvLBoxEntry* pEntry = FindEntry( pNameChangedHint->GetEntryData() );
+            SvTreeListEntry* pEntry = FindEntry( pNameChangedHint->GetEntryData() );
             SetEntryText( pEntry, pNameChangedHint->GetNewName() );
         }
 
@@ -634,13 +634,13 @@ namespace svxform
     }
 
     //------------------------------------------------------------------------
-    SvLBoxEntry* NavigatorTree::Insert( FmEntryData* pEntryData, sal_uIntPtr nRelPos )
+    SvTreeListEntry* NavigatorTree::Insert( FmEntryData* pEntryData, sal_uIntPtr nRelPos )
     {
         RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "NavigatorTree::Insert" );
         //////////////////////////////////////////////////////////////////////
         // Aktuellen Eintrag einfuegen
-        SvLBoxEntry* pParentEntry = FindEntry( pEntryData->GetParent() );
-        SvLBoxEntry* pNewEntry;
+        SvTreeListEntry* pParentEntry = FindEntry( pEntryData->GetParent() );
+        SvTreeListEntry* pNewEntry;
 
         if( !pParentEntry )
             pNewEntry = InsertEntry( pEntryData->GetText(),
@@ -679,7 +679,7 @@ namespace svxform
             return;
 
         // der Entry zu den Daten
-        SvLBoxEntry* pEntry = FindEntry( pEntryData );
+        SvTreeListEntry* pEntry = FindEntry( pEntryData );
         if (!pEntry)
             return;
 
@@ -709,7 +709,7 @@ namespace svxform
     }
 
     //------------------------------------------------------------------------
-    sal_Bool NavigatorTree::IsFormEntry( SvLBoxEntry* pEntry )
+    sal_Bool NavigatorTree::IsFormEntry( SvTreeListEntry* pEntry )
     {
         RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "NavigatorTree::IsFormEntry" );
         FmEntryData* pEntryData = (FmEntryData*)pEntry->GetUserData();
@@ -717,7 +717,7 @@ namespace svxform
     }
 
     //------------------------------------------------------------------------
-    sal_Bool NavigatorTree::IsFormComponentEntry( SvLBoxEntry* pEntry )
+    sal_Bool NavigatorTree::IsFormComponentEntry( SvTreeListEntry* pEntry )
     {
         RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "NavigatorTree::IsFormComponentEntry" );
         FmEntryData* pEntryData = (FmEntryData*)pEntry->GetUserData();
@@ -728,7 +728,7 @@ namespace svxform
     sal_Bool NavigatorTree::implAcceptPaste( )
     {
         RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "NavigatorTree::implAcceptPaste" );
-        SvLBoxEntry* pFirstSelected = FirstSelected();
+        SvTreeListEntry* pFirstSelected = FirstSelected();
         if ( !pFirstSelected || NextSelected( pFirstSelected ) )
             // no selected entry, or at least two selected entries
             return sal_False;
@@ -748,7 +748,7 @@ namespace svxform
     }
 
     //------------------------------------------------------------------------
-    sal_Int8 NavigatorTree::implAcceptDataTransfer( const DataFlavorExVector& _rFlavors, sal_Int8 _nAction, SvLBoxEntry* _pTargetEntry, sal_Bool _bDnD )
+    sal_Int8 NavigatorTree::implAcceptDataTransfer( const DataFlavorExVector& _rFlavors, sal_Int8 _nAction, SvTreeListEntry* _pTargetEntry, sal_Bool _bDnD )
     {
         RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "NavigatorTree::implAcceptDataTransfer" );
         // no target -> no drop
@@ -825,7 +825,7 @@ namespace svxform
         DBG_ASSERT(aDropped.size() >= 1, "NavigatorTree::implAcceptDataTransfer: keine Eintraege !");
 
         sal_Bool bDropTargetIsComponent = IsFormComponentEntry( _pTargetEntry );
-        //SvLBoxEntry* pDropTargetParent = GetParent( _pTargetEntry );
+        //SvTreeListEntry* pDropTargetParent = GetParent( _pTargetEntry );
 
         // conditions to disallow the drop
         // 0) the root entry is part of the list (can't DnD the root!)
@@ -838,7 +838,7 @@ namespace svxform
 
         // collect the ancestors of the drop targte (speeds up 3)
         SvLBoxEntrySortedArray arrDropAnchestors;
-        SvLBoxEntry* pLoop = _pTargetEntry;
+        SvTreeListEntry* pLoop = _pTargetEntry;
         while (pLoop)
         {
             arrDropAnchestors.insert(pLoop);
@@ -850,8 +850,8 @@ namespace svxform
                 ++dropped
             )
         {
-            SvLBoxEntry* pCurrent = *dropped;
-            SvLBoxEntry* pCurrentParent = GetParent(pCurrent);
+            SvTreeListEntry* pCurrent = *dropped;
+            SvTreeListEntry* pCurrentParent = GetParent(pCurrent);
 
             // test for 0)
             if (pCurrent == m_pRootEntry)
@@ -914,7 +914,7 @@ namespace svxform
                     bNeedTrigger = sal_True;
                 } else
                 {   // auf einem Entry mit Children, der nicht aufgeklappt ist ?
-                    SvLBoxEntry* pDropppedOn = GetEntry(aDropPos);
+                    SvTreeListEntry* pDropppedOn = GetEntry(aDropPos);
                     if (pDropppedOn && (GetChildCount(pDropppedOn) > 0) && !IsExpanded(pDropppedOn))
                     {
                         // -> aufklappen
@@ -950,7 +950,7 @@ namespace svxform
     }
 
     //------------------------------------------------------------------------
-    sal_Int8 NavigatorTree::implExecuteDataTransfer( const OControlTransferData& _rData, sal_Int8 _nAction, SvLBoxEntry* _pTargetEntry, sal_Bool _bDnD )
+    sal_Int8 NavigatorTree::implExecuteDataTransfer( const OControlTransferData& _rData, sal_Int8 _nAction, SvTreeListEntry* _pTargetEntry, sal_Bool _bDnD )
     {
         RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "NavigatorTree::implExecuteDataTransfer" );
         const DataFlavorExVector& rDataFlavors = _rData.GetDataFlavorExVector();
@@ -1035,7 +1035,7 @@ namespace svxform
                     }
                 }
 
-                SvLBoxEntry* pToSelect = FindEntry(pNewControlData);
+                SvTreeListEntry* pToSelect = FindEntry(pNewControlData);
                 Select(pToSelect, sal_True);
                 if (i == 0)
                     SetCurEntry(pToSelect);
@@ -1090,7 +1090,7 @@ namespace svxform
             )
         {
             // ein paar Daten zum aktuellen Element
-            SvLBoxEntry* pCurrent = *dropped;
+            SvTreeListEntry* pCurrent = *dropped;
             DBG_ASSERT(pCurrent != NULL, "NavigatorTree::implExecuteDataTransfer: ungueltiger Eintrag");
             DBG_ASSERT(GetParent(pCurrent) != NULL, "NavigatorTree::implExecuteDataTransfer: ungueltiger Eintrag");
                 // die Root darf nicht gedraggt werden
@@ -1182,10 +1182,10 @@ namespace svxform
                 GetNavModel()->GetRootList()->insert( pCurrentUserData, nIndex );
 
             // dann bei mir selber bekanntgeben und neu selektieren
-            SvLBoxEntry* pNew = Insert( pCurrentUserData, nIndex );
+            SvTreeListEntry* pNew = Insert( pCurrentUserData, nIndex );
             if ( ( aDropped.begin() == dropped ) && pNew )
             {
-                SvLBoxEntry* pParent = GetParent( pNew );
+                SvTreeListEntry* pParent = GetParent( pNew );
                 if ( pParent )
                     Expand( pParent );
             }
@@ -1269,10 +1269,10 @@ namespace svxform
     }
 
     //------------------------------------------------------------------------
-    void NavigatorTree::ModelHasRemoved( SvListEntry* _pEntry )
+    void NavigatorTree::ModelHasRemoved( SvTreeListEntry* _pEntry )
     {
         RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "NavigatorTree::ModelHasRemoved" );
-        SvLBoxEntry* pTypedEntry = static_cast< SvLBoxEntry* >( _pEntry );
+        SvTreeListEntry* pTypedEntry = static_cast< SvTreeListEntry* >( _pEntry );
         if ( doingKeyboardCut() )
             m_aCutEntries.erase( pTypedEntry );
 
@@ -1301,7 +1301,7 @@ namespace svxform
             for ( SvLBoxEntrySortedArray::const_iterator it = m_arrCurrentSelection.begin();
                   it != m_arrCurrentSelection.end(); ++it )
             {
-                SvLBoxEntry* pEntry = *it;
+                SvTreeListEntry* pEntry = *it;
                 if ( pEntry )
                 {
                     m_aCutEntries.insert( pEntry );
@@ -1349,7 +1349,7 @@ namespace svxform
     }
 
     //------------------------------------------------------------------------
-    sal_Bool NavigatorTree::EditingEntry( SvLBoxEntry* pEntry, Selection& rSelection )
+    sal_Bool NavigatorTree::EditingEntry( SvTreeListEntry* pEntry, Selection& rSelection )
     {
         RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "NavigatorTree::EditingEntry" );
         if (!SvTreeListBox::EditingEntry( pEntry, rSelection ))
@@ -1360,7 +1360,7 @@ namespace svxform
     }
 
     //------------------------------------------------------------------------
-    void NavigatorTree::NewForm( SvLBoxEntry* pParentEntry )
+    void NavigatorTree::NewForm( SvTreeListEntry* pParentEntry )
     {
         RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "NavigatorTree::NewForm" );
         //////////////////////////////////////////////////////////////////////
@@ -1417,12 +1417,12 @@ namespace svxform
 
         //////////////////////////////////////////////////////////////////////
         // In EditMode schalten
-        SvLBoxEntry* pNewEntry = FindEntry( pNewFormData );
+        SvTreeListEntry* pNewEntry = FindEntry( pNewFormData );
         EditEntry( pNewEntry );
     }
 
     //------------------------------------------------------------------------
-    FmControlData* NavigatorTree::NewControl( const ::rtl::OUString& rServiceName, SvLBoxEntry* pParentEntry, sal_Bool bEditName )
+    FmControlData* NavigatorTree::NewControl( const ::rtl::OUString& rServiceName, SvTreeListEntry* pParentEntry, sal_Bool bEditName )
     {
         RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "NavigatorTree::NewControl" );
         //////////////////////////////////////////////////////////////////////
@@ -1462,7 +1462,7 @@ namespace svxform
         {
             //////////////////////////////////////////////////////////////////////
             // In EditMode schalten
-            SvLBoxEntry* pNewEntry = FindEntry( pNewFormControlData );
+            SvTreeListEntry* pNewEntry = FindEntry( pNewFormControlData );
             Select( pNewEntry, sal_True );
             EditEntry( pNewEntry );
         }
@@ -1506,7 +1506,7 @@ namespace svxform
     }
 
     //------------------------------------------------------------------------
-    sal_Bool NavigatorTree::EditedEntry( SvLBoxEntry* pEntry, const rtl::OUString& rNewText )
+    sal_Bool NavigatorTree::EditedEntry( SvTreeListEntry* pEntry, const rtl::OUString& rNewText )
     {
         RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "NavigatorTree::EditedEntry" );
         if (EditingCanceled())
@@ -1545,7 +1545,7 @@ namespace svxform
         {
         case DA_EXPANDNODE:
         {
-            SvLBoxEntry* pToExpand = GetEntry(m_aTimerTriggered);
+            SvTreeListEntry* pToExpand = GetEntry(m_aTimerTriggered);
             if (pToExpand && (GetChildCount(pToExpand) > 0) &&  !IsExpanded(pToExpand))
                 // tja, eigentlich muesste ich noch testen, ob die Node nicht schon expandiert ist, aber ich
                 // habe dazu weder in den Basisklassen noch im Model eine Methode gefunden ...
@@ -1609,7 +1609,7 @@ namespace svxform
                         ++i
                     )
                 {
-                    SvLBoxEntry* pEntry = *i;
+                    SvTreeListEntry* pEntry = *i;
                     if ( !pEntry )
                         continue;
 
@@ -1868,7 +1868,7 @@ namespace svxform
         m_nFormsSelected = m_nControlsSelected = m_nHiddenControls = 0;
         m_bRootSelected = sal_False;
 
-        SvLBoxEntry* pSelectionLoop = FirstSelected();
+        SvTreeListEntry* pSelectionLoop = FirstSelected();
         while (pSelectionLoop)
         {
             // erst mal die Zaehlung der verschiedenen Elemente
@@ -1893,7 +1893,7 @@ namespace svxform
                     m_arrCurrentSelection.insert(pSelectionLoop);
                 else
                 {
-                    SvLBoxEntry* pParentLoop = GetParent(pSelectionLoop);
+                    SvTreeListEntry* pParentLoop = GetParent(pSelectionLoop);
                     while (pParentLoop)
                     {
                         // eigentlich muesste ich testen, ob das Parent in der m_arrCurrentSelection steht ...
@@ -1917,7 +1917,7 @@ namespace svxform
             }
             else if (sdiHow == SDI_NORMALIZED_FORMARK)
             {
-                SvLBoxEntry* pParent = GetParent(pSelectionLoop);
+                SvTreeListEntry* pParent = GetParent(pSelectionLoop);
                 if (!pParent || !IsSelected(pParent) || IsFormEntry(pSelectionLoop))
                     m_arrCurrentSelection.insert(pSelectionLoop);
             }
@@ -1943,7 +1943,7 @@ namespace svxform
         else
         {
             // erst mal gleiche ich meine aktuelle Selektion mit der geforderten SelectList ab
-            SvLBoxEntry* pSelection = FirstSelected();
+            SvTreeListEntry* pSelection = FirstSelected();
             while (pSelection)
             {
                 FmEntryData* pCurrent = (FmEntryData*)pSelection->GetUserData();
@@ -1969,7 +1969,7 @@ namespace svxform
             }
 
             // jetzt habe ich in der SelectList genau die Eintraege, die noch selektiert werden muessen
-            // zwei Moeglichkeiten : 1) ich gehe durch die SelectList, besorge mir zu jedem Eintrag meinen SvLBoxEntry
+            // zwei Moeglichkeiten : 1) ich gehe durch die SelectList, besorge mir zu jedem Eintrag meinen SvTreeListEntry
             // und selektiere diesen (waere irgendwie intuitiver ;)) 2) ich gehe durch alle meine SvLBoxEntries und selektiere
             // genau die, die ich in der SelectList finde
             // 1) braucht O(k*n) (k=Laenge der SelectList, n=Anzahl meiner Entries), plus den Fakt, dass FindEntry nicht den
@@ -1977,7 +1977,7 @@ namespace svxform
             // 2) braucht O(n*log k), dupliziert aber etwas Code (naemlich den aus FindEntry)
             // da das hier eine relativ oft aufgerufenen Stelle sein koennte (bei jeder Aenderung in der Markierung in der View !),
             // nehme ich doch lieber letzteres
-            SvLBoxEntry* pLoop = First();
+            SvTreeListEntry* pLoop = First();
             while( pLoop )
             {
                 FmEntryData* pCurEntryData = (FmEntryData*)pLoop->GetUserData();
@@ -2027,7 +2027,7 @@ namespace svxform
         for (SvLBoxEntrySortedArray::const_iterator it = m_arrCurrentSelection.begin();
              it != m_arrCurrentSelection.end(); ++it)
         {
-            SvLBoxEntry* pSelectionLoop = *it;
+            SvTreeListEntry* pSelectionLoop = *it;
             // Bei Formselektion alle Controls dieser Form markieren
             if (IsFormEntry(pSelectionLoop) && (pSelectionLoop != m_pRootEntry))
                 MarkViewObj((FmFormData*)pSelectionLoop->GetUserData(), sal_True, sal_False);
@@ -2095,7 +2095,7 @@ namespace svxform
     }
 
     //------------------------------------------------------------------------
-    sal_Bool NavigatorTree::Select( SvLBoxEntry* pEntry, sal_Bool bSelect )
+    sal_Bool NavigatorTree::Select( SvTreeListEntry* pEntry, sal_Bool bSelect )
     {
         RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "NavigatorTree::Select" );
         if (bSelect == IsSelected(pEntry))  // das passiert manchmal, ich glaube, die Basisklasse geht zu sehr auf Nummer sicher ;)

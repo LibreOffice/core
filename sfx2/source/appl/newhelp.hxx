@@ -78,14 +78,14 @@ private:
     Image           aDocumentImage;
 
     void            InitRoot();
-    void            ClearChildren( SvLBoxEntry* pParent );
+    void            ClearChildren( SvTreeListEntry* pParent );
 
 public:
     ContentListBox_Impl( Window* pParent, const ResId& rResId );
     ~ContentListBox_Impl();
 
 
-    virtual void    RequestingChildren( SvLBoxEntry* pParent );
+    virtual void    RequestingChildren( SvTreeListEntry* pParent );
     virtual long    Notify( NotifyEvent& rNEvt );
 
     inline void     SetOpenHdl( const Link& rLink ) { SetDoubleClickHdl( rLink ); }

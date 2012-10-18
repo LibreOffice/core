@@ -96,7 +96,7 @@ SFTreeListBox::~SFTreeListBox()
     deleteAllTree();
 }
 
-void SFTreeListBox::delUserData( SvLBoxEntry* pEntry )
+void SFTreeListBox::delUserData( SvTreeListEntry* pEntry )
 {
     if ( pEntry )
     {
@@ -116,14 +116,14 @@ void SFTreeListBox::delUserData( SvLBoxEntry* pEntry )
     }
 }
 
-void SFTreeListBox::deleteTree( SvLBoxEntry* pEntry )
+void SFTreeListBox::deleteTree( SvTreeListEntry* pEntry )
 {
 
     delUserData( pEntry );
     pEntry = FirstChild( pEntry );
     while ( pEntry )
     {
-        SvLBoxEntry* pNextEntry = NextSibling( pEntry );
+        SvTreeListEntry* pNextEntry = NextSibling( pEntry );
         deleteTree( pEntry );
         GetModel()->Remove( pEntry );
         pEntry = pNextEntry;
@@ -132,7 +132,7 @@ void SFTreeListBox::deleteTree( SvLBoxEntry* pEntry )
 
 void SFTreeListBox::deleteAllTree()
 {
-    SvLBoxEntry* pEntry =  GetEntry( 0 );
+    SvTreeListEntry* pEntry =  GetEntry( 0 );
 
     // TBD - below is a candidate for a destroyAllTrees method
     if ( pEntry )
@@ -140,7 +140,7 @@ void SFTreeListBox::deleteAllTree()
         while ( pEntry )
         {
             String text = GetEntryText( pEntry );
-            SvLBoxEntry* pNextEntry = NextSibling( pEntry ) ;
+            SvTreeListEntry* pNextEntry = NextSibling( pEntry ) ;
             deleteTree( pEntry );
             GetModel()->Remove( pEntry );
             pEntry = pNextEntry;
@@ -303,7 +303,7 @@ SFTreeListBox::getLangNodeFromRootNode( Reference< browse::XBrowseNode >& rootNo
     return langNode;
 }
 
-void SFTreeListBox:: RequestSubEntries( SvLBoxEntry* pRootEntry, Reference< ::com::sun::star::script::browse::XBrowseNode >& node,
+void SFTreeListBox:: RequestSubEntries( SvTreeListEntry* pRootEntry, Reference< ::com::sun::star::script::browse::XBrowseNode >& node,
                                        Reference< XModel >& model )
 {
     if (! node.is() )
@@ -353,11 +353,11 @@ void SFTreeListBox::ExpandAllTrees()
 }
 
 SAL_WNODEPRECATED_DECLARATIONS_PUSH
-SvLBoxEntry * SFTreeListBox::insertEntry(
-    String const & rText, sal_uInt16 nBitmap, SvLBoxEntry * pParent,
+SvTreeListEntry * SFTreeListBox::insertEntry(
+    String const & rText, sal_uInt16 nBitmap, SvTreeListEntry * pParent,
     bool bChildrenOnDemand, std::auto_ptr< SFEntry > aUserData, ::rtl::OUString factoryURL )
 {
-    SvLBoxEntry * p;
+    SvTreeListEntry * p;
     if( nBitmap == IMG_DOCUMENT && !factoryURL.isEmpty() )
     {
         Image aImage = SvFileInformationManager::GetFileImage( INetURLObject(factoryURL), false );
@@ -374,8 +374,8 @@ SvLBoxEntry * SFTreeListBox::insertEntry(
 SAL_WNODEPRECATED_DECLARATIONS_POP
 
 SAL_WNODEPRECATED_DECLARATIONS_PUSH
-SvLBoxEntry * SFTreeListBox::insertEntry(
-    String const & rText, sal_uInt16 nBitmap, SvLBoxEntry * pParent,
+SvTreeListEntry * SFTreeListBox::insertEntry(
+    String const & rText, sal_uInt16 nBitmap, SvTreeListEntry * pParent,
     bool bChildrenOnDemand, std::auto_ptr< SFEntry > aUserData )
 {
     Image aImage;
@@ -395,14 +395,14 @@ SvLBoxEntry * SFTreeListBox::insertEntry(
     {
         aImage = m_docImage;
     }
-    SvLBoxEntry * p = InsertEntry(
+    SvTreeListEntry * p = InsertEntry(
         rText, aImage, aImage, pParent, bChildrenOnDemand, LIST_APPEND,
         aUserData.release()); // XXX possible leak
    return p;
 }
 SAL_WNODEPRECATED_DECLARATIONS_POP
 
-void SFTreeListBox::RequestingChildren( SvLBoxEntry* pEntry )
+void SFTreeListBox::RequestingChildren( SvTreeListEntry* pEntry )
 {
     SFEntry* userData = 0;
     if ( !pEntry )
@@ -657,7 +657,7 @@ IMPL_LINK( SvxScriptOrgDialog, ScriptSelectHdl, SvTreeListBox *, pBox )
         return 0;
     }
 
-    SvLBoxEntry* pEntry = pBox->GetHdlEntry();
+    SvTreeListEntry* pEntry = pBox->GetHdlEntry();
 
     SFEntry* userData = 0;
     if ( !pEntry )
@@ -692,7 +692,7 @@ IMPL_LINK( SvxScriptOrgDialog, ButtonHdl, Button *, pButton )
     {
         if ( aScriptsBox.IsSelected( aScriptsBox.GetHdlEntry() ) )
         {
-            SvLBoxEntry* pEntry = aScriptsBox.GetHdlEntry();
+            SvTreeListEntry* pEntry = aScriptsBox.GetHdlEntry();
             SFEntry* userData = 0;
             if ( !pEntry )
             {
@@ -738,7 +738,7 @@ IMPL_LINK( SvxScriptOrgDialog, ButtonHdl, Button *, pButton )
                     }
 
 
-                    SvLBoxEntry* pParent = aScriptsBox.GetParent( pEntry );
+                    SvTreeListEntry* pParent = aScriptsBox.GetParent( pEntry );
                     while ( pParent && !mspNode.is() )
                     {
                         SFEntry* mspUserData = (SFEntry*)pParent->GetUserData();
@@ -825,7 +825,7 @@ IMPL_LINK( SvxScriptOrgDialog, ButtonHdl, Button *, pButton )
     return 0;
 }
 
-Reference< browse::XBrowseNode > SvxScriptOrgDialog::getBrowseNode( SvLBoxEntry* pEntry )
+Reference< browse::XBrowseNode > SvxScriptOrgDialog::getBrowseNode( SvTreeListEntry* pEntry )
 {
     Reference< browse::XBrowseNode > node;
     if ( pEntry )
@@ -840,7 +840,7 @@ Reference< browse::XBrowseNode > SvxScriptOrgDialog::getBrowseNode( SvLBoxEntry*
     return node;
 }
 
-Reference< XModel > SvxScriptOrgDialog::getModel( SvLBoxEntry* pEntry )
+Reference< XModel > SvxScriptOrgDialog::getModel( SvTreeListEntry* pEntry )
 {
     Reference< XModel > model;
     if ( pEntry )
@@ -855,7 +855,7 @@ Reference< XModel > SvxScriptOrgDialog::getModel( SvLBoxEntry* pEntry )
     return model;
 }
 
-void SvxScriptOrgDialog::createEntry( SvLBoxEntry* pEntry )
+void SvxScriptOrgDialog::createEntry( SvTreeListEntry* pEntry )
 {
 
     Reference< browse::XBrowseNode >  aChildNode;
@@ -994,7 +994,7 @@ void SvxScriptOrgDialog::createEntry( SvLBoxEntry* pEntry )
     if ( aChildNode.is() )
     {
         String aChildName = aChildNode->getName();
-        SvLBoxEntry* pNewEntry = NULL;
+        SvTreeListEntry* pNewEntry = NULL;
 
 
         ::rtl::OUString name( aChildName );
@@ -1045,7 +1045,7 @@ void SvxScriptOrgDialog::createEntry( SvLBoxEntry* pEntry )
     }
 }
 
-void SvxScriptOrgDialog::renameEntry( SvLBoxEntry* pEntry )
+void SvxScriptOrgDialog::renameEntry( SvTreeListEntry* pEntry )
 {
 
     Reference< browse::XBrowseNode >  aChildNode;
@@ -1122,7 +1122,7 @@ void SvxScriptOrgDialog::renameEntry( SvLBoxEntry* pEntry )
         aErrorBox.Execute();
     }
 }
-void SvxScriptOrgDialog::deleteEntry( SvLBoxEntry* pEntry )
+void SvxScriptOrgDialog::deleteEntry( SvTreeListEntry* pEntry )
 {
     sal_Bool result = sal_False;
     Reference< browse::XBrowseNode > node = getBrowseNode( pEntry );
@@ -1225,7 +1225,7 @@ void SvxScriptOrgDialog::StoreCurrentSelection()
     String aDescription;
     if ( aScriptsBox.IsSelected( aScriptsBox.GetHdlEntry() ) )
     {
-        SvLBoxEntry* pEntry = aScriptsBox.GetHdlEntry();
+        SvTreeListEntry* pEntry = aScriptsBox.GetHdlEntry();
         while( pEntry )
         {
             aDescription.Insert( aScriptsBox.GetEntryText( pEntry ), 0 );
@@ -1243,12 +1243,12 @@ void SvxScriptOrgDialog::RestorePreviousSelection()
     String aStoredEntry = String( m_lastSelection[ m_sLanguage ] );
     if( aStoredEntry.Len() <= 0 )
         return;
-    SvLBoxEntry* pEntry = 0;
+    SvTreeListEntry* pEntry = 0;
     sal_uInt16 nIndex = 0;
     while ( nIndex != STRING_NOTFOUND )
     {
         String aTmp( aStoredEntry.GetToken( 0, ';', nIndex ) );
-        SvLBoxEntry* pTmpEntry = aScriptsBox.FirstChild( pEntry );
+        SvTreeListEntry* pTmpEntry = aScriptsBox.FirstChild( pEntry );
         ::rtl::OUString debugStr(aTmp);
         while ( pTmpEntry )
         {

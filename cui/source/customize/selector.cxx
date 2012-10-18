@@ -89,7 +89,7 @@ SvxConfigFunctionListBox_Impl::~SvxConfigFunctionListBox_Impl()
     ClearAll();
 }
 
-SvLBoxEntry* SvxConfigFunctionListBox_Impl::GetLastSelectedEntry()
+SvTreeListEntry* SvxConfigFunctionListBox_Impl::GetLastSelectedEntry()
 {
     if ( m_pDraggingEntry != NULL )
     {
@@ -120,7 +120,7 @@ IMPL_LINK_NOARG(SvxConfigFunctionListBox_Impl, TimerHdl)
 {
     aTimer.Stop();
     Point aMousePos = GetPointerPosPixel();
-    SvLBoxEntry *pEntry = GetCurEntry();
+    SvTreeListEntry *pEntry = GetCurEntry();
     if ( pEntry && GetEntry( aMousePos ) == pEntry && pCurEntry == pEntry )
         Help::ShowBalloon( this, OutputToScreenPixel( aMousePos ), GetHelpText( pEntry ) );
     return 0L;
@@ -132,7 +132,7 @@ void SvxConfigFunctionListBox_Impl::ClearAll()
     Clear();
 }
 
-String SvxConfigFunctionListBox_Impl::GetHelpText( SvLBoxEntry *pEntry )
+String SvxConfigFunctionListBox_Impl::GetHelpText( SvTreeListEntry *pEntry )
 {
     SvxGroupInfo_Impl *pInfo =
         pEntry ? (SvxGroupInfo_Impl*) pEntry->GetUserData(): 0;
@@ -163,7 +163,7 @@ void SvxConfigFunctionListBox_Impl::FunctionSelected()
 
 // drag and drop support
 DragDropMode SvxConfigFunctionListBox_Impl::NotifyStartDrag(
-    TransferDataContainer& /*aTransferDataContainer*/, SvLBoxEntry* pEntry )
+    TransferDataContainer& /*aTransferDataContainer*/, SvTreeListEntry* pEntry )
 {
     m_pDraggingEntry = pEntry;
     return GetDragDropMode();
@@ -275,7 +275,7 @@ namespace
     }
 }
 
-void SvxConfigGroupListBox_Impl::fillScriptList( const Reference< browse::XBrowseNode >& _rxRootNode, SvLBoxEntry* _pParentEntry, bool _bCheapChildrenOnDemand )
+void SvxConfigGroupListBox_Impl::fillScriptList( const Reference< browse::XBrowseNode >& _rxRootNode, SvTreeListEntry* _pParentEntry, bool _bCheapChildrenOnDemand )
 {
     OSL_PRECOND( _rxRootNode.is(), "SvxConfigGroupListBox_Impl::fillScriptList: invalid root node!" );
     if ( !_rxRootNode.is() )
@@ -340,7 +340,7 @@ void SvxConfigGroupListBox_Impl::fillScriptList( const Reference< browse::XBrows
                 if ( children[n]->getType() == browse::BrowseNodeTypes::SCRIPT )
                     continue;
 
-                SvLBoxEntry* pNewEntry = InsertEntry( sUIName, _pParentEntry );
+                SvTreeListEntry* pNewEntry = InsertEntry( sUIName, _pParentEntry );
 
                 Image aImage = GetImage( theChild, comphelper::getProcessComponentContext(), bIsRootNode );
                 SetExpandedEntryBmp( pNewEntry, aImage );
@@ -475,7 +475,7 @@ void SvxConfigGroupListBox_Impl::Init()
                 {
                 }
 
-                SvLBoxEntry *pEntry = InsertEntry( group, NULL );
+                SvTreeListEntry *pEntry = InsertEntry( group, NULL );
 
                 SvxGroupInfo_Impl *pInfo =
                     new SvxGroupInfo_Impl( SVX_CFGGROUP_FUNCTION, gids[i] );
@@ -510,7 +510,7 @@ void SvxConfigGroupListBox_Impl::Init()
             String aTitle =
                 String( CUI_RES( STR_SELECTOR_MACROS ) );
 
-            SvLBoxEntry *pNewEntry = InsertEntry( aTitle, NULL );
+            SvTreeListEntry *pNewEntry = InsertEntry( aTitle, NULL );
             pNewEntry->SetUserData( pInfo );
             pNewEntry->EnableChildrenOnDemand( sal_True );
             aArr.push_back( pInfo );
@@ -620,7 +620,7 @@ SvxConfigGroupListBox_Impl::getDocumentModel(
 
 void SvxConfigGroupListBox_Impl::GroupSelected()
 {
-    SvLBoxEntry *pEntry = FirstSelected();
+    SvTreeListEntry *pEntry = FirstSelected();
     SvxGroupInfo_Impl *pInfo = (SvxGroupInfo_Impl*) pEntry->GetUserData();
     pFunctionListBox->SetUpdateMode(sal_False);
     pFunctionListBox->ClearAll();
@@ -635,7 +635,7 @@ void SvxConfigGroupListBox_Impl::GroupSelected()
     {
         case SVX_CFGGROUP_FUNCTION :
         {
-            SvLBoxEntry *_pEntry = FirstSelected();
+            SvTreeListEntry *_pEntry = FirstSelected();
             if ( _pEntry != NULL )
             {
                 SvxGroupInfo_Impl *_pInfo =
@@ -697,7 +697,7 @@ void SvxConfigGroupListBox_Impl::GroupSelected()
                         aLabel = commands[i].Command;
                     }
 
-                    SvLBoxEntry* pFuncEntry = NULL;
+                    SvTreeListEntry* pFuncEntry = NULL;
                     if ( !!aImage )
                     {
                         pFuncEntry = pFunctionListBox->InsertEntry(
@@ -764,7 +764,7 @@ void SvxConfigGroupListBox_Impl::GroupSelected()
                                     SVX_CFGFUNCTION_SCRIPT, 123, uri, description );
 
                             Image aImage = GetImage( children[n], Reference< XComponentContext >(), sal_False );
-                            SvLBoxEntry* pNewEntry =
+                            SvTreeListEntry* pNewEntry =
                                 pFunctionListBox->InsertEntry( children[n]->getName(), NULL );
                             pFunctionListBox->SetExpandedEntryBmp( pNewEntry, aImage );
                             pFunctionListBox->SetCollapsedEntryBmp(pNewEntry, aImage );
@@ -796,7 +796,7 @@ void SvxConfigGroupListBox_Impl::GroupSelected()
     pFunctionListBox->SetUpdateMode(sal_True);
 }
 
-sal_Bool SvxConfigGroupListBox_Impl::Expand( SvLBoxEntry* pParent )
+sal_Bool SvxConfigGroupListBox_Impl::Expand( SvTreeListEntry* pParent )
 {
     sal_Bool bRet = SvTreeListBox::Expand( pParent );
     if ( bRet )
@@ -811,7 +811,7 @@ sal_Bool SvxConfigGroupListBox_Impl::Expand( SvLBoxEntry* pParent )
         }
         else
         {
-            SvLBoxEntry *pEntry = GetFirstEntryInView();
+            SvTreeListEntry *pEntry = GetFirstEntryInView();
             sal_uLong nParentPos = 0;
             while ( pEntry && pEntry != pParent )
             {
@@ -827,7 +827,7 @@ sal_Bool SvxConfigGroupListBox_Impl::Expand( SvLBoxEntry* pParent )
     return bRet;
 }
 
-void SvxConfigGroupListBox_Impl::RequestingChildren( SvLBoxEntry *pEntry )
+void SvxConfigGroupListBox_Impl::RequestingChildren( SvTreeListEntry *pEntry )
 {
     SvxGroupInfo_Impl *pInfo = (SvxGroupInfo_Impl*) pEntry->GetUserData();
     pInfo->bWasOpened = sal_True;
@@ -1043,8 +1043,8 @@ IMPL_LINK( SvxScriptSelectorDialog, ClickHdl, Button *, pButton )
         else
         {
             // Select the next entry in the list if possible
-            SvLBoxEntry* current = aCommands.FirstSelected();
-            SvLBoxEntry* next = aCommands.NextSibling( current );
+            SvTreeListEntry* current = aCommands.FirstSelected();
+            SvTreeListEntry* next = aCommands.NextSibling( current );
 
             if ( next != NULL )
             {
@@ -1073,7 +1073,7 @@ SvxScriptSelectorDialog::GetScriptURL() const
 {
     OUString result;
 
-    SvLBoxEntry *pEntry = const_cast< SvxScriptSelectorDialog* >( this )->aCommands.GetLastSelectedEntry();
+    SvTreeListEntry *pEntry = const_cast< SvxScriptSelectorDialog* >( this )->aCommands.GetLastSelectedEntry();
     if ( pEntry )
     {
         SvxGroupInfo_Impl *pData = (SvxGroupInfo_Impl*) pEntry->GetUserData();

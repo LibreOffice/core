@@ -88,13 +88,13 @@ namespace dbaui
 
 namespace
 {
-    SvLBoxEntry* lcl_findEntry_impl(DBTreeListBox& rTree,const ::rtl::OUString& _rName,SvLBoxEntry* _pFirst)
+    SvTreeListEntry* lcl_findEntry_impl(DBTreeListBox& rTree,const ::rtl::OUString& _rName,SvTreeListEntry* _pFirst)
     {
-        SvLBoxEntry* pReturn = NULL;
+        SvTreeListEntry* pReturn = NULL;
         sal_Int32 nIndex = 0;
         String sName( _rName.getToken(0,'/',nIndex) );
 
-        SvLBoxEntry* pEntry = _pFirst;
+        SvTreeListEntry* pEntry = _pFirst;
         while( pEntry )
         {
             if ( rTree.GetEntryText(pEntry) == sName )
@@ -115,7 +115,7 @@ namespace
         }
         return pReturn;
     }
-    SvLBoxEntry* lcl_findEntry(DBTreeListBox& rTree,const ::rtl::OUString& _rName,SvLBoxEntry* _pFirst)
+    SvTreeListEntry* lcl_findEntry(DBTreeListBox& rTree,const ::rtl::OUString& _rName,SvTreeListEntry* _pFirst)
     {
         sal_Int32 nIndex = 0;
         ::rtl::OUString sErase = _rName.getToken(0,'/',nIndex); // we don't want to have the "private:forms" part
@@ -327,7 +327,7 @@ void OAppDetailPageHelper::getSelectionElementNames( ::std::vector< ::rtl::OUStr
         DBTreeListBox& rTree = *m_pLists[nPos];
         sal_Int32 nCount = rTree.GetEntryCount();
         _rNames.reserve(nCount);
-        SvLBoxEntry* pEntry = rTree.FirstSelected();
+        SvTreeListEntry* pEntry = rTree.FirstSelected();
         ElementType eType = getElementType();
         while( pEntry )
         {
@@ -339,7 +339,7 @@ void OAppDetailPageHelper::getSelectionElementNames( ::std::vector< ::rtl::OUStr
             else
             {
                 ::rtl::OUString sName = rTree.GetEntryText(pEntry);
-                SvLBoxEntry* pParent = rTree.GetParent(pEntry);
+                SvTreeListEntry* pParent = rTree.GetParent(pEntry);
                 while(pParent)
                 {
                     sName = rTree.GetEntryText(pParent) + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/")) + sName;
@@ -379,7 +379,7 @@ void OAppDetailPageHelper::describeCurrentSelectionForType( const ElementType _e
 
     ::std::vector< NamedDatabaseObject > aSelected;
 
-    SvLBoxEntry* pEntry = pList->FirstSelected();
+    SvTreeListEntry* pEntry = pList->FirstSelected();
     while( pEntry )
     {
         NamedDatabaseObject aObject;
@@ -400,7 +400,7 @@ void OAppDetailPageHelper::describeCurrentSelectionForType( const ElementType _e
         case E_REPORT:
         {
             ::rtl::OUString sName = pList->GetEntryText(pEntry);
-            SvLBoxEntry* pParent = pList->GetParent(pEntry);
+            SvTreeListEntry* pParent = pList->GetParent(pEntry);
             while ( pParent )
             {
                 ::rtl::OUStringBuffer buffer;
@@ -448,14 +448,14 @@ void OAppDetailPageHelper::selectElements(const Sequence< ::rtl::OUString>& _aNa
         const ::rtl::OUString* pEnd  = pIter + _aNames.getLength();
         for(;pIter != pEnd;++pIter)
         {
-            SvLBoxEntry* pEntry = rTree.GetEntryPosByName(*pIter);
+            SvTreeListEntry* pEntry = rTree.GetEntryPosByName(*pIter);
             if ( pEntry )
                 rTree.Select(pEntry);
         }
     }
 }
 // -----------------------------------------------------------------------------
-::rtl::OUString OAppDetailPageHelper::getQualifiedName( SvLBoxEntry* _pEntry ) const
+::rtl::OUString OAppDetailPageHelper::getQualifiedName( SvTreeListEntry* _pEntry ) const
 {
     int nPos = getVisibleControlIndex();
     ::rtl::OUString sComposedName;
@@ -466,7 +466,7 @@ void OAppDetailPageHelper::selectElements(const Sequence< ::rtl::OUString>& _aNa
     OSL_ENSURE(m_pLists[nPos],"Tables tree view is NULL! -> GPF");
     DBTreeListBox& rTree = *m_pLists[nPos];
 
-    SvLBoxEntry* pEntry = _pEntry;
+    SvTreeListEntry* pEntry = _pEntry;
     if ( !pEntry )
         pEntry = rTree.FirstSelected();
 
@@ -481,7 +481,7 @@ void OAppDetailPageHelper::selectElements(const Sequence< ::rtl::OUString>& _aNa
     else
     {
         sComposedName = rTree.GetEntryText(pEntry);
-        SvLBoxEntry* pParent = rTree.GetParent(pEntry);
+        SvTreeListEntry* pParent = rTree.GetParent(pEntry);
         while(pParent)
         {
             sComposedName = rTree.GetEntryText(pParent) + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/")) + sComposedName;
@@ -505,7 +505,7 @@ sal_Int32 OAppDetailPageHelper::getSelectionCount()
     if ( nPos < E_ELEMENT_TYPE_COUNT )
     {
         DBTreeListBox& rTree = *m_pLists[nPos];
-        SvLBoxEntry* pEntry = rTree.FirstSelected();
+        SvTreeListEntry* pEntry = rTree.FirstSelected();
         while( pEntry )
         {
             ++nCount;
@@ -553,7 +553,7 @@ void OAppDetailPageHelper::paste()
 {
 }
 // -----------------------------------------------------------------------------
-bool OAppDetailPageHelper::isLeaf(SvLBoxEntry* _pEntry) const
+bool OAppDetailPageHelper::isLeaf(SvTreeListEntry* _pEntry) const
 {
     if ( !_pEntry )
         return false;
@@ -577,7 +577,7 @@ sal_Bool OAppDetailPageHelper::isALeafSelected() const
     if ( nPos < E_ELEMENT_TYPE_COUNT )
     {
         DBTreeListBox& rTree = *m_pLists[nPos];
-        SvLBoxEntry* pEntry = rTree.FirstSelected( );
+        SvTreeListEntry* pEntry = rTree.FirstSelected( );
         while( !bLeafSelected && pEntry )
         {
             bLeafSelected = isLeaf( pEntry );
@@ -587,9 +587,9 @@ sal_Bool OAppDetailPageHelper::isALeafSelected() const
     return bLeafSelected;
 }
 // -----------------------------------------------------------------------------
-SvLBoxEntry* OAppDetailPageHelper::getEntry( const Point& _aPosPixel) const
+SvTreeListEntry* OAppDetailPageHelper::getEntry( const Point& _aPosPixel) const
 {
-    SvLBoxEntry* pReturn = NULL;
+    SvTreeListEntry* pReturn = NULL;
     int nPos = getVisibleControlIndex();
     if ( nPos < E_ELEMENT_TYPE_COUNT )
         pReturn = m_pLists[nPos]->GetEntry( _aPosPixel,sal_True );
@@ -621,7 +621,7 @@ void OAppDetailPageHelper::createTablesPage(const Reference< XConnection>& _xCon
     {
         static_cast<OTableTreeListBox*>(m_pLists[E_TABLE])->UpdateTableList(_xConnection);
 
-        SvLBoxEntry* pEntry = m_pLists[E_TABLE]->First();
+        SvTreeListEntry* pEntry = m_pLists[E_TABLE]->First();
         if ( pEntry )
             m_pLists[E_TABLE]->Expand(pEntry);
         m_pLists[E_TABLE]->SelectAll(sal_False);
@@ -734,7 +734,7 @@ namespace
 
 // -----------------------------------------------------------------------------
 void OAppDetailPageHelper::fillNames( const Reference< XNameAccess >& _xContainer, const ElementType _eType,
-                                      const sal_uInt16 _nImageId, SvLBoxEntry* _pParent )
+                                      const sal_uInt16 _nImageId, SvTreeListEntry* _pParent )
 {
     OSL_ENSURE(_xContainer.is(),"Data source is NULL! -> GPF");
     OSL_ENSURE( ( _eType >= E_TABLE ) && ( _eType < E_ELEMENT_TYPE_COUNT ), "OAppDetailPageHelper::fillNames: invalid type!" );
@@ -753,7 +753,7 @@ void OAppDetailPageHelper::fillNames( const Reference< XNameAccess >& _xContaine
         const ::rtl::OUString* pEnd  = pIter + aSeq.getLength();
         for(;pIter != pEnd;++pIter)
         {
-            SvLBoxEntry* pEntry = NULL;
+            SvTreeListEntry* pEntry = NULL;
             Reference<XNameAccess> xSubElements(_xContainer->getByName(*pIter),UNO_QUERY);
             if ( xSubElements.is() )
             {
@@ -834,7 +834,7 @@ void OAppDetailPageHelper::elementReplaced(ElementType _eType
     if ( pTreeView )
     {
         ::rtl::OUString sNewName = _rNewName;
-        SvLBoxEntry* pEntry = NULL;
+        SvTreeListEntry* pEntry = NULL;
         switch( _eType )
         {
             case E_TABLE:
@@ -860,9 +860,9 @@ void OAppDetailPageHelper::elementReplaced(ElementType _eType
     }
 }
 // -----------------------------------------------------------------------------
-SvLBoxEntry* OAppDetailPageHelper::elementAdded(ElementType _eType,const ::rtl::OUString& _rName, const Any& _rObject )
+SvTreeListEntry* OAppDetailPageHelper::elementAdded(ElementType _eType,const ::rtl::OUString& _rName, const Any& _rObject )
 {
-    SvLBoxEntry* pRet = NULL;
+    SvTreeListEntry* pRet = NULL;
     DBTreeListBox* pTreeView = m_pLists[_eType];
     if( _eType == E_TABLE && pTreeView )
     {
@@ -871,7 +871,7 @@ SvLBoxEntry* OAppDetailPageHelper::elementAdded(ElementType _eType,const ::rtl::
     else if ( pTreeView )
     {
 
-        SvLBoxEntry* pEntry = NULL;
+        SvTreeListEntry* pEntry = NULL;
         Reference<XChild> xChild(_rObject,UNO_QUERY);
         if ( xChild.is() && E_QUERY != _eType )
         {
@@ -918,7 +918,7 @@ void OAppDetailPageHelper::elementRemoved( ElementType _eType,const ::rtl::OUStr
             case E_QUERY:
                 if ( pTreeView )
                 {
-                    SvLBoxEntry* pEntry = lcl_findEntry_impl(*pTreeView,_rName,pTreeView->First());
+                    SvTreeListEntry* pEntry = lcl_findEntry_impl(*pTreeView,_rName,pTreeView->First());
                     if ( pEntry )
                         pTreeView->GetModel()->Remove(pEntry);
                 }
@@ -928,7 +928,7 @@ void OAppDetailPageHelper::elementRemoved( ElementType _eType,const ::rtl::OUStr
                 {
                     if ( pTreeView )
                     {
-                        SvLBoxEntry* pEntry = lcl_findEntry(*pTreeView,_rName,pTreeView->First());
+                        SvTreeListEntry* pEntry = lcl_findEntry(*pTreeView,_rName,pTreeView->First());
                         if ( pEntry )
                             pTreeView->GetModel()->Remove(pEntry);
                     }

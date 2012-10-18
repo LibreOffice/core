@@ -55,7 +55,7 @@ private:
     DECL_LINK(AddHdl_Impl, void *);
     DECL_LINK(OKHdl_Impl, void *);
 
-    void HandleCheckEntry(SvLBoxEntry* _pEntry);
+    void HandleCheckEntry(SvTreeListEntry* _pEntry);
     void AddCertPath(const rtl::OUString &rProfile, const rtl::OUString &rPath);
 public:
     CertPathDialog(Window* pParent);

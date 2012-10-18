@@ -80,7 +80,7 @@ private:
     DECL_LINK( ButtonHdl, Button * );
 
     void                CheckButtons();
-    void                SaveSetCurEntry( SvTreeListBox& rBox, SvLBoxEntry* pEntry );
+    void                SaveSetCurEntry( SvTreeListBox& rBox, SvTreeListEntry* pEntry );
     void                UpdateFields();
 
     void                EnableButton( Button& rButton, bool bEnable );

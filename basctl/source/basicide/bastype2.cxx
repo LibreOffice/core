@@ -198,7 +198,7 @@ TreeListBox::~TreeListBox ()
     m_aNotifier.dispose();
 
     // destroy user data
-    SvLBoxEntry* pEntry = First();
+    SvTreeListEntry* pEntry = First();
     while ( pEntry )
     {
         delete static_cast<Entry*>(pEntry->GetUserData());
@@ -218,7 +218,7 @@ void TreeListBox::ScanEntry( const ScriptDocument& rDocument, LibraryLocation eL
     SetUpdateMode(false);
 
     // level 1: BasicManager (application, document, ...)
-    SvLBoxEntry* pDocumentRootEntry = FindRootEntry( rDocument, eLocation );
+    SvTreeListEntry* pDocumentRootEntry = FindRootEntry( rDocument, eLocation );
     if ( pDocumentRootEntry && IsExpanded( pDocumentRootEntry ) )
         ImpCreateLibEntries( pDocumentRootEntry, rDocument, eLocation );
     if ( !pDocumentRootEntry )
@@ -239,7 +239,7 @@ void TreeListBox::ScanEntry( const ScriptDocument& rDocument, LibraryLocation eL
     SetUpdateMode(true);
 }
 
-void TreeListBox::ImpCreateLibEntries( SvLBoxEntry* pDocumentRootEntry, const ScriptDocument& rDocument, LibraryLocation eLocation )
+void TreeListBox::ImpCreateLibEntries( SvTreeListEntry* pDocumentRootEntry, const ScriptDocument& rDocument, LibraryLocation eLocation )
 {
     // get a sorted list of library names
     Sequence< OUString > aLibNames( rDocument.getLibraryNames() );
@@ -283,7 +283,7 @@ void TreeListBox::ImpCreateLibEntries( SvLBoxEntry* pDocumentRootEntry, const Sc
                 nId = bLoaded ? RID_IMG_DLGLIB : RID_IMG_DLGLIBNOTLOADED;
             else
                 nId = bLoaded ? RID_IMG_MODLIB : RID_IMG_MODLIBNOTLOADED;
-            SvLBoxEntry* pLibRootEntry = FindEntry( pDocumentRootEntry, aLibName, OBJ_TYPE_LIBRARY );
+            SvTreeListEntry* pLibRootEntry = FindEntry( pDocumentRootEntry, aLibName, OBJ_TYPE_LIBRARY );
             if ( pLibRootEntry )
             {
                 SetEntryBitmaps( pLibRootEntry, Image( IDEResId( nId ) ) );
@@ -303,7 +303,7 @@ void TreeListBox::ImpCreateLibEntries( SvLBoxEntry* pDocumentRootEntry, const Sc
     }
 }
 
-void TreeListBox::ImpCreateLibSubEntries( SvLBoxEntry* pLibRootEntry, const ScriptDocument& rDocument, const OUString& rLibName )
+void TreeListBox::ImpCreateLibSubEntries( SvTreeListEntry* pLibRootEntry, const ScriptDocument& rDocument, const OUString& rLibName )
 {
     // modules
     if ( nMode & BROWSEMODE_MODULES )
@@ -326,7 +326,7 @@ void TreeListBox::ImpCreateLibSubEntries( SvLBoxEntry* pLibRootEntry, const Scri
                     for ( sal_Int32 i = 0 ; i < nModCount ; i++ )
                     {
                         OUString aModName = pModNames[ i ];
-                        SvLBoxEntry* pModuleEntry = FindEntry( pLibRootEntry, aModName, OBJ_TYPE_MODULE );
+                        SvTreeListEntry* pModuleEntry = FindEntry( pLibRootEntry, aModName, OBJ_TYPE_MODULE );
                         if ( !pModuleEntry )
                             pModuleEntry = AddEntry(
                                 aModName,
@@ -345,7 +345,7 @@ void TreeListBox::ImpCreateLibSubEntries( SvLBoxEntry* pLibRootEntry, const Scri
                             for ( sal_Int32 j = 0 ; j < nCount ; j++ )
                             {
                                 OUString aName = pNames[ j ];
-                                SvLBoxEntry* pEntry = FindEntry( pModuleEntry, aName, OBJ_TYPE_METHOD );
+                                SvTreeListEntry* pEntry = FindEntry( pModuleEntry, aName, OBJ_TYPE_METHOD );
                                 if ( !pEntry )
                                     pEntry = AddEntry(
                                         aName,
@@ -382,7 +382,7 @@ void TreeListBox::ImpCreateLibSubEntries( SvLBoxEntry* pLibRootEntry, const Scri
                 for ( sal_Int32 i = 0 ; i < nDlgCount ; i++ )
                 {
                     OUString aDlgName = pDlgNames[ i ];
-                    SvLBoxEntry* pDialogEntry = FindEntry( pLibRootEntry, aDlgName, OBJ_TYPE_DIALOG );
+                    SvTreeListEntry* pDialogEntry = FindEntry( pLibRootEntry, aDlgName, OBJ_TYPE_DIALOG );
                     if ( !pDialogEntry )
                         pDialogEntry = AddEntry(
                             aDlgName,
@@ -400,7 +400,7 @@ void TreeListBox::ImpCreateLibSubEntries( SvLBoxEntry* pLibRootEntry, const Scri
     }
 }
 
-void TreeListBox::ImpCreateLibSubEntriesInVBAMode( SvLBoxEntry* pLibRootEntry, const ScriptDocument& rDocument, const OUString& rLibName )
+void TreeListBox::ImpCreateLibSubEntriesInVBAMode( SvTreeListEntry* pLibRootEntry, const ScriptDocument& rDocument, const OUString& rLibName )
 {
 
     std::vector<std::pair<EntryType, OUString> > aEntries;
@@ -414,7 +414,7 @@ void TreeListBox::ImpCreateLibSubEntriesInVBAMode( SvLBoxEntry* pLibRootEntry, c
     {
         EntryType eType = iter->first;
         OUString aEntryName = iter->second;
-        SvLBoxEntry* pLibSubRootEntry = FindEntry( pLibRootEntry, aEntryName, eType );
+        SvTreeListEntry* pLibSubRootEntry = FindEntry( pLibRootEntry, aEntryName, eType );
         if( pLibSubRootEntry )
         {
             SetEntryBitmaps( pLibSubRootEntry, Image( IDEResId( RID_IMG_MODLIB ) ) );
@@ -433,7 +433,7 @@ void TreeListBox::ImpCreateLibSubEntriesInVBAMode( SvLBoxEntry* pLibRootEntry, c
     }
 }
 
-void TreeListBox::ImpCreateLibSubSubEntriesInVBAMode( SvLBoxEntry* pLibSubRootEntry, const ScriptDocument& rDocument, const OUString& rLibName )
+void TreeListBox::ImpCreateLibSubSubEntriesInVBAMode( SvTreeListEntry* pLibSubRootEntry, const ScriptDocument& rDocument, const OUString& rLibName )
 {
     uno::Reference< container::XNameContainer > xLib = rDocument.getOrCreateLibrary( E_SCRIPTS, rLibName );
     if( !xLib.is() )
@@ -486,7 +486,7 @@ void TreeListBox::ImpCreateLibSubSubEntriesInVBAMode( SvLBoxEntry* pLibSubRootEn
                 }
             }
             OUString aEntryName(aEntryNameBuf.makeStringAndClear());
-            SvLBoxEntry* pModuleEntry = FindEntry( pLibSubRootEntry, aEntryName, OBJ_TYPE_MODULE );
+            SvTreeListEntry* pModuleEntry = FindEntry( pLibSubRootEntry, aEntryName, OBJ_TYPE_MODULE );
             if ( !pModuleEntry )
                 pModuleEntry = AddEntry(
                     aEntryName,
@@ -505,7 +505,7 @@ void TreeListBox::ImpCreateLibSubSubEntriesInVBAMode( SvLBoxEntry* pLibSubRootEn
                 for ( sal_Int32 j = 0 ; j < nCount ; j++ )
                 {
                     OUString aName = pNames[ j ];
-                    SvLBoxEntry* pEntry = FindEntry( pModuleEntry, aName, OBJ_TYPE_METHOD );
+                    SvTreeListEntry* pEntry = FindEntry( pModuleEntry, aName, OBJ_TYPE_METHOD );
                     if ( !pEntry )
                         pEntry = AddEntry(
                             aName,
@@ -523,10 +523,10 @@ void TreeListBox::ImpCreateLibSubSubEntriesInVBAMode( SvLBoxEntry* pLibSubRootEn
     }
 }
 
-SvLBoxEntry* TreeListBox::ImpFindEntry( SvLBoxEntry* pParent, const OUString& rText )
+SvTreeListEntry* TreeListBox::ImpFindEntry( SvTreeListEntry* pParent, const OUString& rText )
 {
     sal_uLong nRootPos = 0;
-    SvLBoxEntry* pEntry = pParent ? FirstChild( pParent ) : GetEntry( nRootPos );
+    SvTreeListEntry* pEntry = pParent ? FirstChild( pParent ) : GetEntry( nRootPos );
     while ( pEntry )
     {
         if (  rText.equals(GetEntryText( pEntry )) )
@@ -590,8 +590,8 @@ void TreeListBox::UpdateEntries()
     EntryDescriptor aCurDesc( GetEntryDescriptor( FirstSelected() ) );
 
     // removing the invalid entries
-    SvLBoxEntry* pLastValid = 0;
-    SvLBoxEntry* pEntry = First();
+    SvTreeListEntry* pLastValid = 0;
+    SvTreeListEntry* pEntry = First();
     while ( pEntry )
     {
         if ( IsValidEntry( pEntry ) )
@@ -607,7 +607,7 @@ void TreeListBox::UpdateEntries()
 }
 
 // Removes the entry from the tree.
-void TreeListBox::RemoveEntry (SvLBoxEntry* pEntry)
+void TreeListBox::RemoveEntry (SvTreeListEntry* pEntry)
 {
     // removing the associated user data
     delete static_cast<Entry*>(pEntry->GetUserData());
@@ -619,7 +619,7 @@ void TreeListBox::RemoveEntry (SvLBoxEntry* pEntry)
 void TreeListBox::RemoveEntry (ScriptDocument const& rDocument)
 {
     // finding the entry of rDocument
-    for (SvLBoxEntry* pEntry = First(); pEntry; pEntry = Next(pEntry))
+    for (SvTreeListEntry* pEntry = First(); pEntry; pEntry = Next(pEntry))
         if (rDocument == GetEntryDescriptor(pEntry).GetDocument())
         {
             RemoveEntry(pEntry);
@@ -627,9 +627,9 @@ void TreeListBox::RemoveEntry (ScriptDocument const& rDocument)
         }
 }
 
-SvLBoxEntry* TreeListBox::CloneEntry( SvLBoxEntry* pSource )
+SvTreeListEntry* TreeListBox::CloneEntry( SvTreeListEntry* pSource )
 {
-    SvLBoxEntry* pNew = SvTreeListBox::CloneEntry( pSource );
+    SvTreeListEntry* pNew = SvTreeListBox::CloneEntry( pSource );
     Entry* pUser = static_cast<Entry*>(pSource->GetUserData());
 
     DBG_ASSERT( pUser, "User-Daten?!" );
@@ -640,10 +640,10 @@ SvLBoxEntry* TreeListBox::CloneEntry( SvLBoxEntry* pSource )
     return pNew;
 }
 
-SvLBoxEntry* TreeListBox::FindEntry( SvLBoxEntry* pParent, const OUString& rText, EntryType eType )
+SvTreeListEntry* TreeListBox::FindEntry( SvTreeListEntry* pParent, const OUString& rText, EntryType eType )
 {
     sal_uLong nRootPos = 0;
-    SvLBoxEntry* pEntry = pParent ? FirstChild( pParent ) : GetEntry( nRootPos );
+    SvTreeListEntry* pEntry = pParent ? FirstChild( pParent ) : GetEntry( nRootPos );
     while ( pEntry )
     {
         Entry* pBasicEntry = static_cast<Entry*>(pEntry->GetUserData());
@@ -662,7 +662,7 @@ long TreeListBox::ExpandingHdl()
     bool bOK = true;
     if ( GetModel()->GetDepth( GetHdlEntry() ) == 1 )
     {
-        SvLBoxEntry* pCurEntry = GetCurEntry();
+        SvTreeListEntry* pCurEntry = GetCurEntry();
         EntryDescriptor aDesc( GetEntryDescriptor( pCurEntry ) );
         ScriptDocument aDocument( aDesc.GetDocument() );
         OSL_ENSURE( aDocument.isAlive(), "TreeListBox::ExpandingHdl: no document, or document is dead!" );
@@ -692,7 +692,7 @@ long TreeListBox::ExpandingHdl()
     return bOK;
 }
 
-bool TreeListBox::IsEntryProtected( SvLBoxEntry* pEntry )
+bool TreeListBox::IsEntryProtected( SvTreeListEntry* pEntry )
 {
     bool bProtected = false;
     if ( pEntry && ( GetModel()->GetDepth( pEntry ) == 1 ) )
@@ -718,15 +718,15 @@ bool TreeListBox::IsEntryProtected( SvLBoxEntry* pEntry )
 }
 
 SAL_WNODEPRECATED_DECLARATIONS_PUSH
-SvLBoxEntry* TreeListBox::AddEntry(
+SvTreeListEntry* TreeListBox::AddEntry(
     OUString const& rText,
     const Image& rImage,
-    SvLBoxEntry* pParent,
+    SvTreeListEntry* pParent,
     bool bChildrenOnDemand,
     std::auto_ptr<Entry> aUserData
 )
 {
-    SvLBoxEntry* p = InsertEntry(
+    SvTreeListEntry* p = InsertEntry(
         rText, rImage, rImage, pParent, bChildrenOnDemand, LIST_APPEND,
         aUserData.release() // XXX possible leak
     );
@@ -734,7 +734,7 @@ SvLBoxEntry* TreeListBox::AddEntry(
 }
 SAL_WNODEPRECATED_DECLARATIONS_POP
 
-void TreeListBox::SetEntryBitmaps( SvLBoxEntry * pEntry, const Image& rImage )
+void TreeListBox::SetEntryBitmaps( SvTreeListEntry * pEntry, const Image& rImage )
 {
     SetExpandedEntryBmp(  pEntry, rImage );
     SetCollapsedEntryBmp( pEntry, rImage );
@@ -809,7 +809,7 @@ void TreeListBox::GetRootEntryBitmaps( const ScriptDocument& rDocument, Image& r
 
 void TreeListBox::SetCurrentEntry (EntryDescriptor& rDesc)
 {
-    SvLBoxEntry* pCurEntry = 0;
+    SvTreeListEntry* pCurEntry = 0;
     EntryDescriptor aDesc = rDesc;
     if ( aDesc.GetType() == OBJ_TYPE_UNKNOWN )
     {
@@ -822,7 +822,7 @@ void TreeListBox::SetCurrentEntry (EntryDescriptor& rDesc)
     ScriptDocument aDocument = aDesc.GetDocument();
     OSL_ENSURE( aDocument.isValid(), "TreeListBox::SetCurrentEntry: invalid document!" );
     LibraryLocation eLocation = aDesc.GetLocation();
-    SvLBoxEntry* pRootEntry = FindRootEntry( aDocument, eLocation );
+    SvTreeListEntry* pRootEntry = FindRootEntry( aDocument, eLocation );
     if ( pRootEntry )
     {
         pCurEntry = pRootEntry;
@@ -830,7 +830,7 @@ void TreeListBox::SetCurrentEntry (EntryDescriptor& rDesc)
         if ( !aLibName.isEmpty() )
         {
             Expand( pRootEntry );
-            SvLBoxEntry* pLibEntry = FindEntry( pRootEntry, aLibName, OBJ_TYPE_LIBRARY );
+            SvTreeListEntry* pLibEntry = FindEntry( pRootEntry, aLibName, OBJ_TYPE_LIBRARY );
             if ( pLibEntry )
             {
                 pCurEntry = pLibEntry;
@@ -838,7 +838,7 @@ void TreeListBox::SetCurrentEntry (EntryDescriptor& rDesc)
                 if( !aLibSubName.isEmpty() )
                 {
                     Expand( pLibEntry );
-                    SvLBoxEntry* pLibSubEntry = ImpFindEntry( pLibEntry, aLibSubName );
+                    SvTreeListEntry* pLibSubEntry = ImpFindEntry( pLibEntry, aLibSubName );
                     if( pLibSubEntry )
                     {
                         pCurEntry = pLibSubEntry;
@@ -851,7 +851,7 @@ void TreeListBox::SetCurrentEntry (EntryDescriptor& rDesc)
                     EntryType eType = OBJ_TYPE_MODULE;
                     if ( aDesc.GetType() == OBJ_TYPE_DIALOG )
                         eType = OBJ_TYPE_DIALOG;
-                    SvLBoxEntry* pEntry = FindEntry( pCurEntry, aName, eType );
+                    SvTreeListEntry* pEntry = FindEntry( pCurEntry, aName, eType );
                     if ( pEntry )
                     {
                         pCurEntry = pEntry;
@@ -859,7 +859,7 @@ void TreeListBox::SetCurrentEntry (EntryDescriptor& rDesc)
                         if ( !aMethodName.isEmpty() )
                         {
                             Expand( pEntry );
-                            SvLBoxEntry* pSubEntry = FindEntry( pEntry, aMethodName, OBJ_TYPE_METHOD );
+                            SvTreeListEntry* pSubEntry = FindEntry( pEntry, aMethodName, OBJ_TYPE_METHOD );
                             if ( pSubEntry )
                             {
                                 pCurEntry = pSubEntry;

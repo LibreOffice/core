@@ -151,7 +151,7 @@ IMPL_LINK( SvBaseLinksDlg, LinksSelectHdl, SvTabListBox *, pSvTabListBox )
     if(nSelectionCount > 1)
     {
         // possibly deselect old entries in case of multi-selection
-        SvLBoxEntry* pEntry = 0;
+        SvTreeListEntry* pEntry = 0;
         SvBaseLink* pLink = 0;
         pEntry = pSvTabListBox->GetHdlEntry();
         pLink = (SvBaseLink*)pEntry->GetUserData();
@@ -269,7 +269,7 @@ IMPL_LINK_NOARG(SvBaseLinksDlg, UpdateNowClickHdl)
     std::vector< SvBaseLink* > aLnkArr;
     std::vector< sal_uInt16 > aPosArr;
 
-    SvLBoxEntry* pE = rListBox.FirstSelected();
+    SvTreeListEntry* pE = rListBox.FirstSelected();
     while( pE )
     {
         sal_uInt16 nFndPos = (sal_uInt16)rListBox.GetModel()->GetAbsPos( pE );
@@ -322,7 +322,7 @@ IMPL_LINK_NOARG(SvBaseLinksDlg, UpdateNowClickHdl)
 
         if( pE )
         {
-            SvLBoxEntry* pSelEntry = rListBox.FirstSelected();
+            SvTreeListEntry* pSelEntry = rListBox.FirstSelected();
             if( pE != pSelEntry )
                 rListBox.Select( pSelEntry, sal_False );
             rListBox.Select( pE );
@@ -344,7 +344,7 @@ IMPL_LINK( SvBaseLinksDlg, ChangeSourceClickHdl, PushButton *, pPushButton )
         PathDialog aPathDlg( this );
         String sType, sFile, sLinkName;
         String  sFilter;
-        SvLBoxEntry* pEntry = Links().FirstSelected();
+        SvTreeListEntry* pEntry = Links().FirstSelected();
         SvBaseLink* pLink = (SvBaseLink*)pEntry->GetUserData();
         pLinkMgr->GetDisplayNames( pLink, &sType, &sFile, 0, 0 );
         INetURLObject aUrl(sFile);
@@ -428,7 +428,7 @@ IMPL_LINK( SvBaseLinksDlg, BreakLinkClickHdl, PushButton *, pPushButton )
                 pLinkMgr = 0;
                 SetManager( pNewMgr );
 
-                SvLBoxEntry* pEntry = Links().GetEntry( nPos ? --nPos : 0 );
+                SvTreeListEntry* pEntry = Links().GetEntry( nPos ? --nPos : 0 );
                 if( pEntry )
                     Links().SetCurEntry( pEntry );
             }
@@ -443,7 +443,7 @@ IMPL_LINK( SvBaseLinksDlg, BreakLinkClickHdl, PushButton *, pPushButton )
         {
 
             SvBaseLinkMemberList aLinkList;
-            SvLBoxEntry* pEntry = Links().FirstSelected();
+            SvTreeListEntry* pEntry = Links().FirstSelected();
             while ( pEntry )
             {
                 void * pUD = pEntry->GetUserData();
@@ -492,7 +492,7 @@ IMPL_LINK( SvBaseLinksDlg, UpdateWaitingHdl, Timer*, pTimer )
     Links().SetUpdateMode(sal_False);
     for( sal_uLong nPos = Links().GetEntryCount(); nPos; )
     {
-        SvLBoxEntry* pBox = Links().GetEntry( --nPos );
+        SvTreeListEntry* pBox = Links().GetEntry( --nPos );
         SvBaseLinkRef xLink( (SvBaseLink*)pBox->GetUserData() );
         if( xLink.Is() )
         {
@@ -529,7 +529,7 @@ IMPL_LINK( SvBaseLinksDlg, EndEditHdl, sfx2::SvBaseLink*, _pLink )
         {
             Links().SetUpdateMode(sal_False);
             Links().GetModel()->Remove( Links().GetEntry( nPos ) );
-            SvLBoxEntry* pToUnselect = Links().FirstSelected();
+            SvTreeListEntry* pToUnselect = Links().FirstSelected();
             InsertEntry( *_pLink, nPos, sal_True );
             if(pToUnselect)
                 Links().Select(pToUnselect, sal_False);
@@ -595,7 +595,7 @@ void SvBaseLinksDlg::SetManager( LinkManager* pNewMgr )
 
         if( !rLnks.empty() )
         {
-            SvLBoxEntry* pEntry = Links().GetEntry( 0 );
+            SvTreeListEntry* pEntry = Links().GetEntry( 0 );
             Links().SetCurEntry( pEntry );
             Links().Select( pEntry );
             LinksSelectHdl( 0 );
@@ -638,7 +638,7 @@ void SvBaseLinksDlg::InsertEntry( const SvBaseLink& rLink, sal_uInt16 nPos, sal_
     aEntry += '\t';
     aEntry += ImplGetStateStr( rLink );
 
-    SvLBoxEntry * pE = Links().InsertEntryToColumn( aEntry, nPos );
+    SvTreeListEntry * pE = Links().InsertEntryToColumn( aEntry, nPos );
     pE->SetUserData( (void*)&rLink );
     if(bSelect)
         Links().Select(pE);
@@ -646,7 +646,7 @@ void SvBaseLinksDlg::InsertEntry( const SvBaseLink& rLink, sal_uInt16 nPos, sal_
 
 SvBaseLink* SvBaseLinksDlg::GetSelEntry( sal_uInt16* pPos )
 {
-    SvLBoxEntry* pE = Links().FirstSelected();
+    SvTreeListEntry* pE = Links().FirstSelected();
     sal_uInt16 nPos;
     if( pE && LISTBOX_ENTRY_NOTFOUND !=
         ( nPos = (sal_uInt16)Links().GetModel()->GetAbsPos( pE ) ) )
@@ -666,7 +666,7 @@ void SvBaseLinksDlg::SetType( SvBaseLink& rLink,
 {
     rLink.SetUpdateMode( nType );
     rLink.Update();
-    SvLBoxEntry* pBox = Links().GetEntry( nSelPos );
+    SvTreeListEntry* pBox = Links().GetEntry( nSelPos );
     Links().SetEntryText( ImplGetStateStr( rLink ), pBox, 3 );
     if( pLinkMgr->GetPersist() )
         pLinkMgr->GetPersist()->SetModified();

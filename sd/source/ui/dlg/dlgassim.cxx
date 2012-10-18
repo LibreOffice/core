@@ -63,7 +63,7 @@ SdPageListControl::SdPageListControl(
 IMPL_LINK_NOARG(SdPageListControl, CheckButtonClickHdl)
 {
     SvLBoxTreeList* pTreeModel = GetModel();
-    SvLBoxEntry* pEntry = pTreeModel->First();
+    SvTreeListEntry* pEntry = pTreeModel->First();
 
     while( pEntry )
     {
@@ -88,9 +88,9 @@ void SdPageListControl::Clear()
     SvTreeListBox::Clear();
 }
 
-SvLBoxEntry* SdPageListControl::InsertPage( const String& rPageName )
+SvTreeListEntry* SdPageListControl::InsertPage( const String& rPageName )
 {
-    SvLBoxEntry* pEntry = new SvLBoxEntry;
+    SvTreeListEntry* pEntry = new SvTreeListEntry;
 
     pEntry->AddItem( new SvLBoxButton( pEntry, SvLBoxButtonKind_enabledCheckbox,
                                        0, m_pCheckButton));
@@ -102,9 +102,9 @@ SvLBoxEntry* SdPageListControl::InsertPage( const String& rPageName )
     return pEntry;
 }
 
-void SdPageListControl::InsertTitle( SvLBoxEntry* pParent, const String& rTitle )
+void SdPageListControl::InsertTitle( SvTreeListEntry* pParent, const String& rTitle )
 {
-    SvLBoxEntry* pEntry = new SvLBoxEntry;
+    SvTreeListEntry* pEntry = new SvTreeListEntry;
     pEntry->AddItem( new SvLBoxString( pEntry, 0, String() ) );
     pEntry->AddItem( new SvLBoxContextBmp( pEntry, 0, Image(), Image(), 0));    // Sonst Puff!
     pEntry->AddItem( new SvLBoxString( pEntry, 0, rTitle ) );
@@ -122,7 +122,7 @@ void SdPageListControl::Fill( SdDrawDocument* pDoc )
         SdPage* pPage = (SdPage*) pDoc->GetPage( nPage );
         if( pPage->GetPageKind() == PK_STANDARD )
         {
-            SvLBoxEntry* pEntry = InsertPage( pPage->GetName() );
+            SvTreeListEntry* pEntry = InsertPage( pPage->GetName() );
             SetCheckButtonState(pEntry, SvButtonState( SV_BUTTON_CHECKED ) );
 
             SdrTextObj* pTO = (SdrTextObj*)pPage->GetPresObj(PRESOBJ_TEXT);
@@ -174,13 +174,13 @@ void SdPageListControl::Fill( SdDrawDocument* pDoc )
 
 sal_uInt16 SdPageListControl::GetSelectedPage()
 {
-    SvLBoxEntry* pSelEntry = GetCurEntry();
+    SvTreeListEntry* pSelEntry = GetCurEntry();
     sal_uInt16 nPage = 0;
 
     if ( pSelEntry )
     {
         SvLBoxTreeList* pTreeModel = GetModel();
-        SvLBoxEntry* pEntry = pTreeModel->First();
+        SvTreeListEntry* pEntry = pTreeModel->First();
 
         while( pEntry && pEntry != pSelEntry )
         {
@@ -197,7 +197,7 @@ sal_uInt16 SdPageListControl::GetSelectedPage()
 
 sal_Bool SdPageListControl::IsPageChecked( sal_uInt16 nPage )
 {
-    SvLBoxEntry* pEntry = GetModel()->GetEntry(nPage);
+    SvTreeListEntry* pEntry = GetModel()->GetEntry(nPage);
     return pEntry?(sal_Bool)(GetCheckButtonState( pEntry ) == SV_BUTTON_CHECKED): sal_False;
 }
 

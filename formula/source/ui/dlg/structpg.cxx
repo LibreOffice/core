@@ -43,12 +43,12 @@ StructListBox::StructListBox(Window* pParent, const ResId& rResId ):
     SetFont( aFont );
 }
 
-SvLBoxEntry* StructListBox::InsertStaticEntry(
+SvTreeListEntry* StructListBox::InsertStaticEntry(
         const XubString& rText,
         const Image& rEntryImg,
-        SvLBoxEntry* pParent, sal_uLong nPos, IFormulaToken* pToken )
+        SvTreeListEntry* pParent, sal_uLong nPos, IFormulaToken* pToken )
 {
-    SvLBoxEntry* pEntry = InsertEntry( rText, rEntryImg, rEntryImg, pParent, sal_False, nPos, pToken );
+    SvTreeListEntry* pEntry = InsertEntry( rText, rEntryImg, rEntryImg, pParent, sal_False, nPos, pToken );
     return pEntry;
 }
 
@@ -108,12 +108,12 @@ void StructPage::ClearStruct()
     aTlbStruct.Clear();
 }
 
-SvLBoxEntry* StructPage::InsertEntry( const XubString& rText, SvLBoxEntry* pParent,
+SvTreeListEntry* StructPage::InsertEntry( const XubString& rText, SvTreeListEntry* pParent,
                                        sal_uInt16 nFlag,sal_uLong nPos,IFormulaToken* pIFormulaToken)
 {
     aTlbStruct.SetActiveFlag( sal_False );
 
-    SvLBoxEntry* pEntry = NULL;
+    SvTreeListEntry* pEntry = NULL;
     switch( nFlag )
     {
         case STRUCT_FOLDER:
@@ -132,7 +132,7 @@ SvLBoxEntry* StructPage::InsertEntry( const XubString& rText, SvLBoxEntry* pPare
     return pEntry;
 }
 
-String StructPage::GetEntryText(SvLBoxEntry* pEntry) const
+String StructPage::GetEntryText(SvTreeListEntry* pEntry) const
 {
     String aString;
     if(pEntry!=NULL)
@@ -140,11 +140,11 @@ String StructPage::GetEntryText(SvLBoxEntry* pEntry) const
     return  aString;
 }
 
-SvLBoxEntry* StructPage::GetParent(SvLBoxEntry* pEntry) const
+SvTreeListEntry* StructPage::GetParent(SvTreeListEntry* pEntry) const
 {
     return aTlbStruct.GetParent(pEntry);
 }
-IFormulaToken* StructPage::GetFunctionEntry(SvLBoxEntry* pEntry)
+IFormulaToken* StructPage::GetFunctionEntry(SvTreeListEntry* pEntry)
 {
     if(pEntry!=NULL)
     {
@@ -170,7 +170,7 @@ IMPL_LINK( StructPage, SelectHdl, SvTreeListBox*, pTlb )
     {
         if(pTlb==&aTlbStruct)
         {
-            SvLBoxEntry*    pCurEntry=aTlbStruct.GetCurEntry();
+            SvTreeListEntry*    pCurEntry=aTlbStruct.GetCurEntry();
             if(pCurEntry!=NULL)
             {
                 pSelectedToken=(IFormulaToken *)pCurEntry->GetUserData();

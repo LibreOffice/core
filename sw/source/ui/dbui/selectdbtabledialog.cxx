@@ -118,7 +118,7 @@ SwSelectDBTableDialog::SwSelectDBTableDialog(Window* pParent,
             String sEntry = pTbls[i];
             sEntry += '\t';
             sEntry += m_sTable;
-            SvLBoxEntry* pEntry = m_aTableLB.InsertEntry(sEntry);
+            SvTreeListEntry* pEntry = m_aTableLB.InsertEntry(sEntry);
             pEntry->SetUserData((void*)0);
         }
     }
@@ -133,7 +133,7 @@ SwSelectDBTableDialog::SwSelectDBTableDialog(Window* pParent,
             String sEntry = pQueries[i];
             sEntry += '\t';
             sEntry += m_sQuery;
-            SvLBoxEntry* pEntry = m_aTableLB.InsertEntry(sEntry);
+            SvTreeListEntry* pEntry = m_aTableLB.InsertEntry(sEntry);
             pEntry->SetUserData((void*)1);
         }
     }
@@ -145,7 +145,7 @@ SwSelectDBTableDialog::~SwSelectDBTableDialog()
 
 IMPL_LINK(SwSelectDBTableDialog, PreviewHdl, PushButton*, pButton)
 {
-    SvLBoxEntry* pEntry = m_aTableLB.FirstSelected();
+    SvTreeListEntry* pEntry = m_aTableLB.FirstSelected();
     if(pEntry)
     {
         ::rtl::OUString sTableOrQuery = m_aTableLB.GetEntryText(pEntry, 0);
@@ -184,14 +184,14 @@ IMPL_LINK(SwSelectDBTableDialog, PreviewHdl, PushButton*, pButton)
 
 String      SwSelectDBTableDialog::GetSelectedTable(bool& bIsTable)
 {
-    SvLBoxEntry* pEntry = m_aTableLB.FirstSelected();
+    SvTreeListEntry* pEntry = m_aTableLB.FirstSelected();
     bIsTable = pEntry->GetUserData() ? false : true;
     return pEntry ? m_aTableLB.GetEntryText(pEntry, 0) : String();
 }
 
 void   SwSelectDBTableDialog::SetSelectedTable(const String& rTable, bool bIsTable)
 {
-    SvLBoxEntry*    pEntry = m_aTableLB.First();
+    SvTreeListEntry*    pEntry = m_aTableLB.First();
     while(pEntry)
     {
         if((m_aTableLB.GetEntryText(pEntry, 0) == rTable) &&

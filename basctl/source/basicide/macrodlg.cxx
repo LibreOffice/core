@@ -135,7 +135,7 @@ void MacroChooser::StoreMacroDescription()
 {
     EntryDescriptor aDesc = aBasicBox.GetEntryDescriptor(aBasicBox.FirstSelected());
     String aMethodName;
-    SvLBoxEntry* pEntry = aMacroBox.FirstSelected();
+    SvTreeListEntry* pEntry = aMacroBox.FirstSelected();
     if ( pEntry )
         aMethodName = aMacroBox.GetEntryText( pEntry );
     else
@@ -170,9 +170,9 @@ void MacroChooser::RestoreMacroDescription()
     if ( aLastMacro.Len() )
     {
         // find entry in macro box
-        SvLBoxEntry* pEntry = 0;
+        SvTreeListEntry* pEntry = 0;
         sal_uLong nPos = 0;
-        SvLBoxEntry* pE = aMacroBox.GetEntry( nPos );
+        SvTreeListEntry* pE = aMacroBox.GetEntry( nPos );
         while ( pE )
         {
             if ( aMacroBox.GetEntryText( pE ) == aLastMacro )
@@ -199,7 +199,7 @@ short MacroChooser::Execute()
     aRunButton.GrabFocus();
 
     // #104198 Check if "wrong" document is active
-    SvLBoxEntry* pSelectedEntry = aBasicBox.GetCurEntry();
+    SvTreeListEntry* pSelectedEntry = aBasicBox.GetCurEntry();
     EntryDescriptor aDesc( aBasicBox.GetEntryDescriptor( pSelectedEntry ) );
     const ScriptDocument& rSelectedDoc( aDesc.GetDocument() );
 
@@ -208,15 +208,15 @@ short MacroChooser::Execute()
     {
         // Search for the right entry
         sal_uLong nRootPos = 0;
-        SvLBoxEntry* pRootEntry = aBasicBox.GetEntry( nRootPos );
+        SvTreeListEntry* pRootEntry = aBasicBox.GetEntry( nRootPos );
         while( pRootEntry )
         {
             EntryDescriptor aCmpDesc( aBasicBox.GetEntryDescriptor( pRootEntry ) );
             const ScriptDocument& rCmpDoc( aCmpDesc.GetDocument() );
             if ( rCmpDoc.isDocument() && rCmpDoc.isActive() )
             {
-                SvLBoxEntry* pEntry = pRootEntry;
-                SvLBoxEntry* pLastValid = pEntry;
+                SvTreeListEntry* pEntry = pRootEntry;
+                SvTreeListEntry* pLastValid = pEntry;
                 while ( pEntry )
                 {
                     pLastValid = pEntry;
@@ -267,7 +267,7 @@ SbMethod* MacroChooser::GetMacro()
     SbModule* pModule = aBasicBox.FindModule( aBasicBox.GetCurEntry() );
     if ( pModule )
     {
-        SvLBoxEntry* pEntry = aMacroBox.FirstSelected();
+        SvTreeListEntry* pEntry = aMacroBox.FirstSelected();
         if ( pEntry )
         {
             String aMacroName( aMacroBox.GetEntryText( pEntry ) );
@@ -315,7 +315,7 @@ void MacroChooser::DeleteMacro()
         String aModName = pModule->GetName();
         OSL_VERIFY( aDocument.updateModule( aLibName, aModName, aSource ) );
 
-        SvLBoxEntry* pEntry = aMacroBox.FirstSelected();
+        SvTreeListEntry* pEntry = aMacroBox.FirstSelected();
         DBG_ASSERT( pEntry, "DeleteMacro: Entry ?!" );
         aMacroBox.GetModel()->Remove( pEntry );
         bForceStoreBasic = true;
@@ -325,7 +325,7 @@ void MacroChooser::DeleteMacro()
 SbMethod* MacroChooser::CreateMacro()
 {
     SbMethod* pMethod = 0;
-    SvLBoxEntry* pCurEntry = aBasicBox.GetCurEntry();
+    SvTreeListEntry* pCurEntry = aBasicBox.GetCurEntry();
     EntryDescriptor aDesc = aBasicBox.GetEntryDescriptor(pCurEntry);
     ScriptDocument aDocument( aDesc.GetDocument() );
     OSL_ENSURE( aDocument.isAlive(), "MacroChooser::CreateMacro: no document!" );
@@ -380,7 +380,7 @@ SbMethod* MacroChooser::CreateMacro()
     return pMethod;
 }
 
-void MacroChooser::SaveSetCurEntry( SvTreeListBox& rBox, SvLBoxEntry* pEntry )
+void MacroChooser::SaveSetCurEntry( SvTreeListBox& rBox, SvTreeListEntry* pEntry )
 {
     // the edit would be killed by the highlight otherwise:
 
@@ -394,9 +394,9 @@ void MacroChooser::SaveSetCurEntry( SvTreeListBox& rBox, SvLBoxEntry* pEntry )
 
 void MacroChooser::CheckButtons()
 {
-    SvLBoxEntry* pCurEntry = aBasicBox.GetCurEntry();
+    SvTreeListEntry* pCurEntry = aBasicBox.GetCurEntry();
     EntryDescriptor aDesc = aBasicBox.GetEntryDescriptor(pCurEntry);
-    SvLBoxEntry* pMacroEntry = aMacroBox.FirstSelected();
+    SvTreeListEntry* pMacroEntry = aMacroBox.FirstSelected();
     SbMethod* pMethod = GetMacro();
 
     // check, if corresponding libraries are readonly
@@ -532,7 +532,7 @@ IMPL_LINK( MacroChooser, BasicSelectHdl, SvTreeListBox *, pBox )
 
         if ( aMacroBox.GetEntryCount() )
         {
-            SvLBoxEntry* pEntry = aMacroBox.GetEntry( 0 );
+            SvTreeListEntry* pEntry = aMacroBox.GetEntry( 0 );
             DBG_ASSERT( pEntry, "Entry ?!" );
             aMacroBox.SetCurEntry( pEntry );
         }
@@ -551,19 +551,19 @@ IMPL_LINK( MacroChooser, EditModifyHdl, Edit *, pEdit )
 
     // select the module in which the macro is put at Neu (new),
     // if BasicManager or Lib is selecting
-    SvLBoxEntry* pCurEntry = aBasicBox.GetCurEntry();
+    SvTreeListEntry* pCurEntry = aBasicBox.GetCurEntry();
     if ( pCurEntry )
     {
         sal_uInt16 nDepth = aBasicBox.GetModel()->GetDepth( pCurEntry );
         if ( ( nDepth == 1 ) && ( aBasicBox.IsEntryProtected( pCurEntry ) ) )
         {
             // then put to the respective Std-Lib...
-            SvLBoxEntry* pManagerEntry = aBasicBox.GetModel()->GetParent( pCurEntry );
+            SvTreeListEntry* pManagerEntry = aBasicBox.GetModel()->GetParent( pCurEntry );
             pCurEntry = aBasicBox.GetModel()->FirstChild( pManagerEntry );
         }
         if ( nDepth < 2 )
         {
-            SvLBoxEntry* pNewEntry = pCurEntry;
+            SvTreeListEntry* pNewEntry = pCurEntry;
             while ( pCurEntry && ( nDepth < 2 ) )
             {
                 pCurEntry = aBasicBox.FirstChild( pCurEntry );
@@ -581,7 +581,7 @@ IMPL_LINK( MacroChooser, EditModifyHdl, Edit *, pEdit )
             bool bFound = false;
             for ( sal_uInt16 n = 0; n < aMacroBox.GetEntryCount(); n++ )
             {
-                SvLBoxEntry* pEntry = aMacroBox.GetEntry( n );
+                SvTreeListEntry* pEntry = aMacroBox.GetEntry( n );
                 DBG_ASSERT( pEntry, "Entry ?!" );
                 if ( aMacroBox.GetEntryText( pEntry ).CompareIgnoreCaseToAscii( aEdtText ) == COMPARE_EQUAL )
                 {
@@ -592,7 +592,7 @@ IMPL_LINK( MacroChooser, EditModifyHdl, Edit *, pEdit )
             }
             if ( !bFound )
             {
-                SvLBoxEntry* pEntry = aMacroBox.FirstSelected();
+                SvTreeListEntry* pEntry = aMacroBox.FirstSelected();
                 // if the entry exists ->Select ->Desription...
                 if ( pEntry )
                     aMacroBox.Select( pEntry, false );
@@ -654,7 +654,7 @@ IMPL_LINK( MacroChooser, ButtonHdl, Button *, pButton )
     }
     else if ( ( pButton == &aEditButton ) || ( pButton == &aNewDelButton ) )
     {
-        SvLBoxEntry* pCurEntry = aBasicBox.GetCurEntry();
+        SvTreeListEntry* pCurEntry = aBasicBox.GetCurEntry();
         EntryDescriptor aDesc = aBasicBox.GetEntryDescriptor(pCurEntry);
         ScriptDocument aDocument( aDesc.GetDocument() );
         DBG_ASSERT( aDocument.isAlive(), "MacroChooser::ButtonHdl: no document, or document is dead!" );
@@ -673,7 +673,7 @@ IMPL_LINK( MacroChooser, ButtonHdl, Button *, pButton )
         SfxMacroInfoItem aInfoItem( SID_BASICIDE_ARG_MACROINFO, pBasMgr, aLib, aMod, aSub, String() );
         if ( pButton == &aEditButton )
         {
-            SvLBoxEntry* pEntry = aMacroBox.FirstSelected();
+            SvTreeListEntry* pEntry = aMacroBox.FirstSelected();
             if ( pEntry )
                 aInfoItem.SetMethod( aMacroBox.GetEntryText( pEntry ) );
             StoreMacroDescription();
@@ -728,7 +728,7 @@ IMPL_LINK( MacroChooser, ButtonHdl, Button *, pButton )
 
     else if ( pButton == &aAssignButton )
     {
-        SvLBoxEntry* pCurEntry = aBasicBox.GetCurEntry();
+        SvTreeListEntry* pCurEntry = aBasicBox.GetCurEntry();
         EntryDescriptor aDesc = aBasicBox.GetEntryDescriptor(pCurEntry);
         ScriptDocument aDocument( aDesc.GetDocument() );
         DBG_ASSERT( aDocument.isAlive(), "MacroChooser::ButtonHdl: no document, or document is dead!" );
@@ -750,14 +750,14 @@ IMPL_LINK( MacroChooser, ButtonHdl, Button *, pButton )
     }
     else if ( pButton == &aNewLibButton )
     {
-        SvLBoxEntry* pCurEntry = aBasicBox.GetCurEntry();
+        SvTreeListEntry* pCurEntry = aBasicBox.GetCurEntry();
         EntryDescriptor aDesc = aBasicBox.GetEntryDescriptor(pCurEntry);
         ScriptDocument aDocument( aDesc.GetDocument() );
         createLibImpl( static_cast<Window*>( this ), aDocument, NULL, &aBasicBox );
     }
     else if ( pButton == &aNewModButton )
     {
-        SvLBoxEntry* pCurEntry = aBasicBox.GetCurEntry();
+        SvTreeListEntry* pCurEntry = aBasicBox.GetCurEntry();
         EntryDescriptor aDesc = aBasicBox.GetEntryDescriptor(pCurEntry);
         ScriptDocument aDocument( aDesc.GetDocument() );
         String aLibName( aDesc.GetLibName() );
@@ -793,7 +793,7 @@ IMPL_LINK( MacroChooser, ButtonHdl, Button *, pButton )
 
 void MacroChooser::UpdateFields()
 {
-    SvLBoxEntry*    pMacroEntry = aMacroBox.GetCurEntry();
+    SvTreeListEntry*    pMacroEntry = aMacroBox.GetCurEntry();
     String          aEmptyStr;
 
     aMacroNameEdit.SetText( aEmptyStr );

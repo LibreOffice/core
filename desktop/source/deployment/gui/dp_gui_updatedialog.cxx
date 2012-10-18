@@ -662,7 +662,7 @@ void UpdateDialog::CheckListBox::KeyInput(KeyEvent const & event) {
 //------------------------------------------------------------------------------
 void UpdateDialog::CheckListBox::handlePopupMenu( const Point &rPos )
 {
-    SvListEntry *pData = GetEntry( rPos );
+    SvTreeListEntry *pData = GetEntry( rPos );
 
     if ( pData )
     {

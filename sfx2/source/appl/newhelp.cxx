@@ -296,7 +296,7 @@ ContentListBox_Impl::ContentListBox_Impl( Window* pParent, const ResId& rResId )
 ContentListBox_Impl::~ContentListBox_Impl()
 {
     sal_uInt16 nPos = 0;
-    SvLBoxEntry* pEntry = GetEntry( nPos++ );
+    SvTreeListEntry* pEntry = GetEntry( nPos++ );
     while ( pEntry )
     {
         ::rtl::OUString aTemp( GetEntryText( pEntry ) );
@@ -325,7 +325,7 @@ void ContentListBox_Impl::InitRoot()
         aURL = aRow.GetToken( 0, '\t', nIdx );
         sal_Unicode cFolder = aRow.GetToken( 0, '\t', nIdx ).GetChar(0);
         sal_Bool bIsFolder = ( '1' == cFolder );
-        SvLBoxEntry* pEntry = InsertEntry( aTitle, aOpenBookImage, aClosedBookImage, NULL, sal_True );
+        SvTreeListEntry* pEntry = InsertEntry( aTitle, aOpenBookImage, aClosedBookImage, NULL, sal_True );
         if ( bIsFolder )
             pEntry->SetUserData( new ContentEntry_Impl( aURL, sal_True ) );
     }
@@ -333,9 +333,9 @@ void ContentListBox_Impl::InitRoot()
 
 // -----------------------------------------------------------------------
 
-void ContentListBox_Impl::ClearChildren( SvLBoxEntry* pParent )
+void ContentListBox_Impl::ClearChildren( SvTreeListEntry* pParent )
 {
-    SvLBoxEntry* pEntry = FirstChild( pParent );
+    SvTreeListEntry* pEntry = FirstChild( pParent );
     while ( pEntry )
     {
         ::rtl::OUString aTemp( GetEntryText( pEntry ) );
@@ -347,7 +347,7 @@ void ContentListBox_Impl::ClearChildren( SvLBoxEntry* pParent )
 
 // -----------------------------------------------------------------------
 
-void ContentListBox_Impl::RequestingChildren( SvLBoxEntry* pParent )
+void ContentListBox_Impl::RequestingChildren( SvTreeListEntry* pParent )
 {
     try
     {
@@ -370,7 +370,7 @@ void ContentListBox_Impl::RequestingChildren( SvLBoxEntry* pParent )
                     aURL = aRow.GetToken( 0, '\t', nIdx );
                     sal_Unicode cFolder = aRow.GetToken( 0, '\t', nIdx ).GetChar(0);
                     sal_Bool bIsFolder = ( '1' == cFolder );
-                    SvLBoxEntry* pEntry = NULL;
+                    SvTreeListEntry* pEntry = NULL;
                     if ( bIsFolder )
                     {
                         pEntry = InsertEntry( aTitle, aOpenBookImage, aClosedBookImage, pParent, sal_True );
@@ -414,7 +414,7 @@ long ContentListBox_Impl::Notify( NotifyEvent& rNEvt )
 String ContentListBox_Impl::GetSelectEntry() const
 {
     String aRet;
-    SvLBoxEntry* pEntry = FirstSelected();
+    SvTreeListEntry* pEntry = FirstSelected();
     if ( pEntry && !( (ContentEntry_Impl*)pEntry->GetUserData()  )->bIsFolder )
         aRet = ( (ContentEntry_Impl*)pEntry->GetUserData() )->aURL;
     return aRet;

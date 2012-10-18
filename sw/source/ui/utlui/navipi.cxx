@@ -601,7 +601,7 @@ void SwNavigationPI::_ZoomOut()
             aContentTree.ShowTree();
             aDocListBox.Show();
         }
-        SvLBoxEntry* pFirst = aContentTree.FirstSelected();
+        SvTreeListEntry* pFirst = aContentTree.FirstSelected();
         if(pFirst)
             aContentTree.Select(pFirst, sal_True); // toolbox enablen
         pConfig->SetSmall( sal_False );
@@ -628,7 +628,7 @@ void SwNavigationPI::_ZoomIn()
         ((SfxDockingWindow*)GetParent())->SetMinOutputSizePixel(Size(
                             aMinOutSizePixel.Width(), aSz.Height()));
         pFloat->SetOutputSizePixel(aSz);
-        SvLBoxEntry* pFirst = aContentTree.FirstSelected();
+        SvTreeListEntry* pFirst = aContentTree.FirstSelected();
         if(pFirst)
             aContentTree.Select(pFirst, sal_True); // toolbox enablen
         pConfig->SetSmall( sal_True );

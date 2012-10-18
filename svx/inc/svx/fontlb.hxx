@@ -46,7 +46,7 @@ private:
 public:
                                 SvLBoxFontString();
                                 SvLBoxFontString(
-                                    SvLBoxEntry* pEntry,
+                                    SvTreeListEntry* pEntry,
                                     sal_uInt16 nFlags,
                                     const XubString& rString,
                                     const Font& rFont,
@@ -57,14 +57,14 @@ public:
     /** Creates a new empty list box item. */
     virtual SvLBoxItem*         Create() const;
 
-    void            InitViewData( SvTreeListBox*,SvLBoxEntry*,SvViewDataItem* );
+    void            InitViewData( SvTreeListBox*,SvTreeListEntry*,SvViewDataItem* );
 
     /** Paints this entry to the specified position, using the own font settings. */
     void                        Paint(
                                     const Point& rPos,
                                     SvTreeListBox& rDev,
                                     sal_uInt16 nFlags,
-                                    SvLBoxEntry* pEntry );
+                                    SvTreeListEntry* pEntry );
 };
 
 
@@ -103,7 +103,7 @@ protected:
     /** Initializes a new SvLBoxFontString entry.
         @descr  Uses current value of maEntryFont to set the entry font (if mbUseFont is true). */
     virtual void                InitEntry(
-                                    SvLBoxEntry* pEntry,
+                                    SvTreeListEntry* pEntry,
                                     const XubString& rEntryText,
                                     const Image& rCollImg,
                                     const Image& rExpImg,

@@ -106,7 +106,7 @@ class SfxConfigFunctionListBox_Impl : public SvTreeListBox
 {
     friend class SfxConfigGroupListBox_Impl;
     Timer                aTimer;
-    SvLBoxEntry*         pCurEntry;
+    SvTreeListEntry*         pCurEntry;
     SfxGroupInfoArr_Impl aArr;
     SfxStylesInfo_Impl*  pStylesInfo;
 
@@ -119,7 +119,7 @@ public:
 
     void          ClearAll();
     using Window::GetHelpText;
-    String        GetHelpText( SvLBoxEntry *pEntry );
+    String        GetHelpText( SvTreeListEntry *pEntry );
     String        GetCurCommand();
     String        GetCurLabel();
     String        GetSelectedScriptURI();
@@ -163,9 +163,9 @@ class SfxConfigGroupListBox_Impl : public SvTreeListBox
     SfxStylesInfo_Impl* pStylesInfo;
 
 protected:
-    virtual void        RequestingChildren( SvLBoxEntry *pEntry);
+    virtual void        RequestingChildren( SvTreeListEntry *pEntry);
     using SvListView::Expand;
-    virtual sal_Bool        Expand( SvLBoxEntry* pParent );
+    virtual sal_Bool        Expand( SvTreeListEntry* pParent );
 
 public:
     SfxConfigGroupListBox_Impl ( Window* pParent,
@@ -179,7 +179,7 @@ public:
                              const ::rtl::OUString&                                        sModuleLongName);
     void                SetFunctionListBox( SfxConfigFunctionListBox_Impl *pBox )
                         { pFunctionListBox = pBox; }
-    void                Open( SvLBoxEntry*, sal_Bool );
+    void                Open( SvTreeListEntry*, sal_Bool );
     void                GroupSelected();
     void                SelectMacro( const SfxMacroInfoItem* );
     void                SelectMacro( const String&, const String& );

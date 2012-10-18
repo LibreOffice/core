@@ -362,13 +362,13 @@ void OApplicationView::paste()
         pTest->paste();
 }
 // -----------------------------------------------------------------------------
-::rtl::OUString OApplicationView::getQualifiedName( SvLBoxEntry* _pEntry ) const
+::rtl::OUString OApplicationView::getQualifiedName( SvTreeListEntry* _pEntry ) const
 {
     OSL_ENSURE(m_pWin && getDetailView(),"Detail view is NULL! -> GPF");
     return getDetailView()->getQualifiedName( _pEntry );
 }
 // -----------------------------------------------------------------------------
-sal_Bool OApplicationView::isLeaf(SvLBoxEntry* _pEntry) const
+sal_Bool OApplicationView::isLeaf(SvTreeListEntry* _pEntry) const
 {
     OSL_ENSURE(m_pWin && getDetailView(),"Detail view is NULL! -> GPF");
     return getDetailView()->isLeaf(_pEntry);
@@ -452,7 +452,7 @@ void OApplicationView::selectElements(const Sequence< ::rtl::OUString>& _aNames)
     getDetailView()->selectElements( _aNames );
 }
 // -----------------------------------------------------------------------------
-SvLBoxEntry* OApplicationView::elementAdded(ElementType eType,const ::rtl::OUString& _rName, const Any& _rObject )
+SvTreeListEntry* OApplicationView::elementAdded(ElementType eType,const ::rtl::OUString& _rName, const Any& _rObject )
 {
     OSL_ENSURE(m_pWin && getDetailView(),"Detail view is NULL! -> GPF");
     return getDetailView()->elementAdded(eType,_rName,_rObject);
@@ -486,7 +486,7 @@ void OApplicationView::selectContainer(ElementType _eType)
     getPanel()->selectContainer(_eType);
 }
 // -----------------------------------------------------------------------------
-SvLBoxEntry* OApplicationView::getEntry( const Point& _aPosPixel ) const
+SvTreeListEntry* OApplicationView::getEntry( const Point& _aPosPixel ) const
 {
     OSL_ENSURE(m_pWin && getDetailView(),"Detail view is NULL! -> GPF");
     return getDetailView()->getEntry(_aPosPixel);

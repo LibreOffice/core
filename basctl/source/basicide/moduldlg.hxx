@@ -104,18 +104,18 @@ public:
 class ExtTreeListBox : public TreeListBox
 {
 protected:
-    virtual sal_Bool    EditingEntry( SvLBoxEntry* pEntry, Selection& rSel  );
-    virtual sal_Bool    EditedEntry( SvLBoxEntry* pEntry, const OUString& rNewText );
+    virtual sal_Bool    EditingEntry( SvTreeListEntry* pEntry, Selection& rSel  );
+    virtual sal_Bool    EditedEntry( SvTreeListEntry* pEntry, const OUString& rNewText );
 
-    virtual DragDropMode    NotifyStartDrag( TransferDataContainer& rData, SvLBoxEntry* pEntry );
-    virtual sal_Bool            NotifyAcceptDrop( SvLBoxEntry* pEntry );
+    virtual DragDropMode    NotifyStartDrag( TransferDataContainer& rData, SvTreeListEntry* pEntry );
+    virtual sal_Bool            NotifyAcceptDrop( SvTreeListEntry* pEntry );
 
-    virtual sal_Bool    NotifyMoving( SvLBoxEntry* pTarget, SvLBoxEntry* pEntry,
-                        SvLBoxEntry*& rpNewParent, sal_uLong& rNewChildPos );
-    virtual sal_Bool    NotifyCopying( SvLBoxEntry* pTarget, SvLBoxEntry* pEntry,
-                        SvLBoxEntry*& rpNewParent, sal_uLong& rNewChildPos );
-    sal_Bool            NotifyCopyingMoving( SvLBoxEntry* pTarget, SvLBoxEntry* pEntry,
-                        SvLBoxEntry*& rpNewParent, sal_uLong& rNewChildPos, sal_Bool bMove );
+    virtual sal_Bool    NotifyMoving( SvTreeListEntry* pTarget, SvTreeListEntry* pEntry,
+                        SvTreeListEntry*& rpNewParent, sal_uLong& rNewChildPos );
+    virtual sal_Bool    NotifyCopying( SvTreeListEntry* pTarget, SvTreeListEntry* pEntry,
+                        SvTreeListEntry*& rpNewParent, sal_uLong& rNewChildPos );
+    sal_Bool            NotifyCopyingMoving( SvTreeListEntry* pTarget, SvTreeListEntry* pEntry,
+                        SvTreeListEntry*& rpNewParent, sal_uLong& rNewChildPos, sal_Bool bMove );
 
 public:
     ExtTreeListBox( Window* pParent, const ResId& rRes );
@@ -134,15 +134,15 @@ public:
     CheckBox( Window* pParent, const ResId& rResId );
     ~CheckBox();
 
-    SvLBoxEntry*    DoInsertEntry( const String& rStr, sal_uLong nPos = LISTBOX_APPEND );
-    SvLBoxEntry*    FindEntry( const String& rName );
+    SvTreeListEntry*    DoInsertEntry( const String& rStr, sal_uLong nPos = LISTBOX_APPEND );
+    SvTreeListEntry*    FindEntry( const String& rName );
 
     void            CheckEntryPos( sal_uLong nPos );
     bool            IsChecked( sal_uLong nPos ) const;
 
-    virtual void    InitEntry( SvLBoxEntry*, const XubString&, const Image&, const Image&, SvLBoxButtonKind eButtonKind );
-    virtual sal_Bool    EditingEntry( SvLBoxEntry* pEntry, Selection& rSel );
-    virtual sal_Bool    EditedEntry( SvLBoxEntry* pEntry, const OUString& rNewText );
+    virtual void    InitEntry( SvTreeListEntry*, const XubString&, const Image&, const Image&, SvLBoxButtonKind eButtonKind );
+    virtual sal_Bool    EditingEntry( SvTreeListEntry* pEntry, Selection& rSel );
+    virtual sal_Bool    EditedEntry( SvTreeListEntry* pEntry, const OUString& rNewText );
 
     void            SetDocument( const ScriptDocument& rDocument ) { m_aDocument = rDocument; }
 
@@ -259,7 +259,7 @@ protected:
     void                FillListBox();
     void                InsertListBoxEntry( const ScriptDocument& rDocument, LibraryLocation eLocation );
     void                SetCurLib();
-    SvLBoxEntry*        ImpInsertLibEntry( const String& rLibName, sal_uLong nPos );
+    SvTreeListEntry*        ImpInsertLibEntry( const String& rLibName, sal_uLong nPos );
     virtual void        ActivatePage();
     virtual void        DeactivatePage();
 

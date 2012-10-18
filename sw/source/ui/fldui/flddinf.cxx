@@ -103,9 +103,9 @@ void SwFldDokInfPage::Reset(const SfxItemSet& )
 
     // display SubTypes in TypeLB
     sal_uInt16 nTypeId = TYP_DOCINFOFLD;
-    SvLBoxEntry* pEntry = 0;
+    SvTreeListEntry* pEntry = 0;
 
-    SvLBoxEntry* pInfo = 0;
+    SvTreeListEntry* pInfo = 0;
 
     sal_uInt16 nSubType = USHRT_MAX;
     if (IsFldEdit())
@@ -213,7 +213,7 @@ void SwFldDokInfPage::Reset(const SfxItemSet& )
 IMPL_LINK_NOARG(SwFldDokInfPage, TypeHdl)
 {
     // save old ListBoxPos
-    SvLBoxEntry* pOldEntry = pSelEntry;
+    SvTreeListEntry* pOldEntry = pSelEntry;
 
     // current ListBoxPos
     pSelEntry = aTypeTLB.FirstSelected();
@@ -474,7 +474,7 @@ void    SwFldDokInfPage::FillUserData()
 {
     String sData(rtl::OUString(USER_DATA_VERSION));
     sData += ';';
-    SvLBoxEntry* pEntry = aTypeTLB.FirstSelected();
+    SvTreeListEntry* pEntry = aTypeTLB.FirstSelected();
     sal_uInt16 nTypeSel = pEntry ? sal::static_int_cast< sal_uInt16 >(reinterpret_cast< sal_uIntPtr >(pEntry->GetUserData())) : USHRT_MAX;
     sData += String::CreateFromInt32( nTypeSel );
     SetUserData(sData);

@@ -81,7 +81,7 @@ namespace accessibility
                 {
                     if ( getListBox() && getListBox()->HasFocus() )
                     {
-                        SvLBoxEntry* pEntry = static_cast< SvLBoxEntry* >( rVclWindowEvent.GetData() );
+                        SvTreeListEntry* pEntry = static_cast< SvTreeListEntry* >( rVclWindowEvent.GetData() );
                         if ( !pEntry )
                             pEntry = getListBox()->GetCurEntry();
 
@@ -105,7 +105,7 @@ namespace accessibility
                     NotifyAccessibleEvent( AccessibleEventId::SELECTION_CHANGED, Any(), Any() );
                     if ( getListBox() && getListBox()->HasFocus() )
                     {
-                        SvLBoxEntry* pEntry = static_cast< SvLBoxEntry* >( rVclWindowEvent.GetData() );
+                        SvTreeListEntry* pEntry = static_cast< SvTreeListEntry* >( rVclWindowEvent.GetData() );
                         if ( pEntry )
                         {
                             Reference< XAccessible > xChild = new AccessibleListBoxEntry( *getListBox(), pEntry, this );
@@ -120,7 +120,7 @@ namespace accessibility
                 case VCLEVENT_ITEM_EXPANDED :
                 case VCLEVENT_ITEM_COLLAPSED :
                 {
-                    SvLBoxEntry* pEntry = static_cast< SvLBoxEntry* >( rVclWindowEvent.GetData() );
+                    SvTreeListEntry* pEntry = static_cast< SvTreeListEntry* >( rVclWindowEvent.GetData() );
                     if ( pEntry )
                     {
                         AccessibleListBoxEntry* pAccListBoxEntry =
@@ -237,7 +237,7 @@ namespace accessibility
         ::comphelper::OExternalLockGuard aGuard( this );
 
         ensureAlive();
-        SvLBoxEntry* pEntry = getListBox()->GetEntry(i);
+        SvTreeListEntry* pEntry = getListBox()->GetEntry(i);
         if ( !pEntry )
             throw IndexOutOfBoundsException();
 
@@ -281,7 +281,7 @@ namespace accessibility
 
         ensureAlive();
 
-        SvLBoxEntry* pEntry = getListBox()->GetEntry( nChildIndex );
+        SvTreeListEntry* pEntry = getListBox()->GetEntry( nChildIndex );
         if ( !pEntry )
             throw IndexOutOfBoundsException();
 
@@ -294,7 +294,7 @@ namespace accessibility
 
         ensureAlive();
 
-        SvLBoxEntry* pEntry = getListBox()->GetEntry( nChildIndex );
+        SvTreeListEntry* pEntry = getListBox()->GetEntry( nChildIndex );
         if ( !pEntry )
             throw IndexOutOfBoundsException();
 
@@ -310,7 +310,7 @@ namespace accessibility
         sal_Int32 nCount = getListBox()->GetLevelChildCount( NULL );
         for ( sal_Int32 i = 0; i < nCount; ++i )
         {
-            SvLBoxEntry* pEntry = getListBox()->GetEntry( i );
+            SvTreeListEntry* pEntry = getListBox()->GetEntry( i );
             if ( getListBox()->IsSelected( pEntry ) )
                 getListBox()->Select( pEntry, sal_False );
         }
@@ -325,7 +325,7 @@ namespace accessibility
         sal_Int32 nCount = getListBox()->GetLevelChildCount( NULL );
         for ( sal_Int32 i = 0; i < nCount; ++i )
         {
-            SvLBoxEntry* pEntry = getListBox()->GetEntry( i );
+            SvTreeListEntry* pEntry = getListBox()->GetEntry( i );
             if ( !getListBox()->IsSelected( pEntry ) )
                 getListBox()->Select( pEntry, sal_True );
         }
@@ -341,7 +341,7 @@ namespace accessibility
         sal_Int32 nCount = getListBox()->GetLevelChildCount( NULL );
         for ( sal_Int32 i = 0; i < nCount; ++i )
         {
-            SvLBoxEntry* pEntry = getListBox()->GetEntry( i );
+            SvTreeListEntry* pEntry = getListBox()->GetEntry( i );
             if ( getListBox()->IsSelected( pEntry ) )
                 ++nSelCount;
         }
@@ -363,7 +363,7 @@ namespace accessibility
         sal_Int32 nCount = getListBox()->GetLevelChildCount( NULL );
         for ( sal_Int32 i = 0; i < nCount; ++i )
         {
-            SvLBoxEntry* pEntry = getListBox()->GetEntry( i );
+            SvTreeListEntry* pEntry = getListBox()->GetEntry( i );
             if ( getListBox()->IsSelected( pEntry ) )
                 ++nSelCount;
 
@@ -383,7 +383,7 @@ namespace accessibility
 
         ensureAlive();
 
-        SvLBoxEntry* pEntry = getListBox()->GetEntry( nSelectedChildIndex );
+        SvTreeListEntry* pEntry = getListBox()->GetEntry( nSelectedChildIndex );
         if ( !pEntry )
             throw IndexOutOfBoundsException();
 

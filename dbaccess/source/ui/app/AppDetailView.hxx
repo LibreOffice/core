@@ -35,7 +35,7 @@
 
 #include <vector>
 
-class SvLBoxEntry;
+class SvTreeListEntry;
 
 namespace dbaui
 {
@@ -49,8 +49,8 @@ namespace dbaui
         OTasksWindow&   m_rTaskWindow;
 
         // members related to drawing the currently hovered/selected entry
-        SvLBoxEntry*        m_pMouseDownEntry;
-        SvLBoxEntry*        m_pLastActiveEntry;
+        SvTreeListEntry*        m_pMouseDownEntry;
+        SvTreeListEntry*        m_pLastActiveEntry;
         Color               m_aOriginalBackgroundColor;
         Font                m_aOriginalFont;
 
@@ -71,8 +71,8 @@ namespace dbaui
         void    updateHelpText();
 
     protected:
-        virtual void        PreparePaint( SvLBoxEntry* _pEntry );
-        virtual Rectangle   GetFocusRect( SvLBoxEntry* _pEntry, long _nLine );
+        virtual void        PreparePaint( SvTreeListEntry* _pEntry );
+        virtual Rectangle   GetFocusRect( SvTreeListEntry* _pEntry, long _nLine );
         virtual void        ModelHasCleared();
 
         // IMnemonicEntryList
@@ -80,11 +80,11 @@ namespace dbaui
         virtual void        ExecuteSearchEntry( const void* _pEntry ) const;
 
     private:
-        void    onSelected( SvLBoxEntry* _pEntry ) const;
+        void    onSelected( SvTreeListEntry* _pEntry ) const;
         /** sets a new current entry, and invalidates the old and the new one, if necessary
             @return <TRUE/> if and only if the "current entry" changed
         */
-        bool    setCurrentEntryInvalidate( SvLBoxEntry* _pEntry );
+        bool    setCurrentEntryInvalidate( SvTreeListEntry* _pEntry );
     };
 
     struct TaskEntry
@@ -206,7 +206,7 @@ namespace dbaui
             @return
                 the qualified name
         */
-        ::rtl::OUString getQualifiedName( SvLBoxEntry* _pEntry ) const;
+        ::rtl::OUString getQualifiedName( SvTreeListEntry* _pEntry ) const;
 
         /** returns if an entry is a leaf
             @param _pEntry
@@ -214,7 +214,7 @@ namespace dbaui
             @return
                 <TRUE/> if the entry is a leaf, otherwise <FALSE/>
         */
-        sal_Bool isLeaf(SvLBoxEntry* _pEntry) const;
+        sal_Bool isLeaf(SvTreeListEntry* _pEntry) const;
 
         /** returns if one of the selected entries is a leaf
             @return
@@ -289,7 +289,7 @@ namespace dbaui
             @param  _rxConn
                 If we insert a table, the connection must be set.
         */
-        SvLBoxEntry* elementAdded(ElementType eType
+        SvTreeListEntry* elementAdded(ElementType eType
                         ,const ::rtl::OUString& _rName
                         ,const ::com::sun::star::uno::Any& _rObject );
 
@@ -352,7 +352,7 @@ namespace dbaui
                             const ::rtl::OUString& _sName,
                             sal_Bool _bTable);
 
-        SvLBoxEntry* getEntry( const Point& _aPoint ) const;
+        SvTreeListEntry* getEntry( const Point& _aPoint ) const;
 
         Window* getTreeWindow() const;
     private:

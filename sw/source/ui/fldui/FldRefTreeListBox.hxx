@@ -30,7 +30,7 @@ public:
     SwFldRefTreeListBox(Window* pParent, const ResId& rResId);
     virtual ~SwFldRefTreeListBox();
 
-//  virtual long    GetTabPos( SvLBoxEntry*, SvLBoxTab* );
+//  virtual long    GetTabPos( SvTreeListEntry*, SvLBoxTab* );
 };
 #endif
 

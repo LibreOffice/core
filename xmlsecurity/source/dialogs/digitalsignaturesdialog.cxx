@@ -679,7 +679,7 @@ void DigitalSignaturesDialog::ImplFillSignaturesBox()
                 aImage = maSigsValidImg.GetImage();
             }
 
-            SvLBoxEntry* pEntry = maSignaturesLB.InsertEntry( OUString(), aImage, aImage );
+            SvTreeListEntry* pEntry = maSignaturesLB.InsertEntry( OUString(), aImage, aImage );
             maSignaturesLB.SetEntryText( aSubject, pEntry, 1 );
             maSignaturesLB.SetEntryText( aIssuer, pEntry, 2 );
             maSignaturesLB.SetEntryText( aDateTimeStr, pEntry, 3 );

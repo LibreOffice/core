@@ -153,7 +153,7 @@ private:
     String          sTitle;
     String          sNotLoadedError;
 
-    SvLBoxEntry*    pCurrentPageEntry;
+    SvTreeListEntry*    pCurrentPageEntry;
 
     // for the ColorTabPage
     SfxItemSet*     pColorPageItemSet;

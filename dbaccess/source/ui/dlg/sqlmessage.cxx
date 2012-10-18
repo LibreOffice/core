@@ -296,7 +296,7 @@ namespace
     void lcl_insertExceptionEntry( SvTreeListBox& _rList, size_t _nElementPos, const ExceptionDisplayInfo& _rEntry )
     {
         Image aEntryImage( _rEntry.pImageProvider->getImage() );
-        SvLBoxEntry* pListEntry =
+        SvTreeListEntry* pListEntry =
             _rList.InsertEntry( _rEntry.pLabelProvider->getLabel(), aEntryImage, aEntryImage );
         pListEntry->SetUserData( reinterpret_cast< void* >( _nElementPos ) );
     }
@@ -390,7 +390,7 @@ OExceptionChainDialog::~OExceptionChainDialog()
 //------------------------------------------------------------------------------
 IMPL_LINK_NOARG(OExceptionChainDialog, OnExceptionSelected)
 {
-    SvLBoxEntry* pSelected = m_aExceptionList.FirstSelected();
+    SvTreeListEntry* pSelected = m_aExceptionList.FirstSelected();
     OSL_ENSURE(!pSelected || !m_aExceptionList.NextSelected(pSelected), "OExceptionChainDialog::OnExceptionSelected : multi selection ?");
 
     String sText;

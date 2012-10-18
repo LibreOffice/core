@@ -417,7 +417,7 @@ namespace svxform
     };
 
     //========================================================================
-    typedef std::set<SvLBoxEntry*> SvLBoxEntrySortedArray;
+    typedef std::set<SvTreeListEntry*> SvLBoxEntrySortedArray;
 
     class NavigatorTree : public SvTreeListBox, public SfxListener
     {
@@ -438,8 +438,8 @@ namespace svxform
 
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >    m_xORB;
         NavigatorTreeModel* m_pNavModel;
-        SvLBoxEntry*        m_pRootEntry;
-        SvLBoxEntry*        m_pEditEntry;
+        SvTreeListEntry*        m_pRootEntry;
+        SvTreeListEntry*        m_pEditEntry;
 
         sal_uLong               nEditEvent;
 
@@ -463,9 +463,9 @@ namespace svxform
 
 
         void            UpdateContent();
-        FmControlData*  NewControl( const ::rtl::OUString& rServiceName, SvLBoxEntry* pParentEntry, sal_Bool bEditName = sal_True );
-        void            NewForm( SvLBoxEntry* pParentEntry );
-        SvLBoxEntry*    Insert( FmEntryData* pEntryData, sal_uLong nRelPos=LIST_APPEND );
+        FmControlData*  NewControl( const ::rtl::OUString& rServiceName, SvTreeListEntry* pParentEntry, sal_Bool bEditName = sal_True );
+        void            NewForm( SvTreeListEntry* pParentEntry );
+        SvTreeListEntry*    Insert( FmEntryData* pEntryData, sal_uLong nRelPos=LIST_APPEND );
         void            Remove( FmEntryData* pEntryData );
 
 
@@ -527,21 +527,21 @@ namespace svxform
         void MarkViewObj( FmControlData* pControlData, sal_Bool bMarkHandles, sal_Bool bMark );
         void UnmarkAllViewObj();
 
-        sal_Bool IsFormEntry( SvLBoxEntry* pEntry );
-        sal_Bool IsFormComponentEntry( SvLBoxEntry* pEntry );
+        sal_Bool IsFormEntry( SvTreeListEntry* pEntry );
+        sal_Bool IsFormComponentEntry( SvTreeListEntry* pEntry );
 
         ::rtl::OUString GenerateName( FmEntryData* pEntryData );
 
         NavigatorTreeModel*    GetNavModel() const { return m_pNavModel; }
-        SvLBoxEntry*        FindEntry( FmEntryData* pEntryData );
+        SvTreeListEntry*        FindEntry( FmEntryData* pEntryData );
 
-        virtual sal_Bool EditedEntry( SvLBoxEntry* pEntry, const rtl::OUString& rNewText );
-        virtual sal_Bool Select( SvLBoxEntry* pEntry, sal_Bool bSelect=sal_True );
-        virtual sal_Bool EditingEntry( SvLBoxEntry* pEntry, Selection& );
+        virtual sal_Bool EditedEntry( SvTreeListEntry* pEntry, const rtl::OUString& rNewText );
+        virtual sal_Bool Select( SvTreeListEntry* pEntry, sal_Bool bSelect=sal_True );
+        virtual sal_Bool EditingEntry( SvTreeListEntry* pEntry, Selection& );
         virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
         virtual void KeyInput( const KeyEvent& rKEvt );
 
-        virtual void ModelHasRemoved( SvListEntry* _pEntry );
+        virtual void ModelHasRemoved( SvTreeListEntry* _pEntry );
 
         using SvTreeListBox::Insert;
         using SvTreeListBox::ExecuteDrop;
@@ -550,10 +550,10 @@ namespace svxform
 
     private:
         sal_Int8    implAcceptDataTransfer( const DataFlavorExVector& _rFlavors, sal_Int8 _nAction, const Point& _rDropPos, sal_Bool _bDnD );
-        sal_Int8    implAcceptDataTransfer( const DataFlavorExVector& _rFlavors, sal_Int8 _nAction, SvLBoxEntry* _pTargetEntry, sal_Bool _bDnD );
+        sal_Int8    implAcceptDataTransfer( const DataFlavorExVector& _rFlavors, sal_Int8 _nAction, SvTreeListEntry* _pTargetEntry, sal_Bool _bDnD );
 
         sal_Int8    implExecuteDataTransfer( const OControlTransferData& _rData, sal_Int8 _nAction, const Point& _rDropPos, sal_Bool _bDnD );
-        sal_Int8    implExecuteDataTransfer( const OControlTransferData& _rData, sal_Int8 _nAction, SvLBoxEntry* _pTargetEntry, sal_Bool _bDnD );
+        sal_Int8    implExecuteDataTransfer( const OControlTransferData& _rData, sal_Int8 _nAction, SvTreeListEntry* _pTargetEntry, sal_Bool _bDnD );
 
         // check if a cut, copy, or drag operation can be started in the current situation
         sal_Bool    implAllowExchange( sal_Int8 _nAction, sal_Bool* _pHasNonHidden = NULL );

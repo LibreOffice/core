@@ -259,7 +259,7 @@ class FmFilterNavigator : public SvTreeListBox, public SfxListener
     enum DROP_ACTION{ DA_SCROLLUP, DA_SCROLLDOWN, DA_EXPANDNODE };
 
     FmFilterModel*          m_pModel;
-    SvLBoxEntry*            m_pEditingCurrently;
+    SvTreeListEntry*            m_pEditingCurrently;
     OFilterExchangeHelper   m_aControlExchange;
 
 
@@ -284,22 +284,22 @@ protected:
     virtual void KeyInput( const KeyEvent& rKEvt );
     virtual void Command( const CommandEvent& rEvt );
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
-    virtual void InitEntry(SvLBoxEntry* pEntry, const XubString& rStr, const Image& rImg1, const Image& rImg2, SvLBoxButtonKind eButtonKind);
-    virtual sal_Bool Select( SvLBoxEntry* pEntry, sal_Bool bSelect=sal_True );
-    virtual sal_Bool EditingEntry( SvLBoxEntry* pEntry, Selection& rSelection );
-    virtual sal_Bool EditedEntry( SvLBoxEntry* pEntry, const rtl::OUString& rNewText );
+    virtual void InitEntry(SvTreeListEntry* pEntry, const XubString& rStr, const Image& rImg1, const Image& rImg2, SvLBoxButtonKind eButtonKind);
+    virtual sal_Bool Select( SvTreeListEntry* pEntry, sal_Bool bSelect=sal_True );
+    virtual sal_Bool EditingEntry( SvTreeListEntry* pEntry, Selection& rSelection );
+    virtual sal_Bool EditedEntry( SvTreeListEntry* pEntry, const rtl::OUString& rNewText );
 
     virtual sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt );
     virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& rEvt );
     virtual void        StartDrag( sal_Int8 nAction, const Point& rPosPixel );
 
     void DeleteSelection();
-    SvLBoxEntry* FindEntry(const FmFilterData* pItem) const;
+    SvTreeListEntry* FindEntry(const FmFilterData* pItem) const;
     void Insert(FmFilterData* pItem, sal_uLong nPos);
     void Remove(FmFilterData* pItem);
 
-    DECL_LINK(OnRemove, SvLBoxEntry*);
-    DECL_LINK(OnEdited, SvLBoxEntry*);
+    DECL_LINK(OnRemove, SvTreeListEntry*);
+    DECL_LINK(OnEdited, SvTreeListEntry*);
     DECL_LINK(OnDropActionTimer, void*);
 
 private:
@@ -319,8 +319,8 @@ private:
             If <TRUE/> the items will not be removed from the model, otherwise they will.
     */
     void insertFilterItem(const ::std::vector<FmFilterItem*>& _rFilterList,FmFilterItems* _pTargetItems,sal_Bool _bCopy = sal_False);
-    SvLBoxEntry* getPrevEntry(SvLBoxEntry* _pStartWith = NULL);
-    SvLBoxEntry* getNextEntry(SvLBoxEntry* _pStartWith = NULL);
+    SvTreeListEntry* getPrevEntry(SvTreeListEntry* _pStartWith = NULL);
+    SvTreeListEntry* getNextEntry(SvTreeListEntry* _pStartWith = NULL);
 
     using SvTreeListBox::Select;
     using SvTreeListBox::ExecuteDrop;

@@ -57,7 +57,7 @@ namespace dbaui
     protected:
         virtual void    KeyInput( const KeyEvent& rEvt );
 
-        virtual void    OnEntryDoubleClicked(SvLBoxEntry* pEntry);
+        virtual void    OnEntryDoubleClicked(SvTreeListEntry* pEntry);
             // wird aus dem DoubleClickHdl der ListBox heraus aufgerufen
         /** delete the user data with the equal type as created within createUserData
             @param  _pUserData

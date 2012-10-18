@@ -64,8 +64,8 @@ class OfaMSFilterTabPage2 : public SfxTabPage
         using SvxSimpleTable::SetTabs;
 
         void            CheckEntryPos(sal_uLong nPos, sal_uInt16 nCol, sal_Bool bChecked);
-        SvButtonState   GetCheckButtonState( SvLBoxEntry*, sal_uInt16 nCol ) const;
-        void            SetCheckButtonState( SvLBoxEntry*, sal_uInt16 nCol, SvButtonState );
+        SvButtonState   GetCheckButtonState( SvTreeListEntry*, sal_uInt16 nCol ) const;
+        void            SetCheckButtonState( SvTreeListEntry*, sal_uInt16 nCol, SvButtonState );
     protected:
         virtual void    SetTabs();
         virtual void    HBarClick();
@@ -92,7 +92,7 @@ class OfaMSFilterTabPage2 : public SfxTabPage
     virtual ~OfaMSFilterTabPage2();
 
     void            InsertEntry( const String& _rTxt, sal_IntPtr _nType );
-    SvLBoxEntry*    GetEntry4Type( sal_IntPtr _nType ) const;
+    SvTreeListEntry*    GetEntry4Type( sal_IntPtr _nType ) const;
 
 public:
 

@@ -77,7 +77,7 @@ void lcl_UpdateCurrentRange(
     SvTabListBox & rOutListBox,
     const OUString & rRole, const OUString & rRange )
 {
-    SvLBoxEntry * pEntry = rOutListBox.FirstSelected();
+    SvTreeListEntry * pEntry = rOutListBox.FirstSelected();
     if( pEntry )
         rOutListBox.SetEntryText( lcl_GetRoleLBEntry( rRole, rRange ), pEntry );
 }
@@ -106,7 +106,7 @@ bool lcl_UpdateCurrentSeriesName(
 OUString lcl_GetSelectedRole( const SvTabListBox & rRoleListBox, bool bUITranslated = false )
 {
     OUString aResult;
-    SvLBoxEntry * pEntry = rRoleListBox.FirstSelected();
+    SvTreeListEntry * pEntry = rRoleListBox.FirstSelected();
     if( pEntry )
         aResult = OUString( rRoleListBox.GetEntryText( pEntry,
                                                        bUITranslated ? 1 : 0 ));
@@ -116,7 +116,7 @@ OUString lcl_GetSelectedRole( const SvTabListBox & rRoleListBox, bool bUITransla
 OUString lcl_GetSelectedRolesRange( const SvTabListBox & rRoleListBox )
 {
     OUString aResult;
-    SvLBoxEntry * pEntry = rRoleListBox.FirstSelected();
+    SvTreeListEntry * pEntry = rRoleListBox.FirstSelected();
     if( pEntry )
         aResult = OUString( rRoleListBox.GetEntryText( pEntry, 2 ));
     return aResult;
@@ -459,7 +459,7 @@ void DataSourceTabPage::fillSeriesListBox()
         xSelected.set( pEntry->m_xDataSeries );
 
     bool bHasSelectedEntry = (pEntry != 0);
-    SvLBoxEntry * pSelectedEntry = 0;
+    SvTreeListEntry * pSelectedEntry = 0;
     m_apLB_SERIES->Clear();
 
     ::std::vector< DialogModel::tSeriesWithChartTypeByName > aSeries(
@@ -511,7 +511,7 @@ void DataSourceTabPage::fillRoleListBox()
     SeriesEntry * pSeriesEntry = dynamic_cast< SeriesEntry * >( m_apLB_SERIES->FirstSelected());
     bool bHasSelectedEntry = (pSeriesEntry != 0);
 
-    SvLBoxEntry * pRoleEntry =  m_aLB_ROLE.FirstSelected();
+    SvTreeListEntry * pRoleEntry =  m_aLB_ROLE.FirstSelected();
     sal_uLong nRoleIndex = SAL_MAX_UINT32;
     if( pRoleEntry )
         nRoleIndex = m_aLB_ROLE.GetModel()->GetAbsPos( pRoleEntry );
@@ -549,14 +549,14 @@ void DataSourceTabPage::fillRoleListBox()
 
 void DataSourceTabPage::updateControlState()
 {
-    SvLBoxEntry * pSeriesEntry = m_apLB_SERIES->FirstSelected();
+    SvTreeListEntry * pSeriesEntry = m_apLB_SERIES->FirstSelected();
     bool bHasSelectedSeries = (pSeriesEntry != 0);
     bool bHasValidRole = false;
     bool bHasRangeChooser = m_rDialogModel.getRangeSelectionHelper()->hasRangeSelection();
 
     if( bHasSelectedSeries )
     {
-        SvLBoxEntry * pRoleEntry =  m_aLB_ROLE.FirstSelected();
+        SvTreeListEntry * pRoleEntry =  m_aLB_ROLE.FirstSelected();
         bHasValidRole = (pRoleEntry != 0);
     }
 
@@ -601,7 +601,7 @@ IMPL_LINK_NOARG(DataSourceTabPage, SeriesSelectionChangedHdl)
 IMPL_LINK_NOARG(DataSourceTabPage, RoleSelectionChangedHdl)
 {
     m_rDialogModel.startControllerLockTimer();
-    SvLBoxEntry * pEntry = m_aLB_ROLE.FirstSelected();
+    SvTreeListEntry * pEntry = m_aLB_ROLE.FirstSelected();
     if( pEntry )
     {
         OUString aRange( m_aEDT_RANGE.GetText());
@@ -712,10 +712,10 @@ IMPL_LINK_NOARG(DataSourceTabPage, AddButtonClickedHdl)
 
     fillSeriesListBox();
     // note the box was cleared and refilled, so pEntry is invalid now
-    SvLBoxEntry * pSelEntry = m_apLB_SERIES->FirstSelected();
+    SvTreeListEntry * pSelEntry = m_apLB_SERIES->FirstSelected();
     if( pSelEntry )
     {
-        SvLBoxEntry * pNextEntry = m_apLB_SERIES->Next( pSelEntry );
+        SvTreeListEntry * pNextEntry = m_apLB_SERIES->Next( pSelEntry );
         if( pNextEntry )
             m_apLB_SERIES->Select( pNextEntry );
     }

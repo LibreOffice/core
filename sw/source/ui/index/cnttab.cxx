@@ -590,11 +590,11 @@ public:
         SvTreeListBox(pWin, rResId), pHeaderBar(0){}
 
     virtual void    KeyInput( const KeyEvent& rKEvt );
-    virtual long    GetTabPos( SvLBoxEntry*, SvLBoxTab* );
+    virtual long    GetTabPos( SvTreeListEntry*, SvLBoxTab* );
     void            SetHeaderBar(const HeaderBar* pHB) {pHeaderBar = pHB;}
 };
 
-long  SwIndexTreeLB::GetTabPos( SvLBoxEntry* pEntry, SvLBoxTab* pTab)
+long  SwIndexTreeLB::GetTabPos( SvTreeListEntry* pEntry, SvLBoxTab* pTab)
 {
     long nData = (long)pEntry->GetUserData();
     if(nData != USHRT_MAX)
@@ -610,7 +610,7 @@ long  SwIndexTreeLB::GetTabPos( SvLBoxEntry* pEntry, SvLBoxTab* pTab)
 
 void    SwIndexTreeLB::KeyInput( const KeyEvent& rKEvt )
 {
-    SvLBoxEntry* pEntry = FirstSelected();
+    SvTreeListEntry* pEntry = FirstSelected();
     KeyCode aCode = rKEvt.GetKeyCode();
     sal_Bool bChanged = sal_False;
     if(pEntry)
@@ -749,7 +749,7 @@ SwAddStylesDlg_Impl::SwAddStylesDlg_Impl(Window* pParent,
         for(sal_uInt16 nToken = 0; nToken < comphelper::string::getTokenCount(sStyles, TOX_STYLE_DELIMITER); nToken++)
         {
             String sTmp(sStyles.GetToken(nToken, TOX_STYLE_DELIMITER));
-            SvLBoxEntry* pEntry = rTLB.InsertEntry(sTmp);
+            SvTreeListEntry* pEntry = rTLB.InsertEntry(sTmp);
             pEntry->SetUserData(reinterpret_cast<void*>(i));
         }
     }
@@ -768,7 +768,7 @@ SwAddStylesDlg_Impl::SwAddStylesDlg_Impl(Window* pParent,
 
         if(rName.Len() > 0)
         {
-            SvLBoxEntry* pEntry = rTLB.First();
+            SvTreeListEntry* pEntry = rTLB.First();
             sal_Bool bFound = sal_False;
             while(pEntry && !bFound)
             {
@@ -795,7 +795,7 @@ IMPL_LINK_NOARG(SwAddStylesDlg_Impl, OkHdl)
         pStyleArr[i].Erase();
 
     SwIndexTreeLB& rTLB = aHeaderTree.GetTreeListBox();
-    SvLBoxEntry* pEntry = rTLB.First();
+    SvTreeListEntry* pEntry = rTLB.First();
     while(pEntry)
     {
         long nLevel = (long)pEntry->GetUserData();
@@ -823,7 +823,7 @@ IMPL_LINK_NOARG(SwAddStylesDlg_Impl, HeaderDragHdl)
 IMPL_LINK(SwAddStylesDlg_Impl, LeftRightHdl, PushButton*, pBtn)
 {
     sal_Bool bLeft = pBtn == &aLeftPB;
-    SvLBoxEntry* pEntry = aHeaderTree.GetTreeListBox().FirstSelected();
+    SvTreeListEntry* pEntry = aHeaderTree.GetTreeListBox().FirstSelected();
     if(pEntry)
     {
         long nLevel = (long)pEntry->GetUserData();
@@ -1802,7 +1802,7 @@ void    SwIdxTreeListBox::RequestHelp( const HelpEvent& rHEvt )
     if( rHEvt.GetMode() & HELPMODE_QUICK )
     {
      Point aPos( ScreenToOutputPixel( rHEvt.GetMousePosPixel() ));
-        SvLBoxEntry* pEntry = GetEntry( aPos );
+        SvTreeListEntry* pEntry = GetEntry( aPos );
         if( pEntry )
         {
             sal_uInt16 nLevel = static_cast< sal_uInt16 >(GetModel()->GetAbsPos(pEntry));

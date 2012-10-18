@@ -181,31 +181,31 @@ protected:
 
     rtl::OUString* MakeTypeString(ScChangeActionType eType);
 
-    SvLBoxEntry* InsertChangeAction(
+    SvTreeListEntry* InsertChangeAction(
         const ScChangeAction* pScChangeAction,ScChangeActionState eState,
-        SvLBoxEntry* pParent=NULL,bool bDelMaster = false,
+        SvTreeListEntry* pParent=NULL,bool bDelMaster = false,
         bool bDisabled = false,sal_uLong nPos = LIST_APPEND);
 
-    SvLBoxEntry* InsertFilteredAction(
+    SvTreeListEntry* InsertFilteredAction(
         const ScChangeAction* pScChangeAction,ScChangeActionState eState,
-        SvLBoxEntry* pParent = NULL,bool bDelMaster = false,
+        SvTreeListEntry* pParent = NULL,bool bDelMaster = false,
         bool bDisabled = false, sal_uLong nPos = LIST_APPEND);
 
-    SvLBoxEntry*    InsertChangeActionContent(const ScChangeActionContent* pScChangeAction,
-                                              SvLBoxEntry* pParent,sal_uLong nSpecial);
+    SvTreeListEntry*    InsertChangeActionContent(const ScChangeActionContent* pScChangeAction,
+                                              SvTreeListEntry* pParent,sal_uLong nSpecial);
 
     void            GetDependents( const ScChangeAction* pScChangeAction,
                                 ScChangeActionMap& aActionMap,
-                                SvLBoxEntry* pEntry);
+                                SvTreeListEntry* pEntry);
 
-    bool            InsertContentChildren( ScChangeActionMap* pActionMap, SvLBoxEntry* pParent );
+    bool            InsertContentChildren( ScChangeActionMap* pActionMap, SvTreeListEntry* pParent );
 
-    bool            InsertAcceptedORejected(SvLBoxEntry* pParent);
+    bool            InsertAcceptedORejected(SvTreeListEntry* pParent);
 
     bool            InsertDeletedChildren( const ScChangeAction* pChangeAction, ScChangeActionMap* pActionMap,
-                                        SvLBoxEntry* pParent);
+                                        SvTreeListEntry* pParent);
 
-    bool            InsertChildren( ScChangeActionMap* pActionMap, SvLBoxEntry* pParent );
+    bool            InsertChildren( ScChangeActionMap* pActionMap, SvTreeListEntry* pParent );
 
     void            AppendChanges(ScChangeTrack* pChanges,sal_uLong nStartAction, sal_uLong nEndAction,
                                     sal_uLong nPos=LIST_APPEND);
@@ -217,7 +217,7 @@ protected:
     void            ClearView();
 
     bool            Expand(ScChangeTrack* pChanges,const ScChangeAction* pScChangeAction,
-                           SvLBoxEntry* pEntry, bool bFilter = false);
+                           SvTreeListEntry* pEntry, bool bFilter = false);
 
 public:
                     ScAcceptChgDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,

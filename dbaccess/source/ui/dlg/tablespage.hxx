@@ -88,7 +88,7 @@ namespace dbaui
         void implCheckTables(const ::com::sun::star::uno::Sequence< ::rtl::OUString >& _rTables);
 
         /// returns the next sibling, if not available, the next sibling of the parent, a.s.o.
-        SvLBoxEntry* implNextSibling(SvLBoxEntry* _pEntry) const;
+        SvTreeListEntry* implNextSibling(SvTreeListEntry* _pEntry) const;
 
         /** return the current selection in <member>m_aTablesList</member>
         */

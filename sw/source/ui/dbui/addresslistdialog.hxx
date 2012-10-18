@@ -78,7 +78,7 @@ class SwAddressListDialog : public SfxModalDialog
     String          m_sConnecting;
 
     String          m_sCreatedURL;
-    SvLBoxEntry*    m_pCreatedDataSource;
+    SvTreeListEntry*    m_pCreatedDataSource;
 
     bool            m_bInSelectHdl;
 
@@ -88,7 +88,7 @@ class SwAddressListDialog : public SfxModalDialog
 
     SwDBData                                                                   m_aDBData;
 
-    void DetectTablesAndQueries(SvLBoxEntry* pSelect, bool bWidthDialog);
+    void DetectTablesAndQueries(SvTreeListEntry* pSelect, bool bWidthDialog);
 
     DECL_LINK(FilterHdl_Impl, void *);
     DECL_LINK(LoadHdl_Impl, void *);
@@ -98,7 +98,7 @@ class SwAddressListDialog : public SfxModalDialog
     DECL_LINK(TableSelectHdl_Impl, PushButton*);
     DECL_LINK(OKHdl_Impl, void *);
 
-    DECL_STATIC_LINK(SwAddressListDialog, StaticListBoxSelectHdl_Impl, SvLBoxEntry*);
+    DECL_STATIC_LINK(SwAddressListDialog, StaticListBoxSelectHdl_Impl, SvTreeListEntry*);
 
 public:
     SwAddressListDialog(SwMailMergeAddressBlockPage* pParent);

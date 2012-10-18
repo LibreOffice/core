@@ -467,11 +467,11 @@ sal_Bool    SfxOrganizeMgr::Delete(SfxOrganizeListBox_Impl *pCaller,
     {
         // deleting of a group
 
-        SvLBoxEntry *pGroupToDelete = pCaller->GetEntry(nRegion);
+        SvTreeListEntry *pGroupToDelete = pCaller->GetEntry(nRegion);
         if ( pGroupToDelete )
         {
             sal_uInt16 nItemNum = (sal_uInt16)( pCaller->GetModel()->GetChildCount( pGroupToDelete ) );
-            typedef std::deque<SvLBoxEntry*> BoxEntries;
+            typedef std::deque<SvTreeListEntry*> BoxEntries;
             BoxEntries pEntriesToDelete;
 
             sal_uInt16 nInd = 0;
@@ -504,7 +504,7 @@ sal_Bool    SfxOrganizeMgr::Delete(SfxOrganizeListBox_Impl *pCaller,
         {
             bModified = 1;
                 // Entry to be deleted.
-            SvLBoxEntry *pEntryToDelete = pCaller->GetEntry(pCaller->GetEntry(nRegion), nIdx);
+            SvTreeListEntry *pEntryToDelete = pCaller->GetEntry(pCaller->GetEntry(nRegion), nIdx);
 
             pCaller->GetModel()->Remove(pEntryToDelete);
         }
@@ -540,7 +540,7 @@ sal_Bool    SfxOrganizeMgr::InsertDir
     if(bOk)
     {
         bModified = 1;
-        SvLBoxEntry *pEntry = pCaller->InsertEntry(rText,
+        SvTreeListEntry *pEntry = pCaller->InsertEntry(rText,
                                                    pCaller->GetOpenedBmp(0),
                                                    pCaller->GetClosedBmp(0),
                                                    0, sal_True, nRegion);
@@ -631,7 +631,7 @@ sal_Bool SfxOrganizeMgr::CopyFrom(SfxOrganizeListBox_Impl *pCaller,
 */
 
 {
-    SvLBoxEntry *pParent = pCaller->FirstSelected();
+    SvTreeListEntry *pParent = pCaller->FirstSelected();
     if( nIdx!=USHRT_MAX )
         pParent = pCaller->GetParent(pParent);
     if( pTemplates->CopyFrom( nRegion, nIdx, rName ) )

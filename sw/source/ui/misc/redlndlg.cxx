@@ -271,7 +271,7 @@ void SwRedlineAcceptDlg::Init(sal_uInt16 nStart)
 
     pTable->SetUpdateMode(sal_True);
     // #i69618# this moves the list box to the right position, visually
-    SvLBoxEntry* pSelEntry = pTable->FirstSelected();
+    SvTreeListEntry* pSelEntry = pTable->FirstSelected();
     if( pSelEntry )
         pTable->MakeVisible( pSelEntry, sal_True ); //#i70937#, force the scroll
 }
@@ -323,7 +323,7 @@ void SwRedlineAcceptDlg::InitAuthors()
     sal_Bool bEnable = pTable->GetEntryCount() != 0 && !pSh->getIDocumentRedlineAccess()->GetRedlinePassword().getLength();
     sal_Bool bSel = pTable->FirstSelected() != 0;
 
-    SvLBoxEntry* pSelEntry = pTable->FirstSelected();
+    SvTreeListEntry* pSelEntry = pTable->FirstSelected();
     while (pSelEntry)
     {
         sal_uInt16 nPos = GetRedlinePos(*pSelEntry);
@@ -628,7 +628,7 @@ void SwRedlineAcceptDlg::InsertChildren(SwRedlineDataParent *pParent, const SwRe
             pData->bDisabled = sal_True;
             sChild = GetRedlineText(rRedln, pData->aDateTime, nStack);
 
-            SvLBoxEntry* pChild = pTable->InsertEntry(sChild, pData, pParent->pTLBParent);
+            SvTreeListEntry* pChild = pTable->InsertEntry(sChild, pData, pParent->pTLBParent);
 
             pRedlineChild->pTLBChild = pChild;
             if (!bValidParent)
@@ -668,7 +668,7 @@ void SwRedlineAcceptDlg::RemoveParents(sal_uInt16 nStart, sal_uInt16 nEnd)
     // set the cursor after the last entry because otherwise performance problem in TLB.
     // TLB would otherwise reset the cursor at every Remove (expensive)
     sal_uInt16 nPos = Min((sal_uInt16)nCount, (sal_uInt16)aRedlineParents.size());
-    SvLBoxEntry *pCurEntry = NULL;
+    SvTreeListEntry *pCurEntry = NULL;
     while( ( pCurEntry == NULL ) && ( nPos > 0 ) )
     {
         --nPos;
@@ -701,7 +701,7 @@ void SwRedlineAcceptDlg::RemoveParents(sal_uInt16 nStart, sal_uInt16 nEnd)
                     break;
                 }
         }
-        SvLBoxEntry *pEntry = aRedlineParents[i].pTLBParent;
+        SvTreeListEntry *pEntry = aRedlineParents[i].pTLBParent;
         if (pEntry)
         {
             long nIdx = aLBoxArr.size() - 1L;
@@ -740,7 +740,7 @@ void SwRedlineAcceptDlg::InsertParents(sal_uInt16 nStart, sal_uInt16 nEnd)
         return;     // no redlines in the document
 
     RedlinData *pData;
-    SvLBoxEntry *pParent;
+    SvTreeListEntry *pParent;
     SwRedlineDataParent* pRedlineParent;
     const SwRedline* pCurrRedline;
     if( !nStart && !pTable->FirstSelected() )
@@ -792,10 +792,10 @@ void SwRedlineAcceptDlg::InsertParents(sal_uInt16 nStart, sal_uInt16 nEnd)
 void SwRedlineAcceptDlg::CallAcceptReject( sal_Bool bSelect, sal_Bool bAccept )
 {
     SwWrtShell* pSh = ::GetActiveView()->GetWrtShellPtr();
-    SvLBoxEntry* pEntry = bSelect ? pTable->FirstSelected() : pTable->First();
+    SvTreeListEntry* pEntry = bSelect ? pTable->FirstSelected() : pTable->First();
     sal_uLong nPos = LONG_MAX;
 
-    typedef std::vector<SvLBoxEntry*> ListBoxEntries_t;
+    typedef std::vector<SvTreeListEntry*> ListBoxEntries_t;
     ListBoxEntries_t aRedlines;
 
     // don't activate
@@ -888,7 +888,7 @@ void SwRedlineAcceptDlg::CallAcceptReject( sal_Bool bSelect, sal_Bool bAccept )
     pTPView->EnableUndo();
 }
 
-sal_uInt16 SwRedlineAcceptDlg::GetRedlinePos( const SvLBoxEntry& rEntry ) const
+sal_uInt16 SwRedlineAcceptDlg::GetRedlinePos( const SvTreeListEntry& rEntry ) const
 {
     SwWrtShell* pSh = ::GetActiveView()->GetWrtShellPtr();
     return pSh->FindRedlineOfData( *((SwRedlineDataParent*)((RedlinData *)
@@ -973,14 +973,14 @@ IMPL_LINK_NOARG(SwRedlineAcceptDlg, GotoHdl)
     //#107938# But not only ask pTable if it has the focus. To move
     //         the selection to the selected redline any child of pParentDlg
     //         may the focus.
-    SvLBoxEntry* pSelEntry = 0;
+    SvTreeListEntry* pSelEntry = 0;
 
     if (pParentDlg->HasChildPathFocus())
         pSelEntry = pTable->FirstSelected();
 
     if( pSelEntry )
     {
-        SvLBoxEntry* pActEntry = pSelEntry;
+        SvTreeListEntry* pActEntry = pSelEntry;
         pSh->StartAction();
         pSh->EnterStdMode();
         pSh->SetCareWin(pParentDlg);
@@ -1039,12 +1039,12 @@ IMPL_LINK_NOARG(SwRedlineAcceptDlg, CommandHdl)
         case COMMAND_CONTEXTMENU:
         {
             SwWrtShell* pSh = ::GetActiveView()->GetWrtShellPtr();
-            SvLBoxEntry* pEntry = pTable->FirstSelected();
+            SvTreeListEntry* pEntry = pTable->FirstSelected();
             const SwRedline *pRed = 0;
 
             if (pEntry)
             {
-                SvLBoxEntry* pTopEntry = pEntry;
+                SvTreeListEntry* pTopEntry = pEntry;
 
                 if (pTable->GetParent(pEntry))
                     pTopEntry = pTable->GetParent(pEntry);

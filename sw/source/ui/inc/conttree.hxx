@@ -110,7 +110,7 @@ class SwContentTree : public SvTreeListBox
 
 protected:
     virtual void    RequestHelp( const HelpEvent& rHEvt );
-    virtual void    InitEntry(SvLBoxEntry*,const XubString&,const Image&,const Image&,SvLBoxButtonKind);
+    virtual void    InitEntry(SvTreeListEntry*,const XubString&,const Image&,const Image&,SvLBoxButtonKind);
     virtual void    DataChanged( const DataChangedEvent& rDCEvt );
 
     SwNavigationPI* GetParentWindow(){return
@@ -127,22 +127,22 @@ protected:
     sal_Bool            HasContentChanged();
 
     virtual DragDropMode NotifyStartDrag( TransferDataContainer& rData,
-                                        SvLBoxEntry* );
-    virtual sal_Bool    NotifyAcceptDrop( SvLBoxEntry* );
+                                        SvTreeListEntry* );
+    virtual sal_Bool    NotifyAcceptDrop( SvTreeListEntry* );
 
-    virtual sal_Bool    NotifyMoving(   SvLBoxEntry*  pTarget,
-                                    SvLBoxEntry*  pEntry,
-                                    SvLBoxEntry*& rpNewParent,
+    virtual sal_Bool    NotifyMoving(   SvTreeListEntry*  pTarget,
+                                    SvTreeListEntry*  pEntry,
+                                    SvTreeListEntry*& rpNewParent,
                                     sal_uLong&        rNewChildPos
                                 );
-    virtual sal_Bool    NotifyCopying(  SvLBoxEntry*  pTarget,
-                                    SvLBoxEntry*  pEntry,
-                                    SvLBoxEntry*& rpNewParent,
+    virtual sal_Bool    NotifyCopying(  SvTreeListEntry*  pTarget,
+                                    SvTreeListEntry*  pEntry,
+                                    SvTreeListEntry*& rpNewParent,
                                     sal_uLong&        rNewChildPos
                                 );
     virtual void    MouseButtonDown( const MouseEvent& rMEvt );
 
-    void            EditEntry( SvLBoxEntry* pEntry, sal_uInt8 nMode );
+    void            EditEntry( SvTreeListEntry* pEntry, sal_uInt8 nMode );
 
     void            GotoContent(SwContent* pCnt);
     static void     SetInDrag(sal_Bool bSet) {bIsInDrag = bSet;}
@@ -179,9 +179,9 @@ public:
     sal_uInt8           GetOutlineLevel()const {return nOutlineLevel;}
     void            SetOutlineLevel(sal_uInt8 nSet);
 
-    sal_Bool            Expand( SvLBoxEntry* pParent );
+    sal_Bool            Expand( SvTreeListEntry* pParent );
 
-    sal_Bool            Collapse( SvLBoxEntry* pParent );
+    sal_Bool            Collapse( SvTreeListEntry* pParent );
 
     void            ExecCommand(sal_uInt16 nCmd, sal_Bool bModifier);
 
@@ -198,12 +198,12 @@ public:
     DECL_LINK( ContentDoubleClickHdl, void * );
     DECL_LINK( TimerUpdate, void * );
 
-    virtual long    GetTabPos( SvLBoxEntry*, SvLBoxTab* );
-    virtual void    RequestingChildren( SvLBoxEntry* pParent );
+    virtual long    GetTabPos( SvTreeListEntry*, SvLBoxTab* );
+    virtual void    RequestingChildren( SvTreeListEntry* pParent );
     virtual void    GetFocus();
     virtual void    KeyInput(const KeyEvent& rKEvt);
 
-    virtual sal_Bool    Select( SvLBoxEntry* pEntry, sal_Bool bSelect=sal_True );
+    virtual sal_Bool    Select( SvTreeListEntry* pEntry, sal_Bool bSelect=sal_True );
 };
 
 
@@ -215,13 +215,13 @@ class SwLBoxString : public SvLBoxString
 {
 public:
 
-    SwLBoxString( SvLBoxEntry* pEntry, sal_uInt16 nFlags,
+    SwLBoxString( SvTreeListEntry* pEntry, sal_uInt16 nFlags,
         const String& rStr ) : SvLBoxString(pEntry,nFlags,rStr)
     {
     }
 
     virtual void Paint( const Point& rPos, SvTreeListBox& rDev, sal_uInt16 nFlags,
-        SvLBoxEntry* pEntry);
+        SvTreeListEntry* pEntry);
 };
 
 namespace sfx2 { class DocumentInserter; }
@@ -236,8 +236,8 @@ private:
     ImageList           aEntryImages;
 
     SwWrtShell*             pActiveShell;   //
-    SvLBoxEntry*            pEmphasisEntry; // Drag'n Drop emphasis
-    SvLBoxEntry*            pDDSource;      // source for Drag'n Drop
+    SvTreeListEntry*            pEmphasisEntry; // Drag'n Drop emphasis
+    SvTreeListEntry*            pDDSource;      // source for Drag'n Drop
     SwGlblDocContents*      pSwGlblDocContents; // array with sorted content
 
     Window*                 pDefParentWin;
@@ -269,30 +269,30 @@ protected:
 
     virtual void    RequestHelp( const HelpEvent& rHEvt );
 
-    virtual long    GetTabPos( SvLBoxEntry*, SvLBoxTab* );
-    virtual sal_Bool    NotifyMoving(   SvLBoxEntry*  pTarget,
-                                    SvLBoxEntry*  pEntry,
-                                    SvLBoxEntry*& rpNewParent,
+    virtual long    GetTabPos( SvTreeListEntry*, SvLBoxTab* );
+    virtual sal_Bool    NotifyMoving(   SvTreeListEntry*  pTarget,
+                                    SvTreeListEntry*  pEntry,
+                                    SvTreeListEntry*& rpNewParent,
                                     sal_uLong&        rNewChildPos
                                 );
-    virtual sal_Bool    NotifyCopying(  SvLBoxEntry*  pTarget,
-                                    SvLBoxEntry*  pEntry,
-                                    SvLBoxEntry*& rpNewParent,
+    virtual sal_Bool    NotifyCopying(  SvTreeListEntry*  pTarget,
+                                    SvTreeListEntry*  pEntry,
+                                    SvTreeListEntry*& rpNewParent,
                                     sal_uLong&        rNewChildPos
                                 );
 
     virtual void    StartDrag( sal_Int8 nAction, const Point& rPosPixel );
     virtual void    DragFinished( sal_Int8 );
     virtual DragDropMode NotifyStartDrag( TransferDataContainer& rData,
-                                        SvLBoxEntry* );
-    virtual sal_Bool    NotifyAcceptDrop( SvLBoxEntry* );
+                                        SvTreeListEntry* );
+    virtual sal_Bool    NotifyAcceptDrop( SvTreeListEntry* );
 
     virtual void    MouseButtonDown( const MouseEvent& rMEvt );
     virtual void    KeyInput(const KeyEvent& rKEvt);
     virtual void    GetFocus();
     virtual void    SelectHdl();
     virtual void    DeselectHdl();
-    virtual void InitEntry(SvLBoxEntry*,const XubString&,const Image&,const Image&,SvLBoxButtonKind);
+    virtual void InitEntry(SvTreeListEntry*,const XubString&,const Image&,const Image&,SvLBoxButtonKind);
 
     void            Clear();
 

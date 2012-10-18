@@ -44,11 +44,11 @@ enum SvTabJustify
 
 struct TabListBoxEventData
 {
-    SvLBoxEntry*    m_pEntry;
+    SvTreeListEntry*    m_pEntry;
     sal_uInt16          m_nColumn;
     String          m_sOldText;
 
-    TabListBoxEventData( SvLBoxEntry* pEntry, sal_uInt16 nColumn, const String& rOldText ) :
+    TabListBoxEventData( SvTreeListEntry* pEntry, sal_uInt16 nColumn, const String& rOldText ) :
         m_pEntry( pEntry ), m_nColumn( nColumn ), m_sOldText( rOldText ) {}
 };
 
@@ -60,16 +60,16 @@ private:
     XubString                   aCurEntry;
 
 protected:
-    SvLBoxEntry*                pViewParent;
+    SvTreeListEntry*                pViewParent;
 
     static const xub_Unicode*   GetToken( const xub_Unicode* pPtr, sal_uInt16& rLen );
 
     virtual void                SetTabs();
-    virtual void                InitEntry( SvLBoxEntry*, const XubString&, const Image&, const Image&, SvLBoxButtonKind );
+    virtual void                InitEntry( SvTreeListEntry*, const XubString&, const Image&, const Image&, SvLBoxButtonKind );
 
     String                      GetTabEntryText( sal_uLong nPos, sal_uInt16 nCol ) const;
-    SvLBoxEntry*                GetEntryOnPos( sal_uLong _nEntryPos ) const;
-    SvLBoxEntry*                GetChildOnPos( SvLBoxEntry* _pParent, sal_uLong _nEntryPos, sal_uLong& _rPos ) const;
+    SvTreeListEntry*                GetEntryOnPos( sal_uLong _nEntryPos ) const;
+    SvTreeListEntry*                GetChildOnPos( SvTreeListEntry* _pParent, sal_uLong _nEntryPos, sal_uLong& _rPos ) const;
 
 public:
     SvTabListBox( Window* pParent, WinBits = WB_BORDER );
@@ -82,36 +82,36 @@ public:
     void            SetTab( sal_uInt16 nTab, long nValue, MapUnit = MAP_APPFONT );
     long            GetLogicTab( sal_uInt16 nTab );
 
-    virtual SvLBoxEntry*    InsertEntry( const XubString& rText, SvLBoxEntry* pParent = 0,
+    virtual SvTreeListEntry*    InsertEntry( const XubString& rText, SvTreeListEntry* pParent = 0,
                                          sal_Bool bChildrenOnDemand = sal_False,
                                          sal_uLong nPos=LIST_APPEND, void* pUserData = 0,
                                          SvLBoxButtonKind eButtonKind = SvLBoxButtonKind_enabledCheckbox );
 
-    virtual SvLBoxEntry*    InsertEntry( const XubString& rText,
+    virtual SvTreeListEntry*    InsertEntry( const XubString& rText,
                                          const Image& rExpandedEntryBmp,
                                          const Image& rCollapsedEntryBmp,
-                                         SvLBoxEntry* pParent = 0,
+                                         SvTreeListEntry* pParent = 0,
                                          sal_Bool bChildrenOnDemand = sal_False,
                                          sal_uLong nPos = LIST_APPEND, void* pUserData = 0,
                                          SvLBoxButtonKind eButtonKind = SvLBoxButtonKind_enabledCheckbox );
 
-    virtual SvLBoxEntry* InsertEntryToColumn( const XubString&, sal_uLong nPos = LIST_APPEND,
+    virtual SvTreeListEntry* InsertEntryToColumn( const XubString&, sal_uLong nPos = LIST_APPEND,
                                  sal_uInt16 nCol = 0xffff, void* pUserData = NULL );
-    virtual SvLBoxEntry* InsertEntryToColumn( const XubString&, SvLBoxEntry* pParent,
+    virtual SvTreeListEntry* InsertEntryToColumn( const XubString&, SvTreeListEntry* pParent,
                                  sal_uLong nPos, sal_uInt16 nCol, void* pUserData = NULL );
-    virtual SvLBoxEntry* InsertEntryToColumn( const XubString&, const Image& rExpandedEntryBmp,
-                                 const Image& rCollapsedEntryBmp, SvLBoxEntry* pParent = NULL,
+    virtual SvTreeListEntry* InsertEntryToColumn( const XubString&, const Image& rExpandedEntryBmp,
+                                 const Image& rCollapsedEntryBmp, SvTreeListEntry* pParent = NULL,
                                  sal_uLong nPos = LIST_APPEND, sal_uInt16 nCol = 0xffff, void* pUserData = NULL );
 
-    virtual String  GetEntryText( SvLBoxEntry* pEntry ) const;
-    String          GetEntryText( SvLBoxEntry*, sal_uInt16 nCol ) const;
+    virtual String  GetEntryText( SvTreeListEntry* pEntry ) const;
+    String          GetEntryText( SvTreeListEntry*, sal_uInt16 nCol ) const;
     String          GetEntryText( sal_uLong nPos, sal_uInt16 nCol = 0xffff ) const;
     using SvTreeListBox::SetEntryText;
     void            SetEntryText( const XubString&, sal_uLong, sal_uInt16 nCol=0xffff );
-    void            SetEntryText(const XubString&,SvLBoxEntry*,sal_uInt16 nCol=0xffff);
+    void            SetEntryText(const XubString&,SvTreeListEntry*,sal_uInt16 nCol=0xffff);
     String          GetCellText( sal_uLong nPos, sal_uInt16 nCol ) const;
     sal_uLong           GetEntryPos( const XubString&, sal_uInt16 nCol = 0xffff );
-    sal_uLong           GetEntryPos( const SvLBoxEntry* pEntry ) const;
+    sal_uLong           GetEntryPos( const SvTreeListEntry* pEntry ) const;
 
     virtual void    Resize();
     void            SetTabJustify( sal_uInt16 nTab, SvTabJustify );
@@ -155,18 +155,18 @@ public:
     virtual void    Paint( const Rectangle& );
 
     void            InitHeaderBar( HeaderBar* pHeaderBar );
-    sal_Bool        IsItemChecked( SvLBoxEntry* pEntry, sal_uInt16 nCol ) const;
+    sal_Bool        IsItemChecked( SvTreeListEntry* pEntry, sal_uInt16 nCol ) const;
 
-    virtual SvLBoxEntry* InsertEntryToColumn( const XubString&, sal_uLong nPos = LIST_APPEND,
+    virtual SvTreeListEntry* InsertEntryToColumn( const XubString&, sal_uLong nPos = LIST_APPEND,
                                  sal_uInt16 nCol = 0xffff, void* pUserData = NULL );
-    virtual SvLBoxEntry* InsertEntryToColumn( const XubString&, SvLBoxEntry* pParent,
+    virtual SvTreeListEntry* InsertEntryToColumn( const XubString&, SvTreeListEntry* pParent,
                                  sal_uLong nPos, sal_uInt16 nCol, void* pUserData = NULL );
-    virtual SvLBoxEntry* InsertEntryToColumn( const XubString&, const Image& rExpandedEntryBmp,
-                                 const Image& rCollapsedEntryBmp, SvLBoxEntry* pParent = NULL,
+    virtual SvTreeListEntry* InsertEntryToColumn( const XubString&, const Image& rExpandedEntryBmp,
+                                 const Image& rCollapsedEntryBmp, SvTreeListEntry* pParent = NULL,
                                  sal_uLong nPos = LIST_APPEND, sal_uInt16 nCol = 0xffff, void* pUserData = NULL );
-    virtual sal_uLong Insert( SvLBoxEntry* pEnt,SvLBoxEntry* pPar,sal_uLong nPos=LIST_APPEND);
-    virtual sal_uLong Insert( SvLBoxEntry* pEntry, sal_uLong nRootPos = LIST_APPEND );
-    void            RemoveEntry( SvLBoxEntry* _pEntry );
+    virtual sal_uLong Insert( SvTreeListEntry* pEnt,SvTreeListEntry* pPar,sal_uLong nPos=LIST_APPEND);
+    virtual sal_uLong Insert( SvTreeListEntry* pEntry, sal_uLong nRootPos = LIST_APPEND );
+    void            RemoveEntry( SvTreeListEntry* _pEntry );
     void            Clear();
 
     // Accessible -------------------------------------------------------------

@@ -44,7 +44,7 @@
 #include "commontypes.hxx"
 
 // =========================================================================
-class SvLBoxEntry;
+class SvTreeListEntry;
 class Splitter;
 struct SvSortData;
 
@@ -110,7 +110,7 @@ namespace dbaui
         DBTreeView*             m_pTreeView;
         Splitter*               m_pSplitter;
         SvLBoxTreeList*         m_pTreeModel;           // contains the datasources of the registry
-        SvLBoxEntry*            m_pCurrentlyDisplayed;
+        SvTreeListEntry*            m_pCurrentlyDisplayed;
         sal_uLong                   m_nAsyncDrop;
 
         sal_Int16               m_nBorder;              // sal_True when border should be shown
@@ -234,7 +234,7 @@ namespace dbaui
         virtual void            Execute(sal_uInt16 nId, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& aArgs);
 
         // IControlActionListener overridables
-        virtual sal_Bool    requestQuickHelp( const SvLBoxEntry* _pEntry, String& _rText ) const;
+        virtual sal_Bool    requestQuickHelp( const SvTreeListEntry* _pEntry, String& _rText ) const;
         virtual sal_Bool    requestDrag( sal_Int8 _nAction, const Point& _rPosPixel );
         virtual sal_Int8    queryDrop( const AcceptDropEvent& _rEvt, const DataFlavorExVector& _rFlavors );
         virtual sal_Int8    executeDrop( const ExecuteDropEvent& _rEvt );
@@ -262,11 +262,11 @@ namespace dbaui
 
         // methods for handling the 'selection' (paintin them bold) of SvLBoxEntries
         // returns <TRUE/> if the entry is selected (which means it's part of the selected path)
-        sal_Bool    isSelected(SvLBoxEntry* _pEntry) const;
+        sal_Bool    isSelected(SvTreeListEntry* _pEntry) const;
         // select the entry (and only the entry, not the whole path)
-        void        select(SvLBoxEntry* _pEntry, sal_Bool _bSelect = sal_True);
+        void        select(SvTreeListEntry* _pEntry, sal_Bool _bSelect = sal_True);
         // select the path of the entry (which must be an entry without children)
-        void        selectPath(SvLBoxEntry* _pEntry, sal_Bool _bSelect = sal_True);
+        void        selectPath(SvTreeListEntry* _pEntry, sal_Bool _bSelect = sal_True);
 
         virtual void loadMenu(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& _xFrame);
 
@@ -311,52 +311,52 @@ namespace dbaui
         void unloadAndCleanup( sal_Bool _bDisposeConnection = sal_True );
 
         // disposes the connection associated with the given entry (which must represent a data source)
-        void        disposeConnection( SvLBoxEntry* _pDSEntry );
+        void        disposeConnection( SvTreeListEntry* _pDSEntry );
 
         /// flushs and disposes the given connection, and de-registers as listener
         void        impl_releaseConnection( SharedConnection& _rxConnection );
 
         /** close the connection (and collapse the list entries) of the given list entries
         */
-        void        closeConnection(SvLBoxEntry* _pEntry,sal_Bool _bDisposeConnection = sal_True);
+        void        closeConnection(SvTreeListEntry* _pEntry,sal_Bool _bDisposeConnection = sal_True);
 
-        void        populateTree(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>& _xNameAccess, SvLBoxEntry* _pParent, EntryType _eEntryType);
+        void        populateTree(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>& _xNameAccess, SvTreeListEntry* _pParent, EntryType _eEntryType);
         void        initializeTreeModel();
 
         /** search in the tree for query- or tablecontainer equal to this interface and return
             this container entry
         */
-        SvLBoxEntry* getEntryFromContainer(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>& _rxNameAccess);
+        SvTreeListEntry* getEntryFromContainer(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>& _rxNameAccess);
         // return true when there is connection available
-        sal_Bool ensureConnection(SvLBoxEntry* _pDSEntry, void * pDSData, SharedConnection& _rConnection );
-        sal_Bool ensureConnection(SvLBoxEntry* _pAnyEntry, SharedConnection& _rConnection );
+        sal_Bool ensureConnection(SvTreeListEntry* _pDSEntry, void * pDSData, SharedConnection& _rConnection );
+        sal_Bool ensureConnection(SvTreeListEntry* _pAnyEntry, SharedConnection& _rConnection );
 
-        sal_Bool getExistentConnectionFor( SvLBoxEntry* _pDSEntry, SharedConnection& _rConnection );
+        sal_Bool getExistentConnectionFor( SvTreeListEntry* _pDSEntry, SharedConnection& _rConnection );
         /** returns an image provider which works with the connection belonging to the given entry
         */
         ::std::auto_ptr< ImageProvider >
-                getImageProviderFor( SvLBoxEntry* _pAnyEntry );
+                getImageProviderFor( SvTreeListEntry* _pAnyEntry );
 
-        void    implAdministrate( SvLBoxEntry* _pApplyTo );
+        void    implAdministrate( SvTreeListEntry* _pApplyTo );
 
         TransferableHelper*
-                implCopyObject( SvLBoxEntry* _pApplyTo, sal_Int32 _nCommandType, sal_Bool _bAllowConnection = sal_True );
+                implCopyObject( SvTreeListEntry* _pApplyTo, sal_Int32 _nCommandType, sal_Bool _bAllowConnection = sal_True );
 
-        EntryType   getEntryType( SvLBoxEntry* _pEntry ) const;
-        EntryType   getChildType( SvLBoxEntry* _pEntry ) const;
+        EntryType   getEntryType( SvTreeListEntry* _pEntry ) const;
+        EntryType   getChildType( SvTreeListEntry* _pEntry ) const;
         sal_Bool    isObject( EntryType _eType ) const { return ( etTableOrView== _eType ) || ( etQuery == _eType ); }
         sal_Bool    isContainer( EntryType _eType ) const { return (etTableContainer == _eType) || (etQueryContainer == _eType); }
-        sal_Bool    isContainer( SvLBoxEntry* _pEntry ) const { return isContainer( getEntryType( _pEntry ) ); }
+        sal_Bool    isContainer( SvTreeListEntry* _pEntry ) const { return isContainer( getEntryType( _pEntry ) ); }
 
         // ensure that the xObject for the given entry is set on the user data
-        sal_Bool    ensureEntryObject( SvLBoxEntry* _pEntry );
+        sal_Bool    ensureEntryObject( SvTreeListEntry* _pEntry );
 
         // get the display text of the entry given
-        String      GetEntryText( SvLBoxEntry* _pEntry ) const;
+        String      GetEntryText( SvTreeListEntry* _pEntry ) const;
 
         // is called when a table or a query was selected
         DECL_LINK( OnSelectionChange, void* );
-        DECL_LINK( OnExpandEntry, SvLBoxEntry* );
+        DECL_LINK( OnExpandEntry, SvTreeListEntry* );
 
         DECL_LINK( OnCopyEntry, void* );
 
@@ -367,7 +367,7 @@ namespace dbaui
         void implRemoveStatusListeners();
 
         sal_Bool implSelect(const ::svx::ODataAccessDescriptor& _rDescriptor,sal_Bool _bSelectDirect = sal_False);
-        bool implSelect( SvLBoxEntry* _pEntry );
+        bool implSelect( SvTreeListEntry* _pEntry );
 
         /// selects the entry given and loads the grid control with the object's data
         sal_Bool implSelect(
@@ -379,10 +379,10 @@ namespace dbaui
             sal_Bool _bSelectDirect = sal_False
         );
 
-        SvLBoxEntry* implGetConnectionEntry(SvLBoxEntry* _pEntry) const;
+        SvTreeListEntry* implGetConnectionEntry(SvTreeListEntry* _pEntry) const;
         /// inserts an entry into the tree
-        SvLBoxEntry* implAppendEntry(
-            SvLBoxEntry* _pParent,
+        SvTreeListEntry* implAppendEntry(
+            SvTreeListEntry* _pParent,
             const String& _rName,
             void* _pUserData,
             EntryType _eEntryType
@@ -402,8 +402,8 @@ namespace dbaui
             @param _bExpandAncestors
                 If <TRUE/>, all ancestor on the way to the entry will be expanded
         */
-        SvLBoxEntry* getObjectEntry(const ::svx::ODataAccessDescriptor& _rDescriptor,
-            SvLBoxEntry** _ppDataSourceEntry = NULL, SvLBoxEntry** _ppContainerEntry = NULL,
+        SvTreeListEntry* getObjectEntry(const ::svx::ODataAccessDescriptor& _rDescriptor,
+            SvTreeListEntry** _ppDataSourceEntry = NULL, SvTreeListEntry** _ppContainerEntry = NULL,
             sal_Bool _bExpandAncestors = sal_True
         );
         /** retrieves the tree entry for the object described by data source name, command and command type
@@ -422,9 +422,9 @@ namespace dbaui
             @param _bExpandAncestors
                 If <TRUE/>, all ancestor on the way to the entry will be expanded
         */
-        SvLBoxEntry* getObjectEntry(
+        SvTreeListEntry* getObjectEntry(
             const ::rtl::OUString& _rDataSource, const ::rtl::OUString& _rCommand, sal_Int32 _nCommandType,
-            SvLBoxEntry** _ppDataSourceEntry = NULL, SvLBoxEntry** _ppContainerEntry = NULL,
+            SvTreeListEntry** _ppDataSourceEntry = NULL, SvTreeListEntry** _ppContainerEntry = NULL,
             sal_Bool _bExpandAncestors = sal_True,
             const SharedConnection& _rxConnection = SharedConnection()
         );
@@ -444,20 +444,20 @@ namespace dbaui
 
 #if OSL_DEBUG_LEVEL > 0
         // checks whether the given tree entry denotes a data source
-        bool impl_isDataSourceEntry( SvLBoxEntry* _pEntry ) const;
+        bool impl_isDataSourceEntry( SvTreeListEntry* _pEntry ) const;
 #endif
 
         /// retrieves the data source URL/name for the given entry representing a data source
-        String  getDataSourceAcessor( SvLBoxEntry* _pDataSourceEntry ) const;
+        String  getDataSourceAcessor( SvTreeListEntry* _pDataSourceEntry ) const;
 
         /** get the signature (command/escape processing) of the query the form is based on
             <p>If the for is not based on a query or not even loaded, nothing happens and <FALSE/> is returned.</p>
         */
         sal_Bool implGetQuerySignature( ::rtl::OUString& _rCommand, sal_Bool& _bEscapeProcessing );
 
-        sal_Bool isEntryCopyAllowed(SvLBoxEntry* _pEntry) const;
+        sal_Bool isEntryCopyAllowed(SvTreeListEntry* _pEntry) const;
 
-        void copyEntry(SvLBoxEntry* _pEntry);
+        void copyEntry(SvTreeListEntry* _pEntry);
 
         // remove all grid columns and dispose them
         void clearGridColumns(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& _xColContainer);
@@ -470,7 +470,7 @@ namespace dbaui
             @return
                     <TRUE/> if it is the currently displayed otherwise <FALSE/>
         */
-        sal_Bool isCurrentlyDisplayedChanged(const String& _sName,SvLBoxEntry* _pContainer);
+        sal_Bool isCurrentlyDisplayedChanged(const String& _sName,SvTreeListEntry* _pContainer);
 
         /** called whenever the content of the browser is used for preview, as the very last action
             of the load process

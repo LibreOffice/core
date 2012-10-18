@@ -31,7 +31,7 @@
 #include <comphelper/containermultiplexer.hxx>
 #include "cppuhelper/basemutex.hxx"
 
-class SvLBoxEntry;
+class SvTreeListEntry;
 namespace dbaui
 {
     //////////////////////////////////////////////////////////////////////////
@@ -88,7 +88,7 @@ namespace dbaui
         sal_Bool FillListBox();
             // wird in JEDEM Init aufgerufen
 
-        virtual void OnEntryDoubleClicked(SvLBoxEntry* /*pEntry*/) { }
+        virtual void OnEntryDoubleClicked(SvTreeListEntry* /*pEntry*/) { }
             // wird aus dem DoubleClickHdl der ListBox heraus aufgerufen
 
         /** HandleKeyInput triues to handle the KeyEvent. Movement or deletion

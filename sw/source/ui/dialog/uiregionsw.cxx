@@ -431,7 +431,7 @@ sal_Bool SwEditRegionDlg::CheckPasswd(CheckBox* pBox)
     if(bDontCheckPasswd)
         return sal_True;
     sal_Bool bRet = sal_True;
-    SvLBoxEntry* pEntry = aTree.FirstSelected();
+    SvTreeListEntry* pEntry = aTree.FirstSelected();
     while( pEntry )
     {
         SectReprPtr pRepr = (SectReprPtr)pEntry->GetUserData();
@@ -474,10 +474,10 @@ sal_Bool SwEditRegionDlg::CheckPasswd(CheckBox* pBox)
 /*---------------------------------------------------------------------
     Description: recursively look for child-sections
 ---------------------------------------------------------------------*/
-void SwEditRegionDlg::RecurseList( const SwSectionFmt* pFmt, SvLBoxEntry* pEntry )
+void SwEditRegionDlg::RecurseList( const SwSectionFmt* pFmt, SvTreeListEntry* pEntry )
 {
     SwSection* pSect = 0;
-    SvLBoxEntry* pSelEntry = 0;
+    SvTreeListEntry* pSelEntry = 0;
 
     if (!pFmt)
     {
@@ -506,7 +506,7 @@ void SwEditRegionDlg::RecurseList( const SwSectionFmt* pFmt, SvLBoxEntry* pEntry
     else
     {
         SwSections aTmpArr;
-        SvLBoxEntry* pNEntry;
+        SvTreeListEntry* pNEntry;
         sal_uInt16 nCnt = pFmt->GetChildSections(aTmpArr,SORTSECT_POS);
         if( nCnt )
         {
@@ -555,7 +555,7 @@ sal_uInt16 SwEditRegionDlg::FindArrPos(const SwSectionFmt* pFmt )
 
 SwEditRegionDlg::~SwEditRegionDlg( )
 {
-    SvLBoxEntry* pEntry = aTree.First();
+    SvTreeListEntry* pEntry = aTree.First();
     while( pEntry )
     {
         delete (SectRepr*)pEntry->GetUserData();
@@ -567,7 +567,7 @@ SwEditRegionDlg::~SwEditRegionDlg( )
 
 void    SwEditRegionDlg::SelectSection(const String& rSectionName)
 {
-    SvLBoxEntry* pEntry = aTree.First();
+    SvTreeListEntry* pEntry = aTree.First();
     while(pEntry)
     {
         SectReprPtr pRepr = (SectReprPtr)pEntry->GetUserData();
@@ -591,7 +591,7 @@ void    SwEditRegionDlg::SelectSection(const String& rSectionName)
 IMPL_LINK( SwEditRegionDlg, GetFirstEntryHdl, SvTreeListBox *, pBox )
 {
     bDontCheckPasswd = sal_True;
-    SvLBoxEntry* pEntry=pBox->FirstSelected();
+    SvTreeListEntry* pEntry=pBox->FirstSelected();
     aHideCB     .Enable(sal_True);
     // edit in readonly sections
     aEditInReadonlyCB.Enable(sal_True);
@@ -803,7 +803,7 @@ IMPL_LINK_NOARG(SwEditRegionDlg, OkHdl)
     rSh.StartAllAction();
     rSh.StartUndo();
     rSh.ResetSelect( 0,sal_False );
-    SvLBoxEntry* pEntry = aTree.First();
+    SvTreeListEntry* pEntry = aTree.First();
 
     while( pEntry )
     {
@@ -873,7 +873,7 @@ IMPL_LINK( SwEditRegionDlg, ChangeProtectHdl, TriStateBox *, pBox )
     if(!CheckPasswd(pBox))
         return 0;
     pBox->EnableTriState( sal_False );
-    SvLBoxEntry* pEntry=aTree.FirstSelected();
+    SvTreeListEntry* pEntry=aTree.FirstSelected();
     OSL_ENSURE(pEntry,"no entry found");
     sal_Bool bCheck = STATE_CHECK == pBox->GetState();
     while( pEntry )
@@ -899,7 +899,7 @@ IMPL_LINK( SwEditRegionDlg, ChangeHideHdl, TriStateBox *, pBox )
     if(!CheckPasswd(pBox))
         return 0;
     pBox->EnableTriState( sal_False );
-    SvLBoxEntry* pEntry=aTree.FirstSelected();
+    SvTreeListEntry* pEntry=aTree.FirstSelected();
     OSL_ENSURE(pEntry,"no entry found");
     while( pEntry )
     {
@@ -928,7 +928,7 @@ IMPL_LINK( SwEditRegionDlg, ChangeEditInReadonlyHdl, TriStateBox *, pBox )
     if(!CheckPasswd(pBox))
         return 0;
     pBox->EnableTriState( sal_False );
-    SvLBoxEntry* pEntry=aTree.FirstSelected();
+    SvTreeListEntry* pEntry=aTree.FirstSelected();
     OSL_ENSURE(pEntry,"no entry found");
     while( pEntry )
     {
@@ -948,9 +948,9 @@ IMPL_LINK_NOARG(SwEditRegionDlg, ChangeDismissHdl)
 {
     if(!CheckPasswd())
         return 0;
-    SvLBoxEntry* pEntry = aTree.FirstSelected();
-    SvLBoxEntry* pChild;
-    SvLBoxEntry* pParent;
+    SvTreeListEntry* pEntry = aTree.FirstSelected();
+    SvTreeListEntry* pChild;
+    SvTreeListEntry* pParent;
     // at first mark all selected
     while(pEntry)
     {
@@ -963,7 +963,7 @@ IMPL_LINK_NOARG(SwEditRegionDlg, ChangeDismissHdl)
     while(pEntry)
     {
         const SectReprPtr pSectRepr = (SectRepr*)pEntry->GetUserData();
-        SvLBoxEntry* pRemove = 0;
+        SvTreeListEntry* pRemove = 0;
         sal_Bool bRestart = sal_False;
         if(pSectRepr->IsSelected())
         {
@@ -1015,7 +1015,7 @@ IMPL_LINK( SwEditRegionDlg, UseFileHdl, CheckBox *, pBox )
 {
     if(!CheckPasswd(pBox))
         return 0;
-    SvLBoxEntry* pEntry = aTree.FirstSelected();
+    SvTreeListEntry* pEntry = aTree.FirstSelected();
     pBox->EnableTriState(sal_False);
     sal_Bool bMulti = 1 < aTree.GetSelectionCount();
     sal_Bool bFile = pBox->IsChecked();
@@ -1098,7 +1098,7 @@ IMPL_LINK_NOARG(SwEditRegionDlg, OptionsHdl)
 {
     if(!CheckPasswd())
         return 0;
-    SvLBoxEntry* pEntry = aTree.FirstSelected();
+    SvTreeListEntry* pEntry = aTree.FirstSelected();
 
     if(pEntry)
     {
@@ -1165,7 +1165,7 @@ IMPL_LINK_NOARG(SwEditRegionDlg, OptionsHdl)
                     SFX_ITEM_SET == eFrmDirState||
                     SFX_ITEM_SET == eLRState)
                 {
-                    SvLBoxEntry* pSelEntry = aTree.FirstSelected();
+                    SvTreeListEntry* pSelEntry = aTree.FirstSelected();
                     while( pSelEntry )
                     {
                         SectReprPtr pRepr = (SectReprPtr)pSelEntry->GetUserData();
@@ -1204,7 +1204,7 @@ IMPL_LINK( SwEditRegionDlg, FileNameHdl, Edit *, pEdit )
     if(!CheckPasswd())
         return 0;
     pEdit->SetSelection(aSelect);
-    SvLBoxEntry* pEntry=aTree.FirstSelected();
+    SvTreeListEntry* pEntry=aTree.FirstSelected();
     OSL_ENSURE(pEntry,"no entry found");
     SectReprPtr pSectRepr = (SectRepr*)pEntry->GetUserData();
     if(pEdit == &aFileNameED)
@@ -1251,7 +1251,7 @@ IMPL_LINK( SwEditRegionDlg, DDEHdl, CheckBox*, pBox )
 {
     if(!CheckPasswd(pBox))
         return 0;
-    SvLBoxEntry* pEntry=aTree.FirstSelected();
+    SvTreeListEntry* pEntry=aTree.FirstSelected();
     if(pEntry)
     {
         sal_Bool bFile = aFileCB.IsChecked();
@@ -1307,7 +1307,7 @@ IMPL_LINK( SwEditRegionDlg, ChangePasswdHdl, Button *, pBox )
             aPasswdCB.Check(!aPasswdCB.IsChecked());
         return 0;
     }
-    SvLBoxEntry* pEntry=aTree.FirstSelected();
+    SvTreeListEntry* pEntry=aTree.FirstSelected();
     sal_Bool bSet = bChange ? bChange : aPasswdCB.IsChecked();
     OSL_ENSURE(pEntry,"no entry found");
     while( pEntry )
@@ -1360,7 +1360,7 @@ IMPL_LINK_NOARG(SwEditRegionDlg, NameEditHdl)
 {
     if(!CheckPasswd(0))
         return 0;
-    SvLBoxEntry* pEntry=aTree.FirstSelected();
+    SvTreeListEntry* pEntry=aTree.FirstSelected();
     OSL_ENSURE(pEntry,"no entry found");
     if (pEntry)
     {
@@ -1380,7 +1380,7 @@ IMPL_LINK( SwEditRegionDlg, ConditionEditHdl, Edit *, pEdit )
     if(!CheckPasswd(0))
         return 0;
     pEdit->SetSelection(aSelect);
-    SvLBoxEntry* pEntry = aTree.FirstSelected();
+    SvTreeListEntry* pEntry = aTree.FirstSelected();
     OSL_ENSURE(pEntry,"no entry found");
     while( pEntry )
     {
@@ -1409,7 +1409,7 @@ IMPL_LINK( SwEditRegionDlg, DlgClosedHdl, sfx2::FileDialogHelper *, _pFileDlg )
         }
     }
 
-    SvLBoxEntry* pEntry = aTree.FirstSelected();
+    SvTreeListEntry* pEntry = aTree.FirstSelected();
     OSL_ENSURE( pEntry, "no entry found" );
     if ( pEntry )
     {

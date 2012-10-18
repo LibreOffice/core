@@ -61,7 +61,7 @@ class SfxAccCfgTabListBox_Impl : public SvTabListBox
     void                        KeyInput( const KeyEvent &rKEvt );
 
 protected:
-    virtual void                InitEntry( SvLBoxEntry*, const XubString&, const Image&, const Image&, SvLBoxButtonKind eButtonKind );
+    virtual void                InitEntry( SvTreeListEntry*, const XubString&, const Image&, const Image&, SvLBoxButtonKind eButtonKind );
 
 public:
                                 SfxAccCfgTabListBox_Impl(
@@ -171,7 +171,7 @@ private:
     void                        Init(const css::uno::Reference< css::ui::XAcceleratorConfiguration >& pAccMgr);
     void                        ResetConfig();
 
-    void                        CreateCustomItems( SvLBoxEntry* pEntry, const String& aCol1, const String& aCol2 );
+    void                        CreateCustomItems( SvTreeListEntry* pEntry, const String& aCol1, const String& aCol2 );
 
 public:
                                 SfxAcceleratorConfigPage( Window *pParent, const SfxItemSet& rItemSet );

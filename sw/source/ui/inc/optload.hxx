@@ -32,7 +32,7 @@
 #include <caption.hxx>
 
 class SwFldMgr;
-class SvLBoxEntry;
+class SvTreeListEntry;
 class SwWrtShell;
 
 class SwLoadOptPage : public SfxTabPage
@@ -171,7 +171,7 @@ private:
     void                SetOptions( const sal_uInt16 nPos,
                                     const SwCapObjType eType,
                                     const SvGlobalName *pOleId = 0);
-    void                SaveEntry( SvLBoxEntry* pEntry );
+    void                SaveEntry( SvTreeListEntry* pEntry );
     void                DrawSample();
 
 public:

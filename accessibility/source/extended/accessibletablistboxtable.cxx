@@ -96,7 +96,7 @@ namespace accessibility
                     commitEvent( AccessibleEventId::SELECTION_CHANGED, Any(), Any() );
                     if ( m_pTabListBox && m_pTabListBox->HasFocus() )
                     {
-                        SvLBoxEntry* pEntry = static_cast< SvLBoxEntry* >( rVclWindowEvent.GetData() );
+                        SvTreeListEntry* pEntry = static_cast< SvTreeListEntry* >( rVclWindowEvent.GetData() );
                         if ( pEntry )
                         {
                             sal_Int32 nRow = m_pTabListBox->GetEntryPos( pEntry );
@@ -136,7 +136,7 @@ namespace accessibility
                 {
                     if ( m_pTabListBox && m_pTabListBox->HasFocus() )
                     {
-                        SvLBoxEntry* pEntry = static_cast< SvLBoxEntry* >( rVclWindowEvent.GetData() );
+                        SvTreeListEntry* pEntry = static_cast< SvTreeListEntry* >( rVclWindowEvent.GetData() );
                         if ( pEntry )
                         {
                             sal_Int32 nRow = m_pTabListBox->GetEntryPos( pEntry );
@@ -161,7 +161,7 @@ namespace accessibility
                     {
                         commitEvent( AccessibleEventId::SELECTION_CHANGED, Any(), Any() );
                         TabListBoxEventData* pData = static_cast< TabListBoxEventData* >( rVclWindowEvent.GetData() );
-                        SvLBoxEntry* pEntry = pData != NULL ? pData->m_pEntry : NULL;
+                        SvTreeListEntry* pEntry = pData != NULL ? pData->m_pEntry : NULL;
                         if ( pEntry )
                         {
                             sal_Int32 nRow = m_pTabListBox->GetEntryPos( pEntry );
@@ -244,7 +244,7 @@ namespace accessibility
         if ( m_pTabListBox )
         {
             sal_Int32 nRow = 0;
-            SvLBoxEntry* pEntry = m_pTabListBox->FirstSelected();
+            SvTreeListEntry* pEntry = m_pTabListBox->FirstSelected();
             while ( pEntry )
             {
                 ++nRow;

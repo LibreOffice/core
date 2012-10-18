@@ -596,7 +596,7 @@ DBChangeDialog_Impl::DBChangeDialog_Impl(Window* pParent, BibDataManager* pMan )
         const ::rtl::OUString* pSourceNames = rSources.getConstArray();
         for(int i = 0; i < rSources.getLength(); i++)
         {
-            SvLBoxEntry* pEntry = aSelectionLB.InsertEntry(pSourceNames[i]);
+            SvTreeListEntry* pEntry = aSelectionLB.InsertEntry(pSourceNames[i]);
             if(pSourceNames[i] == sActiveSource)
             {
                 aSelectionLB.Select(pEntry);
@@ -623,7 +623,7 @@ DBChangeDialog_Impl::~DBChangeDialog_Impl()
 String  DBChangeDialog_Impl::GetCurrentURL()const
 {
     String sRet;
-    SvLBoxEntry* pEntry = aSelectionLB.FirstSelected();
+    SvTreeListEntry* pEntry = aSelectionLB.FirstSelected();
     if(pEntry)
     {
         sRet = aSelectionLB.GetEntryText(pEntry, 0);

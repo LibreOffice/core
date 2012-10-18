@@ -101,7 +101,7 @@ void OTableTreeListBox::implSetDefaultImages()
 }
 
 // -----------------------------------------------------------------------------
-bool  OTableTreeListBox::isFolderEntry( const SvLBoxEntry* _pEntry ) const
+bool  OTableTreeListBox::isFolderEntry( const SvTreeListEntry* _pEntry ) const
 {
     sal_Int32 nEntryType = reinterpret_cast< sal_IntPtr >( _pEntry->GetUserData() );
     if  (   ( nEntryType == DatabaseObjectContainer::TABLES )
@@ -117,7 +117,7 @@ void OTableTreeListBox::notifyHiContrastChanged()
 {
     implSetDefaultImages();
 
-    SvLBoxEntry* pEntryLoop = First();
+    SvTreeListEntry* pEntryLoop = First();
     while (pEntryLoop)
     {
         sal_uInt16 nCount = pEntryLoop->ItemCount();
@@ -325,13 +325,13 @@ void OTableTreeListBox::UpdateTableList( const Reference< XConnection >& _rxConn
                     bCatalogs ? xMeta->getCatalogs() : xMeta->getSchemas(), 1 ) );
                 sal_Int32 nFolderType = bCatalogs ? DatabaseObjectContainer::CATALOG : DatabaseObjectContainer::SCHEMA;
 
-                SvLBoxEntry* pRootEntry = getAllObjectsEntry();
+                SvTreeListEntry* pRootEntry = getAllObjectsEntry();
                 for (   ::std::vector< ::rtl::OUString >::const_iterator folder = aFolderNames.begin();
                         folder != aFolderNames.end();
                         ++folder
                     )
                 {
-                    SvLBoxEntry* pFolder = GetEntryPosByName( *folder, pRootEntry );
+                    SvTreeListEntry* pFolder = GetEntryPosByName( *folder, pRootEntry );
                     if ( !pFolder )
                         pFolder = InsertEntry( *folder, pRootEntry, sal_False, LIST_APPEND, reinterpret_cast< void* >( nFolderType ) );
                 }
@@ -344,7 +344,7 @@ void OTableTreeListBox::UpdateTableList( const Reference< XConnection >& _rxConn
     }
 }
 //------------------------------------------------------------------------
-sal_Bool OTableTreeListBox::isWildcardChecked(SvLBoxEntry* _pEntry) const
+sal_Bool OTableTreeListBox::isWildcardChecked(SvTreeListEntry* _pEntry) const
 {
     if (_pEntry)
     {
@@ -356,20 +356,20 @@ sal_Bool OTableTreeListBox::isWildcardChecked(SvLBoxEntry* _pEntry) const
 }
 
 //------------------------------------------------------------------------
-void OTableTreeListBox::checkWildcard(SvLBoxEntry* _pEntry)
+void OTableTreeListBox::checkWildcard(SvTreeListEntry* _pEntry)
 {
     SetCheckButtonState(_pEntry, SV_BUTTON_CHECKED);
     checkedButton_noBroadcast(_pEntry);
 }
 
 //------------------------------------------------------------------------
-SvLBoxEntry* OTableTreeListBox::getAllObjectsEntry() const
+SvTreeListEntry* OTableTreeListBox::getAllObjectsEntry() const
 {
     return haveVirtualRoot() ? First() : NULL;
 }
 
 //------------------------------------------------------------------------
-void OTableTreeListBox::checkedButton_noBroadcast(SvLBoxEntry* _pEntry)
+void OTableTreeListBox::checkedButton_noBroadcast(SvTreeListEntry* _pEntry)
 {
     OMarkableTreeListBox::checkedButton_noBroadcast(_pEntry);
 
@@ -383,7 +383,7 @@ void OTableTreeListBox::checkedButton_noBroadcast(SvLBoxEntry* _pEntry)
 }
 
 //------------------------------------------------------------------------
-void OTableTreeListBox::implEmphasize(SvLBoxEntry* _pEntry, sal_Bool _bChecked, sal_Bool _bUpdateDescendants, sal_Bool _bUpdateAncestors)
+void OTableTreeListBox::implEmphasize(SvTreeListEntry* _pEntry, sal_Bool _bChecked, sal_Bool _bUpdateDescendants, sal_Bool _bUpdateAncestors)
 {
     OSL_ENSURE(_pEntry, "OTableTreeListBox::implEmphasize: invalid entry (NULL)!");
 
@@ -404,7 +404,7 @@ void OTableTreeListBox::implEmphasize(SvLBoxEntry* _pEntry, sal_Bool _bChecked, 
     if (_bUpdateDescendants)
     {
         // remove the mark for all children of the checked entry
-        SvLBoxEntry* pChildLoop = FirstChild(_pEntry);
+        SvTreeListEntry* pChildLoop = FirstChild(_pEntry);
         while (pChildLoop)
         {
             if (GetModel()->HasChildren(pChildLoop))
@@ -422,7 +422,7 @@ void OTableTreeListBox::implEmphasize(SvLBoxEntry* _pEntry, sal_Bool _bChecked, 
 }
 
 //------------------------------------------------------------------------
-void OTableTreeListBox::InitEntry(SvLBoxEntry* _pEntry, const XubString& _rString, const Image& _rCollapsedBitmap, const Image& _rExpandedBitmap, SvLBoxButtonKind _eButtonKind)
+void OTableTreeListBox::InitEntry(SvTreeListEntry* _pEntry, const XubString& _rString, const Image& _rCollapsedBitmap, const Image& _rExpandedBitmap, SvLBoxButtonKind _eButtonKind)
 {
     OMarkableTreeListBox::InitEntry(_pEntry, _rString, _rCollapsedBitmap, _rExpandedBitmap, _eButtonKind);
 
@@ -436,7 +436,7 @@ void OTableTreeListBox::InitEntry(SvLBoxEntry* _pEntry, const XubString& _rStrin
 }
 
 //------------------------------------------------------------------------
-SvLBoxEntry* OTableTreeListBox::implAddEntry(
+SvTreeListEntry* OTableTreeListBox::implAddEntry(
         const Reference< XDatabaseMetaData >& _rxMeta,
         const ::rtl::OUString& _rTableName,
         sal_Bool _bCheckName
@@ -450,7 +450,7 @@ SvLBoxEntry* OTableTreeListBox::implAddEntry(
     ::rtl::OUString sCatalog, sSchema, sName;
     qualifiedNameComponents( _rxMeta, _rTableName, sCatalog, sSchema, sName, ::dbtools::eInDataManipulation );
 
-    SvLBoxEntry* pParentEntry = getAllObjectsEntry();
+    SvTreeListEntry* pParentEntry = getAllObjectsEntry();
 
     // if the DB uses catalog at the start of identifiers, then our hierarchy is
     //   catalog
@@ -468,7 +468,7 @@ SvLBoxEntry* OTableTreeListBox::implAddEntry(
 
     if ( !rFirstName.isEmpty() )
     {
-        SvLBoxEntry* pFolder = GetEntryPosByName( rFirstName, pParentEntry );
+        SvTreeListEntry* pFolder = GetEntryPosByName( rFirstName, pParentEntry );
         if ( !pFolder )
             pFolder = InsertEntry( rFirstName, pParentEntry, sal_False, LIST_APPEND, reinterpret_cast< void* >( nFirstFolderType ) );
         pParentEntry = pFolder;
@@ -476,13 +476,13 @@ SvLBoxEntry* OTableTreeListBox::implAddEntry(
 
     if ( !rSecondName.isEmpty() )
     {
-        SvLBoxEntry* pFolder = GetEntryPosByName( rSecondName, pParentEntry );
+        SvTreeListEntry* pFolder = GetEntryPosByName( rSecondName, pParentEntry );
         if ( !pFolder )
             pFolder = InsertEntry( rSecondName, pParentEntry, sal_False, LIST_APPEND, reinterpret_cast< void* >( nSecondFolderType ) );
         pParentEntry = pFolder;
     }
 
-    SvLBoxEntry* pRet = NULL;
+    SvTreeListEntry* pRet = NULL;
     if ( !_bCheckName || !GetEntryPosByName( sName, pParentEntry ) )
     {
         pRet = InsertEntry( sName, pParentEntry, sal_False, LIST_APPEND );
@@ -497,7 +497,7 @@ SvLBoxEntry* OTableTreeListBox::implAddEntry(
 }
 
 //------------------------------------------------------------------------
-NamedDatabaseObject OTableTreeListBox::describeObject( SvLBoxEntry* _pEntry )
+NamedDatabaseObject OTableTreeListBox::describeObject( SvTreeListEntry* _pEntry )
 {
     NamedDatabaseObject aObject;
 
@@ -511,7 +511,7 @@ NamedDatabaseObject OTableTreeListBox::describeObject( SvLBoxEntry* _pEntry )
             ||  ( nEntryType == DatabaseObjectContainer::SCHEMA )
             )
     {
-        SvLBoxEntry* pParent = GetParent( _pEntry );
+        SvTreeListEntry* pParent = GetParent( _pEntry );
         sal_Int32 nParentEntryType = pParent ? reinterpret_cast< sal_IntPtr >( pParent->GetUserData() ) : -1;
 
         ::rtl::OUStringBuffer buffer;
@@ -544,7 +544,7 @@ NamedDatabaseObject OTableTreeListBox::describeObject( SvLBoxEntry* _pEntry )
 }
 
 //------------------------------------------------------------------------
-SvLBoxEntry* OTableTreeListBox::addedTable( const ::rtl::OUString& _rName )
+SvTreeListEntry* OTableTreeListBox::addedTable( const ::rtl::OUString& _rName )
 {
     try
     {
@@ -569,7 +569,7 @@ bool OTableTreeListBox::impl_getAndAssertMetaData( Reference< XDatabaseMetaData 
 }
 
 //------------------------------------------------------------------------
-String OTableTreeListBox::getQualifiedTableName( SvLBoxEntry* _pEntry ) const
+String OTableTreeListBox::getQualifiedTableName( SvTreeListEntry* _pEntry ) const
 {
     OSL_PRECOND( !isFolderEntry( _pEntry ), "OTableTreeListBox::getQualifiedTableName: folder entries not allowed here!" );
 
@@ -583,10 +583,10 @@ String OTableTreeListBox::getQualifiedTableName( SvLBoxEntry* _pEntry ) const
         ::rtl::OUString sSchema;
         ::rtl::OUString sTable;
 
-        SvLBoxEntry* pSchema = GetParent( _pEntry );
+        SvTreeListEntry* pSchema = GetParent( _pEntry );
         if ( pSchema )
         {
-            SvLBoxEntry* pCatalog = GetParent( pSchema );
+            SvTreeListEntry* pCatalog = GetParent( pSchema );
             if  (   pCatalog
                 ||  (   xMeta->supportsCatalogsInDataManipulation()
                     &&  !xMeta->supportsSchemasInDataManipulation()
@@ -615,7 +615,7 @@ String OTableTreeListBox::getQualifiedTableName( SvLBoxEntry* _pEntry ) const
 }
 
 //------------------------------------------------------------------------
-SvLBoxEntry* OTableTreeListBox::getEntryByQualifiedName( const ::rtl::OUString& _rName )
+SvTreeListEntry* OTableTreeListBox::getEntryByQualifiedName( const ::rtl::OUString& _rName )
 {
     try
     {
@@ -627,9 +627,9 @@ SvLBoxEntry* OTableTreeListBox::getEntryByQualifiedName( const ::rtl::OUString& 
         ::rtl::OUString sCatalog, sSchema, sName;
         qualifiedNameComponents(xMeta, _rName, sCatalog, sSchema, sName,::dbtools::eInDataManipulation);
 
-        SvLBoxEntry* pParent = getAllObjectsEntry();
-        SvLBoxEntry* pCat = NULL;
-        SvLBoxEntry* pSchema = NULL;
+        SvTreeListEntry* pParent = getAllObjectsEntry();
+        SvTreeListEntry* pCat = NULL;
+        SvTreeListEntry* pSchema = NULL;
         if ( !sCatalog.isEmpty() )
         {
             pCat = GetEntryPosByName(sCatalog, pParent);
@@ -657,7 +657,7 @@ void OTableTreeListBox::removedTable( const ::rtl::OUString& _rName )
 {
     try
     {
-        SvLBoxEntry* pEntry = getEntryByQualifiedName( _rName );
+        SvTreeListEntry* pEntry = getEntryByQualifiedName( _rName );
         if ( pEntry )
             GetModel()->Remove( pEntry );
     }

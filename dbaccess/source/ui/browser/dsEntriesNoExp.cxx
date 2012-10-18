@@ -37,7 +37,7 @@ namespace dbaui
 {
 // .........................................................................
 // -----------------------------------------------------------------------------
-SbaTableQueryBrowser::EntryType SbaTableQueryBrowser::getChildType( SvLBoxEntry* _pEntry ) const
+SbaTableQueryBrowser::EntryType SbaTableQueryBrowser::getChildType( SvTreeListEntry* _pEntry ) const
 {
     OSL_ENSURE(isContainer(_pEntry), "SbaTableQueryBrowser::getChildType: invalid entry!");
     switch (getEntryType(_pEntry))
@@ -53,21 +53,21 @@ SbaTableQueryBrowser::EntryType SbaTableQueryBrowser::getChildType( SvLBoxEntry*
 }
 
 // -----------------------------------------------------------------------------
-String SbaTableQueryBrowser::GetEntryText( SvLBoxEntry* _pEntry ) const
+String SbaTableQueryBrowser::GetEntryText( SvTreeListEntry* _pEntry ) const
 {
     return m_pTreeView->getListBox().GetEntryText(_pEntry);
 }
 
 // -----------------------------------------------------------------------------
-SbaTableQueryBrowser::EntryType SbaTableQueryBrowser::getEntryType( SvLBoxEntry* _pEntry ) const
+SbaTableQueryBrowser::EntryType SbaTableQueryBrowser::getEntryType( SvTreeListEntry* _pEntry ) const
 {
     if (!_pEntry)
         return etUnknown;
 
-    SvLBoxEntry* pRootEntry     = m_pTreeView->getListBox().GetRootLevelParent(_pEntry);
-    SvLBoxEntry* pEntryParent   = m_pTreeView->getListBox().GetParent(_pEntry);
-    SvLBoxEntry* pTables        = m_pTreeView->getListBox().GetEntry(pRootEntry, CONTAINER_TABLES);
-    SvLBoxEntry* pQueries       = m_pTreeView->getListBox().GetEntry(pRootEntry, CONTAINER_QUERIES);
+    SvTreeListEntry* pRootEntry     = m_pTreeView->getListBox().GetRootLevelParent(_pEntry);
+    SvTreeListEntry* pEntryParent   = m_pTreeView->getListBox().GetParent(_pEntry);
+    SvTreeListEntry* pTables        = m_pTreeView->getListBox().GetEntry(pRootEntry, CONTAINER_TABLES);
+    SvTreeListEntry* pQueries       = m_pTreeView->getListBox().GetEntry(pRootEntry, CONTAINER_QUERIES);
 
 #ifdef DBG_UTIL
     String sTest;
@@ -105,7 +105,7 @@ SbaTableQueryBrowser::EntryType SbaTableQueryBrowser::getEntryType( SvLBoxEntry*
     return etQueryContainer;
 }
 //------------------------------------------------------------------------------
-void SbaTableQueryBrowser::select(SvLBoxEntry* _pEntry, sal_Bool _bSelect)
+void SbaTableQueryBrowser::select(SvTreeListEntry* _pEntry, sal_Bool _bSelect)
 {
     SvLBoxItem* pTextItem = _pEntry ? _pEntry->GetFirstItem(SV_ITEM_ID_BOLDLBSTRING) : NULL;
     if (pTextItem)
@@ -119,7 +119,7 @@ void SbaTableQueryBrowser::select(SvLBoxEntry* _pEntry, sal_Bool _bSelect)
 }
 
 //------------------------------------------------------------------------------
-void SbaTableQueryBrowser::selectPath(SvLBoxEntry* _pEntry, sal_Bool _bSelect)
+void SbaTableQueryBrowser::selectPath(SvTreeListEntry* _pEntry, sal_Bool _bSelect)
 {
     while (_pEntry)
     {
@@ -128,7 +128,7 @@ void SbaTableQueryBrowser::selectPath(SvLBoxEntry* _pEntry, sal_Bool _bSelect)
     }
 }
 //------------------------------------------------------------------------------
-sal_Bool SbaTableQueryBrowser::isSelected(SvLBoxEntry* _pEntry) const
+sal_Bool SbaTableQueryBrowser::isSelected(SvTreeListEntry* _pEntry) const
 {
     SvLBoxItem* pTextItem = _pEntry ? _pEntry->GetFirstItem(SV_ITEM_ID_BOLDLBSTRING) : NULL;
     if (pTextItem)
@@ -199,7 +199,7 @@ void SbaTableQueryBrowser::notifyHiContrastChanged()
     if ( m_pTreeView )
     {
         // change all bitmap entries
-        SvLBoxEntry* pEntryLoop = m_pTreeModel->First();
+        SvTreeListEntry* pEntryLoop = m_pTreeModel->First();
         while ( pEntryLoop )
         {
             DBTreeListUserData* pData = static_cast<DBTreeListUserData*>(pEntryLoop->GetUserData());

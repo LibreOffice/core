@@ -179,7 +179,7 @@ private:
             com::sun::star::container::XIndexContainer >& rNewMenuBar,
         com::sun::star::uno::Reference<
             com::sun::star::lang::XSingleComponentFactory >& rFactory,
-        SvLBoxEntry *pParent = NULL );
+        SvTreeListEntry *pParent = NULL );
 
     void        ApplyMenu(
         com::sun::star::uno::Reference<
@@ -331,16 +331,16 @@ public:
 
     virtual sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt );
 
-    virtual sal_Bool        NotifyAcceptDrop( SvLBoxEntry* pEntry );
+    virtual sal_Bool        NotifyAcceptDrop( SvTreeListEntry* pEntry );
 
-    virtual sal_Bool        NotifyMoving( SvLBoxEntry*, SvLBoxEntry*,
-                                      SvLBoxEntry*&, sal_uLong& );
+    virtual sal_Bool        NotifyMoving( SvTreeListEntry*, SvTreeListEntry*,
+                                      SvTreeListEntry*&, sal_uLong& );
 
-    virtual sal_Bool        NotifyCopying( SvLBoxEntry*, SvLBoxEntry*,
-                                       SvLBoxEntry*&, sal_uLong&);
+    virtual sal_Bool        NotifyCopying( SvTreeListEntry*, SvTreeListEntry*,
+                                       SvTreeListEntry*&, sal_uLong&);
 
     virtual DragDropMode    NotifyStartDrag(
-        TransferDataContainer&, SvLBoxEntry* );
+        TransferDataContainer&, SvTreeListEntry* );
 
     virtual void        DragFinished( sal_Int8 );
 
@@ -370,7 +370,7 @@ private:
     DECL_LINK(  SelectSaveInLocation, ListBox * );
     DECL_LINK(  AsyncInfoMsg, String* );
 
-    bool        SwapEntryData( SvLBoxEntry* pSourceEntry, SvLBoxEntry* pTargetEntry );
+    bool        SwapEntryData( SvTreeListEntry* pSourceEntry, SvTreeListEntry* pTargetEntry );
     void        AlignControls();
 
 protected:
@@ -428,14 +428,14 @@ protected:
 
     void            PositionContentsListBox();
 
-    SvLBoxEntry*    InsertEntry(        SvxConfigEntry* pNewEntryData,
-                                        SvLBoxEntry* pTarget = NULL,
+    SvTreeListEntry*    InsertEntry(        SvxConfigEntry* pNewEntryData,
+                                        SvTreeListEntry* pTarget = NULL,
                                         bool bFront = sal_False );
 
     void            AddSubMenusToUI(    const String& rBaseTitle,
                                         SvxConfigEntry* pParentData );
 
-    SvLBoxEntry*    InsertEntryIntoUI ( SvxConfigEntry* pNewEntryData,
+    SvTreeListEntry*    InsertEntryIntoUI ( SvxConfigEntry* pNewEntryData,
                                         sal_uLong nPos = LIST_APPEND );
 
     SvxEntries*     FindParentForChild( SvxEntries* pParentEntries,
@@ -449,14 +449,14 @@ public:
 
     SaveInData*     GetSaveInData() { return pCurrentSaveInData; }
 
-    SvLBoxEntry*    AddFunction( SvLBoxEntry* pTarget = NULL,
+    SvTreeListEntry*    AddFunction( SvTreeListEntry* pTarget = NULL,
                                  bool bFront = sal_False,
                                  bool bAllowDuplicates = sal_False );
 
     virtual void    MoveEntry( bool bMoveUp );
 
-    bool            MoveEntryData(  SvLBoxEntry* pSourceEntry,
-                                    SvLBoxEntry* pTargetEntry );
+    bool            MoveEntryData(  SvTreeListEntry* pSourceEntry,
+                                    SvTreeListEntry* pTargetEntry );
 
     sal_Bool            FillItemSet( SfxItemSet& );
     void            Reset( const SfxItemSet& );
@@ -528,7 +528,7 @@ class SvxMainMenuOrganizerDialog : public ModalDialog
     HelpButton      aHelpButton;
 
     SvxEntries*     pEntries;
-    SvLBoxEntry*    pNewMenuEntry;
+    SvTreeListEntry*    pNewMenuEntry;
     bool            bModified;
 
     void UpdateButtonStates();
@@ -556,7 +556,7 @@ class SvxToolbarEntriesListBox : public SvxMenuEntriesListBox
     SvLBoxButtonData*   m_pButtonData;
     SvxConfigPage*  pPage;
 
-    void            ChangeVisibility( SvLBoxEntry* pEntry );
+    void            ChangeVisibility( SvTreeListEntry* pEntry );
 
 protected:
 
@@ -582,10 +582,10 @@ public:
         { return m_aCheckBoxImageSizePixel; }
 
     virtual sal_Bool    NotifyMoving(
-        SvLBoxEntry*, SvLBoxEntry*, SvLBoxEntry*&, sal_uLong& );
+        SvTreeListEntry*, SvTreeListEntry*, SvTreeListEntry*&, sal_uLong& );
 
     virtual sal_Bool    NotifyCopying(
-        SvLBoxEntry*, SvLBoxEntry*, SvLBoxEntry*&, sal_uLong&);
+        SvTreeListEntry*, SvTreeListEntry*, SvTreeListEntry*&, sal_uLong&);
 
     void            KeyInput( const KeyEvent& rKeyEvent );
 };
@@ -613,7 +613,7 @@ public:
     SvxToolbarConfigPage( Window *pParent, const SfxItemSet& rItemSet );
     ~SvxToolbarConfigPage();
 
-    SvLBoxEntry*    AddFunction( SvLBoxEntry* pTarget = NULL,
+    SvTreeListEntry*    AddFunction( SvTreeListEntry* pTarget = NULL,
                                              bool bFront = sal_False,
                                              bool bAllowDuplicates = sal_True );
 

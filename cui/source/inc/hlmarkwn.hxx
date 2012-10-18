@@ -73,9 +73,9 @@ private:
 protected:
     sal_Bool RefreshFromDoc( ::rtl::OUString aURL );
 
-    SvLBoxEntry* FindEntry ( String aStrName );
+    SvTreeListEntry* FindEntry ( String aStrName );
     void ClearTree();
-    int FillTree( ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > xLinks, SvLBoxEntry* pParentEntry =NULL );
+    int FillTree( ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > xLinks, SvTreeListEntry* pParentEntry =NULL );
 
     virtual void Move ();
 

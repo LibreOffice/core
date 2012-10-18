@@ -34,14 +34,14 @@ namespace dbaui
 {
     struct DBTreeEditedEntry
     {
-        SvLBoxEntry*    pEntry;
+        SvTreeListEntry*    pEntry;
         XubString       aNewText;
     };
 
     class IEntryFilter
     {
     public:
-        virtual bool    includeEntry( SvLBoxEntry* _pEntry ) const = 0;
+        virtual bool    includeEntry( SvTreeListEntry* _pEntry ) const = 0;
 
     protected:
         ~IEntryFilter() {}
@@ -56,8 +56,8 @@ namespace dbaui
         OScrollHelper               m_aScrollHelper;
         Timer                       m_aTimer; // is needed for table updates
         Point                       m_aMousePos;
-        std::set<SvLBoxEntry*>      m_aSelectedEntries;
-        SvLBoxEntry*                m_pDragedEntry;
+        std::set<SvTreeListEntry*>      m_aSelectedEntries;
+        SvTreeListEntry*                m_pDragedEntry;
         IControlActionListener*     m_pActionListener;
         IContextMenuProvider*
                                     m_pContextMenuProvider;
@@ -81,7 +81,7 @@ namespace dbaui
     private:
         void init();
         DECL_LINK( OnTimeOut, void* );
-        DECL_LINK( OnResetEntry, SvLBoxEntry* );
+        DECL_LINK( OnResetEntry, SvTreeListEntry* );
         DECL_LINK( ScrollUpHdl, SvTreeListBox* );
         DECL_LINK( ScrollDownHdl, SvTreeListBox* );
 
@@ -113,21 +113,21 @@ namespace dbaui
 
         // modified the given entry so that the expand handler is called whenever the entry is expanded
         // (normally, the expand handler is called only once)
-        void            EnableExpandHandler(SvLBoxEntry* _pEntry);
+        void            EnableExpandHandler(SvTreeListEntry* _pEntry);
 
-        SvLBoxEntry*    GetEntryPosByName( const String& aName, SvLBoxEntry* pStart = NULL, const IEntryFilter* _pFilter = NULL ) const;
-        virtual void    RequestingChildren( SvLBoxEntry* pParent );
+        SvTreeListEntry*    GetEntryPosByName( const String& aName, SvTreeListEntry* pStart = NULL, const IEntryFilter* _pFilter = NULL ) const;
+        virtual void    RequestingChildren( SvTreeListEntry* pParent );
         virtual void    SelectHdl();
         virtual void    DeselectHdl();
         // Window
         virtual void    KeyInput( const KeyEvent& rKEvt );
 
         virtual void    StateChanged( StateChangedType nStateChange );
-        virtual void    InitEntry( SvLBoxEntry* pEntry, const XubString& aStr, const Image& aCollEntryBmp, const Image& aExpEntryBmp, SvLBoxButtonKind eButtonKind);
+        virtual void    InitEntry( SvTreeListEntry* pEntry, const XubString& aStr, const Image& aCollEntryBmp, const Image& aExpEntryBmp, SvLBoxButtonKind eButtonKind);
 
         // enable editing for tables/views and queries
-        virtual sal_Bool    EditingEntry( SvLBoxEntry* pEntry, Selection& );
-        virtual sal_Bool    EditedEntry( SvLBoxEntry* pEntry, const rtl::OUString& rNewText );
+        virtual sal_Bool    EditingEntry( SvTreeListEntry* pEntry, Selection& );
+        virtual sal_Bool    EditedEntry( SvTreeListEntry* pEntry, const rtl::OUString& rNewText );
 
         virtual sal_Bool    DoubleClickHdl();
 
@@ -148,8 +148,8 @@ namespace dbaui
         virtual sal_Int8    AcceptDrop( const AcceptDropEvent& _rEvt );
         virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& _rEvt );
 
-        virtual void        ModelHasRemoved( SvListEntry* pEntry );
-        virtual void        ModelHasEntryInvalidated( SvListEntry* pEntry );
+        virtual void        ModelHasRemoved( SvTreeListEntry* pEntry );
+        virtual void        ModelHasEntryInvalidated( SvTreeListEntry* pEntry );
 
         void                implStopSelectionTimer();
         void                implStartSelectionTimer();

@@ -421,7 +421,7 @@ typedef std::vector<rtl::OUString> ExpandedEntries_t;
 class StyleTreeListBox_Impl : public DropListBox_Impl
 {
 private:
-    SvLBoxEntry*                    pCurEntry;
+    SvTreeListEntry*                    pCurEntry;
     Link                            aDoubleClickLink;
     Link                            aDropLink;
     String                          aParent;
@@ -433,9 +433,9 @@ protected:
     virtual sal_Bool    DoubleClickHdl();
     virtual long    ExpandingHdl();
     virtual void    ExpandedHdl();
-    virtual sal_Bool    NotifyMoving(SvLBoxEntry*  pTarget,
-                                     SvLBoxEntry*  pEntry,
-                                     SvLBoxEntry*& rpNewParent,
+    virtual sal_Bool    NotifyMoving(SvTreeListEntry*  pTarget,
+                                     SvTreeListEntry*  pEntry,
+                                     SvTreeListEntry*& rpNewParent,
                                      sal_uIntPtr&        rNewChildPos);
 public:
     StyleTreeListBox_Impl( SfxCommonTemplateDialog_Impl* pParent, WinBits nWinStyle = 0);
@@ -455,8 +455,8 @@ public:
 
 void StyleTreeListBox_Impl::MakeExpanded_Impl(ExpandedEntries_t& rEntries) const
 {
-    SvLBoxEntry *pEntry;
-    for(pEntry=(SvLBoxEntry*)FirstVisible();pEntry;pEntry=(SvLBoxEntry*)NextVisible(pEntry))
+    SvTreeListEntry *pEntry;
+    for(pEntry=(SvTreeListEntry*)FirstVisible();pEntry;pEntry=(SvTreeListEntry*)NextVisible(pEntry))
     {
         if(IsExpanded(pEntry))
         {
@@ -520,9 +520,9 @@ long StyleTreeListBox_Impl::Notify( NotifyEvent& rNEvt )
 
 //-------------------------------------------------------------------------
 
-sal_Bool StyleTreeListBox_Impl::NotifyMoving(SvLBoxEntry*  pTarget,
-                                         SvLBoxEntry*  pEntry,
-                                         SvLBoxEntry*& rpNewParent,
+sal_Bool StyleTreeListBox_Impl::NotifyMoving(SvTreeListEntry*  pTarget,
+                                         SvTreeListEntry*  pEntry,
+                                         SvTreeListEntry*& rpNewParent,
                                          sal_uIntPtr& lPos)
 /*  [Description]
 
@@ -539,7 +539,7 @@ sal_Bool StyleTreeListBox_Impl::NotifyMoving(SvLBoxEntry*  pTarget,
     lPos=0;
     IntlWrapper aIntlWrapper( ::comphelper::getProcessServiceFactory(), Application::GetSettings().GetLocale() );
     const CollatorWrapper* pCollator = aIntlWrapper.getCaseCollator();
-    for(SvLBoxEntry *pTmpEntry=FirstChild(pTarget);
+    for(SvTreeListEntry *pTmpEntry=FirstChild(pTarget);
         pTmpEntry && COMPARE_LESS==pCollator->compareString(
             GetEntryText(pTmpEntry),GetEntryText(pEntry));
         pTmpEntry=NextSibling(pTmpEntry),lPos++) ;
@@ -578,7 +578,7 @@ void  StyleTreeListBox_Impl::ExpandedHdl()
 */
 
 {
-    SvLBoxEntry *pEntry = GetHdlEntry();
+    SvTreeListEntry *pEntry = GetHdlEntry();
     if(!IsExpanded(pEntry) && pCurEntry != GetCurEntry())
         SelectAll( sal_False );
     pCurEntry = 0;
@@ -719,12 +719,12 @@ inline sal_Bool IsExpanded_Impl( const ExpandedEntries_t& rEntries,
 
 
 
-SvLBoxEntry* FillBox_Impl(SvTreeListBox *pBox,
+SvTreeListEntry* FillBox_Impl(SvTreeListBox *pBox,
                                  StyleTree_Impl* pEntry,
                                  const ExpandedEntries_t& rEntries,
-                                 SvLBoxEntry* pParent = 0)
+                                 SvTreeListEntry* pParent = 0)
 {
-    SvLBoxEntry* pNewEntry = pBox->InsertEntry(pEntry->aName, pParent);
+    SvTreeListEntry* pNewEntry = pBox->InsertEntry(pEntry->aName, pParent);
     const sal_uInt16 nCount = pEntry->pChildren ? pEntry->pChildren->size() : 0;
     for(sal_uInt16 i = 0; i < nCount; ++i)
         FillBox_Impl(pBox, (*pEntry->pChildren)[i], rEntries, pNewEntry);
@@ -1072,7 +1072,7 @@ void SfxCommonTemplateDialog_Impl::SelectStyle(const String &rStr)
     {
         if ( rStr.Len() )
         {
-            SvLBoxEntry* pEntry = pTreeBox->First();
+            SvTreeListEntry* pEntry = pTreeBox->First();
             while ( pEntry )
             {
                 if ( pTreeBox->GetEntryText( pEntry ) == rStr )
@@ -1092,9 +1092,9 @@ void SfxCommonTemplateDialog_Impl::SelectStyle(const String &rStr)
         sal_Bool bSelect = ( rStr.Len() > 0 );
         if ( bSelect )
         {
-            SvLBoxEntry* pEntry = (SvLBoxEntry*)aFmtLb.FirstVisible();
+            SvTreeListEntry* pEntry = (SvTreeListEntry*)aFmtLb.FirstVisible();
             while ( pEntry && aFmtLb.GetEntryText( pEntry ) != rStr )
-                pEntry = (SvLBoxEntry*)aFmtLb.NextVisible( pEntry );
+                pEntry = (SvTreeListEntry*)aFmtLb.NextVisible( pEntry );
             if ( !pEntry )
                 bSelect = sal_False;
             else
@@ -1121,13 +1121,13 @@ String SfxCommonTemplateDialog_Impl::GetSelectedEntry() const
     String aRet;
     if ( pTreeBox )
     {
-        SvLBoxEntry* pEntry = pTreeBox->FirstSelected();
+        SvTreeListEntry* pEntry = pTreeBox->FirstSelected();
         if ( pEntry )
             aRet = pTreeBox->GetEntryText( pEntry );
     }
     else
     {
-        SvLBoxEntry* pEntry = aFmtLb.FirstSelected();
+        SvTreeListEntry* pEntry = aFmtLb.FirstSelected();
         if ( pEntry )
             aRet = aFmtLb.GetEntryText( pEntry );
     }
@@ -1192,7 +1192,7 @@ void SfxCommonTemplateDialog_Impl::FillTreeBox()
         if ( nCount )
             pTreeBox->Expand( pTreeBox->First() );
 
-        for ( SvLBoxEntry* pEntry = pTreeBox->First(); pEntry; pEntry = pTreeBox->Next( pEntry ) )
+        for ( SvTreeListEntry* pEntry = pTreeBox->First(); pEntry; pEntry = pTreeBox->Next( pEntry ) )
         {
             if ( IsExpanded_Impl( aEntries, pTreeBox->GetEntryText( pEntry ) ) )
                 pTreeBox->Expand( pEntry );
@@ -1303,7 +1303,7 @@ void SfxCommonTemplateDialog_Impl::UpdateStyles_Impl(sal_uInt16 nFlags)
             EnableItem(SID_STYLE_WATERCAN,sal_False);
 
             SfxStyleSheetBase *pStyle = pStyleSheetPool->First();
-            SvLBoxEntry* pEntry = aFmtLb.First();
+            SvTreeListEntry* pEntry = aFmtLb.First();
             std::vector<rtl::OUString> aStrings;
 
             comphelper::string::NaturalStringSorter aSorter(

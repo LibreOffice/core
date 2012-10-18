@@ -109,8 +109,8 @@ private:
     String makeTabString( const DictionaryEntry& rEntry ) const;
 
     DECL_LINK( CompareHdl, SvSortData* );
-    StringCompare ColumnCompare( SvLBoxEntry* pLeft, SvLBoxEntry* pRight );
-    SvLBoxItem* getItemAtColumn( SvLBoxEntry* pEntry, sal_uInt16 nColumn ) const;
+    StringCompare ColumnCompare( SvTreeListEntry* pLeft, SvTreeListEntry* pRight );
+    SvLBoxItem* getItemAtColumn( SvTreeListEntry* pEntry, sal_uInt16 nColumn ) const;
 
 public:
     ::com::sun::star::uno::Reference<

@@ -151,7 +151,7 @@ void OQueryTableWindow::deleteUserData(void*& _pUserData)
     _pUserData = NULL;
 }
 //------------------------------------------------------------------------------
-void OQueryTableWindow::OnEntryDoubleClicked(SvLBoxEntry* pEntry)
+void OQueryTableWindow::OnEntryDoubleClicked(SvTreeListEntry* pEntry)
 {
     OSL_ENSURE(pEntry != NULL, "OQueryTableWindow::OnEntryDoubleClicked : pEntry darf nicht NULL sein !");
         // man koennte das auch abfragen und dann ein return hinsetzen, aber so weist es vielleicht auf Fehler bei Aufrufer hin
@@ -182,7 +182,7 @@ sal_Bool OQueryTableWindow::ExistsField(const ::rtl::OUString& strFieldName, OTa
     sal_Bool bExists = sal_False;
     if(xConnection.is())
     {
-        SvLBoxEntry* pEntry = m_pListBox->First();
+        SvTreeListEntry* pEntry = m_pListBox->First();
         try
         {
             Reference<XDatabaseMetaData> xMeta = xConnection->getMetaData();

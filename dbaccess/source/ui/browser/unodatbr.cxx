@@ -857,7 +857,7 @@ sal_Bool SbaTableQueryBrowser::InitializeGridModel(const Reference< ::com::sun::
     return sal_True;
 }
 // -----------------------------------------------------------------------------
-Reference<XPropertySet> getColumnHelper(SvLBoxEntry* _pCurrentlyDisplayed,const Reference<XPropertySet>& _rxSource)
+Reference<XPropertySet> getColumnHelper(SvTreeListEntry* _pCurrentlyDisplayed,const Reference<XPropertySet>& _rxSource)
 {
     Reference<XPropertySet> xRet;
     if(_pCurrentlyDisplayed)
@@ -1075,9 +1075,9 @@ void SAL_CALL SbaTableQueryBrowser::statusChanged( const FeatureStateEvent& _rEv
 // -------------------------------------------------------------------------
 void SbaTableQueryBrowser::checkDocumentDataSource()
 {
-    SvLBoxEntry* pDataSourceEntry = NULL;
-    SvLBoxEntry* pContainerEntry = NULL;
-    SvLBoxEntry* pObjectEntry = getObjectEntry( m_aDocumentDataSource, &pDataSourceEntry, &pContainerEntry, sal_False );
+    SvTreeListEntry* pDataSourceEntry = NULL;
+    SvTreeListEntry* pContainerEntry = NULL;
+    SvTreeListEntry* pObjectEntry = getObjectEntry( m_aDocumentDataSource, &pDataSourceEntry, &pContainerEntry, sal_False );
     sal_Bool bKnownDocDataSource = (NULL != pObjectEntry);
     if (!bKnownDocDataSource)
     {
@@ -1149,10 +1149,10 @@ namespace
 
         virtual ~FilterByEntryDataId() {}
 
-        virtual bool    includeEntry( SvLBoxEntry* _pEntry ) const;
+        virtual bool    includeEntry( SvTreeListEntry* _pEntry ) const;
     };
 
-    bool FilterByEntryDataId::includeEntry( SvLBoxEntry* _pEntry ) const
+    bool FilterByEntryDataId::includeEntry( SvTreeListEntry* _pEntry ) const
     {
         DBTreeListUserData* pData = static_cast< DBTreeListUserData* >( _pEntry->GetUserData() );
         return ( !pData || ( pData->sAccessor == sId ) );
@@ -1160,7 +1160,7 @@ namespace
 }
 
 // -------------------------------------------------------------------------
-String SbaTableQueryBrowser::getDataSourceAcessor( SvLBoxEntry* _pDataSourceEntry ) const
+String SbaTableQueryBrowser::getDataSourceAcessor( SvTreeListEntry* _pDataSourceEntry ) const
 {
     OSL_ENSURE( _pDataSourceEntry, "SbaTableQueryBrowser::getDataSourceAcessor: invalid entry!" );
 
@@ -1171,8 +1171,8 @@ String SbaTableQueryBrowser::getDataSourceAcessor( SvLBoxEntry* _pDataSourceEntr
 }
 
 // -------------------------------------------------------------------------
-SvLBoxEntry* SbaTableQueryBrowser::getObjectEntry(const ::rtl::OUString& _rDataSource, const ::rtl::OUString& _rCommand, sal_Int32 _nCommandType,
-        SvLBoxEntry** _ppDataSourceEntry, SvLBoxEntry** _ppContainerEntry, sal_Bool _bExpandAncestors,
+SvTreeListEntry* SbaTableQueryBrowser::getObjectEntry(const ::rtl::OUString& _rDataSource, const ::rtl::OUString& _rCommand, sal_Int32 _nCommandType,
+        SvTreeListEntry** _ppDataSourceEntry, SvTreeListEntry** _ppContainerEntry, sal_Bool _bExpandAncestors,
         const SharedConnection& _rxConnection )
 {
     if (_ppDataSourceEntry)
@@ -1180,7 +1180,7 @@ SvLBoxEntry* SbaTableQueryBrowser::getObjectEntry(const ::rtl::OUString& _rDataS
     if (_ppContainerEntry)
         *_ppContainerEntry = NULL;
 
-    SvLBoxEntry* pObject = NULL;
+    SvTreeListEntry* pObject = NULL;
     if ( m_pTreeView )
     {
         // look for the data source entry
@@ -1190,7 +1190,7 @@ SvLBoxEntry* SbaTableQueryBrowser::getObjectEntry(const ::rtl::OUString& _rDataS
             // #i33699#
 
         FilterByEntryDataId aFilter( sDataSourceId );
-        SvLBoxEntry* pDataSource = m_pTreeView->getListBox().GetEntryPosByName( sDisplayName, NULL, &aFilter );
+        SvTreeListEntry* pDataSource = m_pTreeView->getListBox().GetEntryPosByName( sDisplayName, NULL, &aFilter );
         if ( !pDataSource ) // check if the data source name is a file location
         {
             if ( bIsDataSourceURL )
@@ -1213,7 +1213,7 @@ SvLBoxEntry* SbaTableQueryBrowser::getObjectEntry(const ::rtl::OUString& _rDataS
                 m_pTreeView->getListBox().Expand(pDataSource);
 
             // look for the object container
-            SvLBoxEntry* pCommandType = NULL;
+            SvTreeListEntry* pCommandType = NULL;
             switch (_nCommandType)
             {
                 case CommandType::TABLE:
@@ -1284,8 +1284,8 @@ SvLBoxEntry* SbaTableQueryBrowser::getObjectEntry(const ::rtl::OUString& _rDataS
 }
 
 // -------------------------------------------------------------------------
-SvLBoxEntry* SbaTableQueryBrowser::getObjectEntry(const ::svx::ODataAccessDescriptor& _rDescriptor,
-        SvLBoxEntry** _ppDataSourceEntry, SvLBoxEntry** _ppContainerEntry,
+SvTreeListEntry* SbaTableQueryBrowser::getObjectEntry(const ::svx::ODataAccessDescriptor& _rDescriptor,
+        SvTreeListEntry** _ppDataSourceEntry, SvTreeListEntry** _ppContainerEntry,
         sal_Bool _bExpandAncestors)
 {
     // extract the props from the descriptor
@@ -1425,7 +1425,7 @@ void SAL_CALL SbaTableQueryBrowser::disposing( const EventObject& _rSource ) thr
             {   // our connection is in dispose so we have to find the entry equal with this connection
                 // and close it what means to collapse the entry
                 // get the top-level representing the removed data source
-                SvLBoxEntry* pDSLoop = m_pTreeView->getListBox().FirstChild(NULL);
+                SvTreeListEntry* pDSLoop = m_pTreeView->getListBox().FirstChild(NULL);
                 while (pDSLoop)
                 {
                     DBTreeListUserData* pData = static_cast<DBTreeListUserData*>(pDSLoop->GetUserData());
@@ -1733,12 +1733,12 @@ FeatureState SbaTableQueryBrowser::GetState(sal_uInt16 nId) const
         case ID_TREE_CLOSE_CONN:
         case ID_TREE_EDIT_DATABASE:
         {
-            SvLBoxEntry* pCurrentEntry( m_pTreeView->getListBox().GetCurEntry() );
+            SvTreeListEntry* pCurrentEntry( m_pTreeView->getListBox().GetCurEntry() );
             EntryType eType = getEntryType( pCurrentEntry );
             if ( eType == etUnknown )
                 return aReturn;
 
-            SvLBoxEntry* pDataSourceEntry = m_pTreeView->getListBox().GetRootLevelParent( pCurrentEntry );
+            SvTreeListEntry* pDataSourceEntry = m_pTreeView->getListBox().GetRootLevelParent( pCurrentEntry );
             DBTreeListUserData* pDSData
                 =   pDataSourceEntry
                 ?   static_cast< DBTreeListUserData* >( pDataSourceEntry->GetUserData() )
@@ -1949,7 +1949,7 @@ void SbaTableQueryBrowser::Execute(sal_uInt16 nId, const Sequence< PropertyValue
                 // nothing to do
                 break;
 
-            SvLBoxEntry* pSelected = m_pCurrentlyDisplayed;
+            SvTreeListEntry* pSelected = m_pCurrentlyDisplayed;
             // unload
             unloadAndCleanup( sal_False );
 
@@ -2115,7 +2115,7 @@ void SbaTableQueryBrowser::implAddDatasource(const String& _rDbName, Image& _rDb
     String sDSDisplayName, sDataSourceId;
     getDataSourceDisplayName_isURL( _rDbName, sDSDisplayName, sDataSourceId );
 
-    SvLBoxEntry* pDatasourceEntry = m_pTreeView->getListBox().InsertEntry( sDSDisplayName, _rDbImage, _rDbImage, NULL, sal_False );
+    SvTreeListEntry* pDatasourceEntry = m_pTreeView->getListBox().InsertEntry( sDSDisplayName, _rDbImage, _rDbImage, NULL, sal_False );
     DBTreeListUserData* pDSData = new DBTreeListUserData;
     pDSData->eType = etDatasource;
     pDSData->sAccessor = sDataSourceId;
@@ -2161,7 +2161,7 @@ void SbaTableQueryBrowser::initializeTreeModel()
 }
 // -------------------------------------------------------------------------
 void SbaTableQueryBrowser::populateTree(const Reference<XNameAccess>& _xNameAccess,
-                                            SvLBoxEntry* _pParent,
+                                            SvTreeListEntry* _pParent,
                                             EntryType _eEntryType)
 {
     DBTreeListUserData* pData = static_cast<DBTreeListUserData*>(_pParent->GetUserData());
@@ -2196,7 +2196,7 @@ void SbaTableQueryBrowser::populateTree(const Reference<XNameAccess>& _xNameAcce
 }
 
 //------------------------------------------------------------------------------
-SvLBoxEntry* SbaTableQueryBrowser::implAppendEntry( SvLBoxEntry* _pParent, const String& _rName, void* _pUserData, EntryType _eEntryType )
+SvTreeListEntry* SbaTableQueryBrowser::implAppendEntry( SvTreeListEntry* _pParent, const String& _rName, void* _pUserData, EntryType _eEntryType )
 {
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
     ::std::auto_ptr< ImageProvider > pImageProvider( getImageProviderFor( _pParent ) );
@@ -2205,7 +2205,7 @@ SvLBoxEntry* SbaTableQueryBrowser::implAppendEntry( SvLBoxEntry* _pParent, const
     Image aImage;
     pImageProvider->getImages( _rName, getDatabaseObjectType( _eEntryType ), aImage );
 
-    SvLBoxEntry* pNewEntry = m_pTreeView->getListBox().InsertEntry( _rName, _pParent, _eEntryType == etQueryContainer , LIST_APPEND, _pUserData );
+    SvTreeListEntry* pNewEntry = m_pTreeView->getListBox().InsertEntry( _rName, _pParent, _eEntryType == etQueryContainer , LIST_APPEND, _pUserData );
 
     m_pTreeView->getListBox().SetExpandedEntryBmp(  pNewEntry, aImage );
     m_pTreeView->getListBox().SetCollapsedEntryBmp( pNewEntry, aImage );
@@ -2214,13 +2214,13 @@ SvLBoxEntry* SbaTableQueryBrowser::implAppendEntry( SvLBoxEntry* _pParent, const
 }
 
 //------------------------------------------------------------------------------
-IMPL_LINK(SbaTableQueryBrowser, OnExpandEntry, SvLBoxEntry*, _pParent)
+IMPL_LINK(SbaTableQueryBrowser, OnExpandEntry, SvTreeListEntry*, _pParent)
 {
     if (_pParent->HasChildren())
         // nothing to to ...
         return 1L;
 
-    SvLBoxEntry* pFirstParent = m_pTreeView->getListBox().GetRootLevelParent(_pParent);
+    SvTreeListEntry* pFirstParent = m_pTreeView->getListBox().GetRootLevelParent(_pParent);
     OSL_ENSURE(pFirstParent,"SbaTableQueryBrowser::OnExpandEntry: No rootlevelparent!");
 
     DBTreeListUserData* pData = static_cast< DBTreeListUserData* >(_pParent->GetUserData());
@@ -2323,7 +2323,7 @@ IMPL_LINK(SbaTableQueryBrowser, OnExpandEntry, SvLBoxEntry*, _pParent)
 }
 
 //------------------------------------------------------------------------------
-sal_Bool SbaTableQueryBrowser::ensureEntryObject( SvLBoxEntry* _pEntry )
+sal_Bool SbaTableQueryBrowser::ensureEntryObject( SvTreeListEntry* _pEntry )
 {
     OSL_ENSURE(_pEntry, "SbaTableQueryBrowser::ensureEntryObject: invalid argument!");
     if (!_pEntry)
@@ -2335,7 +2335,7 @@ sal_Bool SbaTableQueryBrowser::ensureEntryObject( SvLBoxEntry* _pEntry )
     DBTreeListUserData* pEntryData = static_cast<DBTreeListUserData*>(_pEntry->GetUserData());
     OSL_ENSURE(pEntryData,"ensureEntryObject: user data should already be set!");
 
-    SvLBoxEntry* pDataSourceEntry = m_pTreeView->getListBox().GetRootLevelParent(_pEntry);
+    SvTreeListEntry* pDataSourceEntry = m_pTreeView->getListBox().GetRootLevelParent(_pEntry);
 
     sal_Bool bSuccess = sal_False;
     switch (eType)
@@ -2349,7 +2349,7 @@ sal_Bool SbaTableQueryBrowser::ensureEntryObject( SvLBoxEntry* _pEntry )
             }
 
             {
-                SvLBoxEntry* pParent = m_pTreeView->getListBox().GetParent(_pEntry);
+                SvTreeListEntry* pParent = m_pTreeView->getListBox().GetParent(_pEntry);
                 if ( pParent != pDataSourceEntry )
                 {
                     SvLBoxString* pString = (SvLBoxString*)_pEntry->GetFirstItem(SV_ITEM_ID_BOLDLBSTRING);
@@ -2513,9 +2513,9 @@ sal_Bool SbaTableQueryBrowser::implSelect(const ::rtl::OUString& _rDataSourceNam
 {
     if (_rDataSourceName.getLength() && _rCommand.getLength() && (-1 != _nCommandType))
     {
-        SvLBoxEntry* pDataSource = NULL;
-        SvLBoxEntry* pCommandType = NULL;
-        SvLBoxEntry* pCommand = getObjectEntry( _rDataSourceName, _rCommand, _nCommandType, &pDataSource, &pCommandType, sal_True, _rxConnection );
+        SvTreeListEntry* pDataSource = NULL;
+        SvTreeListEntry* pCommandType = NULL;
+        SvTreeListEntry* pCommand = getObjectEntry( _rDataSourceName, _rCommand, _nCommandType, &pDataSource, &pCommandType, sal_True, _rxConnection );
 
         if (pCommand)
         {
@@ -2556,9 +2556,9 @@ IMPL_LINK(SbaTableQueryBrowser, OnSelectionChange, void*, /*NOINTERESTEDIN*/)
     return implSelect( m_pTreeView->getListBox().FirstSelected() ) ? 1L : 0L;
 }
 //------------------------------------------------------------------------------
-SvLBoxEntry* SbaTableQueryBrowser::implGetConnectionEntry(SvLBoxEntry* _pEntry) const
+SvTreeListEntry* SbaTableQueryBrowser::implGetConnectionEntry(SvTreeListEntry* _pEntry) const
 {
-    SvLBoxEntry* pCurrentEntry = _pEntry;
+    SvTreeListEntry* pCurrentEntry = _pEntry;
     DBTreeListUserData* pEntryData = static_cast< DBTreeListUserData* >( pCurrentEntry->GetUserData() );
     while(pEntryData->eType != etDatasource )
     {
@@ -2568,7 +2568,7 @@ SvLBoxEntry* SbaTableQueryBrowser::implGetConnectionEntry(SvLBoxEntry* _pEntry) 
     return pCurrentEntry;
 }
 //------------------------------------------------------------------------------
-bool SbaTableQueryBrowser::implSelect( SvLBoxEntry* _pEntry )
+bool SbaTableQueryBrowser::implSelect( SvTreeListEntry* _pEntry )
 {
     if ( !_pEntry )
         return false;
@@ -2588,11 +2588,11 @@ bool SbaTableQueryBrowser::implSelect( SvLBoxEntry* _pEntry )
     OSL_ENSURE(m_pTreeModel->HasParent(m_pTreeModel->GetParent(_pEntry)), "SbaTableQueryBrowser::implSelect: invalid entry (2)!");
 
     // get the entry for the tables or queries
-    SvLBoxEntry* pContainer = m_pTreeModel->GetParent(_pEntry);
+    SvTreeListEntry* pContainer = m_pTreeModel->GetParent(_pEntry);
     DBTreeListUserData* pContainerData = static_cast<DBTreeListUserData*>(pContainer->GetUserData());
 
     // get the entry for the datasource
-    SvLBoxEntry* pConnection = implGetConnectionEntry(pContainer);
+    SvTreeListEntry* pConnection = implGetConnectionEntry(pContainer);
     DBTreeListUserData* pConData = static_cast<DBTreeListUserData*>(pConnection->GetUserData());
 
     // reinitialize the rowset
@@ -2612,7 +2612,7 @@ bool SbaTableQueryBrowser::implSelect( SvLBoxEntry* _pEntry )
     ::rtl::OUStringBuffer sNameBuffer(sSimpleName);
     if ( etQueryContainer == pContainerData->eType )
     {
-        SvLBoxEntry* pTemp = pContainer;
+        SvTreeListEntry* pTemp = pContainer;
         while( m_pTreeModel->GetParent(pTemp) != pConnection )
         {
             sNameBuffer.insert(0,sal_Unicode('/'));
@@ -2786,11 +2786,11 @@ bool SbaTableQueryBrowser::implSelect( SvLBoxEntry* _pEntry )
 }
 
 // -----------------------------------------------------------------------------
-SvLBoxEntry* SbaTableQueryBrowser::getEntryFromContainer(const Reference<XNameAccess>& _rxNameAccess)
+SvTreeListEntry* SbaTableQueryBrowser::getEntryFromContainer(const Reference<XNameAccess>& _rxNameAccess)
 {
     DBTreeListBox& rListBox = m_pTreeView->getListBox();
-    SvLBoxEntry* pContainer = NULL;
-    SvLBoxEntry* pDSLoop = rListBox.FirstChild(NULL);
+    SvTreeListEntry* pContainer = NULL;
+    SvTreeListEntry* pDSLoop = rListBox.FirstChild(NULL);
     while (pDSLoop)
     {
         pContainer  = rListBox.GetEntry(pDSLoop, CONTAINER_QUERIES);
@@ -2817,7 +2817,7 @@ void SAL_CALL SbaTableQueryBrowser::elementInserted( const ContainerEvent& _rEve
     Reference< XNameAccess > xNames(_rEvent.Source, UNO_QUERY);
     // first search for a definition container where we can insert this element
 
-    SvLBoxEntry* pEntry = getEntryFromContainer(xNames);
+    SvTreeListEntry* pEntry = getEntryFromContainer(xNames);
     if(pEntry)  // found one
     {
         // insert the new entry into the tree
@@ -2847,7 +2847,7 @@ void SAL_CALL SbaTableQueryBrowser::elementInserted( const ContainerEvent& _rEve
         SbaXDataBrowserController::elementInserted(_rEvent);
 }
 // -------------------------------------------------------------------------
-sal_Bool SbaTableQueryBrowser::isCurrentlyDisplayedChanged(const String& _sName,SvLBoxEntry* _pContainer)
+sal_Bool SbaTableQueryBrowser::isCurrentlyDisplayedChanged(const String& _sName,SvTreeListEntry* _pContainer)
 {
     return m_pCurrentlyDisplayed
             &&  getEntryType(m_pCurrentlyDisplayed) == getChildType(_pContainer)
@@ -2862,7 +2862,7 @@ void SAL_CALL SbaTableQueryBrowser::elementRemoved( const ContainerEvent& _rEven
     Reference< XNameAccess > xNames(_rEvent.Source, UNO_QUERY);
     // get the top-level representing the removed data source
     // and search for the queries and tables
-    SvLBoxEntry* pContainer = getEntryFromContainer(xNames);
+    SvTreeListEntry* pContainer = getEntryFromContainer(xNames);
     if ( pContainer )
     { // a query or table has been removed
         String aName = ::comphelper::getString(_rEvent.Accessor);
@@ -2871,7 +2871,7 @@ void SAL_CALL SbaTableQueryBrowser::elementRemoved( const ContainerEvent& _rEven
         {   // the element displayed currently has been replaced
 
             // we need to remember the old value
-            SvLBoxEntry* pTemp = m_pCurrentlyDisplayed;
+            SvTreeListEntry* pTemp = m_pCurrentlyDisplayed;
 
             // unload
             unloadAndCleanup( sal_False ); // don't dispose the connection
@@ -2885,7 +2885,7 @@ void SAL_CALL SbaTableQueryBrowser::elementRemoved( const ContainerEvent& _rEven
         else
         {
             // remove the entry from the model
-            SvLBoxEntry* pChild = m_pTreeModel->FirstChild(pContainer);
+            SvTreeListEntry* pChild = m_pTreeModel->FirstChild(pContainer);
             while(pChild)
             {
                 if (m_pTreeView->getListBox().GetEntryText(pChild) == aName)
@@ -2913,7 +2913,7 @@ void SAL_CALL SbaTableQueryBrowser::elementReplaced( const ContainerEvent& _rEve
     SolarMutexGuard aSolarGuard;
 
     Reference< XNameAccess > xNames(_rEvent.Source, UNO_QUERY);
-    SvLBoxEntry* pContainer = getEntryFromContainer(xNames);
+    SvTreeListEntry* pContainer = getEntryFromContainer(xNames);
     if ( pContainer )
     {    // a table or query as been replaced
         String aName = ::comphelper::getString(_rEvent.Accessor);
@@ -2922,7 +2922,7 @@ void SAL_CALL SbaTableQueryBrowser::elementReplaced( const ContainerEvent& _rEve
         {   // the element displayed currently has been replaced
 
             // we need to remember the old value
-            SvLBoxEntry* pTemp = m_pCurrentlyDisplayed;
+            SvTreeListEntry* pTemp = m_pCurrentlyDisplayed;
             unloadAndCleanup( sal_False ); // don't dispose the connection
 
             DBTreeListUserData* pData = static_cast<DBTreeListUserData*>(pTemp->GetUserData());
@@ -2942,7 +2942,7 @@ void SAL_CALL SbaTableQueryBrowser::elementReplaced( const ContainerEvent& _rEve
         else
         {
             // find the entry for this name
-            SvLBoxEntry* pChild = m_pTreeModel->FirstChild(pContainer);
+            SvTreeListEntry* pChild = m_pTreeModel->FirstChild(pContainer);
             while(pChild)
             {
                 if (m_pTreeView->getListBox().GetEntryText(pChild) == aName)
@@ -3008,7 +3008,7 @@ void SbaTableQueryBrowser::impl_releaseConnection( SharedConnection& _rxConnecti
 }
 
 // -------------------------------------------------------------------------
-void SbaTableQueryBrowser::disposeConnection( SvLBoxEntry* _pDSEntry )
+void SbaTableQueryBrowser::disposeConnection( SvTreeListEntry* _pDSEntry )
 {
     OSL_ENSURE( _pDSEntry, "SbaTableQueryBrowser::disposeConnection: invalid entry (NULL)!" );
     OSL_ENSURE( impl_isDataSourceEntry( _pDSEntry ), "SbaTableQueryBrowser::disposeConnection: invalid entry (not top-level)!" );
@@ -3022,7 +3022,7 @@ void SbaTableQueryBrowser::disposeConnection( SvLBoxEntry* _pDSEntry )
 }
 
 // -------------------------------------------------------------------------
-void SbaTableQueryBrowser::closeConnection(SvLBoxEntry* _pDSEntry,sal_Bool _bDisposeConnection)
+void SbaTableQueryBrowser::closeConnection(SvTreeListEntry* _pDSEntry,sal_Bool _bDisposeConnection)
 {
     OSL_ENSURE(_pDSEntry, "SbaTableQueryBrowser::closeConnection: invalid entry (NULL)!");
     OSL_ENSURE( impl_isDataSourceEntry( _pDSEntry ), "SbaTableQueryBrowser::closeConnection: invalid entry (not top-level)!");
@@ -3032,16 +3032,16 @@ void SbaTableQueryBrowser::closeConnection(SvLBoxEntry* _pDSEntry,sal_Bool _bDis
         unloadAndCleanup(_bDisposeConnection);
 
     // collapse the query/table container
-    for (SvLBoxEntry* pContainers = m_pTreeModel->FirstChild(_pDSEntry); pContainers; pContainers= m_pTreeModel->NextSibling(pContainers))
+    for (SvTreeListEntry* pContainers = m_pTreeModel->FirstChild(_pDSEntry); pContainers; pContainers= m_pTreeModel->NextSibling(pContainers))
     {
-        SvLBoxEntry* pElements = m_pTreeModel->FirstChild(pContainers);
+        SvTreeListEntry* pElements = m_pTreeModel->FirstChild(pContainers);
         if ( pElements )
             m_pTreeView->getListBox().Collapse(pContainers);
         m_pTreeView->getListBox().EnableExpandHandler(pContainers);
         // and delete their children (they are connection-relative)
         for (; pElements; )
         {
-            SvLBoxEntry* pRemove = pElements;
+            SvTreeListEntry* pRemove = pElements;
             pElements= m_pTreeModel->NextSibling(pElements);
             DBTreeListUserData* pData = static_cast<DBTreeListUserData*>(pRemove->GetUserData());
             pRemove->SetUserData(NULL);
@@ -3064,7 +3064,7 @@ void SbaTableQueryBrowser::unloadAndCleanup( sal_Bool _bDisposeConnection )
         // nothing to do
         return;
 
-    SvLBoxEntry* pDSEntry = m_pTreeView->getListBox().GetRootLevelParent(m_pCurrentlyDisplayed);
+    SvTreeListEntry* pDSEntry = m_pTreeView->getListBox().GetRootLevelParent(m_pCurrentlyDisplayed);
 
     // de-select the path for the currently displayed table/query
     if (m_pCurrentlyDisplayed)
@@ -3356,9 +3356,9 @@ void SbaTableQueryBrowser::showExplorer()
 }
 
 // -----------------------------------------------------------------------------
-sal_Bool SbaTableQueryBrowser::ensureConnection(SvLBoxEntry* _pAnyEntry, SharedConnection& _rConnection)
+sal_Bool SbaTableQueryBrowser::ensureConnection(SvTreeListEntry* _pAnyEntry, SharedConnection& _rConnection)
 {
-    SvLBoxEntry* pDSEntry = m_pTreeView->getListBox().GetRootLevelParent(_pAnyEntry);
+    SvTreeListEntry* pDSEntry = m_pTreeView->getListBox().GetRootLevelParent(_pAnyEntry);
     DBTreeListUserData* pDSData =
                 pDSEntry
             ?   static_cast<DBTreeListUserData*>(pDSEntry->GetUserData())
@@ -3369,7 +3369,7 @@ sal_Bool SbaTableQueryBrowser::ensureConnection(SvLBoxEntry* _pAnyEntry, SharedC
 
 // -----------------------------------------------------------------------------
 SAL_WNODEPRECATED_DECLARATIONS_PUSH
-::std::auto_ptr< ImageProvider > SbaTableQueryBrowser::getImageProviderFor( SvLBoxEntry* _pAnyEntry )
+::std::auto_ptr< ImageProvider > SbaTableQueryBrowser::getImageProviderFor( SvTreeListEntry* _pAnyEntry )
 {
     ::std::auto_ptr< ImageProvider > pImageProvider( new ImageProvider );
     SharedConnection xConnection;
@@ -3380,9 +3380,9 @@ SAL_WNODEPRECATED_DECLARATIONS_PUSH
 SAL_WNODEPRECATED_DECLARATIONS_POP
 
 // -----------------------------------------------------------------------------
-sal_Bool SbaTableQueryBrowser::getExistentConnectionFor( SvLBoxEntry* _pAnyEntry, SharedConnection& _rConnection )
+sal_Bool SbaTableQueryBrowser::getExistentConnectionFor( SvTreeListEntry* _pAnyEntry, SharedConnection& _rConnection )
 {
-    SvLBoxEntry* pDSEntry = m_pTreeView->getListBox().GetRootLevelParent( _pAnyEntry );
+    SvTreeListEntry* pDSEntry = m_pTreeView->getListBox().GetRootLevelParent( _pAnyEntry );
     DBTreeListUserData* pDSData =
                 pDSEntry
             ?   static_cast< DBTreeListUserData* >( pDSEntry->GetUserData() )
@@ -3394,14 +3394,14 @@ sal_Bool SbaTableQueryBrowser::getExistentConnectionFor( SvLBoxEntry* _pAnyEntry
 
 #if OSL_DEBUG_LEVEL > 0
 // -----------------------------------------------------------------------------
-bool SbaTableQueryBrowser::impl_isDataSourceEntry( SvLBoxEntry* _pEntry ) const
+bool SbaTableQueryBrowser::impl_isDataSourceEntry( SvTreeListEntry* _pEntry ) const
 {
     return m_pTreeModel->GetRootLevelParent( _pEntry ) == _pEntry;
 }
 #endif
 
 // -----------------------------------------------------------------------------
-sal_Bool SbaTableQueryBrowser::ensureConnection( SvLBoxEntry* _pDSEntry, void* pDSData, SharedConnection& _rConnection )
+sal_Bool SbaTableQueryBrowser::ensureConnection( SvTreeListEntry* _pDSEntry, void* pDSData, SharedConnection& _rConnection )
 {
     OSL_ENSURE( impl_isDataSourceEntry( _pDSEntry ), "SbaTableQueryBrowser::ensureConnection: this entry does not denote a data source!" );
     if(_pDSEntry)
@@ -3440,8 +3440,8 @@ sal_Bool SbaTableQueryBrowser::ensureConnection( SvLBoxEntry* _pDSEntry, void* p
 // -----------------------------------------------------------------------------
 IMPL_LINK( SbaTableQueryBrowser, OnTreeEntryCompare, const SvSortData*, _pSortData )
 {
-    SvLBoxEntry* pLHS = static_cast<SvLBoxEntry*>(_pSortData->pLeft);
-    SvLBoxEntry* pRHS = static_cast<SvLBoxEntry*>(_pSortData->pRight);
+    SvTreeListEntry* pLHS = static_cast<SvTreeListEntry*>(_pSortData->pLeft);
+    SvTreeListEntry* pRHS = static_cast<SvTreeListEntry*>(_pSortData->pRight);
     OSL_ENSURE(pLHS && pRHS, "SbaTableQueryBrowser::OnTreeEntryCompare: invalid tree entries!");
     // we want the table entry and the end so we have to do a check
 
@@ -3503,7 +3503,7 @@ IMPL_LINK( SbaTableQueryBrowser, OnTreeEntryCompare, const SvSortData*, _pSortDa
 }
 
 // -----------------------------------------------------------------------------
-void SbaTableQueryBrowser::implAdministrate( SvLBoxEntry* _pApplyTo )
+void SbaTableQueryBrowser::implAdministrate( SvTreeListEntry* _pApplyTo )
 {
     OSL_PRECOND( _pApplyTo, "SbaTableQueryBrowser::implAdministrate: illegal entry!" );
     if ( !_pApplyTo )
@@ -3518,7 +3518,7 @@ void SbaTableQueryBrowser::implAdministrate( SvLBoxEntry* _pApplyTo )
         if ( xFrameLoader.is() )
         {
             // the initial selection
-            SvLBoxEntry* pTopLevelSelected = _pApplyTo;
+            SvTreeListEntry* pTopLevelSelected = _pApplyTo;
             while (pTopLevelSelected && m_pTreeView->getListBox().GetParent(pTopLevelSelected))
                 pTopLevelSelected = m_pTreeView->getListBox().GetParent(pTopLevelSelected);
             ::rtl::OUString sInitialSelection;
@@ -3557,7 +3557,7 @@ void SbaTableQueryBrowser::implAdministrate( SvLBoxEntry* _pApplyTo )
 }
 
 // -----------------------------------------------------------------------------
-sal_Bool SbaTableQueryBrowser::requestQuickHelp( const SvLBoxEntry* _pEntry, String& _rText ) const
+sal_Bool SbaTableQueryBrowser::requestQuickHelp( const SvTreeListEntry* _pEntry, String& _rText ) const
 {
     const DBTreeListUserData* pData = static_cast< const DBTreeListUserData* >( _pEntry->GetUserData() );
     if ( ( pData->eType == etDatasource ) && pData->sAccessor.Len() )
@@ -3600,7 +3600,7 @@ Any SbaTableQueryBrowser::getCurrentSelection( Control& _rControl ) const
     if ( &m_pTreeView->getListBox() != &_rControl )
         return Any();
 
-    SvLBoxEntry* pSelected = m_pTreeView->getListBox().FirstSelected();
+    SvTreeListEntry* pSelected = m_pTreeView->getListBox().FirstSelected();
     if ( !pSelected )
         return Any();
 
@@ -3736,9 +3736,9 @@ void SbaTableQueryBrowser::loadMenu(const Reference< XFrame >& _xFrame)
     ::rtl::OUString sTitle;
     if ( m_pCurrentlyDisplayed )
     {
-        SvLBoxEntry* pContainer = m_pTreeModel->GetParent(m_pCurrentlyDisplayed);
+        SvTreeListEntry* pContainer = m_pTreeModel->GetParent(m_pCurrentlyDisplayed);
         // get the entry for the datasource
-        SvLBoxEntry* pConnection = implGetConnectionEntry(pContainer);
+        SvTreeListEntry* pConnection = implGetConnectionEntry(pContainer);
         ::rtl::OUString sName = m_pTreeView->getListBox().GetEntryText(m_pCurrentlyDisplayed);
         sTitle = GetEntryText( pConnection );
         INetURLObject aURL(sTitle);
@@ -3773,8 +3773,8 @@ sal_Bool SbaTableQueryBrowser::preReloadForm()
         extractDescriptorProps(aDesc, sDataSource, sCommand, nCommandType, bEscapeProcessing);
         if ( !sDataSource.isEmpty() && !sCommand.isEmpty() && (-1 != nCommandType) )
         {
-            SvLBoxEntry* pDataSource = NULL;
-            SvLBoxEntry* pCommandType = NULL;
+            SvTreeListEntry* pDataSource = NULL;
+            SvTreeListEntry* pCommandType = NULL;
             m_pCurrentlyDisplayed = getObjectEntry( sDataSource, sCommand, nCommandType, &pDataSource, &pCommandType, sal_True, SharedConnection() );
             bIni = sal_True;
         }
@@ -3840,7 +3840,7 @@ void SAL_CALL SbaTableQueryBrowser::registeredDatabaseLocation( const DatabaseRe
 void SbaTableQueryBrowser::impl_cleanupDataSourceEntry( const String& _rDataSourceName )
 {
     // get the top-level representing the removed data source
-    SvLBoxEntry* pDataSourceEntry = m_pTreeView->getListBox().FirstChild( NULL );
+    SvTreeListEntry* pDataSourceEntry = m_pTreeView->getListBox().FirstChild( NULL );
     while ( pDataSourceEntry )
     {
         if ( m_pTreeView->getListBox().GetEntryText( pDataSourceEntry ) == _rDataSourceName )
@@ -3871,7 +3871,7 @@ void SbaTableQueryBrowser::impl_cleanupDataSourceEntry( const String& _rDataSour
     {
         for ( size_t i = 0, n = pList->size(); i < n; ++i )
         {
-            SvLBoxEntry* pEntryLoop = static_cast<SvLBoxEntry*>((*pList)[ i ]);
+            SvTreeListEntry* pEntryLoop = static_cast<SvTreeListEntry*>((*pList)[ i ]);
             DBTreeListUserData* pData = static_cast< DBTreeListUserData* >( pEntryLoop->GetUserData() );
             pEntryLoop->SetUserData( NULL );
             delete pData;

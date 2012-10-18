@@ -48,7 +48,7 @@
 
 class ViewTabListBox_Impl;
 class SvtFileView_Impl;
-class SvLBoxEntry;
+class SvTreeListEntry;
 class HeaderBar;
 class IUrlFilter;
 
@@ -94,7 +94,7 @@ public:
     ~SvtFileView();
 
     const String&           GetViewURL() const;
-    String                  GetURL( SvLBoxEntry* pEntry ) const;
+    String                  GetURL( SvTreeListEntry* pEntry ) const;
     String                  GetCurrentURL() const;
 
     sal_Bool                GetParentURL( String& _rParentURL ) const;
@@ -186,8 +186,8 @@ public:
     void                    SetOpenDoneHdl( const Link& rHdl );
 
     sal_uLong                   GetSelectionCount() const;
-    SvLBoxEntry*            FirstSelected() const;
-    SvLBoxEntry*            NextSelected( SvLBoxEntry* pEntry ) const;
+    SvTreeListEntry*            FirstSelected() const;
+    SvTreeListEntry*            NextSelected( SvTreeListEntry* pEntry ) const;
     void                    EnableAutoResize();
     void                    SetFocus();
 

@@ -31,7 +31,7 @@ namespace dbaui
     {
     public:
         OTableWindowListBox*    pListBox;       // die ListBox innerhalb desselben (daraus kann man sich das TabWin und daraus den WinName besorgen)
-        SvLBoxEntry*            pEntry;         // der Eintrag, der gedraggt oder auf den gedroppt wurde
+        SvTreeListEntry*            pEntry;         // der Eintrag, der gedraggt oder auf den gedroppt wurde
 
         OJoinExchangeData(OTableWindowListBox* pBox);
         OJoinExchangeData() : pListBox(NULL), pEntry(NULL) { }
@@ -88,7 +88,7 @@ namespace dbaui
         virtual void Command(const CommandEvent& rEvt);
 
         OTableWindow* GetTabWin(){ return m_pTabWin; }
-        SvLBoxEntry* GetEntryFromText( const String& rEntryText );
+        SvTreeListEntry* GetEntryFromText( const String& rEntryText );
 
     private:
         using SvTreeListBox::ExecuteDrop;

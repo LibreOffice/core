@@ -218,7 +218,7 @@ void SwCondCollPage::Reset(const SfxItemSet &/*rSet*/)
             aEntry += pCond->GetTxtFmtColl()->GetName();
         }
 
-        SvLBoxEntry* pE = aTbLinks.InsertEntryToColumn( aEntry, n );
+        SvTreeListEntry* pE = aTbLinks.InsertEntryToColumn( aEntry, n );
         if(0 == n)
             aTbLinks.Select(pE);
     }
@@ -248,7 +248,7 @@ IMPL_LINK( SwCondCollPage, OnOffHdl, CheckBox*, pBox )
 
 IMPL_LINK( SwCondCollPage, AssignRemoveHdl, PushButton*, pBtn)
 {
-    SvLBoxEntry* pE = aTbLinks.FirstSelected();
+    SvTreeListEntry* pE = aTbLinks.FirstSelected();
     sal_uLong nPos;
     if( !pE || LISTBOX_ENTRY_NOTFOUND ==
         ( nPos = aTbLinks.GetModel()->GetAbsPos( pE ) ) )
@@ -299,7 +299,7 @@ IMPL_LINK( SwCondCollPage, SelectHdl, ListBox*, pBox)
     else
     {
         String sTbEntry;
-        SvLBoxEntry* pE = aTbLinks.FirstSelected();
+        SvTreeListEntry* pE = aTbLinks.FirstSelected();
         if(pE)
             sTbEntry = aTbLinks.GetEntryText(pE);
         sTbEntry = sTbEntry.GetToken(1, '\t');

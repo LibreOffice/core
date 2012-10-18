@@ -71,10 +71,10 @@ private:
     // for performance, save which entries already have the formula entry
     // otherwise opening the dialog with a lot of range names is extremelly slow because
     // we would calculate all formula strings during opening
-    std::map<SvLBoxEntry*, bool> maCalculatedFormulaEntries;
+    std::map<SvTreeListEntry*, bool> maCalculatedFormulaEntries;
     const ScAddress maPos;
 
-    void GetLine(ScRangeNameLine& aLine, SvLBoxEntry* pEntry);
+    void GetLine(ScRangeNameLine& aLine, SvTreeListEntry* pEntry);
     void Init();
     void CheckForFormulaString();
     const ScRangeData* findRangeData(const ScRangeNameLine& rLine);

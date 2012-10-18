@@ -311,7 +311,7 @@ sal_Bool SvxHlinkDlgMarkWnd::RefreshFromDoc( OUString aURL )
 |*
 |************************************************************************/
 
-int SvxHlinkDlgMarkWnd::FillTree( uno::Reference< container::XNameAccess > xLinks, SvLBoxEntry* pParentEntry )
+int SvxHlinkDlgMarkWnd::FillTree( uno::Reference< container::XNameAccess > xLinks, SvTreeListEntry* pParentEntry )
 {
     int nEntries=0;
     const uno::Sequence< OUString > aNames( xLinks->getElementNames() );
@@ -360,7 +360,7 @@ int SvxHlinkDlgMarkWnd::FillTree( uno::Reference< container::XNameAccess > xLink
                 // create userdata
                 TargetData *pData = new TargetData ( aLink, bIsTarget );
 
-                SvLBoxEntry* pEntry;
+                SvTreeListEntry* pEntry;
 
                 try
                 {
@@ -418,7 +418,7 @@ int SvxHlinkDlgMarkWnd::FillTree( uno::Reference< container::XNameAccess > xLink
 
 void SvxHlinkDlgMarkWnd::ClearTree()
 {
-    SvLBoxEntry* pEntry = maLbTree.First();
+    SvTreeListEntry* pEntry = maLbTree.First();
 
     while ( pEntry )
     {
@@ -437,10 +437,10 @@ void SvxHlinkDlgMarkWnd::ClearTree()
 |*
 |************************************************************************/
 
-SvLBoxEntry* SvxHlinkDlgMarkWnd::FindEntry ( String aStrName )
+SvTreeListEntry* SvxHlinkDlgMarkWnd::FindEntry ( String aStrName )
 {
     sal_Bool bFound=sal_False;
-    SvLBoxEntry* pEntry = maLbTree.First();
+    SvTreeListEntry* pEntry = maLbTree.First();
 
     while ( pEntry && !bFound )
     {
@@ -462,7 +462,7 @@ SvLBoxEntry* SvxHlinkDlgMarkWnd::FindEntry ( String aStrName )
 
 void SvxHlinkDlgMarkWnd::SelectEntry ( String aStrMark )
 {
-    SvLBoxEntry* pEntry = FindEntry ( aStrMark );
+    SvTreeListEntry* pEntry = FindEntry ( aStrMark );
     if ( pEntry )
     {
         maLbTree.Select ( pEntry );
@@ -478,7 +478,7 @@ void SvxHlinkDlgMarkWnd::SelectEntry ( String aStrMark )
 
 IMPL_LINK_NOARG(SvxHlinkDlgMarkWnd, ClickApplyHdl_Impl)
 {
-    SvLBoxEntry* pEntry = maLbTree.GetCurEntry();
+    SvTreeListEntry* pEntry = maLbTree.GetCurEntry();
 
     if ( pEntry )
     {

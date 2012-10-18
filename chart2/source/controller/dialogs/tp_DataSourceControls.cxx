@@ -39,7 +39,7 @@ SeriesListBox::SeriesListBox( Window* pParent, const ResId & rResId ) :
 SeriesListBox::~SeriesListBox()
 {}
 
-SvLBoxEntry* SeriesListBox::CreateEntry() const
+SvTreeListEntry* SeriesListBox::CreateEntry() const
 {
     return new SeriesEntry();
 }

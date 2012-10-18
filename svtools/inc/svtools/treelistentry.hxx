@@ -34,49 +34,6 @@
 
 #include <vector>
 
-class SvTreeEntryList;
-class SvLBoxItem;
-
-class SVT_DLLPUBLIC SvListEntry
-{
-friend class SvTreeList;
-friend class SvListView;
-
-private:
-    SvListEntry*        pParent;
-    SvTreeEntryList*    pChildren;
-    sal_uLong           nAbsPos;
-    sal_uLong           nListPos;
-
-    void                SetListPositions();
-    void                InvalidateChildrensListPositions()
-    {
-        nListPos |= 0x80000000;
-    }
-
-public:
-                        SvListEntry();
-                        SvListEntry( const SvListEntry& );
-    virtual             ~SvListEntry();
-    sal_Bool            HasChildren() { return (sal_Bool)(pChildren!=0); }
-    sal_Bool            HasChildListPos() const
-    {
-        if( pParent && !(pParent->nListPos & 0x80000000) )
-            return sal_True;
-        else return sal_False;
-    }
-
-    sal_uLong           GetChildListPos() const
-    {
-        if( pParent && (pParent->nListPos & 0x80000000) )
-            pParent->SetListPositions();
-        return ( nListPos & 0x7fffffff );
-    }
-
-    virtual void        Clone( SvListEntry* pSource );
-};
-
-
 // Flags, die am Model haengen
 #define SV_ENTRYFLAG_CHILDREN_ON_DEMAND   0x0001
 #define SV_ENTRYFLAG_DISABLE_DROP       0x0002
@@ -89,37 +46,57 @@ public:
 #define SV_ENTRYFLAG_USER_FLAGS         0xF000
 #define SV_ENTRYFLAG_SEMITRANSPARENT    0x8000      // draw semi-transparent entry bitmaps
 
-class SVT_DLLPUBLIC SvLBoxEntry : public SvListEntry
+class SvTreeEntryList;
+class SvLBoxItem;
+
+class SVT_DLLPUBLIC SvTreeListEntry
 {
+    friend class SvTreeList;
+    friend class SvListView;
     friend class SvTreeListBox;
 
+    SvTreeListEntry*    pParent;
+    SvTreeEntryList*    pChildren;
+    sal_uLong           nAbsPos;
+    sal_uLong           nListPos;
     std::vector<SvLBoxItem*> aItems;
     void*            pUserData;
     sal_uInt16       nEntryFlags;
-    SVT_DLLPRIVATE void         DeleteItems_Impl();
+
+private:
+    SVT_DLLPRIVATE void SetListPositions();
+    SVT_DLLPRIVATE void InvalidateChildrensListPositions();
+    SVT_DLLPRIVATE void DeleteItems_Impl();
+
 public:
+    SvTreeListEntry();
+    SvTreeListEntry(const SvTreeListEntry& r);
+    virtual ~SvTreeListEntry();
 
-                SvLBoxEntry();
-    virtual     ~SvLBoxEntry();
+    bool HasChildren() const;
+    bool HasChildListPos() const;
+    sal_uLong GetChildListPos() const;
 
-    sal_uInt16      ItemCount() const { return (sal_uInt16)aItems.size(); }
+    void Clone(SvTreeListEntry* pSource);
+
+    sal_uInt16 ItemCount() const;
+
     // DARF NUR GERUFEN WERDEN, WENN DER EINTRAG NOCH NICHT IM MODEL
     // EINGEFUEGT IST, DA SONST FUER DAS ITEM KEINE VIEW-ABHAENGIGEN
     // DATEN ALLOZIERT WERDEN!
     void        AddItem( SvLBoxItem* pItem );
     void        ReplaceItem( SvLBoxItem* pNewItem, sal_uInt16 nPos );
-    SvLBoxItem* GetItem( sal_uInt16 nPos ) const { return aItems[nPos]; }
+    SvLBoxItem* GetItem( sal_uInt16 nPos ) const;
     SvLBoxItem* GetFirstItem( sal_uInt16 nId );
     sal_uInt16 GetPos( SvLBoxItem* pItem ) const;
-    void*       GetUserData() const { return pUserData; }
-    void        SetUserData( void* pPtr ) { pUserData = pPtr; }
-    virtual void Clone( SvListEntry* pSource );
-    void        EnableChildrenOnDemand( sal_Bool bEnable=sal_True );
-    sal_Bool        HasChildrenOnDemand() const { return (sal_Bool)((nEntryFlags & SV_ENTRYFLAG_CHILDREN_ON_DEMAND)!=0); }
-    sal_Bool        HasInUseEmphasis() const    { return (sal_Bool)((nEntryFlags & SV_ENTRYFLAG_IN_USE)!=0); }
+    void*       GetUserData() const;
+    void        SetUserData( void* pPtr );
+    void        EnableChildrenOnDemand( bool bEnable=true );
+    bool        HasChildrenOnDemand() const;
+    bool        HasInUseEmphasis() const;
 
-    sal_uInt16      GetFlags() const { return nEntryFlags; }
-    void        SetFlags( sal_uInt16 nFlags ) { nEntryFlags = nFlags; }
+    sal_uInt16 GetFlags() const;
+    void SetFlags( sal_uInt16 nFlags );
 };
 
 #endif

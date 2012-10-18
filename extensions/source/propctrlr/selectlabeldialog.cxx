@@ -124,7 +124,7 @@ namespace pcr
 
             // insert the root
             Image aRootImage = m_aModelImages.GetImage(RID_SVXIMG_FORMS);
-            SvLBoxEntry* pRoot = m_aControlTree.InsertEntry(PcrRes(RID_STR_FORMS), aRootImage, aRootImage);
+            SvTreeListEntry* pRoot = m_aControlTree.InsertEntry(PcrRes(RID_STR_FORMS), aRootImage, aRootImage);
 
             // build the tree
             m_pInitialSelection = NULL;
@@ -162,7 +162,7 @@ namespace pcr
     OSelectLabelDialog::~OSelectLabelDialog()
     {
         // delete the entry datas of the listbox entries
-        SvLBoxEntry* pLoop = m_aControlTree.First();
+        SvTreeListEntry* pLoop = m_aControlTree.First();
         while (pLoop)
         {
             void* pData = pLoop->GetUserData();
@@ -175,7 +175,7 @@ namespace pcr
     }
 
     //------------------------------------------------------------------------
-    sal_Int32 OSelectLabelDialog::InsertEntries(const Reference< XInterface > & _xContainer, SvLBoxEntry* pContainerEntry)
+    sal_Int32 OSelectLabelDialog::InsertEntries(const Reference< XInterface > & _xContainer, SvTreeListEntry* pContainerEntry)
     {
         Reference< XIndexAccess >  xContainer(_xContainer, UNO_QUERY);
         if (!xContainer.is())
@@ -209,7 +209,7 @@ namespace pcr
                 if (xCont.is() && xCont->getCount())
                 {   // yes -> step down
                     Image aFormImage = m_aModelImages.GetImage( RID_SVXIMG_FORM );
-                    SvLBoxEntry* pCont = m_aControlTree.InsertEntry(sName, aFormImage, aFormImage, pContainerEntry);
+                    SvTreeListEntry* pCont = m_aControlTree.InsertEntry(sName, aFormImage, aFormImage, pContainerEntry);
                     sal_Int32 nContChildren = InsertEntries(xCont, pCont);
                     if (nContChildren)
                     {
@@ -236,7 +236,7 @@ namespace pcr
                 makeStringAndClear();
 
             // all requirements met -> insert
-            SvLBoxEntry* pCurrent = m_aControlTree.InsertEntry(sDisplayName, m_aRequiredControlImage, m_aRequiredControlImage, pContainerEntry);
+            SvTreeListEntry* pCurrent = m_aControlTree.InsertEntry(sDisplayName, m_aRequiredControlImage, m_aRequiredControlImage, pContainerEntry);
             pCurrent->SetUserData(new Reference< XPropertySet > (xAsSet));
             ++nChildren;
 
@@ -254,7 +254,7 @@ namespace pcr
     {
         DBG_ASSERT(pLB == &m_aControlTree, "OSelectLabelDialog::OnEntrySelected : where did this come from ?");
         (void)pLB;
-        SvLBoxEntry* pSelected = m_aControlTree.FirstSelected();
+        SvTreeListEntry* pSelected = m_aControlTree.FirstSelected();
         void* pData = pSelected ? pSelected->GetUserData() : NULL;
 
         if (pData)
@@ -279,7 +279,7 @@ namespace pcr
         {
             DBG_ASSERT(m_bHaveAssignableControl, "OSelectLabelDialog::OnNoAssignmentClicked");
             // search the first assignable entry
-            SvLBoxEntry* pSearch = m_aControlTree.First();
+            SvTreeListEntry* pSearch = m_aControlTree.First();
             while (pSearch)
             {
                 if (pSearch->GetUserData())

@@ -47,7 +47,7 @@
 
 #include <memory>
 
-class SvLBoxEntry;
+class SvTreeListEntry;
 class SvTreeListBox;
 class TransferableHelper;
 class TransferableClipboardListener;
@@ -523,7 +523,7 @@ namespace dbaui
         virtual bool        interceptUserInput( const NotifyEvent& _rEvent );
 
         // IControlActionListener overridables
-        virtual sal_Bool        requestQuickHelp( const SvLBoxEntry* _pEntry, String& _rText ) const;
+        virtual sal_Bool        requestQuickHelp( const SvTreeListEntry* _pEntry, String& _rText ) const;
         virtual sal_Bool        requestDrag( sal_Int8 _nAction, const Point& _rPosPixel );
         virtual sal_Int8        queryDrop( const AcceptDropEvent& _rEvt, const DataFlavorExVector& _rFlavors );
         virtual sal_Int8        executeDrop( const ExecuteDropEvent& _rEvt );

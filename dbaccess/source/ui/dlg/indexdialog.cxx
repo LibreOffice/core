@@ -95,7 +95,7 @@ namespace dbaui
 
     extern sal_Bool isCharOk(sal_Unicode _cChar,sal_Bool _bFirstChar,sal_Bool _bUpperCase,const ::rtl::OUString& _sAllowedChars);
     //------------------------------------------------------------------
-    sal_Bool DbaIndexList::EditedEntry( SvLBoxEntry* _pEntry, const rtl::OUString& _rNewText )
+    sal_Bool DbaIndexList::EditedEntry( SvTreeListEntry* _pEntry, const rtl::OUString& _rNewText )
     {
         // first check if this is valid SQL92 name
         if ( isSQL92CheckEnabled(m_xConnection) )
@@ -146,7 +146,7 @@ namespace dbaui
     }
 
     //------------------------------------------------------------------
-    void DbaIndexList::SelectNoHandlerCall( SvLBoxEntry* _pEntry )
+    void DbaIndexList::SelectNoHandlerCall( SvTreeListEntry* _pEntry )
     {
         disableSelectHandler();
         Select(_pEntry, sal_True);
@@ -154,7 +154,7 @@ namespace dbaui
     }
 
     //------------------------------------------------------------------
-    sal_Bool DbaIndexList::Select( SvLBoxEntry* pEntry, sal_Bool _bSelect )
+    sal_Bool DbaIndexList::Select( SvTreeListEntry* pEntry, sal_Bool _bSelect )
     {
         sal_Bool bReturn = SvTreeListBox::Select(pEntry, _bSelect);
 
@@ -273,7 +273,7 @@ DBG_NAME(DbaIndexDialog)
     {
         m_aActions.EnableItem(ID_INDEX_NEW, !m_aIndexes.IsEditingActive());
 
-        SvLBoxEntry* pSelected = m_aIndexes.FirstSelected();
+        SvTreeListEntry* pSelected = m_aIndexes.FirstSelected();
         sal_Bool bSelectedAnything = NULL != pSelected;
 
 
@@ -304,7 +304,7 @@ DBG_NAME(DbaIndexDialog)
         Indexes::iterator aEnd = m_pIndexes->end();
         for (; aIndexLoop != aEnd; ++aIndexLoop)
         {
-            SvLBoxEntry* pNewEntry = NULL;
+            SvTreeListEntry* pNewEntry = NULL;
             if (aIndexLoop->bPrimaryKey)
                 pNewEntry = m_aIndexes.InsertEntry(aIndexLoop->sName, aPKeyIcon, aPKeyIcon);
             else
@@ -327,7 +327,7 @@ DBG_NAME(DbaIndexDialog)
     }
 
     //------------------------------------------------------------------
-    sal_Bool DbaIndexDialog::implCommit(SvLBoxEntry* _pEntry)
+    sal_Bool DbaIndexDialog::implCommit(SvTreeListEntry* _pEntry)
     {
         OSL_ENSURE(_pEntry, "DbaIndexDialog::implCommit: invalid entry!");
 
@@ -389,12 +389,12 @@ DBG_NAME(DbaIndexDialog)
             return;
         }
 
-        SvLBoxEntry* pNewEntry = m_aIndexes.InsertEntry(sNewIndexName);
+        SvTreeListEntry* pNewEntry = m_aIndexes.InsertEntry(sNewIndexName);
         m_pIndexes->insert(sNewIndexName);
 
         // update the user data on the entries in the list box:
         // they're iterators of the index collection, and thus they have changed when removing the index
-        for (SvLBoxEntry* pAdjust = m_aIndexes.First(); pAdjust; pAdjust = m_aIndexes.Next(pAdjust))
+        for (SvTreeListEntry* pAdjust = m_aIndexes.First(); pAdjust; pAdjust = m_aIndexes.Next(pAdjust))
         {
             Indexes::iterator aAfterInsertPos = m_pIndexes->find(m_aIndexes.GetEntryText(pAdjust));
             OSL_ENSURE(aAfterInsertPos != m_pIndexes->end(), "DbaIndexDialog::OnNewIndex: problems with on of the entries!");
@@ -412,7 +412,7 @@ DBG_NAME(DbaIndexDialog)
     void DbaIndexDialog::OnDropIndex(sal_Bool _bConfirm)
     {
         // the selected index
-        SvLBoxEntry* pSelected = m_aIndexes.FirstSelected();
+        SvTreeListEntry* pSelected = m_aIndexes.FirstSelected();
         OSL_ENSURE(pSelected, "DbaIndexDialog::OnDropIndex: invalid call!");
         if (pSelected)
         {
@@ -435,7 +435,7 @@ DBG_NAME(DbaIndexDialog)
     }
 
     //------------------------------------------------------------------
-    sal_Bool DbaIndexDialog::implDropIndex(SvLBoxEntry* _pEntry, sal_Bool _bRemoveFromCollection)
+    sal_Bool DbaIndexDialog::implDropIndex(SvTreeListEntry* _pEntry, sal_Bool _bRemoveFromCollection)
     {
         // do the drop
         Indexes::iterator aDropPos = m_pIndexes->begin() + reinterpret_cast<sal_IntPtr>(_pEntry->GetUserData());
@@ -466,7 +466,7 @@ DBG_NAME(DbaIndexDialog)
 
             // update the user data on the entries in the list box:
             // they're iterators of the index collection, and thus they have changed when removing the index
-            for (SvLBoxEntry* pAdjust = m_aIndexes.First(); pAdjust; pAdjust = m_aIndexes.Next(pAdjust))
+            for (SvTreeListEntry* pAdjust = m_aIndexes.First(); pAdjust; pAdjust = m_aIndexes.Next(pAdjust))
             {
                 Indexes::iterator aAfterDropPos = m_pIndexes->find(m_aIndexes.GetEntryText(pAdjust));
                 OSL_ENSURE(aAfterDropPos != m_pIndexes->end(), "DbaIndexDialog::OnDropIndex: problems with on of the remaining entries!");
@@ -489,7 +489,7 @@ DBG_NAME(DbaIndexDialog)
     void DbaIndexDialog::OnRenameIndex()
     {
         // the selected index
-        SvLBoxEntry* pSelected = m_aIndexes.FirstSelected();
+        SvTreeListEntry* pSelected = m_aIndexes.FirstSelected();
         OSL_ENSURE(pSelected, "DbaIndexDialog::OnRenameIndex: invalid call!");
 
         // save the changes made 'til here
@@ -506,7 +506,7 @@ DBG_NAME(DbaIndexDialog)
     {
         // the selected index
 #if OSL_DEBUG_LEVEL > 0
-        SvLBoxEntry* pSelected = m_aIndexes.FirstSelected();
+        SvTreeListEntry* pSelected = m_aIndexes.FirstSelected();
         OSL_ENSURE( pSelected, "DbaIndexDialog::OnSaveIndex: invalid call!" );
 #endif
 
@@ -518,7 +518,7 @@ DBG_NAME(DbaIndexDialog)
     void DbaIndexDialog::OnResetIndex()
     {
         // the selected index
-        SvLBoxEntry* pSelected = m_aIndexes.FirstSelected();
+        SvTreeListEntry* pSelected = m_aIndexes.FirstSelected();
         OSL_ENSURE(pSelected, "DbaIndexDialog::OnResetIndex: invalid call!");
 
         Indexes::iterator aResetPos = m_pIndexes->begin() + reinterpret_cast<sal_IntPtr>(pSelected->GetUserData());
@@ -587,7 +587,7 @@ DBG_NAME(DbaIndexDialog)
         }
 
         // the currently selected entry
-        const SvLBoxEntry* pSelected = m_aIndexes.FirstSelected();
+        const SvTreeListEntry* pSelected = m_aIndexes.FirstSelected();
         OSL_ENSURE(pSelected == m_pPreviousSelection, "DbaIndexDialog::OnCloseDialog: inconsistence!");
 
         sal_Int32 nResponse = RET_NO;
@@ -621,7 +621,7 @@ DBG_NAME(DbaIndexDialog)
     }
 
     //------------------------------------------------------------------
-    IMPL_LINK( DbaIndexDialog, OnEditIndexAgain, SvLBoxEntry*, _pEntry )
+    IMPL_LINK( DbaIndexDialog, OnEditIndexAgain, SvTreeListEntry*, _pEntry )
     {
         m_bEditAgain = sal_False;
         m_aIndexes.EditEntry(_pEntry);
@@ -629,7 +629,7 @@ DBG_NAME(DbaIndexDialog)
     }
 
     //------------------------------------------------------------------
-    IMPL_LINK( DbaIndexDialog, OnEntryEdited, SvLBoxEntry*, _pEntry )
+    IMPL_LINK( DbaIndexDialog, OnEntryEdited, SvTreeListEntry*, _pEntry )
     {
         Indexes::iterator aPosition = m_pIndexes->begin() + reinterpret_cast<sal_IntPtr>(_pEntry->GetUserData());
 
@@ -767,7 +767,7 @@ DBG_NAME(DbaIndexDialog)
     }
 
     //------------------------------------------------------------------
-    void DbaIndexDialog::updateControls(const SvLBoxEntry* _pEntry)
+    void DbaIndexDialog::updateControls(const SvTreeListEntry* _pEntry)
     {
         if (_pEntry)
         {
@@ -823,7 +823,7 @@ DBG_NAME(DbaIndexDialog)
         m_aFieldsLabel.Enable(bHaveSelection);
         m_pFields->Enable(bHaveSelection);
 
-        SvLBoxEntry* pNewSelection = m_aIndexes.FirstSelected();
+        SvTreeListEntry* pNewSelection = m_aIndexes.FirstSelected();
         updateControls(pNewSelection);
         if (bHaveSelection)
             m_aIndexes.GrabFocus();

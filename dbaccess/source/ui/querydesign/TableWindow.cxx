@@ -183,7 +183,7 @@ sal_Bool OTableWindow::FillListBox()
 
     if (GetData()->IsShowAll())
     {
-        SvLBoxEntry* pEntry = m_pListBox->InsertEntry( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("*")) );
+        SvTreeListEntry* pEntry = m_pListBox->InsertEntry( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("*")) );
         pEntry->SetUserData( createUserData(NULL,false) );
     }
 
@@ -205,7 +205,7 @@ sal_Bool OTableWindow::FillListBox()
             const ::rtl::OUString* pIter = aColumns.getConstArray();
             const ::rtl::OUString* pEnd = pIter + aColumns.getLength();
 
-            SvLBoxEntry* pEntry = NULL;
+            SvTreeListEntry* pEntry = NULL;
             for (; pIter != pEnd; ++pIter)
             {
                 bool bPrimaryKeyColumn = xPKeyColumns.is() && xPKeyColumns->hasByName( *pIter );
@@ -244,13 +244,13 @@ void OTableWindow::clearListBox()
 {
     if ( m_pListBox )
     {
-        SvLBoxEntry* pEntry = m_pListBox->First();
+        SvTreeListEntry* pEntry = m_pListBox->First();
 
         while(pEntry)
         {
             void* pUserData = pEntry->GetUserData();
             deleteUserData(pUserData);
-            SvLBoxEntry* pNextEntry = m_pListBox->Next(pEntry);
+            SvTreeListEntry* pNextEntry = m_pListBox->Next(pEntry);
             m_pListBox->GetModel()->Remove(pEntry);
             pEntry = pNextEntry;
         }
@@ -563,7 +563,7 @@ void OTableWindow::EnumValidFields(::std::vector< ::rtl::OUString>& arrstrFields
     if ( m_pListBox )
     {
         arrstrFields.reserve(m_pListBox->GetEntryCount());
-        SvLBoxEntry* pEntryLoop = m_pListBox->First();
+        SvTreeListEntry* pEntryLoop = m_pListBox->First();
         while (pEntryLoop)
         {
             arrstrFields.push_back(m_pListBox->GetEntryText(pEntryLoop));
@@ -613,7 +613,7 @@ void OTableWindow::Command(const CommandEvent& rEvt)
                     ptWhere = rEvt.GetMousePosPixel();
                 else
                 {
-                    SvLBoxEntry* pCurrent = m_pListBox->GetCurEntry();
+                    SvTreeListEntry* pCurrent = m_pListBox->GetCurEntry();
                     if ( pCurrent )
                         ptWhere = m_pListBox->GetEntryPosition(pCurrent);
                     else

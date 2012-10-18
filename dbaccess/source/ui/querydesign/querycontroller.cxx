@@ -141,7 +141,7 @@ namespace dbaui
     namespace
     {
         // -----------------------------------------------------------------------------
-        void insertParseTree(SvTreeListBox* _pBox,::connectivity::OSQLParseNode* _pNode,SvLBoxEntry* _pParent = NULL)
+        void insertParseTree(SvTreeListBox* _pBox,::connectivity::OSQLParseNode* _pNode,SvTreeListEntry* _pParent = NULL)
         {
             ::rtl::OUString rString;
             if (!_pNode->isToken())
@@ -1598,7 +1598,7 @@ struct CommentStrip
 static ::std::vector< CommentStrip > getComment( const ::rtl::OUString& rQuery )
 {
     ::std::vector< CommentStrip > aRet;
-    // First a quick search if there is any "--" or "//" or "/*", if not then 
+    // First a quick search if there is any "--" or "//" or "/*", if not then
     // the whole copying loop is pointless.
     if (rQuery.indexOfAsciiL( "--", 2, 0) < 0 && rQuery.indexOfAsciiL( "//", 2, 0) < 0 &&
             rQuery.indexOfAsciiL( "/*", 2, 0) < 0)
@@ -1667,10 +1667,10 @@ static ::std::vector< CommentStrip > getComment( const ::rtl::OUString& rQuery )
 
 /** Concat/insert comments that were previously obtained with getComment().
 
-    NOTE: The current parser implementation does not preserve newlines, so all 
-    comments are always appended to the entire query, also inline comments 
-    that would need positioning anyway that can't be obtained after 
-    recomposition. This is ugly but at least allows commented queries while 
+    NOTE: The current parser implementation does not preserve newlines, so all
+    comments are always appended to the entire query, also inline comments
+    that would need positioning anyway that can't be obtained after
+    recomposition. This is ugly but at least allows commented queries while
     preserving the comments _somehow_.
  */
 static ::rtl::OUString concatComment( const ::rtl::OUString& rQuery, const ::std::vector< CommentStrip >& rComments )

@@ -72,7 +72,7 @@ class ScSolverOptionsString : public SvLBoxString
     sal_Int32   mnIntValue;
 
 public:
-    ScSolverOptionsString( SvLBoxEntry* pEntry, sal_uInt16 nFlags, const String& rStr ) :
+    ScSolverOptionsString( SvTreeListEntry* pEntry, sal_uInt16 nFlags, const String& rStr ) :
         SvLBoxString( pEntry, nFlags, rStr ),
         mbIsDouble( false ),
         mfDoubleValue( 0.0 ),
@@ -85,10 +85,10 @@ public:
     void      SetDoubleValue( double fNew ) { mbIsDouble = true; mfDoubleValue = fNew; }
     void      SetIntValue( sal_Int32 nNew ) { mbIsDouble = false; mnIntValue = nNew; }
 
-    virtual void Paint( const Point& rPos, SvTreeListBox& rDev, sal_uInt16 nFlags, SvLBoxEntry* pEntry );
+    virtual void Paint( const Point& rPos, SvTreeListBox& rDev, sal_uInt16 nFlags, SvTreeListEntry* pEntry );
 };
 
-void ScSolverOptionsString::Paint( const Point& rPos, SvTreeListBox& rDev, sal_uInt16, SvLBoxEntry* /* pEntry */ )
+void ScSolverOptionsString::Paint( const Point& rPos, SvTreeListBox& rDev, sal_uInt16, SvTreeListEntry* /* pEntry */ )
 {
     //! move position? (SvxLinguTabPage: aPos.X() += 20)
     String aNormalStr( GetText() );
@@ -200,7 +200,7 @@ const uno::Sequence<beans::PropertyValue>& ScSolverOptionsDialog::GetProperties(
         for (sal_Int32 nEntryPos=0; nEntryPos<nEntryCount; ++nEntryPos)
         {
             uno::Any& rValue = maProperties[nEntryPos].Value;
-            SvLBoxEntry* pEntry = pModel->GetEntry(nEntryPos);
+            SvTreeListEntry* pEntry = pModel->GetEntry(nEntryPos);
 
             bool bHasData = false;
             sal_uInt16 nItemCount = pEntry->ItemCount();
@@ -268,7 +268,7 @@ void ScSolverOptionsDialog::FillListBox()
         mpCheckButtonData = new SvLBoxButtonData( &maLbSettings );
 
     SvLBoxTreeList* pModel = maLbSettings.GetModel();
-    SvLBoxEntry* pEntry = NULL;
+    SvTreeListEntry* pEntry = NULL;
 
     for (sal_Int32 nPos=0; nPos<nCount; nPos++)
     {
@@ -279,7 +279,7 @@ void ScSolverOptionsDialog::FillListBox()
         if ( eClass == uno::TypeClass_BOOLEAN )
         {
             // check box entry
-            pEntry = new SvLBoxEntry;
+            pEntry = new SvTreeListEntry;
             SvLBoxButton* pButton = new SvLBoxButton( pEntry, SvLBoxButtonKind_enabledCheckbox, 0, mpCheckButtonData );
             if ( ScUnoHelpFunctions::GetBoolFromAny( aValue ) )
                 pButton->SetStateChecked();
@@ -292,7 +292,7 @@ void ScSolverOptionsDialog::FillListBox()
         else
         {
             // value entry
-            pEntry = new SvLBoxEntry;
+            pEntry = new SvTreeListEntry;
             pEntry->AddItem( new SvLBoxString( pEntry, 0, sEmpty ) );                   // empty column
             pEntry->AddItem( new SvLBoxContextBmp( pEntry, 0, Image(), Image(), 0 ) );
             ScSolverOptionsString* pItem = new ScSolverOptionsString( pEntry, 0, aVisName );
@@ -323,7 +323,7 @@ void ScSolverOptionsDialog::ReadFromComponent()
 
 void ScSolverOptionsDialog::EditOption()
 {
-    SvLBoxEntry* pEntry = maLbSettings.GetCurEntry();
+    SvTreeListEntry* pEntry = maLbSettings.GetCurEntry();
     if (pEntry)
     {
         sal_uInt16 nItemCount = pEntry->ItemCount();
@@ -394,7 +394,7 @@ IMPL_LINK_NOARG(ScSolverOptionsDialog, SettingsSelHdl)
 {
     sal_Bool bCheckbox = false;
 
-    SvLBoxEntry* pEntry = maLbSettings.GetCurEntry();
+    SvTreeListEntry* pEntry = maLbSettings.GetCurEntry();
     if (pEntry)
     {
         SvLBoxItem* pItem = pEntry->GetFirstItem(SV_ITEM_ID_LBOXBUTTON);

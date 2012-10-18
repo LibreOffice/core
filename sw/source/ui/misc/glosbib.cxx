@@ -114,7 +114,7 @@ SwGlossaryGroupDlg::SwGlossaryGroupDlg(Window * pParent,
         sTemp += '\t';
         pData->sPath = aPathLB.GetEntry((sal_uInt16)sGroup.GetToken(1, GLOS_DELIM).ToInt32());
         sTemp += pData->sPath;
-        SvLBoxEntry* pEntry = aGroupTLB.InsertEntry(sTemp);
+        SvTreeListEntry* pEntry = aGroupTLB.InsertEntry(sTemp);
         pEntry->SetUserData(pData);
 
     }
@@ -142,7 +142,7 @@ void SwGlossaryGroupDlg::Apply()
             //when the current group is deleted, the current group has to be relocated
             if(aGroupTLB.GetEntryCount())
             {
-                SvLBoxEntry* pFirst = aGroupTLB.First();
+                SvTreeListEntry* pFirst = aGroupTLB.First();
                 GlosBibUserData* pUserData = (GlosBibUserData*)pFirst->GetUserData();
                 pGlosHdl->SetCurGroup(pUserData->sGroupName);
             }
@@ -192,7 +192,7 @@ void SwGlossaryGroupDlg::Apply()
 IMPL_LINK( SwGlossaryGroupDlg, SelectHdl, SvTabListBox*, EMPTYARG  )
 {
     aNewPB.Enable(sal_False);
-    SvLBoxEntry* pFirstEntry = aGroupTLB.FirstSelected();
+    SvTreeListEntry* pFirstEntry = aGroupTLB.FirstSelected();
     if(pFirstEntry)
     {
         GlosBibUserData* pUserData = (GlosBibUserData*)pFirstEntry->GetUserData();
@@ -202,7 +202,7 @@ IMPL_LINK( SwGlossaryGroupDlg, SelectHdl, SvTabListBox*, EMPTYARG  )
         sal_uLong nPos = aGroupTLB.GetEntryPos(sName, 0);
         if( 0xffffffff > nPos)
         {
-            SvLBoxEntry* pEntry = aGroupTLB.GetEntry(nPos);
+            SvTreeListEntry* pEntry = aGroupTLB.GetEntry(nPos);
             GlosBibUserData* pFoundData = (GlosBibUserData*)pEntry->GetUserData();
             String sGroup = pFoundData->sGroupName;
             bExists = sGroup == sEntry;
@@ -224,7 +224,7 @@ IMPL_LINK_NOARG(SwGlossaryGroupDlg, NewHdl)
     String sTemp(aNameED.GetText());
     sTemp += '\t';
     sTemp += aPathLB.GetSelectEntry();
-    SvLBoxEntry* pEntry = aGroupTLB.InsertEntry(sTemp);
+    SvTreeListEntry* pEntry = aGroupTLB.InsertEntry(sTemp);
     GlosBibUserData* pData = new GlosBibUserData;
     pData->sPath = aPathLB.GetSelectEntry();
     pData->sGroupName = sGroup;
@@ -239,7 +239,7 @@ IMPL_LINK_NOARG(SwGlossaryGroupDlg, NewHdl)
 
 IMPL_LINK( SwGlossaryGroupDlg, DeleteHdl, Button*, pButton  )
 {
-    SvLBoxEntry* pEntry = aGroupTLB.FirstSelected();
+    SvTreeListEntry* pEntry = aGroupTLB.FirstSelected();
     if(!pEntry)
     {
         pButton->Enable(sal_False);
@@ -293,7 +293,7 @@ IMPL_LINK( SwGlossaryGroupDlg, DeleteHdl, Button*, pButton  )
 
 IMPL_LINK_NOARG(SwGlossaryGroupDlg, RenameHdl)
 {
-    SvLBoxEntry* pEntry = aGroupTLB.FirstSelected();
+    SvTreeListEntry* pEntry = aGroupTLB.FirstSelected();
     GlosBibUserData* pUserData = (GlosBibUserData*)pEntry->GetUserData();
     String sEntryText(aGroupTLB.GetEntryText(pEntry));
     String sEntry(pUserData->sGroupName);
@@ -385,7 +385,7 @@ IMPL_LINK_NOARG(SwGlossaryGroupDlg, ModifyHdl)
             aGroupTLB.MakeVisible(aGroupTLB.GetEntry( nPos ));
         }
     }
-    SvLBoxEntry* pEntry = aGroupTLB.FirstSelected();
+    SvTreeListEntry* pEntry = aGroupTLB.FirstSelected();
     if(pEntry)
     {
         GlosBibUserData* pUserData = (GlosBibUserData*)pEntry->GetUserData();
@@ -432,7 +432,7 @@ void FEdit::KeyInput( const KeyEvent& rKEvent )
 void    SwGlossaryGroupTLB::RequestHelp( const HelpEvent& rHEvt )
 {
     Point aPos( ScreenToOutputPixel( rHEvt.GetMousePosPixel() ));
-    SvLBoxEntry* pEntry = GetEntry( aPos );
+    SvTreeListEntry* pEntry = GetEntry( aPos );
     if(pEntry)
     {
         SvLBoxTab* pTab;

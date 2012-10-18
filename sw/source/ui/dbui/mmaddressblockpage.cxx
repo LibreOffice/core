@@ -583,7 +583,7 @@ SwCustomizeAddressBlockDialog::SwCustomizeAddressBlockDialog(
     {
         m_aFieldFT.Show();
         m_aFieldCB.Show();
-        SvLBoxEntry* pEntry = m_aAddressElementsLB.InsertEntry(String(SW_RES(ST_SALUTATION )));
+        SvTreeListEntry* pEntry = m_aAddressElementsLB.InsertEntry(String(SW_RES(ST_SALUTATION )));
         pEntry->SetUserData((void*)(sal_Int32)USER_DATA_SALUTATION );
         pEntry = m_aAddressElementsLB.InsertEntry(String(SW_RES(ST_PUNCTUATION)));
         pEntry->SetUserData((void*)(sal_Int32)USER_DATA_PUNCTUATION );
@@ -624,7 +624,7 @@ SwCustomizeAddressBlockDialog::SwCustomizeAddressBlockDialog(
     for(sal_uInt16 i = 0; i < rHeaders.Count(); ++i)
     {
         const XubString& rHeader = rHeaders.GetString( i );
-        SvLBoxEntry* pEntry = m_aAddressElementsLB.InsertEntry(rHeader);
+        SvTreeListEntry* pEntry = m_aAddressElementsLB.InsertEntry(rHeader);
         pEntry->SetUserData((void*)(sal_IntPtr)i);
     }
     m_aOK.SetClickHdl(LINK(this, SwCustomizeAddressBlockDialog, OKHdl_Impl));
@@ -676,7 +676,7 @@ IMPL_LINK(SwCustomizeAddressBlockDialog, ImageButtonHdl_Impl, ImageButton*, pBut
 {
     if(&m_aInsertFieldIB == pButton)
     {
-        SvLBoxEntry* pEntry = m_aAddressElementsLB.GetCurEntry();
+        SvTreeListEntry* pEntry = m_aAddressElementsLB.GetCurEntry();
         if(pEntry)
         {
             String sEntry = m_aAddressElementsLB.GetEntryText(pEntry);
@@ -711,7 +711,7 @@ sal_Int32 SwCustomizeAddressBlockDialog::GetSelectedItem_Impl()
     if(sSelected.Len())
         for(sal_uLong i = 0; i < m_aAddressElementsLB.GetEntryCount();  ++i)
         {
-            SvLBoxEntry* pEntry = m_aAddressElementsLB.GetEntry(i);
+            SvTreeListEntry* pEntry = m_aAddressElementsLB.GetEntry(i);
             String sEntry = m_aAddressElementsLB.GetEntryText(pEntry);
             if( sSelected.Equals( sEntry, 1, sSelected.Len() - 2 ) )
             {
@@ -728,7 +728,7 @@ bool   SwCustomizeAddressBlockDialog::HasItem_Impl(sal_Int32 nUserData)
     String sEntry;
     for(sal_uLong i = 0; i < m_aAddressElementsLB.GetEntryCount();  ++i)
     {
-        SvLBoxEntry* pEntry = m_aAddressElementsLB.GetEntry(i);
+        SvTreeListEntry* pEntry = m_aAddressElementsLB.GetEntry(i);
         if((sal_Int32)(sal_IntPtr)pEntry->GetUserData() == nUserData)
         {
             sEntry = m_aAddressElementsLB.GetEntryText(pEntry);
@@ -827,7 +827,7 @@ void SwCustomizeAddressBlockDialog::UpdateImageButtons_Impl()
     m_aRightIB.Enable(nMove & MOVE_ITEM_RIGHT );
     m_aDownIB.Enable(nMove & MOVE_ITEM_DOWN);
     m_aRemoveFieldIB.Enable(m_aDragED.HasCurrentItem() ? sal_True : sal_False);
-    SvLBoxEntry* pEntry = m_aAddressElementsLB.GetCurEntry();
+    SvTreeListEntry* pEntry = m_aAddressElementsLB.GetCurEntry();
     m_aInsertFieldIB.Enable( pEntry &&
             (0 < (sal_Int32)(sal_IntPtr)pEntry->GetUserData() || m_aFieldCB.GetText().Len()));
 }
@@ -847,7 +847,7 @@ void SwCustomizeAddressBlockDialog::SetAddress(const ::rtl::OUString& rAddress)
     {
         for(sal_uLong i = 0; i < m_aAddressElementsLB.GetEntryCount();  ++i)
         {
-            SvLBoxEntry* pEntry = m_aAddressElementsLB.GetEntry(i);
+            SvTreeListEntry* pEntry = m_aAddressElementsLB.GetEntry(i);
             String sEntry = m_aAddressElementsLB.GetEntryText(pEntry);
             sEntry += '>';
             sEntry.Insert('<', 0);
@@ -1358,7 +1358,7 @@ DDListBox::~DDListBox()
 
 void  DDListBox::StartDrag( sal_Int8 /*nAction*/, const Point& /*rPosPixel*/ )
 {
-    SvLBoxEntry* pEntry = GetCurEntry();
+    SvTreeListEntry* pEntry = GetCurEntry();
     if(pEntry)
     {
         ReleaseMouse();

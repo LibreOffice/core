@@ -1523,7 +1523,7 @@ void SvtFileDialog::OpenMultiSelection_Impl()
 {
     String aPath;
     sal_uLong nCount = _pFileView->GetSelectionCount();
-    SvLBoxEntry* pEntry = nCount ? _pFileView->FirstSelected() : NULL;
+    SvTreeListEntry* pEntry = nCount ? _pFileView->FirstSelected() : NULL;
 
     if ( nCount && pEntry )
         _aPath = _pFileView->GetURL( pEntry );
@@ -1598,7 +1598,7 @@ void SvtFileDialog::UpdateControls( const String& rURL )
 
 IMPL_LINK( SvtFileDialog, SelectHdl_Impl, SvTabListBox*, pBox )
 {
-    SvLBoxEntry* pEntry = pBox->FirstSelected();
+    SvTreeListEntry* pEntry = pBox->FirstSelected();
     DBG_ASSERT( pEntry, "SelectHandler without selected entry" );
     SvtContentEntry* pUserData = (SvtContentEntry*)pEntry->GetUserData();
 
@@ -2458,7 +2458,7 @@ std::vector<rtl::OUString> SvtFileDialog::GetPathList() const
 {
     std::vector<rtl::OUString> aList;
     sal_uLong           nCount = _pFileView->GetSelectionCount();
-    SvLBoxEntry*    pEntry = nCount ? _pFileView->FirstSelected() : NULL;
+    SvTreeListEntry*    pEntry = nCount ? _pFileView->FirstSelected() : NULL;
 
     if ( ! pEntry )
     {

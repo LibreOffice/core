@@ -32,50 +32,7 @@
 
 #include "tools/debug.hxx"
 
-DBG_NAME(SvListEntry);
-
-SvListEntry::SvListEntry()
-{
-    DBG_CTOR(SvListEntry,0);
-    pChildren     = 0;
-    pParent     = 0;
-    nListPos    = 0;
-    nAbsPos     = 0;
-}
-
-SvListEntry::SvListEntry( const SvListEntry& rEntry )
-{
-    DBG_CTOR(SvListEntry,0);
-    pChildren  = 0;
-    pParent  = 0;
-    nListPos &= 0x80000000;
-    nListPos |= ( rEntry.nListPos & 0x7fffffff);
-    nAbsPos  = rEntry.nAbsPos;
-}
-
-SvListEntry::~SvListEntry()
-{
-    DBG_DTOR(SvListEntry,0);
-    if ( pChildren )
-    {
-        pChildren->DestroyAll();
-        delete pChildren;
-    }
-#ifdef DBG_UTIL
-    pChildren     = 0;
-    pParent     = 0;
-#endif
-}
-
-void SvListEntry::Clone( SvListEntry* pSource)
-{
-    DBG_CHKTHIS(SvListEntry,0);
-    nListPos &= 0x80000000;
-    nListPos |= ( pSource->nListPos & 0x7fffffff);
-    nAbsPos     = pSource->nAbsPos;
-}
-
-void SvListEntry::SetListPositions()
+void SvTreeListEntry::SetListPositions()
 {
     if( pChildren )
     {
@@ -83,7 +40,7 @@ void SvListEntry::SetListPositions()
         sal_uLong nCur = 0;
         for (; it != itEnd; ++it)
         {
-            SvListEntry* pEntry = *it;
+            SvTreeListEntry* pEntry = *it;
             pEntry->nListPos &= 0x80000000;
             pEntry->nListPos |= nCur;
             ++nCur;
@@ -92,26 +49,12 @@ void SvListEntry::SetListPositions()
     nListPos &= (~0x80000000);
 }
 
-// ***************************************************************
-// class SvLBoxEntry
-// ***************************************************************
-
-DBG_NAME(SvLBoxEntry);
-
-SvLBoxEntry::SvLBoxEntry() : aItems()
+void SvTreeListEntry::InvalidateChildrensListPositions()
 {
-    DBG_CTOR(SvLBoxEntry,0);
-    nEntryFlags = 0;
-    pUserData = 0;
+    nListPos |= 0x80000000;
 }
 
-SvLBoxEntry::~SvLBoxEntry()
-{
-    DBG_DTOR(SvLBoxEntry,0);
-    DeleteItems_Impl();
-}
-
-void SvLBoxEntry::DeleteItems_Impl()
+void SvTreeListEntry::DeleteItems_Impl()
 {
     DBG_CHKTHIS(SvLBoxEntry,0);
     sal_uInt16 nCount = aItems.size();
@@ -124,45 +67,100 @@ void SvLBoxEntry::DeleteItems_Impl()
     aItems.clear();
 }
 
-
-void SvLBoxEntry::AddItem( SvLBoxItem* pItem )
+SvTreeListEntry::SvTreeListEntry() :
+    pParent(NULL),
+    pChildren(NULL),
+    nAbsPos(0),
+    nListPos(0),
+    pUserData(NULL),
+    nEntryFlags(0)
 {
-    DBG_CHKTHIS(SvLBoxEntry,0);
-    aItems.push_back( pItem );
 }
 
-void SvLBoxEntry::Clone( SvListEntry* pSource )
+SvTreeListEntry::SvTreeListEntry(const SvTreeListEntry& r) :
+    pParent(NULL),
+    pChildren(NULL),
+    nAbsPos(r.nAbsPos),
+    nListPos(r.nListPos & 0x7FFFFFFF)
 {
-    DBG_CHKTHIS(SvLBoxEntry,0);
-    SvListEntry::Clone( pSource );
+}
+
+SvTreeListEntry::~SvTreeListEntry()
+{
+    if ( pChildren )
+    {
+        pChildren->DestroyAll();
+        delete pChildren;
+    }
+#ifdef DBG_UTIL
+    pChildren     = 0;
+    pParent     = 0;
+#endif
+
+    DeleteItems_Impl();
+}
+
+bool SvTreeListEntry::HasChildren() const
+{
+    return pChildren != NULL;
+}
+
+bool SvTreeListEntry::HasChildListPos() const
+{
+    if( pParent && !(pParent->nListPos & 0x80000000) )
+        return true;
+    else return false;
+}
+
+sal_uLong SvTreeListEntry::GetChildListPos() const
+{
+    if( pParent && (pParent->nListPos & 0x80000000) )
+        pParent->SetListPositions();
+    return ( nListPos & 0x7fffffff );
+}
+
+void SvTreeListEntry::Clone(SvTreeListEntry* pSource)
+{
+    nListPos &= 0x80000000;
+    nListPos |= ( pSource->nListPos & 0x7fffffff);
+    nAbsPos     = pSource->nAbsPos;
+
     SvLBoxItem* pNewItem;
     DeleteItems_Impl();
-    sal_uInt16 nCount = ((SvLBoxEntry*)pSource)->ItemCount();
+    sal_uInt16 nCount = ((SvTreeListEntry*)pSource)->ItemCount();
     sal_uInt16 nCurPos = 0;
     while( nCurPos < nCount )
     {
-        SvLBoxItem* pItem = ((SvLBoxEntry*)pSource)->GetItem( nCurPos );
+        SvLBoxItem* pItem = ((SvTreeListEntry*)pSource)->GetItem( nCurPos );
         pNewItem = pItem->Create();
         pNewItem->Clone( pItem );
         AddItem( pNewItem );
         nCurPos++;
     }
-    pUserData = ((SvLBoxEntry*)pSource)->GetUserData();
-    nEntryFlags = ((SvLBoxEntry*)pSource)->nEntryFlags;
+    pUserData = ((SvTreeListEntry*)pSource)->GetUserData();
+    nEntryFlags = ((SvTreeListEntry*)pSource)->nEntryFlags;
 }
 
-void SvLBoxEntry::EnableChildrenOnDemand( sal_Bool bEnable )
+sal_uInt16 SvTreeListEntry::ItemCount() const
 {
-    DBG_CHKTHIS(SvLBoxEntry,0);
+    return (sal_uInt16)aItems.size();
+}
+
+void SvTreeListEntry::AddItem( SvLBoxItem* pItem )
+{
+    aItems.push_back( pItem );
+}
+
+void SvTreeListEntry::EnableChildrenOnDemand( bool bEnable )
+{
     if ( bEnable )
         nEntryFlags |= SV_ENTRYFLAG_CHILDREN_ON_DEMAND;
     else
         nEntryFlags &= (~SV_ENTRYFLAG_CHILDREN_ON_DEMAND);
 }
 
-void SvLBoxEntry::ReplaceItem( SvLBoxItem* pNewItem, sal_uInt16 nPos )
+void SvTreeListEntry::ReplaceItem( SvLBoxItem* pNewItem, sal_uInt16 nPos )
 {
-    DBG_CHKTHIS(SvLBoxEntry,0);
     DBG_ASSERT(pNewItem,"ReplaceItem:No Item");
     SvLBoxItem* pOld = GetItem( nPos );
     if ( pOld )
@@ -172,7 +170,12 @@ void SvLBoxEntry::ReplaceItem( SvLBoxItem* pNewItem, sal_uInt16 nPos )
     }
 }
 
-SvLBoxItem* SvLBoxEntry::GetFirstItem( sal_uInt16 nId )
+SvLBoxItem* SvTreeListEntry::GetItem( sal_uInt16 nPos ) const
+{
+    return aItems[nPos];
+}
+
+SvLBoxItem* SvTreeListEntry::GetFirstItem( sal_uInt16 nId )
 {
     sal_uInt16 nCount = aItems.size();
     sal_uInt16 nCur = 0;
@@ -187,10 +190,40 @@ SvLBoxItem* SvLBoxEntry::GetFirstItem( sal_uInt16 nId )
     return 0;
 }
 
-sal_uInt16 SvLBoxEntry::GetPos( SvLBoxItem* pItem ) const
+sal_uInt16 SvTreeListEntry::GetPos( SvLBoxItem* pItem ) const
 {
     std::vector<SvLBoxItem*>::const_iterator it = std::find( aItems.begin(), aItems.end(), pItem );
     return it == aItems.end() ? USHRT_MAX : it - aItems.begin();
+}
+
+void* SvTreeListEntry::GetUserData() const
+{
+    return pUserData;
+}
+
+void SvTreeListEntry::SetUserData( void* pPtr )
+{
+    pUserData = pPtr;
+}
+
+bool SvTreeListEntry::HasChildrenOnDemand() const
+{
+    return (bool)((nEntryFlags & SV_ENTRYFLAG_CHILDREN_ON_DEMAND)!=0);
+}
+
+bool SvTreeListEntry::HasInUseEmphasis() const
+{
+    return (bool)((nEntryFlags & SV_ENTRYFLAG_IN_USE)!=0);
+}
+
+sal_uInt16 SvTreeListEntry::GetFlags() const
+{
+    return nEntryFlags;
+}
+
+void SvTreeListEntry::SetFlags( sal_uInt16 nFlags )
+{
+    nEntryFlags = nFlags;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

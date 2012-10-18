@@ -27,7 +27,7 @@
 
 #include <svx/svxdllapi.h>
 
-class SvLBoxEntry;
+class SvTreeListEntry;
 
 //========================================================================
 class SvTreeListBox;
@@ -39,7 +39,7 @@ namespace svxform
 
     //====================================================================
 
-    typedef ::std::set< SvLBoxEntry* >  ListBoxEntrySet;
+    typedef ::std::set< SvTreeListEntry* >  ListBoxEntrySet;
 
     //====================================================================
     //= OLocalExchange
@@ -141,7 +141,7 @@ namespace svxform
                             m_xFormsRoot;       // the root of the forms collection where the entries we represent reside
                                                 // this uniquely identifies the page and the document
 
-        SvLBoxEntry*        m_pFocusEntry;
+        SvTreeListEntry*        m_pFocusEntry;
 
     protected:
         // updates m_aCurrentFormats with all formats we currently could supply
@@ -157,8 +157,8 @@ namespace svxform
 
         inline const DataFlavorExVector&    GetDataFlavorExVector() const;
 
-        void addSelectedEntry( SvLBoxEntry* _pEntry );
-        void setFocusEntry( SvLBoxEntry* _pFocusEntry );
+        void addSelectedEntry( SvTreeListEntry* _pEntry );
+        void setFocusEntry( SvTreeListEntry* _pFocusEntry );
 
         /** notifies the data transfer object that a certain entry has been removed from the owning tree
 
@@ -168,18 +168,18 @@ namespace svxform
             @param  _pEntry
             @return the number of entries remaining in the selection.
         */
-        size_t  onEntryRemoved( SvLBoxEntry* _pEntry );
+        size_t  onEntryRemoved( SvTreeListEntry* _pEntry );
 
         void setFormsRoot(
             const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& _rxFormsRoot
             ) { m_xFormsRoot = _rxFormsRoot; }
 
-        void buildPathFormat(SvTreeListBox* pTreeBox, SvLBoxEntry* pRoot);
+        void buildPathFormat(SvTreeListBox* pTreeBox, SvTreeListEntry* pRoot);
             // baut aus m_aSelectedEntries m_aControlPaths auf
             // (es wird davon ausgegangen, dass die Eintraege in m_aSelectedEntries sortiert sind in Bezug auf die Nachbar-Beziehung)
 
 
-        void buildListFromPath(SvTreeListBox* pTreeBox, SvLBoxEntry* pRoot);
+        void buildListFromPath(SvTreeListBox* pTreeBox, SvTreeListEntry* pRoot);
             // der umgekehrte Weg : wirft alles aus m_aSelectedEntries weg und baut es mittels m_aControlPaths neu auf
 
         void addHiddenControlsFormat(const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > > seqInterfaces);
@@ -187,7 +187,7 @@ namespace svxform
             // (es erfolgt KEINE Ueberpruefung, ob dadurch auch tatsaechlich nur hidden Controls bezeichnet werden, dass muss der
             // Aufrufer sicherstellen)
 
-        SvLBoxEntry*                focused() const { return m_pFocusEntry; }
+        SvTreeListEntry*                focused() const { return m_pFocusEntry; }
         const ListBoxEntrySet&      selected() const { return m_aSelectedEntries; }
         ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > >
                                     hiddenControls() const { return m_aHiddenControlModels; }

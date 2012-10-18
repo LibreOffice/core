@@ -330,15 +330,15 @@ class OfaImpBrwString : public SvLBoxString
 {
 public:
 
-    OfaImpBrwString( SvLBoxEntry* pEntry, sal_uInt16 nFlags,
+    OfaImpBrwString( SvTreeListEntry* pEntry, sal_uInt16 nFlags,
         const String& rStr ) : SvLBoxString(pEntry,nFlags,rStr){}
 
     virtual void Paint( const Point& rPos, SvTreeListBox& rDev, sal_uInt16 nFlags,
-                                            SvLBoxEntry* pEntry);
+                                            SvTreeListEntry* pEntry);
 };
 
 void OfaImpBrwString::Paint( const Point& rPos, SvTreeListBox& rDev, sal_uInt16 /*nFlags*/,
-    SvLBoxEntry* pEntry )
+    SvTreeListEntry* pEntry )
 {
     rDev.DrawText( rPos, GetText() );
     if(pEntry->GetUserData())
@@ -469,9 +469,9 @@ OfaSwAutoFmtOptionsPage::OfaSwAutoFmtOptionsPage( Window* pParent,
     aEditPB.SetClickHdl(LINK(this, OfaSwAutoFmtOptionsPage, EditHdl));
 }
 
-SvLBoxEntry* OfaSwAutoFmtOptionsPage::CreateEntry(String& rTxt, sal_uInt16 nCol)
+SvTreeListEntry* OfaSwAutoFmtOptionsPage::CreateEntry(String& rTxt, sal_uInt16 nCol)
 {
-    SvLBoxEntry* pEntry = new SvLBoxEntry;
+    SvTreeListEntry* pEntry = new SvTreeListEntry;
 
     if ( !pCheckButtonData )
     {
@@ -789,7 +789,7 @@ sal_Bool OfaACorrCheckListBox::IsChecked(sal_uLong nPos, sal_uInt16 nCol)
     return GetCheckButtonState( GetEntry(nPos), nCol ) == SV_BUTTON_CHECKED;
 }
 
-void OfaACorrCheckListBox::SetCheckButtonState( SvLBoxEntry* pEntry, sal_uInt16 nCol, SvButtonState eState)
+void OfaACorrCheckListBox::SetCheckButtonState( SvTreeListEntry* pEntry, sal_uInt16 nCol, SvButtonState eState)
 {
     SvLBoxButton* pItem = (SvLBoxButton*)(pEntry->GetItem(nCol + 1));
 
@@ -814,7 +814,7 @@ void OfaACorrCheckListBox::SetCheckButtonState( SvLBoxEntry* pEntry, sal_uInt16 
     }
 }
 
-SvButtonState OfaACorrCheckListBox::GetCheckButtonState( SvLBoxEntry* pEntry, sal_uInt16 nCol ) const
+SvButtonState OfaACorrCheckListBox::GetCheckButtonState( SvTreeListEntry* pEntry, sal_uInt16 nCol ) const
 {
     SvButtonState eState = SV_BUTTON_UNCHECKED;
     SvLBoxButton* pItem = (SvLBoxButton*)(pEntry->GetItem(nCol + 1));
@@ -991,7 +991,7 @@ void OfaAutocorrReplacePage::RefillReplaceBox(sal_Bool bFromReset,
         {
             pArray->push_back(DoubleString());
             DoubleString& rDouble = (*pArray)[pArray->size() - 1];
-            SvLBoxEntry*  pEntry = aReplaceTLB.GetEntry( i );
+            SvTreeListEntry*  pEntry = aReplaceTLB.GetEntry( i );
             rDouble.sShort = aReplaceTLB.GetEntryText(pEntry, 0);
             rDouble.sLong = aReplaceTLB.GetEntryText(pEntry, 1);
             rDouble.pUserData = pEntry->GetUserData();
@@ -1015,7 +1015,7 @@ void OfaAutocorrReplacePage::RefillReplaceBox(sal_Bool bFromReset,
                 String sEntry(rDouble.sShort);
                 sEntry += '\t';
                 sEntry += rDouble.sLong;
-                SvLBoxEntry* pEntry = aReplaceTLB.InsertEntry(sEntry);
+                SvTreeListEntry* pEntry = aReplaceTLB.InsertEntry(sEntry);
                 aTextOnlyCB.Check(bTextOnly);
                 if(!bTextOnly)
                     pEntry->SetUserData(rDouble.pUserData); // that means: with format info or even with selection text
@@ -1041,7 +1041,7 @@ void OfaAutocorrReplacePage::RefillReplaceBox(sal_Bool bFromReset,
                 String sEntry(pWordPtr->GetShort());
                 sEntry += '\t';
                 sEntry += pWordPtr->GetLong();
-                SvLBoxEntry* pEntry = aReplaceTLB.InsertEntry(sEntry);
+                SvTreeListEntry* pEntry = aReplaceTLB.InsertEntry(sEntry);
                 aTextOnlyCB.Check(pWordPtr->IsTextOnly());
                 if(!bTextOnly)
                     pEntry->SetUserData(&aTextOnlyCB); // that means: with format info
@@ -1099,7 +1099,7 @@ IMPL_LINK(OfaAutocorrReplacePage, SelectHdl, SvTabListBox*, pBox)
 {
     if(!bFirstSelect || !bHasSelectionText)
     {
-        SvLBoxEntry* pEntry = pBox->FirstSelected();
+        SvTreeListEntry* pEntry = pBox->FirstSelected();
         String sTmpShort(pBox->GetEntryText(pEntry, 0));
         // if the text is set via ModifyHdl, the cursor is always at the beginning
         // of a word, although you're editing here
@@ -1186,7 +1186,7 @@ void OfaAutocorrReplacePage::DeleteEntry(String sShort, String sLong)
 
 IMPL_LINK(OfaAutocorrReplacePage, NewDelHdl, PushButton*, pBtn)
 {
-    SvLBoxEntry* pEntry = aReplaceTLB.FirstSelected();
+    SvTreeListEntry* pEntry = aReplaceTLB.FirstSelected();
     if( pBtn == &aDeleteReplacePB )
     {
         DBG_ASSERT( pEntry, "no entry selected" );
@@ -1200,7 +1200,7 @@ IMPL_LINK(OfaAutocorrReplacePage, NewDelHdl, PushButton*, pBtn)
     }
     if(pBtn == &aNewReplacePB || aNewReplacePB.IsEnabled())
     {
-        SvLBoxEntry* _pNewEntry = aReplaceTLB.FirstSelected();
+        SvTreeListEntry* _pNewEntry = aReplaceTLB.FirstSelected();
         String sEntry(aShortED.GetText());
         if(sEntry.Len() && ( aReplaceED.GetText().Len() ||
                 ( bHasSelectionText && bSWriter ) ))
@@ -1220,14 +1220,14 @@ IMPL_LINK(OfaAutocorrReplacePage, NewDelHdl, PushButton*, pBtn)
                 sal_uInt32 j;
                 for( j = 0; j < aReplaceTLB.GetEntryCount(); j++ )
                 {
-                    SvLBoxEntry* pReplaceEntry = aReplaceTLB.GetEntry(j);
+                    SvTreeListEntry* pReplaceEntry = aReplaceTLB.GetEntry(j);
                     if( 0 >=  pCompareClass->compareString(sEntry, aReplaceTLB.GetEntryText(pReplaceEntry, 0) ) )
                         break;
                 }
                 nPos = j;
             }
-            SvLBoxEntry* pInsEntry = aReplaceTLB.InsertEntry(
-                                        sEntry, static_cast< SvLBoxEntry * >(NULL), false,
+            SvTreeListEntry* pInsEntry = aReplaceTLB.InsertEntry(
+                                        sEntry, static_cast< SvTreeListEntry * >(NULL), false,
                                         nPos == UINT_MAX ? LIST_APPEND : nPos);
             if( !bReplaceEditChanged && !aTextOnlyCB.IsChecked())
             {
@@ -1255,7 +1255,7 @@ IMPL_LINK(OfaAutocorrReplacePage, NewDelHdl, PushButton*, pBtn)
 
 IMPL_LINK(OfaAutocorrReplacePage, ModifyHdl, Edit*, pEdt)
 {
-    SvLBoxEntry* pFirstSel = aReplaceTLB.FirstSelected();
+    SvTreeListEntry* pFirstSel = aReplaceTLB.FirstSelected();
     sal_Bool bShort = pEdt == &aShortED;
     const String rEntry = pEdt->GetText();
     const String rRepString = aReplaceED.GetText();
@@ -1270,7 +1270,7 @@ IMPL_LINK(OfaAutocorrReplacePage, ModifyHdl, Edit*, pEdt)
 
             for(sal_uInt32 i = 0; i < aReplaceTLB.GetEntryCount(); i++)
             {
-                SvLBoxEntry*  pEntry = aReplaceTLB.GetEntry( i );
+                SvTreeListEntry*  pEntry = aReplaceTLB.GetEntry( i );
                 String aTestStr=aReplaceTLB.GetEntryText(pEntry, 0);
                 if( pCompareClass->compareString(rEntry, aTestStr ) == 0 )
                 {
@@ -1306,7 +1306,7 @@ IMPL_LINK(OfaAutocorrReplacePage, ModifyHdl, Edit*, pEdt)
         }
         else if( aReplaceTLB.GetEntryCount() > 0 )
         {
-            SvLBoxEntry*  pEntry = aReplaceTLB.GetEntry( 0 );
+            SvTreeListEntry*  pEntry = aReplaceTLB.GetEntry( 0 );
             aReplaceTLB.MakeVisible( pEntry );
         }
 
@@ -1721,9 +1721,9 @@ enum OfaQuoteOptions
     REPLACE_1ST
 };
 
-SvLBoxEntry* OfaQuoteTabPage::CreateEntry(String& rTxt, sal_uInt16 nCol)
+SvTreeListEntry* OfaQuoteTabPage::CreateEntry(String& rTxt, sal_uInt16 nCol)
 {
-    SvLBoxEntry* pEntry = new SvLBoxEntry;
+    SvTreeListEntry* pEntry = new SvTreeListEntry;
 
     if ( !pCheckButtonData )
     {
@@ -2419,7 +2419,7 @@ void OfaSmartTagOptionsTabPage::ClearListBox()
     const sal_uLong nCount = m_aSmartTagTypesLB.GetEntryCount();
     for ( sal_uInt16 i = 0; i < nCount; ++i )
     {
-        const SvLBoxEntry* pEntry = m_aSmartTagTypesLB.GetEntry(i);
+        const SvTreeListEntry* pEntry = m_aSmartTagTypesLB.GetEntry(i);
         const ImplSmartTagLBUserData* pUserData = static_cast< ImplSmartTagLBUserData* >(pEntry->GetUserData());
         delete pUserData;
     }
@@ -2459,7 +2459,7 @@ void OfaSmartTagOptionsTabPage::FillListBox( const SmartTagMgr& rSmartTagMgr )
                                            aName +
                                            OUString(RTL_CONSTASCII_USTRINGPARAM(")"));
 
-            SvLBoxEntry* pEntry = m_aSmartTagTypesLB.SvTreeListBox::InsertEntry( aLBEntry );
+            SvTreeListEntry* pEntry = m_aSmartTagTypesLB.SvTreeListBox::InsertEntry( aLBEntry );
             if ( pEntry )
             {
                 const bool bCheck = rSmartTagMgr.IsSmartTagTypeEnabled( aSmartTagType );
@@ -2475,7 +2475,7 @@ void OfaSmartTagOptionsTabPage::FillListBox( const SmartTagMgr& rSmartTagMgr )
 IMPL_LINK_NOARG(OfaSmartTagOptionsTabPage, ClickHdl)
 {
     const sal_uInt16 nPos = m_aSmartTagTypesLB.GetSelectEntryPos();
-    const SvLBoxEntry* pEntry = m_aSmartTagTypesLB.GetEntry(nPos);
+    const SvTreeListEntry* pEntry = m_aSmartTagTypesLB.GetEntry(nPos);
     const ImplSmartTagLBUserData* pUserData = static_cast< ImplSmartTagLBUserData* >(pEntry->GetUserData());
     uno::Reference< smarttags::XSmartTagRecognizer > xRec = pUserData->mxRec;
     const sal_Int32 nSmartTagIdx = pUserData->mnSmartTagIdx;
@@ -2514,7 +2514,7 @@ IMPL_LINK_NOARG(OfaSmartTagOptionsTabPage, SelectHdl)
         return 0;
 
     const sal_uInt16 nPos = m_aSmartTagTypesLB.GetSelectEntryPos();
-    const SvLBoxEntry* pEntry = m_aSmartTagTypesLB.GetEntry(nPos);
+    const SvTreeListEntry* pEntry = m_aSmartTagTypesLB.GetEntry(nPos);
     const ImplSmartTagLBUserData* pUserData = static_cast< ImplSmartTagLBUserData* >(pEntry->GetUserData());
     uno::Reference< smarttags::XSmartTagRecognizer > xRec = pUserData->mxRec;
     const sal_Int32 nSmartTagIdx = pUserData->mnSmartTagIdx;
@@ -2547,7 +2547,7 @@ sal_Bool OfaSmartTagOptionsTabPage::FillItemSet( SfxItemSet& )
 
     for ( sal_uInt16 i = 0; i < nCount; ++i )
     {
-        const SvLBoxEntry* pEntry = m_aSmartTagTypesLB.GetEntry(i);
+        const SvTreeListEntry* pEntry = m_aSmartTagTypesLB.GetEntry(i);
         const ImplSmartTagLBUserData* pUserData = static_cast< ImplSmartTagLBUserData* >(pEntry->GetUserData());
         const sal_Bool bChecked = m_aSmartTagTypesLB.IsChecked(i);
         const sal_Bool bIsCurrentlyEnabled = pSmartTagMgr->IsSmartTagTypeEnabled( pUserData->maSmartTagType );

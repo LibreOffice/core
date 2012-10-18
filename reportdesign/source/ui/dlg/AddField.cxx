@@ -88,7 +88,7 @@ uno::Sequence< beans::PropertyValue > OAddFieldWindowListBox::getSelectedFieldDe
 {
     uno::Sequence< beans::PropertyValue > aArgs(GetSelectionCount());
     sal_Int32 i = 0;
-    SvLBoxEntry* pSelected = FirstSelected();
+    SvTreeListEntry* pSelected = FirstSelected();
     while( pSelected )
     {
         // build a descriptor for the currently selected field
@@ -422,7 +422,7 @@ uno::Reference< sdbc::XConnection> OAddFieldWindow::getConnection() const
     return uno::Reference< sdbc::XConnection>(m_xRowSet->getPropertyValue( PROPERTY_ACTIVECONNECTION ),uno::UNO_QUERY);
 }
 // -----------------------------------------------------------------------------
-void OAddFieldWindow::fillDescriptor(SvLBoxEntry* _pSelected,::svx::ODataAccessDescriptor& _rDescriptor)
+void OAddFieldWindow::fillDescriptor(SvTreeListEntry* _pSelected,::svx::ODataAccessDescriptor& _rDescriptor)
 {
     if ( _pSelected && m_xColumns.is() )
     {

@@ -68,7 +68,7 @@ IMPL_LINK_NOARG(SvxMultiPathDialog, SelectHdl_Impl)
 
 IMPL_LINK( SvxMultiPathDialog, CheckHdl_Impl, svx::SvxRadioButtonListBox *, pBox )
 {
-    SvLBoxEntry* pEntry =
+    SvTreeListEntry* pEntry =
         pBox ? pBox->GetEntry( pBox->GetCurMousePoint() ) : aRadioLB.FirstSelected();
     if ( pEntry )
         aRadioLB.HandleEntryChecked( pEntry );
@@ -98,7 +98,7 @@ IMPL_LINK_NOARG(SvxMultiPathDialog, AddHdl_Impl)
             {
                 rtl::OUString sNewEntry( '\t' );
                 sNewEntry += sInsPath;
-                SvLBoxEntry* pEntry = aRadioLB.InsertEntry( sNewEntry );
+                SvTreeListEntry* pEntry = aRadioLB.InsertEntry( sNewEntry );
                 String* pData = new String( aURL );
                 pEntry->SetUserData( pData );
             }
@@ -134,7 +134,7 @@ IMPL_LINK_NOARG(SvxMultiPathDialog, DelHdl_Impl)
 {
     if ( pImpl->bIsRadioButtonMode )
     {
-        SvLBoxEntry* pEntry = aRadioLB.FirstSelected();
+        SvTreeListEntry* pEntry = aRadioLB.FirstSelected();
         delete (String*)pEntry->GetUserData();
         bool bChecked = aRadioLB.GetCheckButtonState( pEntry ) == SV_BUTTON_CHECKED;
         sal_uLong nPos = aRadioLB.GetEntryPos( pEntry );
@@ -224,7 +224,7 @@ SvxMultiPathDialog::~SvxMultiPathDialog()
     nPos = (sal_uInt16)aRadioLB.GetEntryCount();
     while ( nPos-- )
     {
-        SvLBoxEntry* pEntry = aRadioLB.GetEntry( nPos );
+        SvTreeListEntry* pEntry = aRadioLB.GetEntry( nPos );
         delete (String*)pEntry->GetUserData();
     }
     delete pImpl;
@@ -242,7 +242,7 @@ String SvxMultiPathDialog::GetPath() const
         String sWritable;
         for ( sal_uInt16 i = 0; i < aRadioLB.GetEntryCount(); ++i )
         {
-            SvLBoxEntry* pEntry = aRadioLB.GetEntry(i);
+            SvTreeListEntry* pEntry = aRadioLB.GetEntry(i);
             if ( aRadioLB.GetCheckButtonState( pEntry ) == SV_BUTTON_CHECKED )
                 sWritable = *(String*)pEntry->GetUserData();
             else
@@ -286,7 +286,7 @@ void SvxMultiPathDialog::SetPath( const String& rPath )
         {
             rtl::OUString sEntry( '\t' );
             sEntry += (bIsSystemPath ? sSystemPath : sPath);
-            SvLBoxEntry* pEntry = aRadioLB.InsertEntry( sEntry );
+            SvTreeListEntry* pEntry = aRadioLB.InsertEntry( sEntry );
             String* pURL = new String( sPath );
             pEntry->SetUserData( pURL );
         }
@@ -302,7 +302,7 @@ void SvxMultiPathDialog::SetPath( const String& rPath )
 
     if ( pImpl->bIsRadioButtonMode && nCount > 0 )
     {
-        SvLBoxEntry* pEntry = aRadioLB.GetEntry( nCount - 1 );
+        SvTreeListEntry* pEntry = aRadioLB.GetEntry( nCount - 1 );
         if ( pEntry )
         {
             aRadioLB.SetCheckButtonState( pEntry, SV_BUTTON_CHECKED );

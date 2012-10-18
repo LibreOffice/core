@@ -535,7 +535,7 @@ OfaTreeOptionsDialog::OfaTreeOptionsDialog( Window* pParent, const rtl::OUString
 
 OfaTreeOptionsDialog::~OfaTreeOptionsDialog()
 {
-    SvLBoxEntry* pEntry = aTreeLB.First();
+    SvTreeListEntry* pEntry = aTreeLB.First();
     // first children
     while(pEntry)
     {
@@ -594,9 +594,9 @@ OptionsPageInfo* OfaTreeOptionsDialog::AddTabPage(
     sal_uInt16 nId, const String& rPageName, sal_uInt16 nGroup )
 {
     OptionsPageInfo* pPageInfo = new OptionsPageInfo( nId );
-    SvLBoxEntry* pParent = aTreeLB.GetEntry( 0, nGroup );
+    SvTreeListEntry* pParent = aTreeLB.GetEntry( 0, nGroup );
     DBG_ASSERT( pParent, "OfaTreeOptionsDialog::AddTabPage(): no group found" );
-    SvLBoxEntry* pEntry = aTreeLB.InsertEntry( rPageName, pParent );
+    SvTreeListEntry* pEntry = aTreeLB.InsertEntry( rPageName, pParent );
     pEntry->SetUserData( pPageInfo );
     return pPageInfo;
 }
@@ -607,7 +607,7 @@ sal_uInt16  OfaTreeOptionsDialog::AddGroup(const String& rGroupName,
                                         SfxModule* pCreateModule,
                                         sal_uInt16 nDialogId )
 {
-    SvLBoxEntry* pEntry = aTreeLB.InsertEntry(rGroupName);
+    SvTreeListEntry* pEntry = aTreeLB.InsertEntry(rGroupName);
     OptionsGroupInfo* pInfo =
         new OptionsGroupInfo( pCreateShell, pCreateModule, nDialogId );
     pEntry->SetUserData(pInfo);
@@ -673,7 +673,7 @@ IMPL_LINK_NOARG(OfaTreeOptionsDialog, OKHdl_Impl)
         }
     }
 
-    SvLBoxEntry* pEntry = aTreeLB.First();
+    SvTreeListEntry* pEntry = aTreeLB.First();
     while ( pEntry )
     {
         if ( aTreeLB.GetParent( pEntry ) )
@@ -703,12 +703,12 @@ IMPL_LINK(OfaTreeOptionsDialog, ExpandedHdl_Impl, SvTreeListBox*, pBox )
 {
     pBox->Update();
     pBox->InitStartEntry();
-    SvLBoxEntry* pEntry = pBox->GetHdlEntry();
+    SvTreeListEntry* pEntry = pBox->GetHdlEntry();
     if(pEntry && pBox->IsExpanded(pEntry))
     {
         sal_uInt32 nChildCount = pBox->GetChildCount( pEntry );
 
-        SvLBoxEntry* pNext = pEntry;
+        SvTreeListEntry* pNext = pEntry;
         for(sal_uInt32 i = 0; i < nChildCount;i++)
         {
             pNext = pBox->GetNextEntryInView(pNext);
@@ -735,7 +735,7 @@ IMPL_LINK(OfaTreeOptionsDialog, ExpandedHdl_Impl, SvTreeListBox*, pBox )
 
 void OfaTreeOptionsDialog::ApplyItemSets()
 {
-    SvLBoxEntry* pEntry = aTreeLB.First();
+    SvTreeListEntry* pEntry = aTreeLB.First();
     while(pEntry)
     {
         if(!aTreeLB.GetParent(pEntry))
@@ -802,7 +802,7 @@ void OfaTreeOptionsDialog::ActivatePage( const String& rPageURL )
 
 void OfaTreeOptionsDialog::ActivateLastSelection()
 {
-    SvLBoxEntry* pEntry = NULL;
+    SvTreeListEntry* pEntry = NULL;
     if ( pLastPageSaver )
     {
         String sExpand( EXPAND_PROTOCOL  );
@@ -826,7 +826,7 @@ void OfaTreeOptionsDialog::ActivateLastSelection()
                 xContext->getValueByName( ::rtl::OUString( "/singletons/com.sun.star.util.theMacroExpander"  ) ), UNO_QUERY );
         }
 
-        SvLBoxEntry* pTemp = aTreeLB.First();
+        SvTreeListEntry* pTemp = aTreeLB.First();
         while( !pEntry && pTemp )
         {
             // restore only selection of a leaf
@@ -862,7 +862,7 @@ void OfaTreeOptionsDialog::ActivateLastSelection()
         pEntry = aTreeLB.Next(pEntry);
     }
 
-    SvLBoxEntry* pParent = aTreeLB.GetParent(pEntry);
+    SvTreeListEntry* pParent = aTreeLB.GetParent(pEntry);
     aTreeLB.Expand(pParent);
     aTreeLB.MakeVisible(pParent);
     aTreeLB.MakeVisible(pEntry);
@@ -880,8 +880,8 @@ long    OfaTreeOptionsDialog::Notify( NotifyEvent& rNEvt )
         if( aKeyCode.GetCode() == KEY_PAGEUP ||
                 aKeyCode.GetCode() == KEY_PAGEDOWN)
         {
-            SvLBoxEntry* pCurEntry = aTreeLB.FirstSelected();
-            SvLBoxEntry*  pTemp = 0;
+            SvTreeListEntry* pCurEntry = aTreeLB.FirstSelected();
+            SvTreeListEntry*  pTemp = 0;
             if(aKeyCode.GetCode() == KEY_PAGEDOWN)
             {
                 pTemp =  aTreeLB.Next( pCurEntry ) ;
@@ -923,8 +923,8 @@ void OfaTreeOptionsDialog::SelectHdl_Impl()
         return;
     }
 
-    SvLBoxEntry* pEntry = pBox->GetCurEntry();
-    SvLBoxEntry* pParent = pBox->GetParent(pEntry);
+    SvTreeListEntry* pEntry = pBox->GetCurEntry();
+    SvTreeListEntry* pParent = pBox->GetParent(pEntry);
 
     // If the user has selected a category, automatically switch to a suitable
     // default sub-page instead.
@@ -1009,7 +1009,7 @@ void OfaTreeOptionsDialog::SelectHdl_Impl()
                 if(bIdentical)
                     pGroupInfo->m_pShell = pGroupInfo->m_pModule;
                 // now test whether there was the same module in other groups, too (e. g. Text+HTML)
-                SvLBoxEntry* pTemp = aTreeLB.First();
+                SvTreeListEntry* pTemp = aTreeLB.First();
                 while(pTemp)
                 {
                     if(!aTreeLB.GetParent(pTemp) && pTemp != pEntry)
@@ -1841,7 +1841,7 @@ void OfaTreeOptionsDialog::ResizeTreeLB( void )
     SvLBoxTreeList* pTreeList = aTreeLB.GetModel();
     DBG_ASSERT( pTreeList, "-OfaTreeOptionsDialog::ResizeTreeLB(): no model, no cookies!" );
 
-    SvLBoxEntry* pEntry = pTreeList->First();
+    SvTreeListEntry* pEntry = pTreeList->First();
     while( pEntry )
     {
         long n = aTreeLB.GetTextWidth(aTreeLB.GetEntryText(pEntry));
@@ -2166,7 +2166,7 @@ static sal_uInt16 lcl_getGroupId( const rtl::OUString& rGroupName, const SvTreeL
 {
     String sGroupName( rGroupName );
     sal_uInt16 nRet = 0;
-    SvLBoxEntry* pEntry = rTreeLB.First();
+    SvTreeListEntry* pEntry = rTreeLB.First();
     while( pEntry )
     {
         if ( !rTreeLB.GetParent( pEntry ) )
@@ -2192,7 +2192,7 @@ static void lcl_insertLeaf(
         nGrpId = pDlg->AddGroup( pNode->m_sLabel, NULL, NULL, nNodeGrpId );
         if ( !pNode->m_sPageURL.isEmpty() )
         {
-            SvLBoxEntry* pGrpEntry = rTreeLB.GetEntry( 0, nGrpId );
+            SvTreeListEntry* pGrpEntry = rTreeLB.GetEntry( 0, nGrpId );
             DBG_ASSERT( pGrpEntry, "OfaTreeOptionsDialog::InsertNodes(): no group" );
             if ( pGrpEntry )
             {

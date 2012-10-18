@@ -571,14 +571,14 @@ class RecovDocListEntry : public SvLBoxString
 
         //---------------------------------------
         /** @short TODO */
-        RecovDocListEntry(      SvLBoxEntry* pEntry,
+        RecovDocListEntry(      SvTreeListEntry* pEntry,
                                 sal_uInt16       nFlags,
                           const String&      sText );
 
         //---------------------------------------
         /** @short TODO */
         virtual void Paint(
-            const Point& aPos, SvTreeListBox& aDevice, sal_uInt16 nFlags, SvLBoxEntry* pEntry);
+            const Point& aPos, SvTreeListBox& aDevice, sal_uInt16 nFlags, SvTreeListEntry* pEntry);
 };
 
 //===============================================
@@ -611,7 +611,7 @@ class RecovDocList : public SvxSimpleTable
 
         //---------------------------------------
         /** @short TODO */
-        virtual void InitEntry(      SvLBoxEntry* pEntry ,
+        virtual void InitEntry(      SvTreeListEntry* pEntry ,
                                const XubString&   sText  ,
                                const Image&       aImage1,
                                const Image&       aImage2,

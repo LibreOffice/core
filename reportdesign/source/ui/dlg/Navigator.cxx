@@ -144,15 +144,15 @@ class NavigatorTree :   public ::cppu::BaseMutex
     Point                                                                       m_aTimerTriggered;      // die Position, an der der DropTimer angeschaltet wurde
     DROP_ACTION                                                                 m_aDropActionType;
     OReportController&                                                          m_rController;
-    SvLBoxEntry*                                                                m_pMasterReport;
-    SvLBoxEntry*                                                                m_pDragedEntry;
+    SvTreeListEntry*                                                                m_pMasterReport;
+    SvTreeListEntry*                                                                m_pDragedEntry;
     ::rtl::Reference< comphelper::OPropertyChangeMultiplexer>                   m_pReportListener;
     ::rtl::Reference< comphelper::OSelectionChangeMultiplexer>                  m_pSelectionListener;
     unsigned short                                                              m_nTimerCounter;
 
-    SvLBoxEntry* insertEntry(const ::rtl::OUString& _sName,SvLBoxEntry* _pParent,sal_uInt16 _nImageId,sal_uLong _nPosition,UserData* _pData);
-    void traverseSection(const uno::Reference< report::XSection>& _xSection,SvLBoxEntry* _pParent,sal_uInt16 _nImageId,sal_uLong _nPosition = LIST_APPEND);
-    void traverseFunctions(const uno::Reference< report::XFunctions>& _xFunctions,SvLBoxEntry* _pParent);
+    SvTreeListEntry* insertEntry(const ::rtl::OUString& _sName,SvTreeListEntry* _pParent,sal_uInt16 _nImageId,sal_uLong _nPosition,UserData* _pData);
+    void traverseSection(const uno::Reference< report::XSection>& _xSection,SvTreeListEntry* _pParent,sal_uInt16 _nImageId,sal_uLong _nPosition = LIST_APPEND);
+    void traverseFunctions(const uno::Reference< report::XFunctions>& _xFunctions,SvTreeListEntry* _pParent);
 
     NavigatorTree(const NavigatorTree&);
     void operator =(const NavigatorTree&);
@@ -200,8 +200,8 @@ public:
 
     virtual void traverseDetail(const uno::Reference< report::XSection>& _xSection);
 
-    SvLBoxEntry* find(const uno::Reference< uno::XInterface >& _xContent);
-    void removeEntry(SvLBoxEntry* _pEntry,bool _bRemove = true);
+    SvTreeListEntry* find(const uno::Reference< uno::XInterface >& _xContent);
+    void removeEntry(SvTreeListEntry* _pEntry,bool _bRemove = true);
 private:
     using SvTreeListBox::ExecuteDrop;
 };
@@ -248,7 +248,7 @@ NavigatorTree::NavigatorTree( Window* pParent,OReportController& _rController )
 // -----------------------------------------------------------------------------
 NavigatorTree::~NavigatorTree()
 {
-    SvLBoxEntry* pCurrent = First();
+    SvTreeListEntry* pCurrent = First();
     while ( pCurrent )
     {
         delete static_cast<UserData*>(pCurrent->GetUserData());
@@ -267,7 +267,7 @@ void NavigatorTree::Command( const CommandEvent& rEvt )
         case COMMAND_CONTEXTMENU:
         {
             // die Stelle, an der geklickt wurde
-            SvLBoxEntry* ptClickedOn = NULL;
+            SvTreeListEntry* ptClickedOn = NULL;
             ::Point aWhere;
             if (rEvt.IsMouseEvent())
             {
@@ -368,7 +368,7 @@ sal_Int8 NavigatorTree::AcceptDrop( const AcceptDropEvent& _rEvt )
         }
         else
         {
-            SvLBoxEntry* pDropppedOn = GetEntry(aDropPos);
+            SvTreeListEntry* pDropppedOn = GetEntry(aDropPos);
             if (pDropppedOn && (GetChildCount(pDropppedOn) > 0) && !IsExpanded(pDropppedOn))
             {
                 m_aDropActionType = DA_EXPANDNODE;
@@ -419,7 +419,7 @@ IMPL_LINK_NOARG(NavigatorTree, OnDropActionTimer)
     {
     case DA_EXPANDNODE:
     {
-        SvLBoxEntry* pToExpand = GetEntry(m_aTimerTriggered);
+        SvTreeListEntry* pToExpand = GetEntry(m_aTimerTriggered);
         if (pToExpand && (GetChildCount(pToExpand) > 0) &&  !IsExpanded(pToExpand))
             // tja, eigentlich muesste ich noch testen, ob die Node nicht schon expandiert ist, aber ich
             // habe dazu weder in den Basisklassen noch im Model eine Methode gefunden ...
@@ -452,7 +452,7 @@ IMPL_LINK(NavigatorTree, OnEntrySelDesel, NavigatorTree*, /*pThis*/)
     if ( !m_pSelectionListener->locked() )
     {
         m_pSelectionListener->lock();
-        SvLBoxEntry* pEntry = GetCurEntry();
+        SvTreeListEntry* pEntry = GetCurEntry();
         uno::Any aSelection;
         if ( IsSelected(pEntry) )
             aSelection <<= static_cast<UserData*>(pEntry->GetUserData())->getContent();
@@ -473,7 +473,7 @@ void NavigatorTree::_selectionChanged( const lang::EventObject& aEvent ) throw (
     if ( !aSelection.getLength() )
     {
         uno::Reference< uno::XInterface> xSelection(aSec,uno::UNO_QUERY);
-        SvLBoxEntry* pEntry = find(xSelection);
+        SvTreeListEntry* pEntry = find(xSelection);
         if ( pEntry && !IsSelected(pEntry) )
         {
             Select(pEntry, sal_True);
@@ -488,7 +488,7 @@ void NavigatorTree::_selectionChanged( const lang::EventObject& aEvent ) throw (
         const uno::Reference< report::XReportComponent >* pEnd  = pIter + aSelection.getLength();
         for (; pIter != pEnd; ++pIter)
         {
-            SvLBoxEntry* pEntry = find(*pIter);
+            SvTreeListEntry* pEntry = find(*pIter);
             if ( pEntry && !IsSelected(pEntry) )
             {
                 Select(pEntry, sal_True);
@@ -499,9 +499,9 @@ void NavigatorTree::_selectionChanged( const lang::EventObject& aEvent ) throw (
     m_pSelectionListener->unlock();
 }
 // -----------------------------------------------------------------------------
-SvLBoxEntry* NavigatorTree::insertEntry(const ::rtl::OUString& _sName,SvLBoxEntry* _pParent,sal_uInt16 _nImageId,sal_uLong _nPosition,UserData* _pData)
+SvTreeListEntry* NavigatorTree::insertEntry(const ::rtl::OUString& _sName,SvTreeListEntry* _pParent,sal_uInt16 _nImageId,sal_uLong _nPosition,UserData* _pData)
 {
-    SvLBoxEntry* pEntry = NULL;
+    SvTreeListEntry* pEntry = NULL;
     if ( _nImageId )
     {
         const Image aImage( m_aNavigatorImages.GetImage( _nImageId ) );
@@ -512,9 +512,9 @@ SvLBoxEntry* NavigatorTree::insertEntry(const ::rtl::OUString& _sName,SvLBoxEntr
     return pEntry;
 }
 // -----------------------------------------------------------------------------
-void NavigatorTree::traverseSection(const uno::Reference< report::XSection>& _xSection,SvLBoxEntry* _pParent,sal_uInt16 _nImageId,sal_uLong _nPosition)
+void NavigatorTree::traverseSection(const uno::Reference< report::XSection>& _xSection,SvTreeListEntry* _pParent,sal_uInt16 _nImageId,sal_uLong _nPosition)
 {
-    SvLBoxEntry* pSection = insertEntry(_xSection->getName(),_pParent,_nImageId,_nPosition,new UserData(this,_xSection));
+    SvTreeListEntry* pSection = insertEntry(_xSection->getName(),_pParent,_nImageId,_nPosition,new UserData(this,_xSection));
     const sal_Int32 nCount = _xSection->getCount();
     for (sal_Int32 i = 0; i < nCount; ++i)
     {
@@ -531,9 +531,9 @@ void NavigatorTree::traverseSection(const uno::Reference< report::XSection>& _xS
     }
 }
 // -----------------------------------------------------------------------------
-void NavigatorTree::traverseFunctions(const uno::Reference< report::XFunctions>& _xFunctions,SvLBoxEntry* _pParent)
+void NavigatorTree::traverseFunctions(const uno::Reference< report::XFunctions>& _xFunctions,SvTreeListEntry* _pParent)
 {
-    SvLBoxEntry* pFunctions = insertEntry(String(ModuleRes(RID_STR_FUNCTIONS)),_pParent,SID_RPT_NEW_FUNCTION,LIST_APPEND,new UserData(this,_xFunctions));
+    SvTreeListEntry* pFunctions = insertEntry(String(ModuleRes(RID_STR_FUNCTIONS)),_pParent,SID_RPT_NEW_FUNCTION,LIST_APPEND,new UserData(this,_xFunctions));
     const sal_Int32 nCount = _xFunctions->getCount();
     for (sal_Int32 i = 0; i< nCount; ++i)
     {
@@ -542,12 +542,12 @@ void NavigatorTree::traverseFunctions(const uno::Reference< report::XFunctions>&
     }
 }
 // -----------------------------------------------------------------------------
-SvLBoxEntry* NavigatorTree::find(const uno::Reference< uno::XInterface >& _xContent)
+SvTreeListEntry* NavigatorTree::find(const uno::Reference< uno::XInterface >& _xContent)
 {
-    SvLBoxEntry* pRet = NULL;
+    SvTreeListEntry* pRet = NULL;
     if ( _xContent.is() )
     {
-        SvLBoxEntry* pCurrent = First();
+        SvTreeListEntry* pCurrent = First();
         while ( pCurrent )
         {
             UserData* pData = static_cast<UserData*>(pCurrent->GetUserData());
@@ -572,64 +572,64 @@ void NavigatorTree::traverseReport(const uno::Reference< report::XReportDefiniti
 // -----------------------------------------------------------------------------
 void NavigatorTree::traverseReportFunctions(const uno::Reference< report::XFunctions>& _xFunctions)
 {
-    SvLBoxEntry* pReport = find(_xFunctions->getParent());
+    SvTreeListEntry* pReport = find(_xFunctions->getParent());
     traverseFunctions(_xFunctions,pReport);
 }
 // -----------------------------------------------------------------------------
 void NavigatorTree::traverseReportHeader(const uno::Reference< report::XSection>& _xSection)
 {
-    SvLBoxEntry* pReport = find(_xSection->getReportDefinition());
+    SvTreeListEntry* pReport = find(_xSection->getReportDefinition());
     traverseSection(_xSection,pReport,SID_REPORTHEADERFOOTER);
 }
 // -----------------------------------------------------------------------------
 void NavigatorTree::traverseReportFooter(const uno::Reference< report::XSection>& _xSection)
 {
-    SvLBoxEntry* pReport = find(_xSection->getReportDefinition());
+    SvTreeListEntry* pReport = find(_xSection->getReportDefinition());
     traverseSection(_xSection,pReport,SID_REPORTHEADERFOOTER);
 }
 // -----------------------------------------------------------------------------
 void NavigatorTree::traversePageHeader(const uno::Reference< report::XSection>& _xSection)
 {
-    SvLBoxEntry* pReport = find(_xSection->getReportDefinition());
+    SvTreeListEntry* pReport = find(_xSection->getReportDefinition());
     traverseSection(_xSection,pReport,SID_PAGEHEADERFOOTER);
 }
 // -----------------------------------------------------------------------------
 void NavigatorTree::traversePageFooter(const uno::Reference< report::XSection>& _xSection)
 {
-    SvLBoxEntry* pReport = find(_xSection->getReportDefinition());
+    SvTreeListEntry* pReport = find(_xSection->getReportDefinition());
     traverseSection(_xSection,pReport,SID_PAGEHEADERFOOTER);
 }
 // -----------------------------------------------------------------------------
 void NavigatorTree::traverseGroups(const uno::Reference< report::XGroups>& _xGroups)
 {
-    SvLBoxEntry* pReport = find(_xGroups->getReportDefinition());
+    SvTreeListEntry* pReport = find(_xGroups->getReportDefinition());
     insertEntry(String(ModuleRes(RID_STR_GROUPS)),pReport,SID_SORTINGANDGROUPING,LIST_APPEND,new UserData(this,_xGroups));
 }
 // -----------------------------------------------------------------------------
 void NavigatorTree::traverseGroup(const uno::Reference< report::XGroup>& _xGroup)
 {
     uno::Reference< report::XGroups> xGroups(_xGroup->getParent(),uno::UNO_QUERY);
-    SvLBoxEntry* pGroups = find(xGroups);
+    SvTreeListEntry* pGroups = find(xGroups);
     OSL_ENSURE(pGroups,"No Groups inserted so far. Why!");
     insertEntry(_xGroup->getExpression(),pGroups,SID_GROUP,rptui::getPositionInIndexAccess(xGroups.get(),_xGroup),new UserData(this,_xGroup));
 }
 // -----------------------------------------------------------------------------
 void NavigatorTree::traverseGroupFunctions(const uno::Reference< report::XFunctions>& _xFunctions)
 {
-    SvLBoxEntry* pGroup = find(_xFunctions->getParent());
+    SvTreeListEntry* pGroup = find(_xFunctions->getParent());
     traverseFunctions(_xFunctions,pGroup);
 }
 // -----------------------------------------------------------------------------
 void NavigatorTree::traverseGroupHeader(const uno::Reference< report::XSection>& _xSection)
 {
-    SvLBoxEntry* pGroup = find(_xSection->getGroup());
+    SvTreeListEntry* pGroup = find(_xSection->getGroup());
     OSL_ENSURE(pGroup,"No group found");
     traverseSection(_xSection,pGroup,SID_GROUPHEADER,1);
 }
 // -----------------------------------------------------------------------------
 void NavigatorTree::traverseGroupFooter(const uno::Reference< report::XSection>& _xSection)
 {
-    SvLBoxEntry* pGroup = find(_xSection->getGroup());
+    SvTreeListEntry* pGroup = find(_xSection->getGroup());
     OSL_ENSURE(pGroup,"No group found");
     traverseSection(_xSection,pGroup,SID_GROUPFOOTER);
 }
@@ -637,7 +637,7 @@ void NavigatorTree::traverseGroupFooter(const uno::Reference< report::XSection>&
 void NavigatorTree::traverseDetail(const uno::Reference< report::XSection>& _xSection)
 {
     uno::Reference< report::XReportDefinition> xReport = _xSection->getReportDefinition();
-    SvLBoxEntry* pParent = find(xReport);
+    SvTreeListEntry* pParent = find(xReport);
     traverseSection(_xSection,pParent,SID_ICON_DETAIL);
 }
 // -----------------------------------------------------------------------------
@@ -650,7 +650,7 @@ void NavigatorTree::_propertyChanged(const beans::PropertyChangeEvent& _rEvent) 
         _rEvent.NewValue >>= bEnabled;
         if ( bEnabled )
         {
-            SvLBoxEntry* pParent = find(xReport);
+            SvTreeListEntry* pParent = find(xReport);
             if ( _rEvent.PropertyName == PROPERTY_REPORTHEADERON )
             {
                 sal_uLong nPos = xReport->getReportHeaderOn() ? 2 : 1;
@@ -673,7 +673,7 @@ void NavigatorTree::_propertyChanged(const beans::PropertyChangeEvent& _rEvent) 
 // -----------------------------------------------------------------------------
 void NavigatorTree::_elementInserted( const container::ContainerEvent& _rEvent )
 {
-    SvLBoxEntry* pEntry = find(_rEvent.Source);
+    SvTreeListEntry* pEntry = find(_rEvent.Source);
     uno::Reference<beans::XPropertySet> xProp(_rEvent.Element,uno::UNO_QUERY_THROW);
     ::rtl::OUString sName;
     uno::Reference< beans::XPropertySetInfo> xInfo = xProp->getPropertySetInfo();
@@ -704,12 +704,12 @@ void NavigatorTree::_elementInserted( const container::ContainerEvent& _rEvent )
 void NavigatorTree::_elementRemoved( const container::ContainerEvent& _rEvent )
 {
     uno::Reference<beans::XPropertySet> xProp(_rEvent.Element,uno::UNO_QUERY);
-    SvLBoxEntry* pEntry = find(xProp);
+    SvTreeListEntry* pEntry = find(xProp);
     OSL_ENSURE(pEntry,"NavigatorTree::_elementRemoved: No Entry found!");
 
     if ( pEntry )
     {
-        SvLBoxEntry* pParent = GetParent(pEntry);
+        SvTreeListEntry* pParent = GetParent(pEntry);
         removeEntry(pEntry);
         PaintEntry(pParent);
     }
@@ -718,7 +718,7 @@ void NavigatorTree::_elementRemoved( const container::ContainerEvent& _rEvent )
 void NavigatorTree::_elementReplaced( const container::ContainerEvent& _rEvent )
 {
     uno::Reference<beans::XPropertySet> xProp(_rEvent.ReplacedElement,uno::UNO_QUERY);
-    SvLBoxEntry* pEntry = find(xProp);
+    SvTreeListEntry* pEntry = find(xProp);
     if ( pEntry )
     {
         UserData* pData = static_cast<UserData*>(pEntry->GetUserData());
@@ -735,11 +735,11 @@ void NavigatorTree::_disposing(const lang::EventObject& _rSource)throw( uno::Run
     removeEntry(find(_rSource.Source));
 }
 // -----------------------------------------------------------------------------
-void NavigatorTree::removeEntry(SvLBoxEntry* _pEntry,bool _bRemove)
+void NavigatorTree::removeEntry(SvTreeListEntry* _pEntry,bool _bRemove)
 {
     if ( _pEntry )
     {
-        SvLBoxEntry* pChild = FirstChild(_pEntry);
+        SvTreeListEntry* pChild = FirstChild(_pEntry);
         while( pChild )
         {
             removeEntry(pChild,false);
@@ -799,7 +799,7 @@ NavigatorTree::UserData::~UserData()
 // OPropertyChangeListener
 void NavigatorTree::UserData::_propertyChanged(const beans::PropertyChangeEvent& _rEvent) throw( uno::RuntimeException)
 {
-    SvLBoxEntry* pEntry = m_pTree->find(_rEvent.Source);
+    SvTreeListEntry* pEntry = m_pTree->find(_rEvent.Source);
     OSL_ENSURE(pEntry,"No entry could be found! Why not!");
     const bool bFooterOn = (PROPERTY_FOOTERON == _rEvent.PropertyName);
     try

@@ -90,7 +90,7 @@ private:
     void                    ClearJavaList();
     void                    LoadJREs();
     void                    AddJRE( JavaInfo* _pInfo );
-    void                    HandleCheckEntry( SvLBoxEntry* _pEntry );
+    void                    HandleCheckEntry( SvTreeListEntry* _pEntry );
     void                    AddFolder( const ::rtl::OUString& _rFolder );
 
 public:

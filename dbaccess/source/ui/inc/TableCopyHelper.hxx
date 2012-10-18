@@ -28,7 +28,7 @@
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <functional>
 
-class SvLBoxEntry;
+class SvTreeListEntry;
 //........................................................................
 namespace dbaui
 {
@@ -79,7 +79,7 @@ namespace dbaui
             String                          aUrl;
             SotStorageStreamRef             aHtmlRtfStorage;
             ElementType                     nType;
-            SvLBoxEntry*                    pDroppedAt;
+            SvTreeListEntry*                    pDroppedAt;
             sal_Int8                        nAction;
             sal_Bool                        bHtml;
             sal_Bool                        bError;

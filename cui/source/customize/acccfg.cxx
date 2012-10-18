@@ -622,18 +622,18 @@ static long AccCfgTabs[] =
 class SfxAccCfgLBoxString_Impl : public SvLBoxString
 {
     public:
-    SfxAccCfgLBoxString_Impl(      SvLBoxEntry* pEntry,
+    SfxAccCfgLBoxString_Impl(      SvTreeListEntry* pEntry,
                                    sal_uInt16       nFlags,
                              const String&      sText );
 
     virtual ~SfxAccCfgLBoxString_Impl();
 
     virtual void Paint(
-        const Point& aPos, SvTreeListBox& rDevice, sal_uInt16 nFlags, SvLBoxEntry* pEntry);
+        const Point& aPos, SvTreeListBox& rDevice, sal_uInt16 nFlags, SvTreeListEntry* pEntry);
 };
 
 //-----------------------------------------------
-SfxAccCfgLBoxString_Impl::SfxAccCfgLBoxString_Impl(      SvLBoxEntry* pEntry,
+SfxAccCfgLBoxString_Impl::SfxAccCfgLBoxString_Impl(      SvTreeListEntry* pEntry,
                                                          sal_uInt16       nFlags,
                                                    const String&      sText )
         : SvLBoxString(pEntry, nFlags, sText)
@@ -646,7 +646,7 @@ SfxAccCfgLBoxString_Impl::~SfxAccCfgLBoxString_Impl()
 }
 
 void SfxAccCfgLBoxString_Impl::Paint(
-    const Point& aPos, SvTreeListBox& rDevice, sal_uInt16 /*nFlags*/, SvLBoxEntry* pEntry)
+    const Point& aPos, SvTreeListBox& rDevice, sal_uInt16 /*nFlags*/, SvTreeListEntry* pEntry)
 {
     if (!pEntry)
         return;
@@ -663,7 +663,7 @@ void SfxAccCfgLBoxString_Impl::Paint(
 }
 
 //-----------------------------------------------
-void SfxAccCfgTabListBox_Impl::InitEntry(      SvLBoxEntry* pEntry ,
+void SfxAccCfgTabListBox_Impl::InitEntry(      SvTreeListEntry* pEntry ,
                                          const XubString&   sText  ,
                                          const Image&       aImage1,
                                          const Image&       aImage2,
@@ -692,7 +692,7 @@ void SfxAccCfgTabListBox_Impl::KeyInput(const KeyEvent& aKey)
         (nCode1 != KEY_PAGEDOWN)
        )
     {
-        SvLBoxEntry* pEntry = First();
+        SvTreeListEntry* pEntry = First();
         while (pEntry)
         {
             TAccInfo* pUserData = (TAccInfo*)pEntry->GetUserData();
@@ -798,7 +798,7 @@ SfxAcceleratorConfigPage::SfxAcceleratorConfigPage( Window* pParent, const SfxIt
 SfxAcceleratorConfigPage::~SfxAcceleratorConfigPage()
 {
     // free memory - remove all dynamic user data
-    SvLBoxEntry* pEntry = aEntriesBox.First();
+    SvTreeListEntry* pEntry = aEntriesBox.First();
     while (pEntry)
     {
         TAccInfo* pUserData = (TAccInfo*)pEntry->GetUserData();
@@ -876,7 +876,7 @@ void SfxAcceleratorConfigPage::InitAccCfg()
     This is needed as we have to paint disabled entries by ourself. No support for that in the
     original SvTabListBox!
   */
-void SfxAcceleratorConfigPage::CreateCustomItems(      SvLBoxEntry* pEntry,
+void SfxAcceleratorConfigPage::CreateCustomItems(      SvTreeListEntry* pEntry,
                                                  const String&      sCol1 ,
                                                  const String&      sCol2 )
 {
@@ -921,7 +921,7 @@ void SfxAcceleratorConfigPage::Init(const css::uno::Reference< css::ui::XAcceler
         if (!sKey.Len())
             continue;
         TAccInfo*    pEntry   = new TAccInfo(i1, nListPos, aKey);
-        SvLBoxEntry* pLBEntry = aEntriesBox.InsertEntryToColumn(sKey, 0L, LIST_APPEND, 0xFFFF);
+        SvTreeListEntry* pLBEntry = aEntriesBox.InsertEntryToColumn(sKey, 0L, LIST_APPEND, 0xFFFF);
         pLBEntry->SetUserData(pEntry);
     }
 
@@ -944,7 +944,7 @@ void SfxAcceleratorConfigPage::Init(const css::uno::Reference< css::ui::XAcceler
 
         aEntriesBox.SetEntryText(sLabel, nPos, nCol);
 
-        SvLBoxEntry* pLBEntry = aEntriesBox.GetEntry(0, nPos);
+        SvTreeListEntry* pLBEntry = aEntriesBox.GetEntry(0, nPos);
         TAccInfo*    pEntry   = (TAccInfo*)pLBEntry->GetUserData();
 
         pEntry->m_bIsConfigurable = sal_True;
@@ -964,7 +964,7 @@ void SfxAcceleratorConfigPage::Init(const css::uno::Reference< css::ui::XAcceler
             continue;
 
         // Hardcoded function mapped so no ID possible and mark entry as not changeable
-        SvLBoxEntry* pLBEntry = aEntriesBox.GetEntry(0, nPos);
+        SvTreeListEntry* pLBEntry = aEntriesBox.GetEntry(0, nPos);
         TAccInfo*    pEntry   = (TAccInfo*)pLBEntry->GetUserData();
 
         pEntry->m_bIsConfigurable = sal_False;
@@ -981,7 +981,7 @@ void SfxAcceleratorConfigPage::Apply(const css::uno::Reference< css::ui::XAccele
     // Go through the list from the bottom to the top ...
     // because logical accelerator must be preferred instead of
     // physical ones!
-    SvLBoxEntry* pEntry = aEntriesBox.First();
+    SvTreeListEntry* pEntry = aEntriesBox.First();
     while (pEntry)
     {
         TAccInfo*          pUserData = (TAccInfo*)pEntry->GetUserData();
@@ -1115,7 +1115,7 @@ IMPL_LINK( SfxAcceleratorConfigPage, SelectHdl, Control*, pListBox )
         aChangeButton.Enable( sal_False );
 
         // #i36994 First selected can return zero!
-        SvLBoxEntry*    pLBEntry = aEntriesBox.FirstSelected();
+        SvTreeListEntry*    pLBEntry = aEntriesBox.FirstSelected();
         if ( pLBEntry != 0 )
         {
             sal_uInt16          nPos                = (sal_uInt16) aEntriesBox.GetModel()->GetRelPos( pLBEntry );
@@ -1131,14 +1131,14 @@ IMPL_LINK( SfxAcceleratorConfigPage, SelectHdl, Control*, pListBox )
 
             // update key box
             aKeyBox.Clear();
-            SvLBoxEntry* pIt = aEntriesBox.First();
+            SvTreeListEntry* pIt = aEntriesBox.First();
             while ( pIt )
             {
                 TAccInfo* pUserData = (TAccInfo*)pIt->GetUserData();
                 if ( pUserData && pUserData->m_sCommand == sPossibleNewCommand )
                 {
                     TAccInfo*    pU1 = new TAccInfo(-1, -1, pUserData->m_aKey);
-                    SvLBoxEntry* pE1 = aKeyBox.InsertEntry( pUserData->m_aKey.GetName(), 0L, sal_True, LIST_APPEND );
+                    SvTreeListEntry* pE1 = aKeyBox.InsertEntry( pUserData->m_aKey.GetName(), 0L, sal_True, LIST_APPEND );
                     pE1->SetUserData(pU1);
                     pE1->EnableChildrenOnDemand( sal_False );
                 }
@@ -1149,10 +1149,10 @@ IMPL_LINK( SfxAcceleratorConfigPage, SelectHdl, Control*, pListBox )
     else
     {
         // goto selected "key" entry of the key box
-        SvLBoxEntry* pE2 = 0;
+        SvTreeListEntry* pE2 = 0;
         TAccInfo*    pU2 = 0;
         sal_uInt16       nP2 = LISTBOX_ENTRY_NOTFOUND;
-        SvLBoxEntry* pE3 = 0;
+        SvTreeListEntry* pE3 = 0;
 
         pE2 = aKeyBox.FirstSelected();
         if (pE2)
@@ -1194,7 +1194,7 @@ IMPL_LINK_NOARG(SfxAcceleratorConfigPage, RadioHdl)
      pGroupLBox->Init(m_xSMGR, m_xFrame, m_sModuleLongName);
 
     // pb: #133213# do not select NULL entries
-    SvLBoxEntry* pEntry = aEntriesBox.GetEntry( 0, 0 );
+    SvTreeListEntry* pEntry = aEntriesBox.GetEntry( 0, 0 );
     if ( pEntry )
         aEntriesBox.Select( pEntry );
     pEntry = pGroupLBox->GetEntry( 0, 0 );
@@ -1472,7 +1472,7 @@ void SfxAcceleratorConfigPage::Reset( const SfxItemSet& rSet )
 sal_uInt16 SfxAcceleratorConfigPage::MapKeyCodeToPos(const KeyCode& aKey) const
 {
     sal_uInt16       nCode1 = aKey.GetCode()+aKey.GetModifier();
-    SvLBoxEntry* pEntry = aEntriesBox.First();
+    SvTreeListEntry* pEntry = aEntriesBox.First();
     sal_uInt16       i      = 0;
 
     while (pEntry)

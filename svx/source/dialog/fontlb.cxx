@@ -40,7 +40,7 @@ SvLBoxFontString::SvLBoxFontString() :
 }
 
 SvLBoxFontString::SvLBoxFontString(
-        SvLBoxEntry* pEntry, sal_uInt16 nFlags, const XubString& rString,
+        SvTreeListEntry* pEntry, sal_uInt16 nFlags, const XubString& rString,
         const Font& rFont, const Color* pColor ) :
     SvLBoxString( pEntry, nFlags, rString ),
     maFont( rFont ),
@@ -64,7 +64,7 @@ SvLBoxItem* SvLBoxFontString::Create() const
     return new SvLBoxFontString;
 }
 
-void SvLBoxFontString::Paint( const Point& rPos, SvTreeListBox& rDev, sal_uInt16 nFlags, SvLBoxEntry* pEntry )
+void SvLBoxFontString::Paint( const Point& rPos, SvTreeListBox& rDev, sal_uInt16 nFlags, SvTreeListEntry* pEntry )
 {
     DBG_CHKTHIS( SvLBoxFontString, 0 );
     Font aOldFont( rDev.GetFont() );
@@ -81,7 +81,7 @@ void SvLBoxFontString::Paint( const Point& rPos, SvTreeListBox& rDev, sal_uInt16
     rDev.SetFont( aOldFont );
 }
 
-void SvLBoxFontString::InitViewData( SvTreeListBox* pView, SvLBoxEntry* pEntry, SvViewDataItem* pViewData )
+void SvLBoxFontString::InitViewData( SvTreeListBox* pView, SvTreeListEntry* pEntry, SvViewDataItem* pViewData )
 {
     DBG_CHKTHIS( SvLBoxFontString, 0 );
     Font aOldFont( pView->GetFont() );
@@ -113,7 +113,7 @@ void SvxFontListBox::InsertFontEntry( const String& rString, const Font& rFont, 
 
 void SvxFontListBox::SelectEntryPos( sal_uInt16 nPos, bool bSelect )
 {
-    SvLBoxEntry* pEntry = GetEntry( nPos );
+    SvTreeListEntry* pEntry = GetEntry( nPos );
     if( pEntry )
     {
         Select( pEntry, bSelect );
@@ -128,7 +128,7 @@ void SvxFontListBox::SetNoSelection()
 
 sal_uLong SvxFontListBox::GetSelectEntryPos() const
 {
-    SvLBoxEntry* pSvLBoxEntry = FirstSelected();
+    SvTreeListEntry* pSvLBoxEntry = FirstSelected();
     return pSvLBoxEntry ? GetModel()->GetAbsPos( pSvLBoxEntry ) : LIST_APPEND;
 }
 
@@ -138,7 +138,7 @@ XubString SvxFontListBox::GetSelectEntry() const
 }
 
 void SvxFontListBox::InitEntry(
-        SvLBoxEntry* pEntry, const XubString& rEntryText,
+        SvTreeListEntry* pEntry, const XubString& rEntryText,
         const Image& rCollImg, const Image& rExpImg,
         SvLBoxButtonKind eButtonKind )
 {

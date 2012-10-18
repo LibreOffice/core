@@ -98,7 +98,7 @@ namespace formula
         xub_StrLen      GetFunctionPos(xub_StrLen nPos);
         void            ClearAllParas();
 
-        void            MakeTree(IStructHelper* _pTree,SvLBoxEntry* pParent,FormulaToken* _pToken,long Count);
+        void            MakeTree(IStructHelper* _pTree,SvTreeListEntry* pParent,FormulaToken* _pToken,long Count);
         void            fillTree(IStructHelper* _pTree);
         void            UpdateTokenArray( const String& rStrExp);
         String          RepairFormula(const String& aFormula);
@@ -648,7 +648,7 @@ sal_Bool FormulaDlg_Impl::CalcStruct( const String& rStrExp)
 }
 
 // -----------------------------------------------------------------------------
-void FormulaDlg_Impl::MakeTree(IStructHelper* _pTree,SvLBoxEntry* pParent,FormulaToken* _pToken,long Count)
+void FormulaDlg_Impl::MakeTree(IStructHelper* _pTree,SvTreeListEntry* pParent,FormulaToken* _pToken,long Count)
 {
     if( _pToken != NULL && Count > 0 )
     {
@@ -670,7 +670,7 @@ void FormulaDlg_Impl::MakeTree(IStructHelper* _pTree,SvLBoxEntry* pParent,Formul
 
             if ( nParas > 0 )
             {
-                SvLBoxEntry* pEntry;
+                SvTreeListEntry* pEntry;
 
                 String aTest=_pTree->GetEntryText(pParent);
 
