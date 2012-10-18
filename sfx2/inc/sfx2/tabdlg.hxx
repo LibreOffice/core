@@ -68,7 +68,6 @@ friend class SfxTabDialogController;
     VclVBox *m_pVBox;
     TabControl *m_pTabCtrl;
 
-    VclHButtonBox *m_pActionArea;
     OKButton *m_pOKBtn;
     PushButton* m_pApplyBtn;
     PushButton* m_pUserBtn;
@@ -115,6 +114,7 @@ protected:
     virtual void                PageCreated( sal_uInt16 nId, SfxTabPage &rPage );
     virtual long                Notify( NotifyEvent& rNEvt );
 
+    VclHButtonBox*  m_pActionArea;
     SfxItemSet*     pExampleSet;
     SfxItemSet*     GetInputSetImpl();
     SfxTabPage*     GetTabPage( sal_uInt16 nPageId ) const;

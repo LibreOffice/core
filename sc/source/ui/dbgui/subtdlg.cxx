@@ -35,7 +35,7 @@ ScSubTotalDlg::ScSubTotalDlg( Window*           pParent,
         SfxTabDialog( pParent,
                       ScResId( RID_SCDLG_SUBTOTALS ),
                       pArgSet ),
-        aBtnRemove  ( this, ScResId( BTN_REMOVE ) )
+        aBtnRemove  ( m_pActionArea, ScResId( BTN_REMOVE ) )
 {
     AddTabPage( PAGE_GROUP1,  ScTpSubTotalGroup1::Create,  0 );
     AddTabPage( PAGE_GROUP2,  ScTpSubTotalGroup2::Create,  0 );
