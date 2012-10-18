@@ -62,6 +62,7 @@ cppcanvas\
 cppu\
 cppuhelper\
 cpputools\
+ct2n\
 cui\
 dbaccess\
 desktop\
@@ -206,7 +207,6 @@ binfilter \
 cairo\
 cppunit\
 crashrep\
-ct2n\
 curl\
 epm\
 expat\

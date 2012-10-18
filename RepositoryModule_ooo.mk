@@ -59,6 +59,7 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
     cppu \
     cppuhelper \
     cpputools \
+        $(call gb_Helper_optional,CT2N,ct2n) \
     cui \
     dbaccess \
     desktop \
