@@ -133,7 +133,7 @@ local repo
     for module in $SUBMODULES_CONFIGURED ; do
 	if [ ! -d ${module?}/.git ] ; then
 	    case "${module?}" in
-		helcontent2)
+		helpcontent2)
 		    if [ -d clone/help/.git ] ; then
 			repo="clone/help/.git"
 		    fi
