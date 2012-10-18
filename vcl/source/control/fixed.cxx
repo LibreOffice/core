@@ -463,8 +463,11 @@ void FixedText::FillLayoutData() const
 
 void FixedText::setMaxWidthChars(sal_Int32 nWidth)
 {
-    m_nMaxWidthChars = nWidth;
-    queue_resize();
+    if (nWidth != m_nMaxWidthChars)
+    {
+        m_nMaxWidthChars = nWidth;
+        queue_resize();
+    }
 }
 
 bool FixedText::set_property(const rtl::OString &rKey, const rtl::OString &rValue)
