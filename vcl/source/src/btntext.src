@@ -96,3 +96,13 @@ String SV_BUTTONTEXT_REMOVE
 {
     Text [ en-US ] = "~Remove";
 };
+
+String SV_BUTTONTEXT_NEW
+{
+    Text [ en-US ] = "~New";
+};
+
+String SV_BUTTONTEXT_EDIT
+{
+    Text [ en-US ] = "~Edit";
+};

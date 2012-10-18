@@ -332,6 +332,32 @@ namespace
         return bInconsistent;
     }
 
+    OUString getStockText(const OString &rType)
+    {
+        if (rType == "gtk-ok")
+            return (VclResId(SV_BUTTONTEXT_OK).toString());
+        else if (rType == "gtk-cancel")
+            return (VclResId(SV_BUTTONTEXT_CANCEL).toString());
+        else if (rType == "gtk-help")
+            return (VclResId(SV_BUTTONTEXT_HELP).toString());
+        else if (rType == "gtk-close")
+            return (VclResId(SV_BUTTONTEXT_CLOSE).toString());
+        else if (rType == "gtk-revert-to-saved")
+            return (VclResId(SV_BUTTONTEXT_RESET).toString());
+        else if (rType == "gtk-add")
+            return (VclResId(SV_BUTTONTEXT_ADD).toString());
+        else if (rType == "gtk-delete")
+            return (VclResId(SV_BUTTONTEXT_DELETE).toString());
+        else if (rType == "gtk-remove")
+            return (VclResId(SV_BUTTONTEXT_REMOVE).toString());
+        else if (rType == "gtk-new")
+            return (VclResId(SV_BUTTONTEXT_NEW).toString());
+        else if (rType == "gtk-edit")
+            return (VclResId(SV_BUTTONTEXT_EDIT).toString());
+        SAL_WARN("vcl.layout", "unknown stock type: " << rType.getStr());
+        return OUString();
+    }
+
     Window * extractStockAndBuildButton(Window *pParent, VclBuilder::stringmap &rMap)
     {
         WinBits nBits = WB_CENTER|WB_VCENTER|WB_3DLOOK;
@@ -374,39 +400,10 @@ namespace
                 pBtn->SetSymbol(SYMBOL_PREV);
                 pWindow = pBtn;
             }
-            else if (sType == "gtk-close")
-            {
-                PushButton *pBtn = new PushButton(pParent, nBits);
-                pBtn->SetText(VclResId(SV_BUTTONTEXT_CLOSE).toString());
-                pWindow = pBtn;
-            }
-            else if (sType == "gtk-revert-to-saved")
-            {
-                PushButton *pBtn = new PushButton(pParent, nBits);
-                pBtn->SetText(VclResId(SV_BUTTONTEXT_RESET).toString());
-                pWindow = pBtn;
-            }
-            else if (sType == "gtk-add")
-            {
-                PushButton *pBtn = new PushButton(pParent, nBits);
-                pBtn->SetText(VclResId(SV_BUTTONTEXT_ADD).toString());
-                pWindow = pBtn;
-            }
-            else if (sType == "gtk-delete")
-            {
-                PushButton *pBtn = new PushButton(pParent, nBits);
-                pBtn->SetText(VclResId(SV_BUTTONTEXT_DELETE).toString());
-                pWindow = pBtn;
-            }
-            else if (sType == "gtk-remove")
-            {
-                PushButton *pBtn = new PushButton(pParent, nBits);
-                pBtn->SetText(VclResId(SV_BUTTONTEXT_REMOVE).toString());
-                pWindow = pBtn;
-            }
             else
             {
-                SAL_WARN("vcl.layout", "unknown stock type: " << sType.getStr());
+                pWindow = new PushButton(pParent, nBits);
+                pWindow->SetText(getStockText(sType));
             }
         }
 

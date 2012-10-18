@@ -151,6 +151,8 @@
 #define SV_BUTTONTEXT_ADD                   10112
 #define SV_BUTTONTEXT_DELETE                10113
 #define SV_BUTTONTEXT_REMOVE                10114
+#define SV_BUTTONTEXT_NEW                   10115
+#define SV_BUTTONTEXT_EDIT                  10116
 
 #define SV_STDTEXT_FIRST                    SV_STDTEXT_SERVICENOTAVAILABLE
 #define SV_STDTEXT_SERVICENOTAVAILABLE      10200
