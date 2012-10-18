@@ -64,3 +64,4 @@ public class PairingActivity extends SherlockActivity {
     };
 
 }
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

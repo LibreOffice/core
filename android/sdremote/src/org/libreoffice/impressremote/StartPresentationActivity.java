@@ -1,3 +1,11 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
 package org.libreoffice.impressremote;
 
 import org.libreoffice.impressremote.communication.CommunicationService;
@@ -18,7 +26,6 @@ import com.actionbarsherlock.app.SherlockActivity;
 
 public class StartPresentationActivity extends SherlockActivity {
     private CommunicationService mCommunicationService = null;
-    private boolean mIsBound = false;
     private ActivityChangeBroadcastProcessor mBroadcastProcessor;
 
     /** Called when the activity is first created. */
@@ -29,7 +36,6 @@ public class StartPresentationActivity extends SherlockActivity {
         setContentView(R.layout.activity_startpresentation);
         bindService(new Intent(this, CommunicationService.class), mConnection,
                         Context.BIND_IMPORTANT);
-        mIsBound = true;
 
         IntentFilter aFilter = new IntentFilter(
                         CommunicationService.MSG_SLIDESHOW_STARTED);
@@ -71,7 +77,6 @@ public class StartPresentationActivity extends SherlockActivity {
         @Override
         public void onServiceDisconnected(ComponentName aClassName) {
             mCommunicationService = null;
-            mIsBound = false;
         }
     };
 
@@ -93,3 +98,4 @@ public class StartPresentationActivity extends SherlockActivity {
         }
     };
 }
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -276,7 +276,8 @@ public class CommunicationService extends Service implements Runnable {
         SharedPreferences aPref = getSharedPreferences(SERVERSTORAGE_KEY,
                         MODE_PRIVATE);
 
-        Map<String, String> aStoredMap = (Map<String, String>) aPref.getAll();
+        @SuppressWarnings("unchecked")
+		Map<String, String> aStoredMap = (Map<String, String>) aPref.getAll();
 
         for (Entry<String, String> aServerEntry : aStoredMap.entrySet()) {
             mManualServers.put(aServerEntry.getKey(), new Server(
