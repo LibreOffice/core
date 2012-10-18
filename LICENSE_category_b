@@ -15,16 +15,16 @@ ____
 -- MPL 1.1 license
 - For Hunspell library - spell checker and morphological analyzer:
 -- GPL 2.0/LGPL 2.1/MPL 1.1 tri-license
-   MPL 1.1 is chosen for Apache OpenOffice (incubating)
+   MPL 1.1 is chosen for Apache OpenOffice
 - For Hyphen - hyphenation library:
 -- GPL 2.0/LGPL 2.1/MPL 1.1 tri-license
-   MPL 1.1 is chosen for Apache OpenOffice (incubating)
+   MPL 1.1 is chosen for Apache OpenOffice
 - For Network Security Services (NSS) library:
 -- GPL 2.0/LGPL 2.1/MPL 1.1 tri-license
-   MPL 1.1 is chosen for Apache OpenOffice (incubating)
+   MPL 1.1 is chosen for Apache OpenOffice
 - For Rhino
 -- MPL 1.1 / GPL 2.0 dual licensed
-   MPL 1.1 is chosen for Apache OpenOffice (incubating)
+   MPL 1.1 is chosen for Apache OpenOffice
 
 
                           MOZILLA PUBLIC LICENSE
@@ -1002,7 +1002,7 @@ ____
 
 For Graphite:
 - CPL 0.5 / LGPL 2.1 dual-licensed
-  CPL 0.5 is chosen for Apache OpenOffice (incubating)
+  CPL 0.5 is chosen for Apache OpenOffice
 
 GRAPHITE LICENSING
 
@@ -1484,7 +1484,7 @@ ____
 
 For Beanshell:
 - SPL 1.0 / LGPL dual-licensed
-  SPL 1.0 is chosen for Apache OpenOffice (incubating) is chosen
+  SPL 1.0 is chosen for Apache OpenOffice is chosen
 
 This file is part of the BeanShell Java Scripting distribution.
 Documentation and updates may be found at http://www.beanshell.org/

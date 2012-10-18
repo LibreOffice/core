@@ -1,6 +1,6 @@
 ____
 
-The binary package of Apache OpenOffice (incubating) may include
+The binary package of Apache OpenOffice may include
 dictionary extensions that are merely aggregated for the convenience
 of end users.
 Basis for this aggregation is Apache JIRA issue LEGAL-117

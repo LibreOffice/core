@@ -305,7 +305,7 @@ en-US = "< &Back"
 en-US = "Cancel"
 
 [OOO_CONTROL_124]
-en-US = "This Program is based on the 'Apache OpenOffice (incubating)' project which is supported by members of the Apache Community. For credits, see: http://www.openoffice.org/welcome/credits.html"
+en-US = "This Program is based on the 'Apache OpenOffice' project which is supported by members of the Apache Community. For credits please see: http://www.openoffice.org/welcome/credits.html"
 
 [OOO_CONTROL_125]
 en-US = "&Next >"
