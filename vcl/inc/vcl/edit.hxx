@@ -199,7 +199,7 @@ public:
     virtual void        SetMaxTextLen( xub_StrLen nMaxLen = EDIT_NOLIMIT );
     virtual xub_StrLen  GetMaxTextLen() const { return mnMaxTextLen; }
 
-    void                SetMaxWidthInChars(sal_Int32 nMinWidthInChars);
+    void                SetMinWidthInChars(sal_Int32 nMinWidthInChars);
     sal_Int32           GetMinWidthInChars() const { return mnMinWidthInChars; }
 
     virtual void        SetSelection( const Selection& rSelection );

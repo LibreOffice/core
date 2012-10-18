@@ -219,7 +219,7 @@ Edit::Edit( Window* pParent, const ResId& rResId ) :
         Show();
 }
 
-void Edit::SetMaxWidthInChars(sal_Int32 nMinWidthInChars)
+void Edit::SetMinWidthInChars(sal_Int32 nMinWidthInChars)
 {
     if (mnMinWidthInChars != nMinWidthInChars)
     {
@@ -231,7 +231,7 @@ void Edit::SetMaxWidthInChars(sal_Int32 nMinWidthInChars)
 bool Edit::set_property(const rtl::OString &rKey, const rtl::OString &rValue)
 {
     if (rKey == "width-chars")
-        SetMaxWidthInChars(rValue.toInt32());
+        SetMinWidthInChars(rValue.toInt32());
     else if (rKey == "editable")
         SetReadOnly(!toBool(rValue));
     else if (rKey == "visibility")

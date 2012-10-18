@@ -61,7 +61,7 @@ ComboBox::ComboBox( WindowType nType ) :
     Edit( nType )
 {
     ImplInitComboBoxData();
-    SetMaxWidthInChars(0);
+    SetMinWidthInChars(0);
 }
 
 // -----------------------------------------------------------------------
@@ -71,7 +71,7 @@ ComboBox::ComboBox( Window* pParent, WinBits nStyle ) :
 {
     ImplInitComboBoxData();
     ImplInit( pParent, nStyle );
-    SetMaxWidthInChars(0);
+    SetMinWidthInChars(0);
 }
 
 // -----------------------------------------------------------------------
@@ -85,7 +85,7 @@ ComboBox::ComboBox( Window* pParent, const ResId& rResId ) :
     ImplInit( pParent, nStyle );
     ImplLoadRes( rResId );
 
-    SetMaxWidthInChars(0);
+    SetMinWidthInChars(0);
     if ( !(nStyle & WB_HIDE ) )
         Show();
 }
