@@ -155,7 +155,7 @@ fi
 # valgrind --log-file=valgrind.log does not work well with --trace-children=yes
 if [ -n "$VALGRINDCHECK" -a -z "$VALGRIND" ] ; then
     echo "redirecting the standard and the error output to valgrind.log"
-    exec &>valgrind.log
+    exec 2>&1 > valgrind.log
 fi
 
 # oosplash does the rest: forcing pages in, javaldx etc. are
