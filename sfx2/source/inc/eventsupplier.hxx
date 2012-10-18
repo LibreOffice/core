@@ -142,7 +142,6 @@ class ModelCollectionEnumeration : public ModelCollectionMutexBase
     // member
     //-------------------------------------------------------------------------
     private:
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xSMGR;
         TModelList m_lModels;
         TModelList::iterator m_pEnumerationIt;
 
@@ -150,7 +149,7 @@ class ModelCollectionEnumeration : public ModelCollectionMutexBase
     // native interface
     //-------------------------------------------------------------------------
     public:
-        ModelCollectionEnumeration(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xSMGR);
+        ModelCollectionEnumeration();
         virtual ~ModelCollectionEnumeration();
         void setModelList(const TModelList& rList);
 
@@ -177,7 +176,6 @@ class SfxGlobalEvents_Impl : public ModelCollectionMutexBase
                                                            , ::com::sun::star::document::XEventListener
                                                             >
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xSMGR;
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameReplace > m_xEvents;
     ::com::sun::star::uno::WeakReference< ::com::sun::star::document::XEventListener > m_xJobExecutorListener;
     OINTERFACECONTAINERHELPER m_aLegacyListeners;
@@ -186,7 +184,7 @@ class SfxGlobalEvents_Impl : public ModelCollectionMutexBase
     GlobalEventConfig* pImp;
 
 public:
-    SfxGlobalEvents_Impl(const com::sun::star::uno::Reference < ::com::sun::star::lang::XMultiServiceFactory >& xSMGR);
+    SfxGlobalEvents_Impl(const com::sun::star::uno::Reference < ::com::sun::star::uno::XComponentContext >& rxContext);
     virtual ~SfxGlobalEvents_Impl();
 
     SFX_DECL_XSERVICEINFO

@@ -66,7 +66,7 @@
 #include <com/sun/star/configuration/InstallationIncompleteException.hpp>
 #include <com/sun/star/configuration/backend/BackendSetupException.hpp>
 #include <com/sun/star/configuration/backend/BackendAccessException.hpp>
-#include <com/sun/star/task/XJobExecutor.hpp>
+#include <com/sun/star/task/JobExecutor.hpp>
 #include <com/sun/star/task/XRestartManager.hpp>
 #include <com/sun/star/document/XEventListener.hpp>
 #include <com/sun/star/frame/UICommandDescription.hpp>
@@ -2893,9 +2893,8 @@ void Desktop::DoFirstRunInitializations()
 {
     try
     {
-        Reference< XJobExecutor > xExecutor( ::comphelper::getProcessServiceFactory()->createInstance( ::rtl::OUString("com.sun.star.task.JobExecutor") ), UNO_QUERY );
-        if( xExecutor.is() )
-            xExecutor->trigger( ::rtl::OUString("onFirstRunInitialization") );
+        Reference< XJobExecutor > xExecutor = JobExecutor::create( ::comphelper::getProcessComponentContext() );
+        xExecutor->trigger( ::rtl::OUString("onFirstRunInitialization") );
     }
     catch(const ::com::sun::star::uno::Exception&)
     {

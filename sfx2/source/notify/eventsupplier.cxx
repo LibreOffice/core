@@ -21,6 +21,7 @@
 
 #include <com/sun/star/util/URL.hpp>
 
+#include <com/sun/star/task/JobExecutor.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <tools/urlobj.hxx>
@@ -496,9 +497,8 @@ void SfxEvents_Impl::NormalizeMacro( const ::comphelper::NamedValueCollection& i
     }
 }
 
-ModelCollectionEnumeration::ModelCollectionEnumeration(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR)
+ModelCollectionEnumeration::ModelCollectionEnumeration()
     : ModelCollectionMutexBase(                 )
-    , m_xSMGR                 (xSMGR            )
     , m_pEnumerationIt        (m_lModels.begin())
 {
 }
@@ -545,13 +545,12 @@ css::uno::Any SAL_CALL ModelCollectionEnumeration::nextElement()
     return css::uno::makeAny(xModel);
 }
 
-SFX_IMPL_XSERVICEINFO( SfxGlobalEvents_Impl, "com.sun.star.frame.GlobalEventBroadcaster", "com.sun.star.comp.sfx2.GlobalEventBroadcaster" )
+SFX_IMPL_XSERVICEINFO_CTX( SfxGlobalEvents_Impl, "com.sun.star.frame.GlobalEventBroadcaster", "com.sun.star.comp.sfx2.GlobalEventBroadcaster" )
 SFX_IMPL_ONEINSTANCEFACTORY( SfxGlobalEvents_Impl );
 
 //-----------------------------------------------------------------------------
-SfxGlobalEvents_Impl::SfxGlobalEvents_Impl( const com::sun::star::uno::Reference < ::com::sun::star::lang::XMultiServiceFactory >& xSMGR)
+SfxGlobalEvents_Impl::SfxGlobalEvents_Impl( const css::uno::Reference < css::uno::XComponentContext >& rxContext)
     : ModelCollectionMutexBase(       )
-    , m_xSMGR                 (xSMGR  )
     , m_aLegacyListeners      (m_aLock)
     , m_aDocumentListeners    (m_aLock)
     , pImp                    (0      )
@@ -560,9 +559,7 @@ SfxGlobalEvents_Impl::SfxGlobalEvents_Impl( const com::sun::star::uno::Reference
     SFX_APP();
     pImp                   = new GlobalEventConfig();
     m_xEvents              = pImp;
-    m_xJobExecutorListener = css::uno::Reference< css::document::XEventListener >(
-                        xSMGR->createInstance(::rtl::OUString("com.sun.star.task.JobExecutor")),
-                        UNO_QUERY);
+    m_xJobExecutorListener = css::uno::Reference< css::document::XEventListener >( css::task::JobExecutor::create( rxContext ), css::uno::UNO_QUERY_THROW );
     m_refCount--;
 }
 
@@ -754,7 +751,7 @@ css::uno::Reference< css::container::XEnumeration > SAL_CALL SfxGlobalEvents_Imp
 {
     // SAFE ->
     ::osl::ResettableMutexGuard aLock(m_aLock);
-    ModelCollectionEnumeration* pEnum = new ModelCollectionEnumeration(m_xSMGR);
+    ModelCollectionEnumeration* pEnum = new ModelCollectionEnumeration();
     pEnum->setModelList(m_lModels);
     css::uno::Reference< css::container::XEnumeration > xEnum(
         static_cast< css::container::XEnumeration* >(pEnum),
@@ -792,8 +789,7 @@ void SfxGlobalEvents_Impl::implts_notifyJobExecution(const css::document::EventO
         css::uno::Reference< css::document::XEventListener > xJobExecutor(m_xJobExecutorListener);
         aLock.clear();
         // <- SAFE
-        if (xJobExecutor.is())
-            xJobExecutor->notifyEvent(aEvent);
+        xJobExecutor->notifyEvent(aEvent);
     }
     catch(const css::uno::RuntimeException&)
         { throw; }
