@@ -255,8 +255,6 @@ g_lo_action_group_activate (GActionGroup *group,
 {
     GTK_YIELD_GRAB();
 
-    printf("%s\n", __FUNCTION__);
-
     GLOActionGroup *lo_group = G_LO_ACTION_GROUP (group);
     GtkSalFrame *pFrame = lo_group->priv->frame;
 

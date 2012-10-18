@@ -152,34 +152,14 @@ bool GtkSalMenu::PrepUpdate()
     const GtkSalFrame* pFrame = GetFrame();
     if (pFrame)
     {
-//        const GObject* pWindow = G_OBJECT(gtk_widget_get_window( GTK_WIDGET(pFrame->getWindow()) ));
-//        if(!pWindow)
-//        {
-//            SAL_INFO("vcl.unity", "not updating menu model, I have no frame " << mpMenuModel);
-//            return false;
-//        }
-//
-//        // the root menu does not have its own model and has to use the one owned by the frame
-//        if(mbMenuBar)
-//        {
-//            mpMenuModel = G_MENU_MODEL( g_object_get_data( G_OBJECT( pWindow ), "g-lo-menubar" ) );
-//            mpActionGroup = G_ACTION_GROUP( g_object_get_data( G_OBJECT( pWindow ), "g-lo-action-group" ) );
-//
-//            if(!mpMenuModel || !mpActionGroup)
-//                return false;
-//        }
-//
-//        SAL_INFO("vcl.unity", "updating menu model" << mpMenuModel);
         GtkSalFrame* pNonConstFrame = ( GtkSalFrame* ) pFrame;
         GtkSalMenu* pSalMenu = ((GtkSalMenu*) this);
 
         if ( !pNonConstFrame->GetMenu() )
             pNonConstFrame->SetMenu( pSalMenu );
 
-        if ( /*!bMenuVisibility ||*/ !mpMenuModel || !mpActionGroup )
-            return false;
-
-        return true;
+        if ( bMenuVisibility && mpMenuModel && mpActionGroup )
+            return true;
     }
 
     return false;
@@ -366,9 +346,8 @@ void GtkSalMenu::UpdateNativeMenu()
         {
             NativeSetItemCommand( nSection, nItemPos, nId, aNativeCommand, itemBits, FALSE, TRUE );
             pNewCommandList = g_list_append( pNewCommandList, g_strdup( aNativeCommand ) );
-//
+
             GLOMenu* pSubMenuModel = g_lo_menu_get_submenu_from_item_in_section( pLOMenu, nSection, nItemPos );
-//            printf("%s (begin) - submenumodel: %p\n", __FUNCTION__, pSubMenuModel);
 
             if ( pSubMenuModel == NULL )
             {
@@ -379,7 +358,6 @@ void GtkSalMenu::UpdateNativeMenu()
             }
 
             g_object_unref( pSubMenuModel );
-//            printf("%s (end) - submenumodel: %p\n", __FUNCTION__, pSubMenuModel);
 
             pSubmenu->SetMenuModel( G_MENU_MODEL( pSubMenuModel ) );
             pSubmenu->SetActionGroup( G_ACTION_GROUP( pActionGroup ) );
@@ -388,9 +366,6 @@ void GtkSalMenu::UpdateNativeMenu()
             pSubmenu->GetMenu()->Deactivate();
 
             pSubmenu->UpdateNativeMenu();
-
-            //pSubmenu->SetMenuModel( NULL );
-            //pSubmenu->SetActionGroup( NULL );
         }
 
         g_free( aNativeCommand );
@@ -423,8 +398,6 @@ GtkSalMenu::GtkSalMenu( sal_Bool bMenuBar ) :
     mpMenuModel( NULL ),
     mpActionGroup( NULL )
 {
-    if (mbMenuBar)
-        printf("[%p] %s\n", this, __FUNCTION__);
 }
 
 GtkSalMenu::~GtkSalMenu()
@@ -434,23 +407,11 @@ GtkSalMenu::~GtkSalMenu()
 
     if ( mbMenuBar == sal_True )
     {
-        printf("[%p] %s\n", this, __FUNCTION__);
-        //if ( mpFrame )
-        //    ((GtkSalFrame*) mpFrame)->SetMenu( NULL );
-
         if ( mpMenuModel )
         {
-            g_lo_menu_remove( G_LO_MENU( mpMenuModel ), 0 );
+//            g_lo_menu_remove( G_LO_MENU( mpMenuModel ), 0 );
             g_object_unref( mpMenuModel );
         }
-
-        //if ( mpActionGroup )
-        //{
-            //g_lo_action_group_clear( G_LO_ACTION_GROUP( mpActionGroup ) );
-            //g_object_unref( mpActionGroup );
-        //}
-        //if ( mpFrame )
-        //    ((GtkSalFrame*) mpFrame)->FlushConnection();
     }
 
     maItems.clear();
@@ -458,8 +419,7 @@ GtkSalMenu::~GtkSalMenu()
 
 sal_Bool GtkSalMenu::VisibleMenuBar()
 {
-    //return bMenuVisibility;
-    return sal_False;
+    return bMenuVisibility;
 }
 
 void GtkSalMenu::InsertItem( SalMenuItem* pSalMenuItem, unsigned nPos )
@@ -509,12 +469,11 @@ void GtkSalMenu::SetFrame( const SalFrame* pFrame )
     // actiongroup
     mpOldSalMenu = static_cast< GtkSalMenu* >( pFrameNonConst->GetMenu() );
     pFrameNonConst->SetMenu( this );
+    pFrameNonConst->EnsureAppMenuWatch();
 
     // Clean menu model and action group if needed.
     GtkWidget* pWidget = pFrameNonConst->getWindow();
     GdkWindow* gdkWindow = gtk_widget_get_window( pWidget );
-
-    printf("[%p] %s - window: %p\n", this, __FUNCTION__, gdkWindow);
 
     GLOMenu* pMenuModel = G_LO_MENU( g_object_get_data( G_OBJECT( gdkWindow ), "g-lo-menubar" ) );
     GLOActionGroup* pActionGroup = G_LO_ACTION_GROUP( g_object_get_data( G_OBJECT( gdkWindow ), "g-lo-action-group" ) );
@@ -524,10 +483,7 @@ void GtkSalMenu::SetFrame( const SalFrame* pFrame )
         if ( g_menu_model_get_n_items( G_MENU_MODEL( pMenuModel ) ) > 0 )
             g_lo_menu_remove( pMenuModel, 0 );
 
-        //g_lo_menu_new_section( pMenuModel, 0, NULL );
-        //mpMenuModel = G_MENU_MODEL( g_lo_menu_get_section( pMenuModel, 0 ) );
         mpMenuModel = G_MENU_MODEL( g_lo_menu_new() );
-        //g_lo_menu_insert_section( pMenuModel, 0, NULL, mpMenuModel );
     }
 
     if ( pActionGroup )
@@ -536,15 +492,11 @@ void GtkSalMenu::SetFrame( const SalFrame* pFrame )
         mpActionGroup = G_ACTION_GROUP( pActionGroup );
     }
 
-    //pFrameNonConst->FlushConnection();
-
     // Generate the main menu structure.
-    UpdateNativeMenu();
+    if (bMenuVisibility)
+        UpdateNativeMenu();
+
     g_lo_menu_insert_section( pMenuModel, 0, NULL, mpMenuModel );
-
-    //pFrameNonConst->FlushConnection();
-
-    printf("[%p] %s - frame: %p - menu export id: %d - action group export id: %d\n", this, __FUNCTION__, pFrame, pFrameNonConst->m_nMenuExportId, pFrameNonConst->m_nActionGroupExportId);
 }
 
 const GtkSalFrame* GtkSalMenu::GetFrame() const
@@ -737,8 +689,6 @@ void GtkSalMenu::DispatchCommand( gint itemId, const gchar *aCommand )
     if ( mbMenuBar != TRUE )
         return;
 
-    printf("[%p] %s - item id: %d - command: %s\n", this, __FUNCTION__, itemId, aCommand);
-
     GtkSalMenu* pSalSubMenu = GetMenuForItemCommand( (gchar*) aCommand, FALSE );
     Menu* pSubMenu = ( pSalSubMenu != NULL ) ? pSalSubMenu->GetMenu() : NULL;
 
@@ -758,7 +708,6 @@ void GtkSalMenu::Activate( const gchar* aMenuCommand )
         MenuBar* pMenuBar = static_cast< MenuBar* >( mpVCLMenu );
         pMenuBar->HandleMenuActivateEvent( pSalSubMenu->mpVCLMenu );
         pSalSubMenu->UpdateNativeMenu();
-        //((GtkSalFrame*) mpFrame)->FlushConnection();
     }
 }
 
@@ -774,16 +723,6 @@ void GtkSalMenu::Deactivate( const gchar* aMenuCommand )
         pMenuBar->HandleMenuDeActivateEvent( pSalSubMenu->mpVCLMenu );
     }
 }
-
-//void GtkSalMenu::DisconnectFrame()
-//{
-//    if( mbMenuBar == sal_True )
-//    {
-//        mpMenuModel = NULL;
-//        mpActionGroup = NULL;
-//        mpFrame = NULL;
-//    }
-//}
 
 void GtkSalMenu::Display( sal_Bool bVisible )
 {
