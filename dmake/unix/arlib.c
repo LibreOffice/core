@@ -288,20 +288,22 @@ struct   ar_args *arg;
 
    fseek( f, 0L, 0 );   /* Start at the beginning of the archive file */
 
+   long nreadsize = 0;
 #if ASCARCH
 #if defined(_AIX)
-   fread( (char *)&flhdr, sizeof(flhdr), 1, f );
+   nreadsize = fread( (char *)&flhdr, sizeof(flhdr), 1, f );
    if( strncmp(flhdr.fl_magic,AIAMAG, SAIAMAG) != 0 ) return(-1);
    fseek(f, atol(flhdr.fl_fstmoff), 0 ); /* postition to first member */
 #else
-   fread( magic, sizeof(magic), 1, f );
+   nreadsize = fread( magic, sizeof(magic), 1, f );
    if( strncmp(magic, ARMAG, SARMAG) != 0 ) return( -1 );
 #endif
 #else
-   fread( (char*)&word, sizeof(word), 1, f );
+   nreadsize = fread( (char*)&word, sizeof(word), 1, f );
    if( word != ARMAG ) return( -1 );
 #endif
-
+   if(nreadsize)
+      nreadsize++;
    /* scan the library, calling `function' for each member
     */
    while( 1 ) {
