@@ -45,6 +45,7 @@ class VCL_DLLPUBLIC FixedText : public Control
 {
 private:
     sal_Int32 m_nMaxWidthChars;
+    sal_Int32 m_nMinWidthChars;
 
     using Control::ImplInitSettings;
     using Window::ImplInit;
@@ -75,6 +76,8 @@ public:
 
     void setMaxWidthChars(sal_Int32 nWidth);
     sal_Int32 getMaxWidthChars() const { return m_nMaxWidthChars; }
+    void setMinWidthChars(sal_Int32 nWidth);
+    sal_Int32 getMinWidthChars() const { return m_nMinWidthChars; }
     static Size     CalcMinimumTextSize(Control const* pControl, long nMaxWidth = 0x7fffffff);
     static Size     getTextDimensions(Control const *pControl, const OUString &rTxt, long nMaxWidth);
     Size            CalcMinimumSize(long nMaxWidth = 0x7fffffff) const;

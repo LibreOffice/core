@@ -33,7 +33,7 @@
 #include "vcl/dialog.hxx"
 #include "vcl/event.hxx"
 #include "vcl/fixed.hxx"
-
+#include <comphelper/string.hxx>
 #include "controldata.hxx"
 #include "window.h"
 
@@ -157,6 +157,7 @@ void FixedText::ImplInitSettings( sal_Bool bFont,
 FixedText::FixedText( Window* pParent, WinBits nStyle )
     : Control(WINDOW_FIXEDTEXT)
     , m_nMaxWidthChars(-1)
+    , m_nMinWidthChars(-1)
 {
     ImplInit( pParent, nStyle );
 }
@@ -166,6 +167,7 @@ FixedText::FixedText( Window* pParent, WinBits nStyle )
 FixedText::FixedText( Window* pParent, const ResId& rResId )
     : Control(WINDOW_FIXEDTEXT)
     , m_nMaxWidthChars(-1)
+    , m_nMinWidthChars(-1)
 {
     rResId.SetRT( RSC_TEXT );
     WinBits nStyle = ImplInitRes( rResId );
@@ -193,6 +195,7 @@ void FixedText::take_properties(Window &rOther)
 FixedText::FixedText( Window* pParent, const ResId& rResId, bool bDisableAccessibleLabelForRelation )
     : Control( WINDOW_FIXEDTEXT )
     , m_nMaxWidthChars(-1)
+    , m_nMinWidthChars(-1)
 {
     rResId.SetRT( RSC_TEXT );
     WinBits nStyle = ImplInitRes( rResId );
@@ -446,7 +449,17 @@ Size FixedText::GetOptimalSize(WindowSizeType eType) const
                 nMaxAvailWidth = getTextDimensions(this,
                     rTxt.copy(0, m_nMaxWidthChars), 0x7fffffff).Width();
             }
-            return CalcMinimumSize(nMaxAvailWidth);
+            Size aRet = CalcMinimumSize(nMaxAvailWidth);
+            if (m_nMinWidthChars != -1)
+            {
+                OUStringBuffer aBuf;
+                comphelper::string::padToLength(aBuf, m_nMinWidthChars, 'x');
+                Size aMinAllowed = getTextDimensions(this,
+                    aBuf.makeStringAndClear(), 0x7fffffff);
+                if (aMinAllowed.Width() > aRet.Width())
+                    aRet = aMinAllowed;
+            }
+            return aRet;
         }
         default:
             return Control::GetOptimalSize( eType );
@@ -470,10 +483,21 @@ void FixedText::setMaxWidthChars(sal_Int32 nWidth)
     }
 }
 
+void FixedText::setMinWidthChars(sal_Int32 nWidth)
+{
+    if (nWidth != m_nMinWidthChars)
+    {
+        m_nMinWidthChars = nWidth;
+        queue_resize();
+    }
+}
+
 bool FixedText::set_property(const rtl::OString &rKey, const rtl::OString &rValue)
 {
     if (rKey == "max-width-chars")
         setMaxWidthChars(rValue.toInt32());
+    else if (rKey == "width-chars")
+        setMinWidthChars(rValue.toInt32());
     else
         return Control::set_property(rKey, rValue);
     return true;
