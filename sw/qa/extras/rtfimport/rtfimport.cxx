@@ -31,6 +31,7 @@
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/document/XImporter.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeSegment.hpp>
+#include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/graphic/GraphicType.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -117,6 +118,7 @@ public:
     void testCopyPastePageStyle();
     void testShptxtPard();
     void testDoDhgt();
+    void testDplinehollow();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -173,6 +175,7 @@ public:
     CPPUNIT_TEST(testCopyPastePageStyle);
     CPPUNIT_TEST(testShptxtPard);
     CPPUNIT_TEST(testDoDhgt);
+    CPPUNIT_TEST(testDplinehollow);
 #endif
     CPPUNIT_TEST_SUITE_END();
 
@@ -922,6 +925,15 @@ void Test::testDoDhgt()
         else if (nFillColor == 0x4f81bd) // blue
             CPPUNIT_ASSERT_EQUAL(sal_Int32(2), getProperty<sal_Int32>(xDraws->getByIndex(i), "ZOrder"));
     }
+}
+
+void Test::testDplinehollow()
+{
+    load("dplinehollow.rtf");
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPropertySet(xDraws->getByIndex(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(drawing::LineStyle_NONE, getProperty<drawing::LineStyle>(xPropertySet, "LineStyle"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);

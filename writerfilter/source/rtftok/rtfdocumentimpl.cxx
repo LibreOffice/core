@@ -2381,6 +2381,9 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
         case RTF_SHPBYPAGE:
                 m_aStates.top().aShape.nVertOrientRelation = text::RelOrientation::PAGE_FRAME;
                 break;
+        case RTF_DPLINEHOLLOW:
+                m_aStates.top().aDrawingObject.nFLine = 0;
+                break;
         default:
             SAL_INFO("writerfilter", OSL_THIS_FUNC << ": TODO handle flag '" << lcl_RtfToString(nKeyword) << "'");
             aSkip.setParsed(false);
@@ -3684,6 +3687,8 @@ int RTFDocumentImpl::popState()
             // If there is no fill, the Word default is 100% transparency.
             xPropertySet->setPropertyValue("FillTransparence", uno::makeAny(sal_Int32(100)));
 
+        m_pSdrImport->resolveFLine(xPropertySet, rDrawing.nFLine);
+
         Mapper().startShape(xShape);
         replayShapetext();
         Mapper().endShape();
@@ -4127,7 +4132,8 @@ RTFDrawingObject::RTFDrawingObject()
     nFillColorG(0),
     nFillColorB(0),
     bHasFillColor(false),
-    nDhgt(0)
+    nDhgt(0),
+    nFLine(-1)
 {
 }
 

@@ -79,6 +79,12 @@ void RTFSdrImport::resolveDhgt(uno::Reference<beans::XPropertySet> xPropertySet,
     pHelper->addItem(xPropertySet, nZOrder);
 }
 
+void RTFSdrImport::resolveFLine(uno::Reference<beans::XPropertySet> xPropertySet, sal_Int32 nFLine)
+{
+    if (nFLine == 0)
+        xPropertySet->setPropertyValue("LineStyle", uno::makeAny(drawing::LineStyle_NONE));
+}
+
 void RTFSdrImport::resolve(RTFShape& rShape)
 {
     int nType = -1;
@@ -147,13 +153,7 @@ void RTFSdrImport::resolve(RTFShape& rShape)
             }
         }
         else if (i->first == "fLine" && xPropertySet.is())
-        {
-            if (i->second.toInt32() == 0)
-            {
-                aAny <<= drawing::LineStyle_NONE;
-                xPropertySet->setPropertyValue("LineStyle", aAny);
-            }
-        }
+            resolveFLine(xPropertySet, i->second.toInt32());
         else if (i->first == "fillOpacity" && xPropertySet.is())
         {
            int opacity = 100 - (i->second.toInt32())*100/65536;

@@ -273,6 +273,7 @@ namespace writerfilter {
                 sal_uInt8 nFillColorR, nFillColorG, nFillColorB;
                 bool bHasFillColor;
                 sal_Int32 nDhgt;
+                sal_Int32 nFLine;
         };
 
         /// Stores the properties of a picture.
