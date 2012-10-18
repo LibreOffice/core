@@ -303,7 +303,6 @@ public:
 
     guint                           m_nMenuExportId;
     guint                           m_nActionGroupExportId;
-    void FlushConnection();
 
     // dispatches an event, returns true if dispatched
     // and false else; if true was returned the event should
