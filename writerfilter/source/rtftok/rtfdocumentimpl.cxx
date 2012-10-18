@@ -2334,7 +2334,7 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
         case RTF_DOBYPARA:
                 {
                     beans::PropertyValue aPropertyValue;
-                    aPropertyValue.Name = OUString("HoriOrientRelation");
+                    aPropertyValue.Name = OUString("VertOrientRelation");
                     aPropertyValue.Value <<= text::RelOrientation::FRAME;
                     m_aStates.top().aDrawingObject.aPendingProperties.push_back(aPropertyValue);
                 }
