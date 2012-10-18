@@ -5,7 +5,7 @@ Apache OpenOffice (AOO)
     based on open standards. It is the continuation of the OpenOffice.org project.
     
     For detailed information about Apache OpenOffice please visit 
-    http://incubator.apache.org/openofficeorg/
+    http://openoffice.apache.org/
 
     Apache OpenOffice is a very large project with many components and mainly 
     implemented in C++ but also in Java, Perl, Python and other languages.
@@ -28,7 +28,7 @@ Getting the latest sources via Subversion
 
     svn co https://svn.apache.org/repos/asf/incubator/ooo/trunk aoo
 
-    For further information visit http://incubator.apache.org/openofficeorg/source.html
+    For further information visit http://openoffice.apache.org/source.html
 
 Building Apache OpenOffice
 ===========================

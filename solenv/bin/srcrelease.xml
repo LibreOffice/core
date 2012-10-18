@@ -25,7 +25,7 @@
   <property name="aoo.name" value="aoo"/>
   <property name="aoo.ver" value="3.5.0"/>
   <property name="release.dir.name" value="${aoo.name}-${aoo.ver}"/>
-  <property name="release.file.name" value="${release.dir.name}-incubating-src"/>
+  <property name="release.file.name" value="${release.dir.name}-src"/>
   <property name="release.zip" value="${out.dir}/${release.file.name}.zip"/>
   <property name="release.tar" value="${out.dir}/${release.file.name}.tar"/>
   <property name="release.tar.gz" value="${out.dir}/${release.file.name}.tar.gz"/>

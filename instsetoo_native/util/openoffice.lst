@@ -105,8 +105,8 @@ OpenOffice
 		active			1
 		compression		5
 		script			setup_osl
-		downloadname	Apache_OpenOffice_incubating_{productversion}_{os}_install_{languages}
-		langpackdownloadname	Apache_OpenOffice_incubating_{productversion}_languagepack_{os}_install_{languages}
+		downloadname	Apache_OpenOffice_{productversion}_{os}_install_{languages}
+		langpackdownloadname	Apache_OpenOffice_{productversion}_languagepack_{os}_install_{languages}
 		include			{solarenvpath}/{os}/loader2,.,{localpath}/bin,{solarpath}/bin.{minor}/ooowoure,{solarpath}/bin.{minor}/osl,{solarpath}/bin.{minor}/desktop-integration/{pkgtype},{solarpath}/bin.{minor},{solarpath}/lib.{minor},{solarpath}/pck.{minor}/openoffice,{solarpath}/pck.{minor},{solarpath}/xml.{minor}/office/instance,{solarpath}/xml.{minor},../../external/common,{solarenvpath}/{os}/OOo_external
 	}
 }
@@ -170,7 +170,7 @@ OpenOffice_wJRE
 		active			1
 		compression		5
 		script			setup_osljre
-		downloadname	Apache_OpenOffice_incubating_{productversion}_{os}_installwjre_{languages}
+		downloadname	Apache_OpenOffice_{productversion}_{os}_installwjre_{languages}
 		include			{solarenvpath}/{os}/loader2,.,{localpath}/bin,{solarpath}/bin.{minor}/osl,{solarpath}/bin.{minor}/desktop-integration/{pkgtype},{solarpath}/bin.{minor},{solarpath}/lib.{minor},{solarpath}/pck.{minor}/openoffice,{solarpath}/pck.{minor},{solarpath}/xml.{minor}/office/instance,{solarpath}/xml.{minor},../../external/common,{solarenvpath}/{os}/OOo_external
 	}
 }
@@ -241,8 +241,8 @@ OpenOffice_Dev
 		active			1
 		compression		5
 		script			setup_osl
-		downloadname	Apache_OpenOffice_incubating-dev_{productversion}_{os}_install_{languages}
-		langpackdownloadname	Apache_OpenOffice_incubating_{productversion}_languagepack_{os}_install_{languages}
+		downloadname	Apache_OpenOffice-dev_{productversion}_{os}_install_{languages}
+		langpackdownloadname	Apache_OpenOffice_{productversion}_languagepack_{os}_install_{languages}
 		include			{solarenvpath}/{os}/loader2,.,{localpath}/bin/dev,{localpath}/bin,{solarpath}/bin.{minor}/osl,{solarpath}/bin.{minor},{solarpath}/lib.{minor},{solarpath}/pck.{minor}/openoffice_dev,{solarpath}/pck.{minor}/openoffice,{solarpath}/pck.{minor},{solarpath}/xml.{minor}/office/instance,{solarpath}/xml.{minor},../../external/common,{solarenvpath}/{os}/OOo_external
 	}
 }
@@ -292,7 +292,7 @@ OpenOffice_SDK
 {
     Settings
     {
-        downloadname Apache_OpenOffice_incubating-SDK_{packageversion}_{os}_install_{languages}
+        downloadname Apache_OpenOffice-SDK_{packageversion}_{os}_install_{languages}
         variables
         {
             PRODUCTNAME OpenOffice.org
@@ -338,7 +338,7 @@ OpenOffice_Dev_SDK
 {
     Settings
     {
-        downloadname Apache_OpenOffice_incubating-Dev-SDK_{packageversion}_{os}_install_{languages}
+        downloadname Apache_OpenOffice-Dev-SDK_{packageversion}_{os}_install_{languages}
         variables
         {
             PRODUCTNAME OOo-dev

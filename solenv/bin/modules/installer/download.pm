@@ -463,7 +463,7 @@ sub get_downloadname_productname
 {
     my ($allvariables) = @_;
 
-    my $start = "Apache_OpenOffice_incubating";
+    my $start = "Apache_OpenOffice";
 
     if ( $allvariables->{'PRODUCTNAME'} eq "OpenOffice.org" ) { $start .= ""; }
 

@@ -128,7 +128,7 @@ void KDEXLib::Init()
             KAboutData::License_File,
             "(c) 2003, 2004 Novell, Inc and Apache Software Foundation",
             I18N_NOOP( "Apache OpenOffice is an office suite.\n" ),
-            "http://incubator.apache.org/openofficeorg/index.html",
+            "http://openoffice.apache.org/index.html",
             "ooo-issues@incubator.apache.org");
     kAboutData->addAuthor( "Jan Holesovsky",
             I18N_NOOP( "Original author and maintainer of the KDE NWF." ),
