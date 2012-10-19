@@ -207,7 +207,7 @@ SfxModelessDialog* ScTabViewShell::CreateRefDialog(
             {
                 const ScRangeList& rCondFormatRange = pCondFormat->GetRange();
                 if(rCondFormatRange == aRangeList)
-                    pResult = new ScCondFormatDlg( pB, pCW, pParent, pDoc, NULL, rCondFormatRange, aPos, condformat::dialog::NONE );
+                    pResult = new ScCondFormatDlg( pB, pCW, pParent, pDoc, pCondFormat, rCondFormatRange, aPos, condformat::dialog::NONE );
             }
 
             if(!pResult)
