@@ -152,7 +152,7 @@ else
 gb_LINKEROPTFLAGS := -Wl,-O1
 endif
 
-gb_DEBUG_CFLAGS := -ggdb3 -finline-limit=0 -fno-inline -fno-default-inline
+gb_DEBUG_CFLAGS := -ggdb2 -finline-limit=0 -fno-inline -fno-default-inline
 
 gb_COMPILEROPTFLAGS := $(gb_COMPILERDEFAULTOPTFLAGS)
 gb_COMPILERNOOPTFLAGS := -O0
