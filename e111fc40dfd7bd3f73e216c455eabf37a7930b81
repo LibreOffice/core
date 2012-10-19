@@ -16,6 +16,24 @@
       "revId": "e111fc40dfd7bd3f73e216c455eabf37a7930b81",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAP3///3s\u003d",
+        "filename": "writerfilter/source/dmapper/DomainMapper_Impl.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 381,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2012-10-19T10:46:33Z",
+      "side": 1,
+      "message": "Hm, actually it turns out that constructor is not implemented? I just removed it from the header on master, so I think that\u0027s not an issue.",
+      "parentUuid": "AAAAP3///4Q\u003d",
+      "revId": "e111fc40dfd7bd3f73e216c455eabf37a7930b81",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
