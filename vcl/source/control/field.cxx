@@ -80,7 +80,7 @@ static sal_Bool ImplNumericProcessKeyInput( Edit*, const KeyEvent& rKEvt,
         return sal_False;
     else
     {
-        xub_Unicode cChar = rKEvt.GetCharCode();
+        sal_Unicode cChar = rKEvt.GetCharCode();
         sal_uInt16      nGroup = rKEvt.GetKeyCode().GetGroup();
 
         if ( (nGroup == KEYGROUP_FKEYS) || (nGroup == KEYGROUP_CURSOR) ||
@@ -1110,7 +1110,7 @@ static rtl::OUString ImplMetricGetUnitText(const rtl::OUString& rStr)
     rtl::OUStringBuffer aStr;
     for (sal_Int32 i = rStr.getLength()-1; i >= 0; --i)
     {
-        xub_Unicode c = rStr[i];
+        sal_Unicode c = rStr[i];
         if ( (c == '\'') || (c == '\"') || (c == '%' ) || unicode::isAlpha(c) || unicode::isControl(c) )
             aStr.insert(0, c);
         else

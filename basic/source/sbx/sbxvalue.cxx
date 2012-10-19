@@ -452,7 +452,7 @@ sal_Bool SbxValue::GetBool() const
 t SbxValue::g() const { SbxValues aRes(e); Get( aRes ); return aRes.m; }
 
 GET( GetByte,     SbxBYTE,       sal_uInt8,     nByte )
-GET( GetChar,     SbxCHAR,       xub_Unicode,   nChar )
+GET( GetChar,     SbxCHAR,       sal_Unicode,   nChar )
 GET( GetCurrency, SbxCURRENCY,   sal_Int64,     nInt64 )
 GET( GetDate,     SbxDATE,       double,        nDouble )
 GET( GetDouble,   SbxDOUBLE,     double,        nDouble )

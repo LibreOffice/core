@@ -59,14 +59,14 @@ class VCL_DLLPUBLIC KeyEvent
 private:
     KeyCode         maKeyCode;
     sal_uInt16          mnRepeat;
-    xub_Unicode     mnCharCode;
+    sal_Unicode     mnCharCode;
 
 public:
                     KeyEvent();
-                    KeyEvent( xub_Unicode nChar, const KeyCode& rKeyCode,
+                    KeyEvent( sal_Unicode nChar, const KeyCode& rKeyCode,
                               sal_uInt16 nRepeat = 0 );
 
-    xub_Unicode     GetCharCode() const     { return mnCharCode; }
+    sal_Unicode     GetCharCode() const     { return mnCharCode; }
     const KeyCode&  GetKeyCode() const      { return maKeyCode;  }
     sal_uInt16          GetRepeat() const       { return mnRepeat;   }
 
@@ -81,7 +81,7 @@ inline KeyEvent::KeyEvent()
     mnRepeat    = 0;
 }
 
-inline KeyEvent::KeyEvent( xub_Unicode nChar, const KeyCode& rKeyCode,
+inline KeyEvent::KeyEvent( sal_Unicode nChar, const KeyCode& rKeyCode,
                            sal_uInt16 nRepeat ) :
             maKeyCode( rKeyCode )
 

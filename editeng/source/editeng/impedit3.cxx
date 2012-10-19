@@ -128,7 +128,7 @@ Point Rotate( const Point& rPoint, short nOrientation, const Point& rOrigin )
     return aTranslatedPos;
 }
 
-sal_uInt8 GetCharTypeForCompression( xub_Unicode cChar )
+sal_uInt8 GetCharTypeForCompression( sal_Unicode cChar )
 {
     switch ( cChar )
     {
@@ -254,7 +254,7 @@ static Point lcl_ImplCalcRotatedPos( Point rPos, Point rOrigin, double nSin, dou
     return aTranslatedPos;
 }
 
-static sal_Bool lcl_IsLigature( xub_Unicode cCh, xub_Unicode cNextCh ) // For Kashidas from sw/source/core/text/porlay.txt
+static sal_Bool lcl_IsLigature( sal_Unicode cCh, sal_Unicode cNextCh ) // For Kashidas from sw/source/core/text/porlay.txt
 {
             // Lam + Alef
     return ( 0x644 == cCh && 0x627 == cNextCh ) ||
@@ -262,7 +262,7 @@ static sal_Bool lcl_IsLigature( xub_Unicode cCh, xub_Unicode cNextCh ) // For Ka
            ( 0x628 == cCh && 0x631 == cNextCh );
 }
 
-static sal_Bool lcl_ConnectToPrev( xub_Unicode cCh, xub_Unicode cPrevCh )  // For Kashidas from sw/source/core/text/porlay.txt
+static sal_Bool lcl_ConnectToPrev( sal_Unicode cCh, sal_Unicode cPrevCh )  // For Kashidas from sw/source/core/text/porlay.txt
 {
     // Alef, Dal, Thal, Reh, Zain, and Waw do not connect to the left
     sal_Bool bRet = 0x627 != cPrevCh && 0x62F != cPrevCh && 0x630 != cPrevCh &&
@@ -2128,8 +2128,8 @@ void ImpEditEngine::ImpFindKashidas( ContentNode* pNode, sal_uInt16 nStart, sal_
 
         xub_StrLen nIdx = 0;
         xub_StrLen nKashidaPos = STRING_LEN;
-        xub_Unicode cCh;
-        xub_Unicode cPrevCh = 0;
+        sal_Unicode cCh;
+        sal_Unicode cPrevCh = 0;
 
         while ( nIdx < aWord.Len() )
         {
@@ -2177,7 +2177,7 @@ void ImpEditEngine::ImpFindKashidas( ContentNode* pNode, sal_uInt16 nStart, sal_
                 DBG_ASSERT( 0 != cPrevCh, "No previous character" );
 
                 // check if next character is Reh, Yeh or Alef Maksura
-                xub_Unicode cNextCh = aWord.GetChar( nIdx + 1 );
+                sal_Unicode cNextCh = aWord.GetChar( nIdx + 1 );
 
                 if ( 0x631 == cNextCh || 0x64A == cNextCh ||
                      0x649 == cNextCh )

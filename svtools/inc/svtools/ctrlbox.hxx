@@ -439,8 +439,8 @@ private:
 #endif
 
 protected:
-    void            LoadMRUEntries( const String& aFontMRUEntriesFile, xub_Unicode cSep = ';' );
-    void            SaveMRUEntries( const String& aFontMRUEntriesFile, xub_Unicode cSep = ';' ) const;
+    void            LoadMRUEntries( const String& aFontMRUEntriesFile, sal_Unicode cSep = ';' );
+    void            SaveMRUEntries( const String& aFontMRUEntriesFile, sal_Unicode cSep = ';' ) const;
 public:
                     FontNameBox( Window* pParent,
                                  WinBits nWinStyle = WB_SORT );

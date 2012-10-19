@@ -35,17 +35,17 @@
 // '\0' terminated Array with symbol, which should be treat as letters in
 // StarMath Font, (to get a normal (non-clipped) SmRect in contrast to the
 // other operators and symbols).
-static xub_Unicode const aMathAlpha[] =
+static sal_Unicode const aMathAlpha[] =
 {
     MS_ALEPH,               MS_IM,                  MS_RE,
-    MS_WP,                  xub_Unicode(0xE070),    MS_EMPTYSET,
-    xub_Unicode(0x2113),    xub_Unicode(0xE0D6),    xub_Unicode(0x2107),
-    xub_Unicode(0x2127),    xub_Unicode(0x210A),    MS_HBAR,
+    MS_WP,                  sal_Unicode(0xE070),    MS_EMPTYSET,
+    sal_Unicode(0x2113),    sal_Unicode(0xE0D6),    sal_Unicode(0x2107),
+    sal_Unicode(0x2127),    sal_Unicode(0x210A),    MS_HBAR,
     MS_LAMBDABAR,           MS_SETN,                MS_SETZ,
     MS_SETQ,                MS_SETR,                MS_SETC,
-    xub_Unicode(0x2373),    xub_Unicode(0xE0A5),    xub_Unicode(0x2112),
-    xub_Unicode(0x2130),    xub_Unicode(0x2131),
-    xub_Unicode('\0')
+    sal_Unicode(0x2373),    sal_Unicode(0xE0A5),    sal_Unicode(0x2112),
+    sal_Unicode(0x2130),    sal_Unicode(0x2131),
+    sal_Unicode('\0')
 };
 
 bool SmIsMathAlpha(const rtl::OUString &rText)
@@ -55,18 +55,18 @@ bool SmIsMathAlpha(const rtl::OUString &rText)
         return false;
 
     OSL_ENSURE(rText.getLength() == 1, "Sm : string must be exactly one character long");
-    xub_Unicode cChar = rText[0];
+    sal_Unicode cChar = rText[0];
 
     // is it a greek symbol?
-    if (xub_Unicode(0xE0AC) <= cChar  &&  cChar <= xub_Unicode(0xE0D4))
+    if (sal_Unicode(0xE0AC) <= cChar  &&  cChar <= sal_Unicode(0xE0D4))
         return true;
     else
     {
         // appears it in 'aMathAlpha'?
-        const xub_Unicode *pChar = aMathAlpha;
+        const sal_Unicode *pChar = aMathAlpha;
         while (*pChar  &&  *pChar != cChar)
             pChar++;
-        return *pChar != xub_Unicode('\0');
+        return *pChar != sal_Unicode('\0');
     }
 }
 

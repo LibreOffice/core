@@ -1063,7 +1063,7 @@ FontNameBox::~FontNameBox()
 
 // -------------------------------------------------------------------
 
-void FontNameBox::SaveMRUEntries( const String& aFontMRUEntriesFile, xub_Unicode cSep ) const
+void FontNameBox::SaveMRUEntries( const String& aFontMRUEntriesFile, sal_Unicode cSep ) const
 {
     rtl::OString aEntries(rtl::OUStringToOString(GetMRUEntries(cSep),
         RTL_TEXTENCODING_UTF8));
@@ -1088,7 +1088,7 @@ void FontNameBox::SaveMRUEntries( const String& aFontMRUEntriesFile, xub_Unicode
 
 // -------------------------------------------------------------------
 
-void FontNameBox::LoadMRUEntries( const String& aFontMRUEntriesFile, xub_Unicode cSep )
+void FontNameBox::LoadMRUEntries( const String& aFontMRUEntriesFile, sal_Unicode cSep )
 {
     if( ! aFontMRUEntriesFile.Len() )
         return;
@@ -1721,7 +1721,7 @@ void FontSizeBox::Modify()
         if ( bRelative )
         {
             bPtRelative = sal_False;
-            const xub_Unicode* pStr = aStr.GetBuffer();
+            const sal_Unicode* pStr = aStr.GetBuffer();
             while ( *pStr )
             {
                 if ( ((*pStr < '0') || (*pStr > '9')) && (*pStr != '%') )

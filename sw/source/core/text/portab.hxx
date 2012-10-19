@@ -37,13 +37,13 @@
 class SwTabPortion : public SwFixPortion
 {
     const KSHORT nTabPos;
-    const xub_Unicode cFill;
+    const sal_Unicode cFill;
     const bool bAutoTabStop;
 
     // Format() branches either into PreFormat() or PostFormat()
     sal_Bool PreFormat( SwTxtFormatInfo &rInf );
 public:
-    SwTabPortion( const KSHORT nTabPos, const xub_Unicode cFill = '\0', const bool bAutoTab = true );
+    SwTabPortion( const KSHORT nTabPos, const sal_Unicode cFill = '\0', const bool bAutoTab = true );
     virtual void Paint( const SwTxtPaintInfo &rInf ) const;
     virtual sal_Bool Format( SwTxtFormatInfo &rInf );
     virtual void FormatEOL( SwTxtFormatInfo &rInf );
@@ -65,7 +65,7 @@ public:
 class SwTabLeftPortion : public SwTabPortion
 {
 public:
-    inline SwTabLeftPortion( const KSHORT nTabPosVal, const xub_Unicode cFillChar='\0', bool bAutoTab = true )
+    inline SwTabLeftPortion( const KSHORT nTabPosVal, const sal_Unicode cFillChar='\0', bool bAutoTab = true )
          : SwTabPortion( nTabPosVal, cFillChar, bAutoTab )
     { SetWhichPor( POR_TABLEFT ); }
     OUTPUT_OPERATOR
@@ -78,7 +78,7 @@ public:
 class SwTabRightPortion : public SwTabPortion
 {
 public:
-    inline SwTabRightPortion( const KSHORT nTabPosVal, const xub_Unicode cFillChar='\0' )
+    inline SwTabRightPortion( const KSHORT nTabPosVal, const sal_Unicode cFillChar='\0' )
          : SwTabPortion( nTabPosVal, cFillChar )
     { SetWhichPor( POR_TABRIGHT ); }
     OUTPUT_OPERATOR
@@ -91,7 +91,7 @@ public:
 class SwTabCenterPortion : public SwTabPortion
 {
 public:
-    inline SwTabCenterPortion( const KSHORT nTabPosVal, const xub_Unicode cFillChar='\0' )
+    inline SwTabCenterPortion( const KSHORT nTabPosVal, const sal_Unicode cFillChar='\0' )
          : SwTabPortion( nTabPosVal, cFillChar )
     { SetWhichPor( POR_TABCENTER ); }
     OUTPUT_OPERATOR
@@ -103,7 +103,7 @@ public:
 
 class SwTabDecimalPortion : public SwTabPortion
 {
-    const xub_Unicode mcTab;
+    const sal_Unicode mcTab;
 
     /*
      * During text formatting, we already store the width of the portions
@@ -113,14 +113,14 @@ class SwTabDecimalPortion : public SwTabPortion
     sal_uInt16 mnWidthOfPortionsUpTpDecimalPosition;
 
 public:
-    inline SwTabDecimalPortion( const KSHORT nTabPosVal, const xub_Unicode cTab,
-                                const xub_Unicode cFillChar = '\0' )
+    inline SwTabDecimalPortion( const KSHORT nTabPosVal, const sal_Unicode cTab,
+                                const sal_Unicode cFillChar = '\0' )
          : SwTabPortion( nTabPosVal, cFillChar ),
            mcTab(cTab),
            mnWidthOfPortionsUpTpDecimalPosition( USHRT_MAX )
     { SetWhichPor( POR_TABDECIMAL ); }
 
-    inline xub_Unicode GetTabDecimal() const { return mcTab; }
+    inline sal_Unicode GetTabDecimal() const { return mcTab; }
 
     inline void SetWidthOfPortionsUpToDecimalPosition( sal_uInt16 nNew )
     {
@@ -142,8 +142,8 @@ public:
 class SwAutoTabDecimalPortion : public SwTabDecimalPortion
 {
 public:
-    inline SwAutoTabDecimalPortion( const KSHORT nTabPosVal, const xub_Unicode cTab,
-                                    const xub_Unicode cFillChar = '\0' )
+    inline SwAutoTabDecimalPortion( const KSHORT nTabPosVal, const sal_Unicode cTab,
+                                    const sal_Unicode cFillChar = '\0' )
          : SwTabDecimalPortion( nTabPosVal, cTab, cFillChar )
     { SetLen( 0 ); }
     virtual void Paint( const SwTxtPaintInfo &rInf ) const;

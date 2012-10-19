@@ -272,7 +272,7 @@ start:
         }
 
         case SbxBYREF | SbxCHAR:
-            *p->pChar = (xub_Unicode) n; break;
+            *p->pChar = (sal_Unicode) n; break;
         case SbxBYREF | SbxBYTE:
             if( n > SbxMAXBYTE )
             {

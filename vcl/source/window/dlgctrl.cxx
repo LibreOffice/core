@@ -409,13 +409,13 @@ static Window* ImplFindDlgCtrlWindow( Window* pParent, Window* pWindow, sal_uInt
 
 // -----------------------------------------------------------------------
 
-static Window* ImplFindAccelWindow( Window* pParent, sal_uInt16& rIndex, xub_Unicode cCharCode,
+static Window* ImplFindAccelWindow( Window* pParent, sal_uInt16& rIndex, sal_Unicode cCharCode,
                                     sal_uInt16 nFormStart, sal_uInt16 nFormEnd, sal_Bool bCheckEnable = sal_True )
 {
     DBG_ASSERT( (rIndex >= nFormStart) && (rIndex <= nFormEnd),
                 "Window::ImplFindAccelWindow() - rIndex not in Form" );
 
-    xub_Unicode cCompareChar;
+    sal_Unicode cCompareChar;
     sal_uInt16  nStart = rIndex;
     sal_uInt16  i = rIndex;
     int     bSearch = sal_True;
@@ -853,7 +853,7 @@ sal_Bool Window::ImplDlgCtrl( const KeyEvent& rKEvt, sal_Bool bKeyInput )
         }
         else
         {
-            xub_Unicode c = rKEvt.GetCharCode();
+            sal_Unicode c = rKEvt.GetCharCode();
             if ( c )
             {
                 pSWindow = ::ImplFindAccelWindow( this, i, c, nFormStart, nFormEnd );

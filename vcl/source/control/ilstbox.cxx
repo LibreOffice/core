@@ -2735,7 +2735,7 @@ sal_Bool ImplListBox::HandleWheelAsCursorTravel( const CommandEvent& rCEvt )
 
 // -----------------------------------------------------------------------
 
-void ImplListBox::SetMRUEntries( const rtl::OUString& rEntries, xub_Unicode cSep )
+void ImplListBox::SetMRUEntries( const rtl::OUString& rEntries, sal_Unicode cSep )
 {
     sal_Bool bChanges = GetEntryList()->GetMRUCount() ? sal_True : sal_False;
 

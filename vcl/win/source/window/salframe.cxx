@@ -1105,7 +1105,7 @@ sal_Bool WinSalFrame::PostEvent( void* pData )
 
 void WinSalFrame::SetTitle( const rtl::OUString& rTitle )
 {
-    DBG_ASSERT( sizeof( WCHAR ) == sizeof( xub_Unicode ), "WinSalFrame::SetTitle(): WCHAR != sal_Unicode" );
+    DBG_ASSERT( sizeof( WCHAR ) == sizeof( sal_Unicode ), "WinSalFrame::SetTitle(): WCHAR != sal_Unicode" );
 
     SetWindowTextW( mhWnd, reinterpret_cast<LPCWSTR>(rTitle.getStr()) );
 }
@@ -2387,7 +2387,7 @@ static void ImplGetKeyNameText( LONG lParam, sal_Unicode* pBuf,
                                 UINT& rCount, UINT nMaxSize,
                                 const sal_Char* pReplace )
 {
-    DBG_ASSERT( sizeof( WCHAR ) == sizeof( xub_Unicode ), "WinSalFrame::ImplGetKeyNameTextW(): WCHAR != sal_Unicode" );
+    DBG_ASSERT( sizeof( WCHAR ) == sizeof( sal_Unicode ), "WinSalFrame::ImplGetKeyNameTextW(): WCHAR != sal_Unicode" );
 
     static const int nMaxKeyLen = 350;
     WCHAR aKeyBuf[ nMaxKeyLen ];
@@ -5167,7 +5167,7 @@ static sal_Bool ImplHandleIMECompositionInput( WinSalFrame* pFrame,
         {
             WCHAR* pTextBuf = new WCHAR[nTextLen];
             ImmGetCompositionStringW( hIMC, GCS_RESULTSTR, pTextBuf, nTextLen*sizeof( WCHAR ) );
-            aEvt.maText = rtl::OUString( reinterpret_cast<const xub_Unicode*>(pTextBuf), (sal_Int32)nTextLen );
+            aEvt.maText = rtl::OUString( reinterpret_cast<const sal_Unicode*>(pTextBuf), (sal_Int32)nTextLen );
             delete [] pTextBuf;
         }
 
@@ -5193,7 +5193,7 @@ static sal_Bool ImplHandleIMECompositionInput( WinSalFrame* pFrame,
         {
             WCHAR* pTextBuf = new WCHAR[nTextLen];
             ImmGetCompositionStringW( hIMC, GCS_COMPSTR, pTextBuf, nTextLen*sizeof( WCHAR ) );
-            aEvt.maText = rtl::OUString( reinterpret_cast<const xub_Unicode*>(pTextBuf), (sal_Int32)nTextLen );
+            aEvt.maText = rtl::OUString( reinterpret_cast<const sal_Unicode*>(pTextBuf), (sal_Int32)nTextLen );
             delete [] pTextBuf;
 
             BYTE*   pAttrBuf = NULL;

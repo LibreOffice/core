@@ -810,7 +810,7 @@ sal_Bool BibGeneralPage::HandleShortCutKey( const KeyEvent& rKeyEvent )
     DBG_ASSERT( KEY_MOD2 == rKeyEvent.GetKeyCode().GetModifier(), "+BibGeneralPage::HandleShortCutKey(): this is not for me!" );
 
     const vcl::I18nHelper&      rI18nHelper = Application::GetSettings().GetUILocaleI18nHelper();
-    const xub_Unicode           c = rKeyEvent.GetCharCode();
+    const sal_Unicode           c = rKeyEvent.GetCharCode();
     sal_Bool                        bHandled = sal_False;
 
     sal_Int16                   i;

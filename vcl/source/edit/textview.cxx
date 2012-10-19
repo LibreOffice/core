@@ -763,7 +763,7 @@ sal_Bool TextView::KeyInput( const KeyEvent& rKeyEvent )
             {
                 if ( TextEngine::IsSimpleCharInput( rKeyEvent ) )
                 {
-                    xub_Unicode nCharCode = rKeyEvent.GetCharCode();
+                    sal_Unicode nCharCode = rKeyEvent.GetCharCode();
                     if ( !mpImpl->mbReadOnly && ImplCheckTextLen( rtl::OUString(nCharCode) ) )    // sonst trotzdem das Zeichen schlucken...
                     {
                         aCurSel = mpImpl->mpTextEngine->ImpInsertText( nCharCode, aCurSel, !IsInsertMode(), sal_True );
@@ -1648,7 +1648,7 @@ TextPaM TextView::CursorEndOfLine( const TextPaM& rPaM )
 
     if ( pLine->GetEnd() > pLine->GetStart() )  // Leerzeile
     {
-        xub_Unicode cLastChar = pPPortion->GetNode()->GetText().GetChar((sal_uInt16)(aPaM.GetIndex()-1) );
+        sal_Unicode cLastChar = pPPortion->GetNode()->GetText().GetChar((sal_uInt16)(aPaM.GetIndex()-1) );
         if ( ( cLastChar == ' ' ) && ( aPaM.GetIndex() != pPPortion->GetNode()->GetText().Len() ) )
         {
             // Bei einem Blank in einer autom. umgebrochenen Zeile macht es Sinn,

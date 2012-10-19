@@ -2527,7 +2527,7 @@ void ImpEditEngine::ImpRemoveParagraph( sal_uInt16 nPara )
     }
 }
 
-EditPaM ImpEditEngine::AutoCorrect( const EditSelection& rCurSel, xub_Unicode c,
+EditPaM ImpEditEngine::AutoCorrect( const EditSelection& rCurSel, sal_Unicode c,
                                     sal_Bool bOverwrite, Window* pFrameWin )
 {
     EditSelection aSel( rCurSel );
@@ -2590,7 +2590,7 @@ EditPaM ImpEditEngine::AutoCorrect( const EditSelection& rCurSel, xub_Unicode c,
 
 
 EditPaM ImpEditEngine::InsertText( const EditSelection& rCurSel,
-        xub_Unicode c, sal_Bool bOverwrite, sal_Bool bIsUserInput )
+        sal_Unicode c, sal_Bool bOverwrite, sal_Bool bIsUserInput )
 {
     OSL_ENSURE( c != '\t', "Tab for InsertText ?" );
     OSL_ENSURE( c != '\n', "Word wrapping for InsertText ?");

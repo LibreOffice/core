@@ -2485,7 +2485,7 @@ bool SmSymDefineDialog::SelectStyle(const OUString &rStyleName, bool bApplyFont)
 }
 
 
-void SmSymDefineDialog::SelectChar(xub_Unicode cChar)
+void SmSymDefineDialog::SelectChar(sal_Unicode cChar)
 {
     aCharsetDisplay.SelectCharacter( cChar );
     aSymbolDisplay.SetSymbol( cChar, aCharsetDisplay.GetFont() );

@@ -143,7 +143,7 @@ OUString VCLXAccessibleEdit::implGetText()
 
         if ( getAccessibleRole() == AccessibleRole::PASSWORD_TEXT )
         {
-            xub_Unicode cEchoChar = pEdit->GetEchoChar();
+            sal_Unicode cEchoChar = pEdit->GetEchoChar();
             if ( !cEchoChar )
                 cEchoChar = '*';
             OUStringBuffer sTmp;

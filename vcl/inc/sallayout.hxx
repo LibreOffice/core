@@ -105,7 +105,7 @@ public:
     int                 mnLength;
     int                 mnMinCharPos;
     int                 mnEndCharPos;
-    const xub_Unicode*  mpStr;
+    const sal_Unicode*  mpStr;
 
     // positioning related inputs
     const sal_Int32*    mpDXArray;          // in pixel units
@@ -117,7 +117,7 @@ public:
     ImplLayoutRuns      maReruns;
 
 public:
-                ImplLayoutArgs( const xub_Unicode* pStr, int nLength,
+                ImplLayoutArgs( const sal_Unicode* pStr, int nLength,
                     int nMinCharPos, int nEndCharPos, int nFlags );
 
     void        SetLayoutWidth( long nWidth )       { mnLayoutWidth = nWidth; }

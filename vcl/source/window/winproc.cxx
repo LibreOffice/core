@@ -964,7 +964,7 @@ static long ImplHandleKey( Window* pWindow, sal_uInt16 nSVEvent,
     // allow application key listeners to remove the key event
     // but make sure we're not forwarding external KeyEvents, (ie where bForward is sal_False)
     // becasue those are coming back from the listener itself and MUST be processed
-    KeyEvent aKeyEvent( (xub_Unicode)nCharCode, aKeyCode, nRepeat );
+    KeyEvent aKeyEvent( (sal_Unicode)nCharCode, aKeyCode, nRepeat );
     if( bForward )
     {
         sal_uInt16 nVCLEvent;
@@ -1096,7 +1096,7 @@ static long ImplHandleKey( Window* pWindow, sal_uInt16 nSVEvent,
     ImplDelData aDelData;
     pChild->ImplAddDel( &aDelData );
 
-    KeyEvent    aKeyEvt( (xub_Unicode)nCharCode, aKeyCode, nRepeat );
+    KeyEvent    aKeyEvt( (sal_Unicode)nCharCode, aKeyCode, nRepeat );
     NotifyEvent aNotifyEvt( nSVEvent, pChild, &aKeyEvt );
     sal_Bool        bKeyPreNotify = (ImplCallPreNotify( aNotifyEvt ) != 0);
     long        nRet = 1;
@@ -1209,7 +1209,7 @@ static long ImplHandleKey( Window* pWindow, sal_uInt16 nSVEvent,
 
         // call handler
         ImplDelData aChildDelData( pChild );
-        KeyEvent    aKEvt( (xub_Unicode)nCharCode, aKeyCode, nRepeat );
+        KeyEvent    aKEvt( (sal_Unicode)nCharCode, aKeyCode, nRepeat );
         NotifyEvent aNEvt( nSVEvent, pChild, &aKEvt );
         sal_Bool        bPreNotify = (ImplCallPreNotify( aNEvt ) != 0);
         if ( aChildDelData.IsDead() )

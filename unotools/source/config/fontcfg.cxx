@@ -677,8 +677,8 @@ static bool ImplKillLeading( String& rName, const char* const* ppStr )
     for(; *ppStr; ++ppStr )
     {
         const char*         pStr = *ppStr;
-        const xub_Unicode*  pNameStr = rName.GetBuffer();
-        while ( (*pNameStr == (xub_Unicode)(unsigned char)*pStr) && *pStr )
+        const sal_Unicode*  pNameStr = rName.GetBuffer();
+        while ( (*pNameStr == (sal_Unicode)(unsigned char)*pStr) && *pStr )
         {
             pNameStr++;
             pStr++;
@@ -693,7 +693,7 @@ static bool ImplKillLeading( String& rName, const char* const* ppStr )
 
     // special case for Baekmuk
     // TODO: allow non-ASCII KillLeading list
-    const xub_Unicode* pNameStr = rName.GetBuffer();
+    const sal_Unicode* pNameStr = rName.GetBuffer();
     if( (pNameStr[0]==0xBC31) && (pNameStr[1]==0xBC35) )
     {
         xub_StrLen nLen = (pNameStr[2]==0x0020) ? 3 : 2;
@@ -712,7 +712,7 @@ static xub_StrLen ImplIsTrailing( const String& rName, const char* pStr )
     if( nStrLen >= rName.Len() )
         return 0;
 
-    const xub_Unicode* pEndName = rName.GetBuffer() + rName.Len();
+    const sal_Unicode* pEndName = rName.GetBuffer() + rName.Len();
     const sal_Unicode* pNameStr = pEndName - nStrLen;
     do if( *(pNameStr++) != *(pStr++) )
         return 0;

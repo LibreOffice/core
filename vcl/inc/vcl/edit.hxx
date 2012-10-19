@@ -80,7 +80,7 @@ private:
     xub_StrLen          mnMaxTextLen;
     sal_Int32           mnMinWidthInChars;
     AutocompleteAction  meAutocompleteAction;
-    xub_Unicode         mcEchoChar;
+    sal_Unicode         mcEchoChar;
     sal_Bool                mbModified:1,
                         mbInternModified:1,
                         mbReadOnly:1,
@@ -187,8 +187,8 @@ public:
     virtual void        DisableUpdateData() { delete mpUpdateDataTimer; mpUpdateDataTimer = NULL; }
     virtual sal_uLong       IsUpdateDataEnabled() const;
 
-    void                SetEchoChar( xub_Unicode c );
-    xub_Unicode         GetEchoChar() const { return mcEchoChar; }
+    void                SetEchoChar( sal_Unicode c );
+    sal_Unicode         GetEchoChar() const { return mcEchoChar; }
 
     virtual void        SetReadOnly( sal_Bool bReadOnly = sal_True );
     virtual sal_Bool        IsReadOnly() const { return mbReadOnly; }

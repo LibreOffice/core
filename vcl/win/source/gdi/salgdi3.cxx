@@ -1010,7 +1010,7 @@ static ImplWinFontData* ImplLogMetricToDevFontDataW( const ENUMLOGFONTEXW* pLogF
 
 void ImplSalLogFontToFontW( HDC hDC, const LOGFONTW& rLogFont, Font& rFont )
 {
-    rtl::OUString aFontName( reinterpret_cast<const xub_Unicode*>(rLogFont.lfFaceName) );
+    rtl::OUString aFontName( reinterpret_cast<const sal_Unicode*>(rLogFont.lfFaceName) );
     if (!aFontName.isEmpty())
     {
         rFont.SetName( aFontName );

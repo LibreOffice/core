@@ -431,7 +431,7 @@ bool ImplLayoutRuns::GetRun( int* nMinRunPos, int* nEndRunPos, bool* bRightToLef
 
 // =======================================================================
 
-ImplLayoutArgs::ImplLayoutArgs( const xub_Unicode* pStr, int nLen,
+ImplLayoutArgs::ImplLayoutArgs( const sal_Unicode* pStr, int nLen,
     int nMinCharPos, int nEndCharPos, int nFlags )
 :
     mnFlags( nFlags ),

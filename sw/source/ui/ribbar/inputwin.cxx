@@ -429,8 +429,8 @@ void  SwInputWindow::CancelFormula()
 }
 //==================================================================
 
-const xub_Unicode CH_LRE = 0x202a;
-const xub_Unicode CH_PDF = 0x202c;
+const sal_Unicode CH_LRE = 0x202a;
+const sal_Unicode CH_PDF = 0x202c;
 
 IMPL_LINK( SwInputWindow, SelTblCellsNotify, SwWrtShell *, pCaller )
 {

@@ -435,7 +435,7 @@ WinBits Edit::ImplInitStyle( WinBits nStyle )
 sal_Bool Edit::IsCharInput( const KeyEvent& rKeyEvent )
 {
     // In the future we must use new Unicode functions for this
-    xub_Unicode cCharCode = rKeyEvent.GetCharCode();
+    sal_Unicode cCharCode = rKeyEvent.GetCharCode();
     return ((cCharCode >= 32) && (cCharCode != 127) &&
             !rKeyEvent.GetKeyCode().IsMod3() &&
             !rKeyEvent.GetKeyCode().IsMod2() &&
@@ -516,7 +516,7 @@ XubString Edit::ImplGetText() const
     if ( mcEchoChar || (GetStyle() & WB_PASSWORD) )
     {
         XubString   aText;
-        xub_Unicode cEchoChar;
+        sal_Unicode cEchoChar;
         if ( mcEchoChar )
             cEchoChar = mcEchoChar;
         else
@@ -2613,7 +2613,7 @@ void Edit::EnableUpdateData( sal_uLong nTimeout )
 
 // -----------------------------------------------------------------------
 
-void Edit::SetEchoChar( xub_Unicode c )
+void Edit::SetEchoChar( sal_Unicode c )
 {
     mcEchoChar = c;
     if ( mpSubEdit )

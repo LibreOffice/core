@@ -2062,7 +2062,7 @@ XubString EditDoc::GetText( LineEnd eEnd ) const
         nLen += (nNodes - 1) * nSepSize;
 
     rtl_uString* newStr = comphelper::string::rtl_uString_alloc(nLen);
-    xub_Unicode* pCur = newStr->buffer;
+    sal_Unicode* pCur = newStr->buffer;
     size_t nLastNode = nNodes-1;
     for ( sal_uInt16 nNode = 0; nNode < nNodes; nNode++ )
     {

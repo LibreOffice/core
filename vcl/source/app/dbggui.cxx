@@ -1255,7 +1255,7 @@ void DbgDialogTest( Window* pWindow )
             XubString       aText = pChild->GetText();
             XubString       aErrorText = aText;
             sal_uInt16          nAccelPos = STRING_NOTFOUND;
-            xub_Unicode     cAccel = 0;
+            sal_Unicode     cAccel = 0;
             if ( aErrorText.Len() > 128 )
             {
                 aErrorText.Erase( 128 );

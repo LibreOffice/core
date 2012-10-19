@@ -561,8 +561,8 @@ protected:
     SmMathSymbolNode(SmNodeType eNodeType, const SmToken &rNodeToken)
     :   SmSpecialNode(eNodeType, rNodeToken, FNT_MATH)
     {
-        xub_Unicode cChar = GetToken().cMathChar;
-        if ((xub_Unicode) '\0' != cChar)
+        sal_Unicode cChar = GetToken().cMathChar;
+        if ((sal_Unicode) '\0' != cChar)
             SetText(rtl::OUString(cChar));
     }
 
