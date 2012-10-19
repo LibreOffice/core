@@ -85,9 +85,9 @@ void SvTabListBox::InitEntry( SvTreeListEntry* pEntry, const XubString& rStr,
     SvTreeListBox::InitEntry( pEntry, rStr, rColl, rExp, eButtonKind );
     XubString aToken;
 
-    const xub_Unicode* pCurToken = aCurEntry.GetBuffer();
+    const sal_Unicode* pCurToken = aCurEntry.GetBuffer();
     sal_uInt16 nCurTokenLen;
-    const xub_Unicode* pNextToken = GetToken( pCurToken, nCurTokenLen );
+    const sal_Unicode* pNextToken = GetToken( pCurToken, nCurTokenLen );
     sal_uInt16 nCount = nTabCount; nCount--;
     for( sal_uInt16 nToken = 0; nToken < nCount; nToken++ )
     {
@@ -324,9 +324,9 @@ void SvTabListBox::SetEntryText( const XubString& rStr, SvTreeListEntry* pEntry,
         return;
 
     sal_uInt16 nTextColumn = nCol;
-    const xub_Unicode* pCurToken = rStr.GetBuffer();
+    const sal_Unicode* pCurToken = rStr.GetBuffer();
     sal_uInt16 nCurTokenLen;
-    const xub_Unicode* pNextToken = GetToken( pCurToken, nCurTokenLen );
+    const sal_Unicode* pNextToken = GetToken( pCurToken, nCurTokenLen );
 
     XubString aTemp;
     sal_uInt16 nCount = pEntry->ItemCount();
@@ -419,14 +419,14 @@ void SvTabListBox::Resize()
 }
 
 // static
-const xub_Unicode* SvTabListBox::GetToken( const xub_Unicode* pPtr, sal_uInt16& rLen )
+const sal_Unicode* SvTabListBox::GetToken( const sal_Unicode* pPtr, sal_uInt16& rLen )
 {
     if( !pPtr || *pPtr == 0 )
     {
         rLen = 0;
         return 0;
     }
-    xub_Unicode c = *pPtr;
+    sal_Unicode c = *pPtr;
     sal_uInt16 nLen = 0;
     while( c != '\t' && c != 0 )
     {

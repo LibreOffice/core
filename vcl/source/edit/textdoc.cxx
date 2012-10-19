@@ -524,7 +524,7 @@ XubString TextDoc::GetText( sal_uLong nPara ) const
 }
 
 
-sal_uLong TextDoc::GetTextLen( const xub_Unicode* pSep, const TextSelection* pSel ) const
+sal_uLong TextDoc::GetTextLen( const sal_Unicode* pSep, const TextSelection* pSel ) const
 {
     sal_uLong nLen = 0;
     sal_uLong nNodes = maTextNodes.Count();
@@ -559,7 +559,7 @@ sal_uLong TextDoc::GetTextLen( const xub_Unicode* pSep, const TextSelection* pSe
     return nLen;
 }
 
-TextPaM TextDoc::InsertText( const TextPaM& rPaM, xub_Unicode c )
+TextPaM TextDoc::InsertText( const TextPaM& rPaM, sal_Unicode c )
 {
     DBG_ASSERT( c != 0x0A, "TextDoc::InsertText: Zeilentrenner in Absatz nicht erlaubt!" );
     DBG_ASSERT( c != 0x0D, "TextDoc::InsertText: Zeilentrenner in Absatz nicht erlaubt!" );

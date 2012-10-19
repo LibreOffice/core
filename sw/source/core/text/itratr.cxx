@@ -643,7 +643,7 @@ void SwTxtNode::GetMinMaxSize( sal_uLong nIndex, sal_uLong& rMin, sal_uLong &rMa
         if( nNextChg > nStop )
             nNextChg = nStop;
         SwTxtAttr *pHint = NULL;
-        xub_Unicode cChar = CH_BLANK;
+        sal_Unicode cChar = CH_BLANK;
         nStop = nIdx;
         while( nStop < nLen && nStop < nNextChg &&
                CH_TAB != ( cChar = m_Text.GetChar( nStop ) ) &&
@@ -890,7 +890,7 @@ sal_uInt16 SwTxtNode::GetScalingOfSelectedText( xub_StrLen nStt, xub_StrLen nEnd
             nNextChg = nStop;
 
         nStop = nIdx;
-        xub_Unicode cChar = CH_BLANK;
+        sal_Unicode cChar = CH_BLANK;
         SwTxtAttr* pHint = NULL;
 
         // stop at special characters in [ nIdx, nNextChg ]

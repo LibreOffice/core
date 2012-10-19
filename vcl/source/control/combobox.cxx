@@ -43,7 +43,7 @@
 
 // =======================================================================
 
-static void lcl_GetSelectedEntries( ::std::set< sal_uInt16 >& rSelectedPos, const XubString& rText, xub_Unicode cTokenSep, const ImplEntryList* pEntryList )
+static void lcl_GetSelectedEntries( ::std::set< sal_uInt16 >& rSelectedPos, const XubString& rText, sal_Unicode cTokenSep, const ImplEntryList* pEntryList )
 {
     for (xub_StrLen n = comphelper::string::getTokenCount(rText, cTokenSep); n;)
     {
@@ -1363,14 +1363,14 @@ void ComboBox::SetSeparatorPos( sal_uInt16 n )
 
 // -----------------------------------------------------------------------
 
-void ComboBox::SetMRUEntries( const XubString& rEntries, xub_Unicode cSep )
+void ComboBox::SetMRUEntries( const XubString& rEntries, sal_Unicode cSep )
 {
     mpImplLB->SetMRUEntries( rEntries, cSep );
 }
 
 // -----------------------------------------------------------------------
 
-XubString ComboBox::GetMRUEntries( xub_Unicode cSep ) const
+XubString ComboBox::GetMRUEntries( sal_Unicode cSep ) const
 {
     return mpImplLB->GetMRUEntries( cSep );
 }

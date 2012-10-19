@@ -62,7 +62,7 @@ private:
 protected:
     SvTreeListEntry*                pViewParent;
 
-    static const xub_Unicode*   GetToken( const xub_Unicode* pPtr, sal_uInt16& rLen );
+    static const sal_Unicode*   GetToken( const sal_Unicode* pPtr, sal_uInt16& rLen );
 
     virtual void                SetTabs();
     virtual void                InitEntry( SvTreeListEntry*, const XubString&, const Image&, const Image&, SvLBoxButtonKind );

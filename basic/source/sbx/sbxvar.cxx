@@ -230,7 +230,7 @@ const XubString& SbxVariable::GetName( SbxNameType t ) const
     if( !pInfo
      || ( pInfo->aParams.empty() && GetClass() == SbxCLASS_PROPERTY ) )
         return maName;
-    xub_Unicode cType = ' ';
+    sal_Unicode cType = ' ';
     XubString aTmp( maName );
     // short type? Then fetch it, posible this is 0.
     SbxDataType et = GetType();
@@ -304,7 +304,7 @@ sal_uInt16 SbxVariable::MakeHashCode( const XubString& rName )
     sal_uInt16 nLen = rName.Len();
     if( nLen > 6 )
         nLen = 6;
-    const xub_Unicode* p = rName.GetBuffer();
+    const sal_Unicode* p = rName.GetBuffer();
     while( nLen-- )
     {
         sal_uInt8 c = (sal_uInt8)*p;

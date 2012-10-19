@@ -127,7 +127,7 @@ namespace vcl
     //--------------------------------------------------------------------
     bool QuickSelectionEngine::HandleKeyEvent( const KeyEvent& _keyEvent )
     {
-        xub_Unicode c = _keyEvent.GetCharCode();
+        sal_Unicode c = _keyEvent.GetCharCode();
 
         if ( ( c >= 32 ) && ( c != 127 ) && !_keyEvent.GetKeyCode().IsMod2() )
         {

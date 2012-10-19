@@ -811,7 +811,7 @@ public:
     int                 mnFaceMatch;
     int                 mnHeightMatch;
     int                 mnWidthMatch;
-    const xub_Unicode*  mpTargetStyleName;
+    const sal_Unicode*  mpTargetStyleName;
 };
 
 bool PhysicalFontFace::IsBetterMatch( const FontSelectPattern& rFSD, FontMatchStatus& rStatus ) const
@@ -1180,7 +1180,7 @@ PhysicalFontFace* ImplDevFontListData::FindBestFontFace( const FontSelectPattern
 
     // FontName+StyleName should map to FamilyName+StyleName
     const String& rSearchName = rFSD.maTargetName;
-    const xub_Unicode* pTargetStyleName = NULL;
+    const sal_Unicode* pTargetStyleName = NULL;
     if( (rSearchName.Len() > maSearchName.Len())
     &&   rSearchName.Equals( maSearchName, 0, maSearchName.Len() ) )
         pTargetStyleName = rSearchName.GetBuffer() + maSearchName.Len() + 1;
@@ -4139,7 +4139,7 @@ void OutputDevice::ImplDrawStrikeoutChar( long nBaseX, long nBaseY,
         cStrikeoutChar = 'X';
     static const int nTestStrLen = 4;
     static const int nMaxStrikeStrLen = 2048;
-    xub_Unicode aChars[nMaxStrikeStrLen+1]; // +1 for valgrind...
+    sal_Unicode aChars[nMaxStrikeStrLen+1]; // +1 for valgrind...
     for( int i = 0; i < nTestStrLen; ++i)
         aChars[i] = cStrikeoutChar;
     const rtl::OUString aStrikeoutTest(aChars, nTestStrLen);
@@ -5983,8 +5983,8 @@ ImplLayoutArgs OutputDevice::ImplPrepareLayoutArgs( String& rStr,
     else if( 0 == (mnTextLayoutMode & TEXT_LAYOUT_BIDI_RTL) )
     {
         // disable Bidi if no RTL hint and no RTL codes used
-        const xub_Unicode* pStr = rStr.GetBuffer() + nMinIndex;
-        const xub_Unicode* pEnd = rStr.GetBuffer() + nEndIndex;
+        const sal_Unicode* pStr = rStr.GetBuffer() + nMinIndex;
+        const sal_Unicode* pEnd = rStr.GetBuffer() + nEndIndex;
         for( ; pStr < pEnd; ++pStr )
             if( ((*pStr >= 0x0580) && (*pStr < 0x0800))   // middle eastern scripts
             ||  ((*pStr >= 0xFB18) && (*pStr < 0xFE00))   // hebrew + arabic A presentation forms
@@ -6952,7 +6952,7 @@ Rectangle OutputDevice::GetTextRect( const Rectangle& rRect,
 
 // -----------------------------------------------------------------------
 
-static sal_Bool ImplIsCharIn( xub_Unicode c, const sal_Char* pStr )
+static sal_Bool ImplIsCharIn( sal_Unicode c, const sal_Char* pStr )
 {
     while ( *pStr )
     {

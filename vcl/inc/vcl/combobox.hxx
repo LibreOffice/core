@@ -52,7 +52,7 @@ private:
     ImplBtn*                    mpBtn;
     ImplListBoxFloatingWindow*  mpFloatWin;
     sal_uInt16                      mnDDHeight;
-    xub_Unicode                 mcMultiSep;
+    sal_Unicode                 mcMultiSep;
     sal_Bool                        mbDDAutoSize        : 1;
     sal_Bool                        mbSyntheticModify   : 1;
     sal_Bool                        mbMatchCase         : 1;
@@ -157,8 +157,8 @@ public:
 
     void            EnableMultiSelection( sal_Bool bMulti );
     sal_Bool            IsMultiSelectionEnabled() const;
-    void            SetMultiSelectionSeparator( xub_Unicode cSep ) { mcMultiSep = cSep; }
-    xub_Unicode     GetMultiSelectionSeparator() const { return mcMultiSep; }
+    void            SetMultiSelectionSeparator( sal_Unicode cSep ) { mcMultiSep = cSep; }
+    sal_Unicode     GetMultiSelectionSeparator() const { return mcMultiSep; }
 
     void            SetSelectHdl( const Link& rLink )       { maSelectHdl = rLink; }
     const Link&     GetSelectHdl() const                    { return maSelectHdl; }
@@ -172,8 +172,8 @@ public:
     Size            CalcSize( sal_uInt16 nColumns, sal_uInt16 nLines ) const;
     void            GetMaxVisColumnsAndLines( sal_uInt16& rnCols, sal_uInt16& rnLines ) const;
 
-    void            SetMRUEntries( const XubString& rEntries, xub_Unicode cSep = ';' );
-    XubString       GetMRUEntries( xub_Unicode cSep = ';' ) const;
+    void            SetMRUEntries( const XubString& rEntries, sal_Unicode cSep = ';' );
+    XubString       GetMRUEntries( sal_Unicode cSep = ';' ) const;
     void            SetMaxMRUCount( sal_uInt16 n );
     sal_uInt16          GetMaxMRUCount() const;
 

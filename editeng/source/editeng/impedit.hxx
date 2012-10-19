@@ -1179,7 +1179,7 @@ inline Cursor* ImpEditView::GetCursor()
 
 void ConvertItem( SfxPoolItem& rPoolItem, MapUnit eSourceUnit, MapUnit eDestUnit );
 void ConvertAndPutItems( SfxItemSet& rDest, const SfxItemSet& rSource, const MapUnit* pSourceUnit = NULL, const MapUnit* pDestUnit = NULL );
-sal_uInt8 GetCharTypeForCompression( xub_Unicode cChar );
+sal_uInt8 GetCharTypeForCompression( sal_Unicode cChar );
 Point Rotate( const Point& rPoint, short nOrientation, const Point& rOrigin );
 
 #endif // _IMPEDIT_HXX

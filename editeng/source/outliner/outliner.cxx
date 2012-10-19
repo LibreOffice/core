@@ -486,7 +486,7 @@ bool Outliner::ImpConvertEdtToOut( sal_uInt32 nPara,EditView* pView)
     XubString aNumber_US( RTL_CONSTASCII_USTRINGPARAM( "Numbering" ) );
 
     XubString aStr( pEditEngine->GetText( (sal_uInt16)nPara ) );
-    xub_Unicode* pPtr = (xub_Unicode*)aStr.GetBuffer();
+    sal_Unicode* pPtr = (sal_Unicode*)aStr.GetBuffer();
 
     sal_uInt16 nHeadingNumberStart = 0;
     sal_uInt16 nNumberingNumberStart = 0;

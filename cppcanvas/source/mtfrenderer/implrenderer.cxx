@@ -1045,7 +1045,7 @@ namespace cppcanvas
             {
                 long nWidth = rParms.mrVDev.GetTextWidth( rString,nIndex,nLength );
 
-                xub_Unicode pChars[4];
+                sal_Unicode pChars[4];
                 if ( rState.textStrikeoutStyle == STRIKEOUT_X )
                     pChars[0] = 'X';
                 else

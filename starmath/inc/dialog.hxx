@@ -514,7 +514,7 @@ public:
 
     bool        SelectFont(const OUString &rFontName)   { return SelectFont(rFontName, true); }
     bool        SelectStyle(const OUString &rStyleName) { return SelectStyle(rStyleName, true); };
-    void        SelectChar(xub_Unicode cChar);
+    void        SelectChar(sal_Unicode cChar);
 };
 
 

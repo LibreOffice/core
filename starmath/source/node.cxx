@@ -1750,7 +1750,7 @@ void SmBraceNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
         aTmpSize.Width() *= 182;
         aTmpSize.Width() /= 267;
 
-        xub_Unicode cChar = pLeft->GetToken().cMathChar;
+        sal_Unicode cChar = pLeft->GetToken().cMathChar;
         if (cChar != MS_LINE  &&  cChar != MS_DLINE)
             pLeft ->GetFont().SetSize(aTmpSize);
 
@@ -2651,8 +2651,8 @@ SmNode * SmMatrixNode::GetLeftMost()
 SmMathSymbolNode::SmMathSymbolNode(const SmToken &rNodeToken)
 :   SmSpecialNode(NMATH, rNodeToken, FNT_MATH)
 {
-    xub_Unicode cChar = GetToken().cMathChar;
-    if ((xub_Unicode) '\0' != cChar)
+    sal_Unicode cChar = GetToken().cMathChar;
+    if ((sal_Unicode) '\0' != cChar)
         SetText(rtl::OUString(cChar));
 }
 

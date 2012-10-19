@@ -98,8 +98,8 @@ TextSelection ExtTextEngine::MatchGroup( const TextPaM& rCursor ) const
             else
             {
                 // Rueckwaerts suchen...
-                xub_Unicode nEC = maGroupChars.GetChar( nMatchChar );
-                xub_Unicode nSC = maGroupChars.GetChar( nMatchChar-1 );
+                sal_Unicode nEC = maGroupChars.GetChar( nMatchChar );
+                sal_Unicode nSC = maGroupChars.GetChar( nMatchChar-1 );
 
                 sal_uInt16 nCur = rCursor.GetIndex()-1;
                 sal_uInt16 nLevel = 1;

@@ -1341,7 +1341,7 @@ sal_Bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditVie
                 #endif
                 if ( !bReadOnly && IsSimpleCharInput( rKeyEvent ) )
                 {
-                    xub_Unicode nCharCode = rKeyEvent.GetCharCode();
+                    sal_Unicode nCharCode = rKeyEvent.GetCharCode();
                     pEditView->pImpEditView->DrawSelection();
                     // Autocorrection?
                     SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get().GetAutoCorrect();

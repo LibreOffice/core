@@ -158,7 +158,7 @@ static void ImplSkipDelimiters( const sal_Unicode*& rpBuf )
 
 // -----------------------------------------------------------------------
 
-static int ImplIsPatternChar( xub_Unicode cChar, sal_Char cEditMask )
+static int ImplIsPatternChar( sal_Unicode cChar, sal_Char cEditMask )
 {
     sal_Int32 nType = 0;
 
@@ -206,7 +206,7 @@ static int ImplIsPatternChar( xub_Unicode cChar, sal_Char cEditMask )
 
 // -----------------------------------------------------------------------
 
-static xub_Unicode ImplPatternChar( xub_Unicode cChar, sal_Char cEditMask )
+static sal_Unicode ImplPatternChar( sal_Unicode cChar, sal_Char cEditMask )
 {
     if ( ImplIsPatternChar( cChar, cEditMask ) )
     {
@@ -224,7 +224,7 @@ static xub_Unicode ImplPatternChar( xub_Unicode cChar, sal_Char cEditMask )
 
 // -----------------------------------------------------------------------
 
-static int ImplKommaPointCharEqual( xub_Unicode c1, xub_Unicode c2 )
+static int ImplKommaPointCharEqual( sal_Unicode c1, sal_Unicode c2 )
 {
     if ( c1 == c2 )
         return sal_True;
@@ -247,9 +247,9 @@ static XubString ImplPatternReformat( const XubString& rStr,
 
     XubString   aStr    = rStr;
     XubString   aOutStr = rLiteralMask;
-    xub_Unicode cTempChar;
-    xub_Unicode cChar;
-    xub_Unicode cLiteral;
+    sal_Unicode cTempChar;
+    sal_Unicode cChar;
+    sal_Unicode cLiteral;
     sal_Char    cMask;
     xub_StrLen  nStrIndex = 0;
     xub_StrLen  i = 0;
@@ -487,7 +487,7 @@ static sal_Bool ImplPatternProcessKeyInput( Edit* pEdit, const KeyEvent& rKEvt,
 
     Selection   aOldSel     = pEdit->GetSelection();
     KeyCode     aCode       = rKEvt.GetKeyCode();
-    xub_Unicode cChar       = rKEvt.GetCharCode();
+    sal_Unicode cChar       = rKEvt.GetCharCode();
     sal_uInt16      nKeyCode    = aCode.GetCode();
     sal_Bool        bShift      = aCode.IsShift();
     xub_StrLen  nCursorPos  = (xub_StrLen)aOldSel.Max();
@@ -637,7 +637,7 @@ static sal_Bool ImplPatternProcessKeyInput( Edit* pEdit, const KeyEvent& rKEvt,
 
     if ( nNewPos < rEditMask.getLength() )
     {
-        xub_Unicode cPattChar = ImplPatternChar( cChar, rEditMask[nNewPos] );
+        sal_Unicode cPattChar = ImplPatternChar( cChar, rEditMask[nNewPos] );
         if ( cPattChar )
             cChar = cPattChar;
         else
@@ -1069,7 +1069,7 @@ static String ImplGetDateSep( const LocaleDataWrapper& rLocaleDataWrapper, ExtDa
 static sal_Bool ImplDateProcessKeyInput( Edit*, const KeyEvent& rKEvt, ExtDateFieldFormat eFormat,
                                      const LocaleDataWrapper& rLocaleDataWrapper  )
 {
-    xub_Unicode cChar = rKEvt.GetCharCode();
+    sal_Unicode cChar = rKEvt.GetCharCode();
     sal_uInt16 nGroup = rKEvt.GetKeyCode().GetGroup();
     if ( (nGroup == KEYGROUP_FKEYS) || (nGroup == KEYGROUP_CURSOR) ||
          (nGroup == KEYGROUP_MISC)||
@@ -2163,7 +2163,7 @@ static sal_Bool ImplTimeProcessKeyInput( Edit*, const KeyEvent& rKEvt,
                                      TimeFieldFormat eFormat,
                                      const LocaleDataWrapper& rLocaleDataWrapper  )
 {
-    xub_Unicode cChar = rKEvt.GetCharCode();
+    sal_Unicode cChar = rKEvt.GetCharCode();
 
     if ( !bStrictFormat )
         return sal_False;

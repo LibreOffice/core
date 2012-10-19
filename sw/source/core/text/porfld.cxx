@@ -780,7 +780,7 @@ static sal_Char const sDoubleSpace[] = "  ";
  *                      class SwBulletPortion
  *************************************************************************/
 
-SwBulletPortion::SwBulletPortion( const xub_Unicode cBullet,
+SwBulletPortion::SwBulletPortion( const sal_Unicode cBullet,
                                   const XubString& rBulletFollowedBy,
                                   SwFont *pFont,
                                   const sal_Bool bLft,

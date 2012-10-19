@@ -462,9 +462,9 @@ void SvxRedlinTable::InitEntry( SvTreeListEntry* pEntry, const XubString& rStr,
 
     XubString aToken;
 
-    xub_Unicode* pCurToken = (xub_Unicode*)aCurEntry.GetBuffer();
+    sal_Unicode* pCurToken = (sal_Unicode*)aCurEntry.GetBuffer();
     sal_uInt16 nCurTokenLen;
-    xub_Unicode* pNextToken = (xub_Unicode*)GetToken( pCurToken, nCurTokenLen );
+    sal_Unicode* pNextToken = (sal_Unicode*)GetToken( pCurToken, nCurTokenLen );
     sal_uInt16 nCount = TabCount(); nCount--;
 
     for( sal_uInt16 nToken = 0; nToken < nCount; nToken++ )
@@ -479,7 +479,7 @@ void SvxRedlinTable::InitEntry( SvTreeListEntry* pEntry, const XubString& rStr,
 
         pCurToken = pNextToken;
         if( pCurToken )
-            pNextToken = (xub_Unicode*)GetToken( pCurToken, nCurTokenLen );
+            pNextToken = (sal_Unicode*)GetToken( pCurToken, nCurTokenLen );
         else
             nCurTokenLen = 0;
     }
