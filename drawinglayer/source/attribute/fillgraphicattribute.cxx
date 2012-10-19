@@ -60,9 +60,9 @@ namespace drawinglayer
             :   mnRefCount(0),
                 maGraphic(rGraphic),
                 maGraphicRange(rGraphicRange),
-                mbTiling(bTiling),
                 mfOffsetX(fOffsetX),
-                mfOffsetY(fOffsetY)
+                mfOffsetY(fOffsetY),
+                mbTiling(bTiling)
             {
             }
 
