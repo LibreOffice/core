@@ -274,6 +274,8 @@ namespace writerfilter {
                 bool bHasFillColor;
                 sal_Int32 nDhgt;
                 sal_Int32 nFLine;
+                sal_Int32 nPolyLineCount;
+                uno::Sequence<awt::Point> aPolyLinePoints;
         };
 
         /// Stores the properties of a picture.

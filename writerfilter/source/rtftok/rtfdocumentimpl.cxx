@@ -2273,12 +2273,17 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
         case RTF_DPRECT:
         case RTF_DPELLIPSE:
         case RTF_DPTXBX:
+        case RTF_DPPOLYLINE:
                 {
                     sal_Int32 nType = 0;
                     switch (nKeyword)
                     {
                         case RTF_DPLINE:
                             m_aStates.top().aDrawingObject.xShape.set(getModelFactory()->createInstance("com.sun.star.drawing.LineShape"), uno::UNO_QUERY);
+                            break;
+                        case RTF_DPPOLYLINE:
+                            // The reason this is not a simple CustomShape is that in the old syntax we have no ViewBox info.
+                            m_aStates.top().aDrawingObject.xShape.set(getModelFactory()->createInstance("com.sun.star.drawing.PolyLineShape"), uno::UNO_QUERY);
                             break;
                         case RTF_DPRECT:
                             nType = ESCHER_ShpInst_Rectangle;
@@ -3142,6 +3147,32 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             break;
         case RTF_DODHGT:
             m_aStates.top().aDrawingObject.nDhgt = nParam;
+            break;
+        case RTF_DPPOLYCOUNT:
+            if (nParam >= 0)
+            {
+                m_aStates.top().aDrawingObject.nPolyLineCount = nParam;
+                m_aStates.top().aDrawingObject.aPolyLinePoints.realloc(nParam);
+            }
+            break;
+        case RTF_DPPTX:
+            {
+                RTFDrawingObject& rDrawingObject = m_aStates.top().aDrawingObject;
+                rDrawingObject.aPolyLinePoints[rDrawingObject.aPolyLinePoints.getLength() - rDrawingObject.nPolyLineCount].X = TWIP_TO_MM100(nParam);
+            }
+            break;
+        case RTF_DPPTY:
+            {
+                RTFDrawingObject& rDrawingObject = m_aStates.top().aDrawingObject;
+                rDrawingObject.aPolyLinePoints[rDrawingObject.aPolyLinePoints.getLength() - rDrawingObject.nPolyLineCount].Y = TWIP_TO_MM100(nParam);
+                rDrawingObject.nPolyLineCount--;
+                if (rDrawingObject.nPolyLineCount == 0)
+                {
+                    uno::Sequence< uno::Sequence<awt::Point> >aPointSequenceSequence(1);
+                    aPointSequenceSequence[0] = rDrawingObject.aPolyLinePoints;
+                    rDrawingObject.xPropertySet->setPropertyValue("PolyPolygon", uno::Any(aPointSequenceSequence));
+                }
+            }
             break;
         default:
             SAL_INFO("writerfilter", OSL_THIS_FUNC << ": TODO handle value '" << lcl_RtfToString(nKeyword) << "'");
@@ -4133,7 +4164,8 @@ RTFDrawingObject::RTFDrawingObject()
     nFillColorB(0),
     bHasFillColor(false),
     nDhgt(0),
-    nFLine(-1)
+    nFLine(-1),
+    nPolyLineCount(0)
 {
 }
 
