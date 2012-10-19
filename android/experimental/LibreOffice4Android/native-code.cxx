@@ -42,6 +42,7 @@ extern "C"
     extern void * swd_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * t602filter_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * textfd_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
+    extern void * ucppkg1_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * unoxml_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * unordf_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
     extern void * wpftdraw_component_getFactory( const char * pImplName, void * pServiceManager, void * pRegistryKey );
@@ -88,6 +89,7 @@ lo_get_libmap(void)
         { "libswlo.a", sw_component_getFactory },
         { "libt602filterlo.a", t602filter_component_getFactory },
         { "libtextfdlo.a", textfd_component_getFactory },
+        { "libucppkg1.a", ucppkg1_component_getFactory },
         { "libunordflo.a", unordf_component_getFactory },
         { "libunoxmllo.a", unoxml_component_getFactory },
         { "libwpftdrawlo.a", wpftdraw_component_getFactory },
