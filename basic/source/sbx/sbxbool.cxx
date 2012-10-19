@@ -142,7 +142,7 @@ void ImpPutBool( SbxValues* p, sal_Int16 n )
     switch( +p->eType )
     {
         case SbxCHAR:
-            p->nChar = (xub_Unicode) n; break;
+            p->nChar = (sal_Unicode) n; break;
         case SbxUINT:
             p->nByte = (sal_uInt8) n; break;
         case SbxINTEGER:
@@ -189,7 +189,7 @@ void ImpPutBool( SbxValues* p, sal_Int16 n )
             break;
         }
         case SbxBYREF | SbxCHAR:
-            *p->pChar = (xub_Unicode) n; break;
+            *p->pChar = (sal_Unicode) n; break;
         case SbxBYREF | SbxBYTE:
             *p->pByte = (sal_uInt8) n; break;
         case SbxBYREF | SbxINTEGER:

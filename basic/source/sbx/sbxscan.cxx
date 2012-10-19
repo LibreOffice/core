@@ -545,10 +545,10 @@ static sal_uInt16 printfmtnum( double nNum, XubString& rRes, const XubString& rW
     if( nLen > nWidth ) rRes += '%';
     else {
         nWidth -= nLen;
-        while( nWidth-- ) rRes += (xub_Unicode)cFill;
-        if( cPre ) rRes += (xub_Unicode)cPre;
+        while( nWidth-- ) rRes += (sal_Unicode)cFill;
+        if( cPre ) rRes += (sal_Unicode)cPre;
     }
-    rRes += (xub_Unicode*)&(cBuf[0]);
+    rRes += (sal_Unicode*)&(cBuf[0]);
     if( bTrail )
         rRes += bNeg ? '-' : ' ';
 
@@ -559,9 +559,9 @@ static sal_uInt16 printfmtnum( double nNum, XubString& rRes, const XubString& rW
 
 static sal_uInt16 printfmtstr( const XubString& rStr, XubString& rRes, const XubString& rFmt )
 {
-    const xub_Unicode* pStr = rStr.GetBuffer();
-    const xub_Unicode* pFmtStart = rFmt.GetBuffer();
-    const xub_Unicode* pFmt = pFmtStart;
+    const sal_Unicode* pStr = rStr.GetBuffer();
+    const sal_Unicode* pFmtStart = rFmt.GetBuffer();
+    const sal_Unicode* pFmt = pFmtStart;
     rRes.Erase();
     switch( *pFmt )
     {
@@ -570,10 +570,10 @@ static sal_uInt16 printfmtstr( const XubString& rStr, XubString& rRes, const Xub
         case '\\':
             do
             {
-                rRes += *pStr ? *pStr++ : static_cast< xub_Unicode >(' ');
+                rRes += *pStr ? *pStr++ : static_cast< sal_Unicode >(' ');
                 pFmt++;
             } while( *pFmt != '\\' );
-            rRes += *pStr ? *pStr++ : static_cast< xub_Unicode >(' ');
+            rRes += *pStr ? *pStr++ : static_cast< sal_Unicode >(' ');
             pFmt++; break;
         case '&':
             rRes = rStr;

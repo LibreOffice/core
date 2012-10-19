@@ -46,10 +46,10 @@ public:
 
 
 static SbxVariable* Element
-    ( SbxObject* pObj, SbxObject* pGbl, const xub_Unicode** ppBuf,
+    ( SbxObject* pObj, SbxObject* pGbl, const sal_Unicode** ppBuf,
       SbxClassType, const SbxSimpleCharClass& rCharClass );
 
-static const xub_Unicode* SkipWhitespace( const xub_Unicode* p )
+static const sal_Unicode* SkipWhitespace( const sal_Unicode* p )
 {
     while( *p && ( *p == ' ' || *p == '\t' ) )
         p++;
@@ -59,7 +59,7 @@ static const xub_Unicode* SkipWhitespace( const xub_Unicode* p )
 // Scanning of a symbol. The symbol were inserted in rSym, the return value
 // is the new scan position. The symbol is at errors empty.
 
-static const xub_Unicode* Symbol( const xub_Unicode* p, XubString& rSym, const SbxSimpleCharClass& rCharClass )
+static const sal_Unicode* Symbol( const sal_Unicode* p, XubString& rSym, const SbxSimpleCharClass& rCharClass )
 {
     sal_uInt16 nLen = 0;
     // Did we have a nonstandard symbol?
@@ -93,12 +93,12 @@ static const xub_Unicode* Symbol( const xub_Unicode* p, XubString& rSym, const S
 // Qualified name. Element.Element....
 
 static SbxVariable* QualifiedName
-    ( SbxObject* pObj, SbxObject* pGbl, const xub_Unicode** ppBuf, SbxClassType t )
+    ( SbxObject* pObj, SbxObject* pGbl, const sal_Unicode** ppBuf, SbxClassType t )
 {
     static SbxSimpleCharClass aCharClass;
 
     SbxVariableRef refVar;
-    const xub_Unicode* p = SkipWhitespace( *ppBuf );
+    const sal_Unicode* p = SkipWhitespace( *ppBuf );
     if( aCharClass.isAlpha( *p ) || *p == '_' || *p == '[' )
     {
         // Read in the element
@@ -131,12 +131,12 @@ static SbxVariable* QualifiedName
 // a function (with optional parameters).
 
 static SbxVariable* Operand
-    ( SbxObject* pObj, SbxObject* pGbl, const xub_Unicode** ppBuf, bool bVar )
+    ( SbxObject* pObj, SbxObject* pGbl, const sal_Unicode** ppBuf, bool bVar )
 {
     static SbxSimpleCharClass aCharClass;
 
     SbxVariableRef refVar( new SbxVariable );
-    const xub_Unicode* p = SkipWhitespace( *ppBuf );
+    const sal_Unicode* p = SkipWhitespace( *ppBuf );
     if( !bVar && ( aCharClass.isDigit( *p )
      || ( *p == '.' && aCharClass.isDigit( *( p+1 ) ) )
      || *p == '-'
@@ -178,14 +178,14 @@ static SbxVariable* Operand
 // Read in of a simple term. The operands +, -, * and /
 // are supported.
 
-static SbxVariable* MulDiv( SbxObject* pObj, SbxObject* pGbl, const xub_Unicode** ppBuf )
+static SbxVariable* MulDiv( SbxObject* pObj, SbxObject* pGbl, const sal_Unicode** ppBuf )
 {
-    const xub_Unicode* p = *ppBuf;
+    const sal_Unicode* p = *ppBuf;
     SbxVariableRef refVar( Operand( pObj, pGbl, &p, false ) );
     p = SkipWhitespace( p );
     while( refVar.Is() && ( *p == '*' || *p == '/' ) )
     {
-        xub_Unicode cOp = *p++;
+        sal_Unicode cOp = *p++;
         SbxVariableRef refVar2( Operand( pObj, pGbl, &p, false ) );
         if( refVar2.Is() )
         {
@@ -210,14 +210,14 @@ static SbxVariable* MulDiv( SbxObject* pObj, SbxObject* pGbl, const xub_Unicode*
     return refVar;
 }
 
-static SbxVariable* PlusMinus( SbxObject* pObj, SbxObject* pGbl, const xub_Unicode** ppBuf )
+static SbxVariable* PlusMinus( SbxObject* pObj, SbxObject* pGbl, const sal_Unicode** ppBuf )
 {
-    const xub_Unicode* p = *ppBuf;
+    const sal_Unicode* p = *ppBuf;
     SbxVariableRef refVar( MulDiv( pObj, pGbl, &p ) );
     p = SkipWhitespace( p );
     while( refVar.Is() && ( *p == '+' || *p == '-' ) )
     {
-        xub_Unicode cOp = *p++;
+        sal_Unicode cOp = *p++;
         SbxVariableRef refVar2( MulDiv( pObj, pGbl, &p ) );
         if( refVar2.Is() )
         {
@@ -242,9 +242,9 @@ static SbxVariable* PlusMinus( SbxObject* pObj, SbxObject* pGbl, const xub_Unico
     return refVar;
 }
 
-static SbxVariable* Assign( SbxObject* pObj, SbxObject* pGbl, const xub_Unicode** ppBuf )
+static SbxVariable* Assign( SbxObject* pObj, SbxObject* pGbl, const sal_Unicode** ppBuf )
 {
-    const xub_Unicode* p = *ppBuf;
+    const sal_Unicode* p = *ppBuf;
     SbxVariableRef refVar( Operand( pObj, pGbl, &p, true ) );
     p = SkipWhitespace( p );
     if( refVar.Is() )
@@ -285,11 +285,11 @@ static SbxVariable* Assign( SbxObject* pObj, SbxObject* pGbl, const xub_Unicode*
 // specified object and the parameter list will be attached if necessary.
 
 static SbxVariable* Element
-    ( SbxObject* pObj, SbxObject* pGbl, const xub_Unicode** ppBuf,
+    ( SbxObject* pObj, SbxObject* pGbl, const sal_Unicode** ppBuf,
       SbxClassType t, const SbxSimpleCharClass& rCharClass )
 {
     XubString aSym;
-    const xub_Unicode* p = Symbol( *ppBuf, aSym, rCharClass );
+    const sal_Unicode* p = Symbol( *ppBuf, aSym, rCharClass );
     SbxVariableRef refVar;
     if( aSym.Len() )
     {
@@ -351,7 +351,7 @@ static SbxVariable* Element
 SbxVariable* SbxObject::Execute( const XubString& rTxt )
 {
     SbxVariable* pVar = NULL;
-    const xub_Unicode* p = rTxt.GetBuffer();
+    const sal_Unicode* p = rTxt.GetBuffer();
     for( ;; )
     {
         p = SkipWhitespace( p );
@@ -376,7 +376,7 @@ SbxVariable* SbxObject::Execute( const XubString& rTxt )
 SbxVariable* SbxObject::FindQualified( const XubString& rName, SbxClassType t )
 {
     SbxVariable* pVar = NULL;
-    const xub_Unicode* p = rName.GetBuffer();
+    const sal_Unicode* p = rName.GetBuffer();
     p = SkipWhitespace( p );
     if( !*p )
         return NULL;;
