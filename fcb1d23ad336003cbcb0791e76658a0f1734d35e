@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAP3///4s\u003d",
+        "filename": "desktop/scripts/soffice.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 158,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2012-10-19T08:54:38Z",
+      "side": 1,
+      "message": "AFAIK this does not do what is intended, the stderr is not actually redirected to the file but to the initial stdout;\nthe 2\u003e\u00261 needs to come after the \"\u003e file\"",
+      "revId": "fcb1d23ad336003cbcb0791e76658a0f1734d35e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
