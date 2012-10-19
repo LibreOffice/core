@@ -611,9 +611,9 @@ Bitmap XOutBitmap::DetectEdges( const Bitmap& rBmp, const sal_uInt8 cThreshold )
                         nSum2 -= lGray;
 
                         if( ( nSum1 * nSum1 + nSum2 * nSum2 ) < lThres2 )
-                            pWriteAcc->SetPixelIndex( nY1, nXDst, nWhiteIdx );
+                            pWriteAcc->SetPixelIndex( nY1, nXDst, nWhitePalIdx );
                         else
-                            pWriteAcc->SetPixelIndex( nY1, nXDst, nBlackIdx );
+                            pWriteAcc->SetPixelIndex( nY1, nXDst, nBlackPalIdx );
                     }
                 }
 
