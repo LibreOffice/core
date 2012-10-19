@@ -27,6 +27,14 @@ MKFILENAME:=TARGET.MK
 # INCLUDE-Path
 # ------------------------------------------------------------------
 
+.IF "$(TARGET)"==""
+target_empty=warn_target_empty
+.ENDIF
+
+.IF "$(PRJNAME)" == "binfilter"
+CDEFS+=-DBINFILTER_COMPAT
+.ENDIF
+
 .IF "$(STL_OS2_BUILDING)" != ""
 CDEFS+=-DSTL_OS2_BUILDING
 .ENDIF
@@ -38,10 +46,6 @@ CFLAGS += -fvisibility=hidden
 .ELIF "$(COMNAME)" == "sunpro5" && "$(CCNUMVER)" >= "00050005"
 CFLAGS += -xldscope=hidden
 .ENDIF
-.ENDIF
-
-.IF "$(TARGET)"==""
-target_empty=warn_target_empty
 .ENDIF
 
 # all use solarinc
@@ -63,6 +67,7 @@ INCLUDE!:=-I. $(INCPRE:^"-I":s/-I-I/-I/) -I$(INCLOCAL) -I$(INCPCH) -I$(INC) -I$(
 .ENDIF		# "$(PRJINC)"!=""
 INCLUDE_C=$(subst,/stl$(SPACECHAR),dont_use_stl$(SPACECHAR) $(INCLUDE))
 .EXPORT : LIB
+
 # --- Compiler -----------------------------------------------------
 
 .IF "$(RC_SUBDIRS)"!=""
