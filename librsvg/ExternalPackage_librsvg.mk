@@ -17,8 +17,8 @@ $(eval $(call gb_ExternalPackage_add_files,librsvg,lib,\
 
 $(eval $(call gb_ExternalPackage_add_unpacked_files,librsvg,inc/external/librsvg-2.0/librsvg,\
     rsvg-cairo.h \
-    rsvg-enum-types.h \
-    rsvg-features.h \
+    librsvg-enum-types.h \
+    librsvg-features.h \
     rsvg.h \
 ))
 
