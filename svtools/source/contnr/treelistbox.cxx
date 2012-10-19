@@ -1554,13 +1554,6 @@ void SvTreeListBox::DisconnectFromModel()
     pImp->SetModel( GetModel() );
 }
 
-
-sal_uInt16 SvTreeListBox::IsA()
-{
-    DBG_CHKTHIS(SvTreeListBox,0);
-    return SV_LISTBOX_ID_TREEBOX;
-}
-
 void SvTreeListBox::SetSublistOpenWithReturn( sal_Bool b )
 {
     pImp->bSubLstOpRet = b;

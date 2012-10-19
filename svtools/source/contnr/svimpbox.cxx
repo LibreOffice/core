@@ -790,12 +790,11 @@ sal_Bool SvImpLBox::EntryReallyHit(SvTreeListEntry* pEntry,const Point& rPosPixe
 
     Rectangle aRect( pView->GetFocusRect( pEntry, nLine ));
     aRect.Right() = GetOutputSize().Width() - pView->GetMapMode().GetOrigin().X();
-    if( pView->IsA() == SV_LISTBOX_ID_TREEBOX )
-    {
-        SvLBoxContextBmp* pBmp = (SvLBoxContextBmp*)(pEntry->GetFirstItem(SV_ITEM_ID_LBOXCONTEXTBMP));
-        aRect.Left() -= pBmp->GetSize(pView,pEntry).Width();
-        aRect.Left() -= 4; // a little tolerance
-    }
+
+    SvLBoxContextBmp* pBmp = (SvLBoxContextBmp*)(pEntry->GetFirstItem(SV_ITEM_ID_LBOXCONTEXTBMP));
+    aRect.Left() -= pBmp->GetSize(pView,pEntry).Width();
+    aRect.Left() -= 4; // a little tolerance
+
     Point aPos( rPosPixel );
     aPos -= pView->GetMapMode().GetOrigin();
     if( aRect.IsInside( aPos ) )

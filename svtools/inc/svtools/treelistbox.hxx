@@ -101,7 +101,6 @@ enum SvButtonState { SV_BUTTON_UNCHECKED, SV_BUTTON_CHECKED, SV_BUTTON_TRISTATE 
 
 #define SV_TAB_BORDER 8
 
-#define SV_LISTBOX_ID_TREEBOX 1   // fuer SvLBox::IsA()
 #define SV_ENTRYHEIGHTOFFS_PIXEL 2
 
 #define TREEFLAG_CHKBTN         0x0001
@@ -378,7 +377,6 @@ public:
     using SvListView::SetModel;
     void SetModel(SvTreeList* pNewModel);
 
-    sal_uInt16 IsA();
     sal_uLong           GetEntryCount() const {return pModel->GetEntryCount();}
     SvTreeListEntry*    First() const { return (SvTreeListEntry*)(pModel->First()); }
     SvTreeListEntry*    Next( SvTreeListEntry* pEntry, sal_uInt16* pDepth=0 ) const { return pModel->Next(pEntry,pDepth); }
