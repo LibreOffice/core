@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAP3///4Q\u003d",
+        "filename": "writerfilter/source/dmapper/DomainMapper_Impl.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 381,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2012-10-19T09:26:29Z",
+      "side": 1,
+      "message": "apparently in the implementation of this ctor the new m_bIsNewDoc is not initialized",
+      "revId": "e111fc40dfd7bd3f73e216c455eabf37a7930b81",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
