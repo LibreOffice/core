@@ -1,0 +1,69 @@
+--- misc/build/lp_solve_5.5/lp_report.c	2007-01-14 10:31:34.000000000 -0800
++++ misc/build/lp_solve_5.5/lp_report.c	2007-01-14 10:31:34.000000000 -0800
+@@ -160,7 +160,7 @@
+ {
+   int i, k = 0;
+ 
+-  fprintf(output, label);
++  fputs(label, output);
+   fprintf(output, "\n");
+   for(i = first; i <= last; i++) {
+     fprintf(output, " %18g", vector[i]);
+@@ -189,7 +189,7 @@
+   if(last < 0)
+     last = lp->rows;
+ 
+-  fprintf(output, label);
++  fputs(label, output);
+   fprintf(output, "\n");
+ 
+   if(first == 0) {
+@@ -254,7 +254,7 @@
+   if(last < 0)
+     last = lp->rows;
+ 
+-  fprintf(output, label);
++  fputs(label, output);
+   fprintf(output, "\n");
+ 
+   for(i = first; i <= last; i++) {
+--- misc/build/lp_solve_5.5/shared/commonlib.c	2007-01-14 10:33:14.000000000 -0800
++++ misc/build/lp_solve_5.5/shared/commonlib.c	2007-01-14 10:33:14.000000000 -0800
+@@ -715,7 +715,7 @@
+ {
+   int i, k = 0;
+ 
+-  fprintf(output, label);
++  fputs(label, output);
+   fprintf(output, "\n");
+   for(i = first; i <= last; i++) {
+     fprintf(output, " %5d", myvector[i]);
+@@ -734,7 +734,7 @@
+ {
+   int i, k = 0;
+ 
+-  fprintf(output, label);
++  fputs(label, output);
+   fprintf(output, "\n");
+   for(i = first; i <= last; i++) {
+     if(asRaw)
+@@ -756,7 +756,7 @@
+ {
+   int i, k = 0;
+ 
+-  fprintf(output, label);
++  fputs(label, output);
+   fprintf(output, "\n");
+   for(i = first; i <= last; i++) {
+     fprintf(output, " %18g", myvector[i]);
+--- misc/build/lp_solve_5.5/shared/mmio.c	2007-01-14 10:33:14.000000000 -0800
++++ misc/build/lp_solve_5.5/shared/mmio.c	2007-01-14 10:33:14.000000000 -0800
+@@ -74,7 +74,7 @@
+  
+     for (i=0; i<nz; i++)
+     {
+-        fscanf(f, "%d %d %lg\n", &I[i], &J[i], &val[i]);
++        if(fscanf(f, "%d %d %lg\n", &I[i], &J[i], &val[i])) ;
+         I[i]--;  /* adjust from 1-based to 0-based */
+         J[i]--;
+     }

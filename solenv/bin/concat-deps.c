@@ -790,7 +790,6 @@ static inline void print_fullpaths(char* line)
             ++end;
         }
         int token_len = end - token;
-        int fwrite_ret = 1;
         if(elide_dependency(token, token_len, &boost_count))
         {
             if (boost_count == 1)
@@ -807,18 +806,16 @@ static inline void print_fullpaths(char* line)
         else if(*token == ':' || *token == '\\' || *token == '/' ||
                 *token == '$' || ':' == token[1])
         {
-            fwrite_ret = fwrite(token, token_len, 1, stdout);
+            if(fwrite(token, token_len, 1, stdout));
             fputc(' ', stdout);
         }
         else
         {
-            fwrite_ret = fwrite(token, end - token, 1, stdout);
+            if(fwrite(token, end - token, 1, stdout));
             fputc(' ', stdout);
         }
         token = end;
         eat_space(&token);
-        if( fwrite_ret )
-            continue;
     }
 }
 
