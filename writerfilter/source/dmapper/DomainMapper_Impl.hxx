@@ -382,7 +382,6 @@ public:
             uno::Reference< lang::XComponent >  xModel,
             SourceDocumentType eDocumentType,
             bool bIsNewDoc );
-    DomainMapper_Impl();
     virtual ~DomainMapper_Impl();
 
     SectionPropertyMap* GetLastSectionContext( )
