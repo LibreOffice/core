@@ -156,6 +156,8 @@ endif
 gb_COMPILEROPTFLAGS := $(gb_COMPILERDEFAULTOPTFLAGS)
 gb_COMPILERNOOPTFLAGS := -O0
 
+gb_LINKERSTRIPDEBUGFLAGS := -Wl,-S
+
 # LinkTarget class
 
 define gb_LinkTarget__get_rpath_for_layer

@@ -59,7 +59,7 @@ $(call gb_StaticLibrary__StaticLibrary_impl,$(1),$(call gb_StaticLibrary_get_lin
 endef
 
 define gb_StaticLibrary__StaticLibrary_impl
-$(call gb_LinkTarget_LinkTarget,$(2))
+$(call gb_LinkTarget_LinkTarget,$(2),StaticLibrary_$(1))
 $(call gb_LinkTarget_set_targettype,$(2),StaticLibrary)
 $(call gb_StaticLibrary_get_target,$(1)) : $(call gb_LinkTarget_get_target,$(2)) \
 	| $(dir $(call gb_StaticLibrary_get_target,$(1))).dir

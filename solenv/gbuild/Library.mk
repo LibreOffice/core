@@ -66,7 +66,7 @@ $(call gb_Library__Library_impl,$(1),$(call gb_Library_get_linktargetname,$(1)))
 endef
 
 define gb_Library__Library_impl
-$(call gb_LinkTarget_LinkTarget,$(2))
+$(call gb_LinkTarget_LinkTarget,$(2),Library_$(1))
 $(call gb_LinkTarget_set_targettype,$(2),Library)
 $(call gb_LinkTarget_add_libs,$(2),$(gb_STDLIBS))
 $(call gb_LinkTarget_add_defs,$(2),\
