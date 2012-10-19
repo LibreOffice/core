@@ -190,7 +190,7 @@ MSHORT SwTxtNode::GetDropLen( MSHORT nWishLen ) const
     xub_StrLen i = 0;
     for( ; i < nEnd; ++i )
     {
-        xub_Unicode cChar = GetTxt().GetChar( i );
+        sal_Unicode cChar = GetTxt().GetChar( i );
         if( CH_TAB == cChar || CH_BREAK == cChar ||
             (( CH_TXTATR_BREAKWORD == cChar || CH_TXTATR_INWORD == cChar )
                 && SwTxtSizeInfo::_HasHint( this, i ) ) )

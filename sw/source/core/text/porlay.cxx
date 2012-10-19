@@ -88,7 +88,7 @@ using namespace i18n::ScriptType;
 #endif
 #define isSeenOrSadChar(c)  (IS_JOINING_GROUP((c), SAD) || IS_JOINING_GROUP((c), SEEN))
 
-sal_Bool isTransparentChar ( xub_Unicode cCh )
+sal_Bool isTransparentChar ( sal_Unicode cCh )
 {
     return u_getIntPropertyValue( cCh, UCHAR_JOINING_TYPE ) == U_JT_TRANSPARENT;
 }
@@ -99,7 +99,7 @@ sal_Bool isTransparentChar ( xub_Unicode cCh )
  * Checks if cCh + cNectCh builds a ligature (used for Kashidas)
  *************************************************************************/
 
-static sal_Bool lcl_IsLigature( xub_Unicode cCh, xub_Unicode cNextCh )
+static sal_Bool lcl_IsLigature( sal_Unicode cCh, sal_Unicode cNextCh )
 {
             // Lam + Alef
     return ( isLamChar ( cCh ) && isAlefChar ( cNextCh ));
@@ -111,7 +111,7 @@ static sal_Bool lcl_IsLigature( xub_Unicode cCh, xub_Unicode cNextCh )
  * Checks if cCh is connectable to cPrevCh (used for Kashidas)
  *************************************************************************/
 
-static sal_Bool lcl_ConnectToPrev( xub_Unicode cCh, xub_Unicode cPrevCh )
+static sal_Bool lcl_ConnectToPrev( sal_Unicode cCh, sal_Unicode cPrevCh )
 {
     const int32_t nJoiningType = u_getIntPropertyValue( cPrevCh, UCHAR_JOINING_TYPE );
     sal_Bool bRet = nJoiningType != U_JT_RIGHT_JOINING && nJoiningType != U_JT_NON_JOINING;
@@ -277,7 +277,7 @@ static bool lcl_HasOnlyBlanks( const XubString& rTxt, xub_StrLen nStt, xub_StrLe
     bool bBlankOnly = true;
     while ( nStt < nEnd )
     {
-        const xub_Unicode cChar = rTxt.GetChar( nStt++ );
+        const sal_Unicode cChar = rTxt.GetChar( nStt++ );
         if ( ' ' != cChar && 0x3000 != cChar )
         {
             bBlankOnly = false;
@@ -932,7 +932,7 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
 
             while ( nLastCompression < nChg )
             {
-                xub_Unicode cChar = rTxt.GetChar( nLastCompression );
+                sal_Unicode cChar = rTxt.GetChar( nLastCompression );
 
                 // examine current character
                 switch ( cChar )
@@ -1000,8 +1000,8 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
 
                 xub_StrLen nIdx = 0;
                 xub_StrLen nKashidaPos = STRING_LEN;
-                xub_Unicode cCh;
-                xub_Unicode cPrevCh = 0;
+                sal_Unicode cCh;
+                sal_Unicode cPrevCh = 0;
 
                 sal_uInt16 nPriorityLevel = 7; // 0..6 = level found
                                            // 7 not found
@@ -1082,7 +1082,7 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
                         if ( isBaaChar ( cCh )) // Bah
                         {
                             // check if next character is Reh, Yeh or Alef Maksura
-                            xub_Unicode cNextCh = rWord.GetChar( nIdx + 1 );
+                            sal_Unicode cNextCh = rWord.GetChar( nIdx + 1 );
                             if ( isRehChar ( cNextCh ) || isYehChar ( cNextCh ))
                            {
                                 SAL_WARN_IF( 0 == cPrevCh, "sw.core", "No previous character" );
@@ -1369,7 +1369,7 @@ sal_uInt8 SwScriptInfo::DirType( const xub_StrLen nPos ) const
 
 sal_uInt16 SwScriptInfo::MaskHiddenRanges( const SwTxtNode& rNode, XubString& rText,
                                        const xub_StrLen nStt, const xub_StrLen nEnd,
-                                       const xub_Unicode cChar )
+                                       const sal_Unicode cChar )
 {
     assert(rNode.GetTxt().Len() == rText.Len());
 
@@ -1850,7 +1850,7 @@ bool SwScriptInfo::IsArabicText( const rtl::OUString& rTxt, sal_Int32 nStt, sal_
 
     if( nIdx >= 0 )
     {
-        const xub_Unicode cCh = rTxt[nIdx];
+        const sal_Unicode cCh = rTxt[nIdx];
         const sal_Int16 type = unicode::getUnicodeScriptType( cCh, typeList, UnicodeScript_kScriptCount );
         return type == UnicodeScript_kArabic;
     }
@@ -2049,7 +2049,7 @@ sal_Int32 SwScriptInfo::ThaiJustify( const rtl::OUString& rTxt, sal_Int32* pKern
 
     for (sal_Int32 nI = 0; nI < nLen; ++nI)
     {
-        const xub_Unicode cCh = rTxt[nStt + nI];
+        const sal_Unicode cCh = rTxt[nStt + nI];
 
         // check if character is not above or below base
         if ( ( 0xE34 > cCh || cCh > 0xE3A ) &&

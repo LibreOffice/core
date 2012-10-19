@@ -43,11 +43,11 @@ class SwScriptInfo;     // _GetTxtSize
 class ViewShell;
 class IDocumentSettingAccess;
 
-const xub_Unicode CH_BLANK = ' ';   // ' ' Leerzeichen
-const xub_Unicode CH_BREAK = 0x0A;  //
-const xub_Unicode CH_TAB   = '\t';  // \t
-const xub_Unicode CH_PAR    = 0xB6;     // Paragraph
-const xub_Unicode CH_BULLET = 0xB7;     // mittiger Punkt
+const sal_Unicode CH_BLANK = ' ';   // ' ' Leerzeichen
+const sal_Unicode CH_BREAK = 0x0A;  //
+const sal_Unicode CH_TAB   = '\t';  // \t
+const sal_Unicode CH_PAR    = 0xB6;     // Paragraph
+const sal_Unicode CH_BULLET = 0xB7;     // mittiger Punkt
 
 class SwSubFont : public SvxFont
 {

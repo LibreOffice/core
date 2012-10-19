@@ -83,8 +83,8 @@ SwTabPortion *SwTxtFormatter::NewTabPortion( SwTxtFormatInfo &rInf, bool bAuto )
 {
     SwTabPortion *pTabPor = 0;
 
-    xub_Unicode cFill = 0;
-    xub_Unicode cDec = 0;
+    sal_Unicode cFill = 0;
+    sal_Unicode cDec = 0;
     SvxTabAdjust eAdj;
 
     KSHORT nNewTabPos;
@@ -329,7 +329,7 @@ SwTabPortion *SwTxtFormatter::NewTabPortion( SwTxtFormatInfo &rInf, bool bAuto )
 // Die Basisklasse wird erstmal ohne alles initialisiert.
 
 
-SwTabPortion::SwTabPortion( const KSHORT nTabPosition, const xub_Unicode cFillChar, const bool bAutoTab )
+SwTabPortion::SwTabPortion( const KSHORT nTabPosition, const sal_Unicode cFillChar, const bool bAutoTab )
     : SwFixPortion( 0, 0 ), nTabPos(nTabPosition), cFill(cFillChar), bAutoTabStop( bAutoTab )
 {
     nLineLength = 1;

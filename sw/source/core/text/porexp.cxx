@@ -156,7 +156,7 @@ MSHORT SwBlankPortion::MayUnderFlow( const SwTxtFormatInfo &rInf,
             xub_StrLen nBlank = nIdx;
             while( --nBlank > rInf.GetLineStart() )
             {
-                const xub_Unicode cCh = rInf.GetChar( nBlank );
+                const sal_Unicode cCh = rInf.GetChar( nBlank );
                 if( CH_BLANK == cCh ||
                     (( CH_TXTATR_BREAKWORD == cCh || CH_TXTATR_INWORD == cCh )
                         && rInf.HasHint( nBlank ) ) )
@@ -166,7 +166,7 @@ MSHORT SwBlankPortion::MayUnderFlow( const SwTxtFormatInfo &rInf,
                 return 0;
         }
     }
-    xub_Unicode cCh;
+    sal_Unicode cCh;
     if( nIdx < 2 || CH_BLANK == (cCh = rInf.GetChar( nIdx - 1 )) )
         return 1;
     if( CH_BREAK == cCh )

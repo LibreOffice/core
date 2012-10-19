@@ -174,7 +174,7 @@ public:
 class SwBulletPortion : public SwNumberPortion
 {
 public:
-    SwBulletPortion( const xub_Unicode cCh,
+    SwBulletPortion( const sal_Unicode cCh,
                      const XubString& rBulletFollowedBy,
                      SwFont *pFnt,
                      const sal_Bool bLeft,

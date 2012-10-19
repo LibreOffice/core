@@ -1820,7 +1820,7 @@ void    SwSpellIter::AddPortion(uno::Reference< XSpellAlternatives > xAlt,
 
                 bool bField = false;
                 //read the character at the current position to check if it's a field
-                xub_Unicode cChar = pTxtNode->GetTxt().GetChar( pCrsr->GetMark()->nContent.GetIndex() );
+                sal_Unicode cChar = pTxtNode->GetTxt().GetChar( pCrsr->GetMark()->nContent.GetIndex() );
                 if( CH_TXTATR_BREAKWORD == cChar || CH_TXTATR_INWORD == cChar)
                 {
                     const SwTxtAttr* pTxtAttr = pTxtNode->GetTxtAttrForCharAt(

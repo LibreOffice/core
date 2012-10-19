@@ -1482,17 +1482,17 @@ xub_StrLen SwTxtFormatInfo::ScanPortionEnd( const xub_StrLen nStart,
     //
     // Used for decimal tab handling:
     //
-    const xub_Unicode cTabDec = GetLastTab() ? (sal_Unicode)GetTabDecimal() : 0;
-    const xub_Unicode cThousandSep  = ',' == cTabDec ? '.' : ',';
+    const sal_Unicode cTabDec = GetLastTab() ? (sal_Unicode)GetTabDecimal() : 0;
+    const sal_Unicode cThousandSep  = ',' == cTabDec ? '.' : ',';
     // #i45951# German (Switzerland) uses ' as thousand separator
-    const xub_Unicode cThousandSep2 = ',' == cTabDec ? '.' : '\'';
+    const sal_Unicode cThousandSep2 = ',' == cTabDec ? '.' : '\'';
 
     bool bNumFound = false;
     const bool bTabCompat = GetTxtFrm()->GetTxtNode()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::TAB_COMPAT);
 
     for( ; i < nEnd; ++i )
     {
-        const xub_Unicode cPos = GetChar( i );
+        const sal_Unicode cPos = GetChar( i );
         switch( cPos )
         {
         case CH_TXTATR_BREAKWORD:
@@ -1558,7 +1558,7 @@ xub_StrLen SwTxtFormatInfo::ScanPortionEnd( const xub_StrLen nStart,
     // to become the hook:
     if ( i == nEnd && i < GetTxt().Len() && bNumFound )
     {
-        const xub_Unicode cPos = GetChar( i );
+        const sal_Unicode cPos = GetChar( i );
         if ( cPos != cTabDec && cPos != cThousandSep && cPos !=cThousandSep2 && ( 0x2F >= cPos || cPos >= 0x3A ) )
         {
             cHookChar = GetChar( i );

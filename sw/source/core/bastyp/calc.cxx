@@ -1507,7 +1507,7 @@ namespace
                                 const LocaleDataWrapper* const pLclData )
     {
         OSL_ASSERT(pLclData);
-        const xub_Unicode nCurrCmdPos = rCommandPos;
+        const sal_Unicode nCurrCmdPos = rCommandPos;
         rtl_math_ConversionStatus eStatus;
         const sal_Unicode* pEnd;
         rVal = rtl_math_uStringToDouble( rCommand.GetBuffer() + rCommandPos,

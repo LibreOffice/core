@@ -2967,7 +2967,7 @@ sal_Bool SwTxtNode::GetExpandTxt( SwTxtNode& rDestNd, const SwIndex* pDestIdx,
         sTmpText.SearchAndReplaceAll('\t', ' ');
 
     // mask hidden characters
-    const xub_Unicode cChar = CH_TXTATR_BREAKWORD;
+    const sal_Unicode cChar = CH_TXTATR_BREAKWORD;
     sal_uInt16 nHiddenChrs =
         SwScriptInfo::MaskHiddenRanges( *this, sTmpText, 0, sTmpText.Len(), cChar );
 

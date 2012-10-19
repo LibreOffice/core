@@ -519,7 +519,7 @@ bool sw_HideObj( const SwTxtFrm& _rFrm,
               pIDSA->get(IDocumentSettingAccess::CONSIDER_WRAP_ON_OBJECT_POSITION) &&
              _rFrm.IsInDocBody() && !_rFrm.FindNextCnt() )
         {
-            const xub_Unicode cAnchorChar =
+            const sal_Unicode cAnchorChar =
                         _rFrm.GetTxtNode()->GetTxt().GetChar( _nObjAnchorPos );
             if ( cAnchorChar == CH_TXTATR_BREAKWORD )
             {

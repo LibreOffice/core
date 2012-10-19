@@ -202,7 +202,7 @@ public:
  */
     static sal_uInt16 MaskHiddenRanges( const SwTxtNode& rNode, XubString& rText,
                                     const xub_StrLen nStt, const xub_StrLen nEnd,
-                                    const xub_Unicode cChar );
+                                    const sal_Unicode cChar );
 
 /** Hidden text attribute handling
 
