@@ -648,10 +648,10 @@ extern "C" sal_Bool GraphicImport(SvStream & rStream, Graphic & rGraphic, Filter
                                             }
                                         }
                                         if ( nBitDepth == 1 )
-                                            pAcc->SetPixel( y, x, sal::static_int_cast< sal_uInt8 >(( nDat >> nBitsLeft ) & 1) );
+                                            pAcc->SetPixelIndex( y, x, static_cast<sal_uInt8>(nDat >> nBitsLeft) & 1 );
                                         else
                                         {
-                                            pAcc->SetPixel( y, x, ( nDat ) ? 1 : 0 );   // nBitDepth == 8
+                                            pAcc->SetPixelIndex( y, x, nDat ? 1 : 0 );  // nBitDepth == 8
                                             nBitsLeft = 0;
                                         }
                                     }

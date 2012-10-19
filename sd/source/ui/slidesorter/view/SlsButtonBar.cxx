@@ -158,7 +158,7 @@ namespace {
                             static_cast<sal_Int32>(nValue * (1-nAlpha)),
                             0,
                             255));
-                    pBitmap->SetPixel(nY, nX, 255-sal_uInt8(nNewValue));
+                    pBitmap->SetPixelIndex(nY, nX, static_cast<sal_uInt8>(255-nNewValue));
                 }
         }
     }

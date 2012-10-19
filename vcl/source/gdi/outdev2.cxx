@@ -1666,8 +1666,8 @@ Bitmap OutputDevice::ImplBlendWithAlpha( Bitmap              aBmp,
 
                     aSrcCol = pP->GetColor( nMapY, nMapX );
                     aDstCol = pB->GetColor( nY, nX );
-                    const sal_uInt8 nSrcOpaq = 255 - pA->GetPixel( nMapY, nMapX ).GetBlueOrIndex();
-                    const sal_uInt8 nDstOpaq  = 255 - pAlphaW->GetPixel( nY, nX ).GetBlueOrIndex();
+                    const sal_uInt8 nSrcOpaq = 255 - pA->GetPixelIndex( nMapY, nMapX );
+                    const sal_uInt8 nDstOpaq  = 255 - pAlphaW->GetPixelIndex( nY, nX );
 
                     aDstCol.SetRed( lcl_calcColor( aSrcCol.GetRed(), nSrcOpaq, aDstCol.GetRed() ) );
                     aDstCol.SetBlue( lcl_calcColor( aSrcCol.GetBlue(), nSrcOpaq, aDstCol.GetBlue() ) );
@@ -1711,8 +1711,8 @@ Bitmap OutputDevice::ImplBlendWithAlpha( Bitmap              aBmp,
 
                     aSrcCol = pP->GetColor( nMapY, nMapX );
                     aDstCol = pB->GetColor( nY, nX );
-                    const sal_uInt8 nSrcOpaq  = 255 - pA->GetPixel( nMapY, nMapX ).GetBlueOrIndex();
-                    const sal_uInt8 nDstOpaq  = 255 - pAlphaW->GetPixel( nY, nX ).GetBlueOrIndex();
+                    const sal_uInt8 nSrcOpaq  = 255 - pA->GetPixelIndex( nMapY, nMapX );
+                    const sal_uInt8 nDstOpaq  = 255 - pAlphaW->GetPixelIndex( nY, nX );
 
                     aDstCol.SetRed( lcl_calcColor( aSrcCol.GetRed(), nSrcOpaq, aDstCol.GetRed() ) );
                     aDstCol.SetBlue( lcl_calcColor( aSrcCol.GetBlue(), nSrcOpaq, aDstCol.GetBlue() ) );
@@ -1782,7 +1782,7 @@ Bitmap OutputDevice::ImplBlend( Bitmap              aBmp,
                     const sal_uLong nD = nVCLDitherLut[ nModY | ( nOutX & 0x0FL ) ];
 
                     aDstCol = pB->GetColor( nY, nX );
-                    aDstCol.Merge( pP->GetColor( nMapY, nMapX ), (sal_uInt8) pA->GetPixel( nMapY, nMapX ) );
+                    aDstCol.Merge( pP->GetColor( nMapY, nMapX ), pA->GetPixelIndex( nMapY, nMapX ) );
                     aIndex.SetIndex( (sal_uInt8) ( nVCLRLut[ ( nVCLLut[ aDstCol.GetRed() ] + nD ) >> 16UL ] +
                                               nVCLGLut[ ( nVCLLut[ aDstCol.GetGreen() ] + nD ) >> 16UL ] +
                                               nVCLBLut[ ( nVCLLut[ aDstCol.GetBlue() ] + nD ) >> 16UL ] ) );

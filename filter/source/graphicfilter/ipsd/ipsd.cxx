@@ -368,7 +368,7 @@ sal_Bool PSDReader::ImplReadBody()
                     }
                     for ( sal_uInt16 i = 0; i < ( -nRunCount + 1 ); i++ )
                     {
-                        mpWriteAcc->SetPixel( nY, nX, (sal_uInt8)nDat >> nBitCount-- );
+                        mpWriteAcc->SetPixelIndex( nY, nX, nDat >> nBitCount-- );
                         if ( ++nX == mpFileHeader->nColumns )
                         {
                             nX = 0;
@@ -389,7 +389,7 @@ sal_Bool PSDReader::ImplReadBody()
                             nDat ^= 0xff;
                             nBitCount = 7;
                         }
-                        mpWriteAcc->SetPixel( nY, nX, (sal_uInt8)nDat >> nBitCount-- );
+                        mpWriteAcc->SetPixelIndex( nY, nX, nDat >> nBitCount-- );
                         if ( ++nX == mpFileHeader->nColumns )
                         {
                             nX = 0;
@@ -418,7 +418,7 @@ sal_Bool PSDReader::ImplReadBody()
                         *mpPSD >> nDummy;
                     for ( sal_uInt16 i = 0; i < ( -nRunCount + 1 ); i++ )
                     {
-                        mpWriteAcc->SetPixel( nY, nX, (sal_uInt8)nDat );
+                        mpWriteAcc->SetPixelIndex( nY, nX, nDat );
                         if ( ++nX == mpFileHeader->nColumns )
                         {
                             nX = 0;
@@ -435,7 +435,7 @@ sal_Bool PSDReader::ImplReadBody()
                         *mpPSD >> nDat;
                         if ( mpFileHeader->nDepth == 16 )   // 16 bit depth is to be skipped
                             *mpPSD >> nDummy;
-                        mpWriteAcc->SetPixel( nY, nX, (sal_uInt8)nDat );
+                        mpWriteAcc->SetPixelIndex( nY, nX, nDat );
                         if ( ++nX == mpFileHeader->nColumns )
                         {
                             nX = 0;
@@ -686,7 +686,7 @@ sal_Bool PSDReader::ImplReadBody()
                     *mpPSD >> nDummy;
                 for ( sal_uInt16 i = 0; i < ( -nRunCount + 1 ); i++ )
                 {
-                    mpMaskWriteAcc->SetPixel( nY, nX, (sal_uInt8)nDat );
+                    mpMaskWriteAcc->SetPixelIndex( nY, nX, nDat );
                     if ( ++nX == mpFileHeader->nColumns )
                     {
                         nX = 0;
@@ -707,7 +707,7 @@ sal_Bool PSDReader::ImplReadBody()
                         nDat = 1;
                     if ( mpFileHeader->nDepth == 16 )   // 16 bit depth is to be skipped
                         *mpPSD >> nDummy;
-                    mpMaskWriteAcc->SetPixel( nY, nX, (sal_uInt8)nDat );
+                    mpMaskWriteAcc->SetPixelIndex( nY, nX, nDat );
                     if ( ++nX == mpFileHeader->nColumns )
                     {
                         nX = 0;

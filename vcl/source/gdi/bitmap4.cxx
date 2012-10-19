@@ -856,7 +856,7 @@ sal_Bool Bitmap::ImplMosaic( const BmpFilterParam* pFilterParam, const Link* /*p
                         {
                             for( nX = nX1; nX <= nX2; nX++ )
                             {
-                                const BitmapColor& rCol = pReadAcc->GetPaletteColor( (sal_uInt8) pReadAcc->GetPixel( nY, nX ) );
+                                const BitmapColor& rCol = pReadAcc->GetPaletteColor( pReadAcc->GetPixelIndex( nY, nX ) );
                                 nSumR += rCol.GetRed();
                                 nSumG += rCol.GetGreen();
                                 nSumB += rCol.GetBlue();

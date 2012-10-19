@@ -993,14 +993,14 @@ sal_Bool GraphicManager::ImplCreateScaled( const BitmapEx& rBmpEx,
                         {
                             nTmpX = pMapIX[ nX ]; nTmpFX = pMapFX[ nX ];
 
-                            aCol0 = pAcc->GetPaletteColor( pAcc->GetPixel( nTmpY, nTmpX ) );
-                            aCol1 = pAcc->GetPaletteColor( pAcc->GetPixel( nTmpY, ++nTmpX ) );
+                            aCol0 = pAcc->GetPaletteColor( pAcc->GetPixelIndex( nTmpY, nTmpX ) );
+                            aCol1 = pAcc->GetPaletteColor( pAcc->GetPixelIndex( nTmpY, ++nTmpX ) );
                             cR0 = MAP( aCol0.GetRed(), aCol1.GetRed(), nTmpFX );
                             cG0 = MAP( aCol0.GetGreen(), aCol1.GetGreen(), nTmpFX );
                             cB0 = MAP( aCol0.GetBlue(), aCol1.GetBlue(), nTmpFX );
 
-                            aCol1 = pAcc->GetPaletteColor( pAcc->GetPixel( ++nTmpY, nTmpX ) );
-                            aCol0 = pAcc->GetPaletteColor( pAcc->GetPixel( nTmpY--, --nTmpX ) );
+                            aCol1 = pAcc->GetPaletteColor( pAcc->GetPixelIndex( ++nTmpY, nTmpX ) );
+                            aCol0 = pAcc->GetPaletteColor( pAcc->GetPixelIndex( nTmpY--, --nTmpX ) );
                             cR1 = MAP( aCol0.GetRed(), aCol1.GetRed(), nTmpFX );
                             cG1 = MAP( aCol0.GetGreen(), aCol1.GetGreen(), nTmpFX );
                             cB1 = MAP( aCol0.GetBlue(), aCol1.GetBlue(), nTmpFX );
@@ -1273,7 +1273,7 @@ sal_Bool GraphicManager::ImplCreateScaled( const BitmapEx& rBmpEx,
                             {
                                 for( nX = 0L; nX < nDstW; nX++ )
                                 {
-                                    if( pAcc->GetPaletteColor( (sal_uInt8) pAcc->GetPixel( pMapLY[ nY ], pMapLX[ nX ] ) ) == aB )
+                                    if( pAcc->GetPaletteColor( pAcc->GetPixelIndex( pMapLY[ nY ], pMapLX[ nX ] ) ) == aB )
                                         pWAcc->SetPixel( nY, nX, aWB );
                                     else
                                         pWAcc->SetPixel( nY, nX, aWW );
@@ -1387,14 +1387,14 @@ sal_Bool GraphicManager::ImplCreateRotatedScaled( const BitmapEx& rBmpEx,
                             nTmpX = pMapIX[ nUnRotX ]; nTmpFX = pMapFX[ nUnRotX ];
                             nTmpY = pMapIY[ nUnRotY ], nTmpFY = pMapFY[ nUnRotY ];
 
-                            const BitmapColor& rCol0 = pAcc->GetPaletteColor( pAcc->GetPixel( nTmpY, nTmpX ) );
-                            const BitmapColor& rCol1 = pAcc->GetPaletteColor( pAcc->GetPixel( nTmpY, ++nTmpX ) );
+                            const BitmapColor& rCol0 = pAcc->GetPaletteColor( pAcc->GetPixelIndex( nTmpY, nTmpX ) );
+                            const BitmapColor& rCol1 = pAcc->GetPaletteColor( pAcc->GetPixelIndex( nTmpY, ++nTmpX ) );
                             cR0 = MAP( rCol0.GetRed(), rCol1.GetRed(), nTmpFX );
                             cG0 = MAP( rCol0.GetGreen(), rCol1.GetGreen(), nTmpFX );
                             cB0 = MAP( rCol0.GetBlue(), rCol1.GetBlue(), nTmpFX );
 
-                            const BitmapColor& rCol3 = pAcc->GetPaletteColor( pAcc->GetPixel( ++nTmpY, nTmpX ) );
-                            const BitmapColor& rCol2 = pAcc->GetPaletteColor( pAcc->GetPixel( nTmpY, --nTmpX ) );
+                            const BitmapColor& rCol3 = pAcc->GetPaletteColor( pAcc->GetPixelIndex( ++nTmpY, nTmpX ) );
+                            const BitmapColor& rCol2 = pAcc->GetPaletteColor( pAcc->GetPixelIndex( nTmpY, --nTmpX ) );
                             cR1 = MAP( rCol2.GetRed(), rCol3.GetRed(), nTmpFX );
                             cG1 = MAP( rCol2.GetGreen(), rCol3.GetGreen(), nTmpFX );
                             cB1 = MAP( rCol2.GetBlue(), rCol3.GetBlue(), nTmpFX );

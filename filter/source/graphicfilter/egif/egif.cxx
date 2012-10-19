@@ -522,7 +522,7 @@ void GIFWriter::WriteAccess()
             else
             {
                 for( long nX = 0L; nX < nWidth; nX++ )
-                    pBuffer[ nX ] = (sal_uInt8) pAcc->GetPixel( nY, nX );
+                    pBuffer[ nX ] = pAcc->GetPixelIndex( nY, nX );
 
                 aCompressor.Compress( pBuffer, nWidth );
             }

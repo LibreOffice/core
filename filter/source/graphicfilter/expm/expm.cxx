@@ -176,7 +176,7 @@ void XPMWriter::ImplWritePalette()
     sal_uInt16 nTransIndex = 0xffff;
 
     if ( mbTrans )
-        nTransIndex = mpAcc->GetBestMatchingColor( BMP_COL_TRANS );
+        nTransIndex = mpAcc->GetBestPaletteIndex( BMP_COL_TRANS );
     for ( sal_uInt16 i = 0; i < mnColors; i++ )
     {
         *mpOStm << "\x22";
@@ -202,7 +202,7 @@ void XPMWriter::ImplWriteBody()
         *mpOStm << (sal_uInt8)0x22;
         for ( sal_uLong x = 0; x < mnWidth; x++ )
         {
-            ImplWritePixel( (sal_uInt8)(mpAcc->GetPixel( y, x ) ) );
+            ImplWritePixel( mpAcc->GetPixelIndex( y, x ) );
         }
         *mpOStm << "\x22,\x0a";
     }

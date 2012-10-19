@@ -380,7 +380,7 @@ sal_Bool TGAReader::ImplReadBody()
                                 return sal_False;
                             for ( sal_uInt16 i = 0; i < ( ( nRunCount & 0x7f ) + 1 ); i++ )
                             {
-                                mpAcc->SetPixel( nY, nX, (sal_uInt8)nDummy );
+                                mpAcc->SetPixelIndex( nY, nX, nDummy );
                                 nX += nXAdd;
                                 nXCount++;
                                 if ( nXCount == mpFileHeader->nImageWidth )
@@ -403,7 +403,7 @@ sal_Bool TGAReader::ImplReadBody()
                                 *mpTGA >> nDummy;
                                 if ( nDummy >= mpFileHeader->nColorMapLength )
                                     return sal_False;
-                                mpAcc->SetPixel( nY, nX, (sal_uInt8)nDummy );
+                                mpAcc->SetPixelIndex( nY, nX, nDummy );
                                 nX += nXAdd;
                                 nXCount++;
                                 if ( nXCount == mpFileHeader->nImageWidth )
@@ -617,7 +617,7 @@ sal_Bool TGAReader::ImplReadBody()
                             *mpTGA >> nDummy;
                             if ( nDummy >= mpFileHeader->nColorMapLength )
                                 return sal_False;
-                            mpAcc->SetPixel( nY, nX, (sal_uInt8)nDummy );
+                            mpAcc->SetPixelIndex( nY, nX, nDummy );
                         }
                         break;
                     default:

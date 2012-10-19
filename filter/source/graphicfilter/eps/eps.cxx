@@ -1780,7 +1780,7 @@ void PSWriter::ImplBmp( Bitmap* pBitmap, Bitmap* pMaskBitmap, const Point & rPoi
             {
                 for ( long x = 0; x < nWidth; x++ )
                 {
-                    ImplWriteHexByte( (sal_uInt8)pAcc->GetPixel( y, x ) );
+                    ImplWriteHexByte( pAcc->GetPixelIndex( y, x ) );
                 }
             }
             *mpPS << (sal_uInt8)10;
@@ -1818,7 +1818,7 @@ void PSWriter::ImplBmp( Bitmap* pBitmap, Bitmap* pMaskBitmap, const Point & rPoi
                     {
                         for ( long x = 0; x < nWidth; x++ )
                         {
-                            Compress( (sal_uInt8)pAcc->GetPixel( y, x ) );
+                            Compress( pAcc->GetPixelIndex( y, x ) );
                         }
                     }
                     EndCompression();
@@ -1829,7 +1829,7 @@ void PSWriter::ImplBmp( Bitmap* pBitmap, Bitmap* pMaskBitmap, const Point & rPoi
                     {
                         for ( long x = 0; x < nWidth; x++ )
                         {
-                            ImplWriteHexByte( (sal_uInt8)pAcc->GetPixel( y, x ) );
+                            ImplWriteHexByte( pAcc->GetPixelIndex( y, x ) );
                         }
                     }
                 }
@@ -1881,7 +1881,7 @@ void PSWriter::ImplBmp( Bitmap* pBitmap, Bitmap* pMaskBitmap, const Point & rPoi
                         {
                             for ( long x = 0; x < nWidth; x++ )
                             {
-                                Compress( (sal_uInt8)pAcc->GetPixel( y, x ) );
+                                Compress( pAcc->GetPixelIndex( y, x ) );
                             }
                         }
                         EndCompression();
@@ -1892,7 +1892,7 @@ void PSWriter::ImplBmp( Bitmap* pBitmap, Bitmap* pMaskBitmap, const Point & rPoi
                         {
                             for ( long x = 0; x < nWidth; x++ )
                             {
-                                ImplWriteHexByte( (sal_uInt8)pAcc->GetPixel( y, x ) );
+                                ImplWriteHexByte( pAcc->GetPixelIndex( y, x ) );
                             }
                         }
                     }
