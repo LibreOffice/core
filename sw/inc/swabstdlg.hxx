@@ -480,7 +480,7 @@ public:
                                                        Window *pParent,
                                                     SfxChildWinInfo* pInfo,
                                                        sal_Bool bNew=sal_True) = 0; //add for SwIndexMarkFloatDlg
-    virtual AbstractMarkFloatDlg*       CreateAuthMarkFloatDlg( int nResId,
+    virtual AbstractMarkFloatDlg*       CreateAuthMarkFloatDlg(
                                                     SfxBindings* pBindings,
                                                        SfxChildWindow* pChild,
                                                        Window *pParent,

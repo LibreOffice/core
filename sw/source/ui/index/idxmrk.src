@@ -438,145 +438,12 @@ String STR_IDXMRK_EDIT
 {
     Text [ en-US ] = "Edit Index Entry" ;
 };
+
 String STR_IDXMRK_INSERT
 {
     Text [ en-US ] = "Insert Index Entry" ;
 };
 
-#define     AUTH_DIALOG_WINDOW  \
-    Window  WIN_DLG                                 \
-    {                                                   \
-        Pos = MAP_APPFONT ( 0 , 0 ) ;                   \
-        Size = MAP_APPFONT ( 218 , 118 + RADIO_BUTTON_HEIGHT) ;     \
-        RadioButton RB_FROMCOMPONENT                                \
-        {                                                           \
-            Pos = MAP_APPFONT ( 12 , 14 ) ;                         \
-            Size = MAP_APPFONT ( 147 , 12 ) ;                       \
-            Text [ en-US ] = "From bibliography ~database";\
-        };                                                          \
-        RadioButton RB_FROMDOCCONTENT                               \
-        {                                                           \
-            Pos = MAP_APPFONT ( 12,  29 ) ;                         \
-            Size = MAP_APPFONT ( 147 , 12 ) ;                       \
-            Text [ en-US ] = "~From document content";\
-        };                                                          \
-        FixedText FT_AUTHOR                             \
-        {                                               \
-            Pos = MAP_APPFONT ( 12 , 14 + RADIO_BUTTON_HEIGHT) ; \
-            Size = MAP_APPFONT ( 60 , 8 ) ;             \
-            Text [ en-US ] = "Author";\
-        };                                              \
-        FixedText   FI_AUTHOR                           \
-        {                                               \
-            Pos = MAP_APPFONT ( 12 , 25 + RADIO_BUTTON_HEIGHT) ; \
-            Size = MAP_APPFONT ( 140, 8 ) ;            \
-            WordBreak = TRUE;                           \
-        };                                              \
-        FixedText FT_TITLE                              \
-        {                                               \
-            Pos = MAP_APPFONT ( 12 , 37 + RADIO_BUTTON_HEIGHT) ; \
-            Size = MAP_APPFONT ( 60 , 8 ) ;             \
-            Text [ en-US ] = "Title";\
-        };                                              \
-        FixedText   FI_TITLE                            \
-        {                                               \
-            Pos = MAP_APPFONT ( 12 , 48  + RADIO_BUTTON_HEIGHT) ; \
-            Size = MAP_APPFONT ( 140, 8 ) ;            \
-            WordBreak = TRUE;                           \
-        };                                              \
-        FixedText FT_ENTRY                              \
-        {                                               \
-            Pos = MAP_APPFONT ( 12 , 62 + RADIO_BUTTON_HEIGHT) ; \
-            Size = MAP_APPFONT ( 60 , 8 ) ;             \
-            Text [ en-US ] = "Short ~name";\
-        };                                              \
-        Edit ED_ENTRY                                   \
-        {                                               \
-            Border = TRUE ;                             \
-            Pos = MAP_APPFONT ( 12 , 73 + RADIO_BUTTON_HEIGHT) ; \
-            Size = MAP_APPFONT ( 140 , 12 ) ;            \
-            TabStop = TRUE ;                            \
-            Left = TRUE ;                               \
-        };                                              \
-        ListBox LB_ENTRY                                   \
-        {                                               \
-            Border = TRUE ;                             \
-            Pos = MAP_APPFONT ( 12 , 73 + RADIO_BUTTON_HEIGHT) ; \
-            Size = MAP_APPFONT ( 140 , 50 ) ;            \
-            TabStop = TRUE ;                            \
-            DropDown = TRUE ;                           \
-        };                                              \
-        FixedLine FL_ENTRY                               \
-        {                                               \
-            Pos = MAP_APPFONT ( 6 , 3 ) ;               \
-            Size = MAP_APPFONT ( 146 , 8 ) ; \
-            Text [ en-US ] = "Entry";\
-        };                                              \
-        OKButton PB_OK                                  \
-        {                                               \
-            Pos = MAP_APPFONT ( 162 , 6 ) ;             \
-            Size = MAP_APPFONT ( 50 , 14 ) ;            \
-            TabStop = TRUE ;                            \
-            DefButton = TRUE ;                          \
-            Text [ en-US ] = "Insert";\
-        };                                              \
-        CancelButton PB_CANCEL                          \
-        {                                               \
-            Pos = MAP_APPFONT ( 162 , 23 ) ;            \
-            Size = MAP_APPFONT ( 50 , 14 ) ;            \
-            Text [ en-US ] = "Close";\
-        };                                              \
-        HelpButton PB_HELP                              \
-        {                                               \
-            Pos = MAP_APPFONT ( 162 , 43 ) ;            \
-            Size = MAP_APPFONT ( 50 , 14 ) ;            \
-        };                                              \
-        PushButton PB_CREATEENTRY                       \
-        {                                               \
-            Pos = MAP_APPFONT ( 162 , 60 ) ;            \
-            Size = MAP_APPFONT ( 50 , 14 ) ;            \
-            Text [ en-US ] = "~New";\
-        };                                              \
-        PushButton PB_EDITENTRY                       \
-        {                                               \
-            Pos = MAP_APPFONT ( 162 , 77 ) ;            \
-            Size = MAP_APPFONT ( 50 , 14 ) ;            \
-            Text [ en-US ] = "Edit";\
-        };                                              \
-        String ST_CHANGE                                \
-        {                                               \
-            Text [ en-US ] = "Modify";\
-        };                                              \
-    };
-
-ModalDialog DLG_EDIT_AUTHMARK
-{
-    OutputSize = TRUE ;
-    Moveable = TRUE ;
-    Closeable = TRUE ;
-    Sizeable = FALSE ;
-    HelpId = CMD_FN_EDIT_AUTH_ENTRY_DLG;
-    SVLook = TRUE ;
-    Size = MAP_APPFONT ( 218 , 118 ) ;
-    #define RADIO_BUTTON_HEIGHT 0
-    AUTH_DIALOG_WINDOW
-    #undef RADIO_BUTTON_HEIGHT
-};
-ModelessDialog DLG_INSAUTHMARK
-{
-    OutputSize = TRUE ;
-    Moveable = TRUE ;
-    Closeable = TRUE ;
-    Sizeable = FALSE ;
-//  Zoomable = TRUE ;
-    HelpId = CMD_FN_INSERT_AUTH_ENTRY_DLG;
-    SVLook = TRUE ;
-    #define RADIO_BUTTON_HEIGHT 30
-    Size = MAP_APPFONT ( 218 , 118 + RADIO_BUTTON_HEIGHT) ;
-//  Moveable = TRUE ;
-    AUTH_DIALOG_WINDOW
-    #undef RADIO_BUTTON_HEIGHT
-};
 ModalDialog DLG_CREATE_AUTH_ENTRY
 {
     HelpId = HID_DLG_CREATE_AUTH_ENTRY;
@@ -609,16 +476,7 @@ ModalDialog DLG_CREATE_AUTH_ENTRY
     };
     Text [ en-US ] = "Define Bibliography Entry";
 };
-String STR_AUTHMRK_EDIT
-{
 
-    Text [ en-US ] = "Edit Bibliography Entry";
-};
-String STR_AUTHMRK_INSERT
-{
-
-    Text [ en-US ] = "Insert Bibliography Entry";
-};
 QueryBox DLG_CHANGE_AUTH_ENTRY
 {
     BUTTONS = WB_YES_NO ;

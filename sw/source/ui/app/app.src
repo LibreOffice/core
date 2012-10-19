@@ -660,6 +660,18 @@ String STR_SIMPLE
     Text [ en-US ] = "Plain" ;
 };
 
+String STR_AUTHMRK_EDIT
+{
+
+    Text [ en-US ] = "Edit Bibliography Entry";
+};
+
+String STR_AUTHMRK_INSERT
+{
+
+    Text [ en-US ] = "Insert Bibliography Entry";
+};
+
 ToolBox RID_MODULE_TOOLBOX
 {
     HelpID = HID_MODULE_TOOLBOX ;

@@ -918,7 +918,6 @@ VclAbstractDialog * SwAbstractDialogFactory_Impl::CreateVclAbstractDialog ( Wind
         case DLG_ROW_HEIGHT :
             pDlg = new SwTableHeightDlg( pParent, rSh);
             break;
-
         case DLG_SORTING :
             pDlg = new SwSortDlg( pParent, rSh);
             break;
@@ -1445,25 +1444,15 @@ AbstractMarkFloatDlg * SwAbstractDialogFactory_Impl::CreateIndexMarkFloatDlg( in
     return 0;
 }
 
-AbstractMarkFloatDlg * SwAbstractDialogFactory_Impl::CreateAuthMarkFloatDlg( int nResId,
+AbstractMarkFloatDlg * SwAbstractDialogFactory_Impl::CreateAuthMarkFloatDlg(
                                                     SfxBindings* pBindings,
                                                        SfxChildWindow* pChild,
                                                        Window *pParent,
                                                     SfxChildWinInfo* pInfo,
-                                                       sal_Bool bNew ) //add for SwAuthMarkFloatDlg
+                                                       sal_Bool bNew) //add for SwAuthMarkFloatDlg
 {
-    SwAuthMarkFloatDlg* pDlg=NULL;
-    switch ( nResId )
-    {
-        case DLG_INSAUTHMARK :
-            pDlg = new SwAuthMarkFloatDlg( pBindings, pChild, pParent, pInfo, bNew );
-            break;
-        default:
-            break;
-    }
-    if ( pDlg )
-        return new AbstractAuthMarkFloatDlg_Impl( pDlg );
-    return 0;
+    SwAuthMarkFloatDlg* pDlg = new SwAuthMarkFloatDlg( pBindings, pChild, pParent, pInfo, bNew );
+    return new AbstractAuthMarkFloatDlg_Impl( pDlg );
 }
 
 AbstractSwWordCountFloatDlg * SwAbstractDialogFactory_Impl::CreateSwWordCountDialog(

@@ -53,6 +53,7 @@
 #include <multmrk.hxx>
 #include <swundo.hxx>                   // for Undo-Ids
 #include <cmdid.h>
+#include <app.hrc>
 #include <index.hrc>
 #include <idxmrk.hrc>
 #include <swmodule.hxx>
@@ -1161,89 +1162,58 @@ static const TextInfo aTextInfoArr[] =
     {AUTH_FIELD_CUSTOM5,         HID_AUTH_FIELD_CUSTOM5         }
 };
 
-sal_Bool SwAuthMarkDlg::bIsFromComponent = sal_True;
+sal_Bool SwAuthorMarkPane::bIsFromComponent = sal_True;
 
-SwAuthMarkDlg::SwAuthMarkDlg(  Window *pParent,
-                               const ResId& rResId,
-                               sal_Bool bNewDlg) :
-    Window(pParent, rResId),
-    aFromComponentRB(   this, ResId(RB_FROMCOMPONENT, *rResId.GetResMgr()   )),
-    aFromDocContentRB(  this, ResId(RB_FROMDOCCONTENT, *rResId.GetResMgr()  )),
-
-    aAuthorFT(  this, ResId(FT_AUTHOR, *rResId.GetResMgr()       )),
-    aAuthorFI(  this, ResId(FI_AUTHOR, *rResId.GetResMgr()   )),
-    aTitleFT(   this, ResId(FT_TITLE, *rResId.GetResMgr()    )),
-    aTitleFI(   this, ResId(FI_TITLE, *rResId.GetResMgr()    )),
-    aEntryFT(   this, ResId(FT_ENTRY, *rResId.GetResMgr()    )),
-    aEntryED(   this, ResId(ED_ENTRY, *rResId.GetResMgr()   )),
-    aEntryLB(   this, ResId(LB_ENTRY, *rResId.GetResMgr()   )),
-
-    aEntryFL(   this, ResId(FL_ENTRY, *rResId.GetResMgr()    )),
-
-    aOKBT(      this, ResId(PB_OK, *rResId.GetResMgr()       )),
-    aCancelBT(  this, ResId(PB_CANCEL, *rResId.GetResMgr()  )),
-    aHelpBT(    this, ResId(PB_HELP, *rResId.GetResMgr()    )),
-    aCreateEntryPB(this,ResId(PB_CREATEENTRY, *rResId.GetResMgr())),
-    aEditEntryPB(this,  ResId(PB_EDITENTRY, *rResId.GetResMgr())),
-
-    sChangeST(  ResId(ST_CHANGE, *rResId.GetResMgr())),
-    bNewEntry(bNewDlg),
-    bBibAccessInitialized(sal_False),
-
-    pSh(0)
+SwAuthorMarkPane::SwAuthorMarkPane(Dialog &rDialog, sal_Bool bNewDlg)
+    : m_rDialog(rDialog)
+    , bNewEntry(bNewDlg)
+    , bBibAccessInitialized(sal_False)
+    , pSh(0)
 {
-    SetStyle(GetStyle()|WB_DIALOGCONTROL);
-    FreeResource();
+    m_rDialog.get(m_pFromComponentRB, "frombibliography");
+    m_rDialog.get(m_pFromDocContentRB, "fromdocument");
+    m_rDialog.get(m_pAuthorFI, "author");
+    m_rDialog.get(m_pTitleFI, "title");
+    m_rDialog.get(m_pEntryED, "entryed");
+    m_rDialog.get(m_pEntryLB, "entrylb");
+    m_rDialog.get(m_pActionBT,
+        bNewEntry ? OString("insert") : OString("modify"));
+    m_pActionBT->Show(true);
+    m_rDialog.get(m_pCloseBT, "close");
+    m_rDialog.get(m_pCreateEntryPB, "new");
+    m_rDialog.get(m_pEditEntryPB, "edit");
 
-    aFromComponentRB.SetHelpId(HID_AUTH_MARK_DLG_FROM_COMP_RB);
-    aFromDocContentRB.SetHelpId(HID_AUTH_MARK_DLG_FROM_DOC_RB );
-    aEntryED.SetHelpId(HID_AUTH_MARK_DLG_ID_LISTBOX           );
-    aEntryLB.SetHelpId(HID_AUTH_MARK_DLG_ID_LISTBOX           );
+    m_pFromComponentRB->Show(bNewEntry);
+    m_pFromDocContentRB->Show(bNewEntry);
+    m_pFromComponentRB->Check(bIsFromComponent);
+    m_pFromDocContentRB->Check(!bIsFromComponent);
 
-    aFromComponentRB.Show(bNewEntry);
-    aFromDocContentRB.Show(bNewEntry);
-    aFromComponentRB.Check(bIsFromComponent);
-    aFromDocContentRB.Check(!bIsFromComponent);
+    m_pActionBT->SetClickHdl(LINK(this,SwAuthorMarkPane, InsertHdl));
+    m_pCloseBT->SetClickHdl(LINK(this,SwAuthorMarkPane, CloseHdl));
+    m_pCreateEntryPB->SetClickHdl(LINK(this,SwAuthorMarkPane, CreateEntryHdl));
+    m_pEditEntryPB->SetClickHdl(LINK(this,SwAuthorMarkPane, CreateEntryHdl));
+    m_pFromComponentRB->SetClickHdl(LINK(this,SwAuthorMarkPane, ChangeSourceHdl));
+    m_pFromDocContentRB->SetClickHdl(LINK(this,SwAuthorMarkPane, ChangeSourceHdl));
+    m_pEntryED->SetModifyHdl(LINK(this,SwAuthorMarkPane, EditModifyHdl));
 
-    aOKBT       .SetHelpId(HID_INSERT_AUTH_MRK_OK   );
-    aCancelBT   .SetHelpId(HID_INSERT_AUTH_MRK_CLOSE);
-    aEntryED        .SetHelpId(HID_INSERT_AUTH_MRK_ENTRY        );
-    aCreateEntryPB  .SetHelpId(HID_INSERT_AUTH_MRK_CREATE_ENTRY );
-    aEditEntryPB    .SetHelpId(HID_INSERT_AUTH_MRK_EDIT_ENTRY   );
+    m_rDialog.SetText(SW_RESSTR(
+                    bNewEntry ? STR_AUTHMRK_INSERT : STR_AUTHMRK_EDIT));
 
-    aOKBT.SetClickHdl(LINK(this,SwAuthMarkDlg, InsertHdl));
-    aCancelBT.SetClickHdl(LINK(this,SwAuthMarkDlg, CloseHdl));
-    aCreateEntryPB.SetClickHdl(LINK(this,SwAuthMarkDlg, CreateEntryHdl));
-    aEditEntryPB.SetClickHdl(LINK(this,SwAuthMarkDlg, CreateEntryHdl));
-    aFromComponentRB.SetClickHdl(LINK(this,SwAuthMarkDlg, ChangeSourceHdl));
-    aFromDocContentRB.SetClickHdl(LINK(this,SwAuthMarkDlg, ChangeSourceHdl));
-    aEntryED.SetModifyHdl(LINK(this,SwAuthMarkDlg, EditModifyHdl));
-
-    GetParent()->SetText(String(SW_RES(
-                    bNewEntry ? STR_AUTHMRK_INSERT : STR_AUTHMRK_EDIT)));
-    aEntryED.Show(!bNewEntry);
-    aEntryLB.Show(bNewEntry);
-    if(!bNewEntry)
+    m_pEntryED->Show(!bNewEntry);
+    m_pEntryLB->Show(bNewEntry);
+    if(bNewEntry)
     {
-        aOKBT.SetText(sChangeST);
-    }
-    else
-    {
-        aEntryLB.SetSelectHdl(LINK(this, SwAuthMarkDlg, CompEntryHdl));
+        m_pEntryLB->SetSelectHdl(LINK(this, SwAuthorMarkPane, CompEntryHdl));
     }
 }
 
-SwAuthMarkDlg::~SwAuthMarkDlg()
-{
-}
-
-void    SwAuthMarkDlg::ReInitDlg(SwWrtShell& rWrtShell)
+void    SwAuthorMarkPane::ReInitDlg(SwWrtShell& rWrtShell)
 {
     pSh = &rWrtShell;
     InitControls();
 }
 
-IMPL_LINK_NOARG(SwAuthMarkDlg, CloseHdl)
+IMPL_LINK_NOARG(SwAuthorMarkPane, CloseHdl)
 {
     if(bNewEntry)
     {
@@ -1253,7 +1223,7 @@ IMPL_LINK_NOARG(SwAuthMarkDlg, CloseHdl)
     }
     else
     {
-        ((SwAuthMarkModalDlg*)GetParent())->EndDialog(RET_CANCEL);
+        m_rDialog.EndDialog(RET_CANCEL);
     }
     return 0;
 }
@@ -1275,7 +1245,7 @@ static String lcl_FindColumnEntry(const beans::PropertyValue* pFields, sal_Int32
     return sRet;
 }
 
-IMPL_LINK( SwAuthMarkDlg, CompEntryHdl, ListBox*, pBox)
+IMPL_LINK( SwAuthorMarkPane, CompEntryHdl, ListBox*, pBox)
 {
     String sEntry(pBox->GetSelectEntry());
     if(bIsFromComponent)
@@ -1316,12 +1286,12 @@ IMPL_LINK( SwAuthMarkDlg, CompEntryHdl, ListBox*, pBox)
         for(sal_uInt16 i = 0; i < AUTH_FIELD_END; i++)
             m_sFields[i] = aEmptyStr;
     }
-    aAuthorFI.SetText(m_sFields[AUTH_FIELD_AUTHOR]);
-    aTitleFI.SetText(m_sFields[AUTH_FIELD_TITLE]);
+    m_pAuthorFI->SetText(m_sFields[AUTH_FIELD_AUTHOR]);
+    m_pTitleFI->SetText(m_sFields[AUTH_FIELD_TITLE]);
     return 0;
 }
 
-IMPL_LINK_NOARG(SwAuthMarkDlg, InsertHdl)
+IMPL_LINK_NOARG(SwAuthorMarkPane, InsertHdl)
 {
     //insert or update the SwAuthorityField...
     if(pSh)
@@ -1341,7 +1311,7 @@ IMPL_LINK_NOARG(SwAuthMarkDlg, InsertHdl)
                 bDifferent |= m_sFields[i] != pEntry->GetAuthorField((ToxAuthorityField)i);
             if(bDifferent)
             {
-                QueryBox aQuery(this, SW_RES(DLG_CHANGE_AUTH_ENTRY));
+                QueryBox aQuery(&m_rDialog, SW_RES(DLG_CHANGE_AUTH_ENTRY));
                 if(RET_YES != aQuery.Execute())
                     return 0;
             }
@@ -1376,9 +1346,9 @@ IMPL_LINK_NOARG(SwAuthMarkDlg, InsertHdl)
     return 0;
 }
 
-IMPL_LINK(SwAuthMarkDlg, CreateEntryHdl, PushButton*, pButton)
+IMPL_LINK(SwAuthorMarkPane, CreateEntryHdl, PushButton*, pButton)
 {
-    sal_Bool bCreate = pButton == &aCreateEntryPB;
+    sal_Bool bCreate = pButton == m_pCreateEntryPB;
     String sOldId = m_sCreatedEntry[0];
     for(sal_uInt16 i = 0; i < AUTH_FIELD_END; i++)
         m_sCreatedEntry[i] = bCreate ? aEmptyStr : m_sFields[i];
@@ -1387,46 +1357,46 @@ IMPL_LINK(SwAuthMarkDlg, CreateEntryHdl, PushButton*, pButton)
                 *pSh, bNewEntry, bCreate);
     if(bNewEntry)
     {
-        aDlg.SetCheckNameHdl(LINK(this, SwAuthMarkDlg, IsEntryAllowedHdl));
+        aDlg.SetCheckNameHdl(LINK(this, SwAuthorMarkPane, IsEntryAllowedHdl));
     }
     if(RET_OK == aDlg.Execute())
     {
         if(bCreate && sOldId.Len())
         {
-            aEntryLB.RemoveEntry(sOldId);
+            m_pEntryLB->RemoveEntry(sOldId);
         }
         for(sal_uInt16 i = 0; i < AUTH_FIELD_END; i++)
         {
             m_sFields[i] = aDlg.GetEntryText((ToxAuthorityField)i);
             m_sCreatedEntry[i] = m_sFields[i];
         }
-        if(bNewEntry && !aFromDocContentRB.IsChecked())
+        if(bNewEntry && !m_pFromDocContentRB->IsChecked())
         {
-            aFromDocContentRB.Check(sal_True);
-            ChangeSourceHdl(&aFromDocContentRB);
+            m_pFromDocContentRB->Check(sal_True);
+            ChangeSourceHdl(m_pFromDocContentRB);
         }
         if(bCreate)
         {
             OSL_ENSURE(LISTBOX_ENTRY_NOTFOUND ==
-                        aEntryLB.GetEntryPos(m_sFields[AUTH_FIELD_IDENTIFIER]),
+                        m_pEntryLB->GetEntryPos(m_sFields[AUTH_FIELD_IDENTIFIER]),
                         "entry exists!");
-            aEntryLB.InsertEntry(m_sFields[AUTH_FIELD_IDENTIFIER]);
-            aEntryLB.SelectEntry(m_sFields[AUTH_FIELD_IDENTIFIER]);
+            m_pEntryLB->InsertEntry(m_sFields[AUTH_FIELD_IDENTIFIER]);
+            m_pEntryLB->SelectEntry(m_sFields[AUTH_FIELD_IDENTIFIER]);
         }
-        aEntryED.SetText(m_sFields[AUTH_FIELD_IDENTIFIER]);
-        aAuthorFI.SetText(m_sFields[AUTH_FIELD_AUTHOR]);
-        aTitleFI.SetText(m_sFields[AUTH_FIELD_TITLE]);
-        aOKBT.Enable();
+        m_pEntryED->SetText(m_sFields[AUTH_FIELD_IDENTIFIER]);
+        m_pAuthorFI->SetText(m_sFields[AUTH_FIELD_AUTHOR]);
+        m_pTitleFI->SetText(m_sFields[AUTH_FIELD_TITLE]);
+        m_pActionBT->Enable();
     }
     return 0;
 }
 
-IMPL_LINK(SwAuthMarkDlg, ChangeSourceHdl, RadioButton*, pButton)
+IMPL_LINK(SwAuthorMarkPane, ChangeSourceHdl, RadioButton*, pButton)
 {
-    sal_Bool bFromComp = (pButton == &aFromComponentRB);
+    sal_Bool bFromComp = (pButton == m_pFromComponentRB);
     bIsFromComponent = bFromComp;
-    aCreateEntryPB.Enable(!bIsFromComponent);
-    aEntryLB.Clear();
+    m_pCreateEntryPB->Enable(!bIsFromComponent);
+    m_pEntryLB->Clear();
     if(bIsFromComponent)
     {
         if(!bBibAccessInitialized)
@@ -1462,7 +1432,7 @@ IMPL_LINK(SwAuthMarkDlg, ChangeSourceHdl, RadioButton*, pButton)
             const OUString* pNames = aIdentifiers.getConstArray();
             for(sal_uInt16 i = 0; i < aIdentifiers.getLength(); i++)
             {
-                aEntryLB.InsertEntry(pNames[i]);
+                m_pEntryLB->InsertEntry(pNames[i]);
             }
         }
     }
@@ -1475,21 +1445,21 @@ IMPL_LINK(SwAuthMarkDlg, ChangeSourceHdl, RadioButton*, pButton)
             std::vector<String> aIds;
             pFType->GetAllEntryIdentifiers( aIds );
             for(size_t n = 0; n < aIds.size(); ++n)
-                aEntryLB.InsertEntry(aIds[n]);
+                m_pEntryLB->InsertEntry(aIds[n]);
         }
         if(m_sCreatedEntry[AUTH_FIELD_IDENTIFIER].Len())
-            aEntryLB.InsertEntry(m_sCreatedEntry[AUTH_FIELD_IDENTIFIER]);
+            m_pEntryLB->InsertEntry(m_sCreatedEntry[AUTH_FIELD_IDENTIFIER]);
     }
-    aEntryLB.SelectEntryPos(0);
-    CompEntryHdl(&aEntryLB);
+    m_pEntryLB->SelectEntryPos(0);
+    CompEntryHdl(m_pEntryLB);
     return 0;
 }
 
-IMPL_LINK(SwAuthMarkDlg, EditModifyHdl, Edit*, pEdit)
+IMPL_LINK(SwAuthorMarkPane, EditModifyHdl, Edit*, pEdit)
 {
-    Link aAllowed = LINK(this, SwAuthMarkDlg, IsEntryAllowedHdl);
+    Link aAllowed = LINK(this, SwAuthorMarkPane, IsEntryAllowedHdl);
     long nResult = aAllowed.Call(pEdit);
-    aOKBT.Enable(nResult > 0);
+    m_pActionBT->Enable(nResult > 0);
     if(nResult)
     {
         String sEntry(pEdit->GetText());
@@ -1499,13 +1469,13 @@ IMPL_LINK(SwAuthMarkDlg, EditModifyHdl, Edit*, pEdit)
     return 0;
 };
 
-IMPL_LINK(SwAuthMarkDlg, IsEntryAllowedHdl, Edit*, pEdit)
+IMPL_LINK(SwAuthorMarkPane, IsEntryAllowedHdl, Edit*, pEdit)
 {
     String sEntry = pEdit->GetText();
     sal_Bool bAllowed = sal_False;
     if(sEntry.Len())
     {
-        if(aEntryLB.GetEntryPos(sEntry) != LISTBOX_ENTRY_NOTFOUND)
+        if(m_pEntryLB->GetEntryPos(sEntry) != LISTBOX_ENTRY_NOTFOUND)
             return 0;
         else if(bIsFromComponent)
         {
@@ -1521,16 +1491,16 @@ IMPL_LINK(SwAuthMarkDlg, IsEntryAllowedHdl, Edit*, pEdit)
     return bAllowed;
 }
 
-void SwAuthMarkDlg::InitControls()
+void SwAuthorMarkPane::InitControls()
 {
     OSL_ENSURE(pSh, "no shell?");
     SwField* pField = pSh->GetCurFld();
     OSL_ENSURE(bNewEntry || pField, "no current marker");
     if(bNewEntry)
     {
-        ChangeSourceHdl(aFromComponentRB.IsChecked() ? &aFromComponentRB : &aFromDocContentRB);
-        aCreateEntryPB.Enable(!aFromComponentRB.IsChecked());
-        if(!aFromComponentRB.IsChecked() && m_sCreatedEntry[0].Len())
+        ChangeSourceHdl(m_pFromComponentRB->IsChecked() ? m_pFromComponentRB : m_pFromDocContentRB);
+        m_pCreateEntryPB->Enable(!m_pFromComponentRB->IsChecked());
+        if(!m_pFromComponentRB->IsChecked() && m_sCreatedEntry[0].Len())
             for(sal_uInt16 i = 0; i < AUTH_FIELD_END; i++)
                 m_sFields[i] = m_sCreatedEntry[i];
     }
@@ -1546,15 +1516,14 @@ void SwAuthMarkDlg::InitControls()
     for(sal_uInt16 i = 0; i < AUTH_FIELD_END; i++)
         m_sFields[i] = pEntry->GetAuthorField((ToxAuthorityField)i);
 
-    aEntryED.SetText(pEntry->GetAuthorField(AUTH_FIELD_IDENTIFIER));
-    aAuthorFI.SetText(pEntry->GetAuthorField(AUTH_FIELD_AUTHOR));
-    aTitleFI.SetText(pEntry->GetAuthorField(AUTH_FIELD_TITLE));
+    m_pEntryED->SetText(pEntry->GetAuthorField(AUTH_FIELD_IDENTIFIER));
+    m_pAuthorFI->SetText(pEntry->GetAuthorField(AUTH_FIELD_AUTHOR));
+    m_pTitleFI->SetText(pEntry->GetAuthorField(AUTH_FIELD_TITLE));
 }
 
-void    SwAuthMarkDlg::Activate()
+void SwAuthorMarkPane::Activate()
 {
-    aOKBT.Enable(!pSh->HasReadonlySel());
-    Window::Activate();
+    m_pActionBT->Enable(!pSh->HasReadonlySel());
 }
 
 SwCreateAuthEntryDlg_Impl::SwCreateAuthEntryDlg_Impl(Window* pParent,
@@ -1795,39 +1764,39 @@ SwAuthMarkFloatDlg::SwAuthMarkFloatDlg(SfxBindings* _pBindings,
                                    SfxChildWindow* pChild,
                                    Window *pParent,
                                 SfxChildWinInfo* pInfo,
-                                   sal_Bool bNew) :
-    SfxModelessDialog(_pBindings, pChild, pParent, SW_RES(DLG_INSAUTHMARK)),
-    aDlg(this, SW_RES(WIN_DLG), bNew)
+                                   sal_Bool bNew)
+    : SfxModelessDialog(_pBindings, pChild, pParent,
+        "BibliographyEntyDialog", "modules/swriter/ui/bibliographyentry.ui")
+    , m_aContent(*this, bNew)
 {
-    FreeResource();
     Initialize(pInfo);
     SwWrtShell* pWrtShell = ::GetActiveWrtShell();
     OSL_ENSURE(pWrtShell, "No shell?");
-    aDlg.ReInitDlg(*pWrtShell);
+    m_aContent.ReInitDlg(*pWrtShell);
 }
 
-void    SwAuthMarkFloatDlg::Activate()
+void SwAuthMarkFloatDlg::Activate()
 {
     SfxModelessDialog::Activate();
-    aDlg.Activate();
+    m_aContent.Activate();
 }
 
 void SwAuthMarkFloatDlg::ReInitDlg(SwWrtShell& rWrtShell)
 {
-    aDlg.ReInitDlg( rWrtShell );
+    m_aContent.ReInitDlg( rWrtShell );
 }
 
-SwAuthMarkModalDlg::SwAuthMarkModalDlg(Window *pParent, SwWrtShell& rSh) :
-    SvxStandardDialog(pParent, SW_RES(DLG_EDIT_AUTHMARK)),
-    aDlg(this, SW_RES(WIN_DLG), sal_False)
+SwAuthMarkModalDlg::SwAuthMarkModalDlg(Window *pParent, SwWrtShell& rSh)
+    : SvxStandardDialog(pParent, "BibliographyEntyDialog",
+        "modules/swriter/ui/bibliographyentry.ui")
+    , m_aContent(*this, sal_False)
 {
-    FreeResource();
-    aDlg.ReInitDlg(rSh);
+    m_aContent.ReInitDlg(rSh);
 }
 
-void    SwAuthMarkModalDlg::Apply()
+void SwAuthMarkModalDlg::Apply()
 {
-    aDlg.InsertHdl(0);
+    m_aContent.InsertHdl(0);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -384,8 +384,6 @@
 #define HID_DLG_NEW_USER_IDX                                    "SW_HID_DLG_NEW_USER_IDX"
 #define HID_INSERT_IDX_MRK_OK                                   "SW_HID_INSERT_IDX_MRK_OK"
 #define HID_INSERT_IDX_MRK_CLOSE                                "SW_HID_INSERT_IDX_MRK_CLOSE"
-#define HID_INSERT_AUTH_MRK_OK                                  "SW_HID_INSERT_AUTH_MRK_OK"
-#define HID_INSERT_AUTH_MRK_CLOSE                               "SW_HID_INSERT_AUTH_MRK_CLOSE"
 #define HID_INSERT_IDX_MRK_DELETE                               "SW_HID_INSERT_IDX_MRK_DELETE"
 #define HID_INSERT_IDX_MRK_NEW                                  "SW_HID_INSERT_IDX_MRK_NEW"
 #define HID_INSERT_IDX_MRK_PREV                                 "SW_HID_INSERT_IDX_MRK_PREV"
@@ -399,9 +397,6 @@
 #define HID_INSERT_IDX_MRK_LEVEL                                "SW_HID_INSERT_IDX_MRK_LEVEL"
 #define HID_INSERT_IDX_MRK_MAIN_ENTRY                           "SW_HID_INSERT_IDX_MRK_MAIN_ENTRY"
 #define HID_INSERT_IDX_MRK_APPLY_ALL                            "SW_HID_INSERT_IDX_MRK_APPLY_ALL"
-#define HID_INSERT_AUTH_MRK_ENTRY                               "SW_HID_INSERT_AUTH_MRK_ENTRY"
-#define HID_INSERT_AUTH_MRK_CREATE_ENTRY                        "SW_HID_INSERT_AUTH_MRK_CREATE_ENTRY"
-#define HID_INSERT_AUTH_MRK_EDIT_ENTRY                          "SW_HID_INSERT_AUTH_MRK_EDIT_ENTRY"
 #define HID_TOKEN_WINDOW                                        "SW_HID_TOKEN_WINDOW"
 
 #define HID_AUTH_FIELD_IDENTIFIER                               "SW_HID_AUTH_FIELD_IDENTIFIER"
@@ -435,10 +430,6 @@
 #define HID_AUTH_FIELD_CUSTOM4                                  "SW_HID_AUTH_FIELD_CUSTOM4"
 #define HID_AUTH_FIELD_CUSTOM5                                  "SW_HID_AUTH_FIELD_CUSTOM5"
 #define HID_AUTH_FIELD_ISBN                                     "SW_HID_AUTH_FIELD_ISBN"
-
-#define HID_AUTH_MARK_DLG_FROM_COMP_RB                          "SW_HID_AUTH_MARK_DLG_FROM_COMP_RB"
-#define HID_AUTH_MARK_DLG_FROM_DOC_RB                           "SW_HID_AUTH_MARK_DLG_FROM_DOC_RB"
-#define HID_AUTH_MARK_DLG_ID_LISTBOX                            "SW_HID_AUTH_MARK_DLG_ID_LISTBOX"
 
 #define HID_INSERT_INDEX_ENTRY_LEVEL_LB                         "SW_HID_INSERT_INDEX_ENTRY_LEVEL_LB"
 #define HID_INSERT_IDX_MRK_SRCH_CASESENSITIVE                   "SW_HID_INSERT_IDX_MRK_SRCH_CASESENSITIVE"

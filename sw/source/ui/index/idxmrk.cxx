@@ -102,7 +102,7 @@ SwInsertAuthMarkWrapper::SwInsertAuthMarkWrapper(   Window *pParentWindow,
 {
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
     OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
-    pAbstDlg = pFact->CreateAuthMarkFloatDlg( DLG_INSAUTHMARK, pBindings, this, pParentWindow, pInfo );
+    pAbstDlg = pFact->CreateAuthMarkFloatDlg(pBindings, this, pParentWindow, pInfo);
     OSL_ENSURE(pAbstDlg, "Dialogdiet fail!");
     pWindow = pAbstDlg->GetWindow();
 

@@ -189,34 +189,29 @@ public:
 
 class SwAuthMarkModalDlg;
 
-class SwAuthMarkDlg : public Window
+class SwAuthorMarkPane
 {
+    Dialog& m_rDialog;
+
     static sal_Bool     bIsFromComponent;
 
     friend class SwAuthMarkModalDlg;
     friend class SwAuthMarkFloatDlg;
 
-    RadioButton     aFromComponentRB;
-    RadioButton     aFromDocContentRB;
-    FixedText       aAuthorFT;
-    FixedInfo       aAuthorFI;
-    FixedText       aTitleFT;
-    FixedInfo       aTitleFI;
-    FixedText       aEntryFT;
-    Edit            aEntryED;
-    ListBox         aEntryLB;
+    RadioButton*    m_pFromComponentRB;
+    RadioButton*    m_pFromDocContentRB;
+    FixedText*      m_pAuthorFI;
+    FixedText*      m_pTitleFI;
+    Edit*           m_pEntryED;
+    ListBox*        m_pEntryLB;
 
-    FixedLine       aEntryFL;
+    PushButton*     m_pActionBT;
+    PushButton*     m_pCloseBT;
+    PushButton*     m_pCreateEntryPB;
+    PushButton*     m_pEditEntryPB;
 
-    OKButton        aOKBT;
-    CancelButton    aCancelBT;
-    HelpButton      aHelpBT;
-    PushButton      aCreateEntryPB;
-    PushButton      aEditEntryPB;
-
-    String          sChangeST;
-    sal_Bool            bNewEntry;
-    sal_Bool            bBibAccessInitialized;
+    sal_Bool        bNewEntry;
+    sal_Bool        bBibAccessInitialized;
 
     SwWrtShell*     pSh;
 
@@ -236,20 +231,18 @@ class SwAuthMarkDlg : public Window
     DECL_LINK(EditModifyHdl, Edit*);
 
     void InitControls();
-    virtual void    Activate();
+    void Activate();
 public:
 
-    SwAuthMarkDlg( Window *pParent,
-                    const ResId& rResId,
+    SwAuthorMarkPane( Dialog &rDialog,
                        sal_Bool bNew=sal_True);
-    ~SwAuthMarkDlg();
 
     void    ReInitDlg(SwWrtShell& rWrtShell);
 };
 
 class SwAuthMarkFloatDlg : public SfxModelessDialog
 {
-    SwAuthMarkDlg       aDlg;
+    SwAuthorMarkPane m_aContent;
     virtual void    Activate();
     public:
         SwAuthMarkFloatDlg(     SfxBindings* pBindings,
@@ -262,7 +255,7 @@ class SwAuthMarkFloatDlg : public SfxModelessDialog
 
 class SwAuthMarkModalDlg : public SvxStandardDialog
 {
-    SwAuthMarkDlg       aDlg;
+    SwAuthorMarkPane m_aContent;
 public:
     SwAuthMarkModalDlg(Window *pParent, SwWrtShell& rSh);
 

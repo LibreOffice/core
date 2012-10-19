@@ -11,6 +11,7 @@ $(eval $(call gb_UI_UI,modules/swriter))
 
 $(eval $(call gb_UI_add_uifiles,modules/swriter,\
 	sw/uiconfig/swriter/ui/autoformattable \
+	sw/uiconfig/swriter/ui/bibliographyentry \
 	sw/uiconfig/swriter/ui/charurlpage \
 	sw/uiconfig/swriter/ui/columnwidth \
 	sw/uiconfig/swriter/ui/converttexttable \

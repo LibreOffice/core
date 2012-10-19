@@ -115,8 +115,10 @@
 #define STR_COL                         (RC_APP_BEGIN + 127)
 #define STR_ROW                         (RC_APP_BEGIN + 128)
 #define STR_SIMPLE                      (RC_APP_BEGIN + 129)
+#define STR_AUTHMRK_EDIT                (RC_APP_BEGIN + 130)
+#define STR_AUTHMRK_INSERT              (RC_APP_BEGIN + 131)
 
-#define APP_ACT_END                     STR_SIMPLE
+#define APP_ACT_END                     STR_AUTHMRK_INSERT
 
 #if APP_ACT_END > RC_APP_END
 #error Resource-Id Ueberlauf in #file, #line
