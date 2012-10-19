@@ -520,19 +520,19 @@ void Dialog::doDeferredInit(bool bResizable)
 
 Dialog::Dialog(Window* pParent, const rtl::OString& rID, const rtl::OUString& rUIXMLDescription)
     : SystemWindow( WINDOW_DIALOG )
-    , mpDialogParent(pParent) //will be unset in doDeferredInit
     , mbIsDefferedInit(true)
 {
     ImplInitDialogData();
+    mpDialogParent = pParent; //will be unset in doDeferredInit
     m_pUIBuilder = new VclBuilder(this, getUIRootDir(), rUIXMLDescription, rID);
 }
 
 Dialog::Dialog(Window* pParent, const rtl::OString& rID, const rtl::OUString& rUIXMLDescription, WindowType nType)
     : SystemWindow( nType )
-    , mpDialogParent(pParent) //will be unset in doDeferredInit
     , mbIsDefferedInit(true)
 {
     ImplInitDialogData();
+    mpDialogParent = pParent; //will be unset in doDeferredInit
     m_pUIBuilder = new VclBuilder(this, getUIRootDir(), rUIXMLDescription, rID);
 }
 
