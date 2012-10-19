@@ -575,7 +575,9 @@ public class DocumentLoader
             int t = (int)(h/2 - values[Matrix.MTRANS_Y]/scale);
             Log.i(TAG, "Unzoomed rect: " + l + ", " + t + ", " + (int)(l+w/scale) + ", " + (int)(t+h/scale));
 
-            Assert.assertTrue(values[Matrix.MSCALE_X] == values[Matrix.MSCALE_Y]);
+            Log.i(TAG, "Scales: " + values[Matrix.MSCALE_X] + ", " + values[Matrix.MSCALE_Y]);
+
+            // Assert.assertTrue(values[Matrix.MSCALE_X] == values[Matrix.MSCALE_Y]);
 
             super.draw(canvas);
 
