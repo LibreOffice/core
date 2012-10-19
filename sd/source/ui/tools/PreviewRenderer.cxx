@@ -283,16 +283,30 @@ bool PreviewRenderer::Initialize (
         SdrPageView* pPageView = mpView->GetSdrPageView();
         if (pPageView == NULL)
             break;
-        // Set background color of page view and outliner.
+
+        // #121224# No need to set SetApplicationBackgroundColor (which is the color
+        // of the area 'behind' the page (formally called 'Wiese') since the page previews
+        // produced exactly cover the page's area, so it would never be visible. What
+        // needs to be set is the ApplicationDocumentColor which is derived from
+        // svtools::DOCCOLOR normally
         svtools::ColorConfig aColorConfig;
-        const Color aPageBackgroundColor(pPage->GetPageBackgroundColor(pPageView));
-        pPageView->SetApplicationBackgroundColor(aPageBackgroundColor);
-        SdrOutliner& rOutliner (pDocument->GetDrawOutliner(NULL));
-        rOutliner.SetBackgroundColor(aPageBackgroundColor);
+        Color aApplicationDocumentColor;
+
+        if(!pPageView || pPageView->GetApplicationDocumentColor() == COL_AUTO)
+        {
+            svtools::ColorConfig aColorConfig;
+            aApplicationDocumentColor = aColorConfig.GetColorValue( svtools::DOCCOLOR ).nColor;
+        }
+        else
+        {
+            aApplicationDocumentColor = pPageView->GetApplicationDocumentColor();
+        }
+
+        pPageView->SetApplicationDocumentColor(aApplicationDocumentColor);
+        SdrOutliner& rOutliner(pDocument->GetDrawOutliner(NULL));
+        rOutliner.SetBackgroundColor(aApplicationDocumentColor);
         rOutliner.SetDefaultLanguage(pDocument->GetLanguage(EE_CHAR_LANGUAGE));
-        mpView->SetApplicationBackgroundColor(
-            Color(aColorConfig.GetColorValue(svtools::APPBACKGROUND).nColor));
-        mpPreviewDevice->SetBackground(Wallpaper(aPageBackgroundColor));
+        mpPreviewDevice->SetBackground(Wallpaper(aApplicationDocumentColor));
         mpPreviewDevice->Erase();
 
         bSuccess = true;
