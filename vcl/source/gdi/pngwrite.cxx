@@ -327,7 +327,7 @@ void PNGWriterImpl::ImplWritePalette()
 
 void PNGWriterImpl::ImplWriteTransparent ()
 {
-    const sal_uLong nTransIndex = mpAccess->GetBestMatchingColor( BMP_COL_TRANS );
+    const sal_uLong nTransIndex = mpAccess->GetBestPaletteIndex( BMP_COL_TRANS );
 
     ImplOpenChunk( PNGCHUNK_tRNS );
 
@@ -473,11 +473,11 @@ sal_uLong PNGWriterImpl::ImplGetFilter ( sal_uLong nY, sal_uLong nXStart, sal_uL
                     {
                         sal_uLong nShift = ( nXIndex & 7 ) ^ 7;
                         if ( nShift == 7)
-                            *pDest = (sal_uInt8)(mpAccess->GetPixel( nY, nX ) << nShift);
+                            *pDest = mpAccess->GetPixelIndex( nY, nX ) << nShift;
                         else if  ( nShift == 0 )
-                            *pDest++ |= (sal_uInt8) mpAccess->GetPixel( nY, nX ) << nShift;
+                            *pDest++ |= mpAccess->GetPixelIndex( nY, nX ) << nShift;
                         else
-                            *pDest |= (sal_uInt8) mpAccess->GetPixel( nY, nX ) << nShift;
+                            *pDest |= mpAccess->GetPixelIndex( nY, nX ) << nShift;
                     }
                     if ( ( nXIndex & 7 ) != 0 ) pDest++;    // byte is not completely used, so the
                 }                                           // bufferpointer is to correct
@@ -489,9 +489,9 @@ sal_uLong PNGWriterImpl::ImplGetFilter ( sal_uLong nY, sal_uLong nXStart, sal_uL
                     for ( nX = nXStart, nXIndex = 0; nX < mnWidth; nX+= nXAdd, nXIndex++ )
                     {
                         if( nXIndex & 1 )
-                            *pDest++ |= (sal_uInt8) mpAccess->GetPixel( nY, nX );
+                            *pDest++ |= mpAccess->GetPixelIndex( nY, nX );
                         else
-                            *pDest = (sal_uInt8) mpAccess->GetPixel( nY, nX ) << 4;
+                            *pDest = mpAccess->GetPixelIndex( nY, nX ) << 4;
                     }
                     if ( nXIndex & 1 ) pDest++;
                 }
@@ -500,7 +500,7 @@ sal_uLong PNGWriterImpl::ImplGetFilter ( sal_uLong nY, sal_uLong nXStart, sal_uL
                 case( 8 ):
                 {
                     for ( sal_uLong nX = nXStart; nX < mnWidth; nX+=nXAdd )
-                        *pDest++ = mpAccess->GetPixel( nY, nX );
+                        *pDest++ = mpAccess->GetPixelIndex( nY, nX );
                 }
                 break;
 
@@ -521,7 +521,7 @@ sal_uLong PNGWriterImpl::ImplGetFilter ( sal_uLong nY, sal_uLong nXStart, sal_uL
                         *pDest++ = rColor.GetRed();
                         *pDest++ = rColor.GetGreen();
                         *pDest++ = rColor.GetBlue();
-                        *pDest++ = 255 - mpMaskAccess->GetPixel( nY, nX );
+                        *pDest++ = 255 - mpMaskAccess->GetPixelIndex( nY, nX );
                     }
                 }
                 else

@@ -423,14 +423,14 @@ sal_Bool ImplCreateRotatedScaled( const BitmapEx& rBmpEx, const GraphicAttr& rAt
                                 nTmpX = pMapIX[ nUnRotX ]; nTmpFX = pMapFX[ nUnRotX ];
                                 nTmpY = pMapIY[ nUnRotY ], nTmpFY = pMapFY[ nUnRotY ];
 
-                                const BitmapColor& rCol0 = pReadAccess->GetPaletteColor( pReadAccess->GetPixel( nTmpY, nTmpX ) );
-                                const BitmapColor& rCol1 = pReadAccess->GetPaletteColor( pReadAccess->GetPixel( nTmpY, ++nTmpX ) );
+                                const BitmapColor& rCol0 = pReadAccess->GetPaletteColor( pReadAccess->GetPixelIndex( nTmpY, nTmpX ) );
+                                const BitmapColor& rCol1 = pReadAccess->GetPaletteColor( pReadAccess->GetPixelIndex( nTmpY, ++nTmpX ) );
                                 cR0 = MAP( rCol0.GetRed(), rCol1.GetRed(), nTmpFX );
                                 cG0 = MAP( rCol0.GetGreen(), rCol1.GetGreen(), nTmpFX );
                                 cB0 = MAP( rCol0.GetBlue(), rCol1.GetBlue(), nTmpFX );
 
-                                const BitmapColor& rCol3 = pReadAccess->GetPaletteColor( pReadAccess->GetPixel( ++nTmpY, nTmpX ) );
-                                const BitmapColor& rCol2 = pReadAccess->GetPaletteColor( pReadAccess->GetPixel( nTmpY, --nTmpX ) );
+                                const BitmapColor& rCol3 = pReadAccess->GetPaletteColor( pReadAccess->GetPixelIndex( ++nTmpY, nTmpX ) );
+                                const BitmapColor& rCol2 = pReadAccess->GetPaletteColor( pReadAccess->GetPixelIndex( nTmpY, --nTmpX ) );
                                 cR1 = MAP( rCol2.GetRed(), rCol3.GetRed(), nTmpFX );
                                 cG1 = MAP( rCol2.GetGreen(), rCol3.GetGreen(), nTmpFX );
                                 cB1 = MAP( rCol2.GetBlue(), rCol3.GetBlue(), nTmpFX );
@@ -527,10 +527,10 @@ sal_Bool ImplCreateRotatedScaled( const BitmapEx& rBmpEx, const GraphicAttr& rAt
                             {
                                 for (int xIn = xStart; xIn <= xEnd; xIn++)
                                 {
-                                    aColor = pReadAccess->GetPixel( yIn, xIn );
-
                                     if( pReadAccess->HasPalette() )
-                                        aColor = pReadAccess->GetPaletteColor( aColor );
+                                        aColor = pReadAccess->GetPaletteColor( pReadAccess->GetPixelIndex( yIn, xIn ) );
+                                    else
+                                        aColor = pReadAccess->GetPixel( yIn, xIn );
 
                                     aSumRed   += aColor.GetRed();
                                     aSumGreen += aColor.GetGreen();

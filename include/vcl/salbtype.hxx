@@ -117,7 +117,8 @@ public:
     inline              BitmapColor( const BitmapColor& rBitmapColor );
     inline              BitmapColor( sal_uInt8 cRed, sal_uInt8 cGreen, sal_uInt8 cBlue );
     inline              BitmapColor( const Color& rColor );
-    inline              BitmapColor( sal_uInt8 cIndex );
+    explicit inline     BitmapColor( sal_uInt8 cIndex );
+
     inline              ~BitmapColor() {};
 
     inline sal_Bool         operator==( const BitmapColor& rBitmapColor ) const;
@@ -139,7 +140,6 @@ public:
     inline void         SetIndex( sal_uInt8 cIndex );
 
     operator            Color() const;
-    inline operator     sal_uInt8() const;
 
     inline sal_uInt8         GetBlueOrIndex() const;
 
@@ -424,14 +424,6 @@ inline BitmapColor::operator Color() const
 {
     DBG_ASSERT( !mbIndex, "Pixel represents index into colortable!" );
     return Color( mcRed, mcGreen, mcBlueOrIndex );
-}
-
-// ------------------------------------------------------------------
-
-inline BitmapColor::operator sal_uInt8() const
-{
-    DBG_ASSERT( mbIndex, "Pixel represents color values!" );
-    return mcBlueOrIndex;
 }
 
 // ------------------------------------------------------------------

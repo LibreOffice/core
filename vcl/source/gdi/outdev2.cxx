@@ -1437,8 +1437,8 @@ inline BitmapColor lcl_AlphaBlend( int nX,               int nY,
     aDstCol = pB->GetColor( nY, nX );
 
     // vcl stores transparency, not alpha - invert it
-    const sal_uInt8 nSrcAlpha = 255 - pA->GetPixel( nMapY, nMapX ).GetBlueOrIndex();
-    const sal_uInt8 nDstAlpha = 255 - pAlphaW->GetPixel( nY, nX ).GetBlueOrIndex();
+    const sal_uInt8 nSrcAlpha = 255 - pA->GetPixelIndex( nMapY, nMapX );
+    const sal_uInt8 nDstAlpha = 255 - pAlphaW->GetPixelIndex( nY, nX );
 
     // Perform porter-duff compositing 'over' operation
     //
@@ -1592,7 +1592,7 @@ Bitmap OutputDevice::ImplBlend( Bitmap              aBmp,
                     const sal_uLong nD = nVCLDitherLut[ nModY | ( nOutX & 0x0FL ) ];
 
                     aDstCol = pB->GetColor( nY, nX );
-                    aDstCol.Merge( pP->GetColor( nMapY, nMapX ), (sal_uInt8) pA->GetPixel( nMapY, nMapX ) );
+                    aDstCol.Merge( pP->GetColor( nMapY, nMapX ), pA->GetPixelIndex( nMapY, nMapX ) );
                     aIndex.SetIndex( (sal_uInt8) ( nVCLRLut[ ( nVCLLut[ aDstCol.GetRed() ] + nD ) >> 16UL ] +
                                               nVCLGLut[ ( nVCLLut[ aDstCol.GetGreen() ] + nD ) >> 16UL ] +
                                               nVCLBLut[ ( nVCLLut[ aDstCol.GetBlue() ] + nD ) >> 16UL ] ) );

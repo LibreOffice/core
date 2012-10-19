@@ -100,7 +100,7 @@ void Octree::ImplCreateOctree()
             {
                 for( long nX = 0; nX < nWidth; nX++ )
                 {
-                    pColor = &(BitmapColor&) pAcc->GetPaletteColor( pAcc->GetPixel( nY, nX ) );
+                    pColor = &(BitmapColor&) pAcc->GetPaletteColor( pAcc->GetPixelIndex( nY, nX ) );
                     nLevel = 0L;
                     ImplAdd( &pTree );
 

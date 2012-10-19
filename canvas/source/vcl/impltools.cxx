@@ -365,18 +365,10 @@ namespace vclcanvas
                                         // (invert 'alpha' pixel value,
                                         // to get the standard alpha
                                         // channel behaviour)
-                                        pAlphaWriteAccess->SetPixel( y, x,
-                                                                     BitmapColor(
-                                                                         255U -
-                                                                         static_cast<sal_uInt8>(
-                                                                             nAlphaModulation*
-                                                                             (255U
-                                                                              - aAlphaMap[ pAlphaReadAccess->GetPixel(
-                                                                                               nSrcY,
-                                                                                               nSrcX ).GetIndex() ] ) + .5 ) ) );
-
-                                        BitmapColor aColor( pReadAccess->GetPixel( nSrcY,
-                                                                                   nSrcX ) );
+                                        const sal_uInt8 cMappedAlphaIdx = aAlphaMap[ pAlphaReadAccess->GetPixelIndex( nSrcY, nSrcX ) ];
+                                        const sal_uInt8 cModulatedAlphaIdx = 255U - static_cast<sal_uInt8>( nAlphaModulation* (255U - cMappedAlphaIdx) + .5 );
+                                        pAlphaWriteAccess->SetPixelIndex( y, x, cModulatedAlphaIdx );
+                                        BitmapColor aColor( pReadAccess->GetPixel( nSrcY, nSrcX ) );
 
                                         aColor.SetRed(
                                             static_cast<sal_uInt8>(
@@ -465,17 +457,13 @@ namespace vclcanvas
                                     if( nSrcX < 0 || nSrcX >= aBmpSize.Width() ||
                                         nSrcY < 0 || nSrcY >= aBmpSize.Height() )
                                     {
-                                        pAlphaWriteAccess->SetPixel( y, x, BitmapColor(255) );
+                                        pAlphaWriteAccess->SetPixelIndex( y, x, 255 );
                                     }
                                     else
                                     {
-                                        pAlphaWriteAccess->SetPixel( y, x,
-                                                                     aAlphaMap[
-                                                                         pAlphaReadAccess->GetPixel( nSrcY,
-                                                                                                     nSrcX ) ] );
-
-                                        pWriteAccess->SetPixel( y, x, pReadAccess->GetPixel( nSrcY,
-                                                                                             nSrcX ) );
+                                        const sal_uInt8 cAlphaIdx = pAlphaReadAccess->GetPixelIndex( nSrcY, nSrcX );
+                                        pAlphaWriteAccess->SetPixelIndex( y, x, aAlphaMap[ cAlphaIdx ] );
+                                        pWriteAccess->SetPixel( y, x, pReadAccess->GetPixel( nSrcY, nSrcX ) );
                                     }
                                 }
                             }

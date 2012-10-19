@@ -291,12 +291,9 @@ void PCXReader::ImplReadBody()
                 {
                     sal_uLong nShift = ( i & 7 ) ^ 7;
                     if ( nShift == 0 )
-                        pAcc->SetPixel( ny, i, ( *pSource1++ & 1 ) );
+                        pAcc->SetPixelIndex( ny, i, *(pSource1++) & 1 );
                     else
-                        pAcc->SetPixel(
-                            ny, i,
-                            sal::static_int_cast< sal_uInt8 >(
-                                ( *pSource1 >> nShift ) & 1) );
+                        pAcc->SetPixelIndex( ny, i, (*pSource1 >> nShift ) & 1 );
                 }
                 break;
             // 4 colors
@@ -318,14 +315,14 @@ void PCXReader::ImplReadBody()
                             nCol = ( *pSource1++ ) & 0x03;
                             break;
                     }
-                    pAcc->SetPixel( ny, i, nCol );
+                    pAcc->SetPixelIndex( ny, i, nCol );
                 }
                 break;
             // 256 colors
             case 0x108 :
                 for ( i = 0; i < nWidth; i++ )
                 {
-                    pAcc->SetPixel( ny, i, *pSource1++ );
+                    pAcc->SetPixelIndex( ny, i, *pSource1++ );
                 }
                 break;
             // 8 colors
@@ -336,14 +333,14 @@ void PCXReader::ImplReadBody()
                     if ( nShift == 0 )
                     {
                         nCol = ( *pSource1++ & 1) + ( ( *pSource2++ << 1 ) & 2 ) + ( ( *pSource3++ << 2 ) & 4 );
-                        pAcc->SetPixel( ny, i, nCol );
+                        pAcc->SetPixelIndex( ny, i, nCol );
                     }
                     else
                     {
                         nCol = sal::static_int_cast< sal_uInt8 >(
                             ( ( *pSource1 >> nShift ) & 1)  + ( ( ( *pSource2 >> nShift ) << 1 ) & 2 ) +
                             ( ( ( *pSource3 >> nShift ) << 2 ) & 4 ));
-                        pAcc->SetPixel( ny, i, nCol );
+                        pAcc->SetPixelIndex( ny, i, nCol );
                     }
                 }
                 break;
@@ -356,14 +353,14 @@ void PCXReader::ImplReadBody()
                     {
                         nCol = ( *pSource1++ & 1) + ( ( *pSource2++ << 1 ) & 2 ) + ( ( *pSource3++ << 2 ) & 4 ) +
                             ( ( *pSource4++ << 3 ) & 8 );
-                        pAcc->SetPixel( ny, i, nCol );
+                        pAcc->SetPixelIndex( ny, i, nCol );
                     }
                     else
                     {
                         nCol = sal::static_int_cast< sal_uInt8 >(
                             ( ( *pSource1 >> nShift ) & 1)  + ( ( ( *pSource2 >> nShift ) << 1 ) & 2 ) +
                             ( ( ( *pSource3 >> nShift ) << 2 ) & 4 ) + ( ( ( *pSource4 >> nShift ) << 3 ) & 8 ));
-                        pAcc->SetPixel( ny, i, nCol );
+                        pAcc->SetPixelIndex( ny, i, nCol );
                     }
                 }
                 break;

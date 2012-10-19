@@ -940,7 +940,7 @@ sal_Bool Bitmap::CopyPixel( const Rectangle& rRectDst,
 
                             for( long nSrcY = aRectSrc.Top(); nSrcY < nSrcEndY; nSrcY++, nDstY++ )
                                 for( long nSrcX = aRectSrc.Left(), nDstX = aRectDst.Left(); nSrcX < nSrcEndX; nSrcX++, nDstX++ )
-                                    pWriteAcc->SetPixel( nDstY, nDstX, pMap[ pReadAcc->GetPixel( nSrcY, nSrcX ).GetIndex() ] );
+                                    pWriteAcc->SetPixelIndex( nDstY, nDstX, pMap[ pReadAcc->GetPixelIndex( nSrcY, nSrcX ) ] );
 
                             delete[] pMap;
                         }
@@ -948,7 +948,7 @@ sal_Bool Bitmap::CopyPixel( const Rectangle& rRectDst,
                         {
                             for( long nSrcY = aRectSrc.Top(); nSrcY < nSrcEndY; nSrcY++, nDstY++ )
                                 for( long nSrcX = aRectSrc.Left(), nDstX = aRectDst.Left(); nSrcX < nSrcEndX; nSrcX++, nDstX++ )
-                                    pWriteAcc->SetPixel( nDstY, nDstX, pReadAcc->GetPaletteColor( pReadAcc->GetPixel( nSrcY, nSrcX ) ) );
+                                    pWriteAcc->SetPixel( nDstY, nDstX, pReadAcc->GetPaletteColor( pReadAcc->GetPixelIndex( nSrcY, nSrcX ) ) );
                         }
                         else
                             for( long nSrcY = aRectSrc.Top(); nSrcY < nSrcEndY; nSrcY++, nDstY++ )
@@ -1212,7 +1212,7 @@ Bitmap Bitmap::CreateMask( const Color& rTransColor, sal_uLong nTol ) const
                     {
                         for( long nX = 0L; nX < nWidth; nX++ )
                         {
-                            aCol = pReadAcc->GetPaletteColor( pReadAcc->GetPixel( nY, nX ) );
+                            aCol = pReadAcc->GetPaletteColor( pReadAcc->GetPixelIndex( nY, nX ) );
                             nR = aCol.GetRed();
                             nG = aCol.GetGreen();
                             nB = aCol.GetBlue();
@@ -1339,14 +1339,14 @@ sal_Bool Bitmap::Replace( const Bitmap& rMask, const Color& rReplaceColor )
             const sal_uInt16 nActColors = pAcc->GetPaletteEntryCount();
             const sal_uInt16 nMaxColors = 1 << pAcc->GetBitCount();
 
-            // For a start, choose the next color
+            // default to the nearest color
             aReplace = pAcc->GetBestMatchingColor( rReplaceColor );
 
-            // If it's a pallette picture and the color that should be set
-            // is not in the pallette, we try finding a free entry (expensive)
-            if( pAcc->GetPaletteColor( (sal_uInt8) aReplace ) != BitmapColor( rReplaceColor ) )
+            // for paletted images without a matching palette entry
+            // look for an unused palette entry (NOTE: expensive!)
+            if( pAcc->GetPaletteColor( aReplace.GetIndex() ) != BitmapColor( rReplaceColor ) )
             {
-                // See first if we can put the ReplaceColor at a free entry at the end of the pallette
+                // if the palette has empty entries use the last one
                 if( nActColors < nMaxColors )
                 {
                     pAcc->SetPaletteEntryCount( nActColors + 1 );
@@ -1362,7 +1362,7 @@ sal_Bool Bitmap::Replace( const Bitmap& rMask, const Color& rReplaceColor )
 
                     for( long nY = 0L; nY < nHeight; nY++ )
                         for( long nX = 0L; nX < nWidth; nX++ )
-                            pFlags[ (sal_uInt8) pAcc->GetPixel( nY, nX ) ] = sal_True;
+                            pFlags[ pAcc->GetPixelIndex( nY, nX ) ] = sal_True;
 
                     for( sal_uInt16 i = 0UL; i < nMaxColors; i++ )
                     {
@@ -1414,7 +1414,7 @@ sal_Bool Bitmap::Replace( const AlphaMask& rAlpha, const Color& rMergeColor )
             for( long nX = 0L; nX < nWidth; nX++ )
             {
                 aCol = pAcc->GetColor( nY, nX );
-                pNewAcc->SetPixel( nY, nX, aCol.Merge( rMergeColor, 255 - (sal_uInt8) pAlphaAcc->GetPixel( nY, nX ) ) );
+                pNewAcc->SetPixel( nY, nX, aCol.Merge( rMergeColor, 255 - pAlphaAcc->GetPixelIndex( nY, nX ) ) );
             }
         }
 
@@ -1783,7 +1783,7 @@ sal_Bool Bitmap::Blend( const AlphaMask& rAlpha, const Color& rBackgroundColor )
             for( long nX = 0L; nX < nWidth; ++nX )
                 pAcc->SetPixel( nY, nX,
                                 pAcc->GetPixel( nY, nX ).Merge( rBackgroundColor,
-                                                                255 - pAlphaAcc->GetPixel( nY, nX ) ) );
+                                                                255 - pAlphaAcc->GetPixelIndex( nY, nX ) ) );
 
         bRet = sal_True;
     }

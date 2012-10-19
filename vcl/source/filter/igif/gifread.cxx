@@ -509,15 +509,15 @@ void GIFReader::FillImages( HPBYTE pBytes, sal_uLong nCount )
             if( bGCTransparent )
             {
                 if( cTmp == nGCTransparentIndex )
-                    pAcc1->SetPixel( nYAcc, nImageX++, cTransIndex1 );
+                    pAcc1->SetPixelIndex( nYAcc, nImageX++, cTransIndex1 );
                 else
                 {
-                    pAcc8->SetPixel( nYAcc, nImageX, cTmp );
-                    pAcc1->SetPixel( nYAcc, nImageX++, cNonTransIndex1 );
+                    pAcc8->SetPixelIndex( nYAcc, nImageX, cTmp );
+                    pAcc1->SetPixelIndex( nYAcc, nImageX++, cNonTransIndex1 );
                 }
             }
             else
-                pAcc8->SetPixel( nYAcc, nImageX++, cTmp );
+                pAcc8->SetPixelIndex( nYAcc, nImageX++, cTmp );
         }
         else
         {

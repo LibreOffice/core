@@ -224,8 +224,7 @@ sal_Bool RASReader::ImplReadBody()
                 {
                     if (!(x & 7))
                         nDat = ImplGetByte();
-                    mpAcc->SetPixel (
-                        y, x,
+                    mpAcc->SetPixelIndex( y, x,
                         sal::static_int_cast< sal_uInt8 >(
                             nDat >> ( ( x & 7 ) ^ 7 )) );
                 }
@@ -239,7 +238,7 @@ sal_Bool RASReader::ImplReadBody()
                 for ( x = 0; x < mnWidth; x++ )
                 {
                     nDat = ImplGetByte();
-                    mpAcc->SetPixel ( y, x, nDat );
+                    mpAcc->SetPixelIndex( y, x, nDat );
                 }
                 if ( x & 1 ) ImplGetByte();                     // WORD ALIGNMENT ???
             }

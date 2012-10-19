@@ -839,7 +839,7 @@ sal_Bool Bitmap::ImplMosaic( const BmpFilterParam* pFilterParam, const Link* /*p
                         {
                             for( nX = nX1; nX <= nX2; nX++ )
                             {
-                                const BitmapColor& rCol = pReadAcc->GetPaletteColor( (sal_uInt8) pReadAcc->GetPixel( nY, nX ) );
+                                const BitmapColor& rCol = pReadAcc->GetPaletteColor( pReadAcc->GetPixelIndex( nY, nX ) );
                                 nSumR += rCol.GetRed();
                                 nSumG += rCol.GetGreen();
                                 nSumB += rCol.GetBlue();
@@ -1145,17 +1145,8 @@ bool Bitmap::ImplSeparableUnsharpenFilter(const double radius) {
     {
         for( int y = 0; y < nHeight; y++ )
         {
-            aColorBlur = pReadAccBlur->GetPixel( y , x );
-            if( pReadAccBlur->HasPalette() )
-            {
-                 pReadAccBlur->GetPaletteColor( aColorBlur );
-            }
-
-            aColor = pReadAcc->GetPixel( y , x );
-            if( pReadAcc->HasPalette() )
-            {
-                aColor = pReadAcc->GetPaletteColor( aColor );
-            }
+            aColorBlur = pReadAccBlur->GetColor( y , x );
+            aColor = pReadAcc->GetColor( y , x );
 
             BitmapColor aResultColor(
                 (sal_uInt8) MinMax( aColor.GetRed()   + (aColor.GetRed()   - aColorBlur.GetRed())   * aAmount, 0, 255 ),

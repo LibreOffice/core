@@ -1409,7 +1409,7 @@ void PNGReaderImpl::ImplSetPixel( sal_uInt32 nY, sal_uInt32 nX, sal_uInt8 nPalIn
         return;
     nX >>= mnPreviewShift;
 
-    mpAcc->SetPixel( nY, nX, nPalIndex );
+    mpAcc->SetPixelIndex( nY, nX, nPalIndex );
 }
 
 void PNGReaderImpl::ImplSetTranspPixel( sal_uInt32 nY, sal_uInt32 nX, const BitmapColor& rBitmapColor, sal_Bool bTrans )
@@ -1435,8 +1435,8 @@ void PNGReaderImpl::ImplSetAlphaPixel( sal_uInt32 nY, sal_uInt32 nX,
         return;
     nX >>= mnPreviewShift;
 
-    mpAcc->SetPixel( nY, nX, nPalIndex );
-    mpMaskAcc->SetPixel( nY, nX, ~nAlpha );
+    mpAcc->SetPixelIndex( nY, nX, nPalIndex );
+    mpMaskAcc->SetPixelIndex( nY, nX, ~nAlpha );
 }
 
 void PNGReaderImpl::ImplSetAlphaPixel( sal_uInt32 nY, sal_uInt32 nX,
@@ -1448,7 +1448,7 @@ void PNGReaderImpl::ImplSetAlphaPixel( sal_uInt32 nY, sal_uInt32 nX,
     nX >>= mnPreviewShift;
 
     mpAcc->SetPixel( nY, nX, rBitmapColor );
-    mpMaskAcc->SetPixel( nY, nX, ~nAlpha );
+    mpMaskAcc->SetPixelIndex( nY, nX, ~nAlpha );
 }
 
 sal_uInt32 PNGReaderImpl::ImplReadsal_uInt32()

@@ -153,8 +153,8 @@ namespace vcl
                             for( sal_Int32 x=0; x<nWidth; ++x )
                             {
                                 const rendering::ARGBColor& rColor=aARGBColors[x];
-                                rWriteAcc->SetPixel( aRect.Y1, x,
-                                                     (sal_uInt8)rWriteAcc->GetBestPaletteIndex(
+                                rWriteAcc->SetPixelIndex( aRect.Y1, x,
+                                                     (sal_uInt8) rWriteAcc->GetBestPaletteIndex(
                                                          BitmapColor( toByteColor(rColor.Red),
                                                                       toByteColor(rColor.Green),
                                                                       toByteColor(rColor.Blue))) );
@@ -185,8 +185,8 @@ namespace vcl
                             for( sal_Int32 x=0; x<nWidth; ++x )
                             {
                                 const rendering::RGBColor& rColor=aRGBColors[x];
-                                rWriteAcc->SetPixel( aRect.Y1, x,
-                                                     (sal_uInt8)rWriteAcc->GetBestPaletteIndex(
+                                rWriteAcc->SetPixelIndex( aRect.Y1, x,
+                                                     (sal_uInt8) rWriteAcc->GetBestPaletteIndex(
                                                          BitmapColor( toByteColor(rColor.Red),
                                                                       toByteColor(rColor.Green),
                                                                       toByteColor(rColor.Blue))) );

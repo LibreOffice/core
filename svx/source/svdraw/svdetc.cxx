@@ -341,9 +341,7 @@ bool GetDraftFillColor(const SfxItemSet& rSet, Color& rCol)
                 {
                     for(sal_uInt32 nX(0L); nX < nWidth; nX += nXStep)
                     {
-                        const BitmapColor& rCol2 = (pAccess->HasPalette())
-                            ? pAccess->GetPaletteColor((sal_uInt8)pAccess->GetPixel(nY, nX))
-                            : pAccess->GetPixel(nY, nX);
+                        const BitmapColor& rCol2 = pAccess->GetColor(nY, nX);
 
                         nRt += rCol2.GetRed();
                         nGn += rCol2.GetGreen();

@@ -156,7 +156,8 @@ public:
     inline void                 SetPixelOnData( sal_uInt8* pData, long nX, const BitmapColor& rBitmapColor );
     inline BitmapColor          GetPixel( long nY, long nX ) const;
     inline BitmapColor          GetColor( long nY, long nX ) const;
-    inline sal_uInt8                    GetLuminance( long nY, long nX ) const;
+    inline sal_uInt8            GetPixelIndex( long nY, long nX ) const;
+    inline sal_uInt8            GetLuminance( long nY, long nX ) const;
 };
 
 // ---------------------
@@ -181,6 +182,7 @@ public:
     inline void                 SetPaletteColor( sal_uInt16 nColor, const BitmapColor& rBitmapColor );
 
     inline void                 SetPixel( long nY, long nX, const BitmapColor& rBitmapColor );
+    inline void                 SetPixelIndex( long nY, long nX, sal_uInt8 cIndex );
 
     void                        SetLineColor( const Color& rColor );
 
@@ -378,6 +380,11 @@ inline BitmapColor BitmapReadAccess::GetPixel( long nY, long nX ) const
     return mFncGetPixel( mpScanBuf[ nY ], nX, maColorMask );
 }
 
+inline sal_uInt8 BitmapReadAccess::GetPixelIndex( long nY, long nX ) const
+{
+    return GetPixel( nY, nX ).GetBlueOrIndex();
+}
+
 // ------------------------------------------------------------------
 
 inline BitmapColor BitmapReadAccess::GetPixelFromData( const sal_uInt8* pData, long nX ) const
@@ -398,11 +405,8 @@ inline void BitmapReadAccess::SetPixelOnData( sal_uInt8* pData, long nX, const B
 
 inline BitmapColor BitmapReadAccess::GetColor( long nY, long nX ) const
 {
-    if( !!mpBuffer->maPalette )
-    {
-        DBG_ASSERT( mpBuffer, "Access is not valid!" );
-        return mpBuffer->maPalette[ GetPixel( nY, nX ).GetIndex() ];
-    }
+    if( HasPalette() )
+        return mpBuffer->maPalette[ GetPixelIndex( nY, nX ) ];
     else
         return GetPixel( nY, nX );
 }
@@ -448,6 +452,13 @@ inline void BitmapWriteAccess::SetPixel( long nY, long nX, const BitmapColor& rB
     DBG_ASSERT( nY < mpBuffer->mnHeight, "y-coordinate out of range!" );
     mFncSetPixel( mpScanBuf[ nY ], nX, rBitmapColor, maColorMask );
 }
+
+inline void BitmapWriteAccess::SetPixelIndex( long nY, long nX, sal_uInt8 cIndex )
+{
+    SetPixel( nY, nX, BitmapColor( cIndex ));
+}
+
+// ------------------------------------------------------------------
 
 #endif // _SV_BMPACC_HXX
 

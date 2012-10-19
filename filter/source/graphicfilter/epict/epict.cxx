@@ -1164,17 +1164,17 @@ void PictWriter::WriteOpcode_BitsRect(const Point & rPoint, const Size & rSize, 
                     for ( pTemp = pPix, i = 0; i < nSrcRowBytes; i++ )
                         *pTemp++ = (sal_uInt8)0;
                     for ( i = 0; i < nWidth; i++ )
-                        pPix[ ( i >> 3 ) ] |= (sal_uInt8)( pAcc->GetPixel( ny, i ) & 1 ) << ( ( i & 7 ) ^ 7 );
+                        pPix[ ( i >> 3 ) ] |= (pAcc->GetPixelIndex( ny, i ) & 1) << ((i & 7) ^ 7);
                     break;
                 case 4 :
                     for ( pTemp = pPix, i = 0; i < nSrcRowBytes; i++ )
                         *pTemp++ = (sal_uInt8)0;
                     for ( i = 0; i < nWidth; i++ )
-                        pPix[ ( i >> 1 ) ] |= (sal_uInt8)( pAcc->GetPixel( ny, i ) & 15 ) << ( ( i & 1 ) << 2 ) ;
+                        pPix[ ( i >> 1 ) ] |= (pAcc->GetPixelIndex( ny, i ) & 15) << ((i & 1) << 2);
                     break;
                 case 8 :
                     for ( i = 0; i < nWidth; i++ )
-                        pPix[ i ] = (sal_uInt8)pAcc->GetPixel( ny, i );
+                        pPix[ i ] = pAcc->GetPixelIndex( ny, i );
                     break;
             }
 

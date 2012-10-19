@@ -174,7 +174,7 @@ void* JPEGWriter::GetScanline( long nY )
             {
                 for( long nX = 0L; nX < nWidth; nX++ )
                 {
-                    aColor = mpReadAccess->GetPaletteColor( (sal_uInt8) mpReadAccess->GetPixel( nY, nX ) );
+                    aColor = mpReadAccess->GetPaletteColor( mpReadAccess->GetPixelIndex( nY, nX ) );
                     *pTmp++ = aColor.GetRed();
                     if ( !mbGreys )
                     {
@@ -235,7 +235,7 @@ sal_Bool JPEGWriter::Write( const Graphic& rGraphic )
             BitmapColor aColor;
             for( long nX = 0L; bIsGrey && ( nX < nWidth ); nX++ )
             {
-                aColor = mpReadAccess->HasPalette() ? mpReadAccess->GetPaletteColor( (sal_uInt8) mpReadAccess->GetPixel( nY, nX ) )
+                aColor = mpReadAccess->HasPalette() ? mpReadAccess->GetPaletteColor( mpReadAccess->GetPixelIndex( nY, nX ) )
                                             : mpReadAccess->GetPixel( nY, nX );
                 bIsGrey = ( aColor.GetRed() == aColor.GetGreen() ) && ( aColor.GetRed() == aColor.GetBlue() );
             }

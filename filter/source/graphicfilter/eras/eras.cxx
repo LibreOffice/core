@@ -203,7 +203,7 @@ void RASWriter::ImplWriteBody()
             ImplCallback( y );                              // processing output
             for ( x = 0; x < mnWidth; x++ )
             {
-                ImplPutByte ( mpAcc->GetPixel( y, x ) );
+                ImplPutByte ( mpAcc->GetPixelIndex( y, x ) );
             }
             if ( x & 1 ) ImplPutByte( 0 );      // WORD ALIGNMENT ???
         }
@@ -217,7 +217,7 @@ void RASWriter::ImplWriteBody()
             ImplCallback( y );                              // processing output
             for ( x = 0; x < mnWidth; x++ )
             {
-                nDat = ( ( nDat << 1 ) | ( mpAcc->GetPixel ( y, x ) & 1 ) );
+                nDat = ( ( nDat << 1 ) | ( mpAcc->GetPixelIndex( y, x ) & 1 ) );
                 if ( ( x & 7 ) == 7 )
                     ImplPutByte( nDat );
             }

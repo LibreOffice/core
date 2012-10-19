@@ -147,7 +147,7 @@ void PGMWriter::ImplWriteBody()
         {
             for ( sal_uLong x = 0; x < mnWidth; x++ )
             {
-                m_rOStm << (sal_uInt8)( mpAcc->GetPixel( y, x ) );
+                m_rOStm << mpAcc->GetPixelIndex( y, x );
             }
         }
     }
@@ -164,7 +164,7 @@ void PGMWriter::ImplWriteBody()
                     nCount = 69;
                     m_rOStm << (sal_uInt8)10;
                 }
-                nDat = (sal_uInt8)mpAcc->GetPixel( y, x );
+                nDat = mpAcc->GetPixelIndex( y, x );
                 nNumb = nDat / 100;
                 if ( nNumb )
                 {

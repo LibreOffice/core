@@ -596,7 +596,7 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
                             {
                                 if ( x < nWidth )
                                 {
-                                    pAcc->SetPixel( y, x, (nEightPixels>>i)&1 );
+                                    pAcc->SetPixelIndex( y, x, (nEightPixels>>i)&1 );
                                 }
                                 x++;
                             }

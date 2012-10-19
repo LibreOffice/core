@@ -271,7 +271,7 @@ sal_Bool PBMReader::ImplReadBody()
                         mrPBM >> nDat;
                         nShift = 7;
                     }
-                    mpAcc->SetPixel( nHeight, nWidth, nDat >> nShift );
+                    mpAcc->SetPixelIndex( nHeight, nWidth, nDat >> nShift );
                     if ( ++nWidth == mnWidth )
                     {
                         nShift = 0;
@@ -290,7 +290,7 @@ sal_Bool PBMReader::ImplReadBody()
                         return sal_False;
 
                     mrPBM >> nDat;
-                    mpAcc->SetPixel( nHeight, nWidth++, nDat);
+                    mpAcc->SetPixelIndex( nHeight, nWidth++, nDat);
 
                     if ( nWidth == mnWidth )
                     {
@@ -351,7 +351,7 @@ sal_Bool PBMReader::ImplReadBody()
 
                 if ( nDat == '0' || nDat == '1' )
                 {
-                    mpAcc->SetPixel( nHeight, nWidth, (sal_uInt8)nDat-'0' );
+                    mpAcc->SetPixelIndex( nHeight, nWidth, static_cast<sal_uInt8>(nDat - '0') );
                     nWidth++;
                     if ( nWidth == mnWidth )
                     {
@@ -380,7 +380,7 @@ sal_Bool PBMReader::ImplReadBody()
                     nCount--;
                     if ( nGrey <= mnMaxVal )
                         nGrey = 255 * nGrey / mnMaxVal;
-                    mpAcc->SetPixel( nHeight, nWidth++, (sal_uInt8)nGrey );
+                    mpAcc->SetPixelIndex( nHeight, nWidth++, static_cast<sal_uInt8>(nGrey) );
                     nGrey = 0;
                     if ( nWidth == mnWidth )
                     {

@@ -534,8 +534,8 @@ uno::Sequence< sal_Int8 > SAL_CALL VclCanvasBitmap::getData( rendering::IntegerB
                 // input less than a byte - copy via GetPixel()
                 for( long x=aRequestedArea.Left(); x<aRequestedArea.Right(); ++x )
                 {
-                    *pOutScan++ = m_pBmpAcc->GetPixel(y,x);
-                    *pOutScan++ = m_pAlphaAcc->GetPixel(y,x);
+                    *pOutScan++ = m_pBmpAcc->GetPixelIndex(y,x);
+                    *pOutScan++ = m_pAlphaAcc->GetPixelIndex(y,x);
                 }
             }
             else
@@ -549,7 +549,7 @@ uno::Sequence< sal_Int8 > SAL_CALL VclCanvasBitmap::getData( rendering::IntegerB
                 {
                     for( long i=0; i<nNonAlphaBytes; ++i )
                         *pOutScan++ = *pScan++;
-                    *pOutScan++ = m_pAlphaAcc->GetPixel(y,x);
+                    *pOutScan++ = m_pAlphaAcc->GetPixelIndex( y, x );
                 }
             }
 
@@ -611,8 +611,8 @@ uno::Sequence< sal_Int8 > SAL_CALL VclCanvasBitmap::getPixel( rendering::Integer
         if( m_nBitsPerInputPixel < 8 )
         {
             // input less than a byte - copy via GetPixel()
-            *pOutBuf++ = m_pBmpAcc->GetPixel(pos.Y,pos.X);
-            *pOutBuf   = m_pAlphaAcc->GetPixel(pos.Y,pos.X);
+            *pOutBuf++ = m_pBmpAcc->GetPixelIndex(pos.Y,pos.X);
+            *pOutBuf   = m_pAlphaAcc->GetPixelIndex(pos.Y,pos.X);
         }
         else
         {
@@ -622,7 +622,7 @@ uno::Sequence< sal_Int8 > SAL_CALL VclCanvasBitmap::getPixel( rendering::Integer
             // input integer multiple of byte - copy directly
             memcpy(pOutBuf, pScan+nScanlineLeftOffset, nNonAlphaBytes );
             pOutBuf += nNonAlphaBytes;
-            *pOutBuf++ = m_pAlphaAcc->GetPixel(pos.Y,pos.X);
+            *pOutBuf++ = m_pAlphaAcc->GetPixelIndex(pos.Y,pos.X);
         }
     }
 
@@ -1169,10 +1169,7 @@ uno::Sequence<rendering::RGBColor> SAL_CALL VclCanvasBitmap::convertIntegerToRGB
         {
             const BitmapColor aCol =
                 m_bPalette ?
-                m_pBmpAcc->GetPaletteColor(
-                    sal::static_int_cast<sal_uInt16>(
-                        m_pBmpAcc->GetPixelFromData(
-                            pIn, i ))) :
+                m_pBmpAcc->GetPaletteColor( m_pBmpAcc->GetPixelFromData( pIn, i ).GetIndex()) :
                 m_pBmpAcc->GetPixelFromData(pIn, i);
 
             // TODO(F3): Convert result to sRGB color space
@@ -1226,10 +1223,7 @@ uno::Sequence<rendering::ARGBColor> SAL_CALL VclCanvasBitmap::convertIntegerToAR
         {
             const BitmapColor aCol =
                 m_bPalette ?
-                m_pBmpAcc->GetPaletteColor(
-                    sal::static_int_cast<sal_uInt16>(
-                        m_pBmpAcc->GetPixelFromData(
-                            pIn, i ))) :
+                m_pBmpAcc->GetPaletteColor( m_pBmpAcc->GetPixelFromData( pIn, i ).GetIndex() ) :
                 m_pBmpAcc->GetPixelFromData(pIn, i);
 
             // TODO(F3): Convert result to sRGB color space
@@ -1285,10 +1279,7 @@ uno::Sequence<rendering::ARGBColor> SAL_CALL VclCanvasBitmap::convertIntegerToPA
         {
             const BitmapColor aCol =
                 m_bPalette ?
-                m_pBmpAcc->GetPaletteColor(
-                    sal::static_int_cast<sal_uInt16>(
-                        m_pBmpAcc->GetPixelFromData(
-                            pIn, i ))) :
+                m_pBmpAcc->GetPaletteColor( m_pBmpAcc->GetPixelFromData( pIn, i ).GetIndex() ) :
                 m_pBmpAcc->GetPixelFromData(pIn, i);
 
             // TODO(F3): Convert result to sRGB color space

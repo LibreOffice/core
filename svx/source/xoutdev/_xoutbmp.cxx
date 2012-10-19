@@ -332,13 +332,13 @@ Bitmap XOutBitmap::DetectEdges( const Bitmap& rBmp, const sal_uInt8 cThreshold )
                 const long          nHeight = aSize.Height();
                 const long          nHeight2 = nHeight - 2L;
                 const long          lThres2 = (long) cThreshold * cThreshold;
-                const BitmapColor   aWhite = (sal_uInt8) pWriteAcc->GetBestMatchingColor( Color( COL_WHITE ) );
-                const BitmapColor   aBlack = (sal_uInt8) pWriteAcc->GetBestMatchingColor( Color( COL_BLACK ) );
+                const sal_uInt8 nWhitePalIdx = pWriteAcc->GetBestPaletteIndex( Color( COL_WHITE ) );
+                const sal_uInt8 nBlackPalIdx = pWriteAcc->GetBestPaletteIndex( Color( COL_BLACK ) );
                 long                nSum1;
                 long                nSum2;
                 long                lGray;
 
-                // Rand mit Weiss init.
+                // initialize border with white pixels
                 pWriteAcc->SetLineColor( Color( COL_WHITE) );
                 pWriteAcc->DrawLine( Point(), Point( nWidth - 1L, 0L ) );
                 pWriteAcc->DrawLine( Point( nWidth - 1L, 0L ), Point( nWidth - 1L, nHeight - 1L ) );
@@ -351,24 +351,24 @@ Bitmap XOutBitmap::DetectEdges( const Bitmap& rBmp, const sal_uInt8 cThreshold )
                     {
                         nXTmp = nX;
 
-                        nSum1 = -( nSum2 = lGray = (sal_uInt8) pReadAcc->GetPixel( nY, nXTmp++ ) );
-                        nSum2 += ( (long) (sal_uInt8) pReadAcc->GetPixel( nY, nXTmp++ ) ) << 1;
-                        nSum1 += ( lGray = pReadAcc->GetPixel( nY, nXTmp ) );
+                        nSum1 = -( nSum2 = lGray = pReadAcc->GetPixelIndex( nY, nXTmp++ ) );
+                        nSum2 += ( (long) pReadAcc->GetPixelIndex( nY, nXTmp++ ) ) << 1;
+                        nSum1 += ( lGray = pReadAcc->GetPixelIndex( nY, nXTmp ) );
                         nSum2 += lGray;
 
-                        nSum1 += ( (long) (sal_uInt8) pReadAcc->GetPixel( nY1, nXTmp ) ) << 1;
-                        nSum1 -= ( (long) (sal_uInt8) pReadAcc->GetPixel( nY1, nXTmp -= 2 ) ) << 1;
+                        nSum1 += ( (long) pReadAcc->GetPixelIndex( nY1, nXTmp ) ) << 1;
+                        nSum1 -= ( (long) pReadAcc->GetPixelIndex( nY1, nXTmp -= 2 ) ) << 1;
 
-                        nSum1 += ( lGray = -(long) (sal_uInt8) pReadAcc->GetPixel( nY2, nXTmp++ ) );
+                        nSum1 += ( lGray = -(long) pReadAcc->GetPixelIndex( nY2, nXTmp++ ) );
                         nSum2 += lGray;
-                        nSum2 -= ( (long) (sal_uInt8) pReadAcc->GetPixel( nY2, nXTmp++ ) ) << 1;
-                        nSum1 += ( lGray = (long) (sal_uInt8) pReadAcc->GetPixel( nY2, nXTmp ) );
+                        nSum2 -= ( (long) pReadAcc->GetPixelIndex( nY2, nXTmp++ ) ) << 1;
+                        nSum1 += ( lGray = (long) pReadAcc->GetPixelIndex( nY2, nXTmp ) );
                         nSum2 -= lGray;
 
                         if( ( nSum1 * nSum1 + nSum2 * nSum2 ) < lThres2 )
-                            pWriteAcc->SetPixel( nY1, nXDst, aWhite );
+                            pWriteAcc->SetPixelIndex( nY1, nXDst, nWhitePalIdx );
                         else
-                            pWriteAcc->SetPixel( nY1, nXDst, aBlack );
+                            pWriteAcc->SetPixelIndex( nY1, nXDst, nBlackPalIdx );
                     }
                 }
 

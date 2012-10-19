@@ -520,7 +520,7 @@ sal_Bool Bitmap::ImplReadDIBBits( SvStream& rIStm, DIBInfoHeader& rHeader, Bitma
                                 cTmp = *pTmp++;
                             }
 
-                            rAcc.SetPixel( nY, nX, sal::static_int_cast<sal_uInt8>(( cTmp >> --nShift ) & 1) );
+                            rAcc.SetPixelIndex( nY, nX, (cTmp >> --nShift) & 1);
                         }
                     }
                 }
@@ -544,7 +544,7 @@ sal_Bool Bitmap::ImplReadDIBBits( SvStream& rIStm, DIBInfoHeader& rHeader, Bitma
                                 cTmp = *pTmp++;
                             }
 
-                            rAcc.SetPixel( nY, nX, sal::static_int_cast<sal_uInt8>(( cTmp >> ( --nShift << 2UL ) ) & 0x0f) );
+                            rAcc.SetPixelIndex( nY, nX, (cTmp >> ( --nShift << 2UL ) ) & 0x0f);
                         }
                     }
                 }
@@ -559,7 +559,7 @@ sal_Bool Bitmap::ImplReadDIBBits( SvStream& rIStm, DIBInfoHeader& rHeader, Bitma
                         rIStm.Read( pTmp = pBuf, nAlignedWidth );
 
                         for( long nX = 0L; nX < nWidth; nX++ )
-                            rAcc.SetPixel( nY, nX, *pTmp++ );
+                            rAcc.SetPixelIndex( nY, nX, *pTmp++ );
                     }
                 }
                 break;
@@ -965,7 +965,7 @@ sal_Bool Bitmap::ImplWriteDIBBits( SvStream& rOStm, BitmapReadAccess& rAcc,
                                 cTmp = 0;
                             }
 
-                            cTmp |= ( (sal_uInt8) rAcc.GetPixel( nY, nX ) << --nShift );
+                            cTmp |= rAcc.GetPixelIndex( nY, nX ) << --nShift;
                         }
 
                         *pTmp = cTmp;
@@ -990,7 +990,7 @@ sal_Bool Bitmap::ImplWriteDIBBits( SvStream& rOStm, BitmapReadAccess& rAcc,
                                 cTmp = 0;
                             }
 
-                            cTmp |= ( (sal_uInt8) rAcc.GetPixel( nY, nX ) << ( --nShift << 2L ) );
+                            cTmp |= rAcc.GetPixelIndex( nY, nX ) << ( --nShift << 2L );
                         }
                         *pTmp = cTmp;
                         rOStm.Write( pBuf, nAlignedWidth );
@@ -1005,7 +1005,7 @@ sal_Bool Bitmap::ImplWriteDIBBits( SvStream& rOStm, BitmapReadAccess& rAcc,
                         pTmp = pBuf;
 
                         for( long nX = 0L; nX < nWidth; nX++ )
-                            *pTmp++ = rAcc.GetPixel( nY, nX );
+                            *pTmp++ = rAcc.GetPixelIndex( nY, nX );
 
                         rOStm.Write( pBuf, nAlignedWidth );
                     }
@@ -1075,16 +1075,16 @@ void Bitmap::ImplDecodeRLE( sal_uInt8* pBuffer, DIBInfoHeader& rHeader,
                         cTmp = *pRLE++;
 
                         if( nX < nWidth )
-                            rAcc.SetPixel( nY, nX++, cTmp >> 4 );
+                            rAcc.SetPixelIndex( nY, nX++, cTmp >> 4 );
 
                         if( nX < nWidth )
-                            rAcc.SetPixel( nY, nX++, cTmp & 0x0f );
+                            rAcc.SetPixelIndex( nY, nX++, cTmp & 0x0f );
                     }
 
                     if( nRunByte & 1 )
                     {
                         if( nX < nWidth )
-                            rAcc.SetPixel( nY, nX++, *pRLE >> 4 );
+                            rAcc.SetPixelIndex( nY, nX++, *pRLE >> 4 );
 
                         pRLE++;
                     }
@@ -1097,7 +1097,7 @@ void Bitmap::ImplDecodeRLE( sal_uInt8* pBuffer, DIBInfoHeader& rHeader,
                     for( sal_uLong i = 0UL; i < nRunByte; i++ )
                     {
                         if( nX < nWidth )
-                            rAcc.SetPixel( nY, nX++, *pRLE );
+                            rAcc.SetPixelIndex( nY, nX++, *pRLE );
 
                         pRLE++;
                     }
@@ -1130,19 +1130,19 @@ void Bitmap::ImplDecodeRLE( sal_uInt8* pBuffer, DIBInfoHeader& rHeader,
                 for( sal_uLong i = 0UL; i < nRunByte; i++ )
                 {
                     if( nX < nWidth )
-                        rAcc.SetPixel( nY, nX++, cTmp >> 4 );
+                        rAcc.SetPixelIndex( nY, nX++, cTmp >> 4 );
 
                     if( nX < nWidth )
-                        rAcc.SetPixel( nY, nX++, cTmp & 0x0f );
+                        rAcc.SetPixelIndex( nY, nX++, cTmp & 0x0f );
                 }
 
                 if( ( nCountByte & 1 ) && ( nX < nWidth ) )
-                    rAcc.SetPixel( nY, nX++, cTmp >> 4 );
+                    rAcc.SetPixelIndex( nY, nX++, cTmp >> 4 );
             }
             else
             {
                 for( sal_uLong i = 0UL; ( i < nCountByte ) && ( nX < nWidth ); i++ )
-                    rAcc.SetPixel( nY, nX++, cTmp );
+                    rAcc.SetPixelIndex( nY, nX++, cTmp );
             }
         }
     }
@@ -1171,9 +1171,10 @@ sal_Bool Bitmap::ImplWriteRLE( SvStream& rOStm, BitmapReadAccess& rAcc, sal_Bool
         while( nX < nWidth )
         {
             nCount = 1L;
-            cPix = rAcc.GetPixel( nY, nX++ );
+            cPix = rAcc.GetPixelIndex( nY, nX++ );
 
-            while( ( nX < nWidth ) && ( nCount < 255L ) && ( cPix == rAcc.GetPixel( nY, nX ) ) )
+            while( ( nX < nWidth ) && ( nCount < 255L )
+                && ( cPix == rAcc.GetPixelIndex( nY, nX ) ) )
             {
                 nX++;
                 nCount++;
@@ -1191,7 +1192,8 @@ sal_Bool Bitmap::ImplWriteRLE( SvStream& rOStm, BitmapReadAccess& rAcc, sal_Bool
                 nSaveIndex = nX - 1UL;
                 bFound = sal_False;
 
-                while( ( nX < nWidth ) && ( nCount < 256L ) && ( cPix = rAcc.GetPixel( nY, nX ) ) != cLast )
+                while( ( nX < nWidth ) && ( nCount < 256L )
+                    && ( cPix = rAcc.GetPixelIndex( nY, nX ) ) != cLast )
                 {
                     nX++; nCount++;
                     cLast = cPix;
@@ -1210,10 +1212,10 @@ sal_Bool Bitmap::ImplWriteRLE( SvStream& rOStm, BitmapReadAccess& rAcc, sal_Bool
                     {
                         for ( sal_uLong i = 0; i < nCount; i++, pTmp++ )
                         {
-                            *pTmp = (sal_uInt8) rAcc.GetPixel( nY, nSaveIndex++ ) << 4;
+                            *pTmp = rAcc.GetPixelIndex( nY, nSaveIndex++ ) << 4;
 
                             if ( ++i < nCount )
-                                *pTmp |= rAcc.GetPixel( nY, nSaveIndex++ );
+                                *pTmp |= rAcc.GetPixelIndex( nY, nSaveIndex++ );
                         }
 
                         nCount = ( nCount + 1 ) >> 1;
@@ -1221,7 +1223,7 @@ sal_Bool Bitmap::ImplWriteRLE( SvStream& rOStm, BitmapReadAccess& rAcc, sal_Bool
                     else
                     {
                         for( sal_uLong i = 0UL; i < nCount; i++ )
-                            *pTmp++ = rAcc.GetPixel( nY, nSaveIndex++ );
+                            *pTmp++ = rAcc.GetPixelIndex( nY, nSaveIndex++ );
                     }
 
                     if ( nCount & 1 )
@@ -1235,12 +1237,12 @@ sal_Bool Bitmap::ImplWriteRLE( SvStream& rOStm, BitmapReadAccess& rAcc, sal_Bool
                 else
                 {
                     *pTmp++ = 1;
-                    *pTmp++ = (sal_uInt8) rAcc.GetPixel( nY, nSaveIndex ) << ( bRLE4 ? 4 : 0 );
+                    *pTmp++ = rAcc.GetPixelIndex( nY, nSaveIndex ) << (bRLE4 ? 4 : 0);
 
                     if ( nCount == 3 )
                     {
                         *pTmp++ = 1;
-                        *pTmp++ = (sal_uInt8) rAcc.GetPixel( nY, ++nSaveIndex ) << ( bRLE4 ? 4 : 0 );
+                        *pTmp++ = rAcc.GetPixelIndex( nY, ++nSaveIndex ) << ( bRLE4 ? 4 : 0 );
                         nBufCount += 4;
                     }
                     else

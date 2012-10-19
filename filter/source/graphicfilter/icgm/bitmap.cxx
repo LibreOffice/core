@@ -75,7 +75,7 @@ void CGMBitmap::ImplGetBitmap( CGMBitmapDescriptor& rDesc )
                             nxC = nxCount;
                             for ( nx = 0; --nxC; nx++ )
                             {   // this is not fast, but a one bit/pixel format is rarely used
-                                rDesc.mpAcc->SetPixel( ny, nx, (sal_Int8)( (*( rDesc.mpBuf + ( nx >> 3 ) ) >> ( ( nx & 7 ) ^ 7 ) ) ) & 1 );
+                                rDesc.mpAcc->SetPixelIndex( ny, nx, static_cast<sal_uInt8>( (*( rDesc.mpBuf + (nx >> 3)) >> ((nx & 7)^7))) & 1 );
                             }
                         }
                     }
@@ -89,7 +89,7 @@ void CGMBitmap::ImplGetBitmap( CGMBitmapDescriptor& rDesc )
                             nxC = nxCount;
                             for ( nx = 0; --nxC; nx++ )
                             {   // this is not fast, but a two bits/pixel format is rarely used
-                                rDesc.mpAcc->SetPixel( ny, nx, (sal_Int8)( (*( rDesc.mpBuf + ( nx >> 2 ) ) >> ( ( ( nx & 3 ) ^ 3 ) << 1 ) ) ) & 3 );
+                                rDesc.mpAcc->SetPixelIndex( ny, nx, static_cast<sal_uInt8>( (*(rDesc.mpBuf + (nx >> 2)) >> (((nx & 3)^3) << 1))) & 3 );
                             }
                         }
                     }
@@ -106,11 +106,11 @@ void CGMBitmap::ImplGetBitmap( CGMBitmapDescriptor& rDesc )
                             for ( nx = 0; --nxC; nx++ )
                             {
                                 nDat = *pTemp++;
-                                rDesc.mpAcc->SetPixel( ny, nx, (sal_Int8)( nDat >> 4 ) );
+                                rDesc.mpAcc->SetPixelIndex( ny, nx, static_cast<sal_uInt8>(nDat >> 4) );
                                 if ( --nxC )
                                 {
                                     nx ++;
-                                    rDesc.mpAcc->SetPixel( ny, nx, (sal_Int8)( nDat & 15 ) );
+                                    rDesc.mpAcc->SetPixelIndex( ny, nx, static_cast<sal_uInt8>(nDat & 15) );
                                 }
                                 else
                                     break;
@@ -128,7 +128,7 @@ void CGMBitmap::ImplGetBitmap( CGMBitmapDescriptor& rDesc )
                             nxC = nxCount;
                             for ( nx = 0; --nxC; nx++ )
                             {
-                                rDesc.mpAcc->SetPixel( ny, nx, (sal_Int8)( *pTemp++ ) );
+                                rDesc.mpAcc->SetPixelIndex( ny, nx, *(pTemp++) );
                             }
                         }
                     }

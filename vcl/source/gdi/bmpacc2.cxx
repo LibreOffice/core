@@ -22,7 +22,7 @@
 
 IMPL_FORMAT_GETPIXEL_NOMASK( _1BIT_MSB_PAL )
 {
-    return( pScanline[ nX >> 3 ] & ( 1 << ( 7 - ( nX & 7 ) ) ) ? 1 : 0 );
+    return BitmapColor( pScanline[ nX >> 3 ] & ( 1 << ( 7 - ( nX & 7 ) ) ) ? 1 : 0 );
 }
 
 IMPL_FORMAT_SETPIXEL_NOMASK( _1BIT_MSB_PAL )
@@ -35,7 +35,7 @@ IMPL_FORMAT_SETPIXEL_NOMASK( _1BIT_MSB_PAL )
 
 IMPL_FORMAT_GETPIXEL_NOMASK( _1BIT_LSB_PAL )
 {
-    return( pScanline[ nX >> 3 ] & ( 1 << ( nX & 7 ) ) ? 1 : 0 );
+    return BitmapColor( pScanline[ nX >> 3 ] & ( 1 << ( nX & 7 ) ) ? 1 : 0 );
 }
 
 IMPL_FORMAT_SETPIXEL_NOMASK( _1BIT_LSB_PAL )
@@ -48,7 +48,7 @@ IMPL_FORMAT_SETPIXEL_NOMASK( _1BIT_LSB_PAL )
 
 IMPL_FORMAT_GETPIXEL_NOMASK( _4BIT_MSN_PAL )
 {
-    return( ( pScanline[ nX >> 1 ] >> ( nX & 1 ? 0 : 4 ) ) & 0x0f );
+    return BitmapColor( ( pScanline[ nX >> 1 ] >> ( nX & 1 ? 0 : 4 ) ) & 0x0f );
 }
 
 IMPL_FORMAT_SETPIXEL_NOMASK( _4BIT_MSN_PAL )
@@ -61,7 +61,7 @@ IMPL_FORMAT_SETPIXEL_NOMASK( _4BIT_MSN_PAL )
 
 IMPL_FORMAT_GETPIXEL_NOMASK( _4BIT_LSN_PAL )
 {
-    return( ( pScanline[ nX >> 1 ] >> ( nX & 1 ? 4 : 0 ) ) & 0x0f );
+    return BitmapColor( ( pScanline[ nX >> 1 ] >> ( nX & 1 ? 4 : 0 ) ) & 0x0f );
 }
 
 IMPL_FORMAT_SETPIXEL_NOMASK( _4BIT_LSN_PAL )
@@ -74,7 +74,7 @@ IMPL_FORMAT_SETPIXEL_NOMASK( _4BIT_LSN_PAL )
 
 IMPL_FORMAT_GETPIXEL_NOMASK( _8BIT_PAL )
 {
-    return pScanline[ nX ];
+    return BitmapColor( pScanline[ nX ] );
 }
 
 IMPL_FORMAT_SETPIXEL_NOMASK( _8BIT_PAL )

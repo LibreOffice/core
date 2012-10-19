@@ -297,11 +297,11 @@ Bitmap createHistorical8x8FromArray(const sal_uInt16* pArray, Color aColorPix, C
             {
                 if(pArray[(a * 8) + b])
                 {
-                    pContent->SetPixel(b, a, sal_uInt8(1));
+                    pContent->SetPixelIndex(b, a, 1);
                 }
                 else
                 {
-                    pContent->SetPixel(b, a, sal_uInt8(0));
+                    pContent->SetPixelIndex(b, a, 0);
                 }
             }
         }

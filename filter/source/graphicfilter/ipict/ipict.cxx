@@ -255,38 +255,38 @@ public:
     switch ( nPixelSize )                               \
     {                                                   \
         case 1 :                                        \
-            pAcc->SetPixel( ny, nx++, nDat >> 7 );      \
+            pAcc->SetPixelIndex( ny, nx++, nDat >> 7 ); \
             if ( nx == nWidth ) break;                  \
-            pAcc->SetPixel( ny, nx++, nDat >> 6 );      \
+            pAcc->SetPixelIndex( ny, nx++, nDat >> 6 ); \
             if ( nx == nWidth ) break;                  \
-            pAcc->SetPixel( ny, nx++, nDat >> 5 );      \
+            pAcc->SetPixelIndex( ny, nx++, nDat >> 5 ); \
             if ( nx == nWidth ) break;                  \
-            pAcc->SetPixel( ny, nx++, nDat >> 4 );      \
+            pAcc->SetPixelIndex( ny, nx++, nDat >> 4 ); \
             if ( nx == nWidth ) break;                  \
-            pAcc->SetPixel( ny, nx++, nDat >> 3 );      \
+            pAcc->SetPixelIndex( ny, nx++, nDat >> 3 ); \
             if ( nx == nWidth ) break;                  \
-            pAcc->SetPixel( ny, nx++, nDat >> 2 );      \
+            pAcc->SetPixelIndex( ny, nx++, nDat >> 2 ); \
             if ( nx == nWidth ) break;                  \
-            pAcc->SetPixel( ny, nx++, nDat >> 1 );      \
+            pAcc->SetPixelIndex( ny, nx++, nDat >> 1 ); \
             if ( nx == nWidth ) break;                  \
-            pAcc->SetPixel( ny, nx++, nDat );           \
+            pAcc->SetPixelIndex( ny, nx++, nDat );      \
             break;                                      \
         case 2 :                                        \
-            pAcc->SetPixel( ny, nx++, nDat >> 6 );      \
+            pAcc->SetPixelIndex( ny, nx++, nDat >> 6 ); \
             if ( nx == nWidth ) break;                  \
-            pAcc->SetPixel( ny, nx++, nDat >> 4 & 3);   \
+            pAcc->SetPixelIndex( ny, nx++, (nDat>>4)&3);\
             if ( nx == nWidth ) break;                  \
-            pAcc->SetPixel( ny, nx++, nDat >> 2 & 3 );  \
+            pAcc->SetPixelIndex( ny, nx++, (nDat>>2)&3 );\
             if ( nx == nWidth ) break;                  \
-            pAcc->SetPixel( ny, nx++, nDat & 3);        \
+            pAcc->SetPixelIndex( ny, nx++, nDat & 3);       \
             break;                                      \
         case 4 :                                        \
-            pAcc->SetPixel( ny, nx++, nDat >> 4 );      \
+            pAcc->SetPixelIndex( ny, nx++, nDat >> 4 ); \
             if ( nx == nWidth ) break;                  \
-            pAcc->SetPixel( ny, nx++, nDat );           \
+            pAcc->SetPixelIndex( ny, nx++, nDat );      \
             break;                                      \
         case 8 :                                        \
-            pAcc->SetPixel( ny, nx++, nDat );           \
+            pAcc->SetPixelIndex( ny, nx++, nDat );      \
             break;                                      \
     }
 

@@ -145,7 +145,7 @@ void PBMWriter::ImplWriteBody()
             for ( x = 0; x < mnWidth; x++ )
             {
                 nBYTE <<= 1;
-                if (!(mpAcc->GetPixel( y, x ) & 1 ) )
+                if (!(mpAcc->GetPixelIndex( y, x ) & 1 ) )
                     nBYTE++;
                 if ( ( x & 7 ) == 7 )
                     m_rOStm << nBYTE;
@@ -167,7 +167,7 @@ void PBMWriter::ImplWriteBody()
                     nxCount = 69;
                     m_rOStm << (sal_uInt8)10;
                 }
-                m_rOStm << (sal_uInt8)( ( mpAcc->GetPixel( y, x ) ^ 1 ) + '0' ) ;
+                m_rOStm << (sal_uInt8)( ( mpAcc->GetPixelIndex( y, x ) ^ 1 ) + '0' ) ;
             }
             m_rOStm << (sal_uInt8)10;
         }

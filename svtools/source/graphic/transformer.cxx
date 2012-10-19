@@ -54,22 +54,19 @@ GraphicTransformer::~GraphicTransformer()
 
 // ------------------------------------------------------------------------------
 
-void setAlpha( Bitmap& rBitmap, AlphaMask& rAlpha, sal_Int32 nColorFrom, sal_Int8 nAlphaTo )
+void setAlpha( Bitmap& rBitmap, AlphaMask& rAlpha, sal_uInt8 cIndexFrom, sal_Int8 nAlphaTo )
 {
     BitmapWriteAccess* pWriteAccess = rAlpha.AcquireWriteAccess();
     BitmapReadAccess* pReadAccess = rBitmap.AcquireReadAccess();
-    BitmapColor aColorFrom( static_cast< sal_uInt8 >( nColorFrom >> 16 ),
-        static_cast< sal_uInt8 >( nColorFrom >> 8 ),
-        static_cast< sal_uInt8 >( nColorFrom ) );
     if ( pReadAccess && pWriteAccess )
     {
         for ( sal_Int32 nY = 0; nY < pReadAccess->Height(); nY++ )
         {
             for ( sal_Int32 nX = 0; nX < pReadAccess->Width(); nX++ )
             {
-                BitmapColor aColor( pReadAccess->GetPixel( nY, nX ) );
-                if ( aColor == aColorFrom )
-                    pWriteAccess->SetPixel( nY, nX, nAlphaTo );
+                const sal_uInt8 cIndex = pReadAccess->GetPixelIndex( nY, nX );
+                if ( cIndex == cIndexFrom )
+                    pWriteAccess->SetPixelIndex( nY, nX, nAlphaTo );
             }
         }
     }
@@ -87,6 +84,7 @@ uno::Reference< graphic::XGraphic > SAL_CALL GraphicTransformer::colorChange(
 
     BitmapColor aColorFrom( static_cast< sal_uInt8 >( nColorFrom ), static_cast< sal_uInt8 >( nColorFrom >> 8 ), static_cast< sal_uInt8 >( nColorFrom >> 16 ) );
     BitmapColor aColorTo( static_cast< sal_uInt8 >( nColorTo ), static_cast< sal_uInt8 >( nColorTo >> 8 ), static_cast< sal_uInt8 >( nColorTo  >> 16 ) );
+    const sal_uInt8 cIndexFrom = aColorFrom.GetBlueOrIndex();
 
     if ( aGraphic.GetType() == GRAPHIC_BITMAP )
     {
@@ -96,7 +94,7 @@ uno::Reference< graphic::XGraphic > SAL_CALL GraphicTransformer::colorChange(
         if ( aBitmapEx.IsAlpha() )
         {
             AlphaMask aAlphaMask( aBitmapEx.GetAlpha() );
-            setAlpha( aBitmap, aAlphaMask, aColorFrom, nAlphaTo );
+            setAlpha( aBitmap, aAlphaMask, cIndexFrom, nAlphaTo );
             aBitmap.Replace( aColorFrom, aColorTo, nTolerance );
             aGraphic = ::Graphic( BitmapEx( aBitmap, aAlphaMask ) );
         }
@@ -113,7 +111,7 @@ uno::Reference< graphic::XGraphic > SAL_CALL GraphicTransformer::colorChange(
             else
             {
                 AlphaMask aAlphaMask( aBitmapEx.GetMask() );
-                setAlpha( aBitmap, aAlphaMask, aColorFrom, nAlphaTo );
+                setAlpha( aBitmap, aAlphaMask, cIndexFrom, nAlphaTo );
                 aBitmap.Replace( aColorFrom, aColorTo, nTolerance );
                 aGraphic = ::Graphic( BitmapEx( aBitmap, aAlphaMask ) );
             }
@@ -129,7 +127,7 @@ uno::Reference< graphic::XGraphic > SAL_CALL GraphicTransformer::colorChange(
             else
             {
                 AlphaMask aAlphaMask( aBitmapEx.GetSizePixel() );
-                setAlpha( aBitmap, aAlphaMask, aColorFrom, nAlphaTo );
+                setAlpha( aBitmap, aAlphaMask, cIndexFrom, nAlphaTo );
                 aBitmap.Replace( aColorFrom, aColorTo, nTolerance );
                 aGraphic = ::Graphic( BitmapEx( aBitmap, aAlphaMask ) );
             }

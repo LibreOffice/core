@@ -755,7 +755,7 @@ sal_Bool TIFFReader::ConvertScanline( sal_uLong nY )
                     if (nSamplesPerPixel >= 4 && pMaskAcc)
                     {
                         nLAlpha = nLAlpha + pt[ 3 ];
-                        pMaskAcc->SetPixel( nY, nx, ~nLAlpha );
+                        pMaskAcc->SetPixel( nY, nx, BitmapColor(~nLAlpha) );
                     }
                 }
             }
@@ -767,7 +767,7 @@ sal_Bool TIFFReader::ConvertScanline( sal_uLong nY )
                     if (nSamplesPerPixel >= 4 && pMaskAcc)
                     {
                         sal_uInt8 nAlpha = pt[3];
-                        pMaskAcc->SetPixel( nY, nx, ~nAlpha );
+                        pMaskAcc->SetPixel( nY, nx, BitmapColor(~nAlpha) );
                     }
                 }
             }
@@ -885,7 +885,7 @@ sal_Bool TIFFReader::ConvertScanline( sal_uLong nY )
                             nLast = BYTESWAP( (sal_uInt8)*pt++ );
                             for ( nx = 0; nx < nImageWidth; nx++ )
                             {
-                                pAcc->SetPixel( nY, nx, nLast );
+                                pAcc->SetPixelIndex( nY, nx, nLast );
                                 nLast = nLast + *pt++;
                             }
                         }
@@ -894,7 +894,7 @@ sal_Bool TIFFReader::ConvertScanline( sal_uLong nY )
                             for ( nx = 0; nx < nImageWidth; nx++ )
                             {
                                 nLast = *pt++;
-                                pAcc->SetPixel( nY, nx, (sal_uInt8)( ( (BYTESWAP((sal_uLong)nLast ) - nMinSampleValue ) * nMinMax ) ) );
+                                pAcc->SetPixelIndex( nY, nx, static_cast<sal_uInt8>( (BYTESWAP((sal_uLong)nLast) - nMinSampleValue) * nMinMax ) );
                             }
                         }
                     }
@@ -905,7 +905,7 @@ sal_Bool TIFFReader::ConvertScanline( sal_uLong nY )
                             nLast = *pt++;
                             for ( nx = 0; nx < nImageWidth; nx++ )
                             {
-                                pAcc->SetPixel( nY, nx, nLast );
+                                pAcc->SetPixelIndex( nY, nx, nLast );
                                 nLast = nLast + *pt++;
                             }
                         }
@@ -913,7 +913,7 @@ sal_Bool TIFFReader::ConvertScanline( sal_uLong nY )
                         {
                             for ( nx = 0; nx < nImageWidth; nx++ )
                             {
-                                pAcc->SetPixel( nY, nx, (sal_uInt8)( ( (sal_uLong)*pt++ - nMinSampleValue ) * nMinMax ) );
+                                pAcc->SetPixelIndex( nY, nx, static_cast<sal_uInt8>( ((sal_uLong)*pt++ - nMinSampleValue) * nMinMax ) );
 
                             }
                         }
@@ -931,7 +931,7 @@ sal_Bool TIFFReader::ConvertScanline( sal_uLong nY )
                     for ( nx = 0; nx < nImageWidth; nx++ )
                     {
                         nVal = ( GetBits( pt, nx * nBitsPerSample, nBitsPerSample ) - nMinSampleValue ) * nMinMax;
-                        pAcc->SetPixel( nY, nx, (sal_uInt8)nVal );
+                        pAcc->SetPixelIndex( nY, nx, static_cast<sal_uInt8>(nVal));
                     }
                 }
                 break;
@@ -945,28 +945,28 @@ sal_Bool TIFFReader::ConvertScanline( sal_uLong nY )
                         while ( --nByteCount )
                         {
                             nByteVal = *pt++;
-                            pAcc->SetPixel( nY, nx++, nByteVal & 1 );
+                            pAcc->SetPixelIndex( nY, nx++, nByteVal & 1 );
                             nByteVal >>= 1;
-                            pAcc->SetPixel( nY, nx++, nByteVal & 1 );
+                            pAcc->SetPixelIndex( nY, nx++, nByteVal & 1 );
                             nByteVal >>= 1;
-                            pAcc->SetPixel( nY, nx++, nByteVal & 1 );
+                            pAcc->SetPixelIndex( nY, nx++, nByteVal & 1 );
                             nByteVal >>= 1;
-                            pAcc->SetPixel( nY, nx++, nByteVal & 1 );
+                            pAcc->SetPixelIndex( nY, nx++, nByteVal & 1 );
                             nByteVal >>= 1;
-                            pAcc->SetPixel( nY, nx++, nByteVal & 1 );
+                            pAcc->SetPixelIndex( nY, nx++, nByteVal & 1 );
                             nByteVal >>= 1;
-                            pAcc->SetPixel( nY, nx++, nByteVal & 1 );
+                            pAcc->SetPixelIndex( nY, nx++, nByteVal & 1 );
                             nByteVal >>= 1;
-                            pAcc->SetPixel( nY, nx++, nByteVal & 1 );
+                            pAcc->SetPixelIndex( nY, nx++, nByteVal & 1 );
                             nByteVal >>= 1;
-                            pAcc->SetPixel( nY, nx++, nByteVal );
+                            pAcc->SetPixelIndex( nY, nx++, nByteVal );
                         }
                         if ( nImageWidth & 7 )
                         {
                             nByteVal = *pt++;
                             while ( nx < nImageWidth )
                             {
-                                pAcc->SetPixel( nY, nx++, nByteVal & 1 );
+                                pAcc->SetPixelIndex( nY, nx++, nByteVal & 1 );
                                 nByteVal >>= 1;
                             }
                         }
@@ -978,21 +978,21 @@ sal_Bool TIFFReader::ConvertScanline( sal_uLong nY )
                         while ( --nByteCount )
                         {
                             nByteVal = *pt++;
-                            pAcc->SetPixel( nY, nx, nByteVal & 1 );
+                            pAcc->SetPixelIndex( nY, nx, nByteVal & 1 );
                             nByteVal >>= 1;
-                            pAcc->SetPixel( nY, --nx, nByteVal & 1 );
+                            pAcc->SetPixelIndex( nY, --nx, nByteVal & 1 );
                             nByteVal >>= 1;
-                            pAcc->SetPixel( nY, --nx, nByteVal & 1 );
+                            pAcc->SetPixelIndex( nY, --nx, nByteVal & 1 );
                             nByteVal >>= 1;
-                            pAcc->SetPixel( nY, --nx, nByteVal & 1 );
+                            pAcc->SetPixelIndex( nY, --nx, nByteVal & 1 );
                             nByteVal >>= 1;
-                            pAcc->SetPixel( nY, --nx, nByteVal & 1 );
+                            pAcc->SetPixelIndex( nY, --nx, nByteVal & 1 );
                             nByteVal >>= 1;
-                            pAcc->SetPixel( nY, --nx, nByteVal & 1 );
+                            pAcc->SetPixelIndex( nY, --nx, nByteVal & 1 );
                             nByteVal >>= 1;
-                            pAcc->SetPixel( nY, --nx, nByteVal & 1 );
+                            pAcc->SetPixelIndex( nY, --nx, nByteVal & 1 );
                             nByteVal >>= 1;
-                            pAcc->SetPixel( nY, --nx, nByteVal );
+                            pAcc->SetPixelIndex( nY, --nx, nByteVal );
                             nx += 15;
                         }
                         if ( nImageWidth & 7 )
@@ -1002,7 +1002,7 @@ sal_Bool TIFFReader::ConvertScanline( sal_uLong nY )
                             nShift = 7;
                             while ( nx < nImageWidth )
                             {
-                                pAcc->SetPixel( nY, nx++, ( nByteVal >> nShift ) & 1);
+                                pAcc->SetPixelIndex( nY, nx++, ( nByteVal >> nShift ) & 1);
                             }
                         }
                     }
@@ -1025,7 +1025,7 @@ sal_Bool TIFFReader::ConvertScanline( sal_uLong nY )
                 pt++;
             for ( nx = 0; nx < nImageWidth; nx++, pt += 2 )
             {
-                pAcc->SetPixel( nY, nx, (sal_uInt8)( ( (sal_uLong)*pt - nMinSampleValue ) * nMinMax ) );
+                pAcc->SetPixelIndex( nY, nx, static_cast<sal_uInt8>( ((sal_uLong)*pt - nMinSampleValue) * nMinMax) );
             }
         }
     }

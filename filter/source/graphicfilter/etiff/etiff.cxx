@@ -386,7 +386,7 @@ sal_Bool TIFFWriter::ImplWriteBody()
                 ImplCallback( 100 * mnCurAllPictHeight / mnSumOfAllPictHeight );
                 for ( x = 0; x < mnWidth; x++ )
                 {
-                    Compress( mpAcc->GetPixel( y, x ) );
+                    Compress( mpAcc->GetPixelIndex( y, x ) );
                 }
             }
         }
@@ -400,9 +400,9 @@ sal_Bool TIFFWriter::ImplWriteBody()
                 for ( x = 0; x < mnWidth; x++, nShift++ )
                 {
                     if (!( nShift & 1 ))
-                        nTemp = ( (sal_uInt8)mpAcc->GetPixel( y, x ) << 4 );
+                        nTemp = ( mpAcc->GetPixelIndex( y, x ) << 4 );
                     else
-                        Compress( (sal_uInt8)( nTemp | ( mpAcc->GetPixel( y, x ) & 0xf ) ) );
+                        Compress( (sal_uInt8)( nTemp | ( mpAcc->GetPixelIndex( y, x ) & 0xf ) ) );
                 }
                 if ( nShift & 1 )
                     Compress( nTemp );
@@ -419,7 +419,7 @@ sal_Bool TIFFWriter::ImplWriteBody()
                 for ( x = 0; x < mnWidth; x++)
                 {
                     j <<= 1;
-                    j |= ( ( ~mpAcc->GetPixel( y, x ) ) & 1 );
+                    j |= ( ( ~mpAcc->GetPixelIndex( y, x ) ) & 1 );
                     if ( j & 0x100 )
                     {
                         Compress( (sal_uInt8)j );
