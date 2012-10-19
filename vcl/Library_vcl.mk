@@ -353,9 +353,15 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/aqua/source/gdi/coretext/salgdi \
 ))
 
+ifeq ($(MACOSX_SDK_VERSION),1070)
+$(eval $(call gb_Library_use_system_darwin_frameworks,vcl,\
+	ApplicationServices \
+))
+else
 $(eval $(call gb_Library_use_system_darwin_frameworks,vcl,\
 	CoreText \
 ))
+endif
 
 else # ATSUI
 
