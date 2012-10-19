@@ -61,7 +61,7 @@ int UIPreviewApp::Main()
 
     try
     {
-        Dialog *pDialog = new Dialog(NULL, WB_STDDIALOG);
+        Dialog *pDialog = new Dialog(DIALOG_NO_PARENT, WB_STDDIALOG);
 
         {
             VclBuilder aBuilder(pDialog, rtl::OUString(), uifiles[0]);
