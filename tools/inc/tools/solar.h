@@ -183,7 +183,6 @@ template<typename T> inline T Abs(T a) { return (a>=0?a:-a); }
 
 #define UniString       String
 #define XubString       String
-#define xub_Unicode     sal_Unicode
 #define xub_StrLen      sal_uInt16
 
 #define LIBRARY_CONCAT3( s1, s2, s3 ) \
