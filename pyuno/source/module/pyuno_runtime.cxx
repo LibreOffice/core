@@ -662,6 +662,7 @@ Any Runtime::pyObject2Any ( const PyRef & source, enum ConversionMode mode ) con
     {
 
     }
+#if PY_MAJOR_VERSION < 3    // Python 3 has no PyInt
     else if (PyInt_Check (o))
     {
         if( o == Py_True )
@@ -693,6 +694,7 @@ Any Runtime::pyObject2Any ( const PyRef & source, enum ConversionMode mode ) con
             }
         }
     }
+#endif              // Python 3 has no PyInt
     else if (PyLong_Check (o))
     {
         sal_Int64 l = (sal_Int64)PyLong_AsLong (o);
