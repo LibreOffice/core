@@ -135,7 +135,7 @@ void ScCalcOptionsDialog::FillOptionsList()
     maLbSettings.SetUpdateMode(false);
     maLbSettings.Clear();
 
-    SvLBoxTreeList* pModel = maLbSettings.GetModel();
+    SvTreeList* pModel = maLbSettings.GetModel();
 
     {
         // Syntax for INDIRECT function.
@@ -235,7 +235,7 @@ void ScCalcOptionsDialog::ListOptionValueChanged()
 
             maLbSettings.SetUpdateMode(false);
 
-            SvLBoxTreeList* pModel = maLbSettings.GetModel();
+            SvTreeList* pModel = maLbSettings.GetModel();
             SvTreeListEntry* pEntry = pModel->GetEntry(NULL, 0);
             if (!pEntry)
                 return;
@@ -263,7 +263,7 @@ void ScCalcOptionsDialog::RadioValueChanged()
             maConfig.mbEmptyStringAsZero = maBtnTrue.IsChecked();
             maLbSettings.SetUpdateMode(false);
 
-            SvLBoxTreeList* pModel = maLbSettings.GetModel();
+            SvTreeList* pModel = maLbSettings.GetModel();
             SvTreeListEntry* pEntry = pModel->GetEntry(NULL, 1);
             if (!pEntry)
                 return;

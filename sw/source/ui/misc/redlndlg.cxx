@@ -678,7 +678,7 @@ void SwRedlineAcceptDlg::RemoveParents(sal_uInt16 nStart, sal_uInt16 nEnd)
     if (pCurEntry)
         pTable->SetCurEntry(pCurEntry);
 
-    SvLBoxTreeList* pModel = pTable->GetModel();
+    SvTreeList* pModel = pTable->GetModel();
 
     for (sal_uInt16 i = nStart; i <= nEnd; i++)
     {

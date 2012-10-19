@@ -385,71 +385,6 @@ SvViewDataItem::~SvViewDataItem()
     DBG_DTOR(SvViewDataItem,0);
 }
 
-SvTreeListEntry* SvLBoxTreeList::First() const
-{
-    return (SvTreeListEntry*)SvTreeList::First();
-}
-
-SvTreeListEntry* SvLBoxTreeList::Next( SvTreeListEntry* pEntry, sal_uInt16* pDepth ) const
-{
-    return (SvTreeListEntry*)SvTreeList::Next(pEntry,pDepth);
-}
-
-SvTreeListEntry* SvLBoxTreeList::Prev( SvTreeListEntry* pEntry, sal_uInt16* pDepth ) const
-{
-    return (SvTreeListEntry*)SvTreeList::Prev(pEntry,pDepth);
-}
-
-SvTreeListEntry* SvLBoxTreeList::Last() const
-{
-    return (SvTreeListEntry*)SvTreeList::Last();
-}
-
-SvTreeListEntry* SvLBoxTreeList::Clone( SvTreeListEntry* pEntry, sal_uLong& nCloneCount ) const
-{
-    return (SvTreeListEntry*)SvTreeList::Clone(pEntry,nCloneCount);
-}
-
-SvTreeListEntry* SvLBoxTreeList::GetEntry( SvTreeListEntry* pParent, sal_uLong nPos ) const
-{
-    return (SvTreeListEntry*)SvTreeList::GetEntry(pParent,nPos);
-}
-
-SvTreeListEntry* SvLBoxTreeList::GetEntry( sal_uLong nRootPos ) const
-{
-    return (SvTreeListEntry*)SvTreeList::GetEntry(nRootPos);
-}
-
-SvTreeListEntry* SvLBoxTreeList::GetParent( SvTreeListEntry* pEntry ) const
-{
-    return (SvTreeListEntry*)SvTreeList::GetParent(pEntry);
-}
-
-SvTreeListEntry* SvLBoxTreeList::FirstChild( SvTreeListEntry* pParent ) const
-{
-    return (SvTreeListEntry*)SvTreeList::FirstChild(pParent);
-}
-
-SvTreeListEntry* SvLBoxTreeList::NextSibling( SvTreeListEntry* pEntry ) const
-{
-    return (SvTreeListEntry*)SvTreeList::NextSibling(pEntry);
-}
-
-SvTreeListEntry* SvLBoxTreeList::PrevSibling( SvTreeListEntry* pEntry ) const
-{
-    return (SvTreeListEntry*)SvTreeList::PrevSibling(pEntry);
-}
-
-SvTreeListEntry* SvLBoxTreeList::LastSibling( SvTreeListEntry* pEntry ) const
-{
-    return (SvTreeListEntry*)SvTreeList::LastSibling(pEntry);
-}
-
-SvTreeListEntry* SvLBoxTreeList::GetEntryAtAbsPos( sal_uLong nAbsPos ) const
-{
-    return (SvTreeListEntry*)SvTreeList::GetEntryAtAbsPos( nAbsPos);
-}
-
 // ***************************************************************
 // class SvLBoxViewData
 // ***************************************************************
@@ -503,7 +438,7 @@ SvTreeListBox::SvTreeListBox(Window* pParent, WinBits nWinStyle) :
     nImpFlags = 0;
     pTargetEntry = 0;
     nDragDropMode = 0;
-    SvLBoxTreeList* pTempModel = new SvLBoxTreeList;
+    SvTreeList* pTempModel = new SvTreeList;
     pTempModel->SetRefCount( 0 );
     SetBaseModel(pTempModel);
     pModel->SetCloneLink( LINK(this, SvTreeListBox, CloneHdl_Impl ));
@@ -531,7 +466,7 @@ SvTreeListBox::SvTreeListBox(Window* pParent, const ResId& rResId) :
     nImpFlags = 0;
     nDragOptions = DND_ACTION_COPYMOVE | DND_ACTION_LINK;
     nDragDropMode = 0;
-    SvLBoxTreeList* pTempModel = new SvLBoxTreeList;
+    SvTreeList* pTempModel = new SvTreeList;
     pTempModel->SetRefCount( 0 );
     SetBaseModel(pTempModel);
     pModel->InsertView( this );
@@ -1589,14 +1524,14 @@ void SvTreeListBox::SetExtendedWinBits( ExtendedWinBits _nBits )
     pImp->SetExtendedWindowBits( _nBits );
 }
 
-void SvTreeListBox::SetModel( SvLBoxTreeList* pNewModel )
+void SvTreeListBox::SetModel( SvTreeList* pNewModel )
 {
     DBG_CHKTHIS(SvTreeListBox,0);
     pImp->SetModel( pNewModel );
     SetBaseModel(pNewModel);
 }
 
-void SvTreeListBox::SetBaseModel( SvLBoxTreeList* pNewModel )
+void SvTreeListBox::SetBaseModel( SvTreeList* pNewModel )
 {
     // does the CleanUp
     SvListView::SetModel( pNewModel );
@@ -1612,7 +1547,7 @@ void SvTreeListBox::SetBaseModel( SvLBoxTreeList* pNewModel )
 void SvTreeListBox::DisconnectFromModel()
 {
     DBG_CHKTHIS(SvTreeListBox,0);
-    SvLBoxTreeList* pNewModel = new SvLBoxTreeList;
+    SvTreeList* pNewModel = new SvTreeList;
     pNewModel->SetRefCount( 0 );    // else this will never be deleted
     SvListView::SetModel( pNewModel );
 

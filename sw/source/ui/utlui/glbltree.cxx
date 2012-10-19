@@ -550,7 +550,7 @@ sal_Bool     SwGlobalTree::NotifyMoving(   SvTreeListEntry*  pTarget,
                                         sal_uLong&
                                     )
 {
-    SvLBoxTreeList* _pModel = GetModel();
+    SvTreeList* _pModel = GetModel();
     sal_uInt16 nSource = (sal_uInt16) _pModel->GetAbsPos(pSource);
     sal_uInt16 nDest   = pTarget ? (sal_uInt16) _pModel->GetAbsPos(pTarget) : pSwGlblDocContents->size();
 

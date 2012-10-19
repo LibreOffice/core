@@ -51,7 +51,7 @@ Image*  SvImpLBox::s_pDefCollapsed      = NULL;
 Image*  SvImpLBox::s_pDefExpanded       = NULL;
 sal_Int32 SvImpLBox::s_nImageRefCount   = 0;
 
-SvImpLBox::SvImpLBox( SvTreeListBox* pLBView, SvLBoxTreeList* pLBTree, WinBits nWinStyle) :
+SvImpLBox::SvImpLBox( SvTreeListBox* pLBView, SvTreeList* pLBTree, WinBits nWinStyle) :
 
     aVerSBar( pLBView, WB_DRAG | WB_VSCROLL ),
     aHorSBar( pLBView, WB_DRAG | WB_HSCROLL ),

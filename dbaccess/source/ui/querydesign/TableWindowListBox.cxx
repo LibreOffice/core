@@ -90,7 +90,7 @@ SvTreeListEntry* OTableWindowListBox::GetEntryFromText( const String& rEntryText
 {
     //////////////////////////////////////////////////////////////////////
     // Liste durchiterieren
-    SvLBoxTreeList* pTreeList = GetModel();
+    SvTreeList* pTreeList = GetModel();
     SvTreeListEntry* pEntry = pTreeList->First();
     OJoinDesignView* pView = m_pTabWin->getDesignView();
     OJoinController& rController = pView->getController();

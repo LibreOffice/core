@@ -194,7 +194,7 @@ const uno::Sequence<beans::PropertyValue>& ScSolverOptionsDialog::GetProperties(
     // update maProperties from list box content
     // order of entries in list box and maProperties is the same
     sal_Int32 nEntryCount = maProperties.getLength();
-    SvLBoxTreeList* pModel = maLbSettings.GetModel();
+    SvTreeList* pModel = maLbSettings.GetModel();
     if ( nEntryCount == (sal_Int32)pModel->GetEntryCount() )
     {
         for (sal_Int32 nEntryPos=0; nEntryPos<nEntryCount; ++nEntryPos)
@@ -267,7 +267,7 @@ void ScSolverOptionsDialog::FillListBox()
     if (!mpCheckButtonData)
         mpCheckButtonData = new SvLBoxButtonData( &maLbSettings );
 
-    SvLBoxTreeList* pModel = maLbSettings.GetModel();
+    SvTreeList* pModel = maLbSettings.GetModel();
     SvTreeListEntry* pEntry = NULL;
 
     for (sal_Int32 nPos=0; nPos<nCount; nPos++)

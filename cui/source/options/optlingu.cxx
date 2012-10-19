@@ -1465,7 +1465,7 @@ void SvxLinguTabPage::Reset( const SfxItemSet& rSet )
     aLinguOptionsCLB.SetUpdateMode(sal_False);
     aLinguOptionsCLB.Clear();
 
-    SvLBoxTreeList *pModel = aLinguOptionsCLB.GetModel();
+    SvTreeList *pModel = aLinguOptionsCLB.GetModel();
     SvTreeListEntry* pEntry = NULL;
 
     sal_Int16 nVal = 0;
@@ -2113,7 +2113,7 @@ IMPL_LINK( SvxEditModulesDlg, LangSelectHdl_Impl, ListBox *, pBox )
     static Locale aLastLocale;
     Locale aCurLocale;
     SvxLanguageToLocale(aCurLocale, eCurLanguage);
-    SvLBoxTreeList *pModel = aModulesCLB.GetModel();
+    SvTreeList *pModel = aModulesCLB.GetModel();
 
     if (pBox)
     {
@@ -2373,7 +2373,7 @@ IMPL_LINK( SvxEditModulesDlg, UpDownHdl_Impl, PushButton *, pBtn )
         0 != (pEntry = aModulesCLB.GetEntry(nCurPos)))
     {
         aModulesCLB.SetUpdateMode(sal_False);
-        SvLBoxTreeList *pModel = aModulesCLB.GetModel();
+        SvTreeList *pModel = aModulesCLB.GetModel();
 
         ModuleUserData_Impl* pData = (ModuleUserData_Impl*)pEntry->GetUserData();
         String aStr(aModulesCLB.GetEntryText(pEntry));

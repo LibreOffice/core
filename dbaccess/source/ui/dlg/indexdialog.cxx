@@ -458,7 +458,7 @@ DBG_NAME(DbaIndexDialog)
             showError(aExceptionInfo, this, m_xORB);
         else if (bSuccess && _bRemoveFromCollection)
         {
-            SvLBoxTreeList* pModel = m_aIndexes.GetModel();
+            SvTreeList* pModel = m_aIndexes.GetModel();
 
             m_aIndexes.disableSelectHandler();
             pModel->Remove(_pEntry);

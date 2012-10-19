@@ -110,7 +110,7 @@ DBTreeListBox::~DBTreeListBox()
 //------------------------------------------------------------------------
 SvTreeListEntry* DBTreeListBox::GetEntryPosByName( const String& aName, SvTreeListEntry* pStart, const IEntryFilter* _pFilter ) const
 {
-    SvLBoxTreeList* myModel = GetModel();
+    SvTreeList* myModel = GetModel();
     SvTreeEntryList* pChildren = myModel->GetChildList(pStart);
     SvTreeListEntry* pEntry = NULL;
     if ( pChildren )

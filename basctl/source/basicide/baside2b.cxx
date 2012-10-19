@@ -1957,7 +1957,7 @@ void implCollapseModifiedObjectEntry( SvTreeListEntry* pParent, WatchTreeListBox
 {
     pThis->Collapse( pParent );
 
-    SvLBoxTreeList* pModel = pThis->GetModel();
+    SvTreeList* pModel = pThis->GetModel();
     SvTreeListEntry* pDeleteEntry;
     while( (pDeleteEntry = pThis->SvTreeListBox::GetEntry( pParent, 0 )) != NULL )
     {

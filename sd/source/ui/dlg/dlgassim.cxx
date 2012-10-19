@@ -62,7 +62,7 @@ SdPageListControl::SdPageListControl(
 
 IMPL_LINK_NOARG(SdPageListControl, CheckButtonClickHdl)
 {
-    SvLBoxTreeList* pTreeModel = GetModel();
+    SvTreeList* pTreeModel = GetModel();
     SvTreeListEntry* pEntry = pTreeModel->First();
 
     while( pEntry )
@@ -179,7 +179,7 @@ sal_uInt16 SdPageListControl::GetSelectedPage()
 
     if ( pSelEntry )
     {
-        SvLBoxTreeList* pTreeModel = GetModel();
+        SvTreeList* pTreeModel = GetModel();
         SvTreeListEntry* pEntry = pTreeModel->First();
 
         while( pEntry && pEntry != pSelEntry )

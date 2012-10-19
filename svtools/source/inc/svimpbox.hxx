@@ -40,7 +40,7 @@
 
 class SvTreeListBox;
 class Point;
-class SvLBoxTreeList;
+class SvTreeList;
 class SvImpLBox;
 class SvTreeListEntry;
 class SvLBoxTab;
@@ -96,7 +96,7 @@ friend class ImpLBSelEng;
 friend class SvTreeListBox;
 private:
     SvTreeListBox*      pView;
-    SvLBoxTreeList*     pTree;
+    SvTreeList*     pTree;
     SvTreeListEntry*        pCursor;
     SvTreeListEntry*        pStartEntry;
     SvTreeListEntry*        pAnchor;
@@ -255,14 +255,14 @@ private:
     inline void         SetChildrenNotTransient() { bAreChildrenTransient = sal_False; }
 
 public:
-    SvImpLBox( SvTreeListBox* pView, SvLBoxTreeList*, WinBits nWinStyle );
+    SvImpLBox( SvTreeListBox* pView, SvTreeList*, WinBits nWinStyle );
     ~SvImpLBox();
 
     void                Clear();
     void                SetStyle( WinBits i_nWinStyle );
     void                SetExtendedWindowBits( ExtendedWinBits _nBits );
     ExtendedWinBits     GetExtendedWindowBits() const { return nExtendedWinBits; }
-    void                SetModel( SvLBoxTreeList* pModel ) { pTree = pModel;}
+    void                SetModel( SvTreeList* pModel ) { pTree = pModel;}
 
     void                EntryInserted( SvTreeListEntry*);
     void                RemovingEntry( SvTreeListEntry* pEntry );

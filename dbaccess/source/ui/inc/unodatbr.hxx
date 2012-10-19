@@ -50,7 +50,7 @@ struct SvSortData;
 
 namespace com { namespace sun{ namespace star { namespace container { class XNameContainer; } } } }
 
-class SvLBoxTreeList;
+class SvTreeList;
 // .........................................................................
 namespace dbaui
 {
@@ -109,7 +109,7 @@ namespace dbaui
 
         DBTreeView*             m_pTreeView;
         Splitter*               m_pSplitter;
-        SvLBoxTreeList*         m_pTreeModel;           // contains the datasources of the registry
+        SvTreeList*         m_pTreeModel;           // contains the datasources of the registry
         SvTreeListEntry*            m_pCurrentlyDisplayed;
         sal_uLong                   m_nAsyncDrop;
 

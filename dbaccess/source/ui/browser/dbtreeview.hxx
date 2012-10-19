@@ -24,7 +24,7 @@
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
-class SvLBoxTreeList;
+class SvTreeList;
 namespace dbaui
 {
     class DBTreeListBox;
@@ -56,7 +56,7 @@ namespace dbaui
         void    setCopyHandler(const Link& _rHdl);
 
 
-        void                setModel(SvLBoxTreeList* _pTreeModel);
+        void                setModel(SvTreeList* _pTreeModel);
         void                setSelChangeHdl(const Link& _rHdl);
 
         DBTreeListBox&      getListBox() const { return *m_pTreeListBox; }

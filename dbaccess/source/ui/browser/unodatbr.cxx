@@ -321,7 +321,7 @@ void SAL_CALL SbaTableQueryBrowser::disposing()
     // clear the tree model
     {
         SAL_WNODEPRECATED_DECLARATIONS_PUSH
-        ::std::auto_ptr<SvLBoxTreeList> aTemp(m_pTreeModel);
+        ::std::auto_ptr<SvTreeList> aTemp(m_pTreeModel);
         SAL_WNODEPRECATED_DECLARATIONS_POP
         m_pTreeModel = NULL;
     }
@@ -393,7 +393,7 @@ sal_Bool SbaTableQueryBrowser::Construct(Window* pParent)
         getBrowserView()->setTreeView(m_pTreeView);
 
         // fill view with data
-        m_pTreeModel = new SvLBoxTreeList;
+        m_pTreeModel = new SvTreeList;
         m_pTreeModel->SetSortMode(SortAscending);
         m_pTreeModel->SetCompareHdl(LINK(this, SbaTableQueryBrowser, OnTreeEntryCompare));
         m_pTreeView->setModel(m_pTreeModel);

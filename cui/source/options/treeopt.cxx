@@ -1838,7 +1838,7 @@ void OfaTreeOptionsDialog::ResizeTreeLB( void )
     const long  nIndent0 = PixelToLogic( Size( 28, 0 ) ).Width();
     const long  nIndent1 = PixelToLogic( Size( 52, 0 ) ).Width();
 
-    SvLBoxTreeList* pTreeList = aTreeLB.GetModel();
+    SvTreeList* pTreeList = aTreeLB.GetModel();
     DBG_ASSERT( pTreeList, "-OfaTreeOptionsDialog::ResizeTreeLB(): no model, no cookies!" );
 
     SvTreeListEntry* pEntry = pTreeList->First();

@@ -336,7 +336,7 @@ IMPL_LINK( DbRegistrationOptionsPage, HeaderSelect_Impl, HeaderBar*, pBar )
         nBits |= HIB_UPARROW;
     }
     pHeaderBar->SetItemBits( ITEMID_TYPE, nBits );
-    SvLBoxTreeList* pModel = pPathBox->GetModel();
+    SvTreeList* pModel = pPathBox->GetModel();
     pModel->SetSortMode( eMode );
     pModel->Resort();
     return 1;

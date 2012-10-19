@@ -286,7 +286,7 @@ void OAppDetailPageHelper::selectAll()
 void OAppDetailPageHelper::sort(int _nPos,SvSortMode _eSortMode )
 {
     OSL_ENSURE(m_pLists[_nPos],"List can not be NULL! ->GPF");
-    SvLBoxTreeList* pModel = m_pLists[_nPos]->GetModel();
+    SvTreeList* pModel = m_pLists[_nPos]->GetModel();
     SvSortMode eOldSortMode = pModel->GetSortMode();
     pModel->SetSortMode(_eSortMode);
     if ( eOldSortMode != _eSortMode )
@@ -299,7 +299,7 @@ sal_Bool OAppDetailPageHelper::isSortUp() const
     int nPos = getVisibleControlIndex();
     if ( nPos < E_ELEMENT_TYPE_COUNT )
     {
-        SvLBoxTreeList* pModel = m_pLists[nPos]->GetModel();
+        SvTreeList* pModel = m_pLists[nPos]->GetModel();
         eSortMode = pModel->GetSortMode();
     }
     return eSortMode == SortAscending;

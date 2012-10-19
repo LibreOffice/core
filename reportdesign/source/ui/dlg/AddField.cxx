@@ -219,7 +219,7 @@ OAddFieldWindow::~OAddFieldWindow()
 {
     if ( m_pListBox.get() )
     {
-        SvLBoxTreeList* pModel = m_pListBox->GetModel();
+        SvTreeList* pModel = m_pListBox->GetModel();
         sal_uLong nCount = pModel->GetEntryCount();
         for(sal_uLong i = 0; i< nCount;++i)
         {

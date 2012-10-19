@@ -198,24 +198,6 @@ public:
     virtual void        Clone( SvLBoxItem* pSource ) = 0;
 };
 
-class SVT_DLLPUBLIC SvLBoxTreeList : public SvTreeList
-{
-public:
-    SvTreeListEntry* First() const;
-    SvTreeListEntry* Next( SvTreeListEntry* pEntry, sal_uInt16* pDepth=0 ) const;
-    SvTreeListEntry* Prev( SvTreeListEntry* pEntry, sal_uInt16* pDepth=0 ) const;
-    SvTreeListEntry* Last() const;
-    SvTreeListEntry* Clone( SvTreeListEntry* pEntry, sal_uLong& nCloneCount ) const;
-    SvTreeListEntry* GetEntry( SvTreeListEntry* pParent, sal_uLong nPos ) const;
-    SvTreeListEntry* GetEntry( sal_uLong nRootPos ) const;
-    SvTreeListEntry* GetParent( SvTreeListEntry* pEntry ) const;
-    SvTreeListEntry* FirstChild( SvTreeListEntry* pParent ) const;
-    SvTreeListEntry* NextSibling( SvTreeListEntry* pEntry ) const;
-    SvTreeListEntry* PrevSibling( SvTreeListEntry* pEntry ) const;
-    SvTreeListEntry* LastSibling( SvTreeListEntry* pEntry ) const;
-    SvTreeListEntry* GetEntryAtAbsPos( sal_uLong nAbsPos ) const;
-};
-
 // *********************************************************************
 // ****************************** SvTreeListBox *******************************
 // *********************************************************************
@@ -303,7 +285,7 @@ protected:
     sal_uInt16      nCurEntrySelPos;
 
 private:
-    void SetBaseModel(SvLBoxTreeList* pNewModel);
+    void SetBaseModel(SvTreeList* pNewModel);
 
     DECL_DLLPRIVATE_LINK( CheckButtonClick, SvLBoxButtonData * );
     DECL_DLLPRIVATE_LINK( TextEditEndedHdl_Impl, void * );
@@ -392,9 +374,9 @@ public:
     SvTreeListBox( Window* pParent, const ResId& rResId );
     ~SvTreeListBox();
 
-    SvLBoxTreeList* GetModel() const { return (SvLBoxTreeList*)pModel; }
+    SvTreeList* GetModel() const { return (SvTreeList*)pModel; }
     using SvListView::SetModel;
-    void SetModel(SvLBoxTreeList* pNewModel);
+    void SetModel(SvTreeList* pNewModel);
 
     sal_uInt16 IsA();
     sal_uLong           GetEntryCount() const {return pModel->GetEntryCount();}
