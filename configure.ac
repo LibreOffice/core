@@ -4208,7 +4208,13 @@ AC_SUBST(PROEXT)
 dnl Set the ENABLE_DEBUG variable.
 dnl ===================================================================
 AC_MSG_CHECKING([whether to do a debug build])
+if test -n "$enable_debug" && test "$enable_debug" != "yes" && test "$enable_debug" != "no"; then
+    AC_MSG_ERROR([--enable-debug now accepts only yes or no, use --enable-selective-debuginfo])
+fi
 if test -n "$ENABLE_DBGUTIL"; then
+    if test "$enable_debug" = "no"; then
+        AC_MSG_ERROR([--disable-debug cannot be used with --enable-dbgutil])
+    fi
     ENABLE_DEBUG="TRUE"
     AC_MSG_RESULT([yes (dbgutil)])
 elif test -n "$enable_debug" && test "$enable_debug" != "no"; then
