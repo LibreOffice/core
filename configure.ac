@@ -2568,7 +2568,10 @@ fi
 
 dnl The following checks for gcc, cc and then cl (if it weren't guarded for win32)
 if test "$_os" != "WINNT" -o "$WITH_MINGW" = "yes"; then
+    # AC_PROG_CC sets CFLAGS to -g -O2 if not set, avoid that
+    save_CFLAGS=$CFLAGS
     AC_PROG_CC
+    CFLAGS=$save_CFLAGS
 fi
 
 COMPATH=`dirname "$CC"`
@@ -4231,6 +4234,44 @@ if test -n "$ENABLE_DEBUG"; then
 fi
 AC_SUBST(ENABLE_DEBUGINFO_FOR)
 
+dnl Check for explicit C/CXX/OBJC/OBJCXX/LDFLAGS. We by default use the ones specified
+dnl by our build system, but explicit override is possible.
+AC_MSG_CHECKING(for explicit CFLAGS)
+if test -n "$CFLAGS"; then
+    AC_MSG_RESULT([$CFLAGS])
+else
+    AC_MSG_RESULT(no)
+fi
+AC_MSG_CHECKING(for explicit CXXFLAGS)
+if test -n "$CXXFLAGS"; then
+    AC_MSG_RESULT([$CXXFLAGS])
+else
+    AC_MSG_RESULT(no)
+fi
+AC_MSG_CHECKING(for explicit OBJCFLAGS)
+if test -n "$OBJCFLAGS"; then
+    AC_MSG_RESULT([$OBJCFLAGS])
+else
+    AC_MSG_RESULT(no)
+fi
+AC_MSG_CHECKING(for explicit OBJCXXFLAGS)
+if test -n "$OBJCXXFLAGS"; then
+    AC_MSG_RESULT([$OBJCXXFLAGS])
+else
+    AC_MSG_RESULT(no)
+fi
+AC_MSG_CHECKING(for explicit LDFLAGS)
+if test -n "$LDFLAGS"; then
+    AC_MSG_RESULT([$LDFLAGS])
+else
+    AC_MSG_RESULT(no)
+fi
+AC_SUBST(CFLAGS)
+AC_SUBST(CXXFLAGS)
+AC_SUBST(OBJCFLAGS)
+AC_SUBST(OBJCXXFLAGS)
+AC_SUBST(LDFLAGS)
+
 dnl Determine whether to use linkoo for the smoketest installation
 dnl ===================================================================
 AC_MSG_CHECKING([whether to use linkoo for the smoketest installation])
@@ -4817,7 +4858,10 @@ dnl Testing for C++ compiler and version...
 dnl ===================================================================
 
 if test "$_os" != "WINNT" -o "$WITH_MINGW" = "yes"; then
+    # AC_PROG_CXX sets CXXFLAGS to -g -O2 if not set, avoid that
+    save_CXXFLAGS=$CXXFLAGS
     AC_PROG_CXX
+    CXXFLAGS=$save_CXXFLAGS
 else
     if test -n "$CC" -a -z "$CXX"; then
         CXX="$CC"
