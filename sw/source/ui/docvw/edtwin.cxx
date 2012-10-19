@@ -982,6 +982,12 @@ void SwEditWin::FlushInBuffer()
 #define MOVE_RIGHT_SMALL    6
 #define MOVE_DOWN_SMALL     7
 
+// #i121236# Support for shift key in writer
+#define MOVE_LEFT_HUGE      8
+#define MOVE_UP_HUGE        9
+#define MOVE_RIGHT_HUGE     10
+#define MOVE_DOWN_HUGE      11
+
 void SwEditWin::ChangeFly( sal_uInt8 nDir, sal_Bool bWeb )
 {
     SwWrtShell &rSh = m_rView.GetWrtShell();
@@ -1001,11 +1007,18 @@ void SwEditWin::ChangeFly( sal_uInt8 nDir, sal_Bool bWeb )
         rSh.GetFlyFrmAttr( aSet );
         RndStdIds eAnchorId = ((SwFmtAnchor&)aSet.Get(RES_ANCHOR)).GetAnchorId();
         Size aSnap;
+        bool bHuge(MOVE_LEFT_HUGE == nDir ||
+            MOVE_UP_HUGE == nDir ||
+            MOVE_RIGHT_HUGE == nDir ||
+            MOVE_DOWN_HUGE == nDir);
+
         if(MOVE_LEFT_SMALL == nDir ||
             MOVE_UP_SMALL == nDir ||
             MOVE_RIGHT_SMALL == nDir ||
             MOVE_DOWN_SMALL == nDir )
+        {
             aSnap = PixelToLogic(Size(1,1));
+        }
         else
         {
             aSnap = rSh.GetViewOptions()->GetSnapSize();
@@ -1015,6 +1028,12 @@ void SwEditWin::ChangeFly( sal_uInt8 nDir, sal_Bool bWeb )
             nDiv = rSh.GetViewOptions()->GetDivisionY();
             if ( nDiv > 0 )
                 aSnap.Height() = std::max( (sal_uLong)1, (sal_uLong)aSnap.Height() / nDiv );
+        }
+
+        if(bHuge)
+        {
+            // #i121236# 567twips == 1cm, but just take three times the normal snap
+            aSnap = Size(aSnap.Width() * 3, aSnap.Height() * 3);
         }
 
         SwRect aBoundRect;
@@ -1039,15 +1058,31 @@ void SwEditWin::ChangeFly( sal_uInt8 nDir, sal_Bool bWeb )
         switch ( nDir )
         {
             case MOVE_LEFT_BIG:
-            case MOVE_LEFT_SMALL: aTmp.Left( aTmp.Left() - nLeft ); break;
+            case MOVE_LEFT_HUGE:
+            case MOVE_LEFT_SMALL: aTmp.Left( aTmp.Left() - nLeft );
+                break;
+
             case MOVE_UP_BIG:
-            case MOVE_UP_SMALL: aTmp.Top( aTmp.Top() - nUp ); break;
-            case MOVE_RIGHT_SMALL: if( aTmp.Width() < aSnap.Width() + MINFLY ) break;
-                    nRight = aSnap.Width(); // no break
-            case MOVE_RIGHT_BIG: aTmp.Left( aTmp.Left() + nRight ); break;
-            case MOVE_DOWN_SMALL: if( aTmp.Height() < aSnap.Height() + MINFLY ) break;
-                    nDown = aSnap.Height(); // no break
-            case MOVE_DOWN_BIG: aTmp.Top( aTmp.Top() + nDown ); break;
+            case MOVE_UP_HUGE:
+            case MOVE_UP_SMALL: aTmp.Top( aTmp.Top() - nUp );
+                break;
+
+            case MOVE_RIGHT_SMALL:
+                if( aTmp.Width() < aSnap.Width() + MINFLY )
+                    break;
+                nRight = aSnap.Width(); // no break
+            case MOVE_RIGHT_HUGE:
+            case MOVE_RIGHT_BIG: aTmp.Left( aTmp.Left() + nRight );
+                break;
+
+            case MOVE_DOWN_SMALL:
+                if( aTmp.Height() < aSnap.Height() + MINFLY )
+                    break;
+                nDown = aSnap.Height(); // no break
+            case MOVE_DOWN_HUGE:
+            case MOVE_DOWN_BIG: aTmp.Top( aTmp.Top() + nDown );
+                break;
+
             default: OSL_ENSURE(true, "ChangeFly: Unknown direction." );
         }
         bool bSet = false;
@@ -1151,33 +1186,38 @@ void SwEditWin::ChangeDrawing( sal_uInt8 nDir )
 
     long nX = 0;
     long nY = 0;
-    bool bOnePixel = false;
+    const bool bOnePixel(
+        MOVE_LEFT_SMALL == nDir ||
+        MOVE_UP_SMALL == nDir ||
+        MOVE_RIGHT_SMALL == nDir ||
+        MOVE_DOWN_SMALL == nDir);
+    const bool bHuge(
+        MOVE_LEFT_HUGE == nDir ||
+        MOVE_UP_HUGE == nDir ||
+        MOVE_RIGHT_HUGE == nDir ||
+        MOVE_DOWN_HUGE == nDir);
     sal_uInt16 nAnchorDir = SW_MOVE_UP;
     switch(nDir)
     {
         case MOVE_LEFT_SMALL:
-            bOnePixel = true;
-            //no break;
+        case MOVE_LEFT_HUGE:
         case MOVE_LEFT_BIG:
             nX = -1;
             nAnchorDir = SW_MOVE_LEFT;
         break;
         case MOVE_UP_SMALL:
-            bOnePixel = true;
-            //no break;
+        case MOVE_UP_HUGE:
         case MOVE_UP_BIG:
             nY = -1;
         break;
         case MOVE_RIGHT_SMALL:
-            bOnePixel = true;
-            //no break;
+        case MOVE_RIGHT_HUGE:
         case MOVE_RIGHT_BIG:
             nX = +1;
             nAnchorDir = SW_MOVE_RIGHT;
         break;
         case MOVE_DOWN_SMALL:
-            bOnePixel = true;
-            //no break;
+        case MOVE_DOWN_HUGE:
         case MOVE_DOWN_BIG:
             nY = +1;
             nAnchorDir = SW_MOVE_DOWN;
@@ -1196,7 +1236,14 @@ void SwEditWin::ChangeDrawing( sal_uInt8 nDir )
             aSnap.Height() = std::max( (sal_uLong)1, (sal_uLong)aSnap.Height() / nDiv );
 
         if(bOnePixel)
+        {
             aSnap = PixelToLogic(Size(1,1));
+        }
+        else if(bHuge)
+        {
+            // #i121236# 567twips == 1cm, but just take three times the normal snap
+            aSnap = Size(aSnap.Width() * 3, aSnap.Height() * 3);
+        }
 
         nX *= aSnap.Width();
         nY *= aSnap.Height();
@@ -1597,19 +1644,23 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
                 switch( rKeyCode.GetModifier() | rKeyCode.GetCode() )
                 {
                 case KEY_RIGHT | KEY_MOD2:
+                case KEY_RIGHT | KEY_SHIFT:
                     eKeyState = KS_ColRightBig;
                     eFlyState = KS_Fly_Change;
-                    nDir = MOVE_RIGHT_SMALL;
+                    nDir = rKeyCode.GetModifier() & KEY_SHIFT ? MOVE_RIGHT_HUGE : MOVE_RIGHT_SMALL;
                     goto KEYINPUT_CHECKTABLE;
 
                 case KEY_LEFT | KEY_MOD2:
+                case KEY_LEFT | KEY_SHIFT:
                     eKeyState = KS_ColRightSmall;
                     eFlyState = KS_Fly_Change;
-                    nDir = MOVE_LEFT_SMALL;
+                    nDir = rKeyCode.GetModifier() & KEY_SHIFT ? MOVE_LEFT_HUGE : MOVE_LEFT_SMALL;
                     goto KEYINPUT_CHECKTABLE;
+
                 case KEY_RIGHT | KEY_MOD2 | KEY_SHIFT:
                     eKeyState = KS_ColLeftSmall;
                     goto KEYINPUT_CHECKTABLE;
+
                 case KEY_LEFT | KEY_MOD2 | KEY_SHIFT:
                     eKeyState = KS_ColLeftBig;
                     goto KEYINPUT_CHECKTABLE;
@@ -1617,36 +1668,45 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
                 case KEY_RIGHT | KEY_MOD2 | KEY_MOD1:
                     eKeyState = KS_CellRightBig;
                     goto KEYINPUT_CHECKTABLE;
+
                 case KEY_LEFT | KEY_MOD2 | KEY_MOD1:
                     eKeyState = KS_CellRightSmall;
                     goto KEYINPUT_CHECKTABLE;
+
                 case KEY_RIGHT | KEY_MOD2 | KEY_SHIFT | KEY_MOD1:
                     eKeyState = KS_CellLeftSmall;
                     goto KEYINPUT_CHECKTABLE;
+
                 case KEY_LEFT | KEY_MOD2 | KEY_SHIFT | KEY_MOD1:
                     eKeyState = KS_CellLeftBig;
                     goto KEYINPUT_CHECKTABLE;
 
                 case KEY_UP | KEY_MOD2:
+                case KEY_UP | KEY_SHIFT:
                     eKeyState = KS_ColBottomSmall;
                     eFlyState = KS_Fly_Change;
-                    nDir = MOVE_UP_SMALL;
+                    nDir = rKeyCode.GetModifier() & KEY_SHIFT ? MOVE_UP_HUGE : MOVE_UP_SMALL;
                     goto KEYINPUT_CHECKTABLE;
+
                 case KEY_DOWN | KEY_MOD2:
+                case KEY_DOWN | KEY_SHIFT:
                     eKeyState = KS_ColBottomBig;
                     eFlyState = KS_Fly_Change;
-                    nDir = MOVE_DOWN_SMALL;
+                    nDir = rKeyCode.GetModifier() & KEY_SHIFT ? MOVE_DOWN_HUGE : MOVE_DOWN_SMALL;
                     goto KEYINPUT_CHECKTABLE;
 
                 case KEY_UP | KEY_MOD2 | KEY_MOD1:
                     eKeyState = KS_CellBottomSmall;
                     goto KEYINPUT_CHECKTABLE;
+
                 case KEY_DOWN | KEY_MOD2 | KEY_MOD1:
                     eKeyState = KS_CellBottomBig;
                     goto KEYINPUT_CHECKTABLE;
+
                 case KEY_UP | KEY_MOD2 | KEY_SHIFT | KEY_MOD1:
                     eKeyState = KS_CellTopBig;
                     goto KEYINPUT_CHECKTABLE;
+
                 case KEY_DOWN | KEY_MOD2 | KEY_SHIFT | KEY_MOD1:
                     eKeyState = KS_CellTopSmall;
                     goto KEYINPUT_CHECKTABLE;

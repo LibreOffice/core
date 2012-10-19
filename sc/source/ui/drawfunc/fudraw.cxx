@@ -461,6 +461,11 @@ sal_Bool FuDraw::KeyInput(const KeyEvent& rKEvt)
                         nX *= aLogicSizeOnePixel.Width();
                         nY *= aLogicSizeOnePixel.Height();
                     }
+                    else if(rKEvt.GetKeyCode().IsShift()) // #i121236# Support for shift key in calc
+                    {
+                        nX *= 1000;
+                        nY *= 1000;
+                    }
                     else
                     {
                         // old, fixed move distance
