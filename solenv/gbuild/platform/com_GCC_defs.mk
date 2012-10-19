@@ -110,7 +110,7 @@ gb_LinkTarget_EXCEPTIONFLAGS := \
 	-DEXCEPTIONS_ON \
 	-fexceptions
 
-ifeq ($(gb_PRODUCT),$(true))
+ifeq ($(gb_ENABLE_DBGUTIL),$(false))
 # Clang doesn't have this option
 ifeq ($(HAVE_GCC_FNO_ENFORCE_EH_SPECS),TRUE)
 gb_LinkTarget_EXCEPTIONFLAGS += \

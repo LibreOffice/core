@@ -78,7 +78,7 @@ gb_CXXFLAGS := \
 	-Wno-non-virtual-dtor \
 
 # enable debug STL
-ifeq ($(gb_PRODUCT),$(false))
+ifeq ($(gb_ENABLE_DBGUTIL),$(true))
 gb_COMPILERDEFS += \
 	-D_GLIBCXX_DEBUG \
 

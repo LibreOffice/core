@@ -80,16 +80,17 @@ endif
 
 include $(GBUILDDIR)/Output.mk
 
-
-ifneq ($(strip $(PRODUCT)$(product)),)
-gb_PRODUCT := $(true)
-else
-gb_PRODUCT := $(false)
-endif
-
 gb_TIMELOG := 0
 ifneq ($(strip $(TIMELOG)$(timelog)),)
 gb_TIMELOG := 1
+endif
+
+# This used to be PRODUCT="" (for the same meaning as ENABLE_DBGUTIL="TRUE"),
+# but the product meaning is now only confusing.
+ifneq ($(ENABLE_DBGUTIL),)
+gb_ENABLE_DBGUTIL := $(true)
+else
+gb_ENABLE_DBGUTIL := $(false)
 endif
 
 gb_DEBUGLEVEL := 0
@@ -106,7 +107,7 @@ ifeq ($(origin debug),command line)
 ENABLE_DEBUGINFO_FOR := all
 endif
 endif
-ifeq ($(gb_PRODUCT),$(false))
+ifeq ($(gb_ENABLE_DBGUTIL),$(true))
 gb_DEBUGLEVEL := 1
 endif
 
@@ -231,7 +232,7 @@ gb_GLOBALDEFS := \
 	$(gb_CPUDEFS) \
 
 
-ifeq ($(gb_PRODUCT),$(false))
+ifeq ($(gb_ENABLE_DBGUTIL),$(true))
 gb_GLOBALDEFS += -DDBG_UTIL \
 
 ifneq ($(COM),MSC)

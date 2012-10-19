@@ -83,7 +83,7 @@ gb_COMPILERDEFS += \
 endif
 
 # enable debug STL
-ifeq ($(gb_PRODUCT),$(false))
+ifeq ($(gb_ENABLE_DBGUTIL),$(true))
 gb_COMPILERDEFS += \
 	-D_GLIBCXX_DEBUG \
 

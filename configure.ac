@@ -5016,7 +5016,7 @@ AC_SUBST(ALIGNOF_DOUBLE)
 dnl ===================================================================
 dnl Check if valgrind.h is available
 dnl ===================================================================
-if test "$cross_compiling" != "yes" -a "$enable_dbgutil" != "no" -a \
+if test "$cross_compiling" != "yes" -a -n "$ENABLE_DBGUTIL" -a \
         -z "$VALGRIND_CFLAGS"; then
     dnl Test $prefix (currently only testing for /usr and /usr/local)
     dnl so that VALGRIND_CFLAGS = -I$prefix/include/valgrind
@@ -5044,7 +5044,7 @@ COMPILER_PLUGINS=
 if test "$COM_GCC_IS_CLANG" = "TRUE"; then
     if test -n "$enable_compiler_plugins"; then
         compiler_plugins="$enable_compiler_plugins"
-    elif test -n "$enable_dbgutil" -a "$enable_dbgutil" != "no"; then
+    elif test -n "$ENABLE_DBGUTIL"; then
         compiler_plugins=test
     else
         compiler_plugins=no
