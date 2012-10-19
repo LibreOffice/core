@@ -26,7 +26,7 @@ $(SRCDIR)/config_host.mk : \
 		$(SRCDIR)/config_host.mk.in \
 		$(SRCDIR)/bin/repo-list.in \
 		$(SRCDIR)/ooo.lst.in \
-		$(SRCDIR)/configure.in \
+		$(SRCDIR)/configure.ac \
 		$(SRCDIR)/autogen.lastrun
 	./autogen.sh
 

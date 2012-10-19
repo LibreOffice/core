@@ -1,5 +1,5 @@
 dnl -*- Mode: Autoconf; tab-width: 4; indent-tabs-mode: nil; fill-column: 102 -*-
-dnl configure.in serves as input for the GNU autoconf package
+dnl configure.ac serves as input for the GNU autoconf package
 dnl in order to create a configure script.
 
 AC_INIT([LibreOffice],[3.7],[],[],[http://documentfoundation.org/])
@@ -259,7 +259,7 @@ test_cairo=yes
 # differently below just for Mac OSX,but at least better than
 # hardcoding these as we used to do. Much of this is duplicated also
 # in solenv for old build system and for gbuild, ideally we should
-# perhaps define stuff like this only here in configure.in?
+# perhaps define stuff like this only here in configure.ac?
 
 LINKFLAGSSHL="-shared"
 PICSWITCH="-fpic"
@@ -5861,7 +5861,7 @@ if test "$SOLAR_JAVA" != ""; then
     if test -n "$JAVAINTERPRETER"; then
         dnl java -version sends output to stderr!
         if test `$JAVAINTERPRETER -version 2>&1 | $GREP -c "Kaffe"` -gt 0; then
-            AC_MSG_ERROR([No valid check available. Please check the block for your desired java in configure.in])
+            AC_MSG_ERROR([No valid check available. Please check the block for your desired java in configure.ac])
         elif test `$JAVAINTERPRETER --version 2>&1 | $GREP -c "GNU libgcj"` -gt 0; then
             JDK=gcj
             AC_MSG_RESULT([checked (gcj)])
@@ -5869,7 +5869,7 @@ if test "$SOLAR_JAVA" != ""; then
             _gij_longver=`echo $_gij_version | $AWK -F. '{ print \$1*10000+\$2*100+\$3 }'`
 
         elif test `$JAVAINTERPRETER -version 2>&1 | $AWK '{ print }' | $GREP -c "BEA"` -gt 0; then
-            AC_MSG_ERROR([No valid check available. Please check the block for your desired java in configure.in])
+            AC_MSG_ERROR([No valid check available. Please check the block for your desired java in configure.ac])
         elif test `$JAVAINTERPRETER -version 2>&1 | $AWK '{ print }' | $GREP -c "IBM"` -gt 0; then
             JDK=ibm
 
@@ -12881,7 +12881,7 @@ chmod +x ./config.guess
 dnl Setting up the post_download check script
 dnl Using autoconf here, so that the migration from the previous state
 dnl (checks for the additional Windows downloads were directly in
-dnl configure.in) is as easy as possible
+dnl configure.ac) is as easy as possible
 echo "setting up the post_download check script"
 autoconf post_download.in > post_download
 chmod +x post_download
