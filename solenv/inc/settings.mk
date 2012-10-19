@@ -1040,14 +1040,14 @@ CDEFS+= -DGXX_INCLUDE_PATH=$(GXX_INCLUDE_PATH)
 CDEFS+= -DSUPD=$(UPD)
 
 # flags to enable build with symbols; required for crashdump feature
-.IF ("$(ENABLE_CRASHDUMP)"!="" && "$(ENABLE_CRASHDUMP)"!="DUMMY") || ("$(ENABLE_SYMBOLS)"!="" && "$(ENABLE_SYMBOLS)"!="FALSE")
+.IF ("$(ENABLE_CRASHDUMP)"!="" && "$(ENABLE_CRASHDUMP)"!="DUMMY") || ("$(ENABLE_DEBUG)"!="" && "$(ENABLE_DEBUG)"!="FALSE")
 # if debug is enabled, this may enable less debug info than debug, so rely just on debug
 .IF "$(debug)" == ""
 CFLAGSENABLESYMBOLS_CC_ONLY*=$(CFLAGSENABLESYMBOLS)
 CFLAGSCXX+=$(CFLAGSENABLESYMBOLS)
 CFLAGSCC+=$(CFLAGSENABLESYMBOLS_CC_ONLY)
 .ENDIF          # "$(DEBUG)" == ""
-.ENDIF          # ("$(ENABLE_CRASHDUMP)"!="" && "$(ENABLE_CRASHDUMP)"!="DUMMY") || "$(ENABLE_SYMBOLS)"!=""
+.ENDIF          # ("$(ENABLE_CRASHDUMP)"!="" && "$(ENABLE_CRASHDUMP)"!="DUMMY") || "$(ENABLE_DEBUG)"!=""
 
 .IF "$(profile)"!=""
 CDEFS+= $(CDEFSPROF)

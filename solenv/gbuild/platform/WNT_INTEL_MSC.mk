@@ -221,11 +221,6 @@ gb_CFLAGS+=-Zi
 gb_CXXFLAGS+=-Zi
 endif
 
-ifeq ($(gb_SYMBOL),$(true))
-gb_CFLAGS+=-Zi
-gb_CXXFLAGS+=-Zi
-endif
-
 gb_COMPILEROPTFLAGS := -Ob1 -Oxs -Oy-
 gb_COMPILERNOOPTFLAGS := -Od
 

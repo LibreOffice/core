@@ -38,12 +38,12 @@
 
 # enable if: no "-TARGET" defined AND [module is enabled OR "TARGET" defined]
 gb_LinkTarget__debug_enabled = \
- $(and $(if $(filter -$(1),$(ENABLE_DEBUG_FOR)),,$(true)),\
+ $(and $(if $(filter -$(1),$(ENABLE_DEBUGINFO_FOR)),,$(true)),\
        $(or $(gb_Module_CURRENTMODULE_DEBUG_ENABLED),\
-            $(filter $(1),$(ENABLE_DEBUG_FOR))))
+            $(filter $(1),$(ENABLE_DEBUGINFO_FOR))))
 
 # debug flags, if ENABLE_DEBUG is set and the LinkTarget is named
-# in the list of libraries of ENABLE_DEBUG_FOR
+# in the list of libraries of ENABLE_DEBUGINFO_FOR
 gb_LinkTarget__get_debugcflags=$(if $(call gb_LinkTarget__debug_enabled,$(1)),$(gb_COMPILERNOOPTFLAGS) $(gb_DEBUG_CFLAGS),$(gb_COMPILEROPTFLAGS))
 gb_LinkTarget__get_debugcxxflags=$(if $(call gb_LinkTarget__debug_enabled,$(1)),$(gb_COMPILERNOOPTFLAGS) $(gb_DEBUG_CFLAGS) $(gb_DEBUG_CXXFLAGS),$(gb_COMPILEROPTFLAGS))
 

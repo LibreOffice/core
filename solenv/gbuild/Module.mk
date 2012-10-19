@@ -190,8 +190,8 @@ showmodules :
 
 # enable if: no "-MODULE/" defined AND ["all" defined OR "MODULE/" defined]
 gb_Module__debug_enabled = \
- $(and $(if $(filter -$(1)/,$(ENABLE_DEBUG_FOR)),,$(true)),\
-       $(filter all $(1)/,$(ENABLE_DEBUG_FOR)))
+ $(and $(if $(filter -$(1)/,$(ENABLE_DEBUGINFO_FOR)),,$(true)),\
+       $(filter all $(1)/,$(ENABLE_DEBUGINFO_FOR)))
 
 define gb_Module_Module
 gb_Module_ALLMODULES += $(1)

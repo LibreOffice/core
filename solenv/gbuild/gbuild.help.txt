@@ -48,16 +48,16 @@ AVAILABLE TARGETS
                         environement set. (see gb_SIDE)
 
 INTERACTIVE VARIABLES:
-       DEBUG / debug   If not empty, build with DBGLEVEL=1 (see below).
-       ENABLE_SYMBOLS / enable_symbols
-                       If not empty, build with debugging information.
-                       Automatically enabled by DEBUG/debug.
+       DEBUG / debug   If not empty, build as with --enable-debug.
        DBGLEVEL / dbglevel
                        If not empty, force the debug level to the specified value. The
                        debug level is passed to the source code through OSL_DEBUG_LEVEL
                        macro.
-                       0 = no debug
-                       1 = debugging information + no optimizations
+                       0 = no debug (as with --disable-debug)
+                       1 = debugging information + no optimizations (as with --enable-debug)
+                       (Note that levels higher than 2 are used only by obsolete debugging
+                       features. Use SAL_INFO/SAL_WARN with a specific area for extra debug
+                       output in new code.)
                        2 = degugging information + no optimizations + extra
                            debug output. OSL_TRACE starts being active on this
                            level.

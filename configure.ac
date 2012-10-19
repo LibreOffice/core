@@ -752,13 +752,6 @@ AC_ARG_ENABLE(atl,
     ],
 ,)
 
-AC_ARG_ENABLE(symbols,
-    AS_HELP_STRING([--enable-symbols],
-        [Include debugging information in output ("symbols" is misleading here;
-         enables -g compiler option or equivalent).  WARNING: A complete build
-         needs a lot of space (roughly 10 GiB) and takes much longer.]),
-,)
-
 AC_ARG_ENABLE(werror,
     AS_HELP_STRING([--enable-werror],
         [Turn warnings to errors. (Has no effect in modules where the treating
@@ -772,25 +765,26 @@ AC_ARG_ENABLE(assert-always-abort,
 
 AC_ARG_ENABLE(debug,
     AS_HELP_STRING([--enable-debug],
-        [Include debugging information like with --enable-symbols, disable
-         compiler optimization and inlining plus extra debugging code like
-         assertions. Extra large build! (enables -g compiler flag and dmake
-         debug=true) If you need even more verbose output, build a module with
-         "build -- debug=true dbglevel=2".
-         You can also use this switch as follows:
-         --enable-debug="all -sw/ -Library_sc" to enable debugging only for
-         the specified gbuild-build targets (all means everything, - prepended
-         means not to enable, / appended means everything in the directory,
-         there is no ordering, more specific overrides more general, and
-         disabling takes precedence).]))
+        [Include debugging information, disable compiler optimization and inlining plus
+         extra debugging code like assertions. Extra large build! (enables -g compiler flag
+         and dmake debug=true).]))
 
 AC_ARG_ENABLE(dbgutil,
     AS_HELP_STRING([--enable-dbgutil],
-        [Include additional debugging utilities, such as assertions, object
-         counting, etc. Larger build. Independent from --enable-debug.
-         Note that this option makes the build ABI incompatible:
-         It is not possible to mix object files or libraries from a
-         --enable-dbgutil and a --disable-dbgutil build.]))
+        [Provide debugging support from --enable-debug and include additional debugging
+         utilities such as object counting or more expensive checks.
+         This is the recommended option for developers.
+         Note that this makes the build ABI incompatible, it is not possible to mix object
+         files or libraries from a --enable-dbgutil and a --disable-dbgutil build.]))
+
+AC_ARG_ENABLE(selective-debuginfo,
+    AS_HELP_STRING([--enable-selective-debuginfo],
+        [If --enable-debug or --enable-dbgutil is used, build debugging information
+         (-g compiler flag) only for the specified gbuild build targets
+         (where all means everything, - prepended means not to enable, / appended means
+         everything in the directory; there is no ordering, more specific overrides
+         more general, and disabling takes precedence).
+         Example: --enable-selective-debuginfo="all -sw/ -Library_sc".]))
 
 AC_ARG_ENABLE(compiler-plugins,
     AS_HELP_STRING([--enable-compiler-plugins],
@@ -3069,38 +3063,6 @@ printf ("hello world\n");
 fi
 AC_SUBST(HAVE_LD_BSYMBOLIC_FUNCTIONS)
 
-dnl Set the ENABLE_DBGUTIL variable
-dnl ===================================================================
-AC_MSG_CHECKING([whether to build with additional debug utilities])
-if test -n "$enable_dbgutil" -a "$enable_dbgutil" != "no"; then
-    PROEXT=""
-    PRODUCT=""
-
-    AC_MSG_RESULT([yes])
-    # cppunit and graphite expose STL in public headers
-    if test "$with_system_cppunit" = "yes"; then
-        AC_MSG_ERROR([--with-system-cppunit conflicts with DBG_UTIL build])
-    else
-        with_system_cppunit=no
-    fi
-    if test "$with_system_graphite" = "yes"; then
-        AC_MSG_ERROR([--with-system-graphite conflicts with DBG_UTIL build])
-    else
-        with_system_graphite=no
-    fi
-    if test "$with_system_mysql_cppconn" = "yes"; then
-        AC_MSG_ERROR([--with-system-mysql-cppconn conflicts with DBG_UTIL build])
-    else
-        with_system_mysql_cppconn=no
-    fi
-else
-    PRODUCT="full"
-    PROEXT=".pro"
-    AC_MSG_RESULT([no, full product build])
-fi
-AC_SUBST(PRODUCT)
-AC_SUBST(PROEXT)
-
 dnl ===================================================================
 dnl  Check which Microsoft C/C++ or MinGW compiler is used for WINNT
 dnl ===================================================================
@@ -4204,27 +4166,70 @@ else
 fi
 AC_SUBST(ASSERT_ALWAYS_ABORT)
 
+dnl Set the ENABLE_DBGUTIL variable
+dnl ===================================================================
+AC_MSG_CHECKING([whether to build with additional debug utilities])
+if test -n "$enable_dbgutil" -a "$enable_dbgutil" != "no"; then
+    ENABLE_DBGUTIL="TRUE"
+    PROEXT=""
+    PRODUCT=""
+
+    AC_MSG_RESULT([yes])
+    # cppunit and graphite expose STL in public headers
+    if test "$with_system_cppunit" = "yes"; then
+        AC_MSG_ERROR([--with-system-cppunit conflicts with --enable-dbgutil])
+    else
+        with_system_cppunit=no
+    fi
+    if test "$with_system_graphite" = "yes"; then
+        AC_MSG_ERROR([--with-system-graphite conflicts with --enable-dbgutil])
+    else
+        with_system_graphite=no
+    fi
+    if test "$with_system_mysql_cppconn" = "yes"; then
+        AC_MSG_ERROR([--with-system-mysql-cppconn conflicts with --enable-dbgutil])
+    else
+        with_system_mysql_cppconn=no
+    fi
+else
+    ENABLE_DBGUTIL=""
+    # PRODUCT is old concept, still used by build.pl .
+    PRODUCT="full"
+    PROEXT=".pro"
+    AC_MSG_RESULT([no])
+fi
+AC_SUBST(ENABLE_DBGUTIL)
+AC_SUBST(PRODUCT)
+AC_SUBST(PROEXT)
+
 dnl Set the ENABLE_DEBUG variable.
 dnl ===================================================================
 AC_MSG_CHECKING([whether to do a debug build])
-if test -n "$enable_debug" && test "$enable_debug" != "no"; then
-    if test "$enable_debug" = "y" || test "$enable_debug" = "yes"; then
-        ENABLE_DEBUG="TRUE"
-        ENABLE_DEBUG_FOR=all
-        AC_MSG_RESULT([yes])
-    else
-        ENABLE_DEBUG=""
-        ENABLE_DEBUG_FOR="$enable_debug"
-        AC_MSG_RESULT([for $enable_debug])
-    fi
+if test -n "$ENABLE_DBGUTIL"; then
+    ENABLE_DEBUG="TRUE"
+    AC_MSG_RESULT([yes (dbgutil)])
+elif test -n "$enable_debug" && test "$enable_debug" != "no"; then
+    ENABLE_DEBUG="TRUE"
+    AC_MSG_RESULT([yes])
 else
     ENABLE_DEBUG=""
-    ENABLE_DEBUG_FOR=""
     AC_MSG_RESULT([no])
 fi
 AC_SUBST(ENABLE_DEBUG)
-AC_SUBST(ENABLE_DEBUG_FOR)
 
+dnl Selective debuginfo
+ENABLE_DEBUGINFO_FOR=
+if test -n "$ENABLE_DEBUG"; then
+    AC_MSG_CHECKING([whether to use selective debuginfo])
+    if test -n "$enable_selective_debuginfo" -a "$enable_selective_debuginfo" != "no"; then
+        ENABLE_DEBUGINFO_FOR="$enable_selective_debuginfo"
+        AC_MSG_RESULT([for "$enable_selective_debuginfo"])
+    else
+        ENABLE_DEBUGINFO_FOR=all
+        AC_MSG_RESULT([no, for all])
+    fi
+fi
+AC_SUBST(ENABLE_DEBUGINFO_FOR)
 
 dnl Determine whether to use linkoo for the smoketest installation
 dnl ===================================================================
@@ -4249,22 +4254,6 @@ else
     AC_MSG_RESULT([no])
 fi
 AC_SUBST(ENABLE_LTO)
-
-dnl whether to include debgugging information into final build.
-dnl ===================================================================
-AC_MSG_CHECKING([whether to include debugging information])
-if test -n "$enable_symbols" -a "$enable_symbols" != "no"; then
-    ENABLE_SYMBOLS="TRUE"
-    AC_MSG_RESULT([yes])
-else
-    if test -n "$enable_symbols" -a "$enable_symbols" = "no"; then
-        ENABLE_SYMBOLS="FALSE"
-    else
-        ENABLE_SYMBOLS=
-    fi
-    AC_MSG_RESULT([no])
-fi
-AC_SUBST(ENABLE_SYMBOLS)
 
 if test "$enable_headless" = "yes"; then
     # be sure to do not mess with uneeded stuff
