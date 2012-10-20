@@ -403,7 +403,8 @@ public:
                         mbHexpand:1,
                         mbVexpand:1,
                         mbExpand:1,
-                        mbFill:1;
+                        mbFill:1,
+                        mbSecondary:1;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > mxDNDListenerContainer;
 };

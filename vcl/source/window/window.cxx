@@ -726,6 +726,7 @@ void Window::ImplInitWindowData( WindowType nType )
     mpWindowImpl->mbVexpand = false;
     mpWindowImpl->mbExpand = false;
     mpWindowImpl->mbFill = true;
+    mpWindowImpl->mbSecondary = false;
 
 
     mbEnableRTL         = Application::GetSettings().GetLayoutRTL();         // sal_True: this outdev will be mirrored if RTL window layout (UI mirroring) is globally active

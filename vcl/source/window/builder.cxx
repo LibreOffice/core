@@ -1460,6 +1460,10 @@ void VclBuilder::applyPackingProperty(Window *pCurrent,
             {
                 set_window_packing_position(pCurrent, sValue.toInt32());
             }
+            else if (sKey == "secondary")
+            {
+                pCurrent->set_secondary(toBool(sValue));
+            }
             else
             {
                 SAL_WARN("vcl.layout", "unknown packing: " << sKey.getStr());

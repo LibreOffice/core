@@ -255,6 +255,7 @@ Size VclButtonBox::calculateRequisition() const
     {
         if (!pChild->IsVisible())
             continue;
+        SAL_WARN_IF(pChild->get_secondary(), "vcl.layout", "secondary groups not implemented yet");
         ++nVisibleChildren;
         Size aChildSize = getLayoutRequisition(*pChild);
         if (aChildSize.Width() > aSize.Width())

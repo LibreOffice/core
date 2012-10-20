@@ -1119,67 +1119,41 @@ public:
     Size get_preferred_size() const;
 
     /*
-     * Gets the value of the "halign" property.
+     * How to horizontally align this widget
      */
     VclAlign get_halign() const;
-
-    /*
-     * Sets the horizontal alignment of widget. See the "halign" property.
-     */
     void set_halign(VclAlign eAlign);
 
     /*
-     * Gets the value of the "valign" property.
+     * How to vertically align this widget
      */
     VclAlign get_valign() const;
-
-    /*
-     * Sets the horizontal alignment of widget. See the "valign" property.
-     */
     void set_valign(VclAlign eAlign);
 
     /*
-     * Gets whether the widget would like to use any available extra horizontal
+     * Whether the widget would like to use any available extra horizontal
      * space.
      */
     bool get_hexpand() const;
-
-    /*
-     * Sets whether the widget would like to use any available extra horizontal
-     * space.
-     */
     void set_hexpand(bool bExpand);
 
     /*
-     * Gets whether the widget would like to use any available extra vertical
+     * Whether the widget would like to use any available extra vertical
      * space.
      */
     bool get_vexpand() const;
-
-    /*
-     * Sets whether the widget would like to use any available extra vertical
-     * space.
-     */
     void set_vexpand(bool bExpand);
 
     /*
-     * Gets whether the widget would like to use any available extra space.
+     * Whether the widget would like to use any available extra space.
      */
     bool get_expand() const;
-
-    /*
-     * Sets whether the widget would like to use any available extra space.
-     */
     void set_expand(bool bExpand);
 
     /*
-     * Gets whether the widget should receive extra space when the parent grows
+     * Whether the widget should receive extra space when the parent grows
      */
     bool get_fill() const;
-
-    /*
-     * Sets whether the widget should receive extra space when the parent grows
-     */
     void set_fill(bool bFill);
 
     void set_border_width(sal_Int32 nBorderWidth);
@@ -1198,64 +1172,47 @@ public:
     sal_Int32 get_margin_bottom() const;
 
     /*
-     * Gets how the widget is packed with reference to the start or end of the parent
+     * How the widget is packed with reference to the start or end of the parent
      */
     VclPackType get_pack_type() const;
-
-    /*
-     * Sets how the widget is packed with reference to the start or end of the parent
-     */
     void set_pack_type(VclPackType ePackType);
 
     /*
-     * Sets extra space to put between the widget and its neighbors
+     * The extra space to put between the widget and its neighbors
      */
     sal_Int32 get_padding() const;
-
-    /*
-     * Sets extra space to put between the widget and its neighbors
-     */
     void set_padding(sal_Int32 nPadding);
 
     /*
-     * Gets the number of columns that the widget spans
+     * The number of columns that the widget spans
      */
     sal_Int32 get_grid_width() const;
-
-    /*
-     * Sets the number of columns that the widget spans
-     */
     void set_grid_width(sal_Int32 nCols);
 
     /*
-     * Gets the column number to attach the left side of the widget to
+     * The column number to attach the left side of the widget to
      */
     sal_Int32 get_grid_left_attach() const;
-
-    /*
-     * Sets the column number to attach the left side of the widget to
-     */
     void set_grid_left_attach(sal_Int32 nAttach);
 
     /*
-     * Gets the number of row that the widget spans
+     * The number of row that the widget spans
      */
     sal_Int32 get_grid_height() const;
-
-    /*
-     * Sets the number of row that the widget spans
-     */
     void set_grid_height(sal_Int32 nRows);
 
     /*
-     * Gets the row number to attach the top side of the widget to
+     * The row number to attach the top side of the widget to
      */
     sal_Int32 get_grid_top_attach() const;
+    void set_grid_top_attach(sal_Int32 nAttach);
 
     /*
-     * Sets the row number to attach the top side of the widget to
+     * If true this child appears in a secondary layout group of children
+     * e.g. help buttons in a buttonbox
      */
-    void set_grid_top_attach(sal_Int32 nAttach);
+    bool get_secondary() const;
+    void set_secondary(bool bSecondary);
 
     /*
      * Sets a widget property

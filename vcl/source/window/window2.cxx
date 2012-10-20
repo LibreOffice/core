@@ -1925,6 +1925,7 @@ void Window::take_properties(Window &rOther)
     mpWindowImpl->mbVexpand = pWindowImpl->mbVexpand;
     mpWindowImpl->mbExpand = pWindowImpl->mbExpand;
     mpWindowImpl->mbFill = pWindowImpl->mbFill;
+    mpWindowImpl->mbSecondary = pWindowImpl->mbSecondary;
 
     bool bHasBorderWindow = mpWindowImpl->mpBorderWindow;
     bool bOtherHasBorderWindow = pWindowImpl->mpBorderWindow;
@@ -2319,6 +2320,18 @@ sal_Int32 Window::get_width_request() const
 {
     WindowImpl *pWindowImpl = mpWindowImpl->mpBorderWindow ? mpWindowImpl->mpBorderWindow->mpWindowImpl : mpWindowImpl;
     return pWindowImpl->mnWidthRequest;
+}
+
+bool Window::get_secondary() const
+{
+    WindowImpl *pWindowImpl = mpWindowImpl->mpBorderWindow ? mpWindowImpl->mpBorderWindow->mpWindowImpl : mpWindowImpl;
+    return pWindowImpl->mbSecondary;
+}
+
+void Window::set_secondary(bool bSecondary)
+{
+    WindowImpl *pWindowImpl = mpWindowImpl->mpBorderWindow ? mpWindowImpl->mpBorderWindow->mpWindowImpl : mpWindowImpl;
+    pWindowImpl->mbSecondary = bSecondary;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
