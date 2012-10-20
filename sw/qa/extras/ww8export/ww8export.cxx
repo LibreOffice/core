@@ -45,28 +45,39 @@ public:
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
-    CPPUNIT_TEST(testN325936);
-    CPPUNIT_TEST(testFdo45724);
-    CPPUNIT_TEST(testFdo46020);
-    CPPUNIT_TEST(testFirstHeaderFooter);
+    CPPUNIT_TEST(run);
 #endif
     CPPUNIT_TEST_SUITE_END();
 
 private:
-    void roundtrip(const OUString& rURL);
+    void run();
 };
 
-void Test::roundtrip(const OUString& rFilename)
+void Test::run()
 {
-    uno::Reference<lang::XComponent> xImported = loadFromDesktop(getURLFromSrc("/sw/qa/extras/ww8export/data/") + rFilename);
-    uno::Reference<frame::XStorable> xStorable(xImported, uno::UNO_QUERY);
-    uno::Sequence<beans::PropertyValue> aArgs(1);
-    aArgs[0].Name = "FilterName";
-    aArgs[0].Value <<= OUString("MS Word 97");
-    utl::TempFile aTempFile;
-    aTempFile.EnableKillingFile();
-    xStorable->storeToURL(aTempFile.GetURL(), aArgs);
-    mxComponent = loadFromDesktop(aTempFile.GetURL());
+    MethodEntry<Test> aMethods[] = {
+        {"n325936.doc", &Test::testN325936},
+        {"fdo45724.odt", &Test::testFdo45724},
+        {"fdo46020.odt", &Test::testFdo46020},
+        {"first-header-footer.doc", &Test::testFirstHeaderFooter},
+    };
+    for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
+    {
+        MethodEntry<Test>& rEntry = aMethods[i];
+        mxComponent = loadFromDesktop(getURLFromSrc("/sw/qa/extras/ww8export/data/") + OUString::createFromAscii(rEntry.pName));
+        // If the testcase is stored in some other format, it's pointless to test.
+        if (OString(rEntry.pName).endsWith(".doc"))
+            (this->*rEntry.pMethod)();
+        uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+        uno::Sequence<beans::PropertyValue> aArgs(1);
+        aArgs[0].Name = "FilterName";
+        aArgs[0].Value <<= OUString("MS Word 97");
+        utl::TempFile aTempFile;
+        aTempFile.EnableKillingFile();
+        xStorable->storeToURL(aTempFile.GetURL(), aArgs);
+        mxComponent = loadFromDesktop(aTempFile.GetURL());
+        (this->*rEntry.pMethod)();
+    }
 }
 
 void Test::testN325936()
@@ -78,7 +89,6 @@ void Test::testN325936()
      * xray ThisComponent.DrawPage(0).BackColorTransparency
      */
 
-    roundtrip("n325936.doc");
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xPropertySet(xDraws->getByIndex(0), uno::UNO_QUERY);
@@ -88,7 +98,6 @@ void Test::testN325936()
 
 void Test::testFdo45724()
 {
-    roundtrip("fdo45724.odt");
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
     uno::Reference<drawing::XControlShape> xControlShape(xDraws->getByIndex(0), uno::UNO_QUERY);
@@ -100,7 +109,6 @@ void Test::testFdo45724()
 void Test::testFdo46020()
 {
     // The footnote in that document wasn't exported, check that it is actually exported
-    roundtrip("fdo46020.odt");
     uno::Reference<text::XFootnotesSupplier> xFootnotesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xFootnotes(xFootnotesSupplier->getFootnotes(), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xFootnotes->getCount());
@@ -109,7 +117,6 @@ void Test::testFdo46020()
 void Test::testFirstHeaderFooter()
 {
     // Test import and export of a section's headerf/footerf properties.
-    roundtrip("first-header-footer.doc");
 
     // The document has 6 pages. Note that we don't test if 4 or just 2 page
     // styles are created, the point is that layout should be correct.

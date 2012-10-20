@@ -37,34 +37,44 @@ public:
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
-    CPPUNIT_TEST(testFdo38244);
-    CPPUNIT_TEST(testFirstHeaderFooter);
+    CPPUNIT_TEST(run);
 #endif
     CPPUNIT_TEST_SUITE_END();
 
 private:
-    void roundtrip(const OUString& rURL);
+    void run();
 };
 
-void Test::roundtrip(const OUString& rFilename)
+void Test::run()
 {
-    uno::Reference<lang::XComponent> xImported = loadFromDesktop(getURLFromSrc("/sw/qa/extras/odfexport/data/") + rFilename);
-    uno::Reference<frame::XStorable> xStorable(xImported, uno::UNO_QUERY);
-    uno::Sequence<beans::PropertyValue> aArgs(1);
-    aArgs[0].Name = "FilterName";
-    aArgs[0].Value <<= OUString("writer8");
-    utl::TempFile aTempFile;
-    aTempFile.EnableKillingFile();
-    xStorable->storeToURL(aTempFile.GetURL(), aArgs);
-    uno::Reference<lang::XComponent> xComponent(xStorable, uno::UNO_QUERY);
-    xComponent->dispose();
-    mxComponent = loadFromDesktop(aTempFile.GetURL());
+    MethodEntry<Test> aMethods[] = {
+        {"fdo38244.odt", &Test::testFdo38244},
+        {"first-header-footer.odt", &Test::testFirstHeaderFooter},
+    };
+    for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
+    {
+        MethodEntry<Test>& rEntry = aMethods[i];
+        mxComponent = loadFromDesktop(getURLFromSrc("/sw/qa/extras/odfexport/data/") + OUString::createFromAscii(rEntry.pName));
+        // If the testcase is stored in some other format, it's pointless to test.
+        if (OString(rEntry.pName).endsWith(".odt"))
+            (this->*rEntry.pMethod)();
+        uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+        uno::Sequence<beans::PropertyValue> aArgs(1);
+        aArgs[0].Name = "FilterName";
+        aArgs[0].Value <<= OUString("writer8");
+        utl::TempFile aTempFile;
+        aTempFile.EnableKillingFile();
+        xStorable->storeToURL(aTempFile.GetURL(), aArgs);
+        uno::Reference<lang::XComponent> xComponent(xStorable, uno::UNO_QUERY);
+        xComponent->dispose();
+        mxComponent = loadFromDesktop(aTempFile.GetURL());
+        (this->*rEntry.pMethod)();
+    }
 }
 
 void Test::testFdo38244()
 {
     // See ooxmlexport's testFdo38244().
-    roundtrip("fdo38244.odt");
 
     // Test comment range feature.
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
@@ -91,7 +101,6 @@ void Test::testFdo38244()
 void Test::testFirstHeaderFooter()
 {
     // Test import and export of the header-first token.
-    roundtrip("first-header-footer.odt");
 
     // The document has 6 pages, two page styles for the first and second half of pages.
     CPPUNIT_ASSERT_EQUAL(OUString("First header"),  parseDump("/root/page[1]/header/txt/text()"));

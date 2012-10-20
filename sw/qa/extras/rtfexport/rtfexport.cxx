@@ -69,56 +69,77 @@ public:
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
-    CPPUNIT_TEST(testZoom);
-    CPPUNIT_TEST(testFdo38176);
-    CPPUNIT_TEST(testFdo49683);
-    CPPUNIT_TEST(testFdo44174);
-    CPPUNIT_TEST(testFdo50087);
-    CPPUNIT_TEST(testFdo50831);
-    CPPUNIT_TEST(testFdo48335);
-    CPPUNIT_TEST(testFdo38244);
-    CPPUNIT_TEST(testMathAccents);
-    CPPUNIT_TEST(testMathEqarray);
-    CPPUNIT_TEST(testMathD);
-    CPPUNIT_TEST(testMathEscaping);
-    CPPUNIT_TEST(testMathLim);
-    CPPUNIT_TEST(testMathMatrix);
-    CPPUNIT_TEST(testMathBox);
-    CPPUNIT_TEST(testMathMso2007);
-    CPPUNIT_TEST(testMathNary);
-    CPPUNIT_TEST(testMathLimupp);
-    CPPUNIT_TEST(testMathStrikeh);
-    CPPUNIT_TEST(testMathPlaceholders);
-    CPPUNIT_TEST(testMathRad);
-    CPPUNIT_TEST(testMathSepchr);
-    CPPUNIT_TEST(testMathSubscripts);
-    CPPUNIT_TEST(testMathVerticalstacks);
-    CPPUNIT_TEST(testMathRuns);
-    CPPUNIT_TEST(testFdo53113);
+    CPPUNIT_TEST(run);
 #endif
     CPPUNIT_TEST_SUITE_END();
 
 private:
-    void roundtrip(const OUString& rURL);
+    void run();
 };
 
-void Test::roundtrip(const OUString& rFilename)
+void Test::run()
 {
-    uno::Reference<lang::XComponent> xImported = loadFromDesktop(getURLFromSrc("/sw/qa/extras/rtfexport/data/") + rFilename);
-    uno::Reference<frame::XStorable> xStorable(xImported, uno::UNO_QUERY);
-    uno::Sequence<beans::PropertyValue> aArgs(1);
-    aArgs[0].Name = "FilterName";
-    aArgs[0].Value <<= OUString("Rich Text Format");
-    utl::TempFile aTempFile;
-    aTempFile.EnableKillingFile();
-    xStorable->storeToURL(aTempFile.GetURL(), aArgs);
-    mxComponent = loadFromDesktop(aTempFile.GetURL());
+    MethodEntry<Test> aMethods[] = {
+        {"zoom.rtf", &Test::testZoom},
+        {"fdo38176.rtf", &Test::testFdo38176},
+        {"fdo49683.rtf", &Test::testFdo49683},
+        {"fdo44174.rtf", &Test::testFdo44174},
+        {"fdo50087.rtf", &Test::testFdo50087},
+        {"fdo50831.rtf", &Test::testFdo50831},
+        {"fdo48335.odt", &Test::testFdo48335},
+        {"fdo38244.rtf", &Test::testFdo38244},
+        {"math-accents.rtf", &Test::testMathAccents},
+        {"math-eqarray.rtf", &Test::testMathEqarray},
+        {"math-d.rtf", &Test::testMathD},
+        {"math-escaping.rtf", &Test::testMathEscaping},
+        {"math-lim.rtf", &Test::testMathLim},
+        {"math-matrix.rtf", &Test::testMathMatrix},
+        {"math-mbox.rtf", &Test::testMathBox},
+        {"math-mso2007.rtf", &Test::testMathMso2007},
+        {"math-nary.rtf", &Test::testMathNary},
+        {"math-limupp.rtf", &Test::testMathLimupp},
+        {"math-strikeh.rtf", &Test::testMathStrikeh},
+        {"math-placeholders.rtf", &Test::testMathPlaceholders},
+        {"math-rad.rtf", &Test::testMathRad},
+        {"math-sepchr.rtf", &Test::testMathSepchr},
+        {"math-subscripts.rtf", &Test::testMathSubscripts},
+        {"math-vertical-stacks.rtf", &Test::testMathVerticalstacks},
+        {"math-runs.rtf", &Test::testMathRuns},
+        {"fdo53113.odt", &Test::testFdo53113},
+    };
+    // Don't test the first import of these, for some reason those tests fail
+    const char* aBlacklist[] = {
+        "math-eqarray.rtf",
+        "math-escaping.rtf",
+        "math-lim.rtf",
+        "math-mso2007.rtf",
+        "math-nary.rtf",
+        "math-rad.rtf",
+        "math-vertical-stacks.rtf",
+        "math-runs.rtf",
+    };
+    std::vector<const char*> vBlacklist(aBlacklist, aBlacklist + SAL_N_ELEMENTS(aBlacklist));
+    for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
+    {
+        MethodEntry<Test>& rEntry = aMethods[i];
+        mxComponent = loadFromDesktop(getURLFromSrc("/sw/qa/extras/rtfexport/data/") + OUString::createFromAscii(rEntry.pName));
+        // If the testcase is stored in some other format, it's pointless to test.
+        if (OString(rEntry.pName).endsWith(".rtf") && std::find(vBlacklist.begin(), vBlacklist.end(), rEntry.pName) == vBlacklist.end())
+            (this->*rEntry.pMethod)();
+        uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+        uno::Sequence<beans::PropertyValue> aArgs(1);
+        aArgs[0].Name = "FilterName";
+        aArgs[0].Value <<= OUString("Rich Text Format");
+        utl::TempFile aTempFile;
+        aTempFile.EnableKillingFile();
+        xStorable->storeToURL(aTempFile.GetURL(), aArgs);
+        mxComponent = loadFromDesktop(aTempFile.GetURL());
+        (this->*rEntry.pMethod)();
+    }
 }
 
 void Test::testZoom()
 {
-    roundtrip("zoom.rtf");
-
     uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
     uno::Reference<view::XViewSettingsSupplier> xViewSettingsSupplier(xModel->getCurrentController(), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xPropertySet(xViewSettingsSupplier->getViewSettings());
@@ -129,14 +150,11 @@ void Test::testZoom()
 
 void Test::testFdo38176()
 {
-    roundtrip("fdo38176.rtf");
     CPPUNIT_ASSERT_EQUAL(9, getLength());
 }
 
 void Test::testFdo49683()
 {
-    roundtrip("fdo49683.rtf");
-
     uno::Reference<document::XDocumentPropertiesSupplier> xDocumentPropertiesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<document::XDocumentProperties> xDocumentProperties(xDocumentPropertiesSupplier->getDocumentProperties());
     uno::Sequence<OUString> aKeywords(xDocumentProperties->getKeywords());
@@ -147,8 +165,6 @@ void Test::testFdo49683()
 
 void Test::testFdo44174()
 {
-    roundtrip("fdo44174.rtf");
-
     uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XTextViewCursorSupplier> xTextViewCursorSupplier(xModel->getCurrentController(), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xPropertySet(xTextViewCursorSupplier->getViewCursor(), uno::UNO_QUERY);
@@ -159,8 +175,6 @@ void Test::testFdo44174()
 
 void Test::testFdo50087()
 {
-    roundtrip("fdo50087.rtf");
-
     uno::Reference<document::XDocumentPropertiesSupplier> xDocumentPropertiesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<document::XDocumentProperties> xDocumentProperties(xDocumentPropertiesSupplier->getDocumentProperties());
     CPPUNIT_ASSERT_EQUAL(OUString("Title"), xDocumentProperties->getTitle());
@@ -170,8 +184,6 @@ void Test::testFdo50087()
 
 void Test::testFdo50831()
 {
-    roundtrip("fdo50831.rtf");
-
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xTextDocument->getText(), uno::UNO_QUERY);
     uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
@@ -194,8 +206,6 @@ void Test::testFdo48335()
      * oRun = oRuns.nextElement
      * xray oRun.TextPortionType 'was Text, should be SoftPageBreak
      */
-    roundtrip("fdo48335.odt");
-
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xTextDocument->getText(), uno::UNO_QUERY);
     uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
@@ -212,8 +222,6 @@ void Test::testFdo48335()
 void Test::testFdo38244()
 {
     // See ooxmlexport's testFdo38244().
-    roundtrip("fdo38244.rtf");
-
     // Test comment range feature.
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xTextDocument->getText(), uno::UNO_QUERY);
@@ -237,7 +245,6 @@ void Test::testFdo38244()
 
 void Test::testMathAccents()
 {
-    roundtrip("math-accents.rtf");
     OUString aActual = getFormula(getRun(getParagraph(1), 1));
     OUString aExpected("acute {a} grave {a} check {a} breve {a} circle {a} widevec {a} widetilde {a} widehat {a} dot {a} widevec {a} widevec {a} widetilde {a} underline {a}");
     CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
@@ -245,7 +252,6 @@ void Test::testMathAccents()
 
 void Test::testMathEqarray()
 {
-    roundtrip("math-eqarray.rtf");
     OUString aActual = getFormula(getRun(getParagraph(1), 1));
     OUString aExpected("y = left lbrace stack { 0, x < 0 # 1, x = 0 # {x} ^ {2} , x > 0 } right none");
     CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
@@ -253,7 +259,6 @@ void Test::testMathEqarray()
 
 void Test::testMathD()
 {
-    roundtrip("math-d.rtf");
     OUString aActual = getFormula(getRun(getParagraph(1), 1));
     OUString aExpected("left (x mline y mline z right ) left (1 right ) left [2 right ] left ldbracket 3 right rdbracket left lline 4 right rline left ldline 5 right rdline left langle 6 right rangle left langle a mline b right rangle left ({x} over {y} right )");
     CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
@@ -261,7 +266,6 @@ void Test::testMathD()
 
 void Test::testMathEscaping()
 {
-    roundtrip("math-escaping.rtf");
     OUString aActual = getFormula(getRun(getParagraph(1), 1));
     OUString aExpected("á \\{", 5, RTL_TEXTENCODING_UTF8);
     CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
@@ -269,7 +273,6 @@ void Test::testMathEscaping()
 
 void Test::testMathLim()
 {
-    roundtrip("math-lim.rtf");
     OUString aActual = getFormula(getRun(getParagraph(1), 1));
     OUString aExpected("lim from {x → 1} {x}", 22, RTL_TEXTENCODING_UTF8);
     CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
@@ -277,7 +280,6 @@ void Test::testMathLim()
 
 void Test::testMathMatrix()
 {
-    roundtrip("math-matrix.rtf");
     OUString aActual = getFormula(getRun(getParagraph(1), 1));
     OUString aExpected("left [matrix {1 # 2 ## 3 # 4} right ]");
     CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
@@ -285,7 +287,6 @@ void Test::testMathMatrix()
 
 void Test::testMathBox()
 {
-    roundtrip("math-mbox.rtf");
     OUString aActual = getFormula(getRun(getParagraph(1), 1));
     OUString aExpected("a");
     CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
@@ -293,7 +294,6 @@ void Test::testMathBox()
 
 void Test::testMathMso2007()
 {
-    roundtrip("math-mso2007.rtf");
     OUString aActual = getFormula(getRun(getParagraph(1), 1));
     OUString aExpected("A = π {r} ^ {2}", 16, RTL_TEXTENCODING_UTF8);
     CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
@@ -334,7 +334,6 @@ void Test::testMathMso2007()
 
 void Test::testMathNary()
 {
-    roundtrip("math-nary.rtf");
     OUString aActual = getFormula(getRun(getParagraph(1), 1));
     OUString aExpected("lllint from {1} to {2} {x + 1} prod from {a} {b} sum to {2} {x}");
     CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
@@ -342,7 +341,6 @@ void Test::testMathNary()
 
 void Test::testMathLimupp()
 {
-    roundtrip("math-limupp.rtf");
     OUString aActual = getFormula(getRun(getParagraph(1), 1));
     CPPUNIT_ASSERT_EQUAL(OUString("{abcd} overbrace {4}"), aActual);
 
@@ -352,35 +350,30 @@ void Test::testMathLimupp()
 
 void Test::testMathStrikeh()
 {
-    roundtrip("math-strikeh.rtf");
     OUString aActual = getFormula(getRun(getParagraph(1), 1));
     CPPUNIT_ASSERT_EQUAL(OUString("overstrike {abc}"), aActual);
 }
 
 void Test::testMathPlaceholders()
 {
-    roundtrip("math-placeholders.rtf");
     OUString aActual = getFormula(getRun(getParagraph(1), 1));
     CPPUNIT_ASSERT_EQUAL(OUString("sum from <?> to <?> <?>"), aActual);
 }
 
 void Test::testMathRad()
 {
-    roundtrip("math-rad.rtf");
     OUString aActual = getFormula(getRun(getParagraph(1), 1));
     CPPUNIT_ASSERT_EQUAL(OUString("sqrt {4} nroot {3} {x + 1}"), aActual);
 }
 
 void Test::testMathSepchr()
 {
-    roundtrip("math-sepchr.rtf");
     OUString aActual = getFormula(getRun(getParagraph(1), 1));
     CPPUNIT_ASSERT_EQUAL(OUString("AxByBzC"), aActual);
 }
 
 void Test::testMathSubscripts()
 {
-    roundtrip("math-subscripts.rtf");
     OUString aActual = getFormula(getRun(getParagraph(1), 1));
     OUString aExpected("{x} ^ {y} + {e} ^ {x} {x} ^ {b} {x} rsub {b} {a} rsub {c} rsup {b} {x} lsub {2} lsup {1} {{x csup {6} csub {3}} lsub {4} lsup {5}} rsub {2} rsup {1}");
     CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
@@ -388,7 +381,6 @@ void Test::testMathSubscripts()
 
 void Test::testMathVerticalstacks()
 {
-    roundtrip("math-vertical-stacks.rtf");
     CPPUNIT_ASSERT_EQUAL(OUString("{a} over {b}"), getFormula(getRun(getParagraph(1), 1)));
     CPPUNIT_ASSERT_EQUAL(OUString("{a} / {b}"), getFormula(getRun(getParagraph(2), 1)));
     CPPUNIT_ASSERT_EQUAL(OUString("stack { a # b }"), getFormula(getRun(getParagraph(3), 1)));
@@ -397,7 +389,6 @@ void Test::testMathVerticalstacks()
 
 void Test::testMathRuns()
 {
-    roundtrip("math-runs.rtf");
     // was [](){}, i.e. first curly bracket had an incorrect position
     CPPUNIT_ASSERT_EQUAL(OUString("\\{ left [ right ] left ( right ) \\}"), getFormula(getRun(getParagraph(1), 1)));
 }
@@ -414,7 +405,6 @@ void Test::testFdo53113()
      * xray oCoordinates(1).Second.Value ' 102
      */
 
-    roundtrip("fdo53113.odt");
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
     uno::Sequence<beans::PropertyValue> aProps = getProperty< uno::Sequence<beans::PropertyValue> >(xDraws->getByIndex(0), "CustomShapeGeometry");

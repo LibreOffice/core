@@ -67,53 +67,68 @@ public:
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
-    CPPUNIT_TEST(testZoom);
-    CPPUNIT_TEST(defaultTabStopNotInStyles);
-    CPPUNIT_TEST(testFdo38244);
-    CPPUNIT_TEST(testMathEscape);
-    CPPUNIT_TEST(testFdo51034);
-    CPPUNIT_TEST(testMathAccents);
-    CPPUNIT_TEST(testMathD);
-    CPPUNIT_TEST(testMathEscaping);
-    CPPUNIT_TEST(testMathLim);
-    CPPUNIT_TEST(testMathMalformedXml);
-    CPPUNIT_TEST(testMathMatrix);
-    CPPUNIT_TEST(testMathMso2k7);
-    CPPUNIT_TEST(testMathNary);
-    CPPUNIT_TEST(testMathOverbraceUnderbrace);
-    CPPUNIT_TEST(testMathOverstrike);
-    CPPUNIT_TEST(testMathPlaceholders);
-    CPPUNIT_TEST(testMathRad);
-    CPPUNIT_TEST(testMathSubscripts);
-    CPPUNIT_TEST(testMathVerticalStacks);
-    CPPUNIT_TEST(testTablePosition);
-    CPPUNIT_TEST(testFdo47669);
+    CPPUNIT_TEST(run);
 #endif
     CPPUNIT_TEST_SUITE_END();
 
 private:
-    void roundtrip(const OUString& rURL);
+    void run();
 };
 
-void Test::roundtrip(const OUString& rFilename)
+void Test::run()
 {
-    uno::Reference<lang::XComponent> xImported = loadFromDesktop(getURLFromSrc("/sw/qa/extras/ooxmlexport/data/") + rFilename);
-    uno::Reference<frame::XStorable> xStorable(xImported, uno::UNO_QUERY);
-    uno::Sequence<beans::PropertyValue> aArgs(1);
-    aArgs[0].Name = "FilterName";
-    aArgs[0].Value <<= OUString("Office Open XML Text");
-    utl::TempFile aTempFile;
-    aTempFile.EnableKillingFile();
-    xStorable->storeToURL(aTempFile.GetURL(), aArgs);
-    uno::Reference<lang::XComponent> xComponent(xStorable, uno::UNO_QUERY);
-    xComponent->dispose();
-    mxComponent = loadFromDesktop(aTempFile.GetURL());
+    MethodEntry<Test> aMethods[] = {
+        {"zoom.docx", &Test::testZoom},
+        {"empty.odt", &Test::defaultTabStopNotInStyles},
+        {"fdo38244.docx", &Test::testFdo38244},
+        {"math-escape.docx", &Test::testMathEscape},
+        {"fdo51034.odt", &Test::testFdo51034},
+        {"math-accents.docx", &Test::testMathAccents},
+        {"math-d.docx", &Test::testMathD},
+        {"math-escaping.docx", &Test::testMathEscaping},
+        {"math-lim.docx", &Test::testMathLim},
+        {"math-malformed_xml.docx", &Test::testMathMalformedXml},
+        {"math-matrix.docx", &Test::testMathMatrix},
+        {"math-mso2k7.docx", &Test::testMathMso2k7},
+        {"math-nary.docx", &Test::testMathNary},
+        {"math-overbrace_underbrace.docx", &Test::testMathOverbraceUnderbrace},
+        {"math-overstrike.docx", &Test::testMathOverstrike},
+        {"math-placeholders.docx", &Test::testMathPlaceholders},
+        {"math-rad.docx", &Test::testMathRad},
+        {"math-subscripts.docx", &Test::testMathSubscripts},
+        {"math-vertical_stacks.docx", &Test::testMathVerticalStacks},
+        {"../../ooxmlimport/data/n779957.docx", &Test::testTablePosition},
+        {"fdo47669.docx", &Test::testFdo47669},
+    };
+    // Don't test the first import of these, for some reason those tests fail
+    const char* aBlacklist[] = {
+        "math-escape.docx",
+        "math-mso2k7.docx",
+    };
+    std::vector<const char*> vBlacklist(aBlacklist, aBlacklist + SAL_N_ELEMENTS(aBlacklist));
+    for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
+    {
+        MethodEntry<Test>& rEntry = aMethods[i];
+        mxComponent = loadFromDesktop(getURLFromSrc("/sw/qa/extras/ooxmlexport/data/") + OUString::createFromAscii(rEntry.pName));
+        // If the testcase is stored in some other format, it's pointless to test.
+        if (OString(rEntry.pName).endsWith(".docx") && std::find(vBlacklist.begin(), vBlacklist.end(), rEntry.pName) == vBlacklist.end())
+            (this->*rEntry.pMethod)();
+        uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+        uno::Sequence<beans::PropertyValue> aArgs(1);
+        aArgs[0].Name = "FilterName";
+        aArgs[0].Value <<= OUString("Office Open XML Text");
+        utl::TempFile aTempFile;
+        aTempFile.EnableKillingFile();
+        xStorable->storeToURL(aTempFile.GetURL(), aArgs);
+        uno::Reference<lang::XComponent> xComponent(xStorable, uno::UNO_QUERY);
+        xComponent->dispose();
+        mxComponent = loadFromDesktop(aTempFile.GetURL());
+        (this->*rEntry.pMethod)();
+    }
 }
 
 void Test::testZoom()
 {
-    roundtrip("zoom.docx");
-
     uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
     uno::Reference<view::XViewSettingsSupplier> xViewSettingsSupplier(xModel->getCurrentController(), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xPropertySet(xViewSettingsSupplier->getViewSettings());
@@ -124,7 +139,6 @@ void Test::testZoom()
 
 void Test::defaultTabStopNotInStyles()
 {
-    roundtrip( "empty.odt" );
 // The default tab stop was mistakenly exported to a style.
 // xray ThisComponent.StyleFamilies(1)(0).ParaTabStop
     uno::Reference< container::XNameAccess > paragraphStyles = getStyles( "ParagraphStyles" );
@@ -138,8 +152,6 @@ void Test::defaultTabStopNotInStyles()
 
 void Test::testFdo38244()
 {
-    roundtrip("fdo38244.docx");
-
     /*
      * Comments attached to a range was imported without the range, check for the fieldmark start/end positions.
      *
@@ -204,14 +216,12 @@ void Test::testFdo38244()
 
 void Test::testMathEscape()
 {
-    roundtrip("math-escape.docx");
     CPPUNIT_ASSERT_EQUAL(OUString("\\{ left [ right ] left ( right ) \\}"), getFormula(getRun(getParagraph(1), 1)));
 }
 
 void Test::testFdo51034()
 {
     // The problem was that the 'l' param of the HYPERLINK field was parsed with = "#", not += "#".
-    roundtrip("fdo51034.odt");
     CPPUNIT_ASSERT_EQUAL(OUString("http://Www.google.com/#a"), getProperty<OUString>(getRun(getParagraph(1), 1), "HyperLinkURL"));
 }
 
@@ -226,7 +236,6 @@ void Test::testFdo51034()
 
 void Test::testMathAccents()
 {
-    roundtrip( "math-accents.docx" );
     CHECK_FORMULA(
         "acute {a} grave {a} check {a} breve {a} circle {a} widevec {a} widetilde {a}"
             " widehat {a} dot {a} widevec {a} widevec {a} widetilde {a} underline {a}",
@@ -235,7 +244,6 @@ void Test::testMathAccents()
 
 void Test::testMathD()
 {
-    roundtrip( "math-d.docx" );
     CHECK_FORMULA( "left (x mline y mline z right )", getFormula( getRun( getParagraph( 1 ), 1 )));
     CHECK_FORMULA( "left (1 right )", getFormula( getRun( getParagraph( 1 ), 2 )));
     CHECK_FORMULA( "left [2 right ]", getFormula( getRun( getParagraph( 1 ), 3 )));
@@ -249,31 +257,26 @@ void Test::testMathD()
 
 void Test::testMathEscaping()
 {
-    roundtrip( "math-escaping.docx" );
     CHECK_FORMULA( "− ∞ < x < ∞", getFormula( getRun( getParagraph( 1 ), 1 )));
 }
 
 void Test::testMathLim()
 {
-    roundtrip( "math-lim.docx" );
     CHECK_FORMULA( "lim from {x → 1} {x}", getFormula( getRun( getParagraph( 1 ), 1 )));
 }
 
 void Test::testMathMalformedXml()
 {
-    roundtrip( "math-malformed_xml.docx" );
     CPPUNIT_ASSERT_EQUAL( 0, getLength());
 }
 
 void Test::testMathMatrix()
 {
-    roundtrip( "math-matrix.docx" );
     CHECK_FORMULA( "left [matrix {1 # 2 ## 3 # 4} right ]", getFormula( getRun( getParagraph( 1 ), 1 )));
 }
 
 void Test::testMathMso2k7()
 {
-    roundtrip( "math-mso2k7.docx" );
     CHECK_FORMULA( "A = π {r} ^ {2}", getFormula( getRun( getParagraph( 1 ), 1 )));
 // TODO check the stack/binom difference
 //    CHECK_FORMULA( "{left (x+a right )} ^ {n} = sum from {k=0} to {n} {left (binom {n} {k} right ) {x} ^ {k} {a} ^ {n-k}}",
@@ -305,7 +308,6 @@ void Test::testMathMso2k7()
 
 void Test::testMathNary()
 {
-    roundtrip( "math-nary.docx" );
     CHECK_FORMULA( "lllint from {1} to {2} {x + 1}", getFormula( getRun( getParagraph( 1 ), 1 )));
     CHECK_FORMULA( "prod from {a} {b}", getFormula( getRun( getParagraph( 1 ), 2 )));
     CHECK_FORMULA( "sum to {2} {x}", getFormula( getRun( getParagraph( 1 ), 3 )));
@@ -313,33 +315,28 @@ void Test::testMathNary()
 
 void Test::testMathOverbraceUnderbrace()
 {
-    roundtrip( "math-overbrace_underbrace.docx" );
     CHECK_FORMULA( "{abcd} overbrace {4}", getFormula( getRun( getParagraph( 1 ), 1 )));
     CHECK_FORMULA( "{xyz} underbrace {3}", getFormula( getRun( getParagraph( 2 ), 1 )));
 }
 
 void Test::testMathOverstrike()
 {
-    roundtrip( "math-overstrike.docx" );
     CHECK_FORMULA( "overstrike {abc}", getFormula( getRun( getParagraph( 1 ), 1 )));
 }
 
 void Test::testMathPlaceholders()
 {
-    roundtrip( "math-placeholders.docx" );
     CHECK_FORMULA( "sum from <?> to <?> <?>", getFormula( getRun( getParagraph( 1 ), 1 )));
 }
 
 void Test::testMathRad()
 {
-    roundtrip( "math-rad.docx" );
     CHECK_FORMULA( "sqrt {4}", getFormula( getRun( getParagraph( 1 ), 1 )));
     CHECK_FORMULA( "nroot {3} {x + 1}", getFormula( getRun( getParagraph( 1 ), 2 )));
 }
 
 void Test::testMathSubscripts()
 {
-    roundtrip( "math-subscripts.docx" );
     CHECK_FORMULA( "{x} ^ {y} + {e} ^ {x}", getFormula( getRun( getParagraph( 1 ), 1 )));
     CHECK_FORMULA( "{x} ^ {b}", getFormula( getRun( getParagraph( 1 ), 2 )));
     CHECK_FORMULA( "{x} rsub {b}", getFormula( getRun( getParagraph( 1 ), 3 )));
@@ -351,7 +348,6 @@ void Test::testMathSubscripts()
 
 void Test::testMathVerticalStacks()
 {
-    roundtrip( "math-vertical_stacks.docx" );
     CHECK_FORMULA( "{a} over {b}", getFormula( getRun( getParagraph( 1 ), 1 )));
     CHECK_FORMULA( "{a} / {b}", getFormula( getRun( getParagraph( 2 ), 1 )));
 // TODO check these
@@ -364,7 +360,6 @@ void Test::testTablePosition()
     // This is the reverse test of n779957 from ooxmlimport
     // We want to verify that a full round-trip does not break formatting
     // Of course if import code is wrong, this tests will fail regardless of export code.
-    roundtrip( "../../ooxmlimport/data/n779957.docx" );
 
     sal_Int32 xCoordsFromOffice[] = { 2500, -1000, 0, 0 };
     sal_Int32 cellLeftMarginFromOffice[] = { 250, 100, 0, 0 };
@@ -401,8 +396,6 @@ void Test::testTablePosition()
 
 void Test::testFdo47669()
 {
-    roundtrip("fdo47669.docx");
-
     /*
      * Problem: we created imbalance </w:hyperlink> which shouldn't be there,
      * resulting in loading error: missing last character of hyperlink text
