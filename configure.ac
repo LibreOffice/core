@@ -11060,10 +11060,12 @@ AC_MSG_CHECKING([for ConvertTextToNumber extension integration])
 if test "x$enable_ext_ct2n" = "xyes" -a "x$enable_extension_integration" != "xno"; then
     BUILD_TYPE="$BUILD_TYPE CT2N"
     SCPDEFS="$SCPDEFS -DWITH_EXTENSION_CT2N"
+    CT2N_TARBALL="451ccf439a36a568653b024534669971-ConvertTextToNumber-1.3.2.oxt"
     AC_MSG_RESULT([yes])
 else
     AC_MSG_RESULT([no])
 fi
+AC_SUBST([CT2N_TARBALL])
 
 dnl ===================================================================
 dnl Test whether to include Numbertext extension

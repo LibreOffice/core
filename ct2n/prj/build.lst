@@ -1,3 +1,2 @@
-ct2n	ct2n	:	solenv NULL
-ct2n	ct2n		usr1	-	all	ct2n_mkout NULL
-ct2n	ct2n      nmake	-	all	ct2n_ct2n NULL
+ct2n	ct2n	:     solenv NULL
+ct2n	ct2n\prj      nmake  -	all	ct2n_ct2n NULL
