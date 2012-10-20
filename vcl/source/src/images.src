@@ -77,6 +77,11 @@ Bitmap SV_RESID_BITMAP_CLOSEDOC
     File = "closedoc.png";
 };
 
+Bitmap SV_RESID_BITMAP_INDEX
+{
+    File = "index.png";
+};
+
 Bitmap SV_RESID_BITMAP_SPLITHPIN
 {
     File = "splhpin.png";

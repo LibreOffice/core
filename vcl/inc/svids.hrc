@@ -41,6 +41,7 @@
 #define SV_RESID_BITMAP_SCROLLMSK           1050
 #define SV_RESID_BITMAP_SCROLLBMP           1051
 #define SV_RESID_BITMAP_CLOSEDOC            1052
+#define SV_RESID_BITMAP_INDEX               1053
 
 #define SV_DISCLOSURE_PLUS                  1060
 #define SV_DISCLOSURE_MINUS                 1061

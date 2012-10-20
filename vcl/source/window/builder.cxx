@@ -33,6 +33,14 @@
 
 namespace
 {
+    sal_uInt16 mapStockToImageResource(OString sType)
+    {
+        sal_uInt16 nRet = 0;
+        if (sType == "gtk-index")
+            nRet = SV_RESID_BITMAP_INDEX;
+        return nRet;
+    }
+
     SymbolType mapStockToSymbol(OString sType)
     {
         SymbolType eRet = SYMBOL_NOSYMBOL;
@@ -54,6 +62,8 @@ namespace
             eRet = SYMBOL_HELP;
         else if (sType == "gtk-close")
             eRet = SYMBOL_CLOSE;
+        else if (mapStockToImageResource(sType))
+            eRet = SYMBOL_IMAGE;
         return eRet;
     }
 }
@@ -168,13 +178,19 @@ VclBuilder::VclBuilder(Window *pParent, OUString sUIDir, OUString sUIFile, OStri
         PushButton *pTarget = get<PushButton>(aI->m_sID);
         FixedImage *pImage = get<FixedImage>(aI->m_sValue);
         aImagesToBeRemoved.insert(aI->m_sValue);
-        SymbolType eType = mapStockToSymbol(m_pParserState->m_aStockMap[aI->m_sValue]);
+        const OString &rImage = m_pParserState->m_aStockMap[aI->m_sValue];
+        SymbolType eType = mapStockToSymbol(rImage);
         SAL_WARN_IF(!pTarget || !pImage || eType == SYMBOL_NOSYMBOL,
             "vcl", "missing elements of button/image/stock");
+        if (!pTarget || eType == SYMBOL_NOSYMBOL)
+            continue;
+
         //to-do, situation where image isn't a stock image
         if (pTarget && eType != SYMBOL_NOSYMBOL)
         {
             pTarget->SetSymbol(eType);
+            if (eType == SYMBOL_IMAGE)
+                pTarget->SetModeImage(VclResId(mapStockToImageResource(rImage)));
         }
     }
 
