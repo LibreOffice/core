@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAP3///2Y\u003d",
+        "filename": "ct2n/Zip_ct2n.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2012-10-20T21:49:39Z",
+      "side": 1,
+      "message": "well, sure it can be done with Extension, but some adjustments must be done to match it \"expectation\":\n* new description-en-US.txt\n* manifest.xml is expected in the root directory and not in META-INF\n* LICENSE file is used and not COPYING\n\nnew patch set try to implement part of this adjustment in post_action of UnpackedTarball target and part in Extension target.",
+      "parentUuid": "AAAAP3///4k\u003d",
+      "revId": "25a398974b3a94303771f3bb9f0daf4e28fd3450",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAP3///4g\u003d",
         "filename": "ct2n/Zip_ct2n.mk",
         "patchSetId": 2
