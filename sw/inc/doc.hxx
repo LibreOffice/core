@@ -1365,13 +1365,13 @@ public:
     SwPageDesc * GetPageDesc( const String & rName );
     void ChgPageDesc( const String & rName, const SwPageDesc& );
     void ChgPageDesc( sal_uInt16 i, const SwPageDesc& );
-    sal_Bool FindPageDesc( const String & rName, sal_uInt16 * pFound );
-    void DelPageDesc( const String & rName, sal_Bool bBroadcast = sal_False);
-    void DelPageDesc( sal_uInt16 i, sal_Bool bBroadcast = sal_False );
+    bool FindPageDesc( const String & rName, sal_uInt16 * pFound );
+    void DelPageDesc( const String & rName, bool bBroadcast = false);
+    void DelPageDesc( sal_uInt16 i, bool bBroadcast = false );
     void PreDelPageDesc(SwPageDesc * pDel);
     sal_uInt16 MakePageDesc( const String &rName, const SwPageDesc* pCpy = 0,
-                             sal_Bool bRegardLanguage = sal_True,
-                             sal_Bool bBroadcast = sal_False);
+                             bool bRegardLanguage = true,
+                             bool bBroadcast = false);
     void BroadcastStyleOperation(String rName, SfxStyleFamily eFamily,
                                  sal_uInt16 nOp);
 
@@ -1783,7 +1783,7 @@ public:
     bool IsInLoadAsynchron() const             { return mbInLoadAsynchron; }
     void SetInLoadAsynchron( bool bFlag )       { mbInLoadAsynchron = bFlag; }
 
-    sal_Bool SelectServerObj( const String& rStr, SwPaM*& rpPam,
+    bool SelectServerObj( const String& rStr, SwPaM*& rpPam,
                             SwNodeRange*& rpRange ) const;
 
     /// For Drag&Move: (e.g. allow "moving" of RefMarks)
@@ -1792,7 +1792,7 @@ public:
 
     SwDrawContact* GroupSelection( SdrView& );
     void UnGroupSelection( SdrView& );
-    sal_Bool DeleteSelection( SwDrawView& );
+    bool DeleteSelection( SwDrawView& );
 
     /// Invalidates OnlineSpell-WrongLists.
     void SpellItAgainSam( bool bInvalid, bool bOnlyWrong, bool bSmartTags );

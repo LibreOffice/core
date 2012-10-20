@@ -2231,7 +2231,7 @@ void SwRTFParser::SetAttrInDoc( SvxRTFItemStackType &rSet )
                 if( pTxtNd )
                 {
                     // Update vom LR-Space abschalten
-                    pTxtNd->SetNumLSpace( sal_False );
+                    pTxtNd->SetNumLSpace( false );
                 }
             }
         }

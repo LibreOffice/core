@@ -70,7 +70,7 @@
 
 using namespace ::com::sun::star::uno;
 
-extern sal_Bool IsFrameBehind( const SwTxtNode& rMyNd, sal_uInt16 nMySttPos,
+extern bool IsFrameBehind( const SwTxtNode& rMyNd, sal_uInt16 nMySttPos,
                         const SwTxtNode& rBehindNd, sal_uInt16 nSttPos );
 
 /*--------------------------------------------------------------------

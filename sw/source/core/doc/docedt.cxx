@@ -229,7 +229,7 @@ void _SaveFlyInRange( const SwNodeRange& rRg, _SaveFlyArr& rArr )
             rRg.aStart <= pAPos->nNode && pAPos->nNode < rRg.aEnd )
         {
             _SaveFly aSave( pAPos->nNode.GetIndex() - rRg.aStart.GetIndex(),
-                            pFmt, sal_False );
+                            pFmt, false );
             rArr.push_back( aSave );
             pFmt->DelFrms();
             rFmts.erase( rFmts.begin() + n-- );
@@ -259,7 +259,7 @@ void _SaveFlyInRange( const SwPaM& rPam, const SwNodeIndex& rInsPos,
 
     for( sal_uInt16 n = 0; n < rFmts.size(); ++n )
     {
-        sal_Bool bInsPos = sal_False;
+        bool bInsPos = false;
         pFmt = (SwFrmFmt*)rFmts[n];
         pAnchor = &pFmt->GetAnchor();
         const SwPosition* pAPos = pAnchor->GetCntntAnchor();
@@ -304,7 +304,7 @@ void _SaveFlyInRange( const SwPaM& rPam, const SwNodeIndex& rInsPos,
 void DelFlyInRange( const SwNodeIndex& rMkNdIdx,
                     const SwNodeIndex& rPtNdIdx )
 {
-    const sal_Bool bDelFwrd = rMkNdIdx.GetIndex() <= rPtNdIdx.GetIndex();
+    const bool bDelFwrd = rMkNdIdx.GetIndex() <= rPtNdIdx.GetIndex();
 
     SwDoc* pDoc = rMkNdIdx.GetNode().GetDoc();
     SwFrmFmts& rTbl = *pDoc->GetSpzFrmFmts();
@@ -760,8 +760,8 @@ bool SwDoc::Overwrite( const SwPaM &rRg, const String &rStr )
     sal_Unicode c;
     String aStr;
 
-    sal_Bool bOldExpFlg = pNode->IsIgnoreDontExpand();
-    pNode->SetIgnoreDontExpand( sal_True );
+    bool bOldExpFlg = pNode->IsIgnoreDontExpand();
+    pNode->SetIgnoreDontExpand( true );
 
     for( xub_StrLen nCnt = 0; nCnt < rStr.Len(); ++nCnt )
     {
@@ -1873,7 +1873,7 @@ uno::Any SwDoc::Spell( SwPaM& rPaM,
     if( nCurrNd <= nEndNd )
     {
         SwCntntFrm* pCntFrm;
-        sal_Bool bGoOn = sal_True;
+        bool bGoOn = true;
         while( bGoOn )
         {
             SwNode* pNd = GetNodes()[ nCurrNd ];
@@ -2154,9 +2154,9 @@ uno::Reference< XHyphenatedWord >  SwDoc::Hyphenate(
     return aHyphArg.GetHyphWord();  // will be set by lcl_HyphenateNode
 }
 
-static sal_Bool lcl_GetTokenToParaBreak( String& rStr, String& rRet, sal_Bool bRegExpRplc )
+static bool lcl_GetTokenToParaBreak( String& rStr, String& rRet, bool bRegExpRplc )
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     if( bRegExpRplc )
     {
         xub_StrLen nPos = 0;
@@ -2173,7 +2173,7 @@ static sal_Bool lcl_GetTokenToParaBreak( String& rStr, String& rRet, sal_Bool bR
             {
                 rRet = rStr.Copy( 0, nPos );
                 rStr.Erase( 0, nPos + sPara.getLength() );
-                bRet = sal_True;
+                bRet = true;
                 break;
             }
         }
@@ -2344,7 +2344,7 @@ bool SwDoc::ReplaceRangeImpl( SwPaM& rPam, const String& rStr,
                 SwNodeIndex aPtNd( aDelPam.GetPoint()->nNode, -1 );
                 xub_StrLen nPtCnt = aDelPam.GetPoint()->nContent.GetIndex();
 
-                sal_Bool bFirst = sal_True;
+                bool bFirst = true;
                 String sIns;
                 while ( lcl_GetTokenToParaBreak( sRepl, sIns, bRegExReplace ) )
                 {
@@ -2360,7 +2360,7 @@ bool SwDoc::ReplaceRangeImpl( SwPaM& rPam, const String& rStr,
                         aDelPam.GetMark()->nNode = aMkNd;
                         aDelPam.GetMark()->nContent.Assign(
                                     aMkNd.GetNode().GetCntntNode(), nMkCnt );
-                        bFirst = sal_False;
+                        bFirst = false;
                     }
                     else
                         SplitNode( *aDelPam.GetPoint(), false );
@@ -2441,7 +2441,7 @@ SetRedlineMode( eOld );
             nEnd = bOneNode ? pEnd->nContent.GetIndex()
                             : pTxtNd->GetTxt().Len();
 
-            sal_Bool bFirst = sal_True;
+            bool bFirst = true;
             String sIns;
             while ( lcl_GetTokenToParaBreak( sRepl, sIns, bRegExReplace ) )
             {
@@ -2454,7 +2454,7 @@ SetRedlineMode( eOld );
                     pTxtNd->ReplaceText( pStt->nContent, nEnd - nStt, sIns );
                 }
                 SplitNode( *pStt, false);
-                bFirst = sal_False;
+                bFirst = false;
             }
 
             if( bFirst || sIns.Len() )

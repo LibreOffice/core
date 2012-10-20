@@ -104,9 +104,9 @@ struct _SaveFly
 {
     sal_uLong nNdDiff;              /// relative node difference
     SwFrmFmt* pFrmFmt;          /// the fly's frame format
-    sal_Bool bInsertPosition;   /// if true, anchor _at_ insert position
+    bool bInsertPosition;   /// if true, anchor _at_ insert position
 
-    _SaveFly( sal_uLong nNodeDiff, SwFrmFmt* pFmt, sal_Bool bInsert )
+    _SaveFly( sal_uLong nNodeDiff, SwFrmFmt* pFmt, bool bInsert )
         : nNdDiff( nNodeDiff ), pFrmFmt( pFmt ), bInsertPosition( bInsert )
     { }
 };

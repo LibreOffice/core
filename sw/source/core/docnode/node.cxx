@@ -307,7 +307,7 @@ long SwNode::s_nSerial = 0;
 SwNode::SwNode( const SwNodeIndex &rWhere, const sal_uInt8 nNdType )
     : nNodeType( nNdType ), pStartOfSection( 0 )
 {
-    bSetNumLSpace = bIgnoreDontExpand = sal_False;
+    bSetNumLSpace = bIgnoreDontExpand = false;
     nAFmtNumLvl = 0;
 
     SwNodes& rNodes = (SwNodes&)rWhere.GetNodes();
@@ -341,7 +341,7 @@ SwNode::SwNode( const SwNodeIndex &rWhere, const sal_uInt8 nNdType )
 SwNode::SwNode( SwNodes& rNodes, sal_uLong nPos, const sal_uInt8 nNdType )
     : nNodeType( nNdType ), pStartOfSection( 0 )
 {
-    bSetNumLSpace = bIgnoreDontExpand = sal_False;
+    bSetNumLSpace = bIgnoreDontExpand = false;
     nAFmtNumLvl = 0;
 
     SwNode* pInsNd = this;      // The  MAC cannot insert anything!

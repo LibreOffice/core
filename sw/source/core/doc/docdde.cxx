@@ -295,7 +295,7 @@ bool SwDoc::SetData( const rtl::OUString& rItem, const String& rMimeType,
     return pObj;
 }
 
-sal_Bool SwDoc::SelectServerObj( const String& rStr, SwPaM*& rpPam,
+bool SwDoc::SelectServerObj( const String& rStr, SwPaM*& rpPam,
                             SwNodeRange*& rpRange ) const
 {
     // Do we actually have the Item?
@@ -314,7 +314,7 @@ sal_Bool SwDoc::SelectServerObj( const String& rStr, SwPaM*& rpPam,
     // but also frames (text!), tables, outlines:
     if( STRING_NOTFOUND != nPos )
     {
-        sal_Bool bWeiter = sal_False;
+        bool bWeiter = false;
         String sName( sItem.Copy( 0, nPos ) );
         String sCmp( sItem.Copy( nPos + 1 ));
         sItem = rCC.lowercase( sItem );
@@ -333,7 +333,7 @@ sal_Bool SwDoc::SelectServerObj( const String& rStr, SwPaM*& rpPam,
             {
                 rpRange = new SwNodeRange( *aPara.pTblNd, 0,
                                 *aPara.pTblNd->EndOfSectionNode(), 1 );
-                return sal_True;
+                return true;
             }
         }
         else if( sCmp.EqualsAscii( pMarkToFrame ) )
@@ -346,13 +346,13 @@ sal_Bool SwDoc::SelectServerObj( const String& rStr, SwPaM*& rpPam,
                 !( pNd = &pIdx->GetNode())->IsNoTxtNode() )
             {
                 rpRange = new SwNodeRange( *pNd, 1, *pNd->EndOfSectionNode() );
-                return sal_True;
+                return true;
             }
         }
         else if( sCmp.EqualsAscii( pMarkToRegion ) )
         {
             sItem = sName;              // Is being dealt with further down!
-            bWeiter = sal_True;
+            bWeiter = true;
         }
         else if( sCmp.EqualsAscii( pMarkToOutline ) )
         {
@@ -381,12 +381,12 @@ sal_Bool SwDoc::SelectServerObj( const String& rStr, SwPaM*& rpPam,
                     rpRange->aEnd = *rOutlNds[ nTmpPos ];
                 else
                     rpRange->aEnd = GetNodes().GetEndOfContent();
-                return sal_True;
+                return true;
             }
         }
 
         if( !bWeiter )
-            return sal_False;
+            return false;
     }
 
     // search for bookmarks and sections case senstive at first. If nothing is found then try again case insensitive
@@ -417,7 +417,7 @@ sal_Bool SwDoc::SelectServerObj( const String& rStr, SwPaM*& rpPam,
             {
                 rpRange = new SwNodeRange( *aPara.pSectNd, 1,
                                         *aPara.pSectNd->EndOfSectionNode() );
-                return sal_True;
+                return true;
 
             }
         }
@@ -425,7 +425,7 @@ sal_Bool SwDoc::SelectServerObj( const String& rStr, SwPaM*& rpPam,
             break;
         bCaseSensitive = false;
     }
-    return sal_False;
+    return false;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

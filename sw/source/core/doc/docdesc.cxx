@@ -130,7 +130,7 @@ static void lcl_DefaultPageFmt( sal_uInt16 nPoolFmtId,
 |*************************************************************************/
 
 static void lcl_DescSetAttr( const SwFrmFmt &rSource, SwFrmFmt &rDest,
-                         const sal_Bool bPage = sal_True )
+                         const bool bPage = true )
 {
     // We should actually use ItemSet's Intersect here, but that doesn't work
     // correctly if we have different WhichRanges.
@@ -194,7 +194,7 @@ void SwDoc::CopyMasterHeader(const SwPageDesc &rChged, const SwFmtHeader &rHead,
             SwFmtHeader aHead( MakeLayoutFmt( RND_STD_HEADERL, 0 ) );
             rDescFrmFmt.SetFmtAttr( aHead );
             // take over additional attributes (margins, borders ...)
-            ::lcl_DescSetAttr( *rHead.GetHeaderFmt(), *aHead.GetHeaderFmt(), sal_False);
+            ::lcl_DescSetAttr( *rHead.GetHeaderFmt(), *aHead.GetHeaderFmt(), false);
         }
         else
         {
@@ -210,7 +210,7 @@ void SwDoc::CopyMasterHeader(const SwPageDesc &rChged, const SwFmtHeader &rHead,
             {
                 SwFrmFmt *pFmt = new SwFrmFmt( GetAttrPool(), (bLeft ? "Left header" : "First header"),
                                                 GetDfltFrmFmt() );
-                ::lcl_DescSetAttr( *pRight, *pFmt, sal_False );
+                ::lcl_DescSetAttr( *pRight, *pFmt, false );
                 // The section which the right header attribute is pointing
                 // is copied, and the Index to the StartNode is set to
                 // the left or first header attribute.
@@ -226,7 +226,7 @@ void SwDoc::CopyMasterHeader(const SwPageDesc &rChged, const SwFmtHeader &rHead,
             }
             else
                 ::lcl_DescSetAttr( *pRight,
-                               *(SwFrmFmt*)rFmtHead.GetHeaderFmt(), sal_False );
+                               *(SwFrmFmt*)rFmtHead.GetHeaderFmt(), false );
 
         }
     }
@@ -249,7 +249,7 @@ void SwDoc::CopyMasterFooter(const SwPageDesc &rChged, const SwFmtFooter &rFoot,
             SwFmtFooter aFoot( MakeLayoutFmt( RND_STD_FOOTER, 0 ) );
             rDescFrmFmt.SetFmtAttr( aFoot );
             // Take over additional attributes (margins, borders ...).
-            ::lcl_DescSetAttr( *rFoot.GetFooterFmt(), *aFoot.GetFooterFmt(), sal_False);
+            ::lcl_DescSetAttr( *rFoot.GetFooterFmt(), *aFoot.GetFooterFmt(), false);
         }
         else
         {
@@ -265,7 +265,7 @@ void SwDoc::CopyMasterFooter(const SwPageDesc &rChged, const SwFmtFooter &rFoot,
             {
                 SwFrmFmt *pFmt = new SwFrmFmt( GetAttrPool(), (bLeft ? "Left footer" : "First footer"),
                                                 GetDfltFrmFmt() );
-                ::lcl_DescSetAttr( *pRight, *pFmt, sal_False );
+                ::lcl_DescSetAttr( *pRight, *pFmt, false );
                 // The section to which the right footer attribute is pointing
                 // is copied, and the Index to the StartNode is set to
                 // the left footer attribute.
@@ -281,7 +281,7 @@ void SwDoc::CopyMasterFooter(const SwPageDesc &rChged, const SwFmtFooter &rFoot,
             }
             else
                 ::lcl_DescSetAttr( *pRight,
-                               *(SwFrmFmt*)rFmtFoot.GetFooterFmt(), sal_False );
+                               *(SwFrmFmt*)rFmtFoot.GetFooterFmt(), false );
         }
     }
 }
@@ -379,22 +379,22 @@ void SwDoc::ChgPageDesc( sal_uInt16 i, const SwPageDesc &rChged )
     pDesc->SetRegisterFmtColl( rChged.GetRegisterFmtColl() );
 
     // If UseOn or the Follow change, the paragraphs need to know about it.
-    sal_Bool bUseOn  = sal_False;
-    sal_Bool bFollow = sal_False;
+    bool bUseOn  = false;
+    bool bFollow = false;
     if ( pDesc->GetUseOn() != rChged.GetUseOn() )
     {   pDesc->SetUseOn( rChged.GetUseOn() );
-        bUseOn = sal_True;
+        bUseOn = true;
     }
     if ( pDesc->GetFollow() != rChged.GetFollow() )
     {   if ( rChged.GetFollow() == &rChged )
         {   if ( pDesc->GetFollow() != pDesc )
             {   pDesc->SetFollow( pDesc );
-                bFollow = sal_True;
+                bFollow = true;
             }
         }
         else
         {   pDesc->SetFollow( rChged.pFollow );
-            bFollow = sal_True;
+            bFollow = true;
         }
     }
 
@@ -505,7 +505,7 @@ void SwDoc::BroadcastStyleOperation(String rName, SfxStyleFamily eFamily,
     }
 }
 
-void SwDoc::DelPageDesc( sal_uInt16 i, sal_Bool bBroadcast )
+void SwDoc::DelPageDesc( sal_uInt16 i, bool bBroadcast )
 {
     OSL_ENSURE( i < aPageDescs.size(), "PageDescs is out of range." );
     OSL_ENSURE( i != 0, "You cannot delete the default Pagedesc.");
@@ -540,7 +540,7 @@ void SwDoc::DelPageDesc( sal_uInt16 i, sal_Bool bBroadcast )
 |*************************************************************************/
 
 sal_uInt16 SwDoc::MakePageDesc( const String &rName, const SwPageDesc *pCpy,
-                            sal_Bool bRegardLanguage, sal_Bool bBroadcast)
+                            bool bRegardLanguage, bool bBroadcast)
 {
     SwPageDesc *pNew;
     if( pCpy )
@@ -613,12 +613,12 @@ void SwDoc::PrtDataChanged()
             0 != getPrinter( sal_False ), "PrtDataChanged will be called recursively!" );
     SwRootFrm* pTmpRoot = GetCurrentLayout();
     SwWait *pWait = 0;
-    sal_Bool bEndAction = sal_False;
+    bool bEndAction = false;
 
     if( GetDocShell() )
         GetDocShell()->UpdateFontList();
 
-    sal_Bool bDraw = sal_True;
+    bool bDraw = true;
     if ( pTmpRoot )
     {
         ViewShell *pSh = GetCurrentViewShell();
@@ -630,9 +630,9 @@ void SwDoc::PrtDataChanged()
                 pWait = new SwWait( *GetDocShell(), sal_True );
 
             pTmpRoot->StartAllAction();
-            bEndAction = sal_True;
+            bEndAction = true;
 
-            bDraw = sal_False;
+            bDraw = false;
             if( pDrawModel )
             {
                 pDrawModel->SetAddExtLeading( get(IDocumentSettingAccess::ADD_EXT_LEADING) );
@@ -735,7 +735,7 @@ void SwDoc::PrtOLENotify( sal_Bool bAll )
                         // aName = ????
                 }
 
-                sal_Bool bFound = sal_False;
+                bool bFound = false;
                 for ( sal_uInt16 j = 0;
                       j < pGlobalOLEExcludeList->size() && !bFound;
                       ++j )
@@ -796,16 +796,16 @@ IMPL_LINK( SwDoc, DoUpdateModifiedOLE, Timer *, )
     return 0;
 }
 
-sal_Bool SwDoc::FindPageDesc( const String & rName, sal_uInt16 * pFound)
+bool SwDoc::FindPageDesc( const String & rName, sal_uInt16 * pFound)
 {
-    sal_Bool bResult = sal_False;
+    bool bResult = false;
     sal_uInt16 nI;
     for (nI = 0; nI < aPageDescs.size(); nI++)
     {
         if (aPageDescs[nI]->GetName() == rName)
         {
             *pFound = nI;
-            bResult = sal_True;
+            bResult = true;
             break;
         }
     }
@@ -825,7 +825,7 @@ SwPageDesc * SwDoc::GetPageDesc( const String & rName )
     return aResult;
 }
 
-void SwDoc::DelPageDesc( const String & rName, sal_Bool bBroadcast )
+void SwDoc::DelPageDesc( const String & rName, bool bBroadcast )
 {
     sal_uInt16 nI;
 

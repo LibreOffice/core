@@ -65,7 +65,7 @@ public:
     virtual ~CompareLine();
 
     virtual sal_uLong GetHashValue() const = 0;
-    virtual sal_Bool Compare( const CompareLine& rLine ) const = 0;
+    virtual bool Compare( const CompareLine& rLine ) const = 0;
 };
 
 class CompareData
@@ -85,7 +85,7 @@ public:
     virtual ~CompareData();
 
     // Are there differences?
-    sal_Bool HasDiffs( const CompareData& rData ) const;
+    bool HasDiffs( const CompareData& rData ) const;
 
     // Triggers the comparison and creation of two documents
     void CompareLines( CompareData& rData );
@@ -413,9 +413,9 @@ sal_uLong CompareData::ShowDiffs( const CompareData& rData )
     return nCnt;
 }
 
-sal_Bool CompareData::HasDiffs( const CompareData& rData ) const
+bool CompareData::HasDiffs( const CompareData& rData ) const
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     sal_uLong nLen1 = rData.GetLineCount(), nLen2 = GetLineCount();
     sal_uLong nStt1 = 0, nStt2 = 0;
 
@@ -423,7 +423,7 @@ sal_Bool CompareData::HasDiffs( const CompareData& rData ) const
     {
         if( rData.GetChanged( nStt1 ) || GetChanged( nStt2 ) )
         {
-            bRet = sal_True;
+            bRet = true;
             break;
         }
         ++nStt1, ++nStt2;
@@ -962,14 +962,14 @@ public:
     virtual ~SwCompareLine();
 
     virtual sal_uLong GetHashValue() const;
-    virtual sal_Bool Compare( const CompareLine& rLine ) const;
+    virtual bool Compare( const CompareLine& rLine ) const;
 
     static sal_uLong GetTxtNodeHashValue( const SwTxtNode& rNd, sal_uLong nVal );
-    static sal_Bool CompareNode( const SwNode& rDstNd, const SwNode& rSrcNd );
-    static sal_Bool CompareTxtNd( const SwTxtNode& rDstNd,
+    static bool CompareNode( const SwNode& rDstNd, const SwNode& rSrcNd );
+    static bool CompareTxtNd( const SwTxtNode& rDstNd,
                               const SwTxtNode& rSrcNd );
 
-    sal_Bool ChangesInLine( const SwCompareLine& rLine,
+    bool ChangesInLine( const SwCompareLine& rLine,
                             SwPaM *& rpInsRing, SwPaM*& rpDelRing ) const;
 
     const SwNode& GetNode() const { return rNode; }
@@ -1072,7 +1072,7 @@ const SwNode& SwCompareLine::GetEndNode() const
     return *pNd;
 }
 
-sal_Bool SwCompareLine::Compare( const CompareLine& rLine ) const
+bool SwCompareLine::Compare( const CompareLine& rLine ) const
 {
     return CompareNode( rNode, ((SwCompareLine&)rLine).rNode );
 }
@@ -1100,12 +1100,12 @@ namespace
     }
 }
 
-sal_Bool SwCompareLine::CompareNode( const SwNode& rDstNd, const SwNode& rSrcNd )
+bool SwCompareLine::CompareNode( const SwNode& rDstNd, const SwNode& rSrcNd )
 {
     if( rSrcNd.GetNodeType() != rDstNd.GetNodeType() )
-        return sal_False;
+        return false;
 
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
 
     switch( rDstNd.GetNodeType() )
     {
@@ -1262,23 +1262,23 @@ sal_uLong SwCompareLine::GetTxtNodeHashValue( const SwTxtNode& rNd, sal_uLong nV
     return nVal;
 }
 
-sal_Bool SwCompareLine::CompareTxtNd( const SwTxtNode& rDstNd,
+bool SwCompareLine::CompareTxtNd( const SwTxtNode& rDstNd,
                                   const SwTxtNode& rSrcNd )
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     // Very simple at first
     if( rDstNd.GetTxt() == rSrcNd.GetTxt() )
     {
         // The text is the same, but are the "special attributes" (0xFF) also the same?
-        bRet = sal_True;
+        bRet = true;
     }
     return bRet;
 }
 
-sal_Bool SwCompareLine::ChangesInLine( const SwCompareLine& rLine,
+bool SwCompareLine::ChangesInLine( const SwCompareLine& rLine,
                             SwPaM *& rpInsRing, SwPaM*& rpDelRing ) const
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
 
     // Only compare textnodes
     if( ND_TEXTNODE == rNode.GetNodeType() &&
@@ -1358,7 +1358,7 @@ sal_Bool SwCompareLine::ChangesInLine( const SwCompareLine& rLine,
         // Don't compare if there aren't enough similarities
         if ( nAvgLen >= 8 && nSqSum*32 < nAvgLen*nAvgLen )
         {
-            return sal_False;
+            return false;
         }
 
         // Show the differences
@@ -1412,7 +1412,7 @@ sal_Bool SwCompareLine::ChangesInLine( const SwCompareLine& rLine,
         delete[] pLcsDst;
         delete[] pLcsSrc;
 
-        bRet = sal_True;
+        bRet = true;
     }
 
     return bRet;

@@ -2037,7 +2037,7 @@ SwPageDesc* SwFltShell::MakePageDesc(SwPageDesc* pFirstPageDesc)
 
     nPos = GetDoc().MakePageDesc( ViewShell::GetShellRes()->GetPageDescName(
                                    GetDoc().GetPageDescCnt(), bFollow ? ShellResource::FOLLOW_PAGE : ShellResource::NORMAL_PAGE),
-                                pFirstPageDesc, sal_False );
+                                pFirstPageDesc, false );
 
     pNewPD =  &GetDoc().GetPageDesc(nPos);
     if (bFollow)

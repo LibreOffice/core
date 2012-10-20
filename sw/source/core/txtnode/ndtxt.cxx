@@ -1727,10 +1727,10 @@ void SwTxtNode::InsertText( const XubString & rStr, const SwIndex & rIdx,
 
     if ( !nLen ) return;
 
-    sal_Bool bOldExpFlg = IsIgnoreDontExpand();
+    bool bOldExpFlg = IsIgnoreDontExpand();
     if (nMode & IDocumentContentOperations::INS_FORCEHINTEXPAND)
     {
-        SetIgnoreDontExpand( sal_True );
+        SetIgnoreDontExpand( true );
     }
 
     Update( rIdx, nLen ); // text content changed!
@@ -3330,8 +3330,8 @@ void SwTxtNode::ReplaceText( const SwIndex& rStart, const xub_StrLen nDelLen,
         }
     }
 
-    sal_Bool bOldExpFlg = IsIgnoreDontExpand();
-    SetIgnoreDontExpand( sal_True );
+    bool bOldExpFlg = IsIgnoreDontExpand();
+    SetIgnoreDontExpand( true );
 
     if( nLen && rText.Len() )
     {
