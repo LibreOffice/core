@@ -4025,13 +4025,12 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
 
     aStyleSet.SetToolbarIconSize( STYLE_TOOLBAR_ICONSIZE_LARGE );
 
-    const cairo_font_options_t* pNewOptions = NULL;
 #if !GTK_CHECK_VERSION(2,9,0)
     static cairo_font_options_t* (*gdk_screen_get_font_options)(GdkScreen*) =
         (cairo_font_options_t*(*)(GdkScreen*))osl_getAsciiFunctionSymbol( GetSalData()->m_pPlugin, "gdk_screen_get_font_options" );
     if( gdk_screen_get_font_options != NULL )
 #endif
-        pNewOptions = gdk_screen_get_font_options( pScreen );
+        const cairo_font_options_t* pNewOptions = gdk_screen_get_font_options( pScreen );
     aStyleSet.SetCairoFontOptions( pNewOptions );
 
     // finally update the collected settings
