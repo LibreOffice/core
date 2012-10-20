@@ -106,7 +106,7 @@ OUString getTextEngineText (ExtTextEngine& rEngine)
 void setTextEngineText (ExtTextEngine& rEngine, OUString const& aStr)
 {
     rEngine.SetText(String());
-    OString aUTF8Str = ::rtl::OUStringToOString( aStr, RTL_TEXTENCODING_UTF8 );
+    OString aUTF8Str = OUStringToOString( aStr, RTL_TEXTENCODING_UTF8 );
     SvMemoryStream aMemStream( (void*)aUTF8Str.getStr(), aUTF8Str.getLength(),
         STREAM_READ | STREAM_SEEK_TO_BEGIN );
     aMemStream.SetStreamCharSet( RTL_TEXTENCODING_UTF8 );

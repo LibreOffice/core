@@ -36,7 +36,7 @@ using namespace ::com::sun::star::uno;
 
 namespace
 {
-    rtl::OUString aSubToolBarResName( RTL_CONSTASCII_USTRINGPARAM( "private:resource/toolbar/insertcontrolsbar" ) );
+    OUString aSubToolBarResName( "private:resource/toolbar/insertcontrolsbar" );
 }
 
 SFX_IMPL_TOOLBOX_CONTROL( TbxControls, SfxAllEnumItem )
@@ -107,8 +107,8 @@ void TbxControls::StateChanged( sal_uInt16 nSID, SfxItemState eState,
             }
             if( nTemp )
             {
-                rtl::OUString aSlotURL( RTL_CONSTASCII_USTRINGPARAM( "slot:" ));
-                aSlotURL += rtl::OUString::valueOf( sal_Int32( nTemp ));
+                OUString aSlotURL( "slot:" );
+                aSlotURL += OUString::valueOf( sal_Int32( nTemp ));
                 Image aImage = GetImage( m_xFrame,
                                          aSlotURL,
                                          hasBigImages()
