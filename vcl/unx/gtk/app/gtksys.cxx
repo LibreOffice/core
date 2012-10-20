@@ -118,9 +118,8 @@ SalX11Screen
 GtkSalSystem::getXScreenFromDisplayScreen(unsigned int nScreen)
 {
     gint nMonitor;
-    GdkScreen *pScreen = NULL;
 
-    pScreen = getScreenMonitorFromIdx (nScreen, nMonitor);
+    GdkScreen *pScreen = getScreenMonitorFromIdx (nScreen, nMonitor);
     if (!pScreen)
         return SalX11Screen (0);
 #if GTK_CHECK_VERSION(3,0,0)

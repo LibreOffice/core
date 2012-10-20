@@ -2846,7 +2846,6 @@ sal_Bool GtkSalGraphics::NWPaintGTKToolbar(
     GtkShadowType    shadowType;
     gint            x, y, w, h;
     gint            g_x=0, g_y=0, g_w=10, g_h=10;
-    bool            bPaintButton = true;
     GtkWidget*      pButtonWidget = gWidgetData[m_nXScreen].gToolbarButtonWidget;
     GdkRectangle    clipRect;
 
@@ -2898,7 +2897,7 @@ sal_Bool GtkSalGraphics::NWPaintGTKToolbar(
     // handle button
     else if( nPart == PART_BUTTON )
     {
-        bPaintButton = (nState & CTRL_STATE_PRESSED)
+        bool bPaintButton = (nState & CTRL_STATE_PRESSED)
             || (nState & CTRL_STATE_ROLLOVER);
         if( aValue.getTristateVal() == BUTTONVALUE_ON )
         {
