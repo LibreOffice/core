@@ -29,6 +29,7 @@
             <menu:menuitem menu:id=".uno:Save"/>
             <menu:menuitem menu:id=".uno:SaveAs"/>
             <menu:menuitem menu:id=".uno:SaveAll"/>
+            <menu:menuitem menu:id=".uno:CheckOut"/>
             <menu:menu menu:id=".uno:TemplateMenu">
                 <menu:menupopup>
                     <menu:menuitem menu:id=".uno:Organizer"/>

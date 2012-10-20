@@ -29,6 +29,7 @@
             <menu:menuitem menu:id=".uno:Save"/>
             <menu:menuitem menu:id=".uno:SaveAs"/>
             <menu:menuitem menu:id=".uno:SaveAll"/>
+            <menu:menuitem menu:id=".uno:CheckOut"/>
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:ExportTo"/>
             <menu:menu menu:id=".uno:SendToMenu">

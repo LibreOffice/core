@@ -3348,7 +3348,7 @@ void SfxViewFrame::ActivateToolPanel_Impl( const ::rtl::OUString& i_rPanelURL )
     pPanelAccess->ActivateToolPanel( i_rPanelURL );
 }
 
-void SfxViewFrame::AppendInfoBar( const rtl::OUString& sMessage, std::vector< PushButton* > aButtons )
+void SfxViewFrame::AppendInfoBar( const rtl::OUString& sId, const rtl::OUString& sMessage, std::vector< PushButton* > aButtons )
 {
     const sal_uInt16 nId = SfxInfoBarContainerChild::GetChildWindowId();
 
@@ -3359,12 +3359,12 @@ void SfxViewFrame::AppendInfoBar( const rtl::OUString& sMessage, std::vector< Pu
     if ( pChild )
     {
         SfxInfoBarContainerWindow* pInfoBars = ( SfxInfoBarContainerWindow* )pChild->GetWindow();
-        pInfoBars->appendInfoBar( sMessage, aButtons );
+        pInfoBars->appendInfoBar( sId, sMessage, aButtons );
         ShowChildWindow( nId );
     }
 }
 
-void SfxViewFrame::RemoveInfoBar( SfxInfoBarWindow* pInfoBar )
+void SfxViewFrame::RemoveInfoBar( const rtl::OUString& sId )
 {
     const sal_uInt16 nId = SfxInfoBarContainerChild::GetChildWindowId();
 
@@ -3375,6 +3375,7 @@ void SfxViewFrame::RemoveInfoBar( SfxInfoBarWindow* pInfoBar )
     if ( pChild )
     {
         SfxInfoBarContainerWindow* pInfoBars = ( SfxInfoBarContainerWindow* )pChild->GetWindow();
+        SfxInfoBarWindow* pInfoBar = pInfoBars->getInfoBar( sId );
         pInfoBars->removeInfoBar( pInfoBar );
         ShowChildWindow( nId );
     }

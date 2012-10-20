@@ -13,6 +13,7 @@
       <menu:menuitem menu:id=".uno:SaveAs"/>
       <menu:menuitem menu:id=".uno:SaveAsTemplate"/>
       <menu:menuitem menu:id=".uno:SaveAll"/>
+      <menu:menuitem menu:id=".uno:CheckOut"/>
       <menu:menuitem menu:id=".uno:Reload"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:ExportTo"/>

@@ -143,6 +143,7 @@
 #define SID_EXPORTDOCASPDF                  (SID_SFX_START + 1673)
 #define SID_DIRECTEXPORTDOCASPDF            (SID_SFX_START + 1674)
 #define SID_UPDATEDOCMODE                   (SID_SFX_START + 1668)
+#define SID_CHECKOUT                        (SID_SFX_START + 512)
 
 #define SID_FORCERELOAD                     (SID_SFX_START + 1502)
 #define SID_FILE_DIALOG                     (SID_SFX_START + 304)

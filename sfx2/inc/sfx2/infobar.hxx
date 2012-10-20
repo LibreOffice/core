@@ -41,16 +41,18 @@ class SFX2_DLLPUBLIC SfxInfoBarContainerChild : public SfxChildWindow
 class SfxInfoBarWindow : public Window
 {
     private:
+        rtl::OUString               m_sId;
         FixedText*                  m_pMessage;
         Button*                     m_pCloseBtn;
         std::vector< PushButton* >  m_aActionBtns;
 
     public:
-        SfxInfoBarWindow( Window* parent,
+        SfxInfoBarWindow( Window* parent, const rtl::OUString& sId,
                           const rtl::OUString& sMessage,
                           std::vector< PushButton* > aButtons );
         ~SfxInfoBarWindow( );
 
+        virtual const rtl::OUString& getId() const { return m_sId; }
         virtual void Paint( const Rectangle& );
         virtual void Resize( );
 
@@ -68,7 +70,8 @@ class SfxInfoBarContainerWindow : public Window
         SfxInfoBarContainerWindow( SfxInfoBarContainerChild* pChildWin );
         ~SfxInfoBarContainerWindow( );
 
-        void appendInfoBar( const rtl::OUString& sMessage, std::vector< PushButton* > aButtons );
+        void appendInfoBar( const rtl::OUString& sId, const rtl::OUString& sMessage, std::vector< PushButton* > aButtons );
+        SfxInfoBarWindow* getInfoBar( const rtl::OUString& sId );
         void removeInfoBar( SfxInfoBarWindow* pInfoBar );
 
         virtual void Resize( );

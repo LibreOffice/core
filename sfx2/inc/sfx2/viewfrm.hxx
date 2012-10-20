@@ -23,7 +23,6 @@
 #include "sfx2/dllapi.h"
 #include "sal/types.h"
 #include <svl/lstner.hxx>
-#include <sfx2/infobar.hxx>
 #include <sfx2/module.hxx>
 #include <sfx2/frame.hxx>
 #include <sfx2/shell.hxx>
@@ -191,8 +190,8 @@ public:
         The buttons will be added from Right to Left at the right of the info bar. The parent, size
         and position of each button will be changed: only the width will remain unchanged.
       */
-    void                    AppendInfoBar( const rtl::OUString& sMessage, std::vector< PushButton* > aButtons );
-    void                    RemoveInfoBar( SfxInfoBarWindow* pInfoBar );
+    void                    AppendInfoBar( const rtl::OUString& sId, const rtl::OUString& sMessage, std::vector< PushButton* > aButtons );
+    void                    RemoveInfoBar( const rtl::OUString& sId );
 
     SAL_DLLPRIVATE void SetDowning_Impl();
     SAL_DLLPRIVATE void GetDocNumber_Impl();

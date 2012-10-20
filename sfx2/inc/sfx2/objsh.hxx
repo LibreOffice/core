@@ -732,6 +732,8 @@ public:
 
     SAL_DLLPRIVATE void ImplSign( sal_Bool bScriptingContent = sal_False );
     SAL_DLLPRIVATE sal_Bool QuerySaveSizeExceededModules_Impl( const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& xHandler );
+
+    SAL_DLLPRIVATE void CheckOut( );
 };
 
 #define SFX_GLOBAL_CLASSID \

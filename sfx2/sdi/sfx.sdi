@@ -4444,6 +4444,30 @@ SfxObjectItem OpenTemplate SID_OPENTEMPLATE
     GroupId = GID_TEMPLATE;
 ]
 
+SfxVoidItem CheckOut SID_CHECKOUT
+()
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = TRUE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Asynchron;
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_DOCUMENT;
+]
+
 //--------------------------------------------------------------------------
 SfxStringItem OpenUrl SID_OPENURL
 

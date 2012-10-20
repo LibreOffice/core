@@ -28,11 +28,13 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
+#include <com/sun/star/document/XCmisDocument.hpp>
 #include <com/sun/star/document/XExporter.hpp>
 #include <com/sun/star/task/InteractionHandler.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #include <com/sun/star/task/XStatusIndicatorFactory.hpp>
 #include <com/sun/star/frame/DocumentTemplates.hpp>
+#include <com/sun/star/frame/XController2.hpp>
 #include <com/sun/star/frame/XDocumentTemplates.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <comphelper/processfactory.hxx>
@@ -46,6 +48,7 @@
 #include <vcl/msgbox.hxx>
 #include <svl/intitem.hxx>
 #include <svl/eitem.hxx>
+#include <svl/visitem.hxx>
 #include <vcl/wrkwin.hxx>
 #include <svtools/sfxecode.hxx>
 #include <svtools/ehdl.hxx>
@@ -337,6 +340,25 @@ sal_Bool SfxObjectShell::APISaveAs_Impl
     }
 
     return bOk;
+}
+
+void SfxObjectShell::CheckOut( )
+{
+    try
+    {
+        uno::Reference< document::XCmisDocument > xCmisDoc( GetModel(), uno::UNO_QUERY_THROW );
+        xCmisDoc->checkOut( );
+
+        // Remove the info bar
+        SfxViewFrame* pViewFrame = GetFrame();
+        pViewFrame->RemoveInfoBar( "checkout" );
+    }
+    catch ( const uno::RuntimeException& e )
+    {
+        ErrorBox* pErrorBox = new ErrorBox( &GetFrame()->GetWindow(), WB_OK, e.Message );
+        pErrorBox->Execute( );
+        delete pErrorBox;
+    }
 }
 
 //--------------------------------------------------------------------
@@ -884,6 +906,12 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
 
             break;
         }
+
+        case SID_CHECKOUT:
+        {
+            CheckOut( );
+            break;
+        }
     }
 
     // Prevent entry in the Pick-lists
@@ -917,6 +945,36 @@ void SfxObjectShell::GetState_Impl(SfxItemSet &rSet)
                     rSet.DisableItem( nWhich );
                 break;
             }
+
+            case SID_CHECKOUT:
+                {
+                    bool bShow = false;
+                    Reference< XCmisDocument > xCmisDoc( GetModel(), uno::UNO_QUERY );
+                    beans::PropertyValues aCmisProperties = xCmisDoc->getCmisPropertiesValues( );
+
+                    if ( xCmisDoc->isVersionable( ) && aCmisProperties.hasElements( ) )
+                    {
+                        // Loop over the CMIS Properties to find cmis:isVersionSeriesCheckedOut
+                        bool bFoundCheckedout = false;
+                        sal_Bool bCheckedOut = sal_False;
+                        for ( sal_Int32 i = 0; i < aCmisProperties.getLength() && !bFoundCheckedout; ++i )
+                        {
+                            if ( aCmisProperties[i].Name == "cmis:isVersionSeriesCheckedOut" )
+                            {
+                                bFoundCheckedout = true;
+                                aCmisProperties[i].Value >>= bCheckedOut;
+                            }
+                        }
+                        bShow = !bCheckedOut;
+                    }
+
+                    if ( !bShow )
+                    {
+                        rSet.DisableItem( nWhich );
+                        rSet.Put( SfxVisibilityItem( nWhich, sal_False ) );
+                    }
+                }
+                break;
 
             case SID_VERSION:
                 {

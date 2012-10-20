@@ -1464,7 +1464,7 @@ void SfxBaseController::ShowInfoBars( )
                 PushButton* pBtn = new PushButton( &pViewFrame->GetWindow(), SfxResId( BT_CHECKOUT ) );
                 pBtn->SetClickHdl( LINK( this, SfxBaseController, CheckOutHandler ) );
                 aButtons.push_back( pBtn );
-                pViewFrame->AppendInfoBar( SfxResId( STR_NONCHECKEDOUT_DOCUMENT ), aButtons );
+                pViewFrame->AppendInfoBar( "checkout", SfxResId( STR_NONCHECKEDOUT_DOCUMENT ), aButtons );
             }
         }
     }
@@ -1473,24 +1473,7 @@ void SfxBaseController::ShowInfoBars( )
 IMPL_LINK( SfxBaseController, CheckOutHandler, PushButton*, pBtn )
 {
     if ( m_pData->m_pViewShell )
-    {
-        try
-        {
-            REFERENCE< document::XCmisDocument > xCmisDoc( m_pData->m_pViewShell->GetObjectShell()->GetModel(), uno::UNO_QUERY_THROW );
-            xCmisDoc->checkOut( );
-
-            // Remove the info bar
-            SfxInfoBarWindow* pInfoBar = ( SfxInfoBarWindow* )pBtn->GetParent( );
-            SfxViewFrame* pViewFrame = m_pData->m_pViewShell->GetFrame();
-            pViewFrame->RemoveInfoBar( pInfoBar );
-        }
-        catch ( const uno::RuntimeException& e )
-        {
-            ErrorBox* pErrorBox = new ErrorBox( &m_pData->m_pViewShell->GetFrame()->GetWindow(), WB_OK, e.Message );
-            pErrorBox->Execute( );
-            delete pErrorBox;
-        }
-    }
+        m_pData->m_pViewShell->GetObjectShell()->CheckOut( );
     return 0;
 }
 
