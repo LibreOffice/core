@@ -108,7 +108,7 @@ sal_uInt16 Shell::SetPrinter( SfxPrinter *pNewPrinter, sal_uInt16 nDiffFlags, bo
 
 void Shell::SetMDITitle()
 {
-    ::rtl::OUStringBuffer aTitleBuf;
+    OUStringBuffer aTitleBuf;
     if ( !m_aCurLibName.isEmpty() )
     {
         LibraryLocation eLocation = m_aCurDocument.getLibraryLocation( m_aCurLibName );

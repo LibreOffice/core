@@ -31,7 +31,6 @@
 namespace basctl
 {
 
-using ::rtl::OUString;
 using namespace ::cppu;
 using namespace ::std;
 using namespace ::com::sun::star;
