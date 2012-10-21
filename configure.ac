@@ -884,7 +884,7 @@ AC_ARG_ENABLE(sdremote,
 
 AC_ARG_ENABLE(bluetooth,
     AS_HELP_STRING([--disable-bluetooth],
-        [Determines whether to build sdremote sith bluetooth support
+        [Determines whether to build sdremote with bluetooth support
         (via dbus)]),
 ,enable_bluetooth=yes)
 
