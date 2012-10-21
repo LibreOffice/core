@@ -19,7 +19,8 @@ ifeq ($(OS)$(COM),WNTMSC)
 
 $(call gb_ExternalProject_get_state_target,postgresql,build) :
 	cd $(EXTERNAL_WORKDIR)/src \
-	&& nmake -f win32.mk USE_SSL=1 USE_LDAP=1 USE_MICROSOFT_LDAP=1 \
+	&& unset MAKEFLAGS \
+	&& nmake -f win32.mak USE_SSL=1 USE_LDAP=1 \
 	&& touch $@
 else
 
