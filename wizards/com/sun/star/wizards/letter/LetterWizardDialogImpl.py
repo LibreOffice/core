@@ -395,11 +395,9 @@ class LetterWizardDialogImpl(LetterWizardDialog):
             TextDocument.xTextDocument = \
                 self.myLetterDoc.loadAsPreview(
                     self.OfficialFiles.values()[selectedItemPos], False)
-            self.myLetterDoc.xTextDocument.lockControllers()
             self.initializeElements()
             self.setPossibleSenderData(True)
             self.setElements(False)
-            self.myLetterDoc.xTextDocument.unlockControllers()
 
     def lstPrivateStyleItemChanged(self):
         selectedItemPos = self.lstPrivateStyle.SelectedItemPos
@@ -408,10 +406,8 @@ class LetterWizardDialogImpl(LetterWizardDialog):
             TextDocument.xTextDocument = \
                 self.myLetterDoc.loadAsPreview(
                     self.PrivateFiles.values()[selectedItemPos], False)
-            self.myLetterDoc.xTextDocument.lockControllers()
             self.initializeElements()
             self.setElements(True)
-            self.myLetterDoc.xTextDocument.unlockControllers()
 
     def numLogoHeightTextChanged(self):
         self.BusCompanyLogo.iHeight = int(self.numLogoHeight.Value * 1000)
