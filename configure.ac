@@ -12242,7 +12242,7 @@ AC_SUBST(GIT_NEEDED_SUBMODULES)
 PathFormat "$SRC_ROOT/translations"
 L10N_MODULE="$formatted_path"
 WITH_POOR_HELP_LOCALIZATIONS=
-if test -d "./translations"; then
+if test -d "./translations/source"; then
     for l in `ls -1 translations/source`; do
         if test ! -d translations/source/$l/helpcontent2; then
             WITH_POOR_HELP_LOCALIZATIONS="$WITH_POOR_HELP_LOCALIZATIONS $l"
