@@ -272,6 +272,12 @@ namespace cmis
                 m_pSession = libcmis::SessionFactory::createSession(
                         OUSTR_TO_STDSTR( m_aURL.getBindingUrl( ) ),
                         rUsername, rPassword, OUSTR_TO_STDSTR( m_aURL.getRepositoryId( ) ) );
+                if ( m_pSession == NULL )
+                    ucbhelper::cancelCommandExecution(
+                                        ucb::IOErrorCode_INVALID_DEVICE,
+                                        uno::Sequence< uno::Any >( 0 ),
+                                        xEnv,
+                                        rtl::OUString( ) );
                 m_pProvider->registerSession( sSessionId, m_pSession );
             }
             else
