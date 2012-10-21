@@ -2534,8 +2534,7 @@ AutoRecovery::ETimerType AutoRecovery::implts_openDocs(const DispatchParams& aPa
             rInfo.DocumentState |= AutoRecovery::E_TRY_LOAD_BACKUP;
             lDescriptor[::comphelper::MediaDescriptor::PROP_SALVAGEDFILE()] <<= sLoadOriginalURL;
         }
-        else
-        if (!sLoadOriginalURL.isEmpty())
+        else if (!sLoadOriginalURL.isEmpty())
         {
             sURL = sLoadOriginalURL;
             rInfo.DocumentState |= AutoRecovery::E_TRY_LOAD_ORIGINAL;
@@ -2780,8 +2779,7 @@ void AutoRecovery::implts_generateNewTempURL(const ::rtl::OUString&             
         xParser->parseStrict(aURL);
         sUniqueName.append(aURL.Name);
     }
-    else
-    if (!rInfo.FactoryURL.isEmpty())
+    else if (!rInfo.FactoryURL.isEmpty())
         sUniqueName.appendAscii("untitled");
     sUniqueName.appendAscii("_");
 
@@ -3168,11 +3166,9 @@ void AutoRecovery::implts_backupWorkingEntry(const DispatchParams& aParams)
         // Prefer temp file. It contains the changes against the original document!
         if (!rInfo.OldTempURL.isEmpty())
             sSourceURL = rInfo.OldTempURL;
-        else
-        if (!rInfo.NewTempURL.isEmpty())
+        else if (!rInfo.NewTempURL.isEmpty())
             sSourceURL = rInfo.NewTempURL;
-        else
-        if (!rInfo.OrgURL.isEmpty())
+        else if (!rInfo.OrgURL.isEmpty())
             sSourceURL = rInfo.OrgURL;
         else
             continue; // nothing real to save! An unmodified but new created document.
