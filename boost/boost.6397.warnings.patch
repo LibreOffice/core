@@ -257,6 +257,72 @@
  
 --- misc/boost_1_44_0/boost/multi_array.hpp	2012-09-28 13:06:44.796521371 +0100
 +++ misc/build/boost_1_44_0/boost/multi_array.hpp	2012-09-28 13:07:25.119002500 +0100
+@@ -139,20 +139,20 @@
+ 
+   explicit multi_array() :
+     super_type((T*)initial_base_,c_storage_order(),
+-               /*index_bases=*/0, /*extents=*/0) {
++               /*index_bases=*/0, /*extents_=*/0) {
+     allocate_space(); 
+   }
+ 
+   template <class ExtentList>
+   explicit multi_array(
+-      ExtentList const& extents
++      ExtentList const& extents_
+ #ifdef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
+       , typename mpl::if_<
+       detail::multi_array::is_multi_array_impl<ExtentList>,
+       int&,int>::type* = 0
+ #endif
+       ) :
+-    super_type((T*)initial_base_,extents) {
++    super_type((T*)initial_base_,extents_) {
+     boost::function_requires<
+       detail::multi_array::CollectionConcept<ExtentList> >();
+     allocate_space();
+@@ -160,19 +160,19 @@
+ 
+     
+   template <class ExtentList>
+-  explicit multi_array(ExtentList const& extents,
++  explicit multi_array(ExtentList const& extents_,
+                        const general_storage_order<NumDims>& so) :
+-    super_type((T*)initial_base_,extents,so) {
++    super_type((T*)initial_base_,extents_,so) {
+     boost::function_requires<
+       detail::multi_array::CollectionConcept<ExtentList> >();
+     allocate_space();
+   }
+ 
+   template <class ExtentList>
+-  explicit multi_array(ExtentList const& extents,
++  explicit multi_array(ExtentList const& extents_,
+                        const general_storage_order<NumDims>& so,
+                        Allocator const& alloc) :
+-    super_type((T*)initial_base_,extents,so), allocator_(alloc) {
++    super_type((T*)initial_base_,extents_,so), allocator_(alloc) {
+     boost::function_requires<
+       detail::multi_array::CollectionConcept<ExtentList> >();
+     allocate_space();
+@@ -381,7 +381,7 @@
+ 
+ 
+   template <typename ExtentList>
+-  multi_array& resize(const ExtentList& extents) {
++  multi_array& resize(const ExtentList& extents_) {
+     boost::function_requires<
+       detail::multi_array::CollectionConcept<ExtentList> >();
+ 
+@@ -390,7 +390,7 @@
+ 
+     for (int i=0; i != NumDims; ++i) {
+       typedef typename gen_type::range range_type;
+-      ranges.ranges_[i] = range_type(0,extents[i]);
++      ranges.ranges_[i] = range_type(0,extents_[i]);
+     }
+     
+     return this->resize(ranges);
 @@ -423,9 +423,9 @@
      // Build index_gen objects to create views with the same shape
  
