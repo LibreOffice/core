@@ -196,6 +196,7 @@ my_components += \
     component/scripting/source/protocolhandler/protocolhandler \
     component/scripting/source/pyprov/mailmerge \
     component/wizards/com/sun/star/wizards/fax/fax \
+    component/wizards/com/sun/star/wizards/letter/letter \
     component/scripting/source/stringresource/stringresource \
     component/scripting/source/vbaevents/vbaevents \
     component/scripting/util/scriptframe \
@@ -301,7 +302,6 @@ my_components += \
     component/wizards/com/sun/star/wizards/form/form \
     component/connectivity/source/drivers/hsqldb/hsqldb \
     component/connectivity/source/drivers/jdbc/jdbc \
-    component/wizards/com/sun/star/wizards/letter/letter \
     component/wizards/com/sun/star/wizards/query/query \
     component/wizards/com/sun/star/wizards/report/report \
     component/wizards/com/sun/star/wizards/table/table \

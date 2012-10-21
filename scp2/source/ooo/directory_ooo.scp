@@ -109,6 +109,12 @@ Directory gid_Dir_Wizards_Fax
     DosName = "fax";
 End
 
+Directory gid_Dir_Wizards_Letter
+    Styles = (CREATE);
+    ParentID = gid_Dir_Wizards;
+    DosName = "letter";
+End
+
 Directory gid_Dir_Resource
     ParentID = gid_Brand_Dir_Program;
     DosName = "resource";

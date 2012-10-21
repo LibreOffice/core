@@ -494,6 +494,12 @@ File gid_File_Wizards_Fax
     Name = "fax.zip";
 End
 
+File gid_File_Wizards_Letter
+    Dir = gid_Dir_Wizards_Letter;
+    ARCHIVE_TXT_FILE_BODY;
+    Name = "letter.zip";
+End
+
 #endif
 #endif
 
