@@ -449,7 +449,7 @@ class FaxWizardDialogImpl(FaxWizardDialog):
     def lstBusinessStyleItemChanged(self):
         selectedItemPos = self.lstBusinessStyle.SelectedItemPos
         #avoid to load the same item again
-        if FaxWizardDialogImpl.lstBusinessStylePos is not selectedItemPos:
+        if FaxWizardDialogImpl.lstBusinessStylePos != selectedItemPos:
             FaxWizardDialogImpl.lstBusinessStylePos = selectedItemPos
             TextDocument.xTextDocument = self.myFaxDoc.loadAsPreview(
                 self.BusinessFiles.values()[selectedItemPos], False)
@@ -474,7 +474,7 @@ class FaxWizardDialogImpl(FaxWizardDialog):
     def lstPrivateStyleItemChanged(self):
         selectedItemPos = self.lstPrivateStyle.SelectedItemPos
         #avoid to load the same item again
-        if FaxWizardDialogImpl.lstPrivateStylePos is not selectedItemPos:
+        if FaxWizardDialogImpl.lstPrivateStylePos != selectedItemPos:
             FaxWizardDialogImpl.lstPrivateStylePos = selectedItemPos
             TextDocument.xTextDocument = self.myFaxDoc.loadAsPreview(
                 self.PrivateFiles.values()[selectedItemPos], False)
