@@ -1,2 +1,2 @@
-fa     fileaccess      : comphelper unotools DESKTOP:rdbmaker tools ucbhelper LIBXSLT:libxslt NULL
+fa     fileaccess      : comphelper unotools tools ucbhelper LIBXSLT:libxslt NULL
 fa     fileaccess\prj                                                  nmake   -       all     fa_prj NULL

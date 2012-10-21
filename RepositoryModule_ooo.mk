@@ -127,7 +127,6 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
 	$(if $(strip $(OOO_JUNIT_JAR)),\
 		qadevOOo \
 	) \
-	$(call gb_Helper_optional,DESKTOP,rdbmaker) \
 	readlicense_oo \
     regexp \
     registry \

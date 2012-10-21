@@ -116,7 +116,6 @@ $(eval $(call gb_Module_add_moduledirs,tail_end,\
 	psprint_config \
 	$(call gb_Helper_optional,PYUNO,pyuno) \
 	$(call gb_Helper_optional,QADEVOOO,qadevOOo) \
-	$(call gb_Helper_optional,DESKTOP,rdbmaker) \
 	readlicense_oo \
 	regexp \
 	registry \

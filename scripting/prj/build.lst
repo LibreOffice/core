@@ -1,2 +1,2 @@
-tc	scripting	:	filter oovbaapi vbahelper bridges DESKTOP:rdbmaker vcl xmlscript basic sfx2 RHINO:rhino BSH:beanshell javaunohelper LIBXSLT:libxslt NULL
+tc	scripting	:	filter oovbaapi vbahelper bridges vcl xmlscript basic sfx2 RHINO:rhino BSH:beanshell javaunohelper LIBXSLT:libxslt NULL
 tc	scripting\prj						nmake	-	all	tc1_prj NULL

@@ -1,2 +1,2 @@
-fp	fpicker	: LIBXSLT:libxslt TRANSLATIONS:translations DESKTOP:rdbmaker svtools ucb NULL
+fp	fpicker	: LIBXSLT:libxslt TRANSLATIONS:translations svtools ucb NULL
 fp	fpicker\prj			nmake	-	all	fp_prj NULL
