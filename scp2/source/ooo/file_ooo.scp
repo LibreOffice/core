@@ -430,7 +430,6 @@ End
 #ifdef SOLAR_JAVA
 STD_JAR_FILE( gid_File_Jar_Report, report )
 STD_JAR_FILE( gid_File_Jar_Table, table )
-STD_JAR_FILE( gid_File_Jar_Letter, letter )
 STD_JAR_FILE( gid_File_Jar_Form, form )
 STD_JAR_FILE( gid_File_Jar_Agenda, agenda )
 STD_JAR_FILE( gid_File_Jar_Query, query )

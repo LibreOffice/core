@@ -57,7 +57,6 @@ $(eval $(call gb_Module_add_targets,wizards,\
 	Jar_commonwizards \
 	Jar_agenda \
 	Jar_form \
-	Jar_letter \
 	Jar_query \
 	Jar_report \
 	Jar_reportbuilder \
