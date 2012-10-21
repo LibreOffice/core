@@ -384,12 +384,10 @@ class LetterWizardDialogImpl(LetterWizardDialog):
             TextDocument.xTextDocument = \
                 self.myLetterDoc.loadAsPreview(
                     self.BusinessFiles.values()[selectedItemPos], False)
-            self.myLetterDoc.xTextDocument.lockControllers()
             self.initializeElements()
             self.chkBusinessPaperItemChanged()
             self.setElements(False)
-            self.myLetterDoc.xTextDocument.unlockControllers()
-
+            
     def lstPrivOfficialStyleItemChanged(self):
         selectedItemPos = self.lstPrivOfficialStyle.SelectedItemPos
         if LetterWizardDialogImpl.lstPrivOfficialStylePos != selectedItemPos:
