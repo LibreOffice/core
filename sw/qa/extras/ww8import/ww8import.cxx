@@ -50,30 +50,35 @@ public:
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
-    CPPUNIT_TEST(testN757910);
-    CPPUNIT_TEST(testN760294);
-    CPPUNIT_TEST(testN750255);
-    CPPUNIT_TEST(testN652364);
-    CPPUNIT_TEST(testN757118);
-    CPPUNIT_TEST(testN757905);
-    CPPUNIT_TEST(testAllGapsWord);
+    CPPUNIT_TEST(run);
 #endif
     CPPUNIT_TEST_SUITE_END();
 
 private:
-    /// Load a WW8 file and make the document available via mxComponent.
-    void load(const OUString& rURL);
+    void run();
 };
 
-void Test::load(const OUString& rFilename)
+void Test::run()
 {
-    mxComponent = loadFromDesktop(getURLFromSrc("/sw/qa/extras/ww8import/data/") + rFilename);
+    MethodEntry<Test> aMethods[] = {
+        {"n757910.doc", &Test::testN757910},
+        {"n760294.doc", &Test::testN760294},
+        {"n750255.doc", &Test::testN750255},
+        {"n652364.doc", &Test::testN652364},
+        {"n757118.doc", &Test::testN757118},
+        {"n757905.doc", &Test::testN757905},
+        {"all_gaps_word.doc", &Test::testAllGapsWord},
+    };
+    for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
+    {
+        MethodEntry<Test>& rEntry = aMethods[i];
+        mxComponent = loadFromDesktop(getURLFromSrc("/sw/qa/extras/ww8import/data/") + OUString::createFromAscii(rEntry.pName));
+        (this->*rEntry.pMethod)();
+    }
 }
 
 void Test::testN757910()
 {
-    load("n757910.doc");
-
     // The internal margin was larger than 0.28cm
     uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xIndexAccess(xTextFramesSupplier->getTextFrames(), uno::UNO_QUERY);
@@ -90,8 +95,6 @@ void Test::testN757910()
 
 void Test::testN760294()
 {
-    load("n760294.doc");
-
     uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xIndexAccess(xTextTablesSupplier->getTextTables(), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xTable(xIndexAccess->getByIndex(0), uno::UNO_QUERY);
@@ -103,8 +106,6 @@ void Test::testN760294()
 
 void Test::testN750255()
 {
-    load( "n750255.doc" );
-
 /*
 Column break without columns on the page is a page break, so check those paragraphs
 are on page 2 (page style 'Convert 1') and page 3 (page style 'Convert 2')
@@ -142,8 +143,6 @@ xray para2.PageStyleName
 
 void Test::testN652364()
 {
-    load( "n652364.doc" );
-
 /*
 Related to 750255 above, column break with columns on the page however should be a column break.
 enum = ThisComponent.Text.createEnumeration
@@ -181,7 +180,6 @@ xray para2.PageStyleName
 
 void Test::testN757118()
 {
-    load( "n757118.doc" );
 /*
 Two pairs of horizontal rules (one absolute width, one relative width)
 have the same width (full page width, half page width).
@@ -216,15 +214,12 @@ void Test::testN757905()
     // paragraph height. When in Word-compat mode, we should take the max of
     // the two, not just the height of the fly.
 
-    load("n757905.doc");
-
     OUString aHeight = parseDump("/root/page/body/txt/infos/bounds", "height");
     CPPUNIT_ASSERT(sal_Int32(31) < aHeight.toInt32());
 }
 
 void Test::testAllGapsWord()
 {
-    load("all_gaps_word.doc");
     BorderTest borderTest;
     borderTest.testTheBorders(mxComponent);
 }
