@@ -3448,7 +3448,6 @@ sal_Bool GtkSalGraphics::NWPaintGTKSlider(
                          : GTK_WIDGET(gWidgetData[m_nXScreen].gVScale);
     const gchar* pDetail = (nPart == PART_TRACK_HORZ_AREA) ? "hscale" : "vscale";
     GtkOrientation eOri = (nPart == PART_TRACK_HORZ_AREA) ? GTK_ORIENTATION_HORIZONTAL : GTK_ORIENTATION_VERTICAL;
-    GtkStateType eState = (nState & CTRL_STATE_ENABLED) ? GTK_STATE_ACTIVE : GTK_STATE_INSENSITIVE;
     gint slider_width = 10;
     gint slider_length = 10;
     gint trough_border = 0;
@@ -3458,7 +3457,7 @@ sal_Bool GtkSalGraphics::NWPaintGTKSlider(
                           "trough-border", &trough_border,
                           NULL);
 
-    eState = (nState & CTRL_STATE_ENABLED) ? GTK_STATE_NORMAL : GTK_STATE_INSENSITIVE;
+    GtkStateType eState = (nState & CTRL_STATE_ENABLED) ? GTK_STATE_NORMAL : GTK_STATE_INSENSITIVE;
     if( nPart == PART_TRACK_HORZ_AREA )
     {
         gtk_paint_box( pWidget->style,
