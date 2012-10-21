@@ -513,7 +513,6 @@ $(eval $(call gb_Library_add_exception_objects,sd,\
 
 ifeq ($(ENABLE_SDREMOTE),YES)
 $(eval $(call gb_Library_add_exception_objects,sd,\
-    sd/source/ui/remotecontrol/BluetoothServer \
     sd/source/ui/remotecontrol/BufferedStreamSocket \
     sd/source/ui/remotecontrol/Communicator \
     sd/source/ui/remotecontrol/DiscoveryService \
@@ -527,6 +526,16 @@ $(eval $(call gb_Library_add_exception_objects,sd,\
 $(eval $(call gb_Library_add_defs,sd,\
     -DENABLE_SDREMOTE \
 ))
+
+ifeq ($(ENABLE_BLUETOOTH),YES)
+$(eval $(call gb_Library_add_exception_objects,sd,\
+    sd/source/ui/remotecontrol/BluetoothServer \
+))
+
+$(eval $(call gb_Library_add_defs,sd,\
+    -DENABLE_BLUETOOTH \
+))
+endif
 
 endif
 

@@ -879,9 +879,14 @@ AC_ARG_ENABLE(packagekit,
 
 AC_ARG_ENABLE(sdremote,
     AS_HELP_STRING([--disable-sdremote],
-        [Determines whether to enable Impress remote control.
-         Uses dbus and bluetooth (bluez).]),
+        [Determines whether to enable Impress remote control.]),
 ,enable_sdremote=yes)
+
+AC_ARG_ENABLE(bluetooth,
+    AS_HELP_STRING([--disable-bluetooth],
+        [Determines whether to build sdremote sith bluetooth support
+        (via dbus)]),
+,enable_bluetooth=yes)
 
 AC_ARG_ENABLE(gconf,
     AS_HELP_STRING([--disable-gconf],
@@ -9597,32 +9602,42 @@ fi
 AC_SUBST(ENABLE_PACKAGEKIT)
 
 AC_MSG_CHECKING([whether to enable sd remotecontrol])
-if test "$ENABLE_DBUS" = "TRUE"; then
-    if test -n "$enable_sdremote" -a "$enable_sdremote" != "no"; then
-        AC_MSG_RESULT([yes])
-        ENABLE_SDREMOTE=YES
+if test -n "$enable_sdremote" -a "$enable_sdremote" != "no"; then
+    AC_MSG_RESULT([yes])
+    ENABLE_SDREMOTE=YES
+    AC_MSG_CHECKING([whether to enable bluetooth support])
+    if test -n "$enable_bluetooth" -a "$enable_bluetooth" != "no"; then
+	AC_MSG_RESULT([yes])
+        ENABLE_BLUETOOTH=YES
         if test "$OS" = "LINUX"; then
-            dnl ===================================================================
-            dnl Check for system bluez
-            dnl ===================================================================
-            AC_MSG_CHECKING([which bluetooth header to use])
-            if test "$with_system_bluez" = "yes"; then
+            if test "$ENABLE_DBUS" = "TRUE"; then
+                dnl ===================================================================
+                dnl Check for system bluez
+                dnl ===================================================================
+                AC_MSG_CHECKING([which bluetooth header to use])
+                if test "$with_system_bluez" = "yes"; then
                     AC_MSG_RESULT([external])
                     AC_CHECK_HEADER(bluetooth/bluetooth.h, [],
                         [AC_MSG_ERROR(bluetooth.h not found. install bluez)], [])
-            else
+                else
                     AC_MSG_RESULT([internal])
                     BUILD_TYPE="$BUILD_TYPE BLUEZ"
+                fi
             fi
+        else
+            AC_MSG_RESULT([no, dbus disabled])
+            ENABLE_BLUETOOTH=NO
         fi
     else
-        ENABLE_SDREMOTE=NO
-        AC_MSG_RESULT([no])
+	AC_MSG_RESULT([no])
+        ENABLE_BLUETOOTH=NO
     fi
 else
-        AC_MSG_RESULT([no, dbus disabled.])
+    ENABLE_SDREMOTE=NO
+    AC_MSG_RESULT([no])
 fi
 AC_SUBST(ENABLE_SDREMOTE)
+AC_SUBST(ENABLE_BLUETOOTH)
 
 dnl ===================================================================
 dnl Check whether the gtk 2.0 libraries are available.
