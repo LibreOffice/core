@@ -1350,22 +1350,19 @@ RTLFUNC(Right)
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
     else
     {
-        const String& rStr = rPar.Get(1)->GetString();
-        sal_Int32 lResultLen = rPar.Get(2)->GetLong();
-        if( lResultLen > 0xffff )
+        const OUString& rStr = rPar.Get(1)->GetOUString();
+        int nResultLen = rPar.Get(2)->GetLong();
+        if( nResultLen < 0 )
         {
-            lResultLen = 0xffff;
-        }
-        else if( lResultLen < 0 )
-        {
-            lResultLen = 0;
+            nResultLen = 0;
             StarBASIC::Error( SbERR_BAD_ARGUMENT );
         }
-        sal_uInt16 nResultLen = (sal_uInt16)lResultLen;
-        sal_uInt16 nStrLen = rStr.Len();
+        int nStrLen = rStr.getLength();
         if ( nResultLen > nStrLen )
+        {
             nResultLen = nStrLen;
-        String aResultStr = rStr.Copy( nStrLen-nResultLen );
+        }
+        OUString aResultStr = rStr.copy( nStrLen - nResultLen );
         rPar.Get(0)->PutString( aResultStr );
     }
 }
