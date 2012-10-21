@@ -390,7 +390,7 @@
     <node oor:name="Wizard">
       <node oor:name="m0" oor:op="replace" install:module="writer">
         <prop oor:name="URL"  oor:type="xs:string">
-          <value >service:com.sun.star.wizards.letter.CallWizard?start</value>
+          <value >service:com.sun.star.wizards.letter.CallWizard?insert</value>
         </prop>
         <prop oor:name="Title">
           <value xml:lang="en-US">~Letter...</value>
