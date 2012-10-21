@@ -105,8 +105,8 @@ void ScFormulaReferenceHelper::enableInput( bool bEnable )
                         Window *pParent=pWin->GetParent();
                         if(pParent)
                         {
-                            pParent->EnableInput(bEnable,true /* sal_False */);
-                            if(true /*bChildren*/)
+                            pParent->EnableInput(bEnable,true);
+                            if(true)
                                 pViewSh->EnableRefInput(bEnable);
                         }
                     }
@@ -181,7 +181,7 @@ bool ScFormulaReferenceHelper::ParseWithNames( ScRangeList& rRanges, const Strin
 // -----------------------------------------------------------------------------
 void ScFormulaReferenceHelper::ShowFormulaReference( const XubString& rStr )
 {
-    if( /*!pRefEdit &&*/ bEnableColorRef)
+    if( bEnableColorRef)
     {
         bHighLightRef=true;
         ScViewData* pViewData=ScDocShell::GetViewData();
@@ -244,7 +244,7 @@ void ScFormulaReferenceHelper::HideReference( bool bDoneRefMode )
 {
     ScViewData* pViewData=ScDocShell::GetViewData();
 
-    if( pViewData && /*!pRefEdit &&*/ bHighLightRef && bEnableColorRef)
+    if( pViewData && bHighLightRef && bEnableColorRef)
     {
         ScTabViewShell* pTabViewShell=pViewData->GetViewShell();
 
@@ -263,7 +263,7 @@ void ScFormulaReferenceHelper::HideReference( bool bDoneRefMode )
 // -----------------------------------------------------------------------------
 void ScFormulaReferenceHelper::ShowReference( const XubString& rStr )
 {
-    if( /*!pRefEdit &&*/ bEnableColorRef )
+    if( bEnableColorRef )
     {
         if( rStr.Search('(')!=STRING_NOTFOUND ||
             rStr.Search('+')!=STRING_NOTFOUND ||
@@ -574,7 +574,7 @@ void ScFormulaReferenceHelper::SetDispatcherLock( bool bLock )
     //  for that view (ScTabViewShell::CreateRefDialog)
 }
 // -----------------------------------------------------------------------------
-void ScFormulaReferenceHelper::ViewShellChanged(ScTabViewShell* /* pScViewShell */)
+void ScFormulaReferenceHelper::ViewShellChanged()
 {
     enableInput( false );
 
@@ -669,16 +669,14 @@ static void lcl_HideAllReferences()
 //  class ScRefHandler
 //----------------------------------------------------------------------------
 
-ScRefHandler::ScRefHandler( Window &rWindow, SfxBindings* pB/*, SfxChildWindow* pCW,
-                          Window* pParent, sal_uInt16 nResId*/, bool bBindRef )
-    :   //SfxModelessDialog ( pB, pCW, pParent, ScResId( nResId ) ),
+ScRefHandler::ScRefHandler( Window &rWindow, SfxBindings* pB, bool bBindRef ):
         m_rWindow( rWindow ),
         m_bInRefMode( false ),
         m_aHelper(this,pB),
         pMyBindings( pB ),
         pActiveWin(NULL)
 {
-    m_aHelper.SetWindow(/*this*/&m_rWindow);
+    m_aHelper.SetWindow(&m_rWindow);
     if(m_rWindow.GetHelpId().isEmpty())                //Hack, da im SfxModelessDialog die HelpId
         m_rWindow.SetHelpId(m_rWindow.GetUniqueId());   //fuer einen ModelessDialog entfernt und
                                     //in eine UniqueId gewandelt wird, machen
@@ -833,7 +831,7 @@ void ScRefHandler::SetDispatcherLock( bool bLock )
 
 void ScRefHandler::ViewShellChanged()
 {
-    m_aHelper.ViewShellChanged(pScViewShell);
+    m_aHelper.ViewShellChanged();
 }
 
 //----------------------------------------------------------------------------

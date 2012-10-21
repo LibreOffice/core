@@ -53,7 +53,7 @@ public:
     virtual sal_Bool IsDocAllowed( SfxObjectShell* pDocSh ) const = 0;
     virtual void AddRefEntry() = 0;
     virtual void SetActive() = 0;
-    virtual void ViewShellChanged( ScTabViewShell* pScViewShell ) = 0;
+    virtual void ViewShellChanged() = 0;
 };
 
 #endif // SC_IANYREFDIALOG_HXX_INCLUDED

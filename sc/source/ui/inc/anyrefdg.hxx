@@ -98,7 +98,7 @@ public:
     bool                DoClose( sal_uInt16 nId );
     void                SetDispatcherLock( bool bLock );
     void                EnableSpreadsheets( bool bFlag = true, bool bChildren = true );
-    void                ViewShellChanged( ScTabViewShell* pScViewShell );
+    void                ViewShellChanged();
 
     static              void enableInput(bool _bInput);
 
@@ -112,7 +112,7 @@ public:
 
 //============================================================================
 
-class SC_DLLPUBLIC ScRefHandler : //public SfxModelessDialog,
+class SC_DLLPUBLIC ScRefHandler :
                     public IAnyRefDialog
 {
     Window &    m_rWindow;
@@ -141,9 +141,6 @@ protected:
 
     void                SetDispatcherLock( bool bLock );
 
-    //Overwrite TWindow will implemented by ScRefHdlrImplBase
-    //virtual long        PreNotify( NotifyEvent& rNEvt );
-
     virtual void        RefInputStart( formula::RefEdit* pEdit, formula::RefButton* pButton = NULL );
     virtual void        RefInputDone( sal_Bool bForced = false );
     void                ShowSimpleReference( const XubString& rStr );
@@ -155,8 +152,7 @@ protected:
     void stateChanged(const StateChangedType nStateChange, const bool bBindRef);
 
 public:
-                        ScRefHandler( Window &rWindow, SfxBindings* pB/*, SfxChildWindow* pCW,
-                                     Window* pParent, sal_uInt16 nResId*/, bool bBindRef );
+                        ScRefHandler( Window &rWindow, SfxBindings* pB, bool bBindRef );
     virtual             ~ScRefHandler();
 
     virtual void        SetReference( const ScRange& rRef, ScDocument* pDoc ) = 0;
@@ -172,14 +168,10 @@ public:
     virtual void        ToggleCollapsed( formula::RefEdit* pEdit, formula::RefButton* pButton = NULL );
     virtual void        ReleaseFocus( formula::RefEdit* pEdit, formula::RefButton* pButton = NULL );
 
-    virtual void        ViewShellChanged( ScTabViewShell* pScViewShell );
+    virtual void        ViewShellChanged();
     void                SwitchToDocument();
-    //SfxBindings&        GetBindings();
 
     virtual void        SetActive() = 0;
-//  virtual sal_Bool        Close();
-    //Overwrite TWindow will implemented by ScRefHdlrImplBase
-    //virtual void        StateChanged( StateChangedType nStateChange );
 
 public:
     bool                EnterRefMode();
@@ -207,7 +199,6 @@ template<  class TWindow, bool bBindRef = true >
 class ScRefHdlrImplBase: public TWindow, public ScRefHandler
 {
 public:
-    //Overwrite TWindow
     virtual long        PreNotify( NotifyEvent& rNEvt );
     virtual void        StateChanged( StateChangedType nStateChange );
 
@@ -231,7 +222,7 @@ ScRefHdlrImplBase<TWindow, bBindRef>::ScRefHdlrImplBase( TBindings* pB, TChildWi
 
 template<class TWindow, bool bBindRef >
 template<class TParentWindow, class TResId, class TArg>
-ScRefHdlrImplBase<TWindow,bBindRef>::ScRefHdlrImplBase( TParentWindow* pParent, TResId nResIdP, const TArg &rArg, SfxBindings *pB /*= NULL*/ )
+ScRefHdlrImplBase<TWindow,bBindRef>::ScRefHdlrImplBase( TParentWindow* pParent, TResId nResIdP, const TArg &rArg, SfxBindings *pB )
 :TWindow( pParent, ScResId(static_cast<sal_uInt16>( nResIdP )), rArg ), ScRefHandler( *static_cast<TWindow*>(this), pB, bBindRef ){}
 
 template<class TWindow, bool bBindRef >
