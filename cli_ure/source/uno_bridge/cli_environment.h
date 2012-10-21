@@ -40,8 +40,6 @@ public ref class Cli_environment
     int _numRegisteredObjects;
 #endif
 
-public:
-
     static Cli_environment()
     {
         m_objects = Hashtable::Synchronized(gcnew Hashtable());
@@ -52,6 +50,8 @@ public:
         buffer->Append(gd.ToString());
         sOidPart = buffer->ToString();
     }
+
+public:
 
     inline Cli_environment();
 

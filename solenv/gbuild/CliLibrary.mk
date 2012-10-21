@@ -41,6 +41,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(CLI_CSCFLAGS) \
 		-target:library \
 		-out:$(1) \
+		-keyfile:$(call gb_Helper_windows_path,$(CLI_KEYFILE)) \
 		-reference:System.dll \
 		$(foreach assembly,$(CLI_ASSEMBLIES),-reference:$(assembly)) \
 		$(CLI_SOURCES) \
@@ -71,6 +72,7 @@ define gb_CliLibraryTarget_CliLibraryTarget
 $(call gb_CliLibraryTarget_get_target,$(1)) : CLI_ASSEMBLIES :=
 $(call gb_CliLibraryTarget_get_target,$(1)) : CLI_SOURCES :=
 $(call gb_CliLibraryTarget_get_target,$(1)) : CLI_CSCFLAGS :=
+$(call gb_CliLibraryTarget_get_target,$(1)) : CLI_KEYFILE :=
 
 $(call gb_CliLibraryTarget_get_target,$(1)) :| $(dir $(call gb_CliLibraryTarget_get_target,$(1))).dir
 
@@ -148,6 +150,7 @@ $(call gb_CliAssembly_set_configfile,$(1),$(2))
 endef
 
 define gb_CliLibrary_set_keyfile
+$(call gb_CliLibraryTarget_get_target,$(1)) : CLI_KEYFILE := $(2)
 $(call gb_CliAssembly_set_keyfile,$(1),$(2))
 
 endef

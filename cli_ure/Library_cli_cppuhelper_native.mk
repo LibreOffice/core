@@ -7,6 +7,8 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
+include $(SRCDIR)/cli_ure/version/version.txt
+
 $(eval $(call gb_Library_Assembly,cli_cppuhelper_native))
 
 # When compiling for CLR, disable "warning C4339: use of undefined type detected
@@ -15,6 +17,11 @@ $(eval $(call gb_Library_add_cxxflags,cli_cppuhelper_native,\
 	-AI $(gb_Helper_OUTDIRLIBDIR) \
 	-clr \
 	-wd4339 \
+))
+
+$(eval $(call gb_Library_add_ldflags,cli_cppuhelper_native,\
+	-ignore:4248 \
+	-keyfile:$(call gb_Helper_windows_path,$(SRCDIR)/cli_ure/source/cliuno.snk) \
 ))
 
 # TODO do not encode filenames here

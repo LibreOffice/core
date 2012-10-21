@@ -67,8 +67,8 @@ struct Bridge
     ~Bridge() SAL_THROW(());
     Bridge( uno_Environment * java_env, uno_ExtEnvironment * uno_env, bool registered_java2uno );
 
-    void acquire() const;
-    void release() const;
+    void acquire() const SAL_THROW(());
+    void release() const SAL_THROW(());
 
     void  map_to_uno(
         void * uno_data, System::Object^ cli_data,
