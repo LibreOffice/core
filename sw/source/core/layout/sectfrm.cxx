@@ -612,9 +612,9 @@ static SwCntntFrm* lcl_GetNextCntntFrm( const SwLayoutFrm* pLay, bool bFwd )
     sal_Bool bGoingUp = sal_True;
     do {
         const SwFrm *p = 0;
-        sal_Bool bGoingFwdOrBwd = sal_False, bGoingDown = sal_False;
+        sal_Bool bGoingFwdOrBwd = sal_False;
 
-        bGoingDown = !bGoingUp && ( 0 !=  ( p = pFrm->IsLayoutFrm() ? ((SwLayoutFrm*)pFrm)->Lower() : 0 ) );
+        sal_Bool bGoingDown = !bGoingUp && ( 0 !=  ( p = pFrm->IsLayoutFrm() ? ((SwLayoutFrm*)pFrm)->Lower() : 0 ) );
         if ( !bGoingDown )
         {
             bGoingFwdOrBwd = ( 0 != ( p = pFrm->IsFlyFrm() ?

@@ -5524,10 +5524,9 @@ SwTwips SwTabFrm::CalcHeightOfFirstContentLine() const
         return (Frm().*fnRect->fnGetHeight)();
     }
 
-    SwRowFrm* pFirstRow = 0;
     SwTwips nTmpHeight = 0;
 
-    pFirstRow = GetFirstNonHeadlineRow();
+    SwRowFrm* pFirstRow = GetFirstNonHeadlineRow();
     OSL_ENSURE( !IsFollow() || pFirstRow, "FollowTable without Lower" );
 
     // NEW TABLES
