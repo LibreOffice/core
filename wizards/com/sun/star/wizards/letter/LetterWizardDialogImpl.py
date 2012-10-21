@@ -31,6 +31,7 @@ from ..ui.event.RadioDataAware import RadioDataAware
 from ..text.TextDocument import TextDocument
 from ..text.ViewHandler import ViewHandler
 from ..text.TextFieldHandler import TextFieldHandler
+from ..document.OfficeDocument import OfficeDocument
 
 from com.sun.star.awt.VclWindowPeerAttribute import YES_NO, DEF_NO
 from com.sun.star.uno import RuntimeException
