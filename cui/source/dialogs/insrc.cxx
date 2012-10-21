@@ -25,30 +25,23 @@
 
 bool SvxInsRowColDlg::isInsertBefore() const
 {
-    return !aAfterBtn.IsChecked();
+    return !m_pAfterBtn->IsChecked();
 }
 
 sal_uInt16 SvxInsRowColDlg::getInsertCount() const
 {
-    return static_cast< sal_uInt16 >( aCountEdit.GetValue() );
+    return static_cast< sal_uInt16 >( m_pCountEdit->GetValue() );
 }
 
 SvxInsRowColDlg::SvxInsRowColDlg(Window* pParent, bool bCol, const rtl::OString& sHelpId )
-    : ModalDialog( pParent, CUI_RES(DLG_INS_ROW_COL) ),
-    aCount( this, CUI_RES( FT_COUNT ) ),
-    aCountEdit( this, CUI_RES( ED_COUNT ) ),
-    aInsFL( this, CUI_RES( FL_INS ) ),
-    aBeforeBtn( this, CUI_RES( CB_POS_BEFORE ) ),
-    aAfterBtn( this, CUI_RES( CB_POS_AFTER ) ),
-    aPosFL( this, CUI_RES( FL_POS ) ),
+    : ModalDialog( pParent, "insert_row_dialog", "cui/ui/insrc.ui" ),
     aRow(CUI_RESSTR(STR_ROW)),
     aCol(CUI_RESSTR(STR_COL)),
-    aOKBtn( this, CUI_RES( BT_OK ) ),
-    aCancelBtn( this, CUI_RES( BT_CANCEL ) ),
-    aHelpBtn( this, CUI_RES( BT_HELP ) ),
     bColumn( bCol )
 {
-    FreeResource();
+    get(m_pCountEdit, "insert_number");
+    get(m_pBeforeBtn, "insert_before");
+    get(m_pAfterBtn,  "insert_after");
     SetText( bColumn ? aCol : aRow );
     SetHelpId( sHelpId );
 }

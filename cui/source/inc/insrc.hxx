@@ -31,20 +31,13 @@
 
 class SvxInsRowColDlg : public SvxAbstractInsRowColDlg, public ModalDialog
 {
-    FixedText       aCount;
-    NumericField    aCountEdit;
-    FixedLine        aInsFL;
+    NumericField*   m_pCountEdit;
 
-    RadioButton     aBeforeBtn;
-    RadioButton     aAfterBtn;
-    FixedLine        aPosFL;
+    RadioButton*    m_pBeforeBtn;
+    RadioButton*    m_pAfterBtn;
 
     rtl::OUString   aRow;
     rtl::OUString   aCol;
-
-    OKButton        aOKBtn;
-    CancelButton    aCancelBtn;
-    HelpButton      aHelpBtn;
 
     bool            bColumn;
 
