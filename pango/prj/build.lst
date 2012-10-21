@@ -1,3 +1,3 @@
-pg	pango	: gettext glib soltools cairo NULL
+pg	pango	: GETTEXT:gettext GLIB:glib soltools CAIRO:cairo NULL
 pg	pango			    usr1	-	all	pg_mkout NULL
 pg	pango			    nmake	-	all	pg_pango NULL

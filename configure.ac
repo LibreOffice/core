@@ -11453,7 +11453,7 @@ dnl ===================================================================
 dnl Checks for librsvg
 dnl ===================================================================
 
-dnl ENABLE_LIBRSVG is set to "" (for NO), SYSTEM or INTERNAL. The
+dnl ENABLE_LIBRSVG is set to NO, SYSTEM or INTERNAL. The
 dnl SYSTEM_LIBRSVG, SYSTEM_GDKPIXBUF etc are redundant.
 
 dnl FIXME: RSVG is a hard dependency now as the impress masterpages use it
@@ -11626,33 +11626,36 @@ dnl ===================================================================
 dnl Test whether to build gdk-pixbuf or rely on the system version
 dnl ===================================================================
 
-AC_MSG_CHECKING([whether to use the system gdk-pixbuf])
+if test "$ENABLE_LIBRSVG" != NO; then
+    AC_MSG_CHECKING([whether to use the system gdk-pixbuf])
 
-dnl As long as the only thing we need gdk-pixbuf for is below
-dnl librsvg, use the same --enable-librsvg (possibly implied
-dnl by --with-system-libs) to override this.
+    dnl As long as the only thing we need gdk-pixbuf for is below
+    dnl librsvg, use the same --enable-librsvg (possibly implied
+    dnl by --with-system-libs) to override this.
 
-if test "$SYSTEM_LIBRSVG" = YES; then
-    SYSTEM_GDKPIXBUF=YES
-    AC_MSG_RESULT([yes])
-elif test "$enable_librsvg" = fully-internal; then
-    SYSTEM_GDKPIXBUF=NO
-    BUILD_TYPE="$BUILD_TYPE GDK_PIXBUF"
-    AC_MSG_RESULT([no])
-else
-    case "$_os" in
-    WINNT|Darwin|iOS|Android)
-        SYSTEM_GDKPIXBUF=NO
-        if test $_os != iOS -a $_os != Android; then
-            BUILD_TYPE="$BUILD_TYPE GDK_PIXBUF"
-        fi
-        AC_MSG_RESULT([no])
-        ;;
-    *)
+    if test "$SYSTEM_LIBRSVG" = YES; then
         SYSTEM_GDKPIXBUF=YES
+    elif test "$enable_librsvg" = fully-internal; then
+        SYSTEM_GDKPIXBUF=NO
+    else
+        case "$_os" in
+        WINNT|Darwin|iOS|Android)
+            SYSTEM_GDKPIXBUF=NO
+            ;;
+        *)
+            SYSTEM_GDKPIXBUF=YES
+            ;;
+        esac
+    fi
+
+    if test "$SYSTEM_GDKPIXBUF" = YES; then
         AC_MSG_RESULT([yes])
-        ;;
-    esac
+    else
+        AC_MSG_RESULT([no])
+        BUILD_TYPE="$BUILD_TYPE GDK_PIXBUF"
+    fi
+else
+    SYSTEM_GDKPIXBUF=NO
 fi
 AC_SUBST(SYSTEM_GDKPIXBUF)
 
@@ -11660,37 +11663,41 @@ dnl ===================================================================
 dnl Test whether to build GLib or rely on the system version
 dnl ===================================================================
 
-AC_MSG_CHECKING([whether to use the system GLib])
+if test "$ENABLE_LIBRSVG" != NO; then
+    AC_MSG_CHECKING([whether to use the system GLib])
 
-dnl As long as the only thing we need GLib for is below
-dnl librsvg, use the same --enable-librsvg (possibly implied
-dnl by --with-system-libs) to override this.
+    dnl As long as the only thing we need GLib for is below
+    dnl librsvg, use the same --enable-librsvg (possibly implied
+    dnl by --with-system-libs) to override this.
 
-if test "$SYSTEM_LIBRSVG" = YES; then
-    SYSTEM_GLIB=YES
-    AC_MSG_RESULT([yes])
-elif test "$enable_librsvg" = fully-internal; then
-    SYSTEM_GLIB=NO
-    AC_MSG_RESULT([no])
-else
-    case "$_os" in
-    WINNT|Darwin|iOS|Android)
-        SYSTEM_GLIB=NO
-        AC_MSG_RESULT([no])
-        ;;
-    *)
+    if test "$SYSTEM_LIBRSVG" = YES; then
         SYSTEM_GLIB=YES
+    elif test "$enable_librsvg" = fully-internal; then
+        SYSTEM_GLIB=NO
+    else
+        case "$_os" in
+        WINNT|Darwin|iOS|Android)
+            SYSTEM_GLIB=NO
+            ;;
+        *)
+            SYSTEM_GLIB=YES
+            ;;
+        esac
+    fi
+
+    if test "$SYSTEM_GLIB" = "YES"; then
         AC_MSG_RESULT([yes])
-        ;;
-    esac
+        PKG_CHECK_MODULES( GLIB, glib-2.0 )
+    else
+        AC_MSG_RESULT([no])
+        BUILD_TYPE="$BUILD_TYPE GLIB"
+    fi
+else
+    GLIB_CFLAGS=
+    GLIB_LIBS=
+    SYSTEM_GLIB=NO
 fi
 AC_SUBST(SYSTEM_GLIB)
-
-if test "$SYSTEM_GLIB" = "YES"; then
-    PKG_CHECK_MODULES( GLIB, glib-2.0 )
-elif test $_os != iOS -a $_os != Android; then
-    BUILD_TYPE="$BUILD_TYPE GLIB"
-fi
 AC_SUBST(GLIB_CFLAGS)
 AC_SUBST(GLIB_LIBS)
 
@@ -11744,7 +11751,11 @@ if test "$with_system_gettext" = yes; then
     AC_MSG_RESULT([yes])
 elif test "$with_system_gettext" = no; then
     SYSTEM_GETTEXT=NO
-    BUILD_TYPE="$BUILD_TYPE GETTEXT"
+    dnl gettext is only used by the librsvg stack, so let us not build
+    dnl it unless it is actually needed
+    if test "$ENABLE_LIBRSVG" != NO; then
+        BUILD_TYPE="$BUILD_TYPE GETTEXT"
+    fi
     AC_MSG_RESULT([no])
 else
     AC_MSG_ERROR([bad --with-system-gettext=$with_system_gettext])
@@ -11755,33 +11766,36 @@ dnl ===================================================================
 dnl Test whether to build libcroco or rely on the system version
 dnl ===================================================================
 
-AC_MSG_CHECKING([whether to use the system libcroco])
+if test "$ENABLE_LIBRSVG" != NO; then
+    AC_MSG_CHECKING([whether to use the system libcroco])
 
-dnl As long as the only thing we need libcroco for is below
-dnl librsvg, use the same --enable-librsvg (possibly implied
-dnl by --with-system-libs) to override this.
+    dnl As long as the only thing we need libcroco for is below
+    dnl librsvg, use the same --enable-librsvg (possibly implied
+    dnl by --with-system-libs) to override this.
 
-if test "$SYSTEM_LIBRSVG" = YES; then
-    SYSTEM_LIBCROCO=YES
-    AC_MSG_RESULT([yes])
-elif test "$enable_librsvg" = fully-internal; then
-    SYSTEM_LIBCROCO=NO
-    BUILD_TYPE="$BUILD_TYPE LIBCROCO"
-    AC_MSG_RESULT([no])
-else
-    case "$_os" in
-    WINNT|Darwin|iOS|Android)
-        SYSTEM_LIBCROCO=NO
-        if test $_os != iOS -a $_os != Android; then
-            BUILD_TYPE="$BUILD_TYPE LIBCROCO"
-        fi
-        AC_MSG_RESULT([no])
-        ;;
-    *)
+    if test "$SYSTEM_LIBRSVG" = YES; then
         SYSTEM_LIBCROCO=YES
+    elif test "$enable_librsvg" = fully-internal; then
+        SYSTEM_LIBCROCO=NO
+    else
+        case "$_os" in
+        WINNT|Darwin|iOS|Android)
+            SYSTEM_LIBCROCO=NO
+            ;;
+        *)
+            SYSTEM_LIBCROCO=YES
+            ;;
+        esac
+    fi
+
+    if test "$SYSTEM_LIBCROCO" = YES; then
         AC_MSG_RESULT([yes])
-        ;;
-    esac
+    else
+        AC_MSG_RESULT([no])
+        BUILD_TYPE="$BUILD_TYPE LIBCROCO"
+    fi
+else
+    SYSTEM_LIBCROCO=NO
 fi
 AC_SUBST(SYSTEM_LIBCROCO)
 
@@ -11789,33 +11803,36 @@ dnl ===================================================================
 dnl Test whether to build Pango or rely on the system version
 dnl ===================================================================
 
-AC_MSG_CHECKING([whether to use the system pango])
+if test "$ENABLE_LIBRSVG" != NO; then
+    AC_MSG_CHECKING([whether to use the system pango])
 
-dnl As long as the only thing we need Pango for is below
-dnl librsvg, use the same --enable-librsvg (possibly implied
-dnl by --with-system-libs) to override this.
+    dnl As long as the only thing we need Pango for is below
+    dnl librsvg, use the same --enable-librsvg (possibly implied
+    dnl by --with-system-libs) to override this.
 
-if test "$SYSTEM_LIBRSVG" = YES; then
-    SYSTEM_PANGO=YES
-    AC_MSG_RESULT([yes])
-elif test "$enable_librsvg" = fully-internal; then
-    SYSTEM_PANGO=NO
-    BUILD_TYPE="$BUILD_TYPE PANGO"
-    AC_MSG_RESULT([no])
-else
-    case "$_os" in
-    WINNT|Darwin|iOS|Android)
-        SYSTEM_PANGO=NO
-        if test $_os != iOS -a $_os != Android; then
-            BUILD_TYPE="$BUILD_TYPE PANGO"
-        fi
-        AC_MSG_RESULT([no])
-        ;;
-    *)
+    if test "$SYSTEM_LIBRSVG" = YES; then
         SYSTEM_PANGO=YES
+    elif test "$enable_librsvg" = fully-internal; then
+        SYSTEM_PANGO=NO
+    else
+        case "$_os" in
+        WINNT|Darwin|iOS|Android)
+            SYSTEM_PANGO=NO
+            ;;
+        *)
+            SYSTEM_PANGO=YES
+            ;;
+        esac
+    fi
+
+    if test "$SYSTEM_PANGO" = YES; then
         AC_MSG_RESULT([yes])
-        ;;
-    esac
+    else
+        AC_MSG_RESULT([no])
+        BUILD_TYPE="$BUILD_TYPE PANGO"
+    fi
+else
+    SYSTEM_PANGO=NO
 fi
 AC_SUBST(SYSTEM_PANGO)
 
@@ -11823,34 +11840,36 @@ dnl ===================================================================
 dnl Test whether to build libgsf or rely on the system version
 dnl ===================================================================
 
-AC_MSG_CHECKING([whether to use the system libgsf])
+if test "$ENABLE_LIBRSVG" != NO; then
+    AC_MSG_CHECKING([whether to use the system libgsf])
 
-dnl As long as the only thing we need libgsf for is below librsvg (is
-dnl it?), use the same --enable-librsvg (possibly implied by
-dnl --with-system-libs) to override this.
+    dnl As long as the only thing we need libgsf for is below librsvg (is
+    dnl it?), use the same --enable-librsvg (possibly implied by
+    dnl --with-system-libs) to override this.
 
-if test "$SYSTEM_LIBRSVG" = YES; then
-    SYSTEM_LIBGSF=YES
-    AC_MSG_RESULT([yes])
-elif test "$enable_librsvg" = fully-internal; then
-    SYSTEM_LIBGSF=NO
-    BUILD_TYPE="$BUILD_TYPE LIBGSF"
-	
-    AC_MSG_RESULT([no])
-else
-    case "$_os" in
-    WINNT|Darwin|iOS|Android)
-        SYSTEM_LIBGSF=NO
-        if test $_os != iOS -a $_os != Android; then
-            BUILD_TYPE="$BUILD_TYPE LIBGSF"
-        fi
-        AC_MSG_RESULT([no])
-        ;;
-    *)
+    if test "$SYSTEM_LIBRSVG" = YES; then
         SYSTEM_LIBGSF=YES
+    elif test "$enable_librsvg" = fully-internal; then
+        SYSTEM_LIBGSF=NO
+    else
+        case "$_os" in
+        WINNT|Darwin|iOS|Android)
+            SYSTEM_LIBGSF=NO
+            ;;
+        *)
+            SYSTEM_LIBGSF=YES
+            ;;
+        esac
+    fi
+
+    if test "$SYSTEM_LIBGSF" = YES; then
         AC_MSG_RESULT([yes])
-        ;;
-    esac
+    else
+        AC_MSG_RESULT([no])
+        BUILD_TYPE="$BUILD_TYPE LIBGSF"
+    fi
+else
+    SYSTEM_LIBGSF=NO
 fi
 AC_SUBST(SYSTEM_LIBGSF)
 

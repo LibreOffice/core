@@ -1,3 +1,3 @@
-gs	libgsf	: glib soltools NULL
+gs	libgsf	: GLIB:glib soltools NULL
 gs	libgsf			    usr1	-	all	gs_mkout NULL
 gs	libgsf			    nmake	-	all	gs_libgsf NULL

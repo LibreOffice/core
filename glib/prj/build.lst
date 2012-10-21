@@ -1,3 +1,3 @@
-gl	glib	: gettext ZLIB:zlib NULL
+gl	glib	: GETTEXT:gettext ZLIB:zlib NULL
 gl	glib			    usr1	-	all	gl_mkout NULL
 gl	glib			    nmake	-	all	gl_glib NULL
