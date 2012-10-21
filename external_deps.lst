@@ -199,10 +199,9 @@ if (SYSTEM_LIBXSLT != YES)
     URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
 
 if (SOLAR_JAVA == TRUE)
-    MD5 = 7e4e73c21f031d5a4c93c128baf7fd75
-    name = apache-tomcat-5.5.35-src.tar.gz
-    # This seems to be the original host, but the MD5 sum does not match.
-    # URL1 = http://<mirror>/tomcat/tomcat-5/v5.5.35/bin/apache-tomcat-5.5.35.tar.gz
+    MD5 = 63574e3ada44f473892a61a2da433a59
+    name = apache-tomcat-5.5.36-src.tar.gz
+    # URL1 = http://www.alliedquotes.com/mirrors/apache/tomcat/tomcat-5/v5.5.36/src/apache-tomcat-5.5.36-src.tar.gz
     URL2 = $(OOO_EXTRAS)$(MD5)-$(name)
 
 if (SOLAR_JAVA == TRUE)

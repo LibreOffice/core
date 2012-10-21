@@ -34,10 +34,10 @@ TARGET=servlet
 
 # --- Files --------------------------------------------------------
 
-TARFILE_NAME=apache-tomcat-5.5.35-src
-TARFILE_MD5=7e4e73c21f031d5a4c93c128baf7fd75
+TARFILE_NAME=apache-tomcat-5.5.36-src
+TARFILE_MD5=63574e3ada44f473892a61a2da433a59
 
-TARFILE_ROOTDIR=apache-tomcat-5.5.35-src
+TARFILE_ROOTDIR=apache-tomcat-5.5.36-src
 
 ADDITIONAL_FILES = servletapi/build.xml
 #CONVERTFILES=build$/build.xml
