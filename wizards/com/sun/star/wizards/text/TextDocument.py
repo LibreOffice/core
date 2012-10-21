@@ -172,38 +172,6 @@ class TextDocument(object):
         xTextCursor = oCursorContainer.createTextCursor()
         return xTextCursor
 
-    # Todo: This method is  unsecure because the last index is not necessarily the last section
-    # Todo: This Routine should be  modified, because I cannot rely on the last Table in the document to be the last in the TextTables sequence
-    # to make it really safe you must acquire the Tablenames before the insertion and after the insertion of the new Table. By comparing the
-    # two sequences of tablenames you can find out the tablename of the last inserted Table
-    # Todo: This method is  unsecure because the last index is not necessarily the last section
-
-    def getCharWidth(self, ScaleString):
-        iScale = 200
-        TextDocument.xTextDocument.lockControllers()
-        iScaleLen = ScaleString.length()
-        xTextCursor = createTextCursor(TextDocument.xTextDocument.Text)
-        xTextCursor.gotoStart(False)
-        com.sun.star.wizards.common.Helper.setUnoPropertyValue(
-            xTextCursor, "PageDescName", "First Page")
-        xTextCursor.String = ScaleString
-        xViewCursor = TextDocument.xTextDocument.CurrentController
-        xTextViewCursor = xViewCursor.ViewCursor
-        xTextViewCursor.gotoStart(False)
-        iFirstPos = xTextViewCursor.Position.X
-        xTextViewCursor.gotoEnd(False)
-        iLastPos = xTextViewCursor.Position.X
-        iScale = (iLastPos - iFirstPos) / iScaleLen
-        xTextCursor.gotoStart(False)
-        xTextCursor.gotoEnd(True)
-        xTextCursor.String = ""
-        unlockallControllers()
-        return iScale
-
-    def unlockallControllers(self):
-        while TextDocument.xTextDocument.hasControllersLocked():
-            TextDocument.xTextDocument.unlockControllers()
-
     def refresh(self):
         TextDocument.xTextDocument.refresh()
 
