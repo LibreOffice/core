@@ -121,6 +121,7 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
     package \
     packimages \
     padmin \
+    $(call gb_Helper_optional,POSTGRESQL,postgresql) \
     psprint_config \
 	$(call gb_Helper_optional,PYUNO,pyuno) \
 	$(if $(strip $(OOO_JUNIT_JAR)),\

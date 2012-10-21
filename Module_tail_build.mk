@@ -112,6 +112,7 @@ $(eval $(call gb_Module_add_moduledirs,tail_end,\
 	oox \
 	package \
 	padmin \
+	$(call gb_Helper_optional,POSTGRESQL,postgresql) \
 	psprint_config \
 	$(call gb_Helper_optional,PYUNO,pyuno) \
 	$(call gb_Helper_optional,QADEVOOO,qadevOOo) \

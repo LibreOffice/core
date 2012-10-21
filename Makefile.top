@@ -122,6 +122,7 @@ oox\
 package\
 packimages\
 padmin\
+postgresql\
 psprint_config\
 pyuno\
 qadevOOo\
@@ -241,7 +242,6 @@ odk\
 openldap\
 openssl\
 pango\
-postgresql\
 postprocess\
 python\
 redland\
