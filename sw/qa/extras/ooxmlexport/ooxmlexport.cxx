@@ -97,7 +97,7 @@ void Test::run()
         {"math-rad.docx", &Test::testMathRad},
         {"math-subscripts.docx", &Test::testMathSubscripts},
         {"math-vertical_stacks.docx", &Test::testMathVerticalStacks},
-        {"../../ooxmlimport/data/n779957.docx", &Test::testTablePosition},
+        {"table-position.docx", &Test::testTablePosition},
         {"fdo47669.docx", &Test::testFdo47669},
     };
     // Don't test the first import of these, for some reason those tests fail
@@ -357,10 +357,6 @@ void Test::testMathVerticalStacks()
 
 void Test::testTablePosition()
 {
-    // This is the reverse test of n779957 from ooxmlimport
-    // We want to verify that a full round-trip does not break formatting
-    // Of course if import code is wrong, this tests will fail regardless of export code.
-
     sal_Int32 xCoordsFromOffice[] = { 2500, -1000, 0, 0 };
     sal_Int32 cellLeftMarginFromOffice[] = { 250, 100, 0, 0 };
 

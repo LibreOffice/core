@@ -96,7 +96,6 @@ public:
     void testN779834();
     void testN779627();
     void testN779941();
-    void testN779957();
     void testFdo55187();
     void testN780563();
     void testN780853();
@@ -155,7 +154,6 @@ void Test::run()
         {"n779834.docx", &Test::testN779834},
         {"n779627.docx", &Test::testN779627},
         {"n779941.docx", &Test::testN779941},
-        {"n779957.docx", &Test::testN779957},
         {"fdo55187.docx", &Test::testFdo55187},
         {"n780563.docx", &Test::testN780563},
         {"n780853.docx", &Test::testN780853},
@@ -983,46 +981,6 @@ void Test::testN779941()
         sal_Int32 nBottomMargin;
         aValue >>= nBottomMargin;
         CPPUNIT_ASSERT_EQUAL(sal_Int32(0), nBottomMargin);
-    }
-}
-
-void Test::testN779957()
-{
-    /*
-     * n779957.docx contains 4 tables. This test verifies their X position.
-     * We compare cursor position in LibreOffice to table indentation in Office, because it's
-     * where text starts in tables.
-     */
-    sal_Int32 xCoordsFromOffice[] = { 2500, -1000, 0, 0 };
-    sal_Int32 cellLeftMarginFromOffice[] = { 250, 100, 0, 0 };
-
-    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
-    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables( ), uno::UNO_QUERY);
-
-    for (int i=0; i<4; i++) {
-        uno::Reference<text::XTextTable> xTable1 (xTables->getByIndex(i), uno::UNO_QUERY);
-        // Verify X coord
-        uno::Reference<view::XSelectionSupplier> xCtrl(xModel->getCurrentController(), uno::UNO_QUERY);
-        xCtrl->select(uno::makeAny(xTable1));
-        uno::Reference<text::XTextViewCursorSupplier> xTextViewCursorSupplier(xCtrl, uno::UNO_QUERY);
-        uno::Reference<text::XTextViewCursor> xCursor(xTextViewCursorSupplier->getViewCursor(), uno::UNO_QUERY);
-        awt::Point pos = xCursor->getPosition();
-        CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Incorrect X coord computed from docx",
-            xCoordsFromOffice[i], pos.X, 1);
-
-        // Verify left margin of 1st cell :
-        //  * Office left margins are measured relative to the right of the border
-        //  * LO left spacing is measured from the center of the border
-        uno::Reference<table::XCell> xCell = xTable1->getCellByName("A1");
-        uno::Reference< beans::XPropertySet > xPropSet(xCell, uno::UNO_QUERY_THROW);
-        sal_Int32 aLeftMargin = -1;
-        xPropSet->getPropertyValue("LeftBorderDistance") >>= aLeftMargin;
-        uno::Any aLeftBorder = xPropSet->getPropertyValue("LeftBorder");
-        table::BorderLine2 aLeftBorderLine;
-        aLeftBorder >>= aLeftBorderLine;
-        CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("Incorrect left spacing computed from docx cell margin",
-            cellLeftMarginFromOffice[i], aLeftMargin - 0.5 * aLeftBorderLine.LineWidth, 1);
     }
 }
 
