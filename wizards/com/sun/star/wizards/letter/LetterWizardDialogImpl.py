@@ -378,7 +378,7 @@ class LetterWizardDialogImpl(LetterWizardDialog):
 
     def lstBusinessStyleItemChanged(self):
         selectedItemPos = self.lstBusinessStyle.SelectedItemPos
-        if LetterWizardDialogImpl.lstBusinessStylePos is not selectedItemPos:
+        if LetterWizardDialogImpl.lstBusinessStylePos != selectedItemPos:
             LetterWizardDialogImpl.lstBusinessStylePos = selectedItemPos
             TextDocument.xTextDocument = \
                 self.myLetterDoc.loadAsPreview(
@@ -391,7 +391,7 @@ class LetterWizardDialogImpl(LetterWizardDialog):
 
     def lstPrivOfficialStyleItemChanged(self):
         selectedItemPos = self.lstPrivOfficialStyle.SelectedItemPos
-        if LetterWizardDialogImpl.lstPrivOfficialStylePos is not selectedItemPos:
+        if LetterWizardDialogImpl.lstPrivOfficialStylePos != selectedItemPos:
             LetterWizardDialogImpl.lstPrivOfficialStylePos = selectedItemPos
             TextDocument.xTextDocument = \
                 self.myLetterDoc.loadAsPreview(
@@ -404,7 +404,7 @@ class LetterWizardDialogImpl(LetterWizardDialog):
 
     def lstPrivateStyleItemChanged(self):
         selectedItemPos = self.lstPrivateStyle.SelectedItemPos
-        if LetterWizardDialogImpl.lstPrivateStylePos is not selectedItemPos:
+        if LetterWizardDialogImpl.lstPrivateStylePos != selectedItemPos:
             LetterWizardDialogImpl.lstPrivateStylePos = selectedItemPos
             TextDocument.xTextDocument = \
                 self.myLetterDoc.loadAsPreview(
