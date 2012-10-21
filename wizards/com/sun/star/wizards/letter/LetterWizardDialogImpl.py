@@ -18,7 +18,7 @@
 import traceback
 from .LetterWizardDialog import LetterWizardDialog, Helper, \
     PropertyNames, uno, HelpIds, HID
-from .LetterDocument import LetterDocument
+from .LetterDocument import LetterDocument, BusinessPaperObject
 from .CGLetterWizard import CGLetterWizard
 from ..common.NoValidPathException import NoValidPathException
 from ..common.FileAccess import FileAccess
