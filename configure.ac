@@ -9647,10 +9647,10 @@ if test -n "$enable_sdremote" -a "$enable_sdremote" != "no"; then
     ENABLE_SDREMOTE=YES
     AC_MSG_CHECKING([whether to enable bluetooth support])
     if test -n "$enable_bluetooth" -a "$enable_bluetooth" != "no"; then
-	AC_MSG_RESULT([yes])
-        ENABLE_BLUETOOTH=YES
         if test "$OS" = "LINUX"; then
             if test "$ENABLE_DBUS" = "TRUE"; then
+				AC_MSG_RESULT([yes])
+				ENABLE_BLUETOOTH=YES
                 dnl ===================================================================
                 dnl Check for system bluez
                 dnl ===================================================================
@@ -9663,15 +9663,15 @@ if test -n "$enable_sdremote" -a "$enable_sdremote" != "no"; then
                     AC_MSG_RESULT([internal])
                     BUILD_TYPE="$BUILD_TYPE BLUEZ"
                 fi
-            fi
-        else
-            AC_MSG_RESULT([no, dbus disabled])
-            ENABLE_BLUETOOTH=NO
-        fi
-    else
-	AC_MSG_RESULT([no])
-        ENABLE_BLUETOOTH=NO
-    fi
+			else
+				AC_MSG_RESULT([no, dbus disabled])
+				ENABLE_BLUETOOTH=NO
+			fi
+		else
+			AC_MSG_RESULT([no])
+			ENABLE_BLUETOOTH=NO
+		fi
+	fi
 else
     ENABLE_SDREMOTE=NO
     AC_MSG_RESULT([no])
