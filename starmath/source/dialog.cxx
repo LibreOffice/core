@@ -35,7 +35,6 @@
 #include <vcl/wall.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/sfx.hrc>
-#include <tools/string.hxx>
 #include <osl/diagnose.h>
 #include <svx/ucsubset.hxx>
 
@@ -50,8 +49,6 @@
 #include "document.hxx"
 #include "unomodel.hxx"
 
-
-using ::rtl::OUString;
 
 // Since it's better to set/query the FontStyle via its attributes rather
 // than via the StyleName we create a way to translate
@@ -1183,7 +1180,7 @@ void SmShowSymbolSet::Paint(const Rectangle&)
 
         int   nIV   = i - v;
         sal_UCS4 cChar = aSymbol.GetCharacter();
-        String aText( OUString( &cChar, 1 ) );
+        OUString aText(&cChar, 1);
         Size  aSize( GetTextWidth( aText ), GetTextHeight());
 
         DrawText(Point((nIV % nColumns) * nLen + (nLen - aSize.Width()) / 2,
@@ -1383,7 +1380,7 @@ void SmShowSymbol::SetSymbol(const SmSym *pSymbol)
         SetFont(aFont);
 
         sal_UCS4 cChar = pSymbol->GetCharacter();
-        String aText( OUString( &cChar, 1 ) );
+        OUString aText(&cChar, 1);
         SetText( aText );
     }
 
@@ -1505,13 +1502,12 @@ IMPL_LINK( SmSymbolDialog, GetClickHdl, Button *, EMPTYARG pButton )
     const SmSym *pSym = GetSymbol();
     if (pSym)
     {
-        String aText = rtl::OUString('%');
-        aText += pSym->GetName();
-        aText += (sal_Unicode)' ';
+        OUStringBuffer aText;
+        aText.append('%').append(pSym->GetName()).append(' ');
 
         rViewSh.GetViewFrame()->GetDispatcher()->Execute(
                 SID_INSERTSYMBOL, SFX_CALLMODE_STANDARD,
-                new SfxStringItem(SID_INSERTSYMBOL, aText), 0L);
+                new SfxStringItem(SID_INSERTSYMBOL, aText.makeStringAndClear()), 0L);
     }
 
     return 0;
@@ -1709,7 +1705,7 @@ void SmShowChar::SetSymbol( sal_UCS4 cChar, const Font &rFont )
     SetFont(aFont);
     aFont.SetTransparent(true);
 
-    String aText( OUString( &cChar, 1) );
+    OUString aText(&cChar, 1);
     SetText( aText );
 
     Invalidate();
@@ -1920,9 +1916,9 @@ IMPL_LINK_NOARG(SmSymDefineDialog, CharHighlightHdl)
     UpdateButtons();
 
     // display Unicode position as symbol name while iterating over characters
-    const String aHex(rtl::OUString::valueOf(static_cast<sal_Int64>(cChar), 16 ).toAsciiUpperCase());
-    const String aPattern( OUString::createFromAscii( aHex.Len() > 4 ? "Ux000000" : "Ux0000" ) );
-    String aUnicodePos( aPattern.Copy( 0, aPattern.Len() - aHex.Len() ) );
+    const OUString aHex(rtl::OUString::valueOf(static_cast<sal_Int64>(cChar), 16 ).toAsciiUpperCase());
+    const OUString aPattern( (aHex.getLength() > 4) ? OUString("Ux000000") : OUString("Ux0000") );
+    OUString aUnicodePos( aPattern.copy( 0, aPattern.getLength() - aHex.getLength() ) );
     aUnicodePos += aHex;
     aSymbols.SetText( aUnicodePos );
     aSymbolName.SetText( aUnicodePos );

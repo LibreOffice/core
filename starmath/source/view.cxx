@@ -1414,11 +1414,11 @@ SmEditWindow *SmViewShell::GetEditWindow()
 }
 
 
-void SmViewShell::SetStatusText(const String& Text)
+void SmViewShell::SetStatusText(const OUString& rText)
 {
     RTL_LOGFILE_CONTEXT( aLog, "starmath: SmViewShell::SetStatusText" );
 
-    StatusText = Text;
+    aStatusText = rText;
     GetViewFrame()->GetBindings().Invalidate(SID_TEXTSTATUS);
 }
 
@@ -1576,7 +1576,7 @@ void SmViewShell::Execute(SfxRequest& rReq)
             if (pWin)
             {
                 GetDoc()->SetText( pWin->GetText() );
-                SetStatusText(String());
+                SetStatusText(OUString());
                 ShowError( 0 );
                 GetDoc()->Repaint();
             }
@@ -1935,7 +1935,7 @@ void SmViewShell::GetState(SfxItemSet &rSet)
 
         case SID_TEXTSTATUS:
             {
-                rSet.Put(SfxStringItem(nWh, StatusText));
+                rSet.Put(SfxStringItem(nWh, aStatusText));
             }
             break;
 
@@ -1970,7 +1970,7 @@ SmViewShell::SmViewShell(SfxViewFrame *pFrame_, SfxViewShell *):
 {
     RTL_LOGFILE_CONTEXT( aLog, "starmath: SmViewShell::SmViewShell" );
 
-    SetStatusText(String());
+    SetStatusText(OUString());
     SetWindow(&aGraphic);
     SfxShell::SetName(rtl::OUString("SmView"));
     SfxShell::SetUndoManager( &GetDoc()->GetEditEngine().GetUndoManager() );

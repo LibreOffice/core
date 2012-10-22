@@ -228,7 +228,7 @@ class SmViewShell: public SfxViewShell
 
     SmGraphicWindow     aGraphic;
     SmGraphicController aGraphicController;
-    String              StatusText;
+    OUString            aStatusText;
 
     ::com::sun::star::uno:: Reference <
             ::com::sun::star::lang:: XEventListener > xClipEvtLstnr;
@@ -292,7 +292,7 @@ public:
           SmGraphicWindow & GetGraphicWindow()       { return aGraphic; }
     const SmGraphicWindow & GetGraphicWindow() const { return aGraphic; }
 
-    void        SetStatusText(const String& Text);
+    void        SetStatusText(const OUString& rText);
 
     void        ShowError( const SmErrorDesc *pErrorDesc );
     void        NextError();
