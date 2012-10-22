@@ -157,12 +157,15 @@ XubString Button::GetStandardText( StandardButtonType eButton )
         sal_uInt32 nResId = aResIdAry[(sal_uInt16)eButton].nResId;
         aText = ResId(nResId, *pResMgr).toString();
 
-        // Windows (apparently) has some magic auto-accelerator evil around
-        // ok / cancel so add this only for Unix
-#ifdef UNX
-        if( nResId == SV_BUTTONTEXT_OK || nResId == SV_BUTTONTEXT_CANCEL )
-            aText.Insert( rtl::OUString("~"), 0 );
+        if (nResId == SV_BUTTONTEXT_OK || nResId == SV_BUTTONTEXT_CANCEL)
+        {
+#ifndef WNT
+            // Windows (apparently) has some magic auto-accelerator evil around
+            // ok / cancel so add accelerators only for Unix
+            if (aText.Search('~') == STRING_NOTFOUND)
+                aText.Insert(rtl::OUString("~"), 0);
 #endif
+        }
     }
     else
     {
