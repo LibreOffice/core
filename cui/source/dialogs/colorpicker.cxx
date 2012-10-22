@@ -1383,8 +1383,8 @@ IMPL_LINK( ColorPickerDialog, ColorModifyHdl, void *, p )
             if( aColor != GetColor() )
             {
                 mdRed = ((double)aColor.GetRed()) / 255.0;
-                mdGreen = ((double)aColor.GetRed()) / 255.0;
-                mdBlue = ((double)aColor.GetRed()) / 255.0;
+                mdGreen = ((double)aColor.GetGreen()) / 255.0;
+                mdBlue = ((double)aColor.GetBlue()) / 255.0;
 
                 RGBtoHSV( mdRed, mdGreen, mdBlue, mdHue, mdSat, mdBri );
                 RGBtoCMYK( mdRed, mdGreen, mdBlue, mdCyan, mdMagenta, mdYellow, mdKey );
