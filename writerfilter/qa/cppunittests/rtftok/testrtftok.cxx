@@ -29,6 +29,7 @@
 #include <unotest/filters-test.hxx>
 #include <test/bootstrapfixture.hxx>
 #include <com/sun/star/document/XFilter.hpp>
+#include <com/sun/star/io/WrongFormatException.hpp>
 
 #include <osl/file.hxx>
 #include <osl/process.h>
@@ -65,7 +66,14 @@ bool RtfTest::load(const OUString &, const OUString &rURL, const OUString &)
     uno::Sequence< beans::PropertyValue > aDescriptor(1);
     aDescriptor[0].Name = "URL";
     aDescriptor[0].Value <<= rURL;
-    return m_xFilter->filter(aDescriptor);
+    try
+    {
+        return m_xFilter->filter(aDescriptor);
+    }
+    catch (const io::WrongFormatException&)
+    {
+        return false;
+    }
 }
 
 void RtfTest::test()

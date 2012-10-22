@@ -49,6 +49,7 @@ namespace writerfilter {
                 void pushGroup();
                 /// To be invoked by the popState() callback to single when the importer leaves a group.
                 void popGroup();
+                OUString getPosition();
             private:
                 SvStream& Strm();
                 int resolveKeyword();
@@ -61,6 +62,8 @@ namespace writerfilter {
                 std::vector<RTFSymbol> m_aRTFControlWords;
                 /// Same as the size of the importer's states, except that this can be negative for invalid input.
                 int m_nGroup;
+                sal_Int32 m_nLineNumber;
+                sal_Int32 m_nLineStartPos;
         };
     } // namespace rtftok
 } // namespace writerfilter

@@ -47,7 +47,9 @@ RTFTokenizer::RTFTokenizer(RTFDocumentImpl& rImport, SvStream* pInStream, uno::R
     m_pInStream(pInStream),
     m_xStatusIndicator(xStatusIndicator),
     m_aRTFControlWords(std::vector<RTFSymbol>(aRTFControlWords, aRTFControlWords + nRTFControlWords)),
-    m_nGroup(0)
+    m_nGroup(0),
+    m_nLineNumber(0),
+    m_nLineStartPos(0)
 {
     std::sort(m_aRTFControlWords.begin(), m_aRTFControlWords.end());
 }
@@ -128,8 +130,11 @@ int RTFTokenizer::resolveParse()
                         return ret;
                     break;
                 case 0x0d:
+                    break; // ignore this
                 case 0x0a:
-                    break; // ignore these
+                    m_nLineNumber++;
+                    m_nLineStartPos = nCurrentPos;
+                    break;
                 default:
                     if (m_nGroup == 0)
                         return ERROR_CHAR_OVER;
@@ -333,6 +338,15 @@ int RTFTokenizer::dispatchKeyword(OString& rKeyword, bool bParam, int nParam)
     }
 
     return 0;
+}
+
+OUString RTFTokenizer::getPosition()
+{
+    OUStringBuffer aRet;
+    aRet.append(m_nLineNumber + 1);
+    aRet.append(",");
+    aRet.append(sal_Int32(Strm().Tell() - m_nLineStartPos + 1));
+    return aRet.makeStringAndClear();
 }
 
 } // namespace rtftok
