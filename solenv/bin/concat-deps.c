@@ -711,14 +711,6 @@ static inline void eat_space(char ** token)
 }
 
 /*
- * Find substring in bounded length string
- */
-static inline const char *find_substr(const char *key, int key_len,
-                                      const char *substr, int substr_len)
-{
-}
-
-/*
  * Prune LibreOffice specific duplicate dependencies to improve
  * gnumake startup time, and shrink the disk-space footprint.
  */
