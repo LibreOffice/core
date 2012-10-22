@@ -1444,7 +1444,8 @@ std::pair<SvTreeEntryList::const_iterator,SvTreeEntryList::const_iterator>
 {
     typedef std::pair<SvTreeEntryList::const_iterator,SvTreeEntryList::const_iterator> IteratorPair;
 
-    IteratorPair aRet;
+    static const SvTreeEntryList dummy; // prevent singular iterator asserts
+    IteratorPair aRet(dummy.begin(), dummy.end());
 
     if (!pParent)
         pParent = pRootItem;
@@ -1464,7 +1465,8 @@ std::pair<SvTreeEntryList::iterator,SvTreeEntryList::iterator>
 {
     typedef std::pair<SvTreeEntryList::iterator,SvTreeEntryList::iterator> IteratorPair;
 
-    IteratorPair aRet;
+    static SvTreeEntryList dummy; // prevent singular iterator asserts
+    IteratorPair aRet(dummy.begin(), dummy.end());
 
     if (!pParent)
         pParent = pRootItem;
