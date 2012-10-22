@@ -145,7 +145,6 @@ TabPage TP_OPTLOAD_PAGE
     CheckBox CB_USE_CHAR_UNIT
     {
         HelpID = "sw:CheckBox:TP_OPTLOAD_PAGE:CB_USE_CHAR_UNIT";
-        Pos = MAP_APPFONT ( 12 , 111) ;
         Pos = MAP_APPFONT ( 12 , 130) ;
         Size = MAP_APPFONT ( 109 , 10 ) ;
         Text [ en-US ] = "Enable char unit";
