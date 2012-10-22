@@ -148,7 +148,7 @@ class SbiInstance
     sal_uInt32      nStdDateIdx, nStdTimeIdx, nStdDateTimeIdx;
 
     SbError         nErr;
-    String          aErrorMsg;      // last error message for $ARG
+    OUString          aErrorMsg;      // last error message for $ARG
     sal_uInt16          nErl;           // current error line
     sal_Bool            bReschedule;    // Flag: sal_True = Reschedule in main loop
     sal_Bool            bCompatibility; // Flag: sal_True = VBA runtime compatibility mode
@@ -168,16 +168,16 @@ public:
    ~SbiInstance();
 
     void Error( SbError );                      // trappable Error
-    void Error( SbError, const String& rMsg );  // trappable Error with message
-    void ErrorVB( sal_Int32 nVBNumber, const String& rMsg );
-    void setErrorVB( sal_Int32 nVBNumber, const String& rMsg );
+    void Error( SbError, const OUString& rMsg );  // trappable Error with message
+    void ErrorVB( sal_Int32 nVBNumber, const OUString& rMsg );
+    void setErrorVB( sal_Int32 nVBNumber, const OUString& rMsg );
     void FatalError( SbError );                 // non-trappable Error
-    void FatalError( SbError, const String& );  // non-trappable Error
+    void FatalError( SbError, const OUString& );  // non-trappable Error
     void Abort();                               // with current error code
 
     void    Stop();
     SbError GetErr()                { return nErr; }
-    String  GetErrorMsg()           { return aErrorMsg; }
+    OUString  GetErrorMsg()           { return aErrorMsg; }
     xub_StrLen GetErl()             { return nErl; }
     void    EnableReschedule( sal_Bool bEnable ) { bReschedule = bEnable; }
     sal_Bool    IsReschedule( void ) { return bReschedule; }
@@ -395,10 +395,10 @@ public:
     SbiRuntime( SbModule*, SbMethod*, sal_uInt32 );
    ~SbiRuntime();
     void Error( SbError, bool bVBATranslationAlreadyDone = false );     // set error if != 0
-    void Error( SbError, const String& );       // set error if != 0
+    void Error( SbError, const OUString& );       // set error if != 0
     void FatalError( SbError );                 // error handling = standard, set error
-    void FatalError( SbError, const String& );  // error handling = standard, set error
-    static sal_Int32 translateErrorToVba( SbError nError, String& rMsg );
+    void FatalError( SbError, const OUString& );  // error handling = standard, set error
+    static sal_Int32 translateErrorToVba( SbError nError, OUString& rMsg );
     void DumpPCode();
     bool Step();                    // single step (one opcode)
     void Stop()            { bRun = false;   }

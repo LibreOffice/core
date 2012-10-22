@@ -427,7 +427,7 @@ void SbiInstance::Error( SbError n )
     Error( n, String() );
 }
 
-void SbiInstance::Error( SbError n, const String& rMsg )
+void SbiInstance::Error( SbError n, const OUString& rMsg )
 {
     if( !bWatchMode )
     {
@@ -436,7 +436,7 @@ void SbiInstance::Error( SbError n, const String& rMsg )
     }
 }
 
-void SbiInstance::ErrorVB( sal_Int32 nVBNumber, const String& rMsg )
+void SbiInstance::ErrorVB( sal_Int32 nVBNumber, const OUString& rMsg )
 {
     if( !bWatchMode )
     {
@@ -453,7 +453,7 @@ void SbiInstance::ErrorVB( sal_Int32 nVBNumber, const String& rMsg )
     }
 }
 
-void SbiInstance::setErrorVB( sal_Int32 nVBNumber, const String& rMsg )
+void SbiInstance::setErrorVB( sal_Int32 nVBNumber, const OUString& rMsg )
 {
     SbError n = StarBASIC::GetSfxFromVBError( static_cast< sal_uInt16 >( nVBNumber ) );
     if( !n )
@@ -472,7 +472,7 @@ void SbiInstance::FatalError( SbError n )
     pRun->FatalError( n );
 }
 
-void SbiInstance::FatalError( SbError _errCode, const String& _details )
+void SbiInstance::FatalError( SbError _errCode, const OUString& _details )
 {
     pRun->FatalError( _errCode, _details );
 }
@@ -862,7 +862,7 @@ void SbiRuntime::Error( SbError n, bool bVBATranslationAlreadyDone )
         nError = n;
         if( isVBAEnabled() && !bVBATranslationAlreadyDone )
         {
-            String aMsg = pInst->GetErrorMsg();
+            OUString aMsg = pInst->GetErrorMsg();
             sal_Int32 nVBAErrorNumber = translateErrorToVba( nError, aMsg );
             SbxVariable* pSbxErrObjVar = SbxErrObject::getErrObject();
             SbxErrObject* pGlobErr = static_cast< SbxErrObject* >( pSbxErrObjVar );
@@ -876,7 +876,7 @@ void SbiRuntime::Error( SbError n, bool bVBATranslationAlreadyDone )
     }
 }
 
-void SbiRuntime::Error( SbError _errCode, const String& _details )
+void SbiRuntime::Error( SbError _errCode, const OUString& _details )
 {
     if ( _errCode )
     {
@@ -900,20 +900,20 @@ void SbiRuntime::FatalError( SbError n )
     Error( n );
 }
 
-void SbiRuntime::FatalError( SbError _errCode, const String& _details )
+void SbiRuntime::FatalError( SbError _errCode, const OUString& _details )
 {
     StepSTDERROR();
     Error( _errCode, _details );
 }
 
-sal_Int32 SbiRuntime::translateErrorToVba( SbError nError, String& rMsg )
+sal_Int32 SbiRuntime::translateErrorToVba( SbError nError, OUString& rMsg )
 {
     // If a message is defined use that ( in preference to
     // the defined one for the error ) NB #TODO
     // if there is an error defined it more than likely
     // is not the one you want ( some are the same though )
     // we really need a new vba compatible error list
-    if ( !rMsg.Len() )
+    if ( rMsg.isEmpty() )
     {
         // TEST, has to be vb here always
 #ifdef DBG_UTIL
@@ -923,9 +923,9 @@ sal_Int32 SbiRuntime::translateErrorToVba( SbError nError, String& rMsg )
 
         StarBASIC::MakeErrorText( nError, rMsg );
         rMsg = StarBASIC::GetErrorText();
-        if ( !rMsg.Len() ) // no message for err no, need localized resource here
+        if ( rMsg.isEmpty() ) // no message for err no, need localized resource here
         {
-            rMsg = String( RTL_CONSTASCII_USTRINGPARAM("Internal Object Error:") );
+            rMsg = "Internal Object Error:";
         }
     }
     // no num? most likely then it *is* really a vba err
