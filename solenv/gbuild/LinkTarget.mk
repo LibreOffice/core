@@ -1139,17 +1139,6 @@ define gb_LinkTarget_use_packages
 $(foreach package,$(2),$(call gb_LinkTarget_use_package,$(1),$(package)))
 endef
 
-# use a external package, possibly from another module (i.e. via OUTDIR)
-define gb_LinkTarget_use_external_package
-$(call gb_LinkTarget_get_external_headers_target,$(1)) :| \
-	$(call gb_ExternalPackage_get_target,$(strip $(2)))
-
-endef
-
-define gb_LinkTarget_use_external_packages
-$(foreach package,$(2),$(call gb_LinkTarget_use_external_package,$(1),$(package)))
-endef
-
 # Use sources from unpacked tarball of an external project
 define gb_LinkTarget_use_unpacked
 $(call gb_LinkTarget_get_external_headers_target,$(1)) :| $(call gb_UnpackedTarball_get_final_target,$(2))

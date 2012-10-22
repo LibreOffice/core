@@ -210,8 +210,6 @@ $(eval $(foreach method,\
 	add_external_headers \
 	use_package \
 	use_packages \
-	use_external_package \
-	use_external_packages \
 	use_unpacked \
 	add_package_headers \
 	add_sdi_headers \
