@@ -246,12 +246,11 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_queryDeskt
     //  Why is "top" here handled too? Because the desktop is the topest frame. Normaly it's superflous
     //  to use this target - but we can handle it in the same manner then "_self".
     //-----------------------------------------------------------------------------------------------------
-    else
-    if (
-        (sTargetFrameName==SPECIALTARGET_SELF)  ||
-        (sTargetFrameName==SPECIALTARGET_TOP )  ||
-        (sTargetFrameName.isEmpty())
-       )
+    else if (
+             (sTargetFrameName==SPECIALTARGET_SELF)  ||
+             (sTargetFrameName==SPECIALTARGET_TOP )  ||
+             (sTargetFrameName.isEmpty())
+            )
     {
         xDispatcher = implts_searchProtocolHandler(aURL);
     }
@@ -274,10 +273,9 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_queryDeskt
             css::uno::Reference< css::frame::XDispatchProvider > xProvider( xFoundFrame, css::uno::UNO_QUERY );
             xDispatcher = xProvider->queryDispatch(aURL,SPECIALTARGET_SELF,0);
         }
-        else
         // if it couldn't be found - but creation was allowed
         // use special dispatcher for creatio or froward it to the browser
-        if (nSearchFlags & css::frame::FrameSearchFlag::CREATE)
+        else if (nSearchFlags & css::frame::FrameSearchFlag::CREATE)
             xDispatcher = implts_getOrCreateDispatchHelper( E_CREATEDISPATCHER, xDesktop, sTargetFrameName, nSearchFlags );
     }
 
@@ -324,8 +322,7 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_queryFrame
     // I.II) "_menubar"
     //  Special mode on frame or task to receive the local menu. Not supported by findFrame()
     //-----------------------------------------------------------------------------------------------------
-    else
-    if (sTargetName==SPECIALTARGET_MENUBAR)
+    else if (sTargetName==SPECIALTARGET_MENUBAR)
     {
         xDispatcher = implts_getOrCreateDispatchHelper( E_MENUDISPATCHER, xFrame );
     }
@@ -335,8 +332,7 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_queryFrame
     //  Special sub frame of a top frame only. Search or create it. ... OK it's currently a little bit HACKI.
     //  Only the sfx (means the controller) can create it it.
     //-----------------------------------------------------------------------------------------------------
-    else
-    if (sTargetName==SPECIALTARGET_BEAMER)
+    else if (sTargetName==SPECIALTARGET_BEAMER)
     {
         css::uno::Reference< css::frame::XDispatchProvider > xBeamer( xFrame->findFrame( SPECIALTARGET_BEAMER, css::frame::FrameSearchFlag::CHILDREN | css::frame::FrameSearchFlag::SELF ), css::uno::UNO_QUERY );
         if (xBeamer.is())
@@ -357,8 +353,7 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_queryFrame
     // I.V) "_parent"
     //  Our parent frame (if it exist) should handle this URL.
     //-----------------------------------------------------------------------------------------------------
-    else
-    if (sTargetName==SPECIALTARGET_PARENT)
+    else if (sTargetName==SPECIALTARGET_PARENT)
     {
         css::uno::Reference< css::frame::XDispatchProvider > xParent( xFrame->getCreator(), css::uno::UNO_QUERY );
         if (xParent.is())
@@ -371,8 +366,7 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_queryFrame
     //  This request must be forwarded to any parent frame, till we reach a top frame.
     //  If no parent exist, we can handle itself.
     //-----------------------------------------------------------------------------------------------------
-    else
-    if (sTargetName==SPECIALTARGET_TOP)
+    else if (sTargetName==SPECIALTARGET_TOP)
     {
         if (xFrame->isTop())
         {
@@ -398,11 +392,10 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_queryFrame
     //  protocol handler. If this failed too - we check for a loadable content and in case of true
     //  we load it into the frame by returning specilized dispatch object.
     //-----------------------------------------------------------------------------------------------------
-    else
-    if (
-        (sTargetName==SPECIALTARGET_SELF)  ||
-        (sTargetName.isEmpty())
-       )
+    else if (
+             (sTargetName==SPECIALTARGET_SELF)  ||
+             (sTargetName.isEmpty())
+            )
     {
         // There exist a hard coded interception for special URLs.
         if ( aURL.Complete == ".uno:CloseDoc" || aURL.Complete == ".uno:CloseWin" )

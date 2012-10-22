@@ -1506,7 +1506,7 @@ int INetMIMEMessageStream::PutMsgLine (const sal_Char *pData, sal_uIntPtr nSize)
                                     return status;
                             }
                             else {
-                                SAL_WARN( "tools", "Boundary not found." );
+                                SAL_WARN( "tools.stream", "Boundary not found." );
                             }
                             status = INetMessageIOStream::PutMsgLine(
                                 pOldPos, pChar - pOldPos + 1 );

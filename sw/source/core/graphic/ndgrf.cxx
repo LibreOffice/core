@@ -884,7 +884,7 @@ SwCntntNode* SwGrfNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
         catch (const uno::Exception& e)
         {
             // #i48434#
-            SAL_WARN("sw", "<SwGrfNode::MakeCopy(..)> - unhandled exception!" << e.Message);
+            SAL_WARN("sw.core", "<SwGrfNode::MakeCopy(..)> - unhandled exception!" << e.Message);
         }
     }
     else
