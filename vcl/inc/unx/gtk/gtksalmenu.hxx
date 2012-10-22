@@ -35,7 +35,6 @@
 
 
 class MenuItemList;
-class GtkSalMenu;
 class GtkSalMenuItem;
 
 
