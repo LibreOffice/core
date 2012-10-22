@@ -2765,21 +2765,24 @@ EditPaM ImpEditEngine::ImpInsertText( EditSelection aCurSel, const XubString& rS
     // Token mit LINE_SEP abfragen,
     // da der MAC-Compiler aus \n etwas anderes macht!
 
-    sal_uInt16 nStart = 0;
+    // #117400
+    // The loop run variable must be capable to hold STRLEN_MAX+1,
+    // that with STRING32 would be SAL_MAX_INT32+1 but with 16-bit is 0xFFFF+1
+    sal_uInt32 nStart = 0;
     while ( nStart < aText.Len() )
     {
-        sal_uInt16 nEnd = aText.Search( LINE_SEP, nStart );
+        sal_uInt32 nEnd = aText.Search( LINE_SEP, static_cast<xub_StrLen>(nStart) );
         if ( nEnd == STRING_NOTFOUND )
             nEnd = aText.Len(); // nicht dereferenzieren!
 
         // Start == End => Leerzeile
         if ( nEnd > nStart )
         {
-            XubString aLine( aText, nStart, nEnd-nStart );
+            XubString aLine( aText, nStart, static_cast<xub_StrLen>(nEnd-nStart) );
             xub_StrLen nChars = aPaM.GetNode()->Len() + aLine.Len();
             if ( nChars > MAXCHARSINPARA )
             {
-                sal_uInt16 nMaxNewChars = MAXCHARSINPARA-aPaM.GetNode()->Len();
+                xub_StrLen nMaxNewChars = MAXCHARSINPARA-aPaM.GetNode()->Len();
                 nEnd -= ( aLine.Len() - nMaxNewChars ); // Dann landen die Zeichen im naechsten Absatz.
                 aLine.Erase( nMaxNewChars );            // Del Rest...
             }
@@ -2792,15 +2795,17 @@ EditPaM ImpEditEngine::ImpInsertText( EditSelection aCurSel, const XubString& rS
                 aPaM = aEditDoc.InsertText( aPaM, aLine );
             else
             {
-                sal_uInt16 nStart2 = 0;
+                sal_uInt32 nStart2 = 0;
                 while ( nStart2 < aLine.Len() )
                 {
-                    sal_uInt16 nEnd2 = aLine.Search( '\t', nStart2 );
+                    sal_uInt32 nEnd2 = aLine.Search( '\t', static_cast<xub_StrLen>(nStart2) );
                     if ( nEnd2 == STRING_NOTFOUND )
                         nEnd2 = aLine.Len();    // nicht dereferenzieren!
 
                     if ( nEnd2 > nStart2 )
-                        aPaM = aEditDoc.InsertText( aPaM, XubString( aLine, nStart2, nEnd2-nStart2 ) );
+                        aPaM = aEditDoc.InsertText( aPaM, XubString( aLine,
+                            static_cast<xub_StrLen>(nStart2),
+                            static_cast<xub_StrLen>(nEnd2-nStart2 ) ) );
                     if ( nEnd2 < aLine.Len() )
                     {
                         // aPaM = ImpInsertFeature( EditSelection( aPaM, aPaM ),  );
