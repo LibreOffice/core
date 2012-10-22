@@ -7654,10 +7654,10 @@ if test "x$enable_postgresql_sdbc" != "xno"; then
             WITH_KRB5=YES
             save_LIBS=$LIBS
             AC_SEARCH_LIBS(com_err, [com_err 'com_err -lssl -lcrypto' krb5 'krb5 -lcrypto -ldes -lasn1 -lroken'], [],
-                [AC_MSG_ERROR([could not find function 'com_err' required for Kerberos 5])])
+                [AC_MSG_ERROR([could not find function 'com_err' required for Kerberos 5, try installing libcom_err devel package])])
             LIBS=$save_LIBS
             AC_SEARCH_LIBS(krb5_sendauth, [krb5 'krb5 -lcrypto -ldes -lasn1 -lroken'], [],
-                [AC_MSG_ERROR([could not find function 'krb5_sendauth' required for Kerberos 5])])
+                [AC_MSG_ERROR([could not find function 'krb5_sendauth' required for Kerberos 5, try installing krb5 devel package])])
             LIBS=$save_LIBS
         fi
         if test "$with_gssapi" != "no"; then
