@@ -15,14 +15,14 @@
    {
      BOOST_CONCEPT_USAGE(Assignable) {
  #if !defined(_ITERATOR_) // back_insert_iterator broken for VC++ STL
-+#if defined __clang__
++#if defined __clang__ && !defined(__APPLE__)
 +#if __clang_major__ == 3 && __clang_minor__ >= 2 || __clang_major__ > 3
 +#pragma clang diagnostic push
 +#pragma clang diagnostic ignored "-Wself-assign-field"
 +#endif
 +#endif
        a = a;             // require assignment operator
-+#if defined __clang__
++#if defined __clang__ && !defined(__APPLE__)
 +#if __clang_major__ == 3 && __clang_minor__ >= 2 || __clang_major__ > 3
 +#pragma clang diagnostic pop
 +#endif
