@@ -241,19 +241,19 @@ void SbiInstance::CalcBreakCallLevel( sal_uInt16 nFlags )
     sal_uInt16 nRet;
     switch( nFlags )
     {
-        case SbDEBUG_STEPINTO:
-            nRet = nCallLvl + 1;    // CallLevel+1 is also stopped
-            break;
-        case SbDEBUG_STEPOVER | SbDEBUG_STEPINTO:
-            nRet = nCallLvl;        // current CallLevel is stopped
-            break;
-        case SbDEBUG_STEPOUT:
-            nRet = nCallLvl - 1;    // smaller CallLevel is stopped
-            break;
-        case SbDEBUG_CONTINUE:
+    case SbDEBUG_STEPINTO:
+        nRet = nCallLvl + 1;    // CallLevel+1 is also stopped
+        break;
+    case SbDEBUG_STEPOVER | SbDEBUG_STEPINTO:
+        nRet = nCallLvl;        // current CallLevel is stopped
+        break;
+    case SbDEBUG_STEPOUT:
+        nRet = nCallLvl - 1;    // smaller CallLevel is stopped
+        break;
+    case SbDEBUG_CONTINUE:
         // Basic-IDE returns 0 instead of SbDEBUG_CONTINUE, so also default=continue
-        default:
-            nRet = 0;               // CallLevel is always > 0 -> no StepPoint
+    default:
+        nRet = 0;               // CallLevel is always > 0 -> no StepPoint
     }
     nBreakCallLvl = nRet;           // take result
 }
@@ -312,7 +312,9 @@ SbiInstance::~SbiInstance()
 SbiDllMgr* SbiInstance::GetDllMgr()
 {
     if( !pDllMgr )
+    {
         pDllMgr = new SbiDllMgr;
+    }
     return pDllMgr;
 }
 
@@ -334,8 +336,10 @@ SvNumberFormatter* SbiInstance::GetNumberFormatter()
     meFormatterLangType = eLangType;
     meFormatterDateFormat = eDate;
     if( !pNumberFormatter )
+    {
         PrepareNumberFormatter( pNumberFormatter, nStdDateIdx, nStdTimeIdx, nStdDateTimeIdx,
         &meFormatterLangType, &meFormatterDateFormat );
+    }
     return pNumberFormatter;
 }
 
@@ -349,13 +353,18 @@ void SbiInstance::PrepareNumberFormatter( SvNumberFormatter*& rpNumberFormatter,
 
     LanguageType eLangType;
     if( peFormatterLangType )
+    {
         eLangType = *peFormatterLangType;
+    }
     else
+    {
         eLangType = GetpApp()->GetSettings().GetLanguage();
-
+    }
     DateFormat eDate;
     if( peFormatterDateFormat )
+    {
         eDate = *peFormatterDateFormat;
+    }
     else
     {
         SvtSysLocale aSysLocale;
@@ -432,8 +441,9 @@ void SbiInstance::ErrorVB( sal_Int32 nVBNumber, const String& rMsg )
     {
         SbError n = StarBASIC::GetSfxFromVBError( static_cast< sal_uInt16 >( nVBNumber ) );
         if ( !n )
+        {
             n = nVBNumber; // force orig number, probably should have a specific table of vb ( localized ) errors
-
+        }
         aErrorMsg = rMsg;
         SbiRuntime::translateErrorToVba( n, aErrorMsg );
 
@@ -446,8 +456,9 @@ void SbiInstance::setErrorVB( sal_Int32 nVBNumber, const String& rMsg )
 {
     SbError n = StarBASIC::GetSfxFromVBError( static_cast< sal_uInt16 >( nVBNumber ) );
     if( !n )
+    {
         n = nVBNumber; // force orig number, probably should have a specific table of vb ( localized ) errors
-
+    }
     aErrorMsg = rMsg;
     SbiRuntime::translateErrorToVba( n, aErrorMsg );
 
@@ -481,7 +492,9 @@ StarBASIC* GetCurrentBasic( StarBASIC* pRTBasic )
     {
         SbxObject* pParent = pActiveModule->GetParent();
         if( pParent && pParent->ISA(StarBASIC) )
+        {
             pCurBasic = (StarBASIC*)pParent;
+        }
     }
     return pCurBasic;
 }
@@ -489,20 +502,23 @@ StarBASIC* GetCurrentBasic( StarBASIC* pRTBasic )
 SbModule* SbiInstance::GetActiveModule()
 {
     if( pRun )
+    {
         return pRun->GetModule();
+    }
     else
+    {
         return NULL;
+    }
 }
 
 SbMethod* SbiInstance::GetCaller( sal_uInt16 nLevel )
 {
     SbiRuntime* p = pRun;
     while( nLevel-- && p )
+    {
         p = p->pNext;
-    if( p )
-        return p->GetCaller();
-    else
-        return NULL;
+    }
+    return p ? p->GetCaller() : NULL;
 }
 
 //                              SbiInstance                             //
@@ -571,10 +587,14 @@ void SbiRuntime::SetVBAEnabled(bool bEnabled )
     if ( bVBAEnabled )
     {
         if ( pMeth )
+        {
             mpExtCaller = pMeth->mCaller;
+        }
     }
     else
+    {
         mpExtCaller = 0;
+    }
 }
 
 // Construction of the parameter list. All ByRef-parameters are directly
@@ -629,14 +649,18 @@ void SbiRuntime::SetParameters( SbxArray* pParams )
 
                 if( !bByVal && t != SbxVARIANT &&
                     (!v->IsFixed() || (SbxDataType)(v->GetType() & 0x0FFF ) != t) )
-                        bByVal = sal_True;
+                {
+                    bByVal = sal_True;
+                }
 
                 bTargetTypeIsArray = (p->nUserData & PARAM_INFO_WITHBRACKETS) != 0;
             }
             if( bByVal )
             {
                 if( bTargetTypeIsArray )
+                {
                     t = SbxOBJECT;
+                }
                 SbxVariable* v2 = new SbxVariable( t );
                 v2->SetFlag( SBX_READWRITE );
                 *v2 = *v;
@@ -647,14 +671,20 @@ void SbiRuntime::SetParameters( SbxArray* pParams )
                 if( t != SbxVARIANT && t != ( v->GetType() & 0x0FFF ) )
                 {
                     if( p && (p->eType & SbxARRAY) )
+                    {
                         Error( SbERR_CONVERSION );
+                    }
                     else
+                    {
                         v->Convert( t );
+                    }
                 }
                 refParams->Put( v, i );
             }
             if( p )
+            {
                 refParams->PutAlias( p->aName, i );
+            }
         }
     }
 
@@ -697,7 +727,9 @@ bool SbiRuntime::Step()
         while( bBlocked )
         {
             if( pInst->IsReschedule() )
+            {
                 Application::Reschedule();
+            }
         }
 
         SbiOpcode eOp = (SbiOpcode ) ( *pCode++ );
@@ -719,8 +751,9 @@ bool SbiRuntime::Step()
             (this->*( aStep2[ eOp - SbOP2_START ] ) )( nOp1, nOp2 );
         }
         else
+        {
             StarBASIC::FatalError( SbERR_INTERNAL_ERROR );
-
+        }
 
         SbError nSbError = SbxBase::GetError();
         Error( ERRCODE_TOERROR(nSbError) );
@@ -730,7 +763,9 @@ bool SbiRuntime::Step()
         // since nError can now also be set from other RT-instances
 
         if( nError )
+        {
             SbxBase::ResetError();
+        }
 
         // from 15.3.96: display errors only if BASIC is still active
         // (especially not after compiler errors at the runtime)
@@ -754,11 +789,17 @@ bool SbiRuntime::Step()
                 bInError = true;
 
                 if( !bError )           // On Error Resume Next
+                {
                     StepRESUME( 1 );
+                }
                 else if( pError )       // On Error Goto ...
+                {
                     pCode = pError;
+                }
                 else
+                {
                     bLetParentHandleThis = true;
+                }
             }
             else
             {
@@ -791,9 +832,13 @@ bool SbiRuntime::Step()
                     {
                         pRt->nError = err;
                         if( pRt != pRtErrHdl )
+                        {
                             pRt->bRun = false;
+                        }
                         else
+                        {
                             break;
+                        }
                         pRt = pRt->pNext;
                     }
                     while( pRt );
@@ -803,7 +848,6 @@ bool SbiRuntime::Step()
                 {
                     pInst->Abort();
                 }
-
             }
         }
     }
@@ -822,8 +866,9 @@ void SbiRuntime::Error( SbError n, bool bVBATranslationAlreadyDone )
             SbxVariable* pSbxErrObjVar = SbxErrObject::getErrObject();
             SbxErrObject* pGlobErr = static_cast< SbxErrObject* >( pSbxErrObjVar );
             if( pGlobErr != NULL )
+            {
                 pGlobErr->setNumberAndDescription( nVBAErrorNumber, aMsg );
-
+            }
             pInst->aErrorMsg = aMsg;
             nError = SbERR_BASIC_COMPAT;
         }
@@ -878,7 +923,9 @@ sal_Int32 SbiRuntime::translateErrorToVba( SbError nError, String& rMsg )
         StarBASIC::MakeErrorText( nError, rMsg );
         rMsg = StarBASIC::GetErrorText();
         if ( !rMsg.Len() ) // no message for err no, need localized resource here
+        {
             rMsg = String( RTL_CONSTASCII_USTRINGPARAM("Internal Object Error:") );
+        }
     }
     // no num? most likely then it *is* really a vba err
     sal_uInt16 nVBErrorCode = StarBASIC::GetVBErrorCode( nError );
@@ -901,7 +948,9 @@ SbMethod* SbiRuntime::GetCaller()
 void SbiRuntime::PushVar( SbxVariable* pVar )
 {
     if( pVar )
+    {
         refExprStk->Put( pVar, nExprLvl++ );
+    }
 }
 
 SbxVariableRef SbiRuntime::PopVar()
@@ -920,7 +969,9 @@ SbxVariableRef SbiRuntime::PopVar()
 #endif
     // methods hold themselves in parameter 0
     if( xVar->IsA( TYPE(SbxMethod) ) )
+    {
         xVar->SetParameters(0);
+    }
     return xVar;
 }
 
@@ -956,7 +1007,9 @@ void SbiRuntime::TOSMakeTemp()
 {
     SbxVariable* p = refExprStk->Get( nExprLvl - 1 );
     if ( p->GetType() == SbxEMPTY )
+    {
         p->Broadcast( SBX_HINT_DATAWANTED );
+    }
 
     SbxVariable* pDflt = NULL;
     if ( bVBAEnabled &&  ( p->GetType() == SbxOBJECT || p->GetType() == SbxVARIANT  ) && ((pDflt = getDefaultProp(p)) != NULL) )
@@ -971,7 +1024,6 @@ void SbiRuntime::TOSMakeTemp()
         p->SetFlag( SBX_READWRITE );
         refExprStk->Put( p, nExprLvl - 1 );
     }
-
     else if( p->GetRefCount() != 1 )
     {
         SbxVariable* pNew = new SbxVariable( *p );
@@ -984,7 +1036,9 @@ void SbiRuntime::TOSMakeTemp()
 void SbiRuntime::PushGosub( const sal_uInt8* pc )
 {
     if( ++nGosubLvl > MAXRECURSION )
+    {
         StarBASIC::FatalError( SbERR_STACK_OVERFLOW );
+    }
     SbiGosubStack* p = new SbiGosubStack;
     p->pCode  = pc;
     p->pNext  = pGosubStk;
@@ -995,7 +1049,9 @@ void SbiRuntime::PushGosub( const sal_uInt8* pc )
 void SbiRuntime::PopGosub()
 {
     if( !pGosubStk )
+    {
         Error( SbERR_NO_GOSUB );
+    }
     else
     {
         SbiGosubStack* p = pGosubStk;
@@ -1011,7 +1067,9 @@ void SbiRuntime::ClearGosubStack()
 {
     SbiGosubStack* p;
     while(( p = pGosubStk ) != NULL )
+    {
         pGosubStk = p->pNext, delete p;
+    }
     nGosubLvl = 0;
 }
 
@@ -1044,7 +1102,9 @@ void SbiRuntime::PopArgv()
 void SbiRuntime::ClearArgvStack()
 {
     while( pArgvStk )
+    {
         PopArgv();
+    }
 }
 
 // Push of the for-stack. The stack has increment, end, begin and variable.
@@ -1129,9 +1189,10 @@ void SbiRuntime::PushForEach()
                 catch(const uno::Exception& )
                 {}
             }
-
             if ( !p->xEnumeration.is() )
+            {
                 bError_ = true;
+            }
         }
         else
         {
@@ -1170,7 +1231,9 @@ void SbiRuntime::PopFor()
 void SbiRuntime::ClearForStack()
 {
     while( pForStk )
+    {
         PopFor();
+    }
 }
 
 SbiForStack* SbiRuntime::FindForStackItemForCollection( class BasicCollection* pCollection )
@@ -1213,7 +1276,9 @@ void SbiRuntime::DllCall
     SbiDllMgr* pDllMgr = pInst->GetDllMgr();
     SbError nErr = pDllMgr->Call( aFuncName, aDLLName, pArgs, *pRes, bCDecl );
     if( nErr )
+    {
         Error( nErr );
+    }
     PushVar( pRes );
 }
 
