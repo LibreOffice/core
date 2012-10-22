@@ -1071,10 +1071,10 @@ sal_Bool SwFEShell::GetFlyFrmAttr( SfxItemSet &rSet ) const
 #*  Description :  Attributes of the current fly will change.
 #***********************************************************************/
 
-sal_Bool SwFEShell::SetFlyFrmAttr( SfxItemSet& rSet )
+bool SwFEShell::SetFlyFrmAttr( SfxItemSet& rSet )
 {
     SET_CURR_SHELL( this );
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
 
     if( rSet.Count() )
     {
@@ -1096,7 +1096,7 @@ sal_Bool SwFEShell::SetFlyFrmAttr( SfxItemSet& rSet )
 
             if( GetDoc()->SetFlyFrmAttr( *pFlyFmt, rSet ))
             {
-                bRet = sal_True;
+                bRet = true;
                 SwFlyFrm* pFrm = pFlyFmt->GetFrm( &aPt );
                 if( pFrm )
                     SelectFlyFrm( *pFrm, sal_True );
@@ -1222,7 +1222,7 @@ SwFrmFmt* SwFEShell::GetCurFrmFmt() const
  *  Description :
  ******************************************************************************/
 
-void SwFEShell::SetFrmFmt( SwFrmFmt *pNewFmt, sal_Bool bKeepOrient, Point* pDocPos )
+void SwFEShell::SetFrmFmt( SwFrmFmt *pNewFmt, bool bKeepOrient, Point* pDocPos )
 {
     SwFlyFrm *pFly = 0;
     if(pDocPos)

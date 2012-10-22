@@ -635,7 +635,7 @@ private:
                             const xub_StrLen nEndContentIndex,
                             const SwNodeIndex& rStartIdx,
                             const bool bCopyFlyAtFly = false ) const;
-    sal_Int8 SetFlyFrmAnchor( SwFrmFmt& rFlyFmt, SfxItemSet& rSet, sal_Bool bNewFrms );
+    sal_Int8 SetFlyFrmAnchor( SwFrmFmt& rFlyFmt, SfxItemSet& rSet, bool bNewFrms );
 
     typedef SwFmt* (SwDoc:: *FNCopyFmt)( const String&, SwFmt*, sal_Bool, sal_Bool );
     SwFmt* CopyFmt( const SwFmt& rFmt, const SwFmtsBase& rFmtArr,
@@ -665,7 +665,7 @@ private:
     void AddUsedDBToList( std::vector<String>& rDBNameList,
                           const std::vector<String>& rUsedDBNames );
     void AddUsedDBToList( std::vector<String>& rDBNameList, const String& rDBName );
-    sal_Bool IsNameInArray( const std::vector<String>& rOldNames, const String& rName );
+    bool IsNameInArray( const std::vector<String>& rOldNames, const String& rName );
     void GetAllDBNames( std::vector<String>& rAllDBNames );
     void ReplaceUsedDBs( const std::vector<String>& rUsedDBNames,
                         const String& rNewName, String& rFormel );
@@ -1082,10 +1082,10 @@ public:
                             sal_Bool bDelRedlines = sal_True,
                             sal_Bool bCopyFlyAtFly = sal_False ) const;
 
-    sal_Bool SetFlyFrmAttr( SwFrmFmt& rFlyFmt, SfxItemSet& rSet );
+    bool SetFlyFrmAttr( SwFrmFmt& rFlyFmt, SfxItemSet& rSet );
 
-    sal_Bool SetFrmFmtToFly( SwFrmFmt& rFlyFmt, SwFrmFmt& rNewFmt,
-                        SfxItemSet* pSet = 0, sal_Bool bKeepOrient = sal_False );
+    bool SetFrmFmtToFly( SwFrmFmt& rFlyFmt, SwFrmFmt& rNewFmt,
+                        SfxItemSet* pSet = 0, bool bKeepOrient = false );
     void SetFlyFrmTitle( SwFlyFrmFmt& rFlyFrmFmt,
                          const String& sNewTitle );
     void SetFlyFrmDescription( SwFlyFrmFmt& rFlyFrmFmt,

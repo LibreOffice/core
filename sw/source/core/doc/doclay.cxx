@@ -1888,7 +1888,7 @@ IMPL_LINK( SwDoc, DoIdleJobs, Timer *, pTimer )
                 /* && !pStartSh->GetViewOptions()->IsFldName()*/ )
         {
             //  Action brackets!
-            GetUpdtFlds().SetInUpdateFlds( sal_True );
+            GetUpdtFlds().SetInUpdateFlds( true );
 
             pTmpRoot->StartAllAction();
 
@@ -1905,8 +1905,8 @@ IMPL_LINK( SwDoc, DoIdleJobs, Timer *, pTimer )
 
             pStartSh->LockView( bOldLockView );
 
-            GetUpdtFlds().SetInUpdateFlds( sal_False );
-            GetUpdtFlds().SetFieldsDirty( sal_False );
+            GetUpdtFlds().SetInUpdateFlds( false );
+            GetUpdtFlds().SetFieldsDirty( false );
         }
     }   //swmod 080219
 #ifdef TIMELOG

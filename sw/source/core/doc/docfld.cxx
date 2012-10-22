@@ -1227,8 +1227,8 @@ void SwDoc::UpdateExpFlds( SwTxtFld* pUpdtFld, bool bUpdRefFlds )
     if( IsExpFldsLocked() || IsInReading() )
         return;
 
-    sal_Bool bOldInUpdateFlds = pUpdtFlds->IsInUpdateFlds();
-    pUpdtFlds->SetInUpdateFlds( sal_True );
+    bool bOldInUpdateFlds = pUpdtFlds->IsInUpdateFlds();
+    pUpdtFlds->SetInUpdateFlds( true );
 
     pUpdtFlds->MakeFldList( *this, sal_True, GETFLD_ALL );
     mbNewFldLst = sal_False;
@@ -1239,7 +1239,7 @@ void SwDoc::UpdateExpFlds( SwTxtFld* pUpdtFld, bool bUpdRefFlds )
             UpdateRefFlds(NULL);
 
         pUpdtFlds->SetInUpdateFlds( bOldInUpdateFlds );
-        pUpdtFlds->SetFieldsDirty( sal_False );
+        pUpdtFlds->SetFieldsDirty( false );
         return ;
     }
 
@@ -1538,7 +1538,7 @@ void SwDoc::UpdateExpFlds( SwTxtFld* pUpdtFld, bool bUpdRefFlds )
         UpdateRefFlds(NULL);
 
     pUpdtFlds->SetInUpdateFlds( bOldInUpdateFlds );
-    pUpdtFlds->SetFieldsDirty( sal_False );
+    pUpdtFlds->SetFieldsDirty( false );
 }
 
 void SwDoc::UpdateDBNumFlds( SwDBNameInfField& rDBFld, SwCalc& rCalc )
@@ -1886,7 +1886,7 @@ void SwDoc::ChangeDBFields( const std::vector<String>& rOldNames,
             continue;
 
         SwField* pFld = pFmtFld->GetFld();
-        sal_Bool bExpand = sal_False;
+        bool bExpand = false;
 
         switch( pFld->GetTyp()->Which() )
         {
@@ -1904,7 +1904,7 @@ void SwDoc::ChangeDBFields( const std::vector<String>& rOldNames,
                     ((SwDBField*)pFld)->ClearInitialized();
                     ((SwDBField*)pFld)->InitContent();
 
-                    bExpand = sal_True;
+                    bExpand = true;
                 }
                 break;
 
@@ -1914,7 +1914,7 @@ void SwDoc::ChangeDBFields( const std::vector<String>& rOldNames,
                                 lcl_DBDataToString(((SwDBNameInfField*)pFld)->GetRealDBData())))
                 {
                     ((SwDBNameInfField*)pFld)->SetDBData(aNewDBData);
-                    bExpand = sal_True;
+                    bExpand = true;
                 }
                 break;
 
@@ -1924,7 +1924,7 @@ void SwDoc::ChangeDBFields( const std::vector<String>& rOldNames,
                                 lcl_DBDataToString(((SwDBNameInfField*)pFld)->GetRealDBData())))
                 {
                     ((SwDBNameInfField*)pFld)->SetDBData(aNewDBData);
-                    bExpand = sal_True;
+                    bExpand = true;
                 }
                 // no break;
             case RES_HIDDENTXTFLD:
@@ -1932,7 +1932,7 @@ void SwDoc::ChangeDBFields( const std::vector<String>& rOldNames,
                 sFormel = pFld->GetPar1();
                 ReplaceUsedDBs( rOldNames, rNewName, sFormel);
                 pFld->SetPar1( sFormel );
-                bExpand = sal_True;
+                bExpand = true;
                 break;
 
             case RES_SETEXPFLD:
@@ -1941,7 +1941,7 @@ void SwDoc::ChangeDBFields( const std::vector<String>& rOldNames,
                 sFormel = pFld->GetFormula();
                 ReplaceUsedDBs( rOldNames, rNewName, sFormel);
                 pFld->SetPar2( sFormel );
-                bExpand = sal_True;
+                bExpand = true;
                 break;
         }
 
@@ -1991,19 +1991,19 @@ void SwDoc::ReplaceUsedDBs( const std::vector<String>& rUsedDBNames,
     }
 }
 
-sal_Bool SwDoc::IsNameInArray( const std::vector<String>& rArr, const String& rName )
+bool SwDoc::IsNameInArray( const std::vector<String>& rArr, const String& rName )
 {
 #ifdef UNX
     for( sal_uInt16 i = 0; i < rArr.size(); ++i )
         if( rName == rArr[ i ] )
-            return sal_True;
+            return true;
 #else
     const ::utl::TransliterationWrapper& rSCmp = GetAppCmpStrIgnore();
     for( sal_uInt16 i = 0; i < rArr.size(); ++i )
         if( rSCmp.isEqual( rName, rArr[ i] ))
-            return sal_True;
+            return true;
 #endif
-    return sal_False;
+    return false;
 }
 
 void SwDoc::SetFixFields( bool bOnlyTimeDate, const DateTime* pNewDateTime )
@@ -2039,13 +2039,13 @@ void SwDoc::SetFixFields( bool bOnlyTimeDate, const DateTime* pNewDateTime )
         {
             if( pFld && pFld->GetTxtFld() )
             {
-                sal_Bool bChgd = sal_False;
+                bool bChgd = false;
                 switch( aTypes[ nStt ] )
                 {
                 case RES_DOCINFOFLD:
                     if( ((SwDocInfoField*)pFld->GetFld())->IsFixed() )
                     {
-                        bChgd = sal_True;
+                        bChgd = true;
                         SwDocInfoField* pDocInfFld = (SwDocInfoField*)pFld->GetFld();
                         pDocInfFld->SetExpansion( ((SwDocInfoFieldType*)
                                     pDocInfFld->GetTyp())->Expand(
@@ -2059,7 +2059,7 @@ void SwDoc::SetFixFields( bool bOnlyTimeDate, const DateTime* pNewDateTime )
                 case RES_AUTHORFLD:
                     if( ((SwAuthorField*)pFld->GetFld())->IsFixed() )
                     {
-                        bChgd = sal_True;
+                        bChgd = true;
                         SwAuthorField* pAuthorFld = (SwAuthorField*)pFld->GetFld();
                         pAuthorFld->SetExpansion( ((SwAuthorFieldType*)
                                     pAuthorFld->GetTyp())->Expand(
@@ -2070,7 +2070,7 @@ void SwDoc::SetFixFields( bool bOnlyTimeDate, const DateTime* pNewDateTime )
                 case RES_EXTUSERFLD:
                     if( ((SwExtUserField*)pFld->GetFld())->IsFixed() )
                     {
-                        bChgd = sal_True;
+                        bChgd = true;
                         SwExtUserField* pExtUserFld = (SwExtUserField*)pFld->GetFld();
                         pExtUserFld->SetExpansion( ((SwExtUserFieldType*)
                                     pExtUserFld->GetTyp())->Expand(
@@ -2082,7 +2082,7 @@ void SwDoc::SetFixFields( bool bOnlyTimeDate, const DateTime* pNewDateTime )
                 case RES_DATETIMEFLD:
                     if( ((SwDateTimeField*)pFld->GetFld())->IsFixed() )
                     {
-                        bChgd = sal_True;
+                        bChgd = true;
                         ((SwDateTimeField*)pFld->GetFld())->SetDateTime(
                                                     DateTime(Date(nDate), Time(nTime)) );
                     }
@@ -2091,7 +2091,7 @@ void SwDoc::SetFixFields( bool bOnlyTimeDate, const DateTime* pNewDateTime )
                 case RES_FILENAMEFLD:
                     if( ((SwFileNameField*)pFld->GetFld())->IsFixed() )
                     {
-                        bChgd = sal_True;
+                        bChgd = true;
                         SwFileNameField* pFileNameFld =
                             (SwFileNameField*)pFld->GetFld();
                         pFileNameFld->SetExpansion( ((SwFileNameFieldType*)
@@ -2116,12 +2116,12 @@ bool SwDoc::SetFieldsDirty( bool b, const SwNode* pChk, sal_uLong nLen )
 {
     // See if the supplied nodes actually contain fields.
     // If they don't, the flag doesn't need to be changed.
-    sal_Bool bFldsFnd = sal_False;
+    bool bFldsFnd = false;
     if( b && pChk && !GetUpdtFlds().IsFieldsDirty() && !IsInDtor()
         // ?? what's up with Undo, this is also wanted there!
         /*&& &pChk->GetNodes() == &GetNodes()*/ )
     {
-        b = sal_False;
+        b = false;
         if( !nLen )
             ++nLen;
         sal_uLong nStt = pChk->GetIndex();
@@ -2133,7 +2133,7 @@ bool SwDoc::SetFieldsDirty( bool b, const SwNode* pChk, sal_uLong nLen )
             {
                 if( pTNd->GetAttrOutlineLevel() != 0 )
                     // update chapter fields
-                    b = sal_True;
+                    b = true;
                 else if( pTNd->GetpSwpHints() && pTNd->GetSwpHints().Count() )
                     for( sal_uInt16 n = 0, nEnd = pTNd->GetSwpHints().Count();
                             n < nEnd; ++n )
@@ -2141,7 +2141,7 @@ bool SwDoc::SetFieldsDirty( bool b, const SwNode* pChk, sal_uLong nLen )
                         const SwTxtAttr* pAttr = pTNd->GetSwpHints()[ n ];
                         if( RES_TXTATR_FIELD == pAttr->Which() )
                         {
-                            b = sal_True;
+                            b = true;
                             break;
                         }
                     }
@@ -2173,7 +2173,7 @@ void SwDoc::ChangeAuthorityData( const SwAuthEntry* pNewData )
 
 }
 
-void SwDocUpdtFld::InsDelFldInFldLst( sal_Bool bIns, const SwTxtFld& rFld )
+void SwDocUpdtFld::InsDelFldInFldLst( bool bIns, const SwTxtFld& rFld )
 {
     sal_uInt16 nWhich = rFld.GetFld().GetFld()->GetTyp()->Which();
     switch( nWhich )
@@ -2192,7 +2192,7 @@ void SwDocUpdtFld::InsDelFldInFldLst( sal_Bool bIns, const SwTxtFld& rFld )
         return;
     }
 
-    SetFieldsDirty( sal_True );
+    SetFieldsDirty( true );
     if( !pFldSortLst )
     {
         if( !bIns )             // if list is present and deleted
@@ -2291,7 +2291,7 @@ void SwDocUpdtFld::_MakeFldList( SwDoc& rDoc, int eGetMode )
 
     rtl::OUString sTrue("TRUE"), sFalse("FALSE");
 
-    sal_Bool bIsDBMgr = 0 != rDoc.GetNewDBMgr();
+    bool bIsDBMgr = 0 != rDoc.GetNewDBMgr();
     sal_uInt16 nWhich, n;
     const rtl::OUString* pFormel = 0;
     const SfxPoolItem* pItem;
@@ -2510,7 +2510,7 @@ void SwDocUpdtFld::InsertFldType( const SwFieldType& rType )
 
     if( sFldName.Len() )
     {
-        SetFieldsDirty( sal_True );
+        SetFieldsDirty( true );
         // look up and remove from the hash table
         sFldName = GetAppCharClass().lowercase( sFldName );
         sal_uInt16 n;
@@ -2541,7 +2541,7 @@ void SwDocUpdtFld::RemoveFldType( const SwFieldType& rType )
 
     if( sFldName.Len() )
     {
-        SetFieldsDirty( sal_True );
+        SetFieldsDirty( true );
         // look up and remove from the hash table
         sFldName = GetAppCharClass().lowercase( sFldName );
         sal_uInt16 n;
@@ -2585,7 +2585,7 @@ bool SwDoc::UpdateFld(SwTxtFld * pDstTxtFld, SwField & rSrcFld,
 {
     OSL_ENSURE(pDstTxtFld, "no field to update!");
 
-    sal_Bool bTblSelBreak = sal_False;
+    bool bTblSelBreak = false;
 
     SwFmtFld * pDstFmtFld = (SwFmtFld*)&pDstTxtFld->GetFld();
     SwField * pDstFld = pDstFmtFld->GetFld();
@@ -2631,7 +2631,7 @@ bool SwDoc::UpdateFld(SwTxtFld * pDstTxtFld, SwField & rSrcFld,
                         pNewFld->GetTyp()->ModifyNotification(0, &aTblUpdate);
 
                     if (! bUpdateFlds)
-                        bTblSelBreak = sal_True;
+                        bTblSelBreak = true;
                 }
             }
             break;

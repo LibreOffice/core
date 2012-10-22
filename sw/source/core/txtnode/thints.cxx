@@ -1146,7 +1146,7 @@ void SwTxtNode::DestroyAttr( SwTxtAttr* pAttr )
                 case RES_DBNUMSETFLD:
                 case RES_DBNEXTSETFLD:
                     if( !pDoc->IsNewFldLst() && GetNodes().IsDocNodes() )
-                        pDoc->InsDelFldInFldLst( sal_False, *(SwTxtFld*)pAttr );
+                        pDoc->InsDelFldInFldLst( false, *(SwTxtFld*)pAttr );
                     break;
                 case RES_DDEFLD:
                     if( GetNodes().IsDocNodes() &&
@@ -2627,9 +2627,9 @@ bool SwpHints::TryInsertHint( SwTxtAttr* const pHint, SwTxtNode &rNode,
                 case RES_DBNEXTSETFLD:
                     {
                         if( bDelFirst )
-                            pDoc->InsDelFldInFldLst( sal_False, *(SwTxtFld*)pHint );
+                            pDoc->InsDelFldInFldLst( false, *(SwTxtFld*)pHint );
                         if( rNode.GetNodes().IsDocNodes() )
-                            pDoc->InsDelFldInFldLst( sal_True, *(SwTxtFld*)pHint );
+                            pDoc->InsDelFldInFldLst( true, *(SwTxtFld*)pHint );
                     }
                     break;
                 case RES_DDEFLD:

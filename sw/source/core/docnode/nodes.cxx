@@ -142,7 +142,7 @@ void SwNodes::ChgNode( SwNodeIndex& rDelPos, sal_uLong nSz,
 
     //JP 03.02.99: alle Felder als invalide erklaeren, aktu. erfolgt im
     //              Idle-Handler des Docs
-    if( GetDoc()->SetFieldsDirty( sal_True, &rDelPos.GetNode(), nSz ) &&
+    if( GetDoc()->SetFieldsDirty( true, &rDelPos.GetNode(), nSz ) &&
         rNds.GetDoc() != GetDoc() )
         rNds.GetDoc()->SetFieldsDirty( true, NULL, 0 );
 

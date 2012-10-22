@@ -1008,7 +1008,7 @@ sal_uInt16 SwDocShell::UpdateStyle(const String &rName, sal_uInt16 nFamily, SwWr
                 pFrm->SetFmtAttr( aSet );
 
                     // also apply template to remove hard set attributes
-                pCurrWrtShell->SetFrmFmt( pFrm, sal_True );
+                pCurrWrtShell->SetFrmFmt( pFrm, true );
                 pCurrWrtShell->EndAllAction();
             }
         }

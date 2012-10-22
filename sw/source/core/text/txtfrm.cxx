@@ -1352,7 +1352,7 @@ void SwTxtFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
     } // switch
 
     if( bSetFldsDirty )
-        GetNode()->getIDocumentFieldsAccess()->SetFieldsDirty( sal_True, GetNode(), 1 );
+        GetNode()->getIDocumentFieldsAccess()->SetFieldsDirty( true, GetNode(), 1 );
 
     if ( bRecalcFtnFlag )
         CalcFtnFlag();

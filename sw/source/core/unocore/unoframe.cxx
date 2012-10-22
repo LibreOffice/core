@@ -1072,7 +1072,7 @@ void SwXFrame::setPropertyValue(const :: OUString& rPropertyName, const :: uno::
                 // if document is currently in reading mode.
                 if ( !pFmt->GetDoc()->IsInReading() )
                 {
-                    // see SwFEShell::SetFrmFmt( SwFrmFmt *pNewFmt, sal_Bool bKeepOrient, Point* pDocPos )
+                    // see SwFEShell::SetFrmFmt( SwFrmFmt *pNewFmt, bool bKeepOrient, Point* pDocPos )
                     SwFlyFrm *pFly = 0;
                     {
                         const :: SwFrmFmt* pFmtXX = pFmt;
@@ -1092,7 +1092,7 @@ void SwXFrame::setPropertyValue(const :: OUString& rPropertyName, const :: uno::
                     }
                 }
 
-                pFmt->GetDoc()->SetFrmFmtToFly( *pFmt, *pFrmFmt, pSet, sal_False );
+                pFmt->GetDoc()->SetFrmFmtToFly( *pFmt, *pFrmFmt, pSet, false );
                 delete pSet;
             }
             else

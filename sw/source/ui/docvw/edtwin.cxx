@@ -4587,7 +4587,7 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                     const SwFrmFmt* pFmt = rSh.GetFmtFromObj( aDocPt );
                     if(PTR_CAST(SwFlyFrmFmt, pFmt))
                     {
-                        rSh.SetFrmFmt( pApplyTempl->aColl.pFrmFmt, sal_False, &aDocPt );
+                        rSh.SetFrmFmt( pApplyTempl->aColl.pFrmFmt, false, &aDocPt );
                         pApplyTempl->bUndo = sal_True;
                         bCallBase = sal_False;
                         if( pApplyTempl->aColl.pFrmFmt )
