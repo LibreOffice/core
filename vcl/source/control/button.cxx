@@ -153,12 +153,15 @@ XubString Button::GetStandardText( StandardButtonType eButton )
         ResId aResId( nResId, *pResMgr );
         aText = String( aResId );
 
-        // Windows (apparently) has some magic auto-accelerator evil around
-        // ok / cancel so add this only for Unix
-#ifdef UNX
-        if( nResId == SV_BUTTONTEXT_OK || nResId == SV_BUTTONTEXT_CANCEL )
-            aText.Insert( String::CreateFromAscii("~"), 0 );
+        if (nResId == SV_BUTTONTEXT_OK || nResId == SV_BUTTONTEXT_CANCEL)
+        {
+#ifndef WNT
+            // Windows (apparently) has some magic auto-accelerator evil around
+            // ok / cancel so add accelerators only for Unix
+            if (aText.Search('~') == STRING_NOTFOUND)
+                aText.Insert(String::CreateFromAscii("~"), 0);
 #endif
+        }
     }
     else
     {
