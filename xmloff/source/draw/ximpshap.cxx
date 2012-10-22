@@ -470,7 +470,7 @@ void SdXMLShapeContext::AddShape(uno::Reference< drawing::XShape >& xShape)
 
         if( !maShapeId.isEmpty() )
         {
-            uno::Reference< uno::XInterface > xRef( xShape, uno::UNO_QUERY );
+            uno::Reference< uno::XInterface > xRef( static_cast<uno::XInterface *>(xShape.get()) );
             GetImport().getInterfaceToIdentifierMapper().registerReference( maShapeId, xRef );
         }
 
