@@ -241,7 +241,7 @@ void RemoveUnusedCommands( GLOActionGroup* pActionGroup, GList* pOldCommandList,
     }
 }
 
-void GtkSalMenu::UpdateNativeMenu()
+void GtkSalMenu::Update()
 {
     SolarMutexGuard aGuard;
     //GTK_YIELD_GRAB();
@@ -376,17 +376,17 @@ void GtkSalMenu::UpdateNativeMenu()
     RemoveUnusedCommands( pActionGroup, pOldCommandList, pNewCommandList );
 }
 
-static void GenerateFullMenu( GtkSalMenu* pSalMenu )
+void GtkSalMenu::UpdateFull()
 {
     SolarMutexGuard aGuard;
     //GTK_YIELD_GRAB();
 
-    if( !pSalMenu || !pSalMenu->PrepUpdate() )
+    if( !PrepUpdate() )
         return;
 
-    Menu* pVCLMenu = pSalMenu->GetMenu();
-    GLOMenu* pLOMenu = G_LO_MENU( pSalMenu->GetMenuModel() );
-    GLOActionGroup* pActionGroup = G_LO_ACTION_GROUP( pSalMenu->GetActionGroup() );
+    Menu* pVCLMenu = mpVCLMenu;
+    GLOMenu* pLOMenu = G_LO_MENU( mpMenuModel );
+    GLOActionGroup* pActionGroup = G_LO_ACTION_GROUP( mpActionGroup );
     GList *pOldCommandList = NULL;
     GList *pNewCommandList = NULL;
 
@@ -400,11 +400,11 @@ static void GenerateFullMenu( GtkSalMenu* pSalMenu )
     sal_Int32 validItems = 0;
     sal_Int32 nItem;
 
-    for ( nItem = 0; nItem < ( sal_Int32 ) pSalMenu->GetItemCount(); nItem++ ) {
-        if ( pSalMenu->IsItemVisible( nItem ) == sal_False )
+    for ( nItem = 0; nItem < ( sal_Int32 ) GetItemCount(); nItem++ ) {
+        if ( IsItemVisible( nItem ) == sal_False )
             continue;
 
-        GtkSalMenuItem *pSalMenuItem = pSalMenu->GetItemAtPos( nItem );
+        GtkSalMenuItem *pSalMenuItem = GetItemAtPos( nItem );
         sal_uInt16 nId = pSalMenuItem->mnId;
 
         if ( pSalMenuItem->mnType == MENUITEM_SEPARATOR )
@@ -440,7 +440,7 @@ static void GenerateFullMenu( GtkSalMenu* pSalMenu )
         gboolean bChecked = ( itemChecked == sal_True ) ? TRUE : FALSE;
         gboolean bEnabled = ( itemEnabled == sal_True ) ? TRUE : FALSE;
 //        gchar* aNativeCommand = g_strdup( rtl::OUStringToOString( aCommand, RTL_TEXTENCODING_UTF8 ).getStr() );
-        gchar* aNativeCommand = pSalMenu->GetCommandForSpecialItem( pSalMenuItem );
+        gchar* aNativeCommand = GetCommandForSpecialItem( pSalMenuItem );
 
         // Store current item command in command list.
         gchar *aCurrentCommand = g_lo_menu_get_command_from_item_in_section( pLOMenu, nSection, nItemPos );
@@ -449,8 +449,8 @@ static void GenerateFullMenu( GtkSalMenu* pSalMenu )
             pOldCommandList = g_list_append( pOldCommandList, aCurrentCommand );
 
         // Force updating of native menu labels.
-        pSalMenu->NativeSetItemText( nSection, nItemPos, aText );
-        pSalMenu->NativeSetAccelerator( nSection, nItemPos, nAccelKey, nAccelKey.GetName( GetFrame()->GetWindow() ) );
+        NativeSetItemText( nSection, nItemPos, aText );
+        NativeSetAccelerator( nSection, nItemPos, nAccelKey, nAccelKey.GetName( GetFrame()->GetWindow() ) );
 
         // Some items are special, so they have different commands.
 //        if ( g_strcmp0( aNativeCommand, "" ) == 0 )
@@ -468,9 +468,9 @@ static void GenerateFullMenu( GtkSalMenu* pSalMenu )
 
         if ( g_strcmp0( aNativeCommand, "" ) != 0 && pSalMenuItem->mpSubMenu == NULL )
         {
-            pSalMenu->NativeSetItemCommand( nSection, nItemPos, nId, aNativeCommand, itemBits, bChecked, FALSE );
-            pSalMenu->NativeCheckItem( nSection, nItemPos, itemBits, bChecked );
-            pSalMenu->NativeSetEnableItem( aNativeCommand, bEnabled );
+            NativeSetItemCommand( nSection, nItemPos, nId, aNativeCommand, itemBits, bChecked, FALSE );
+            NativeCheckItem( nSection, nItemPos, itemBits, bChecked );
+            NativeSetEnableItem( aNativeCommand, bEnabled );
 
             pNewCommandList = g_list_append( pNewCommandList, g_strdup( aNativeCommand ) );
         }
@@ -479,7 +479,7 @@ static void GenerateFullMenu( GtkSalMenu* pSalMenu )
 
         if ( pSubmenu && pSubmenu->GetMenu() )
         {
-            pSalMenu->NativeSetItemCommand( nSection, nItemPos, nId, aNativeCommand, itemBits, FALSE, TRUE );
+            NativeSetItemCommand( nSection, nItemPos, nId, aNativeCommand, itemBits, FALSE, TRUE );
             pNewCommandList = g_list_append( pNewCommandList, g_strdup( aNativeCommand ) );
 
             GLOMenu* pSubMenuModel = g_lo_menu_get_submenu_from_item_in_section( pLOMenu, nSection, nItemPos );
@@ -500,8 +500,7 @@ static void GenerateFullMenu( GtkSalMenu* pSalMenu )
             pSubmenu->GetMenu()->Activate();
             pSubmenu->GetMenu()->Deactivate();
 
-            GenerateFullMenu( pSubmenu );
-            //pSubmenu->UpdateNativeMenu();
+            pSubmenu->UpdateFull();
         }
 
         g_free( aNativeCommand );
@@ -630,7 +629,7 @@ void GtkSalMenu::SetFrame( const SalFrame* pFrame )
 
     // Generate the main menu structure.
     if (bMenuVisibility)
-        UpdateNativeMenu();
+        UpdateFull();
 
     g_lo_menu_insert_section( pMenuModel, 0, NULL, mpMenuModel );
 }
@@ -843,7 +842,7 @@ void GtkSalMenu::Activate( const gchar* aMenuCommand )
     if ( pSalSubMenu != NULL ) {
         MenuBar* pMenuBar = static_cast< MenuBar* >( mpVCLMenu );
         pMenuBar->HandleMenuActivateEvent( pSalSubMenu->mpVCLMenu );
-        pSalSubMenu->UpdateNativeMenu2();
+        pSalSubMenu->Update();
     }
 }
 
