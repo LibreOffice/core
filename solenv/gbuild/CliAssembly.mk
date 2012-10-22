@@ -89,7 +89,6 @@ $(call gb_CliAssemblyTarget_get_target,$(1)) : CLI_ASSEMBLY_KEYFILE := $(gb_CliA
 $(call gb_CliAssemblyTarget_get_target,$(1)) : CLI_ASSEMBLY_PLATFORM :=
 $(call gb_CliAssemblyTarget_get_target,$(1)) : CLI_ASSEMBLY_VERSION :=
 
-$(call gb_CliAssemblyTarget_get_target,$(1)) : $$(CLI_ASSEMBLY_KEYFILE)
 $(call gb_CliAssemblyTarget_get_target,$(1)) :| $(dir $(call gb_CliAssemblyTarget_get_target,$(1))).dir
 
 endef
@@ -102,6 +101,7 @@ endef
 
 define gb_CliAssemblyTarget_set_keyfile
 $(call gb_CliAssemblyTarget_get_target,$(1)) : CLI_ASSEMBLY_KEYFILE := $(2)
+$(call gb_CliAssemblyTarget_get_target,$(1)) : $(2)
 
 endef
 
