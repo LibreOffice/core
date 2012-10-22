@@ -1772,6 +1772,10 @@ else # !SYSTEM_POSTGRESQL
 
 define gb_LinkTarget__use_postgresql
 
+$(call gb_LinkTarget_use_packages,$(1),\
+	postgresql \
+)
+
 $(call gb_LinkTarget_set_include,$(1),\
 	-I$(OUTDIR)/inc/postgresql \
 	$$(INCLUDE) \

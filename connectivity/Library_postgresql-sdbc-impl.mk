@@ -64,10 +64,6 @@ $(eval $(call gb_Library_use_externals,postgresql-sdbc-impl,\
 ifneq ($(SYSTEM_POSTGRESQL),YES)
 ifneq ($(GUI)$(COM),WNTMSC)
 
-$(eval $(call gb_Library_use_external_package,postgresql-sdbc-impl,\
-	postgresql \
-))
-
 -include $(OUTDIR)/inc/postgresql/libpq-flags.mk
 
 $(eval $(call gb_Library_add_libs,postgresql-sdbc-impl,\
