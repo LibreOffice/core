@@ -158,9 +158,14 @@ $(call gb_CliAssembly_get_clean_target,$(1)) : $(call gb_Package_get_clean_targe
 
 endef
 
+define gb_CliAssembly__add_file
+$(call gb_Package_add_file,$(1)_assembly,bin/$(notdir $(2)),$(subst $(WORKDIR)/,,$(2)))
+
+endef
+
 define gb_CliAssembly__set_configfile_impl
 $(call gb_CliAssemblyTarget_set_configfile,$(1),$(2))
-$(call gb_Package_add_file,$(1)_assembly,bin/$(notdir $(2)),$(subst $(WORKDIR)/,,$(2)))
+$(call gb_CliAssembly__add_file,$(1),$(2))
 
 endef
 
@@ -185,15 +190,10 @@ $(call gb_CliAssemblyTarget_set_platform,$(1),$(2))
 
 endef
 
-define gb_CliAssembly__set_policy
-$(call gb_Package_add_file,$(1)_assembly,bin/$(notdir $(2)),$(subst $(WORKDIR)/,,$(2)))
-
-endef
-
 define gb_CliAssembly_set_policy
 $(call gb_CliAssemblyTarget_set_version,$(1),$(3))
 $(call gb_CliAssemblyTarget_set_name,$(1),$(2))
-$(call gb_CliAssembly__set_policy,$(1),$(call gb_CliAssemblyTarget_get_assembly_target,$(2)))
+$(call gb_CliAssembly__add_file,$(1),$(call gb_CliAssemblyTarget_get_assembly_target,$(2)))
 
 endef
 
