@@ -112,12 +112,12 @@ void SetEncryptionKeyProperty_Impl( const uno::Reference< beans::XPropertySet >&
         throw uno::RuntimeException();
 
     try {
-        xPropertySet->setPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( STORAGE_ENCRYPTION_KEYS_PROPERTY ) ), uno::makeAny( aKey ) );
+        xPropertySet->setPropertyValue( STORAGE_ENCRYPTION_KEYS_PROPERTY, uno::makeAny( aKey ) );
     }
     catch ( const uno::Exception& rException )
     {
         ::package::StaticAddLog( rException.Message );
-        ::package::StaticAddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Can't set encryption") ) );
+        ::package::StaticAddLog( OSL_LOG_PREFIX "Can't set encryption");
         OSL_FAIL( "Can't write encryption related properties!\n" );
         throw io::IOException(); // TODO
     }
@@ -131,12 +131,12 @@ uno::Any GetEncryptionKeyProperty_Impl( const uno::Reference< beans::XPropertySe
         throw uno::RuntimeException();
 
     try {
-        return xPropertySet->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( STORAGE_ENCRYPTION_KEYS_PROPERTY ) ) );
+        return xPropertySet->getPropertyValue(STORAGE_ENCRYPTION_KEYS_PROPERTY);
     }
     catch ( const uno::Exception& rException )
     {
         ::package::StaticAddLog( rException.Message );
-        ::package::StaticAddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Can't get encryption property" ) ) );
+        ::package::StaticAddLog( OSL_LOG_PREFIX "Can't get encryption property" );
 
         OSL_FAIL( "Can't get encryption related properties!\n" );
         throw io::IOException(); // TODO
@@ -223,7 +223,7 @@ sal_Bool KillFile( const ::rtl::OUString& aURL, const uno::Reference< uno::XComp
     catch( const uno::Exception& rException )
     {
         ::package::StaticAddLog( rException.Message );
-        ::package::StaticAddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Quiet exception") ) );
+        ::package::StaticAddLog( OSL_LOG_PREFIX "Quiet exception" );
     }
 
     return bRet;
@@ -241,14 +241,14 @@ const sal_Int32 n_ConstBufferSize = 32000;
             uno::UNO_QUERY_THROW );
 
     try {
-        xTempFile->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RemoveFile") ), uno::makeAny( sal_False ) );
-        uno::Any aUrl = xTempFile->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Uri") ) );
+        xTempFile->setPropertyValue( "RemoveFile", uno::makeAny( sal_False ) );
+        uno::Any aUrl = xTempFile->getPropertyValue( "Uri" );
         aUrl >>= aTempURL;
     }
     catch ( const uno::Exception& rException )
     {
         ::package::StaticAddLog( rException.Message );
-        ::package::StaticAddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Quiet exception") ) );
+        ::package::StaticAddLog( OSL_LOG_PREFIX "Quiet exception" );
     }
 
     if ( aTempURL.isEmpty() )
@@ -263,7 +263,7 @@ uno::Reference< io::XStream > CreateMemoryStream( const uno::Reference< lang::XM
     if ( !xFactory.is() )
         throw uno::RuntimeException();
 
-    return uno::Reference< io::XStream >( xFactory->createInstance (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.MemoryStream") ) ), uno::UNO_QUERY_THROW);
+    return uno::Reference< io::XStream >( xFactory->createInstance ("com.sun.star.comp.MemoryStream"), uno::UNO_QUERY_THROW);
 }
 
 } // anonymous namespace
@@ -406,7 +406,7 @@ sal_Bool OWriteStream_Impl::IsEncrypted()
     uno::Reference< beans::XPropertySet > xPropSet( m_xPackageStream, uno::UNO_QUERY );
     if ( xPropSet.is() )
     {
-        uno::Any aValue = xPropSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("WasEncrypted") ) );
+        uno::Any aValue = xPropSet->getPropertyValue("WasEncrypted");
         if ( !( aValue >>= bWasEncr ) )
         {
             OSL_FAIL( "The property WasEncrypted has wrong type!\n" );
@@ -513,7 +513,7 @@ void OWriteStream_Impl::DisposeWrappers()
         catch ( const uno::RuntimeException& rRuntimeException )
         {
             AddLog( rRuntimeException.Message );
-            AddLog( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(OSL_LOG_PREFIX "Quiet exception") ) );
+            AddLog( OSL_LOG_PREFIX "Quiet exception" );
         }
 
         m_pAntiImpl = NULL;
@@ -572,7 +572,7 @@ uno::Reference< lang::XMultiServiceFactory > OWriteStream_Impl::GetServiceFactor
         catch( const packages::WrongPasswordException& rWrongPasswordException )
         {
             AddLog( rWrongPasswordException.Message );
-            AddLog( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow") ) );
+            AddLog( OSL_LOG_PREFIX "Rethrow" );
 
             KillFile( aTempURL, comphelper::getProcessComponentContext() );
             throw;
@@ -580,7 +580,7 @@ uno::Reference< lang::XMultiServiceFactory > OWriteStream_Impl::GetServiceFactor
         catch( const uno::Exception& rException )
         {
             AddLog( rException.Message );
-            AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow") ) );
+            AddLog( OSL_LOG_PREFIX "Rethrow" );
 
             KillFile( aTempURL, comphelper::getProcessComponentContext() );
         throw;
@@ -697,7 +697,7 @@ uno::Reference< io::XStream > OWriteStream_Impl::GetTempFileAsStream()
             catch( const uno::Exception& rException )
             {
                 AddLog( rException.Message );
-                AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Quiet exception" ) ) );
+                AddLog( OSL_LOG_PREFIX "Quiet exception" );
             }
         }
     }
@@ -736,7 +736,7 @@ uno::Reference< io::XInputStream > OWriteStream_Impl::GetTempFileAsInputStream()
             catch( const uno::Exception& rException )
             {
                 AddLog( rException.Message );
-                AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Quiet exception" ) ) );
+                AddLog( OSL_LOG_PREFIX "Quiet exception" );
             }
         }
     }
@@ -789,8 +789,8 @@ void OWriteStream_Impl::InsertStreamDirectly( const uno::Reference< io::XInputSt
     // Thus if Compressed property is provided it must be set as the latest one
     sal_Bool bCompressedIsSet = sal_False;
     sal_Bool bCompressed = sal_False;
-    ::rtl::OUString aComprPropName( RTL_CONSTASCII_USTRINGPARAM( "Compressed" ) );
-    ::rtl::OUString aMedTypePropName( RTL_CONSTASCII_USTRINGPARAM( "MediaType" ) );
+    OUString aComprPropName( "Compressed" );
+    OUString aMedTypePropName( "MediaType" );
     for ( sal_Int32 nInd = 0; nInd < aProps.getLength(); nInd++ )
     {
         if ( aProps[nInd].Name.equals( aComprPropName ) )
@@ -803,7 +803,7 @@ void OWriteStream_Impl::InsertStreamDirectly( const uno::Reference< io::XInputSt
         {
             xPropertySet->setPropertyValue( aProps[nInd].Name, aProps[nInd].Value );
         }
-        else if ( m_nStorageType == embed::StorageFormats::PACKAGE && aProps[nInd].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "UseCommonStoragePasswordEncryption" ) ) )
+        else if ( m_nStorageType == embed::StorageFormats::PACKAGE && aProps[nInd].Name == "UseCommonStoragePasswordEncryption" )
             aProps[nInd].Value >>= m_bUseCommonEncryption;
         else
             throw lang::IllegalArgumentException();
@@ -829,10 +829,9 @@ void OWriteStream_Impl::InsertStreamDirectly( const uno::Reference< io::XInputSt
             throw uno::RuntimeException();
 
         // set to be encrypted but do not use encryption key
-        xPropertySet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( STORAGE_ENCRYPTION_KEYS_PROPERTY ) ),
+        xPropertySet->setPropertyValue( STORAGE_ENCRYPTION_KEYS_PROPERTY,
                                         uno::makeAny( uno::Sequence< beans::NamedValue >() ) );
-        xPropertySet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Encrypted") ),
-                                        uno::makeAny( sal_True ) );
+        xPropertySet->setPropertyValue( "Encrypted", uno::makeAny( sal_True ) );
     }
 
     // the stream should be free soon, after package is stored
@@ -928,9 +927,9 @@ void OWriteStream_Impl::Commit()
             throw uno::RuntimeException();
 
         // set to be encrypted but do not use encryption key
-        xPropertySet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( STORAGE_ENCRYPTION_KEYS_PROPERTY ) ),
+        xPropertySet->setPropertyValue( STORAGE_ENCRYPTION_KEYS_PROPERTY,
                                         uno::makeAny( uno::Sequence< beans::NamedValue >() ) );
-        xPropertySet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Encrypted") ),
+        xPropertySet->setPropertyValue( "Encrypted",
                                         uno::makeAny( sal_True ) );
     }
     else if ( m_bHasCachedEncryptionData )
@@ -938,7 +937,7 @@ void OWriteStream_Impl::Commit()
         if ( m_nStorageType != embed::StorageFormats::PACKAGE )
             throw uno::RuntimeException();
 
-        xPropertySet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( STORAGE_ENCRYPTION_KEYS_PROPERTY ) ),
+        xPropertySet->setPropertyValue( STORAGE_ENCRYPTION_KEYS_PROPERTY,
                                         uno::makeAny( m_aEncryptionData.getAsConstNamedValueList() ) );
     }
 
@@ -1030,7 +1029,7 @@ uno::Sequence< beans::PropertyValue > OWriteStream_Impl::InsertOwnProps(
             }
 
         aResult.realloc( ++nLen );
-        aResult[nLen - 1].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UseCommonStoragePasswordEncryption") );
+        aResult[nLen - 1].Name = "UseCommonStoragePasswordEncryption";
         aResult[nLen - 1].Value <<= bUseCommonEncryption;
     }
     else if ( m_nStorageType == embed::StorageFormats::OFOPXML )
@@ -1043,7 +1042,7 @@ uno::Sequence< beans::PropertyValue > OWriteStream_Impl::InsertOwnProps(
         else if ( m_nRelInfoStatus == RELINFO_CHANGED_STREAM_READ || m_nRelInfoStatus == RELINFO_CHANGED )
             aValue <<= m_aNewRelInfo;
         else // m_nRelInfoStatus == RELINFO_CHANGED_BROKEN || m_nRelInfoStatus == RELINFO_BROKEN
-            throw io::IOException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Wrong relinfo stream!" ) ),
+            throw io::IOException( "Wrong relinfo stream!",
                                     uno::Reference< uno::XInterface >() );
 
         for ( sal_Int32 nInd = 0; nInd < nLen; nInd++ )
@@ -1054,7 +1053,7 @@ uno::Sequence< beans::PropertyValue > OWriteStream_Impl::InsertOwnProps(
             }
 
         aResult.realloc( ++nLen );
-        aResult[nLen - 1].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RelationsInfo") );
+        aResult[nLen - 1].Name = "RelationsInfo";
         aResult[nLen - 1].Value = aValue;
     }
 
@@ -1081,7 +1080,7 @@ void OWriteStream_Impl::ReadRelInfoIfNecessary()
             if ( m_xOrigRelInfoStream.is() )
                 m_aOrigRelInfo = ::comphelper::OFOPXMLHelper::ReadRelationsInfoSequence(
                                         m_xOrigRelInfoStream,
-                                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "_rels/*.rels" ) ),
+                                        "_rels/*.rels",
                                         comphelper::getComponentContext(m_xFactory) );
 
             // in case of success the stream must be thrown away, that means that the OrigRelInfo is initialized
@@ -1093,7 +1092,7 @@ void OWriteStream_Impl::ReadRelInfoIfNecessary()
         catch( const uno::Exception& rException )
         {
             AddLog( rException.Message );
-            AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Quiet exception" ) ) );
+            AddLog( OSL_LOG_PREFIX "Quiet exception" );
 
             m_nRelInfoStatus = RELINFO_BROKEN;
             m_bOrigRelInfoBroken = sal_True;
@@ -1107,7 +1106,7 @@ void OWriteStream_Impl::ReadRelInfoIfNecessary()
             if ( m_xNewRelInfoStream.is() )
                 m_aNewRelInfo = ::comphelper::OFOPXMLHelper::ReadRelationsInfoSequence(
                                         m_xNewRelInfoStream,
-                                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "_rels/*.rels" ) ),
+                                        "_rels/*.rels",
                                         comphelper::getComponentContext(m_xFactory) );
 
             m_nRelInfoStatus = RELINFO_CHANGED_STREAM_READ;
@@ -1162,7 +1161,7 @@ uno::Sequence< beans::PropertyValue > OWriteStream_Impl::ReadPackageStreamProper
             catch( const uno::Exception& rException )
             {
                 AddLog( rException.Message );
-                AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Quiet exception" ) ) );
+                AddLog( OSL_LOG_PREFIX "Quiet exception" );
 
                 OSL_FAIL( "A property can't be retrieved!\n" );
             }
@@ -1219,7 +1218,7 @@ uno::Sequence< uno::Sequence< beans::StringPair > > OWriteStream_Impl::GetAllRel
     else if ( m_nRelInfoStatus == RELINFO_CHANGED_STREAM_READ || m_nRelInfoStatus == RELINFO_CHANGED )
         return m_aNewRelInfo;
     else // m_nRelInfoStatus == RELINFO_CHANGED_BROKEN || m_nRelInfoStatus == RELINFO_BROKEN
-            throw io::IOException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Wrong relinfo stream!" ) ),
+            throw io::IOException( "Wrong relinfo stream!",
                                     uno::Reference< uno::XInterface >() );
 }
 
@@ -1284,13 +1283,13 @@ uno::Reference< io::XStream > OWriteStream_Impl::GetStream( sal_Int32 nStreamMod
         {
             SetEncryptionKeyProperty_Impl( xPropertySet, uno::Sequence< beans::NamedValue >() );
             AddLog( rWrongPasswordException.Message );
-            AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
+            AddLog( OSL_LOG_PREFIX "Rethrow" );
             throw;
         }
         catch ( const uno::Exception& rException )
         {
             AddLog( rException.Message );
-            AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Quiet exception" ) ) );
+            AddLog( OSL_LOG_PREFIX "Quiet exception" );
 
             OSL_FAIL( "Can't write encryption related properties!\n" );
             SetEncryptionKeyProperty_Impl( xPropertySet, uno::Sequence< beans::NamedValue >() );
@@ -1325,7 +1324,7 @@ uno::Reference< io::XStream > OWriteStream_Impl::GetStream( sal_Int32 nStreamMod
         catch( const packages::NoEncryptionException& rNoEncryptionException )
         {
             AddLog( rNoEncryptionException.Message );
-            AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
+            AddLog( OSL_LOG_PREFIX "Rethrow" );
 
             throw packages::WrongPasswordException();
         }
@@ -1562,7 +1561,7 @@ void OWriteStream_Impl::GetCopyOfLastCommit( uno::Reference< io::XStream >& xTar
         catch( const packages::NoEncryptionException& rNoEncryptionException )
         {
             AddLog( rNoEncryptionException.Message );
-            AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "No Element" ) ) );
+            AddLog( OSL_LOG_PREFIX "No Element" );
 
             throw packages::WrongPasswordException();
         }
@@ -1605,12 +1604,12 @@ void OWriteStream_Impl::GetCopyOfLastCommit( uno::Reference< io::XStream >& xTar
             throw uno::RuntimeException();
 
         sal_Bool bEncr = sal_False;
-        xProps->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Encrypted") ) ) >>= bEncr;
+        xProps->getPropertyValue( "Encrypted" ) >>= bEncr;
         if ( !bEncr )
             throw packages::NoEncryptionException();
 
         uno::Sequence< beans::NamedValue > aPackKey;
-        xProps->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( STORAGE_ENCRYPTION_KEYS_PROPERTY ) ) ) >>= aPackKey;
+        xProps->getPropertyValue( STORAGE_ENCRYPTION_KEYS_PROPERTY ) >>= aPackKey;
         if ( !SequencesEqual( aKey, aPackKey ) )
             throw packages::WrongPasswordException();
 
@@ -1636,7 +1635,7 @@ void OWriteStream_Impl::GetCopyOfLastCommit( uno::Reference< io::XStream >& xTar
             OSL_FAIL( "Can't open encrypted stream!\n" );
             SetEncryptionKeyProperty_Impl( xPropertySet, uno::Sequence< beans::NamedValue >() );
             AddLog( rException.Message );
-            AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
+            AddLog( OSL_LOG_PREFIX "Rethrow" );
             throw;
         }
 
@@ -1667,10 +1666,10 @@ void OWriteStream_Impl::CommitStreamRelInfo( const uno::Reference< embed::XStora
             throw io::IOException(); // TODO:
 
         ::rtl::OUString aOrigRelStreamName = aOrigStreamName;
-        aOrigRelStreamName += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".rels" ) );
+        aOrigRelStreamName += ".rels";
 
         ::rtl::OUString aNewRelStreamName = aNewStreamName;
-        aNewRelStreamName += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".rels" ) );
+        aNewRelStreamName += ".rels";
 
         sal_Bool bRenamed = !aOrigRelStreamName.equals( aNewRelStreamName );
         if ( m_nRelInfoStatus == RELINFO_CHANGED
@@ -1697,9 +1696,8 @@ void OWriteStream_Impl::CommitStreamRelInfo( const uno::Reference< embed::XStora
                     // set the mediatype
                     uno::Reference< beans::XPropertySet > xPropSet( xRelsStream, uno::UNO_QUERY_THROW );
                     xPropSet->setPropertyValue(
-                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "MediaType" ) ),
-                        uno::makeAny( ::rtl::OUString(
-                             RTL_CONSTASCII_USTRINGPARAM( "application/vnd.openxmlformats-package.relationships+xml" ) ) ) );
+                        "MediaType",
+                        uno::makeAny( OUString("application/vnd.openxmlformats-package.relationships+xml" ) ) );
 
                     m_nRelInfoStatus = RELINFO_READ;
                 }
@@ -1722,10 +1720,8 @@ void OWriteStream_Impl::CommitStreamRelInfo( const uno::Reference< embed::XStora
 
                 // set the mediatype
                 uno::Reference< beans::XPropertySet > xPropSet( xRelsStream, uno::UNO_QUERY_THROW );
-                xPropSet->setPropertyValue(
-                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "MediaType" ) ),
-                    uno::makeAny( ::rtl::OUString(
-                         RTL_CONSTASCII_USTRINGPARAM( "application/vnd.openxmlformats-package.relationships+xml" ) ) ) );
+                xPropSet->setPropertyValue("MediaType",
+                    uno::makeAny( OUString("application/vnd.openxmlformats-package.relationships+xml" ) ) );
 
                   if ( m_nRelInfoStatus == RELINFO_CHANGED_STREAM )
                     m_nRelInfoStatus = RELINFO_NO_INIT;
@@ -1813,7 +1809,7 @@ OWriteStream::~OWriteStream()
             catch( const uno::RuntimeException& rRuntimeException )
             {
                 m_pImpl->AddLog( rRuntimeException.Message );
-                m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Quiet exception" ) ) );
+                m_pImpl->AddLog( OSL_LOG_PREFIX "Quiet exception" );
             }
         }
     }
@@ -1845,7 +1841,7 @@ void OWriteStream::CheckInitOnDemand()
 {
     if ( !m_pImpl )
     {
-        ::package::StaticAddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Disposed!" ) ) );
+        ::package::StaticAddLog( OSL_LOG_PREFIX "Disposed!" );
         throw lang::DisposedException();
     }
 
@@ -1909,7 +1905,7 @@ void OWriteStream::CopyToStreamInternally_Impl( const uno::Reference< io::XStrea
     catch ( const uno::Exception& rException )
     {
         m_pImpl->AddLog( rException.Message );
-        m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Quiet exception" ) ) );
+        m_pImpl->AddLog( OSL_LOG_PREFIX "Quiet exception" );
 
         // TODO: set the stoream in invalid state or dispose
         OSL_FAIL( "The stream become invalid during copiing!\n" );
@@ -1921,16 +1917,16 @@ void OWriteStream::CopyToStreamInternally_Impl( const uno::Reference< io::XStrea
 
     // now the properties can be copied
     // the order of the properties setting is not important for StorageStream API
-    ::rtl::OUString aPropName (RTL_CONSTASCII_USTRINGPARAM("Compressed") );
+    OUString aPropName ("Compressed");
     xDestProps->setPropertyValue( aPropName, getPropertyValue( aPropName ) );
     if ( m_pData->m_nStorageType == embed::StorageFormats::PACKAGE || m_pData->m_nStorageType == embed::StorageFormats::OFOPXML )
     {
-        aPropName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MediaType" ) );
+        aPropName = "MediaType";
         xDestProps->setPropertyValue( aPropName, getPropertyValue( aPropName ) );
 
         if ( m_pData->m_nStorageType == embed::StorageFormats::PACKAGE )
         {
-            aPropName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UseCommonStoragePasswordEncryption") );
+            aPropName = "UseCommonStoragePasswordEncryption";
             xDestProps->setPropertyValue( aPropName, getPropertyValue( aPropName ) );
         }
     }
@@ -2152,7 +2148,7 @@ sal_Int32 SAL_CALL OWriteStream::readBytes( uno::Sequence< sal_Int8 >& aData, sa
 
     if ( !m_pImpl )
     {
-        ::package::StaticAddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Disposed!" ) ) );
+        ::package::StaticAddLog( OSL_LOG_PREFIX "Disposed!" );
         throw lang::DisposedException();
     }
 
@@ -2175,7 +2171,7 @@ sal_Int32 SAL_CALL OWriteStream::readSomeBytes( uno::Sequence< sal_Int8 >& aData
 
     if ( !m_pImpl )
     {
-        ::package::StaticAddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Disposed!" ) ) );
+        ::package::StaticAddLog( OSL_LOG_PREFIX "Disposed!" );
         throw lang::DisposedException();
     }
 
@@ -2198,7 +2194,7 @@ void SAL_CALL OWriteStream::skipBytes( sal_Int32 nBytesToSkip )
 
     if ( !m_pImpl )
     {
-        ::package::StaticAddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Disposed!" ) ) );
+        ::package::StaticAddLog( OSL_LOG_PREFIX "Disposed!" );
         throw lang::DisposedException();
     }
 
@@ -2220,7 +2216,7 @@ sal_Int32 SAL_CALL OWriteStream::available(  )
 
     if ( !m_pImpl )
     {
-        ::package::StaticAddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Disposed!" ) ) );
+        ::package::StaticAddLog( OSL_LOG_PREFIX "Disposed!" );
         throw lang::DisposedException();
     }
 
@@ -2241,7 +2237,7 @@ void SAL_CALL OWriteStream::closeInput(  )
 
     if ( !m_pImpl )
     {
-        ::package::StaticAddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Disposed!" ) ) );
+        ::package::StaticAddLog( OSL_LOG_PREFIX "Disposed!" );
         throw lang::DisposedException();
     }
 
@@ -2266,7 +2262,7 @@ uno::Reference< io::XInputStream > SAL_CALL OWriteStream::getInputStream()
 
     if ( !m_pImpl )
     {
-        ::package::StaticAddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Disposed!" ) ) );
+        ::package::StaticAddLog( OSL_LOG_PREFIX "Disposed!" );
         throw lang::DisposedException();
     }
 
@@ -2286,7 +2282,7 @@ uno::Reference< io::XOutputStream > SAL_CALL OWriteStream::getOutputStream()
 
     if ( !m_pImpl )
     {
-        ::package::StaticAddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Disposed!" ) ) );
+        ::package::StaticAddLog( OSL_LOG_PREFIX "Disposed!" );
         throw lang::DisposedException();
     }
 
@@ -2310,7 +2306,7 @@ void SAL_CALL OWriteStream::writeBytes( const uno::Sequence< sal_Int8 >& aData )
 
     if ( !m_pImpl )
     {
-        ::package::StaticAddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Disposed!" ) ) );
+        ::package::StaticAddLog( OSL_LOG_PREFIX "Disposed!" );
         throw lang::DisposedException();
     }
 
@@ -2381,7 +2377,7 @@ void SAL_CALL OWriteStream::flush()
 
     if ( !m_pImpl )
     {
-        ::package::StaticAddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Disposed!" ) ) );
+        ::package::StaticAddLog( OSL_LOG_PREFIX "Disposed!" );
         throw lang::DisposedException();
     }
 
@@ -2431,7 +2427,7 @@ void SAL_CALL OWriteStream::closeOutput()
 
     if ( !m_pImpl )
     {
-        ::package::StaticAddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Disposed!" ) ) );
+        ::package::StaticAddLog( OSL_LOG_PREFIX "Disposed!" );
         throw lang::DisposedException();
     }
 
@@ -2456,7 +2452,7 @@ void SAL_CALL OWriteStream::seek( sal_Int64 location )
 
     if ( !m_pImpl )
     {
-        ::package::StaticAddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Disposed!" ) ) );
+        ::package::StaticAddLog( OSL_LOG_PREFIX "Disposed!" );
         throw lang::DisposedException();
     }
 
@@ -2477,7 +2473,7 @@ sal_Int64 SAL_CALL OWriteStream::getPosition()
 
     if ( !m_pImpl )
     {
-        ::package::StaticAddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Disposed!" ) ) );
+        ::package::StaticAddLog( OSL_LOG_PREFIX "Disposed!" );
         throw lang::DisposedException();
     }
 
@@ -2498,7 +2494,7 @@ sal_Int64 SAL_CALL OWriteStream::getLength()
 
     if ( !m_pImpl )
     {
-        ::package::StaticAddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Disposed!" ) ) );
+        ::package::StaticAddLog( OSL_LOG_PREFIX "Disposed!" );
         throw lang::DisposedException();
     }
 
@@ -2519,7 +2515,7 @@ void SAL_CALL OWriteStream::truncate()
 
     if ( !m_pImpl )
     {
-        ::package::StaticAddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Disposed!" ) ) );
+        ::package::StaticAddLog( "Disposed!" );
         throw lang::DisposedException();
     }
 
@@ -2551,7 +2547,7 @@ void SAL_CALL OWriteStream::dispose()
 
         if ( !m_pImpl )
         {
-            ::package::StaticAddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Disposed!" ) ) );
+            ::package::StaticAddLog( "Disposed!" );
             throw lang::DisposedException();
         }
 
@@ -2585,11 +2581,10 @@ void SAL_CALL OWriteStream::dispose()
             catch( const uno::Exception& rException )
             {
                 m_pImpl->AddLog( rException.Message );
-                m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
+                m_pImpl->AddLog( "Rethrow" );
 
                 uno::Any aCaught( ::cppu::getCaughtException() );
-                throw lang::WrappedTargetRuntimeException(
-                                                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Can not commit/revert the storage!\n") ),
+                throw lang::WrappedTargetRuntimeException("Can not commit/revert the storage!\n",
                                                 uno::Reference< uno::XInterface >(  static_cast< OWeakObject* >( this ),
                                                                                     uno::UNO_QUERY ),
                                                 aCaught );
@@ -2616,7 +2611,7 @@ void SAL_CALL OWriteStream::addEventListener(
 
     if ( !m_pImpl )
     {
-        ::package::StaticAddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Disposed!" ) ) );
+        ::package::StaticAddLog( "Disposed!" );
         throw lang::DisposedException();
     }
 
@@ -2633,7 +2628,7 @@ void SAL_CALL OWriteStream::removeEventListener(
 
     if ( !m_pImpl )
     {
-        ::package::StaticAddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Disposed!" ) ) );
+        ::package::StaticAddLog( "Disposed!" );
         throw lang::DisposedException();
     }
 
@@ -2652,7 +2647,7 @@ void SAL_CALL OWriteStream::setEncryptionPassword( const ::rtl::OUString& aPass 
 
     if ( !m_pImpl )
     {
-        ::package::StaticAddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Disposed!" ) ) );
+        ::package::StaticAddLog( "Disposed!" );
         throw lang::DisposedException();
     }
 
@@ -2674,7 +2669,7 @@ void SAL_CALL OWriteStream::removeEncryption()
 
     if ( !m_pImpl )
     {
-        ::package::StaticAddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Disposed!" ) ) );
+        ::package::StaticAddLog( "Disposed!" );
         throw lang::DisposedException();
     }
 
@@ -2695,7 +2690,7 @@ void SAL_CALL OWriteStream::setEncryptionData( const uno::Sequence< beans::Named
 
     if ( !m_pImpl )
     {
-        ::package::StaticAddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Disposed!" ) ) );
+        ::package::StaticAddLog( "Disposed!" );
         throw lang::DisposedException();
     }
 
@@ -2732,7 +2727,7 @@ sal_Bool SAL_CALL OWriteStream::hasByID(  const ::rtl::OUString& sID )
 
     if ( !m_pImpl )
     {
-        ::package::StaticAddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Disposed!" ) ) );
+        ::package::StaticAddLog( "Disposed!" );
         throw lang::DisposedException();
     }
 
@@ -2747,7 +2742,7 @@ sal_Bool SAL_CALL OWriteStream::hasByID(  const ::rtl::OUString& sID )
     catch( const container::NoSuchElementException& rNoSuchElementException )
     {
         m_pImpl->AddLog( rNoSuchElementException.Message );
-        m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "No Element" ) ) );
+        m_pImpl->AddLog( OSL_LOG_PREFIX "No Element" );
     }
 
     return sal_False;
@@ -2763,7 +2758,7 @@ sal_Bool SAL_CALL OWriteStream::hasByID(  const ::rtl::OUString& sID )
 
     if ( !m_pImpl )
     {
-        ::package::StaticAddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Disposed!" ) ) );
+        ::package::StaticAddLog( "Disposed!" );
         throw lang::DisposedException();
     }
 
@@ -2788,7 +2783,7 @@ sal_Bool SAL_CALL OWriteStream::hasByID(  const ::rtl::OUString& sID )
 
     if ( !m_pImpl )
     {
-        ::package::StaticAddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Disposed!" ) ) );
+        ::package::StaticAddLog( "Disposed!" );
         throw lang::DisposedException();
     }
 
@@ -2813,7 +2808,7 @@ uno::Sequence< beans::StringPair > SAL_CALL OWriteStream::getRelationshipByID(  
 
     if ( !m_pImpl )
     {
-        ::package::StaticAddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Disposed!" ) ) );
+        ::package::StaticAddLog( "Disposed!" );
         throw lang::DisposedException();
     }
 
@@ -2843,7 +2838,7 @@ uno::Sequence< uno::Sequence< beans::StringPair > > SAL_CALL OWriteStream::getRe
 
     if ( !m_pImpl )
     {
-        ::package::StaticAddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Disposed!" ) ) );
+        ::package::StaticAddLog( "Disposed!" );
         throw lang::DisposedException();
     }
 
@@ -2878,7 +2873,7 @@ uno::Sequence< uno::Sequence< beans::StringPair > > SAL_CALL OWriteStream::getAl
 
     if ( !m_pImpl )
     {
-        ::package::StaticAddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Disposed!" ) ) );
+        ::package::StaticAddLog( "Disposed!" );
         throw lang::DisposedException();
     }
 
@@ -2898,14 +2893,14 @@ void SAL_CALL OWriteStream::insertRelationshipByID(  const ::rtl::OUString& sID,
 
     if ( !m_pImpl )
     {
-        ::package::StaticAddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Disposed!" ) ) );
+        ::package::StaticAddLog( "Disposed!" );
         throw lang::DisposedException();
     }
 
     if ( m_pData->m_nStorageType != embed::StorageFormats::OFOPXML )
         throw uno::RuntimeException();
 
-    ::rtl::OUString aIDTag( RTL_CONSTASCII_USTRINGPARAM( "Id" ) );
+    OUString aIDTag( "Id" );
 
     sal_Int32 nIDInd = -1;
 
@@ -2963,7 +2958,7 @@ void SAL_CALL OWriteStream::removeRelationshipByID(  const ::rtl::OUString& sID 
 
     if ( !m_pImpl )
     {
-        ::package::StaticAddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Disposed!" ) ) );
+        ::package::StaticAddLog( "Disposed!" );
         throw lang::DisposedException();
     }
 
@@ -3005,14 +3000,14 @@ void SAL_CALL OWriteStream::insertRelationships(  const uno::Sequence< uno::Sequ
 
     if ( !m_pImpl )
     {
-        ::package::StaticAddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Disposed!" ) ) );
+        ::package::StaticAddLog( "Disposed!" );
         throw lang::DisposedException();
     }
 
     if ( m_pData->m_nStorageType != embed::StorageFormats::OFOPXML )
         throw uno::RuntimeException();
 
-    ::rtl::OUString aIDTag( RTL_CONSTASCII_USTRINGPARAM( "Id" ) );
+    OUString aIDTag( "Id" );
     uno::Sequence< uno::Sequence< beans::StringPair > > aSeq = getAllRelationships();
     uno::Sequence< uno::Sequence< beans::StringPair > > aResultSeq( aSeq.getLength() + aEntries.getLength() );
     sal_Int32 nResultInd = 0;
@@ -3087,7 +3082,7 @@ void SAL_CALL OWriteStream::clearRelationships()
 
     if ( !m_pImpl )
     {
-        ::package::StaticAddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Disposed!" ) ) );
+        ::package::StaticAddLog( "Disposed!" );
         throw lang::DisposedException();
     }
 
@@ -3121,13 +3116,13 @@ void SAL_CALL OWriteStream::setPropertyValue( const ::rtl::OUString& aPropertyNa
 
     if ( !m_pImpl )
     {
-        ::package::StaticAddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Disposed!" ) ) );
+        ::package::StaticAddLog( "Disposed!" );
         throw lang::DisposedException();
     }
 
     m_pImpl->GetStreamProperties();
-    ::rtl::OUString aCompressedString( RTL_CONSTASCII_USTRINGPARAM( "Compressed" ) );
-    ::rtl::OUString aMediaTypeString( RTL_CONSTASCII_USTRINGPARAM( "MediaType" ) );
+    OUString aCompressedString( "Compressed" );
+    OUString aMediaTypeString( "MediaType" );
     if ( m_pData->m_nStorageType == embed::StorageFormats::PACKAGE && aPropertyName.equals( aMediaTypeString ) )
     {
         // if the "Compressed" property is not set explicitly, the MediaType can change the default value
@@ -3160,7 +3155,7 @@ void SAL_CALL OWriteStream::setPropertyValue( const ::rtl::OUString& aPropertyNa
         }
     }
     else if ( m_pData->m_nStorageType == embed::StorageFormats::PACKAGE
-            && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "UseCommonStoragePasswordEncryption" ) ) )
+            && aPropertyName == "UseCommonStoragePasswordEncryption" )
     {
         sal_Bool bUseCommonEncryption = sal_False;
         if ( aValue >>= bUseCommonEncryption )
@@ -3192,7 +3187,7 @@ void SAL_CALL OWriteStream::setPropertyValue( const ::rtl::OUString& aPropertyNa
                 m_pImpl->m_aProps[nInd].Value = aValue;
         }
     }
-    else if ( m_pData->m_nStorageType == embed::StorageFormats::OFOPXML && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "RelationsInfoStream" ) ) )
+    else if ( m_pData->m_nStorageType == embed::StorageFormats::OFOPXML && aPropertyName == "RelationsInfoStream" )
     {
         uno::Reference< io::XInputStream > xInRelStream;
         if ( ( aValue >>= xInRelStream ) && xInRelStream.is() )
@@ -3213,7 +3208,7 @@ void SAL_CALL OWriteStream::setPropertyValue( const ::rtl::OUString& aPropertyNa
         else
             throw lang::IllegalArgumentException(); // TODO
     }
-    else if ( m_pData->m_nStorageType == embed::StorageFormats::OFOPXML && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "RelationsInfo" ) ) )
+    else if ( m_pData->m_nStorageType == embed::StorageFormats::OFOPXML && aPropertyName == "RelationsInfo" )
     {
         if ( aValue >>= m_pImpl->m_aNewRelInfo )
         {
@@ -3224,7 +3219,7 @@ void SAL_CALL OWriteStream::setPropertyValue( const ::rtl::OUString& aPropertyNa
     else if ( aPropertyName == "Size" )
         throw beans::PropertyVetoException(); // TODO
     else if ( m_pData->m_nStorageType == embed::StorageFormats::PACKAGE
-           && ( aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "IsEncrypted" ) ) || aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Encrypted" ) ) ) )
+           && ( aPropertyName == "IsEncrypted" || aPropertyName == "Encrypted" ) )
         throw beans::PropertyVetoException(); // TODO
     else
         throw beans::UnknownPropertyException(); // TODO
@@ -3244,7 +3239,7 @@ uno::Any SAL_CALL OWriteStream::getPropertyValue( const ::rtl::OUString& aProp )
 
     if ( !m_pImpl )
     {
-        ::package::StaticAddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Disposed!" ) ) );
+        ::package::StaticAddLog( "Disposed!" );
         throw lang::DisposedException();
     }
 
@@ -3255,14 +3250,14 @@ uno::Any SAL_CALL OWriteStream::getPropertyValue( const ::rtl::OUString& aProp )
 
     ::rtl::OUString aPropertyName;
     if ( aProp == "IsEncrypted" )
-        aPropertyName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Encrypted" ) );
+        aPropertyName = "Encrypted";
     else
         aPropertyName = aProp;
 
     if ( ( ( m_pData->m_nStorageType == embed::StorageFormats::PACKAGE || m_pData->m_nStorageType == embed::StorageFormats::OFOPXML )
-            && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "MediaType" ) ) )
-      || ( m_pData->m_nStorageType == embed::StorageFormats::PACKAGE && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Encrypted" ) ) )
-      || aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Compressed" ) ) )
+            && aPropertyName == "MediaType" )
+      || ( m_pData->m_nStorageType == embed::StorageFormats::PACKAGE && aPropertyName == "Encrypted" )
+      || aPropertyName == "Compressed" )
     {
         m_pImpl->GetStreamProperties();
 
@@ -3273,7 +3268,7 @@ uno::Any SAL_CALL OWriteStream::getPropertyValue( const ::rtl::OUString& aProp )
         }
     }
     else if ( m_pData->m_nStorageType == embed::StorageFormats::PACKAGE
-            && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "UseCommonStoragePasswordEncryption" ) ) )
+            && aPropertyName == "UseCommonStoragePasswordEncryption" )
         return uno::makeAny( m_pImpl->m_bUseCommonEncryption );
     else if ( aPropertyName == "Size" )
     {
@@ -3301,7 +3296,7 @@ void SAL_CALL OWriteStream::addPropertyChangeListener(
 
     if ( !m_pImpl )
     {
-        ::package::StaticAddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Disposed!" ) ) );
+        ::package::StaticAddLog( "Disposed!" );
         throw lang::DisposedException();
     }
 
@@ -3321,7 +3316,7 @@ void SAL_CALL OWriteStream::removePropertyChangeListener(
 
     if ( !m_pImpl )
     {
-        ::package::StaticAddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Disposed!" ) ) );
+        ::package::StaticAddLog( "Disposed!" );
         throw lang::DisposedException();
     }
 
@@ -3341,7 +3336,7 @@ void SAL_CALL OWriteStream::addVetoableChangeListener(
 
     if ( !m_pImpl )
     {
-        ::package::StaticAddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Disposed!" ) ) );
+        ::package::StaticAddLog( "Disposed!" );
         throw lang::DisposedException();
     }
 
@@ -3361,7 +3356,7 @@ void SAL_CALL OWriteStream::removeVetoableChangeListener(
 
     if ( !m_pImpl )
     {
-        ::package::StaticAddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Disposed!" ) ) );
+        ::package::StaticAddLog( "Disposed!" );
         throw lang::DisposedException();
     }
 
@@ -3384,7 +3379,7 @@ void OWriteStream::BroadcastTransaction( sal_Int8 nMessage )
     // no need to lock mutex here for the checking of m_pImpl, and m_pData is alive until the object is destructed
     if ( !m_pImpl )
     {
-        ::package::StaticAddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Disposed!" ) ) );
+        ::package::StaticAddLog( "Disposed!" );
         throw lang::DisposedException();
     }
 
@@ -3428,7 +3423,7 @@ void SAL_CALL OWriteStream::commit()
 
     if ( !m_pImpl )
     {
-        ::package::StaticAddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Disposed!" ) ) );
+        ::package::StaticAddLog( "Disposed!" );
         throw lang::DisposedException();
     }
 
@@ -3442,7 +3437,7 @@ void SAL_CALL OWriteStream::commit()
 
         if ( !m_pImpl )
         {
-            ::package::StaticAddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Disposed!" ) ) );
+            ::package::StaticAddLog( "Disposed!" );
             throw lang::DisposedException();
         }
 
@@ -3454,28 +3449,28 @@ void SAL_CALL OWriteStream::commit()
     catch( const io::IOException& rIOException )
     {
         m_pImpl->AddLog( rIOException.Message );
-        m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
+        m_pImpl->AddLog( "Rethrow" );
         throw;
     }
     catch( const embed::StorageWrappedTargetException& rStorageWrappedTargetException )
     {
         m_pImpl->AddLog( rStorageWrappedTargetException.Message );
-        m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
+        m_pImpl->AddLog( "Rethrow" );
         throw;
     }
     catch( const uno::RuntimeException& rRuntimeException )
     {
         m_pImpl->AddLog( rRuntimeException.Message );
-        m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
+        m_pImpl->AddLog( "Rethrow" );
         throw;
     }
     catch( const uno::Exception& rException )
     {
         m_pImpl->AddLog( rException.Message );
-        m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
+        m_pImpl->AddLog( "Rethrow" );
 
         uno::Any aCaught( ::cppu::getCaughtException() );
-        throw embed::StorageWrappedTargetException( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Problems on commit!") ),
+        throw embed::StorageWrappedTargetException( "Problems on commit!",
                                   uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >( this ) ),
                                   aCaught );
     }
@@ -3495,7 +3490,7 @@ void SAL_CALL OWriteStream::revert()
 
     if ( !m_pImpl )
     {
-        ::package::StaticAddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Disposed!" ) ) );
+        ::package::StaticAddLog( "Disposed!" );
         throw lang::DisposedException();
     }
 
@@ -3508,7 +3503,7 @@ void SAL_CALL OWriteStream::revert()
 
     if ( !m_pImpl )
     {
-        ::package::StaticAddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Disposed!" ) ) );
+        ::package::StaticAddLog( "Disposed!" );
         throw lang::DisposedException();
     }
 
@@ -3518,28 +3513,28 @@ void SAL_CALL OWriteStream::revert()
     catch( const io::IOException& rIOException )
     {
         m_pImpl->AddLog( rIOException.Message );
-        m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
+        m_pImpl->AddLog( "Rethrow" );
         throw;
     }
     catch( const embed::StorageWrappedTargetException& rStorageWrappedTargetException )
     {
         m_pImpl->AddLog( rStorageWrappedTargetException.Message );
-        m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
+        m_pImpl->AddLog( "Rethrow" );
         throw;
     }
     catch( const uno::RuntimeException& rRuntimeException )
     {
         m_pImpl->AddLog( rRuntimeException.Message );
-        m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
+        m_pImpl->AddLog( "Rethrow" );
         throw;
     }
     catch( const uno::Exception& rException )
     {
         m_pImpl->AddLog( rException.Message );
-        m_pImpl->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Rethrow" ) ) );
+        m_pImpl->AddLog( "Rethrow" );
 
         uno::Any aCaught( ::cppu::getCaughtException() );
-        throw embed::StorageWrappedTargetException( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Problems on revert!") ),
+        throw embed::StorageWrappedTargetException( "Problems on revert!",
                                   uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >( this ) ),
                                   aCaught );
     }
@@ -3561,7 +3556,7 @@ void SAL_CALL OWriteStream::addTransactionListener( const uno::Reference< embed:
 
     if ( !m_pImpl )
     {
-        ::package::StaticAddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Disposed!" ) ) );
+        ::package::StaticAddLog( "Disposed!" );
         throw lang::DisposedException();
     }
 
@@ -3580,7 +3575,7 @@ void SAL_CALL OWriteStream::removeTransactionListener( const uno::Reference< emb
 
     if ( !m_pImpl )
     {
-        ::package::StaticAddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Disposed!" ) ) );
+        ::package::StaticAddLog( "Disposed!" );
         throw lang::DisposedException();
     }
 
