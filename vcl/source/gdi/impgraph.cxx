@@ -1127,7 +1127,8 @@ sal_Bool ImpGraphic::ImplReadEmbedded( SvStream& rIStm, sal_Bool bSwap )
             rIStm >> *this;
             bRet = ( rIStm.GetError() == 0UL );
         }
-        else if( meType >= SYS_WINMETAFILE && meType <= SYS_MACMETAFILE )
+        else if( sal::static_int_cast<sal_uLong>(meType) >= SYS_WINMETAFILE
+                 && sal::static_int_cast<sal_uLong>(meType) <= SYS_MACMETAFILE )
         {
             Graphic aSysGraphic;
             sal_uLong   nCvtType;
