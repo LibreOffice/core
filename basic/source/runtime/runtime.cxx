@@ -384,25 +384,24 @@ void SbiInstance::PrepareNumberFormatter( SvNumberFormatter*& rpNumberFormatter,
     // Problem: Print Year(Date) under engl. BS
     // also have a look at: svtools\source\sbx\sbxdate.cxx
 
-    String aDateStr;
+    OUString aDateStr;
     switch( eDate )
     {
-        case MDY: aDateStr = String( RTL_CONSTASCII_USTRINGPARAM("MM.TT.JJJJ") ); break;
-        case DMY: aDateStr = String( RTL_CONSTASCII_USTRINGPARAM("TT.MM.JJJJ") ); break;
-        case YMD: aDateStr = String( RTL_CONSTASCII_USTRINGPARAM("JJJJ.MM.TT") ); break;
-        default:  aDateStr = String( RTL_CONSTASCII_USTRINGPARAM("MM.TT.JJJJ") );
+    case MDY: aDateStr = "MM.TT.JJJJ"; break;
+    case DMY: aDateStr = "TT.MM.JJJJ"; break;
+    case YMD: aDateStr = "JJJJ.MM.TT"; break;
+    default:  aDateStr = "MM.TT.JJJJ"; break;
     }
     String aStr( aDateStr );
     rpNumberFormatter->PutandConvertEntry( aStr, nCheckPos, nType,
         rnStdDateIdx, LANGUAGE_GERMAN, eLangType );
     nCheckPos = 0;
-    String aStrHHMMSS( RTL_CONSTASCII_USTRINGPARAM(" HH:MM:SS") );
+    OUString aStrHHMMSS(" HH:MM:SS");
+    aDateStr += aStrHHMMSS;
     aStr = aDateStr;
-    aStr += aStrHHMMSS;
     rpNumberFormatter->PutandConvertEntry( aStr, nCheckPos, nType,
         rnStdDateTimeIdx, LANGUAGE_GERMAN, eLangType );
 }
-
 
 
 // Let engine run. If Flags == SbDEBUG_CONTINUE, take Flags over
@@ -410,7 +409,9 @@ void SbiInstance::PrepareNumberFormatter( SvNumberFormatter*& rpNumberFormatter,
 void SbiInstance::Stop()
 {
     for( SbiRuntime* p = pRun; p; p = p->pNext )
+    {
         p->Stop();
+    }
 }
 
 // Allows Basic IDE to set watch mode to suppress errors
