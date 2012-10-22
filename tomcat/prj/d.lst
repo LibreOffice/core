@@ -1,1 +1,1 @@
-..\%__SRC%\misc\build\apache-tomcat-5.5.35-src\servletapi\jsr154\dist\lib\servlet-api.jar %_DEST%\bin%_EXT%\servlet-api.jar
+..\%__SRC%\misc\build\apache-tomcat-5.5.36-src\servletapi\jsr154\dist\lib\servlet-api.jar %_DEST%\bin%_EXT%\servlet-api.jar
