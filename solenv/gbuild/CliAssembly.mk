@@ -74,7 +74,7 @@ $(dir $(call gb_CliAssemblyTarget_get_target,%))%/.dir :
 $(call gb_CliAssemblyTarget_get_target,%) :
 	$(if $(strip $(CLI_ASSEMBLY_VERSION)),,$(call gb_Output_error,assembly version not set))
 	$(if $(strip $(CLI_ASSEMBLY_CONFIGFILE)),,$(call gb_Output_error,assembly configuration file not set))
-	$(if $(strip $(CLI_ASSEMBLY_NAME)),,$(call gb_Output_error,assembly name not set))
+	$(if $(strip $(CLI_ASSEMBLY_OUTFILE)),,$(call gb_Output_error,assembly name not set))
 	$(call gb_CliAssemblyTarget__command,$@,$*,$<)
 
 $(call gb_CliAssemblyTarget_get_assembly_target,%) :
