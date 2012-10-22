@@ -2222,6 +2222,10 @@ sal_Bool SfxObjectShell::ImportFrom( SfxMedium& rMedium, bool bInsert )
         {
             SetError( ERRCODE_IO_BROKENPACKAGE, "Badness in the underlying package format." );
         }
+        catch (const io::WrongFormatException& rException)
+        {
+            SetError( *new StringErrorInfo( ERRCODE_SFX_FORMAT_ROWCOL, rException.Message, ERRCODE_BUTTON_OK | ERRCODE_MSG_ERROR ), "");
+        }
         catch(...)
         {}
     }
