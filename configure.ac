@@ -3307,6 +3307,115 @@ if test "$CCACHE" != ""; then
     AC_LANG_POP([C])
 fi
 
+dnl Set the ENABLE_DBGUTIL variable
+dnl ===================================================================
+AC_MSG_CHECKING([whether to build with additional debug utilities])
+if test -n "$enable_dbgutil" -a "$enable_dbgutil" != "no"; then
+    ENABLE_DBGUTIL="TRUE"
+    PROEXT=""
+    PRODUCT=""
+
+    AC_MSG_RESULT([yes])
+    # cppunit and graphite expose STL in public headers
+    if test "$with_system_cppunit" = "yes"; then
+        AC_MSG_ERROR([--with-system-cppunit conflicts with --enable-dbgutil])
+    else
+        with_system_cppunit=no
+    fi
+    if test "$with_system_graphite" = "yes"; then
+        AC_MSG_ERROR([--with-system-graphite conflicts with --enable-dbgutil])
+    else
+        with_system_graphite=no
+    fi
+    if test "$with_system_mysql_cppconn" = "yes"; then
+        AC_MSG_ERROR([--with-system-mysql-cppconn conflicts with --enable-dbgutil])
+    else
+        with_system_mysql_cppconn=no
+    fi
+else
+    ENABLE_DBGUTIL=""
+    # PRODUCT is old concept, still used by build.pl .
+    PRODUCT="full"
+    PROEXT=".pro"
+    AC_MSG_RESULT([no])
+fi
+AC_SUBST(ENABLE_DBGUTIL)
+AC_SUBST(PRODUCT)
+AC_SUBST(PROEXT)
+
+dnl Set the ENABLE_DEBUG variable.
+dnl ===================================================================
+AC_MSG_CHECKING([whether to do a debug build])
+if test -n "$enable_debug" && test "$enable_debug" != "yes" && test "$enable_debug" != "no"; then
+    AC_MSG_ERROR([--enable-debug now accepts only yes or no, use --enable-selective-debuginfo])
+fi
+if test -n "$ENABLE_DBGUTIL"; then
+    if test "$enable_debug" = "no"; then
+        AC_MSG_ERROR([--disable-debug cannot be used with --enable-dbgutil])
+    fi
+    ENABLE_DEBUG="TRUE"
+    AC_MSG_RESULT([yes (dbgutil)])
+elif test -n "$enable_debug" && test "$enable_debug" != "no"; then
+    ENABLE_DEBUG="TRUE"
+    AC_MSG_RESULT([yes])
+else
+    ENABLE_DEBUG=""
+    AC_MSG_RESULT([no])
+fi
+AC_SUBST(ENABLE_DEBUG)
+
+dnl Selective debuginfo
+ENABLE_DEBUGINFO_FOR=
+if test -n "$ENABLE_DEBUG"; then
+    AC_MSG_CHECKING([whether to use selective debuginfo])
+    if test -n "$enable_selective_debuginfo" -a "$enable_selective_debuginfo" != "no"; then
+        ENABLE_DEBUGINFO_FOR="$enable_selective_debuginfo"
+        AC_MSG_RESULT([for "$enable_selective_debuginfo"])
+    else
+        ENABLE_DEBUGINFO_FOR=all
+        AC_MSG_RESULT([no, for all])
+    fi
+fi
+AC_SUBST(ENABLE_DEBUGINFO_FOR)
+
+dnl Check for explicit C/CXX/OBJC/OBJCXX/LDFLAGS. We by default use the ones specified
+dnl by our build system, but explicit override is possible.
+AC_MSG_CHECKING(for explicit CFLAGS)
+if test -n "$CFLAGS"; then
+    AC_MSG_RESULT([$CFLAGS])
+else
+    AC_MSG_RESULT(no)
+fi
+AC_MSG_CHECKING(for explicit CXXFLAGS)
+if test -n "$CXXFLAGS"; then
+    AC_MSG_RESULT([$CXXFLAGS])
+else
+    AC_MSG_RESULT(no)
+fi
+AC_MSG_CHECKING(for explicit OBJCFLAGS)
+if test -n "$OBJCFLAGS"; then
+    AC_MSG_RESULT([$OBJCFLAGS])
+else
+    AC_MSG_RESULT(no)
+fi
+AC_MSG_CHECKING(for explicit OBJCXXFLAGS)
+if test -n "$OBJCXXFLAGS"; then
+    AC_MSG_RESULT([$OBJCXXFLAGS])
+else
+    AC_MSG_RESULT(no)
+fi
+AC_MSG_CHECKING(for explicit LDFLAGS)
+if test -n "$LDFLAGS"; then
+    AC_MSG_RESULT([$LDFLAGS])
+else
+    AC_MSG_RESULT(no)
+fi
+AC_SUBST(CFLAGS)
+AC_SUBST(CXXFLAGS)
+AC_SUBST(OBJCFLAGS)
+AC_SUBST(OBJCXXFLAGS)
+AC_SUBST(LDFLAGS)
+
 #
 # determine CPU, CPUNAME, GUI, GUIBASE, ...
 #
@@ -4168,115 +4277,6 @@ else
     AC_MSG_RESULT([no])
 fi
 AC_SUBST(ASSERT_ALWAYS_ABORT)
-
-dnl Set the ENABLE_DBGUTIL variable
-dnl ===================================================================
-AC_MSG_CHECKING([whether to build with additional debug utilities])
-if test -n "$enable_dbgutil" -a "$enable_dbgutil" != "no"; then
-    ENABLE_DBGUTIL="TRUE"
-    PROEXT=""
-    PRODUCT=""
-
-    AC_MSG_RESULT([yes])
-    # cppunit and graphite expose STL in public headers
-    if test "$with_system_cppunit" = "yes"; then
-        AC_MSG_ERROR([--with-system-cppunit conflicts with --enable-dbgutil])
-    else
-        with_system_cppunit=no
-    fi
-    if test "$with_system_graphite" = "yes"; then
-        AC_MSG_ERROR([--with-system-graphite conflicts with --enable-dbgutil])
-    else
-        with_system_graphite=no
-    fi
-    if test "$with_system_mysql_cppconn" = "yes"; then
-        AC_MSG_ERROR([--with-system-mysql-cppconn conflicts with --enable-dbgutil])
-    else
-        with_system_mysql_cppconn=no
-    fi
-else
-    ENABLE_DBGUTIL=""
-    # PRODUCT is old concept, still used by build.pl .
-    PRODUCT="full"
-    PROEXT=".pro"
-    AC_MSG_RESULT([no])
-fi
-AC_SUBST(ENABLE_DBGUTIL)
-AC_SUBST(PRODUCT)
-AC_SUBST(PROEXT)
-
-dnl Set the ENABLE_DEBUG variable.
-dnl ===================================================================
-AC_MSG_CHECKING([whether to do a debug build])
-if test -n "$enable_debug" && test "$enable_debug" != "yes" && test "$enable_debug" != "no"; then
-    AC_MSG_ERROR([--enable-debug now accepts only yes or no, use --enable-selective-debuginfo])
-fi
-if test -n "$ENABLE_DBGUTIL"; then
-    if test "$enable_debug" = "no"; then
-        AC_MSG_ERROR([--disable-debug cannot be used with --enable-dbgutil])
-    fi
-    ENABLE_DEBUG="TRUE"
-    AC_MSG_RESULT([yes (dbgutil)])
-elif test -n "$enable_debug" && test "$enable_debug" != "no"; then
-    ENABLE_DEBUG="TRUE"
-    AC_MSG_RESULT([yes])
-else
-    ENABLE_DEBUG=""
-    AC_MSG_RESULT([no])
-fi
-AC_SUBST(ENABLE_DEBUG)
-
-dnl Selective debuginfo
-ENABLE_DEBUGINFO_FOR=
-if test -n "$ENABLE_DEBUG"; then
-    AC_MSG_CHECKING([whether to use selective debuginfo])
-    if test -n "$enable_selective_debuginfo" -a "$enable_selective_debuginfo" != "no"; then
-        ENABLE_DEBUGINFO_FOR="$enable_selective_debuginfo"
-        AC_MSG_RESULT([for "$enable_selective_debuginfo"])
-    else
-        ENABLE_DEBUGINFO_FOR=all
-        AC_MSG_RESULT([no, for all])
-    fi
-fi
-AC_SUBST(ENABLE_DEBUGINFO_FOR)
-
-dnl Check for explicit C/CXX/OBJC/OBJCXX/LDFLAGS. We by default use the ones specified
-dnl by our build system, but explicit override is possible.
-AC_MSG_CHECKING(for explicit CFLAGS)
-if test -n "$CFLAGS"; then
-    AC_MSG_RESULT([$CFLAGS])
-else
-    AC_MSG_RESULT(no)
-fi
-AC_MSG_CHECKING(for explicit CXXFLAGS)
-if test -n "$CXXFLAGS"; then
-    AC_MSG_RESULT([$CXXFLAGS])
-else
-    AC_MSG_RESULT(no)
-fi
-AC_MSG_CHECKING(for explicit OBJCFLAGS)
-if test -n "$OBJCFLAGS"; then
-    AC_MSG_RESULT([$OBJCFLAGS])
-else
-    AC_MSG_RESULT(no)
-fi
-AC_MSG_CHECKING(for explicit OBJCXXFLAGS)
-if test -n "$OBJCXXFLAGS"; then
-    AC_MSG_RESULT([$OBJCXXFLAGS])
-else
-    AC_MSG_RESULT(no)
-fi
-AC_MSG_CHECKING(for explicit LDFLAGS)
-if test -n "$LDFLAGS"; then
-    AC_MSG_RESULT([$LDFLAGS])
-else
-    AC_MSG_RESULT(no)
-fi
-AC_SUBST(CFLAGS)
-AC_SUBST(CXXFLAGS)
-AC_SUBST(OBJCFLAGS)
-AC_SUBST(OBJCXXFLAGS)
-AC_SUBST(LDFLAGS)
 
 dnl Determine whether to use linkoo for the smoketest installation
 dnl ===================================================================
