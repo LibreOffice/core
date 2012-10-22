@@ -243,9 +243,9 @@ bool VclBox::set_property(const rtl::OString &rKey, const rtl::OString &rValue)
 #define DEFAULT_CHILD_MIN_WIDTH 85
 #define DEFAULT_CHILD_MIN_HEIGHT 27
 
-Size VclButtonBox::calculateRequisition() const
+VclButtonBox::Requisition VclButtonBox::calculatePrimarySecondaryRequisitions() const
 {
-    sal_uInt16 nVisibleChildren = 0;
+    Requisition aReq;
 
     sal_Int32 nChildMinWidth = DEFAULT_CHILD_MIN_WIDTH; //to-do, pull from theme
     sal_Int32 nChildMinHeight = DEFAULT_CHILD_MIN_HEIGHT; //to-do, pull from theme
@@ -255,8 +255,10 @@ Size VclButtonBox::calculateRequisition() const
     {
         if (!pChild->IsVisible())
             continue;
-        SAL_WARN_IF(pChild->get_secondary(), "vcl.layout", "secondary groups not implemented yet");
-        ++nVisibleChildren;
+        if (pChild->get_secondary())
+            ++aReq.m_nSecondaryChildren;
+        else
+            ++aReq.m_nPrimaryChildren;
         Size aChildSize = getLayoutRequisition(*pChild);
         if (aChildSize.Width() > aSize.Width())
             aSize.Width() = aChildSize.Width();
@@ -264,18 +266,25 @@ Size VclButtonBox::calculateRequisition() const
             aSize.Height() = aChildSize.Height();
     }
 
+    sal_uInt16 nVisibleChildren = aReq.m_nPrimaryChildren + aReq.m_nSecondaryChildren;
+
     if (!nVisibleChildren)
-        return Size();
+        return aReq;
 
     long nPrimaryDimension =
         (getPrimaryDimension(aSize) * nVisibleChildren) +
         (m_nSpacing * (nVisibleChildren-1));
-    setPrimaryDimension(aSize, nPrimaryDimension + m_nSpacing);
+    setPrimaryDimension(aReq.m_aSize, nPrimaryDimension + m_nSpacing);
 
     long nSecondaryDimension = getSecondaryDimension(aSize);
-    setSecondaryDimension(aSize, nSecondaryDimension);
+    setSecondaryDimension(aReq.m_aSize, nSecondaryDimension);
 
-    return aSize;
+    return aReq;
+}
+
+Size VclButtonBox::calculateRequisition() const
+{
+    return calculatePrimarySecondaryRequisitions().m_aSize;
 }
 
 bool VclButtonBox::set_property(const rtl::OString &rKey, const rtl::OString &rValue)
@@ -308,54 +317,71 @@ bool VclButtonBox::set_property(const rtl::OString &rKey, const rtl::OString &rV
 
 void VclButtonBox::setAllocation(const Size &rAllocation)
 {
-    sal_uInt16 nVisibleChildren = 0;
-    for (Window *pChild = GetWindow(WINDOW_FIRSTCHILD); pChild; pChild = pChild->GetWindow(WINDOW_NEXT))
-    {
-        if (!pChild->IsVisible())
-            continue;
-        ++nVisibleChildren;
-    }
+    Requisition aReq(calculatePrimarySecondaryRequisitions());
 
+    sal_uInt16 nVisibleChildren = aReq.m_nPrimaryChildren + aReq.m_nSecondaryChildren;
     if (!nVisibleChildren)
         return;
 
     Size aSize = rAllocation;
 
     long nAllocPrimaryDimension = getPrimaryDimension(rAllocation);
-    Size aRequisition = calculateRequisition();
-    long nHomogeneousDimension = ((getPrimaryDimension(aRequisition) -
+    long nHomogeneousDimension = ((getPrimaryDimension(aReq.m_aSize) -
         (nVisibleChildren - 1) * m_nSpacing)) / nVisibleChildren;
 
-    Point aPos(0, 0);
-    long nPrimaryCoordinate = getPrimaryCoordinate(aPos);
+    Point aMainGroupPos, aOtherGroupPos;
 
     //To-Do, other layout styles
     switch (m_eLayoutStyle)
     {
         case VCL_BUTTONBOX_START:
+            if (aReq.m_nSecondaryChildren)
+            {
+                long nOtherPrimaryDimension =
+                    aReq.m_nSecondaryChildren * nHomogeneousDimension +
+                        ((aReq.m_nSecondaryChildren - 1) * m_nSpacing);
+
+                setPrimaryCoordinate(aOtherGroupPos,
+                    nAllocPrimaryDimension - nOtherPrimaryDimension);
+            }
             break;
         default:
             SAL_WARN("vcl.layout", "todo unimplemented layout style");
         case VCL_BUTTONBOX_DEFAULT_STYLE:
         case VCL_BUTTONBOX_END:
-            setPrimaryCoordinate(aPos, nPrimaryCoordinate + nAllocPrimaryDimension
-                - getPrimaryDimension(aRequisition));
+            if (aReq.m_nPrimaryChildren)
+            {
+                long nMainPrimaryDimension =
+                    aReq.m_nPrimaryChildren * nHomogeneousDimension +
+                        ((aReq.m_nPrimaryChildren - 1) * m_nSpacing);
+
+                setPrimaryCoordinate(aMainGroupPos,
+                    nAllocPrimaryDimension - nMainPrimaryDimension);
+            }
             break;
     }
+
+    Size aChildSize;
+    setSecondaryDimension(aChildSize, getSecondaryDimension(aSize));
+    setPrimaryDimension(aChildSize, nHomogeneousDimension);
 
     for (Window *pChild = GetWindow(WINDOW_FIRSTCHILD); pChild; pChild = pChild->GetWindow(WINDOW_NEXT))
     {
         if (!pChild->IsVisible())
             continue;
 
-        Size aChildSize;
-        setSecondaryDimension(aChildSize, getSecondaryDimension(aSize));
-        setPrimaryDimension(aChildSize, nHomogeneousDimension);
-
-        setLayoutAllocation(*pChild, aPos, aChildSize);
-
-        nPrimaryCoordinate = getPrimaryCoordinate(aPos);
-        setPrimaryCoordinate(aPos, nPrimaryCoordinate + nHomogeneousDimension + m_nSpacing);
+        if (pChild->get_secondary())
+        {
+            setLayoutAllocation(*pChild, aOtherGroupPos, aChildSize);
+            long nPrimaryCoordinate = getPrimaryCoordinate(aOtherGroupPos);
+            setPrimaryCoordinate(aOtherGroupPos, nPrimaryCoordinate + nHomogeneousDimension + m_nSpacing);
+        }
+        else
+        {
+            setLayoutAllocation(*pChild, aMainGroupPos, aChildSize);
+            long nPrimaryCoordinate = getPrimaryCoordinate(aMainGroupPos);
+            setPrimaryCoordinate(aMainGroupPos, nPrimaryCoordinate + nHomogeneousDimension + m_nSpacing);
+        }
     }
 }
 

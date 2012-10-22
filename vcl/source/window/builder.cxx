@@ -1076,6 +1076,13 @@ bool VclBuilder::sortIntoBestTabTraversalOrder::operator()(const Window *pA, con
         return true;
     if (ePackA > ePackB)
         return false;
+    //group secondaries before primaries
+    bool bPackA = pA->get_secondary();
+    bool bPackB = pB->get_secondary();
+    if (bPackA > bPackB)
+        return true;
+    if (bPackA < bPackB)
+        return false;
     //honour relative box positions with pack group
     return m_pBuilder->get_window_packing_position(pA) < m_pBuilder->get_window_packing_position(pB);
 }

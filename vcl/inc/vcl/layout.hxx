@@ -201,6 +201,18 @@ protected:
     virtual void setAllocation(const Size &rAllocation);
 private:
     VclButtonBoxStyle m_eLayoutStyle;
+    struct Requisition
+    {
+        sal_uInt16 m_nPrimaryChildren;
+        sal_uInt16 m_nSecondaryChildren;
+        Size m_aSize;
+        Requisition()
+            : m_nPrimaryChildren(0)
+            , m_nSecondaryChildren(0)
+        {
+        }
+    };
+    Requisition calculatePrimarySecondaryRequisitions() const;
 };
 
 class VCL_DLLPUBLIC VclVButtonBox : public VclButtonBox
