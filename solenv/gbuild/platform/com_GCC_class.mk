@@ -38,13 +38,9 @@ $(call gb_Output_announce,$(2),$(true),ASM,3)
 $(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) $(dir $(4)) && cd $(SRCDIR) && \
 	$(gb_CC) \
-		$(DEFS) \
-		$(if $(WARNINGS_NOT_ERRORS),,$(gb_CFLAGS_WERROR)) \
 		$(T_CFLAGS) \
 		-c $(3) \
-		-o $(1) \
-		-I$(dir $(3)) \
-		$(INCLUDE)) && \
+		-o $(1)) && \
 	echo "$(1) : $(3)" > $(4)
 endef
 
