@@ -3224,7 +3224,7 @@ if test "$_os" = "WINNT"; then
         LINK_X64_BINARY=
         LIBMGR_X64_BINARY=
 
-        AC_MSG_CHECKING([for a x64 compiler and libraries for 64bit ActiveX component])
+        AC_MSG_CHECKING([for a x64 compiler and libraries for 64-bit Explorer extensions])
         if test "$BITNESS_OVERRIDE" = "" -a -f "$with_cl_home/atlmfc/lib/amd64/atls.lib"; then
             # Prefer native x64 compiler to cross-compiler, in case we are running
             # the build on a 64-bit OS.
@@ -3244,7 +3244,7 @@ if test "$_os" = "WINNT"; then
             AC_MSG_RESULT([found])
         else
             AC_MSG_RESULT([not found])
-            AC_MSG_WARN([Installation set will not contain the 64-bit Explorer extension])
+            AC_MSG_WARN([Installation set will not contain 64-bit Explorer extensions])
         fi
         AC_SUBST(BUILD_X64)
 
