@@ -110,14 +110,14 @@ sal_Bool InternalStreamLock::LockFile( sal_Size nStart, sal_Size nEnd, SvFileStr
     osl::DirectoryItem aItem;
     if (osl::DirectoryItem::get( pStream->GetFileName(), aItem) != osl::FileBase::E_None )
     {
-        SAL_INFO("tools", "Failed to lookup stream for locking");
+        SAL_INFO("tools.stream", "Failed to lookup stream for locking");
         return sal_True;
     }
 
     osl::FileStatus aStatus( osl_FileStatus_Mask_Type );
     if ( aItem.getFileStatus( aStatus ) != osl::FileBase::E_None )
     {
-        SAL_INFO("tools", "Failed to stat stream for locking");
+        SAL_INFO("tools.stream", "Failed to stat stream for locking");
         return sal_True;
     }
     if( aStatus.getFileType() == osl::FileStatus::Directory )

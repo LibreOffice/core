@@ -130,6 +130,7 @@ certain functionality.
 
 @li @c svx.dialog
 @li @c svx.form
+@li @c svx.tbxcrtls
 
 @section tools
 
@@ -174,6 +175,10 @@ certain functionality.
 @li @c xmloff.forms
 @li @c xmloff.chart
 @li @c xmloff.style
+
+@section xmlsecurity
+
+@li @c xmlsecurity.dialogs - xml security dialogs
 
 @section other
 

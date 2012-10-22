@@ -66,7 +66,7 @@ String TransliterationWrapper::transliterate(
         }
         catch( Exception&  )
         {
-            SAL_WARN( "unotools", "transliterate: Exception caught!" );
+            SAL_WARN( "unotools.i18n", "transliterate: Exception caught!" );
         }
     }
     return sRet;
@@ -90,7 +90,7 @@ String TransliterationWrapper::transliterate(
         }
         catch( Exception&  )
         {
-            SAL_WARN( "unotools", "transliterate: Exception caught!" );
+            SAL_WARN( "unotools.i18n", "transliterate: Exception caught!" );
         }
     }
     return sRet;
