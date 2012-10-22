@@ -190,7 +190,7 @@ VclBuilder::VclBuilder(Window *pParent, OUString sUIDir, OUString sUIFile, OStri
         {
             pTarget->SetSymbol(eType);
             if (eType == SYMBOL_IMAGE)
-                pTarget->SetModeImage(VclResId(mapStockToImageResource(rImage)));
+                pTarget->SetModeImage(Bitmap(VclResId(mapStockToImageResource(rImage))));
         }
     }
 
