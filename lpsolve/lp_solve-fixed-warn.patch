@@ -27,6 +27,17 @@
    fprintf(output, "\n");
  
    for(i = first; i <= last; i++) {
+--- misc/build/lp_solve_5.5/lp_rlp.h	2007-01-14 10:31:52.000000000 -0800
++++ misc/build/lp_solve_5.5/lp_rlp.h	2007-01-14 10:31:52.000000000 -0800
+@@ -615,7 +615,7 @@
+ /* This used to be an fputs(), but since the string might contain NUL's,
+  * we now use fwrite().
+  */
+-#define ECHO (void) fwrite( lp_yytext, lp_yyleng, 1, lp_yyout )
++#define ECHO if(fwrite( lp_yytext, lp_yyleng, 1, lp_yyout ));
+ #endif
+ 
+ /* Gets input and stuffs it into "buf".  number of characters read, or YY_NULL,
 --- misc/build/lp_solve_5.5/shared/commonlib.c	2007-01-14 10:33:14.000000000 -0800
 +++ misc/build/lp_solve_5.5/shared/commonlib.c	2007-01-14 10:33:14.000000000 -0800
 @@ -715,7 +715,7 @@
