@@ -166,6 +166,7 @@ void AboutDialog::StyleControls()
     // Version Text
     aLargeFont.SetSize( Size( 0, aLabelFont.GetSize().Height() * 1.2 ) );
     aVersionText.SetControlFont( aLargeFont );
+    aVersionText.EnableCursor( sal_False );
 
     // Copyright Text
     aCopyrightText.SetTextSelectable( sal_False );

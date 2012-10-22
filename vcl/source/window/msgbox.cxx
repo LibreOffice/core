@@ -403,6 +403,7 @@ void MessBox::ImplPosControls()
     mpVCLMultiLineEdit->SetPosSizePixel( aTextPos, aMEditSize );
     mpVCLMultiLineEdit->Show();
     mpVCLMultiLineEdit->SetPaintTransparent(sal_True);
+    mpVCLMultiLineEdit->EnableCursor(sal_False);
     SetPageSizePixel( aPageSize );
 }
 

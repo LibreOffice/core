@@ -49,11 +49,6 @@ void ExtMultiLineEdit::SetAutoScroll( sal_Bool bAutoScroll )
     GetTextView()->SetAutoScroll( bAutoScroll );
 }
 
-void ExtMultiLineEdit::EnableCursor( sal_Bool bEnable )
-{
-    GetTextView()->EnableCursor( bEnable );
-}
-
 void ExtMultiLineEdit::SetAttrib( const TextAttrib& rAttr, sal_uLong nPara, sal_uInt16 nStart, sal_uInt16 nEnd )
 {
     GetTextEngine()->SetAttrib( rAttr, nPara, nStart, nEnd );

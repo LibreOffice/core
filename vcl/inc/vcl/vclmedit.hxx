@@ -137,6 +137,7 @@ public:
     void            DisableSelectionOnFocus();
 
     void            SetTextSelectable( sal_Bool bTextSelectable );
+    void            EnableCursor( sal_Bool bEnable );
 };
 
 inline sal_uLong VclMultiLineEdit::IsUpdateDataEnabled() const

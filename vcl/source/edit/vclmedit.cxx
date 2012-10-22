@@ -1569,4 +1569,9 @@ void VclMultiLineEdit::SetTextSelectable( sal_Bool bTextSelectable )
     pImpVclMEdit->GetTextWindow()->SetTextSelectable( bTextSelectable );
 }
 
+void VclMultiLineEdit::EnableCursor( sal_Bool bEnable )
+{
+    GetTextView()->EnableCursor( bEnable );
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

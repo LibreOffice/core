@@ -46,7 +46,6 @@
 #include <vcl/lstbox.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/vclmedit.hxx>
 #include <sot/clsids.hxx>
 #include <sfx2/frmdescr.hxx>
 #include <sfx2/viewsh.hxx>
