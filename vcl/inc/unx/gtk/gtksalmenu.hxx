@@ -35,7 +35,12 @@
 
 
 class MenuItemList;
+class GtkSalMenu;
 class GtkSalMenuItem;
+
+
+// Generate the complete structure of a menu.
+static void GenerateFullMenu( GtkSalMenu* pSalMenu );
 
 
 class GtkSalMenu : public SalMenu
@@ -103,11 +108,9 @@ public:
     void                        DispatchCommand( gint itemId, const gchar* aCommand );
     void                        Activate( const gchar* aMenuCommand );
     void                        Deactivate( const gchar* aMenuCommand );
-//    void                        DisconnectFrame();
     void                        Display( sal_Bool bVisible );
-    void UpdateNativeMenu();
-//    void UpdateNativeSubMenu();
-    bool PrepUpdate();
+    bool                        PrepUpdate();
+//    void                        UpdateNativeMenu();
 };
 
 class GtkSalMenuItem : public SalMenuItem
