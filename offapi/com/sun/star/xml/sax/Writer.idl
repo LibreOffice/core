@@ -27,6 +27,7 @@ module com {  module sun {  module star {  module xml {  module sax {
 
 
 /**
+  @since LibreOffice 3.7
  */
 service Writer : XWriter;
 
