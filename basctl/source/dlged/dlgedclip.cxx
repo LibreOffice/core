@@ -58,7 +58,7 @@ sal_Bool DlgEdTransferableImpl::compareDataFlavors( const DataFlavor& lFlavor, c
     // compare mime content types
     Reference< lang::XMultiServiceFactory >  xMSF = getProcessServiceFactory();
     Reference< datatransfer::XMimeContentTypeFactory >
-        xMCntTypeFactory( xMSF->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.datatransfer.MimeContentTypeFactory" ) ) ), UNO_QUERY );
+        xMCntTypeFactory( xMSF->createInstance( "com.sun.star.datatransfer.MimeContentTypeFactory" ), UNO_QUERY );
 
     if ( xMCntTypeFactory.is( ) )
     {
@@ -66,8 +66,8 @@ sal_Bool DlgEdTransferableImpl::compareDataFlavors( const DataFlavor& lFlavor, c
         Reference< datatransfer::XMimeContentType > xLType = xMCntTypeFactory->createMimeContentType( lFlavor.MimeType );
         Reference< datatransfer::XMimeContentType > xRType = xMCntTypeFactory->createMimeContentType( rFlavor.MimeType );
 
-        ::rtl::OUString aLFullMediaType = xLType->getFullMediaType();
-        ::rtl::OUString aRFullMediaType = xRType->getFullMediaType();
+        OUString aLFullMediaType = xLType->getFullMediaType();
+        OUString aRFullMediaType = xRType->getFullMediaType();
 
         bRet = aLFullMediaType.equalsIgnoreAsciiCase( aRFullMediaType );
     }
