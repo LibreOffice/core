@@ -16,7 +16,7 @@
    version="1.1"
    inkscape:version="0.48.3.1 r9886"
    sodipodi:docname="lc_autosum.svg"
-   inkscape:export-filename="/home/alexander/tango_testing/cmd/lc_autosum.png"
+   inkscape:export-filename="/home/alexander/libo/icon-themes/tango_testing/cmd/lc_autosum.png"
    inkscape:export-xdpi="90"
    inkscape:export-ydpi="90">
   <defs
@@ -213,7 +213,8 @@
        y1="1052.801"
        x2="14.243299"
        y2="1028.6135"
-       gradientUnits="userSpaceOnUse" />
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(0.00689303,0.0408)" />
   </defs>
   <sodipodi:namedview
      id="base"
@@ -223,19 +224,19 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="1"
-     inkscape:cx="-76.915361"
-     inkscape:cy="14.709741"
+     inkscape:cx="21.881123"
+     inkscape:cy="25.447535"
      inkscape:document-units="px"
-     inkscape:current-layer="layer1"
+     inkscape:current-layer="text2985"
      showgrid="false"
-     inkscape:snap-global="true"
+     inkscape:snap-global="false"
      showborder="false"
      inkscape:showpageshadow="false"
-     inkscape:window-width="783"
-     inkscape:window-height="414"
-     inkscape:window-x="348"
-     inkscape:window-y="189"
-     inkscape:window-maximized="0">
+     inkscape:window-width="1366"
+     inkscape:window-height="721"
+     inkscape:window-x="0"
+     inkscape:window-y="24"
+     inkscape:window-maximized="1">
     <inkscape:grid
        type="xygrid"
        id="grid2989"
@@ -266,17 +267,17 @@
        id="text2985"
        transform="translate(-2,0)">
       <path
-         d="m 22,1052.3622 -17,0 0,-1 8,-12 -7.9963785,-10.1734 0,-0.8188 L 22,1028.36 l 0,7.0022 -1,0 c 0,-1.9978 -2,-3.9978 -3,-3.9978 l -8,0 6,8 -7,10 9,0 c 1,0 3,-2 3,-4.0022 l 1,0 z"
+         d="m 22,1052.3622 -17,0 0,-1 8,-12 -7.9963785,-10.1734 0,-0.8188 L 22,1028.36 l 0,7.0022 -2,0 c 0,-1.9978 -2,-3.9978 -3,-3.9978 l -6,0 6,8 -7,10 7,0 c 1,0 3,-2 3,-4.0022 l 2,0 z"
          style="font-variant:normal;font-stretch:normal;fill:url(#linearGradient3963);fill-opacity:1;font-family:GentiumAlt;-inkscape-font-specification:GentiumAlt"
          id="path2992"
          inkscape:connector-curvature="0"
          sodipodi:nodetypes="ccccccccccccccccc" />
       <path
-         sodipodi:nodetypes="cccccccccccccccc"
+         sodipodi:nodetypes="ccccccccccccccccc"
          inkscape:connector-curvature="0"
          id="path3969"
-         style="font-variant:normal;font-stretch:normal;opacity:0.40000000000000002;fill:none;fill-opacity:1;stroke:url(#linearGradient3983);stroke-width:1;stroke-opacity:1;font-family:GentiumAlt;-inkscape-font-specification:GentiumAlt"
-         d="m 21.493298,1051.8654 -16.0001911,-0.044 0,-0.2915 8.1384721,-12.1753 -8.1293708,-10.3264 0,-0.1566 15.9910898,-0.01 0,6.0034 -0.01024,0 c -0.134117,-1.7427 -2.227635,-4.0964 -3.589431,-3.9902 l -8.8911917,0.01 6.3952977,8.4707 -7.3656125,10.5239 10.1708655,-0.033 c 3.086845,-0.9929 3.290313,-4.4855 3.290313,-4.4855 z" />
+         style="font-variant:normal;font-stretch:normal;opacity:0.4;fill:none;stroke:url(#linearGradient3983);stroke-width:1;stroke-opacity:1;font-family:GentiumAlt;-inkscape-font-specification:GentiumAlt"
+         d="M 21.500191,1051.9062 5.5,1051.8622 l 0,-0.3384 8.138472,-12.1284 -8.129371,-10.3264 0,-0.1566 15.99109,-0.01 0,6.0034 -1.059852,-0.022 c -0.134117,-1.7427 -2.216586,-4.1406 -3.578382,-4.0344 l -6.8693083,0.01 6.3732003,8.537 -7.2440787,10.4797 8.1600307,2e-4 c 2.133386,-0.7845 2.978569,-2.8932 3.189808,-4.0003 0.919915,0 1.028583,9e-4 1.028583,9e-4 z" />
       <rect
          style="opacity:0.4;fill:#ffffff;fill-opacity:1;stroke:none"
          id="rect3973"

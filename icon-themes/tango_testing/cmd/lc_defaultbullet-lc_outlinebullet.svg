@@ -15,8 +15,8 @@
    id="svg2"
    version="1.1"
    inkscape:version="0.48.3.1 r9886"
-   sodipodi:docname="lc_defaultbullet.svg"
-   inkscape:export-filename="/home/alexander/libo/icon-themes/tango_testing/cmd/lc_defaultbullet.png"
+   sodipodi:docname="lc_defaultbullet-lc_outlinebullet.svg"
+   inkscape:export-filename="/home/alexander/libo/icon-themes/tango_testing/cmd/lc_outlinebullet.png"
    inkscape:export-xdpi="90"
    inkscape:export-ydpi="90">
   <defs
@@ -337,16 +337,16 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="11.313708"
-     inkscape:cx="3.9210631"
-     inkscape:cy="17.989754"
+     inkscape:cx="21.726794"
+     inkscape:cy="7.7886196"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
-     showgrid="false"
+     showgrid="true"
      inkscape:snap-global="false"
      inkscape:window-width="1366"
-     inkscape:window-height="716"
+     inkscape:window-height="721"
      inkscape:window-x="0"
-     inkscape:window-y="26"
+     inkscape:window-y="24"
      inkscape:window-maximized="1">
     <inkscape:grid
        type="xygrid"
@@ -374,7 +374,7 @@
      id="layer1"
      transform="translate(0,-1028.3622)">
     <g
-       transform="matrix(0.63020001,0,0,0.99889952,-38.403146,794.63017)"
+       transform="matrix(0.63020001,0,0,0.99889952,-38.410959,796.63185)"
        style="color:#000000;fill:url(#radialGradient8572);fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:1.2742455;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
        id="g6106"
        inkscape:export-filename="/home/alexander/Dokumente/LibreOffice/Icons/bullets.png"

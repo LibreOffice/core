@@ -14,7 +14,10 @@
    id="svg6119"
    version="1.1"
    inkscape:version="0.48.3.1 r9886"
-   sodipodi:docname="Neues Dokument 1">
+   sodipodi:docname="sc_insertannotation-sw-imglst-nc20010-nc20015.svg"
+   inkscape:export-filename="/home/alexander/libo/icon-themes/tango_testing/sw/imglst/sr20015.png"
+   inkscape:export-xdpi="90"
+   inkscape:export-ydpi="90">
   <defs
      id="defs6121" />
   <sodipodi:namedview
@@ -24,17 +27,17 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="11.2"
-     inkscape:cx="17.50458"
-     inkscape:cy="6.0643681"
+     inkscape:zoom="1"
+     inkscape:cx="8.5849437"
+     inkscape:cy="6.5086193"
      inkscape:document-units="px"
-     inkscape:current-layer="layer1"
-     showgrid="true"
-     inkscape:window-width="626"
-     inkscape:window-height="436"
-     inkscape:window-x="1"
-     inkscape:window-y="50"
-     inkscape:window-maximized="0">
+     inkscape:current-layer="g75490"
+     showgrid="false"
+     inkscape:window-width="1366"
+     inkscape:window-height="721"
+     inkscape:window-x="0"
+     inkscape:window-y="24"
+     inkscape:window-maximized="1">
     <inkscape:grid
        type="xygrid"
        id="grid6175"
@@ -155,6 +158,14 @@
          y="66"
          rx="0.99999028"
          ry="0.99999034" />
+      <path
+         style="opacity:0.4;fill:#ffffff;stroke:none;stroke-width:0.50000000000000000;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;fill-opacity:1"
+         d="M 2 1 C 1.4460053 1 1 1.4460053 1 2 L 1 13 C 1 13.553995 1.4460053 14 2 14 L 14 14 C 14.553995 14 15 13.553995 15 13 L 15 2 C 15 1.4460053 14.553995 1 14 1 L 2 1 z M 3 2 L 13 2 C 13.553995 2 14 2.4460053 14 3 L 14 12 C 14 12.553995 13.553995 13 13 13 L 3 13 C 2.4460053 13 2 12.553995 2 12 L 2 3 C 2 2.4460053 2.4460053 2 3 2 z "
+         transform="translate(62,-21.6378)"
+         id="rect3016" />
     </g>
+    <g
+       id="g2994"
+       transform="translate(-62,1058)" />
   </g>
 </svg>
