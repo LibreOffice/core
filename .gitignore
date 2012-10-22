@@ -10,8 +10,7 @@
 # python generated file
 *.pyc
 
-# where the 'subrepos' and downloads are located
-/clone
+# where the downloads are located
 /src
 
 # the build directories
