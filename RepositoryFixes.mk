@@ -146,6 +146,8 @@ gb_Library_NOILIBFILENAMES := \
     lcms2 \
 	pango-1.0 \
 	pangocairo-1.0 \
+	xpcom \
+	xpcom_core \
     nspr4 \
     nss3 \
     smime3 \
