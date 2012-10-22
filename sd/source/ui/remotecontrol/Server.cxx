@@ -320,6 +320,8 @@ void RemoteServer::setBluetoothDiscoverable( bool aDiscoverable )
 {
 #ifdef ENABLE_BLUETOOTH
     BluetoothServer::setDiscoverable( aDiscoverable );
+#else
+    (void) aDiscoverable;
 #endif
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
