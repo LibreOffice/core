@@ -59,6 +59,7 @@ private:
     GActionGroup*                   mpActionGroup;
 
     GtkSalMenu*                 GetMenuForItemCommand( gchar* aCommand, gboolean bGetSubmenu );
+    void                        ImplUpdate( gboolean bRecurse );
 
 public:
     GtkSalMenu( sal_Bool bMenuBar );
