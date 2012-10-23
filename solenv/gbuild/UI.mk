@@ -46,8 +46,8 @@ $(call gb_UILocalizeTarget_get_target,$(1)) : SDF := $(gb_SDFLOCATION)/$(dir $(2
 $(call gb_UILocalizeTarget_get_target,$(1)) : UI_FILE := $(SRCDIR)/$(2).ui
 $(call gb_UILocalizeTarget_get_target,$(1)) : UI_LANG := $(3)
 
-$(call gb_UILocalizeTarget_get_target,$(1)) : $$(SDF)
-$(call gb_UILocalizeTarget_get_target,$(1)) : $$(UI_FILE)
+$(call gb_UILocalizeTarget_get_target,$(1)) : $(gb_SDFLOCATION)/$(dir $(2))localize.sdf
+$(call gb_UILocalizeTarget_get_target,$(1)) : $(SRCDIR)/$(2).ui
 $(call gb_UILocalizeTarget_get_target,$(1)) :| $(dir $(call gb_UILocalizeTarget_get_target,$(1))).dir
 
 endef
