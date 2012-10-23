@@ -92,8 +92,8 @@ int RTFTokenizer::resolveParse()
     {
         //SAL_INFO("writerfilter", OSL_THIS_FUNC << ": parsing character '" << ch << "'");
 
-        sal_uInt32 nCurrentPos;
-        if (m_xStatusIndicator.is() && (nCurrentPos = Strm().Tell()) > (nLastPos + nPercentSize))
+        sal_uInt32 nCurrentPos = Strm().Tell();
+        if (m_xStatusIndicator.is() && nCurrentPos > (nLastPos + nPercentSize))
             m_xStatusIndicator->setValue(nLastPos = nCurrentPos);
 
         if (m_nGroup < 0)
