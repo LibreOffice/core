@@ -16,13 +16,6 @@ $(eval $(call gb_UnpackedTarball_add_patches,ConvertTextToNumber,\
 	ct2n/ConvertTextToNumber-1.3.2-no-visible-by-default.patch \
 ))
 
-# adjustments for using Extension class
-# 1. manifest.xml is expected in root directory
-$(eval $(call gb_UnpackedTarball_set_post_action,ConvertTextToNumber,\
-	mv $(call gb_UnpackedTarball_get_dir,ConvertTextToNumber)/META-INF/manifest.xml \
-	$(call gb_UnpackedTarball_get_dir,ConvertTextToNumber) \
-))
-
 $(eval $(call gb_UnpackedTarball_mark_output_file,ConvertTextToNumber,description.xml))
 
 # vim: set noet sw=4 ts=4:

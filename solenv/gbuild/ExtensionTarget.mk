@@ -118,7 +118,7 @@ $(call gb_ExtensionTarget_get_target,%) : \
 		mkdir -p $(call gb_ExtensionTarget_get_rootdir,$*)/META-INF \
 			$(if $(LICENSE),$(call gb_ExtensionTarget_get_rootdir,$*)/registration) && \
 		$(call gb_ExtensionTarget__subst_platform,$(call gb_ExtensionTarget_get_workdir,$*)/description.xml,$(call gb_ExtensionTarget_get_rootdir,$*)/description.xml) && \
-		$(call gb_ExtensionTarget__subst_platform,$(LOCATION)/manifest.xml,$(call gb_ExtensionTarget_get_rootdir,$*)/META-INF/manifest.xml) && \
+		$(call gb_ExtensionTarget__subst_platform,$(LOCATION)/META-INF/manifest.xml,$(call gb_ExtensionTarget_get_rootdir,$*)/META-INF/manifest.xml) && \
 		$(if $(LICENSE),cp -f $(LICENSE) $(call gb_ExtensionTarget_get_rootdir,$*)/registration &&) \
 		$(if $(and $(gb_ExtensionTarget_TRANS_LANGS),$(DESCRIPTION)),cp $(foreach lang,$(gb_ExtensionTarget_TRANS_LANGS),$(call gb_ExtensionTarget_get_workdir,$*)/description-$(lang).txt) $(call gb_ExtensionTarget_get_rootdir,$*) &&) \
 		cd $(call gb_ExtensionTarget_get_rootdir,$*) && \
@@ -138,7 +138,7 @@ $(call gb_ExtensionTarget_get_target,$(1)) : LOCATION := $(2)
 $(call gb_ExtensionTarget_get_target,$(1)) : PLATFORM := $(PLATFORMID)
 $(call gb_ExtensionTarget_get_target,$(1)) : PRJNAME := $(firstword $(subst /, ,$(2)))
 $(call gb_ExtensionTarget_get_workdir,$(1))/description.xml : \
-	$(SRCDIR)/$(2)/description.xml
+	$(2)/description.xml
 $(call gb_ExtensionTarget_get_workdir,$(1))/description.xml :| \
 	$(call gb_ExtensionTarget__get_preparation_target,$(1))
 
