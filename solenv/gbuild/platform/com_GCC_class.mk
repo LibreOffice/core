@@ -103,7 +103,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		-o $(1) \
 	    $(gb_cxx_dep_generation_options) \
 		-I$(dir $(3)) \
-		$(INCLUDE_STL) $(INCLUDE) \
+		$(INCLUDE) \
 	    $(gb_cxx_dep_copy) \
 		)
 endef
@@ -119,7 +119,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(T_CXXFLAGS) \
 		-c $(2) \
 		-I$(dir $(2)) \
-		$(INCLUDE_STL) $(INCLUDE) \
+		$(INCLUDE) \
 		$(gb_COMPILER_PLUGINS) \
 		)
 endef

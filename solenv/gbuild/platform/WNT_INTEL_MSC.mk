@@ -303,7 +303,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		-Fd$(PDBFILE) \
 		$(gb_COMPILERDEPFLAGS) \
 		-I$(dir $(3)) \
-		$(INCLUDE_STL) $(INCLUDE) \
+		$(INCLUDE) \
 		$(if $(filter YES,$(CXXOBJECT_X64)), -U_X86_ -D_AMD64_,) \
 		-c $(3) \
 		-Fo$(1)) $(call gb_create_deps,$(4),$(1),$(3))
@@ -329,10 +329,8 @@ gb_LinkTarget_CFLAGS := $(gb_CFLAGS)
 gb_LinkTarget_CXXFLAGS := $(gb_CXXFLAGS)
 
 gb_LinkTarget_INCLUDE :=\
-	$(filter-out %/stl, $(subst -I. , ,$(SOLARINC))) \
+	$(subst -I. , ,$(SOLARINC)) \
 	$(foreach inc,$(subst ;, ,$(JDKINC)),-I$(inc)) \
-
-gb_LinkTarget_INCLUDE_STL := $(filter %/stl, $(subst -I. , ,$(SOLARINC)))
 
 gb_LinkTarget_get_pdbfile = $(call gb_LinkTarget_get_target,)pdb/$(1).pdb
 

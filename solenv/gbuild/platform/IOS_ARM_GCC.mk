@@ -103,7 +103,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		-MMD -MT $(1) \
 		-MP -MF $(4) \
 		-I$(dir $(3)) \
-		$(INCLUDE_STL) $(INCLUDE))
+		$(INCLUDE))
 endef
 
 # ObjCObject class
@@ -121,7 +121,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		-MMD -MT $(call gb_ObjCObject_get_target,$(2)) \
 		-MP -MF $(call gb_ObjCObject_get_dep_target,$(2)) \
 		-I$(dir $(3)) \
-		$(INCLUDE_STL) $(INCLUDE))
+		$(INCLUDE))
 endef
 
 

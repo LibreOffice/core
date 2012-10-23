@@ -150,8 +150,7 @@ gb_DEBUG_CFLAGS := $(GGDB2) $(FINLINE_LIMIT0) $(FNO_INLINE)
 gb_DEBUG_CXXFLAGS := $(FNO_DEFAULT_INLINE)
 
 
-gb_LinkTarget_INCLUDE := $(filter-out %/stl, $(subst -I. , ,$(SOLARINC)))
-gb_LinkTarget_INCLUDE_STL := $(filter %/stl, $(subst -I. , ,$(SOLARINC)))
+gb_LinkTarget_INCLUDE := $(subst -I. , ,$(SOLARINC))
 
 ifeq ($(COM_GCC_IS_CLANG),TRUE)
 ifeq ($(COMPILER_PLUGIN_TOOL),)
