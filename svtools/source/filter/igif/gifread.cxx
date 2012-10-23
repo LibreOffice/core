@@ -96,6 +96,20 @@ sal_Bool GIFReader::CreateBitmaps( long nWidth, long nHeight, BitmapPalette* pPa
 {
     const Size aSize( nWidth, nHeight );
 
+#ifdef __LP64__
+    // Don't bother allocating a bitmap of a size that would fail on a
+    // 32-bit system. We have at least one unit tests that is expected
+    // to fail (loading a 65535*65535 size GIF
+    // svtools/qa/cppunit/data/gif/fail/CVE-2008-5937-1.gif), but
+    // which doesn't fail on 64-bit Mac OS X at least. Why the loading
+    // fails on 64-bit Linux, no idea.
+    if (nWidth >= 64000 && nHeight >= 64000)
+    {
+        bStatus = sal_False;
+        return bStatus;
+    }
+#endif
+
     if( bGCTransparent )
     {
         const Color aWhite( COL_WHITE );
