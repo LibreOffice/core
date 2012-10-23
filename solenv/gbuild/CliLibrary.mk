@@ -13,6 +13,7 @@ gb_CliLibraryTarget_EXT := $(gb_CliAssembly_POLICYEXT)
 
 gb_CliLibraryTarget_CSCFLAGS := \
 	-noconfig \
+	-nologo \
 
 gb_CliLibraryTarget_CSCFLAGS_DEBUG := \
 	-checked+ \

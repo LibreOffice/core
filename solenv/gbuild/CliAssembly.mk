@@ -56,6 +56,7 @@ define gb_CliAssemblyTarget__command
 $(call gb_Output_announce,$(2),$(true),AL ,2)
 $(call gb_Helper_abbreviate_dirs,\
 	al \
+		-nologo \
 		-out:$(CLI_ASSEMBLY_OUTFILE) \
 		-version:$(CLI_ASSEMBLY_VERSION) \
 		-keyfile:$(call gb_Helper_windows_path,$(CLI_ASSEMBLY_KEYFILE)) \
