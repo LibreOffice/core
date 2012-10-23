@@ -455,8 +455,8 @@ void SbiRuntime::StepPUT()
 // VBA Dim As New behavior handling, save init object information
 struct DimAsNewRecoverItem
 {
-    String          m_aObjClass;
-    String          m_aObjName;
+    OUString          m_aObjClass;
+    OUString          m_aObjName;
     SbxObject*      m_pObjParent;
     SbModule*       m_pClassModule;
 
@@ -465,8 +465,8 @@ struct DimAsNewRecoverItem
         , m_pClassModule( NULL )
     {}
 
-    DimAsNewRecoverItem( const String& rObjClass, const String& rObjName,
-        SbxObject* pObjParent, SbModule* pClassModule )
+    DimAsNewRecoverItem( const OUString& rObjClass, const OUString& rObjName,
+                         SbxObject* pObjParent, SbModule* pClassModule )
             : m_aObjClass( rObjClass )
             , m_aObjName( rObjName )
             , m_pObjParent( pObjParent )
@@ -659,7 +659,7 @@ void SbiRuntime::StepSET_Impl( SbxVariableRef& refVal, SbxVariableRef& refVar, b
                                 pNewObj->SetParent( rItem.m_pObjParent );
                                 refVar->PutObject( pNewObj );
                             }
-                            else if( rItem.m_aObjClass.EqualsIgnoreCaseAscii( pCollectionStr ) )
+                            else if( rItem.m_aObjClass.equalsIgnoreAsciiCaseAscii( pCollectionStr ) )
                             {
                                 BasicCollection* pNewCollection = new BasicCollection( OUString(pCollectionStr) );
                                 pNewCollection->SetName( rItem.m_aObjName );
