@@ -39,16 +39,12 @@ void SbiRuntime::StepLOADNC( sal_uInt32 nOp1 )
     SbxVariable* p = new SbxVariable( SbxDOUBLE );
 
     // #57844 use localized function
-    String aStr = pImg->GetString( static_cast<short>( nOp1 ) );
+    OUString aStr = pImg->GetString( static_cast<short>( nOp1 ) );
     // also allow , !!!
-    sal_uInt16 iComma = aStr.Search( ',' );
-    if( iComma != STRING_NOTFOUND )
+    sal_Int32 iComma = aStr.indexOf((sal_Unicode)',');
+    if( iComma >= 0 )
     {
-        String aStr1 = aStr.Copy( 0, iComma );
-        String aStr2 = aStr.Copy( iComma + 1 );
-        aStr = aStr1;
-        aStr += '.';
-        aStr += aStr2;
+        aStr = aStr.replaceAt(iComma, 1, OUString("."));
     }
     double n = ::rtl::math::stringToDouble( aStr, '.', ',', NULL, NULL );
 
