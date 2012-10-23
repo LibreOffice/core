@@ -82,6 +82,7 @@ forms\
 formula\
 fpicker\
 framework\
+freetype\
 helpcompiler\
 hsqldb\
 hwpfilter\
@@ -212,7 +213,6 @@ curl\
 epm\
 expat\
 external\
-freetype\
 gdk-pixbuf\
 gettext\
 glib\

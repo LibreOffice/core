@@ -1,8 +1,0 @@
-..\%__SRC%\misc\build\freetype*\objs\.libs\*.a %_DEST%\lib
-
-..\%__SRC%\misc\build\freetype*\builds\unix\freetype-config %_DEST%\bin
-
-mkdir: %_DEST%\inc\external\freetype\config
-..\%__SRC%\misc\build\freetype*\include\ft2build.h %_DEST%\inc\external
-..\%__SRC%\misc\build\freetype*\include\freetype\*.h %_DEST%\inc\external\freetype
-..\%__SRC%\misc\build\freetype*\include\freetype\config\*.h %_DEST%\inc\external\freetype\config
