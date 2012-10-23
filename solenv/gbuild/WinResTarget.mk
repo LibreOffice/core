@@ -36,7 +36,7 @@ $(call gb_WinResTarget_get_target,%) :
 	$(call gb_WinResTarget__command,$@,$*,$<)
 
 $(call gb_WinResTarget_get_clean_target,%) :
-	$(call gb_Output_announce,$*,$(false),RES,3)
+	$(call gb_Output_announce,$*,$(false),RC ,3)
 	$(call gb_Helper_abbreviate_dirs,\
 		rm -f $(call gb_WinResTarget_get_target,$*) \
 			$(call gb_WinResTarget_get_dep_target,$*))

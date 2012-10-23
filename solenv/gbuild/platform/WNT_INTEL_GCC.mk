@@ -343,7 +343,7 @@ endef
 gb_WinResTarget_POSTFIX :=.o
 
 define gb_WinResTarget__command
-$(call gb_Output_announce,$(2),$(true),RES,3)
+$(call gb_Output_announce,$(2),$(true),RC ,3)
 $(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) && \
 	$(gb_RC) \
@@ -359,7 +359,7 @@ $(eval $(call gb_Helper_make_dep_targets,\
 
 ifeq ($(gb_FULLDEPS),$(true))
 define gb_WinResTarget__command_dep
-$(call gb_Output_announce,RES:$(2),$(true),DEP,1)
+$(call gb_Output_announce,RC:$(2),$(true),DEP,1)
 $(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) && \
 	$(OUTDIR_FOR_BUILD)/bin/makedepend \
