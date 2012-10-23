@@ -3091,24 +3091,27 @@ static uno::Any lcl_getSheetModule( const uno::Reference<table::XCellRange>& xCe
     BasicManager* pBasMgr = pDok->GetDocumentShell()->GetBasicManager();
 
     uno::Reference< uno::XInterface > xIf;
-    if ( pBasMgr && pBasMgr->GetName().Len() )
+    if ( pBasMgr && !pBasMgr->GetName().isEmpty() )
     {
         String sProj = String( RTL_CONSTASCII_USTRINGPARAM( "Standard" ) );
-        if ( pDok->GetDocumentShell()->GetBasicManager()->GetName().Len() )
+        if ( !pDok->GetDocumentShell()->GetBasicManager()->GetName().isEmpty() )
+        {
             sProj = pDok->GetDocumentShell()->GetBasicManager()->GetName();
+        }
         StarBASIC* pBasic = pDok->GetDocumentShell()->GetBasicManager()->GetLib( sProj );
         if ( pBasic )
         {
             SbModule* pMod = pBasic->FindModule( sCodeName );
             if ( pMod )
+            {
                 xIf = pMod->GetUnoModule();
+            }
         }
     }
     return uno::makeAny( xIf );
 }
 
-static bool
-lcl_setVBARange( ScRange& aRange, ScDocument* pDok, SbxVariable* pPar )
+static bool lcl_setVBARange( ScRange& aRange, ScDocument* pDok, SbxVariable* pPar )
 {
     bool bOk = false;
     try

@@ -143,12 +143,14 @@ void ScMacroManager::InitUserFuncData()
 {
     // Clear boost::unordered_map
     mhFuncToVolatile.clear();
-    String sProjectName( RTL_CONSTASCII_USTRINGPARAM("Standard") );
+    OUString sProjectName("Standard");
 
     Reference< container::XContainer > xModuleContainer;
     SfxObjectShell* pShell = mpDoc->GetDocumentShell();
-    if ( pShell && pShell->GetBasicManager()->GetName().Len() > 0 )
+    if ( pShell && ! pShell->GetBasicManager()->GetName().isEmpty() > 0 )
+    {
         sProjectName = pShell->GetBasicManager()->GetName();
+    }
     try
     {
         Reference< script::XLibraryContainer > xLibraries( pShell->GetBasicContainer(), uno::UNO_QUERY_THROW );

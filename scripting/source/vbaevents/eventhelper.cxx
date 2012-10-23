@@ -896,7 +896,9 @@ EventListener::firing_Impl(const ScriptEvent& evt, Any* pRet ) throw(RuntimeExce
     uno::Reference< script::provider::XScriptProviderSupplier > xSPS( m_xModel, uno::UNO_QUERY );
     uno::Reference< script::provider::XScriptProvider > xScriptProvider;
     if ( xSPS.is() )
+    {
         xScriptProvider =  xSPS->getScriptProvider();
+    }
     if ( xScriptProvider.is() && mpShell )
     {
         std::list< TranslateInfo >::const_iterator txInfo =
@@ -906,22 +908,24 @@ EventListener::firing_Impl(const ScriptEvent& evt, Any* pRet ) throw(RuntimeExce
         BasicManager* pBasicManager = mpShell->GetBasicManager();
         rtl::OUString sProject;
         rtl::OUString sScriptCode( evt.ScriptCode );
-    // dialogs pass their own library, presence of Dot determines that
-    if ( sScriptCode.indexOf( '.' ) == -1 )
-    {
-       //'Project' is a better default but I want to force failures
-       //rtl::OUString sMacroLoc("Project");
-        sProject = rtl::OUString("Standard");
+        // dialogs pass their own library, presence of Dot determines that
+        if ( sScriptCode.indexOf( '.' ) == -1 )
+        {
+            //'Project' is a better default but I want to force failures
+            //rtl::OUString sMacroLoc("Project");
+            sProject = "Standard";
 
-        if ( pBasicManager->GetName().Len() > 0 )
-            sProject =  pBasicManager->GetName();
-    }
-    else
-    {
-        sal_Int32 nIndex = sScriptCode.indexOf( '.' );
-        sProject = sScriptCode.copy( 0, nIndex );
-        sScriptCode = sScriptCode.copy( nIndex + 1 );
-    }
+            if ( !pBasicManager->GetName().isEmpty() > 0 )
+            {
+                sProject =  pBasicManager->GetName();
+            }
+        }
+        else
+        {
+            sal_Int32 nIndex = sScriptCode.indexOf( '.' );
+            sProject = sScriptCode.copy( 0, nIndex );
+            sScriptCode = sScriptCode.copy( nIndex + 1 );
+        }
         rtl::OUString sMacroLoc = sProject;
         sMacroLoc = sMacroLoc.concat(  rtl::OUString(".") );
         sMacroLoc = sMacroLoc.concat( sScriptCode ).concat( rtl::OUString(".") );
@@ -954,9 +958,13 @@ EventListener::firing_Impl(const ScriptEvent& evt, Any* pRet ) throw(RuntimeExce
                 // !! translate arguments & emulate events where necessary
                 Sequence< Any > aArguments;
                 if  ( (*txInfo).toVBA )
+                {
                     aArguments = (*txInfo).toVBA( evt.Arguments );
+                }
                 else
+                {
                     aArguments = evt.Arguments;
+                }
                 if ( aArguments.getLength() )
                 {
                     // call basic event handlers for event
@@ -971,7 +979,9 @@ EventListener::firing_Impl(const ScriptEvent& evt, Any* pRet ) throw(RuntimeExce
                     {
                         uno::Any aDummyCaller = uno::makeAny( rtl::OUString("Error") );
                         if ( pRet )
+                        {
                             ooo::vba::executeMacro( mpShell, url, aArguments, *pRet, aDummyCaller );
+                        }
                         else
                         {
                             uno::Any aRet;

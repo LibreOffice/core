@@ -1154,7 +1154,7 @@ uno::Reference< XHelperInterface > getUnoDocModule( const String& aModName, SfxO
     {
         OUString sProj( "Standard" );
         BasicManager* pBasMgr = pShell->GetBasicManager();
-        if ( pBasMgr && pBasMgr->GetName().Len() )
+        if ( pBasMgr && !pBasMgr->GetName().isEmpty() )
             sProj = pBasMgr->GetName();
         if( StarBASIC* pBasic = pShell->GetBasicManager()->GetLib( sProj ) )
             if( SbModule* pMod = pBasic->FindModule( aModName ) )

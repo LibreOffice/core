@@ -2651,9 +2651,11 @@ void VBA_InsertModule( ScDocument& rDoc, SCTAB nTab, const rtl::OUString& sModul
     uno::Reference< container::XNameContainer > xLib;
     if( xLibContainer.is() )
     {
-        String aLibName( RTL_CONSTASCII_USTRINGPARAM( "Standard" ) );
-        if ( rDocSh.GetBasicManager() && rDocSh.GetBasicManager()->GetName().Len() )
+        String aLibName( "Standard" );
+        if ( rDocSh.GetBasicManager() && !rDocSh.GetBasicManager()->GetName().isEmpty() )
+        {
             aLibName = rDocSh.GetBasicManager()->GetName();
+        }
         uno::Any aLibAny = xLibContainer->getByName( aLibName );
         aLibAny >>= xLib;
     }
@@ -2697,9 +2699,11 @@ void VBA_DeleteModule( ScDocShell& rDocSh, const rtl::OUString& sModuleName )
     uno::Reference< container::XNameContainer > xLib;
     if( xLibContainer.is() )
     {
-        String aLibName( RTL_CONSTASCII_USTRINGPARAM( "Standard" ) );
-        if ( rDocSh.GetBasicManager() && rDocSh.GetBasicManager()->GetName().Len() )
+        String aLibName( "Standard" );
+        if ( rDocSh.GetBasicManager() && !rDocSh.GetBasicManager()->GetName().isEmpty() )
+        {
             aLibName = rDocSh.GetBasicManager()->GetName();
+        }
         uno::Any aLibAny = xLibContainer->getByName( aLibName );
         aLibAny >>= xLib;
     }

@@ -1004,11 +1004,12 @@ sal_uLong ScDocument::TransferTab( ScDocument* pSrcDoc, SCTAB nSrcPos,
         SfxObjectShell* pSrcShell = pSrcDoc ? pSrcDoc->GetDocumentShell() : NULL;
         if ( pSrcShell )
         {
-            rtl::OUString aLibName(RTL_CONSTASCII_USTRINGPARAM("Standard"));
+            rtl::OUString aLibName("Standard");
             const BasicManager *pBasicManager = pSrcShell->GetBasicManager();
-            if (pBasicManager && pBasicManager->GetName().Len() > 0)
+            if (pBasicManager && !pBasicManager->GetName().isEmpty() > 0)
+            {
                 aLibName = pSrcShell->GetBasicManager()->GetName();
-
+            }
             rtl::OUString sCodeName;
             rtl::OUString sSource;
             uno::Reference< script::XLibraryContainer > xLibContainer = pSrcShell->GetBasicContainer();

@@ -123,10 +123,11 @@ public:
             {
                 uno::Reference< beans::XPropertySet > xProps( mpDocShell->GetModel(), uno::UNO_QUERY_THROW );
                 uno::Reference< container::XNameAccess > xLibContainer( xProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("BasicLibraries") ) ), uno::UNO_QUERY_THROW );
-        rtl::OUString sProjectName( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Standard") ) );
-                if ( mpDocShell->GetBasicManager()->GetName().Len() )
+                rtl::OUString sProjectName( "Standard");
+                if ( !mpDocShell->GetBasicManager()->GetName().isEmpty() )
+                {
                     sProjectName =  mpDocShell->GetBasicManager()->GetName();
-
+                }
                 uno::Reference< container::XNameAccess > xLib( xLibContainer->getByName( sProjectName ), uno::UNO_QUERY_THROW );
                 uno::Sequence< rtl::OUString > sModuleNames = xLib->getElementNames();
                 uno::Reference< script::vba::XVBAModuleInfo > xVBAModuleInfo( xLib, uno::UNO_QUERY );

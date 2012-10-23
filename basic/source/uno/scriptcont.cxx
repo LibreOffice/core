@@ -85,12 +85,12 @@ const sal_Char* SAL_CALL SfxScriptLibraryContainer::getLibrariesDir() const { re
 
 // OldBasicPassword interface
 void SfxScriptLibraryContainer::setLibraryPassword
-    ( const String& rLibraryName, const String& rPassword )
+    ( const OUString& rLibraryName, const OUString& rPassword )
 {
     try
     {
         SfxLibrary* pImplLib = getImplLib( rLibraryName );
-        if( rPassword.Len() )
+        if( !rPassword.isEmpty() )
         {
             pImplLib->mbDoc50Password = true;
             pImplLib->mbPasswordProtected = sal_True;
@@ -100,16 +100,16 @@ void SfxScriptLibraryContainer::setLibraryPassword
     catch(const NoSuchElementException& ) {}
 }
 
-String SfxScriptLibraryContainer::getLibraryPassword( const String& rLibraryName )
+OUString SfxScriptLibraryContainer::getLibraryPassword( const OUString& rLibraryName )
 {
     SfxLibrary* pImplLib = getImplLib( rLibraryName );
-    String aPassword;
+    OUString aPassword;
     if( pImplLib->mbPasswordVerified )
         aPassword = pImplLib->maPassword;
     return aPassword;
 }
 
-void SfxScriptLibraryContainer::clearLibraryPassword( const String& rLibraryName )
+void SfxScriptLibraryContainer::clearLibraryPassword( const OUString& rLibraryName )
 {
     try
     {
@@ -121,7 +121,7 @@ void SfxScriptLibraryContainer::clearLibraryPassword( const String& rLibraryName
     catch(const NoSuchElementException& ) {}
 }
 
-sal_Bool SfxScriptLibraryContainer::hasLibraryPassword( const String& rLibraryName )
+sal_Bool SfxScriptLibraryContainer::hasLibraryPassword( const OUString& rLibraryName )
 {
     SfxLibrary* pImplLib = getImplLib( rLibraryName );
     return pImplLib->mbPasswordProtected;
@@ -610,7 +610,7 @@ sal_Bool SfxScriptLibraryContainer::implStorePasswordLibrary( SfxLibrary* pLib, 
             if( pMod )
             {
                 OUString aCodeStreamName = aElementName;
-                aCodeStreamName += String( RTL_CONSTASCII_USTRINGPARAM(".bin") );
+                aCodeStreamName += ".bin";
 
                 try {
                     uno::Reference< io::XStream > xCodeStream = xStorage->openStreamElement(
@@ -656,7 +656,7 @@ sal_Bool SfxScriptLibraryContainer::implStorePasswordLibrary( SfxLibrary* pLib, 
                 }
 
                 OUString aSourceStreamName = aElementName;
-                aSourceStreamName += String( RTL_CONSTASCII_USTRINGPARAM(".xml") );
+                aSourceStreamName += ".xml";
 
                 try {
                     uno::Reference< io::XStream > xSourceStream = xStorage->openStreamElement(
@@ -723,7 +723,7 @@ sal_Bool SfxScriptLibraryContainer::implStorePasswordLibrary( SfxLibrary* pLib, 
                 aElementInetObj.insertName( aElementName, sal_False,
                     INetURLObject::LAST_SEGMENT, sal_True, INetURLObject::ENCODE_ALL );
                 aElementInetObj.setExtension( OUString( "pba" ) );
-                String aElementPath = aElementInetObj.GetMainURL( INetURLObject::NO_DECODE );
+                OUString aElementPath = aElementInetObj.GetMainURL( INetURLObject::NO_DECODE );
 
                 if( !isLibraryElementValid( pLib->getByName( aElementName ) ) )
                 {
@@ -914,7 +914,7 @@ sal_Bool SfxScriptLibraryContainer::implLoadPasswordLibrary
                 }
 
                 OUString aCodeStreamName= aElementName;
-                aCodeStreamName += String( RTL_CONSTASCII_USTRINGPARAM(".bin") );
+                aCodeStreamName += ".bin";
 
                 try {
                     uno::Reference< io::XStream > xCodeStream = xLibraryStor->openStreamElement(
@@ -947,7 +947,7 @@ sal_Bool SfxScriptLibraryContainer::implLoadPasswordLibrary
             {
                 // Access encrypted source stream
                 OUString aSourceStreamName = aElementName;
-                aSourceStreamName += String( RTL_CONSTASCII_USTRINGPARAM(".xml") );
+                aSourceStreamName += ".xml";
 
                 try {
                     uno::Reference< io::XStream > xSourceStream = xLibraryStor->openEncryptedStreamElement(
@@ -1000,7 +1000,7 @@ sal_Bool SfxScriptLibraryContainer::implLoadPasswordLibrary
                 aElementInetObj.insertName( aElementName, sal_False,
                     INetURLObject::LAST_SEGMENT, sal_True, INetURLObject::ENCODE_ALL );
                 aElementInetObj.setExtension( OUString( "pba" ) );
-                String aElementPath = aElementInetObj.GetMainURL( INetURLObject::NO_DECODE );
+                OUString aElementPath = aElementInetObj.GetMainURL( INetURLObject::NO_DECODE );
 
                 uno::Reference< embed::XStorage > xElementRootStorage;
                 try {

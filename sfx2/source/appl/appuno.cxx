@@ -1908,7 +1908,7 @@ ErrCode SfxMacroLoader::loadMacro( const ::rtl::OUString& rURL, com::sun::star::
                 aQualifiedMethod.Erase( nArgsPos - nHashPos - 1 );
             }
 
-            if ( pBasMgr->HasMacro( aQualifiedMethod ) )
+            if ( pBasMgr->HasMacro( OUString(aQualifiedMethod) ) )
             {
                 Any aOldThisComponent;
                 const bool bSetDocMacroMode = ( pDoc != NULL ) && bIsDocBasic;

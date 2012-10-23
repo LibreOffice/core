@@ -81,10 +81,10 @@ class SfxScriptLibraryContainer : public SfxLibraryContainer, public OldBasicPas
 
 
     // OldBasicPassword interface
-    virtual void setLibraryPassword( const String& rLibraryName, const String& rPassword );
-    virtual String getLibraryPassword( const String& rLibraryName );
-    virtual void clearLibraryPassword( const String& rLibraryName );
-    virtual sal_Bool hasLibraryPassword( const String& rLibraryName );
+    virtual void setLibraryPassword( const OUString& rLibraryName, const OUString& rPassword );
+    virtual OUString getLibraryPassword( const OUString& rLibraryName );
+    virtual void clearLibraryPassword( const OUString& rLibraryName );
+    virtual sal_Bool hasLibraryPassword( const OUString& rLibraryName );
 
     virtual const sal_Char* SAL_CALL    getInfoFileName() const;
     virtual const sal_Char* SAL_CALL    getOldInfoFileName() const;
