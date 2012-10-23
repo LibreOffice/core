@@ -41,53 +41,53 @@ using ::rtl::OUStringBuffer;
 
 ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > xHandler,  const uno::Sequence< uno::Sequence < beans::PropertyValue > >& rManList )
 {
-    const ::rtl::OUString sFileEntryElement     ( RTL_CONSTASCII_USTRINGPARAM ( ELEMENT_FILE_ENTRY ) );
-    const ::rtl::OUString sManifestElement      ( RTL_CONSTASCII_USTRINGPARAM ( ELEMENT_MANIFEST ) );
-    const ::rtl::OUString sEncryptionDataElement( RTL_CONSTASCII_USTRINGPARAM ( ELEMENT_ENCRYPTION_DATA ) );
-    const ::rtl::OUString sAlgorithmElement     ( RTL_CONSTASCII_USTRINGPARAM ( ELEMENT_ALGORITHM ) );
-    const ::rtl::OUString sStartKeyGenerationElement ( RTL_CONSTASCII_USTRINGPARAM ( ELEMENT_START_KEY_GENERATION ) );
-    const ::rtl::OUString sKeyDerivationElement ( RTL_CONSTASCII_USTRINGPARAM ( ELEMENT_KEY_DERIVATION ) );
+    const OUString sFileEntryElement     ( ELEMENT_FILE_ENTRY );
+    const OUString sManifestElement      ( ELEMENT_MANIFEST );
+    const OUString sEncryptionDataElement( ELEMENT_ENCRYPTION_DATA );
+    const OUString sAlgorithmElement     ( ELEMENT_ALGORITHM );
+    const OUString sStartKeyGenerationElement ( ELEMENT_START_KEY_GENERATION );
+    const OUString sKeyDerivationElement ( ELEMENT_KEY_DERIVATION );
 
-    const ::rtl::OUString sCdataAttribute       ( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_CDATA ) );
-    const ::rtl::OUString sMediaTypeAttribute   ( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_MEDIA_TYPE ) );
-    const ::rtl::OUString sVersionAttribute     ( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_VERSION ) );
-    const ::rtl::OUString sFullPathAttribute    ( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_FULL_PATH ) );
-    const ::rtl::OUString sSizeAttribute        ( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_SIZE ) );
-    const ::rtl::OUString sKeySizeAttribute     ( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_KEY_SIZE ) );
-    const ::rtl::OUString sSaltAttribute        ( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_SALT ) );
-    const ::rtl::OUString sInitialisationVectorAttribute ( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_INITIALISATION_VECTOR ) );
-    const ::rtl::OUString sIterationCountAttribute  ( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_ITERATION_COUNT ) );
-    const ::rtl::OUString sAlgorithmNameAttribute   ( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_ALGORITHM_NAME ) );
-    const ::rtl::OUString sStartKeyGenerationNameAttribute ( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_START_KEY_GENERATION_NAME ) );
-    const ::rtl::OUString sKeyDerivationNameAttribute   ( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_KEY_DERIVATION_NAME ) );
-    const ::rtl::OUString sChecksumTypeAttribute    ( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_CHECKSUM_TYPE ) );
-    const ::rtl::OUString sChecksumAttribute    ( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_CHECKSUM) );
+    const OUString sCdataAttribute       ( ATTRIBUTE_CDATA );
+    const OUString sMediaTypeAttribute   ( ATTRIBUTE_MEDIA_TYPE );
+    const OUString sVersionAttribute     ( ATTRIBUTE_VERSION );
+    const OUString sFullPathAttribute    ( ATTRIBUTE_FULL_PATH );
+    const OUString sSizeAttribute        ( ATTRIBUTE_SIZE );
+    const OUString sKeySizeAttribute     ( ATTRIBUTE_KEY_SIZE );
+    const OUString sSaltAttribute        ( ATTRIBUTE_SALT );
+    const OUString sInitialisationVectorAttribute ( ATTRIBUTE_INITIALISATION_VECTOR );
+    const OUString sIterationCountAttribute  ( ATTRIBUTE_ITERATION_COUNT );
+    const OUString sAlgorithmNameAttribute   ( ATTRIBUTE_ALGORITHM_NAME );
+    const OUString sStartKeyGenerationNameAttribute ( ATTRIBUTE_START_KEY_GENERATION_NAME );
+    const OUString sKeyDerivationNameAttribute   ( ATTRIBUTE_KEY_DERIVATION_NAME );
+    const OUString sChecksumTypeAttribute    ( ATTRIBUTE_CHECKSUM_TYPE );
+    const OUString sChecksumAttribute    ( ATTRIBUTE_CHECKSUM);
 
-    const ::rtl::OUString sFullPathProperty     ( RTL_CONSTASCII_USTRINGPARAM ( "FullPath" ) );
-    const ::rtl::OUString sVersionProperty  ( RTL_CONSTASCII_USTRINGPARAM ( "Version" ) );
-    const ::rtl::OUString sMediaTypeProperty    ( RTL_CONSTASCII_USTRINGPARAM ( "MediaType" ) );
-    const ::rtl::OUString sIterationCountProperty   ( RTL_CONSTASCII_USTRINGPARAM ( "IterationCount" ) );
-    const ::rtl::OUString  sDerivedKeySizeProperty  ( RTL_CONSTASCII_USTRINGPARAM ( "DerivedKeySize" ) );
-    const ::rtl::OUString sSaltProperty         ( RTL_CONSTASCII_USTRINGPARAM ( "Salt" ) );
-    const ::rtl::OUString sInitialisationVectorProperty( RTL_CONSTASCII_USTRINGPARAM ( "InitialisationVector" ) );
-    const ::rtl::OUString sSizeProperty         ( RTL_CONSTASCII_USTRINGPARAM ( "Size" ) );
-    const ::rtl::OUString sDigestProperty       ( RTL_CONSTASCII_USTRINGPARAM ( "Digest" ) );
-    const ::rtl::OUString sEncryptionAlgProperty    ( RTL_CONSTASCII_USTRINGPARAM ( "EncryptionAlgorithm" ) );
-    const ::rtl::OUString sStartKeyAlgProperty  ( RTL_CONSTASCII_USTRINGPARAM ( "StartKeyAlgorithm" ) );
-    const ::rtl::OUString sDigestAlgProperty    ( RTL_CONSTASCII_USTRINGPARAM ( "DigestAlgorithm" ) );
+    const OUString sFullPathProperty     ( "FullPath" );
+    const OUString sVersionProperty  ( "Version" );
+    const OUString sMediaTypeProperty    ( "MediaType" );
+    const OUString sIterationCountProperty   ( "IterationCount" );
+    const OUString  sDerivedKeySizeProperty  ( "DerivedKeySize" );
+    const OUString sSaltProperty         ( "Salt" );
+    const OUString sInitialisationVectorProperty( "InitialisationVector" );
+    const OUString sSizeProperty         ( "Size" );
+    const OUString sDigestProperty       ( "Digest" );
+    const OUString sEncryptionAlgProperty    ( "EncryptionAlgorithm" );
+    const OUString sStartKeyAlgProperty  ( "StartKeyAlgorithm" );
+    const OUString sDigestAlgProperty    ( "DigestAlgorithm" );
 
-    const ::rtl::OUString sWhiteSpace           ( RTL_CONSTASCII_USTRINGPARAM ( " " ) );
+    const OUString sWhiteSpace           ( " " );
 
-    const ::rtl::OUString sSHA256_URL           ( RTL_CONSTASCII_USTRINGPARAM ( SHA256_URL ) );
-    const ::rtl::OUString  sSHA1_Name           ( RTL_CONSTASCII_USTRINGPARAM ( SHA1_NAME ) );
+    const OUString sSHA256_URL           ( SHA256_URL );
+    const OUString  sSHA1_Name           ( SHA1_NAME );
 
-    const ::rtl::OUString  sSHA1_1k_Name        ( RTL_CONSTASCII_USTRINGPARAM ( SHA1_1K_NAME ) );
-    const ::rtl::OUString  sSHA256_1k_URL       ( RTL_CONSTASCII_USTRINGPARAM ( SHA256_1K_URL ) );
+    const OUString  sSHA1_1k_Name        ( SHA1_1K_NAME );
+    const OUString  sSHA256_1k_URL       ( SHA256_1K_URL );
 
-    const ::rtl::OUString  sBlowfish_Name       ( RTL_CONSTASCII_USTRINGPARAM ( BLOWFISH_NAME ) );
-    const ::rtl::OUString  sAES256_URL          ( RTL_CONSTASCII_USTRINGPARAM ( AES256_URL ) );
+    const OUString  sBlowfish_Name       ( BLOWFISH_NAME );
+    const OUString  sAES256_URL          ( AES256_URL );
 
-    const ::rtl::OUString  sPBKDF2_Name         ( RTL_CONSTASCII_USTRINGPARAM ( PBKDF2_NAME ) );
+    const OUString  sPBKDF2_Name         ( PBKDF2_NAME );
 
     ::comphelper::AttributeList * pRootAttrList = new ::comphelper::AttributeList;
     const uno::Sequence < beans::PropertyValue > *pSequence = rManList.getConstArray();
@@ -153,9 +153,9 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > xHa
 
         {
             // oasis format
-            pRootAttrList->AddAttribute ( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_XMLNS ) ),
+            pRootAttrList->AddAttribute ( ATTRIBUTE_XMLNS,
                                         sCdataAttribute,
-                                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( MANIFEST_OASIS_NAMESPACE ) ) );
+                                        MANIFEST_OASIS_NAMESPACE );
             bAcceptNonemptyVersion = sal_True;
             if ( aDocVersion.compareTo( ODFVER_012_TEXT ) >= 0 )
             {
@@ -168,9 +168,9 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > xHa
         {
             // even if it is no SO6 format the namespace must be specified
             // thus SO6 format is used as default one
-            pRootAttrList->AddAttribute ( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( ATTRIBUTE_XMLNS ) ),
+            pRootAttrList->AddAttribute ( ATTRIBUTE_XMLNS,
                                         sCdataAttribute,
-                                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( MANIFEST_NAMESPACE ) ) );
+                                        MANIFEST_NAMESPACE );
 
             bProvideDTD = sal_True;
         }
@@ -182,7 +182,7 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > xHa
     uno::Reference < xml::sax::XExtendedDocumentHandler > xExtHandler ( xHandler, uno::UNO_QUERY );
     if ( xExtHandler.is() && bProvideDTD )
     {
-        ::rtl::OUString aDocType ( RTL_CONSTASCII_USTRINGPARAM ( MANIFEST_DOCTYPE ) );
+        OUString aDocType ( MANIFEST_DOCTYPE );
         xExtHandler->unknown ( aDocType );
         xHandler->ignorableWhitespace ( sWhiteSpace );
     }
@@ -261,7 +261,7 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > xHa
             else if ( nDigestAlgID == xml::crypto::DigestID::SHA1_1K )
                 sChecksumType = sSHA1_1k_Name;
             else
-                throw uno::RuntimeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Unexpected digest algorithm is provided!" ) ), uno::Reference< uno::XInterface >() );
+                throw uno::RuntimeException( OSL_LOG_PREFIX "Unexpected digest algorithm is provided!", uno::Reference< uno::XInterface >() );
 
             pNewAttrList->AddAttribute ( sChecksumTypeAttribute, sCdataAttribute, sChecksumType );
             *pDigest >>= aSequence;
@@ -284,7 +284,7 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > xHa
             {
                 OSL_ENSURE( nDerivedKeySize, "Unexpected key size is provided!" );
                 if ( nDerivedKeySize != 32 )
-                    throw uno::RuntimeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Unexpected key size is provided!" ) ), uno::Reference< uno::XInterface >() );
+                    throw uno::RuntimeException( OSL_LOG_PREFIX "Unexpected key size is provided!", uno::Reference< uno::XInterface >() );
 
                 sEncAlgName = sAES256_URL;
             }
@@ -293,7 +293,7 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > xHa
                 sEncAlgName = sBlowfish_Name;
             }
             else
-                throw uno::RuntimeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Unexpected encryption algorithm is provided!" ) ), uno::Reference< uno::XInterface >() );
+                throw uno::RuntimeException( OSL_LOG_PREFIX "Unexpected encryption algorithm is provided!", uno::Reference< uno::XInterface >() );
 
             pNewAttrList->AddAttribute ( sAlgorithmNameAttribute, sCdataAttribute, sEncAlgName );
 
@@ -357,7 +357,7 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > xHa
                     sStartKeySize = aBuffer.makeStringAndClear();
                 }
                 else
-                    throw uno::RuntimeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Unexpected start key algorithm is provided!" ) ), uno::Reference< uno::XInterface >() );
+                    throw uno::RuntimeException( OSL_LOG_PREFIX "Unexpected start key algorithm is provided!", uno::Reference< uno::XInterface >() );
 
                 pNewAttrList->AddAttribute ( sStartKeyGenerationNameAttribute, sCdataAttribute, sStartKeyAlg );
                 pNewAttrList->AddAttribute ( sKeySizeAttribute, sCdataAttribute, sStartKeySize );

@@ -329,7 +329,7 @@ void SAL_CALL OHierarchyElement_Impl::commited( const ::com::sun::star::lang::Ev
     catch( const uno::Exception& e )
     {
         throw lang::WrappedTargetRuntimeException(
-                            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Can not commit storage sequence!" ) ),
+                            "Can not commit storage sequence!",
                             uno::Reference< uno::XInterface >(),
                             uno::makeAny( e ) );
     }

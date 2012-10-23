@@ -57,7 +57,7 @@ Sequence< Sequence< PropertyValue > > SAL_CALL ManifestReader::readManifestSeque
         Reference < XDocumentHandler > xFilter = new ManifestImport( aManVector );
         InputSource aParserInput;
         aParserInput.aInputStream = rStream;
-        aParserInput.sSystemId = OUString ( RTL_CONSTASCII_USTRINGPARAM ( "META-INF/manifest.xml" ) );
+        aParserInput.sSystemId = "META-INF/manifest.xml";
         xParser->setDocumentHandler ( xFilter );
         xParser->parseStream( aParserInput );
         aManifestSequence.realloc ( aManVector.size() );
@@ -87,7 +87,7 @@ Reference < XInterface > SAL_CALL ManifestReader_createInstance( Reference< XMul
 }
 OUString ManifestReader::static_getImplementationName()
 {
-    return OUString ( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.packages.manifest.comp.ManifestReader" ) );
+    return OUString( "com.sun.star.packages.manifest.comp.ManifestReader" );
 }
 
 sal_Bool SAL_CALL ManifestReader::static_supportsService(OUString const & rServiceName)
@@ -98,7 +98,7 @@ sal_Bool SAL_CALL ManifestReader::static_supportsService(OUString const & rServi
 Sequence < OUString > ManifestReader::static_getSupportedServiceNames()
 {
     Sequence < OUString > aNames(1);
-    aNames[0] = OUString(RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.packages.manifest.ManifestReader" ) );
+    aNames[0] = "com.sun.star.packages.manifest.ManifestReader";
     return aNames;
 }
 
