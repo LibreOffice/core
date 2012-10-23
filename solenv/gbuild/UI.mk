@@ -12,7 +12,7 @@
 gb_UILocalizeTarget_WORKDIR := $(WORKDIR)/UILocalizeTarget
 
 gb_UILocalizeTarget_TARGET := $(call gb_Executable_get_target_for_build,uiex)
-gb_UILocalizeTarget_COMMAND := $(gb_Helper_set_ldpath) $(gb_UILocalizeTarget_TARGET)
+gb_UILocalizeTarget_COMMAND := $(gb_Helper_set_ld_path) $(gb_UILocalizeTarget_TARGET)
 
 define gb_UILocalizeTarget__command
 $(call gb_Output_announce,$(2),$(true),UIX,1)
