@@ -259,14 +259,12 @@ gb_Library_ILIBEXT := .lib
 define gb_Library_Library_platform
 $(call gb_LinkTarget_set_dlltarget,$(2),$(3))
 
-$(call gb_LinkTarget_add_auxtargets,$(2),\
-	$(patsubst %.dll,%.map,$(3)) \
-)
-
 $(call gb_Library_get_target,$(1)) :| $(OUTDIR)/bin/.dir
 
-$(call gb_Library_get_target,$(1)) \
-$(call gb_Library_get_clean_target,$(1)) : AUXTARGETS := $(OUTDIR)/bin/$(notdir $(3)) $(OUTDIR)/bin/$(notdir $(patsubst %.dll,%.map,$(3)))
+$(call gb_Library_add_auxtargets,$(1), \
+	$(OUTDIR)/bin/$(notdir $(3)) \
+	$(OUTDIR)/bin/$(notdir $(patsubst %.dll,%.map,$(3))) \
+)
 
 $(call gb_Library_add_default_nativeres,$(1),$(1)/default)
 
@@ -333,6 +331,7 @@ define gb_CppunitTest_CppunitTest_platform
 $(call gb_LinkTarget_set_dlltarget,$(2),$(3))
 
 $(call gb_LinkTarget_add_auxtargets,$(2),\
+	$(3) \
 	$(patsubst %.dll,%.map,$(3)) \
 )
 

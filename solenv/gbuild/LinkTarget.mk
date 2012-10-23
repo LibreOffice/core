@@ -565,7 +565,6 @@ define gb_LinkTarget_set_soversion_script
 $(call gb_LinkTarget_get_target,$(1)) : $(3)
 $(call gb_LinkTarget_get_target,$(1)) : SOVERSION := $(2)
 $(call gb_LinkTarget_get_target,$(1)) : SOVERSIONSCRIPT := $(3)
-$(call gb_LinkTarget_add_auxtargets,$(1),$(call gb_LinkTarget_get_target,$(1)).$(2))
 
 endef
 
@@ -1090,10 +1089,35 @@ $$(call gb_Output_error,\
  gb_LinkTarget_set_auxtargets: use gb_LinkTarget_add_auxtargets instead.)
 endef
 
-define gb_LinkTarget_add_auxtargets
+# Add a file that is built by the LinkTarget command and define
+# a dummy touch rule for it so it can be tracked via dependencies.
+# gb_LinkTarget_add_auxtarget linktarget auxtarget
+define gb_LinkTarget_add_auxtarget
+$(2) : $(call gb_LinkTarget_get_target,$(1))
+	touch $$@
+
 $(call gb_LinkTarget_get_clean_target,$(1)) : AUXTARGETS += $(2)
 
 endef
+
+define gb_LinkTarget_add_auxtargets
+$(foreach aux,$(2),$(call gb_LinkTarget_add_auxtarget,$(1),$(aux)))
+
+endef
+
+#$(2)/$(3) : $(dir $(call gb_LinkTarget_get_target,$(1)/$(3)))/$(notdir $(2))
+#$(dir $(call gb_LinkTarget_get_target,$(1)))/$(notdir $(3)) : $(call gb_LinkTarget_get_target,$(3))
+# CLEAN??? inheritance not a problem here?
+#$(dir $(call gb_LinkTarget_get_target,$(1)))/$(notdir $(2)) : $()
+
+# linktarget-type, outdir-dir, pattern
+# define a dummy touch rule for auxtargets
+# linktarget-type, aux-pattern, linktarget-pattern
+#define gb_LinkTarget__define_auxtarget_rule
+#$(call gb_LinkTarget_get_target,$(1))/$(2) : $(call gb_LinkTarget_get_target,$(1)/$(3))
+#	touch $@
+#
+#endef
 
 define gb_LinkTarget__add_internal_headers
 $(call gb_LinkTarget_get_headers_target,$(1)) : $(2)

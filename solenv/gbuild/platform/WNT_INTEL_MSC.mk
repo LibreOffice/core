@@ -458,20 +458,21 @@ $(call gb_LinkTarget_add_auxtargets,$(2),\
 	$(patsubst %.lib,%.exp,$(call gb_LinkTarget_get_target,$(2))) \
 	$(3).manifest \
 	$(call gb_LinkTarget_get_pdbfile,$(2)) \
-	$(patsubst %.dll,%.pdb,$(3)) \
-	$(patsubst %.dll,%.ilk,$(3)) \
 )
 
 $(if $(filter $(gb_MERGEDLIBS),$(1)),,\
-$(call gb_Library_get_target,$(1)) \
-$(call gb_Library_get_clean_target,$(1)) : AUXTARGETS := $(OUTDIR)/bin/$(notdir $(3)))
+$(call gb_Library_add_auxtarget,$(1),$(OUTDIR)/bin/$(notdir $(3))))
 
 ifneq ($(ENABLE_CRASHDUMP),)
-$(call gb_Library_get_target,$(1)) \
-$(call gb_Library_get_clean_target,$(1)) : AUXTARGETS +=  \
+$(call gb_Library_add_auxtargets,$(1),
 		$(OUTDIR)/bin/$(notdir $(patsubst %.dll,%.pdb,$(3))) \
 		$(OUTDIR)/bin/$(notdir $(patsubst %.dll,%.ilk,$(3))) \
-
+)
+else
+$(call gb_LinkTarget_add_auxtargets,$(2),\
+	$(patsubst %.dll,%.pdb,$(3)) \
+	$(patsubst %.dll,%.ilk,$(3)) \
+)
 endif
 
 $(call gb_Library_add_default_nativeres,$(1),$(1)/default)
@@ -542,11 +543,9 @@ define gb_Executable_Executable_platform
 $(call gb_LinkTarget_add_auxtargets,$(2),\
 	$(patsubst %.exe,%.pdb,$(call gb_LinkTarget_get_target,$(2))) \
 	$(call gb_LinkTarget_get_pdbfile,$(2)) \
-	$(call gb_LinkTarget_get_target,$(2)).manifest \
 )
 
-$(call gb_Executable_get_target,$(1)) \
-$(call gb_Executable_get_clean_target,$(1)) : AUXTARGETS := $(call gb_Executable_get_target,$(1)).manifest
+$(call gb_Executable_add_auxtarget,$(1),$(call gb_Executable_get_target,$(1)).manifest)
 $(call gb_Deliver_add_deliverable,$(call gb_Executable_get_target,$(1)).manifest,$(call gb_LinkTarget_get_target,$(2)).manifest,$(1))
 
 $(call gb_LinkTarget_get_target,$(2)) \
@@ -573,6 +572,7 @@ $(call gb_LinkTarget_set_dlltarget,$(2),$(3))
 
 $(call gb_LinkTarget_add_auxtargets,$(2),\
 	$(patsubst %.lib,%.exp,$(call gb_LinkTarget_get_target,$(2))) \
+	$(3) \
 	$(3).manifest \
 	$(patsubst %.dll,%.pdb,$(3)) \
 	$(call gb_LinkTarget_get_pdbfile,$(2)) \

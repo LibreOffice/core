@@ -48,18 +48,11 @@ $(WORKDIR)/Clean/OutDir/lib/%$(gb_Library_PLAINEXT) :
 		rm -f $(OUTDIR)/lib/$*$(gb_Library_PLAINEXT) \
 			$(AUXTARGETS))
 
-# EVIL: gb_StaticLibrary and gb_Library need the same deliver rule because they are indistinguishable on windows
-$(gb_Library_OUTDIRLOCATION)/%$(gb_Library_PLAINEXT) : 
-	$(call gb_Helper_abbreviate_dirs,\
-		$(call gb_Deliver_deliver,$<,$@) \
-			$(foreach target,$(AUXTARGETS), && $(call gb_Deliver_deliver,$(dir $<)/$(notdir $(target)),$(target))))
-
 define gb_Library_Library
 ifeq (,$$(findstring $(1),$$(gb_Library_KNOWNLIBS)))
 $$(eval $$(call gb_Output_info,Currently known libraries are: $(sort $(gb_Library_KNOWNLIBS)),ALL))
 $$(eval $$(call gb_Output_error,Library $(1) must be registered in Repository.mk))
 endif
-$(call gb_Library_get_target,$(1)) : AUXTARGETS :=
 $(call gb_Library_get_target,$(1)) : SOVERSION :=
 $(call gb_Library__Library_impl,$(1),$(call gb_Library_get_linktargetname,$(1)))
 
@@ -76,18 +69,35 @@ $(call gb_Library__get_final_target,$(1)) : $(call gb_Library_get_target,$(1))
 $(call gb_Library_get_target,$(1)) : $(call gb_LinkTarget_get_target,$(2)) \
 	| $(dir $(call gb_Library_get_target,$(1))).dir
 $(call gb_Library_get_clean_target,$(1)) : $(call gb_LinkTarget_get_clean_target,$(2))
+$(call gb_Library_get_clean_target,$(1)) : AUXTARGETS :=
 $(call gb_Library_Library_platform,$(1),$(2),$(gb_Library_DLLDIR)/$(call gb_Library_get_dllname,$(1)))
 $$(eval $$(call gb_Module_register_target,$(call gb_Library__get_final_target,$(1)),$(call gb_Library_get_clean_target,$(1))))
 $(call gb_Deliver_add_deliverable,$(call gb_Library_get_target,$(1)),$(call gb_LinkTarget_get_target,$(2)),$(1))
 
 endef
 
+# Custom definition that does not simply forward to LinkTarget,
+# because there are cases where the auxtargets are not delivered to solver...
+# The auxtarget is delivered via the rule in Package.mk.
+# gb_Library_add_auxtarget library outdirauxtarget
+define gb_Library_add_auxtarget
+$(call gb_LinkTarget_add_auxtarget,$(call gb_Library_get_linktargetname,$(1)),$(dir $(call gb_LinkTarget_get_target,$(call gb_Library_get_linktargetname,$(1))))/$(notdir $(2)))
+$(call gb_Library_get_target,$(1)) : $(2)
+$(2) : $(dir $(call gb_LinkTarget_get_target,$(call gb_Library_get_linktargetname,$(1))))/$(notdir $(2))
+$(call gb_Library_get_clean_target,$(1)) : AUXTARGETS += $(2)
+
+endef
+
+define gb_Library_add_auxtargets
+$(foreach aux,$(2),$(call gb_Library_add_auxtarget,$(1),$(aux)))
+
+endef
+
 define gb_Library__set_soversion_script
 $(call gb_LinkTarget_set_soversion_script,$(call gb_Library_get_linktargetname,$(1)),$(2),$(3))
 $(call gb_Library_get_target,$(1)) : SOVERSION := $(2)
-$(call gb_Library_get_target,$(1)) \
-$(call gb_Library_get_clean_target,$(1)) : \
-	AUXTARGETS += $(call gb_Library_get_target,$(1)).$(2)
+$(call gb_Library_add_auxtarget,$(1),$(call gb_Library_get_target,$(1)).$(2))
+
 endef
 
 # for libraries that maintain stable ABI: set SOVERSION and version script

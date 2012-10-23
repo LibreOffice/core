@@ -42,18 +42,11 @@ $(WORKDIR)/Clean/OutDir/lib/%$(gb_StaticLibrary_PLAINEXT) :
 		rm -f $(OUTDIR)/lib/$*$(gb_StaticLibrary_PLAINEXT) \
 			$(AUXTARGETS))
 
-# EVIL: gb_StaticLibrary and gb_Library need the same deliver rule because they are indistinguishable on windows
-$(gb_StaticLibrary_OUTDIRLOCATION)/%$(gb_StaticLibrary_PLAINEXT) : 
-	$(call gb_Helper_abbreviate_dirs,\
-		$(call gb_Deliver_deliver,$<,$@) \
-			$(foreach target,$(AUXTARGETS), && $(call gb_Deliver_deliver,$(dir $<)/$(notdir $(target)),$(target))))
-
 define gb_StaticLibrary_StaticLibrary
 ifeq (,$$(findstring $(1),$$(gb_StaticLibrary_KNOWNLIBS)))
 $$(eval $$(call gb_Output_info,Currently known static libraries are: $(sort $(gb_StaticLibrary_KNOWNLIBS)),ALL))
 $$(eval $$(call gb_Output_error,Static library $(1) must be registered in Repository.mk))
 endif
-$(call gb_StaticLibrary_get_target,$(1)) : AUXTARGETS :=
 $(call gb_StaticLibrary__StaticLibrary_impl,$(1),$(call gb_StaticLibrary_get_linktargetname,$(1)))
 
 endef
@@ -64,6 +57,7 @@ $(call gb_LinkTarget_set_targettype,$(2),StaticLibrary)
 $(call gb_StaticLibrary_get_target,$(1)) : $(call gb_LinkTarget_get_target,$(2)) \
 	| $(dir $(call gb_StaticLibrary_get_target,$(1))).dir
 $(call gb_StaticLibrary_get_clean_target,$(1)) : $(call gb_LinkTarget_get_clean_target,$(2))
+$(call gb_StaticLibrary_get_clean_target,$(1)) : AUXTARGETS :=
 $(call gb_StaticLibrary_StaticLibrary_platform,$(1),$(2))
 $$(eval $$(call gb_Module_register_target,$(call gb_StaticLibrary_get_target,$(1)),$(call gb_StaticLibrary_get_clean_target,$(1))))
 $(call gb_Deliver_add_deliverable,$(call gb_StaticLibrary_get_target,$(1)),$(call gb_LinkTarget_get_target,$(2)),$(1))
