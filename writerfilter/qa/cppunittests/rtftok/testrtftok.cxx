@@ -30,6 +30,7 @@
 #include <test/bootstrapfixture.hxx>
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/io/WrongFormatException.hpp>
+#include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 
 #include <osl/file.hxx>
 #include <osl/process.h>
@@ -70,9 +71,14 @@ bool RtfTest::load(const OUString &, const OUString &rURL, const OUString &)
     {
         return m_xFilter->filter(aDescriptor);
     }
-    catch (const io::WrongFormatException&)
+    catch (const lang::WrappedTargetRuntimeException& rWrapped)
     {
-        return false;
+        io::WrongFormatException e;
+        if (rWrapped.TargetException >>= e)
+        {
+            return false;
+        }
+        throw;
     }
 }
 

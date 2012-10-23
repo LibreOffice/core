@@ -28,6 +28,7 @@
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #include <com/sun/star/io/WrongFormatException.hpp>
+#include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #ifdef DBG_COPYPASTE
 #include <unotools/localfilehelper.hxx>
 #include <tools/stream.hxx>
@@ -117,9 +118,11 @@ sal_Bool RtfFilter::filter( const uno::Sequence< beans::PropertyValue >& aDescri
         sal_uInt32 nEndTime = osl_getGlobalTimer();
         SAL_INFO("writerfilter.profile", OSL_THIS_FUNC << " finished in " << nEndTime - nStartTime << " ms");
     }
-    catch (const io::WrongFormatException&)
+    catch (const io::WrongFormatException& e)
     {
-        throw;
+        // cannot throw WrongFormatException directly :(
+        throw lang::WrappedTargetRuntimeException("",
+                static_cast<OWeakObject*>(this), uno::makeAny(e));
     }
     catch (const uno::Exception& e)
     {
