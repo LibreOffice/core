@@ -273,9 +273,9 @@ $(call gb_XcuMergeTarget_get_clean_target,%) :
 define gb_XcuMergeTarget_XcuMergeTarget
 $(call gb_XcuMergeTarget_get_target,$(1)) : \
 	$(call gb_Configuration__get_source,$(2),$(3)/$(4)) \
-	$(wildcard $(gb_SDFLOCATION)/$(dir $(1))localize.sdf)
+	$(gb_SDFLOCATION)/$(dir $(1))localize.sdf
 $(call gb_XcuMergeTarget_get_target,$(1)) : \
-	SDF := $(wildcard $(gb_SDFLOCATION)/$(dir $(1))localize.sdf)
+	SDF := $(gb_SDFLOCATION)/$(dir $(1))localize.sdf
 endef
 
 

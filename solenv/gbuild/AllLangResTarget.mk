@@ -110,7 +110,7 @@ $(call gb_SrsPartTarget_get_target,$(1)) : MERGEDFILE :=
 else
 $(call gb_SrsPartTarget_get_target,$(1)) : MERGEDFILE := $(call gb_SrsPartMergeTarget_get_target,$(1))
 $(call gb_SrsPartTarget_get_target,$(1)) : $(call gb_SrsPartMergeTarget_get_target,$(1))
-$(call gb_SrsPartMergeTarget_get_target,$(1)) : SDF := $(wildcard $(gb_SDFLOCATION)/$(dir $(1))localize.sdf)
+$(call gb_SrsPartMergeTarget_get_target,$(1)) : SDF := $(gb_SDFLOCATION)/$(dir $(1))localize.sdf
 endif
 
 endef
@@ -123,8 +123,8 @@ $(call gb_SrsTemplatePartTarget_get_target,$(1)) : $(call gb_SrsPartMergeTarget_
 	    mkdir -p $$(dir $$@) && \
 	    cp $$< $$@)
 ifneq ($(strip $(WITH_LANG)),)
-$(call gb_SrsPartMergeTarget_get_target,$(1)) : SDF := $(wildcard $(gb_SDFLOCATION)/$(dir $(1))localize.sdf)
-$(call gb_SrsPartMergeTarget_get_target,$(1)) : $(wildcard $(gb_SDFLOCATION)/$(dir $(1))localize.sdf)
+$(call gb_SrsPartMergeTarget_get_target,$(1)) : SDF := $(gb_SDFLOCATION)/$(dir $(1))localize.sdf
+$(call gb_SrsPartMergeTarget_get_target,$(1)) : $(gb_SDFLOCATION)/$(dir $(1))localize.sdf
 endif
 
 endef
