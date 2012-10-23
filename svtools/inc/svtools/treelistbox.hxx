@@ -383,9 +383,9 @@ public:
     SvTreeListEntry*    Prev( SvTreeListEntry* pEntry, sal_uInt16* pDepth=0 ) const { return pModel->Prev(pEntry,pDepth); }
     SvTreeListEntry*    Last() const { return pModel->Last(); }
 
-    SvTreeListEntry*    FirstChild(SvTreeListEntry* pParent ) const { return pModel->FirstChild(pParent); }
-    SvTreeListEntry*    NextSibling(SvTreeListEntry* pEntry ) const { return pModel->NextSibling(pEntry); }
-    SvTreeListEntry*    PrevSibling(SvTreeListEntry* pEntry ) const { return pModel->PrevSibling(pEntry); }
+    SvTreeListEntry*    FirstChild( SvTreeListEntry* pParent ) const;
+    SvTreeListEntry*    NextSibling( SvTreeListEntry* pEntry ) const;
+    SvTreeListEntry*    PrevSibling( SvTreeListEntry* pEntry ) const;
 
     sal_Bool            CopySelection( SvTreeListBox* pSource, SvTreeListEntry* pTarget );
     sal_Bool            MoveSelection( SvTreeListBox* pSource, SvTreeListEntry* pTarget );
@@ -396,18 +396,18 @@ public:
     SelectionMode   GetSelectionMode() const { return eSelMode; }
 
     // pParent==0 -> Root-Ebene
-    SvTreeListEntry*    GetEntry( SvTreeListEntry* pParent, sal_uLong nPos ) const { return pModel->GetEntry(pParent, nPos); }
-    SvTreeListEntry*    GetEntry( sal_uLong nRootPos ) const { return pModel->GetEntry(nRootPos); }
+    SvTreeListEntry* GetEntry( SvTreeListEntry* pParent, sal_uLong nPos ) const;
+    SvTreeListEntry* GetEntry( sal_uLong nRootPos ) const;
 
     SvTreeListEntry*    GetEntryFromPath( const ::std::deque< sal_Int32 >& _rPath ) const;
     void            FillEntryPath( SvTreeListEntry* pEntry, ::std::deque< sal_Int32 >& _rPath ) const;
 
     using Window::GetParent;
-    SvTreeListEntry*    GetParent( SvTreeListEntry* pEntry ) const { return pModel->GetParent(pEntry); }
-    SvTreeListEntry*    GetRootLevelParent(SvTreeListEntry* pEntry ) const { return pModel->GetRootLevelParent(pEntry);}
+    SvTreeListEntry*    GetParent( SvTreeListEntry* pEntry ) const;
+    SvTreeListEntry*    GetRootLevelParent(SvTreeListEntry* pEntry ) const;
 
     using Window::GetChildCount;
-    sal_uLong           GetChildCount( SvTreeListEntry* pParent ) const { return pModel->GetChildCount(pParent); }
+    sal_uLong           GetChildCount( SvTreeListEntry* pParent ) const;
     sal_uLong           GetLevelChildCount( SvTreeListEntry* pParent ) const;
 
     SvViewDataEntry* GetViewDataEntry( SvTreeListEntry* pEntry ) const { return (SvViewDataEntry*)SvListView::GetViewData(pEntry); }

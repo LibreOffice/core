@@ -111,23 +111,24 @@ DBTreeListBox::~DBTreeListBox()
 SvTreeListEntry* DBTreeListBox::GetEntryPosByName( const String& aName, SvTreeListEntry* pStart, const IEntryFilter* _pFilter ) const
 {
     SvTreeList* myModel = GetModel();
-    SvTreeEntryList* pChildren = myModel->GetChildList(pStart);
+    std::pair<SvTreeEntryList::iterator,SvTreeEntryList::iterator> aIters =
+        myModel->GetChildIterators(pStart);
+
     SvTreeListEntry* pEntry = NULL;
-    if ( pChildren )
+    SvTreeEntryList::const_iterator it = aIters.first, itEnd = aIters.second;
+    for (; it != itEnd; ++it)
     {
-        size_t nCount = pChildren->size();
-        for (size_t i = 0; i < nCount; ++i)
+        pEntry = *it;
+        const SvLBoxString* pItem = static_cast<const SvLBoxString*>(
+            pEntry->GetFirstItem(SV_ITEM_ID_LBOXSTRING));
+
+        if (pItem && pItem->GetText().equals(aName))
         {
-            pEntry = static_cast<SvTreeListEntry*>((*pChildren)[ i ]);
-            SvLBoxString* pItem = (SvLBoxString*)(pEntry->GetFirstItem(SV_ITEM_ID_LBOXSTRING));
-            if ( pItem->GetText().equals(aName) )
-            {
-                if ( !_pFilter || _pFilter->includeEntry( pEntry ) )
-                    // found
-                    break;
-            }
-            pEntry = NULL;
+            if (!_pFilter || _pFilter->includeEntry(pEntry))
+                // found
+                break;
         }
+        pEntry = NULL;
     }
 
     return pEntry;

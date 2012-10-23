@@ -3866,16 +3866,17 @@ void SbaTableQueryBrowser::impl_cleanupDataSourceEntry( const String& _rDataSour
             "SbaTableQueryBrowser::impl_cleanupDataSourceEntry: inconsistence (2)!");
 
     // delete any user data of the child entries of the to-be-removed entry
-    SvTreeEntryList* pList = m_pTreeModel->GetChildList( pDataSourceEntry );
-    if ( pList )
+    std::pair<SvTreeEntryList::iterator,SvTreeEntryList::iterator> aIters =
+        m_pTreeModel->GetChildIterators(pDataSourceEntry);
+
+    SvTreeEntryList::const_iterator it = aIters.first, itEnd = aIters.second;
+
+    for (; it != itEnd; ++it)
     {
-        for ( size_t i = 0, n = pList->size(); i < n; ++i )
-        {
-            SvTreeListEntry* pEntryLoop = static_cast<SvTreeListEntry*>((*pList)[ i ]);
-            DBTreeListUserData* pData = static_cast< DBTreeListUserData* >( pEntryLoop->GetUserData() );
-            pEntryLoop->SetUserData( NULL );
-            delete pData;
-        }
+        SvTreeListEntry* pEntry = *it;
+        const DBTreeListUserData* pData = static_cast<const DBTreeListUserData*>(pEntry->GetUserData());
+        pEntry->SetUserData(NULL);
+        delete pData;
     }
 
     // remove the entry

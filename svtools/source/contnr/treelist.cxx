@@ -1439,17 +1439,45 @@ SvTreeListEntry* SvTreeList::GetRootLevelParent( SvTreeListEntry* pEntry ) const
     return pCurParent;
 }
 
+std::pair<SvTreeEntryList::const_iterator,SvTreeEntryList::const_iterator>
+    SvTreeList::GetChildIterators(const SvTreeListEntry* pParent) const
+{
+    typedef std::pair<SvTreeEntryList::const_iterator,SvTreeEntryList::const_iterator> IteratorPair;
 
+    IteratorPair aRet;
 
+    if (!pParent)
+        pParent = pRootItem;
 
-//*************************************************************************
-//*************************************************************************
-//*************************************************************************
-//*************************************************************************
-//*************************************************************************
-//*************************************************************************
-//*************************************************************************
-//*************************************************************************
+    if (!pParent->pChildren || pParent->pChildren->empty())
+        // This entry has no children.
+        return aRet;
+
+    aRet.first = pParent->pChildren->begin();
+    aRet.second = pParent->pChildren->end();
+
+    return aRet;
+}
+
+std::pair<SvTreeEntryList::iterator,SvTreeEntryList::iterator>
+    SvTreeList::GetChildIterators(SvTreeListEntry* pParent)
+{
+    typedef std::pair<SvTreeEntryList::iterator,SvTreeEntryList::iterator> IteratorPair;
+
+    IteratorPair aRet;
+
+    if (!pParent)
+        pParent = pRootItem;
+
+    if (!pParent->pChildren || pParent->pChildren->empty())
+        // This entry has no children.
+        return aRet;
+
+    aRet.first = pParent->pChildren->begin();
+    aRet.second = pParent->pChildren->end();
+
+    return aRet;
+}
 
 DBG_NAME(SvListView);
 
@@ -1524,6 +1552,11 @@ void SvListView::Clear()
         pViewData->nFlags = SVLISTENTRYFLAG_EXPANDED;
         maDataTable.insert( pEntry, pViewData );
     }
+}
+
+SvTreeList* SvListView::GetModel() const
+{
+    return pModel;
 }
 
 void SvListView::SetModel( SvTreeList* pNewModel )
@@ -1864,5 +1897,43 @@ void SvTreeList::GetInsertionPos( SvTreeListEntry* pEntry, SvTreeListEntry* pPar
     }
 }
 
+sal_Bool SvTreeList::HasChildren( SvTreeListEntry* pEntry ) const
+{
+    if ( !pEntry )
+        pEntry = pRootItem;
+    return (sal_Bool)(pEntry->pChildren != 0);
+}
+
+SvTreeListEntry* SvTreeList::GetEntry( SvTreeListEntry* pParent, sal_uLong nPos ) const
+{   if ( !pParent )
+        pParent = pRootItem;
+    SvTreeListEntry* pRet = 0;
+    if ( pParent->pChildren )
+        pRet = (*pParent->pChildren)[ nPos ];
+    return pRet;
+}
+
+SvTreeListEntry* SvTreeList::GetEntry( sal_uLong nRootPos ) const
+{
+    SvTreeListEntry* pRet = 0;
+    if ( nEntryCount )
+        pRet = (*pRootItem->pChildren)[ nRootPos ];
+    return pRet;
+}
+
+SvTreeEntryList* SvTreeList::GetChildList( SvTreeListEntry* pParent ) const
+{
+    if ( !pParent )
+        pParent = pRootItem;
+    return pParent->pChildren;
+}
+
+SvTreeListEntry* SvTreeList::GetParent( SvTreeListEntry* pEntry ) const
+{
+    SvTreeListEntry* pParent = pEntry->pParent;
+    if ( pParent==pRootItem )
+        pParent = 0;
+    return pParent;
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

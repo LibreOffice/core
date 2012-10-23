@@ -64,7 +64,7 @@
 
 class SvTreeListEntry;
 
-class SVT_DLLPUBLIC SvTreeEntryList
+class SvTreeEntryList
 {
 private:
     typedef std::vector<SvTreeListEntry*> ListType;
@@ -297,6 +297,12 @@ public:
     SvTreeListEntry*        GetRootLevelParent( SvTreeListEntry* pEntry ) const;
     SvTreeEntryList*    GetChildList( SvTreeListEntry* pParent ) const;
 
+    std::pair<SvTreeEntryList::const_iterator,SvTreeEntryList::const_iterator>
+        GetChildIterators(const SvTreeListEntry* pParent) const;
+
+    std::pair<SvTreeEntryList::iterator,SvTreeEntryList::iterator>
+        GetChildIterators(SvTreeListEntry* pParent);
+
     sal_uLong           GetAbsPos( SvTreeListEntry* pEntry ) const;
     sal_uLong           GetRelPos( SvTreeListEntry* pChild ) const
     { return pChild->GetChildListPos(); }
@@ -365,7 +371,7 @@ public:
                         SvListView();   // !!! setzt das Model auf 0
     virtual             ~SvListView();
     void                Clear();
-    SvTreeList*         GetModel() const { return pModel; }
+    SvTreeList*         GetModel() const;
     virtual void        SetModel( SvTreeList* );
     virtual void        ModelNotification(
                             sal_uInt16 nActionId,
@@ -521,45 +527,6 @@ inline SvViewData* SvListView::GetViewData( SvTreeListEntry* pEntry )
     DBG_ASSERT(itr != maDataTable.end(),"Entry not in model or wrong view");
     return itr->second;
 #endif
-}
-
-inline sal_Bool SvTreeList::HasChildren( SvTreeListEntry* pEntry ) const
-{
-    if ( !pEntry )
-        pEntry = pRootItem;
-    return (sal_Bool)(pEntry->pChildren != 0);
-}
-
-inline SvTreeListEntry* SvTreeList::GetEntry( SvTreeListEntry* pParent, sal_uLong nPos ) const
-{   if ( !pParent )
-        pParent = pRootItem;
-    SvTreeListEntry* pRet = 0;
-    if ( pParent->pChildren )
-        pRet = (*pParent->pChildren)[ nPos ];
-    return pRet;
-}
-
-inline SvTreeListEntry* SvTreeList::GetEntry( sal_uLong nRootPos ) const
-{
-    SvTreeListEntry* pRet = 0;
-    if ( nEntryCount )
-        pRet = (*pRootItem->pChildren)[ nRootPos ];
-    return pRet;
-}
-
-inline SvTreeEntryList* SvTreeList::GetChildList( SvTreeListEntry* pParent ) const
-{
-    if ( !pParent )
-        pParent = pRootItem;
-    return pParent->pChildren;
-}
-
-inline SvTreeListEntry* SvTreeList::GetParent( SvTreeListEntry* pEntry ) const
-{
-    SvTreeListEntry* pParent = pEntry->pParent;
-    if ( pParent==pRootItem )
-        pParent = 0;
-    return pParent;
 }
 
 #endif

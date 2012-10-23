@@ -667,6 +667,21 @@ sal_Bool SvTreeListBox::NotifyCopying(
     return NotifyMoving(pTarget,pEntry,rpNewParent,rNewChildPos);
 }
 
+SvTreeListEntry* SvTreeListBox::FirstChild( SvTreeListEntry* pParent ) const
+{
+    return pModel->FirstChild(pParent);
+}
+
+SvTreeListEntry* SvTreeListBox::NextSibling( SvTreeListEntry* pEntry ) const
+{
+    return pModel->NextSibling(pEntry);
+}
+
+SvTreeListEntry* SvTreeListBox::PrevSibling( SvTreeListEntry* pEntry ) const
+{
+    return pModel->PrevSibling(pEntry);
+}
+
 // return: all entries copied
 sal_Bool SvTreeListBox::CopySelection( SvTreeListBox* pSource, SvTreeListEntry* pTarget )
 {
@@ -867,6 +882,16 @@ void SvTreeListBox::OnCurrentEntryChanged()
         mpImpl->m_aQuickSelectionEngine.Reset();
 }
 
+SvTreeListEntry* SvTreeListBox::GetEntry( SvTreeListEntry* pParent, sal_uLong nPos ) const
+{
+    return pModel->GetEntry(pParent, nPos);
+}
+
+SvTreeListEntry* SvTreeListBox::GetEntry( sal_uLong nRootPos ) const
+{
+    return pModel->GetEntry(nRootPos);
+}
+
 SvTreeListEntry* SvTreeListBox::GetEntryFromPath( const ::std::deque< sal_Int32 >& _rPath ) const
 {
     DBG_CHKTHIS(SvTreeListBox,0);
@@ -914,6 +939,21 @@ void SvTreeListBox::FillEntryPath( SvTreeListEntry* pEntry, ::std::deque< sal_In
                 break;
         }
     }
+}
+
+SvTreeListEntry* SvTreeListBox::GetParent( SvTreeListEntry* pEntry ) const
+{
+    return pModel->GetParent(pEntry);
+}
+
+SvTreeListEntry* SvTreeListBox::GetRootLevelParent( SvTreeListEntry* pEntry ) const
+{
+    return pModel->GetRootLevelParent(pEntry);
+}
+
+sal_uLong SvTreeListBox::GetChildCount( SvTreeListEntry* pParent ) const
+{
+    return pModel->GetChildCount(pParent);
 }
 
 sal_uLong SvTreeListBox::GetLevelChildCount( SvTreeListEntry* _pParent ) const
