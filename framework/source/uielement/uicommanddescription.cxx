@@ -664,15 +664,14 @@ UICommandDescription::~UICommandDescription()
 void UICommandDescription::impl_fillElements(const sal_Char* _pName)
 {
     m_xModuleManager.set( ModuleManager::create( comphelper::getComponentContext(m_xServiceManager) ) );
-    Reference< XNameAccess > xNameAccess( m_xModuleManager, UNO_QUERY_THROW );
-    Sequence< rtl::OUString > aElementNames = xNameAccess->getElementNames();
+    Sequence< rtl::OUString > aElementNames = m_xModuleManager->getElementNames();
     Sequence< PropertyValue > aSeq;
     ::rtl::OUString                  aModuleIdentifier;
 
     for ( sal_Int32 i = 0; i < aElementNames.getLength(); i++ )
     {
         aModuleIdentifier = aElementNames[i];
-        if ( xNameAccess->getByName( aModuleIdentifier ) >>= aSeq )
+        if ( m_xModuleManager->getByName( aModuleIdentifier ) >>= aSeq )
         {
             ::rtl::OUString aCommandStr;
             for ( sal_Int32 y = 0; y < aSeq.getLength(); y++ )

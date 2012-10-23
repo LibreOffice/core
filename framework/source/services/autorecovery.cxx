@@ -1183,12 +1183,11 @@ void AutoRecovery::implts_specifyAppModuleAndFactory(AutoRecovery::TDocumentInfo
     // <- SAFE ----------------------------------
 
     css::uno::Reference< css::frame::XModuleManager2 > xManager = ModuleManager::create( comphelper::getComponentContext(xSMGR) );
-    css::uno::Reference< css::container::XNameAccess > xModuleConfig(xManager, css::uno::UNO_QUERY_THROW);
 
     if (rInfo.AppModule.isEmpty())
         rInfo.AppModule = xManager->identify(rInfo.Document);
 
-    ::comphelper::SequenceAsHashMap lModuleDescription(xModuleConfig->getByName(rInfo.AppModule));
+    ::comphelper::SequenceAsHashMap lModuleDescription(xManager->getByName(rInfo.AppModule));
     lModuleDescription[rtl::OUString(CFG_ENTRY_PROP_EMPTYDOCUMENTURL)] >>= rInfo.FactoryURL;
     lModuleDescription[rtl::OUString(CFG_ENTRY_PROP_FACTORYSERVICE)] >>= rInfo.FactoryService;
 }

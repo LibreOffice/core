@@ -42,7 +42,6 @@
 #include <com/sun/star/ui/XModuleUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
-#include <com/sun/star/container/XNameAccess.hpp>
 
 #include <vcl/svapp.hxx>
 #include <vcl/i18nhelp.hxx>
@@ -493,12 +492,11 @@ void NewMenuController::impl_setPopupMenu()
         m_aModuleIdentifier = xModuleManager->identify( m_xFrame );
         m_bModuleIdentified = sal_True;
 
-        Reference< XNameAccess > xNameAccess( xModuleManager, UNO_QUERY );
-        if ( !m_aModuleIdentifier.isEmpty() && xNameAccess.is() )
+        if ( !m_aModuleIdentifier.isEmpty() )
         {
             Sequence< PropertyValue > aSeq;
 
-            if ( xNameAccess->getByName( m_aModuleIdentifier ) >>= aSeq )
+            if ( xModuleManager->getByName( m_aModuleIdentifier ) >>= aSeq )
             {
                 for ( sal_Int32 y = 0; y < aSeq.getLength(); y++ )
                 {
