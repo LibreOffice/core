@@ -230,14 +230,14 @@ SwSection::~SwSection()
     SwDoc* pDoc = pFmt->GetDoc();
     if( pDoc->IsInDtor() )
     {
-        // dann melden wir noch schnell unser Format um ans dflt FrameFmt,
-        // damit es keine Abhaengigkeiten gibt
+        // We reattach our Format to the default FrameFmt
+        // to not get any dependencies
         if( pFmt->DerivedFrom() != pDoc->GetDfltFrmFmt() )
             pFmt->RegisterToFormat( *pDoc->GetDfltFrmFmt() );
     }
     else
     {
-        pFmt->Remove( this );               // austragen,
+        pFmt->Remove( this ); // remove
 
         if (CONTENT_SECTION != m_Data.GetType())
         {
@@ -249,16 +249,14 @@ SwSection::~SwSection()
             pDoc->GetLinkManager().RemoveServer( &m_RefObj );
         }
 
-        // ist die Section der letzte Client im Format, kann dieses
-        // geloescht werden
+        // If the Section is the last Client in the Format we can delete it
         SwPtrMsgPoolItem aMsgHint( RES_REMOVE_UNO_OBJECT, pFmt );
         pFmt->ModifyNotification( &aMsgHint, &aMsgHint );
         if( !pFmt->GetDepends() )
         {
-            // Bug: 28191 - nicht ins Undo aufnehmen, sollte schon vorher
-            //          geschehen sein!!
+            // Do not add to the Undo. This should've happened earlier.
             ::sw::UndoGuard const undoGuard(pDoc->GetIDocumentUndoRedo());
-            pDoc->DelSectionFmt( pFmt );    // und loeschen
+            pDoc->DelSectionFmt( pFmt );
         }
     }
     if (m_RefObj.Is())
@@ -271,7 +269,7 @@ void SwSection::SetSectionData(SwSectionData const& rData)
 {
     bool const bOldHidden( m_Data.IsHidden() );
     m_Data = rData;
-    // next 2 may actually overwrite m_Data.m_b{Protect,EditInReadonly}Flag
+    // The next two may actually overwrite the m_Data.m_bProtect or EditInReadonly Flag
     // in Modify, which should result in same flag value as the old code!
     SetProtect(m_Data.IsProtectFlag());
     SetEditInReadonly(m_Data.IsEditInReadonlyFlag());
@@ -310,27 +308,25 @@ void SwSection::ImplSetHiddenFlag(bool const bTmpHidden, bool const bCondition)
         {
             if (!m_Data.IsHiddenFlag()) // is not hidden
             {
-                // wie sieht es mit dem Parent aus, ist der versteckt ?
-                // (eigentlich muesste das vom bHiddenFlag angezeigt werden!)
+                // Is the Parent hidden?
+                // This should be shown by the bHiddenFlag.
 
-                // erstmal allen Children sagen, das sie versteckt sind
+                // Tell all Children that they are hidden
                 SwMsgPoolItem aMsgItem( RES_SECTION_HIDDEN );
                 pFmt->ModifyNotification( &aMsgItem, &aMsgItem );
 
-                // alle Frames loeschen
+                // Delete all Frames
                 pFmt->DelFrms();
             }
         }
         else if (m_Data.IsHiddenFlag()) // show Nodes again
         {
-            // alle Frames sichtbar machen ( Children Sections werden vom
-            // MakeFrms beruecksichtigt). Aber nur wenn die ParentSection
-            // nichts dagegen hat !
+            // Show all Frames (Child Sections are accounted for by MakeFrms)
+            // Only if the Parent Section is not restricting us!
             SwSection* pParentSect = pFmt->GetParentSection();
             if( !pParentSect || !pParentSect->IsHiddenFlag() )
             {
-                // erstmal allen Children sagen, das der Parent nicht mehr
-                // versteckt ist
+                // Tell all Children that the Parent is not hidden anymore
                 SwMsgPoolItem aMsgItem( RES_SECTION_NOT_HIDDEN );
                 pFmt->ModifyNotification( &aMsgItem, &aMsgItem );
 
@@ -466,8 +462,8 @@ void SwSection::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
                 static_cast<const SvxProtectItem*>(pNew)->IsCntntProtected();
             if( !bNewFlag )
             {
-                // Abschalten: teste ob nicht vielleich ueber die Parents
-                //              doch ein Schutzt besteht!
+                // Switching off: See if there is protection transferred
+                // by the Parents
                 const SwSection* pSect = this;
                 do {
                     if( pSect->IsProtect() )
@@ -502,7 +498,7 @@ void SwSection::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
         return;
 
     case RES_COL:
-        /* wird ggf. vom Layout erledigt */
+        // Is handeled by the Layout, if appropriate
         break;
 
     case RES_FTN_AT_TXTEND:
@@ -554,7 +550,7 @@ void SwSection::SetCondHidden(bool const bFlag)
 }
 
 
-// setze/erfrage den gelinkten FileNamen
+// Set/remove the linked FileName
 const String& SwSection::GetLinkFileName() const
 {
     if (m_RefLink.Is())
@@ -578,9 +574,9 @@ const String& SwSection::GetLinkFileName() const
                 }
                 else if( GetFmt() && !GetFmt()->GetSectionNode() )
                 {
-                    // ist die Section im UndoNodesArray, dann steht
-                    // der Link nicht im LinkManager, kann also auch nicht
-                    // erfragt werden. Dann returne den akt. Namen
+                    // If the Section is in the UndoNodesArray, the LinkManager
+                    // does not contain the Link, thus it cannot be queried for it.
+                    // Thus return the current Name.
                     return m_Data.GetLinkFileName();
                 }
             }
@@ -606,8 +602,7 @@ void SwSection::SetLinkFileName(const String& rNew, String const*const pPassWd)
     }
 }
 
-// falls es ein gelinkter Bereich war, dann muessen alle
-// Child-Verknuepfungen sichtbar bemacht werden.
+// If it was a Linked Section, we need to make all Child Links visible
 void SwSection::MakeChildLinksVisible( const SwSectionNode& rSectNd )
 {
     const SwNode* pNd;
@@ -619,15 +614,14 @@ void SwSection::MakeChildLinksVisible( const SwSectionNode& rSectNd )
             pBLnk->ISA( SwBaseLink ) &&
             0 != ( pNd = ((SwBaseLink*)pBLnk)->GetAnchor() ) )
         {
-            pNd = pNd->StartOfSectionNode();    // falls SectionNode ist!
+            pNd = pNd->StartOfSectionNode(); // If it's a SectionNode
             const SwSectionNode* pParent;
             while( 0 != ( pParent = pNd->FindSectionNode() ) &&
                     ( CONTENT_SECTION == pParent->GetSection().GetType()
                         || pNd == &rSectNd ))
                     pNd = pParent->StartOfSectionNode();
 
-            // steht nur noch in einer normalen Section, also
-            // wieder anzeigen
+            // It's within a normal Section, so show again
             if( !pParent )
                 pBLnk->SetVisible( sal_True );
         }
@@ -662,19 +656,18 @@ SwSectionFmt::~SwSectionFmt()
             0 != (pSectNd = pIdx->GetNode().GetSectionNode() ))
         {
             SwSection& rSect = pSectNd->GetSection();
-            // falls es ein gelinkter Bereich war, dann muessen alle
-            // Child-Verknuepfungen sichtbar bemacht werden.
+            // If it was a linked Section, we need to make all Child Links
+            // visible again
             if( rSect.IsConnected() )
                 rSect.MakeChildLinksVisible( *pSectNd );
 
-            // vorm loeschen der Nodes pruefe, ob wir uns nicht
-            // noch anzeigen muessen!
+            // Check whether we need to be visible, before deleting the Nodes
             if( rSect.IsHiddenFlag() )
             {
                 SwSection* pParentSect = rSect.GetParent();
                 if( !pParentSect || !pParentSect->IsHiddenFlag() )
                 {
-                    // Nodes wieder anzeigen
+                    // Make Nodes visible again
                     rSect.SetHidden(false);
                 }
             }
@@ -682,7 +675,7 @@ SwSectionFmt::~SwSectionFmt()
             // use hint which allows to specify, if the content shall be saved or not
             CallSwClientNotify( SwSectionFrmMoveAndDeleteHint( sal_True ) );
 
-            // hebe die Section doch mal auf
+            // Raise he Section up
             SwNodeRange aRg( *pSectNd, 0, *pSectNd->EndOfSectionNode() );
             GetDoc()->GetNodes().SectionUp( &aRg );
         }
@@ -700,7 +693,7 @@ SwSection * SwSectionFmt::GetSection() const
 
 extern void sw_DeleteFtn( SwSectionNode *pNd, sal_uLong nStt, sal_uLong nEnd );
 
-//Vernichtet alle Frms in aDepend (Frms werden per PTR_CAST erkannt).
+// Do not destroy all Frms in aDepend (Frms are recognized with a PTR_CAST).
 void SwSectionFmt::DelFrms()
 {
     SwSectionNode* pSectNd;
@@ -728,10 +721,9 @@ void SwSectionFmt::DelFrms()
     }
     if( pIdx )
     {
-        //Hint fuer Pagedesc versenden. Das mueste eigntlich das Layout im
-        //Paste der Frames selbst erledigen, aber das fuehrt dann wiederum
-        //zu weiteren Folgefehlern, die mit Laufzeitkosten geloest werden
-        //muesten.
+        // Send Hint for PageDesc. Actually the Layout contained in the
+        // Paste of the Framei tself would need to do this. But that leads
+        // to subsequent errors, which we'd need to solve at run-time.
         SwNodeIndex aNextNd( *pIdx );
         SwCntntNode* pCNd = GetDoc()->GetNodes().GoNextSection( &aNextNd, sal_True, sal_False );
         if( pCNd )
@@ -743,7 +735,7 @@ void SwSectionFmt::DelFrms()
 }
 
 
-//Erzeugt die Ansichten
+// Create the Views
 void SwSectionFmt::MakeFrms()
 {
     SwSectionNode* pSectNd;
@@ -824,20 +816,20 @@ void SwSectionFmt::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
 
     case RES_PROTECT:
     case RES_EDIT_IN_READONLY: // edit in readonly sections
-        // diese Messages bis zum Ende des Baums durchreichen !
+        // Pass through these Messages until the End of the tree!
         if( GetDepends() )
         {
             ModifyBroadcast( pOld, pNew );
         }
-        return;     // das wars
+        return; // That's it!
 
     case RES_OBJECTDYING:
         if( !GetDoc()->IsInDtor() &&
             ((SwPtrMsgPoolItem *)pOld)->pObject == (void*)GetRegisteredIn() )
         {
-            // mein Parent wird vernichtet, dann an den Parent vom Parent
-            // umhaengen und wieder aktualisieren
-            SwFrmFmt::Modify( pOld, pNew );     //  erst umhaengen !!!
+            // My Parents will be destroyed, so get the Parent's Parent
+            // and update
+            SwFrmFmt::Modify( pOld, pNew ); // Rewire first!
             UpdateParent();
             return;
         }
@@ -848,8 +840,8 @@ void SwSectionFmt::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
             ((SwFmtChg*)pNew)->pChangedFmt == (void*)GetRegisteredIn() &&
             ((SwFmtChg*)pNew)->pChangedFmt->IsA( TYPE( SwSectionFmt )) )
         {
-            // mein Parent wird veraendert, muss mich aktualisieren
-            SwFrmFmt::Modify( pOld, pNew );     //  erst umhaengen !!!
+            // My Parent will be changed, thus I need to update
+            SwFrmFmt::Modify( pOld, pNew ); // Rewire first!
             UpdateParent();
             return;
         }
@@ -863,7 +855,7 @@ void SwSectionFmt::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
     }
 }
 
-        // erfrage vom Format Informationen
+// Get info from the Format
 sal_Bool SwSectionFmt::GetInfo( SfxPoolItem& rInfo ) const
 {
     switch( rInfo.Which() )
@@ -912,13 +904,13 @@ static bool lcl_SectionCmpPos( const SwSection *pFirst, const SwSection *pSecond
 
 static bool lcl_SectionCmpNm( const SwSection *pFSect, const SwSection *pSSect)
 {
-    OSL_ENSURE( pFSect && pSSect, "ungueltige Sections" );
+    OSL_ENSURE( pFSect && pSSect, "Invalid Sections" );
     StringCompare const eCmp =
         pFSect->GetSectionName().CompareTo( pSSect->GetSectionName() );
     return eCmp == COMPARE_LESS;
 }
 
-    // alle Sections, die von dieser abgeleitet sind
+// Alle Sections which have been derived from this one
 sal_uInt16 SwSectionFmt::GetChildSections( SwSections& rArr,
                                         SectionSort eSort,
                                         sal_Bool bAllSections ) const
@@ -938,7 +930,7 @@ sal_uInt16 SwSectionFmt::GetChildSections( SwSections& rArr,
                 rArr.push_back( pDummy );
             }
 
-        // noch eine Sortierung erwuenscht ?
+        // Do we need any sorting?
         if( 1 < rArr.size() )
             switch( eSort )
             {
@@ -955,16 +947,15 @@ sal_uInt16 SwSectionFmt::GetChildSections( SwSections& rArr,
     return rArr.size();
 }
 
-    // erfrage, ob sich die Section im Nodes-Array oder UndoNodes-Array
-    // befindet.
+// See whether the Section is within the Nodes or the UndoNodes array
 sal_Bool SwSectionFmt::IsInNodesArr() const
 {
     const SwNodeIndex* pIdx = GetCntnt(sal_False).GetCntntIdx();
     return pIdx && &pIdx->GetNodes() == &GetDoc()->GetNodes();
 }
 
-
-void SwSectionFmt::UpdateParent()       // Parent wurde veraendert
+// Parent was changed
+void SwSectionFmt::UpdateParent()
 {
     if( !GetDepends() )
         return;
@@ -977,7 +968,7 @@ void SwSectionFmt::UpdateParent()       // Parent wurde veraendert
 
     SwClientIter aIter( *this );    // TODO
     ::SwClient * pLast = aIter.GoStart();
-    if( pLast )     // konnte zum Anfang gesprungen werden ??
+    if( pLast ) // Could we jump to the beginning?
         do {
             if( pLast->IsA( TYPE(SwSectionFmt) ) )
             {
@@ -1055,7 +1046,7 @@ SwSectionNode* SwSectionFmt::GetSectionNode(bool const bAlways)
     return 0;
 }
 
-    // ist die Section eine gueltige fuers GlobalDocument?
+// Is this Section valid for the GlobalDocument?
 const SwSection* SwSectionFmt::GetGlobalDocSection() const
 {
     const SwSectionNode* pNd = GetSectionNode();
@@ -1158,7 +1149,7 @@ static void lcl_UpdateLinksInSect( SwBaseLink& rUpdLnk, SwSectionNode& rSectNd )
     SwBaseLink* pBLink;
     String sMimeType( SotExchange::GetFormatMimeType( FORMAT_FILE ));
     uno::Any aValue;
-    aValue <<= ::rtl::OUString( sName );                        // beliebiger Name
+    aValue <<= ::rtl::OUString( sName ); // Arbitrary name
 
     const ::sfx2::SvBaseLinks& rLnks = pDoc->GetLinkManager().GetLinks();
     for( sal_uInt16 n = rLnks.size(); n; )
@@ -1170,22 +1161,20 @@ static void lcl_UpdateLinksInSect( SwBaseLink& rUpdLnk, SwSectionNode& rSectNd )
             ( pBLink = (SwBaseLink*)pLnk )->IsInRange( rSectNd.GetIndex(),
                                                 rSectNd.EndOfSectionIndex() ) )
         {
-            // liegt in dem Bereich: also updaten. Aber nur wenns nicht
-            // im gleichen File liegt
+            // It's in the Section, so update. But only if it's not in the same File!
             String sFName;
             pDoc->GetLinkManager().GetDisplayNames( pBLink, 0, &sFName, 0, 0 );
             if( sFName != sName )
             {
                 pBLink->DataChanged( sMimeType, aValue );
 
-                // ggfs. neu den Link-Pointer wieder suchen, damit nicht einer
-                // ausgelassen oder doppelt gerufen wird.
+                // If needed find the Link pointer to avoid skipping one or calling one twice
                 if( n >= rLnks.size() && 0 != ( n = rLnks.size() ))
                     --n;
 
                 if( n && pLnk != &(*rLnks[ n ]) )
                 {
-                    // suchen - kann nur davor liegen!!
+                    // Find - it can only precede it!
                     while( n )
                         if( pLnk == &(*rLnks[ --n ] ) )
                             break;
@@ -1196,12 +1185,12 @@ static void lcl_UpdateLinksInSect( SwBaseLink& rUpdLnk, SwSectionNode& rSectNd )
 }
 
 
-// sucht sich die richtige DocShell raus oder erzeugt eine neue:
-// Der Return-Wert gibt an, was mit der Shell zu geschehen hat:
-//  0 - Fehler, konnte DocShell nicht finden
-//  1 - DocShell ist ein existieren Document
-//  2 - DocShell wurde neu angelegt, muss also wieder geschlossen werden ( will be assigned to xLockRef additionaly )
-
+// Find the right DocShell and create a new one:
+// The return value specifies what should happen to the Shell
+//  0 - Error, could not find the DocShell
+//  1 - DocShell is an existing Document
+//  2 - DocShell was created anew, thus it needs to be closed again
+//      (will be assigned to xLockRef additionally)
 int sw_FindDocShell( SfxObjectShellRef& xDocSh,
                         SfxObjectShellLock& xLockRef,
                         const String& rFileName,
@@ -1213,25 +1202,23 @@ int sw_FindDocShell( SfxObjectShellRef& xDocSh,
     if( !rFileName.Len() )
         return 0;
 
-    // 1. existiert die Datei schon in der Liste aller Dokumente?
+    // 1. Does the file already exist in the list of all Documents?
     INetURLObject aTmpObj( rFileName );
     aTmpObj.SetMark( aEmptyStr );
 
-    // erstmal nur ueber die DocumentShells laufen und die mit dem
-    // Namen heraussuchen:
+    // Iterate over the DocShell and get the ones with the name
     TypeId aType( TYPE(SwDocShell) );
 
     SfxObjectShell* pShell = pDestSh;
     sal_Bool bFirst = 0 != pShell;
 
     if( !bFirst )
-        // keine DocShell uebergeben, also beginne mit der ersten aus der
-        // DocShell Liste
+        // No DocShell passed, starting with the first from the DocShell list
         pShell = SfxObjectShell::GetFirst( &aType );
 
     while( pShell )
     {
-        // die wollen wir haben
+        // We want this one
         SfxMedium* pMed = pShell->GetMedium();
         if( pMed && pMed->GetURLObject() == aTmpObj )
         {
@@ -1241,7 +1228,7 @@ int sw_FindDocShell( SfxObjectShellRef& xDocSh,
                     ? (nVersion == ((SfxInt16Item*)pItem)->GetValue())
                     : !nVersion )
             {
-                // gefunden also returnen
+                // Found, thus return
                 xDocSh = pShell;
                 return 1;
             }
@@ -1256,11 +1243,11 @@ int sw_FindDocShell( SfxObjectShellRef& xDocSh,
             pShell = SfxObjectShell::GetNext( *pShell, &aType );
     }
 
-    // 2. selbst die Date oeffnen
+    // 2. Open the file ourselves
     SfxMedium* pMed = new SfxMedium( aTmpObj.GetMainURL(
                              INetURLObject::NO_DECODE ), STREAM_READ );
     if( INET_PROT_FILE == aTmpObj.GetProtocol() )
-        pMed->DownLoad();     // nur mal das Medium anfassen (DownLoaden)
+        pMed->DownLoad(); // Touch the medium (download it)
 
     const SfxFilter* pSfxFlt = 0;
     if( !pMed->GetError() )
@@ -1268,8 +1255,7 @@ int sw_FindDocShell( SfxObjectShellRef& xDocSh,
         String sFactory(rtl::OUString::createFromAscii(SwDocShell::Factory().GetShortName()));
         SfxFilterMatcher aMatcher( sFactory );
 
-        // kein Filter, dann suche ihn. Ansonsten teste, ob der angegebene
-        // ein gueltiger ist
+        // No Filter, so search for it. Else test if the one passed is a valid one
         if( rFilter.Len() )
         {
             pSfxFlt = aMatcher.GetFilter4FilterName( rFilter );
@@ -1286,10 +1272,10 @@ int sw_FindDocShell( SfxObjectShellRef& xDocSh,
 
         if( pSfxFlt )
         {
-            // ohne Filter geht gar nichts
+            // We cannot do anything without a Filter
             pMed->SetFilter( pSfxFlt );
 
-            // if the new shell is created, SfxObjectShellLock should be used to let it be closed later for sure
+            // If the new shell is created, SfxObjectShellLock should be used to let it be closed later for sure
             xLockRef = new SwDocShell( SFX_CREATE_MODE_INTERNAL );
             xDocSh = (SfxObjectShell*)xLockRef;
             if( xDocSh->DoLoad( pMed ) )
@@ -1297,10 +1283,10 @@ int sw_FindDocShell( SfxObjectShellRef& xDocSh,
         }
     }
 
-    if( !xDocSh.Is() )      // Medium muss noch geloescht werden
+    if( !xDocSh.Is() ) // Medium still needs to be deleted
         delete pMed;
 
-    return 0;   // das war wohl nichts
+    return 0;
 }
 
 
@@ -1316,7 +1302,7 @@ int sw_FindDocShell( SfxObjectShellRef& xDocSh,
     if( !pSectNd || !pDoc || pDoc->IsInDtor() || ChkNoDataFlag() ||
         sfx2::LinkManager::RegisterStatusInfoId() == nDataFormat )
     {
-        // sollten wir schon wieder im Undo stehen?
+        // Should we be in the Undo already?
         return SUCCESS;
     }
 
@@ -1327,7 +1313,7 @@ int sw_FindDocShell( SfxObjectShellRef& xDocSh,
     // during load.
     pDoc->SetLinksUpdated( sal_True );
 
-    // Undo immer abschalten
+    // Always switch off Undo
     bool const bWasUndo = pDoc->GetIDocumentUndoRedo().DoesUndo();
     pDoc->GetIDocumentUndoRedo().DoUndo(false);
     sal_Bool bWasVisibleLinks = pDoc->IsVisibleLinks();
@@ -1338,7 +1324,7 @@ int sw_FindDocShell( SfxObjectShellRef& xDocSh,
     SwEditShell* pESh = pDoc->GetEditShell( &pVSh );
     pDoc->LockExpFlds();
     {
-        // am Anfang des Bereichs einen leeren TextNode einfuegen
+        // Insert an empty TextNode at the Section's start
         SwNodeIndex aIdx( *pSectNd, +1 );
         SwNodeIndex aEndIdx( *pSectNd->EndOfSectionNode() );
         SwTxtNode* pNewNd = pDoc->GetNodes().MakeTxtNode( aIdx,
@@ -1355,7 +1341,7 @@ int sw_FindDocShell( SfxObjectShellRef& xDocSh,
 
         pPam = new SwPaM( aPos );
 
-        //und alles dahinter liegende loeschen
+        // Delete everything succeeding it
         aIdx--;
         DelFlyInRange( aIdx, aEndIdx );
         _DelBookmarks(aIdx, aEndIdx);
@@ -1429,7 +1415,7 @@ int sw_FindDocShell( SfxObjectShellRef& xDocSh,
 
                 if( sRange.Len() )
                 {
-                    // Rekursionen abfangen
+                    // Catch recursion
                     sal_Bool bRecursion = sal_False;
                     if( pSrcDoc == pDoc )
                     {
@@ -1490,14 +1476,13 @@ int sw_FindDocShell( SfxObjectShellRef& xDocSh,
                     if( !bCreateFrm )
                         ::MakeFrms( pDoc, aSave, rInsPos );
 
-                    // den letzten Node noch loeschen, aber nur wenn
-                    // erfolgreich kopiert werden konnte, also der Bereich
-                    // mehr als 1 Node enthaelt
+                    // Delete last Node, only if it was copied successfully
+                    // (the Section contains more than one Node)
                     if( 2 < pSectNd->EndOfSectionIndex() - pSectNd->GetIndex() )
                     {
                         aSave = rInsPos;
                         pPam->Move( fnMoveBackward, fnGoNode );
-                        pPam->SetMark();    // beide SwPositions ummelden!
+                        pPam->SetMark(); // Rewire both SwPositions
 
                         pDoc->CorrAbs( aSave, *pPam->GetPoint(), 0, sal_True );
                         pDoc->GetNodes().Delete( aSave, 1 );
@@ -1507,7 +1492,7 @@ int sw_FindDocShell( SfxObjectShellRef& xDocSh,
 
                 lcl_BreakSectionLinksInSect( *pSectNd );
 
-                // update alle Links in diesem Bereich
+                // Update all Links in this Section
                 lcl_UpdateLinksInSect( *this, *pSectNd );
             }
             if( xDocSh.Is() )
@@ -1522,7 +1507,7 @@ int sw_FindDocShell( SfxObjectShellRef& xDocSh,
         break;
     }
 
-    // !!!! DDE nur updaten wenn Shell vorhanden ist??
+    // Only create DDE if Shell is available!
     uno::Sequence< sal_Int8 > aSeq;
     if( pRead && rValue.hasValue() && ( rValue >>= aSeq ) )
     {
@@ -1550,7 +1535,7 @@ int sw_FindDocShell( SfxObjectShellRef& xDocSh,
         if( pESh )
         {
             pESh->Pop( sal_False );
-            pPam = 0;                   // pam is deleted before
+            pPam = 0; // pam was deleted earlier
         }
     }
 
@@ -1568,7 +1553,7 @@ int sw_FindDocShell( SfxObjectShellRef& xDocSh,
         pESh->EndAllAction();
     else if( pVSh )
         pVSh->EndAction();
-    delete pPam;            // wurde am Anfang angelegt
+    delete pPam; // Was created at the start
 
     return SUCCESS;
 }
@@ -1579,9 +1564,8 @@ void SwIntrnlSectRefLink::Closed()
     SwDoc* pDoc = rSectFmt.GetDoc();
     if( pDoc && !pDoc->IsInDtor() )
     {
-        // Advise verabschiedet sich, den Bereich als nicht geschuetzt
-        // kennzeichnen und das Flag umsetzen
-
+        // Advise says goodbye: mark the Section as not protected
+        // and change the Flag
         const SwSectionFmts& rFmts = pDoc->GetSections();
         for( sal_uInt16 n = rFmts.size(); n; )
             if( rFmts[ --n ] == &rSectFmt )
@@ -1606,7 +1590,7 @@ void SwIntrnlSectRefLink::Closed()
 
                 pDoc->UpdateSection( n, aSectionData );
 
-                // alle in der Section liegenden Links werden sichtbar
+                // Make all Links within the Section visible again
                 SwSectionNode* pSectNd = rSectFmt.GetSectionNode( sal_False );
                 if( pSectNd )
                     pSectNd->GetSection().MakeChildLinksVisible( *pSectNd );
@@ -1671,16 +1655,16 @@ void SwSection::CreateLink( LinkCreateType eCreateType )
         }
         break;
     default:
-        OSL_ENSURE( !this, "Was ist das fuer ein Link?" );
+        OSL_ENSURE( !this, "What kind of Link is this?" );
     }
 
     switch( eCreateType )
     {
-    case CREATE_CONNECT:            // Link gleich connecten
+    case CREATE_CONNECT: // Connect Link right away
         pLnk->Connect();
         break;
 
-    case CREATE_UPDATE:         // Link connecten und updaten
+    case CREATE_UPDATE: // Connect Link and update
         pLnk->Update();
         break;
     case CREATE_NONE: break;
@@ -1698,7 +1682,7 @@ void SwSection::BreakLink()
         return;
     }
 
-    // release link, if it exists
+    // Release link, if it exists
     if (m_RefLink.Is())
     {
         SwSectionFmt *const pFormat( GetFmt() );
