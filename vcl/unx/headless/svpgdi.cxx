@@ -42,7 +42,6 @@
 #endif
 
 #include <svppspgraphics.hxx>
-#include <region.h>
 
 using namespace basegfx;
 using namespace basebmp;
@@ -152,35 +151,66 @@ void SvpSalGraphics::ResetClipRegion()
 bool SvpSalGraphics::setClipRegion( const Region& i_rClip )
 {
     if( i_rClip.IsEmpty() )
-        m_aClipMap.reset();
-    else if( i_rClip.GetRectCount() == 1 )
     {
         m_aClipMap.reset();
-        Rectangle aBoundRect( i_rClip.GetBoundRect() );
-        m_aDevice = basebmp::subsetBitmapDevice( m_aOrigDevice,
-                                                 basegfx::B2IRange(aBoundRect.Left(),aBoundRect.Top(),aBoundRect.Right(),aBoundRect.Bottom()) );
+        return true;
     }
-    else
-    {
-        m_aDevice = m_aOrigDevice;
-        B2IVector aSize = m_aDevice->getSize();
-        m_aClipMap = createBitmapDevice( aSize, false, Format::ONE_BIT_MSB_GREY );
-        m_aClipMap->clear( basebmp::Color(0xFFFFFFFF) );
 
-        ImplRegionInfo aInfo;
-        long nX, nY, nW, nH;
-        bool bRegionRect = i_rClip.ImplGetFirstRect(aInfo, nX, nY, nW, nH );
-        while( bRegionRect )
+    RectangleVector aRectangles;
+    i_rClip.GetRegionRectangles(aRectangles);
+
+    if(1 == aRectangles.size())
+    {
+        m_aClipMap.reset();
+        const Rectangle& aBoundRect = aRectangles[0];
+        m_aDevice = basebmp::subsetBitmapDevice(
+            m_aOrigDevice,
+            basegfx::B2IRange(aBoundRect.Left(),aBoundRect.Top(),aBoundRect.Right(),aBoundRect.Bottom()) );
+        return true;
+    }
+
+    m_aDevice = m_aOrigDevice;
+    B2IVector aSize = m_aDevice->getSize();
+    m_aClipMap = createBitmapDevice( aSize, false, Format::ONE_BIT_MSB_GREY );
+    m_aClipMap->clear( basebmp::Color(0xFFFFFFFF) );
+
+    for(RectangleVector::const_iterator aRectIter(aRectangles.begin()); aRectIter != aRectangles.end(); aRectIter++)
+    {
+        const long nW(aRectIter->GetWidth());
+
+        if(nW)
         {
-            if ( nW && nH )
+            const long nH(aRectIter->GetHeight());
+
+            if(nH)
             {
                 B2DPolyPolygon aFull;
-                aFull.append( tools::createPolygonFromRect( B2DRectangle( nX, nY, nX+nW, nY+nH ) ) );
-                m_aClipMap->fillPolyPolygon( aFull, basebmp::Color(0), DrawMode_PAINT );
+
+                aFull.append(
+                    tools::createPolygonFromRect(
+                        B2DRectangle(
+                            aRectIter->Left(),
+                            aRectIter->Top(),
+                            aRectIter->Left() + nW,
+                            aRectIter->Top() + nH)));
+                m_aClipMap->fillPolyPolygon(aFull, basebmp::Color(0), DrawMode_PAINT);
             }
-            bRegionRect = i_rClip.ImplGetNextRect( aInfo, nX, nY, nW, nH );
         }
     }
+
+    //ImplRegionInfo aInfo;
+    //long nX, nY, nW, nH;
+    //bool bRegionRect = i_rClip.ImplGetFirstRect(aInfo, nX, nY, nW, nH );
+    //while( bRegionRect )
+    //{
+    //    if ( nW && nH )
+    //    {
+    //        B2DPolyPolygon aFull;
+    //        aFull.append( tools::createPolygonFromRect( B2DRectangle( nX, nY, nX+nW, nY+nH ) ) );
+    //        m_aClipMap->fillPolyPolygon( aFull, basebmp::Color(0), DrawMode_PAINT );
+    //    }
+    //    bRegionRect = i_rClip.ImplGetNextRect( aInfo, nX, nY, nW, nH );
+    //}
     return true;
 }
 

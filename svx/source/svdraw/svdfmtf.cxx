@@ -809,9 +809,7 @@ void ImpSdrGDIMetaFileImport::checkClip()
 {
     if(maVD.IsClipRegion())
     {
-        Region aRegion(maVD.GetClipRegion());
-
-        maClip = aRegion.ConvertToB2DPolyPolygon();
+        maClip = maVD.GetClipRegion().GetAsB2DPolyPolygon();
 
         if(isClip())
         {

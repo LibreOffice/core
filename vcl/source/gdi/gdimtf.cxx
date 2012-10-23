@@ -1384,8 +1384,8 @@ void GDIMetaFile::Rotate( long nAngle10 )
                 {
                     MetaClipRegionAction* pAct = (MetaClipRegionAction*) pAction;
 
-                    if( pAct->IsClipping() && pAct->GetRegion().HasPolyPolygon() )
-                        aMtf.AddAction( new MetaClipRegionAction( Region( ImplGetRotatedPolyPolygon( pAct->GetRegion().GetPolyPolygon(), aRotAnchor, aRotOffset, fSin, fCos ) ), sal_True ) );
+                    if( pAct->IsClipping() && pAct->GetRegion().HasPolyPolygonOrB2DPolyPolygon() )
+                        aMtf.AddAction( new MetaClipRegionAction( Region( ImplGetRotatedPolyPolygon( pAct->GetRegion().GetAsPolyPolygon(), aRotAnchor, aRotOffset, fSin, fCos ) ), sal_True ) );
                     else
                     {
                         pAction->Duplicate();
@@ -1406,8 +1406,8 @@ void GDIMetaFile::Rotate( long nAngle10 )
                     MetaISectRegionClipRegionAction*    pAct = (MetaISectRegionClipRegionAction*) pAction;
                     const Region&                       rRegion = pAct->GetRegion();
 
-                    if( rRegion.HasPolyPolygon() )
-                        aMtf.AddAction( new MetaISectRegionClipRegionAction( Region( ImplGetRotatedPolyPolygon( rRegion.GetPolyPolygon(), aRotAnchor, aRotOffset, fSin, fCos ) ) ) );
+                    if( rRegion.HasPolyPolygonOrB2DPolyPolygon() )
+                        aMtf.AddAction( new MetaISectRegionClipRegionAction( Region( ImplGetRotatedPolyPolygon( rRegion.GetAsPolyPolygon(), aRotAnchor, aRotOffset, fSin, fCos ) ) ) );
                     else
                     {
                         pAction->Duplicate();
@@ -2744,12 +2744,12 @@ sal_uLong GDIMetaFile::GetChecksum() const
                 MetaClipRegionAction* pAct = dynamic_cast< MetaClipRegionAction* >(pAction);
                 const Region& rRegion = pAct->GetRegion();
 
-                if(rRegion.HasPolyPolygon())
+                if(rRegion.HasPolyPolygonOrB2DPolyPolygon())
                 {
                     // It has shown that this is a possible bottleneck for checksum calculation.
                     // In worst case a very expensive RegionHandle representation gets created.
                     // In this case it's cheaper to use the PolyPolygon
-                    const basegfx::B2DPolyPolygon aPolyPolygon(rRegion.GetB2DPolyPolygon());
+                    const basegfx::B2DPolyPolygon aPolyPolygon(rRegion.GetAsB2DPolyPolygon());
                     const sal_uInt32 nPolyCount(aPolyPolygon.count());
                     SVBT64 aSVBT64;
 

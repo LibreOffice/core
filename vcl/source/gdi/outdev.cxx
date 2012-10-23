@@ -50,7 +50,6 @@
 #include <svdata.hxx>
 #include <window.h>
 #include <outdev.h>
-#include <region.h>
 #include <outdata.hxx>
 
 #include <basegfx/point/b2dpoint.hxx>
@@ -329,7 +328,7 @@ void OutputDevice::ImplDrawPolyPolygon( sal_uInt16 nPoly, const PolyPolygon& rPo
 // =======================================================================
 
 OutputDevice::OutputDevice() :
-    maRegion( REGION_NULL ),
+    maRegion(true),
     maFillColor( COL_WHITE ),
     maTextLineColor( COL_TRANSPARENT ),
     maSettings( Application::GetSettings() )
@@ -541,23 +540,35 @@ void    OutputDevice::ImplReMirror( Rectangle &rRect ) const
 }
 void    OutputDevice::ImplReMirror( Region &rRegion ) const
 {
-    long                nX;
-    long                nY;
-    long                nWidth;
-    long                nHeight;
-    ImplRegionInfo      aInfo;
-    sal_Bool                bRegionRect;
-    Region              aMirroredRegion;
+    RectangleVector aRectangles;
+    rRegion.GetRegionRectangles(aRectangles);
+    Region aMirroredRegion;
 
-    bRegionRect = rRegion.ImplGetFirstRect( aInfo, nX, nY, nWidth, nHeight );
-    while ( bRegionRect )
+    for(RectangleVector::iterator aRectIter(aRectangles.begin()); aRectIter != aRectangles.end(); aRectIter++)
     {
-        Rectangle aRect( Point(nX, nY), Size(nWidth, nHeight) );
-        ImplReMirror( aRect );
-        aMirroredRegion.Union( aRect );
-        bRegionRect = rRegion.ImplGetNextRect( aInfo, nX, nY, nWidth, nHeight );
+        ImplReMirror(*aRectIter);
+        aMirroredRegion.Union(*aRectIter);
     }
+
     rRegion = aMirroredRegion;
+
+//  long                nX;
+//  long                nY;
+//  long                nWidth;
+//  long                nHeight;
+//  ImplRegionInfo      aInfo;
+//  sal_Bool                bRegionRect;
+//    Region              aMirroredRegion;
+//
+//  bRegionRect = rRegion.ImplGetFirstRect( aInfo, nX, nY, nWidth, nHeight );
+//  while ( bRegionRect )
+//  {
+//        Rectangle aRect( Point(nX, nY), Size(nWidth, nHeight) );
+//        ImplReMirror( aRect );
+//        aMirroredRegion.Union( aRect );
+//      bRegionRect = rRegion.ImplGetNextRect( aInfo, nX, nY, nWidth, nHeight );
+//  }
+//    rRegion = aMirroredRegion;
 }
 
 
@@ -1037,7 +1048,7 @@ void OutputDevice::ImplSetClipRegion( const Region* pRegion )
     {
         if ( mbClipRegion )
         {
-            maRegion            = Region( REGION_NULL );
+            maRegion            = Region(true);
             mbClipRegion        = sal_False;
             mbInitClipRegion    = sal_True;
         }
@@ -1072,13 +1083,14 @@ void OutputDevice::SetClipRegion( const Region& rRegion )
 {
     DBG_TRACE( "OutputDevice::SetClipRegion( rRegion )" );
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
-    DBG_CHKOBJ( &rRegion, Region, ImplDbgTestRegion );
 
     if ( mpMetaFile )
         mpMetaFile->AddAction( new MetaClipRegionAction( rRegion, sal_True ) );
 
-    if ( rRegion.GetType() == REGION_NULL )
+    if ( rRegion.IsNull() )
+    {
         ImplSetClipRegion( NULL );
+    }
     else
     {
         Region aRegion = LogicToPixel( rRegion );
@@ -1106,7 +1118,7 @@ Region OutputDevice::GetActiveClipRegion() const
 
     if ( GetOutDevType() == OUTDEV_WINDOW )
     {
-        Region aRegion( REGION_NULL );
+        Region aRegion(true);
         Window* pWindow = (Window*)this;
         if ( pWindow->mpWindowImpl->mbInPaint )
         {
@@ -1167,11 +1179,8 @@ void OutputDevice::IntersectClipRegion( const Region& rRegion )
 {
     DBG_TRACE( "OutputDevice::IntersectClipRegion( rRegion )" );
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
-    DBG_CHKOBJ( &rRegion, Region, ImplDbgTestRegion );
 
-    RegionType eType = rRegion.GetType();
-
-    if ( eType != REGION_NULL )
+    if(!rRegion.IsNull())
     {
         if ( mpMetaFile )
             mpMetaFile->AddAction( new MetaISectRegionClipRegionAction( rRegion ) );

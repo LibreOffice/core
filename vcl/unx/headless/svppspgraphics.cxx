@@ -51,7 +51,6 @@
 #include "printergfx.hxx"
 #include "svppspgraphics.hxx"
 #include "svpbmp.hxx"
-#include "region.h"
 
 using namespace psp;
 using namespace rtl;
@@ -220,19 +219,41 @@ void PspGraphics::ResetClipRegion()
 bool PspGraphics::setClipRegion( const Region& i_rClip )
 {
     // TODO: support polygonal clipregions here
-    m_pPrinterGfx->BeginSetClipRegion( i_rClip.GetRectCount() );
+    RectangleVector aRectangles;
+    i_rClip.GetRegionRectangles(aRectangles);
+    m_pPrinterGfx->BeginSetClipRegion(aRectangles.size());
 
-    ImplRegionInfo aInfo;
-    long nX, nY, nW, nH;
-    bool bRegionRect = i_rClip.ImplGetFirstRect(aInfo, nX, nY, nW, nH );
-    while( bRegionRect )
+    for(RectangleVector::const_iterator aRectIter(aRectangles.begin()); aRectIter != aRectangles.end(); aRectIter++)
     {
-        if ( nW && nH )
+        const long nW(aRectIter->GetWidth());
+
+        if(nW)
         {
-            m_pPrinterGfx->UnionClipRegion( nX, nY, nW, nH );
+            const long nH(aRectIter->GetHeight());
+
+            if(nH)
+            {
+                m_pPrinterGfx->UnionClipRegion(
+                    aRectIter->Left(),
+                    aRectIter->Top(),
+                    nW,
+                    nH);
+            }
         }
-        bRegionRect = i_rClip.ImplGetNextRect( aInfo, nX, nY, nW, nH );
     }
+
+    //ImplRegionInfo aInfo;
+    //long nX, nY, nW, nH;
+    //bool bRegionRect = i_rClip.ImplGetFirstRect(aInfo, nX, nY, nW, nH );
+    //while( bRegionRect )
+    //{
+    //    if ( nW && nH )
+    //    {
+    //        m_pPrinterGfx->UnionClipRegion( nX, nY, nW, nH );
+    //    }
+    //    bRegionRect = i_rClip.ImplGetNextRect( aInfo, nX, nY, nW, nH );
+    //}
+
     m_pPrinterGfx->EndSetClipRegion();
     return true;
 }

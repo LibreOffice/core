@@ -50,7 +50,6 @@
 
 #include "fontsubset.hxx"
 #include "impfont.hxx"
-#include "region.h"
 #include "sallayout.hxx"
 #include "sft.hxx"
 
@@ -572,24 +571,31 @@ bool AquaSalGraphics::setClipRegion( const Region& i_rClip )
     mxClipPath = CGPathCreateMutable();
 
     // set current path, either as polypolgon or sequence of rectangles
-    if( i_rClip.HasPolyPolygon() )
+    if(i_rClip.HasPolyPolygonOrB2DPolyPolygon())
     {
-        basegfx::B2DPolyPolygon aClip( const_cast<Region&>(i_rClip).ConvertToB2DPolyPolygon() );
+        const basegfx::B2DPolyPolygon aClip(i_rClip.GetAsB2DPolyPolygon());
+
         AddPolyPolygonToPath( mxClipPath, aClip, !getAntiAliasB2DDraw(), false );
     }
     else
     {
-        long nX, nY, nW, nH;
-        ImplRegionInfo aInfo;
-        bool bRegionRect = i_rClip.ImplGetFirstRect(aInfo, nX, nY, nW, nH );
-        while( bRegionRect )
+        RectangleVector aRectangles;
+        i_rClip.GetRegionRectangles(aRectangles);
+
+        for(RectangleVector::const_iterator aRectIter(aRectangles.begin()); aRectIter != aRectangles.end(); aRectIter++)
         {
-            if( nW && nH )
+            const long nW(aRectIter->Right() - aRectIter->Left() + 1); // uses +1 logic in original
+
+            if(nW)
             {
-                CGRect aRect = {{nX,nY}, {nW,nH}};
-                CGPathAddRect( mxClipPath, NULL, aRect );
+                const long nH(aRectIter->Bottom() - aRectIter->Top() + 1); // uses +1 logic in original
+
+                if(nH)
+                {
+                    CGRect aRect = {{ aRectIter->Left(), aRectIter->Top() }, { nW, nH }};
+                    CGPathAddRect( mxClipPath, NULL, aRect );
+                }
             }
-            bRegionRect = i_rClip.ImplGetNextRect( aInfo, nX, nY, nW, nH );
         }
     }
     // set the current path as clip region

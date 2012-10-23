@@ -68,7 +68,6 @@
 #include "window.h"
 #include "toolbox.h"
 #include "outdev.h"
-#include "region.h"
 #include "brdwin.hxx"
 #include "helpwin.hxx"
 #include "sallayout.hxx"
@@ -151,8 +150,8 @@ ImplAccessibleInfos::~ImplAccessibleInfos()
 WindowImpl::WindowImpl( WindowType nType )
 {
     maZoom              = Fraction( 1, 1 );
-    maWinRegion         = Region( REGION_NULL );
-    maWinClipRegion                   = Region( REGION_NULL );
+    maWinRegion         = Region(true);
+    maWinClipRegion     = Region(true);
     mpWinData           = NULL;         // Extra Window Data, that we dont need for all windows
     mpOverlapData       = NULL;         // Overlap Data
     mpFrameData         = NULL;         // Frame Data
@@ -1809,23 +1808,38 @@ sal_Bool Window::ImplSysObjClip( const Region* pOldRegion )
                         aRegion.Move( -mnOutOffX, -mnOutOffY );
 
                     // ClipRegion setzen/updaten
-                    long                nX;
-                    long                nY;
-                    long                nWidth;
-                    long                nHeight;
-                    sal_uLong               nRectCount;
-                    ImplRegionInfo      aInfo;
-                    sal_Bool                bRegionRect;
+                    RectangleVector aRectangles;
+                    aRegion.GetRegionRectangles(aRectangles);
+                    mpWindowImpl->mpSysObj->BeginSetClipRegion(aRectangles.size());
 
-                    nRectCount = aRegion.GetRectCount();
-                    mpWindowImpl->mpSysObj->BeginSetClipRegion( nRectCount );
-                    bRegionRect = aRegion.ImplGetFirstRect( aInfo, nX, nY, nWidth, nHeight );
-                    while ( bRegionRect )
+                    for(RectangleVector::const_iterator aRectIter(aRectangles.begin()); aRectIter != aRectangles.end(); aRectIter++)
                     {
-                        mpWindowImpl->mpSysObj->UnionClipRegion( nX, nY, nWidth, nHeight );
-                        bRegionRect = aRegion.ImplGetNextRect( aInfo, nX, nY, nWidth, nHeight );
+                        mpWindowImpl->mpSysObj->UnionClipRegion(
+                            aRectIter->Left(),
+                            aRectIter->Top(),
+                            aRectIter->GetWidth(),   // orig nWidth was ((R - L) + 1), same as GetWidth does
+                            aRectIter->GetHeight()); // same for height
                     }
+
                     mpWindowImpl->mpSysObj->EndSetClipRegion();
+
+                    //long                nX;
+                    //long                nY;
+                    //long                nWidth;
+                    //long                nHeight;
+                    //sal_uLong               nRectCount;
+                    //ImplRegionInfo      aInfo;
+                    //sal_Bool                bRegionRect;
+                    //
+                    //nRectCount = aRegion.GetRectCount();
+                    //mpWindowImpl->mpSysObj->BeginSetClipRegion( nRectCount );
+                    //bRegionRect = aRegion.ImplGetFirstRect( aInfo, nX, nY, nWidth, nHeight );
+                    //while ( bRegionRect )
+                    //{
+                    //    mpWindowImpl->mpSysObj->UnionClipRegion( nX, nY, nWidth, nHeight );
+                    //    bRegionRect = aRegion.ImplGetNextRect( aInfo, nX, nY, nWidth, nHeight );
+                    //}
+                    //mpWindowImpl->mpSysObj->EndSetClipRegion();
                 }
             }
             else
@@ -2348,6 +2362,9 @@ void Window::ImplCalcOverlapRegion( const Rectangle& rSourceRect, Region& rRegio
 
 void Window::ImplCallPaint( const Region* pRegion, sal_uInt16 nPaintFlags )
 {
+    Exception aException;
+    bool bExceptionCaught(false);
+
     // call PrePaint. PrePaint may add to the invalidate region as well as
     // other parameters used below.
     PrePaint();
@@ -2441,7 +2458,19 @@ void Window::ImplCallPaint( const Region* pRegion, sal_uInt16 nPaintFlags )
             if( mpWindowImpl->mbDrawSelectionBackground )
                 aSelectionRect = aPaintRect;
 
-            Paint( aPaintRect );
+            // Paint can throw exceptions; to not have a situation where
+            // mpWindowImpl->mbInPaint keeps to be on true (and other
+            // settings, too) better catch here to avoid to go completely out of
+            // this method without executing the after-paint stuff
+            try
+            {
+                Paint( aPaintRect );
+            }
+            catch(Exception& rException)
+            {
+                aException = rException;
+                bExceptionCaught = true;
+            }
 
             if ( mpWindowImpl->mpWinData )
             {
@@ -2482,6 +2511,11 @@ void Window::ImplCallPaint( const Region* pRegion, sal_uInt16 nPaintFlags )
 
     if ( pChildRegion )
         delete pChildRegion;
+
+    if(bExceptionCaught)
+    {
+        throw(aException);
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -6023,7 +6057,7 @@ void Window::SetWindowRegionPixel()
         mpWindowImpl->mpBorderWindow->SetWindowRegionPixel();
     else if( mpWindowImpl->mbFrame )
     {
-        mpWindowImpl->maWinRegion = Region( REGION_NULL);
+        mpWindowImpl->maWinRegion = Region(true);
         mpWindowImpl->mbWinRegion = sal_False;
         mpWindowImpl->mpFrame->ResetClipRegion();
     }
@@ -6031,7 +6065,7 @@ void Window::SetWindowRegionPixel()
     {
         if ( mpWindowImpl->mbWinRegion )
         {
-            mpWindowImpl->maWinRegion = Region( REGION_NULL );
+            mpWindowImpl->maWinRegion = Region(true);
             mpWindowImpl->mbWinRegion = sal_False;
             ImplSetClipFlag();
 
@@ -6060,30 +6094,46 @@ void Window::SetWindowRegionPixel( const Region& rRegion )
         mpWindowImpl->mpBorderWindow->SetWindowRegionPixel( rRegion );
     else if( mpWindowImpl->mbFrame )
     {
-        if( rRegion.GetType() != REGION_NULL )
+        if( !rRegion.IsNull() )
         {
             mpWindowImpl->maWinRegion = rRegion;
             mpWindowImpl->mbWinRegion = ! rRegion.IsEmpty();
+
             if( mpWindowImpl->mbWinRegion )
             {
                 // ClipRegion setzen/updaten
-                long                nX;
-                long                nY;
-                long                nWidth;
-                long                nHeight;
-                sal_uLong               nRectCount;
-                ImplRegionInfo      aInfo;
-                sal_Bool                bRegionRect;
+                RectangleVector aRectangles;
+                mpWindowImpl->maWinRegion.GetRegionRectangles(aRectangles);
+                mpWindowImpl->mpFrame->BeginSetClipRegion(aRectangles.size());
 
-                nRectCount = mpWindowImpl->maWinRegion.GetRectCount();
-                mpWindowImpl->mpFrame->BeginSetClipRegion( nRectCount );
-                bRegionRect = mpWindowImpl->maWinRegion.ImplGetFirstRect( aInfo, nX, nY, nWidth, nHeight );
-                while ( bRegionRect )
+                for(RectangleVector::const_iterator aRectIter(aRectangles.begin()); aRectIter != aRectangles.end(); aRectIter++)
                 {
-                    mpWindowImpl->mpFrame->UnionClipRegion( nX, nY, nWidth, nHeight );
-                    bRegionRect = mpWindowImpl->maWinRegion.ImplGetNextRect( aInfo, nX, nY, nWidth, nHeight );
+                    mpWindowImpl->mpFrame->UnionClipRegion(
+                        aRectIter->Left(),
+                        aRectIter->Top(),
+                        aRectIter->GetWidth(),       // orig nWidth was ((R - L) + 1), same as GetWidth does
+                        aRectIter->GetHeight());     // same for height
                 }
+
                 mpWindowImpl->mpFrame->EndSetClipRegion();
+
+                //long                nX;
+                //long                nY;
+                //long                nWidth;
+                //long                nHeight;
+                //sal_uLong               nRectCount;
+                //ImplRegionInfo      aInfo;
+                //sal_Bool                bRegionRect;
+                //
+                //nRectCount = mpWindowImpl->maWinRegion.GetRectCount();
+                //mpWindowImpl->mpFrame->BeginSetClipRegion( nRectCount );
+                //bRegionRect = mpWindowImpl->maWinRegion.ImplGetFirstRect( aInfo, nX, nY, nWidth, nHeight );
+                //while ( bRegionRect )
+                //{
+                //    mpWindowImpl->mpFrame->UnionClipRegion( nX, nY, nWidth, nHeight );
+                //    bRegionRect = mpWindowImpl->maWinRegion.ImplGetNextRect( aInfo, nX, nY, nWidth, nHeight );
+                //}
+                //mpWindowImpl->mpFrame->EndSetClipRegion();
             }
             else
                 SetWindowRegionPixel();
@@ -6095,11 +6145,11 @@ void Window::SetWindowRegionPixel( const Region& rRegion )
     {
         sal_Bool bInvalidate = sal_False;
 
-        if ( rRegion.GetType() == REGION_NULL )
+        if ( rRegion.IsNull() )
         {
             if ( mpWindowImpl->mbWinRegion )
             {
-                mpWindowImpl->maWinRegion = Region( REGION_NULL );
+                mpWindowImpl->maWinRegion = Region(true);
                 mpWindowImpl->mbWinRegion = sal_False;
                 ImplSetClipFlag();
                 bInvalidate = sal_True;
@@ -6202,7 +6252,7 @@ Region Window::GetPaintRegion() const
     }
     else
     {
-        Region aPaintRegion( REGION_NULL );
+        Region aPaintRegion(true);
         return aPaintRegion;
     }
 }
@@ -6452,7 +6502,7 @@ void Window::Show( sal_Bool bVisible, sal_uInt16 nFlags )
 
         if ( mpWindowImpl->mbReallyVisible )
         {
-            Region  aInvRegion( REGION_EMPTY );
+            Region  aInvRegion;
             sal_Bool    bSaveBack = sal_False;
 
             if ( ImplIsOverlapWindow() && !mpWindowImpl->mbFrame )

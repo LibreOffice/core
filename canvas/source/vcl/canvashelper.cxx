@@ -1230,7 +1230,7 @@ namespace vclcanvas
         // accumulate non-empty clips into one region
         // ==========================================
 
-        Region aClipRegion( REGION_NULL );
+        Region aClipRegion(true);
 
         if( viewState.Clip.is() )
         {

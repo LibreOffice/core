@@ -35,8 +35,6 @@
 #include <rtl/strbuf.hxx>
 #endif
 
-#include <region.h>
-
 #ifndef __H_FT2LIB
 #include <os2/wingdi.h>
 #include <ft2lib.h>
@@ -217,27 +215,48 @@ void Os2SalGraphics::ResetClipRegion()
 
 bool Os2SalGraphics::setClipRegion( const Region& i_rClip )
 {
-    ULONG nCount = i_rClip.GetRectCount();
+    RectangleVector aRectangles;
+    i_rClip.GetRegionRectangles(aRectangles);
+    mnClipElementCount = aRectangles.size();
+    mpClipRectlAry = 0;
 
-    mpClipRectlAry    = new RECTL[ nCount ];
-    mnClipElementCount = 0;
-
-    ImplRegionInfo aInfo;
-    long nX, nY, nW, nH;
-    bool bRegionRect = i_rClip.ImplGetFirstRect(aInfo, nX, nY, nW, nH );
-    while( bRegionRect )
+    if(mnClipElementCount)
     {
-        if ( nW && nH )
+        mpClipRectlAry = new RECTL[mnClipElementCount];
+
+        for(sal_uInt32 a(0); a < mnClipElementCount; a++)
         {
-            RECTL* pClipRect = &mpClipRectlAry[ mnClipElementCount ];
-            pClipRect->xLeft   = nX;
-            pClipRect->yTop    = mnHeight - nY;
-            pClipRect->xRight  = nX + nW;
-            pClipRect->yBottom = mnHeight - (nY + nH);
-            mnClipElementCount++;
+            const Rectangle& rRect = aRectangles[a];
+            RECTL* pClipRect = &mpClipRectlAry[a];
+
+            pClipRect->xLeft = rRect.Left();
+            pClipRect->yTop = mnHeight - rRect.Top();
+            pClipRect->xRight = rRect.Right() + 1; // nX + nW -> L + ((R - L) + 1) -> R + 1
+            pClipRect->yBottom = mnHeight - (rRect.Bottom() + 1); // same for height
         }
-        bRegionRect = i_rClip.ImplGetNextRect( aInfo, nX, nY, nW, nH );
     }
+
+//    ULONG nCount = i_rClip.GetRectCount();
+//
+//  mpClipRectlAry    = new RECTL[ nCount ];
+//  mnClipElementCount = 0;
+//
+//    ImplRegionInfo aInfo;
+//    long nX, nY, nW, nH;
+//    bool bRegionRect = i_rClip.ImplGetFirstRect(aInfo, nX, nY, nW, nH );
+//    while( bRegionRect )
+//    {
+//        if ( nW && nH )
+//        {
+//            RECTL* pClipRect = &mpClipRectlAry[ mnClipElementCount ];
+//            pClipRect->xLeft   = nX;
+//            pClipRect->yTop    = mnHeight - nY;
+//            pClipRect->xRight  = nX + nW;
+//            pClipRect->yBottom = mnHeight - (nY + nH);
+//            mnClipElementCount++;
+//        }
+//        bRegionRect = i_rClip.ImplGetNextRect( aInfo, nX, nY, nW, nH );
+//    }
 #ifdef SAL_PRINTER_CLIPPATH
     if ( mbPrinter )
     {

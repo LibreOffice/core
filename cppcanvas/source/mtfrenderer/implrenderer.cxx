@@ -1396,7 +1396,7 @@ namespace cppcanvas
                         }
                         else
                         {
-                            if( !pClipAction->GetRegion().HasPolyPolygon() )
+                            if( !pClipAction->GetRegion().HasPolyPolygonOrB2DPolyPolygon() )
                             {
                                 VERBOSE_TRACE( "ImplRenderer::createActions(): non-polygonal clip "
                                                "region encountered, falling back to bounding box!" );
@@ -1418,9 +1418,11 @@ namespace cppcanvas
                                 // with old one, just set it)
 
                                 // #121806# explicitely kept integer
+                                basegfx::B2DPolyPolygon aPolyPolygon(pClipAction->GetRegion().GetAsB2DPolyPolygon());
+
+                                aPolyPolygon.transform(rVDev.GetViewTransformation());
                                 updateClipping(
-                                    rVDev.LogicToPixel(
-                                        pClipAction->GetRegion().GetPolyPolygon() ).getB2DPolyPolygon(),
+                                    aPolyPolygon,
                                     rFactoryParms,
                                     false );
                             }
@@ -1450,7 +1452,7 @@ namespace cppcanvas
                     {
                         MetaISectRegionClipRegionAction* pClipAction = static_cast<MetaISectRegionClipRegionAction*>(pCurrAct);
 
-                        if( !pClipAction->GetRegion().HasPolyPolygon() )
+                        if( !pClipAction->GetRegion().HasPolyPolygonOrB2DPolyPolygon() )
                         {
                             VERBOSE_TRACE( "ImplRenderer::createActions(): non-polygonal clip "
                                            "region encountered, falling back to bounding box!" );
@@ -1470,9 +1472,11 @@ namespace cppcanvas
                             // intersect current clip with given clip polygon
 
                             // #121806# explicitely kept integer
+                            basegfx::B2DPolyPolygon aPolyPolygon(pClipAction->GetRegion().GetAsB2DPolyPolygon());
+
+                            aPolyPolygon.transform(rVDev.GetViewTransformation());
                             updateClipping(
-                                rVDev.LogicToPixel(
-                                    pClipAction->GetRegion().GetPolyPolygon() ).getB2DPolyPolygon(),
+                                aPolyPolygon,
                                 rFactoryParms,
                                 true );
                         }

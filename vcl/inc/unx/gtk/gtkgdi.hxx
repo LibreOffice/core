@@ -40,7 +40,7 @@ class GtkSalGraphics : public X11SalGraphics
 public:
                         GtkSalGraphics( GtkWidget *window )
                             : m_pWindow( window ),
-                              m_aClipRegion( REGION_NULL )
+                              m_aClipRegion(true)
                               {}
     virtual             ~GtkSalGraphics();
 

@@ -116,33 +116,33 @@ namespace sdr
 
         void OverlayManagerBuffered::ImpRestoreBackground(const Region& rRegionPixel) const
         {
-            // local region
-            Region aRegionPixel(rRegionPixel);
-            RegionHandle aRegionHandle(aRegionPixel.BeginEnumRects());
-            Rectangle aRegionRectanglePixel;
-
             // MapModes off
             const bool bMapModeWasEnabledDest(getOutputDevice().IsMapModeEnabled());
             const bool bMapModeWasEnabledSource(maBufferDevice.IsMapModeEnabled());
             getOutputDevice().EnableMapMode(false);
             ((OverlayManagerBuffered*)this)->maBufferDevice.EnableMapMode(false);
 
-            while(aRegionPixel.GetEnumRects(aRegionHandle, aRegionRectanglePixel))
+            // local region
+            RectangleVector aRectangles;
+            rRegionPixel.GetRegionRectangles(aRectangles);
+
+            for(RectangleVector::const_iterator aRectIter(aRectangles.begin()); aRectIter != aRectangles.end(); aRectIter++)
             {
 #ifdef DBG_UTIL
                 // #i72754# possible graphical region test only with non-pro
                 static bool bDoPaintForVisualControl(false);
+
                 if(bDoPaintForVisualControl)
                 {
                     getOutputDevice().SetLineColor(COL_LIGHTGREEN);
                     getOutputDevice().SetFillColor();
-                    getOutputDevice().DrawRect(aRegionRectanglePixel);
+                    getOutputDevice().DrawRect(*aRectIter);
                 }
 #endif
 
                 // restore the area
-                const Point aTopLeft(aRegionRectanglePixel.TopLeft());
-                const Size aSize(aRegionRectanglePixel.GetSize());
+                const Point aTopLeft(aRectIter->TopLeft());
+                const Size aSize(aRectIter->GetSize());
 
                 getOutputDevice().DrawOutDev(
                     aTopLeft, aSize, // destination
@@ -150,7 +150,33 @@ namespace sdr
                     maBufferDevice);
             }
 
-            aRegionPixel.EndEnumRects(aRegionHandle);
+            //Region aRegionPixel(rRegionPixel);
+            //RegionHandle aRegionHandle(aRegionPixel.BeginEnumRects());
+            //Rectangle aRegionRectanglePixel;
+            //
+            //while(aRegionPixel.GetEnumRects(aRegionHandle, aRegionRectanglePixel))
+            //{
+#ifdef DBG_U//TIL
+            //  // #i72754# possible graphical region test only with non-pro
+            //  static bool bDoPaintForVisualControl(false);
+            //  if(bDoPaintForVisualControl)
+            //  {
+            //      getOutputDevice().SetLineColor(COL_LIGHTGREEN);
+            //      getOutputDevice().SetFillColor();
+            //      getOutputDevice().DrawRect(aRegionRectanglePixel);
+            //  }
+#endif      //
+            //  // restore the area
+            //  const Point aTopLeft(aRegionRectanglePixel.TopLeft());
+            //  const Size aSize(aRegionRectanglePixel.GetSize());
+            //
+            //  getOutputDevice().DrawOutDev(
+            //      aTopLeft, aSize, // destination
+            //      aTopLeft, aSize, // source
+            //      maBufferDevice);
+            //}
+            //
+            //aRegionPixel.EndEnumRects(aRegionHandle);
 
             // restore MapModes
             getOutputDevice().EnableMapMode(bMapModeWasEnabledDest);
@@ -182,12 +208,8 @@ namespace sdr
             }
 
             // also limit to buffer size
-            const Rectangle aBufferDeviceRectanglePixel = Rectangle(Point(), maBufferDevice.GetOutputSizePixel());
+            const Rectangle aBufferDeviceRectanglePixel(Point(), maBufferDevice.GetOutputSizePixel());
             aRegion.Intersect(aBufferDeviceRectanglePixel);
-
-            // prepare to iterate over the rectangles from the region in pixels
-            RegionHandle aRegionHandle(aRegion.BeginEnumRects());
-            Rectangle aRegionRectanglePixel;
 
             // MapModes off
             const bool bMapModeWasEnabledDest(rSource.IsMapModeEnabled());
@@ -195,11 +217,15 @@ namespace sdr
             rSource.EnableMapMode(false);
             maBufferDevice.EnableMapMode(false);
 
-            while(aRegion.GetEnumRects(aRegionHandle, aRegionRectanglePixel))
+            // prepare to iterate over the rectangles from the region in pixels
+            RectangleVector aRectangles;
+            aRegion.GetRegionRectangles(aRectangles);
+
+            for(RectangleVector::const_iterator aRectIter(aRectangles.begin()); aRectIter != aRectangles.end(); aRectIter++)
             {
                 // for each rectangle, save the area
-                Point aTopLeft(aRegionRectanglePixel.TopLeft());
-                Size aSize(aRegionRectanglePixel.GetSize());
+                const Point aTopLeft(aRectIter->TopLeft());
+                const Size aSize(aRectIter->GetSize());
 
                 maBufferDevice.DrawOutDev(
                     aTopLeft, aSize, // destination
@@ -209,17 +235,20 @@ namespace sdr
 #ifdef DBG_UTIL
                 // #i72754# possible graphical region test only with non-pro
                 static bool bDoPaintForVisualControl(false);
+
                 if(bDoPaintForVisualControl)
                 {
                     const bool bMapModeWasEnabledTest(getOutputDevice().IsMapModeEnabled());
+
                     getOutputDevice().EnableMapMode(false);
                     getOutputDevice().SetLineColor(COL_LIGHTRED);
                     getOutputDevice().SetFillColor();
-                    getOutputDevice().DrawRect(aRegionRectanglePixel);
+                    getOutputDevice().DrawRect(*aRectIter);
                     getOutputDevice().EnableMapMode(bMapModeWasEnabledTest);
                 }
 
                 static bool bDoSaveForVisualControl(false);
+
                 if(bDoSaveForVisualControl)
                 {
                     const Bitmap aBitmap(maBufferDevice.GetBitmap(aTopLeft, aSize));
@@ -229,7 +258,44 @@ namespace sdr
 #endif
             }
 
-            aRegion.EndEnumRects(aRegionHandle);
+            //RegionHandle aRegionHandle(aRegion.BeginEnumRects());
+            //Rectangle aRegionRectanglePixel;
+            //
+            //while(aRegion.GetEnumRects(aRegionHandle, aRegionRectanglePixel))
+            //{
+            //  // for each rectangle, save the area
+            //  Point aTopLeft(aRegionRectanglePixel.TopLeft());
+            //  Size aSize(aRegionRectanglePixel.GetSize());
+            //
+            //  maBufferDevice.DrawOutDev(
+            //      aTopLeft, aSize, // destination
+            //      aTopLeft, aSize, // source
+            //      rSource);
+            //
+#ifdef DBG_U//TIL
+            //  // #i72754# possible graphical region test only with non-pro
+            //  static bool bDoPaintForVisualControl(false);
+            //  if(bDoPaintForVisualControl)
+            //  {
+            //      const bool bMapModeWasEnabledTest(getOutputDevice().IsMapModeEnabled());
+            //      getOutputDevice().EnableMapMode(false);
+            //      getOutputDevice().SetLineColor(COL_LIGHTRED);
+            //      getOutputDevice().SetFillColor();
+            //      getOutputDevice().DrawRect(aRegionRectanglePixel);
+            //      getOutputDevice().EnableMapMode(bMapModeWasEnabledTest);
+            //  }
+            //
+            //  static bool bDoSaveForVisualControl(false);
+            //  if(bDoSaveForVisualControl)
+            //  {
+            //      const Bitmap aBitmap(maBufferDevice.GetBitmap(aTopLeft, aSize));
+            //      SvFileStream aNew((const String&)String(ByteString( "c:\\test.bmp" ), RTL_TEXTENCODING_UTF8), STREAM_WRITE|STREAM_TRUNC);
+            //      aNew << aBitmap;
+            //  }
+#endif      //
+            //}
+            //
+            //aRegion.EndEnumRects(aRegionHandle);
 
             // restore MapModes
             rSource.EnableMapMode(bMapModeWasEnabledDest);
