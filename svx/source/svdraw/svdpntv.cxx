@@ -617,19 +617,31 @@ void SdrPaintView::CompleteRedraw(OutputDevice* pOut, const Region& rReg, sdr::c
 #ifdef DBG_UTIL
                 // #i74769# test-paint repaint region
                 static bool bDoPaintForVisualControl(false);
+
                 if(bDoPaintForVisualControl)
                 {
-                    RegionHandle aRegionHandle(aOptimizedRepaintRegion.BeginEnumRects());
-                    Rectangle aRegionRectangle;
+                    RectangleVector aRectangles;
+                    aOptimizedRepaintRegion.GetRegionRectangles(aRectangles);
 
-                    while(aOptimizedRepaintRegion.GetEnumRects(aRegionHandle, aRegionRectangle))
+                    pWindow->SetLineColor(COL_LIGHTGREEN);
+                    pWindow->SetFillColor();
+
+                    for(RectangleVector::const_iterator aRectIter(aRectangles.begin()); aRectIter != aRectangles.end(); aRectIter++)
                     {
-                        pWindow->SetLineColor(COL_LIGHTGREEN);
-                        pWindow->SetFillColor();
-                        pWindow->DrawRect(aRegionRectangle);
+                        pWindow->DrawRect(*aRectIter);
                     }
 
-                    aOptimizedRepaintRegion.EndEnumRects(aRegionHandle);
+                    //RegionHandle aRegionHandle(aOptimizedRepaintRegion.BeginEnumRects());
+                    //Rectangle aRegionRectangle;
+                    //
+                    //while(aOptimizedRepaintRegion.GetEnumRects(aRegionHandle, aRegionRectangle))
+                    //{
+                    //  pWindow->SetLineColor(COL_LIGHTGREEN);
+                    //  pWindow->SetFillColor();
+                    //  pWindow->DrawRect(aRegionRectangle);
+                    //}
+                    //
+                    //aOptimizedRepaintRegion.EndEnumRects(aRegionHandle);
                 }
 #endif
             }
@@ -840,25 +852,6 @@ Region SdrPaintView::OptimizeDrawLayersRegion(OutputDevice* pOut, const Region& 
             if(!pWindow->GetPaintRegion().IsEmpty())
             {
                 aOptimizedRepaintRegion.Intersect(pWindow->GetPaintRegion());
-
-#ifdef DBG_UTIL
-                // #i74769# test-paint repaint region
-                static bool bDoPaintForVisualControl(false);
-                if(bDoPaintForVisualControl)
-                {
-                    RegionHandle aRegionHandle(aOptimizedRepaintRegion.BeginEnumRects());
-                    Rectangle aRegionRectangle;
-
-                    while(aOptimizedRepaintRegion.GetEnumRects(aRegionHandle, aRegionRectangle))
-                    {
-                        pWindow->SetLineColor(COL_LIGHTGREEN);
-                        pWindow->SetFillColor();
-                        pWindow->DrawRect(aRegionRectangle);
-                    }
-
-                    aOptimizedRepaintRegion.EndEnumRects(aRegionHandle);
-                }
-#endif
             }
         }
     }

@@ -879,7 +879,7 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                         else
                         {
                             Region aReg( pA->GetRegion() );
-                            m_rOuterFace.SetClipRegion( aReg.ConvertToB2DPolyPolygon() );
+                            m_rOuterFace.SetClipRegion( aReg.GetAsB2DPolyPolygon() );
                         }
                     }
                     else
@@ -898,7 +898,7 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                 {
                     const MetaISectRegionClipRegionAction* pA = (const MetaISectRegionClipRegionAction*) pAction;
                     Region aReg( pA->GetRegion() );
-                    m_rOuterFace.IntersectClipRegion( aReg.ConvertToB2DPolyPolygon() );
+                    m_rOuterFace.IntersectClipRegion( aReg.GetAsB2DPolyPolygon() );
                 }
                 break;
 

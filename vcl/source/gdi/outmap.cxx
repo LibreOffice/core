@@ -34,7 +34,6 @@
 #include <vcl/outdev.hxx>
 
 #include <svdata.hxx>
-#include <region.h>
 #include <window.h>
 #include <outdev.h>
 #include <salgdi.hxx>
@@ -679,8 +678,6 @@ Rectangle OutputDevice::ImplDevicePixelToLogic( const Rectangle& rPixelRect ) co
 
 Region OutputDevice::ImplPixelToDevicePixel( const Region& rRegion ) const
 {
-    DBG_CHKOBJ( &rRegion, Region, ImplDbgTestRegion );
-
     if ( !mnOutOffX && !mnOutOffY )
         return rRegion;
 
@@ -1132,48 +1129,73 @@ PolyPolygon OutputDevice::LogicToPixel( const PolyPolygon& rLogicPolyPoly ) cons
 
 // -----------------------------------------------------------------------
 
+basegfx::B2DPolygon OutputDevice::LogicToPixel( const basegfx::B2DPolygon& rLogicPoly ) const
+{
+    basegfx::B2DPolygon aTransformedPoly = rLogicPoly;
+    const ::basegfx::B2DHomMatrix& rTransformationMatrix = GetViewTransformation();
+    aTransformedPoly.transform( rTransformationMatrix );
+    return aTransformedPoly;
+}
+
+// -----------------------------------------------------------------------
+
+basegfx::B2DPolyPolygon OutputDevice::LogicToPixel( const basegfx::B2DPolyPolygon& rLogicPolyPoly ) const
+{
+    basegfx::B2DPolyPolygon aTransformedPoly = rLogicPolyPoly;
+    const ::basegfx::B2DHomMatrix& rTransformationMatrix = GetViewTransformation();
+    aTransformedPoly.transform( rTransformationMatrix );
+    return aTransformedPoly;
+}
+
+// -----------------------------------------------------------------------
+
 Region OutputDevice::LogicToPixel( const Region& rLogicRegion ) const
 {
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
-    DBG_CHKOBJ( &rLogicRegion, Region, ImplDbgTestRegion );
 
-    RegionType eType = rLogicRegion.GetType();
-
-    if ( !mbMap || (eType == REGION_EMPTY) || (eType == REGION_NULL) )
+    if(!mbMap || rLogicRegion.IsNull() || rLogicRegion.IsEmpty())
+    {
         return rLogicRegion;
-
-    Region          aRegion;
-    const ImplRegion& rImplRegion = *rLogicRegion.ImplGetImplRegion();
-    const PolyPolygon* pPolyPoly = rImplRegion.mpPolyPoly;
-    const basegfx::B2DPolyPolygon* pB2DPolyPoly = rImplRegion.mpB2DPolyPoly;
-
-    if ( pPolyPoly )
-        aRegion = Region( LogicToPixel( *pPolyPoly ) );
-    else if( pB2DPolyPoly )
-    {
-        basegfx::B2DPolyPolygon aTransformedPoly = *pB2DPolyPoly;
-        const ::basegfx::B2DHomMatrix& rTransformationMatrix = GetViewTransformation();
-        aTransformedPoly.transform( rTransformationMatrix );
-        aRegion = Region( aTransformedPoly );
     }
-    else
-    {
-        long                nX;
-        long                nY;
-        long                nWidth;
-        long                nHeight;
-        ImplRegionInfo      aInfo;
-        sal_Bool                bRegionRect;
 
-        aRegion.ImplBeginAddRect();
-        bRegionRect = rLogicRegion.ImplGetFirstRect( aInfo, nX, nY, nWidth, nHeight );
-        while ( bRegionRect )
+    Region aRegion;
+
+    if(rLogicRegion.getB2DPolyPolygon())
+    {
+        aRegion = Region(LogicToPixel(*rLogicRegion.getB2DPolyPolygon()));
+    }
+    else if(rLogicRegion.getPolyPolygon())
+    {
+        aRegion = Region(LogicToPixel(*rLogicRegion.getPolyPolygon()));
+    }
+    else if(rLogicRegion.getRegionBand())
+    {
+        RectangleVector aRectangles;
+        rLogicRegion.GetRegionRectangles(aRectangles);
+        const RectangleVector& rRectangles(aRectangles); // needed to make the '!=' work
+
+        // make reverse run to fill new region bottom-up, this will speed it up due to the used data structuring
+        for(RectangleVector::const_reverse_iterator aRectIter(rRectangles.rbegin()); aRectIter != rRectangles.rend(); aRectIter++)
         {
-            Rectangle aRect( Point( nX, nY ), Size( nWidth, nHeight ) );
-            aRegion.ImplAddRect( LogicToPixel( aRect ) );
-            bRegionRect = rLogicRegion.ImplGetNextRect( aInfo, nX, nY, nWidth, nHeight );
+            aRegion.Union(LogicToPixel(*aRectIter));
         }
-        aRegion.ImplEndAddRect();
+
+        //long nX(0);
+        //long nY(0);
+        //long nWidth(0);
+        //long nHeight(0);
+        //ImplRegionInfo aInfo;
+        //aRegion.ImplBeginAddRect();
+        //bool bRegionRect(rLogicRegion.ImplGetFirstRect(aInfo, nX, nY, nWidth, nHeight));
+        //
+        //while(bRegionRect)
+        //{
+        //  const Rectangle aRect(Point(nX, nY), Size(nWidth, nHeight));
+        //  aRegion.ImplAddRect(LogicToPixel(aRect));
+        //  bRegionRect = rLogicRegion.ImplGetNextRect(aInfo, nX, nY, nWidth, nHeight);
+        //}
+        //
+        //aRegion.ImplEndAddRect();
     }
 
     return aRegion;
@@ -1295,6 +1317,27 @@ Polygon OutputDevice::LogicToPixel( const Polygon& rLogicPoly,
 
 // -----------------------------------------------------------------------
 
+PolyPolygon OutputDevice::LogicToPixel( const PolyPolygon& rLogicPolyPoly,
+    const MapMode& rMapMode ) const
+{
+    DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
+    DBG_CHKOBJ( &rLogicPolyPoly, PolyPolygon, NULL );
+
+    if ( rMapMode.IsDefault() )
+        return rLogicPolyPoly;
+
+    PolyPolygon aPolyPoly( rLogicPolyPoly );
+    sal_uInt16              nPoly = aPolyPoly.Count();
+    for( sal_uInt16 i = 0; i < nPoly; i++ )
+    {
+        Polygon& rPoly = aPolyPoly[i];
+        rPoly = LogicToPixel( rPoly, rMapMode );
+    }
+    return aPolyPoly;
+}
+
+// -----------------------------------------------------------------------
+
 basegfx::B2DPolyPolygon OutputDevice::LogicToPixel( const basegfx::B2DPolyPolygon& rLogicPolyPoly,
                                                     const MapMode& rMapMode ) const
 {
@@ -1302,6 +1345,71 @@ basegfx::B2DPolyPolygon OutputDevice::LogicToPixel( const basegfx::B2DPolyPolygo
     const ::basegfx::B2DHomMatrix& rTransformationMatrix = GetViewTransformation( rMapMode );
     aTransformedPoly.transform( rTransformationMatrix );
     return aTransformedPoly;
+}
+
+// -----------------------------------------------------------------------
+
+basegfx::B2DPolygon OutputDevice::LogicToPixel( const basegfx::B2DPolygon& rLogicPoly,
+                                                const MapMode& rMapMode ) const
+{
+    basegfx::B2DPolygon aTransformedPoly = rLogicPoly;
+    const ::basegfx::B2DHomMatrix& rTransformationMatrix = GetViewTransformation( rMapMode );
+    aTransformedPoly.transform( rTransformationMatrix );
+    return aTransformedPoly;
+}
+
+// -----------------------------------------------------------------------
+
+Region OutputDevice::LogicToPixel( const Region& rLogicRegion, const MapMode& rMapMode ) const
+{
+    DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
+
+    if(rMapMode.IsDefault() || rLogicRegion.IsNull() || rLogicRegion.IsEmpty())
+    {
+        return rLogicRegion;
+    }
+
+    Region aRegion;
+
+    if(rLogicRegion.getB2DPolyPolygon())
+    {
+        aRegion = Region(LogicToPixel(*rLogicRegion.getB2DPolyPolygon(), rMapMode));
+    }
+    else if(rLogicRegion.getPolyPolygon())
+    {
+        aRegion = Region(LogicToPixel(*rLogicRegion.getPolyPolygon(), rMapMode));
+    }
+    else if(rLogicRegion.getRegionBand())
+    {
+        RectangleVector aRectangles;
+        rLogicRegion.GetRegionRectangles(aRectangles);
+        const RectangleVector& rRectangles(aRectangles); // needed to make the '!=' work
+
+        // make reverse run to fill new region bottom-up, this will speed it up due to the used data structuring
+        for(RectangleVector::const_reverse_iterator aRectIter(rRectangles.rbegin()); aRectIter != rRectangles.rend(); aRectIter++)
+        {
+            aRegion.Union(LogicToPixel(*aRectIter, rMapMode));
+        }
+
+        //long nX(0);
+        //long nY(0);
+        //long nWidth(0);
+        //long nHeight(0);
+        //ImplRegionInfo aInfo;
+        //aRegion.ImplBeginAddRect();
+        //bool bRegionRect(rLogicRegion.ImplGetFirstRect(aInfo, nX, nY, nWidth, nHeight));
+        //
+        //while(bRegionRect)
+        //{
+        //  const Rectangle aRect(Point(nX, nY), Size(nWidth, nHeight));
+        //  aRegion.ImplAddRect(LogicToPixel(aRect, rMapMode));
+        //  bRegionRect = rLogicRegion.ImplGetNextRect(aInfo, nX, nY, nWidth, nHeight);
+        //}
+        //
+        //aRegion.ImplEndAddRect();
+    }
+
+    return aRegion;
 }
 
 // -----------------------------------------------------------------------
@@ -1427,43 +1535,50 @@ basegfx::B2DPolyPolygon OutputDevice::PixelToLogic( const basegfx::B2DPolyPolygo
 Region OutputDevice::PixelToLogic( const Region& rDeviceRegion ) const
 {
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
-    DBG_CHKOBJ( &rDeviceRegion, Region, ImplDbgTestRegion );
 
-    RegionType eType = rDeviceRegion.GetType();
-
-    if ( !mbMap || (eType == REGION_EMPTY) || (eType == REGION_NULL) )
+    if(!mbMap || rDeviceRegion.IsNull() || rDeviceRegion.IsEmpty())
+    {
         return rDeviceRegion;
-
-    Region          aRegion;
-    basegfx::B2DPolyPolygon* pB2DPolyPoly = rDeviceRegion.ImplGetImplRegion()->mpB2DPolyPoly;
-    PolyPolygon* pPolyPoly = pB2DPolyPoly ? 0 : rDeviceRegion.ImplGetImplRegion()->mpPolyPoly;
-
-    if ( pB2DPolyPoly ) // conversion with B2DPolyPolygon lost polygon-based ClipRegion
-    {
-        aRegion = Region( PixelToLogic( *pB2DPolyPoly ) );
     }
-    else if ( pPolyPoly )
-    {
-        aRegion = Region( PixelToLogic( *pPolyPoly ) );
-    }
-    else
-    {
-        long                nX;
-        long                nY;
-        long                nWidth;
-        long                nHeight;
-        ImplRegionInfo      aInfo;
-        sal_Bool                bRegionRect;
 
-        aRegion.ImplBeginAddRect();
-        bRegionRect = rDeviceRegion.ImplGetFirstRect( aInfo, nX, nY, nWidth, nHeight );
-        while ( bRegionRect )
+    Region aRegion;
+
+    if(rDeviceRegion.getB2DPolyPolygon())
+    {
+        aRegion = Region(PixelToLogic(*rDeviceRegion.getB2DPolyPolygon()));
+    }
+    else if(rDeviceRegion.getPolyPolygon())
+    {
+        aRegion = Region(PixelToLogic(*rDeviceRegion.getPolyPolygon()));
+    }
+    else if(rDeviceRegion.getRegionBand())
+    {
+        RectangleVector aRectangles;
+        rDeviceRegion.GetRegionRectangles(aRectangles);
+        const RectangleVector& rRectangles(aRectangles); // needed to make the '!=' work
+
+        // make reverse run to fill new region bottom-up, this will speed it up due to the used data structuring
+        for(RectangleVector::const_reverse_iterator aRectIter(rRectangles.rbegin()); aRectIter != rRectangles.rend(); aRectIter++)
         {
-            Rectangle aRect( Point( nX, nY ), Size( nWidth, nHeight ) );
-            aRegion.ImplAddRect( PixelToLogic( aRect ) );
-            bRegionRect = rDeviceRegion.ImplGetNextRect( aInfo, nX, nY, nWidth, nHeight );
+            aRegion.Union(PixelToLogic(*aRectIter));
         }
-        aRegion.ImplEndAddRect();
+
+        //long nX(0);
+        //long nY(0);
+        //long nWidth(0);
+        //long nHeight(0);
+        //ImplRegionInfo aInfo;
+        //aRegion.ImplBeginAddRect();
+        //bool bRegionRect(rDeviceRegion.ImplGetFirstRect(aInfo, nX, nY, nWidth, nHeight));
+        //
+        //while(bRegionRect)
+        //{
+        //  const Rectangle aRect(Point(nX, nY), Size(nWidth, nHeight));
+        //  aRegion.ImplAddRect(PixelToLogic(aRect));
+        //  bRegionRect = rDeviceRegion.ImplGetNextRect(aInfo, nX, nY, nWidth, nHeight);
+        //}
+        //
+        //aRegion.ImplEndAddRect();
     }
 
     return aRegion;
@@ -1589,6 +1704,27 @@ Polygon OutputDevice::PixelToLogic( const Polygon& rDevicePoly,
 
 // -----------------------------------------------------------------------
 
+PolyPolygon OutputDevice::PixelToLogic( const PolyPolygon& rDevicePolyPoly,
+    const MapMode& rMapMode ) const
+{
+    DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
+    DBG_CHKOBJ( &rDevicePolyPoly, PolyPolygon, NULL );
+
+    if ( rMapMode.IsDefault() )
+        return rDevicePolyPoly;
+
+    PolyPolygon aPolyPoly( rDevicePolyPoly );
+    sal_uInt16      nPoly = aPolyPoly.Count();
+    for( sal_uInt16 i = 0; i < nPoly; i++ )
+    {
+        Polygon& rPoly = aPolyPoly[i];
+        rPoly = PixelToLogic( rPoly, rMapMode );
+    }
+    return aPolyPoly;
+}
+
+// -----------------------------------------------------------------------
+
 basegfx::B2DPolygon OutputDevice::PixelToLogic( const basegfx::B2DPolygon& rPixelPoly,
                                                 const MapMode& rMapMode ) const
 {
@@ -1607,6 +1743,60 @@ basegfx::B2DPolyPolygon OutputDevice::PixelToLogic( const basegfx::B2DPolyPolygo
     const ::basegfx::B2DHomMatrix& rTransformationMatrix = GetInverseViewTransformation( rMapMode );
     aTransformedPoly.transform( rTransformationMatrix );
     return aTransformedPoly;
+}
+
+// -----------------------------------------------------------------------
+
+Region OutputDevice::PixelToLogic( const Region& rDeviceRegion, const MapMode& rMapMode ) const
+{
+    DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
+
+    if(rMapMode.IsDefault() || rDeviceRegion.IsNull() || rDeviceRegion.IsEmpty())
+    {
+        return rDeviceRegion;
+    }
+
+    Region aRegion;
+
+    if(rDeviceRegion.getB2DPolyPolygon())
+    {
+        aRegion = Region(PixelToLogic(*rDeviceRegion.getB2DPolyPolygon(), rMapMode));
+    }
+    else if(rDeviceRegion.getPolyPolygon())
+    {
+        aRegion = Region(PixelToLogic(*rDeviceRegion.getPolyPolygon(), rMapMode));
+    }
+    else if(rDeviceRegion.getRegionBand())
+    {
+        RectangleVector aRectangles;
+        rDeviceRegion.GetRegionRectangles(aRectangles);
+        const RectangleVector& rRectangles(aRectangles); // needed to make the '!=' work
+
+        // make reverse run to fill new region bottom-up, this will speed it up due to the used data structuring
+        for(RectangleVector::const_reverse_iterator aRectIter(rRectangles.rbegin()); aRectIter != rRectangles.rend(); aRectIter++)
+        {
+            aRegion.Union(PixelToLogic(*aRectIter, rMapMode));
+        }
+
+        //long nX(0);
+        //long nY(0);
+        //long nWidth(0);
+        //long nHeight(0);
+        //ImplRegionInfo aInfo;
+        //aRegion.ImplBeginAddRect();
+        //bool bRegionRect(rDeviceRegion.ImplGetFirstRect(aInfo, nX, nY, nWidth, nHeight));
+        //
+        //while(bRegionRect)
+        //{
+        //  const Rectangle aRect(Point(nX, nY), Size(nWidth, nHeight));
+        //  aRegion.ImplAddRect(PixelToLogic(aRect, rMapMode));
+        //  bRegionRect = rDeviceRegion.ImplGetNextRect(aInfo, nX, nY, nWidth, nHeight);
+        //}
+        //
+        //aRegion.ImplEndAddRect();
+    }
+
+    return aRegion;
 }
 
 // -----------------------------------------------------------------------

@@ -31,7 +31,6 @@
 #include <vcl/unowrap.hxx>
 
 #include <window.h>
-#include <region.h>
 #include <outdev.h>
 #include <sallayout.hxx>
 #include <salgdi.hxx>
@@ -235,28 +234,38 @@ sal_Bool SalGraphics::mirror( sal_uInt32 nPoints, const SalPoint *pPtAry, SalPoi
 
 void SalGraphics::mirror( Region& rRgn, const OutputDevice *pOutDev, bool bBack ) const
 {
-    if( rRgn.HasPolyPolygon() )
+    if( rRgn.HasPolyPolygonOrB2DPolyPolygon() )
     {
-        basegfx::B2DPolyPolygon aPolyPoly( rRgn.ConvertToB2DPolyPolygon() );
-        aPolyPoly = mirror( aPolyPoly, pOutDev, bBack );
-        rRgn = Region( aPolyPoly );
+        const basegfx::B2DPolyPolygon aPolyPoly(mirror(rRgn.GetAsB2DPolyPolygon(), pOutDev, bBack));
+
+        rRgn = Region(aPolyPoly);
     }
     else
     {
-        ImplRegionInfo      aInfo;
-        bool                bRegionRect;
-        Region              aMirroredRegion;
-        long nX, nY, nWidth, nHeight;
+        RectangleVector aRectangles;
+        rRgn.GetRegionRectangles(aRectangles);
+        rRgn.SetEmpty();
 
-        bRegionRect = rRgn.ImplGetFirstRect( aInfo, nX, nY, nWidth, nHeight );
-        while ( bRegionRect )
+        for(RectangleVector::iterator aRectIter(aRectangles.begin()); aRectIter != aRectangles.end(); aRectIter++)
         {
-            Rectangle aRect( Point(nX, nY), Size(nWidth, nHeight) );
-            mirror( aRect, pOutDev, bBack );
-            aMirroredRegion.Union( aRect );
-            bRegionRect = rRgn.ImplGetNextRect( aInfo, nX, nY, nWidth, nHeight );
+            mirror(*aRectIter, pOutDev, bBack);
+            rRgn.Union(*aRectIter);
         }
-        rRgn = aMirroredRegion;
+
+        //ImplRegionInfo        aInfo;
+        //bool              bRegionRect;
+        //Region              aMirroredRegion;
+        //long nX, nY, nWidth, nHeight;
+        //
+        //bRegionRect = rRgn.ImplGetFirstRect( aInfo, nX, nY, nWidth, nHeight );
+        //while ( bRegionRect )
+        //{
+        //    Rectangle aRect( Point(nX, nY), Size(nWidth, nHeight) );
+        //    mirror( aRect, pOutDev, bBack );
+        //    aMirroredRegion.Union( aRect );
+        //    bRegionRect = rRgn.ImplGetNextRect( aInfo, nX, nY, nWidth, nHeight );
+        //}
+        //rRgn = aMirroredRegion;
     }
 }
 

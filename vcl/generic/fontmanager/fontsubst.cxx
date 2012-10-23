@@ -30,7 +30,6 @@
 #include "outdev.h"
 #include "fontsubset.hxx"
 #include "salprn.hxx"
-#include "region.h"
 
 #include <unotools/fontdefs.hxx>
 #include <list>

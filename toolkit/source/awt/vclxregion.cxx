@@ -141,15 +141,24 @@ void VCLXRegion::xOrRegion( const ::com::sun::star::uno::Reference< ::com::sun::
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
-    sal_uLong nRects = maRegion.GetRectCount();
-    ::com::sun::star::uno::Sequence< ::com::sun::star::awt::Rectangle > aRects( nRects );
+    RectangleVector aRectangles;
+    maRegion.GetRegionRectangles(aRectangles);
 
-    Rectangle aRect;
-    sal_uInt32 nR = 0;
-    RegionHandle h = maRegion.BeginEnumRects();
-    while ( maRegion.GetNextEnumRect( h, aRect ) )
-        aRects.getArray()[nR++] = AWTRectangle( aRect );
-    maRegion.EndEnumRects( h );
+//    sal_uLong nRects = maRegion.GetRectCount();
+    ::com::sun::star::uno::Sequence< ::com::sun::star::awt::Rectangle > aRects(aRectangles.size());
+    sal_uInt32 a(0);
+
+    for(RectangleVector::const_iterator aRectIter(aRectangles.begin()); aRectIter != aRectangles.end(); aRectIter++)
+    {
+        aRects.getArray()[a++] = AWTRectangle(*aRectIter);
+    }
+
+    //Rectangle aRect;
+    //sal_uInt32 nR = 0;
+    //RegionHandle h = maRegion.BeginEnumRects();
+    //while ( maRegion.GetEnumRects( h, aRect ) )
+    //  aRects.getArray()[nR++] = AWTRectangle( aRect );
+    //maRegion.EndEnumRects( h );
 
     return aRects;
 }

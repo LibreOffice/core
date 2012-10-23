@@ -37,7 +37,6 @@
 #include <image.h>
 #include <outdev.h>
 #include <window.h>
-#include <region.h>
 #include <outdata.hxx>
 
 DBG_NAMEEX( OutputDevice )
@@ -1945,7 +1944,7 @@ void OutputDevice::ImplPrintTransparent( const Bitmap& rBmp, const Bitmap& rMask
 
         // do painting
         const long      nSrcWidth = aSrcRect.GetWidth(), nSrcHeight = aSrcRect.GetHeight();
-        long            nX, nY, nWorkX, nWorkY, nWorkWidth, nWorkHeight;
+        long            nX, nY; // , nWorkX, nWorkY, nWorkWidth, nWorkHeight;
         long*           pMapX = new long[ nSrcWidth + 1 ];
         long*           pMapY = new long[ nSrcHeight + 1 ];
         const bool      bOldMap = mbMap;
@@ -1960,21 +1959,37 @@ void OutputDevice::ImplPrintTransparent( const Bitmap& rBmp, const Bitmap& rMask
             pMapY[ nY ] = aDestPt.Y() + FRound( (double) aDestSz.Height() * nY / nSrcHeight );
 
         // walk through all rectangles of mask
-        Region          aWorkRgn( aMask.CreateRegion( COL_BLACK, Rectangle( Point(), aMask.GetSizePixel() ) ) );
-        ImplRegionInfo  aInfo;
-        bool            bRgnRect = aWorkRgn.ImplGetFirstRect( aInfo, nWorkX, nWorkY, nWorkWidth, nWorkHeight );
+        const Region aWorkRgn(aMask.CreateRegion(COL_BLACK, Rectangle(Point(), aMask.GetSizePixel())));
+        RectangleVector aRectangles;
+        aWorkRgn.GetRegionRectangles(aRectangles);
 
-        while( bRgnRect )
+        for(RectangleVector::const_iterator aRectIter(aRectangles.begin()); aRectIter != aRectangles.end(); aRectIter++)
         {
-            Bitmap          aBandBmp( aPaint );
-            const Rectangle aBandRect( Point( nWorkX, nWorkY ), Size( nWorkWidth, nWorkHeight ) );
-            const Point     aMapPt( pMapX[ nWorkX ], pMapY[ nWorkY ] );
-            const Size      aMapSz( pMapX[ nWorkX + nWorkWidth ] - aMapPt.X(), pMapY[ nWorkY + nWorkHeight ] - aMapPt.Y() );
+            const Point aMapPt(pMapX[aRectIter->Left()], pMapY[aRectIter->Top()]);
+            const Size aMapSz(
+                pMapX[aRectIter->Right() + 1] - aMapPt.X(),      // pMapX[L + W] -> L + ((R - L) + 1) -> R + 1
+                pMapY[aRectIter->Bottom() + 1] - aMapPt.Y());    // same for Y
+            Bitmap aBandBmp(aPaint);
 
-            aBandBmp.Crop( aBandRect );
-            ImplDrawBitmap( aMapPt, aMapSz, Point(), aBandBmp.GetSizePixel(), aBandBmp, META_BMPSCALEPART_ACTION );
-            bRgnRect = aWorkRgn.ImplGetNextRect( aInfo, nWorkX, nWorkY, nWorkWidth, nWorkHeight );
+            aBandBmp.Crop(*aRectIter);
+            ImplDrawBitmap(aMapPt, aMapSz, Point(), aBandBmp.GetSizePixel(), aBandBmp, META_BMPSCALEPART_ACTION);
         }
+
+        //Region          aWorkRgn( aMask.CreateRegion( COL_BLACK, Rectangle( Point(), aMask.GetSizePixel() ) ) );
+        //ImplRegionInfo    aInfo;
+        //sal_Bool            bRgnRect = aWorkRgn.ImplGetFirstRect( aInfo, nWorkX, nWorkY, nWorkWidth, nWorkHeight );
+        //
+        //while( bRgnRect )
+        //{
+        //  Bitmap          aBandBmp( aPaint );
+        //    const Rectangle aBandRect( Point( nWorkX, nWorkY ), Size( nWorkWidth, nWorkHeight ) );
+        //    const Point     aMapPt( pMapX[ nWorkX ], pMapY[ nWorkY ] );
+        //    const Size      aMapSz( pMapX[ nWorkX + nWorkWidth ] - aMapPt.X(), pMapY[ nWorkY + nWorkHeight ] - aMapPt.Y() );
+        //
+        //  aBandBmp.Crop( aBandRect );
+        //    ImplDrawBitmap( aMapPt, aMapSz, Point(), aBandBmp.GetSizePixel(), aBandBmp, META_BMPSCALEPART_ACTION );
+        //    bRgnRect = aWorkRgn.ImplGetNextRect( aInfo, nWorkX, nWorkY, nWorkWidth, nWorkHeight );
+        //}
 
         mbMap = bOldMap;
 
@@ -2028,7 +2043,7 @@ void OutputDevice::ImplPrintMask( const Bitmap& rMask, const Color& rMaskColor,
 
         // do painting
         const long      nSrcWidth = aSrcRect.GetWidth(), nSrcHeight = aSrcRect.GetHeight();
-        long            nX, nY, nWorkX, nWorkY, nWorkWidth, nWorkHeight;
+        long            nX, nY; //, nWorkX, nWorkY, nWorkWidth, nWorkHeight;
         long*           pMapX = new long[ nSrcWidth + 1 ];
         long*           pMapY = new long[ nSrcHeight + 1 ];
         GDIMetaFile*    pOldMetaFile = mpMetaFile;
@@ -2050,18 +2065,32 @@ void OutputDevice::ImplPrintMask( const Bitmap& rMask, const Color& rMaskColor,
             pMapY[ nY ] = aDestPt.Y() + FRound( (double) aDestSz.Height() * nY / nSrcHeight );
 
         // walk through all rectangles of mask
-        Region          aWorkRgn( aMask.CreateRegion( COL_BLACK, Rectangle( Point(), aMask.GetSizePixel() ) ) );
-        ImplRegionInfo  aInfo;
-        bool            bRgnRect = aWorkRgn.ImplGetFirstRect( aInfo, nWorkX, nWorkY, nWorkWidth, nWorkHeight );
+        const Region aWorkRgn(aMask.CreateRegion(COL_BLACK, Rectangle(Point(), aMask.GetSizePixel())));
+        RectangleVector aRectangles;
+        aWorkRgn.GetRegionRectangles(aRectangles);
 
-        while( bRgnRect )
+        for(RectangleVector::const_iterator aRectIter(aRectangles.begin()); aRectIter != aRectangles.end(); aRectIter++)
         {
-            const Point aMapPt( pMapX[ nWorkX ], pMapY[ nWorkY ] );
-            const Size  aMapSz( pMapX[ nWorkX + nWorkWidth ] - aMapPt.X(), pMapY[ nWorkY + nWorkHeight ] - aMapPt.Y() );
+            const Point aMapPt(pMapX[aRectIter->Left()], pMapY[aRectIter->Top()]);
+            const Size aMapSz(
+                pMapX[aRectIter->Right() + 1] - aMapPt.X(),      // pMapX[L + W] -> L + ((R - L) + 1) -> R + 1
+                pMapY[aRectIter->Bottom() + 1] - aMapPt.Y());    // same for Y
 
-            DrawRect( Rectangle( aMapPt, aMapSz ) );
-            bRgnRect = aWorkRgn.ImplGetNextRect( aInfo, nWorkX, nWorkY, nWorkWidth, nWorkHeight );
+            DrawRect(Rectangle(aMapPt, aMapSz));
         }
+
+        //Region          aWorkRgn( aMask.CreateRegion( COL_BLACK, Rectangle( Point(), aMask.GetSizePixel() ) ) );
+        //ImplRegionInfo    aInfo;
+        //sal_Bool            bRgnRect = aWorkRgn.ImplGetFirstRect( aInfo, nWorkX, nWorkY, nWorkWidth, nWorkHeight );
+        //
+        //while( bRgnRect )
+        //{
+        //    const Point aMapPt( pMapX[ nWorkX ], pMapY[ nWorkY ] );
+        //    const Size  aMapSz( pMapX[ nWorkX + nWorkWidth ] - aMapPt.X(), pMapY[ nWorkY + nWorkHeight ] - aMapPt.Y() );
+        //
+        //  DrawRect( Rectangle( aMapPt, aMapSz ) );
+        //  bRgnRect = aWorkRgn.ImplGetNextRect( aInfo, nWorkX, nWorkY, nWorkWidth, nWorkHeight );
+        //}
 
         Pop();
         delete[] pMapX;

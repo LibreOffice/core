@@ -56,9 +56,9 @@ void SdrPreRenderDevice::PreparePreRenderDevice()
 void SdrPreRenderDevice::OutputPreRenderDevice(const Region& rExpandedRegion)
 {
     // region to pixels
-    Region aRegionPixel(mrOutputDevice.LogicToPixel(rExpandedRegion));
-    RegionHandle aRegionHandle(aRegionPixel.BeginEnumRects());
-    Rectangle aRegionRectanglePixel;
+    const Region aRegionPixel(mrOutputDevice.LogicToPixel(rExpandedRegion));
+    //RegionHandle aRegionHandle(aRegionPixel.BeginEnumRects());
+    //Rectangle aRegionRectanglePixel;
 
     // MapModes off
     sal_Bool bMapModeWasEnabledDest(mrOutputDevice.IsMapModeEnabled());
@@ -66,11 +66,14 @@ void SdrPreRenderDevice::OutputPreRenderDevice(const Region& rExpandedRegion)
     mrOutputDevice.EnableMapMode(sal_False);
     maPreRenderDevice.EnableMapMode(sal_False);
 
-    while(aRegionPixel.GetEnumRects(aRegionHandle, aRegionRectanglePixel))
+    RectangleVector aRectangles;
+    aRegionPixel.GetRegionRectangles(aRectangles);
+
+    for(RectangleVector::const_iterator aRectIter(aRectangles.begin()); aRectIter != aRectangles.end(); aRectIter++)
     {
         // for each rectangle, copy the area
-        const Point aTopLeft(aRegionRectanglePixel.TopLeft());
-        const Size aSize(aRegionRectanglePixel.GetSize());
+        const Point aTopLeft(aRectIter->TopLeft());
+        const Size aSize(aRectIter->GetSize());
 
         mrOutputDevice.DrawOutDev(
             aTopLeft, aSize,
@@ -80,17 +83,43 @@ void SdrPreRenderDevice::OutputPreRenderDevice(const Region& rExpandedRegion)
 #ifdef DBG_UTIL
         // #i74769#
         static bool bDoPaintForVisualControlRegion(false);
+
         if(bDoPaintForVisualControlRegion)
         {
-            Color aColor((((((rand()&0x7f)|0x80)<<8L)|((rand()&0x7f)|0x80))<<8L)|((rand()&0x7f)|0x80));
+            const Color aColor((((((rand()&0x7f)|0x80)<<8L)|((rand()&0x7f)|0x80))<<8L)|((rand()&0x7f)|0x80));
+
             mrOutputDevice.SetLineColor(aColor);
             mrOutputDevice.SetFillColor();
-            mrOutputDevice.DrawRect(aRegionRectanglePixel);
+            mrOutputDevice.DrawRect(*aRectIter);
         }
 #endif
     }
 
-    aRegionPixel.EndEnumRects(aRegionHandle);
+//  while(aRegionPixel.GetEnumRects(aRegionHandle, aRegionRectanglePixel))
+//  {
+//      // for each rectangle, copy the area
+//      const Point aTopLeft(aRegionRectanglePixel.TopLeft());
+//      const Size aSize(aRegionRectanglePixel.GetSize());
+//
+//      mrOutputDevice.DrawOutDev(
+//          aTopLeft, aSize,
+//          aTopLeft, aSize,
+//          maPreRenderDevice);
+//
+//#ifdef DBG_UTIL
+//      // #i74769#
+//      static bool bDoPaintForVisualControlRegion(false);
+//      if(bDoPaintForVisualControlRegion)
+//      {
+//          Color aColor((((((rand()&0x7f)|0x80)<<8L)|((rand()&0x7f)|0x80))<<8L)|((rand()&0x7f)|0x80));
+//          mrOutputDevice.SetLineColor(aColor);
+//          mrOutputDevice.SetFillColor();
+//          mrOutputDevice.DrawRect(aRegionRectanglePixel);
+//      }
+//#endif
+//  }
+//
+//  aRegionPixel.EndEnumRects(aRegionHandle);
 
     mrOutputDevice.EnableMapMode(bMapModeWasEnabledDest);
     maPreRenderDevice.EnableMapMode(bMapModeWasEnabledSource);

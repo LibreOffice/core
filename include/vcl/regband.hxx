@@ -49,7 +49,7 @@ struct ImplRegionBandSep
     ImplRegionBandSep*          mpNextSep;
     long                        mnXLeft;
     long                        mnXRight;
-    sal_Bool                        mbRemoved;
+    bool                        mbRemoved;
 };
 
 enum LineType { LINE_ASCENDING, LINE_DESCENDING, LINE_HORIZONTAL };
@@ -60,7 +60,7 @@ struct ImplRegionBandPoint
     ImplRegionBandPoint*        mpNextBandPoint;
     long                        mnX;
     long                        mnLineId;
-    sal_Bool                        mbEndPoint;
+    bool                        mbEndPoint;
     LineType                    meLineType;
 };
 
@@ -77,7 +77,9 @@ public:
     ImplRegionBandPoint*        mpFirstBandPoint;   // root of the list with lines
     long                        mnYTop;             // actual boundary of the band
     long                        mnYBottom;
-    sal_Bool                        mbTouched;
+
+    // bitfield
+    bool                        mbTouched : 1;
 
                                 // create y-band with boundaries
                                 ImplRegionBand( long nYTop, long nYBottom );
@@ -102,14 +104,14 @@ public:
     long                        GetXRightBoundary() const;
 
                                 // combine overlapping bands
-    sal_Bool                        OptimizeBand();
+    bool                        OptimizeBand();
 
                                 // generate separations from lines and process
                                 // union with existing separations
     void                        ProcessPoints();
                                 // insert point in the list for later processing
-    sal_Bool                        InsertPoint( long nX, long nLineID,
-                                             sal_Bool bEndPoint, LineType eLineType );
+    bool                        InsertPoint( long nX, long nLineID,
+                                             bool bEndPoint, LineType eLineType );
 
     void                        Union( long nXLeft, long nXRight );
     void                        Intersect( long nXLeft, long nXRight );
@@ -119,11 +121,14 @@ public:
     void                        MoveX( long nHorzMove );
     void                        ScaleX( double fHorzScale );
 
-    sal_Bool                        IsInside( long nX );
+    bool                        IsInside( long nX );
+    bool                        IsInside( long nLeft, long nRight );
+    bool                        IsOver( long nLeft, long nRight );
 
-    sal_Bool                        IsEmpty() const { return ((!mpFirstSep) && (!mpFirstBandPoint)); }
 
-    sal_Bool                        operator==( const ImplRegionBand& rRegionBand ) const;
+    bool                        IsEmpty() const { return ((!mpFirstSep) && (!mpFirstBandPoint)); }
+
+    bool                        operator==( const ImplRegionBand& rRegionBand ) const;
 
     /** Split the called band at the given vertical coordinate.  After the
         split the called band will cover the upper part not including nY.

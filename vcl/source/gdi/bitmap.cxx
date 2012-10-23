@@ -1281,38 +1281,92 @@ Region Bitmap::CreateRegion( const Color& rColor, const Rectangle& rRect ) const
 
     if( pReadAcc )
     {
-        Rectangle           aSubRect;
+        //Rectangle         aSubRect;
         const long          nLeft = aRect.Left();
         const long          nTop = aRect.Top();
         const long          nRight = aRect.Right();
         const long          nBottom = aRect.Bottom();
         const BitmapColor   aMatch( pReadAcc->GetBestMatchingColor( rColor ) );
 
-        aRegion.ImplBeginAddRect();
+        //RectangleVector aRectangles;
+        //aRegion.ImplBeginAddRect();
+        std::vector< long > aLine;
+        long nYStart(nTop);
+        long nY(nTop);
 
-        for( long nY = nTop; nY <= nBottom; nY++ )
+        for( ; nY <= nBottom; nY++ )
         {
-            aSubRect.Top() = aSubRect.Bottom() = nY;
+            //aSubRect.Top() = aSubRect.Bottom() = nY;
+            std::vector< long > aNewLine;
+            long nX(nLeft);
 
-            for( long nX = nLeft; nX <= nRight; )
+            for( ; nX <= nRight; )
             {
                 while( ( nX <= nRight ) && ( aMatch != pReadAcc->GetPixel( nY, nX ) ) )
                     nX++;
 
                 if( nX <= nRight )
                 {
-                    aSubRect.Left() = nX;
+                    aNewLine.push_back(nX);
+                    //aSubRect.Left() = nX;
 
                     while( ( nX <= nRight ) && ( aMatch == pReadAcc->GetPixel( nY, nX ) ) )
                         nX++;
 
-                    aSubRect.Right() = nX - 1L;
-                    aRegion.ImplAddRect( aSubRect );
+                    //aSubRect.Right() = nX - 1L;
+                    aNewLine.push_back(nX - 1);
+
+                    //aRegion.ImplAddRect( aSubRect );
+                    //aRectangles.push_back(aSubRect);
+                    //aRegion.Union(aSubRect);
                 }
+            }
+
+            if(aNewLine != aLine)
+            {
+                // need to write aLine, it's different from the next line
+                if(aLine.size())
+                {
+                    Rectangle aSubRect;
+
+                    // enter y values and proceed ystart
+                    aSubRect.Top() = nYStart;
+                    aSubRect.Bottom() = nY ? nY - 1 : 0;
+
+                    for(sal_uInt32 a(0); a < aLine.size();)
+                    {
+                        aSubRect.Left() = aLine[a++];
+                        aSubRect.Right() = aLine[a++];
+                        aRegion.Union(aSubRect);
+                    }
+                }
+
+                // copy line as new line
+                aLine = aNewLine;
+                nYStart = nY;
             }
         }
 
-        aRegion.ImplEndAddRect();
+        // write last line if used
+        if(aLine.size())
+        {
+            Rectangle aSubRect;
+
+            // enter y values
+            aSubRect.Top() = nYStart;
+            aSubRect.Bottom() = nY ? nY - 1 : 0;
+
+            for(sal_uInt32 a(0); a < aLine.size();)
+            {
+                aSubRect.Left() = aLine[a++];
+                aSubRect.Right() = aLine[a++];
+                aRegion.Union(aSubRect);
+            }
+        }
+
+        //aRegion.ImplEndAddRect();
+        //aRegion.SetRegionRectangles(aRectangles);
+
         ( (Bitmap*) this )->ReleaseAccess( pReadAcc );
     }
     else

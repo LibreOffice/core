@@ -195,6 +195,12 @@ public:
     void                        FillRect( const Rectangle& rRect );
     void                        DrawRect( const Rectangle& rRect );
 
+    void                        FillPolygon( const Polygon& rPoly );
+    void                        DrawPolygon( const Polygon& rPoly );
+
+    void                        FillPolyPolygon( const PolyPolygon& rPoly );
+    void                        DrawPolyPolygon( const PolyPolygon& rPolyPoly );
+
 private:
 
     BitmapColor*                mpLineColor;

@@ -79,19 +79,26 @@ void DeviceCopy (
 void ForAllRectangles (const Region& rRegion, ::boost::function<void(const Rectangle&)> aFunction)
 {
     OSL_ASSERT(aFunction);
+    RectangleVector aRectangles;
+    rRegion.GetRegionRectangles(aRectangles);
 
-    if (rRegion.GetRectCount() <= 1)
+    if(0 == aRectangles.size())
     {
-        aFunction(rRegion.GetBoundRect());
+        aFunction(Rectangle());
     }
     else
     {
-        Region aMutableRegionCopy (rRegion);
-        RegionHandle aHandle(aMutableRegionCopy.BeginEnumRects());
-        Rectangle aBox;
-        while (aMutableRegionCopy.GetNextEnumRect(aHandle, aBox))
-            aFunction(aBox);
-        aMutableRegionCopy.EndEnumRects(aHandle);
+        for(RectangleVector::const_iterator aRectIter(aRectangles.begin()); aRectIter != aRectangles.end(); aRectIter++)
+        {
+            aFunction(*aRectIter);
+        }
+
+        //Region aMutableRegionCopy (rRegion);
+        //RegionHandle aHandle(aMutableRegionCopy.BeginEnumRects());
+        //Rectangle aBox;
+        //while (aMutableRegionCopy.GetEnumRects(aHandle, aBox))
+        //    aFunction(aBox);
+        //aMutableRegionCopy.EndEnumRects(aHandle);
     }
 }
 

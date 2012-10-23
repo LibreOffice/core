@@ -49,7 +49,7 @@ sal_Bool GtkSalGraphics::bNeedPixmapPaint = sal_False;
 GtkSalGraphics::GtkSalGraphics( GtkSalFrame *pFrame, GtkWidget *pWindow )
     : X11SalGraphics(),
       m_pWindow( pWindow ),
-      m_aClipRegion( REGION_NULL )
+      m_aClipRegion(true)
 {
     Init( pFrame, GDK_WINDOW_XID( widget_get_window( pWindow ) ),
           SalX11Screen( gdk_x11_screen_get_screen_number(
@@ -828,16 +828,29 @@ sal_Bool GtkSalGraphics::drawNativeControl(    ControlType nType,
     }
     else
     {
-        RegionHandle aHdl = aClipRegion.BeginEnumRects();
-        Rectangle aPaintRect;
-        while( aClipRegion.GetNextEnumRect( aHdl, aPaintRect ) )
+        RectangleVector aRectangles;
+        aClipRegion.GetRegionRectangles(aRectangles);
+
+        for(RectangleVector::const_iterator aRectIter(aRectangles.begin()); aRectIter != aRectangles.end(); aRectIter++)
         {
-            aPaintRect = aCtrlRect.GetIntersection( aPaintRect );
-            if( aPaintRect.IsEmpty() )
+            if(aRectIter->IsEmpty())
+            {
                 continue;
-            aClip.push_back( aPaintRect );
+            }
+
+            aClip.push_back(*aRectIter);
         }
-        aClipRegion.EndEnumRects( aHdl );
+
+        //RegionHandle aHdl = aClipRegion.BeginEnumRects();
+        //Rectangle aPaintRect;
+        //while( aClipRegion.GetEnumRects( aHdl, aPaintRect ) )
+        //{
+        //    aPaintRect = aCtrlRect.GetIntersection( aPaintRect );
+        //    if( aPaintRect.IsEmpty() )
+        //        continue;
+        //    aClip.push_back( aPaintRect );
+        //}
+        //aClipRegion.EndEnumRects( aHdl );
     }
 
     if ( (nType==CTRL_PUSHBUTTON) && (nPart==PART_ENTIRE_CONTROL) )

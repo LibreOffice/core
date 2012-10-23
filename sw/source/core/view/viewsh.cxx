@@ -1729,12 +1729,20 @@ void ViewShell::Paint(const Rectangle &rRect)
 
         if ( mbInEndAction && GetWin() )
         {
-            Region aRegion( GetWin()->GetPaintRegion() );
-            RegionHandle hHdl( aRegion.BeginEnumRects() );
-            Rectangle aRect;
-            while ( aRegion.GetNextEnumRect( hHdl, aRect ) )
-                Imp()->AddPaintRect( aRect );
-            aRegion.EndEnumRects( hHdl );
+            const Region aRegion(GetWin()->GetPaintRegion());
+            RectangleVector aRectangles;
+            aRegion.GetRegionRectangles(aRectangles);
+
+            for(RectangleVector::const_iterator aRectIter(aRectangles.begin()); aRectIter != aRectangles.end(); aRectIter++)
+            {
+                Imp()->AddPaintRect(*aRectIter);
+            }
+
+            //RegionHandle hHdl( aRegion.BeginEnumRects() );
+            //Rectangle aRect;
+            //while ( aRegion.GetEnumRects( hHdl, aRect ) )
+            //  Imp()->AddPaintRect( aRect );
+            //aRegion.EndEnumRects( hHdl );
         }
         else if ( SfxProgress::GetActiveProgress( GetDoc()->GetDocShell() ) &&
                   GetOut() == GetWin() )

@@ -25,115 +25,96 @@
 #include <vcl/dllapi.h>
 
 #include <basegfx/polygon/b2dpolypolygon.hxx>
+#include <boost/shared_ptr.hpp>
 
-class ImplRegion;
 class ImplRegionBand;
+class RegionBand;
 class Polygon;
 class PolyPolygon;
-struct ImplRegionInfo;
 
-// --------------
-// - RegionType -
-// --------------
+//////////////////////////////////////////////////////////////////////////////
 
-enum RegionType { REGION_NULL, REGION_EMPTY, REGION_RECTANGLE, REGION_COMPLEX };
-enum RegionOverlapType { REGION_INSIDE, REGION_OVER, REGION_OUTSIDE };
+typedef boost::shared_ptr< RegionBand > RegionBandPtr;
+typedef boost::shared_ptr< PolyPolygon > PolyPolygonPtr;
+typedef boost::shared_ptr< basegfx::B2DPolyPolygon > B2DPolyPolygonPtr;
+typedef std::vector< Rectangle > RectangleVector;
 
-typedef sal_IntPtr RegionHandle;
-
-// ----------
-// - Region -
-// ----------
+//////////////////////////////////////////////////////////////////////////////
 
 class VCL_DLLPUBLIC Region
 {
+private:
     friend class OutputDevice;
     friend class Window;
     friend class Bitmap;
 
-private:
-    ImplRegion*         mpImplRegion;
+    // possible contents
+    B2DPolyPolygonPtr           mpB2DPolyPolygon;
+    PolyPolygonPtr              mpPolyPolygon;
+    RegionBandPtr               mpRegionBand;
 
-    SAL_DLLPRIVATE void             ImplCopyData();
-    SAL_DLLPRIVATE void             ImplCreateRectRegion( const Rectangle& rRect );
-    SAL_DLLPRIVATE void             ImplCreatePolyPolyRegion( const PolyPolygon& rPolyPoly );
-    SAL_DLLPRIVATE void             ImplCreatePolyPolyRegion( const basegfx::B2DPolyPolygon& rPolyPoly );
-    SAL_DLLPRIVATE void             ImplPolyPolyRegionToBandRegionFunc();
-    SAL_DLLPRIVATE inline void      ImplPolyPolyRegionToBandRegion();
-    SAL_DLLPRIVATE const ImplRegion*    ImplGetImplRegion() const { return mpImplRegion; }
-    SAL_DLLPRIVATE ImplRegion*      ImplGetImplRegion() { return mpImplRegion; }
-    SAL_DLLPRIVATE void             ImplBeginAddRect( );
-    SAL_DLLPRIVATE sal_Bool             ImplAddRect( const Rectangle& rRect );
-    SAL_DLLPRIVATE void             ImplEndAddRect( );
-    SAL_DLLPRIVATE void             ImplIntersectWithPolyPolygon( const Region& );
-    SAL_DLLPRIVATE void             ImplExcludePolyPolygon( const Region& );
-    SAL_DLLPRIVATE void             ImplUnionPolyPolygon( const Region& );
-    SAL_DLLPRIVATE void             ImplXOrPolyPolygon( const Region& );
+    /// bitfield
+    bool                        mbIsNull : 1;
 
-public: // public within vcl
-    VCL_PLUGIN_PUBLIC bool              ImplGetFirstRect( ImplRegionInfo& rImplRegionInfo,
-                                          long& nX, long& nY, long& nWidth, long& nHeight ) const;
-    VCL_PLUGIN_PUBLIC bool              ImplGetNextRect( ImplRegionInfo& rImplRegionInfo,
-                                         long& nX, long& nY, long& nWidth, long& nHeight ) const;
-#ifdef DBG_UTIL
-    friend const char*  ImplDbgTestRegion( const void* pObj );
-#endif
+    // helpers
+    SAL_DLLPRIVATE void ImplCreatePolyPolyRegion( const PolyPolygon& rPolyPoly );
+    SAL_DLLPRIVATE void ImplCreatePolyPolyRegion( const basegfx::B2DPolyPolygon& rPolyPoly );
+
+    SAL_DLLPRIVATE PolyPolygon ImplCreatePolyPolygonFromRegionBand() const;
+    SAL_DLLPRIVATE basegfx::B2DPolyPolygon ImplCreateB2DPolyPolygonFromRegionBand() const;
 
 public:
-    explicit        Region();
-    explicit        Region( RegionType eType );
-    explicit        Region( const Rectangle& rRect );
-    explicit        Region( const Polygon& rPolygon );
-    explicit        Region( const PolyPolygon& rPolyPoly );
-    explicit        Region( const basegfx::B2DPolyPolygon& );
-                    Region( const Region& rRegion );
-                    ~Region();
 
-    void            Move( long nHorzMove, long nVertMove );
-    void            Scale( double fScaleX, double fScaleY );
-    void            Union( const Rectangle& rRegion );
-    void            Intersect( const Rectangle& rRegion );
-    void            Exclude( const Rectangle& rRegion );
-    void            XOr( const Rectangle& rRegion );
-    void            Union( const Region& rRegion );
-    void            Intersect( const Region& rRegion );
-    void            Exclude( const Region& rRegion );
-    void            XOr( const Region& rRegion );
+    explicit Region(bool bIsNull = false); // default creates empty region, with true a null region is created
+    explicit Region(const Rectangle& rRect);
+    explicit Region(const Polygon& rPolygon);
+    explicit Region(const PolyPolygon& rPolyPoly);
+    explicit Region(const basegfx::B2DPolyPolygon&);
+    Region(const Region& rRegion);
+    ~Region();
 
-    RegionType      GetType() const;
-    sal_Bool            IsEmpty() const { return GetType() == REGION_EMPTY; };
-    sal_Bool            IsNull() const { return GetType() == REGION_NULL; };
+    // direct access to contents
+    const basegfx::B2DPolyPolygon* getB2DPolyPolygon() const { return mpB2DPolyPolygon.get(); }
+    const PolyPolygon* getPolyPolygon() const { return mpPolyPolygon.get(); }
+    const RegionBand* getRegionBand() const { return mpRegionBand.get(); }
 
-    void            SetEmpty();
-    void            SetNull();
+    // access with converters, the asked data will be created from the most
+    // valuable data, buffered and returned
+    const PolyPolygon GetAsPolyPolygon() const;
+    const basegfx::B2DPolyPolygon GetAsB2DPolyPolygon() const;
+    const RegionBand* GetAsRegionBand() const;
 
-    Rectangle       GetBoundRect() const;
+    // manipulators
+    void Move( long nHorzMove, long nVertMove );
+    void Scale( double fScaleX, double fScaleY );
+    bool Union( const Rectangle& rRegion );
+    bool Intersect( const Rectangle& rRegion );
+    bool Exclude( const Rectangle& rRegion );
+    bool XOr( const Rectangle& rRegion );
+    bool Union( const Region& rRegion );
+    bool Intersect( const Region& rRegion );
+    bool Exclude( const Region& rRegion );
+    bool XOr( const Region& rRegion );
 
-    sal_Bool            HasPolyPolygon() const;
-    PolyPolygon     GetPolyPolygon() const;
-    // returns an empty polypolygon in case HasPolyPolygon is sal_False
-    const basegfx::B2DPolyPolygon GetB2DPolyPolygon() const;
-    // returns a PolyPolygon either copied from the set PolyPolygon region
-    // or created from the constituent rectangles
-    basegfx::B2DPolyPolygon ConvertToB2DPolyPolygon();
+    bool IsEmpty() const;
+    bool IsNull() const;
 
-    sal_uLong           GetRectCount() const;
-    RegionHandle    BeginEnumRects();
-    sal_Bool            GetEnumRects( RegionHandle hRegionHandle, Rectangle& rRect );
-    sal_Bool            GetNextEnumRect( RegionHandle hRegionHandle, Rectangle& rRect )
-                        { return GetEnumRects( hRegionHandle, rRect ); }
-    void            EndEnumRects( RegionHandle hRegionHandle );
+    void SetEmpty();
+    void SetNull();
 
-    sal_Bool            IsInside( const Point& rPoint ) const;
-    sal_Bool            IsInside( const Rectangle& rRect ) const;
-    sal_Bool            IsOver( const Rectangle& rRect ) const;
+    Rectangle GetBoundRect() const;
+    bool HasPolyPolygonOrB2DPolyPolygon() const { return (getB2DPolyPolygon() || getPolyPolygon()); }
+    void GetRegionRectangles(RectangleVector& rTarget) const;
 
-    Region&         operator=( const Region& rRegion );
-    Region&         operator=( const Rectangle& rRect );
+    bool IsInside( const Point& rPoint ) const;
+    bool IsInside( const Rectangle& rRect ) const;
+    bool IsOver( const Rectangle& rRect ) const;
 
-    sal_Bool            operator==( const Region& rRegion ) const;
-    sal_Bool            operator!=( const Region& rRegion ) const
-                        { return !(Region::operator==( rRegion )); }
+    Region& operator=( const Region& rRegion );
+    Region& operator=( const Rectangle& rRect );
+
+    bool operator==( const Region& rRegion ) const;
+    bool operator!=( const Region& rRegion ) const { return !(Region::operator==( rRegion )); }
 
     friend VCL_DLLPUBLIC SvStream& operator>>( SvStream& rIStm, Region& rRegion );
     friend VCL_DLLPUBLIC SvStream& operator<<( SvStream& rOStm, const Region& rRegion );

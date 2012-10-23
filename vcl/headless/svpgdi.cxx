@@ -37,7 +37,6 @@
 #include <sys/stat.h>
 #endif
 
-#include <region.h>
 #include <stdio.h>
 
 inline void dbgOut( const basebmp::BitmapDeviceSharedPtr&
@@ -165,21 +164,30 @@ void SvpSalGraphics::ensureClip()
     m_aClipMap = basebmp::createBitmapDevice( aSize, false, basebmp::Format::ONE_BIT_MSB_GREY );
     m_aClipMap->clear( basebmp::Color(0xFFFFFFFF) );
 
-    // fprintf( stderr, "non rect clip region set with %d rects:\n",
-    //         (int)m_aClipRegion.GetRectCount() );
-    ImplRegionInfo aInfo;
-    long nX, nY, nW, nH;
-    bool bRegionRect = m_aClipRegion.ImplGetFirstRect(aInfo, nX, nY, nW, nH );
-    while( bRegionRect )
+    RectangleVector aRectangles;
+    m_aClipRegion.GetRegionRectangles(aRectangles);
+
+    for(RectangleVector::const_iterator aRectIter(aRectangles.begin()); aRectIter != aRectangles.end(); aRectIter++)
     {
-        if ( nW && nH )
+        const long nW(aRectIter->GetWidth());
+        if(nW)
         {
-            basegfx::B2DPolyPolygon aFull;
-            aFull.append( basegfx::tools::createPolygonFromRect( basegfx::B2DRectangle( nX, nY, nX+nW, nY+nH ) ) );
-            m_aClipMap->fillPolyPolygon( aFull, basebmp::Color(0), basebmp::DrawMode_PAINT );
+            const long nH(aRectIter->GetHeight());
+
+            if(nH)
+            {
+                basegfx::B2DPolyPolygon aFull;
+
+                aFull.append(
+                    basegfx::tools::createPolygonFromRect(
+                        basegfx::B2DRectangle(
+                            aRectIter->Left(),
+                            aRectIter->Top(),
+                            aRectIter->Left() + nW,
+                            aRectIter->Top() + nH)));
+                m_aClipMap->fillPolyPolygon(aFull, basebmp::Color(0), basebmp::DrawMode_PAINT);
+            }
         }
-    //    fprintf( stderr, "\t %ld,%ld %ldx%ld\n", nX, nY, nW, nH );
-        bRegionRect = m_aClipRegion.ImplGetNextRect( aInfo, nX, nY, nW, nH );
     }
     m_bClipSetup = true;
 }
@@ -213,17 +221,17 @@ bool SvpSalGraphics::isClippedSetup( const basegfx::B2IBox &aRange, SvpSalGraphi
 
     // then see if we are overlapping with just one
     int nHit = 0;
-    Rectangle aIterRect, aHitRect;
-    RegionHandle aHnd = m_aClipRegion.BeginEnumRects();
-    while( m_aClipRegion.GetNextEnumRect( aHnd, aIterRect ) )
+    Rectangle aHitRect;
+    RectangleVector aRectangles;
+    m_aClipRegion.GetRegionRectangles(aRectangles);
+    for(RectangleVector::const_iterator aRectIter(aRectangles.begin()); aRectIter != aRectangles.end(); aRectIter++)
     {
-        if( aIterRect.IsOver( aRect ) )
+        if( aRectIter->IsOver( aRect ) )
         {
-            aHitRect = aIterRect;
+            aHitRect = *aRectIter;
             nHit++;
         }
     }
-    m_aClipRegion.EndEnumRects (aHnd);
 
     if( nHit == 0 ) // rendering outside any clipping region
     {
@@ -270,14 +278,23 @@ bool SvpSalGraphics::setClipRegion( const Region& i_rClip )
     m_aClipRegion = i_rClip;
     m_aClipMap.reset();
     if( i_rClip.IsEmpty() )
+    {
         m_bClipSetup = true;
+        return true;
+    }
 
-    else if( i_rClip.GetRectCount() == 1 )
+    RectangleVector aRectangles;
+    i_rClip.GetRegionRectangles(aRectangles);
+
+    if(1 == aRectangles.size())
     {
         m_aClipMap.reset();
-        Rectangle aBoundRect( i_rClip.GetBoundRect() );
-        m_aDevice = basebmp::subsetBitmapDevice( m_aOrigDevice,
-                                                 basegfx::B2IBox(aBoundRect.Left(),aBoundRect.Top(),aBoundRect.Right(),aBoundRect.Bottom()) );
+
+        const Rectangle& aBoundRect = aRectangles[0];
+        m_aDevice = basebmp::subsetBitmapDevice(
+            m_aOrigDevice,
+            basegfx::B2IBox(aBoundRect.Left(),aBoundRect.Top(),aBoundRect.Right(),aBoundRect.Bottom()) );
+
         m_bClipSetup = true;
     }
     else

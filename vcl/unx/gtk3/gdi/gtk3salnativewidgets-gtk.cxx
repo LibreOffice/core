@@ -1450,7 +1450,8 @@ void GtkSalGraphics::getStyleContext(GtkStyleContext** style, GtkWidget* widget)
 GtkSalGraphics::GtkSalGraphics( GtkSalFrame *pFrame, GtkWidget *pWindow )
     : SvpSalGraphics(),
       mpFrame( pFrame ),
-      mpWindow( pWindow )
+      mpWindow( pWindow ),
+      m_aClipRegion(true)
 {
     if(style_loaded)
         return;

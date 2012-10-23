@@ -52,7 +52,6 @@
 
 #include "generic/printergfx.hxx"
 #include "xrender_peer.hxx"
-#include "region.h"
 
 #define STATIC_POINTS 64
 
@@ -559,23 +558,47 @@ bool X11SalGraphics::setClipRegion( const Region& i_rClip )
         XDestroyRegion( mpClipRegion );
     mpClipRegion = XCreateRegion();
 
-    ImplRegionInfo aInfo;
-    long nX, nY, nW, nH;
-    bool bRegionRect = i_rClip.ImplGetFirstRect(aInfo, nX, nY, nW, nH );
-    while( bRegionRect )
-    {
-        if ( nW && nH )
-        {
-            XRectangle aRect;
-            aRect.x         = (short)nX;
-            aRect.y         = (short)nY;
-            aRect.width     = (unsigned short)nW;
-            aRect.height    = (unsigned short)nH;
+    RectangleVector aRectangles;
+    i_rClip.GetRegionRectangles(aRectangles);
 
-            XUnionRectWithRegion( &aRect, mpClipRegion, mpClipRegion );
+    for(RectangleVector::const_iterator aRectIter(aRectangles.begin()); aRectIter != aRectangles.end(); aRectIter++)
+    {
+        const long nW(aRectIter->GetWidth());
+
+        if(nW)
+        {
+            const long nH(aRectIter->GetHeight());
+
+            if(nH)
+            {
+                XRectangle aRect;
+
+                aRect.x = (short)aRectIter->Left();
+                aRect.y = (short)aRectIter->Top();
+                aRect.width = (unsigned short)nW;
+                aRect.height = (unsigned short)nH;
+                XUnionRectWithRegion(&aRect, mpClipRegion, mpClipRegion);
+            }
         }
-        bRegionRect = i_rClip.ImplGetNextRect( aInfo, nX, nY, nW, nH );
     }
+
+    //ImplRegionInfo aInfo;
+    //long nX, nY, nW, nH;
+    //bool bRegionRect = i_rClip.ImplGetFirstRect(aInfo, nX, nY, nW, nH );
+    //while( bRegionRect )
+    //{
+    //    if ( nW && nH )
+    //    {
+    //        XRectangle aRect;
+    //        aRect.x           = (short)nX;
+    //        aRect.y           = (short)nY;
+    //        aRect.width       = (unsigned short)nW;
+    //        aRect.height  = (unsigned short)nH;
+    //
+    //        XUnionRectWithRegion( &aRect, mpClipRegion, mpClipRegion );
+    //    }
+    //    bRegionRect = i_rClip.ImplGetNextRect( aInfo, nX, nY, nW, nH );
+    //}
 
     // done, invalidate GCs
     bPenGC_         = sal_False;

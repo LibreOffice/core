@@ -243,4 +243,133 @@ void BitmapWriteAccess::DrawRect( const Rectangle& rRect )
     }
 }
 
+// ------------------------------------------------------------------
+
+void BitmapWriteAccess::FillPolygon( const Polygon& rPoly )
+{
+    const sal_uInt16 nSize = rPoly.GetSize();
+
+    if( nSize && mpFillColor )
+    {
+        const BitmapColor&  rFillColor = *mpFillColor;
+        Region              aRegion( rPoly );
+//      Rectangle           aRect;
+
+        aRegion.Intersect( Rectangle( Point(), Size( Width(), Height() ) ) );
+
+        if( !aRegion.IsEmpty() )
+        {
+            RectangleVector aRectangles;
+            aRegion.GetRegionRectangles(aRectangles);
+
+            for(RectangleVector::const_iterator aRectIter(aRectangles.begin()); aRectIter != aRectangles.end(); aRectIter++)
+            {
+                for(long nY = aRectIter->Top(), nEndY = aRectIter->Bottom(); nY <= nEndY; nY++)
+                {
+                    for(long nX = aRectIter->Left(), nEndX = aRectIter->Right(); nX <= nEndX; nX++)
+                    {
+                        SetPixel(nY, nX, rFillColor);
+                    }
+                }
+            }
+
+            //RegionHandle aRegHandle( aRegion.BeginEnumRects() );
+            //
+            //while( aRegion.GetEnumRects( aRegHandle, aRect ) )
+            //  for( long nY = aRect.Top(), nEndY = aRect.Bottom(); nY <= nEndY; nY++ )
+            //      for( long nX = aRect.Left(), nEndX = aRect.Right(); nX <= nEndX; nX++ )
+            //          SetPixel( nY, nX, rFillColor );
+            //
+            //aRegion.EndEnumRects( aRegHandle );
+        }
+    }
+}
+
+// ------------------------------------------------------------------
+
+void BitmapWriteAccess::DrawPolygon( const Polygon& rPoly )
+{
+    if( mpFillColor )
+        FillPolygon( rPoly );
+
+    if( mpLineColor && ( !mpFillColor || ( *mpFillColor != *mpLineColor ) ) )
+    {
+        const sal_uInt16 nSize = rPoly.GetSize();
+
+        for( sal_uInt16 i = 0, nSize1 = nSize - 1; i < nSize1; i++ )
+            DrawLine( rPoly[ i ], rPoly[ i + 1 ] );
+
+        if( rPoly[ nSize - 1 ] != rPoly[ 0 ] )
+            DrawLine( rPoly[ nSize - 1 ], rPoly[ 0 ] );
+    }
+}
+
+// ------------------------------------------------------------------
+
+void BitmapWriteAccess::FillPolyPolygon( const PolyPolygon& rPolyPoly )
+{
+    const sal_uInt16 nCount = rPolyPoly.Count();
+
+    if( nCount && mpFillColor )
+    {
+        const BitmapColor&  rFillColor = *mpFillColor;
+        Region              aRegion( rPolyPoly );
+        //Rectangle         aRect;
+
+        aRegion.Intersect( Rectangle( Point(), Size( Width(), Height() ) ) );
+
+        if( !aRegion.IsEmpty() )
+        {
+            RectangleVector aRectangles;
+            aRegion.GetRegionRectangles(aRectangles);
+
+            for(RectangleVector::const_iterator aRectIter(aRectangles.begin()); aRectIter != aRectangles.end(); aRectIter++)
+            {
+                for(long nY = aRectIter->Top(), nEndY = aRectIter->Bottom(); nY <= nEndY; nY++)
+                {
+                    for(long nX = aRectIter->Left(), nEndX = aRectIter->Right(); nX <= nEndX; nX++)
+                    {
+                        SetPixel(nY, nX, rFillColor);
+                    }
+                }
+            }
+
+            //RegionHandle aRegHandle( aRegion.BeginEnumRects() );
+            //
+            //while( aRegion.GetEnumRects( aRegHandle, aRect ) )
+            //  for( long nY = aRect.Top(), nEndY = aRect.Bottom(); nY <= nEndY; nY++ )
+            //      for( long nX = aRect.Left(), nEndX = aRect.Right(); nX <= nEndX; nX++ )
+            //          SetPixel( nY, nX, rFillColor );
+            //
+            //aRegion.EndEnumRects( aRegHandle );
+        }
+    }
+}
+
+// ------------------------------------------------------------------
+
+void BitmapWriteAccess::DrawPolyPolygon( const PolyPolygon& rPolyPoly )
+{
+    if( mpFillColor )
+        FillPolyPolygon( rPolyPoly );
+
+    if( mpLineColor && ( !mpFillColor || ( *mpFillColor != *mpLineColor ) ) )
+    {
+        for( sal_uInt16 n = 0, nCount = rPolyPoly.Count(); n < nCount; )
+        {
+            const Polygon&  rPoly = rPolyPoly[ n++ ];
+            const sal_uInt16    nSize = rPoly.GetSize();
+
+            if( nSize )
+            {
+                for( sal_uInt16 i = 0, nSize1 = nSize - 1; i < nSize1; i++ )
+                    DrawLine( rPoly[ i ], rPoly[ i + 1 ] );
+
+                if( rPoly[ nSize - 1 ] != rPoly[ 0 ] )
+                    DrawLine( rPoly[ nSize - 1 ], rPoly[ 0 ] );
+            }
+        }
+    }
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

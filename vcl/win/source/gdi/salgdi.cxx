@@ -35,8 +35,6 @@
 #include <win/salgdi.h>
 #include <win/salframe.h>
 
-#include <region.h>
-
 // =======================================================================
 
 // comment out to prevent use of beziers on GDI functions
@@ -848,10 +846,9 @@ bool WinSalGraphics::setClipRegion( const Region& i_rClip )
         mhRegion = 0;
     }
 
-    if( i_rClip.HasPolyPolygon() )
+    if( i_rClip.HasPolyPolygonOrB2DPolyPolygon() )
     {
-        // TODO: ConvertToB2DPolyPolygon actually is kind of const, just it does not advertise it in the header
-        basegfx::B2DPolyPolygon aPolyPolygon( const_cast<Region&>(i_rClip).ConvertToB2DPolyPolygon() );
+        const basegfx::B2DPolyPolygon aPolyPolygon( i_rClip.GetAsB2DPolyPolygon() );
         const sal_uInt32 nCount(aPolyPolygon.count());
 
         if( nCount )
@@ -859,12 +856,15 @@ bool WinSalGraphics::setClipRegion( const Region& i_rClip )
             std::vector< POINT > aPolyPoints;
             aPolyPoints.reserve( 1024 );
             std::vector< INT > aPolyCounts( nCount, 0 );
+
             for(sal_uInt32 a(0); a < nCount; a++)
             {
-                basegfx::B2DPolygon aPoly( aPolyPolygon.getB2DPolygon(a) );
+                basegfx::B2DPolygon aPoly(aPolyPolygon.getB2DPolygon(a));
+
                 aPoly = basegfx::tools::adaptiveSubdivideByDistance( aPoly, 1 );
                 const sal_uInt32 nPoints = aPoly.count();
                 aPolyCounts[a] = nPoints;
+
                 for( sal_uInt32 b = 0; b < nPoints; b++ )
                 {
                     basegfx::B2DPoint aPt( aPoly.getB2DPoint( b ) );
@@ -874,15 +874,18 @@ bool WinSalGraphics::setClipRegion( const Region& i_rClip )
                     aPolyPoints.push_back( aPOINT );
                 }
             }
+
             mhRegion = CreatePolyPolygonRgn( &aPolyPoints[0], &aPolyCounts[0], nCount, ALTERNATE );
         }
     }
     else
     {
-        sal_uLong nRectCount = i_rClip.GetRectCount();
+        RectangleVector aRectangles;
+        i_rClip.GetRegionRectangles(aRectangles);
 
-        sal_uLong nRectBufSize = sizeof(RECT)*nRectCount;
-        if ( nRectCount < SAL_CLIPRECT_COUNT )
+        //sal_uLong nRectCount = i_rClip.GetRectCount();
+        sal_uLong nRectBufSize = sizeof(RECT)*aRectangles.size();
+        if ( aRectangles.size() < SAL_CLIPRECT_COUNT )
         {
             if ( !mpStdClipRgnData )
                 mpStdClipRgnData = (RGNDATA*)new BYTE[sizeof(RGNDATA)-1+(SAL_CLIPRECT_COUNT*sizeof(RECT))];
@@ -892,50 +895,58 @@ bool WinSalGraphics::setClipRegion( const Region& i_rClip )
             mpClipRgnData = (RGNDATA*)new BYTE[sizeof(RGNDATA)-1+nRectBufSize];
         mpClipRgnData->rdh.dwSize   = sizeof( RGNDATAHEADER );
         mpClipRgnData->rdh.iType    = RDH_RECTANGLES;
-        mpClipRgnData->rdh.nCount   = nRectCount;
+        mpClipRgnData->rdh.nCount   = aRectangles.size();
         mpClipRgnData->rdh.nRgnSize = nRectBufSize;
         RECT*       pBoundRect = &(mpClipRgnData->rdh.rcBound);
         SetRectEmpty( pBoundRect );
         RECT* pNextClipRect         = (RECT*)(&(mpClipRgnData->Buffer));
         bool bFirstClipRect         = true;
 
-        ImplRegionInfo aInfo;
-        long nX, nY, nW, nH;
-        bool bRegionRect = i_rClip.ImplGetFirstRect(aInfo, nX, nY, nW, nH );
-        while( bRegionRect )
+        for(RectangleVector::const_iterator aRectIter(aRectangles.begin()); aRectIter != aRectangles.end(); aRectIter++)
         {
-            if ( nW && nH )
-            {
-                long        nRight = nX + nW;
-                long        nBottom = nY + nH;
+            const long nW(aRectIter->GetWidth());
+            const long nH(aRectIter->GetHeight());
 
-                if ( bFirstClipRect )
+            if(nW && nH)
+            {
+                const long nRight(aRectIter->Left() + nW);
+                const long nBottom(aRectIter->Top() + nH);
+
+                if(bFirstClipRect)
                 {
-                    pBoundRect->left    = nX;
-                    pBoundRect->top     = nY;
-                    pBoundRect->right   = nRight;
-                    pBoundRect->bottom  = nBottom;
+                    pBoundRect->left = aRectIter->Left();
+                    pBoundRect->top = aRectIter->Top();
+                    pBoundRect->right = nRight;
+                    pBoundRect->bottom = nBottom;
                     bFirstClipRect = false;
                 }
                 else
                 {
-                    if ( nX < pBoundRect->left )
-                        pBoundRect->left = (int)nX;
+                    if(aRectIter->Left() < pBoundRect->left)
+                    {
+                        pBoundRect->left = (int)aRectIter->Left();
+                    }
 
-                    if ( nY < pBoundRect->top )
-                        pBoundRect->top = (int)nY;
+                    if(aRectIter->Top() < pBoundRect->top)
+                    {
+                        pBoundRect->top = (int)aRectIter->Top();
+                    }
 
-                    if ( nRight > pBoundRect->right )
+                    if(nRight > pBoundRect->right)
+                    {
                         pBoundRect->right = (int)nRight;
+                    }
 
-                    if ( nBottom > pBoundRect->bottom )
+                    if(nBottom > pBoundRect->bottom)
+                    {
                         pBoundRect->bottom = (int)nBottom;
+                    }
                 }
 
-                pNextClipRect->left     = (int)nX;
-                pNextClipRect->top      = (int)nY;
-                pNextClipRect->right    = (int)nRight;
-                pNextClipRect->bottom   = (int)nBottom;
+                pNextClipRect->left = (int)aRectIter->Left();
+                pNextClipRect->top = (int)aRectIter->Top();
+                pNextClipRect->right = (int)nRight;
+                pNextClipRect->bottom = (int)nBottom;
                 pNextClipRect++;
             }
             else
@@ -943,8 +954,55 @@ bool WinSalGraphics::setClipRegion( const Region& i_rClip )
                 mpClipRgnData->rdh.nCount--;
                 mpClipRgnData->rdh.nRgnSize -= sizeof( RECT );
             }
-            bRegionRect = i_rClip.ImplGetNextRect( aInfo, nX, nY, nW, nH );
         }
+
+        //ImplRegionInfo aInfo;
+        //long nX, nY, nW, nH;
+        //bool bRegionRect = i_rClip.ImplGetFirstRect(aInfo, nX, nY, nW, nH );
+        //while( bRegionRect )
+        //{
+        //    if ( nW && nH )
+        //    {
+        //        long      nRight = nX + nW;
+        //        long      nBottom = nY + nH;
+        //
+        //        if ( bFirstClipRect )
+        //        {
+        //            pBoundRect->left  = nX;
+        //            pBoundRect->top   = nY;
+        //            pBoundRect->right = nRight;
+        //            pBoundRect->bottom    = nBottom;
+        //            bFirstClipRect = false;
+        //        }
+        //        else
+        //        {
+        //            if ( nX < pBoundRect->left )
+        //                pBoundRect->left = (int)nX;
+        //
+        //            if ( nY < pBoundRect->top )
+        //                pBoundRect->top = (int)nY;
+        //
+        //            if ( nRight > pBoundRect->right )
+        //                pBoundRect->right = (int)nRight;
+        //
+        //            if ( nBottom > pBoundRect->bottom )
+        //                pBoundRect->bottom = (int)nBottom;
+        //        }
+        //
+        //        pNextClipRect->left   = (int)nX;
+        //        pNextClipRect->top        = (int)nY;
+        //        pNextClipRect->right  = (int)nRight;
+        //        pNextClipRect->bottom = (int)nBottom;
+        //        pNextClipRect++;
+        //    }
+        //    else
+        //    {
+        //        mpClipRgnData->rdh.nCount--;
+        //        mpClipRgnData->rdh.nRgnSize -= sizeof( RECT );
+        //    }
+        //    bRegionRect = i_rClip.ImplGetNextRect( aInfo, nX, nY, nW, nH );
+        //}
+
         // create clip region from ClipRgnData
         if ( mpClipRgnData->rdh.nCount == 1 )
         {

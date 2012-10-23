@@ -54,7 +54,7 @@ ImplRegionBand::ImplRegionBand( long nTop, long nBottom )
     mpPrevBand          = NULL;
     mpFirstSep          = NULL;
     mpFirstBandPoint    = NULL;
-    mbTouched           = sal_False;
+    mbTouched           = false;
 }
 
 // -----------------------------------------------------------------------
@@ -202,8 +202,8 @@ void ImplRegionBand::ProcessPoints()
 // generate separations from lines and process union with existing
 // separations
 
-sal_Bool ImplRegionBand::InsertPoint( long nX, long nLineId,
-                                  sal_Bool bEndPoint, LineType eLineType )
+bool ImplRegionBand::InsertPoint( long nX, long nLineId,
+                                  bool bEndPoint, LineType eLineType )
 {
     if ( !mpFirstBandPoint )
     {
@@ -213,7 +213,7 @@ sal_Bool ImplRegionBand::InsertPoint( long nX, long nLineId,
         mpFirstBandPoint->mbEndPoint      = bEndPoint;
         mpFirstBandPoint->meLineType      = eLineType;
         mpFirstBandPoint->mpNextBandPoint = NULL;
-        return sal_True;
+        return true;
     }
 
     // look if line already touched the band
@@ -232,8 +232,8 @@ sal_Bool ImplRegionBand::InsertPoint( long nX, long nLineId,
                     {
                         // if we've only got one point => replace first point
                         pRegionBandPoint->mnX = nX;
-                        pRegionBandPoint->mbEndPoint = sal_True;
-                        return sal_True;
+                        pRegionBandPoint->mbEndPoint = true;
+                        return true;
                     }
                     else
                     {
@@ -257,7 +257,7 @@ sal_Bool ImplRegionBand::InsertPoint( long nX, long nLineId,
                 }
             }
             else
-                return sal_False;
+                return false;
         }
 
         // use next element
@@ -288,7 +288,7 @@ sal_Bool ImplRegionBand::InsertPoint( long nX, long nLineId,
             else
                 pLastTestedRegionBandPoint->mpNextBandPoint = pNewRegionBandPoint;
 
-            return sal_True;
+            return true;
         }
 
         // use next element
@@ -307,7 +307,7 @@ sal_Bool ImplRegionBand::InsertPoint( long nX, long nLineId,
     // connections to the new point
     pLastTestedRegionBandPoint->mpNextBandPoint = pNewRegionBandPoint;
 
-    return sal_True;
+    return true;
 }
 
 // -----------------------------------------------------------------------
@@ -341,7 +341,7 @@ void ImplRegionBand::ScaleX( double fHorzScale )
 //
 // combine overlaping sparations
 
-sal_Bool ImplRegionBand::OptimizeBand()
+bool ImplRegionBand::OptimizeBand()
 {
     ImplRegionBandSep* pPrevSep = 0;
     ImplRegionBandSep* pSep = mpFirstSep;
@@ -379,7 +379,7 @@ sal_Bool ImplRegionBand::OptimizeBand()
         pSep = pSep->mpNextSep;
     }
 
-    return sal_True;
+    return true;
 }
 
 // -----------------------------------------------------------------------
@@ -394,7 +394,7 @@ void ImplRegionBand::Union( long nXLeft, long nXRight )
         mpFirstSep              = new ImplRegionBandSep;
         mpFirstSep->mnXLeft     = nXLeft;
         mpFirstSep->mnXRight    = nXRight;
-        mpFirstSep->mbRemoved   = sal_False;
+        mpFirstSep->mbRemoved   = false;
         mpFirstSep->mpNextSep   = NULL;
         return;
     }
@@ -415,7 +415,7 @@ void ImplRegionBand::Union( long nXLeft, long nXRight )
             pNewSep             = new ImplRegionBandSep;
             pNewSep->mnXLeft    = nXLeft;
             pNewSep->mnXRight   = nXRight;
-            pNewSep->mbRemoved  = sal_False;
+            pNewSep->mbRemoved  = false;
 
             pNewSep->mpNextSep = pSep;
             if ( pSep == mpFirstSep )
@@ -442,7 +442,7 @@ void ImplRegionBand::Union( long nXLeft, long nXRight )
             pNewSep             = new ImplRegionBandSep;
             pNewSep->mnXLeft    = nXLeft;
             pNewSep->mnXRight   = nXRight;
-            pNewSep->mbRemoved  = sal_False;
+            pNewSep->mbRemoved  = false;
 
             pSep->mpNextSep     = pNewSep;
             pNewSep->mpNextSep  = NULL;
@@ -463,7 +463,7 @@ void ImplRegionBand::Intersect( long nXLeft, long nXRight )
     DBG_ASSERT( nXLeft <= nXRight, "ImplRegionBand::Intersect(): nxLeft > nXRight" );
 
     // band has been touched
-    mbTouched = sal_True;
+    mbTouched = true;
 
     // band empty? -> nothing to do
     if ( !mpFirstSep )
@@ -476,7 +476,7 @@ void ImplRegionBand::Intersect( long nXLeft, long nXRight )
         // new separation completely outside? -> remove separation
         if ( (nXRight < pSep->mnXLeft) || (nXLeft > pSep->mnXRight) )
             // will be removed from the optimizer
-            pSep->mbRemoved = sal_True;
+            pSep->mbRemoved = true;
 
         // new separation overlaping from left? -> reduce right boundary
         if ( (nXLeft <= pSep->mnXLeft) &&
@@ -510,7 +510,7 @@ void ImplRegionBand::Exclude( long nXLeft, long nXRight )
     DBG_ASSERT( nXLeft <= nXRight, "ImplRegionBand::Exclude(): nxLeft > nXRight" );
 
     // band has been touched
-    mbTouched = sal_True;
+    mbTouched = true;
 
     // band empty? -> nothing to do
     if ( !mpFirstSep )
@@ -522,14 +522,14 @@ void ImplRegionBand::Exclude( long nXLeft, long nXRight )
     ImplRegionBandSep* pSep = mpFirstSep;
     while ( pSep  )
     {
-        sal_Bool bSepProcessed = sal_False;
+        bool bSepProcessed = false;
 
         // new separation completely overlapping? -> remove separation
         if ( (nXLeft <= pSep->mnXLeft) && (nXRight >= pSep->mnXRight) )
         {
             // will be removed from the optimizer
-            pSep->mbRemoved = sal_True;
-            bSepProcessed = sal_True;
+            pSep->mbRemoved = true;
+            bSepProcessed = true;
         }
 
         // new separation overlaping from left? -> reduce boundary
@@ -538,7 +538,7 @@ void ImplRegionBand::Exclude( long nXLeft, long nXRight )
             if ( (nXRight >= pSep->mnXLeft) && (nXLeft <= pSep->mnXLeft) )
             {
                 pSep->mnXLeft = nXRight+1;
-                bSepProcessed = sal_True;
+                bSepProcessed = true;
             }
         }
 
@@ -548,7 +548,7 @@ void ImplRegionBand::Exclude( long nXLeft, long nXRight )
             if ( (nXLeft <= pSep->mnXRight) && (nXRight > pSep->mnXRight) )
             {
                 pSep->mnXRight = nXLeft-1;
-                bSepProcessed = sal_True;
+                bSepProcessed = true;
             }
         }
 
@@ -561,7 +561,7 @@ void ImplRegionBand::Exclude( long nXLeft, long nXRight )
                 pNewSep             = new ImplRegionBandSep;
                 pNewSep->mnXLeft    = pSep->mnXLeft;
                 pNewSep->mnXRight   = nXLeft-1;
-                pNewSep->mbRemoved  = sal_False;
+                pNewSep->mbRemoved  = false;
 
                 pSep->mnXLeft = nXRight+1;
 
@@ -641,7 +641,7 @@ void ImplRegionBand::XOr( long nXLeft, long nXRight )
         mpFirstSep              = new ImplRegionBandSep;
         mpFirstSep->mnXLeft     = nXLeft;
         mpFirstSep->mnXRight    = nXRight;
-        mpFirstSep->mbRemoved   = sal_False;
+        mpFirstSep->mbRemoved   = false;
         mpFirstSep->mpNextSep   = NULL;
         return;
     }
@@ -670,7 +670,7 @@ void ImplRegionBand::XOr( long nXLeft, long nXRight )
                 pNewSep->mnXLeft    = nXLeft;
                 pNewSep->mnXRight   = nXRight;
                 pNewSep->mpNextSep  = pSep;
-                pNewSep->mbRemoved  = sal_False;
+                pNewSep->mbRemoved  = false;
 
                 // connections from the new separation
                 pNewSep->mpNextSep = pSep;
@@ -686,7 +686,7 @@ void ImplRegionBand::XOr( long nXLeft, long nXRight )
             else if( nXLeft == nOldLeft && nXRight == nOldRight )
             {
                 // #3
-                pSep->mbRemoved = sal_True;
+                pSep->mbRemoved = true;
                 pPrevSep = NULL; // do not run accidentally into the "right" case when breaking the loop
                 break;
             }
@@ -719,7 +719,7 @@ void ImplRegionBand::XOr( long nXLeft, long nXRight )
 
                     // cannot break here, simply mark segment as removed,
                     // and go on with adapted nXLeft/nXRight
-                    pSep->mbRemoved = sal_True;
+                    pSep->mbRemoved = true;
                 }
                 else
                 {
@@ -799,7 +799,7 @@ void ImplRegionBand::XOr( long nXLeft, long nXRight )
                     pNewSep->mnXLeft    = nXLeft;
                     pNewSep->mnXRight   = nXRight;
                     pNewSep->mpNextSep  = pSep->mpNextSep;
-                    pNewSep->mbRemoved  = sal_False;
+                    pNewSep->mbRemoved  = false;
 
                     // connections from the new separation
                     pSep->mpNextSep = pNewSep;
@@ -821,7 +821,7 @@ void ImplRegionBand::XOr( long nXLeft, long nXRight )
         pNewSep->mnXLeft    = nXLeft;
         pNewSep->mnXRight   = nXRight;
         pNewSep->mpNextSep  = NULL;
-        pNewSep->mbRemoved  = sal_False;
+        pNewSep->mbRemoved  = false;
 
         // connections from the new separation
         pPrevSep->mpNextSep = pNewSep;
@@ -832,18 +832,50 @@ void ImplRegionBand::XOr( long nXLeft, long nXRight )
 
 // -----------------------------------------------------------------------
 
-sal_Bool ImplRegionBand::IsInside( long nX )
+bool ImplRegionBand::IsInside( long nX )
 {
     ImplRegionBandSep* pSep = mpFirstSep;
     while ( pSep )
     {
         if ( (pSep->mnXLeft <= nX) && (pSep->mnXRight >= nX) )
-            return sal_True;
+            return true;
 
         pSep = pSep->mpNextSep;
     }
 
-    return sal_False;
+    return false;
+}
+
+// -----------------------------------------------------------------------
+
+bool ImplRegionBand::IsOver( long nLeft, long nRight )
+{
+    ImplRegionBandSep* pSep = mpFirstSep;
+    while ( pSep )
+    {
+        if ( (pSep->mnXLeft < nRight) && (pSep->mnXRight > nLeft) )
+            return true;
+
+        pSep = pSep->mpNextSep;
+    }
+
+    return false;
+}
+
+// -----------------------------------------------------------------------
+
+bool ImplRegionBand::IsInside( long nLeft, long nRight )
+{
+    ImplRegionBandSep* pSep = mpFirstSep;
+    while ( pSep )
+    {
+        if ( (pSep->mnXLeft >= nLeft) && (nRight <= pSep->mnXRight) )
+            return true;
+
+        pSep = pSep->mpNextSep;
+    }
+
+    return false;
 }
 
 // -----------------------------------------------------------------------
@@ -870,7 +902,7 @@ long ImplRegionBand::GetXRightBoundary() const
 
 // -----------------------------------------------------------------------
 
-sal_Bool ImplRegionBand::operator==( const ImplRegionBand& rRegionBand ) const
+bool ImplRegionBand::operator==( const ImplRegionBand& rRegionBand ) const
 {
     ImplRegionBandSep*   pOwnRectBandSep = mpFirstSep;
     ImplRegionBandSep*   pSecondRectBandSep = rRegionBand.mpFirstSep;
@@ -880,12 +912,12 @@ sal_Bool ImplRegionBand::operator==( const ImplRegionBand& rRegionBand ) const
         long nOwnXLeft = pOwnRectBandSep->mnXLeft;
         long nSecondXLeft = pSecondRectBandSep->mnXLeft;
         if ( nOwnXLeft != nSecondXLeft )
-            return sal_False;
+            return false;
 
         long nOwnXRight = pOwnRectBandSep->mnXRight;
         long nSecondXRight = pSecondRectBandSep->mnXRight;
         if ( nOwnXRight != nSecondXRight )
-            return sal_False;
+            return false;
 
         // get next separation from current band
         pOwnRectBandSep = pOwnRectBandSep->mpNextSep;
@@ -896,9 +928,9 @@ sal_Bool ImplRegionBand::operator==( const ImplRegionBand& rRegionBand ) const
 
     // different number of separations?
     if ( pOwnRectBandSep || pSecondRectBandSep )
-        return sal_False;
+        return false;
 
-    return sal_True;
+    return true;
 }
 
 // -----------------------------------------------------------------------

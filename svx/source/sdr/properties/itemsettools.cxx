@@ -21,10 +21,9 @@
 #include <tools/debug.hxx>
 #include <svl/itemset.hxx>
 #include <svl/whiter.hxx>
-
-#include <vector>
 #include <svx/svdogrp.hxx>
 #include <svx/svditer.hxx>
+#include <vcl/region.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 // class to remember broadcast start positions
@@ -33,9 +32,6 @@ namespace sdr
 {
     namespace properties
     {
-        // helper vector to remember rectangles
-        typedef ::std::vector< Rectangle > RectangleVector;
-
         ItemChangeBroadcaster::ItemChangeBroadcaster(const SdrObject& rObj)
         {
             if(rObj.ISA(SdrObjGroup))
