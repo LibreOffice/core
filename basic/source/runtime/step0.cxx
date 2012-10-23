@@ -179,8 +179,26 @@ namespace
 {
     bool NeedEsc(sal_Unicode cCode)
     {
-        String sEsc(RTL_CONSTASCII_USTRINGPARAM(".^$+\\|{}()"));
-        return (STRING_NOTFOUND != sEsc.Search(cCode));
+        if((cCode & 0xFF80))
+        {
+            return false;
+        }
+        switch((sal_uInt8)(cCode & 0x07F))
+        {
+        case '.':
+        case '^':
+        case '$':
+        case '+':
+        case '\\':
+        case '|':
+        case '{':
+        case '}':
+        case '(':
+        case ')':
+            return true;
+        default:
+            return false;
+        }
     }
 
     String VBALikeToRegexp(const String &rIn)
