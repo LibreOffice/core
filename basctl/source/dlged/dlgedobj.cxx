@@ -49,7 +49,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::script;
-using ::rtl::OUString;
 
 TYPEINIT1(DlgEdObj, SdrUnoObj);
 DBG_NAME(DlgEdObj);
@@ -74,7 +73,7 @@ DlgEdObj::DlgEdObj()
 
 //----------------------------------------------------------------------------
 
-DlgEdObj::DlgEdObj(const ::rtl::OUString& rModelName,
+DlgEdObj::DlgEdObj(const OUString& rModelName,
                    const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rxSFac)
           :SdrUnoObj(rModelName, rxSFac, false)
           ,bIsListening(false)
@@ -488,11 +487,11 @@ void DlgEdObj::PositionAndSizeChange( const beans::PropertyChangeEvent& evt )
 void SAL_CALL DlgEdObj::NameChange( const  ::com::sun::star::beans::PropertyChangeEvent& evt ) throw( ::com::sun::star::uno::RuntimeException)
 {
     // get old name
-    ::rtl::OUString aOldName;
+    OUString aOldName;
     evt.OldValue >>= aOldName;
 
     // get new name
-    ::rtl::OUString aNewName;
+    OUString aNewName;
     evt.NewValue >>= aNewName;
 
     if ( !aNewName.equals(aOldName) )
@@ -553,7 +552,7 @@ void DlgEdObj::UpdateStep()
     sal_Int32 nStep = GetStep();
 
     SdrLayerAdmin& rLayerAdmin = GetModel()->GetLayerAdmin();
-    SdrLayerID nHiddenLayerId   = rLayerAdmin.GetLayerID( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "HiddenLayer" ) ), false );
+    SdrLayerID nHiddenLayerId   = rLayerAdmin.GetLayerID( OUString( "HiddenLayer" ), false );
     SdrLayerID nControlLayerId   = rLayerAdmin.GetLayerID( rLayerAdmin.GetControlLayerName(), false );
 
     if( nCurStep )
@@ -592,8 +591,8 @@ void DlgEdObj::TabIndexChange( const beans::PropertyChangeEvent& evt ) throw (Ru
         if ( xNameAcc.is() )
         {
             // get sequence of control names
-            Sequence< ::rtl::OUString > aNames = xNameAcc->getElementNames();
-            const ::rtl::OUString* pNames = aNames.getConstArray();
+            Sequence< OUString > aNames = xNameAcc->getElementNames();
+            const OUString* pNames = aNames.getConstArray();
             sal_Int32 nCtrls = aNames.getLength();
             sal_Int16 i;
 
@@ -602,7 +601,7 @@ void DlgEdObj::TabIndexChange( const beans::PropertyChangeEvent& evt ) throw (Ru
             for ( i = 0; i < nCtrls; ++i )
             {
                 // get control name
-                ::rtl::OUString aName( pNames[i] );
+                OUString aName( pNames[i] );
 
                 // get tab index
                 sal_Int16 nTabIndex = -1;
@@ -619,7 +618,7 @@ void DlgEdObj::TabIndexChange( const beans::PropertyChangeEvent& evt ) throw (Ru
             }
 
             // create a helper list of control names, sorted by tab index
-            ::std::vector< ::rtl::OUString > aNameList( aIndexToNameMap.size() );
+            ::std::vector< OUString > aNameList( aIndexToNameMap.size() );
             ::std::transform(
                     aIndexToNameMap.begin(), aIndexToNameMap.end(),
                     aNameList.begin(),
@@ -637,7 +636,7 @@ void DlgEdObj::TabIndexChange( const beans::PropertyChangeEvent& evt ) throw (Ru
                 nNewTabIndex = sal::static_int_cast<sal_Int16>( nCtrls - 1 );
 
             // reorder helper list
-            ::rtl::OUString aCtrlName = aNameList[nOldTabIndex];
+            OUString aCtrlName = aNameList[nOldTabIndex];
             aNameList.erase( aNameList.begin() + nOldTabIndex );
             aNameList.insert( aNameList.begin() + nNewTabIndex , aCtrlName );
 
@@ -679,17 +678,17 @@ sal_Bool DlgEdObj::supportsService( const sal_Char* _pServiceName ) const
     Reference< lang::XServiceInfo > xServiceInfo( GetUnoControlModel() , UNO_QUERY );
         // TODO: cache xServiceInfo as member?
     if ( xServiceInfo.is() )
-        bSupports = xServiceInfo->supportsService( ::rtl::OUString::createFromAscii( _pServiceName ) );
+        bSupports = xServiceInfo->supportsService( OUString::createFromAscii( _pServiceName ) );
 
     return bSupports;
 }
 
 //----------------------------------------------------------------------------
 
-::rtl::OUString DlgEdObj::GetDefaultName() const
+OUString DlgEdObj::GetDefaultName() const
 {
     sal_uInt16 nResId = 0;
-    ::rtl::OUString aDefaultName;
+    OUString aDefaultName;
     if ( supportsService( "com.sun.star.awt.UnoControlDialogModel" ) )
     {
         nResId = RID_STR_CLASS_DIALOG;
@@ -793,19 +792,19 @@ sal_Bool DlgEdObj::supportsService( const sal_Char* _pServiceName ) const
 
 //----------------------------------------------------------------------------
 
-::rtl::OUString DlgEdObj::GetUniqueName() const
+OUString DlgEdObj::GetUniqueName() const
 {
-    ::rtl::OUString aUniqueName;
+    OUString aUniqueName;
     uno::Reference< container::XNameAccess > xNameAcc((GetDlgEdForm()->GetUnoControlModel()), uno::UNO_QUERY);
 
     if ( xNameAcc.is() )
     {
         sal_Int32 n = 0;
-        ::rtl::OUString aDefaultName = GetDefaultName();
+        OUString aDefaultName = GetDefaultName();
 
         do
         {
-            aUniqueName = aDefaultName + ::rtl::OUString::valueOf(++n);
+            aUniqueName = aDefaultName + OUString::valueOf(++n);
         }   while (xNameAcc->hasByName(aUniqueName));
     }
 
@@ -927,7 +926,7 @@ void DlgEdObj::clonedFrom(const DlgEdObj* _pSource)
     if ( xPSet.is() )
     {
         // set new name
-        ::rtl::OUString aOUniqueName( GetUniqueName() );
+        OUString aOUniqueName( GetUniqueName() );
         Any aUniqueName;
         aUniqueName <<= aOUniqueName;
         xPSet->setPropertyValue( DLGED_PROP_NAME, aUniqueName );
@@ -1046,7 +1045,7 @@ void DlgEdObj::SetDefaults()
         if ( xPSet.is() )
         {
             // get unique name
-            ::rtl::OUString aOUniqueName( GetUniqueName() );
+            OUString aOUniqueName( GetUniqueName() );
 
             // set name property
             Any aUniqueName;
@@ -1133,7 +1132,7 @@ void DlgEdObj::StartListening()
             m_xPropertyChangeListener = new DlgEdPropListenerImpl(*this);
 
             // register listener to properties
-            xControlModel->addPropertyChangeListener( ::rtl::OUString() , m_xPropertyChangeListener );
+            xControlModel->addPropertyChangeListener( OUString() , m_xPropertyChangeListener );
         }
 
         // XContainerListener
@@ -1170,7 +1169,7 @@ void DlgEdObj::EndListening(bool bRemoveListener)
             if ( m_xPropertyChangeListener.is() && xControlModel.is() )
             {
                 // remove listener
-                xControlModel->removePropertyChangeListener( ::rtl::OUString() , m_xPropertyChangeListener );
+                xControlModel->removePropertyChangeListener( OUString() , m_xPropertyChangeListener );
             }
             m_xPropertyChangeListener.clear();
 
@@ -1529,8 +1528,8 @@ void DlgEdForm::UpdateTabIndices()
     if ( xNameAcc.is() )
     {
         // get sequence of control names
-        Sequence< ::rtl::OUString > aNames = xNameAcc->getElementNames();
-        const ::rtl::OUString* pNames = aNames.getConstArray();
+        Sequence< OUString > aNames = xNameAcc->getElementNames();
+        const OUString* pNames = aNames.getConstArray();
         sal_Int32 nCtrls = aNames.getLength();
 
         // create a map of tab indices and control names, sorted by tab index
@@ -1538,7 +1537,7 @@ void DlgEdForm::UpdateTabIndices()
         for ( sal_Int16 i = 0; i < nCtrls; ++i )
         {
             // get name
-            ::rtl::OUString aName( pNames[i] );
+            OUString aName( pNames[i] );
 
             // get tab index
             sal_Int16 nTabIndex = -1;
@@ -1627,7 +1626,7 @@ void DlgEdForm::UpdateGroups()
         for ( sal_Int32 nGroup = 0; nGroup < nGroupCount; ++nGroup )
         {
             // get a list of control models that belong to this group
-            ::rtl::OUString aName;
+            OUString aName;
             Sequence< Reference< awt::XControlModel > > aSeqModels;
             xTabModel->getGroup( nGroup, aSeqModels, aName );
             const Reference< awt::XControlModel >* pModels = aSeqModels.getConstArray();
@@ -1797,12 +1796,12 @@ bool DlgEdObj::MakeDataAware( const Reference< frame::XModel >& xModel )
     {
         if ( xBindable.is() )
         {
-            Reference< form::binding::XValueBinding > xBinding( xFac->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.table.CellValueBinding" ) ) ), UNO_QUERY );
+            Reference< form::binding::XValueBinding > xBinding( xFac->createInstance( "com.sun.star.table.CellValueBinding" ), UNO_QUERY );
             xBindable->setValueBinding( xBinding );
         }
         if ( xListEntrySink.is() )
         {
-            Reference< form::binding::XListEntrySource > xSource( xFac->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.table.CellRangeListSource" ) ) ), UNO_QUERY );
+            Reference< form::binding::XListEntrySource > xSource( xFac->createInstance( "com.sun.star.table.CellRangeListSource" ), UNO_QUERY );
             xListEntrySink->setListEntrySource( xSource );
         }
         if ( xListEntrySink.is() || xBindable.is() )
