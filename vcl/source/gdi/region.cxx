@@ -1630,7 +1630,6 @@ SvStream& operator<<( SvStream& rOStrm, const Region& rRegion )
 {
     const sal_uInt16 nVersion(2);
     VersionCompat aCompat(rOStrm, STREAM_WRITE, nVersion);
-    const RegionBand* pSourceRegionBand = rRegion.GetAsRegionBand();
 
     // put version
     rOStrm << nVersion;
