@@ -48,6 +48,10 @@ namespace
             eRet = SYMBOL_NEXT;
         else if (sType == "gtk-media-previous")
             eRet = SYMBOL_PREV;
+        else if (sType == "gtk-goto-first")
+            eRet = SYMBOL_FIRST;
+        else if (sType == "gtk-goto-last")
+            eRet = SYMBOL_LAST;
         else if (sType == "gtk-go-back")
             eRet = SYMBOL_ARROW_LEFT;
         else if (sType == "gtk-go-forward")
