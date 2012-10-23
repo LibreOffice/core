@@ -111,7 +111,6 @@ else
 $(call gb_SrsPartTarget_get_target,$(1)) : MERGEDFILE := $(call gb_SrsPartMergeTarget_get_target,$(1))
 $(call gb_SrsPartTarget_get_target,$(1)) : $(call gb_SrsPartMergeTarget_get_target,$(1))
 $(call gb_SrsPartMergeTarget_get_target,$(1)) : SDF := $(gb_SDFLOCATION)/$(dir $(1))localize.sdf
-$(call gb_SrsPartMergeTarget_get_target,$(1)) : $(gb_SDFLOCATION)/$(dir $(1))localize.sdf
 endif
 
 endef
