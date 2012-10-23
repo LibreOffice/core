@@ -63,27 +63,27 @@ $(eval $(call gb_Extension_add_files,report-builder,images,\
 ))
 
 $(eval $(call gb_Extension_add_files,report-builder,registry/data/org/openoffice,\
-	$(call gb_XcuMergeTarget_get_target,reportbuilder/registry/data/org/openoffice/Setup.xcu) \
+	$(call gb_XcuFile_for_extension,reportbuilder/registry/data/org/openoffice/Setup.xcu) \
 ))
 
 $(eval $(call gb_Extension_add_files,report-builder,registry/data/org/openoffice/Office,\
-	$(call gb_XcuMergeTarget_get_target,reportbuilder/registry/data/org/openoffice/Office/Accelerators.xcu) \
-	$(call gb_XcuMergeTarget_get_target,reportbuilder/registry/data/org/openoffice/Office/DataAccess.xcu) \
-	$(call gb_XcuMergeTarget_get_target,reportbuilder/registry/data/org/openoffice/Office/Embedding.xcu) \
-	$(call gb_XcuMergeTarget_get_target,reportbuilder/registry/data/org/openoffice/Office/ExtendedColorScheme.xcu) \
+	$(call gb_XcuFile_for_extension,reportbuilder/registry/data/org/openoffice/Office/Accelerators.xcu) \
+	$(call gb_XcuFile_for_extension,reportbuilder/registry/data/org/openoffice/Office/DataAccess.xcu) \
+	$(call gb_XcuFile_for_extension,reportbuilder/registry/data/org/openoffice/Office/Embedding.xcu) \
+	$(call gb_XcuFile_for_extension,reportbuilder/registry/data/org/openoffice/Office/ExtendedColorScheme.xcu) \
 	$(call gb_XcuDataTarget_get_target,reportbuilder/registry/data/org/openoffice/Office/Paths.xcu) \
 	$(call gb_XcuDataTarget_get_target,reportbuilder/registry/data/org/openoffice/Office/ReportDesign.xcu) \
 ))
 
 $(eval $(call gb_Extension_add_files,report-builder,registry/data/org/openoffice/Office/UI,\
 	$(call gb_XcuDataTarget_get_target,reportbuilder/registry/data/org/openoffice/Office/UI/Controller.xcu) \
-	$(call gb_XcuMergeTarget_get_target,reportbuilder/registry/data/org/openoffice/Office/UI/DbReportWindowState.xcu) \
-	$(call gb_XcuMergeTarget_get_target,reportbuilder/registry/data/org/openoffice/Office/UI/ReportCommands.xcu) \
+	$(call gb_XcuFile_for_extension,reportbuilder/registry/data/org/openoffice/Office/UI/DbReportWindowState.xcu) \
+	$(call gb_XcuFile_for_extension,reportbuilder/registry/data/org/openoffice/Office/UI/ReportCommands.xcu) \
 ))
 
 $(eval $(call gb_Extension_add_files,report-builder,registry/data/org/openoffice/TypeDetection,\
-	$(call gb_XcuMergeTarget_get_target,reportbuilder/registry/data/org/openoffice/TypeDetection/Filter.xcu) \
-	$(call gb_XcuMergeTarget_get_target,reportbuilder/registry/data/org/openoffice/TypeDetection/Types.xcu) \
+	$(call gb_XcuFile_for_extension,reportbuilder/registry/data/org/openoffice/TypeDetection/Filter.xcu) \
+	$(call gb_XcuFile_for_extension,reportbuilder/registry/data/org/openoffice/TypeDetection/Types.xcu) \
 ))
 
 $(eval $(call gb_Extension_add_files,report-builder,registry/schema/org/openoffice/Office,\

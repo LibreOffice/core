@@ -512,4 +512,12 @@ $(call gb_Configuration_get_preparation_target,$(1)) : $(call gb_Configuration_g
 
 endef
 
+# apparently extensions package the XcuMergeTarget directly...
+# trivial convenience function to get the right file:
+ifeq ($(gb_WITH_LANG),)
+gb_XcuFile_for_extension = $(call gb_Configuration__get_source,,$(1))
+else
+gb_XcuFile_for_extension = $(call gb_XcuMergeTarget_get_target,$(1))
+endif
+
 # vim: set noet sw=4 ts=4:

@@ -43,10 +43,10 @@ $(eval $(call gb_Extension_add_files,presentation-minimizer,bitmaps,\
 $(eval $(call gb_Extension_add_file,presentation-minimizer,registry/schema/org/openoffice/Office/extension/SunPresentationMinimizer.xcs,$(call gb_XcsTarget_get_target,sdext/source/minimizer/registry/schema/org/openoffice/Office/extension/SunPresentationMinimizer.xcs)))
 
 $(eval $(call gb_Extension_add_files,presentation-minimizer,registry/data/org/openoffice/Office,\
-    $(call gb_XcuMergeTarget_get_target,sdext/source/minimizer/registry/data/org/openoffice/Office/Addons.xcu) \
+    $(call gb_XcuFile_for_extension,sdext/source/minimizer/registry/data/org/openoffice/Office/Addons.xcu) \
     $(call gb_XcuDataTarget_get_target,sdext/source/minimizer/registry/data/org/openoffice/Office/ProtocolHandler.xcu) \
 ))
 
-$(eval $(call gb_Extension_add_file,presentation-minimizer,registry/data/org/openoffice/Office/extension/SunPresentationMinimizer.xcu,$(call gb_XcuMergeTarget_get_target,sdext/source/minimizer/registry/data/org/openoffice/Office/extension/SunPresentationMinimizer.xcu)))
+$(eval $(call gb_Extension_add_file,presentation-minimizer,registry/data/org/openoffice/Office/extension/SunPresentationMinimizer.xcu,$(call gb_XcuFile_for_extension,sdext/source/minimizer/registry/data/org/openoffice/Office/extension/SunPresentationMinimizer.xcu)))
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab:
