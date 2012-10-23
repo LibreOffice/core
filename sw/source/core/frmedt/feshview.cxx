@@ -690,7 +690,7 @@ long SwFEShell::EndDrag( const Point *, sal_Bool )
         // DrawUndo on to flyframes are not stored
         //             The flys change the flag.
         GetDoc()->GetIDocumentUndoRedo().DoDrawUndo(true);
-        ChgAnchor( 0, sal_True );
+        ChgAnchor( 0, true );
 
         EndUndo( UNDO_END );
 
@@ -2115,7 +2115,7 @@ short SwFEShell::GetAnchorId() const
 |*
 *************************************************************************/
 
-void SwFEShell::ChgAnchor( int eAnchorId, sal_Bool bSameOnly, sal_Bool bPosCorr )
+void SwFEShell::ChgAnchor( int eAnchorId, bool bSameOnly, bool bPosCorr )
 {
     OSL_ENSURE( Imp()->HasDrawView(), "ChgAnchor without DrawView?" );
     const SdrMarkList &rMrkList = Imp()->GetDrawView()->GetMarkedObjectList();

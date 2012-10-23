@@ -508,8 +508,8 @@ public:
     /** frmatr.hxx. Here no enum because of dependencies.
      bool value only for internal use! Anchor is newly set according
      to current document position. Anchor is not re-set. */
-    void ChgAnchor( int eAnchorId, sal_Bool bSameOnly = sal_False,
-                                   sal_Bool bPosCorr = sal_True );
+    void ChgAnchor( int eAnchorId, bool bSameOnly = false,
+                                   bool bPosCorr = true );
 
     sal_Bool SetDrawingAttr( SfxItemSet &rSet );
 

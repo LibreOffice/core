@@ -141,7 +141,7 @@ void SwUndoSplitNode::UndoImpl(::sw::UndoRedoContext & rContext)
                 rPam.SetMark();
                 rPam.GetPoint()->nContent = pTNd->GetTxt().Len();
 
-                pDoc->RstTxtAttrs( rPam, sal_True );
+                pDoc->RstTxtAttrs( rPam, true );
                 pHistory->TmpRollback( pDoc, 0, false );
             }
 

@@ -1018,7 +1018,7 @@ throw (beans::UnknownPropertyException, uno::RuntimeException)
         aWhichIds.insert( pEntry->nWID );
         if (pEntry->nWID < RES_PARATR_BEGIN)
         {
-            aCursor.GetDoc()->ResetAttrs(aCursor, sal_True, aWhichIds);
+            aCursor.GetDoc()->ResetAttrs(aCursor, true, aWhichIds);
         }
         else
         {
@@ -1040,7 +1040,7 @@ throw (beans::UnknownPropertyException, uno::RuntimeException)
             {
                 pTemp->MovePara(fnParaCurr, fnParaEnd);
             }
-            pTemp->GetDoc()->ResetAttrs(*pTemp, sal_True, aWhichIds);
+            pTemp->GetDoc()->ResetAttrs(*pTemp, true, aWhichIds);
         }
     }
     else

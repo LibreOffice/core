@@ -282,7 +282,7 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
                             if (bCaption)
                                 pSdrView->SetAttributes(*pOutSet);
 
-                            sal_Bool bPosCorr =
+                            bool bPosCorr =
                                 SFX_ITEM_SET != pOutSet->GetItemState(
                                     SID_ATTR_TRANSFORM_POS_X, sal_False ) &&
                                 SFX_ITEM_SET != pOutSet->GetItemState(
@@ -298,7 +298,7 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
                             {
                                 if(!bSingleSelection)
                                     pSh->ChgAnchor(((const SfxInt16Item*)pAnchorItem)
-                                            ->GetValue(), sal_False, bPosCorr );
+                                            ->GetValue(), false, bPosCorr );
                                 else
                                 {
                                     SwFmtAnchor aAnchor(pFrmFmt->GetAnchor());

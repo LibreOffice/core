@@ -602,10 +602,10 @@ void SwDoc::GetGrfNms( const SwFlyFrmFmt& rFmt, String* pGrfName,
         pGrfNd->GetFileFilterNms( pGrfName, pFltName );
 }
 
-sal_Bool SwDoc::ChgAnchor( const SdrMarkList& _rMrkList,
+bool SwDoc::ChgAnchor( const SdrMarkList& _rMrkList,
                            RndStdIds _eAnchorType,
-                           const sal_Bool _bSameOnly,
-                           const sal_Bool _bPosCorr )
+                           const bool _bSameOnly,
+                           const bool _bPosCorr )
 {
     OSL_ENSURE( GetCurrentLayout(), "No layout!" );
 
@@ -617,7 +617,7 @@ sal_Bool SwDoc::ChgAnchor( const SdrMarkList& _rMrkList,
 
     GetIDocumentUndoRedo().StartUndo( UNDO_INSATTR, NULL );
 
-    sal_Bool bUnmark = sal_False;
+    bool bUnmark = false;
     for ( sal_uInt16 i = 0; i < _rMrkList.GetMarkCount(); ++i )
     {
         SdrObject* pObj = _rMrkList.GetMark( i )->GetMarkedSdrObj();
@@ -912,13 +912,13 @@ int SwDoc::Chainable( const SwFrmFmt &rSource, const SwFrmFmt &rDest )
     const SwFmtAnchor &rSrcAnchor = rSource.GetAnchor(),
                       &rDstAnchor = rDest.GetAnchor();
     sal_uLong nEndOfExtras = GetNodes().GetEndOfExtras().GetIndex();
-    sal_Bool bAllowed = sal_False;
+    bool bAllowed = false;
     if ( FLY_AT_PAGE == rSrcAnchor.GetAnchorId() )
     {
         if ( (FLY_AT_PAGE == rDstAnchor.GetAnchorId()) ||
             ( rDstAnchor.GetCntntAnchor() &&
               rDstAnchor.GetCntntAnchor()->nNode.GetIndex() > nEndOfExtras ))
-            bAllowed = sal_True;
+            bAllowed = true;
     }
     else if( rSrcAnchor.GetCntntAnchor() && rDstAnchor.GetCntntAnchor() )
     {
@@ -937,7 +937,7 @@ int SwDoc::Chainable( const SwFrmFmt &rSource, const SwFrmFmt &rDest )
                 pSttNd == rDstIdx.GetNode().FindHeaderStartNode() ) ||
             ( !pSttNd && rDstIdx.GetIndex() > nEndOfExtras &&
                             rSrcIdx.GetIndex() > nEndOfExtras ))
-            bAllowed = sal_True;
+            bAllowed = true;
     }
 
     return bAllowed ? SW_CHAIN_OK : SW_CHAIN_WRONG_AREA;

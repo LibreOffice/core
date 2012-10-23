@@ -80,11 +80,11 @@ namespace {
                         rPam.End()->nNode );
             aPam.Start()->nContent = 0;
             aPam.End()->nContent = rPam.End()->nNode.GetNode().GetTxtNode()->Len();
-            pDoc->ResetAttrs( aPam, sal_False, aResetAttrsArray );
+            pDoc->ResetAttrs( aPam, false, aResetAttrsArray );
         }
         else
         {
-            pDoc->ResetAttrs( rPam, sal_False, aResetAttrsArray );
+            pDoc->ResetAttrs( rPam, false, aResetAttrsArray );
         }
     }
 }

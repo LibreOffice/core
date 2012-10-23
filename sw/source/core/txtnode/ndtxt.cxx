@@ -3376,7 +3376,7 @@ namespace {
         SwPaM aPam( rTxtNode );
         // #i96644#
         // suppress side effect "send data changed events"
-        rTxtNode.GetDoc()->ResetAttrs( aPam, sal_False, aAttrs, false );
+        rTxtNode.GetDoc()->ResetAttrs( aPam, false, aAttrs, false );
     }
 
     // Helper method for special handling of modified attributes at text node.

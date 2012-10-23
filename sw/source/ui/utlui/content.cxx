@@ -246,7 +246,7 @@ void SwContentType::Init(sal_Bool* pbInvalidateWindow)
 
         case CONTENT_TYPE_TABLE     :
             sTypeToken = rtl::OUString::createFromAscii(pMarkToTable);
-            nMemberCount = pWrtShell->GetTblFrmFmtCount(sal_True);
+            nMemberCount = pWrtShell->GetTblFrmFmtCount(true);
             bEdit = sal_True;
         break;
 
@@ -535,13 +535,13 @@ void    SwContentType::FillMemberList(sal_Bool* pbLevelOrVisibilityChanged)
 
         case CONTENT_TYPE_TABLE     :
         {
-            OSL_ENSURE(nMemberCount == pWrtShell->GetTblFrmFmtCount(sal_True),
+            OSL_ENSURE(nMemberCount == pWrtShell->GetTblFrmFmtCount(true),
                        "MemberCount differs");
             Point aNullPt;
-            nMemberCount =  pWrtShell->GetTblFrmFmtCount(sal_True);
+            nMemberCount =  pWrtShell->GetTblFrmFmtCount(true);
             for(sal_uInt16 i = 0; i < nMemberCount; i++)
             {
-                const SwFrmFmt& rTblFmt = pWrtShell->GetTblFrmFmt(i, sal_True);
+                const SwFrmFmt& rTblFmt = pWrtShell->GetTblFrmFmt(i, true);
                 String sTblName( rTblFmt.GetName() );
 
                 SwContent* pCnt = new SwContent(this, sTblName,

@@ -1175,10 +1175,10 @@ public:
      Introduce new optional parameter <bSendDataChangedEvents> in order to
      control, if the side effect "send data changed events" is triggered or not. */
     void ResetAttrs( const SwPaM &rRg,
-                     sal_Bool bTxtAttr = sal_True,
+                     bool bTxtAttr = true,
                      const std::set<sal_uInt16> &rAttrs = std::set<sal_uInt16>(),
                      const bool bSendDataChangedEvents = true );
-    void RstTxtAttrs(const SwPaM &rRg, sal_Bool bInclRefToxMark = sal_False );
+    void RstTxtAttrs(const SwPaM &rRg, bool bInclRefToxMark = false );
 
     /** Set attribute in given format.
      If Undo is activated, the old one is listed in Undo-History. */
@@ -1226,15 +1226,15 @@ public:
 
     SwFrmFmt  *MakeFrmFmt(const String &rFmtName, SwFrmFmt *pDerivedFrom,
                           sal_Bool bBroadcast = sal_False, sal_Bool bAuto = sal_True);
-    void       DelFrmFmt( SwFrmFmt *pFmt, sal_Bool bBroadcast = sal_False );
+    void       DelFrmFmt( SwFrmFmt *pFmt, bool bBroadcast = false );
     SwFrmFmt* FindFrmFmtByName( const String& rName ) const
         {   return (SwFrmFmt*)FindFmtByName( (SwFmtsBase&)*pFrmFmtTbl, rName ); }
 
     SwCharFmt *MakeCharFmt(const String &rFmtName, SwCharFmt *pDerivedFrom,
                            sal_Bool bBroadcast = sal_False,
                            sal_Bool bAuto = sal_True );
-    void       DelCharFmt(sal_uInt16 nFmt, sal_Bool bBroadcast = sal_False);
-    void       DelCharFmt(SwCharFmt* pFmt, sal_Bool bBroadcast = sal_False);
+    void       DelCharFmt(sal_uInt16 nFmt, bool bBroadcast = false);
+    void       DelCharFmt(SwCharFmt* pFmt, bool bBroadcast = false);
     SwCharFmt* FindCharFmtByName( const String& rName ) const
         {   return (SwCharFmt*)FindFmtByName( (SwFmtsBase&)*pCharFmtTbl, rName ); }
 
@@ -1276,8 +1276,8 @@ public:
     /// Table formating
     const SwFrmFmts* GetTblFrmFmts() const  { return pTblFrmFmtTbl; }
           SwFrmFmts* GetTblFrmFmts()        { return pTblFrmFmtTbl; }
-    sal_uInt16 GetTblFrmFmtCount( sal_Bool bUsed ) const;
-    SwFrmFmt& GetTblFrmFmt(sal_uInt16 nFmt, sal_Bool bUsed ) const;
+    sal_uInt16 GetTblFrmFmtCount( bool bUsed ) const;
+    SwFrmFmt& GetTblFrmFmt(sal_uInt16 nFmt, bool bUsed ) const;
     SwTableFmt* MakeTblFrmFmt(const String &rFmtName, SwFrmFmt *pDerivedFrom);
     void        DelTblFrmFmt( SwTableFmt* pFmt );
     SwTableFmt* FindTblFmtByName( const String& rName, sal_Bool bAll = sal_False ) const;
@@ -1887,10 +1887,10 @@ public:
 
     // -------------------- FeShell - Interfaces -----------------------
     // !!! These assume always an existing layout !!!
-    sal_Bool ChgAnchor( const SdrMarkList& _rMrkList,
+    bool ChgAnchor( const SdrMarkList& _rMrkList,
                         RndStdIds _eAnchorType,
-                        const sal_Bool _bSameOnly,
-                        const sal_Bool _bPosCorr );
+                        const bool _bSameOnly,
+                        const bool _bPosCorr );
 
     void SetRowHeight( const SwCursor& rCursor, const SwFmtFrmSize &rNew );
     void GetRowHeight( const SwCursor& rCursor, SwFmtFrmSize *& rpSz ) const;

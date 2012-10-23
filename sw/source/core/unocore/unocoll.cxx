@@ -878,7 +878,7 @@ sal_Int32 SwXTextTables::getCount(void) throw( uno::RuntimeException )
     SolarMutexGuard aGuard;
     sal_Int32 nRet = 0;
     if(IsValid())
-        nRet = GetDoc()->GetTblFrmFmtCount(sal_True);
+        nRet = GetDoc()->GetTblFrmFmtCount(true);
     return nRet;
 }
 
@@ -889,9 +889,9 @@ uno::Any SAL_CALL SwXTextTables::getByIndex(sal_Int32 nIndex)
     uno::Any aRet;
     if(IsValid())
     {
-        if(0 <= nIndex && GetDoc()->GetTblFrmFmtCount(sal_True) > nIndex)
+        if(0 <= nIndex && GetDoc()->GetTblFrmFmtCount(true) > nIndex)
         {
-            SwFrmFmt& rFmt = GetDoc()->GetTblFrmFmt( static_cast< xub_StrLen >(nIndex), sal_True);
+            SwFrmFmt& rFmt = GetDoc()->GetTblFrmFmt( static_cast< xub_StrLen >(nIndex), true);
             uno::Reference< XTextTable >  xTbl = SwXTextTables::GetObject(rFmt);
             aRet.setValue( &xTbl,
                 ::getCppuType((uno::Reference< XTextTable>*)0));
@@ -911,12 +911,12 @@ uno::Any SwXTextTables::getByName(const OUString& rItemName)
     uno::Any aRet;
     if(IsValid())
     {
-        sal_uInt16 nCount = GetDoc()->GetTblFrmFmtCount(sal_True);
+        sal_uInt16 nCount = GetDoc()->GetTblFrmFmtCount(true);
         uno::Reference< XTextTable >  xTbl;
         for( sal_uInt16 i = 0; i < nCount; i++)
         {
             String aName(rItemName);
-            SwFrmFmt& rFmt = GetDoc()->GetTblFrmFmt(i, sal_True);
+            SwFrmFmt& rFmt = GetDoc()->GetTblFrmFmt(i, true);
             if(aName == rFmt.GetName())
             {
                 xTbl = SwXTextTables::GetObject(rFmt);
@@ -939,14 +939,14 @@ uno::Sequence< OUString > SwXTextTables::getElementNames(void)
     SolarMutexGuard aGuard;
     if(!IsValid())
         throw uno::RuntimeException();
-    sal_uInt16 nCount = GetDoc()->GetTblFrmFmtCount(sal_True);
+    sal_uInt16 nCount = GetDoc()->GetTblFrmFmtCount(true);
     uno::Sequence<OUString> aSeq(nCount);
     if(nCount)
     {
         OUString* pArray = aSeq.getArray();
         for( sal_uInt16 i = 0; i < nCount; i++)
         {
-            SwFrmFmt& rFmt = GetDoc()->GetTblFrmFmt(i, sal_True);
+            SwFrmFmt& rFmt = GetDoc()->GetTblFrmFmt(i, true);
 
             pArray[i] = OUString(rFmt.GetName());
         }
@@ -961,11 +961,11 @@ sal_Bool SwXTextTables::hasByName(const OUString& rName)
     sal_Bool bRet= sal_False;
     if(IsValid())
     {
-        sal_uInt16 nCount = GetDoc()->GetTblFrmFmtCount(sal_True);
+        sal_uInt16 nCount = GetDoc()->GetTblFrmFmtCount(true);
         for( sal_uInt16 i = 0; i < nCount; i++)
         {
             String aName(rName);
-            SwFrmFmt& rFmt = GetDoc()->GetTblFrmFmt(i, sal_True);
+            SwFrmFmt& rFmt = GetDoc()->GetTblFrmFmt(i, true);
             if(aName == rFmt.GetName())
             {
                 bRet = sal_True;
@@ -990,7 +990,7 @@ sal_Bool SwXTextTables::hasElements(void) throw( uno::RuntimeException )
     SolarMutexGuard aGuard;
     if(!IsValid())
         throw uno::RuntimeException();
-    return 0 != GetDoc()->GetTblFrmFmtCount(sal_True);
+    return 0 != GetDoc()->GetTblFrmFmtCount(true);
 }
 
 OUString SwXTextTables::getImplementationName(void) throw( uno::RuntimeException )

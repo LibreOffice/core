@@ -372,10 +372,10 @@ static void GetTableByName( const SwDoc &rDoc, const String &rTableName,
 
     // find frame format of table
     //! see SwXTextTables::getByName
-    sal_uInt16 nCount = rDoc.GetTblFrmFmtCount(sal_True);
+    sal_uInt16 nCount = rDoc.GetTblFrmFmtCount(true);
     for (sal_uInt16 i = 0; i < nCount && !pTblFmt; ++i)
     {
-        SwFrmFmt& rTblFmt = rDoc.GetTblFrmFmt(i, sal_True);
+        SwFrmFmt& rTblFmt = rDoc.GetTblFrmFmt(i, true);
         if(rTableName == rTblFmt.GetName())
             pTblFmt = &rTblFmt;
     }

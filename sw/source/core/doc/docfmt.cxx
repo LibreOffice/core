@@ -310,7 +310,7 @@ static bool lcl_RstAttr( const SwNodePtr& rpNd, void* pArgs )
     return true;
 }
 
-void SwDoc::RstTxtAttrs(const SwPaM &rRg, sal_Bool bInclRefToxMark )
+void SwDoc::RstTxtAttrs(const SwPaM &rRg, bool bInclRefToxMark )
 {
     SwHistory* pHst = 0;
     SwDataChanged aTmp( rRg );
@@ -322,20 +322,20 @@ void SwDoc::RstTxtAttrs(const SwPaM &rRg, sal_Bool bInclRefToxMark )
     }
     const SwPosition *pStt = rRg.Start(), *pEnd = rRg.End();
     ParaRstFmt aPara( pStt, pEnd, pHst );
-    aPara.bInclRefToxMark = ( bInclRefToxMark == sal_True );
+    aPara.bInclRefToxMark = bInclRefToxMark;
     GetNodes().ForEach( pStt->nNode.GetIndex(), pEnd->nNode.GetIndex()+1,
                         lcl_RstTxtAttr, &aPara );
     SetModified();
 }
 
 void SwDoc::ResetAttrs( const SwPaM &rRg,
-                        sal_Bool bTxtAttr,
+                        bool bTxtAttr,
                         const std::set<sal_uInt16> &rAttrs,
                         const bool bSendDataChangedEvents )
 {
     SwPaM* pPam = (SwPaM*)&rRg;
     if( !bTxtAttr && !rAttrs.empty() && RES_TXTATR_END > *(rAttrs.begin()) )
-        bTxtAttr = sal_True;
+        bTxtAttr = true;
 
     if( !rRg.HasMark() )
     {
@@ -433,7 +433,7 @@ void SwDoc::ResetAttrs( const SwPaM &rRg,
             aPara.pDelSet = &aDelSet;
     }
 
-    sal_Bool bAdd = sal_True;
+    bool bAdd = true;
     SwNodeIndex aTmpStt( pStt->nNode );
     SwNodeIndex aTmpEnd( pEnd->nNode );
     if( pStt->nContent.GetIndex() )     // just one part
@@ -457,7 +457,7 @@ void SwDoc::ResetAttrs( const SwPaM &rRg,
     }
     if( pEnd->nContent.GetIndex() == pEnd->nNode.GetNode().GetCntntNode()->Len() )
          // set up a later, and all CharFmtAttr -> TxtFmtAttr
-        aTmpEnd++, bAdd = sal_False;
+        aTmpEnd++, bAdd = false;
     else if( pStt->nNode != pEnd->nNode || !pStt->nContent.GetIndex() )
     {
         SwTxtNode* pTNd = aTmpEnd.GetNode().GetTxtNode();
@@ -971,7 +971,7 @@ lcl_InsAttr(SwDoc *const pDoc, const SwPaM &rRg, const SfxItemSet& rChgSet,
         pDoc->GetNodes().ForEach( aSt, aEnd, lcl_RstTxtAttr, &aPara );
     }
 
-    sal_Bool bCreateSwpHints = pCharSet && (
+    bool bCreateSwpHints = pCharSet && (
         SFX_ITEM_SET == pCharSet->GetItemState( RES_TXTATR_CHARFMT, sal_False ) ||
         SFX_ITEM_SET == pCharSet->GetItemState( RES_TXTATR_INETFMT, sal_False ) );
 
@@ -1167,7 +1167,7 @@ void SwDoc::SetDefault( const SfxItemSet& rSet )
     SfxItemPool* pSdrPool = GetAttrPool().GetSecondaryPool();
     while( sal_True )
     {
-        sal_Bool bCheckSdrDflt = sal_False;
+        bool bCheckSdrDflt = false;
         nWhich = pItem->Which();
         aOld.Put( GetAttrPool().GetDefaultItem( nWhich ) );
         GetAttrPool().SetPoolDefaultItem( *pItem );
@@ -1282,7 +1282,7 @@ const SfxPoolItem& SwDoc::GetDefault( sal_uInt16 nFmtHint ) const
 /*
  * Delete the formats
  */
-void SwDoc::DelCharFmt(sal_uInt16 nFmt, sal_Bool bBroadcast)
+void SwDoc::DelCharFmt(sal_uInt16 nFmt, bool bBroadcast)
 {
     SwCharFmt * pDel = (*pCharFmtTbl)[nFmt];
 
@@ -1304,14 +1304,14 @@ void SwDoc::DelCharFmt(sal_uInt16 nFmt, sal_Bool bBroadcast)
     SetModified();
 }
 
-void SwDoc::DelCharFmt( SwCharFmt *pFmt, sal_Bool bBroadcast )
+void SwDoc::DelCharFmt( SwCharFmt *pFmt, bool bBroadcast )
 {
     sal_uInt16 nFmt = pCharFmtTbl->GetPos( pFmt );
     OSL_ENSURE( USHRT_MAX != nFmt, "Fmt not found," );
     DelCharFmt( nFmt, bBroadcast );
 }
 
-void SwDoc::DelFrmFmt( SwFrmFmt *pFmt, sal_Bool bBroadcast )
+void SwDoc::DelFrmFmt( SwFrmFmt *pFmt, bool bBroadcast )
 {
     if( pFmt->ISA( SwTableBoxFmt ) || pFmt->ISA( SwTableLineFmt ))
     {
@@ -1384,7 +1384,7 @@ SwDrawFrmFmt *SwDoc::MakeDrawFrmFmt( const String &rFmtName,
 }
 
 
-sal_uInt16 SwDoc::GetTblFrmFmtCount(sal_Bool bUsed) const
+sal_uInt16 SwDoc::GetTblFrmFmtCount(bool bUsed) const
 {
     sal_uInt16 nCount = pTblFrmFmtTbl->size();
     if(bUsed)
@@ -1401,7 +1401,7 @@ sal_uInt16 SwDoc::GetTblFrmFmtCount(sal_Bool bUsed) const
 }
 
 
-SwFrmFmt& SwDoc::GetTblFrmFmt(sal_uInt16 nFmt, sal_Bool bUsed ) const
+SwFrmFmt& SwDoc::GetTblFrmFmt(sal_uInt16 nFmt, bool bUsed ) const
 {
     sal_uInt16 nRemoved = 0;
     if(bUsed)

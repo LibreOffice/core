@@ -143,7 +143,7 @@ sal_uInt16 SwDoc::SetRubyList( const SwPaM& rPam, const SwRubyList& rList,
                         }
                         else
                         {
-                            ResetAttrs( aPam, sal_True, aDelArr );
+                            ResetAttrs( aPam, true, aDelArr );
                         }
                     }
 
