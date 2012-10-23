@@ -69,6 +69,7 @@ $(eval $(call gb_Module_add_moduledirs,tail_end,\
 	extras \
 	fileaccess \
 	filter \
+	$(call gb_Helper_optional,FONTCONFIG,fontconfig) \
 	forms \
 	formula \
 	fpicker \

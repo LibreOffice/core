@@ -1,4 +1,0 @@
-..\%__SRC%\misc\build\fontconfig*\src\.libs\*.a %_DEST%\lib
-
-mkdir: %_DEST%\inc\external\fontconfig
-..\%__SRC%\misc\build\fontconfig*\fontconfig\*.h %_DEST%\inc\external\fontconfig
