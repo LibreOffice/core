@@ -11,10 +11,6 @@ $(eval $(call gb_UnpackedTarball_UnpackedTarball,ConvertTextToNumber))
 
 $(eval $(call gb_UnpackedTarball_set_tarball,ConvertTextToNumber,$(CT2N_TARBALL),0))
 
-# Extension class requires description-en-US.txt file
-$(eval $(call gb_UnpackedTarball_add_file,ConvertTextToNumber,\
-	description-en-US.txt,ct2n/description-en-US.txt))
-
 $(eval $(call gb_UnpackedTarball_add_patches,ConvertTextToNumber,\
 	ct2n/ConvertTextToNumber-1.3.2-no-license.patch \
 	ct2n/ConvertTextToNumber-1.3.2-no-visible-by-default.patch \
@@ -22,12 +18,11 @@ $(eval $(call gb_UnpackedTarball_add_patches,ConvertTextToNumber,\
 
 # adjustments for using Extension class
 # 1. manifest.xml is expected in root directory
-# 2. LICENSE file is required, reuse existing COPYING
 $(eval $(call gb_UnpackedTarball_set_post_action,ConvertTextToNumber,\
 	mv $(call gb_UnpackedTarball_get_dir,ConvertTextToNumber)/META-INF/manifest.xml \
-	$(call gb_UnpackedTarball_get_dir,ConvertTextToNumber) && \
-	mv $(call gb_UnpackedTarball_get_dir,ConvertTextToNumber)/registration/COPYING \
-	$(call gb_UnpackedTarball_get_dir,ConvertTextToNumber)/registration/LICENSE \
+	$(call gb_UnpackedTarball_get_dir,ConvertTextToNumber) \
 ))
+
+$(eval $(call gb_UnpackedTarball_mark_output_file,ConvertTextToNumber,description.xml))
 
 # vim: set noet sw=4 ts=4:

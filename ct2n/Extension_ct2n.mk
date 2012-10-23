@@ -8,13 +8,14 @@
 #
 
 $(eval $(call gb_Extension_Extension,ConvertTextToNumber,\
-	workdir/$(INPATH_FOR_BUILD)/UnpackedTarball/ConvertTextToNumber))
+	$(call gb_UnpackedTarball_get_dir,ConvertTextToNumber),nodefaults))
 
 CT2N_DIR := $(call gb_UnpackedTarball_get_dir,ConvertTextToNumber)
 
+$(eval $(call gb_Extension_use_unpacked,ConvertTextToNumber,ConvertTextToNumber))
+
 # we have our own LICENSE file; force using it instead of the default one
-$(call gb_ExtensionTarget_get_target,ConvertTextToNumber) : \
-	LICENSE := $(CT2N_DIR)/registration/LICENSE
+$(call gb_Extension_set_license,ConvertTextToNumber,$(CT2N_DIR)/registration/COPYING)
 
 $(eval $(call gb_Extension_add_files,ConvertTextToNumber,,\
 	$(CT2N_DIR)/Addons.xcu \

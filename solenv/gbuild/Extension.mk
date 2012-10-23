@@ -28,9 +28,11 @@
 # Extension class
 
 define gb_Extension_Extension
-$(call gb_ExtensionTarget_ExtensionTarget,$(1),$(2))
-$(call gb_ExtensionTarget_use_default_license,$(1))
-$(call gb_ExtensionTarget_use_default_description,$(1),$(2))
+$(call gb_ExtensionTarget_ExtensionTarget,$(1),$(if $(filter nodefaults,$(3)),$(2),$(SRCDIR)/$(2)))
+$(if $(filter nodefaults,$(3)),,\
+ $(call gb_ExtensionTarget_use_default_license,$(1)))
+$(if $(filter nodefaults,$(3)),,\
+ $(call gb_ExtensionTarget_use_default_description,$(1),$(2)))
 
 $(call gb_Extension_get_target,$(1)) : $(call gb_ExtensionTarget_get_target,$(1))
 $(call gb_Extension_get_clean_target,$(1)) : $(call gb_ExtensionTarget_get_clean_target,$(1))
@@ -39,6 +41,10 @@ $(call gb_Deliver_add_deliverable,$(call gb_Extension_get_target,$(1)),$(call gb
 
 $$(eval $$(call gb_Module_register_target,$(call gb_Extension_get_target,$(1)),$(call gb_Extension_get_clean_target,$(1))))
 
+endef
+
+define gb_Extension_set_license
+$(call gb_ExtensionTarget_set_license,$(1),$(2))
 endef
 
 define gb_Extension_add_file
@@ -119,6 +125,11 @@ endef
 #     is $(2)/$(4))
 define gb_Extension_add_helptreefile
 $(call gb_ExtensionTarget_add_helptreefile,$(1),$(2),$(3),$(4),$(5))
+
+endef
+
+define gb_Extension_use_unpacked
+$(call gb_ExtensionTarget_use_unpacked,$(1),$(2))
 
 endef
 
