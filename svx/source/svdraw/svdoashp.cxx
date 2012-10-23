@@ -100,7 +100,7 @@ using namespace ::com::sun::star::drawing;
 // A simple one item cache really helps here ...
 namespace {
     static const SdrObjCustomShape *g_pLastCacheShape;
-    static Reference< XCustomShapeEngine > g_xLastCacheShape;
+    static Reference< XCustomShapeEngine > g_xLastCacheShapeEngine;
 }
 
 static void lcl_ShapeSegmentFromBinary( EnhancedCustomShapeSegment& rSegInfo, sal_uInt16 nSDat )
@@ -411,7 +411,7 @@ Reference< XCustomShapeEngine > SdrObjCustomShape::GetCustomShapeEngine( const S
 
     // We get dozens of back-to-back calls for the same shape
     if( pCustomShape == g_pLastCacheShape )
-        return xCustomShapeEngine;
+        return g_xLastCacheShapeEngine;
 
     String aEngine(((SdrCustomShapeEngineItem&)pCustomShape->GetMergedItem( SDRATTR_CUSTOMSHAPE_ENGINE )).GetValue());
     if ( !aEngine.Len() )
@@ -436,7 +436,7 @@ Reference< XCustomShapeEngine > SdrObjCustomShape::GetCustomShapeEngine( const S
     }
 
     g_pLastCacheShape = pCustomShape;
-    g_xLastCacheShape = xCustomShapeEngine;
+    g_xLastCacheShapeEngine = xCustomShapeEngine;
 
     return xCustomShapeEngine;
 }
@@ -868,7 +868,7 @@ SdrObjCustomShape::~SdrObjCustomShape()
     if (this == g_pLastCacheShape)
     {
         g_pLastCacheShape = NULL;
-        g_xLastCacheShape.clear();
+        g_xLastCacheShapeEngine.clear();
     }
     // delete buffered display geometry
     InvalidateRenderGeometry();
