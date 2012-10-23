@@ -151,16 +151,16 @@ private:
 
     WinBits             m_nStyle;
     ExtendedWinBits     nExtendedWinBits;
-    sal_Bool                bSimpleTravel : 1; // ist sal_True bei SINGLE_SELECTION
-    sal_Bool                bUpdateMode : 1;
-    sal_Bool                bInVScrollHdl : 1;
-    sal_Bool                bAsyncBeginDrag : 1;
-    sal_Bool                bSubLstOpRet : 1;   // open/close sublist with return/enter, defaulted with sal_False
-    sal_Bool                bSubLstOpLR : 1;    // open/close sublist with cursor left/right, defaulted with sal_False
-    sal_Bool                bContextMenuHandling : 1;
-    sal_Bool                bIsCellFocusEnabled : 1;
+    bool                bSimpleTravel : 1; // ist true bei SINGLE_SELECTION
+    bool                bUpdateMode : 1;
+    bool                bInVScrollHdl : 1;
+    bool                bAsyncBeginDrag : 1;
+    bool                bSubLstOpRet : 1;   // open/close sublist with return/enter, defaulted with false
+    bool                bSubLstOpLR : 1;    // open/close sublist with cursor left/right, defaulted with false
+    bool                bContextMenuHandling : 1;
+    bool                bIsCellFocusEnabled : 1;
 
-    sal_Bool            bAreChildrenTransient;
+    bool                bAreChildrenTransient;
 
     Point               aEditClickPos;
     Timer               aEditTimer;
@@ -182,7 +182,7 @@ private:
     void                ShowVerSBar();
     // setzt Thumb auf FirstEntryToDraw
     void                SyncVerThumb();
-    sal_Bool                IsLineVisible( long nY ) const;
+    bool                IsLineVisible( long nY ) const;
     long                GetEntryLine( SvTreeListEntry* pEntry ) const;
     void                FillView();
     void                CursorDown();
@@ -191,7 +191,7 @@ private:
     void                PageDown( sal_uInt16 nDelta );
     void                PageUp( sal_uInt16 nDelta );
 
-    void                SetCursor( SvTreeListEntry* pEntry, sal_Bool bForceNoSelect = sal_False );
+    void                SetCursor( SvTreeListEntry* pEntry, bool bForceNoSelect = false );
 
     void                DrawNet();
 
@@ -204,41 +204,38 @@ private:
     void                SetNodeBmpTabDistance();
 
     // Selection-Engine
-    SvTreeListEntry*        MakePointVisible( const Point& rPoint,
-                            sal_Bool bNotifyScroll=sal_True );
+    SvTreeListEntry* MakePointVisible( const Point& rPoint, bool bNotifyScroll=true );
 
     void                SetAnchorSelection( SvTreeListEntry* pOld,
                             SvTreeListEntry* pNewCursor );
     void                BeginDrag();
-    sal_Bool                ButtonDownCheckCtrl( const MouseEvent& rMEvt,
-                            SvTreeListEntry* pEntry, long nY    );
-    sal_Bool                MouseMoveCheckCtrl( const MouseEvent& rMEvt,
-                            SvTreeListEntry* pEntry );
-    sal_Bool                ButtonUpCheckCtrl( const MouseEvent& rMEvt );
-    sal_Bool                ButtonDownCheckExpand( const MouseEvent&,
-                            SvTreeListEntry*,long nY );
+    bool ButtonDownCheckCtrl( const MouseEvent& rMEvt, SvTreeListEntry* pEntry, long nY );
+    bool MouseMoveCheckCtrl( const MouseEvent& rMEvt, SvTreeListEntry* pEntry );
+    bool ButtonUpCheckCtrl( const MouseEvent& rMEvt );
+    bool ButtonDownCheckExpand( const MouseEvent&, SvTreeListEntry*,long nY );
 
     void                PositionScrollBars( Size& rOSize, sal_uInt16 nMask );
     sal_uInt16              AdjustScrollBars( Size& rSize );
 
     void                BeginScroll();
     void                EndScroll();
-    sal_Bool                InScroll() const { return (sal_Bool)(nFlags & F_IN_SCROLLING)!=0;}
+    bool InScroll() const { return (nFlags & F_IN_SCROLLING) != 0; }
     Rectangle           GetVisibleArea() const;
-    sal_Bool                EntryReallyHit(SvTreeListEntry* pEntry,const Point& rPos,long nLine);
+    bool EntryReallyHit(SvTreeListEntry* pEntry, const Point& rPos, long nLine);
     void                InitScrollBarBox();
     SvLBoxTab*          NextTab( SvLBoxTab* );
 
-    sal_Bool                SetMostRight( SvTreeListEntry* pEntry );
+    bool SetMostRight( SvTreeListEntry* pEntry );
     void                FindMostRight( SvTreeListEntry* EntryToIgnore );
     void                FindMostRight( SvTreeListEntry* pParent, SvTreeListEntry* EntryToIgnore );
     void                FindMostRight_Impl( SvTreeListEntry* pParent,SvTreeListEntry* EntryToIgnore  );
     void                NotifyTabsChanged();
 
-    inline sal_Bool         IsExpandable() const        // if element at cursor can be expanded in general
-                            { return pCursor->HasChildren() || pCursor->HasChildrenOnDemand(); }
-    inline sal_Bool         IsNowExpandable() const     // if element at cursor can be expanded at this moment
-                            { return IsExpandable() && !pView->IsExpanded( pCursor ); }
+    // if element at cursor can be expanded in general
+    bool IsExpandable() const { return pCursor->HasChildren() || pCursor->HasChildrenOnDemand(); }
+
+    // if element at cursor can be expanded at this moment
+    bool IsNowExpandable() const { return IsExpandable() && !pView->IsExpanded( pCursor ); }
 
     static  void        implInitDefaultNodeImages();
 
@@ -251,8 +248,8 @@ private:
 
     void                CalcCellFocusRect( SvTreeListEntry* pEntry, Rectangle& rRect );
 
-    inline sal_Bool     AreChildrenTransient() const { return bAreChildrenTransient; }
-    inline void         SetChildrenNotTransient() { bAreChildrenTransient = sal_False; }
+    bool AreChildrenTransient() const { return bAreChildrenTransient; }
+    inline void         SetChildrenNotTransient() { bAreChildrenTransient = false; }
 
 public:
     SvImpLBox( SvTreeListBox* pView, SvTreeList*, WinBits nWinStyle );
@@ -274,39 +271,35 @@ public:
     void                EntryExpanded( SvTreeListEntry* pEntry );
     void                EntryCollapsed( SvTreeListEntry* pEntry );
     void                CollapsingEntry( SvTreeListEntry* pEntry );
-    void                EntrySelected( SvTreeListEntry*, sal_Bool bSelect );
+    void                EntrySelected( SvTreeListEntry* pEntry, bool bSelect );
 
     void                Paint( const Rectangle& rRect );
     void                MouseButtonDown( const MouseEvent& );
     void                MouseButtonUp( const MouseEvent& );
     void                MouseMove( const MouseEvent&);
-    sal_Bool                KeyInput( const KeyEvent& );
+    bool                KeyInput( const KeyEvent& );
     void                Resize();
     void                GetFocus();
     void                LoseFocus();
-    void                UpdateAll(
-                            sal_Bool bInvalidateCompleteView= sal_True,
-                            sal_Bool bUpdateVerSBar = sal_True );
+    void UpdateAll( bool bInvalidateCompleteView= true, bool bUpdateVerSBar = true );
     void                SetEntryHeight( short nHeight );
     void                PaintEntry( SvTreeListEntry* pEntry );
     void                InvalidateEntry( SvTreeListEntry* );
     void                RecalcFocusRect();
 
-    inline void         SelectEntry( SvTreeListEntry* pEntry, sal_Bool bSelect );
+    void SelectEntry( SvTreeListEntry* pEntry, bool bSelect );
     void                SetDragDropMode( DragDropMode eDDMode );
     void                SetSelectionMode( SelectionMode eSelMode  );
-    void                SetAddMode( sal_Bool ) { aSelEng.AddAlways(sal_False); }
-    sal_Bool                IsAddMode() const { return aSelEng.IsAlwaysAdding(); }
 
     SvTreeListEntry*        GetCurrentEntry() const { return pCursor; }
-    sal_Bool                IsEntryInView( SvTreeListEntry* ) const;
+    bool IsEntryInView( SvTreeListEntry* pEntry ) const;
     SvTreeListEntry*        GetEntry( const Point& rPos ) const;
     // gibt letzten Eintrag zurueck, falls Pos unter letztem Eintrag
     SvTreeListEntry*        GetClickedEntry( const Point& ) const;
     SvTreeListEntry*        GetCurEntry() const { return pCursor; }
     void                SetCurEntry( SvTreeListEntry* );
     Point               GetEntryPosition( SvTreeListEntry* ) const;
-    void                MakeVisible( SvTreeListEntry* pEntry, sal_Bool bMoveToTop=sal_False );
+    void                MakeVisible( SvTreeListEntry* pEntry, bool bMoveToTop = false );
     void                ScrollToAbsPos( long nPos );
 
     void                PaintDDCursor( SvTreeListEntry* );
@@ -330,32 +323,30 @@ public:
     static const Image& GetDefaultCollapsedNodeImage( );
 
     const Size&         GetOutputSize() const { return aOutputSize;}
-    void                KeyUp( sal_Bool bPageUp, sal_Bool bNotifyScroll = sal_True );
-    void                KeyDown( sal_Bool bPageDown, sal_Bool bNotifyScroll = sal_True );
+    void                KeyUp( bool bPageUp, bool bNotifyScroll = true );
+    void                KeyDown( bool bPageDown, bool bNotifyScroll = true );
     void                Command( const CommandEvent& rCEvt );
 
     void                Invalidate();
     void                DestroyAnchor() { pAnchor=0; aSelEng.Reset(); }
-    void                SelAllDestrAnch( sal_Bool bSelect,
-                            sal_Bool bDestroyAnchor = sal_True,
-                            sal_Bool bSingleSelToo = sal_False );
-    void                ShowCursor( sal_Bool bShow );
+    void SelAllDestrAnch( bool bSelect, bool bDestroyAnchor = true, bool bSingleSelToo = false );
+    void ShowCursor( bool bShow );
 
-    sal_Bool                RequestHelp( const HelpEvent& rHEvt );
+    bool RequestHelp( const HelpEvent& rHEvt );
     void                EndSelection();
-    sal_Bool                IsNodeButton( const Point& rPosPixel, SvTreeListEntry* pEntry ) const;
+    bool IsNodeButton( const Point& rPosPixel, SvTreeListEntry* pEntry ) const;
     void                RepaintScrollBars();
-    void                EnableAsyncDrag( sal_Bool b) { bAsyncBeginDrag = b; }
-    void                SetUpdateMode( sal_Bool );
-    sal_Bool                GetUpdateMode() const { return bUpdateMode; }
+    void EnableAsyncDrag( bool b ) { bAsyncBeginDrag = b; }
+    void SetUpdateMode( bool bMode );
+    bool GetUpdateMode() const { return bUpdateMode; }
     Rectangle           GetClipRegionRect() const;
-    sal_Bool                HasHorScrollBar() const { return aHorSBar.IsVisible(); }
+    bool HasHorScrollBar() const { return aHorSBar.IsVisible(); }
     void                ShowFocusRect( const SvTreeListEntry* pEntry );
     void                CallEventListeners( sal_uLong nEvent, void* pData = NULL );
 
     /** Enables, that one cell of a tablistbox entry can be focused */
-    inline sal_Bool         IsCellFocusEnabled() const { return bIsCellFocusEnabled; }
-    inline void         EnableCellFocus() { bIsCellFocusEnabled = sal_True; }
+    bool IsCellFocusEnabled() const { return bIsCellFocusEnabled; }
+    inline void         EnableCellFocus() { bIsCellFocusEnabled = true; }
     bool                SetCurrentTabPos( sal_uInt16 _nNewPos );
     inline sal_uInt16       GetCurrentTabPos() const { return nCurTabPos; }
 
@@ -429,11 +420,11 @@ inline void SvImpLBox::PaintEntry( SvTreeListEntry* pEntry )
     pView->PaintEntry( pEntry, nY );
 }
 
-inline sal_Bool SvImpLBox::IsLineVisible( long nY ) const
+inline bool SvImpLBox::IsLineVisible( long nY ) const
 {
-    sal_Bool bRet = sal_True;
+    bool bRet = true;
     if ( nY < 0 || nY >= aOutputSize.Height() )
-        bRet = sal_False;
+        bRet = false;
     return bRet;
 }
 
