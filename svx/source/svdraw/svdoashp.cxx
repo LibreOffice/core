@@ -97,6 +97,12 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::drawing;
 
 
+// A simple one item cache really helps here ...
+namespace {
+    static const SdrObjCustomShape *g_pLastCacheShape;
+    static Reference< XCustomShapeEngine > g_xLastCacheShape;
+}
+
 static void lcl_ShapeSegmentFromBinary( EnhancedCustomShapeSegment& rSegInfo, sal_uInt16 nSDat )
 {
     switch( nSDat >> 8 )
@@ -402,6 +408,11 @@ SdrObject* ImpCreateShadowObjectClone(const SdrObject& rOriginal, const SfxItemS
 Reference< XCustomShapeEngine > SdrObjCustomShape::GetCustomShapeEngine( const SdrObjCustomShape* pCustomShape )
 {
     Reference< XCustomShapeEngine > xCustomShapeEngine;
+
+    // We get dozens of back-to-back calls for the same shape
+    if( pCustomShape == g_pLastCacheShape )
+        return xCustomShapeEngine;
+
     String aEngine(((SdrCustomShapeEngineItem&)pCustomShape->GetMergedItem( SDRATTR_CUSTOMSHAPE_ENGINE )).GetValue());
     if ( !aEngine.Len() )
         aEngine = String( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.drawing.EnhancedCustomShapeEngine" ) );
@@ -423,8 +434,13 @@ Reference< XCustomShapeEngine > SdrObjCustomShape::GetCustomShapeEngine( const S
                 xCustomShapeEngine = Reference< XCustomShapeEngine >( xInterface, UNO_QUERY );
         }
     }
+
+    g_pLastCacheShape = pCustomShape;
+    g_xLastCacheShape = xCustomShapeEngine;
+
     return xCustomShapeEngine;
 }
+
 const SdrObject* SdrObjCustomShape::GetSdrObjectFromCustomShape() const
 {
     if ( !mXRenderedCustomShape.is() )
@@ -556,10 +572,12 @@ double SdrObjCustomShape::GetExtraTextRotation( const bool bPreRotation ) const
         *pAny >>= fExtraTextRotateAngle;
     return fExtraTextRotateAngle;
 }
+
 sal_Bool SdrObjCustomShape::GetTextBounds( Rectangle& rTextBound ) const
 {
     sal_Bool bRet = sal_False;
-    Reference< XCustomShapeEngine > xCustomShapeEngine( GetCustomShapeEngine( this ) ); // a candidate for being cached
+
+    Reference< XCustomShapeEngine > xCustomShapeEngine( GetCustomShapeEngine( this ) );
     if ( xCustomShapeEngine.is() )
     {
         awt::Rectangle aR( xCustomShapeEngine->getTextBounds() );
@@ -847,6 +865,11 @@ SdrObjCustomShape::SdrObjCustomShape() :
 
 SdrObjCustomShape::~SdrObjCustomShape()
 {
+    if (this == g_pLastCacheShape)
+    {
+        g_pLastCacheShape = NULL;
+        g_xLastCacheShape.clear();
+    }
     // delete buffered display geometry
     InvalidateRenderGeometry();
 }
