@@ -99,11 +99,11 @@ PropBrw::PropBrw (DialogWindowLayout& rLayout_):
     try
     {
         // create a frame wrapper for myself
-        m_xMeAsFrame = Reference< XFrame >(m_xORB->createInstance(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.Frame" ))), UNO_QUERY);
+        m_xMeAsFrame = Reference< XFrame >(m_xORB->createInstance( "com.sun.star.frame.Frame" ), UNO_QUERY);
         if (m_xMeAsFrame.is())
         {
             m_xMeAsFrame->initialize( VCLUnoHelper::GetInterface ( this ) );
-            m_xMeAsFrame->setName(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "form property browser" )));  // change name!
+            m_xMeAsFrame->setName( "form property browser" );  // change name!
         }
     }
     catch (const Exception&)
@@ -133,15 +133,15 @@ void PropBrw::ImplReCreateController()
         // a ComponentContext for the
         ::cppu::ContextEntry_Init aHandlerContextInfo[] =
         {
-            ::cppu::ContextEntry_Init( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DialogParentWindow" ) ), makeAny( VCLUnoHelper::GetInterface ( this ) ) ),
-            ::cppu::ContextEntry_Init( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ContextDocument" ) ), makeAny( m_xContextDocument ) )
+            ::cppu::ContextEntry_Init( "DialogParentWindow", makeAny( VCLUnoHelper::GetInterface ( this ) ) ),
+            ::cppu::ContextEntry_Init( "ContextDocument", makeAny( m_xContextDocument ) )
         };
         Reference< XComponentContext > xInspectorContext(
             ::cppu::createComponentContext( aHandlerContextInfo, SAL_N_ELEMENTS( aHandlerContextInfo ), xOwnContext ) );
 
         // create a property browser controller
         Reference< XMultiComponentFactory > xFactory( xInspectorContext->getServiceManager(), UNO_QUERY_THROW );
-        static const ::rtl::OUString s_sControllerServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.PropertyBrowserController" ));
+        static const OUString s_sControllerServiceName( "com.sun.star.awt.PropertyBrowserController" );
         m_xBrowserController = Reference< XPropertySet >(
             xFactory->createInstanceWithContext( s_sControllerServiceName, xInspectorContext ), UNO_QUERY
         );
@@ -294,7 +294,7 @@ void PropBrw::implSetNewObjectSequence
     {
         xObjectInspector->inspect( _rObjectSeq );
 
-        ::rtl::OUString aText = IDE_RESSTR(RID_STR_BRWTITLE_PROPERTIES);
+        OUString aText = IDE_RESSTR(RID_STR_BRWTITLE_PROPERTIES);
         aText += IDE_RESSTR(RID_STR_BRWTITLE_MULTISELECT);
         SetText( aText );
     }
@@ -305,8 +305,7 @@ void PropBrw::implSetNewObject( const Reference< XPropertySet >& _rxObject )
 {
     if ( m_xBrowserController.is() )
     {
-        m_xBrowserController->setPropertyValue(
-            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IntrospectedObject" )),
+        m_xBrowserController->setPropertyValue( "IntrospectedObject",
             makeAny( _rxObject )
         );
 
@@ -316,9 +315,9 @@ void PropBrw::implSetNewObject( const Reference< XPropertySet >& _rxObject )
 }
 
 
-::rtl::OUString PropBrw::GetHeadlineName( const Reference< XPropertySet >& _rxObject )
+OUString PropBrw::GetHeadlineName( const Reference< XPropertySet >& _rxObject )
 {
-    ::rtl::OUString aName;
+    OUString aName;
     Reference< lang::XServiceInfo > xServiceInfo( _rxObject, UNO_QUERY );
 
     if (xServiceInfo.is())    // single selection
@@ -326,87 +325,87 @@ void PropBrw::implSetNewObject( const Reference< XPropertySet >& _rxObject )
         sal_uInt16 nResId = 0;
         aName = IDE_RESSTR(RID_STR_BRWTITLE_PROPERTIES);
 
-        if ( xServiceInfo->supportsService( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControlDialogModel" ) ) ) )
+        if ( xServiceInfo->supportsService( "com.sun.star.awt.UnoControlDialogModel" ) )
         {
             nResId = RID_STR_CLASS_DIALOG;
         }
-        else if ( xServiceInfo->supportsService( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControlButtonModel" ) ) ) )
+        else if ( xServiceInfo->supportsService( "com.sun.star.awt.UnoControlButtonModel" ) )
         {
             nResId = RID_STR_CLASS_BUTTON;
         }
-        else if ( xServiceInfo->supportsService( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControlRadioButtonModel" ) ) ) )
+        else if ( xServiceInfo->supportsService( "com.sun.star.awt.UnoControlRadioButtonModel" ) )
         {
             nResId = RID_STR_CLASS_RADIOBUTTON;
         }
-        else if ( xServiceInfo->supportsService( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControlCheckBoxModel" ) ) ) )
+        else if ( xServiceInfo->supportsService( "com.sun.star.awt.UnoControlCheckBoxModel" ) )
         {
             nResId = RID_STR_CLASS_CHECKBOX;
         }
-        else if ( xServiceInfo->supportsService( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControlListBoxModel" ) ) ) )
+        else if ( xServiceInfo->supportsService( "com.sun.star.awt.UnoControlListBoxModel" ) )
         {
             nResId = RID_STR_CLASS_LISTBOX;
         }
-        else if ( xServiceInfo->supportsService( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControlComboBoxModel" ) ) ) )
+        else if ( xServiceInfo->supportsService( "com.sun.star.awt.UnoControlComboBoxModel" ) )
         {
             nResId = RID_STR_CLASS_COMBOBOX;
         }
-        else if ( xServiceInfo->supportsService( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControlGroupBoxModel" ) ) ) )
+        else if ( xServiceInfo->supportsService( "com.sun.star.awt.UnoControlGroupBoxModel" ) )
         {
             nResId = RID_STR_CLASS_GROUPBOX;
         }
-        else if ( xServiceInfo->supportsService( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControlEditModel" ) ) ) )
+        else if ( xServiceInfo->supportsService( "com.sun.star.awt.UnoControlEditModel" ) )
         {
             nResId = RID_STR_CLASS_EDIT;
         }
-        else if ( xServiceInfo->supportsService( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControlFixedTextModel" ) ) ) )
+        else if ( xServiceInfo->supportsService( "com.sun.star.awt.UnoControlFixedTextModel" ) )
         {
             nResId = RID_STR_CLASS_FIXEDTEXT;
         }
-        else if ( xServiceInfo->supportsService( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControlImageControlModel" ) ) ) )
+        else if ( xServiceInfo->supportsService( "com.sun.star.awt.UnoControlImageControlModel" ) )
         {
             nResId = RID_STR_CLASS_IMAGECONTROL;
         }
-        else if ( xServiceInfo->supportsService( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControlProgressBarModel" ) ) ) )
+        else if ( xServiceInfo->supportsService( "com.sun.star.awt.UnoControlProgressBarModel" ) )
         {
             nResId = RID_STR_CLASS_PROGRESSBAR;
         }
-        else if ( xServiceInfo->supportsService( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControlScrollBarModel" ) ) ) )
+        else if ( xServiceInfo->supportsService( "com.sun.star.awt.UnoControlScrollBarModel" ) )
         {
             nResId = RID_STR_CLASS_SCROLLBAR;
         }
-        else if ( xServiceInfo->supportsService( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControlFixedLineModel" ) ) ) )
+        else if ( xServiceInfo->supportsService( "com.sun.star.awt.UnoControlFixedLineModel" ) )
         {
             nResId = RID_STR_CLASS_FIXEDLINE;
         }
-        else if ( xServiceInfo->supportsService( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControlDateFieldModel" ) ) ) )
+        else if ( xServiceInfo->supportsService( "com.sun.star.awt.UnoControlDateFieldModel" ) )
         {
             nResId = RID_STR_CLASS_DATEFIELD;
         }
-        else if ( xServiceInfo->supportsService( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControlTimeFieldModel" ) ) ) )
+        else if ( xServiceInfo->supportsService( "com.sun.star.awt.UnoControlTimeFieldModel" ) )
         {
             nResId = RID_STR_CLASS_TIMEFIELD;
         }
-        else if ( xServiceInfo->supportsService( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControlNumericFieldModel" ) ) ) )
+        else if ( xServiceInfo->supportsService( "com.sun.star.awt.UnoControlNumericFieldModel" ) )
         {
             nResId = RID_STR_CLASS_NUMERICFIELD;
         }
-        else if ( xServiceInfo->supportsService( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControlCurrencyFieldModel" ) ) ) )
+        else if ( xServiceInfo->supportsService( "com.sun.star.awt.UnoControlCurrencyFieldModel" ) )
         {
             nResId = RID_STR_CLASS_CURRENCYFIELD;
         }
-        else if ( xServiceInfo->supportsService( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControlFormattedFieldModel" ) ) ) )
+        else if ( xServiceInfo->supportsService( "com.sun.star.awt.UnoControlFormattedFieldModel" ) )
         {
             nResId = RID_STR_CLASS_FORMATTEDFIELD;
         }
-        else if ( xServiceInfo->supportsService( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControlPatternFieldModel" ) ) ) )
+        else if ( xServiceInfo->supportsService( "com.sun.star.awt.UnoControlPatternFieldModel" ) )
         {
             nResId = RID_STR_CLASS_PATTERNFIELD;
         }
-        else if ( xServiceInfo->supportsService( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControlFileControlModel" ) ) ) )
+        else if ( xServiceInfo->supportsService( "com.sun.star.awt.UnoControlFileControlModel" ) )
         {
             nResId = RID_STR_CLASS_FILECONTROL;
         }
-        else if ( xServiceInfo->supportsService( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.tree.TreeControlModel" ) ) ) )
+        else if ( xServiceInfo->supportsService( "com.sun.star.awt.tree.TreeControlModel" ) )
         {
             nResId = RID_STR_CLASS_TREECONTROL;
         }
