@@ -749,33 +749,27 @@ sal_Int32 GrammarCheckingIterator::GetSuggestedEndOfSentence(
 {
     // internal method; will always be called with locked mutex
 
-    // FIXME! this is a bug, the xBreakIterator var is hiding an issue!
-    // But if I fix it, the sw/complex tests start failing.
-    uno::Reference< i18n::XBreakIterator > xBreakIterator;
     if (!m_xBreakIterator.is())
     {
         uno::Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
-        xBreakIterator = i18n::BreakIterator::create(xContext);
+        m_xBreakIterator = i18n::BreakIterator::create(xContext);
     }
     sal_Int32 nTextLen = rText.getLength();
-    sal_Int32 nEndPosition = nTextLen;
-    if (m_xBreakIterator.is())
+    sal_Int32 nEndPosition;
+    sal_Int32 nTmpStartPos = nSentenceStartPos;
+    do
     {
-        sal_Int32 nTmpStartPos = nSentenceStartPos;
-        do
-        {
+        nEndPosition = nTextLen;
+        if (nTmpStartPos < nTextLen)
+            nEndPosition = m_xBreakIterator->endOfSentence( rText, nTmpStartPos, rLocale );
+        if (nEndPosition < 0)
             nEndPosition = nTextLen;
-            if (nTmpStartPos < nTextLen)
-                nEndPosition = m_xBreakIterator->endOfSentence( rText, nTmpStartPos, rLocale );
-            if (nEndPosition < 0)
-                nEndPosition = nTextLen;
 
-            ++nTmpStartPos;
-        }
-        while (nEndPosition <= nSentenceStartPos && nEndPosition < nTextLen);
-        if (nEndPosition > nTextLen)
-            nEndPosition = nTextLen;
+        ++nTmpStartPos;
     }
+    while (nEndPosition <= nSentenceStartPos && nEndPosition < nTextLen);
+    if (nEndPosition > nTextLen)
+        nEndPosition = nTextLen;
     return nEndPosition;
 }
 
