@@ -180,6 +180,7 @@ $(call gb_UnpackedTarball_get_clean_target,%) :
 	$(call gb_Output_announce,$*,$(false),PAT,2)
 	$(call gb_Helper_abbreviate_dirs,\
 		rm -rf \
+			$(call gb_UnpackedTarball_get_final_target,$*) \
 			$(call gb_UnpackedTarball_get_target,$*) \
 			$(call gb_UnpackedTarball_get_preparation_target,$*) \
 			$(call gb_UnpackedTarball_get_dir,$*) \
