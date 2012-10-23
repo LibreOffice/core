@@ -85,6 +85,14 @@ ifneq ($(HAVE_THREADSAFE_STATICS),TRUE)
 gb_CXXFLAGS_COMMON += -fno-threadsafe-statics
 endif
 
+ifeq ($(strip $(gb_GCOV)),YES)
+gb_CFLAGS_COMMON += -fprofile-arcs -ftest-coverage
+gb_CXXFLAGS_COMMON += -fprofile-arcs -ftest-coverage
+gb_LinkTarget_LDFLAGS += -fprofile-arcs -lgcov
+gb_COMPILERDEFAULTOPTFLAGS := -O0
+endif
+
+
 ifeq ($(HAVE_GCC_VISIBILITY_FEATURE),TRUE)
 gb_VISIBILITY_FLAGS := -DHAVE_GCC_VISIBILITY_FEATURE -fvisibility=hidden
 ifneq ($(HAVE_GCC_VISIBILITY_BROKEN),TRUE)
