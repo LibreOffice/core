@@ -392,14 +392,12 @@ void SbiInstance::PrepareNumberFormatter( SvNumberFormatter*& rpNumberFormatter,
     case YMD: aDateStr = "JJJJ.MM.TT"; break;
     default:  aDateStr = "MM.TT.JJJJ"; break;
     }
-    String aStr( aDateStr );
-    rpNumberFormatter->PutandConvertEntry( aStr, nCheckPos, nType,
+    rpNumberFormatter->PutandConvertEntry( aDateStr, nCheckPos, nType,
         rnStdDateIdx, LANGUAGE_GERMAN, eLangType );
     nCheckPos = 0;
     OUString aStrHHMMSS(" HH:MM:SS");
     aDateStr += aStrHHMMSS;
-    aStr = aDateStr;
-    rpNumberFormatter->PutandConvertEntry( aStr, nCheckPos, nType,
+    rpNumberFormatter->PutandConvertEntry( aDateStr, nCheckPos, nType,
         rnStdDateTimeIdx, LANGUAGE_GERMAN, eLangType );
 }
 
