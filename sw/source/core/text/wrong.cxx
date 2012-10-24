@@ -504,7 +504,7 @@ void SwWrongList::InsertSubList( xub_StrLen nNewPos, xub_StrLen nNewLen, sal_uIn
         i = maList.end(); // robust
     else
         i += nWhere;
-    maList.insert(i, SwWrongArea( rtl::OUString(), 0, nNewPos, nNewLen, pSubList ) );
+    maList.insert(i, SwWrongArea( OUString(), 0, nNewPos, nNewLen, pSubList ) );
 }
 
 
@@ -597,7 +597,7 @@ bool SwWrongList::LookForEntry( xub_StrLen nBegin, xub_StrLen nEnd ) {
     return false;
 }
 
-void SwWrongList::Insert( const rtl::OUString& rType,
+void SwWrongList::Insert( const OUString& rType,
                           com::sun::star::uno::Reference< com::sun::star::container::XStringKeyMap > xPropertyBag,
                           xub_StrLen nNewPos, xub_StrLen nNewLen )
 {

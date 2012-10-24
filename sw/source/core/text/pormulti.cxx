@@ -328,14 +328,14 @@ SwDoubleLinePortion::SwDoubleLinePortion( const SwMultiCreator& rCreate,
     sal_uInt8 nTmp = SW_SCRIPTS;
     if( pBracket->cPre > 255 )
     {
-        String aTxt = rtl::OUString(pBracket->cPre);
+        String aTxt = OUString(pBracket->cPre);
         nTmp = SwScriptInfo::WhichFont( 0, &aTxt, 0 );
     }
     pBracket->nPreScript = nTmp;
     nTmp = SW_SCRIPTS;
     if( pBracket->cPost > 255 )
     {
-        String aTxt = rtl::OUString(pBracket->cPost);
+        String aTxt = OUString(pBracket->cPost);
         nTmp = SwScriptInfo::WhichFont( 0, &aTxt, 0 );
     }
     pBracket->nPostScript = nTmp;
@@ -428,7 +428,7 @@ void SwDoubleLinePortion::FormatBrackets( SwTxtFormatInfo &rInf, SwTwips& nMaxWi
     pBracket->nHeight = 0;
     if( pBracket->cPre )
     {
-        rtl::OUString aStr( pBracket->cPre );
+        OUString aStr( pBracket->cPre );
         sal_uInt8 nActualScr = pTmpFnt->GetActual();
         if( SW_SCRIPTS > pBracket->nPreScript )
             pTmpFnt->SetActual( pBracket->nPreScript );
@@ -453,7 +453,7 @@ void SwDoubleLinePortion::FormatBrackets( SwTxtFormatInfo &rInf, SwTwips& nMaxWi
         pBracket->nPreWidth = 0;
     if( pBracket->cPost )
     {
-        rtl::OUString aStr( pBracket->cPost );
+        OUString aStr( pBracket->cPost );
         if( SW_SCRIPTS > pBracket->nPostScript )
             pTmpFnt->SetActual( pBracket->nPostScript );
         SwFontSave aSave( rInf, pTmpFnt );

@@ -243,7 +243,7 @@ sal_Bool SwBlankPortion::GetExpTxt( const SwTxtSizeInfo&, XubString &rTxt ) cons
 
 void SwBlankPortion::HandlePortion( SwPortionHandler& rPH ) const
 {
-    rtl::OUString aString( cChar );
+    OUString aString( cChar );
     rPH.Special( GetLen(), aString, GetWhichPor() );
 }
 

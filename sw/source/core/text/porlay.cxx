@@ -1821,7 +1821,7 @@ sal_uInt16 SwScriptInfo::KashidaJustify( sal_Int32* pKernArray,
  * character has to be checked because a ctl portion only contains one
  * script, see NewTxtPortion
  *************************************************************************/
-bool SwScriptInfo::IsArabicText( const rtl::OUString& rTxt, sal_Int32 nStt, sal_Int32 nLen )
+bool SwScriptInfo::IsArabicText( const OUString& rTxt, sal_Int32 nStt, sal_Int32 nLen )
 {
     using namespace ::com::sun::star::i18n;
     static ScriptTypeList typeList[] = {
@@ -2034,7 +2034,7 @@ bool SwScriptInfo::MarkKashidasInvalid ( xub_StrLen nCnt, xub_StrLen* pKashidaPo
    return true;
 }
 
-sal_Int32 SwScriptInfo::ThaiJustify( const rtl::OUString& rTxt, sal_Int32* pKernArray,
+sal_Int32 SwScriptInfo::ThaiJustify( const OUString& rTxt, sal_Int32* pKernArray,
                                   sal_Int32* pScrArray, sal_Int32 nStt,
                                   sal_Int32 nLen, sal_Int32 nNumberOfBlanks,
                                   long nSpaceAdd )
