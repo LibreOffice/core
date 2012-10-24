@@ -32,7 +32,6 @@
 #include <com/sun/star/frame/XDispatchProviderInterception.hpp>
 #include <com/sun/star/lang/SystemDependent.hpp>
 #include <com/sun/star/awt/Toolkit.hpp>
-#include <com/sun/star/awt/XSystemChildFactory.hpp>
 #include <com/sun/star/awt/XVclWindowPeer.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
@@ -137,7 +136,7 @@ sal_Bool SoPluginInstance::LoadDocument(NSP_HWND hParent)
         Reference< uno::XComponentContext > xContext( xFactoryProperties->getPropertyValue( "DefaultContext" ), UNO_QUERY );
 
         // try to create netscape plugin window
-        Reference< awt::XToolkit > xToolkit( awt::Toolkit::create(xContext), uno::UNO_QUERY_THROW );
+        Reference< awt::XToolkit2 > xToolkit( awt::Toolkit::create(xContext) );
 
         // prepare parameters for plugin window
         css::uno::Any hwndParent = css::uno::makeAny((sal_Int32)hParent);
@@ -148,18 +147,11 @@ sal_Bool SoPluginInstance::LoadDocument(NSP_HWND hParent)
         sal_Int16 nWindowType = css::lang::SystemDependent::SYSTEM_WIN32;
 #endif //end of WNT
 
-        Reference< awt::XSystemChildFactory > xToolkitSystemChildFactory(xToolkit, uno::UNO_QUERY);
-        if (!xToolkitSystemChildFactory.is())
-        {
-            debug_fprintf(NSP_LOG_APPEND, "print by Nsplugin, get xToolkitSystemChildFactory failure.\n");
-            return sal_False;
-        }
-
         debug_fprintf(NSP_LOG_APPEND, "print by Nsplugin,  try to create plugin container window HWIN:%ld.\n", hParent);
 
         // create the plugin window
         Reference< awt::XWindowPeer > xNewWinPeer =
-            xToolkitSystemChildFactory->createSystemChild( hwndParent,
+            xToolkit->createSystemChild( hwndParent,
                 css::uno::Sequence<sal_Int8>(), nWindowType );
         if ( !xNewWinPeer.is() )
         {
