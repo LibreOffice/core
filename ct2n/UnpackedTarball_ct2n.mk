@@ -16,6 +16,18 @@ $(eval $(call gb_UnpackedTarball_add_patches,ConvertTextToNumber,\
 	ct2n/ConvertTextToNumber-1.3.2-no-visible-by-default.patch \
 ))
 
+$(eval $(call gb_UnpackedTarball_fix_end_of_line,ConvertTextToNumber,\
+	description.xml \
+	Office/UI/BaseWindowState.xcu \
+	Office/UI/BasicIDEWindowState.xcu \
+	Office/UI/CalcWindowState.xcu \
+	Office/UI/DrawWindowState.xcu \
+	Office/UI/ImpressWindowState.xcu \
+	Office/UI/MathWindowState.xcu \
+	Office/UI/StartModuleWindowState.xcu \
+	Office/UI/WriterWindowState.xcu \
+))
+
 $(eval $(call gb_UnpackedTarball_mark_output_file,ConvertTextToNumber,description.xml))
 
 # vim: set noet sw=4 ts=4:
