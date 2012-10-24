@@ -38,6 +38,7 @@
 
 #include <cppuhelper/interfacecontainer.h>
 #include <comphelper/configurationhelper.hxx>
+#include <comphelper/processfactory.hxx>
 #include <osl/diagnose.h>
 #include <osl/mutex.hxx>
 #include <osl/file.hxx>
@@ -221,13 +222,13 @@ void SAL_CALL VistaFilePicker::setDisplayDirectory(const ::rtl::OUString& sDirec
     const ::rtl::OUString aKey( RTL_CONSTASCII_USTRINGPARAM("WorkPathChanged"));
 
     css::uno::Any aValue = ::comphelper::ConfigurationHelper::readDirectKey(
-        m_xSMGR, aPackage, aRelPath, aKey, ::comphelper::ConfigurationHelper::E_READONLY);
+        comphelper::getComponentContext(m_xSMGR), aPackage, aRelPath, aKey, ::comphelper::ConfigurationHelper::E_READONLY);
 
     bool bChanged(false);
     if (( aValue >>= bChanged ) && bChanged )
     {
         ::comphelper::ConfigurationHelper::writeDirectKey(
-            m_xSMGR, aPackage, aRelPath, aKey, css::uno::makeAny(false), ::comphelper::ConfigurationHelper::E_STANDARD);
+            comphelper::getComponentContext(m_xSMGR), aPackage, aRelPath, aKey, css::uno::makeAny(false), ::comphelper::ConfigurationHelper::E_STANDARD);
     }
 
     RequestRef rRequest(new Request());
