@@ -112,7 +112,7 @@ void SwGluePortion::Paint( const SwTxtPaintInfo &rInf ) const
 #endif
         if( 1 == GetLen() )
         {
-            rtl::OUString aBullet( CH_BULLET );
+            OUString aBullet( CH_BULLET );
             SwPosSize aBulletSize( rInf.GetTxtSize( aBullet ) );
             Point aPos( rInf.GetPos() );
             aPos.X() += (Width()/2) - (aBulletSize.Width()/2);

@@ -177,8 +177,8 @@ class XmlPortionDumper:public SwPortionHandler
         xmlTextWriterWriteFormatAttribute( writer,
                                            BAD_CAST( "nType" ),
                                            "%s", getTypeName( nType ) );
-        rtl::OUString sText( rText );
-        rtl::OString sText8 =::rtl::OUStringToOString( sText,
+        OUString sText( rText );
+        OString sText8 =::rtl::OUStringToOString( sText,
                                                        RTL_TEXTENCODING_UTF8 );
         xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "rText" ),
                                            "%s", sText8.getStr(  ) );
@@ -326,12 +326,12 @@ void SwFrm::dumpAsXml( xmlTextWriterPtr writer )
         if ( IsTxtFrm(  ) )
         {
             SwTxtFrm *pTxtFrm = ( SwTxtFrm * ) this;
-            rtl::OUString aTxt = pTxtFrm->GetTxt(  );
+            OUString aTxt = pTxtFrm->GetTxt(  );
             for ( int i = 0; i < 32; i++ )
             {
                 aTxt = aTxt.replace( i, '*' );
             }
-            rtl::OString aTxt8 =::rtl::OUStringToOString( aTxt,
+            OString aTxt8 =::rtl::OUStringToOString( aTxt,
                                                           RTL_TEXTENCODING_UTF8 );
             xmlTextWriterWriteString( writer,
                                       ( const xmlChar * ) aTxt8.getStr(  ) );
@@ -382,7 +382,7 @@ void SwFrm::dumpAsXmlAttributes( xmlTextWriterPtr writer )
     if (IsHeaderFrm() || IsFooterFrm())
     {
         SwHeadFootFrm *pHeadFootFrm = (SwHeadFootFrm*)this;
-        rtl::OUString aFmtName = pHeadFootFrm->GetFmt()->GetName();
+        OUString aFmtName = pHeadFootFrm->GetFmt()->GetName();
         xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "fmtName" ), "%s", BAD_CAST(rtl::OUStringToOString(aFmtName, RTL_TEXTENCODING_UTF8).getStr()));
         xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "fmtPtr" ), "%p", pHeadFootFrm->GetFmt());
     }

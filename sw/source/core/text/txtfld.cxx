@@ -298,7 +298,7 @@ static SwFldPortion * lcl_NewMetaPortion(SwTxtAttr & rHint, const bool bPrefix)
 {
     ::sw::Meta *const pMeta(
         static_cast<SwFmtMeta &>(rHint.GetAttr()).GetMeta() );
-    ::rtl::OUString fix;
+    OUString fix;
     ::sw::MetaField *const pField( dynamic_cast< ::sw::MetaField * >(pMeta) );
     OSL_ENSURE(pField, "lcl_NewMetaPortion: no meta field?");
     if (pField)

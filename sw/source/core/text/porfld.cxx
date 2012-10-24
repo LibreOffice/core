@@ -133,7 +133,7 @@ KSHORT SwFldPortion::GetViewWidth( const SwTxtSizeInfo &rInf ) const
             !rInf.GetOpt().IsReadonly() && SwViewOption::IsFieldShadings() )
     {
         if( !nViewWidth )
-            pThis->nViewWidth = rInf.GetTxtSize(rtl::OUString(' ')).Width();
+            pThis->nViewWidth = rInf.GetTxtSize(OUString(' ')).Width();
     }
     else
         pThis->nViewWidth = 0;

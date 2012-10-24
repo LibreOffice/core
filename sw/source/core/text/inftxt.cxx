@@ -823,7 +823,7 @@ static void lcl_DrawSpecial( const SwTxtPaintInfo& rInf, const SwLinePortion& rP
     }
 
     // check if char fits into rectangle
-    const rtl::OUString aTmp( cChar );
+    const OUString aTmp( cChar );
     aFontSize = rInf.GetTxtSize( aTmp ).SvLSize();
     while ( aFontSize.Width() > nMaxWidth )
     {
@@ -1100,7 +1100,7 @@ void SwTxtPaintInfo::_DrawBackBrush( const SwLinePortion &rPor ) const
             if(pFieldmark) {
                 OSL_TRACE("Found Fieldmark");
 #if OSL_DEBUG_LEVEL > 1
-                rtl::OUString str = pFieldmark->ToString( );
+                OUString str = pFieldmark->ToString( );
                 fprintf( stderr, "%s\n", rtl::OUStringToOString( str, RTL_TEXTENCODING_UTF8 ).getStr( ) );
 #endif
             }
@@ -1123,7 +1123,7 @@ void SwTxtPaintInfo::_DrawBackBrush( const SwLinePortion &rPor ) const
                         SwTxtAttr* pTxtAttr = pNd->GetTxtAttrForCharAt(nEndIdx, RES_TXTATR_FIELD);
                         const SwFmtFld& rPostItField = pTxtAttr->GetFld();
                         // Look up the author name
-                        const rtl::OUString& rAuthor = rPostItField.GetFld()->GetPar1();
+                        const OUString& rAuthor = rPostItField.GetFld()->GetPar1();
                         sal_uInt16 nIndex = pNd->GetDoc()->InsertRedlineAuthor(rAuthor);
                         pOutDev->SetFillColor( SwPostItMgr::GetColorLight(nIndex) );
                         pOutDev->SetLineColor( SwPostItMgr::GetColorAnchor(nIndex) );
@@ -1636,7 +1636,7 @@ SwTxtSlot::SwTxtSlot( const SwTxtSizeInfo *pNew, const SwLinePortion *pPor,
                 else if( !pTempList && nPos < pOldSmartTagList->Count() && nListPos < nIdx && aTxt.Len() )
                 {
                     pTempList = new SwWrongList( WRONGLIST_SMARTTAG );
-                    pTempList->Insert( rtl::OUString(), 0, 0, aTxt.Len(), 0 );
+                    pTempList->Insert( OUString(), 0, 0, aTxt.Len(), 0 );
                     ((SwTxtPaintInfo*)pInf)->SetSmartTags( pTempList );
                 }
                 else
@@ -1652,7 +1652,7 @@ SwTxtSlot::SwTxtSlot( const SwTxtSizeInfo *pNew, const SwLinePortion *pPor,
                 else if( !pTempList && nPos < pOldGrammarCheckList->Count() && nListPos < nIdx && aTxt.Len() )
                 {
                     pTempList = new SwWrongList( WRONGLIST_GRAMMAR );
-                    pTempList->Insert( rtl::OUString(), 0, 0, aTxt.Len(), 0 );
+                    pTempList->Insert( OUString(), 0, 0, aTxt.Len(), 0 );
                     ((SwTxtPaintInfo*)pInf)->SetGrammarCheckList( pTempList );
                 }
                 else
