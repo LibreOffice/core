@@ -45,7 +45,6 @@ private:
 class VCL_DLLPUBLIC VclBox : public VclContainer
 {
 protected:
-    Size m_aMinChildSize;
     bool m_bHomogeneous;
     int m_nSpacing;
 public:
@@ -73,6 +72,7 @@ public:
     }
     virtual bool set_property(const OString &rKey, const OString &rValue);
 protected:
+    void accumulateMaxes(const Size &rChildSize, Size &rSize) const;
     Size finalizeMaxes(const Size &rSize, sal_uInt16 nVisibleChildren) const;
 
     virtual Size calculateRequisition() const;
@@ -185,7 +185,12 @@ enum VclButtonBoxStyle
 class VCL_DLLPUBLIC VclButtonBox : public VclBox
 {
 public:
-    VclButtonBox(Window *pParent, int nSpacing);
+    VclButtonBox(Window *pParent, int nSpacing)
+        : VclBox(pParent, true, nSpacing)
+        , m_eLayoutStyle(VCL_BUTTONBOX_DEFAULT_STYLE)
+        , m_bHomogeneousGroups(false)
+    {
+    }
     void set_layout(VclButtonBoxStyle eStyle)
     {
         m_eLayoutStyle = eStyle;
@@ -200,18 +205,21 @@ protected:
     virtual void setAllocation(const Size &rAllocation);
 private:
     VclButtonBoxStyle m_eLayoutStyle;
+    bool m_bHomogeneousGroups;
     struct Requisition
     {
-        sal_uInt16 m_nPrimaryChildren;
-        sal_uInt16 m_nSecondaryChildren;
-        Size m_aSize;
+        sal_uInt16 m_nMainGroupChildren;
+        sal_uInt16 m_nSubGroupChildren;
+        Size m_aMainGroupSize;
+        Size m_aSubGroupSize;
         Requisition()
-            : m_nPrimaryChildren(0)
-            , m_nSecondaryChildren(0)
+            : m_nMainGroupChildren(0)
+            , m_nSubGroupChildren(0)
         {
         }
     };
     Requisition calculatePrimarySecondaryRequisitions() const;
+    Size addReqGroups(const VclButtonBox::Requisition &rReq) const;
 };
 
 class VCL_DLLPUBLIC VclVButtonBox : public VclButtonBox
