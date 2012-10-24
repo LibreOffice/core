@@ -25,6 +25,7 @@
 #include <unx/gtk/glomenu.h>
 #include <unx/gtk/gloactiongroup.h>
 #include <unx/gtk/gtksalmenu.hxx>
+#include <unx/gtk/hudawareness.h>
 #include <vcl/keycodes.hxx>
 #include <unx/wmadaptor.hxx>
 #include <unx/sm.hxx>

@@ -217,6 +217,7 @@ class GtkSalFrame : public SalFrame
     friend void on_registrar_available (GDBusConnection*, const gchar*, const gchar*, gpointer);
     friend void on_registrar_unavailable (GDBusConnection*, const gchar*, gpointer);
     guint                           m_nWatcherId;
+    guint                           m_nHudAwarenessId;
 
     void Init( SalFrame* pParent, sal_uLong nStyle );
     void Init( SystemParentData* pSysData );
