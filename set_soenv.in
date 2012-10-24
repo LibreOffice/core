@@ -180,7 +180,7 @@ my @unixroot='@unixroot';
 # , $Warning.
 AddWarning( "configure", "" );
 #
-print ("Setting up the environment for building OpenOffice.org $newline");
+print ("Setting up the environment for building Apache OpenOffice $newline");
 #
 #--------------------------------------------------
 # V. Setting the environment variables/values.
@@ -823,7 +823,7 @@ print "done\n";
 # D. Gathering directory information from the user.
 #
 # If the directory does not exist something is strange.
-# 1. OpenOffice.org build home directory.
+# 1. Apache OpenOffice build home directory.
 chomp($SRC_ROOT  = `pwd`);
 $SRC_ROOT =~ s/\/config_office//;
 $SRC_ROOT = PathFormat($SRC_ROOT);
@@ -2199,12 +2199,12 @@ if(defined($outfile_bat))
 #
 print "*********************************************************".
       "******************* $newline"."*"."$newline";
-print "* OpenOffice.org $UPD configuration. $newline";
+print "* Apache OpenOffice $UPD configuration. $newline";
 for ( $tmp = 0; $tmp < 2; $tmp++ ) 
 {  print "* $newline";
 }
-print "* Configuration part of OpenOffice.org $UPD build is finished. $newline* $newline";
-print "* NB! Be aware that you might not be able to build OpenOffice.org if you $newline".
+print "* Configuration part of Apache OpenOffice $UPD build is finished. $newline* $newline";
+print "* NB! Be aware that you might not be able to build Apache OpenOffice if you $newline".
       "* ignore any warning message that were generated during this configuration $newline".
       "* process. $newline* $newline";
 
@@ -2314,7 +2314,7 @@ sub CreateFileHeader
    my $comment = $_[4];
    print { $filehandle } "$comment #################################################################"; 
    print { $filehandle } $newline;
-   print { $filehandle } "$comment OpenOffice.org $_[ 1 ] build environment file for: $_[ 2 ]. $newline"; 
+   print { $filehandle } "$comment Apache OpenOffice $_[ 1 ] build environment file for: $_[ 2 ]. $newline"; 
    print { $filehandle } "$comment Generated on: $timestamp $newline"; 
    print { $filehandle } "$comment Source this file to set up the build environment. $newline"; 
    print { $filehandle } "$comment 1. exec $_[3] $newline"; 
