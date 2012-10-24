@@ -30,7 +30,7 @@ $(call gb_ExternalProject_get_state_target,liborcus,build) :
 	&& export BOOST_INCLUDE_DIR=$(OUTDIR)/inc/external \
 	&& export BOOST_LIB_DIR=$(OUTDIR)/lib \
 	&& $(COMPATH)/../Common7/Tools/vcupgrade.exe liborcus-static-nozip.vcproj \
-	&& MSBuild.exe liborcus-static-nozip.vcxproj /p:Configuration=Release /p:OutDir=Release /p:TargetName=orcus /p:WholeProgramOptimization=no \
+	&& MSBuild.exe liborcus-static-nozip.vcxproj /p:Configuration=Release /p:OutDir=Release/ /p:TargetName=orcus /p:WholeProgramOptimization=no \
 	&& touch $@
 endif
 	
