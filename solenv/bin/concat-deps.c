@@ -811,6 +811,17 @@ static inline void print_fullpaths(char* line)
     }
 }
 
+static inline char * eat_space_at_end(char * end)
+{
+    assert('\0' == *end);
+    char * real_end = end - 1;
+    while (' ' == *real_end || '\t' == *real_end || '\n' == *real_end
+                || ':' == *real_end)
+    {    /* eat colon and whitespace at end */
+         --real_end;
+    }
+    return real_end;
+}
 
 static int _process(struct hash* dep_hash, char* fn)
 {
@@ -866,8 +877,8 @@ off_t size;
                              * these are the one for which we want to filter
                              * duplicate out
                              */
-                            int key_len = cursor_out - base;
-                            if(!elide_dependency(base,key_len - 1, NULL) &&
+                            int key_len = eat_space_at_end(cursor_out) - base;
+                            if(!elide_dependency(base,key_len + 1, NULL) &&
                                hash_store(dep_hash, base, key_len))
                             {
                                 /* DO NOT modify base after it has been added
@@ -882,6 +893,7 @@ off_t size;
                             print_fullpaths(base);
                             putc('\n', stdout);
                         }
+                        last_ns = ' '; // cannot hurt to reset it
                     }
                     cursor += 1;
                     base = cursor_out = cursor;
@@ -892,6 +904,7 @@ off_t size;
                      * i.e not a complete rule yet
                      */
                     *cursor_out++ = *cursor++;
+                    continuation = 0; // cancel current one (empty lines!)
                 }
             }
             else
@@ -910,7 +923,9 @@ off_t size;
         {
             if(last_ns == ':')
             {
-                if(hash_store(dep_hash, base, (int)(cursor_out - base)))
+                int key_len = eat_space_at_end(cursor_out) - base;
+                if (!elide_dependency(base,key_len + 1, NULL) &&
+                    hash_store(dep_hash, base, key_len))
                 {
                     puts(base);
                     putc('\n', stdout);
