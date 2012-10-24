@@ -845,8 +845,6 @@ bool ScConditionEntry::IsDuplicate( double nArg, const rtl::OUString& rStr, cons
                 return false;
         }
     }
-
-    return false;
 }
 
 bool ScConditionEntry::IsValid( double nArg, const ScAddress& rAddr ) const
