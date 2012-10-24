@@ -44,7 +44,7 @@ namespace framework{
 
 DEFINE_XSERVICEINFO_MULTISERVICE(DispatchHelper                   ,
                                  ::cppu::OWeakObject              ,
-                                 DECLARE_ASCII("com.sun.star.frame.DispatchHelper"),
+                                 "com.sun.star.frame.DispatchHelper",
                                  IMPLEMENTATIONNAME_DISPATCHHELPER)
 
 DEFINE_INIT_SERVICE( DispatchHelper, {} )
