@@ -1114,7 +1114,7 @@ Size ComboBox::CalcMinimumSize() const
     }
     else
     {
-        aSz.Height() = mpImplLB->CalcSize( 1 ).Height();
+        aSz.Height() = Edit::CalcMinimumSizeForText(GetText()).Height();
         aSz.Width() = mpImplLB->GetMaxEntryWidth();
         aSz.Width() += getMaxWidthScrollBarAndDownButton();
     }
