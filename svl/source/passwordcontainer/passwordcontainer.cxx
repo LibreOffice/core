@@ -1256,7 +1256,7 @@ void SAL_CALL PasswordContainer::removeMasterPassword()
     if ( !bAllow )
         removeMasterPassword();
 
-    if ( m_pStorageFile->useStorage() == bAllow )
+    if (m_pStorageFile->useStorage() == static_cast<bool>(bAllow))
         return bAllow;
 
     m_pStorageFile->setUseStorage( bAllow );
