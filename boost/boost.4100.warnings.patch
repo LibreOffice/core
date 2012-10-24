@@ -1,0 +1,19 @@
+--- misc/boost_1_44_0/boost/concept/detail/msvc.hpp
++++ misc/build/boost_1_44_0/boost/concept/detail/msvc.hpp
+@@ -12,6 +12,9 @@
+ #  include <boost/mpl/if.hpp>
+ # endif
+ 
++// disable spurious "unreferenced formal parameter" warnings
++#pragma warning( push )
++#pragma warning( disable: 4100 )
+ 
+ namespace boost { namespace concepts {
+ 
+@@ -111,4 +114,6 @@
+ # endif
+ }}
+ 
++#pragma warning( pop )
++
+ #endif // BOOST_CONCEPT_CHECK_MSVC_DWA2006429_HPP
