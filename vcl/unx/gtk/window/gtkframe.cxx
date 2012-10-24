@@ -513,6 +513,11 @@ static void ObjectDestroyedNotify( gpointer data )
     }
 }
 
+static void hud_activated( gboolean hud_active, gpointer user_data )
+{
+    printf("HUD active state: %d\n", hud_active);
+}
+
 gboolean ensure_dbus_setup( gpointer data )
 {
     GtkSalFrame* pSalFrame = reinterpret_cast< GtkSalFrame* >( data );
@@ -549,6 +554,7 @@ gboolean ensure_dbus_setup( gpointer data )
         SAL_INFO("vcl.unity", "exporting menu model at " << pMenuModel << " for window " << windowId);
         pSalFrame->m_nMenuExportId = g_dbus_connection_export_menu_model (pSessionBus, aDBusMenubarPath, pMenuModel, NULL);
         pSalFrame->m_nActionGroupExportId = g_dbus_connection_export_action_group( pSessionBus, aDBusPath, pActionGroup, NULL);
+        pSalFrame->m_nHudAwarenessId = hud_awareness_register( pSessionBus, aDBusMenubarPath, hud_activated, pSalFrame, NULL, NULL );
 
         g_free( aDBusPath );
         g_free( aDBusWindowPath );
@@ -674,10 +680,12 @@ GtkSalFrame::~GtkSalFrame()
 
             if ( pSessionBus )
             {
-                if(m_nMenuExportId)
-                    g_dbus_connection_unexport_menu_model(pSessionBus, m_nMenuExportId);
-                if(m_nActionGroupExportId)
-                    g_dbus_connection_unexport_action_group(pSessionBus, m_nActionGroupExportId);
+                if ( m_nHudAwarenessId )
+                    hud_awareness_unregister( pSessionBus, m_nHudAwarenessId );
+                if ( m_nMenuExportId )
+                    g_dbus_connection_unexport_menu_model( pSessionBus, m_nMenuExportId );
+                if ( m_nActionGroupExportId )
+                    g_dbus_connection_unexport_action_group( pSessionBus, m_nActionGroupExportId );
             }
             gtk_widget_destroy( m_pWindow );
         }
@@ -795,6 +803,9 @@ void GtkSalFrame::InitCommon()
     m_bSetFocusOnMap    = false;
     m_pSalMenu          = NULL;
     m_nWatcherId        = 0;
+    m_nMenuExportId     = 0;
+    m_nActionGroupExportId = 0;
+    m_nHudAwarenessId   = 0;
 
     gtk_widget_set_app_paintable( m_pWindow, TRUE );
     gtk_widget_set_double_buffered( m_pWindow, FALSE );
@@ -1108,7 +1119,6 @@ void GtkSalFrame::Init( SalFrame* pParent, sal_uLong nStyle )
     {
         // Enable DBus native menu if available.
         ensure_dbus_setup( this );
-        //EnsureAppMenuWatch();
 
         guint32 nUserTime = 0;
         if( (nStyle & (SAL_FRAME_STYLE_OWNERDRAWDECORATION|SAL_FRAME_STYLE_TOOLWINDOW)) == 0 )
