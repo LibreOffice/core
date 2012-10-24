@@ -95,7 +95,7 @@ endef
 $(call gb_XcsTarget_get_target,%) : \
 	    $(gb_XcsTarget_XSLT_SchemaVal) $(gb_XcsTarget_XSLT_Sanity) \
 		$(gb_XcsTarget_XSLT_SchemaTrim) $(gb_XcsTarget_DTD_Schema)
-	$(call gb_XcsTarget__command,$@,$*,$(call gb_Helper_symlinked_native,$(filter %.xcs,$^)))
+	$(call gb_XcsTarget__command,$@,$*,$(filter %.xcs,$^))
 
 $(call gb_XcsTarget_get_clean_target,%) :
 	$(call gb_Output_announce,$*,$(false),XCS,1)
@@ -142,7 +142,7 @@ endef
 
 $(call gb_XcuDataTarget_get_target,%) : $(gb_XcuDataTarget_XSLT_DataVal) \
 		$(gb_XcuTarget_XSLT_AllLang) $(gb_XcuDataTarget_DTD_ComponentUpdate)
-	$(call gb_XcuDataTarget__command,$@,$*,$(call gb_Helper_symlinked_native,$(filter %.xcu,$^)))
+	$(call gb_XcuDataTarget__command,$@,$*,$(filter %.xcu,$^))
 
 $(call gb_XcuDataTarget_get_clean_target,%) :
 	$(call gb_Output_announce,$*,$(false),XCU,2)
@@ -185,7 +185,7 @@ $(call gb_Helper_abbreviate_dirs,\
 endef
 
 $(call gb_XcuModuleTarget_get_target,%) : $(gb_XcuTarget_XSLT_AllLang)
-	$(call gb_XcuModuleTarget__command,$@,$*,$(call gb_Helper_symlinked_native,$(filter %.xcu,$^)),$(filter %.xcs,$^))
+	$(call gb_XcuModuleTarget__command,$@,$*,$(filter %.xcu,$^),$(filter %.xcs,$^))
 
 $(call gb_XcuModuleTarget_get_clean_target,%) :
 	$(call gb_Output_announce,$*,$(false),XCU,3)
@@ -255,7 +255,7 @@ $(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) && \
 	$(gb_XcuMergeTarget_CFGEXCOMMAND) \
 		-p $(firstword $(subst /, ,$(2))) \
-		-i $(call gb_Helper_symlinked_native,$(3)) \
+		-i $(3) \
 		-o $(1) \
 		-m $(SDF) \
 		-l all)
@@ -297,7 +297,7 @@ $(call gb_Helper_abbreviate_dirs,\
 endef
 
 $(call gb_XcuResTarget_get_target,%) : $(gb_XcuTarget_XSLT_AllLang)
-	$(call gb_XcuResTarget__command,$@,$*,$(call gb_Helper_symlinked_native,$(filter %.xcu,$^)))
+	$(call gb_XcuResTarget__command,$@,$*,$(filter %.xcu,$^))
 
 $(call gb_XcuResTarget_get_clean_target,%) :
 	$(call gb_Output_announce,$*,$(false),XCU,6)

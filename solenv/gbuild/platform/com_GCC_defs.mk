@@ -192,8 +192,6 @@ define gb_Helper_make_url
 file://$(strip $(1))
 endef
 
-gb_Helper_symlinked_native = $(1)
-
 gb_Helper_OUTDIRLIBDIR := $(OUTDIR)/lib
 gb_Helper_OUTDIR_FOR_BUILDLIBDIR := $(OUTDIR_FOR_BUILD)/lib
 
