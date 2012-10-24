@@ -28,6 +28,4 @@ $(eval $(call gb_UnpackedTarball_fix_end_of_line,ConvertTextToNumber,\
 	Office/UI/WriterWindowState.xcu \
 ))
 
-$(eval $(call gb_UnpackedTarball_mark_output_file,ConvertTextToNumber,description.xml))
-
 # vim: set noet sw=4 ts=4:

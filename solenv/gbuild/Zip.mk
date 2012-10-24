@@ -128,4 +128,10 @@ $(call gb_Zip_get_target,$(1)) : gb_Zip_ZIPCOMMAND += $(2)
 
 endef
 
+define gb_Zip_use_unpacked
+$(call gb_Zip__get_preparation_target,$(1)) \
+	:| $(call gb_UnpackedTarball_get_final_target,$(2))
+
+endef
+
 # vim: set noet sw=4 ts=4:

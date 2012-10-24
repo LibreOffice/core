@@ -13,7 +13,7 @@ ifneq (,$(filter CT2N,$(BUILD_TYPE)))
 
 $(eval $(call gb_Module_add_targets,ConvertTextToNumber,\
 	UnpackedTarball_ct2n \
-	Extension_ct2n \
+	Zip_ct2n \
 ))
 
 endif

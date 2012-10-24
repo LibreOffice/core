@@ -7,11 +7,9 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Zip_Zip,ct2n,$(call gb_UnpackedTarball_get_dir,ct2n)))
+$(eval $(call gb_Zip_Zip,ct2n,$(call gb_UnpackedTarball_get_dir,ConvertTextToNumber)))
 
-$(eval $(call gb_Zip_add_dependencies,ct2n,\
-	$(call gb_UnpackedTarball_get_target,ct2n) \
-))
+$(eval $(call gb_Zip_use_unpacked,ct2n,ConvertTextToNumber))
 
 $(eval $(call gb_Zip_add_files,ct2n,\
     Addons.xcu \
@@ -45,6 +43,8 @@ $(eval $(call gb_Zip_add_files,ct2n,\
     registration \
     registration/COPYING \
 ))
+
+# UGLY: the Zip target always has .zip suffix, so copy the file to .oxt here...
 
 $(call gb_Zip_get_final_target,ct2n) : $(OUTDIR)/bin/ConvertTextToNumber.oxt
 $(call gb_Zip_get_clean_target,ct2n) : Clean_ConvertTextToNumber_oxt
