@@ -261,7 +261,7 @@ bool UnoInterfaceProxy::CanCastTo(System::Type^ fromType,
 
         // handle regular exception from target
         OSL_ENSURE(
-            0 == pException,
+            nullptr == pException,
             OUStringToOString(
                 mapCliString( pException->ToString()),
                 RTL_TEXTENCODING_UTF8 ).getStr() );
