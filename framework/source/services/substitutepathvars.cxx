@@ -570,7 +570,7 @@ void SubstitutePathVariables_Impl::ReadSharePointRuleSetFromConfiguration(
 //*****************************************************************************************************************
 DEFINE_XSERVICEINFO_ONEINSTANCESERVICE  ( SubstitutePathVariables                     ,
                                           ::cppu::OWeakObject                         ,
-                                          DECLARE_ASCII("com.sun.star.util.PathSubstitution"),
+                                          "com.sun.star.util.PathSubstitution",
                                           IMPLEMENTATIONNAME_SUBSTITUTEPATHVARIABLES    )
 
 DEFINE_INIT_SERVICE                     (   SubstitutePathVariables, {} )
