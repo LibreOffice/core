@@ -45,6 +45,7 @@ private:
 class VCL_DLLPUBLIC VclBox : public VclContainer
 {
 protected:
+    Size m_aMinChildSize;
     bool m_bHomogeneous;
     int m_nSpacing;
 public:
@@ -70,8 +71,10 @@ public:
     {
         return m_bHomogeneous;
     }
-    virtual bool set_property(const rtl::OString &rKey, const rtl::OString &rValue);
+    virtual bool set_property(const OString &rKey, const OString &rValue);
 protected:
+    Size finalizeMaxes(const Size &rSize, sal_uInt16 nVisibleChildren) const;
+
     virtual Size calculateRequisition() const;
     virtual void setAllocation(const Size &rAllocation);
 
@@ -182,11 +185,7 @@ enum VclButtonBoxStyle
 class VCL_DLLPUBLIC VclButtonBox : public VclBox
 {
 public:
-    VclButtonBox(Window *pParent, int nSpacing)
-        : VclBox(pParent, true, nSpacing)
-        , m_eLayoutStyle(VCL_BUTTONBOX_DEFAULT_STYLE)
-    {
-    }
+    VclButtonBox(Window *pParent, int nSpacing);
     void set_layout(VclButtonBoxStyle eStyle)
     {
         m_eLayoutStyle = eStyle;
@@ -195,7 +194,7 @@ public:
     {
         return m_eLayoutStyle;
     }
-    virtual bool set_property(const rtl::OString &rKey, const rtl::OString &rValue);
+    virtual bool set_property(const OString &rKey, const OString &rValue);
 protected:
     virtual Size calculateRequisition() const;
     virtual void setAllocation(const Size &rAllocation);
@@ -388,7 +387,7 @@ public:
     {
         return m_nColumnSpacing;
     }
-    virtual bool set_property(const rtl::OString &rKey, const rtl::OString &rValue);
+    virtual bool set_property(const OString &rKey, const OString &rValue);
 };
 
 VCL_DLLPUBLIC void setGridAttach(Window &rWidget, sal_Int32 nLeft, sal_Int32 nTop,
@@ -408,7 +407,7 @@ class VCL_DLLPUBLIC VclFrame : public VclBin
 {
 public:
     VclFrame(Window *pParent) : VclBin(pParent) {}
-    void set_label(const rtl::OUString &rLabel);
+    void set_label(const OUString &rLabel);
     Window *get_label_widget();
     const Window *get_label_widget() const;
 protected:
@@ -431,7 +430,7 @@ public:
         , m_fYScale(1.0)
     {
     }
-    virtual bool set_property(const rtl::OString &rKey, const rtl::OString &rValue);
+    virtual bool set_property(const OString &rKey, const OString &rValue);
 protected:
     virtual Size calculateRequisition() const;
     virtual void setAllocation(const Size &rAllocation);
@@ -459,7 +458,7 @@ public:
     }
     virtual Window *get_child();
     virtual const Window *get_child() const;
-    virtual bool set_property(const rtl::OString &rKey, const rtl::OString &rValue);
+    virtual bool set_property(const OString &rKey, const OString &rValue);
 protected:
     virtual Size calculateRequisition() const;
     virtual void setAllocation(const Size &rAllocation);

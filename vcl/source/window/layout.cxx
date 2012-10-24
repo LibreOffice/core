@@ -88,8 +88,6 @@ void VclContainer::SetSizePixel(const Size& rAllocation)
 
 Size VclBox::calculateRequisition() const
 {
-    long nMaxChildDimension = 0;
-
     sal_uInt16 nVisibleChildren = 0;
 
     Size aSize;
@@ -99,31 +97,20 @@ Size VclBox::calculateRequisition() const
             continue;
         ++nVisibleChildren;
         Size aChildSize = getLayoutRequisition(*pChild);
-        long nSecondaryDimension = getSecondaryDimension(aChildSize);
-        if (nSecondaryDimension > getSecondaryDimension(aSize))
-            setSecondaryDimension(aSize, nSecondaryDimension);
+
+        long nSecondaryChildDimension = getSecondaryDimension(aChildSize);
+        long nSecondaryBoxDimension = getSecondaryDimension(aSize);
+        setSecondaryDimension(aSize, std::max(nSecondaryChildDimension, nSecondaryBoxDimension));
+
+        long nPrimaryChildDimension = getPrimaryDimension(aChildSize);
+        long nPrimaryBoxDimension = getPrimaryDimension(aSize);
         if (m_bHomogeneous)
-        {
-            long nPrimaryDimension = getPrimaryDimension(aChildSize);
-            if (nPrimaryDimension > nMaxChildDimension)
-                nMaxChildDimension = nPrimaryDimension;
-        }
+            setPrimaryDimension(aSize, std::max(nPrimaryBoxDimension, nPrimaryChildDimension));
         else
-        {
-            long nPrimaryDimension = getPrimaryDimension(aSize);
-            setPrimaryDimension(aSize, nPrimaryDimension + getPrimaryDimension(aChildSize));
-        }
+            setPrimaryDimension(aSize, nPrimaryBoxDimension + nPrimaryChildDimension);
     }
 
-    if (nVisibleChildren)
-    {
-        long nPrimaryDimension = getPrimaryDimension(aSize);
-        if (m_bHomogeneous)
-            nPrimaryDimension += nMaxChildDimension * nVisibleChildren;
-        setPrimaryDimension(aSize, nPrimaryDimension + m_nSpacing * (nVisibleChildren-1));
-    }
-
-    return aSize;
+    return finalizeMaxes(aSize, nVisibleChildren);
 }
 
 void VclBox::setAllocation(const Size &rAllocation)
@@ -238,18 +225,37 @@ bool VclBox::set_property(const rtl::OString &rKey, const rtl::OString &rValue)
     return true;
 }
 
-#define DEFAULT_CHILD_INTERNAL_PAD_X 4
-#define DEFAULT_CHILD_INTERNAL_PAD_Y 0
 #define DEFAULT_CHILD_MIN_WIDTH 85
 #define DEFAULT_CHILD_MIN_HEIGHT 27
+
+VclButtonBox::VclButtonBox(Window *pParent, int nSpacing)
+    : VclBox(pParent, true, nSpacing)
+    , m_eLayoutStyle(VCL_BUTTONBOX_DEFAULT_STYLE)
+{
+    m_aMinChildSize = Size(DEFAULT_CHILD_MIN_WIDTH, DEFAULT_CHILD_MIN_HEIGHT); //to-do, pull from theme
+}
+
+Size VclBox::finalizeMaxes(const Size &rSize, sal_uInt16 nVisibleChildren) const
+{
+    Size aRet;
+
+    if (nVisibleChildren)
+    {
+        long nPrimaryDimension = getPrimaryDimension(rSize);
+        if (m_bHomogeneous)
+            nPrimaryDimension *= nVisibleChildren;
+        setPrimaryDimension(aRet, nPrimaryDimension + m_nSpacing * (nVisibleChildren-1));
+        setSecondaryDimension(aRet, getSecondaryDimension(rSize));
+    }
+
+    return aRet;
+}
 
 VclButtonBox::Requisition VclButtonBox::calculatePrimarySecondaryRequisitions() const
 {
     Requisition aReq;
 
-    sal_Int32 nChildMinWidth = DEFAULT_CHILD_MIN_WIDTH; //to-do, pull from theme
-    sal_Int32 nChildMinHeight = DEFAULT_CHILD_MIN_HEIGHT; //to-do, pull from theme
-    Size aSize(nChildMinWidth, nChildMinHeight);
+    Size aSize(m_aMinChildSize);
 
     for (Window *pChild = GetWindow(WINDOW_FIRSTCHILD); pChild; pChild = pChild->GetWindow(WINDOW_NEXT))
     {
@@ -268,16 +274,7 @@ VclButtonBox::Requisition VclButtonBox::calculatePrimarySecondaryRequisitions() 
 
     sal_uInt16 nVisibleChildren = aReq.m_nPrimaryChildren + aReq.m_nSecondaryChildren;
 
-    if (!nVisibleChildren)
-        return aReq;
-
-    long nPrimaryDimension =
-        (getPrimaryDimension(aSize) * nVisibleChildren) +
-        (m_nSpacing * (nVisibleChildren-1));
-    setPrimaryDimension(aReq.m_aSize, nPrimaryDimension + m_nSpacing);
-
-    long nSecondaryDimension = getSecondaryDimension(aSize);
-    setSecondaryDimension(aReq.m_aSize, nSecondaryDimension);
+    aReq.m_aSize = finalizeMaxes(aSize, nVisibleChildren);
 
     return aReq;
 }
