@@ -62,7 +62,7 @@ gb_Dictionary_extensionname = Dictionary/$(1)
 #
 # gb_Dictionary_Dictionary dictionary srcdir
 define gb_Dictionary_Dictionary
-$(call gb_ExtensionTarget_ExtensionTarget,$(call gb_Dictionary_extensionname,$(1)),$(SRCDIR)/$(2))
+$(call gb_ExtensionTarget_ExtensionTarget,$(call gb_Dictionary_extensionname,$(1)),$(SRCDIR)/$(2),$(2))
 $(call gb_Dictionary_add_root_file,$(1),$(2)/$(gb_Dictionary_CONFIGURATION_FILE))
 
 $(call gb_Dictionary_get_target,$(1)) : $(call gb_ExtensionTarget_get_target,$(call gb_Dictionary_extensionname,$(1)))

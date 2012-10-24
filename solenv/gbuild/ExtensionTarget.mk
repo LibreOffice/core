@@ -130,21 +130,23 @@ $(call gb_ExtensionTarget_get_target,%) : \
 # register target and clean target
 # add deliverable
 # add dependency for outdir target to workdir target (pattern rule for delivery is in Package.mk)
+#
+# gb_ExtensionTarget_ExtensionTarget extension srcdir l10n-srcdir?
 define gb_ExtensionTarget_ExtensionTarget
 $(call gb_ExtensionTarget_get_target,$(1)) : DESCRIPTION :=
 $(call gb_ExtensionTarget_get_target,$(1)) : FILES := META-INF description.xml
 $(call gb_ExtensionTarget_get_target,$(1)) : LICENSE :=
 $(call gb_ExtensionTarget_get_target,$(1)) : LOCATION := $(2)
 $(call gb_ExtensionTarget_get_target,$(1)) : PLATFORM := $(PLATFORMID)
-$(call gb_ExtensionTarget_get_target,$(1)) : PRJNAME := $(firstword $(subst /, ,$(2)))
+$(call gb_ExtensionTarget_get_target,$(1)) : PRJNAME := $(firstword $(subst /, ,$(3)))
 $(call gb_ExtensionTarget_get_workdir,$(1))/description.xml : \
 	$(2)/description.xml
 $(call gb_ExtensionTarget_get_workdir,$(1))/description.xml :| \
 	$(call gb_ExtensionTarget__get_preparation_target,$(1))
 
 ifneq ($(strip $(gb_WITH_LANG)),)
-$(call gb_ExtensionTarget_get_target,$(1)) : SDF := $(gb_SDFLOCATION)/$(2)/localize.sdf
-$(call gb_ExtensionTarget_get_workdir,$(1))/description.xml : $(gb_SDFLOCATION)/$(2)/localize.sdf
+$(if $(3),$(call gb_ExtensionTarget_get_target,$(1)) : SDF := $(gb_SDFLOCATION)/$(3)/localize.sdf)
+$(if $(3),$(call gb_ExtensionTarget_get_workdir,$(1))/description.xml : $(gb_SDFLOCATION)/$(3)/localize.sdf)
 endif
 
 $(foreach lang,$(gb_ExtensionTarget_ALL_LANGS), \

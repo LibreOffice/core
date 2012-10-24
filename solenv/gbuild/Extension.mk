@@ -28,7 +28,7 @@
 # Extension class
 
 define gb_Extension_Extension
-$(call gb_ExtensionTarget_ExtensionTarget,$(1),$(if $(filter nodefaults,$(3)),$(2),$(SRCDIR)/$(2)))
+$(call gb_ExtensionTarget_ExtensionTarget,$(1),$(if $(filter nodefaults,$(3)),$(2),$(SRCDIR)/$(2)),$(if $(filter nodefaults,$(3)),,$(2)))
 $(if $(filter nodefaults,$(3)),,\
  $(call gb_ExtensionTarget_use_default_license,$(1)))
 $(if $(filter nodefaults,$(3)),,\
