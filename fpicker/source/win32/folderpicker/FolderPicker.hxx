@@ -24,7 +24,7 @@
 #include <osl/mutex.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
-#include <com/sun/star/ui/dialogs/XFolderPicker.hpp>
+#include <com/sun/star/ui/dialogs/FolderPicker.hpp>
 #include <com/sun/star/util/XCancellable.hpp>
 
 #include <memory>
