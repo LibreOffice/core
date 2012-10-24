@@ -111,6 +111,11 @@ Size VclBox::calculateRequisition() const
             continue;
         ++nVisibleChildren;
         Size aChildSize = getLayoutRequisition(*pChild);
+
+        long nPrimaryDimension = getPrimaryDimension(aChildSize);
+        nPrimaryDimension += pChild->get_padding() * 2;
+        setPrimaryDimension(aChildSize, nPrimaryDimension);
+
         accumulateMaxes(aChildSize, aSize);
     }
 
@@ -175,10 +180,10 @@ void VclBox::setAllocation(const Size &rAllocation)
             {
                 aBoxSize = getLayoutRequisition(*pChild);
                 long nPrimaryDimension = getPrimaryDimension(aBoxSize);
-                nPrimaryDimension += nPadding;
-                bool bExpand = pChild->get_expand();
-                if (bExpand)
-                    setPrimaryDimension(aBoxSize, nPrimaryDimension + nExtraSpace);
+                nPrimaryDimension += nPadding * 2;
+                if (pChild->get_expand())
+                    nPrimaryDimension += nExtraSpace;
+                setPrimaryDimension(aBoxSize, nPrimaryDimension);
             }
             setSecondaryDimension(aBoxSize, getSecondaryDimension(rAllocation));
 
