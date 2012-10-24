@@ -84,7 +84,6 @@ int UIPreviewApp::Main()
     {
         fprintf(stderr, "fatal error: %s\n", rtl::OUStringToOString(e.Message, osl_getThreadTextEncoding()).getStr());
     }
-    return false;
 
     return EXIT_SUCCESS;
 }
