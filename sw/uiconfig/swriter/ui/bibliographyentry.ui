@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <!-- interface-requires gtk+ 3.0 -->
-  <object class="GtkDialog" id="BibliographyEntyDialog">
+  <object class="GtkDialog" id="BibliographyEntryDialog">
     <property name="can_focus">False</property>
     <property name="border_width">5</property>
     <property name="title" translatable="yes">Insert Bibliography Entry</property>

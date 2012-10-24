@@ -701,7 +701,7 @@ Window *VclBuilder::makeObject(Window *pParent, const OString &name, const OStri
     {
         extractModel(id, rMap);
         ListBox *pListBox = new ListBox(pParent, WB_LEFT|WB_DROPDOWN|WB_VCENTER|WB_3DLOOK);
-        pListBox->SetBestDropDownLineCount();
+        pListBox->EnableAutoSize(true);
         pWindow = pListBox;
     }
     else if (name == "GtkComboBoxText")
@@ -710,7 +710,7 @@ Window *VclBuilder::makeObject(Window *pParent, const OString &name, const OStri
         if (extractEntry(rMap))
         {
             ComboBox* pComboBox = new ComboBox(pParent, WB_LEFT|WB_DROPDOWN|WB_VCENTER|WB_3DLOOK);
-            pComboBox->SetBestDropDownLineCount();
+            pComboBox->EnableAutoSize(true);
             pWindow = pComboBox;
         }
         else

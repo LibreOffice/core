@@ -982,7 +982,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
             OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
-            AbstractSwInsertAbstractDlg* pDlg = pFact->CreateSwInsertAbstractDlg(0, DLG_INSERT_ABSTRACT );
+            AbstractSwInsertAbstractDlg* pDlg = pFact->CreateSwInsertAbstractDlg(0);
             OSL_ENSURE(pDlg, "Dialogdiet fail!");
             if(RET_OK == pDlg->Execute())
             {

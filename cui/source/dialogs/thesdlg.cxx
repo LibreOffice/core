@@ -58,7 +58,7 @@ using ::rtl::OUString;
 LookUpComboBox::LookUpComboBox(Window *pParent)
     : ComboBox(pParent, WB_LEFT|WB_DROPDOWN|WB_VCENTER|WB_3DLOOK)
 {
-    SetBestDropDownLineCount();
+    EnableAutoSize(true);
 
     m_aModifyTimer.SetTimeoutHdl( LINK( this, LookUpComboBox, ModifyTimer_Hdl ) );
     m_aModifyTimer.SetTimeout( 500 );

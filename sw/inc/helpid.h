@@ -382,21 +382,6 @@
 #define HID_TOX_ENTRY_EDIT                                      "SW_HID_TOX_ENTRY_EDIT"
 
 #define HID_DLG_NEW_USER_IDX                                    "SW_HID_DLG_NEW_USER_IDX"
-#define HID_INSERT_IDX_MRK_OK                                   "SW_HID_INSERT_IDX_MRK_OK"
-#define HID_INSERT_IDX_MRK_CLOSE                                "SW_HID_INSERT_IDX_MRK_CLOSE"
-#define HID_INSERT_IDX_MRK_DELETE                               "SW_HID_INSERT_IDX_MRK_DELETE"
-#define HID_INSERT_IDX_MRK_NEW                                  "SW_HID_INSERT_IDX_MRK_NEW"
-#define HID_INSERT_IDX_MRK_PREV                                 "SW_HID_INSERT_IDX_MRK_PREV"
-#define HID_INSERT_IDX_MRK_PREV_SAME                            "SW_HID_INSERT_IDX_MRK_PREV_SAME"
-#define HID_INSERT_IDX_MRK_NEXT                                 "SW_HID_INSERT_IDX_MRK_NEXT"
-#define HID_INSERT_IDX_MRK_NEXT_SAME                            "SW_HID_INSERT_IDX_MRK_NEXT_SAME"
-#define HID_INSERT_IDX_MRK_TYPE                                 "SW_HID_INSERT_IDX_MRK_TYPE"
-#define HID_INSERT_IDX_MRK_ENTRY                                "SW_HID_INSERT_IDX_MRK_ENTRY"
-#define HID_INSERT_IDX_MRK_PRIM_KEY                             "SW_HID_INSERT_IDX_MRK_PRIM_KEY"
-#define HID_INSERT_IDX_MRK_SEC_KEY                              "SW_HID_INSERT_IDX_MRK_SEC_KEY"
-#define HID_INSERT_IDX_MRK_LEVEL                                "SW_HID_INSERT_IDX_MRK_LEVEL"
-#define HID_INSERT_IDX_MRK_MAIN_ENTRY                           "SW_HID_INSERT_IDX_MRK_MAIN_ENTRY"
-#define HID_INSERT_IDX_MRK_APPLY_ALL                            "SW_HID_INSERT_IDX_MRK_APPLY_ALL"
 #define HID_TOKEN_WINDOW                                        "SW_HID_TOKEN_WINDOW"
 
 #define HID_AUTH_FIELD_IDENTIFIER                               "SW_HID_AUTH_FIELD_IDENTIFIER"
@@ -432,8 +417,6 @@
 #define HID_AUTH_FIELD_ISBN                                     "SW_HID_AUTH_FIELD_ISBN"
 
 #define HID_INSERT_INDEX_ENTRY_LEVEL_LB                         "SW_HID_INSERT_INDEX_ENTRY_LEVEL_LB"
-#define HID_INSERT_IDX_MRK_SRCH_CASESENSITIVE                   "SW_HID_INSERT_IDX_MRK_SRCH_CASESENSITIVE"
-#define HID_INSERT_IDX_MRK_SRCH_WORDONLY                        "SW_HID_INSERT_IDX_MRK_SRCH_WORDONLY"
 #define HID_DLG_CREATE_AUTOMARK                                 "SW_HID_DLG_CREATE_AUTOMARK"
 #define HID_BUSINESS_CARD_CONTENT                               "SW_HID_BUSINESS_CARD_CONTENT"
 #define HID_SAVE_LABEL_DLG                                      "SW_HID_SAVE_LABEL_DLG"
@@ -460,7 +443,6 @@
 #define HID_SEND_HTML_CTRL_CHECKBOX_AUTOEXTENSION               "SW_HID_SEND_HTML_CTRL_CHECKBOX_AUTOEXTENSION"
 #define HID_SEND_HTML_CTRL_LISTBOX_TEMPLATE                     "SW_HID_SEND_HTML_CTRL_LISTBOX_TEMPLATE"
 
-#define HID_INSERT_IDX_MRK_PHONETIC_READING                     "SW_HID_INSERT_IDX_MRK_PHONETIC_READING"
 #define HID_COLUMN_VALUESET                                     "SW_HID_COLUMN_VALUESET"
 #define HID_PVIEW_ZOOM_LB                                       "SW_HID_PVIEW_ZOOM_LB"
 #define HID_MAIL_MERGE_SELECT                                   "SW_HID_MAIL_MERGE_SELECT"

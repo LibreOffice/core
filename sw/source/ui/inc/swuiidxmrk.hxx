@@ -31,18 +31,16 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <sfx2/basedlgs.hxx>
 
-#include <vcl/fixed.hxx>
-#include <vcl/lstbox.hxx>
-#include <vcl/combobox.hxx>
 #include <svx/stddlg.hxx>
 
+#include <vcl/button.hxx>
+#include <vcl/combobox.hxx>
 #include <vcl/field.hxx>
-
+#include <vcl/fixed.hxx>
 #include <vcl/group.hxx>
+#include <vcl/layout.hxx>
+#include <vcl/lstbox.hxx>
 
-#include <vcl/button.hxx>
-
-#include <vcl/button.hxx>
 #include <sfx2/childwin.hxx>
 #include "toxe.hxx"
 #include <svtools/stdctrl.hxx>
@@ -57,51 +55,49 @@ class SwTOXMark;
 class SwIndexMarkFloatDlg;
 class SwIndexMarkModalDlg;
 
-class SwIndexMarkDlg : public Window
+class SwIndexMarkPane
 {
+    Dialog& m_rDialog;
+
     friend class SwIndexMarkFloatDlg;
     friend class SwIndexMarkModalDlg;
-    FixedLine       aIndexFL;
-    FixedText       aTypeFT;
-    ListBox         aTypeDCB;
-    ImageButton     aNewBT;
+    VclFrame*       m_pFrame;
+    FixedText*      m_pTypeFT;
+    ListBox*        m_pTypeDCB;
+    PushButton*     m_pNewBT;
 
-    FixedText       aEntryFT;
-    Edit            aEntryED;
-    FixedText       aPhoneticFT0;
-    Edit            aPhoneticED0;
+    Edit*           m_pEntryED;
+    FixedText*      m_pPhoneticFT0;
+    Edit*           m_pPhoneticED0;
 
-    FixedText       aKeyFT;
-    ComboBox        aKeyDCB;
-    FixedText       aPhoneticFT1;
-    Edit            aPhoneticED1;
+    FixedText*      m_pKey1FT;
+    ComboBox*       m_pKey1DCB;
+    FixedText*      m_pPhoneticFT1;
+    Edit*           m_pPhoneticED1;
 
-    FixedText       aKey2FT;
-    ComboBox        aKey2DCB;
-    FixedText       aPhoneticFT2;
-    Edit            aPhoneticED2;
+    FixedText*      m_pKey2FT;
+    ComboBox*       m_pKey2DCB;
+    FixedText*      m_pPhoneticFT2;
+    Edit*           m_pPhoneticED2;
 
-    FixedText       aLevelFT;
-    NumericField    aLevelED;
-     CheckBox       aMainEntryCB;
-     CheckBox       aApplyToAllCB;
-     CheckBox       aSearchCaseSensitiveCB;
-     CheckBox       aSearchCaseWordOnlyCB;
+    FixedText*      m_pLevelFT;
+    NumericField*   m_pLevelNF;
+    CheckBox*       m_pMainEntryCB;
+    CheckBox*       m_pApplyToAllCB;
+    CheckBox*       m_pSearchCaseSensitiveCB;
+    CheckBox*       m_pSearchCaseWordOnlyCB;
 
 
-    OKButton        aOKBT;
-    CancelButton    aCancelBT;
-    HelpButton      aHelpBT;
-    PushButton      aDelBT;
-    //PushButton        aNewBT;
+    PushButton*     m_pOKBT;
+    PushButton*     m_pCloseBT;
+    PushButton*     m_pDelBT;
 
-    ImageButton     aPrevSameBT;
-    ImageButton     aNextSameBT;
-    ImageButton     aPrevBT;
-    ImageButton     aNextBT;
+    PushButton*     m_pPrevSameBT;
+    PushButton*     m_pNextSameBT;
+    PushButton*     m_pPrevBT;
+    PushButton*     m_pNextBT;
 
     String          aOrgStr;
-    sal_Int32       nOptionsId;
     sal_Bool            bDel;
     sal_Bool            bNewMark;
     sal_Bool            bSelected;
@@ -146,27 +142,27 @@ class SwIndexMarkDlg : public Window
     void            UpdateDialog();
     void            InsertUpdate();
 
-    virtual void    Activate();
+    void            Activate();
 
 public:
 
-    SwIndexMarkDlg( Window *pParent,
-                       sal_Bool bNewDlg,
-                    const ResId& rResId,
-                    sal_Int32 _nOptionsId,
-                    SwWrtShell& rWrtShell );
+    SwIndexMarkPane(Dialog &rDialog,
+                    sal_Bool bNewDlg,
+                    SwWrtShell& rWrtShell);
+
+    Dialog &GetDialog() { return m_rDialog; }
 
 
-    ~SwIndexMarkDlg();
+    ~SwIndexMarkPane();
 
     void    ReInitDlg(SwWrtShell& rWrtShell, SwTOXMark* pCurTOXMark = 0);
     sal_Bool    IsTOXType(const String& rName)
-                {return LISTBOX_ENTRY_NOTFOUND != aTypeDCB.GetEntryPos(rName);}
+                {return LISTBOX_ENTRY_NOTFOUND != m_pTypeDCB->GetEntryPos(rName);}
 };
 
 class SwIndexMarkFloatDlg : public SfxModelessDialog
 {
-    SwIndexMarkDlg      aDlg;
+    SwIndexMarkPane m_aContent;
     virtual void    Activate();
     public:
         SwIndexMarkFloatDlg(    SfxBindings* pBindings,
@@ -179,7 +175,7 @@ class SwIndexMarkFloatDlg : public SfxModelessDialog
 
 class SwIndexMarkModalDlg : public SvxStandardDialog
 {
-    SwIndexMarkDlg      aDlg;
+    SwIndexMarkPane m_aContent;
 public:
     SwIndexMarkModalDlg(Window *pParent, SwWrtShell& rSh, SwTOXMark* pCurTOXMark);
 

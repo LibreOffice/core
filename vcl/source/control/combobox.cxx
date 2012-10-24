@@ -544,7 +544,7 @@ void ComboBox::EnableAutoSize( sal_Bool bAuto )
     if ( mpFloatWin )
     {
         if ( bAuto && !mpFloatWin->GetDropDownLineCount() )
-            mpFloatWin->SetDropDownLineCount( 5 );
+            mpFloatWin->SetDropDownLineCount( 16 );
         else if ( !bAuto )
             mpFloatWin->SetDropDownLineCount( 0 );
     }

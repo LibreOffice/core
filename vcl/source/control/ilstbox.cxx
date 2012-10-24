@@ -3229,7 +3229,7 @@ Size ImplListBoxFloatingWindow::CalcFloatSize()
     // Minimale Hoehe, falls Hoehe nicht auf Float-Hoehe eingestellt wurde.
     // Der Parent vom FloatWin muss die DropDown-Combo/Listbox sein.
     Size aParentSz = GetParent()->GetSizePixel();
-    if( !mnDDLineCount && ( aFloatSz.Height() < aParentSz.Height() ) )
+    if( (!mnDDLineCount || !nLines) && ( aFloatSz.Height() < aParentSz.Height() ) )
         aFloatSz.Height() = aParentSz.Height();
 
     // Nicht schmaler als der Parent werden...
@@ -3254,6 +3254,7 @@ Size ImplListBoxFloatingWindow::CalcFloatSize()
         long nSBWidth = GetSettings().GetStyleSettings().GetScrollBarSize();
         aFloatSz.Height() += nSBWidth;
     }
+
     return aFloatSz;
 }
 

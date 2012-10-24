@@ -147,7 +147,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeColorListBox(Window *pParen
         nWinBits |= WB_DROPDOWN;
     ColorListBox *pListBox = new ColorListBox(pParent, nWinBits);
     if (bDropdown)
-        pListBox->SetBestDropDownLineCount();
+        pListBox->EnableAutoSize(true);
     return pListBox;
 }
 
@@ -1049,7 +1049,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeFontNameBox(Window *pParent
         nWinBits |= WB_DROPDOWN;
     FontNameBox *pListBox = new FontNameBox(pParent, nWinBits);
     if (bDropdown)
-        pListBox->SetBestDropDownLineCount();
+        pListBox->EnableAutoSize(true);
     return pListBox;
 }
 
@@ -1438,7 +1438,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeFontStyleBox(Window *pParen
         nWinBits |= WB_DROPDOWN;
     FontStyleBox *pListBox = new FontStyleBox(pParent, nWinBits);
     if (bDropdown)
-        pListBox->SetBestDropDownLineCount();
+        pListBox->EnableAutoSize(true);
     return pListBox;
 }
 
@@ -1658,7 +1658,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeFontSizeBox(Window *pParent
         nWinBits |= WB_DROPDOWN;
     FontSizeBox* pListBox = new FontSizeBox(pParent, nWinBits);
     if (bDropdown)
-        pListBox->SetBestDropDownLineCount();
+        pListBox->EnableAutoSize(true);
     return pListBox;
 }
 

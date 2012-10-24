@@ -72,7 +72,7 @@ SwInsertIdxMarkWrapper::SwInsertIdxMarkWrapper( Window *pParentWindow,
 {
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
     OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
-    pAbstDlg = pFact->CreateIndexMarkFloatDlg( DLG_INSIDXMARK , pBindings, this, pParentWindow, pInfo );
+    pAbstDlg = pFact->CreateIndexMarkFloatDlg(pBindings, this, pParentWindow, pInfo);
     OSL_ENSURE(pAbstDlg, "Dialogdiet fail!");
     pWindow = pAbstDlg->GetWindow();
     pWindow->Show();    // at this point,because before pSh has to be initialized in ReInitDlg()
