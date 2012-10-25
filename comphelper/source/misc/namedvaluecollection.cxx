@@ -194,7 +194,7 @@ namespace comphelper
         else if ( i_rWrappedElements >>= aPropertyValue )
             impl_assign( Sequence< PropertyValue >( &aPropertyValue, 1 ) );
         else
-            OSL_ENSURE( !i_rWrappedElements.hasValue(), "NamedValueCollection::impl_assign(Any): unsupported type!" );
+            SAL_WARN_IF( i_rWrappedElements.hasValue(), "comphelper", "NamedValueCollection::impl_assign(Any): unsupported type!" );
     }
 
     //--------------------------------------------------------------------
@@ -222,7 +222,8 @@ namespace comphelper
                 ::rtl::OStringBuffer message;
                 message.append( "NamedValueCollection::impl_assign: encountered a value type which I cannot handle:\n" );
                 message.append( ::rtl::OUStringToOString( pArgument->getValueTypeName(), RTL_TEXTENCODING_ASCII_US ) );
-                OSL_FAIL( message.getStr() );
+                // Once this is rare, this could be turned into a warning.
+                SAL_INFO( "comphelper", message.getStr() );
             }
 #endif
         }
