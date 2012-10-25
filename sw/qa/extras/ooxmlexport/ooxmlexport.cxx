@@ -64,6 +64,7 @@ public:
     void testMathVerticalStacks();
     void testTablePosition();
     void testFdo47669();
+    void testTableBorders();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -99,6 +100,7 @@ void Test::run()
         {"math-vertical_stacks.docx", &Test::testMathVerticalStacks},
         {"table-position.docx", &Test::testTablePosition},
         {"fdo47669.docx", &Test::testFdo47669},
+        {"table-borders.docx", &Test::testTableBorders},
     };
     // Don't test the first import of these, for some reason those tests fail
     const char* aBlacklist[] = {
@@ -400,6 +402,66 @@ void Test::testFdo47669()
     getParagraph(1, "This is a hyperlink with anchor. Also, this sentence should be seen.");
     getRun(getParagraph(1), 2, "hyperlink with anchor");
     CPPUNIT_ASSERT_EQUAL(OUString("http://www.google.com/#a"), getProperty<OUString>(getRun(getParagraph(1), 2), "HyperLinkURL"));
+}
+
+union SingleLineBorders {
+    SingleLineBorders(int t=0, int b=0, int l=0, int r=0)
+        : top(t), bottom(b), left(l), right(r) {}
+    struct {
+        sal_Int16 top, bottom, left, right;
+    };
+    sal_Int16 sizes[4];
+};
+void Test::testTableBorders() {
+    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables( ), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(1, xTables->getCount());
+    uno::Reference<text::XTextTable> xTextTable (xTables->getByIndex(0), uno::UNO_QUERY);
+
+    std::map<OUString, SingleLineBorders> cellBorders;
+    cellBorders[OUString("A1")] = SingleLineBorders(106, 106, 106, 106);
+    cellBorders[OUString("B1")] = SingleLineBorders(106, 0, 106, 35);
+    cellBorders[OUString("C1")] = SingleLineBorders(106, 106, 35, 106);
+    cellBorders[OUString("A2")] = SingleLineBorders(106, 35, 106, 0);
+    cellBorders[OUString("B2")] = SingleLineBorders(0, 0, 0, 0);
+    cellBorders[OUString("C2")] = SingleLineBorders(106, 106, 0, 106);
+    cellBorders[OUString("A3")] = SingleLineBorders(35, 35, 106, 106);
+    cellBorders[OUString("B3")] = SingleLineBorders(0, 106, 106, 106);
+    cellBorders[OUString("C3")] = SingleLineBorders(106, 106, 106, 106);
+    cellBorders[OUString("A4")] = SingleLineBorders(35, 106, 106, 35);
+    cellBorders[OUString("B4")] = SingleLineBorders(106, 106, 35, 106);
+    cellBorders[OUString("C4")] = SingleLineBorders(106, 106, 106, 106);
+
+    const OUString borderNames[] = {
+        OUString("TopBorder"),
+        OUString("BottomBorder"),
+        OUString("LeftBorder"),
+        OUString("RightBorder"),
+    };
+
+    uno::Sequence<OUString> const cells = xTextTable->getCellNames();
+    sal_Int32 nLength = cells.getLength();
+    CPPUNIT_ASSERT_EQUAL((sal_Int32)cellBorders.size(), nLength);
+
+    for (sal_Int32 i = 0; i < nLength; ++i)
+    {
+        uno::Reference<table::XCell> xCell = xTextTable->getCellByName(cells[i]);
+        uno::Reference< beans::XPropertySet > xPropSet(xCell, uno::UNO_QUERY_THROW);
+        const SingleLineBorders& borders = cellBorders[cells[i]];
+
+        for (sal_Int32 j = 0; j < 4; ++j)
+        {
+            uno::Any aBorder = xPropSet->getPropertyValue(borderNames[j]);
+            table::BorderLine aBorderLine;
+            if (aBorder >>= aBorderLine)
+            {
+                std::stringstream message;
+                message << cells[i] << "'s " << borderNames[j] << " is incorrect";
+                CPPUNIT_ASSERT_EQUAL_MESSAGE(message.str(), borders.sizes[j], aBorderLine.OuterLineWidth);
+            }
+        }
+    }
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
