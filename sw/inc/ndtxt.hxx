@@ -215,7 +215,7 @@ public:
     /// End: Data collected during idle time
 
 protected:
-    /// fuers Umhaengen der TxtFmtCollections (Outline-Nummerierung!!)
+    /// To rewire the TxtFmtCollections (Outline numbering!)
     virtual void Modify( const SfxPoolItem*, const SfxPoolItem* );
     virtual void SwClientNotify( const SwModify&, const SfxHint& );
 

@@ -56,7 +56,7 @@ private:
 
     xub_StrLen m_nIndex;
     SwIndexReg * m_pIndexReg;
-    // doubly linked list of Indexes registered at m_pIndexReg
+    // doube linked list of Indexes registered at m_pIndexReg
     SwIndex * m_pNext;
     SwIndex * m_pPrev;
 
@@ -138,8 +138,8 @@ public:
     explicit SwIndexReg();
     virtual ~SwIndexReg();
 
-    // rtti, abgeleitete moegens gleichtun oder nicht. Wenn sie es gleichtun
-    // kann ueber das SwIndexReg typsicher gecastet werden.
+    // RTTI; derived classes may do the same or not.
+    // If they follow suit we can cast via SwIndexReg in a type-safe manner.
     TYPEINFO();
 
     void MoveTo( SwIndexReg& rArr );
