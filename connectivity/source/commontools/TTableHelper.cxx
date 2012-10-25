@@ -36,6 +36,8 @@
 
 #include <o3tl/compat_functional.hxx>
 
+#include <iterator>
+
 using namespace ::comphelper;
 using namespace connectivity;
 using namespace ::com::sun::star::uno;

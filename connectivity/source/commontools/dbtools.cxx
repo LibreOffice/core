@@ -81,6 +81,7 @@
 #include "connectivity/OSubComponent.hxx"
 
 #include <algorithm>
+#include <iterator>
 
 using namespace ::comphelper;
 using namespace ::com::sun::star::uno;
