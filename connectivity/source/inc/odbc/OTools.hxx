@@ -232,7 +232,7 @@ namespace connectivity
                                         sal_Int32 nPos,
                                         sal_Int8*& pDataBuffer,
                                         sal_Int8* pLenBuffer,
-                                        SQLSMALLINT _nJDBCtype,
+                                        SQLSMALLINT _nODBCtype,
                                         sal_Bool _bUseWChar,
                                         sal_Bool _bUseOldTimeDate,
                                         const void* _pValue,
