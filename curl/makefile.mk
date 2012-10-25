@@ -153,11 +153,14 @@ MACHINE=X86
 MACHINE=X64
 .ENDIF
 
-.IF "$(debug)"==""
+# that debug configuration is disabled for now because it needs msvcr90d.dll
+# (the debug MSVC runtime) and that is not copied into the solver currently,
+# causing unit tests to fail
+#.IF "$(debug)"==""
 BUILD_ACTION=nmake -f Makefile.vc9 cfg=release-dll EXCFLAGS=$(EXCFLAGS) MACHINE=$(MACHINE)
-.ELSE
-BUILD_ACTION=nmake -f Makefile.vc9 cfg=debug-dll EXCFLAGS=$(EXCFLAGS) MACHINE=$(MACHINE)
-.ENDIF
+#.ELSE
+#BUILD_ACTION=nmake -f Makefile.vc9 cfg=debug-dll EXCFLAGS=$(EXCFLAGS) MACHINE=$(MACHINE)
+#.ENDIF
 
 OUT2BIN=$(BUILD_DIR)$/libcurl.dll
 OUT2LIB=$(BUILD_DIR)$/libcurl.lib
