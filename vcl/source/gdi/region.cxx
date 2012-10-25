@@ -1389,8 +1389,7 @@ bool Region::IsInside( const Point& rPoint ) const
     //}
 
     // ensure RegionBand existance
-    const_cast< Region* >(this)->GetAsRegionBand();
-    const RegionBand* pRegionBand = getRegionBand();
+    const RegionBand* pRegionBand = GetAsRegionBand();
 
     if(pRegionBand)
     {
@@ -1673,6 +1672,14 @@ SvStream& operator<<( SvStream& rOStrm, const Region& rRegion )
     {
         pRegionBand->save(rOStrm);
     }
+    else
+    {
+        // for compatibility, write an empty RegionBand (will only write
+        // the end marker STREAMENTRY_END, but this *is* needed)
+        const RegionBand aRegionBand;
+
+        aRegionBand.save(rOStrm);
+    }
 
     // write polypolygon if available
     const sal_Bool bHasPolyPolygon(rRegion.HasPolyPolygonOrB2DPolyPolygon());
@@ -1696,8 +1703,7 @@ void Region::GetRegionRectangles(RectangleVector& rTarget) const
     rTarget.clear();
 
     // ensure RegionBand existance
-    const_cast< Region* >(this)->GetAsRegionBand();
-    const RegionBand* pRegionBand = getRegionBand();
+    const RegionBand* pRegionBand = GetAsRegionBand();
 
     if(pRegionBand)
     {
