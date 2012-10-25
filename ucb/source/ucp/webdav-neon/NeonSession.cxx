@@ -49,6 +49,7 @@ extern "C" {
 
 #include "libxml/parser.h"
 #include "rtl/ustrbuf.hxx"
+#include "comphelper/processfactory.hxx"
 #include "comphelper/sequence.hxx"
 #include <comphelper/stl_types.hxx>
 #include "ucbhelper/simplecertificatevalidationrequest.hxx"
@@ -406,11 +407,7 @@ extern "C" int NeonSession_CertificationNotify( void *userdata,
     uno::Reference< security::XCertificateContainer > xCertificateContainer;
     try
     {
-        xCertificateContainer
-            = uno::Reference< security::XCertificateContainer >(
-                pSession->getMSF()->createInstance(
-                    rtl::OUString( "com.sun.star.security.CertificateContainer" ) ),
-                uno::UNO_QUERY );
+        xCertificateContainer = security::CertificateContainer::create( comphelper::getComponentContext( pSession->getMSF() ) );
     }
     catch ( uno::Exception const & )
     {

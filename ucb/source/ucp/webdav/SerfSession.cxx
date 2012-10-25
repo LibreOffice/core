@@ -24,6 +24,7 @@
 #include <vector>
 #include <string.h>
 #include <rtl/string.h>
+#include "comphelper/processfactory.hxx"
 #include "comphelper/sequence.hxx"
 #include "ucbhelper/simplecertificatevalidationrequest.hxx"
 
@@ -385,11 +386,7 @@ apr_status_t SerfSession::verifySerfCertificateChain (
     try
     {
         // Create a certificate container.
-        xCertificateContainer = uno::Reference< security::XCertificateContainer >(
-            getMSF()->createInstance(
-                rtl::OUString::createFromAscii(
-                    "com.sun.star.security.CertificateContainer" ) ),
-            uno::UNO_QUERY_THROW);
+        xCertificateContainer = security::CertificateContainer::create( comphelper::getComponentContext(getMSF()) );
 
         xSEInitializer = uno::Reference< xml::crypto::XSEInitializer >(
             getMSF()->createInstance(
