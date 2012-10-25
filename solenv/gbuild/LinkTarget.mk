@@ -1098,20 +1098,6 @@ $(foreach aux,$(2),$(call gb_LinkTarget_add_auxtarget,$(1),$(aux)))
 
 endef
 
-#$(2)/$(3) : $(dir $(call gb_LinkTarget_get_target,$(1)/$(3)))/$(notdir $(2))
-#$(dir $(call gb_LinkTarget_get_target,$(1)))/$(notdir $(3)) : $(call gb_LinkTarget_get_target,$(3))
-# CLEAN??? inheritance not a problem here?
-#$(dir $(call gb_LinkTarget_get_target,$(1)))/$(notdir $(2)) : $()
-
-# linktarget-type, outdir-dir, pattern
-# define a dummy touch rule for auxtargets
-# linktarget-type, aux-pattern, linktarget-pattern
-#define gb_LinkTarget__define_auxtarget_rule
-#$(call gb_LinkTarget_get_target,$(1))/$(2) : $(call gb_LinkTarget_get_target,$(1)/$(3))
-#	touch $@
-#
-#endef
-
 define gb_LinkTarget__add_internal_headers
 $(call gb_LinkTarget_get_headers_target,$(1)) : $(2)
 $(2) :|	$(call gb_LinkTarget_get_external_headers_target,$(1))
