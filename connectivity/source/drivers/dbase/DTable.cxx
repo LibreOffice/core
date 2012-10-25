@@ -2002,7 +2002,7 @@ sal_Bool ODbaseTable::UpdateBuffer(OValueRefVector& rRow, OValueRefRow pOrgRow,c
 }
 
 // -----------------------------------------------------------------------------
-sal_Bool ODbaseTable::WriteMemo(ORowSetValue& aVariable, sal_uIntPtr& rBlockNr)
+sal_Bool ODbaseTable::WriteMemo(const ORowSetValue& aVariable, sal_uIntPtr& rBlockNr)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbase", "Ocke.Janssen@sun.com", "ODbaseTable::WriteMemo" );
     // if the BlockNo 0 is given, the block will be appended at the end
