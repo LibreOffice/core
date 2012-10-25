@@ -91,13 +91,11 @@ namespace slideshow
         {
             ::osl::MutexGuard aGuard( maMutex );
 
-#if OSL_DEBUG_LEVEL > 1
             SAL_INFO("slideshow.eventqueue", "adding event \"" << rEvent->GetDescription()
                 << "\" [" << rEvent.get()
                 << "] at " << mpTimer->getElapsedTime()
                 << " with delay " << rEvent->getActivationTime(0.0)
                 );
-#endif
             ENSURE_OR_RETURN_FALSE( rEvent,
                                "EventQueue::addEvent: event ptr NULL" );
 
@@ -119,13 +117,11 @@ namespace slideshow
         {
             ::osl::MutexGuard aGuard( maMutex );
 
-#if OSL_DEBUG_LEVEL > 1
             SAL_INFO("slideshow.eventqueue", "adding event \"" << rEvent->GetDescription()
                 << "\" [" << rEvent.get()
                 << "] for the next round at " << mpTimer->getElapsedTime()
                 << " with delay " << rEvent->getActivationTime(0.0)
                 );
-#endif
 
             ENSURE_OR_RETURN_FALSE( rEvent.get() != NULL,
                                "EventQueue::addEvent: event ptr NULL" );
@@ -139,13 +135,11 @@ namespace slideshow
         {
             ::osl::MutexGuard aGuard( maMutex );
 
-#if OSL_DEBUG_LEVEL > 1
             SAL_INFO("slideshow.eventqueue", "adding event \"" << rpEvent->GetDescription()
                 << "\" [" << rpEvent.get()
                 << "] for execution when the queue is empty at " << mpTimer->getElapsedTime()
                 << " with delay " << rpEvent->getActivationTime(0.0)
                 );
-#endif
 
             ENSURE_OR_RETURN_FALSE(
                 rpEvent.get() != NULL,
@@ -222,20 +216,12 @@ namespace slideshow
                 {
                     try
                     {
-#if OSL_DEBUG_LEVEL > 0
-                        VERBOSE_TRACE( "Firing event: unknown (0x%X), timeout was: %f",
-                                       event.pEvent.get(),
-                                       event.pEvent->getActivationTime(0.0) );
-#endif
-#if OSL_DEBUG_LEVEL > 1
                         SAL_INFO("slideshow.eventqueue", "firing event \""
                                 << event.pEvent->GetDescription()
                                 << "\" [" << event.pEvent.get()
                                 << "] at " << mpTimer->getElapsedTime()
                                 << " with delay " << event.pEvent->getActivationTime(0.0)
                                 );
-#endif
-
                         event.pEvent->fire();
                         SAL_INFO("slideshow.eventqueue", "event \""
                                 << event.pEvent->GetDescription()

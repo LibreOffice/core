@@ -32,9 +32,7 @@ namespace slideshow
         WakeupEvent::WakeupEvent(
             boost::shared_ptr<canvas::tools::ElapsedTime> const & pTimeBase,
             ActivitiesQueue& rActivityQueue ) :
-#if OSL_DEBUG_LEVEL > 1
-            Event(::rtl::OUString("WakeupEvent")),
-#endif
+            Event("WakeupEvent"),
             maTimer(pTimeBase),
             mnNextTime(0.0),
             mpActivity(),

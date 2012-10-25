@@ -38,9 +38,7 @@ namespace slideshow
         public:
             DelayFacade( const EventSharedPtr&  rEvent,
                          double                 nTimeout    ) :
-#if OSL_DEBUG_LEVEL > 1
-                Event(::rtl::OUString("DelayFacade")),
-#endif
+                Event("DelayFacade"),
                 mpEvent( rEvent ),
                 mnTimeout( nTimeout )
             {

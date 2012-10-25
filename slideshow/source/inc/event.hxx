@@ -32,9 +32,7 @@ namespace internal {
 class Event : public Disposable
 {
 public:
-#if OSL_DEBUG_LEVEL > 1
-    Event (const ::rtl::OUString& rsDescription) : msDescription(rsDescription) {};
-#endif
+    Event (const ::rtl::OUString& rsDescription) : msDescription(rsDescription) {}
 
     /** Execute the event.
 
@@ -66,12 +64,10 @@ public:
     */
     virtual double getActivationTime( double nCurrentTime ) const = 0;
 
-#if OSL_DEBUG_LEVEL > 1
-    ::rtl::OUString GetDescription (void) const { return msDescription; }
+    const ::rtl::OUString& GetDescription (void) const { return msDescription; }
 
 private:
     const ::rtl::OUString msDescription;
-#endif
 };
 
 typedef ::boost::shared_ptr< Event > EventSharedPtr;

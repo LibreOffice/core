@@ -37,22 +37,14 @@ public:
     template <typename FuncT>
         Delay( FuncT const& func,
                double nTimeout
-#if OSL_DEBUG_LEVEL > 1
             ,  const ::rtl::OUString& rsDescription
             ) : Event(rsDescription),
-#else
-            ) :
-#endif
             mnTimeout(nTimeout), maFunc(func), mbWasFired(false) {}
 
     Delay( const boost::function0<void>& func,
            double nTimeout
-#if OSL_DEBUG_LEVEL > 1
         , const ::rtl::OUString& rsDescription
         ) : Event(rsDescription),
-#else
-        ) :
-#endif
         mnTimeout(nTimeout),
         maFunc(func),
         mbWasFired(false) {}
@@ -83,9 +75,9 @@ private:
     @return generated delay event
 */
 template <typename FuncT>
-inline EventSharedPtr makeDelay_( FuncT const& func, double nTimeout )
+inline EventSharedPtr makeDelay_( FuncT const& func, double nTimeout, rtl::OUString const& rsDescription )
 {
-    return EventSharedPtr( new Delay( func, nTimeout ) );
+    return EventSharedPtr( new Delay( func, nTimeout, rsDescription ) );
 }
 
 /** Generate immediate event
@@ -96,15 +88,14 @@ inline EventSharedPtr makeDelay_( FuncT const& func, double nTimeout )
     @return generated immediate event.
 */
 template <typename FuncT>
-inline EventSharedPtr makeEvent_( FuncT const& func )
+inline EventSharedPtr makeEvent_( FuncT const& func, rtl::OUString const& rsDescription)
 {
-    return EventSharedPtr( new Delay( func, 0.0 ) );
+    return EventSharedPtr( new Delay( func, 0.0, rsDescription ) );
 }
 
 
-// Strip away description.
-#define makeDelay(f, t, d) makeDelay_(f, t)
-#define makeEvent(f, d) makeEvent_(f)
+#define makeDelay(f, t, d) makeDelay_(f, t, d)
+#define makeEvent(f, d) makeEvent_(f, d)
 
 #else // OSL_DEBUG_LEVEL > 1
 
@@ -135,10 +126,10 @@ inline EventSharedPtr makeDelay_(
 
 #define makeDelay(f, t, d) makeDelay_(f, t,                   \
         BOOST_CURRENT_FUNCTION, __FILE__, __LINE__,           \
-        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(d)))
+        d)
 #define makeEvent(f, d) makeDelay_(f, 0.0,                  \
         BOOST_CURRENT_FUNCTION, __FILE__, __LINE__,         \
-        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(d)))
+        d)
 
 #endif // OSL_DEBUG_LEVEL <= 1
 
