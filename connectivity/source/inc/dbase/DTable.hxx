@@ -116,7 +116,7 @@ namespace connectivity
 
             sal_Bool WriteMemo(ORowSetValue& aVariable, sal_uIntPtr& rBlockNr);
             sal_Bool WriteBuffer();
-            sal_Bool UpdateBuffer(OValueRefVector& rRow, OValueRefRow pOrgRow,const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>& _xCols);
+            sal_Bool UpdateBuffer(OValueRefVector& rRow, OValueRefRow pOrgRow,const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>& _xCols, bool bForceAllFields);
             ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> isUniqueByColumnName(sal_Int32 _nColumnPos);
             void AllocBuffer();
 
