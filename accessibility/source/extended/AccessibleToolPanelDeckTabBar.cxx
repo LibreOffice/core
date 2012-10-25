@@ -213,7 +213,7 @@ namespace accessibility
     {
         ENSURE_OR_RETURN_VOID( i_nPosition <= m_aChildren.size(), "AccessibleToolPanelTabBar_Impl::PanelInserted: illegal position (or invalid cache!)" );
         (void)i_pPanel;
-        m_aChildren.insert( m_aChildren.begin() + i_nPosition, NULL );
+        m_aChildren.insert( m_aChildren.begin() + i_nPosition, (Reference< XAccessible >)NULL );
         m_rAntiImpl.NotifyAccessibleEvent( AccessibleEventId::CHILD, Any(), makeAny( getAccessiblePanelItem( i_nPosition ) ) );
     }
 
