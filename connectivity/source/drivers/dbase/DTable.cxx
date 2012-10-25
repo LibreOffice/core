@@ -1505,7 +1505,7 @@ sal_Bool ODbaseTable::InsertRow(OValueRefVector& rRow, sal_Bool bFlush,const Ref
     sal_uInt32 nTempPos = m_nFilePos;
 
     m_nFilePos = (sal_uIntPtr)m_aHeader.db_anz + 1;
-    sal_Bool bInsertRow = UpdateBuffer( rRow, NULL, _xCols );
+    sal_Bool bInsertRow = UpdateBuffer( rRow, NULL, _xCols, true );
     if ( bInsertRow )
     {
         sal_uInt32 nFileSize = 0, nMemoFileSize = 0;
@@ -1567,7 +1567,7 @@ sal_Bool ODbaseTable::UpdateRow(OValueRefVector& rRow, OValueRefRow& pOrgRow,con
         m_pMemoStream->Seek(STREAM_SEEK_TO_END);
         nMemoFileSize = m_pMemoStream->Tell();
     }
-    if (!UpdateBuffer(rRow, pOrgRow,_xCols) || !WriteBuffer())
+    if (!UpdateBuffer(rRow, pOrgRow, _xCols, false) || !WriteBuffer())
     {
         if (HasMemoFields() && m_pMemoStream)
             m_pMemoStream->SetStreamSize(nMemoFileSize);    // restore old size
@@ -1668,7 +1668,7 @@ static double toDouble(const rtl::OString& rString)
 }
 
 //------------------------------------------------------------------
-sal_Bool ODbaseTable::UpdateBuffer(OValueRefVector& rRow, OValueRefRow pOrgRow,const Reference<XIndexAccess>& _xCols)
+sal_Bool ODbaseTable::UpdateBuffer(OValueRefVector& rRow, OValueRefRow pOrgRow, const Reference<XIndexAccess>& _xCols, const bool bForceAllFields)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbase", "Ocke.Janssen@sun.com", "ODbaseTable::UpdateBuffer" );
     OSL_ENSURE(m_pBuffer,"Buffer is NULL!");
@@ -1814,10 +1814,10 @@ sal_Bool ODbaseTable::UpdateBuffer(OValueRefVector& rRow, OValueRefRow pOrgRow,c
 
 
         ++nPos; // the row values start at 1
-        // If the variable is bound at all?
-        if ( !rRow.get()[nPos]->isBound() )
+        // don't overwrite non-bound columns
+        if ( ! (bForceAllFields || rRow.get()[nPos]->isBound()) )
         {
-            // No - the next field.
+            // No - don't overwrite this field, it has not changed.
             nByteOffset += nLen;
             continue;
         }
@@ -1828,14 +1828,14 @@ sal_Bool ODbaseTable::UpdateBuffer(OValueRefVector& rRow, OValueRefRow pOrgRow,c
             ODbaseIndex* pIndex = reinterpret_cast< ODbaseIndex* >( xTunnel->getSomething(ODbaseIndex::getUnoTunnelImplementationId()) );
             OSL_ENSURE(pIndex,"ODbaseTable::UpdateBuffer: No Index returned!");
             // Update !!
-            if (pOrgRow.is() && !rRow.get()[nPos]->getValue().isNull() )
+            if (pOrgRow.is() && rRow.get()[nPos]->isBound() && !rRow.get()[nPos]->getValue().isNull() )
                 pIndex->Update(m_nFilePos,*(pOrgRow->get())[nPos],*rRow.get()[nPos]);
             else
                 pIndex->Insert(m_nFilePos,*rRow.get()[nPos]);
         }
 
         char* pData = (char *)(m_pBuffer + nByteOffset);
-        if (rRow.get()[nPos]->getValue().isNull())
+        if (rRow.get()[nPos]->getValue().isNull() || !rRow.get()[nPos]->isBound())
         {
             if ( bSetZero )
                 memset(pData,0,nLen);   // Clear to NULL char ('\0')
