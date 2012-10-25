@@ -2331,17 +2331,20 @@ void RtfAttributeOutput::TextFootnote_Impl( const SwFmtFtn& rFootnote )
 
     /*
      * The footnote contains a whole paragraph, so we have to:
-     * 1) Reset, then later restore the contents of our run buffer.
+     * 1) Reset, then later restore the contents of our run buffer and run state.
      * 2) Buffer the output of the whole paragraph, as we do so for section headers already.
      */
     const SwNodeIndex* pIndex = rFootnote.GetTxtFtn()->GetStartNode();
     RtfStringBuffer aRun = m_aRun;
     m_aRun.clear();
+    bool bInRunOrig = m_bInRun;
+    m_bInRun = false;
     m_bBufferSectionHeaders = true;
     m_rExport.WriteSpecialText( pIndex->GetIndex() + 1,
             pIndex->GetNode().EndOfSectionIndex(),
             !rFootnote.IsEndNote() ? TXT_FTN : TXT_EDN);
     m_bBufferSectionHeaders = false;
+    m_bInRun = bInRunOrig;
     m_aRun = aRun;
     m_aRun->append(m_aSectionHeaders.makeStringAndClear());
 

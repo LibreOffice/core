@@ -66,6 +66,7 @@ public:
     void testMathVerticalstacks();
     void testMathRuns();
     void testFdo53113();
+    void testFdo55939();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -106,6 +107,7 @@ void Test::run()
         {"math-vertical-stacks.rtf", &Test::testMathVerticalstacks},
         {"math-runs.rtf", &Test::testMathRuns},
         {"fdo53113.odt", &Test::testFdo53113},
+        {"fdo55939.odt", &Test::testFdo55939},
     };
     // Don't test the first import of these, for some reason those tests fail
     const char* aBlacklist[] = {
@@ -424,6 +426,17 @@ void Test::testFdo53113()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(16), aPairs.getLength());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(535), aPairs[1].First.Value.get<sal_Int32>());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(102), aPairs[1].Second.Value.get<sal_Int32>());
+}
+
+void Test::testFdo55939()
+{
+    // The problem was that the exported RTF was invalid.
+    uno::Reference<text::XTextRange> xParagraph(getParagraph(1));
+    getRun(xParagraph, 1, "Main text before footnote.");
+    // Why the tab has to be removed here?
+    CPPUNIT_ASSERT_EQUAL(OUString("Footnote text."),
+            getProperty< uno::Reference<text::XTextRange> >(getRun(xParagraph, 2), "Footnote")->getText()->getString().replaceAll("\t", ""));
+    getRun(xParagraph, 3, " Text after the footnote."); // However, this leading space is intentional and OK.
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
