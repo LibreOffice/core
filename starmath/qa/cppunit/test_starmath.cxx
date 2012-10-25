@@ -240,7 +240,7 @@ void Test::tmEditAllClipboard()
 
 void Test::tmEditFailure()
 {
-    m_xDocShRef->SetText("color a b over {a/}");
+    m_xDocShRef->SetText(String("color a b over {a/}"));
 
     const SmErrorDesc *pErrorDesc = m_xDocShRef->GetParser().NextError();
 

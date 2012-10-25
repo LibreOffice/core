@@ -48,7 +48,10 @@ $(eval $(call gb_CppunitTest_use_libraries,starmath_qa_cppunit,\
     editeng \
     i18nisolang1 \
     i18nutil \
+    msfilter \
+    oox \
     sal \
+    sax \
     sfx \
     sot \
     svl \
