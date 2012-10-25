@@ -1974,6 +1974,53 @@ namespace
     }
 }
 
+bool Window::set_font_attribute(const OString &rKey, const OString &rValue)
+{
+    if (rKey == "weight")
+    {
+        Font aFont(GetControlFont());
+        if (rValue == "thin")
+            aFont.SetWeight(WEIGHT_THIN);
+        else if (rValue == "ultralight")
+            aFont.SetWeight(WEIGHT_ULTRALIGHT);
+        else if (rValue == "light")
+            aFont.SetWeight(WEIGHT_LIGHT);
+        else if (rValue == "book")
+            aFont.SetWeight(WEIGHT_SEMILIGHT);
+        else if (rValue == "normal")
+            aFont.SetWeight(WEIGHT_NORMAL);
+        else if (rValue == "medium")
+            aFont.SetWeight(WEIGHT_MEDIUM);
+        else if (rValue == "semibold")
+            aFont.SetWeight(WEIGHT_SEMIBOLD);
+        else if (rValue == "bold")
+            aFont.SetWeight(WEIGHT_BOLD);
+        else if (rValue == "ultrabold")
+            aFont.SetWeight(WEIGHT_ULTRABOLD);
+        else
+            aFont.SetWeight(WEIGHT_BLACK);
+        SetControlFont(aFont);
+    }
+    else if (rKey == "style")
+    {
+        Font aFont(GetControlFont());
+        if (rValue == "normal")
+            aFont.SetItalic(ITALIC_NONE);
+        else if (rValue == "oblique")
+            aFont.SetItalic(ITALIC_OBLIQUE);
+        else if (rValue == "italic")
+            aFont.SetItalic(ITALIC_NORMAL);
+        SetControlFont(aFont);
+    }
+    else
+    {
+        SAL_INFO("vcl.layout", "unhandled font attribute: " << rKey.getStr());
+        return false;
+    }
+    return true;
+}
+
+
 bool Window::set_property(const OString &rKey, const OString &rValue)
 {
     if (

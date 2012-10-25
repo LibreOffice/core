@@ -328,18 +328,6 @@ namespace
         return bVertical;
     }
 
-    bool extractMarkup(VclBuilder::stringmap &rMap)
-    {
-        bool bUseMarkup = false;
-        VclBuilder::stringmap::iterator aFind = rMap.find(OString("use-markup"));
-        if (aFind != rMap.end())
-        {
-            bUseMarkup = toBool(aFind->second);
-            rMap.erase(aFind);
-        }
-        return bUseMarkup;
-    }
-
     bool extractInconsistent(VclBuilder::stringmap &rMap)
     {
         bool bInconsistent = false;
@@ -837,50 +825,10 @@ namespace
     {
         return pWindow->GetType() == WINDOW_TABPAGE;
     }
-
-    //super cheesy markup, just globally set bold and/or
-    //italic if any tag exists and return detagged string
-    OString handleMarkup(Window &rWindow, const OString &rLabel)
-    {
-        OStringBuffer aBuf;
-
-        xmlreader::XmlReader reader(rLabel.getStr(), rLabel.getLength());
-        xmlreader::Span name;
-        int nsId;
-
-        while(1)
-        {
-            xmlreader::XmlReader::Result res = reader.nextItem(
-                xmlreader::XmlReader::TEXT_RAW, &name, &nsId);
-
-            if (res == xmlreader::XmlReader::RESULT_BEGIN)
-            {
-                if (name.equals(RTL_CONSTASCII_STRINGPARAM("b")))
-                {
-                    Font aFont(rWindow.GetControlFont());
-                    aFont.SetWeight(WEIGHT_BOLD);
-                    rWindow.SetControlFont(aFont);
-                }
-                else if (name.equals(RTL_CONSTASCII_STRINGPARAM("i")))
-                {
-                    Font aFont(rWindow.GetControlFont());
-                    aFont.SetItalic(ITALIC_NORMAL);
-                    rWindow.SetControlFont(aFont);
-                }
-            }
-
-            if (res == xmlreader::XmlReader::RESULT_TEXT)
-                aBuf.append(name.begin, name.length);
-
-            if (res == xmlreader::XmlReader::RESULT_DONE)
-                break;
-        }
-
-        return aBuf.makeStringAndClear();
-    }
 }
 
-Window *VclBuilder::insertObject(Window *pParent, const OString &rClass, const OString &rID, stringmap &rMap)
+Window *VclBuilder::insertObject(Window *pParent, const OString &rClass,
+    const OString &rID, stringmap &rProps, stringmap &rPango)
 {
     Window *pCurrentChild = NULL;
 
@@ -891,7 +839,7 @@ Window *VclBuilder::insertObject(Window *pParent, const OString &rClass, const O
         if (pCurrentChild->IsDialog())
         {
             Dialog *pDialog = (Dialog*)pCurrentChild;
-            pDialog->doDeferredInit(extractResizable(rMap));
+            pDialog->doDeferredInit(extractResizable(rProps));
             m_bToplevelHasDeferredInit = false;
         }
         if (pCurrentChild->GetHelpId().isEmpty())
@@ -909,32 +857,28 @@ Window *VclBuilder::insertObject(Window *pParent, const OString &rClass, const O
         //been seen yet, then make unattached widgets parent-less toplevels
         if (pParent == m_pParent && m_bToplevelHasDeferredInit)
             pParent = NULL;
-        pCurrentChild = makeObject(pParent, rClass, rID, rMap);
+        pCurrentChild = makeObject(pParent, rClass, rID, rProps);
     }
 
     if (pCurrentChild)
     {
-        //Support super-basic bold/italic hints
-        if (extractMarkup(rMap))
-        {
-            VclBuilder::stringmap::iterator aFind = rMap.find(OString("label"));
-            if (aFind != rMap.end())
-            {
-                OString &rLabel = aFind->second;
-                if (rLabel.indexOf('<') != -1)
-                    rLabel = handleMarkup(*pCurrentChild, aFind->second);
-            }
-        }
-
-        for (stringmap::iterator aI = rMap.begin(), aEnd = rMap.end(); aI != aEnd; ++aI)
+        for (stringmap::iterator aI = rProps.begin(), aEnd = rProps.end(); aI != aEnd; ++aI)
         {
             const OString &rKey = aI->first;
             const OString &rValue = aI->second;
             pCurrentChild->set_property(rKey, rValue);
         }
+
+        for (stringmap::iterator aI = rPango.begin(), aEnd = rPango.end(); aI != aEnd; ++aI)
+        {
+            const OString &rKey = aI->first;
+            const OString &rValue = aI->second;
+            pCurrentChild->set_font_attribute(rKey, rValue);
+        }
     }
 
-    rMap.clear();
+    rProps.clear();
+    rPango.clear();
 
     if (!pCurrentChild)
         pCurrentChild = m_aChildren.empty() ? pParent : m_aChildren.back().m_pWindow;
@@ -1186,6 +1130,32 @@ void VclBuilder::handleChild(Window *pParent, xmlreader::XmlReader &reader)
     }
 }
 
+void VclBuilder::collectPangoAttribute(xmlreader::XmlReader &reader, stringmap &rMap)
+{
+    xmlreader::Span span;
+    int nsId;
+
+    OString sProperty;
+    OString sValue;
+
+    while (reader.nextAttribute(&nsId, &span))
+    {
+        if (span.equals(RTL_CONSTASCII_STRINGPARAM("name")))
+        {
+            span = reader.getAttributeValue(false);
+            sProperty = OString(span.begin, span.length);
+        }
+        else if (span.equals(RTL_CONSTASCII_STRINGPARAM("value")))
+        {
+            span = reader.getAttributeValue(false);
+            sValue = OString(span.begin, span.length);
+        }
+    }
+
+    if (!sProperty.isEmpty())
+        rMap[sProperty] = sValue;
+}
+
 void VclBuilder::handleAdjustment(const OString &rID, stringmap &rProperties)
 {
     m_pParserState->m_aAdjustments.push_back(AdjustmentAndId(rID, rProperties));
@@ -1329,7 +1299,7 @@ Window* VclBuilder::handleObject(Window *pParent, xmlreader::XmlReader &reader)
 
     int nLevel = 1;
 
-    stringmap aProperties;
+    stringmap aProperties, aPangoAttributes;
 
     if (!sPattern.isEmpty())
         aProperties[OString("pattern")] = sPattern;
@@ -1348,7 +1318,10 @@ Window* VclBuilder::handleObject(Window *pParent, xmlreader::XmlReader &reader)
             if (name.equals(RTL_CONSTASCII_STRINGPARAM("child")))
             {
                 if (!pCurrentChild)
-                    pCurrentChild = insertObject(pParent, sClass, sID, aProperties);
+                {
+                    pCurrentChild = insertObject(pParent, sClass, sID,
+                        aProperties, aPangoAttributes);
+                }
                 handleChild(pCurrentChild, reader);
             }
             else
@@ -1356,6 +1329,8 @@ Window* VclBuilder::handleObject(Window *pParent, xmlreader::XmlReader &reader)
                 ++nLevel;
                 if (name.equals(RTL_CONSTASCII_STRINGPARAM("property")))
                     collectProperty(reader, sID, aProperties);
+                else if (name.equals(RTL_CONSTASCII_STRINGPARAM("attribute")))
+                    collectPangoAttribute(reader, aPangoAttributes);
             }
         }
 
@@ -1375,7 +1350,7 @@ Window* VclBuilder::handleObject(Window *pParent, xmlreader::XmlReader &reader)
     }
 
     if (!pCurrentChild)
-        pCurrentChild = insertObject(pParent, sClass, sID, aProperties);
+        pCurrentChild = insertObject(pParent, sClass, sID, aProperties, aPangoAttributes);
 
     return pCurrentChild;
 }
@@ -1528,6 +1503,8 @@ void VclBuilder::collectProperty(xmlreader::XmlReader &reader, const OString &rI
     if (!sProperty.isEmpty())
     {
         sProperty = sProperty.replace('_', '-');
+        //https://live.gnome.org/GnomeGoals/RemoveMarkupInMessages
+        SAL_WARN_IF(sProperty == "use-markup", "vcl.layout", "Use pango attributes instead of mark-up");
         rMap[sProperty] = sValue;
     }
 }

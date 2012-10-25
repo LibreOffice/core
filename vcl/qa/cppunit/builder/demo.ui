@@ -348,7 +348,6 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="label" translatable="yes">Frame Label</property>
-                        <property name="use_markup">True</property>
                       </object>
                     </child>
                   </object>
@@ -557,7 +556,6 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="label" translatable="yes">Make Title Pages</property>
-                        <property name="use_markup">True</property>
                       </object>
                     </child>
                   </object>
@@ -703,7 +701,6 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="label" translatable="yes">Page Numbering</property>
-                        <property name="use_markup">True</property>
                       </object>
                     </child>
                   </object>
@@ -763,7 +760,6 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="label" translatable="yes">Edit Page Properties</property>
-                        <property name="use_markup">True</property>
                       </object>
                     </child>
                   </object>
@@ -937,7 +933,6 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="label" translatable="yes">Type</property>
-                    <property name="use_markup">True</property>
                   </object>
                 </child>
               </object>
@@ -1100,7 +1095,6 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="label" translatable="yes">Zoom factor</property>
-                        <property name="use_markup">True</property>
                       </object>
                     </child>
                   </object>
@@ -1237,7 +1231,6 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="label" translatable="yes">View layout</property>
-                        <property name="use_markup">True</property>
                       </object>
                     </child>
                   </object>
@@ -1299,7 +1292,6 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="label" translatable="yes">Level</property>
-                        <property name="use_markup">True</property>
                       </object>
                     </child>
                   </object>
@@ -1589,7 +1581,6 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="label" translatable="yes">Numbering</property>
-                        <property name="use_markup">True</property>
                       </object>
                     </child>
                   </object>
@@ -1651,7 +1642,6 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="label" translatable="yes">Level</property>
-                        <property name="use_markup">True</property>
                       </object>
                     </child>
                   </object>
@@ -1854,7 +1844,6 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="label" translatable="yes">Position and spacing</property>
-                        <property name="use_markup">True</property>
                       </object>
                     </child>
                   </object>

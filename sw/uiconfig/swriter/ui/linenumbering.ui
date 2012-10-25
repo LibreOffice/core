@@ -301,8 +301,10 @@
                       <object class="GtkLabel" id="view">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">&lt;b&gt;View&lt;/b&gt;</property>
-                        <property name="use_markup">True</property>
+                        <property name="label" translatable="yes">View</property>
+                        <attributes>
+                          <attribute name="weight" value="bold"/>
+                        </attributes>
                       </object>
                     </child>
                   </object>
@@ -412,8 +414,10 @@
                           <object class="GtkLabel" id="separator">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">&lt;b&gt;Separator&lt;/b&gt;</property>
-                            <property name="use_markup">True</property>
+                            <property name="label" translatable="yes">Separator</property>
+                            <attributes>
+                              <attribute name="weight" value="bold"/>
+                            </attributes>
                           </object>
                         </child>
                       </object>
@@ -501,8 +505,10 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="ypad">1</property>
-                            <property name="label" translatable="yes">&lt;b&gt;Count&lt;/b&gt;</property>
-                            <property name="use_markup">True</property>
+                            <property name="label" translatable="yes">Count</property>
+                            <attributes>
+                              <attribute name="weight" value="bold"/>
+                            </attributes>
                           </object>
                         </child>
                       </object>
@@ -548,6 +554,12 @@
     <property name="step_increment">1</property>
     <property name="page_increment">10</property>
   </object>
+  <object class="GtkAdjustment" id="lineadjustment">
+    <property name="upper">1000</property>
+    <property name="value">3</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
   <object class="GtkListStore" id="positionstore">
     <columns>
       <!-- column-name positions -->
@@ -567,12 +579,6 @@
         <col id="0" translatable="yes">Outer</col>
       </row>
     </data>
-  </object>
-  <object class="GtkAdjustment" id="lineadjustment">
-    <property name="upper">1000</property>
-    <property name="value">3</property>
-    <property name="step_increment">1</property>
-    <property name="page_increment">10</property>
   </object>
   <object class="GtkAdjustment" id="spacingadjustment">
     <property name="upper">9999</property>

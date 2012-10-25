@@ -165,7 +165,9 @@ public:
     //taking ownership of it
     bool replace(OString sID, Window &rReplacement);
 private:
-    Window *insertObject(Window *pParent, const OString &rClass, const OString &rID, stringmap &rVec);
+    Window *insertObject(Window *pParent, const OString &rClass, const OString &rID,
+        stringmap &rProps, stringmap &rPangoAttributes);
+
     Window *makeObject(Window *pParent, const OString &rClass, const OString &rID, stringmap &rVec);
     bool extractGroup(const OString &id, stringmap &rVec);
     bool extractModel(const OString &id, stringmap &rVec);
@@ -181,6 +183,7 @@ private:
     void handlePacking(Window *pCurrent, xmlreader::XmlReader &reader);
     void applyPackingProperty(Window *pCurrent, xmlreader::XmlReader &reader);
     void collectProperty(xmlreader::XmlReader &reader, const OString &rID, stringmap &rVec);
+    void collectPangoAttribute(xmlreader::XmlReader &reader, stringmap &rMap);
 
     void handleListStore(xmlreader::XmlReader &reader, const OString &rID);
     void handleRow(xmlreader::XmlReader &reader, const OString &rID, sal_Int32 nRowIndex);

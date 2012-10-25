@@ -1222,6 +1222,13 @@ public:
     virtual bool set_property(const rtl::OString &rKey, const rtl::OString &rValue);
 
     /*
+     * Sets a font attribute
+     *
+     * @return false if attribute is unknown
+     */
+    bool set_font_attribute(const rtl::OString &rKey, const rtl::OString &rValue);
+
+    /*
      * Move this widget to be the nNewPosition'd child of its parent
      */
     void reorderWithinParent(sal_uInt16 nNewPosition);
