@@ -436,15 +436,12 @@ Reference<deployment::XPackageManager> PackageManagerImpl::create(
     catch (const RuntimeException &) {
         throw;
     }
-    catch (const Exception &) {
+    catch (const Exception & e) {
         Any exc( ::cppu::getCaughtException() );
-        ::rtl::OUStringBuffer buf;
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("[context=\"") );
-        buf.append( context );
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(
-                             "\"] caught unexpected exception!") );
         throw lang::WrappedTargetRuntimeException(
-            buf.makeStringAndClear(), Reference<XInterface>(), exc );
+            ("[context=\"" + context + "\"] caught unexpected "
+             + exc.getValueType().getTypeName() + ": " + e.Message),
+            Reference<XInterface>(), exc );
     }
 }
 
