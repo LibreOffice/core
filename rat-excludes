@@ -1048,6 +1048,25 @@ main/xmlsecurity/test_docs/CAs/Sub_CA_2_Root_8/demoCA/crl/DO_NOT_INSTALL_THIS_CR
 main/xmlsecurity/test_docs/CAs/Sub_CA_2_Root_8/demoCA/crlnumber
 main/xmlsecurity/test_docs/CAs/Sub_CA_2_Root_8/demoCA/serial
 main/xmlsecurity/tools/demo/manifest
+test/testassistant/META-INF/MANIFEST.MF
+test/testassistant.feature/.project
+test/testassistant.feature/build.properties
+test/testassistant/.classpath
+test/testassistant/.project
+test/testassistant/META-INF/MANIFEST.MF
+test/testassistant/build.properties
+test/testcommon/.classpath
+test/testcommon/.project
+test/testgui/.classpath
+test/testgui/.project
+test/testgui/.settings/org.eclipse.jdt.core.prefs
+test/testgui/.settings/org.eclipse.jdt.launching.prefs
+test/testgui/ids/obsolete_hid
+test/testuno/data/limit_cfg.ini
+test/testuno/.classpath_linux
+test/testuno/.classpath_win
+test/testuno/.externalToolBuilders/Classpath Builder.launch
+test/testuno/.project
 
 # used in main/libtextcat/data/new_fingerprints/lm (74), not in SGA
 # some language mapping files, created using libtextcat
@@ -1238,6 +1257,13 @@ main/extensions/source/macosx/spotlight/mdimporter/en.lproj/schema.strings
 main/desktop/test/deployment/update/defect/update/info1.update.xml
 main/desktop/test/deployment/update/defect/update/info2.update.xml
 
+
+##############################################################################
+#
+# files with Apache License 2.0 (ALv2)
+# that are plain copies, so they cannot be modified
+
+main/stax/download/README_stax-1.2.0.jar.txt
 
 ##############################################################################
 #
