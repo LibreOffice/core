@@ -1838,9 +1838,9 @@ sal_Bool ODbaseTable::UpdateBuffer(OValueRefVector& rRow, OValueRefRow pOrgRow,c
         if (rRow.get()[nPos]->getValue().isNull())
         {
             if ( bSetZero )
-                memset(pData,0,nLen);   // Clear to NULL
+                memset(pData,0,nLen);   // Clear to NULL char ('\0')
             else
-                memset(pData,' ',nLen); // Clear to NULL
+                memset(pData,' ',nLen); // Clear to space/blank ('\0x20')
             nByteOffset += nLen;
             OSL_ENSURE( nByteOffset <= m_nBufferSize ,"ByteOffset > m_nBufferSize!");
             continue;
