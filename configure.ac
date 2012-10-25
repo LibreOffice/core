@@ -636,18 +636,6 @@ AC_ARG_ENABLE(ext-report-builder,
         [Disable the Report Builder extension.])
 )
 
-AC_ARG_ENABLE(ext-scripting-beanshell,
-    AS_HELP_STRING([--enable-ext-scripting-beanshell],
-                   [DEPRECATED: use --enable-scripting-beanshell instead.])
-,AC_MSG_ERROR([--enable-ext-scripting-beanshell is no longer supported.])
-)
-
-AC_ARG_ENABLE(ext-scripting-javascript,
-    AS_HELP_STRING([--enable-ext-scripting-javascript],
-                   [DEPRECATED: use --enable-scripting-javascript instead.])
-,AC_MSG_ERROR([--enable-ext-scripting-javascript is no longer supported.])
-)
-
 AC_ARG_ENABLE(ext-typo,
     AS_HELP_STRING([--enable-ext-typo],
         [Enable the Typography Toolbar extension.])
