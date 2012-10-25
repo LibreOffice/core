@@ -36,6 +36,7 @@
 
 #include <vector>
 #include <map>
+#include <iterator>
 
 class SchXMLSeriesHelper
 {

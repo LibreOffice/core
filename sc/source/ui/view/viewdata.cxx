@@ -461,7 +461,7 @@ void ScViewData::InsertTab( SCTAB nTab )
     if( nTab >= static_cast<SCTAB>(maTabData.size()))
         maTabData.resize(nTab+1, NULL);
     else
-        maTabData.insert( maTabData.begin() + nTab, NULL );
+        maTabData.insert( maTabData.begin() + nTab, (ScViewDataTable *)NULL );
     CreateTabData( nTab );
 
     UpdateCurrentTab();
@@ -524,7 +524,7 @@ void ScViewData::CopyTab( SCTAB nSrcTab, SCTAB nDestTab )
     if ( maTabData[nSrcTab] )
         maTabData.insert(maTabData.begin() + nDestTab, new ScViewDataTable( *maTabData[nSrcTab] ));
     else
-        maTabData.insert(maTabData.begin() + nDestTab, NULL);
+        maTabData.insert(maTabData.begin() + nDestTab, (ScViewDataTable *)NULL);
 
     UpdateCurrentTab();
     mpMarkData->InsertTab( nDestTab );

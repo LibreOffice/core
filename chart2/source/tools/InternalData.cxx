@@ -25,6 +25,7 @@
 
 #include <rtl/math.hxx>
 #include <algorithm>
+#include <iterator>
 
 using ::com::sun::star::uno::Sequence;
 using ::rtl::OUString;

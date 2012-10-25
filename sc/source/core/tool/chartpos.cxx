@@ -470,7 +470,7 @@ void ScChartPositioner::CreatePositionMap()
             {
                 sal_uLong nKey = it1->first;
                 for (ColumnMap::const_iterator it2 = ++pCols->begin(); it2 != pCols->end(); ++it2 )
-                    it2->second->insert( RowMap::value_type( nKey, NULL )); // no data
+                    it2->second->insert( RowMap::value_type( nKey, (ScAddress *)NULL )); // no data
             }
         }
     }

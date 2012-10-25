@@ -40,6 +40,9 @@
 #include "diagnose_ex.h"
 #include <rtl/logfile.hxx>
 
+
+#include <iterator>
+
 using namespace ::comphelper;
 using namespace ::connectivity;
 using namespace ::connectivity::sdbcx;

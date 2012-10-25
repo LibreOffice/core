@@ -24,6 +24,7 @@
 #include <map>
 #include <functional>
 #include <algorithm>
+#include <iterator>
 
 namespace chart
 {

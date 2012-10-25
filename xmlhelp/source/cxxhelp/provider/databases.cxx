@@ -441,7 +441,7 @@ StaticModuleInformation* Databases::getStaticInformationForModule( const rtl::OU
     rtl::OUString key = processLang(Language) + rtl::OUString( "/" ) + Module;
 
     std::pair< ModInfoTable::iterator,bool > aPair =
-        m_aModInfo.insert( ModInfoTable::value_type( key,0 ) );
+        m_aModInfo.insert( ModInfoTable::value_type( key,(StaticModuleInformation*)0 ) );
 
     ModInfoTable::iterator it = aPair.first;
 
@@ -593,7 +593,7 @@ Db* Databases::getBerkeley( const rtl::OUString& Database,
         key = *pExtensionPath + Language + dbFileName;      // make unique, don't change language
 
     std::pair< DatabasesTable::iterator,bool > aPair =
-        m_aDatabases.insert( DatabasesTable::value_type( key,0 ) );
+        m_aDatabases.insert( DatabasesTable::value_type( key,(Db*)0 ) );
 
     DatabasesTable::iterator it = aPair.first;
 
@@ -642,7 +642,7 @@ Databases::getCollator( const rtl::OUString& Language,
     osl::MutexGuard aGuard( m_aMutex );
 
     CollatorTable::iterator it =
-        m_aCollatorTable.insert( CollatorTable::value_type( key,0 ) ).first;
+        m_aCollatorTable.insert( CollatorTable::value_type( key,(Reference< XCollator >)0 ) ).first;
 
     if( ! it->second.is() )
     {
@@ -883,7 +883,7 @@ KeywordInfo* Databases::getKeyword( const rtl::OUString& Database,
     rtl::OUString key = processLang(Language) + rtl::OUString( "/" ) + Database;
 
     std::pair< KeywordInfoTable::iterator,bool > aPair =
-        m_aKeywordInfo.insert( KeywordInfoTable::value_type( key,0 ) );
+        m_aKeywordInfo.insert( KeywordInfoTable::value_type( key,(KeywordInfo*)0 ) );
 
     KeywordInfoTable::iterator it = aPair.first;
 

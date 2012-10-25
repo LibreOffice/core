@@ -71,6 +71,7 @@
 
 #include <vector>
 #include <set>
+#include <iterator>
 
 #define DEFAULT_DOC_PROGRESS_RANGE  100000
 

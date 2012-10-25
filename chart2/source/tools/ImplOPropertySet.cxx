@@ -21,6 +21,7 @@
 #include "CloneHelper.hxx"
 
 #include <algorithm>
+#include <iterator>
 #include <functional>
 #include <com/sun/star/beans/XFastPropertySet.hpp>
 
