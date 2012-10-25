@@ -248,7 +248,7 @@ $(call gb_LinkTarget_set_include,$(1),\
     $$(INCLUDE) \
 )
 
-$(if $(filter-out ascii_expat_xmlparse,$(2)),\
+$(if $(filter-out ascii_expat_xmlparse expat_xmltok,$(2)),\
 	$(call gb_LinkTarget_add_defs,$(1),\
 		-DXML_UNICODE \
 ))
