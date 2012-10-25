@@ -84,6 +84,7 @@ formula\
 fpicker\
 framework\
 freetype\
+graphite\
 helpcompiler\
 hsqldb\
 hwpfilter\
@@ -215,7 +216,6 @@ external\
 gdk-pixbuf\
 gettext\
 glib\
-graphite\
 helpcontent2 \
 hunspell\
 hyphen\

@@ -78,14 +78,12 @@ gb_Library_FILENAMES := $(patsubst vbahelper:ivbahelper%,vbahelper:vbahelper%,$(
 gb_Library_FILENAMES := $(patsubst curl:icurl%,curl:libcurl%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst npsoplugin:inpsoplugin%,npsoplugin:npsoplugin%,$(gb_Library_FILENAMES))
 
-gb_StaticLibrary_FILENAMES := $(patsubst graphite:graphite%,graphite:graphite_dll%,$(gb_StaticLibrary_FILENAMES))
 gb_StaticLibrary_FILENAMES := $(patsubst png:png%,png:libpng%,$(gb_StaticLibrary_FILENAMES))
 gb_StaticLibrary_FILENAMES := $(patsubst salcpprt:salcpprt%,salcpprt:cpprtl%,$(gb_StaticLibrary_FILENAMES))
 
 ifeq ($(COM),GCC)
 gb_Library_FILENAMES := $(patsubst crypto:icrypto%,crypto:crypto%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst exslt:iexslt%,exslt:libexslt$(gb_Library_IARCEXT),$(gb_Library_FILENAMES))
-gb_Library_FILENAMES := $(patsubst graphite2_off:%.dll.a,graphite2_off:%.a,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst libexttextcat:liblibext%,libexttextcat:libilibext%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst rdf:irdf%,rdf:librdf.dll$(gb_Library_IARCEXT),$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst ssl:issl%,ssl:ssl%,$(gb_Library_FILENAMES))
@@ -140,7 +138,6 @@ gb_Library_NOILIBFILENAMES := \
     gmodule-2.0 \
 	gobject-2.0 \
 	gthread-2.0 \
-    graphite2_off \
     icudt icuin icule icuuc \
     langtag \
     lcms2 \

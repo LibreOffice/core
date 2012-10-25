@@ -8526,14 +8526,16 @@ if test "$_os" = "WINNT" -o "$_os" = "Linux" && test "$enable_graphite" = "" -o 
         AC_MSG_RESULT([internal])
         SYSTEM_GRAPHITE=NO
         BUILD_TYPE="$BUILD_TYPE GRAPHITE"
+        GRAPHITE_TARBALL=f5ef3f7f10fa8c3542c6a085a233080b-graphite2-1.2.0.tgz
     fi
 else
     AC_MSG_RESULT([no])
 fi
 AC_SUBST(ENABLE_GRAPHITE)
 AC_SUBST(SYSTEM_GRAPHITE)
-AC_SUBST(GRAPHITE_LIBS)
 AC_SUBST(GRAPHITE_CFLAGS)
+AC_SUBST(GRAPHITE_LIBS)
+AC_SUBST(GRAPHITE_TARBALL)
 AC_SUBST([MINGW_GRAPHITE2_DLL])
 
 dnl ===================================================================

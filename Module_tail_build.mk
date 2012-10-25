@@ -74,7 +74,8 @@ $(eval $(call gb_Module_add_moduledirs,tail_end,\
 	formula \
 	fpicker \
 	framework \
-       $(call gb_Helper_optional,FREETYPE,freetype) \
+	$(call gb_Helper_optional,FREETYPE,freetype) \
+	$(call gb_Helper_optional,GRAPHITE,graphite) \
 	$(call gb_Helper_optional,DESKTOP,helpcompiler) \
 	$(call gb_Helper_optional,HSQLDB,hsqldb) \
 	hwpfilter \

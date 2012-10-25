@@ -53,6 +53,7 @@ $(eval $(call gb_Library_use_libraries,vclplug_gen,\
 
 $(eval $(call gb_Library_use_externals,vclplug_gen,\
 	cairo \
+	graphite \
 	icule \
 	icuuc \
 	Xrender \

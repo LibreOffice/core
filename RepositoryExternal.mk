@@ -777,11 +777,15 @@ endef
 else # !SYSTEM_GRAPHITE
 
 $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
-	graphite2_off \
+	graphite \
 ))
 define gb_LinkTarget__use_graphite
+$(call gb_LinkTarget_set_include,$(1),\
+	-I$(call gb_UnpackedTarball_get_dir,graphite/include) \
+	$$(INCLUDE) \
+)
 $(call gb_LinkTarget_use_static_libraries,$(1),\
-    graphite2_off \
+    graphite \
 )
 
 endef
