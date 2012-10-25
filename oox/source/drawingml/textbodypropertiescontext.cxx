@@ -94,7 +94,7 @@ TextBodyPropertiesContext::TextBodyPropertiesContext( ContextHandler& rParent,
         bool bRtl = aAttribs.getBool( XML_rtl, false );
         sal_Int32 tVert = mrTextBodyProp.moVert.get( XML_horz );
         if( tVert == XML_vert || tVert == XML_eaVert || tVert == XML_vert270 || tVert == XML_mongolianVert )
-            mrTextBodyProp.moRotation = 5400000*(tVert==XML_vert270?3:1);
+            mrTextBodyProp.moRotation = -5400000*(tVert==XML_vert270?3:1);
         else
             mrTextBodyProp.maPropertyMap[ PROP_TextWritingMode ]
                 <<= ( bRtl ? WritingMode_RL_TB : WritingMode_LR_TB );
