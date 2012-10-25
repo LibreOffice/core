@@ -48,25 +48,6 @@
  */
 namespace css = ::com::sun::star;
 
-namespace framework {
-
-//-----------------------------------------------------------------------------
-/** Those macro is used to make it more clear where a synchronized block will start.
-    Because normal documentation code wont be recognized by some developers to be real
-    I need something where they are thinking about.
-
-    At least this macro will do nothing ... it's empty.
-    But it should make the code more clear .-))
-*/
-#define SYNCHRONIZED_START
-
-//-----------------------------------------------------------------------------
-/** Same then SYNCHRONIZED_START ... but instead it mark the end of such code block.
-*/
-#define SYNCHRONIZED_END
-
-} // namespace framework
-
 #endif // #ifndef __FRAMEWORK_GENERAL_H_
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -271,19 +271,17 @@ sal_Bool SAL_CALL Desktop::terminate()
 {
     TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
 
-    SYNCHRONIZED_START
-        ReadGuard aReadLock( m_aLock );
+    ReadGuard aReadLock( m_aLock ); // start synchronize
 
-        css::uno::Reference< css::frame::XTerminateListener > xPipeTerminator    = m_xPipeTerminator;
-        css::uno::Reference< css::frame::XTerminateListener > xQuickLauncher     = m_xQuickLauncher;
-        css::uno::Reference< css::frame::XTerminateListener > xSWThreadManager   = m_xSWThreadManager;
-        css::uno::Reference< css::frame::XTerminateListener > xSfxTerminator     = m_xSfxTerminator;
+    css::uno::Reference< css::frame::XTerminateListener > xPipeTerminator    = m_xPipeTerminator;
+    css::uno::Reference< css::frame::XTerminateListener > xQuickLauncher     = m_xQuickLauncher;
+    css::uno::Reference< css::frame::XTerminateListener > xSWThreadManager   = m_xSWThreadManager;
+    css::uno::Reference< css::frame::XTerminateListener > xSfxTerminator     = m_xSfxTerminator;
 
-        css::lang::EventObject                                aEvent             ( static_cast< ::cppu::OWeakObject* >(this) );
-        ::sal_Bool                                            bAskQuickStart     = !m_bSuspendQuickstartVeto                  ;
+    css::lang::EventObject                                aEvent             ( static_cast< ::cppu::OWeakObject* >(this) );
+    ::sal_Bool                                            bAskQuickStart     = !m_bSuspendQuickstartVeto                  ;
 
-        aReadLock.unlock();
-    SYNCHRONIZED_END
+    aReadLock.unlock(); // end synchronize
 
     //-------------------------------------------------------------------------------------------------------------
     // Ask normal terminate listener. They could stop terminate without closing any open document.
@@ -1179,30 +1177,29 @@ void SAL_CALL Desktop::dispose()
         fprintf( stderr, "This used to be an assertion failure: Desktop disposed before terminating it,\n"
                  "but nothing bad seems to happen anyway?\n" );
 #endif
-    SYNCHRONIZED_START
-        WriteGuard aWriteLock( m_aLock );
 
-        // Look for multiple calls of this method!
-        // If somewhere call dispose() twice - he will be stopped here realy!!!
-        TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
+    WriteGuard aWriteLock( m_aLock ); // start synchronize
 
-        // Now - we are alone and its the first call of this method ...
-        // otherwise call before had thrown a DisposedException / hopefully .-)
-        // But we dont use the transaction object created before ... we reset it immediatly ...
-        // two lines of code ... for what ?
-        // The answer: We wished to synchronize concurrent dispose() calls -> OK
-        // But next line will wait for all currently running transaction (even if they
-        // are running within the same thread!) So we would block ourself there if aTransaction
-        // will stay registered .-)
-        aTransaction.stop();
+    // Look for multiple calls of this method!
+    // If somewhere call dispose() twice - he will be stopped here realy!!!
+    TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
 
-        // Disable this instance for further work.
-        // This will wait for all current running transactions ...
-        // and reject all new incoming requests!
-        m_aTransactionManager.setWorkingMode( E_BEFORECLOSE );
+    // Now - we are alone and its the first call of this method ...
+    // otherwise call before had thrown a DisposedException / hopefully .-)
+    // But we dont use the transaction object created before ... we reset it immediatly ...
+    // two lines of code ... for what ?
+    // The answer: We wished to synchronize concurrent dispose() calls -> OK
+    // But next line will wait for all currently running transaction (even if they
+    // are running within the same thread!) So we would block ourself there if aTransaction
+    // will stay registered .-)
+    aTransaction.stop();
 
-        aWriteLock.unlock();
-    SYNCHRONIZED_END
+    // Disable this instance for further work.
+    // This will wait for all current running transactions ...
+    // and reject all new incoming requests!
+    m_aTransactionManager.setWorkingMode( E_BEFORECLOSE );
+
+    aWriteLock.unlock(); // end synchronize
 
     // Following lines of code can be called outside a synchronized block ...
     // Because our transaction manager will block all new requests to this object.
@@ -1898,11 +1895,9 @@ void Desktop::impl_sendNotifyTerminationEvent()
 //=============================================================================
 ::sal_Bool Desktop::impl_closeFrames(::sal_Bool bAllowUI)
 {
-    SYNCHRONIZED_START
-        ReadGuard aReadLock( m_aLock );
-        css::uno::Sequence< css::uno::Reference< css::frame::XFrame > > lFrames = m_aChildTaskContainer.getAllElements();
-        aReadLock.unlock();
-    SYNCHRONIZED_END
+    ReadGuard aReadLock( m_aLock ); // start synchronize
+    css::uno::Sequence< css::uno::Reference< css::frame::XFrame > > lFrames = m_aChildTaskContainer.getAllElements();
+    aReadLock.unlock(); // end synchronize
 
     ::sal_Int32 c                = lFrames.getLength();
     ::sal_Int32 i                = 0;

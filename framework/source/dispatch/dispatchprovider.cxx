@@ -230,8 +230,7 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_queryDeskt
     // I.II) "_default"
     //  This is a combination of search an empty task for recycling - or create a new one.
     //-----------------------------------------------------------------------------------------------------
-    else
-    if (sTargetFrameName==SPECIALTARGET_DEFAULT)
+    else if (sTargetFrameName==SPECIALTARGET_DEFAULT)
     {
         if (implts_isLoadableContent(aURL))
             xDispatcher = implts_getOrCreateDispatchHelper( E_DEFAULTDISPATCHER, xDesktop );
