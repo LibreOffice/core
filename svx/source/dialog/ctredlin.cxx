@@ -440,8 +440,8 @@ SvTreeListEntry* SvxRedlinTable::CreateEntry() const
     return new SvxRedlinEntry;
 }
 
-void SvxRedlinTable::InitEntry( SvTreeListEntry* pEntry, const XubString& rStr,
-    const Image& rColl, const Image& rExp, SvLBoxButtonKind eButtonKind )
+void SvxRedlinTable::InitEntry(SvTreeListEntry* pEntry, const OUString& rStr,
+    const Image& rColl, const Image& rExp, SvLBoxButtonKind eButtonKind)
 {
     SvLBoxButton* pButton;
     SvLBoxString* pString;

@@ -138,9 +138,9 @@ XubString SvxFontListBox::GetSelectEntry() const
 }
 
 void SvxFontListBox::InitEntry(
-        SvTreeListEntry* pEntry, const XubString& rEntryText,
+        SvTreeListEntry* pEntry, const OUString& rEntryText,
         const Image& rCollImg, const Image& rExpImg,
-        SvLBoxButtonKind eButtonKind )
+        SvLBoxButtonKind eButtonKind)
 {
     if( mbUseFont )
     {

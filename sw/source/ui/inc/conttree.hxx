@@ -110,7 +110,7 @@ class SwContentTree : public SvTreeListBox
 
 protected:
     virtual void    RequestHelp( const HelpEvent& rHEvt );
-    virtual void    InitEntry(SvTreeListEntry*,const XubString&,const Image&,const Image&,SvLBoxButtonKind);
+    virtual void    InitEntry(SvTreeListEntry*, const OUString&, const Image&, const Image&, SvLBoxButtonKind);
     virtual void    DataChanged( const DataChangedEvent& rDCEvt );
 
     SwNavigationPI* GetParentWindow(){return
@@ -292,7 +292,7 @@ protected:
     virtual void    GetFocus();
     virtual void    SelectHdl();
     virtual void    DeselectHdl();
-    virtual void InitEntry(SvTreeListEntry*,const XubString&,const Image&,const Image&,SvLBoxButtonKind);
+    virtual void    InitEntry(SvTreeListEntry*, const OUString&, const Image&, const Image&, SvLBoxButtonKind);
 
     void            Clear();
 

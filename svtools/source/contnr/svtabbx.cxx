@@ -79,10 +79,10 @@ void SvTabListBox::SetTabs()
     }
 }
 
-void SvTabListBox::InitEntry( SvTreeListEntry* pEntry, const XubString& rStr,
-    const Image& rColl, const Image& rExp, SvLBoxButtonKind eButtonKind )
+void SvTabListBox::InitEntry(SvTreeListEntry* pEntry, const OUString& rStr,
+    const Image& rColl, const Image& rExp, SvLBoxButtonKind eButtonKind)
 {
-    SvTreeListBox::InitEntry( pEntry, rStr, rColl, rExp, eButtonKind );
+    SvTreeListBox::InitEntry(pEntry, rStr, rColl, rExp, eButtonKind);
     XubString aToken;
 
     const sal_Unicode* pCurToken = aCurEntry.GetBuffer();

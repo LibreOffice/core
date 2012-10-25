@@ -145,7 +145,7 @@ public:
     sal_Bool        isWildcardChecked(SvTreeListEntry* _pEntry) const;
 
 protected:
-    virtual void InitEntry(SvTreeListEntry* _pEntry, const XubString& _rString, const Image& _rCollapsedBitmap, const Image& _rExpandedBitmap, SvLBoxButtonKind _eButtonKind);
+    virtual void InitEntry(SvTreeListEntry* _pEntry, const OUString& _rString, const Image& _rCollapsedBitmap, const Image& _rExpandedBitmap, SvLBoxButtonKind _eButtonKind);
 
     virtual void checkedButton_noBroadcast(SvTreeListEntry* _pEntry);
 

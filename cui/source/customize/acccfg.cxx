@@ -663,13 +663,13 @@ void SfxAccCfgLBoxString_Impl::Paint(
 }
 
 //-----------------------------------------------
-void SfxAccCfgTabListBox_Impl::InitEntry(      SvTreeListEntry* pEntry ,
-                                         const XubString&   sText  ,
-                                         const Image&       aImage1,
-                                         const Image&       aImage2,
-                                               SvLBoxButtonKind eButtonKind)
+void SfxAccCfgTabListBox_Impl::InitEntry(SvTreeListEntry* pEntry,
+                                         const OUString& rText,
+                                         const Image& rImage1,
+                                         const Image& rImage2,
+                                         SvLBoxButtonKind eButtonKind)
 {
-    SvTabListBox::InitEntry(pEntry, sText, aImage1, aImage2, eButtonKind);
+    SvTabListBox::InitEntry(pEntry, rText, rImage1, rImage2, eButtonKind);
 }
 
 //-----------------------------------------------

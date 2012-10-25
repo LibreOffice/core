@@ -116,7 +116,7 @@ private:
 protected:
 
     virtual StringCompare   ColCompare(SvTreeListEntry*,SvTreeListEntry*);
-    virtual void            InitEntry(SvTreeListEntry*,const XubString&,const Image&,const Image&,SvLBoxButtonKind);
+    virtual void            InitEntry(SvTreeListEntry*, const OUString&, const Image&, const Image&, SvLBoxButtonKind);
 
 
 

@@ -123,7 +123,7 @@ namespace dbaui
         virtual void    KeyInput( const KeyEvent& rKEvt );
 
         virtual void    StateChanged( StateChangedType nStateChange );
-        virtual void    InitEntry( SvTreeListEntry* pEntry, const XubString& aStr, const Image& aCollEntryBmp, const Image& aExpEntryBmp, SvLBoxButtonKind eButtonKind);
+        virtual void    InitEntry(SvTreeListEntry* pEntry, const OUString& aStr, const Image& aCollEntryBmp, const Image& aExpEntryBmp, SvLBoxButtonKind eButtonKind);
 
         // enable editing for tables/views and queries
         virtual sal_Bool    EditingEntry( SvTreeListEntry* pEntry, Selection& );

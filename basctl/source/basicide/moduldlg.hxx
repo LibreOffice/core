@@ -140,7 +140,7 @@ public:
     void            CheckEntryPos( sal_uLong nPos );
     bool            IsChecked( sal_uLong nPos ) const;
 
-    virtual void    InitEntry( SvTreeListEntry*, const XubString&, const Image&, const Image&, SvLBoxButtonKind eButtonKind );
+    virtual void    InitEntry(SvTreeListEntry*, const OUString&, const Image&, const Image&, SvLBoxButtonKind eButtonKind);
     virtual sal_Bool    EditingEntry( SvTreeListEntry* pEntry, Selection& rSel );
     virtual sal_Bool    EditedEntry( SvTreeListEntry* pEntry, const OUString& rNewText );
 

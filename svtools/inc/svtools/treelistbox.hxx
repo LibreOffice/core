@@ -579,7 +579,7 @@ protected:
     SvLBoxTab*      GetTab( SvTreeListEntry*, SvLBoxItem* ) const;
     void            ClearTabList();
 
-    virtual void InitEntry(SvTreeListEntry*,const XubString&,const Image&,const Image&,SvLBoxButtonKind);
+    virtual void InitEntry(SvTreeListEntry*, const OUString&, const Image&, const Image&, SvLBoxButtonKind);
 
     virtual void    NotifyBeginScroll();
     virtual void    NotifyEndScroll();

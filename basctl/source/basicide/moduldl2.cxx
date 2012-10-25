@@ -260,9 +260,10 @@ bool CheckBox::IsChecked( sal_uLong nPos ) const
 
 //----------------------------------------------------------------------------
 
-void CheckBox::InitEntry( SvTreeListEntry* pEntry, const XubString& rTxt, const Image& rImg1, const Image& rImg2, SvLBoxButtonKind eButtonKind )
+void CheckBox::InitEntry(SvTreeListEntry* pEntry, const OUString& rTxt,
+    const Image& rImg1, const Image& rImg2, SvLBoxButtonKind eButtonKind )
 {
-    SvTabListBox::InitEntry( pEntry, rTxt, rImg1, rImg2, eButtonKind );
+    SvTabListBox::InitEntry(pEntry, rTxt, rImg1, rImg2, eButtonKind);
 
     if (eMode == ObjectMode::Module)
     {

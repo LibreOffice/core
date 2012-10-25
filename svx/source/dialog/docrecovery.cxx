@@ -211,9 +211,9 @@ sal_Bool RecoveryCore::isBrokenTempEntry(const TURLInfo& rInfo)
 }
 
 //===============================================
-void RecoveryCore::saveBrokenTempEntries(const ::rtl::OUString& sPath)
+void RecoveryCore::saveBrokenTempEntries(const OUString& rPath)
 {
-    if (sPath.isEmpty())
+    if (rPath.isEmpty())
         return;
 
     if (!m_xRealCore.is())
@@ -225,7 +225,7 @@ void RecoveryCore::saveBrokenTempEntries(const ::rtl::OUString& sPath)
     lCopyArgs[0].Name    = PROP_DISPATCHASYNCHRON;
     lCopyArgs[0].Value <<= sal_False;
     lCopyArgs[1].Name    = PROP_SAVEPATH;
-    lCopyArgs[1].Value <<= sPath;
+    lCopyArgs[1].Value <<= rPath;
     lCopyArgs[2].Name    = PROP_ENTRYID;
     // lCopyArgs[2].Value will be changed during next loop ...
 
@@ -249,9 +249,9 @@ void RecoveryCore::saveBrokenTempEntries(const ::rtl::OUString& sPath)
 }
 
 //===============================================
-void RecoveryCore::saveAllTempEntries(const ::rtl::OUString& sPath)
+void RecoveryCore::saveAllTempEntries(const OUString& rPath)
 {
-    if (sPath.isEmpty())
+    if (rPath.isEmpty())
         return;
 
     if (!m_xRealCore.is())
@@ -263,7 +263,7 @@ void RecoveryCore::saveAllTempEntries(const ::rtl::OUString& sPath)
     lCopyArgs[0].Name    = PROP_DISPATCHASYNCHRON;
     lCopyArgs[0].Value <<= sal_False;
     lCopyArgs[1].Name    = PROP_SAVEPATH;
-    lCopyArgs[1].Value <<= sPath;
+    lCopyArgs[1].Value <<= rPath;
     lCopyArgs[2].Name    = PROP_ENTRYID;
     // lCopyArgs[2].Value will be changed during next loop ...
 
@@ -506,12 +506,12 @@ void SAL_CALL RecoveryCore::statusChanged(const css::frame::FeatureStateEvent& a
 
     aNew.ID          = lInfo.getUnpackedValueOrDefault(STATEPROP_ID         , (sal_Int32)0     );
     aNew.DocState    = lInfo.getUnpackedValueOrDefault(STATEPROP_STATE      , (sal_Int32)0     );
-    aNew.OrgURL      = lInfo.getUnpackedValueOrDefault(STATEPROP_ORGURL     , ::rtl::OUString());
-    aNew.TempURL     = lInfo.getUnpackedValueOrDefault(STATEPROP_TEMPURL    , ::rtl::OUString());
-    aNew.FactoryURL  = lInfo.getUnpackedValueOrDefault(STATEPROP_FACTORYURL , ::rtl::OUString());
-    aNew.TemplateURL = lInfo.getUnpackedValueOrDefault(STATEPROP_TEMPLATEURL, ::rtl::OUString());
-    aNew.DisplayName = lInfo.getUnpackedValueOrDefault(STATEPROP_TITLE      , ::rtl::OUString());
-    aNew.Module      = lInfo.getUnpackedValueOrDefault(STATEPROP_MODULE     , ::rtl::OUString());
+    aNew.OrgURL      = lInfo.getUnpackedValueOrDefault(STATEPROP_ORGURL     , OUString());
+    aNew.TempURL     = lInfo.getUnpackedValueOrDefault(STATEPROP_TEMPURL    , OUString());
+    aNew.FactoryURL  = lInfo.getUnpackedValueOrDefault(STATEPROP_FACTORYURL , OUString());
+    aNew.TemplateURL = lInfo.getUnpackedValueOrDefault(STATEPROP_TEMPLATEURL, OUString());
+    aNew.DisplayName = lInfo.getUnpackedValueOrDefault(STATEPROP_TITLE      , OUString());
+    aNew.Module      = lInfo.getUnpackedValueOrDefault(STATEPROP_MODULE     , OUString());
 
     // search for already existing items and update her nState value ...
     TURLList::iterator pIt;
@@ -897,7 +897,7 @@ void RecovDocListEntry::Paint(const Point&       aPos   ,
                                     SvTreeListEntry* pEntry )
 {
     const Image*        pImg  = 0;
-    const String*       pTxt  = 0;
+    const OUString*     pTxt  = 0;
           RecovDocList* pList = static_cast< RecovDocList* >(&aDevice);
 
     TURLInfo* pInfo  = (TURLInfo*)pEntry->GetUserData();
@@ -970,13 +970,13 @@ RecovDocList::~RecovDocList()
 }
 
 //===============================================
-void RecovDocList::InitEntry(      SvTreeListEntry* pEntry ,
-                             const XubString&   sText  ,
-                             const Image&       aImage1,
-                             const Image&       aImage2,
-                                   SvLBoxButtonKind eButtonKind)
+void RecovDocList::InitEntry(SvTreeListEntry* pEntry,
+                             const OUString& rText,
+                             const Image& rImage1,
+                             const Image& rImage2,
+                             SvLBoxButtonKind eButtonKind)
 {
-    SvTabListBox::InitEntry(pEntry, sText, aImage1, aImage2, eButtonKind);
+    SvTabListBox::InitEntry(pEntry, rText, rImage1, rImage2, eButtonKind);
     DBG_ASSERT( TabCount() == 2, "*RecovDocList::InitEntry(): structure missmatch" );
 
     SvLBoxString*       pCol = (SvLBoxString*)pEntry->GetItem(2);

@@ -1450,10 +1450,10 @@ sal_Int8 FmFilterNavigator::ExecuteDrop( const ExecuteDropEvent& rEvt )
 
 //------------------------------------------------------------------------
 void FmFilterNavigator::InitEntry(SvTreeListEntry* pEntry,
-                                  const XubString& rStr,
+                                  const OUString& rStr,
                                   const Image& rImg1,
                                   const Image& rImg2,
-                                                                  SvLBoxButtonKind eButtonKind)
+                                  SvLBoxButtonKind eButtonKind)
 {
     SvTreeListBox::InitEntry( pEntry, rStr, rImg1, rImg2, eButtonKind );
     SvLBoxString* pString = NULL;

@@ -284,7 +284,7 @@ protected:
     virtual void KeyInput( const KeyEvent& rKEvt );
     virtual void Command( const CommandEvent& rEvt );
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
-    virtual void InitEntry(SvTreeListEntry* pEntry, const XubString& rStr, const Image& rImg1, const Image& rImg2, SvLBoxButtonKind eButtonKind);
+    virtual void InitEntry(SvTreeListEntry* pEntry, const OUString& rStr, const Image& rImg1, const Image& rImg2, SvLBoxButtonKind eButtonKind);
     virtual sal_Bool Select( SvTreeListEntry* pEntry, sal_Bool bSelect=sal_True );
     virtual sal_Bool EditingEntry( SvTreeListEntry* pEntry, Selection& rSelection );
     virtual sal_Bool EditedEntry( SvTreeListEntry* pEntry, const rtl::OUString& rNewText );

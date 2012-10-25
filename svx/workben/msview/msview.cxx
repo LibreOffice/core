@@ -535,7 +535,7 @@ public:
 
     SvTreeListEntry*    findAtom( Atom* pAtom );
 
-    virtual void InitEntry(SvTreeListEntry*,const XubString&,const Image&,const Image&);
+    virtual void InitEntry(SvTreeListEntry*, const OUString&, const Image&, const Image&);
     virtual void SetTabs();
 
 private:
@@ -591,7 +591,8 @@ void AtomContainerTreeListBox::SetTabs()
     AddTab( nStartPos, SV_LBOXTAB_DYNAMIC|SV_LBOXTAB_ADJUST_LEFT | SV_LBOXTAB_SHOW_SELECTION );
 }
 
-void AtomContainerTreeListBox::InitEntry(SvTreeListEntry* pEntry,const XubString& aStr,const Image& aCollEntryBmp,const Image& aExpEntryBmp)
+void AtomContainerTreeListBox::InitEntry(SvTreeListEntry* pEntry, const OUString& aStr,
+    const Image& aCollEntryBmp, const Image& aExpEntryBmp)
 {
     pEntry->AddItem( new SvLBoxContextBmp( pEntry,0, aCollEntryBmp,aExpEntryBmp, SVLISTENTRYFLAG_EXPANDED ) );
     pEntry->AddItem( new SvLBoxContextBmp( pEntry,0, maImgAtom, maImgAtom, SVLISTENTRYFLAG_EXPANDED ) );

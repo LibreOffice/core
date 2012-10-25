@@ -65,7 +65,7 @@ protected:
     static const sal_Unicode*   GetToken( const sal_Unicode* pPtr, sal_uInt16& rLen );
 
     virtual void                SetTabs();
-    virtual void                InitEntry( SvTreeListEntry*, const XubString&, const Image&, const Image&, SvLBoxButtonKind );
+    virtual void                InitEntry(SvTreeListEntry*, const OUString&, const Image&, const Image&, SvLBoxButtonKind);
 
     String                      GetTabEntryText( sal_uLong nPos, sal_uInt16 nCol ) const;
     SvTreeListEntry*                GetEntryOnPos( sal_uLong _nEntryPos ) const;

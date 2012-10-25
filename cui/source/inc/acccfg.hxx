@@ -61,7 +61,8 @@ class SfxAccCfgTabListBox_Impl : public SvTabListBox
     void                        KeyInput( const KeyEvent &rKEvt );
 
 protected:
-    virtual void                InitEntry( SvTreeListEntry*, const XubString&, const Image&, const Image&, SvLBoxButtonKind eButtonKind );
+    virtual void                InitEntry(SvTreeListEntry*, const OUString&, const Image&,
+                                          const Image&, SvLBoxButtonKind eButtonKind);
 
 public:
                                 SfxAccCfgTabListBox_Impl(

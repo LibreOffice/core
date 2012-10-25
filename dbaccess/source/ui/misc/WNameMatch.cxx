@@ -358,9 +358,9 @@ OColumnTreeBox::OColumnTreeBox( Window* pParent, const ResId& rResId )
     SetSelectionMode( SINGLE_SELECTION );
 }
 //------------------------------------------------------------------------
-void OColumnTreeBox::InitEntry(SvTreeListEntry* pEntry, const String& rStr, const Image& rImg1, const Image& rImg2, SvLBoxButtonKind eButtonKind)
+void OColumnTreeBox::InitEntry(SvTreeListEntry* pEntry, const OUString& rStr, const Image& rImg1, const Image& rImg2, SvLBoxButtonKind eButtonKind)
 {
-    DBTreeListBox::InitEntry( pEntry, rStr, rImg1, rImg2, eButtonKind );
+    DBTreeListBox::InitEntry(pEntry, rStr, rImg1, rImg2, eButtonKind);
     SvLBoxString* pString = new OColumnString(pEntry, 0, rStr,sal_False);
     if (pString)
         pEntry->ReplaceItem( pString, pEntry->ItemCount() - 1 );

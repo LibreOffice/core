@@ -591,11 +591,11 @@ class RecovDocList : public SvxSimpleTable
         Image  m_aYellowCheckImg;
         Image  m_aRedCrossImg;
 
-        String m_aSuccessRecovStr;
-        String m_aOrigDocRecovStr;
-        String m_aRecovFailedStr;
-        String m_aRecovInProgrStr;
-        String m_aNotRecovYetStr;
+        OUString m_aSuccessRecovStr;
+        OUString m_aOrigDocRecovStr;
+        OUString m_aRecovFailedStr;
+        OUString m_aRecovInProgrStr;
+        OUString m_aNotRecovYetStr;
 
     //-------------------------------------------
     // interface
@@ -610,11 +610,11 @@ class RecovDocList : public SvxSimpleTable
 
         //---------------------------------------
         /** @short TODO */
-        virtual void InitEntry(      SvTreeListEntry* pEntry ,
-                               const XubString&   sText  ,
-                               const Image&       aImage1,
-                               const Image&       aImage2,
-                                     SvLBoxButtonKind eButtonKind);
+        virtual void InitEntry(SvTreeListEntry* pEntry,
+                               const OUString& rText,
+                               const Image& rImage1,
+                               const Image& rImage2,
+                               SvLBoxButtonKind eButtonKind);
 };
 
 //===============================================

@@ -57,7 +57,7 @@ OptHeaderTabListBox::OptHeaderTabListBox( Window* pParent, WinBits nWinStyle ) :
 }
 
 // -----------------------------------------------------------------------
-void OptHeaderTabListBox::InitEntry( SvTreeListEntry* pEntry, const XubString& rTxt,
+void OptHeaderTabListBox::InitEntry( SvTreeListEntry* pEntry, const OUString& rTxt,
                                      const Image& rImg1, const Image& rImg2,
                                      SvLBoxButtonKind eButtonKind )
 {

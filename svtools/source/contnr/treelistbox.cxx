@@ -1750,9 +1750,9 @@ void SvTreeListBox::SetTabs()
     pImp->NotifyTabsChanged();
 }
 
-void SvTreeListBox::InitEntry( SvTreeListEntry* pEntry,
-  const XubString& aStr, const Image& aCollEntryBmp, const Image& aExpEntryBmp,
-  SvLBoxButtonKind eButtonKind)
+void SvTreeListBox::InitEntry(SvTreeListEntry* pEntry,
+    const OUString& aStr, const Image& aCollEntryBmp, const Image& aExpEntryBmp,
+    SvLBoxButtonKind eButtonKind)
 {
     DBG_CHKTHIS(SvTreeListBox,0);
     SvLBoxButton* pButton;

@@ -104,10 +104,10 @@ protected:
         @descr  Uses current value of maEntryFont to set the entry font (if mbUseFont is true). */
     virtual void                InitEntry(
                                     SvTreeListEntry* pEntry,
-                                    const XubString& rEntryText,
+                                    const OUString& rEntryText,
                                     const Image& rCollImg,
                                     const Image& rExpImg,
-                                    SvLBoxButtonKind eButtonKind );
+                                    SvLBoxButtonKind eButtonKind);
 };
 
 // ============================================================================

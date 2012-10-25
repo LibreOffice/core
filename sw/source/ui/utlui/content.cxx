@@ -3135,7 +3135,7 @@ public:
 };
 
 void SwContentTree::InitEntry(SvTreeListEntry* pEntry,
-        const XubString& rStr ,const Image& rImg1,const Image& rImg2,
+        const OUString& rStr ,const Image& rImg1,const Image& rImg2,
         SvLBoxButtonKind eButtonKind)
 {
     sal_uInt16 nColToHilite = 1; //0==Bitmap;1=="Spalte1";2=="Spalte2"
