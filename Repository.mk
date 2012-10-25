@@ -734,7 +734,6 @@ $(eval $(call gb_Helper_register_jars,OOO, \
 	fax \
 	form \
 	htmlsoff \
-	java_accessibility \
 	java_uno_accessbridge \
 	letter \
 	officebean \
