@@ -1528,13 +1528,7 @@ void VclBuilder::collectProperty(xmlreader::XmlReader &reader, const OString &rI
     if (!sProperty.isEmpty())
     {
         sProperty = sProperty.replace('_', '-');
-        //replace '_' with '-' except for property values that
-        //refer to widget ids themselves. TO-DO, drop conversion
-        //and just use foo_bar properties throughout ?
-        if (sProperty == "group")
-            rMap[sProperty] = sValue;
-        else
-            rMap[sProperty] = sValue.replace('_', '-');
+        rMap[sProperty] = sValue;
     }
 }
 

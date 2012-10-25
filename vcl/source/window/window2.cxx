@@ -1284,22 +1284,22 @@ Window* Window::ImplGetTopmostFrameWindow()
     return pTopmostParent->mpWindowImpl->mpFrameWindow;
 }
 
-void Window::SetHelpId( const rtl::OString& rHelpId )
+void Window::SetHelpId( const OString& rHelpId )
 {
     mpWindowImpl->maHelpId = rHelpId;
 }
 
-const rtl::OString& Window::GetHelpId() const
+const OString& Window::GetHelpId() const
 {
     return mpWindowImpl->maHelpId;
 }
 
-void Window::SetUniqueId( const rtl::OString& rUniqueId )
+void Window::SetUniqueId( const OString& rUniqueId )
 {
     mpWindowImpl->maUniqId = rUniqueId;
 }
 
-const rtl::OString& Window::GetUniqueId() const
+const OString& Window::GetUniqueId() const
 {
     return mpWindowImpl->maUniqId;
 }
@@ -1938,7 +1938,7 @@ void Window::take_properties(Window &rOther)
 
 namespace
 {
-    VclAlign toAlign(const rtl::OString &rValue)
+    VclAlign toAlign(const OString &rValue)
     {
         VclAlign eRet = VCL_ALIGN_FILL;
 
@@ -1954,12 +1954,36 @@ namespace
     }
 }
 
-bool Window::set_property(const rtl::OString &rKey, const rtl::OString &rValue)
+namespace
 {
-    if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("label")))
-        SetText(rtl::OStringToOUString(rValue, RTL_TEXTENCODING_UTF8));
-    else if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("title")))
-        SetText(rtl::OStringToOUString(rValue, RTL_TEXTENCODING_UTF8));
+    OString convertMnemonicMarkup(const OString &rIn)
+    {
+        OStringBuffer aRet(rIn);
+        for (sal_Int32 nI = 0; nI < aRet.getLength(); ++nI)
+        {
+            if (aRet[nI] == '_')
+            {
+                if (aRet[nI+1] != '_')
+                    aRet[nI] = '~';
+                else
+                    aRet.remove(nI, 1);
+                ++nI;
+            }
+        }
+        return aRet.makeStringAndClear();
+    }
+}
+
+bool Window::set_property(const OString &rKey, const OString &rValue)
+{
+    if (
+         (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("label"))) ||
+         (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("title"))) ||
+         (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("text")))
+       )
+    {
+        SetText(OStringToOUString(convertMnemonicMarkup(rValue), RTL_TEXTENCODING_UTF8));
+    }
     else if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("visible")))
         Show(toBool(rValue));
     else if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("sensitive")))
@@ -2010,8 +2034,6 @@ bool Window::set_property(const rtl::OString &rKey, const rtl::OString &rValue)
             nBits |= WB_WORDBREAK;
         SetStyle(nBits);
     }
-    else if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("text")))
-        SetText(rtl::OStringToOUString(rValue, RTL_TEXTENCODING_UTF8));
     else if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("height-request")))
         set_height_request(rValue.toInt32());
     else if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("width-request")))
@@ -2025,9 +2047,9 @@ bool Window::set_property(const rtl::OString &rKey, const rtl::OString &rValue)
     else if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("valign")))
         set_valign(toAlign(rValue));
     else if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("tooltip-markup")))
-        SetQuickHelpText(rtl::OStringToOUString(rValue, RTL_TEXTENCODING_UTF8));
+        SetQuickHelpText(OStringToOUString(rValue, RTL_TEXTENCODING_UTF8));
     else if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("tooltip-text")))
-        SetQuickHelpText(rtl::OStringToOUString(rValue, RTL_TEXTENCODING_UTF8));
+        SetQuickHelpText(OStringToOUString(rValue, RTL_TEXTENCODING_UTF8));
     else if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("border-width")))
         set_border_width(rValue.toInt32());
     else if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("margin-left")))
