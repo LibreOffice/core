@@ -2204,8 +2204,8 @@ for ( $tmp = 0; $tmp < 2; $tmp++ )
 {  print "* $newline";
 }
 print "* Configuration part of Apache OpenOffice $UPD build is finished. $newline* $newline";
-print "* NB! Be aware that you might not be able to build Apache OpenOffice if you $newline".
-      "* ignore any warning message that were generated during this configuration $newline".
+print "* Note: Be aware that you might not be able to build Apache OpenOffice if $newline".
+      "* you ignore any warnings that were generated during this configuration $newline".
       "* process. $newline* $newline";
 
 if ( $Warning ne "" ) 
