@@ -38,8 +38,7 @@ endif
 #---------------------------------------------------------
 ifeq ($(BUILD_X64),TRUE)
 $(eval $(call gb_Module_add_targets,expat,\
-	StaticLibrary_expat_xmlparse_x64 \
-	StaticLibrary_expat_xmltok_x64 \
+	StaticLibrary_expat_x64 \
 ))
 endif
 
