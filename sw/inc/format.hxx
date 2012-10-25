@@ -55,7 +55,7 @@ class SW_DLLPUBLIC SwFmt : public SwModify
     sal_uInt16 nPoolHelpId;       ///< HelpId for this Pool-style.
     sal_uInt8 nPoolHlpFileId;     ///< FilePos to Doc to these style helps.
     sal_Bool   bWritten : 1;      ///< TRUE: already written.
-    sal_Bool   bAutoFmt : 1;      /**< FALSE: it is a template.
+    bool   bAutoFmt : 1;      /**< FALSE: it is a template.
                                        default is true! */
     sal_Bool   bFmtInDTOR : 1;    /**< TRUE: Format becomes deleted. In order to be able
                                        to recognize this in FmtChg-message!! */
@@ -161,8 +161,8 @@ public:
     void   ResetWritten()    { bWritten = sal_False; }
 
     /// Query / set AutoFmt-flag.
-    sal_Bool IsAuto() const                 { return bAutoFmt; }
-    void SetAuto( sal_Bool bNew = sal_False )   { bAutoFmt = bNew; }
+    bool IsAuto() const                 { return bAutoFmt; }
+    void SetAuto( bool bNew = false )   { bAutoFmt = bNew; }
 
     /// Query / set bAutoUpdateFmt-flag.
     sal_Bool IsAutoUpdateFmt() const                { return bAutoUpdateFmt; }

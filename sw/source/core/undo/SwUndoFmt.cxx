@@ -215,7 +215,7 @@ SwFmt * SwUndoTxtFmtCollCreate::Create(SwFmt * pDerivedFrom)
 
 void SwUndoTxtFmtCollCreate::Delete()
 {
-    pDoc->DelTxtFmtColl((SwTxtFmtColl *) pNew, sal_True);
+    pDoc->DelTxtFmtColl((SwTxtFmtColl *) pNew, true);
 }
 
 SwFmt * SwUndoTxtFmtCollCreate::Find(const String & rName) const
@@ -236,7 +236,7 @@ SwFmt * SwUndoTxtFmtCollDelete::Create(SwFmt * pDerivedFrom)
 
 void SwUndoTxtFmtCollDelete::Delete(SwFmt * pOld)
 {
-    pDoc->DelTxtFmtColl((SwTxtFmtColl *) pOld, sal_True);
+    pDoc->DelTxtFmtColl((SwTxtFmtColl *) pOld, true);
 }
 
 SwFmt * SwUndoTxtFmtCollDelete::Find(const String & rName) const
@@ -265,7 +265,7 @@ SwUndoCharFmtCreate::SwUndoCharFmtCreate(SwCharFmt * pNewFmt,
 
 SwFmt * SwUndoCharFmtCreate::Create(SwFmt * pDerivedFrom)
 {
-    return pDoc->MakeCharFmt(sNewName, (SwCharFmt *) pDerivedFrom, sal_True);
+    return pDoc->MakeCharFmt(sNewName, (SwCharFmt *) pDerivedFrom, true);
 }
 
 void SwUndoCharFmtCreate::Delete()
@@ -285,7 +285,7 @@ SwUndoCharFmtDelete::SwUndoCharFmtDelete(SwCharFmt * pOld, SwDoc * pDocument)
 
 SwFmt * SwUndoCharFmtDelete::Create(SwFmt * pDerivedFrom)
 {
-    return pDoc->MakeCharFmt(sOldName, (SwCharFmt *) pDerivedFrom, sal_True);
+    return pDoc->MakeCharFmt(sOldName, (SwCharFmt *) pDerivedFrom, true);
 }
 
 void SwUndoCharFmtDelete::Delete(SwFmt * pFmt)
@@ -320,7 +320,7 @@ SwUndoFrmFmtCreate::SwUndoFrmFmtCreate(SwFrmFmt * pNewFmt,
 
 SwFmt * SwUndoFrmFmtCreate::Create(SwFmt * pDerivedFrom)
 {
-    return pDoc->MakeFrmFmt(sNewName, (SwFrmFmt *) pDerivedFrom, sal_True, bAuto);
+    return pDoc->MakeFrmFmt(sNewName, (SwFrmFmt *) pDerivedFrom, true, bAuto);
 }
 
 void SwUndoFrmFmtCreate::Delete()
@@ -340,7 +340,7 @@ SwUndoFrmFmtDelete::SwUndoFrmFmtDelete(SwFrmFmt * pOld, SwDoc * pDocument)
 
 SwFmt * SwUndoFrmFmtDelete::Create(SwFmt * pDerivedFrom)
 {
-    return pDoc->MakeFrmFmt(sOldName, (SwFrmFmt *) pDerivedFrom, sal_True);
+    return pDoc->MakeFrmFmt(sOldName, (SwFrmFmt *) pDerivedFrom, true);
 }
 
 void SwUndoFrmFmtDelete::Delete(SwFmt * pFmt)

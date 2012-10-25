@@ -1595,8 +1595,7 @@ bool SwWW8ImplReader::SetTxtFmtCollAndListLevel(const SwPaM& rRg,
     bool bRes = true;
     if( rStyleInfo.pFmt && rStyleInfo.bColl )
     {
-        bRes = rDoc.SetTxtFmtColl(rRg, (SwTxtFmtColl*)rStyleInfo.pFmt)
-            ? true : false;
+        bRes = rDoc.SetTxtFmtColl(rRg, (SwTxtFmtColl*)rStyleInfo.pFmt);
         SwTxtNode* pTxtNode = pPaM->GetNode()->GetTxtNode();
         OSL_ENSURE( pTxtNode, "No Text-Node at PaM-Position" );
         // make code robust

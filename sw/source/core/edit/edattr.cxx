@@ -377,15 +377,15 @@ sal_uInt16 SwEditShell::GetSeqFtnList( SwSeqFldList& rList, bool bEndNotes )
 
 
 // Adjust left margin via object bar (similar to adjustment of numerations).
-sal_Bool SwEditShell::IsMoveLeftMargin( sal_Bool bRight, sal_Bool bModulus ) const
+bool SwEditShell::IsMoveLeftMargin( bool bRight, bool bModulus ) const
 {
-    sal_Bool bRet = sal_True;
+    bool bRet = true;
 
     const SvxTabStopItem& rTabItem = (SvxTabStopItem&)GetDoc()->
                                 GetDefault( RES_PARATR_TABSTOP );
     sal_uInt16 nDefDist = static_cast<sal_uInt16>(rTabItem.Count() ? rTabItem[0].GetTabPos() : 1134);
     if( !nDefDist )
-        return sal_False;
+        return false;
 
     FOREACHPAM_START(this)
 
@@ -415,7 +415,7 @@ sal_Bool SwEditShell::IsMoveLeftMargin( sal_Bool bRight, sal_Bool bModulus ) con
                         bRet = nFrmWidth > ( nNext + MM50 );
                     }
                     else
-                        bRet = sal_False;
+                        bRet = false;
                 }
             }
 
@@ -426,7 +426,7 @@ sal_Bool SwEditShell::IsMoveLeftMargin( sal_Bool bRight, sal_Bool bModulus ) con
     return bRet;
 }
 
-void SwEditShell::MoveLeftMargin( sal_Bool bRight, sal_Bool bModulus )
+void SwEditShell::MoveLeftMargin( bool bRight, bool bModulus )
 {
     StartAllAction();
     StartUndo( UNDO_START );

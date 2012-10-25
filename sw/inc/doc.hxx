@@ -637,7 +637,7 @@ private:
                             const bool bCopyFlyAtFly = false ) const;
     sal_Int8 SetFlyFrmAnchor( SwFrmFmt& rFlyFmt, SfxItemSet& rSet, bool bNewFrms );
 
-    typedef SwFmt* (SwDoc:: *FNCopyFmt)( const String&, SwFmt*, sal_Bool, sal_Bool );
+    typedef SwFmt* (SwDoc:: *FNCopyFmt)( const String&, SwFmt*, bool, bool );
     SwFmt* CopyFmt( const SwFmt& rFmt, const SwFmtsBase& rFmtArr,
                         FNCopyFmt fnCopyFmt, const SwFmt& rDfltFmt );
     void CopyFmtArr( const SwFmtsBase& rSourceArr, SwFmtsBase& rDestArr,
@@ -697,9 +697,9 @@ private:
     void DoUpdateAllCharts();
     DECL_LINK( DoUpdateModifiedOLE, Timer * );
 
-     SwFmt *_MakeCharFmt(const String &, SwFmt *, sal_Bool, sal_Bool );
-     SwFmt *_MakeFrmFmt(const String &, SwFmt *, sal_Bool, sal_Bool );
-     SwFmt *_MakeTxtFmtColl(const String &, SwFmt *, sal_Bool, sal_Bool );
+     SwFmt *_MakeCharFmt(const String &, SwFmt *, bool, bool );
+     SwFmt *_MakeFrmFmt(const String &, SwFmt *, bool, bool );
+     SwFmt *_MakeTxtFmtColl(const String &, SwFmt *, bool, bool );
 
      void InitTOXTypes();
      void   Paste( const SwDoc& );
@@ -1225,14 +1225,14 @@ public:
     void RemoveAllFmtLanguageDependencies();
 
     SwFrmFmt  *MakeFrmFmt(const String &rFmtName, SwFrmFmt *pDerivedFrom,
-                          sal_Bool bBroadcast = sal_False, sal_Bool bAuto = sal_True);
+                          bool bBroadcast = false, bool bAuto = true);
     void       DelFrmFmt( SwFrmFmt *pFmt, bool bBroadcast = false );
     SwFrmFmt* FindFrmFmtByName( const String& rName ) const
         {   return (SwFrmFmt*)FindFmtByName( (SwFmtsBase&)*pFrmFmtTbl, rName ); }
 
     SwCharFmt *MakeCharFmt(const String &rFmtName, SwCharFmt *pDerivedFrom,
-                           sal_Bool bBroadcast = sal_False,
-                           sal_Bool bAuto = sal_True );
+                           bool bBroadcast = false,
+                           bool bAuto = true );
     void       DelCharFmt(sal_uInt16 nFmt, bool bBroadcast = false);
     void       DelCharFmt(SwCharFmt* pFmt, bool bBroadcast = false);
     SwCharFmt* FindCharFmtByName( const String& rName ) const
@@ -1244,13 +1244,13 @@ public:
     const SwTxtFmtColls *GetTxtFmtColls() const { return pTxtFmtCollTbl; }
     SwTxtFmtColl *MakeTxtFmtColl( const String &rFmtName,
                                   SwTxtFmtColl *pDerivedFrom,
-                                  sal_Bool bBroadcast = sal_False,
-                                  sal_Bool bAuto = sal_True );
+                                  bool bBroadcast = false,
+                                  bool bAuto = true );
     SwConditionTxtFmtColl* MakeCondTxtFmtColl( const String &rFmtName,
                                                SwTxtFmtColl *pDerivedFrom,
-                                               sal_Bool bBroadcast = sal_False);
-    void DelTxtFmtColl(sal_uInt16 nFmt, sal_Bool bBroadcast = sal_False);
-    void DelTxtFmtColl( SwTxtFmtColl* pColl, sal_Bool bBroadcast = sal_False );
+                                               bool bBroadcast = false);
+    void DelTxtFmtColl(sal_uInt16 nFmt, bool bBroadcast = false);
+    void DelTxtFmtColl( SwTxtFmtColl* pColl, bool bBroadcast = false );
     /** Add 4th optional parameter <bResetListAttrs>.
      'side effect' of <SetTxtFmtColl> with <bReset = true> is that the hard
      attributes of the affected text nodes are cleared, except the break
@@ -1258,7 +1258,7 @@ public:
      The new parameter <bResetListAttrs> indicates, if the list attributes
      (list style, restart at and restart with) are cleared as well in case
      that <bReset = true> and the paragraph style has a list style attribute set. */
-    sal_Bool SetTxtFmtColl( const SwPaM &rRg, SwTxtFmtColl *pFmt,
+    bool SetTxtFmtColl( const SwPaM &rRg, SwTxtFmtColl *pFmt,
                             bool bReset = true,
                             bool bResetListAttrs = false );
     SwTxtFmtColl* FindTxtFmtCollByName( const String& rName ) const
@@ -1348,7 +1348,7 @@ public:
     /** Copy the complete PageDesc - beyond document and "deep"!
      Optionally copying of PoolFmtId, -HlpId can be prevented. */
     void CopyPageDesc( const SwPageDesc& rSrcDesc, SwPageDesc& rDstDesc,
-                        sal_Bool bCopyPoolIds = sal_True );
+                        bool bCopyPoolIds = true );
 
     /** Copy header (with contents) from SrcFmt to DestFmt
      (can also be copied into other document). */
@@ -1821,9 +1821,9 @@ public:
 
     /** Adjust left margin via object bar (similar to adjustment of numerations).
      One can either change the margin "by" adding or substracting a given
-     offset or set it "to" this position (bModulus = sal_True). */
-    void MoveLeftMargin( const SwPaM& rPam, sal_Bool bRight = sal_True,
-                        sal_Bool bModulus = sal_True );
+     offset or set it "to" this position (bModulus = true). */
+    void MoveLeftMargin( const SwPaM& rPam, bool bRight = true,
+                        bool bModulus = true );
 
     /// Query NumberFormatter.
     inline       SvNumberFormatter* GetNumberFormatter( sal_Bool bCreate = sal_True );

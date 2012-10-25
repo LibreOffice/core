@@ -1123,7 +1123,7 @@ sal_Bool SwCSS1Parser::StyleParsed( const CSS1Selector *pSelector,
             if( !pCFmt )
             {
                 pCFmt = pDoc->MakeCharFmt( aName, pParentCFmt );
-                pCFmt->SetAuto( sal_False );
+                pCFmt->SetAuto( false );
             }
         }
 
@@ -1209,7 +1209,7 @@ SwCharFmt* SwCSS1Parser::GetChrFmt( sal_uInt16 nToken2, const String& rClass ) c
         if( !pCFmt )
         {
             pCFmt = pDoc->MakeCharFmt( sCName, pDoc->GetDfltCharFmt() );
-            pCFmt->SetAuto( sal_False );
+            pCFmt->SetAuto( false );
         }
     }
 
@@ -1234,7 +1234,7 @@ SwCharFmt* SwCSS1Parser::GetChrFmt( sal_uInt16 nToken2, const String& rClass ) c
             if( pClass )
             {
                 pCFmt = pDoc->MakeCharFmt( aTmp, pCFmt );
-                pCFmt->SetAuto( sal_False );
+                pCFmt->SetAuto( false );
                 SfxItemSet aItemSet( pClass->GetItemSet() );
                 SetCharFmtAttrs( pCFmt, aItemSet );
             }
@@ -1404,7 +1404,7 @@ const SwPageDesc *SwCSS1Parser::GetPageDesc( sal_uInt16 nPoolId, sal_Bool bCreat
         pPageDesc = FindPageDesc( pDoc, nPoolId, nPage );
         OSL_ENSURE( pPageDesc==pNewPageDesc, "Seitenvorlage nicht gefunden" );
 
-        pDoc->CopyPageDesc( *pMasterPageDesc, *pNewPageDesc, sal_False );
+        pDoc->CopyPageDesc( *pMasterPageDesc, *pNewPageDesc, false );
 
         // Die Vorlagen an ihren neuen Zweck anpassen.
         const SwPageDesc *pFollow = 0;
@@ -1569,7 +1569,7 @@ void SwCSS1Parser::FillDropCap( SwFmtDrop& rDrop,
         if( !pCFmt )
         {
             pCFmt = pDoc->MakeCharFmt( aName, pDoc->GetDfltCharFmt() );
-            pCFmt->SetAuto( sal_False );
+            pCFmt->SetAuto( false );
         }
         SetCharFmtAttrs( pCFmt, rItemSet );
 

@@ -428,7 +428,7 @@ sal_Bool SwView::InsertGraphicDlg( SfxRequest& rReq )
             if(!pFmt)
                 pFmt = pDoc->MakeFrmFmt(sGraphicFormat,
                                         pDocShell->GetDoc()->GetDfltFrmFmt(),
-                                        sal_True, sal_False);
+                                        true, false);
             rSh.SetFrmFmt( pFmt );
         }
 

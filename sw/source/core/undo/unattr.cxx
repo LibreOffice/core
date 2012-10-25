@@ -1021,7 +1021,7 @@ void SwUndoDefaultAttr::RedoImpl(::sw::UndoRedoContext & rContext)
 }
 
 SwUndoMoveLeftMargin::SwUndoMoveLeftMargin(
-            const SwPaM& rPam, sal_Bool bFlag, sal_Bool bMod )
+            const SwPaM& rPam, sal_Bool bFlag, bool bMod )
     : SwUndo( bFlag ? UNDO_INC_LEFTMARGIN : UNDO_DEC_LEFTMARGIN )
     , SwUndRng( rPam )
     , m_pHistory( new SwHistory )

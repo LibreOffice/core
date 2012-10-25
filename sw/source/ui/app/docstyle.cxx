@@ -1709,7 +1709,7 @@ void SwDocStyleSheet::Create()
             if( !pCharFmt )
                 pCharFmt = rDoc.MakeCharFmt(aName,
                                             rDoc.GetDfltCharFmt());
-            pCharFmt->SetAuto( sal_False );
+            pCharFmt->SetAuto( false );
             break;
 
         case SFX_STYLE_FAMILY_PARA :
@@ -1727,7 +1727,7 @@ void SwDocStyleSheet::Create()
         case SFX_STYLE_FAMILY_FRAME:
             pFrmFmt = lcl_FindFrmFmt( rDoc, aName );
             if( !pFrmFmt )
-                pFrmFmt = rDoc.MakeFrmFmt(aName, rDoc.GetDfltFrmFmt(), sal_False, sal_False);
+                pFrmFmt = rDoc.MakeFrmFmt(aName, rDoc.GetDfltFrmFmt(), false, false);
 
             break;
 

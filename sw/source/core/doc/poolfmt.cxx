@@ -1156,10 +1156,10 @@ SwFmt* SwDoc::GetFmtFromPool( sal_uInt16 nId )
             switch (nId & (COLL_GET_RANGE_BITS + POOLGRP_NOCOLLID) )
             {
                 case POOLGRP_CHARFMT:
-                    pNewFmt = _MakeCharFmt(aNm, pDeriveFmt, sal_False, sal_True);
+                    pNewFmt = _MakeCharFmt(aNm, pDeriveFmt, false, true);
                 break;
                 case POOLGRP_FRAMEFMT:
-                    pNewFmt = _MakeFrmFmt(aNm, pDeriveFmt, sal_False, sal_True);
+                    pNewFmt = _MakeFrmFmt(aNm, pDeriveFmt, false, true);
                 break;
                 default:
                 break;
@@ -1169,7 +1169,7 @@ SwFmt* SwDoc::GetFmtFromPool( sal_uInt16 nId )
         if( !bIsModified )
             ResetModified();
         pNewFmt->SetPoolFmtId( nId );
-        pNewFmt->SetAuto( sal_False );      // no AutoFormat
+        pNewFmt->SetAuto( false );      // no AutoFormat
     }
 
     switch( nId )

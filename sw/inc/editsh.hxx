@@ -872,9 +872,9 @@ public:
 
     /** Adjust left margin via object bar (similar to adjustment of numerations).
      One can either change the margin "by" adding or substracting a given
-     offset or set it "to" this position @param (bModulus = sal_True). */
-    sal_Bool IsMoveLeftMargin( sal_Bool bRight = sal_True, sal_Bool bModulus = sal_True ) const;
-    void MoveLeftMargin( sal_Bool bRight = sal_True, sal_Bool bModulus = sal_True );
+     offset or set it "to" this position @param (bModulus = true). */
+    bool IsMoveLeftMargin( bool bRight = true, bool bModulus = true ) const;
+    void MoveLeftMargin( bool bRight = true, bool bModulus = true );
 
     /// Query NumberFormater from document.
           SvNumberFormatter* GetNumberFormatter();
