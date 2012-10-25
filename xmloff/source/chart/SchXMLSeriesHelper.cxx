@@ -114,7 +114,8 @@ using ::rtl::OUString;
     return aRet;
 }
 
-static uno::Reference< chart2::XChartType > lcl_getChartTypeOfSeries(
+namespace {
+uno::Reference< chart2::XChartType > lcl_getChartTypeOfSeries(
                                 const uno::Reference< chart2::XDiagram >&   xDiagram
                               , const Reference< chart2::XDataSeries >& xSeries )
 {
@@ -161,6 +162,7 @@ static uno::Reference< chart2::XChartType > lcl_getChartTypeOfSeries(
         }
     }
     return 0;
+}
 }
 
 bool SchXMLSeriesHelper::isCandleStickSeries(
