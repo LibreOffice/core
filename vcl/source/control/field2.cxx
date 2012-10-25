@@ -26,6 +26,9 @@
  *
  ************************************************************************/
 
+#include "sal/config.h"
+
+#include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 #include <tools/rc.h>
 #include <vcl/svapp.hxx>
@@ -1577,7 +1580,7 @@ CalendarWrapper& DateFormatter::GetCalendarWrapper() const
 {
     if ( !mpCalendarWrapper )
     {
-        ((DateFormatter*)this)->mpCalendarWrapper = new CalendarWrapper( vcl::unohelper::GetMultiServiceFactory() );
+        ((DateFormatter*)this)->mpCalendarWrapper = new CalendarWrapper( comphelper::getComponentContext( vcl::unohelper::GetMultiServiceFactory() ) );
         mpCalendarWrapper->loadDefaultCalendar( GetLocale() );
     }
 

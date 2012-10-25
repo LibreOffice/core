@@ -30,6 +30,7 @@
 #include <unotools/calendarwrapper.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <com/sun/star/i18n/CalendarFieldIndex.hpp>
+#include <com/sun/star/i18n/LocaleCalendar.hpp>
 #include <unotools/digitgroupingiterator.hxx>
 
 #include <svl/zforlist.hxx>         // NUMBERFORMAT_XXX
@@ -1766,11 +1767,9 @@ input for the following reasons:
     sal_Int16 nDaySet, nMonthSet, nYearSet, nHourSet, nMinuteSet, nSecondSet;
     sal_Int16 nZO, nDST1, nDST2, nDST, nZOmillis, nDST1millis, nDST2millis, nDSTmillis;
     sal_Int32 nZoneInMillis, nDST1InMillis, nDST2InMillis;
-    uno::Reference< lang::XMultiServiceFactory > xSMgr =
-        ::comphelper::getProcessServiceFactory();
-    uno::Reference< ::com::sun::star::i18n::XCalendar3 > xCal(
-            xSMgr->createInstance( "com.sun.star.i18n.LocaleCalendar" ),
-            uno::UNO_QUERY );
+    uno::Reference< uno::XComponentContext > xContext =
+        ::comphelper::getProcessComponentContext();
+    uno::Reference< i18n::XCalendar3 > xCal = i18n::LocaleCalendar::create(xContext);
     for ( const entry* p = cals; p->lan; ++p )
     {
         aLocale.Language = ::rtl::OUString::createFromAscii( p->lan );

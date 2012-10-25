@@ -28,6 +28,7 @@
 
 #include "sc.hrc"
 
+#include <comphelper/processfactory.hxx>
 #include <i18npool/mslangid.hxx>
 #include <sot/formats.hxx>
 #include <sfx2/mieclip.hxx>
@@ -1296,7 +1297,7 @@ bool ScImportExport::ExtText2Doc( SvStream& rStrm )
     ::utl::TransliterationWrapper aTransliteration(
         pDoc->GetServiceManager(), SC_TRANSLITERATION_IGNORECASE );
     aTransliteration.loadModuleIfNeeded( eDocLang );
-    CalendarWrapper aCalendar( pDoc->GetServiceManager() );
+    CalendarWrapper aCalendar( comphelper::getComponentContext(pDoc->GetServiceManager()) );
     aCalendar.loadDefaultCalendar(
         MsLangId::convertLanguageToLocale( eDocLang ) );
     ::utl::TransliterationWrapper* pEnglishTransliteration = NULL;
@@ -1306,7 +1307,7 @@ bool ScImportExport::ExtText2Doc( SvStream& rStrm )
         pEnglishTransliteration = new ::utl::TransliterationWrapper (
             pDoc->GetServiceManager(), SC_TRANSLITERATION_IGNORECASE );
         aTransliteration.loadModuleIfNeeded( LANGUAGE_ENGLISH_US );
-        pEnglishCalendar = new CalendarWrapper ( pDoc->GetServiceManager() );
+        pEnglishCalendar = new CalendarWrapper ( comphelper::getComponentContext(pDoc->GetServiceManager()) );
         pEnglishCalendar->loadDefaultCalendar(
             MsLangId::convertLanguageToLocale( LANGUAGE_ENGLISH_US ) );
     }

@@ -1137,7 +1137,7 @@ CalendarWrapper*     ScGlobal::GetCalendar()
 {
     if ( !pCalendar )
     {
-        pCalendar = new CalendarWrapper( ::comphelper::getProcessServiceFactory() );
+        pCalendar = new CalendarWrapper( ::comphelper::getProcessComponentContext() );
         pCalendar->loadDefaultCalendar( *GetLocale() );
     }
     return pCalendar;

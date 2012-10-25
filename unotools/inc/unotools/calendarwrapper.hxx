@@ -29,8 +29,8 @@
 #include "unotools/unotoolsdllapi.h"
 
 namespace com { namespace sun { namespace star {
-    namespace lang {
-        class XMultiServiceFactory;
+    namespace uno {
+        class XComponentContext;
     }
 }}}
 
@@ -43,14 +43,13 @@ namespace com { namespace sun { namespace star {
 
 class UNOTOOLS_DLLPUBLIC CalendarWrapper
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xSMgr;
     ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XCalendar3 >   xC;
 
             DateTime            aEpochStart;        // 1Jan1970
 
 public:
                                 CalendarWrapper(
-                                    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & xSF
+                                    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > & rxContext
                                     );
                                 ~CalendarWrapper();
 

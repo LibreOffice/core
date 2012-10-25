@@ -48,7 +48,7 @@
 
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/i18n/XCalendar3.hpp>
+#include <com/sun/star/i18n/LocaleCalendar.hpp>
 #include <com/sun/star/sheet/XFunctionAccess.hpp>
 
 using namespace comphelper;
@@ -64,12 +64,8 @@ static Reference< XCalendar3 > getLocaleCalendar( void )
     static Reference< XCalendar3 > xCalendar;
     if( !xCalendar.is() )
     {
-        Reference< XMultiServiceFactory > xSMgr = getProcessServiceFactory();
-        if( xSMgr.is() )
-        {
-            xCalendar = Reference< XCalendar3 >( xSMgr->createInstance
-                ( ::rtl::OUString("com.sun.star.i18n.LocaleCalendar" ) ), UNO_QUERY );
-        }
+        Reference< XComponentContext > xContext = getProcessComponentContext();
+        xCalendar = LocaleCalendar::create(xContext);
     }
 
     static com::sun::star::lang::Locale aLastLocale;

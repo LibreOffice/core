@@ -236,7 +236,7 @@ void SvNumberFormatter::ImpConstruct( LanguageType eLang )
     aLocale = MsLangId::convertLanguageToLocale( eLang );
     pCharClass = new CharClass( xServiceManager, aLocale );
     xLocaleData.init( xServiceManager, aLocale, eLang );
-    xCalendar.init( xServiceManager, aLocale );
+    xCalendar.init( comphelper::getComponentContext(xServiceManager), aLocale );
     xTransliteration.init( xServiceManager, eLang,
         ::com::sun::star::i18n::TransliterationModules_IGNORE_CASE );
     xNatNum.init( xServiceManager );
