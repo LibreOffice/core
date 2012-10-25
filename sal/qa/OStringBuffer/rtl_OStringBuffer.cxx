@@ -1943,25 +1943,6 @@ namespace rtl_OStringBuffer
 
         }
 
-#ifdef WITH_CORE
-        void append_001_021()
-        {
-            OString                expVal;
-            ::rtl::OStringBuffer   aStrBuf( kSInt32Max );
-            OString                input2;
-
-            aStrBuf.append( input2 );
-
-            CPPUNIT_ASSERT_MESSAGE
-            (
-                "Appends the string(length equal to 0) to the string buffer arrOUS[4]",
-                aStrBuf.getStr()== expVal &&
-                    aStrBuf.getLength() == expVal.getLength()
-            );
-
-        }
-#endif
-
         CPPUNIT_TEST_SUITE( append_001 );
         CPPUNIT_TEST( append_001_001 );
         CPPUNIT_TEST( append_001_002 );
@@ -1984,9 +1965,6 @@ namespace rtl_OStringBuffer
         CPPUNIT_TEST( append_001_019 );
         CPPUNIT_TEST( append_001_020 );
         CPPUNIT_TEST( append_null );
-#ifdef WITH_CORE
-        CPPUNIT_TEST( append_001_021 );
-#endif
         CPPUNIT_TEST_SUITE_END();
     };
 
@@ -8183,7 +8161,6 @@ namespace rtl_OStringBuffer
                 aStrBuf.getStr()== expVal &&
                     aStrBuf.getLength() == expVal.getLength()
             );
-
         }
 
         void append_099()
@@ -8203,7 +8180,6 @@ namespace rtl_OStringBuffer
                 aStrBuf.getStr()== expVal &&
                     aStrBuf.getLength() == expVal.getLength()
             );
-
         }
 
         void append_100()
@@ -8223,7 +8199,6 @@ namespace rtl_OStringBuffer
                 aStrBuf.getStr()== expVal &&
                     aStrBuf.getLength() == expVal.getLength()
             );
-
         }
 
         CPPUNIT_TEST_SUITE( append_006_Int32_Negative );
@@ -8315,9 +8290,9 @@ namespace rtl_OStringBuffer
             CPPUNIT_ASSERT_MESSAGE
             (
                 "Appends the WrongRadix to the string buffer arrOUS[0]",
-                sal_True
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
             );
-
         }
 
         void append_002()
@@ -8330,9 +8305,9 @@ namespace rtl_OStringBuffer
             CPPUNIT_ASSERT_MESSAGE
             (
                 "Appends the WrongRadix to the string buffer arrOUS[1]",
-                sal_True
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
             );
-
         }
 
         void append_003()
@@ -8345,7 +8320,8 @@ namespace rtl_OStringBuffer
             CPPUNIT_ASSERT_MESSAGE
             (
                 "Appends the WrongRadix to the string buffer arrOUS[2]",
-                sal_True
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
             );
 
         }
@@ -8360,7 +8336,8 @@ namespace rtl_OStringBuffer
             CPPUNIT_ASSERT_MESSAGE
             (
                 "Appends the WrongRadix to the string buffer arrOUS[3]",
-                sal_True
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
             );
 
         }
@@ -8375,9 +8352,9 @@ namespace rtl_OStringBuffer
             CPPUNIT_ASSERT_MESSAGE
             (
                 "Appends the WrongRadix to the string buffer arrOUS[4]",
-                sal_True
+                (aStrBuf.toString() == expVal &&
+                 aStrBuf.getLength() == expVal.getLength())
             );
-
         }
 #ifdef WITH_CORE
         void append_006()
@@ -8390,7 +8367,8 @@ namespace rtl_OStringBuffer
             CPPUNIT_ASSERT_MESSAGE
             (
                 "Appends the WrongRadix to the string buffer(with INT_MAX)",
-                sal_True
+                aStrBuf.getStr()== expVal &&
+                    aStrBuf.getLength() == expVal.getLength()
             );
 
         }
@@ -14061,12 +14039,13 @@ namespace rtl_OStringBuffer
 
             aStrBuf.append( intVal, -5 );
 
+
             CPPUNIT_ASSERT_MESSAGE
             (
                 "Appends the WrongRadix to the string buffer arrOUS[0]",
-                sal_True
+                (aStrBuf.toString() == expVal &&
+                 aStrBuf.getLength() == expVal.getLength())
             );
-
         }
 
         void append_002()
@@ -14079,9 +14058,9 @@ namespace rtl_OStringBuffer
             CPPUNIT_ASSERT_MESSAGE
             (
                 "Appends the WrongRadix to the string buffer arrOUS[1]",
-                sal_True
+                (aStrBuf.toString() == expVal &&
+                 aStrBuf.getLength() == expVal.getLength())
             );
-
         }
 
         void append_003()
@@ -14094,9 +14073,9 @@ namespace rtl_OStringBuffer
             CPPUNIT_ASSERT_MESSAGE
             (
                 "Appends the WrongRadix to the string buffer arrOUS[2]",
-                sal_True
+                (aStrBuf.toString() == expVal &&
+                 aStrBuf.getLength() == expVal.getLength())
             );
-
         }
 
         void append_004()
@@ -14109,9 +14088,9 @@ namespace rtl_OStringBuffer
             CPPUNIT_ASSERT_MESSAGE
             (
                 "Appends the WrongRadix to the string buffer arrOUS[3]",
-                sal_True
+                (aStrBuf.toString() == expVal &&
+                 aStrBuf.getLength() == expVal.getLength())
             );
-
         }
 
         void append_005()
@@ -14124,9 +14103,9 @@ namespace rtl_OStringBuffer
             CPPUNIT_ASSERT_MESSAGE
             (
                 "Appends the WrongRadix to the string buffer arrOUS[4]",
-                sal_True
+                (aStrBuf.toString() == expVal &&
+                 aStrBuf.getLength() == expVal.getLength())
             );
-
         }
 #ifdef WITH_CORE
         void append_006()
@@ -14139,9 +14118,9 @@ namespace rtl_OStringBuffer
             CPPUNIT_ASSERT_MESSAGE
             (
                 "Appends the WrongRadix to the string buffer(with INT_MAX)",
-                sal_True
+                (aStrBuf.toString() == expVal &&
+                 aStrBuf.getLength() == expVal.getLength())
             );
-
         }
 #endif
 
