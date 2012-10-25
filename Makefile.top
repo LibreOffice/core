@@ -359,7 +359,7 @@ ifeq ($(BUILD_DMAKE),YES)
 	rm -f solenv/*/bin/dmake*
 endif
 	rm -fr config_host.mk config_build.mk aclocal.m4 autom4te.cache \
-    bin/repo-list config.log config.status configure \
+	config.log config.status configure \
 	ooo.lst post_download post_download.log \
 	config_host.mk.last set_soenv.stamp src.downloaded warn \
 	solenv/bin/concat-deps.exe solenv/bin/concat-deps
@@ -380,7 +380,7 @@ ifneq ($(filter-out clean distclean,$(MAKECMDGOALS)),)
 #
 fetch: src.downloaded
 
-src.downloaded : Makefile.top download ooo.lst bin/repo-list
+src.downloaded : Makefile.top download ooo.lst
 ifeq ($(DO_FETCH_TARBALLS),YES)
 	@./download $(SRCDIR)/ooo.lst && touch $@
 else

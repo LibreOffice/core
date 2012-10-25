@@ -53,18 +53,13 @@ if [ -d .git ] ; then
         ./g -f clone
     else
         echo "FIXME: GIT_LINK_SRC method is not yet implemented with submodules" 1>&2
-        exit 1;
         # space-saving clone from another local workdir
-#        mkdir clone
-#        branch=$(git symbolic-ref HEAD | cut -d"/" -f 3)
-#        for i in $GIT_REPO_NAMES ; do
-#            bin/git-new-workdir $GIT_LINK_SRC/$i clone/$i $branch
-#            for d in clone/$i/* ; do
-#                if [ "${d}" != "clone/$i/git-hooks" ]; then
-#                    ln -sfn ${d} $(basename ${d})
-#                fi
-#            done
-#        done
+        for i in $GIT_NEEDED_SUBMODULES ; do
+            rm -r $i
+            cp -R $GIT_LINK_SRC/$i $i
+#            bin/git-new-workdir $GIT_LINK_SRC/$i $i
+        done
+        git submodule update $GIT_NEEDED_SUBMODULES
     fi
 fi
 
@@ -191,7 +186,8 @@ if [ -f $start_dir/sources.ver -a ! -d $start_dir/.git ] ; then
     lo_bugfix_release_sources_ver=`echo $lo_sources_ver | sed -e "s/\([0-9]*\.[0-9]*\.[0-9]*\).*/\1/"`
     lo_src_dir="$start_dir/src"
     mkdir -p "$lo_src_dir"
-    for piece in `cat $start_dir/bin/repo-list` ; do
+    for piece in $GIT_NEEDED_SUBMODULES ; do
+        if [ "helpcontent2" = "$piece" ] ; then piece="help"; fi
         tarname="libreoffice-$piece-$lo_sources_ver"
         if [ ! -f "$TARFILE_LOCATION/$tarname.tar.xz" ] ; then
 	    downloaditem "http://download.documentfoundation.org/libreoffice/src/$lo_bugfix_release_sources_ver" "$tarname.tar.xz" ""

@@ -10,7 +10,6 @@ save_CXX=$CXX
 
 BUILD_TYPE="LibO"
 SCPDEFS=""
-GIT_REPO_NAMES=""
 GIT_NEEDED_SUBMODULES=""
 LO_PATH= # used by path_munge to construct a PATH variable
 
@@ -4070,7 +4069,6 @@ if test "$cross_compiling" = "yes"; then
     rm -rf CONF-FOR-BUILD config_build.mk
     mkdir CONF-FOR-BUILD
     tar cf - \
-        bin/repo-list.in \
         config.guess \
         config_host.mk.in \
         config_host.mk.source \
@@ -4367,7 +4365,6 @@ if test "$enable_binfilter" = "no"; then
 else
     WITH_BINFILTER="YES"
     BUILD_TYPE="$BUILD_TYPE BINFILTER"
-    GIT_REPO_NAMES="$GIT_REPO_NAMES binfilter"
     GIT_NEEDED_SUBMODULES="binfilter $GIT_NEEDED_SUBMODULES"
     AC_MSG_RESULT([yes])
 fi
@@ -4378,7 +4375,6 @@ if test "$with_help" != "no" -a $_os != iOS -a $_os != Android; then
     AC_MSG_RESULT([yes])
     BUILD_TYPE="$BUILD_TYPE HELP"
     SCPDEFS="$SCPDEFS -DWITH_HELP"
-    GIT_REPO_NAMES="$GIT_REPO_NAMES help"
     GIT_NEEDED_SUBMODULES="helpcontent2 $GIT_NEEDED_SUBMODULES"
 else
     AC_MSG_RESULT([no])
@@ -4391,7 +4387,6 @@ if test -z "$with_myspell_dicts" -o "$with_myspell_dicts" = "yes"; then
     AC_MSG_RESULT([yes])
     WITH_MYSPELL_DICTS=YES
     BUILD_TYPE="$BUILD_TYPE DICTIONARIES"
-    GIT_REPO_NAMES="$GIT_REPO_NAMES dictionaries"
     GIT_NEEDED_SUBMODULES="dictionaries $GIT_NEEDED_SUBMODULES"
 else
     AC_MSG_RESULT([no])
@@ -12120,7 +12115,6 @@ if test -z "$WITH_LANG" -o "$WITH_LANG" = "en-US"; then
     AC_MSG_RESULT([en-US])
 else
     AC_MSG_RESULT([$WITH_LANG])
-    GIT_REPO_NAMES="$GIT_REPO_NAMES translations"
     GIT_NEEDED_SUBMODULES="translations $GIT_NEEDED_SUBMODULES"
 fi
 # check that the list is valid
@@ -12146,7 +12140,6 @@ test -z "$WITH_LANG" || BUILD_TYPE="$BUILD_TYPE TRANSLATIONS"
 AC_SUBST(ALL_LANGS)
 AC_SUBST(WITH_LANG)
 AC_SUBST(WITH_LANG_LIST)
-AC_SUBST(GIT_REPO_NAMES)
 AC_SUBST(GIT_NEEDED_SUBMODULES)
 
 
@@ -12166,7 +12159,7 @@ AC_SUBST(WITH_POOR_HELP_LOCALIZATIONS)
 dnl git-new-workdir
 dnl ===================================================================
 if test -n "${GIT_LINK_SRC}"; then
-    for repo in ${GIT_REPO_NAMES}; do
+    for repo in ${GIT_NEEDED_SUBMODULES}; do
         if ! test -d "${GIT_LINK_SRC}"/${repo}; then
             AC_MSG_ERROR([linked git: required repository does not exist: ${GIT_LINK_SRC}/${repo}])
         fi
@@ -12825,7 +12818,7 @@ else
     echo > config_host.mk.last
 fi
 
-AC_CONFIG_FILES([config_host.mk ooo.lst bin/repo-list])
+AC_CONFIG_FILES([config_host.mk ooo.lst])
 AC_OUTPUT
 
 # touch the config timestamp file set_soenv.stamp

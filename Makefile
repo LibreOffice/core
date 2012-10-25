@@ -24,7 +24,6 @@ $(filter-out help,$(firstword $(MAKECMDGOALS))) : $(SRCDIR)/config_host.mk
 # run configure in an environment not polluted by config_host.mk
 $(SRCDIR)/config_host.mk : \
 		$(SRCDIR)/config_host.mk.in \
-		$(SRCDIR)/bin/repo-list.in \
 		$(SRCDIR)/ooo.lst.in \
 		$(SRCDIR)/configure.ac \
 		$(SRCDIR)/autogen.lastrun
