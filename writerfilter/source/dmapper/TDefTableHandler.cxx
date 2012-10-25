@@ -188,8 +188,10 @@ void TDefTableHandler::lcl_sprm(Sprm & rSprm)
     {
         case NS_ooxml::LN_CT_TcBorders_top:
         case NS_ooxml::LN_CT_TcBorders_left:
+        case NS_ooxml::LN_CT_TcBorders_start:
         case NS_ooxml::LN_CT_TcBorders_bottom:
         case NS_ooxml::LN_CT_TcBorders_right:
+        case NS_ooxml::LN_CT_TcBorders_end:
         case NS_ooxml::LN_CT_TcBorders_insideH:
         case NS_ooxml::LN_CT_TcBorders_insideV:
         case NS_ooxml::LN_CT_TcBorders_tl2br:
