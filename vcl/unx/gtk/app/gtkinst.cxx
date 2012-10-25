@@ -140,7 +140,7 @@ extern "C"
 
     VCLPLUG_GTK_PUBLIC SalInstance* create_SalInstance( oslModule pModule )
     {
-#if OSL_DEBUG_LEVEL > 0
+#if OSL_DEBUG_LEVEL > 1
         fprintf( stderr, "create vcl plugin instance with gtk version %d %d %d\n",
                  (int) gtk_major_version, (int) gtk_minor_version,
                  (int) gtk_micro_version );
