@@ -615,7 +615,7 @@ define gb_JunitTest_JunitTest_platform
 $(call gb_JunitTest_get_target,$(1)) : DEFS := \
 	-Dorg.openoffice.test.arg.soffice="$$$${OOO_TEST_SOFFICE:-path:$(OUTDIR)/installation/opt/program/soffice.exe}" \
 	-Dorg.openoffice.test.arg.env=PATH="$$$$PATH" \
-	-Dorg.openoffice.test.arg.user=file:///$(call gb_JunitTest_get_userdir,$(1))
+	-Dorg.openoffice.test.arg.user=$(call gb_Helper_make_url,$(call gb_JunitTest_get_userdir,$(1)))
 
 endef
 
