@@ -27,6 +27,7 @@ boost_patches += boost.mipsbackport.patch
 #https://svn.boost.org/trac/boost/ticket/7551
 boost_patches += boost.7551.unusedvars.patch
 boost_patches += boost.4100.warnings.patch
+boost_patches += boost.4510.warnings.patch
 
 boost_patches += boost.windows.patch
 boost_patches += boost.vc2012.patch

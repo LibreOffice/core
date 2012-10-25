@@ -1,0 +1,26 @@
+--- misc/boost_1_44_0/boost/multi_array/concept_checks.hpp
++++ misc/build/boost_1_44_0/boost/multi_array/concept_checks.hpp
+@@ -56,6 +56,13 @@
+     }
+   };
+ 
++// MSVC 2008 produces 2 warnings "default constructor could not be generated"
++// here that run over ~100 lines :(
++#ifdef _MSC_VER
++#pragma warning(push,1)
++#pragma warning(disable: 4510)
++#pragma warning(disable: 4610)
++#endif
+ 
+   template <typename Array, std::size_t NumDims >
+   struct ConstMultiArrayConcept
+@@ -117,6 +124,9 @@
+     index_range range;
+   };
+ 
++#ifdef _MSC_VER
++#pragma warning(pop)
++#endif
+ 
+   template <typename Array, std::size_t NumDims >
+   struct MutableMultiArrayConcept
