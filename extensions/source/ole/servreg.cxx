@@ -26,6 +26,10 @@
  *
  ************************************************************************/
 
+// http://stackoverflow.com/questions/5839292/error-c1189-after-installing-visual-studio-2010
+#define _WIN32_WINNT 0x0403
+
+
 #include <rtl/unload.h>
 #include <osl/time.h>
 #include "ole2uno.hxx"

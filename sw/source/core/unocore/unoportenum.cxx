@@ -1108,7 +1108,7 @@ lcl_CreatePortions(
     lcl_FillSoftPageBreakArray(*pUnoCrsr, SoftPageBreaks);
 
     PortionStack_t PortionStack;
-    PortionStack.push( PortionList_t(&i_rPortions, 0) );
+    PortionStack.push( PortionList_t(&i_rPortions, (const SwTxtAttr *)0) );
 
     bool bAtEnd( false );
     while (!bAtEnd) // every iteration consumes at least current character!

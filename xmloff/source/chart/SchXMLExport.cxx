@@ -795,7 +795,9 @@ void lcl_ReorderInternalSequencesAccordingToTheirRangeName(
         // fill empty columns
         for( ; nIndex < aIt->first; ++nIndex )
             rInOutSequences.push_back(
-                SchXMLExportHelper_Impl::tDataSequenceCont::value_type( 0, 0 ));
+                SchXMLExportHelper_Impl::tDataSequenceCont::value_type(
+                    (uno::Reference< chart2::data::XDataSequence >)0,
+                    (uno::Reference< chart2::data::XDataSequence >)0 ));
         OSL_ASSERT( nIndex == aIt->first );
         rInOutSequences.push_back( aIt->second );
     }
@@ -2896,7 +2898,8 @@ void SchXMLExportHelper_Impl::exportSeries(
                                 {
                                     Reference< chart2::data::XDataSequence > xValues( xSequence->getValues() );
                                     if( lcl_exportDomainForThisSequence( xValues, aFirstXDomainRange, mrExport ) )
-                                        m_aDataSequencesToExport.push_back( tLabelValuesDataPair( 0, xValues ));
+                                        m_aDataSequencesToExport.push_back( tLabelValuesDataPair(
+                                            (uno::Reference< chart2::data::XDataSequence >)0, xValues ));
                                 }
                                 else if( nSeriesIdx==0 )
                                 {
@@ -2911,7 +2914,8 @@ void SchXMLExportHelper_Impl::exportSeries(
                                 }
                             }
                             if( xYValuesForBubbleChart.is() )
-                                m_aDataSequencesToExport.push_back( tLabelValuesDataPair( 0, xYValuesForBubbleChart ));
+                                m_aDataSequencesToExport.push_back( tLabelValuesDataPair(
+                                    (uno::Reference< chart2::data::XDataSequence >)0, xYValuesForBubbleChart ));
                         }
                     }
 
@@ -3171,7 +3175,8 @@ void SchXMLExportHelper_Impl::exportErrorBar( const Reference<beans::XPropertySe
                         }
                     }
 
-                    m_aDataSequencesToExport.push_back( tLabelValuesDataPair( 0, *aIt ));
+                    m_aDataSequencesToExport.push_back( tLabelValuesDataPair(
+                        (uno::Reference< chart2::data::XDataSequence >)0, *aIt ));
                 }
             }
 

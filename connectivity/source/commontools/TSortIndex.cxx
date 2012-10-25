@@ -19,6 +19,7 @@
 
 #include "TSortIndex.hxx"
 #include <algorithm>
+#include <iterator>
 
 #include <o3tl/compat_functional.hxx>
 
@@ -107,7 +108,7 @@ void OSortIndex::AddKeyValue(OKeyValue * pKeyValue)
     OSL_ENSURE(pKeyValue,"Can not be null here!");
     if(m_bFrozen)
     {
-        m_aKeyValues.push_back(TIntValuePairVector::value_type(pKeyValue->getValue(),NULL));
+        m_aKeyValues.push_back(TIntValuePairVector::value_type(pKeyValue->getValue(),(OKeyValue *)NULL));
         delete pKeyValue;
     }
     else

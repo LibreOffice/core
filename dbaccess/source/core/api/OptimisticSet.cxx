@@ -131,7 +131,8 @@ void OptimisticSet::construct(const Reference< XResultSet>& _xDriverSet,const ::
 
     // the first row is empty because it's now easier for us to distinguish when we are beforefirst or first
     // without extra variable to be set
-    m_aKeyMap.insert(OKeySetMatrix::value_type(0,OKeySetValue(NULL,::std::pair<sal_Int32,Reference<XRow> >(0,NULL))));
+    OKeySetValue keySetValue((ORowSetValueVector *)NULL,::std::pair<sal_Int32,Reference<XRow> >(0,(Reference<XRow>)NULL));
+    m_aKeyMap.insert(OKeySetMatrix::value_type(0,keySetValue));
     m_aKeyIter = m_aKeyMap.begin();
 
     ::rtl::OUStringBuffer aFilter = createKeyFilter();
@@ -503,7 +504,8 @@ void OptimisticSet::reset(const Reference< XResultSet>& _xDriverSet)
     OCacheSet::construct(_xDriverSet,::rtl::OUString());
     m_bRowCountFinal = sal_False;
     m_aKeyMap.clear();
-    m_aKeyMap.insert(OKeySetMatrix::value_type(0,OKeySetValue(NULL,::std::pair<sal_Int32,Reference<XRow> >(0,NULL))));
+    OKeySetValue keySetValue((ORowSetValueVector *)NULL,::std::pair<sal_Int32,Reference<XRow> >(0,(Reference<XRow>)NULL));
+    m_aKeyMap.insert(OKeySetMatrix::value_type(0,keySetValue));
     m_aKeyIter = m_aKeyMap.begin();
 }
 

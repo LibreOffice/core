@@ -1168,7 +1168,7 @@ struct AnnotatingVisitor
                      const ARGBColor& rInheritColor,
                      const Gradient&  rInheritGradient )
     {
-        std::pair<const char*,const char*> aPaintUri(NULL,NULL);
+        std::pair<const char*,const char*> aPaintUri((const char*)NULL,(const char*)NULL);
         std::pair<ARGBColor,bool>          aColor(maCurrState.maCurrentColor,
                                                   false);
         if( strcmp(sValue,"none") == 0 )
