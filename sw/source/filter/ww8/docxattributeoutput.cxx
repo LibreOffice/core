@@ -1349,7 +1349,7 @@ static void impl_borderLine( FSHelperPtr pSerializer, sal_Int32 elementToken, co
     //      thickThinMediumGap, thickThinLargeGap, thickThinSmallGap
     //      thinThickLargeGap, thinThickMediumGap, thinThickSmallGap
     const char* pVal = "none";
-    if ( !pBorderLine->isEmpty( ) )
+    if ( pBorderLine && !pBorderLine->isEmpty( ) )
     {
         switch (pBorderLine->GetBorderLineStyle())
         {
@@ -1403,7 +1403,7 @@ static void impl_borderLine( FSHelperPtr pSerializer, sal_Int32 elementToken, co
 
     pAttr->add( FSNS( XML_w, XML_val ), OString( pVal ) );
 
-    if ( !pBorderLine->isEmpty() )
+    if ( pBorderLine && !pBorderLine->isEmpty() )
     {
         // Compute the sz attribute
 
@@ -1452,32 +1452,29 @@ static void impl_pageBorders( FSHelperPtr pSerializer, const SvxBoxItem& rBox, s
     for( int i = 0; i < 4; ++i, ++pBrd )
     {
         const SvxBorderLine* pLn = rBox.GetLine( *pBrd );
-        if ( pLn )
+        if ( pDefaultBorders && pLn )
         {
-            if ( pDefaultBorders )
-            {
-                const SvxBorderLine* pRefLn = pDefaultBorders->GetLine( *pBrd );
+            const SvxBorderLine* pRefLn = pDefaultBorders->GetLine( *pBrd );
 
-                // If border is equal to default border: do not output
-                if ( pRefLn && *pLn == *pRefLn) {
-                    continue;
-                }
+            // If border is equal to default border: do not output
+            if ( pRefLn && *pLn == *pRefLn) {
+                continue;
             }
+        }
 
-            if (!tagWritten && bWriteTag) {
-                pSerializer->startElementNS( XML_w, tag, FSEND );
-                tagWritten = true;
-            }
+        if (!tagWritten && bWriteTag) {
+            pSerializer->startElementNS( XML_w, tag, FSEND );
+            tagWritten = true;
+        }
 
-            impl_borderLine( pSerializer, aXmlElements[i], pLn, 0 );
+        impl_borderLine( pSerializer, aXmlElements[i], pLn, 0 );
 
-            // When exporting default borders, we need to export these 2 attr
-            if ( pDefaultBorders == 0 ) {
-                if ( i == 2 )
-                    impl_borderLine( pSerializer, XML_insideH, pLn, 0 );
-                else if ( i == 3 )
-                    impl_borderLine( pSerializer, XML_insideV, pLn, 0 );
-            }
+        // When exporting default borders, we need to export these 2 attr
+        if ( pDefaultBorders == 0 ) {
+            if ( i == 2 )
+                impl_borderLine( pSerializer, XML_insideH, pLn, 0 );
+            else if ( i == 3 )
+                impl_borderLine( pSerializer, XML_insideV, pLn, 0 );
         }
     }
     if (tagWritten && bWriteTag) {
