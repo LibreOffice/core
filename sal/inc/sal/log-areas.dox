@@ -91,6 +91,12 @@ certain functionality.
 
 @li @c i18npool.langtag
 
+@section jvmfwk
+
+@li @c jfw
+@li @c jfw.level1
+@li @c jfw.level2
+
 @section Math
 
 @li @c starmath.rtf
