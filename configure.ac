@@ -6824,16 +6824,9 @@ if test "$with_system_zlib" = "yes"; then
         [AC_MSG_ERROR(zlib.h not found. install zlib)], [])
     AC_CHECK_LIB(z, deflate, [ ZLIB=-lz ],
         [AC_MSG_ERROR(zlib not found or functional)], [])
-    if test "$WITH_MINGW" = "yes"; then
-        # we need minizip too
-        PKG_CHECK_MODULES([MINIZIP], [minizip])
-        libo_MINGW_CHECK_DLL([MINIZIP], [libminizip])
-        SYSTEM_MINIZIP=YES
-    fi
 else
     AC_MSG_RESULT([internal])
     SYSTEM_ZLIB=NO
-    SYSTEM_MINIZIP=NO
     BUILD_TYPE="$BUILD_TYPE ZLIB"
     ZLIB_CFLAGS="-I${OUTDIR}/inc/external/zlib"
     ZLIB_LIBS="-L${OUTDIR}/lib -lz"
@@ -6842,8 +6835,6 @@ fi
 AC_SUBST(ZLIB_CFLAGS)
 AC_SUBST(ZLIB_LIBS)
 AC_SUBST(SYSTEM_ZLIB)
-AC_SUBST([SYSTEM_MINIZIP])
-AC_SUBST([MINGW_MINIZIP_DLL])
 AC_SUBST(ZLIB_TARBALL)
 
 dnl ===================================================================

@@ -117,7 +117,6 @@ $(eval $(call gb_InstallModule_define_mingw_dll_if_set,scp2/ooo,\
 	MINGW_LIBXML_DLL \
 	MINGW_LIBXSLT_DLL \
 	MINGW_LPSOLVE_DLL \
-	MINGW_MINIZIP_DLL \
 	MINGW_MYTHES_DLL \
 	MINGW_NEON_DLL \
 	MINGW_NSPR4_DLL \

@@ -136,12 +136,6 @@ MINGW_DLL( gid_Brand_File_Lib_Mingw_Libgrahpite, MINGW_GRAPHITE2_DLL )
 #endif
 #endif
 
-#ifdef SYSTEM_MINIZIP
-#ifdef NEEDS_MINGW_MINIZP_DLL
-MINGW_DLL( gid_Brand_File_Lib_Mingw_Libminizip, MINGW_MINIZIP_DLL )
-#endif
-#endif
-
 #ifdef SYSTEM_NEON
 #ifdef NEEDS_MINGW_TASN1_DLL
 MINGW_DLL( gid_Brand_File_Lib_Mingw_Libtasn,   MINGW_TASN1_DLL )
