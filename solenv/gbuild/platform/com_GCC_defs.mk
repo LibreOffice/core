@@ -158,7 +158,8 @@ gb_COMPILER_PLUGINS := -Xclang -load -Xclang $(SRCDIR)/compilerplugins/obj/plugi
 else
 gb_COMPILER_PLUGINS := -Xclang -load -Xclang $(SRCDIR)/compilerplugins/obj/plugin.so -Xclang -plugin -Xclang loplugin -Xclang -plugin-arg-loplugin -Xclang $(COMPILER_PLUGIN_TOOL)
 endif
-gb_COMPILER_PLUGINS_SETUP := ICECC_EXTRAFILES=$(SRCDIR)/sal/inc/sal/log-areas.dox
+# extra EF variable to make the command line shorter (just like is done with $(SRCDIR) etc.)
+gb_COMPILER_PLUGINS_SETUP := EF=$(SRCDIR)/sal/inc/sal/log-areas.dox && ICECC_EXTRAFILES=$$EF CCACHE_EXTRAFILES=$$EF
 else
 gb_COMPILER_PLUGINS :=
 gb_COMPILER_PLUGINS_SETUP :=
