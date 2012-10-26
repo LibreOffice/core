@@ -41,7 +41,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/msgbox.hxx>
 #include <svl/solar.hrc>
-
+#include <vcl/gdimetafiletools.hxx>
 
 // -----------------------------Feld-Typen-------------------------------
 
@@ -2588,8 +2588,20 @@ sal_Bool METWriter::WriteMET( const GDIMetaFile& rMTF, SvStream& rTargetStream, 
 //================== GraphicExport - die exportierte Funktion ================
 
 extern "C" sal_Bool __LOADONCALLAPI GraphicExport( SvStream & rStream, Graphic & rGraphic, FilterConfigItem* pFilterConfigItem, sal_Bool )
-{   METWriter aMETWriter;
+{
+    METWriter aMETWriter;
 
     // #119735# just use GetGDIMetaFile, it will create a bufferd version of contained bitmap now automatically
-    return aMETWriter.WriteMET( rGraphic.GetGDIMetaFile(), rStream, pFilterConfigItem );
+    GDIMetaFile aMetafile(rGraphic.GetGDIMetaFile());
+
+    if(usesClipActions(aMetafile))
+    {
+        // #121267# It is necessary to prepare the metafile since the export does *not* support
+        // clip regions. This tooling method clips the geometry content of the metafile internally
+        // against it's own clip regions, so that the export is safe to ignore clip regions
+        clipMetafileContentAgainstOwnRegions(aMetafile);
+    }
+
+    // #119735# just use GetGDIMetaFile, it will create a bufferd version of contained bitmap now automatically
+    return aMETWriter.WriteMET( aMetafile, rStream, pFilterConfigItem );
 }

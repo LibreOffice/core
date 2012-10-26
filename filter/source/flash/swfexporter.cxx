@@ -41,6 +41,7 @@
 #include <vcl/metaact.hxx>
 #include <svtools/wmf.hxx>
 #include <svtools/filter.hxx>
+#include <vcl/gdimetafiletools.hxx>
 
 #include "swfexporter.hxx"
 #include "swfwriter.hxx"
@@ -721,7 +722,17 @@ bool FlashExporter::getMetaFile( Reference< XComponent >&xComponent, GDIMetaFile
 
     }
     else
+    {
         rMtf.Read( *aFile.GetStream( STREAM_READ ) );
+
+        if(usesClipActions(rMtf))
+        {
+            // #121267# It is necessary to prepare the metafile since the export does *not* support
+            // clip regions. This tooling method clips the geometry content of the metafile internally
+            // against it's own clip regions, so that the export is safe to ignore clip regions
+            clipMetafileContentAgainstOwnRegions(rMtf);
+        }
+    }
 
     int icount = rMtf.GetActionCount();
     return icount != 0;

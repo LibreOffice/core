@@ -1155,14 +1155,29 @@ namespace drawinglayer
                         // direct draw of hairline; use default processing
                         // support SvtGraphicStroke MetaCommentAction
                         const basegfx::BColor aLineColor(maBColorModifierStack.getModifiedColor(rHairlinePrimitive.getBColor()));
-                        SvtGraphicStroke* pSvtGraphicStroke = impTryToCreateSvtGraphicStroke(
-                            rHairlinePrimitive.getB2DPolygon(),
-                            &aLineColor,
-                            0, 0, 0, 0);
+                        SvtGraphicStroke* pSvtGraphicStroke = 0;
 
-                        impStartSvtGraphicStroke(pSvtGraphicStroke);
+                        // #121267# Not needed, does not give better quality compared with
+                        // the META_POLYPOLYGON_ACTION written by RenderPolygonHairlinePrimitive2D
+                        // below
+                        bool bSupportSvtGraphicStroke(false);
+
+                        if(bSupportSvtGraphicStroke)
+                        {
+                            pSvtGraphicStroke = impTryToCreateSvtGraphicStroke(
+                                rHairlinePrimitive.getB2DPolygon(),
+                                &aLineColor,
+                                0, 0, 0, 0);
+
+                            impStartSvtGraphicStroke(pSvtGraphicStroke);
+                        }
+
                         RenderPolygonHairlinePrimitive2D(static_cast< const primitive2d::PolygonHairlinePrimitive2D& >(rCandidate), false);
-                        impEndSvtGraphicStroke(pSvtGraphicStroke);
+
+                        if(bSupportSvtGraphicStroke)
+                        {
+                            impEndSvtGraphicStroke(pSvtGraphicStroke);
+                        }
                     }
                     break;
                 }
@@ -1631,7 +1646,12 @@ namespace drawinglayer
                     // XPATHFILL_SEQ_BEGIN/XPATHFILL_SEQ_END support
                     SvtGraphicFill* pSvtGraphicFill = 0;
 
-                    if(!mnSvtGraphicFillCount && aLocalPolyPolygon.count())
+                    // #121267# Not needed, does not give better quality compared with
+                    // the META_POLYPOLYGON_ACTION written by the DrawPolyPolygon command
+                    // below
+                    bool bSupportSvtGraphicFill(false);
+
+                    if(bSupportSvtGraphicFill && !mnSvtGraphicFillCount && aLocalPolyPolygon.count())
                     {
                         // setup simple color fill stuff like in impgrfll
                         pSvtGraphicFill = new SvtGraphicFill(
@@ -1656,9 +1676,17 @@ namespace drawinglayer
                     mpOutputDevice->SetLineColor();
 
                     // call VCL directly; encapsulate with SvtGraphicFill
-                    impStartSvtGraphicFill(pSvtGraphicFill);
+                    if(bSupportSvtGraphicFill)
+                    {
+                            impStartSvtGraphicFill(pSvtGraphicFill);
+                    }
+
                     mpOutputDevice->DrawPolyPolygon(aLocalPolyPolygon);
-                    impEndSvtGraphicFill(pSvtGraphicFill);
+
+                    if(bSupportSvtGraphicFill)
+                    {
+                        impEndSvtGraphicFill(pSvtGraphicFill);
+                    }
 
                     break;
                 }
@@ -1716,16 +1744,13 @@ namespace drawinglayer
                                 // Removed subdivision and fixed in Region::ImplPolyPolyRegionToBandRegionFunc() in VCL where
                                 // the ClipRegion is built from the Polygon. A AdaptiveSubdivide on the source polygon was missing there
                                 mpOutputDevice->Push(PUSH_CLIPREGION);
-                                //mpOutputDevice->SetClipRegion(Region(PolyPolygon(basegfx::tools::adaptiveSubdivideByAngle(maClipPolyPolygon))));
-                                //mpOutputDevice->SetClipRegion(Region(PolyPolygon(maClipPolyPolygon)));
                                 mpOutputDevice->SetClipRegion(Region(maClipPolyPolygon));
-                            }
 
-                            // recursively paint content
-                            process(rMaskCandidate.getChildren());
+                                // recursively paint content
+                                // #121267# Only need to process sub-content when clip polygon is *not* empty.
+                                // If it is empty, the clip is empty and there can be nothing inside.
+                                process(rMaskCandidate.getChildren());
 
-                            if(maClipPolyPolygon.count())
-                            {
                                 // restore VCL clip region
                                 mpOutputDevice->Pop();
                             }
@@ -1817,7 +1842,12 @@ namespace drawinglayer
                                 // XPATHFILL_SEQ_BEGIN/XPATHFILL_SEQ_END support
                                 SvtGraphicFill* pSvtGraphicFill = 0;
 
-                                if(!mnSvtGraphicFillCount && aLocalPolyPolygon.count())
+                                // #121267# Not needed, does not give better quality compared with
+                                // the META_POLYPOLYGON_ACTION written by the DrawPolyPolygon command
+                                // below
+                                bool bSupportSvtGraphicFill(false);
+
+                                if(bSupportSvtGraphicFill && !mnSvtGraphicFillCount && aLocalPolyPolygon.count())
                                 {
                                     // setup simple color with transparence fill stuff like in impgrfll
                                     pSvtGraphicFill = new SvtGraphicFill(
@@ -1843,11 +1873,19 @@ namespace drawinglayer
                                 mpOutputDevice->SetLineColor();
 
                                 // call VCL directly; encapsulate with SvtGraphicFill
-                                impStartSvtGraphicFill(pSvtGraphicFill);
+                                if(bSupportSvtGraphicFill)
+                                {
+                                    impStartSvtGraphicFill(pSvtGraphicFill);
+                                }
+
                                 mpOutputDevice->DrawTransparent(
                                     PolyPolygon(aLocalPolyPolygon),
                                     nTransPercentVcl);
-                                impEndSvtGraphicFill(pSvtGraphicFill);
+
+                                if(bSupportSvtGraphicFill)
+                                {
+                                    impEndSvtGraphicFill(pSvtGraphicFill);
+                                }
                             }
                             else
                             {
