@@ -217,7 +217,7 @@ namespace comphelper
             else
             {
                 // Once this is rare, this could be turned into a warning.
-                SAL_INFO_IF(
+                SAL_WARN_IF(
                     pArgument->hasValue(), "comphelper",
                     ("NamedValueCollection::impl_assign: encountered a value"
                      " type which I cannot handle: "
