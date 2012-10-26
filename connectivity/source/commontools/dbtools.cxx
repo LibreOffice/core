@@ -1819,6 +1819,7 @@ void setObjectWithInfo(const Reference<XParameters>& _xParams,
                             Reference< css::io::XInputStream > xStream;
                             if(x >>= xStream)
                                 _xParams->setCharacterStream(parameterIndex,xStream,xStream->available());
+                            // LEM TODO: else some kind of error?
                         }
                     }
                 }
