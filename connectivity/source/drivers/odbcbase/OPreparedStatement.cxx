@@ -479,7 +479,7 @@ void SAL_CALL OPreparedStatement::setLong( sal_Int32 parameterIndex, sal_Int64 x
 void SAL_CALL OPreparedStatement::setNull( sal_Int32 parameterIndex, const sal_Int32 _nType ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    setParameterPre(paramterIndex):
+    setParameterPre(parameterIndex);
 
     OSL_VERIFY(allocBindBuf(parameterIndex, 0) == NULL);
     SQLLEN * const lenBuf = getLengthBuf (parameterIndex);
