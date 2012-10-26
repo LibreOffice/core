@@ -216,7 +216,6 @@ namespace comphelper
                 m_pImpl->aValues[ aNamedValue.Name ] = aNamedValue.Value;
             else
             {
-                // Once this is rare, this could be turned into a warning.
                 SAL_WARN_IF(
                     pArgument->hasValue(), "comphelper",
                     ("NamedValueCollection::impl_assign: encountered a value"
