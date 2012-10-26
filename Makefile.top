@@ -203,6 +203,7 @@ xmlreader\
 xmlscript\
 xmlsecurity\
 xsltml\
+zlib\
 
 dmake_modules:=\
 berkeleydb\
@@ -247,7 +248,6 @@ setup_native\
 stlport\
 sysui\
 xpdf\
-zlib\
 
 export gb_TAILBUILDTARGET=all slowcheck
 

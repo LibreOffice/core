@@ -6837,12 +6837,14 @@ else
     BUILD_TYPE="$BUILD_TYPE ZLIB"
     ZLIB_CFLAGS="-I${OUTDIR}/inc/external/zlib"
     ZLIB_LIBS="-L${OUTDIR}/lib -lz"
+    ZLIB_TARBALL="2ab442d169156f34c379c968f3f482dd-zlib-1.2.7.tar.bz2"
 fi
 AC_SUBST(ZLIB_CFLAGS)
 AC_SUBST(ZLIB_LIBS)
 AC_SUBST(SYSTEM_ZLIB)
 AC_SUBST([SYSTEM_MINIZIP])
 AC_SUBST([MINGW_MINIZIP_DLL])
+AC_SUBST(ZLIB_TARBALL)
 
 dnl ===================================================================
 dnl Check for system jpeg

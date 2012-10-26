@@ -167,20 +167,43 @@ $(call gb_LinkTarget_add_libs,$(1),-lz)
 
 endef
 
+# nothing on system
+define gb_LinkTarget__use_zlib_x64
+
+endef
+
 else # !SYSTEM_ZLIB
 
 $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
 	zlib \
+	zlib_x64 \
 ))
 
-define gb_LinkTarget__use_zlib
+define gb_LinkTarget__use_zlib_multiarch
+$(if $(2),,$(call gb_Output_error,gb_LinkTarget__use_zlib_multiarch needs two arguments))
+
+$(call gb_LinkTarget_use_packages,$(1),\
+	zlib_inc \
+)
+
 $(call gb_LinkTarget_set_include,$(1),\
 	-I$(OUTDIR)/inc/external/zlib \
 	$$(INCLUDE) \
 )
+
 $(call gb_LinkTarget_use_static_libraries,$(1),\
-	zlib \
+	$(2) \
 )
+
+endef
+
+define gb_LinkTarget__use_zlib
+$(call gb_LinkTarget__use_zlib_multiarch,$(1),zlib)
+
+endef
+
+define gb_LinkTarget__use_zlib_x64
+$(call gb_LinkTarget__use_zlib_multiarch,$(1),zlib_x64)
 
 endef
 
