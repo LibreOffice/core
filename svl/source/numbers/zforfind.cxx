@@ -886,7 +886,7 @@ bool ImpSvNumberInputScan::GetTimeRef(
     {
         nHour = 0;
         bRet = false;
-        SAL_WARN( "svl", "ImpSvNumberInputScan::GetTimeRef: bad number index");
+        SAL_WARN( "svl.numbers", "ImpSvNumberInputScan::GetTimeRef: bad number index");
     }
     if (nDecPos == 2 && nAnz == 2)                  // 45.5
         nMinute = 0;
@@ -1082,7 +1082,7 @@ bool ImpSvNumberInputScan::IsAcceptedDatePattern( sal_uInt16 nStartPatternAt )
     else if (!sDateAcceptancePatterns.getLength())
     {
         sDateAcceptancePatterns = pFormatter->GetLocaleData()->getDateAcceptancePatterns();
-        SAL_WARN_IF( !sDateAcceptancePatterns.getLength(), "svl", "ImpSvNumberInputScan::IsAcceptedDatePattern: no date acceptance patterns");
+        SAL_WARN_IF( !sDateAcceptancePatterns.getLength(), "svl.numbers", "ImpSvNumberInputScan::IsAcceptedDatePattern: no date acceptance patterns");
         nAcceptedDatePattern = (sDateAcceptancePatterns.getLength() ? -2 : -1);
     }
 
@@ -1300,7 +1300,7 @@ DateFormat ImpSvNumberInputScan::GetDateOrder()
                     break;
             }
     }
-    SAL_WARN( "svl", "ImpSvNumberInputScan::GetDateOrder: undefined, falling back to locale's default");
+    SAL_WARN( "svl.numbers", "ImpSvNumberInputScan::GetDateOrder: undefined, falling back to locale's default");
     return pFormatter->GetLocaleData()->getDateFormat();
 }
 
@@ -1379,7 +1379,7 @@ bool ImpSvNumberInputScan::GetDateRef( double& fDays, sal_uInt16& nCounter,
                 }
             break;
             default:
-                OSL_FAIL( "ImpSvNumberInputScan::GetDateRef: unknown NfEvalDateFormat" );
+                SAL_WARN( "svl.numbers", "ImpSvNumberInputScan::GetDateRef: unknown NfEvalDateFormat" );
                 DateFmt = YMD;
                 bFormatTurn = false;
         }
@@ -1550,7 +1550,7 @@ input for the following reasons:
                                 default:
                                     bHadExact = false;
                             }
-                            SAL_WARN_IF( !bHadExact, "svl", "ImpSvNumberInputScan::GetDateRef: error in exact date order");
+                            SAL_WARN_IF( !bHadExact, "svl.numbers", "ImpSvNumberInputScan::GetDateRef: error in exact date order");
                         }
                         else
                             bHadExact = false;
@@ -3230,7 +3230,7 @@ bool ImpSvNumberInputScan::IsNumberFormat(
             break;
 
             default:
-                SAL_WARN( "svl", "Some number recognized but what's it?" );
+                SAL_WARN( "svl.numbers", "Some number recognized but what's it?" );
                 fOutNumber = 0.0;
                 break;
         }

@@ -2377,7 +2377,7 @@ bool SvNumberformat::GetOutputString(double fNumber,
                 }
                 if (rInfo.nCntExp == 0)
                 {
-                    OSL_FAIL("SvNumberformat:: Bruch, nCntExp == 0");
+                    SAL_WARN( "svl.numbers", "SvNumberformat:: Bruch, nCntExp == 0");
                     return false;
                 }
                 sal_uLong nBasis = ((sal_uLong)floor(           // 9, 99, 999 ,...
@@ -3025,7 +3025,7 @@ sal_Int32 SvNumberformat::ImpUseMonthCase( int & io_nState, const ImpSvNumFor& r
                     ;   // nothing
             }
     }
-    OSL_FAIL( "ImpUseMonthCase: unhandled keyword index eCodeType");
+    SAL_WARN( "svl.numbers", "ImpUseMonthCase: unhandled keyword index eCodeType");
     return CalendarDisplayCode::LONG_MONTH_NAME;
 }
 
@@ -3241,7 +3241,7 @@ bool SvNumberformat::ImpIsIso8601( const ImpSvNumFor& rNumFor )
     }
     else
     {
-       OSL_FAIL( "SvNumberformat::ImpIsIso8601: no date" );
+       SAL_WARN( "svl.numbers", "SvNumberformat::ImpIsIso8601: no date" );
     }
     return bIsIso;
 }
@@ -4443,7 +4443,7 @@ DateFormat SvNumberformat::GetDateOrder() const
     }
     else
     {
-       OSL_FAIL( "SvNumberformat::GetDateOrder: no date" );
+       SAL_WARN( "svl.numbers", "SvNumberformat::GetDateOrder: no date" );
     }
     return rLoc().getDateFormat();
 }
@@ -4453,7 +4453,7 @@ sal_uInt32 SvNumberformat::GetExactDateOrder() const
     sal_uInt32 nRet = 0;
     if ( (eType & NUMBERFORMAT_DATE) != NUMBERFORMAT_DATE )
     {
-        OSL_FAIL( "SvNumberformat::GetExactDateOrder: no date" );
+        SAL_WARN( "svl.numbers", "SvNumberformat::GetExactDateOrder: no date" );
         return nRet;
     }
     short const * const pType = NumFor[0].Info().nTypeArray;
@@ -4533,7 +4533,7 @@ static void lcl_SvNumberformat_AddLimitStringImpl( String& rStr,
                 rStr.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "[>=" ) );
             break;
             default:
-                OSL_FAIL( "unsupported number format" );
+                SAL_WARN( "svl.numbers", "unsupported number format" );
                 break;
         }
         rStr += String( ::rtl::math::doubleToUString( fLimit,

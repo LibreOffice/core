@@ -511,7 +511,7 @@ bool SvNumberFormatter::PutEntry(String& rString,
             sal_uInt32 nPos = CLOffset + pStdFormat->GetLastInsertKey();
             if (nPos - CLOffset >= SV_COUNTRY_LANGUAGE_OFFSET)
             {
-                OSL_FAIL("SvNumberFormatter:: Zu viele Formate pro CL");
+                SAL_WARN( "svl.numbers", "SvNumberFormatter:: Zu viele Formate pro CL");
                 delete p_Entry;
             }
             else if (!aFTable.insert(make_pair( nPos+1,p_Entry)).second)
@@ -829,7 +829,7 @@ String SvNumberFormatter::GetKeyword( LanguageType eLnge, sal_uInt16 nIndex )
     if ( nIndex < NF_KEYWORD_ENTRIES_COUNT )
         return rTable[nIndex];
 
-    OSL_FAIL("GetKeyword: invalid index");
+    SAL_WARN( "svl.numbers", "GetKeyword: invalid index");
     return String();
 }
 
@@ -2928,7 +2928,7 @@ SvNumberFormatterIndexTable* SvNumberFormatter::MergeFormatter(SvNumberFormatter
                 nNewKey = nPos+1;
                 if (nPos - nCLOffset >= SV_COUNTRY_LANGUAGE_OFFSET)
                 {
-                    OSL_FAIL(
+                    SAL_WARN( "svl.numbers",
                         "SvNumberFormatter:: Zu viele Formate pro CL");
                     delete pNewEntry;
                 }
@@ -3880,7 +3880,7 @@ void NfCurrencyEntry::CompletePositiveFormatString(OUStringBuffer& rStr,
         }
         break;
         default:
-            OSL_FAIL("NfCurrencyEntry::CompletePositiveFormatString: unknown option");
+            SAL_WARN( "svl.numbers", "NfCurrencyEntry::CompletePositiveFormatString: unknown option");
         break;
     }
 }
@@ -4002,7 +4002,7 @@ void NfCurrencyEntry::CompleteNegativeFormatString(OUStringBuffer& rStr,
         }
         break;
         default:
-            OSL_FAIL("NfCurrencyEntry::CompleteNegativeFormatString: unknown option");
+            SAL_WARN( "svl.numbers", "NfCurrencyEntry::CompleteNegativeFormatString: unknown option");
         break;
     }
 }
@@ -4031,7 +4031,7 @@ sal_uInt16 NfCurrencyEntry::GetEffectivePositiveFormat(
             case 3:                                         // 1 $
             break;
             default:
-                OSL_FAIL("NfCurrencyEntry::GetEffectivePositiveFormat: unknown option");
+                SAL_WARN( "svl.numbers", "NfCurrencyEntry::GetEffectivePositiveFormat: unknown option");
             break;
         }
         return nIntlFormat;
@@ -4072,7 +4072,7 @@ static sal_uInt16 lcl_MergeNegativeParenthesisFormat( sal_uInt16 nIntlFormat, sa
             nSign = 2;
         break;
         default:
-            OSL_FAIL("lcl_MergeNegativeParenthesisFormat: unknown option");
+            SAL_WARN( "svl.numbers", "lcl_MergeNegativeParenthesisFormat: unknown option");
         break;
     }
 
@@ -4185,7 +4185,7 @@ sal_uInt16 NfCurrencyEntry::GetEffectiveNegativeFormat( sal_uInt16 nIntlFormat,
                 nIntlFormat = 8;                            // -1 $
             break;
             default:
-                OSL_FAIL("NfCurrencyEntry::GetEffectiveNegativeFormat: unknown option");
+                SAL_WARN( "svl.numbers", "NfCurrencyEntry::GetEffectiveNegativeFormat: unknown option");
             break;
         }
 #endif
@@ -4247,7 +4247,7 @@ sal_uInt16 NfCurrencyEntry::GetEffectiveNegativeFormat( sal_uInt16 nIntlFormat,
                     nIntlFormat, nCurrFormat );
             break;
             default:
-                OSL_FAIL("NfCurrencyEntry::GetEffectiveNegativeFormat: unknown option");
+                SAL_WARN( "svl.numbers", "NfCurrencyEntry::GetEffectiveNegativeFormat: unknown option");
             break;
         }
     }
