@@ -535,19 +535,17 @@ void T602ImportFilter::wrtfnt()
 
 void T602ImportFilter::setfnt(fonts fnt,bool mustwrite)
 {
-    if( fnt == fst.oldfnt &&
-        fnt == fst.nowfnt &&
-        !mustwrite )
+    if (fnt == fst.oldfnt && fnt == fst.nowfnt && !mustwrite)
         fst.nowfnt = standard;
-    else
-        if (fnt != chngul) fst.nowfnt = fnt;
+    else if (fnt != chngul)
+        fst.nowfnt = fnt;
 
-        if(mustwrite)
-            if(fst.oldfnt != fst.nowfnt || fst.olduline != fst.uline) {
-                wrtfnt();
-                fst.oldfnt = fst.nowfnt;
-                fst.olduline = fst.uline;
-            }
+    if (mustwrite && (fst.oldfnt != fst.nowfnt || fst.olduline != fst.uline))
+    {
+        wrtfnt();
+        fst.oldfnt = fst.nowfnt;
+        fst.olduline = fst.uline;
+    }
 }
 
 unsigned char T602ImportFilter::Readchar602()
