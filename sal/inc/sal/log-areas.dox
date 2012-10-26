@@ -123,6 +123,11 @@ certain functionality.
 
 @li @c slideshow.opengl
 
+@section svl
+
+@li @c svl
+@li @c svl.numbers
+
 @section svtools
 
 @li @c svtools.config
@@ -208,7 +213,6 @@ certain functionality.
 @li @c rsc
 @li @c shell
 @li @c stoc
-@li @c svl
 @li @c svx
 @li @c ucbhelper
 @li @c writerfilter
