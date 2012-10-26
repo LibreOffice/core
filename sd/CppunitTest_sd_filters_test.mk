@@ -96,6 +96,7 @@ $(eval $(call gb_CppunitTest_use_components,sd_filters_test,\
     filter/source/config/cache/filterconfig1 \
     framework/util/fwk \
     i18npool/util/i18npool \
+    linguistic/source/lng \
     oox/util/oox \
     package/source/xstor/xstor \
     package/util/package2 \

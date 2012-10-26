@@ -38,6 +38,7 @@
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/linguistic2/XAvailableLocales.hpp>
+#include <com/sun/star/linguistic2/LinguServiceManager.hpp>
 #include <com/sun/star/ucb/XAnyCompareFactory.hpp>
 #include <com/sun/star/ucb/XContentAccess.hpp>
 #include <com/sun/star/ucb/XSortedDynamicResultSetFactory.hpp>
@@ -73,16 +74,10 @@ using namespace ::com::sun::star::linguistic2;
 
 #define CSS com::sun::star
 
-static uno::Reference< XLinguServiceManager > GetLngSvcMgr_Impl()
+static uno::Reference< XLinguServiceManager2 > GetLngSvcMgr_Impl()
 {
-    uno::Reference< XLinguServiceManager > xRes;
-    uno::Reference< XMultiServiceFactory >  xMgr = getProcessServiceFactory();
-    if (xMgr.is())
-    {
-        xRes = uno::Reference< XLinguServiceManager > ( xMgr->createInstance(
-                OUString( RTL_CONSTASCII_USTRINGPARAM(
-                    "com.sun.star.linguistic2.LinguServiceManager" ) ) ), UNO_QUERY ) ;
-    }
+    uno::Reference< XComponentContext > xContext = comphelper::getProcessComponentContext();
+    uno::Reference< XLinguServiceManager2 > xRes = LinguServiceManager::create(xContext);
     return xRes;
 }
 
@@ -155,9 +150,8 @@ void ThesDummy_Impl::GetThes_Impl()
 {
     if (!xThes.is())
     {
-        uno::Reference< XLinguServiceManager > xLngSvcMgr( GetLngSvcMgr_Impl() );
-        if (xLngSvcMgr.is())
-            xThes = xLngSvcMgr->getThesaurus();
+        uno::Reference< XLinguServiceManager2 > xLngSvcMgr( GetLngSvcMgr_Impl() );
+        xThes = xLngSvcMgr->getThesaurus();
 
         if (xThes.is())
         {
@@ -261,9 +255,8 @@ void SpellDummy_Impl::GetSpell_Impl()
 {
     if (!xSpell.is())
     {
-        uno::Reference< XLinguServiceManager > xLngSvcMgr( GetLngSvcMgr_Impl() );
-        if (xLngSvcMgr.is())
-            xSpell = uno::Reference< XSpellChecker1 >( xLngSvcMgr->getSpellChecker(), UNO_QUERY );
+        uno::Reference< XLinguServiceManager2 > xLngSvcMgr( GetLngSvcMgr_Impl() );
+        xSpell = uno::Reference< XSpellChecker1 >( xLngSvcMgr->getSpellChecker(), UNO_QUERY );
     }
 }
 
@@ -373,9 +366,8 @@ void HyphDummy_Impl::GetHyph_Impl()
 {
     if (!xHyph.is())
     {
-        uno::Reference< XLinguServiceManager > xLngSvcMgr( GetLngSvcMgr_Impl() );
-        if (xLngSvcMgr.is())
-            xHyph = xLngSvcMgr->getHyphenator();
+        uno::Reference< XLinguServiceManager2 > xLngSvcMgr( GetLngSvcMgr_Impl() );
+        xHyph = xLngSvcMgr->getHyphenator();
     }
 }
 
@@ -536,7 +528,7 @@ void LinguMgrExitLstnr::AtExit()
 
 LinguMgrExitLstnr *             LinguMgr::pExitLstnr    = 0;
 sal_Bool                        LinguMgr::bExiting      = sal_False;
-uno::Reference< XLinguServiceManager >  LinguMgr::xLngSvcMgr    = 0;
+uno::Reference< XLinguServiceManager2 >  LinguMgr::xLngSvcMgr    = 0;
 uno::Reference< XSpellChecker1 >    LinguMgr::xSpell        = 0;
 uno::Reference< XHyphenator >       LinguMgr::xHyph         = 0;
 uno::Reference< XThesaurus >        LinguMgr::xThes         = 0;
@@ -546,7 +538,7 @@ uno::Reference< XDictionary >       LinguMgr::xIgnoreAll    = 0;
 uno::Reference< XDictionary >       LinguMgr::xChangeAll    = 0;
 
 
-uno::Reference< XLinguServiceManager > LinguMgr::GetLngSvcMgr()
+uno::Reference< XLinguServiceManager2 > LinguMgr::GetLngSvcMgr()
 {
     if (bExiting)
         return 0;

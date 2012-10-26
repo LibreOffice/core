@@ -29,7 +29,7 @@
 
 #include <com/sun/star/linguistic2/DictionaryListEventFlags.hpp>
 #include <com/sun/star/linguistic2/XDictionaryList.hpp>
-#include <com/sun/star/linguistic2/XLinguServiceManager.hpp>
+#include <com/sun/star/linguistic2/LinguServiceManager.hpp>
 #include <com/sun/star/linguistic2/XLinguServiceEventBroadcaster.hpp>
 #include <com/sun/star/linguistic2/XProofreadingIterator.hpp>
 #include <com/sun/star/linguistic2/LinguServiceEventFlags.hpp>
@@ -57,34 +57,30 @@ using namespace ::com::sun::star::linguistic2::LinguServiceEventFlags;
 SwLinguServiceEventListener::SwLinguServiceEventListener()
 {
     Reference< XMultiServiceFactory > xMgr( comphelper::getProcessServiceFactory() );
-    if (xMgr.is())
+    Reference< XComponentContext > xContext( comphelper::getProcessComponentContext() );
+    try
     {
-        try
-        {
-            OUString aSvcName( OUString( "com.sun.star.frame.Desktop" ) );
-            xDesktop = Reference< frame::XDesktop >(
-                    xMgr->createInstance( aSvcName ), UNO_QUERY );
-            if (xDesktop.is())
-                xDesktop->addTerminateListener( this );
+        OUString aSvcName( OUString( "com.sun.star.frame.Desktop" ) );
+        xDesktop = Reference< frame::XDesktop >(
+                xMgr->createInstance( aSvcName ), UNO_QUERY );
+        if (xDesktop.is())
+            xDesktop->addTerminateListener( this );
 
-            aSvcName = OUString( "com.sun.star.linguistic2.LinguServiceManager" );
-            xLngSvcMgr = Reference< XLinguServiceManager >( xMgr->createInstance( aSvcName ), UNO_QUERY );
-            if (xLngSvcMgr.is())
-                xLngSvcMgr->addLinguServiceManagerListener( (XLinguServiceEventListener *) this );
+        xLngSvcMgr = LinguServiceManager::create(xContext);
+        xLngSvcMgr->addLinguServiceManagerListener( (XLinguServiceEventListener *) this );
 
-            if (SvtLinguConfig().HasGrammarChecker())
-            {
-                aSvcName = OUString( "com.sun.star.linguistic2.ProofreadingIterator" );
-                xGCIterator = Reference< XProofreadingIterator >( xMgr->createInstance( aSvcName ), UNO_QUERY );
-                Reference< XLinguServiceEventBroadcaster > xBC( xGCIterator, UNO_QUERY );
-                if (xBC.is())
-                    xBC->addLinguServiceEventListener( (XLinguServiceEventListener *) this );
-            }
-        }
-        catch (const uno::Exception&)
+        if (SvtLinguConfig().HasGrammarChecker())
         {
-            OSL_FAIL("exception caught in SwLinguServiceEventListener c-tor" );
+            aSvcName = OUString( "com.sun.star.linguistic2.ProofreadingIterator" );
+            xGCIterator = Reference< XProofreadingIterator >( xMgr->createInstance( aSvcName ), UNO_QUERY );
+            Reference< XLinguServiceEventBroadcaster > xBC( xGCIterator, UNO_QUERY );
+            if (xBC.is())
+                xBC->addLinguServiceEventListener( (XLinguServiceEventListener *) this );
         }
+    }
+    catch (const uno::Exception&)
+    {
+        OSL_FAIL("exception caught in SwLinguServiceEventListener c-tor" );
     }
 }
 

@@ -71,6 +71,7 @@ $(eval $(call gb_CppunitTest_use_components,sw_subsequent_ww8import,\
     forms/util/frm \
     framework/util/fwk \
     i18npool/util/i18npool \
+    linguistic/source/lng \
     package/util/package2 \
     sw/util/msword \
     sw/util/sw \

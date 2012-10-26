@@ -21,15 +21,13 @@
 #define _LINGUISTIC_LNGSVCMGR_HXX_
 
 #include <uno/lbnames.h>            // CPPU_CURRENT_LANGUAGE_BINDING_NAME macro, which specify the environment type
-#include <cppuhelper/implbase5.hxx> // helper for implementations
+#include <cppuhelper/implbase3.hxx> // helper for implementations
 #include <cppuhelper/interfacecontainer.h>  //OMultiTypeInterfaceContainerHelper
 
 
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XComponent.hpp>
-#include <com/sun/star/linguistic2/XLinguServiceManager.hpp>
-#include <com/sun/star/linguistic2/XAvailableLocales.hpp>
+#include <com/sun/star/linguistic2/XLinguServiceManager2.hpp>
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
 #include <com/sun/star/util/XModifyListener.hpp>
 #include <unotools/configitem.hxx>
@@ -57,11 +55,9 @@ namespace com { namespace sun { namespace star { namespace linguistic2 {
 
 
 class LngSvcMgr :
-    public cppu::WeakImplHelper5
+    public cppu::WeakImplHelper3
     <
-        com::sun::star::linguistic2::XLinguServiceManager,
-        com::sun::star::linguistic2::XAvailableLocales,
-        com::sun::star::lang::XComponent,
+        com::sun::star::linguistic2::XLinguServiceManager2,
         com::sun::star::lang::XServiceInfo,
         com::sun::star::util::XModifyListener
     >,

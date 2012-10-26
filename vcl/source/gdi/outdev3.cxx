@@ -81,7 +81,8 @@
 #include "com/sun/star/beans/PropertyValues.hpp"
 #include "com/sun/star/i18n/XBreakIterator.hpp"
 #include "com/sun/star/i18n/WordType.hpp"
-#include "com/sun/star/linguistic2/XLinguServiceManager.hpp"
+#include "com/sun/star/linguistic2/LinguServiceManager.hpp"
+#include <comphelper/processfactory.hxx>
 
 #if defined UNX
 #define GLYPH_FONT_HEIGHT   128
@@ -4928,17 +4929,10 @@ long OutputDevice::ImplGetTextLines( ImplMultiTextLineInfo& rLineInfo,
         ::rtl::OUString aText( rStr );
         uno::Reference < i18n::XBreakIterator > xBI;
         // get service provider
-        uno::Reference< lang::XMultiServiceFactory > xSMgr( unohelper::GetMultiServiceFactory() );
+        uno::Reference< uno::XComponentContext > xContext( comphelper::getProcessComponentContext() );
 
-        uno::Reference< linguistic2::XHyphenator > xHyph;
-        if( xSMgr.is() )
-        {
-            uno::Reference< linguistic2::XLinguServiceManager> xLinguMgr(xSMgr->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.linguistic2.LinguServiceManager"))),uno::UNO_QUERY);
-            if ( xLinguMgr.is() )
-            {
-                xHyph = xLinguMgr->getHyphenator();
-            }
-        }
+        uno::Reference< linguistic2::XLinguServiceManager2> xLinguMgr = linguistic2::LinguServiceManager::create(xContext);
+        uno::Reference< linguistic2::XHyphenator > xHyph = xLinguMgr->getHyphenator();
 
         i18n::LineBreakHyphenationOptions aHyphOptions( xHyph, uno::Sequence <beans::PropertyValue>(), 1 );
         i18n::LineBreakUserOptions aUserOptions;

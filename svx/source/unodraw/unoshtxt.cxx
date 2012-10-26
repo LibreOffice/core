@@ -51,7 +51,7 @@
 #include <editeng/editobj.hxx>
 
 #include <editeng/unotext.hxx>
-#include <com/sun/star/linguistic2/XLinguServiceManager.hpp>
+#include <com/sun/star/linguistic2/LinguServiceManager.hpp>
 #include <comphelper/processfactory.hxx>
 #include <svx/sdrpaintwindow.hxx>
 
@@ -100,7 +100,7 @@ private:
     SdrOutliner*                    mpOutliner;
     SvxOutlinerForwarder*           mpTextForwarder;
     SvxDrawOutlinerViewForwarder*   mpViewForwarder;    // if non-NULL, use GetViewModeTextForwarder text forwarder
-    css::uno::Reference< css::linguistic2::XLinguServiceManager > m_xLinguServiceManager;
+    css::uno::Reference< css::linguistic2::XLinguServiceManager2 > m_xLinguServiceManager;
     Point                           maTextOffset;
     sal_Bool                            mbDataValid;
     sal_Bool                            mbDestroyed;
@@ -585,17 +585,13 @@ SvxTextForwarder* SvxTextEditSourceImpl::GetBackgroundTextForwarder()
 
             if ( !m_xLinguServiceManager.is() )
             {
-                css::uno::Reference< css::lang::XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
-                m_xLinguServiceManager = css::uno::Reference< css::linguistic2::XLinguServiceManager >(
-                    xMgr->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.linguistic2.LinguServiceManager" ))), css::uno::UNO_QUERY );
+                css::uno::Reference< css::uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
+                m_xLinguServiceManager.set(css::linguistic2::LinguServiceManager::create(xContext));
             }
 
-            if ( m_xLinguServiceManager.is() )
-            {
-                css::uno::Reference< css::linguistic2::XHyphenator > xHyphenator( m_xLinguServiceManager->getHyphenator(), css::uno::UNO_QUERY );
-                if( xHyphenator.is() )
-                    mpOutliner->SetHyphenator( xHyphenator );
-            }
+            css::uno::Reference< css::linguistic2::XHyphenator > xHyphenator( m_xLinguServiceManager->getHyphenator(), css::uno::UNO_QUERY );
+            if( xHyphenator.is() )
+                mpOutliner->SetHyphenator( xHyphenator );
         }
 
 

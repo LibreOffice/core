@@ -33,7 +33,7 @@
 #include <tools/string.hxx>
 #include <com/sun/star/util/Language.hpp>
 #include <com/sun/star/lang/Locale.hpp>
-#include <com/sun/star/linguistic2/XLinguServiceManager.hpp>
+#include <com/sun/star/linguistic2/XLinguServiceManager2.hpp>
 #include <com/sun/star/linguistic2/XSpellChecker1.hpp>
 #include <com/sun/star/linguistic2/XHyphenator.hpp>
 #include <com/sun/star/linguistic2/XThesaurus.hpp>
@@ -52,7 +52,7 @@ class EDITENG_DLLPUBLIC LinguMgr
     friend class LinguMgrExitLstnr;
 
     static ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XLinguServiceManager > xLngSvcMgr;
+        ::com::sun::star::linguistic2::XLinguServiceManager2 > xLngSvcMgr;
     static ::com::sun::star::uno::Reference<
         ::com::sun::star::linguistic2::XSpellChecker1 > xSpell;
     static ::com::sun::star::uno::Reference<
@@ -107,7 +107,7 @@ public:
         ::com::sun::star::beans::XPropertySet >         GetLinguPropertySet();
 
     static ::com::sun::star::uno::Reference<
-        ::com::sun::star::linguistic2::XLinguServiceManager > GetLngSvcMgr();
+        ::com::sun::star::linguistic2::XLinguServiceManager2 > GetLngSvcMgr();
 
     static ::com::sun::star::uno::Reference<
         ::com::sun::star::linguistic2::XDictionary >    GetStandardDic();

@@ -23,6 +23,7 @@
 #include <cppuhelper/weak.hxx>
 #include <com/sun/star/linguistic2/XDictionaryListEventListener.hpp>
 #include <com/sun/star/linguistic2/XLinguServiceEventListener.hpp>
+#include <com/sun/star/linguistic2/XLinguServiceManager2.hpp>
 #include <com/sun/star/frame/XTerminateListener.hpp>
 #include <com/sun/star/frame/XDesktop.hpp>
 #include <cppuhelper/implbase2.hxx> // helper for implementations
@@ -31,7 +32,6 @@
 namespace com { namespace sun { namespace star {
     namespace linguistic2 {
         class XDictionaryList;
-        class XLinguServiceManager;
         class XProofreadingIterator;
     }
     namespace frame {
@@ -56,7 +56,7 @@ class SwLinguServiceEventListener :
     com::sun::star::uno::Reference<
         com::sun::star::frame::XDesktop >                       xDesktop;
     com::sun::star::uno::Reference<
-        com::sun::star::linguistic2::XLinguServiceManager >     xLngSvcMgr;
+        com::sun::star::linguistic2::XLinguServiceManager2 >    xLngSvcMgr;
     com::sun::star::uno::Reference<
         com::sun::star::linguistic2::XProofreadingIterator >    xGCIterator;
 

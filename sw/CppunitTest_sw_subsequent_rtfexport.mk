@@ -71,6 +71,7 @@ $(eval $(call gb_CppunitTest_use_components,sw_subsequent_rtfexport,\
     filter/source/config/cache/filterconfig1 \
     framework/util/fwk \
     i18npool/util/i18npool \
+    linguistic/source/lng \
     package/source/xstor/xstor \
     package/util/package2 \
     sax/source/expatwrap/expwrap \

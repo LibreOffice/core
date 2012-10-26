@@ -95,6 +95,7 @@ $(eval $(call gb_CppunitTest_use_components,sd_uimpress,\
     configmgr/source/configmgr \
     framework/util/fwk \
     i18npool/util/i18npool \
+    linguistic/source/lng \
     ucb/source/core/ucb1 \
 ))
 

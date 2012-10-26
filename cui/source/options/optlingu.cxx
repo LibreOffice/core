@@ -32,6 +32,7 @@
 #include <tools/urlobj.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <comphelper/processfactory.hxx>
+#include <com/sun/star/linguistic2/LinguServiceManager.hpp>
 #include <com/sun/star/linguistic2/XSpellChecker.hpp>
 #include <com/sun/star/linguistic2/XProofreader.hpp>
 #include <com/sun/star/linguistic2/XHyphenator.hpp>
@@ -63,6 +64,7 @@
 #include <cuires.hrc>
 #include "helpid.hrc"
 
+#include <comphelper/componentcontext.hxx>
 #include <ucbhelper/content.hxx>
 
 #include <vector>
@@ -518,7 +520,7 @@ class SvxLinguData_Impl
     LangImplNameTable                   aCfgThesTable;
     LangImplNameTable                   aCfgGrammarTable;
     uno::Reference< XMultiServiceFactory >   xMSF;
-    uno::Reference< XLinguServiceManager >   xLinguSrvcMgr;
+    uno::Reference< XLinguServiceManager2 >  xLinguSrvcMgr;
 
 
     sal_Bool    AddRemove( Sequence< OUString > &rConfigured,
@@ -531,7 +533,7 @@ public:
 
     SvxLinguData_Impl & operator = (const SvxLinguData_Impl &rData);
 
-    uno::Reference<XLinguServiceManager> &   GetManager() { return xLinguSrvcMgr; }
+    uno::Reference<XLinguServiceManager2> &   GetManager() { return xLinguSrvcMgr; }
 
     void SetChecked( const Sequence< OUString > &rConfiguredServices );
     void Reconfigure( const OUString &rDisplayName, sal_Bool bEnable );
@@ -731,142 +733,137 @@ SvxLinguData_Impl::SvxLinguData_Impl() :
     nDisplayServices    (0)
 {
     xMSF = ::comphelper::getProcessServiceFactory();
-    uno::Reference < XInterface > xI = xMSF->createInstance(
-        "com.sun.star.linguistic2.LinguServiceManager" );
-    xLinguSrvcMgr = uno::Reference<XLinguServiceManager>(xI, UNO_QUERY);
-    DBG_ASSERT(xLinguSrvcMgr.is(), "No linguistic service available!");
-    if(xLinguSrvcMgr.is())
+    xLinguSrvcMgr = LinguServiceManager::create(comphelper::getComponentContext(xMSF));
+
+    Locale aCurrentLocale;
+    LanguageType eLang = Application::GetSettings().GetLanguage();
+    SvxLanguageToLocale(aCurrentLocale, eLang);
+    Sequence<Any> aArgs(2);//second arguments has to be empty!
+    aArgs.getArray()[0] <<= SvxGetLinguPropertySet();
+
+    //read spell checker
+    Sequence< OUString > aSpellNames = xLinguSrvcMgr->getAvailableServices(
+                    cSpell,    Locale() );
+    const OUString* pSpellNames = aSpellNames.getConstArray();
+
+    sal_Int32 nIdx;
+    for(nIdx = 0; nIdx < aSpellNames.getLength(); nIdx++)
     {
-        Locale aCurrentLocale;
-        LanguageType eLang = Application::GetSettings().GetLanguage();
-        SvxLanguageToLocale(aCurrentLocale, eLang);
-        Sequence<Any> aArgs(2);//second arguments has to be empty!
-        aArgs.getArray()[0] <<= SvxGetLinguPropertySet();
+        ServiceInfo_Impl aInfo;
+        aInfo.sSpellImplName = pSpellNames[nIdx];
+        aInfo.xSpell = uno::Reference<XSpellChecker>(
+                        xMSF->createInstanceWithArguments(aInfo.sSpellImplName, aArgs), UNO_QUERY);
 
-        //read spell checker
-        Sequence< OUString > aSpellNames = xLinguSrvcMgr->getAvailableServices(
-                        cSpell,    Locale() );
-        const OUString* pSpellNames = aSpellNames.getConstArray();
+        uno::Reference<XServiceDisplayName> xDispName(aInfo.xSpell, UNO_QUERY);
+        if(xDispName.is())
+            aInfo.sDisplayName = xDispName->getServiceDisplayName( aCurrentLocale );
 
-        sal_Int32 nIdx;
-        for(nIdx = 0; nIdx < aSpellNames.getLength(); nIdx++)
+        const Sequence< Locale > aLocales( aInfo.xSpell->getLocales() );
+        //! suppress display of entries with no supported languages (see feature 110994)
+        if (aLocales.getLength())
         {
-            ServiceInfo_Impl aInfo;
-            aInfo.sSpellImplName = pSpellNames[nIdx];
-            aInfo.xSpell = uno::Reference<XSpellChecker>(
-                            xMSF->createInstanceWithArguments(aInfo.sSpellImplName, aArgs), UNO_QUERY);
-
-            uno::Reference<XServiceDisplayName> xDispName(aInfo.xSpell, UNO_QUERY);
-            if(xDispName.is())
-                aInfo.sDisplayName = xDispName->getServiceDisplayName( aCurrentLocale );
-
-            const Sequence< Locale > aLocales( aInfo.xSpell->getLocales() );
-            //! suppress display of entries with no supported languages (see feature 110994)
-            if (aLocales.getLength())
-            {
-                lcl_MergeLocales( aAllServiceLocales, aLocales );
-                lcl_MergeDisplayArray( *this, aInfo );
-            }
+            lcl_MergeLocales( aAllServiceLocales, aLocales );
+            lcl_MergeDisplayArray( *this, aInfo );
         }
+    }
 
-        //read grammar checker
-        Sequence< OUString > aGrammarNames = xLinguSrvcMgr->getAvailableServices(
-                        cGrammar, Locale() );
-        const OUString* pGrammarNames = aGrammarNames.getConstArray();
-        for(nIdx = 0; nIdx < aGrammarNames.getLength(); nIdx++)
+    //read grammar checker
+    Sequence< OUString > aGrammarNames = xLinguSrvcMgr->getAvailableServices(
+                    cGrammar, Locale() );
+    const OUString* pGrammarNames = aGrammarNames.getConstArray();
+    for(nIdx = 0; nIdx < aGrammarNames.getLength(); nIdx++)
+    {
+        ServiceInfo_Impl aInfo;
+        aInfo.sGrammarImplName = pGrammarNames[nIdx];
+        aInfo.xGrammar = uno::Reference<XProofreader>(
+                        xMSF->createInstanceWithArguments(aInfo.sGrammarImplName, aArgs), UNO_QUERY);
+
+        uno::Reference<XServiceDisplayName> xDispName(aInfo.xGrammar, UNO_QUERY);
+        if(xDispName.is())
+            aInfo.sDisplayName = xDispName->getServiceDisplayName( aCurrentLocale );
+
+        const Sequence< Locale > aLocales( aInfo.xGrammar->getLocales() );
+        //! suppress display of entries with no supported languages (see feature 110994)
+        if (aLocales.getLength())
         {
-            ServiceInfo_Impl aInfo;
-            aInfo.sGrammarImplName = pGrammarNames[nIdx];
-            aInfo.xGrammar = uno::Reference<XProofreader>(
-                            xMSF->createInstanceWithArguments(aInfo.sGrammarImplName, aArgs), UNO_QUERY);
-
-            uno::Reference<XServiceDisplayName> xDispName(aInfo.xGrammar, UNO_QUERY);
-            if(xDispName.is())
-                aInfo.sDisplayName = xDispName->getServiceDisplayName( aCurrentLocale );
-
-            const Sequence< Locale > aLocales( aInfo.xGrammar->getLocales() );
-            //! suppress display of entries with no supported languages (see feature 110994)
-            if (aLocales.getLength())
-            {
-                lcl_MergeLocales( aAllServiceLocales, aLocales );
-                lcl_MergeDisplayArray( *this, aInfo );
-            }
+            lcl_MergeLocales( aAllServiceLocales, aLocales );
+            lcl_MergeDisplayArray( *this, aInfo );
         }
+    }
 
-        //read hyphenator
-        Sequence< OUString > aHyphNames = xLinguSrvcMgr->getAvailableServices(
-                        cHyph, Locale() );
-        const OUString* pHyphNames = aHyphNames.getConstArray();
-        for(nIdx = 0; nIdx < aHyphNames.getLength(); nIdx++)
+    //read hyphenator
+    Sequence< OUString > aHyphNames = xLinguSrvcMgr->getAvailableServices(
+                    cHyph, Locale() );
+    const OUString* pHyphNames = aHyphNames.getConstArray();
+    for(nIdx = 0; nIdx < aHyphNames.getLength(); nIdx++)
+    {
+        ServiceInfo_Impl aInfo;
+        aInfo.sHyphImplName = pHyphNames[nIdx];
+        aInfo.xHyph = uno::Reference<XHyphenator>(
+                        xMSF->createInstanceWithArguments(aInfo.sHyphImplName, aArgs), UNO_QUERY);
+
+        uno::Reference<XServiceDisplayName> xDispName(aInfo.xHyph, UNO_QUERY);
+        if(xDispName.is())
+            aInfo.sDisplayName = xDispName->getServiceDisplayName( aCurrentLocale );
+
+        const Sequence< Locale > aLocales( aInfo.xHyph->getLocales() );
+        //! suppress display of entries with no supported languages (see feature 110994)
+        if (aLocales.getLength())
         {
-            ServiceInfo_Impl aInfo;
-            aInfo.sHyphImplName = pHyphNames[nIdx];
-            aInfo.xHyph = uno::Reference<XHyphenator>(
-                            xMSF->createInstanceWithArguments(aInfo.sHyphImplName, aArgs), UNO_QUERY);
-
-            uno::Reference<XServiceDisplayName> xDispName(aInfo.xHyph, UNO_QUERY);
-            if(xDispName.is())
-                aInfo.sDisplayName = xDispName->getServiceDisplayName( aCurrentLocale );
-
-            const Sequence< Locale > aLocales( aInfo.xHyph->getLocales() );
-            //! suppress display of entries with no supported languages (see feature 110994)
-            if (aLocales.getLength())
-            {
-                lcl_MergeLocales( aAllServiceLocales, aLocales );
-                lcl_MergeDisplayArray( *this, aInfo );
-            }
+            lcl_MergeLocales( aAllServiceLocales, aLocales );
+            lcl_MergeDisplayArray( *this, aInfo );
         }
+    }
 
-        //read thesauri
-        Sequence< OUString > aThesNames = xLinguSrvcMgr->getAvailableServices(
-                        cThes,     Locale() );
-        const OUString* pThesNames = aThesNames.getConstArray();
-        for(nIdx = 0; nIdx < aThesNames.getLength(); nIdx++)
+    //read thesauri
+    Sequence< OUString > aThesNames = xLinguSrvcMgr->getAvailableServices(
+                    cThes,     Locale() );
+    const OUString* pThesNames = aThesNames.getConstArray();
+    for(nIdx = 0; nIdx < aThesNames.getLength(); nIdx++)
+    {
+        ServiceInfo_Impl aInfo;
+        aInfo.sThesImplName = pThesNames[nIdx];
+        aInfo.xThes = uno::Reference<XThesaurus>(
+                        xMSF->createInstanceWithArguments(aInfo.sThesImplName, aArgs), UNO_QUERY);
+
+        uno::Reference<XServiceDisplayName> xDispName(aInfo.xThes, UNO_QUERY);
+        if(xDispName.is())
+            aInfo.sDisplayName = xDispName->getServiceDisplayName( aCurrentLocale );
+
+        const Sequence< Locale > aLocales( aInfo.xThes->getLocales() );
+        //! suppress display of entries with no supported languages (see feature 110994)
+        if (aLocales.getLength())
         {
-            ServiceInfo_Impl aInfo;
-            aInfo.sThesImplName = pThesNames[nIdx];
-            aInfo.xThes = uno::Reference<XThesaurus>(
-                            xMSF->createInstanceWithArguments(aInfo.sThesImplName, aArgs), UNO_QUERY);
-
-            uno::Reference<XServiceDisplayName> xDispName(aInfo.xThes, UNO_QUERY);
-            if(xDispName.is())
-                aInfo.sDisplayName = xDispName->getServiceDisplayName( aCurrentLocale );
-
-            const Sequence< Locale > aLocales( aInfo.xThes->getLocales() );
-            //! suppress display of entries with no supported languages (see feature 110994)
-            if (aLocales.getLength())
-            {
-                lcl_MergeLocales( aAllServiceLocales, aLocales );
-                lcl_MergeDisplayArray( *this, aInfo );
-            }
+            lcl_MergeLocales( aAllServiceLocales, aLocales );
+            lcl_MergeDisplayArray( *this, aInfo );
         }
+    }
 
-        Sequence< OUString > aCfgSvcs;
-        const Locale* pAllLocales = aAllServiceLocales.getConstArray();
-        for(sal_Int32 nLocale = 0; nLocale < aAllServiceLocales.getLength(); nLocale++)
-        {
-            sal_Int16 nLang = SvxLocaleToLanguage( pAllLocales[nLocale] );
+    Sequence< OUString > aCfgSvcs;
+    const Locale* pAllLocales = aAllServiceLocales.getConstArray();
+    for(sal_Int32 nLocale = 0; nLocale < aAllServiceLocales.getLength(); nLocale++)
+    {
+        sal_Int16 nLang = SvxLocaleToLanguage( pAllLocales[nLocale] );
 
-            aCfgSvcs = xLinguSrvcMgr->getConfiguredServices(cSpell, pAllLocales[nLocale]);
-            SetChecked( aCfgSvcs );
-            if (aCfgSvcs.getLength())
-                aCfgSpellTable[ nLang ] = aCfgSvcs;
+        aCfgSvcs = xLinguSrvcMgr->getConfiguredServices(cSpell, pAllLocales[nLocale]);
+        SetChecked( aCfgSvcs );
+        if (aCfgSvcs.getLength())
+            aCfgSpellTable[ nLang ] = aCfgSvcs;
 
-            aCfgSvcs = xLinguSrvcMgr->getConfiguredServices(cGrammar, pAllLocales[nLocale]);
-            SetChecked( aCfgSvcs );
-            if (aCfgSvcs.getLength())
-                aCfgGrammarTable[ nLang ] = aCfgSvcs;
+        aCfgSvcs = xLinguSrvcMgr->getConfiguredServices(cGrammar, pAllLocales[nLocale]);
+        SetChecked( aCfgSvcs );
+        if (aCfgSvcs.getLength())
+            aCfgGrammarTable[ nLang ] = aCfgSvcs;
 
-            aCfgSvcs = xLinguSrvcMgr->getConfiguredServices(cHyph, pAllLocales[nLocale]);
-            SetChecked( aCfgSvcs );
-            if (aCfgSvcs.getLength())
-                aCfgHyphTable[ nLang ] = aCfgSvcs;
+        aCfgSvcs = xLinguSrvcMgr->getConfiguredServices(cHyph, pAllLocales[nLocale]);
+        SetChecked( aCfgSvcs );
+        if (aCfgSvcs.getLength())
+            aCfgHyphTable[ nLang ] = aCfgSvcs;
 
-            aCfgSvcs = xLinguSrvcMgr->getConfiguredServices(cThes, pAllLocales[nLocale]);
-            SetChecked( aCfgSvcs );
-            if (aCfgSvcs.getLength())
-                aCfgThesTable[ nLang ] = aCfgSvcs;
-        }
+        aCfgSvcs = xLinguSrvcMgr->getConfiguredServices(cThes, pAllLocales[nLocale]);
+        SetChecked( aCfgSvcs );
+        if (aCfgSvcs.getLength())
+            aCfgThesTable[ nLang ] = aCfgSvcs;
     }
 }
 
@@ -1214,7 +1211,7 @@ sal_Bool SvxLinguTabPage::FillItemSet( SfxItemSet& rCoreSet )
         {
             sal_Int16 nLang = aIt->first;
             const Sequence< OUString > aImplNames( aIt->second );
-            uno::Reference< XLinguServiceManager > xMgr( pLinguData->GetManager() );
+            uno::Reference< XLinguServiceManager2 > xMgr( pLinguData->GetManager() );
             Locale aLocale( SvxCreateLocale(nLang) );
             if (xMgr.is())
                 xMgr->setConfiguredServices( cSpell, aLocale, aImplNames );
@@ -1226,7 +1223,7 @@ sal_Bool SvxLinguTabPage::FillItemSet( SfxItemSet& rCoreSet )
         {
             sal_Int16 nLang = aIt->first;
             const Sequence< OUString > aImplNames( aIt->second );
-            uno::Reference< XLinguServiceManager > xMgr( pLinguData->GetManager() );
+            uno::Reference< XLinguServiceManager2 > xMgr( pLinguData->GetManager() );
             Locale aLocale( SvxCreateLocale(nLang) );
             if (xMgr.is())
                 xMgr->setConfiguredServices( cGrammar, aLocale, aImplNames );
@@ -1238,7 +1235,7 @@ sal_Bool SvxLinguTabPage::FillItemSet( SfxItemSet& rCoreSet )
         {
             sal_Int16 nLang = aIt->first;
             const Sequence< OUString > aImplNames( aIt->second );
-            uno::Reference< XLinguServiceManager > xMgr( pLinguData->GetManager() );
+            uno::Reference< XLinguServiceManager2 > xMgr( pLinguData->GetManager() );
             Locale aLocale( SvxCreateLocale(nLang) );
             if (xMgr.is())
                 xMgr->setConfiguredServices( cHyph, aLocale, aImplNames );
@@ -1250,7 +1247,7 @@ sal_Bool SvxLinguTabPage::FillItemSet( SfxItemSet& rCoreSet )
         {
             sal_Int16 nLang = aIt->first;
             const Sequence< OUString > aImplNames( aIt->second );
-            uno::Reference< XLinguServiceManager > xMgr( pLinguData->GetManager() );
+            uno::Reference< XLinguServiceManager2 > xMgr( pLinguData->GetManager() );
             Locale aLocale( SvxCreateLocale(nLang) );
             if (xMgr.is())
                 xMgr->setConfiguredServices( cThes, aLocale, aImplNames );
