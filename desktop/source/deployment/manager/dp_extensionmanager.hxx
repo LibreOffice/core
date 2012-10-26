@@ -280,11 +280,6 @@ private:
         css::uno::Reference<css::deployment::XPackage> const & oldExtension,
         css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv);
 
-    css::uno::Reference<css::deployment::XPackage> getTempExtension(
-        ::rtl::OUString const & url,
-        css::uno::Reference<css::task::XAbortChannel> const & xAbortChannel,
-        css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv);
-
     void addExtensionsToMap(
         id2extensions & mapExt,
         css::uno::Sequence<css::uno::Reference<css::deployment::XPackage> > const & seqExt,

@@ -655,8 +655,22 @@ Reference<deploy::XPackage> ExtensionManager::addExtension(
     //would remove the first one.
     ::osl::MutexGuard addGuard(m_addMutex);
 
-    Reference<deploy::XPackage> xTmpExtension =
-        getTempExtension(url, xAbortChannel, xCmdEnv);
+    Reference<deploy::XPackageManager> xTmpRepository(getTmpRepository());
+        // make sure xTmpRepository is alive as long as xTmpExtension is; as
+        // the "tmp" manager is only held weakly by m_xPackageManagerFactory, it
+        // could otherwise be disposed early, which would in turn dispose
+        // xTmpExtension's PackageRegistryBackend behind its back
+    Reference<deploy::XPackage> xTmpExtension(
+        xTmpRepository->addPackage(
+            url, uno::Sequence<beans::NamedValue>(), OUString(), xAbortChannel,
+            new TmpRepositoryCommandEnv()));
+    if (!xTmpExtension.is()) {
+        throw deploy::DeploymentException(
+            ("Extension Manager: Failed to create temporary XPackage for url: "
+             + url),
+            static_cast<OWeakObject*>(this), uno::Any());
+    }
+
     //Make sure the extension is removed from the tmp repository in case
     //of an exception
     ExtensionRemoveGuard tmpExtensionRemoveGuard(xTmpExtension, getTmpRepository());
@@ -1402,25 +1416,6 @@ void ExtensionManager::checkUpdate(
             dp_misc::getResourceString(
                 RID_STR_PACKAGE_ALREADY_ADDED) + newDisplayName,
             static_cast<OWeakObject *>(this), request );
-}
-
-Reference<deploy::XPackage> ExtensionManager::getTempExtension(
-    OUString const & url,
-    Reference<task::XAbortChannel> const & xAbortChannel,
-    Reference<ucb::XCommandEnvironment> const & /*xCmdEnv*/)
-
-{
-    Reference<ucb::XCommandEnvironment> tmpCmdEnvA(new TmpRepositoryCommandEnv());
-    Reference<deploy::XPackage> xTmpPackage = getTmpRepository()->addPackage(
-        url, uno::Sequence<beans::NamedValue>(),OUString(), xAbortChannel, tmpCmdEnvA);
-    if (!xTmpPackage.is())
-    {
-        throw deploy::DeploymentException(
-            OUSTR("Extension Manager: Failed to create temporary XPackage for url: ") + url,
-            static_cast<OWeakObject*>(this), uno::Any());
-
-    }
-    return xTmpPackage;
 }
 
 uno::Sequence<Reference<deploy::XPackage> > SAL_CALL
