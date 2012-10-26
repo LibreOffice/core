@@ -11,6 +11,7 @@
 #include "sallogareas.hxx"
 
 #include <clang/Basic/SourceManager.h>
+#include <clang/Lex/Lexer.h>
 
 #include <fstream>
 
@@ -54,15 +55,15 @@ bool SalLogAreas::VisitCallExpr( CallExpr* call )
             string qualifiedName = func->getQualifiedNameAsString();
             if( qualifiedName == "sal_detail_log" || qualifiedName == "sal::detail::log" )
                 {
+                // The SAL_DETAIL_LOG_STREAM macro expands to two calls to sal::detail::log(),
+                // so do not warn repeatedly about the same macro (the area->getLocStart() of all the calls
+                // from the same macro should be the same).
+                SourceLocation expansionLocation = context.getSourceManager().getExpansionLoc( call->getLocStart());
+                if( expansionLocation == lastSalDetailLogStreamMacro )
+                    return true;
+                lastSalDetailLogStreamMacro = expansionLocation;
                 if( const StringLiteral* area = dyn_cast< StringLiteral >( call->getArg( 1 )->IgnoreParenImpCasts()))
                     {
-                    // The SAL_DETAIL_LOG_STREAM macro expands to two calls to sal::detail::log(),
-                    // so do not warn repeatedly about the same macro (the area->getLocStart() of all the calls
-                    // from the same macro should be the same).
-                    SourceLocation expansionLocation = context.getSourceManager().getExpansionLoc(area->getLocStart());
-                    if( expansionLocation == lastSalDetailLogStreamMacro )
-                        return true;
-                    lastSalDetailLogStreamMacro = expansionLocation;
                     if( area->getKind() == StringLiteral::Ascii )
                         checkArea( area->getBytes(), area->getExprLoc());
                     else
@@ -72,6 +73,21 @@ bool SalLogAreas::VisitCallExpr( CallExpr* call )
                     }
                 if( inFunction->getQualifiedNameAsString() == "sal::detail::log" )
                     return true; // This function only forwards to sal_detail_log, so ok.
+                if( call->getArg( 1 )->isNullPointerConstant( context, Expr::NPC_ValueDependentIsNotNull ) != Expr::NPCK_NotNull )
+                    { // If the area argument is a null pointer, that is allowed only for SAL_DEBUG.
+                    const SourceManager& source = context.getSourceManager();
+                    for( SourceLocation loc = call->getLocStart();
+                         loc.isMacroID();
+                         loc = source.getImmediateExpansionRange( loc ).first )
+                        {
+                        StringRef inMacro = Lexer::getImmediateMacroName( loc, source, context.getLangOpts());
+                        if( inMacro == "SAL_DEBUG" )
+                            return true; // ok
+                        }
+                    report( DiagnosticsEngine::Warning, "missing log area [loplugin]",
+                        call->getArg( 1 )->IgnoreParenImpCasts()->getLocStart());
+                    return true;
+                    }
                 report( DiagnosticsEngine::Warning, "cannot analyse log area argument (plugin needs fixing?) [loplugin]",
                     call->getLocStart());
                 }
