@@ -2127,6 +2127,11 @@ bool Window::set_property(const OString &rKey, const OString &rValue)
             nBits |= WB_AUTOVSCROLL;
         SetStyle(nBits);
     }
+    else if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("use-markup")))
+    {
+        //https://live.gnome.org/GnomeGoals/RemoveMarkupInMessages
+        SAL_WARN_IF(toBool(rValue), "vcl.layout", "Use pango attributes instead of mark-up");
+    }
     else
     {
         SAL_INFO("vcl.layout", "unhandled property: " << rKey.getStr());

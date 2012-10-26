@@ -14,8 +14,8 @@ $ENV{LC_ALL} = "C";
 sub check_whitespaces($)
 {
     my ($h) = @_;
-    my $src_limited = "c|cpp|cxx|h|hrc|hxx|idl|inl|java|map|MK|pmk|pl|pm|sdi|sh|src|tab|xcu|xml";
-    my $src_full = "c|cpp|cxx|h|hrc|hxx|idl|inl|java|map|mk|MK|pmk|pl|pm|sdi|sh|src|tab|xcu|xml";
+    my $src_limited = "c|cpp|cxx|h|hrc|hxx|idl|inl|java|map|MK|pmk|pl|pm|sdi|sh|src|tab|ui|xcu|xml";
+    my $src_full = "c|cpp|cxx|h|hrc|hxx|idl|inl|java|map|mk|MK|pmk|pl|pm|sdi|sh|src|tab|ui|xcu|xml";
 
     my $found_bad = 0;
     my $filename;
@@ -79,6 +79,10 @@ sub check_whitespaces($)
             if (/SAL_DEBUG/)
             {
                 bad_line("temporary debug in commit", $_, $src_limited);
+            }
+            if (/<property name="use_markup">True<\/property>/)
+            {
+                bad_line("use font attributes instead of use-markup", $_, $src_limited);
             }
         }
     }

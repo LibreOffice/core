@@ -1503,8 +1503,6 @@ void VclBuilder::collectProperty(xmlreader::XmlReader &reader, const OString &rI
     if (!sProperty.isEmpty())
     {
         sProperty = sProperty.replace('_', '-');
-        //https://live.gnome.org/GnomeGoals/RemoveMarkupInMessages
-        SAL_WARN_IF(sProperty == "use-markup", "vcl.layout", "Use pango attributes instead of mark-up");
         rMap[sProperty] = sValue;
     }
 }
