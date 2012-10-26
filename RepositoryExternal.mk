@@ -774,7 +774,7 @@ $(call gb_LinkTarget_add_libs,$(1),$(GRAPHITE_LIBS))
 
 endef
 
-else # !SYSTEM_GRAPHITE
+else ifeq ($(SYSTEM_GRAPHITE),NO)
 
 $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
 	graphite \
@@ -789,6 +789,10 @@ $(call gb_LinkTarget_use_static_libraries,$(1),\
 )
 
 endef
+
+else # DISABLED GRAPHITE
+
+gb_LinkTarget__use_graphite :=
 
 endif # SYSTEM_GRAPHITE
 
