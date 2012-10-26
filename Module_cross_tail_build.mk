@@ -70,6 +70,7 @@ $(eval $(call gb_Module_add_moduledirs,cross_tail_build,\
 	remotebridges \
 	ridljar \
 	rsc \
+	sal \
 	salhelper \
 	sax \
 	shell \
