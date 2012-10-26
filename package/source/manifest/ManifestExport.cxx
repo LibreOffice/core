@@ -215,7 +215,7 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > xHa
             }
             else if (pValue->Name.equals (sSizeProperty) )
             {
-                sal_Int32 nSize = 0;
+                sal_Int64 nSize = 0;
                 pValue->Value >>= nSize;
                 ::rtl::OUStringBuffer aBuffer;
                 aBuffer.append ( nSize );
