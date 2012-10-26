@@ -509,13 +509,16 @@ bool SvNumberFormatter::PutEntry(String& rString,
             SvNumberformat* pStdFormat =
                      GetFormatEntry(CLOffset + ZF_STANDARD);
             sal_uInt32 nPos = CLOffset + pStdFormat->GetLastInsertKey();
-            if (nPos - CLOffset >= SV_COUNTRY_LANGUAGE_OFFSET)
+            if (nPos+1 - CLOffset >= SV_COUNTRY_LANGUAGE_OFFSET)
             {
-                SAL_WARN( "svl.numbers", "SvNumberFormatter:: Zu viele Formate pro CL");
+                SAL_WARN( "svl.numbers", "SvNumberFormatter::PutEntry: too many formats for CL");
                 delete p_Entry;
             }
             else if (!aFTable.insert(make_pair( nPos+1,p_Entry)).second)
+            {
+                SAL_WARN( "svl.numbers", "SvNumberFormatter::PutEntry: dup position");
                 delete p_Entry;
+            }
             else
             {
                 bCheck = true;
@@ -714,7 +717,10 @@ bool SvNumberFormatter::Load( SvStream& rStream )
                 pEnt->SetLastInsertKey(pEntry->GetLastInsertKey());
         }
         if (!aFTable.insert(make_pair( nPos, pEntry)).second)
+        {
+            SAL_WARN( "svl.numbers", "SvNumberFormatter::Load: dup position");
             delete pEntry;
+        }
         rStream >> nPos;
     }
 
@@ -1843,6 +1849,10 @@ SvNumberformat* SvNumberFormatter::ImpInsertFormat(
             aMsg += rCode.Code;
             LocaleDataWrapper::outputCheckMessage( xLocaleData->appendLocaleInfo( aMsg));
         }
+        else
+        {
+            SAL_WARN( "svl.numbers", "SvNumberFormatter::ImpInsertFormat: dup position");
+        }
         delete pFormat;
         return NULL;
     }
@@ -2203,7 +2213,10 @@ void SvNumberFormatter::ImpGenerateFormats( sal_uInt32 CLOffset, bool bNoAdditio
     if ( !aFTable.insert(make_pair(
             CLOffset + SetIndexTable( NF_BOOLEAN, ZF_STANDARD_LOGICAL ),
             pNewFormat)).second)
+    {
+        SAL_WARN( "svl.numbers", "SvNumberFormatter::ImpGenerateFormats: dup position Boolean");
         delete pNewFormat;
+    }
 
     // Text
     aFormatCode = '@';
@@ -2214,7 +2227,10 @@ void SvNumberFormatter::ImpGenerateFormats( sal_uInt32 CLOffset, bool bNoAdditio
     if ( !aFTable.insert(make_pair(
             CLOffset + SetIndexTable( NF_TEXT, ZF_STANDARD_TEXT ),
             pNewFormat)).second)
+    {
+        SAL_WARN( "svl.numbers", "SvNumberFormatter::ImpGenerateFormats: dup position Text");
         delete pNewFormat;
+    }
 
 
 
@@ -2904,7 +2920,10 @@ SvNumberFormatterIndexTable* SvNumberFormatter::MergeFormatter(SvNumberFormatter
 //              pNewEntry = new SvNumberformat(*pFormat);   // Copy is not sufficient!
                 pNewEntry = new SvNumberformat( *pFormat, *pFormatScanner );
                 if (!aFTable.insert(make_pair( nNewKey, pNewEntry)).second)
+                {
+                    SAL_WARN( "svl.numbers", "SvNumberFormatter::MergeFormatter: dup position");
                     delete pNewEntry;
+                }
             }
             if (nNewKey != nOldKey)                     // new index
             {
@@ -2926,14 +2945,16 @@ SvNumberFormatterIndexTable* SvNumberFormatter::MergeFormatter(SvNumberFormatter
                         GetFormatEntry(nCLOffset + ZF_STANDARD);
                 sal_uInt32 nPos = nCLOffset + pStdFormat->GetLastInsertKey();
                 nNewKey = nPos+1;
-                if (nPos - nCLOffset >= SV_COUNTRY_LANGUAGE_OFFSET)
+                if (nNewKey - nCLOffset >= SV_COUNTRY_LANGUAGE_OFFSET)
                 {
-                    SAL_WARN( "svl.numbers",
-                        "SvNumberFormatter:: Zu viele Formate pro CL");
+                    SAL_WARN( "svl.numbers", "SvNumberFormatter::MergeFormatter: too many formats for CL");
                     delete pNewEntry;
                 }
                 else if (!aFTable.insert(make_pair( nNewKey, pNewEntry)).second)
+                {
+                    SAL_WARN( "svl.numbers", "SvNumberFormatter::MergeFormatter: dup position");
                     delete pNewEntry;
+                }
                 else
                     pStdFormat->SetLastInsertKey((sal_uInt16) (nNewKey - nCLOffset));
             }
