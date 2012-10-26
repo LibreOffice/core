@@ -9,7 +9,7 @@
 
 $(eval $(call gb_StaticLibrary_StaticLibrary,zlib_x64))
 
-$(eval $(call gb_StaticLibrary_set_x64,zlib,YES))
+$(eval $(call gb_StaticLibrary_set_x64,zlib_x64,YES))
 
 $(eval $(call gb_StaticLibrary_use_unpacked,zlib_x64,zlib))
 
