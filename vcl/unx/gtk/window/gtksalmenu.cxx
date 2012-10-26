@@ -40,10 +40,10 @@
 static sal_Bool bMenuVisibility = sal_False;
 
 /*
- * This function generates an alternative command name to avoid name collisions
- * or to give a valid command name to certain menu items.
+ * This function generates the proper command name for all actions, including
+ * duplicated or special ones.
  */
-static gchar* GetCommandForSpecialItem( GtkSalMenuItem* pSalMenuItem )
+static gchar* GetCommandForItem( GtkSalMenuItem* pSalMenuItem, gchar* aCurrentCommand, GActionGroup* pActionGroup )
 {
     gchar* aCommand = NULL;
 
@@ -54,14 +54,27 @@ static gchar* GetCommandForSpecialItem( GtkSalMenuItem* pSalMenuItem )
     if ( ( nId >= START_ITEMID_WINDOWLIST ) && ( nId <= END_ITEMID_WINDOWLIST ) )
         aCommand = g_strdup_printf( "window-%d", nId );
     else
-        if ( pMenu )
-        {
-            rtl::OUString aMenuCommand = pMenu->GetItemCommand( nId );
-            MenuItemBits nBits = pMenu->GetItemBits( nId );
+    {
+        if ( !pMenu )
+            return NULL;
 
-            if ( aMenuCommand.equalsAscii(".uno:Presentation") && nBits == 0 )
-                aCommand = g_strdup(".uno:Presentation2");
+        rtl::OUString aMenuCommand = pMenu->GetItemCommand( nId );
+        gchar* aCommandStr = g_strdup( rtl::OUStringToOString( aMenuCommand, RTL_TEXTENCODING_UTF8 ).getStr() );
+        aCommand = g_strdup( aCommandStr );
+
+        // Some items could have duplicated commands. A new one should be generated.
+        for ( sal_uInt16 i = 2; ; i++ )
+        {
+            if ( !g_action_group_has_action( pActionGroup, aCommand )
+                    || ( aCurrentCommand && g_strcmp0( aCurrentCommand, aCommand ) == 0 ) )
+                break;
+
+            g_free( aCommand );
+            aCommand = g_strdup_printf("%s%d", aCommandStr, i);
         }
+
+        g_free( aCommandStr );
+    }
 
     return aCommand;
 }
@@ -244,7 +257,6 @@ void RemoveUnusedCommands( GLOActionGroup* pActionGroup, GList* pOldCommandList,
 void GtkSalMenu::ImplUpdate( gboolean bRecurse )
 {
     SolarMutexGuard aGuard;
-    //GTK_YIELD_GRAB();
 
     if( !PrepUpdate() )
         return;
@@ -304,8 +316,6 @@ void GtkSalMenu::ImplUpdate( gboolean bRecurse )
         // Convert internal values to native values.
         gboolean bChecked = ( itemChecked == sal_True ) ? TRUE : FALSE;
         gboolean bEnabled = ( itemEnabled == sal_True ) ? TRUE : FALSE;
-//        gchar* aNativeCommand = g_strdup( rtl::OUStringToOString( aCommand, RTL_TEXTENCODING_UTF8 ).getStr() );
-        gchar* aNativeCommand = GetCommandForSpecialItem( pSalMenuItem );
 
         // Store current item command in command list.
         gchar *aCurrentCommand = g_lo_menu_get_command_from_item_in_section( pLOMenu, nSection, nItemPos );
@@ -313,23 +323,12 @@ void GtkSalMenu::ImplUpdate( gboolean bRecurse )
         if ( aCurrentCommand != NULL )
             pOldCommandList = g_list_append( pOldCommandList, aCurrentCommand );
 
+        // Get the new command for the item.
+        gchar* aNativeCommand = GetCommandForItem( pSalMenuItem, aCurrentCommand, mpActionGroup );
+
         // Force updating of native menu labels.
         NativeSetItemText( nSection, nItemPos, aText );
         NativeSetAccelerator( nSection, nItemPos, nAccelKey, nAccelKey.GetName( GetFrame()->GetWindow() ) );
-
-        // Some items are special, so they have different commands.
-//        if ( g_strcmp0( aNativeCommand, "" ) == 0 )
-        if ( !aNativeCommand )
-        {
-//            gchar *aSpecialItemCmd = GetCommandForSpecialItem( pSalMenuItem );
-            aNativeCommand = g_strdup( rtl::OUStringToOString( aCommand, RTL_TEXTENCODING_UTF8 ).getStr() );
-
-//            if ( aSpecialItemCmd != NULL )
-//            {
-//                g_free( aNativeCommand );
-//                aNativeCommand = aSpecialItemCmd;
-//            }
-        }
 
         if ( g_strcmp0( aNativeCommand, "" ) != 0 && pSalMenuItem->mpSubMenu == NULL )
         {
@@ -351,8 +350,6 @@ void GtkSalMenu::ImplUpdate( gboolean bRecurse )
 
             if ( pSubMenuModel == NULL )
             {
-                //pSubMenuModel = g_lo_menu_new();
-                //g_lo_menu_set_submenu_to_item_in_section( pLOMenu, nSection, nItemPos, G_MENU_MODEL( pSubMenuModel ) );
                 g_lo_menu_new_submenu_in_item_in_section( pLOMenu, nSection, nItemPos );
                 pSubMenuModel = g_lo_menu_get_submenu_from_item_in_section( pLOMenu, nSection, nItemPos );
             }
