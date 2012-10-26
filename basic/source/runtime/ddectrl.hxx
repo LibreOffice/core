@@ -22,7 +22,6 @@
 
 #include <tools/link.hxx>
 #include <basic/sberrors.hxx>
-#include <tools/string.hxx>
 
 class DdeConnection;
 class DdeData;
@@ -32,22 +31,22 @@ class SbiDdeControl
 private:
     DECL_LINK( Data, DdeData* );
     SbError GetLastErr( DdeConnection* );
-    sal_Int16 GetFreeChannel();
+    size_t GetFreeChannel();
     std::vector<DdeConnection*> aConvList;
-    String aData;
+    OUString aData;
 
 public:
 
     SbiDdeControl();
     ~SbiDdeControl();
 
-    SbError Initiate( const String& rService, const String& rTopic,
-                     sal_Int16& rnHandle );
-    SbError Terminate( sal_uInt16 nChannel );
+    SbError Initiate( const OUString& rService, const OUString& rTopic,
+                     size_t& rnHandle );
+    SbError Terminate( size_t nChannel );
     SbError TerminateAll();
-    SbError Request( sal_uInt16 nChannel, const String& rItem, String& rResult );
-    SbError Execute( sal_uInt16 nChannel, const String& rCommand );
-    SbError Poke( sal_uInt16 nChannel, const String& rItem, const String& rData );
+    SbError Request( size_t nChannel, const OUString& rItem, OUString& rResult );
+    SbError Execute( size_t nChannel, const OUString& rCommand );
+    SbError Poke( size_t nChannel, const OUString& rItem, const OUString& rData );
 };
 
 #endif

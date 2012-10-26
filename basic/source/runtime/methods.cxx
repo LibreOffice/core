@@ -3427,16 +3427,20 @@ RTLFUNC(DDEInitiate)
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
         return;
     }
-    const String& rApp = rPar.Get(1)->GetString();
-    const String& rTopic = rPar.Get(2)->GetString();
+    const OUString& rApp = rPar.Get(1)->GetString();
+    const OUString& rTopic = rPar.Get(2)->GetString();
 
     SbiDdeControl* pDDE = GetSbData()->pInst->GetDdeControl();
-    sal_Int16 nChannel;
+    size_t nChannel;
     SbError nDdeErr = pDDE->Initiate( rApp, rTopic, nChannel );
     if( nDdeErr )
+    {
         StarBASIC::Error( nDdeErr );
+    }
     else
-        rPar.Get(0)->PutInteger( nChannel );
+    {
+        rPar.Get(0)->PutInteger( (int)nChannel );
+    }
 }
 
 RTLFUNC(DDETerminate)
@@ -3458,11 +3462,13 @@ RTLFUNC(DDETerminate)
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
         return;
     }
-    sal_Int16 nChannel = rPar.Get(1)->GetInteger();
+    size_t nChannel = rPar.Get(1)->GetInteger();
     SbiDdeControl* pDDE = GetSbData()->pInst->GetDdeControl();
     SbError nDdeErr = pDDE->Terminate( nChannel );
     if( nDdeErr )
+    {
         StarBASIC::Error( nDdeErr );
+    }
 }
 
 RTLFUNC(DDETerminateAll)
@@ -3488,8 +3494,9 @@ RTLFUNC(DDETerminateAll)
     SbiDdeControl* pDDE = GetSbData()->pInst->GetDdeControl();
     SbError nDdeErr = pDDE->TerminateAll();
     if( nDdeErr )
+    {
         StarBASIC::Error( nDdeErr );
-
+    }
 }
 
 RTLFUNC(DDERequest)
@@ -3510,15 +3517,19 @@ RTLFUNC(DDERequest)
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
         return;
     }
-    sal_Int16 nChannel = rPar.Get(1)->GetInteger();
-    const String& rItem = rPar.Get(2)->GetString();
+    size_t nChannel = rPar.Get(1)->GetInteger();
+    const OUString& rItem = rPar.Get(2)->GetString();
     SbiDdeControl* pDDE = GetSbData()->pInst->GetDdeControl();
-    String aResult;
+    OUString aResult;
     SbError nDdeErr = pDDE->Request( nChannel, rItem, aResult );
     if( nDdeErr )
+    {
         StarBASIC::Error( nDdeErr );
+    }
     else
+    {
         rPar.Get(0)->PutString( aResult );
+    }
 }
 
 RTLFUNC(DDEExecute)
@@ -3540,12 +3551,14 @@ RTLFUNC(DDEExecute)
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
         return;
     }
-    sal_Int16 nChannel = rPar.Get(1)->GetInteger();
-    const String& rCommand = rPar.Get(2)->GetString();
+    size_t nChannel = rPar.Get(1)->GetInteger();
+    const OUString& rCommand = rPar.Get(2)->GetString();
     SbiDdeControl* pDDE = GetSbData()->pInst->GetDdeControl();
     SbError nDdeErr = pDDE->Execute( nChannel, rCommand );
     if( nDdeErr )
+    {
         StarBASIC::Error( nDdeErr );
+    }
 }
 
 RTLFUNC(DDEPoke)
@@ -3567,13 +3580,15 @@ RTLFUNC(DDEPoke)
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
         return;
     }
-    sal_Int16 nChannel = rPar.Get(1)->GetInteger();
-    const String& rItem = rPar.Get(2)->GetString();
-    const String& rData = rPar.Get(3)->GetString();
+    size_t nChannel = rPar.Get(1)->GetInteger();
+    const OUString& rItem = rPar.Get(2)->GetString();
+    const OUString& rData = rPar.Get(3)->GetString();
     SbiDdeControl* pDDE = GetSbData()->pInst->GetDdeControl();
     SbError nDdeErr = pDDE->Poke( nChannel, rItem, rData );
     if( nDdeErr )
+    {
         StarBASIC::Error( nDdeErr );
+    }
 }
 
 
