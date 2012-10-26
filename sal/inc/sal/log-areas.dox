@@ -48,6 +48,7 @@ certain functionality.
 
 @section Calc
 
+@li @c sc
 @li @c sc.core
 @li @c sc.ui - Calc UI
 
@@ -176,6 +177,7 @@ certain functionality.
 
 @section Writer
 
+@li @c sw
 @li @c sw.core - Writer core
 @li @c sw.rtf - .rtf export filter
 @li @c sw.uno - Writer UNO interfaces
