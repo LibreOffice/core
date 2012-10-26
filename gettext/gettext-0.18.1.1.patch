@@ -1,6 +1,6 @@
 --- misc/gettext-0.18.1.1/gettext-runtime/intl/makefile.mk	Wed Aug 20 14:33:55 2008
 +++ misc/build/gettext-0.18.1.1/gettext-runtime/intl/makefile.mk	Wed Aug 20 14:26:42 2008
-@@ -1,1 +1,109 @@
+@@ -1,1 +1,110 @@
 -dummy
 +#*************************************************************************
 +#
@@ -37,6 +37,7 @@
 +#ENABLE_EXCEPTIONS=TRUE
 +VISIBILITY_HIDDEN=TRUE
 +EXTERNAL_WARNINGS_NOT_ERRORS=TRUE
++UWINAPILIB=
 +
 +# --- Settings ----------------------------------
 +

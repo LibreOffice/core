@@ -14,7 +14,7 @@
 +#endif
 --- misc/libgsf-1.14.19/gsf/makefile.mk	2011-03-23 16:18:27.070742300 +0100
 +++ misc/build/libgsf-1.14.19/gsf/makefile.mk	2011-03-23 16:17:29.477448100 +0100
-@@ -1 +1,120 @@
+@@ -1 +1,121 @@
 -dummy
 +#*************************************************************************
 +#
@@ -50,6 +50,7 @@
 +
 +VISIBILITY_HIDDEN=TRUE
 +EXTERNAL_WARNINGS_NOT_ERRORS=TRUE
++UWINAPILIB=
 +
 +# --- Settings ----------------------------------
 +
