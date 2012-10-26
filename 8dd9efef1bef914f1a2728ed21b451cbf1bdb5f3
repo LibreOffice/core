@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAP3///xQ\u003d",
+        "filename": "sw/source/core/docnode/ndtbl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 420,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2012-10-26T17:15:40Z",
+      "side": 1,
+      "message": "not \"characters\" but \"lines\"",
+      "revId": "8dd9efef1bef914f1a2728ed21b451cbf1bdb5f3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAP3///xM\u003d",
+        "filename": "sw/source/core/docnode/ndtbl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 488,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2012-10-26T17:15:40Z",
+      "side": 1,
+      "message": "actiually the startnode of the first box",
+      "revId": "8dd9efef1bef914f1a2728ed21b451cbf1bdb5f3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAP3///xI\u003d",
+        "filename": "sw/source/core/docnode/ndtbl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 666,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2012-10-26T17:15:40Z",
+      "side": 1,
+      "message": "\"Bereich\" is _always_ translated wrongly, there is clearly no Section here...\n\na) if there is actually a section involved (i.e. the thing in Insert-\u003eSection...): \"section\"\n\nb) if there are positions in the nodes array: \"range\"\n\nc) for drawings and graphics i guess it\u0027s \"area\"",
+      "revId": "8dd9efef1bef914f1a2728ed21b451cbf1bdb5f3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAP3///w4\u003d",
+        "filename": "sw/source/core/docnode/ndtbl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3263,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2012-10-26T17:15:40Z",
+      "side": 1,
+      "message": "\"Also\" -\u003e \"So\"",
+      "revId": "8dd9efef1bef914f1a2728ed21b451cbf1bdb5f3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAP3///w0\u003d",
+        "filename": "sw/source/core/docnode/ndtbl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3471,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2012-10-26T17:15:40Z",
+      "side": 1,
+      "message": "not rPos but the boolean :)",
+      "revId": "8dd9efef1bef914f1a2728ed21b451cbf1bdb5f3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAP3///ww\u003d",
+        "filename": "sw/source/core/docnode/ndtbl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3618,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2012-10-26T17:15:40Z",
+      "side": 1,
+      "message": "Vorlage most often means \"Style\"",
+      "revId": "8dd9efef1bef914f1a2728ed21b451cbf1bdb5f3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
