@@ -16,10 +16,12 @@
 #include <sfx2/app.hxx>
 #include <sfx2/docfilt.hxx>
 #include <sfx2/docfile.hxx>
+#include <sfx2/frame.hxx>
 #include <sfx2/sfxmodelfactory.hxx>
 #include <svl/stritem.hxx>
 
 #include <unotools/tempfile.hxx>
+#include <comphelper/storagehelper.hxx>
 
 #define CALC_DEBUG_OUTPUT 0
 #define TEST_BUG_FILES 0
@@ -70,10 +72,14 @@ public:
     virtual void tearDown();
 
     ScDocShellRef saveAndReload( ScDocShell*, const rtl::OUString&, const rtl::OUString&, const rtl::OUString&, sal_uLong );
+    ScDocShellRef saveAndReloadPassword( ScDocShell*, const rtl::OUString&, const rtl::OUString&, const rtl::OUString&, sal_uLong );
 
     void test();
+    void testPasswordExport();
+
     CPPUNIT_TEST_SUITE(ScExportTest);
     CPPUNIT_TEST(test);
+    CPPUNIT_TEST(testPasswordExport);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -91,6 +97,60 @@ void ScFiltersTest::createFileURL(const rtl::OUString& aFileBase, const rtl::OUS
     rFilePath = aBuffer.makeStringAndClear();
 }
 */
+
+ScDocShellRef ScExportTest::saveAndReloadPassword(ScDocShell* pShell, const rtl::OUString &rFilter,
+    const rtl::OUString &rUserData, const rtl::OUString& rTypeName, sal_uLong nFormatType)
+{
+
+    utl::TempFile aTempFile;
+    //aTempFile.EnableKillingFile();
+    SfxMedium aStoreMedium( aTempFile.GetURL(), STREAM_STD_WRITE );
+    sal_uInt32 nExportFormat = 0;
+    if (nFormatType)
+        nExportFormat = SFX_FILTER_EXPORT | SFX_FILTER_USESOPTIONS;
+    SfxFilter* pExportFilter = new SfxFilter(
+        rFilter,
+        rtl::OUString(), nFormatType, nExportFormat, rTypeName, 0, rtl::OUString(),
+        rUserData, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("private:factory/scalc*")) );
+    pExportFilter->SetVersion(SOFFICE_FILEFORMAT_CURRENT);
+    aStoreMedium.SetFilter(pExportFilter);
+    SfxItemSet* pExportSet = aStoreMedium.GetItemSet();
+    uno::Sequence< beans::NamedValue > aEncryptionData = comphelper::OStorageHelper::CreatePackageEncryptionData( rtl::OUString("test") );
+    uno::Any xEncryptionData;
+    xEncryptionData <<= aEncryptionData;
+    pExportSet->Put(SfxUnoAnyItem(SID_ENCRYPTIONDATA, xEncryptionData));
+
+    uno::Reference< embed::XStorage > xMedStorage = aStoreMedium.GetStorage();
+    ::comphelper::OStorageHelper::SetCommonStorageEncryptionData( xMedStorage, aEncryptionData );
+
+    pShell->DoSaveAs( aStoreMedium );
+    pShell->DoClose();
+
+    std::cout << "File: " << aTempFile.GetURL() << std::endl;
+
+    sal_uInt32 nFormat = 0;
+    if (nFormatType)
+        nFormat = SFX_FILTER_IMPORT | SFX_FILTER_USESOPTIONS;
+    SfxFilter* pFilter = new SfxFilter(
+        rFilter,
+        rtl::OUString(), nFormatType, nFormat, rTypeName, 0, rtl::OUString(),
+        rUserData, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("private:factory/scalc*")) );
+    pFilter->SetVersion(SOFFICE_FILEFORMAT_CURRENT);
+
+    ScDocShellRef xDocShRef = new ScDocShell;
+    SfxMedium* pSrcMed = new SfxMedium(aTempFile.GetURL(), STREAM_STD_READ);
+    SfxItemSet* pSet = pSrcMed->GetItemSet();
+    pSet->Put(SfxStringItem(SID_PASSWORD, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("test"))));
+    pSrcMed->SetFilter(pFilter);
+    if (!xDocShRef->DoLoad(pSrcMed))
+    {
+        xDocShRef->DoClose();
+        // load failed.
+        xDocShRef.Clear();
+    }
+
+    return xDocShRef;
+}
 
 ScDocShellRef ScExportTest::saveAndReload(ScDocShell* pShell, const rtl::OUString &rFilter,
     const rtl::OUString &rUserData, const rtl::OUString& rTypeName, sal_uLong nFormatType)
@@ -153,6 +213,31 @@ void ScExportTest::test()
     rtl::OUString aFilterName(aFileFormats[nFormat].pFilterName, strlen(aFileFormats[nFormat].pFilterName), RTL_TEXTENCODING_UTF8) ;
     rtl::OUString aFilterType(aFileFormats[nFormat].pTypeName, strlen(aFileFormats[nFormat].pTypeName), RTL_TEXTENCODING_UTF8);
     ScDocShellRef xDocSh = saveAndReload(pShell, aFilterName, rtl::OUString(), aFilterType, aFileFormats[nFormat].nFormatType);
+
+    CPPUNIT_ASSERT(xDocSh.Is());
+    ScDocument* pLoadedDoc = xDocSh->GetDocument();
+    double aVal = pLoadedDoc->GetValue(0,0,0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(aVal, 1.0, 1e-8);
+}
+
+void ScExportTest::testPasswordExport()
+{
+    ScDocShell* pShell = new ScDocShell(
+        SFXMODEL_STANDARD |
+        SFXMODEL_DISABLE_EMBEDDED_SCRIPTS |
+        SFXMODEL_DISABLE_DOCUMENT_RECOVERY);
+    pShell->DoInitNew();
+
+    ScDocument* pDoc = pShell->GetDocument();
+
+    pDoc->SetValue(0,0,0, 1.0);
+    CPPUNIT_ASSERT(pDoc);
+
+    sal_Int32 nFormat = ODS;
+    rtl::OUString aFileExtension(aFileFormats[nFormat].pName, strlen(aFileFormats[nFormat].pName), RTL_TEXTENCODING_UTF8 );
+    rtl::OUString aFilterName(aFileFormats[nFormat].pFilterName, strlen(aFileFormats[nFormat].pFilterName), RTL_TEXTENCODING_UTF8) ;
+    rtl::OUString aFilterType(aFileFormats[nFormat].pTypeName, strlen(aFileFormats[nFormat].pTypeName), RTL_TEXTENCODING_UTF8);
+    ScDocShellRef xDocSh = saveAndReloadPassword(pShell, aFilterName, rtl::OUString(), aFilterType, aFileFormats[nFormat].nFormatType);
 
     CPPUNIT_ASSERT(xDocSh.Is());
     ScDocument* pLoadedDoc = xDocSh->GetDocument();
