@@ -1855,7 +1855,7 @@ void WW8AttributeOutput::TableInfoRow( ww8::WW8TableNodeInfoInner::Pointer_t pTa
     }
 }
 
-static sal_uInt16 lcl_TCFlags(const SwTableBox * pBox, long nRowSpan)
+static sal_uInt16 lcl_TCFlags(const SwTableBox * pBox, sal_Int32 nRowSpan)
 {
     sal_uInt16 nFlags = 0;
 
