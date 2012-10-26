@@ -1,3 +1,3 @@
-gt	gettext	: sal soltools NULL
+gt	gettext	: soltools NULL
 gt	gettext			    usr1	-	all	gt_mkout NULL
 gt	gettext			    nmake	-	all	gt_gettext NULL
