@@ -50,14 +50,7 @@ import com.sun.star.script.framework.io.UCBStreamHandler;
 
 import com.sun.star.ucb.XSimpleFileAccess2;
 
-import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XComponentContext;
-
-import com.sun.star.uri.UriReferenceFactory;
-import com.sun.star.uri.XVndSunStarExpandUrl;
-
-import com.sun.star.util.XMacroExpander;
 
 public class ScriptMetaData extends ScriptEntry implements Cloneable {
     private boolean hasSource = false;
@@ -253,8 +246,7 @@ public class ScriptMetaData extends ScriptEntry implements Cloneable {
         return "\nParcelLocation = " + getParcelLocation() + "\nLocationPlaceHolder = " + locationPlaceHolder + super.toString();
     }
 
-    public URL[] getClassPath(XComponentContext context)
-        throws java.net.MalformedURLException
+    public URL[] getClassPath() throws java.net.MalformedURLException
     {
     try
     {
@@ -282,7 +274,7 @@ public class ScriptMetaData extends ScriptEntry implements Cloneable {
         {
             String relativeClasspath =  (String)stk.nextElement();
             String pathToProcess  = PathUtils.make_url( parcelPath, relativeClasspath);
-            URL url = expandURL( context, pathToProcess );
+            URL url = createURL( pathToProcess );
             if ( url != null )
             {
                 classPathVec.add (  url  );
@@ -291,7 +283,7 @@ public class ScriptMetaData extends ScriptEntry implements Cloneable {
         }
         if ( classPathVec.size() == 0)
         {
-            URL url = expandURL( context, parcelPath );
+            URL url = createURL( parcelPath );
             if ( url != null )
             {
                 classPathVec.add(url);
@@ -308,38 +300,6 @@ public class ScriptMetaData extends ScriptEntry implements Cloneable {
     }
 
     }
-
-    private URL expandURL(XComponentContext context, String url)
-        throws java.net.MalformedURLException
-    {
-        XVndSunStarExpandUrl exp = UnoRuntime.queryInterface(
-            XVndSunStarExpandUrl.class,
-            UriReferenceFactory.create(context).parse(url));
-        String expurl;
-        if (exp == null) {
-            expurl = url;
-        } else {
-            XMacroExpander expander;
-            try {
-                expander = (XMacroExpander) AnyConverter.toObject(
-                    XMacroExpander.class,
-                    context.getValueByName(
-                        "/singletons/com.sun.star.util.theMacroExpander"));
-            } catch (com.sun.star.lang.IllegalArgumentException e) {
-                throw new RuntimeException(e);
-            }
-            try {
-                expurl = exp.expand(expander);
-            } catch (com.sun.star.lang.IllegalArgumentException e) {
-                java.net.MalformedURLException e2 =
-                    new java.net.MalformedURLException(e.toString());
-                e2.initCause(e);
-                throw e2;
-            }
-        }
-        return new URL(expurl);
-    }
-
     private URL createURL( String path ) throws java.net.MalformedURLException
     {
         URL url = null;
