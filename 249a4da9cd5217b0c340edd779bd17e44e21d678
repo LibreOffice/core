@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAP3///yI\u003d",
+        "filename": "solenv/bin/concat-deps.c",
+        "patchSetId": 5
+      },
+      "lineNbr": 806,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2012-10-26T10:45:24Z",
+      "side": 1,
+      "message": "This is incorrect. In final builds assert expands to (pretty much) nothing, so the fwrite() would not be called at all. Fixed in 3d3993969f11400c96ddff3632edd4b60c0cc163 .",
+      "revId": "249a4da9cd5217b0c340edd779bd17e44e21d678",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
