@@ -417,7 +417,7 @@ const SwTable* SwDoc::InsertTable( const SwInsertTableOptions& rInsTblOpts,
 
     // Set Orientation at the Table's Fmt
     pTableFmt->SetFmtAttr( SwFmtHoriOrient( 0, eAdjust ) );
-    // All characters use the left-to-right Fill-Order!
+    // All lines use the left-to-right Fill-Order!
     pLineFmt->SetFmtAttr( SwFmtFillOrder( ATT_LEFT_TO_RIGHT ));
 
     // Set USHRT_MAX as the Table's default SSize
@@ -485,7 +485,7 @@ const SwTable* SwDoc::InsertTable( const SwInsertTableOptions& rInsTblOpts,
     }
     SfxItemSet aCharSet( GetAttrPool(), RES_CHRATR_BEGIN, RES_PARATR_LIST_END-1 );
 
-    SwNodeIndex aNdIdx( *pTblNd, 1 ); // Set to Box's first StartNode
+    SwNodeIndex aNdIdx( *pTblNd, 1 ); // Set to StartNode of first Box
     SwTableLines& rLines = pNdTbl->GetTabLines();
     for( sal_uInt16 n = 0; n < nRows; ++n )
     {
@@ -663,7 +663,7 @@ const SwTable* SwDoc::TextToTable( const SwInsertTableOptions& rInsTblOpts,
 
     ::PaMCorrAbs( aOriginal, *pEnd );
 
-    // Make sure that the Section is on Node Edges
+    // Make sure that the range is on Node Edges
     SwNodeRange aRg( pStt->nNode, pEnd->nNode );
     if( pStt->nContent.GetIndex() )
         SplitNode( *pStt, false );
@@ -691,7 +691,7 @@ const SwTable* SwDoc::TextToTable( const SwInsertTableOptions& rInsTblOpts,
 
     if( aRg.aEnd.GetIndex() == aRg.aStart.GetIndex() )
     {
-        OSL_FAIL( "No Section" );
+        OSL_FAIL( "empty range" );
         aRg.aEnd++;
     }
 
@@ -1032,7 +1032,7 @@ SwTableNode* SwNodes::TextToTable( const SwNodeRange& rRange, sal_Unicode cCh,
 
             // Get the separator's position from the first Node, in order for the Boxes to be set accordingly
             SwTxtFrmInfo aFInfo( (SwTxtFrm*)pTxtNd->getLayoutFrm( pTxtNd->GetDoc()->GetCurrentLayout() ) );
-            if( aFInfo.IsOneLine() ) // The only sensible case
+            if( aFInfo.IsOneLine() ) // only makes sense in this case
             {
                 const sal_Unicode* pTxt = pTxtNd->GetTxt().GetBuffer();
                 for( xub_StrLen nChPos = 0; *pTxt; ++nChPos, ++pTxt )
@@ -1157,7 +1157,7 @@ const SwTable* SwDoc::TextToTable( const std::vector< std::vector<SwNodeRange> >
 
     ::PaMCorrAbs( aOriginal, *pEnd );
 
-    // make sure that the Section is on Node Edges
+    // make sure that the range is on Node Edges
     SwNodeRange aRg( pStt->nNode, pEnd->nNode );
     if( pStt->nContent.GetIndex() )
         SplitNode( *pStt, false );
@@ -1185,7 +1185,7 @@ const SwTable* SwDoc::TextToTable( const std::vector< std::vector<SwNodeRange> >
 
     if( aRg.aEnd.GetIndex() == aRg.aStart.GetIndex() )
     {
-        OSL_FAIL( "No Section" );
+        OSL_FAIL( "empty range" );
         aRg.aEnd++;
     }
 
@@ -1696,7 +1696,6 @@ sal_Bool SwDoc::InsertCol( const SwCursor& rCursor, sal_uInt16 nCnt, sal_Bool bB
 
 sal_Bool SwDoc::InsertCol( const SwSelBoxes& rBoxes, sal_uInt16 nCnt, sal_Bool bBehind )
 {
-    // Iterate over the SwDoc for Undo
     OSL_ENSURE( !rBoxes.empty(), "No valid Box list" );
     SwTableNode* pTblNd = (SwTableNode*)rBoxes[0]->GetSttNd()->FindTableNode();
     if( !pTblNd )
@@ -1759,7 +1758,6 @@ sal_Bool SwDoc::InsertRow( const SwCursor& rCursor, sal_uInt16 nCnt, sal_Bool bB
 
 sal_Bool SwDoc::InsertRow( const SwSelBoxes& rBoxes, sal_uInt16 nCnt, sal_Bool bBehind )
 {
-    // Iterate over the SwDoc for Undo
     OSL_ENSURE( !rBoxes.empty(), "No valid Box list" );
     SwTableNode* pTblNd = (SwTableNode*)rBoxes[0]->GetSttNd()->FindTableNode();
     if( !pTblNd )
@@ -1821,7 +1819,7 @@ sal_Bool SwDoc::DeleteRow( const SwCursor& rCursor )
         return sal_False;
 
     // Remove the Crsr from the to-be-deleted Section.
-    // The Cursor comes after it, except for
+    // The Cursor is placed after the table, except for
     //  - when there's another Line, we place it in that one
     //  - when a Line preceeds it, we place it in that one
     {
@@ -1922,7 +1920,7 @@ sal_Bool SwDoc::DeleteCol( const SwCursor& rCursor )
     if( ::HasProtectedCells( aBoxes ))
         return sal_False;
 
-    // The Cursors need to be removed from the to-be-deleted Section.
+    // The Cursors need to be removed from the to-be-deleted range.
     // Always place them after/on top of the Table; they are always set
     // to the old position via the document position.
     SwEditShell* pESh = GetEditShell();
@@ -1945,7 +1943,6 @@ sal_Bool SwDoc::DeleteRowCol( const SwSelBoxes& rBoxes, bool bColumn )
     if( ::HasProtectedCells( rBoxes ))
         return sal_False;
 
-    // Iterate over the SwDoc for Undo
     OSL_ENSURE( !rBoxes.empty(), "No valid Box list" );
     SwTableNode* pTblNd = (SwTableNode*)rBoxes[0]->GetSttNd()->FindTableNode();
     if( !pTblNd )
@@ -2152,7 +2149,6 @@ sal_Bool SwDoc::DeleteRowCol( const SwSelBoxes& rBoxes, bool bColumn )
 sal_Bool SwDoc::SplitTbl( const SwSelBoxes& rBoxes, sal_Bool bVert, sal_uInt16 nCnt,
                       sal_Bool bSameHeight )
 {
-    // Iterate over the SwDoc for Undo
     OSL_ENSURE( !rBoxes.empty() && nCnt, "No valid Box list" );
     SwTableNode* pTblNd = (SwTableNode*)rBoxes[0]->GetSttNd()->FindTableNode();
     if( !pTblNd )
@@ -2222,7 +2218,7 @@ sal_Bool SwDoc::SplitTbl( const SwSelBoxes& rBoxes, sal_Bool bVert, sal_uInt16 n
 
 sal_uInt16 SwDoc::MergeTbl( SwPaM& rPam )
 {
-    // Check if the current SPoint/Mark's Cursor are inside a Table
+    // Check if the current cursor's Point/Mark are inside a Table
     SwTableNode* pTblNd = rPam.GetNode()->FindTableNode();
     if( !pTblNd )
         return TBLMERGE_NOSELECTION;
@@ -2279,7 +2275,7 @@ sal_uInt16 SwDoc::MergeTbl( SwPaM& rPam )
     }
     else
     {
-        // The PaMs need to be removed from the to-be-deleted Section. Thus always place
+        // The PaMs need to be removed from the to-be-deleted range. Thus always place
         // them at the end of/on top of the Table; it's always set to the old position via
         // the Document Position.
         // For a start remember an index for the temporary position, because we cannot
@@ -2993,7 +2989,7 @@ sal_Bool SwCollectTblLineBoxes::Resize( sal_uInt16 nOffset, sal_uInt16 nOldWidth
         aPosArr.erase( aPosArr.begin(), aPosArr.begin() + n );
         m_Boxes.erase(m_Boxes.begin(), m_Boxes.begin() + n);
 
-        // Adapt the positions of the new Size
+        // Adapt the positions to the new Size
         for( n = 0; n < aPosArr.size(); ++n )
         {
             sal_uLong nSize = nWidth;
@@ -3106,12 +3102,12 @@ sal_uInt16 aTableSplitBoxSetRange[] = {
 }
 
 /**
- * Splits a Table into the BaseLine which contains the Index.
- * All succeeding BaseLines go into a new Table/Node.
+ * Splits a Table in the top-level Line which contains the Index.
+ * All succeeding top-level Lines go into a new Table/Node.
  *
- * @param bCalcNewSize sal_True
+ * @param bCalcNewSize true
  *                     Calculate the new Size for both from the
- *                     Box' Max; but only if Size is using absolute
+ *                     Boxes' Max; but only if Size is using absolute
  *                     values (USHRT_MAX)
  */
 sal_Bool SwDoc::SplitTable( const SwPosition& rPos, sal_uInt16 eHdlnMode,
@@ -3139,7 +3135,7 @@ sal_Bool SwDoc::SplitTable( const SwPosition& rPos, sal_uInt16 eHdlnMode,
     {
         sal_uLong nSttIdx = pNd->FindTableBoxStartNode()->GetIndex();
 
-        // Find BaseLine
+        // Find top-level Line
         SwTableBox* pBox = rTbl.GetTblBox( nSttIdx );
         if( pBox )
         {
@@ -3147,7 +3143,7 @@ sal_Bool SwDoc::SplitTable( const SwPosition& rPos, sal_uInt16 eHdlnMode,
             while( pLine->GetUpper() )
                 pLine = pLine->GetUpper()->GetUpper();
 
-            // pLine contains the BaseLine now
+            // pLine contains the top-level Line now
             aMsgHnt.nSplitLine = rTbl.GetTabLines().GetPos( pLine );
         }
 
@@ -3260,7 +3256,7 @@ static sal_Bool lcl_ChgTblSize( SwTable& rTbl )
 {
     // The Attribute must not be set via the Modify or else all Boxes are
     // set back to 0.
-    // Also lock the Format.
+    // So lock the Format.
     SwFrmFmt* pFmt = rTbl.GetFrmFmt();
     SwFmtFrmSize aTblMaxSz( pFmt->GetFrmSize() );
 
@@ -3363,7 +3359,7 @@ SwTableNode* SwNodes::SplitTable( const SwNodeIndex& rPos, sal_Bool bAfter,
 
     sal_uLong nSttIdx = pNd->FindTableBoxStartNode()->GetIndex();
 
-    // Find this Box/BaseLine
+    // Find this Box/top-level line
     SwTable& rTbl = pTNd->GetTable();
     SwTableBox* pBox = rTbl.GetTblBox( nSttIdx );
     if( !pBox )
@@ -3373,7 +3369,7 @@ SwTableNode* SwNodes::SplitTable( const SwNodeIndex& rPos, sal_Bool bAfter,
     while( pLine->GetUpper() )
         pLine = pLine->GetUpper()->GetUpper();
 
-    // pLine now contains the BaseLine
+    // pLine now contains the top-level line
     sal_uInt16 nLinePos = rTbl.GetTabLines().GetPos( pLine );
     if( USHRT_MAX == nLinePos ||
         ( bAfter ? ++nLinePos >= rTbl.GetTabLines().size() : !nLinePos ))
@@ -3468,8 +3464,8 @@ SwTableNode* SwNodes::SplitTable( const SwNodeIndex& rPos, sal_Bool bAfter,
 /**
  * rPos needs to be in the Table that remains
  *
- * @param rPos merge the current Table with the preceeding
- *             or succeeding one
+ * @param bWithPrev  merge the current Table with the preceeding
+ *                   or succeeding one
  */
 sal_Bool SwDoc::MergeTable( const SwPosition& rPos, sal_Bool bWithPrev, sal_uInt16 nMode )
 {
@@ -3615,7 +3611,7 @@ sal_Bool SwNodes::MergeTable( const SwNodeIndex& rPos, sal_Bool bWithPrev,
     aIdx -= 2;
     DelNodes( aIdx, 2 );
 
-    // Kick (?) the conditional Templates over at the first inserted Line
+    // tweak the conditional styles at the first inserted Line
     const SwTableLine* pFirstLn = rTbl.GetTabLines()[ nOldSize ];
     if( 1 == nMode )
     {
@@ -3756,7 +3752,7 @@ sal_Bool SwDoc::SetTableAutoFmt( const SwSelBoxes& rBoxes, const SwTableAutoFmt&
         pFndBox = pFndBox->GetUpper()->GetUpper();
 
 
-    // Disable Undo, Attribute were added beforehand
+    // Disable Undo, but first store parameters
     SwUndoTblAutoFmt* pUndo = 0;
     bool const bUndo(GetIDocumentUndoRedo().DoesUndo());
     if (bUndo)
