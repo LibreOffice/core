@@ -97,7 +97,8 @@ extern const application_info_impl* getApplicationInfo( const rtl::OUString& rSe
 
 extern ResMgr* getXSLTDialogResMgr();
 
-#define RESID(x) ResId(x, *getXSLTDialogResMgr() )
+#define RESID(x) ResId(x, *getXSLTDialogResMgr())
+#define RESIDSTR(x) RESID(x).toString()
 
 #endif
 
