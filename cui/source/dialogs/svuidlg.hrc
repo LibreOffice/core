@@ -84,26 +84,3 @@
 #define GB_APPLET_OPTIONS       21
 
 #define MD_INSERT_OBJECT_IFRAME 32011
-#define FT_FRAMENAME                    3
-#define ED_FRAMENAME                    4
-#define FT_URL                          5
-#define ED_URL                          6
-#define BT_FILEOPEN                     7
-#define NM_MARGINHEIGHT                 8
-#define FT_MARGINHEIGHT                 9
-#define NM_MARGINWIDTH                  10
-#define FT_MARGINWIDTH                  11
-#define GB_MARGIN                       12
-#define RB_SCROLLINGON                  13
-#define RB_SCROLLINGOFF                 14
-#define RB_SCROLLINGAUTO                15
-#define GB_SCROLLING                    16
-#define GB_BORDER                       17
-#define RB_FRMBORDER_ON                 18
-#define RB_FRMBORDER_INHERIT            19
-#define RB_FRMBORDER_OFF                20
-#define CB_MARGINWIDTHDEFAULT           21
-#define CB_MARGINHEIGHTDEFAULT          22
-#define FL_SEP_LEFT                     46
-#define FL_SEP_RIGHT                    47
-

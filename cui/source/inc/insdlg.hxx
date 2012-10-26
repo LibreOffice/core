@@ -116,45 +116,35 @@ public:
 class SfxInsertFloatingFrameDialog : public InsertObjectDialog_Impl
 {
 private:
-    FixedText               aFTName;
-    Edit                    aEDName;
-    FixedText               aFTURL;
-    Edit                    aEDURL;
-    PushButton              aBTOpen;
+    Edit* m_pEDName;
+    Edit* m_pEDURL;
+    PushButton* m_pBTOpen;
 
-    FixedLine               aFLScrolling;
-    RadioButton             aRBScrollingOn;
-    RadioButton             aRBScrollingOff;
-    RadioButton             aRBScrollingAuto;
+    RadioButton* m_pRBScrollingOn;
+    RadioButton* m_pRBScrollingOff;
+    RadioButton* m_pRBScrollingAuto;
 
+    RadioButton* m_pRBFrameBorderOn;
+    RadioButton* m_pRBFrameBorderOff;
 
-    FixedLine               aFLSepLeft;
-    FixedLine               aFLFrameBorder;
-    RadioButton             aRBFrameBorderOn;
-    RadioButton             aRBFrameBorderOff;
+    FixedText* m_pFTMarginWidth;
+    NumericField* m_pNMMarginWidth;
+    CheckBox* m_pCBMarginWidthDefault;
+    FixedText* m_pFTMarginHeight;
+    NumericField* m_pNMMarginHeight;
+    CheckBox* m_pCBMarginHeightDefault;
 
-    FixedLine               aFLSepRight;
-    FixedLine               aFLMargin;
-    FixedText               aFTMarginWidth;
-    NumericField            aNMMarginWidth;
-    CheckBox                aCBMarginWidthDefault;
-    FixedText               aFTMarginHeight;
-    NumericField            aNMMarginHeight;
-    CheckBox                aCBMarginHeightDefault;
+    DECL_STATIC_LINK(SfxInsertFloatingFrameDialog, OpenHdl, PushButton* );
+    DECL_STATIC_LINK(SfxInsertFloatingFrameDialog, CheckHdl, CheckBox* );
 
-    OKButton aOKButton1;
-    CancelButton aCancelButton1;
-    HelpButton aHelpButton1;
-
-    DECL_STATIC_LINK(       SfxInsertFloatingFrameDialog, OpenHdl, PushButton* );
-    DECL_STATIC_LINK(       SfxInsertFloatingFrameDialog, CheckHdl, CheckBox* );
+    void Init();
 
 public:
-                            SfxInsertFloatingFrameDialog( Window *pParent,
-                                const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& xStorage );
-                            SfxInsertFloatingFrameDialog( Window* pParent,
-                                const com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject >& xObj );
-    virtual short           Execute();
+    SfxInsertFloatingFrameDialog(Window *pParent,
+        const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& xStorage );
+    SfxInsertFloatingFrameDialog( Window* pParent,
+        const com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject >& xObj );
+    virtual short Execute();
 };
 
 #endif // _SVX_INSDLG_HXX

@@ -509,97 +509,49 @@ short SvInsertPlugInDialog::Execute()
 
 SfxInsertFloatingFrameDialog::SfxInsertFloatingFrameDialog( Window *pParent,
                             const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& xStorage )
-    : InsertObjectDialog_Impl( pParent, CUI_RES( MD_INSERT_OBJECT_IFRAME ), xStorage )
-    , aFTName ( this, CUI_RES( FT_FRAMENAME ) )
-    , aEDName ( this, CUI_RES( ED_FRAMENAME ) )
-    , aFTURL ( this, CUI_RES( FT_URL ) )
-    , aEDURL ( this, CUI_RES( ED_URL ) )
-    , aBTOpen ( this, CUI_RES(BT_FILEOPEN ) )
-
-    , aFLScrolling ( this, CUI_RES( GB_SCROLLING ) )
-    , aRBScrollingOn ( this, CUI_RES( RB_SCROLLINGON ) )
-    , aRBScrollingOff ( this, CUI_RES( RB_SCROLLINGOFF ) )
-    , aRBScrollingAuto ( this, CUI_RES( RB_SCROLLINGAUTO ) )
-    , aFLSepLeft( this, CUI_RES( FL_SEP_LEFT ) )
-    , aFLFrameBorder( this, CUI_RES( GB_BORDER ) )
-    , aRBFrameBorderOn ( this, CUI_RES( RB_FRMBORDER_ON ) )
-    , aRBFrameBorderOff ( this, CUI_RES( RB_FRMBORDER_OFF ) )
-    , aFLSepRight( this, CUI_RES( FL_SEP_RIGHT ) )
-    , aFLMargin( this, CUI_RES( GB_MARGIN ) )
-    , aFTMarginWidth ( this, CUI_RES( FT_MARGINWIDTH ) )
-    , aNMMarginWidth ( this, CUI_RES( NM_MARGINWIDTH ) )
-    , aCBMarginWidthDefault( this, CUI_RES( CB_MARGINWIDTHDEFAULT ) )
-    , aFTMarginHeight ( this, CUI_RES( FT_MARGINHEIGHT ) )
-    , aNMMarginHeight ( this, CUI_RES( NM_MARGINHEIGHT ) )
-    , aCBMarginHeightDefault( this, CUI_RES( CB_MARGINHEIGHTDEFAULT ) )
-    , aOKButton1( this, CUI_RES( 1 ) )
-    , aCancelButton1( this, CUI_RES( 1 ) )
-    , aHelpButton1( this, CUI_RES( 1 ) )
+    : InsertObjectDialog_Impl( pParent, "InsertFloatingFrameDialog", "cui/ui/insertfloatingframe.ui",
+                              xStorage )
 {
-    FreeResource();
-
-    aFLSepLeft.SetStyle(aFLSepLeft.GetStyle()|WB_VERT);
-    aFLSepRight.SetStyle(aFLSepRight.GetStyle()|WB_VERT);
-
-    Link aLink( STATIC_LINK( this, SfxInsertFloatingFrameDialog, CheckHdl ) );
-    aCBMarginWidthDefault.SetClickHdl( aLink );
-    aCBMarginHeightDefault.SetClickHdl( aLink );
-
-    aCBMarginWidthDefault.Check();
-    aCBMarginHeightDefault.Check();
-    aRBScrollingAuto.Check();
-    aRBFrameBorderOn.Check();
-
-    aBTOpen.SetClickHdl( STATIC_LINK( this, SfxInsertFloatingFrameDialog, OpenHdl ) );
+    Init();
 }
 
-SfxInsertFloatingFrameDialog::SfxInsertFloatingFrameDialog( Window *pParent, const uno::Reference < embed::XEmbeddedObject >& xObj )
-    : InsertObjectDialog_Impl( pParent, CUI_RES( MD_INSERT_OBJECT_IFRAME ), uno::Reference < embed::XStorage >() )
-    , aFTName ( this, CUI_RES( FT_FRAMENAME ) )
-    , aEDName ( this, CUI_RES( ED_FRAMENAME ) )
-    , aFTURL ( this, CUI_RES( FT_URL ) )
-    , aEDURL ( this, CUI_RES( ED_URL ) )
-    , aBTOpen ( this, CUI_RES(BT_FILEOPEN ) )
-
-    , aFLScrolling ( this, CUI_RES( GB_SCROLLING ) )
-    , aRBScrollingOn ( this, CUI_RES( RB_SCROLLINGON ) )
-    , aRBScrollingOff ( this, CUI_RES( RB_SCROLLINGOFF ) )
-    , aRBScrollingAuto ( this, CUI_RES( RB_SCROLLINGAUTO ) )
-
-    , aFLSepLeft( this, CUI_RES( FL_SEP_LEFT ) )
-    , aFLFrameBorder( this, CUI_RES( GB_BORDER ) )
-    , aRBFrameBorderOn ( this, CUI_RES( RB_FRMBORDER_ON ) )
-    , aRBFrameBorderOff ( this, CUI_RES( RB_FRMBORDER_OFF ) )
-
-    , aFLSepRight( this, CUI_RES( FL_SEP_RIGHT ) )
-    , aFLMargin( this, CUI_RES( GB_MARGIN ) )
-    , aFTMarginWidth ( this, CUI_RES( FT_MARGINWIDTH ) )
-    , aNMMarginWidth ( this, CUI_RES( NM_MARGINWIDTH ) )
-    , aCBMarginWidthDefault( this, CUI_RES( CB_MARGINWIDTHDEFAULT ) )
-    , aFTMarginHeight ( this, CUI_RES( FT_MARGINHEIGHT ) )
-    , aNMMarginHeight ( this, CUI_RES( NM_MARGINHEIGHT ) )
-    , aCBMarginHeightDefault( this, CUI_RES( CB_MARGINHEIGHTDEFAULT ) )
-    , aOKButton1( this, CUI_RES( 1 ) )
-    , aCancelButton1( this, CUI_RES( 1 ) )
-    , aHelpButton1( this, CUI_RES( 1 ) )
+SfxInsertFloatingFrameDialog::SfxInsertFloatingFrameDialog( Window *pParent,
+                            const uno::Reference < embed::XEmbeddedObject >& xObj )
+    : InsertObjectDialog_Impl( pParent, "InsertFloatingFrameDialog", "cui/ui/insertfloatingframe.ui",
+                              uno::Reference < embed::XStorage >() )
 {
-    FreeResource();
-
     m_xObj = xObj;
 
-    aFLSepLeft.SetStyle(aFLSepLeft.GetStyle()|WB_VERT);
-    aFLSepRight.SetStyle(aFLSepRight.GetStyle()|WB_VERT);
+    Init();
+}
+
+void SfxInsertFloatingFrameDialog::Init()
+{
+    get(m_pEDName, "edname");
+    get(m_pEDURL, "edurl");
+    get(m_pBTOpen, "buttonbrowse");
+    get(m_pRBScrollingOn, "scrollbaron");
+    get(m_pRBScrollingOff, "scrollbaroff");
+    get(m_pRBScrollingAuto, "scrollbarauto");
+    get(m_pRBFrameBorderOn, "borderon");
+    get(m_pRBFrameBorderOff, "borderoff");
+    get(m_pFTMarginWidth, "widthlabel");
+    get(m_pNMMarginWidth, "width");
+    get(m_pCBMarginWidthDefault, "defaultwidth");
+    get(m_pFTMarginHeight, "heightlabel");
+    get(m_pNMMarginHeight, "height");
+    get(m_pCBMarginHeightDefault, "defaultheight");
 
     Link aLink( STATIC_LINK( this, SfxInsertFloatingFrameDialog, CheckHdl ) );
-    aCBMarginWidthDefault.SetClickHdl( aLink );
-    aCBMarginHeightDefault.SetClickHdl( aLink );
+    m_pCBMarginWidthDefault->SetClickHdl( aLink );
+    m_pCBMarginHeightDefault->SetClickHdl( aLink );
 
-    aCBMarginWidthDefault.Check();
-    aCBMarginHeightDefault.Check();
-    aRBScrollingAuto.Check();
-    aRBFrameBorderOn.Check();
+    m_pCBMarginWidthDefault->Check();
+    m_pCBMarginHeightDefault->Check();
+    m_pRBScrollingAuto->Check();
+    m_pRBFrameBorderOn->Check();
 
-    aBTOpen.SetClickHdl( STATIC_LINK( this, SfxInsertFloatingFrameDialog, OpenHdl ) );
+    m_pBTOpen->SetClickHdl( STATIC_LINK( this, SfxInsertFloatingFrameDialog, OpenHdl ) );
 }
 
 short SfxInsertFloatingFrameDialog::Execute()
@@ -617,10 +569,10 @@ short SfxInsertFloatingFrameDialog::Execute()
             ::rtl::OUString aStr;
             uno::Any aAny = xSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameURL") ) );
             if ( aAny >>= aStr )
-                aEDURL.SetText( aStr );
+                m_pEDURL->SetText( aStr );
             aAny = xSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameName") ) );
             if ( aAny >>= aStr )
-                aEDName.SetText( aStr );
+                m_pEDName->SetText( aStr );
 
             sal_Int32 nSize = SIZE_NOT_SET;
             aAny = xSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameMarginWidth") ) );
@@ -628,26 +580,26 @@ short SfxInsertFloatingFrameDialog::Execute()
 
             if ( nSize == SIZE_NOT_SET )
             {
-                aCBMarginWidthDefault.Check( sal_True );
-                aNMMarginWidth.SetText( String::CreateFromInt32( DEFAULT_MARGIN_WIDTH )  );
-                aFTMarginWidth.Enable( sal_False );
-                aNMMarginWidth.Enable( sal_False );
+                m_pCBMarginWidthDefault->Check( sal_True );
+                m_pNMMarginWidth->SetText( String::CreateFromInt32( DEFAULT_MARGIN_WIDTH )  );
+                m_pFTMarginWidth->Enable( sal_False );
+                m_pNMMarginWidth->Enable( sal_False );
             }
             else
-                aNMMarginWidth.SetText( String::CreateFromInt32( nSize ) );
+                m_pNMMarginWidth->SetText( String::CreateFromInt32( nSize ) );
 
             aAny = xSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameMarginHeight") ) );
             aAny >>= nSize;
 
             if ( nSize == SIZE_NOT_SET )
             {
-                aCBMarginHeightDefault.Check( sal_True );
-                aNMMarginHeight.SetText( String::CreateFromInt32( DEFAULT_MARGIN_HEIGHT )  );
-                aFTMarginHeight.Enable( sal_False );
-                aNMMarginHeight.Enable( sal_False );
+                m_pCBMarginHeightDefault->Check( sal_True );
+                m_pNMMarginHeight->SetText( String::CreateFromInt32( DEFAULT_MARGIN_HEIGHT )  );
+                m_pFTMarginHeight->Enable( sal_False );
+                m_pNMMarginHeight->Enable( sal_False );
             }
             else
-                aNMMarginHeight.SetText( String::CreateFromInt32( nSize ) );
+                m_pNMMarginHeight->SetText( String::CreateFromInt32( nSize ) );
 
             sal_Bool bScrollOn = sal_False;
             sal_Bool bScrollOff = sal_False;
@@ -666,9 +618,9 @@ short SfxInsertFloatingFrameDialog::Execute()
             else
                 bScrollAuto = sal_True;
 
-            aRBScrollingOn.Check( bScrollOn );
-            aRBScrollingOff.Check( bScrollOff );
-            aRBScrollingAuto.Check( bScrollAuto );
+            m_pRBScrollingOn->Check( bScrollOn );
+            m_pRBScrollingOff->Check( bScrollOff );
+            m_pRBScrollingAuto->Check( bScrollAuto );
 
             bSet = sal_False;
             aAny = xSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameIsAutoBorder") ) );
@@ -677,8 +629,8 @@ short SfxInsertFloatingFrameDialog::Execute()
             {
                 aAny = xSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameIsBorder") ) );
                 aAny >>= bSet;
-                aRBFrameBorderOn.Check( bSet );
-                aRBFrameBorderOff.Check( !bSet );
+                m_pRBFrameBorderOn->Check( bSet );
+                m_pRBFrameBorderOff->Check( !bSet );
             }
 
             SetUpdateMode( sal_True );
@@ -698,12 +650,12 @@ short SfxInsertFloatingFrameDialog::Execute()
     if ( bOK && ( nRet = Dialog::Execute() ) == RET_OK )
     {
         ::rtl::OUString aURL;
-        if ( aEDURL.GetText().Len() )
+        if ( m_pEDURL->GetText().Len() )
         {
             // URL can be a valid and absolute URL or a system file name
             INetURLObject aObj;
             aObj.SetSmartProtocol( INET_PROT_FILE );
-            if ( aObj.SetSmartURL( aEDURL.GetText() ) )
+            if ( aObj.SetSmartURL( m_pEDURL->GetText() ) )
                 aURL = aObj.GetMainURL( INetURLObject::NO_DECODE );
         }
 
@@ -726,26 +678,26 @@ short SfxInsertFloatingFrameDialog::Execute()
                 if ( bIPActive )
                     m_xObj->changeState( embed::EmbedStates::RUNNING );
 
-                ::rtl::OUString aName = aEDName.GetText();
+                ::rtl::OUString aName = m_pEDName->GetText();
                 ScrollingMode eScroll = ScrollingNo;
-                if ( aRBScrollingOn.IsChecked() )
+                if ( m_pRBScrollingOn->IsChecked() )
                     eScroll = ScrollingYes;
-                if ( aRBScrollingOff.IsChecked() )
+                if ( m_pRBScrollingOff->IsChecked() )
                     eScroll = ScrollingNo;
-                if ( aRBScrollingAuto.IsChecked() )
+                if ( m_pRBScrollingAuto->IsChecked() )
                     eScroll = ScrollingAuto;
 
-                sal_Bool bHasBorder = aRBFrameBorderOn.IsChecked();
+                sal_Bool bHasBorder = m_pRBFrameBorderOn->IsChecked();
 
                 long lMarginWidth;
-                if ( !aCBMarginWidthDefault.IsChecked() )
-                    lMarginWidth = (long) aNMMarginWidth.GetText().ToInt32();
+                if ( !m_pCBMarginWidthDefault->IsChecked() )
+                    lMarginWidth = (long) m_pNMMarginWidth->GetText().ToInt32();
                 else
                     lMarginWidth = SIZE_NOT_SET;
 
                 long lMarginHeight;
-                if ( !aCBMarginHeightDefault.IsChecked() )
-                    lMarginHeight = (long) aNMMarginHeight.GetText().ToInt32();
+                if ( !m_pCBMarginHeightDefault->IsChecked() )
+                    lMarginHeight = (long) m_pNMMarginHeight->GetText().ToInt32();
                 else
                     lMarginHeight = SIZE_NOT_SET;
 
@@ -785,20 +737,20 @@ short SfxInsertFloatingFrameDialog::Execute()
 
 IMPL_STATIC_LINK( SfxInsertFloatingFrameDialog, CheckHdl, CheckBox*, pCB )
 {
-    if ( pCB == &pThis->aCBMarginWidthDefault )
+    if ( pCB == pThis->m_pCBMarginWidthDefault )
     {
         if ( pCB->IsChecked() )
-            pThis->aNMMarginWidth.SetText( String::CreateFromInt32( DEFAULT_MARGIN_WIDTH ) );
-        pThis->aFTMarginWidth.Enable( !pCB->IsChecked() );
-        pThis->aNMMarginWidth.Enable( !pCB->IsChecked() );
+            pThis->m_pNMMarginWidth->SetText( String::CreateFromInt32( DEFAULT_MARGIN_WIDTH ) );
+        pThis->m_pFTMarginWidth->Enable( !pCB->IsChecked() );
+        pThis->m_pNMMarginWidth->Enable( !pCB->IsChecked() );
     }
 
-    if ( pCB == &pThis->aCBMarginHeightDefault )
+    if ( pCB == pThis->m_pCBMarginHeightDefault )
     {
         if ( pCB->IsChecked() )
-            pThis->aNMMarginHeight.SetText( String::CreateFromInt32( DEFAULT_MARGIN_HEIGHT ) );
-        pThis->aFTMarginHeight.Enable( !pCB->IsChecked() );
-        pThis->aNMMarginHeight.Enable( !pCB->IsChecked() );
+            pThis->m_pNMMarginHeight->SetText( String::CreateFromInt32( DEFAULT_MARGIN_HEIGHT ) );
+        pThis->m_pFTMarginHeight->Enable( !pCB->IsChecked() );
+        pThis->m_pNMMarginHeight->Enable( !pCB->IsChecked() );
     }
 
     return 0L;
@@ -820,7 +772,7 @@ IMPL_STATIC_LINK( SfxInsertFloatingFrameDialog, OpenHdl, PushButton*, EMPTYARG )
 
     // show the dialog
     if ( aFileDlg.Execute() == ERRCODE_NONE )
-        pThis->aEDURL.SetText(
+        pThis->m_pEDURL->SetText(
             INetURLObject( aFileDlg.GetPath() ).GetMainURL( INetURLObject::DECODE_WITH_CHARSET ) );
 
     Application::SetDefDialogParent( pOldParent );
