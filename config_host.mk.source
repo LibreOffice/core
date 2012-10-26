@@ -5,7 +5,7 @@
 #       source ./config_host.mk.source
 
 temp_conf=`mktemp config_host.mk.XXXXXX`
-sed -e 's/^\s*\(export [A-Z0-9_]*=\)\(.*\)$/\1"\2"/' \
-    -e 's/^\s*export\s\+\([A-Z0-9_]*\)?=\(.*\)$/export \1="${\1:-\2}"/' config_host.mk >$temp_conf
+sed -n -e 's/^\s*\(export [A-Z0-9_]*=\)\(.*\)$/\1"\2"/p' \
+    -e 's/^\s*export\s\+\([A-Z0-9_]*\)?=\(.*\)$/export \1="${\1:-\2}"/p' config_host.mk >$temp_conf
 source ./$temp_conf
 rm $temp_conf
