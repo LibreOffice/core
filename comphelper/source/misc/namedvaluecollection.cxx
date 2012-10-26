@@ -33,9 +33,7 @@
 #include <com/sun/star/beans/PropertyState.hpp>
 
 #include <rtl/ustrbuf.hxx>
-#include <rtl/strbuf.hxx>
 #include <rtl/instance.hxx>
-#include <osl/diagnose.h>
 
 #include <boost/unordered_map.hpp>
 #include <functional>
@@ -216,16 +214,15 @@ namespace comphelper
                 m_pImpl->aValues[ aPropertyValue.Name ] = aPropertyValue.Value;
             else if ( *pArgument >>= aNamedValue )
                 m_pImpl->aValues[ aNamedValue.Name ] = aNamedValue.Value;
-#if OSL_DEBUG_LEVEL > 0
-            else if ( pArgument->hasValue() )
+            else
             {
-                ::rtl::OStringBuffer message;
-                message.append( "NamedValueCollection::impl_assign: encountered a value type which I cannot handle:\n" );
-                message.append( ::rtl::OUStringToOString( pArgument->getValueTypeName(), RTL_TEXTENCODING_ASCII_US ) );
                 // Once this is rare, this could be turned into a warning.
-                SAL_INFO( "comphelper", message.getStr() );
+                SAL_INFO_IF(
+                    pArgument->hasValue(), "comphelper",
+                    ("NamedValueCollection::impl_assign: encountered a value"
+                     " type which I cannot handle: "
+                     + pArgument->getValueTypeName()));
             }
-#endif
         }
     }
 
