@@ -129,7 +129,7 @@ void ReturnActionEdit::KeyInput( const KeyEvent& rEvt)
 extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeTableNameEdit(Window *pParent, VclBuilder::stringmap &)
 {
     TableNameEdit* pTableNameEdit = new TableNameEdit(pParent);
-    pTableNameEdit->SetMinWidthInChars(25);
+    pTableNameEdit->SetWidthInChars(25);
     return pTableNameEdit;
 }
 

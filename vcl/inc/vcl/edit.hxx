@@ -78,7 +78,7 @@ private:
     Selection           maSelection;
     sal_uInt16          mnAlign;
     xub_StrLen          mnMaxTextLen;
-    sal_Int32           mnMinWidthInChars;
+    sal_Int32           mnWidthInChars;
     AutocompleteAction  meAutocompleteAction;
     sal_Unicode         mcEchoChar;
     sal_Bool                mbModified:1,
@@ -199,8 +199,8 @@ public:
     virtual void        SetMaxTextLen( xub_StrLen nMaxLen = EDIT_NOLIMIT );
     virtual xub_StrLen  GetMaxTextLen() const { return mnMaxTextLen; }
 
-    void                SetMinWidthInChars(sal_Int32 nMinWidthInChars);
-    sal_Int32           GetMinWidthInChars() const { return mnMinWidthInChars; }
+    void                SetWidthInChars(sal_Int32 nWidthInChars);
+    sal_Int32           GetWidthInChars() const { return mnWidthInChars; }
 
     virtual void        SetSelection( const Selection& rSelection );
     virtual const Selection&    GetSelection() const;

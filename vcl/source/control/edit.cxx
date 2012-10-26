@@ -219,11 +219,11 @@ Edit::Edit( Window* pParent, const ResId& rResId ) :
         Show();
 }
 
-void Edit::SetMinWidthInChars(sal_Int32 nMinWidthInChars)
+void Edit::SetWidthInChars(sal_Int32 nWidthInChars)
 {
-    if (mnMinWidthInChars != nMinWidthInChars)
+    if (mnWidthInChars != nWidthInChars)
     {
-        mnMinWidthInChars = nMinWidthInChars;
+        mnWidthInChars = nWidthInChars;
         queue_resize();
     }
 }
@@ -231,7 +231,12 @@ void Edit::SetMinWidthInChars(sal_Int32 nMinWidthInChars)
 bool Edit::set_property(const rtl::OString &rKey, const rtl::OString &rValue)
 {
     if (rKey == "width-chars")
-        SetMinWidthInChars(rValue.toInt32());
+        SetWidthInChars(rValue.toInt32());
+    else if (rKey == "max-length")
+    {
+        sal_Int32 nTextLen = rValue.toInt32();
+        SetMaxTextLen(nTextLen == 0 ? EDIT_NOLIMIT : nTextLen);
+    }
     else if (rKey == "editable")
         SetReadOnly(!toBool(rValue));
     else if (rKey == "visibility")
@@ -266,7 +271,7 @@ void Edit::take_properties(Window &rOther)
     maSelection = rOtherEdit.maSelection;
     mnAlign = rOtherEdit.mnAlign;
     mnMaxTextLen = rOtherEdit.mnMaxTextLen;
-    mnMinWidthInChars = rOtherEdit.mnMinWidthInChars;
+    mnWidthInChars = rOtherEdit.mnWidthInChars;
     meAutocompleteAction = rOtherEdit.meAutocompleteAction;
     mcEchoChar = rOtherEdit.mcEchoChar;
     mbModified = rOtherEdit.mbModified;
@@ -341,7 +346,7 @@ void Edit::ImplInitEditData()
     mnXOffset               = 0;
     mnAlign                 = EDIT_ALIGN_LEFT;
     mnMaxTextLen            = EDIT_NOLIMIT;
-    mnMinWidthInChars       = 3;
+    mnWidthInChars          = -1;
     meAutocompleteAction    = AUTOCOMPLETE_KEYINPUT;
     mbModified              = sal_False;
     mbInternModified        = sal_False;
@@ -2890,13 +2895,22 @@ void Edit::SetSubEdit( Edit* pEdit )
 
 Size Edit::CalcMinimumSizeForText(const rtl::OUString &rString) const
 {
-    Size aSize ( GetTextWidth( rString ), GetTextHeight() );
-    aSize.Width() += ImplGetExtraOffset() * 2;
-    // do not create edit fields in which one cannot enter anything
-    // a default minimum width should exist for at least 3 characters
-    Size aMinSize ( CalcSize( mnMinWidthInChars ) );
-    if( aSize.Width() < aMinSize.Width() )
-        aSize.Width() = aMinSize.Width();
+    Size aSize;
+    if (mnWidthInChars != -1)
+    {
+        aSize = CalcSize(mnWidthInChars);
+    }
+    else
+    {
+        aSize.Height() = GetTextHeight();
+        aSize.Width() = GetTextWidth(rString);
+        aSize.Width() += ImplGetExtraOffset() * 2;
+        // do not create edit fields in which one cannot enter anything
+        // a default minimum width should exist for at least 3 characters
+        Size aMinSize(CalcSize(3));
+        if (aSize.Width() < aMinSize.Width())
+            aSize.Width() = aMinSize.Width();
+    }
     // add some space between text entry and border
     aSize.Height() += 4;
 
