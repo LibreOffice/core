@@ -186,8 +186,7 @@ class ScriptImpl implements XScript
             ClassLoader cl = null;
             URL sourceUrl = null;
             try {
-                cl = ClassLoaderFactory.getURLClassLoader(
-                    m_xContext, metaData );
+                cl = ClassLoaderFactory.getURLClassLoader( metaData );
                 sourceUrl = metaData.getSourceURL();
             }
             catch ( java.net.MalformedURLException mfu )

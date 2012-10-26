@@ -191,7 +191,7 @@ class ScriptImpl implements XScript
             try {
                 LogUtils.DEBUG( "Classloader starting..." );
                 scriptLoader = ClassLoaderFactory.getURLClassLoader(
-                    m_xContext, metaData );
+                        metaData );
                 LogUtils.DEBUG( "Classloader finished..." );
             }
             catch (MalformedURLException mfe )
