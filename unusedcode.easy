@@ -1,10 +1,7 @@
 FontSelectPattern::FontSelectPattern(PhysicalFontFace const&, Size const&, float, int, bool)
 RelatedMultipart::getIds()
 SanExtensionImpl::setCertExtn(unsigned char*, unsigned int, unsigned char*, unsigned int, unsigned char)
-ScCTB::ScCTB()
-ScCondFormatItem::ScCondFormatItem(unsigned int)
 ScConditionalFormat::dumpInfo(rtl::OUStringBuffer&) const
-ScDataBarSettingsDlg::ScDataBarSettingsDlg(Window*, ScDocument*, ScAddress const&)
 ScMenuFloatingWindow::getDoc()
 ScVbaFormat<ooo::vba::excel::XRange>::setNumberFormat(com::sun::star::lang::Locale, rtl::OUString const&)
 ScVbaFormat<ooo::vba::excel::XStyle>::getAddIndent()

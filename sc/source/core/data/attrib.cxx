@@ -1228,12 +1228,6 @@ ScCondFormatItem::ScCondFormatItem():
 {
 }
 
-ScCondFormatItem::ScCondFormatItem( sal_uInt32 nIndex ):
-    SfxPoolItem( ATTR_CONDITIONAL )
-{
-    maIndex.push_back(nIndex);
-}
-
 ScCondFormatItem::ScCondFormatItem( const std::vector<sal_uInt32>& rIndex ):
     SfxPoolItem( ATTR_CONDITIONAL ),
     maIndex( rIndex )
