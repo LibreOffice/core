@@ -35,8 +35,8 @@
 #include <vcl/syswin.hxx>
 #include <vcl/timer.hxx>
 
-// parameter to pass to the dialogue constructor if really no parent is wanted
-// whereas NULL chooses the deafult dialogue parent
+// parameter to pass to the dialog constructor if really no parent is wanted
+// whereas NULL chooses the default dialog parent
 #define DIALOG_NO_PARENT ((Window*)0xffffffff)
 
 // ----------
