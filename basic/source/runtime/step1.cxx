@@ -30,7 +30,7 @@
 #include "sbunoobj.hxx"
 #include "errobject.hxx"
 
-bool checkUnoObjectType( SbUnoObject* refVal, const ::rtl::OUString& aClass );
+bool checkUnoObjectType( SbUnoObject* refVal, const OUString& aClass );
 
 // loading a numeric constant (+ID)
 
@@ -78,7 +78,7 @@ void SbiRuntime::StepARGN( sal_uInt32 nOp1 )
         StarBASIC::FatalError( SbERR_INTERNAL_ERROR );
     else
     {
-        String aAlias( pImg->GetString( static_cast<short>( nOp1 ) ) );
+        OUString aAlias( pImg->GetString( static_cast<short>( nOp1 ) ) );
         SbxVariableRef pVal = PopVar();
         if( bVBAEnabled && ( pVal->ISA(SbxMethod) || pVal->ISA(SbUnoProperty) || pVal->ISA(SbProcedureProperty) ) )
         {
@@ -361,7 +361,7 @@ void SbiRuntime::StepERRHDL( sal_uInt32 nOp1 )
     StepJUMP( nOp1 );
     pError = pCode;
     pCode = p;
-    pInst->aErrorMsg = String();
+    pInst->aErrorMsg = OUString();
     pInst->nErr = 0;
     pInst->nErl = 0;
     nError = 0;
@@ -391,7 +391,7 @@ void SbiRuntime::StepRESUME( sal_uInt32 nOp1 )
 
     if( nOp1 > 1 )
         StepJUMP( nOp1 );
-    pInst->aErrorMsg = String();
+    pInst->aErrorMsg = OUString();
     pInst->nErr = 0;
     pInst->nErl = 0;
     nError = 0;
@@ -420,14 +420,14 @@ void SbiRuntime::StepCLOSE( sal_uInt32 nOp1 )
 
 void SbiRuntime::StepPRCHAR( sal_uInt32 nOp1 )
 {
-    rtl::OString s(static_cast<sal_Char>(nOp1));
+    OString s(static_cast<sal_Char>(nOp1));
     pIosys->Write( s );
     Error( pIosys->GetError() );
 }
 
 // check whether TOS is a certain object class (+StringID)
 
-bool SbiRuntime::implIsClass( SbxObject* pObj, const ::rtl::OUString& aClass )
+bool SbiRuntime::implIsClass( SbxObject* pObj, const OUString& aClass )
 {
     bool bRet = true;
 
@@ -438,13 +438,12 @@ bool SbiRuntime::implIsClass( SbxObject* pObj, const ::rtl::OUString& aClass )
             bRet = aClass.equalsIgnoreAsciiCaseAsciiL( RTL_CONSTASCII_STRINGPARAM("object") );
         if( !bRet )
         {
-            String aObjClass = pObj->GetClassName();
+            OUString aObjClass = pObj->GetClassName();
             SbModule* pClassMod = GetSbData()->pClassFac->FindClass( aObjClass );
             SbClassData* pClassData;
             if( pClassMod && (pClassData=pClassMod->pClassData) != NULL )
             {
-                SbxVariable* pClassVar =
-                    pClassData->mxIfaces->Find( aClass, SbxCLASS_DONTCARE );
+                SbxVariable* pClassVar = pClassData->mxIfaces->Find( aClass, SbxCLASS_DONTCARE );
                 bRet = (pClassVar != NULL);
             }
         }
@@ -453,7 +452,7 @@ bool SbiRuntime::implIsClass( SbxObject* pObj, const ::rtl::OUString& aClass )
 }
 
 bool SbiRuntime::checkClass_Impl( const SbxVariableRef& refVal,
-    const ::rtl::OUString& aClass, bool bRaiseErrors, bool bDefault )
+    const OUString& aClass, bool bRaiseErrors, bool bDefault )
 {
     bool bOk = bDefault;
 
@@ -519,11 +518,13 @@ void SbiRuntime::StepSETCLASS_impl( sal_uInt32 nOp1, bool bHandleDflt )
 {
     SbxVariableRef refVal = PopVar();
     SbxVariableRef refVar = PopVar();
-    String aClass( pImg->GetString( static_cast<short>( nOp1 ) ) );
+    OUString aClass( pImg->GetString( static_cast<short>( nOp1 ) ) );
 
     bool bOk = checkClass_Impl( refVal, aClass, true );
     if( bOk )
+    {
         StepSET_Impl( refVal, refVar, bHandleDflt ); // don't do handle dflt prop for a "proper" set
+    }
 }
 
 void SbiRuntime::StepVBASETCLASS( sal_uInt32 nOp1 )
@@ -539,7 +540,7 @@ void SbiRuntime::StepSETCLASS( sal_uInt32 nOp1 )
 void SbiRuntime::StepTESTCLASS( sal_uInt32 nOp1 )
 {
     SbxVariableRef xObjVal = PopVar();
-    String aClass( pImg->GetString( static_cast<short>( nOp1 ) ) );
+    OUString aClass( pImg->GetString( static_cast<short>( nOp1 ) ) );
     bool bDefault = !bVBAEnabled;
     bool bOk = checkClass_Impl( xObjVal, aClass, false, bDefault );
 

@@ -602,7 +602,7 @@ SbxObject* SbTypeFactory::CreateObject( const rtl::OUString& rClassName )
     return pRet;
 }
 
-SbxObject* createUserTypeImpl( const String& rClassName )
+SbxObject* createUserTypeImpl( const OUString& rClassName )
 {
     SbxObject* pRetObj = GetSbData()->pTypeFac->CreateObject( rClassName );
     return pRetObj;
