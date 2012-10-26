@@ -30,6 +30,7 @@
 #include <com/sun/star/drawing/XEnhancedCustomShapeDefaulter.hpp>
 #include <com/sun/star/graphic/GraphicProvider.hpp>
 #include <com/sun/star/io/UnexpectedEOFException.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/text/XTextFrame.hpp>
 #include <com/sun/star/text/SizeType.hpp>
 #include <com/sun/star/text/HoriOrientation.hpp>
@@ -2292,7 +2293,32 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
                             nType = ESCHER_ShpInst_Ellipse;
                             break;
                         case RTF_DPTXBX:
-                            nType = ESCHER_ShpInst_TextBox;
+                            {
+                                m_aStates.top().aDrawingObject.xShape.set(getModelFactory()->createInstance("com.sun.star.text.TextFrame"), uno::UNO_QUERY);
+                                // These are the default in Word, but not in Writer
+                                beans::PropertyValue aPropertyValue;
+                                aPropertyValue.Name = "HoriOrient";
+                                aPropertyValue.Value <<= text::HoriOrientation::NONE;
+                                m_aStates.top().aDrawingObject.aPendingProperties.push_back(aPropertyValue);
+                                aPropertyValue.Name = "VertOrient";
+                                aPropertyValue.Value <<= text::VertOrientation::NONE;
+                                m_aStates.top().aDrawingObject.aPendingProperties.push_back(aPropertyValue);
+                                aPropertyValue.Name = "BackColorTransparency";
+                                aPropertyValue.Value <<= sal_Int32(100);
+                                m_aStates.top().aDrawingObject.aPendingProperties.push_back(aPropertyValue);
+                                aPropertyValue.Name = "LeftBorderDistance";
+                                aPropertyValue.Value <<= sal_Int32(0);
+                                m_aStates.top().aDrawingObject.aPendingProperties.push_back(aPropertyValue);
+                                aPropertyValue.Name = "RightBorderDistance";
+                                aPropertyValue.Value <<= sal_Int32(0);
+                                m_aStates.top().aDrawingObject.aPendingProperties.push_back(aPropertyValue);
+                                aPropertyValue.Name = "TopBorderDistance";
+                                aPropertyValue.Value <<= sal_Int32(0);
+                                m_aStates.top().aDrawingObject.aPendingProperties.push_back(aPropertyValue);
+                                aPropertyValue.Name = "BottomBorderDistance";
+                                aPropertyValue.Value <<= sal_Int32(0);
+                                m_aStates.top().aDrawingObject.aPendingProperties.push_back(aPropertyValue);
+                            }
                             break;
                         default:
                             break;
@@ -2303,7 +2329,7 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
                     if (xDrawSupplier.is())
                     {
                         uno::Reference<drawing::XShapes> xShapes(xDrawSupplier->getDrawPage(), uno::UNO_QUERY);
-                        if (xShapes.is())
+                        if (xShapes.is() && nKeyword != RTF_DPTXBX)
                             xShapes->add(m_aStates.top().aDrawingObject.xShape);
                     }
                     if (nType)
@@ -3706,15 +3732,25 @@ int RTFDocumentImpl::popState()
     {
         RTFDrawingObject& rDrawing = m_aStates.top().aDrawingObject;
         uno::Reference<drawing::XShape> xShape(rDrawing.xShape);
-        xShape->setPosition(awt::Point(rDrawing.nLeft, rDrawing.nTop));
-        xShape->setSize(awt::Size(rDrawing.nRight, rDrawing.nBottom));
         uno::Reference<beans::XPropertySet> xPropertySet(rDrawing.xPropertySet);
+
+        uno::Reference<lang::XServiceInfo> xServiceInfo(xShape, uno::UNO_QUERY);
+        bool bTextFrame = xServiceInfo->supportsService("com.sun.star.text.TextFrame");
+
+        if (bTextFrame)
+        {
+            xPropertySet->setPropertyValue("HoriOrientPosition", uno::makeAny(rDrawing.nLeft));
+            xPropertySet->setPropertyValue("VertOrientPosition", uno::makeAny(rDrawing.nTop));
+        }
+        else
+            xShape->setPosition(awt::Point(rDrawing.nLeft, rDrawing.nTop));
+        xShape->setSize(awt::Size(rDrawing.nRight, rDrawing.nBottom));
 
         if (rDrawing.bHasLineColor)
             xPropertySet->setPropertyValue("LineColor", uno::makeAny(sal_uInt32((rDrawing.nLineColorR<<16) + (rDrawing.nLineColorG<<8) + rDrawing.nLineColorB)));
         if (rDrawing.bHasFillColor)
             xPropertySet->setPropertyValue("FillColor", uno::makeAny(sal_uInt32((rDrawing.nFillColorR<<16) + (rDrawing.nFillColorG<<8) + rDrawing.nFillColorB)));
-        else
+        else if (!bTextFrame)
             // If there is no fill, the Word default is 100% transparency.
             xPropertySet->setPropertyValue("FillTransparence", uno::makeAny(sal_Int32(100)));
 
