@@ -105,7 +105,7 @@ ScDocShellRef ScExportTest::saveAndReloadPassword(ScDocShell* pShell, const rtl:
 {
 
     utl::TempFile aTempFile;
-    //aTempFile.EnableKillingFile();
+    aTempFile.EnableKillingFile();
     SfxMedium aStoreMedium( aTempFile.GetURL(), STREAM_STD_WRITE );
     sal_uInt32 nExportFormat = 0;
     if (nFormatType)
@@ -128,7 +128,7 @@ ScDocShellRef ScExportTest::saveAndReloadPassword(ScDocShell* pShell, const rtl:
     pShell->DoSaveAs( aStoreMedium );
     pShell->DoClose();
 
-    std::cout << "File: " << aTempFile.GetURL() << std::endl;
+    //std::cout << "File: " << aTempFile.GetURL() << std::endl;
 
     sal_uInt32 nFormat = 0;
     if (nFormatType)
