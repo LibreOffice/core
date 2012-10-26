@@ -55,11 +55,10 @@ class FaxWizardDialogImpl(FaxWizardDialog):
     RM_FOOTER = 4
     RM_FINALSETTINGS = 5
 
-    lstBusinessStylePos = None
-    lstPrivateStylePos = None
-
     def __init__(self, xmsf):
         super(FaxWizardDialogImpl, self).__init__(xmsf)
+		self.lstBusinessStylePos = None
+		self.lstPrivateStylePos = None
         self.bSaveSuccess = False
         self.filenameChanged = False
         self.UserTemplatePath = ""
@@ -433,7 +432,7 @@ class FaxWizardDialogImpl(FaxWizardDialog):
             self.optPrivateFaxItemChanged()
 
     def optBusinessFaxItemChanged(self):
-        FaxWizardDialogImpl.lstPrivateStylePos = None
+        self.lstPrivateStylePos = None
         self.setControlProperty("lblBusinessStyle",
             PropertyNames.PROPERTY_ENABLED, True)
         self.setControlProperty("lstBusinessStyle",
@@ -449,8 +448,8 @@ class FaxWizardDialogImpl(FaxWizardDialog):
     def lstBusinessStyleItemChanged(self):
         selectedItemPos = self.lstBusinessStyle.SelectedItemPos
         #avoid to load the same item again
-        if FaxWizardDialogImpl.lstBusinessStylePos != selectedItemPos:
-            FaxWizardDialogImpl.lstBusinessStylePos = selectedItemPos
+        if self.lstBusinessStylePos != selectedItemPos:
+            self.lstBusinessStylePos = selectedItemPos
             TextDocument.xTextDocument = self.myFaxDoc.loadAsPreview(
                 self.BusinessFiles.values()[selectedItemPos], False)
             self.initializeElements()
@@ -458,7 +457,7 @@ class FaxWizardDialogImpl(FaxWizardDialog):
             self.drawConstants()
 
     def optPrivateFaxItemChanged(self):
-        FaxWizardDialogImpl.lstBusinessStylePos = None
+        self.lstBusinessStylePos = None
         self.setControlProperty("lblBusinessStyle",
             PropertyNames.PROPERTY_ENABLED, False)
         self.setControlProperty("lstBusinessStyle",
@@ -474,8 +473,8 @@ class FaxWizardDialogImpl(FaxWizardDialog):
     def lstPrivateStyleItemChanged(self):
         selectedItemPos = self.lstPrivateStyle.SelectedItemPos
         #avoid to load the same item again
-        if FaxWizardDialogImpl.lstPrivateStylePos != selectedItemPos:
-            FaxWizardDialogImpl.lstPrivateStylePos = selectedItemPos
+        if self.lstPrivateStylePos != selectedItemPos:
+            self.lstPrivateStylePos = selectedItemPos
             TextDocument.xTextDocument = self.myFaxDoc.loadAsPreview(
                 self.PrivateFiles.values()[selectedItemPos], False)
             self.initializeElements()
