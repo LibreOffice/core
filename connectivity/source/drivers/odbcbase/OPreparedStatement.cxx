@@ -199,31 +199,6 @@ sal_Bool SAL_CALL OPreparedStatement::execute(  ) throw(SQLException, RuntimeExc
     {
     }
 
-    // Now loop while more data is needed (i.e. a data-at-
-    // execution parameter was given).  For each parameter
-    // that needs data, put the data from the input stream.
-
-    while (needData) {
-
-        // Get the parameter number that requires data
-
-        sal_Int32* paramIndex = 0;
-        N3SQLParamData (m_aStatementHandle,(SQLPOINTER*)&paramIndex);
-
-        // If the parameter index is -1, there is no more
-        // data required
-
-        if (*paramIndex == -1) {
-            needData = sal_False;
-        }
-        else {
-            // Now we have the proper parameter index,
-            // get the data from the input stream
-            // and do a SQLPutData
-            putParamData(*paramIndex);
-        }
-    }
-
     // Now determine if there is a result set associated with
     // the SQL statement that was executed.  Get the column
     // count, and if it is not zero, there is a result set.
