@@ -129,6 +129,7 @@ $(eval $(call gb_Module_add_moduledirs,tail_end,\
 	$(call gb_Helper_optional,RHINO,rhino) \
 	ridljar \
 	rsc \
+	sal \
 	salhelper \
 	sane \
 	sax \
