@@ -53,7 +53,7 @@
 #include <svl/ownlist.hxx>
 #include <comphelper/seqstream.hxx>
 
-#include "svuidlg.hrc"
+#include "cuires.hrc"
 
 #include <osl/file.hxx>
 
@@ -768,7 +768,7 @@ IMPL_STATIC_LINK( SfxInsertFloatingFrameDialog, OpenHdl, PushButton*, EMPTYARG )
             ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE, 0, String() );
 
     // set the title
-    aFileDlg.SetTitle( OUString( String( CUI_RES( MD_INSERT_OBJECT_IFRAME ) ) ) );
+    aFileDlg.SetTitle(CUI_RESSTR(RID_SVXSTR_SELECT_FILE_IFRAME));
 
     // show the dialog
     if ( aFileDlg.Execute() == ERRCODE_NONE )

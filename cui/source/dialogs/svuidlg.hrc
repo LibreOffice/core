@@ -82,5 +82,3 @@
 #define GB_CLASS                14
 #define ED_APPLET_OPTIONS       20
 #define GB_APPLET_OPTIONS       21
-
-#define MD_INSERT_OBJECT_IFRAME 32011

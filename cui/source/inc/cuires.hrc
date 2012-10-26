@@ -417,6 +417,7 @@
 #define RID_SVXSTR_EVENT_CONTENTCHANGED                     (RID_SVX_START + 1194)
 
 #define RID_SVXSTR_ERR_TEXTNOTFOUND                         (RID_SVX_START + 1195)
+#define RID_SVXSTR_SELECT_FILE_IFRAME                       (RID_SVX_START + 1196)
 
 #define RID_SVXDLG_CERTPATH                                 (RID_SVX_START + 1198)
 

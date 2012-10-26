@@ -392,8 +392,3 @@ Control TB_LINKS
     TabStop = TRUE ;
     ClipChildren = TRUE ;
 };
-
-String MD_INSERT_OBJECT_IFRAME
-{
-    Text [ en-US ] = "Select File for Floating Frame" ;
-};

@@ -14,4 +14,9 @@ String RID_SVXSTR_ERR_TEXTNOTFOUND
     Text [ en-US ] = "No alternatives found." ;
 };
 
+String RID_SVXSTR_SELECT_FILE_IFRAME
+{
+    Text [ en-US ] = "Select File for Floating Frame" ;
+};
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
