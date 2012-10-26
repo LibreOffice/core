@@ -144,15 +144,19 @@ void SbiRuntime::StepARGTYP( sal_uInt32 nOp1 )
 void SbiRuntime::StepPAD( sal_uInt32 nOp1 )
 {
     SbxVariable* p = GetTOS();
-    String& s = (String&)(const String&) *p;
-    if (s.Len() != nOp1)
+    OUString s = p->GetOUString();
+    sal_Int32 nLen(nOp1);
+    if( s.getLength() != nLen )
     {
         rtl::OUStringBuffer aBuf(s);
-        sal_Int32 nLen(nOp1);
         if (aBuf.getLength() > nLen)
+        {
             comphelper::string::truncateToLength(aBuf, nLen);
+        }
         else
+        {
             comphelper::string::padToLength(aBuf, nLen, ' ');
+        }
         s = aBuf.makeStringAndClear();
     }
 }
