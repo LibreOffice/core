@@ -49,6 +49,7 @@ $(eval $(call gb_Module_add_check_targets,sc,\
 ))
 
 $(eval $(call gb_Module_add_slowcheck_targets,sc, \
+    CppunitTest_sc_subsequent_filters_test \
     CppunitTest_sc_subsequent_export_test \
 ))
 
