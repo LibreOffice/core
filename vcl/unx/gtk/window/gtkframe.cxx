@@ -515,7 +515,14 @@ static void ObjectDestroyedNotify( gpointer data )
 
 static void hud_activated( gboolean hud_active, gpointer user_data )
 {
-    printf("HUD active state: %d\n", hud_active);
+    if ( hud_activated )
+    {
+        GtkSalFrame* pSalFrame = reinterpret_cast< GtkSalFrame* >( user_data );
+        GtkSalMenu* pSalMenu = reinterpret_cast< GtkSalMenu* >( pSalFrame->GetMenu() );
+
+        if ( pSalMenu )
+            pSalMenu->UpdateFull();
+    }
 }
 
 gboolean ensure_dbus_setup( gpointer data )
