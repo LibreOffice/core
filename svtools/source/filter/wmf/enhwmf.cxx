@@ -517,11 +517,11 @@ sal_Bool EnhWMFReader::ReadEnhWMF()
             break;
 
             case EMR_POLYPOLYLINE :
-                ReadAndDrawPolyLine<sal_uInt32>();
+                ReadAndDrawPolyLine<sal_Int32>();
             break;
 
             case EMR_POLYPOLYGON :
-                ReadAndDrawPolyPolygon<sal_uInt32>();
+                ReadAndDrawPolyPolygon<sal_Int32>();
             break;
 
             case EMR_SETWINDOWEXTEX :
@@ -1205,11 +1205,11 @@ sal_Bool EnhWMFReader::ReadEnhWMF()
             break;
 
             case EMR_POLYPOLYLINE16 :
-                ReadAndDrawPolyLine<sal_uInt16>();
+                ReadAndDrawPolyLine<sal_Int16>();
                 break;
 
             case EMR_POLYPOLYGON16 :
-                ReadAndDrawPolyPolygon<sal_uInt16>();
+                ReadAndDrawPolyPolygon<sal_Int16>();
             break;
 
             case EMR_FILLRGN :
