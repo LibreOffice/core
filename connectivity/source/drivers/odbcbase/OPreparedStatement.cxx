@@ -37,6 +37,8 @@
 #include "connectivity/FValue.hxx"
 #include "resource/common_res.hrc"
 #include "connectivity/sqlparse.hxx"
+#include <boost/type_traits/remove_reference.hpp>
+#include <boost/type_traits/is_same.hpp>
 
 using namespace ::comphelper;
 using namespace connectivity;
@@ -52,6 +54,13 @@ using namespace com::sun::star::util;
 
 IMPLEMENT_SERVICE_INFO(OPreparedStatement,"com.sun.star.sdbcx.OPreparedStatement","com.sun.star.sdbc.PreparedStatement");
 
+namespace
+{
+    // for now, never use wchar,
+    // but most of code is prepared to handle it
+    // in case we make this configurable
+    const bool useWChar = false;
+}
 
 OPreparedStatement::OPreparedStatement( OConnection* _pConnection,const ::rtl::OUString& sql)
     :OStatement_BASE2(_pConnection)
@@ -233,8 +242,7 @@ sal_Int32 SAL_CALL OPreparedStatement::executeUpdate(  ) throw(SQLException, Run
 
 void SAL_CALL OPreparedStatement::setString( sal_Int32 parameterIndex, const ::rtl::OUString& x ) throw(SQLException, RuntimeException)
 {
-    ::rtl::OString aString(::rtl::OUStringToOString(x,getOwnConnection()->getTextEncoding()));
-    setParameter(parameterIndex,DataType::CHAR,aString.getLength(),(void*)&x);
+    setParameter(parameterIndex, DataType::CHAR, invalid_scale, x);
 }
 // -------------------------------------------------------------------------
 
@@ -269,111 +277,189 @@ Reference< XResultSet > SAL_CALL OPreparedStatement::executeQuery(  ) throw(SQLE
 
 void SAL_CALL OPreparedStatement::setBoolean( sal_Int32 parameterIndex, sal_Bool x ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
-
-
-    sal_Int32 value = 0;
-
-    // If the parameter is sal_True, set the value to 1
-    if (x) {
-        value = 1;
-    }
-
     // Set the parameter as if it were an integer
-    setInt (parameterIndex, value);
+    setInt (parameterIndex, x ? 1 : 0 );
 }
 // -------------------------------------------------------------------------
-void OPreparedStatement::setParameter(sal_Int32 parameterIndex,sal_Int32 _nType,sal_Int32 _nSize,void* _pData)
+// The MutexGuard must _already_ be taken!
+void OPreparedStatement::setParameterPre(sal_Int32 parameterIndex)
+{
+    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+    prepareStatement();
+    checkParameterIndex(parameterIndex);
+    OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");
+}
+// -------------------------------------------------------------------------
+
+template <typename T> void OPreparedStatement::setScalarParameter(const sal_Int32 parameterIndex, const sal_Int32 i_nType, const SQLULEN i_nColSize, const T i_Value)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+    setParameterPre(parameterIndex);
 
-    prepareStatement();
-    // Allocate a buffer to be used in binding.  This will be
-        // a 'permanent' buffer that the bridge will fill in with
-        // the bound data in native format.
+    typedef typename boost::remove_reference< T >::type TnoRef;
 
+    TnoRef *bindBuf = static_cast< TnoRef* >( allocBindBuf(parameterIndex, sizeof(i_Value)) );
+    *bindBuf = i_Value;
 
-    checkParameterIndex(parameterIndex);
-    sal_Int32 nRealSize = _nSize;
-    SQLSMALLINT fSqlType = static_cast<SQLSMALLINT>(OTools::jdbcTypeToOdbc(_nType));
-    switch(fSqlType)
+    setParameter(parameterIndex, i_nType, i_nColSize, invalid_scale, bindBuf, sizeof(i_Value), sizeof(i_Value));
+}
+// -------------------------------------------------------------------------
+
+void OPreparedStatement::setParameter(const sal_Int32 parameterIndex, const sal_Int32 _nType, const sal_Int16 _nScale, const ::rtl::OUString &_sData)
+{
+    ::osl::MutexGuard aGuard( m_aMutex );
+    setParameterPre(parameterIndex);
+
+    assert (_nType == DataType::VARCHAR || _nType == DataType::CHAR || _nType == DataType::DECIMAL || _nType == DataType::NUMERIC);
+
+    sal_Int32 nCharLen;
+    sal_Int32 nByteLen;
+    void *pData;
+    if (useWChar)
     {
-        case SQL_CHAR:
-        case SQL_VARCHAR:
-        case SQL_DECIMAL:
-        case SQL_NUMERIC:
-            ++nRealSize;
-            break;
-        case SQL_BINARY:
-        case SQL_VARBINARY:
-            nRealSize=1;    //dummy buffer, binary data isn't copied
-            break;
-        default:
-            break;
+        /*
+         * On Windows, wchar is 16 bits (UTF-16 encoding), the ODBC "W" variants functions take UTF-16 encoded strings
+         * and character lengths are number of UTF-16 codepoints.
+         * Reference: http://msdn.microsoft.com/en-us/library/windows/desktop/ms716246%28v=vs.85%29.aspx
+         * ODBC Programmer's reference > Developing Applications > Programming Considerations > Unicode >  Unicode Function Arguments
+         *            http://support.microsoft.com/kb/294169
+         *
+         * UnixODBC can be configured at compile-time so that the "W" variants expect
+         * UTF-16 or UTF-32 encoded strings, and character lengths are number of codepoints.
+         * However, UTF-16 is the default, what all/most distributions do
+         * and the established API that most drivers implement.
+         * As wchar is often 32 bits, this differs from C-style strings of wchar!
+         *
+         * Our internal OUString storage is always UTF-16, so no conversion to do here.
+         */
+        BOOST_STATIC_ASSERT( sizeof(sal_Unicode) == 2 );
+        nCharLen = _sData.getLength();
+        nByteLen = nCharLen * sizeof(sal_Unicode);
+        pData = allocBindBuf(parameterIndex, nByteLen);
+        memcpy(pData, _sData.getStr(), nByteLen);
+    }
+    else
+    {
+        ::rtl::OString sOData( ::rtl::OUStringToOString(_sData, getOwnConnection()->getTextEncoding()) );
+        nCharLen = sOData.getLength();
+        nByteLen = nCharLen;
+        pData = allocBindBuf(parameterIndex, nByteLen);
+        memcpy(pData, sOData.getStr(), nByteLen);
     }
 
-    sal_Int8* bindBuf = allocBindBuf(parameterIndex, nRealSize);
+    setParameter( parameterIndex, _nType, nCharLen, _nScale, pData, nByteLen, nByteLen );
+}
+// -------------------------------------------------------------------------
+void OPreparedStatement::setParameter(const sal_Int32 parameterIndex, const sal_Int32 _nType, const Sequence< sal_Int8 > &x)
+{
+    ::osl::MutexGuard aGuard( m_aMutex );
+    setParameterPre(parameterIndex);
 
-    OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");
-    OTools::bindParameter(  m_pConnection,
-                            m_aStatementHandle,
-                            parameterIndex,
-                            bindBuf,
-                            getLengthBuf(parameterIndex),
-                            fSqlType,
-                            sal_False,
-                            m_pConnection->useOldDateFormat(),
-                            _pData,
-                            (Reference <XInterface>)*this,
-                            getOwnConnection()->getTextEncoding());
+    assert(_nType == DataType::BINARY || _nType == DataType::VARBINARY);
+
+    // don't copy the sequence, just point the ODBC directly at the sequence's storage array
+    // Why BINARY/Sequence is treated differently than strings (which are copied), I'm not sure
+    OSL_VERIFY(allocBindBuf(parameterIndex, 0) == NULL);
+    boundParams[parameterIndex-1].setSequence(x); // this ensures that the sequence stays alive
+
+    setParameter( parameterIndex, _nType, x.getLength(), invalid_scale, x.getConstArray(), x.getLength(), x.getLength() );
+}
+// -------------------------------------------------------------------------
+void OPreparedStatement::setParameter(const sal_Int32 parameterIndex, const sal_Int32 _nType, const SQLULEN _nColumnSize, const sal_Int32 _nScale, const void* const _pData, const SQLULEN _nDataLen, const SQLLEN _nDataAllocLen)
+{
+    SQLSMALLINT fCType, fSqlType;
+    OTools::getBindTypes(useWChar, m_pConnection->useOldDateFormat(), OTools::jdbcTypeToOdbc(_nType), fCType, fSqlType);
+
+    SQLLEN *pDataLen=boundParams[parameterIndex-1].getBindLengthBuffer();
+    *pDataLen=_nDataLen;
+
+    SQLRETURN nRetcode;
+    nRetcode = (*(T3SQLBindParameter)m_pConnection->getOdbcFunction(ODBC3SQLBindParameter))(
+                  m_aStatementHandle,
+                  // checkParameterIndex guarantees this is safe
+                  static_cast<SQLUSMALLINT>(parameterIndex),
+                  SQL_PARAM_INPUT,
+                  fCType,
+                  fSqlType,
+                  _nColumnSize,
+                  _nScale,
+                  // we trust the ODBC driver not to touch it because SQL_PARAM_INPUT
+                  const_cast<void*>(_pData),
+                  _nDataAllocLen,
+                  pDataLen);
+
+    OTools::ThrowException(m_pConnection, nRetcode, m_aStatementHandle, SQL_HANDLE_STMT, *this);
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OPreparedStatement::setByte( sal_Int32 parameterIndex, sal_Int8 x ) throw(SQLException, RuntimeException)
+void SAL_CALL OPreparedStatement::setByte( const sal_Int32 parameterIndex, const sal_Int8 x ) throw(SQLException, RuntimeException)
 {
-    setParameter(parameterIndex,DataType::TINYINT,sizeof(sal_Int8),&x);
+    setScalarParameter(parameterIndex, DataType::TINYINT, 3, x);
 }
 // -------------------------------------------------------------------------
-
+// For older compilers (that do not support partial specialisation of class templates)
+// uncomment if necessary (safe also on compilers that *do* support partial specialisation)
+//BOOST_BROKEN_COMPILER_TYPE_TRAITS_SPECIALIZATION(DATE_STRUCT);
+//BOOST_STATIC_ASSERT((boost::is_same<DATE_STRUCT, boost::remove_reference<DATE_STRUCT&>::type>::value));
 void SAL_CALL OPreparedStatement::setDate( sal_Int32 parameterIndex, const Date& aData ) throw(SQLException, RuntimeException)
 {
-    DATE_STRUCT x = OTools::DateToOdbcDate(aData);
-    setParameter(parameterIndex,DataType::DATE,sizeof(DATE_STRUCT),&x);
+    DATE_STRUCT x(OTools::DateToOdbcDate(aData));
+    setScalarParameter<DATE_STRUCT&>(parameterIndex, DataType::DATE, 10, x);
 }
 // -------------------------------------------------------------------------
-
 
 void SAL_CALL OPreparedStatement::setTime( sal_Int32 parameterIndex, const Time& aVal ) throw(SQLException, RuntimeException)
 {
-    TIME_STRUCT x = OTools::TimeToOdbcTime(aVal);
-    setParameter(parameterIndex,DataType::TIME,sizeof(TIME_STRUCT),&x);
+    const sal_uInt16 hundredths (aVal.HundredthSeconds);
+    SQLULEN nColSize;
+    if(hundredths == 0)
+        nColSize = 8;
+    else if(hundredths % 10 == 0)
+        nColSize = 10;
+    else
+        nColSize = 11;
+    TIME_STRUCT x(OTools::TimeToOdbcTime(aVal));
+    setScalarParameter<TIME_STRUCT&>(parameterIndex, DataType::TIME, nColSize, x);
 }
 // -------------------------------------------------------------------------
 
 void SAL_CALL OPreparedStatement::setTimestamp( sal_Int32 parameterIndex, const DateTime& aVal ) throw(SQLException, RuntimeException)
 {
-    TIMESTAMP_STRUCT x = OTools::DateTimeToTimestamp(aVal);
-    setParameter(parameterIndex,DataType::TIMESTAMP,sizeof(TIMESTAMP_STRUCT),&x);
+    sal_uInt16 s(aVal.Seconds);
+    sal_uInt16 hundredths(aVal.HundredthSeconds);
+    SQLULEN nColSize;
+    if(hundredths == 0)
+    {
+        if (s == 0)
+            nColSize=16;
+        else
+            nColSize=19;
+    }
+    else if(hundredths % 10 == 0)
+        nColSize = 21;
+    else
+        nColSize = 22;
+
+    TIMESTAMP_STRUCT x(OTools::DateTimeToTimestamp(aVal));
+    setScalarParameter<TIMESTAMP_STRUCT&>(parameterIndex, DataType::TIMESTAMP, nColSize, x);
 }
 // -------------------------------------------------------------------------
 
 void SAL_CALL OPreparedStatement::setDouble( sal_Int32 parameterIndex, double x ) throw(SQLException, RuntimeException)
 {
-    setParameter(parameterIndex,DataType::DOUBLE,sizeof(double),&x);
+    setScalarParameter(parameterIndex, DataType::DOUBLE, 15, x);
 }
 
 // -------------------------------------------------------------------------
 
 void SAL_CALL OPreparedStatement::setFloat( sal_Int32 parameterIndex, float x ) throw(SQLException, RuntimeException)
 {
-    setParameter(parameterIndex,DataType::FLOAT,sizeof(float),&x);
+    setScalarParameter(parameterIndex, DataType::FLOAT, 15, x);
 }
 // -------------------------------------------------------------------------
 
 void SAL_CALL OPreparedStatement::setInt( sal_Int32 parameterIndex, sal_Int32 x ) throw(SQLException, RuntimeException)
 {
-    setParameter(parameterIndex,DataType::INTEGER,sizeof(sal_Int32),&x);
+    setScalarParameter(parameterIndex, DataType::INTEGER, 10, x);
 }
 // -------------------------------------------------------------------------
 
@@ -381,57 +467,44 @@ void SAL_CALL OPreparedStatement::setLong( sal_Int32 parameterIndex, sal_Int64 x
 {
     try
     {
-        setParameter(parameterIndex,DataType::BIGINT,sizeof(sal_Int64),&x);
+        setScalarParameter(parameterIndex, DataType::BIGINT, 19, x);
     }
     catch(SQLException&)
     {
-        setString(parameterIndex,ORowSetValue(x));
+        setString(parameterIndex, ORowSetValue(x));
     }
 }
 // -------------------------------------------------------------------------
 
-void SAL_CALL OPreparedStatement::setNull( sal_Int32 parameterIndex, sal_Int32 sqlType ) throw(SQLException, RuntimeException)
+void SAL_CALL OPreparedStatement::setNull( sal_Int32 parameterIndex, const sal_Int32 _nType ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
+    setParameterPre(paramterIndex):
+
+    OSL_VERIFY(allocBindBuf(parameterIndex, 0) == NULL);
+    SQLLEN * const lenBuf = getLengthBuf (parameterIndex);
+    *lenBuf = SQL_NULL_DATA;
 
 
-    prepareStatement();
-    // Get the buffer needed for the length
-    checkParameterIndex(parameterIndex);
+    SQLSMALLINT fCType;
+    SQLSMALLINT fSqlType;
 
-    sal_Int8* lenBuf = getLengthBuf (parameterIndex);
-    *(SQLLEN*)lenBuf = SQL_NULL_DATA;
-
-
-    SQLLEN prec = 0;
-    SQLULEN nColumnSize = 0;
-    if (sqlType == SQL_CHAR || sqlType == SQL_VARCHAR || sqlType == SQL_LONGVARCHAR)
-    {
-        prec = 1;
-        nColumnSize = 1;
-    }
-
-    SQLSMALLINT fCType = 0;
-    SQLSMALLINT fSqlType = 0;
-
-    SQLSMALLINT nDecimalDigits = 0;
-    OTools::getBindTypes(   sal_False,
+    OTools::getBindTypes(   useWChar,
                             m_pConnection->useOldDateFormat(),
-                            (SQLSMALLINT)sqlType,
+                            OTools::jdbcTypeToOdbc(_nType),
                             fCType,
                             fSqlType);
 
     SQLRETURN nReturn = N3SQLBindParameter( m_aStatementHandle,
-                                            (SQLUSMALLINT)parameterIndex,
-                                            (SQLSMALLINT)SQL_PARAM_INPUT,
+                                            static_cast<SQLUSMALLINT>(parameterIndex),
+                                            SQL_PARAM_INPUT,
                                             fCType,
                                             fSqlType,
-                                            nColumnSize,
-                                            nDecimalDigits,
+                                            0,
+                                            0,
                                             NULL,
-                                            prec,
-                                            (SQLLEN*)lenBuf
+                                            0,
+                                            lenBuf
                                             );
     OTools::ThrowException(m_pConnection,nReturn,m_aStatementHandle,SQL_HANDLE_STMT,*this);
 }
@@ -440,14 +513,14 @@ void SAL_CALL OPreparedStatement::setNull( sal_Int32 parameterIndex, sal_Int32 s
 void SAL_CALL OPreparedStatement::setClob( sal_Int32 parameterIndex, const Reference< XClob >& x ) throw(SQLException, RuntimeException)
 {
     if ( x.is() )
-        setStream(parameterIndex, x->getCharacterStream(), (SQLLEN)x->length(), DataType::LONGVARCHAR);
+        setStream(parameterIndex, x->getCharacterStream(), x->length(), DataType::LONGVARCHAR);
 }
 // -------------------------------------------------------------------------
 
 void SAL_CALL OPreparedStatement::setBlob( sal_Int32 parameterIndex, const Reference< XBlob >& x ) throw(SQLException, RuntimeException)
 {
     if ( x.is() )
-        setStream(parameterIndex, x->getBinaryStream(), (SQLLEN)x->length(), DataType::LONGVARCHAR);
+        setStream(parameterIndex, x->getBinaryStream(), x->length(), DataType::LONGVARBINARY);
 }
 // -------------------------------------------------------------------------
 
@@ -462,12 +535,6 @@ void SAL_CALL OPreparedStatement::setRef( sal_Int32 /*parameterIndex*/, const Re
     ::dbtools::throwFunctionNotSupportedException( "XParameters::setRef", *this );
 }
 // -------------------------------------------------------------------------
-void OPreparedStatement::setDecimal( sal_Int32 parameterIndex, const ::rtl::OUString& x )
-{
-    ::rtl::OString aString(::rtl::OUStringToOString(x,getOwnConnection()->getTextEncoding()));
-    setParameter(parameterIndex,DataType::DECIMAL,aString.getLength(),(void*)&x);
-}
-// -------------------------------------------------------------------------
 void SAL_CALL OPreparedStatement::setObjectWithInfo( sal_Int32 parameterIndex, const Any& x, sal_Int32 sqlType, sal_Int32 scale ) throw(SQLException, RuntimeException)
 {
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
@@ -479,31 +546,29 @@ void SAL_CALL OPreparedStatement::setObjectWithInfo( sal_Int32 parameterIndex, c
 
     switch (sqlType)
     {
+        case DataType::CHAR:
         case DataType::VARCHAR:
         case DataType::LONGVARCHAR:
             if(x.hasValue())
             {
                 ::rtl::OUString sStr;
                 x >>= sStr;
-                ::rtl::OString aString(::rtl::OUStringToOString(sStr,getOwnConnection()->getTextEncoding()));
-                setParameter(parameterIndex,sqlType,aString.getLength(),&aString);
+                setParameter(parameterIndex, sqlType, scale, sStr);
             }
             else
                 setNull(parameterIndex,sqlType);
             break;
         case DataType::DECIMAL:
-            {
-                ORowSetValue aValue;
-                aValue.fill(x);
-                setDecimal(parameterIndex,aValue);
-            }
-            break;
         case DataType::NUMERIC:
+            if(x.hasValue())
             {
                 ORowSetValue aValue;
                 aValue.fill(x);
-                setString(parameterIndex,aValue);
+                // TODO: make sure that this calls the string overload
+                setParameter(parameterIndex, sqlType, scale, aValue);
             }
+            else
+                setNull(parameterIndex,sqlType);
             break;
         default:
             ::dbtools::setObjectWithInfo(this,parameterIndex,x,sqlType,scale);
@@ -513,9 +578,6 @@ void SAL_CALL OPreparedStatement::setObjectWithInfo( sal_Int32 parameterIndex, c
 
 void SAL_CALL OPreparedStatement::setObjectNull( sal_Int32 parameterIndex, sal_Int32 sqlType, const ::rtl::OUString& /*typeName*/ ) throw(SQLException, RuntimeException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OStatement_BASE::rBHelper.bDisposed);
-
     setNull(parameterIndex,sqlType);
 }
 // -------------------------------------------------------------------------
@@ -531,20 +593,21 @@ void SAL_CALL OPreparedStatement::setObject( sal_Int32 parameterIndex, const Any
 
 void SAL_CALL OPreparedStatement::setShort( sal_Int32 parameterIndex, sal_Int16 x ) throw(SQLException, RuntimeException)
 {
-    setParameter(parameterIndex,DataType::SMALLINT,sizeof(sal_Int16),&x);
+    setScalarParameter(parameterIndex, DataType::SMALLINT, 5, x);
 }
 // -------------------------------------------------------------------------
 
 void SAL_CALL OPreparedStatement::setBytes( sal_Int32 parameterIndex, const Sequence< sal_Int8 >& x ) throw(SQLException, RuntimeException)
 {
-    setParameter(parameterIndex,DataType::BINARY,x.getLength(),(void*)&x);
-    boundParams[parameterIndex-1].setSequence(x); // this assures that the sequence stays alive
+    setParameter(parameterIndex, DataType::BINARY, x);
 }
 // -------------------------------------------------------------------------
 
 
 void SAL_CALL OPreparedStatement::setCharacterStream( sal_Int32 parameterIndex, const Reference< ::com::sun::star::io::XInputStream >& x, sal_Int32 length ) throw(SQLException, RuntimeException)
 {
+    // LEM: It is quite unclear to me what the interface here is.
+    // The XInputStream provides *bytes*, not characters.
     setStream(parameterIndex, x, length, DataType::LONGVARCHAR);
 }
 // -------------------------------------------------------------------------
@@ -557,6 +620,7 @@ void SAL_CALL OPreparedStatement::setBinaryStream( sal_Int32 parameterIndex, con
 
 void SAL_CALL OPreparedStatement::clearParameters(  ) throw(SQLException, RuntimeException)
 {
+    ::osl::MutexGuard aGuard( m_aMutex );
     prepareStatement();
     OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");
     SQLRETURN nRet = N3SQLFreeStmt (m_aStatementHandle, SQL_RESET_PARAMS);
@@ -566,6 +630,7 @@ void SAL_CALL OPreparedStatement::clearParameters(  ) throw(SQLException, Runtim
 // -------------------------------------------------------------------------
 void SAL_CALL OPreparedStatement::clearBatch(  ) throw(SQLException, RuntimeException)
 {
+    ::dbtools::throwFunctionNotSupportedException( "XPreparedBatchExecution::clearBatch", *this );
     //  clearParameters(  );
     //  m_aBatchList.erase();
 }
@@ -573,11 +638,14 @@ void SAL_CALL OPreparedStatement::clearBatch(  ) throw(SQLException, RuntimeExce
 
 void SAL_CALL OPreparedStatement::addBatch( ) throw(SQLException, RuntimeException)
 {
+    ::dbtools::throwFunctionNotSupportedException( "XPreparedBatchExecution::addBatch", *this );
 }
 // -------------------------------------------------------------------------
 
 Sequence< sal_Int32 > SAL_CALL OPreparedStatement::executeBatch(  ) throw(SQLException, RuntimeException)
 {
+    ::dbtools::throwFunctionNotSupportedException( "XPreparedBatchExecution::executeBatch", *this );
+    // not reached, but keep -Werror happy
     return Sequence< sal_Int32 > ();
 }
 // -------------------------------------------------------------------------
@@ -607,12 +675,6 @@ void OPreparedStatement::initBoundParam () throw(SQLException)
 
         boundParams = new OBoundParam[numParams];
 
-        // initialize each bound parameter
-
-        for (sal_Int32 i = 0; i < numParams; i++)
-        {
-            boundParams[i].initialize ();
-        }
     }
 }
 // -------------------------------------------------------------------------
@@ -623,14 +685,13 @@ void OPreparedStatement::initBoundParam () throw(SQLException)
 // parameter.
 //--------------------------------------------------------------------
 
-sal_Int8* OPreparedStatement::allocBindBuf( sal_Int32 index,sal_Int32 bufLen)
+void* OPreparedStatement::allocBindBuf( sal_Int32 index,sal_Int32 bufLen)
 {
-    sal_Int8* b = NULL;
+    void* b = NULL;
 
     // Sanity check the parameter number
 
-    if ((index >= 1) &&
-        (index <= numParams) && bufLen > 0 )
+    if ((index >= 1) && (index <= numParams))
     {
         b = boundParams[index - 1].allocBindDataBuffer(bufLen);
     }
@@ -644,9 +705,9 @@ sal_Int8* OPreparedStatement::allocBindBuf( sal_Int32 index,sal_Int32 bufLen)
 // Gets the length buffer for the given parameter index
 //--------------------------------------------------------------------
 
-sal_Int8* OPreparedStatement::getLengthBuf (sal_Int32 index)
+SQLLEN* OPreparedStatement::getLengthBuf (sal_Int32 index)
 {
-    sal_Int8* b = NULL;
+    SQLLEN* b = NULL;
 
     // Sanity check the parameter number
 
@@ -737,7 +798,7 @@ void OPreparedStatement::setStream(
                                     sal_Int32 ParameterIndex,
                                     const Reference< XInputStream>& x,
                                     SQLLEN length,
-                                    sal_Int32 SQLtype)
+                                    sal_Int32 _nType)
                                     throw(SQLException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -749,35 +810,33 @@ void OPreparedStatement::setStream(
     checkParameterIndex(ParameterIndex);
     // Get the buffer needed for the length
 
-    sal_Int8* lenBuf = getLengthBuf(ParameterIndex);
+    SQLLEN * const lenBuf = getLengthBuf(ParameterIndex);
 
     // Allocate a new buffer for the parameter data.  This buffer
     // will be returned by SQLParamData (it is set to the parameter
-    // number, a 4-sal_Int8 integer)
+    // number, a sal_Int32)
 
-    sal_Int8* dataBuf = allocBindBuf (ParameterIndex, 4);
+    sal_Int32* dataBuf = static_cast<sal_Int32*>( allocBindBuf(ParameterIndex, sizeof(ParameterIndex)) );
+    *dataBuf = ParameterIndex;
 
     // Bind the parameter with SQL_LEN_DATA_AT_EXEC
-    SQLSMALLINT   Ctype = SQL_C_CHAR;
-    SQLLEN  atExec = SQL_LEN_DATA_AT_EXEC (length);
-    memcpy (dataBuf, &ParameterIndex, sizeof(ParameterIndex));
-    memcpy (lenBuf, &atExec, sizeof (atExec));
+    *lenBuf = SQL_LEN_DATA_AT_EXEC (length);
 
-    if ((SQLtype == SQL_BINARY) || (SQLtype == SQL_VARBINARY) || (SQLtype == SQL_LONGVARBINARY))
-        Ctype = SQL_C_BINARY;
+    SQLSMALLINT fCType, fSqlType;
+    OTools::getBindTypes(useWChar, m_pConnection->useOldDateFormat(), OTools::jdbcTypeToOdbc(_nType), fCType, fSqlType);
 
 
     OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");
     N3SQLBindParameter(m_aStatementHandle,
-                        (SQLUSMALLINT)ParameterIndex,
-                        (SQLUSMALLINT)SQL_PARAM_INPUT,
-                        Ctype,
-                        (SQLSMALLINT)SQLtype,
-                        (SQLULEN)length,
-                        0,
-                        dataBuf,
-                        sizeof(ParameterIndex),
-                        (SQLLEN*)lenBuf);
+                       static_cast<SQLUSMALLINT>(ParameterIndex),
+                       SQL_PARAM_INPUT,
+                       fCType,
+                       fSqlType,
+                       length,
+                       invalid_scale,
+                       dataBuf,
+                       sizeof(ParameterIndex),
+                       lenBuf);
 
     // Save the input stream
     boundParams[ParameterIndex - 1].setInputStream (x, length);
@@ -840,7 +899,9 @@ void OPreparedStatement::prepareStatement()
 // -----------------------------------------------------------------------------
 void OPreparedStatement::checkParameterIndex(sal_Int32 _parameterIndex)
 {
-    if( !_parameterIndex || _parameterIndex > numParams)
+    if( _parameterIndex > numParams ||
+        _parameterIndex < 1 ||
+        _parameterIndex > std::numeric_limits<SQLUSMALLINT>::max() )
     {
         ::connectivity::SharedResources aResources;
         const ::rtl::OUString sError( aResources.getResourceStringWithSubstitution(STR_WRONG_PARAM_INDEX,

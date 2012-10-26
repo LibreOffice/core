@@ -150,190 +150,6 @@ void OTools::getValue(  OConnection* _pConnection,
                             _aStatementHandle,SQL_HANDLE_STMT,_xInterface,sal_False);
     _bWasNull = pcbValue == SQL_NULL_DATA;
 }
-// -----------------------------------------------------------------------------
-void OTools::bindParameter( OConnection* _pConnection,
-                            SQLHANDLE _hStmt,
-                            sal_Int32 nPos,
-                            sal_Int8*& pDataBuffer,
-                            sal_Int8* pLenBuffer,
-                            SQLSMALLINT _nODBCtype,
-                            sal_Bool _bUseWChar,
-                            sal_Bool _bUseOldTimeDate,
-                            const void* _pValue,
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xInterface,
-                            rtl_TextEncoding _nTextEncoding)
-                             throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
-{
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "odbc", "Ocke.Janssen@sun.com", "OTools::bindParameter" );
-    SQLRETURN nRetcode;
-    SQLSMALLINT fSqlType;
-    SQLSMALLINT fCType;
-    SQLLEN  nMaxLen = 0;
-    SQLLEN* pLen    = (SQLLEN*)pLenBuffer;
-    SQLULEN nColumnSize=0;
-    SQLSMALLINT nDecimalDigits=0;
-    bool atExec;
-
-    OTools::getBindTypes(_bUseWChar,_bUseOldTimeDate,_nODBCtype,fCType,fSqlType);
-
-    OTools::bindData(_nODBCtype,_bUseWChar,pDataBuffer,pLen,_pValue,_nTextEncoding,nColumnSize, atExec);
-    if ((nColumnSize == 0) && (fSqlType == SQL_CHAR || fSqlType == SQL_VARCHAR || fSqlType == SQL_LONGVARCHAR))
-        nColumnSize = 1;
-
-    if (atExec)
-        memcpy(pDataBuffer,&nPos,sizeof(nPos));
-
-    nRetcode = (*(T3SQLBindParameter)_pConnection->getOdbcFunction(ODBC3SQLBindParameter))(_hStmt,
-                  (SQLUSMALLINT)nPos,
-                  SQL_PARAM_INPUT,
-                  fCType,
-                  fSqlType,
-                  nColumnSize,
-                  nDecimalDigits,
-                  pDataBuffer,
-                  nMaxLen,
-                  pLen);
-
-    OTools::ThrowException(_pConnection,nRetcode,_hStmt,SQL_HANDLE_STMT,_xInterface);
-}
-// -----------------------------------------------------------------------------
-void OTools::bindData(  SQLSMALLINT _nOdbcType,
-                        sal_Bool _bUseWChar,
-                        sal_Int8 *&_pData,
-                        SQLLEN*& pLen,
-                        const void* _pValue,
-                        rtl_TextEncoding _nTextEncoding,
-                        SQLULEN& _nColumnSize,
-                        bool &atExec)
-{
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "odbc", "Ocke.Janssen@sun.com", "OTools::bindData" );
-    _nColumnSize = 0;
-    atExec = false;
-
-    switch (_nOdbcType)
-    {
-        case SQL_CHAR:
-        case SQL_VARCHAR:
-        case SQL_DECIMAL:
-            if(_bUseWChar)
-            {
-                *pLen = SQL_NTS;
-                ::rtl::OUString sStr(*(::rtl::OUString*)_pValue);
-                _nColumnSize = sStr.getLength();
-                *((rtl::OUString*)_pData) = sStr;
-
-                // Pointer on Char*
-                _pData = (sal_Int8*)((rtl::OUString*)_pData)->getStr();
-            }
-            else
-            {
-                ::rtl::OString aString(::rtl::OUStringToOString(*(::rtl::OUString*)_pValue,_nTextEncoding));
-                *pLen = SQL_NTS;
-                _nColumnSize = aString.getLength();
-                memcpy(_pData,aString.getStr(),aString.getLength());
-                ((sal_Int8*)_pData)[aString.getLength()] = '\0';
-            }
-            break;
-
-        case SQL_BIGINT:
-            *((sal_Int64*)_pData) = *(sal_Int64*)_pValue;
-            *pLen = sizeof(sal_Int64);
-            _nColumnSize = *pLen;
-            break;
-
-        case SQL_NUMERIC:
-            if(_bUseWChar)
-            {
-                ::rtl::OUString aString = rtl::OUString::valueOf(*(double*)_pValue);
-                _nColumnSize = aString.getLength();
-                *pLen = _nColumnSize;
-                *((rtl::OUString*)_pData) = aString;
-                // Pointer on Char*
-                _pData = (sal_Int8*)((rtl::OUString*)_pData)->getStr();
-            }
-            else
-            {
-                ::rtl::OString aString = ::rtl::OString::valueOf(*(double*)_pValue);
-                _nColumnSize = aString.getLength();
-                *pLen = _nColumnSize;
-                memcpy(_pData,aString.getStr(),aString.getLength());
-                ((sal_Int8*)_pData)[_nColumnSize] = '\0';
-            }   break;
-        case SQL_BIT:
-        case SQL_TINYINT:
-            *((sal_Int8*)_pData) = *(sal_Int8*)_pValue;
-            *pLen = sizeof(sal_Int8);
-            break;
-
-        case SQL_SMALLINT:
-            *((sal_Int16*)_pData) = *(sal_Int16*)_pValue;
-            *pLen = sizeof(sal_Int16);
-            break;
-        case SQL_INTEGER:
-            *((sal_Int32*)_pData) = *(sal_Int32*)_pValue;
-            *pLen = sizeof(sal_Int32);
-            break;
-        case SQL_FLOAT:
-            *((float*)_pData) = *(float*)_pValue;
-            *pLen = sizeof(float);
-            break;
-        case SQL_REAL:
-        case SQL_DOUBLE:
-            *((double*)_pData) = *(double*)_pValue;
-            *pLen = sizeof(double);
-            break;
-        case SQL_BINARY:
-        case SQL_VARBINARY:
-            {
-                const ::com::sun::star::uno::Sequence< sal_Int8 >* pSeq = static_cast< const ::com::sun::star::uno::Sequence< sal_Int8 >* >(_pValue);
-                OSL_ENSURE(pSeq,"OTools::bindData: Sequence is null!");
-
-                if(pSeq)
-                {
-                    _pData = (sal_Int8*)pSeq->getConstArray();
-                    *pLen = pSeq->getLength();
-                }
-            }
-            break;
-        case SQL_LONGVARBINARY:
-            {
-                sal_Int32 nLen = 0;
-                nLen = ((const ::com::sun::star::uno::Sequence< sal_Int8 > *)_pValue)->getLength();
-                *pLen = (SQLLEN)SQL_LEN_DATA_AT_EXEC(nLen);
-            }
-            atExec = true;
-            break;
-        case SQL_LONGVARCHAR:
-        {
-            sal_Int32 nLen = 0;
-            if(_bUseWChar)
-                nLen = sizeof(sal_Unicode) * ((::rtl::OUString*)_pValue)->getLength();
-            else
-            {
-                ::rtl::OString aString(::rtl::OUStringToOString(*(::rtl::OUString*)_pValue,_nTextEncoding));
-                nLen = aString.getLength();
-            }
-            *pLen = (SQLLEN)SQL_LEN_DATA_AT_EXEC(nLen);
-            atExec = true;
-        }   break;
-        case SQL_DATE:
-            *(DATE_STRUCT*)_pData = *(DATE_STRUCT*)_pValue;
-            *pLen = (SQLLEN)sizeof(DATE_STRUCT);
-            _nColumnSize = 10;
-            break;
-        case SQL_TIME:
-            *(TIME_STRUCT*)_pData = *(TIME_STRUCT*)_pValue;
-            *pLen = (SQLLEN)sizeof(TIME_STRUCT);
-            _nColumnSize = 8;
-            break;
-        case SQL_TIMESTAMP:
-            *(TIMESTAMP_STRUCT*)_pData = *(TIMESTAMP_STRUCT*)_pValue;
-            *pLen = (SQLLEN)sizeof(TIMESTAMP_STRUCT);
-            // 20+sub-zero precision; we have hundredths of seconds
-            _nColumnSize = 22;
-            break;
-    }
-}
 // -------------------------------------------------------------------------
 void OTools::bindValue( OConnection* _pConnection,
                         SQLHANDLE _aStatementHandle,
@@ -342,7 +158,7 @@ void OTools::bindValue( OConnection* _pConnection,
                         SQLSMALLINT _nMaxLen,
                         const void* _pValue,
                         void* _pData,
-                        SQLLEN *pLen,
+                        SQLLEN * const pLen,
                         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xInterface,
                         rtl_TextEncoding _nTextEncoding,
                         sal_Bool _bUseOldTimeDate) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
@@ -779,7 +595,7 @@ void OTools::GetInfo(OConnection* _pConnection,
                             _aConnectionHandle,SQL_HANDLE_DBC,_xInterface);
 }
 // -------------------------------------------------------------------------
-sal_Int32 OTools::MapOdbcType2Jdbc(sal_Int32 _nType)
+sal_Int32 OTools::MapOdbcType2Jdbc(SQLSMALLINT _nType)
 {
     sal_Int32 nValue = DataType::VARCHAR;
     switch(_nType)
@@ -857,7 +673,7 @@ sal_Int32 OTools::MapOdbcType2Jdbc(sal_Int32 _nType)
 // jdbcTypeToOdbc
 // Convert the JDBC SQL type to the correct ODBC type
 //--------------------------------------------------------------------
-sal_Int32 OTools::jdbcTypeToOdbc(sal_Int32 jdbcType)
+SQLSMALLINT OTools::jdbcTypeToOdbc(sal_Int32 jdbcType)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "odbc", "Ocke.Janssen@sun.com", "OTools::jdbcTypeToOdbc" );
     // For the most part, JDBC types match ODBC types.  We'll
@@ -876,6 +692,11 @@ sal_Int32 OTools::jdbcTypeToOdbc(sal_Int32 jdbcType)
     case DataType::TIMESTAMP:
         odbcType = SQL_TIMESTAMP;
         break;
+    // ODBC doesn't have any notion of CLOB or BLOB
+    case DataType::CLOB:
+        odbcType = SQL_LONGVARCHAR;
+    case DataType::BLOB:
+        odbcType = SQL_LONGVARBINARY;
     }
 
     return odbcType;
