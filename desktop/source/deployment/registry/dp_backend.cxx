@@ -26,6 +26,9 @@
  *
  ************************************************************************/
 
+#include "sal/config.h"
+
+#include <cassert>
 
 #include "dp_backend.h"
 #include "dp_ucb.h"
@@ -85,6 +88,7 @@ PackageRegistryBackend::PackageRegistryBackend(
       m_eContext( CONTEXT_UNKNOWN ),
       m_readOnly( false )
 {
+    assert(xContext.is());
     boost::optional<OUString> cachePath;
     boost::optional<bool> readOnly;
     comphelper::unwrapArgs( args, m_context, cachePath, readOnly );
