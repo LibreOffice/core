@@ -609,14 +609,15 @@ namespace cairocanvas
             if (rSysFontData.bFakeBold)
             {
                 double bold_dx = 0.5 * sqrt( 0.7 * aFont.GetHeight() );
-                int total_steps = 2 * ((int) (bold_dx + 0.5));
+                int total_steps = 1 * ((int) (bold_dx + 0.5));
 
                 // loop to draw the text for every half pixel of displacement
                 for (int nSteps = 0; nSteps < total_steps; nSteps++)
                 {
                     for(int nGlyphIdx = 0; nGlyphIdx < (int) cairo_glyphs.size(); nGlyphIdx++)
                     {
-                        cairo_glyphs[nGlyphIdx].x += bold_dx * nSteps / total_steps;
+                        cairo_glyphs[nGlyphIdx].x += (bold_dx * nSteps / total_steps) / 4;
+                        cairo_glyphs[nGlyphIdx].y -= (bold_dx * nSteps / total_steps) / 4;
                     }
                     cairo_show_glyphs(pSCairo.get(), &cairo_glyphs[0], cairo_glyphs.size());
                 }
