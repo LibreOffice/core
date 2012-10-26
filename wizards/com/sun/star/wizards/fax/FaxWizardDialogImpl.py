@@ -57,8 +57,8 @@ class FaxWizardDialogImpl(FaxWizardDialog):
 
     def __init__(self, xmsf):
         super(FaxWizardDialogImpl, self).__init__(xmsf)
-		self.lstBusinessStylePos = None
-		self.lstPrivateStylePos = None
+        self.lstBusinessStylePos = None
+        self.lstPrivateStylePos = None
         self.bSaveSuccess = False
         self.filenameChanged = False
         self.UserTemplatePath = ""

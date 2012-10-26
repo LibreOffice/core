@@ -50,10 +50,6 @@ class LetterWizardDialogImpl(LetterWizardDialog):
     RM_FOOTER = 5
     RM_FINALSETTINGS = 6
 
-    lstBusinessStylePos = None
-    lstPrivateStylePos = None
-    lstPrivOfficialStylePos = None
-
     def enterStep(self, OldStep, NewStep):
         pass
 
@@ -62,6 +58,9 @@ class LetterWizardDialogImpl(LetterWizardDialog):
 
     def __init__(self, xmsf):
         super(LetterWizardDialogImpl, self).__init__(xmsf)
+        self.lstBusinessStylePos = None
+        self.lstPrivateStylePos = None
+        self.lstPrivOfficialStylePos = None
         self.xmsf = xmsf
         self.bSaveSuccess = False
         self.filenameChanged = False
@@ -265,8 +264,8 @@ class LetterWizardDialogImpl(LetterWizardDialog):
             traceback.print_exc()
 
     def optBusinessLetterItemChanged(self):
-        LetterWizardDialogImpl.lstPrivateStylePos = None
-        LetterWizardDialogImpl.lstPrivOfficialStylePos = None
+        self.lstPrivateStylePos = None
+        self.lstPrivOfficialStylePos = None
         self.setControlProperty(
             "lblBusinessStyle", PropertyNames.PROPERTY_ENABLED, True)
         self.setControlProperty(
@@ -288,8 +287,8 @@ class LetterWizardDialogImpl(LetterWizardDialog):
             self.myPathSelection.initializePath()
 
     def optPrivOfficialLetterItemChanged(self):
-        LetterWizardDialogImpl.lstBusinessStylePos = None
-        LetterWizardDialogImpl.lstPrivateStylePos = None
+        self.lstBusinessStylePos = None
+        self.lstPrivateStylePos = None
         self.setControlProperty(
             "lblBusinessStyle", PropertyNames.PROPERTY_ENABLED, False)
         self.setControlProperty(
@@ -312,8 +311,8 @@ class LetterWizardDialogImpl(LetterWizardDialog):
             self.myPathSelection.initializePath()
 
     def optPrivateLetterItemChanged(self):
-        LetterWizardDialogImpl.lstBusinessStylePos = None
-        LetterWizardDialogImpl.lstPrivOfficialStylePos = None
+        self.lstBusinessStylePos = None
+        self.lstPrivOfficialStylePos = None
         self.setControlProperty(
             "lblBusinessStyle", PropertyNames.PROPERTY_ENABLED, False)
         self.setControlProperty(
@@ -379,8 +378,8 @@ class LetterWizardDialogImpl(LetterWizardDialog):
 
     def lstBusinessStyleItemChanged(self):
         selectedItemPos = self.lstBusinessStyle.SelectedItemPos
-        if LetterWizardDialogImpl.lstBusinessStylePos != selectedItemPos:
-            LetterWizardDialogImpl.lstBusinessStylePos = selectedItemPos
+        if self.lstBusinessStylePos != selectedItemPos:
+            self.lstBusinessStylePos = selectedItemPos
             TextDocument.xTextDocument = \
                 self.myLetterDoc.loadAsPreview(
                     self.BusinessFiles.values()[selectedItemPos], False)
@@ -390,8 +389,8 @@ class LetterWizardDialogImpl(LetterWizardDialog):
             
     def lstPrivOfficialStyleItemChanged(self):
         selectedItemPos = self.lstPrivOfficialStyle.SelectedItemPos
-        if LetterWizardDialogImpl.lstPrivOfficialStylePos != selectedItemPos:
-            LetterWizardDialogImpl.lstPrivOfficialStylePos = selectedItemPos
+        if self.lstPrivOfficialStylePos != selectedItemPos:
+            self.lstPrivOfficialStylePos = selectedItemPos
             TextDocument.xTextDocument = \
                 self.myLetterDoc.loadAsPreview(
                     self.OfficialFiles.values()[selectedItemPos], False)
@@ -401,8 +400,8 @@ class LetterWizardDialogImpl(LetterWizardDialog):
 
     def lstPrivateStyleItemChanged(self):
         selectedItemPos = self.lstPrivateStyle.SelectedItemPos
-        if LetterWizardDialogImpl.lstPrivateStylePos != selectedItemPos:
-            LetterWizardDialogImpl.lstPrivateStylePos = selectedItemPos
+        if self.lstPrivateStylePos != selectedItemPos:
+            self.lstPrivateStylePos = selectedItemPos
             TextDocument.xTextDocument = \
                 self.myLetterDoc.loadAsPreview(
                     self.PrivateFiles.values()[selectedItemPos], False)
