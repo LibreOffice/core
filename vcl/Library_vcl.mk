@@ -206,6 +206,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/gdi/extoutdevdata \
     vcl/source/gdi/font \
     vcl/source/gdi/gdimtf \
+    vcl/source/gdi/gdimetafiletools \
     vcl/source/gdi/gfxlink \
     vcl/source/gdi/gradient \
     vcl/source/gdi/graph \

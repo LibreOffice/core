@@ -489,8 +489,6 @@ namespace basegfx
                     fRetval -= aPreviousPoint.getY() * aCurrentPoint.getX();
                 }
 
-                fRetval /= 2.0;
-
                 // correct to zero if small enough. Also test the quadratic
                 // of the result since the precision is near quadratic due to
                 // the algorithm

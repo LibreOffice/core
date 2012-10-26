@@ -22,6 +22,7 @@
 #include "emfwr.hxx"
 #include "wmfwr.hxx"
 #include <vcl/wmf.hxx>
+#include <vcl/gdimetafiletools.hxx>
 #include <comphelper/scopeguard.hxx>
 
 // -----------------------------------------------------------------------------
@@ -88,7 +89,17 @@ bool ConvertGDIMetaFileToWMF( const GDIMetaFile & rMTF, SvStream & rTargetStream
                               FilterConfigItem* pConfigItem, bool bPlaceable)
 {
     WMFWriter aWMFWriter;
-    return aWMFWriter.WriteWMF( rMTF, rTargetStream, pConfigItem, bPlaceable );
+    GDIMetaFile aGdiMetaFile(rMTF);
+
+    if(usesClipActions(aGdiMetaFile))
+    {
+        // #i121267# It is necessary to prepare the metafile since the export does *not* support
+        // clip regions. This tooling method clips the geometry content of the metafile internally
+        // against it's own clip regions, so that the export is safe to ignore clip regions
+        clipMetafileContentAgainstOwnRegions(aGdiMetaFile);
+    }
+
+    return aWMFWriter.WriteWMF( aGdiMetaFile, rTargetStream, pConfigItem, bPlaceable );
 }
 
 // -----------------------------------------------------------------------------
@@ -97,7 +108,17 @@ sal_Bool ConvertGDIMetaFileToEMF( const GDIMetaFile & rMTF, SvStream & rTargetSt
                               FilterConfigItem* pConfigItem )
 {
     EMFWriter aEMFWriter(rTargetStream);
-    return aEMFWriter.WriteEMF( rMTF, pConfigItem );
+    GDIMetaFile aGdiMetaFile(rMTF);
+
+    if(usesClipActions(aGdiMetaFile))
+    {
+        // #i121267# It is necessary to prepare the metafile since the export does *not* support
+        // clip regions. This tooling method clips the geometry content of the metafile internally
+        // against it's own clip regions, so that the export is safe to ignore clip regions
+        clipMetafileContentAgainstOwnRegions(aGdiMetaFile);
+    }
+
+    return aEMFWriter.WriteEMF( aGdiMetaFile, pConfigItem );
 }
 
 // -----------------------------------------------------------------------------

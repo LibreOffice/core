@@ -243,6 +243,26 @@ namespace basegfx
             return aRetval;
         }
 
+        double getSignedArea(const B2DPolyPolygon& rCandidate)
+        {
+            double fRetval(0.0);
+            const sal_uInt32 nPolygonCount(rCandidate.count());
+
+            for(sal_uInt32 a(0L); a < nPolygonCount; a++)
+            {
+                const B2DPolygon aCandidate(rCandidate.getB2DPolygon(a));
+
+                fRetval += tools::getSignedArea(aCandidate);
+            }
+
+            return fRetval;
+        }
+
+        double getArea(const B2DPolyPolygon& rCandidate)
+        {
+            return fabs(getSignedArea(rCandidate));
+        }
+
         void applyLineDashing(const B2DPolyPolygon& rCandidate, const ::std::vector<double>& rDotDashArray, B2DPolyPolygon* pLineTarget, B2DPolyPolygon* pGapTarget, double fFullDashDotLen)
         {
             if(0.0 == fFullDashDotLen && rDotDashArray.size())

@@ -538,14 +538,16 @@ namespace drawinglayer
                                 // nBWidth, nBHeight is the pixel size of the neede bitmap. To not need to scale it
                                 // in vcl many times, create a size-optimized version
                                 const Size aNeededBitmapSizePixel(nBWidth, nBHeight);
-                                BitmapEx aBitmapEx(rFillGraphicAttribute.getGraphic().GetBitmapEx(
-                                    GraphicConversionParameters(
-                                        aNeededBitmapSizePixel, // get the correct size immediately
-                                        false, // no unlimited size
-                                        false, // Use AntiAliasing
-                                        false, //SnapHorVerLines
-                                        true // ScaleHighQuality
-                                        )));
+                                BitmapEx aBitmapEx(rFillGraphicAttribute.getGraphic().GetBitmapEx());
+                                static bool bEnablePreScaling(true);
+                                const bool bPreScaled(bEnablePreScaling && nBWidth * nBHeight < (250 * 250));
+
+                                if(bPreScaled)
+                                {
+                                    // ... but only up to a maximum size, else it gets too expensive
+                                    aBitmapEx.Scale(aNeededBitmapSizePixel, BMP_SCALE_INTERPOLATE);
+                                }
+
                                 bool bPainted(false);
 
                                 if(maBColorModifierStack.count())
@@ -632,7 +634,14 @@ namespace drawinglayer
 
                                                 if(aOutRectPixel.IsOver(aVisiblePixel))
                                                 {
-                                                    mpOutputDevice->DrawBitmapEx(aOutRectPixel.TopLeft(), aBitmapEx);
+                                                    if(bPreScaled)
+                                                    {
+                                                        mpOutputDevice->DrawBitmapEx(aOutRectPixel.TopLeft(), aBitmapEx);
+                                                    }
+                                                    else
+                                                    {
+                                                        mpOutputDevice->DrawBitmapEx(aOutRectPixel.TopLeft(), aNeededBitmapSizePixel, aBitmapEx);
+                                                    }
                                                 }
                                             }
                                         }
@@ -652,7 +661,14 @@ namespace drawinglayer
 
                                                 if(aOutRectPixel.IsOver(aVisiblePixel))
                                                 {
-                                                    mpOutputDevice->DrawBitmapEx(aOutRectPixel.TopLeft(), aBitmapEx);
+                                                    if(bPreScaled)
+                                                    {
+                                                        mpOutputDevice->DrawBitmapEx(aOutRectPixel.TopLeft(), aBitmapEx);
+                                                    }
+                                                    else
+                                                    {
+                                                        mpOutputDevice->DrawBitmapEx(aOutRectPixel.TopLeft(), aNeededBitmapSizePixel, aBitmapEx);
+                                                    }
                                                 }
                                             }
                                         }
