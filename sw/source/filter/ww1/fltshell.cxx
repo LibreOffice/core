@@ -327,6 +327,8 @@ SwFltStackEntry* SwFltControlStack::SetAttr(const SwPosition& rPos,
     myEIter aI = maEntries.begin();
     while (aI != maEntries.end())
     {
+        bool bLastEntry = aI == maEntries.end() - 1;
+
         SwFltStackEntry& rEntry = *aI;
         if (rEntry.bOpen)
         {
@@ -352,7 +354,7 @@ SwFltStackEntry* SwFltControlStack::SetAttr(const SwPosition& rPos,
             {
                 rEntry.bConsumedByField = consumedByField;
                 rEntry.SetEndPos(rPos);
-                if (nAttrId == rEntry.pAttr->Which())
+                if (bLastEntry && nAttrId == rEntry.pAttr->Which())
                 {
                     //potential candidate for merging with an identical
                     //property beginning at rPos
@@ -379,7 +381,7 @@ SwFltStackEntry* SwFltControlStack::SetAttr(const SwPosition& rPos,
             //we advance to the next node, or finish processing the document
             if (rEntry.m_aPtPos.m_nNode.GetIndex() == aFltPos.m_nNode.GetIndex())
             {
-                if (nAttrId == rEntry.pAttr->Which() &&
+                if (bLastEntry && nAttrId == rEntry.pAttr->Which() &&
                     rEntry.m_aPtPos.m_nCntnt == aFltPos.m_nCntnt)
                 {
                     //potential candidate for merging with an identical
