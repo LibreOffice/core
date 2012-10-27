@@ -26,7 +26,7 @@ $(call gb_ExternalProject_get_state_target,mythes,build):
 		HUNSPELL_LIBS="-L$(OUTDIR)/lib -lhunspell" \
 	) \
 	$(if $(filter C52U,$(COM)$(CPU)),CFLAGS="-m64") \
-	&& $(GNUMAKE) -j$(EXTMAXPROCESS) \
+	&& $(GNUMAKE) \
 	&& touch $@
 
 # vim: set noet sw=4 ts=4:
