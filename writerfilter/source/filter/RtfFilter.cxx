@@ -103,6 +103,18 @@ sal_Bool RtfFilter::filter( const uno::Sequence< beans::PropertyValue >& aDescri
         uno::Reference<frame::XFrame> xFrame = aMediaDesc.getUnpackedValueOrDefault(MediaDescriptor::PROP_FRAME(),
                 uno::Reference<frame::XFrame>());
 
+#ifdef DBG_OLDFILTER
+        uno::Reference< lang::XMultiServiceFactory > xMSF(m_xContext->getServiceManager(), uno::UNO_QUERY_THROW);
+        uno::Reference< uno::XInterface > xIfc( xMSF->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.comp.Writer.RtfImport" ))), uno::UNO_QUERY_THROW);
+        if (!xIfc.is())
+            return sal_False;
+        uno::Reference< document::XImporter > xImprtr(xIfc, uno::UNO_QUERY_THROW);
+        uno::Reference< document::XFilter > xFltr(xIfc, uno::UNO_QUERY_THROW);
+        if (!xImprtr.is() || !xFltr.is())
+            return sal_False;
+        xImprtr->setTargetDocument(m_xDstDoc);
+        bResult = xFltr->filter(aDescriptor);
+#else
         xStatusIndicator = aMediaDesc.getUnpackedValueOrDefault(MediaDescriptor::PROP_STATUSINDICATOR(),
                 uno::Reference<task::XStatusIndicator>());
 
@@ -114,6 +126,7 @@ sal_Bool RtfFilter::filter( const uno::Sequence< beans::PropertyValue >& aDescri
         bResult = sal_True;
 #ifdef DEBUG_IMPORT
         dmapperLogger->endDocument();
+#endif
 #endif
         sal_uInt32 nEndTime = osl_getGlobalTimer();
         SAL_INFO("writerfilter.profile", OSL_THIS_FUNC << " finished in " << nEndTime - nStartTime << " ms");
