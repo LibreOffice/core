@@ -264,13 +264,13 @@ $(1).all: bootstrap fetch
 	, \
 		cd $(1) && unset MAKEFLAGS && \
 	) \
-	$(SOLARENV)/bin/build.pl -P$(BUILD_NCPUS) --all -- -P$(GMAKE_PARALLELISM)
+	$(SOLARENV)/bin/build.pl -P$(GMAKE_PARALLELISM) --all -- -P$(GMAKE_PARALLELISM)
 
 $(1).build:
-	cd $(1) && $(GNUMAKE) -j $(CHECK_PARALLELISM) $(GMAKE_OPTIONS) build gb_PARTIALBUILD=T
+	cd $(1) && $(GNUMAKE) -j $(GMAKE_PARALLELISM) $(GMAKE_OPTIONS) build gb_PARTIALBUILD=T
 
 $(1).check:
-	cd $(1) && $(GNUMAKE) -j $(CHECK_PARALLELISM) $(GMAKE_OPTIONS) check gb_PARTIALBUILD=T
+	cd $(1) && $(GNUMAKE) -j $(GMAKE_PARALLELISM) $(GMAKE_OPTIONS) check gb_PARTIALBUILD=T
 
 $(1).clean:
 	cd $(1) && $(GNUMAKE) -j $(GMAKE_PARALLELISM) $(GMAKE_OPTIONS) clean gb_PARTIALBUILD=T
@@ -292,11 +292,11 @@ define dmake_module_rules
 
 $(1): bootstrap fetch
 	cd $(1) && unset MAKEFLAGS && \
-        $(SOLARENV)/bin/build.pl -P$(BUILD_NCPUS) -- -P$(GMAKE_PARALLELISM)
+        $(SOLARENV)/bin/build.pl -P$(GMAKE_PARALLELISM) -- -P$(GMAKE_PARALLELISM)
 
 $(1).all: bootstrap fetch
 	cd $(1) && unset MAKEFLAGS && \
-        $(SOLARENV)/bin/build.pl -P$(BUILD_NCPUS) --all -- -P$(GMAKE_PARALLELISM)
+        $(SOLARENV)/bin/build.pl -P$(GMAKE_PARALLELISM) --all -- -P$(GMAKE_PARALLELISM)
 
 $(1).deliver: $(1)
 	cd $(1) && $(SOLARENV)/bin/deliver.pl
@@ -413,7 +413,7 @@ ifeq ($(DISABLE_DBCONNECTIVITY),TRUE)
 	cd connectivity && sed -e 's/^\(export [A-Z0-9_]*=\)\(.*\)$$/\1"\2"/' <../config_host.mk >conftmp.sh && . conftmp.sh && rm conftmp.sh && $(SOLARENV)/bin/deliver.pl
 endif
 	cd packimages && unset MAKEFLAGS && \
-		$(SOLARENV)/bin/build.pl -P$(BUILD_NCPUS) --all -- -P$(GMAKE_PARALLELISM) && \
+		$(SOLARENV)/bin/build.pl -P$(GMAKE_PARALLELISM) --all -- -P$(GMAKE_PARALLELISM) && \
 		$(GNUMAKE) -j $(GMAKE_PARALLELISM) $(GMAKE_OPTIONS)
 
 build: build-packimages
@@ -421,7 +421,7 @@ ifeq ($(OS_FOR_BUILD),WNT)
 	cd instsetoo_native && unset MAKEFLAGS && $(SOLARENV)/bin/build.pl
 else
 	cd instsetoo_native && unset MAKEFLAGS && \
-        $(SOLARENV)/bin/build.pl -P$(BUILD_NCPUS) -- -P$(GMAKE_PARALLELISM)
+        $(SOLARENV)/bin/build.pl -P$(GMAKE_PARALLELISM) -- -P$(GMAKE_PARALLELISM)
 endif
 ifeq ($(OS),ANDROID)
 	cd android && $(GNUMAKE) -j $(GMAKE_PARALLELISM) $(GMAKE_OPTIONS)
@@ -549,7 +549,7 @@ findunusedcode:
 check: dev-install subsequentcheck
 
 subsequentcheck :| $(if $(filter-out subsequentcheck,$(MAKECMDGOALS)),dev-install)
-	$(GNUMAKE) -j $(GMAKE_PARALLELISM) $(GMAKE_OPTIONS) -f Makefile.post $@
+	$(GNUMAKE) -j $(CHECK_PARALLELISM) $(GMAKE_OPTIONS) -f Makefile.post $@
 
 unitcheck:
 	$(GNUMAKE) -j $(GMAKE_PARALLELISM) $(GMAKE_OPTIONS) -f Makefile.post $@
