@@ -235,6 +235,7 @@
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:Gallery"/>
       <menu:menuitem menu:id=".uno:BmpMask"/>
+      <menu:menuitem menu:id=".uno:AVMediaPlayer"/>
       <menu:menuseparator/>
       <menu:menu menu:id=".uno:MacrosMenu">
         <menu:menupopup>
