@@ -138,14 +138,6 @@ void LiblantagDataRef::setupDataPath()
         lt_db_set_datadir( maDataPath.getStr());
 }
 
-
-// static
-void LanguageTag::overrideDataPath( const rtl::OUString& rPath )
-{
-    theDataRef.presetDataPath( rPath);
-}
-
-
 LanguageTag::LanguageTag( const rtl::OUString & rBcp47LanguageTag, bool bCanonicalize )
     :
         maBcp47( rBcp47LanguageTag),

@@ -1,5 +1,4 @@
 FontSelectPattern::FontSelectPattern(PhysicalFontFace const&, Size const&, float, int, bool)
-LanguageTag::overrideDataPath(rtl::OUString const&)
 RelatedMultipart::getIds()
 SanExtensionImpl::setCertExtn(unsigned char*, unsigned int, unsigned char*, unsigned int, unsigned char)
 ScFiltersTest::testColorScaleODS()
