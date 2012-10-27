@@ -1329,7 +1329,7 @@ SvxLineWindow_Impl::SvxLineWindow_Impl( sal_uInt16 nId, const Reference< XFrame 
     SetOutputSizePixel( Size( 114, 144 ) );
 
     m_aLineStyleLb.SetSourceUnit( FUNIT_TWIP );
-    m_aLineStyleLb.SetNone( SVX_RESSTR(STR_NONE) );
+    m_aLineStyleLb.SetNone( SVX_RESSTR(RID_SVXSTR_NONE) );
 
     using namespace table::BorderLineStyle;
     m_aLineStyleLb.InsertEntry( SvxBorderLine::getWidthImpl( SOLID ), SOLID );
