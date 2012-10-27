@@ -1573,7 +1573,12 @@ SdrObject* SdrMarkView::CheckSingleSdrObjectHit(const Point& rPnt, sal_uInt16 nT
 
 SdrObject* SdrMarkView::CheckSingleSdrObjectHit(const Point& rPnt, sal_uInt16 nTol, SdrObjList* pOL, SdrPageView* pPV, sal_uIntPtr nOptions, const SetOfByte* pMVisLay, SdrObject*& rpRootObj) const
 {
+    return (*this).CheckSingleSdrObjectHit(rPnt,nTol,pOL,pPV,nOptions,pMVisLay,rpRootObj,NULL);
+}
+SdrObject* SdrMarkView::CheckSingleSdrObjectHit(const Point& rPnt, sal_uInt16 nTol, SdrObjList* pOL, SdrPageView* pPV, sal_uIntPtr nOptions, const SetOfByte* pMVisLay, SdrObject*& rpRootObj,const SdrMarkList * pMarkList) const
+{
     sal_Bool bBack=(nOptions & SDRSEARCH_BACKWARD)!=0;
+    sal_Bool bBefMrk=(nOptions & SDRSEARCH_BEFOREMARK)!=0;
     SdrObject* pRet=NULL;
     rpRootObj=NULL;
     if (pOL!=NULL)
@@ -1595,7 +1600,16 @@ SdrObject* SdrMarkView::CheckSingleSdrObjectHit(const Point& rPnt, sal_uInt16 nT
             {
                 pObj = pOL->GetObj(nObjNum);
             }
-
+            if (bBefMrk)
+            {
+                if ((pMarkList)!=NULL)
+                {
+                    if ((*pMarkList).FindObject(pObj)!=CONTAINER_ENTRY_NOTFOUND)
+                    {
+                        return NULL;
+                    }
+                }
+            }
             pRet=CheckSingleSdrObjectHit(rPnt,nTol,pObj,pPV,nOptions,pMVisLay);
             if (pRet!=NULL) rpRootObj=pObj;
             if (bBack) nObjNum++;
@@ -1689,7 +1703,7 @@ sal_Bool SdrMarkView::PickObj(const Point& rPnt, short nTol, SdrObject*& rpObj, 
                     if (pnPassNum!=NULL) *pnPassNum|=SDRSEARCHPASS_MASTERPAGE;
                     nTmpOptions=nTmpOptions | SDRSEARCH_IMPISMASTER;
                 }
-                pHitObj=CheckSingleSdrObjectHit(aPt,nTol,pObjList,pPV,nTmpOptions,pMVisLay,pObj);
+                pHitObj=CheckSingleSdrObjectHit(aPt,nTol,pObjList,pPV,nTmpOptions,pMVisLay,pObj,&(GetMarkedObjectList()));
                 if (bBack) nPgNum++;
             }
         }
@@ -1795,6 +1809,7 @@ sal_Bool SdrMarkView::PickMarkedObj(const Point& rPnt, SdrObject*& rpObj, SdrPag
     }
     return bFnd;
 }
+
 
 void SdrMarkView::UnmarkAllObj(SdrPageView* pPV)
 {

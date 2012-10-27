@@ -642,6 +642,8 @@ sal_Bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
     // (and deselect others) as a preparation for showing the context
     // menu.
     const bool bSelectionOnly = rMEvt.IsRight();
+    SdrObject* pObj;
+    SdrPageView* pPV;
 
     if (bHideAndAnimate)
     {
@@ -693,6 +695,17 @@ sal_Bool FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
                 Abs(aPnt.X() - aMDPos.X()) < nDrgLog &&
                 Abs(aPnt.Y() - aMDPos.Y()) < nDrgLog)
             {
+                /*************************************************************
+                * If a user wants to click on an object in front of a masked
+                * one, he releases the mouse button immediately
+                **************************************************************/
+                if (mpView->PickObj(aMDPos, mpView->getHitTolLog(), pObj, pPV, SDRSEARCH_ALSOONMASTER | SDRSEARCH_BEFOREMARK))
+                {
+                    //not Needed in the ordinary pick routine for some reason...
+                    mpView->UnmarkAllObj();
+                    mpView->MarkObj(pObj,pPV,false,false);
+                    return (bReturn);
+                }
                 /**************************************************************
                 * Toggle between selection and rotation
                 **************************************************************/
