@@ -792,7 +792,7 @@ sal_Int16 SAL_CALL NativeNumberSupplier::convertFromXmlAttributes( const NativeN
 
 // Following code generates Hebrew Number,
 // see numerical system in the Hebrew Numbering System in following link for details,
-// http://people.netscape.com/smontagu/writings/HebrewNumbers.html
+// http://smontagu.org/writings/HebrewNumbers.html
 
 struct HebrewNumberChar {
     sal_Unicode code;
