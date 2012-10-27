@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAP3///vo\u003d",
+        "filename": "cui/source/dialogs/insrc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2012-10-27T16:02:09Z",
+      "side": 1,
+      "message": "delete this line here FreeResource and it should then work",
+      "revId": "96703f467ea5b2f7380de39dfab96bdc8f3a5604",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
