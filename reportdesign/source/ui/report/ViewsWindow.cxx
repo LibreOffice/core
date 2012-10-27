@@ -241,14 +241,7 @@ void OViewsWindow::resize(const OSectionWindow& _rSectionWindow)
             pSectionWindow->getEndMarker().Invalidate( nIn );
         }
     }
-    Fraction aStartWidth(long(REPORT_STARTMARKER_WIDTH));
-    aStartWidth *= GetMapMode().GetScaleX();
-    Size aOut = GetOutputSizePixel();
-    aOut.Width() = aStartWidth;
-    aOut = PixelToLogic(aOut);
     m_pParent->notifySizeChanged();
-
-    Rectangle aRect(PixelToLogic(Point(0,0)),aOut);
 }
 //------------------------------------------------------------------------------
 void OViewsWindow::Resize()

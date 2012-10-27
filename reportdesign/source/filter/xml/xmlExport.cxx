@@ -447,7 +447,6 @@ void ORptExport::exportComponent(const Reference<XReportComponent>& _xReportComp
 void ORptExport::exportFormatConditions(const Reference<XReportControlModel>& _xReportElement)
 {
     OSL_ENSURE(_xReportElement.is(),"_xReportElement is NULL -> GPF");
-    ::rtl::OUString sDataField = convertFormula(_xReportElement->getDataField());
     const sal_Int32 nCount = _xReportElement->getCount();
     try
     {

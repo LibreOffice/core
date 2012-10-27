@@ -61,7 +61,6 @@ OXMLComponent::OXMLComponent( ORptFilter& _rImport
     const SvXMLTokenMap& rTokenMap = _rImport.GetComponentElemTokenMap();
 
     const sal_Int16 nLength = (_xAttrList.is()) ? _xAttrList->getLength() : 0;
-    static const ::rtl::OUString s_sTRUE = ::xmloff::token::GetXMLToken(XML_TRUE);
 
     for(sal_Int16 i = 0; i < nLength; ++i)
     {
