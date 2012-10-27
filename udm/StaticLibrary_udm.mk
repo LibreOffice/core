@@ -11,6 +11,8 @@ $(eval $(call gb_StaticLibrary_StaticLibrary,udm))
 
 $(eval $(call gb_StaticLibrary_use_packages,udm,\
 	cosv_inc \
+	sal_generated \
+	sal_inc \
 	udm_inc \
 ))
 

@@ -11,6 +11,8 @@ $(eval $(call gb_StaticLibrary_StaticLibrary,cosv))
 
 $(eval $(call gb_StaticLibrary_use_packages,cosv,\
 	cosv_inc \
+	sal_generated \
+	sal_inc \
 ))
 
 $(eval $(call gb_StaticLibrary_add_exception_objects,cosv,\

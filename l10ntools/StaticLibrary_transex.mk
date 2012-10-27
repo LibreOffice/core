@@ -27,6 +27,11 @@
 
 $(eval $(call gb_StaticLibrary_StaticLibrary,transex))
 
+$(eval $(call gb_StaticLibrary_use_packages,transex,\
+	sal_generated \
+	sal_inc \
+))
+
 $(eval $(call gb_StaticLibrary_set_include,transex,\
     -I$(SRCDIR)/l10ntools/inc \
     $$(INCLUDE) \
