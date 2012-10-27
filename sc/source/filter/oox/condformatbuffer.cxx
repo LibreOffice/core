@@ -141,7 +141,43 @@ void lclAppendProperty( ::std::vector< PropertyValue >& orProps, const OUString&
     orProps.back().Value <<= rValue;
 }
 
-} // namespace
+//------------------------------------------------------------------------------
+
+void SetCfvoData( ColorScaleRuleModelEntry* pEntry, const AttributeList& rAttribs )
+{
+    rtl::OUString aType = rAttribs.getString( XML_type, rtl::OUString() );
+
+    double nVal = rAttribs.getDouble( XML_val, 0.0 );
+    pEntry->mnVal = nVal;
+    if (aType == "num")
+    {
+        // nothing to do
+    }
+    else if( aType == "min" )
+    {
+        pEntry->mbMin = true;
+    }
+    else if( aType == "max" )
+    {
+        pEntry->mbMax = true;
+    }
+    else if( aType == "percent" )
+    {
+        pEntry->mbPercent = true;
+    }
+    else if( aType == "percentile" )
+    {
+        pEntry->mbPercentile = true;
+    }
+    else if( aType == "formula" )
+    {
+        rtl::OUString aFormula = rAttribs.getString( XML_val, rtl::OUString() );
+        pEntry->maFormula = aFormula;
+    }
+
+}
+
+}
 
 ColorScaleRule::ColorScaleRule( const CondFormat& rFormat ):
     WorksheetHelper( rFormat ),
@@ -155,35 +191,7 @@ void ColorScaleRule::importCfvo( const AttributeList& rAttribs )
     if(mnCfvo >= maColorScaleRuleEntries.size())
         maColorScaleRuleEntries.push_back(ColorScaleRuleModelEntry());
 
-    rtl::OUString aType = rAttribs.getString( XML_type, rtl::OUString() );
-
-    double nVal = rAttribs.getDouble( XML_val, 0.0 );
-    maColorScaleRuleEntries[mnCfvo].mnVal = nVal;
-    if (aType == "num")
-    {
-        // nothing to do
-    }
-    else if( aType == "min" )
-    {
-        maColorScaleRuleEntries[mnCfvo].mbMin = true;
-    }
-    else if( aType == "max" )
-    {
-        maColorScaleRuleEntries[mnCfvo].mbMax = true;
-    }
-    else if( aType == "percent" )
-    {
-        maColorScaleRuleEntries[mnCfvo].mbPercent = true;
-    }
-    else if( aType == "percentile" )
-    {
-        maColorScaleRuleEntries[mnCfvo].mbPercentile = true;
-    }
-    else if( aType == "formula" )
-    {
-        rtl::OUString aFormula = rAttribs.getString( XML_val, rtl::OUString() );
-        maColorScaleRuleEntries[mnCfvo].maFormula = aFormula;
-    }
+    SetCfvoData( &maColorScaleRuleEntries[mnCfvo], rAttribs );
 
     ++mnCfvo;
 }
@@ -260,7 +268,7 @@ void ColorScaleRule::AddEntries( ScColorScaleFormat* pFormat, ScDocument* pDoc, 
 }
 
 // ============================================================================
-//
+
 DataBarRule::DataBarRule( const CondFormat& rFormat ):
     WorksheetHelper( rFormat ),
     mpFormat(new ScDataBarFormatData)
@@ -297,35 +305,8 @@ void DataBarRule::importCfvo( const AttributeList& rAttribs )
         mpUpperLimit.reset(new ColorScaleRuleModelEntry);
         pEntry = mpUpperLimit.get();
     }
-    rtl::OUString aType = rAttribs.getString( XML_type, rtl::OUString() );
 
-    double nVal = rAttribs.getDouble( XML_val, 0.0 );
-    pEntry->mnVal = nVal;
-    if (aType == "num")
-    {
-        // nothing to do
-    }
-    else if( aType == "min" )
-    {
-        pEntry->mbMin = true;
-    }
-    else if( aType == "max" )
-    {
-        pEntry->mbMax = true;
-    }
-    else if( aType == "percent" )
-    {
-        pEntry->mbPercent = true;
-    }
-    else if( aType == "percentile" )
-    {
-        pEntry->mbPercentile = true;
-    }
-    else if( aType == "formula" )
-    {
-        rtl::OUString aFormula = rAttribs.getString( XML_val, rtl::OUString() );
-        pEntry->maFormula = aFormula;
-    }
+    SetCfvoData( pEntry, rAttribs );
 }
 
 void DataBarRule::importAttribs( const AttributeList& rAttribs )
