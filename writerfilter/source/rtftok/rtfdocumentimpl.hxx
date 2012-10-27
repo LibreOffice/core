@@ -251,10 +251,10 @@ namespace writerfilter {
             public:
                 RTFShape();
                 std::vector< std::pair<rtl::OUString, rtl::OUString> > aProperties;
-                int nLeft;
-                int nTop;
-                int nRight;
-                int nBottom;
+                sal_Int32 nLeft;
+                sal_Int32 nTop;
+                sal_Int32 nRight;
+                sal_Int32 nBottom;
                 sal_Int16 nHoriOrientRelation;
                 sal_Int16 nVertOrientRelation;
                 int nWrap;
