@@ -744,6 +744,10 @@ int RTFDocumentImpl::resolvePict(bool bInline)
     if (bInline)
     {
         RTFSprms aInlineAttributes;
+        aInlineAttributes.set(NS_ooxml::LN_CT_Inline_distT, RTFValue::Pointer_t(new RTFValue(0)));
+        aInlineAttributes.set(NS_ooxml::LN_CT_Inline_distB, RTFValue::Pointer_t(new RTFValue(0)));
+        aInlineAttributes.set(NS_ooxml::LN_CT_Inline_distL, RTFValue::Pointer_t(new RTFValue(0)));
+        aInlineAttributes.set(NS_ooxml::LN_CT_Inline_distR, RTFValue::Pointer_t(new RTFValue(0)));
         RTFSprms aInlineSprms;
         aInlineSprms.set(NS_ooxml::LN_CT_Inline_extent, pExtentValue);
         aInlineSprms.set(NS_ooxml::LN_CT_Inline_docPr, pDocprValue);
