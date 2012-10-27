@@ -113,7 +113,7 @@ public:
                                      true,
                                      Format::EIGHT_BIT_GREY );
 
-        ::rtl::OUString aSvg( RTL_CONSTASCII_USTRINGPARAM( "m 0 0h5v10h5v-5h-10z" ));
+        OUString aSvg( "m 0 0h5v10h5v-5h-10z" );
 
         basegfx::B2DPolyPolygon aPoly;
         basegfx::tools::importFromSvgD( aPoly, aSvg );

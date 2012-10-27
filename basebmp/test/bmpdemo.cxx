@@ -959,7 +959,7 @@ class TestWindow : public Dialog
     public:
         TestWindow() : Dialog( (Window *) NULL )
         {
-            SetText( rtl::OUString( "VIGRA test" ) );
+            SetText( OUString( "VIGRA test" ) );
             SetSizePixel( Size( 1024, 1024 ) );
             EnablePaint( true );
             Show();
@@ -1059,16 +1059,15 @@ void TestWindow::Paint( const Rectangle& /*rRect*/ )
                                                                          basebmp::Format::THIRTYTWO_BIT_TC_MASK ));
 
     {
-        ::rtl::OUString aSvg;
+        OUString aSvg;
+
         basegfx::B2DPolyPolygon aPoly;
 
-        basegfx::tools::importFromSvgD( aPoly,
-                                        ::rtl::OUString( "m0 0 h7 v7 h-7 z" ) );
-        basegfx::tools::importFromSvgD( aPoly,
-                                        ::rtl::OUString( "m2 2 h3 v3 h-3 z" ) );
+        basegfx::tools::importFromSvgD( aPoly, OUString( "m0 0 h7 v7 h-7 z" ) );
 
-        pDevice->fillPolyPolygon(
-            aPoly,
+        basegfx::tools::importFromSvgD( aPoly, OUString( "m2 2 h3 v3 h-3 z" ) );
+
+        pDevice->fillPolyPolygon( aPoly,
             basebmp::Color(0xFFFFFFFF),
             basebmp::DrawMode_PAINT );
     }
@@ -1084,7 +1083,7 @@ void TestWindow::Paint( const Rectangle& /*rRect*/ )
         pMask->drawLine( aPt111, aPt222, aCol333, basebmp::DrawMode_PAINT );
 
 
-        ::rtl::OUString aSvg( "m 0 0 h5 l5 5 v5 h-5 l-5-5 z" );
+        OUString aSvg( "m 0 0 h5 l5 5 v5 h-5 l-5-5 z" );
         basegfx::B2DPolyPolygon aPoly;
         basegfx::tools::importFromSvgD( aPoly, aSvg );
         pMask->clear(basebmp::Color(0xFFFFFFFF));
