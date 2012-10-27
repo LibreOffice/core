@@ -89,6 +89,7 @@ $(eval $(call gb_Module_add_moduledirs,tail_end,\
 	jurt \
 	jvmaccess \
 	jvmfwk \
+	$(call gb_Helper_optional,LANGUAGETOOL,languagetool) \
 	libcdr \
 	libcmis \
 	libmspub \

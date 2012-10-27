@@ -1,4 +1,4 @@
-po      postprocess     ::      BINFILTER:binfilter CRASHREP:crashrep EPM:epm HELP:helpcontent2 ODK:odk LANGUAGETOOL:languagetool MYSQLC:mysqlc DESKTOP:setup_native STLPORT:stlport sysui tail_build NULL
+po      postprocess     ::      BINFILTER:binfilter CRASHREP:crashrep EPM:epm HELP:helpcontent2 ODK:odk MYSQLC:mysqlc DESKTOP:setup_native STLPORT:stlport sysui tail_build NULL
 po	postprocess			    	usr1	-	all	po_mkout NULL
 po	postprocess\checkxml		nmake	-	all	po_checkxml NULL
 po	postprocess\packconfig		nmake	-	all	po_packconfig po_checkxml NULL
