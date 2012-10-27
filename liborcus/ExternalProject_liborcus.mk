@@ -48,7 +48,7 @@ $(call gb_ExternalProject_get_state_target,liborcus,build) :
 		--disable-spreadsheet-model \
 		$(if $(filter NO,$(SYSTEM_BOOST)),CXXFLAGS=-I$(OUTDIR)/inc/external) \
 		$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
-	&& $(GNUMAKE) \
+	&& $(MAKE) \
 	&& touch $@
 
 endif

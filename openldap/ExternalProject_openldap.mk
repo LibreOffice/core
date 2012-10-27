@@ -36,7 +36,7 @@ $(call gb_ExternalProject_get_state_target,openldap,build) :
 			CFLAGS="-I $(OUTDIR)/inc/mozilla/nss -I $(OUTDIR)/inc/mozilla/nspr" \
 			LDFLAGS="-L$(OUTDIR)/lib" \
 		) \
-	&& unset MAKEFLAGS && $(GNUMAKE) -j$(GMAKE_PARALLELISM) \
+	&& MAKEFLAGS= && $(MAKE) \
 	&& touch $@
 
 # vim: set noet sw=4 ts=4:

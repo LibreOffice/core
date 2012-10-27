@@ -24,7 +24,7 @@ $(call gb_ExternalProject_get_state_target,freetype,build) :
 		--prefix=$(OUTDIR) --includedir=$(OUTDIR)/inc/external \
 		--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM) \
 	&& chmod +x builds/unix/freetype-config \
-	&& $(GNUMAKE) \
+	&& $(MAKE) \
 	&& touch $@
 
 # vim: set noet sw=4 ts=4:
