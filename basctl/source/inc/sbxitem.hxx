@@ -38,23 +38,23 @@ enum ItemType
 class SbxItem : public SfxPoolItem
 {
     const ScriptDocument    m_aDocument;
-    const ::rtl::OUString   m_aLibName;
-    const ::rtl::OUString   m_aName;
-    const ::rtl::OUString   m_aMethodName;
+    const OUString          m_aLibName;
+    const OUString          m_aName;
+    const OUString          m_aMethodName;
     ItemType                m_eType;
 
 public:
     TYPEINFO();
-    SbxItem(sal_uInt16 nWhich, const ScriptDocument& rDocument, const ::rtl::OUString& aLibName, const ::rtl::OUString& aName, ItemType);
-    SbxItem(sal_uInt16 nWhich, const ScriptDocument& rDocument, const ::rtl::OUString& aLibName, const ::rtl::OUString& aName, const ::rtl::OUString& aMethodName, ItemType eType);
+    SbxItem(sal_uInt16 nWhich, const ScriptDocument& rDocument, const OUString& aLibName, const OUString& aName, ItemType);
+    SbxItem(sal_uInt16 nWhich, const ScriptDocument& rDocument, const OUString& aLibName, const OUString& aName, const OUString& aMethodName, ItemType eType);
 
     virtual SfxPoolItem* Clone(SfxItemPool *pPool = 0) const;
     virtual int operator==(const SfxPoolItem&) const;
 
     ScriptDocument const& GetDocument () const { return m_aDocument; }
-    rtl::OUString const& GetLibName () const { return m_aLibName; }
-    rtl::OUString const& GetName () const { return m_aName; }
-    rtl::OUString const& GetMethodName () const { return m_aMethodName; }
+    OUString const& GetLibName () const { return m_aLibName; }
+    OUString const& GetName () const { return m_aName; }
+    OUString const& GetMethodName () const { return m_aMethodName; }
     ItemType GetType () const { return m_eType; }
 };
 

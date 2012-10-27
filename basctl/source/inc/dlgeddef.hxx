@@ -68,21 +68,21 @@ enum
 };
 
 // control properties
-#define DLGED_PROP_BACKGROUNDCOLOR   rtl::OUString("BackgroundColor")
-#define DLGED_PROP_DROPDOWN          rtl::OUString("Dropdown")
-#define DLGED_PROP_FORMATSSUPPLIER   rtl::OUString("FormatsSupplier")
-#define DLGED_PROP_HEIGHT            rtl::OUString("Height")
-#define DLGED_PROP_LABEL             rtl::OUString("Label")
-#define DLGED_PROP_NAME              rtl::OUString("Name")
-#define DLGED_PROP_ORIENTATION       rtl::OUString("Orientation")
-#define DLGED_PROP_POSITIONX         rtl::OUString("PositionX")
-#define DLGED_PROP_POSITIONY         rtl::OUString("PositionY")
-#define DLGED_PROP_STEP              rtl::OUString("Step")
-#define DLGED_PROP_TABINDEX          rtl::OUString("TabIndex")
-#define DLGED_PROP_TEXTCOLOR         rtl::OUString("TextColor")
-#define DLGED_PROP_TEXTLINECOLOR     rtl::OUString("TextLineColor")
-#define DLGED_PROP_WIDTH             rtl::OUString("Width")
-#define DLGED_PROP_DECORATION        rtl::OUString("Decoration")
+#define DLGED_PROP_BACKGROUNDCOLOR   "BackgroundColor"
+#define DLGED_PROP_DROPDOWN          "Dropdown"
+#define DLGED_PROP_FORMATSSUPPLIER   "FormatsSupplier"
+#define DLGED_PROP_HEIGHT            "Height"
+#define DLGED_PROP_LABEL             "Label"
+#define DLGED_PROP_NAME              "Name"
+#define DLGED_PROP_ORIENTATION       "Orientation"
+#define DLGED_PROP_POSITIONX         "PositionX"
+#define DLGED_PROP_POSITIONY         "PositionY"
+#define DLGED_PROP_STEP              "Step"
+#define DLGED_PROP_TABINDEX          "TabIndex"
+#define DLGED_PROP_TEXTCOLOR         "TextColor"
+#define DLGED_PROP_TEXTLINECOLOR     "TextLineColor"
+#define DLGED_PROP_WIDTH             "Width"
+#define DLGED_PROP_DECORATION        "Decoration"
 
 
 } // namespace basctl

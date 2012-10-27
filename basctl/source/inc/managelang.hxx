@@ -34,11 +34,11 @@ class LocalizationMgr;
 
 struct LanguageEntry
 {
-    ::rtl::OUString                 m_sLanguage;
+    OUString                        m_sLanguage;
     ::com::sun::star::lang::Locale  m_aLocale;
     bool                            m_bIsDefault;
 
-    LanguageEntry( const ::rtl::OUString& _rLanguage,
+    LanguageEntry( const OUString& _rLanguage,
                    const ::com::sun::star::lang::Locale& _rLocale,
                    bool _bIsDefault ) :
         m_sLanguage( _rLanguage ),
@@ -65,9 +65,9 @@ private:
 
     boost::shared_ptr<LocalizationMgr> m_pLocalizationMgr;
 
-    ::rtl::OUString     m_sDefLangStr;
-    ::rtl::OUString     m_sDeleteStr;
-    ::rtl::OUString     m_sCreateLangStr;
+    OUString            m_sDefLangStr;
+    OUString            m_sDeleteStr;
+    OUString            m_sCreateLangStr;
 
     void                Init();
     void                CalcInfoSize();
