@@ -27,7 +27,7 @@ class ResId;
 enum DayOfWeek { MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY,
                  SATURDAY, SUNDAY };
 
-class TOOLS_DLLPUBLIC Date
+class TOOLS_DLLPUBLIC SAL_WARN_UNUSED Date
 {
 private:
     sal_uInt32      nDate;

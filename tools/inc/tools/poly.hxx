@@ -53,7 +53,7 @@ enum PolyFlags
 };
 #endif
 
-class PolyOptimizeData
+class SAL_WARN_UNUSED PolyOptimizeData
 {
 private:
 
@@ -81,7 +81,7 @@ namespace basegfx
     class B2DPolyPolygon;
 }
 
-class TOOLS_DLLPUBLIC Polygon
+class TOOLS_DLLPUBLIC SAL_WARN_UNUSED Polygon
 {
 private:
     ImplPolygon*        mpImplPolygon;
@@ -194,7 +194,7 @@ public:
     explicit Polygon(const ::basegfx::B2DPolygon& rPolygon);
 };
 
-class TOOLS_DLLPUBLIC PolyPolygon
+class TOOLS_DLLPUBLIC SAL_WARN_UNUSED PolyPolygon
 {
 private:
     ImplPolyPolygon*    mpImplPolyPolygon;
