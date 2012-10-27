@@ -610,7 +610,7 @@ int RTFDocumentImpl::resolvePict(bool bInline)
         for (int i = 0; i < aStr.getLength(); ++i)
         {
             char ch = str[i];
-            if (ch != 0x0d && ch != 0x0a)
+            if (ch != 0x0d && ch != 0x0a && ch != 0x20)
             {
                 b = b << 4;
                 sal_Int8 parsed = m_pTokenizer->asHex(ch);
