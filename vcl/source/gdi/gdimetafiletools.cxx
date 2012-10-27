@@ -392,7 +392,6 @@ void clipMetafileContentAgainstOwnRegions(GDIMetaFile& rSource)
 
             case META_POP_ACTION :
             {
-                const MetaPopAction* pA = static_cast< const MetaPopAction* >(pAction);
 
                 if(aPushFlags.size())
                 {
