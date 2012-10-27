@@ -7,9 +7,9 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-ifneq ($(SYSTEM_ZLIB),YES)
-
 $(eval $(call gb_Module_Module,zlib))
+
+ifeq ($(SYSTEM_ZLIB),NO)
 
 $(eval $(call gb_Module_add_targets,zlib,\
 	ExternalPackage_zlib \

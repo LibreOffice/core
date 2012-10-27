@@ -70,6 +70,7 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
 	embeddedobj \
 	embedserv \
 	eventattacher \
+	$(call gb_Helper_optional,EXPAT,expat) \
 	extensions \
 	extras \
 	fileaccess \
@@ -154,6 +155,7 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
 	slideshow \
 	smoketest \
 	solenv \
+	soltools \
 	sot \
 	starmath \
 	stoc \
@@ -200,6 +202,7 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
 	xmlscript \
 	xmlsecurity \
 	xsltml \
+	$(call gb_Helper_optional,ZLIB,zlib) \
 ))
 
 # vim: set noet ts=4 sw=4:
