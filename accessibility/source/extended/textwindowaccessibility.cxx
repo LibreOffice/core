@@ -2126,8 +2126,14 @@ void Document::notifySelectionChange( sal_Int32 nFirst, sal_Int32 nLast )
 {
     if ( nFirst < nLast )
     {
-        Paragraphs::iterator aEnd( ::std::min( m_xParagraphs->begin() + nLast, m_aVisibleEnd ) );
-        for ( Paragraphs::iterator aIt = ::std::max( m_xParagraphs->begin() + nFirst, m_aVisibleBegin ); aIt < aEnd; ++aIt )
+        Paragraphs::iterator aItBound1 = m_xParagraphs->begin();
+        for (sal_Int32 i = 0; i < nLast  && aItBound1 !=  m_xParagraphs->end() ; ++aItBound1);
+        Paragraphs::iterator aEnd( ::std::min( aItBound1, m_aVisibleEnd ) );
+
+        Paragraphs::iterator aItBound2 = m_xParagraphs->begin();
+        for (sal_Int32 i = 0; i < nFirst && aItBound2 !=  m_xParagraphs->end() ; ++aItBound2);
+
+        for ( Paragraphs::iterator aIt = ::std::max( aItBound2, m_aVisibleBegin ); aIt != aEnd; ++aIt )
         {
             ::rtl::Reference< ParagraphImpl > xParagraph( getParagraph( aIt ) );
             if ( xParagraph.is() )
