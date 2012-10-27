@@ -44,10 +44,6 @@ public:
             com::sun::star::container::NoSuchElementException,
             com::sun::star::uno::RuntimeException));
 
-    //string is not copied so must persist for lifetime
-    //of XmlReader
-    explicit XmlReader(const char * str, sal_uInt64 len) SAL_THROW(());
-
     ~XmlReader();
 
     enum { NAMESPACE_NONE = -2, NAMESPACE_UNKNOWN = -1, NAMESPACE_XML = 0 };
@@ -173,8 +169,6 @@ private:
     SAL_DLLPRIVATE Result handleNormalizedText(Span * text);
 
     SAL_DLLPRIVATE int toNamespaceId(NamespaceIris::size_type pos);
-
-    SAL_DLLPRIVATE void init();
 
     rtl::OUString fileUrl_;
     oslFileHandle fileHandle_;

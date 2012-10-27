@@ -80,7 +80,6 @@ comphelper::detail::ConfigurationWrapper::getGroupReadWrite(boost::shared_ptr<co
 comphelper::detail::ConfigurationWrapper::getLocalizedPropertyValue(rtl::OUString const&) const
 comphelper::detail::ConfigurationWrapper::setLocalizedPropertyValue(boost::shared_ptr<comphelper::ConfigurationChanges> const&, rtl::OUString const&, com::sun::star::uno::Any const&) const
 connectivity::file::OStatement_Base::reset()
-connectivity::mork::MQueryHelper::next()
 connectivity::mork::MQueryHelperResultEntry::insert(rtl::OString const&, rtl::OUString&)
 connectivity::mork::OColumnAlias::OColumnAlias()
 connectivity::mozab::MQueryHelper::next()
