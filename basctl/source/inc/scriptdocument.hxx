@@ -136,7 +136,7 @@ namespace basctl
             @see getApplicationScriptDocument
         */
         static ScriptDocument
-                    getDocumentWithURLOrCaption( const ::rtl::OUString& _rUrlOrCaption );
+                    getDocumentWithURLOrCaption( const OUString& _rUrlOrCaption );
 
         /** operation mode for getAllScriptDocuments
         */
@@ -232,7 +232,7 @@ namespace basctl
 
         /** determines whether there exists a library of the given type, with the given name
         */
-        bool        hasLibrary( LibraryContainerType _eType, const ::rtl::OUString& _rLibName ) const;
+        bool        hasLibrary( LibraryContainerType _eType, const OUString& _rLibName ) const;
 
         /** returns a script or dialog library given by name
 
@@ -247,7 +247,7 @@ namespace basctl
                 if there is no script library with the given name
         */
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >
-                    getLibrary( LibraryContainerType _eType, const ::rtl::OUString& _rLibName, bool _bLoadLibrary ) const
+                    getLibrary( LibraryContainerType _eType, const OUString& _rLibName, bool _bLoadLibrary ) const
                         SAL_THROW((::com::sun::star::container::NoSuchElementException));
 
         /** creates a script or dialog library in the document, or returns an existing one
@@ -256,24 +256,23 @@ namespace basctl
             then this library will automatically be loaded, and then returned.
         */
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >
-                    getOrCreateLibrary( LibraryContainerType _eType, const ::rtl::OUString& _rLibName ) const;
+                    getOrCreateLibrary( LibraryContainerType _eType, const OUString& _rLibName ) const;
 
         /** returns the names of the modules in a given script or dialog library of the document
         */
-        ::com::sun::star::uno::Sequence< ::rtl::OUString >
-                    getObjectNames( LibraryContainerType _eType, const ::rtl::OUString& _rLibName ) const;
+        ::com::sun::star::uno::Sequence< OUString >
+                    getObjectNames( LibraryContainerType _eType, const OUString& _rLibName ) const;
 
         /** retrieves a name for a newly to be created module or dialog
         */
-        ::rtl::OUString
-                    createObjectName( LibraryContainerType _eType, const ::rtl::OUString& _rLibName ) const;
+        OUString    createObjectName( LibraryContainerType _eType, const OUString& _rLibName ) const;
 
         /** loads a script or dialog library given by name, if there is such a library
         */
-        void        loadLibraryIfExists( LibraryContainerType _eType, const ::rtl::OUString& _rLibrary );
+        void        loadLibraryIfExists( LibraryContainerType _eType, const OUString& _rLibrary );
 
         /// retrieves the (combined) names of all script and dialog libraries
-        ::com::sun::star::uno::Sequence< ::rtl::OUString >
+        ::com::sun::star::uno::Sequence< OUString >
                     getLibraryNames() const;
 
         /** removes a given script module from the document
@@ -282,7 +281,7 @@ namespace basctl
                 <TRUE/> if and only if the removal was successful. When <FALSE/> is returned,
                 this will reported as assertion in a non-product build.
         */
-        bool        removeModule( const ::rtl::OUString& _rLibName, const ::rtl::OUString& _rModuleName ) const;
+        bool        removeModule( const OUString& _rLibName, const OUString& _rModuleName ) const;
 
         /** creates a module with the given name in the given library
             @param  _rLibName
@@ -296,7 +295,7 @@ namespace basctl
             @return
                 <TRUE/> if and only if the creation was successful
         */
-        bool        createModule( const ::rtl::OUString& _rLibName, const ::rtl::OUString& _rModName, bool _bCreateMain, ::rtl::OUString& _out_rNewModuleCode ) const;
+        bool        createModule( const OUString& _rLibName, const OUString& _rModName, bool _bCreateMain, OUString& _out_rNewModuleCode ) const;
 
         /** inserts a given piece as code as module
             @param  _rLibName
@@ -310,7 +309,7 @@ namespace basctl
             @return
                 <TRUE/> if and only if the insertion was successful.
         */
-        bool        insertModule( const ::rtl::OUString& _rLibName, const ::rtl::OUString& _rModName, const ::rtl::OUString& _rModuleCode ) const;
+        bool        insertModule( const OUString& _rLibName, const OUString& _rModName, const OUString& _rModuleCode ) const;
 
         /** updates a given module with new code
             @param  _rLibName
@@ -322,10 +321,10 @@ namespace basctl
             @return
                 <TRUE/> if and only if the insertion was successful.
         */
-        bool        updateModule( const ::rtl::OUString& _rLibName, const ::rtl::OUString& _rModName, const ::rtl::OUString& _rModuleCode ) const;
+        bool        updateModule( const OUString& _rLibName, const OUString& _rModName, const OUString& _rModuleCode ) const;
 
         /// determines whether a module with the given name exists in the given library
-        bool        hasModule( const ::rtl::OUString& _rLibName, const ::rtl::OUString& _rModName ) const;
+        bool        hasModule( const OUString& _rLibName, const OUString& _rModName ) const;
 
         /** retrieves a module's source
             @param  _rLibName
@@ -337,7 +336,7 @@ namespace basctl
             @return
                 <TRUE/> if and only if the code could be successfully retrieved, <FALSE/> otherwise
         */
-        bool        getModule( const ::rtl::OUString& _rLibName, const ::rtl::OUString& _rModName, ::rtl::OUString& _rModuleSource ) const;
+        bool        getModule( const OUString& _rLibName, const OUString& _rModName, OUString& _rModuleSource ) const;
 
         /** renames a module
             @param  _rLibName
@@ -349,7 +348,7 @@ namespace basctl
             @return
                 <TRUE/> if and only if renaming was successful.
         */
-        bool        renameModule( const ::rtl::OUString& _rLibName, const ::rtl::OUString& _rOldName, const ::rtl::OUString& _rNewName ) const;
+        bool        renameModule( const OUString& _rLibName, const OUString& _rOldName, const OUString& _rNewName ) const;
 
         /** removes a given dialog from the document
 
@@ -357,10 +356,10 @@ namespace basctl
                 <TRUE/> if and only if the removal was successful. When <FALSE/> is returned,
                 this will reported as assertion in a non-product build.
         */
-        bool        removeDialog( const ::rtl::OUString& _rLibName, const ::rtl::OUString& _rDialogName ) const;
+        bool        removeDialog( const OUString& _rLibName, const OUString& _rDialogName ) const;
 
         /// determines whether a dialog with the given name exists in the given library
-        bool        hasDialog( const ::rtl::OUString& _rLibName, const ::rtl::OUString& _rDialogName ) const;
+        bool        hasDialog( const OUString& _rLibName, const OUString& _rDialogName ) const;
 
         /** retrieves a dialog
             @param  _rLibName
@@ -373,8 +372,8 @@ namespace basctl
                 <TRUE/> if and only if the dialog could be successfully retrieved, <FALSE/> otherwise
         */
         bool        getDialog(
-                        const ::rtl::OUString& _rLibName,
-                        const ::rtl::OUString& _rDialogName,
+                        const OUString& _rLibName,
+                        const OUString& _rDialogName,
                         ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStreamProvider >& _out_rDialogProvider
                     ) const;
 
@@ -391,9 +390,9 @@ namespace basctl
                 <TRUE/> if and only if renaming was successful.
         */
         bool        renameDialog(
-                        const ::rtl::OUString& _rLibName,
-                        const ::rtl::OUString& _rOldName,
-                        const ::rtl::OUString& _rNewName,
+                        const OUString& _rLibName,
+                        const OUString& _rOldName,
+                        const OUString& _rNewName,
                         const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& _rxExistingDialogModel
                     ) const;
 
@@ -408,8 +407,8 @@ namespace basctl
                 <TRUE/> if and only if the dialog could be successfully retrieved, <FALSE/> otherwise
         */
         bool        createDialog(
-                        const ::rtl::OUString& _rLibName,
-                        const ::rtl::OUString& _rDialogName,
+                        const OUString& _rLibName,
+                        const OUString& _rDialogName,
                         ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStreamProvider >& _out_rDialogProvider
                     ) const;
 
@@ -427,8 +426,8 @@ namespace basctl
                 <TRUE/> if and only if the insertion was successful.
         */
         bool        insertDialog(
-                        const ::rtl::OUString& _rLibName,
-                        const ::rtl::OUString& _rDialogName,
+                        const OUString& _rLibName,
+                        const OUString& _rDialogName,
                         const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStreamProvider >& _rDialogProvider
                     ) const;
 
@@ -472,25 +471,22 @@ namespace basctl
 
         /// returns the location of a library given by name
         LibraryLocation
-                    getLibraryLocation( const ::rtl::OUString& _rLibName ) const;
+                    getLibraryLocation( const OUString& _rLibName ) const;
 
         /// returns the title for the document
-        ::rtl::OUString
-                    getTitle( LibraryLocation _eLocation, LibraryType _eType = LIBRARY_TYPE_ALL ) const;
+        OUString    getTitle( LibraryLocation _eLocation, LibraryType _eType = LIBRARY_TYPE_ALL ) const;
 
         /** returns the title of the document
 
             to be used for valid documents only
         */
-        ::rtl::OUString
-                    getTitle() const;
+        OUString    getTitle() const;
 
         /** returns the URL of the document
 
             to be used for valid documents only
         */
-        ::rtl::OUString
-                    getURL() const;
+        OUString    getURL() const;
 
         /** determines whether the document is currently the one-and-only application-wide active document
         */
