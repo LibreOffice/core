@@ -2126,24 +2126,18 @@ AC_ARG_WITH(sun-templates,
         [Integrate Sun template packages.]),
 ,)
 
-AC_ARG_WITH(num-cpus,
-    AS_HELP_STRING([--with-num-cpus],
-        [Number of build processes/cpus to use (number of projects that will build at the same time).
-         Multi-process/multi-cpu builds can save a lot of time on multi-cpu machines.
-         Defaults to the number of CPUs on the machine.]),
-,)
-
-AC_ARG_WITH(max-jobs,
-    AS_HELP_STRING([--with-max-jobs],
-        [Maximum number of jobs that will be issued at the same time per dmake or gbuild subproject.
-         The real number of the jobs is affected by the --with-num-cpus too, it can get up to CPUS*max_jobs.
-         Defaults to 1, unless you configure --enable-icecream - then to 10.]),
+AC_ARG_WITH(parallelism,
+    AS_HELP_STRING([--with-parallelism],
+        [Number of jobs to run simultaneously during build. Parallel builds can save a lot
+         of time on multi-cpu machines. The real number of jobs can get up to parallelism*parallelism
+         for a while in the first build phase. That will not happen when dmake is removed.
+         Defaults to the number of CPUs on the machine, unless you configure --enable-icecream - then to 10.]),
 ,)
 
 AC_ARG_WITH(check-jobs,
     AS_HELP_STRING([--with-check-jobs],
         [Maximum number of jobs that will be issued at the same time during 'make subsequenttest'.
-         Default value is the same as 'max-jobs'. Useful because the subsequent tests are very lighweight.]),
+         Default value is the same as 'parallelism'. Useful because the subsequent tests are very lightweight.]),
 ,)
 
 dnl ===================================================================
@@ -4130,8 +4124,7 @@ if test "$cross_compiling" = "yes"; then
         --disable-mozilla \
         --disable-postgresql-sdbc \
         --disable-zenity \
-        --with-num-cpus="$with_num_cpus" \
-        --with-max-jobs="$with_max_jobs" \
+        --with-parallelism="$with_parallelism" \
         --without-doxygen \
         $sub_conf_opts \
         2>&1 | sed -e 's/^/    /'
@@ -12525,32 +12518,58 @@ dnl ===================================================================
 dnl Number of CPUs to use during the build
 dnl ===================================================================
 AC_MSG_CHECKING([for number of processors to use])
-if test -n "$with_num_cpus"; then
-    BUILD_NCPUS=$with_num_cpus
+if test -n "$with_parallelism"; then
+    PARALLELISM=$with_parallelism
 else
-    case `uname -s` in
+    if test "$enable_icecream" = "yes"; then
+        PARALLELISM="10"
+    else
+        case `uname -s` in
 
-    Darwin|FreeBSD|NetBSD|OpenBSD)
-        BUILD_NCPUS=`sysctl -n hw.ncpu`
+        Darwin|FreeBSD|NetBSD|OpenBSD)
+            PARALLELISM=`sysctl -n hw.ncpu`
+            ;;
+
+        Linux)
+            PARALLELISM=`getconf _NPROCESSORS_ONLN`
         ;;
+        # what else than above does profit here *and* has /proc?
+        *)
+            PARALLELISM=`grep $'^processor\t*:' /proc/cpuinfo | wc -l`
+            ;;
+        esac
 
-    Linux)
-        BUILD_NCPUS=`getconf _NPROCESSORS_ONLN`
-    ;;
-    # what else than above does profit here *and* has /proc?
-    *)
-        BUILD_NCPUS=`grep $'^processor\t*:' /proc/cpuinfo | wc -l`
-        ;;
-    esac
-
-    # If we hit the catch-all case, but /proc/cpuinfo doesn't exist or has an
-    # unexpected format, 'wc -l' will have returned 0.
-    if test "$BUILD_NCPUS" -eq 0; then
-        BUILD_NCPUS=1
+        # If we hit the catch-all case, but /proc/cpuinfo doesn't exist or has an
+        # unexpected format, 'wc -l' will have returned 0.
+        if test "$PARALLELISM" -eq 0; then
+            PARALLELISM=1
+        fi
     fi
 fi
-AC_MSG_RESULT([$BUILD_NCPUS])
-AC_SUBST(BUILD_NCPUS)
+
+if test "$no_parallelism_make" = "YES" && test $PARALLELISM -gt 1; then
+    if test -z "$with_parallelism"; then
+            AC_MSG_WARN([gmake 3.81 crashes with parallelism > 1, reducing it to 1. upgrade to 3.82 to avoid this.])
+            add_warning "gmake 3.81 crashes with parallelism > 1, reducing it to 1. upgrade to 3.82 to avoid this."
+            PARALLELISM="1"
+    else
+        add_warning "make 3.81 is prone to crashes with parallelism > 1. Since --with-parallelism was explicitly given, it is honored, but do not complain when make segfaults on you."
+    fi
+fi
+
+AC_MSG_RESULT([$PARALLELISM])
+AC_SUBST(PARALLELISM)
+
+# ===================================================================
+# Number of parallel jobs to be executed during subsequenttest
+# ===================================================================
+AC_MSG_CHECKING([for maximum no. of jobs during subsequenttest])
+CHECK_PARALLELISM=$PARALLELISM
+if test "$with_check_jobs" != ""; then
+    CHECK_PARALLELISM="$with_check_jobs"
+fi
+AC_MSG_RESULT([$CHECK_PARALLELISM])
+AC_SUBST(CHECK_PARALLELISM)
 
 #
 # Set up ILIB for MSVC build
@@ -12604,21 +12623,6 @@ fi
 AC_SUBST(MERGELIBS)
 
 dnl ===================================================================
-dnl Number of parallel jobs to be executed by dmake
-dnl ===================================================================
-AC_MSG_CHECKING([for maximum of jobs per processor])
-BUILD_MAX_JOBS="1"
-if test "$with_max_jobs" != ""; then
-    BUILD_MAX_JOBS="$with_max_jobs"
-else
-    if test "$enable_icecream" = "yes"; then
-        BUILD_MAX_JOBS="10"
-    fi
-fi
-AC_MSG_RESULT([$BUILD_MAX_JOBS])
-AC_SUBST(BUILD_MAX_JOBS)
-
-dnl ===================================================================
 dnl icerun is a wrapper that stops us spawning tens of processes
 dnl locally - for tools that can't be executed on the compile cluster
 dnl this avoids a dozen javac's ganging up on your laptop to kill it.
@@ -12628,49 +12632,6 @@ if test "$enable_icecream" = "yes"; then
    ICECREAM_RUN=icerun
 fi
 AC_SUBST(ICECREAM_RUN)
-
-# =====================================================================
-# determine the parallelism for gnu make
-# =====================================================================
-AC_MSG_CHECKING([for maximum parallelism for gmake])
-if test $BUILD_MAX_JOBS -gt $BUILD_NCPUS; then
-    GMAKE_PARALLELISM="$BUILD_MAX_JOBS"
-else
-    GMAKE_PARALLELISM="$BUILD_NCPUS"
-fi
-GMAKE_MODULE_PARALLELISM="$BUILD_MAX_JOBS"
-if test "$no_parallelism_make" = "YES"; then
-    if test -z "$with_num_cpus"; then
-        GMAKE_PARALLELISM="1"
-        if test $GMAKE_MODULE_PARALLELISM -gt 1; then
-            AC_MSG_WARN([gmake 3.81 crashes with parallelism > 1, reducing it to 1. upgrade to 3.82 to avoid this.])
-            if test -z "$with_num_cpus"; then
-                add_warning "gmake 3.81 crashes with parallelism > 1, reducing it to 1. upgrade to 3.82 to avoid this."
-            fi
-            GMAKE_MODULE_PARALLELISM="1"
-        fi
-    else
-        GMAKE_PARALLELISM="$BUILD_NCPUS"
-        add_warning "make 3.81 is prone to crashes with parallelism > 1. Since --with-num-cpus was explicitly given, it is honored, but do not complain when make segfault on you."
-    fi
-fi
-
-# GMAKE_PARALLELISM is used in tail_build
-# GMAKE_MODULE_PARALLELISM is used when building individual gbuildified module
-AC_MSG_RESULT([per module:$GMAKE_MODULE_PARALLELISM, for tail_build:$GMAKE_PARALLELISM])
-AC_SUBST(GMAKE_PARALLELISM)
-AC_SUBST(GMAKE_MODULE_PARALLELISM)
-
-dnl ===================================================================
-dnl Number of parallel jobs to be executed during subsequenttest
-dnl ===================================================================
-AC_MSG_CHECKING([for maximum no. of jobs during subsequenttest])
-CHECK_PARALLELISM=$GMAKE_PARALLELISM
-if test "$with_check_jobs" != ""; then
-    CHECK_PARALLELISM="$with_check_jobs"
-fi
-AC_MSG_RESULT([$CHECK_PARALLELISM])
-AC_SUBST(CHECK_PARALLELISM)
 
 dnl ===================================================================
 dnl Setting up the environment.

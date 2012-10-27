@@ -30,6 +30,6 @@ $(call gb_ExternalProject_get_state_target,librsvg,build) :
     LIBRSVG_LIBS="-L$(OUTDIR)/lib -lgdk_pixbuf-2.0 -lpango-1.0 -lpangocairo-1.0 -lgthread-2.0 -lgio-2.0 -lgmodule-2.0 -lgobject-2.0 -lglib-2.0 $(if $(filter YES,$(SYSTEM_LIBXML)),$(LIBXML_LIBS),-lxml2) -lcairo -lintl" \
 	CFLAGS="-I$(OUTDIR)/inc/external -I$(OUTDIR)/inc/external/glib-2.0 -I$(OUTDIR)/inc/external/gdk-pixbuf-2.0 -I$(OUTDIR)/inc/external/pango-1.0 -I$(OUTDIR)/inc/cairo" \
 	LDFLAGS="$(foreach lib,cairo.2 gio-2.0.0 glib-2.0.0 gmodule-2.0.0 gobject-2.0.0 gthread-2.0.0 intl.8 pango-1.0.0,-Wl,-dylib_file,@loader_path/lib$(lib).dylib:$(OUTDIR)/lib/lib$(lib).dylib) $(if $(filter YES,$(SYSTEM_LIBXML)),,-Wl,-dylib_file,@loader_path/../ure-link/lib/libxml2.2.dylib:$(OUTDIR)/lib/libxml2.2.dylib)" \
-	&& PATH=$(OUTDIR_FOR_BUILD)/bin:$$PATH $(GNUMAKE) -j$(EXTMAXPROCESS) \
+	&& PATH=$(OUTDIR_FOR_BUILD)/bin:$$PATH $(MAKE) \
 	&& touch $@
 # vim: set noet sw=4 ts=4:

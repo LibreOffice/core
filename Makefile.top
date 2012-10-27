@@ -255,7 +255,7 @@ define gbuild_module_rules
 .PHONY: $(1) $(1).all $(1).build $(1).check $(1).clean $(1).subsequentcheck $(1).deliver
 
 $(1): bootstrap fetch
-	cd $(1) && $(GNUMAKE) -j $(GMAKE_PARALLELISM) $(GMAKE_OPTIONS) gb_PARTIALBUILD=T
+	cd $(1) && $(GNUMAKE) -j $(PARALLELISM) $(GMAKE_OPTIONS) gb_PARTIALBUILD=T
 
 $(1).all: bootstrap fetch
 	$$(if $$(filter $(1),$$(shell $(GNUMAKE) -r -f $(SRCDIR)/tail_build/Makefile showmodules)), \
@@ -264,16 +264,16 @@ $(1).all: bootstrap fetch
 	, \
 		cd $(1) && unset MAKEFLAGS && \
 	) \
-	$(SOLARENV)/bin/build.pl -P$(BUILD_NCPUS) --all -- -P$(GMAKE_PARALLELISM)
+	$(SOLARENV)/bin/build.pl -P$(PARALLELISM) --all -- -P$(PARALLELISM)
 
 $(1).build:
-	cd $(1) && $(GNUMAKE) -j $(CHECK_PARALLELISM) $(GMAKE_OPTIONS) build gb_PARTIALBUILD=T
+	cd $(1) && $(GNUMAKE) -j $(PARALLELISM) $(GMAKE_OPTIONS) build gb_PARTIALBUILD=T
 
 $(1).check:
-	cd $(1) && $(GNUMAKE) -j $(CHECK_PARALLELISM) $(GMAKE_OPTIONS) check gb_PARTIALBUILD=T
+	cd $(1) && $(GNUMAKE) -j $(PARALLELISM) $(GMAKE_OPTIONS) check gb_PARTIALBUILD=T
 
 $(1).clean:
-	cd $(1) && $(GNUMAKE) -j $(GMAKE_PARALLELISM) $(GMAKE_OPTIONS) clean gb_PARTIALBUILD=T
+	cd $(1) && $(GNUMAKE) -j $(PARALLELISM) $(GMAKE_OPTIONS) clean gb_PARTIALBUILD=T
 
 $(1).subsequentcheck:
 	cd $(1) && $(GNUMAKE) -j $(CHECK_PARALLELISM) $(GMAKE_OPTIONS) subsequentcheck gb_PARTIALBUILD=T
@@ -292,11 +292,11 @@ define dmake_module_rules
 
 $(1): bootstrap fetch
 	cd $(1) && unset MAKEFLAGS && \
-        $(SOLARENV)/bin/build.pl -P$(BUILD_NCPUS) -- -P$(GMAKE_PARALLELISM)
+        $(SOLARENV)/bin/build.pl -P$(PARALLELISM) -- -P$(PARALLELISM)
 
 $(1).all: bootstrap fetch
 	cd $(1) && unset MAKEFLAGS && \
-        $(SOLARENV)/bin/build.pl -P$(BUILD_NCPUS) --all -- -P$(GMAKE_PARALLELISM)
+        $(SOLARENV)/bin/build.pl -P$(PARALLELISM) --all -- -P$(PARALLELISM)
 
 $(1).deliver: $(1)
 	cd $(1) && $(SOLARENV)/bin/deliver.pl
@@ -333,7 +333,7 @@ clean: clean-host clean-build
 
 clean-host:
 ifeq ($(BUILD_DMAKE),YES)
-	if [ -f dmake/Makefile ] ; then $(GNUMAKE) -j $(GMAKE_PARALLELISM) -C dmake clean; fi
+	if [ -f dmake/Makefile ] ; then $(GNUMAKE) -j $(PARALLELISM) -C dmake clean; fi
 endif
 	rm -fr $(DEVINSTALLDIR)
 	rm -fr $(OUTDIR)
@@ -355,7 +355,7 @@ include $(SRCDIR)/compilerplugins/Makefile.mk
 #
 distclean : clean compilerplugins-clean
 ifeq ($(BUILD_DMAKE),YES)
-	(if [ -f dmake/Makefile ] ; then $(GNUMAKE) -j $(GMAKE_PARALLELISM) -C dmake distclean; fi) && \
+	(if [ -f dmake/Makefile ] ; then $(GNUMAKE) -j $(PARALLELISM) -C dmake distclean; fi) && \
 	rm -f solenv/*/bin/dmake*
 endif
 	rm -fr config_host.mk config_build.mk aclocal.m4 autom4te.cache \
@@ -413,25 +413,25 @@ ifeq ($(DISABLE_DBCONNECTIVITY),TRUE)
 	cd connectivity && sed -e 's/^\(export [A-Z0-9_]*=\)\(.*\)$$/\1"\2"/' <../config_host.mk >conftmp.sh && . conftmp.sh && rm conftmp.sh && $(SOLARENV)/bin/deliver.pl
 endif
 	cd packimages && unset MAKEFLAGS && \
-		$(SOLARENV)/bin/build.pl -P$(BUILD_NCPUS) --all -- -P$(GMAKE_PARALLELISM) && \
-		$(GNUMAKE) -j $(GMAKE_PARALLELISM) $(GMAKE_OPTIONS)
+		$(SOLARENV)/bin/build.pl -P$(PARALLELISM) --all -- -P$(PARALLELISM) && \
+		$(GNUMAKE) -j $(PARALLELISM) $(GMAKE_OPTIONS)
 
 build: build-packimages
 ifeq ($(OS_FOR_BUILD),WNT)
 	cd instsetoo_native && unset MAKEFLAGS && $(SOLARENV)/bin/build.pl
 else
 	cd instsetoo_native && unset MAKEFLAGS && \
-        $(SOLARENV)/bin/build.pl -P$(BUILD_NCPUS) -- -P$(GMAKE_PARALLELISM)
+        $(SOLARENV)/bin/build.pl -P$(PARALLELISM) -- -P$(PARALLELISM)
 endif
 ifeq ($(OS),ANDROID)
-	cd android && $(GNUMAKE) -j $(GMAKE_PARALLELISM) $(GMAKE_OPTIONS)
+	cd android && $(GNUMAKE) -j $(PARALLELISM) $(GMAKE_OPTIONS)
 endif
 
 build-nocheck : export SKIP_TESTS := YES
 build-nocheck : build
 
 cross-toolset: bootstrap fetch
-	cd cross_toolset && $(GNUMAKE) -j $(GMAKE_PARALLELISM) $(GMAKE_OPTIONS)
+	cd cross_toolset && $(GNUMAKE) -j $(PARALLELISM) $(GMAKE_OPTIONS)
 ifneq (,$(filter DESKTOP,$(BUILD_TYPE)))
 ifneq (WNT,$(OS))
 # We need to build nss for nsinstall... See NSINSTALL=... in nss/makefile.mk
@@ -556,16 +556,16 @@ findunusedcode:
 check: dev-install subsequentcheck
 
 subsequentcheck :| $(if $(filter-out subsequentcheck,$(MAKECMDGOALS)),dev-install)
-	$(GNUMAKE) -j $(GMAKE_PARALLELISM) $(GMAKE_OPTIONS) -f Makefile.post $@
+	$(GNUMAKE) -j $(CHECK_PARALLELISM) $(GMAKE_OPTIONS) -f Makefile.post $@
 
 unitcheck:
-	$(GNUMAKE) -j $(GMAKE_PARALLELISM) $(GMAKE_OPTIONS) -f Makefile.post $@
+	$(GNUMAKE) -j $(PARALLELISM) $(GMAKE_OPTIONS) -f Makefile.post $@
 
 slowcheck:
-	$(GNUMAKE) -j $(GMAKE_PARALLELISM) $(GMAKE_OPTIONS) -f Makefile.post $@
+	$(GNUMAKE) -j $(PARALLELISM) $(GMAKE_OPTIONS) -f Makefile.post $@
 
 debugrun:
-	$(GNUMAKE) -j $(GMAKE_PARALLELISM) $(GMAKE_OPTIONS) -f Makefile.post $@
+	$(GNUMAKE) -j $(PARALLELISM) $(GMAKE_OPTIONS) -f Makefile.post $@
 
 endif # not clean or distclean
 

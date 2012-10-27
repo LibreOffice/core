@@ -21,9 +21,9 @@ ifeq ($(OS)$(COM),WNTMSC)
 
 $(call gb_ExternalProject_get_state_target,postgresql,build) :
 	cd $(EXTERNAL_WORKDIR)/src \
-	&& unset MAKEFLAGS \
-	&& nmake -f win32.mak USE_SSL=1 USE_LDAP=1 \
+	&& MAKEFLAGS= && nmake -f win32.mak USE_SSL=1 USE_LDAP=1 \
 	&& touch $@
+
 else
 
 $(call gb_ExternalProject_get_state_target,postgresql,build) :
@@ -35,8 +35,7 @@ $(call gb_ExternalProject_get_state_target,postgresql,build) :
 		$(if $(filter YES,$(WITH_GSSAPI)),--with-gssapi) \
 		$(if $(filter NO,$(SYSTEM_OPENLDAP)),CPPFLAGS="-I$(OUTDIR)/inc/openldap" LDFLAGS="-L$(OUTDIR)/lib" EXTRA_LDAP_LIBS="-llber -lssl3 -lsmime3 -lnss3 -lnssutil3 -lplds4 -lplc4 -lnspr4") \
 	&& cd src/interfaces/libpq \
-	&& unset MAKEFLAGS \
-	&& $(GNUMAKE) -j$(EXTMAXPROCESS) all-static-lib libpq-flags.mk \
+	&& MAKEFLAGS= && $(MAKE) all-static-lib libpq-flags.mk \
 	&& touch $@
 
 endif

@@ -22,7 +22,7 @@ $(call gb_ExternalProject_get_state_target,hunspell,build):
 	$(if $(filter AIX,$(OS)),CFLAGS="-D_LINUX_SOURCE_COMPAT") \
 	$(if $(filter C53,$(COM)),CFLAGS="-xc99=none") \
 	$(if $(filter-out WNTGCC,$(GUI)$(COM)),,LDFLAGS="-Wl,--enable-runtime-pseudo-reloc-v2") \
-	&& $(GNUMAKE) -j$(EXTMAXPROCESS) \
+	&& $(MAKE) \
 	&& touch $@
 
 # vim: set noet sw=4 ts=4:

@@ -28,7 +28,7 @@ $(call gb_ExternalProject_get_state_target,fontconfig,build) :
 		--with-expat-lib=$(OUTDIR)/lib \
 		--with-freetype-config=$(OUTDIR)/bin/freetype-config \
 		--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM) \
-	&& $(GNUMAKE) \
+	&& $(MAKE) \
 	&& touch $@
 
 # vim: set noet sw=4 ts=4:

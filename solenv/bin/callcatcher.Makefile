@@ -24,9 +24,9 @@ include $(SOLARENV)/gbuild/gbuild.mk
 
 findunusedcode:
 	cd instsetoo_native && unset MAKEFLAGS && \
-        $(SOLARENV)/bin/build.pl -P$(BUILD_NCPUS) --all -- -P$(GMAKE_PARALLELISM)
+        $(SOLARENV)/bin/build.pl -P$(PARALLELISM) --all -- -P$(PARALLELISM)
 	ooinstall -l $(DEVINSTALLDIR)/opt
-	$(GNUMAKE) -j $(GMAKE_PARALLELISM) $(GMAKE_OPTIONS) -f Makefile.post subsequentcheck
+	$(GNUMAKE) -j $(PARALLELISM) $(GMAKE_OPTIONS) -f Makefile.post subsequentcheck
 	callanalyse \
         $(WORKDIR)/LinkTarget/*/* \
 	    */$(OUTPATH)/bin/* \

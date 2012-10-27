@@ -72,7 +72,7 @@ $(call gb_ExternalProject_get_state_target,libcdr,build) :
 		--disable-debug \
 		--disable-werror \
 		$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
-	&& (cd $(EXTERNAL_WORKDIR)/src/lib && $(GNUMAKE) -j$(EXTMAXPROCESS)) \
+	&& (cd $(EXTERNAL_WORKDIR)/src/lib && $(MAKE)) \
 	&& touch $@
 
 endif
