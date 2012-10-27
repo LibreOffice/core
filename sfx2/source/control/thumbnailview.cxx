@@ -405,40 +405,6 @@ void ThumbnailView::CalculateItemPositions ()
     delete pDelScrBar;
 }
 
-bool ThumbnailView::ImplScroll( const Point& rPos )
-{
-    if ( !mbScroll || !maItemListRect.IsInside(rPos) )
-        return false;
-
-    const long nScrollOffset = (mnItemHeight <= 16) ? SCROLL_OFFSET/2 : SCROLL_OFFSET;
-    bool bScroll = false;
-
-    if ( rPos.Y() <= maItemListRect.Top()+nScrollOffset )
-    {
-        if ( mnFirstLine > 0 )
-        {
-            --mnFirstLine;
-            bScroll = true;
-        }
-    }
-    else if ( rPos.Y() >= maItemListRect.Bottom()-nScrollOffset )
-    {
-        if ( mnFirstLine < static_cast<sal_uInt16>(mnLines-mnVisLines) )
-        {
-            ++mnFirstLine;
-            bScroll = true;
-        }
-    }
-
-    if ( !bScroll )
-        return false;
-
-    if ( IsReallyVisible() && IsUpdateMode() )
-        Invalidate();
-
-    return true;
-}
-
 size_t ThumbnailView::ImplGetItem( const Point& rPos, bool bMove ) const
 {
     if ( !mbHasVisibleItems )
@@ -791,36 +757,6 @@ void ThumbnailView::DataChanged( const DataChangedEvent& rDCEvt )
     }
 }
 
-void ThumbnailView::InsertItem( sal_uInt16 nItemId, const BitmapEx& rImage,
-                           const OUString& rText, size_t nPos )
-{
-    ThumbnailViewItem* pItem = new ThumbnailViewItem( *this, this );
-    pItem->mnId     = nItemId;
-    pItem->maPreview1 = rImage;
-    pItem->maTitle   = rText;
-    pItem->setSelectClickHdl(LINK(this,ThumbnailView,OnItemSelected));
-    ImplInsertItem( pItem, nPos );
-}
-
-void ThumbnailView::ImplInsertItem( ThumbnailViewItem *const pItem, const size_t nPos )
-{
-    assert(pItem->mnId); // "ItemId == 0"
-    assert(GetItemPos( pItem->mnId ) == THUMBNAILVIEW_ITEM_NOTFOUND); // ItemId already exists
-
-    if ( nPos < mItemList.size() ) {
-        ValueItemList::iterator it = mItemList.begin();
-        ::std::advance( it, nPos );
-        mItemList.insert( it, pItem );
-    } else {
-        mItemList.push_back( pItem );
-    }
-
-    CalculateItemPositions();
-
-    if ( IsReallyVisible() && IsUpdateMode() )
-        Invalidate();
-}
-
 void ThumbnailView::RemoveItem( sal_uInt16 nItemId )
 {
     size_t nPos = GetItemPos( nItemId );
@@ -861,11 +797,6 @@ void ThumbnailView::Clear()
 
     if ( IsReallyVisible() && IsUpdateMode() )
         Invalidate();
-}
-
-size_t ThumbnailView::GetItemCount() const
-{
-    return mItemList.size();
 }
 
 size_t ThumbnailView::GetItemPos( sal_uInt16 nItemId ) const

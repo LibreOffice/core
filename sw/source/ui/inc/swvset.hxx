@@ -22,10 +22,9 @@
 
 class SwRulerValueSet : public SvxBmpNumValueSet
 {
-    public:
-        SwRulerValueSet(Window* pParent, const ResId& rResId);
-        SwRulerValueSet(Window* pParent, WinBits nWinStyle);
-        ~SwRulerValueSet();
+public:
+    SwRulerValueSet(Window* pParent, WinBits nWinStyle);
+    ~SwRulerValueSet();
     virtual void    UserDraw( const UserDrawEvent& rUDEvt );
 };
 #endif

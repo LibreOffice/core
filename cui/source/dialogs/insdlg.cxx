@@ -91,13 +91,6 @@ uno::Reference< io::XInputStream > InsertObjectDialog_Impl::GetIconIfIconified( 
     return uno::Reference< io::XInputStream >();
 }
 
-InsertObjectDialog_Impl::InsertObjectDialog_Impl( Window * pParent, const ResId & rResId, const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& xStorage )
- : ModalDialog( pParent, rResId )
- , m_xStorage( xStorage )
- , aCnt( m_xStorage )
-{
-}
-
 InsertObjectDialog_Impl::InsertObjectDialog_Impl(Window * pParent, const OString& rID,
     const OUString& rUIXMLDescription,
     const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& xStorage)

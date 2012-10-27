@@ -44,7 +44,6 @@ protected:
     const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& m_xStorage;
     comphelper::EmbeddedObjectContainer aCnt;
 
-    InsertObjectDialog_Impl( Window * pParent, const ResId & rResId, const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& xStorage );
     InsertObjectDialog_Impl(Window * pParent, const OString& rID,
         const OUString& rUIXMLDescription,
         const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& xStorage);

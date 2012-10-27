@@ -91,12 +91,6 @@ OUString SwInsertGrfRulerDlg::GetGraphicName() const
     return OUString();
 }
 
-SwRulerValueSet::SwRulerValueSet( Window* pParent, const ResId& rResId )
-    : SvxBmpNumValueSet(pParent, rResId)
-{
-    SetStyle(GetStyle() & ~WB_ITEMBORDER);
-}
-
 SwRulerValueSet::SwRulerValueSet(Window* pParent, WinBits nWinStyle)
     : SvxBmpNumValueSet(pParent, nWinStyle)
 {

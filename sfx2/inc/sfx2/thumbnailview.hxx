@@ -179,15 +179,9 @@ public:
 
     virtual ~ThumbnailView ();
 
-    void InsertItem( sal_uInt16 nItemId,
-                     const BitmapEx &rImage, const OUString &rStr,
-                     size_t nPos = THUMBNAILVIEW_APPEND );
-
     void RemoveItem( sal_uInt16 nItemId );
 
     void Clear();
-
-    size_t GetItemCount() const;
 
     size_t GetItemPos( sal_uInt16 nItemId ) const;
 
@@ -300,13 +294,10 @@ protected:
     SFX2_DLLPRIVATE void         ImplInitScrollBar();
     SFX2_DLLPRIVATE void         ImplDeleteItems();
     SFX2_DLLPRIVATE void         ImplDraw();
-    using Window::ImplScroll;
-    SFX2_DLLPRIVATE bool         ImplScroll( const Point& rPos );
     SFX2_DLLPRIVATE size_t       ImplGetItem( const Point& rPoint, bool bMove = false ) const;
     SFX2_DLLPRIVATE ThumbnailViewItem*    ImplGetItem( size_t nPos );
     SFX2_DLLPRIVATE sal_uInt16          ImplGetVisibleItemCount() const;
     SFX2_DLLPRIVATE ThumbnailViewItem*    ImplGetVisibleItem( sal_uInt16 nVisiblePos );
-    SFX2_DLLPRIVATE void         ImplInsertItem( ThumbnailViewItem *const pItem, const size_t nPos );
     SFX2_DLLPRIVATE void            ImplFireAccessibleEvent( short nEventId, const ::com::sun::star::uno::Any& rOldValue, const ::com::sun::star::uno::Any& rNewValue );
     SFX2_DLLPRIVATE bool         ImplHasAccessibleListeners();
     DECL_DLLPRIVATE_LINK( ImplScrollHdl, ScrollBar* );
