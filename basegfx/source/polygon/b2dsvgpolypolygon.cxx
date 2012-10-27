@@ -41,9 +41,9 @@ namespace basegfx
     {
         namespace
         {
-            void lcl_skipSpaces(sal_Int32&              io_rPos,
-                                const ::rtl::OUString&  rStr,
-                                const sal_Int32         nLen)
+            void lcl_skipSpaces(sal_Int32&          io_rPos,
+                                const OUString&     rStr,
+                                const sal_Int32     nLen)
             {
                 while( io_rPos < nLen &&
                        sal_Unicode(' ') == rStr[io_rPos] )
@@ -52,9 +52,9 @@ namespace basegfx
                 }
             }
 
-            void lcl_skipSpacesAndCommas(sal_Int32&             io_rPos,
-                                         const ::rtl::OUString& rStr,
-                                         const sal_Int32        nLen)
+            void lcl_skipSpacesAndCommas(sal_Int32&         io_rPos,
+                                         const OUString&    rStr,
+                                         const sal_Int32    nLen)
             {
                 while(io_rPos < nLen
                       && (sal_Unicode(' ') == rStr[io_rPos] || sal_Unicode(',') == rStr[io_rPos]))
@@ -73,18 +73,18 @@ namespace basegfx
                 return bPredicate;
             }
 
-            inline bool lcl_isOnNumberChar(const ::rtl::OUString& rStr, const sal_Int32 nPos, bool bSignAllowed = true)
+            inline bool lcl_isOnNumberChar(const OUString& rStr, const sal_Int32 nPos, bool bSignAllowed = true)
             {
                 return lcl_isOnNumberChar(rStr[nPos],
                                           bSignAllowed);
             }
 
-            bool lcl_getDoubleChar(double&                  o_fRetval,
-                                   sal_Int32&               io_rPos,
-                                   const ::rtl::OUString&   rStr)
+            bool lcl_getDoubleChar(double&              o_fRetval,
+                                   sal_Int32&           io_rPos,
+                                   const OUString&      rStr)
             {
                 sal_Unicode aChar( rStr[io_rPos] );
-                ::rtl::OUStringBuffer sNumberString;
+                OUStringBuffer sNumberString;
                 bool separator_seen=false;
 
                 if(sal_Unicode('+') == aChar || sal_Unicode('-') == aChar)
@@ -133,10 +133,10 @@ namespace basegfx
                 return false;
             }
 
-            bool lcl_importDoubleAndSpaces( double&                 o_fRetval,
-                                            sal_Int32&              io_rPos,
-                                            const ::rtl::OUString&  rStr,
-                                            const sal_Int32         nLen )
+            bool lcl_importDoubleAndSpaces( double&             o_fRetval,
+                                            sal_Int32&          io_rPos,
+                                            const OUString&     rStr,
+                                            const sal_Int32     nLen )
             {
                 if( !lcl_getDoubleChar(o_fRetval, io_rPos, rStr) )
                     return false;
@@ -146,10 +146,10 @@ namespace basegfx
                 return true;
             }
 
-            bool lcl_importFlagAndSpaces(sal_Int32&               o_nRetval,
-                                         sal_Int32&               io_rPos,
-                                         const ::rtl::OUString&   rStr,
-                                         const sal_Int32          nLen)
+            bool lcl_importFlagAndSpaces(sal_Int32&         o_nRetval,
+                                         sal_Int32&         io_rPos,
+                                         const OUString&    rStr,
+                                         const sal_Int32    nLen)
             {
                 sal_Unicode aChar( rStr[io_rPos] );
 
@@ -171,14 +171,14 @@ namespace basegfx
                 return true;
             }
 
-            void lcl_putNumberChar( ::rtl::OUStringBuffer& rStr,
-                                    double                 fValue )
+            void lcl_putNumberChar( OUStringBuffer& rStr,
+                                    double          fValue )
             {
                 rStr.append( fValue );
             }
 
-            void lcl_putNumberCharWithSpace( ::rtl::OUStringBuffer& rStr,
-                                             double                 fValue,
+            void lcl_putNumberCharWithSpace( OUStringBuffer&    rStr,
+                                             double             fValue,
                                              double                 fOldValue,
                                              bool                   bUseRelativeCoordinates )
             {
@@ -206,7 +206,7 @@ namespace basegfx
             }
         }
 
-        bool importFromSvgD(B2DPolyPolygon& o_rPolyPolygon, const ::rtl::OUString&  rSvgDStatement, bool bWrongPositionAfterZ)
+        bool importFromSvgD(B2DPolyPolygon& o_rPolyPolygon, const OUString&  rSvgDStatement, bool bWrongPositionAfterZ)
         {
             o_rPolyPolygon.clear();
             const sal_Int32 nLen(rSvgDStatement.getLength());
@@ -789,7 +789,7 @@ namespace basegfx
         }
 
         bool importFromSvgPoints( B2DPolygon&            o_rPoly,
-                                  const ::rtl::OUString& rSvgPointsAttribute )
+                                  const OUString& rSvgPointsAttribute )
         {
             o_rPoly.clear();
             const sal_Int32 nLen(rSvgPointsAttribute.getLength());
@@ -814,13 +814,13 @@ namespace basegfx
             return true;
         }
 
-        ::rtl::OUString exportToSvgD(
+        OUString exportToSvgD(
             const B2DPolyPolygon& rPolyPolygon,
             bool bUseRelativeCoordinates,
             bool bDetectQuadraticBeziers)
         {
             const sal_uInt32 nCount(rPolyPolygon.count());
-            ::rtl::OUStringBuffer aResult;
+            OUStringBuffer aResult;
             B2DPoint aCurrentSVGPosition(0.0, 0.0); // SVG assumes (0,0) as the initial current point
 
             for(sal_uInt32 i(0); i < nCount; i++)
