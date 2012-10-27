@@ -69,7 +69,7 @@ protected:
     void implSetNewObject(
         const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxObject);
 
-    ::rtl::OUString GetHeadlineName(
+    OUString GetHeadlineName(
         const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxObject);
 
 public:
