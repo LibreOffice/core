@@ -641,7 +641,11 @@ int RTFDocumentImpl::resolvePict(bool bInline)
     aExtHeader.mapMode = m_aStates.top().aPicture.eWMetafile;
     aExtHeader.xExt = m_aStates.top().aPicture.nWidth;
     aExtHeader.yExt = m_aStates.top().aPicture.nHeight;
-    OUString aGraphicUrl = m_pGraphicHelper->importGraphicObject(xInputStream, &aExtHeader);
+    WMF_EXTERNALHEADER* pExtHeader = &aExtHeader;
+    uno::Reference<lang::XServiceInfo> xServiceInfo(m_aStates.top().aDrawingObject.xShape, uno::UNO_QUERY);
+    if (xServiceInfo.is() && xServiceInfo->supportsService("com.sun.star.text.TextFrame"))
+        pExtHeader = 0;
+    OUString aGraphicUrl = m_pGraphicHelper->importGraphicObject(xInputStream, pExtHeader);
 
     if (m_aStates.top().aPicture.nStyle == BMPSTYLE_PNG)
     {
