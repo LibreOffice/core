@@ -113,10 +113,8 @@ namespace unotools
                 // found - contract violation.
                 if( !xLinePoly.is() )
                     throw lang::IllegalArgumentException(
-                        ::rtl::OUString(
-                            RTL_CONSTASCII_USTRINGPARAM(
-                                "UnoPolyPolygon::addPolyPolygon(): Invalid input "
-                                "poly-polygon, cannot retrieve vertex data")),
+                        "UnoPolyPolygon::addPolyPolygon(): Invalid input "
+                        "poly-polygon, cannot retrieve vertex data",
                         static_cast<cppu::OWeakObject*>(this), 1);
 
                 aSrcPoly = unotools::polyPolygonFromPoint2DSequenceSequence(
@@ -447,20 +445,20 @@ namespace unotools
 
 #define IMPLEMENTATION_NAME "gfx::internal::UnoPolyPolygon"
 #define SERVICE_NAME "com.sun.star.rendering.PolyPolygon2D"
-    ::rtl::OUString SAL_CALL UnoPolyPolygon::getImplementationName() throw( uno::RuntimeException )
+    OUString SAL_CALL UnoPolyPolygon::getImplementationName() throw( uno::RuntimeException )
     {
-        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( IMPLEMENTATION_NAME ) );
+        return OUString( IMPLEMENTATION_NAME );
     }
 
-    sal_Bool SAL_CALL UnoPolyPolygon::supportsService( const ::rtl::OUString& ServiceName ) throw( uno::RuntimeException )
+    sal_Bool SAL_CALL UnoPolyPolygon::supportsService( const OUString& ServiceName ) throw( uno::RuntimeException )
     {
         return ServiceName == SERVICE_NAME;
     }
 
-    uno::Sequence< ::rtl::OUString > SAL_CALL UnoPolyPolygon::getSupportedServiceNames()  throw( uno::RuntimeException )
+    uno::Sequence< OUString > SAL_CALL UnoPolyPolygon::getSupportedServiceNames()  throw( uno::RuntimeException )
     {
-        uno::Sequence< ::rtl::OUString > aRet(1);
-        aRet[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( SERVICE_NAME ) );
+        uno::Sequence< OUString > aRet(1);
+        aRet[0] = SERVICE_NAME ;
 
         return aRet;
     }
