@@ -3756,11 +3756,13 @@ int RTFDocumentImpl::popState()
 
         if (bTextFrame)
         {
-            xPropertySet->setPropertyValue("HoriOrientPosition", uno::makeAny(rDrawing.nLeft));
-            xPropertySet->setPropertyValue("VertOrientPosition", uno::makeAny(rDrawing.nTop));
+            xPropertySet->setPropertyValue("HoriOrientPosition", uno::makeAny((sal_Int32)rDrawing.nLeft));
+            xPropertySet->setPropertyValue("VertOrientPosition", uno::makeAny((sal_Int32)rDrawing.nTop));
         }
         else
+        {
             xShape->setPosition(awt::Point(rDrawing.nLeft, rDrawing.nTop));
+        }
         xShape->setSize(awt::Size(rDrawing.nRight, rDrawing.nBottom));
 
         if (rDrawing.bHasLineColor)
