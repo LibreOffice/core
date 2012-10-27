@@ -30,7 +30,7 @@ $(call gb_CustomTarget_get_target,tools/reversemap) : \
 
 $(call gb_CustomTarget_get_workdir,tools/reversemap)/reversemap.hxx : \
 		$(call gb_Executable_get_target_for_build,bestreversemap) \
-		| $(call gb_Library_get_target,sal_textenc) \
+		| $(if $(filter-out ANDROID,$(OS)),$(call gb_Library_get_target,sal_textenc)) \
 		$(call gb_CustomTarget_get_workdir,tools/reversemap)/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),BRM,1)
 	$(call gb_Helper_execute,bestreversemap > $@)
