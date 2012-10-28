@@ -2329,7 +2329,7 @@ XclExpCellTable::XclExpCellTable( const XclExpRoot& rRoot ) :
                     mxHyperlinkList->AppendRecord( aLinkHelper.GetLinkRecord() );
                 // add list of multiple URLs to the additional cell note text
                 if( aLinkHelper.HasMultipleUrls() )
-                    ScGlobal::AddToken( aAddNoteText, aLinkHelper.GetUrlList(), '\n', 2 );
+                    aAddNoteText = ScGlobal::addToken( aAddNoteText, aLinkHelper.GetUrlList(), '\n', 2 );
             }
             break;
 

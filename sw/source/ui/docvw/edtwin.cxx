@@ -31,6 +31,7 @@
 #include <hintids.hxx>
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/string.hxx>
 #include <com/sun/star/i18n/XBreakIterator.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <com/sun/star/i18n/InputSequenceCheckMode.hpp>
@@ -2386,7 +2387,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                 {
                     // insert a blank ahead of the character. this ends up
                     // between the expanded text and the new "non-word-seperator".
-                    aInBuffer.Expand( aInBuffer.Len() + 1, ' ' );
+                    aInBuffer += ' ';
                 }
 
                 sal_Bool bIsAutoCorrectChar =  SvxAutoCorrect::IsAutoCorrectChar( aCh );
@@ -2417,7 +2418,10 @@ KEYINPUT_CHECKTABLE_INSDEL:
                 }
                 else
                 {
-                    aInBuffer.Expand( aInBuffer.Len() + aKeyEvent.GetRepeat() + 1,aCh );
+                    rtl::OUStringBuffer aBuf(aInBuffer);
+                    comphelper::string::padToLength(aBuf,
+                        aInBuffer.Len() + aKeyEvent.GetRepeat() + 1, aCh);
+                    aInBuffer = aBuf.makeStringAndClear();
                     bFlushCharBuffer = Application::AnyInput( VCL_INPUT_KEYBOARD );
                     bFlushBuffer = !bFlushCharBuffer;
                     if( bFlushCharBuffer )

@@ -3082,7 +3082,7 @@ void ScHTMLQueryParser::FontOn( const ImportInfo& rInfo )
                 {
                     // font list separator: VCL = ';' HTML = ','
                     String aFName = comphelper::string::strip(rFace.GetToken(0, ',', nPos), ' ');
-                    ScGlobal::AddToken( aFontName, aFName, ';' );
+                    aFontName = ScGlobal::addToken(aFontName, aFName, ';');
                 }
                 if ( aFontName.Len() )
                     mpCurrTable->PutItem( SvxFontItem( FAMILY_DONTKNOW,

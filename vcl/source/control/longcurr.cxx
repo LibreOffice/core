@@ -142,10 +142,9 @@ static sal_Bool ImplNumericGetValue( const XubString& rStr, BigInt& rValue,
 {
     XubString   aStr = rStr;
     XubString   aStr1;
-    XubString   aStr2;
+    rtl::OUStringBuffer aStr2;
     sal_uInt16      nDecPos;
     sal_Bool        bNegative = sal_False;
-    xub_StrLen  i;
 
     // Reaktion auf leeren String
     if ( !rStr.Len() )
@@ -160,7 +159,7 @@ static sal_Bool ImplNumericGetValue( const XubString& rStr, BigInt& rValue,
     if ( nDecPos != STRING_NOTFOUND )
     {
         aStr1 = aStr.Copy( 0, nDecPos );
-        aStr2 = aStr.Copy( nDecPos+1 );
+        aStr2.append(aStr.Copy(nDecPos+1));
     }
     else
         aStr1 = aStr;
@@ -172,7 +171,7 @@ static sal_Bool ImplNumericGetValue( const XubString& rStr, BigInt& rValue,
             bNegative = sal_True;
         if ( !bNegative )
         {
-            for ( i=0; i < aStr.Len(); i++ )
+            for (xub_StrLen i=0; i < aStr.Len(); i++ )
             {
                 if ( (aStr.GetChar( i ) >= '0') && (aStr.GetChar( i ) <= '9') )
                     break;
@@ -189,7 +188,7 @@ static sal_Bool ImplNumericGetValue( const XubString& rStr, BigInt& rValue,
             if ( (nFormat == 3) || (nFormat == 6)  ||
                  (nFormat == 7) || (nFormat == 10) )
             {
-                for ( i = (sal_uInt16)(aStr.Len()-1); i > 0; i++ )
+                for (xub_StrLen i = (sal_uInt16)(aStr.Len()-1); i > 0; i++ )
                 {
                     if ( (aStr.GetChar( i ) >= '0') && (aStr.GetChar( i ) <= '9') )
                         break;
@@ -209,22 +208,22 @@ static sal_Bool ImplNumericGetValue( const XubString& rStr, BigInt& rValue,
     }
 
     // Alle unerwuenschten Zeichen rauswerfen
-    for ( i=0; i < aStr1.Len(); )
+    for (xub_StrLen i=0; i < aStr1.Len(); )
     {
         if ( (aStr1.GetChar( i ) >= '0') && (aStr1.GetChar( i ) <= '9') )
             i++;
         else
             aStr1.Erase( i, 1 );
     }
-    for ( i=0; i < aStr2.Len(); )
+    for (sal_Int32 i=0; i < aStr2.getLength();)
     {
-        if ( (aStr2.GetChar( i ) >= '0') && (aStr2.GetChar( i ) <= '9') )
-            i++;
+        if ((aStr2[i] >= '0') && (aStr2[i] <= '9'))
+            ++i;
         else
-            aStr2.Erase( i, 1 );
+            aStr2.remove(i, 1);
     }
 
-    if ( !aStr1.Len() && !aStr2.Len() )
+    if (!aStr1.Len() && !aStr2.getLength())
         return sal_False;
 
     if ( !aStr1.Len() )
@@ -233,18 +232,18 @@ static sal_Bool ImplNumericGetValue( const XubString& rStr, BigInt& rValue,
         aStr1.Insert( '-', 0 );
 
     // Nachkommateil zurechtstutzen und dabei runden
-    sal_Bool bRound = sal_False;
-    if ( aStr2.Len() > nDecDigits )
+    bool bRound = false;
+    if (aStr2.getLength() > nDecDigits)
     {
-        if ( aStr2.GetChar( nDecDigits ) >= '5' )
-            bRound = sal_True;
-        aStr2.Erase( nDecDigits );
+        if (aStr2[nDecDigits] >= '5')
+            bRound = true;
+        string::truncateToLength(aStr2, nDecDigits);
     }
-    if ( aStr2.Len() < nDecDigits )
-        aStr2.Expand( nDecDigits, '0' );
+    if (aStr2.getLength() < nDecDigits)
+        string::padToLength(aStr2, nDecDigits, '0');
 
     aStr  = aStr1;
-    aStr += aStr2;
+    aStr += aStr2.makeStringAndClear();
 
     // Bereichsueberpruefung
     BigInt nValue( aStr );

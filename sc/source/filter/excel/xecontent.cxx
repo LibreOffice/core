@@ -1600,7 +1600,7 @@ XclExpWebQuery::XclExpWebQuery(
         mbEntireDoc = ScfTools::IsHTMLDocName( aToken );
         bExitLoop = mbEntireDoc || ScfTools::IsHTMLTablesName( aToken );
         if( !bExitLoop && ScfTools::GetHTMLNameFromName( aToken, aAppendTable ) )
-            ScGlobal::AddToken( aNewTables, aAppendTable, ',' );
+            aNewTables = ScGlobal::addToken( aNewTables, aAppendTable, ',' );
     }
 
     if( !bExitLoop )    // neither HTML_all nor HTML_tables found

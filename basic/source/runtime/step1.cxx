@@ -19,7 +19,9 @@
 
 
 #include <stdlib.h>
+#include <comphelper/string.hxx>
 #include <rtl/math.hxx>
+#include <rtl/ustrbuf.hxx>
 #include <basic/sbuno.hxx>
 #include "runtime.hxx"
 #include "sbintern.hxx"
@@ -147,10 +149,16 @@ void SbiRuntime::StepPAD( sal_uInt32 nOp1 )
 {
     SbxVariable* p = GetTOS();
     String& s = (String&)(const String&) *p;
-    if( s.Len() > nOp1 )
-        s.Erase( static_cast<xub_StrLen>( nOp1 ) );
-    else
-        s.Expand( static_cast<xub_StrLen>( nOp1 ), ' ' );
+    if (s.Len() != nOp1)
+    {
+        rtl::OUStringBuffer aBuf(s);
+        sal_Int32 nLen(nOp1);
+        if (aBuf.getLength() > nLen)
+            comphelper::string::truncateToLength(aBuf, nLen);
+        else
+            comphelper::string::padToLength(aBuf, nLen, ' ');
+        s = aBuf.makeStringAndClear();
+    }
 }
 
 // jump (+target)

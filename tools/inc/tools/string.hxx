@@ -131,7 +131,7 @@ private:
                                    sal_uInt32 nCvtFlags = BYTESTRING_TO_UNISTRING_CVTFLAGS );
     TOOLS_DLLPRIVATE UniString( const sal_Unicode* pCharStr );
     TOOLS_DLLPRIVATE UniString( const sal_Unicode* pCharStr, xub_StrLen nLen );
-
+    TOOLS_DLLPRIVATE UniString& Expand( xub_StrLen nCount, sal_Unicode cExpandChar );
 public:
                         UniString();
                         UniString( const ResId& rResId );
@@ -216,7 +216,6 @@ public:
     UniString           Copy( xub_StrLen nIndex = 0, xub_StrLen nCount = STRING_LEN ) const;
 
     UniString&          Fill( xub_StrLen nCount, sal_Unicode cFillChar = ' ' );
-    UniString&          Expand( xub_StrLen nCount, sal_Unicode cExpandChar = ' ' );
 
     UniString&          ToLowerAscii();
     UniString&          ToUpperAscii();

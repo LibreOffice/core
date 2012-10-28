@@ -26,6 +26,7 @@
  *
  ************************************************************************/
 
+#include <comphelper/string.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/objsh.hxx>
@@ -2602,7 +2603,14 @@ void ScInterpreter::ScRoman()
                 {
                     if( nDigit > 4 )
                         aRoman += pChars[ nIndex - 1 ];
-                    aRoman.Expand( aRoman.Len() + (nDigit % 5), pChars[ nIndex ] );
+                    sal_Int32 nPad = nDigit % 5;
+                    if (nPad)
+                    {
+                        rtl::OUStringBuffer aBuf(aRoman);
+                        comphelper::string::padToLength(aBuf, aBuf.getLength() + nPad,
+                            pChars[nIndex]);
+                        aRoman = aBuf.makeStringAndClear();
+                    }
                     nVal %= pValues[ nIndex ];
                 }
             }

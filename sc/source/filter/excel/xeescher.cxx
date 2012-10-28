@@ -1225,7 +1225,7 @@ XclExpNote::XclExpNote( const XclExpRoot& rRoot, const ScAddress& rScPos,
             mpNoteContents = XclExpStringHelper::CreateString( rRoot, *pEditObj );
     }
     // append additional text
-    ScGlobal::AddToken( aNoteText, rAddText, '\n', 2 );
+    aNoteText = ScGlobal::addToken( aNoteText, rAddText, '\n', 2 );
     maOrigNoteText = aNoteText;
 
     // initialize record dependent on BIFF type

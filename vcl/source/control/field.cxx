@@ -103,10 +103,9 @@ static sal_Bool ImplNumericGetValue( const XubString& rStr, double& rValue,
 {
     XubString   aStr = rStr;
     XubString   aStr1;
-    XubString   aStr2;
+    rtl::OUStringBuffer aStr2;
     sal_Bool        bNegative = sal_False;
     xub_StrLen  nDecPos;
-    xub_StrLen  i;
 
     // react on empty string
     if ( !rStr.Len() )
@@ -120,7 +119,7 @@ static sal_Bool ImplNumericGetValue( const XubString& rStr, double& rValue,
     if ( nDecPos != STRING_NOTFOUND )
     {
         aStr1 = aStr.Copy( 0, nDecPos );
-        aStr2 = aStr.Copy( nDecPos+1 );
+        aStr2.append(aStr.Copy(nDecPos+1));
     }
     else
         aStr1 = aStr;
@@ -132,7 +131,7 @@ static sal_Bool ImplNumericGetValue( const XubString& rStr, double& rValue,
             bNegative = sal_True;
         if ( !bNegative )
         {
-            for ( i=0; i < aStr.Len(); i++ )
+            for (xub_StrLen i=0; i < aStr.Len(); i++ )
             {
                 if ( (aStr.GetChar( i ) >= '0') && (aStr.GetChar( i ) <= '9') )
                     break;
@@ -149,7 +148,7 @@ static sal_Bool ImplNumericGetValue( const XubString& rStr, double& rValue,
             if ( (nFormat == 3) || (nFormat == 6)  ||
                  (nFormat == 7) || (nFormat == 10) )
             {
-                for ( i = (xub_StrLen)(aStr.Len()-1); i > 0; i++ )
+                for (xub_StrLen i = (xub_StrLen)(aStr.Len()-1); i > 0; i++ )
                 {
                     if ( (aStr.GetChar( i ) >= '0') && (aStr.GetChar( i ) <= '9') )
                         break;
@@ -169,22 +168,22 @@ static sal_Bool ImplNumericGetValue( const XubString& rStr, double& rValue,
     }
 
     // remove all unwanted charaters
-    for ( i=0; i < aStr1.Len(); )
+    for (xub_StrLen i=0; i < aStr1.Len(); )
     {
         if ( (aStr1.GetChar( i ) >= '0') && (aStr1.GetChar( i ) <= '9') )
             i++;
         else
             aStr1.Erase( i, 1 );
     }
-    for ( i=0; i < aStr2.Len(); )
+    for (sal_Int32 i=0; i < aStr2.getLength(); )
     {
-        if ( (aStr2.GetChar( i ) >= '0') && (aStr2.GetChar( i ) <= '9') )
-            i++;
+        if ((aStr2[i] >= '0') && (aStr2[i] <= '9'))
+            ++i;
         else
-            aStr2.Erase( i, 1 );
+            aStr2.remove(i, 1);
     }
 
-    if ( !aStr1.Len() && !aStr2.Len() )
+    if ( !aStr1.Len() && !aStr2.getLength() )
         return sal_False;
 
     if ( !aStr1.Len() )
@@ -193,22 +192,22 @@ static sal_Bool ImplNumericGetValue( const XubString& rStr, double& rValue,
         aStr1.Insert( '-', 0 );
 
     // prune and round fraction
-    sal_Bool bRound = sal_False;
-    if ( aStr2.Len() > nDecDigits )
+    bool bRound = false;
+    if (aStr2.getLength() > nDecDigits)
     {
-        if ( aStr2.GetChar( nDecDigits ) >= '5' )
-            bRound = sal_True;
-        aStr2.Erase( nDecDigits );
+        if (aStr2[nDecDigits] >= '5')
+            bRound = true;
+        string::truncateToLength(aStr2, nDecDigits);
     }
-    if ( aStr2.Len() < nDecDigits )
-        aStr2.Expand( nDecDigits, '0' );
+    if (aStr2.getLength() < nDecDigits)
+        string::padToLength(aStr2, nDecDigits, '0');
 
     aStr  = aStr1;
-    aStr += aStr2;
+    aStr += aStr2.makeStringAndClear();
 
     // check range
     double nValue = rtl::OUString(aStr).toDouble();
-    if ( bRound )
+    if (bRound)
     {
         if ( !bNegative )
             nValue++;
@@ -950,12 +949,12 @@ namespace
         sal_Int32 nTextLen;
 
         nTextLen = rtl::OUString::valueOf(rFormatter.GetMin()).getLength();
-        comphelper::string::padToLength(aBuf, nTextLen, '9');
+        string::padToLength(aBuf, nTextLen, '9');
         Size aMinTextSize = rSpinField.CalcMinimumSizeForText(
             rFormatter.CreateFieldText(aBuf.makeStringAndClear().toInt64()));
 
         nTextLen = rtl::OUString::valueOf(rFormatter.GetMax()).getLength();
-        comphelper::string::padToLength(aBuf, nTextLen, '9');
+        string::padToLength(aBuf, nTextLen, '9');
         Size aMaxTextSize = rSpinField.CalcMinimumSizeForText(
             rFormatter.CreateFieldText(aBuf.makeStringAndClear().toInt64()));
 
@@ -967,7 +966,7 @@ namespace
         if (nDigits)
         {
             sBuf.append('.');
-            comphelper::string::padToLength(aBuf, aBuf.getLength() + nDigits, '9');
+            string::padToLength(aBuf, aBuf.getLength() + nDigits, '9');
         }
         aMaxTextSize = rSpinField.CalcMinimumSizeForText(sBuf.makeStringAndClear());
         aRet.Width() = std::min(aRet.Width(), aMaxTextSize.Width());
