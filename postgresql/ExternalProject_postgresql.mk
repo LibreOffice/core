@@ -34,7 +34,7 @@ $(call gb_ExternalProject_get_state_target,postgresql,build) :
 		$(if $(filter NO,$(SYSTEM_OPENLDAP)),CPPFLAGS="-I$(OUTDIR)/inc/openldap" LDFLAGS="-L$(OUTDIR)/lib" EXTRA_LDAP_LIBS="-llber -lssl3 -lsmime3 -lnss3 -lnssutil3 -lplds4 -lplc4 -lnspr4") \
 	&& cd src/interfaces/libpq \
 	&& unset MAKEFLAGS \
-	&& $(GNUMAKE) -j$(EXTMAXPROCESS) all-static-lib libpq-flags.mk \
+	&& $(GNUMAKE) -j$(GMAKE_MODULE_PARALLELISM) all-static-lib libpq-flags.mk \
 	&& touch $@
 
 endif

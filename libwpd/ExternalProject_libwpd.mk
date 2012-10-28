@@ -46,7 +46,7 @@ $(call gb_ExternalProject_get_state_target,libwpd,build) :
 		--disable-debug \
 		$(if $(filter MACOSX,$(OS)),--disable-werror) \
 		$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
-	&& $(GNUMAKE) -j$(EXTMAXPROCESS) \
+	&& $(GNUMAKE) -j$(GMAKE_MODULE_PARALLELISM) \
 	&& touch $@
 
 endif
