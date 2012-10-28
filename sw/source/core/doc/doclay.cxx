@@ -133,7 +133,7 @@ SwFrmFmt *SwDoc::MakeLayoutFmt( RndStdIds eRequest, const SfxItemSet* pSet )
 {
     SwFrmFmt *pFmt = 0;
     const sal_Bool bMod = IsModified();
-    sal_Bool bHeader = sal_False;
+    bool bHeader = false;
 
     switch ( eRequest )
     {
@@ -141,7 +141,7 @@ SwFrmFmt *SwDoc::MakeLayoutFmt( RndStdIds eRequest, const SfxItemSet* pSet )
     case RND_STD_HEADERL:
     case RND_STD_HEADERR:
         {
-            bHeader = sal_True;
+            bHeader = true;
             // no break, we continue further down
         }
     case RND_STD_FOOTER:
@@ -522,8 +522,8 @@ SwFrmFmt *SwDoc::CopyLayoutFmt( const SwFrmFmt& rSource,
     return pDest;
 }
 
-SdrObject* SwDoc::CloneSdrObj( const SdrObject& rObj, sal_Bool bMoveWithinDoc,
-                                sal_Bool bInsInPage )
+SdrObject* SwDoc::CloneSdrObj( const SdrObject& rObj, bool bMoveWithinDoc,
+                                bool bInsInPage )
 {
     // #i52858# - method name changed
     SdrPage *pPg = GetOrCreateDrawModel()->GetPage( 0 );

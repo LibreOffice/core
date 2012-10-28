@@ -201,7 +201,7 @@ sal_Bool SwFEShell::Copy( SwDoc* pClpDoc, const String* pNewClpTxt )
                 aSet.Put( aAnchor );
 
                 SdrObject *const pNew =
-                    pClpDoc->CloneSdrObj( *pObj, sal_False, sal_True );
+                    pClpDoc->CloneSdrObj( *pObj, false, true );
 
                 SwPaM aTemp(aPos);
                 pClpDoc->Insert(aTemp, *pNew, &aSet, NULL);
@@ -325,7 +325,7 @@ sal_Bool SwFEShell::CopyDrawSel( SwFEShell* pDestShell, const Point& rSttPt,
 
             {
                 SdrObject* pNew = pDestDoc->CloneSdrObj( *pObj, bIsMove &&
-                                        GetDoc() == pDestDoc, sal_False );
+                                        GetDoc() == pDestDoc, false );
                 pNew->NbcMove( aSiz );
                 pDestDrwView->InsertObjectAtView( pNew, *pDestPgView );
                 bInsWithFmt = sal_False;
@@ -387,7 +387,7 @@ sal_Bool SwFEShell::CopyDrawSel( SwFEShell* pDestShell, const Point& rSttPt,
                     SfxItemSet aSet( pDestDoc->GetAttrPool(),aFrmFmtSetRange);
                     aSet.Put( aAnchor );
                     SdrObject* pNew = pDestDoc->CloneSdrObj( *pObj, bIsMove &&
-                                                GetDoc() == pDestDoc, sal_True );
+                                                GetDoc() == pDestDoc, true );
                     pFmt = pDestDoc->Insert( *pDestShell->GetCrsr(),
                                             *pNew, &aSet, NULL );
                 }
@@ -913,7 +913,7 @@ sal_Bool SwFEShell::Paste( SwDoc* pClpDoc, sal_Bool bIncludingPageFrames )
                     if( pSdrObj )
                     {
                         SdrObject* pNew = GetDoc()->CloneSdrObj( *pSdrObj,
-                                                            sal_False, sal_False );
+                                                            false, false );
 
                         // Insert object sets any anchor position to 0.
                         // Therefore we calculate the absolute position here

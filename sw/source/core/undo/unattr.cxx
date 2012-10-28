@@ -656,7 +656,7 @@ void SwUndoResetAttr::UndoImpl(::sw::UndoRedoContext & rContext)
         if( pTNd )
         {
             SwIndex aIdx( pTNd, nSttCntnt );
-            pTNd->DontExpandFmt( aIdx, sal_False );
+            pTNd->DontExpandFmt( aIdx, false );
         }
     }
 
@@ -1168,7 +1168,7 @@ void SwUndoDontExpandFmt::UndoImpl(::sw::UndoRedoContext & rContext)
     SwPosition& rPos = *pPam->GetPoint();
     rPos.nNode = m_nNodeIndex;
     rPos.nContent.Assign( rPos.nNode.GetNode().GetCntntNode(), m_nContentIndex);
-    pDoc->DontExpandFmt( rPos, sal_False );
+    pDoc->DontExpandFmt( rPos, false );
 }
 
 void SwUndoDontExpandFmt::RedoImpl(::sw::UndoRedoContext & rContext)

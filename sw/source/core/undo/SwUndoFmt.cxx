@@ -177,7 +177,7 @@ void SwUndoRenameFmt::UndoImpl(::sw::UndoRedoContext &)
 
     if (pFmt)
     {
-        pDoc->RenameFmt(*pFmt, sOldName, sal_True);
+        pDoc->RenameFmt(*pFmt, sOldName, true);
     }
 }
 
@@ -187,7 +187,7 @@ void SwUndoRenameFmt::RedoImpl(::sw::UndoRedoContext &)
 
     if (pFmt)
     {
-        pDoc->RenameFmt(*pFmt, sNewName, sal_True);
+        pDoc->RenameFmt(*pFmt, sNewName, true);
     }
 }
 

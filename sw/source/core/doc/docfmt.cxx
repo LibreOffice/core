@@ -375,7 +375,7 @@ void SwDoc::ResetAttrs( const SwPaM &rRg,
             {
                 nPtPos = nMkPos = rSt.GetIndex();
                 if( bTxtAttr )
-                    pTxtNd->DontExpandFmt( rSt, sal_True );
+                    pTxtNd->DontExpandFmt( rSt, true );
             }
         }
 
@@ -2280,9 +2280,9 @@ void SwDoc::MoveLeftMargin( const SwPaM& rPam, bool bRight, bool bModulus )
     SetModified();
 }
 
-sal_Bool SwDoc::DontExpandFmt( const SwPosition& rPos, sal_Bool bFlag )
+bool SwDoc::DontExpandFmt( const SwPosition& rPos, bool bFlag )
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     SwTxtNode* pTxtNd = rPos.nNode.GetNode().GetTxtNode();
     if( pTxtNd )
     {
@@ -2457,7 +2457,7 @@ void SwDoc::ChgFmt(SwFmt & rFmt, const SfxItemSet & rSet)
 }
 
 void SwDoc::RenameFmt(SwFmt & rFmt, const String & sNewName,
-                      sal_Bool bBroadcast)
+                      bool bBroadcast)
 {
     SfxStyleFamily eFamily = SFX_STYLE_FAMILY_ALL;
 

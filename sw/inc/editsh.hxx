@@ -234,7 +234,7 @@ public:
 
     /** If Cursor is at the end of a character style in which the DontExpand-flag
      is not yet set, the latter will be set (==> return TRUE). */
-    sal_Bool DontExpandFmt();
+    bool DontExpandFmt();
 
     /** Apply / remove attributes.
      @return attributs in required AttributeSet.

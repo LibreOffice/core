@@ -1198,7 +1198,7 @@ public:
     const SfxPoolItem& GetDefault( sal_uInt16 nFmtHint ) const;
 
     /// Do not expand text attributes.
-    sal_Bool DontExpandFmt( const SwPosition& rPos, sal_Bool bFlag = sal_True );
+    bool DontExpandFmt( const SwPosition& rPos, bool bFlag = true );
 
     /* Formats */
     const SwFrmFmts* GetFrmFmts() const     { return pFrmFmtTbl; }
@@ -1326,7 +1326,7 @@ public:
     void SetGlossaryDoc( SwDoc* pDoc ) { pGlossaryDoc = pDoc; }
 
     /// travel over PaM Ring
-    sal_Bool InsertGlossary( SwTextBlocks& rBlock, const String& rEntry,
+    bool InsertGlossary( SwTextBlocks& rBlock, const String& rEntry,
                         SwPaM& rPaM, SwCrsrShell* pShell = 0);
 
     /** get the set of printable pages for the XRenderable API by
@@ -1925,8 +1925,8 @@ public:
     void Unchain( SwFrmFmt &rFmt );
 
     // For Copy/Move from FrmShell.
-    SdrObject* CloneSdrObj( const SdrObject&, sal_Bool bMoveWithinDoc = sal_False,
-                            sal_Bool bInsInPage = sal_True );
+    SdrObject* CloneSdrObj( const SdrObject&, bool bMoveWithinDoc = false,
+                            bool bInsInPage = true );
 
     //
     // -------------------- FeShell - Interface end ------------------
@@ -1995,7 +1995,7 @@ public:
     void ChgFmt(SwFmt & rFmt, const SfxItemSet & rSet);
 
     void RenameFmt(SwFmt & rFmt, const String & sNewName,
-                   sal_Bool bBroadcast = sal_False);
+                   bool bBroadcast = false);
 
     /// Change a TOX undoable.
     void ChgTOX(SwTOXBase & rTOX, const SwTOXBase & rNew);

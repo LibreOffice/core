@@ -348,8 +348,8 @@ public:
     SwCntntNode *AppendNode( const SwPosition & );
 
     /// When appropriate set DontExpand-flag at INet or character styles respectively.
-    sal_Bool DontExpandFmt( const SwIndex& rIdx, bool bFlag = true,
-                        sal_Bool bFmtToTxtAttributes = sal_True );
+    bool DontExpandFmt( const SwIndex& rIdx, bool bFlag = true,
+                        bool bFmtToTxtAttributes = true );
 
     enum GetTxtAttrMode {
         DEFAULT,    /// DEFAULT: (Start <  nIndex <= End)

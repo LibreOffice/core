@@ -812,12 +812,12 @@ sal_Bool SwEditShell::DelINetAttrWithText()
 
 
 // setzen an den Textzeichenattributen das DontExpand-Flag
-sal_Bool SwEditShell::DontExpandFmt()
+bool SwEditShell::DontExpandFmt()
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     if( !IsTableMode() && GetDoc()->DontExpandFmt( *GetCrsr()->GetPoint() ))
     {
-        bRet = sal_True;
+        bRet = true;
         CallChgLnk();
     }
     return bRet;

@@ -107,10 +107,10 @@ static void lcl_copyDocumentProperties(
 /* --------------------------------------------------
     Description: inserts an AutoText block
  --------------------------------------------------*/
-sal_Bool SwDoc::InsertGlossary( SwTextBlocks& rBlock, const String& rEntry,
+bool SwDoc::InsertGlossary( SwTextBlocks& rBlock, const String& rEntry,
                             SwPaM& rPaM, SwCrsrShell* pShell )
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     sal_uInt16 nIdx = rBlock.GetIndex( rEntry );
     if( (sal_uInt16) -1 != nIdx )
     {
@@ -188,7 +188,7 @@ sal_Bool SwDoc::InsertGlossary( SwTextBlocks& rBlock, const String& rEntry,
             UnlockExpFlds();
             if( !IsExpFldsLocked() )
                 UpdateExpFlds(NULL, true);
-            bRet = sal_True;
+            bRet = true;
         }
         mbInsOnlyTxtGlssry = bSav_IsInsGlossary;
     }
