@@ -19,7 +19,7 @@ $(eval $(call gb_Module_add_targets,mythes,\
 	StaticLibrary_mythes \
 ))
 else
-$(eval $(call gb_Module_add_targets,librsvg,\
+$(eval $(call gb_Module_add_targets,mythes,\
 	ExternalPackage_mythes \
 	ExternalProject_mythes \
 ))
