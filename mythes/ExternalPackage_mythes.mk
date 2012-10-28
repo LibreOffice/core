@@ -13,9 +13,7 @@ ifneq ($(COM),MSC)
 
 $(eval $(call gb_ExternalPackage_use_external_project,mythes,mythes))
 
-$(eval $(call gb_ExternalPackage_add_files,mythes,lib,\
-    .libs/libmythes-1.2.a \
-))
+$(eval $(call gb_ExternalPackage_add_file,mythes,lib/libmythes.a,.libs/libmythes-1.2.a))
 
 endif
 

@@ -7,18 +7,18 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_StaticLibrary_StaticLibrary,libhunspell))
+$(eval $(call gb_StaticLibrary_StaticLibrary,hunspell))
 
-$(eval $(call gb_StaticLibrary_use_unpacked,libhunspell,hunspell))
+$(eval $(call gb_StaticLibrary_use_unpacked,hunspell,hunspell))
 
-$(eval $(call gb_StaticLibrary_set_warnings_not_errors,libhunspell))
+$(eval $(call gb_StaticLibrary_set_warnings_not_errors,hunspell))
 
-$(eval $(call gb_StaticLibrary_add_defs,libhunspell,\
+$(eval $(call gb_StaticLibrary_add_defs,hunspell,\
 	-DHUNSPELL_STATIC \
 	-DOPENOFFICEORG \
 ))
 
-$(eval $(call gb_StaticLibrary_add_generated_cxxobjects,libhunspell,\
+$(eval $(call gb_StaticLibrary_add_generated_cxxobjects,hunspell,\
 	UnpackedTarball/hunspell/src/hunspell/affentry \
 	UnpackedTarball/hunspell/src/hunspell/affixmgr \
 	UnpackedTarball/hunspell/src/hunspell/dictmgr \

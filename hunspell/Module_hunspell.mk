@@ -16,7 +16,7 @@ $(eval $(call gb_Module_add_targets,hunspell,\
 ))
 ifeq ($(COM),MSC)
 $(eval $(call gb_Module_add_targets,hunspell,\
-	StaticLibrary_libhunspell \
+	StaticLibrary_hunspell \
 ))
 else
 $(eval $(call gb_Module_add_targets,hunspell,\

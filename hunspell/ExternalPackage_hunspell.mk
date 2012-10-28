@@ -13,9 +13,7 @@ ifneq ($(COM),MSC)
 
 $(eval $(call gb_ExternalPackage_use_external_project,hunspell,hunspell))
 
-$(eval $(call gb_ExternalPackage_add_files,hunspell,lib,\
-    src/hunspell/.libs/libhunspell-1.3.a \
-))
+$(eval $(call gb_ExternalPackage_add_file,hunspell,lib/libhunspell.a,src/hunspell/.libs/libhunspell-1.3.a))
 
 endif
 

@@ -255,9 +255,10 @@ define gb_LinkTarget__use_mythes
 $(call gb_LinkTarget_use_package,$(1),\
 	mythes \
 )
-$(call gb_LinkTarget_add_libs,$(1),\
-	$(if $(filter MSC,$(COM)),libmythes.lib,-lmythes-1.2) \
+$(call gb_LinkTarget_use_static_libraries,$(1),\
+	mythes \
 )
+
 endef
 
 endif # SYSTEM_MYTHES
@@ -343,7 +344,7 @@ endef
 else # !SYSTEM_HUNSPELL
 
 $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
-	$(if $(filter MSC,$(COM)),libhunspell,hunspell-1.3) \
+	hunspell \
 ))
 
 define gb_LinkTarget__use_hunspell
@@ -355,7 +356,7 @@ $(call gb_LinkTarget_set_include,$(1),\
 	-I$(call gb_UnpackedTarball_get_dir,hunspell/src/hunspell)\
 )
 $(call gb_LinkTarget_use_static_libraries,$(1),\
-	$(if $(filter MSC,$(COM)),libhunspell,hunspell-1.3) \
+	hunspell \
 )
 
 endef
