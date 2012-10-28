@@ -352,7 +352,7 @@ $(call gb_LinkTarget_add_defs,$(1),\
 )
 $(call gb_LinkTarget_set_include,$(1),\
 	$$(INCLUDE) \
-	-I$(OUTDIR)/inc/hunspell \
+	-I$(call gb_UnpackedTarball_get_dir,hunspell/src/hunspell)\
 )
 $(call gb_LinkTarget_use_static_libraries,$(1),\
 	$(if $(filter MSC,$(COM)),libhunspell,hunspell-1.3) \

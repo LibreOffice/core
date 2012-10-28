@@ -85,6 +85,7 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
 	$(call gb_Helper_optional,GRAPHITE,graphite) \
 	$(call gb_Helper_optional,DESKTOP,helpcompiler) \
 	$(call gb_Helper_optional,HSQLDB,hsqldb) \
+	$(call gb_Helper_optional,HUNSPELL,hunspell) \
 	hwpfilter \
 	i18npool \
 	i18nutil \

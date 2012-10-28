@@ -88,6 +88,7 @@ freetype\
 graphite\
 helpcompiler\
 hsqldb\
+hunspell\
 hwpfilter\
 i18npool\
 i18nutil\
@@ -220,7 +221,6 @@ gdk-pixbuf\
 gettext\
 glib\
 helpcontent2 \
-hunspell\
 hyphen\
 icu\
 instsetoo_native\
