@@ -377,28 +377,6 @@ class AgendaTemplate(TextDocument):
             i += 1
 
     '''
-    searches the document for items in the format "&gt;*&lt;"
-    @return a vector containing the XTextRanges of the found items
-    '''
-
-    def searchFillInItems(self):
-        try:
-            sd = AgendaTemplate.document.createSearchDescriptor()
-            sd.setSearchString("<[^>]+>")
-            sd.setPropertyValue("SearchRegularExpression", True)
-            sd.setPropertyValue("SearchWords", True)
-            ia = AgendaTemplate.document.findAll(sd)
-            try:
-                l = [ia.getByIndex(i) for i in xrange(ia.Count)]
-            except Exception, ex:
-                print "Nonfatal Error in finding fillins."
-            return l
-        except Exception, ex:
-            traceback.print_exc()
-            raise AttributeError (
-                "Fatal Error: Loading template failed: searching fillins failed")
-
-    '''
     analyze the item sections in the template.
     delegates the analyze of each table to the ItemsTable class.
     '''
@@ -535,7 +513,7 @@ class AgendaTemplate(TextDocument):
             try:
                 topicStartTime = int(AgendaTemplate.agenda.cp_Time)
                 #first I replace the minutes titles...
-                AgendaTemplate.items = self.searchFillInItems()
+                AgendaTemplate.items = TextDocument.searchFillInItems()
                 itemIndex = 0
                 for item in self.items:
                     itemText = item.String.lstrip().lower()
@@ -566,7 +544,7 @@ class AgendaTemplate(TextDocument):
 
                 for i in xrange(len(topicsData) - 1):
                     topic = topicsData[i]
-                    AgendaTemplate.items = self.searchFillInItems()
+                    AgendaTemplate.items = TextDocument.searchFillInItems()
                     itemIndex = 0
                     for item in self.items:
                         itemText = item.String.lstrip().lower()
