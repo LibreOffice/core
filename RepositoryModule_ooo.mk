@@ -69,6 +69,7 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
 	editeng \
 	embeddedobj \
 	embedserv \
+	$(call gb_Helper_optional,EPM,epm) \
 	eventattacher \
 	$(call gb_Helper_optional,EXPAT,expat) \
 	extensions \

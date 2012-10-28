@@ -64,6 +64,7 @@ $(eval $(call gb_Module_add_moduledirs,tail_end,\
 	editeng \
 	embeddedobj \
 	embedserv \
+	$(call gb_Helper_optional,EPM,epm) \
 	eventattacher \
 	extensions \
 	extras \

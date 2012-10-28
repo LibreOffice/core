@@ -9,7 +9,6 @@ c63f411b3ad147db2bcce1bf262a0e02-pixman-0.24.4.tar.bz2
 26b3e95ddf3d9c077c480ea45874b3b8-lp_solve_5.5.tar.gz
 284e768eeda0e2898b0d5bf7e26a016e-raptor-1.4.18.tar.gz
 35c94d2df8893241173de1d16b6034c0-swingExSrc.zip
-3ade8cfe7e59ca8e65052644fed9fca4-epm-3.7.tar.gz
 4a660ce8466c9df01f19036435425c3a-glibc-2.1.3-stub.tar.gz
 f101a9e88b783337b20b2e26dfd26d5f-cairo-1.10.2.tar.gz
 599dc4cc65a07ee868cf92a667a913d2-xpdf-3.02.tar.gz
@@ -57,6 +56,7 @@ fa6a2f85bd28baab035b2c95e722713f-liblangtag-0.2.tar.bz2
 @CDR_TARBALL@
 @CLUCENE_TARBALL@
 @CMIS_TARBALL@
+@EPM_TARBALL@
 @FONT_DEJAVU_TARBALL@
 @FONT_GENTIUM_TARBALL@
 @FONT_LIBERATION_NARROW_TARBALL@

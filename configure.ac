@@ -6563,7 +6563,6 @@ dnl ===================================================================
 dnl Check for epm (not needed for Windows)
 dnl ===================================================================
 AC_MSG_CHECKING([whether to enable EPM for packing])
-BUILD_EPM=NO
 if test "$enable_epm" = "yes"; then
     AC_MSG_RESULT([yes])
     if test "$_os" != "WINNT"; then
@@ -6574,7 +6573,7 @@ if test "$enable_epm" = "yes"; then
         fi
         if test "$EPM" = "no" -o "$EPM" = "internal"; then
             echo "EPM will be built."
-            BUILD_EPM=YES
+            EPM_TARBALL="3ade8cfe7e59ca8e65052644fed9fca4-epm-3.7.tar.gz"
             BUILD_TYPE="$BUILD_TYPE EPM"
         else
             # Gentoo has some epm which is something different...
@@ -6589,7 +6588,6 @@ if test "$enable_epm" = "yes"; then
             if test "`echo $EPM_VERSION | cut -d'.' -f1`" -gt "3" || \
                test "`echo $EPM_VERSION | cut -d'.' -f1`" -eq "3" -a "`echo $EPM_VERSION | cut -d'.' -f2`" -ge "7"; then
                 AC_MSG_RESULT([OK, >= 3.7])
-                BUILD_EPM=NO
                 if test "$_os" = "Darwin"; then
                     AC_MSG_CHECKING([which PackageMaker EPM thinks to use])
                     _pm=`strings $EPM | grep PackageMaker | cut -d" " -f1`
@@ -6604,7 +6602,7 @@ if test "$enable_epm" = "yes"; then
             else
                 AC_MSG_RESULT([too old. epm >= 3.7 is required.])
                 echo "EPM will be built."
-                BUILD_EPM=YES
+                EPM_TARBALL="3ade8cfe7e59ca8e65052644fed9fca4-epm-3.7.tar.gz"
                 BUILD_TYPE="$BUILD_TYPE EPM"
             fi
         fi
@@ -6692,7 +6690,7 @@ else
     EPM=NO
 fi
 AC_SUBST(EPM)
-AC_SUBST(BUILD_EPM)
+AC_SUBST(EPM_TARBALL)
 
 dnl ===================================================================
 dnl We need winegcc when building MinGW build to be able to cross-build msi tools

@@ -72,6 +72,7 @@ dtrans\
 editeng\
 embeddedobj\
 embedserv\
+epm\
 eventattacher\
 expat\
 extensions\
@@ -213,7 +214,6 @@ cairo\
 cppunit\
 crashrep\
 curl\
-epm\
 external\
 gdk-pixbuf\
 gettext\
