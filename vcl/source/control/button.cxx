@@ -829,7 +829,7 @@ void PushButton::ImplDrawPushButtonContent( OutputDevice* pDev, sal_uLong nDrawF
     sal_uInt16                  nTextStyle = ImplGetTextStyle( nDrawFlags );
     sal_uInt16                  nStyle;
 
-    if( aInRect.nRight < aInRect.nLeft || aInRect.nBottom < aInRect.nTop )
+    if( aInRect.Right() < aInRect.Left() || aInRect.Bottom() < aInRect.Top() )
         aInRect.SetEmpty();
 
     pDev->Push( PUSH_CLIPREGION );

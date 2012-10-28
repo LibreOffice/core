@@ -7101,7 +7101,7 @@ void Window::setPosSizePixel( long nX, long nY,
                 // --- RTL --- (re-mirror at parent window)
                 Rectangle aRect( Point ( nX, nY ), Size( nWidth, nHeight ) );
                 GetParent()->ImplReMirror( aRect );
-                nX = aRect.nLeft;
+                nX = aRect.Left();
             }
         }
         if( !(nFlags & WINDOW_POSSIZE_X) && bHasValidSize && pWindow->mpWindowImpl->mpFrame->maGeometry.nWidth )
@@ -9103,10 +9103,10 @@ void Window::DrawSelectionBackground( const Rectangle& rRect,
     Rectangle aRect( rRect );
     if( bDrawExtBorderOnly )
     {
-        aRect.nLeft     -= 1;
-        aRect.nTop      -= 1;
-        aRect.nRight    += 1;
-        aRect.nBottom   += 1;
+        --aRect.Left();
+        --aRect.Top();
+        ++aRect.Right();
+        ++aRect.Bottom();
     }
     Color oldFillCol = GetFillColor();
     Color oldLineCol = GetLineColor();

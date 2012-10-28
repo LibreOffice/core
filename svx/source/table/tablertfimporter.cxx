@@ -296,7 +296,7 @@ void SdrTableRTFParser::FillTable()
         }
 
         Rectangle aRect( mrTableObj.GetSnapRect() );
-        aRect.nRight = aRect.nLeft + nLastEdge;
+        aRect.Right() = aRect.Left() + nLastEdge;
         mrTableObj.NbcSetSnapRect( aRect );
 
     }

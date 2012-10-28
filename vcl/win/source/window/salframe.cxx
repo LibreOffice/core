@@ -1700,10 +1700,10 @@ void WinSalFrame::GetWorkArea( Rectangle &rRect )
 {
     RECT aRect;
     ImplSalGetWorkArea( mhWnd, &aRect, NULL );
-    rRect.nLeft     = aRect.left;
-    rRect.nRight    = aRect.right-1;
-    rRect.nTop      = aRect.top;
-    rRect.nBottom   = aRect.bottom-1;
+    rRect.Left()     = aRect.left;
+    rRect.Right()    = aRect.right-1;
+    rRect.Top()      = aRect.top;
+    rRect.Bottom()   = aRect.bottom-1;
 }
 
 // -----------------------------------------------------------------------

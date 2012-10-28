@@ -54,8 +54,8 @@ void SdHtmlAttrPreview::Paint( const Rectangle& rRect )
     DrawRect(rRect);
     SetFillColor();
 
-    int nHeight = (aTextRect.nBottom - aTextRect.nTop) >> 2;
-    aTextRect.nBottom =  nHeight + aTextRect.nTop;
+    int nHeight = (aTextRect.Bottom() - aTextRect.Top()) >> 2;
+    aTextRect.Bottom() =  nHeight + aTextRect.Top();
 
     SetTextColor(m_aTextColor);
     DrawText( aTextRect, String(SdResId(STR_HTMLATTR_TEXT)),

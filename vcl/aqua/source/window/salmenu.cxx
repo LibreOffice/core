@@ -370,7 +370,7 @@ bool AquaSalMenu::ShowNativePopupMenu(FloatingWindow * pWin, const Rectangle& rR
     removeUnusedItemsRunner( pCopyMenu );
 
     // create frame rect
-    NSRect displayPopupFrame = NSMakeRect( rRect.nLeft+(offset-1), rRect.nTop+(offset+1), popupFrame.size.width, 0 );
+    NSRect displayPopupFrame = NSMakeRect( rRect.Left()+(offset-1), rRect.Top()+(offset+1), popupFrame.size.width, 0 );
     pParentAquaSalFrame->VCLToCocoa(displayPopupFrame, false);
 
     // do the same strange semantics as vcl popup windows to arrive at a frame geometry

@@ -820,8 +820,8 @@ void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider& rBuProv, sal_Int1
                                 // don't cast awt::Size to Size as on 64-bits they are not the same.
                                 ::com::sun::star::awt::Size aSize;
                                 pPropValue[ i ].Value >>= aSize;
-                                aBuGraSize.nA = aSize.Width;
-                                aBuGraSize.nB = aSize.Height;
+                                aBuGraSize.A() = aSize.Width;
+                                aBuGraSize.B() = aSize.Height;
                             }
                         }
                         else if ( aPropName == "StartWith" )

@@ -4231,9 +4231,9 @@ void Test::testGraphicsInGroup()
         m_pDoc->ShowRows(0, 100, 0, false);
         m_pDoc->SetDrawPageSize(0);
         CPPUNIT_ASSERT_MESSAGE("Left and Right should be unchanged",
-            aOrigRect.nLeft == rNewRect.nLeft && aOrigRect.nRight == rNewRect.nRight);
+            aOrigRect.Left() == rNewRect.Left() && aOrigRect.Right() == rNewRect.Right());
         CPPUNIT_ASSERT_MESSAGE("Height should be minimum allowed height",
-            (rNewRect.nBottom - rNewRect.nTop) <= 1);
+            (rNewRect.Bottom() - rNewRect.Top()) <= 1);
         m_pDoc->ShowRows(0, 100, 0, true);
         m_pDoc->SetDrawPageSize(0);
         CPPUNIT_ASSERT_MESSAGE("Should not change when page anchored", aOrigRect == rNewRect);

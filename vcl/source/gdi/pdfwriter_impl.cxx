@@ -8654,10 +8654,10 @@ void PDFWriterImpl::drawStrikeoutChar( const Point& rPos, long nWidth, FontStrik
     push( PUSH_CLIPREGION );
     FontMetric aRefDevFontMetric = m_pReferenceDevice->GetFontMetric();
     Rectangle aRect;
-    aRect.nLeft = rPos.X();
-    aRect.nRight = aRect.nLeft+nWidth;
-    aRect.nBottom = rPos.Y()+aRefDevFontMetric.GetDescent();
-    aRect.nTop = rPos.Y()-aRefDevFontMetric.GetAscent();
+    aRect.Left() = rPos.X();
+    aRect.Right() = aRect.Left()+nWidth;
+    aRect.Bottom() = rPos.Y()+aRefDevFontMetric.GetDescent();
+    aRect.Top() = rPos.Y()-aRefDevFontMetric.GetAscent();
 
     ImplFontEntry* pFontEntry = m_pReferenceDevice->mpFontEntry;
     if (pFontEntry->mnOrientation)

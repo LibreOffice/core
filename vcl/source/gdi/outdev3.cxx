@@ -4177,10 +4177,10 @@ void OutputDevice::ImplDrawStrikeoutChar( long nBaseX, long nBaseY,
     pLayout->DrawBase() = Point( nBaseX+mnTextOffX, nBaseY+mnTextOffY );
 
     Rectangle aPixelRect;
-    aPixelRect.nLeft = nBaseX+mnTextOffX;
-    aPixelRect.nRight = aPixelRect.nLeft+nWidth;
-    aPixelRect.nBottom = nBaseY+mpFontEntry->maMetric.mnDescent;
-    aPixelRect.nTop = nBaseY-mpFontEntry->maMetric.mnAscent;
+    aPixelRect.Left() = nBaseX+mnTextOffX;
+    aPixelRect.Right() = aPixelRect.Left()+nWidth;
+    aPixelRect.Bottom() = nBaseY+mpFontEntry->maMetric.mnDescent;
+    aPixelRect.Top() = nBaseY-mpFontEntry->maMetric.mnAscent;
 
     if (mpFontEntry->mnOrientation)
     {

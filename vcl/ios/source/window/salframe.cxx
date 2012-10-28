@@ -869,10 +869,10 @@ void IosSalFrame::GetWorkArea( Rectangle& rRect )
         pScreen = [UIScreen mainScreen];
     CGRect aRect = [pScreen applicationFrame];
     CocoaTouchToVCL( aRect );
-    rRect.nLeft     = static_cast<long>(aRect.origin.x);
-    rRect.nTop      = static_cast<long>(aRect.origin.y);
-    rRect.nRight    = static_cast<long>(aRect.origin.x + aRect.size.width - 1);
-    rRect.nBottom   = static_cast<long>(aRect.origin.y + aRect.size.height - 1);
+    rRect.Left()     = static_cast<long>(aRect.origin.x);
+    rRect.Top()      = static_cast<long>(aRect.origin.y);
+    rRect.Right()    = static_cast<long>(aRect.origin.x + aRect.size.width - 1);
+    rRect.Bottom()   = static_cast<long>(aRect.origin.y + aRect.size.height - 1);
 }
 
 SalPointerState IosSalFrame::GetPointerState()

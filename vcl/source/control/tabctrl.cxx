@@ -1553,9 +1553,9 @@ long TabControl::PreNotify( NotifyEvent& rNEvt )
                         // as used by gtk
                         // TODO: query for the correct sizes
                         Rectangle aRect(*pLastRect);
-                        aRect.nLeft-=2;
-                        aRect.nRight+=2;
-                        aRect.nTop-=3;
+                        aRect.Left()-=2;
+                        aRect.Right()+=2;
+                        aRect.Top()-=3;
                         aClipRgn.Union( aRect );
                     }
                     if( pRect )
@@ -1564,9 +1564,9 @@ long TabControl::PreNotify( NotifyEvent& rNEvt )
                         // as used by gtk
                         // TODO: query for the correct sizes
                         Rectangle aRect(*pRect);
-                        aRect.nLeft-=2;
-                        aRect.nRight+=2;
-                        aRect.nTop-=3;
+                        aRect.Left()-=2;
+                        aRect.Right()+=2;
+                        aRect.Top()-=3;
                         aClipRgn.Union( aRect );
                     }
                     if( !aClipRgn.IsEmpty() )

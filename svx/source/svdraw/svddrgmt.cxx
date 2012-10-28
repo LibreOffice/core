@@ -3577,7 +3577,7 @@ bool SdrDragCrop::EndSdrDrag(bool bCopy)
     else
         aGraphicSize = Application::GetDefaultDevice()->LogicToLogic( aGraphicSize, rGraphicObject.GetPrefMapMode(), aMapMode100thmm);
 
-    if( aGraphicSize.nA == 0 || aGraphicSize.nB == 0 )
+    if( aGraphicSize.A() == 0 || aGraphicSize.B() == 0 )
         return false;
 
     const SdrGrafCropItem& rOldCrop = (const SdrGrafCropItem&)pObj->GetMergedItem(SDRATTR_GRAFCROP);
@@ -3613,10 +3613,10 @@ bool SdrDragCrop::EndSdrDrag(bool bCopy)
         aNewRect = Rectangle(aNewRect.TopLeft() - (aNewRect.BottomRight() - aNewRect.TopLeft()), aNewRect.TopLeft());
     }
 
-    sal_Int32 nDiffLeft = aNewRect.nLeft - aOldRect.nLeft;
-    sal_Int32 nDiffTop = aNewRect.nTop - aOldRect.nTop;
-    sal_Int32 nDiffRight = aNewRect.nRight - aOldRect.nRight;
-    sal_Int32 nDiffBottom = aNewRect.nBottom - aOldRect.nBottom;
+    sal_Int32 nDiffLeft = aNewRect.Left() - aOldRect.Left();
+    sal_Int32 nDiffTop = aNewRect.Top() - aOldRect.Top();
+    sal_Int32 nDiffRight = aNewRect.Right() - aOldRect.Right();
+    sal_Int32 nDiffBottom = aNewRect.Bottom() - aOldRect.Bottom();
 
     sal_Int32 nLeftCrop = static_cast<sal_Int32>( rOldCrop.GetLeft() + nDiffLeft * fScaleX );
     sal_Int32 nTopCrop = static_cast<sal_Int32>( rOldCrop.GetTop() + nDiffTop * fScaleY );

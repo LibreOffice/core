@@ -6331,15 +6331,6 @@ void SwLayoutFrm::RefreshLaySubsidiary( const SwPageFrm *pPage,
 |*************************************************************************/
 
 //Paints the desired line and pays attention to not overpaint any flys.
-
-typedef long Size::* SizePtr;
-typedef long Point::* PointPtr;
-
-PointPtr pX = &Point::nA;
-PointPtr pY = &Point::nB;
-SizePtr pWidth = &Size::nA;
-SizePtr pHeight = &Size::nB;
-
 // OD 18.11.2002 #99672# - new parameter <_pSubsLines>
 static void lcl_RefreshLine( const SwLayoutFrm *pLay,
                                   const SwPageFrm *pPage,
@@ -6351,14 +6342,19 @@ static void lcl_RefreshLine( const SwLayoutFrm *pLay,
     //In which direction do we loop? Can only be horizontal or vertical.
     OSL_ENSURE( ((rP1.X() == rP2.X()) || (rP1.Y() == rP2.Y())),
             "Sloped subsidiary lines are not allowed." );
-    const PointPtr pDirPt = rP1.X() == rP2.X() ? pY : pX;
-    const PointPtr pOthPt = pDirPt == pX ? pY : pX;
-    const SizePtr pDirSz = pDirPt == pX ? pWidth : pHeight;
-    const SizePtr pOthSz = pDirSz == pWidth ? pHeight : pWidth;
-    Point aP1( rP1 ),
-          aP2( rP2 );
 
-    while ( aP1.*pDirPt < aP2.*pDirPt )
+    const bool bHori = rP1.Y() == rP2.Y();
+
+    // use pointers to member function in order to unify flow
+    typedef long& (Point:: *pmfPt)();
+    const pmfPt pmfPtX = &Point::X;
+    const pmfPt pmfPtY = &Point::Y;
+    const pmfPt pDirPt = bHori ? pmfPtX : pmfPtY;
+
+    Point aP1( rP1 );
+    Point aP2( rP2 );
+
+    while ( (aP1.*pDirPt)() < (aP2.*pDirPt)() )
     {
         //If the starting point lies in a fly, it is directly set behind the
         //fly.
@@ -6409,24 +6405,28 @@ static void lcl_RefreshLine( const SwLayoutFrm *pLay,
             }
 
             //Is the Obj placed on the line
+            const long nP1OthPt = !bHori ? rP1.X() : rP1.Y();
             const Rectangle &rBound = pObj->GetCurrentBoundRect();
             const Point aDrPt( rBound.TopLeft() );
+            const long nDrOthPt = !bHori ? aDrPt.X() : aDrPt.Y();
             const Size  aDrSz( rBound.GetSize() );
-            if ( rP1.*pOthPt >= aDrPt.*pOthPt &&
-                 rP1.*pOthPt <= (aDrPt.*pOthPt + aDrSz.*pOthSz) )
-            {
-                if ( aP1.*pDirPt >= aDrPt.*pDirPt &&
-                         aP1.*pDirPt <= (aDrPt.*pDirPt + aDrSz.*pDirSz) )
-                    aP1.*pDirPt = aDrPt.*pDirPt + aDrSz.*pDirSz;
+            const long nDrOthSz = !bHori ? aDrSz.Width() : aDrSz.Height();
 
-                if ( aP2.*pDirPt >= aDrPt.*pDirPt &&
-                     aP1.*pDirPt < (aDrPt.*pDirPt - 1) )
-                    aP2.*pDirPt = aDrPt.*pDirPt - 1;
+            if ( nP1OthPt >= nDrOthPt && nP1OthPt <= nDrOthPt + nDrOthSz )
+            {
+                const long nDrDirPt = bHori ? aDrPt.X() : aDrPt.Y();
+                const long nDrDirSz = bHori ? aDrSz.Width() : aDrSz.Height();
+
+                if ( (aP1.*pDirPt)() >= nDrDirPt && (aP1.*pDirPt)() <= nDrDirPt + nDrDirSz )
+                    (aP1.*pDirPt)() = nDrDirPt + nDrDirSz;
+
+                if ( (aP2.*pDirPt)() >= nDrDirPt && (aP1.*pDirPt)() < (nDrDirPt - 1) )
+                    (aP2.*pDirPt)() = nDrDirPt - 1;
             }
             aIter.Next();
         }
 
-        if ( aP1.*pDirPt < aP2.*pDirPt )
+        if ( (aP1.*pDirPt)() < (aP2.*pDirPt)() )
         {
             SwRect aRect( aP1, aP2 );
             // OD 18.11.2002 #99672# - use parameter <_pSubsLines> instead of
@@ -6435,7 +6435,7 @@ static void lcl_RefreshLine( const SwLayoutFrm *pLay,
                     0, nSubColor );
         }
         aP1 = aP2;
-        aP1.*pDirPt += 1;
+        (aP1.*pDirPt)() += 1;
         aP2 = rP2;
     }
 }
