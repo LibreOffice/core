@@ -590,10 +590,10 @@ const Rectangle& Cell::GetCurrentBoundRect() const
 
 void Cell::TakeTextAnchorRect(Rectangle& rAnchorRect) const
 {
-    rAnchorRect.nLeft = maCellRect.nLeft + GetTextLeftDistance();
-    rAnchorRect.nRight = maCellRect.nRight - GetTextRightDistance();
-    rAnchorRect.nTop = maCellRect.nTop + GetTextUpperDistance();
-    rAnchorRect.nBottom = maCellRect.nBottom - GetTextLowerDistance();
+    rAnchorRect.Left() = maCellRect.Left() + GetTextLeftDistance();
+    rAnchorRect.Right() = maCellRect.Right() - GetTextRightDistance();
+    rAnchorRect.Top() = maCellRect.Top() + GetTextUpperDistance();
+    rAnchorRect.Bottom() = maCellRect.Bottom() - GetTextLowerDistance();
 }
 
 // -----------------------------------------------------------------------------

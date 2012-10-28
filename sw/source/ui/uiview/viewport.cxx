@@ -89,14 +89,13 @@ static void lcl_GetPos(SwView* pView,
     const Size aDocSz( rSh.GetDocSize() );
 
     const long lBorder = bBorder ? DOCUMENTBORDER : DOCUMENTBORDER * 2;
-    sal_Bool bHori = pScrollbar->IsHoriScroll();
+    const bool bHori = pScrollbar->IsHoriScroll();
 
     const long lPos = pScrollbar->GetThumbPos() + (bBorder ? DOCUMENTBORDER : 0);
-    long Point:: *pPt = bHori ? &Point::nA : &Point::nB;
-    long Size::  *pSz = bHori ? &Size::nA  : &Size::nB;
 
-    long lDelta = lPos - rSh.VisArea().Pos().*pPt;
-    const long lSize = aDocSz.*pSz + lBorder;
+    long lDelta = lPos - (bHori ? rSh.VisArea().Pos().X() : rSh.VisArea().Pos().Y());
+
+    const long lSize = (bHori ? aDocSz.A() : aDocSz.B()) + lBorder;
     // sollte rechts oder unten zuviel Wiese sein, dann muss
     // diese von der VisArea herausgerechnet werden!
     long nTmp = pView->GetVisArea().Right()+lDelta;
@@ -106,9 +105,12 @@ static void lcl_GetPos(SwView* pView,
     if ( !bHori && nTmp > lSize )
         lDelta -= nTmp - lSize;
 
-    rPos.*pPt += lDelta;
-    if ( bBorder && rPos.*pPt < DOCUMENTBORDER )
-        rPos.*pPt = DOCUMENTBORDER;
+    // use a reference to access/moodify the correct coordinate
+    // returned by accessors to non-const object
+    long & rCoord = bHori ? rPos.X() : rPos.Y();
+    rCoord += lDelta;
+    if ( bBorder && rCoord < DOCUMENTBORDER )
+        rCoord = DOCUMENTBORDER;
 }
 
 /*--------------------------------------------------------------------

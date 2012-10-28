@@ -31,9 +31,6 @@ class SvStream;
 class SAL_WARN_UNUSED Pair
 {
 public:
-    long                nA;
-    long                nB;
-
                         Pair();
                         Pair( long nA, long nB );
 
@@ -48,6 +45,10 @@ public:
 
     TOOLS_DLLPUBLIC friend SvStream&    operator>>( SvStream& rIStream, Pair& rPair );
     TOOLS_DLLPUBLIC friend SvStream&    operator<<( SvStream& rOStream, const Pair& rPair );
+
+protected:
+    long                nA;
+    long                nB;
 };
 
 inline Pair::Pair()
@@ -329,11 +330,6 @@ inline void Selection::Justify()
 class TOOLS_DLLPUBLIC SAL_WARN_UNUSED Rectangle
 {
 public:
-    long                nLeft;
-    long                nTop;
-    long                nRight;
-    long                nBottom;
-
                         Rectangle();
                         Rectangle( const Point& rLT, const Point& rRB );
                         Rectangle( long nLeft, long nTop,
@@ -404,6 +400,12 @@ public:
     void                setY( long n ) { nBottom += n-nTop; nTop = n; }
     void                setWidth( long n ) { nRight = nLeft + n; }
     void                setHeight( long n ) { nBottom = nTop + n; }
+
+private:
+    long                nLeft;
+    long                nTop;
+    long                nRight;
+    long                nBottom;
 };
 
 inline Rectangle::Rectangle()

@@ -166,10 +166,10 @@ void ImageControl::Paint( const Rectangle& /*rRect*/ )
         pWin->SetFillColor();
         pWin->SetLineColor( bFlat ? COL_WHITE : COL_BLACK );
         pWin->DrawRect( aRect );
-        aRect.nLeft++;
-        aRect.nRight--;
-        aRect.nTop++;
-        aRect.nBottom--;
+        ++aRect.Left();
+        --aRect.Right();
+        ++aRect.Top();
+        --aRect.Bottom();
         pWin->SetLineColor( bFlat ? COL_BLACK : COL_WHITE );
         pWin->DrawRect( aRect );
         pWin->SetLineColor( oldLineCol );

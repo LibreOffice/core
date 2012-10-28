@@ -229,9 +229,9 @@ void SwRect::SetBottomAndHeight( long nBottom, long nNew )
 void SwRect::SetUpperLeftCorner(  const Point& rNew )
     { m_Point = rNew; }
 void SwRect::SetUpperRightCorner(  const Point& rNew )
-    { m_Point = Point(rNew.nA - m_Size.getWidth(), rNew.nB); }
+    { m_Point = Point(rNew.A() - m_Size.getWidth(), rNew.B()); }
 void SwRect::SetLowerLeftCorner(  const Point& rNew )
-    { m_Point = Point(rNew.nA, rNew.nB - m_Size.getHeight()); }
+    { m_Point = Point(rNew.A(), rNew.B() - m_Size.getHeight()); }
 
 #ifdef DBG_UTIL
 SvStream &operator<<( SvStream &rStream, const SwRect &rRect )

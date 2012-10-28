@@ -395,10 +395,10 @@ void AnnotationManagerImpl::InsertAnnotation()
                    for( AnnotationVector::iterator iter = aAnnotations.begin(); iter != aAnnotations.end(); ++iter )
                    {
                        RealPoint2D aPoint( (*iter)->getPosition() );
-                       aTagRect.nLeft   = sal::static_int_cast< long >( aPoint.X * 100.0 );
-                       aTagRect.nTop    = sal::static_int_cast< long >( aPoint.Y * 100.0 );
-                       aTagRect.nRight  = aTagRect.nLeft + width - 1;
-                       aTagRect.nBottom = aTagRect.nTop + height - 1;
+                       aTagRect.Left()   = sal::static_int_cast< long >( aPoint.X * 100.0 );
+                       aTagRect.Top()    = sal::static_int_cast< long >( aPoint.Y * 100.0 );
+                       aTagRect.Right()  = aTagRect.Left() + width - 1;
+                       aTagRect.Bottom() = aTagRect.Top() + height - 1;
 
                        if( aNewRect.IsOver( aTagRect ) )
                        {

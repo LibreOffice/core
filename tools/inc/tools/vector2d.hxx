@@ -33,7 +33,7 @@ public:
     inline Vector2D() : mfX( 0.0 ), mfY( 0.0 ) {}
     inline Vector2D( double fX, double fY ) : mfX( fX ), mfY( fY ) {}
     inline Vector2D( const Vector2D& rVec ) : mfX( rVec.mfX ), mfY( rVec.mfY ) {}
-    inline Vector2D( const Pair& rPair ) : mfX( rPair.nA ), mfY( rPair.nB ) {};
+    inline Vector2D( const Pair& rPair ) : mfX( rPair.A() ), mfY( rPair.B() ) {};
     inline ~Vector2D() {}
 
     inline const double& X() const { return mfX; }
@@ -79,13 +79,13 @@ public:
     inline sal_Bool     operator!=( const Vector2D& rVec ) const { return !( *this == rVec ); }
 
     inline Vector2D&    operator=( const Vector2D& rVec ) { mfX = rVec.mfX, mfY = rVec.mfY; return *this; }
-    inline Vector2D&    operator=( const Pair& rPair ) { mfX = rPair.nA, mfY = rPair.nB; return *this; }
-    inline Vector2D&    operator-=( const Pair& rPair ) { mfX -= rPair.nA, mfY -= rPair.nB; return *this; }
-    inline Vector2D&    operator+=( const Pair& rPair ) { mfX += rPair.nA, mfY += rPair.nB; return *this; }
-    inline Vector2D&    operator*=( const Pair& rPair ) { mfX *= rPair.nA, mfY *= rPair.nB; return *this; }
-    inline Vector2D&    operator/=( const Pair& rPair ) { mfX /= rPair.nA, mfY /= rPair.nB; return *this; }
+    inline Vector2D&    operator=( const Pair& rPair ) { mfX = rPair.A(), mfY = rPair.B(); return *this; }
+    inline Vector2D&    operator-=( const Pair& rPair ) { mfX -= rPair.A(), mfY -= rPair.B(); return *this; }
+    inline Vector2D&    operator+=( const Pair& rPair ) { mfX += rPair.A(), mfY += rPair.B(); return *this; }
+    inline Vector2D&    operator*=( const Pair& rPair ) { mfX *= rPair.A(), mfY *= rPair.B(); return *this; }
+    inline Vector2D&    operator/=( const Pair& rPair ) { mfX /= rPair.A(), mfY /= rPair.B(); return *this; }
 
-    inline sal_Bool     operator==( const Pair& rPair ) const { return( mfX == rPair.nA && mfY == rPair.nB ); }
+    inline sal_Bool     operator==( const Pair& rPair ) const { return( mfX == rPair.A() && mfY == rPair.B() ); }
     inline sal_Bool     operator!=( const Pair& rPair ) const { return !( *this == rPair ); }
 
     inline sal_Bool     IsPositive( Vector2D& rVec ) const { return( ( mfX * rVec.mfY - mfY * rVec.mfX ) >= 0.0 ); }

@@ -758,8 +758,8 @@ void FrameView::ReadUserDataSequence ( const ::com::sun::star::uno::Sequence < :
                 if( pValue->Value >>= nTop )
                 {
                     Rectangle aVisArea( GetVisArea() );
-                    aVisArea.nBottom += nTop - aVisArea.nTop;
-                    aVisArea.nTop = nTop;
+                    aVisArea.Bottom() += nTop - aVisArea.Top();
+                    aVisArea.Top() = nTop;
                     SetVisArea( aVisArea );
                 }
             }
@@ -769,8 +769,8 @@ void FrameView::ReadUserDataSequence ( const ::com::sun::star::uno::Sequence < :
                 if( pValue->Value >>= nLeft )
                 {
                     Rectangle aVisArea( GetVisArea() );
-                    aVisArea.nRight += nLeft - aVisArea.nLeft;
-                    aVisArea.nLeft = nLeft;
+                    aVisArea.Right() += nLeft - aVisArea.Left();
+                    aVisArea.Left() = nLeft;
                     SetVisArea( aVisArea );
                 }
             }
@@ -780,7 +780,7 @@ void FrameView::ReadUserDataSequence ( const ::com::sun::star::uno::Sequence < :
                 if( pValue->Value >>= nWidth )
                 {
                     Rectangle aVisArea( GetVisArea() );
-                    aVisArea.nRight = aVisArea.nLeft + nWidth - 1;
+                    aVisArea.Right() = aVisArea.Left() + nWidth - 1;
                     SetVisArea( aVisArea );
                 }
             }
@@ -790,7 +790,7 @@ void FrameView::ReadUserDataSequence ( const ::com::sun::star::uno::Sequence < :
                 if( pValue->Value >>= nHeight )
                 {
                     Rectangle aVisArea( GetVisArea() );
-                    aVisArea.nBottom = nHeight + aVisArea.nTop - 1;
+                    aVisArea.Bottom() = nHeight + aVisArea.Top() - 1;
                     SetVisArea( aVisArea );
                 }
             }

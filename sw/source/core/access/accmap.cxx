@@ -2502,14 +2502,14 @@ static inline void lcl_CorrectRectangle(Rectangle & rRect,
                                         const Rectangle & rSource,
                                         const Rectangle & rInGrid)
 {
-    rRect.nLeft = lcl_CorrectCoarseValue(rRect.nLeft, rSource.nLeft,
-                                         rInGrid.nLeft, false);
-    rRect.nTop = lcl_CorrectCoarseValue(rRect.nTop, rSource.nTop,
-                                        rInGrid.nTop, false);
-    rRect.nRight = lcl_CorrectCoarseValue(rRect.nRight, rSource.nRight,
-                                          rInGrid.nRight, true);
-    rRect.nBottom = lcl_CorrectCoarseValue(rRect.nBottom, rSource.nBottom,
-                                           rInGrid.nBottom, true);
+    rRect.Left() = lcl_CorrectCoarseValue(rRect.Left(), rSource.Left(),
+                                          rInGrid.Left(), false);
+    rRect.Top() = lcl_CorrectCoarseValue(rRect.Top(), rSource.Top(),
+                                         rInGrid.Top(), false);
+    rRect.Right() = lcl_CorrectCoarseValue(rRect.Right(), rSource.Right(),
+                                           rInGrid.Right(), true);
+    rRect.Bottom() = lcl_CorrectCoarseValue(rRect.Bottom(), rSource.Bottom(),
+                                            rInGrid.Bottom(), true);
 }
 
 Rectangle SwAccessibleMap::CoreToPixel( const Rectangle& rRect ) const

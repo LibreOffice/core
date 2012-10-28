@@ -968,7 +968,7 @@ void HatchingLB::UserDraw( const UserDrawEvent& rUDEvt )
     {
         // Draw gradient with borderrectangle
         const Rectangle& rDrawRect = rUDEvt.GetRect();
-        Rectangle aRect( rDrawRect.nLeft+1, rDrawRect.nTop+1, rDrawRect.nLeft+33, rDrawRect.nBottom-1 );
+        Rectangle aRect( rDrawRect.Left()+1, rDrawRect.Top()+1, rDrawRect.Left()+33, rDrawRect.Bottom()-1 );
 
         sal_Int32 nId = rUDEvt.GetItemId();
         if( nId >= 0 && nId <= mpList->Count() )
@@ -995,7 +995,7 @@ void HatchingLB::UserDraw( const UserDrawEvent& rUDEvt )
             pDevice->SetDrawMode( nOldDrawMode );
 
             // Draw name
-            pDevice->DrawText( Point( aRect.nRight+7, aRect.nTop-1 ), mpList->GetHatch( rUDEvt.GetItemId() )->GetName() );
+            pDevice->DrawText( Point( aRect.Right()+7, aRect.Top()-1 ), mpList->GetHatch( rUDEvt.GetItemId() )->GetName() );
         }
     }
 }
@@ -1087,7 +1087,7 @@ void GradientLB::UserDraw( const UserDrawEvent& rUDEvt )
     {
         // Draw gradient with borderrectangle
         const Rectangle& rDrawRect = rUDEvt.GetRect();
-        Rectangle aRect( rDrawRect.nLeft+1, rDrawRect.nTop+1, rDrawRect.nLeft+33, rDrawRect.nBottom-1 );
+        Rectangle aRect( rDrawRect.Left()+1, rDrawRect.Top()+1, rDrawRect.Left()+33, rDrawRect.Bottom()-1 );
 
         sal_Int32 nId = rUDEvt.GetItemId();
         if( nId >= 0 && nId <= mpList->Count() )
@@ -1127,7 +1127,7 @@ void GradientLB::UserDraw( const UserDrawEvent& rUDEvt )
             pDevice->DrawRect( aRect );
 
             // Draw name
-            pDevice->DrawText( Point( aRect.nRight+7, aRect.nTop-1 ), mpList->GetGradient( rUDEvt.GetItemId() )->GetName() );
+            pDevice->DrawText( Point( aRect.Right()+7, aRect.Top()-1 ), mpList->GetGradient( rUDEvt.GetItemId() )->GetName() );
         }
     }
 }
@@ -1268,20 +1268,20 @@ void BitmapLB::UserDraw( const UserDrawEvent& rUDEvt )
     {
         // Draw bitmap
         const Rectangle& rDrawRect = rUDEvt.GetRect();
-        Rectangle aRect( rDrawRect.nLeft+1, rDrawRect.nTop+1, rDrawRect.nLeft+33, rDrawRect.nBottom-1 );
+        Rectangle aRect( rDrawRect.Left()+1, rDrawRect.Top()+1, rDrawRect.Left()+33, rDrawRect.Bottom()-1 );
 
         sal_Int32 nId = rUDEvt.GetItemId();
         if( nId >= 0 && nId <= mpList->Count() )
         {
-            Rectangle aClipRect( rDrawRect.nLeft+1, rDrawRect.nTop+1, rDrawRect.nRight-1, rDrawRect.nBottom-1 );
+            Rectangle aClipRect( rDrawRect.Left()+1, rDrawRect.Top()+1, rDrawRect.Right()-1, rDrawRect.Bottom()-1 );
 
             OutputDevice* pDevice = rUDEvt.GetDevice();
             pDevice->SetClipRegion( Region( aClipRect ) );
 
             aBitmap = mpList->GetBitmap( nId )->GetXBitmap().GetBitmap();
 
-            long nPosBaseX = aRect.nLeft;
-            long nPosBaseY = aRect.nTop;
+            long nPosBaseX = aRect.Left();
+            long nPosBaseY = aRect.Top();
 
             if( aBitmap.GetSizePixel().Width() > 8 ||
                 aBitmap.GetSizePixel().Height() > 8 )
@@ -1303,7 +1303,7 @@ void BitmapLB::UserDraw( const UserDrawEvent& rUDEvt )
             pDevice->SetClipRegion();
 
             // Draw name
-            pDevice->DrawText( Point( aRect.nRight+7, aRect.nTop-1 ), mpList->GetBitmap( nId )->GetName() );
+            pDevice->DrawText( Point( aRect.Right()+7, aRect.Top()-1 ), mpList->GetBitmap( nId )->GetName() );
         }
     }
 }

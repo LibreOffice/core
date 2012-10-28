@@ -858,8 +858,8 @@ bool SlideshowImpl::startPreview(
             Rectangle aContentRect (mpViewShell->GetViewShellBase().getClientRectangle());
             if (Application::GetSettings().GetLayoutRTL())
             {
-                aContentRect.nLeft = aContentRect.nRight;
-                aContentRect.nRight += aContentRect.nRight;
+                aContentRect.Left() = aContentRect.Right();
+                aContentRect.Right() += aContentRect.Right();
             }
             maPresSize = aContentRect.GetSize();
             mpShowWindow->SetPosPixel( aContentRect.TopLeft() );
