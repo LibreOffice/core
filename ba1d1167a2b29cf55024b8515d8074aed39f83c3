@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAP3///uU\u003d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2012-10-28T18:00:03Z",
+      "side": 1,
+      "message": "maybe it\u0027s just me, but i find it quite surprising that \"It is advised to use max-jobs and num-cpus with the same value\" :)",
+      "parentUuid": "AAAAP3///u4\u003d",
+      "revId": "ba1d1167a2b29cf55024b8515d8074aed39f83c3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAP3///vQ\u003d",
         "filename": "configure.ac",
         "patchSetId": 1
@@ -65,6 +83,41 @@
       "side": 1,
       "message": "I\u0027d keep the whole option as --with-max-jobs - as that is also the term make uses for the -j option, where that value ends up in the end.\n\"Specifies the number of jobs (commands) to run simultaneously.\"\n\nThe number of CPUs/Cores is irrelevant, and thus misleading when it comes to this option.",
       "parentUuid": "AAAAP3///vU\u003d",
+      "revId": "ba1d1167a2b29cf55024b8515d8074aed39f83c3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAP3///uY\u003d",
+        "filename": "configure.ac",
+        "patchSetId": 1
+      },
+      "lineNbr": 2127,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2012-10-28T18:00:03Z",
+      "side": 1,
+      "message": "who (except for shm_get) has ever heard of batch jobs?\njobs is the term that the make documentation uses for this,\nso it\u0027 s probably what people are most likely to be familiar with.",
+      "parentUuid": "AAAAP3///vU\u003d",
+      "revId": "ba1d1167a2b29cf55024b8515d8074aed39f83c3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAP3///uc\u003d",
+        "filename": "libcdr/ExternalProject_libcdr.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2012-10-28T18:00:03Z",
+      "side": 1,
+      "message": "we should not be calling recursive GNU make with -j at all;\ninstead, try to use the GNU make job server, which will automatically\nbalance the total number of jobs across all GNU make instances.\n\nit may be necessary to tweak the invocation a bit;\niirc make prints some \"warning: job server disabled\" if it\u0027s done wrong.\n\nthe recipe should invoke $(MAKE).\nmore details:\nhttp://www.gnu.org/software/make/manual/make.html#MAKE-Variable",
       "revId": "ba1d1167a2b29cf55024b8515d8074aed39f83c3",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
