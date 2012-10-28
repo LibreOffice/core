@@ -243,6 +243,12 @@ endif # SYSTEM_JPEG
 ifeq ($(SYSTEM_MYTHES),YES)
 
 define gb_LinkTarget__use_mythes
+$(call gb_LinkTarget_set_include,$(1),\
+	$$(INCLUDE) \
+	$(MYTHES_CFLAGS) \
+)
+$(call gb_LinkTarget_add_libs,$(1),$(MYTHES_LIBS))
+
 endef
 
 else # !SYSTEM_MYTHES
