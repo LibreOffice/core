@@ -15,11 +15,4 @@ $(eval $(call gb_ExternalPackage_add_files,librsvg,lib,\
     .libs/librsvg-2.2.dylib \
 ))
 
-$(eval $(call gb_ExternalPackage_add_unpacked_files,librsvg,inc/external/librsvg-2.0/librsvg,\
-    rsvg-cairo.h \
-    librsvg-enum-types.h \
-    librsvg-features.h \
-    rsvg.h \
-))
-
 # vim: set noet sw=4 ts=4:
