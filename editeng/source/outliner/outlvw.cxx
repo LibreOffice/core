@@ -1258,10 +1258,9 @@ sal_uLong OutlinerView::Read( SvStream& rInput,  const String& rBaseURL, EETextF
     {
         if ( eFormat == EE_FORMAT_BIN )
         {
-            sal_uInt16 nDepth = 0;
             const SfxItemSet& rAttrs = pOwner->GetParaAttribs( n );
             const SfxInt16Item& rLevel = (const SfxInt16Item&) rAttrs.Get( EE_PARA_OUTLLEVEL );
-            nDepth = rLevel.GetValue();
+            sal_uInt16 nDepth = rLevel.GetValue();
             pOwner->ImplInitDepth( n, nDepth, sal_False );
         }
 

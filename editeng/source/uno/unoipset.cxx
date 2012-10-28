@@ -167,7 +167,6 @@ void SvxItemPropertySet::setPropertyValue( const SfxItemPropertySimpleEntry* pMa
 
     // Get item
     const SfxPoolItem* pItem = 0;
-    SfxPoolItem *pNewItem = 0;
     SfxItemState eState = rSet.GetItemState( pMap->nWID, sal_True, &pItem );
     SfxItemPool* pPool = rSet.GetPool();
 
@@ -197,7 +196,7 @@ void SvxItemPropertySet::setPropertyValue( const SfxItemPropertySimpleEntry* pMa
                 SvxUnoConvertFromMM( eMapUnit, aValue );
         }
 
-        pNewItem = pItem->Clone();
+        SfxPoolItem *pNewItem = pItem->Clone();
 
         sal_uInt8 nMemberId = pMap->nMemberId & (~SFX_METRIC_ITEM);
         if( eMapUnit == SFX_MAPUNIT_100TH_MM )
