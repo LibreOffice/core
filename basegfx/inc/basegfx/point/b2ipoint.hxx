@@ -45,7 +45,7 @@ namespace basegfx
 
         @see B2ITuple
     */
-    class BASEGFX_DLLPUBLIC B2IPoint : public ::basegfx::B2ITuple
+    class BASEGFX_DLLPUBLIC SAL_WARN_UNUSED B2IPoint : public ::basegfx::B2ITuple
     {
     public:
         /** Create a 2D Point

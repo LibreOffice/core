@@ -46,7 +46,7 @@ namespace basegfx
         @derive Use this class to implement Points or Vectors
         which are based on two double values
     */
-    class B2DTuple
+    class SAL_WARN_UNUSED B2DTuple
     {
     protected:
         double                                      mfX;

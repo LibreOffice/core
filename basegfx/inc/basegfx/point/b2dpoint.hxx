@@ -48,7 +48,7 @@ namespace basegfx
 
         @see B2DTuple
     */
-    class B2DPoint : public ::basegfx::B2DTuple
+    class SAL_WARN_UNUSED B2DPoint : public ::basegfx::B2DTuple
     {
     public:
         /** Create a 2D Point

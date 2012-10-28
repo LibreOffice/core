@@ -46,7 +46,7 @@ namespace basegfx
         @derive Use this class to implement Points or Vectors
         which are based on three double values
     */
-    class BASEGFX_DLLPUBLIC B3DTuple
+    class BASEGFX_DLLPUBLIC SAL_WARN_UNUSED B3DTuple
     {
     protected:
         double                                      mfX;

@@ -50,7 +50,7 @@ namespace basegfx
     /** Class to hold a color, value and mode for a color modification. Color modification is
         done calling the getModifiedColor() method
     */
-    class BASEGFX_DLLPUBLIC BColorModifier
+    class BASEGFX_DLLPUBLIC SAL_WARN_UNUSED BColorModifier
     {
     protected:
         ::basegfx::BColor                           maBColor;

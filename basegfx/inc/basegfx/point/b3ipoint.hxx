@@ -45,7 +45,7 @@ namespace basegfx
 
         @see B3ITuple
     */
-    class BASEGFX_DLLPUBLIC B3IPoint : public ::basegfx::B3ITuple
+    class BASEGFX_DLLPUBLIC SAL_WARN_UNUSED B3IPoint : public ::basegfx::B3ITuple
     {
     public:
         /** Create a 3D Point

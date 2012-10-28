@@ -44,7 +44,7 @@ namespace basegfx
         @derive Use this class to implement Points or Vectors
         which are based on three sal_Int64 values
     */
-    class BASEGFX_DLLPUBLIC B3I64Tuple
+    class BASEGFX_DLLPUBLIC SAL_WARN_UNUSED B3I64Tuple
     {
     protected:
         sal_Int64                                       mnX;

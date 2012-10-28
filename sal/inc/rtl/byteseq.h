@@ -167,7 +167,7 @@ enum __ByteSequence_NoAcquire
     To keep value semantics, copies are only generated if the sequence is to be modified
     (new handle).
 */
-class ByteSequence
+class SAL_WARN_UNUSED ByteSequence
 {
     /** sequence handle
     */
