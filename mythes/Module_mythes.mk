@@ -12,15 +12,14 @@ $(eval $(call gb_Module_Module,mythes))
 ifeq ($(SYSTEM_MYTHES),NO)
 $(eval $(call gb_Module_add_targets,mythes,\
 	UnpackedTarball_mythes \
+	ExternalPackage_mythes \
 ))
 ifeq ($(COM),MSC)
 $(eval $(call gb_Module_add_targets,mythes,\
-	ExternalPackage_mythes \
 	StaticLibrary_mythes \
 ))
 else
 $(eval $(call gb_Module_add_targets,mythes,\
-	ExternalPackage_mythes \
 	ExternalProject_mythes \
 ))
 endif

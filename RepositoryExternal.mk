@@ -240,6 +240,28 @@ endef
 
 endif # SYSTEM_JPEG
 
+ifeq ($(SYSTEM_MYTHES),YES)
+
+define gb_LinkTarget__use_mythes
+endef
+
+else # !SYSTEM_MYTHES
+
+$(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
+	mythes \
+))
+
+define gb_LinkTarget__use_mythes
+$(call gb_LinkTarget_use_package,$(1),\
+	mythes \
+)
+$(call gb_LinkTarget_add_libs,\
+	$(if $(filter MSC,$(COM)),libmythes.lib,-lmythes-1.2) \
+)
+endef
+
+endif # SYSTEM_MYTHES
+
 
 ifeq ($(SYSTEM_EXPAT),YES)
 

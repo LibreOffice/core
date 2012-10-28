@@ -54,10 +54,7 @@ $(eval $(call gb_Library_use_static_libraries,lnth,\
 
 $(eval $(call gb_Library_use_externals,lnth,\
 	hunspell \
-))
-
-$(eval $(call gb_Library_add_libs,lnth,\
-	$(if $(filter MSC,$(COM)),libmythes.lib,-lmythes-1.2) \
+	mythes \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,lnth,\

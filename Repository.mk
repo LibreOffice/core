@@ -654,7 +654,6 @@ $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
 	findsofficepath \
     headless \
     libeay32 \
-	mythes \
     npsoenv \
     nputils \
     pdfimport_s \
