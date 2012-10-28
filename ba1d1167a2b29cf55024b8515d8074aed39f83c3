@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "AAAAP3///u4\u003d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2012-10-28T09:34:05Z",
+      "side": 1,
+      "message": "that\u0027s the theorie i guess, in praxis i am always using some factors here, ... and i am not alone:\n\n* ´--with-num-cpus\u003d2´ \\ \n* ´--with-max-jobs\u003d30´ \\\n\nas in http://tinderbox.libreoffice.org/cgi-bin/gunzip.cgi?tree\u003dMASTER\u0026full-log\u003d1351414828.12097\n\nso may be we should introduce an optional max-jobs factor and have an sensible default?",
+      "revId": "ba1d1167a2b29cf55024b8515d8074aed39f83c3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAP3///vQ\u003d",
         "filename": "configure.ac",
         "patchSetId": 1
