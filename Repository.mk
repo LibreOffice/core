@@ -408,7 +408,7 @@ endif
 
 $(eval $(call gb_Helper_register_libraries,PLAINLIBS_URE, \
     affine_uno \
-	cli_cppuhelper_native \
+	cli_cppuhelper \
 	cli_uno \
 	gcc3_uno \
 	java_uno \
