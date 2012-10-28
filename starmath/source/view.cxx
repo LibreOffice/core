@@ -459,7 +459,7 @@ void SmGraphicWindow::KeyInput(const KeyEvent& rKEvt)
             else {
                 SmNode *pTree = (SmNode*)pViewShell->GetDoc()->GetFormulaTree();
                 std::fstream file("/tmp/smath-dump.gv", std::fstream::out);
-                String label(pViewShell->GetDoc()->GetText());
+                OUString label(pViewShell->GetDoc()->GetText());
                 pTree->DumpAsDot(file, &label);
                 file.close();
             }
@@ -1017,7 +1017,6 @@ Size SmViewShell::GetTextLineSize(OutputDevice& rDevice, const String& rLine)
 {
     RTL_LOGFILE_CONTEXT( aLog, "starmath: SmViewShell::GetTextLineSize" );
 
-    String aText;
     Size   aSize(rDevice.GetTextWidth(rLine), rDevice.GetTextHeight());
     sal_uInt16 nTabs = comphelper::string::getTokenCount(rLine, '\t');
 
@@ -1032,7 +1031,7 @@ Size SmViewShell::GetTextLineSize(OutputDevice& rDevice, const String& rLine)
             if (i > 0)
                 aSize.Width() = ((aSize.Width() / TabPos) + 1) * TabPos;
 
-            aText = rLine.GetToken(i, '\t');
+            OUString aText = rLine.GetToken(i, '\t');
             aText = comphelper::string::stripStart(aText, '\t');
             aText = comphelper::string::stripEnd(aText, '\t');
             aSize.Width() += rDevice.GetTextWidth(aText);
@@ -1048,14 +1047,12 @@ Size SmViewShell::GetTextSize(OutputDevice& rDevice, const String& rText, long M
     RTL_LOGFILE_CONTEXT( aLog, "starmath: SmViewShell::GetTextSize" );
 
     Size    aSize;
-    String  aLine;
     Size    TextSize;
-    String  aText;
     sal_uInt16  nLines = comphelper::string::getTokenCount(rText, '\n');
 
     for (sal_uInt16 i = 0; i < nLines; i++)
     {
-        aLine = rText.GetToken(i, '\n');
+        OUString aLine = rText.GetToken(i, '\n');
         aLine = comphelper::string::remove(aLine, '\r');
         aLine = comphelper::string::stripStart(aLine, '\n');
         aLine = comphelper::string::stripEnd(aLine, '\n');
@@ -1066,15 +1063,16 @@ Size SmViewShell::GetTextSize(OutputDevice& rDevice, const String& rText, long M
         {
             do
             {
-                xub_StrLen m    = aLine.Len();
-                xub_StrLen nLen = m;
+                OUString aText;
+                sal_Int32 m = aLine.getLength();
+                sal_Int32 nLen = m;
 
-                for (xub_StrLen n = 0; n < nLen; n++)
+                for (sal_Int32 n = 0; n < nLen; n++)
                 {
-                    sal_Unicode cLineChar = aLine.GetChar(n);
+                    sal_Unicode cLineChar = aLine[n];
                     if ((cLineChar == ' ') || (cLineChar == '\t'))
                     {
-                        aText = aLine.Copy(0, n);
+                        aText = aLine.copy(0, n);
                         if (GetTextLineSize(rDevice, aText).Width() < MaxWidth)
                             m = n;
                         else
@@ -1082,8 +1080,8 @@ Size SmViewShell::GetTextSize(OutputDevice& rDevice, const String& rText, long M
                     }
                 }
 
-                aText = aLine.Copy(0, m);
-                aLine.Erase(0, m);
+                aText = aLine.copy(0, m);
+                aLine = aLine.replaceAt(0, m, "");
                 aSize = GetTextLineSize(rDevice, aText);
                 TextSize.Height() += aSize.Height();
                 TextSize.Width() = Max(TextSize.Width(), Min(aSize.Width(), MaxWidth));
@@ -1092,7 +1090,7 @@ Size SmViewShell::GetTextSize(OutputDevice& rDevice, const String& rText, long M
                 aLine = comphelper::string::stripStart(aLine, '\t');
                 aLine = comphelper::string::stripStart(aLine, ' ');
             }
-            while (aLine.Len() > 0);
+            while (!aLine.isEmpty());
         }
         else
         {
@@ -1109,7 +1107,6 @@ void SmViewShell::DrawTextLine(OutputDevice& rDevice, const Point& rPosition, co
 {
     RTL_LOGFILE_CONTEXT( aLog, "starmath: SmViewShell::DrawTextLine" );
 
-    String  aText;
     Point   aPoint (rPosition);
     sal_uInt16 nTabs = comphelper::string::getTokenCount(rLine, '\t');
 
@@ -1122,7 +1119,7 @@ void SmViewShell::DrawTextLine(OutputDevice& rDevice, const Point& rPosition, co
             if (i > 0)
                 aPoint.X() = ((aPoint.X() / TabPos) + 1) * TabPos;
 
-            aText = rLine.GetToken(i, '\t');
+            OUString aText = rLine.GetToken(i, '\t');
             aText = comphelper::string::stripStart(aText, '\t');
             aText = comphelper::string::stripEnd(aText, '\t');
             rDevice.DrawText(aPoint, aText);
@@ -1141,12 +1138,10 @@ void SmViewShell::DrawText(OutputDevice& rDevice, const Point& rPosition, const 
     sal_uInt16 nLines = comphelper::string::getTokenCount(rText, '\n');
     Point   aPoint (rPosition);
     Size    aSize;
-    String  aLine;
-    String  aText;
 
     for (sal_uInt16 i = 0; i < nLines; i++)
     {
-        aLine = rText.GetToken(i, '\n');
+        OUString aLine = rText.GetToken(i, '\n');
         aLine = comphelper::string::remove(aLine, '\r');
         aLine = comphelper::string::stripEnd(aLine, '\n');
         aLine = comphelper::string::stripEnd(aLine, '\n');
@@ -1155,23 +1150,24 @@ void SmViewShell::DrawText(OutputDevice& rDevice, const Point& rPosition, const 
         {
             do
             {
-                xub_StrLen m    = aLine.Len();
-                xub_StrLen nLen = m;
+                OUString aText;
+                sal_Int32 m = aLine.getLength();
+                sal_Int32 nLen = m;
 
-                for (xub_StrLen n = 0; n < nLen; n++)
+                for (sal_Int32 n = 0; n < nLen; n++)
                 {
-                    sal_Unicode cLineChar = aLine.GetChar(n);
+                    sal_Unicode cLineChar = aLine[n];
                     if ((cLineChar == ' ') || (cLineChar == '\t'))
                     {
-                        aText = aLine.Copy(0, n);
+                        aText = aLine.copy(0, n);
                         if (GetTextLineSize(rDevice, aText).Width() < MaxWidth)
                             m = n;
                         else
                             break;
                     }
                 }
-                aText = aLine.Copy(0, m);
-                aLine.Erase(0, m);
+                aText = aLine.copy(0, m);
+                aLine = aLine.replaceAt(0, m, "");
 
                 DrawTextLine(rDevice, aPoint, aText);
                 aPoint.Y() += aSize.Height();
@@ -1183,7 +1179,7 @@ void SmViewShell::DrawText(OutputDevice& rDevice, const Point& rPosition, const 
             while (GetTextLineSize(rDevice, aLine).Width() > MaxWidth);
 
             // print the remaining text
-            if (aLine.Len() > 0)
+            if (!aLine.isEmpty())
             {
                 DrawTextLine(rDevice, aPoint, aLine);
                 aPoint.Y() += aSize.Height();
@@ -1513,8 +1509,8 @@ bool SmViewShell::InsertFrom(SfxMedium &rMedium)
 
     if (pStream)
     {
-        const String& rFltName = rMedium.GetFilter()->GetFilterName();
-        if ( rFltName.EqualsAscii(MATHML_XML) )
+        const OUString& rFltName = rMedium.GetFilter()->GetFilterName();
+        if ( rFltName == MATHML_XML )
         {
             Reference<com::sun::star::frame::XModel> xModel( pDoc->GetModel() );
             SmXMLImportWrapper aEquation(xModel);    //!! modifies the result of pDoc->GetText() !!
@@ -1643,7 +1639,7 @@ void SmViewShell::Execute(SfxRequest& rReq)
                     uno::Reference < embed::XStorage > xStorage =
                             ::comphelper::OStorageHelper::GetStorageFromInputStream( xStrm, ::comphelper::getProcessServiceFactory() );
                     uno::Reference < beans::XPropertySet > xProps( xStorage, uno::UNO_QUERY );
-                    SfxMedium aMedium( xStorage, String() );
+                    SfxMedium aMedium( xStorage, OUString() );
                     Insert( aMedium );
                     GetDoc()->UpdateText();
                 }

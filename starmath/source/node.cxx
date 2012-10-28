@@ -556,18 +556,18 @@ const SmNode * SmNode::FindNodeWithAccessibleIndex(xub_StrLen nAccIdx) const
 }
 
 #ifdef DEBUG_ENABLE_DUMPASDOT
-void SmNode::DumpAsDot(std::ostream &out, String* label, int number, int& id, int parent) const
+void SmNode::DumpAsDot(std::ostream &out, OUString* label, int number, int& id, int parent) const
 {
     //If this is the root start the file
     if(number == -1){
         out<<"digraph {"<<std::endl;
         if(label){
             out<<"labelloc = \"t\";"<<std::endl;
-            String eq(*label);
+            OUString eq(*label);
             //CreateTextFromNode(eq);
-            eq.SearchAndReplaceAll(String::CreateFromAscii("\n"), String::CreateFromAscii(" "));
-            eq.SearchAndReplaceAll(String::CreateFromAscii("\\"), String::CreateFromAscii("\\\\"));
-            eq.SearchAndReplaceAll(String::CreateFromAscii("\""), String::CreateFromAscii("\\\""));
+            eq = eq.replaceAll("\n", " ");
+            eq = eq.replaceAll("\\", "\\\\");
+            eq = eq.replaceAll("\"", "\\\"");
             out<<"label= \"Equation: \\\"";
             out<< rtl::OUStringToOString(eq, RTL_TEXTENCODING_UTF8).getStr();
             out<<"\\\"\";"<<std::endl;

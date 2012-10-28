@@ -262,7 +262,7 @@ void SmSymbolManager::Load()
     SmLocalizedSymbolData   aLocalizedData;
     const OUString aGreekSymbolSetName(aLocalizedData.GetUiSymbolSetName(OUString("Greek")));
     const SymbolPtrVec_t    aGreekSymbols( GetSymbolSet( aGreekSymbolSetName ) );
-    String aSymbolSetName = OUString('i');
+    OUString aSymbolSetName('i');
     aSymbolSetName += aGreekSymbolSetName;
     size_t nSymbols = aGreekSymbols.size();
     for (size_t i = 0;  i < nSymbols;  ++i)
@@ -272,7 +272,7 @@ void SmSymbolManager::Load()
         Font aFont( rSym.GetFace() );
         OSL_ENSURE( aFont.GetItalic() == ITALIC_NONE, "expected Font with ITALIC_NONE, failed." );
         aFont.SetItalic( ITALIC_NORMAL );
-        String aSymbolName = OUString('i');
+        OUString aSymbolName('i');
         aSymbolName += rSym.GetName();
         SmSym aSymbol( aSymbolName, aFont, rSym.GetCharacter(),
                 aSymbolSetName, true /*bIsPredefined*/ );

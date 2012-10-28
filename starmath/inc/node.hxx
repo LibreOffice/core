@@ -190,7 +190,7 @@ public:
     /** The tree as dot graph for graphviz, usable for debugging
      * Convert the output to a image using $ dot graph.gv -Tpng > graph.png
      */
-    inline void DumpAsDot(std::ostream &out, String* label = NULL) const{
+    inline void DumpAsDot(std::ostream &out, OUString* label = NULL) const{
         int id = 0;
         DumpAsDot(out, label, -1, id, -1);
     }
@@ -230,7 +230,7 @@ protected:
     }
 private:
     SmStructureNode* aParentNode;
-    void DumpAsDot(std::ostream &out, String* label, int number, int& id, int parent) const;
+    void DumpAsDot(std::ostream &out, OUString* label, int number, int& id, int parent) const;
 };
 
 ////////////////////////////////////////////////////////////////////////////////
