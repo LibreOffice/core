@@ -255,7 +255,7 @@ define gb_LinkTarget__use_mythes
 $(call gb_LinkTarget_use_package,$(1),\
 	mythes \
 )
-$(call gb_LinkTarget_add_libs,\
+$(call gb_LinkTarget_add_libs,$(1),\
 	$(if $(filter MSC,$(COM)),libmythes.lib,-lmythes-1.2) \
 )
 endef
