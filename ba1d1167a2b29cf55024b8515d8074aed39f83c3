@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAP3///vQ\u003d",
+        "filename": "configure.ac",
+        "patchSetId": 1
+      },
+      "lineNbr": 2126,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2012-10-28T08:08:21Z",
+      "side": 1,
+      "message": "Just say \"processes\". \"CPU\" is a bit vague, people might wander whether it means a CPU chip (with perhaps multiple cores), or a \"processor\"? But actually \"processes\" is not really correct either; even in a build with no parallelism at all there of course are a lot of processes existing at the same time (but just one \"runnable\"),,, Hmm, should the switch then be changes to --with-parallelism?",
+      "revId": "ba1d1167a2b29cf55024b8515d8074aed39f83c3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAP3///vU\u003d",
+        "filename": "configure.ac",
+        "patchSetId": 1
+      },
+      "lineNbr": 2127,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2012-10-28T08:08:21Z",
+      "side": 1,
+      "message": "I think it would be better to avoid the vague term \"jobs\" here. (It makes me think of \"batch jobs\";)",
+      "revId": "ba1d1167a2b29cf55024b8515d8074aed39f83c3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
