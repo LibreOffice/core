@@ -50,6 +50,24 @@
       "revId": "ba1d1167a2b29cf55024b8515d8074aed39f83c3",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAP3///us\u003d",
+        "filename": "configure.ac",
+        "patchSetId": 1
+      },
+      "lineNbr": 2127,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2012-10-28T13:21:04Z",
+      "side": 1,
+      "message": "I\u0027d keep the whole option as --with-max-jobs - as that is also the term make uses for the -j option, where that value ends up in the end.\n\"Specifies the number of jobs (commands) to run simultaneously.\"\n\nThe number of CPUs/Cores is irrelevant, and thus misleading when it comes to this option.",
+      "parentUuid": "AAAAP3///vU\u003d",
+      "revId": "ba1d1167a2b29cf55024b8515d8074aed39f83c3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
