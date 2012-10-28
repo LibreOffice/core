@@ -906,10 +906,10 @@ void PresLayoutPreview::Paint( const Rectangle& )
         nWidth = long( (double)(nHeight * maPageSize.Width()) / (double)maPageSize.Height() );
     }
 
-    maOutRect.nLeft += (maOutRect.GetWidth() - nWidth) >> 1;
-    maOutRect.nRight = maOutRect.nLeft + nWidth - 1;
-    maOutRect.nTop += (maOutRect.GetHeight() - nHeight) >> 1;
-    maOutRect.nBottom = maOutRect.nTop + nHeight - 1;
+    maOutRect.Left() += (maOutRect.GetWidth() - nWidth) >> 1;
+    maOutRect.Right() = maOutRect.Left() + nWidth - 1;
+    maOutRect.Top() += (maOutRect.GetHeight() - nHeight) >> 1;
+    maOutRect.Bottom() = maOutRect.Top() + nHeight - 1;
 
     // draw decoration frame
     DecorationView aDecoView( this );

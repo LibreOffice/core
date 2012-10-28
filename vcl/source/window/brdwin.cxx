@@ -143,10 +143,10 @@ static void ImplDrawBrdWinSymbolButton( OutputDevice* pDev,
                                             sal_True, sal_False );
         }
         aTempRect = rRect;
-        aTempRect.nLeft+=3;
-        aTempRect.nRight-=4;
-        aTempRect.nTop+=3;
-        aTempRect.nBottom-=4;
+        aTempRect.Left()+=3;
+        aTempRect.Right()-=4;
+        aTempRect.Top()+=3;
+        aTempRect.Bottom()-=4;
     }
     else
     {
@@ -1674,8 +1674,10 @@ void ImplStdBorderWindowView::DrawWindow( sal_uInt16 nDrawFlags, OutputDevice* p
         pDev->SetLineColor( aFrameColor );
         pDev->SetFillColor();
         pDev->DrawRect( aInRect );
-        aInRect.nLeft++; aInRect.nRight--;
-        aInRect.nTop++; aInRect.nBottom--;
+        ++aInRect.Left();
+        --aInRect.Right();
+        ++aInRect.Top();
+        --aInRect.Bottom();
 
         // restore
         if ( pData->mnTitleType == BORDERWINDOW_TITLE_POPUP )

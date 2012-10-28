@@ -199,9 +199,9 @@ IMPL_LINK_NOARG(ImplDockFloatWin2, DockingHdl)
             sal_Int32 nLeft, nTop, nRight, nBottom;
             GetBorder( nLeft, nTop, nRight, nBottom );
             // limit borderrect to the caption part only and without the resizing borders
-            aBorderRect.nBottom = aBorderRect.nTop + nTop;
-            aBorderRect.nLeft += nLeft;
-            aBorderRect.nRight -= nRight;
+            aBorderRect.Bottom() = aBorderRect.Top() + nTop;
+            aBorderRect.Left() += nLeft;
+            aBorderRect.Right() -= nRight;
 
             PointerState aBorderState = pBorder->GetPointerState();
             if( aBorderRect.IsInside( aBorderState.maPos ) )
@@ -684,10 +684,10 @@ void ImplPopupFloatWin::DrawGrip()
 
     // draw background
     Rectangle aRect( GetDragRect() );
-    aRect.nTop      += POPUP_DRAGBORDER;
-    aRect.nBottom   -= POPUP_DRAGBORDER;
-    aRect.nLeft+=3;
-    aRect.nRight-=3;
+    aRect.Top()      += POPUP_DRAGBORDER;
+    aRect.Bottom()   -= POPUP_DRAGBORDER;
+    aRect.Left()+=3;
+    aRect.Right()-=3;
 
     if( mbHighlight )
     {
@@ -710,16 +710,18 @@ void ImplPopupFloatWin::DrawGrip()
         aLineInfo.SetDashLen( 12 );
         aLineInfo.SetDashCount( 1 );
 
-        aRect.nLeft+=2; aRect.nRight-=2;
+        aRect.Left()+=2;
+        aRect.Right()-=2;
 
-        aRect.nTop+=2;
-        aRect.nBottom = aRect.nTop;
+        aRect.Top()+=2;
+        aRect.Bottom() = aRect.Top();
         SetLineColor( GetSettings().GetStyleSettings().GetDarkShadowColor() );
         DrawLine( aRect.TopLeft(), aRect.TopRight(), aLineInfo );
 
         if( !mbHighlight )
         {
-            aRect.nTop++; aRect.nBottom++;
+            ++aRect.Top();
+            ++aRect.Bottom();
             SetLineColor( GetSettings().GetStyleSettings().GetLightColor() );
             DrawLine( aRect.TopLeft(), aRect.TopRight(), aLineInfo );
         }
@@ -727,8 +729,8 @@ void ImplPopupFloatWin::DrawGrip()
 #else
         // draw several grip lines
         SetFillColor( GetSettings().GetStyleSettings().GetShadowColor() );
-        aRect.nTop++;
-        aRect.nBottom = aRect.nTop;
+        aRect.Top()++;
+        aRect.Bottom() = aRect.Top();
 
         int width = POPUP_DRAGWIDTH;
         while( width >= aRect.getWidth() )
@@ -736,15 +738,15 @@ void ImplPopupFloatWin::DrawGrip()
         if( width <= 0 )
             width = aRect.getWidth();
         //aRect.nLeft = aRect.nLeft + (aRect.getWidth() - width) / 2;
-        aRect.nLeft = (aRect.nLeft + aRect.nRight - width) / 2;
-        aRect.nRight = aRect.nLeft + width;
+        aRect.Left() = (aRect.Left() + aRect.Right() - width) / 2;
+        aRect.Right() = aRect.Left() + width;
 
         int i=0;
         while( i< POPUP_DRAGGRIP )
         {
             DrawRect( aRect );
-            aRect.nTop+=2;
-            aRect.nBottom+=2;
+            aRect.Top()+=2;
+            aRect.Bottom()+=2;
             i+=2;
         }
 #endif

@@ -1172,7 +1172,7 @@ void Writer::Impl_writeLine( const Point& rPt1, const Point& rPt2, const Color* 
 
 void Writer::Impl_writeRect( const Rectangle& rRect, long nRadX, long nRadY )
 {
-    if( (rRect.nTop == rRect.nBottom) || (rRect.nLeft == rRect.nRight) )
+    if( (rRect.Top() == rRect.Bottom()) || (rRect.Left() == rRect.Right()) )
     {
         Color aColor( mpVDev->GetFillColor() );
         Impl_writeLine( rRect.TopLeft(), rRect.BottomRight(), &aColor );

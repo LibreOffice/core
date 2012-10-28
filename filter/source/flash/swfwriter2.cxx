@@ -252,23 +252,27 @@ void Tag::writeRect( SvStream& rOut, const Rectangle& rRect )
 
     sal_Int32 minX, minY, maxX, maxY;
 
-    if( rRect.nLeft < rRect.nRight )
+    if( rRect.Left() < rRect.Right() )
     {
-        minX = rRect.nLeft; maxX = rRect.nRight;
+        minX = rRect.Left();
+        maxX = rRect.Right();
     }
     else
     {
-        maxX = rRect.nLeft; minX = rRect.nRight;
+        maxX = rRect.Left();
+        minX = rRect.Right();
     }
 
 
-    if( rRect.nTop < rRect.nBottom )
+    if( rRect.Top() < rRect.Bottom() )
     {
-        minY = rRect.nTop; maxY = rRect.nBottom;
+        minY = rRect.Top();
+        maxY = rRect.Bottom();
     }
     else
     {
-        maxY = rRect.nTop; minY = rRect.nBottom;
+        maxY = rRect.Top();
+        minY = rRect.Bottom();
     }
 
     // AS: Figure out the maximum nubmer of bits required to represent any of the
@@ -665,7 +669,7 @@ void FillStyle::Impl_addGradient( Tag* pTag ) const
     case  GradientStyle_FORCE_EQUAL_SIZE: break;
     }
 
-    m.translate( maBoundRect.nLeft, maBoundRect.nTop );
+    m.translate( maBoundRect.Left(), maBoundRect.Top() );
 
     pTag->addMatrix( m );
 

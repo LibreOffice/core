@@ -1040,8 +1040,8 @@ TableHitKind SdrTableObj::CheckTableHit( const Point& rPos, sal_Int32& rnX, sal_
     const sal_Int32 nColCount = mpImpl->getColumnCount();
     const sal_Int32 nRowCount = mpImpl->getRowCount();
 
-    sal_Int32 nX = rPos.X() + nTol - aRect.nLeft;
-    sal_Int32 nY = rPos.Y() + nTol - aRect.nTop;
+    sal_Int32 nX = rPos.X() + nTol - aRect.Left();
+    sal_Int32 nY = rPos.Y() + nTol - aRect.Top();
 
     if( (nX < 0) || (nX > (aRect.GetWidth() + nTol)) || (nY < 0) || (nY > (aRect.GetHeight() + nTol) ) )
         return SDRTABLEHIT_NONE;

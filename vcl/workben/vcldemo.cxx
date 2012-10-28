@@ -159,9 +159,9 @@ void MyWin::Paint( const Rectangle& rRect )
     DrawRect( r );
 
     for(int i=0; i<aSz.Height(); i+=15)
-        DrawLine( Point(r.nLeft, r.nTop+i), Point(r.nRight, r.nBottom-i) );
+        DrawLine( Point(r.Left(), r.Top()+i), Point(r.Right(), r.Bottom()-i) );
     for(int i=0; i<aSz.Width(); i+=15)
-        DrawLine( Point(r.nLeft+i, r.nBottom), Point(r.nRight-i, r.nTop) );
+        DrawLine( Point(r.Left()+i, r.Bottom()), Point(r.Right()-i, r.Top()) );
 
     SetTextColor( Color( COL_WHITE ) );
     Font aFont( String( RTL_CONSTASCII_USTRINGPARAM( "Times" ) ), Size( 0, 25 ) );

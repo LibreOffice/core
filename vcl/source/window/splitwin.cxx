@@ -1982,9 +1982,9 @@ void SplitWindow::ImplDrawGrip( const Rectangle& rRect, sal_Bool bHorz, sal_Bool
     if( bHorz )
     {
         int width = (int) (0.5 * rRect.getWidth() + 0.5);
-        int i = rRect.nLeft + (rRect.getWidth() - width) / 2;
+        int i = rRect.Left() + (rRect.getWidth() - width) / 2;
         width += i;
-        const int y = rRect.nTop + 1;
+        const int y = rRect.Top() + 1;
         ImplDrawFadeArrow( Point( i-8, y), bHorz, bLeft );
         while( i <= width )
         {
@@ -2005,9 +2005,9 @@ void SplitWindow::ImplDrawGrip( const Rectangle& rRect, sal_Bool bHorz, sal_Bool
     else
     {
         int height = (int) (0.5 * rRect.getHeight() + 0.5);
-        int i = rRect.nTop + (rRect.getHeight() - height) / 2;
+        int i = rRect.Top() + (rRect.getHeight() - height) / 2;
         height += i;
-        const int x = rRect.nLeft + 1;
+        const int x = rRect.Left() + 1;
         ImplDrawFadeArrow( Point( x, i-8), bHorz, bLeft );
         while( i <= height )
         {

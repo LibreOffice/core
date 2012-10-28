@@ -254,7 +254,7 @@ Polygon PictWriter::PolyPolygonToPolygon(const PolyPolygon & rPolyPoly)
         nSize2=aPoly2.GetSize();
 
         // At first we look for a point in aPoly1 (referenced by nBestIdx1) and a
-        // point in aPoly2 (referenced by nBestid2), which 
+        // point in aPoly2 (referenced by nBestid2), which
         // Zunaechst werden ein Punkt in aPoly1 (referenziert durch nBestIdx1) und ein
         // Punkt in aPoly2 (referenziert durch nBestIdx2) gesucht, die moeglichst dicht
         // beieinander liegen. Da dies mit quadratischem Aufwand einher geht, und somit
@@ -340,8 +340,8 @@ Rectangle PictWriter::MapRectangle( const Rectangle& rRect )
     Size    aSize = OutputDevice::LogicToLogic( rRect.GetSize(), aSrcMapMode, aTargetMapMode );
     Rectangle aRect( aPoint, aSize );
     aRect.Justify();
-    aRect.nBottom++;
-    aRect.nRight++;
+    ++aRect.Bottom();
+    ++aRect.Right();
     return aRect;
 }
 
@@ -730,8 +730,8 @@ void PictWriter::WriteOpcode_FontName(const Font & rFont)
 void PictWriter::WriteOpcode_ClipRect( const Rectangle& rRect )
 {
     Rectangle aRect( MapRectangle( rRect ) );
-    aRect.nBottom++;
-    aRect.nRight++;
+    ++aRect.Bottom();
+    ++aRect.Right();
     *pPict  << (sal_uInt16)1    // opcode 1
             << (sal_uInt16)10   // data size
             << (sal_Int16)aRect.Top() << (sal_Int16)aRect.Left()

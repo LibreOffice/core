@@ -435,10 +435,10 @@ void CustomAnimationTriggerEntryItem::Paint( const Point& rPos, SvTreeListBox& r
     int nVertBorder = (( aSize.Height() - rDev.GetTextHeight()) >> 1);
     int nHorzBorder = rDev.LogicToPixel( Size( 3, 3 ), MAP_APPFONT ).Width();
 
-    aOutRect.nLeft += nHorzBorder;
-    aOutRect.nRight -= nHorzBorder;
-    aOutRect.nTop += nVertBorder;
-    aOutRect.nBottom -= nVertBorder;
+    aOutRect.Left() += nHorzBorder;
+    aOutRect.Right() -= nHorzBorder;
+    aOutRect.Top() += nVertBorder;
+    aOutRect.Bottom() -= nVertBorder;
 
     rDev.DrawText (aOutRect, rDev.GetEllipsisString( maDescription, aOutRect.GetWidth() ) );
     rDev.Pop();

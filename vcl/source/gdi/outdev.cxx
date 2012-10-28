@@ -540,14 +540,14 @@ void    OutputDevice::ImplReMirror( Point &rPoint ) const
 }
 void    OutputDevice::ImplReMirror( Rectangle &rRect ) const
 {
-    long nWidth = rRect.nRight - rRect.nLeft;
+    long nWidth = rRect.Right() - rRect.Left();
 
     //long lc_x = rRect.nLeft - mnOutOffX;    // normalize
     //lc_x = mnOutWidth - nWidth - 1 - lc_x;  // mirror
     //rRect.nLeft = lc_x + mnOutOffX;         // re-normalize
 
-    rRect.nLeft = mnOutOffX + mnOutWidth - nWidth - 1 - rRect.nLeft + mnOutOffX;
-    rRect.nRight = rRect.nLeft + nWidth;
+    rRect.Left() = mnOutOffX + mnOutWidth - nWidth - 1 - rRect.Left() + mnOutOffX;
+    rRect.Right() = rRect.Left() + nWidth;
 }
 void    OutputDevice::ImplReMirror( Region &rRegion ) const
 {
