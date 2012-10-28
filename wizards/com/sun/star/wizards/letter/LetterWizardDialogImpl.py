@@ -25,6 +25,7 @@ from ..common.FileAccess import FileAccess
 from ..common.Configuration import Configuration
 from ..common.SystemDialog import SystemDialog
 from ..common.Desktop import Desktop
+from ..common.TextElement import TextElement
 from ..ui.PathSelection import PathSelection
 from ..ui.event.UnoDataAware import UnoDataAware
 from ..ui.event.RadioDataAware import RadioDataAware
@@ -386,6 +387,7 @@ class LetterWizardDialogImpl(LetterWizardDialog):
             self.initializeElements()
             self.chkBusinessPaperItemChanged()
             self.setElements(False)
+            self.drawConstants()
             
     def lstPrivOfficialStyleItemChanged(self):
         selectedItemPos = self.lstPrivOfficialStyle.SelectedItemPos
@@ -397,6 +399,7 @@ class LetterWizardDialogImpl(LetterWizardDialog):
             self.initializeElements()
             self.setPossibleSenderData(True)
             self.setElements(False)
+            self.drawConstants()
 
     def lstPrivateStyleItemChanged(self):
         selectedItemPos = self.lstPrivateStyle.SelectedItemPos
@@ -981,7 +984,18 @@ class LetterWizardDialogImpl(LetterWizardDialog):
 
         if self.optMakeChanges.State:
             self.optMakeChangesItemChanged()
-
+            
+    def drawConstants(self):
+        '''Localise the template'''
+        constRangeList = TextDocument.searchFillInItems(1)
+        
+        for i in xrange(constRangeList.Count):
+            item = constRangeList.getByIndex(i)
+            text = item.String.lower()
+            aux = TextElement(item, self.resources.dictConstants[text],
+                "hint", self.xMSF)
+            aux.write()
+            
     def insertRoadmap(self):
         self.addRoadmap()
 

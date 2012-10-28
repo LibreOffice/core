@@ -208,6 +208,11 @@ class LetterWizardDialogResources(Resource):
         self.reslblTitle6_value = \
             self.getResText(
                 LetterWizardDialogResources.RID_LETTERWIZARDDIALOG_START + 58)
+                
+        #Create a Dictionary for the constants values.
+        self.dictConstants = {
+        "#subjectconst#" : self.getResText(
+            LetterWizardDialogResources.RID_LETTERWIZARDDIALOG_START + 59)}
 
         #Create a dictionary for localising the bussiness templates
         self.dictBusinessTemplate = {

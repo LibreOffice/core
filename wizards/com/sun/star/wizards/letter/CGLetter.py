@@ -28,7 +28,6 @@ class CGLetter(ConfigGroup):
         self.cp_PaperCompanyAddressReceiverField = bool()
         self.cp_PaperFooter = bool()
         self.cp_PaperFooterHeight = float()
-        self.cp_Norm = int()
         self.cp_PrintCompanyLogo = bool()
         self.cp_PrintCompanyAddressReceiverField = bool()
         self.cp_PrintLetterSigns = bool()

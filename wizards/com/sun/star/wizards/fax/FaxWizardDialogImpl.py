@@ -232,7 +232,7 @@ class FaxWizardDialogImpl(FaxWizardDialog):
 
     def drawConstants(self):
         '''Localise the template'''
-        constRangeList = self.searchFillInItems(1)
+        constRangeList = TextDocument.searchFillInItems(1)
         
         for i in xrange(constRangeList.Count):
             item = constRangeList.getByIndex(i)
@@ -241,19 +241,6 @@ class FaxWizardDialogImpl(FaxWizardDialog):
                 "hint", self.xMSF)
             aux.write()
             
-    def searchFillInItems(self, typeSearch):
-        sd = TextDocument.xTextDocument.createSearchDescriptor()
-        
-        if typeSearch == 0:
-            sd.setSearchString("<[^>]+>")
-        elif typeSearch == 1:
-            sd.setSearchString("#[^#]+#")
-            
-        sd.setPropertyValue("SearchRegularExpression", True)
-        sd.setPropertyValue("SearchWords", True)
-        
-        return TextDocument.xTextDocument.findAll(sd)
-
     def insertRoadmap(self):
         self.addRoadmap()
         self.insertRoadMapItems(
