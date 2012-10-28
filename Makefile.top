@@ -126,6 +126,7 @@ offapi\
 officecfg\
 oovbaapi\
 oox\
+openldap\
 package\
 packimages\
 padmin\
@@ -238,7 +239,6 @@ mysqlc\
 mysqlcppconn\
 nss\
 odk\
-openldap\
 openssl\
 pango\
 postprocess\

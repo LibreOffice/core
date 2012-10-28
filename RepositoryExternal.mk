@@ -1776,9 +1776,11 @@ $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS,\
 define gb_LinkTarget__use_openldap
 
 $(call gb_LinkTarget_set_include,$(1),\
-	-I$(OUTDIR)/inc/openldap \
+	-I$(call gb_UnpackedTarball_get_dir,openldap/include) \
 	$$(INCLUDE) \
 )
+
+$(call gb_LinkTarget_use_package,$(1),openldap)
 
 $(call gb_LinkTarget_use_static_libraries,$(1),\
 	ldap \

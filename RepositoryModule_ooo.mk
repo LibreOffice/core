@@ -125,6 +125,7 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
 	officecfg \
 	oovbaapi \
 	oox \
+	$(call gb_Helper_optional,OPENLDAP,openldap) \
 	package \
 	packimages \
 	padmin \

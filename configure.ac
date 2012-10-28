@@ -8064,7 +8064,7 @@ dnl ===================================================================
 dnl Check for system openldap
 dnl ===================================================================
 
-if test "$_os" != "WINNT"; then
+if test "$_os" != "WINNT" -a "$_os" != "iOS" -a "$_os" != "Android"; then
 AC_MSG_CHECKING([which openldap library to use])
 if test "$with_system_openldap" = "yes"; then
     AC_MSG_RESULT([external])
@@ -8075,12 +8075,12 @@ if test "$with_system_openldap" = "yes"; then
 else
     AC_MSG_RESULT([internal])
     SYSTEM_OPENLDAP=NO
+    OPENLDAP_TARBALL="804c6cb5698db30b75ad0ff1c25baefd-openldap-2.4.31.tgz"
     BUILD_TYPE="$BUILD_TYPE OPENLDAP"
 fi
-else
-    SYSTEM_OPENLDAP=NO
 fi
 AC_SUBST(SYSTEM_OPENLDAP)
+AC_SUBST(OPENLDAP_TARBALL)
 
 dnl ===================================================================
 dnl Check for system mozilla

@@ -117,6 +117,7 @@ $(eval $(call gb_Module_add_moduledirs,tail_end,\
 	officecfg \
 	oovbaapi \
 	oox \
+	$(call gb_Helper_optional,OPENLDAP,openldap) \
 	package \
 	padmin \
 	$(call gb_Helper_optional,POSTGRESQL,postgresql) \

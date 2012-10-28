@@ -11,6 +11,8 @@ $(eval $(call gb_ExternalProject_ExternalProject,postgresql))
 
 $(eval $(call gb_ExternalProject_use_unpacked,postgresql,postgresql))
 
+$(eval $(call gb_ExternalProject_use_package,postgresql,openldap))
+
 $(eval $(call gb_ExternalProject_register_targets,postgresql,\
 	build \
 ))
