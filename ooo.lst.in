@@ -29,7 +29,7 @@ e61d0364a30146aaa3001296f853b2b9-libxslt-1.1.26.tar.gz
 fca8706f2c4619e2fa3f8f42f8fc1e9d-rasqal-0.9.16.tar.gz
 0981bda6548a8c8233ffce2b6e4b2a23-mysql-connector-c++-1.1.0.tar.gz
 @POSTGRESQL_TARBALL@
-46e92b68e31e858512b680b3b61dc4c1-mythes-1.2.3.tar.gz
+@MYTHES_TARBALL@
 3dd55b952826d2b32f51308f2f91aa89-gettext-0.18.1.1.tar.gz
 9f6e85e1e38490c3956f4415bcd33e6e-glib-2.28.1.tar.gz
 a7d6c5f2fe2d481149ed3ba807b5c043-gdk-pixbuf-2.23.0.tar.gz

@@ -1,7 +1,0 @@
-..\%__SRC%\slb\libmythes.lib     %_DEST%\lib\libmythes.lib
-
-..\%__SRC%\inc\mythes.hxx %_DEST%\inc\mythes.hxx
-..\%__SRC%\misc\build\mythes-1.2.3\.libs\libmythes-1.2.a %_DEST%\lib\libmythes-1.2.a
-..\%__SRC%\lib\libmythes-1.2.a %_DEST%\lib\libmythes-1.2.a
-..\%__SRC%\misc\build\mythes-1.2.3\th_gen_idx.pl %_DEST%\bin\th_gen_idx.pl
-

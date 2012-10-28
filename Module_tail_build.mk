@@ -107,6 +107,7 @@ $(eval $(call gb_Module_add_moduledirs,tail_end,\
 	mdds \
 	Mesa \
 	$(call gb_Helper_optional,MORE_FONTS,more_fonts) \
+	$(call gb_Helper_optional,MYTHES,mythes) \
 	$(call gb_Helper_optional,NEON,neon) \
 	$(call gb_Helper_optional,NLPSOLVER,nlpsolver) \
 	np_sdk \

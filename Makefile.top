@@ -116,6 +116,7 @@ linguistic\
 lotuswordpro\
 mdds\
 more_fonts\
+mythes\
 neon\
 nlpsolver\
 np_sdk\
@@ -235,7 +236,6 @@ migrationanalysis\
 moz\
 mysqlc\
 mysqlcppconn\
-mythes\
 nss\
 odk\
 openldap\
