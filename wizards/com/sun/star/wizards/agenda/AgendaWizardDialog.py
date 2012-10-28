@@ -15,9 +15,9 @@
 #   except in compliance with the License. You may obtain a copy of
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
-from wizards.ui.WizardDialog import *
-from wizards.ui.WizardDialog import *
-from AgendaWizardDialogConst import *
+from wizards.ui.WizardDialog import WizardDialog, uno, Helper, UIConsts, \
+    PropertyNames
+from AgendaWizardDialogConst import AgendaWizardDialogConst, HID
 from AgendaWizardDialogResources import AgendaWizardDialogResources
 
 from com.sun.star.awt.FontUnderline import SINGLE
@@ -26,23 +26,22 @@ class AgendaWizardDialog(WizardDialog):
 
     def __init__(self, xmsf):
         super(AgendaWizardDialog,self).__init__(xmsf, HID )
+        
         #Load Resources
         self.resources = AgendaWizardDialogResources(xmsf)
+        
         #set dialog properties...
         Helper.setUnoPropertyValues(
-            self.xDialogModel, ("Closeable",
+            self.xDialogModel, ("Closeable", 
                 PropertyNames.PROPERTY_HEIGHT,
-                "Moveable",
-                PropertyNames.PROPERTY_POSITION_X,
+                "Moveable", PropertyNames.PROPERTY_POSITION_X,
                 PropertyNames.PROPERTY_POSITION_Y,
                 PropertyNames.PROPERTY_STEP,
                 PropertyNames.PROPERTY_TABINDEX,
-                "Title",
-                PropertyNames.PROPERTY_WIDTH),
+                "Title", PropertyNames.PROPERTY_WIDTH),
             (True, 210, True, 200, 52, 1, 1,
                 self.resources.resAgendaWizardDialog_title,310))
 
-        self.IMGHELP1_HID = ""
         self.PROPS_LIST = ("Dropdown",
                 PropertyNames.PROPERTY_HEIGHT,
                 PropertyNames.PROPERTY_HELPURL,
@@ -105,16 +104,17 @@ class AgendaWizardDialog(WizardDialog):
                 PropertyNames.PROPERTY_IMAGEURL,
                 PropertyNames.PROPERTY_POSITION_X,
                 PropertyNames.PROPERTY_POSITION_Y,
-                "ScaleImage",
-                PropertyNames.PROPERTY_STEP,
+                "ScaleImage", PropertyNames.PROPERTY_STEP,
                 PropertyNames.PROPERTY_TABINDEX,
                 PropertyNames.PROPERTY_WIDTH)
+                
         self.fontDescriptor1 = \
             uno.createUnoStruct('com.sun.star.awt.FontDescriptor')
         self.fontDescriptor2 = \
             uno.createUnoStruct('com.sun.star.awt.FontDescriptor')
         self.fontDescriptor4 = \
             uno.createUnoStruct('com.sun.star.awt.FontDescriptor')
+            
         #Set member- FontDescriptors...
         self.fontDescriptor1.Weight = 150
         self.fontDescriptor1.Underline = SINGLE
@@ -125,35 +125,40 @@ class AgendaWizardDialog(WizardDialog):
     build components
     '''
     def buildStep1(self):
-        self.insertLabel("lblTitle1", self.PROPS_LABEL_B, (self.fontDescriptor4,
-            16, self.resources.reslblTitle1_value, True, 91, 8, 1, 100,212))
+        self.insertLabel("lblTitle1", self.PROPS_LABEL_B,
+            (self.fontDescriptor4, 16, self.resources.reslblTitle1_value,
+                True, 91, 8, 1, 100,212))
         self.insertLabel("lblPageDesign", self.PROPS_TEXT,
-            (8, self.resources.reslblPageDesign_value, 97, 32, 1, 101, 66))
+            (8, self.resources.reslblPageDesign_value, 97, 32, 1, 101, 66))  
         self.listPageDesign = self.insertListBox("listPageDesign",
-            None, LISTPAGEDESIGN_ACTION_PERFORMED, self.PROPS_LIST,
-            (True, 12, LISTPAGEDESIGN_HID, 166, 30, 1, 102, 70), self)
+            None, AgendaWizardDialogConst.LISTPAGEDESIGN_ACTION_PERFORMED,
+            self.PROPS_LIST,
+            (True, 12, AgendaWizardDialogConst.LISTPAGEDESIGN_HID,
+                166, 30, 1, 102, 70), self)
         self.chkMinutes = self.insertCheckBox("chkMinutes", None,
-            self.PROPS_CHECK, (9, CHKMINUTES_HID,
+            self.PROPS_CHECK, (9, AgendaWizardDialogConst.CHKMINUTES_HID,
             self.resources.reschkMinutes_value, 97, 50, 0, 1, 103, 203), self)
         self.insertImage("imgHelp1", self.PROPS_IMAGE,
-            (0, 10, self.IMGHELP1_HID,
-                INFO_IMAGE_URL, 92,
-                145, False, 1, 104, 10))
+            (0, 10, "", UIConsts.INFOIMAGEURL, 92, 145, False, 1, 104, 10))
         self.insertLabel("lblHelp1", self.PROPS_TEXTAREA,
-            (39, self.resources.reslblHelp1_value, True,104,145, 1, 105,199))
+            (39, self.resources.reslblHelp1_value,
+                True, 104, 145, 1, 105, 199))
 
     def buildStep2(self):
         self.insertLabel("lblTitle2", self.PROPS_LABEL_B,
-            (self.fontDescriptor4, 16,
-                self.resources.reslblTitle2_value, True,91, 8, 2, 200,212))
+            (self.fontDescriptor4, 16, self.resources.reslblTitle2_value,
+                True, 91, 8, 2, 200, 212))
         self.insertLabel("lblDate", self.PROPS_TEXT,
             (8, self.resources.reslblDate_value, 97, 32, 2, 201,66))
         self.txtDate = self.insertDateField(
-            "txtDate", TXTDATE_TEXT_CHANGED, self.PROPS_LIST,
-            (True, 12, TXTDATE_HID,166,30, 2, 202,70), self)
+            "txtDate", AgendaWizardDialogConst.TXTDATE_TEXT_CHANGED,
+            self.PROPS_LIST,
+            (True, 12, AgendaWizardDialogConst.TXTDATE_HID,
+                166,30, 2, 202, 70), self)
         self.insertLabel("lblTime", self.PROPS_TEXT,
             (8, self.resources.reslblTime_value, 97, 50, 2, 203, 66))
-        self.txtTime = self.insertTimeField("txtTime", TXTTIME_TEXT_CHANGED,
+        self.txtTime = self.insertTimeField("txtTime",
+            AgendaWizardDialogConst.TXTTIME_TEXT_CHANGED,
             (PropertyNames.PROPERTY_HEIGHT,
                 PropertyNames.PROPERTY_HELPURL,
                 PropertyNames.PROPERTY_POSITION_X,
@@ -162,11 +167,12 @@ class AgendaWizardDialog(WizardDialog):
                 "StrictFormat",
                 PropertyNames.PROPERTY_TABINDEX,
                 PropertyNames.PROPERTY_WIDTH),
-            (12, TXTTIME_HID, 166, 48, 2, True, 204,70), self)
+            (12, AgendaWizardDialogConst.TXTTIME_HID,
+                166, 48, 2, True, 204, 70), self)
         self.insertLabel("lblTitle", self.PROPS_TEXT,
-            (8, self.resources.reslblTitle_value, 97, 68, 2, 205,66))
+            (8, self.resources.reslblTitle_value, 97, 68, 2, 205, 66))
         self.txtTitle = self.insertTextField(
-            "txtTitle", TXTTITLE_TEXT_CHANGED,
+            "txtTitle", AgendaWizardDialogConst.TXTTITLE_TEXT_CHANGED,
             (PropertyNames.PROPERTY_HEIGHT,
                 PropertyNames.PROPERTY_HELPURL,
                 PropertyNames.PROPERTY_MULTILINE,
@@ -175,11 +181,12 @@ class AgendaWizardDialog(WizardDialog):
                 PropertyNames.PROPERTY_STEP,
                 PropertyNames.PROPERTY_TABINDEX,
                 PropertyNames.PROPERTY_WIDTH),
-            (26, TXTTITLE_HID, True, 166, 66, 2, 206, 138), self)
+            (26, AgendaWizardDialogConst.TXTTITLE_HID,
+                True, 166, 66, 2, 206, 138), self)
         self.insertLabel("lblLocation", self.PROPS_TEXT,
             (8, self.resources.reslblLocation_value, 97, 100, 2, 207, 66))
         self.cbLocation = self.insertTextField(
-            "cbLocation", TXTLOCATION_TEXT_CHANGED,
+            "cbLocation", AgendaWizardDialogConst.TXTLOCATION_TEXT_CHANGED,
             (PropertyNames.PROPERTY_HEIGHT,
                 PropertyNames.PROPERTY_HELPURL,
                 PropertyNames.PROPERTY_MULTILINE,
@@ -188,37 +195,40 @@ class AgendaWizardDialog(WizardDialog):
                 PropertyNames.PROPERTY_STEP,
                 PropertyNames.PROPERTY_TABINDEX,
                 PropertyNames.PROPERTY_WIDTH),
-            (34, CBLOCATION_HID, True, 166,98, 2, 208, 138), self)
+            (34, AgendaWizardDialogConst.CBLOCATION_HID,
+                True, 166,98, 2, 208, 138), self)
         self.insertImage("imgHelp2", self.PROPS_IMAGE,
-            (0, 10, self.IMGHELP1_HID,
-                INFO_IMAGE_URL,
-                92, 145, False, 2, 209, 10))
+            (0, 10, "", UIConsts.INFOIMAGEURL, 92, 145, False, 2, 209, 10))
         self.insertLabel("lblHelp2", self.PROPS_TEXTAREA,
-            (39, self.resources.reslblHelp2_value, True, 104, 145, 2, 210, 199))
+            (39, self.resources.reslblHelp2_value,
+                True, 104, 145, 2, 210, 199))
 
     def buildStep3(self):
         self.insertLabel("lblTitle3", self.PROPS_LABEL_B,
             (self.fontDescriptor4, 16, self.resources.reslblTitle3_value,
                 True, 91, 8, 3, 300,212))
         self.chkMeetingTitle = self.insertCheckBox("chkMeetingTitle",
-            CHKUSEMEETINGTYPE_ITEM_CHANGED, self.PROPS_CHECK,
-            (8, CHKMEETINGTITLE_HID, self.resources.reschkMeetingTitle_value,
+            AgendaWizardDialogConst.CHKUSEMEETINGTYPE_ITEM_CHANGED,
+            self.PROPS_CHECK,
+            (8, AgendaWizardDialogConst.CHKMEETINGTITLE_HID,
+                self.resources.reschkMeetingTitle_value,
                 97, 32, 1, 3, 301, 69), self)
         self.chkRead = self.insertCheckBox("chkRead",
-            CHKUSEREAD_ITEM_CHANGED, self.PROPS_CHECK,
-            (8, CHKREAD_HID, self.resources.reschkRead_value,
-                97, 46, 0, 3, 302, 162), self)
+            AgendaWizardDialogConst.CHKUSEREAD_ITEM_CHANGED, self.PROPS_CHECK,
+            (8, AgendaWizardDialogConst.CHKREAD_HID,
+                self.resources.reschkRead_value, 97, 46, 0, 3, 302, 162), self)
         self.chkBring = self.insertCheckBox("chkBring",
-            CHKUSEBRING_ITEM_CHANGED, self.PROPS_CHECK,
-            (8, CHKBRING_HID, self.resources.reschkBring_value,
+            AgendaWizardDialogConst.CHKUSEBRING_ITEM_CHANGED, self.PROPS_CHECK,
+            (8, AgendaWizardDialogConst.CHKBRING_HID,
+                self.resources.reschkBring_value,
                 97, 60, 0, 3, 303, 162), self)
         self.chkNotes = self.insertCheckBox("chkNotes",
-            CHKUSENOTES_ITEM_CHANGED, self.PROPS_CHECK,
-            (8, CHKNOTES_HID, self.resources.reschkNotes_value,
+            AgendaWizardDialogConst.CHKUSENOTES_ITEM_CHANGED, self.PROPS_CHECK,
+            (8, AgendaWizardDialogConst.CHKNOTES_HID,
+                self.resources.reschkNotes_value,
                 97, 74, 1, 3, 304, 160), self)
         self.insertImage("imgHelp3", self.PROPS_IMAGE, (0, 10,
-            self.IMGHELP1_HID, INFO_IMAGE_URL,
-                92, 145, False, 3, 305, 10))
+            "", UIConsts.INFOIMAGEURL, 92, 145, False, 3, 305, 10))
         self.insertLabel("lblHelp3", self.PROPS_TEXTAREA,
             (39, self.resources.reslblHelp3_value, True,104, 145, 3, 306, 199))
 
@@ -227,35 +237,49 @@ class AgendaWizardDialog(WizardDialog):
             (self.fontDescriptor4, 16, self.resources.reslblTitle5_value,
                 True, 91, 8, 4, 400, 212))
         self.chkConvenedBy = self.insertCheckBox("chkConvenedBy",
-            CHKUSECALLEDBYNAME_ITEM_CHANGED, self.PROPS_CHECK,
-            (8, CHKCONVENEDBY_HID, self.resources.reschkConvenedBy_value,
+            AgendaWizardDialogConst.CHKUSECALLEDBYNAME_ITEM_CHANGED,
+            self.PROPS_CHECK,
+            (8, AgendaWizardDialogConst.CHKCONVENEDBY_HID,
+                self.resources.reschkConvenedBy_value,
                 97, 32, 1, 4, 401, 150), self)
         self.chkPresiding = self.insertCheckBox("chkPresiding",
-            CHKUSEFACILITATOR_ITEM_CHANGED, self.PROPS_CHECK,
-            (8, CHKPRESIDING_HID, self.resources.reschkPresiding_value,
+            AgendaWizardDialogConst.CHKUSEFACILITATOR_ITEM_CHANGED,
+            self.PROPS_CHECK,
+            (8, AgendaWizardDialogConst.CHKPRESIDING_HID,
+                self.resources.reschkPresiding_value,
                 97, 46, 0, 4, 402, 150), self)
         self.chkNoteTaker = self.insertCheckBox("chkNoteTaker",
-            CHKUSENOTETAKER_ITEM_CHANGED, self.PROPS_CHECK,
-            (8, CHKNOTETAKER_HID, self.resources.reschkNoteTaker_value,
+            AgendaWizardDialogConst.CHKUSENOTETAKER_ITEM_CHANGED,
+            self.PROPS_CHECK,
+            (8, AgendaWizardDialogConst.CHKNOTETAKER_HID,
+                self.resources.reschkNoteTaker_value,
                 97, 60, 0, 4, 403, 150), self)
         self.chkTimekeeper = self.insertCheckBox("chkTimekeeper",
-            CHKUSETIMEKEEPER_ITEM_CHANGED, self.PROPS_CHECK,
-            (8, CHKTIMEKEEPER_HID, self.resources.reschkTimekeeper_value,
+            AgendaWizardDialogConst.CHKUSETIMEKEEPER_ITEM_CHANGED,
+            self.PROPS_CHECK,
+            (8, AgendaWizardDialogConst.CHKTIMEKEEPER_HID,
+                self.resources.reschkTimekeeper_value,
                 97, 74, 0, 4, 404, 150), self)
         self.chkAttendees = self.insertCheckBox("chkAttendees",
-            CHKUSEATTENDEES_ITEM_CHANGED, self.PROPS_CHECK,
-            (8, CHKATTENDEES_HID, self.resources.reschkAttendees_value,
+            AgendaWizardDialogConst.CHKUSEATTENDEES_ITEM_CHANGED,
+            self.PROPS_CHECK,
+            (8, AgendaWizardDialogConst.CHKATTENDEES_HID,
+                self.resources.reschkAttendees_value,
                 97, 88, 1, 4, 405, 150), self)
         self.chkObservers = self.insertCheckBox("chkObservers",
-            CHKUSEOBSERVERS_ITEM_CHANGED, self.PROPS_CHECK,
-            (8, CHKOBSERVERS_HID, self.resources.reschkObservers_value,
+            AgendaWizardDialogConst.CHKUSEOBSERVERS_ITEM_CHANGED,
+            self.PROPS_CHECK,
+            (8, AgendaWizardDialogConst.CHKOBSERVERS_HID,
+                self.resources.reschkObservers_value,
                 97, 102, 0, 4, 406, 150), self)
         self.chkResourcePersons = self.insertCheckBox("chkResourcePersons",
-            CHKUSERESOURCEPERSONS_ITEM_CHANGED, self.PROPS_CHECK,
-            (8, CHKRESOURCEPERSONS_HID, self.resources.reschkResourcePersons_value,
+            AgendaWizardDialogConst.CHKUSERESOURCEPERSONS_ITEM_CHANGED,
+            self.PROPS_CHECK,
+            (8, AgendaWizardDialogConst.CHKRESOURCEPERSONS_HID,
+                self.resources.reschkResourcePersons_value,
                 97, 116, 0, 4, 407, 150), self)
         self.insertImage("imgHelp4", self.PROPS_IMAGE,
-            (0, 10, self.IMGHELP1_HID, INFO_IMAGE_URL,
+            (0, 10, "", UIConsts.INFOIMAGEURL,
                 92, 145, False, 4, 408, 10))
         self.insertLabel("lblHelp4", self.PROPS_TEXTAREA,
             (39, self.resources.reslblHelp4_value, True, 104, 145, 4, 409, 199))
@@ -270,18 +294,22 @@ class AgendaWizardDialog(WizardDialog):
             (8, self.resources.reslblResponsible_value, 195, 28, 5, 72, 502))
         self.insertLabel("lblDuration", self.PROPS_TEXT,
             (8, self.resources.reslblDuration_value, 267, 28, 5, 73, 503))
-        self.btnInsert = self.insertButton("btnInsert", BTNINSERT_ACTION_PERFORMED,
-            self.PROPS_BUTTON, (14, BTNINSERT_HID,
+        self.btnInsert = self.insertButton("btnInsert",
+            AgendaWizardDialogConst.BTNINSERT_ACTION_PERFORMED,
+            self.PROPS_BUTTON, (14, AgendaWizardDialogConst.BTNINSERT_HID,
                 self.resources.resButtonInsert, 92, 136, 5, 580, 40), self)
-        self.btnRemove = self.insertButton("btnRemove", BTNREMOVE_ACTION_PERFORMED,
-                self.PROPS_BUTTON, (14, BTNREMOVE_HID,
-                    self.resources.resButtonRemove, 134, 136, 5, 581, 40), self)
-        self.btnUp = self.insertButton("btnUp", BTNUP_ACTION_PERFORMED,
-                self.PROPS_BUTTON, (14, BTNUP_HID,
-                    self.resources.resButtonUp, 202, 136, 5, 582, 50), self)
-        self.btnDown = self.insertButton("btnDown", BTNDOWN_ACTION_PERFORMED,
-                self.PROPS_BUTTON, (14, BTNDOWN_HID,
-                    self.resources.resButtonDown, 254, 136, 5, 583, 50), self)
+        self.btnRemove = self.insertButton("btnRemove",
+            AgendaWizardDialogConst.BTNREMOVE_ACTION_PERFORMED,
+            self.PROPS_BUTTON, (14, AgendaWizardDialogConst.BTNREMOVE_HID,
+                self.resources.resButtonRemove, 134, 136, 5, 581, 40), self)
+        self.btnUp = self.insertButton("btnUp",
+            AgendaWizardDialogConst.BTNUP_ACTION_PERFORMED,
+            self.PROPS_BUTTON, (14, AgendaWizardDialogConst.BTNUP_HID,
+                self.resources.resButtonUp, 202, 136, 5, 582, 50), self)
+        self.btnDown = self.insertButton("btnDown",
+            AgendaWizardDialogConst.BTNDOWN_ACTION_PERFORMED,
+            self.PROPS_BUTTON, (14, AgendaWizardDialogConst.BTNDOWN_HID,
+                self.resources.resButtonDown, 254, 136, 5, 583, 50), self)
 
     def buildStep6(self):
         self.insertLabel("lblTitle6", self.PROPS_LABEL_B,
@@ -294,18 +322,21 @@ class AgendaWizardDialog(WizardDialog):
             (8, self.resources.reslblTemplateName_value,
                 97, 62, 6, 602, 101))
         self.txtTemplateName = self.insertTextField("txtTemplateName",
-            TXTTEMPLATENAME_TEXT_CHANGED, self.PROPS_X,
-            (12, TXTTEMPLATENAME_HID, 202, 60, 6, 603, 100), self)
+            AgendaWizardDialogConst.TXTTEMPLATENAME_TEXT_CHANGED,
+            self.PROPS_X,
+            (12, AgendaWizardDialogConst.TXTTEMPLATENAME_HID,
+                202, 60, 6, 603, 100), self)
         self.insertLabel("lblProceed", self.PROPS_TEXT,
             (8, self.resources.reslblProceed_value, 97, 101, 6, 607,204))
         self.optCreateAgenda = self.insertRadioButton("optCreateAgenda", None,
-            self.PROPS_CHECK, (8, OPTCREATEAGENDA_HID,
+            self.PROPS_CHECK, (8, AgendaWizardDialogConst.OPTCREATEAGENDA_HID,
                 self.resources.resoptCreateAgenda_value,
                 103, 113, 1, 6, 608, 198), self)
         self.optMakeChanges = self.insertRadioButton("optMakeChanges", None,
-            self.PROPS_BUTTON, (8, OPTMAKECHANGES_HID,
-                self.resources.resoptMakeChanges_value, 103, 125, 6, 609, 198), self)
-        self.insertImage("imgHelp6", self.PROPS_IMAGE, (0, 10, self.IMGHELP1_HID,
-            INFO_IMAGE_URL, 92, 145, False, 6, 610, 10))
+            self.PROPS_BUTTON, (8, AgendaWizardDialogConst.OPTMAKECHANGES_HID,
+                self.resources.resoptMakeChanges_value,
+                103, 125, 6, 609, 198), self)
+        self.insertImage("imgHelp6", self.PROPS_IMAGE, (0, 10, "",
+            UIConsts.INFOIMAGEURL, 92, 145, False, 6, 610, 10))
         self.insertLabel("lblHelp6", self.PROPS_TEXTAREA,
             (39, self.resources.reslblHelp6_value, True, 104, 145, 6, 611, 199))

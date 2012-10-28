@@ -16,11 +16,12 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 from threading import RLock
-from CGTopic import CGTopic
-from wizards.ui.ControlScroller import *
-from AgendaWizardDialogConst import LAST_HID
-from wizards.common.Properties import Properties
-from wizards.ui.event.CommonListener import FocusListenerProcAdapter, KeyListenerProcAdapter
+from .CGTopic import CGTopic
+from ..ui.ControlScroller import *
+from .AgendaWizardDialogConst import HID
+from ..common.Properties import Properties
+from ..ui.event.CommonListener import FocusListenerProcAdapter, \
+    KeyListenerProcAdapter
 
 from com.sun.star.awt.Key import DOWN, UP, TAB
 from com.sun.star.awt.KeyModifier import SHIFT, MOD1
@@ -115,7 +116,7 @@ class TopicsControl(ControlScroller):
     def __init__(self, dialog, xmsf, agenda):
         try:
             super(TopicsControl, self).__init__(
-                dialog, xmsf, 5, 92, 38, 212, 5, 18, LAST_HID)
+                dialog, xmsf, 5, 92, 38, 212, 5, 18, HID + 32)
             self.initializeScrollFields(agenda)
             # set some focus listeners for TAB scroll down and up...
             # prepare scroll down on tab press...

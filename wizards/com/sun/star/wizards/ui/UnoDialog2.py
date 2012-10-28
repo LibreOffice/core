@@ -20,7 +20,8 @@ from .UIConsts import UIConsts
 from ..common.Desktop import Desktop
 from ..common.PropertyNames import PropertyNames
 from .event.CommonListener import ItemListenerProcAdapter, \
-    ActionListenerProcAdapter, TextListenerProcAdapter
+    ActionListenerProcAdapter, TextListenerProcAdapter, \
+    AdjustmentListenerProcAdapter
 
 '''
 This class contains convenience methods for inserting components to a dialog.

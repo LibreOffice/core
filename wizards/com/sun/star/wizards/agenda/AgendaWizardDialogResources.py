@@ -166,5 +166,5 @@ class AgendaWizardDialogResources(Resource):
         self.resButtonDown = self.getResText(
             AgendaWizardDialogResources.RID_AGENDAWIZARDDIALOG_START + 71)
 
-        self.resFileExists = self.getResText(
+        self.resOverwriteWarning = self.getResText(
             AgendaWizardDialogResources.RID_COMMON_START + 19)

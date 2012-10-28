@@ -15,14 +15,19 @@
 #   except in compliance with the License. You may obtain a copy of
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
-from AgendaWizardDialog import *
-from AgendaTemplate import *
+import traceback
+from .AgendaWizardDialog import AgendaWizardDialog
+from .AgendaWizardDialogConst import HID
+from .AgendaTemplate import AgendaTemplate, TopicsControl, FileAccess
 from CGAgenda import CGAgenda
-from wizards.ui.PathSelection import PathSelection
-from wizards.ui.event.UnoDataAware import UnoDataAware
-from wizards.ui.event.RadioDataAware import RadioDataAware
-from wizards.common.NoValidPathException import NoValidPathException
-from wizards.common.SystemDialog import SystemDialog
+from ..ui.PathSelection import PathSelection
+from ..ui.event.UnoDataAware import UnoDataAware
+from ..ui.event.RadioDataAware import RadioDataAware
+from ..common.NoValidPathException import NoValidPathException
+from ..common.SystemDialog import SystemDialog
+from ..common.Desktop import Desktop
+from ..common.HelpIds import HelpIds
+from ..common.Configuration import Configuration
 
 from com.sun.star.view.DocumentZoomType import OPTIMAL
 from com.sun.star.awt.VclWindowPeerAttribute import YES_NO, DEF_NO
@@ -43,31 +48,20 @@ class AgendaWizardDialogImpl(AgendaWizardDialog):
     def leaveStep(self, OldStep, NewStep):
         pass
 
-    '''
-    used in developement to start the wizard
-    '''
 
     @classmethod
-    def main(self, args):
-        ConnectStr = \
-            "uno:socket,host=localhost,port=2002;urp;StarOffice.ComponentContext"
+    def main(self):
+        #Call the wizard remotely(see README)
         try:
+            ConnectStr = \
+                "uno:socket,host=localhost,port=2002;urp;StarOffice.ComponentContext"
             xLocMSF = Desktop.connect(ConnectStr)
-            wizard = AgendaWizardDialogImpl(xLocMSF)
-            wizard.startWizard()
-        except Exception, exception:
-            traceback.print_exc()
-
-    '''
-    read the configuration data, open the specified template,
-    initialize the template controller (AgendaTemplate) and
-    set the status of the displayed template to the one
-    read from the configuration.
-    build the dialog.
-    Synchronize the dialog to the same status (read from
-    the configuration).
-    show the dialog.
-    '''
+            lw = AgendaWizardDialogImpl(xLocMSF)
+            lw.startWizard()
+        except Exception as e:
+            print ("Wizard failure exception " + str(type(e)) +
+                   " message " + str(e) + " args " + str(e.args) +
+                   traceback.format_exc())
 
     def startWizard(self):
         self.running = True
@@ -134,8 +128,7 @@ class AgendaWizardDialogImpl(AgendaWizardDialog):
         self.myPathSelection.sDefaultDirectory = self.sUserTemplatePath
         self.myPathSelection.sDefaultName = "myAgendaTemplate.ott"
         self.myPathSelection.sDefaultFilter = "writer8_template"
-        self.myPathSelection.addSelectionListener(
-            self.myPathSelectionListener())
+        self.myPathSelection.addSelectionListener(self)
 
     def initializePaths(self):
         try:
@@ -173,7 +166,8 @@ class AgendaWizardDialogImpl(AgendaWizardDialog):
         self.agenda.readConfiguration(root, "cp_")
 
         self.setControlProperty(
-            "listPageDesign", "StringItemList", tuple(self.agendaTemplates[0]))
+            "listPageDesign", "StringItemList",
+            tuple(self.agendaTemplates.keys()))
         self.checkSavePath()
         UnoDataAware.attachListBox(
             self.agenda, "cp_AgendaType", self.listPageDesign, True).updateUI()
@@ -271,7 +265,7 @@ class AgendaWizardDialogImpl(AgendaWizardDialog):
             if AgendaWizardDialogImpl.pageDesign is not SelectedItemPos:
                 AgendaWizardDialogImpl.pageDesign = SelectedItemPos
                 self.agendaTemplate.load(
-                    self.agendaTemplates[1][SelectedItemPos],
+                    self.agendaTemplates.values()[SelectedItemPos],
                     self.topicsControl.scrollfields)
         except Exception:
             traceback.print_exc()
@@ -422,7 +416,7 @@ class AgendaWizardDialogImpl(AgendaWizardDialog):
                 if fileAccess.exists(self.sPath, True):
                     answer = SystemDialog.showMessageBox(
                         self.xMSF, "MessBox", YES_NO + DEF_NO,
-                        self.resources.resFileExists,
+                        self.resources.resOverwriteWarning,
                         self.xUnoDialog.Peer)
                     if answer == 3:
                         # user said: no, do not overwrite

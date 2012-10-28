@@ -16,12 +16,13 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 import uno
-from TemplateConsts import *
+from .TemplateConsts import *
 from threading import RLock
-from wizards.text.TextDocument import *
-from wizards.common.FileAccess import FileAccess
-from wizards.text.TextSectionHandler import TextSectionHandler
-from TopicsControl import TopicsControl
+from ..text.TextDocument import *
+from ..common.FileAccess import FileAccess
+from ..text.TextSectionHandler import TextSectionHandler
+from .TopicsControl import TopicsControl
+
 from datetime import date as dateTimeObject
 
 from com.sun.star.text.PlaceholderType import TEXT
