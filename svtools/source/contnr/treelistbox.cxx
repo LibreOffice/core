@@ -49,6 +49,7 @@
 
 #include <set>
 #include <string.h>
+#include <vector>
 
 using namespace ::com::sun::star::accessibility;
 
@@ -812,7 +813,7 @@ sal_Bool SvTreeListBox::MoveSelectionCopyFallbackPossible( SvTreeListBox* pSourc
 void SvTreeListBox::RemoveSelection()
 {
     DBG_CHKTHIS(SvTreeListBox,0);
-    SvTreeEntryList aList;
+    std::vector<const SvTreeListEntry*> aList;
     // cache selection, as the implementation deselects everything on the first
     // remove
     SvTreeListEntry* pEntry = FirstSelected();
@@ -821,16 +822,13 @@ void SvTreeListBox::RemoveSelection()
         aList.push_back( pEntry );
         if ( pEntry->HasChildren() )
             // remove deletes all children automatically
-            SelectChildren( pEntry, sal_False );
+            SelectChildren(pEntry, false);
         pEntry = NextSelected( pEntry );
     }
 
-    SvTreeEntryList::iterator it = aList.begin(), itEnd = aList.end();
+    std::vector<const SvTreeListEntry*>::const_iterator it = aList.begin(), itEnd = aList.end();
     for (; it != itEnd; ++it)
-    {
-        pEntry = static_cast<SvTreeListEntry*>(*it);
-        pModel->Remove(pEntry);
-    }
+        pModel->Remove(*it);
 }
 
 SvTreeListBox* SvTreeListBox::GetSourceView() const
