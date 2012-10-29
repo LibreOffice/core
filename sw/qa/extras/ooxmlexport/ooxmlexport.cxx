@@ -416,7 +416,7 @@ void Test::testTableBorders() {
     uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables( ), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(1, xTables->getCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTables->getCount());
     uno::Reference<text::XTextTable> xTextTable (xTables->getByIndex(0), uno::UNO_QUERY);
 
     std::map<OUString, SingleLineBorders> cellBorders;
