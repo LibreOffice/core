@@ -55,7 +55,7 @@ MediaTypeDetectionHelper::~MediaTypeDetectionHelper()
 
 DEFINE_XSERVICEINFO_ONEINSTANCESERVICE  (   MediaTypeDetectionHelper
                                         , ::cppu::OWeakObject
-                                        , DECLARE_ASCII("com.sun.star.frame.MediaTypeDetectionHelper")
+                                        , "com.sun.star.frame.MediaTypeDetectionHelper"
                                         , IMPLEMENTATIONNAME_MEDIATYPEDETECTIONHELPER
                                     )
 
