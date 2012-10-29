@@ -106,8 +106,8 @@ if ($usage || !defined $OOO_INSTALL || !defined $OOO_BUILD) {
     exit (1);
 }
 
-substr ($OOO_INSTALL, 0, 1) eq '/' || die "linkoo requires absolute paths ($OOO_INSTALL does not qualify)";
-substr ($OOO_BUILD, 0, 1)   eq '/' || die "linkoo requires absolute paths ($OOO_BUILD does not qualify)";
+File::Spec->file_name_is_absolute($OOO_INSTALL) || die "linkoo requires absolute paths ($OOO_INSTALL does not qualify)";
+File::Spec->file_name_is_absolute($OOO_BUILD) || die "linkoo requires absolute paths ($OOO_BUILD does not qualify)";
 
 -d $OOO_INSTALL || die "No such directory $OOO_INSTALL";
 -w $OOO_INSTALL || die "You need write access to $OOO_INSTALL";
