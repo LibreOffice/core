@@ -3637,11 +3637,12 @@ void DomainMapper_Impl::ApplySettingsTable()
                 xViewDataSupplier->setViewData(xIndexAccess);
             }
 
+            uno::Reference< beans::XPropertySet > xSettings(m_xTextFactory->createInstance("com.sun.star.document.Settings"), uno::UNO_QUERY);
             if (m_pSettingsTable->GetUsePrinterMetrics())
             {
-                uno::Reference< beans::XPropertySet > xSettings(m_xTextFactory->createInstance("com.sun.star.document.Settings"), uno::UNO_QUERY);
                 xSettings->setPropertyValue("PrinterIndependentLayout", uno::makeAny(document::PrinterIndependentLayout::DISABLED));
             }
+            xSettings->setPropertyValue("AddParaTableSpacing", uno::makeAny(m_pSettingsTable->GetDoNotUseHTMLParagraphAutoSpacing()));
         }
         catch(const uno::Exception& )
         {
