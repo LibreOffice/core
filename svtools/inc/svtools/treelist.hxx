@@ -63,45 +63,6 @@
 #define SVLISTENTRYFLAG_NOT_SELECTABLE  0x0010
 
 class SvTreeListEntry;
-
-class SvTreeEntryList
-{
-private:
-    typedef std::vector<SvTreeListEntry*> ListType;
-    ListType maEntryList;
-
-public:
-    typedef ListType::const_iterator const_iterator;
-    typedef ListType::iterator iterator;
-
-    SvTreeEntryList();
-    SvTreeEntryList(const SvTreeEntryList& rList);
-
-    void DestroyAll();
-    void push_back(SvTreeListEntry* pItem);
-    void insert(SvTreeListEntry* pItem, size_t i);
-    void remove(SvTreeListEntry* pItem);
-    void remove(size_t i);
-    void replace(SvTreeListEntry* pNew, SvTreeListEntry* pOld);
-    void clear();
-
-    bool empty() const;
-
-    size_t size() const;
-    size_t GetPos(const SvTreeListEntry* pItem) const;
-
-    SvTreeListEntry* operator[](size_t i);
-    const SvTreeListEntry* operator[](size_t i) const;
-
-    const_iterator begin() const;
-    const_iterator end() const;
-
-    iterator begin();
-    iterator end();
-    SvTreeListEntry* front();
-    SvTreeListEntry* back();
-};
-
 class SvListView;
 
 class SvViewData
