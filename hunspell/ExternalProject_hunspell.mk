@@ -17,7 +17,7 @@ $(eval $(call gb_ExternalProject_register_targets,hunspell,\
 
 $(call gb_ExternalProject_get_state_target,hunspell,build):
 	cd $(EXTERNAL_WORKDIR) \
-	&& LIBS="$(addprefix -l,$(gb_STDLIBS)) $(LIBS)" ./configure --disable-shared --disable-nls --with-pic \
+	&& LIBS="$(gb_STDLIBS) $(LIBS)" ./configure --disable-shared --disable-nls --with-pic \
 	$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM))\
 	$(if $(filter AIX,$(OS)),CFLAGS="-D_LINUX_SOURCE_COMPAT") \
 	$(if $(filter C53,$(COM)),CFLAGS="-xc99=none") \
