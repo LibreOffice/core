@@ -21,10 +21,8 @@ $(call gb_ExternalProject_get_state_target,mythes,build):
 	cd $(EXTERNAL_WORKDIR) \
 	&& ./configure --disable-shared --with-pic \
 	$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM) gio_can_sniff=no) \
-	$(if $(filter NO,$(SYSTEM_HUNSPELL)), \
-		HUNSPELL_CFLAGS="-I$(call gb_UnpackedTarball_get_dir,hunspell/src/hunspell)" \
-		HUNSPELL_LIBS="-L$(OUTDIR)/lib -lhunspell" \
-	) \
+	HUNSPELL_CFLAGS=" $(HUNSPELL_CFLAGS)" \
+	HUNSPELL_LIBS=" $(HUNSPELL_LIBS)" \
 	$(if $(filter C52U,$(COM)$(CPU)),CFLAGS="-m64") \
 	&& $(GNUMAKE) -j$(EXTMAXPROCESS) \
 	&& touch $@

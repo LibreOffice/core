@@ -8840,6 +8840,8 @@ if test "$with_system_hunspell" = "yes"; then
 else
     AC_MSG_RESULT([internal])
     SYSTEM_HUNSPELL=NO
+    HUNSPELL_CFLAGS="-I${WORKDIR}/UnpackedTarball/hunspell/src/hunspell"
+    HUNSPELL_LIBS="-L${OUTDIR}/lib -lhunspell"
     HUNSPELL_TARBALL="3121aaf3e13e5d88dfff13fb4a5f1ab8-hunspell-1.3.2.tar.gz"
     BUILD_TYPE="$BUILD_TYPE HUNSPELL"
 fi
