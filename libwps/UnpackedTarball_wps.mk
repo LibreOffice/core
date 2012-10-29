@@ -18,4 +18,8 @@ $(eval $(call gb_UnpackedTarball_add_patches,wps,\
     libwps/libwps.gcc.warnings.patch \
 ))
 
+$(eval $(call gb_UnpackedTarball_mark_output_files,wps,\
+	$(addsuffix .cpp,$(libwps_SOURCEFILES)) \
+))
+
 # vim: set noet sw=4 ts=4:

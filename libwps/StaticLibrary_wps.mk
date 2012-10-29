@@ -22,25 +22,7 @@ $(eval $(call gb_StaticLibrary_use_externals,wpslib,\
 $(eval $(call gb_StaticLibrary_set_generated_cxx_suffix,wpslib,cpp))
 
 $(eval $(call gb_StaticLibrary_add_generated_exception_objects,wpslib,\
-	UnpackedTarball/wps/src/lib/libwps_internal \
-	UnpackedTarball/wps/src/lib/libwps_tools_win \
-	UnpackedTarball/wps/src/lib/WPS4 \
-	UnpackedTarball/wps/src/lib/WPS4Graph \
-	UnpackedTarball/wps/src/lib/WPS4Text \
-	UnpackedTarball/wps/src/lib/WPS8 \
-	UnpackedTarball/wps/src/lib/WPSCell \
-	UnpackedTarball/wps/src/lib/WPSContentListener \
-	UnpackedTarball/wps/src/lib/WPSDebug \
-	UnpackedTarball/wps/src/lib/WPSDocument \
-	UnpackedTarball/wps/src/lib/WPSHeader \
-	UnpackedTarball/wps/src/lib/WPSList \
-	UnpackedTarball/wps/src/lib/WPSOLEParser \
-	UnpackedTarball/wps/src/lib/WPSOLEStream \
-	UnpackedTarball/wps/src/lib/WPSPageSpan \
-	UnpackedTarball/wps/src/lib/WPSParagraph \
-	UnpackedTarball/wps/src/lib/WPSParser \
-	UnpackedTarball/wps/src/lib/WPSSubDocument \
-	UnpackedTarball/wps/src/lib/WPSTable \
+	$(addprefix UnpackedTarball/wps/,$(libwps_SOURCEFILES)) \
 ))
 
 # vim: set noet sw=4 ts=4:
