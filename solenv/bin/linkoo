@@ -73,10 +73,6 @@ if ($ENV{'OS'} eq 'MACOSX') {
     print "FIXME: linkoo currently does not work on Mac OS X\n";
     exit(0);
 }
-if ($TARGET eq 'wntgcci.pro') {
-    $windows = 1;
-    $copy = 1;
-}
 
 # process options
 for my $a (@ARGV) {
@@ -119,6 +115,10 @@ substr ($OOO_BUILD, 0, 1)   eq '/' || die "linkoo requires absolute paths ($OOO_
 
 ($TARGET, $LIBVER, $LANG) = sniff_target ($OOO_BUILD);
 
+if ($TARGET =~ /^wntgcci/ || $TARGET =~ /^wntmsci[0-9]+/) {
+    $windows = 1;
+    $copy = 1;
+}
 
 # setup global variables
 my $brand_program_dir = 'program';
