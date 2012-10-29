@@ -11,27 +11,6 @@ $(eval $(call gb_Module_Module,libwps))
 
 ifeq ($(SYSTEM_LIBWPS),NO)
 
-libwps_SOURCEFILES := \
-	src/lib/libwps_internal \
-	src/lib/libwps_tools_win \
-	src/lib/WPS4 \
-	src/lib/WPS4Graph \
-	src/lib/WPS4Text \
-	src/lib/WPS8 \
-	src/lib/WPSCell \
-	src/lib/WPSContentListener \
-	src/lib/WPSDebug \
-	src/lib/WPSDocument \
-	src/lib/WPSHeader \
-	src/lib/WPSList \
-	src/lib/WPSOLEParser \
-	src/lib/WPSOLEStream \
-	src/lib/WPSPageSpan \
-	src/lib/WPSParagraph \
-	src/lib/WPSParser \
-	src/lib/WPSSubDocument \
-	src/lib/WPSTable \
-
 $(eval $(call gb_Module_add_targets,libwps,\
 	ExternalPackage_libwps \
 	StaticLibrary_wps \
