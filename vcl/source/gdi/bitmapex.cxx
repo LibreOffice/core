@@ -353,7 +353,9 @@ sal_Bool BitmapEx::Scale( const double& rScaleX, const double& rScaleY, sal_uLon
         bRet = aBitmap.Scale( rScaleX, rScaleY, nScaleFlag );
 
         if( bRet && ( eTransparent == TRANSPARENT_BITMAP ) && !!aMask )
-            aMask.Scale( rScaleX, rScaleY, BMP_SCALE_FAST );
+        {
+            aMask.Scale( rScaleX, rScaleY, nScaleFlag );
+        }
 
         aBitmapSize = aBitmap.GetSizePixel();
 
@@ -663,7 +665,7 @@ BitmapEx BitmapEx:: AutoScaleBitmap(BitmapEx & aBitmap, const long aStandardSize
         }
 
         aScaledSize = Size( imgNewWidth, imgNewHeight );
-        aRet.Scale( aScaledSize, BMP_SCALE_BEST );
+        aRet.Scale( aScaledSize, BMP_SCALE_BESTQUALITY );
     }
     else
     {

@@ -35,15 +35,17 @@
 #define BMP_SCALE_NONE              0x00000000UL
 #define BMP_SCALE_FAST              0x00000001UL
 #define BMP_SCALE_INTERPOLATE       0x00000002UL
-#define BMP_SCALE_LANCZOS           0x00000003UL
-#define BMP_SCALE_BICUBIC           0x00000004UL
-#define BMP_SCALE_BILINEAR          0x00000005UL
-#define BMP_SCALE_BOX               0x00000006UL
+#define BMP_SCALE_SUPER             0x00000003UL
+#define BMP_SCALE_LANCZOS           0x00000004UL
+#define BMP_SCALE_BICUBIC           0x00000005UL
+#define BMP_SCALE_BILINEAR          0x00000006UL
+#define BMP_SCALE_BOX               0x00000007UL
 
 // Aliases, try to use these two (or BMP_SCALE_FAST/BMP_SCALE_NONE),
 // use a specific algorithm only if you really need to.
-#define BMP_SCALE_BEST              BMP_SCALE_LANCZOS
-#define BMP_SCALE_DEFAULT           BMP_SCALE_BOX
+#define BMP_SCALE_BESTQUALITY       BMP_SCALE_LANCZOS
+#define BMP_SCALE_DEFAULT           BMP_SCALE_SUPER
+
 
 #define BMP_DITHER_NONE             0x00000000UL
 #define BMP_DITHER_MATRIX           0x00000001UL
@@ -198,21 +200,21 @@ public:
     Kernel () {}
     virtual ~Kernel() {}
 
-    virtual double GetWidth() = 0;
-    virtual double Calculate( double x ) = 0;
+    virtual double GetWidth() const = 0;
+    virtual double Calculate( double x ) const = 0;
 };
 
 class Lanczos3Kernel : public Kernel
 {
 
 public:
-    virtual double GetWidth() { return 3.0; }
-    virtual double Calculate (double x)
+    virtual double GetWidth() const { return 3.0; }
+    virtual double Calculate (double x) const
     {
         return (-3.0 <= x && x < 3.0) ? SincFilter(x) * SincFilter( x / 3.0 ) : 0.0;
     }
 
-    inline double SincFilter(double x)
+    inline double SincFilter(double x) const
     {
         if (x == 0.0)
         {
@@ -224,8 +226,8 @@ public:
 };
 
 class BicubicKernel : public Kernel {
-    virtual double GetWidth() { return 2.0; }
-    virtual double Calculate (double x)
+    virtual double GetWidth() const { return 2.0; }
+    virtual double Calculate (double x) const
     {
         if (x < 0.0)
         {
@@ -245,8 +247,8 @@ class BicubicKernel : public Kernel {
 };
 
 class BilinearKernel : public Kernel {
-    virtual double GetWidth() { return 1.0; }
-    virtual double Calculate (double x)
+    virtual double GetWidth() const { return 1.0; }
+    virtual double Calculate (double x) const
     {
         if (x < 0.0)
         {
@@ -261,8 +263,8 @@ class BilinearKernel : public Kernel {
 };
 
 class BoxKernel : public Kernel {
-    virtual double GetWidth() { return 0.5; }
-    virtual double Calculate (double x)
+    virtual double GetWidth() const { return 0.5; }
+    virtual double Calculate (double x) const
     {
         if (-0.5 <= x && x < 0.5)
             return 1.0;
@@ -328,8 +330,11 @@ public:
                                                             BitmapWriteAccess& rAcc, sal_Bool bRLE4 );
     SAL_DLLPRIVATE static sal_Bool      ImplWriteRLE( SvStream& rOStm, BitmapReadAccess& rAcc, sal_Bool bRLE4 );
 
+    SAL_DLLPRIVATE void                 ImplAdaptBitCount(Bitmap& rNew);
     SAL_DLLPRIVATE sal_Bool             ImplScaleFast( const double& rScaleX, const double& rScaleY );
     SAL_DLLPRIVATE sal_Bool             ImplScaleInterpolate( const double& rScaleX, const double& rScaleY );
+    SAL_DLLPRIVATE sal_Bool             ImplScaleSuper( const double& rScaleX, const double& rScaleY );
+    SAL_DLLPRIVATE sal_Bool             ImplScaleConvolution( const double& rScaleX, const double& rScaleY, const Kernel& aKernel);
     SAL_DLLPRIVATE bool                 ImplScaleConvolution( const double& rScaleX, const double& rScaleY, Kernel& aKernel);
     SAL_DLLPRIVATE bool                 ImplTransformAveraging( const double& rScaleX, const double& rScaleY,
                                                 const Rectangle& rRotatedRectangle, const long nAngle10, const Color& rFillColor );

@@ -207,7 +207,7 @@ Point InsertionIndicatorOverlay::PaintRepresentatives (
 
         // Paint the preview.
         Bitmap aPreview (rRepresentatives[nIndex].maBitmap);
-        aPreview.Scale(aPreviewSize, BMP_SCALE_BEST);
+        aPreview.Scale(aPreviewSize, BMP_SCALE_BESTQUALITY);
         rContent.DrawBitmapEx(aPageOffset, aPreview);
 
         // When the page is marked as excluded from the slide show then

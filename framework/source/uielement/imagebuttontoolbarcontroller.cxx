@@ -188,7 +188,7 @@ sal_Bool ImageButtonToolbarController::ReadImageFromURL( sal_Bool bBigImage, con
         {
             ::Size aNoScaleSize( aBmpSize.Width(), aSize.Height() );
             if ( aBmpSize != aNoScaleSize )
-                aBitmapEx.Scale( aNoScaleSize, BMP_SCALE_BEST );
+                aBitmapEx.Scale( aNoScaleSize, BMP_SCALE_BESTQUALITY );
             aImage = Image( aBitmapEx );
             return sal_True;
         }

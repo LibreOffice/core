@@ -149,15 +149,15 @@ FramePainter::OffsetBitmap::OffsetBitmap (
     const sal_Int32 nSideBitmapSize (64);
     if (nHorizontalPosition == 0 && nVerticalPosition == 0)
     {
-        maBitmap.Scale(Size(nSideBitmapSize,nSideBitmapSize), BMP_SCALE_FAST);
+        maBitmap.Scale(Size(nSideBitmapSize,nSideBitmapSize));
     }
     else if (nHorizontalPosition == 0)
     {
-        maBitmap.Scale(Size(nSideBitmapSize,aSize.Height()), BMP_SCALE_FAST);
+        maBitmap.Scale(Size(nSideBitmapSize,aSize.Height()));
     }
     else if (nVerticalPosition == 0)
     {
-        maBitmap.Scale(Size(maBitmap.GetSizePixel().Width(), nSideBitmapSize), BMP_SCALE_FAST);
+        maBitmap.Scale(Size(maBitmap.GetSizePixel().Width(), nSideBitmapSize));
     }
 }
 

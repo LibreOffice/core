@@ -31,6 +31,7 @@
 
 #define RGB15( _def_cR, _def_cG, _def_cB )  (((sal_uLong)(_def_cR)<<10UL)|((sal_uLong)(_def_cG)<<5UL)|(sal_uLong)(_def_cB))
 #define GAMMA( _def_cVal, _def_InvGamma )   ((sal_uInt8)MinMax(FRound(pow( _def_cVal/255.0,_def_InvGamma)*255.0),0L,255L))
+#define MAP( cVal0, cVal1, nFrac )  ((sal_uInt8)((((long)(cVal0)<<7L)+nFrac*((long)(cVal1)-(cVal0)))>>7L))
 
 #define CALC_ERRORS                                                             \
                         nTemp   = p1T[nX++] >> 12;                              \
@@ -854,47 +855,78 @@ sal_Bool Bitmap::ImplConvertGhosted()
 
 sal_Bool Bitmap::Scale( const double& rScaleX, const double& rScaleY, sal_uLong nScaleFlag )
 {
-    bool bRet;
-
-    if( ( rScaleX != 1.0 ) || ( rScaleY != 1.0 ) )
+    if(basegfx::fTools::equalZero(rScaleX) && basegfx::fTools::equalZero(rScaleY))
     {
-        if( BMP_SCALE_FAST == nScaleFlag )
-        {
-            bRet = ImplScaleFast( rScaleX, rScaleY );
-        }
-        else if( BMP_SCALE_INTERPOLATE == nScaleFlag )
-        {
-            bRet = ImplScaleInterpolate( rScaleX, rScaleY );
-        }
-        else if( BMP_SCALE_LANCZOS == nScaleFlag )
-        {
-            Lanczos3Kernel kernel;
-            bRet = ImplScaleConvolution( rScaleX, rScaleY, kernel);
-        }
-        else if( BMP_SCALE_BICUBIC == nScaleFlag )
-        {
-            BicubicKernel kernel;
-            bRet = ImplScaleConvolution( rScaleX, rScaleY, kernel );
-        }
-        else if( BMP_SCALE_BILINEAR == nScaleFlag )
-        {
-            BilinearKernel kernel;
-            bRet = ImplScaleConvolution( rScaleX, rScaleY, kernel );
-        }
-        else if( BMP_SCALE_BOX == nScaleFlag )
-        {
-            BoxKernel kernel;
-            bRet = ImplScaleConvolution( rScaleX, rScaleY, kernel );
-        }
-        else
-        {
-            return false;
-        }
+        // no scale
+        return true;
     }
     else
-        bRet = true;
+    {
+        switch(nScaleFlag)
+        {
+            default:
+            case BMP_SCALE_NONE :
+            {
+                return false;
+                break;
+            }
+            case BMP_SCALE_FAST :
+            {
+                return ImplScaleFast( rScaleX, rScaleY );
+                break;
+            }
+            case BMP_SCALE_INTERPOLATE :
+            {
+                return ImplScaleInterpolate( rScaleX, rScaleY );
+                break;
+            }
+            case BMP_SCALE_SUPER :
+            {
+                if(GetSizePixel().Width() < 2 || GetSizePixel().Height() < 2)
+                {
+                    // fallback to ImplScaleFast
+                    return ImplScaleFast( rScaleX, rScaleY );
+                }
+                else
+                {
+                    // #i121233# use method from symphony
+                    return ImplScaleSuper( rScaleX, rScaleY );
+                }
+                break;
+            }
+            case BMP_SCALE_LANCZOS :
+            {
+                const Lanczos3Kernel kernel;
 
-    return bRet;
+                return ImplScaleConvolution( rScaleX, rScaleY, kernel );
+                break;
+            }
+            case BMP_SCALE_BICUBIC :
+            {
+                const BicubicKernel kernel;
+
+                return ImplScaleConvolution( rScaleX, rScaleY, kernel );
+                break;
+            }
+            case BMP_SCALE_BILINEAR :
+            {
+                const BilinearKernel kernel;
+
+                return ImplScaleConvolution( rScaleX, rScaleY, kernel );
+                break;
+            }
+            case BMP_SCALE_BOX :
+            {
+                const BoxKernel kernel;
+
+                return ImplScaleConvolution( rScaleX, rScaleY, kernel );
+                break;
+            }
+        }
+    }
+
+    // should not happen
+    return false;
 }
 
 sal_Bool Bitmap::Scale( const Size& rNewSize, sal_uLong nScaleFlag )
@@ -912,6 +944,56 @@ sal_Bool Bitmap::Scale( const Size& rNewSize, sal_uLong nScaleFlag )
         bRet = sal_True;
 
     return bRet;
+}
+
+void Bitmap::ImplAdaptBitCount(Bitmap& rNew)
+{
+    // aNew is the result of some operation; adapt it's BitCount to the original (this)
+    if(GetBitCount() != rNew.GetBitCount())
+    {
+        switch(GetBitCount())
+        {
+            case 1:
+            {
+                rNew.Convert(BMP_CONVERSION_1BIT_THRESHOLD);
+                break;
+            }
+            case 4:
+            {
+                if(HasGreyPalette())
+                {
+                    rNew.Convert(BMP_CONVERSION_4BIT_GREYS);
+                }
+                else
+                {
+                    rNew.Convert(BMP_CONVERSION_4BIT_COLORS);
+                }
+                break;
+            }
+            case 8:
+            {
+                if(HasGreyPalette())
+                {
+                    rNew.Convert(BMP_CONVERSION_8BIT_GREYS);
+                }
+                else
+                {
+                    rNew.Convert(BMP_CONVERSION_8BIT_COLORS);
+                }
+                break;
+            }
+            case 24:
+            {
+                rNew.Convert(BMP_CONVERSION_24BIT);
+                break;
+            }
+            default:
+            {
+                OSL_ENSURE(false, "BitDepth adaption failed (!)");
+                break;
+            }
+        }
+    }
 }
 
 sal_Bool Bitmap::ImplScaleFast( const double& rScaleX, const double& rScaleY )
@@ -1105,6 +1187,7 @@ sal_Bool Bitmap::ImplScaleInterpolate( const double& rScaleX, const double& rSca
         if( bRet )
         {
             bRet = sal_False;
+            ImplAdaptBitCount(aNewBmp);
             ImplAssignWithSize( aNewBmp );
             pReadAcc = AcquireReadAccess();
             aNewBmp = Bitmap( Size( nNewWidth, nNewHeight ), 24 );
@@ -1207,7 +1290,10 @@ sal_Bool Bitmap::ImplScaleInterpolate( const double& rScaleX, const double& rSca
             aNewBmp.ReleaseAccess( pWriteAcc );
 
             if( bRet )
+            {
+                ImplAdaptBitCount(aNewBmp);
                 ImplAssignWithSize( aNewBmp );
+            }
         }
     }
 
@@ -1216,6 +1302,1172 @@ sal_Bool Bitmap::ImplScaleInterpolate( const double& rScaleX, const double& rSca
 
     return bRet;
 }
+
+// #i121233# Added BMP_SCALE_SUPER from symphony code
+
+sal_Bool Bitmap::ImplScaleSuper(
+    const double& rScaleX,
+    const double& rScaleY )
+{
+    const Size  aSizePix( GetSizePixel() );
+    bool   bHMirr = ( rScaleX < 0 );
+    bool   bVMirr = ( rScaleY < 0 );
+    double scaleX = bHMirr ? -rScaleX : rScaleX;
+    double scaleY = bVMirr ? -rScaleY : rScaleY;
+    const long  nDstW = FRound( aSizePix.Width() * scaleX );
+    const long  nDstH = FRound( aSizePix.Height() * scaleY );
+    const double fScaleThresh = 0.6;
+    bool bRet = false;
+
+    if( ( nDstW > 1L ) && ( nDstH > 1L ) )
+    {
+        BitmapColor         aCol0, aCol1, aColRes;
+        BitmapReadAccess*   pAcc = AcquireReadAccess();
+        long                nW = pAcc->Width() ;
+        long                nH = pAcc->Height() ;
+        Bitmap              aOutBmp( Size( nDstW, nDstH ), 24 );
+        BitmapWriteAccess*  pWAcc = aOutBmp.AcquireWriteAccess();
+        long*               pMapIX = new long[ nDstW ];
+        long*               pMapIY = new long[ nDstH ];
+        long*               pMapFX = new long[ nDstW ];
+        long*               pMapFY = new long[ nDstH ];
+        long                nX, nY, nXDst, nYDst;;
+        double              fTemp;
+        long                nTemp , nTempX, nTempY, nTempFX, nTempFY;
+        sal_uInt8           cR0, cG0, cB0, cR1, cG1, cB1;
+        long                nStartX = 0 , nStartY = 0;
+        long                nEndX = nDstW - 1L;
+        long                nEndY = nDstH - 1L;
+        long                nMax = 1 << 7L;
+
+        if( pAcc && pWAcc )
+        {
+            const double    fRevScaleX = ( nDstW > 1L ) ? ( (double) ( nW - 1 ) / ( nDstW - 1 ) ) : 0.0;
+            const double    fRevScaleY = ( nDstH > 1L ) ? ( (double) ( nH - 1 ) / ( nDstH - 1 ) ) : 0.0;
+
+            // create horizontal mapping table
+            for( nX = 0L, nTempX = nW - 1L, nTemp = nW - 2L; nX < nDstW; nX++ )
+            {
+                fTemp = nX * fRevScaleX;
+
+                if( bHMirr )
+                    fTemp = nTempX - fTemp;
+
+                pMapFX[ nX ] = (long) ( ( fTemp - ( pMapIX[ nX ] = MinMax( (long) fTemp, 0, nTemp ) ) ) * 128. );
+            }
+
+            // create vertical mapping table
+            for( nY = 0L, nTempY = nH - 1L, nTemp = nH - 2L; nY < nDstH; nY++ )
+            {
+                fTemp = nY * fRevScaleY;
+
+                if( bVMirr )
+                    fTemp = nTempY - fTemp;
+
+                pMapFY[ nY ] = (long) ( ( fTemp - ( pMapIY[ nY ] = MinMax( (long) fTemp, 0, nTemp ) ) ) * 128. );
+            }
+
+            if( pAcc->HasPalette() )
+            {
+                if( pAcc->GetScanlineFormat() == BMP_FORMAT_8BIT_PAL )
+                {
+                    if( scaleX >= fScaleThresh && scaleY >= fScaleThresh )
+                    {
+                        Scanline pLine0, pLine1;
+
+                        for( nY = nStartY, nYDst = 0L; nY <= nEndY; nY++, nYDst++ )
+                        {
+                            nTempY = pMapIY[ nY ]; nTempFY = pMapFY[ nY ];
+                            pLine0 = pAcc->GetScanline( nTempY );
+                            pLine1 = pAcc->GetScanline( ++nTempY );
+
+                            for( nX = nStartX, nXDst = 0L; nX <= nEndX; nX++ )
+                            {
+                                nTempX = pMapIX[ nX ]; nTempFX = pMapFX[ nX ];
+
+                                const BitmapColor& rCol0 = pAcc->GetPaletteColor( pLine0[ nTempX ] );
+                                const BitmapColor& rCol2 = pAcc->GetPaletteColor( pLine1[ nTempX ] );
+                                const BitmapColor& rCol1 = pAcc->GetPaletteColor( pLine0[ ++nTempX ] );
+                                const BitmapColor& rCol3 = pAcc->GetPaletteColor( pLine1[ nTempX ] );
+
+                                cR0 = MAP( rCol0.GetRed(), rCol1.GetRed(), nTempFX );
+                                cG0 = MAP( rCol0.GetGreen(), rCol1.GetGreen(), nTempFX );
+                                cB0 = MAP( rCol0.GetBlue(), rCol1.GetBlue(), nTempFX );
+
+                                cR1 = MAP( rCol2.GetRed(), rCol3.GetRed(), nTempFX );
+                                cG1 = MAP( rCol2.GetGreen(), rCol3.GetGreen(), nTempFX );
+                                cB1 = MAP( rCol2.GetBlue(), rCol3.GetBlue(), nTempFX );
+
+                                aColRes.SetRed( MAP( cR0, cR1, nTempFY ) );
+                                aColRes.SetGreen( MAP( cG0, cG1, nTempFY ) );
+                                aColRes.SetBlue( MAP( cB0, cB1, nTempFY ) );
+                                pWAcc->SetPixel( nYDst, nXDst++, aColRes );
+                            }
+                        }
+                    }
+                    else
+                    {
+                        Scanline    pTmpY;
+                        long        nSumR, nSumG, nSumB,nLineStart , nLineRange, nRowStart , nRowRange ;
+                        long        nLeft, nRight, nTop, nBottom, nWeightX, nWeightY ;
+                        long        nSumRowR ,nSumRowG,nSumRowB, nTotalWeightX, nTotalWeightY;
+
+                        for( nY = nStartY , nYDst = 0L; nY <= nEndY; nY++, nYDst++ )
+                        {
+                            nTop = bVMirr ? ( nY + 1 ) : nY;
+                            nBottom = bVMirr ? nY : ( nY + 1 ) ;
+
+                            if( nY ==nEndY )
+                            {
+                                nLineStart = pMapIY[ nY ];
+                                nLineRange = 0;
+                            }
+                            else
+                            {
+                                nLineStart = pMapIY[ nTop ] ;
+                                nLineRange = ( pMapIY[ nBottom ] == pMapIY[ nTop ] ) ? 1 :( pMapIY[ nBottom ] - pMapIY[ nTop ] );
+                            }
+
+                            for( nX = nStartX , nXDst = 0L; nX <= nEndX; nX++ )
+                            {
+                                nLeft = bHMirr ? ( nX + 1 ) : nX;
+                                nRight = bHMirr ? nX : ( nX + 1 ) ;
+
+                                if( nX == nEndX )
+                                {
+                                    nRowStart = pMapIX[ nX ];
+                                    nRowRange = 0;
+                                }
+                                else
+                                {
+                                    nRowStart = pMapIX[ nLeft ];
+                                    nRowRange = ( pMapIX[ nRight ] == pMapIX[ nLeft ] )? 1 : ( pMapIX[ nRight ] - pMapIX[ nLeft ] );
+                                }
+
+                                nSumR = nSumG = nSumB = 0;
+                                nTotalWeightY = 0;
+
+                                for(int i = 0; i<= nLineRange; i++)
+                                {
+                                    pTmpY = pAcc->GetScanline( nLineStart + i );
+                                    nSumRowR = nSumRowG = nSumRowB = 0;
+                                    nTotalWeightX = 0;
+
+                                    for(int j = 0; j <= nRowRange; j++)
+                                    {
+                                        const BitmapColor& rCol = pAcc->GetPaletteColor( pTmpY[ nRowStart + j ] );
+
+                                        if(nX == nEndX )
+                                        {
+                                            nSumRowB += rCol.GetBlue() << 7L;
+                                            nSumRowG += rCol.GetGreen() << 7L;
+                                            nSumRowR += rCol.GetRed() << 7L;
+                                            nTotalWeightX += 1 << 7L;
+                                        }
+                                        else if( j == 0 )
+                                        {
+                                            nWeightX = (nMax- pMapFX[ nLeft ]) ;
+                                            nSumRowB += ( nWeightX *rCol.GetBlue()) ;
+                                            nSumRowG += ( nWeightX *rCol.GetGreen()) ;
+                                            nSumRowR += ( nWeightX *rCol.GetRed()) ;
+                                            nTotalWeightX += nWeightX;
+                                        }
+                                        else if ( nRowRange == j )
+                                        {
+                                            nWeightX = pMapFX[ nRight ] ;
+                                            nSumRowB += ( nWeightX *rCol.GetBlue() );
+                                            nSumRowG += ( nWeightX *rCol.GetGreen() );
+                                            nSumRowR += ( nWeightX *rCol.GetRed() );
+                                            nTotalWeightX += nWeightX;
+                                        }
+                                        else
+                                        {
+                                            nSumRowB += rCol.GetBlue() << 7L;
+                                            nSumRowG += rCol.GetGreen() << 7L;
+                                            nSumRowR += rCol.GetRed() << 7L;
+                                            nTotalWeightX += 1 << 7L;
+                                        }
+                                    }
+
+                                    if( nY == nEndY )
+                                        nWeightY = nMax;
+                                    else if( i == 0 )
+                                        nWeightY = nMax - pMapFY[ nTop ];
+                                    else if( nLineRange == 1 )
+                                        nWeightY = pMapFY[ nTop ];
+                                    else if ( nLineRange == i )
+                                        nWeightY = pMapFY[ nBottom ];
+                                    else
+                                        nWeightY = nMax;
+
+                                    nWeightY = nWeightY ;
+                                    nSumB += nWeightY * ( nSumRowB / nTotalWeightX );
+                                    nSumG += nWeightY * ( nSumRowG / nTotalWeightX );
+                                    nSumR += nWeightY * ( nSumRowR / nTotalWeightX );
+                                    nTotalWeightY += nWeightY;
+                                }
+
+                                aColRes.SetRed( ( sal_uInt8 ) (( nSumR / nTotalWeightY ) ));
+                                aColRes.SetGreen( ( sal_uInt8 ) (( nSumG / nTotalWeightY) ));
+                                aColRes.SetBlue( ( sal_uInt8 ) (( nSumB / nTotalWeightY ) ));
+                                pWAcc->SetPixel( nYDst, nXDst++, aColRes );
+
+                            }
+                        }
+                    }
+}
+                else
+                {
+                    if( scaleX >= fScaleThresh && scaleY >= fScaleThresh )
+                    {
+                        for( nY = nStartY, nYDst = 0L; nY <= nEndY; nY++, nYDst++ )
+                        {
+                            nTempY = pMapIY[ nY ], nTempFY = pMapFY[ nY ];
+
+                            for( nX = nStartX, nXDst = 0L; nX <= nEndX; nX++ )
+                            {
+                                nTempX = pMapIX[ nX ]; nTempFX = pMapFX[ nX ];
+
+                                aCol0 = pAcc->GetPaletteColor( pAcc->GetPixelIndex( nTempY, nTempX ) );
+                                aCol1 = pAcc->GetPaletteColor( pAcc->GetPixelIndex( nTempY, ++nTempX ) );
+                                cR0 = MAP( aCol0.GetRed(), aCol1.GetRed(), nTempFX );
+                                cG0 = MAP( aCol0.GetGreen(), aCol1.GetGreen(), nTempFX );
+                                cB0 = MAP( aCol0.GetBlue(), aCol1.GetBlue(), nTempFX );
+
+                                aCol1 = pAcc->GetPaletteColor( pAcc->GetPixelIndex( ++nTempY, nTempX ) );
+                                aCol0 = pAcc->GetPaletteColor( pAcc->GetPixelIndex( nTempY--, --nTempX ) );
+                                cR1 = MAP( aCol0.GetRed(), aCol1.GetRed(), nTempFX );
+                                cG1 = MAP( aCol0.GetGreen(), aCol1.GetGreen(), nTempFX );
+                                cB1 = MAP( aCol0.GetBlue(), aCol1.GetBlue(), nTempFX );
+
+                                aColRes.SetRed( MAP( cR0, cR1, nTempFY ) );
+                                aColRes.SetGreen( MAP( cG0, cG1, nTempFY ) );
+                                aColRes.SetBlue( MAP( cB0, cB1, nTempFY ) );
+                                pWAcc->SetPixel( nYDst, nXDst++, aColRes );
+                            }
+                        }
+
+                    }
+                    else
+                    {
+                        long        nSumR, nSumG, nSumB,nLineStart , nLineRange, nRowStart , nRowRange ;
+                        long        nLeft, nRight, nTop, nBottom, nWeightX, nWeightY ;
+                        long        nSumRowR ,nSumRowG,nSumRowB, nTotalWeightX, nTotalWeightY;
+
+                        for( nY = nStartY , nYDst = 0L; nY <= nEndY; nY++, nYDst++ )
+                        {
+                            nTop = bVMirr ? ( nY + 1 ) : nY;
+                            nBottom = bVMirr ? nY : ( nY + 1 ) ;
+
+                            if( nY ==nEndY )
+                            {
+                                nLineStart = pMapIY[ nY ];
+                                nLineRange = 0;
+                            }
+                            else
+                            {
+                                nLineStart = pMapIY[ nTop ] ;
+                                nLineRange = ( pMapIY[ nBottom ] == pMapIY[ nTop ] ) ? 1 :( pMapIY[ nBottom ] - pMapIY[ nTop ] );
+                            }
+
+                            for( nX = nStartX , nXDst = 0L; nX <= nEndX; nX++ )
+                            {
+                                nLeft = bHMirr ? ( nX + 1 ) : nX;
+                                nRight = bHMirr ? nX : ( nX + 1 ) ;
+
+                                if( nX == nEndX )
+                                {
+                                    nRowStart = pMapIX[ nX ];
+                                    nRowRange = 0;
+                                }
+                                else
+                                {
+                                    nRowStart = pMapIX[ nLeft ];
+                                    nRowRange = ( pMapIX[ nRight ] == pMapIX[ nLeft ] )? 1 : ( pMapIX[ nRight ] - pMapIX[ nLeft ] );
+                                }
+
+                                nSumR = nSumG = nSumB = 0;
+                                nTotalWeightY = 0;
+
+                                for(int i = 0; i<= nLineRange; i++)
+                                {
+                                    nSumRowR = nSumRowG = nSumRowB = 0;
+                                    nTotalWeightX = 0;
+
+                                    for(int j = 0; j <= nRowRange; j++)
+                                    {
+                                        aCol0 = pAcc->GetPaletteColor ( pAcc->GetPixelIndex( nLineStart + i, nRowStart + j ) );
+
+                                        if(nX == nEndX )
+                                        {
+
+                                            nSumRowB += aCol0.GetBlue() << 7L;
+                                            nSumRowG += aCol0.GetGreen() << 7L;
+                                            nSumRowR += aCol0.GetRed() << 7L;
+                                            nTotalWeightX += 1 << 7L;
+                                        }
+                                        else if( j == 0 )
+                                        {
+
+                                            nWeightX = (nMax- pMapFX[ nLeft ]) ;
+                                            nSumRowB += ( nWeightX *aCol0.GetBlue()) ;
+                                            nSumRowG += ( nWeightX *aCol0.GetGreen()) ;
+                                            nSumRowR += ( nWeightX *aCol0.GetRed()) ;
+                                            nTotalWeightX += nWeightX;
+                                        }
+                                        else if ( nRowRange == j )
+                                        {
+
+                                            nWeightX = pMapFX[ nRight ] ;
+                                            nSumRowB += ( nWeightX *aCol0.GetBlue() );
+                                            nSumRowG += ( nWeightX *aCol0.GetGreen() );
+                                            nSumRowR += ( nWeightX *aCol0.GetRed() );
+                                            nTotalWeightX += nWeightX;
+                                        }
+                                        else
+                                        {
+
+                                            nSumRowB += aCol0.GetBlue() << 7L;
+                                            nSumRowG += aCol0.GetGreen() << 7L;
+                                            nSumRowR += aCol0.GetRed() << 7L;
+                                            nTotalWeightX += 1 << 7L;
+                                        }
+                                    }
+
+                                    if( nY == nEndY )
+                                        nWeightY = nMax;
+                                    else if( i == 0 )
+                                        nWeightY = nMax - pMapFY[ nTop ];
+                                    else if( nLineRange == 1 )
+                                        nWeightY = pMapFY[ nTop ];
+                                    else if ( nLineRange == i )
+                                        nWeightY = pMapFY[ nBottom ];
+                                    else
+                                        nWeightY = nMax;
+
+                                    nWeightY = nWeightY ;
+                                    nSumB += nWeightY * ( nSumRowB / nTotalWeightX );
+                                    nSumG += nWeightY * ( nSumRowG / nTotalWeightX );
+                                    nSumR += nWeightY * ( nSumRowR / nTotalWeightX );
+                                    nTotalWeightY += nWeightY;
+                                }
+
+                                aColRes.SetRed( ( sal_uInt8 ) (( nSumR / nTotalWeightY ) ));
+                                aColRes.SetGreen( ( sal_uInt8 ) (( nSumG / nTotalWeightY) ));
+                                aColRes.SetBlue( ( sal_uInt8 ) (( nSumB / nTotalWeightY ) ));
+                                pWAcc->SetPixel( nYDst, nXDst++, aColRes );
+                            }
+                        }
+                    }
+                }
+            }
+            else
+            {
+                if( pAcc->GetScanlineFormat() == BMP_FORMAT_24BIT_TC_BGR )
+                {
+                    if( scaleX >= fScaleThresh && scaleY >= fScaleThresh )
+                    {
+                        Scanline    pLine0, pLine1, pTmp0, pTmp1;
+                        long        nOff;
+
+                        for( nY = nStartY, nYDst = 0L; nY <= nEndY; nY++, nYDst++ )
+                        {
+                            nTempY = pMapIY[ nY ]; nTempFY = pMapFY[ nY ];
+                            pLine0 = pAcc->GetScanline( nTempY );
+                            pLine1 = pAcc->GetScanline( ++nTempY );
+
+                            for( nX = nStartX, nXDst = 0L; nX <= nEndX; nX++ )
+                            {
+                                nOff = 3L * ( nTempX = pMapIX[ nX ] );
+                                nTempFX = pMapFX[ nX ];
+
+                                pTmp1 = ( pTmp0 = pLine0 + nOff ) + 3L;
+                                cB0 = MAP( *pTmp0, *pTmp1, nTempFX ); pTmp0++; pTmp1++;
+                                cG0 = MAP( *pTmp0, *pTmp1, nTempFX ); pTmp0++; pTmp1++;
+                                cR0 = MAP( *pTmp0, *pTmp1, nTempFX );
+
+                                pTmp1 = ( pTmp0 = pLine1 + nOff ) + 3L;
+                                cB1 = MAP( *pTmp0, *pTmp1, nTempFX ); pTmp0++; pTmp1++;
+                                cG1 = MAP( *pTmp0, *pTmp1, nTempFX ); pTmp0++; pTmp1++;
+                                cR1 = MAP( *pTmp0, *pTmp1, nTempFX );
+
+                                aColRes.SetRed( MAP( cR0, cR1, nTempFY ) );
+                                aColRes.SetGreen( MAP( cG0, cG1, nTempFY ) );
+                                aColRes.SetBlue( MAP( cB0, cB1, nTempFY ) );
+                                pWAcc->SetPixel( nYDst, nXDst++, aColRes );
+                            }
+                        }
+                    }
+                    else
+                    {
+                        Scanline    pTmpY, pTmpX;
+                        long        nSumR, nSumG, nSumB,nLineStart , nLineRange, nRowStart , nRowRange ;
+                        long        nLeft, nRight, nTop, nBottom, nWeightX, nWeightY ;
+                        long        nSumRowR ,nSumRowG,nSumRowB, nTotalWeightX, nTotalWeightY;
+
+                        for( nY = nStartY , nYDst = 0L; nY <= nEndY; nY++, nYDst++ )
+                        {
+                            nTop = bVMirr ? ( nY + 1 ) : nY;
+                            nBottom = bVMirr ? nY : ( nY + 1 ) ;
+
+                            if( nY ==nEndY )
+                            {
+                                nLineStart = pMapIY[ nY ];
+                                nLineRange = 0;
+                            }
+                            else
+                            {
+                                nLineStart = pMapIY[ nTop ] ;
+                                nLineRange = ( pMapIY[ nBottom ] == pMapIY[ nTop ] ) ? 1 :( pMapIY[ nBottom ] - pMapIY[ nTop ] );
+                            }
+
+                            for( nX = nStartX , nXDst = 0L; nX <= nEndX; nX++ )
+                            {
+                                nLeft = bHMirr ? ( nX + 1 ) : nX;
+                                nRight = bHMirr ? nX : ( nX + 1 ) ;
+
+                                if( nX == nEndX  )
+                                {
+                                    nRowStart = pMapIX[ nX ];
+                                    nRowRange = 0;
+                                }
+                                else
+                                {
+                                    nRowStart = pMapIX[ nLeft ];
+                                    nRowRange = ( pMapIX[ nRight ] == pMapIX[ nLeft ] )? 1 : ( pMapIX[ nRight ] - pMapIX[ nLeft ] );
+                                }
+
+                                nSumR = nSumG = nSumB = 0;
+                                nTotalWeightY = 0;
+
+                                for(int i = 0; i<= nLineRange; i++)
+                                {
+                                    pTmpY = pAcc->GetScanline( nLineStart + i );
+                                    pTmpX = pTmpY + 3L * nRowStart;
+                                    nSumRowR = nSumRowG = nSumRowB = 0;
+                                    nTotalWeightX = 0;
+
+                                    for(int j = 0; j <= nRowRange; j++)
+                                    {
+                                        if(nX == nEndX )
+                                        {
+                                            nSumRowB += ( *pTmpX ) << 7L;pTmpX++;
+                                            nSumRowG += ( *pTmpX ) << 7L;pTmpX++;
+                                            nSumRowR += ( *pTmpX ) << 7L;pTmpX++;
+                                            nTotalWeightX += 1 << 7L;
+                                        }
+                                        else if( j == 0 )
+                                        {
+                                            nWeightX = (nMax- pMapFX[ nLeft ]) ;
+                                            nSumRowB += ( nWeightX *( *pTmpX )) ;pTmpX++;
+                                            nSumRowG += ( nWeightX *( *pTmpX )) ;pTmpX++;
+                                            nSumRowR += ( nWeightX *( *pTmpX )) ;pTmpX++;
+                                            nTotalWeightX += nWeightX;
+                                        }
+                                        else if ( nRowRange == j )
+                                        {
+                                            nWeightX = pMapFX[ nRight ] ;
+                                            nSumRowB += ( nWeightX *( *pTmpX ) );pTmpX++;
+                                            nSumRowG += ( nWeightX *( *pTmpX ) );pTmpX++;
+                                            nSumRowR += ( nWeightX *( *pTmpX ) );pTmpX++;
+                                            nTotalWeightX += nWeightX;
+                                        }
+                                        else
+                                        {
+                                            nSumRowB += ( *pTmpX ) << 7L;pTmpX++;
+                                            nSumRowG += ( *pTmpX ) << 7L;pTmpX++;
+                                            nSumRowR += ( *pTmpX ) << 7L;pTmpX++;
+                                            nTotalWeightX += 1 << 7L;
+                                        }
+                                    }
+
+                                    if( nY == nEndY )
+                                        nWeightY = nMax;
+                                    else if( i == 0 )
+                                        nWeightY = nMax - pMapFY[ nTop ];
+                                    else if( nLineRange == 1 )
+                                        nWeightY = pMapFY[ nTop ];
+                                    else if ( nLineRange == i )
+                                        nWeightY = pMapFY[ nBottom ];
+                                    else
+                                        nWeightY = nMax;
+
+                                    nWeightY = nWeightY ;
+                                    nSumB += nWeightY * ( nSumRowB / nTotalWeightX );
+                                    nSumG += nWeightY * ( nSumRowG / nTotalWeightX );
+                                    nSumR += nWeightY * ( nSumRowR / nTotalWeightX );
+                                    nTotalWeightY += nWeightY;
+                                }
+
+                                aColRes.SetRed( ( sal_uInt8 ) (( nSumR / nTotalWeightY ) ));
+                                aColRes.SetGreen( ( sal_uInt8 ) (( nSumG / nTotalWeightY) ));
+                                aColRes.SetBlue( ( sal_uInt8 ) (( nSumB / nTotalWeightY ) ));
+                                pWAcc->SetPixel( nYDst, nXDst++, aColRes );
+
+                            }
+                        }
+                    }
+                }
+                else if( pAcc->GetScanlineFormat() == BMP_FORMAT_24BIT_TC_RGB )
+                {
+                    if( scaleX >= fScaleThresh && scaleY >= fScaleThresh )
+                    {
+                        Scanline    pLine0, pLine1, pTmp0, pTmp1;
+                        long        nOff;
+
+                        for( nY = nStartY, nYDst = 0L; nY <= nEndY; nY++, nYDst++ )
+                        {
+                            nTempY = pMapIY[ nY ]; nTempFY = pMapFY[ nY ];
+                            pLine0 = pAcc->GetScanline( nTempY );
+                            pLine1 = pAcc->GetScanline( ++nTempY );
+
+                            for( nX = nStartX, nXDst = 0L; nX <= nEndX; nX++ )
+                            {
+                                nOff = 3L * ( nTempX = pMapIX[ nX ] );
+                                nTempFX = pMapFX[ nX ];
+
+                                pTmp1 = ( pTmp0 = pLine0 + nOff ) + 3L;
+                                cR0 = MAP( *pTmp0, *pTmp1, nTempFX ); pTmp0++; pTmp1++;
+                                cG0 = MAP( *pTmp0, *pTmp1, nTempFX ); pTmp0++; pTmp1++;
+                                cB0 = MAP( *pTmp0, *pTmp1, nTempFX );
+
+                                pTmp1 = ( pTmp0 = pLine1 + nOff ) + 3L;
+                                cR1 = MAP( *pTmp0, *pTmp1, nTempFX ); pTmp0++; pTmp1++;
+                                cG1 = MAP( *pTmp0, *pTmp1, nTempFX ); pTmp0++; pTmp1++;
+                                cB1 = MAP( *pTmp0, *pTmp1, nTempFX );
+
+                                aColRes.SetRed( MAP( cR0, cR1, nTempFY ) );
+                                aColRes.SetGreen( MAP( cG0, cG1, nTempFY ) );
+                                aColRes.SetBlue( MAP( cB0, cB1, nTempFY ) );
+                                pWAcc->SetPixel( nYDst, nXDst++, aColRes );
+                            }
+                        }
+                    }
+                    else
+                    {
+                        Scanline    pTmpY, pTmpX;
+                        long        nSumR, nSumG, nSumB,nLineStart , nLineRange, nRowStart , nRowRange ;
+                        long        nLeft, nRight, nTop, nBottom, nWeightX, nWeightY ;
+                        long        nSumRowR ,nSumRowG,nSumRowB, nTotalWeightX, nTotalWeightY;
+
+                        for( nY = nStartY , nYDst = 0L; nY <= nEndY; nY++, nYDst++ )
+                        {
+                            nTop = bVMirr ? ( nY + 1 ) : nY;
+                            nBottom = bVMirr ? nY : ( nY + 1 ) ;
+
+                            if( nY ==nEndY )
+                            {
+                                nLineStart = pMapIY[ nY ];
+                                nLineRange = 0;
+                            }
+                            else
+                            {
+                                nLineStart = pMapIY[ nTop ] ;
+                                nLineRange = ( pMapIY[ nBottom ] == pMapIY[ nTop ] ) ? 1 :( pMapIY[ nBottom ] - pMapIY[ nTop ] );
+                            }
+
+                            for( nX = nStartX , nXDst = 0L; nX <= nEndX; nX++ )
+                            {
+                                nLeft = bHMirr ? ( nX + 1 ) : nX;
+                                nRight = bHMirr ? nX : ( nX + 1 ) ;
+
+                                if( nX == nEndX )
+                                {
+                                    nRowStart = pMapIX[ nX ];
+                                    nRowRange = 0;
+                                }
+                                else
+                                {
+                                    nRowStart = pMapIX[ nLeft ];
+                                    nRowRange = ( pMapIX[ nRight ] == pMapIX[ nLeft ] )? 1 : ( pMapIX[ nRight ] - pMapIX[ nLeft ] );
+                                }
+
+                                nSumR = nSumG = nSumB = 0;
+                                nTotalWeightY = 0;
+
+                                for(int i = 0; i<= nLineRange; i++)
+                                {
+                                    pTmpY = pAcc->GetScanline( nLineStart + i );
+                                    pTmpX = pTmpY + 3L * nRowStart;
+                                    nSumRowR = nSumRowG = nSumRowB = 0;
+                                    nTotalWeightX = 0;
+
+                                    for(int j = 0; j <= nRowRange; j++)
+                                    {
+                                        if(nX == nEndX )
+                                        {
+                                            nSumRowR += ( *pTmpX ) << 7L;pTmpX++;
+                                            nSumRowG += ( *pTmpX ) << 7L;pTmpX++;
+                                            nSumRowB += ( *pTmpX ) << 7L;pTmpX++;
+                                            nTotalWeightX += 1 << 7L;
+                                        }
+                                        else if( j == 0 )
+                                        {
+                                            nWeightX = (nMax- pMapFX[ nLeft ]) ;
+                                            nSumRowR += ( nWeightX *( *pTmpX )) ;pTmpX++;
+                                            nSumRowG += ( nWeightX *( *pTmpX )) ;pTmpX++;
+                                            nSumRowB += ( nWeightX *( *pTmpX )) ;pTmpX++;
+                                            nTotalWeightX += nWeightX;
+                                        }
+                                        else if ( nRowRange == j )
+                                        {
+                                            nWeightX = pMapFX[ nRight ] ;
+                                            nSumRowR += ( nWeightX *( *pTmpX ) );pTmpX++;
+                                            nSumRowG += ( nWeightX *( *pTmpX ) );pTmpX++;
+                                            nSumRowB += ( nWeightX *( *pTmpX ) );pTmpX++;
+                                            nTotalWeightX += nWeightX;
+                                        }
+                                        else
+                                        {
+                                            nSumRowR += ( *pTmpX ) << 7L;pTmpX++;
+                                            nSumRowG += ( *pTmpX ) << 7L;pTmpX++;
+                                            nSumRowB += ( *pTmpX ) << 7L;pTmpX++;
+                                            nTotalWeightX += 1 << 7L;
+                                        }
+                                    }
+
+                                    if( nY == nEndY )
+                                        nWeightY = nMax;
+                                    else if( i == 0 )
+                                        nWeightY = nMax - pMapFY[ nTop ];
+                                    else if( nLineRange == 1 )
+                                        nWeightY = pMapFY[ nTop ];
+                                    else if ( nLineRange == i )
+                                        nWeightY = pMapFY[ nBottom ];
+                                    else
+                                        nWeightY = nMax;
+
+                                    nWeightY = nWeightY ;
+                                    nSumB += nWeightY * ( nSumRowB / nTotalWeightX );
+                                    nSumG += nWeightY * ( nSumRowG / nTotalWeightX );
+                                    nSumR += nWeightY * ( nSumRowR / nTotalWeightX );
+                                    nTotalWeightY += nWeightY;
+                                }
+
+                                aColRes.SetRed( ( sal_uInt8 ) (( nSumR / nTotalWeightY ) ));
+                                aColRes.SetGreen( ( sal_uInt8 ) (( nSumG / nTotalWeightY) ));
+                                aColRes.SetBlue( ( sal_uInt8 ) (( nSumB / nTotalWeightY ) ));
+                                pWAcc->SetPixel( nYDst, nXDst++, aColRes );
+
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    if( scaleX >= fScaleThresh && scaleY >= fScaleThresh )
+                    {
+                        for( nY = nStartY, nYDst = 0L; nY <= nEndY; nY++, nYDst++ )
+                        {
+                            nTempY = pMapIY[ nY ]; nTempFY = pMapFY[ nY ];
+
+                            for( nX = nStartX, nXDst = 0L; nX <= nEndX; nX++ )
+                            {
+                                nTempX = pMapIX[ nX ]; nTempFX = pMapFX[ nX ];
+
+                                aCol0 = pAcc->GetPixel( nTempY, nTempX );
+                                aCol1 = pAcc->GetPixel( nTempY, ++nTempX );
+                                cR0 = MAP( aCol0.GetRed(), aCol1.GetRed(), nTempFX );
+                                cG0 = MAP( aCol0.GetGreen(), aCol1.GetGreen(), nTempFX );
+                                cB0 = MAP( aCol0.GetBlue(), aCol1.GetBlue(), nTempFX );
+
+                                aCol1 = pAcc->GetPixel( ++nTempY, nTempX );
+                                aCol0 = pAcc->GetPixel( nTempY--, --nTempX );
+                                cR1 = MAP( aCol0.GetRed(), aCol1.GetRed(), nTempFX );
+                                cG1 = MAP( aCol0.GetGreen(), aCol1.GetGreen(), nTempFX );
+                                cB1 = MAP( aCol0.GetBlue(), aCol1.GetBlue(), nTempFX );
+
+                                aColRes.SetRed( MAP( cR0, cR1, nTempFY ) );
+                                aColRes.SetGreen( MAP( cG0, cG1, nTempFY ) );
+                                aColRes.SetBlue( MAP( cB0, cB1, nTempFY ) );
+                                pWAcc->SetPixel( nYDst, nXDst++, aColRes );
+                            }
+                        }
+                    }
+                    else
+                    {
+                        long        nSumR, nSumG, nSumB,nLineStart , nLineRange, nRowStart , nRowRange ;
+                        long        nLeft, nRight, nTop, nBottom, nWeightX, nWeightY ;
+                        long        nSumRowR ,nSumRowG,nSumRowB, nTotalWeightX, nTotalWeightY;
+
+                        for( nY = nStartY , nYDst = 0L; nY <= nEndY; nY++, nYDst++ )
+                        {
+                            nTop = bVMirr ? ( nY + 1 ) : nY;
+                            nBottom = bVMirr ? nY : ( nY + 1 ) ;
+
+                            if( nY ==nEndY )
+                            {
+                                nLineStart = pMapIY[ nY ];
+                                nLineRange = 0;
+                            }
+                            else
+                            {
+                                nLineStart = pMapIY[ nTop ] ;
+                                nLineRange = ( pMapIY[ nBottom ] == pMapIY[ nTop ] ) ? 1 :( pMapIY[ nBottom ] - pMapIY[ nTop ] );
+                            }
+
+                            for( nX = nStartX , nXDst = 0L; nX <= nEndX; nX++ )
+                            {
+                                nLeft = bHMirr ? ( nX + 1 ) : nX;
+                                nRight = bHMirr ? nX : ( nX + 1 ) ;
+
+                                if( nX == nEndX )
+                                {
+                                    nRowStart = pMapIX[ nX ];
+                                    nRowRange = 0;
+                                }
+                                else
+                                {
+                                    nRowStart = pMapIX[ nLeft ];
+                                    nRowRange = ( pMapIX[ nRight ] == pMapIX[ nLeft ] )? 1 : ( pMapIX[ nRight ] - pMapIX[ nLeft ] );
+                                }
+
+                                nSumR = nSumG = nSumB = 0;
+                                nTotalWeightY = 0;
+
+                                for(int i = 0; i<= nLineRange; i++)
+                                {
+                                    nSumRowR = nSumRowG = nSumRowB = 0;
+                                    nTotalWeightX = 0;
+
+                                    for(int j = 0; j <= nRowRange; j++)
+                                    {
+                                        aCol0 = pAcc->GetPixel( nLineStart + i, nRowStart + j );
+
+                                        if(nX == nEndX )
+                                        {
+
+                                            nSumRowB += aCol0.GetBlue() << 7L;
+                                            nSumRowG += aCol0.GetGreen() << 7L;
+                                            nSumRowR += aCol0.GetRed() << 7L;
+                                            nTotalWeightX += 1 << 7L;
+                                        }
+                                        else if( j == 0 )
+                                        {
+
+                                            nWeightX = (nMax- pMapFX[ nLeft ]) ;
+                                            nSumRowB += ( nWeightX *aCol0.GetBlue()) ;
+                                            nSumRowG += ( nWeightX *aCol0.GetGreen()) ;
+                                            nSumRowR += ( nWeightX *aCol0.GetRed()) ;
+                                            nTotalWeightX += nWeightX;
+                                        }
+                                        else if ( nRowRange == j )
+                                        {
+
+                                            nWeightX = pMapFX[ nRight ] ;
+                                            nSumRowB += ( nWeightX *aCol0.GetBlue() );
+                                            nSumRowG += ( nWeightX *aCol0.GetGreen() );
+                                            nSumRowR += ( nWeightX *aCol0.GetRed() );
+                                            nTotalWeightX += nWeightX;
+                                        }
+                                        else
+                                        {
+                                            nSumRowB += aCol0.GetBlue() << 7L;
+                                            nSumRowG += aCol0.GetGreen() << 7L;
+                                            nSumRowR += aCol0.GetRed() << 7L;
+                                            nTotalWeightX += 1 << 7L;
+                                        }
+                                    }
+
+                                    if( nY == nEndY )
+                                        nWeightY = nMax;
+                                    else if( i == 0 )
+                                        nWeightY = nMax - pMapFY[ nTop ];
+                                    else if( nLineRange == 1 )
+                                        nWeightY = pMapFY[ nTop ];
+                                    else if ( nLineRange == i )
+                                        nWeightY = pMapFY[ nBottom ];
+                                    else
+                                        nWeightY = nMax;
+
+                                    nWeightY = nWeightY ;
+                                    nSumB += nWeightY * ( nSumRowB / nTotalWeightX );
+                                    nSumG += nWeightY * ( nSumRowG / nTotalWeightX );
+                                    nSumR += nWeightY * ( nSumRowR / nTotalWeightX );
+                                    nTotalWeightY += nWeightY;
+                                }
+
+                                aColRes.SetRed( ( sal_uInt8 ) (( nSumR / nTotalWeightY ) ));
+                                aColRes.SetGreen( ( sal_uInt8 ) (( nSumG / nTotalWeightY) ));
+                                aColRes.SetBlue( ( sal_uInt8 ) (( nSumB / nTotalWeightY ) ));
+                                pWAcc->SetPixel( nYDst, nXDst++, aColRes );
+
+                            }
+                        }
+                    }
+                }
+            }
+
+            bRet = true;
+        }
+
+        delete[] pMapIX;
+        delete[] pMapIY;
+        delete[] pMapFX;
+        delete[] pMapFY;
+
+        ReleaseAccess( pAcc );
+        aOutBmp.ReleaseAccess( pWAcc );
+
+        if( bRet )
+        {
+            ImplAdaptBitCount(aOutBmp);
+            ImplAssignWithSize(aOutBmp);
+        }
+
+        if( !bRet )
+            bRet = ImplScaleFast( scaleX, scaleY );
+    }
+
+    return bRet;
+}
+
+//-----------------------------------------------------------------------------------
+
+namespace
+{
+    void ImplCalculateContributions(
+        const sal_uInt32 aSourceSize,
+        const sal_uInt32 aDestinationSize,
+        sal_uInt32& aNumberOfContributions,
+        double*& pWeights,
+        sal_uInt32*& pPixels,
+        sal_uInt32*& pCount,
+        const Kernel& aKernel)
+    {
+        const double fSamplingRadius(aKernel.GetWidth());
+        const double fScale(aDestinationSize / static_cast< double >(aSourceSize));
+        const double fScaledRadius((fScale < 1.0) ? fSamplingRadius / fScale : fSamplingRadius);
+        const double fFilterFactor((fScale < 1.0) ? fScale : 1.0);
+
+        aNumberOfContributions = (static_cast< sal_uInt32 >(fabs(ceil(fScaledRadius))) * 2) + 1;
+        const sal_uInt32 nAllocSize(aDestinationSize * aNumberOfContributions);
+        pWeights = new double[nAllocSize];
+        pPixels = new sal_uInt32[nAllocSize];
+        pCount = new sal_uInt32[aDestinationSize];
+
+        for(sal_uInt32 i(0); i < aDestinationSize; i++)
+        {
+            const sal_uInt32 aIndex(i * aNumberOfContributions);
+            const double aCenter(i / fScale);
+            const sal_Int32 aLeft(static_cast< sal_Int32 >(floor(aCenter - fScaledRadius)));
+            const sal_Int32 aRight(static_cast< sal_Int32 >(ceil(aCenter + fScaledRadius)));
+            sal_uInt32 aCurrentCount(0);
+
+            for(sal_Int32 j(aLeft); j <= aRight; j++)
+            {
+                const double aWeight(aKernel.Calculate(fFilterFactor * (aCenter - static_cast< double>(j))));
+
+                // Reduce calculations with ignoring weights of 0.0
+                if(fabs(aWeight) < 0.0001)
+                {
+                    continue;
+                }
+
+                // Handling on edges
+                const sal_uInt32 aPixelIndex(MinMax(j, 0, aSourceSize - 1));
+                const sal_uInt32 nIndex(aIndex + aCurrentCount);
+
+                pWeights[nIndex] = aWeight;
+                pPixels[nIndex] = aPixelIndex;
+
+                aCurrentCount++;
+            }
+
+            pCount[i] = aCurrentCount;
+        }
+    }
+
+    sal_Bool ImplScaleConvolutionHor(
+        Bitmap& rSource,
+        Bitmap& rTarget,
+        const double& rScaleX,
+        const Kernel& aKernel)
+    {
+        // Do horizontal filtering
+        OSL_ENSURE(rScaleX > 0.0, "Error in scaling: Mirror given in non-mirror-capable method (!)");
+        const sal_uInt32 nWidth(rSource.GetSizePixel().Width());
+        const sal_uInt32 nNewWidth(FRound(nWidth * rScaleX));
+
+        if(nWidth == nNewWidth)
+        {
+            return true;
+        }
+
+        BitmapReadAccess* pReadAcc = rSource.AcquireReadAccess();
+
+        if(pReadAcc)
+        {
+            double* pWeights = 0;
+            sal_uInt32* pPixels = 0;
+            sal_uInt32* pCount = 0;
+            sal_uInt32 aNumberOfContributions(0);
+
+            const sal_uInt32 nHeight(rSource.GetSizePixel().Height());
+            ImplCalculateContributions(nWidth, nNewWidth, aNumberOfContributions, pWeights, pPixels, pCount, aKernel);
+            rTarget = Bitmap(Size(nNewWidth, nHeight), 24);
+            BitmapWriteAccess* pWriteAcc = rTarget.AcquireWriteAccess();
+            bool bResult(0 != pWriteAcc);
+
+            if(bResult)
+            {
+                for(sal_uInt32 y(0); y < nHeight; y++)
+                {
+                    for(sal_uInt32 x(0); x < nNewWidth; x++)
+                    {
+                        const sal_uInt32 aBaseIndex(x * aNumberOfContributions);
+                        double aSum(0.0);
+                        double aValueRed(0.0);
+                        double aValueGreen(0.0);
+                        double aValueBlue(0.0);
+
+                        for(sal_uInt32 j(0); j < pCount[x]; j++)
+                        {
+                            const sal_uInt32 aIndex(aBaseIndex + j);
+                            const double aWeight(pWeights[aIndex]);
+                            BitmapColor aColor;
+
+                            aSum += aWeight;
+
+                            if(pReadAcc->HasPalette())
+                            {
+                                aColor = pReadAcc->GetPaletteColor(pReadAcc->GetPixelIndex(y, pPixels[aIndex]));
+                            }
+                            else
+                            {
+                                aColor = pReadAcc->GetPixel(y, pPixels[aIndex]);
+                            }
+
+                            aValueRed += aWeight * aColor.GetRed();
+                            aValueGreen += aWeight * aColor.GetGreen();
+                            aValueBlue += aWeight * aColor.GetBlue();
+                        }
+
+                        const BitmapColor aResultColor(
+                            static_cast< sal_uInt8 >(MinMax(static_cast< sal_Int32 >(aValueRed / aSum), 0, 255)),
+                            static_cast< sal_uInt8 >(MinMax(static_cast< sal_Int32 >(aValueGreen / aSum), 0, 255)),
+                            static_cast< sal_uInt8 >(MinMax(static_cast< sal_Int32 >(aValueBlue / aSum), 0, 255)));
+
+                        pWriteAcc->SetPixel(y, x, aResultColor);
+                    }
+                }
+
+                rTarget.ReleaseAccess(pWriteAcc);
+            }
+
+            rSource.ReleaseAccess(pReadAcc);
+            delete[] pWeights;
+            delete[] pCount;
+            delete[] pPixels;
+
+            if(bResult)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    bool ImplScaleConvolutionVer(
+        Bitmap& rSource,
+        Bitmap& rTarget,
+        const double& rScaleY,
+        const Kernel& aKernel)
+    {
+        // Do vertical filtering
+        OSL_ENSURE(rScaleY > 0.0, "Error in scaling: Mirror given in non-mirror-capable method (!)");
+        const sal_uInt32 nHeight(rSource.GetSizePixel().Height());
+        const sal_uInt32 nNewHeight(FRound(nHeight * rScaleY));
+
+        if(nHeight == nNewHeight)
+        {
+            return true;
+        }
+
+        BitmapReadAccess* pReadAcc = rSource.AcquireReadAccess();
+
+        if(pReadAcc)
+        {
+            double* pWeights = 0;
+            sal_uInt32* pPixels = 0;
+            sal_uInt32* pCount = 0;
+            sal_uInt32 aNumberOfContributions(0);
+
+            const sal_uInt32 nWidth(rSource.GetSizePixel().Width());
+            ImplCalculateContributions(nHeight, nNewHeight, aNumberOfContributions, pWeights, pPixels, pCount, aKernel);
+            rTarget = Bitmap(Size(nWidth, nNewHeight), 24);
+            BitmapWriteAccess* pWriteAcc = rTarget.AcquireWriteAccess();
+            bool bResult(0 != pWriteAcc);
+
+            if(pWriteAcc)
+            {
+                for(sal_uInt32 x(0); x < nWidth; x++)
+                {
+                    for(sal_uInt32 y(0); y < nNewHeight; y++)
+                    {
+                        const sal_uInt32 aBaseIndex(y * aNumberOfContributions);
+                        double aSum(0.0);
+                        double aValueRed(0.0);
+                        double aValueGreen(0.0);
+                        double aValueBlue(0.0);
+
+                        for(sal_uInt32 j(0); j < pCount[y]; j++)
+                        {
+                            const sal_uInt32 aIndex(aBaseIndex + j);
+                            const double aWeight(pWeights[aIndex]);
+                            BitmapColor aColor;
+
+                            aSum += aWeight;
+
+                            if(pReadAcc->HasPalette())
+                            {
+                                aColor = pReadAcc->GetPaletteColor(pReadAcc->GetPixelIndex(pPixels[aIndex], x));
+                            }
+                            else
+                            {
+                                aColor = pReadAcc->GetPixel(pPixels[aIndex], x);
+                            }
+
+                            aValueRed += aWeight * aColor.GetRed();
+                            aValueGreen += aWeight * aColor.GetGreen();
+                            aValueBlue += aWeight * aColor.GetBlue();
+                        }
+
+                        const BitmapColor aResultColor(
+                            static_cast< sal_uInt8 >(MinMax(static_cast< sal_Int32 >(aValueRed / aSum), 0, 255)),
+                            static_cast< sal_uInt8 >(MinMax(static_cast< sal_Int32 >(aValueGreen / aSum), 0, 255)),
+                            static_cast< sal_uInt8 >(MinMax(static_cast< sal_Int32 >(aValueBlue / aSum), 0, 255)));
+
+                        if(pWriteAcc->HasPalette())
+                        {
+                            pWriteAcc->SetPixelIndex(y, x, static_cast< sal_uInt8 >(pWriteAcc->GetBestPaletteIndex(aResultColor)));
+                        }
+                        else
+                        {
+                            pWriteAcc->SetPixel(y, x, aResultColor);
+                        }
+                    }
+                }
+            }
+
+            rTarget.ReleaseAccess(pWriteAcc);
+            rSource.ReleaseAccess(pReadAcc);
+
+            delete[] pWeights;
+            delete[] pCount;
+            delete[] pPixels;
+
+            if(bResult)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+}
+
+// #i121233# Added BMP_SCALE_LANCZOS, BMP_SCALE_BICUBIC, BMP_SCALE_BILINEAR and
+// BMP_SCALE_BOX derived from the original commit from Tomaž Vajngerl (see
+// bugzilla task for deitails) Thanks!
+sal_Bool Bitmap::ImplScaleConvolution(
+    const double& rScaleX,
+    const double& rScaleY,
+    const Kernel& aKernel)
+{
+    const bool bMirrorHor(rScaleX < 0.0);
+    const bool bMirrorVer(rScaleY < 0.0);
+    const double fScaleX(bMirrorHor ? -rScaleX : rScaleX);
+    const double fScaleY(bMirrorVer ? -rScaleY : rScaleY);
+    const sal_uInt32 nWidth(GetSizePixel().Width());
+    const sal_uInt32 nHeight(GetSizePixel().Height());
+    const sal_uInt32 nNewWidth(FRound(nWidth * fScaleX));
+    const sal_uInt32 nNewHeight(FRound(nHeight * fScaleY));
+    const bool bScaleHor(nWidth != nNewWidth);
+    const bool bScaleVer(nHeight != nNewHeight);
+    const bool bMirror(bMirrorHor || bMirrorVer);
+
+    if(!bMirror && !bScaleHor && !bScaleVer)
+    {
+        return true;
+    }
+
+    bool bResult(true);
+    sal_uInt32 nMirrorFlags(BMP_MIRROR_NONE);
+    bool bMirrorAfter(false);
+
+    if(bMirror)
+    {
+        if(bMirrorHor)
+        {
+            nMirrorFlags |= BMP_MIRROR_HORZ;
+        }
+
+        if(bMirrorVer)
+        {
+            nMirrorFlags |= BMP_MIRROR_VERT;
+        }
+
+        const sal_uInt32 nStartSize(nWidth * nHeight);
+        const sal_uInt32 nEndSize(nNewWidth * nNewHeight);
+
+        bMirrorAfter = nStartSize > nEndSize;
+
+        if(!bMirrorAfter)
+        {
+            bResult = Mirror(nMirrorFlags);
+        }
+    }
+
+    Bitmap aResult;
+
+    if(bResult)
+    {
+        const sal_uInt32 nInBetweenSizeHorFirst(nHeight * nNewWidth);
+        const sal_uInt32 nInBetweenSizeVerFirst(nNewHeight * nWidth);
+
+        if(nInBetweenSizeHorFirst < nInBetweenSizeVerFirst)
+        {
+            if(bScaleHor)
+            {
+                bResult = ImplScaleConvolutionHor(*this, aResult, fScaleX, aKernel);
+            }
+
+            if(bResult && bScaleVer)
+            {
+                bResult = ImplScaleConvolutionVer(*this, aResult, fScaleY, aKernel);
+            }
+        }
+        else
+        {
+            if(bScaleVer)
+            {
+                bResult = ImplScaleConvolutionVer(*this, aResult, fScaleY, aKernel);
+            }
+
+            if(bResult && bScaleHor)
+            {
+                bResult = ImplScaleConvolutionHor(*this, aResult, fScaleX, aKernel);
+            }
+        }
+    }
+
+    if(bResult && bMirrorAfter)
+    {
+        bResult = aResult.Mirror(nMirrorFlags);
+    }
+
+    if(bResult)
+    {
+        ImplAdaptBitCount(aResult);
+        *this = aResult;
+    }
+
+    return bResult;
+}
+
+// ------------------------------------------------------------------------
 
 sal_Bool Bitmap::Dither( sal_uLong nDitherFlags )
 {

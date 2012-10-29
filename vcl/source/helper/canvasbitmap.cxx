@@ -450,7 +450,7 @@ uno::Reference< rendering::XBitmap > SAL_CALL VclCanvasBitmap::getScaledBitmap( 
     SolarMutexGuard aGuard;
 
     BitmapEx aNewBmp( m_aBitmap );
-    aNewBmp.Scale( sizeFromRealSize2D( newSize ), beFast ? BMP_SCALE_FAST : BMP_SCALE_DEFAULT );
+    aNewBmp.Scale( sizeFromRealSize2D( newSize ), beFast ? BMP_SCALE_DEFAULT : BMP_SCALE_BESTQUALITY );
     return uno::Reference<rendering::XBitmap>( new VclCanvasBitmap( aNewBmp ) );
 }
 

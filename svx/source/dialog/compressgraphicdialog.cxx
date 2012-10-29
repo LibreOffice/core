@@ -228,7 +228,7 @@ sal_uLong CompressGraphicsDialog::GetSelectedInterpolationType()
     } else if ( aSelectionText == "None" ) {
         return BMP_SCALE_FAST;
     }
-    return BMP_SCALE_BEST;
+    return BMP_SCALE_BESTQUALITY;
 }
 
 void CompressGraphicsDialog::Compress(SvStream& aStream)

@@ -174,7 +174,7 @@ void PrintDialog::PrintPreviewWindow::Paint( const Rectangle& )
     else
     {
         Bitmap aPreviewBitmap(maPreviewBitmap);
-        aPreviewBitmap.Scale(maPreviewSize, BMP_SCALE_BEST);
+        aPreviewBitmap.Scale(maPreviewSize, BMP_SCALE_BESTQUALITY);
         DrawBitmap(aOffset, aPreviewBitmap);
     }
 
