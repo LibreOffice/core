@@ -96,7 +96,7 @@ class SmDocShell : public SfxObjectShell, public SfxListener
     String              aText;
     SmFormat            aFormat;
     SmParser            aInterpreter;
-    String              aAccText;
+    OUString            aAccText;
     SmNode             *pTree;
     SfxMenuBarManager  *pMenuMgr;
     SfxItemPool        *pEditEngineItemPool;
@@ -198,7 +198,7 @@ public:
 
     const std::set< rtl::OUString > &    GetUsedSymbols() const  { return aUsedSymbols; }
 
-    String          GetAccessibleText();
+    OUString        GetAccessibleText();
 
     EditEngine &    GetEditEngine();
     SfxItemPool &   GetEditEngineItemPool();

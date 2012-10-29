@@ -156,7 +156,7 @@ public:
     virtual void Arrange(const OutputDevice &rDev, const SmFormat &rFormat);
     virtual void CreateTextFromNode(String &rText);
 
-    virtual void    GetAccessibleText( String &rText ) const;
+    virtual void    GetAccessibleText( OUStringBuffer &rText ) const;
     sal_Int32       GetAccessibleIndex() const { return nAccIndex; }
     const SmNode *  FindNodeWithAccessibleIndex(xub_StrLen nAccIndex) const;
 
@@ -324,7 +324,7 @@ public:
 
     SmStructureNode & operator = ( const SmStructureNode &rNode );
 
-    virtual void  GetAccessibleText( String &rText ) const;
+    virtual void  GetAccessibleText( OUStringBuffer &rText ) const;
 
     void SetSubNode(size_t nIndex, SmNode* pNode)
     {
@@ -378,7 +378,7 @@ protected:
 
 public:
 
-    virtual void  GetAccessibleText( String &rText ) const;
+    virtual void  GetAccessibleText( OUStringBuffer &rText ) const;
 };
 
 
@@ -490,7 +490,7 @@ public:
     virtual void Arrange(const OutputDevice &rDev, const SmFormat &rFormat);
     virtual void CreateTextFromNode(String &rText);
 
-    virtual void  GetAccessibleText( String &rText ) const;
+    virtual void  GetAccessibleText( OUStringBuffer &rText ) const;
     void Accept(SmVisitor* pVisitor);
     /**
       Converts the character from StarMath's private area symbols to a matching Unicode
