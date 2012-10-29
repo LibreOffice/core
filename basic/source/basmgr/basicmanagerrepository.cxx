@@ -41,6 +41,7 @@
 #include <unotools/eventlisteneradapter.hxx>
 
 #include <rtl/instance.hxx>
+#include <rtl/strbuf.hxx>
 
 #include <map>
 
