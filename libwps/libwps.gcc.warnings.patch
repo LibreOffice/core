@@ -1,0 +1,15 @@
+warning: passing ‘libwps::Justification’ chooses ‘int’ over ‘unsigned int’
+
+diff -ru wps.old/src/lib/WPSParagraph.cpp wps/src/lib/WPSParagraph.cpp
+--- wps.old/src/lib/WPSParagraph.cpp	2012-10-29 14:44:09.135977333 +0100
++++ wps/src/lib/WPSParagraph.cpp	2012-10-29 14:44:13.649981497 +0100
+@@ -137,7 +137,8 @@
+ 		o << "just=fullAllLines, ";
+ 		break;
+ 	default:
+-		o << "just=" << pp.m_justify << ", ";
++		assert(false); // unhandled Justification enum value
++		o << "just=" << static_cast<unsigned>(pp.m_justify) << ", ";
+ 		break;
+ 	}
+ 
