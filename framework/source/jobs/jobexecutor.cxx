@@ -73,7 +73,7 @@ DEFINE_XTYPEPROVIDER_6( JobExecutor                       ,
 
 DEFINE_XSERVICEINFO_ONEINSTANCESERVICE( JobExecutor                   ,
                                         ::cppu::OWeakObject           ,
-                                        DECLARE_ASCII("com.sun.star.task.JobExecutor"),
+                                        "com.sun.star.task.JobExecutor",
                                         IMPLEMENTATIONNAME_JOBEXECUTOR
                                       )
 
