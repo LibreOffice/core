@@ -10,7 +10,7 @@
 ifeq ($(DISABLE_DYNLOADING),TRUE)
 # Link with -lgnustl_static
 gb_STDLIBS := \
-	gnustl_static
+	-lgnustl_static
 
 gb_Library_PLAINLIBS_NONE := \
 	android \
