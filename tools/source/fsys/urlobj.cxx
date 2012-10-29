@@ -3702,7 +3702,7 @@ rtl::OUString INetURLObject::decode(sal_Unicode const * pBegin,
         switch (eEscapeType)
         {
             case ESCAPE_NO:
-                aResult.append(sal_Unicode(nUTF32));
+                aResult.appendUtf32(nUTF32);
                 break;
 
             case ESCAPE_OCTET:
@@ -3724,7 +3724,7 @@ rtl::OUString INetURLObject::decode(sal_Unicode const * pBegin,
                     appendEscape(aResult, cEscapePrefix, nUTF32);
                 }
                 else
-                    aResult.append(sal_Unicode(nUTF32));
+                    aResult.appendUtf32(nUTF32);
                 break;
         }
     }
