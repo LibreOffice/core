@@ -25,6 +25,8 @@ rtl::OUString getTextForType(ScCondFormatEntryType eType)
             return ScGlobal::GetRscString(STR_COND_DATABAR);
         case FORMULA:
             return ScGlobal::GetRscString(STR_COND_FORMULA);
+        case ICONSET:
+            return ScGlobal::GetRscString(STR_COND_ICONSET);
         default:
             break;
     }
@@ -104,6 +106,9 @@ rtl::OUString ScCondFormatHelper::GetExpression(const ScConditionalFormat& rForm
                 break;
             case condformat::COLORSCALE:
                 aBuffer.append(getTextForType(COLORSCALE));
+                break;
+            case condformat::ICONSET:
+                aBuffer.append(getTextForType(ICONSET));
                 break;
         }
     }

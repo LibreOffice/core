@@ -1875,6 +1875,10 @@ Resource RID_GLOBSTR
     {
         Text [ en-US ] = "DataBar";
     };
+    String STR_COND_ICONSET
+    {
+        Text [ en-US ] = "IconSet";
+    };
     String STR_COND_BETWEEN
     {
         Text [ en-US ] = "between";

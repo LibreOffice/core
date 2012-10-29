@@ -18,6 +18,7 @@ enum ScCondFormatEntryType
     COLORSCALE,
     DATABAR,
     FORMULA,
+    ICONSET,
     COLLAPSED
 };
 

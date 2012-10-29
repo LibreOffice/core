@@ -594,15 +594,15 @@
 #define STR_COND_CONDITION          469
 #define STR_COND_COLORSCALE         470
 #define STR_COND_DATABAR            471
-#define STR_COND_FORMULA            472
-#define STR_COND_BETWEEN            473
-#define STR_COND_NOTBETWEEN         474
-#define STR_COND_UNIQUE             475
-#define STR_COND_DUPLICATE          476
+#define STR_COND_ICONSET            472
+#define STR_COND_FORMULA            473
+#define STR_COND_BETWEEN            474
+#define STR_COND_NOTBETWEEN         475
+#define STR_COND_UNIQUE             476
+#define STR_COND_DUPLICATE          477
 
-#define STR_ERR_CONDFORMAT_PROTECTED 477
+#define STR_ERR_CONDFORMAT_PROTECTED 478
 
-#define STR_COUNT                   478
-
+#define STR_COUNT                   479
 
 #endif
