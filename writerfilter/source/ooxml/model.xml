@@ -22153,7 +22153,7 @@
       <action name="start" action="printproperty" sendtokenid="ooxml:CT_SimpleField_instr"/>
       <action name="start" action="endCharacterGroup"/>
       <action name="start" action="fieldsep"/>
-      <action name="end" action="simplefieldend"/>
+      <action name="end" action="fieldend"/>
     </resource>
     <resource name="ST_FldCharType" resource="List">
       <value name="begin" tokenid="ooxml:Value_ST_FldCharType_begin">begin</value>
