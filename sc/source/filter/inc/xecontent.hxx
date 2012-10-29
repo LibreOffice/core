@@ -277,6 +277,20 @@ private:
     rtl::OString maGuid;
 };
 
+class XclExpIconSet : public XclExpRecord, protected XclExpRoot
+{
+public:
+    explicit XclExpIconSet( const XclExpRoot& rRoot, const ScIconSetFormat& rFormat, sal_Int32 nPriority );
+
+    virtual void SaveXml( XclExpXmlStream& rStrm );
+private:
+    typedef XclExpRecordList< XclExpCfvo > XclExpCfvoList;
+
+    XclExpCfvoList maCfvoList;
+    const ScIconSetFormat& mrFormat;
+    sal_Int32 mnPriority;
+};
+
 // ----------------------------------------------------------------------------
 
 /** Contains all conditional formats of a specific sheet. */

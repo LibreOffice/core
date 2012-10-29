@@ -316,10 +316,6 @@ struct ScIconSetFormatData
 
 class SC_DLLPUBLIC ScIconSetFormat : public ScColorFormat
 {
-private:
-    typedef boost::ptr_vector<ScColorScaleEntry>::iterator iterator;
-    typedef boost::ptr_vector<ScColorScaleEntry>::const_iterator const_iterator;
-
 public:
     ScIconSetFormat(ScDocument* pDoc);
     ScIconSetFormat(ScDocument* pDoc, const ScIconSetFormat& rFormat);
@@ -340,14 +336,18 @@ public:
 
     static ScIconSetMap* getIconSetMap();
 
-#if DUMP_FORMAT_INFO
-    virtual void dumpInfo(rtl::OUStringBuffer& rBuf) const;
-#endif
-private:
+    typedef boost::ptr_vector<ScColorScaleEntry>::iterator iterator;
+    typedef boost::ptr_vector<ScColorScaleEntry>::const_iterator const_iterator;
+
     iterator begin();
     const_iterator begin() const;
     iterator end();
     const_iterator end() const;
+
+#if DUMP_FORMAT_INFO
+    virtual void dumpInfo(rtl::OUStringBuffer& rBuf) const;
+#endif
+private:
 
     double GetMinValue() const;
     double GetMaxValue() const;

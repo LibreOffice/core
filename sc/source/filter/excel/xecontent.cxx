@@ -988,6 +988,8 @@ XclExpCondfmt::XclExpCondfmt( const XclExpRoot& rRoot, const ScConditionalFormat
                     maCFList.AppendNewRecord( new XclExpColorScale( GetRoot(), static_cast<const ScColorScaleFormat&>(*pFormatEntry), nIndex ) );
                 else if(pFormatEntry->GetType() == condformat::DATABAR)
                     maCFList.AppendNewRecord( new XclExpDataBar( GetRoot(), static_cast<const ScDataBarFormat&>(*pFormatEntry), nIndex, xExtLst ) );
+                else if(pFormatEntry->GetType() == condformat::ICONSET)
+                    maCFList.AppendNewRecord( new XclExpIconSet( GetRoot(), static_cast<const ScIconSetFormat&>(*pFormatEntry), nIndex ) );
             }
         aScRanges.Format( msSeqRef, SCA_VALID, NULL, formula::FormulaGrammar::CONV_XL_A1 );
     }
@@ -1167,6 +1169,63 @@ void XclExpDataBar::SaveXml( XclExpXmlStream& rStrm )
     rWorksheet->endElement( XML_ext );
     rWorksheet->endElement( XML_extLst );
 
+    rWorksheet->endElement( XML_cfRule );
+
+    // OOXTODO: XML_extLst
+
+}
+
+XclExpIconSet::XclExpIconSet( const XclExpRoot& rRoot, const ScIconSetFormat& rFormat, sal_Int32 nPriority ):
+    XclExpRecord(),
+    XclExpRoot( rRoot ),
+    mrFormat( rFormat ),
+    mnPriority( nPriority )
+{
+    const ScRange* pRange = rFormat.GetRange().front();
+    ScAddress aAddr = pRange->aStart;
+    for(ScIconSetFormat::const_iterator itr = rFormat.begin();
+            itr != rFormat.end(); ++itr)
+    {
+        // exact position is not important, we allow only absolute refs
+
+        XclExpCfvoList::RecordRefType xCfvo( new XclExpCfvo( GetRoot(), *itr, aAddr ) );
+        maCfvoList.AppendRecord( xCfvo );
+    }
+}
+
+namespace {
+
+const char* getIconSetName( ScIconSetType eType )
+{
+    ScIconSetMap* pMap = ScIconSetFormat::getIconSetMap();
+    for(; pMap->pName; ++pMap)
+    {
+        if(pMap->eType == eType)
+            return pMap->pName;
+    }
+
+    return "";
+}
+
+}
+
+void XclExpIconSet::SaveXml( XclExpXmlStream& rStrm )
+{
+    sax_fastparser::FSHelperPtr& rWorksheet = rStrm.GetCurrentStream();
+
+    rWorksheet->startElement( XML_cfRule,
+            XML_type, "iconSet",
+            XML_priority, OString::valueOf( mnPriority + 1 ).getStr(),
+            FSEND );
+
+    const char* pIconSetName = getIconSetName(mrFormat.GetIconSetData()->eIconSetType);
+    rWorksheet->startElement( XML_iconSet,
+            XML_iconSet, pIconSetName,
+            FSEND );
+
+    maCfvoList.SaveXml( rStrm );
+
+    rWorksheet->endElement( XML_iconSet );
     rWorksheet->endElement( XML_cfRule );
 
     // OOXTODO: XML_extLst
