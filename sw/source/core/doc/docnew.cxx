@@ -1248,10 +1248,7 @@ void SwDoc::Paste( const SwDoc& rSource )
         {
             for ( sal_uInt16 i = 0; i < rSource.GetSpzFrmFmts()->size(); ++i )
             {
-                sal_Bool bInsWithFmt = sal_True;
                 const SwFrmFmt& rCpyFmt = *(*rSource.GetSpzFrmFmts())[i];
-                if( bInsWithFmt  )
-                {
                     SwFmtAnchor aAnchor( rCpyFmt.GetAnchor() );
                     if (FLY_AT_PAGE == aAnchor.GetAnchorId())
                     {
@@ -1260,7 +1257,6 @@ void SwDoc::Paste( const SwDoc& rSource )
                     else
                         continue;
                     this->CopyLayoutFmt( rCpyFmt, aAnchor, true, true );
-                }
             }
         }
     }
