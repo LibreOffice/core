@@ -47,7 +47,6 @@
 #define SV_ENTRYFLAG_USER_FLAGS         0xF000
 #define SV_ENTRYFLAG_SEMITRANSPARENT    0x8000      // draw semi-transparent entry bitmaps
 
-class SvTreeEntryList;
 class SvLBoxItem;
 class SvTreeListEntry;
 

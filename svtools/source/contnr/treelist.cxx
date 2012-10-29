@@ -278,7 +278,7 @@ sal_Bool SvTreeList::IsEntryVisible( const SvListView* pView, SvTreeListEntry* p
     return bRetVal;
 }
 
-sal_uInt16 SvTreeList::GetDepth( SvTreeListEntry* pEntry ) const
+sal_uInt16 SvTreeList::GetDepth( const SvTreeListEntry* pEntry ) const
 {
     DBG_ASSERT(pEntry&&pEntry!=pRootItem,"GetDepth:Bad Entry");
     sal_uInt16 nDepth = 0;
@@ -288,6 +288,11 @@ sal_uInt16 SvTreeList::GetDepth( SvTreeListEntry* pEntry ) const
         pEntry = pEntry->pParent;
     }
     return nDepth;
+}
+
+bool SvTreeList::IsAtRootDepth( const SvTreeListEntry* pEntry ) const
+{
+    return pEntry->pParent == pRootItem;
 }
 
 /*************************************************************************
@@ -612,7 +617,7 @@ void SvTreeList::CloneChildren(
 |*
 *************************************************************************/
 
-sal_uLong SvTreeList::GetChildCount( SvTreeListEntry* pParent ) const
+sal_uLong SvTreeList::GetChildCount( const SvTreeListEntry* pParent ) const
 {
     if ( !pParent )
         return GetEntryCount();
@@ -625,7 +630,7 @@ sal_uLong SvTreeList::GetChildCount( SvTreeListEntry* pParent ) const
     sal_uInt16 nActDepth = nRefDepth;
     do
     {
-        pParent = Next( pParent, &nActDepth );
+        pParent = Next(const_cast<SvTreeListEntry*>(pParent), &nActDepth);
         nCount++;
     } while( pParent && nRefDepth < nActDepth );
     nCount--;
@@ -1358,12 +1363,7 @@ sal_Bool SvTreeList::Select( SvListView* pView, SvTreeListEntry* pEntry, sal_Boo
     return sal_True;
 }
 
-/*************************************************************************
-|*
-|*    SvTreeList::Remove
-|*
-*************************************************************************/
-sal_Bool SvTreeList::Remove( SvTreeListEntry* pEntry )
+bool SvTreeList::Remove( const SvTreeListEntry* pEntry )
 {
     DBG_ASSERT(pEntry,"Cannot remove root, use clear");
 
@@ -1376,9 +1376,9 @@ sal_Bool SvTreeList::Remove( SvTreeListEntry* pEntry )
         return sal_False;
     }
 
-    Broadcast( LISTACTION_REMOVING, pEntry );
+    Broadcast(LISTACTION_REMOVING, const_cast<SvTreeListEntry*>(pEntry));
     sal_uLong nRemoved = 1 + GetChildCount(pEntry);
-    bAbsPositionsValid = sal_False;
+    bAbsPositionsValid = false;
 
     SvTreeListEntry* pParent = pEntry->pParent;
     SvTreeListEntries& rList = pParent->maChildren;
@@ -1411,7 +1411,7 @@ sal_Bool SvTreeList::Remove( SvTreeListEntry* pEntry )
 #ifdef CHECK_INTEGRITY
     CheckIntegrity();
 #endif
-    Broadcast( LISTACTION_REMOVED, pEntry );
+    Broadcast(LISTACTION_REMOVED, const_cast<SvTreeListEntry*>(pEntry));
 
     delete pEntry; // deletes any children as well
     return true;

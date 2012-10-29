@@ -284,7 +284,7 @@ public:
     void                Copy( SvTreeListEntry* pSource, SvTreeListEntry* pTarget );
     sal_uLong           Copy( SvTreeListEntry* pSource, SvTreeListEntry* pTargetParent, sal_uLong nListPos);
 
-    sal_Bool            Remove( SvTreeListEntry* pEntry );
+    bool Remove( const SvTreeListEntry* pEntry );
     void                Clear();
 
     sal_Bool            HasChildren( SvTreeListEntry* pEntry ) const;
@@ -310,10 +310,9 @@ public:
     sal_uLong           GetRelPos( SvTreeListEntry* pChild ) const
     { return pChild->GetChildListPos(); }
 
-    sal_uLong           GetChildCount( SvTreeListEntry* pParent ) const;
-    sal_uInt16          GetDepth( SvTreeListEntry* pEntry ) const;
-    sal_Bool            IsAtRootDepth( SvTreeListEntry* pEntry ) const
-    { return (sal_Bool)(pEntry->pParent==pRootItem); }
+    sal_uLong GetChildCount( const SvTreeListEntry* pParent ) const;
+    sal_uInt16 GetDepth( const SvTreeListEntry* pEntry ) const;
+    bool IsAtRootDepth( const SvTreeListEntry* pEntry ) const;
 
     // das Model ruft zum Clonen von Entries den Clone-Link auf,
     // damit man sich nicht vom Model ableiten muss, wenn man
