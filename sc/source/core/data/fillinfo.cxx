@@ -535,6 +535,9 @@ void ScDocument::FillInfo( ScTableInfo& rTabInfo, SCCOL nX1, SCROW nY1, SCCOL nX
                                             itr != rCondFormats.end() && !bFound; ++itr)
                                     {
                                         ScConditionalFormat* pCondForm = pCondFormList->GetFormat(*itr);
+                                        if(!pCondForm)
+                                            continue;
+
                                         ScCondFormatData aData = pCondForm->GetData( pInfo->pCell,
                                                 ScAddress( nX, nCurRow, nTab ) );
                                         if (!aData.aStyleName.isEmpty())
