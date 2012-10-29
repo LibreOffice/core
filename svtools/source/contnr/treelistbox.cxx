@@ -689,7 +689,7 @@ sal_Bool SvTreeListBox::CopySelection( SvTreeListBox* pSource, SvTreeListEntry* 
     DBG_CHKTHIS(SvTreeListBox,0);
     nCurEntrySelPos = 0; // selection counter for NotifyMoving/Copying
     sal_Bool bSuccess = sal_True;
-    SvTreeEntryList aList;
+    std::vector<SvTreeListEntry*> aList;
     sal_Bool bClone = (sal_Bool)( (sal_uLong)(pSource->GetModel()) != (sal_uLong)GetModel() );
     Link aCloneLink( pModel->GetCloneLink() );
     pModel->SetCloneLink( LINK(this, SvTreeListBox, CloneHdl_Impl ));
@@ -705,10 +705,10 @@ sal_Bool SvTreeListBox::CopySelection( SvTreeListBox* pSource, SvTreeListEntry* 
         pSourceEntry = pSource->NextSelected( pSourceEntry );
     }
 
-    SvTreeEntryList::iterator it = aList.begin(), itEnd = aList.end();
+    std::vector<SvTreeListEntry*>::const_iterator it = aList.begin(), itEnd = aList.end();
     for (; it != itEnd; ++it)
     {
-        pSourceEntry = static_cast<SvTreeListEntry*>(*it);
+        pSourceEntry = *it;
         SvTreeListEntry* pNewParent = 0;
         sal_uLong nInsertionPos = ULONG_MAX;
         sal_Bool bOk=NotifyCopying(pTarget,pSourceEntry,pNewParent,nInsertionPos);
@@ -718,14 +718,12 @@ sal_Bool SvTreeListBox::CopySelection( SvTreeListBox* pSource, SvTreeListEntry* 
             {
                 sal_uLong nCloneCount = 0;
                 pSourceEntry = (SvTreeListEntry*)
-                    pModel->Clone( (SvTreeListEntry*)pSourceEntry, nCloneCount );
-                pModel->InsertTree( (SvTreeListEntry*)pSourceEntry,
-                                    (SvTreeListEntry*)pNewParent, nInsertionPos );
+                    pModel->Clone(pSourceEntry, nCloneCount);
+                pModel->InsertTree(pSourceEntry, pNewParent, nInsertionPos);
             }
             else
             {
-                sal_uLong nListPos = pModel->Copy( (SvTreeListEntry*)pSourceEntry,
-                    (SvTreeListEntry*)pNewParent, nInsertionPos );
+                sal_uLong nListPos = pModel->Copy(pSourceEntry, pNewParent, nInsertionPos);
                 pSourceEntry = GetEntry( pNewParent, nListPos );
             }
         }
@@ -750,7 +748,7 @@ sal_Bool SvTreeListBox::MoveSelectionCopyFallbackPossible( SvTreeListBox* pSourc
     DBG_CHKTHIS(SvTreeListBox,0);
     nCurEntrySelPos = 0; // selection counter for NotifyMoving/Copying
     sal_Bool bSuccess = sal_True;
-    SvTreeEntryList aList;
+    std::vector<SvTreeListEntry*> aList;
     sal_Bool bClone = (sal_Bool)( (sal_uLong)(pSource->GetModel()) != (sal_uLong)GetModel() );
     Link aCloneLink( pModel->GetCloneLink() );
     if ( bClone )
@@ -765,10 +763,10 @@ sal_Bool SvTreeListBox::MoveSelectionCopyFallbackPossible( SvTreeListBox* pSourc
         pSourceEntry = pSource->NextSelected( pSourceEntry );
     }
 
-    SvTreeEntryList::iterator it = aList.begin(), itEnd = aList.end();
+    std::vector<SvTreeListEntry*>::const_iterator it = aList.begin(), itEnd = aList.end();
     for (; it != itEnd; ++it)
     {
-        pSourceEntry = static_cast<SvTreeListEntry*>(*it);
+        pSourceEntry = *it;
 
         SvTreeListEntry* pNewParent = 0;
         sal_uLong nInsertionPos = ULONG_MAX;
@@ -785,19 +783,15 @@ sal_Bool SvTreeListBox::MoveSelectionCopyFallbackPossible( SvTreeListBox* pSourc
             if ( bClone )
             {
                 sal_uLong nCloneCount = 0;
-                pSourceEntry = (SvTreeListEntry*)
-                    pModel->Clone( (SvTreeListEntry*)pSourceEntry, nCloneCount );
-                pModel->InsertTree( (SvTreeListEntry*)pSourceEntry,
-                                    (SvTreeListEntry*)pNewParent, nInsertionPos );
+                pSourceEntry = pModel->Clone(pSourceEntry, nCloneCount);
+                pModel->InsertTree(pSourceEntry, pNewParent, nInsertionPos);
             }
             else
             {
                 if ( bOk )
-                    pModel->Move( (SvTreeListEntry*)pSourceEntry,
-                                  (SvTreeListEntry*)pNewParent, nInsertionPos );
+                    pModel->Move(pSourceEntry, pNewParent, nInsertionPos);
                 else
-                    pModel->Copy( (SvTreeListEntry*)pSourceEntry,
-                                  (SvTreeListEntry*)pNewParent, nInsertionPos );
+                    pModel->Copy(pSourceEntry, pNewParent, nInsertionPos);
             }
         }
         else
