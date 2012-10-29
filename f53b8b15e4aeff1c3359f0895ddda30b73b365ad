@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAP3///to\u003d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2012-10-29T01:56:55Z",
+      "side": 1,
+      "message": "the idea was not to disable parallelism for submodules, but to have them use the parent/global make\u0027s jobserver.",
+      "revId": "f53b8b15e4aeff1c3359f0895ddda30b73b365ad",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
