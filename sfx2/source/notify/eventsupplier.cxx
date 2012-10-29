@@ -551,6 +551,7 @@ SFX_IMPL_ONEINSTANCEFACTORY( SfxGlobalEvents_Impl );
 //-----------------------------------------------------------------------------
 SfxGlobalEvents_Impl::SfxGlobalEvents_Impl( const css::uno::Reference < css::uno::XComponentContext >& rxContext)
     : ModelCollectionMutexBase(       )
+    , m_xJobExecutorListener( css::task::JobExecutor::create( rxContext ), css::uno::UNO_QUERY_THROW )
     , m_aLegacyListeners      (m_aLock)
     , m_aDocumentListeners    (m_aLock)
     , pImp                    (0      )
@@ -559,7 +560,6 @@ SfxGlobalEvents_Impl::SfxGlobalEvents_Impl( const css::uno::Reference < css::uno
     SFX_APP();
     pImp                   = new GlobalEventConfig();
     m_xEvents              = pImp;
-    m_xJobExecutorListener = css::uno::Reference< css::document::XEventListener >( css::task::JobExecutor::create( rxContext ), css::uno::UNO_QUERY_THROW );
     m_refCount--;
 }
 
@@ -784,12 +784,7 @@ void SfxGlobalEvents_Impl::implts_notifyJobExecution(const css::document::EventO
 {
     try
     {
-        // SAFE ->
-        ::osl::ResettableMutexGuard aLock(m_aLock);
-        css::uno::Reference< css::document::XEventListener > xJobExecutor(m_xJobExecutorListener);
-        aLock.clear();
-        // <- SAFE
-        xJobExecutor->notifyEvent(aEvent);
+        m_xJobExecutorListener->notifyEvent(aEvent);
     }
     catch(const css::uno::RuntimeException&)
         { throw; }

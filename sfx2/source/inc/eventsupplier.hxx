@@ -34,7 +34,6 @@
 #include <com/sun/star/uno/Type.hxx>
 #include <sal/types.h>
 #include <osl/mutex.hxx>
-#include <cppuhelper/weak.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase2.hxx>
 #include <cppuhelper/implbase3.hxx>
@@ -177,7 +176,7 @@ class SfxGlobalEvents_Impl : public ModelCollectionMutexBase
                                                             >
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameReplace > m_xEvents;
-    ::com::sun::star::uno::WeakReference< ::com::sun::star::document::XEventListener > m_xJobExecutorListener;
+    ::com::sun::star::uno::Reference< ::com::sun::star::document::XEventListener > m_xJobExecutorListener;
     OINTERFACECONTAINERHELPER m_aLegacyListeners;
     OINTERFACECONTAINERHELPER m_aDocumentListeners;
     TModelList m_lModels;
