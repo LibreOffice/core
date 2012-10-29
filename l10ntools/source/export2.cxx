@@ -95,10 +95,6 @@ bool Export::handleArguments(
     int argc, char * argv[], HandledArgs& o_aHandledArgs)
 {
     o_aHandledArgs = HandledArgs();
-    if ( argc <= 1  )
-    {
-        return false;
-    }
     sLanguages = "";
     sal_uInt16 nState = STATE_NON;
 
