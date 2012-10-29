@@ -30,7 +30,7 @@ public:
     bool isInitialized() const { return m_bIsInitialized; }
     void Extract(
         const OString& rSDFFile, const OString& rPrj, const OString& rRoot );
-    void Merge( const OString &rSDFFile, const OString &rDestinationFile );
+    void Merge( const OString &rMergeSrc, const OString &rDestinationFile );
 };
 
 #endif //_PROPMERGE_INCLUDED

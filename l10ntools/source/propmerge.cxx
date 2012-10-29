@@ -168,7 +168,7 @@ void PropParser::Extract(
 }
 
 //Merge strings to source file
-void PropParser::Merge( const OString &rSDFFile, const OString &rDestinationFile )
+void PropParser::Merge( const OString &rMergeSrc, const OString &rDestinationFile )
 {
     assert( m_bIsInitialized );
     std::ofstream aDestination(
@@ -180,14 +180,14 @@ void PropParser::Merge( const OString &rSDFFile, const OString &rDestinationFile
         return;
     }
 
-    MergeDataFile aMergeDataFile( rSDFFile, m_sSource, false );
+    MergeDataFile aMergeDataFile( rMergeSrc, m_sSource, false );
 
     if( aMergeDataFile.GetLanguages()[0] != m_sLang )
     {
         std::cerr
             << "Propex error: given language conflicts with "
             << "language of Mergedata file: "
-            << m_sLang.getStr() << " - " << rSDFFile.getStr() << std::endl;
+            << m_sLang.getStr() << " - " << rMergeSrc.getStr() << std::endl;
         return;
     }
 
