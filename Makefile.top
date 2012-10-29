@@ -64,6 +64,7 @@ cppuhelper\
 cpputools\
 ct2n\
 cui\
+curl\
 dbaccess\
 desktop\
 dictionaries \
@@ -215,7 +216,6 @@ binfilter \
 cairo\
 cppunit\
 crashrep\
-curl\
 external\
 gdk-pixbuf\
 gettext\
