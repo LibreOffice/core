@@ -1,0 +1,71 @@
+fix MSVC warnings:
+
+* various C4946 reinterpret_cast between related classes
+* silly C4305 truncation from double to float
+* C4806: no value of type 'bool' promoted to type 'int'
+  can equal the given constant (real bug?)
+* C4701: pot. uninitialized variable 'ucs4Character'
+
+diff -ru wps.old/src/lib/WPS4.cpp wps/src/lib/WPS4.cpp
+--- wps.old/src/lib/WPS4.cpp	2012-05-31 14:14:13.000000000 +0200
++++ wps/src/lib/WPS4.cpp	2012-10-29 14:13:08.241600000 +0100
+@@ -116,7 +116,7 @@
+ 		return;
+ 	}
+ 
+-	WPS4Parser *mnParser = reinterpret_cast<WPS4Parser *>(m_parser);
++	WPS4Parser *mnParser = dynamic_cast<WPS4Parser *>(m_parser);
+ 	mnParser->send(m_entry, subDocumentType);
+ }
+ 
+diff -ru wps.old/src/lib/WPS4Text.cpp wps/src/lib/WPS4Text.cpp
+--- wps.old/src/lib/WPS4Text.cpp	2012-05-31 14:14:13.000000000 +0200
++++ wps/src/lib/WPS4Text.cpp	2012-10-29 14:22:16.004400000 +0100
+@@ -212,7 +212,7 @@
+ //! operator<< for font properties
+ std::ostream &operator<<(std::ostream &o, Font const &ft)
+ {
+-	o << reinterpret_cast<WPSFont const &>(ft) << ",";
++	o << dynamic_cast<WPSFont const &>(ft) << ",";
+ 
+ 	if (ft.m_special)
+ 	{
+@@ -822,7 +822,7 @@
+ 				WPSEntry ent = m_state->m_dosLinkList[id].m_pos;
+ 				ent.setType("TEXT");
+ 				ent.setId(WPS4TextInternal::Z_DLink);
+-				WPSPosition pos_(Vec2f(),Vec2f(3.0,0.2));
++				WPSPosition pos_(Vec2f(),Vec2f(3.0f,0.2f));
+ 				pos_.setRelativePosition(WPSPosition::Paragraph, WPSPosition::XCenter);
+ 				pos_.m_wrapping = WPSPosition::WNone;
+ 				WPXPropertyList extras;
+@@ -1729,7 +1729,7 @@
+ 		int underlinePos = libwps::readU8(m_input);
+ 		if (underlinePos)
+ 		{
+-			if (!what & 0x20) f << "undFl,";
++			if (!(what & 0x20)) f << "undFl,";
+ 			what &= 0xdf;
+ 			attributes |= WPS_UNDERLINE_BIT;
+ 		}
+diff -ru wps.old/src/lib/WPS8.cpp wps/src/lib/WPS8.cpp
+--- wps.old/src/lib/WPS8.cpp	2012-05-31 14:14:13.000000000 +0200
++++ wps/src/lib/WPS8.cpp	2012-10-29 14:19:31.206000000 +0100
+@@ -94,7 +94,7 @@
+ 	}
+ 
+ 	long actPos = m_input->tell();
+-	WPS8Parser *mnParser = reinterpret_cast<WPS8Parser *>(m_parser);
++	WPS8Parser *mnParser = dynamic_cast<WPS8Parser *>(m_parser);
+ 	if (type == libwps::DOC_NOTE)
+ 		mnParser->sendNote(m_input, m_id, m_type == Endnote);
+ 	else
+@@ -337,7 +337,7 @@
+ 	uint16_t high_surrogate = 0;
+ 	bool fail = false;
+ 	uint16_t readVal;
+-	uint32_t ucs4Character;
++	uint32_t ucs4Character(0);
+ 	while (true)
+ 	{
+ 		if (input->atEOS())

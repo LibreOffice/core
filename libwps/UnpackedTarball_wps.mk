@@ -11,4 +11,10 @@ $(eval $(call gb_UnpackedTarball_UnpackedTarball,wps))
 
 $(eval $(call gb_UnpackedTarball_set_tarball,wps,$(WPS_TARBALL)))
 
+$(eval $(call gb_UnpackedTarball_set_patchlevel,wps,1))
+
+$(eval $(call gb_UnpackedTarball_add_patches,wps,\
+    libwps/libwps.msvc.warnings.patch \
+))
+
 # vim: set noet sw=4 ts=4:
