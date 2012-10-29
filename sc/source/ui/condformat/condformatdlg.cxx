@@ -89,6 +89,8 @@ ScCondFormatList::ScCondFormatList(Window* pParent, const ResId& rResId, ScDocum
                 case condformat::DATABAR:
                     maEntries.push_back(new ScDataBarFrmtEntry( this, mpDoc, maPos, static_cast<const ScDataBarFormat*>( pEntry ) ) );
                     break;
+                case condformat::ICONSET:
+                    break;
             }
         }
     }
