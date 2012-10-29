@@ -63,6 +63,17 @@ private:
     CondFormatRuleRef mxRule;
 };
 
+class IconSetContext : public WorksheetContextBase
+{
+public:
+    explicit IconSetContext( CondFormatContext& rFormat, CondFormatRuleRef xRule );
+
+    virtual oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
+    virtual void onStartElement( const AttributeList& rAttribs );
+private:
+    CondFormatRuleRef mxRule;
+};
+
 class CondFormatContext : public WorksheetContextBase
 {
 public:

@@ -179,6 +179,33 @@ struct SC_DLLPUBLIC ScDataBarFormatData
     boost::scoped_ptr<ScColorScaleEntry> mpLowerLimit;
 };
 
+enum ScIconSetType
+{
+    IconSet_3Arrows,
+    IconSet_3ArrowsGray,
+    IconSet_3Flags,
+    IconSet_3TrafficLights1,
+    IconSet_3TrafficLights2,
+    IconSet_3Signs,
+    IconSet_3Symbols,
+    IconSet_3Symbols2,
+    IconSet_4Arrows,
+    IconSet_4ArrowsGray,
+    IconSet_4RedToBlack,
+    IconSet_4Rating,
+    IconSet_4TrafficLights,
+    IconSet_5Arrows,
+    IconSet_5ArrowsGray,
+    IconSet_5Ratings,
+    IconSet_5Quarters
+};
+
+struct ScIconSetMap {
+    const char* pName;
+    ScIconSetType eType;
+    sal_Int32 nElements;
+};
+
 class SC_DLLPUBLIC ScColorFormat : public ScFormatEntry
 {
 public:
@@ -279,6 +306,54 @@ private:
     double getMax(double nMin, double nMax) const;
 
     boost::scoped_ptr<ScDataBarFormatData> mpFormatData;
+};
+
+struct ScIconSetFormatData
+{
+    ScIconSetType eIconSetType;
+    boost::ptr_vector<ScColorScaleEntry> maEntries;
+};
+
+class SC_DLLPUBLIC ScIconSetFormat : public ScColorFormat
+{
+private:
+    typedef boost::ptr_vector<ScColorScaleEntry>::iterator iterator;
+    typedef boost::ptr_vector<ScColorScaleEntry>::const_iterator const_iterator;
+
+public:
+    ScIconSetFormat(ScDocument* pDoc);
+    ScIconSetFormat(ScDocument* pDoc, const ScIconSetFormat& rFormat);
+
+    virtual ScColorFormat* Clone(ScDocument* pDoc = NULL) const;
+
+    ScIconSetInfo* GetIconSetInfo(const ScAddress& rAddr) const;
+
+    void SetIconSetData( ScIconSetFormatData* pData );
+    const ScIconSetFormatData* GetIconSetData() const;
+
+    virtual void DataChanged(const ScRange& rRange);
+    virtual void UpdateMoveTab(SCTAB nOldTab, SCTAB nNewTab);
+    virtual void UpdateReference( UpdateRefMode eUpdateRefMode,
+            const ScRange& rRange, SCsCOL nDx, SCsROW nDy, SCsTAB nDz );
+
+    virtual condformat::ScFormatEntryType GetType() const;
+
+    static ScIconSetMap* getIconSetMap();
+
+#if DUMP_FORMAT_INFO
+    virtual void dumpInfo(rtl::OUStringBuffer& rBuf) const;
+#endif
+private:
+    iterator begin();
+    const_iterator begin() const;
+    iterator end();
+    const_iterator end() const;
+
+    double GetMinValue() const;
+    double GetMaxValue() const;
+    double CalcValue(double nMin, double nMax, ScIconSetFormat::const_iterator& itr) const;
+
+    boost::scoped_ptr<ScIconSetFormatData> mpFormatData;
 };
 
 #endif

@@ -1499,6 +1499,11 @@ ScCondFormatData ScConditionalFormat::GetData( ScBaseCell* pCell, const ScAddres
             const ScDataBarFormat& rEntry = static_cast<const ScDataBarFormat&>(*itr);
             aData.pDataBar = rEntry.GetDataBarInfo(rPos);
         }
+        else if(itr->GetType() == condformat::ICONSET && !aData.pIconSet)
+        {
+            const ScIconSetFormat& rEntry = static_cast<const ScIconSetFormat&>(*itr);
+            aData.pIconSet = rEntry.GetIconSetInfo(rPos);
+        }
     }
     return aData;
 }

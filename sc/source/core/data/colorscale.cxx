@@ -848,4 +848,214 @@ void ScDataBarFormat::dumpInfo(rtl::OUStringBuffer& rBuf) const
 }
 #endif
 
+ScIconSetFormat::ScIconSetFormat(ScDocument* pDoc):
+    ScColorFormat(pDoc),
+    mpFormatData(new ScIconSetFormatData)
+{
+}
+
+ScIconSetFormat::ScIconSetFormat(ScDocument* pDoc, const ScIconSetFormat& rFormat):
+    ScColorFormat(pDoc),
+    mpFormatData(new ScIconSetFormatData(*rFormat.mpFormatData))
+{
+}
+
+ScColorFormat* ScIconSetFormat::Clone( ScDocument* pDoc ) const
+{
+    return new ScIconSetFormat(pDoc, *this);
+}
+
+void ScIconSetFormat::SetIconSetData( ScIconSetFormatData* pFormatData )
+{
+    mpFormatData.reset( pFormatData );
+}
+
+const ScIconSetFormatData* ScIconSetFormat::GetIconSetData() const
+{
+    return mpFormatData.get();
+}
+
+ScIconSetInfo* ScIconSetFormat::GetIconSetInfo(const ScAddress& rAddr) const
+{
+    CellType eCellType = mpDoc->GetCellType(rAddr);
+    if(eCellType != CELLTYPE_VALUE && eCellType != CELLTYPE_FORMULA)
+        return NULL;
+
+    if (eCellType == CELLTYPE_FORMULA)
+    {
+        if(!static_cast<ScFormulaCell*>(mpDoc->GetCell(rAddr))->IsValue())
+            return NULL;
+    }
+
+    ScIconSetInfo* pInfo = new ScIconSetInfo;
+
+    // now we have for sure a value
+    double nVal = mpDoc->GetValue(rAddr);
+
+    if (mpFormatData->maEntries.size() < 2)
+        return NULL;
+
+    double nMin = GetMinValue();
+    double nMax = GetMaxValue();
+
+    // this check is for safety
+    if(nMin >= nMax)
+        return NULL;
+
+    sal_Int32 nIndex = 0;
+    const_iterator itr = begin();
+    ++itr;
+    double nValMax = CalcValue(nMin, nMax, itr);
+
+    ++itr;
+    while(itr != end() && nVal > nValMax)
+    {
+        ++nIndex;
+        nValMax = CalcValue(nMin, nMax, itr);
+        ++itr;
+    }
+    if(nVal > nValMax)
+        ++nIndex;
+
+    pInfo->nIconIndex = nIndex;
+    pInfo->eIconSetType = mpFormatData->eIconSetType;
+    return pInfo;
+}
+
+condformat::ScFormatEntryType ScIconSetFormat::GetType() const
+{
+    return condformat::ICONSET;
+}
+
+void ScIconSetFormat::DataChanged( const ScRange& )
+{
+
+}
+
+void ScIconSetFormat::UpdateMoveTab( SCTAB nOldTab, SCTAB nNewTab )
+{
+    for(iterator itr = begin(); itr != end(); ++itr)
+    {
+        itr->UpdateMoveTab(nOldTab, nNewTab, 0);
+    }
+}
+
+void ScIconSetFormat::UpdateReference( UpdateRefMode eUpdateRefMode,
+        const ScRange& rRange, SCsCOL nDx, SCsROW nDy, SCsTAB nDz )
+{
+    for(iterator itr = begin(); itr != end(); ++itr)
+    {
+        itr->UpdateReference( eUpdateRefMode, rRange, nDx, nDy, nDz );
+    }
+}
+
+void ScIconSetFormat::dumpInfo( rtl::OUStringBuffer& rBuffer ) const
+{
+    rBuffer.append("IconSet: \n");
+    for(const_iterator itr = begin(); itr != end(); ++itr)
+    {
+        itr->dumpInfo(rBuffer);
+    }
+}
+
+ScIconSetFormat::iterator ScIconSetFormat::begin()
+{
+    return mpFormatData->maEntries.begin();
+}
+
+ScIconSetFormat::const_iterator ScIconSetFormat::begin() const
+{
+    return mpFormatData->maEntries.begin();
+}
+
+ScIconSetFormat::iterator ScIconSetFormat::end()
+{
+    return mpFormatData->maEntries.end();
+}
+
+ScIconSetFormat::const_iterator ScIconSetFormat::end() const
+{
+    return mpFormatData->maEntries.end();
+}
+
+double ScIconSetFormat::GetMinValue() const
+{
+    const_iterator itr = begin();
+
+    if(itr->GetType() == COLORSCALE_VALUE || itr->GetType() == COLORSCALE_FORMULA)
+        return itr->GetValue();
+    else
+    {
+        return getMinValue();
+    }
+}
+
+double ScIconSetFormat::GetMaxValue() const
+{
+    boost::ptr_vector<ScColorScaleEntry>::const_reverse_iterator itr = mpFormatData->maEntries.rbegin();
+
+    if(itr->GetType() == COLORSCALE_VALUE || itr->GetType() == COLORSCALE_FORMULA)
+        return itr->GetValue();
+    else
+    {
+        return getMaxValue();
+    }
+}
+
+double ScIconSetFormat::CalcValue(double nMin, double nMax, ScIconSetFormat::const_iterator& itr) const
+{
+    switch(itr->GetType())
+    {
+        case COLORSCALE_PERCENT:
+            return nMin + (nMax-nMin)*(itr->GetValue()/100);
+        case COLORSCALE_MIN:
+            return nMin;
+        case COLORSCALE_MAX:
+            return nMax;
+        case COLORSCALE_PERCENTILE:
+        {
+            std::vector<double>& rValues = getValues();
+            if(rValues.size() == 1)
+                return rValues[0];
+            else
+            {
+                double fPercentile = itr->GetValue()/100.0;
+                return GetPercentile(rValues, fPercentile);
+            }
+        }
+
+        default:
+        break;
+    }
+
+    return itr->GetValue();
+}
+
+ScIconSetMap* ScIconSetFormat::getIconSetMap()
+{
+
+    static ScIconSetMap aIconSetMap[] = {
+        { "3Arrows", IconSet_3Arrows, 3 },
+        { "3ArrowsGray", IconSet_3ArrowsGray, 3 },
+        { "3Flags", IconSet_3Flags, 3 },
+        { "3TrafficLights1", IconSet_3TrafficLights1, 3 },
+        { "3TrafficLights2", IconSet_3TrafficLights2, 3 },
+        { "3Signs", IconSet_3Signs, 3 },
+        { "3Symbols", IconSet_3Symbols, 3 },
+        { "3Symbols2", IconSet_3Symbols2, 3 },
+        { "4Arrows", IconSet_4Arrows, 4 },
+        { "4ArrowsGray", IconSet_4ArrowsGray, 4 },
+        { "4RedToBlack", IconSet_4RedToBlack, 4 },
+        { "4Rating", IconSet_4Rating, 4 },
+        { "4TrafficLights", IconSet_4TrafficLights, 4 },
+        { "5Arrows", IconSet_5Arrows, 5 },
+        { "5ArrowsGray", IconSet_5ArrowsGray, 5 },
+        { "5Ratings", IconSet_5Ratings, 5 },
+        { "5Quarters", IconSet_5Quarters, 5 },
+        { NULL, IconSet_3Arrows, 0 }
+    };
+
+    return aIconSetMap;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

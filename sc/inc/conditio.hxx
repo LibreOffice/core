@@ -79,6 +79,7 @@ enum ScConditionMode
 
 class ScConditionalFormat;
 struct ScDataBarInfo;
+struct ScIconSetInfo;
 
 namespace condformat
 {
@@ -87,7 +88,8 @@ enum ScFormatEntryType
 {
     CONDITION,
     COLORSCALE,
-    DATABAR
+    DATABAR,
+    ICONSET
 };
 
 }
@@ -96,10 +98,12 @@ struct ScCondFormatData
 {
     ScCondFormatData():
         pColorScale(NULL),
-        pDataBar(NULL) {}
+        pDataBar(NULL),
+        pIconSet(NULL) {}
 
     Color* pColorScale;
     ScDataBarInfo* pDataBar;
+    ScIconSetInfo* pIconSet;
     rtl::OUString aStyleName;
 };
 

@@ -42,6 +42,8 @@ class ScColorScaleFormat;
 class ScDataBarFormat;
 struct ScDataBarFormatData;
 class ScConditionalFormat;
+class ScIconSetFormat;
+struct ScIconSetFormatData;
 
 namespace oox {
 namespace xls {
@@ -135,6 +137,21 @@ private:
     boost::scoped_ptr<ColorScaleRuleModelEntry> mpLowerLimit;
 };
 
+class IconSetRule : public WorksheetHelper
+{
+public:
+    IconSetRule( const CondFormat& rFormat );
+    void importCfvo( const AttributeList& rAttribs );
+    void importAttribs( const AttributeList& rAttribs );
+
+    void SetData( ScIconSetFormat* pFormat, ScDocument* pDoc, const ScAddress& rAddr );
+
+private:
+    std::vector< ColorScaleRuleModelEntry > maEntries;
+    ScIconSetFormatData* mpFormatData;
+    rtl::OUString maIconSetType;
+};
+
 
 // ============================================================================
 
@@ -161,6 +178,7 @@ public:
 
     ColorScaleRule*     getColorScale();
     DataBarRule*        getDataBar();
+    IconSetRule*            getIconSet();
 
 private:
     const CondFormat&   mrCondFormat;
@@ -168,6 +186,7 @@ private:
     ScConditionalFormat* mpFormat;
     boost::scoped_ptr<ColorScaleRule> mpColor;
     boost::scoped_ptr<DataBarRule> mpDataBar;
+    boost::scoped_ptr<IconSetRule> mpIconSet;
 };
 
 typedef ::boost::shared_ptr< CondFormatRule > CondFormatRuleRef;

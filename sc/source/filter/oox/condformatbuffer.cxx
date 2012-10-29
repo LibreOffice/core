@@ -326,6 +326,49 @@ void DataBarRule::SetData( ScDataBarFormat* pFormat, ScDocument* pDoc, const ScA
 
 // ============================================================================
 
+IconSetRule::IconSetRule( const CondFormat& rFormat ):
+    WorksheetHelper( rFormat ),
+    mpFormatData( new ScIconSetFormatData )
+{
+}
+
+void IconSetRule::importCfvo( const AttributeList& rAttribs )
+{
+    ColorScaleRuleModelEntry aNewEntry;
+    SetCfvoData(&aNewEntry, rAttribs);
+
+    maEntries.push_back(aNewEntry);
+}
+
+void IconSetRule::importAttribs( const AttributeList& rAttribs )
+{
+    maIconSetType = rAttribs.getString( XML_iconSet, rtl::OUString("3TrafficLights1") );
+}
+
+void IconSetRule::SetData( ScIconSetFormat* pFormat, ScDocument* pDoc, const ScAddress& rPos )
+{
+    for(size_t i = 0; i < maEntries.size(); ++i)
+    {
+        ScColorScaleEntry* pModelEntry = ConvertToModel( maEntries[i], pDoc, rPos );
+        mpFormatData->maEntries.push_back(pModelEntry);
+    }
+
+    ScIconSetType eIconSetType = IconSet_3TrafficLights1;
+    ScIconSetMap* pIconSetMap = ScIconSetFormat::getIconSetMap();
+    for(size_t i = 0; pIconSetMap[i].pName; ++i)
+    {
+        if(rtl::OUString::createFromAscii(pIconSetMap[i].pName) == maIconSetType)
+        {
+            eIconSetType = pIconSetMap[i].eType;
+            break;
+        }
+    }
+    mpFormatData->eIconSetType = eIconSetType;
+    pFormat->SetIconSetData(mpFormatData);
+}
+
+// ============================================================================
+
 CondFormatRuleModel::CondFormatRuleModel() :
     mnPriority( -1 ),
     mnType( XML_TOKEN_INVALID ),
@@ -802,6 +845,14 @@ void CondFormatRule::finalizeImport()
         mpDataBar->SetData( pFormatEntry, &rDoc, aPos );
 
     }
+    else if(mpIconSet)
+    {
+        ScDocument& rDoc = getScDocument();
+        ScIconSetFormat* pFormatEntry = new ScIconSetFormat(&rDoc);
+
+        mpFormat->AddEntry(pFormatEntry);
+        mpIconSet->SetData( pFormatEntry, &rDoc, aPos );
+    }
 }
 
 ColorScaleRule* CondFormatRule::getColorScale()
@@ -818,6 +869,14 @@ DataBarRule* CondFormatRule::getDataBar()
         mpDataBar.reset( new DataBarRule(mrCondFormat) );
 
     return mpDataBar.get();
+}
+
+IconSetRule* CondFormatRule::getIconSet()
+{
+    if(!mpIconSet)
+        mpIconSet.reset( new IconSetRule(mrCondFormat) );
+
+    return mpIconSet.get();
 }
 
 // ============================================================================

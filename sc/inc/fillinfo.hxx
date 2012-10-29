@@ -31,6 +31,7 @@
 
 #include <svx/framelinkarray.hxx>
 #include "global.hxx"
+#include "colorscale.hxx"
 
 class SfxItemSet;
 class SvxBrushItem;
@@ -91,6 +92,12 @@ struct ScDataBarInfo
     }
 };
 
+struct ScIconSetInfo
+{
+    sal_Int32 nIconIndex;
+    ScIconSetType eIconSetType;
+};
+
 struct CellInfo
 {
     ScBaseCell*                 pCell;
@@ -99,6 +106,7 @@ struct CellInfo
     const SfxItemSet*           pConditionSet;
     const Color*                pColorScale;
     const ScDataBarInfo*        pDataBar;
+    const ScIconSetInfo*        pIconSet;
 
     const SvxBrushItem*         pBackground;
 
@@ -135,12 +143,14 @@ struct CellInfo
 
     CellInfo():
         pColorScale(NULL),
-        pDataBar(NULL) {}
+        pDataBar(NULL),
+        pIconSet(NULL) {}
 
     ~CellInfo()
     {
         delete pColorScale;
         delete pDataBar;
+        delete pIconSet;
     }
 };
 

@@ -1,0 +1,90 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+#include "iconsets.hrc"
+
+Bitmap BMP_GREEN_CIRCLE
+{
+    File = "green_circle.png";
+};
+Bitmap BMP_YELLOW_CIRCLE
+{
+    File = "yellow_circle.png";
+};
+Bitmap BMP_RED_CIRCLE
+{
+    File = "red_circle.png";
+};
+Bitmap BMP_BLACK_CIRCLE
+{
+    File = "black_circle_full.png";
+};
+Bitmap BMP_BLACK_CIRCLE_EMPTY
+{
+    File = "black_circle_empty.png";
+};
+Bitmap BMP_BLACK_CIRCLE_HALF
+{
+    File = "black_circle_half.png";
+};
+Bitmap BMP_BLACK_CIRCLE_1_4TH
+{
+    File = "black_circle_1_4th.png";
+};
+Bitmap BMP_BLACK_CIRCLE_3_4TH
+{
+    File = "black_circle_3_4th.png";
+};
+Bitmap BMP_ARROW_GREEN_UP
+{
+    File = "green_arrow_up.png";
+};
+Bitmap BMP_ARROW_YELLOW_RIGHT
+{
+    File = "yellow_arrow_right.png";
+};
+Bitmap BMP_ARROW_RED_DOWN
+{
+    File = "red_arrow_down.png";
+};
+Bitmap BMP_ARROW_YELLOW_UP_RIGHT
+{
+    File = "yellow_arrow_up_right.png";
+};
+Bitmap BMP_ARROW_YELLOW_DOWN_RIGHT
+{
+    File = "yellow_arrow_down_right.png";
+};
+Bitmap BMP_GREEN_TRIANGLE_UP
+{
+    File = "triangle_up_green.png";
+};
+Bitmap BMP_BLACK_MINUS
+{
+    File = "minus.png";
+};
+Bitmap BMP_RED_TRIANGLE_DOWN
+{
+    File = "triangle_down_red.png";
+};
+Bitmap BMP_SIGN
+{
+    File = "sign.png";
+};
+Bitmap BMP_EXCLAMATION_MARK
+{
+    File = "exclamation_mark.png";
+};
+Bitmap BMP_CANCEL
+{
+    File = "cancel.png";
+};
+
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

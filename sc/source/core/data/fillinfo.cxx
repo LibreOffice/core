@@ -49,6 +49,8 @@
 #include "colorscale.hxx"
 #include "stlpool.hxx"
 
+#include <iostream>
+
 // -----------------------------------------------------------------------
 
 const sal_uInt16 ROWINFO_MAX = 1024;
@@ -568,6 +570,11 @@ void ScDocument::FillInfo( ScTableInfo& rTabInfo, SCCOL nX1, SCROW nY1, SCCOL nX
                                         if(aData.pDataBar)
                                         {
                                             pInfo->pDataBar = aData.pDataBar;
+                                            bFound = true;
+                                        }
+                                        if(aData.pIconSet)
+                                        {
+                                            pInfo->pIconSet = aData.pIconSet;
                                             bFound = true;
                                         }
                                     }
