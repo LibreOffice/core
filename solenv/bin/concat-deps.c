@@ -714,7 +714,9 @@ static inline void eat_space(char ** token)
  * Prune LibreOffice specific duplicate dependencies to improve
  * gnumake startup time, and shrink the disk-space footprint.
  */
-static inline int elide_dependency(const char* key, int key_len, int *boost_count)
+static inline int
+elide_dependency(const char* key, int key_len,
+        int *boost_count, const char **unpacked_end)
 {
 #if 0
     {
@@ -732,21 +734,45 @@ static inline int elide_dependency(const char* key, int key_len, int *boost_coun
         return 1;
 
     /* boost brings a plague of header files */
-    if (internal_boost)
+    int i;
+    int boost = 0;
+    int unpacked = 0;
+    /* walk down path elements */
+    for (i = 0; i < key_len - 1; i++)
     {
-        int i;
-        int hit = 0;
-        /* walk down path elements */
-        for (i = 0; i < key_len - 1; i++)
+        if (key[i] == '/')
         {
-            if (key[i] == '/')
+            if (internal_boost)
             {
-                if (!strncmp(key + i + 1, "solver/", 7))
-                    hit++;
-                if (hit > 0 && !strncmp(key + i + 1, "inc/external/boost/", 19))
+                if (0 == boost)
+                {
+                    if (!strncmp(key + i + 1, "solver/", 7))
+                    {
+                        boost++;
+                        continue;
+                    }
+                }
+                else if (!strncmp(key + i + 1, "inc/external/boost/", 19))
                 {
                     if (boost_count)
                         (*boost_count)++;
+                    return 1;
+                }
+            }
+            if (0 == unpacked)
+            {
+                if (!strncmp(key + i + 1, "workdir/", 8))
+                {
+                    unpacked = 1;
+                    continue;
+                }
+            }
+            else
+            {
+                if (!strncmp(key + i + 1, "UnpackedTarball/", 16))
+                {
+                    if (unpacked_end)
+                        *unpacked_end = strchr(key + i + 17, '/');
                     return 1;
                 }
             }
@@ -766,12 +792,24 @@ static void emit_single_boost_header(void)
     fprintf(stdout, "%s" BOOST_HEADER " ", out_dir);
 }
 
+static void emit_unpacked_target(char const*const token, char const*const end)
+{
+    /* is there some obvious way to printf N characters that i'm missing? */
+    size_t size = end - token + 1;
+    char tmp[size];
+    snprintf(tmp, size, "%s", token);
+    fputs(tmp, stdout);
+    fputs(".done ", stdout);
+}
+
 /* prefix paths to absolute */
 static inline void print_fullpaths(char* line)
 {
     char* token;
     char* end;
     int boost_count = 0;
+    const char * unpacked_end = 0; /* end of UnpackedTarget match (if any) */
+    int first = 1; /* for UnpackedTarget the first (target) is GenCxxObject! */
 
     token = line;
     eat_space(&token);
@@ -782,9 +820,15 @@ static inline void print_fullpaths(char* line)
             ++end;
         }
         int token_len = end - token;
-        if(elide_dependency(token, token_len, &boost_count))
+        if (!first &&
+            elide_dependency(token, token_len, &boost_count, &unpacked_end))
         {
-            if (boost_count == 1)
+            if (unpacked_end)
+            {
+                emit_unpacked_target(token, unpacked_end);
+                unpacked_end = 0;
+            }
+            else if (boost_count == 1)
                 emit_single_boost_header();
             else
             {
@@ -808,6 +852,7 @@ static inline void print_fullpaths(char* line)
                 abort();
             fputc(' ', stdout);
         }
+        first = 0;
         token = end;
         eat_space(&token);
     }
@@ -880,8 +925,8 @@ off_t size;
                              * duplicate out
                              */
                             int key_len = eat_space_at_end(cursor_out) - base;
-                            if(!elide_dependency(base,key_len + 1, NULL) &&
-                               hash_store(dep_hash, base, key_len))
+                            if (!elide_dependency(base,key_len + 1, NULL, NULL)
+                                && hash_store(dep_hash, base, key_len))
                             {
                                 /* DO NOT modify base after it has been added
                                    as key by hash_store */
@@ -926,7 +971,7 @@ off_t size;
             if(last_ns == ':')
             {
                 int key_len = eat_space_at_end(cursor_out) - base;
-                if (!elide_dependency(base,key_len + 1, NULL) &&
+                if (!elide_dependency(base,key_len + 1, NULL, NULL) &&
                     hash_store(dep_hash, base, key_len))
                 {
                     puts(base);
