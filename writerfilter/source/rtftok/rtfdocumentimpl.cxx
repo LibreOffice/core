@@ -2295,7 +2295,7 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
                             m_aStates.top().aDrawingObject.xShape.set(getModelFactory()->createInstance("com.sun.star.drawing.PolyLineShape"), uno::UNO_QUERY);
                             break;
                         case RTF_DPRECT:
-                            nType = ESCHER_ShpInst_Rectangle;
+                            m_aStates.top().aDrawingObject.xShape.set(getModelFactory()->createInstance("com.sun.star.drawing.RectangleShape"), uno::UNO_QUERY);
                             break;
                         case RTF_DPELLIPSE:
                             nType = ESCHER_ShpInst_Ellipse;
@@ -2422,6 +2422,11 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
                 break;
         case RTF_DPLINEHOLLOW:
                 m_aStates.top().aDrawingObject.nFLine = 0;
+                break;
+        case RTF_DPROUNDR:
+                if (m_aStates.top().aDrawingObject.xPropertySet.is())
+                    // Seems this old syntax has no way to specify a custom radius, and this is the default
+                    m_aStates.top().aDrawingObject.xPropertySet->setPropertyValue("CornerRadius", uno::makeAny(sal_Int32(83)));
                 break;
         default:
             SAL_INFO("writerfilter", OSL_THIS_FUNC << ": TODO handle flag '" << lcl_RtfToString(nKeyword) << "'");
