@@ -25,15 +25,16 @@ else
 $(eval $(call gb_ExternalPackage_add_file,curl,lib/libcurl.so,lib/.libs/libcurl.so.4.2.0))
 endif
 
-else ifeq ($(GUI),WNT)
+else ifeq ($(OS)$(COM),WNTGCC)
 
-ifeq ($(COM),GCC)
 $(eval $(call gb_ExternalPackage_add_file,curl,lib/libcurl.a,.libs/libcurl.a))
 $(eval $(call gb_ExternalPackage_add_file,curl,bin/libcurl.dll,.libs/libcurl.dll))
-else ifeq ($(COM),WNT)
+
+else ifeq ($(COM),MSC)
+
 $(eval $(call gb_ExternalPackage_add_file,curl,lib/libcurl.lib,lib/libcurl.lib))
 $(eval $(call gb_ExternalPackage_add_file,curl,bin/libcurl.dll,lib/libcurl.dll))
-endif
 
 endif
+
 # vim: set noet sw=4 ts=4:

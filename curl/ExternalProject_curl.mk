@@ -16,6 +16,7 @@ $(eval $(call gb_ExternalProject_register_targets,curl,\
 ))
 
 ifeq ($(GUI),UNX)
+
 $(call gb_ExternalProject_get_state_target,curl,build):
 	cd $(EXTERNAL_WORKDIR) \
 	&& ./configure --with-nss --without-ssl --without-libidn --enable-ftp --enable-ipv6 --enable-http --disable-gopher \
@@ -25,10 +26,11 @@ $(call gb_ExternalProject_get_state_target,curl,build):
 	$(if $(filter TRUE,$(ENABLE_DEBUG)),--enable-debug) \
 	$(if $(SYSBASE),CPPFLAGS="-I$(SYSBASE)/usr/include" LDFLAGS="-L$(SYSBASE)/usr/lib") \
 	&& cd lib \
-	&& $(GNUMAKE) -j$(EXTMAXPROCESS) \
+	&& $(MAKE) \
 	&& touch $@
-else ifeq ($(GUI),WNT)
-ifeq ($(COM),GCC)
+
+else ifeq ($(OS)$(COM),WNTGCC)
+
 $(call gb_ExternalProject_get_state_target,curl,build):
 	cd $(EXTERNAL_WORKDIR) \
 	&& ./configure --with-nss --without-ssl --enable-ftp --enable-ipv6 --disable-http --disable-gopher \
@@ -39,17 +41,16 @@ $(call gb_ExternalProject_get_state_target,curl,build):
 	LDFLAGS="$(patsubst ;, -L,$(ILIB))" \
 	CPPFLAGS="$(INCLUDE)" OBJDUMP="objdump" \
 	&& cd lib \
-	&& $(GNUMAKE) -j$(EXTMAXPROCESS) \
+	&& $(MAKE) \
 	&& touch $@
 
 else ifeq ($(COM),MSC)
+
 $(call gb_ExternalProject_get_state_target,curl,build):
 	cd $(EXTERNAL_WORKDIR)/lib \
-	&& unset MAKEFLAGS \
-	&& export LIB="$(ILIB)" \
-	&& nmake -f Makefile.vc9 cfg=release-dll EXCFLAGS="/EHa /Zc:wchar_t- /D_CRT_SECURE_NO_DEPRECATE $(SOLARINC)" $(if $(filter X86_64,$(CPUNAME)),MACHINE=X64) \
+	&& MAKEFLAGS= && LIB="$(ILIB)" && nmake -f Makefile.vc9 cfg=release-dll \
+		EXCFLAGS="/EHa /Zc:wchar_t- /D_CRT_SECURE_NO_DEPRECATE $(SOLARINC)" $(if $(filter X86_64,$(CPUNAME)),MACHINE=X64) \
 	&& touch $@
-endif
 
 endif
 
