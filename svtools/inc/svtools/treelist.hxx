@@ -52,9 +52,6 @@
 #define LISTACTION_RESORTED         10
 #define LISTACTION_CLEARED          11
 
-#define SV_TREELIST_ROOT_ENTRY  (SvTreeListEntry*)0
-#define SV_TREELIST_ERROR        0xFFFFFFFF
-
 // Entryflags, die an der View haengen
 #define SVLISTENTRYFLAG_SELECTED        0x0001
 #define SVLISTENTRYFLAG_EXPANDED        0x0002
