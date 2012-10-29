@@ -342,11 +342,11 @@ namespace dbaui
         TransferableHelper*
                 implCopyObject( SvTreeListEntry* _pApplyTo, sal_Int32 _nCommandType, sal_Bool _bAllowConnection = sal_True );
 
-        EntryType   getEntryType( SvTreeListEntry* _pEntry ) const;
+        EntryType getEntryType( const SvTreeListEntry* _pEntry ) const;
         EntryType   getChildType( SvTreeListEntry* _pEntry ) const;
         sal_Bool    isObject( EntryType _eType ) const { return ( etTableOrView== _eType ) || ( etQuery == _eType ); }
         sal_Bool    isContainer( EntryType _eType ) const { return (etTableContainer == _eType) || (etQueryContainer == _eType); }
-        sal_Bool    isContainer( SvTreeListEntry* _pEntry ) const { return isContainer( getEntryType( _pEntry ) ); }
+        bool isContainer( const SvTreeListEntry* _pEntry ) const { return isContainer( getEntryType( _pEntry ) ); }
 
         // ensure that the xObject for the given entry is set on the user data
         sal_Bool    ensureEntryObject( SvTreeListEntry* _pEntry );

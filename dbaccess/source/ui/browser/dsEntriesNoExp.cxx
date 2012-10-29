@@ -59,13 +59,13 @@ String SbaTableQueryBrowser::GetEntryText( SvTreeListEntry* _pEntry ) const
 }
 
 // -----------------------------------------------------------------------------
-SbaTableQueryBrowser::EntryType SbaTableQueryBrowser::getEntryType( SvTreeListEntry* _pEntry ) const
+SbaTableQueryBrowser::EntryType SbaTableQueryBrowser::getEntryType( const SvTreeListEntry* _pEntry ) const
 {
     if (!_pEntry)
         return etUnknown;
 
-    SvTreeListEntry* pRootEntry     = m_pTreeView->getListBox().GetRootLevelParent(_pEntry);
-    SvTreeListEntry* pEntryParent   = m_pTreeView->getListBox().GetParent(_pEntry);
+    SvTreeListEntry* pRootEntry     = m_pTreeView->getListBox().GetRootLevelParent(const_cast<SvTreeListEntry*>(_pEntry));
+    SvTreeListEntry* pEntryParent   = m_pTreeView->getListBox().GetParent(const_cast<SvTreeListEntry*>(_pEntry));
     SvTreeListEntry* pTables        = m_pTreeView->getListBox().GetEntry(pRootEntry, CONTAINER_TABLES);
     SvTreeListEntry* pQueries       = m_pTreeView->getListBox().GetEntry(pRootEntry, CONTAINER_QUERIES);
 

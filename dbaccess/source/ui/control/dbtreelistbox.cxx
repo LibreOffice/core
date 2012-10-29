@@ -111,14 +111,14 @@ DBTreeListBox::~DBTreeListBox()
 SvTreeListEntry* DBTreeListBox::GetEntryPosByName( const String& aName, SvTreeListEntry* pStart, const IEntryFilter* _pFilter ) const
 {
     SvTreeList* myModel = GetModel();
-    std::pair<SvTreeEntryList::iterator,SvTreeEntryList::iterator> aIters =
+    std::pair<SvTreeListEntries::iterator,SvTreeListEntries::iterator> aIters =
         myModel->GetChildIterators(pStart);
 
     SvTreeListEntry* pEntry = NULL;
-    SvTreeEntryList::const_iterator it = aIters.first, itEnd = aIters.second;
+    SvTreeListEntries::iterator it = aIters.first, itEnd = aIters.second;
     for (; it != itEnd; ++it)
     {
-        pEntry = *it;
+        pEntry = &(*it);
         const SvLBoxString* pItem = static_cast<const SvLBoxString*>(
             pEntry->GetFirstItem(SV_ITEM_ID_LBOXSTRING));
 

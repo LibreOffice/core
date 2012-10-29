@@ -33,6 +33,7 @@
 #include "tools/solar.h"
 
 #include <vector>
+#include <boost/ptr_container/ptr_vector.hpp>
 
 // Flags, die am Model haengen
 #define SV_ENTRYFLAG_CHILDREN_ON_DEMAND   0x0001
@@ -48,6 +49,9 @@
 
 class SvTreeEntryList;
 class SvLBoxItem;
+class SvTreeListEntry;
+
+typedef boost::ptr_vector<SvTreeListEntry> SvTreeListEntries;
 
 class SVT_DLLPUBLIC SvTreeListEntry
 {
@@ -56,7 +60,7 @@ class SVT_DLLPUBLIC SvTreeListEntry
     friend class SvTreeListBox;
 
     SvTreeListEntry*    pParent;
-    SvTreeEntryList*    pChildren;
+    SvTreeListEntries   maChildren;
     sal_uLong           nAbsPos;
     sal_uLong           nListPos;
     std::vector<SvLBoxItem*> aItems;
@@ -64,9 +68,10 @@ class SVT_DLLPUBLIC SvTreeListEntry
     sal_uInt16       nEntryFlags;
 
 private:
-    SVT_DLLPRIVATE void SetListPositions();
-    SVT_DLLPRIVATE void InvalidateChildrensListPositions();
-    SVT_DLLPRIVATE void DeleteItems_Impl();
+    void ClearChildren();
+    void SetListPositions();
+    void InvalidateChildrensListPositions();
+    void DeleteItems_Impl();
 
 public:
     SvTreeListEntry();
@@ -87,7 +92,7 @@ public:
     void        AddItem( SvLBoxItem* pItem );
     void        ReplaceItem( SvLBoxItem* pNewItem, sal_uInt16 nPos );
     SvLBoxItem* GetItem( sal_uInt16 nPos ) const;
-    SvLBoxItem* GetFirstItem( sal_uInt16 nId );
+    SvLBoxItem* GetFirstItem( sal_uInt16 nId ) const;
     sal_uInt16 GetPos( SvLBoxItem* pItem ) const;
     void*       GetUserData() const;
     void        SetUserData( void* pPtr );

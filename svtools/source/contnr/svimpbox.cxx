@@ -1659,7 +1659,7 @@ void SvImpLBox::RemovingEntry( SvTreeListEntry* pEntry )
 
     SvTreeListEntry* pParent = (SvTreeListEntry*)(pView->GetModel()->GetParent(pEntry));
 
-    if( pParent && pView->GetModel()->GetChildList(pParent)->size() == 1 )
+    if (pParent && pView->GetModel()->GetChildList(pParent).size() == 1)
     {
         DBG_ASSERT( pView->IsExpanded( pParent ), "Parent not expanded");
         pParent->SetFlags( pParent->GetFlags() | SV_ENTRYFLAG_NO_NODEBMP);
@@ -1825,7 +1825,7 @@ void SvImpLBox::EntryInserted( SvTreeListEntry* pEntry )
     if( GetUpdateMode() )
     {
         SvTreeListEntry* pParent = (SvTreeListEntry*)pTree->GetParent(pEntry);
-        if( pParent && pTree->GetChildList(pParent)->size() == 1 )
+        if (pParent && pTree->GetChildList(pParent).size() == 1)
             // draw plus sign
             pTree->InvalidateEntry( pParent );
 
@@ -2460,7 +2460,7 @@ bool SvImpLBox::KeyInput( const KeyEvent& rKEvt)
                         sal_uInt16 nRefDepth;
                         // special case explorer: if the root only has a single
                         // entry, don't collapse the root entry
-                        if( pTree->GetChildList(0)->size() < 2 )
+                        if (pTree->GetChildList(0).size() < 2)
                         {
                             nRefDepth = 1;
                             pParentToCollapse = pCursor;
@@ -3303,15 +3303,12 @@ void SvImpLBox::FindMostRight( SvTreeListEntry* pParent, SvTreeListEntry* pEntry
 
 void SvImpLBox::FindMostRight_Impl( SvTreeListEntry* pParent, SvTreeListEntry* pEntryToIgnore )
 {
-    SvTreeEntryList* pList = pTree->GetChildList( pParent );
+    SvTreeListEntries& rList = pTree->GetChildList( pParent );
 
-    if( !pList )
-        return;
-
-    size_t nCount = pList->size();
+    size_t nCount = rList.size();
     for( size_t nCur = 0; nCur < nCount; nCur++ )
     {
-        SvTreeListEntry* pChild = (SvTreeListEntry*)(*pList)[ nCur ];
+        SvTreeListEntry* pChild = &rList[nCur];
         if( pChild != pEntryToIgnore )
         {
             SetMostRight( pChild );

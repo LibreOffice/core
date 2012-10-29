@@ -167,8 +167,8 @@ enum SvSortMode { SortAscending, SortDescending, SortNone };
 // ( Compare(a,b) ==> b.Compare(a) ==> strcmp(a,b) )
 struct SvSortData
 {
-    SvTreeListEntry* pLeft;
-    SvTreeListEntry* pRight;
+    const SvTreeListEntry* pLeft;
+    const SvTreeListEntry* pRight;
 };
 
 class SVT_DLLPUBLIC SvTreeList
@@ -214,13 +214,15 @@ class SVT_DLLPUBLIC SvTreeList
     void                Collapse( SvListView*,SvTreeListEntry* pParent );
 
     SVT_DLLPRIVATE void SetAbsolutePositions();
-    SVT_DLLPRIVATE      SvTreeEntryList*CloneChildren(
-                            SvTreeEntryList* pChildren,
-                            SvTreeListEntry* pNewParent,
-                            sal_uLong& nCloneCount
-                        ) const;
 
-    SVT_DLLPRIVATE void SetListPositions( SvTreeEntryList* );
+    SVT_DLLPRIVATE void CloneChildren(
+        SvTreeListEntries& rDst, sal_uLong& rCloneCount, SvTreeListEntries& rSrc, SvTreeListEntry* pNewParent) const;
+
+    /**
+     * Invalidate the cached position data to have them re-generated before
+     * the next access.
+     */
+    SVT_DLLPRIVATE void SetListPositions( SvTreeListEntries& rEntries );
 
     // rPos wird bei SortModeNone nicht geaendert
     SVT_DLLPRIVATE void GetInsertionPos(
@@ -295,12 +297,13 @@ public:
     SvTreeListEntry*        GetEntryAtAbsPos( sal_uLong nAbsPos ) const;
     SvTreeListEntry*        GetParent( SvTreeListEntry* pEntry ) const;
     SvTreeListEntry*        GetRootLevelParent( SvTreeListEntry* pEntry ) const;
-    SvTreeEntryList*    GetChildList( SvTreeListEntry* pParent ) const;
+    const SvTreeListEntries& GetChildList( SvTreeListEntry* pParent ) const;
+    SvTreeListEntries& GetChildList( SvTreeListEntry* pParent );
 
-    std::pair<SvTreeEntryList::const_iterator,SvTreeEntryList::const_iterator>
+    std::pair<SvTreeListEntries::const_iterator, SvTreeListEntries::const_iterator>
         GetChildIterators(const SvTreeListEntry* pParent) const;
 
-    std::pair<SvTreeEntryList::iterator,SvTreeEntryList::iterator>
+    std::pair<SvTreeListEntries::iterator, SvTreeListEntries::iterator>
         GetChildIterators(SvTreeListEntry* pParent);
 
     sal_uLong           GetAbsPos( SvTreeListEntry* pEntry ) const;
@@ -325,7 +328,7 @@ public:
     const Link&         GetCloneLink() const
     { return aCloneLink; }
 
-    virtual SvTreeListEntry*    CloneEntry( SvTreeListEntry* ) const; // ruft den Clone-Link
+    virtual SvTreeListEntry*    CloneEntry( SvTreeListEntry* pSource ) const; // ruft den Clone-Link
     virtual SvTreeListEntry*    CreateEntry() const; // zum 'new'en von Entries
 
     sal_uInt16          GetRefCount() const { return nRefCount; }
@@ -333,7 +336,7 @@ public:
 
     void                SetSortMode( SvSortMode eMode ) { eSortMode = eMode; }
     SvSortMode          GetSortMode() const { return eSortMode; }
-    virtual StringCompare   Compare( SvTreeListEntry*, SvTreeListEntry* ) const;
+    StringCompare Compare(const SvTreeListEntry* pLeft, const SvTreeListEntry* pRight) const;
     void                SetCompareHdl( const Link& rLink ) { aCompareLink = rLink; }
     const Link&         GetCompareHdl() const { return aCompareLink; }
     void                Resort();

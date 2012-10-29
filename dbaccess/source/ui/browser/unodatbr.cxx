@@ -3440,8 +3440,8 @@ sal_Bool SbaTableQueryBrowser::ensureConnection( SvTreeListEntry* _pDSEntry, voi
 // -----------------------------------------------------------------------------
 IMPL_LINK( SbaTableQueryBrowser, OnTreeEntryCompare, const SvSortData*, _pSortData )
 {
-    SvTreeListEntry* pLHS = static_cast<SvTreeListEntry*>(_pSortData->pLeft);
-    SvTreeListEntry* pRHS = static_cast<SvTreeListEntry*>(_pSortData->pRight);
+    const SvTreeListEntry* pLHS = static_cast<const SvTreeListEntry*>(_pSortData->pLeft);
+    const SvTreeListEntry* pRHS = static_cast<const SvTreeListEntry*>(_pSortData->pRight);
     OSL_ENSURE(pLHS && pRHS, "SbaTableQueryBrowser::OnTreeEntryCompare: invalid tree entries!");
     // we want the table entry and the end so we have to do a check
 
@@ -3455,7 +3455,7 @@ IMPL_LINK( SbaTableQueryBrowser, OnTreeEntryCompare, const SvSortData*, _pSortDa
             // every other container should be placed _before_ the bookmark container
             return -1;
 
-        const String sLeft = m_pTreeView->getListBox().GetEntryText(pLHS);
+        const String sLeft = m_pTreeView->getListBox().GetEntryText(const_cast<SvTreeListEntry*>(pLHS));
 
         EntryType eLeft = etTableContainer;
         if (String(ModuleRes(RID_STR_TABLES_CONTAINER)) == sLeft)
@@ -3866,14 +3866,14 @@ void SbaTableQueryBrowser::impl_cleanupDataSourceEntry( const String& _rDataSour
             "SbaTableQueryBrowser::impl_cleanupDataSourceEntry: inconsistence (2)!");
 
     // delete any user data of the child entries of the to-be-removed entry
-    std::pair<SvTreeEntryList::iterator,SvTreeEntryList::iterator> aIters =
+    std::pair<SvTreeListEntries::iterator, SvTreeListEntries::iterator> aIters =
         m_pTreeModel->GetChildIterators(pDataSourceEntry);
 
-    SvTreeEntryList::const_iterator it = aIters.first, itEnd = aIters.second;
+    SvTreeListEntries::iterator it = aIters.first, itEnd = aIters.second;
 
     for (; it != itEnd; ++it)
     {
-        SvTreeListEntry* pEntry = *it;
+        SvTreeListEntry* pEntry = &(*it);
         const DBTreeListUserData* pData = static_cast<const DBTreeListUserData*>(pEntry->GetUserData());
         pEntry->SetUserData(NULL);
         delete pData;

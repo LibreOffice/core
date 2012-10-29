@@ -30,21 +30,24 @@
 #include "svtools/treelist.hxx"
 #include "svtools/treelistbox.hxx"
 
+void SvTreeListEntry::ClearChildren()
+{
+    maChildren.clear();
+}
+
 void SvTreeListEntry::SetListPositions()
 {
-    if( pChildren )
+    SvTreeListEntries::iterator it = maChildren.begin(), itEnd = maChildren.end();
+    sal_uLong nCur = 0;
+    for (; it != itEnd; ++it)
     {
-        SvTreeEntryList::iterator it = pChildren->begin(), itEnd = pChildren->end();
-        sal_uLong nCur = 0;
-        for (; it != itEnd; ++it)
-        {
-            SvTreeListEntry* pEntry = *it;
-            pEntry->nListPos &= 0x80000000;
-            pEntry->nListPos |= nCur;
-            ++nCur;
-        }
+        SvTreeListEntry& rEntry = *it;
+        rEntry.nListPos &= 0x80000000;
+        rEntry.nListPos |= nCur;
+        ++nCur;
     }
-    nListPos &= (~0x80000000);
+
+    nListPos &= (~0x80000000); // remove the invalid bit.
 }
 
 void SvTreeListEntry::InvalidateChildrensListPositions()
@@ -66,7 +69,6 @@ void SvTreeListEntry::DeleteItems_Impl()
 
 SvTreeListEntry::SvTreeListEntry() :
     pParent(NULL),
-    pChildren(NULL),
     nAbsPos(0),
     nListPos(0),
     pUserData(NULL),
@@ -76,30 +78,27 @@ SvTreeListEntry::SvTreeListEntry() :
 
 SvTreeListEntry::SvTreeListEntry(const SvTreeListEntry& r) :
     pParent(NULL),
-    pChildren(NULL),
     nAbsPos(r.nAbsPos),
     nListPos(r.nListPos & 0x7FFFFFFF)
 {
+    SvTreeListEntries::const_iterator it = r.maChildren.begin(), itEnd = r.maChildren.end();
+    for (; it != itEnd; ++it)
+        maChildren.push_back(new SvTreeListEntry(*it));
 }
 
 SvTreeListEntry::~SvTreeListEntry()
 {
-    if ( pChildren )
-    {
-        pChildren->DestroyAll();
-        delete pChildren;
-    }
 #ifdef DBG_UTIL
-    pChildren     = 0;
     pParent     = 0;
 #endif
 
+    maChildren.clear();
     DeleteItems_Impl();
 }
 
 bool SvTreeListEntry::HasChildren() const
 {
-    return pChildren != NULL;
+    return !maChildren.empty();
 }
 
 bool SvTreeListEntry::HasChildListPos() const
@@ -172,7 +171,7 @@ SvLBoxItem* SvTreeListEntry::GetItem( sal_uInt16 nPos ) const
     return aItems[nPos];
 }
 
-SvLBoxItem* SvTreeListEntry::GetFirstItem( sal_uInt16 nId )
+SvLBoxItem* SvTreeListEntry::GetFirstItem( sal_uInt16 nId ) const
 {
     sal_uInt16 nCount = aItems.size();
     sal_uInt16 nCur = 0;
