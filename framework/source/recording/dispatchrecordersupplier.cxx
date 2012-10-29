@@ -47,7 +47,7 @@ DEFINE_XTYPEPROVIDER_3(
 DEFINE_XSERVICEINFO_MULTISERVICE(
     DispatchRecorderSupplier,
     ::cppu::OWeakObject,
-    DECLARE_ASCII("com.sun.star.frame.DispatchRecorderSupplier"),
+    "com.sun.star.frame.DispatchRecorderSupplier",
     IMPLEMENTATIONNAME_DISPATCHRECORDERSUPPLIER)
 
 DEFINE_INIT_SERVICE(
