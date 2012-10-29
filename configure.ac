@@ -6468,20 +6468,11 @@ if test "$SOLAR_JAVA" != ""; then
         test -d "$JRE_BASE_DIR/$JAVA_TOOLKIT" && JAVALIB="$JAVALIB -L$JRE_BASE_DIR/$JAVA_TOOLKIT"
         test -d "$JRE_BASE_DIR/native_thread" && JAVALIB="$JAVALIB -L$JRE_BASE_DIR/native_thread"
     fi
-
-    CLASSPATH=
-    if test "$JDK"!="gcj"; then
-        if test -f "$JAVA_HOME/jre/lib/rt.jar"; then
-            CLASSPATH="${JAVA_HOME}/jre/lib/rt.jar${P_SEP}."
-        fi
-    fi
-    XCLASSPATH="$CLASSPATH"
 else
     x_JAVALIB=[\#]
     x_JDKLIB=[\#]
 fi
 
-AC_SUBST(CLASSPATH)
 AC_SUBST(JAVALIB)
 AC_SUBST(JAVACOMPILER)
 AC_SUBST(JAVADOC)
@@ -6492,7 +6483,6 @@ AC_SUBST(JAVA_SOURCE_VER)
 AC_SUBST(JAVA_TARGET_VER)
 AC_SUBST(JDK)
 AC_SUBST(JDKLIB)
-AC_SUBST(XCLASSPATH)
 AC_SUBST(x_JAVALIB)
 AC_SUBST(x_JDKLIB)
 
