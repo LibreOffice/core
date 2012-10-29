@@ -477,6 +477,13 @@ endif
 dev-install-nocheck : export SKIP_TESTS := YES
 dev-install-nocheck : dev-install
 
+dev-update:
+ifeq ($(DISABLE_LINKOO),TRUE)
+	@linkoo --copy $(DEVINSTALLDIR)/opt $(SRCDIR)
+else
+	@linkoo $(DEVINSTALLDIR)/opt $(SRCDIR)
+endif
+
 install-tb:
 	@rm -rf $(DEVINSTALLDIR)
 	@mkdir $(DEVINSTALLDIR)
