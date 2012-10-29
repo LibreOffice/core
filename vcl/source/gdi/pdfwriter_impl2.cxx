@@ -132,10 +132,16 @@ void PDFWriterImpl::implWriteBitmapEx( const Point& i_rPoint, const Size& i_rSiz
                     aNewBmpSize.Width() = FRound( fMaxPixelX );
                     aNewBmpSize.Height() = FRound( fMaxPixelX / fBmpWH);
                 }
+
                 if( aNewBmpSize.Width() && aNewBmpSize.Height() )
-                    aBitmapEx.Scale( aNewBmpSize );
+                {
+                    // #121233# Use best quality for PDF exports
+                    aBitmapEx.Scale( aNewBmpSize, BMP_SCALE_BESTQUALITY );
+                }
                 else
+                {
                     aBitmapEx.SetEmpty();
+                }
             }
         }
 

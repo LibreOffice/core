@@ -143,7 +143,7 @@ Bitmap GenericPageCache::GetPreviewBitmap (
             // i.e. the bitmap is not empty.
             if (bResize && aBitmapSize.Width()>0 && aBitmapSize.Height()>0)
             {
-                aPreview.Scale(maPreviewSize, BMP_SCALE_FAST);
+                aPreview.Scale(maPreviewSize, BMP_SCALE_FASTESTINTERPOLATE);
             }
             bMayBeUpToDate = false;
         }
@@ -180,7 +180,7 @@ Bitmap GenericPageCache::GetMarkedPreviewBitmap (
         // i.e. the bitmap is not empty.
         if (aBitmapSize.Width()>0 && aBitmapSize.Height()>0)
         {
-            aMarkedPreview.Scale(maPreviewSize, BMP_SCALE_FAST);
+            aMarkedPreview.Scale(maPreviewSize, BMP_SCALE_FASTESTINTERPOLATE);
         }
     }
 

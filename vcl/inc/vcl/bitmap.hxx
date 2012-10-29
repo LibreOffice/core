@@ -40,9 +40,21 @@
 
 // -----------------------------------------------------------------------------
 
-#define BMP_SCALE_NONE              0x00000000UL
-#define BMP_SCALE_FAST              0x00000001UL
-#define BMP_SCALE_INTERPOLATE       0x00000002UL
+#define BMP_SCALE_NONE                  0x00000000UL
+#define BMP_SCALE_FAST                  0x00000001UL
+#define BMP_SCALE_INTERPOLATE           0x00000002UL
+#define BMP_SCALE_SUPER                 0x00000003UL
+#define BMP_SCALE_LANCZOS               0x00000004UL
+#define BMP_SCALE_BICUBIC               0x00000005UL
+#define BMP_SCALE_BILINEAR              0x00000006UL
+#define BMP_SCALE_BOX                   0x00000007UL
+
+// new default assigns for having slots for best quality and
+// an alternative with a good compromize between speed and quality.
+// Currently BMP_SCALE_BESTQUALITY maps to BMP_SCALE_LANCZOS and
+// BMP_SCALE_FASTESTINTERPOLATE to BMP_SCALE_SUPER
+#define BMP_SCALE_BESTQUALITY           0x000000feUL
+#define BMP_SCALE_FASTESTINTERPOLATE    0x000000ffUL
 
 // -----------------------------------------------------------------------------
 
@@ -159,7 +171,7 @@ class VCL_DLLPUBLIC BmpFilterParam
     friend class Animation;
 
 private:
-    BmpFilter   meFilter;
+    BmpFilter       meFilter;
     sal_uLong       mnProgressStart;
     sal_uLong       mnProgressEnd;
 
@@ -212,6 +224,114 @@ public:
             maEmbossAngles.mnAzimuthAngle100 = nEmbossAzimuthAngle100;
             maEmbossAngles.mnElevationAngle100 = nEmbossElevationAngle100;
         }
+};
+
+// --------------------
+// Resample Kernels
+// --------------------
+
+class Kernel
+{
+public:
+    Kernel() {}
+    virtual ~Kernel() {}
+
+    virtual double GetWidth() const = 0;
+    virtual double Calculate(double x) const = 0;
+};
+
+class Lanczos3Kernel : public Kernel
+{
+public:
+    virtual double GetWidth() const
+    {
+        return 3.0;
+    }
+
+    virtual double Calculate(double x) const
+    {
+        return (-3.0 <= x && 3.0 > x) ? SincFilter(x) * SincFilter( x / 3.0 ) : 0.0;
+    }
+
+    inline double SincFilter(double x) const
+    {
+        if(0.0 == x)
+        {
+            return 1.0;
+        }
+
+        x *= M_PI;
+
+        return sin(x) / x;
+    }
+};
+
+class BicubicKernel : public Kernel
+{
+    virtual double GetWidth() const
+    {
+        return 2.0;
+    }
+
+    virtual double Calculate(double x) const
+    {
+        if(0.0 > x)
+        {
+            x = -x;
+        }
+
+        if(1.0 >= x)
+        {
+            return (1.5 * x - 2.5) * x * x + 1.0;
+        }
+        else if(2.0 > x)
+        {
+            return ((-0.5 * x + 2.5) * x - 4.0) * x + 2.0;
+        }
+
+        return 0.0;
+    }
+};
+
+class BilinearKernel : public Kernel
+{
+    virtual double GetWidth() const
+    {
+        return 1.0;
+    }
+
+    virtual double Calculate(double x) const
+    {
+        if(0.0 > x)
+        {
+            x = -x;
+        }
+
+        if(1.0 > x)
+        {
+            return 1.0 - x;
+        }
+
+        return 0.0;
+    }
+};
+
+class BoxKernel : public Kernel
+{
+    virtual double GetWidth() const
+    {
+        return 0.5;
+    }
+
+    virtual double Calculate(double x) const
+    {
+        if(-0.5 <= x && 0.5 > x)
+        {
+            return 1.0;
+        }
+
+        return 0.0;
+    }
 };
 
 // ----------
@@ -277,8 +397,11 @@ public:
                                            BitmapWriteAccess& rAcc, sal_Bool bRLE4 );
     SAL_DLLPRIVATE static sal_Bool          ImplWriteRLE( SvStream& rOStm, BitmapReadAccess& rAcc, sal_Bool bRLE4 );
 
+    SAL_DLLPRIVATE void                     ImplAdaptBitCount(Bitmap& rNew);
     SAL_DLLPRIVATE sal_Bool                 ImplScaleFast( const double& rScaleX, const double& rScaleY );
     SAL_DLLPRIVATE sal_Bool                 ImplScaleInterpolate( const double& rScaleX, const double& rScaleY );
+    SAL_DLLPRIVATE sal_Bool                 ImplScaleSuper( const double& rScaleX, const double& rScaleY );
+    SAL_DLLPRIVATE sal_Bool                 ImplScaleConvolution( const double& rScaleX, const double& rScaleY, const Kernel& aKernel);
     SAL_DLLPRIVATE sal_Bool                 ImplMakeMono( sal_uInt8 cThreshold );
     SAL_DLLPRIVATE sal_Bool                 ImplMakeMonoDither();
     SAL_DLLPRIVATE sal_Bool                 ImplMakeGreyscales( sal_uInt16 nGreyscales );
@@ -531,8 +654,7 @@ public:
 
         @return sal_True, if the operation was completed successfully.
      */
-    sal_Bool                    Scale( const Size& rNewSize,
-                                   sal_uLong nScaleFlag = BMP_SCALE_FAST );
+    sal_Bool                    Scale( const Size& rNewSize, sal_uLong nScaleFlag = BMP_SCALE_FASTESTINTERPOLATE );
 
     /** Scale the bitmap
 
@@ -544,8 +666,7 @@ public:
 
         @return sal_True, if the operation was completed successfully.
      */
-    sal_Bool                    Scale( const double& rScaleX, const double& rScaleY,
-                                   sal_uLong nScaleFlag = BMP_SCALE_FAST );
+    sal_Bool                    Scale( const double& rScaleX, const double& rScaleY, sal_uLong nScaleFlag = BMP_SCALE_FASTESTINTERPOLATE );
 
     /** Rotate bitmap by the specified angle
 
