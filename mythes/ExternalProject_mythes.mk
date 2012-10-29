@@ -19,7 +19,7 @@ $(eval $(call gb_ExternalProject_register_targets,mythes,\
 
 $(call gb_ExternalProject_get_state_target,mythes,build):
 	cd $(EXTERNAL_WORKDIR) \
-	&& ./configure --disable-shared --with-pic \
+	&& LIBS="$(gb_STDLIBS) $(LIBS)" ./configure --disable-shared --with-pic \
 	$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM) gio_can_sniff=no) \
 	HUNSPELL_CFLAGS=" $(HUNSPELL_CFLAGS)" \
 	HUNSPELL_LIBS=" $(HUNSPELL_LIBS)" \
