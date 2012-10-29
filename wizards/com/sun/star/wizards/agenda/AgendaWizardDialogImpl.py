@@ -18,8 +18,9 @@
 import traceback
 from .AgendaWizardDialog import AgendaWizardDialog
 from .AgendaWizardDialogConst import HID
-from .AgendaTemplate import AgendaTemplate, TopicsControl, FileAccess
-from CGAgenda import CGAgenda
+from .AgendaTemplate import AgendaTemplate, FileAccess
+from .TopicsControl import TopicsControl
+from .CGAgenda import CGAgenda
 from ..ui.PathSelection import PathSelection
 from ..ui.event.UnoDataAware import UnoDataAware
 from ..ui.event.RadioDataAware import RadioDataAware
@@ -48,7 +49,6 @@ class AgendaWizardDialogImpl(AgendaWizardDialog):
     def leaveStep(self, OldStep, NewStep):
         pass
 
-
     @classmethod
     def main(self):
         #Call the wizard remotely(see README)
@@ -63,7 +63,7 @@ class AgendaWizardDialogImpl(AgendaWizardDialog):
                    " message " + str(e) + " args " + str(e.args) +
                    traceback.format_exc())
 
-    def startWizard(self):
+    def startWizard(self, xMSF):
         self.running = True
         try:
             #Number of steps on WizardDialog

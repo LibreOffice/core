@@ -21,7 +21,6 @@ from threading import RLock
 from ..text.TextDocument import *
 from ..common.FileAccess import FileAccess
 from ..text.TextSectionHandler import TextSectionHandler
-from .TopicsControl import TopicsControl
 
 from datetime import date as dateTimeObject
 
