@@ -1090,6 +1090,7 @@ main/sc/source/ui/vba/testvba/TestDocuments-ooo-build/logs/win/*.log
 # no comments allowed in file format
 #
 
+test/testcommon/source/org/openoffice/test/Run.help
 main/setup_native/source/packinfo/package_names_ext.txt
 main/setup_native/source/packinfo/package_names.txt
 main/officecfg/registry/schema/oo-common.conf
