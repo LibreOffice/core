@@ -209,41 +209,41 @@ void ScDPCacheTable::fillTable(
 
 void ScDPCacheTable::fillTable()
 {
-   SCROW nRowCount = getRowSize();
-   SCCOL nColCount = getColSize();
-   if (nRowCount <= 0 || nColCount <= 0)
+    SCROW nRowCount = getRowSize();
+    SCCOL nColCount = getColSize();
+    if (nRowCount <= 0 || nColCount <= 0)
         return;
 
-   maShowByFilter.clear();
-   maShowByPage.clear();
-   maShowByFilter.insert_front(0, nRowCount, true);
+    maShowByFilter.clear();
+    maShowByPage.clear();
+    maShowByFilter.insert_front(0, nRowCount, true);
 
-   // Initialize field entries container.
-   maFieldEntries.clear();
-   maFieldEntries.reserve(nColCount);
+    // Initialize field entries container.
+    maFieldEntries.clear();
+    maFieldEntries.reserve(nColCount);
 
-   // Data rows
-   for (SCCOL nCol = 0; nCol < nColCount; ++nCol)
-   {
-       maFieldEntries.push_back( vector<SCROW>() );
-       SCROW nMemCount = getCache()->GetDimMemberCount( nCol );
-       if (!nMemCount)
-           continue;
+    // Data rows
+    for (SCCOL nCol = 0; nCol < nColCount; ++nCol)
+    {
+        maFieldEntries.push_back( vector<SCROW>() );
+        SCROW nMemCount = getCache()->GetDimMemberCount( nCol );
+        if (!nMemCount)
+            continue;
 
-       std::vector<SCROW> aAdded(nMemCount, -1);
+        std::vector<SCROW> aAdded(nMemCount, -1);
 
-       for (SCROW nRow = 0; nRow < nRowCount; ++nRow)
-       {
-           SCROW nIndex = getCache()->GetItemDataId(nCol, nRow, false);
-           SCROW nOrder = getOrder(nCol, nIndex);
-           aAdded[nOrder] = nIndex;
-       }
-       for (SCROW nRow = 0; nRow < nMemCount; ++nRow)
-       {
-           if (aAdded[nRow] != -1)
-               maFieldEntries.back().push_back(aAdded[nRow]);
-       }
-   }
+        for (SCROW nRow = 0; nRow < nRowCount; ++nRow)
+        {
+            SCROW nIndex = getCache()->GetItemDataId(nCol, nRow, false);
+            SCROW nOrder = getOrder(nCol, nIndex);
+            aAdded[nOrder] = nIndex;
+        }
+        for (SCROW nRow = 0; nRow < nMemCount; ++nRow)
+        {
+            if (aAdded[nRow] != -1)
+                maFieldEntries.back().push_back(aAdded[nRow]);
+        }
+    }
 }
 
 bool ScDPCacheTable::isRowActive(sal_Int32 nRow, sal_Int32* pLastRow) const
