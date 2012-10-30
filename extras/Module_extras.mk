@@ -50,7 +50,7 @@ endif
 
 ifeq ($(WITH_EXTRA_FONT),YES)
 $(eval $(call gb_Module_add_targets,extras,\
-	Package_extra_fonts \
+	ExternalPackage_extra_fonts \
 	UnpackedTarball_fonts_pack \
 ))
 endif
