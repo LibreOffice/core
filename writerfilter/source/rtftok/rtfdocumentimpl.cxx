@@ -2064,8 +2064,11 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
             }
             break;
         case RTF_LTRCH:
+            // dmapper does not support this.
+            break;
         case RTF_RTLCH:
-            // dmapper does not support these.
+            if (m_aDefaultState.nCurrentEncoding == RTL_TEXTENCODING_MS_1255)
+                m_aStates.top().nCurrentEncoding = m_aDefaultState.nCurrentEncoding;
             break;
         case RTF_ULNONE:
             {
@@ -2587,6 +2590,7 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             }
             break;
         case RTF_ANSICPG:
+            m_aDefaultState.nCurrentEncoding = rtl_getTextEncodingFromWindowsCodePage(nParam);
             m_aStates.top().nCurrentEncoding = rtl_getTextEncodingFromWindowsCodePage(nParam);
             break;
         case RTF_CPG:
