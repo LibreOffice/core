@@ -597,7 +597,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
             SfxAbstractTabDialog* pDlg = pFact->CreateFrmTabDialog( DLG_FRM_STD,
                                                     GetView().GetViewFrame(), &GetView().GetViewFrame()->GetWindow(), aSet, sal_True);
             OSL_ENSURE(pDlg, "Dialogdiet fail!");
-            if(pDlg->Execute() && pDlg->GetOutputItemSet())
+            if(pDlg->Execute() == RET_OK && pDlg->GetOutputItemSet())
             {
                 //local variable necessary at least after call of .AutoCaption() because this could be deleted at this point
                 SwWrtShell& rShell = GetShell();
