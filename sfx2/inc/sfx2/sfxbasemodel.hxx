@@ -1422,8 +1422,16 @@ public:
         throw (::com::sun::star::uno::RuntimeException);
 
     virtual void SAL_CALL checkOut(  ) throw ( ::com::sun::star::uno::RuntimeException );
+    virtual void SAL_CALL cancelCheckOut(  ) throw ( ::com::sun::star::uno::RuntimeException );
+    virtual void SAL_CALL checkIn( sal_Bool bIsMajor, const rtl::OUString & rMessage  )
+        throw ( ::com::sun::star::uno::RuntimeException );
 
     virtual sal_Bool SAL_CALL isVersionable( ) throw ( ::com::sun::star::uno::RuntimeException );
+    virtual sal_Bool SAL_CALL canCheckOut( ) throw ( ::com::sun::star::uno::RuntimeException );
+    virtual sal_Bool SAL_CALL canCancelCheckOut( ) throw ( ::com::sun::star::uno::RuntimeException );
+    virtual sal_Bool SAL_CALL canCheckIn( ) throw ( ::com::sun::star::uno::RuntimeException );
+
+    sal_Bool getBoolPropertyValue( const rtl::OUString& rName ) throw ( ::com::sun::star::uno::RuntimeException );
 
     //____________________________________________________________________________________________________
     //  SfxListener

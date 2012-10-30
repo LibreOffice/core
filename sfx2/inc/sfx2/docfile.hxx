@@ -194,6 +194,8 @@ public:
     sal_Bool            SwitchDocumentToFile( const rtl::OUString& aURL );
 
     ::rtl::OUString     GetBaseURL( bool bForSaving=false );
+    void                SetInCheckIn( bool bInCheckIn );
+    bool                IsInCheckIn( );
 
 #if _SOLAR__PRIVATE
     SAL_DLLPRIVATE sal_Bool HasStorage_Impl() const;

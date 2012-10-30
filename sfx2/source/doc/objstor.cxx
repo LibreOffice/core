@@ -1374,7 +1374,7 @@ sal_Bool SfxObjectShell::SaveTo_Impl
 
         pFilter = rMedium.GetFilter();
 
-        const SfxStringItem *pVersionItem = pSet ? (const SfxStringItem*)
+        const SfxStringItem *pVersionItem = ( !rMedium.IsInCheckIn( ) && pSet ) ? (const SfxStringItem*)
                 SfxRequest::GetItem( pSet, SID_DOCINFO_COMMENTS, sal_False, TYPE(SfxStringItem) ) : NULL;
         ::rtl::OUString aTmpVersionURL;
 
@@ -1460,7 +1460,7 @@ sal_Bool SfxObjectShell::SaveTo_Impl
                 }
             }
 
-            if ( bOk && pVersionItem )
+            if ( bOk && pVersionItem && !rMedium.IsInCheckIn() )
             {
                 // store a version also
                 const SfxStringItem *pAuthorItem = pSet ? (const SfxStringItem*)
@@ -1624,7 +1624,12 @@ sal_Bool SfxObjectShell::SaveTo_Impl
 
         AddLog( ::rtl::OUString( OSL_LOG_PREFIX "Medium commit."  ) );
 
+        rtl::OUString sName( rMedium.GetName( ) );
         bOk = rMedium.Commit();
+        rtl::OUString sNewName( rMedium.GetName( ) );
+
+        if ( sName != sNewName )
+            GetMedium( )->SwitchDocumentToFile( sNewName );
 
         if ( bOk )
         {
@@ -2414,10 +2419,23 @@ sal_Bool SfxObjectShell::DoSave_Impl( const SfxItemSet* pArgs )
     pSet->ClearItem( SID_VERSION );
     pSet->ClearItem( SID_DOC_BASEURL );
 
+    // copy the version comment and major items for the checkin only
+    if ( pRetrMedium->IsInCheckIn( ) )
+    {
+        const SfxPoolItem* pMajor = pArgs->GetItem( SID_DOCINFO_MAJOR );
+        if ( pMajor )
+            pSet->Put( *pMajor );
+
+        const SfxPoolItem* pComments = pArgs->GetItem( SID_DOCINFO_COMMENTS );
+        if ( pComments )
+            pSet->Put( *pComments );
+    }
+
     // create a medium as a copy; this medium is only for writingm, because it
     // uses the same name as the original one writing is done through a copy,
     // that will be transferred to the target (of course after calling HandsOff)
     SfxMedium* pMediumTmp = new SfxMedium( pRetrMedium->GetName(), pRetrMedium->GetOpenMode(), pFilter, pSet );
+    pMediumTmp->SetInCheckIn( pRetrMedium->IsInCheckIn( ) );
     pMediumTmp->SetLongName( pRetrMedium->GetLongName() );
     if ( pMediumTmp->GetErrorCode() != ERRCODE_NONE )
     {

@@ -28,6 +28,8 @@
             <menu:menuitem menu:id=".uno:SaveAs" menu:helpid="5502" menu:label="" />
             <menu:menuitem menu:id=".uno:SaveAll" menu:helpid="5309" menu:label="" />
             <menu:menuitem menu:id=".uno:CheckOut"/>
+            <menu:menuitem menu:id=".uno:CancelCheckOut"/>
+            <menu:menuitem menu:id=".uno:CheckIn"/>
             <menu:menuitem menu:id=".uno:Reload" menu:helpid="5508" menu:label="" />
             <menu:menuitem menu:id=".uno:VersionDialog" menu:helpid="6583" menu:label="" />
             <menu:menuitem menu:id=".uno:SendMail" menu:helpid="5331" menu:label="" />

@@ -1621,11 +1621,13 @@ void SAL_CALL SfxBaseModel::storeSelf( const    uno::Sequence< beans::PropertyVa
         m_pData->m_pObjectShell->AddLog( ::rtl::OUString( OSL_LOG_PREFIX "storeSelf"  ) );
         SfxSaveGuard aSaveGuard(this, m_pData, sal_False);
 
+        sal_Bool bCheckIn = sal_False;
         for ( sal_Int32 nInd = 0; nInd < aSeqArgs.getLength(); nInd++ )
         {
             // check that only acceptable parameters are provided here
             if ( aSeqArgs[nInd].Name != "VersionComment" && aSeqArgs[nInd].Name != "Author"
-              && aSeqArgs[nInd].Name != "InteractionHandler" && aSeqArgs[nInd].Name != "StatusIndicator" )
+              && aSeqArgs[nInd].Name != "InteractionHandler" && aSeqArgs[nInd].Name != "StatusIndicator"
+              && aSeqArgs[nInd].Name != "VersionMajor" && aSeqArgs[nInd].Name != "CheckIn" )
             {
                 m_pData->m_pObjectShell->AddLog( ::rtl::OUString( OSL_LOG_PREFIX "unexpected parameter for storeSelf, might be no problem if SaveAs is executed."  ) );
                 m_pData->m_pObjectShell->StoreLog();
@@ -1634,10 +1636,34 @@ void SAL_CALL SfxBaseModel::storeSelf( const    uno::Sequence< beans::PropertyVa
                 aMessage += aSeqArgs[nInd].Name;
                 throw lang::IllegalArgumentException( aMessage, uno::Reference< uno::XInterface >(), 1 );
             }
+            else if ( aSeqArgs[nInd].Name == "CheckIn" )
+            {
+                aSeqArgs[nInd].Value >>= bCheckIn;
+            }
+        }
+
+        // Remove CheckIn property if needed
+        sal_uInt16 nSlotId = SID_SAVEDOC;
+        uno::Sequence< beans::PropertyValue >  aArgs = aSeqArgs;
+        if ( bCheckIn )
+        {
+            nSlotId = SID_CHECKIN;
+            sal_Int32 nLength = aSeqArgs.getLength( );
+            aArgs = uno::Sequence< beans::PropertyValue >( nLength - 1 );
+            sal_Int32 nNewI = 0;
+            for ( sal_Int32 i = 0; i < nLength; ++i )
+            {
+                beans::PropertyValue aProp = aSeqArgs[i];
+                if ( aProp.Name != "CheckIn" )
+                {
+                    aArgs[nNewI] = aProp;
+                    ++nNewI;
+                }
+            }
         }
 
         SfxAllItemSet *pParams = new SfxAllItemSet( SFX_APP()->GetPool() );
-        TransformParameters( SID_SAVEDOC, aSeqArgs, *pParams );
+        TransformParameters( nSlotId, aArgs, *pParams );
 
         SFX_APP()->NotifyEvent( SfxEventHint( SFX_EVENT_SAVEDOC, GlobalEventConfig::GetEventName(STR_EVENT_SAVEDOC), m_pData->m_pObjectShell ) );
 
@@ -1662,7 +1688,12 @@ void SAL_CALL SfxBaseModel::storeSelf( const    uno::Sequence< beans::PropertyVa
             }
         }
         else
+        {
+            // Tell the SfxMedium if we are in checkin instead of normal save
+            m_pData->m_pObjectShell->GetMedium( )->SetInCheckIn( nSlotId == SID_CHECKIN );
             bRet = m_pData->m_pObjectShell->Save_Impl( pParams );
+            m_pData->m_pObjectShell->GetMedium( )->SetInCheckIn( nSlotId != SID_CHECKIN );
+        }
 
         DELETEZ( pParams );
 
@@ -2577,9 +2608,81 @@ void SAL_CALL SfxBaseModel::checkOut(  ) throw ( uno::RuntimeException )
     }
 }
 
-sal_Bool SAL_CALL SfxBaseModel::isVersionable( ) throw ( uno::RuntimeException )
+void SAL_CALL SfxBaseModel::cancelCheckOut(  ) throw ( uno::RuntimeException )
 {
-    sal_Bool bVersionable = sal_False;
+    SfxMedium* pMedium = m_pData->m_pObjectShell->GetMedium();
+    if ( pMedium )
+    {
+        try
+        {
+            ::ucbhelper::Content aContent( pMedium->GetName(),
+                uno::Reference<ucb::XCommandEnvironment>(),
+                comphelper::getProcessComponentContext() );
+
+            uno::Any aResult = aContent.executeCommand( "cancelCheckout", uno::Any( ) );
+            rtl::OUString sURL;
+            aResult >>= sURL;
+
+            m_pData->m_pObjectShell->GetMedium( )->SwitchDocumentToFile( sURL );
+            m_pData->m_xDocumentProperties->setTitle( getTitle( ) );
+            uno::Sequence< beans::PropertyValue > aSequence ;
+            TransformItems( SID_OPENDOC, *pMedium->GetItemSet(), aSequence );
+            attachResource( sURL, aSequence );
+
+            // Reload the CMIS properties
+            loadCmisProperties( );
+        }
+        catch ( const uno::Exception & e )
+        {
+            throw uno::RuntimeException( e.Message, e.Context );
+        }
+    }
+}
+
+void SAL_CALL SfxBaseModel::checkIn( sal_Bool bIsMajor, const rtl::OUString& rMessage ) throw ( uno::RuntimeException )
+{
+    SfxMedium* pMedium = m_pData->m_pObjectShell->GetMedium();
+    if ( pMedium )
+    {
+        try
+        {
+            uno::Sequence< beans::PropertyValue > aProps( 3 );
+            aProps[0].Name = "VersionMajor";
+            aProps[0].Value = uno::makeAny( bIsMajor );
+            aProps[1].Name = "VersionComment";
+            aProps[1].Value = uno::makeAny( rMessage );
+            aProps[2].Name = "CheckIn";
+            aProps[2].Value = uno::makeAny( sal_True );
+
+            rtl::OUString sName( pMedium->GetName( ) );
+            storeSelf( aProps );
+
+            // Refresh pMedium as it has probably changed during the storeSelf call
+            pMedium = m_pData->m_pObjectShell->GetMedium( );
+            rtl::OUString sNewName( pMedium->GetName( ) );
+
+            // URL has changed, update the document
+            if ( sName != sNewName )
+            {
+                m_pData->m_xDocumentProperties->setTitle( getTitle( ) );
+                uno::Sequence< beans::PropertyValue > aSequence ;
+                TransformItems( SID_OPENDOC, *pMedium->GetItemSet(), aSequence );
+                attachResource( sNewName, aSequence );
+
+                // Reload the CMIS properties
+                loadCmisProperties( );
+            }
+        }
+        catch ( const uno::Exception & e )
+        {
+            throw uno::RuntimeException( e.Message, e.Context );
+        }
+    }
+}
+
+sal_Bool SfxBaseModel::getBoolPropertyValue( const rtl::OUString& rName ) throw ( uno::RuntimeException )
+{
+    sal_Bool bValue = sal_False;
     SfxMedium* pMedium = m_pData->m_pObjectShell->GetMedium();
     if ( pMedium )
     {
@@ -2589,10 +2692,9 @@ sal_Bool SAL_CALL SfxBaseModel::isVersionable( ) throw ( uno::RuntimeException )
                 uno::Reference<ucb::XCommandEnvironment>(),
                 comphelper::getProcessComponentContext() );
             com::sun::star::uno::Reference < beans::XPropertySetInfo > xProps = aContent.getProperties();
-            ::rtl::OUString aIsVersionableProp( "IsVersionable" );
-            if ( xProps->hasPropertyByName( aIsVersionableProp ) )
+            if ( xProps->hasPropertyByName( rName ) )
             {
-                aContent.getPropertyValue( aIsVersionableProp ) >>= bVersionable;
+                aContent.getPropertyValue( rName ) >>= bValue;
             }
         }
         catch ( const uno::Exception & e )
@@ -2600,7 +2702,27 @@ sal_Bool SAL_CALL SfxBaseModel::isVersionable( ) throw ( uno::RuntimeException )
             throw uno::RuntimeException( e.Message, e.Context );
         }
     }
-    return bVersionable;
+    return bValue;
+}
+
+sal_Bool SAL_CALL SfxBaseModel::isVersionable( ) throw ( uno::RuntimeException )
+{
+    return getBoolPropertyValue( "IsVersionable" );
+}
+
+sal_Bool SAL_CALL SfxBaseModel::canCheckOut( ) throw ( uno::RuntimeException )
+{
+    return getBoolPropertyValue( "CanCheckOut" );
+}
+
+sal_Bool SAL_CALL SfxBaseModel::canCancelCheckOut( ) throw ( uno::RuntimeException )
+{
+    return getBoolPropertyValue( "CanCancelCheckOut" );
+}
+
+sal_Bool SAL_CALL SfxBaseModel::canCheckIn( ) throw ( uno::RuntimeException )
+{
+    return getBoolPropertyValue( "CanCheckIn" );
 }
 
 void SfxBaseModel::loadCmisProperties( )

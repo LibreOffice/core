@@ -3768,6 +3768,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/ucb,\
 	AlreadyInitializedException \
 	AuthenticationRequest \
 	CHAOSProgressStart \
+	CheckinArgument \
 	CertificateValidationRequest \
 	Command \
 	CommandAbortedException \

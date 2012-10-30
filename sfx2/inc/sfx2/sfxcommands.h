@@ -45,6 +45,8 @@
 #define CMD_SID_DOCINFO_TITLE                       ".uno:DocInfoTitle"
 #define CMD_SID_OPENTEMPLATE                        ".uno:OpenTemplate"
 #define CMD_SID_CHECKOUT                            ".uno:CheckOut"
+#define CMD_SID_CANCELCHECKOUT                      ".uno:CancelCheckOut"
+#define CMD_SID_CHECKIN                             ".uno:CheckIn"
 #define CMD_SID_OPENURL                             ".uno:OpenUrl"
 #define CMD_SID_OPTIONS                             ".uno:Options"
 #define CMD_SID_ORGANIZER                           ".uno:Organizer"

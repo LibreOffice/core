@@ -361,6 +361,43 @@ void SfxObjectShell::CheckOut( )
     }
 }
 
+void SfxObjectShell::CancelCheckOut( )
+{
+    try
+    {
+        uno::Reference< document::XCmisDocument > xCmisDoc( GetModel(), uno::UNO_QUERY_THROW );
+        // TODO Pop up dialog to ask whether to loose data or not
+        xCmisDoc->cancelCheckOut( );
+    }
+    catch ( const uno::RuntimeException& e )
+    {
+        ErrorBox* pErrorBox = new ErrorBox( &GetFrame()->GetWindow(), WB_OK, e.Message );
+        pErrorBox->Execute( );
+        delete pErrorBox;
+    }
+}
+
+void SfxObjectShell::CheckIn( )
+{
+    try
+    {
+        uno::Reference< document::XCmisDocument > xCmisDoc( GetModel(), uno::UNO_QUERY_THROW );
+        sal_Bool bIsMajor = sal_False;
+        rtl::OUString sComment( "Some sample comment" );
+        // TODO Pop up dialog to ask for comment and major
+        xCmisDoc->checkIn( bIsMajor, sComment );
+        uno::Reference< util::XModifiable > xModifiable( GetModel( ), uno::UNO_QUERY );
+        if ( xModifiable.is( ) )
+            xModifiable->setModified( sal_False );
+    }
+    catch ( const uno::RuntimeException& e )
+    {
+        ErrorBox* pErrorBox = new ErrorBox( &GetFrame()->GetWindow(), WB_OK, e.Message );
+        pErrorBox->Execute( );
+        delete pErrorBox;
+    }
+}
+
 //--------------------------------------------------------------------
 
 void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
@@ -912,6 +949,16 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
             CheckOut( );
             break;
         }
+        case SID_CANCELCHECKOUT:
+        {
+            CancelCheckOut( );
+            break;
+        }
+        case SID_CHECKIN:
+        {
+            CheckIn( );
+            break;
+        }
     }
 
     // Prevent entry in the Pick-lists
@@ -966,6 +1013,37 @@ void SfxObjectShell::GetState_Impl(SfxItemSet &rSet)
                             }
                         }
                         bShow = !bCheckedOut;
+                    }
+
+                    if ( !bShow )
+                    {
+                        rSet.DisableItem( nWhich );
+                        rSet.Put( SfxVisibilityItem( nWhich, sal_False ) );
+                    }
+                }
+                break;
+
+            case SID_CANCELCHECKOUT:
+            case SID_CHECKIN:
+                {
+                    bool bShow = false;
+                    Reference< XCmisDocument > xCmisDoc( GetModel(), uno::UNO_QUERY );
+                    beans::PropertyValues aCmisProperties = xCmisDoc->getCmisPropertiesValues( );
+
+                    if ( xCmisDoc->isVersionable( ) && aCmisProperties.hasElements( ) )
+                    {
+                        // Loop over the CMIS Properties to find cmis:isVersionSeriesCheckedOut
+                        bool bFoundCheckedout = false;
+                        sal_Bool bCheckedOut = sal_False;
+                        for ( sal_Int32 i = 0; i < aCmisProperties.getLength() && !bFoundCheckedout; ++i )
+                        {
+                            if ( aCmisProperties[i].Name == "cmis:isVersionSeriesCheckedOut" )
+                            {
+                                bFoundCheckedout = true;
+                                aCmisProperties[i].Value >>= bCheckedOut;
+                            }
+                        }
+                        bShow = bCheckedOut;
                     }
 
                     if ( !bShow )

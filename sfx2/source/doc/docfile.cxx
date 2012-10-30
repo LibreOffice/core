@@ -262,6 +262,7 @@ public:
     bool m_bTriedStorage:1;
     bool m_bRemote:1;
     bool m_bInputStreamIsReadOnly:1;
+    bool m_bInCheckIn:1;
 
     OUString m_aName;
     OUString m_aLogicName;
@@ -336,6 +337,7 @@ SfxMedium_Impl::SfxMedium_Impl( SfxMedium* pAntiImplP ) :
     m_bTriedStorage(false),
     m_bRemote(false),
     m_bInputStreamIsReadOnly(false),
+    m_bInCheckIn(false),
     m_pSet(NULL),
     m_pURLObj(NULL),
     m_pFilter(NULL),
@@ -1924,23 +1926,31 @@ void SfxMedium::Transfer_Impl()
             ::ucbhelper::Content aSourceContent;
             ::ucbhelper::Content aTransferContent;
 
-            // Get the parent URL from the XChild if possible: why would the URL necessarily have
-            // a hierarchical path? It's not always the case for CMIS.
             ::ucbhelper::Content aDestContent;
             ::ucbhelper::Content::create( aDestURL, xComEnv, comphelper::getProcessComponentContext(), aDestContent );
-            Reference< ::com::sun::star::container::XChild> xChild( aDestContent.get(), uno::UNO_QUERY );
-            rtl::OUString sParentUrl;
-            if ( xChild.is( ) )
+            if ( !IsInCheckIn( ) )
             {
-                Reference< ::com::sun::star::ucb::XContent > xParent( xChild->getParent( ), uno::UNO_QUERY );
-                if ( xParent.is( ) )
+                // Get the parent URL from the XChild if possible: why would the URL necessarily have
+                // a hierarchical path? It's not always the case for CMIS.
+                Reference< ::com::sun::star::container::XChild> xChild( aDestContent.get(), uno::UNO_QUERY );
+                rtl::OUString sParentUrl;
+                if ( xChild.is( ) )
                 {
-                    sParentUrl = xParent->getIdentifier( )->getContentIdentifier();
+                    Reference< ::com::sun::star::ucb::XContent > xParent( xChild->getParent( ), uno::UNO_QUERY );
+                    if ( xParent.is( ) )
+                    {
+                        sParentUrl = xParent->getIdentifier( )->getContentIdentifier();
+                    }
                 }
-            }
 
-            if ( !sParentUrl.isEmpty() )
-                aDest = INetURLObject( sParentUrl );
+                if ( !sParentUrl.isEmpty() )
+                    aDest = INetURLObject( sParentUrl );
+            }
+            else
+            {
+                // For checkin, we need the object URL, not the parent folder
+                aDest = INetURLObject( aDestURL );
+            }
 
             // LongName wasn't defined anywhere, only used here... get the Title instead
             // as it's less probably empty
@@ -1997,8 +2007,24 @@ void SfxMedium::Transfer_Impl()
                 try
                 {
                     rtl::OUString aMimeType = GetFilter()->GetMimeType( );
-                    if (!aTransferContent.transferContent( aSourceContent, ::ucbhelper::InsertOperation_COPY, aFileName, nNameClash, aMimeType ))
+                    ::ucbhelper::InsertOperation eOperation = ::ucbhelper::InsertOperation_COPY;
+                    bool bMajor = false;
+                    rtl::OUString sComment;
+                    if ( IsInCheckIn( ) )
+                    {
+                        eOperation = ::ucbhelper::InsertOperation_CHECKIN;
+                        SFX_ITEMSET_ARG( GetItemSet(), pMajor, SfxBoolItem, SID_DOCINFO_MAJOR, false );
+                        bMajor = pMajor && pMajor->GetValue( );
+                        SFX_ITEMSET_ARG( GetItemSet(), pComments, SfxStringItem, SID_DOCINFO_COMMENTS, false );
+                        if ( pComments )
+                            sComment = pComments->GetValue( );
+                    }
+                    rtl::OUString sResultURL;
+                    if (!aTransferContent.transferContent( aSourceContent, eOperation,
+                                aFileName, nNameClash, aMimeType, bMajor, sComment, &sResultURL ))
                         pImp->m_eError = ERRCODE_IO_GENERAL;
+                    else if ( !sResultURL.isEmpty( ) )  // Likely to happen only for checkin
+                        SwitchDocumentToFile( sResultURL );
                 }
                 catch ( const ::com::sun::star::ucb::CommandAbortedException& )
                 {
@@ -3692,6 +3718,16 @@ sal_Bool SfxMedium::SwitchDocumentToFile( const rtl::OUString& aURL )
     }
 
     return bResult;
+}
+
+void SfxMedium::SetInCheckIn( bool bInCheckIn )
+{
+    pImp->m_bInCheckIn = bInCheckIn;
+}
+
+bool SfxMedium::IsInCheckIn( )
+{
+    return pImp->m_bInCheckIn;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

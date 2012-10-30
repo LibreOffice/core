@@ -734,6 +734,8 @@ public:
     SAL_DLLPRIVATE sal_Bool QuerySaveSizeExceededModules_Impl( const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& xHandler );
 
     SAL_DLLPRIVATE void CheckOut( );
+    SAL_DLLPRIVATE void CancelCheckOut( );
+    SAL_DLLPRIVATE void CheckIn( );
 };
 
 #define SFX_GLOBAL_CLASSID \

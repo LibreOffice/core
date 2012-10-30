@@ -81,7 +81,8 @@ enum InsertOperation
 {
     InsertOperation_COPY, // copy source data
     InsertOperation_MOVE, // move source data
-    InsertOperation_LINK  // create a link to source
+    InsertOperation_LINK,  // create a link to source
+    InsertOperation_CHECKIN  // check-in source data
 };
 
 //=========================================================================
@@ -664,13 +665,21 @@ public:
       *        will overwrite the clashing content and all its data,
       *        NameClash::RENAME will generate and supply a non-clashing title.
       *        @see com/sun/star/ucb/NameClash.idl
+      * @param rMimeType contains the MIME type of the document to write.
+      * @param bMajorVersion tells to create a new major version for checkin operations
+      * @param rCommentVersion contains the comment to use for checkin operations
+      * @param rResultURL is a hacky way to get the update URL after the operation in
+      *        case there was a change (introduced for the checkin operation)
       */
     sal_Bool
     transferContent( const Content& rSourceContent,
                      InsertOperation eOperation,
                      const ::rtl::OUString & rTitle,
                      const sal_Int32 nNameClashAction,
-                     const ::rtl::OUString & rMimeType = ::rtl::OUString( ) )
+                     const ::rtl::OUString & rMimeType = ::rtl::OUString( ),
+                     bool bMajorVersion = false,
+                     const ::rtl::OUString & rCommentVersion = ::rtl::OUString( ),
+                     ::rtl::OUString* pResultURL = NULL )
         throw( ::com::sun::star::ucb::CommandAbortedException,
                ::com::sun::star::uno::RuntimeException,
                ::com::sun::star::uno::Exception );

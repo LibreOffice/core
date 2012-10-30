@@ -53,7 +53,9 @@
 
 #include <libcmis/document.hxx>
 
+#include <comphelper/processfactory.hxx>
 #include <ucbhelper/cancelcommandexecution.hxx>
+#include <ucbhelper/content.hxx>
 #include <ucbhelper/contentidentifier.hxx>
 #include <ucbhelper/std_inputstream.hxx>
 #include <ucbhelper/std_outputstream.hxx>
@@ -454,7 +456,8 @@ namespace cmis
                 {
                     boost::shared_ptr< libcmis::AllowableActions > allowableActions = getObject( xEnv )->getAllowableActions( );
                     sal_Bool bReadOnly = sal_False;
-                    if ( !allowableActions->isAllowed( libcmis::ObjectAction::SetContentStream ) )
+                    if ( !allowableActions->isAllowed( libcmis::ObjectAction::SetContentStream ) &&
+                         !allowableActions->isAllowed( libcmis::ObjectAction::CheckIn ) )
                         bReadOnly = sal_True;
 
                     xRow->appendBoolean( rProp, bReadOnly );
@@ -563,6 +566,60 @@ namespace cmis
                         xRow->appendVoid( rProp );
                     }
                 }
+                else if ( rProp.Name == "CanCheckOut" )
+                {
+                    try
+                    {
+                        libcmis::ObjectPtr pObject = getObject( xEnv );
+                        libcmis::AllowableActionsPtr aAllowables = pObject->getAllowableActions( );
+                        bool bAllowed = false;
+                        if ( aAllowables )
+                        {
+                            bAllowed = aAllowables->isAllowed( libcmis::ObjectAction::CheckOut );
+                        }
+                        xRow->appendBoolean( rProp, bAllowed );
+                    }
+                    catch ( const libcmis::Exception& )
+                    {
+                        xRow->appendVoid( rProp );
+                    }
+                }
+                else if ( rProp.Name == "CanCancelCheckOut" )
+                {
+                    try
+                    {
+                        libcmis::ObjectPtr pObject = getObject( xEnv );
+                        libcmis::AllowableActionsPtr aAllowables = pObject->getAllowableActions( );
+                        bool bAllowed = false;
+                        if ( aAllowables )
+                        {
+                            bAllowed = aAllowables->isAllowed( libcmis::ObjectAction::CancelCheckOut );
+                        }
+                        xRow->appendBoolean( rProp, bAllowed );
+                    }
+                    catch ( const libcmis::Exception& )
+                    {
+                        xRow->appendVoid( rProp );
+                    }
+                }
+                else if ( rProp.Name == "CanCheckIn" )
+                {
+                    try
+                    {
+                        libcmis::ObjectPtr pObject = getObject( xEnv );
+                        libcmis::AllowableActionsPtr aAllowables = pObject->getAllowableActions( );
+                        bool bAllowed = false;
+                        if ( aAllowables )
+                        {
+                            bAllowed = aAllowables->isAllowed( libcmis::ObjectAction::CheckIn );
+                        }
+                        xRow->appendBoolean( rProp, bAllowed );
+                    }
+                    catch ( const libcmis::Exception& )
+                    {
+                        xRow->appendVoid( rProp );
+                    }
+                }
                 else
                     SAL_INFO( "cmisucp", "Looking for unsupported property " << rProp.Name );
             }
@@ -662,6 +719,170 @@ namespace cmis
         return aRet;
     }
 
+    rtl::OUString Content::checkIn( const ucb::CheckinArgument& rArg,
+        const uno::Reference< ucb::XCommandEnvironment > & xEnv )
+            throw( uno::Exception )
+    {
+        ucbhelper::Content aSourceContent( rArg.SourceURL, xEnv, comphelper::getProcessComponentContext( ) );
+        uno::Reference< io::XInputStream > xIn = aSourceContent.openStream( );
+
+        libcmis::ObjectPtr object;
+        try
+        {
+            object = getObject( xEnv );
+        }
+        catch ( const libcmis::Exception& )
+        {
+        }
+
+        libcmis::Document* pPwc = dynamic_cast< libcmis::Document* >( object.get( ) );
+        if ( !pPwc )
+        {
+            ucbhelper::cancelCommandExecution(
+                                ucb::IOErrorCode_GENERAL,
+                                uno::Sequence< uno::Any >( 0 ),
+                                xEnv,
+                                "Checkin only supported by documents" );
+        }
+
+        boost::shared_ptr< ostream > pOut( new ostringstream ( ios_base::binary | ios_base::in | ios_base::out ) );
+        uno::Reference < io::XOutputStream > xOutput = new ucbhelper::StdOutputStream( pOut );
+        copyData( xIn, xOutput );
+
+        map< string, libcmis::PropertyPtr > newProperties;
+        libcmis::DocumentPtr pDoc = pPwc->checkIn( rArg.MajorVersion, OUSTR_TO_STDSTR( rArg.VersionComment ), newProperties,
+                           pOut, OUSTR_TO_STDSTR( rArg.MimeType ), OUSTR_TO_STDSTR( rArg.NewTitle ) );
+
+        // Get the URL and send it back as a result
+        URL aCmisUrl( m_sURL );
+        vector< string > aPaths = pDoc->getPaths( );
+        if ( !aPaths.empty() )
+        {
+            string sPath = aPaths.front( );
+            aCmisUrl.setObjectPath( STD_TO_OUSTR( sPath ) );
+        }
+        else
+        {
+            // We may have unfiled document depending on the server, those
+            // won't have any path, use their ID instead
+            string sId = pDoc->getId( );
+            aCmisUrl.setObjectId( STD_TO_OUSTR( sId ) );
+        }
+        return aCmisUrl.asString( );
+    }
+
+    rtl::OUString Content::checkOut( const uno::Reference< ucb::XCommandEnvironment > & xEnv )
+            throw( uno::Exception )
+    {
+        rtl::OUString aRet;
+        try
+        {
+            // Checkout the document if possible
+            libcmis::DocumentPtr pDoc = boost::dynamic_pointer_cast< libcmis::Document >( getObject( xEnv ) );
+            if ( pDoc.get( ) == NULL )
+            {
+                ucbhelper::cancelCommandExecution(
+                                    ucb::IOErrorCode_GENERAL,
+                                    uno::Sequence< uno::Any >( 0 ),
+                                    xEnv,
+                                    "Checkout only supported by documents" );
+            }
+            libcmis::DocumentPtr pPwc = pDoc->checkOut( );
+
+            // Compute the URL of the Private Working Copy (PWC)
+            URL aCmisUrl( m_sURL );
+            vector< string > aPaths = pPwc->getPaths( );
+            if ( !aPaths.empty() )
+            {
+                string sPath = aPaths.front( );
+                aCmisUrl.setObjectPath( STD_TO_OUSTR( sPath ) );
+            }
+            else
+            {
+                // We may have unfiled PWC depending on the server, those
+                // won't have any path, use their ID instead
+                string sId = pPwc->getId( );
+                aCmisUrl.setObjectId( STD_TO_OUSTR( sId ) );
+            }
+            aRet = aCmisUrl.asString( );
+        }
+        catch ( const libcmis::Exception& e )
+        {
+            SAL_INFO( "cmisucp", "Unexpected libcmis exception: " << e.what( ) );
+            ucbhelper::cancelCommandExecution(
+                                ucb::IOErrorCode_GENERAL,
+                                uno::Sequence< uno::Any >( 0 ),
+                                xEnv,
+                                rtl::OUString::createFromAscii( e.what() ) );
+        }
+        return aRet;
+    }
+
+    rtl::OUString Content::cancelCheckOut( const uno::Reference< ucb::XCommandEnvironment > & xEnv )
+            throw( uno::Exception )
+    {
+        rtl::OUString aRet;
+        try
+        {
+            libcmis::DocumentPtr pPwc = boost::dynamic_pointer_cast< libcmis::Document >( getObject( xEnv ) );
+            if ( pPwc.get( ) == NULL )
+            {
+                ucbhelper::cancelCommandExecution(
+                                    ucb::IOErrorCode_GENERAL,
+                                    uno::Sequence< uno::Any >( 0 ),
+                                    xEnv,
+                                    "CancelCheckout only supported by documents" );
+            }
+            pPwc->cancelCheckout( );
+
+            // Get the Original document (latest version)
+            vector< libcmis::DocumentPtr > aVersions = pPwc->getAllVersions( );
+            libcmis::DocumentPtr pDoc;
+            for ( vector< libcmis::DocumentPtr >::iterator it = aVersions.begin();
+                    it != aVersions.end( ) && pDoc != NULL; ++it )
+            {
+                libcmis::DocumentPtr pVersion = *it;
+                map< string, libcmis::PropertyPtr > aProps = pVersion->getProperties( );
+                bool bIsLatestVersion = false;
+                map< string, libcmis::PropertyPtr >::iterator propIt = aProps.find( string( "cmis:isLatestVersion" ) );
+                if ( propIt != aProps.end( ) && !propIt->second->getBools( ).empty( ) )
+                {
+                    bIsLatestVersion = propIt->second->getBools( ).front( );
+                }
+
+                if ( bIsLatestVersion )
+                    pDoc.reset( pVersion.get( ) );
+            }
+
+            // Compute the URL of the Document
+            URL aCmisUrl( m_sURL );
+            vector< string > aPaths = pDoc->getPaths( );
+            if ( !aPaths.empty() )
+            {
+                string sPath = aPaths.front( );
+                aCmisUrl.setObjectPath( STD_TO_OUSTR( sPath ) );
+            }
+            else
+            {
+                // We may have unfiled doc depending on the server, those
+                // won't have any path, use their ID instead
+                string sId = pDoc->getId( );
+                aCmisUrl.setObjectId( STD_TO_OUSTR( sId ) );
+            }
+            aRet = aCmisUrl.asString( );
+        }
+        catch ( const libcmis::Exception& e )
+        {
+            SAL_INFO( "cmisucp", "Unexpected libcmis exception: " << e.what( ) );
+            ucbhelper::cancelCommandExecution(
+                                ucb::IOErrorCode_GENERAL,
+                                uno::Sequence< uno::Any >( 0 ),
+                                xEnv,
+                                rtl::OUString::createFromAscii( e.what() ) );
+        }
+        return aRet;
+    }
+
     void Content::transfer( const ucb::TransferInfo& rTransferInfo,
         const uno::Reference< ucb::XCommandEnvironment > & xEnv )
             throw( uno::Exception )
@@ -756,11 +977,10 @@ namespace cmis
                     libcmis::Document* document = dynamic_cast< libcmis::Document* >( object.get( ) );
                     if ( NULL != document )
                     {
-                        string sMime = document->getContentType( );
                         boost::shared_ptr< ostream > pOut( new ostringstream ( ios_base::binary | ios_base::in | ios_base::out ) );
                         uno::Reference < io::XOutputStream > xOutput = new ucbhelper::StdOutputStream( pOut );
                         copyData( xInputStream, xOutput );
-                        document->setContentStream( pOut, sMime, OUSTR_TO_STDSTR( rMimeType ), bReplaceExisting );
+                        document->setContentStream( pOut, OUSTR_TO_STDSTR( rMimeType ), string( ), bReplaceExisting );
                     }
                 }
                 else
@@ -997,6 +1217,15 @@ namespace cmis
             beans::Property( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsVersionable" ) ),
                 -1, getCppuBooleanType(),
                 beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
+            beans::Property( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CanCheckOut" ) ),
+                -1, getCppuBooleanType(),
+                beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
+            beans::Property( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CanCancelCheckOut" ) ),
+                -1, getCppuBooleanType(),
+                beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
+            beans::Property( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CanCheckIn" ) ),
+                -1, getCppuBooleanType(),
+                beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
         };
 
         const int nProps = SAL_N_ELEMENTS(aGenericProperties);
@@ -1035,6 +1264,9 @@ namespace cmis
 
             // Mandatory CMIS-only commands
             ucb::CommandInfo ( rtl::OUString( "checkout" ), -1, getCppuVoidType() ),
+            ucb::CommandInfo ( rtl::OUString( "cancelCheckout" ), -1, getCppuVoidType() ),
+            ucb::CommandInfo ( rtl::OUString( "checkIn" ), -1,
+                    getCppuType( static_cast<ucb::TransferInfo * >( 0 ) ) ),
 
             // Folder Only, omitted if not a folder
             ucb::CommandInfo
@@ -1227,46 +1459,20 @@ namespace cmis
         }
         else if ( aCommand.Name == "checkout" )
         {
-            try
+            aRet <<= checkOut( xEnv );
+        }
+        else if ( aCommand.Name == "cancelCheckout" )
+        {
+            aRet <<= cancelCheckOut( xEnv );
+        }
+        else if ( aCommand.Name == "checkin" )
+        {
+            ucb::CheckinArgument aArg;
+            if ( !( aCommand.Argument >>= aArg ) )
             {
-                // Checkout the document if possible
-                libcmis::DocumentPtr pDoc = boost::dynamic_pointer_cast< libcmis::Document >( getObject( xEnv ) );
-                if ( pDoc.get( ) == NULL )
-                {
-                    ucbhelper::cancelCommandExecution(
-                                        ucb::IOErrorCode_GENERAL,
-                                        uno::Sequence< uno::Any >( 0 ),
-                                        xEnv,
-                                        "Checkout only supported by documents" );
-                }
-                libcmis::DocumentPtr pPwc = pDoc->checkOut( );
-
-                // Compute the URL of the Private Working Copy (PWC)
-                URL aCmisUrl( m_sURL );
-                vector< string > aPaths = pPwc->getPaths( );
-                if ( !aPaths.empty() )
-                {
-                    string sPath = aPaths.front( );
-                    aCmisUrl.setObjectPath( STD_TO_OUSTR( sPath ) );
-                }
-                else
-                {
-                    // We may have unfiled PWC depending on the server, those
-                    // won't have any path, use their ID instead
-                    string sId = pPwc->getId( );
-                    aCmisUrl.setObjectId( STD_TO_OUSTR( sId ) );
-                }
-                aRet <<= aCmisUrl.asString( );
+                ucbhelper::cancelCommandExecution ( getBadArgExcept(), xEnv );
             }
-            catch ( const libcmis::Exception& e )
-            {
-                SAL_INFO( "cmisucp", "Unexpected libcmis exception: " << e.what( ) );
-                ucbhelper::cancelCommandExecution(
-                                    ucb::IOErrorCode_GENERAL,
-                                    uno::Sequence< uno::Any >( 0 ),
-                                    xEnv,
-                                    rtl::OUString::createFromAscii( e.what() ) );
-            }
+            aRet <<= checkIn( aArg, xEnv );
         }
         else
         {

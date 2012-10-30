@@ -679,6 +679,21 @@ Any SAL_CALL UniversalContentBroker::execute(
 
         globalTransfer( aTransferArg, Environment );
     }
+    else if ( ( aCommand.Handle == CHECKIN_HANDLE ) || aCommand.Name == CHECKIN_NAME )
+    {
+        ucb::CheckinArgument aCheckinArg;
+        if ( !( aCommand.Argument >>= aCheckinArg ) )
+        {
+            ucbhelper::cancelCommandExecution(
+                makeAny( IllegalArgumentException(
+                                OUString( "Wrong argument type!" ),
+                                static_cast< cppu::OWeakObject * >( this ),
+                                -1 ) ),
+                Environment );
+            // Unreachable
+        }
+        aRet <<= checkIn( aCheckinArg, Environment );
+    }
     else
     {
         //////////////////////////////////////////////////////////////////

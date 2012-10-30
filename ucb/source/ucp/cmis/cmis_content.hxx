@@ -34,6 +34,7 @@
 
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
+#include <com/sun/star/ucb/CheckinArgument.hpp>
 #include <com/sun/star/ucb/ContentCreationException.hpp>
 #include <com/sun/star/ucb/OpenCommandArgument2.hpp>
 #include <com/sun/star/ucb/TransferInfo.hpp>
@@ -115,6 +116,16 @@ private:
     void insert( const com::sun::star::uno::Reference< com::sun::star::io::XInputStream > & xInputStream,
         sal_Bool bReplaceExisting, const ::rtl::OUString & rMimeType,
         const com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment >& xEnv )
+            throw( com::sun::star::uno::Exception );
+
+    rtl::OUString checkIn( const com::sun::star::ucb::CheckinArgument& rArg,
+        const com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment > & xEnv )
+            throw( com::sun::star::uno::Exception );
+
+    rtl::OUString checkOut( const com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment > & xEnv )
+            throw( com::sun::star::uno::Exception );
+
+    rtl::OUString cancelCheckOut( const com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment > & xEnv )
             throw( com::sun::star::uno::Exception );
 
     void destroy( ) throw( com::sun::star::uno::Exception );

@@ -1470,7 +1470,7 @@ void SfxBaseController::ShowInfoBars( )
     }
 }
 
-IMPL_LINK( SfxBaseController, CheckOutHandler, PushButton*, pBtn )
+IMPL_LINK_NOARG ( SfxBaseController, CheckOutHandler )
 {
     if ( m_pData->m_pViewShell )
         m_pData->m_pViewShell->GetObjectShell()->CheckOut( );

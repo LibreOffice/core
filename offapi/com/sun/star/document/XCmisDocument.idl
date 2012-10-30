@@ -24,9 +24,25 @@ interface XCmisDocument : com::sun::star::uno::XInterface
      */
     void checkOut( );
 
+    /** Cancel checked out document, this will discard all changes since
+        check-out.
+     */
+    void cancelCheckOut( );
+
+    /** Creates a new version of the document from the private working
+        copy.
+     */
+    void checkIn( [in] boolean isMajor, [in] string comment );
+
     /** Tells whether a document can support versioning or not.
      */
     boolean isVersionable( );
+
+    boolean canCheckOut( );
+
+    boolean canCancelCheckOut( );
+
+    boolean canCheckIn( );
 
     /** Contains the properties values named after their CMIS ID.
      */

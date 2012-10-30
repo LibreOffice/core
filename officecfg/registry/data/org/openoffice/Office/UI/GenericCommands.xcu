@@ -1901,6 +1901,16 @@
                     <value xml:lang="en-US">Check-Out</value>
                 </prop>
             </node>
+            <node oor:name=".uno:CancelCheckOut" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">Cancel Check-Out...</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:CheckIn" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">Check-In...</value>
+                </prop>
+            </node>
             <node oor:name=".uno:CloseDoc" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="en-US">~Close</value>

@@ -182,6 +182,16 @@ interface OfficeDocument : Document
         ExecMethod = ExecFile_Impl;
         StateMethod = GetState_Impl;
     ]
+    SID_CANCELCHECKOUT
+    [
+        ExecMethod = ExecFile_Impl;
+        StateMethod = GetState_Impl;
+    ]
+    SID_CHECKIN
+    [
+        ExecMethod = ExecFile_Impl;
+        StateMethod = GetState_Impl;
+    ]
 }
 
  //=========================================================================

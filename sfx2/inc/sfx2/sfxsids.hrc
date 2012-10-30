@@ -144,6 +144,8 @@
 #define SID_DIRECTEXPORTDOCASPDF            (SID_SFX_START + 1674)
 #define SID_UPDATEDOCMODE                   (SID_SFX_START + 1668)
 #define SID_CHECKOUT                        (SID_SFX_START + 512)
+#define SID_CANCELCHECKOUT                  (SID_SFX_START + 513)
+#define SID_CHECKIN                         (SID_SFX_START + 514)
 
 #define SID_FORCERELOAD                     (SID_SFX_START + 1502)
 #define SID_FILE_DIALOG                     (SID_SFX_START + 304)
@@ -310,6 +312,7 @@
 #define SID_DOCINFO_KEYWORDS                (SID_SFX_START + 591)
 #define SID_DOCINFO_COMMENTS                (SID_SFX_START + 592)
 #define SID_DOCINFO_AUTHOR                  (SID_SFX_START + 593)
+#define SID_DOCINFO_MAJOR                   (SID_SFX_START + 594)
 #define SID_NEWDOCDIRECT                    (SID_SFX_START + 537)
 #define SID_DOCFRAME                        (SID_SFX_START + 598)
 #define SID_TARGETNAME                      (SID_SFX_START + 560)
