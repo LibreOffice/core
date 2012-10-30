@@ -203,6 +203,9 @@ namespace svgio
             // vaules for fill, stroke, strokeWidth and others
             bool                        mbIsClipPathContent : 1;
 
+            // #121221# Defines if evtl. an empty array *is* set
+            bool                        mbStrokeDasharraySet : 1;
+
             /// internal helpers
             void add_fillGradient(
                 const basegfx::B2DPolyPolygon& rPath,
@@ -318,6 +321,10 @@ namespace svgio
             /// fill StrokeDasharray content
             const SvgNumberVector& getStrokeDasharray() const;
             void setStrokeDasharray(const SvgNumberVector& rStrokeDasharray = SvgNumberVector()) { maStrokeDasharray = rStrokeDasharray; }
+
+            /// #121221# StrokeDasharray needs a set state, it *may* be set to empty by purpose
+            bool getStrokeDasharraySet() const { return mbStrokeDasharraySet; }
+            void setStrokeDasharraySet(bool bNew) { mbStrokeDasharraySet = bNew; }
 
             /// StrokeDashOffset content
             const SvgNumber getStrokeDashOffset() const;

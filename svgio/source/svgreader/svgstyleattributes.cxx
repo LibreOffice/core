@@ -1156,7 +1156,8 @@ namespace svgio
             mpMarkerEndXLink(0),
             maFillRule(FillRule_notset),
             maClipRule(FillRule_nonzero),
-            mbIsClipPathContent(SVGTokenClipPathNode == mrOwner.getType())
+            mbIsClipPathContent(SVGTokenClipPathNode == mrOwner.getType()),
+            mbStrokeDasharraySet(false)
         {
             if(!mbIsClipPathContent)
             {
@@ -1263,9 +1264,18 @@ namespace svgio
                 {
                     if(aContent.getLength())
                     {
+                        static rtl::OUString aStrNone(rtl::OUString::createFromAscii("none"));
                         SvgNumberVector aVector;
 
-                        if(readSvgNumberVector(aContent, aVector))
+                        if(aContent.match(aStrNone))
+                        {
+                            // #121221# The special value 'none' needs to be handled
+                            // in the sense that *when* it is set, the parent shall not
+                            // be used. Before this was only dependent on the array being
+                            // empty
+                            setStrokeDasharraySet(true);
+                        }
+                        else if(readSvgNumberVector(aContent, aVector))
                         {
                             setStrokeDasharray(aVector);
                         }
@@ -2018,6 +2028,11 @@ namespace svgio
         {
             if(!maStrokeDasharray.empty())
             {
+                return maStrokeDasharray;
+            }
+            else if(getStrokeDasharraySet())
+            {
+                // #121221# is set to empty *by purpose*, do not visit parent styles
                 return maStrokeDasharray;
             }
 
