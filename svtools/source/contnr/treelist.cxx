@@ -786,7 +786,7 @@ SvTreeListEntry* SvTreeList::NextVisible(const SvListView* pView,SvTreeListEntry
 
     if ( pView->IsExpanded(pActEntry) )
     {
-        OSL_ENSURE(!pActEntry->mpChildren.empty(), "Pass entry is supposed to have child entries.");
+        OSL_ENSURE(!pActEntry->maChildren.empty(), "Pass entry is supposed to have child entries.");
 
         nDepth++;
         pActEntry = &pActEntry->maChildren[0];
