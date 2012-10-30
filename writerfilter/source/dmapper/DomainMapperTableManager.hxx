@@ -82,7 +82,7 @@ public:
     inline virtual void cellProps(TablePropertyMapPtr pProps)
     {
         if ( m_pStyleProps.get( ) )
-            m_pStyleProps->insert( pProps, true );
+            m_pStyleProps->InsertProps(pProps);
         else
            DomainMapperTableManager_Base_t::cellProps( pProps );
     };
@@ -90,7 +90,7 @@ public:
     inline virtual void cellPropsByCell(unsigned int i, TablePropertyMapPtr pProps)
     {
         if ( m_pStyleProps.get( ) )
-            m_pStyleProps->insert( pProps, true );
+            m_pStyleProps->InsertProps(pProps);
         else
            DomainMapperTableManager_Base_t::cellPropsByCell( i, pProps );
     };
@@ -98,7 +98,7 @@ public:
     inline virtual void insertRowProps(TablePropertyMapPtr pProps)
     {
         if ( m_pStyleProps.get( ) )
-            m_pStyleProps->insert( pProps, true );
+            m_pStyleProps->InsertProps(pProps);
         else
            DomainMapperTableManager_Base_t::insertRowProps( pProps );
     };
@@ -106,7 +106,7 @@ public:
     inline virtual void insertTableProps(TablePropertyMapPtr pProps)
     {
         if ( m_pStyleProps.get( ) )
-            m_pStyleProps->insert( pProps, true );
+            m_pStyleProps->InsertProps(pProps);
         else
            DomainMapperTableManager_Base_t::insertTableProps( pProps );
     };

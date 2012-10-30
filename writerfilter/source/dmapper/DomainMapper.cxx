@@ -1807,7 +1807,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
             CellColorHandlerPtr pCellColorHandler( new CellColorHandler );
             pCellColorHandler->setOutputFormat( CellColorHandler::Paragraph );
             pProperties->resolve(*pCellColorHandler);
-            rContext->insert( pCellColorHandler->getProperties(), true );
+            rContext->InsertProps(pCellColorHandler->getProperties());
         }
     }
     break;
@@ -2285,7 +2285,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
                 CellColorHandlerPtr pCellColorHandler( new CellColorHandler );
                 pCellColorHandler->setOutputFormat( CellColorHandler::Character );
                 pProperties->resolve(*pCellColorHandler);
-                rContext->insert( pCellColorHandler->getProperties(), true );
+                rContext->InsertProps(pCellColorHandler->getProperties());
             }
             break;
         }

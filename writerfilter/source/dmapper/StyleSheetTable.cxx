@@ -160,14 +160,14 @@ PropertyMapPtr TableStyleSheetEntry::GetProperties( sal_Int32 nMask, StyleSheetE
             pStack->push_back(pEntry);
 
         TableStyleSheetEntry* pParent = static_cast<TableStyleSheetEntry *>( pEntry.get( ) );
-            pProps->insert( pParent->GetProperties( nMask ), pStack );
+            pProps->InsertProps(pParent->GetProperties(nMask));
 
             pStack->pop_back();
     }
     }
 
     // And finally get the mask ones
-    pProps->insert( GetLocalPropertiesFromMask( nMask ) );
+    pProps->InsertProps(GetLocalPropertiesFromMask(nMask));
 
     return pProps;
 }
@@ -211,7 +211,7 @@ void lcl_mergeProps( PropertyMapPtr pToFill,  PropertyMapPtr pToAdd, TblStyleTyp
         }
     }
 
-    pToFill->insert( pToAdd );
+    pToFill->InsertProps(pToAdd);
 }
 
 PropertyMapPtr TableStyleSheetEntry::GetLocalPropertiesFromMask( sal_Int32 nMask )
@@ -517,7 +517,7 @@ void StyleSheetTable::lcl_sprm(Sprm & rSprm)
 
                 if (nType == TBL_STYLE_UNKNOWN)
                 {
-                    pEntry->pProperties->insert(pProps);
+                    pEntry->pProperties->InsertProps(pProps);
                 }
                 else
                 {
@@ -556,7 +556,8 @@ void StyleSheetTable::lcl_sprm(Sprm & rSprm)
             {
                 BorderHandlerPtr pBorderHandler( new BorderHandler(m_pImpl->m_rDMapper.IsOOXMLImport()) );
                 pProperties->resolve(*pBorderHandler);
-                m_pImpl->m_pCurrentEntry->pProperties->insert( pBorderHandler->getProperties(), true );
+                m_pImpl->m_pCurrentEntry->pProperties->InsertProps(
+                        pBorderHandler->getProperties());
             }
         }
         break;
@@ -595,7 +596,7 @@ void StyleSheetTable::lcl_sprm(Sprm & rSprm)
                     PropertyMapPtr pProps(new PropertyMap());
                     m_pImpl->m_rDMapper.sprmWithProps( rSprm, pProps );
 
-                    m_pImpl->m_pCurrentEntry->pProperties->insert(pProps);
+                    m_pImpl->m_pCurrentEntry->pProperties->InsertProps(pProps);
 
                     m_pImpl->m_rDMapper.PopStyleSheetProperties( );
                 }

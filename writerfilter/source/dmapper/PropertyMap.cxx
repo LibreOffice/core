@@ -224,12 +224,20 @@ template<class T>
 };
 
 
-void PropertyMap::insert( const PropertyMapPtr pMap, bool bOverwrite )
+void PropertyMap::InsertProps(const PropertyMapPtr pMap)
 {
     if( pMap.get() )
     {
-        if( bOverwrite )
-            ::std::for_each( pMap->begin(), pMap->end(), removeExistingElements<PropertyMap::value_type>(*this) );
+        ::std::for_each( pMap->begin(), pMap->end(),
+                removeExistingElements<PropertyMap::value_type>(*this) );
+        InsertPropsNoOverwrite(pMap);
+    }
+}
+
+void PropertyMap::InsertPropsNoOverwrite(const PropertyMapPtr pMap)
+{
+    if( pMap.get() )
+    {
         _PropertyMap::insert(pMap->begin(), pMap->end());
         insertTableProperties(pMap.get());
 

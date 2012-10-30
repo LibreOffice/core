@@ -68,7 +68,7 @@ private:
         if ( m_pTableManager )
             m_pTableManager->cellProps( pProps );
         else
-            m_pCurrentProperties->insert( pProps, true );
+            m_pCurrentProperties->InsertProps(pProps);
     };
 
     inline void cellPropsByCell( unsigned int i, TablePropertyMapPtr pProps )
@@ -76,7 +76,7 @@ private:
         if ( m_pTableManager )
             m_pTableManager->cellPropsByCell( i, pProps );
         else
-            m_pCurrentProperties->insert( pProps, true );
+            m_pCurrentProperties->InsertProps(pProps);
     };
 
     inline void insertRowProps( TablePropertyMapPtr pProps )
@@ -84,7 +84,7 @@ private:
         if ( m_pTableManager )
             m_pTableManager->insertRowProps( pProps );
         else
-            m_pCurrentProperties->insert( pProps, true );
+            m_pCurrentProperties->InsertProps(pProps);
     };
 
     inline void insertTableProps( TablePropertyMapPtr pProps )
@@ -92,7 +92,7 @@ private:
         if ( m_pTableManager )
             m_pTableManager->insertTableProps( pProps );
         else
-            m_pCurrentProperties->insert( pProps, true );
+            m_pCurrentProperties->InsertProps(pProps);
     };
 };
 typedef boost::shared_ptr<TablePropertiesHandler> TablePropertiesHandlerPtr;

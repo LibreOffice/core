@@ -890,7 +890,7 @@ void TableManager<T, PropertiesPointer>::cellProps(PropertiesPointer pProps)
 #endif
 
     if(getCellProps().get())
-        getCellProps()->insert( pProps );
+        getCellProps()->InsertProps(pProps);
     else
         setCellProps(pProps);
 
@@ -926,7 +926,7 @@ void TableManager<T, PropertiesPointer>::insertRowProps(PropertiesPointer pProps
 #endif
 
     if( getRowProps().get() )
-        getRowProps()->insert( pProps );
+        getRowProps()->InsertProps(pProps);
     else
         setRowProps(pProps);
 
@@ -945,7 +945,7 @@ void TableManager<T, PropertiesPointer>::insertTableProps(PropertiesPointer pPro
 #endif
 
     if( getTableProps().get() )
-        getTableProps()->insert( pProps );
+        getTableProps()->InsertProps(pProps);
     else
         setTableProps(pProps);
 

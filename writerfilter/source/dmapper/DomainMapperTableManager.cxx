@@ -142,7 +142,7 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
                     pProperties->resolve( *pTDefTableHandler );
 
                     TablePropertyMapPtr pRowPropMap( new TablePropertyMap );
-                    pRowPropMap->insert( pTDefTableHandler->getRowProperties() );
+                    pRowPropMap->InsertProps(pTDefTableHandler->getRowProperties());
                     insertRowProps( pRowPropMap );
                     if( !m_nTableWidth )
                     {
@@ -171,7 +171,7 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
                     BorderHandlerPtr pBorderHandler( new BorderHandler(m_bOOXML) );
                     pProperties->resolve(*pBorderHandler);
                     TablePropertyMapPtr pCellPropMap( new TablePropertyMap() );
-                    pCellPropMap->insert( pBorderHandler->getProperties() );
+                    pCellPropMap->InsertProps(pBorderHandler->getProperties());
                     cellPropsByCell( m_nCellBorderIndex, pCellPropMap );
                     ++m_nCellBorderIndex;
                 }
@@ -569,7 +569,7 @@ void DomainMapperTableManager::CopyTextProperties(PropertyMapPtr pContext, Style
         OSL_ENSURE( pStyleSheetEntry, "table style not found" );
         lcl_CopyTextProperties(m_pTableStyleTextProperies, pStyleSheetEntry.get( ), pStyleSheetTable);
     }
-    pContext->insert( m_pTableStyleTextProperies );
+    pContext->InsertProps(m_pTableStyleTextProperies);
 }
 
 

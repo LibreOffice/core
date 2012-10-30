@@ -146,7 +146,7 @@ namespace dmapper {
                     BorderHandlerPtr pBorderHandler( new BorderHandler(m_bOOXML) );
                     pProperties->resolve(*pBorderHandler);
                     TablePropertyMapPtr pTablePropMap( new TablePropertyMap );
-                    pTablePropMap->insert( pBorderHandler->getProperties() );
+                    pTablePropMap->InsertProps(pBorderHandler->getProperties());
 
 #ifdef DEBUG_DOMAINMAPPER
                     pTablePropMap->dumpXml( dmapper_logger );
