@@ -23,6 +23,7 @@
 #include <com/sun/star/util/SearchFlags.hpp>
 #include <com/sun/star/i18n/TransliterationModules.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
+#include <comphelper/string.hxx>
 #include <unotools/tempfile.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/print.hxx>
@@ -205,10 +206,10 @@ static void lcl_ConvertTabsToSpaces( String& rLine )
             if ( rLine.GetChar(nPos) == '\t' )
             {
                 // Nicht 4 Blanks, sondern an 4er TabPos:
-                String aBlanker;
-                aBlanker.Fill( ( 4 - ( nPos % 4 ) ), ' ' );
+                rtl::OUStringBuffer aBlanker;
+                comphelper::string::padToLength(aBlanker, ( 4 - ( nPos % 4 ) ), ' ');
                 rLine.Erase( nPos, 1 );
-                rLine.Insert( aBlanker, nPos );
+                rLine.Insert(aBlanker.makeStringAndClear(), nPos);
                 nMax = rLine.Len();
             }
             nPos++; // Nicht optimal, falls Tab, aber auch nicht verkehrt...

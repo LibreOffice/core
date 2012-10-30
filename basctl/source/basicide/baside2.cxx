@@ -37,6 +37,7 @@
 #include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
 #include <com/sun/star/ui/dialogs/XFilterManager.hpp>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/string.hxx>
 #include <sfx2/dinfdlg.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/docfile.hxx>
@@ -164,13 +165,13 @@ void lcl_ConvertTabsToSpaces( String& rLine )
             if ( rLine.GetChar( nPos ) == '\t' )
             {
                 // not 4 Blanks, but at 4 TabPos:
-                String aBlanker;
-                aBlanker.Fill( ( 4 - ( nPos % 4 ) ), ' ' );
+                rtl::OUStringBuffer aBlanker;
+                string::padToLength(aBlanker, ( 4 - ( nPos % 4 ) ), ' ');
                 rLine.Erase( nPos, 1 );
-                rLine.Insert( aBlanker, nPos );
+                rLine.Insert( aBlanker.makeStringAndClear(), nPos );
                 nMax = rLine.Len();
             }
-            nPos++;
+            ++nPos;
         }
     }
 }

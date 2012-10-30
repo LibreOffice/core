@@ -26,6 +26,7 @@
  *
  ************************************************************************/
 
+#include <comphelper/string.hxx>
 #include <drawinglayer/processor2d/vclprocessor2d.hxx>
 #include <drawinglayer/primitive2d/textprimitive2d.hxx>
 #include <drawinglayer/primitive2d/textdecoratedprimitive2d.hxx>
@@ -54,6 +55,7 @@
 #include <drawinglayer/primitive2d/wrongspellprimitive2d.hxx>
 #include <drawinglayer/primitive2d/pagepreviewprimitive2d.hxx>
 #include <tools/diagnose_ex.h>
+#include <rtl/ustrbuf.hxx>
 #include <vcl/metric.hxx>
 #include <drawinglayer/primitive2d/textenumsprimitive2d.hxx>
 #include <drawinglayer/primitive2d/epsprimitive2d.hxx>
@@ -270,9 +272,9 @@ namespace drawinglayer
                         if ( nWidth )
                             nChars = nWidthToFill / nWidth;
 
-                        String aFilled;
-                        aFilled.Fill( (sal_uInt16)nChars, aText.GetChar( 0 ) );
-                        aText = aFilled;
+                        rtl::OUStringBuffer aFilled;
+                        comphelper::string::padToLength(aFilled, (sal_uInt16)nChars, aText.GetChar(0));
+                        aText = aFilled.makeStringAndClear();
                         nPos = 0;
                         nLen = nChars;
                     }

@@ -1797,19 +1797,13 @@ sal_Bool SwCrsrShell::SetShadowCrsrPos( const Point& rPt, SwFillMode eFillMode )
             case FILL_TAB:
             case FILL_SPACE:
                 {
-                    String sInsert;
-                    if( aFPos.nTabCnt )
-                        sInsert.Fill( aFPos.nTabCnt, '\t' );
-                    if( aFPos.nSpaceCnt )
-                    {
-                        String sSpace;
-                        sSpace.Fill( aFPos.nSpaceCnt );
-                        sInsert += sSpace;
-                    }
-                    if( sInsert.Len() )
-                    {
-                        GetDoc()->InsertString( *pCurCrsr, sInsert );
-                    }
+                    rtl::OUStringBuffer sInsert;
+                    if (aFPos.nTabCnt)
+                        comphelper::string::padToLength(sInsert, aFPos.nTabCnt, '\t');
+                    if (aFPos.nSpaceCnt)
+                        comphelper::string::padToLength(sInsert, sInsert.getLength() + aFPos.nSpaceCnt, ' ');
+                    if (sInsert.getLength())
+                        GetDoc()->InsertString( *pCurCrsr, sInsert.makeStringAndClear());
                 }
                 // no break - still need to set orientation
             case FILL_MARGIN:

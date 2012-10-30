@@ -3487,7 +3487,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
                                     aTmpFont.SetPhysFont( pOutDev );
                                     long nCharWidth = aTmpFont.QuickGetTextSize( pOutDev,
                                         rtl::OUString(pTextPortion->GetExtraValue()), 0, 1, NULL ).Width();
-                                    long nChars = 2;
+                                    sal_Int32 nChars = 2;
                                     if( nCharWidth )
                                         nChars = pTextPortion->GetSize().Width() / nCharWidth;
                                     if ( nChars < 2 )
@@ -3495,8 +3495,9 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
                                     else if ( nChars == 2 )
                                         nChars = 3; // looks better
 
-                                    String aText;
-                                    aText.Fill( (sal_uInt16)nChars, pTextPortion->GetExtraValue() );
+                                    rtl::OUStringBuffer aBuf;
+                                    comphelper::string::padToLength(aBuf, nChars, pTextPortion->GetExtraValue());
+                                    String aText(aBuf.makeStringAndClear());
                                     aTmpFont.QuickDrawText( pOutDev, aTmpPos, aText, 0, aText.Len(), NULL );
                                     pOutDev->DrawStretchText( aTmpPos, pTextPortion->GetSize().Width(), aText );
 

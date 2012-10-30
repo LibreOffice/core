@@ -30,6 +30,8 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/uno/Any.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/string.hxx>
+#include <rtl/ustrbuf.hxx>
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::container;
@@ -1090,9 +1092,9 @@ void SbiRuntime::implHandleSbxFlags( SbxVariable* pVar, SbxDataType t, sal_uInt3
     if( bFixedString )
     {
         sal_uInt16 nCount = static_cast<sal_uInt16>( nOp2 >> 17 );      // len = all bits above 0x10000
-        String aStr;
-        aStr.Fill( nCount, 0 );
-        pVar->PutString( aStr );
+        rtl::OUStringBuffer aBuf;
+        comphelper::string::padToLength(aBuf, nCount, 0);
+        pVar->PutString(aBuf.makeStringAndClear());
     }
 
     bool bVarToDim = ((nOp2 & SBX_TYPE_VAR_TO_DIM_FLAG) != 0);

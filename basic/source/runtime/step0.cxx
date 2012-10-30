@@ -721,19 +721,18 @@ void SbiRuntime::StepLSET()
 
         sal_uInt16 nVarStrLen = aRefVarString.Len();
         sal_uInt16 nValStrLen = aRefValString.Len();
-        String aNewStr;
+        rtl::OUStringBuffer aNewStr;
         if( nVarStrLen > nValStrLen )
         {
-            aRefVarString.Fill(nVarStrLen,' ');
-            aNewStr  = aRefValString.Copy( 0, nValStrLen );
-            aNewStr += aRefVarString.Copy( nValStrLen, nVarStrLen - nValStrLen );
+            aNewStr.append(aRefValString);
+            comphelper::string::padToLength(aNewStr, nVarStrLen, ' ');
         }
         else
         {
-            aNewStr = aRefValString.Copy( 0, nVarStrLen );
+            aNewStr.append(aRefValString.Copy(0, nVarStrLen));
         }
 
-        refVar->PutString( aNewStr );
+        refVar->PutString(aNewStr.makeStringAndClear());
         refVar->SetFlags( n );
     }
 }
@@ -753,16 +752,19 @@ void SbiRuntime::StepRSET()
         String aRefVarString = refVar->GetString();
         String aRefValString = refVal->GetString();
 
-        sal_uInt16 nPos = 0;
         sal_uInt16 nVarStrLen = aRefVarString.Len();
-        if( nVarStrLen > aRefValString.Len() )
+        sal_uInt16 nValStrLen = aRefValString.Len();
+        rtl::OUStringBuffer aNewStr;
+        if (nVarStrLen > nValStrLen)
         {
-            aRefVarString.Fill(nVarStrLen,' ');
-            nPos = nVarStrLen - aRefValString.Len();
+            comphelper::string::padToLength(aNewStr, nVarStrLen - nValStrLen, ' ');
+            aNewStr.append(aRefValString);
         }
-        aRefVarString  = aRefVarString.Copy( 0, nPos );
-        aRefVarString += aRefValString.Copy( 0, nVarStrLen - nPos );
-        refVar->PutString(aRefVarString);
+        else
+        {
+            aNewStr.append(aRefValString.Copy(0, nVarStrLen));
+        }
+        refVar->PutString(aNewStr.makeStringAndClear());
 
         refVar->SetFlags( n );
     }

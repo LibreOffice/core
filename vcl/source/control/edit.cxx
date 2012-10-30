@@ -520,14 +520,14 @@ XubString Edit::ImplGetText() const
 {
     if ( mcEchoChar || (GetStyle() & WB_PASSWORD) )
     {
-        XubString   aText;
         sal_Unicode cEchoChar;
         if ( mcEchoChar )
             cEchoChar = mcEchoChar;
         else
             cEchoChar = '*';
-        aText.Fill( maText.Len(), cEchoChar );
-        return aText;
+        rtl::OUStringBuffer aText;
+        comphelper::string::padToLength(aText, maText.Len(), cEchoChar);
+        return aText.makeStringAndClear();
     }
     else
         return maText;

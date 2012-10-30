@@ -687,16 +687,19 @@ void SwWW8ImplReader::SetAnlvStrings(SwNumFmt &rNum, WW8_ANLV &rAV,
     if( bOutline )
     {                             // Gliederung
         if( !rNum.GetIncludeUpperLevels()           // es sind  <= 1 Nummern anzuzeigen
-            || rNum.GetNumberingType() == SVX_NUM_NUMBER_NONE ){    // oder dieser Level hat keine
+            || rNum.GetNumberingType() == SVX_NUM_NUMBER_NONE )    // oder dieser Level hat keine
+        {
                                                 // eigenen Ziffern
             bInsert = true;                     // -> dann uebernehme Zeichen
 
             // replace by simple Bullet ?
             if( bListSymbol )
+            {
                 //cBulletChar benutzen, damit auf dem MAC richtig gemappt wird
                 sTxt.Fill(  SVBT8ToByte( rAV.cbTextBefore )
                           + SVBT8ToByte( rAV.cbTextAfter  ), cBulletChar );
             }
+        }
     }
     else
     {                                       // Nummerierung / Aufzaehlung

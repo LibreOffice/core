@@ -30,11 +30,11 @@
 #include "paratr.hxx"   // pTabStop, ADJ*
 #include "viewopt.hxx"  // SwViewOptions
 #include <SwPortionHandler.hxx>
-
 #include "porglue.hxx"
 #include "inftxt.hxx"
 #include "porlay.hxx"   // SwParaPortion, SetFull
 #include "porfly.hxx"   // SwParaPortion, SetFull
+#include <comphelper/string.hxx>
 
 /*************************************************************************
  *                      class SwGluePortion
@@ -97,8 +97,9 @@ void SwGluePortion::Paint( const SwTxtPaintInfo &rInf ) const
 
     if( rInf.GetFont()->IsPaintBlank() )
     {
-        XubString aTxt;
-        aTxt.Fill( GetFixWidth() / GetLen(), ' ' );
+        rtl::OUStringBuffer aBuf;
+        comphelper::string::padToLength(aBuf, GetFixWidth() / GetLen(), ' ');
+        String aTxt(aBuf.makeStringAndClear());
         SwTxtPaintInfo aInf( rInf, aTxt );
         aInf.DrawText( *this, aTxt.Len(), sal_True );
     }

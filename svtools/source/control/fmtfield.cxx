@@ -44,6 +44,7 @@
 #include <unotools/syslocale.hxx>
 #include <map>
 #include <rtl/math.hxx>
+#include <rtl/ustrbuf.hxx>
 
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::util;
@@ -1253,9 +1254,9 @@ void DoubleCurrencyField::UpdateCurrencyFormat()
     {
         sNewFormat += aLocaleInfo.getNumDecimalSep();
 
-        XubString sTemp;
-        sTemp.Fill(nDigits, '0');
-        sNewFormat += sTemp;
+        rtl::OUStringBuffer sTemp;
+        comphelper::string::padToLength(sTemp, nDigits, '0');
+        sNewFormat += sTemp.makeStringAndClear();
     }
 
     if (getPrependCurrSym())

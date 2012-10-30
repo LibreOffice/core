@@ -1138,7 +1138,7 @@ RTLFUNC(LTrim)
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
     else
     {
-        rtl::OUString aStr(comphelper::string::stripStart(rPar.Get(1)->GetString(), ' '));
+        rtl::OUString aStr(string::stripStart(rPar.Get(1)->GetString(), ' '));
         rPar.Get(0)->PutString(aStr);
     }
 }
@@ -1387,7 +1387,7 @@ RTLFUNC(RTrim)
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
     else
     {
-        rtl::OUString aStr(comphelper::string::stripEnd(rPar.Get(1)->GetString(), ' '));
+        rtl::OUString aStr(string::stripEnd(rPar.Get(1)->GetString(), ' '));
         rPar.Get(0)->PutString(aStr);
     }
 }
@@ -1420,9 +1420,9 @@ RTLFUNC(Space)
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
     else
     {
-        String aStr;
-        aStr.Fill( (sal_uInt16)(rPar.Get(1)->GetLong() ));
-        rPar.Get(0)->PutString( aStr );
+        rtl::OUStringBuffer aBuf;
+        string::padToLength(aBuf, rPar.Get(1)->GetLong(), ' ');
+        rPar.Get(0)->PutString(aBuf.makeStringAndClear());
     }
 }
 
@@ -1435,9 +1435,9 @@ RTLFUNC(Spc)
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
     else
     {
-        String aStr;
-        aStr.Fill( (sal_uInt16)(rPar.Get(1)->GetLong() ));
-        rPar.Get(0)->PutString( aStr );
+        rtl::OUStringBuffer aBuf;
+        string::padToLength(aBuf, rPar.Get(1)->GetLong(), ' ');
+        rPar.Get(0)->PutString(aBuf.makeStringAndClear());
     }
 }
 
@@ -1578,7 +1578,6 @@ RTLFUNC(String)
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
     else
     {
-        String aStr;
         sal_Unicode aFiller;
         sal_Int32 lCount = rPar.Get(1)->GetLong();
         if( lCount < 0 || lCount > 0xffff )
@@ -1591,8 +1590,9 @@ RTLFUNC(String)
             const String& rStr = rPar.Get(2)->GetString();
             aFiller = rStr.GetBuffer()[0];
         }
-        aStr.Fill( nCount, aFiller );
-        rPar.Get(0)->PutString( aStr );
+        rtl::OUStringBuffer aBuf;
+        string::padToLength(aBuf, nCount, aFiller);
+        rPar.Get(0)->PutString(aBuf.makeStringAndClear());
     }
 }
 
@@ -2372,7 +2372,7 @@ String implSetupWildcard( const String& rFileParam, SbiRTLData* pRTLData )
 
     // Is there a pure file name left? Otherwise the path is
     // invalid anyway because it was not accepted by OSL before
-    if (comphelper::string::equals(aPureFileName, '*'))
+    if (string::equals(aPureFileName, '*'))
     {
         pRTLData->pWildCard = new WildCard( aPureFileName );
     }

@@ -648,13 +648,12 @@ private:
     }
 
     // transliterate according to NativeNumber
-    SVL_DLLPRIVATE void ImpTransliterateImpl( String& rStr, const SvNumberNatNum& rNum ) const;
+    SVL_DLLPRIVATE OUString impTransliterateImpl(const OUString& rStr, const SvNumberNatNum& rNum) const;
 
-    void ImpTransliterate( String& rStr, const SvNumberNatNum& rNum ) const
-        {
-            if ( rNum.IsComplete() )
-                ImpTransliterateImpl( rStr, rNum );
-        }
+    OUString impTransliterate(const OUString& rStr, const SvNumberNatNum& rNum) const
+    {
+        return rNum.IsComplete() ? impTransliterateImpl(rStr, rNum) : rStr;
+    }
 
 #endif // _ZFORMAT_CXX
 
