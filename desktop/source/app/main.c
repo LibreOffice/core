@@ -21,22 +21,38 @@
 
 #include "sofficemain.h"
 
-SAL_IMPLEMENT_MAIN() {
-    return soffice_main();
-}
-
 #ifdef DBG_UTIL
 #ifdef __gnu_linux__
 #include <stdio.h>
 #include <stdlib.h>
 
+int g_Exiting = 0;
+
 /* HACK: detect calls to xmlCleanupParser, which causes hard to debug crashes */
 __attribute__ ((visibility("default"))) void xmlCleanupParser(void)
 {
-    fprintf(stderr, "\n*** ERROR: DO NOT call xmlCleanupParser()\n\n");
-    abort();
+    /* there are libraries that register xmlCleanupParser as an atexit handler,
+       which is not entirely sound (another atexit handler could want to
+       use libxml), but not enough of a problem to complain.
+       (example found by llunak: KDE's Strigi library) */
+    if (!g_Exiting)
+    {
+        fprintf(stderr, "\n*** ERROR: DO NOT call xmlCleanupParser()\n\n");
+        abort();
+    }
 }
 #endif
 #endif
+
+SAL_IMPLEMENT_MAIN() {
+    int ret = soffice_main();
+#ifdef DBG_UTIL
+#ifdef __gnu_linux__
+    g_Exiting = 1;
+#endif
+#endif
+    return ret;
+}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
