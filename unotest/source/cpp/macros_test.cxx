@@ -49,7 +49,8 @@ uno::Reference< com::sun::star::lang::XComponent > MacrosTest::loadFromDesktop(c
         com::sun::star::document::MacroExecMode::ALWAYS_EXECUTE_NO_WARN;
     args[0].State = com::sun::star::beans::PropertyState_DIRECT_VALUE;
     uno::Reference< com::sun::star::lang::XComponent> xComponent= xLoader->loadComponentFromURL(rURL, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_default")), 0, args);
-    CPPUNIT_ASSERT_MESSAGE("loading failed", xComponent.is());
+    rtl::OUString sMessage = rtl::OUString( "loading failed: " ) + rURL;
+    CPPUNIT_ASSERT_MESSAGE(rtl::OUStringToOString( sMessage, RTL_TEXTENCODING_UTF8 ).getStr( ), xComponent.is());
     return xComponent;
 }
 
