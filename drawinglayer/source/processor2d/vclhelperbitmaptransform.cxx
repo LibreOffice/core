@@ -110,78 +110,14 @@ namespace drawinglayer
             }
         }
 
-        void impSmoothIndex(BitmapColor& rValue, const basegfx::B2DPoint& rSource, sal_Int32 nIntX, sal_Int32 nIntY, BitmapReadAccess& rRead)
+        Bitmap impTransformBitmap(
+            const Bitmap& rSource,
+            const Size aDestinationSize,
+            const basegfx::B2DHomMatrix& rTransform,
+            bool bSmooth)
         {
-            double fDeltaX(rSource.getX() - nIntX);
-            double fDeltaY(rSource.getY() - nIntY);
-            sal_Int32 nIndX(0L);
-            sal_Int32 nIndY(0L);
-
-            if(fDeltaX > 0.0 && nIntX + 1L < rRead.Width())
-            {
-                nIndX++;
-            }
-            else if(fDeltaX < 0.0 && nIntX >= 1L)
-            {
-                fDeltaX = -fDeltaX;
-                nIndX--;
-            }
-
-            if(fDeltaY > 0.0 && nIntY + 1L < rRead.Height())
-            {
-                nIndY++;
-            }
-            else if(fDeltaY < 0.0 && nIntY >= 1L)
-            {
-                fDeltaY = -fDeltaY;
-                nIndY--;
-            }
-
-            if(nIndX || nIndY)
-            {
-                const double fColorToReal(1.0 / 255.0);
-                double fVal(rValue.GetIndex() * fColorToReal);
-                double fValBottom(0.0);
-
-                if(nIndX)
-                {
-                    const double fMulA(fDeltaX * fColorToReal);
-                    double fMulB(1.0 - fDeltaX);
-                    const BitmapColor aTopPartner(rRead.GetPixel(nIntY, nIntX + nIndX));
-
-                    fVal = (fVal * fMulB) + (aTopPartner.GetIndex() * fMulA);
-
-                    if(nIndY)
-                    {
-                        fMulB *= fColorToReal;
-                        const BitmapColor aBottom(rRead.GetPixel(nIntY + nIndY, nIntX));
-                        const BitmapColor aBottomPartner(rRead.GetPixel(nIntY + nIndY, nIntX + nIndX));
-
-                        fValBottom = (aBottom.GetIndex() * fMulB) + (aBottomPartner.GetIndex() * fMulA);
-                    }
-                }
-
-                if(nIndY)
-                {
-                    if(!nIndX)
-                    {
-                        const BitmapColor aBottom(rRead.GetPixel(nIntY + nIndY, nIntX));
-
-                        fValBottom = aBottom.GetIndex() * fColorToReal;
-                    }
-
-                    const double fMulB(1.0 - fDeltaY);
-
-                    fVal = (fVal * fMulB) + (fValBottom * fDeltaY);
-                }
-
-                rValue.SetIndex((sal_uInt8)(fVal * 255.0));
-            }
-        }
-
-        void impTransformBitmap(const Bitmap& rSource, Bitmap& rDestination, const basegfx::B2DHomMatrix& rTransform, bool bSmooth)
-        {
-            BitmapWriteAccess* pWrite = rDestination.AcquireWriteAccess();
+            Bitmap aDestination(aDestinationSize, 24);
+            BitmapWriteAccess* pWrite = aDestination.AcquireWriteAccess();
 
             if(pWrite)
             {
@@ -190,9 +126,9 @@ namespace drawinglayer
 
                 if(pRead)
                 {
-                    const Size aDestinationSizePixel(rDestination.GetSizePixel());
-                    bool bWorkWithIndex(rDestination.GetBitCount() <= 8);
-                    BitmapColor aOutside(pRead->GetBestMatchingColor(BitmapColor(0xff, 0xff, 0xff)));
+                    const Size aDestinationSizePixel(aDestination.GetSizePixel());
+                    bool bWorkWithIndex(rSource.GetBitCount() <= 8);
+                    BitmapColor aOutside(BitmapColor(0xff, 0xff, 0xff));
 
                     for(sal_Int32 y(0L); y < aDestinationSizePixel.getHeight(); y++)
                     {
@@ -207,29 +143,24 @@ namespace drawinglayer
 
                                 if(nIntY >= 0L && nIntY < aContentSizePixel.getHeight())
                                 {
+                                    // inside pixel
+                                    BitmapColor aValue;
+
                                     if(bWorkWithIndex)
                                     {
-                                        BitmapColor aValue(pRead->GetPixel(nIntY, nIntX));
-
-                                        if(bSmooth)
-                                        {
-                                            impSmoothIndex(aValue, aSourceCoor, nIntX, nIntY, *pRead);
-                                        }
-
-                                        pWrite->SetPixel(y, x, aValue);
+                                        aValue = pRead->GetPaletteColor(pRead->GetPixelIndex(nIntY, nIntX));
                                     }
                                     else
                                     {
-                                        BitmapColor aValue(pRead->GetColor(nIntY, nIntX));
-
-                                        if(bSmooth)
-                                        {
-                                            impSmoothPoint(aValue, aSourceCoor, nIntX, nIntY, *pRead);
-                                        }
-
-                                        pWrite->SetPixel(y, x, aValue.IsIndex() ? aValue : pWrite->GetBestMatchingColor(aValue));
+                                        aValue = pRead->GetPixel(nIntY, nIntX);
                                     }
 
+                                    if(bSmooth)
+                                    {
+                                        impSmoothPoint(aValue, aSourceCoor, nIntX, nIntY, *pRead);
+                                    }
+
+                                    pWrite->SetPixel(y, x, aValue);
                                     continue;
                                 }
                             }
@@ -247,29 +178,10 @@ namespace drawinglayer
 
                 delete pWrite;
             }
-        }
 
-        Bitmap impCreateEmptyBitmapWithPattern(const Bitmap& rSource, const Size& aTargetSizePixel)
-        {
-            Bitmap aRetval;
-            BitmapReadAccess* pReadAccess = (const_cast< Bitmap& >(rSource)).AcquireReadAccess();
+            rSource.AdaptBitCount(aDestination);
 
-            if(pReadAccess)
-            {
-                if(rSource.GetBitCount() <= 8)
-                {
-                    BitmapPalette aPalette(pReadAccess->GetPalette());
-                    aRetval = Bitmap(aTargetSizePixel, rSource.GetBitCount(), &aPalette);
-                }
-                else
-                {
-                    aRetval = Bitmap(aTargetSizePixel, rSource.GetBitCount());
-                }
-
-                delete pReadAccess;
-            }
-
-            return aRetval;
+            return aDestination;
         }
     } // end of anonymous namespace
 } // end of namespace drawinglayer
@@ -283,23 +195,20 @@ namespace drawinglayer
     {
         // force destination to 24 bit, we want to smooth output
         const Size aDestinationSize(rCroppedRectPixel.GetSize());
-        Bitmap aDestination(impCreateEmptyBitmapWithPattern(rSource.GetBitmap(), aDestinationSize));
         static bool bDoSmoothAtAll(true);
-        impTransformBitmap(rSource.GetBitmap(), aDestination, rTransform, bDoSmoothAtAll);
+        const Bitmap aDestination(impTransformBitmap(rSource.GetBitmap(), aDestinationSize, rTransform, bDoSmoothAtAll));
 
         // create mask
         if(rSource.IsTransparent())
         {
             if(rSource.IsAlpha())
             {
-                Bitmap aAlpha(impCreateEmptyBitmapWithPattern(rSource.GetAlpha().GetBitmap(), aDestinationSize));
-                impTransformBitmap(rSource.GetAlpha().GetBitmap(), aAlpha, rTransform, bDoSmoothAtAll);
+                const Bitmap aAlpha(impTransformBitmap(rSource.GetAlpha().GetBitmap(), aDestinationSize, rTransform, bDoSmoothAtAll));
                 return BitmapEx(aDestination, AlphaMask(aAlpha));
             }
             else
             {
-                Bitmap aMask(impCreateEmptyBitmapWithPattern(rSource.GetMask(), aDestinationSize));
-                impTransformBitmap(rSource.GetMask(), aMask, rTransform, false);
+                const Bitmap aMask(impTransformBitmap(rSource.GetMask(), aDestinationSize, rTransform, false));
                 return BitmapEx(aDestination, aMask);
             }
         }

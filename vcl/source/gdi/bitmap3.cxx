@@ -950,7 +950,16 @@ sal_Bool Bitmap::Scale( const Size& rNewSize, sal_uInt32 nScaleFlag )
     return bRet;
 }
 
-void Bitmap::ImplAdaptBitCount(Bitmap& rNew)
+// ------------------------------------------------------------------------
+
+void Bitmap::AdaptBitCount(Bitmap& rNew) const
+{
+    ImplAdaptBitCount(rNew);
+}
+
+// ------------------------------------------------------------------------
+
+void Bitmap::ImplAdaptBitCount(Bitmap& rNew) const
 {
     // aNew is the result of some operation; adapt it's BitCount to the original (this)
     if(GetBitCount() != rNew.GetBitCount())
@@ -1109,73 +1118,52 @@ sal_Bool Bitmap::ImplScaleInterpolate( const double& rScaleX, const double& rSca
                 pLutFrac[ nX ] = (long) ( fTemp * 1024. );
             }
 
-            if( pReadAcc->HasPalette() )
+            for( nY = 0L; nY < nHeight; nY++ )
             {
-                for( nY = 0L; nY < nHeight; nY++ )
+                if( 1 == nWidth )
                 {
-                    if( 1 == nWidth )
+                    if( pReadAcc->HasPalette() )
                     {
                         aCol0 = pReadAcc->GetPaletteColor( pReadAcc->GetPixelIndex( nY, 0 ) );
-
-                        for( nX = 0L; nX < nNewWidth; nX++ )
-                            pWriteAcc->SetPixel( nY, nX, aCol0 );
                     }
                     else
-                    {
-                        for( nX = 0L; nX < nNewWidth; nX++ )
-                        {
-                            nTemp = pLutInt[ nX ];
-
-                            aCol0 = pReadAcc->GetPaletteColor( pReadAcc->GetPixelIndex( nY, nTemp++ ) );
-                            aCol1 = pReadAcc->GetPaletteColor( pReadAcc->GetPixelIndex( nY, nTemp ) );
-
-                            nTemp = pLutFrac[ nX ];
-
-                            lXR1 = aCol1.GetRed() - ( lXR0 = aCol0.GetRed() );
-                            lXG1 = aCol1.GetGreen() - ( lXG0 = aCol0.GetGreen() );
-                            lXB1 = aCol1.GetBlue() - ( lXB0 = aCol0.GetBlue() );
-
-                            aCol0.SetRed( (sal_uInt8) ( ( lXR1 * nTemp + ( lXR0 << 10 ) ) >> 10 ) );
-                            aCol0.SetGreen( (sal_uInt8) ( ( lXG1 * nTemp + ( lXG0 << 10 ) ) >> 10 ) );
-                            aCol0.SetBlue( (sal_uInt8) ( ( lXB1 * nTemp + ( lXB0 << 10 ) ) >> 10 ) );
-
-                            pWriteAcc->SetPixel( nY, nX, aCol0 );
-                        }
-                    }
-                }
-            }
-            else
-            {
-                for( nY = 0L; nY < nHeight; nY++ )
-                {
-                    if( 1 == nWidth )
                     {
                         aCol0 = pReadAcc->GetPixel( nY, 0 );
-
-                        for( nX = 0L; nX < nNewWidth; nX++ )
-                            pWriteAcc->SetPixel( nY, nX, aCol0 );
                     }
-                    else
-                    {
-                        for( nX = 0L; nX < nNewWidth; nX++ )
-                        {
-                            nTemp = pLutInt[ nX ];
 
+                    for( nX = 0L; nX < nNewWidth; nX++ )
+                    {
+                        pWriteAcc->SetPixel( nY, nX, aCol0 );
+                    }
+                }
+                else
+                {
+                    for( nX = 0L; nX < nNewWidth; nX++ )
+                    {
+                        nTemp = pLutInt[ nX ];
+
+                        if( pReadAcc->HasPalette() )
+                        {
+                            aCol0 = pReadAcc->GetPaletteColor( pReadAcc->GetPixelIndex( nY, nTemp++ ) );
+                            aCol1 = pReadAcc->GetPaletteColor( pReadAcc->GetPixelIndex( nY, nTemp ) );
+                        }
+                        else
+                        {
                             aCol0 = pReadAcc->GetPixel( nY, nTemp++ );
                             aCol1 = pReadAcc->GetPixel( nY, nTemp );
-
-                            nTemp = pLutFrac[ nX ];
-
-                            lXR1 = aCol1.GetRed() - ( lXR0 = aCol0.GetRed() );
-                            lXG1 = aCol1.GetGreen() - ( lXG0 = aCol0.GetGreen() );
-                            lXB1 = aCol1.GetBlue() - ( lXB0 = aCol0.GetBlue() );
-
-                            aCol0.SetRed( (sal_uInt8) ( ( lXR1 * nTemp + ( lXR0 << 10 ) ) >> 10 ) );
-                            aCol0.SetGreen( (sal_uInt8) ( ( lXG1 * nTemp + ( lXG0 << 10 ) ) >> 10 ) );
-                            aCol0.SetBlue( (sal_uInt8) ( ( lXB1 * nTemp + ( lXB0 << 10 ) ) >> 10 ) );
-
-                            pWriteAcc->SetPixel( nY, nX, aCol0 );
                         }
+
+                        nTemp = pLutFrac[ nX ];
+
+                        lXR1 = aCol1.GetRed() - ( lXR0 = aCol0.GetRed() );
+                        lXG1 = aCol1.GetGreen() - ( lXG0 = aCol0.GetGreen() );
+                        lXB1 = aCol1.GetBlue() - ( lXB0 = aCol0.GetBlue() );
+
+                        aCol0.SetRed( (sal_uInt8) ( ( lXR1 * nTemp + ( lXR0 << 10 ) ) >> 10 ) );
+                        aCol0.SetGreen( (sal_uInt8) ( ( lXG1 * nTemp + ( lXG0 << 10 ) ) >> 10 ) );
+                        aCol0.SetBlue( (sal_uInt8) ( ( lXB1 * nTemp + ( lXB0 << 10 ) ) >> 10 ) );
+
+                        pWriteAcc->SetPixel( nY, nX, aCol0 );
                     }
                 }
             }
@@ -1191,10 +1179,9 @@ sal_Bool Bitmap::ImplScaleInterpolate( const double& rScaleX, const double& rSca
         if( bRet )
         {
             bRet = sal_False;
-            ImplAdaptBitCount(aNewBmp);
-            ImplAssignWithSize( aNewBmp );
-            pReadAcc = AcquireReadAccess();
+            *this = aNewBmp;
             aNewBmp = Bitmap( Size( nNewWidth, nNewHeight ), 24 );
+            pReadAcc = AcquireReadAccess();
             pWriteAcc = aNewBmp.AcquireWriteAccess();
 
             if( pReadAcc && pWriteAcc )
@@ -1214,73 +1201,40 @@ sal_Bool Bitmap::ImplScaleInterpolate( const double& rScaleX, const double& rSca
                     pLutFrac[ nY ] = (long) ( fTemp * 1024. );
                 }
 
-                if( pReadAcc->HasPalette() )
+                // after 1st step, bitmap *is* 24bit format (see above)
+                OSL_ENSURE(!pReadAcc->HasPalette(), "OOps, somehow ImplScaleInterpolate in-between format has palette, should not happen (!)");
+
+                for( nX = 0L; nX < nNewWidth; nX++ )
                 {
-                    for( nX = 0L; nX < nNewWidth; nX++ )
+                    if( 1 == nHeight )
                     {
-                        if( 1 == nHeight )
+                        aCol0 = pReadAcc->GetPixel( 0, nX );
+
+                        for( nY = 0L; nY < nNewHeight; nY++ )
                         {
-                            aCol0 = pReadAcc->GetPaletteColor( pReadAcc->GetPixelIndex( 0, nX ) );
-
-                            for( nY = 0L; nY < nNewHeight; nY++ )
-                                pWriteAcc->SetPixel( nY, nX, aCol0 );
-                        }
-                        else
-                        {
-                            for( nY = 0L; nY < nNewHeight; nY++ )
-                            {
-                                nTemp = pLutInt[ nY ];
-
-                                aCol0 = pReadAcc->GetPaletteColor( pReadAcc->GetPixelIndex( nTemp++, nX ) );
-                                aCol1 = pReadAcc->GetPaletteColor( pReadAcc->GetPixelIndex( nTemp, nX ) );
-
-                                nTemp = pLutFrac[ nY ];
-
-                                lXR1 = aCol1.GetRed() - ( lXR0 = aCol0.GetRed() );
-                                lXG1 = aCol1.GetGreen() - ( lXG0 = aCol0.GetGreen() );
-                                lXB1 = aCol1.GetBlue() - ( lXB0 = aCol0.GetBlue() );
-
-                                aCol0.SetRed( (sal_uInt8) ( ( lXR1 * nTemp + ( lXR0 << 10 ) ) >> 10 ) );
-                                aCol0.SetGreen( (sal_uInt8) ( ( lXG1 * nTemp + ( lXG0 << 10 ) ) >> 10 ) );
-                                aCol0.SetBlue( (sal_uInt8) ( ( lXB1 * nTemp + ( lXB0 << 10 ) ) >> 10 ) );
-
-                                pWriteAcc->SetPixel( nY, nX, aCol0 );
-                            }
+                            pWriteAcc->SetPixel( nY, nX, aCol0 );
                         }
                     }
-                }
-                else
-                {
-                    for( nX = 0L; nX < nNewWidth; nX++ )
+                    else
                     {
-                        if( 1 == nHeight )
+                        for( nY = 0L; nY < nNewHeight; nY++ )
                         {
-                            aCol0 = pReadAcc->GetPixel( 0, nX );
+                            nTemp = pLutInt[ nY ];
 
-                            for( nY = 0L; nY < nNewHeight; nY++ )
-                                pWriteAcc->SetPixel( nY, nX, aCol0 );
-                        }
-                        else
-                        {
-                            for( nY = 0L; nY < nNewHeight; nY++ )
-                            {
-                                nTemp = pLutInt[ nY ];
+                            aCol0 = pReadAcc->GetPixel( nTemp++, nX );
+                            aCol1 = pReadAcc->GetPixel( nTemp, nX );
 
-                                aCol0 = pReadAcc->GetPixel( nTemp++, nX );
-                                aCol1 = pReadAcc->GetPixel( nTemp, nX );
+                            nTemp = pLutFrac[ nY ];
 
-                                nTemp = pLutFrac[ nY ];
+                            lXR1 = aCol1.GetRed() - ( lXR0 = aCol0.GetRed() );
+                            lXG1 = aCol1.GetGreen() - ( lXG0 = aCol0.GetGreen() );
+                            lXB1 = aCol1.GetBlue() - ( lXB0 = aCol0.GetBlue() );
 
-                                lXR1 = aCol1.GetRed() - ( lXR0 = aCol0.GetRed() );
-                                lXG1 = aCol1.GetGreen() - ( lXG0 = aCol0.GetGreen() );
-                                lXB1 = aCol1.GetBlue() - ( lXB0 = aCol0.GetBlue() );
+                            aCol0.SetRed( (sal_uInt8) ( ( lXR1 * nTemp + ( lXR0 << 10 ) ) >> 10 ) );
+                            aCol0.SetGreen( (sal_uInt8) ( ( lXG1 * nTemp + ( lXG0 << 10 ) ) >> 10 ) );
+                            aCol0.SetBlue( (sal_uInt8) ( ( lXB1 * nTemp + ( lXB0 << 10 ) ) >> 10 ) );
 
-                                aCol0.SetRed( (sal_uInt8) ( ( lXR1 * nTemp + ( lXR0 << 10 ) ) >> 10 ) );
-                                aCol0.SetGreen( (sal_uInt8) ( ( lXG1 * nTemp + ( lXG0 << 10 ) ) >> 10 ) );
-                                aCol0.SetBlue( (sal_uInt8) ( ( lXB1 * nTemp + ( lXB0 << 10 ) ) >> 10 ) );
-
-                                pWriteAcc->SetPixel( nY, nX, aCol0 );
-                            }
+                            pWriteAcc->SetPixel( nY, nX, aCol0 );
                         }
                     }
                 }
@@ -1296,13 +1250,15 @@ sal_Bool Bitmap::ImplScaleInterpolate( const double& rScaleX, const double& rSca
             if( bRet )
             {
                 ImplAdaptBitCount(aNewBmp);
-                ImplAssignWithSize( aNewBmp );
+                *this = aNewBmp;
             }
         }
     }
 
     if( !bRet )
+    {
         bRet = ImplScaleFast( rScaleX, rScaleY );
+    }
 
     return bRet;
 }
