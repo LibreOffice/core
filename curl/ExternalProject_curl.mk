@@ -19,7 +19,8 @@ ifeq ($(GUI),UNX)
 
 $(call gb_ExternalProject_get_state_target,curl,build):
 	cd $(EXTERNAL_WORKDIR) \
-	&& ./configure --with-nss --without-ssl --without-libidn --enable-ftp --enable-ipv6 --enable-http --disable-gopher \
+	&& PATH=$(OUTDIR_FOR_BUILD)/bin:$$PATH ./configure --with-nss --without-ssl \
+	--without-libidn --enable-ftp --enable-ipv6 --enable-http --disable-gopher \
 	--disable-file --disable-ldap --disable-telnet --disable-dict --without-libssh2 \
 	$(if $(filter YES,$(CROSS_COMPILING)),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
 	$(if $(filter TRUE,$(DISABLE_DYNLOADING)),--disable-shared,--disable-static) \
@@ -33,7 +34,7 @@ else ifeq ($(OS)$(COM),WNTGCC)
 
 $(call gb_ExternalProject_get_state_target,curl,build):
 	cd $(EXTERNAL_WORKDIR) \
-	&& ./configure --with-nss --without-ssl --enable-ftp --enable-ipv6 --disable-http --disable-gopher \
+	&& PATH=$(OUTDIR_FOR_BUILD)/bin:$$PATH ./configure --with-nss --without-ssl --enable-ftp --enable-ipv6 --disable-http --disable-gopher \
 	--disable-file --disable-ldap --disable-telnet --disable-dict --build=i586-pc-mingw32 --host=i586-pc-mingw32 \
 	$(if $(filter TRUE,$(ENABLE_DEBUG)),--enable-debug) \
 	CC="$(CC) -mthreads $(if $(filter YES,$(MINGW_SHARED_GCCLIB)),-shared-libgcc)" \
