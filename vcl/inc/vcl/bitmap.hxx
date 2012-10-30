@@ -397,7 +397,7 @@ public:
                                            BitmapWriteAccess& rAcc, sal_Bool bRLE4 );
     SAL_DLLPRIVATE static sal_Bool          ImplWriteRLE( SvStream& rOStm, BitmapReadAccess& rAcc, sal_Bool bRLE4 );
 
-    SAL_DLLPRIVATE void                     ImplAdaptBitCount(Bitmap& rNew);
+    SAL_DLLPRIVATE void                     ImplAdaptBitCount(Bitmap& rNew) const;
     SAL_DLLPRIVATE sal_Bool                 ImplScaleFast( const double& rScaleX, const double& rScaleY );
     SAL_DLLPRIVATE sal_Bool                 ImplScaleInterpolate( const double& rScaleX, const double& rScaleY );
     SAL_DLLPRIVATE sal_Bool                 ImplScaleSuper( const double& rScaleX, const double& rScaleY );
@@ -667,6 +667,10 @@ public:
         @return sal_True, if the operation was completed successfully.
      */
     sal_Bool                    Scale( const double& rScaleX, const double& rScaleY, sal_uLong nScaleFlag = BMP_SCALE_FASTESTINTERPOLATE );
+
+    // Adapt the BitCount of rNew to BitCount of lolal, including grey or color paltette
+    // Can be used to create alpha/mask bitmaps after their processing in 24bit
+    void AdaptBitCount(Bitmap& rNew) const;
 
     /** Rotate bitmap by the specified angle
 
