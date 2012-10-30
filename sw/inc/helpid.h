@@ -189,8 +189,6 @@
 #define HID_OPTSHDWCRSR                                         "SW_HID_OPTSHDWCRSR"
 #define HID_NUM_POSITION                                        "SW_HID_NUM_POSITION"
 #define HID_NUMPARA                                             "SW_HID_NUMPARA"
-#define HID_FOOTNOTE_OPTIONS                                    "SW_HID_FOOTNOTE_OPTIONS"
-#define HID_ENDNOTE_OPTIONS                                     "SW_HID_ENDNOTE_OPTIONS"
 #define HID_REDLINE_OPT                                         "SW_HID_REDLINE_OPT"
 #define HID_REDLINE_ACCEPT                                      "SW_HID_REDLINE_ACCEPT"
 #define HID_EDIT_FLD_DB                                         "SW_HID_EDIT_FLD_DB"

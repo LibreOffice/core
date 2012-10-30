@@ -15,6 +15,8 @@ $(eval $(call gb_UI_add_uifiles,modules/swriter,\
 	sw/uiconfig/swriter/ui/charurlpage \
 	sw/uiconfig/swriter/ui/columnwidth \
 	sw/uiconfig/swriter/ui/converttexttable \
+	sw/uiconfig/swriter/ui/endnotepage \
+	sw/uiconfig/swriter/ui/footnotepage \
 	sw/uiconfig/swriter/ui/horizontalrule \
 	sw/uiconfig/swriter/ui/indexentry \
 	sw/uiconfig/swriter/ui/insertbreak \
