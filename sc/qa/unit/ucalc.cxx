@@ -334,6 +334,9 @@ ScRange insertRangeData(ScDocument* pDoc, const ScAddress& rPos, const char* aDa
     return aRange;
 }
 
+/**
+ * Temporarily switch on/off auto calculation mode.
+ */
 class AutoCalcSwitch
 {
     ScDocument* mpDoc;
@@ -347,6 +350,26 @@ public:
     ~AutoCalcSwitch()
     {
         mpDoc->SetAutoCalc(mbOldValue);
+    }
+};
+
+/**
+ * Temporarily set formula grammar.
+ */
+class FormulaGrammarSwitch
+{
+    ScDocument* mpDoc;
+    formula::FormulaGrammar::Grammar meOldGrammar;
+public:
+    FormulaGrammarSwitch(ScDocument* pDoc, formula::FormulaGrammar::Grammar eGrammar) :
+        mpDoc(pDoc), meOldGrammar(pDoc->GetGrammar())
+    {
+        mpDoc->SetGrammar(eGrammar);
+    }
+
+    ~FormulaGrammarSwitch()
+    {
+        mpDoc->SetGrammar(meOldGrammar);
     }
 };
 
@@ -1146,6 +1169,35 @@ void Test::testFormulaDepTracking()
     m_pDoc->SetValue(4, 1, 0, 2.4);
     m_pDoc->GetValue(1, 1, 0, val);
     CPPUNIT_ASSERT_MESSAGE("Failed to recalculate on single value change.", rtl::math::approxEqual(val, 12.0));
+
+    clearRange(m_pDoc, ScRange(0, 0, 0, 10, 10, 0));
+
+    // Now, column-based dependency tracking.  We now switch to the R1C1
+    // syntax which is easier to use for repeated relative references.
+
+    FormulaGrammarSwitch aFGSwitch(m_pDoc, formula::FormulaGrammar::GRAM_ENGLISH_XL_R1C1);
+
+    val = 0.0;
+    for (SCROW nRow = 1; nRow <= 9; ++nRow)
+    {
+        // Static value in column 1.
+        m_pDoc->SetValue(0, nRow, 0, ++val);
+
+        // Formula in column 2 that references cell to the left.
+        m_pDoc->SetString(1, nRow, 0, "=RC[-1]");
+
+        // Formula in column 3 that references cell to the left.
+        m_pDoc->SetString(2, nRow, 0, "=RC[-1]*2");
+    }
+
+    // Check formula values.
+    val = 0.0;
+    for (SCROW nRow = 1; nRow <= 9; ++nRow)
+    {
+        ++val;
+        CPPUNIT_ASSERT_MESSAGE("Unexpected formula value.", m_pDoc->GetValue(1, nRow, 0) == val);
+        CPPUNIT_ASSERT_MESSAGE("Unexpected formula value.", m_pDoc->GetValue(2, nRow, 0) == val*2.0);
+    }
 
     m_pDoc->DeleteTab(0);
 }
