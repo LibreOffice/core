@@ -62,12 +62,6 @@ VendorBase::VendorBase(): m_bAccessibility(false)
 {
 }
 
-rtl::Reference<VendorBase> VendorBase::createInstance()
-{
-    VendorBase *pBase = new VendorBase();
-    return rtl::Reference<VendorBase>(pBase);
-}
-
 bool VendorBase::initialize(vector<pair<OUString, OUString> > props)
 {
     //get java.vendor, java.version, java.home,

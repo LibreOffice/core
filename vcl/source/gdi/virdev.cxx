@@ -368,20 +368,6 @@ sal_Bool VirtualDevice::SetOutputSizePixel( const Size& rNewSize, sal_Bool bEras
     return ImplSetOutputSizePixel( rNewSize, bErase, basebmp::RawMemorySharedArray() );
 }
 
-sal_Bool VirtualDevice::SetOutputSizePixelScaleOffsetAndBuffer( const Size& rNewSize, const Fraction& rScale, const Point& rNewOffset, const basebmp::RawMemorySharedArray &pBuffer )
-{
-    if (pBuffer) {
-        MapMode mm = GetMapMode();
-        mm.SetOrigin( rNewOffset );
-        mm.SetScaleX( rScale );
-        mm.SetScaleY( rScale );
-        SetMapMode( mm );
-    }
-    return ImplSetOutputSizePixel( rNewSize, sal_True, pBuffer);
-}
-
-// -----------------------------------------------------------------------
-
 void VirtualDevice::SetReferenceDevice( RefDevMode i_eRefDevMode )
 {
     sal_Int32 nDPIX = 600, nDPIY = 600;

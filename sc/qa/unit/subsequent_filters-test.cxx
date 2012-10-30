@@ -142,8 +142,6 @@ public:
     void testRepeatedColumnsODS();
     void testDataValidityODS();
 
-    void testColorScaleODS();
-    void testColorScaleXLSX();
     void testDataBarODS();
     void testNewCondFormat();
 
@@ -195,8 +193,6 @@ public:
     CPPUNIT_TEST(testCellValueXLSX);
     CPPUNIT_TEST(testControlImport);
 
-    //CPPUNIT_TEST(testColorScaleODS);
-    //CPPUNIT_TEST(testColorScaleXLSX);
     CPPUNIT_TEST(testDataBarODS);
     CPPUNIT_TEST(testNewCondFormat);
 
@@ -1559,46 +1555,6 @@ void testColorScale_Impl(ScDocument* pDoc, const rtl::OUString& aBaseString)
     }
 }
 
-}
-
-void ScFiltersTest::testColorScaleODS()
-{
-    const rtl::OUString aFileNameBase(RTL_CONSTASCII_USTRINGPARAM("colorScale."));
-    rtl::OUString aFileExtension(aFileFormats[ODS].pName, strlen(aFileFormats[ODS].pName), RTL_TEXTENCODING_UTF8 );
-    rtl::OUString aFilterName(aFileFormats[ODS].pFilterName, strlen(aFileFormats[ODS].pFilterName), RTL_TEXTENCODING_UTF8) ;
-    rtl::OUString aFileName;
-    createFileURL(aFileNameBase, aFileExtension, aFileName);
-    rtl::OUString aFilterType(aFileFormats[ODS].pTypeName, strlen(aFileFormats[ODS].pTypeName), RTL_TEXTENCODING_UTF8);
-    std::cout << aFileFormats[ODS].pName << " Test" << std::endl;
-    ScDocShellRef xDocSh = load (aFilterName, aFileName, rtl::OUString(), aFilterType, aFileFormats[ODS].nFormatType);
-
-    CPPUNIT_ASSERT_MESSAGE("Failed to load colorScale.ods", xDocSh.Is());
-
-    ScDocument* pDoc = xDocSh->GetDocument();
-
-    rtl::OUStringBuffer aBuffer(getSrcRootPath());
-    aBuffer.append(m_aBaseString).append(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/reference/")));
-    testColorScale_Impl(pDoc, aBuffer.makeStringAndClear());
-}
-
-void ScFiltersTest::testColorScaleXLSX()
-{
-    const rtl::OUString aFileNameBase(RTL_CONSTASCII_USTRINGPARAM("colorScale."));
-    rtl::OUString aFileExtension(aFileFormats[XLSX].pName, strlen(aFileFormats[XLSX].pName), RTL_TEXTENCODING_UTF8 );
-    rtl::OUString aFilterName(aFileFormats[XLSX].pFilterName, strlen(aFileFormats[XLSX].pFilterName), RTL_TEXTENCODING_UTF8) ;
-    rtl::OUString aFileName;
-    createFileURL(aFileNameBase, aFileExtension, aFileName);
-    rtl::OUString aFilterType(aFileFormats[XLSX].pTypeName, strlen(aFileFormats[XLSX].pTypeName), RTL_TEXTENCODING_UTF8);
-    std::cout << aFileFormats[XLSX].pName << " Test" << std::endl;
-    ScDocShellRef xDocSh = load (aFilterName, aFileName, rtl::OUString(), aFilterType, aFileFormats[XLSX].nFormatType);
-
-    CPPUNIT_ASSERT_MESSAGE("Failed to load colorScale.xlsx", xDocSh.Is());
-
-    ScDocument* pDoc = xDocSh->GetDocument();
-
-    rtl::OUStringBuffer aBuffer(getSrcRootPath());
-    aBuffer.append(m_aBaseString).append(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/reference/")));
-    testColorScale_Impl(pDoc, aBuffer.makeStringAndClear());
 }
 
 void ScFiltersTest::testDataBarODS()

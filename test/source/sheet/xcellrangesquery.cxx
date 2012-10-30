@@ -71,16 +71,6 @@ void XCellRangesQuery::testQueryEmptyCells()
     CPPUNIT_ASSERT_MESSAGE("testQueryEmptyCells", aResult == aExpected);
 }
 
-void XCellRangesQuery::testQueryFormulaCells()
-{
-    rtl::OUString aExpected(RTL_CONSTASCII_USTRINGPARAM("Sheet1.C2"));
-    uno::Reference<sheet::XCellRangesQuery> xCellRangesQuery(init(),UNO_QUERY_THROW);
-    uno::Reference<sheet::XSheetCellRanges> xRanges = xCellRangesQuery->queryFormulaCells(sheet::CellFlags::FORMULA);
-    rtl::OUString aResult = xRanges->getRangeAddressesAsString();
-    std::cout << "testQueryFormulaCells: Result: " << rtl::OUStringToOString(aResult, RTL_TEXTENCODING_UTF8).getStr() << std::endl;
-    CPPUNIT_ASSERT_MESSAGE("testQueryFormulaCells", aResult == aExpected);
-}
-
 void XCellRangesQuery::testQueryIntersection()
 {
     rtl::OUString aExpected(RTL_CONSTASCII_USTRINGPARAM("Sheet1.D4:D5"));

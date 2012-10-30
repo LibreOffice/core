@@ -2947,11 +2947,6 @@ void TextEngine::SetLeftMargin( sal_uInt16 n )
     mpDoc->SetLeftMargin( n );
 }
 
-sal_uInt16 TextEngine::GetLeftMargin() const
-{
-    return mpDoc->GetLeftMargin();
-}
-
 uno::Reference< i18n::XBreakIterator > TextEngine::GetBreakIterator()
 {
     if ( !mxBreakIterator.is() )

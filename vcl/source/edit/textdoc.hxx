@@ -135,7 +135,6 @@ public:
     String              GetText( sal_uLong nPara ) const;
 
     void                SetLeftMargin( sal_uInt16 n )   { mnLeftMargin = n; }
-    sal_uInt16              GetLeftMargin() const       { return mnLeftMargin; }
 
     sal_Bool                IsValidPaM( const TextPaM& rPaM );
 };

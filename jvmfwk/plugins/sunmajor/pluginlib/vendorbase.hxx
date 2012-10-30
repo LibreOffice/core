@@ -103,16 +103,6 @@ public:
      */
     static char const* const *  getJavaExePaths(int* size);
 
-    /* creates an instance of this class. MUST be overridden
-       in a derived class.
-       ####################################################
-       OVERRIDE in derived class
-       ###################################################
-       @param
-       Key - value pairs of the system properties of the JRE.
-     */
-    static rtl::Reference<VendorBase> createInstance();
-
     /* called automatically on the instance created by createInstance.
 
        @return
