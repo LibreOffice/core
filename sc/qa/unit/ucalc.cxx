@@ -1199,6 +1199,13 @@ void Test::testFormulaDepTracking()
         CPPUNIT_ASSERT_MESSAGE("Unexpected formula value.", m_pDoc->GetValue(2, nRow, 0) == val*2.0);
     }
 
+    // Intentionally insert a formula in column 1. This will break column 1's
+    // uniformity of consisting only of static value cells.
+    m_pDoc->SetString(0, 4, 0, "=R2C3");
+    CPPUNIT_ASSERT_MESSAGE("Unexpected formula value.", m_pDoc->GetValue(0, 4, 0) == 2.0);
+    CPPUNIT_ASSERT_MESSAGE("Unexpected formula value.", m_pDoc->GetValue(1, 4, 0) == 2.0);
+    CPPUNIT_ASSERT_MESSAGE("Unexpected formula value.", m_pDoc->GetValue(2, 4, 0) == 4.0);
+
     m_pDoc->DeleteTab(0);
 }
 
