@@ -63,13 +63,6 @@ class  SplashScreen
     , public IntroWindow
 {
 private:
-    struct FullScreenProgressRatioValue
-    {
-        double _fXRelPos;
-        double _fYRelPos;
-        double _fRelWidth;
-        double _fRelHeight;
-    };
     enum BitmapMode { BM_FULLSCREEN, BM_DEFAULTMODE };
 
     DECL_LINK( AppEventListenerHdl, VclWindowEvent * );
@@ -89,7 +82,6 @@ private:
     bool            _bNativeProgress;
     OUString        _sAppName;
     OUString        _sProgressText;
-    std::vector< FullScreenProgressRatioValue > _sFullScreenProgressRatioValues;
 
     sal_Int32   _iMax;
     sal_Int32   _iProgress;
