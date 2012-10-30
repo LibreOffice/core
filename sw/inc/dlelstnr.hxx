@@ -23,7 +23,6 @@
 #include <cppuhelper/weak.hxx>
 #include <com/sun/star/linguistic2/XDictionaryListEventListener.hpp>
 #include <com/sun/star/linguistic2/XLinguServiceEventListener.hpp>
-#include <com/sun/star/linguistic2/XLinguServiceManager2.hpp>
 #include <com/sun/star/frame/XTerminateListener.hpp>
 #include <com/sun/star/frame/XDesktop.hpp>
 #include <cppuhelper/implbase2.hxx> // helper for implementations
@@ -32,6 +31,7 @@
 namespace com { namespace sun { namespace star {
     namespace linguistic2 {
         class XDictionaryList;
+        class XLinguServiceManager2;
         class XProofreadingIterator;
     }
     namespace frame {

@@ -64,18 +64,12 @@ void SfxThesSubMenuHelper::GetLocale(
 }
 
 
-SfxThesSubMenuHelper::SfxThesSubMenuHelper()
+SfxThesSubMenuHelper::SfxThesSubMenuHelper():
+    m_xLngMgr(
+        linguistic2::LinguServiceManager::create(
+            comphelper::getProcessComponentContext())),
+    m_xThesarus(m_xLngMgr->getThesaurus())
 {
-    try
-    {
-        uno::Reference< uno::XComponentContext >  xContext( ::comphelper::getProcessComponentContext() );
-        m_xLngMgr = linguistic2::LinguServiceManager::create(xContext);
-        m_xThesarus = m_xLngMgr->getThesaurus();
-    }
-    catch (const uno::Exception &)
-    {
-        DBG_ASSERT( 0, "failed to get thesaurus" );
-    }
 }
 
 
