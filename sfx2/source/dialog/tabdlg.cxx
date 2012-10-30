@@ -727,19 +727,14 @@ sal_Bool SfxTabDialog::IsApplyButtonEnabled() const
 
 void SfxTabDialog::Start_Impl()
 {
-    //If we're layout enabled, we need to force all tabs to
-    //exist to get overall optimal size for dialog
-    if (isLayoutEnabled())
+    //We need to force all tabs to exist to get overall optimal size for dialog
+    for (sal_uInt16 n=0; n < m_pTabCtrl->GetPageCount(); ++n)
     {
-        for ( sal_uInt16 n=0; n < m_pTabCtrl->GetPageCount(); ++n)
+        sal_uInt16 nPageId = m_pTabCtrl->GetPageId(n);
+        if (!m_pTabCtrl->GetTabPage(nPageId))
         {
-            sal_uInt16 nPageId = m_pTabCtrl->GetPageId(n);
-            TabPage* pTabPage = m_pTabCtrl->GetTabPage(nPageId);
-            if (!pTabPage)
-            {
-                m_pTabCtrl->SetCurPageId(nPageId);
-                ActivatePageHdl(m_pTabCtrl);
-            }
+            m_pTabCtrl->SetCurPageId(nPageId);
+            ActivatePageHdl(m_pTabCtrl);
         }
     }
 
