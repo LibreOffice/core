@@ -48,11 +48,9 @@
 
 #include "com/sun/star/deployment/ui/PackageManagerDialog.hpp"
 #include "com/sun/star/ui/dialogs/XExecutableDialog.hpp"
-#include "com/sun/star/lang/DisposedException.hpp"
 #include "boost/scoped_array.hpp"
 #include "com/sun/star/ui/dialogs/XDialogClosedListener.hpp"
 #include "com/sun/star/bridge/BridgeFactory.hpp"
-#include "com/sun/star/bridge/XBridgeFactory.hpp"
 #include <stdio.h>
 #include <vector>
 
@@ -190,36 +188,9 @@ Reference<deployment::XPackage> findPackage(
 
 } // anon namespace
 
-
-//workaround for some reason the bridge threads which communicate with the uno.exe
-//process are not releases on time
-void disposeBridges(Reference<css::uno::XComponentContext> ctx)
-{
-    if (!ctx.is())
-        return;
-
-    Reference<css::bridge::XBridgeFactory2> bridgeFac( css::bridge::BridgeFactory::create(ctx) );
-
-    const Sequence< Reference<css::bridge::XBridge> >seqBridges = bridgeFac->getExistingBridges();
-    for (sal_Int32 i = 0; i < seqBridges.getLength(); i++)
-    {
-        Reference<css::lang::XComponent> comp(seqBridges[i], UNO_QUERY);
-        if (comp.is())
-        {
-            try {
-                comp->dispose();
-            }
-            catch ( const css::lang::DisposedException& )
-            {
-            }
-        }
-    }
-}
-
 extern "C" DESKTOP_DLLPUBLIC int unopkg_main()
 {
     tools::extendApplicationEnvironment();
-    DisposeGuard disposeGuard;
     bool bNoOtherErrorMsg = false;
     OUString subCommand;
     bool option_shared = false;
@@ -371,8 +342,7 @@ extern "C" DESKTOP_DLLPUBLIC int unopkg_main()
         }
 
         xComponentContext = getUNO(
-            disposeGuard, option_verbose, option_shared, subcmd_gui,
-            xLocalComponentContext );
+            option_verbose, option_shared, subcmd_gui, xLocalComponentContext );
 
         Reference<deployment::XExtensionManager> xExtensionManager(
             deployment::ExtensionManager::get( xComponentContext ) );
@@ -575,6 +545,7 @@ extern "C" DESKTOP_DLLPUBLIC int unopkg_main()
 
             xDialog->startExecuteModal(xListener);
             dialogEnded.wait();
+            return 0;
         }
         else
         {
@@ -591,7 +562,7 @@ extern "C" DESKTOP_DLLPUBLIC int unopkg_main()
         if (option_verbose)
             dp_misc::writeConsole(OUSTR("\n" APP_NAME " done.\n"));
         //Force to release all bridges which connect us to the child processes
-        disposeBridges(xLocalComponentContext);
+        dp_misc::disposeBridges(xLocalComponentContext);
         return 0;
     }
     catch (const ucb::CommandFailedException &e)
@@ -640,7 +611,7 @@ extern "C" DESKTOP_DLLPUBLIC int unopkg_main()
     }
     if (!bNoOtherErrorMsg)
         dp_misc::writeConsoleError("\n" APP_NAME " failed.\n");
-    disposeBridges(xLocalComponentContext);
+    dp_misc::disposeBridges(xLocalComponentContext);
     return 1;
 }
 
