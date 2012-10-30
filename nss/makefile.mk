@@ -164,7 +164,11 @@ BUILD_ACTION += NSS_USE_SYSTEM_SQLITE=1
 
 .IF "$(COM)"=="GCC"
 
-PATCH_FILES+=nss.patch.mingw
+PATCH_FILES += \
+	       nspr-4.9-build.patch \
+	       nss-3.13.3-build.patch \
+	       nss.patch.mingw \
+
 
 PATH!:=$(MOZILLABUILD)/bin:$(PATH)
 
@@ -175,25 +179,29 @@ nss_CC+=-shared-libgcc
 nss_CXX+=-shared-libgcc
 .ENDIF
 
-nss_LIBS=
+nss_LIBS=-ladvapi32 -lws2_32 -lmswsock -lwinmm
 .IF "$(MINGW_SHARED_GXXLIB)"=="YES"
 nss_LIBS+=$(MINGW_SHARED_LIBSTDCPP)
 .ENDIF
+nss_LDFLAGS=
+
+OS_TARGET=WINNT
+.EXPORT : OS_TARGET
 
 BUILD_DIR=mozilla/security/nss
-BUILD_ACTION=NS_USE_GCC=1 CC="$(nss_CC)" CXX="$(nss_CXX)" OS_LIBS="$(nss_LIBS)" OS_TARGET=WIN95 _WIN32_IE=0x500 PATH="$(PATH)" DEFINES=-D_WIN32_IE=0x500 $(GNUMAKE) nss_build_all
+BUILD_ACTION=$(GNUMAKE) NS_USE_GCC=1 CC="$(nss_CC)" CXX="$(nss_CXX)" OS_LIBS="$(nss_LIBS)" PATH="$(PATH)" NSPR_CONFIGURE_OPTS="--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM) --enable-shared --disable-static" LDFLAGS="$(nss_LDFLAGS)" RANLIB="$(RANLIB)" RC="$(WINDRES)" OS_RELEASE=5.0 NSINSTALL="$(PYTHON_FOR_BUILD) $(SRC_ROOT)/nss/nsinstall.py" IMPORT_LIB_SUFFIX=dll.a nss_build_all
 
 OUT2LIB= \
-    mozilla/dist/out/lib/libnspr4.a \
-    mozilla/dist/out/lib/libnss3.a \
-    mozilla/dist/out/lib/libnssdbm3.a \
-    mozilla/dist/out/lib/libnssutil3.a \
-    mozilla/dist/out/lib/libplc4.a \
-    mozilla/dist/out/lib/libplds4.a \
-    mozilla/dist/out/lib/libsmime3.a \
-    mozilla/dist/out/lib/libsoftokn3.a \
-    mozilla/dist/out/lib/libsqlite3.a \
-    mozilla/dist/out/lib/libssl3.a
+    mozilla/nsprpub/out/pr/src/libnspr4.dll.a \
+    mozilla/dist/out/lib/libnss3.dll.a \
+    mozilla/dist/out/lib/libnssdbm3.dll.a \
+    mozilla/dist/out/lib/libnssutil3.dll.a \
+    mozilla/nsprpub/out/lib/libc/src/libplc4.dll.a \
+    mozilla/nsprpub/out/lib/ds/libplds4.dll.a \
+    mozilla/dist/out/lib/libsmime3.dll.a \
+    mozilla/dist/out/lib/libsoftokn3.dll.a \
+    mozilla/dist/out/lib/libsqlite3.dll.a \
+    mozilla/dist/out/lib/libssl3.dll.a
 
 .ELSE			# "$(COM)"=="GCC"
 MOZ_MSVCVERSION= 9

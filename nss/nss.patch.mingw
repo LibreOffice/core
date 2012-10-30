@@ -1,167 +1,128 @@
---- misc/nss-3.12.6/mozilla/nsprpub/config/autoconf.mk.in	2009-03-04 07:04:23.000000000 +0900
-+++ misc/build/nss-3.12.6/mozilla/nsprpub/config/autoconf.mk.in	2010-06-17 08:42:08.010625000 +0900
-@@ -22,6 +22,7 @@
- RELEASE_OBJDIR_NAME = @RELEASE_OBJDIR_NAME@
- OBJDIR_NAME	= @OBJDIR_NAME@
- OBJDIR		= @OBJDIR@
-+LIB_PREFIX	= @LIB_PREFIX@
- OBJ_SUFFIX	= @OBJ_SUFFIX@
- LIB_SUFFIX	= @LIB_SUFFIX@
- DLL_SUFFIX	= @DLL_SUFFIX@
---- misc/nss-3.12.6/mozilla/nsprpub/config/rules.mk	2009-12-10 06:24:37.000000000 +0900
-+++ misc/build/nss-3.12.6/mozilla/nsprpub/config/rules.mk	2010-06-17 08:42:08.057500000 +0900
-@@ -113,9 +113,9 @@
- # other platforms do not.
- #
- ifeq (,$(filter-out WIN95 WINCE WINMO OS2,$(OS_TARGET)))
--LIBRARY		= $(OBJDIR)/$(LIBRARY_NAME)$(LIBRARY_VERSION)_s.$(LIB_SUFFIX)
-+LIBRARY		= $(OBJDIR)/$(LIB_PREFIX)$(LIBRARY_NAME)$(LIBRARY_VERSION)_s.$(LIB_SUFFIX)
- SHARED_LIBRARY	= $(OBJDIR)/$(LIBRARY_NAME)$(LIBRARY_VERSION).$(DLL_SUFFIX)
--IMPORT_LIBRARY	= $(OBJDIR)/$(LIBRARY_NAME)$(LIBRARY_VERSION).$(LIB_SUFFIX)
-+IMPORT_LIBRARY	= $(OBJDIR)/$(LIB_PREFIX)$(LIBRARY_NAME)$(LIBRARY_VERSION).$(LIB_SUFFIX)
- SHARED_LIB_PDB	= $(OBJDIR)/$(LIBRARY_NAME)$(LIBRARY_VERSION).pdb
+diff -up misc/build/nss-3.13.5/mozilla/nsprpub/config/Makefile.in.dt nss/wntgcci.pro/misc/build/nss-3.13.5/mozilla/nsprpub/config/Makefile.in
+--- misc/build/nss-3.13.5/mozilla/nsprpub/config/Makefile.in.dt	2012-10-29 13:30:49.244696426 +0100
++++ misc/build/nss-3.13.5/mozilla/nsprpub/config/Makefile.in	2012-10-29 13:31:26.541830215 +0100
+@@ -30,7 +30,6 @@ CSRCS	= now.c
+ 
+ # This version hasn't been ported for us; the one in mozilla/config has
+ ifneq ($(OS_ARCH),OS2)
+-CSRCS  += nsinstall.c
+  
+ PLSRCS	= nfspwd.pl
+ endif
+@@ -84,7 +83,6 @@ else
+ ifeq (,$(filter-out SYMBIAN WINCE,$(OS_ARCH)))
+ TARGETS = $(PROGS)
  else
- LIBRARY		= $(OBJDIR)/lib$(LIBRARY_NAME)$(LIBRARY_VERSION)_s.$(LIB_SUFFIX)
---- misc/nss-3.12.6/mozilla/nsprpub/configure	2010-02-09 03:41:35.000000000 +0900
-+++ misc/build/nss-3.12.6/mozilla/nsprpub/configure	2010-06-17 08:42:10.000000000 +0900
-@@ -2770,6 +2770,7 @@
- LIB_SUFFIX=a
- DLL_SUFFIX=so
- ASM_SUFFIX=s
-+LIB_PREFIX=lib
- MKSHLIB='$(LD) $(DSO_LDOPTS) -o $@'
- PR_MD_ASFILES=
- PR_MD_CSRCS=
-@@ -4000,6 +4001,7 @@
-         OBJ_SUFFIX=obj
-         LIB_SUFFIX=lib
-         DLL_SUFFIX=dll
-+        LIB_PREFIX=
- 
-         # Determine compiler version
-         CC_VERSION=`"${CC}" -v 2>&1 | grep Version | sed -e 's|.* Version ||' -e 's| .*||'`
-@@ -6262,6 +6264,7 @@
- s%@LIB_SUFFIX@%$LIB_SUFFIX%g
- s%@DLL_SUFFIX@%$DLL_SUFFIX%g
- s%@ASM_SUFFIX@%$ASM_SUFFIX%g
-+s%@LIB_PREFIX@%$LIB_PREFIX%g
- s%@MKSHLIB@%$MKSHLIB%g
- s%@DSO_CFLAGS@%$DSO_CFLAGS%g
- s%@DSO_LDOPTS@%$DSO_LDOPTS%g
---- misc/nss-3.12.6/mozilla/nsprpub/pr/src/Makefile.in	2009-12-19 18:06:07.000000000 +0900
-+++ misc/build/nss-3.12.6/mozilla/nsprpub/pr/src/Makefile.in	2010-06-17 08:42:08.151250000 +0900
-@@ -195,7 +195,7 @@
- 
- ifeq ($(OS_ARCH),WINNT)
- ifdef NS_USE_GCC
--OS_LIBS		= -ladvapi32 -lwsock32 -lwinmm
-+OS_LIBS		+= -ladvapi32 -lwsock32 -lwinmm
- else
- OS_LIBS		= advapi32.lib wsock32.lib winmm.lib
+-PROGS	+= $(OBJDIR)/nsinstall$(PROG_SUFFIX)
+ TARGETS = $(PROGS) $(PLSRCS:.pl=)
  endif
---- misc/nss-3.12.6/mozilla/security/coreconf/WIN32.mk	2009-07-29 09:15:46.000000000 +0900
-+++ misc/build/nss-3.12.6/mozilla/security/coreconf/WIN32.mk	2010-06-17 08:42:08.198125000 +0900
-@@ -43,8 +43,8 @@
- DEFAULT_COMPILER = cl
- 
- ifdef NS_USE_GCC
--	CC           = gcc
--	CCC          = g++
-+#	CC           = gcc
-+	CCC          = $(CXX)
- 	LINK         = ld
- 	AR           = ar
- 	AR          += cr $@
---- misc/nss-3.12.6/mozilla/security/coreconf/WIN95.mk	2009-02-14 14:51:10.000000000 +0900
-+++ misc/build/nss-3.12.6/mozilla/security/coreconf/WIN95.mk	2010-06-17 08:42:08.245000000 +0900
-@@ -44,4 +44,8 @@
- DEFINES += -DWIN95
- 
- # WINNT uses the lib prefix, Win95 and WinCE don't
--NSPR31_LIB_PREFIX = $(NULL)
-+ifdef NS_USE_GCC
-+  NSPR31_LIB_PREFIX = lib
-+else
-+  NSPR31_LIB_PREFIX = $(NULL)
-+endif
-\ No newline at end of file
---- misc/nss-3.12.6/mozilla/security/coreconf/rules.mk	2009-12-08 10:33:36.000000000 +0900
-+++ misc/build/nss-3.12.6/mozilla/security/coreconf/rules.mk	2010-06-17 08:42:08.291875000 +0900
-@@ -281,8 +281,12 @@
- 	fi
- endif	# MSVC with manifest tool
- else
-+ifeq (,$(filter-out WIN%,$(OS_TARGET)))
-+	$(MKPROG) -o $@ $(CFLAGS) $(OBJS) $(LDFLAGS) -Wl,--start-group $(EXTRA_LIBS) -Wl,--end-group $(EXTRA_SHARED_LIBS) $(OS_LIBS)
-+else
- 	$(MKPROG) -o $@ $(CFLAGS) $(OBJS) $(LDFLAGS) $(EXTRA_LIBS) $(EXTRA_SHARED_LIBS) $(OS_LIBS)
  endif
-+endif
+diff -up ./nss-3.13.5/mozilla/security/nss/Makefile.dt ./nss-3.13.5/mozilla/security/nss/Makefile
+--- misc/build/nss-3.13.5/mozilla/security/nss/Makefile.dt	2012-10-30 10:13:07.165713712 +0100
++++ misc/build/nss-3.13.5/mozilla/security/nss/Makefile	2012-10-30 10:13:09.680656998 +0100
+@@ -58,7 +58,7 @@ include $(CORE_DEPTH)/coreconf/config.mk
+ # (4) Include "local" platform-dependent assignments (OPTIONAL).      #
+ #######################################################################
  
- get_objs:
- 	@echo $(OBJS)
---- misc/nss-3.12.6/mozilla/security/nss/Makefile	2009-12-09 01:47:03.000000000 +0900
-+++ misc/build/nss-3.12.6/mozilla/security/nss/Makefile	2010-06-17 08:42:08.338750000 +0900
-@@ -108,7 +108,7 @@
- NSPR_CONFIGURE_OPTS += --enable-debug-rtl
- endif
- ifdef NS_USE_GCC
--NSPR_COMPILERS = CC=gcc CXX=g++
-+NSPR_COMPILERS = CC="$(CC)" CXX="$(CXX)"
+-ifeq ($(OS_TARGET),WINCE)
++ifeq ($(OS_TARGET),WINNT)
+ DIRS	= lib	# omit cmd since wince has no command line shell
  endif
  
- #
---- misc/nss-3.12.6/mozilla/security/nss/cmd/crmftest/Makefile	2005-11-14 09:17:21.000000000 +0900
-+++ misc/build/nss-3.12.6/mozilla/security/nss/cmd/crmftest/Makefile	2010-06-17 08:42:08.370000000 +0900
-@@ -90,7 +90,7 @@
- LDDIST = $(DIST)/lib
+diff -up misc/build/nss-3.13.5/mozilla/security/nss/cmd/platlibs.mk.dt misc/build/nss-3.13.5/mozilla/security/nss/cmd/platlibs.mk
+diff -up misc/build/nss-3.13.5/mozilla/security/nss/lib/nss/config.mk.dt misc/build/nss-3.13.5/mozilla/security/nss/lib/nss/config.mk
+--- misc/build/nss-3.13.5/mozilla/security/nss/lib/nss/config.mk.dt	2012-10-30 12:31:06.675726730 +0100
++++ misc/build/nss-3.13.5/mozilla/security/nss/lib/nss/config.mk	2012-10-30 12:31:08.860676053 +0100
+@@ -40,7 +40,7 @@ ifeq (,$(filter-out WIN%,$(OS_TARGET)))
  
- ifeq (,$(filter-out WIN%,$(OS_TARGET)))
--EXTRA_LIBS += $(LDDIST)/sectool.lib
-+EXTRA_LIBS += $(LDDIST)/$(LIB_PREFIX)sectool.$(LIB_SUFFIX)
- endif
+ # don't want the 32 in the shared library name
+ SHARED_LIBRARY = $(OBJDIR)/$(DLL_PREFIX)$(LIBRARY_NAME)$(LIBRARY_VERSION).$(DLL_SUFFIX)
+-IMPORT_LIBRARY = $(OBJDIR)/$(IMPORT_LIB_PREFIX)$(LIBRARY_NAME)$(LIBRARY_VERSION)$(IMPORT_LIB_SUFFIX)
++IMPORT_LIBRARY = $(OBJDIR)/$(IMPORT_LIB_PREFIX)$(LIBRARY_NAME)$(LIBRARY_VERSION).$(IMPORT_LIB_SUFFIX)
  
- include ../platrules.mk
---- misc/nss-3.12.6/mozilla/security/nss/cmd/shlibsign/Makefile	2009-08-08 04:06:37.000000000 +0900
-+++ misc/build/nss-3.12.6/mozilla/security/nss/cmd/shlibsign/Makefile	2010-06-17 08:42:10.000000000 +0900
-@@ -115,10 +115,16 @@
- 	$(call core_abspath,$(OBJDIR)) $(OS_TARGET) \
- 	$(call core_abspath,$(NSPR_LIB_DIR)) $(call core_abspath,$<)
- else
-+ifeq ($(OS_TARGET), WIN95)
-+	sh ./sign.sh $(shell cygpath -m -a $(DIST)) \
-+	$(shell cygpath -m -a $(OBJDIR)) $(OS_TARGET) \
-+	$(shell cygpath -m -a $(NSPR_LIB_DIR)) $(shell cygpath -m -a $<)
-+else
- 	cd $(OBJDIR) ; sh $(SRCDIR)/sign.sh $(call core_abspath,$(DIST)) \
- 	$(call core_abspath,$(OBJDIR)) $(OS_TARGET) \
- 	$(call core_abspath,$(NSPR_LIB_DIR)) $(call core_abspath,$<)
- endif
-+endif
+ RES = $(OBJDIR)/$(LIBRARY_NAME).res.o
+ RESNAME = $(LIBRARY_NAME).rc
+diff -up misc/build/nss-3.13.5/mozilla/security/nss/lib/smime/config.mk.dt misc/build/nss-3.13.5/mozilla/security/nss/lib/smime/config.mk
+--- misc/build/nss-3.13.5/mozilla/security/nss/lib/smime/config.mk.dt	2012-10-30 12:30:52.020062600 +0100
++++ misc/build/nss-3.13.5/mozilla/security/nss/lib/smime/config.mk	2012-10-30 12:30:54.504004586 +0100
+@@ -41,7 +41,7 @@ ifeq (,$(filter-out WIN%,$(OS_TARGET)))
  
- libs install :: $(CHECKLOC)
+ # don't want the 32 in the shared library name
+ SHARED_LIBRARY = $(OBJDIR)/$(DLL_PREFIX)$(LIBRARY_NAME)$(LIBRARY_VERSION).$(DLL_SUFFIX)
+-IMPORT_LIBRARY = $(OBJDIR)/$(IMPORT_LIB_PREFIX)$(LIBRARY_NAME)$(LIBRARY_VERSION)$(IMPORT_LIB_SUFFIX)
++IMPORT_LIBRARY = $(OBJDIR)/$(IMPORT_LIB_PREFIX)$(LIBRARY_NAME)$(LIBRARY_VERSION).$(IMPORT_LIB_SUFFIX)
  
---- misc/nss-3.12.6/mozilla/security/nss/lib/freebl/config.mk	2009-04-12 06:18:42.000000000 +0900
-+++ misc/build/nss-3.12.6/mozilla/security/nss/lib/freebl/config.mk	2010-06-17 08:42:08.557500000 +0900
-@@ -84,10 +84,6 @@
- RES     = $(OBJDIR)/$(LIBRARY_NAME).res
- RESNAME = freebl.rc
+ RES = $(OBJDIR)/smime.res.o
+ RESNAME = smime.rc
+diff -up misc/build/nss-3.13.5/mozilla/security/nss/lib/softoken/config.mk.dt misc/build/nss-3.13.5/mozilla/security/nss/lib/softoken/config.mk
+--- misc/build/nss-3.13.5/mozilla/security/nss/lib/softoken/config.mk.dt	2012-10-30 12:31:02.707816790 +0100
++++ misc/build/nss-3.13.5/mozilla/security/nss/lib/softoken/config.mk	2012-10-30 12:31:04.388778631 +0100
+@@ -47,7 +47,7 @@ ifeq (,$(filter-out WIN%,$(OS_TARGET)))
  
--ifndef WINCE
--OS_LIBS += shell32.lib
--endif
--
- ifdef NS_USE_GCC
- EXTRA_SHARED_LIBS += \
- 	-L$(DIST)/lib \
-@@ -97,6 +93,10 @@
- 	-lnspr4 \
- 	$(NULL)
- else # ! NS_USE_GCC
-+ifndef WINCE
-+OS_LIBS += shell32.lib
-+endif
-+
- EXTRA_SHARED_LIBS += \
- 	$(DIST)/lib/nssutil3.lib \
- 	$(NSPR_LIB_DIR)/$(NSPR31_LIB_PREFIX)nspr4.lib \
+ # don't want the 32 in the shared library name
+ SHARED_LIBRARY = $(OBJDIR)/$(DLL_PREFIX)$(LIBRARY_NAME)$(LIBRARY_VERSION).$(DLL_SUFFIX)
+-IMPORT_LIBRARY = $(OBJDIR)/$(IMPORT_LIB_PREFIX)$(LIBRARY_NAME)$(LIBRARY_VERSION)$(IMPORT_LIB_SUFFIX)
++IMPORT_LIBRARY = $(OBJDIR)/$(IMPORT_LIB_PREFIX)$(LIBRARY_NAME)$(LIBRARY_VERSION).$(IMPORT_LIB_SUFFIX)
+ 
+ RES = $(OBJDIR)/$(LIBRARY_NAME).res.o
+ RESNAME = $(LIBRARY_NAME).rc
+diff -up misc/build/nss-3.13.5/mozilla/security/nss/lib/softoken/legacydb/config.mk.dt misc/build/nss-3.13.5/mozilla/security/nss/lib/softoken/legacydb/config.mk
+--- misc/build/nss-3.13.5/mozilla/security/nss/lib/softoken/legacydb/config.mk.dt	2012-10-30 12:30:56.531958414 +0100
++++ misc/build/nss-3.13.5/mozilla/security/nss/lib/softoken/legacydb/config.mk	2012-10-30 12:31:00.575865594 +0100
+@@ -48,7 +48,7 @@ ifeq (,$(filter-out WIN%,$(OS_TARGET)))
+ 
+ # don't want the 32 in the shared library name
+ SHARED_LIBRARY = $(OBJDIR)/$(DLL_PREFIX)$(LIBRARY_NAME)$(LIBRARY_VERSION).$(DLL_SUFFIX)
+-IMPORT_LIBRARY = $(OBJDIR)/$(IMPORT_LIB_PREFIX)$(LIBRARY_NAME)$(LIBRARY_VERSION)$(IMPORT_LIB_SUFFIX)
++IMPORT_LIBRARY = $(OBJDIR)/$(IMPORT_LIB_PREFIX)$(LIBRARY_NAME)$(LIBRARY_VERSION).$(IMPORT_LIB_SUFFIX)
+ 
+ RES = $(OBJDIR)/$(LIBRARY_NAME).res.o
+ RESNAME = $(LIBRARY_NAME).rc
+diff -up misc/build/nss-3.13.5/mozilla/security/nss/lib/sqlite/config.mk.dt misc/build/nss-3.13.5/mozilla/security/nss/lib/sqlite/config.mk
+--- misc/build/nss-3.13.5/mozilla/security/nss/lib/sqlite/config.mk.dt	2012-10-30 12:31:10.499638736 +0100
++++ misc/build/nss-3.13.5/mozilla/security/nss/lib/sqlite/config.mk	2012-10-30 12:31:12.624590177 +0100
+@@ -41,7 +41,7 @@ ifeq (,$(filter-out WIN%,$(OS_TARGET)))
+ 
+ # don't want the 32 in the shared library name
+ SHARED_LIBRARY = $(OBJDIR)/$(DLL_PREFIX)$(LIBRARY_NAME)$(LIBRARY_VERSION).$(DLL_SUFFIX)
+-IMPORT_LIBRARY = $(OBJDIR)/$(IMPORT_LIB_PREFIX)$(LIBRARY_NAME)$(LIBRARY_VERSION)$(IMPORT_LIB_SUFFIX)
++IMPORT_LIBRARY = $(OBJDIR)/$(IMPORT_LIB_PREFIX)$(LIBRARY_NAME)$(LIBRARY_VERSION).$(IMPORT_LIB_SUFFIX)
+ 
+ #RES = $(OBJDIR)/$(LIBRARY_NAME).res
+ #RESNAME = $(LIBRARY_NAME).rc
+diff -up misc/build/nss-3.13.5/mozilla/security/nss/lib/ssl/config.mk.dt misc/build/nss-3.13.5/mozilla/security/nss/lib/ssl/config.mk
+--- misc/build/nss-3.13.5/mozilla/security/nss/lib/ssl/config.mk.dt	2012-10-30 12:31:14.882539495 +0100
++++ misc/build/nss-3.13.5/mozilla/security/nss/lib/ssl/config.mk	2012-10-30 12:31:16.379504032 +0100
+@@ -53,7 +53,7 @@ ifeq (,$(filter-out WIN%,$(OS_TARGET)))
+ 
+ # don't want the 32 in the shared library name
+ SHARED_LIBRARY = $(OBJDIR)/$(DLL_PREFIX)$(LIBRARY_NAME)$(LIBRARY_VERSION).$(DLL_SUFFIX)
+-IMPORT_LIBRARY = $(OBJDIR)/$(IMPORT_LIB_PREFIX)$(LIBRARY_NAME)$(LIBRARY_VERSION)$(IMPORT_LIB_SUFFIX)
++IMPORT_LIBRARY = $(OBJDIR)/$(IMPORT_LIB_PREFIX)$(LIBRARY_NAME)$(LIBRARY_VERSION).$(IMPORT_LIB_SUFFIX)
+ 
+ RES = $(OBJDIR)/ssl.res.o
+ RESNAME = ssl.rc
+diff -up misc/build/nss-3.13.5/mozilla/security/nss/lib/sysinit/config.mk.dt misc/build/nss-3.13.5/mozilla/security/nss/lib/sysinit/config.mk
+--- misc/build/nss-3.13.5/mozilla/security/nss/lib/sysinit/config.mk.dt	2012-10-30 12:31:18.195462428 +0100
++++ misc/build/nss-3.13.5/mozilla/security/nss/lib/sysinit/config.mk	2012-10-30 12:31:20.277414942 +0100
+@@ -45,7 +45,7 @@ ifeq (,$(filter-out WIN%,$(OS_TARGET)))
+ 
+ # don't want the 32 in the shared library name
+ SHARED_LIBRARY = $(OBJDIR)/$(DLL_PREFIX)$(LIBRARY_NAME)$(LIBRARY_VERSION).$(DLL_SUFFIX)
+-IMPORT_LIBRARY = $(OBJDIR)/$(IMPORT_LIB_PREFIX)$(LIBRARY_NAME)$(LIBRARY_VERSION)$(IMPORT_LIB_SUFFIX)
++IMPORT_LIBRARY = $(OBJDIR)/$(IMPORT_LIB_PREFIX)$(LIBRARY_NAME)$(LIBRARY_VERSION).$(IMPORT_LIB_SUFFIX)
+ 
+ #RES = $(OBJDIR)/$(LIBRARY_NAME).res
+ #RESNAME = $(LIBRARY_NAME).rc
+diff -up misc/build/nss-3.13.5/mozilla/security/nss/lib/util/config.mk.dt misc/build/nss-3.13.5/mozilla/security/nss/lib/util/config.mk
+--- misc/build/nss-3.13.5/mozilla/security/nss/lib/util/config.mk.dt	2012-10-30 12:31:22.179371231 +0100
++++ misc/build/nss-3.13.5/mozilla/security/nss/lib/util/config.mk	2012-10-30 12:31:24.074328169 +0100
+@@ -40,7 +40,7 @@ ifeq (,$(filter-out WIN%,$(OS_TARGET)))
+ 
+ # don't want the 32 in the shared library name
+ SHARED_LIBRARY = $(OBJDIR)/$(DLL_PREFIX)$(LIBRARY_NAME)$(LIBRARY_VERSION).$(DLL_SUFFIX)
+-IMPORT_LIBRARY = $(OBJDIR)/$(IMPORT_LIB_PREFIX)$(LIBRARY_NAME)$(LIBRARY_VERSION)$(IMPORT_LIB_SUFFIX)
++IMPORT_LIBRARY = $(OBJDIR)/$(IMPORT_LIB_PREFIX)$(LIBRARY_NAME)$(LIBRARY_VERSION).$(IMPORT_LIB_SUFFIX)
+ 
+ RES = $(OBJDIR)/$(LIBRARY_NAME).res.o
+ RESNAME = $(LIBRARY_NAME).rc
