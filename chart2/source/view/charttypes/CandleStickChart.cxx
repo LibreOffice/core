@@ -187,7 +187,6 @@ void CandleStickChart::createShapes()
 
                 ::std::vector< VDataSeries* >::const_iterator       aSeriesIter = pSeriesList->begin();
                 const ::std::vector< VDataSeries* >::const_iterator aSeriesEnd  = pSeriesList->end();
-                aSeriesIter = pSeriesList->begin();
     //=============================================================================
                 //iterate through all series in this x slot
                 for( ; aSeriesIter != aSeriesEnd; ++aSeriesIter )
