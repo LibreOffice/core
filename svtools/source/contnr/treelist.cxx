@@ -1257,6 +1257,8 @@ bool SvTreeList::Remove( const SvTreeListEntry* pEntry )
     SvTreeListEntries& rList = pParent->maChildren;
     bool bLastEntry = false;
 
+    Broadcast(LISTACTION_REMOVED, const_cast<SvTreeListEntry*>(pEntry));
+
     if ( pEntry->HasChildListPos() )
     {
         size_t nListPos = pEntry->GetChildListPos();
@@ -1273,7 +1275,6 @@ bool SvTreeList::Remove( const SvTreeListEntry* pEntry )
             rList.erase(it);
     }
 
-
     // moved to end of method because it is used later with Broadcast
 
     if (!rList.empty() && !bLastEntry)
@@ -1284,9 +1285,7 @@ bool SvTreeList::Remove( const SvTreeListEntry* pEntry )
 #ifdef CHECK_INTEGRITY
     CheckIntegrity();
 #endif
-    Broadcast(LISTACTION_REMOVED, const_cast<SvTreeListEntry*>(pEntry));
 
-    delete pEntry; // deletes any children as well
     return true;
 }
 
