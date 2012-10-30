@@ -118,6 +118,7 @@ public:
      */
     void testSheetsFunc();
     void testVolatileFunc();
+    void testFormulaDepTracking();
     void testFuncParam();
     void testNamedRange();
     void testCSV();
@@ -235,6 +236,7 @@ public:
     CPPUNIT_TEST(testCellFunctions);
     CPPUNIT_TEST(testSheetsFunc);
     CPPUNIT_TEST(testVolatileFunc);
+    CPPUNIT_TEST(testFormulaDepTracking);
     CPPUNIT_TEST(testFuncParam);
     CPPUNIT_TEST(testNamedRange);
     CPPUNIT_TEST(testCSV);
@@ -331,6 +333,22 @@ ScRange insertRangeData(ScDocument* pDoc, const ScAddress& rPos, const char* aDa
     printRange(pDoc, aRange, "Range data content");
     return aRange;
 }
+
+class AutoCalcSwitch
+{
+    ScDocument* mpDoc;
+    bool mbOldValue;
+public:
+    AutoCalcSwitch(ScDocument* pDoc, bool bAutoCalc) : mpDoc(pDoc), mbOldValue(pDoc->GetAutoCalc())
+    {
+        mpDoc->SetAutoCalc(bAutoCalc);
+    }
+
+    ~AutoCalcSwitch()
+    {
+        mpDoc->SetAutoCalc(mbOldValue);
+    }
+};
 
 Test::Test()
     : m_pDoc(0)
@@ -1060,6 +1078,78 @@ void Test::testVolatileFunc()
     m_pDoc->DeleteTab(0);
 }
 
+void Test::testFormulaDepTracking()
+{
+    CPPUNIT_ASSERT_MESSAGE ("failed to insert sheet", m_pDoc->InsertTab (0, "foo"));
+
+    AutoCalcSwitch aACSwitch(m_pDoc, true); // turn on auto calculation.
+
+    // B2 listens on D2.
+    m_pDoc->SetString(1, 1, 0, "=D2");
+    double val = -999.0; // dummy initial value
+    m_pDoc->GetValue(1, 1, 0, val);
+    CPPUNIT_ASSERT_MESSAGE("Referencing an empty cell should yield zero.", val == 0.0);
+
+    // Changing the value of D2 should trigger recalculation of B2.
+    m_pDoc->SetValue(3, 1, 0, 1.1);
+    m_pDoc->GetValue(1, 1, 0, val);
+    CPPUNIT_ASSERT_MESSAGE("Failed to recalculate on value change.", val == 1.1);
+
+    // And again.
+    m_pDoc->SetValue(3, 1, 0, 2.2);
+    m_pDoc->GetValue(1, 1, 0, val);
+    CPPUNIT_ASSERT_MESSAGE("Failed to recalculate on value change.", val == 2.2);
+
+    clearRange(m_pDoc, ScRange(0, 0, 0, 10, 10, 0));
+
+    // Now, let's test the range dependency tracking.
+
+    // B2 listens on D2:E6.
+    m_pDoc->SetString(1, 1, 0, "=SUM(D2:E6)");
+    m_pDoc->GetValue(1, 1, 0, val);
+    CPPUNIT_ASSERT_MESSAGE("Summing an empty range should yield zero.", val == 0.0);
+
+    // Set value to E3. This should trigger recalc on B2.
+    m_pDoc->SetValue(4, 2, 0, 2.4);
+    m_pDoc->GetValue(1, 1, 0, val);
+    CPPUNIT_ASSERT_MESSAGE("Failed to recalculate on single value change.", val == 2.4);
+
+    // Set value to D5 to trigger recalc again.  Note that this causes an
+    // addition of 1.2 + 2.4 which is subject to binary floating point
+    // rounding error.  We need to use approxEqual to assess its value.
+
+    m_pDoc->SetValue(3, 4, 0, 1.2);
+    m_pDoc->GetValue(1, 1, 0, val);
+    CPPUNIT_ASSERT_MESSAGE("Failed to recalculate on single value change.", rtl::math::approxEqual(val, 3.6));
+
+    // Change the value of D2 (boundary case).
+    m_pDoc->SetValue(3, 1, 0, 1.0);
+    m_pDoc->GetValue(1, 1, 0, val);
+    CPPUNIT_ASSERT_MESSAGE("Failed to recalculate on single value change.", rtl::math::approxEqual(val, 4.6));
+
+    // Change the value of E6 (another boundary case).
+    m_pDoc->SetValue(4, 5, 0, 2.0);
+    m_pDoc->GetValue(1, 1, 0, val);
+    CPPUNIT_ASSERT_MESSAGE("Failed to recalculate on single value change.", rtl::math::approxEqual(val, 6.6));
+
+    // Change the value of D6 (another boundary case).
+    m_pDoc->SetValue(3, 5, 0, 3.0);
+    m_pDoc->GetValue(1, 1, 0, val);
+    CPPUNIT_ASSERT_MESSAGE("Failed to recalculate on single value change.", rtl::math::approxEqual(val, 9.6));
+
+    // Change the value of E2 (another boundary case).
+    m_pDoc->SetValue(4, 1, 0, 0.4);
+    m_pDoc->GetValue(1, 1, 0, val);
+    CPPUNIT_ASSERT_MESSAGE("Failed to recalculate on single value change.", rtl::math::approxEqual(val, 10.0));
+
+    // Change the existing non-empty value cell (E2).
+    m_pDoc->SetValue(4, 1, 0, 2.4);
+    m_pDoc->GetValue(1, 1, 0, val);
+    CPPUNIT_ASSERT_MESSAGE("Failed to recalculate on single value change.", rtl::math::approxEqual(val, 12.0));
+
+    m_pDoc->DeleteTab(0);
+}
+
 void Test::testFuncParam()
 {
     rtl::OUString aTabName("foo");
@@ -1539,22 +1629,6 @@ ScRange refreshGroups(ScDPCollection* pDPs, ScDPObject* pDPObj)
 
     return refresh(pDPObj);
 }
-
-class AutoCalcSwitch
-{
-    ScDocument* mpDoc;
-    bool mbOldValue;
-public:
-    AutoCalcSwitch(ScDocument* pDoc, bool bAutoCalc) : mpDoc(pDoc), mbOldValue(pDoc->GetAutoCalc())
-    {
-        mpDoc->SetAutoCalc(bAutoCalc);
-    }
-
-    ~AutoCalcSwitch()
-    {
-        mpDoc->SetAutoCalc(mbOldValue);
-    }
-};
 
 }
 
