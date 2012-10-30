@@ -1862,7 +1862,7 @@ SvTreeListEntry* SvTreeList::GetEntry( SvTreeListEntry* pParent, sal_uLong nPos 
 SvTreeListEntry* SvTreeList::GetEntry( sal_uLong nRootPos ) const
 {
     SvTreeListEntry* pRet = 0;
-    if ( nEntryCount )
+    if ( nEntryCount && nRootPos < pRootItem->maChildren.size())
         pRet = &pRootItem->maChildren[nRootPos];
     return pRet;
 }
