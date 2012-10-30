@@ -166,5 +166,53 @@ class AgendaWizardDialogResources(Resource):
         self.resButtonDown = self.getResText(
             AgendaWizardDialogResources.RID_AGENDAWIZARDDIALOG_START + 71)
 
+        #Create a dictionary for localising the template placeholders
+        self.dictTemplatePlaceHolders = {
+            "<title>" : self.resPlaceHolderTitle,
+            "<date>" : self.resPlaceHolderDate,
+            "<time>" : self.resPlaceHolderTime,
+            "<location>" : self.resPlaceHolderLocation,
+            "<meeting-type>" : self.reschkMeetingTitle_value,
+            "<bring>" : self.reschkBring_value,
+            "<read>" : self.reschkRead_value,
+            "<notes>" : self.reschkNotes_value,
+            "<called-by>" : self.itemCalledBy,
+            "<facilitator>" : self.itemFacilitator,
+            "<attendees>" : self.itemAttendees,
+            "<notetaker>" : self.itemNotetaker,
+            "<timekeeper>" : self.itemTimekeeper,
+            "<observers>" : self.itemObservers,
+            "<resource-persons>" : self.itemResource,
+            "<num>" : "",
+            "<topic>" : "",
+            "<responsible>" : "",
+            "<topic-time>" : "",
+            "<mnum>" : "",
+            "<mtopic>" : "",
+            "<mresponsible>" : "",
+            "<mtime>" : ""}            
+            
+        '''
+        section name <b>prefix</b> for sections that contain items.
+        this is also used as table name prefix, since each items section
+        must contain a table whos name is identical name to the section's name.
+        '''
+        SECTION_ITEMS = "AGENDA_ITEMS"
+        '''
+        the name of the section which contains the topics.
+        '''
+        SECTION_TOPICS = "AGENDA_TOPICS"
+        '''
+        the name of the parent minutes section.
+        '''
+        SECTION_MINUTES_ALL = "MINUTES_ALL"
+        '''
+        the name of the child nimutes section.
+        This section will be duplicated for each topic.
+        '''
+        SECTION_MINUTES = "MINUTES"
+
+
+        #Common Resources
         self.resOverwriteWarning = self.getResText(
             AgendaWizardDialogResources.RID_COMMON_START + 19)

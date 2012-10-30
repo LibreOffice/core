@@ -57,7 +57,7 @@ class AgendaWizardDialogImpl(AgendaWizardDialog):
                 "uno:socket,host=localhost,port=2002;urp;StarOffice.ComponentContext"
             xLocMSF = Desktop.connect(ConnectStr)
             lw = AgendaWizardDialogImpl(xLocMSF)
-            lw.startWizard()
+            lw.startWizard(xLocMSF)
         except Exception as e:
             print ("Wizard failure exception " + str(type(e)) +
                    " message " + str(e) + " args " + str(e.args) +
