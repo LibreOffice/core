@@ -121,6 +121,7 @@ public:
     void testDplinehollow();
     void testLeftmarginDefault();
     void testDppolyline();
+    void testFdo56512();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -193,6 +194,7 @@ void Test::run()
         {"dplinehollow.rtf", &Test::testDplinehollow},
         {"leftmargin-default.rtf", &Test::testLeftmarginDefault},
         {"dppolyline.rtf", &Test::testDppolyline},
+        {"fdo56512.rtf", &Test::testFdo56512},
     };
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
     {
@@ -882,6 +884,15 @@ void Test::testDppolyline()
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(4), xDraws->getCount());
+}
+
+void Test::testFdo56512()
+{
+    uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xIndexAccess(xTextFramesSupplier->getTextFrames(), uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xTextRange(xIndexAccess->getByIndex(0), uno::UNO_QUERY);
+    OUString aExpected("עוסק מורשה ", 20, RTL_TEXTENCODING_UTF8);
+    CPPUNIT_ASSERT_EQUAL(aExpected, xTextRange->getString());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
