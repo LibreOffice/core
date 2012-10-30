@@ -1261,6 +1261,11 @@ AC_ARG_WITH(system-cairo,
         [Use Cairo libraries already on system.]),,
     [with_system_cairo="$with_system_libs"])
 
+AC_ARG_WITH(system-glib,
+    AS_HELP_STRING([--with-system-glib],
+        [Use GLib library already installed on system.]),,
+    [with_system_glib=auto])
+
 AC_ARG_WITH(system-graphite,
     AS_HELP_STRING([--with-system-graphite],
         [Use graphite library already installed on system.]),,
@@ -11430,12 +11435,14 @@ system)
     ;;
 esac
 
+want_glib=
 dnl By now enable_librsvg should be "system", "internal", "fully-internal", or
 dnl "no":
 case $enable_librsvg in
 system)
     ENABLE_LIBRSVG=SYSTEM
     SYSTEM_LIBRSVG=YES
+    want_glib=yes
     ;;
 
 internal|fully-internal)
@@ -11443,6 +11450,7 @@ internal|fully-internal)
     SYSTEM_LIBRSVG=NO
     BUILD_TYPE="$BUILD_TYPE LIBRSVG"
 	LIBRSVG_TARBALL="d7a242ca43e33e1b63d3073f9d46a6a8-librsvg-2.32.1.tar.gz"
+    want_glib=yes
     ;;
 
 no)
@@ -11567,48 +11575,6 @@ fi
 AC_SUBST(SYSTEM_GDKPIXBUF)
 
 dnl ===================================================================
-dnl Test whether to build GLib or rely on the system version
-dnl ===================================================================
-
-if test "$ENABLE_LIBRSVG" != NO; then
-    AC_MSG_CHECKING([whether to use the system GLib])
-
-    dnl As long as the only thing we need GLib for is below
-    dnl librsvg, use the same --enable-librsvg (possibly implied
-    dnl by --with-system-libs) to override this.
-
-    if test "$SYSTEM_LIBRSVG" = YES; then
-        SYSTEM_GLIB=YES
-    elif test "$enable_librsvg" = fully-internal; then
-        SYSTEM_GLIB=NO
-    else
-        case "$_os" in
-        WINNT|Darwin|iOS|Android)
-            SYSTEM_GLIB=NO
-            ;;
-        *)
-            SYSTEM_GLIB=YES
-            ;;
-        esac
-    fi
-
-    if test "$SYSTEM_GLIB" = "YES"; then
-        AC_MSG_RESULT([yes])
-        PKG_CHECK_MODULES( GLIB, glib-2.0 )
-    else
-        AC_MSG_RESULT([no])
-        BUILD_TYPE="$BUILD_TYPE GLIB"
-    fi
-else
-    GLIB_CFLAGS=
-    GLIB_LIBS=
-    SYSTEM_GLIB=NO
-fi
-AC_SUBST(SYSTEM_GLIB)
-AC_SUBST(GLIB_CFLAGS)
-AC_SUBST(GLIB_LIBS)
-
-dnl ===================================================================
 dnl Test whether to use liblangtag
 dnl ===================================================================
 ENABLE_LIBLANGTAG=
@@ -11616,6 +11582,7 @@ SYSTEM_LIBLANGTAG=
 AC_MSG_CHECKING([whether to use liblangtag])
 if test "$enable_liblangtag" = "yes" -o \( "$enable_liblangtag" = "" -a $_os != Android -a $_os != iOS \); then
     ENABLE_LIBLANGTAG=YES
+    want_glib=yes
     AC_MSG_RESULT([yes])
     AC_MSG_CHECKING([whether to use system liblangtag])
     if test "$with_system_liblangtag" = yes; then
@@ -11635,6 +11602,38 @@ AC_SUBST(ENABLE_LIBLANGTAG)
 AC_SUBST(SYSTEM_LIBLANGTAG)
 AC_SUBST(LIBLANGTAG_CFLAGS)
 AC_SUBST(LIBLANGTAG_LIBS)
+
+dnl ===================================================================
+dnl Test whether to build GLib or rely on the system version
+dnl ===================================================================
+
+if test "$want_glib" = yes; then
+    if test "$with_system_glib" = auto; then
+        case "$_os" in
+        WINNT|Darwin|iOS|Android)
+            with_system_glib="$with_system_libs"
+            ;;
+        *)
+            with_system_glib=yes
+            ;;
+        esac
+    fi
+
+    AC_MSG_CHECKING([which GLib to use])
+
+    if test "$with_system_glib" = yes; then
+        AC_MSG_RESULT([external])
+        SYSTEM_GLIB=YES
+        PKG_CHECK_MODULES( GLIB, glib-2.0 )
+    else
+        AC_MSG_RESULT([internal])
+        SYSTEM_GLIB=NO
+        BUILD_TYPE="$BUILD_TYPE GLIB"
+    fi
+fi
+AC_SUBST([SYSTEM_GLIB])
+AC_SUBST([GLIB_CFLAGS])
+AC_SUBST([GLIB_LIBS])
 
 dnl ===================================================================
 dnl Test whether to build gettext runtime (libintl) or rely on the
