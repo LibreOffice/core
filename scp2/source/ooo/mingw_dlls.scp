@@ -46,6 +46,18 @@ MINGW_DLL( gid_Brand_File_Lib_Mingw_Libexpat, MINGW_EXPAT_DLL )
 #endif
 #endif
 
+#ifdef SYSTEM_GLIB
+#ifdef NEEDS_MINGW_GLIB_DLL
+MINGW_DLL( gid_Brand_File_Lib_Mingw_Glib, MINGW_GLIB_DLL )
+#endif
+#endif
+
+#ifdef SYSTEM_LIBLANGTAG
+#ifdef NEEDS_MINGW_LIBLANGTAG_DLL
+MINGW_DLL( gid_Brand_File_Lib_Mingw_Liblangtag, MINGW_LIBLANGTAG_DLL )
+#endif
+#endif
+
 #ifdef SYSTEM_LIBXSLT
 #ifdef NEEDS_MINGW_LIBEXSLT_DLL
 MINGW_DLL( gid_Brand_File_Lib_Mingw_Libexslt, MINGW_LIBEXSLT_DLL )

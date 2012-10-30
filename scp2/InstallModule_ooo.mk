@@ -100,6 +100,7 @@ $(eval $(call gb_InstallModule_define_mingw_dll_if_set,scp2/ooo,\
 	MINGW_FONTCONFIG_DLL \
 	MINGW_FREETYPE_DLL \
 	MINGW_GCRYPT_DLL \
+	MINGW_GLIB_DLL \
 	MINGW_GNUTLS_DLL \
 	MINGW_GPG_ERROR_DLL \
 	MINGW_GRAPHITE2_DLL \
@@ -114,6 +115,7 @@ $(eval $(call gb_InstallModule_define_mingw_dll_if_set,scp2/ooo,\
 	MINGW_JPEG_DLL \
 	MINGW_LCMS2_DLL \
 	MINGW_LIBEXSLT_DLL \
+	MINGW_LIBLANGTAG_DLL \
 	MINGW_LIBXML_DLL \
 	MINGW_LIBXSLT_DLL \
 	MINGW_LPSOLVE_DLL \
