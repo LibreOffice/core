@@ -57,10 +57,6 @@ class ScTokenArray;
 
 #define DUMP_FORMAT_INFO 1
 
-
-// ordering of ScConditionMode and ScQueryOp is equal,
-// to facilitate the merging of both in the future
-
 enum ScConditionMode
 {
     SC_COND_EQUAL, //done
