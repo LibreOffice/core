@@ -1624,7 +1624,7 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
 ))
 
 define gb_LinkTarget__use_curl
-$(call gb_LinkTarget_use_unpacked,$(1),curl)
+$(call gb_LinkTarget_use_external_project,$(1),curl)
 $(call gb_LinkTarget_set_include,$(1),\
 	-I$(call gb_UnpackedTarball_get_dir,curl/include) \
 	$$(INCLUDE) \
