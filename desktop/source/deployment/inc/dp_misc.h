@@ -159,6 +159,14 @@ void syncRepositories(
     ::com::sun::star::uno::Reference<
         ::com::sun::star::ucb::XCommandEnvironment> const & xCmdEnv);
 
+/** workaround: for some reason the bridge threads which communicate with the
+    uno.exe process are not released on time
+*/
+DESKTOP_DEPLOYMENTMISC_DLLPUBLIC
+void disposeBridges(
+    com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >
+        const & ctx);
+
 }
 
 #endif
