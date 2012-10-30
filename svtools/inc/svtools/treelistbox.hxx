@@ -378,7 +378,7 @@ public:
     void SetModel(SvTreeList* pNewModel);
 
     sal_uLong           GetEntryCount() const {return pModel->GetEntryCount();}
-    SvTreeListEntry*    First() const { return (SvTreeListEntry*)(pModel->First()); }
+    SvTreeListEntry*    First() const { return pModel->First(); }
     SvTreeListEntry*    Next( SvTreeListEntry* pEntry, sal_uInt16* pDepth=0 ) const { return pModel->Next(pEntry,pDepth); }
     SvTreeListEntry*    Prev( SvTreeListEntry* pEntry, sal_uInt16* pDepth=0 ) const { return pModel->Prev(pEntry,pDepth); }
     SvTreeListEntry*    Last() const { return pModel->Last(); }

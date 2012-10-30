@@ -717,8 +717,7 @@ sal_Bool SvTreeListBox::CopySelection( SvTreeListBox* pSource, SvTreeListEntry* 
             if ( bClone )
             {
                 sal_uLong nCloneCount = 0;
-                pSourceEntry = (SvTreeListEntry*)
-                    pModel->Clone(pSourceEntry, nCloneCount);
+                pSourceEntry = pModel->Clone(pSourceEntry, nCloneCount);
                 pModel->InsertTree(pSourceEntry, pNewParent, nInsertionPos);
             }
             else
@@ -3636,8 +3635,8 @@ void SvTreeListBox::CursorMoved( SvTreeListEntry* )
 
 IMPL_LINK( SvTreeListBox, DefaultCompare, SvSortData*, pData )
 {
-    SvTreeListEntry* pLeft = (SvTreeListEntry*)(pData->pLeft );
-    SvTreeListEntry* pRight = (SvTreeListEntry*)(pData->pRight );
+    const SvTreeListEntry* pLeft = pData->pLeft;
+    const SvTreeListEntry* pRight = pData->pRight;
     String aLeft( ((SvLBoxString*)(pLeft->GetFirstItem(SV_ITEM_ID_LBOXSTRING)))->GetText());
     String aRight( ((SvLBoxString*)(pRight->GetFirstItem(SV_ITEM_ID_LBOXSTRING)))->GetText());
     pImp->UpdateStringSorter();

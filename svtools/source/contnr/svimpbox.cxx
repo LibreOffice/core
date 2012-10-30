@@ -354,7 +354,7 @@ IMPL_LINK( SvImpLBox, ScrollUpDownHdl, ScrollBar *, pScrollBar )
 
 void SvImpLBox::CursorDown()
 {
-    SvTreeListEntry* pNextFirstToDraw = (SvTreeListEntry*)(pView->NextVisible( pStartEntry));
+    SvTreeListEntry* pNextFirstToDraw = pView->NextVisible(pStartEntry);
     if( pNextFirstToDraw )
     {
         nFlags &= (~F_FILLING);
@@ -372,7 +372,7 @@ void SvImpLBox::CursorDown()
 
 void SvImpLBox::CursorUp()
 {
-    SvTreeListEntry* pPrevFirstToDraw = (SvTreeListEntry*)(pView->PrevVisible( pStartEntry));
+    SvTreeListEntry* pPrevFirstToDraw = pView->PrevVisible(pStartEntry);
     if( pPrevFirstToDraw )
     {
         nFlags &= (~F_FILLING);
@@ -397,8 +397,7 @@ void SvImpLBox::PageDown( sal_uInt16 nDelta )
     if( !nDelta )
         return;
 
-    SvTreeListEntry* pNext;
-    pNext = (SvTreeListEntry*)(pView->NextVisible( pStartEntry, nRealDelta ));
+    SvTreeListEntry* pNext = pView->NextVisible(pStartEntry, nRealDelta);
     if( (sal_uLong)pNext == (sal_uLong)pStartEntry )
         return;
 
@@ -435,7 +434,7 @@ void SvImpLBox::PageUp( sal_uInt16 nDelta )
     if( !nDelta )
         return;
 
-    SvTreeListEntry* pPrev = (SvTreeListEntry*)(pView->PrevVisible( pStartEntry, nRealDelta ));
+    SvTreeListEntry* pPrev = pView->PrevVisible(pStartEntry, nRealDelta);
     if( (sal_uLong)pPrev == (sal_uLong)pStartEntry )
         return;
 
@@ -621,7 +620,7 @@ void SvImpLBox::SetCursor( SvTreeListEntry* pEntry, bool bForceNoSelect )
     // if this cursor is not selectable, find first visible that is and use it
     while( pEntry && pViewDataNewCur && !pViewDataNewCur->IsSelectable() )
     {
-        pEntry = (SvTreeListEntry*)(pView->NextVisible( pEntry ));
+        pEntry = pView->NextVisible(pEntry);
         pViewDataNewCur = pEntry ? pView->GetViewDataEntry(pEntry) : 0;
     }
 
@@ -771,7 +770,7 @@ SvTreeListEntry* SvImpLBox::GetClickedEntry( const Point& rPoint ) const
 
     sal_uInt16 nClickedEntry = (sal_uInt16)(rPoint.Y() / pView->GetEntryHeight() );
     sal_uInt16 nTemp = nClickedEntry;
-    SvTreeListEntry* pEntry = (SvTreeListEntry*)(pView->NextVisible( pStartEntry, nTemp ));
+    SvTreeListEntry* pEntry = pView->NextVisible(pStartEntry, nTemp);
     return pEntry;
 }
 
@@ -814,7 +813,7 @@ SvTreeListEntry* SvImpLBox::GetEntry( const Point& rPoint ) const
 
     sal_uInt16 nClickedEntry = (sal_uInt16)(rPoint.Y() / pView->GetEntryHeight() );
     sal_uInt16 nTemp = nClickedEntry;
-    SvTreeListEntry* pEntry = (SvTreeListEntry*)(pView->NextVisible( pStartEntry, nTemp ));
+    SvTreeListEntry* pEntry = pView->NextVisible(pStartEntry, nTemp);
     if( nTemp != nClickedEntry )
         pEntry = 0;
     return pEntry;
@@ -831,9 +830,9 @@ SvTreeListEntry* SvImpLBox::MakePointVisible(const Point& rPoint, bool bNotifySc
     if( nY < 0 || nY >= nMax ) // aOutputSize.Height() )
     {
         if( nY < 0 )
-            pEntry = (SvTreeListEntry*)(pView->PrevVisible( pCursor ));
+            pEntry = pView->PrevVisible(pCursor);
         else
-            pEntry = (SvTreeListEntry*)(pView->NextVisible( pCursor ));
+            pEntry = pView->NextVisible(pCursor);
 
         if( pEntry && pEntry != pCursor )
             pView->SetEntryFocus( pCursor, false );
@@ -850,7 +849,7 @@ SvTreeListEntry* SvImpLBox::MakePointVisible(const Point& rPoint, bool bNotifySc
         {
             sal_uInt16 nSteps = 0xFFFF;
             // TODO: LastVisible is not yet implemented!
-            pEntry = (SvTreeListEntry*)(pView->NextVisible( pStartEntry, nSteps ));
+            pEntry = pView->NextVisible(pStartEntry, nSteps);
         }
         if( pEntry )
         {
@@ -915,7 +914,7 @@ void SvImpLBox::Paint( const Rectangle& rRect )
     SvTreeListEntry* pEntry = pStartEntry;
     while( nStartLine && pEntry )
     {
-        pEntry = (SvTreeListEntry*)(pView->NextVisible( pEntry ));
+        pEntry = pView->NextVisible(pEntry);
         nStartLine--;
     }
 
@@ -933,7 +932,7 @@ void SvImpLBox::Paint( const Rectangle& rRect )
         /*long nMaxRight=*/
         pView->PaintEntry1( pEntry, nY, 0xffff, true );
         nY += nEntryHeight;
-        pEntry = (SvTreeListEntry*)(pView->NextVisible( pEntry ));
+        pEntry = pView->NextVisible(pEntry);
     }
 
     if ( !pCursor && ( ( nExtendedWinBits & EWB_NO_AUTO_CURENTRY ) == 0 ) )
@@ -1122,7 +1121,7 @@ void SvImpLBox::DrawNet()
             pView->DrawLine( aPos1, aPos2 );
         }
         nY += nEntryHeight;
-        pEntry = (SvTreeListEntry*)(pView->NextVisible( pEntry ));
+        pEntry = pView->NextVisible(pEntry);
     }
     if( m_nStyle & WB_HASLINESATROOT )
     {
@@ -1338,11 +1337,11 @@ void SvImpLBox::FillView()
         sal_uInt16 nTempThumb = (sal_uInt16)aVerSBar.GetThumbPos();
         if( nTempThumb >= nVisibleViewCount )
             nTempThumb = nVisibleViewCount - 1;
-        pStartEntry = (SvTreeListEntry*)(pView->GetEntryAtVisPos(nTempThumb));
+        pStartEntry = pView->GetEntryAtVisPos(nTempThumb);
     }
     if( pStartEntry )
     {
-        sal_uInt16 nLast = (sal_uInt16)(pView->GetVisiblePos( (SvTreeListEntry*)(pView->LastVisible())));
+        sal_uInt16 nLast = (sal_uInt16)(pView->GetVisiblePos(pView->LastVisible()));
         sal_uInt16 nThumb = (sal_uInt16)(pView->GetVisiblePos( pStartEntry ));
         sal_uInt16 nCurDispEntries = nLast-nThumb+1;
         if( nCurDispEntries <  nVisibleCount )
@@ -1353,7 +1352,7 @@ void SvImpLBox::FillView()
             SvTreeListEntry* pTemp = pStartEntry;
             while( nCurDispEntries < nVisibleCount && pTemp )
             {
-                pTemp = (SvTreeListEntry*)(pView->PrevVisible(pStartEntry));
+                pTemp = pView->PrevVisible(pStartEntry);
                 if( pTemp )
                 {
                     nThumb--;
@@ -1544,8 +1543,7 @@ void SvImpLBox::EntryCollapsed( SvTreeListEntry* pEntry )
             pStartEntry = pView->First();
             sal_uInt16 nDistance = (sal_uInt16)nNewThumbPos;
             if( nDistance )
-                pStartEntry = (SvTreeListEntry*)(pView->NextVisible( pStartEntry,
-                                                        nDistance));
+                pStartEntry = pView->NextVisible(pStartEntry, nDistance);
             if( GetUpdateMode() )
                 pView->Invalidate();
         }
@@ -1657,7 +1655,7 @@ void SvImpLBox::RemovingEntry( SvTreeListEntry* pEntry )
 
     SvTreeListEntry* pOldStartEntry = pStartEntry;
 
-    SvTreeListEntry* pParent = (SvTreeListEntry*)(pView->GetModel()->GetParent(pEntry));
+    SvTreeListEntry* pParent = pView->GetModel()->GetParent(pEntry);
 
     if (pParent && pView->GetModel()->GetChildList(pParent).size() == 1)
     {
@@ -1680,7 +1678,7 @@ void SvImpLBox::RemovingEntry( SvTreeListEntry* pEntry )
         // NextSibling, because we also delete the children of the cursor
         pTemp = pView->NextSibling( pCursor );
         if( !pTemp )
-            pTemp = (SvTreeListEntry*)(pView->PrevVisible( pCursor ));
+            pTemp = pView->PrevVisible(pCursor);
 
         SetCursor( pTemp, true );
     }
@@ -1688,7 +1686,7 @@ void SvImpLBox::RemovingEntry( SvTreeListEntry* pEntry )
     {
         pTemp = pView->NextSibling( pStartEntry );
         if( !pTemp )
-            pTemp = (SvTreeListEntry*)(pView->PrevVisible( pStartEntry ));
+            pTemp = pView->PrevVisible(pStartEntry);
         pStartEntry = pTemp;
     }
     if( GetUpdateMode())
@@ -1770,9 +1768,9 @@ void SvImpLBox::MovingEntry( SvTreeListEntry* pEntry )
         SvTreeListEntry* pNew = 0;
         if( !pEntry->HasChildren() )
         {
-            pNew = (SvTreeListEntry*)(pView->NextVisible( pStartEntry ));
+            pNew = pView->NextVisible(pStartEntry);
             if( !pNew )
-                pNew = (SvTreeListEntry*)(pView->PrevVisible( pStartEntry ));
+                pNew = pView->PrevVisible(pStartEntry);
         }
         else
         {
@@ -1850,7 +1848,7 @@ void SvImpLBox::EntryInserted( SvTreeListEntry* pEntry )
         {
             // Check if the view is filled completely. If not, then adjust
             // pStartEntry and the Cursor (automatic scrolling).
-            sal_uInt16 nLast = (sal_uInt16)(pView->GetVisiblePos( (SvTreeListEntry*)(pView->LastVisible())));
+            sal_uInt16 nLast = (sal_uInt16)(pView->GetVisiblePos(pView->LastVisible()));
             sal_uInt16 nThumb = (sal_uInt16)(pView->GetVisiblePos( pStartEntry ));
             sal_uInt16 nCurDispEntries = nLast-nThumb+1;
             if( nCurDispEntries < nVisibleCount )
@@ -2158,7 +2156,7 @@ bool SvImpLBox::KeyInput( const KeyEvent& rKEvt)
             pNewCursor = pCursor;
             do
             {
-                pNewCursor = (SvTreeListEntry*)(pView->PrevVisible( pNewCursor ));
+                pNewCursor = pView->PrevVisible(pNewCursor);
             } while( pNewCursor && !IsSelectable(pNewCursor) );
 
             if ( pNewCursor )
@@ -2186,7 +2184,7 @@ bool SvImpLBox::KeyInput( const KeyEvent& rKEvt)
             pNewCursor = pCursor;
             do
             {
-                pNewCursor = (SvTreeListEntry*)(pView->NextVisible( pNewCursor ));
+                pNewCursor = pView->NextVisible(pNewCursor);
             } while( pNewCursor && !IsSelectable(pNewCursor) );
 
             if ( pNewCursor )
@@ -2297,11 +2295,11 @@ bool SvImpLBox::KeyInput( const KeyEvent& rKEvt)
         case KEY_PAGEUP:
             if( !bMod1 )
             {
-                pNewCursor = (SvTreeListEntry*)(pView->PrevVisible( pCursor, nDelta ));
+                pNewCursor = pView->PrevVisible(pCursor, nDelta);
 
                 while( nDelta && pNewCursor && !IsSelectable(pNewCursor) )
                 {
-                    pNewCursor = (SvTreeListEntry*)(pView->NextVisible( pNewCursor ));
+                    pNewCursor = pView->NextVisible(pNewCursor);
                     nDelta--;
                 }
 
@@ -2325,11 +2323,11 @@ bool SvImpLBox::KeyInput( const KeyEvent& rKEvt)
         case KEY_PAGEDOWN:
             if( !bMod1 )
             {
-                pNewCursor= (SvTreeListEntry*)(pView->NextVisible( pCursor, nDelta ));
+                pNewCursor= pView->NextVisible(pCursor, nDelta);
 
                 while( nDelta && pNewCursor && !IsSelectable(pNewCursor) )
                 {
-                    pNewCursor = (SvTreeListEntry*)(pView->PrevVisible( pNewCursor ));
+                    pNewCursor = pView->PrevVisible(pNewCursor);
                     nDelta--;
                 }
 
@@ -2508,7 +2506,7 @@ bool SvImpLBox::KeyInput( const KeyEvent& rKEvt)
 
             while( pNewCursor && !IsSelectable(pNewCursor) )
             {
-                pNewCursor = (SvTreeListEntry*)(pView->NextVisible( pNewCursor ));
+                pNewCursor = pView->NextVisible(pNewCursor);
             }
 
             if( pNewCursor && pNewCursor != pCursor )
@@ -2528,7 +2526,7 @@ bool SvImpLBox::KeyInput( const KeyEvent& rKEvt)
 
             while( pNewCursor && !IsSelectable(pNewCursor) )
             {
-                pNewCursor = (SvTreeListEntry*)(pView->PrevVisible( pNewCursor ));
+                pNewCursor = pView->PrevVisible(pNewCursor);
             }
 
             if( pNewCursor && pNewCursor != pCursor)
@@ -2704,7 +2702,7 @@ void SvImpLBox::SetAnchorSelection(SvTreeListEntry* pOldCursor,SvTreeListEntry* 
             while( pEntry && pEntry != pNewCursor )
             {
                 pView->Select( pEntry, true );
-                pEntry = (SvTreeListEntry*)(pView->NextVisible( pEntry ));
+                pEntry = pView->NextVisible(pEntry);
             }
             if( pEntry )
                 pView->Select( pEntry, true );
@@ -2717,7 +2715,7 @@ void SvImpLBox::SetAnchorSelection(SvTreeListEntry* pOldCursor,SvTreeListEntry* 
             while( pEntry && pEntry != pOldCursor )
             {
                 pView->Select( pEntry, false );
-                pEntry = (SvTreeListEntry*)(pView->NextVisible( pEntry ));
+                pEntry = pView->NextVisible(pEntry);
             }
             if( pEntry )
                 pView->Select( pEntry, false );
@@ -2726,7 +2724,7 @@ void SvImpLBox::SetAnchorSelection(SvTreeListEntry* pOldCursor,SvTreeListEntry* 
             while( pEntry && pEntry != pAnchor )
             {
                 pView->Select( pEntry, true );
-                pEntry = (SvTreeListEntry*)(pView->NextVisible( pEntry ));
+                pEntry = pView->NextVisible(pEntry);
             }
             if( pEntry )
                 pView->Select( pEntry, true );
@@ -2736,11 +2734,11 @@ void SvImpLBox::SetAnchorSelection(SvTreeListEntry* pOldCursor,SvTreeListEntry* 
         if( nNewVisPos < nOldVisPos )
         {
             pEntry = pNewCursor;
-            pEntry = (SvTreeListEntry*)(pView->NextVisible( pEntry ));
+            pEntry = pView->NextVisible(pEntry);
             while( pEntry && pEntry != pOldCursor )
             {
                 pView->Select( pEntry, false );
-                pEntry = (SvTreeListEntry*)(pView->NextVisible( pEntry ));
+                pEntry = pView->NextVisible(pEntry);
             }
             if( pEntry )
                 pView->Select( pEntry, false );
@@ -2755,7 +2753,7 @@ void SvImpLBox::SetAnchorSelection(SvTreeListEntry* pOldCursor,SvTreeListEntry* 
             while( pEntry && pEntry != pOldCursor )
             {
                 pView->Select( pEntry, true );
-                pEntry = (SvTreeListEntry*)(pView->NextVisible( pEntry ));
+                pEntry = pView->NextVisible(pEntry);
             }
             if( pEntry )
                 pView->Select( pEntry, true );
@@ -2768,7 +2766,7 @@ void SvImpLBox::SetAnchorSelection(SvTreeListEntry* pOldCursor,SvTreeListEntry* 
             while( pEntry && pEntry != pAnchor )
             {
                 pView->Select( pEntry, false );
-                pEntry = (SvTreeListEntry*)(pView->NextVisible( pEntry ));
+                pEntry = pView->NextVisible(pEntry);
             }
             if( pEntry )
                 pView->Select( pEntry, false );
@@ -2776,7 +2774,7 @@ void SvImpLBox::SetAnchorSelection(SvTreeListEntry* pOldCursor,SvTreeListEntry* 
             while( pEntry && pEntry != pNewCursor )
             {
                 pView->Select( pEntry, true );
-                pEntry = (SvTreeListEntry*)(pView->NextVisible( pEntry ));
+                pEntry = pView->NextVisible(pEntry);
             }
             if( pEntry )
                 pView->Select( pEntry, true );
@@ -2789,7 +2787,7 @@ void SvImpLBox::SetAnchorSelection(SvTreeListEntry* pOldCursor,SvTreeListEntry* 
             while( pEntry && pEntry != pNewCursor )
             {
                 pView->Select( pEntry, false );
-                pEntry = (SvTreeListEntry*)(pView->NextVisible( pEntry ));
+                pEntry = pView->NextVisible(pEntry);
             }
             return;
         }

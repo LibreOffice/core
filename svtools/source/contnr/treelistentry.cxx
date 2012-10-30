@@ -115,6 +115,16 @@ sal_uLong SvTreeListEntry::GetChildListPos() const
     return ( nListPos & 0x7fffffff );
 }
 
+SvTreeListEntries& SvTreeListEntry::GetChildEntries()
+{
+    return maChildren;
+}
+
+const SvTreeListEntries& SvTreeListEntry::GetChildEntries() const
+{
+    return maChildren;
+}
+
 void SvTreeListEntry::Clone(SvTreeListEntry* pSource)
 {
     nListPos &= 0x80000000;
