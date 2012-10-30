@@ -33,6 +33,7 @@
 #include "cppuhelper/implbase2.hxx"
 #include "cppuhelper/implementationentry.hxx"
 #include "unotools/configmgr.hxx"
+#include "comphelper/processfactory.hxx"
 #include "comphelper/servicedecl.hxx"
 #include "comphelper/unwrapargs.hxx"
 #include <i18npool/mslangid.hxx>
@@ -47,6 +48,8 @@
 #include "license_dialog.hxx"
 #include "dp_gui_dialog2.hxx"
 #include "dp_gui_extensioncmdqueue.hxx"
+#include <ucbhelper/contentbroker.hxx>
+
 
 using namespace ::dp_misc;
 using namespace ::com::sun::star;
@@ -66,6 +69,7 @@ public:
 
     // Application
     virtual int Main();
+    virtual void DeInit();
 };
 
 //______________________________________________________________________________
@@ -84,6 +88,18 @@ int MyApp::Main()
     return EXIT_SUCCESS;
 }
 
+
+void MyApp::DeInit()
+{
+    if (::ucbhelper::ContentBroker::get())
+        ::ucbhelper::ContentBroker::deinitialize();
+    css::uno::Reference< css::uno::XComponentContext > context(
+        comphelper::getProcessComponentContext());
+    dp_misc::disposeBridges(context);
+    css::uno::Reference< css::lang::XComponent >(
+        context, css::uno::UNO_QUERY_THROW)->dispose();
+    comphelper::setProcessServiceFactory(0);
+}
 
 namespace
 {
