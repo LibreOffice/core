@@ -4078,6 +4078,7 @@ if test "$cross_compiling" = "yes"; then
         ooo.lst.in \
         oowintool \
         post_download.in \
+        solenv/bin/getcompver.awk \
         solenv/inc/langlist.mk \
         solenv/inc/postset.mk \
     | (cd CONF-FOR-BUILD && tar xf -)
