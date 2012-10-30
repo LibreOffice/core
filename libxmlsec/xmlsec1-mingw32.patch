@@ -1,5 +1,14 @@
 --- misc/xmlsec1-1.2.14/configure.in	2009-09-29 15:55:33.282288142 +0200
 +++ misc/build/xmlsec1-1.2.14/configure.in	2009-09-29 15:49:39.614223428 +0200
+@@ -33,6 +33,8 @@
+ AC_HEADER_STDC
+ 
+ LT_INIT
++dnl force the right implib extension for mingw
++libext=dll.a
+ 
+ dnl
+ dnl Find programs
 @@ -671,7 +671,9 @@
  	done
  	
