@@ -186,7 +186,7 @@ File gid_File_Lib_Curl
     #ifdef MACOSX
        Name = STRING(CONCAT2(libcurl.4,UNXSUFFIX));
     #else
-       Name = STRING(CONCAT3(libcurl,UNXSUFFIX,.4));
+       Name = STRING(CONCAT2(libcurl,UNXSUFFIX));
     #endif
   #else
    #ifdef _gcc3
