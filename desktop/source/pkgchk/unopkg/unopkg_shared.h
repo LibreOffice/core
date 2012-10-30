@@ -28,7 +28,6 @@
 
 #include "dp_misc.h"
 #include "com/sun/star/uno/Exception.hpp"
-#include "com/sun/star/lang/XComponent.hpp"
 #include "com/sun/star/uno/XComponentContext.hpp"
 #include "com/sun/star/ucb/XCommandEnvironment.hpp"
 #include "com/sun/star/deployment/XPackage.hpp"
@@ -123,35 +122,6 @@ bool isBootstrapVariable(sal_uInt32 * pIndex);
 //##############################################################################
 
 //==============================================================================
-class DisposeGuard
-{
-    css::uno::Reference<css::lang::XComponent> m_xComp;
-    bool m_bDeinitUCB;
-public:
-    DisposeGuard(): m_bDeinitUCB(false) {}
-    inline ~DisposeGuard()
-    {
-        if (m_bDeinitUCB)
-            ::ucbhelper::ContentBroker::deinitialize();
-
-        if (m_xComp.is())
-            m_xComp->dispose();
-    }
-
-    inline void reset(
-        css::uno::Reference<css::lang::XComponent> const & xComp )
-    {
-        m_xComp = xComp;
-    }
-
-    inline void setDeinitUCB()
-    {
-        m_bDeinitUCB = true;
-    }
-
-};
-
-//==============================================================================
 css::uno::Reference<css::ucb::XCommandEnvironment> createCmdEnv(
     css::uno::Reference<css::uno::XComponentContext> const & xContext,
     ::rtl::OUString const & logFile,
@@ -170,7 +140,7 @@ void printf_packages(
 
 //==============================================================================
 css::uno::Reference<css::uno::XComponentContext> getUNO(
-    DisposeGuard & disposeGuard, bool verbose, bool shared, bool bGui,
+    bool verbose, bool shared, bool bGui,
     css::uno::Reference<css::uno::XComponentContext> & out_LocalComponentContext);
 
 }

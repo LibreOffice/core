@@ -364,20 +364,13 @@ void printf_packages(
     }
 }
 
-
-
 namespace {
 
 //------------------------------------------------------------------------------
-Reference<XComponentContext> bootstrapStandAlone(
-    DisposeGuard & disposeGuard, bool /*verbose */)
+Reference<XComponentContext> bootstrapStandAlone()
 {
     Reference<XComponentContext> xContext =
         ::cppu::defaultBootstrap_InitialComponentContext();
-
-    // assure disposing of local component context:
-    disposeGuard.reset(
-        Reference<lang::XComponent>( xContext, UNO_QUERY ) );
 
     Reference<lang::XMultiServiceFactory> xServiceManager(
         xContext->getServiceManager(), UNO_QUERY_THROW );
@@ -392,7 +385,6 @@ Reference<XComponentContext> bootstrapStandAlone(
     if (! ::ucbhelper::ContentBroker::initialize( xServiceManager, ucb_args ))
         throw RuntimeException( OUSTR("cannot initialize UCB!"), 0 );
 
-    disposeGuard.setDeinitUCB();
     return xContext;
 }
 
@@ -468,7 +460,7 @@ OUString getLockFilePath()
 }
 //==============================================================================
 Reference<XComponentContext> getUNO(
-    DisposeGuard & disposeGuard, bool verbose, bool shared, bool bGui,
+    bool verbose, bool shared, bool bGui,
     Reference<XComponentContext> & out_localContext)
 {
     // do not create any user data (for the root user) in --shared mode:
@@ -480,8 +472,7 @@ Reference<XComponentContext> getUNO(
 
     // hold lock during process runtime:
     static ::desktop::Lockfile s_lockfile( false /* no IPC server */ );
-    Reference<XComponentContext> xComponentContext(
-        bootstrapStandAlone( disposeGuard, verbose ) );
+    Reference<XComponentContext> xComponentContext( bootstrapStandAlone() );
     out_localContext = xComponentContext;
     if (::dp_misc::office_is_running()) {
         xComponentContext.set(
