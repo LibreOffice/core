@@ -7,11 +7,9 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Package_Package,font_libertineg_inc,$(call gb_UnpackedTarball_get_dir,font_libertineg)))
+$(eval $(call gb_ExternalPackage_ExternalPackage,font_libertineg_inc,font_libertineg))
 
-$(eval $(call gb_Package_use_unpacked,font_libertineg_inc,font_libertineg))
-
-$(eval $(call gb_Package_add_files,font_libertineg_inc,pck,\
+$(eval $(call gb_ExternalPackage_add_unpacked_files,font_libertineg_inc,pck,\
 	LinBiolinum_RB_G.ttf \
 	LinBiolinum_RI_G.ttf \
 	LinBiolinum_R_G.ttf \
@@ -24,5 +22,6 @@ $(eval $(call gb_Package_add_files,font_libertineg_inc,pck,\
 	LinLibertine_R_G.ttf \
 ))
 
-$(eval $(call gb_Package_add_file,font_libertineg_inc,pck/License_libertineg.txt,OFL.txt))
+$(eval $(call gb_ExternalPackage_add_unpacked_file,font_libertineg_inc,pck/License_libertineg.txt,OFL.txt))
 
+# vim: set noet sw=4 ts=4:

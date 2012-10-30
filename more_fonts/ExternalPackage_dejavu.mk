@@ -7,11 +7,9 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Package_Package,font_dejavu_inc,$(call gb_UnpackedTarball_get_dir,font_dejavu)))
+$(eval $(call gb_ExternalPackage_ExternalPackage,font_dejavu_inc,font_dejavu))
 
-$(eval $(call gb_Package_use_unpacked,font_dejavu_inc,font_dejavu))
-
-$(eval $(call gb_Package_add_files,font_dejavu_inc,pck,\
+$(eval $(call gb_ExternalPackage_add_unpacked_files,font_dejavu_inc,pck,\
 	ttf/DejaVuSans-Bold.ttf \
 	ttf/DejaVuSans-BoldOblique.ttf \
 	ttf/DejaVuSans-ExtraLight.ttf \
@@ -35,4 +33,6 @@ $(eval $(call gb_Package_add_files,font_dejavu_inc,pck,\
 	ttf/DejaVuSerifCondensed.ttf \
 ))
 
-$(eval $(call gb_Package_add_file,font_dejavu_lic,pck/License_dejavu.txt,LICENSE))
+$(eval $(call gb_ExternalPackage_add_unpacked_file,font_dejavu_lic,pck/License_dejavu.txt,LICENSE))
+
+# vim: set noet sw=4 ts=4:

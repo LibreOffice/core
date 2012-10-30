@@ -7,11 +7,9 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Package_Package,font_gentium_inc,$(call gb_UnpackedTarball_get_dir,font_gentium)))
+$(eval $(call gb_ExternalPackage_ExternalPackage,font_gentium_inc,font_gentium))
 
-$(eval $(call gb_Package_use_unpacked,font_gentium_inc,font_gentium))
-
-$(eval $(call gb_Package_add_files,font_gentium_inc,pck,\
+$(eval $(call gb_ExternalPackage_add_unpacked_files,font_gentium_inc,pck,\
 	GenBasB.ttf \
 	GenBasBI.ttf \
 	GenBasI.ttf \
@@ -22,4 +20,6 @@ $(eval $(call gb_Package_add_files,font_gentium_inc,pck,\
 	GenBkBasR.ttf \
 ))
 
-$(eval $(call gb_Package_add_file,font_gentium_inc,pck/License_gentium.txt,OFL.txt))
+$(eval $(call gb_ExternalPackage_add_unpacked_file,font_gentium_inc,pck/License_gentium.txt,OFL.txt))
+
+# vim: set noet sw=4 ts=4:

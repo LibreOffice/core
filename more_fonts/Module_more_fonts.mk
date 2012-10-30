@@ -11,11 +11,11 @@ $(eval $(call gb_Module_Module,more_fonts))
 
 $(eval $(call gb_Module_add_targets,more_fonts,\
 	Package_conf \
-	Package_dejavu \
-	Package_gentium \
-	Package_liberation \
-	Package_liberation_narrow \
-	Package_libertineg \
+	ExternalPackage_dejavu \
+	ExternalPackage_gentium \
+	ExternalPackage_liberation \
+	ExternalPackage_liberation_narrow \
+	ExternalPackage_libertineg \
 	UnpackedTarball_dejavu \
 	UnpackedTarball_gentium \
 	UnpackedTarball_liberation \

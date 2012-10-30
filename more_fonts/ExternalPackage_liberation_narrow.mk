@@ -7,15 +7,15 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Package_Package,font_liberation_narrow_inc,$(call gb_UnpackedTarball_get_dir,font_liberation_narrow)))
+$(eval $(call gb_ExternalPackage_ExternalPackage,font_liberation_narrow_inc,font_liberation_narrow))
 
-$(eval $(call gb_Package_use_unpacked,font_liberation_narrow_inc,font_liberation_narrow))
-
-$(eval $(call gb_Package_add_files,font_liberation_narrow_inc,pck,\
+$(eval $(call gb_ExternalPackage_add_unpacked_files,font_liberation_narrow_inc,pck,\
 	LiberationSansNarrow-Bold.ttf \
 	LiberationSansNarrow-BoldItalic.ttf \
 	LiberationSansNarrow-Italic.ttf \
 	LiberationSansNarrow-Regular.ttf \
 ))
 
-$(eval $(call gb_Package_add_file,font_liberation_narrow_inc,pck/License_liberation_narrow.txt,License.txt))
+$(eval $(call gb_ExternalPackage_add_unpacked_file,font_liberation_narrow_inc,pck/License_liberation_narrow.txt,License.txt))
+
+# vim: set noet sw=4 ts=4:
