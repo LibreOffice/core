@@ -18,17 +18,17 @@ $(eval $(call gb_ExternalPackage_add_file,curl,lib/pkgconfig/libcurl.pc,libcurl.
 endif
 
 ifeq ($(DISABLE_DYNLOADING),TRUE)
-$(eval $(call gb_ExternalPackage_add_file,curl,lib/libcurl.a,.libs/libcurl.a))
+$(eval $(call gb_ExternalPackage_add_file,curl,lib/libcurl.a,lib/.libs/libcurl.a))
 else ifeq ($(OS),ANDROID)
-$(eval $(call gb_ExternalPackage_add_file,curl,lib/libcurl.so,.libs/libcurl.so))
+$(eval $(call gb_ExternalPackage_add_file,curl,lib/libcurl.so,lib/.libs/libcurl.so))
 else
 $(eval $(call gb_ExternalPackage_add_file,curl,lib/libcurl.so,lib/.libs/libcurl.so.4.2.0))
 endif
 
 else ifeq ($(OS)$(COM),WNTGCC)
 
-$(eval $(call gb_ExternalPackage_add_file,curl,lib/libcurl.a,.libs/libcurl.a))
-$(eval $(call gb_ExternalPackage_add_file,curl,bin/libcurl.dll,.libs/libcurl.dll))
+$(eval $(call gb_ExternalPackage_add_file,curl,lib/libcurl.a,lib/.libs/libcurl.a))
+$(eval $(call gb_ExternalPackage_add_file,curl,bin/libcurl.dll,lib/.libs/libcurl.dll))
 
 else ifeq ($(COM),MSC)
 
