@@ -66,6 +66,7 @@ $(eval $(call gb_CppunitTest_use_api,sw_subsequent_rtfimport,\
 $(eval $(call gb_CppunitTest_use_ure,sw_subsequent_rtfimport))
 
 $(eval $(call gb_CppunitTest_use_components,sw_subsequent_rtfimport,\
+	basic/util/sb \
 	comphelper/util/comphelp \
     configmgr/source/configmgr \
     fileaccess/source/fileacc \

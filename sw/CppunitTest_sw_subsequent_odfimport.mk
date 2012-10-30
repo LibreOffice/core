@@ -64,6 +64,7 @@ $(eval $(call gb_CppunitTest_use_api,sw_subsequent_odfimport,\
 $(eval $(call gb_CppunitTest_use_ure,sw_subsequent_odfimport))
 
 $(eval $(call gb_CppunitTest_use_components,sw_subsequent_odfimport,\
+	basic/util/sb \
     comphelper/util/comphelp \
     configmgr/source/configmgr \
     fileaccess/source/fileacc \
