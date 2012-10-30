@@ -322,10 +322,6 @@ sal_uLong SvTreeList::Move(SvTreeListEntry* pSrcEntry,SvTreeListEntry* pTargetPa
     if (!bSameParent)
         SetListPositions(rSrc);
 
-#ifdef CHECK_INTEGRITY
-    CheckIntegrity();
-#endif
-
     sal_uLong nRetVal = findEntryPosition(rDst, pSrcEntry);
     OSL_ENSURE(nRetVal == pSrcEntry->GetChildListPos(), "ListPos not valid");
     Broadcast( LISTACTION_MOVED,pSrcEntry,pTargetParent,nRetVal);
@@ -360,9 +356,6 @@ sal_uLong SvTreeList::Copy(SvTreeListEntry* pSrcEntry,SvTreeListEntry* pTargetPa
 
     SetListPositions(rDst); // correct list position in target list
 
-#ifdef CHECK_INTEGRITY
-    CheckIntegrity();
-#endif
     Broadcast( LISTACTION_INSERTED_TREE, pClonedEntry );
     sal_uLong nRetVal = findEntryPosition(rDst, pClonedEntry);
     return nRetVal;
@@ -426,9 +419,6 @@ void SvTreeList::InsertTree(SvTreeListEntry* pSrcEntry,
     nEntryCount += GetChildCount( pSrcEntry );
     nEntryCount++; // the parent is new, too
 
-#ifdef CHECK_INTEGRITY
-CheckIntegrity();
-#endif
     Broadcast(LISTACTION_INSERTED_TREE, pSrcEntry );
 }
 
@@ -1100,9 +1090,6 @@ sal_uLong SvTreeList::Insert( SvTreeListEntry* pEntry,SvTreeListEntry* pParent,s
     else
         pEntry->nListPos = rList.size()-1;
 
-#ifdef CHECK_INTEGRITY
-    CheckIntegrity();
-#endif
     Broadcast( LISTACTION_INSERTED, pEntry );
     return nPos; // pEntry->nListPos;
 }
@@ -1136,10 +1123,7 @@ void SvTreeList::SetAbsolutePositions()
         nPos++;
         pEntry = Next( pEntry );
     }
-    bAbsPositionsValid = sal_True;
-#ifdef CHECK_INTEGRITY
-CheckIntegrity();
-#endif
+    bAbsPositionsValid = true;
 }
 
 
@@ -1166,9 +1150,6 @@ void SvTreeList::Expand( SvListView* pView, SvTreeListEntry* pEntry )
         pView->bVisPositionsValid = sal_False;
         pView->nVisibleCount = 0;
     }
-#ifdef CHECK_INTEGRITY
-CheckIntegrity();
-#endif
 }
 
 /*************************************************************************
@@ -1194,9 +1175,6 @@ void SvTreeList::Collapse( SvListView* pView, SvTreeListEntry* pEntry )
         pView->nVisibleCount = 0;
         pView->bVisPositionsValid = sal_False;
     }
-#ifdef CHECK_INTEGRITY
-CheckIntegrity();
-#endif
 }
 
 
@@ -1230,9 +1208,6 @@ sal_Bool SvTreeList::Select( SvListView* pView, SvTreeListEntry* pEntry, sal_Boo
             pView->nSelectionCount--;
         }
     }
-#ifdef CHECK_INTEGRITY
-    CheckIntegrity();
-#endif
     return sal_True;
 }
 
@@ -1281,11 +1256,6 @@ bool SvTreeList::Remove( const SvTreeListEntry* pEntry )
         SetListPositions(rList);
 
     nEntryCount -= nRemoved;
-
-#ifdef CHECK_INTEGRITY
-    CheckIntegrity();
-#endif
-
     return true;
 }
 
@@ -1313,9 +1283,6 @@ void SvTreeList::SelectAll( SvListView* pView, sal_Bool bSelect )
         pView->nSelectionCount = nEntryCount;
     else
         pView->nSelectionCount = 0;
-#ifdef CHECK_INTEGRITY
-CheckIntegrity();
-#endif
 }
 
 

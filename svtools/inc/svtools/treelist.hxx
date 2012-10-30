@@ -297,8 +297,6 @@ public:
     void                SetCompareHdl( const Link& rLink ) { aCompareLink = rLink; }
     const Link&         GetCompareHdl() const { return aCompareLink; }
     void                Resort();
-
-    void                CheckIntegrity() const;
 };
 
 class SVT_DLLPUBLIC SvListView
