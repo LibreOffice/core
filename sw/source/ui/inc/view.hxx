@@ -606,7 +606,7 @@ public:
     sal_Bool IsCrsrAtTop() const                    { return bTopCrsr; }
     sal_Bool IsCrsrAtCenter() const                 { return bCenterCrsr; }
 
-    sal_Bool JumpToSwMark( const String& rMark );
+    bool JumpToSwMark( const String& rMark );
 
     long InsertDoc( sal_uInt16 nSlotId, const String& rFileName,
                     const String& rFilterName, sal_Int16 nVersion = 0 );

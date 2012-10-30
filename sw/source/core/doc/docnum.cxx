@@ -185,10 +185,10 @@ void SwDoc::PropagateOutlineRule()
 }
 
 // Increase/Decrease
-sal_Bool SwDoc::OutlineUpDown( const SwPaM& rPam, short nOffset )
+bool SwDoc::OutlineUpDown( const SwPaM& rPam, short nOffset )
 {
     if( GetNodes().GetOutLineNds().empty() || !nOffset )
-        return sal_False;
+        return false;
 
     // calculate the range
     const SwOutlineNodes& rOutlNds = GetNodes().GetOutLineNds();
@@ -199,7 +199,7 @@ sal_Bool SwDoc::OutlineUpDown( const SwPaM& rPam, short nOffset )
     if( !rOutlNds.Seek_Entry( pSttNd, &nSttPos ) &&
         !nSttPos-- )
         // we're not in an "Outline section"
-        return sal_False;
+        return false;
 
     if( rOutlNds.Seek_Entry( pEndNd, &nEndPos ) )
         ++nEndPos;
@@ -371,7 +371,7 @@ sal_Bool SwDoc::OutlineUpDown( const SwPaM& rPam, short nOffset )
     }
 
     if (! bMoveApplicable )
-        return sal_False;
+        return false;
 
     if (GetIDocumentUndoRedo().DoesUndo())
     {
@@ -424,11 +424,11 @@ sal_Bool SwDoc::OutlineUpDown( const SwPaM& rPam, short nOffset )
     ChkCondColls();
     SetModified();
 
-    return sal_True;
+    return true;
 }
 
 // Move up/down
-sal_Bool SwDoc::MoveOutlinePara( const SwPaM& rPam, short nOffset )
+bool SwDoc::MoveOutlinePara( const SwPaM& rPam, short nOffset )
 {
     // Do not move to special sections in the nodes array
     const SwPosition& rStt = *rPam.Start(),
@@ -438,7 +438,7 @@ sal_Bool SwDoc::MoveOutlinePara( const SwPaM& rPam, short nOffset )
         (rStt.nNode.GetIndex() < GetNodes().GetEndOfExtras().GetIndex()) ||
         (rEnd.nNode.GetIndex() < GetNodes().GetEndOfExtras().GetIndex()))
     {
-        return sal_False;
+        return false;
     }
 
     sal_uInt16 nAktPos = 0;
@@ -453,11 +453,11 @@ sal_Bool SwDoc::MoveOutlinePara( const SwPaM& rPam, short nOffset )
     if( !GetNodes().GetOutLineNds().Seek_Entry( pSrch, &nAktPos ) )
     {
         if( !nAktPos )
-            return sal_False; // Promoting or demoting before the first outline => no.
+            return false; // Promoting or demoting before the first outline => no.
         if( --nAktPos )
             aSttRg = *GetNodes().GetOutLineNds()[ nAktPos ];
         else if( 0 > nOffset )
-            return sal_False; // Promoting at the top of document?!
+            return false; // Promoting at the top of document?!
         else
             aSttRg = *GetNodes().GetEndOfContent().StartOfSectionNode();
     }
@@ -561,7 +561,7 @@ sal_Bool SwDoc::MoveOutlinePara( const SwPaM& rPam, short nOffset )
     if( pNd->IsTableNode() )
         pNd = pNd->StartOfSectionNode();
     if( pNd->FindTableNode() )
-        return sal_False;
+        return false;
 
     OSL_ENSURE( aSttRg.GetIndex() > nNewPos || nNewPos >= aEndRg.GetIndex(),
                 "Position lies within Move range" );
@@ -573,11 +573,11 @@ sal_Bool SwDoc::MoveOutlinePara( const SwPaM& rPam, short nOffset )
 
     long nOffs = nNewPos - ( 0 < nOffset ? aEndRg.GetIndex() : aSttRg.GetIndex());
     SwPaM aPam( aSttRg, aEndRg, 0, -1 );
-    return MoveParagraph( aPam, nOffs, sal_True );
+    return MoveParagraph( aPam, nOffs, true );
 }
 
 static sal_uInt16 lcl_FindOutlineName( const SwNodes& rNds, const String& rName,
-                            sal_Bool bExact )
+                            bool bExact )
 {
     sal_uInt16 nSavePos = USHRT_MAX;
     const SwOutlineNodes& rOutlNds = rNds.GetOutLineNds();
@@ -704,7 +704,7 @@ static sal_uInt16 lcl_FindOutlineNum( const SwNodes& rNds, String& rName )
 // found, we got the right entry. Or else we use the one found by
 // searching for the Number.
 // If we don't have a Number, we search via the Text only.
-sal_Bool SwDoc::GotoOutline( SwPosition& rPos, const String& rName ) const
+bool SwDoc::GotoOutline( SwPosition& rPos, const String& rName ) const
 {
     if( rName.Len() )
     {
@@ -732,7 +732,7 @@ sal_Bool SwDoc::GotoOutline( SwPosition& rPos, const String& rName ) const
 
             if( !sExpandedText.Equals( sName ) )
             {
-                sal_uInt16 nTmp = ::lcl_FindOutlineName( GetNodes(), sName, sal_True );
+                sal_uInt16 nTmp = ::lcl_FindOutlineName( GetNodes(), sName, true );
                 if( USHRT_MAX != nTmp )             // found via the Name
                 {
                     nFndPos = nTmp;
@@ -741,32 +741,32 @@ sal_Bool SwDoc::GotoOutline( SwPosition& rPos, const String& rName ) const
             }
             rPos.nNode = *pNd;
             rPos.nContent.Assign( pNd, 0 );
-            return sal_True;
+            return true;
         }
 
-        nFndPos = ::lcl_FindOutlineName( GetNodes(), rName, sal_False );
+        nFndPos = ::lcl_FindOutlineName( GetNodes(), rName, false );
         if( USHRT_MAX != nFndPos )
         {
             SwTxtNode* pNd = rOutlNds[ nFndPos ]->GetTxtNode();
             rPos.nNode = *pNd;
             rPos.nContent.Assign( pNd, 0 );
-            return sal_True;
+            return true;
         }
 
         // #i68289# additional search on hyperlink URL without its outline numbering part
         if ( !sName.Equals( rName ) )
         {
-            nFndPos = ::lcl_FindOutlineName( GetNodes(), sName, sal_False );
+            nFndPos = ::lcl_FindOutlineName( GetNodes(), sName, false );
             if( USHRT_MAX != nFndPos )
             {
                 SwTxtNode* pNd = rOutlNds[ nFndPos ]->GetTxtNode();
                 rPos.nNode = *pNd;
                 rPos.nContent.Assign( pNd, 0 );
-                return sal_True;
+                return true;
             }
         }
     }
-    return sal_False;
+    return false;
 }
 
 static void lcl_ChgNumRule( SwDoc& rDoc, const SwNumRule& rRule )
@@ -838,7 +838,7 @@ void SwDoc::SetNumRule( const SwPaM& rPam,
                         const SwNumRule& rRule,
                         const bool bCreateNewList,
                         const String sContinuedListId,
-                        sal_Bool bSetItem,
+                        bool bSetItem,
                         const bool bResetIndentAttrs )
 {
     SwUndoInsNum * pUndo = NULL;
@@ -915,7 +915,7 @@ void SwDoc::SetNumRule( const SwPaM& rPam,
 
             if (pRule && pRule->GetName() == pNew->GetName())
             {
-                bSetItem = sal_False;
+                bSetItem = false;
 
                 if ( !pTxtNd->IsInList() )
                 {
@@ -933,7 +933,7 @@ void SwDoc::SetNumRule( const SwPaM& rPam,
                     if ( pCollRule && pCollRule->GetName() == pNew->GetName() )
                     {
                         pTxtNd->ResetAttr( RES_PARATR_NUMRULE );
-                        bSetItem = sal_False;
+                        bSetItem = false;
                     }
                 }
             }
@@ -1626,7 +1626,7 @@ sal_Bool SwDoc::GotoPrevNum( SwPosition& rPos, sal_Bool bOverUpper,
    return ::lcl_GotoNextPrevNum( rPos, sal_False, bOverUpper, pUpper, pLower );
 }
 
-sal_Bool SwDoc::NumUpDown( const SwPaM& rPam, sal_Bool bDown )
+bool SwDoc::NumUpDown( const SwPaM& rPam, bool bDown )
 {
     sal_uLong nStt = rPam.GetPoint()->nNode.GetIndex(),
             nEnd = rPam.GetMark()->nNode.GetIndex();
@@ -1656,7 +1656,7 @@ sal_Bool SwDoc::NumUpDown( const SwPaM& rPam, sal_Bool bDown )
         }
     }
 
-    sal_Bool bRet = sal_True;
+    bool bRet = true;
     sal_Int8 nDiff = bDown ? 1 : -1;
 
     if (bOnlyOutline)
@@ -1684,7 +1684,7 @@ sal_Bool SwDoc::NumUpDown( const SwPaM& rPam, sal_Bool bDown )
                     sal_uInt8 nLevel = static_cast<sal_uInt8>(pTNd->GetActualListLevel());
                     if( (-1 == nDiff && 0 >= nLevel) ||
                         (1 == nDiff && MAXLEVEL - 1 <= nLevel))
-                        bRet = sal_False;
+                        bRet = false;
                 }
             }
         }
@@ -1725,7 +1725,7 @@ sal_Bool SwDoc::NumUpDown( const SwPaM& rPam, sal_Bool bDown )
     return bRet;
 }
 
-sal_Bool SwDoc::MoveParagraph( const SwPaM& rPam, long nOffset, sal_Bool bIsOutlMv )
+bool SwDoc::MoveParagraph( const SwPaM& rPam, long nOffset, bool bIsOutlMv )
 {
     const SwPosition *pStt = rPam.Start(), *pEnd = rPam.End();
 
@@ -1750,21 +1750,21 @@ sal_Bool SwDoc::MoveParagraph( const SwPaM& rPam, long nOffset, sal_Bool bIsOutl
         {   // First is a start node
             pTmp2 = pTmp1->EndOfSectionNode();
             if( pTmp2->GetIndex() > nEndIdx )
-                return sal_False; // Its end node is behind the moved range
+                return false; // Its end node is behind the moved range
         }
         pTmp1 = pTmp1->StartOfSectionNode()->EndOfSectionNode();
         if( pTmp1->GetIndex() <= nEndIdx )
-            return sal_False; // End node inside but start node before moved range => no.
+            return false; // End node inside but start node before moved range => no.
         pTmp1 = GetNodes()[ nEndIdx ];
         if( pTmp1->IsEndNode() )
         {   // The last one is an end node
             pTmp1 = pTmp1->StartOfSectionNode();
             if( pTmp1->GetIndex() < nStIdx )
-                return sal_False; // Its start node is before the moved range.
+                return false; // Its start node is before the moved range.
         }
         pTmp1 = pTmp1->StartOfSectionNode();
         if( pTmp1->GetIndex() >= nStIdx )
-            return sal_False; // A start node which ends behind the moved range => no.
+            return false; // A start node which ends behind the moved range => no.
     }
 
     sal_uLong nInStIdx, nInEndIdx;
@@ -1779,7 +1779,7 @@ sal_Bool SwDoc::MoveParagraph( const SwPaM& rPam, long nOffset, sal_Bool bIsOutl
     {
         // Impossible to move to negative index
         if( sal_uLong(abs( nOffset )) > nStIdx)
-            return sal_False;
+            return false;
 
         nInEndIdx = nStIdx - 1;
         nStIdx += nOffset;
@@ -1789,7 +1789,7 @@ sal_Bool SwDoc::MoveParagraph( const SwPaM& rPam, long nOffset, sal_Bool bIsOutl
     // Swap [ nStIdx, nInEndIdx ] with [ nInStIdx, nEndIdx ]
 
     if( nEndIdx >= GetNodes().GetEndOfContent().GetIndex() )
-        return sal_False;
+        return false;
 
     if( !bIsOutlMv )
     {   // And here the restrictions for moving paragraphs other than chapters (outlines)
@@ -1800,7 +1800,7 @@ sal_Bool SwDoc::MoveParagraph( const SwPaM& rPam, long nOffset, sal_Bool bIsOutl
         pTmp1 = GetNodes()[ nStIdx ]->StartOfSectionNode();
         pTmp2 = GetNodes()[ nInStIdx ]->StartOfSectionNode();
         if( pTmp1 != pTmp2 )
-            return sal_False; // "start" nodes in different sections
+            return false; // "start" nodes in different sections
         pTmp1 = GetNodes()[ nEndIdx ];
         bool bIsEndNode = pTmp1->IsEndNode();
         if( !pTmp1->IsStartNode() )
@@ -1820,7 +1820,7 @@ sal_Bool SwDoc::MoveParagraph( const SwPaM& rPam, long nOffset, sal_Bool bIsOutl
         }
         pTmp2 = pTmp2->EndOfSectionNode();
         if( pTmp1 != pTmp2 )
-            return sal_False; // The "end" notes are in different sections
+            return false; // The "end" notes are in different sections
     }
 
     // Test for Redlining - Can the Selection be moved at all, actually?
@@ -1861,7 +1861,7 @@ sal_Bool SwDoc::MoveParagraph( const SwPaM& rPam, long nOffset, sal_Bool bIsOutl
                     case POS_EQUAL:             // Pos1 is equal to Pos2
                     case POS_OVERLAP_BEFORE:    // Pos1 overlaps Pos2 in the beginning
                     case POS_OVERLAP_BEHIND:    // Pos1 overlaps Pos2 at the end
-                        return sal_False;
+                        return false;
                     }
                 }
             }
@@ -2018,7 +2018,7 @@ sal_Bool SwDoc::MoveParagraph( const SwPaM& rPam, long nOffset, sal_Bool bIsOutl
             GetIDocumentUndoRedo().EndUndo( UNDO_END, NULL );
             SetModified();
 
-            return sal_True;
+            return true;
         }
     }
 
@@ -2076,7 +2076,7 @@ sal_Bool SwDoc::MoveParagraph( const SwPaM& rPam, long nOffset, sal_Bool bIsOutl
     }
 
     SetModified();
-    return sal_True;
+    return true;
 }
 
 sal_Bool SwDoc::NumOrNoNum( const SwNodeIndex& rIdx, sal_Bool bDel )

@@ -680,7 +680,7 @@ sal_Bool SwWrtShell::GotoFly( const String& rName, FlyCntType eType, sal_Bool bS
     return bRet;
 }
 
-sal_Bool SwWrtShell::GotoINetAttr( const SwTxtINetFmt& rAttr )
+bool SwWrtShell::GotoINetAttr( const SwTxtINetFmt& rAttr )
 {
     SwPosition aPos = *GetCrsr()->GetPoint();
     bool bRet = SwCrsrShell::GotoINetAttr(rAttr);
@@ -692,10 +692,10 @@ sal_Bool SwWrtShell::GotoINetAttr( const SwTxtINetFmt& rAttr )
 void SwWrtShell::GotoOutline( sal_uInt16 nIdx )
 {
     addCurrentPosition();
-    return SwCrsrShell::GotoOutline (nIdx);
+    SwCrsrShell::GotoOutline (nIdx);
 }
 
-sal_Bool SwWrtShell::GotoOutline( const String& rName )
+bool SwWrtShell::GotoOutline( const String& rName )
 {
     SwPosition aPos = *GetCrsr()->GetPoint();
     bool bRet = SwCrsrShell::GotoOutline (rName);
@@ -704,7 +704,7 @@ sal_Bool SwWrtShell::GotoOutline( const String& rName )
     return bRet;
 }
 
-sal_Bool SwWrtShell::GotoRegion( const String& rName )
+bool SwWrtShell::GotoRegion( const String& rName )
 {
     SwPosition aPos = *GetCrsr()->GetPoint();
     bool bRet = SwCrsrShell::GotoRegion (rName);
@@ -732,7 +732,7 @@ sal_Bool SwWrtShell::GotoNextTOXBase( const String* pName )
     return bRet;
 }
 
-sal_Bool SwWrtShell::GotoTable( const String& rName )
+bool SwWrtShell::GotoTable( const String& rName )
 {
    SwPosition aPos = *GetCrsr()->GetPoint();
     bool bRet = SwCrsrShell::GotoTable(rName);

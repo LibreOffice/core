@@ -97,7 +97,7 @@ class SwUndoMoveNum : public SwUndo, private SwUndRng
     long nOffset;
 
 public:
-    SwUndoMoveNum( const SwPaM& rPam, long nOffset, sal_Bool bIsOutlMv = sal_False );
+    SwUndoMoveNum( const SwPaM& rPam, long nOffset, bool bIsOutlMv = false );
 
     virtual void UndoImpl( ::sw::UndoRedoContext & );
     virtual void RedoImpl( ::sw::UndoRedoContext & );

@@ -304,9 +304,9 @@ bool LinkManager::GetDisplayNames(
 }
 
 void LinkManager::UpdateAllLinks(
-    sal_Bool bAskUpdate,
-    sal_Bool /*bCallErrHdl*/,
-    sal_Bool bUpdateGrfLinks,
+    bool bAskUpdate,
+    bool /*bCallErrHdl*/,
+    bool bUpdateGrfLinks,
     Window* pParentWin )
 {
     // First make a copy of the array in order to update links
@@ -350,7 +350,7 @@ void LinkManager::UpdateAllLinks(
             int nRet = QueryBox( pParentWin, WB_YES_NO | WB_DEF_YES, SfxResId( STR_QUERY_UPDATE_LINKS ).toString() ).Execute();
             if( RET_YES != nRet )
                 return ;         // nothing should be updated
-            bAskUpdate = sal_False;  // once is enough
+            bAskUpdate = false;  // once is enough
         }
 
         pLink->Update();

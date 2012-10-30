@@ -1787,9 +1787,9 @@ void SwView::EditLinkDlg()
     }
 }
 
-sal_Bool SwView::JumpToSwMark( const String& rMark )
+bool SwView::JumpToSwMark( const String& rMark )
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     if( rMark.Len() )
     {
         // wir wollen den Bookmark aber am oberen Rand haben
@@ -1863,11 +1863,11 @@ sal_Bool SwView::JumpToSwMark( const String& rMark )
                 if( pWrtShell->SearchPattern( aSearchOpt, bSearchInNotes, DOCPOS_START, DOCPOS_END ))
                 {
                     pWrtShell->EnterStdMode();      // Selektion wieder aufheben
-                    bRet = sal_True;
+                    bRet = true;
                 }
             }
             else if( pMarkAccess->getMarksEnd() != (ppMark = pMarkAccess->findMark(sMark)) )
-                pWrtShell->GotoMark( ppMark->get(), sal_False, sal_True ), bRet = sal_True;
+                pWrtShell->GotoMark( ppMark->get(), sal_False, sal_True ), bRet = true;
             else if( 0 != ( pINet = pWrtShell->FindINetAttr( sMark ) )) {
                 pWrtShell->addCurrentPosition();
                 bRet = pWrtShell->GotoINetAttr( *pINet->GetTxtINetFmt() );
@@ -1876,7 +1876,7 @@ sal_Bool SwView::JumpToSwMark( const String& rMark )
             // fuer alle Arten von Flys
             if( FLYCNTTYPE_ALL != eFlyType && pWrtShell->GotoFly( sName, eFlyType ))
             {
-                bRet = sal_True;
+                bRet = true;
                 if( FLYCNTTYPE_FRM == eFlyType )
                 {
                     // TextFrames: Cursor in den Frame setzen
@@ -1891,7 +1891,7 @@ sal_Bool SwView::JumpToSwMark( const String& rMark )
             }
         }
         else if( pMarkAccess->getMarksEnd() != (ppMark = pMarkAccess->findMark(sMark)))
-            pWrtShell->GotoMark( ppMark->get(), sal_False, sal_True ), bRet = sal_True;
+            pWrtShell->GotoMark( ppMark->get(), sal_False, sal_True ), bRet = true;
         else if( 0 != ( pINet = pWrtShell->FindINetAttr( sMark ) ))
             bRet = pWrtShell->GotoINetAttr( *pINet->GetTxtINetFmt() );
 

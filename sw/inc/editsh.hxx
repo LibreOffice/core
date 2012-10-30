@@ -465,9 +465,9 @@ public:
     void SetOutlineNumRule(const SwNumRule&);
     const SwNumRule* GetOutlineNumRule() const;
 
-    sal_Bool OutlineUpDown( short nOffset = 1 );
+    bool OutlineUpDown( short nOffset = 1 );
 
-    sal_Bool MoveOutlinePara( short nOffset = 1);
+    bool MoveOutlinePara( short nOffset = 1);
 
     sal_Bool IsProtectedOutlinePara() const;
 
@@ -496,10 +496,10 @@ public:
     /// Delete, split enumeration list.
     void DelNumRules();
 
-    sal_Bool NumUpDown( sal_Bool bDown = sal_True );
+    bool NumUpDown( bool bDown = true );
 
-    sal_Bool MoveParagraph( long nOffset = 1);
-    sal_Bool MoveNumParas( sal_Bool bUpperLower, sal_Bool bUpperLeft );
+    bool MoveParagraph( long nOffset = 1);
+    bool MoveNumParas( bool bUpperLower, bool bUpperLeft );
 
     /// Switch on/off of numbering via Delete/Backspace.
     sal_Bool NumOrNoNum( sal_Bool bDelete = sal_False, sal_Bool bChkStart = sal_True);

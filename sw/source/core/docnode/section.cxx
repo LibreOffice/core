@@ -1458,7 +1458,7 @@ int sw_FindDocShell( SfxObjectShellRef& xDocSh,
                 if ( pSrcDoc != pDoc &&
                      rSection.IsProtectFlag() )
                 {
-                    pSrcDoc->GetLinkManager().UpdateAllLinks( sal_False, sal_True, sal_False, 0 );
+                    pSrcDoc->GetLinkManager().UpdateAllLinks( false, true, false, 0 );
                 }
 
                 if( pCpyRg )

@@ -809,7 +809,7 @@ public:
     virtual void SetVisibleLinks(bool bFlag);
     virtual sfx2::LinkManager& GetLinkManager();
     virtual const sfx2::LinkManager& GetLinkManager() const;
-    virtual void UpdateLinks(sal_Bool bUI);
+    virtual void UpdateLinks(bool bUI);
     virtual bool GetData(const rtl::OUString& rItem, const String& rMimeType, ::com::sun::star::uno::Any& rValue) const;
     virtual bool SetData(const rtl::OUString& rItem, const String& rMimeType, const ::com::sun::star::uno::Any& rValue);
     virtual ::sfx2::SvLinkSource* CreateLinkSource(const rtl::OUString& rItem);
@@ -1472,12 +1472,12 @@ public:
     void PropagateOutlineRule();
 
     /// Outline - promote / demote.
-    sal_Bool OutlineUpDown( const SwPaM& rPam, short nOffset = 1 );
+    bool OutlineUpDown( const SwPaM& rPam, short nOffset = 1 );
 
     /// Ountline - move up / move down.
-    sal_Bool MoveOutlinePara( const SwPaM& rPam, short nOffset = 1);
+    bool MoveOutlinePara( const SwPaM& rPam, short nOffset = 1);
 
-    sal_Bool GotoOutline( SwPosition& rPos, const String& rName ) const;
+    bool GotoOutline( SwPosition& rPos, const String& rName ) const;
 
     /** Accept changes of outline styles for OUtlineRule.
      re-use unused 3rd parameter
@@ -1492,7 +1492,7 @@ public:
                      const SwNumRule&,
                      const bool bCreateNewList,
                      const String sContinuedListId = String(),
-                     sal_Bool bSetItem = sal_True,
+                     bool bSetItem = true,
                      const bool bResetIndentAttrs = false );
     void SetCounted( const SwPaM&, bool bCounted);
 
@@ -1578,11 +1578,11 @@ public:
     /// Invalidates all numrules
     void InvalidateNumRules();
 
-    sal_Bool NumUpDown( const SwPaM&, sal_Bool bDown = sal_True );
+    bool NumUpDown( const SwPaM&, bool bDown = true );
 
     /** Move selected paragraphes (not only numberings)
      according to offsets. (if negative: go to doc start). */
-    sal_Bool MoveParagraph( const SwPaM&, long nOffset = 1, sal_Bool bIsOutlMv = sal_False );
+    bool MoveParagraph( const SwPaM&, long nOffset = 1, bool bIsOutlMv = false );
 
     sal_Bool NumOrNoNum( const SwNodeIndex& rIdx, sal_Bool bDel = sal_False);
 

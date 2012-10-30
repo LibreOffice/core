@@ -469,14 +469,14 @@ typedef sal_Bool (SwWrtShell:: *FNSimpleMove)();
     void addCurrentPosition();
     sal_Bool GotoFly( const String& rName, FlyCntType eType = FLYCNTTYPE_ALL,
          sal_Bool bSelFrame = sal_True );
-    sal_Bool GotoINetAttr( const SwTxtINetFmt& rAttr );
+    bool GotoINetAttr( const SwTxtINetFmt& rAttr );
     void GotoOutline( sal_uInt16 nIdx );
-    sal_Bool GotoOutline( const String& rName );
-    sal_Bool GotoRegion( const String& rName );
+    bool GotoOutline( const String& rName );
+    bool GotoRegion( const String& rName );
     sal_Bool GotoRefMark( const String& rRefMark, sal_uInt16 nSubType = 0,
         sal_uInt16 nSeqNo = 0 );
     sal_Bool GotoNextTOXBase( const String* pName = 0);
-    sal_Bool GotoTable( const String& rName );
+    bool GotoTable( const String& rName );
     sal_Bool GotoFld( const SwFmtFld& rFld );
     const SwRedline* GotoRedline( sal_uInt16 nArrPos, sal_Bool bSelect = sal_False);
 

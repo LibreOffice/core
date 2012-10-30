@@ -487,7 +487,7 @@ void SwMailMergeLayoutPage::InsertGreeting(SwWrtShell& rShell, SwMailMergeConfig
         else
             while(nMoves)
             {
-                sal_Bool bMoved = rShell.MoveParagraph( 1 );
+                bool bMoved = rShell.MoveParagraph( 1 );
                 if(!bMoved)
                 {
                     //insert a new paragraph before the greeting line
@@ -758,7 +758,7 @@ IMPL_LINK_NOARG(SwMailMergeLayoutPage, ChangeAddressHdl_Impl)
 IMPL_LINK(SwMailMergeLayoutPage, GreetingsHdl_Impl, PushButton*, pButton)
 {
     bool bDown = pButton == &m_aDownPB;
-    sal_Bool bMoved = m_pExampleWrtShell->MoveParagraph( bDown ? 1 : -1 );
+    bool bMoved = m_pExampleWrtShell->MoveParagraph( bDown ? 1 : -1 );
     if (bMoved || bDown)
         m_pWizard->GetConfigItem().MoveGreeting(bDown ? 1 : -1 );
     if(!bMoved && bDown)

@@ -1963,14 +1963,14 @@ sal_Bool SwCursor::GoPrevNextCell( sal_Bool bNext, sal_uInt16 nCnt )
     return !IsInProtectTable( sal_True );
 }
 
-sal_Bool SwTableCursor::GotoTable( const String& )
+bool SwTableCursor::GotoTable( const String& )
 {
-    return sal_False; // invalid action
+    return false; // invalid action
 }
 
-sal_Bool SwCursor::GotoTable( const String& rName )
+bool SwCursor::GotoTable( const String& rName )
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     if ( !HasMark() )
     {
         SwTable* pTmpTbl = SwTable::FindTable( GetDoc()->FindTblFmtByName( rName ) );

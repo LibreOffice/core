@@ -241,11 +241,11 @@ void SwEditShell::DelNumRules()
 // Hoch-/Runterstufen
 
 
-sal_Bool SwEditShell::NumUpDown( sal_Bool bDown )
+bool SwEditShell::NumUpDown( bool bDown )
 {
     StartAllAction();
 
-    sal_Bool bRet = sal_True;
+    bool bRet = true;
     SwPaM* pCrsr = GetCrsr();
     if( pCrsr->GetNext() == pCrsr )         // keine Mehrfachselektion ?
         bRet = GetDoc()->NumUpDown( *pCrsr, bDown );
@@ -354,7 +354,7 @@ void SwEditShell::SetIndent(short nIndent, const SwPosition & rPos)
 }
 // <- #i23725#
 
-sal_Bool SwEditShell::MoveParagraph( long nOffset )
+bool SwEditShell::MoveParagraph( long nOffset )
 {
     StartAllAction();
 
@@ -366,7 +366,7 @@ sal_Bool SwEditShell::MoveParagraph( long nOffset )
         pCrsr->DeleteMark();
     }
 
-    sal_Bool bRet = GetDoc()->MoveParagraph( *pCrsr, nOffset );
+    bool bRet = GetDoc()->MoveParagraph( *pCrsr, nOffset );
 
     GetDoc()->SetModified();
     EndAllAction();
@@ -397,7 +397,7 @@ void SwEditShell::GetCurrentOutlineLevels( sal_uInt8& rUpper, sal_uInt8& rLower 
                             &rUpper, &rLower );
 }
 
-sal_Bool SwEditShell::MoveNumParas( sal_Bool bUpperLower, sal_Bool bUpperLeft )
+bool SwEditShell::MoveNumParas( bool bUpperLower, bool bUpperLeft )
 {
     StartAllAction();
 
@@ -490,11 +490,11 @@ sal_Bool SwEditShell::MoveNumParas( sal_Bool bUpperLower, sal_Bool bUpperLeft )
     return bRet;
 }
 
-sal_Bool SwEditShell::OutlineUpDown( short nOffset )
+bool SwEditShell::OutlineUpDown( short nOffset )
 {
     StartAllAction();
 
-    sal_Bool bRet = sal_True;
+    bool bRet = true;
     SwPaM* pCrsr = GetCrsr();
     if( pCrsr->GetNext() == pCrsr )         // keine Mehrfachselektion ?
         bRet = GetDoc()->OutlineUpDown( *pCrsr, nOffset );
@@ -514,10 +514,10 @@ sal_Bool SwEditShell::OutlineUpDown( short nOffset )
 }
 
 
-sal_Bool SwEditShell::MoveOutlinePara( short nOffset )
+bool SwEditShell::MoveOutlinePara( short nOffset )
 {
     StartAllAction();
-    sal_Bool bRet = GetDoc()->MoveOutlinePara( *GetCrsr(), nOffset );
+    bool bRet = GetDoc()->MoveOutlinePara( *GetCrsr(), nOffset );
     EndAllAction();
     return bRet;
 }
@@ -680,7 +680,7 @@ void SwEditShell::SetCurNumRule( const SwNumRule& rRule,
             aRangeArr.SetPam( n, aPam );
             GetDoc()->SetNumRule( aPam, rRule,
                                   bCreateNewList, sContinuedListId,
-                                  sal_True, bResetIndentAttrs );
+                                  true, bResetIndentAttrs );
             GetDoc()->SetCounted( aPam, true );
           }
     }
@@ -688,7 +688,7 @@ void SwEditShell::SetCurNumRule( const SwNumRule& rRule,
     {
         GetDoc()->SetNumRule( *pCrsr, rRule,
                               bCreateNewList, sContinuedListId,
-                              sal_True, bResetIndentAttrs );
+                              true, bResetIndentAttrs );
         GetDoc()->SetCounted( *pCrsr, true );
     }
     GetDoc()->GetIDocumentUndoRedo().EndUndo( UNDO_END, NULL );

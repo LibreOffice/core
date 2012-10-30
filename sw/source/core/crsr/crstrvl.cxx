@@ -798,7 +798,7 @@ void SwCrsrShell::GotoOutline( sal_uInt16 nIdx )
 }
 
 
-sal_Bool SwCrsrShell::GotoOutline( const String& rName )
+bool SwCrsrShell::GotoOutline( const String& rName )
 {
     SwCursor* pCrsr = getShellCrsr( true );
 
@@ -806,11 +806,11 @@ sal_Bool SwCrsrShell::GotoOutline( const String& rName )
     SwCallLink aLk( *this ); // watch Crsr-Moves
     SwCrsrSaveState aSaveState( *pCrsr );
 
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     if( pDoc->GotoOutline( *pCrsr->GetPoint(), rName ) && !pCrsr->IsSelOvr() )
     {
         UpdateCrsr(SwCrsrShell::SCROLLWIN|SwCrsrShell::CHKRANGE|SwCrsrShell::READONLY);
-        bRet = sal_True;
+        bRet = true;
     }
     return bRet;
 }
@@ -1644,9 +1644,9 @@ sal_Bool SwCrsrShell::SelectTxtAttr( sal_uInt16 nWhich, sal_Bool bExpand,
 }
 
 
-sal_Bool SwCrsrShell::GotoINetAttr( const SwTxtINetFmt& rAttr )
+bool SwCrsrShell::GotoINetAttr( const SwTxtINetFmt& rAttr )
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     if( rAttr.GetpTxtNode() )
     {
         SwCursor* pCrsr = getShellCrsr( true );

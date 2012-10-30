@@ -240,9 +240,9 @@ sal_Bool SwCrsrShell::MoveRegion( SwWhichRegion fnWhichRegion, SwPosRegion fnPos
 }
 
 
-sal_Bool SwCursor::GotoRegion( const String& rName )
+bool SwCursor::GotoRegion( const String& rName )
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     const SwSectionFmts& rFmts = GetDoc()->GetSections();
     for( sal_uInt16 n = rFmts.size(); n; )
     {
@@ -265,10 +265,10 @@ sal_Bool SwCursor::GotoRegion( const String& rName )
     return bRet;
 }
 
-sal_Bool SwCrsrShell::GotoRegion( const String& rName )
+bool SwCrsrShell::GotoRegion( const String& rName )
 {
     SwCallLink aLk( *this ); // watch Crsr-Moves;call Link if needed
-    sal_Bool bRet = !pTblCrsr && pCurCrsr->GotoRegion( rName );
+    bool bRet = !pTblCrsr && pCurCrsr->GotoRegion( rName );
     if( bRet )
         UpdateCrsr( SwCrsrShell::SCROLLWIN | SwCrsrShell::CHKRANGE |
                     SwCrsrShell::READONLY );

@@ -2477,11 +2477,11 @@ KEYINPUT_CHECKTABLE_INSDEL:
                 break;
 
             case KS_NumDown:
-                rSh.NumUpDown( sal_True );
+                rSh.NumUpDown( true );
                 nKS_NUMDOWN_Count = 2;
                 break;
             case KS_NumUp:
-                rSh.NumUpDown( sal_False );
+                rSh.NumUpDown( false );
                 break;
 
             case KS_NumIndentInc:

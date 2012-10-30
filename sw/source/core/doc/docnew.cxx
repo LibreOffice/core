@@ -957,7 +957,7 @@ IGrammarContact* getGrammarContact( const SwTxtNode& rTxtNode )
 
 // #i42634# Moved common code of SwReader::Read() and SwDocShell::UpdateLinks()
 // to new SwDoc::UpdateLinks():
-void SwDoc::UpdateLinks( sal_Bool bUI )
+void SwDoc::UpdateLinks( bool bUI )
 {
     SfxObjectCreateMode eMode;
     sal_uInt16 nLinkMode = getLinkUpdateMode( true );
@@ -972,13 +972,13 @@ void SwDoc::UpdateLinks( sal_Bool bUI )
             !GetDocShell()->IsPreview() )
         {
             ViewShell* pVSh = 0;
-            sal_Bool bAskUpdate = nLinkMode == MANUAL;
-            sal_Bool bUpdate = sal_True;
+            bool bAskUpdate = nLinkMode == MANUAL;
+            bool bUpdate = true;
             switch(nUpdateDocMode)
             {
-                case document::UpdateDocMode::NO_UPDATE:   bUpdate = sal_False;break;
-                case document::UpdateDocMode::QUIET_UPDATE:bAskUpdate = sal_False; break;
-                case document::UpdateDocMode::FULL_UPDATE: bAskUpdate = sal_True; break;
+                case document::UpdateDocMode::NO_UPDATE:   bUpdate = false;break;
+                case document::UpdateDocMode::QUIET_UPDATE:bAskUpdate = false; break;
+                case document::UpdateDocMode::FULL_UPDATE: bAskUpdate = true; break;
             }
             if( bUpdate && (bUI || !bAskUpdate) )
             {
@@ -990,10 +990,10 @@ void SwDoc::UpdateLinks( sal_Bool bUI )
                     ViewShell aVSh( *this, 0, 0 );
 
                     SET_CURR_SHELL( &aVSh );
-                    GetLinkManager().UpdateAllLinks( bAskUpdate , sal_True, sal_False, pDlgParent );
+                    GetLinkManager().UpdateAllLinks( bAskUpdate , true, false, pDlgParent );
                 }
                 else
-                    GetLinkManager().UpdateAllLinks( bAskUpdate, sal_True, sal_False, pDlgParent );
+                    GetLinkManager().UpdateAllLinks( bAskUpdate, true, false, pDlgParent );
             }
         }
     }
@@ -1196,7 +1196,7 @@ SfxObjectShell* SwDoc::CreateCopy(bool bCallInitNew ) const
 }
 
 /*-------------------------------------------------------------------------
-    copy document content - code from SwFEShell::Paste( SwDoc* , sal_Bool  )
+    copy document content - code from SwFEShell::Paste( SwDoc* )
   -----------------------------------------------------------------------*/
 void SwDoc::Paste( const SwDoc& rSource )
 {

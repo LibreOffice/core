@@ -786,10 +786,10 @@ String SwCrsrShell::GetBoxNms() const
 }
 
 
-sal_Bool SwCrsrShell::GotoTable( const String& rName )
+bool SwCrsrShell::GotoTable( const String& rName )
 {
     SwCallLink aLk( *this ); // watch Crsr-Moves
-    sal_Bool bRet = !pTblCrsr && pCurCrsr->GotoTable( rName );
+    bool bRet = !pTblCrsr && pCurCrsr->GotoTable( rName );
     if( bRet )
     {
         pCurCrsr->GetPtPos() = Point();
