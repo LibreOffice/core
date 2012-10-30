@@ -126,7 +126,7 @@ JobExecutor::JobExecutor( /*IN*/ const css::uno::Reference< css::lang::XMultiSer
     , ::cppu::OWeakObject (                                                                )
     , m_xSMGR             (xSMGR                                                           )
     , m_xModuleManager    (                                                                )
-    , m_aConfig           (xSMGR, ::rtl::OUString::createFromAscii(JobData::EVENTCFG_ROOT) )
+    , m_aConfig           (comphelper::getComponentContext(xSMGR), ::rtl::OUString::createFromAscii(JobData::EVENTCFG_ROOT) )
 {
     // Don't do any reference related code here! Do it inside special
     // impl_ method() ... see DEFINE_INIT_SERVICE() macro for further informations.
@@ -166,7 +166,7 @@ void SAL_CALL JobExecutor::trigger( const ::rtl::OUString& sEvent ) throw(css::u
     // get list of all enabled jobs
     // The called static helper methods read it from the configuration and
     // filter disabled jobs using it's time stamp values.
-    css::uno::Sequence< ::rtl::OUString > lJobs = JobData::getEnabledJobsForEvent(m_xSMGR, sEvent);
+    css::uno::Sequence< ::rtl::OUString > lJobs = JobData::getEnabledJobsForEvent(comphelper::getComponentContext(m_xSMGR), sEvent);
 
     aReadLock.unlock();
     /* } SAFE */
@@ -178,7 +178,7 @@ void SAL_CALL JobExecutor::trigger( const ::rtl::OUString& sEvent ) throw(css::u
         /* SAFE { */
         aReadLock.lock();
 
-        JobData aCfg(m_xSMGR);
+        JobData aCfg(comphelper::getComponentContext(m_xSMGR));
         aCfg.setEvent(sEvent, lJobs[j]);
         aCfg.setEnvironment(JobData::E_EXECUTION);
 
@@ -235,7 +235,7 @@ void SAL_CALL JobExecutor::notifyEvent( const css::document::EventObject& aEvent
        )
     {
         if (m_lEvents.find(EVENT_ON_DOCUMENT_OPENED) != m_lEvents.end())
-            JobData::appendEnabledJobsForEvent(m_xSMGR, EVENT_ON_DOCUMENT_OPENED, lJobs);
+            JobData::appendEnabledJobsForEvent(comphelper::getComponentContext(m_xSMGR), EVENT_ON_DOCUMENT_OPENED, lJobs);
     }
 
     // Special feature: If the events "OnCreate" or "OnLoadFinished" occures - we generate our own event "onDocumentAdded".
@@ -245,12 +245,12 @@ void SAL_CALL JobExecutor::notifyEvent( const css::document::EventObject& aEvent
        )
     {
         if (m_lEvents.find(EVENT_ON_DOCUMENT_ADDED) != m_lEvents.end())
-            JobData::appendEnabledJobsForEvent(m_xSMGR, EVENT_ON_DOCUMENT_ADDED, lJobs);
+            JobData::appendEnabledJobsForEvent(comphelper::getComponentContext(m_xSMGR), EVENT_ON_DOCUMENT_ADDED, lJobs);
     }
 
     // Add all jobs for "real" notified event too .-)
     if (m_lEvents.find(aEvent.EventName) != m_lEvents.end())
-        JobData::appendEnabledJobsForEvent(m_xSMGR, aEvent.EventName, lJobs);
+        JobData::appendEnabledJobsForEvent(comphelper::getComponentContext(m_xSMGR), aEvent.EventName, lJobs);
 
     aReadLock.unlock();
     /* } SAFE */
@@ -266,7 +266,7 @@ void SAL_CALL JobExecutor::notifyEvent( const css::document::EventObject& aEvent
 
         const JobData::TJob2DocEventBinding& rBinding = *pIt;
 
-        JobData aCfg(m_xSMGR);
+        JobData aCfg(comphelper::getComponentContext(m_xSMGR));
         aCfg.setEvent(rBinding.m_sDocEvent, rBinding.m_sJobName);
         aCfg.setEnvironment(JobData::E_DOCUMENTEVENT);
 

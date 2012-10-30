@@ -32,6 +32,7 @@
 #include <osl/socket.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <com/sun/star/container/XNameAccess.hpp>
+#include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/util/XChangesListener.hpp>
 #include <com/sun/star/util/XChangesNotifier.hpp>
@@ -138,7 +139,7 @@ private:
                          bool bUseFullyQualified ) const;
 public:
     InternetProxyDecider_Impl(
-        const uno::Reference< lang::XMultiServiceFactory >& rxSMgr );
+        const uno::Reference< uno::XComponentContext >& rxContext );
     virtual ~InternetProxyDecider_Impl();
 
     void dispose();
@@ -299,7 +300,7 @@ bool getConfigInt32Value(
 //=========================================================================
 
 InternetProxyDecider_Impl::InternetProxyDecider_Impl(
-    const uno::Reference< lang::XMultiServiceFactory >& rxSMgr )
+    const uno::Reference< uno::XComponentContext >& rxContext )
     : m_nProxyType( 0 ),
       m_aHostnames( 256 ) // cache size
 {
@@ -309,11 +310,8 @@ InternetProxyDecider_Impl::InternetProxyDecider_Impl(
         // Read proxy configuration from config db.
         //////////////////////////////////////////////////////////////
 
-        uno::Reference< lang::XMultiServiceFactory > xConfigProv(
-                rxSMgr->createInstance(
-                    rtl::OUString(
-                        "com.sun.star.configuration.ConfigurationProvider" ) ),
-                uno::UNO_QUERY );
+        uno::Reference< lang::XMultiServiceFactory > xConfigProv =
+                configuration::theDefaultProvider::get( rxContext );
 
         uno::Sequence< uno::Any > aArguments( 1 );
         aArguments[ 0 ] <<= rtl::OUString( CONFIG_ROOT_KEY );
@@ -794,8 +792,8 @@ void InternetProxyDecider_Impl::setNoProxyList(
 //=========================================================================
 
 InternetProxyDecider::InternetProxyDecider(
-    const uno::Reference< lang::XMultiServiceFactory >& rxSMgr )
-: m_pImpl( new proxydecider_impl::InternetProxyDecider_Impl( rxSMgr ) )
+    const uno::Reference< uno::XComponentContext>& rxContext )
+: m_pImpl( new proxydecider_impl::InternetProxyDecider_Impl( rxContext ) )
 {
     m_pImpl->acquire();
 }

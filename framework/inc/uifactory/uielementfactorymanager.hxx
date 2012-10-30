@@ -63,7 +63,7 @@ namespace framework
                                                     public  ::cppu::WeakImplHelper1< ::com::sun::star::container::XContainerListener>
 {
     public:
-                      ConfigurationAccess_FactoryManager( ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rServiceManager,const ::rtl::OUString& _sRoot );
+                      ConfigurationAccess_FactoryManager( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& rxContext, const ::rtl::OUString& _sRoot );
         virtual       ~ConfigurationAccess_FactoryManager();
 
         void          readConfigurationData();
@@ -101,7 +101,6 @@ namespace framework
         rtl::OUString                     m_aPropFactory;
         ::rtl::OUString                   m_sRoot;
         FactoryManagerMap                 m_aFactoryManagerMap;
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xServiceManager;
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xConfigProvider;
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >     m_xConfigAccess;
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerListener > m_xConfigListener;
@@ -115,7 +114,7 @@ class UIElementFactoryManager :  private ThreadHelpBase                         
                                                                  ::com::sun::star::ui::XUIElementFactoryRegistration>
 {
     public:
-        UIElementFactoryManager( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceManager );
+        UIElementFactoryManager( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext );
         virtual ~UIElementFactoryManager();
 
         //  XInterface, XTypeProvider, XServiceInfo
@@ -133,7 +132,7 @@ class UIElementFactoryManager :  private ThreadHelpBase                         
     private:
 
         sal_Bool                                                                            m_bConfigRead;
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >    m_xServiceManager;
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >        m_xContext;
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModuleManager2 >        m_xModuleManager;
         ConfigurationAccess_FactoryManager*                                        m_pConfigAccess;
 };

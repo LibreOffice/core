@@ -79,12 +79,12 @@ const sal_Char* JobData::PROP_CONTEXT             = "Context"                   
                 But for real working it's neccessary to call setAlias() or setService() later.
                 Because we need the job data ...
 
-    @param      xSMGR
+    @param      rxContext
                     reference to the uno service manager
 */
-JobData::JobData( const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR )
+JobData::JobData( const css::uno::Reference< css::uno::XComponentContext >& rxContext )
     : ThreadHelpBase(&Application::GetSolarMutex())
-    , m_xSMGR       (xSMGR                        )
+    , m_xContext    (rxContext                    )
 {
     // share code for member initialization with defaults!
     impl_reset();
@@ -170,7 +170,7 @@ void JobData::setAlias( const ::rtl::OUString& sAlias )
     ::rtl::OUString sKey(::rtl::OUString::createFromAscii(JOBCFG_ROOT));
     sKey += ::utl::wrapConfigurationElementName(m_sAlias);
 
-    ConfigAccess aConfig(m_xSMGR, sKey);
+    ConfigAccess aConfig(m_xContext, sKey);
     aConfig.open(ConfigAccess::E_READONLY);
     if (aConfig.getMode()==ConfigAccess::E_CLOSED)
     {
@@ -304,7 +304,7 @@ void JobData::setJobConfig( const css::uno::Sequence< css::beans::NamedValue >& 
         ::rtl::OUString sKey(::rtl::OUString::createFromAscii(JOBCFG_ROOT));
         sKey += ::utl::wrapConfigurationElementName(m_sAlias);
 
-        ConfigAccess aConfig(m_xSMGR, sKey);
+        ConfigAccess aConfig(m_xContext, sKey);
         aConfig.open(ConfigAccess::E_READWRITE);
         if (aConfig.getMode()==ConfigAccess::E_CLOSED)
             return;
@@ -537,7 +537,7 @@ void JobData::disableJob()
     sKey.appendAscii("/"                                          );
     sKey.append     (::utl::wrapConfigurationElementName(m_sAlias));
 
-    ConfigAccess aConfig(m_xSMGR, sKey.makeStringAndClear());
+    ConfigAccess aConfig(m_xContext, sKey.makeStringAndClear());
     aConfig.open(ConfigAccess::E_READWRITE);
     if (aConfig.getMode()==ConfigAccess::E_CLOSED)
         return;
@@ -585,11 +585,11 @@ sal_Bool isEnabled( const ::rtl::OUString& sAdminTime ,
 //________________________________
 /**
  */
-void JobData::appendEnabledJobsForEvent( const css::uno::Reference< css::lang::XMultiServiceFactory >&          xSMGR  ,
+void JobData::appendEnabledJobsForEvent( const css::uno::Reference< css::uno::XComponentContext >&              rxContext,
                                          const ::rtl::OUString&                                                 sEvent ,
                                                ::comphelper::SequenceAsVector< JobData::TJob2DocEventBinding >& lJobs  )
 {
-    css::uno::Sequence< ::rtl::OUString > lAdditionalJobs = JobData::getEnabledJobsForEvent(xSMGR, sEvent);
+    css::uno::Sequence< ::rtl::OUString > lAdditionalJobs = JobData::getEnabledJobsForEvent(rxContext, sEvent);
     sal_Int32                             c               = lAdditionalJobs.getLength();
     sal_Int32                             i               = 0;
 
@@ -627,8 +627,8 @@ sal_Bool JobData::hasCorrectContext(const ::rtl::OUString& rModuleIdent) const
 //________________________________
 /**
  */
-css::uno::Sequence< ::rtl::OUString > JobData::getEnabledJobsForEvent( const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR  ,
-                                                                       const ::rtl::OUString&                                        sEvent )
+css::uno::Sequence< ::rtl::OUString > JobData::getEnabledJobsForEvent( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+                                                                       const ::rtl::OUString&                                    sEvent )
 {
     // these static values may perform following loop for reading time stamp values ...
     static ::rtl::OUString ADMINTIME = ::rtl::OUString::createFromAscii(JobData::EVENTCFG_PROP_ADMINTIME);
@@ -637,7 +637,7 @@ css::uno::Sequence< ::rtl::OUString > JobData::getEnabledJobsForEvent( const css
     static ::rtl::OUString JOBLIST   = ::rtl::OUString::createFromAscii(JobData::EVENTCFG_PATH_JOBLIST  );
 
     // create a config access to "/org.openoffice.Office.Jobs/Events"
-    ConfigAccess aConfig(xSMGR,ROOT);
+    ConfigAccess aConfig(rxContext,ROOT);
     aConfig.open(ConfigAccess::E_READONLY);
     if (aConfig.getMode()==ConfigAccess::E_CLOSED)
         return css::uno::Sequence< ::rtl::OUString >();

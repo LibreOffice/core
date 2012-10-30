@@ -56,6 +56,7 @@
 #include <comphelper/processfactory.hxx>
 
 #include "com/sun/star/beans/XPropertySet.hpp"
+#include "com/sun/star/configuration/theDefaultProvider.hpp"
 #include "com/sun/star/container/XNameAccess.hpp"
 #include "com/sun/star/lang/XMultiServiceFactory.hpp"
 
@@ -63,6 +64,7 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::container;
+using namespace com::sun::star::configuration;
 
 int nImplSysDialog = 0;
 
@@ -157,69 +159,61 @@ bool PrinterOptions::ReadFromConfig( bool i_bFile )
     try
     {
         // get service provider
-        Reference< XMultiServiceFactory > xSMgr( comphelper::getProcessServiceFactory() );
+        Reference< XComponentContext > xContext( comphelper::getProcessComponentContext() );
         // create configuration hierachical access name
-        if( xSMgr.is() )
+        try
         {
-            try
-            {
-                xConfigProvider = Reference< XMultiServiceFactory >(
-                        xSMgr->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                                        "com.sun.star.configuration.ConfigurationProvider" ))),
-                        UNO_QUERY );
-                if( xConfigProvider.is() )
-                {
-                    Sequence< Any > aArgs(1);
-                    PropertyValue aVal;
-                    aVal.Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "nodepath" ) );
-                    if( i_bFile )
-                        aVal.Value <<= rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/org.openoffice.Office.Common/Print/Option/File" ) );
-                    else
-                        aVal.Value <<= rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/org.openoffice.Office.Common/Print/Option/Printer" ) );
-                    aArgs.getArray()[0] <<= aVal;
-                    xConfigAccess = Reference< XNameAccess >(
-                            xConfigProvider->createInstanceWithArguments(
-                                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.configuration.ConfigurationAccess" )), aArgs ),
-                                UNO_QUERY );
-                    if( xConfigAccess.is() )
-                    {
-                        Reference< XPropertySet > xSet( xConfigAccess, UNO_QUERY );
-                        if( xSet.is() )
-                        {
-                            sal_Int32 nValue = 0;
-                            sal_Bool  bValue = 0;
-                            if( xSet->getPropertyValue(PROPERTYNAME_REDUCETRANSPARENCY) >>= bValue )
-                                SetReduceTransparency( bValue );
-                            if( xSet->getPropertyValue(PROPERTYNAME_REDUCEDTRANSPARENCYMODE) >>= nValue )
-                                SetReducedTransparencyMode( (PrinterTransparencyMode)nValue );
-                            if( xSet->getPropertyValue(PROPERTYNAME_REDUCEGRADIENTS) >>= bValue )
-                                SetReduceGradients( bValue );
-                            if( xSet->getPropertyValue(PROPERTYNAME_REDUCEDGRADIENTMODE) >>= nValue )
-                                SetReducedGradientMode( (PrinterGradientMode)nValue );
-                            if( xSet->getPropertyValue(PROPERTYNAME_REDUCEDGRADIENTSTEPCOUNT) >>= nValue )
-                                SetReducedGradientStepCount( (sal_uInt16)nValue );
-                            if( xSet->getPropertyValue(PROPERTYNAME_REDUCEBITMAPS) >>= bValue )
-                                SetReduceBitmaps( bValue );
-                            if( xSet->getPropertyValue(PROPERTYNAME_REDUCEDBITMAPMODE) >>= nValue )
-                                SetReducedBitmapMode( (PrinterBitmapMode)nValue );
-                            if( xSet->getPropertyValue(PROPERTYNAME_REDUCEDBITMAPRESOLUTION) >>= nValue )
-                                SetReducedBitmapResolution( (sal_uInt16)nValue );
-                            if( xSet->getPropertyValue(PROPERTYNAME_REDUCEDBITMAPINCLUDESTRANSPARENCY) >>= bValue )
-                                SetReducedBitmapIncludesTransparency( bValue );
-                            if( xSet->getPropertyValue(PROPERTYNAME_CONVERTTOGREYSCALES) >>= bValue )
-                                SetConvertToGreyscales( bValue );
+            xConfigProvider = theDefaultProvider::get( xContext );
 
-                            bSuccess = true;
-                        }
-                    }
+            Sequence< Any > aArgs(1);
+            PropertyValue aVal;
+            aVal.Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "nodepath" ) );
+            if( i_bFile )
+                aVal.Value <<= rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/org.openoffice.Office.Common/Print/Option/File" ) );
+            else
+                aVal.Value <<= rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/org.openoffice.Office.Common/Print/Option/Printer" ) );
+            aArgs.getArray()[0] <<= aVal;
+            xConfigAccess = Reference< XNameAccess >(
+                    xConfigProvider->createInstanceWithArguments(
+                        rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.configuration.ConfigurationAccess" )), aArgs ),
+                        UNO_QUERY );
+            if( xConfigAccess.is() )
+            {
+                Reference< XPropertySet > xSet( xConfigAccess, UNO_QUERY );
+                if( xSet.is() )
+                {
+                    sal_Int32 nValue = 0;
+                    sal_Bool  bValue = 0;
+                    if( xSet->getPropertyValue(PROPERTYNAME_REDUCETRANSPARENCY) >>= bValue )
+                        SetReduceTransparency( bValue );
+                    if( xSet->getPropertyValue(PROPERTYNAME_REDUCEDTRANSPARENCYMODE) >>= nValue )
+                        SetReducedTransparencyMode( (PrinterTransparencyMode)nValue );
+                    if( xSet->getPropertyValue(PROPERTYNAME_REDUCEGRADIENTS) >>= bValue )
+                        SetReduceGradients( bValue );
+                    if( xSet->getPropertyValue(PROPERTYNAME_REDUCEDGRADIENTMODE) >>= nValue )
+                        SetReducedGradientMode( (PrinterGradientMode)nValue );
+                    if( xSet->getPropertyValue(PROPERTYNAME_REDUCEDGRADIENTSTEPCOUNT) >>= nValue )
+                        SetReducedGradientStepCount( (sal_uInt16)nValue );
+                    if( xSet->getPropertyValue(PROPERTYNAME_REDUCEBITMAPS) >>= bValue )
+                        SetReduceBitmaps( bValue );
+                    if( xSet->getPropertyValue(PROPERTYNAME_REDUCEDBITMAPMODE) >>= nValue )
+                        SetReducedBitmapMode( (PrinterBitmapMode)nValue );
+                    if( xSet->getPropertyValue(PROPERTYNAME_REDUCEDBITMAPRESOLUTION) >>= nValue )
+                        SetReducedBitmapResolution( (sal_uInt16)nValue );
+                    if( xSet->getPropertyValue(PROPERTYNAME_REDUCEDBITMAPINCLUDESTRANSPARENCY) >>= bValue )
+                        SetReducedBitmapIncludesTransparency( bValue );
+                    if( xSet->getPropertyValue(PROPERTYNAME_CONVERTTOGREYSCALES) >>= bValue )
+                        SetConvertToGreyscales( bValue );
+
+                    bSuccess = true;
                 }
             }
-            catch( Exception& )
-            {
-            }
+        }
+        catch( const Exception& )
+        {
         }
     }
-    catch( WrappedTargetException& )
+    catch( const WrappedTargetException& )
     {
     }
 

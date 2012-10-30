@@ -60,7 +60,7 @@ class ConfigurationAccess_ControllerFactory : // interfaces
                                                     public  ::cppu::WeakImplHelper1< ::com::sun::star::container::XContainerListener>
 {
 public:
-                    ConfigurationAccess_ControllerFactory( ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rServiceManager,const ::rtl::OUString& _sRoot,bool _bAskValue = false );
+                    ConfigurationAccess_ControllerFactory( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext, const ::rtl::OUString& _sRoot,bool _bAskValue = false );
     virtual       ~ConfigurationAccess_ControllerFactory();
 
     void          readConfigurationData();
@@ -107,7 +107,6 @@ private:
     rtl::OUString                     m_aPropValue;
     rtl::OUString                     m_sRoot;
     MenuControllerMap                 m_aMenuControllerMap;
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >    m_xServiceManager;
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >    m_xConfigProvider;
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >        m_xConfigAccess;
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerListener > m_xConfigAccessListener;

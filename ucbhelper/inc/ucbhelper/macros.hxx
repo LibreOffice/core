@@ -656,6 +656,19 @@ Class##_CreateInstance( const com::sun::star::uno::Reference<               \
                             com::sun::star::uno::XInterface >::query( pX ); \
 }
 
+#define XSERVICEINFO_CREATE_INSTANCE_IMPL_CTX( Class )                          \
+static com::sun::star::uno::Reference<                                      \
+                                com::sun::star::uno::XInterface > SAL_CALL  \
+Class##_CreateInstance( const com::sun::star::uno::Reference<               \
+                com::sun::star::lang::XMultiServiceFactory> & rSMgr )       \
+    throw( com::sun::star::uno::Exception )                                 \
+{                                                                           \
+    com::sun::star::lang::XServiceInfo* pX =                                \
+                (com::sun::star::lang::XServiceInfo*)new Class( comphelper::getComponentContext(rSMgr) );    \
+    return com::sun::star::uno::Reference<                                  \
+                            com::sun::star::uno::XInterface >::query( pX ); \
+}
+
 //=========================================================================
 //
 // XServiceInfo impl.
@@ -704,6 +717,14 @@ Class::getSupportedServiceNames_Static()                                    \
 #define XSERVICEINFO_IMPL_0( Class, ImplName )                              \
 XSERVICEINFO_COMMOM_IMPL( Class, ImplName )                                 \
 XSERVICEINFO_CREATE_INSTANCE_IMPL( Class )                                  \
+                                                                            \
+com::sun::star::uno::Sequence< rtl::OUString >                              \
+Class::getSupportedServiceNames_Static()
+
+// Own implementation of getSupportedServiceNames_Static().
+#define XSERVICEINFO_IMPL_0_CTX( Class, ImplName )                              \
+XSERVICEINFO_COMMOM_IMPL( Class, ImplName )                                 \
+XSERVICEINFO_CREATE_INSTANCE_IMPL_CTX( Class )                                  \
                                                                             \
 com::sun::star::uno::Sequence< rtl::OUString >                              \
 Class::getSupportedServiceNames_Static()

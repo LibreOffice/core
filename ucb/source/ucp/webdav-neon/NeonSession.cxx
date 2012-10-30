@@ -407,7 +407,7 @@ extern "C" int NeonSession_CertificationNotify( void *userdata,
     uno::Reference< security::XCertificateContainer > xCertificateContainer;
     try
     {
-        xCertificateContainer = security::CertificateContainer::create( comphelper::getComponentContext( pSession->getMSF() ) );
+        xCertificateContainer = security::CertificateContainer::create( pSession->getComponentContext() );
     }
     catch ( uno::Exception const & )
     {
@@ -437,8 +437,8 @@ extern "C" int NeonSession_CertificationNotify( void *userdata,
     try
     {
         xSEInitializer = uno::Reference< xml::crypto::XSEInitializer >(
-            pSession->getMSF()->createInstance(
-                rtl::OUString( SEINITIALIZER_COMPONENT ) ),
+            pSession->getComponentContext()->getServiceManager()->createInstanceWithContext(
+                SEINITIALIZER_COMPONENT, pSession->getComponentContext()),
             uno::UNO_QUERY );
     }
     catch ( uno::Exception const & )

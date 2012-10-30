@@ -56,11 +56,11 @@ namespace framework
 {
 
 ToolbarLayoutManager::ToolbarLayoutManager(
-    const uno::Reference< lang::XMultiServiceFactory >& xSMGR,
+    const uno::Reference< uno::XComponentContext >& rxContext,
     const uno::Reference< ui::XUIElementFactory >& xUIElementFactory,
     ILayoutNotifications* pParentLayouter )
     : ThreadHelpBase( &Application::GetSolarMutex() ),
-    m_xSMGR( xSMGR ),
+    m_xContext( rxContext),
     m_xUIElementFactoryManager( xUIElementFactory ),
     m_pParentLayouter( pParentLayouter ),
     m_eDockOperation( DOCKOP_ON_COLROW ),
@@ -83,7 +83,7 @@ ToolbarLayoutManager::ToolbarLayoutManager(
     setZeroRectangle( m_aDockingArea );
 
     // create toolkit object
-    m_xToolkit = awt::Toolkit::create( comphelper::getComponentContext(m_xSMGR) );
+    m_xToolkit = awt::Toolkit::create( m_xContext );
 }
 
 ToolbarLayoutManager::~ToolbarLayoutManager()
@@ -913,10 +913,10 @@ void ToolbarLayoutManager::setParentWindow(
 {
     static const char DOCKINGAREASTRING[] = "dockingarea";
 
-    uno::Reference< awt::XWindow > xTopDockWindow = uno::Reference< awt::XWindow >( createToolkitWindow( comphelper::getComponentContext(m_xSMGR), xParentWindow, DOCKINGAREASTRING ), uno::UNO_QUERY );
-    uno::Reference< awt::XWindow > xLeftDockWindow = uno::Reference< awt::XWindow >( createToolkitWindow( comphelper::getComponentContext(m_xSMGR), xParentWindow, DOCKINGAREASTRING ), uno::UNO_QUERY );
-    uno::Reference< awt::XWindow > xRightDockWindow = uno::Reference< awt::XWindow >( createToolkitWindow( comphelper::getComponentContext(m_xSMGR), xParentWindow, DOCKINGAREASTRING ), uno::UNO_QUERY );
-    uno::Reference< awt::XWindow > xBottomDockWindow = uno::Reference< awt::XWindow >( createToolkitWindow( comphelper::getComponentContext(m_xSMGR), xParentWindow, DOCKINGAREASTRING ), uno::UNO_QUERY );
+    uno::Reference< awt::XWindow > xTopDockWindow = uno::Reference< awt::XWindow >( createToolkitWindow( m_xContext, xParentWindow, DOCKINGAREASTRING ), uno::UNO_QUERY );
+    uno::Reference< awt::XWindow > xLeftDockWindow = uno::Reference< awt::XWindow >( createToolkitWindow( m_xContext, xParentWindow, DOCKINGAREASTRING ), uno::UNO_QUERY );
+    uno::Reference< awt::XWindow > xRightDockWindow = uno::Reference< awt::XWindow >( createToolkitWindow( m_xContext, xParentWindow, DOCKINGAREASTRING ), uno::UNO_QUERY );
+    uno::Reference< awt::XWindow > xBottomDockWindow = uno::Reference< awt::XWindow >( createToolkitWindow( m_xContext, xParentWindow, DOCKINGAREASTRING ), uno::UNO_QUERY );
 
     WriteGuard aWriteLock( m_aLock );
     m_xContainerWindow = uno::Reference< awt::XWindow2 >( xParentWindow, uno::UNO_QUERY );
@@ -1582,7 +1582,7 @@ sal_Bool ToolbarLayoutManager::implts_readWindowStateData( const rtl::OUString& 
         GlobalSettings* pGlobalSettings( 0 );
         if ( m_pGlobalSettings.get() == 0 )
         {
-            m_pGlobalSettings.reset( new GlobalSettings( m_xSMGR ) );
+            m_pGlobalSettings.reset( new GlobalSettings( m_xContext ) );
             bGetSettingsState = true;
         }
         pGlobalSettings = m_pGlobalSettings.get();

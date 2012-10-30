@@ -485,7 +485,7 @@ void Window::ImplUpdateGlobalSettings( AllSettings& rSettings, sal_Bool bCallHdl
     {
         sal_Bool bTmp = sal_False, bAutoHCMode = sal_True;
         utl::OConfigurationNode aNode = utl::OConfigurationTreeRoot::tryCreateWithServiceFactory(
-            comphelper::getProcessServiceFactory(),
+            comphelper::getProcessComponentContext(),
             OUString("org.openoffice.Office.Common/Accessibility") );    // note: case sensitive !
         if ( aNode.isValid() )
         {

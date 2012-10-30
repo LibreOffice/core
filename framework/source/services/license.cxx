@@ -38,6 +38,7 @@
 #include <com/sun/star/frame/XDesktop.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/util/XChangesBatch.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
@@ -64,6 +65,7 @@ using namespace ::osl                           ;
 using namespace ::cppu                          ;
 using namespace ::com::sun::star::uno           ;
 using namespace ::com::sun::star::beans         ;
+using namespace ::com::sun::star::configuration ;
 using namespace ::com::sun::star::lang          ;
 using namespace ::com::sun::star::util          ;
 using namespace ::com::sun::star::frame         ;
@@ -81,7 +83,7 @@ static const char *szWNTLicenseExt = ".txt";
 //*****************************************************************************************************************
 //  constructor
 //*****************************************************************************************************************
-License::License( const Reference< XMultiServiceFactory >& xFactory )
+License::License( const Reference< XComponentContext >& rxContext )
         //  Init baseclasses first
         //  Attention:
         //      Don't change order of initialization!
@@ -91,7 +93,7 @@ License::License( const Reference< XMultiServiceFactory >& xFactory )
         :   ThreadHelpBase  ( &Application::GetSolarMutex() )
         ,   OWeakObject     (                               )
         // Init member
-        ,   m_xFactory      ( xFactory                      )
+        ,   m_xContext      ( rxContext                     )
         ,   m_bTerminate    ( sal_False                     )
 {
 }
@@ -122,7 +124,7 @@ DEFINE_XTYPEPROVIDER_4              (   License ,
                                         XCloseable
                                     )
 
-DEFINE_XSERVICEINFO_MULTISERVICE    (   License,
+DEFINE_XSERVICEINFO_MULTISERVICE_2  (   License,
                                         OWeakObject                 ,
                                         SERVICENAME_LICENSE         ,
                                         IMPLEMENTATIONNAME_LICENSE
@@ -262,12 +264,10 @@ css::uno::Any SAL_CALL License::execute(const css::uno::Sequence< css::beans::Na
 #endif
         // check if we need to show the license at all
         // open org.openoffice.Setup/Office/ooLicenseAcceptDate
-        ::rtl::OUString sConfigSrvc = SERVICENAME_CFGPROVIDER;
         ::rtl::OUString sAccessSrvc("com.sun.star.configuration.ConfigurationUpdateAccess");
 
         // get configuration provider
-        Reference< XMultiServiceFactory > theConfigProvider = Reference< XMultiServiceFactory >(
-        m_xFactory->createInstance(sConfigSrvc), UNO_QUERY_THROW);
+        Reference< XMultiServiceFactory > theConfigProvider = theDefaultProvider::get( m_xContext );
         Sequence< Any > theArgs(1);
         NamedValue v;
         v.Name = ::rtl::OUString("NodePath");

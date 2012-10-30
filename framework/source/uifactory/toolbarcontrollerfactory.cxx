@@ -73,7 +73,7 @@ ToolbarControllerFactory::ToolbarControllerFactory( const Reference< XMultiServi
     m_bConfigRead( sal_False ),
     m_xServiceManager( xServiceManager )
 {
-    m_pConfigAccess = new ConfigurationAccess_ControllerFactory( m_xServiceManager,rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/org.openoffice.Office.UI.Controller/Registered/ToolBar" )) );
+    m_pConfigAccess = new ConfigurationAccess_ControllerFactory( comphelper::getComponentContext(m_xServiceManager), rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/org.openoffice.Office.UI.Controller/Registered/ToolBar" )) );
     m_pConfigAccess->acquire();
 }
 

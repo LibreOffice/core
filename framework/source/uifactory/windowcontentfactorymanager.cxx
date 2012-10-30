@@ -63,7 +63,7 @@ namespace framework
 //*****************************************************************************************************************
 //  XInterface, XTypeProvider, XServiceInfo
 //*****************************************************************************************************************
-DEFINE_XSERVICEINFO_ONEINSTANCESERVICE  (   WindowContentFactoryManager                     ,
+DEFINE_XSERVICEINFO_ONEINSTANCESERVICE_2  (   WindowContentFactoryManager                     ,
                                             ::cppu::OWeakObject                             ,
                                             SERVICENAME_WINDOWCONTENTFACTORYMANAGER         ,
                                             IMPLEMENTATIONNAME_WINDOWCONTENTFACTORYMANAGER
@@ -71,14 +71,13 @@ DEFINE_XSERVICEINFO_ONEINSTANCESERVICE  (   WindowContentFactoryManager         
 
 DEFINE_INIT_SERVICE                     (   WindowContentFactoryManager, {} )
 
-WindowContentFactoryManager::WindowContentFactoryManager( const uno::Reference< lang::XMultiServiceFactory >& xServiceManager ) :
+WindowContentFactoryManager::WindowContentFactoryManager( const uno::Reference< uno::XComponentContext >& rxContext ) :
     ThreadHelpBase( &Application::GetSolarMutex() ),
-    m_bConfigRead( sal_False ),
-    m_xServiceManager( xServiceManager )
+    m_bConfigRead( sal_False )
 {
-    m_pConfigAccess = new ConfigurationAccess_FactoryManager( m_xServiceManager,rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/org.openoffice.Office.UI.WindowContentFactories/Registered/ContentFactories" )) );
+    m_pConfigAccess = new ConfigurationAccess_FactoryManager( rxContext, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/org.openoffice.Office.UI.WindowContentFactories/Registered/ContentFactories" )) );
     m_pConfigAccess->acquire();
-    m_xModuleManager = frame::ModuleManager::create( comphelper::getComponentContext(m_xServiceManager) );
+    m_xModuleManager = frame::ModuleManager::create( rxContext );
 }
 
 WindowContentFactoryManager::~WindowContentFactoryManager()

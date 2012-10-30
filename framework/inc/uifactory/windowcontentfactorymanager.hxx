@@ -49,7 +49,7 @@ class WindowContentFactoryManager : private ThreadHelpBase                      
                                                              com::sun::star::lang::XSingleComponentFactory>
 {
     public:
-        WindowContentFactoryManager( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceManager );
+        WindowContentFactoryManager( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>& rxContext );
         virtual ~WindowContentFactoryManager();
 
         //  XInterface, XTypeProvider, XServiceInfo
@@ -63,7 +63,6 @@ class WindowContentFactoryManager : private ThreadHelpBase                      
     private:
 
         sal_Bool                                                                         m_bConfigRead;
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xServiceManager;
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModuleManager2 >     m_xModuleManager;
         ConfigurationAccess_FactoryManager*                                 m_pConfigAccess;
 };

@@ -64,7 +64,7 @@ PopupMenuControllerFactory::PopupMenuControllerFactory( const Reference< XMultiS
     ToolbarControllerFactory(xServiceManager,true)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "PopupMenuControllerFactory::PopupMenuControllerFactory" );
-    m_pConfigAccess = new ConfigurationAccess_ControllerFactory( m_xServiceManager,rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/org.openoffice.Office.UI.Controller/Registered/PopupMenu" )) );
+    m_pConfigAccess = new ConfigurationAccess_ControllerFactory( comphelper::getComponentContext(m_xServiceManager), rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/org.openoffice.Office.UI.Controller/Registered/PopupMenu" )) );
     m_pConfigAccess->acquire();
 }
 

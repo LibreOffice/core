@@ -61,7 +61,7 @@ DEFINE_INIT_SERVICE                     (   StatusbarControllerFactory, {} )
 StatusbarControllerFactory::StatusbarControllerFactory( const Reference< XMultiServiceFactory >& xServiceManager ) :
     ToolbarControllerFactory(xServiceManager,true)
 {
-    m_pConfigAccess = new ConfigurationAccess_ControllerFactory( m_xServiceManager,rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/org.openoffice.Office.UI.Controller/Registered/StatusBar" )),true );
+    m_pConfigAccess = new ConfigurationAccess_ControllerFactory( comphelper::getComponentContext(m_xServiceManager), rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/org.openoffice.Office.UI.Controller/Registered/StatusBar" )),true );
     m_pConfigAccess->acquire();
 }
 

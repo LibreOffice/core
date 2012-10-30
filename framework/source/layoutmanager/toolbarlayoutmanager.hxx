@@ -90,7 +90,7 @@ class ToolbarLayoutManager : public ::cppu::WeakImplHelper3< ::com::sun::star::a
             PREVIEWFRAME_YES
         };
 
-        ToolbarLayoutManager( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xSMGR,
+        ToolbarLayoutManager( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
                               const ::com::sun::star::uno::Reference< ::com::sun::star::ui::XUIElementFactory >& xUIElementFactory,
                               ILayoutNotifications* pParentLayouter );
         virtual ~ToolbarLayoutManager();
@@ -299,7 +299,7 @@ class ToolbarLayoutManager : public ::cppu::WeakImplHelper3< ::com::sun::star::a
         //---------------------------------------------------------------------------------------------------------
         // members
         //---------------------------------------------------------------------------------------------------------
-        css::uno::Reference< css::lang::XMultiServiceFactory >               m_xSMGR;
+        css::uno::Reference< css::uno::XComponentContext >                   m_xContext;
         css::uno::Reference< css::frame::XFrame >                            m_xFrame;
         css::uno::Reference< css::awt::XWindow2 >                            m_xContainerWindow;
         css::uno::Reference< css::awt::XWindow >                             m_xDockAreaWindows[DOCKINGAREAS_COUNT];

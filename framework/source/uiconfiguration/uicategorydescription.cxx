@@ -36,6 +36,7 @@
 
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/container/XContainer.hpp>
@@ -55,6 +56,7 @@
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
+using namespace com::sun::star::configuration;
 using namespace com::sun::star::container;
 using namespace ::com::sun::star::frame;
 
@@ -85,7 +87,7 @@ class ConfigurationAccess_UICategory : // Order is neccessary for right initiali
                                         public  ::cppu::WeakImplHelper2<XNameAccess,XContainerListener>
 {
     public:
-                                  ConfigurationAccess_UICategory( const ::rtl::OUString& aModuleName, const Reference< XNameAccess >& xGenericUICommands, const Reference< XMultiServiceFactory >& rServiceManager );
+                                  ConfigurationAccess_UICategory( const ::rtl::OUString& aModuleName, const Reference< XNameAccess >& xGenericUICommands, const Reference< XComponentContext >& rxContext );
         virtual                   ~ConfigurationAccess_UICategory();
 
         // XNameAccess
@@ -130,7 +132,6 @@ class ConfigurationAccess_UICategory : // Order is neccessary for right initiali
         rtl::OUString                     m_aConfigCategoryAccess;
         rtl::OUString                     m_aPropUIName;
         Reference< XNameAccess >          m_xGenericUICategories;
-        Reference< XMultiServiceFactory > m_xServiceManager;
         Reference< XMultiServiceFactory > m_xConfigProvider;
         Reference< XNameAccess >          m_xConfigAccess;
         Reference< XContainerListener >   m_xConfigListener;
@@ -143,12 +144,11 @@ class ConfigurationAccess_UICategory : // Order is neccessary for right initiali
 //  XInterface, XTypeProvider
 //*****************************************************************************************************************
 
-ConfigurationAccess_UICategory::ConfigurationAccess_UICategory( const rtl::OUString& aModuleName, const Reference< XNameAccess >& rGenericUICategories, const Reference< XMultiServiceFactory >& rServiceManager ) :
+ConfigurationAccess_UICategory::ConfigurationAccess_UICategory( const rtl::OUString& aModuleName, const Reference< XNameAccess >& rGenericUICategories, const Reference< XComponentContext >& rxContext ) :
     ThreadHelpBase(),
     m_aConfigCategoryAccess( CONFIGURATION_ROOT_ACCESS ),
     m_aPropUIName( CONFIGURATION_PROPERTY_NAME ),
     m_xGenericUICategories( rGenericUICategories ),
-    m_xServiceManager( rServiceManager ),
     m_bConfigAccessInitialized( sal_False ),
     m_bCacheFilled( sal_False )
 {
@@ -157,7 +157,7 @@ ConfigurationAccess_UICategory::ConfigurationAccess_UICategory( const rtl::OUStr
     m_aConfigCategoryAccess += aModuleName;
     m_aConfigCategoryAccess += rtl::OUString( CONFIGURATION_CATEGORY_ELEMENT_ACCESS );
 
-    m_xConfigProvider = Reference< XMultiServiceFactory >( rServiceManager->createInstance(SERVICENAME_CFGPROVIDER),UNO_QUERY );
+    m_xConfigProvider = theDefaultProvider::get( rxContext );
 }
 
 ConfigurationAccess_UICategory::~ConfigurationAccess_UICategory()
@@ -424,7 +424,7 @@ void SAL_CALL ConfigurationAccess_UICategory::disposing( const EventObject& aEve
 //*****************************************************************************************************************
 //  XInterface, XTypeProvider, XServiceInfo
 //*****************************************************************************************************************
-DEFINE_XSERVICEINFO_ONEINSTANCESERVICE  (   UICategoryDescription                   ,
+DEFINE_XSERVICEINFO_ONEINSTANCESERVICE_2  (   UICategoryDescription                   ,
                                             ::cppu::OWeakObject                     ,
                                             SERVICENAME_UICATEGORYDESCRIPTION       ,
                                             IMPLEMENTATIONNAME_UICATEGORYDESCRIPTION
@@ -432,12 +432,12 @@ DEFINE_XSERVICEINFO_ONEINSTANCESERVICE  (   UICategoryDescription               
 
 DEFINE_INIT_SERVICE                     (   UICategoryDescription, {} )
 
-UICategoryDescription::UICategoryDescription( const Reference< XMultiServiceFactory >& xServiceManager ) :
-    UICommandDescription(xServiceManager,true)
+UICategoryDescription::UICategoryDescription( const Reference< XComponentContext >& rxContext ) :
+    UICommandDescription(rxContext,true)
 {
     Reference< XNameAccess > xEmpty;
     rtl::OUString aGenericCategories( "GenericCategories" );
-    m_xGenericUICommands = new ConfigurationAccess_UICategory( aGenericCategories, xEmpty, xServiceManager );
+    m_xGenericUICommands = new ConfigurationAccess_UICategory( aGenericCategories, xEmpty, rxContext );
 
     // insert generic categories mappings
     m_aModuleToCommandFileMap.insert( ModuleToCommandFileMap::value_type(
@@ -455,7 +455,7 @@ UICategoryDescription::~UICategoryDescription()
 }
 Reference< XNameAccess > UICategoryDescription::impl_createConfigAccess(const ::rtl::OUString& _sName)
 {
-    return new ConfigurationAccess_UICategory( _sName,m_xGenericUICommands,m_xServiceManager );
+    return new ConfigurationAccess_UICategory( _sName, m_xGenericUICommands, m_xContext );
 }
 
 } // namespace framework

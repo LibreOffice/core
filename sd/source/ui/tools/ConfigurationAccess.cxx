@@ -31,6 +31,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
+#include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/util/XChangesBatch.hpp>
 #include <comphelper/processfactory.hxx>
 #include <tools/diagnose_ex.h>
@@ -47,17 +48,9 @@ ConfigurationAccess::ConfigurationAccess (
     const WriteMode eMode)
     : mxRoot()
 {
-    Reference<lang::XMultiComponentFactory> xFactory (rxContext->getServiceManager());
-    if (xFactory.is())
-    {
-        Reference<lang::XMultiServiceFactory> xProvider (
-            xFactory->createInstanceWithContext(
-                "com.sun.star.configuration.ConfigurationProvider",
-                rxContext),
-            UNO_QUERY);
-        if (xProvider.is())
-            Initialize(xProvider, rsRootName, eMode);
-    }
+    Reference<lang::XMultiServiceFactory> xProvider =
+           configuration::theDefaultProvider::get( rxContext );
+    Initialize(xProvider, rsRootName, eMode);
 }
 
 
@@ -68,12 +61,9 @@ ConfigurationAccess::ConfigurationAccess (
     const WriteMode eMode)
     : mxRoot()
 {
-    Reference<lang::XMultiServiceFactory> xProvider (
-        ::comphelper::getProcessServiceFactory()->createInstance(
-            "com.sun.star.configuration.ConfigurationProvider"),
-        UNO_QUERY);
-    if (xProvider.is())
-        Initialize(xProvider, rsRootName, eMode);
+    Reference<lang::XMultiServiceFactory> xProvider =
+        configuration::theDefaultProvider::get( ::comphelper::getProcessComponentContext() );
+    Initialize(xProvider, rsRootName, eMode);
 }
 
 

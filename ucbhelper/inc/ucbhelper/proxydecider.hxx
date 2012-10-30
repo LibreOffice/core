@@ -22,6 +22,7 @@
 
 #include <rtl/ustring.hxx>
 #include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include "ucbhelper/ucbhelperdllapi.h"
 
 namespace com { namespace sun { namespace star { namespace lang {
@@ -76,7 +77,7 @@ public:
       * @param rxSMgr is a Service Manager.
       */
     InternetProxyDecider( const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::lang::XMultiServiceFactory >& rxSMgr );
+                    ::com::sun::star::uno::XComponentContext >& rxContext );
 
     /**
       * Destructor.

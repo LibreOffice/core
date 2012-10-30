@@ -21,6 +21,7 @@
 
 #include "com/sun/star/awt/XWindow.hpp"
 #include "com/sun/star/beans/PropertyValue.hpp"
+#include "com/sun/star/configuration/theDefaultProvider.hpp"
 #include "com/sun/star/configuration/backend/MergeRecoveryRequest.hpp"
 #include "com/sun/star/configuration/backend/StratumCreationException.hpp"
 #include "com/sun/star/container/XHierarchicalNameAccess.hpp"
@@ -971,18 +972,8 @@ UUIInteractionHelper::getInteractionHandlerList(
 {
     try
     {
-        uno::Reference< lang::XMultiServiceFactory > xConfigProv(
-            m_xServiceFactory->createInstance(
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                    "com.sun.star.configuration.ConfigurationProvider" )) ),
-            uno::UNO_QUERY );
-
-        if ( !xConfigProv.is() )
-            throw uno::RuntimeException(
-                rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM(
-                        "unable to instanciate config provider service")),
-                uno::Reference< uno::XInterface >());
+        uno::Reference< lang::XMultiServiceFactory > xConfigProv =
+            configuration::theDefaultProvider::get( comphelper::getComponentContext(m_xServiceFactory) );
 
         rtl::OUStringBuffer aFullPath;
         aFullPath.appendAscii(

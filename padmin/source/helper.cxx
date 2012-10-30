@@ -62,7 +62,7 @@ ResId padmin::PaResId( sal_uInt32 nId )
 
         utl::OConfigurationNode aNode =
             utl::OConfigurationTreeRoot::tryCreateWithServiceFactory(
-                    comphelper::getProcessServiceFactory(),
+                    comphelper::getProcessComponentContext(),
                     OUString("org.openoffice.Setup/L10N") );
         if ( aNode.isValid() )
         {

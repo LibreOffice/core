@@ -624,7 +624,7 @@ AcceleratorCache& XMLBasedAcceleratorConfiguration::impl_getCFG(sal_Bool bWriteA
     aReadLock.unlock();
     // <- SAFE ----------------------------------
 
-    css::uno::Reference< css::uno::XInterface >     xCFG      = fpc::ConfigurationHelper::openConfig(xSMGR,
+    css::uno::Reference< css::uno::XInterface >     xCFG      = fpc::ConfigurationHelper::openConfig( comphelper::getComponentContext(xSMGR),
         "/org.openoffice.Setup", "L10N", fpc::ConfigurationHelper::E_READONLY);
     css::uno::Reference< css::beans::XPropertySet > xProp     (xCFG, css::uno::UNO_QUERY_THROW);
     ::rtl::OUString                                 sISOLocale;
@@ -1663,7 +1663,7 @@ AcceleratorCache& XCUBasedAcceleratorConfiguration::impl_getCFG(sal_Bool bPrefer
     aReadLock.unlock();
     // <- SAFE ----------------------------------
 
-    css::uno::Reference< css::uno::XInterface >     xCFG      = fpc::ConfigurationHelper::openConfig(xSMGR,
+    css::uno::Reference< css::uno::XInterface >     xCFG      = fpc::ConfigurationHelper::openConfig( comphelper::getComponentContext(xSMGR),
         "/org.openoffice.Setup", "L10N", fpc::ConfigurationHelper::E_READONLY);
     css::uno::Reference< css::beans::XPropertySet > xProp     (xCFG, css::uno::UNO_QUERY_THROW);
     ::rtl::OUString                                 sISOLocale;

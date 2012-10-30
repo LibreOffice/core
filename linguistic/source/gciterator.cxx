@@ -23,6 +23,7 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/container/XNameReplace.hpp>
+#include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/i18n/BreakIterator.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -967,14 +968,9 @@ uno::Reference< util::XChangesBatch > GrammarCheckingIterator::GetUpdateAccess()
         try
         {
             // get configuration provider
-            uno::Reference< lang::XMultiServiceFactory > xConfigurationProvider;
-            uno::Reference< lang::XMultiServiceFactory > xMgr = comphelper::getProcessServiceFactory();
-            if (xMgr.is())
-            {
-                xConfigurationProvider = uno::Reference< lang::XMultiServiceFactory > (
-                        xMgr->createInstance( "com.sun.star.configuration.ConfigurationProvider" ),
-                        uno::UNO_QUERY_THROW ) ;
-            }
+            uno::Reference< uno::XComponentContext > xContext = comphelper::getProcessComponentContext();
+            uno::Reference< lang::XMultiServiceFactory > xConfigurationProvider =
+                    configuration::theDefaultProvider::get( xContext );
 
             // get configuration update access
             beans::PropertyValue aValue;

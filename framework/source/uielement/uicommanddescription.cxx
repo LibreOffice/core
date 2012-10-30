@@ -37,6 +37,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
+#include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/container/XContainer.hpp>
@@ -58,6 +59,7 @@
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
+using namespace com::sun::star::configuration;
 using namespace com::sun::star::container;
 using namespace ::com::sun::star::frame;
 
@@ -97,12 +99,12 @@ namespace framework
 //  Configuration access class for PopupMenuControllerFactory implementation
 //*****************************************************************************************************************
 
-class ConfigurationAccess_UICommand : // Order is neccessary for right initialization!
+class ConfigurationAccess_UICommand : // Order is necessary for right initialization!
                                         private ThreadHelpBase                           ,
                                         public  ::cppu::WeakImplHelper2<XNameAccess,XContainerListener>
 {
     public:
-                                  ConfigurationAccess_UICommand( const ::rtl::OUString& aModuleName, const Reference< XNameAccess >& xGenericUICommands, const Reference< XMultiServiceFactory >& rServiceManager );
+                                  ConfigurationAccess_UICommand( const ::rtl::OUString& aModuleName, const Reference< XNameAccess >& xGenericUICommands, const Reference< XComponentContext >& rxContext );
         virtual                   ~ConfigurationAccess_UICommand();
 
         // XNameAccess
@@ -180,7 +182,6 @@ class ConfigurationAccess_UICommand : // Order is neccessary for right initializ
         rtl::OUString                     m_aExtension;
         rtl::OUString                     m_aPrivateResourceURL;
         Reference< XNameAccess >          m_xGenericUICommands;
-        Reference< XMultiServiceFactory > m_xServiceManager;
         Reference< XMultiServiceFactory > m_xConfigProvider;
         Reference< XNameAccess >          m_xConfigAccess;
         Reference< XContainerListener >   m_xConfigListener;
@@ -198,7 +199,7 @@ class ConfigurationAccess_UICommand : // Order is neccessary for right initializ
 //*****************************************************************************************************************
 //  XInterface, XTypeProvider
 //*****************************************************************************************************************
-ConfigurationAccess_UICommand::ConfigurationAccess_UICommand( const rtl::OUString& aModuleName, const Reference< XNameAccess >& rGenericUICommands, const Reference< XMultiServiceFactory >& rServiceManager ) :
+ConfigurationAccess_UICommand::ConfigurationAccess_UICommand( const rtl::OUString& aModuleName, const Reference< XNameAccess >& rGenericUICommands, const Reference< XComponentContext>& rxContext ) :
     ThreadHelpBase(),
     m_aConfigCmdAccess( CONFIGURATION_ROOT_ACCESS ),
     m_aConfigPopupAccess( CONFIGURATION_ROOT_ACCESS ),
@@ -210,7 +211,6 @@ ConfigurationAccess_UICommand::ConfigurationAccess_UICommand( const rtl::OUStrin
     m_aPropProperties( PROPSET_PROPERTIES ),
     m_aPrivateResourceURL( PRIVATE_RESOURCE_URL ),
     m_xGenericUICommands( rGenericUICommands ),
-    m_xServiceManager( rServiceManager ),
     m_bConfigAccessInitialized( sal_False ),
     m_bCacheFilled( sal_False ),
     m_bGenericDataRetrieved( sal_False )
@@ -219,7 +219,7 @@ ConfigurationAccess_UICommand::ConfigurationAccess_UICommand( const rtl::OUStrin
     m_aConfigCmdAccess += aModuleName;
     m_aConfigCmdAccess += rtl::OUString( CONFIGURATION_CMD_ELEMENT_ACCESS );
 
-    m_xConfigProvider = Reference< XMultiServiceFactory >( rServiceManager->createInstance(SERVICENAME_CFGPROVIDER),UNO_QUERY );
+    m_xConfigProvider = theDefaultProvider::get( rxContext );
 
     m_aConfigPopupAccess += aModuleName;
     m_aConfigPopupAccess += rtl::OUString( CONFIGURATION_POP_ELEMENT_ACCESS );
@@ -624,7 +624,7 @@ void SAL_CALL ConfigurationAccess_UICommand::disposing( const EventObject& aEven
 //*****************************************************************************************************************
 //  XInterface, XTypeProvider, XServiceInfo
 //*****************************************************************************************************************
-DEFINE_XSERVICEINFO_ONEINSTANCESERVICE  (   UICommandDescription                    ,
+DEFINE_XSERVICEINFO_ONEINSTANCESERVICE_2  (   UICommandDescription                    ,
                                             ::cppu::OWeakObject                     ,
                                             SERVICENAME_UICOMMANDDESCRIPTION        ,
                                             IMPLEMENTATIONNAME_UICOMMANDDESCRIPTION
@@ -632,15 +632,15 @@ DEFINE_XSERVICEINFO_ONEINSTANCESERVICE  (   UICommandDescription                
 
 DEFINE_INIT_SERVICE                     (   UICommandDescription, {} )
 
-UICommandDescription::UICommandDescription( const Reference< XMultiServiceFactory >& xServiceManager ) :
+UICommandDescription::UICommandDescription( const Reference< XComponentContext >& rxContext ) :
     ThreadHelpBase(),
     m_aPrivateResourceURL( PRIVATE_RESOURCE_URL ),
-    m_xServiceManager( xServiceManager )
+    m_xContext( rxContext )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "UICommandDescription::UICommandDescription" );
     Reference< XNameAccess > xEmpty;
     rtl::OUString aGenericUICommand( "GenericCommands" );
-    m_xGenericUICommands = new ConfigurationAccess_UICommand( aGenericUICommand, xEmpty, xServiceManager );
+    m_xGenericUICommands = new ConfigurationAccess_UICommand( aGenericUICommand, xEmpty, m_xContext );
 
     impl_fillElements("ooSetupFactoryCommandConfigRef");
 
@@ -649,9 +649,9 @@ UICommandDescription::UICommandDescription( const Reference< XMultiServiceFactor
     if ( pIter != m_aUICommandsHashMap.end() )
         pIter->second = m_xGenericUICommands;
 }
-UICommandDescription::UICommandDescription( const Reference< XMultiServiceFactory >& xServiceManager,bool ) :
+UICommandDescription::UICommandDescription( const Reference< XComponentContext >& rxContext, bool ) :
     ThreadHelpBase(),
-    m_xServiceManager( xServiceManager )
+    m_xContext( rxContext )
 {
 }
 UICommandDescription::~UICommandDescription()
@@ -663,7 +663,7 @@ UICommandDescription::~UICommandDescription()
 }
 void UICommandDescription::impl_fillElements(const sal_Char* _pName)
 {
-    m_xModuleManager.set( ModuleManager::create( comphelper::getComponentContext(m_xServiceManager) ) );
+    m_xModuleManager.set( ModuleManager::create( m_xContext ) );
     Sequence< rtl::OUString > aElementNames = m_xModuleManager->getElementNames();
     Sequence< PropertyValue > aSeq;
     ::rtl::OUString                  aModuleIdentifier;
@@ -695,7 +695,7 @@ void UICommandDescription::impl_fillElements(const sal_Char* _pName)
 }
 Reference< XNameAccess > UICommandDescription::impl_createConfigAccess(const ::rtl::OUString& _sName)
 {
-    return new ConfigurationAccess_UICommand( _sName,m_xGenericUICommands,m_xServiceManager );
+    return new ConfigurationAccess_UICommand( _sName, m_xGenericUICommands, m_xContext );
 }
 
 Any SAL_CALL UICommandDescription::getByName( const ::rtl::OUString& aName )
@@ -720,7 +720,7 @@ throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::la
                 Reference< XNameAccess > xUICommands;
                 ConfigurationAccess_UICommand* pUICommands = new ConfigurationAccess_UICommand( aCommandFile,
                                                                                                m_xGenericUICommands,
-                                                                                               m_xServiceManager );
+                                                                                               m_xContext );
                 xUICommands = Reference< XNameAccess >( static_cast< cppu::OWeakObject* >( pUICommands ),UNO_QUERY );
                 pIter->second = xUICommands;
                 a <<= xUICommands;

@@ -24,6 +24,7 @@
 #include <osl/diagnose.h>
 #include <com/sun/star/container/XHierarchicalName.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/util/XStringEscape.hpp>
@@ -47,6 +48,7 @@ namespace utl
     using namespace ::com::sun::star::util;
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::container;
+    using namespace ::com::sun::star::configuration;
 
     //========================================================================
     //= OConfigurationNode
@@ -479,14 +481,12 @@ namespace utl
     //========================================================================
     namespace
     {
-        static const char s_sProviderServiceName[] = "com.sun.star.configuration.ConfigurationProvider";
-
         //--------------------------------------------------------------------
         Reference< XMultiServiceFactory > lcl_getConfigProvider( const ::comphelper::ComponentContext& i_rContext )
         {
             try
             {
-                Reference< XMultiServiceFactory > xProvider( i_rContext.createComponent(s_sProviderServiceName), UNO_QUERY_THROW );
+                Reference< XMultiServiceFactory > xProvider = theDefaultProvider::get( i_rContext.getUNOContext() );
                 return xProvider;
             }
             catch ( const Exception& )
@@ -592,22 +592,18 @@ namespace utl
     }
 
     //------------------------------------------------------------------------
-    OConfigurationTreeRoot OConfigurationTreeRoot::tryCreateWithServiceFactory( const Reference< XMultiServiceFactory >& _rxORB,
+    OConfigurationTreeRoot OConfigurationTreeRoot::tryCreateWithServiceFactory( const Reference< XComponentContext >& rxContext,
         const ::rtl::OUString& _rPath, sal_Int32 _nDepth , CREATION_MODE _eMode , sal_Bool _bLazyWrite )
     {
-        OSL_ENSURE( _rxORB.is(), "OConfigurationTreeRoot::tryCreateWithServiceFactory: invalid service factory!" );
-        if ( _rxORB.is() )
+        OSL_ENSURE( rxContext.is(), "OConfigurationTreeRoot::tryCreateWithServiceFactory: invalid service factory!" );
+        try
         {
-            try
-            {
-                Reference< XMultiServiceFactory > xConfigFactory( _rxORB->createInstance(s_sProviderServiceName), UNO_QUERY );
-                if ( xConfigFactory.is() )
-                    return createWithProvider( xConfigFactory, _rPath, _nDepth, _eMode, _bLazyWrite );
-            }
-            catch(const Exception&)
-            {
-                // silence this, 'cause the contract of this method states "no assertions"
-            }
+            Reference< XMultiServiceFactory > xConfigFactory = theDefaultProvider::get( rxContext );
+            return createWithProvider( xConfigFactory, _rPath, _nDepth, _eMode, _bLazyWrite );
+        }
+        catch(const Exception&)
+        {
+            // silence this, 'cause the contract of this method states "no assertions"
         }
         return OConfigurationTreeRoot();
     }

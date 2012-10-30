@@ -33,6 +33,7 @@
 #include <expat.h>
 #include <osl/file.hxx>
 #include <unotools/configmgr.hxx>
+#include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
 #include <com/sun/star/frame/XConfigManager.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -182,6 +183,7 @@ using namespace treeview;
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::beans;
+using namespace com::sun::star::configuration;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::util;
 using namespace com::sun::star::frame;
@@ -720,7 +722,7 @@ TVChildTarget::hasByHierarchicalName( const rtl::OUString& aName )
 ConfigData TVChildTarget::init( const Reference< XMultiServiceFactory >& xSMgr )
 {
     ConfigData configData;
-    Reference< XMultiServiceFactory >  sProvider( getConfiguration(xSMgr) );
+    Reference< XMultiServiceFactory > sProvider( getConfiguration(comphelper::getComponentContext(xSMgr)) );
 
     /**********************************************************************/
     /*                       reading Office.Common                        */
@@ -750,8 +752,7 @@ ConfigData TVChildTarget::init( const Reference< XMultiServiceFactory >& xSMgr )
 
     try
     {
-        uno::Reference< lang::XMultiServiceFactory > xConfigProvider(
-              xSMgr ->createInstance(::rtl::OUString("com.sun.star.configuration.ConfigurationProvider")), uno::UNO_QUERY_THROW);
+        Reference< lang::XMultiServiceFactory > xConfigProvider = theDefaultProvider::get( comphelper::getComponentContext(xSMgr) );
 
         uno::Sequence < uno::Any > lParams(1);
         beans::PropertyValue                       aParam ;
@@ -889,27 +890,22 @@ ConfigData TVChildTarget::init( const Reference< XMultiServiceFactory >& xSMgr )
 
 
 Reference< XMultiServiceFactory >
-TVChildTarget::getConfiguration(const Reference< XMultiServiceFactory >& m_xSMgr) const
+TVChildTarget::getConfiguration(const Reference< XComponentContext >& rxContext) const
 {
-    Reference< XMultiServiceFactory > sProvider;
-    if( m_xSMgr.is() )
+    Reference< XMultiServiceFactory > xProvider;
+    if( rxContext.is() )
     {
         try
         {
-            rtl::OUString sProviderService =
-                rtl::OUString( "com.sun.star.configuration.ConfigurationProvider" );
-            sProvider =
-                Reference< XMultiServiceFactory >(
-                    m_xSMgr->createInstance( sProviderService ),
-                    UNO_QUERY );
+            xProvider = theDefaultProvider::get( rxContext );
         }
         catch( const com::sun::star::uno::Exception& )
         {
-            OSL_ENSURE( sProvider.is(),"cant instantiate configuration" );
+            OSL_ENSURE( xProvider.is(),"cant instantiate configuration" );
         }
     }
 
-    return sProvider;
+    return xProvider;
 }
 
 

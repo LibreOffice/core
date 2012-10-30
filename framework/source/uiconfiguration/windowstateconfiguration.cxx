@@ -34,6 +34,7 @@
 
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/container/XContainer.hpp>
@@ -55,6 +56,7 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::util;
+using namespace com::sun::star::configuration;
 using namespace com::sun::star::container;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::ui;
@@ -140,7 +142,7 @@ class ConfigurationAccess_WindowState : // interfaces
                                         public  ::cppu::OWeakObject
 {
     public:
-                                  ConfigurationAccess_WindowState( const ::rtl::OUString& aWindowStateConfigFile, const Reference< XMultiServiceFactory >& rServiceManager );
+                                  ConfigurationAccess_WindowState( const ::rtl::OUString& aWindowStateConfigFile, const Reference< XComponentContext >& rxContext );
         virtual                   ~ConfigurationAccess_WindowState();
 
         //  XInterface, XTypeProvider
@@ -250,7 +252,6 @@ class ConfigurationAccess_WindowState : // interfaces
                                  ::std::equal_to< ::rtl::OUString > > ResourceURLToInfoCache;
 
         rtl::OUString                     m_aConfigWindowAccess;
-        Reference< XMultiServiceFactory > m_xServiceManager;
         Reference< XMultiServiceFactory > m_xConfigProvider;
         Reference< XNameAccess >          m_xConfigAccess;
         Reference< XContainerListener >   m_xConfigListener;
@@ -284,17 +285,16 @@ DEFINE_XTYPEPROVIDER_7  (   ConfigurationAccess_WindowState         ,
                             css::lang::XTypeProvider
                         )
 
-ConfigurationAccess_WindowState::ConfigurationAccess_WindowState( const rtl::OUString& aModuleName, const Reference< XMultiServiceFactory >& rServiceManager ) :
+ConfigurationAccess_WindowState::ConfigurationAccess_WindowState( const rtl::OUString& aModuleName, const Reference< XComponentContext >& rxContext ) :
     ThreadHelpBase(),
     m_aConfigWindowAccess( CONFIGURATION_ROOT_ACCESS ),
-    m_xServiceManager( rServiceManager ),
     m_bConfigAccessInitialized( sal_False ),
     m_bModified( sal_False )
 {
     // Create configuration hierachical access name
     m_aConfigWindowAccess += aModuleName;
     m_aConfigWindowAccess += rtl::OUString( CONFIGURATION_WINDOWSTATE_ACCESS );
-    m_xConfigProvider = Reference< XMultiServiceFactory >( rServiceManager->createInstance( SERVICENAME_CFGPROVIDER ), UNO_QUERY );
+    m_xConfigProvider = theDefaultProvider::get( rxContext );
 
     // Initialize access array with property names.
     sal_Int32 n = 0;
@@ -1352,7 +1352,7 @@ DEFINE_XTYPEPROVIDER_4                  (   WindowStateConfiguration            
                                             css::container::XElementAccess
                                         )
 
-DEFINE_XSERVICEINFO_ONEINSTANCESERVICE  (   WindowStateConfiguration                    ,
+DEFINE_XSERVICEINFO_ONEINSTANCESERVICE_2(   WindowStateConfiguration                    ,
                                             ::cppu::OWeakObject                         ,
                                             SERVICENAME_WINDOWSTATECONFIGURATION        ,
                                             IMPLEMENTATIONNAME_WINDOWSTATECONFIGURATION
@@ -1360,11 +1360,11 @@ DEFINE_XSERVICEINFO_ONEINSTANCESERVICE  (   WindowStateConfiguration            
 
 DEFINE_INIT_SERVICE                     (   WindowStateConfiguration, {} )
 
-WindowStateConfiguration::WindowStateConfiguration( const Reference< XMultiServiceFactory >& xServiceManager ) :
+WindowStateConfiguration::WindowStateConfiguration( const Reference< XComponentContext >& rxContext ) :
     ThreadHelpBase(),
-    m_xServiceManager( xServiceManager )
+    m_xContext( rxContext )
 {
-    m_xModuleManager = ModuleManager::create( comphelper::getComponentContext(m_xServiceManager) );
+    m_xModuleManager = ModuleManager::create( m_xContext );
     Reference< XNameAccess > xEmptyNameAccess;
     Sequence< rtl::OUString > aElementNames;
     try
@@ -1432,7 +1432,7 @@ throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::la
             else
             {
                 Reference< XNameAccess > xResourceURLWindowState;
-                ConfigurationAccess_WindowState* pModuleWindowState = new ConfigurationAccess_WindowState( aWindowStateConfigFile, m_xServiceManager );
+                ConfigurationAccess_WindowState* pModuleWindowState = new ConfigurationAccess_WindowState( aWindowStateConfigFile, m_xContext );
                 xResourceURLWindowState = Reference< XNameAccess >( static_cast< cppu::OWeakObject* >( pModuleWindowState ),UNO_QUERY );
                 pModuleIter->second = xResourceURLWindowState;
                 a <<= xResourceURLWindowState;

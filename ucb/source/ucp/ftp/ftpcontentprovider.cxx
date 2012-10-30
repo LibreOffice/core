@@ -178,7 +178,7 @@ FTPContentProvider::queryContent(
 
 void FTPContentProvider::init() {
     m_ftpLoaderThread = new FTPLoaderThread();
-    m_pProxyDecider = new ucbhelper::InternetProxyDecider(m_xSMgr);
+    m_pProxyDecider = new ucbhelper::InternetProxyDecider(comphelper::getComponentContext(m_xSMgr));
 }
 
 

@@ -20,6 +20,7 @@
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
+#include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/container/XNameReplace.hpp>
@@ -1115,15 +1116,9 @@ uno::Reference< util::XChangesBatch > SvtLinguConfig::GetMainUpdateAccess() cons
         try
         {
             // get configuration provider
-            uno::Reference< lang::XMultiServiceFactory > xConfigurationProvider;
-            uno::Reference< lang::XMultiServiceFactory > xMgr = comphelper::getProcessServiceFactory();
-            if (xMgr.is())
-            {
-                xConfigurationProvider = uno::Reference< lang::XMultiServiceFactory > (
-                        xMgr->createInstance(OUString(RTL_CONSTASCII_USTRINGPARAM(
-                            "com.sun.star.configuration.ConfigurationProvider"))),
-                        uno::UNO_QUERY_THROW ) ;
-            }
+            uno::Reference< uno::XComponentContext > xContext = comphelper::getProcessComponentContext();
+            uno::Reference< lang::XMultiServiceFactory > xConfigurationProvider =
+                    configuration::theDefaultProvider::get( xContext );
 
             // get configuration update access
             beans::PropertyValue aValue;

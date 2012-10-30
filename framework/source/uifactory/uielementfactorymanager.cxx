@@ -35,6 +35,7 @@
 
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/container/XContainer.hpp>
@@ -54,6 +55,7 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::frame;
+using namespace com::sun::star::configuration;
 using namespace com::sun::star::container;
 using namespace ::com::sun::star::ui;
 using namespace ::com::sun::star::frame;
@@ -82,18 +84,17 @@ rtl::OUString getHashKeyFromStrings( const rtl::OUString& aType, const rtl::OUSt
 //*****************************************************************************************************************
 
 
-ConfigurationAccess_FactoryManager::ConfigurationAccess_FactoryManager( Reference< XMultiServiceFactory >& rServiceManager,const ::rtl::OUString& _sRoot ) :
+ConfigurationAccess_FactoryManager::ConfigurationAccess_FactoryManager( const Reference< XComponentContext >& rxContext, const ::rtl::OUString& _sRoot ) :
     ThreadHelpBase(),
     m_aPropType( RTL_CONSTASCII_USTRINGPARAM( "Type" )),
     m_aPropName( RTL_CONSTASCII_USTRINGPARAM( "Name" )),
     m_aPropModule( RTL_CONSTASCII_USTRINGPARAM( "Module" )),
     m_aPropFactory( RTL_CONSTASCII_USTRINGPARAM( "FactoryImplementation" )),
     m_sRoot(_sRoot),
-    m_xServiceManager( rServiceManager ),
     m_bConfigAccessInitialized( sal_False )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "UIElementFactoryManager::ConfigurationAccess_FactoryManager" );
-    m_xConfigProvider = Reference< XMultiServiceFactory >( rServiceManager->createInstance( SERVICENAME_CFGPROVIDER),UNO_QUERY );
+    m_xConfigProvider = theDefaultProvider::get( rxContext );
 }
 
 ConfigurationAccess_FactoryManager::~ConfigurationAccess_FactoryManager()
@@ -379,7 +380,7 @@ sal_Bool ConfigurationAccess_FactoryManager::impl_getElementProps( const Any& aE
 //*****************************************************************************************************************
 //  XInterface, XTypeProvider, XServiceInfo
 //*****************************************************************************************************************
-DEFINE_XSERVICEINFO_ONEINSTANCESERVICE  (   UIElementFactoryManager                         ,
+DEFINE_XSERVICEINFO_ONEINSTANCESERVICE_2  (   UIElementFactoryManager                         ,
                                             ::cppu::OWeakObject                             ,
                                             SERVICENAME_UIELEMENTFACTORYMANAGER             ,
                                             IMPLEMENTATIONNAME_UIELEMENTFACTORYMANAGER
@@ -387,15 +388,15 @@ DEFINE_XSERVICEINFO_ONEINSTANCESERVICE  (   UIElementFactoryManager             
 
 DEFINE_INIT_SERVICE                     (   UIElementFactoryManager, {} )
 
-UIElementFactoryManager::UIElementFactoryManager( const Reference< XMultiServiceFactory >& xServiceManager ) :
+UIElementFactoryManager::UIElementFactoryManager( const Reference< XComponentContext >& rxContext ) :
     ThreadHelpBase( &Application::GetSolarMutex() ),
     m_bConfigRead( sal_False ),
-    m_xServiceManager( xServiceManager )
+    m_xContext(rxContext)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "UIElementFactoryManager::UIElementFactoryManager" );
-    m_pConfigAccess = new ConfigurationAccess_FactoryManager( m_xServiceManager,rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/org.openoffice.Office.UI.Factories/Registered/UIElementFactories" )) );
+    m_pConfigAccess = new ConfigurationAccess_FactoryManager( rxContext, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/org.openoffice.Office.UI.Factories/Registered/UIElementFactories" )) );
     m_pConfigAccess->acquire();
-    m_xModuleManager = ModuleManager::create( comphelper::getComponentContext(m_xServiceManager) );
+    m_xModuleManager = ModuleManager::create( rxContext );
 }
 
 UIElementFactoryManager::~UIElementFactoryManager()
@@ -491,13 +492,13 @@ throw ( RuntimeException )
 
     WindowContentFactoryManager::RetrieveTypeNameFromResourceURL( aResourceURL, aType, aName );
 
-    Reference< XMultiServiceFactory > xSManager( m_xServiceManager );
+    Reference< XComponentContext > xContext( m_xContext );
 
     rtl::OUString aServiceSpecifier = m_pConfigAccess->getFactorySpecifierFromTypeNameModule( aType, aName, aModuleId );
 
     aLock.unlock();
     if ( !aServiceSpecifier.isEmpty() )
-        return Reference< XUIElementFactory >( xSManager->createInstance( aServiceSpecifier ), UNO_QUERY );
+        return Reference< XUIElementFactory >( xContext->getServiceManager()->createInstanceWithContext(aServiceSpecifier, xContext), UNO_QUERY );
     else
         return Reference< XUIElementFactory >();
 }

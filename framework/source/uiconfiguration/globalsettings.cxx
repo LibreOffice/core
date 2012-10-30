@@ -32,6 +32,7 @@
 
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/container/XContainer.hpp>
@@ -74,7 +75,7 @@ class GlobalSettings_Access : public ::com::sun::star::lang::XComponent      ,
                               public ::cppu::OWeakObject
 {
     public:
-        GlobalSettings_Access( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceManager );
+        GlobalSettings_Access( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext );
         virtual ~GlobalSettings_Access();
 
         // XInterface, XTypeProvider, XServiceInfo
@@ -103,7 +104,7 @@ class GlobalSettings_Access : public ::com::sun::star::lang::XComponent      ,
         rtl::OUString                                                                       m_aPropLocked;
         rtl::OUString                                                                       m_aPropDocked;
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >        m_xConfigAccess;
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >    m_xServiceManager;
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>         m_xContext;
 };
 
 
@@ -116,7 +117,7 @@ DEFINE_XINTERFACE_2     (   GlobalSettings_Access                           ,
                             DIRECT_INTERFACE ( css::lang::XEventListener    )
                         )
 
-GlobalSettings_Access::GlobalSettings_Access( const css::uno::Reference< css::lang::XMultiServiceFactory >& rServiceManager ) :
+GlobalSettings_Access::GlobalSettings_Access( const css::uno::Reference< css::uno::XComponentContext >& rxContext ) :
     ThreadHelpBase(),
     m_bDisposed( sal_False ),
     m_bConfigRead( sal_False ),
@@ -125,7 +126,7 @@ GlobalSettings_Access::GlobalSettings_Access( const css::uno::Reference< css::la
     m_aPropStatesEnabled( RTL_CONSTASCII_USTRINGPARAM( GLOBALSETTINGS_PROPERTY_STATESENABLED )),
     m_aPropLocked( RTL_CONSTASCII_USTRINGPARAM( GLOBALSETTINGS_PROPERTY_LOCKED )),
     m_aPropDocked( RTL_CONSTASCII_USTRINGPARAM( GLOBALSETTINGS_PROPERTY_DOCKED )),
-    m_xServiceManager( rServiceManager )
+    m_xContext( rxContext )
 {
 }
 
@@ -255,14 +256,11 @@ sal_Bool GlobalSettings_Access::impl_initConfigAccess()
 
     try
     {
-        css::uno::Reference< css::lang::XMultiServiceFactory > xConfigProvider;
-        if ( m_xServiceManager.is() )
-            xConfigProvider = css::uno::Reference< css::lang::XMultiServiceFactory >(
-                                    m_xServiceManager->createInstance( SERVICENAME_CFGPROVIDER ),
-                                    css::uno::UNO_QUERY );
-
-        if ( xConfigProvider.is() )
+        if ( m_xContext.is() )
         {
+            css::uno::Reference< css::lang::XMultiServiceFactory > xConfigProvider =
+                 css::configuration::theDefaultProvider::get( m_xContext );
+
             aPropValue.Name  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "nodepath" ));
             aPropValue.Value = css::uno::makeAny( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( GLOBALSETTINGS_ROOT_ACCESS )));
             aArgs[0] = css::uno::makeAny( aPropValue );
@@ -275,9 +273,8 @@ sal_Bool GlobalSettings_Access::impl_initConfigAccess()
                                     SERVICENAME_CFGREADACCESS, aArgs ),
                                 css::uno::UNO_QUERY );
 
-            css::uno::Reference< css::lang::XComponent > xComponent( xConfigProvider, css::uno::UNO_QUERY );
-            if ( xComponent.is() )
-                xComponent->addEventListener(
+            css::uno::Reference< css::lang::XComponent >(
+                xConfigProvider, css::uno::UNO_QUERY_THROW )->addEventListener(
                     css::uno::Reference< css::lang::XEventListener >(
                         static_cast< cppu::OWeakObject* >( this ),
                         css::uno::UNO_QUERY ));
@@ -302,16 +299,16 @@ sal_Bool GlobalSettings_Access::impl_initConfigAccess()
 struct mutexGlobalSettings : public rtl::Static< osl::Mutex, mutexGlobalSettings > {};
 static GlobalSettings_Access* pStaticSettings = 0;
 
-static GlobalSettings_Access* GetGlobalSettings( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rSrvMgr )
+static GlobalSettings_Access* GetGlobalSettings( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext )
 {
     osl::MutexGuard aGuard(mutexGlobalSettings::get());
     if ( !pStaticSettings )
-        pStaticSettings = new GlobalSettings_Access( rSrvMgr );
+        pStaticSettings = new GlobalSettings_Access( rxContext );
     return pStaticSettings;
 }
 
-GlobalSettings::GlobalSettings( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rSrvMgr ) :
-    m_xSrvMgr( rSrvMgr )
+GlobalSettings::GlobalSettings( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext ) :
+    m_xContext( rxContext )
 {
 }
 
@@ -322,7 +319,7 @@ GlobalSettings::~GlobalSettings()
 // settings access
 sal_Bool GlobalSettings::HasStatesInfo( UIElementType eElementType )
 {
-    GlobalSettings_Access* pSettings( GetGlobalSettings( m_xSrvMgr ));
+    GlobalSettings_Access* pSettings( GetGlobalSettings( m_xContext ));
 
     if ( pSettings )
         return pSettings->HasStatesInfo( eElementType );
@@ -332,7 +329,7 @@ sal_Bool GlobalSettings::HasStatesInfo( UIElementType eElementType )
 
 sal_Bool GlobalSettings::GetStateInfo( UIElementType eElementType, StateInfo eStateInfo, ::com::sun::star::uno::Any& aValue )
 {
-    GlobalSettings_Access* pSettings( GetGlobalSettings( m_xSrvMgr ));
+    GlobalSettings_Access* pSettings( GetGlobalSettings( m_xContext ));
 
     if ( pSettings )
         return pSettings->GetStateInfo( eElementType, eStateInfo, aValue );

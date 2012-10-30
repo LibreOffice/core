@@ -30,8 +30,10 @@
 #include <osl/diagnose.h>
 
 #include "osl/doublecheckedlocking.h"
+#include <comphelper/processfactory.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/util/XChangesBatch.hpp>
@@ -50,8 +52,6 @@ using namespace hierarchy_ucp;
 #define READ_SERVICE_NAME      "com.sun.star.ucb.HierarchyDataReadAccess"
 #define READWRITE_SERVICE_NAME "com.sun.star.ucb.HierarchyDataReadWriteAccess"
 
-#define CONFIG_PROVIDER_SERVICE_NAME  \
-                        "com.sun.star.configuration.ConfigurationProvider"
 #define CONFIG_READ_SERVICE_NAME      \
                         "com.sun.star.configuration.ConfigurationAccess"
 #define CONFIG_READWRITE_SERVICE_NAME \
@@ -213,8 +213,8 @@ using namespace hcp_impl;
 //=========================================================================
 
 HierarchyDataSource::HierarchyDataSource(
-        const uno::Reference< lang::XMultiServiceFactory > & rxServiceMgr )
-: m_xSMgr( rxServiceMgr ),
+        const uno::Reference< uno::XComponentContext > & rxContext )
+: m_xContext( rxContext ),
   m_pDisposeEventListeners( 0 )
 {
 }
@@ -256,7 +256,7 @@ XTYPEPROVIDER_IMPL_4( HierarchyDataSource,
 //
 //=========================================================================
 
-XSERVICEINFO_IMPL_0( HierarchyDataSource,
+XSERVICEINFO_IMPL_0_CTX( HierarchyDataSource,
                      rtl::OUString( "com.sun.star.comp.ucb.HierarchyDataSource" ) )
 {
     uno::Sequence< rtl::OUString > aSNS( 2 );
@@ -524,15 +524,7 @@ HierarchyDataSource::getConfigProvider()
         {
             try
             {
-                m_xConfigProvider
-                    = uno::Reference< lang::XMultiServiceFactory >(
-                        m_xSMgr->createInstance(
-                            rtl::OUString( CONFIG_PROVIDER_SERVICE_NAME  ) ),
-                        uno::UNO_QUERY );
-
-                OSL_ENSURE( m_xConfigProvider.is(),
-                            "HierarchyDataSource::getConfigProvider - "
-                            "No configuration provider!" );
+                m_xConfigProvider = configuration::theDefaultProvider::get( m_xContext );
             }
             catch ( uno::Exception const & )
             {

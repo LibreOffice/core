@@ -38,6 +38,7 @@
 #include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 
+#include <comphelper/processfactory.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <vcl/svapp.hxx>
 
@@ -76,7 +77,7 @@ Job::Job( /*IN*/ const css::uno::Reference< css::lang::XMultiServiceFactory >& x
           /*IN*/ const css::uno::Reference< css::frame::XFrame >&              xFrame )
     : ThreadHelpBase       (&Application::GetSolarMutex())
     , ::cppu::OWeakObject  (                             )
-    , m_aJobCfg            (xSMGR                        )
+    , m_aJobCfg            (comphelper::getComponentContext(xSMGR))
     , m_xSMGR              (xSMGR                        )
     , m_xFrame             (xFrame                       )
     , m_bListenOnDesktop   (sal_False                    )
@@ -106,7 +107,7 @@ Job::Job( /*IN*/ const css::uno::Reference< css::lang::XMultiServiceFactory >& x
           /*IN*/ const css::uno::Reference< css::frame::XModel >&              xModel )
     : ThreadHelpBase       (&Application::GetSolarMutex())
     , ::cppu::OWeakObject  (                             )
-    , m_aJobCfg            (xSMGR                        )
+    , m_aJobCfg            (comphelper::getComponentContext(xSMGR))
     , m_xSMGR              (xSMGR                        )
     , m_xModel             (xModel                       )
     , m_bListenOnDesktop   (sal_False                    )

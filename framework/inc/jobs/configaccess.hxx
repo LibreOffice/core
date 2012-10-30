@@ -25,6 +25,7 @@
 #include <general.h>
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <rtl/ustring.hxx>
 #include <fwidllapi.h>
@@ -65,7 +66,7 @@ class FWI_DLLPUBLIC ConfigAccess : public ThreadHelpBase
             reference to the uno service manager
             It's neccessary to instanciate own needed services.
          */
-        css::uno::Reference< css::lang::XMultiServiceFactory > m_xSMGR;
+        css::uno::Reference< css::uno::XComponentContext > m_xContext;
 
         /** hold an opened configuration alive */
         css::uno::Reference< css::uno::XInterface > m_xConfig;
@@ -81,8 +82,8 @@ class FWI_DLLPUBLIC ConfigAccess : public ThreadHelpBase
 
     public:
 
-                 ConfigAccess( const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR ,
-                               const ::rtl::OUString&                                        sRoot );
+                 ConfigAccess( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
+                               const ::rtl::OUString&                                    sRoot );
         virtual ~ConfigAccess();
 
         virtual void      open   ( EOpenMode eMode );

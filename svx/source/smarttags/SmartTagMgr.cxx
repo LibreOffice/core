@@ -34,6 +34,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XSingleComponentFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/container/XContentEnumerationAccess.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -382,10 +383,7 @@ void SmartTagMgr::PrepareConfiguration( const rtl::OUString& rConfigurationGroup
     aPathArgument.Value = aAny;
     Sequence< Any > aArguments( 1 );
     aArguments[ 0 ] <<= aPathArgument;
-    Reference< lang::XMultiServiceFactory > xConfProv( mxContext->getServiceManager()->createInstanceWithContext("com.sun.star.configuration.ConfigurationProvider", mxContext), UNO_QUERY );
-
-    if ( !xConfProv.is() )
-        return;
+    Reference< lang::XMultiServiceFactory > xConfProv = configuration::theDefaultProvider::get( mxContext );
 
     // try to get read-write access to configuration:
     Reference< XInterface > xConfigurationAccess;

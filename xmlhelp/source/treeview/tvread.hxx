@@ -300,10 +300,10 @@ namespace treeview {
 
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
         getConfiguration(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xMSgr ) const;
+            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext ) const;
 
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XHierarchicalNameAccess >
-        getHierAccess( const ::com::sun::star::uno::Reference<  ::com::sun::star::lang::XMultiServiceFactory >& sProvider,
+        getHierAccess( const ::com::sun::star::uno::Reference<  ::com::sun::star::lang::XMultiServiceFactory >& rxProvider,
                        const char* file ) const;
 
       ::rtl::OUString

@@ -130,7 +130,7 @@ using namespace ::com::sun::star::i18n;
 IMPL_CREATEINSTANCE_CTX( NumberFormatCodeMapper )
 IMPL_CREATEINSTANCE( NativeNumberSupplier )
 IMPL_CREATEINSTANCE( LocaleData )
-IMPL_CREATEINSTANCE_MSF( DefaultNumberingProvider )
+IMPL_CREATEINSTANCE_CTX( DefaultNumberingProvider )
 IMPL_CREATEINSTANCE_MSF( IndexEntrySupplier )
 IMPL_CREATEINSTANCE_MSF( IndexEntrySupplier_asian )
 IMPL_CREATEINSTANCE_MSF( IndexEntrySupplier_ja_phonetic_alphanumeric_first_by_syllable )

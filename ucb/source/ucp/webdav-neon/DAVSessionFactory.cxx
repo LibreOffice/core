@@ -41,15 +41,15 @@ DAVSessionFactory::~DAVSessionFactory()
 rtl::Reference< DAVSession > DAVSessionFactory::createDAVSession(
                 const ::rtl::OUString & inUri,
                 const uno::Sequence< beans::NamedValue >& rFlags,
-                const uno::Reference< lang::XMultiServiceFactory > & rxSMgr )
+                const uno::Reference< uno::XComponentContext > & rxContext )
     throw( DAVException )
 {
-    m_xMSF = rxSMgr;
+    m_xContext = rxContext;
 
     osl::MutexGuard aGuard( m_aMutex );
 
     if ( !m_xProxyDecider.get() )
-        m_xProxyDecider.reset( new ucbhelper::InternetProxyDecider( rxSMgr ) );
+        m_xProxyDecider.reset( new ucbhelper::InternetProxyDecider( rxContext ) );
 
     Map::iterator aIt( m_aMap.begin() );
     Map::iterator aEnd( m_aMap.end() );

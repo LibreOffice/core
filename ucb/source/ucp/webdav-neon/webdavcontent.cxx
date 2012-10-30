@@ -117,7 +117,7 @@ Content::Content(
     try
     {
         m_xResAccess.reset( new DAVResourceAccess(
-                rxSMgr,
+                comphelper::getComponentContext(rxSMgr),
                 rSessionFactory,
                 Identifier->getContentIdentifier() ) );
 
@@ -149,7 +149,7 @@ Content::Content(
     try
     {
         m_xResAccess.reset( new DAVResourceAccess(
-            rxSMgr, rSessionFactory, Identifier->getContentIdentifier() ) );
+            comphelper::getComponentContext(rxSMgr), rSessionFactory, Identifier->getContentIdentifier() ) );
     }
     catch ( DAVException const & )
     {
@@ -2514,7 +2514,7 @@ void Content::transfer(
         uno::Reference< ucb::XContentIdentifier > xTargetId
             = new ::ucbhelper::ContentIdentifier( xSMgr, aTargetURL );
 
-        DAVResourceAccess aSourceAccess( xSMgr,
+        DAVResourceAccess aSourceAccess( comphelper::getComponentContext(xSMgr),
                                          xResAccess->getSessionFactory(),
                                          sourceURI.GetURI() );
 

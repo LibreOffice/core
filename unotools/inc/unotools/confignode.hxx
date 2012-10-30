@@ -25,6 +25,7 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/util/XChangesBatch.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <unotools/eventlisteneradapter.hxx>
 
 namespace comphelper
@@ -301,7 +302,7 @@ namespace utl
             the configuration could be initialized, errors in the creation of the specific node (e.g. because the
             given node path does not exist) are still asserted.</p>
         */
-        static OConfigurationTreeRoot tryCreateWithServiceFactory( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB,
+        static OConfigurationTreeRoot tryCreateWithServiceFactory( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
             const ::rtl::OUString& _rPath, sal_Int32 _nDepth = -1, CREATION_MODE _eMode = CM_UPDATABLE, sal_Bool _bLazyWrite = sal_True );
 
         /** commit all changes made on the subtree the object is the root for<p/>

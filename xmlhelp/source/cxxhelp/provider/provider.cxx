@@ -40,6 +40,7 @@
 #include <com/sun/star/frame/XConfigManager.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/container/XContainer.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XNameReplace.hpp>
@@ -306,8 +307,8 @@ void ContentProvider::init()
 
     try
     {
-        uno::Reference< lang::XMultiServiceFactory > xConfigProvider(
-              m_xSMgr ->createInstance(::rtl::OUString("com.sun.star.configuration.ConfigurationProvider")), uno::UNO_QUERY_THROW);
+        uno::Reference< lang::XMultiServiceFactory > xConfigProvider =
+              configuration::theDefaultProvider::get( comphelper::getComponentContext(m_xSMgr) );
 
         uno::Sequence < uno::Any > lParams(1);
         beans::PropertyValue                       aParam ;
@@ -361,26 +362,20 @@ void ContentProvider::init()
 uno::Reference< lang::XMultiServiceFactory >
 ContentProvider::getConfiguration() const
 {
-    uno::Reference< lang::XMultiServiceFactory > sProvider;
+    uno::Reference< lang::XMultiServiceFactory > xProvider;
     if( m_xSMgr.is() )
     {
         try
         {
-            rtl::OUString sProviderService =
-                rtl::OUString(
-                    "com.sun.star.configuration.ConfigurationProvider" );
-            sProvider =
-                uno::Reference< lang::XMultiServiceFactory >(
-                    m_xSMgr->createInstance( sProviderService ),
-                    uno::UNO_QUERY );
+            xProvider = configuration::theDefaultProvider::get( comphelper::getComponentContext(m_xSMgr) );
         }
         catch( const uno::Exception& )
         {
-            OSL_ENSURE( sProvider.is(), "cant instantiate configuration" );
+            OSL_ENSURE( xProvider.is(), "cant instantiate configuration" );
         }
     }
 
-    return sProvider;
+    return xProvider;
 }
 
 uno::Reference< container::XHierarchicalNameAccess >

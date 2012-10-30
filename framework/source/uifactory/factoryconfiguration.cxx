@@ -34,6 +34,7 @@
 
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/container/XContainer.hpp>
@@ -69,19 +70,18 @@ rtl::OUString getHashKeyFromStrings( const rtl::OUString& aCommandURL, const rtl
 //*****************************************************************************************************************
 //  XInterface, XTypeProvider
 //*****************************************************************************************************************
-ConfigurationAccess_ControllerFactory::ConfigurationAccess_ControllerFactory( Reference< XMultiServiceFactory >& rServiceManager,const ::rtl::OUString& _sRoot,bool _bAskValue ) :
+ConfigurationAccess_ControllerFactory::ConfigurationAccess_ControllerFactory( const Reference< XComponentContext >& rxContext, const ::rtl::OUString& _sRoot,bool _bAskValue ) :
     ThreadHelpBase(),
     m_aPropCommand( RTL_CONSTASCII_USTRINGPARAM( "Command" )),
     m_aPropModule( RTL_CONSTASCII_USTRINGPARAM( "Module" )),
     m_aPropController( RTL_CONSTASCII_USTRINGPARAM( "Controller" )),
     m_aPropValue( RTL_CONSTASCII_USTRINGPARAM( "Value" )),
     m_sRoot(_sRoot),
-    m_xServiceManager( rServiceManager ),
     m_bConfigAccessInitialized( sal_False ),
     m_bAskValue(_bAskValue)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "ConfigurationAccess_ControllerFactory::ConfigurationAccess_ControllerFactory" );
-    m_xConfigProvider = Reference< XMultiServiceFactory >( rServiceManager->createInstance( SERVICENAME_CFGPROVIDER),UNO_QUERY );
+    m_xConfigProvider = configuration::theDefaultProvider::get( rxContext );
 }
 
 ConfigurationAccess_ControllerFactory::~ConfigurationAccess_ControllerFactory()

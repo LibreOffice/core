@@ -26,6 +26,7 @@
 #include "com/sun/star/beans/PropertyState.hpp"
 #include "com/sun/star/beans/PropertyValue.hpp"
 #include "com/sun/star/beans/XPropertySet.hpp"
+#include "com/sun/star/configuration/theDefaultProvider.hpp"
 #include "com/sun/star/lang/DisposedException.hpp"
 #include "com/sun/star/lang/XMultiServiceFactory.hpp"
 #include "com/sun/star/uno/Any.hxx"
@@ -84,9 +85,8 @@ namespace css = com::sun::star;
 using sfx2::appl::ImeStatusWindow;
 
 ImeStatusWindow::ImeStatusWindow(
-    css::uno::Reference< css::lang::XMultiServiceFactory > const &
-        rServiceFactory):
-    m_xServiceFactory(rServiceFactory),
+    css::uno::Reference< css::uno::XComponentContext > const & rxContext):
+    m_xContext(rxContext),
     m_bDisposed(false)
 {}
 
@@ -201,24 +201,14 @@ css::uno::Reference< css::beans::XPropertySet > ImeStatusWindow::getConfig()
         {
             if (m_bDisposed)
                 throw css::lang::DisposedException();
-            if (!m_xServiceFactory.is())
+            if (!m_xContext.is())
                 throw css::uno::RuntimeException(
                     rtl::OUString(
                         RTL_CONSTASCII_USTRINGPARAM(
                             "null comphelper::getProcessServiceFactory")),
                     0);
-            css::uno::Reference< css::lang::XMultiServiceFactory > xProvider(
-                m_xServiceFactory->createInstance(
-                    rtl::OUString(
-                        RTL_CONSTASCII_USTRINGPARAM(
-                          "com.sun.star.configuration.ConfigurationProvider"))),
-                css::uno::UNO_QUERY);
-            if (!xProvider.is())
-                throw css::uno::RuntimeException(
-                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                      "null com.sun.star.configuration."
-                                      "ConfigurationProvider")),
-                    0);
+            css::uno::Reference< css::lang::XMultiServiceFactory > xProvider =
+                css::configuration::theDefaultProvider::get( m_xContext );
             css::beans::PropertyValue aArg(
                 rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("nodepath")), -1,
                 css::uno::makeAny(

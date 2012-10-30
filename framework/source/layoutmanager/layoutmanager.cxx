@@ -164,7 +164,7 @@ LayoutManager::LayoutManager( const Reference< XMultiServiceFactory >& xServiceM
     m_aStatusBarElement.m_aType = rtl::OUString( "statusbar" );
     m_aStatusBarElement.m_aName = m_aStatusBarAlias;
 
-    m_pToolbarManager = new ToolbarLayoutManager( xServiceManager, m_xUIElementFactoryManager, this );
+    m_pToolbarManager = new ToolbarLayoutManager( comphelper::getComponentContext(xServiceManager), m_xUIElementFactoryManager, this );
     m_xToolbarManager = uno::Reference< ui::XUIConfigurationListener >( static_cast< OWeakObject* >( m_pToolbarManager ), uno::UNO_QUERY );
 
     Application::AddEventListener( LINK( this, LayoutManager, SettingsChanged ) );
@@ -517,7 +517,7 @@ sal_Bool LayoutManager::implts_readWindowStateData( const rtl::OUString& aName, 
         GlobalSettings* pGlobalSettings( 0 );
         if ( m_pGlobalSettings == 0 )
         {
-            m_pGlobalSettings = new GlobalSettings( m_xSMGR );
+            m_pGlobalSettings = new GlobalSettings( comphelper::getComponentContext(m_xSMGR) );
             bGetSettingsState = sal_True;
         }
         pGlobalSettings = m_pGlobalSettings;

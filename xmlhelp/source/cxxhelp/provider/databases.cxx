@@ -51,6 +51,7 @@
 #include <com/sun/star/beans/Optional.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
+#include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/frame/XConfigManager.hpp>
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
 #include <com/sun/star/util/XMacroExpander.hpp>
@@ -252,8 +253,8 @@ rtl::OString Databases::getImagesZipFileURL()
     sal_Int16 nSymbolsStyle = 0;
     try
     {
-        uno::Reference< lang::XMultiServiceFactory > xConfigProvider(
-            m_xSMgr ->createInstanceWithContext(::rtl::OUString("com.sun.star.configuration.ConfigurationProvider"), m_xContext), uno::UNO_QUERY_THROW);
+        uno::Reference< lang::XMultiServiceFactory > xConfigProvider =
+            configuration::theDefaultProvider::get(m_xContext);
 
         // set root path
         uno::Sequence < uno::Any > lParams(1);

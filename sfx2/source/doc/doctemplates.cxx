@@ -39,6 +39,7 @@
 #include <com/sun/star/beans/XPropertyContainer.hpp>
 #include <com/sun/star/beans/StringPair.hpp>
 #include <com/sun/star/util/XMacroExpander.hpp>
+#include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/container/XContainerQuery.hpp>
 #include <com/sun/star/document/XTypeDetection.hpp>
 #include <com/sun/star/document/XStandaloneDocumentInfo.hpp>
@@ -1838,10 +1839,8 @@ sal_Bool SfxDocTplService_Impl::storeTemplate( const OUString& rGroupName,
         // get the actual filter name
         ::rtl::OUString aFilterName;
 
-        uno::Reference< lang::XMultiServiceFactory > xConfigProvider(
-                xFactory->createInstance(
-                    ::rtl::OUString("com.sun.star.configuration.ConfigurationProvider") ),
-                uno::UNO_QUERY_THROW );
+        uno::Reference< lang::XMultiServiceFactory > xConfigProvider =
+                configuration::theDefaultProvider::get( comphelper::getComponentContext(xFactory) );
 
         uno::Sequence< uno::Any > aArgs( 1 );
         beans::PropertyValue aPathProp;
