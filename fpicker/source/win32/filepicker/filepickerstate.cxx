@@ -498,7 +498,6 @@ OUString SAL_CALL CExecuteFilePickerState::getLabel( sal_Int16 aControlId )
     OUString ctrlLabel;
     if ( nRet )
     {
-        ctrlLabel = OUString( aLabel, rtl_ustr_getLength( aLabel ) );
         ctrlLabel = WindowsToSOfficeLabel( aLabel );
     }
 
