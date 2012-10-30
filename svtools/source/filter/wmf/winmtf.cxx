@@ -1459,9 +1459,10 @@ void WinMtfOutput::DrawText( Point& rPosition, String& rText, sal_Int32* pDXArry
 
         for( i = 0, nSum = 0; i < nLen; i++ )
         {
-            sal_Int32 nTemp = ImplMap( Size( pDXArry[ i ], 0 ) ).Width();
-            nSum += nTemp;
-            pDXArry[ i ] = nSum;
+            if ( i ) {
+                pDXArry[ i - 1 ] = ImplMap( Size( nSum, 0 ) ).Width();
+            }
+            nSum += pDXArry[ i ];
         }
     }
     if ( mnLatestTextLayoutMode != mnTextLayoutMode )
