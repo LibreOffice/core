@@ -70,12 +70,15 @@ PATCH_FILES=\
    xmlsec1-customkeymanage.patch \
    xmlsec1-nssmangleciphers.patch \
    xmlsec1-noverify.patch \
-   xmlsec1-mingw32.patch \
    xmlsec1-mingw-keymgr-mscrypto.patch \
    xmlsec1-vc10.patch \
    xmlsec1-1.2.14_fix_extern_c.patch \
    xmlsec1-android.patch \
    xmlsec1-1.2.14-ansi.patch
+
+.IF "$(GUI)$(COM)"=="WNTGCC"
+   PATCH_FILES+=xmlsec1-mingw32.patch
+.ENDIF
 
 .IF "$(OS)$(CPU)"=="MACOSXP"
 PATCH_FILES+=xmlsec1-1.2.14_old_automake.patch
