@@ -223,28 +223,18 @@ template<class T>
   }
 };
 
-
 void PropertyMap::InsertProps(const PropertyMapPtr pMap)
 {
     if( pMap.get() )
     {
         ::std::for_each( pMap->begin(), pMap->end(),
                 removeExistingElements<PropertyMap::value_type>(*this) );
-        InsertPropsNoOverwrite(pMap);
-    }
-}
-
-void PropertyMap::InsertPropsNoOverwrite(const PropertyMapPtr pMap)
-{
-    if( pMap.get() )
-    {
         _PropertyMap::insert(pMap->begin(), pMap->end());
         insertTableProperties(pMap.get());
 
         Invalidate();
     }
 }
-
 
 const uno::Reference< text::XFootnote>&  PropertyMap::GetFootnote() const
 {
