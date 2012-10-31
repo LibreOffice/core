@@ -1232,7 +1232,10 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
 
                 short nDialogResult = pDlg->Execute();
                 if ( !nDialogResult )
+                {
+                    delete pDlg;
                     break;
+                }
 
                 Sequence< Any > args;
                 Sequence< sal_Int16 > outIndex;
@@ -1250,6 +1253,7 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
                     xScriptContext = xController;
 
                 SfxObjectShell::CallXScript( xScriptContext, pDlg->GetScriptURL(), args, ret, outIndex, outArgs );
+                delete pDlg;
             }
             while ( false );
             rReq.Done();
@@ -1275,6 +1279,7 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
             if( pDlg )
             {
                 pDlg->Execute();
+                delete pDlg;
             }
             else
             {
