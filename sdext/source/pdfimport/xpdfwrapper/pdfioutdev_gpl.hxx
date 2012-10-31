@@ -189,10 +189,12 @@ namespace pdfi
         // virtual void cvtDevToUser(double dx, double dy, double *ux, double *uy);
         // virtual void cvtUserToDev(double ux, double uy, int *dx, int *dy);
 
-        #if POPPLER_CHECK_VERSION(0, 17, 0)
-        virtual void processLink(AnnotLink *link, Catalog *catalog);
-        #else
         //----- link borders
+	#if POPPLER_CHECK_VERSION(0, 19, 0)
+        virtual void processLink(AnnotLink *link);
+        #elif POPPLER_CHECK_VERSION(0, 17, 0)
+	virtual void processLink(AnnotLink *link, Catalog *catalog);
+        #else
         virtual void processLink(Link *link, Catalog *catalog);
         #endif
 
