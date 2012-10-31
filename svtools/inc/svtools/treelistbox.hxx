@@ -371,7 +371,7 @@ public:
 
     SvTreeListBox( Window* pParent, WinBits nWinStyle=0 );
     SvTreeListBox( Window* pParent, const ResId& rResId );
-    ~SvTreeListBox();
+    virtual ~SvTreeListBox();
 
     SvTreeList* GetModel() const { return (SvTreeList*)pModel; }
     using SvListView::SetModel;
