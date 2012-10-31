@@ -342,9 +342,6 @@ public:
                  LanguageType eLang = LANGUAGE_SYSTEM )
         { return _GetLanguageList( eLang ).PutText(rShort, rShell ); }
 
-    //  - Delete a entry
-    sal_Bool DeleteText( const String& rShort, LanguageType eLang = LANGUAGE_SYSTEM);
-
     sal_Bool MakeCombinedChanges( std::vector<SvxAutocorrWord>& aNewEntries,
                                   std::vector<SvxAutocorrWord>& aDeleteEntries,
                                   LanguageType eLang = LANGUAGE_SYSTEM );
