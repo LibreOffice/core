@@ -404,13 +404,20 @@ void Test::testFdo47669()
     CPPUNIT_ASSERT_EQUAL(OUString("http://www.google.com/#a"), getProperty<OUString>(getRun(getParagraph(1), 2), "HyperLinkURL"));
 }
 
-union SingleLineBorders {
+struct SingleLineBorders {
+    sal_Int16 top, bottom, left, right;
     SingleLineBorders(int t=0, int b=0, int l=0, int r=0)
         : top(t), bottom(b), left(l), right(r) {}
-    struct {
-        sal_Int16 top, bottom, left, right;
-    };
-    sal_Int16 sizes[4];
+    sal_Int16 getBorder(int i) const
+    {
+        switch (i) {
+            case 0: return top;
+            case 1: return bottom;
+            case 2: return left;
+            case 3: return right;
+            default: assert(false); return 0;
+        }
+    }
 };
 void Test::testTableBorders() {
     uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
@@ -458,7 +465,8 @@ void Test::testTableBorders() {
             {
                 std::stringstream message;
                 message << cells[i] << "'s " << borderNames[j] << " is incorrect";
-                CPPUNIT_ASSERT_EQUAL_MESSAGE(message.str(), borders.sizes[j], aBorderLine.OuterLineWidth);
+                CPPUNIT_ASSERT_EQUAL_MESSAGE(message.str(),
+                        borders.getBorder(j), aBorderLine.OuterLineWidth);
             }
         }
     }
