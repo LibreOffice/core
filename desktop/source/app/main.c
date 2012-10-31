@@ -26,7 +26,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int g_Exiting = 0;
+static int g_Exiting = 0;
 
 /* HACK: detect calls to xmlCleanupParser, which causes hard to debug crashes */
 __attribute__ ((visibility("default"))) void xmlCleanupParser(void)
