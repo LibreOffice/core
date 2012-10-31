@@ -37,6 +37,7 @@ class DomainMapperTableManager : public DomainMapperTableManager_Base_t
     sal_uInt32      m_nRow;
     ::std::vector< sal_uInt32 > m_nCell;
     sal_uInt32      m_nGridSpan;
+    sal_uInt32      m_nGridAfter; ///< number of grid columns in the parent table's table grid which shall be left after the last cell in the table row
     sal_uInt32      m_nCellBorderIndex; //borders are provided for all cells and need counting
     sal_Int32       m_nHeaderRepeat; //counter of repeated headers - if == -1 then the repeating stops
     sal_Int32       m_nTableWidth; //might be set directly or has to be calculated from the column positions

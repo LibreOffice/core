@@ -44,6 +44,7 @@ DomainMapperTableManager::DomainMapperTableManager(bool bOOXML, bool bImplicitMe
     m_nRow(0),
     m_nCell(),
     m_nGridSpan(1),
+    m_nGridAfter(0),
     m_nCellBorderIndex(0),
     m_nHeaderRepeat(0),
     m_nTableWidth(0),
@@ -309,6 +310,9 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
                     }
                 }
                 break;
+            case NS_ooxml::LN_CT_TrPrBase_gridAfter:
+                m_nGridAfter = nIntValue;
+                break;
             default:
                 bRet = false;
 
@@ -452,7 +456,7 @@ void DomainMapperTableManager::endOfRowAction()
     double nFullWidth = m_nTableWidth;
     //the positions have to be distibuted in a range of 10000
     const double nFullWidthRelative = 10000.;
-    if( pTableGrid->size() == nGrids && m_nCell.back( ) > 0 )
+    if( pTableGrid->size() == ( nGrids + m_nGridAfter ) && m_nCell.back( ) > 0 )
     {
         uno::Sequence< text::TableColumnSeparator > aSeparators( m_nCell.back( ) - 1 );
         text::TableColumnSeparator* pSeparators = aSeparators.getArray();
@@ -520,6 +524,8 @@ void DomainMapperTableManager::endOfRowAction()
     m_nCell.back( ) = 0;
     m_nCellBorderIndex = 0;
     pCurrentSpans->clear();
+
+    m_nGridAfter = 0;
 
 #ifdef DEBUG_DOMAINMAPPER
     dmapper_logger->endElement();
