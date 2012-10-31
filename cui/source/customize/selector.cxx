@@ -20,9 +20,9 @@
 #include <vcl/help.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/metric.hxx>
+#include <vcl/vclmedit.hxx>
 #include "selector.hxx"
 #include <dialmgr.hxx>
-#include "selector.hrc"
 #include <svx/fmresids.hrc> // for RID_SVXIMG_...
 #include <svx/dialmgr.hxx>  // for RID_SVXIMG_...
 #include <cuires.hrc>
@@ -67,29 +67,47 @@ using namespace ::com::sun::star::container;
 #include <tools/diagnose_ex.h>
 
 /*
- * The implementations of SvxConfigFunctionListBox_Impl and
- * SvxConfigGroupListBox_Impl are copied from sfx2/source/dialog/cfg.cxx
+ * The implementations of SvxConfigFunctionListBox and
+ * SvxConfigGroupListBox are copied from sfx2/source/dialog/cfg.cxx
  */
-SvxConfigFunctionListBox_Impl::SvxConfigFunctionListBox_Impl( Window* pParent, const ResId& rResId)
+SvxConfigFunctionListBox::SvxConfigFunctionListBox( Window* pParent, const ResId& rResId)
     : SvTreeListBox( pParent, rResId )
     , pCurEntry( 0 )
     , m_pDraggingEntry( 0 )
 {
     SetStyle( GetStyle() | WB_CLIPCHILDREN | WB_HSCROLL | WB_SORT );
+    Init();
+}
+
+SvxConfigFunctionListBox::SvxConfigFunctionListBox(Window* pParent)
+    : SvTreeListBox(pParent, WB_CLIPCHILDREN | WB_HSCROLL | WB_SORT)
+    , pCurEntry(0)
+    , m_pDraggingEntry(0)
+{
+    Init();
+}
+
+void SvxConfigFunctionListBox::Init()
+{
     GetModel()->SetSortMode( SortAscending );
 
     // Timer for the BallonHelp
     aTimer.SetTimeout( 200 );
     aTimer.SetTimeoutHdl(
-        LINK( this, SvxConfigFunctionListBox_Impl, TimerHdl ) );
+        LINK( this, SvxConfigFunctionListBox, TimerHdl ) );
 }
 
-SvxConfigFunctionListBox_Impl::~SvxConfigFunctionListBox_Impl()
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvxConfigFunctionListBox(Window *pParent, VclBuilder::stringmap &)
+{
+    return new SvxConfigFunctionListBox(pParent);
+}
+
+SvxConfigFunctionListBox::~SvxConfigFunctionListBox()
 {
     ClearAll();
 }
 
-SvTreeListEntry* SvxConfigFunctionListBox_Impl::GetLastSelectedEntry()
+SvTreeListEntry* SvxConfigFunctionListBox::GetLastSelectedEntry()
 {
     if ( m_pDraggingEntry != NULL )
     {
@@ -101,7 +119,7 @@ SvTreeListEntry* SvxConfigFunctionListBox_Impl::GetLastSelectedEntry()
     }
 }
 
-void SvxConfigFunctionListBox_Impl::MouseMove( const MouseEvent& rMEvt )
+void SvxConfigFunctionListBox::MouseMove( const MouseEvent& rMEvt )
 {
     Point aMousePos = rMEvt.GetPosPixel();
     pCurEntry = GetCurEntry();
@@ -116,7 +134,7 @@ void SvxConfigFunctionListBox_Impl::MouseMove( const MouseEvent& rMEvt )
 }
 
 
-IMPL_LINK_NOARG(SvxConfigFunctionListBox_Impl, TimerHdl)
+IMPL_LINK_NOARG(SvxConfigFunctionListBox, TimerHdl)
 {
     aTimer.Stop();
     Point aMousePos = GetPointerPosPixel();
@@ -126,13 +144,13 @@ IMPL_LINK_NOARG(SvxConfigFunctionListBox_Impl, TimerHdl)
     return 0L;
 }
 
-void SvxConfigFunctionListBox_Impl::ClearAll()
+void SvxConfigFunctionListBox::ClearAll()
 {
     aArr.clear();
     Clear();
 }
 
-String SvxConfigFunctionListBox_Impl::GetHelpText( SvTreeListEntry *pEntry )
+String SvxConfigFunctionListBox::GetHelpText( SvTreeListEntry *pEntry )
 {
     SvxGroupInfo_Impl *pInfo =
         pEntry ? (SvxGroupInfo_Impl*) pEntry->GetUserData(): 0;
@@ -156,41 +174,41 @@ String SvxConfigFunctionListBox_Impl::GetHelpText( SvTreeListEntry *pEntry )
     return String();
 }
 
-void SvxConfigFunctionListBox_Impl::FunctionSelected()
+void SvxConfigFunctionListBox::FunctionSelected()
 {
     Help::ShowBalloon( this, Point(), String() );
 }
 
 // drag and drop support
-DragDropMode SvxConfigFunctionListBox_Impl::NotifyStartDrag(
+DragDropMode SvxConfigFunctionListBox::NotifyStartDrag(
     TransferDataContainer& /*aTransferDataContainer*/, SvTreeListEntry* pEntry )
 {
     m_pDraggingEntry = pEntry;
     return GetDragDropMode();
 }
 
-void SvxConfigFunctionListBox_Impl::DragFinished( sal_Int8 /*nDropAction*/ )
+void SvxConfigFunctionListBox::DragFinished( sal_Int8 /*nDropAction*/ )
 {
     m_pDraggingEntry = NULL;
 }
 
 sal_Int8
-SvxConfigFunctionListBox_Impl::AcceptDrop( const AcceptDropEvent& /*rEvt*/ )
+SvxConfigFunctionListBox::AcceptDrop( const AcceptDropEvent& /*rEvt*/ )
 {
     return DND_ACTION_NONE;
 }
 
-SvxConfigGroupListBox_Impl::SvxConfigGroupListBox_Impl(
+SvxConfigGroupListBox::SvxConfigGroupListBox(
     Window* pParent, const ResId& rResId,
     bool _bShowSlots, const Reference< frame::XFrame >& xFrame )
         : SvTreeListBox( pParent, rResId )
-        , m_bShowSlots( _bShowSlots ),
-    m_hdImage(ResId(IMG_HARDDISK,*rResId.GetResMgr())),
-    m_libImage(ResId(IMG_LIB,*rResId.GetResMgr())),
-    m_macImage(ResId(IMG_MACRO,*rResId.GetResMgr())),
-    m_docImage(ResId(IMG_DOC,*rResId.GetResMgr())),
-    m_sMyMacros(String(ResId(STR_MYMACROS,*rResId.GetResMgr()))),
-    m_sProdMacros(String(ResId(STR_PRODMACROS,*rResId.GetResMgr())))
+        , m_bShowSlots( _bShowSlots )
+    , m_hdImage(CUI_RES(RID_CUIIMG_HARDDISK))
+    , m_libImage(CUI_RES(RID_CUIIMG_LIB))
+    , m_macImage(CUI_RES(RID_CUIIMG_MACRO))
+    , m_docImage(CUI_RES(RID_CUIIMG_DOC))
+    , m_sMyMacros(CUI_RESSTR(RID_SVXSTR_MYMACROS))
+    , m_sProdMacros(CUI_RESSTR(RID_SVXSTR_PRODMACROS))
 {
     FreeResource();
 
@@ -209,13 +227,36 @@ SvxConfigGroupListBox_Impl::SvxConfigGroupListBox_Impl(
     );
 }
 
+SvxConfigGroupListBox::SvxConfigGroupListBox(Window* pParent)
+    : SvTreeListBox(pParent,
+            WB_CLIPCHILDREN | WB_HSCROLL | WB_HASBUTTONS | WB_HASLINES | WB_HASLINESATROOT | WB_HASBUTTONSATROOT)
+    , m_bShowSlots(false)
+    , m_hdImage(CUI_RES(RID_CUIIMG_HARDDISK))
+    , m_libImage(CUI_RES(RID_CUIIMG_LIB))
+    , m_macImage(CUI_RES(RID_CUIIMG_MACRO))
+    , m_docImage(CUI_RES(RID_CUIIMG_DOC))
+    , m_sMyMacros(CUI_RESSTR(RID_SVXSTR_MYMACROS))
+    , m_sProdMacros(CUI_RESSTR(RID_SVXSTR_PRODMACROS))
+{
+    ImageList aNavigatorImages( SVX_RES( RID_SVXIMGLIST_FMEXPL ) );
 
-SvxConfigGroupListBox_Impl::~SvxConfigGroupListBox_Impl()
+    SetNodeBitmaps(
+        aNavigatorImages.GetImage( RID_SVXIMG_COLLAPSEDNODE ),
+        aNavigatorImages.GetImage( RID_SVXIMG_EXPANDEDNODE )
+    );
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvxConfigGroupListBox(Window *pParent, VclBuilder::stringmap &)
+{
+    return new SvxConfigGroupListBox(pParent);
+}
+
+SvxConfigGroupListBox::~SvxConfigGroupListBox()
 {
     ClearAll();
 }
 
-void SvxConfigGroupListBox_Impl::ClearAll()
+void SvxConfigGroupListBox::ClearAll()
 {
     aArr.clear();
     Clear();
@@ -275,9 +316,9 @@ namespace
     }
 }
 
-void SvxConfigGroupListBox_Impl::fillScriptList( const Reference< browse::XBrowseNode >& _rxRootNode, SvTreeListEntry* _pParentEntry, bool _bCheapChildrenOnDemand )
+void SvxConfigGroupListBox::fillScriptList( const Reference< browse::XBrowseNode >& _rxRootNode, SvTreeListEntry* _pParentEntry, bool _bCheapChildrenOnDemand )
 {
-    OSL_PRECOND( _rxRootNode.is(), "SvxConfigGroupListBox_Impl::fillScriptList: invalid root node!" );
+    OSL_PRECOND( _rxRootNode.is(), "SvxConfigGroupListBox::fillScriptList: invalid root node!" );
     if ( !_rxRootNode.is() )
         return;
 
@@ -384,8 +425,11 @@ void SvxConfigGroupListBox_Impl::fillScriptList( const Reference< browse::XBrows
     }
 }
 
-void SvxConfigGroupListBox_Impl::Init()
+void SvxConfigGroupListBox::Init(bool bShowSlots, const Reference< frame::XFrame >& xFrame)
 {
+    m_bShowSlots = bShowSlots;
+    m_xFrame.set(xFrame);
+
     SetUpdateMode(sal_False);
     ClearAll();
 
@@ -507,8 +551,7 @@ void SvxConfigGroupListBox_Impl::Init()
             SvxGroupInfo_Impl *pInfo =
                 new SvxGroupInfo_Impl( SVX_CFGGROUP_SCRIPTCONTAINER, 0, rootNode );
 
-            String aTitle =
-                String( CUI_RES( STR_SELECTOR_MACROS ) );
+            String aTitle = CUI_RESSTR(RID_SVXSTR_PRODMACROS);
 
             SvTreeListEntry *pNewEntry = InsertEntry( aTitle, NULL );
             pNewEntry->SetUserData( pInfo );
@@ -524,7 +567,7 @@ void SvxConfigGroupListBox_Impl::Init()
     SetUpdateMode( sal_True );
 }
 
-Image SvxConfigGroupListBox_Impl::GetImage(
+Image SvxConfigGroupListBox::GetImage(
     Reference< browse::XBrowseNode > node,
     Reference< XComponentContext > xCtx,
     bool bIsRootNode
@@ -586,7 +629,7 @@ Image SvxConfigGroupListBox_Impl::GetImage(
 }
 
 Reference< XInterface  >
-SvxConfigGroupListBox_Impl::getDocumentModel(
+SvxConfigGroupListBox::getDocumentModel(
     Reference< XComponentContext >& xCtx, OUString& docName )
 {
     Reference< XInterface > xModel;
@@ -618,7 +661,7 @@ SvxConfigGroupListBox_Impl::getDocumentModel(
     return xModel;
 }
 
-void SvxConfigGroupListBox_Impl::GroupSelected()
+void SvxConfigGroupListBox::GroupSelected()
 {
     SvTreeListEntry *pEntry = FirstSelected();
     SvxGroupInfo_Impl *pInfo = (SvxGroupInfo_Impl*) pEntry->GetUserData();
@@ -796,7 +839,7 @@ void SvxConfigGroupListBox_Impl::GroupSelected()
     pFunctionListBox->SetUpdateMode(sal_True);
 }
 
-sal_Bool SvxConfigGroupListBox_Impl::Expand( SvTreeListEntry* pParent )
+sal_Bool SvxConfigGroupListBox::Expand( SvTreeListEntry* pParent )
 {
     sal_Bool bRet = SvTreeListBox::Expand( pParent );
     if ( bRet )
@@ -827,7 +870,7 @@ sal_Bool SvxConfigGroupListBox_Impl::Expand( SvTreeListEntry* pParent )
     return bRet;
 }
 
-void SvxConfigGroupListBox_Impl::RequestingChildren( SvTreeListEntry *pEntry )
+void SvxConfigGroupListBox::RequestingChildren( SvTreeListEntry *pEntry )
 {
     SvxGroupInfo_Impl *pInfo = (SvxGroupInfo_Impl*) pEntry->GetUserData();
     pInfo->bWasOpened = sal_True;
@@ -857,115 +900,52 @@ void SvxConfigGroupListBox_Impl::RequestingChildren( SvTreeListEntry *pEntry )
  */
 
 SvxScriptSelectorDialog::SvxScriptSelectorDialog(
-  Window* pParent, sal_Bool bShowSlots, const Reference< frame::XFrame >& xFrame )
-    :
-    ModelessDialog( pParent, CUI_RES( RID_DLG_SCRIPTSELECTOR ) ),
-    aDialogDescription( this, CUI_RES( TXT_SELECTOR_DIALOG_DESCRIPTION ) ),
-    aGroupText( this, CUI_RES( TXT_SELECTOR_CATEGORIES ) ),
-    aCategories( this, CUI_RES( BOX_SELECTOR_CATEGORIES ), bShowSlots, xFrame ),
-    aFunctionText( this, CUI_RES( TXT_SELECTOR_COMMANDS ) ),
-    aCommands( this, CUI_RES( BOX_SELECTOR_COMMANDS ) ),
-    aOKButton( this, CUI_RES( BTN_SELECTOR_OK ) ),
-    aCancelButton( this, CUI_RES( BTN_SELECTOR_CANCEL ) ),
-    aHelpButton( this, CUI_RES( BTN_SELECTOR_HELP ) ),
-    aDescription( this, CUI_RES( GRP_SELECTOR_DESCRIPTION ) ),
-    aDescriptionText( this, CUI_RES( TXT_SELECTOR_DESCRIPTION ) ),
-    m_bShowSlots( bShowSlots )
+    Window* pParent, sal_Bool bShowSlots, const Reference< frame::XFrame >& xFrame)
+    : ModelessDialog(pParent, "MacroSelectorDialog", "cui/ui/macroselectordialog.ui")
+    , m_bShowSlots(bShowSlots)
 {
-
-    ResMgr& rMgr = CUI_MGR();
-
-    // If we are showing Slot API commands update labels in the UI, and
-    // enable drag'n'drop
-    if ( m_bShowSlots )
+    get<FixedText>("libraryft")->Show(!m_bShowSlots);
+    get<FixedText>("categoryft")->Show(m_bShowSlots);
+    get<FixedText>("macronameft")->Show(!m_bShowSlots);
+    get<FixedText>("commandsft")->Show(m_bShowSlots);
+    get(m_pDescriptionText, "description");
+    get(m_pCommands, "commands");
+    if (m_bShowSlots)
     {
-        aGroupText.SetText( String( ResId( STR_SELECTOR_CATEGORIES, rMgr ) ) );
-        aOKButton.SetText( String( ResId( STR_SELECTOR_ADD, rMgr ) ) );
-        aCancelButton.SetText( String( ResId( STR_SELECTOR_CLOSE, rMgr ) ) );
-        aFunctionText.SetText( String( ResId( STR_SELECTOR_COMMANDS, rMgr ) ) );
-        SetDialogDescription(
-            String( ResId( STR_SELECTOR_ADD_COMMANDS_DESCRIPTION, rMgr ) ) );
-        SetText( String( ResId( STR_SELECTOR_ADD_COMMANDS, rMgr ) ) );
+        // If we are showing Slot API commands update labels in the UI, and
+        // enable drag'n'drop
+        SetText(CUI_RESSTR(RID_SVXSTR_SELECTOR_ADD_COMMANDS));
+        m_pCommands->SetDragDropMode( SV_DRAGDROP_APP_COPY );
 
-        aCommands.SetDragDropMode( SV_DRAGDROP_APP_COPY );
+        get(m_pCancelButton, "close");
+        get(m_pDialogDescription, "helptoolbar");
+        get(m_pOKButton, "add");
     }
+    else
+    {
+        get(m_pCancelButton, "cancel");
+        get(m_pDialogDescription, "helpmacro");
+        get(m_pOKButton, "ok");
+    }
+    m_pCancelButton->Show();
+    m_pDialogDescription->Show();
+    m_pOKButton->Show();
 
-    ResizeControls();
+    get(m_pCategories, "categories");
+    m_pCategories->SetFunctionListBox(m_pCommands);
+    m_pCategories->Init(bShowSlots, xFrame);
 
-    aCategories.SetFunctionListBox( &aCommands );
-    aCategories.Init();
-
-    aCategories.SetSelectHdl(
+    m_pCategories->SetSelectHdl(
             LINK( this, SvxScriptSelectorDialog, SelectHdl ) );
-    aCommands.SetSelectHdl( LINK( this, SvxScriptSelectorDialog, SelectHdl ) );
-    aCommands.SetDoubleClickHdl( LINK( this, SvxScriptSelectorDialog, FunctionDoubleClickHdl ) );
+    m_pCommands->SetSelectHdl( LINK( this, SvxScriptSelectorDialog, SelectHdl ) );
+    m_pCommands->SetDoubleClickHdl( LINK( this, SvxScriptSelectorDialog, FunctionDoubleClickHdl ) );
 
-    aOKButton.SetClickHdl( LINK( this, SvxScriptSelectorDialog, ClickHdl ) );
-    aCancelButton.SetClickHdl( LINK( this, SvxScriptSelectorDialog, ClickHdl ) );
+    m_pOKButton->SetClickHdl( LINK( this, SvxScriptSelectorDialog, ClickHdl ) );
+    m_pCancelButton->SetClickHdl( LINK( this, SvxScriptSelectorDialog, ClickHdl ) );
+
+    m_sDefaultDesc = m_pDescriptionText->GetText();
 
     UpdateUI();
-    FreeResource();
-}
-
-void SvxScriptSelectorDialog::ResizeControls()
-{
-    Point p, newp;
-    Size s, news;
-    long gap;
-
-    sal_uInt16 style = TEXT_DRAW_MULTILINE | TEXT_DRAW_TOP |
-                   TEXT_DRAW_LEFT | TEXT_DRAW_WORDBREAK;
-
-    // get dimensions of dialog instructions control
-    p = aDialogDescription.GetPosPixel();
-    s = aDialogDescription.GetSizePixel();
-
-    // get dimensions occupied by text in the control
-    Rectangle rect =
-        GetTextRect( Rectangle( p, s ), aDialogDescription.GetText(), style );
-    news = rect.GetSize();
-
-    // the gap is the difference between the control height and its text height
-    gap = s.Height() - news.Height();
-
-    // resize the dialog instructions control
-    news = Size( s.Width(), s.Height() - gap );
-    aDialogDescription.SetSizePixel( news );
-
-    // resize other controls to fill the gap
-    p = aGroupText.GetPosPixel();
-    newp = Point( p.X(), p.Y() - gap );
-    aGroupText.SetPosPixel( newp );
-
-    p = aCategories.GetPosPixel();
-    newp = Point( p.X(), p.Y() - gap );
-    aCategories.SetPosPixel( newp );
-    s = aCategories.GetSizePixel();
-    news = Size( s.Width(), s.Height() + gap );
-    aCategories.SetSizePixel( news );
-
-    p = aFunctionText.GetPosPixel();
-    newp = Point( p.X(), p.Y() - gap );
-    aFunctionText.SetPosPixel( newp );
-
-    p = aCommands.GetPosPixel();
-    newp = Point( p.X(), p.Y() - gap );
-    aCommands.SetPosPixel( newp );
-    s = aCommands.GetSizePixel();
-    news = Size( s.Width(), s.Height() + gap );
-    aCommands.SetSizePixel( news );
-
-    p = aOKButton.GetPosPixel();
-    newp = Point( p.X(), p.Y() - gap );
-    aOKButton.SetPosPixel( newp );
-
-    p = aCancelButton.GetPosPixel();
-    newp = Point( p.X(), p.Y() - gap );
-    aCancelButton.SetPosPixel( newp );
-
-    p = aHelpButton.GetPosPixel();
-    newp = Point( p.X(), p.Y() - gap );
-    aHelpButton.SetPosPixel( newp );
 }
 
 SvxScriptSelectorDialog::~SvxScriptSelectorDialog()
@@ -974,13 +954,13 @@ SvxScriptSelectorDialog::~SvxScriptSelectorDialog()
 
 IMPL_LINK( SvxScriptSelectorDialog, SelectHdl, Control*, pCtrl )
 {
-    if ( pCtrl == &aCategories )
+    if (pCtrl == m_pCategories)
     {
-        aCategories.GroupSelected();
+        m_pCategories->GroupSelected();
     }
-    else if ( pCtrl == &aCommands )
+    else if (pCtrl == m_pCommands)
     {
-        aCommands.FunctionSelected();
+        m_pCommands->FunctionSelected();
     }
     UpdateUI();
     return 0;
@@ -989,8 +969,8 @@ IMPL_LINK( SvxScriptSelectorDialog, SelectHdl, Control*, pCtrl )
 IMPL_LINK( SvxScriptSelectorDialog, FunctionDoubleClickHdl, Control*, pCtrl )
 {
     (void)pCtrl;
-    if ( aOKButton.IsEnabled() )
-        return ClickHdl( &aOKButton );
+    if (m_pOKButton->IsEnabled())
+        return ClickHdl(m_pOKButton);
     return 0;
 }
 
@@ -1002,22 +982,22 @@ SvxScriptSelectorDialog::UpdateUI()
     OUString url = GetScriptURL();
     if ( url != NULL && !url.isEmpty() )
     {
-        String rMessage =
-            aCommands.GetHelpText( aCommands.FirstSelected() );
-        aDescriptionText.SetText( rMessage );
+        OUString sMessage =
+            m_pCommands->GetHelpText(m_pCommands->FirstSelected());
+        m_pDescriptionText->SetText(sMessage.isEmpty() ? m_sDefaultDesc : sMessage);
 
-        aOKButton.Enable( sal_True );
+        m_pOKButton->Enable( sal_True );
     }
     else
     {
-        aDescriptionText.SetText( String() );
-        aOKButton.Enable( sal_False );
+        m_pDescriptionText->SetText(m_sDefaultDesc);
+        m_pOKButton->Enable( sal_False );
     }
 }
 
 IMPL_LINK( SvxScriptSelectorDialog, ClickHdl, Button *, pButton )
 {
-    if ( pButton == &aCancelButton )
+    if (pButton == m_pCancelButton)
     {
         // If we are displaying Slot API commands then the dialog is being
         // run from Tools/Configure and we should not close it, just hide it
@@ -1030,7 +1010,7 @@ IMPL_LINK( SvxScriptSelectorDialog, ClickHdl, Button *, pButton )
             Hide();
         }
     }
-    else if ( pButton == &aOKButton )
+    else if (pButton == m_pOKButton)
     {
         GetAddHdl().Call( this );
 
@@ -1043,12 +1023,12 @@ IMPL_LINK( SvxScriptSelectorDialog, ClickHdl, Button *, pButton )
         else
         {
             // Select the next entry in the list if possible
-            SvTreeListEntry* current = aCommands.FirstSelected();
-            SvTreeListEntry* next = aCommands.NextSibling( current );
+            SvTreeListEntry* current = m_pCommands->FirstSelected();
+            SvTreeListEntry* next = m_pCommands->NextSibling( current );
 
             if ( next != NULL )
             {
-                aCommands.Select( next );
+                m_pCommands->Select( next );
             }
         }
     }
@@ -1059,13 +1039,13 @@ IMPL_LINK( SvxScriptSelectorDialog, ClickHdl, Button *, pButton )
 void
 SvxScriptSelectorDialog::SetRunLabel()
 {
-    aOKButton.SetText( String( CUI_RES( STR_SELECTOR_RUN ) ) );
+    m_pOKButton->SetText(CUI_RESSTR(RID_SVXSTR_SELECTOR_RUN));
 }
 
 void
 SvxScriptSelectorDialog::SetDialogDescription( const String& rDescription )
 {
-    aDialogDescription.SetText( rDescription );
+    m_pDialogDescription->SetText( rDescription );
 }
 
 String
@@ -1073,7 +1053,7 @@ SvxScriptSelectorDialog::GetScriptURL() const
 {
     OUString result;
 
-    SvTreeListEntry *pEntry = const_cast< SvxScriptSelectorDialog* >( this )->aCommands.GetLastSelectedEntry();
+    SvTreeListEntry *pEntry = const_cast< SvxScriptSelectorDialog* >( this )->m_pCommands->GetLastSelectedEntry();
     if ( pEntry )
     {
         SvxGroupInfo_Impl *pData = (SvxGroupInfo_Impl*) pEntry->GetUserData();
@@ -1091,13 +1071,13 @@ SvxScriptSelectorDialog::GetScriptURL() const
 String
 SvxScriptSelectorDialog::GetSelectedDisplayName()
 {
-    return aCommands.GetEntryText( aCommands.GetLastSelectedEntry() );
+    return m_pCommands->GetEntryText( m_pCommands->GetLastSelectedEntry() );
 }
 
 String
 SvxScriptSelectorDialog::GetSelectedHelpText()
 {
-    return aCommands.GetHelpText( aCommands.GetLastSelectedEntry() );
+    return m_pCommands->GetHelpText( m_pCommands->GetLastSelectedEntry() );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

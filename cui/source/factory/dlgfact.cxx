@@ -1208,15 +1208,8 @@ AbstractScriptSelectorDialog*
 AbstractDialogFactory_Impl::CreateScriptSelectorDialog(
     Window* pParent, sal_Bool bShowSlots, const Reference< frame::XFrame >& _rxFrame )
 {
-    SvxScriptSelectorDialog* pDlg = NULL;
-
-    pDlg = new SvxScriptSelectorDialog( pParent, bShowSlots, _rxFrame );
-
-    if (pDlg)
-    {
-        return new AbstractScriptSelectorDialog_Impl( pDlg );
-    }
-    return 0;
+    SvxScriptSelectorDialog* pDlg = new SvxScriptSelectorDialog(pParent, bShowSlots, _rxFrame);
+    return new AbstractScriptSelectorDialog_Impl(pDlg);
 }
 
 String AbstractScriptSelectorDialog_Impl::GetScriptURL() const

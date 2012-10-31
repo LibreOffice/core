@@ -24,6 +24,16 @@
 
 // Resource-Id's ------------------------------------------------------------
 
+#define RID_SVX_MSGBOX_JAVA_RESTART         (RID_SVX_START + 0)
+#define RID_SVX_MSGBOX_OPTIONS_RESTART      (RID_SVX_START + 1)
+#define RID_SVX_MSGBOX_LANGUAGE_RESTART     (RID_SVX_START + 2)
+#define RID_CUI_DIALOG_COLORPICKER          (RID_SVX_START + 3)
+
+#define RID_CUIIMG_HARDDISK                 (RID_SVX_START + 4)
+#define RID_CUIIMG_LIB                      (RID_SVX_START + 5)
+#define RID_CUIIMG_MACRO                    (RID_SVX_START + 6)
+#define RID_CUIIMG_DOC                      (RID_SVX_START + 7)
+
 // Gallery
 #define RID_CUI_GALLERY_START               (RID_SVX_START + 360)
 //      RID_CUI_GALLERY_END                 (RID_SVX_START + 410)
@@ -157,15 +167,12 @@
 #define RID_SVXSTR_COLOR_CONFIG_SAVE2       (RID_SVX_START + 854)
 #define RID_SVXSTR_COLOR_CONFIG_DELETE      (RID_SVX_START + 855)
 #define RID_SVXSTR_OPT_DOUBLE_DICTS         (RID_SVX_START + 320)
-#define RID_SVX_MSGBOX_LANGUAGE_RESTART     ( RID_SVX_START +  2 )
 #define RID_SVXERR_OPT_PROXYPORTS           (RID_SVX_START + 224)
 #define RID_SVXDLG_OPT_JAVASCRIPT_DISABLE   (RID_SVX_START + 225)
 #define RID_SVXDLG_JAVA_PARAMETER           (RID_SVX_START + 254)
 #define RID_SVXDLG_JAVA_CLASSPATH           (RID_SVX_START + 255)
 #define RID_SVXERR_JRE_NOT_RECOGNIZED       (RID_SVX_START + 256)
 #define RID_SVXERR_JRE_FAILED_VERSION       (RID_SVX_START + 257)
-#define RID_SVX_MSGBOX_JAVA_RESTART         ( RID_SVX_START +  0 )
-#define RID_SVX_MSGBOX_OPTIONS_RESTART      ( RID_SVX_START +  1 )
 #define RID_SVXDLG_LNG_ED_NUM_PREBREAK      (RID_SVX_START +  830)
 #define RID_SVXDLG_EDIT_MODULES             (RID_SVX_START +  831)
 #define RID_SVXSTR_PATH_NAME_START          (RID_SVX_START + 1003)
@@ -315,7 +322,7 @@
 #define RID_SVXPAGE_EVENTS                  (RID_SVX_START + 295)
 #define RID_SVXPAGE_CONFIGGROUPBOX          (RID_SVX_START + 304)
 #define RID_SVXDLG_ASSIGNCOMPONENT          (RID_SVX_START + 297)
-#define RID_DLG_SCRIPTSELECTOR              (RID_SVX_START + 259)
+
 #define RID_SVXSTR_NEW_MENU                 (RID_SVX_START + 1039)
 #define RID_SVXSTR_NEW_TOOLBAR              (RID_SVX_START + 1040)
 #define RID_SVXSTR_MOVE_MENU                (RID_SVX_START + 1041)
@@ -418,9 +425,11 @@
 
 #define RID_SVXSTR_ERR_TEXTNOTFOUND                         (RID_SVX_START + 1195)
 #define RID_SVXSTR_SELECT_FILE_IFRAME                       (RID_SVX_START + 1196)
+#define RID_SVXSTR_MYMACROS                                 (RID_SVX_START + 1197)
+#define RID_SVXSTR_PRODMACROS                               (RID_SVX_START + 1198)
+#define RID_SVXSTR_SELECTOR_ADD_COMMANDS                    (RID_SVX_START + 1199)
+#define RID_SVXSTR_SELECTOR_RUN                             (RID_SVX_START + 1200)
 
-#define RID_SVXDLG_CERTPATH                                 (RID_SVX_START + 1198)
-
-#define RID_CUI_DIALOG_COLORPICKER                          (RID_SVX_START + 3)
+#define RID_SVXDLG_CERTPATH                                 (RID_SVX_START + 1201)
 
 #endif

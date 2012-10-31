@@ -16,6 +16,7 @@ $(eval $(call gb_UI_add_uifiles,cui,\
 	cui/uiconfig/ui/insertfloatingframe \
 	cui/uiconfig/ui/insertoleobject \
 	cui/uiconfig/ui/insertplugin \
+	cui/uiconfig/ui/macroselectordialog \
 	cui/uiconfig/ui/positionpage \
 	cui/uiconfig/ui/specialcharacters \
 	cui/uiconfig/ui/thesaurus \

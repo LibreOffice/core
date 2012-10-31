@@ -89,9 +89,9 @@ public:
     virtual Image GetImage( const rtl::OUString& rCommandURL ) = 0;
 };
 
-class SvxConfigFunctionListBox_Impl : public SvTreeListBox
+class SvxConfigFunctionListBox : public SvTreeListBox
 {
-friend class SvxConfigGroupListBox_Impl;
+friend class SvxConfigGroupListBox;
     Timer                           aTimer;
     SvTreeListEntry*                    pCurEntry;
     SvxGroupInfoArr_Impl            aArr;
@@ -100,13 +100,16 @@ friend class SvxConfigGroupListBox_Impl;
     DECL_LINK(TimerHdl, void *);
     virtual void                    MouseMove( const MouseEvent& rMEvt );
 
+    void Init();
+
 public:
-                                    SvxConfigFunctionListBox_Impl( Window*, const ResId& );
-                                    ~SvxConfigFunctionListBox_Impl();
+                                    SvxConfigFunctionListBox(Window*, const ResId&);
+                                    SvxConfigFunctionListBox(Window* pParent);
+                                    ~SvxConfigFunctionListBox();
     void                            ClearAll();
     String                          GetHelpText( SvTreeListEntry *pEntry );
     using Window::GetHelpText;
-    SvTreeListEntry*                    GetLastSelectedEntry();
+    SvTreeListEntry*                GetLastSelectedEntry();
     void                            FunctionSelected();
 
     // drag n drop methods
@@ -118,12 +121,12 @@ public:
     virtual void        DragFinished( sal_Int8 );
 };
 
-class SvxConfigGroupListBox_Impl : public SvTreeListBox
+class SvxConfigGroupListBox : public SvTreeListBox
 {
     SvxGroupInfoArr_Impl            aArr;
     bool                            m_bShowSlots;
 
-    SvxConfigFunctionListBox_Impl*  pFunctionListBox;
+    SvxConfigFunctionListBox*  pFunctionListBox;
     ImageProvider*                  m_pImageProvider;
 
     ::com::sun::star::uno::Reference
@@ -162,21 +165,23 @@ protected:
     using SvListView::Expand;
 
 public:
-            SvxConfigGroupListBox_Impl (
+            SvxConfigGroupListBox (
                 Window* pParent, const ResId&,
                 bool _bShowSlots,
                 const ::com::sun::star::uno::Reference
                     < ::com::sun::star::frame::XFrame >& xFrame
             );
+            SvxConfigGroupListBox(Window* pParent);
+            ~SvxConfigGroupListBox();
 
-            ~SvxConfigGroupListBox_Impl();
+    void    Init(bool bShowSlots, const ::com::sun::star::uno::Reference
+                    < ::com::sun::star::frame::XFrame >& xFrame);
 
-    void    Init();
     void    Open( SvTreeListEntry*, sal_Bool );
     void    ClearAll();
     void    GroupSelected();
 
-    void    SetFunctionListBox( SvxConfigFunctionListBox_Impl *pBox )
+    void    SetFunctionListBox( SvxConfigFunctionListBox *pBox )
         { pFunctionListBox = pBox; }
 
     void    SetImageProvider( ImageProvider* provider )
@@ -185,26 +190,21 @@ public:
 
 class SvxScriptSelectorDialog : public ModelessDialog
 {
-    FixedText                       aDialogDescription;
-    FixedText                       aGroupText;
-    SvxConfigGroupListBox_Impl      aCategories;
-    FixedText                       aFunctionText;
-    SvxConfigFunctionListBox_Impl   aCommands;
-    OKButton                        aOKButton;
-    CancelButton                    aCancelButton;
-    HelpButton                      aHelpButton;
-    FixedLine                       aDescription;
-    FixedText                       aDescriptionText;
-
-    sal_Bool                            m_bShowSlots;
+    FixedText*                      m_pDialogDescription;
+    SvxConfigGroupListBox*          m_pCategories;
+    SvxConfigFunctionListBox*       m_pCommands;
+    PushButton*                     m_pOKButton;
+    PushButton*                     m_pCancelButton;
+    VclMultiLineEdit*               m_pDescriptionText;
+    OUString                        m_sDefaultDesc;
+    sal_Bool                        m_bShowSlots;
     Link                            m_aAddHdl;
 
     DECL_LINK( ClickHdl, Button * );
     DECL_LINK( SelectHdl, Control* );
     DECL_LINK( FunctionDoubleClickHdl, Control* );
 
-    void                                UpdateUI();
-    void                                ResizeControls();
+    void                            UpdateUI();
 
 public:
 
@@ -220,8 +220,10 @@ public:
     void        SetAddHdl( const Link& rLink ) { m_aAddHdl = rLink; }
     const Link& GetAddHdl() const { return m_aAddHdl; }
 
-    void        SetImageProvider( ImageProvider* provider )
-        { aCategories.SetImageProvider( provider ); }
+    void        SetImageProvider(ImageProvider* provider)
+    {
+        m_pCategories->SetImageProvider(provider);
+    }
 
     String      GetScriptURL() const;
     String      GetSelectedDisplayName();

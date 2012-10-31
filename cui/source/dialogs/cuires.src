@@ -19,4 +19,51 @@ String RID_SVXSTR_SELECT_FILE_IFRAME
     Text [ en-US ] = "Select File for Floating Frame" ;
 };
 
+String RID_SVXSTR_MYMACROS
+{
+    Text [ en-US ] = "My Macros";
+};
+
+String RID_SVXSTR_PRODMACROS
+{
+    Text [ en-US ] = "%PRODUCTNAME Macros";
+};
+
+String RID_SVXSTR_SELECTOR_ADD_COMMANDS
+{
+  TEXT [ en-US ] = "Add Commands" ;
+};
+
+String RID_SVXSTR_SELECTOR_RUN
+{
+  TEXT [ en-US ] = "Run" ;
+};
+
+#define MASKCOLOR  MaskColor = \
+    Color { Red = 0xFFFF ; Green = 0x0000 ; Blue = 0xFFFF ; };
+
+Image RID_CUIIMG_HARDDISK
+{
+    ImageBitmap = Bitmap { File = "harddisk_16.bmp" ; };
+    MASKCOLOR
+};
+
+Image RID_CUIIMG_LIB
+{
+    ImageBitmap = Bitmap { File = "im30820.png"; };
+    MASKCOLOR
+};
+
+Image RID_CUIIMG_MACRO
+{
+    ImageBitmap = Bitmap { File = "im30821.png"; };
+    MASKCOLOR
+};
+
+Image RID_CUIIMG_DOC
+{
+    ImageBitmap = Bitmap { File = "im30826.png"; };
+    MASKCOLOR
+};
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
