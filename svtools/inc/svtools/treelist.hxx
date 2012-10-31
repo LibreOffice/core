@@ -191,6 +191,9 @@ class SVT_DLLPUBLIC SvTreeList
 
     SVT_DLLPRIVATE void ResortChildren( SvTreeListEntry* pParent );
 
+    SvTreeList(const SvTreeList&); // disabled
+    SvTreeList& operator= (const SvTreeList&); // disabled
+
 protected:
     SvTreeListEntry*        pRootItem;
 
