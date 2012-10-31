@@ -454,7 +454,6 @@ void ScDPCacheTable::dump() const
 {
     cout << "--- pivot cache filter dump" << endl;
 
-    // Flat segment tree always has at least 2 nodes.
     cout << endl;
     cout << "* show by filter" << endl;
     dumpRowFlag(maShowByFilter);
