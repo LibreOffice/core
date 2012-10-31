@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAP3///pk\u003d",
+        "filename": "sysui/desktop/menus/calc.desktop",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000080
+      },
+      "writtenOn": "2012-10-31T23:29:32Z",
+      "side": 1,
+      "message": "Keywords\u003dAccounting;Stats;OpenDocument Spreadsheet;Chart;Microsoft Excel;Microsoft Works;OpenOffice Calc;ods;xls;xlsx;LibreOffice Calc;",
+      "revId": "b50ed6494d5ab2122b6242f50c6d45eb04b987ca",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAP3///pc\u003d",
+        "filename": "sysui/desktop/menus/draw.desktop",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000080
+      },
+      "writtenOn": "2012-10-31T23:29:32Z",
+      "side": 1,
+      "message": "Keywords\u003dSlideshow;Slides;OpenDocument Presentation;Microsoft PowerPoint;Microsoft Works;OpenOffice Impress;odp;ppt;pptx;LibreOffice Impress;",
+      "revId": "b50ed6494d5ab2122b6242f50c6d45eb04b987ca",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAP3///pg\u003d",
+        "filename": "sysui/desktop/menus/impress.desktop",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000080
+      },
+      "writtenOn": "2012-10-31T23:29:32Z",
+      "side": 1,
+      "message": "Keywords\u003dSlideshow;Slides;OpenDocument Presentation;Microsoft PowerPoint;Microsoft Works;OpenOffice Impress;odp;ppt;pptx;LibreOffice Impress;",
+      "revId": "b50ed6494d5ab2122b6242f50c6d45eb04b987ca",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAP3///pY\u003d",
+        "filename": "sysui/desktop/menus/math.desktop",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000080
+      },
+      "writtenOn": "2012-10-31T23:29:32Z",
+      "side": 1,
+      "message": "Keywords\u003dEquation;OpenDocument Formula;Formula;odf;LibreOffice Formula;Math;",
+      "revId": "b50ed6494d5ab2122b6242f50c6d45eb04b987ca",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAP3///po\u003d",
+        "filename": "sysui/desktop/menus/writer.desktop",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000080
+      },
+      "writtenOn": "2012-10-31T23:29:32Z",
+      "side": 1,
+      "message": "Keywords\u003dText;Letter;Fax;Document;OpenDocument Text;Microsoft Word;Microsoft Works;Lotus WordPro;OpenOffice Writer;CV;odt;doc;docx;rtf;LibreOffice Writer;",
+      "revId": "b50ed6494d5ab2122b6242f50c6d45eb04b987ca",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
