@@ -140,7 +140,7 @@ ADDITIONAL_FILES= config.h \
     gmodule/gmoduleconf.h \
     gobject/glib-mkenums
 
-BUILD_ACTION=nmake -f makefile.msc
+BUILD_ACTION=unset debug; nmake -f makefile.msc
 
 OUT2BIN+=gio$/giolo.dll
 OUT2BIN+=glib$/gliblo.dll

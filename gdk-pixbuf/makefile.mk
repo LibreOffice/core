@@ -99,7 +99,7 @@ ADDITIONAL_FILES=config.h.win32 glib-mkenums.pl msvc_recommended_pragmas.h
 CONFIGURE_DIR=
 CONFIGURE_ACTION=
 BUILD_DIR=./gdk-pixbuf
-BUILD_ACTION=nmake -f makefile.msc
+BUILD_ACTION=unset debug; nmake -f makefile.msc
 
 OUT2LIB+=gdk-pixbuf/gdk_pixbuf-2.0.lib
 

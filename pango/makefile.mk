@@ -121,7 +121,7 @@ ADDITIONAL_FILES=config.h msvc_recommended_pragmas.h
 CONFIGURE_DIR=
 CONFIGURE_ACTION=
 BUILD_DIR=./pango																																																																																																																										
-BUILD_ACTION=nmake -f makefile.msc
+BUILD_ACTION=unset debug; nmake -f makefile.msc
 
 OUT2LIB+=pango/pango-1.0.lib
 OUT2LIB+=pango/pangocairo-1.0.lib
