@@ -33,6 +33,7 @@
 #include "osl/mutex.hxx"
 #include "global.hxx"
 #include "dpitemdata.hxx"
+#include "dpmacros.hxx"
 
 #include <vector>
 #include <boost/unordered_set.hpp>
@@ -55,6 +56,8 @@ struct ScQueryParam;
  */
 class SC_DLLPUBLIC ScDPCacheTable
 {
+    typedef mdds::flat_segment_tree<SCROW, bool> RowFlagType;
+
 public:
     /** interface class used for filtering of rows. */
     class FilterBase
@@ -155,6 +158,11 @@ public:
     bool empty() const;
     bool hasCache() const;
 
+#if DEBUG_PIVOT_TABLE
+    void dumpRowFlag(const RowFlagType& rFlag) const;
+    void dump() const;
+#endif
+
 private:
     ScDPCacheTable();
     ScDPCacheTable(const ScDPCacheTable&);
@@ -168,7 +176,6 @@ private:
     bool isRowQualified(sal_Int32 nRow, const ::std::vector<Criterion>& rCriteria, const ::boost::unordered_set<sal_Int32>& rRepeatIfEmptyDims) const;
 
 private:
-    typedef mdds::flat_segment_tree<SCROW, bool> RowFlagType;
 
     /** unique field entires for each field (column). */
     ::std::vector< ::std::vector<SCROW> > maFieldEntries;

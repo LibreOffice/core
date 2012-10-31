@@ -431,4 +431,41 @@ const ScDPCache* ScDPCacheTable::getCache() const
     return mpCache;
 }
 
+#if DEBUG_PIVOT_TABLE
+#include <iostream>
+using std::cout;
+using std::endl;
+
+void ScDPCacheTable::dumpRowFlag(const RowFlagType& rFlag) const
+{
+    RowFlagType::const_iterator it = rFlag.begin(), itEnd = rFlag.end();
+    bool bShow = it->second;
+    SCROW nRow1 = it->first;
+    for (++it; it != itEnd; ++it)
+    {
+        SCROW nRow2 = it->first;
+        cout << "  * range " << nRow1 << "-" << nRow2 << ": " << (bShow ? "on" : "off") << endl;
+        bShow = it->second;
+        nRow1 = nRow2;
+    }
+}
+
+void ScDPCacheTable::dump() const
+{
+    cout << "--- pivot cache filter dump" << endl;
+
+    // Flat segment tree always has at least 2 nodes.
+    cout << endl;
+    cout << "* show by filter" << endl;
+    dumpRowFlag(maShowByFilter);
+
+    cout << endl;
+    cout << "* show by page dimensions" << endl;
+    dumpRowFlag(maShowByPage);
+
+    cout << "---" << endl;
+}
+
+#endif
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
