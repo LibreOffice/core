@@ -25,6 +25,7 @@
 #include "boost/noncopyable.hpp"
 #include "com/sun/star/beans/NamedValue.hpp"
 #include "com/sun/star/beans/PropertyValue.hpp"
+#include "com/sun/star/configuration/theDefaultProvider.hpp"
 #include "com/sun/star/lang/EventObject.hpp"
 #include "com/sun/star/lang/Locale.hpp"
 #include "com/sun/star/lang/XLocalizable.hpp"
@@ -32,7 +33,6 @@
 #include "com/sun/star/lang/XServiceInfo.hpp"
 #include "com/sun/star/lang/XSingleComponentFactory.hpp"
 #include "com/sun/star/uno/Any.hxx"
-#include "com/sun/star/uno/DeploymentException.hpp"
 #include "com/sun/star/uno/Exception.hpp"
 #include "com/sun/star/uno/Reference.hxx"
 #include "com/sun/star/uno/RuntimeException.hpp"
@@ -432,23 +432,7 @@ Factory::createInstanceWithArgumentsAndContext(
     throw (css::uno::Exception, css::uno::RuntimeException)
 {
     if (Arguments.getLength() == 0) {
-        css::uno::Reference< css::uno::XInterface > instance;
-        if (!(Context->getValueByName(
-                  rtl::OUString(
-                      RTL_CONSTASCII_USTRINGPARAM(
-                          "/singletons/"
-                          "com.sun.star.configuration.theDefaultProvider")))
-              >>= instance) ||
-            !instance.is())
-        {
-            throw css::uno::DeploymentException(
-                rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM(
-                        "component context fails to supply singleton"
-                        " com.sun.star.configuration.theDefaultProvider")),
-                Context);
-        }
-        return instance;
+        return css::configuration::theDefaultProvider::get(Context);
     } else {
         rtl::OUString locale;
         for (sal_Int32 i = 0; i < Arguments.getLength(); ++i) {
