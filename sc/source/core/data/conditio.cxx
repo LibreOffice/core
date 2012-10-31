@@ -768,7 +768,7 @@ static bool lcl_GetCellContent( ScBaseCell* pCell, bool bIsStr1, double& rArg, r
     return bVal;
 }
 
-bool ScConditionEntry::IsDuplicate( double nArg, const rtl::OUString& rStr, const ScAddress& rAddr, const ScRangeList& rRanges ) const
+void ScConditionEntry::FillCache( const ScRangeList& rRanges ) const
 {
     if(!mpCache)
     {
@@ -798,7 +798,7 @@ bool ScConditionEntry::IsDuplicate( double nArg, const rtl::OUString& rStr, cons
                     double nVal = 0.0;
                     ScBaseCell *pCell = NULL;
 
-                    mpDoc->GetCell( c, r, rAddr.Tab(), pCell );
+                    mpDoc->GetCell( c, r, nTab, pCell );
                     if( !pCell )
                         continue;
 
@@ -818,6 +818,11 @@ bool ScConditionEntry::IsDuplicate( double nArg, const rtl::OUString& rStr, cons
                 }
         }
     }
+}
+
+bool ScConditionEntry::IsDuplicate( double nArg, const rtl::OUString& rStr, const ScRangeList& rRanges ) const
+{
+    FillCache( rRanges );
 
     if(rStr.isEmpty())
     {
@@ -847,7 +852,7 @@ bool ScConditionEntry::IsDuplicate( double nArg, const rtl::OUString& rStr, cons
     }
 }
 
-bool ScConditionEntry::IsValid( double nArg, const ScAddress& rAddr ) const
+bool ScConditionEntry::IsValid( double nArg ) const
 {
     //  Interpret muss schon gerufen sein
 
@@ -910,7 +915,7 @@ bool ScConditionEntry::IsValid( double nArg, const ScAddress& rAddr ) const
             if( pCondFormat )
             {
                 const ScRangeList& aRanges = pCondFormat->GetRange();
-                bValid = IsDuplicate( nArg, rtl::OUString(), rAddr, aRanges );
+                bValid = IsDuplicate( nArg, rtl::OUString(), aRanges );
                 if( eOp == SC_COND_NOTDUPLICATE )
                     bValid = !bValid;
             }
@@ -925,7 +930,7 @@ bool ScConditionEntry::IsValid( double nArg, const ScAddress& rAddr ) const
     return bValid;
 }
 
-bool ScConditionEntry::IsValidStr( const String& rArg, const ScAddress& rAddr ) const
+bool ScConditionEntry::IsValidStr( const String& rArg ) const
 {
     bool bValid = false;
     //  Interpret muss schon gerufen sein
@@ -938,7 +943,7 @@ bool ScConditionEntry::IsValidStr( const String& rArg, const ScAddress& rAddr ) 
         if( pCondFormat && rArg.Len() )
         {
             const ScRangeList& aRanges = pCondFormat->GetRange();
-            bValid = IsDuplicate( 0.0, rArg, rAddr, aRanges );
+            bValid = IsDuplicate( 0.0, rArg, aRanges );
             if( eOp == SC_COND_NOTDUPLICATE )
                 bValid = !bValid;
             return bValid;
@@ -1020,9 +1025,9 @@ bool ScConditionEntry::IsCellValid( ScBaseCell* pCell, const ScAddress& rPos ) c
     rtl::OUString aArgStr;
     bool bVal = lcl_GetCellContent( pCell, bIsStr1, nArg, aArgStr );
     if (bVal)
-        return IsValid( nArg, rPos );
+        return IsValid( nArg );
     else
-        return IsValidStr( aArgStr, rPos );
+        return IsValidStr( aArgStr );
 }
 
 String ScConditionEntry::GetExpression( const ScAddress& rCursor, sal_uInt16 nIndex,

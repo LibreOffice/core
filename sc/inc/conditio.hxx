@@ -177,8 +177,8 @@ class SC_DLLPUBLIC ScConditionEntry : public ScFormatEntry
                         bool bTextToReal );
     void    Interpret( const ScAddress& rPos );
 
-    bool    IsValid( double nArg, const ScAddress& rAddr ) const;
-    bool    IsValidStr( const String& rArg, const ScAddress& rAddr ) const;
+    bool    IsValid( double nArg ) const;
+    bool    IsValidStr( const String& rArg ) const;
 
 public:
             ScConditionEntry( ScConditionMode eOper,
@@ -248,7 +248,9 @@ protected:
 
 private:
 
-    bool IsDuplicate(double nArg, const rtl::OUString& rStr, const ScAddress& rAddr, const ScRangeList& rRanges) const;
+    bool IsDuplicate(double nArg, const rtl::OUString& rStr, const ScRangeList& rRanges) const;
+
+    void FillCache(const ScRangeList& rRanges) const;
 
     struct ScConditionEntryCache
     {
