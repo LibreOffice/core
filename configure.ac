@@ -4079,7 +4079,6 @@ if test "$cross_compiling" = "yes"; then
         configure \
         ooo.lst.in \
         oowintool \
-        post_download.in \
         solenv/bin/getcompver.awk \
         solenv/inc/langlist.mk \
         solenv/inc/postset.mk \
@@ -12794,14 +12793,6 @@ AC_SUBST(LO_PATH)
 
 # make sure config.guess is +x; we execute config.guess, so it has to be so
 chmod +x ./config.guess
-
-dnl Setting up the post_download check script
-dnl Using autoconf here, so that the migration from the previous state
-dnl (checks for the additional Windows downloads were directly in
-dnl configure.ac) is as easy as possible
-echo "setting up the post_download check script"
-autoconf post_download.in > post_download
-chmod +x post_download
 
 # Generate a configuration timestamp we can use for deps
 if test -f config_host.mk; then

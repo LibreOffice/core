@@ -208,52 +208,86 @@ if [ ! -z "$failed" ]; then
     exit 1
 fi
 
-if [ "$COM" = "MSC" -a "$CPUNAME" = "INTEL" -a -n "$md5sum" ]; then
-    # This can be run only on Windows itself (Cygwin)
-    TMPUNPACK=`cygpath -d $TARFILE_LOCATION/tmp`
-    chmod a+w $TARFILE_LOCATION/tmp
+if [ "$COM" = "MSC" -a "$CPUNAME" = "INTEL" ]; then
+
+    # Windows builds need dbghelp.dll in external/dbghelp/
     if [ ! -f ./external/dbghelp/dbghelp.dll -a -f $TARFILE_LOCATION/$DBGHELP_DLL ]; then
-	    cp $TARFILE_LOCATION/$DBGHELP_DLL ./external/dbghelp/dbghelp.dll
-	fi
-    if [ ! -f ./external/dbghelp/dbghelp.dll -a -f $TARFILE_LOCATION/dbg_x86.msi ]; then
-        msiexec /a `cygpath -d $TARFILE_LOCATION/dbg_x86.msi` /qn TARGETDIR=$TMPUNPACK SHORTFILENAMES=1
-		dbghelp_dll_path=PFiles/DbgTools/dbghelp.dll
-        sum=`$md5sum $md5special $TARFILE_LOCATION/tmp/$dbghelp_dll_path | sed "s/ .*//"`
-        if [ "$sum" = "4003e34416ebd25e4c115d49dc15e1a7" ]; then
-			cp $TARFILE_LOCATION/tmp/$dbghelp_dll_path ./external/dbghelp/dbghelp.dll
+        cp $TARFILE_LOCATION/$DBGHELP_DLL ./external/dbghelp/dbghelp.dll
+    else
+        echo "dbghelp.dll is missing in external/dbghelp/."
+        echo "Get it from the Microsoft site and put it there."
+        echo "(Note: Microsoft seems to enjoy changing the exact location of this file."
+        echo "You may have to search Microsoft's website.) Last time it was seen at:"
+        echo "<http://www.microsoft.com/downloads/release.asp?releaseid=30682>."
+        exit 1
+    fi
+
+    # Windows builds need gdiplus.dll in external/gdiplus/
+    if [ ! -f ./external/gdiplus/gdiplus.dll -a -f $TARFILE_LOCATION/WindowsXP-KB958911-x86-ENU.exe -a -n "$md5sum" ]; then
+        # This can be run only on Windows itself (Cygwin)
+        TMPUNPACK=`cygpath -d $TARFILE_LOCATION/tmp`
+        chmod a+w $TARFILE_LOCATION/tmp
+        gdiplus_dll_path=SP3QFE/asms/10/msft/windows/gdiplus/gdiplus.dll
+        chmod +x $TARFILE_LOCATION/WindowsXP-KB958911-x86-ENU.exe
+
+        # Run it through cmd so that the UAC prompt is displayed
+        echo
+        echo "NOTE: We are running the Microsoft KB958911 security fix installer"
+        echo "to get gdiplus.dll. You will most probably get a UAC prompt now."
+        echo "If you trust us, just enter your administrator password."
+        echo "The security fix is run with the /extract switch to just unpack"
+        echo "its files."
+        echo "If you don't trust us, just get gdiplus.dll yourself and put it"
+        echo "in external/gdiplus/gdiplus.dll."
+        echo "gdiplus.dll is included in the LibreOffice installer for the benefit of"
+        echo "Windows 2000 users."
+        # A few empty lines so that the above is visible even if the taskbar's auto-hide is turned on,
+        # and the UAC prompt caused it to taise (with a blinking icon for the UAC prompt)
+        echo
+        echo
+        echo
+            cmd /c "`cygpath -w $TARFILE_LOCATION/WindowsXP-KB958911-x86-ENU.exe` /extract:$TMPUNPACK /q"
+        if [ -f $TARFILE_LOCATION/tmp/$gdiplus_dll_path ]; then
+            echo "Extraction succeeded"
+            sum=`$md5sum $md5special $TARFILE_LOCATION/tmp/$gdiplus_dll_path | sed "s/ .*//"`
+            if [ "$sum" = "3a95b4d80a3586ab1e2f0c608608ebac" ]; then
+            cp $TARFILE_LOCATION/tmp/$gdiplus_dll_path ./external/gdiplus/gdiplus.dll
+            else
+            echo "But unexpected checksum of $gdiplus_dll_path"
+            fi
+        else
+            echo "WindowsXP-KB958911-x86-ENU.exe did not unpack the expected $gdiplus_dll_path"
         fi
     fi
-    if [ ! -f ./external/gdiplus/gdiplus.dll -a -f $TARFILE_LOCATION/WindowsXP-KB958911-x86-ENU.exe ]; then
-	gdiplus_dll_path=SP3QFE/asms/10/msft/windows/gdiplus/gdiplus.dll
-	chmod +x `cygpath $TARFILE_LOCATION`/WindowsXP-KB958911-x86-ENU.exe
+    if [ -f ./external/gdiplus/gdiplus.dll ]; then
+        echo "gdiplus.dll is missing in external/gdiplus/."
+        echo "Get it from the Microsoft site and put it there."
+        echo "You may have to search Microsoft's website. Last time it was seen at:"
+        echo "<http://www.microsoft.com/downloads/details.aspx?familyid=6A63AB9C-DF12-4D41-933C-BE590FEAA05A&displaylang=en>."
+        exit 1
+    fi
+fi
 
-	# Run it through cmd so that the UAC prompt is displayed
-	echo
-	echo "NOTE: We are running the Microsoft KB958911 security fix installer"
-	echo "to get gdiplus.dll. You will most probably get a UAC prompt now."
-	echo "If you trust us, just enter your administrator password."
-	echo "The security fix is run with the /extract switch to just unpack"
-	echo "its files."
-	echo "If you don't trust us, just get gdiplus.dll yourself and put it"
-	echo "in external/gdiplus/gdiplus.dll."
-	echo "gdiplus.dll is included in the LibreOffice installer for the benefit of"
-	echo "Windows 2000 users."
-	# A few empty lines so that the above is visible even if the taskbar's auto-hide is turned on,
-	# and the UAC prompt caused it to taise (with a blinking icon for the UAC prompt)
-	echo
-	echo
-	echo
-        cmd /c "`cygpath -w $TARFILE_LOCATION/WindowsXP-KB958911-x86-ENU.exe` /extract:$TMPUNPACK /q"
-	if [ -f $TARFILE_LOCATION/tmp/$gdiplus_dll_path ]; then
-	    echo "Extraction succeeded"
-	    sum=`$md5sum $md5special $TARFILE_LOCATION/tmp/$gdiplus_dll_path | sed "s/ .*//"`
-	    if [ "$sum" = "3a95b4d80a3586ab1e2f0c608608ebac" ]; then
-		cp $TARFILE_LOCATION/tmp/$gdiplus_dll_path ./external/gdiplus/gdiplus.dll
-	    else
-		echo "But unexpected checksum of $gdiplus_dll_path"
-	    fi
-	else
-	    echo "WindowsXP-KB958911-x86-ENU.exe did not unpack the expected $gdiplus_dll_path"
+if [ "$COM" = "MSC" ]; then
+    if [ "$CPUNAME" = "INTEL" ]; then
+        ver=""
+    else
+        ver="-64"
+    fi
+    # use oowintool to copy CRT dlls and manifest
+    if ! ./oowintool --msvc-copy-dlls"$ver" ./external/msvcp ; then
+       echo "oowintool failed to copy CRT"
+       exit 1
+    fi
+
+    # use oowintool to copy VC redist merge modules
+    if ! ./oowintool --msvc-copy-msms"$ver" ./external/msm"$VCVER" ; then
+       echo "oowintool failed to copy merge modules"
+       exit 1
+    fi
+    if [ "$CPUNAME" = "INTEL" ]; then
+        if ! ./oowintool --msvc-copy-msms-64 ./external/msm"$VCVER" ; then
+           echo "WARNING: oowintool failed to copy x64 merge modules, installation will lack the 64-bit Explorer extension"
         fi
     fi
 fi
@@ -263,20 +297,6 @@ if [ -n "$OXYGENOFFICE_PACK" ] ; then
     echo "Unpacking OxygenOffice '$OXYGENOFFICE_PACK' ..."
     unzip -o -q $TARFILE_LOCATION/$OXYGENOFFICE_PACK -d $SRC_ROOT/src
 fi
-
-[ -x "post_download" ] || { echo "'post_download' script not found, run ./autogen.sh." ; exit 1 ; }
-
-# Save the config.log from the main configure script
-# and restore it after running post_download.
-mv config.log config.log.save
-
-./post_download --build=$BUILD_PLATFORM --host=$HOST_PLATFORM
-post_download_status=$?
-
-test -f config.log && mv config.log post_download.log
-mv config.log.save config.log
-
-exit $post_download_status
 
 # Local Variables:
 # tab-width: 4
