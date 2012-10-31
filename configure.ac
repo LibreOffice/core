@@ -4982,6 +4982,18 @@ if test "$_os" != "WINNT" -o "$WITH_MINGW" = "yes"; then
                 test -z "$ac_cv_alignof_long" && ac_cv_alignof_long=1
                 test -z "$ac_cv_alignof_double" && ac_cv_alignof_double=1
                 ;;
+            Linux-i686)
+                test -z "$ac_cv_alignof_short" && ac_cv_alignof_short=2
+                test -z "$ac_cv_alignof_int" && ac_cv_alignof_int=4
+                test -z "$ac_cv_alignof_long" && ac_cv_alignof_long=4
+                test -z "$ac_cv_alignof_double" && ac_cv_alignof_double=4
+                ;;
+            Linux-x86_64)
+                test -z "$ac_cv_alignof_short" && ac_cv_alignof_short=2
+                test -z "$ac_cv_alignof_int" && ac_cv_alignof_int=4
+                test -z "$ac_cv_alignof_long" && ac_cv_alignof_long=8
+                test -z "$ac_cv_alignof_double" && ac_cv_alignof_double=8
+                ;;
             *)
                 if test -z "$ac_cv_alignof_short" -o \
                         -z "$ac_cv_alignof_int" -o \
