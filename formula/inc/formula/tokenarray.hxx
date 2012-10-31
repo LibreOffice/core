@@ -97,7 +97,6 @@ public:
     FormulaTokenArray* Clone() const;    /// True copy!
     void Clear();
     void DelRPN();
-    FormulaToken* First() { nIndex = 0; return Next(); }
     FormulaToken* Next();
     FormulaToken* FirstNoSpaces() { nIndex = 0; return NextNoSpaces(); }
     FormulaToken* NextNoSpaces();
