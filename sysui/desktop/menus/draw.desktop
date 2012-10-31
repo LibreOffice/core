@@ -8,8 +8,8 @@ Exec=${UNIXBASISROOTNAME} --draw %U
 MimeType=application/vnd.oasis.opendocument.graphics;application/vnd.oasis.opendocument.graphics-template;application/vnd.sun.xml.draw;application/vnd.sun.xml.draw.template;application/vnd.visio;application/x-wpg;
 Name=%PRODUCTNAME Draw
 GenericName=Drawing Program
-Comment=Create and edit drawings, flow charts, and logos by using Draw.
-Keywords=Vector;Schema;Diagram;odg;
+Comment=Create and edit drawings, flow charts and logos by using Draw.
+Keywords=Vector;Schema;Diagram;Layout;OpenDocument Graphics;Microsoft Publisher;Corel Draw;cdr;odg;svg;
 InitialPreference=5
 X-Ayatana-Desktop-Shortcuts=X-New
 [X-New Shortcut Group]
