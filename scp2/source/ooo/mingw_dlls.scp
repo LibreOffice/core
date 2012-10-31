@@ -85,13 +85,7 @@ MINGW_DLL( gid_Brand_File_Lib_Mingw_Libdb, MINGW_DB_DLL )
 #endif
 #endif
 
-#ifdef SYSTEM_CURL
-#ifdef NEEDS_MINGW_INTL_DLL
-MINGW_DLL( gid_Brand_File_Lib_Mingw_Libintl,     MINGW_INTL_DLL )
-#endif
-#ifdef NEEDS_MINGW_IDN_DLL
-MINGW_DLL( gid_Brand_File_Lib_Mingw_Libdn,       MINGW_IDN_DLL )
-#endif
+#if defined SYSTEM_CURL || defined SYSTEM_NSS
 #ifdef NEEDS_MINGW_NSPR4_DLL
 MINGW_DLL( gid_Brand_File_Lib_Mingw_Libnspr,     MINGW_NSPR4_DLL )
 #endif
@@ -110,11 +104,23 @@ MINGW_DLL( gid_Brand_File_Lib_Mingw_nss,         MINGW_NSS3_DLL )
 #ifdef NEEDS_MINGW_SSL3_DLL
 MINGW_DLL( gid_Brand_File_Lib_Mingw_ssl,         MINGW_SSL3_DLL )
 #endif
+#ifdef NEEDS_MINGW_SMIME3_DLL
+MINGW_DLL( gid_Brand_File_Lib_Mingw_smime,         MINGW_SMIME3_DLL )
+#endif
+#endif
+
+#ifdef SYSTEM_CURL
 #ifdef NEEDS_MINGW_GPG_ERROR_DLL
 MINGW_DLL( gid_Brand_File_Lib_Mingw_Libgpgerror, MINGW_GPG_ERROR_DLL )
 #endif
 #ifdef NEEDS_MINGW_GCRYPT_DLL
 MINGW_DLL( gid_Brand_File_Lib_Mingw_Libgcrypt,   MINGW_GCRYPT_DLL )
+#endif
+#ifdef NEEDS_MINGW_INTL_DLL
+MINGW_DLL( gid_Brand_File_Lib_Mingw_Libintl,     MINGW_INTL_DLL )
+#endif
+#ifdef NEEDS_MINGW_IDN_DLL
+MINGW_DLL( gid_Brand_File_Lib_Mingw_Libdn,       MINGW_IDN_DLL )
 #endif
 #ifdef NEEDS_MINGW_SSH2_DLL
 MINGW_DLL( gid_Brand_File_Lib_Mingw_Libssh,      MINGW_SSH2_DLL )

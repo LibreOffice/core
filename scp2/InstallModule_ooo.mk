@@ -131,6 +131,7 @@ $(eval $(call gb_InstallModule_define_mingw_dll_if_set,scp2/ooo,\
 	MINGW_RAPTOR_DLL \
 	MINGW_RASQAL_DLL \
 	MINGW_REDLAND_DLL \
+	MINGW_SMIME3_DLL \
 	MINGW_SQLITE3_DLL \
 	MINGW_SSH2_DLL \
 	MINGW_SSL3_DLL \

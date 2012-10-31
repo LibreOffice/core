@@ -8280,6 +8280,13 @@ if test "$with_system_nss" = "yes"; then
     AC_MSG_RESULT([external])
     SYSTEM_NSS="YES"
     PKG_CHECK_MODULES(NSS, nss >= 3.9.3 nspr >= 4.8)
+    libo_MINGW_CHECK_DLL([NSPR4], [libnspr4])
+    libo_MINGW_CHECK_DLL([PLC4], [libplc4])
+    libo_MINGW_CHECK_DLL([PLDS4], [libplds4])
+    libo_MINGW_CHECK_DLL([NSS3], [nss3])
+    libo_MINGW_CHECK_DLL([NSSUTIL3], [nssutil3])
+    libo_MINGW_CHECK_DLL([SMIME3], [smime3])
+    libo_MINGW_CHECK_DLL([SSL3], [ssl3])
 else
     SYSTEM_NSS="NO"
     BUILD_TYPE="$BUILD_TYPE NSS"
@@ -8311,6 +8318,7 @@ fi # system nss
 AC_SUBST(SYSTEM_NSS)
 AC_SUBST(NSS_CFLAGS)
 AC_SUBST(NSS_LIBS)
+AC_SUBST([MINGW_SMIME3_DLL])
 
 dnl ===================================================================
 dnl Check for system mozilla headers
