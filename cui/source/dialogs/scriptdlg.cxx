@@ -100,8 +100,6 @@ void SFTreeListBox::delUserData( SvTreeListEntry* pEntry )
 {
     if ( pEntry )
     {
-
-        String text = GetEntryText( pEntry );
         SFEntry* pUserData = (SFEntry*)pEntry->GetUserData();
         if ( pUserData )
         {
@@ -139,7 +137,6 @@ void SFTreeListBox::deleteAllTree()
     {
         while ( pEntry )
         {
-            String text = GetEntryText( pEntry );
             SvTreeListEntry* pNextEntry = NextSibling( pEntry ) ;
             deleteTree( pEntry );
             GetModel()->Remove( pEntry );
@@ -1249,10 +1246,8 @@ void SvxScriptOrgDialog::RestorePreviousSelection()
     {
         String aTmp( aStoredEntry.GetToken( 0, ';', nIndex ) );
         SvTreeListEntry* pTmpEntry = aScriptsBox.FirstChild( pEntry );
-        ::rtl::OUString debugStr(aTmp);
         while ( pTmpEntry )
         {
-            debugStr = ::rtl::OUString(aScriptsBox.GetEntryText( pTmpEntry ));
             if ( aScriptsBox.GetEntryText( pTmpEntry ) == aTmp )
             {
                 pEntry = pTmpEntry;
