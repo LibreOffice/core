@@ -341,7 +341,7 @@ SwDoc::SwDoc()
 
     // COMPATIBILITY FLAGS END
 
-    mbStartIdleTimer(sal_False),
+    mbStartIdleTimer(false),
     mbSetDrawDefaults(false)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLog, "SW", "JP93722",  "SwDoc::SwDoc" );
@@ -541,7 +541,7 @@ SwDoc::~SwDoc()
 
     delete pPgPViewPrtData;
 
-    mbDtor = sal_True;
+    mbDtor = true;
 
     delete pRedlineTbl;
     delete pUnoCrsrTbl;

@@ -77,9 +77,9 @@
 using namespace ::com::sun::star;
 
 /// go to next/previous point on the same level
-sal_Bool SwCrsrShell::GotoNextNum()
+bool SwCrsrShell::GotoNextNum()
 {
-    sal_Bool bRet = GetDoc()->GotoNextNum( *pCurCrsr->GetPoint() );
+    bool bRet = GetDoc()->GotoNextNum( *pCurCrsr->GetPoint() );
     if( bRet )
     {
         SwCallLink aLk( *this ); // watch Crsr-Moves
@@ -117,9 +117,9 @@ sal_Bool SwCrsrShell::GotoNextNum()
 }
 
 
-sal_Bool SwCrsrShell::GotoPrevNum()
+bool SwCrsrShell::GotoPrevNum()
 {
-    sal_Bool bRet = GetDoc()->GotoPrevNum( *pCurCrsr->GetPoint() );
+    bool bRet = GetDoc()->GotoPrevNum( *pCurCrsr->GetPoint() );
     if( bRet )
     {
         SwCallLink aLk( *this ); // watch Crsr-Moves

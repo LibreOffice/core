@@ -144,9 +144,9 @@ const SwNumRule* SwEditShell::GetOutlineNumRule() const
 
 // Absaetze ohne Numerierung, aber mit Einzuegen
 
-sal_Bool SwEditShell::NoNum()
+bool SwEditShell::NoNum()
 {
-    sal_Bool bRet = sal_True;
+    bool bRet = true;
     StartAllAction();
 
     SwPaM* pCrsr = GetCrsr();
@@ -393,7 +393,7 @@ void SwEditShell::GetCurrentOutlineLevels( sal_uInt8& rUpper, sal_uInt8& rLower 
     aCrsr.SetMark();
     if( pCrsr->HasMark() )
         *aCrsr.GetPoint() = *pCrsr->End();
-    GetDoc()->GotoNextNum( *aCrsr.GetPoint(), sal_False,
+    GetDoc()->GotoNextNum( *aCrsr.GetPoint(), false,
                             &rUpper, &rLower );
 }
 
@@ -411,7 +411,7 @@ bool SwEditShell::MoveNumParas( bool bUpperLower, bool bUpperLeft )
 
     sal_Bool bRet = sal_False;
     sal_uInt8 nUpperLevel, nLowerLevel;
-    if( GetDoc()->GotoNextNum( *aCrsr.GetPoint(), sal_False,
+    if( GetDoc()->GotoNextNum( *aCrsr.GetPoint(), false,
                                 &nUpperLevel, &nLowerLevel ))
     {
         if( bUpperLower )
@@ -423,7 +423,7 @@ bool SwEditShell::MoveNumParas( bool bUpperLower, bool bUpperLeft )
             if( bUpperLeft )        // verschiebe nach oben
             {
                 SwPosition aPos( *aCrsr.GetMark() );
-                if( GetDoc()->GotoPrevNum( aPos, sal_False ) )
+                if( GetDoc()->GotoPrevNum( aPos, false ) )
                     nOffset = aPos.nNode.GetIndex() -
                             aCrsr.GetMark()->nNode.GetIndex();
                 else
@@ -708,10 +708,10 @@ void SwEditShell::ChgNumRuleFmts( const SwNumRule& rRule )
     EndAllAction();
 }
 
-sal_Bool SwEditShell::ReplaceNumRule( const String& rOldRule, const String& rNewRule )
+bool SwEditShell::ReplaceNumRule( const String& rOldRule, const String& rNewRule )
 {
     StartAllAction();
-    sal_Bool bRet = GetDoc()->ReplaceNumRule( *GetCrsr()->GetPoint(), rOldRule, rNewRule );
+    bool bRet = GetDoc()->ReplaceNumRule( *GetCrsr()->GetPoint(), rOldRule, rNewRule );
     EndAllAction();
     return bRet;
 }

@@ -380,7 +380,7 @@ void SwUndoNumruleCreate::UndoImpl(::sw::UndoRedoContext &)
         bInitialized = true;
     }
 
-    pDoc->DelNumRule(aNew.GetName(), sal_True);
+    pDoc->DelNumRule(aNew.GetName(), true);
 }
 
 void SwUndoNumruleCreate::RedoImpl(::sw::UndoRedoContext &)
@@ -416,7 +416,7 @@ void SwUndoNumruleDelete::UndoImpl(::sw::UndoRedoContext &)
 
 void SwUndoNumruleDelete::RedoImpl(::sw::UndoRedoContext &)
 {
-    pDoc->DelNumRule(aOld.GetName(), sal_True);
+    pDoc->DelNumRule(aOld.GetName(), true);
 }
 
 SwRewriter SwUndoNumruleDelete::GetRewriter() const
@@ -438,12 +438,12 @@ SwUndoNumruleRename::SwUndoNumruleRename(const String & _aOldName,
 
 void SwUndoNumruleRename::UndoImpl(::sw::UndoRedoContext &)
 {
-    pDoc->RenameNumRule(aNewName, aOldName, sal_True);
+    pDoc->RenameNumRule(aNewName, aOldName, true);
 }
 
 void SwUndoNumruleRename::RedoImpl(::sw::UndoRedoContext &)
 {
-    pDoc->RenameNumRule(aOldName, aNewName, sal_True);
+    pDoc->RenameNumRule(aOldName, aNewName, true);
 }
 
 SwRewriter SwUndoNumruleRename::GetRewriter() const

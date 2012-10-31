@@ -752,7 +752,7 @@ const SwFrmFmt *SwFEShell::NewFlyFrm( const SfxItemSet& rSet, sal_Bool bAnchVali
         /* If called from a shell try to propagate an
             existing adjust item from rPos to the content node of the
             new frame. */
-        pRet = GetDoc()->MakeFlySection( eRndId, &rPos, &rSet, pParent, sal_True );
+        pRet = GetDoc()->MakeFlySection( eRndId, &rPos, &rSet, pParent, true );
 
     if( pRet )
     {

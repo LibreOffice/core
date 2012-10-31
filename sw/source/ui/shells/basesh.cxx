@@ -2135,9 +2135,9 @@ void SwBaseShell::GetTxtFontCtrlState( SfxItemSet& rSet )
                         aFont.SetCharSet(((const SvxFontItem*)pI)->GetCharSet());
                     }
 
-                    sal_Bool bVertical = rSh.IsInVerticalText();
+                    bool bVertical = rSh.IsInVerticalText();
                     aFont.SetOrientation(bVertical ? 2700 : 0);
-                    aFont.SetVertical(bVertical);
+                    aFont.SetVertical(bVertical ? sal_True : sal_False);
                     GetView().GetEditWin().SetInputContext( InputContext( aFont, INPUTCONTEXT_TEXT |
                                                         INPUTCONTEXT_EXTTEXTINPUT ) );
                 }

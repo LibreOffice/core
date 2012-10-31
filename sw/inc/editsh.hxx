@@ -491,7 +491,7 @@ public:
                         const bool bResetIndentAttrs = false );
 
     /// Paragraphs without enumeration but with indents.
-    sal_Bool NoNum();
+    bool NoNum();
 
     /// Delete, split enumeration list.
     void DelNumRules();
@@ -542,7 +542,7 @@ public:
 
     sal_uInt16 GetNodeNumStart( SwPaM* pPaM = NULL ) const;
 
-    sal_Bool ReplaceNumRule( const String& rOldRule, const String& rNewRule );
+    bool ReplaceNumRule( const String& rOldRule, const String& rNewRule );
 
     /** Searches for a text node with a numbering rule.
      in case a list style is found, <sListId> holds the list id, to which the

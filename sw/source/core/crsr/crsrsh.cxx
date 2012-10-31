@@ -2988,7 +2988,7 @@ short SwCrsrShell::GetTextDirection( const Point* pPt ) const
     return pDoc->GetTextDirection( aPos, &aPt );
 }
 
-sal_Bool SwCrsrShell::IsInVerticalText( const Point* pPt ) const
+bool SwCrsrShell::IsInVerticalText( const Point* pPt ) const
 {
     const short nDir = GetTextDirection( pPt );
     return FRMDIR_VERT_TOP_RIGHT == nDir || FRMDIR_VERT_TOP_LEFT == nDir;

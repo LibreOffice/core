@@ -612,8 +612,8 @@ public:
 
     sal_Bool SelTbl();
 
-    sal_Bool GotoNextNum();
-    sal_Bool GotoPrevNum();
+    bool GotoNextNum();
+    bool GotoPrevNum();
 
     bool GotoOutline( const String& rName );
     // to the next/previous or the given OutlineNode
@@ -805,7 +805,7 @@ public:
     const SwRedline* GotoRedline( sal_uInt16 nArrPos, sal_Bool bSelect = sal_False );
 
     // is cursor or the point in/over a vertical formatted text?
-    sal_Bool IsInVerticalText( const Point* pPt = 0 ) const;
+    bool IsInVerticalText( const Point* pPt = 0 ) const;
     // is cursor or the point in/over a right to left formatted text?
     sal_Bool IsInRightToLeftText( const Point* pPt = 0 ) const;
 

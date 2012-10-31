@@ -1016,14 +1016,14 @@ void SwDoc::SetNodeNumStart( const SwPosition& rPos, sal_uInt16 nStt )
 }
 
 // We can only delete if the Rule is unused!
-sal_Bool SwDoc::DelNumRule( const String& rName, sal_Bool bBroadcast )
+bool SwDoc::DelNumRule( const String& rName, bool bBroadcast )
 {
     sal_uInt16 nPos = FindNumRule( rName );
 
     if ( (*pNumRuleTbl)[ nPos ] == GetOutlineNumRule() )
     {
         OSL_FAIL( "<SwDoc::DelNumRule(..)> - No deletion of outline list style. This is serious defect - please inform OD" );
-        return sal_False;
+        return false;
     }
 
     if( USHRT_MAX != nPos && !IsUsed( *(*pNumRuleTbl)[ nPos ] ))
@@ -1069,9 +1069,9 @@ sal_Bool SwDoc::DelNumRule( const String& rName, sal_Bool bBroadcast )
         maNumRuleMap.erase(aTmpName);
 
         SetModified();
-        return sal_True;
+        return true;
     }
-    return sal_False;
+    return false;
 }
 
 void SwDoc::ChgNumRuleFmts( const SwNumRule& rRule, const String * pName )
@@ -1095,10 +1095,10 @@ void SwDoc::ChgNumRuleFmts( const SwNumRule& rRule, const String * pName )
     }
 }
 
-sal_Bool SwDoc::RenameNumRule(const String & rOldName, const String & rNewName,
-                              sal_Bool bBroadcast)
+bool SwDoc::RenameNumRule(const String & rOldName, const String & rNewName,
+                              bool bBroadcast)
 {
-    sal_Bool bResult = sal_False;
+    bool bResult = false;
     SwNumRule * pNumRule = FindNumRulePtr(rOldName);
 
     if (pNumRule)
@@ -1123,7 +1123,7 @@ sal_Bool SwDoc::RenameNumRule(const String & rOldName, const String & rNewName,
             pTxtNd->SetAttr(aItem);
         }
 
-        bResult = sal_True;
+        bResult = true;
 
         if (bBroadcast)
             BroadcastStyleOperation(rOldName, SFX_STYLE_FAMILY_PSEUDO,
@@ -1151,10 +1151,10 @@ void SwDoc::StopNumRuleAnimations( OutputDevice* pOut )
     }
 }
 
-sal_Bool SwDoc::ReplaceNumRule( const SwPosition& rPos,
+bool SwDoc::ReplaceNumRule( const SwPosition& rPos,
                             const String& rOldRule, const String& rNewRule )
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     SwNumRule *pOldRule = FindNumRulePtr( rOldRule ),
               *pNewRule = FindNumRulePtr( rNewRule );
     if( pOldRule && pNewRule && pOldRule != pNewRule )
@@ -1205,7 +1205,7 @@ sal_Bool SwDoc::ReplaceNumRule( const SwPosition& rPos,
             GetIDocumentUndoRedo().EndUndo( UNDO_END, NULL );
             SetModified();
 
-            bRet = sal_True;
+            bRet = true;
         }
     }
 
@@ -1294,10 +1294,10 @@ void SwDoc::MakeUniqueNumRules(const SwPaM & rPaM)
     }
 }
 
-sal_Bool SwDoc::NoNum( const SwPaM& rPam )
+bool SwDoc::NoNum( const SwPaM& rPam )
 {
 
-    sal_Bool bRet = SplitNode( *rPam.GetPoint(), false );
+    bool bRet = SplitNode( *rPam.GetPoint(), false );
     // Do we actually use Numbering at all?
     if( bRet )
     {
@@ -1312,7 +1312,7 @@ sal_Bool SwDoc::NoNum( const SwPaM& rPam )
             SetModified();
         }
         else
-            bRet = sal_False;   // no Numbering or just always sal_True?
+            bRet = false;   // no Numbering or just always sal_True?
     }
     return bRet;
 }
@@ -1389,16 +1389,16 @@ void SwDoc::InvalidateNumRules()
 }
 
 // To the next/preceding Bullet at the same Level
-static sal_Bool lcl_IsNumOk( sal_uInt8 nSrchNum, sal_uInt8& rLower, sal_uInt8& rUpper,
-                    sal_Bool bOverUpper, sal_uInt8 nNumber )
+static bool lcl_IsNumOk( sal_uInt8 nSrchNum, sal_uInt8& rLower, sal_uInt8& rUpper,
+                    bool bOverUpper, sal_uInt8 nNumber )
 {
     OSL_ENSURE( nNumber < MAXLEVEL,
             "<lcl_IsNumOk(..)> - misusage of method" );
 
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     {
         if( bOverUpper ? nSrchNum == nNumber : nSrchNum >= nNumber )
-            bRet = sal_True;
+            bRet = true;
         else if( nNumber > rLower )
             rLower = nNumber;
         else if( nNumber < rUpper )
@@ -1407,9 +1407,9 @@ static sal_Bool lcl_IsNumOk( sal_uInt8 nSrchNum, sal_uInt8& rLower, sal_uInt8& r
     return bRet;
 }
 
-static sal_Bool lcl_IsValidPrevNextNumNode( const SwNodeIndex& rIdx )
+static bool lcl_IsValidPrevNextNumNode( const SwNodeIndex& rIdx )
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     const SwNode& rNd = rIdx.GetNode();
     switch( rNd.GetNodeType() )
     {
@@ -1423,19 +1423,19 @@ static sal_Bool lcl_IsValidPrevNextNumNode( const SwNodeIndex& rIdx )
         break;
 
     case ND_SECTIONNODE:            // that one's valid, so proceed
-        bRet = sal_True;
+        bRet = true;
         break;
     }
     return bRet;
 }
 
-static sal_Bool lcl_GotoNextPrevNum( SwPosition& rPos, sal_Bool bNext,
-                            sal_Bool bOverUpper, sal_uInt8* pUpper, sal_uInt8* pLower )
+static bool lcl_GotoNextPrevNum( SwPosition& rPos, bool bNext,
+                            bool bOverUpper, sal_uInt8* pUpper, sal_uInt8* pLower )
 {
     const SwTxtNode* pNd = rPos.nNode.GetNode().GetTxtNode();
     const SwNumRule* pRule;
     if( !pNd || 0 == ( pRule = pNd->GetNumRule()))
-        return sal_False;
+        return false;
 
     sal_uInt8 nSrchNum = static_cast<sal_uInt8>(pNd->GetActualListLevel());
 
@@ -1443,7 +1443,7 @@ static sal_Bool lcl_GotoNextPrevNum( SwPosition& rPos, sal_Bool bNext,
     if( ! pNd->IsCountedInList() )
     {
         // If NO_NUMLEVEL is switched on, we search the preceding Node with Numbering
-        sal_Bool bError = sal_False;
+        bool bError = false;
         do {
             aIdx--;
             if( aIdx.GetNode().IsTxtNode() )
@@ -1461,18 +1461,18 @@ static sal_Bool lcl_GotoNextPrevNum( SwPosition& rPos, sal_Bool bNext,
                         break;      // found it!
                 }
                 else
-                    bError = sal_True;
+                    bError = true;
             }
             else
                 bError = !lcl_IsValidPrevNextNumNode( aIdx );
 
         } while( !bError );
         if( bError )
-            return sal_False;
+            return false;
     }
 
     sal_uInt8 nLower = nSrchNum, nUpper = nSrchNum;
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
 
     const SwTxtNode* pLast;
     if( bNext )
@@ -1494,7 +1494,7 @@ static sal_Bool lcl_GotoNextPrevNum( SwPosition& rPos, sal_Bool bNext,
                 {
                     rPos.nNode = aIdx;
                     rPos.nContent.Assign( (SwTxtNode*)pNd, 0 );
-                    bRet = sal_True;
+                    bRet = true;
                     break;
                 }
                 else
@@ -1525,7 +1525,7 @@ static sal_Bool lcl_GotoNextPrevNum( SwPosition& rPos, sal_Bool bNext,
             rPos.nNode.Assign( *pLast );
             rPos.nContent.Assign( (SwTxtNode*)pLast, 0 );
         }
-        bRet = sal_True;
+        bRet = true;
     }
 
     if( bRet )
@@ -1538,10 +1538,10 @@ static sal_Bool lcl_GotoNextPrevNum( SwPosition& rPos, sal_Bool bNext,
     return bRet;
 }
 
-sal_Bool SwDoc::GotoNextNum( SwPosition& rPos, sal_Bool bOverUpper,
+bool SwDoc::GotoNextNum( SwPosition& rPos, bool bOverUpper,
                             sal_uInt8* pUpper, sal_uInt8* pLower  )
 {
-   return ::lcl_GotoNextPrevNum( rPos, sal_True, bOverUpper, pUpper, pLower );
+   return ::lcl_GotoNextPrevNum( rPos, true, bOverUpper, pUpper, pLower );
 }
 
 const SwNumRule *  SwDoc::SearchNumRule(const SwPosition & rPos,
@@ -1620,10 +1620,10 @@ const SwNumRule *  SwDoc::SearchNumRule(const SwPosition & rPos,
 }
 
 
-sal_Bool SwDoc::GotoPrevNum( SwPosition& rPos, sal_Bool bOverUpper,
+bool SwDoc::GotoPrevNum( SwPosition& rPos, bool bOverUpper,
                             sal_uInt8* pUpper, sal_uInt8* pLower  )
 {
-   return ::lcl_GotoNextPrevNum( rPos, sal_False, bOverUpper, pUpper, pLower );
+   return ::lcl_GotoNextPrevNum( rPos, false, bOverUpper, pUpper, pLower );
 }
 
 bool SwDoc::NumUpDown( const SwPaM& rPam, bool bDown )

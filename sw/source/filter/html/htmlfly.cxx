@@ -311,7 +311,7 @@ void SwHTMLWriter::CollectFlyFrms()
             "number of browser configurations has changed" );
 
     SwPosFlyFrms aFlyPos;
-    pDoc->GetAllFlyFmts( aFlyPos, bWriteAll ? 0 : pCurPam, sal_True );
+    pDoc->GetAllFlyFmts( aFlyPos, bWriteAll ? 0 : pCurPam, true );
 
     for(SwPosFlyFrms::iterator it = aFlyPos.begin(); it != aFlyPos.end(); ++it)
     {

@@ -114,7 +114,7 @@ bool SwDoc::InsertGlossary( SwTextBlocks& rBlock, const String& rEntry,
     sal_uInt16 nIdx = rBlock.GetIndex( rEntry );
     if( (sal_uInt16) -1 != nIdx )
     {
-        sal_Bool bSav_IsInsGlossary = mbInsOnlyTxtGlssry;
+        bool bSav_IsInsGlossary = mbInsOnlyTxtGlssry;
         mbInsOnlyTxtGlssry = rBlock.IsOnlyTextBlock( nIdx );
 
         if( rBlock.BeginGetDoc( nIdx ) )

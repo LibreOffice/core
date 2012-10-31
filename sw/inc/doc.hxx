@@ -601,7 +601,7 @@ private:
     // COMPATIBILITY FLAGS END
     //
 
-    sal_Bool    mbStartIdleTimer;               ///< idle timer mode start/stop
+    bool    mbStartIdleTimer;               ///< idle timer mode start/stop
 
     bool        mbSetDrawDefaults;              ///< set draw pool defaults for freshly created documents
 
@@ -1046,8 +1046,8 @@ public:
      ( Start < Pos < End ) !!!
      (Required for Writers.) */
     void GetAllFlyFmts( SwPosFlyFrms& rPosFlyFmts, const SwPaM* = 0,
-                        sal_Bool bDrawAlso = sal_False,
-                        sal_Bool bAsCharAlso = sal_False ) const;
+                        bool bDrawAlso = false,
+                        bool bAsCharAlso = false ) const;
 
     /// Because swrtf.cxx and define private public here now.
     SwFlyFrmFmt  *MakeFlyFrmFmt (const String &rFmtName, SwFrmFmt *pDerivedFrom);
@@ -1070,7 +1070,7 @@ public:
                                  const SwPosition* pAnchorPos,
                                  const SfxItemSet* pSet = 0,
                                  SwFrmFmt *pParent = 0,
-                                 sal_Bool bCalledFromShell = sal_False );
+                                 bool bCalledFromShell = false );
     SwFlyFrmFmt* MakeFlyAndMove( const SwPaM& rPam, const SfxItemSet& rSet,
                                 const SwSelBoxes* pSelBoxes = 0,
                                 SwFrmFmt *pParent = 0 );
@@ -1133,7 +1133,7 @@ public:
     bool IsInHeaderFooter( const SwNodeIndex& rIdx ) const;
     short GetTextDirection( const SwPosition& rPos,
                             const Point* pPt = 0 ) const;
-    sal_Bool IsInVerticalText( const SwPosition& rPos,
+    bool IsInVerticalText( const SwPosition& rPos,
                                const Point* pPt = 0 ) const;
 
     /** Database  and DB-Manager
@@ -1522,20 +1522,20 @@ public:
     SwNumRule* FindNumRulePtr( const String& rName ) const;
 
     /// Deletion only possible if ::com::sun::star::chaos::Rule is not used!
-    sal_Bool RenameNumRule(const String & aOldName, const String & aNewName,
-                           sal_Bool bBroadcast = sal_False);
-    sal_Bool DelNumRule( const String& rName, sal_Bool bBroadCast = sal_False );
+    bool RenameNumRule(const String & aOldName, const String & aNewName,
+                           bool bBroadcast = false);
+    bool DelNumRule( const String& rName, bool bBroadCast = false );
     String GetUniqueNumRuleName( const String* pChkStr = 0, sal_Bool bAutoNum = sal_True ) const;
 
     void UpdateNumRule();   /// Update all invalids.
     void ChgNumRuleFmts( const SwNumRule& rRule, const String * pOldName = 0 );
-    sal_Bool ReplaceNumRule( const SwPosition& rPos, const String& rOldRule,
+    bool ReplaceNumRule( const SwPosition& rPos, const String& rOldRule,
                         const String& rNewRule );
 
     /// Goto next/previous on same level.
-    sal_Bool GotoNextNum( SwPosition&, sal_Bool bOverUpper = sal_True,
+    bool GotoNextNum( SwPosition&, bool bOverUpper = true,
                         sal_uInt8* pUpper = 0, sal_uInt8* pLower = 0 );
-    sal_Bool GotoPrevNum( SwPosition&, sal_Bool bOverUpper = sal_True,
+    bool GotoPrevNum( SwPosition&, bool bOverUpper = true,
                         sal_uInt8* pUpper = 0, sal_uInt8* pLower = 0 );
 
     /** Searches for a text node with a numbering rule.
@@ -1570,7 +1570,7 @@ public:
                                     const bool bInvestigateStartNode = false );
 
     /// Paragraphs without numbering but with indents.
-    sal_Bool NoNum( const SwPaM& );
+    bool NoNum( const SwPaM& );
 
     /// Delete, splitting of numbering list.
     void DelNumRules( const SwPaM& );
