@@ -314,6 +314,9 @@ public:
 
     SfxMedium_Impl( SfxMedium* pAntiImplP );
     ~SfxMedium_Impl();
+
+    OUString getFilterMimeType()
+    { return m_pFilter == 0 ? OUString() : m_pFilter->GetMimeType(); }
 };
 
 //------------------------------------------------------------------
@@ -2006,7 +2009,7 @@ void SfxMedium::Transfer_Impl()
 
                 try
                 {
-                    rtl::OUString aMimeType = GetFilter()->GetMimeType( );
+                    rtl::OUString aMimeType = pImp->getFilterMimeType();
                     ::ucbhelper::InsertOperation eOperation = ::ucbhelper::InsertOperation_COPY;
                     bool bMajor = false;
                     rtl::OUString sComment;
@@ -2087,7 +2090,7 @@ void SfxMedium::DoInternalBackup_Impl( const ::ucbhelper::Content& aOriginalCont
     {
         try
         {
-            rtl::OUString sMimeType = GetFilter()->GetMimeType( );
+            rtl::OUString sMimeType = pImp->getFilterMimeType();
             if( aBackupCont.transferContent( aOriginalContent,
                                             ::ucbhelper::InsertOperation_COPY,
                                             aBackupName,
@@ -2175,7 +2178,7 @@ void SfxMedium::DoBackup_Impl()
                 try
                 {
                     // do the transfer ( copy source file to backup dir )
-                    rtl::OUString sMimeType = GetFilter()->GetMimeType( );
+                    rtl::OUString sMimeType = pImp->getFilterMimeType();
                     bSuccess = aContent.transferContent( aSourceContent,
                                                         ::ucbhelper::InsertOperation_COPY,
                                                         aFileName,
@@ -3307,7 +3310,7 @@ void SfxMedium::CreateTempFile( sal_Bool bReplace )
                 if ( !aFileName.isEmpty() && aTmpURLObj.removeSegment() )
                 {
                     ::ucbhelper::Content aTargetContent( aTmpURLObj.GetMainURL( INetURLObject::NO_DECODE ), xComEnv, comphelper::getProcessComponentContext() );
-                    rtl::OUString sMimeType = GetFilter()->GetMimeType( );
+                    rtl::OUString sMimeType = pImp->getFilterMimeType();
                     if ( aTargetContent.transferContent( pImp->aContent, ::ucbhelper::InsertOperation_COPY, aFileName, NameClash::OVERWRITE, sMimeType ) )
                     {
                         SetWritableForUserOnly( aTmpURL );
