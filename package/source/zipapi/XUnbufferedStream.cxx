@@ -41,7 +41,7 @@ using com::sun::star::packages::zip::ZipIOException;
 using ::rtl::OUString;
 
 XUnbufferedStream::XUnbufferedStream(
-                      const uno::Reference< lang::XMultiServiceFactory >& xFactory,
+                      const uno::Reference< uno::XComponentContext >& xContext,
                       SotMutexHolderRef aMutexHolder,
                       ZipEntry & rEntry,
                       Reference < XInputStream > xNewZipStream,
@@ -87,7 +87,7 @@ XUnbufferedStream::XUnbufferedStream(
 
     if ( bMustDecrypt )
     {
-        m_xCipherContext = ZipFile::StaticGetCipher( xFactory, rData, false );
+        m_xCipherContext = ZipFile::StaticGetCipher( xContext, rData, false );
         mnBlockSize = ( rData->m_nEncAlg == xml::crypto::CipherID::AES_CBC_W3C_PADDING ? 16 : 1 );
     }
 
@@ -111,7 +111,7 @@ XUnbufferedStream::XUnbufferedStream(
 
 // allows to read package raw stream
 XUnbufferedStream::XUnbufferedStream(
-                    const uno::Reference< lang::XMultiServiceFactory >& /*xFactory*/,
+                    const uno::Reference< uno::XComponentContext >& /*xContext*/,
                     const Reference < XInputStream >& xRawStream,
                     const ::rtl::Reference< EncryptionData >& rData )
 : maMutexHolder( new SotMutexHolder )
@@ -148,7 +148,7 @@ XUnbufferedStream::XUnbufferedStream(
     mnZipEnd = mnZipCurrent + mnZipSize;
 
     // the raw data will not be decrypted, no need for the cipher
-    // m_xCipherContext = ZipFile::StaticGetCipher( xFactory, rData, false );
+    // m_xCipherContext = ZipFile::StaticGetCipher( xContext, rData, false );
 }
 
 XUnbufferedStream::~XUnbufferedStream()

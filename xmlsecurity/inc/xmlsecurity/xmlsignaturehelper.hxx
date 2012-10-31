@@ -112,7 +112,6 @@ private:
     Link                        maStartVerifySignatureHdl;
 
 private:
-    void        ImplCreateSEInitializer();
     DECL_LINK(  SignatureCreationResultListener, XMLSignatureCreationResult*);
     DECL_LINK(  SignatureVerifyResultListener, XMLSignatureVerifyResult* );
     DECL_LINK(  StartVerifySignatureElement, const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >* );

@@ -38,14 +38,14 @@
 using namespace ::com::sun::star;
 
 // ----------------------------------------------------------------
-OZipFileAccess::OZipFileAccess( const uno::Reference< lang::XMultiServiceFactory >& xFactory )
+OZipFileAccess::OZipFileAccess( const uno::Reference< uno::XComponentContext >& rxContext )
 : m_aMutexHolder( new SotMutexHolder )
-, m_xFactory( xFactory )
+, m_xContext( rxContext )
 , m_pZipFile( NULL )
 , m_pListenersContainer( NULL )
 , m_bDisposed( sal_False )
 {
-    if ( !xFactory.is() )
+    if ( !rxContext.is() )
         throw uno::RuntimeException(OSL_LOG_PREFIX, uno::Reference< uno::XInterface >() );
 }
 
@@ -188,7 +188,7 @@ void SAL_CALL OZipFileAccess::initialize( const uno::Sequence< uno::Any >& aArgu
         ::ucbhelper::Content aContent(
             aParamURL,
             uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >(),
-            comphelper::getComponentContext( m_xFactory ) );
+            m_xContext );
         uno::Reference < io::XActiveDataSink > xSink = new ZipPackageSink;
         if ( aContent.openStream ( xSink ) )
         {
@@ -221,7 +221,7 @@ void SAL_CALL OZipFileAccess::initialize( const uno::Sequence< uno::Any >& aArgu
     // TODO: in case xSeekable is implemented on separated XStream implementation a wrapper is required
     m_pZipFile = new ZipFile(
                 m_xContentStream,
-                m_xFactory,
+                m_xContext,
                 sal_True );
 }
 
@@ -450,9 +450,9 @@ OUString SAL_CALL OZipFileAccess::impl_staticGetImplementationName()
 
 //-------------------------------------------------------------------------
 uno::Reference< uno::XInterface > SAL_CALL OZipFileAccess::impl_staticCreateSelfInstance(
-            const uno::Reference< lang::XMultiServiceFactory >& xServiceManager )
+            const uno::Reference< lang::XMultiServiceFactory >& rxMSF )
 {
-    return uno::Reference< uno::XInterface >( *new OZipFileAccess( xServiceManager ) );
+    return uno::Reference< uno::XInterface >( *new OZipFileAccess( comphelper::getComponentContext(rxMSF) ) );
 }
 
 //-------------------------------------------------------------------------

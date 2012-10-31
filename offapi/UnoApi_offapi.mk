@@ -319,6 +319,10 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/util,\
 	UriAbbreviation \
 	URLTransformer \
 ))
+$(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/xml/crypto,\
+	NSSInitializer \
+	SEInitializer \
+))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/xml/dom,\
 	DocumentBuilder \
 	SAXDocumentBuilder \
@@ -4157,6 +4161,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/xml/crypto,\
 	XDigestContextSupplier \
 	XMLEncryptionException \
 	XMLSignatureException \
+	XNSSInitializer \
 	XSEInitializer \
 	XSecurityEnvironment \
 	XUriBinding \

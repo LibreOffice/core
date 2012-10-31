@@ -36,7 +36,7 @@ class SEInitializer_NssImpl : public cppu::ImplInheritanceHelper1
 >
 {
 public:
-    SEInitializer_NssImpl( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > &rxMSF );
+    SEInitializer_NssImpl( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > &rxContext );
     virtual ~SEInitializer_NssImpl();
 
     /* XSEInitializer */
@@ -70,7 +70,7 @@ com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL SEInitializer_NssImpl_ge
     throw ( ::com::sun::star::uno::RuntimeException );
 
 com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
-SAL_CALL SEInitializer_NssImpl_createInstance( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & rSMgr)
+SAL_CALL SEInitializer_NssImpl_createInstance( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & rxMSF)
     throw ( ::com::sun::star::uno::Exception );
 
 #endif

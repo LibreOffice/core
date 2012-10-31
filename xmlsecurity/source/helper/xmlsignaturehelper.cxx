@@ -37,12 +37,10 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/xml/sax/Parser.hpp>
 #include <com/sun/star/xml/sax/Writer.hpp>
+#include <com/sun/star/xml/crypto/SEInitializer.hpp>
 
 #include <tools/date.hxx>
 #include <tools/time.hxx>
-
-/* SEInitializer component */
-#define SEINITIALIZER_COMPONENT "com.sun.star.xml.crypto.SEInitializer"
 
 #define TAG_DOCUMENTSIGNATURES  "document-signatures"
 #define NS_DOCUMENTSIGNATURES   "http://openoffice.org/2004/documentsignatures"
@@ -68,20 +66,12 @@ bool XMLSignatureHelper::Init()
     DBG_ASSERT( !mxSEInitializer.is(), "XMLSignatureHelper::Init - mxSEInitializer already set!" );
     DBG_ASSERT( !mxSecurityContext.is(), "XMLSignatureHelper::Init - mxSecurityContext already set!" );
 
-    ImplCreateSEInitializer();
+    mxSEInitializer = com::sun::star::xml::crypto::SEInitializer::create( mxCtx );
 
     if ( mxSEInitializer.is() )
         mxSecurityContext = mxSEInitializer->createSecurityContext( ::rtl::OUString() );
 
     return mxSecurityContext.is();
-}
-
-void XMLSignatureHelper::ImplCreateSEInitializer()
-{
-    rtl::OUString sSEInitializer( SEINITIALIZER_COMPONENT );
-    uno::Reference< lang::XMultiComponentFactory > xMCF( mxCtx->getServiceManager() );
-    mxSEInitializer = uno::Reference< com::sun::star::xml::crypto::XSEInitializer > (
-        xMCF->createInstanceWithContext( sSEInitializer,  mxCtx ), uno::UNO_QUERY );
 }
 
 void XMLSignatureHelper::SetStorage(

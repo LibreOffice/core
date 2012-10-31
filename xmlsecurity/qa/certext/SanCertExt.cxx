@@ -22,7 +22,7 @@
 #include <com/sun/star/security/XSanExtension.hpp>
 #include <com/sun/star/security/ExtAltNameType.hpp>
 #include <com/sun/star/xml/crypto/XSecurityEnvironment.hpp>
-#include <com/sun/star/xml/crypto/XSEInitializer.hpp>
+#include <com/sun/star/xml/crypto/SEInitializer.hpp>
 #include <com/sun/star/xml/crypto/XXMLSecurityContext.hpp>
 #include <com/sun/star/security/XCertificate.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -44,7 +44,6 @@
 using namespace com::sun::star;
 
 #define OID_SUBJECT_ALTERNATIVE_NAME "2.5.29.17"
-#define SEINITIALIZER_COMPONENT "com.sun.star.xml.crypto.SEInitializer"
 
 
 namespace {
@@ -129,8 +128,7 @@ namespace {
     {
         uno::Reference< uno::XComponentContext > context(connection_.getComponentContext(), uno::UNO_QUERY_THROW);
         uno::Reference< lang::XMultiServiceFactory > factory(context->getServiceManager(), uno::UNO_QUERY_THROW);
-        uno::Reference< xml::crypto::XSEInitializer > xSEInitializer(factory->createInstance(
-            rtl::OUString::createFromAscii( SEINITIALIZER_COMPONENT )), uno::UNO_QUERY_THROW);
+        uno::Reference< xml::crypto::XSEInitializer > xSEInitializer = xml::crypto::SEInitializer::create(context);
         uno::Reference< xml::crypto::XXMLSecurityContext > xSecurityContext(
             xSEInitializer->createSecurityContext(rtl::OUString()));
         return xSecurityContext->getSecurityEnvironment();

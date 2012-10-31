@@ -44,7 +44,7 @@ class OZipFileAccess : public ::cppu::WeakImplHelper5<
 {
     SotMutexHolderRef m_aMutexHolder;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xFactory;
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > m_xContext;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > m_xContentStream;
     ZipFile* m_pZipFile;
@@ -54,7 +54,7 @@ class OZipFileAccess : public ::cppu::WeakImplHelper5<
     sal_Bool m_bDisposed;
 
 public:
-    OZipFileAccess( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xFactory );
+    OZipFileAccess( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext );
 
     virtual ~OZipFileAccess();
 
@@ -69,7 +69,7 @@ public:
     static ::rtl::OUString SAL_CALL impl_staticGetImplementationName();
 
     static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL impl_staticCreateSelfInstance(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceManager );
+            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxMSF );
 
 
     // XInitialization

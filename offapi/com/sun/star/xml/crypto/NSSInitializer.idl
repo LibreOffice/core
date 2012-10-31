@@ -17,17 +17,17 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef __com_sun_star_xml_crypto_SEInitializer_idl_
-#define __com_sun_star_xml_crypto_SEInitializer_idl_
+#ifndef __com_sun_star_xml_crypto_NSSInitializer_idl_
+#define __com_sun_star_xml_crypto_NSSInitializer_idl_
 
-#include <com/sun/star/xml/crypto/XSEInitializer.idl>
+#include <com/sun/star/xml/crypto/XNSSInitializer.idl>
 
 module com { module sun { module star { module xml { module crypto {
 
 /**
- * Service of SEInitializer
+    @since LibreOffice 3.7
  */
-service SEInitializer : XSEInitializer;
+service NSSInitializer : XNSSInitializer;
 
 } ; } ; } ; } ; } ;
 

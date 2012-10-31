@@ -72,14 +72,12 @@ extern "C" {
 #include <com/sun/star/security/XCertificateContainer.hpp>
 #include <com/sun/star/ucb/Lock.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
-#include <com/sun/star/xml/crypto/XSEInitializer.hpp>
+#include <com/sun/star/xml/crypto/SEInitializer.hpp>
 
 #include <boost/bind.hpp>
 
 using namespace com::sun::star;
 using namespace webdav_ucp;
-
-#define SEINITIALIZER_COMPONENT "com.sun.star.xml.crypto.SEInitializer"
 
 #ifndef EOL
 #    define EOL "\r\n"
@@ -436,10 +434,7 @@ extern "C" int NeonSession_CertificationNotify( void *userdata,
     uno::Reference< xml::crypto::XSEInitializer > xSEInitializer;
     try
     {
-        xSEInitializer = uno::Reference< xml::crypto::XSEInitializer >(
-            pSession->getComponentContext()->getServiceManager()->createInstanceWithContext(
-                SEINITIALIZER_COMPONENT, pSession->getComponentContext()),
-            uno::UNO_QUERY );
+        xSEInitializer = xml::crypto::SEInitializer::create( pSession->getComponentContext() );
     }
     catch ( uno::Exception const & )
     {

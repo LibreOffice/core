@@ -753,7 +753,7 @@ void SAL_CALL ZipPackage::initialize( const uno::Sequence< Any >& aArguments )
         {
             try
             {
-                m_pZipFile = new ZipFile ( m_xContentStream, m_xFactory, sal_True, m_bForceRecovery, xProgressHandler );
+                m_pZipFile = new ZipFile ( m_xContentStream, comphelper::getComponentContext(m_xFactory), sal_True, m_bForceRecovery, xProgressHandler );
                 getZipFileContents();
             }
             catch ( IOException & )
@@ -1108,7 +1108,7 @@ void ZipPackage::ConnectTo( const uno::Reference< io::XInputStream >& xInStream 
     if ( m_pZipFile )
         m_pZipFile->setInputStream( m_xContentStream );
     else
-        m_pZipFile = new ZipFile ( m_xContentStream, m_xFactory, sal_False );
+        m_pZipFile = new ZipFile ( m_xContentStream, comphelper::getComponentContext(m_xFactory), sal_False );
 }
 
 //--------------------------------------------------------
@@ -1157,7 +1157,7 @@ uno::Reference< io::XInputStream > ZipPackage::writeTempFile()
     }
 
     // Hand it to the ZipOutputStream:
-    ZipOutputStream aZipOut( m_xFactory, xTempOut );
+    ZipOutputStream aZipOut( comphelper::getComponentContext(m_xFactory), xTempOut );
     aZipOut.setMethod( DEFLATED );
     aZipOut.setLevel( DEFAULT_COMPRESSION );
 
