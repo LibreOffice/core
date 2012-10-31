@@ -1751,9 +1751,14 @@ void SvTreeList::ResortChildren( SvTreeListEntry* pParent )
         SvTreeListEntry* p = *it;
         sal_uLong nListPos = ULONG_MAX;
         GetInsertionPos(p, pParent, nListPos);
-        SvTreeListEntries::iterator itPos = pParent->maChildren.begin();
-        std::advance(itPos, nListPos);
-        pParent->maChildren.insert(itPos, p);
+        if (nListPos < pParent->maChildren.size())
+        {
+            SvTreeListEntries::iterator itPos = pParent->maChildren.begin();
+            std::advance(itPos, nListPos);
+            pParent->maChildren.insert(itPos, p);
+        }
+        else
+            pParent->maChildren.push_back(p);
         if (!p->maChildren.empty())
             // Recursively sort child entries.
             ResortChildren(p);
