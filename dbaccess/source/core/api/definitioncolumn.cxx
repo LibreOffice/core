@@ -162,7 +162,7 @@ rtl::OUString OTableColumn::getImplementationName(  ) throw (RuntimeException)
 // =========================================================================
 DBG_NAME( OQueryColumn );
 
-OQueryColumn::OQueryColumn( const Reference< XPropertySet >& _rxParserColumn, const Reference< XConnection >& _rxConnection,const ::rtl::OUString i_sLabel )
+OQueryColumn::OQueryColumn( const Reference< XPropertySet >& _rxParserColumn, const Reference< XConnection >& _rxConnection, const ::rtl::OUString &i_sLabel )
     :OTableColumnDescriptor( false /* do not act as descriptor */ )
     ,m_sLabel(i_sLabel)
 {

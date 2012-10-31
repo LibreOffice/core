@@ -158,7 +158,7 @@ namespace dbaccess
         OQueryColumn(
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _rxParserColumn,
             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
-            const ::rtl::OUString i_sLabel
+            const ::rtl::OUString &i_sLabel
         );
 
         // XTypeProvider
