@@ -65,8 +65,8 @@ using namespace chelp;
 //=========================================================================
 
 ContentProvider::ContentProvider(
-    const uno::Reference< lang::XMultiServiceFactory >& rSMgr )
-    : ::ucbhelper::ContentProviderImplHelper( rSMgr ),
+    const uno::Reference< uno::XComponentContext >& rxContext )
+    : ::ucbhelper::ContentProviderImplHelper( rxContext ),
         isInitialized( false ),
         m_aScheme(MYUCP_URL_SCHEME),
         m_pDatabases( 0 )
@@ -152,7 +152,7 @@ ContentProvider_CreateInstance(
     throw( uno::Exception )
 {
     lang::XServiceInfo * pX = static_cast< lang::XServiceInfo * >(
-        new ContentProvider( rSMgr ) );
+        new ContentProvider( comphelper::getComponentContext(rSMgr) ) );
     return uno::Reference< uno::XInterface >::query( pX );
 }
 
@@ -216,7 +216,7 @@ ContentProvider::queryContent(
     if ( xContent.is() )
         return xContent;
 
-    xContent = new Content( m_xSMgr, this, xCanonicId, m_pDatabases );
+    xContent = new Content( uno::Reference<lang::XMultiServiceFactory>(m_xContext->getServiceManager(), uno::UNO_QUERY_THROW), this, xCanonicId, m_pDatabases );
 
     // register new content
     registerNewContent( xContent );
@@ -308,7 +308,7 @@ void ContentProvider::init()
     try
     {
         uno::Reference< lang::XMultiServiceFactory > xConfigProvider =
-              configuration::theDefaultProvider::get( comphelper::getComponentContext(m_xSMgr) );
+              configuration::theDefaultProvider::get( m_xContext );
 
         uno::Sequence < uno::Any > lParams(1);
         beans::PropertyValue                       aParam ;
@@ -346,9 +346,6 @@ void ContentProvider::init()
     rtl::Bootstrap::expandMacros(aPath);
     aImagesZipPaths[ 1 ] = aPath;
 
-    uno::Reference< uno::XComponentContext > xContext(
-        comphelper::getComponentContext( m_xSMgr ) );
-
     sal_Bool showBasic = getBooleanKey(xHierAccess,"Help/ShowBasic");
     m_pDatabases = new Databases( showBasic,
                                   instPath,
@@ -356,18 +353,18 @@ void ContentProvider::init()
                                   utl::ConfigManager::getProductName(),
                                   productversion,
                                   stylesheet,
-                                  xContext );
+                                  m_xContext );
 }
 
 uno::Reference< lang::XMultiServiceFactory >
 ContentProvider::getConfiguration() const
 {
     uno::Reference< lang::XMultiServiceFactory > xProvider;
-    if( m_xSMgr.is() )
+    if( m_xContext.is() )
     {
         try
         {
-            xProvider = configuration::theDefaultProvider::get( comphelper::getComponentContext(m_xSMgr) );
+            xProvider = configuration::theDefaultProvider::get( m_xContext );
         }
         catch( const uno::Exception& )
         {
@@ -460,15 +457,13 @@ ContentProvider::getBooleanKey(
 void ContentProvider::subst( rtl::OUString& instpath ) const
 {
     uno::Reference< frame::XConfigManager > xCfgMgr;
-    if( m_xSMgr.is() )
+    if( m_xContext.is() )
     {
         try
         {
             xCfgMgr =
                 uno::Reference< frame::XConfigManager >(
-                    m_xSMgr->createInstance(
-                        rtl::OUString(
-                            "com.sun.star.config.SpecialConfigManager" ) ),
+                    m_xContext->getServiceManager()->createInstanceWithContext("com.sun.star.config.SpecialConfigManager", m_xContext),
                     uno::UNO_QUERY );
         }
         catch( const uno::Exception&)

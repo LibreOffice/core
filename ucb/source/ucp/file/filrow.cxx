@@ -43,8 +43,7 @@ sal_Bool convert( shell* pShell,
     {
         if( ! xConverter.is() )
         {
-            xConverter = uno::Reference< script::XTypeConverter >(
-                script::Converter::create(comphelper::getComponentContext(pShell->m_xMultiServiceFactory)) );
+            xConverter = script::Converter::create(pShell->m_xContext);
         }
 
         try

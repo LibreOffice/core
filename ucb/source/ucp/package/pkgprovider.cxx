@@ -26,6 +26,7 @@
 
 #include <boost/unordered_map.hpp>
 #include <osl/diagnose.h>
+#include <comphelper/processfactory.hxx>
 #include <cppuhelper/weak.hxx>
 #include <ucbhelper/contentidentifier.hxx>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
@@ -130,8 +131,8 @@ using namespace package_ucp;
 //=========================================================================
 
 ContentProvider::ContentProvider(
-            const uno::Reference< lang::XMultiServiceFactory >& rSMgr )
-: ::ucbhelper::ContentProviderImplHelper( rSMgr ),
+            const uno::Reference< uno::XComponentContext >& rxContext )
+: ::ucbhelper::ContentProviderImplHelper( rxContext ),
   m_pPackages( 0 )
 {
 }
@@ -171,7 +172,7 @@ XTYPEPROVIDER_IMPL_3( ContentProvider,
 //
 //=========================================================================
 
-XSERVICEINFO_IMPL_1( ContentProvider,
+XSERVICEINFO_IMPL_1_CTX( ContentProvider,
                      rtl::OUString( "com.sun.star.comp.ucb.PackageContentProvider" ),
                      rtl::OUString( PACKAGE_CONTENT_PROVIDER_SERVICE_NAME ) );
 
@@ -204,7 +205,7 @@ uno::Reference< ucb::XContent > SAL_CALL ContentProvider::queryContent(
     // Create a new identifier for the mormalized URL returned by
     // PackageUri::getUri().
     uno::Reference< ucb::XContentIdentifier > xId
-                = new ::ucbhelper::ContentIdentifier( m_xSMgr, aUri.getUri() );
+                = new ::ucbhelper::ContentIdentifier( uno::Reference<lang::XMultiServiceFactory>(m_xContext->getServiceManager(), uno::UNO_QUERY_THROW), aUri.getUri() );
 
     osl::MutexGuard aGuard( m_aMutex );
 
@@ -216,7 +217,7 @@ uno::Reference< ucb::XContent > SAL_CALL ContentProvider::queryContent(
 
     // Create a new content.
 
-    xContent = Content::create( m_xSMgr, this, Identifier ); // not xId!!!
+    xContent = Content::create( uno::Reference<lang::XMultiServiceFactory>(m_xContext->getServiceManager(), uno::UNO_QUERY_THROW), this, Identifier ); // not xId!!!
     registerNewContent( xContent );
 
     if ( xContent.is() && !xContent->getIdentifier().is() )
@@ -263,9 +264,8 @@ ContentProvider::createPackage( const rtl::OUString & rName, const rtl::OUString
         aArguments[ 0 ] <<= rURL;
 
         uno::Reference< uno::XInterface > xIfc
-            = m_xSMgr->createInstanceWithArguments(
-                rtl::OUString( "com.sun.star.packages.comp.ZipPackage" ),
-                aArguments );
+            = m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext("com.sun.star.packages.comp.ZipPackage",
+                aArguments, m_xContext );
 
         if ( xIfc.is() )
         {

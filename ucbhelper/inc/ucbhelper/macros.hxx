@@ -742,6 +742,19 @@ Class::getSupportedServiceNames_Static()                                    \
     return aSNS;                                                            \
 }
 
+// 1 service name
+#define XSERVICEINFO_IMPL_1_CTX( Class, ImplName, Service1 )                    \
+XSERVICEINFO_COMMOM_IMPL( Class, ImplName )                                 \
+XSERVICEINFO_CREATE_INSTANCE_IMPL_CTX( Class )                                  \
+                                                                            \
+com::sun::star::uno::Sequence< rtl::OUString >                              \
+Class::getSupportedServiceNames_Static()                                    \
+{                                                                           \
+    com::sun::star::uno::Sequence< rtl::OUString > aSNS( 1 );               \
+    aSNS.getArray()[ 0 ] = Service1;                                        \
+    return aSNS;                                                            \
+}
+
 #endif /* !_UCBHELPER_MACROS_HXX */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

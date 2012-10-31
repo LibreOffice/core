@@ -60,7 +60,7 @@ namespace fileaccess {
         friend class BaseContent;
     public:
 
-        FileProvider( const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& xMSF );
+        FileProvider( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext );
         ~FileProvider();
 
         // XInterface
@@ -211,7 +211,7 @@ namespace fileaccess {
         void SAL_CALL init();
 
         // Members
-        com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >  m_xMultiServiceFactory;
+        com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >      m_xContext;
 
         void SAL_CALL initProperties( void );
         osl::Mutex   m_aMutex;

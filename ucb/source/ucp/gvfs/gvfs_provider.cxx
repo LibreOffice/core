@@ -18,6 +18,7 @@
  */
 
 
+#include <comphelper/processfactory.hxx>
 #include <ucbhelper/contentidentifier.hxx>
 #include <libgnomevfs/gnome-vfs-init.h>
 #include "gvfs_provider.hxx"
@@ -35,8 +36,8 @@ using namespace gvfs;
 //=========================================================================
 
 ContentProvider::ContentProvider(
-    const uno::Reference< lang::XMultiServiceFactory >& rSMgr )
-: ::ucbhelper::ContentProviderImplHelper( rSMgr )
+    const uno::Reference< uno::XComponentContext >& rxContext )
+: ::ucbhelper::ContentProviderImplHelper( rxContext )
 {
 }
 // sdafas
@@ -74,7 +75,7 @@ XTYPEPROVIDER_IMPL_3( ContentProvider,
 //
 //=========================================================================
 
-XSERVICEINFO_IMPL_1( ContentProvider,
+XSERVICEINFO_IMPL_1_CTX( ContentProvider,
                      rtl::OUString( "com.sun.star.comp.GnomeVFSContentProvider" ),
                      rtl::OUString( "com.sun.star.ucb.GnomeVFSContentProvider" ) );
 //=========================================================================
@@ -114,7 +115,7 @@ ContentProvider::queryContent(
 
     try
     {
-        xContent = new ::gvfs::Content(m_xSMgr, this, Identifier );
+        xContent = new ::gvfs::Content(uno::Reference<lang::XMultiServiceFactory>(m_xContext->getServiceManager(), uno::UNO_QUERY_THROW), this, Identifier );
         registerNewContent( xContent );
     }
     catch ( com::sun::star::ucb::ContentCreationException const & )

@@ -28,6 +28,7 @@
 #include <com/sun/star/beans/XPropertyAccess.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XNamed.hpp>
+#include <com/sun/star/ucb/Store.hpp>
 #include <com/sun/star/ucb/XPropertySetRegistryFactory.hpp>
 #include <com/sun/star/ucb/XPropertySetRegistry.hpp>
 
@@ -102,9 +103,9 @@ struct ContentProviderImplHelper_Impl
 namespace ucbhelper {
 
 ContentProviderImplHelper::ContentProviderImplHelper(
-    const uno::Reference< lang::XMultiServiceFactory >& rXSMgr )
+    const uno::Reference< uno::XComponentContext >& rxContext )
 : m_pImpl( new ucbhelper_impl::ContentProviderImplHelper_Impl ),
-  m_xSMgr( rXSMgr )
+  m_xContext( rxContext )
 {
 }
 
@@ -313,26 +314,15 @@ ContentProviderImplHelper::getAdditionalPropertySetRegistry()
     if ( !m_pImpl->m_xPropertySetRegistry.is() )
     {
         uno::Reference< com::sun::star::ucb::XPropertySetRegistryFactory >
-            xRegFac(
-                m_xSMgr->createInstance(
-                    rtl::OUString(
-                        "com.sun.star.ucb.Store" ) ),
-                uno::UNO_QUERY );
+            xRegFac = com::sun::star::ucb::Store::create( m_xContext );
 
-        OSL_ENSURE( xRegFac.is(),
-                    "ContentProviderImplHelper::getAdditionalPropertySet - "
-                    "No UCB-Store service!" );
+        // Open/create a registry.
+        m_pImpl->m_xPropertySetRegistry
+            = xRegFac->createPropertySetRegistry( rtl::OUString() );
 
-        if ( xRegFac.is() )
-        {
-            // Open/create a registry.
-            m_pImpl->m_xPropertySetRegistry
-                = xRegFac->createPropertySetRegistry( rtl::OUString() );
-
-            OSL_ENSURE( m_pImpl->m_xPropertySetRegistry.is(),
-                    "ContentProviderImplHelper::getAdditionalPropertySet - "
-                    "Error opening registry!" );
-        }
+        OSL_ENSURE( m_pImpl->m_xPropertySetRegistry.is(),
+                "ContentProviderImplHelper::getAdditionalPropertySet - "
+                "Error opening registry!" );
     }
 
     return m_pImpl->m_xPropertySetRegistry;

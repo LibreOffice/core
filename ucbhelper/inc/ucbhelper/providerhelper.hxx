@@ -76,8 +76,7 @@ class UCBHELPER_DLLPUBLIC ContentProviderImplHelper : public cppu::OWeakObject,
 
 protected:
     osl::Mutex m_aMutex;
-    ::com::sun::star::uno::Reference<
-            ::com::sun::star::lang::XMultiServiceFactory >  m_xSMgr;
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >  m_xContext;
 
 private:
     UCBHELPER_DLLPRIVATE void removeContent( ContentImplHelper* pContent );
@@ -140,7 +139,7 @@ public:
 
     ContentProviderImplHelper(
                 const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::lang::XMultiServiceFactory >& rXSMgr );
+                    ::com::sun::star::uno::XComponentContext >& rxContext );
     virtual ~ContentProviderImplHelper();
 
     //////////////////////////////////////////////////////////////////////

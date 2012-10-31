@@ -32,6 +32,7 @@
  **************************************************************************
 
  *************************************************************************/
+#include <comphelper/processfactory.hxx>
 #include <ucbhelper/contentidentifier.hxx>
 #include "webdavprovider.hxx"
 #include "webdavcontent.hxx"
@@ -50,8 +51,8 @@ using namespace webdav_ucp;
 //=========================================================================
 
 ContentProvider::ContentProvider(
-                const uno::Reference< lang::XMultiServiceFactory >& rSMgr )
-: ::ucbhelper::ContentProviderImplHelper( rSMgr ),
+                const uno::Reference< uno::XComponentContext >& rxContext )
+: ::ucbhelper::ContentProviderImplHelper( rxContext ),
   m_xDAVSessionFactory( new DAVSessionFactory() ),
   m_pProps( 0 )
 {
@@ -92,7 +93,7 @@ XTYPEPROVIDER_IMPL_3( ContentProvider,
 //
 //=========================================================================
 
-XSERVICEINFO_IMPL_1( ContentProvider,
+XSERVICEINFO_IMPL_1_CTX( ContentProvider,
                      rtl::OUString( "com.sun.star.comp.WebDAVContentProvider" ),
                      rtl::OUString( WEBDAV_CONTENT_PROVIDER_SERVICE_NAME ) );
 
@@ -180,7 +181,7 @@ ContentProvider::queryContent(
     }
 
     if ( bNewId )
-        xCanonicId = new ::ucbhelper::ContentIdentifier( m_xSMgr, aURL );
+        xCanonicId = new ::ucbhelper::ContentIdentifier( uno::Reference<lang::XMultiServiceFactory>(m_xContext->getServiceManager(), uno::UNO_QUERY_THROW), aURL );
     else
         xCanonicId = Identifier;
 
@@ -197,7 +198,7 @@ ContentProvider::queryContent(
     try
     {
         xContent = new ::webdav_ucp::Content(
-                        m_xSMgr, this, xCanonicId, m_xDAVSessionFactory );
+                        uno::Reference<lang::XMultiServiceFactory>(m_xContext->getServiceManager(), uno::UNO_QUERY_THROW), this, xCanonicId, m_xDAVSessionFactory );
         registerNewContent( xContent );
     }
     catch ( ucb::ContentCreationException const & )

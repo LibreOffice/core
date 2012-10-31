@@ -20,6 +20,7 @@
 #include <osl/security.hxx>
 #include <osl/file.hxx>
 #include <osl/socket.h>
+#include <comphelper/processfactory.hxx>
 #include <cppuhelper/factory.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/ucb/FileSystemNotation.hpp>
@@ -80,8 +81,8 @@ extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL ucpfile_component_getFactory(
 
 
 
-FileProvider::FileProvider( const Reference< XMultiServiceFactory >& xMultiServiceFactory )
-    : m_xMultiServiceFactory( xMultiServiceFactory ),
+FileProvider::FileProvider( const Reference< XComponentContext >& rxContext )
+    : m_xContext( rxContext ),
       m_pMyShell( 0 )
 {
 }
@@ -139,7 +140,7 @@ FileProvider::queryInterface(
 void SAL_CALL FileProvider::init()
 {
     if( ! m_pMyShell )
-        m_pMyShell = new shell( m_xMultiServiceFactory, this, sal_True );
+        m_pMyShell = new shell( m_xContext, this, sal_True );
 }
 
 
@@ -153,9 +154,9 @@ FileProvider::initialize(
         if( aArguments.getLength() > 0 &&
             (aArguments[0] >>= config) &&
             config.compareToAscii("NoConfig") == 0 )
-            m_pMyShell = new shell( m_xMultiServiceFactory, this, sal_False );
+            m_pMyShell = new shell( m_xContext, this, sal_False );
         else
-            m_pMyShell = new shell( m_xMultiServiceFactory, this, sal_True );
+            m_pMyShell = new shell( m_xContext, this, sal_True );
     }
 }
 
@@ -244,7 +245,7 @@ Reference< XInterface > SAL_CALL
 FileProvider::CreateInstance(
     const Reference< XMultiServiceFactory >& xMultiServiceFactory )
 {
-    XServiceInfo* xP = (XServiceInfo*) new FileProvider( xMultiServiceFactory );
+    XServiceInfo* xP = (XServiceInfo*) new FileProvider( comphelper::getComponentContext(xMultiServiceFactory) );
     return Reference< XInterface >::query( xP );
 }
 

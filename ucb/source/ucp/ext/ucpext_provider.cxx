@@ -54,8 +54,8 @@ namespace ucb { namespace ucp { namespace ext
     //= ContentProvider
     //==================================================================================================================
     //------------------------------------------------------------------------------------------------------------------
-    ContentProvider::ContentProvider( const Reference< XMultiServiceFactory >& i_rServiceManager )
-        :ContentProvider_Base( i_rServiceManager )
+    ContentProvider::ContentProvider( const Reference< XComponentContext >& rxContext )
+        :ContentProvider_Base( rxContext )
     {
     }
 
@@ -94,8 +94,7 @@ namespace ucb { namespace ucp { namespace ext
     //------------------------------------------------------------------------------------------------------------------
     Reference< XInterface > ContentProvider::Create( const Reference< XComponentContext >& i_rContext )
     {
-        const ::comphelper::ComponentContext aContext( i_rContext );
-        return *( new ContentProvider( aContext.getLegacyServiceFactory() ) );
+        return *( new ContentProvider( i_rContext ) );
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -173,7 +172,7 @@ namespace ucb { namespace ucp { namespace ext
                 }
             }
         }
-        const Reference< XContentIdentifier > xNormalizedIdentifier( new ::ucbhelper::ContentIdentifier( m_xSMgr, aComposer.makeStringAndClear() ) );
+        const Reference< XContentIdentifier > xNormalizedIdentifier( new ::ucbhelper::ContentIdentifier( Reference<XMultiServiceFactory>(m_xContext->getServiceManager(), UNO_QUERY_THROW), aComposer.makeStringAndClear() ) );
 
         ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -183,7 +182,7 @@ namespace ucb { namespace ucp { namespace ext
             return xContent;
 
         // create a new content
-        xContent = new Content( m_xSMgr, this, xNormalizedIdentifier );
+        xContent = new Content( Reference<XMultiServiceFactory>(m_xContext->getServiceManager(), UNO_QUERY_THROW), this, xNormalizedIdentifier );
         if ( !xContent->getIdentifier().is() )
             throw IllegalIdentifierException();
 

@@ -50,8 +50,8 @@ using namespace com::sun::star::beans;
 //=========================================================================
 
 FTPContentProvider::FTPContentProvider(
-    const Reference< XMultiServiceFactory >& rSMgr)
-: ::ucbhelper::ContentProviderImplHelper(rSMgr),
+    const Reference< XComponentContext >& rxContext)
+: ::ucbhelper::ContentProviderImplHelper(rxContext),
   m_ftpLoaderThread(0),
   m_pProxyDecider(0)
 {
@@ -93,7 +93,7 @@ XTYPEPROVIDER_IMPL_3(FTPContentProvider,
 //
 //=========================================================================
 
-XSERVICEINFO_IMPL_1(
+XSERVICEINFO_IMPL_1_CTX(
     FTPContentProvider,
     rtl::OUString("com.sun.star.comp.FTPContentProvider"),
     rtl::OUString(FTP_CONTENT_PROVIDER_SERVICE_NAME));
@@ -154,7 +154,7 @@ FTPContentProvider::queryContent(
             aURL.host(),
             aURL.port().toInt32()))
         {
-            xContent = new FTPContent(m_xSMgr,this,xCanonicId,aURL);
+            xContent = new FTPContent( Reference<XMultiServiceFactory>(m_xContext->getServiceManager(), UNO_QUERY_THROW), this,xCanonicId,aURL);
             registerNewContent(xContent);
         }
         else {
@@ -178,7 +178,7 @@ FTPContentProvider::queryContent(
 
 void FTPContentProvider::init() {
     m_ftpLoaderThread = new FTPLoaderThread();
-    m_pProxyDecider = new ucbhelper::InternetProxyDecider(comphelper::getComponentContext(m_xSMgr));
+    m_pProxyDecider = new ucbhelper::InternetProxyDecider( m_xContext );
 }
 
 
@@ -250,10 +250,7 @@ FTPContentProvider::getHttpProvider()
     throw(RuntimeException)
 {
     // used for access to ftp-proxy
-    return
-        UniversalContentBroker::create(
-            comphelper::getComponentContext(m_xSMgr))->
-        queryContentProvider("http:");
+    return UniversalContentBroker::create( m_xContext )->queryContentProvider("http:");
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

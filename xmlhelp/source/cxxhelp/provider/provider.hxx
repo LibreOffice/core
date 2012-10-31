@@ -63,7 +63,7 @@ namespace chelp {
     {
     public:
         ContentProvider(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rSMgr );
+            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext );
 
         virtual ~ContentProvider();
 

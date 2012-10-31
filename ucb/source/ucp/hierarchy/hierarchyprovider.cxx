@@ -49,8 +49,8 @@ using namespace hierarchy_ucp;
 //=========================================================================
 
 HierarchyContentProvider::HierarchyContentProvider(
-            const uno::Reference< lang::XMultiServiceFactory >& rXSMgr )
-: ::ucbhelper::ContentProviderImplHelper( rXSMgr )
+            const uno::Reference< uno::XComponentContext >& rxContext )
+: ::ucbhelper::ContentProviderImplHelper( rxContext )
 {
 }
 
@@ -90,7 +90,7 @@ XTYPEPROVIDER_IMPL_4( HierarchyContentProvider,
 //
 //=========================================================================
 
-XSERVICEINFO_IMPL_1( HierarchyContentProvider,
+XSERVICEINFO_IMPL_1_CTX( HierarchyContentProvider,
                      rtl::OUString( "com.sun.star.comp.ucb.HierarchyContentProvider" ),
                      rtl::OUString( HIERARCHY_CONTENT_PROVIDER_SERVICE_NAME ) );
 
@@ -120,7 +120,7 @@ HierarchyContentProvider::queryContent(
 
     // Encode URL and create new Id. This may "correct" user-typed-in URL's.
     uno::Reference< ucb::XContentIdentifier > xCanonicId
-        = new ::ucbhelper::ContentIdentifier( m_xSMgr,
+        = new ::ucbhelper::ContentIdentifier( uno::Reference<lang::XMultiServiceFactory>(m_xContext->getServiceManager(), uno::UNO_QUERY_THROW),
                                               ::ucb_impl::urihelper::encodeURI(
                                                   aUri.getUri() ) );
     osl::MutexGuard aGuard( m_aMutex );
@@ -132,7 +132,7 @@ HierarchyContentProvider::queryContent(
         return xContent;
 
     // Create a new content.
-    xContent = HierarchyContent::create( m_xSMgr, this, xCanonicId );
+    xContent = HierarchyContent::create( uno::Reference<lang::XMultiServiceFactory>(m_xContext->getServiceManager(), uno::UNO_QUERY_THROW), this, xCanonicId );
     registerNewContent( xContent );
 
     if ( xContent.is() && !xContent->getIdentifier().is() )
@@ -176,7 +176,7 @@ HierarchyContentProvider::getConfigProvider(
             ConfigProviderMapEntry aEntry;
             aEntry.xConfigProvider
                 = uno::Reference< lang::XMultiServiceFactory >(
-                                m_xSMgr->createInstance( rServiceSpecifier ),
+                                m_xContext->getServiceManager()->createInstanceWithContext(rServiceSpecifier, m_xContext),
                                 uno::UNO_QUERY );
 
             if ( aEntry.xConfigProvider.is() )
@@ -268,12 +268,9 @@ HierarchyContentProvider::getOfficeInstallationDirectories()
         osl::MutexGuard aGuard( m_aMutex );
         if ( !m_xOfficeInstDirs.is() )
         {
-            OSL_ENSURE( m_xSMgr.is(), "No service manager!" );
+            OSL_ENSURE( m_xContext.is(), "No service manager!" );
 
-            uno::Reference< uno::XComponentContext > xCtx(
-                comphelper::getComponentContext( m_xSMgr ) );
-
-            xCtx->getValueByName(
+            m_xContext->getValueByName(
                 rtl::OUString( "/singletons/com.sun.star.util.theOfficeInstallationDirectories"  ) )
                 >>= m_xOfficeInstDirs;
 

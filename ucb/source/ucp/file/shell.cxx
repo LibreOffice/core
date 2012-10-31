@@ -28,6 +28,7 @@
 #include <com/sun/star/ucb/InteractiveAugmentedIOException.hpp>
 #include <com/sun/star/ucb/InsertCommandArgument.hpp>
 #include <com/sun/star/ucb/NameClash.hpp>
+#include <com/sun/star/ucb/Store.hpp>
 #include <com/sun/star/ucb/XContentIdentifier.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/ucb/XContentAccess.hpp>
@@ -146,12 +147,12 @@ shell::MyProperty::~MyProperty()
 #include "filinl.hxx"
 
 
-shell::shell( const uno::Reference< lang::XMultiServiceFactory >& xMultiServiceFactory,
+shell::shell( const uno::Reference< uno::XComponentContext >& rxContext,
               FileProvider* pProvider, sal_Bool bWithConfig )
     : TaskManager(),
       m_bWithConfig( bWithConfig ),
       m_pProvider( pProvider ),
-      m_xMultiServiceFactory( xMultiServiceFactory ),
+      m_xContext( rxContext ),
       Title( "Title" ),
       CasePreservingURL( "CasePreservingURL" ),
       IsDocument( "IsDocument" ),
@@ -386,15 +387,9 @@ shell::shell( const uno::Reference< lang::XMultiServiceFactory >& xMultiServiceF
 
     if(m_bWithConfig)
     {
-        rtl::OUString Store("com.sun.star.ucb.Store");
-        uno::Reference< XPropertySetRegistryFactory > xRegFac(
-            m_xMultiServiceFactory->createInstance( Store ),
-            uno::UNO_QUERY );
-        if ( xRegFac.is() )
-        {
-            // Open/create a registry
-            m_xFileRegistry = xRegFac->createPropertySetRegistry( rtl::OUString() );
-        }
+        uno::Reference< XPropertySetRegistryFactory > xRegFac = ucb::Store::create( m_xContext );
+        // Open/create a registry
+        m_xFileRegistry = xRegFac->createPropertySetRegistry( rtl::OUString() );
     }
 }
 

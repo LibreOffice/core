@@ -705,8 +705,7 @@ XResultSet_impl::connectToCache(
            ucb::ServiceNotFoundException,
            uno::RuntimeException )
 {
-    uno::Reference< lang::XMultiServiceFactory > mxSMgr
-        = m_pMyShell->m_xMultiServiceFactory;
+    uno::Reference< lang::XMultiServiceFactory > mxSMgr(m_pMyShell->m_xContext->getServiceManager(), uno::UNO_QUERY_THROW);
 
     if( m_xListener.is() )
         throw ucb::ListenerAlreadySetException( ::rtl::OUString(  OSL_LOG_PREFIX  ), uno::Reference< uno::XInterface >() );
@@ -773,7 +772,7 @@ XResultSet_impl::getMetaData(
 
             ::ucbhelper::ResultSetMetaData* p =
                 new ::ucbhelper::ResultSetMetaData(
-                    m_pMyShell->m_xMultiServiceFactory,
+                    uno::Reference<lang::XMultiServiceFactory>(m_pMyShell->m_xContext->getServiceManager(), uno::UNO_QUERY_THROW),
                     m_sProperty,
                     aColumnData );
             return uno::Reference< sdbc::XResultSetMetaData >( p );
@@ -782,7 +781,7 @@ XResultSet_impl::getMetaData(
 
     ::ucbhelper::ResultSetMetaData* p =
             new ::ucbhelper::ResultSetMetaData(
-                m_pMyShell->m_xMultiServiceFactory, m_sProperty );
+                uno::Reference<lang::XMultiServiceFactory>(m_pMyShell->m_xContext->getServiceManager(), uno::UNO_QUERY_THROW), m_sProperty );
     return uno::Reference< sdbc::XResultSetMetaData >( p );
 }
 
