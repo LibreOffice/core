@@ -699,17 +699,14 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
                 rRet.Insert(aStr,nTextStart);
                 rRet += '\"';
             }
-            else
+            else if (nRecord == END && rRet.Len() > 0)
             {
-                if (nRecord == END)
-                {
-                    sal_Unicode cChar = 0;
-                    xub_StrLen nI = rRet.Len()-1;
-                    while (nI && ((cChar = rRet.GetChar(nI)) == ' '))
-                        --nI;
-                    if ((cChar == '=') || (cChar == '+') || (cChar == '-'))
-                        APPEND(rRet,"{}");
-                }
+                sal_Unicode cChar = 0;
+                xub_StrLen nI = rRet.Len()-1;
+                while (nI && ((cChar = rRet.GetChar(nI)) == ' '))
+                    --nI;
+                if ((cChar == '=') || (cChar == '+') || (cChar == '-'))
+                    APPEND(rRet,"{}");
             }
         }
 
