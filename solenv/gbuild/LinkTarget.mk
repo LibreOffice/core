@@ -50,8 +50,14 @@ gb_LinkTarget__get_debugcxxflags=$(if $(call gb_LinkTarget__debug_enabled,$(1)),
 # similar for LDFLAGS, use linker optimization flags in non-debug case,
 # but moreover strip debug from libraries for which debuginfo is not wanted
 # (some libraries reuse .o files from other libraries, notably unittests)
+ifneq ($(strip $(BUILD_MAGIC)),)
+# magic only here
 gb_LinkTarget__get_stripldflags=$(if $(call gb_LinkTarget__debug_enabled,$(1)),,$(gb_LINKERSTRIPDEBUGFLAGS))
 gb_LinkTarget__get_debugldflags=$(if $(call gb_LinkTarget__debug_enabled,$(1)),,$(gb_LINKEROPTFLAGS) $(call gb_LinkTarget__get_stripldflags,$(1)))
+else
+# no magic here, please
+gb_LinkTarget__get_debugldflags=$(gb_LINKEROPTFLAGS)
+endif
 
 # generic cflags/cxxflags to use (optimization flags, debug flags)
 # user supplied CFLAGS/CXXFLAGS override default debug/optimization flags
