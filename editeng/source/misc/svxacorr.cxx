@@ -1604,14 +1604,6 @@ sal_Bool SvxAutoCorrect::PutText( const String& rShort, const String& rLong,
     return sal_False;
 }
 
-    //  - Delete an entry
-sal_Bool SvxAutoCorrect::DeleteText( const String& rShort, LanguageType eLang )
-{
-    boost::ptr_map<LanguageType, SvxAutoCorrectLanguageLists>::iterator nTmpVal = pLangTable->find(eLang);
-    if(nTmpVal != pLangTable->end())
-        return nTmpVal->second->DeleteText(rShort);
-    return sal_False;
-}
 sal_Bool SvxAutoCorrect::MakeCombinedChanges( std::vector<SvxAutocorrWord>& aNewEntries,
                                               std::vector<SvxAutocorrWord>& aDeleteEntries,
                                               LanguageType eLang )
