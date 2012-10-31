@@ -711,9 +711,12 @@ void ScColumn::GetOptimalHeight( SCROW nStartRow, SCROW nEndRow, sal_uInt16* pHe
                 bStdOnly = !bBreak;
 
                 // bedingte Formatierung: Zellen durchgehen
-                if ( bStdOnly && ((const SfxUInt32Item&)pPattern->
-                                    GetItem(ATTR_CONDITIONAL)).GetValue() )
+                if (bStdOnly &&
+                    !static_cast<const ScCondFormatItem&>(pPattern->GetItem(
+                            ATTR_CONDITIONAL)).GetCondFormatData().empty())
+                {
                     bStdOnly = false;
+                }
 
                 // gedrehter Text: Zellen durchgehen
                 if ( bStdOnly && ((const SfxInt32Item&)pPattern->
