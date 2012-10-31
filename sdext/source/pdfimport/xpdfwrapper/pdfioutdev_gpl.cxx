@@ -34,7 +34,11 @@
 #pragma warning(push, 1)
 #endif
 
+#if POPPLER_CHECK_VERSION(0, 21, 0)
+#include "UTF.h"
+#else
 #include "UTF8.h"
+#endif
 
 #if defined __SUNPRO_CC
 #pragma enable_warn
