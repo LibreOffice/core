@@ -11,11 +11,15 @@ $(eval $(call gb_Module_Module,epm))
 
 ifeq (EPM,$(filter EPM,$(BUILD_TYPE)))
 
+ifneq ($(CROSS_COMPILING),YES)
+
 $(eval $(call gb_Module_add_targets,epm,\
 	ExternalPackage_epm \
 	ExternalProject_epm \
 	UnpackedTarball_epm \
 ))
+
+endif
 
 endif
 
