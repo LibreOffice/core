@@ -12531,8 +12531,13 @@ dnl ===================================================================
 dnl Number of CPUs to use during the build
 dnl ===================================================================
 AC_MSG_CHECKING([for number of processors to use])
-if test -n "$with_parallelism"; then
-    PARALLELISM=$with_parallelism
+# plain --with-parallelism is just the default
+if test -n "$with_parallelism" -a "$with_parallelism" != "yes"; then
+    if test "$with_parallelism" = "no"; then
+        PARALLELISM=1
+    else
+        PARALLELISM=$with_parallelism
+    fi
 else
     if test "$enable_icecream" = "yes"; then
         PARALLELISM="10"
