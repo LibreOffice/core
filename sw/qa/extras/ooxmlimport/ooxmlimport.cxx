@@ -37,6 +37,7 @@
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/text/RelOrientation.hpp>
 #include <com/sun/star/text/SetVariableType.hpp>
+#include <com/sun/star/text/TableColumnSeparator.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>
 #include <com/sun/star/text/WrapTextMode.hpp>
@@ -105,6 +106,7 @@ public:
     void testN782345();
     void testN783638();
     void testFdo52208();
+    void testN785767();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -163,6 +165,7 @@ void Test::run()
         {"n782345.docx", &Test::testN782345},
         {"n783638.docx", &Test::testN783638},
         {"fdo52208.docx", &Test::testFdo52208},
+        {"n785767.docx", &Test::testN785767},
     };
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
     {
@@ -1001,6 +1004,17 @@ void Test::testFdo52208()
     uno::Reference<text::XPageCursor> xCursor(xTextViewCursorSupplier->getViewCursor(), uno::UNO_QUERY);
     xCursor->jumpToLastPage();
     CPPUNIT_ASSERT_EQUAL(sal_Int16(1), xCursor->getPage());
+}
+
+void Test::testN785767()
+{
+    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables( ), uno::UNO_QUERY);
+    uno::Reference<text::XTextTable> xTextTable(xTables->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<table::XTableRows> xTableRows(xTextTable->getRows(), uno::UNO_QUERY);
+    // Check the A1 and B1 cells, the width of both of them was the default value (10000 / 9, as there were 9 cells in the row).
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(36), getProperty< uno::Sequence<text::TableColumnSeparator> >(xTableRows->getByIndex(0), "TableColumnSeparators")[0].Position);
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(978), getProperty< uno::Sequence<text::TableColumnSeparator> >(xTableRows->getByIndex(1), "TableColumnSeparators")[0].Position);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
