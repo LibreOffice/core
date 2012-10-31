@@ -2683,23 +2683,27 @@ void SAL_CALL SfxBaseModel::checkIn( sal_Bool bIsMajor, const rtl::OUString& rMe
 sal_Bool SfxBaseModel::getBoolPropertyValue( const rtl::OUString& rName ) throw ( uno::RuntimeException )
 {
     sal_Bool bValue = sal_False;
-    SfxMedium* pMedium = m_pData->m_pObjectShell->GetMedium();
-    if ( pMedium )
+    if ( m_pData->m_pObjectShell )
     {
-        try
+        SfxMedium* pMedium = m_pData->m_pObjectShell->GetMedium();
+        if ( pMedium )
         {
-            ::ucbhelper::Content aContent( pMedium->GetName( ),
-                uno::Reference<ucb::XCommandEnvironment>(),
-                comphelper::getProcessComponentContext() );
-            com::sun::star::uno::Reference < beans::XPropertySetInfo > xProps = aContent.getProperties();
-            if ( xProps->hasPropertyByName( rName ) )
+            try
             {
-                aContent.getPropertyValue( rName ) >>= bValue;
+                ::ucbhelper::Content aContent( pMedium->GetName( ),
+                    uno::Reference<ucb::XCommandEnvironment>(),
+                    comphelper::getProcessComponentContext() );
+                com::sun::star::uno::Reference < beans::XPropertySetInfo > xProps = aContent.getProperties();
+                if ( xProps->hasPropertyByName( rName ) )
+                {
+                    aContent.getPropertyValue( rName ) >>= bValue;
+                }
             }
-        }
-        catch ( const uno::Exception & e )
-        {
-            throw uno::RuntimeException( e.Message, e.Context );
+            catch ( const uno::Exception & )
+            {
+                // Simply ignore it: it's likely the document isn't versionable in that case
+                bValue = sal_False;
+            }
         }
     }
     return bValue;

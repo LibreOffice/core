@@ -1440,31 +1440,34 @@ void SfxBaseController::ShowInfoBars( )
     {
         // CMIS verifications
         REFERENCE< document::XCmisDocument > xCmisDoc( m_pData->m_pViewShell->GetObjectShell()->GetModel(), uno::UNO_QUERY );
-        beans::PropertyValues aCmisProperties = xCmisDoc->getCmisPropertiesValues( );
-
-        if ( xCmisDoc->isVersionable( ) && aCmisProperties.hasElements( ) )
+        if ( xCmisDoc.is( ) )
         {
-            // Loop over the CMIS Properties to find cmis:isVersionSeriesCheckedOut
-            bool bFoundCheckedout = false;
-            sal_Bool bCheckedOut = sal_False;
-            for ( sal_Int32 i = 0; i < aCmisProperties.getLength() && !bFoundCheckedout; ++i )
-            {
-                if ( aCmisProperties[i].Name == "cmis:isVersionSeriesCheckedOut" )
-                {
-                    bFoundCheckedout = true;
-                    aCmisProperties[i].Value >>= bCheckedOut;
-                }
-            }
+            beans::PropertyValues aCmisProperties = xCmisDoc->getCmisPropertiesValues( );
 
-            if ( !bCheckedOut )
+            if ( xCmisDoc->isVersionable( ) && aCmisProperties.hasElements( ) )
             {
-                // Get the Frame and show the InfoBar if not checked out
-                SfxViewFrame* pViewFrame = m_pData->m_pViewShell->GetFrame();
-                std::vector< PushButton* > aButtons;
-                PushButton* pBtn = new PushButton( &pViewFrame->GetWindow(), SfxResId( BT_CHECKOUT ) );
-                pBtn->SetClickHdl( LINK( this, SfxBaseController, CheckOutHandler ) );
-                aButtons.push_back( pBtn );
-                pViewFrame->AppendInfoBar( "checkout", SfxResId( STR_NONCHECKEDOUT_DOCUMENT ), aButtons );
+                // Loop over the CMIS Properties to find cmis:isVersionSeriesCheckedOut
+                bool bFoundCheckedout = false;
+                sal_Bool bCheckedOut = sal_False;
+                for ( sal_Int32 i = 0; i < aCmisProperties.getLength() && !bFoundCheckedout; ++i )
+                {
+                    if ( aCmisProperties[i].Name == "cmis:isVersionSeriesCheckedOut" )
+                    {
+                        bFoundCheckedout = true;
+                        aCmisProperties[i].Value >>= bCheckedOut;
+                    }
+                }
+
+                if ( !bCheckedOut )
+                {
+                    // Get the Frame and show the InfoBar if not checked out
+                    SfxViewFrame* pViewFrame = m_pData->m_pViewShell->GetFrame();
+                    std::vector< PushButton* > aButtons;
+                    PushButton* pBtn = new PushButton( &pViewFrame->GetWindow(), SfxResId( BT_CHECKOUT ) );
+                    pBtn->SetClickHdl( LINK( this, SfxBaseController, CheckOutHandler ) );
+                    aButtons.push_back( pBtn );
+                    pViewFrame->AppendInfoBar( "checkout", SfxResId( STR_NONCHECKEDOUT_DOCUMENT ), aButtons );
+                }
             }
         }
     }
