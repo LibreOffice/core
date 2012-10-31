@@ -1,0 +1,9 @@
+module ooo { module vba { module adodb {
+    constants ParameterDirectionEnum {
+        const long adParamInput = 1;
+        const long adParamInputOutput = 3;
+        const long adParamOutput = 2;
+        const long adParamReturnValue = 4;
+        const long adParamUnknown = 0;
+    };
+}; }; };
