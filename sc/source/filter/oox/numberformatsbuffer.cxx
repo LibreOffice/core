@@ -1960,8 +1960,9 @@ void NumberFormat::writeToPropertyMap( PropertyMap& rPropMap ) const
 
 // ============================================================================
 
-NumberFormatsBuffer::NumberFormatsBuffer( const WorkbookHelper& rHelper ) :
-    WorkbookHelper( rHelper )
+NumberFormatsBuffer::NumberFormatsBuffer( const WorkbookHelper& rHelper )
+    : WorkbookHelper(rHelper)
+    , mnHighestId(0)
 {
     // get the current locale
     // try user-defined locale setting
