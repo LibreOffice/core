@@ -1177,7 +1177,6 @@ class MSFILTER_DLLPUBLIC EscherPropertyContainer
     sal_uInt32              nCountSize;
 
     sal_Bool                bHasComplexData;
-    sal_Bool                bSuppressRotation;
 
 
     sal_uInt32  ImplGetColor( const sal_uInt32 rColor, sal_Bool bSwap = sal_True );

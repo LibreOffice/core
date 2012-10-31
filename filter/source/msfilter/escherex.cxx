@@ -146,7 +146,6 @@ void EscherPropertyContainer::ImplInit()
     nCountSize = 0;
     nSortBufSize = 64;
     bHasComplexData = sal_False;
-    bSuppressRotation = sal_False;
     pSortStruct = new EscherPropSortStruct[ nSortBufSize ];
 }
 
@@ -310,9 +309,6 @@ void EscherPropertyContainer::Commit( SvStream& rSt, sal_uInt16 nVersion, sal_uI
         {
             sal_uInt32 nPropValue = pSortStruct[ i ].nPropValue;
             sal_uInt16 nPropId = pSortStruct[ i ].nPropId;
-
-            if ( bSuppressRotation && ( nPropId == ESCHER_Prop_Rotation ) )
-                nPropValue = 0;
 
             rSt << nPropId
                 << nPropValue;
@@ -2336,7 +2332,6 @@ sal_Bool EscherPropertyContainer::CreateConnectorProperties(
                         }
                         CreateLineProperties( aXPropSet, sal_False );
                         bRetValue = sal_True;
-                        bSuppressRotation = sal_False;
                     }
                 }
             }
