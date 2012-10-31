@@ -1232,7 +1232,9 @@ bool SvTreeList::Remove( const SvTreeListEntry* pEntry )
     SvTreeListEntries& rList = pParent->maChildren;
     bool bLastEntry = false;
 
-    Broadcast(LISTACTION_REMOVED, const_cast<SvTreeListEntry*>(pEntry));
+    // Since we need the live instance of SvTreeListEntry for broadcasting,
+    // we first need to pop it from the container, broadcast it, then delete
+    // the instance manually at the end.
 
     if ( pEntry->HasChildListPos() )
     {
@@ -1240,22 +1242,23 @@ bool SvTreeList::Remove( const SvTreeListEntry* pEntry )
         bLastEntry = (nListPos == (rList.size()-1)) ? true : false;
         SvTreeListEntries::iterator it = rList.begin();
         std::advance(it, nListPos);
-        rList.erase(it);
+        rList.release(it).release();
     }
     else
     {
         SvTreeListEntries::iterator it =
             std::find_if(rList.begin(), rList.end(), FindByPointer(pEntry));
         if (it != rList.end())
-            rList.erase(it);
+            rList.release(it).release();
     }
-
-    // moved to end of method because it is used later with Broadcast
 
     if (!rList.empty() && !bLastEntry)
         SetListPositions(rList);
 
     nEntryCount -= nRemoved;
+    Broadcast(LISTACTION_REMOVED, const_cast<SvTreeListEntry*>(pEntry));
+    delete pEntry;
+
     return true;
 }
 
