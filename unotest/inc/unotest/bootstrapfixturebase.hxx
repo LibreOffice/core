@@ -83,9 +83,6 @@ public:
   // return a URL to a given c-str path from the solver directory
   ::rtl::OUString getURLFromSolver( const char *pPath );
 
-  // return a Path to a given c-str path from the solver directory
-  ::rtl::OUString getPathFromSolver( const char *pPath );
-
   virtual void setUp();
   virtual void tearDown();
 
