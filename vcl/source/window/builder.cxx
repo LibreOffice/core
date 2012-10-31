@@ -547,7 +547,7 @@ public:
     VclScrolledWindow(Window *pParent)
         : Window(WINDOW_SCROLLWINDOW)
     {
-        ImplInit(pParent, WB_HIDE, NULL);
+        ImplInit(pParent, WB_HIDE | WB_AUTOHSCROLL | WB_AUTOVSCROLL, NULL);
     }
 };
 
