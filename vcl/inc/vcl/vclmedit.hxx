@@ -138,6 +138,8 @@ public:
 
     void            SetTextSelectable( sal_Bool bTextSelectable );
     void            EnableCursor( sal_Bool bEnable );
+
+    virtual bool set_property(const rtl::OString &rKey, const rtl::OString &rValue);
 };
 
 inline sal_uLong VclMultiLineEdit::IsUpdateDataEnabled() const

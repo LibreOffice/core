@@ -29,7 +29,7 @@
 #include <memory>
 
 #include <tools/rc.h>
-
+#include <vcl/builder.hxx>
 #include <vcl/decoview.hxx>
 #include <vcl/svapp.hxx>
 
@@ -1572,6 +1572,15 @@ void VclMultiLineEdit::SetTextSelectable( sal_Bool bTextSelectable )
 void VclMultiLineEdit::EnableCursor( sal_Bool bEnable )
 {
     GetTextView()->EnableCursor( bEnable );
+}
+
+bool VclMultiLineEdit::set_property(const rtl::OString &rKey, const rtl::OString &rValue)
+{
+    if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("cursor-visible")))
+        EnableCursor(toBool(rValue));
+    else
+        return Edit::set_property(rKey, rValue);
+    return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
