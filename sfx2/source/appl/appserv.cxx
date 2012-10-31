@@ -351,7 +351,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                     RID_SVXDLG_CUSTOMIZE,
                     NULL, &aSet, xFrame );
 
-                  if ( pDlg )
+                if ( pDlg )
                 {
                     const short nRet = pDlg->Execute();
 
@@ -528,13 +528,13 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
         // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
         case SID_ABOUT:
         {
-             SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
+            SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
             if ( pFact )
             {
                 VclAbstractDialog* pDlg = pFact->CreateVclDialog( 0, RID_DEFAULTABOUT );
                 pDlg->Execute();
                 delete pDlg;
-            bDone = true;
+                bDone = true;
             }
             break;
         }
@@ -1039,8 +1039,8 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
             {
                 VclAbstractDialog* pDlg =
                     pFact->CreateFrameDialog( NULL, xFrame, rReq.GetSlot(), sPageURL );
-                  short nRet = pDlg->Execute();
-                  delete pDlg;
+                short nRet = pDlg->Execute();
+                delete pDlg;
                 SfxViewFrame* pView = SfxViewFrame::GetFirst();
                 while ( pView )
                 {
@@ -1315,9 +1315,9 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
                 if ( pSet && pSet->GetItemState( pSetPool->GetWhich( SID_AUTO_CORRECT_DLG ), sal_False, &pItem ) == SFX_ITEM_SET )
                     aSet.Put( *pItem );
 
-                  SfxAbstractTabDialog* pDlg = pFact->CreateTabDialog( RID_OFA_AUTOCORR_DLG, NULL, &aSet, NULL );
-                  pDlg->Execute();
-                  delete pDlg;
+                SfxAbstractTabDialog* pDlg = pFact->CreateTabDialog( RID_OFA_AUTOCORR_DLG, NULL, &aSet, NULL );
+                pDlg->Execute();
+                delete pDlg;
             }
 
             break;
