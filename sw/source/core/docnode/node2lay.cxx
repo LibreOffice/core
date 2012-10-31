@@ -41,25 +41,25 @@
 #include "section.hxx"
 #include "node2lay.hxx"
 
-/* --------------------------------------------------
- * Die SwNode2LayImpl-Klasse erledigt die eigentliche Arbeit,
- * die SwNode2Layout-Klasse ist nur die der Oefffentlichkeit bekannte Schnittstelle
- * --------------------------------------------------*/
+/**
+ * The SwNode2LayImpl class does the actual work, the SwNode2Layout class is
+ * just the public interface.
+ */
 class SwNode2LayImpl
 {
     SwIterator<SwFrm,SwModify>* pIter;
     SwModify* pMod;
-    std::vector<SwFrm*>* pUpperFrms;// Zum Einsammeln der Upper
-    sal_uLong nIndex;        // Der Index des einzufuegenden Nodes
-    sal_Bool bMaster    : 1; // sal_True => nur Master , sal_False => nur Frames ohne Follow
-    sal_Bool bInit      : 1; // Ist am SwClient bereits ein First()-Aufruf erfolgt?
+    std::vector<SwFrm*>* pUpperFrms; // To collect the Upper
+    sal_uLong nIndex;        // The Index of the to-be-inserted Nodes
+    sal_Bool bMaster    : 1; // sal_True => only Master, sal_False => only Frames without Follow
+    sal_Bool bInit      : 1; // Did we already call First() at SwClient?
 public:
     SwNode2LayImpl( const SwNode& rNode, sal_uLong nIdx, sal_Bool bSearch );
     ~SwNode2LayImpl() { delete pIter; delete pUpperFrms; }
-    SwFrm* NextFrm(); // liefert den naechsten "sinnvollen" Frame
+    SwFrm* NextFrm(); // Returns the next "useful" Frame
     SwLayoutFrm* UpperFrm( SwFrm* &rpFrm, const SwNode &rNode );
-    void SaveUpperFrms(); // Speichert (und lockt ggf.) die pUpper
-    // Fuegt unter jeden pUpper des Arrays einen Frame ein.
+    void SaveUpperFrms(); // Saves (and locks if needed) the pUpper
+    // Inserts a Frame under every pUpper of the array
     void RestoreUpperFrms( SwNodes& rNds, sal_uLong nStt, sal_uLong nEnd );
 
     SwFrm* GetFrm( const Point* pDocPos = 0,
@@ -67,15 +67,15 @@ public:
                     const sal_Bool bCalcFrm = sal_True ) const;
 };
 
-/* --------------------------------------------------
- * Hauptaufgabe des Ctor: Das richtige SwModify zu ermitteln,
- * ueber das iteriert wird.
- * Uebergibt man bSearch == sal_True, so wird der naechste Cntnt- oder TableNode
- * gesucht, der Frames besitzt ( zum Einsammeln der pUpper ), ansonsten wird
- * erwartet, das rNode bereits auf einem solchen Cntnt- oder TableNode sitzt,
- * vor oder hinter den eingefuegt werden soll.
- * --------------------------------------------------*/
-
+/**
+ * The main purpose of this ctor is to find the right SwModify to iterate over.
+ *
+ * @param bSearch sal_True: find the next Content or TableNode which contains
+ *                          Frames (to collect the pUpper).
+ *                          Else we assume that rNode points already to such a
+ *                          Content or TableNode.
+ *                          We insert before or after it.
+ */
 SwNode* GoNextWithFrm(const SwNodes& rNodes, SwNodeIndex *pIdx)
 {
     if( pIdx->GetIndex() >= rNodes.Count() - 1 )
@@ -147,14 +147,14 @@ SwNode2LayImpl::SwNode2LayImpl( const SwNode& rNode, sal_uLong nIdx, sal_Bool bS
     const SwNode* pNd;
     if( bSearch || rNode.IsSectionNode() )
     {
-        // Suche den naechsten Cntnt/TblNode, der einen Frame besitzt,
-        // damit wir uns vor/hinter ihn haengen koennen
+        // Find the next Cntnt/TableNode that contains a Frame, so that we can add
+        // ourselves before/after it
         if( !bSearch && rNode.GetIndex() < nIndex )
         {
             SwNodeIndex aTmp( *rNode.EndOfSectionNode(), +1 );
             pNd = GoPreviousWithFrm( &aTmp );
             if( !bSearch && pNd && rNode.GetIndex() > pNd->GetIndex() )
-                pNd = NULL; // Nicht ueber den Bereich hinausschiessen
+                pNd = NULL; // Do not go over the limits
             bMaster = sal_False;
         }
         else
@@ -163,7 +163,7 @@ SwNode2LayImpl::SwNode2LayImpl( const SwNode& rNode, sal_uLong nIdx, sal_Bool bS
             pNd = GoNextWithFrm( rNode.GetNodes(), &aTmp );
             bMaster = sal_True;
             if( !bSearch && pNd && rNode.EndOfSectionIndex() < pNd->GetIndex() )
-                pNd = NULL; // Nicht ueber den Bereich hinausschiessen
+                pNd = NULL; // Do not go over the limits
         }
     }
     else
@@ -189,17 +189,20 @@ SwNode2LayImpl::SwNode2LayImpl( const SwNode& rNode, sal_uLong nIdx, sal_Bool bS
     }
 }
 
-/* --------------------------------------------------
- * SwNode2LayImpl::NextFrm() liefert den naechsten "sinnvollen" Frame,
- * beim ersten Aufruf wird am eigentlichen Iterator ein First gerufen,
- * danach die Next-Methode. Das Ergebnis wird auf Brauchbarkeit untersucht,
- * so werden keine Follows akzeptiert, ein Master wird beim Einsammeln der
- * pUpper und beim Einfuegen vor ihm akzeptiert. Beim Einfuegen dahinter
- * wird vom Master ausgehend der letzte Follow gesucht und zurueckgegeben.
- * Wenn der Frame innerhalb eines SectionFrms liegt, wird noch festgestellt,
- * ob statt des Frames der SectionFrm der geeignete Rueckgabewert ist, dies
- * ist der Fall, wenn der neu einzufuegende Node ausserhalb des Bereichs liegt.
- * --------------------------------------------------*/
+/**
+ * Returns the next "useful" Frame.
+ *
+ * When calling this method for the first time, a First is triggered at the
+ * actual Iterator. The result is check for suitability: Follows are not
+ * accepted, a Master is accepted when collecting the pUpper and when
+ * inserting before it.
+ * When inserting after it, we find and return the last Follow starting
+ * from the Master.
+ *
+ * If the Frame is located in a SectionFrm, we check to see whether the
+ * SectionFrame is the suitable return value (instead of the Frame itself).
+ * This is the case if the to-be-inserted Node is outside of the Area.
+ */
 SwFrm* SwNode2LayImpl::NextFrm()
 {
     SwFrm* pRet;
@@ -216,9 +219,9 @@ SwFrm* SwNode2LayImpl::NextFrm()
     {
         SwFlowFrm* pFlow = SwFlowFrm::CastFlowFrm( pRet );
         OSL_ENSURE( pFlow, "Cntnt or Table expected?!" );
-        // Follows sind fluechtige Gestalten, deshalb werden sie ignoriert.
-        // Auch wenn wir hinter dem Frame eingefuegt werden sollen, nehmen wir
-        // zunaechst den Master, hangeln uns dann aber zum letzten Follow durch.
+        // Follows are pretty volatile, thus we ignore them.
+        // Even if we insert after the Frame, we start from the Master
+        // and iterate through it until the last Follow
         if( !pFlow->IsFollow() )
         {
             if( !bMaster )
@@ -230,19 +233,19 @@ SwFrm* SwNode2LayImpl::NextFrm()
             if( pRet->IsInSct() )
             {
                 SwSectionFrm* pSct = pRet->FindSctFrm();
-                // Vorsicht: Wenn wir in einer Fussnote sind, so kann diese
-                // Layoutmaessig in einem spaltigen Bereich liegen, obwohl
-                // sie nodemaessig ausserhalb liegt. Deshalb muss bei Fussnoten
-                // ueberprueft werden, ob auch der SectionFrm in der Fussnote
-                // und nicht ausserhalb liegt.
+                // ATTENTION: If we are in a Footnote, from a Layout point of view
+                // it could be located in an Area with columns, although it should be
+                // outside of it when looking at the Nodes.
+                // Thus, when dealing with Footnotes, we need to check whether the
+                // SectionFrm is also located within the Footnote and not outside of it.
                 if( !pRet->IsInFtn() || pSct->IsInFtn() )
                 {
                     OSL_ENSURE( pSct && pSct->GetSection(), "Where's my section?" );
                     SwSectionNode* pNd = pSct->GetSection()->GetFmt()->GetSectionNode();
                     OSL_ENSURE( pNd, "Lost SectionNode" );
-                    // Wenn der erhaltene Frame in einem Bereichsframe steht,
-                    // dessen Bereich den Ausgangsnode nicht umfasst, so kehren
-                    // wir mit dem SectionFrm zurueck, sonst mit dem Cntnt/TabFrm
+                    // If the received Frame is located within an Area Frame that does
+                    // not encompass the ExitNode, we return with the SectionFrm, else
+                    // we return with the Cntnt/TabFrm
                     if( bMaster )
                     {
                         if( pNd->GetIndex() >= nIndex )
@@ -382,7 +385,7 @@ void SwNode2LayImpl::RestoreUpperFrms( SwNodes& rNds, sal_uLong nStt, sal_uLong 
                 else
                     pNxt = pUp->Lower();
                 pNew = ((SwTableNode*)pNd)->MakeFrm( pUp );
-                OSL_ENSURE( pNew->IsTabFrm(), "Table exspected" );
+                OSL_ENSURE( pNew->IsTabFrm(), "Table expected" );
                 pNew->Paste( pUp, pNxt );
                 ((SwTabFrm*)pNew)->RegistFlys();
                 (*pUpperFrms)[x-2] = pNew;
@@ -425,7 +428,7 @@ SwFrm* SwNode2LayImpl::GetFrm( const Point* pDocPos,
                                 const SwPosition *pPos,
                                 const sal_Bool bCalcFrm ) const
 {
-    // mba: test if change of member pIter -> pMod broke anything
+    // test if change of member pIter -> pMod broke anything
     return pMod ? ::GetFrmOfModify( 0, *pMod, USHRT_MAX, pDocPos, pPos, bCalcFrm ) : 0;
 }
 
