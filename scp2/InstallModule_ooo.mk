@@ -101,6 +101,7 @@ $(eval $(call gb_InstallModule_define_mingw_dll_if_set,scp2/ooo,\
 	MINGW_FREETYPE_DLL \
 	MINGW_GCRYPT_DLL \
 	MINGW_GLIB_DLL \
+	MINGW_GMODULE_DLL \
 	MINGW_GNUTLS_DLL \
 	MINGW_GPG_ERROR_DLL \
 	MINGW_GRAPHITE2_DLL \

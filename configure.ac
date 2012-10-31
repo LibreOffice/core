@@ -11592,6 +11592,7 @@ if test "$enable_liblangtag" = "yes" -o \( "$enable_liblangtag" = "" -a $_os != 
         PKG_CHECK_MODULES( LIBLANGTAG, liblangtag >= 0.3)
         libo_MINGW_CHECK_DLL([LIBLANGTAG], [liblangtag])
         libo_MINGW_TRY_DLL([GLIB], [libglib-2.0])
+        libo_MINGW_TRY_DLL([GMODULE], [libgmodule-2.0])
     else
         SYSTEM_LIBLANGTAG=NO
         AC_MSG_RESULT([no])
@@ -11607,6 +11608,7 @@ AC_SUBST(LIBLANGTAG_CFLAGS)
 AC_SUBST(LIBLANGTAG_LIBS)
 AC_SUBST([MINGW_LIBLANGTAG_DLL])
 AC_SUBST([MINGW_GLIB_DLL])
+AC_SUBST([MINGW_GMODULE_DLL])
 
 dnl ===================================================================
 dnl Test whether to build GLib or rely on the system version
@@ -11631,6 +11633,7 @@ if test "$want_glib" = yes; then
         SYSTEM_GLIB=YES
         PKG_CHECK_MODULES( GLIB, glib-2.0 )
         libo_MINGW_CHECK_DLL([GLIB], [libglib-2.0])
+        libo_MINGW_TRY_DLL([GMODULE], [libgmodule-2.0])
     else
         AC_MSG_RESULT([internal])
         SYSTEM_GLIB=NO
