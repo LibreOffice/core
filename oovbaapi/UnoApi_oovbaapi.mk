@@ -181,6 +181,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,oovbaapi,oovbaapi/ooo/vba/adodb,\
     CursorLocationEnum \
     CursorOptionEnum \
     CursorTypeEnum \
+    DataTypeEnum \
     ErrorValueEnum \
     EventReasonEnum \
     EventStatusEnum \
@@ -191,6 +192,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,oovbaapi,oovbaapi/ooo/vba/adodb,\
     MarshalOptionsEnum \
     ObjectStateEnum \
     ParameterAttributesEnum \
+    ParameterDirectionEnum \
     PersistFormatEnum \
     PositionEnum \
     PropertyAttributesEnum \
