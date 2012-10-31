@@ -36,7 +36,6 @@ class LeftImpressPaneShell
 {
 public:
     TYPEINFO();
-    SFX_DECL_INTERFACE(SD_IF_SDLEFTIMPRESSPANESHELL)
 
     LeftImpressPaneShell (void);
     virtual ~LeftImpressPaneShell (void);
@@ -53,7 +52,6 @@ class LeftDrawPaneShell
 {
 public:
     TYPEINFO();
-    SFX_DECL_INTERFACE(SD_IF_SDLEFTDRAWPANESHELL)
 
     LeftDrawPaneShell (void);
     virtual ~LeftDrawPaneShell (void);
@@ -69,7 +67,6 @@ class ToolPanelPaneShell : public SfxShell
 {
 public:
     TYPEINFO();
-    SFX_DECL_INTERFACE( SD_IF_SDTOOLPANELPANESHELL )
 
     ToolPanelPaneShell();
     virtual ~ToolPanelPaneShell();
