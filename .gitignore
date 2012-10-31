@@ -61,7 +61,6 @@
 /configure
 /desktop/scripts/soffice.sh
 /makefile.mk
-/post_download
 /bin/repo-list
 /src.downloaded
 /ooo.lst
@@ -81,7 +80,6 @@
 /warn
 /build.log
 /build_error.log
-/post_download.log
 /install
 /downloaded
 /ID
