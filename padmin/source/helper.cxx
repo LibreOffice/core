@@ -31,9 +31,9 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
+#include <comphelper/processfactory.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/confignode.hxx>
-#include <vcl/unohelp.hxx>
 #include <i18npool/mslangid.hxx>
 #include <rtl/ustrbuf.hxx>
 
@@ -62,7 +62,7 @@ ResId padmin::PaResId( sal_uInt32 nId )
 
         utl::OConfigurationNode aNode =
             utl::OConfigurationTreeRoot::tryCreateWithServiceFactory(
-                    vcl::unohelper::GetMultiServiceFactory(),
+                    comphelper::getProcessServiceFactory(),
                     OUString("org.openoffice.Setup/L10N") );
         if ( aNode.isValid() )
         {

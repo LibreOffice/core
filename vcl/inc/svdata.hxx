@@ -53,10 +53,6 @@
 
 #include <boost/unordered_map.hpp>
 
-namespace com { namespace sun { namespace star { namespace lang {
-    class XMultiServiceFactory;
-} } } }
-
 struct ImplTimerData;
 struct ImplConfigData;
 class ImplDirectFontSubstitution;
@@ -124,8 +120,6 @@ struct ImplSVAppData
         ImeStatusWindowMode_SHOW
     };
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >    mxMSF;
-    String*                 mpMSFTempFileName;
     AllSettings*            mpSettings;         // Application settings
     LocaleConfigurationListener* mpCfgListener;
     VclEventListeners*      mpEventListeners;   // listeners for vcl events (eg, extended toolkit)

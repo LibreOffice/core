@@ -96,7 +96,7 @@ void Main();
     }
     comphelper::setProcessServiceFactory( xMSF );
 
-    InitVCL( xMSF );
+    InitVCL();
     ::Main();
     DeInitVCL();
 

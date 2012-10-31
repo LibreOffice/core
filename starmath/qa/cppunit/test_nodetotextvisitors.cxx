@@ -145,7 +145,7 @@ Test::Test()
     //of retaining references to the root ServiceFactory as its passed around
     comphelper::setProcessServiceFactory(xSM);
 
-    InitVCL(xSM);
+    InitVCL();
 
     SmGlobals::ensure();
 }

@@ -26,7 +26,9 @@
  *
  ************************************************************************/
 
+#include "sal/config.h"
 
+#include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 
 #include "tools/debug.hxx"
@@ -37,7 +39,6 @@
 #include "vcl/field.hxx"
 #include "vcl/event.hxx"
 #include "vcl/svapp.hxx"
-#include "vcl/unohelp.hxx"
 
 #include "svids.hrc"
 #include "svdata.hxx"
@@ -317,7 +318,7 @@ LocaleDataWrapper& FormatterBase::ImplGetLocaleDataWrapper() const
 {
     if ( !mpLocaleDataWrapper )
     {
-        ((FormatterBase*)this)->mpLocaleDataWrapper = new LocaleDataWrapper( vcl::unohelper::GetMultiServiceFactory(), GetLocale() );
+        ((FormatterBase*)this)->mpLocaleDataWrapper = new LocaleDataWrapper( comphelper::getProcessServiceFactory(), GetLocale() );
     }
     return *mpLocaleDataWrapper;
 }

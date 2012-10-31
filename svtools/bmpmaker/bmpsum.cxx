@@ -468,7 +468,7 @@ int main( int nArgCount, char* ppArgs[] )
     ::std::vector< String > aArgs;
     BmpSum                  aBmpSum;
 
-    InitVCL( com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >() );
+    InitVCL();
 
     for( int i = 1; i < nArgCount; i++ )
         aArgs.push_back( String( ppArgs[ i ], RTL_TEXTENCODING_ASCII_US ) );

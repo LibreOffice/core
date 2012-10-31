@@ -78,7 +78,9 @@ SAL_IMPLEMENT_MAIN()
         rtl::OUString( "applicat.rdb"  ),
         sal_True );
 
-    InitVCL( xMS );
+    comphelper::setProcessServiceFactory( xMS );
+
+    InitVCL();
     ::Main();
     DeInitVCL();
 

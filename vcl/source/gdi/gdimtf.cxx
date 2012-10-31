@@ -39,7 +39,6 @@
 #include <vcl/gdimtf.hxx>
 #include <vcl/graphictools.hxx>
 #include <vcl/canvastools.hxx>
-#include <vcl/unohelp.hxx>
 
 #include <salbmp.hxx>
 #include <salinst.hxx>
@@ -55,6 +54,7 @@
 #include <com/sun/star/awt/XGraphics.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/graphic/XGraphicRenderer.hpp>
+#include <comphelper/processfactory.hxx>
 
 using namespace com::sun::star;
 
@@ -462,8 +462,8 @@ bool GDIMetaFile::ImplPlayWithRenderer( OutputDevice* pOut, const Point& rPos, S
 
         Size aSize (rDestSize.Width () + 1, rDestSize.Height () + 1);
         uno::Reference<rendering::XBitmap> xBitmap = xCanvas->getDevice ()->createCompatibleAlphaBitmap (vcl::unotools::integerSize2DFromSize( aSize));
-        uno::Reference< lang::XMultiServiceFactory > xFactory = vcl::unohelper::GetMultiServiceFactory();
-        if( xFactory.is() && xBitmap.is () )
+        uno::Reference< lang::XMultiServiceFactory > xFactory = comphelper::getProcessServiceFactory();
+        if( xBitmap.is () )
         {
             uno::Reference< rendering::XMtfRenderer > xMtfRenderer;
             uno::Sequence< uno::Any > args (1);
@@ -553,8 +553,8 @@ void GDIMetaFile::ImplDelegate2PluggableRenderer( const MetaCommentAction* pAct,
     const ::rtl::OUString aGraphicServiceName=aBuffer.makeStringAndClear();
     ++pData;
 
-    uno::Reference< lang::XMultiServiceFactory > xFactory = vcl::unohelper::GetMultiServiceFactory();
-    if( pData<pEndData && xFactory.is() )
+    uno::Reference< lang::XMultiServiceFactory > xFactory = comphelper::getProcessServiceFactory();
+    if( pData<pEndData )
     {
         try
         {

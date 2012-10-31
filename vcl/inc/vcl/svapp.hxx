@@ -551,7 +551,7 @@ public:
 
 VCL_DLLPUBLIC Application* GetpApp();
 
-VCL_DLLPUBLIC sal_Bool InitVCL( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & );
+VCL_DLLPUBLIC sal_Bool InitVCL();
 VCL_DLLPUBLIC void DeInitVCL();
 
 VCL_DLLPUBLIC bool InitAccessBridge( bool bAllowCancel, bool &rCancelled );

@@ -195,7 +195,7 @@ void PDFWriterImpl::implWriteBitmapEx( const Point& i_rPoint, const Size& i_rSiz
                 {
                     uno::Reference < io::XStream > xStream = new utl::OStreamWrapper( aStrm );
                     uno::Reference< io::XSeekable > xSeekable( xStream, UNO_QUERY_THROW );
-                    uno::Reference< uno::XComponentContext > xContext( comphelper::getComponentContext(ImplGetSVData()->maAppData.mxMSF) );
+                    uno::Reference< uno::XComponentContext > xContext( comphelper::getProcessComponentContext() );
                     uno::Reference< graphic::XGraphicProvider > xGraphicProvider( graphic::GraphicProvider::create(xContext) );
                     uno::Reference< graphic::XGraphic > xGraphic( aGraphic.GetXGraphic() );
                     uno::Reference < io::XOutputStream > xOut( xStream->getOutputStream() );

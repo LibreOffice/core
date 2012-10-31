@@ -27,18 +27,11 @@
  ************************************************************************/
 
 
-#include <tools/tempfile.hxx>
-
-#include <osl/file.hxx>
-
-#include <cppuhelper/servicefactory.hxx>
-
 #include <vcl/svapp.hxx>
 #include <vcl/unohelp.hxx>
 
 #include <svdata.hxx>
 
-#include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <comphelper/processfactory.hxx>
 
@@ -47,8 +40,6 @@
 #include <com/sun/star/awt/XExtendedToolkit.hpp>
 #include <com/sun/star/accessibility/AccessibleEventObject.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
-#include <com/sun/star/registry/ImplementationRegistration.hpp>
-
 
 using namespace ::com::sun::star;
 using namespace ::rtl;
@@ -56,102 +47,21 @@ using namespace ::rtl;
 #define DOSTRING( x )                       #x
 #define STRING( x )                         DOSTRING( x )
 
-struct VCLRegServiceInfo
-{
-    const sal_Char*     pLibName;
-    sal_Bool            bHasSUPD;
-};
-
-static VCLRegServiceInfo aVCLComponentsArray[] =
-{
-    {"i18n", sal_True},
-    {"i18npool", sal_True},
-#ifdef UNX
-#ifdef MACOSX
-    {"dtransaqua", sal_True},
-#else
-    {"dtransX11", sal_True},
-#endif
-#endif
-#if defined(WNT)
-    {"sysdtrans", sal_False},
-#endif
-    {"dtrans", sal_False},
-    {"mcnttype", sal_False},
-    {"ftransl", sal_False},
-    {"dnd", sal_False},
-    {NULL, sal_False}
-};
-
-uno::Reference< lang::XMultiServiceFactory > vcl::unohelper::GetMultiServiceFactory()
-{
-    ImplSVData* pSVData = ImplGetSVData();
-    if ( !pSVData->maAppData.mxMSF.is() )
-    {
-        pSVData->maAppData.mxMSF = ::comphelper::getProcessServiceFactory();
-    }
-    if ( !pSVData->maAppData.mxMSF.is() )
-    {
-        TempFile aTempFile;
-        OUString aTempFileName;
-        osl::FileBase::getSystemPathFromFileURL( aTempFile.GetName(), aTempFileName );
-        pSVData->maAppData.mpMSFTempFileName = new String(aTempFileName);
-
-        try
-        {
-            pSVData->maAppData.mxMSF = ::cppu::createRegistryServiceFactory( aTempFileName, rtl::OUString(), sal_False );
-            uno::Reference < registry::XImplementationRegistration > xReg(
-                registry::ImplementationRegistration::create( comphelper::getComponentContext(pSVData->maAppData.mxMSF) ) );
-
-            if( xReg.is() )
-            {
-                sal_Int32 nCompCount = 0;
-                while ( aVCLComponentsArray[ nCompCount ].pLibName )
-                {
-                    OUString aComponentPathString = CreateLibraryName( aVCLComponentsArray[ nCompCount ].pLibName,  aVCLComponentsArray[ nCompCount ].bHasSUPD );
-                    if (!aComponentPathString.isEmpty() )
-                    {
-                        try
-                        {
-                            xReg->registerImplementation(
-                                OUString("com.sun.star.loader.SharedLibrary"),aComponentPathString, NULL );
-                        }
-                        catch( ::com::sun::star::uno::Exception & )
-                        {
-                        }
-                    }
-                    nCompCount++;
-                }
-            }
-        }
-        catch( ::com::sun::star::uno::Exception & )
-        {
-            delete pSVData->maAppData.mpMSFTempFileName;
-            pSVData->maAppData.mpMSFTempFileName = NULL;
-        }
-    }
-    return pSVData->maAppData.mxMSF;
-}
-
-
 uno::Reference < i18n::XBreakIterator > vcl::unohelper::CreateBreakIterator()
 {
-    uno::Reference< uno::XComponentContext > xContext = comphelper::getComponentContext(GetMultiServiceFactory());
+    uno::Reference< uno::XComponentContext > xContext = comphelper::getProcessComponentContext();
     return i18n::BreakIterator::create(xContext);
 }
 
 uno::Reference < i18n::XCharacterClassification > vcl::unohelper::CreateCharacterClassification()
 {
     uno::Reference < i18n::XCharacterClassification > xB;
-    uno::Reference< lang::XMultiServiceFactory > xMSF = GetMultiServiceFactory();
-    if ( xMSF.is() )
+    uno::Reference< lang::XMultiServiceFactory > xMSF = comphelper::getProcessServiceFactory();
+    uno::Reference < uno::XInterface > xI = xMSF->createInstance( ::rtl::OUString("com.sun.star.i18n.CharacterClassification") );
+    if ( xI.is() )
     {
-        uno::Reference < uno::XInterface > xI = xMSF->createInstance( ::rtl::OUString("com.sun.star.i18n.CharacterClassification") );
-        if ( xI.is() )
-        {
-            uno::Any x = xI->queryInterface( ::getCppuType((const uno::Reference< i18n::XCharacterClassification >*)0) );
-            x >>= xB;
-        }
+        uno::Any x = xI->queryInterface( ::getCppuType((const uno::Reference< i18n::XCharacterClassification >*)0) );
+        x >>= xB;
     }
     return xB;
 }

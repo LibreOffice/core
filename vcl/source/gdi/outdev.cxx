@@ -68,7 +68,7 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/rendering/XCanvas.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <vcl/unohelp.hxx>
+#include <comphelper/processfactory.hxx>
 
 #include <numeric>
 
@@ -2677,29 +2677,21 @@ SystemGraphicsData OutputDevice::GetSystemGfxData() const
     aArg[ 3 ] = uno::makeAny( sal_False );
     aArg[ 5 ] = GetSystemGfxDataAny();
 
-    uno::Reference<lang::XMultiServiceFactory> xFactory = vcl::unohelper::GetMultiServiceFactory();
+    uno::Reference<lang::XMultiServiceFactory> xFactory = comphelper::getProcessServiceFactory();
 
     uno::Reference<rendering::XCanvas> xCanvas;
 
     // Create canvas instance with window handle
     // =========================================
-    if ( xFactory.is() )
+    static uno::Reference<lang::XMultiServiceFactory> xCanvasFactory(
+        xFactory->createInstance( "com.sun.star.rendering.CanvasFactory" ),
+        uno::UNO_QUERY );
+    if(xCanvasFactory.is())
     {
-        static uno::Reference<lang::XMultiServiceFactory> xCanvasFactory(
-            xFactory->createInstance(
-                OUString( RTL_CONSTASCII_USTRINGPARAM(
-                              "com.sun.star."
-                              "rendering.CanvasFactory") ) ),
+        xCanvas.set(
+            xCanvasFactory->createInstanceWithArguments(
+                "com.sun.star.rendering.Canvas", aArg ),
             uno::UNO_QUERY );
-        if(xCanvasFactory.is())
-        {
-            xCanvas.set(
-                xCanvasFactory->createInstanceWithArguments(
-                    OUString( RTL_CONSTASCII_USTRINGPARAM(
-                                  "com.sun.star.rendering.Canvas" )),
-                    aArg ),
-                uno::UNO_QUERY );
-        }
     }
 
     return xCanvas;

@@ -31,9 +31,9 @@
 
 #include <boost/ptr_container/ptr_vector.hpp>
 
+#include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 
-#include <osl/file.hxx>
 #include <osl/mutex.hxx>
 #include <rtl/process.h>
 #include "tools/debug.hxx"
@@ -49,7 +49,6 @@
 #include "vcl/svapp.hxx"
 #include "vcl/wrkwin.hxx"
 #include "vcl/msgbox.hxx"
-#include "vcl/unohelp.hxx"
 #include "vcl/button.hxx" // for Button::GetStandardText
 #include "vcl/dockwin.hxx"  // for DockingManager
 #include "salinst.hxx"
@@ -61,7 +60,6 @@
 #include "svids.hrc"
 
 #include "com/sun/star/lang/XMultiServiceFactory.hpp"
-#include "com/sun/star/lang/XComponent.hpp"
 #include "com/sun/star/awt/XExtendedToolkit.hpp"
 #include "com/sun/star/java/JavaNotConfiguredException.hpp"
 #include "com/sun/star/java/JavaVMCreationFailureException.hpp"
@@ -140,22 +138,6 @@ void ImplDeInitSVData()
         delete pSVData->maGDIData.mpDefaultFontConfiguration;
     if( pSVData->maGDIData.mpFontSubstConfiguration )
         delete pSVData->maGDIData.mpFontSubstConfiguration;
-
-    if ( pSVData->maAppData.mpMSFTempFileName )
-    {
-        if ( pSVData->maAppData.mxMSF.is() )
-        {
-            ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > xComp( pSVData->maAppData.mxMSF, ::com::sun::star::uno::UNO_QUERY );
-            xComp->dispose();
-            pSVData->maAppData.mxMSF = NULL;
-        }
-
-        ::rtl::OUString aFileUrl;
-        ::osl::File::getFileURLFromSystemPath( *pSVData->maAppData.mpMSFTempFileName, aFileUrl );
-        osl::File::remove( aFileUrl );
-        delete pSVData->maAppData.mpMSFTempFileName;
-        pSVData->maAppData.mpMSFTempFileName = NULL;
-    }
 
     if( pSVData->maCtrlData.mpFieldUnitStrings )
         delete pSVData->maCtrlData.mpFieldUnitStrings, pSVData->maCtrlData.mpFieldUnitStrings = NULL;
@@ -353,7 +335,7 @@ bool ImplInitAccessBridge(bool bAllowCancel, bool &rCancelled)
         ImplSVData* pSVData = ImplGetSVData();
         if( ! pSVData->mxAccessBridge.is() )
         {
-            css::uno::Reference< XMultiServiceFactory > xFactory(vcl::unohelper::GetMultiServiceFactory());
+            css::uno::Reference< XMultiServiceFactory > xFactory(comphelper::getProcessServiceFactory());
 
             if( xFactory.is() )
             {

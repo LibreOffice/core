@@ -40,11 +40,7 @@ namespace i18n {
     class XBreakIterator;
     class XCharacterClassification;
     class XCollator;
-}
-namespace lang {
-    class XMultiServiceFactory;
-}
-}}}
+}}}}
 
 namespace com {
 namespace sun {
@@ -63,7 +59,6 @@ namespace vcl
 {
 namespace unohelper
 {
-VCL_DLLPUBLIC ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > GetMultiServiceFactory();
 VCL_DLLPUBLIC ::com::sun::star::uno::Reference < ::com::sun::star::i18n::XBreakIterator > CreateBreakIterator();
 VCL_DLLPUBLIC ::com::sun::star::uno::Reference < ::com::sun::star::i18n::XCharacterClassification> CreateCharacterClassification();
 //Get access to singleton Natural String Sorter collating for Application::GetLocale

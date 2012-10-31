@@ -100,7 +100,7 @@ SAL_IMPLEMENT_MAIN()
         exit( 1 );
     }
 
-    InitVCL( xFactory );
+    InitVCL();
     ::Main();
     DeInitVCL();
 

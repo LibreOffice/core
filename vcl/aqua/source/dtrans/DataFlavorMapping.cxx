@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-#include "vcl/unohelp.hxx"
 #include <DataFlavorMapping.hxx>
 #include "HtmlFmtFlt.hxx"
 #include "PictToBmpFlt.hxx"
@@ -34,6 +33,7 @@
 #include "com/sun/star/datatransfer/XMimeContentType.hpp"
 #include "com/sun/star/lang/XMultiServiceFactory.hpp"
 #include "com/sun/star/uno/Sequence.hxx"
+#include "comphelper/processfactory.hxx"
 
 #include <rtl/ustring.hxx>
 #include <osl/endian.h>
@@ -510,7 +510,7 @@ Any FileListDataProvider::getOOoData()
 
 DataFlavorMapper::DataFlavorMapper()
 {
-    Reference<XMultiServiceFactory> mrServiceManager = vcl::unohelper::GetMultiServiceFactory();
+    Reference<XMultiServiceFactory> mrServiceManager = comphelper::getProcessServiceFactory();
     mrXMimeCntFactory = Reference<XMimeContentTypeFactory>(mrServiceManager->createInstance(
        OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.datatransfer.MimeContentTypeFactory"))), UNO_QUERY);
 

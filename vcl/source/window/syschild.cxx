@@ -39,7 +39,6 @@
 #include <vcl/sysdata.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/syschild.hxx>
-#include <vcl/unohelp.hxx>
 
 #include <window.h>
 #include <salinst.hxx>
@@ -245,9 +244,9 @@ sal_IntPtr SystemChildWindow::GetParentWindowHandle( sal_Bool bUseJava )
 #ifdef SOLAR_JAVA
     else
     {
-        uno::Reference< lang::XMultiServiceFactory > xFactory( vcl::unohelper::GetMultiServiceFactory() );
+        uno::Reference< lang::XMultiServiceFactory > xFactory( comphelper::getProcessServiceFactory() );
 
-        if( xFactory.is() && ( GetSystemData()->aWindow > 0 ) )
+        if( GetSystemData()->aWindow > 0 )
         {
             try
             {

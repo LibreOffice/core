@@ -244,9 +244,7 @@ void ServiceImpl::startExecuteModal(
         if (! bOfficePipePresent) {
             OSL_ASSERT( ! bAppUp );
             app.reset( new MyApp );
-            if (! InitVCL( Reference<lang::XMultiServiceFactory>(
-                               m_xComponentContext->getServiceManager(),
-                               UNO_QUERY_THROW ) ))
+            if (! InitVCL() )
                 throw RuntimeException( OUSTR("Cannot initialize VCL!"),
                                         static_cast<OWeakObject *>(this) );
             AllSettings as = app->GetSettings();

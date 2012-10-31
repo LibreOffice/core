@@ -31,9 +31,8 @@
 #include "DataFlavorMapping.hxx"
 #include "OSXTransferable.hxx"
 
-#include "vcl/unohelp.hxx"
-
 #include "comphelper/makesequence.hxx"
+#include "comphelper/processfactory.hxx"
 
 #include <boost/assert.hpp>
 
@@ -95,7 +94,7 @@ AquaClipboard::AquaClipboard(NSPasteboard* pasteboard, bool bUseSystemPasteboard
   WeakComponentImplHelper4<XClipboardEx, XClipboardNotifier, XFlushableClipboard, XServiceInfo>(m_aMutex),
   mIsSystemPasteboard(bUseSystemPasteboard)
 {
-    Reference<XMultiServiceFactory> mrServiceMgr = vcl::unohelper::GetMultiServiceFactory();
+    Reference<XMultiServiceFactory> mrServiceMgr = comphelper::getProcessServiceFactory();
 
     mrXMimeCntFactory = Reference<XMimeContentTypeFactory>(mrServiceMgr->createInstance(
      OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.datatransfer.MimeContentTypeFactory"))), UNO_QUERY);

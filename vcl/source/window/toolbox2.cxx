@@ -26,7 +26,9 @@
  *
  ************************************************************************/
 
+#include "sal/config.h"
 
+#include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 #include <tools/debug.hxx>
 #include <tools/rc.h>
@@ -37,7 +39,6 @@
 #include <vcl/toolbox.hxx>
 #include <vcl/mnemonic.hxx>
 #include <vcl/menu.hxx>
-#include <vcl/unohelp.hxx>
 #include <vcl/ImageListProvider.hxx>
 
 #include <svdata.hxx>
@@ -2139,7 +2140,7 @@ sal_Bool ToolBox::AlwaysLocked()
         nAlwaysLocked = 0; // ask configuration only once
 
         utl::OConfigurationNode aNode = utl::OConfigurationTreeRoot::tryCreateWithServiceFactory(
-            vcl::unohelper::GetMultiServiceFactory(),
+            comphelper::getProcessServiceFactory(),
             OUString("/org.openoffice.Office.UI.GlobalSettings/Toolbars") );    // note: case sensitive !
         if ( aNode.isValid() )
         {
@@ -2152,7 +2153,7 @@ sal_Bool ToolBox::AlwaysLocked()
                 {
                     // now read the locking state
                     utl::OConfigurationNode aNode2 = utl::OConfigurationTreeRoot::tryCreateWithServiceFactory(
-                        vcl::unohelper::GetMultiServiceFactory(),
+                        comphelper::getProcessServiceFactory(),
                         OUString("/org.openoffice.Office.UI.GlobalSettings/Toolbars/States") );    // note: case sensitive !
 
                     sal_Bool bLocked = sal_Bool();

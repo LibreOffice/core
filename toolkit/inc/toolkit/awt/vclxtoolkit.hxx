@@ -106,7 +106,7 @@ protected:
 
 public:
 
-    VCLXToolkit( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & );
+    VCLXToolkit();
     ~VCLXToolkit();
 
     // ::com::sun::star::awt::XToolkitExperimental

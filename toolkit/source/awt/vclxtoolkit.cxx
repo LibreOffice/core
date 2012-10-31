@@ -414,27 +414,15 @@ static osl::Condition & getInitCondition()
     return *pC;
 }
 
-struct ToolkitThreadData
-{
-    VCLXToolkit * pTk;
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xSMgr;
-
-    ToolkitThreadData( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & rSMgr, VCLXToolkit * pTk_ )
-        : pTk( pTk_ )
-        , xSMgr( rSMgr )
-    {
-    }
-};
-
 extern "C"
 {
 static void SAL_CALL ToolkitWorkerFunction( void* pArgs )
 {
-    ToolkitThreadData * pTTD = (ToolkitThreadData *)pArgs;
-    bInitedByVCLToolkit = InitVCL( pTTD->xSMgr );
+    VCLXToolkit * pTk = (VCLXToolkit *)pArgs;
+    bInitedByVCLToolkit = InitVCL();
     if( bInitedByVCLToolkit )
     {
-        UnoWrapper* pUnoWrapper = new UnoWrapper( pTTD->pTk );
+        UnoWrapper* pUnoWrapper = new UnoWrapper( pTk );
         Application::SetUnoWrapper( pUnoWrapper );
     }
     getInitCondition().set();
@@ -446,7 +434,7 @@ static void SAL_CALL ToolkitWorkerFunction( void* pArgs )
         }
         try
         {
-            pTTD->pTk->dispose();
+            pTk->dispose();
         }
         catch( com::sun::star::uno::Exception & )
         {
@@ -457,12 +445,11 @@ static void SAL_CALL ToolkitWorkerFunction( void* pArgs )
     {
         JoinMainLoopThread();
     }
-    delete pTTD;
 }
 }
 
 // contructor, which might initialize VCL
-VCLXToolkit::VCLXToolkit( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & rSMgr ):
+VCLXToolkit::VCLXToolkit():
     cppu::WeakComponentImplHelper2<
     ::com::sun::star::awt::XToolkitExperimental,
     ::com::sun::star::lang::XServiceInfo>( GetMutex() ),
@@ -482,7 +469,7 @@ VCLXToolkit::VCLXToolkit( const ::com::sun::star::uno::Reference< ::com::sun::st
     if( ( nVCLToolkitInstanceCount == 1 ) && ( !Application::IsInMain() ) )
     {
         // setup execute thread
-        CreateMainLoopThread( ToolkitWorkerFunction, new ToolkitThreadData( rSMgr, this ) );
+        CreateMainLoopThread( ToolkitWorkerFunction, this );
         getInitCondition().wait();
     }
 }

@@ -490,9 +490,7 @@ Reference<XComponentContext> getUNO(
             {
                 //We show a message box or print to the console that there
                 //is another instance already running
-                if ( ! InitVCL( Reference<lang::XMultiServiceFactory>(
-                                    xComponentContext->getServiceManager(),
-                                    UNO_QUERY_THROW ) ))
+                if ( ! InitVCL() )
                     throw RuntimeException( OUSTR("Cannot initialize VCL!"),
                                             NULL );
                 {

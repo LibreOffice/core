@@ -1580,7 +1580,7 @@ CalendarWrapper& DateFormatter::GetCalendarWrapper() const
 {
     if ( !mpCalendarWrapper )
     {
-        ((DateFormatter*)this)->mpCalendarWrapper = new CalendarWrapper( comphelper::getComponentContext( vcl::unohelper::GetMultiServiceFactory() ) );
+        ((DateFormatter*)this)->mpCalendarWrapper = new CalendarWrapper( comphelper::getComponentContext( comphelper::getProcessServiceFactory() ) );
         mpCalendarWrapper->loadDefaultCalendar( GetLocale() );
     }
 

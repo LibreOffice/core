@@ -160,11 +160,9 @@ int ImplSVMain()
 
     DBG_ASSERT( pSVData->mpApp, "no instance of class Application" );
 
-    uno::Reference<lang::XMultiServiceFactory> xMS;
-
     int nReturn = EXIT_FAILURE;
 
-    sal_Bool bInit = InitVCL( xMS );
+    sal_Bool bInit = InitVCL();
 
     if( bInit )
     {
@@ -251,7 +249,7 @@ uno::Any SAL_CALL DesktopEnvironmentContext::getValueByName( const rtl::OUString
     return retVal;
 }
 
-sal_Bool InitVCL( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & rSMgr )
+sal_Bool InitVCL()
 {
     RTL_LOGFILE_CONTEXT( aLog, "vcl (ss112471) ::InitVCL" );
 
@@ -276,9 +274,6 @@ sal_Bool InitVCL( const ::com::sun::star::uno::Reference< ::com::sun::star::lang
 
     // SV bei den Tools anmelden
     InitTools();
-
-    DBG_ASSERT( !pSVData->maAppData.mxMSF.is(), "VCL service factory already set" );
-    pSVData->maAppData.mxMSF = rSMgr;
 
     // Main-Thread-Id merken
     pSVData->mnMainThreadId = ::osl::Thread::getCurrentIdentifier();
@@ -335,7 +330,7 @@ InitVCLWrapper()
 
     comphelper::setProcessServiceFactory( xSM );
 
-    InitVCL( xSM );
+    InitVCL();
 }
 
 #endif
@@ -498,8 +493,6 @@ void DeInitVCL()
             // ignore
         }
     }
-
-    pSVData->maAppData.mxMSF.clear();
 
     if( pSVData->mpApp )
     {

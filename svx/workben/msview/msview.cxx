@@ -1119,7 +1119,7 @@ void MSViewerWorkWindow::Resize()
     }
     comphelper::setProcessServiceFactory( xMSF );
 
-    InitVCL( xMSF );
+    InitVCL();
 
     String aConfigURL;
     if( ::utl::LocalFileHelper::ConvertPhysicalNameToURL( Application::GetAppFileName(), aConfigURL ) )
