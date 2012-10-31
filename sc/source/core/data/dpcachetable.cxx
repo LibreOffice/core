@@ -143,6 +143,7 @@ void ScDPCacheTable::fillTable(
 
     maShowByFilter.clear();
     maShowByPage.clear();
+    maShowByPage.build_tree();
 
     // Process the non-empty data rows.
     for (SCROW nRow = 0; nRow < nDataSize; ++nRow)
@@ -214,9 +215,12 @@ void ScDPCacheTable::fillTable()
     if (nRowCount <= 0 || nColCount <= 0)
         return;
 
-    maShowByFilter.clear();
     maShowByPage.clear();
+    maShowByPage.build_tree();
+
+    maShowByFilter.clear();
     maShowByFilter.insert_front(0, nRowCount, true);
+    maShowByFilter.build_tree();
 
     // Initialize field entries container.
     maFieldEntries.clear();
