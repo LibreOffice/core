@@ -72,14 +72,6 @@ if test "$BUILD_DMAKE" != "NO"; then
     echo "dmake copied to $SOLARENV/$OUTPATH_FOR_BUILD/bin/dmake$EXEEXT"
 fi
 
-# build concat-deps
-echo "building concat-deps"
-if [ "$COM_FOR_BUILD" = "MSC" ] ; then
-    # on cygwin force the use of gcc
-    gcc -O2 "$SOLARENV/bin/concat-deps.c" -o "$SOLARENV/bin/concat-deps" || exit
-else
-    $CC_FOR_BUILD -O2 "$SOLARENV/bin/concat-deps.c" -o "$SOLARENV/bin/concat-deps" || exit
-fi
 #make sure build.pl is executable
 
 chmod +x "$SRC_ROOT/solenv/bin/build.pl"

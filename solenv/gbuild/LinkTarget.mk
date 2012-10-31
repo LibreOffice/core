@@ -386,7 +386,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(foreach object,$(8),$(call gb_GenCObject_get_dep_target,$(object))) \
 		$(foreach object,$(9),$(call gb_GenCxxObject_get_dep_target,$(object))) \
 		) && \
-	$(SOLARENV)/bin/concat-deps $${RESPONSEFILE} > $(1)) && \
+	$(call gb_Executable_get_target_for_build,concat-deps) $${RESPONSEFILE} > $(1)) && \
 	rm -f $${RESPONSEFILE}
 
 endef

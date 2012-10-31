@@ -104,10 +104,6 @@ TAGS
 /solenv/gdb/libreoffice/*.py[co]
 /solenv/gdb/libreoffice/util/*.py[co]
 
-# botstrap generated tool
-/solenv/bin/concat-deps
-/solenv/bin/concat-deps.exe
-
 # test output files
 test/user-template/user/psprint/pspfontcache
 
