@@ -761,7 +761,11 @@ File gid_File_Lib_Langtag
   #ifdef MACOSX
     Name = STRING(CONCAT4(liblangtag,.,0,UNXSUFFIX));
   #elif defined WNT
-    // Nothing, statically linked to libi18nisolang1
+    #if defined _gcc3
+        Name = STRING(CONCAT4(liblangtag,-,0,.dll));
+    #else
+        // Nothing, statically linked to libi18nisolang1
+    #endif
   #else
     // FIXME: use version vars
     Name = STRING(CONCAT4(liblangtag,UNXSUFFIX,.,0));

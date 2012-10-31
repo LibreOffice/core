@@ -1,6 +1,7 @@
 mkdir: %_DEST%\inc\liblangtag
 
 ..\%__SRC%\inc\*                    %_DEST%\inc\liblangtag\
+..\%__SRC%\bin\liblangtag-0.dll     %_DEST%\bin\
 ..\%__SRC%\lib\liblangtag.so*       %_DEST%\lib\
 ..\%__SRC%\lib\langtag.lib*         %_DEST%\lib\
 ..\%__SRC%\lib\liblangtag*.dylib    %_DEST%\lib\
