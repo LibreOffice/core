@@ -752,7 +752,7 @@ const SvXMLTokenMap& ScXMLImport::GetIconSetAttrMap()
 
 const SvXMLTokenMap& ScXMLImport::GetDataBarEntryAttrMap()
 {
-    if( !pDataBarEntryAttrMap )
+    if( !pFormattingEntryAttrMap )
     {
         static SvXMLTokenMapEntry aDataBarAttrEntryTokenMap[] =
         {
@@ -761,10 +761,10 @@ const SvXMLTokenMap& ScXMLImport::GetDataBarEntryAttrMap()
             XML_TOKEN_MAP_END
         };
 
-        pDataBarEntryAttrMap = new SvXMLTokenMap( aDataBarAttrEntryTokenMap );
+        pFormattingEntryAttrMap = new SvXMLTokenMap( aDataBarAttrEntryTokenMap );
     }
 
-    return *pDataBarEntryAttrMap;
+    return *pFormattingEntryAttrMap;
 }
 
 const SvXMLTokenMap& ScXMLImport::GetLabelRangesElemTokenMap()
@@ -1891,7 +1891,7 @@ ScXMLImport::ScXMLImport(
     pColorScaleEntryAttrTokenMap( 0 ),
     pDataBarTokenMap( 0 ),
     pDataBarAttrMap( 0 ),
-    pDataBarEntryAttrMap( 0 ),
+    pFormattingEntryAttrMap( 0 ),
     pIconSetAttrMap( 0 ),
     pLabelRangesElemTokenMap( 0 ),
     pLabelRangeAttrTokenMap( 0 ),
@@ -2029,7 +2029,7 @@ ScXMLImport::~ScXMLImport() throw()
     delete pColorScaleEntryAttrTokenMap;
     delete pDataBarTokenMap;
     delete pDataBarAttrMap;
-    delete pDataBarEntryAttrMap;
+    delete pFormattingEntryAttrMap;
     delete pLabelRangesElemTokenMap;
     delete pLabelRangeAttrTokenMap;
     delete pTableElemTokenMap;

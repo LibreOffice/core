@@ -784,7 +784,7 @@ class ScXMLImport: public SvXMLImport
     SvXMLTokenMap           *pColorScaleEntryAttrTokenMap;
     SvXMLTokenMap           *pDataBarTokenMap;
     SvXMLTokenMap           *pDataBarAttrMap;
-    SvXMLTokenMap           *pDataBarEntryAttrMap;
+    SvXMLTokenMap           *pFormattingEntryAttrMap;
     SvXMLTokenMap           *pIconSetAttrMap;
     SvXMLTokenMap           *pLabelRangesElemTokenMap;
     SvXMLTokenMap           *pLabelRangeAttrTokenMap;
