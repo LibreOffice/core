@@ -70,6 +70,8 @@ enum ScConditionMode
     SC_COND_DUPLICATE,
     SC_COND_NOTDUPLICATE,
     SC_COND_DIRECT,
+    SC_COND_TOP10,
+    SC_COND_BOTTOM10,
     SC_COND_NONE
 };
 
@@ -249,6 +251,8 @@ protected:
 private:
 
     bool IsDuplicate(double nArg, const rtl::OUString& rStr, const ScRangeList& rRanges) const;
+    bool IsTopNElement( double nArg, const ScRangeList& rRanges ) const;
+    bool IsTopNPercent( double nArg, const ScRangeList& rRanges ) const;
 
     void FillCache(const ScRangeList& rRanges) const;
 
@@ -258,6 +262,9 @@ private:
         StringCacheType maStrings;
         typedef std::map<double, sal_Int32, approx_less> ValueCacheType;
         ValueCacheType maValues;
+
+        // cache them for easier access
+        size_t nValueItems;
     };
 
     mutable boost::scoped_ptr<ScConditionEntryCache> mpCache;

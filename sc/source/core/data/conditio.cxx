@@ -814,6 +814,8 @@ void ScConditionEntry::FillCache( const ScRangeList& rRanges ) const
                         std::pair<ScConditionEntryCache::ValueCacheType::iterator, bool> aResult = mpCache->maValues.insert(std::pair<double, sal_Int32>(nVal, (sal_Int32)1));
                         if(!aResult.second)
                             aResult.first->second++;
+
+                        ++(mpCache->nValueItems);
                     }
                 }
         }
@@ -850,6 +852,48 @@ bool ScConditionEntry::IsDuplicate( double nArg, const rtl::OUString& rStr, cons
                 return false;
         }
     }
+}
+
+bool ScConditionEntry::IsTopNElement( double nArg, const ScRangeList& rRanges ) const
+{
+    FillCache( rRanges );
+
+    if(mpCache->nValueItems <= nVal1)
+        return true;
+
+    size_t nCells = 0;
+    for(ScConditionEntryCache::ValueCacheType::const_reverse_iterator itr = mpCache->maValues.rbegin(),
+            itrEnd = mpCache->maValues.rend(); itr != itrEnd; ++itr)
+    {
+        if(nCells >= nVal1)
+            return false;
+        if(itr->first <= nArg)
+            return true;
+        nCells += itr->second;
+    }
+
+    return true;
+}
+
+bool ScConditionEntry::IsBottomNElement( double nArg, const ScRangeList& rRanges ) const
+{
+    FillCache( rRanges );
+
+    if(mpCache->nValueItems <= nVal1)
+        return true;
+
+    size_t nCells = 0;
+    for(ScConditionEntryCache::ValueCacheType::const_iterator itr = mpCache->maValues.begin(),
+            itrEnd = mpCache->maValues.end(); itr != itrEnd; ++itr)
+    {
+        if(nCells >= nVal1)
+            return false;
+        if(itr->first >= nArg)
+            return true;
+        nCells += itr->second;
+    }
+
+    return true;
 }
 
 bool ScConditionEntry::IsValid( double nArg ) const
@@ -923,6 +967,12 @@ bool ScConditionEntry::IsValid( double nArg ) const
         case SC_COND_DIRECT:
             bValid = !::rtl::math::approxEqual( nComp1, 0.0 );
             break;
+        case SC_COND_TOP10:
+            bValid = IsTopNElement( nArg, pCondFormat->GetRange() );
+            break;
+        case SC_COND_BOTTOM10:
+            bValid = IsBottomNElement( nArg, pCondFormat->GetRange() );
+            break;
         default:
             OSL_FAIL("unbekannte Operation bei ScConditionEntry");
             break;
@@ -979,6 +1029,9 @@ bool ScConditionEntry::IsValidStr( const String& rArg ) const
             bValid = (ScGlobal::GetCollator()->compareString(
                 rArg, aUpVal1 ) != COMPARE_EQUAL);
         break;
+        case SC_COND_TOP10:
+        case SC_COND_BOTTOM10:
+            return false;
         default:
         {
             sal_Int32 nCompare = ScGlobal::GetCollator()->compareString(
