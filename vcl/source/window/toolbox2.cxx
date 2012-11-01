@@ -2139,7 +2139,7 @@ sal_Bool ToolBox::AlwaysLocked()
     {
         nAlwaysLocked = 0; // ask configuration only once
 
-        utl::OConfigurationNode aNode = utl::OConfigurationTreeRoot::tryCreateWithServiceFactory(
+        utl::OConfigurationNode aNode = utl::OConfigurationTreeRoot::tryCreateWithComponentContext(
             comphelper::getProcessComponentContext(),
             OUString("/org.openoffice.Office.UI.GlobalSettings/Toolbars") );    // note: case sensitive !
         if ( aNode.isValid() )
@@ -2152,7 +2152,7 @@ sal_Bool ToolBox::AlwaysLocked()
                 if( bStatesEnabled == sal_True )
                 {
                     // now read the locking state
-                    utl::OConfigurationNode aNode2 = utl::OConfigurationTreeRoot::tryCreateWithServiceFactory(
+                    utl::OConfigurationNode aNode2 = utl::OConfigurationTreeRoot::tryCreateWithComponentContext(
                         comphelper::getProcessComponentContext(),
                         OUString("/org.openoffice.Office.UI.GlobalSettings/Toolbars/States") );    // note: case sensitive !
 

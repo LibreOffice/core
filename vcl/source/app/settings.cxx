@@ -1511,7 +1511,7 @@ bool AllSettings::GetLayoutRTL() const
     if( nUIMirroring == -1 )
     {
         nUIMirroring = 0; // ask configuration only once
-        utl::OConfigurationNode aNode = utl::OConfigurationTreeRoot::tryCreateWithServiceFactory(
+        utl::OConfigurationNode aNode = utl::OConfigurationTreeRoot::tryCreateWithComponentContext(
             comphelper::getProcessComponentContext(),
             OUString("org.openoffice.Office.Common/I18N/CTL") );    // note: case sensitive !
         if ( aNode.isValid() )

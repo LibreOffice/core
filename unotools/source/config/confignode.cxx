@@ -592,10 +592,10 @@ namespace utl
     }
 
     //------------------------------------------------------------------------
-    OConfigurationTreeRoot OConfigurationTreeRoot::tryCreateWithServiceFactory( const Reference< XComponentContext >& rxContext,
+    OConfigurationTreeRoot OConfigurationTreeRoot::tryCreateWithComponentContext( const Reference< XComponentContext >& rxContext,
         const ::rtl::OUString& _rPath, sal_Int32 _nDepth , CREATION_MODE _eMode , sal_Bool _bLazyWrite )
     {
-        OSL_ENSURE( rxContext.is(), "OConfigurationTreeRoot::tryCreateWithServiceFactory: invalid service factory!" );
+        OSL_ENSURE( rxContext.is(), "OConfigurationTreeRoot::tryCreateWithComponentContext: invalid XComponentContext!" );
         try
         {
             Reference< XMultiServiceFactory > xConfigFactory = theDefaultProvider::get( rxContext );
