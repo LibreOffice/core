@@ -2127,11 +2127,11 @@ void Document::notifySelectionChange( sal_Int32 nFirst, sal_Int32 nLast )
     if ( nFirst < nLast )
     {
         Paragraphs::iterator aItBound1 = m_xParagraphs->begin();
-        for (sal_Int32 i = 0; i < nLast  && aItBound1 !=  m_xParagraphs->end() ; ++aItBound1);
+        for (sal_Int32 i = 0; i < nLast  && aItBound1 !=  m_xParagraphs->end() ; ++aItBound1, ++i);
         Paragraphs::iterator aEnd( ::std::min( aItBound1, m_aVisibleEnd ) );
 
         Paragraphs::iterator aItBound2 = m_xParagraphs->begin();
-        for (sal_Int32 i = 0; i < nFirst && aItBound2 !=  m_xParagraphs->end() ; ++aItBound2);
+        for (sal_Int32 i = 0; i < nFirst && aItBound2 !=  m_xParagraphs->end() ; ++aItBound2, ++i);
 
         for ( Paragraphs::iterator aIt = ::std::max( aItBound2, m_aVisibleBegin ); aIt != aEnd; ++aIt )
         {
