@@ -46,7 +46,7 @@ CntContentTypeItem::CntContentTypeItem()
 }
 
 //----------------------------------------------------------------------------
-CntContentTypeItem::CntContentTypeItem( sal_uInt16 which, const XubString& rType )
+CntContentTypeItem::CntContentTypeItem( sal_uInt16 which, const OUString& rType )
 : CntUnencodedStringItem( which, rType ),
   _eType( CONTENT_TYPE_NOT_INIT )
 {
@@ -122,11 +122,11 @@ SfxPoolItem* CntContentTypeItem::Clone( SfxItemPool* /* pPool */ ) const
 }
 
 //----------------------------------------------------------------------------
-void CntContentTypeItem::SetValue( const XubString& rNewVal )
+void CntContentTypeItem::SetValue( const OUString& rNewVal )
 {
     // De-initialize enum type and presentation.
     _eType = CONTENT_TYPE_NOT_INIT;
-    _aPresentation.Erase();
+    _aPresentation = OUString();
 
     CntUnencodedStringItem::SetValue( rNewVal );
 }
@@ -150,7 +150,7 @@ SfxItemPresentation CntContentTypeItem::GetPresentation(
     XubString         & rText,
     const IntlWrapper * pIntlWrapper) const
 {
-    if (_aPresentation.Len() == 0)
+    if (_aPresentation.isEmpty())
     {
         DBG_ASSERT(pIntlWrapper,
                    "CntContentTypeItem::GetPresentation(): No IntlWrapper");
@@ -160,7 +160,7 @@ SfxItemPresentation CntContentTypeItem::GetPresentation(
                                                  pIntlWrapper->
                                                   getLocale());
     }
-    if (_aPresentation.Len() > 0)
+    if (!_aPresentation.isEmpty())
     {
         rText = _aPresentation;
         return SFX_ITEM_PRESENTATION_COMPLETE;
@@ -217,7 +217,7 @@ bool CntContentTypeItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uIn
             SetValue(aValue);
         else
             SetValue(
-                INetContentTypes::RegisterContentType(aValue, UniString()));
+                INetContentTypes::RegisterContentType(aValue, OUString()));
         return true;
     }
 
