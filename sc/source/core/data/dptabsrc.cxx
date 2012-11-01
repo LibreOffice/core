@@ -431,7 +431,7 @@ Sequence< Sequence<Any> > SAL_CALL ScDPSource::getDrillDownData(const Sequence<s
 {
     long nColumnCount = GetData()->GetColumnCount();
 
-    vector<ScDPCacheTable::Criterion> aFilterCriteria;
+    vector<ScDPFilteredCache::Criterion> aFilterCriteria;
     sal_Int32 nFilterCount = aFilters.getLength();
     for (sal_Int32 i = 0; i < nFilterCount; ++i)
     {
@@ -449,10 +449,10 @@ Sequence< Sequence<Any> > SAL_CALL ScDPSource::getDrillDownData(const Sequence<s
                 {
                     ScDPItemData aItem;
                     pMembers->getByIndex(nIndex)->FillItemData( aItem );
-                    aFilterCriteria.push_back( ScDPCacheTable::Criterion() );
+                    aFilterCriteria.push_back( ScDPFilteredCache::Criterion() );
                     aFilterCriteria.back().mnFieldIndex = nCol;
                     aFilterCriteria.back().mpFilter.reset(
-                        new ScDPCacheTable::SingleFilter(aItem));
+                        new ScDPFilteredCache::SingleFilter(aItem));
                 }
             }
         }
@@ -678,12 +678,13 @@ void ScDPSource::GetCategoryDimensionIndices(boost::unordered_set<sal_Int32>& rC
     rCatDims.swap(aCatDims);
 }
 
-void ScDPSource::FilterCacheTableByPageDimensions()
+void ScDPSource::FilterCacheByPageDimensions()
 {
-    // #i117661# Repeated calls to ScDPCacheTable::filterByPageDimension are invalid because
-    // rows are only hidden, never shown again. If FilterCacheTableByPageDimensions is called
-    // again, the cache table must be re-initialized. Currently, CreateRes_Impl always uses
-    // a fresh cache because ScDBDocFunc::DataPilotUpdate calls InvalidateData.
+    // #i117661# Repeated calls to ScDPFilteredCache::filterByPageDimension
+    // are invalid because rows are only hidden, never shown again. If
+    // FilterCacheByPageDimensions is called again, the cache table must
+    // be re-initialized. Currently, CreateRes_Impl always uses a fresh cache
+    // because ScDBDocFunc::DataPilotUpdate calls InvalidateData.
 
     if (bPageFiltered)
     {
@@ -695,7 +696,7 @@ void ScDPSource::FilterCacheTableByPageDimensions()
     }
 
     // filter table by page dimensions.
-    vector<ScDPCacheTable::Criterion> aCriteria;
+    vector<ScDPFilteredCache::Criterion> aCriteria;
     for (long i = 0; i < nPageDimCount; ++i)
     {
         ScDPDimension* pDim = GetDimensionsObject()->getByIndex(nPageDims[i]);
@@ -705,11 +706,11 @@ void ScDPSource::FilterCacheTableByPageDimensions()
             GetLevelsObject()->getByIndex(0)->GetMembersObject();
 
         long nMemCount = pMems->getCount();
-        ScDPCacheTable::Criterion aFilter;
+        ScDPFilteredCache::Criterion aFilter;
         aFilter.mnFieldIndex = static_cast<sal_Int32>(nField);
-        aFilter.mpFilter.reset(new ScDPCacheTable::GroupFilter(/*rSharedString*/));
-        ScDPCacheTable::GroupFilter* pGrpFilter =
-            static_cast<ScDPCacheTable::GroupFilter*>(aFilter.mpFilter.get());
+        aFilter.mpFilter.reset(new ScDPFilteredCache::GroupFilter(/*rSharedString*/));
+        ScDPFilteredCache::GroupFilter* pGrpFilter =
+            static_cast<ScDPFilteredCache::GroupFilter*>(aFilter.mpFilter.get());
         for (long j = 0; j < nMemCount; ++j)
         {
             ScDPMember* pMem = pMems->getByIndex(j);
@@ -728,10 +729,10 @@ void ScDPSource::FilterCacheTableByPageDimensions()
             continue;
 
         const ScDPItemData& rData = pDim->GetSelectedData();
-        aCriteria.push_back(ScDPCacheTable::Criterion());
-        ScDPCacheTable::Criterion& r = aCriteria.back();
+        aCriteria.push_back(ScDPFilteredCache::Criterion());
+        ScDPFilteredCache::Criterion& r = aCriteria.back();
         r.mnFieldIndex = static_cast<sal_Int32>(nField);
-        r.mpFilter.reset(new ScDPCacheTable::SingleFilter(rData));
+        r.mpFilter.reset(new ScDPFilteredCache::SingleFilter(rData));
     }
     if (!aCriteria.empty())
     {
@@ -913,7 +914,7 @@ void ScDPSource::CreateRes_Impl()
         return;
     }
 
-    FilterCacheTableByPageDimensions();
+    FilterCacheByPageDimensions();
 
     aInfo.aPageDims.reserve(nPageDimCount);
     for (i = 0; i < nPageDimCount; ++i)

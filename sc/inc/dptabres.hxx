@@ -656,7 +656,7 @@ public:
     ~ScDPResultVisibilityData();
 
     void addVisibleMember(const String& rDimName, const ScDPItemData& rMemberItem);
-    void fillFieldFilters(::std::vector<ScDPCacheTable::Criterion>& rFilters) const;
+    void fillFieldFilters(::std::vector<ScDPFilteredCache::Criterion>& rFilters) const;
 
 private:
     struct MemberHash

@@ -64,24 +64,24 @@ using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::uno::UNO_QUERY_THROW;
 using ::com::sun::star::sheet::DataPilotFieldFilter;
 
-ScDPCacheTable::SingleFilter::SingleFilter(const ScDPItemData& rItem) :
+ScDPFilteredCache::SingleFilter::SingleFilter(const ScDPItemData& rItem) :
     maItem(rItem) {}
 
-bool ScDPCacheTable::SingleFilter::match(const ScDPItemData& rCellData) const
+bool ScDPFilteredCache::SingleFilter::match(const ScDPItemData& rCellData) const
 {
     return maItem == rCellData;
 }
 
-const ScDPItemData& ScDPCacheTable::SingleFilter::getMatchValue() const
+const ScDPItemData& ScDPFilteredCache::SingleFilter::getMatchValue() const
 {
     return maItem;
 }
 
-ScDPCacheTable::GroupFilter::GroupFilter()
+ScDPFilteredCache::GroupFilter::GroupFilter()
 {
 }
 
-bool ScDPCacheTable::GroupFilter::match(const ScDPItemData& rCellData) const
+bool ScDPFilteredCache::GroupFilter::match(const ScDPItemData& rCellData) const
 {
     vector<ScDPItemData>::const_iterator it = maItems.begin(), itEnd = maItems.end();
     for (; it != itEnd; ++it)
@@ -93,19 +93,19 @@ bool ScDPCacheTable::GroupFilter::match(const ScDPItemData& rCellData) const
     return false;
 }
 
-void ScDPCacheTable::GroupFilter::addMatchItem(const ScDPItemData& rItem)
+void ScDPFilteredCache::GroupFilter::addMatchItem(const ScDPItemData& rItem)
 {
     maItems.push_back(rItem);
 }
 
-size_t ScDPCacheTable::GroupFilter::getMatchItemCount() const
+size_t ScDPFilteredCache::GroupFilter::getMatchItemCount() const
 {
     return maItems.size();
 }
 
 // ----------------------------------------------------------------------------
 
-ScDPCacheTable::Criterion::Criterion() :
+ScDPFilteredCache::Criterion::Criterion() :
     mnFieldIndex(-1),
     mpFilter(static_cast<FilterBase*>(NULL))
 {
@@ -113,26 +113,26 @@ ScDPCacheTable::Criterion::Criterion() :
 
 // ----------------------------------------------------------------------------
 
-ScDPCacheTable::ScDPCacheTable(const ScDPCache& rCache) :
+ScDPFilteredCache::ScDPFilteredCache(const ScDPCache& rCache) :
     maShowByFilter(0, MAXROW+1, false), maShowByPage(0, MAXROW+1, true), mrCache(rCache)
 {
 }
 
-ScDPCacheTable::~ScDPCacheTable()
+ScDPFilteredCache::~ScDPFilteredCache()
 {
 }
 
-sal_Int32 ScDPCacheTable::getRowSize() const
+sal_Int32 ScDPFilteredCache::getRowSize() const
 {
     return mrCache.GetRowCount();
 }
 
-sal_Int32 ScDPCacheTable::getColSize() const
+sal_Int32 ScDPFilteredCache::getColSize() const
 {
     return mrCache.GetColumnCount();
 }
 
-void ScDPCacheTable::fillTable(
+void ScDPFilteredCache::fillTable(
     const ScQueryParam& rQuery, bool bIgnoreEmptyRows, bool bRepeatIfEmpty)
 {
     SCROW nRowCount = getRowSize();
@@ -208,7 +208,7 @@ void ScDPCacheTable::fillTable(
     }
 }
 
-void ScDPCacheTable::fillTable()
+void ScDPFilteredCache::fillTable()
 {
     SCROW nRowCount = getRowSize();
     SCCOL nColCount = getColSize();
@@ -250,7 +250,7 @@ void ScDPCacheTable::fillTable()
     }
 }
 
-bool ScDPCacheTable::isRowActive(sal_Int32 nRow, sal_Int32* pLastRow) const
+bool ScDPFilteredCache::isRowActive(sal_Int32 nRow, sal_Int32* pLastRow) const
 {
     bool bFilter = false, bPage = true;
     SCROW nLastRowFilter = MAXROW, nLastRowPage = MAXROW;
@@ -266,7 +266,7 @@ bool ScDPCacheTable::isRowActive(sal_Int32 nRow, sal_Int32* pLastRow) const
     return bFilter && bPage;
 }
 
-void ScDPCacheTable::filterByPageDimension(const vector<Criterion>& rCriteria, const boost::unordered_set<sal_Int32>& rRepeatIfEmptyDims)
+void ScDPFilteredCache::filterByPageDimension(const vector<Criterion>& rCriteria, const boost::unordered_set<sal_Int32>& rRepeatIfEmptyDims)
 {
     SCROW nRowSize = getRowSize();
 
@@ -280,13 +280,13 @@ void ScDPCacheTable::filterByPageDimension(const vector<Criterion>& rCriteria, c
     maShowByPage.build_tree();
 }
 
-const ScDPItemData* ScDPCacheTable::getCell(SCCOL nCol, SCROW nRow, bool bRepeatIfEmpty) const
+const ScDPItemData* ScDPFilteredCache::getCell(SCCOL nCol, SCROW nRow, bool bRepeatIfEmpty) const
 {
    SCROW nId= mrCache.GetItemDataId(nCol, nRow, bRepeatIfEmpty);
    return mrCache.GetItemDataById( nCol, nId );
 }
 
-void  ScDPCacheTable::getValue( ScDPValueData& rVal, SCCOL nCol, SCROW nRow, bool bRepeatIfEmpty) const
+void  ScDPFilteredCache::getValue( ScDPValueData& rVal, SCCOL nCol, SCROW nRow, bool bRepeatIfEmpty) const
 {
     const ScDPItemData* pData = getCell( nCol, nRow, bRepeatIfEmpty );
 
@@ -299,12 +299,12 @@ void  ScDPCacheTable::getValue( ScDPValueData& rVal, SCCOL nCol, SCROW nRow, boo
         rVal.Set(0.0, SC_VALTYPE_EMPTY);
 }
 
-rtl::OUString ScDPCacheTable::getFieldName(SCCOL nIndex) const
+rtl::OUString ScDPFilteredCache::getFieldName(SCCOL nIndex) const
 {
     return mrCache.GetDimensionName(nIndex);
 }
 
-const ::std::vector<SCROW>&  ScDPCacheTable::getFieldEntries( sal_Int32 nColumn ) const
+const ::std::vector<SCROW>&  ScDPFilteredCache::getFieldEntries( sal_Int32 nColumn ) const
 {
     if (nColumn < 0 || static_cast<size_t>(nColumn) >= maFieldEntries.size())
     {
@@ -315,7 +315,7 @@ const ::std::vector<SCROW>&  ScDPCacheTable::getFieldEntries( sal_Int32 nColumn 
     return maFieldEntries[nColumn];
 }
 
-void ScDPCacheTable::filterTable(const vector<Criterion>& rCriteria, Sequence< Sequence<Any> >& rTabData,
+void ScDPFilteredCache::filterTable(const vector<Criterion>& rCriteria, Sequence< Sequence<Any> >& rTabData,
                                  const boost::unordered_set<sal_Int32>& rRepeatIfEmptyDims)
 {
     sal_Int32 nRowSize = getRowSize();
@@ -381,24 +381,24 @@ void ScDPCacheTable::filterTable(const vector<Criterion>& rCriteria, Sequence< S
         rTabData[i] = tableData[i];
 }
 
-SCROW ScDPCacheTable::getOrder(long nDim, SCROW nIndex) const
+SCROW ScDPFilteredCache::getOrder(long nDim, SCROW nIndex) const
 {
     return mrCache.GetOrder(nDim, nIndex);
 }
 
-void ScDPCacheTable::clear()
+void ScDPFilteredCache::clear()
 {
     maFieldEntries.clear();
     maShowByFilter.clear();
     maShowByPage.clear();
 }
 
-bool ScDPCacheTable::empty() const
+bool ScDPFilteredCache::empty() const
 {
     return maFieldEntries.empty();
 }
 
-bool ScDPCacheTable::isRowQualified(sal_Int32 nRow, const vector<Criterion>& rCriteria,
+bool ScDPFilteredCache::isRowQualified(sal_Int32 nRow, const vector<Criterion>& rCriteria,
                                     const boost::unordered_set<sal_Int32>& rRepeatIfEmptyDims) const
 {
     sal_Int32 nColSize = getColSize();
@@ -419,7 +419,7 @@ bool ScDPCacheTable::isRowQualified(sal_Int32 nRow, const vector<Criterion>& rCr
     return true;
 }
 
-const ScDPCache* ScDPCacheTable::getCache() const
+const ScDPCache* ScDPFilteredCache::getCache() const
 {
     return &mrCache;
 }
@@ -429,7 +429,7 @@ const ScDPCache* ScDPCacheTable::getCache() const
 using std::cout;
 using std::endl;
 
-void ScDPCacheTable::dumpRowFlag(const RowFlagType& rFlag) const
+void ScDPFilteredCache::dumpRowFlag(const RowFlagType& rFlag) const
 {
     RowFlagType::const_iterator it = rFlag.begin(), itEnd = rFlag.end();
     bool bShow = it->second;
@@ -443,7 +443,7 @@ void ScDPCacheTable::dumpRowFlag(const RowFlagType& rFlag) const
     }
 }
 
-void ScDPCacheTable::dump() const
+void ScDPFilteredCache::dump() const
 {
     cout << "--- pivot cache filter dump" << endl;
 

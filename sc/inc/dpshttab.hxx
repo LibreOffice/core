@@ -104,7 +104,7 @@ private:
     bool            bIgnoreEmptyRows;
     bool            bRepeatIfEmpty;
 
-    ScDPCacheTable  aCacheTable;
+    ScDPFilteredCache  aCacheTable;
 
 public:
     ScSheetDPData(ScDocument* pD, const ScSheetSourceDesc& rDesc, const ScDPCache& rCache);
@@ -121,12 +121,12 @@ public:
     virtual bool                    IsRepeatIfEmpty();
 
     virtual void                    CreateCacheTable();
-    virtual void                    FilterCacheTable(const ::std::vector<ScDPCacheTable::Criterion>& rCriteria, const ::boost::unordered_set<sal_Int32>& rCatDims);
-    virtual void                    GetDrillDownData(const ::std::vector<ScDPCacheTable::Criterion>& rCriteria,
+    virtual void                    FilterCacheTable(const ::std::vector<ScDPFilteredCache::Criterion>& rCriteria, const ::boost::unordered_set<sal_Int32>& rCatDims);
+    virtual void                    GetDrillDownData(const ::std::vector<ScDPFilteredCache::Criterion>& rCriteria,
                                                      const ::boost::unordered_set<sal_Int32>& rCatDims,
                                                      ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > >& rData);
     virtual void                    CalcResults(CalcInfo& rInfo, bool bAutoShow);
-    virtual const ScDPCacheTable&   GetCacheTable() const;
+    virtual const ScDPFilteredCache&   GetCacheTable() const;
     virtual void ReloadCacheTable();
 };
 

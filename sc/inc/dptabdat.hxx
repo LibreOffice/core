@@ -148,12 +148,12 @@ public:
     virtual bool                    IsRepeatIfEmpty();
 
     virtual void                    CreateCacheTable() = 0;
-    virtual void                    FilterCacheTable(const ::std::vector<ScDPCacheTable::Criterion>& rCriteria, const ::boost::unordered_set<sal_Int32>& rDataDims) = 0;
-    virtual void                    GetDrillDownData(const ::std::vector<ScDPCacheTable::Criterion>& rCriteria,
+    virtual void                    FilterCacheTable(const ::std::vector<ScDPFilteredCache::Criterion>& rCriteria, const ::boost::unordered_set<sal_Int32>& rDataDims) = 0;
+    virtual void                    GetDrillDownData(const ::std::vector<ScDPFilteredCache::Criterion>& rCriteria,
                                                      const ::boost::unordered_set<sal_Int32>& rCatDims,
                                                      ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > >& rData) = 0;
     virtual void                    CalcResults(CalcInfo& rInfo, bool bAutoShow) = 0;
-    virtual const ScDPCacheTable&   GetCacheTable() const = 0;
+    virtual const ScDPFilteredCache&   GetCacheTable() const = 0;
     virtual void ReloadCacheTable() = 0;
 
                                     // overloaded in ScDPGroupTableData:
@@ -187,12 +187,12 @@ protected:
         ::std::vector<ScDPValueData> aValues;
     };
 
-    void            FillRowDataFromCacheTable(sal_Int32 nRow, const ScDPCacheTable& rCacheTable, const CalcInfo& rInfo, CalcRowData& rData);
+    void            FillRowDataFromCacheTable(sal_Int32 nRow, const ScDPFilteredCache& rCacheTable, const CalcInfo& rInfo, CalcRowData& rData);
     void            ProcessRowData(CalcInfo& rInfo, CalcRowData& rData, bool bAutoShow);
-    void            CalcResultsFromCacheTable(const ScDPCacheTable& rCacheTable, CalcInfo& rInfo, bool bAutoShow);
+    void            CalcResultsFromCacheTable(const ScDPFilteredCache& rCacheTable, CalcInfo& rInfo, bool bAutoShow);
 
 private:
-    void            GetItemData(const ScDPCacheTable& rCacheTable, sal_Int32 nRow,
+    void            GetItemData(const ScDPFilteredCache& rCacheTable, sal_Int32 nRow,
                                           const ::std::vector<long>& rDims, ::std::vector< SCROW >& rItemData);
 };
 #endif

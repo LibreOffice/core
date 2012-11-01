@@ -63,7 +63,7 @@ using ::boost::shared_ptr;
 
 const sal_uInt16 SC_DP_LEAPYEAR = 1648;     // arbitrary leap year for date calculations
 
-class ScDPGroupNumFilter : public ScDPCacheTable::FilterBase
+class ScDPGroupNumFilter : public ScDPFilteredCache::FilterBase
 {
 public:
     ScDPGroupNumFilter(const ScDPItemData& rValue, const ScDPNumGroupInfo& rInfo);
@@ -103,7 +103,7 @@ bool ScDPGroupNumFilter::match(const ScDPItemData& rCellData) const
     return low <= rCellData.GetValue() && rCellData.GetValue() < high;
 }
 
-class ScDPGroupDateFilter : public ScDPCacheTable::FilterBase
+class ScDPGroupDateFilter : public ScDPFilteredCache::FilterBase
 {
 public:
     virtual ~ScDPGroupDateFilter() {}
@@ -309,7 +309,7 @@ bool ScDPGroupItem::HasCommonElement( const ScDPGroupItem& rOther ) const
     return false;
 }
 
-void ScDPGroupItem::FillGroupFilter( ScDPCacheTable::GroupFilter& rFilter ) const
+void ScDPGroupItem::FillGroupFilter( ScDPFilteredCache::GroupFilter& rFilter ) const
 {
     ScDPItemDataVec::const_iterator itrEnd = aElements.end();
     for (ScDPItemDataVec::const_iterator itr = aElements.begin(); itr != itrEnd; ++itr)
@@ -361,7 +361,7 @@ void ScDPGroupDimension::SetGroupDim( long nDim )
 }
 
 const std::vector<SCROW>& ScDPGroupDimension::GetColumnEntries(
-    const ScDPCacheTable& rCacheTable) const
+    const ScDPFilteredCache& rCacheTable) const
 {
     if (!maMemberEntries.empty())
         return maMemberEntries;
@@ -628,7 +628,7 @@ void ScDPGroupTableData::CreateCacheTable()
     pSourceData->CreateCacheTable();
 }
 
-void ScDPGroupTableData::ModifyFilterCriteria(vector<ScDPCacheTable::Criterion>& rCriteria)
+void ScDPGroupTableData::ModifyFilterCriteria(vector<ScDPFilteredCache::Criterion>& rCriteria)
 {
     typedef boost::unordered_map<long, const ScDPGroupDimension*> GroupFieldMapType;
     GroupFieldMapType aGroupFieldIds;
@@ -638,17 +638,17 @@ void ScDPGroupTableData::ModifyFilterCriteria(vector<ScDPCacheTable::Criterion>&
             aGroupFieldIds.insert( boost::unordered_map<long, const ScDPGroupDimension*>::value_type(itr->GetGroupDim(), &(*itr)) );
     }
 
-    vector<ScDPCacheTable::Criterion> aNewCriteria;
+    vector<ScDPFilteredCache::Criterion> aNewCriteria;
     aNewCriteria.reserve(rCriteria.size() + aGroups.size());
 
     // Go through all the filtered field names and process them appropriately.
 
     const ScDPCache* pCache = GetCacheTable().getCache();
-    vector<ScDPCacheTable::Criterion>::const_iterator itrEnd = rCriteria.end();
+    vector<ScDPFilteredCache::Criterion>::const_iterator itrEnd = rCriteria.end();
     GroupFieldMapType::const_iterator itrGrpEnd = aGroupFieldIds.end();
-    for (vector<ScDPCacheTable::Criterion>::const_iterator itr = rCriteria.begin(); itr != itrEnd; ++itr)
+    for (vector<ScDPFilteredCache::Criterion>::const_iterator itr = rCriteria.begin(); itr != itrEnd; ++itr)
     {
-        ScDPCacheTable::SingleFilter* pFilter = dynamic_cast<ScDPCacheTable::SingleFilter*>(itr->mpFilter.get());
+        ScDPFilteredCache::SingleFilter* pFilter = dynamic_cast<ScDPFilteredCache::SingleFilter*>(itr->mpFilter.get());
         if (!pFilter)
             // We expect this to be a single filter.
             continue;
@@ -659,7 +659,7 @@ void ScDPGroupTableData::ModifyFilterCriteria(vector<ScDPCacheTable::Criterion>&
             if (IsNumGroupDimension(itr->mnFieldIndex))
             {
                 // internal number group field
-                ScDPCacheTable::Criterion aCri;
+                ScDPFilteredCache::Criterion aCri;
                 aCri.mnFieldIndex = itr->mnFieldIndex;
                 const ScDPNumGroupDimension& rNumGrpDim = pNumGroups[itr->mnFieldIndex];
                 const ScDPNumGroupInfo* pNumInfo = pCache->GetNumGroupInfo(itr->mnFieldIndex);
@@ -701,7 +701,7 @@ void ScDPGroupTableData::ModifyFilterCriteria(vector<ScDPCacheTable::Criterion>&
             if (pGrpDim->IsDateDimension() && pNumInfo)
             {
                 // external number group
-                ScDPCacheTable::Criterion aCri;
+                ScDPFilteredCache::Criterion aCri;
                 aCri.mnFieldIndex = nSrcDim;  // use the source dimension, not the group dimension.
                 aCri.mpFilter.reset(
                     new ScDPGroupDateFilter(
@@ -723,11 +723,11 @@ void ScDPGroupTableData::ModifyFilterCriteria(vector<ScDPCacheTable::Criterion>&
                     if (!pGrpItem || !pGrpItem->GetName().IsCaseInsEqual(aName))
                         continue;
 
-                    ScDPCacheTable::Criterion aCri;
+                    ScDPFilteredCache::Criterion aCri;
                     aCri.mnFieldIndex = nSrcDim;
-                    aCri.mpFilter.reset(new ScDPCacheTable::GroupFilter());
-                    ScDPCacheTable::GroupFilter* pGrpFilter =
-                        static_cast<ScDPCacheTable::GroupFilter*>(aCri.mpFilter.get());
+                    aCri.mpFilter.reset(new ScDPFilteredCache::GroupFilter());
+                    ScDPFilteredCache::GroupFilter* pGrpFilter =
+                        static_cast<ScDPFilteredCache::GroupFilter*>(aCri.mpFilter.get());
 
                     pGrpItem->FillGroupFilter(*pGrpFilter);
                     aNewCriteria.push_back(aCri);
@@ -738,16 +738,16 @@ void ScDPGroupTableData::ModifyFilterCriteria(vector<ScDPCacheTable::Criterion>&
     rCriteria.swap(aNewCriteria);
 }
 
-void ScDPGroupTableData::FilterCacheTable(const vector<ScDPCacheTable::Criterion>& rCriteria, const boost::unordered_set<sal_Int32>& rCatDims)
+void ScDPGroupTableData::FilterCacheTable(const vector<ScDPFilteredCache::Criterion>& rCriteria, const boost::unordered_set<sal_Int32>& rCatDims)
 {
-    vector<ScDPCacheTable::Criterion> aNewCriteria(rCriteria);
+    vector<ScDPFilteredCache::Criterion> aNewCriteria(rCriteria);
     ModifyFilterCriteria(aNewCriteria);
     pSourceData->FilterCacheTable(aNewCriteria, rCatDims);
 }
 
-void ScDPGroupTableData::GetDrillDownData(const vector<ScDPCacheTable::Criterion>& rCriteria, const boost::unordered_set<sal_Int32>& rCatDims, Sequence< Sequence<Any> >& rData)
+void ScDPGroupTableData::GetDrillDownData(const vector<ScDPFilteredCache::Criterion>& rCriteria, const boost::unordered_set<sal_Int32>& rCatDims, Sequence< Sequence<Any> >& rData)
 {
-    vector<ScDPCacheTable::Criterion> aNewCriteria(rCriteria);
+    vector<ScDPFilteredCache::Criterion> aNewCriteria(rCriteria);
     ModifyFilterCriteria(aNewCriteria);
     pSourceData->GetDrillDownData(aNewCriteria, rCatDims, rData);
 }
@@ -758,7 +758,7 @@ void ScDPGroupTableData::CalcResults(CalcInfo& rInfo, bool bAutoShow)
     // getIsDataLayoutDimension and GetSourceDim are used, so it has to be called
     // with original rInfo, containing dimension indexes of the grouped data.
 
-    const ScDPCacheTable& rCacheTable = pSourceData->GetCacheTable();
+    const ScDPFilteredCache& rCacheTable = pSourceData->GetCacheTable();
     sal_Int32 nRowSize = rCacheTable.getRowSize();
     for (sal_Int32 nRow = 0; nRow < nRowSize; ++nRow)
     {
@@ -783,7 +783,7 @@ void ScDPGroupTableData::CalcResults(CalcInfo& rInfo, bool bAutoShow)
     }
 }
 
-const ScDPCacheTable& ScDPGroupTableData::GetCacheTable() const
+const ScDPFilteredCache& ScDPGroupTableData::GetCacheTable() const
 {
     return pSourceData->GetCacheTable();
 }

@@ -134,14 +134,14 @@ void ScDatabaseDPData::CreateCacheTable()
     aCacheTable.fillTable();
 }
 
-void ScDatabaseDPData::FilterCacheTable(const vector<ScDPCacheTable::Criterion>& rCriteria, const boost::unordered_set<sal_Int32>& rCatDims)
+void ScDatabaseDPData::FilterCacheTable(const vector<ScDPFilteredCache::Criterion>& rCriteria, const boost::unordered_set<sal_Int32>& rCatDims)
 {
     CreateCacheTable();
     aCacheTable.filterByPageDimension(
         rCriteria, (IsRepeatIfEmpty() ? rCatDims : boost::unordered_set<sal_Int32>()));
 }
 
-void ScDatabaseDPData::GetDrillDownData(const vector<ScDPCacheTable::Criterion>& rCriteria, const boost::unordered_set<sal_Int32>& rCatDims, Sequence< Sequence<Any> >& rData)
+void ScDatabaseDPData::GetDrillDownData(const vector<ScDPFilteredCache::Criterion>& rCriteria, const boost::unordered_set<sal_Int32>& rCatDims, Sequence< Sequence<Any> >& rData)
 {
     CreateCacheTable();
     sal_Int32 nRowSize = aCacheTable.getRowSize();
@@ -158,7 +158,7 @@ void ScDatabaseDPData::CalcResults(CalcInfo& rInfo, bool bAutoShow)
     CalcResultsFromCacheTable( aCacheTable, rInfo, bAutoShow);
 }
 
-const ScDPCacheTable& ScDatabaseDPData::GetCacheTable() const
+const ScDPFilteredCache& ScDatabaseDPData::GetCacheTable() const
 {
     return aCacheTable;
 }

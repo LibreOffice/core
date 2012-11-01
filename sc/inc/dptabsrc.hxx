@@ -152,7 +152,7 @@ private:
      * Set visibilities of individual rows in the cache table based on the
      * page field data.
      */
-    void                    FilterCacheTableByPageDimensions();
+    void FilterCacheByPageDimensions();
 
     void                    SetDupCount( long nNew );
 

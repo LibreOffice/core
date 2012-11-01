@@ -157,7 +157,7 @@ sal_Bool ScDPTableData::HasCommonElement( const ScDPItemData&, long,
     OSL_FAIL("HasCommonElement shouldn't be called for non-group data");
     return false;
 }
-void ScDPTableData::FillRowDataFromCacheTable(sal_Int32 nRow, const ScDPCacheTable& rCacheTable,
+void ScDPTableData::FillRowDataFromCacheTable(sal_Int32 nRow, const ScDPFilteredCache& rCacheTable,
                                         const CalcInfo& rInfo, CalcRowData& rData)
 {
     // column dimensions
@@ -216,7 +216,7 @@ void ScDPTableData::ProcessRowData(CalcInfo& rInfo, CalcRowData& rData, bool bAu
     }
 }
 
-void ScDPTableData::CalcResultsFromCacheTable(const ScDPCacheTable& rCacheTable, CalcInfo& rInfo, bool bAutoShow)
+void ScDPTableData::CalcResultsFromCacheTable(const ScDPFilteredCache& rCacheTable, CalcInfo& rInfo, bool bAutoShow)
 {
     sal_Int32 nRowSize = rCacheTable.getRowSize();
     for (sal_Int32 nRow = 0; nRow < nRowSize; ++nRow)
@@ -234,7 +234,7 @@ void ScDPTableData::CalcResultsFromCacheTable(const ScDPCacheTable& rCacheTable,
     }
 }
 
-void ScDPTableData::GetItemData(const ScDPCacheTable& rCacheTable, sal_Int32 nRow,
+void ScDPTableData::GetItemData(const ScDPFilteredCache& rCacheTable, sal_Int32 nRow,
                                 const vector<long>& rDims, vector<SCROW>& rItemData)
 {
     sal_Int32 nDimSize = rDims.size();

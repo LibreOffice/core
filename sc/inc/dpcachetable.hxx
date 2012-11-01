@@ -49,12 +49,10 @@ struct ScDPValueData;
 struct ScQueryParam;
 
 /**
- * Despite the name, this class is only a wrapper to the actual cache, to
- * provide filtering on the raw data based on the query filter and/or page
- * field filters. I will rename this class to a more appropriate name in the
- * future.
+ * This class is only a wrapper to the actual cache, to provide filtering on
+ * the raw data based on the query filter and/or page field filters.
  */
-class SC_DLLPUBLIC ScDPCacheTable
+class SC_DLLPUBLIC ScDPFilteredCache
 {
     typedef mdds::flat_segment_tree<SCROW, bool> RowFlagType;
 
@@ -109,8 +107,8 @@ public:
         Criterion();
     };
 
-    ScDPCacheTable(const ScDPCache& rCache);
-    ~ScDPCacheTable();
+    ScDPFilteredCache(const ScDPCache& rCache);
+    ~ScDPFilteredCache();
 
     sal_Int32 getRowSize() const;
     sal_Int32 getColSize() const;
@@ -159,8 +157,8 @@ public:
 #endif
 
 private:
-    ScDPCacheTable();
-    ScDPCacheTable(const ScDPCacheTable&);
+    ScDPFilteredCache();
+    ScDPFilteredCache(const ScDPFilteredCache&);
 
     /**
      * Check if a given row meets all specified criteria.

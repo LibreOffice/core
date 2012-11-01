@@ -3849,7 +3849,7 @@ void ScDPResultVisibilityData::addVisibleMember(const String& rDimName, const Sc
         rMem.insert(rMemberItem);
 }
 
-void ScDPResultVisibilityData::fillFieldFilters(vector<ScDPCacheTable::Criterion>& rFilters) const
+void ScDPResultVisibilityData::fillFieldFilters(vector<ScDPFilteredCache::Criterion>& rFilters) const
 {
     typedef boost::unordered_map<String, long, ScStringHashCode> FieldNameMapType;
     FieldNameMapType aFieldNames;
@@ -3866,7 +3866,7 @@ void ScDPResultVisibilityData::fillFieldFilters(vector<ScDPCacheTable::Criterion
           itr != itrEnd; ++itr)
     {
         const String& rDimName = itr->first;
-        ScDPCacheTable::Criterion aCri;
+        ScDPFilteredCache::Criterion aCri;
         FieldNameMapType::const_iterator itrField = aFieldNames.find(rDimName);
         if (itrField == aFieldNames.end())
             // This should never happen!
@@ -3874,10 +3874,10 @@ void ScDPResultVisibilityData::fillFieldFilters(vector<ScDPCacheTable::Criterion
 
         long nDimIndex = itrField->second;
         aCri.mnFieldIndex = static_cast<sal_Int32>(nDimIndex);
-        aCri.mpFilter.reset(new ScDPCacheTable::GroupFilter(/*mrSharedString*/));
+        aCri.mpFilter.reset(new ScDPFilteredCache::GroupFilter(/*mrSharedString*/));
 
-        ScDPCacheTable::GroupFilter* pGrpFilter =
-            static_cast<ScDPCacheTable::GroupFilter*>(aCri.mpFilter.get());
+        ScDPFilteredCache::GroupFilter* pGrpFilter =
+            static_cast<ScDPFilteredCache::GroupFilter*>(aCri.mpFilter.get());
 
         const VisibleMemberType& rMem = itr->second;
         for (VisibleMemberType::const_iterator itrMem = rMem.begin(), itrMemEnd = rMem.end();

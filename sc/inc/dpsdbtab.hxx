@@ -36,7 +36,7 @@
 #include <vector>
 #include <boost/unordered_set.hpp>
 
-class ScDPCacheTable;
+class ScDPFilteredCache;
 class ScDocument;
 class ScDPCache;
 class ScDPDimensionSaveData;
@@ -68,7 +68,7 @@ struct ScImportSourceDesc
 class ScDatabaseDPData : public ScDPTableData
 {
 private:
-    ScDPCacheTable aCacheTable;
+    ScDPFilteredCache aCacheTable;
 public:
     ScDatabaseDPData(ScDocument* pDoc, const ScDPCache& rCache);
     virtual ~ScDatabaseDPData();
@@ -81,12 +81,12 @@ public:
     virtual void                    SetEmptyFlags( sal_Bool bIgnoreEmptyRows, sal_Bool bRepeatIfEmpty );
 
     virtual void                    CreateCacheTable();
-    virtual void                    FilterCacheTable(const ::std::vector<ScDPCacheTable::Criterion>& rCriteria, const ::boost::unordered_set<sal_Int32>& rDataDims);
-    virtual void                    GetDrillDownData(const ::std::vector<ScDPCacheTable::Criterion>& rCriteria,
+    virtual void                    FilterCacheTable(const ::std::vector<ScDPFilteredCache::Criterion>& rCriteria, const ::boost::unordered_set<sal_Int32>& rDataDims);
+    virtual void                    GetDrillDownData(const ::std::vector<ScDPFilteredCache::Criterion>& rCriteria,
                                                      const ::boost::unordered_set<sal_Int32>& rCatDims,
                                                      ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > >& rData);
     virtual void                    CalcResults(CalcInfo& rInfo, bool bAutoShow);
-    virtual const ScDPCacheTable&   GetCacheTable() const;
+    virtual const ScDPFilteredCache&   GetCacheTable() const;
     virtual void ReloadCacheTable();
 };
 
