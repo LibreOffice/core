@@ -37,12 +37,14 @@
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/util/Time.hpp>
 #include <com/sun/star/util/DateTime.hpp>
+#include <com/sun/star/ucb/PropertiesManager.hpp>
 #include <ucbhelper/resultsetmetadata.hxx>
 
 using namespace com::sun::star::beans;
 using namespace com::sun::star::io;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::sdbc;
+using namespace com::sun::star::ucb;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::util;
 
@@ -82,11 +84,11 @@ namespace ucbhelper {
 //=========================================================================
 
 ResultSetMetaData::ResultSetMetaData(
-                        const Reference< XMultiServiceFactory >& rxSMgr,
+                        const Reference< XComponentContext >& rxContext,
                         const Sequence< Property >& rProps,
                         sal_Bool bReadOnly )
 : m_pImpl( new ResultSetMetaData_Impl( rProps.getLength() ) ),
-  m_xSMgr( rxSMgr ),
+  m_xContext( rxContext ),
   m_aProps( rProps ),
   m_bReadOnly( bReadOnly )
 {
@@ -94,11 +96,11 @@ ResultSetMetaData::ResultSetMetaData(
 
 //=========================================================================
 ResultSetMetaData::ResultSetMetaData(
-                        const Reference< XMultiServiceFactory >& rxSMgr,
+                        const Reference< XComponentContext >& rxContext,
                         const Sequence< Property >& rProps,
                         const std::vector< ResultSetColumnData >& rColumnData )
 : m_pImpl( new ResultSetMetaData_Impl( rColumnData ) ),
-  m_xSMgr( rxSMgr ),
+  m_xContext( rxContext ),
   m_aProps( rProps ),
   m_bReadOnly( sal_True )
 {
@@ -400,35 +402,27 @@ sal_Int32 SAL_CALL ResultSetMetaData::getColumnType( sal_Int32 column )
         {
             try
             {
-                Reference< XPropertySetInfo > xInfo(
-                            m_xSMgr->createInstance(
-                                OUString(
-                                    "com.sun.star.ucb.PropertiesManager" ) ),
-                            UNO_QUERY );
-                if ( xInfo.is() )
-                {
-
+                Reference< XPropertySetInfo > xInfo = PropertiesManager::create( m_xContext );
     // Less (remote) calls...
 
-                    Sequence< Property > aProps = xInfo->getProperties();
-                    const Property* pProps1 = aProps.getConstArray();
-                    sal_Int32 nCount1 = aProps.getLength();
+                Sequence< Property > aProps = xInfo->getProperties();
+                const Property* pProps1 = aProps.getConstArray();
+                sal_Int32 nCount1 = aProps.getLength();
 
-                    sal_Int32 nCount = m_aProps.getLength();
-                    Property* pProps = m_aProps.getArray();
-                    for ( sal_Int32 n = 0; n < nCount; ++n )
+                sal_Int32 nCount = m_aProps.getLength();
+                Property* pProps = m_aProps.getArray();
+                for ( sal_Int32 n = 0; n < nCount; ++n )
+                {
+                    Property& rProp = pProps[ n ];
+
+                    for ( sal_Int32 m = 0; m < nCount1; ++m )
                     {
-                        Property& rProp = pProps[ n ];
-
-                        for ( sal_Int32 m = 0; m < nCount1; ++m )
+                        const Property& rProp1 = pProps1[ m ];
+                        if ( rProp.Name == rProp1.Name )
                         {
-                            const Property& rProp1 = pProps1[ m ];
-                            if ( rProp.Name == rProp1.Name )
-                            {
-                                // Found...
-                                rProp.Type = rProp1.Type;
-                                break;
-                            }
+                            // Found...
+                            rProp.Type = rProp1.Type;
+                            break;
                         }
                     }
                 }

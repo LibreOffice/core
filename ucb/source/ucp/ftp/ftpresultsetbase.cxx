@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <comphelper/processfactory.hxx>
 #include <ucbhelper/contentidentifier.hxx>
 #include <com/sun/star/ucb/OpenMode.hpp>
 #include <com/sun/star/uno/Reference.h>
@@ -641,7 +642,7 @@ ResultSetBase::getMetaData(
 {
     ::ucbhelper::ResultSetMetaData* p =
           new ::ucbhelper::ResultSetMetaData(
-              m_xMSF, m_sProperty );
+              comphelper::getComponentContext(m_xMSF), m_sProperty );
     return uno::Reference< sdbc::XResultSetMetaData >( p );
 }
 
