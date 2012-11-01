@@ -104,19 +104,21 @@ bool SwFiltersTest::load(const rtl::OUString &rFilter, const rtl::OUString &rURL
     return bLoaded;
 }
 
+#define isstorage 1
+
 void SwFiltersTest::testCVEs()
 {
     testDir(rtl::OUString("Staroffice XML (Writer)"),
             getURLFromSrc("/sw/qa/core/data/xml/"),
             rtl::OUString(FILTER_XML),
             SFX_FILTER_IMPORT | SFX_FILTER_OWN | SFX_FILTER_DEFAULT,
-            -1, SOFFICE_FILEFORMAT_CURRENT);
+            isstorage, SOFFICE_FILEFORMAT_CURRENT);
 
     testDir(rtl::OUString("writer8"),
             getURLFromSrc("/sw/qa/core/data/odt/"),
             rtl::OUString(FILTER_XML),
             SFX_FILTER_IMPORT | SFX_FILTER_OWN | SFX_FILTER_DEFAULT,
-            -1, SOFFICE_FILEFORMAT_CURRENT);
+            isstorage, SOFFICE_FILEFORMAT_CURRENT);
 
     testDir(rtl::OUString("MS Word 97"),
             getURLFromSrc("/sw/qa/core/data/ww8/"),
