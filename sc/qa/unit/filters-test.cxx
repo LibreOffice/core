@@ -68,7 +68,7 @@ using namespace ::com::sun::star::uno;
 namespace {
 
 struct FileFormat {
-    const char* pName; const char* pFilterName; const char* pTypeName; sal_uLong nFormatType;
+    const char* pName; const char* pFilterName; const char* pTypeName; unsigned int nFormatType;
 };
 
 FileFormat aFileFormats[] = {
@@ -89,9 +89,13 @@ class ScFiltersTest
 public:
     ScFiltersTest();
 
-    virtual bool load(const rtl::OUString &rFilter, const rtl::OUString &rURL, const rtl::OUString &rUserData);
+    virtual bool load( const rtl::OUString &rFilter, const rtl::OUString &rURL,
+        const rtl::OUString &rUserData, unsigned int nFilterFlags,
+        unsigned int nClipboardID, unsigned int nFilterVersion);
+
     ScDocShellRef load(const rtl::OUString &rFilter, const rtl::OUString &rURL,
-        const rtl::OUString &rUserData, const rtl::OUString& rTypeName, sal_uLong nFormatType=0);
+        const rtl::OUString &rUserData, const rtl::OUString& rTypeName,
+        unsigned int nFilterFlags, unsigned int nClipboardID, unsigned int nFilterVersion);
 
     void createFileURL(const rtl::OUString& aFileBase, const rtl::OUString& aFileExtension, rtl::OUString& rFilePath);
     void createCSVPath(const rtl::OUString& aFileBase, rtl::OUString& rFilePath);
@@ -142,20 +146,18 @@ private:
 };
 
 ScDocShellRef ScFiltersTest::load(const rtl::OUString &rFilter, const rtl::OUString &rURL,
-    const rtl::OUString &rUserData, const rtl::OUString& rTypeName, sal_uLong nFormatType)
+    const rtl::OUString &rUserData, const rtl::OUString& rTypeName,
+    unsigned int nFilterFlags, unsigned int nClipboardID, unsigned int nFilterVersion)
 {
-    sal_uInt32 nFormat = 0;
-    if (nFormatType)
-        nFormat = SFX_FILTER_IMPORT | SFX_FILTER_USESOPTIONS;
-    SfxFilter* aFilter = new SfxFilter(
+    SfxFilter* pFilter = new SfxFilter(
         rFilter,
-        rtl::OUString(), nFormatType, nFormat, rTypeName, 0, rtl::OUString(),
-        rUserData, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("private:factory/scalc*")) );
-    aFilter->SetVersion(SOFFICE_FILEFORMAT_CURRENT);
+        rtl::OUString(), nFilterFlags, nClipboardID, rTypeName, 0, rtl::OUString(),
+        rUserData, rtl::OUString("private:factory/scalc*") );
+    pFilter->SetVersion(nFilterVersion);
 
     ScDocShellRef xDocShRef = new ScDocShell;
     SfxMedium* pSrcMed = new SfxMedium(rURL, STREAM_STD_READ);
-    pSrcMed->SetFilter(aFilter);
+    pSrcMed->SetFilter(pFilter);
     if (!xDocShRef->DoLoad(pSrcMed))
     {
         xDocShRef->DoClose();
@@ -167,9 +169,11 @@ ScDocShellRef ScFiltersTest::load(const rtl::OUString &rFilter, const rtl::OUStr
 }
 
 bool ScFiltersTest::load(const rtl::OUString &rFilter, const rtl::OUString &rURL,
-    const rtl::OUString &rUserData)
+    const rtl::OUString &rUserData, unsigned int nFilterFlags,
+        unsigned int nClipboardID, unsigned int nFilterVersion)
 {
-    ScDocShellRef xDocShRef = load(rFilter, rURL, rUserData, rtl::OUString());
+    ScDocShellRef xDocShRef = load(rFilter, rURL, rUserData,
+        rtl::OUString(), nFilterFlags, nClipboardID, nFilterVersion);
     bool bLoaded = xDocShRef.Is();
     //reference counting of ScDocShellRef is very confused.
     if (bLoaded)
@@ -227,7 +231,11 @@ void ScFiltersTest::testDir(osl::Directory& rDir, sal_uInt32 nType)
         std::cout << "File: " << rtl::OUStringToOString(sURL, RTL_TEXTENCODING_UTF8).getStr() << std::endl;
         //rtl::OStringBuffer aMessage("Failed loading: ");
         //aMessage.append(rtl::OUStringToOString(sURL, RTL_TEXTENCODING_UTF8));
-        ScDocShellRef xDocSh = load( aFilterName,sURL, rtl::OUString(),aFilterType, aFileFormats[nType].nFormatType);
+
+        unsigned int nFormatType = aFileFormats[nType].nFormatType;
+        unsigned int nClipboardId = nFormatType ? SFX_FILTER_IMPORT | SFX_FILTER_USESOPTIONS : 0;
+        ScDocShellRef xDocSh = load(aFilterName, sURL, rtl::OUString(),
+            aFilterType, nFormatType, nClipboardId, SOFFICE_FILEFORMAT_CURRENT);
         // use this only if you're sure that all files can be loaded
         // pay attention to lock files
         //CPPUNIT_ASSERT_MESSAGE(aMessage.getStr(), xDocSh.Is());
@@ -300,7 +308,10 @@ ScDocShellRef ScFiltersTest::loadDoc(const rtl::OUString& rName, sal_Int32 nForm
     rtl::OUString aFileName;
     createFileURL( rName, aFileExtension, aFileName );
     rtl::OUString aFilterType(aFileFormats[nFormat].pTypeName, strlen(aFileFormats[nFormat].pTypeName), RTL_TEXTENCODING_UTF8);
-    ScDocShellRef xDocSh = load (aFilterName, aFileName, rtl::OUString(), aFilterType, aFileFormats[nFormat].nFormatType);
+    unsigned int nFormatType = aFileFormats[nFormat].nFormatType;
+    unsigned int nClipboardId = nFormatType ? SFX_FILTER_IMPORT | SFX_FILTER_USESOPTIONS : 0;
+    ScDocShellRef xDocSh = load(aFilterName, aFileName, rtl::OUString(), aFilterType,
+        nFormatType, nClipboardId, SOFFICE_FILEFORMAT_CURRENT);
     CPPUNIT_ASSERT(xDocSh.Is());
     return xDocSh;
 }

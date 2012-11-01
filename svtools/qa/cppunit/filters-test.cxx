@@ -46,7 +46,9 @@ class SvtoolsFiltersTest
 public:
     SvtoolsFiltersTest() : BootstrapFixture(true, false) {}
 
-    virtual bool load(const rtl::OUString &, const rtl::OUString &rURL, const rtl::OUString &);
+    virtual bool load(const rtl::OUString &,
+        const rtl::OUString &rURL, const rtl::OUString &,
+        unsigned int, unsigned int, unsigned int);
 
     /**
      * Ensure CVEs remain unbroken
@@ -59,7 +61,8 @@ public:
 };
 
 bool SvtoolsFiltersTest::load(const rtl::OUString &,
-    const rtl::OUString &rURL, const rtl::OUString &)
+    const rtl::OUString &rURL, const rtl::OUString &,
+    unsigned int, unsigned int, unsigned int)
 {
     GraphicFilter aGraphicFilter(false);
     SvFileStream aFileStream(rURL, STREAM_READ);

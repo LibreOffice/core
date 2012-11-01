@@ -52,7 +52,8 @@ namespace
         bool checkStorage( const SotStorageRef &xObjStor );
 
         virtual bool load(const rtl::OUString &,
-            const rtl::OUString &rURL, const rtl::OUString &);
+            const rtl::OUString &rURL, const rtl::OUString &,
+            unsigned int, unsigned int, unsigned int);
 
         void test();
 
@@ -107,9 +108,6 @@ namespace
         for( SvStorageInfoList::iterator aIt = aInfoList.begin();
              aIt != aInfoList.end(); ++aIt )
         {
-//            fprintf( stderr, "Stream '%s' size %ld\n",
-//                     rtl::OUStringToOString( aIt->GetName(), RTL_TEXTENCODING_UTF8 ).getStr(),
-//                     (long)aIt->GetSize() );
             if( aIt->IsStorage() )
             {
                 SotStorageRef xChild( xObjStor->OpenSotStorage( aIt->GetName() ) );
@@ -123,7 +121,8 @@ namespace
     }
 
     bool SotTest::load(const rtl::OUString &,
-        const rtl::OUString &rURL, const rtl::OUString &)
+        const rtl::OUString &rURL, const rtl::OUString &,
+        unsigned int, unsigned int, unsigned int)
     {
         SvFileStream aStream(rURL, STREAM_READ);
         SotStorageRef xObjStor = new SotStorage(aStream);

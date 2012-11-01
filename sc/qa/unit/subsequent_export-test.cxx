@@ -51,7 +51,7 @@ using namespace ::com::sun::star::uno;
 namespace {
 
 struct FileFormat {
-    const char* pName; const char* pFilterName; const char* pTypeName; sal_uLong nFormatType;
+    const char* pName; const char* pFilterName; const char* pTypeName; unsigned int nFormatType;
 };
 
 FileFormat aFileFormats[] = {

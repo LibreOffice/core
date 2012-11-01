@@ -62,7 +62,9 @@ class SwFiltersTest
     , public test::BootstrapFixture
 {
 public:
-    bool load(const rtl::OUString &rFilter, const rtl::OUString &rURL, const rtl::OUString &rUserData);
+    virtual bool load( const rtl::OUString &rFilter, const rtl::OUString &rURL,
+        const rtl::OUString &rUserData, unsigned int nFilterFlags,
+        unsigned int nClipboardID, unsigned int nFilterVersion);
     virtual void setUp();
 
     // Ensure CVEs remain unbroken
@@ -77,12 +79,14 @@ private:
 };
 
 bool SwFiltersTest::load(const rtl::OUString &rFilter, const rtl::OUString &rURL,
-    const rtl::OUString &rUserData)
+    const rtl::OUString &rUserData, unsigned int nFilterFlags,
+        unsigned int nClipboardID, unsigned int nFilterVersion)
 {
     SfxFilter* pFilter = new SfxFilter(
-        rFilter,
-        rtl::OUString(), 0, 0, rtl::OUString(), 0, rtl::OUString(),
-        rUserData, rtl::OUString() );
+        rFilter, rtl::OUString(), nFilterFlags,
+        nClipboardID, rtl::OUString(), 0, rtl::OUString(),
+        rUserData, rtl::OUString());
+    pFilter->SetVersion(nFilterVersion);
 
     SwDocShellRef xDocShRef = new SwDocShell;
     SfxMedium* pSrcMed = new SfxMedium(rURL, STREAM_STD_READ);
@@ -104,7 +108,15 @@ void SwFiltersTest::testCVEs()
 {
     testDir(rtl::OUString("Staroffice XML (Writer)"),
             getURLFromSrc("/sw/qa/core/data/xml/"),
-            rtl::OUString(FILTER_XML));
+            rtl::OUString(FILTER_XML),
+            SFX_FILTER_IMPORT | SFX_FILTER_OWN | SFX_FILTER_DEFAULT,
+            -1, SOFFICE_FILEFORMAT_CURRENT);
+
+    testDir(rtl::OUString("writer8"),
+            getURLFromSrc("/sw/qa/core/data/odt/"),
+            rtl::OUString(FILTER_XML),
+            SFX_FILTER_IMPORT | SFX_FILTER_OWN | SFX_FILTER_DEFAULT,
+            -1, SOFFICE_FILEFORMAT_CURRENT);
 
     testDir(rtl::OUString("MS Word 97"),
             getURLFromSrc("/sw/qa/core/data/ww8/"),

@@ -54,7 +54,9 @@ class TgaFilterTest
 public:
     TgaFilterTest() : BootstrapFixture(true, false) {}
 
-    virtual bool load(const rtl::OUString &, const rtl::OUString &rURL, const rtl::OUString &);
+    virtual bool load(const rtl::OUString &,
+        const rtl::OUString &rURL, const rtl::OUString &,
+        unsigned int, unsigned int, unsigned int);
 
     /**
      * Ensure CVEs remain unbroken
@@ -67,7 +69,8 @@ public:
 };
 
 bool TgaFilterTest::load(const rtl::OUString &,
-    const rtl::OUString &rURL, const rtl::OUString &)
+    const rtl::OUString &rURL, const rtl::OUString &,
+    unsigned int, unsigned int, unsigned int)
 {
     SvFileStream aFileStream(rURL, STREAM_READ);
     Graphic aGraphic;

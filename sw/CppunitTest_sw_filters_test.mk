@@ -80,6 +80,7 @@ $(eval $(call gb_CppunitTest_use_components,sw_filters_test,\
     forms/util/frm \
     framework/util/fwk \
     i18npool/util/i18npool \
+    package/source/xstor/xstor \
     package/util/package2 \
     sax/source/expatwrap/expwrap \
     sfx2/util/sfx \
@@ -91,6 +92,7 @@ $(eval $(call gb_CppunitTest_use_components,sw_filters_test,\
     ucb/source/ucp/file/ucpfile1 \
     unoxml/source/service/unoxml \
 	$(if $(filter DESKTOP,$(BUILD_TYPE)),xmlhelp/util/ucpchelp1) \
+	xmloff/source/transform/xof \
 ))
 
 $(eval $(call gb_CppunitTest_use_configuration,sw_filters_test))

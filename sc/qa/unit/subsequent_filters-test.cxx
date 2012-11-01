@@ -83,7 +83,7 @@ using namespace ::com::sun::star::uno;
 namespace {
 
 struct FileFormat {
-    const char* pName; const char* pFilterName; const char* pTypeName; sal_uLong nFormatType;
+    const char* pName; const char* pFilterName; const char* pTypeName; unsigned int nFormatType;
 };
 
 FileFormat aFileFormats[] = {
@@ -105,9 +105,13 @@ class ScFiltersTest
 public:
     ScFiltersTest();
 
-    virtual bool load(const rtl::OUString &rFilter, const rtl::OUString &rURL, const rtl::OUString &rUserData);
+    virtual bool load( const rtl::OUString &rFilter, const rtl::OUString &rURL,
+        const rtl::OUString &rUserData, unsigned int nFilterFlags,
+        unsigned int nClipboardID, unsigned int nFilterVersion);
+
     ScDocShellRef load(const rtl::OUString &rFilter, const rtl::OUString &rURL,
-        const rtl::OUString &rUserData, const rtl::OUString& rTypeName, sal_uLong nFormatType=0);
+        const rtl::OUString &rUserData, const rtl::OUString& rTypeName,
+        unsigned int nFilterFlags, unsigned int nClipboardID, unsigned int nFilterVersion);
 
     void createFileURL(const rtl::OUString& aFileBase, const rtl::OUString& aFileExtension, rtl::OUString& rFilePath);
     void createCSVPath(const rtl::OUString& aFileBase, rtl::OUString& rFilePath);
@@ -230,20 +234,18 @@ private:
 };
 
 ScDocShellRef ScFiltersTest::load(const rtl::OUString &rFilter, const rtl::OUString &rURL,
-    const rtl::OUString &rUserData, const rtl::OUString& rTypeName, sal_uLong nFormatType)
+    const rtl::OUString &rUserData, const rtl::OUString& rTypeName,
+    unsigned int nFilterFlags, unsigned int nClipboardID, unsigned int nFilterVersion)
 {
-    sal_uInt32 nFormat = 0;
-    if (nFormatType)
-        nFormat = SFX_FILTER_IMPORT | SFX_FILTER_USESOPTIONS;
-    SfxFilter* aFilter = new SfxFilter(
+    SfxFilter* pFilter = new SfxFilter(
         rFilter,
-        rtl::OUString(), nFormatType, nFormat, rTypeName, 0, rtl::OUString(),
-        rUserData, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("private:factory/scalc*")) );
-    aFilter->SetVersion(SOFFICE_FILEFORMAT_CURRENT);
+        rtl::OUString(), nFilterFlags, nClipboardID, rTypeName, 0, rtl::OUString(),
+        rUserData, rtl::OUString("private:factory/scalc*") );
+    pFilter->SetVersion(nFilterVersion);
 
     ScDocShellRef xDocShRef = new ScDocShell;
     SfxMedium* pSrcMed = new SfxMedium(rURL, STREAM_STD_READ);
-    pSrcMed->SetFilter(aFilter);
+    pSrcMed->SetFilter(pFilter);
     if (!xDocShRef->DoLoad(pSrcMed))
     {
         xDocShRef->DoClose();
@@ -255,9 +257,11 @@ ScDocShellRef ScFiltersTest::load(const rtl::OUString &rFilter, const rtl::OUStr
 }
 
 bool ScFiltersTest::load(const rtl::OUString &rFilter, const rtl::OUString &rURL,
-    const rtl::OUString &rUserData)
+    const rtl::OUString &rUserData, unsigned int nFilterFlags,
+        unsigned int nClipboardID, unsigned int nFilterVersion)
 {
-    ScDocShellRef xDocShRef = load(rFilter, rURL, rUserData, rtl::OUString());
+    ScDocShellRef xDocShRef = load(rFilter, rURL, rUserData,
+        rtl::OUString(), nFilterFlags, nClipboardID, nFilterVersion);
     bool bLoaded = xDocShRef.Is();
     //reference counting of ScDocShellRef is very confused.
     if (bLoaded)
@@ -272,7 +276,10 @@ ScDocShellRef ScFiltersTest::loadDoc(const rtl::OUString& rName, sal_Int32 nForm
     rtl::OUString aFileName;
     createFileURL( rName, aFileExtension, aFileName );
     rtl::OUString aFilterType(aFileFormats[nFormat].pTypeName, strlen(aFileFormats[nFormat].pTypeName), RTL_TEXTENCODING_UTF8);
-    ScDocShellRef xDocSh = load (aFilterName, aFileName, rtl::OUString(), aFilterType, aFileFormats[nFormat].nFormatType);
+    unsigned int nFormatType = aFileFormats[nFormat].nFormatType;
+    unsigned int nClipboardId = nFormatType ? SFX_FILTER_IMPORT | SFX_FILTER_USESOPTIONS : 0;
+    ScDocShellRef xDocSh = load(aFilterName, aFileName, rtl::OUString(), aFilterType,
+        nFormatType, nClipboardId, SOFFICE_FILEFORMAT_CURRENT);
     CPPUNIT_ASSERT(xDocSh.Is());
     return xDocSh;
 }
@@ -933,7 +940,10 @@ void ScFiltersTest::testBugFixesODS()
     createFileURL(aFileNameBase, aFileExtension, aFileName);
     rtl::OUString aFilterType(aFileFormats[0].pTypeName, strlen(aFileFormats[0].pTypeName), RTL_TEXTENCODING_UTF8);
     std::cout << aFileFormats[0].pName << " Test" << std::endl;
-    ScDocShellRef xDocSh = load (aFilterName, aFileName, rtl::OUString(), aFilterType, aFileFormats[0].nFormatType);
+    unsigned int nFormatType = aFileFormats[0].nFormatType;
+    unsigned int nClipboardId = nFormatType ? SFX_FILTER_IMPORT | SFX_FILTER_USESOPTIONS : 0;
+    ScDocShellRef xDocSh = load(aFilterName, aFileName, rtl::OUString(), aFilterType,
+        nFormatType, nClipboardId, SOFFICE_FILEFORMAT_CURRENT);
     xDocSh->DoHardRecalc(true);
 
     CPPUNIT_ASSERT_MESSAGE("Failed to load bugFixes.ods", xDocSh.Is());
@@ -969,7 +979,10 @@ void ScFiltersTest::testBugFixesXLS()
     createFileURL(aFileNameBase, aFileExtension, aFileName);
     rtl::OUString aFilterType(aFileFormats[1].pTypeName, strlen(aFileFormats[1].pTypeName), RTL_TEXTENCODING_UTF8);
     std::cout << aFileFormats[1].pName << " Test" << std::endl;
-    ScDocShellRef xDocSh = load (aFilterName, aFileName, rtl::OUString(), aFilterType, aFileFormats[1].nFormatType);
+    unsigned int nFormatType = aFileFormats[1].nFormatType;
+    unsigned int nClipboardId = nFormatType ? SFX_FILTER_IMPORT | SFX_FILTER_USESOPTIONS : 0;
+    ScDocShellRef xDocSh = load(aFilterName, aFileName, rtl::OUString(), aFilterType,
+        nFormatType, nClipboardId, SOFFICE_FILEFORMAT_CURRENT);
     xDocSh->DoHardRecalc(true);
 
     CPPUNIT_ASSERT_MESSAGE("Failed to load bugFixes.xls", xDocSh.Is());
@@ -987,7 +1000,10 @@ void ScFiltersTest::testBugFixesXLSX()
     createFileURL(aFileNameBase, aFileExtension, aFileName);
     rtl::OUString aFilterType(aFileFormats[2].pTypeName, strlen(aFileFormats[2].pTypeName), RTL_TEXTENCODING_UTF8);
     std::cout << aFileFormats[2].pName << " Test" << std::endl;
-    ScDocShellRef xDocSh = load (aFilterName, aFileName, rtl::OUString(), aFilterType, aFileFormats[2].nFormatType);
+    unsigned int nFormatType = aFileFormats[2].nFormatType;
+    unsigned int nClipboardId = nFormatType ? SFX_FILTER_IMPORT | SFX_FILTER_USESOPTIONS : 0;
+    ScDocShellRef xDocSh = load(aFilterName, aFileName, rtl::OUString(), aFilterType,
+        nFormatType, nClipboardId, SOFFICE_FILEFORMAT_CURRENT);
     xDocSh->DoHardRecalc(true);
 
     CPPUNIT_ASSERT_MESSAGE("Failed to load bugFixes.xlsx", xDocSh.Is());
@@ -1211,7 +1227,11 @@ void ScFiltersTest::testBrokenQuotesCSV()
     createFileURL(aFileNameBase, aFileExtension, aFileName);
     rtl::OUString aFilterType(aFileFormats[CSV].pTypeName, strlen(aFileFormats[CSV].pTypeName), RTL_TEXTENCODING_UTF8);
     std::cout << aFileFormats[CSV].pName << " Test" << std::endl;
-    ScDocShellRef xDocSh = load (aFilterName, aFileName, rtl::OUString(), aFilterType, aFileFormats[CSV].nFormatType);
+
+    unsigned int nFormatType = aFileFormats[CSV].nFormatType;
+    unsigned int nClipboardId = nFormatType ? SFX_FILTER_IMPORT | SFX_FILTER_USESOPTIONS : 0;
+    ScDocShellRef xDocSh = load(aFilterName, aFileName, rtl::OUString(), aFilterType,
+        nFormatType, nClipboardId, SOFFICE_FILEFORMAT_CURRENT);
 
     CPPUNIT_ASSERT_MESSAGE("Failed to load fdo48621_broken_quotes.csv", xDocSh.Is());
     ScDocument* pDoc = xDocSh->GetDocument();
@@ -1235,7 +1255,12 @@ void ScFiltersTest::testSharedFormulaXLSX()
     createFileURL(aFileNameBase, aFileExtension, aFileName);
     rtl::OUString aFilterType(aFileFormats[XLSX].pTypeName, strlen(aFileFormats[XLSX].pTypeName), RTL_TEXTENCODING_UTF8);
     std::cout << aFileFormats[XLSX].pName << " Test" << std::endl;
-    ScDocShellRef xDocSh = load (aFilterName, aFileName, rtl::OUString(), aFilterType, aFileFormats[XLSX].nFormatType);
+
+    unsigned int nFormatType = aFileFormats[XLSX].nFormatType;
+    unsigned int nClipboardId = nFormatType ? SFX_FILTER_IMPORT | SFX_FILTER_USESOPTIONS : 0;
+    ScDocShellRef xDocSh = load(aFilterName, aFileName, rtl::OUString(), aFilterType,
+        nFormatType, nClipboardId, SOFFICE_FILEFORMAT_CURRENT);
+
     xDocSh->DoHardRecalc(true);
 
     CPPUNIT_ASSERT_MESSAGE("Failed to load shared-formula.xlsx", xDocSh.Is());
@@ -1265,7 +1290,11 @@ void ScFiltersTest::testCellValueXLSX()
     createFileURL(aFileNameBase, aFileExtension, aFileName);
     rtl::OUString aFilterType(aFileFormats[XLSX].pTypeName, strlen(aFileFormats[XLSX].pTypeName), RTL_TEXTENCODING_UTF8);
     std::cout << aFileFormats[XLSX].pName << " Test" << std::endl;
-    ScDocShellRef xDocSh = load (aFilterName, aFileName, rtl::OUString(), aFilterType, aFileFormats[XLSX].nFormatType);
+
+    unsigned int nFormatType = aFileFormats[XLSX].nFormatType;
+    unsigned int nClipboardId = nFormatType ? SFX_FILTER_IMPORT | SFX_FILTER_USESOPTIONS : 0;
+    ScDocShellRef xDocSh = load(aFilterName, aFileName, rtl::OUString(), aFilterType,
+        nFormatType, nClipboardId, SOFFICE_FILEFORMAT_CURRENT);
 
     CPPUNIT_ASSERT_MESSAGE("Failed to load cell-value.xlsx", xDocSh.Is());
     ScDocument* pDoc = xDocSh->GetDocument();
@@ -1335,7 +1364,11 @@ void ScFiltersTest::testControlImport()
     createFileURL(aFileNameBase, aFileExtension, aFileName);
     rtl::OUString aFilterType(aFileFormats[XLSX].pTypeName, strlen(aFileFormats[XLSX].pTypeName), RTL_TEXTENCODING_UTF8);
     std::cout << aFileFormats[XLSX].pName << " Test" << std::endl;
-    ScDocShellRef xDocSh = load (aFilterName, aFileName, rtl::OUString(), aFilterType, aFileFormats[XLSX].nFormatType);
+
+    unsigned int nFormatType = aFileFormats[XLSX].nFormatType;
+    unsigned int nClipboardId = nFormatType ? SFX_FILTER_IMPORT | SFX_FILTER_USESOPTIONS : 0;
+    ScDocShellRef xDocSh = load(aFilterName, aFileName, rtl::OUString(), aFilterType,
+        nFormatType, nClipboardId, SOFFICE_FILEFORMAT_CURRENT);
 
     CPPUNIT_ASSERT_MESSAGE("Failed to load cell-value.xlsx", xDocSh.Is());
 
@@ -1359,7 +1392,12 @@ void ScFiltersTest::testNumberFormatHTML()
 
     rtl::OUString aFileName;
     createFileURL(aFileNameBase, aFileExt, aFileName);
-    ScDocShellRef xDocSh = load (aFilterName, aFileName, rtl::OUString(), aFilterType, aFileFormats[HTML].nFormatType);
+
+    unsigned int nFormatType = aFileFormats[HTML].nFormatType;
+    unsigned int nClipboardId = nFormatType ? SFX_FILTER_IMPORT | SFX_FILTER_USESOPTIONS : 0;
+    ScDocShellRef xDocSh = load(aFilterName, aFileName, rtl::OUString(), aFilterType,
+        nFormatType, nClipboardId, SOFFICE_FILEFORMAT_CURRENT);
+
     CPPUNIT_ASSERT_MESSAGE("Failed to load numberformat.html", xDocSh.Is());
 
     ScDocument* pDoc = xDocSh->GetDocument();
@@ -1386,7 +1424,12 @@ void ScFiltersTest::testNumberFormatCSV()
 
     rtl::OUString aFileName;
     createFileURL(aFileNameBase, aFileExt, aFileName);
-    ScDocShellRef xDocSh = load (aFilterName, aFileName, rtl::OUString(), aFilterType, aFileFormats[CSV].nFormatType);
+
+    unsigned int nFormatType = aFileFormats[CSV].nFormatType;
+    unsigned int nClipboardId = nFormatType ? SFX_FILTER_IMPORT | SFX_FILTER_USESOPTIONS : 0;
+    ScDocShellRef xDocSh = load(aFilterName, aFileName, rtl::OUString(), aFilterType,
+        nFormatType, nClipboardId, SOFFICE_FILEFORMAT_CURRENT);
+
     CPPUNIT_ASSERT_MESSAGE("Failed to load numberformat.html", xDocSh.Is());
 
     ScDocument* pDoc = xDocSh->GetDocument();
@@ -1413,7 +1456,12 @@ void ScFiltersTest::testCellAnchoredShapesODS()
 
     rtl::OUString aFileName;
     createFileURL(aFileNameBase, aFileExt, aFileName);
-    ScDocShellRef xDocSh = load (aFilterName, aFileName, rtl::OUString(), aFilterType, aFileFormats[ODS].nFormatType);
+
+    unsigned int nFormatType = aFileFormats[ODS].nFormatType;
+    unsigned int nClipboardId = nFormatType ? SFX_FILTER_IMPORT | SFX_FILTER_USESOPTIONS : 0;
+    ScDocShellRef xDocSh = load(aFilterName, aFileName, rtl::OUString(), aFilterType,
+        nFormatType, nClipboardId, SOFFICE_FILEFORMAT_CURRENT);
+
     CPPUNIT_ASSERT_MESSAGE("Failed to load cell-anchored-shapes.ods", xDocSh.Is());
 
     // There are two cell-anchored objects on the first sheet.
@@ -1468,7 +1516,12 @@ void ScFiltersTest::testPivotTableBasicODS()
 
     rtl::OUString aFileName;
     createFileURL(aFileNameBase, aFileExt, aFileName);
-    ScDocShellRef xDocSh = load (aFilterName, aFileName, rtl::OUString(), aFilterType, aFileFormats[ODS].nFormatType);
+
+    unsigned int nFormatType = aFileFormats[ODS].nFormatType;
+    unsigned int nClipboardId = nFormatType ? SFX_FILTER_IMPORT | SFX_FILTER_USESOPTIONS : 0;
+    ScDocShellRef xDocSh = load(aFilterName, aFileName, rtl::OUString(), aFilterType,
+        nFormatType, nClipboardId, SOFFICE_FILEFORMAT_CURRENT);
+
     CPPUNIT_ASSERT_MESSAGE("Failed to load pivot-table-basic.ods", xDocSh.Is());
 
     ScDocument* pDoc = xDocSh->GetDocument();
@@ -1570,7 +1623,11 @@ void ScFiltersTest::testColorScaleODS()
     createFileURL(aFileNameBase, aFileExtension, aFileName);
     rtl::OUString aFilterType(aFileFormats[ODS].pTypeName, strlen(aFileFormats[ODS].pTypeName), RTL_TEXTENCODING_UTF8);
     std::cout << aFileFormats[ODS].pName << " Test" << std::endl;
-    ScDocShellRef xDocSh = load (aFilterName, aFileName, rtl::OUString(), aFilterType, aFileFormats[ODS].nFormatType);
+
+    unsigned int nFormatType = aFileFormats[ODS].nFormatType;
+    unsigned int nClipboardId = nFormatType ? SFX_FILTER_IMPORT | SFX_FILTER_USESOPTIONS : 0;
+    ScDocShellRef xDocSh = load(aFilterName, aFileName, rtl::OUString(), aFilterType,
+        nFormatType, nClipboardId, SOFFICE_FILEFORMAT_CURRENT);
 
     CPPUNIT_ASSERT_MESSAGE("Failed to load colorScale.ods", xDocSh.Is());
 
@@ -1590,7 +1647,11 @@ void ScFiltersTest::testColorScaleXLSX()
     createFileURL(aFileNameBase, aFileExtension, aFileName);
     rtl::OUString aFilterType(aFileFormats[XLSX].pTypeName, strlen(aFileFormats[XLSX].pTypeName), RTL_TEXTENCODING_UTF8);
     std::cout << aFileFormats[XLSX].pName << " Test" << std::endl;
-    ScDocShellRef xDocSh = load (aFilterName, aFileName, rtl::OUString(), aFilterType, aFileFormats[XLSX].nFormatType);
+
+    unsigned int nFormatType = aFileFormats[XLSX].nFormatType;
+    unsigned int nClipboardId = nFormatType ? SFX_FILTER_IMPORT | SFX_FILTER_USESOPTIONS : 0;
+    ScDocShellRef xDocSh = load(aFilterName, aFileName, rtl::OUString(), aFilterType,
+        nFormatType, nClipboardId, SOFFICE_FILEFORMAT_CURRENT);
 
     CPPUNIT_ASSERT_MESSAGE("Failed to load colorScale.xlsx", xDocSh.Is());
 
