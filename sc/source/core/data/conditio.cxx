@@ -865,10 +865,10 @@ bool ScConditionEntry::IsTopNElement( double nArg, const ScRangeList& rRanges ) 
     for(ScConditionEntryCache::ValueCacheType::const_reverse_iterator itr = mpCache->maValues.rbegin(),
             itrEnd = mpCache->maValues.rend(); itr != itrEnd; ++itr)
     {
-        if(nCells >= nVal1)
-            return false;
         if(itr->first <= nArg)
             return true;
+        if(nCells >= nVal1)
+            return false;
         nCells += itr->second;
     }
 
@@ -886,10 +886,48 @@ bool ScConditionEntry::IsBottomNElement( double nArg, const ScRangeList& rRanges
     for(ScConditionEntryCache::ValueCacheType::const_iterator itr = mpCache->maValues.begin(),
             itrEnd = mpCache->maValues.end(); itr != itrEnd; ++itr)
     {
-        if(nCells >= nVal1)
-            return false;
         if(itr->first >= nArg)
             return true;
+        if(nCells >= nVal1)
+            return false;
+        nCells += itr->second;
+    }
+
+    return true;
+}
+
+bool ScConditionEntry::IsTopNPercent( double nArg, const ScRangeList& rRanges ) const
+{
+    FillCache( rRanges );
+
+    size_t nCells = 0;
+    size_t nLimitCells = static_cast<size_t>(mpCache->nValueItems*nVal1/100);
+    for(ScConditionEntryCache::ValueCacheType::const_reverse_iterator itr = mpCache->maValues.rbegin(),
+            itrEnd = mpCache->maValues.rend(); itr != itrEnd; ++itr)
+    {
+        if(itr->first <= nArg)
+            return true;
+        if(nCells >= nLimitCells)
+            return false;
+        nCells += itr->second;
+    }
+
+    return true;
+}
+
+bool ScConditionEntry::IsBottomNPercent( double nArg, const ScRangeList& rRanges ) const
+{
+    FillCache( rRanges );
+
+    size_t nCells = 0;
+    size_t nLimitCells = static_cast<size_t>(mpCache->nValueItems*nVal1/100);
+    for(ScConditionEntryCache::ValueCacheType::const_iterator itr = mpCache->maValues.begin(),
+            itrEnd = mpCache->maValues.end(); itr != itrEnd; ++itr)
+    {
+        if(itr->first >= nArg)
+            return true;
+        if(nCells >= nLimitCells)
+            return false;
         nCells += itr->second;
     }
 
@@ -973,6 +1011,12 @@ bool ScConditionEntry::IsValid( double nArg ) const
         case SC_COND_BOTTOM10:
             bValid = IsBottomNElement( nArg, pCondFormat->GetRange() );
             break;
+        case SC_COND_TOP_PERCENT:
+            bValid = IsTopNPercent( nArg, pCondFormat->GetRange() );
+            break;
+        case SC_COND_BOTTOM_PERCENT:
+            bValid = IsBottomNPercent( nArg, pCondFormat->GetRange() );
+            break;
         default:
             OSL_FAIL("unbekannte Operation bei ScConditionEntry");
             break;
@@ -1029,6 +1073,8 @@ bool ScConditionEntry::IsValidStr( const String& rArg ) const
             bValid = (ScGlobal::GetCollator()->compareString(
                 rArg, aUpVal1 ) != COMPARE_EQUAL);
         break;
+        case SC_COND_TOP_PERCENT:
+        case SC_COND_BOTTOM_PERCENT:
         case SC_COND_TOP10:
         case SC_COND_BOTTOM10:
             return false;
