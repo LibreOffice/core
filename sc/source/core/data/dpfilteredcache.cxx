@@ -26,7 +26,7 @@
  *
  ************************************************************************/
 
-#include "dpcachetable.hxx"
+#include "dpfilteredcache.hxx"
 #include "document.hxx"
 #include "address.hxx"
 #include "cell.hxx"

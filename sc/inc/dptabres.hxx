@@ -30,7 +30,7 @@
 #define SC_DPTABRES_HXX
 
 #include "global.hxx"
-#include "dpcachetable.hxx"
+#include "dpfilteredcache.hxx"
 
 #include <tools/string.hxx>
 #include <com/sun/star/sheet/MemberResult.hpp>

@@ -29,7 +29,7 @@
 #include "dpsdbtab.hxx"
 #include "global.hxx"
 #include "globstr.hrc"
-#include "dpcachetable.hxx"
+#include "dpfilteredcache.hxx"
 #include "dptabres.hxx"
 #include "document.hxx"
 #include "dpobject.hxx"

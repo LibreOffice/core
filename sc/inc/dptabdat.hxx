@@ -31,7 +31,7 @@
 
 #include "address.hxx"
 #include "dpoutput.hxx"
-#include "dpcachetable.hxx"
+#include "dpfilteredcache.hxx"
 #include "dpcache.hxx"
 #include "dpmacros.hxx"
 

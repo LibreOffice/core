@@ -32,7 +32,7 @@
 #include "dptabres.hxx"
 #include "document.hxx"
 #include "cell.hxx"
-#include "dpcachetable.hxx"
+#include "dpfilteredcache.hxx"
 #include "dpobject.hxx"
 #include "globstr.hrc"
 #include "rangenam.hxx"

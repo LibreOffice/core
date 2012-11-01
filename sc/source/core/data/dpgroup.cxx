@@ -30,7 +30,7 @@
 
 #include "global.hxx"
 #include "document.hxx"
-#include "dpcachetable.hxx"
+#include "dpfilteredcache.hxx"
 #include "dptabsrc.hxx"
 #include "dptabres.hxx"
 #include "dpobject.hxx"
