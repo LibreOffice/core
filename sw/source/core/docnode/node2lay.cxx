@@ -201,7 +201,7 @@ SwNode2LayImpl::SwNode2LayImpl( const SwNode& rNode, sal_uLong nIdx, sal_Bool bS
  *
  * If the Frame is located in a SectionFrm, we check to see whether the
  * SectionFrame is the suitable return value (instead of the Frame itself).
- * This is the case if the to-be-inserted Node is outside of the Area.
+ * This is the case if the to-be-inserted Node is outside of the Section.
  */
 SwFrm* SwNode2LayImpl::NextFrm()
 {
@@ -234,8 +234,8 @@ SwFrm* SwNode2LayImpl::NextFrm()
             {
                 SwSectionFrm* pSct = pRet->FindSctFrm();
                 // ATTENTION: If we are in a Footnote, from a Layout point of view
-                // it could be located in an Area with columns, although it should be
-                // outside of it when looking at the Nodes.
+                // it could be located in a Section with columns, although it
+                // should be outside of it when looking at the Nodes.
                 // Thus, when dealing with Footnotes, we need to check whether the
                 // SectionFrm is also located within the Footnote and not outside of it.
                 if( !pRet->IsInFtn() || pSct->IsInFtn() )
@@ -243,9 +243,9 @@ SwFrm* SwNode2LayImpl::NextFrm()
                     OSL_ENSURE( pSct && pSct->GetSection(), "Where's my section?" );
                     SwSectionNode* pNd = pSct->GetSection()->GetFmt()->GetSectionNode();
                     OSL_ENSURE( pNd, "Lost SectionNode" );
-                    // If the received Frame is located within an Area Frame that does
-                    // not encompass the ExitNode, we return with the SectionFrm, else
-                    // we return with the Cntnt/TabFrm
+                    // If the result Frame is located within a Section Frame
+                    // whose Section does not contain the Node, we return with
+                    // the SectionFrm, else we return with the Cntnt/TabFrm
                     if( bMaster )
                     {
                         if( pNd->GetIndex() >= nIndex )
