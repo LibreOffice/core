@@ -51,8 +51,6 @@ public:
                                      const ::rtl::OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
-
-    virtual void EndElement();
 };
 
 class ScXMLConditionalFormatContext : public SvXMLImportContext
@@ -73,7 +71,6 @@ public:
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
 
     virtual void EndElement();
-
 private:
 
     ScConditionalFormat* mpFormat;
@@ -97,9 +94,6 @@ public:
                                      const ::rtl::OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
-
-    virtual void EndElement();
-
 private:
 
     ScColorScaleFormat* pColorScaleFormat;
@@ -123,9 +117,6 @@ public:
                                      const ::rtl::OUString& rLocalName,
                                      const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
-
-    virtual void EndElement();
-
 private:
 
     ScDataBarFormat* mpDataBarFormat;
@@ -168,9 +159,6 @@ public:
                         ScColorScaleFormat* pFormat);
 
     virtual ~ScXMLColorScaleFormatEntryContext() {}
-
-    virtual void EndElement();
-
 private:
 
     ScColorScaleEntry* mpFormatEntry;

@@ -65,10 +65,6 @@ SvXMLImportContext* ScXMLConditionalFormatsContext::CreateChildContext( sal_uInt
     return pContext;
 }
 
-void ScXMLConditionalFormatsContext::EndElement()
-{
-}
-
 ScXMLConditionalFormatContext::ScXMLConditionalFormatContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
                         const ::rtl::OUString& rLName, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList>& xAttrList):
     SvXMLImportContext( rImport, nPrfx, rLName )
@@ -169,11 +165,6 @@ SvXMLImportContext* ScXMLColorScaleFormatContext::CreateChildContext( sal_uInt16
     }
 
     return pContext;
-}
-
-void ScXMLColorScaleFormatContext::EndElement()
-{
-
 }
 
 ScXMLDataBarFormatContext::ScXMLDataBarFormatContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
@@ -299,10 +290,6 @@ SvXMLImportContext* ScXMLDataBarFormatContext::CreateChildContext( sal_uInt16 nP
     }
 
     return pContext;
-}
-
-void ScXMLDataBarFormatContext::EndElement()
-{
 }
 
 ScXMLIconSetFormatContext::ScXMLIconSetFormatContext(ScXMLImport& rImport, sal_uInt16 nPrfx,
@@ -575,10 +562,6 @@ ScXMLColorScaleFormatEntryContext::ScXMLColorScaleFormatEntryContext( ScXMLImpor
     mpFormatEntry = new ScColorScaleEntry(nVal, aColor);
     setColorEntryType(sType, mpFormatEntry, sVal, GetScImport());
     pFormat->AddEntry(mpFormatEntry);
-}
-
-void ScXMLColorScaleFormatEntryContext::EndElement()
-{
 }
 
 ScXMLFormattingEntryContext::ScXMLFormattingEntryContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
