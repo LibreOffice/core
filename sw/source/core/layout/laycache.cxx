@@ -114,19 +114,19 @@ sal_Bool SwLayCacheImpl::Read( SvStream& rStream )
     // height of fly frames
     bUseFlyCache = aIo.GetMinorVersion() >= 1;
 
-    sal_uInt8 cFlags;
-    sal_uInt32 nIndex, nOffset;
-
     aIo.OpenRec( SW_LAYCACHE_IO_REC_PAGES );
     aIo.OpenFlagRec();
     aIo.CloseFlagRec();
     while( aIo.BytesLeft() && !aIo.HasError() )
     {
+        sal_uInt32 nIndex(0), nOffset(0);
+
         switch( aIo.Peek() )
         {
         case SW_LAYCACHE_IO_REC_PARA:
+        {
             aIo.OpenRec( SW_LAYCACHE_IO_REC_PARA );
-            cFlags = aIo.OpenFlagRec();
+            sal_uInt8 cFlags = aIo.OpenFlagRec();
             aIo.GetStream() >> nIndex;
             if( (cFlags & 0x01) != 0 )
                 aIo.GetStream() >> nOffset;
@@ -136,6 +136,7 @@ sal_Bool SwLayCacheImpl::Read( SvStream& rStream )
             Insert( SW_LAYCACHE_IO_REC_PARA, nIndex, (xub_StrLen)nOffset );
             aIo.CloseRec( SW_LAYCACHE_IO_REC_PARA );
             break;
+        }
         case SW_LAYCACHE_IO_REC_TABLE:
             aIo.OpenRec( SW_LAYCACHE_IO_REC_TABLE );
             aIo.OpenFlagRec();
@@ -150,8 +151,8 @@ sal_Bool SwLayCacheImpl::Read( SvStream& rStream )
             aIo.OpenRec( SW_LAYCACHE_IO_REC_FLY );
             aIo.OpenFlagRec();
             aIo.CloseFlagRec();
-            sal_Int32 nX, nY, nW, nH;
-            sal_uInt16 nPgNum;
+            sal_Int32 nX(0), nY(0), nW(0), nH(0);
+            sal_uInt16 nPgNum(0);
             aIo.GetStream() >> nPgNum >> nIndex
                     >> nX >> nY >> nW >> nH;
             SwFlyCache* pFly = new SwFlyCache( nPgNum, nIndex, nX, nY, nW, nH );
@@ -1188,7 +1189,7 @@ sal_Bool SwLayCacheIoImpl::OpenRec( sal_uInt8 cType )
     }
     else
     {
-        sal_uInt32 nVal;
+        sal_uInt32 nVal(0);
         *pStream >> nVal;
         sal_uInt8 cRecTyp = (sal_uInt8)nVal;
         if( !nVal || cRecTyp != cType ||
@@ -1266,7 +1267,7 @@ sal_uInt32 SwLayCacheIoImpl::BytesLeft()
 
 sal_uInt8 SwLayCacheIoImpl::Peek()
 {
-    sal_uInt8 c = 0;
+    sal_uInt8 c(0);
     if( !bError )
     {
         sal_uInt32 nPos = pStream->Tell();
@@ -1292,7 +1293,7 @@ void SwLayCacheIoImpl::SkipRec()
 sal_uInt8 SwLayCacheIoImpl::OpenFlagRec()
 {
     OSL_ENSURE( !bWriteMode, "OpenFlagRec illegal in write  mode" );
-    sal_uInt8 cFlags;
+    sal_uInt8 cFlags(0);
     *pStream >> cFlags;
     nFlagRecEnd = pStream->Tell() + ( cFlags & 0x0F );
     return (cFlags >> 4);
