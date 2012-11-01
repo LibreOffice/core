@@ -254,6 +254,7 @@ public:
 
     /** Converts an OOXML condition operator token to the API constant. */
     static sal_Int32    convertToApiOperator( sal_Int32 nToken );
+    static sal_Int32    convertToInternalOperator( sal_Int32 nToken );
 
 private:
     CondFormatRef       createCondFormat();

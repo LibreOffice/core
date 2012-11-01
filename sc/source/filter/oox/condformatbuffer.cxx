@@ -639,7 +639,7 @@ void CondFormatRule::importCfRule( SequenceInputStream& rStrm )
 
 void CondFormatRule::finalizeImport()
 {
-    sal_Int32 eOperator = ::com::sun::star::sheet::ConditionOperator2::NONE;
+    ScConditionMode eOperator = SC_COND_NONE;
 
     /*  Replacement formula for unsupported rule types (text comparison rules,
         time period rules, cell type rules). The replacement formulas below may
@@ -663,14 +663,14 @@ void CondFormatRule::finalizeImport()
     switch( maModel.mnType )
     {
         case XML_cellIs:
-            eOperator = CondFormatBuffer::convertToApiOperator( maModel.mnOperator );
+            eOperator = static_cast<ScConditionMode>(CondFormatBuffer::convertToInternalOperator( maModel.mnOperator ));
         break;
         case XML_duplicateValues:
-            eOperator = CondFormatBuffer::convertToApiOperator( XML_duplicateValues );
+            eOperator = static_cast<ScConditionMode>(CondFormatBuffer::convertToInternalOperator( XML_duplicateValues ));
             aReplaceFormula = " ";
         break;
         case XML_expression:
-            eOperator = ::com::sun::star::sheet::ConditionOperator2::FORMULA;
+            eOperator = SC_COND_DIRECT;
         break;
         case XML_containsText:
             OSL_ENSURE( maModel.mnOperator == XML_containsText, "CondFormatRule::finalizeImport - unexpected operator" );
@@ -803,14 +803,14 @@ void CondFormatRule::finalizeImport()
         // set the replacement formula
         maModel.maFormulas.clear();
         appendFormula( aReplaceFormula );
-        if( eOperator != ::com::sun::star::sheet::ConditionOperator2::DUPLICATE )
-            eOperator = ::com::sun::star::sheet::ConditionOperator2::FORMULA;
+        if( eOperator != SC_COND_DUPLICATE )
+            eOperator = SC_COND_DIRECT;
     }
 
     CellAddress aBaseAddr = mrCondFormat.getRanges().getBaseAddress();
     ScAddress aPos;
     ScUnoConversion::FillScAddress( aPos, aBaseAddr );
-    if( (eOperator != ::com::sun::star::sheet::ConditionOperator2::NONE) && !maModel.maFormulas.empty() )
+    if( (eOperator != SC_COND_NONE) && !maModel.maFormulas.empty() )
     {
         ScDocument& rDoc = getScDocument();
         boost::scoped_ptr<ScTokenArray> pTokenArray2;
@@ -823,7 +823,7 @@ void CondFormatRule::finalizeImport()
         ScTokenArray aTokenArray;
         OUString aStyleName = getStyles().createDxfStyle( maModel.mnDxfId );
         ScTokenConversion::ConvertToTokenArray( rDoc, aTokenArray, maModel.maFormulas[ 0 ] );
-        ScCondFormatEntry* pNewEntry = new ScCondFormatEntry(ScCondFormatEntry::GetModeFromApi(eOperator),
+        ScCondFormatEntry* pNewEntry = new ScCondFormatEntry(eOperator,
                                             &aTokenArray, pTokenArray2.get(), &rDoc, aPos, aStyleName);
         mpFormat->AddEntry(pNewEntry);
     }
@@ -991,6 +991,23 @@ sal_Int32 CondFormatBuffer::convertToApiOperator( sal_Int32 nToken )
         case XML_notBetween:            return ConditionOperator2::NOT_BETWEEN;
         case XML_notEqual:              return ConditionOperator2::NOT_EQUAL;
         case XML_duplicateValues:       return ConditionOperator2::DUPLICATE;
+    }
+    return ConditionOperator2::NONE;
+}
+
+sal_Int32 CondFormatBuffer::convertToInternalOperator( sal_Int32 nToken )
+{
+    switch( nToken )
+    {
+        case XML_between:               return SC_COND_BETWEEN;
+        case XML_equal:                 return SC_COND_EQUAL;
+        case XML_greaterThan:           return SC_COND_GREATER;
+        case XML_greaterThanOrEqual:    return SC_COND_EQGREATER;
+        case XML_lessThan:              return SC_COND_LESS;
+        case XML_lessThanOrEqual:       return SC_COND_EQLESS;
+        case XML_notBetween:            return SC_COND_NOTBETWEEN;
+        case XML_notEqual:              return SC_COND_NOTEQUAL;
+        case XML_duplicateValues:       return SC_COND_DUPLICATE;
     }
     return ConditionOperator2::NONE;
 }
