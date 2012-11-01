@@ -273,9 +273,6 @@ void ScDocShell::BeforeXMLLoading()
     aDocument.EnableUndo( false );
     // prevent unnecessary broadcasts and "half way listeners"
     aDocument.SetInsertingFromOtherDoc( sal_True );
-
-    if (GetCreateMode() != SFX_CREATE_MODE_ORGANIZER)
-        ScColumn::bDoubleAlloc = sal_True;
 }
 
 void ScDocShell::AfterXMLLoading(sal_Bool bRet)
@@ -358,7 +355,6 @@ void ScDocShell::AfterXMLLoading(sal_Bool bRet)
                 }
             }
         }
-        ScColumn::bDoubleAlloc = false;
     }
     else
         aDocument.SetInsertingFromOtherDoc( false );
@@ -1084,10 +1080,8 @@ sal_Bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
                 sItStr = ScGlobal::GetCharsetString( RTL_TEXTENCODING_IBM_437 );
             }
 
-            ScColumn::bDoubleAlloc = sal_True;
             FltError eError = ScFormatFilter::Get().ScImportLotus123( rMedium, &aDocument,
                                                 ScGlobal::GetCharsetValue(sItStr));
-            ScColumn::bDoubleAlloc = false;
             if (eError != eERR_OK)
             {
                 if (!GetError())
@@ -1117,9 +1111,7 @@ sal_Bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
 
             MakeDrawLayer();                //! im Filter
             CalcOutputFactor();             // prepare update of row height
-            ScColumn::bDoubleAlloc = true;
             FltError eError = ScFormatFilter::Get().ScImportExcel( rMedium, &aDocument, eFormat );
-            ScColumn::bDoubleAlloc = false;
             aDocument.UpdateFontCharSet();
             if ( aDocument.IsChartListenerCollectionNeedsUpdate() )
                 aDocument.UpdateChartListenerCollection();              //! fuer alle Importe?
@@ -1316,9 +1308,7 @@ sal_Bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
         }
         else if (aFltName.EqualsAscii(pFilterQPro6))
         {
-            ScColumn::bDoubleAlloc = sal_True;
             FltError eError = ScFormatFilter::Get().ScImportQuattroPro( rMedium, &aDocument);
-            ScColumn::bDoubleAlloc = false;
             if (eError != eERR_OK)
             {
                 if (!GetError())

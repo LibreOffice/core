@@ -2423,12 +2423,6 @@ void ScDocument::CopyFromClip( const ScRange& rDestRange, const ScMarkData& rMar
 
             bInsertingFromOtherDoc = true;  // kein Broadcast/Listener aufbauen bei Insert
 
-            // bei mindestens 64 Zeilen wird in ScColumn::CopyFromClip voralloziert
-            bool bDoDouble = ( nYw < 64 && nAllRow2 - nAllRow1 > 64);
-            bool bOldDouble = ScColumn::bDoubleAlloc;
-            if (bDoDouble)
-                ScColumn::bDoubleAlloc = true;
-
             SCCOL nClipStartCol = aClipRange.aStart.Col();
             SCROW nClipStartRow = aClipRange.aStart.Row();
             SCROW nClipEndRow = aClipRange.aEnd.Row();
@@ -2488,8 +2482,6 @@ void ScDocument::CopyFromClip( const ScRange& rDestRange, const ScMarkData& rMar
                     nR2 = Min((SCROW)(nR1 + nYw), nRow2);
                 } while (nR1 <= nRow2);
             }
-
-            ScColumn::bDoubleAlloc = bOldDouble;
 
             itr = rMark.begin();
             for (; itr != itrEnd && *itr < nMax; ++itr)

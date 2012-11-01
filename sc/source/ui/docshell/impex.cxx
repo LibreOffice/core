@@ -1273,8 +1273,6 @@ bool ScImportExport::ExtText2Doc( SvStream& rStrm )
     rStrm.Seek( nOldPos );
     rStrm.StartReadingUnicodeText( rStrm.GetStreamCharSet() );
 
-    ScColumn::DoubleAllocSwitch aAllocSwitch(true);
-
     SCCOL nStartCol = aRange.aStart.Col();
     SCCOL nEndCol = aRange.aEnd.Col();
     SCROW nStartRow = aRange.aStart.Row();

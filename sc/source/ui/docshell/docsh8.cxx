@@ -317,7 +317,6 @@ sal_uLong ScDocShell::DBaseImport( const String& rFullFileName, CharSet eCharSet
 
     return ERRCODE_IO_GENERAL;
 #else
-    ScColumn::DoubleAllocSwitch aAllocSwitch(true);
 
     sal_uLong nErr = eERR_OK;
     long i;
@@ -395,7 +394,6 @@ sal_uLong ScDocShell::DBaseImport( const String& rFullFileName, CharSet eCharSet
         //! add type descriptions
 
         aProgress.SetState( 0 );
-        ScColumn::bDoubleAlloc = true;      // row count isn't readily available in advance
 
         vector<long> aScales(nColCount, -1);
         for (i=0; i<nColCount; i++)
@@ -487,7 +485,6 @@ sal_uLong ScDocShell::DBaseImport( const String& rFullFileName, CharSet eCharSet
         nErr = ERRCODE_IO_GENERAL;
     }
 
-    ScColumn::bDoubleAlloc = false;
     if ( nColCount > 0 )
         aDocument.DoColResize( 0, 0, static_cast<SCCOL>(nColCount) - 1, 0 );
 

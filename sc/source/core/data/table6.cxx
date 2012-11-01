@@ -480,10 +480,6 @@ bool ScTable::ReplaceAll(
     const SvxSearchItem& rSearchItem, const ScMarkData& rMark, ScRangeList& rMatchedRanges,
     rtl::OUString& rUndoStr, ScDocument* pUndoDoc)
 {
-    bool bOldDouble = ScColumn::bDoubleAlloc;       // sollte immer sal_False sein?
-    OSL_ENSURE(!bOldDouble,"bDoubleAlloc ???");
-    ScColumn::bDoubleAlloc = true;                  // fuer Undo-Doc
-
     SCCOL nCol = 0;
     SCROW nRow = -1;
 
@@ -500,7 +496,6 @@ bool ScTable::ReplaceAll(
         else
             break;
     }
-    ScColumn::bDoubleAlloc = bOldDouble;
     return bEverFound;
 }
 

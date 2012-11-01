@@ -62,21 +62,6 @@ inline bool IsAmbiguousScriptNonZero( sal_uInt8 nScript )
              nScript != 0 );
 }
 
-// ----------------------------------------------------------------------------
-
-ScColumn::DoubleAllocSwitch::DoubleAllocSwitch(bool bNewVal) :
-    mbOldVal(ScColumn::bDoubleAlloc)
-{
-    ScColumn::bDoubleAlloc = bNewVal;
-}
-
-ScColumn::DoubleAllocSwitch::~DoubleAllocSwitch()
-{
-    ScColumn::bDoubleAlloc = mbOldVal;
-}
-
-// ----------------------------------------------------------------------------
-
 ScColumn::ScColumn() :
     nCol( 0 ),
     pAttrArray( NULL ),

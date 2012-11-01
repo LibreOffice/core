@@ -201,7 +201,6 @@ bool ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
     // ImportDoc - also used for Redo
     ScDocument* pImportDoc = new ScDocument( SCDOCMODE_UNDO );
     pImportDoc->InitUndo( pDoc, nTab, nTab );
-    ScColumn::DoubleAllocSwitch aAllocSwitch(true);
 
     //
     //  get data from database into import document

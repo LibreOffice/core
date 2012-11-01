@@ -117,17 +117,6 @@ friend class ScHorizontalCellIterator;
 friend class ScHorizontalAttrIterator;
 
 public:
-    static bool bDoubleAlloc;                  // for Import: double size for alloc
-
-    class DoubleAllocSwitch
-    {
-    public:
-        DoubleAllocSwitch(bool bNewVal = true);
-        ~DoubleAllocSwitch();
-    private:
-        bool mbOldVal;
-    };
-public:
                 ScColumn();
                 ~ScColumn();
 
