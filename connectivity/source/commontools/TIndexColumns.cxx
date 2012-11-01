@@ -87,14 +87,14 @@ sdbcx::ObjectType OIndexColumns::createObject(const ::rtl::OUString& _rName)
                 ::rtl::OUString aColumnDef(xRow->getString(13));
 
                 OIndexColumn* pRet = new OIndexColumn(bAsc,
-                                                    _rName,
-                                                    aTypeName,
-                                                    aColumnDef,
-                                                    nNull,
-                                                    nSize,
-                                                    nDec,
-                                                    nDataType,
-                                                    sal_False,sal_False,sal_False,sal_True);
+                                                      _rName,
+                                                      aTypeName,
+                                                      aColumnDef,
+                                                      nNull,
+                                                      nSize,
+                                                      nDec,
+                                                      nDataType,
+                                                      sal_False,sal_False,sal_False,sal_True);
                 xRet = pRet;
                 break;
             }
