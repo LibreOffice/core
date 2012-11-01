@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAP3///o4\u003d",
+        "filename": "sw/source/core/docnode/node2lay.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 204,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2012-11-01T17:03:41Z",
+      "side": 1,
+      "message": "Area should be Section here (at the end)",
+      "revId": "025147d04f2543e2e1fa77d639135ee4e90644a5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAP3///o0\u003d",
+        "filename": "sw/source/core/docnode/node2lay.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 246,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2012-11-01T17:03:41Z",
+      "side": 1,
+      "message": "Area frame -\u003e Section frame",
+      "revId": "025147d04f2543e2e1fa77d639135ee4e90644a5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
