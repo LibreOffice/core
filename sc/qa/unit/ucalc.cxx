@@ -62,6 +62,7 @@
 #include "dpsave.hxx"
 #include "dpdimsave.hxx"
 #include "dpcache.hxx"
+#include "dpfilteredcache.hxx"
 #include "calcconfig.hxx"
 #include "interpre.hxx"
 
@@ -82,6 +83,7 @@
 #include <com/sun/star/sheet/GeneralFunction.hpp>
 
 #include <iostream>
+#include <sstream>
 #include <vector>
 
 #define CALC_DEBUG_OUTPUT 0
@@ -2419,6 +2421,29 @@ void Test::testPivotTableCache()
             }
         }
     }
+
+    // Now, on to testing the filtered cache.
+
+    {
+        // Non-filtered cache - everything should be visible.
+        ScDPFilteredCache aFilteredCache(aCache);
+        aFilteredCache.fillTable();
+
+        sal_Int32 nRows = aFilteredCache.getRowSize();
+        CPPUNIT_ASSERT_MESSAGE("Wrong dimension.", nRows == 6 && aFilteredCache.getColSize() == 3);
+
+        for (sal_Int32 i = 0; i < nRows; ++i)
+        {
+            if (!aFilteredCache.isRowActive(i))
+            {
+                std::ostringstream os;
+                os << "Row " << i << " should be visible but it isn't.";
+                CPPUNIT_ASSERT_MESSAGE(os.str().c_str(), false);
+            }
+        }
+    }
+
+    // TODO : Add test for filtered caches.
 
     m_pDoc->DeleteTab(0);
 }
