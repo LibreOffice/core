@@ -284,6 +284,10 @@ void ScUndoInsertCells::Undo()
     BeginUndo();
     DoChange( sal_True );
     EndUndo();
+
+    ScDocument* pDoc = pDocShell->GetDocument();
+    for (SCTAB i = 0; i < nCount; ++i)
+        pDoc->SetDrawPageSize(pTabs[i]);
 }
 
 void ScUndoInsertCells::Redo()
@@ -295,6 +299,10 @@ void ScUndoInsertCells::Redo()
 
     if ( pPasteUndo )
         pPasteUndo->Redo();     // redo paste last
+
+    ScDocument* pDoc = pDocShell->GetDocument();
+    for (SCTAB i = 0; i < nCount; ++i)
+        pDoc->SetDrawPageSize(pTabs[i]);
 }
 
 void ScUndoInsertCells::Repeat(SfxRepeatTarget& rTarget)
@@ -519,6 +527,10 @@ void ScUndoDeleteCells::Undo()
             pViewShell->MarkRange( ScRange(aEffRange.aStart.Col(), aEffRange.aStart.Row(), pTabs[i], aEffRange.aEnd.Col(), aEffRange.aEnd.Row(), pTabs[i]+pScenarios[i]) );
         }
     }
+
+    ScDocument* pDoc = pDocShell->GetDocument();
+    for (SCTAB i = 0; i < nCount; ++i)
+        pDoc->SetDrawPageSize(pTabs[i]);
 }
 
 void ScUndoDeleteCells::Redo()
@@ -532,6 +544,10 @@ void ScUndoDeleteCells::Redo()
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
     if (pViewShell)
         pViewShell->DoneBlockMode();            // current way
+
+    ScDocument* pDoc = pDocShell->GetDocument();
+    for (SCTAB i = 0; i < nCount; ++i)
+        pDoc->SetDrawPageSize(pTabs[i]);
 }
 
 void ScUndoDeleteCells::Repeat(SfxRepeatTarget& rTarget)

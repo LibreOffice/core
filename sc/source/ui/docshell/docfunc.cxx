@@ -1499,6 +1499,8 @@ sal_Bool ScDocFunc::InsertCells( const ScRange& rRange, const ScMarkData* pTabMa
     itr = aMark.begin();
     for (; itr != itrEnd && nTabCount; ++itr)
     {
+        pDoc->InitializeNoteCaptions(*itr);
+
         i = *itr;
         if( pDoc->HasAttrib( nMergeTestStartX, nMergeTestStartY, i, nMergeTestEndX, nMergeTestEndY, i, HASATTR_MERGED | HASATTR_OVERLAPPED ) )
         {
@@ -1721,6 +1723,8 @@ sal_Bool ScDocFunc::InsertCells( const ScRange& rRange, const ScMarkData* pTabMa
         for (; itr != itrEnd && *itr < nTabCount; ++itr)
         {
             i = *itr;
+            pDoc->SetDrawPageSize(i);
+
             if (bNeedRefresh)
                 pDoc->ExtendMerge( nMergeTestStartX, nMergeTestStartY, nMergeTestEndX, nMergeTestEndY, i, sal_True );
             else
@@ -1904,6 +1908,8 @@ sal_Bool ScDocFunc::DeleteCells( const ScRange& rRange, const ScMarkData* pTabMa
     itr = aMark.begin();
     for (; itr != itrEnd && *itr < nTabCount; ++itr)
     {
+        pDoc->InitializeNoteCaptions(*itr);
+
         SCTAB i = *itr;
         if ( pDoc->HasAttrib( nUndoStartX, nUndoStartY, i, nMergeTestEndX, nMergeTestEndY, i, HASATTR_MERGED | HASATTR_OVERLAPPED ))
         {
@@ -2227,6 +2233,8 @@ sal_Bool ScDocFunc::DeleteCells( const ScRange& rRange, const ScMarkData* pTabMa
     itr = aMark.begin(), itrEnd = aMark.end();
     for (; itr != itrEnd && *itr < nTabCount; ++itr)
     {
+        pDoc->SetDrawPageSize(*itr);
+
         if ( eCmd == DEL_DELCOLS || eCmd == DEL_DELROWS )
             pDoc->UpdatePageBreaks( *itr );
 
