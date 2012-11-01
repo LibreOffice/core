@@ -1290,9 +1290,12 @@ sal_Bool OSingleSelectQueryComposer::setComparsionPredicate(OSQLParseNode * pCon
     if(m_pTables && m_pTables->getCount() > 1)
     {
         ::rtl::OUString aCatalog,aSchema,aTable,aComposedName,aColumnName;
-        column->getPropertyValue(PROPERTY_CATALOGNAME)  >>= aCatalog;
-        column->getPropertyValue(PROPERTY_SCHEMANAME)   >>= aSchema;
-        column->getPropertyValue(PROPERTY_TABLENAME)    >>= aTable;
+        if(column->getPropertySetInfo()->hasPropertyByName(PROPERTY_CATALOGNAME))
+            column->getPropertyValue(PROPERTY_CATALOGNAME)  >>= aCatalog;
+        if(column->getPropertySetInfo()->hasPropertyByName(PROPERTY_SCHEMANAME))
+            column->getPropertyValue(PROPERTY_SCHEMANAME)   >>= aSchema;
+        if(column->getPropertySetInfo()->hasPropertyByName(PROPERTY_TABLENAME))
+            column->getPropertyValue(PROPERTY_TABLENAME)    >>= aTable;
         column->getPropertyValue(PROPERTY_NAME)         >>= aColumnName;
 
         Sequence< ::rtl::OUString> aNames(m_pTables->getElementNames());
