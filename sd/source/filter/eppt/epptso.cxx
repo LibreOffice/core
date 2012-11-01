@@ -2835,21 +2835,10 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                     else
                     {
                         ImplCreateShape( ESCHER_ShpInst_PictureFrame, 0xa00, aSolverContainer );
-                        const Rectangle aOldRect100thmm(aRect100thmm);
 
                         if ( aPropOpt.CreateGraphicProperties( mXPropSet, OUString( "GraphicURL" ), sal_False, sal_True ) )
                         {
                             aPropOpt.AddOpt( ESCHER_Prop_LockAgainstGrouping, 0x800080 );
-
-                            if(aOldRect100thmm != aRect100thmm)
-                            {
-                                // #119536# graphic has been adapted (rotated) so that it can be saved without angle,
-                                // adapt local values as needed
-                                maPosition = MapPoint( ::com::sun::star::awt::Point( aRect100thmm.Left(), aRect100thmm.Top() ) );
-                                maSize = MapSize( ::com::sun::star::awt::Size ( aRect100thmm.GetWidth(), aRect100thmm.GetHeight() ) );
-                                maRect = Rectangle( Point( maPosition.X, maPosition.Y ), Size( maSize.Width, maSize.Height ) );
-                                mnAngle = 0;
-                            }
                         }
                     }
                 }
