@@ -1472,86 +1472,85 @@ void ScColumn::SwapCol(ScColumn& rCol)
     }
 }
 
-
 void ScColumn::MoveTo(SCROW nStartRow, SCROW nEndRow, ScColumn& rCol)
 {
     pAttrArray->MoveTo(nStartRow, nEndRow, *rCol.pAttrArray);
 
-    if ( !maItems.empty() )
-    {
-        ::std::vector<SCROW> aRows;
-        bool bConsecutive = true;
-        SCSIZE i;
-        Search( nStartRow, i);  // i points to start row or position thereafter
-        SCSIZE nStartPos = i;
-        for ( ; i < maItems.size() && maItems[i].nRow <= nEndRow; ++i)
-        {
-            SCROW nRow = maItems[i].nRow;
-            aRows.push_back( nRow);
-            rCol.Insert( nRow, maItems[i].pCell);
-            if (nRow != maItems[i].nRow)
-            {   // Listener inserted
-                bConsecutive = false;
-                Search( nRow, i);
-            }
-        }
-        SCSIZE nStopPos = i;
-        if (nStartPos < nStopPos)
-        {
-            // Create list of ranges of cell entry positions
-            typedef ::std::pair<SCSIZE,SCSIZE> PosPair;
-            typedef ::std::vector<PosPair> EntryPosPairs;
-            EntryPosPairs aEntries;
-            if (bConsecutive)
-                aEntries.push_back( PosPair(nStartPos, nStopPos));
-            else
-            {
-                bool bFirst = true;
-                nStopPos = 0;
-                for (::std::vector<SCROW>::const_iterator it( aRows.begin());
-                        it != aRows.end() && nStopPos < maItems.size(); ++it,
-                        ++nStopPos)
-                {
-                    if (!bFirst && *it != maItems[nStopPos].nRow)
-                    {
-                        aEntries.push_back( PosPair(nStartPos, nStopPos));
-                        bFirst = true;
-                    }
-                    if (bFirst && Search( *it, nStartPos))
-                    {
-                        bFirst = false;
-                        nStopPos = nStartPos;
-                    }
-                }
-                if (!bFirst && nStartPos < nStopPos)
-                    aEntries.push_back( PosPair(nStartPos, nStopPos));
-            }
-            // Broadcast changes
-            ScAddress aAdr( nCol, 0, nTab );
-            ScHint aHint( SC_HINT_DYING, aAdr, NULL );  // areas only
-            ScAddress& rAddress = aHint.GetAddress();
-            ScNoteCell* pNoteCell = new ScNoteCell;     // Dummy like in DeleteRange
+    if (maItems.empty())
+        // No cells to move.
+        return;
 
-            // must iterate backwards, because indexes of following cells become invalid
-            for (EntryPosPairs::reverse_iterator it( aEntries.rbegin());
-                    it != aEntries.rend(); ++it)
-            {
-                nStartPos = (*it).first;
-                nStopPos = (*it).second;
-                for (i=nStartPos; i<nStopPos; ++i)
-                    maItems[i].pCell = pNoteCell;
-                for (i=nStartPos; i<nStopPos; ++i)
-                {
-                    rAddress.SetRow( maItems[i].nRow );
-                    pDocument->AreaBroadcast( aHint );
-                }
-                maItems.erase(maItems.begin() + nStartPos, maItems.begin() + nStopPos - 1);
-            }
-            pNoteCell->Delete();
+    ::std::vector<SCROW> aRows;
+    bool bConsecutive = true;
+    SCSIZE i;
+    Search( nStartRow, i);  // i points to start row or position thereafter
+    SCSIZE nStartPos = i;
+    for ( ; i < maItems.size() && maItems[i].nRow <= nEndRow; ++i)
+    {
+        SCROW nRow = maItems[i].nRow;
+        aRows.push_back( nRow);
+        rCol.Insert( nRow, maItems[i].pCell);
+        if (nRow != maItems[i].nRow)
+        {   // Listener inserted
+            bConsecutive = false;
+            Search( nRow, i);
         }
     }
-}
+    SCSIZE nStopPos = i;
+    if (nStartPos < nStopPos)
+    {
+        // Create list of ranges of cell entry positions
+        typedef ::std::pair<SCSIZE,SCSIZE> PosPair;
+        typedef ::std::vector<PosPair> EntryPosPairs;
+        EntryPosPairs aEntries;
+        if (bConsecutive)
+            aEntries.push_back( PosPair(nStartPos, nStopPos));
+        else
+        {
+            bool bFirst = true;
+            nStopPos = 0;
+            for (::std::vector<SCROW>::const_iterator it( aRows.begin());
+                    it != aRows.end() && nStopPos < maItems.size(); ++it,
+                    ++nStopPos)
+            {
+                if (!bFirst && *it != maItems[nStopPos].nRow)
+                {
+                    aEntries.push_back( PosPair(nStartPos, nStopPos));
+                    bFirst = true;
+                }
+                if (bFirst && Search( *it, nStartPos))
+                {
+                    bFirst = false;
+                    nStopPos = nStartPos;
+                }
+            }
+            if (!bFirst && nStartPos < nStopPos)
+                aEntries.push_back( PosPair(nStartPos, nStopPos));
+        }
+        // Broadcast changes
+        ScAddress aAdr( nCol, 0, nTab );
+        ScHint aHint( SC_HINT_DYING, aAdr, NULL );  // areas only
+        ScAddress& rAddress = aHint.GetAddress();
+        ScNoteCell* pNoteCell = new ScNoteCell;     // Dummy like in DeleteRange
 
+        // must iterate backwards, because indexes of following cells become invalid
+        for (EntryPosPairs::reverse_iterator it( aEntries.rbegin());
+                it != aEntries.rend(); ++it)
+        {
+            nStartPos = (*it).first;
+            nStopPos = (*it).second;
+            for (i=nStartPos; i<nStopPos; ++i)
+                maItems[i].pCell = pNoteCell;
+            for (i=nStartPos; i<nStopPos; ++i)
+            {
+                rAddress.SetRow( maItems[i].nRow );
+                pDocument->AreaBroadcast( aHint );
+            }
+            maItems.erase(maItems.begin() + nStartPos, maItems.begin() + nStopPos - 1);
+        }
+        pNoteCell->Delete();
+    }
+}
 
 bool ScColumn::UpdateReference( UpdateRefMode eUpdateRefMode, SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
              SCCOL nCol2, SCROW nRow2, SCTAB nTab2, SCsCOL nDx, SCsROW nDy, SCsTAB nDz,
