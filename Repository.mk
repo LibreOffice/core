@@ -69,6 +69,7 @@ $(eval $(call gb_Helper_register_executables,NONE, \
     svg2odf \
     svidl \
     transex3 \
+    treex \
     typesconfig \
     $(if $(filter UCPP,$(BUILD_TYPE)),\
             ucpp \

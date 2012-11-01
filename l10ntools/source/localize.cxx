@@ -324,7 +324,8 @@ void handleFile(
         { RTL_CONSTASCII_STRINGPARAM(".xml"), "xrmex", true },
         { RTL_CONSTASCII_STRINGPARAM(".xhp"), "helpex", false },
         { RTL_CONSTASCII_STRINGPARAM(".properties"), "propex", false },
-        { RTL_CONSTASCII_STRINGPARAM(".ui"), "uiex", false } };
+        { RTL_CONSTASCII_STRINGPARAM(".ui"), "uiex", false },
+        { RTL_CONSTASCII_STRINGPARAM(".tree"), "treex", false } };
     for (std::size_t i = 0; i != SAL_N_ELEMENTS(commands); ++i) {
         if (url.endsWithAsciiL(
                 commands[i].extension, commands[i].extensionLength))

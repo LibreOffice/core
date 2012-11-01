@@ -39,11 +39,9 @@ gb_ExtensionTarget_PROPMERGETARGET := $(call gb_Executable_get_target_for_build,
 gb_ExtensionTarget_PROPMERGECOMMAND := \
 	$(gb_Helper_set_ld_path) $(gb_ExtensionTarget_PROPMERGETARGET)
 
-gb_ExtensionTarget_UPDATETREETARGET := $(SRCDIR)/l10ntools/scripts/update_tree.pl
-gb_ExtensionTarget_UPDATETREECOMMAND := \
-    $(gb_Helper_set_ld_path) $(PERL) $(gb_ExtensionTarget_UPDATETREETARGET)
-    # update_tree.pl calls xmllint, which needs $(gb_Helper_set_ld_path) if it
-    # is the internal one
+gb_ExtensionTarget_TREEXTARGET := $(call gb_Executable_get_target_for_build,treex)
+gb_ExtensionTarget_TREEXCOMMAND := \
+    $(gb_Helper_set_ld_path) $(gb_ExtensionTarget_TREEXTARGET)
 
 gb_ExtensionTarget_HELPEXTARGET := $(call gb_Executable_get_target_for_build,helpex)
 gb_ExtensionTarget_HELPEXCOMMAND := \
@@ -261,9 +259,8 @@ endef
 #     suffix
 # $(3): relative path of (target) help.tree file (e.g.,
 #     com.sun.wiki-publisher/help.tree)
-# $(4): optional relative path of source help.tree file, when it differs from $(3)
-#     (i.e., if $(4) is empty the en-US source file is $(2)/$(3), otherwise it
-#     is $(2)/$(4))
+# $(4): relative path of source help.tree file
+# $(5): relative path of localized xhp files (PlatformID included) 
 define gb_ExtensionTarget_add_helptreefile
 $(foreach lang,$(gb_ExtensionTarget_ALL_LANGS), \
     $(call gb_ExtensionTarget__localize_helptreefile_onelang,$(1),$(2),$(3),$(4),$(lang),$(5)) \
@@ -322,38 +319,44 @@ $(call gb_ExtensionTarget_get_workdir,$(1))/help/$(5)/$(3) : \
 endef
 
 # localize one help.tree for one language; the result is stored as
-# help/$(4)/$(3) in the extension's workdir; as a special case, if $(4) is
-# "en-US", the source file is just copied, not passed through update_tree.pl
+# help/$(4)/$(3) in the extension's workdir;
 # $(1): extension identifier
 # $(2): absolute path prefix of en-US source file without $(3) (resp. $(4))
 #     suffix
 # $(3): relative path of (target) help.tree file (see
 #     gb_ExtensionTarget_add_helptreefile)
-# $(4): optional relative path of source help.tree file (see
+# $(4): relative path of source help.tree file (see
 #     gb_ExtensionTarget_add_helptreefile)
 # $(5): language
+# $(6): relative path of localized xhp files (PlatformID included) 
 define gb_ExtensionTarget__localize_helptreefile_onelang
 $(call gb_ExtensionTarget_get_rootdir,$(1))/help/$(5).done : \
         $(call gb_ExtensionTarget_get_rootdir,$(1))/help/$(5)/$(3)
 ifneq ($(strip $(gb_WITH_LANG)),)
 ifneq ($(filter-out en-US,$(5)),)
 $(call gb_ExtensionTarget_get_rootdir,$(1))/help/$(5)/$(3) : \
-	POFILE := $(gb_POLOCATION)/$(5)$(subst $(SRCDIR),,$(2))$(patsubst %/,/%.po,$(patsubst ./,.po,$(dir $(or $(4),$(3)))))
+	POFILE := $(gb_POLOCATION)/$(5)$(subst $(SRCDIR),,$(2))$(patsubst %/,/%.po,$(patsubst ./,.po,$(dir $(4))))
 $(call gb_ExtensionTarget_get_rootdir,$(1))/help/$(5)/$(3) : \
-        $(gb_POLOCATION)/$(5)$(subst $(SRCDIR),,$(2))$(patsubst %/,/%.po,$(patsubst ./,.po,$(dir $(or $(4),$(3)))))
+        $(gb_POLOCATION)/$(5)$(subst $(SRCDIR),,$(2))$(patsubst %/,/%.po,$(patsubst ./,.po,$(dir $(4))))
 endif
 endif
 $(call gb_ExtensionTarget_get_rootdir,$(1))/help/$(5)/$(3) : \
-        $(if $(filter-out en-US,$(5)),$(gb_ExtensionTarget_UPDATETREETARGET)) | \
+        $(gb_ExtensionTarget_TREEXTARGET) | \
         $(2)/$(4)
 $(call gb_ExtensionTarget_get_rootdir,$(1))/help/$(5)/$(3) : \
         $(2)/$(or $(4),$(3))
 	$$(call gb_Output_announce,$(1) $(3) $(5),$(true),TRE,3)
 	$$(call gb_Helper_abbreviate_dirs, \
-        mkdir -p $$(dir $$@) && \
+		mkdir -p $$(dir $$@) && \
 		$(if $(filter-out en-US,$(5)), \
-			cp $$< $$@,\
-			cp $$< $$@))
+		    MERGEINPUT=`$(gb_MKTEMP)` && \
+			echo $$(POFILE) > $$$${MERGEINPUT} && \
+			$(gb_ExtensionTarget_TREEXCOMMAND) -i $$< -o $$@ -l $(5) \
+				-m $$$${MERGEINPUT} \
+				-r $$(call gb_ExtensionTarget_get_workdir,$(1))/help/$(5)/$(6) && \
+			rm -rf $$$${MERGEINPUT}, \
+			$(gb_ExtensionTarget_TREEXCOMMAND) -i $$< -o $$@ -l $(5) \
+				-r $$(call gb_ExtensionTarget_get_workdir,$(1))/help/$(5)/$(6) ))
 
 endef
 
