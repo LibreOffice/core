@@ -6940,7 +6940,11 @@ Rectangle OutputDevice::GetTextRect( const Rectangle& rRect,
     else
         aRect.Bottom() = aRect.Top()+(nTextHeight*nLines)-1;
 
-    aRect.Right()++; // #99188# get rid of rounding problems when using this rect later
+    // #99188# get rid of rounding problems when using this rect later
+    if (nStyle & TEXT_DRAW_RIGHT)
+        aRect.Left()--;
+    else
+        aRect.Right()++;
     return aRect;
 }
 
