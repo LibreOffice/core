@@ -52,7 +52,7 @@
 #define LISTACTION_RESORTED         10
 #define LISTACTION_CLEARED          11
 
-// Entryflags, die an der View haengen
+// Entryflags that are attached to the View
 #define SVLISTENTRYFLAG_SELECTED        0x0001
 #define SVLISTENTRYFLAG_EXPANDED        0x0002
 #define SVLISTENTRYFLAG_FOCUSED         0x0004
@@ -120,8 +120,8 @@ public:
 
 enum SvSortMode { SortAscending, SortDescending, SortNone };
 
-// Rueckgabewerte Sortlink:
-// siehe International::Compare( pLeft, pRight )
+// For the return values of Sortlink:
+// See International::Compare( pLeft, pRight )
 // ( Compare(a,b) ==> b.Compare(a) ==> strcmp(a,b) )
 struct SvSortData
 {
@@ -165,7 +165,7 @@ class SVT_DLLPUBLIC SvTreeList
     SvTreeListEntry*        LastSelected( const SvListView*) const;
 
     sal_Bool            Select( SvListView*,SvTreeListEntry* pEntry, sal_Bool bSelect=sal_True );
-    void                SelectAll( SvListView*,sal_Bool bSelect ); // ruft nicht Select-Hdl
+    void                SelectAll( SvListView*,sal_Bool bSelect ); // Does not call Select Handler
     sal_uLong           GetChildSelectionCount( const SvListView*,SvTreeListEntry* pParent ) const;
 
     void                Expand( SvListView*,SvTreeListEntry* pParent );
@@ -182,7 +182,7 @@ class SVT_DLLPUBLIC SvTreeList
      */
     SVT_DLLPRIVATE void SetListPositions( SvTreeListEntries& rEntries );
 
-    // rPos wird bei SortModeNone nicht geaendert
+    // rPos is not changed for SortModeNone
     SVT_DLLPRIVATE void GetInsertionPos(
                             SvTreeListEntry* pEntry,
                             SvTreeListEntry* pParent,
@@ -217,7 +217,7 @@ public:
                             sal_uLong nPos=0
                         );
 
-    // informiert alle Listener
+    // Notify all Listeners
     void                InvalidateEntry( SvTreeListEntry* );
 
     sal_uLong           GetEntryCount() const { return nEntryCount; }
@@ -237,10 +237,10 @@ public:
 
     void                InsertTree( SvTreeListEntry* pTree, SvTreeListEntry* pTargetParent, sal_uLong nListPos );
 
-    // Entries muessen im gleichen Model stehen!
+    // Entries need to be in the same Model!
     void                Move( SvTreeListEntry* pSource, SvTreeListEntry* pTarget );
 
-    // erzeugt ggf. Child-List
+    // Creates ChildList if needed
     sal_uLong           Move( SvTreeListEntry* pSource, SvTreeListEntry* pTargetParent, sal_uLong nListPos);
     void                Copy( SvTreeListEntry* pSource, SvTreeListEntry* pTarget );
     sal_uLong           Copy( SvTreeListEntry* pSource, SvTreeListEntry* pTargetParent, sal_uLong nListPos);
@@ -275,12 +275,11 @@ public:
     sal_uInt16 GetDepth( const SvTreeListEntry* pEntry ) const;
     bool IsAtRootDepth( const SvTreeListEntry* pEntry ) const;
 
-    // das Model ruft zum Clonen von Entries den Clone-Link auf,
-    // damit man sich nicht vom Model ableiten muss, wenn man
-    // sich von SvTreeListEntry ableitet.
-    // Deklaration des Clone-Handlers:
+    // The Model calls the Clone Link to clone Entries.
+    // Thus we do not need to derive from the Model if we derive from SvTreeListEntry.
+    // Declaration of the Clone Handler:
     // DECL_LINK(CloneHdl,SvTreeListEntry*);
-    // der Handler muss einen SvTreeListEntry* zurueckgeben
+    // The Handler needs to return a SvTreeListEntry*
     SvTreeListEntry*        Clone( SvTreeListEntry* pEntry, sal_uLong& nCloneCount ) const;
     void                SetCloneLink( const Link& rLink )
     { aCloneLink=rLink; }
@@ -288,8 +287,8 @@ public:
     const Link&         GetCloneLink() const
     { return aCloneLink; }
 
-    virtual SvTreeListEntry*    CloneEntry( SvTreeListEntry* pSource ) const; // ruft den Clone-Link
-    virtual SvTreeListEntry*    CreateEntry() const; // zum 'new'en von Entries
+    virtual SvTreeListEntry*    CloneEntry( SvTreeListEntry* pSource ) const; // Calls the Clone Link
+    virtual SvTreeListEntry*    CreateEntry() const; // To create Entries
 
     sal_uInt16          GetRefCount() const { return nRefCount; }
     void                SetRefCount( sal_uInt16 nRef ) { nRefCount = nRef; }
@@ -329,7 +328,7 @@ protected:
     SvTreeList* pModel;
 
 public:
-                        SvListView();   // !!! setzt das Model auf 0
+                        SvListView();   // Sets the Model to 0
     virtual             ~SvListView();
     void                Clear();
     SvTreeList*         GetModel() const;
@@ -403,7 +402,7 @@ public:
     sal_Bool            Select( SvTreeListEntry* pEntry, sal_Bool bSelect=sal_True )
     { return pModel->Select((SvListView*)this,pEntry,bSelect); }
 
-    // ruft nicht Select-Hdl
+    // Does not call the Select Handler
     virtual void        SelectAll( sal_Bool bSelect, sal_Bool )
     { pModel->SelectAll((SvListView*)this, bSelect); }
 
@@ -417,7 +416,7 @@ public:
     const SvViewData*         GetViewData( SvTreeListEntry* pEntry ) const;
     SvViewData*         GetViewData( SvTreeListEntry* pEntry );
     sal_Bool            HasViewData() const
-    { return maDataTable.size() > 1; }  // eine ROOT gibts immer
+    { return maDataTable.size() > 1; }  // There's always a ROOT
 
     virtual SvViewData* CreateViewData( SvTreeListEntry* pEntry );
     virtual void        InitViewData( SvViewData*, SvTreeListEntry* pEntry );
