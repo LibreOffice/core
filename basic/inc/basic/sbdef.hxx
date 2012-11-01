@@ -26,13 +26,13 @@
 
 // Returns type name for Basic type, array flag is ignored
 // implementation: basic/source/runtime/methods.cxx
-BASIC_DLLPUBLIC ::rtl::OUString getBasicTypeName( SbxDataType eType );
+BASIC_DLLPUBLIC OUString getBasicTypeName( SbxDataType eType );
 
 // Returns type name for Basic objects, especially
 // important for SbUnoObj instances
 // implementation: basic/source/classes/sbunoobj.cxx
 class SbxObject;
-BASIC_DLLPUBLIC ::rtl::OUString getBasicObjectTypeName( SbxObject* pObj );
+BASIC_DLLPUBLIC OUString getBasicObjectTypeName( SbxObject* pObj );
 
 // Allows Basic IDE to set watch mode to suppress errors
 // implementation: basic/source/runtime/runtime.cxx

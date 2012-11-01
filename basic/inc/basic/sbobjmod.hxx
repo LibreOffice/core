@@ -41,7 +41,7 @@ protected:
 public:
     TYPEINFO();
     SbObjModule( const String& rName, const com::sun::star::script::ModuleInfo& mInfo, bool bIsVbaCompatible );
-    virtual SbxVariable* Find( const rtl::OUString& rName, SbxClassType t );
+    virtual SbxVariable* Find( const OUString& rName, SbxClassType t );
 
     virtual void SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
                              const SfxHint& rHint, const TypeId& rHintType );
@@ -68,7 +68,7 @@ public:
     TYPEINFO();
     SbUserFormModule( const String& rName, const com::sun::star::script::ModuleInfo& mInfo, bool bIsVBACompat );
     virtual ~SbUserFormModule();
-    virtual SbxVariable* Find( const rtl::OUString& rName, SbxClassType t );
+    virtual SbxVariable* Find( const OUString& rName, SbxClassType t );
     void ResetApiObj( bool bTriggerTerminateEvent = true );
     void Unload();
     void Load();
@@ -94,11 +94,11 @@ class BASIC_DLLPUBLIC SbUserFormModuleInstance : public SbUserFormModule
     SbUserFormModule* m_pParentModule;
 
 public:
-    SbUserFormModuleInstance( SbUserFormModule* pParentModule, const rtl::OUString& rName,
+    SbUserFormModuleInstance( SbUserFormModule* pParentModule, const OUString& rName,
         const com::sun::star::script::ModuleInfo& mInfo, bool bIsVBACompat );
 
-    virtual sal_Bool IsClass( const rtl::OUString& ) const;
-    virtual SbxVariable* Find( const rtl::OUString& rName, SbxClassType t );
+    virtual sal_Bool IsClass( const OUString& ) const;
+    virtual SbxVariable* Find( const OUString& rName, SbxClassType t );
 };
 
 #endif

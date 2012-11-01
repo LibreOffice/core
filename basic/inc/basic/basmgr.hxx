@@ -206,7 +206,7 @@ public:
         @param _out_rModuleNames
             takes the names of modules whose size exceeds the legacy limit
     */
-    bool            LegacyPsswdBinaryLimitExceeded( ::com::sun::star::uno::Sequence< rtl::OUString >& _out_rModuleNames );
+    bool            LegacyPsswdBinaryLimitExceeded( ::com::sun::star::uno::Sequence< OUString >& _out_rModuleNames );
     bool HasExeCode( const String& );
     /// determines whether the Basic Manager has a given macro, given by fully qualified name
     bool            HasMacro( String const& i_fullyQualifiedName ) const;

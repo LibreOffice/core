@@ -28,7 +28,7 @@ class BASIC_DLLPUBLIC ModuleSizeExceeded : public ::cppu::WeakImplHelper1< ::com
 {
     // C++ interface
     public:
-    ModuleSizeExceeded( const com::sun::star::uno::Sequence< ::rtl::OUString>& sModules );
+    ModuleSizeExceeded( const com::sun::star::uno::Sequence< OUString>& sModules );
 
     sal_Bool isAbort() const;
     sal_Bool isApprove() const;
@@ -43,7 +43,7 @@ class BASIC_DLLPUBLIC ModuleSizeExceeded : public ::cppu::WeakImplHelper1< ::com
 
     // member
     private:
-    rtl::OUString m_sMods;
+    OUString m_sMods;
     com::sun::star::uno::Any m_aRequest;
     com::sun::star::uno::Sequence< com::sun::star::uno::Reference< com::sun::star::task::XInteractionContinuation > > m_lContinuations;
     com::sun::star::uno::Reference< com::sun::star::task::XInteractionContinuation > m_xAbort;

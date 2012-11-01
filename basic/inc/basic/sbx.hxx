@@ -79,7 +79,7 @@ public:
     SbxInfo();
     SbxInfo( const String&, sal_uInt32 );
 
-    void                AddParam( const rtl::OUString&, SbxDataType, sal_uInt16=SBX_READ );
+    void                AddParam( const OUString&, SbxDataType, sal_uInt16=SBX_READ );
     const SbxParamInfo* GetParam( sal_uInt16 n ) const; // index starts with 1!
     const String&       GetComment() const              { return aComment; }
     const String&       GetHelpFile() const             { return aHelpFile; }
@@ -155,7 +155,7 @@ public:
     const String& GetAlias( sal_uInt16 );
     void PutAlias( const String&, sal_uInt16 );
     SbxVariable* FindUserData( sal_uInt32 nUserData );
-    virtual SbxVariable* Find( const rtl::OUString&, SbxClassType );
+    virtual SbxVariable* Find( const OUString&, SbxClassType );
 
     // Additional methods for 32-bit indices
     sal_uInt32 Count32() const;
@@ -233,7 +233,7 @@ public:
     SbxCollection( const SbxCollection& );
     SbxCollection& operator=( const SbxCollection& );
     virtual SbxVariable* FindUserData( sal_uInt32 nUserData );
-    virtual SbxVariable* Find( const rtl::OUString&, SbxClassType );
+    virtual SbxVariable* Find( const OUString&, SbxClassType );
     virtual void Clear();
 };
 

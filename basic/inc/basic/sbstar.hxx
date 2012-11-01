@@ -69,7 +69,7 @@ class BASIC_DLLPUBLIC StarBASIC : public SbxObject
     BASIC_DLLPRIVATE void implClearDependingVarsOnDelete( StarBASIC* pDeletedBasic );
 
 protected:
-    sal_Bool            CError( SbError, const ::rtl::OUString&, xub_StrLen, xub_StrLen, xub_StrLen );
+    sal_Bool            CError( SbError, const OUString&, xub_StrLen, xub_StrLen, xub_StrLen );
 private:
     BASIC_DLLPRIVATE sal_Bool           RTError( SbError, xub_StrLen, xub_StrLen, xub_StrLen );
     BASIC_DLLPRIVATE sal_Bool           RTError( SbError, const String& rMsg, xub_StrLen, xub_StrLen, xub_StrLen );
@@ -108,8 +108,8 @@ public:
 
     // Compiler-Interface
     SbModule*       MakeModule( const String& rName, const String& rSrc );
-    SbModule*       MakeModule32( const String& rName, const ::rtl::OUString& rSrc );
-    SbModule*       MakeModule32( const String& rName, const com::sun::star::script::ModuleInfo& mInfo, const ::rtl::OUString& rSrc );
+    SbModule*       MakeModule32( const String& rName, const OUString& rSrc );
+    SbModule*       MakeModule32( const String& rName, const com::sun::star::script::ModuleInfo& mInfo, const OUString& rSrc );
     sal_Bool            Compile( SbModule* );
     static void     Stop();
     static void     Error( SbError );
@@ -122,7 +122,7 @@ public:
     static String   GetErrorMsg();
     static xub_StrLen GetErl();
 
-    virtual SbxVariable* Find( const rtl::OUString&, SbxClassType );
+    virtual SbxVariable* Find( const OUString&, SbxClassType );
     virtual sal_Bool Call( const String&, SbxArray* = NULL );
 
     SbxArray*       GetModules() { return pModules; }
@@ -141,7 +141,7 @@ public:
                                   sal_uInt16 nCol1, sal_uInt16 nCol2 );
 
     // Specific to error handler
-    static void     MakeErrorText( SbError, const ::rtl::OUString& aMsg );
+    static void     MakeErrorText( SbError, const OUString& aMsg );
     static const    String& GetErrorText();
     static SbError  GetErrorCode();
     static bool     IsCompilerError();
@@ -168,7 +168,7 @@ public:
 
     SbxObjectRef getRTL( void ) { return pRtl; }
     bool IsDocBasic() { return bDocBasic; }
-    SbxVariable* VBAFind( const rtl::OUString& rName, SbxClassType t );
+    SbxVariable* VBAFind( const OUString& rName, SbxClassType t );
     bool GetUNOConstant( const sal_Char* _pAsciiName, ::com::sun::star::uno::Any& aOut );
     void QuitAndExitApplication();
     bool IsQuitApplication() { return bQuit; };
