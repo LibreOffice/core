@@ -336,3 +336,37 @@
  
      std::transform(new_array.index_base_list_.begin(),
                     new_array.index_base_list_.end(),
+--- misc/boost_1_44_0/boost/random/mersenne_twister.hpp
++++ misc/build/boost_1_44_0/boost/random/mersenne_twister.hpp
+@@ -195,16 +195,16 @@
+   }
+ #endif
+ 
+-  friend bool operator==(const mersenne_twister& x, const mersenne_twister& y)
++  friend bool operator==(const mersenne_twister& x_, const mersenne_twister& y_)
+   {
+     for(int j = 0; j < state_size; ++j)
+-      if(x.compute(j) != y.compute(j))
++      if(x_.compute(j) != y_.compute(j))
+         return false;
+     return true;
+   }
+ 
+-  friend bool operator!=(const mersenne_twister& x, const mersenne_twister& y)
+-  { return !(x == y); }
++  friend bool operator!=(const mersenne_twister& x_, const mersenne_twister& y_)
++  { return !(x_ == y_); }
+ #else
+   // Use a member function; Streamable concept not supported.
+   bool operator==(const mersenne_twister& rhs) const
+--- misc/boost_1_44_0/boost/uuid/uuid_io.hpp
++++ misc/build/boost_1_44_0/boost/uuid/uuid_io.hpp
+@@ -59,7 +59,7 @@
+         }
+         
+         if (flags & std::ios_base::left) {
+-            for (std::streamsize i=uuid_width; i<width; i++) {
++            for (std::streamsize s=uuid_width; s<width; ++s) {
+                 os << fill;
+             }
+         }
