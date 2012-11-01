@@ -404,11 +404,6 @@ bool ScDPCacheTable::empty() const
     return maFieldEntries.empty();
 }
 
-bool ScDPCacheTable::hasCache() const
-{
-    return mpCache != NULL;
-}
-
 bool ScDPCacheTable::isRowQualified(sal_Int32 nRow, const vector<Criterion>& rCriteria,
                                     const boost::unordered_set<sal_Int32>& rRepeatIfEmptyDims) const
 {

@@ -152,7 +152,6 @@ public:
     SCROW getOrder(long nDim, SCROW nIndex) const;
     void clear();
     bool empty() const;
-    bool hasCache() const;
 
 #if DEBUG_PIVOT_TABLE
     void dumpRowFlag(const RowFlagType& rFlag) const;

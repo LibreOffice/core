@@ -131,14 +131,6 @@ void ScDatabaseDPData::CreateCacheTable()
         // cache table already created.
         return;
 
-    if (!aCacheTable.hasCache())
-    {
-        OSL_FAIL("Cache table should be created with a live data cache instance at all times.");
-        // This better not happen!!  Cache table should be created with a live
-        // data cache instance at all times.
-        return;
-    }
-
     aCacheTable.fillTable();
 }
 
