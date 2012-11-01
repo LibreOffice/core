@@ -117,7 +117,16 @@ public:
 #if DEBUG_CSV_HANDLER
         std::cout << "Col: " << mnCol << " Row: " << mnRow << std::endl;
 #endif //DEBUG_CSV_HANDLER
-        if (meStringType == PureString)
+        if (n == 0)
+        {
+            // Empty cell.
+            if (!mpDoc->GetString(mnCol, mnRow, mnTab).isEmpty())
+            {
+                // cell in the document is not empty.
+                CPPUNIT_ASSERT_MESSAGE(createErrorMessage(mnCol, mnRow, mnTab).getStr(), false);
+            }
+        }
+        else if (meStringType == PureString)
         {
             rtl::OUString aCSVString(p, n, RTL_TEXTENCODING_UTF8);
             rtl::OUString aString;
