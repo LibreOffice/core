@@ -234,11 +234,11 @@ sal_Int32 ReadThroughComponent(
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "parser created" );
 
     // get filter
+    OUString aFilterName(OUString::createFromAscii(pFilterName));
     Reference< xml::sax::XDocumentHandler > xFilter(
-        rFactory->createInstanceWithArguments(
-            OUString::createFromAscii(pFilterName), rFilterArguments),
+        rFactory->createInstanceWithArguments(aFilterName, rFilterArguments),
         UNO_QUERY );
-    DBG_ASSERT( xFilter.is(), "Can't instantiate filter component." );
+    SAL_WARN_IF(!xFilter.is(), "sd", "Can't instantiate filter component: " << aFilterName);
     if( !xFilter.is() )
         return SD_XML_READERROR;
     RTL_LOGFILE_CONTEXT_TRACE1( aLog, "%s created", pFilterName );

@@ -114,6 +114,7 @@ $(eval $(call gb_CppunitTest_use_components,sd_filters_test,\
     unotools/util/utl \
     unoxml/source/rdf/unordf \
     unoxml/source/service/unoxml \
+    xmloff/util/xo \
 ))
 
 $(eval $(call gb_CppunitTest_use_configuration,sd_filters_test))

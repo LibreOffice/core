@@ -205,6 +205,10 @@ void SdFiltersTest::testCVEs()
     testDir(rtl::OUString("MS PowerPoint 97"),
             getURLFromSrc("/sd/qa/unit/data/ppt/"),
             rtl::OUString("sdfilt"));
+
+    testDir(rtl::OUString("draw8"),
+            getURLFromSrc("/sd/qa/unit/data/odg/"),
+            rtl::OUString("sdfilt"));
 #endif
 }
 
