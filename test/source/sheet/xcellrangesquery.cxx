@@ -48,7 +48,7 @@ void XCellRangesQuery::testQueryColumnDifference()
     uno::Reference<sheet::XSheetCellRanges> xRanges = xCellRangesQuery->queryColumnDifferences(table::CellAddress(0, 1, 1));
     rtl::OUString aResult = xRanges->getRangeAddressesAsString();
     std::cout << "testQueryColumnDifference: Result: " << rtl::OUStringToOString(aResult, RTL_TEXTENCODING_UTF8).getStr() << std::endl;
-    CPPUNIT_ASSERT_MESSAGE("testQueryColumnDifference", aResult == aExpected);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("testQueryColumnDifference", aResult, aExpected);
 }
 
 void XCellRangesQuery::testQueryContentDifference()
@@ -58,7 +58,7 @@ void XCellRangesQuery::testQueryContentDifference()
     uno::Reference<sheet::XSheetCellRanges> xRanges = xCellRangesQuery->queryContentCells(sheet::CellFlags::VALUE);
     rtl::OUString aResult = xRanges->getRangeAddressesAsString();
     std::cout << "testQueryContentDifference: Result: " << rtl::OUStringToOString(aResult, RTL_TEXTENCODING_UTF8).getStr() << std::endl;
-    CPPUNIT_ASSERT_MESSAGE("testQueryContentDifference", aResult == aExpected);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("testQueryContentDifference", aResult, aExpected);
 }
 
 void XCellRangesQuery::testQueryEmptyCells()
@@ -68,7 +68,7 @@ void XCellRangesQuery::testQueryEmptyCells()
     uno::Reference<sheet::XSheetCellRanges> xRanges = xCellRangesQuery->queryEmptyCells();
     rtl::OUString aResult = xRanges->getRangeAddressesAsString();
     std::cout << "testQueryEmptyCells: Result: " << rtl::OUStringToOString(aResult, RTL_TEXTENCODING_UTF8).getStr() << std::endl;
-    CPPUNIT_ASSERT_MESSAGE("testQueryEmptyCells", aResult == aExpected);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("testQueryEmptyCells", aResult, aExpected);
 }
 
 void XCellRangesQuery::testQueryFormulaCells()
@@ -78,7 +78,7 @@ void XCellRangesQuery::testQueryFormulaCells()
     uno::Reference<sheet::XSheetCellRanges> xRanges = xCellRangesQuery->queryFormulaCells(sheet::CellFlags::FORMULA);
     rtl::OUString aResult = xRanges->getRangeAddressesAsString();
     std::cout << "testQueryFormulaCells: Result: " << rtl::OUStringToOString(aResult, RTL_TEXTENCODING_UTF8).getStr() << std::endl;
-    CPPUNIT_ASSERT_MESSAGE("testQueryFormulaCells", aResult == aExpected);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("testQueryFormulaCells", aResult, aExpected);
 }
 
 void XCellRangesQuery::testQueryIntersection()
@@ -88,7 +88,7 @@ void XCellRangesQuery::testQueryIntersection()
     uno::Reference<sheet::XSheetCellRanges> xRanges = xCellRangesQuery->queryIntersection(table::CellRangeAddress(0,3,3,7,7));
     rtl::OUString aResult = xRanges->getRangeAddressesAsString();
     std::cout << "testQueryIntersection: Result: " << rtl::OUStringToOString(aResult, RTL_TEXTENCODING_UTF8).getStr() << std::endl;
-    CPPUNIT_ASSERT_MESSAGE("testQueryFormulaCells", aResult == aExpected);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("testQueryIntersection", aResult, aExpected);
 }
 
 void XCellRangesQuery::testQueryRowDifference()
@@ -98,7 +98,7 @@ void XCellRangesQuery::testQueryRowDifference()
     uno::Reference<sheet::XSheetCellRanges> xRanges = xCellRangesQuery->queryRowDifferences(table::CellAddress(0,1,1));
     rtl::OUString aResult = xRanges->getRangeAddressesAsString();
     std::cout << "testQueryRowDifference: Result: " << rtl::OUStringToOString(aResult, RTL_TEXTENCODING_UTF8).getStr() << std::endl;
-    CPPUNIT_ASSERT_MESSAGE("testQueryFormulaCells", aResult == aExpected);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("testQueryRowDifference", aResult, aExpected);
 }
 
 void XCellRangesQuery::testQueryVisibleCells()
@@ -108,7 +108,7 @@ void XCellRangesQuery::testQueryVisibleCells()
     uno::Reference<sheet::XSheetCellRanges> xRanges = xCellRangesQuery->queryVisibleCells();
     rtl::OUString aResult = xRanges->getRangeAddressesAsString();
     std::cout << "testQueryVisibleCells: Result: " << rtl::OUStringToOString(aResult, RTL_TEXTENCODING_UTF8).getStr() << std::endl;
-    CPPUNIT_ASSERT_MESSAGE("testQueryFormulaCells", aResult == aExpected);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("testQueryVisibleCells", aResult, aExpected);
 }
 
 }
