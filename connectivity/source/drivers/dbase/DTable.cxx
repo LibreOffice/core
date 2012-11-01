@@ -436,7 +436,8 @@ OSL_TRACE("column type: %c",aDBFColumn.db_typ);
                                                     sal_False,
                                                     bIsRowVersion,
                                                     bIsCurrency,
-                                                    bCase);
+                                                    bCase,
+                                                    m_CatalogName, getSchema(), getName());
         m_aColumns->get().push_back(xCol);
     } // for (; i < nFieldCount; i++)
     OSL_ENSURE(i,"No columns in table!");

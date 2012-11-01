@@ -41,7 +41,6 @@ namespace connectivity
             public OParseColumn_BASE, public OParseColumn_PROP
         {
             ::rtl::OUString m_aRealName;
-            ::rtl::OUString m_aTableName;
             ::rtl::OUString m_sLabel;
             sal_Bool        m_bFunction;
             sal_Bool        m_bDbasePrecisionChanged;
@@ -65,21 +64,24 @@ namespace connectivity
                     sal_Int32       _Type,
                     sal_Bool        _IsAutoIncrement,
                     sal_Bool        _IsCurrency,
-                    sal_Bool        _bCase);
+                    sal_Bool        _bCase,
+                    const ::rtl::OUString& _CatalogName,
+                    const ::rtl::OUString& _SchemaName,
+                    const ::rtl::OUString& _TableName);
 
             virtual void construct();
 
             void setRealName(const ::rtl::OUString& _rName)  { m_aRealName  = _rName; }
             void setLabel(const ::rtl::OUString& i_sLabel)   { m_sLabel  = i_sLabel; }
-            void setTableName(const ::rtl::OUString& _rName) { m_aTableName = _rName; }
+            void setTableName(const ::rtl::OUString& _rName) { m_TableName = _rName; }
             void setFunction(sal_Bool _bFunction)            { m_bFunction  = _bFunction; }
             void setAggregateFunction(sal_Bool _bFunction)   { m_bAggregateFunction = _bFunction; }
             void setIsSearchable( sal_Bool _bIsSearchable )  { m_bIsSearchable = _bIsSearchable; }
             void setDbasePrecisionChanged(sal_Bool _bDbasePrecisionChanged) { m_bDbasePrecisionChanged = _bDbasePrecisionChanged; }
 
-            ::rtl::OUString getRealName()   const { return  m_aRealName; }
-            ::rtl::OUString getLabel()      const { return  m_sLabel; }
-            ::rtl::OUString getTableName()  const { return  m_aTableName; }
+            const ::rtl::OUString& getRealName()   const { return  m_aRealName; }
+            const ::rtl::OUString& getLabel()      const { return  m_sLabel; }
+            const ::rtl::OUString& getTableName()  const { return  m_TableName; }
             sal_Bool        getFunction()   const { return  m_bFunction; }
             sal_Bool        getDbasePrecisionChanged()  const { return  m_bDbasePrecisionChanged; }
 
@@ -118,7 +120,6 @@ namespace connectivity
             public OOrderColumn_BASE, public OOrderColumn_PROP
         {
             const   sal_Bool        m_bAscending;
-            const   ::rtl::OUString m_sTableName;
 
         protected:
             virtual ::cppu::IPropertyArrayHelper* createArrayHelper() const;

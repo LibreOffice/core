@@ -50,7 +50,10 @@ namespace connectivity
                             sal_Bool        _IsAutoIncrement,
                             sal_Bool        _IsRowVersion,
                             sal_Bool        _IsCurrency,
-                            sal_Bool        _bCase);
+                            sal_Bool        _bCase,
+                            const ::rtl::OUString& _CatalogName,
+                            const ::rtl::OUString& _SchemaName,
+                            const ::rtl::OUString& _TableName);
 
             virtual void construct();
             DECLARE_SERVICE_INFO();

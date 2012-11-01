@@ -374,7 +374,10 @@ namespace dbtools
                                                                 nType,
                                                                 sal_False,
                                                                 sal_False,
-                                                                xMeta.is() && xMeta->supportsMixedCaseQuotedIdentifiers());
+                                                                xMeta.is() && xMeta->supportsMixedCaseQuotedIdentifiers(),
+                                                                ::rtl::OUString(),
+                                                                ::rtl::OUString(),
+                                                                ::rtl::OUString());
         Reference<XPropertySet> xColumn = pColumn;
         pColumn->setFunction(sal_True);
         pColumn->setRealName(sField);

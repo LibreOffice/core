@@ -514,7 +514,8 @@ void OCalcTable::fillColumns()
         sdbcx::OColumn* pColumn = new sdbcx::OColumn( aAlias, aTypeName, ::rtl::OUString(),::rtl::OUString(),
                                                 ColumnValue::NULLABLE, nPrecision, nDecimals,
                                                 eType, sal_False, sal_False, bCurrency,
-                                                bStoresMixedCaseQuotedIdentifiers);
+                                                bStoresMixedCaseQuotedIdentifiers,
+                                                m_CatalogName, getSchema(), getName());
         Reference< XPropertySet> xCol = pColumn;
         m_aColumns->get().push_back(xCol);
         m_aTypes.push_back(eType);

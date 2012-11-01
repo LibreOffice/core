@@ -115,6 +115,11 @@ sdbcx::ObjectType OColumnsHelper::createObject(const ::rtl::OUString& _rName)
         {
             nField11 = ColumnValue::NO_NULLS;
         } // if ( xKeys.is() )
+        ::dbtools::OPropertyMap& rPropMap = OMetaConnection::getPropMap();
+        ::rtl::OUString aCatalog, aSchema, aTable;
+        m_pTable->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_CATALOGNAME)) >>= aCatalog;
+        m_pTable->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_SCHEMANAME))  >>= aSchema;
+        m_pTable->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_NAME))        >>= aTable;
         connectivity::sdbcx::OColumn* pRet = new connectivity::sdbcx::OColumn(_rName,
                                                 pColDesc->aField6,
                                                 pColDesc->sField13,
@@ -126,7 +131,10 @@ sdbcx::ObjectType OColumnsHelper::createObject(const ::rtl::OUString& _rName)
                                                 bAutoIncrement,
                                                 sal_False,
                                                 bIsCurrency,
-                                                isCaseSensitive());
+                                                isCaseSensitive(),
+                                                aCatalog,
+                                                aSchema,
+                                                aTable);
 
         xRet = pRet;
     }

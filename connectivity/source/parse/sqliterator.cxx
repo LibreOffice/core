@@ -899,7 +899,8 @@ void OSQLParseTreeIterator::traverseCreateColumns(const OSQLParseNode* pSelectNo
             {
                 //TODO:Create a new class for create statement to handle field length
                 OParseColumn* pColumn = new OParseColumn(aColumnName,aTypeName,::rtl::OUString(),::rtl::OUString(),
-                    ColumnValue::NULLABLE_UNKNOWN,0,0,nType,sal_False,sal_False,isCaseSensitive());
+                    ColumnValue::NULLABLE_UNKNOWN,0,0,nType,sal_False,sal_False,isCaseSensitive(),
+                    ::rtl::OUString(),::rtl::OUString(),::rtl::OUString());
                 pColumn->setFunction(sal_False);
                 pColumn->setRealName(aColumnName);
 
@@ -1500,7 +1501,10 @@ void OSQLParseTreeIterator::traverseParameter(const OSQLParseNode* _pParseNode
                                                     nType,
                                                     sal_False,
                                                     sal_False,
-                                                    isCaseSensitive());
+                                                    isCaseSensitive(),
+                                                    ::rtl::OUString(),
+                                                    ::rtl::OUString(),
+                                                    ::rtl::OUString());
         pColumn->setFunction(sal_True);
         pColumn->setAggregateFunction(sal_True);
         pColumn->setRealName(sFunctionName);
@@ -1564,7 +1568,10 @@ void OSQLParseTreeIterator::traverseParameter(const OSQLParseNode* _pParseNode
                                                     nType,
                                                     sal_False,
                                                     sal_False,
-                                                    isCaseSensitive() );
+                                                    isCaseSensitive(),
+                                                    ::rtl::OUString(),
+                                                    ::rtl::OUString(),
+                                                    ::rtl::OUString());
             pColumn->setName(aNewColName);
             pColumn->setRealName(sParameterName);
             m_aParameters->get().push_back(pColumn);
@@ -1707,7 +1714,10 @@ void OSQLParseTreeIterator::appendColumns(::rtl::Reference<OSQLColumns>& _rColum
                                                 ,   getINT32(xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE)))
                                                 ,   getBOOL(xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISAUTOINCREMENT)))
                                                 ,   getBOOL(xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISCURRENCY)))
-                                                ,   isCaseSensitive() );
+                                                ,   isCaseSensitive()
+                                                ,   getString(xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_CATALOGNAME)))
+                                                ,   getString(xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_SCHEMANAME)))
+                                                ,   getString(xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TABLENAME))));
 
             pColumn->setTableName(_rTableAlias);
             pColumn->setRealName(*pBegin);
@@ -1785,7 +1795,10 @@ void OSQLParseTreeIterator::setSelectColumnName(::rtl::Reference<OSQLColumns>& _
                     _nType,
                     sal_False,
                     sal_False,
-                    isCaseSensitive()
+                    isCaseSensitive(),
+                    ::rtl::OUString(),
+                    ::rtl::OUString(),
+                    ::rtl::OUString()
                 );
 
                 xNewColumn = pColumn;
@@ -1799,7 +1812,8 @@ void OSQLParseTreeIterator::setSelectColumnName(::rtl::Reference<OSQLColumns>& _
             ::rtl::OUString aNewColName(getUniqueColumnName(rColumnAlias));
 
             OParseColumn* pColumn = new OParseColumn(aNewColName,::rtl::OUString(),::rtl::OUString(),::rtl::OUString(),
-                ColumnValue::NULLABLE_UNKNOWN,0,0,_nType,sal_False,sal_False,isCaseSensitive());
+                ColumnValue::NULLABLE_UNKNOWN,0,0,_nType,sal_False,sal_False,isCaseSensitive(),
+                ::rtl::OUString(),::rtl::OUString(),::rtl::OUString());
             pColumn->setFunction(sal_True);
             pColumn->setAggregateFunction(bAggFkt);
             pColumn->setRealName(rColumnName);
@@ -1820,7 +1834,8 @@ void OSQLParseTreeIterator::setSelectColumnName(::rtl::Reference<OSQLColumns>& _
                 ::rtl::OUString aNewColName(getUniqueColumnName(rColumnAlias));
 
                 OParseColumn* pColumn = new OParseColumn(aNewColName,::rtl::OUString(),::rtl::OUString(),::rtl::OUString(),
-                    ColumnValue::NULLABLE_UNKNOWN,0,0,_nType,sal_False,sal_False,isCaseSensitive());
+                    ColumnValue::NULLABLE_UNKNOWN,0,0,_nType,sal_False,sal_False,isCaseSensitive(),
+                    ::rtl::OUString(),::rtl::OUString(),::rtl::OUString());
                 pColumn->setFunction(sal_True);
                 pColumn->setAggregateFunction(bAggFkt);
                 pColumn->setRealName(rColumnName);
@@ -1857,7 +1872,8 @@ void OSQLParseTreeIterator::setSelectColumnName(::rtl::Reference<OSQLColumns>& _
             ::rtl::OUString aNewColName(getUniqueColumnName(rColumnAlias));
 
             OParseColumn* pColumn = new OParseColumn(aNewColName,::rtl::OUString(),::rtl::OUString(),::rtl::OUString(),
-                ColumnValue::NULLABLE_UNKNOWN,0,0,DataType::VARCHAR,sal_False,sal_False,isCaseSensitive());
+                ColumnValue::NULLABLE_UNKNOWN,0,0,DataType::VARCHAR,sal_False,sal_False,isCaseSensitive(),
+                ::rtl::OUString(),::rtl::OUString(),::rtl::OUString());
             pColumn->setFunction(sal_True);
             pColumn->setAggregateFunction(bAggFkt);
 

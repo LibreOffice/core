@@ -47,8 +47,9 @@ OIndexColumns::OIndexColumns(   OIndexHelper* _pIndex,
 sdbcx::ObjectType OIndexColumns::createObject(const ::rtl::OUString& _rName)
 {
     ::dbtools::OPropertyMap& rPropMap = OMetaConnection::getPropMap();
-    ::rtl::OUString aSchema,aTable;
+    ::rtl::OUString aCatalog, aSchema, aTable;
     ::com::sun::star::uno::Any Catalog(m_pIndex->getTable()->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_CATALOGNAME)));
+    Catalog >>= aCatalog;
     m_pIndex->getTable()->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_SCHEMANAME)) >>= aSchema;
     m_pIndex->getTable()->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_NAME))       >>= aTable;
 
@@ -93,7 +94,8 @@ sdbcx::ObjectType OIndexColumns::createObject(const ::rtl::OUString& _rName)
                                                       nSize,
                                                       nDec,
                                                       nDataType,
-                                                      sal_False,sal_False,sal_False,sal_True);
+                                                      sal_False,sal_False,sal_False,sal_True,
+                                                      aCatalog, aSchema, aTable);
                 xRet = pRet;
                 break;
             }

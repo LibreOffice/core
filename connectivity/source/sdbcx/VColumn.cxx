@@ -87,7 +87,10 @@ OColumn::OColumn(   const ::rtl::OUString& _Name,
                     sal_Bool        _IsAutoIncrement,
                     sal_Bool        _IsRowVersion,
                     sal_Bool        _IsCurrency,
-                    sal_Bool        _bCase)
+                    sal_Bool        _bCase,
+                    const ::rtl::OUString& _CatalogName,
+                    const ::rtl::OUString& _SchemaName,
+                    const ::rtl::OUString& _TableName)
     :OColumnDescriptor_BASE(m_aMutex)
     ,ODescriptor(OColumnDescriptor_BASE::rBHelper,_bCase)
     ,m_TypeName(_TypeName)
@@ -100,6 +103,9 @@ OColumn::OColumn(   const ::rtl::OUString& _Name,
     ,m_IsAutoIncrement(_IsAutoIncrement)
     ,m_IsRowVersion(_IsRowVersion)
     ,m_IsCurrency(_IsCurrency)
+    ,m_CatalogName(_CatalogName)
+    ,m_SchemaName(_SchemaName)
+    ,m_TableName(_TableName)
 {
     m_Name = _Name;
 
@@ -167,6 +173,9 @@ void OColumn::construct()
     registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISAUTOINCREMENT), PROPERTY_ID_ISAUTOINCREMENT,    nAttrib, &m_IsAutoIncrement, ::getBooleanCppuType());
     registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISROWVERSION),    PROPERTY_ID_ISROWVERSION,       nAttrib, &m_IsRowVersion,    ::getBooleanCppuType());
     registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISCURRENCY),      PROPERTY_ID_ISCURRENCY,         nAttrib, &m_IsCurrency,      ::getBooleanCppuType());
+    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_CATALOGNAME),     PROPERTY_ID_CATALOGNAME,        nAttrib, &m_CatalogName,     ::getCppuType(&m_CatalogName));
+    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_SCHEMANAME),      PROPERTY_ID_SCHEMANAME,         nAttrib, &m_SchemaName,      ::getCppuType(&m_SchemaName));
+    registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TABLENAME),       PROPERTY_ID_TABLENAME,          nAttrib, &m_TableName,       ::getCppuType(&m_TableName));
 }
 // -------------------------------------------------------------------------
 void OColumn::disposing(void)
@@ -195,7 +204,10 @@ Reference< XPropertySet > SAL_CALL OColumn::createDataDescriptor(  ) throw(Runti
                                         m_IsAutoIncrement,
                                         m_IsRowVersion,
                                         m_IsCurrency,
-                                        isCaseSensitive());
+                                        isCaseSensitive(),
+                                        m_CatalogName,
+                                        m_SchemaName,
+                                        m_TableName);
     pNewColumn->setNew(sal_True);
     return pNewColumn;
 }

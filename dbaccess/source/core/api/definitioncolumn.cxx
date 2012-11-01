@@ -44,10 +44,16 @@ using namespace ::comphelper;
 using namespace ::osl;
 using namespace dbaccess;
 
-#define HAS_DESCRIPTION             0x00000001
-#define HAS_DEFAULTVALUE            0x00000002
-#define HAS_ROWVERSION              0x00000004
-#define HAS_AUTOINCREMENT_CREATION  0x00000008
+namespace
+{
+    const sal_Int32 HAS_DESCRIPTION            = 0x00000001;
+    const sal_Int32 HAS_DEFAULTVALUE           = 0x00000002;
+    const sal_Int32 HAS_ROWVERSION             = 0x00000004;
+    const sal_Int32 HAS_AUTOINCREMENT_CREATION = 0x00000008;
+    const sal_Int32 HAS_CATALOGNAME            = 0x00000010;
+    const sal_Int32 HAS_SCHEMANAME             = 0x00000020;
+    const sal_Int32 HAS_TABLENAME              = 0x00000040;
+}
 
 //============================================================
 //= OTableColumnDescriptor
@@ -336,6 +342,9 @@ OColumnWrapper::OColumnWrapper( const Reference< XPropertySet > & rCol, const bo
         m_nColTypeID |= xInfo->hasPropertyByName(PROPERTY_DEFAULTVALUE) ? HAS_DEFAULTVALUE : 0;
         m_nColTypeID |= xInfo->hasPropertyByName(PROPERTY_ISROWVERSION) ? HAS_ROWVERSION : 0;
         m_nColTypeID |= xInfo->hasPropertyByName(PROPERTY_AUTOINCREMENTCREATION) ? HAS_AUTOINCREMENT_CREATION : 0;
+        m_nColTypeID |= xInfo->hasPropertyByName(PROPERTY_CATALOGNAME) ? HAS_CATALOGNAME : 0;
+        m_nColTypeID |= xInfo->hasPropertyByName(PROPERTY_SCHEMANAME) ? HAS_SCHEMANAME : 0;
+        m_nColTypeID |= xInfo->hasPropertyByName(PROPERTY_TABLENAME) ? HAS_TABLENAME : 0;
 
         m_xAggregate->getPropertyValue(PROPERTY_NAME) >>= m_sName;
     }
@@ -445,15 +454,7 @@ Sequence< ::rtl::OUString > OTableColumnDescriptorWrapper::getSupportedServiceNa
     const sal_Int32 nHaveAlways = 7;
 
     // Which optional properties are contained?
-    sal_Int32 nHaveOptionally = 0;
-    if (nId & HAS_DESCRIPTION)
-        ++nHaveOptionally;
-    if (nId & HAS_DEFAULTVALUE)
-        ++nHaveOptionally;
-    if (nId & HAS_ROWVERSION)
-        ++nHaveOptionally;
-    if ( nId & HAS_AUTOINCREMENT_CREATION )
-        ++nHaveOptionally;
+    const sal_Int32 nHaveOptionally (::std::bitset<7>(nId).count());
 
     BEGIN_PROPERTY_SEQUENCE( nHaveAlways + nHaveOptionally )
 
@@ -480,6 +481,18 @@ Sequence< ::rtl::OUString > OTableColumnDescriptorWrapper::getSupportedServiceNa
     if ( nId & HAS_ROWVERSION )
     {
         DECL_PROP0_BOOL( ISROWVERSION );
+    }
+    if ( nId & HAS_CATALOGNAME )
+    {
+        DECL_PROP0( CATALOGNAME, ::rtl::OUString );
+    }
+    if ( nId & HAS_SCHEMANAME )
+    {
+        DECL_PROP0( SCHEMANAME, ::rtl::OUString );
+    }
+    if ( nId & HAS_TABLENAME )
+    {
+        DECL_PROP0( TABLENAME, ::rtl::OUString );
     }
 
     END_PROPERTY_SEQUENCE()

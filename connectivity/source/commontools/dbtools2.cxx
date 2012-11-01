@@ -389,6 +389,8 @@ namespace
         Reference<XPropertySet> xProp;
         Reference<XDatabaseMetaData> xMetaData = _xConnection->getMetaData();
         Reference< XResultSet > xResult = xMetaData->getColumns(_aCatalog, _aSchema, _aTable, _rQueryName);
+        ::rtl::OUString sCatalog;
+        _aCatalog >>= sCatalog;
 
         if ( xResult.is() )
         {
@@ -472,7 +474,10 @@ namespace
                                                 bAutoIncrement,
                                                 sal_False,
                                                 bIsCurrency,
-                                                _bCase);
+                                                _bCase,
+                                                sCatalog,
+                                                _aSchema,
+                                                _aTable);
 
                     xProp = pRet;
                     break;
@@ -515,6 +520,8 @@ Reference<XPropertySet> createSDBCXColumn(const Reference<XPropertySet>& _xTable
     Reference<XDatabaseMetaData> xMetaData = _xConnection->getMetaData();
     Any aCatalog;
     aCatalog = _xTable->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_CATALOGNAME));
+    ::rtl::OUString sCatalog;
+    aCatalog >>= sCatalog;
 
     ::rtl::OUString aSchema, aTable;
     _xTable->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_SCHEMANAME))  >>= aSchema;
@@ -536,7 +543,10 @@ Reference<XPropertySet> createSDBCXColumn(const Reference<XPropertySet>& _xTable
                                                 _bIsAutoIncrement,
                                                 sal_False,
                                                 _bIsCurrency,
-                                                _bCase);
+                                                _bCase,
+                                                sCatalog,
+                                                aSchema,
+                                                aTable);
 
     }
 
