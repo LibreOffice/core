@@ -305,17 +305,20 @@ long SwNode::s_nSerial = 0;
 #endif
 
 SwNode::SwNode( const SwNodeIndex &rWhere, const sal_uInt8 nNdType )
-    : nNodeType( nNdType ), pStartOfSection( 0 )
+    : nNodeType( nNdType )
+    , nAFmtNumLvl( 0 )
+    , bSetNumLSpace( false )
+    , bIgnoreDontExpand( false)
+    , pStartOfSection( 0 )
+#ifdef DBG_UTIL
+    , m_nSerial( s_nSerial++)
+#endif
 {
-    bSetNumLSpace = bIgnoreDontExpand = false;
-    nAFmtNumLvl = 0;
-
-    SwNodes& rNodes = (SwNodes&)rWhere.GetNodes();
-    SwNode* pInsNd = this;      // The MAC cannot insert anything!
+    SwNodes& rNodes = const_cast<SwNodes&> (rWhere.GetNodes());
     if( rWhere.GetIndex() )
     {
         SwNode* pNd = rNodes[ rWhere.GetIndex() -1 ];
-        rNodes.InsertNode( pInsNd, rWhere );
+        rNodes.InsertNode( this, rWhere );
         if( 0 == ( pStartOfSection = pNd->GetStartNode()) )
         {
             pStartOfSection = pNd->pStartOfSection;
@@ -328,27 +331,25 @@ SwNode::SwNode( const SwNodeIndex &rWhere, const sal_uInt8 nNdType )
     }
     else
     {
-        rNodes.InsertNode( pInsNd, rWhere );
+        rNodes.InsertNode( this, rWhere );
         pStartOfSection = (SwStartNode*)this;
     }
-
-#ifdef DBG_UTIL
-    m_nSerial = s_nSerial;
-    s_nSerial++;
-#endif
 }
 
 SwNode::SwNode( SwNodes& rNodes, sal_uLong nPos, const sal_uInt8 nNdType )
-    : nNodeType( nNdType ), pStartOfSection( 0 )
+    : nNodeType( nNdType )
+    , nAFmtNumLvl( 0 )
+    , bSetNumLSpace( false )
+    , bIgnoreDontExpand( false)
+    , pStartOfSection( 0 )
+#ifdef DBG_UTIL
+    ,m_nSerial( s_nSerial++)
+#endif
 {
-    bSetNumLSpace = bIgnoreDontExpand = false;
-    nAFmtNumLvl = 0;
-
-    SwNode* pInsNd = this;      // The  MAC cannot insert anything!
     if( nPos )
     {
         SwNode* pNd = rNodes[ nPos - 1 ];
-        rNodes.InsertNode( pInsNd, nPos );
+        rNodes.InsertNode( this, nPos );
         if( 0 == ( pStartOfSection = pNd->GetStartNode()) )
         {
             pStartOfSection = pNd->pStartOfSection;
@@ -361,14 +362,9 @@ SwNode::SwNode( SwNodes& rNodes, sal_uLong nPos, const sal_uInt8 nNdType )
     }
     else
     {
-        rNodes.InsertNode( pInsNd, nPos );
+        rNodes.InsertNode( this, nPos );
         pStartOfSection = (SwStartNode*)this;
     }
-
-#ifdef DBG_UTIL
-    m_nSerial = s_nSerial;
-    s_nSerial++;
-#endif
 }
 
 SwNode::~SwNode()
