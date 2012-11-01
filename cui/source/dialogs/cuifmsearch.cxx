@@ -83,7 +83,7 @@ void FmSearchDialog::initCommon( const Reference< XResultSet >& _rxCursor )
 }
 
 //------------------------------------------------------------------------
-FmSearchDialog::FmSearchDialog(Window* pParent, const UniString& sInitialText, const ::std::vector< String >& _rContexts, sal_Int16 nInitialContext,
+FmSearchDialog::FmSearchDialog(Window* pParent, const OUString& sInitialText, const ::std::vector< String >& _rContexts, sal_Int16 nInitialContext,
     const Link& lnkContextSupplier)
     :ModalDialog(pParent, CUI_RES(RID_SVXDLG_SEARCHFORM))
     ,m_flSearchFor              (this, CUI_RES(FL_SEARCHFOR))

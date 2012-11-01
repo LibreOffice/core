@@ -429,7 +429,7 @@ public:
                                             SfxBindings* pBindings,
                                             sal_uInt32 nResId)=0;
     virtual AbstractFmSearchDialog* CreateFmSearchDialog(Window* pParent, //add for FmSearchDialog
-                                                        const String& strInitialText,
+                                                        const OUString& strInitialText,
                                                         const ::std::vector< String >& _rContexts,
                                                         sal_Int16 nInitialContext,
                                                         const Link& lnkContextSupplier)=0;

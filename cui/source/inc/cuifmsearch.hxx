@@ -114,7 +114,7 @@ public:
         (of course needed : the string number i in strUsedFields of a context must correspond with the interface number i in the
         arrFields of the context)
     */
-    FmSearchDialog(Window* pParent, const String& strInitialText, const ::std::vector< String >& _rContexts, sal_Int16 nInitialContext,
+    FmSearchDialog(Window* pParent, const OUString& strInitialText, const ::std::vector< String >& _rContexts, sal_Int16 nInitialContext,
         const Link& lnkContextSupplier);
 
     virtual ~FmSearchDialog();
