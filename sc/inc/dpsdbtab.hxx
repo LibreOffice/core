@@ -70,7 +70,7 @@ class ScDatabaseDPData : public ScDPTableData
 private:
     ScDPCacheTable aCacheTable;
 public:
-    ScDatabaseDPData(ScDocument* pDoc, const ScDPCache* pCache);
+    ScDatabaseDPData(ScDocument* pDoc, const ScDPCache& rCache);
     virtual ~ScDatabaseDPData();
 
     virtual long                    GetColumnCount();

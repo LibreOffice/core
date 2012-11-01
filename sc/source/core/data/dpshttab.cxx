@@ -51,12 +51,12 @@ using ::std::vector;
 
 // -----------------------------------------------------------------------
 
-ScSheetDPData::ScSheetDPData(ScDocument* pD, const ScSheetSourceDesc& rDesc, const ScDPCache* pCache) :
+ScSheetDPData::ScSheetDPData(ScDocument* pD, const ScSheetSourceDesc& rDesc, const ScDPCache& rCache) :
     ScDPTableData(pD),
     aQuery ( rDesc.GetQueryParam() ),
     bIgnoreEmptyRows( false ),
     bRepeatIfEmpty(false),
-    aCacheTable(pCache)
+    aCacheTable(rCache)
 {
     SCSIZE nEntryCount( aQuery.GetEntryCount());
     for (SCSIZE j = 0; j < nEntryCount; ++j)

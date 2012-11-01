@@ -109,7 +109,7 @@ public:
         Criterion();
     };
 
-    ScDPCacheTable(const ScDPCache* pCache);
+    ScDPCacheTable(const ScDPCache& rCache);
     ~ScDPCacheTable();
 
     sal_Int32 getRowSize() const;
@@ -180,7 +180,7 @@ private:
     /** Rows visible by page dimension filtering. */
     RowFlagType maShowByPage;
 
-    const ScDPCache* mpCache;
+    const ScDPCache& mrCache;
 };
 #endif
 

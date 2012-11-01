@@ -107,7 +107,7 @@ private:
     ScDPCacheTable  aCacheTable;
 
 public:
-    ScSheetDPData(ScDocument* pD, const ScSheetSourceDesc& rDesc, const ScDPCache* pCache);
+    ScSheetDPData(ScDocument* pD, const ScSheetSourceDesc& rDesc, const ScDPCache& rCache);
     virtual ~ScSheetDPData();
 
     virtual long                    GetColumnCount();
