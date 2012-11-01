@@ -160,12 +160,10 @@ struct SetRowHeightRangeFunc : public OptimalHeightsFuncObjBase
     }
 };
 
-bool SetOptimalHeightsToRows( OptimalHeightsFuncObjBase& rFuncObj, ScTable* pTab,
+bool SetOptimalHeightsToRows(OptimalHeightsFuncObjBase& rFuncObj,
     ScBitMaskCompressedArray<SCROW, sal_uInt8>* pRowFlags, SCROW nStartRow, SCROW nEndRow, sal_uInt16 nExtra,
     const vector<sal_uInt16>& aHeights, bool bForce)
 {
-    pTab->IncRecalcLevel();       // #i116460# avoid problems with Excel files
-
     SCSIZE nCount = static_cast<SCSIZE>(nEndRow-nStartRow+1);
     bool bChanged = false;
     SCROW nRngStart = 0;
@@ -222,8 +220,6 @@ bool SetOptimalHeightsToRows( OptimalHeightsFuncObjBase& rFuncObj, ScTable* pTab
     if (nLast)
         bChanged |= rFuncObj(nRngStart, nRngEnd, nLast);
 
-    pTab->DecRecalcLevel();       // #i116460# avoid problems with Excel files
-
     return bChanged;
 }
 
@@ -253,7 +249,6 @@ ScTable::ScTable( ScDocument* pDoc, SCTAB nNewTab, const rtl::OUString& rNewName
     pOutlineTable( NULL ),
     pSheetEvents( NULL ),
     nTab( nNewTab ),
-    nRecalcLvl( 0 ),
     pDocument( pDoc ),
     pSearchText ( NULL ),
     pSortCollator( NULL ),
@@ -485,7 +480,7 @@ bool ScTable::SetOptimalHeight( SCROW nStartRow, SCROW nEndRow, sal_uInt16 nExtr
 
     SetRowHeightRangeFunc aFunc(this, nPPTX, nPPTY);
     bool bChanged = SetOptimalHeightsToRows(
-        aFunc, this, pRowFlags, nStartRow, nEndRow, nExtra, aHeights, bForce);
+        aFunc, pRowFlags, nStartRow, nEndRow, nExtra, aHeights, bForce);
 
     if ( pProgress != pOuterProgress )
         delete pProgress;
@@ -516,7 +511,7 @@ void ScTable::SetOptimalHeightOnly( SCROW nStartRow, SCROW nEndRow, sal_uInt16 n
 
     SetRowHeightOnlyFunc aFunc(this);
     SetOptimalHeightsToRows(
-        aFunc, this, pRowFlags, nStartRow, nEndRow, nExtra, aHeights, bForce);
+        aFunc, pRowFlags, nStartRow, nEndRow, nExtra, aHeights, bForce);
 
     if ( pProgress != pOuterProgress )
         delete pProgress;

@@ -383,8 +383,6 @@ sal_Bool ScOutlineDocFunc::SelectLevel( SCTAB nTab, sal_Bool bColumns, sal_uInt1
                                     bColumns, nLevel ) );
     }
 
-    pDoc->IncSizeRecalcLevel( nTab );
-
     pDoc->InitializeNoteCaptions(nTab);
     ScSubOutlineIterator aIter( pArray );                   // alle Eintraege
     ScOutlineEntry* pEntry;
@@ -426,7 +424,6 @@ sal_Bool ScOutlineDocFunc::SelectLevel( SCTAB nTab, sal_Bool bColumns, sal_uInt1
         }
     }
 
-    pDoc->DecSizeRecalcLevel( nTab );
     pDoc->SetDrawPageSize(nTab);
     pDoc->UpdatePageBreaks( nTab );
 
@@ -481,7 +478,7 @@ sal_Bool ScOutlineDocFunc::ShowMarkedOutlines( const ScRange& rRange, sal_Bool b
                                         pUndoDoc, pUndoTab, sal_True ) );
         }
 
-        pDoc->IncSizeRecalcLevel( nTab );
+        pDoc->InitializeNoteCaptions(nTab);
 
         //  Spalten
 
@@ -534,7 +531,6 @@ sal_Bool ScOutlineDocFunc::ShowMarkedOutlines( const ScRange& rRange, sal_Bool b
             i = nFilterEnd;
         }
 
-        pDoc->DecSizeRecalcLevel( nTab );
         pDoc->SetDrawPageSize(nTab);
         pDoc->UpdatePageBreaks( nTab );
 
@@ -601,7 +597,7 @@ sal_Bool ScOutlineDocFunc::HideMarkedOutlines( const ScRange& rRange, sal_Bool b
                                         pUndoDoc, pUndoTab, false ) );
         }
 
-        pDoc->IncSizeRecalcLevel( nTab );
+        pDoc->InitializeNoteCaptions(nTab);
 
         //  Spalten
 
@@ -629,7 +625,7 @@ sal_Bool ScOutlineDocFunc::HideMarkedOutlines( const ScRange& rRange, sal_Bool b
                 HideOutline( nTab, false, nRowLevel, i, false, false, bApi );
         }
 
-        pDoc->DecSizeRecalcLevel( nTab );
+        pDoc->SetDrawPageSize(nTab);
         pDoc->UpdatePageBreaks( nTab );
 
         rDocShell.PostPaint( 0,0,nTab, MAXCOL,MAXROW,nTab, PAINT_GRID | PAINT_LEFT | PAINT_TOP );
@@ -679,8 +675,6 @@ sal_Bool ScOutlineDocFunc::ShowOutline( SCTAB nTab, sal_Bool bColumns, sal_uInt1
                                     nStart, nEnd, nTab, pUndoDoc,       //! start und end berechnen
                                     bColumns, nLevel, nEntry, sal_True ) );
     }
-
-    pDoc->IncSizeRecalcLevel( nTab );
 
     pDoc->InitializeNoteCaptions(nTab);
     pEntry->SetHidden(false);
@@ -767,8 +761,6 @@ sal_Bool ScOutlineDocFunc::HideOutline( SCTAB nTab, sal_Bool bColumns, sal_uInt1
                                     bColumns, nLevel, nEntry, false ) );
     }
 
-    pDoc->IncSizeRecalcLevel( nTab );
-
     pDoc->InitializeNoteCaptions(nTab);
     pEntry->SetHidden(true);
     SCCOLROW i;
@@ -780,7 +772,6 @@ sal_Bool ScOutlineDocFunc::HideOutline( SCTAB nTab, sal_Bool bColumns, sal_uInt1
 
     pArray->SetVisibleBelow( nLevel, nEntry, false );
 
-    pDoc->DecSizeRecalcLevel( nTab );
     pDoc->SetDrawPageSize(nTab);
     pDoc->InvalidatePageBreaks(nTab);
     pDoc->UpdatePageBreaks( nTab );

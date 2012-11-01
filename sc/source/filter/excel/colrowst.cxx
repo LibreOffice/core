@@ -204,7 +204,6 @@ void XclImpColRowSettings::Convert( SCTAB nScTab )
         return;
 
     ScDocument& rDoc = GetDoc();
-    rDoc.IncSizeRecalcLevel( nScTab );
 
     // column widths ----------------------------------------------------------
 
@@ -288,13 +287,11 @@ void XclImpColRowSettings::Convert( SCTAB nScTab )
     // ------------------------------------------------------------------------
 
     mbDirty = false;
-    rDoc.DecSizeRecalcLevel( nScTab );
 }
 
 void XclImpColRowSettings::ConvertHiddenFlags( SCTAB nScTab )
 {
     ScDocument& rDoc = GetDoc();
-    rDoc.IncSizeRecalcLevel( nScTab );      // #i116460# performance with many hidden rows
 
     // hide the columns
     for( SCCOL nScCol = 0; nScCol <= MAXCOL; ++nScCol )
@@ -355,8 +352,6 @@ void XclImpColRowSettings::ConvertHiddenFlags( SCTAB nScTab )
     // #i47438# if default row format is hidden, hide remaining rows
     if( ::get_flag( mnDefRowFlags, EXC_DEFROW_HIDDEN ) && (mnLastScRow < MAXROW) )
         rDoc.ShowRows( mnLastScRow + 1, MAXROW, nScTab, false );
-
-    rDoc.DecSizeRecalcLevel( nScTab );      // #i116460# performance with many hidden rows
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4078,19 +4078,23 @@ void Test::testGraphicsInGroup()
 
         //Use a range of rows guaranteed to include all of the square
         m_pDoc->ShowRows(0, 100, 0, false);
+        m_pDoc->SetDrawPageSize(0);
         CPPUNIT_ASSERT_MESSAGE("Should not change when page anchored", aOrigRect == rNewRect);
         m_pDoc->ShowRows(0, 100, 0, true);
+        m_pDoc->SetDrawPageSize(0);
         CPPUNIT_ASSERT_MESSAGE("Should not change when page anchored", aOrigRect == rNewRect);
 
         ScDrawLayer::SetCellAnchoredFromPosition(*pObj, *m_pDoc, 0);
         CPPUNIT_ASSERT_MESSAGE("That shouldn't change size or positioning", aOrigRect == rNewRect);
 
         m_pDoc->ShowRows(0, 100, 0, false);
+        m_pDoc->SetDrawPageSize(0);
         CPPUNIT_ASSERT_MESSAGE("Left and Right should be unchanged",
             aOrigRect.nLeft == rNewRect.nLeft && aOrigRect.nRight == rNewRect.nRight);
         CPPUNIT_ASSERT_MESSAGE("Height should be minimum allowed height",
             (rNewRect.nBottom - rNewRect.nTop) <= 1);
         m_pDoc->ShowRows(0, 100, 0, true);
+        m_pDoc->SetDrawPageSize(0);
         CPPUNIT_ASSERT_MESSAGE("Should not change when page anchored", aOrigRect == rNewRect);
     }
 
@@ -4109,6 +4113,7 @@ void Test::testGraphicsInGroup()
 
         // Insert 2 rows at the top.  This should push the circle object down.
         m_pDoc->InsertRow(0, 0, MAXCOL, 0, 0, 2);
+        m_pDoc->SetDrawPageSize(0);
 
         // Make sure the size of the circle is still identical.
         CPPUNIT_ASSERT_MESSAGE("Size of the circle has changed, but shouldn't!",
@@ -4116,6 +4121,7 @@ void Test::testGraphicsInGroup()
 
         // Delete 2 rows at the top.  This should bring the circle object to its original position.
         m_pDoc->DeleteRow(0, 0, MAXCOL, 0, 0, 2);
+        m_pDoc->SetDrawPageSize(0);
         CPPUNIT_ASSERT_MESSAGE("Failed to move back to its original position.", aOrigRect == rNewRect);
     }
 
@@ -4139,6 +4145,7 @@ void Test::testGraphicsInGroup()
         // Insert 2 rows at the top and delete them immediately.
         m_pDoc->InsertRow(0, 0, MAXCOL, 0, 0, 2);
         m_pDoc->DeleteRow(0, 0, MAXCOL, 0, 0, 2);
+        m_pDoc->SetDrawPageSize(0);
         CPPUNIT_ASSERT_MESSAGE("Size of a line object changed after row insertion and removal.",
                                aOrigRect == rNewRect);
 

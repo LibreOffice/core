@@ -1718,9 +1718,6 @@ public:
     void                SetExpandRefs( bool bVal ) { bExpandRefs = bVal; }
     bool                IsExpandRefs() { return bExpandRefs; }
 
-    SC_DLLPUBLIC void               IncSizeRecalcLevel( SCTAB nTab );
-    SC_DLLPUBLIC void               DecSizeRecalcLevel( SCTAB nTab, bool bUpdateNoteCaptionPos = true );
-
     sal_uLong               GetXMLImportedFormulaCount() const { return nXMLImportedFormulaCount; }
     void                IncXMLImportedFormulaCount( sal_uLong nVal )
                             {

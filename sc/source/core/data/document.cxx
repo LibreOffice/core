@@ -2411,7 +2411,6 @@ void ScDocument::CopyFromClip( const ScRange& rDestRange, const ScMarkData& rMar
                     if ( *itr < aCBFCP.nTabStart )
                         aCBFCP.nTabStart = *itr;
                     aCBFCP.nTabEnd = *itr;
-                    maTabs[*itr]->IncRecalcLevel();
                 }
 
             ScRangeList aLocalRangeList;
@@ -2484,9 +2483,6 @@ void ScDocument::CopyFromClip( const ScRange& rDestRange, const ScMarkData& rMar
             }
 
             itr = rMark.begin();
-            for (; itr != itrEnd && *itr < nMax; ++itr)
-                if (maTabs[*itr] )
-                    maTabs[*itr]->DecRecalcLevel();
 
             bInsertingFromOtherDoc = false;
 
@@ -2554,7 +2550,6 @@ void ScDocument::CopyMultiRangeFromClip(
             if ( *itr < aCBFCP.nTabStart )
                 aCBFCP.nTabStart = *itr;
             aCBFCP.nTabEnd = *itr;
-            maTabs[*itr]->IncRecalcLevel();
         }
     }
 
@@ -2618,9 +2613,6 @@ void ScDocument::CopyMultiRangeFromClip(
     }
 
     itr = rMark.begin();
-    for (; itr != itrEnd && *itr < nMax; ++itr)
-        if (maTabs[*itr])
-            maTabs[*itr]->DecRecalcLevel();
 
     bInsertingFromOtherDoc = false;
 
