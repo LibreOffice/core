@@ -139,7 +139,7 @@ $(eval $(call gb_Extension_add_files,presenter-screen,registry/data/org/openoffi
 
 $(eval $(call gb_Extension_add_helpfile,presenter-screen,$(SRCDIR)/sdext/source/presenter/help/en-US,com.sun.PresenterScreen-$(PLATFORMID)/presenter.xhp,com.sun.PresenterScreen/presenter.xhp))
 
-$(eval $(call gb_Extension_add_helptreefile,presenter-screen,$(SRCDIR)/sdext/source/presenter/help/en-US,/help.tree,com.sun.PresenterScreen/help.tree,com.sun.PresenterScreen-$(PLATFORMID)))
+$(eval $(call gb_Extension_add_helptreefile,presenter-screen,$(SRCDIR)/sdext/source/presenter/help/en-US,help.tree,com.sun.PresenterScreen/help.tree,com.sun.PresenterScreen-$(PLATFORMID)))
 
 
 
