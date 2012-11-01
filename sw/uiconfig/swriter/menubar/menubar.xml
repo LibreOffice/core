@@ -422,7 +422,6 @@
       <menu:menuitem menu:id=".uno:FootnoteDialog"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:Gallery"/>
-      <menu:menuitem menu:id=".uno:AVMediaPlayer"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:BibliographyComponent"/>
       <menu:menuseparator/>
