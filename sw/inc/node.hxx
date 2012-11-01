@@ -91,17 +91,17 @@ class SW_DLLPUBLIC SwNode
 {
     friend class SwNodes;
 
-#ifdef DBG_UTIL
-    static long s_nSerial;
-    long m_nSerial;
-#endif
-
     sal_uInt8 nNodeType;
 
     /// For text nodes: level of auto format. Was put here because we had still free bits.
     sal_uInt8 nAFmtNumLvl : 3;
     bool bSetNumLSpace : 1;         ///< For numbering: TRUE: set indent.
     bool bIgnoreDontExpand : 1;     ///< for Text Attributes - ignore the flag
+
+#ifdef DBG_UTIL
+    static long s_nSerial;
+    long m_nSerial;
+#endif
 
 protected:
     SwStartNode* pStartOfSection;

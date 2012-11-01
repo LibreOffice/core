@@ -309,10 +309,10 @@ SwNode::SwNode( const SwNodeIndex &rWhere, const sal_uInt8 nNdType )
     , nAFmtNumLvl( 0 )
     , bSetNumLSpace( false )
     , bIgnoreDontExpand( false)
-    , pStartOfSection( 0 )
 #ifdef DBG_UTIL
     , m_nSerial( s_nSerial++)
 #endif
+    , pStartOfSection( 0 )
 {
     SwNodes& rNodes = const_cast<SwNodes&> (rWhere.GetNodes());
     if( rWhere.GetIndex() )
@@ -341,10 +341,10 @@ SwNode::SwNode( SwNodes& rNodes, sal_uLong nPos, const sal_uInt8 nNdType )
     , nAFmtNumLvl( 0 )
     , bSetNumLSpace( false )
     , bIgnoreDontExpand( false)
-    , pStartOfSection( 0 )
 #ifdef DBG_UTIL
-    ,m_nSerial( s_nSerial++)
+    , m_nSerial( s_nSerial++)
 #endif
+    , pStartOfSection( 0 )
 {
     if( nPos )
     {
