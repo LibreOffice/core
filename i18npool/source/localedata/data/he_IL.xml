@@ -51,7 +51,7 @@
     <TimePM>PM</TimePM>
     <MeasurementSystem>metric</MeasurementSystem>
   </LC_CTYPE>
-  <LC_FORMAT replaceFrom="[CURRENCY]" replaceTo="[$₪-40D]">
+  <LC_FORMAT replaceFrom="[CURRENCY]" replaceTo="[$‎₪-40D]">
     <DateAcceptancePattern>D/M</DateAcceptancePattern>
     <FormatElement msgid="DateFormatskey1" default="true" type="short" usage="DATE" formatindex="18">
       <FormatCode>D/M/YY</FormatCode>
@@ -414,7 +414,7 @@
   <LC_CURRENCY>
     <Currency default="true" usedInCompatibleFormatCodes="true">
       <CurrencyID>ILS</CurrencyID>
-      <CurrencySymbol>₪</CurrencySymbol>
+      <CurrencySymbol>‎₪</CurrencySymbol>
       <BankSymbol>ILS</BankSymbol>
       <CurrencyName>New Israeli Sheqel</CurrencyName>
       <DecimalPlaces>2</DecimalPlaces>
