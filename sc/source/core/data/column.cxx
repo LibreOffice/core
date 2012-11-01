@@ -1490,11 +1490,6 @@ void ScColumn::MoveTo(SCROW nStartRow, SCROW nEndRow, ScColumn& rCol)
         SCROW nRow = maItems[i].nRow;
         aRows.push_back( nRow);
         rCol.Insert( nRow, maItems[i].pCell);
-        if (nRow != maItems[i].nRow)
-        {   // Listener inserted
-            bConsecutive = false;
-            Search( nRow, i);
-        }
     }
     SCSIZE nStopPos = i;
     if (nStartPos < nStopPos)
