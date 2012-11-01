@@ -204,8 +204,7 @@ uno::Reference< ucb::XContent > SAL_CALL ContentProvider::queryContent(
 
     // Create a new identifier for the mormalized URL returned by
     // PackageUri::getUri().
-    uno::Reference< ucb::XContentIdentifier > xId
-                = new ::ucbhelper::ContentIdentifier( uno::Reference<lang::XMultiServiceFactory>(m_xContext->getServiceManager(), uno::UNO_QUERY_THROW), aUri.getUri() );
+    uno::Reference< ucb::XContentIdentifier > xId = new ::ucbhelper::ContentIdentifier( aUri.getUri() );
 
     osl::MutexGuard aGuard( m_aMutex );
 

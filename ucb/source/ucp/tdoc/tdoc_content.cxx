@@ -724,7 +724,7 @@ Content::createNewContent( const ucb::ContentInfo& Info )
             aURL += rtl::OUString("New_Stream");
 
         uno::Reference< ucb::XContentIdentifier > xId
-            = new ::ucbhelper::ContentIdentifier( m_xSMgr, aURL );
+            = new ::ucbhelper::ContentIdentifier( aURL );
 
         return create( m_xSMgr, m_pProvider, xId, Info );
     }
@@ -757,8 +757,7 @@ Content::makeNewIdentifier( const rtl::OUString& rTitle )
 
     return
         uno::Reference< ucb::XContentIdentifier >(
-            new ::ucbhelper::ContentIdentifier(
-                m_xSMgr, aNewURL.makeStringAndClear() ) );
+            new ::ucbhelper::ContentIdentifier( aNewURL.makeStringAndClear() ) );
 }
 
 //=========================================================================
@@ -879,8 +878,7 @@ sal_Bool Content::exchangeIdentity(
                                         aOldURL.getLength(),
                                         xNewId->getContentIdentifier() );
                     uno::Reference< ucb::XContentIdentifier > xNewChildId
-                        = new ::ucbhelper::ContentIdentifier(
-                            m_xSMgr, aNewChildURL );
+                        = new ::ucbhelper::ContentIdentifier( aNewChildURL );
 
                     if ( !xChild->exchangeIdentity( xNewChildId ) )
                         return sal_False;
@@ -1730,7 +1728,7 @@ void Content::insert( const uno::Reference< io::XInputStream >& xData,
     if ( bNewId )
     {
         m_xIdentifier
-            = new ::ucbhelper::ContentIdentifier( m_xSMgr, aNewUri.getUri() );
+            = new ::ucbhelper::ContentIdentifier( aNewUri.getUri() );
     }
 
     if ( !storeData( xData, xEnv ) )
@@ -1846,8 +1844,7 @@ Content::queryChildContent( const rtl::OUString & rRelativeChildUri )
         aBuf.append( rRelativeChildUri.copy( 1 ) );
 
     uno::Reference< ucb::XContentIdentifier > xChildId
-        = new ::ucbhelper::ContentIdentifier(
-            m_xSMgr, aBuf.makeStringAndClear() );
+        = new ::ucbhelper::ContentIdentifier( aBuf.makeStringAndClear() );
 
     uno::Reference< ucb::XContent > xChild;
     try
@@ -2134,7 +2131,7 @@ void Content::transfer(
     try
     {
         uno::Reference< ucb::XContentIdentifier > xTargetId
-            = new ::ucbhelper::ContentIdentifier( m_xSMgr, aTargetUri );
+            = new ::ucbhelper::ContentIdentifier( aTargetUri );
 
         // Note: The static cast is okay here, because its sure that
         //       m_xProvider is always the WebDAVContentProvider.
@@ -2177,8 +2174,7 @@ void Content::transfer(
         try
         {
             uno::Reference< ucb::XContentIdentifier >
-                xSourceId = new ::ucbhelper::ContentIdentifier(
-                    m_xSMgr, rInfo.SourceURL );
+                xSourceId = new ::ucbhelper::ContentIdentifier( rInfo.SourceURL );
 
             // Note: The static cast is okay here, because its sure
             //       that m_xProvider is always the ContentProvider.

@@ -26,6 +26,7 @@
  *
  ************************************************************************/
 
+#include <comphelper/processfactory.hxx>
 #include <com/sun/star/ucb/Command.hpp>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <com/sun/star/i18n/XExtendedTransliteration.hpp>
@@ -94,7 +95,7 @@ ResultSetForQuery::ResultSetForQuery( const uno::Reference< lang::XMultiServiceF
                                       const uno::Sequence< NumberedSortingInfo >& seqSort,
                                       URLParameter& aURLParameter,
                                       Databases* pDatabases )
-    : ResultSetBase( xMSF,xProvider,nOpenMode,seq,seqSort ),
+    : ResultSetBase( comphelper::getComponentContext(xMSF),xProvider,nOpenMode,seq,seqSort ),
       m_aURLParameter( aURLParameter )
 {
     Reference< XTransliteration > xTrans(

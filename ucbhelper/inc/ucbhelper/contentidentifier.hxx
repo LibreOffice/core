@@ -25,10 +25,6 @@
 #include <com/sun/star/ucb/XContentIdentifier.hpp>
 #include "ucbhelper/ucbhelperdllapi.h"
 
-namespace com { namespace sun { namespace star { namespace lang {
-    class XMultiServiceFactory;
-} } } }
-
 namespace rtl {
     class OUString;
 }
@@ -52,9 +48,6 @@ class UCBHELPER_DLLPUBLIC ContentIdentifier :
                   public com::sun::star::ucb::XContentIdentifier
 {
 public:
-    ContentIdentifier( const com::sun::star::uno::Reference<
-                        com::sun::star::lang::XMultiServiceFactory >& rxSMgr,
-                       const rtl::OUString& rURL );
     ContentIdentifier( const rtl::OUString& rURL );
     virtual ~ContentIdentifier();
 

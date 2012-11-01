@@ -31,12 +31,12 @@ using namespace ftp;
 using namespace com::sun::star;
 
 ResultSetBase::ResultSetBase(
-    const uno::Reference< lang::XMultiServiceFactory >&  xMSF,
+    const uno::Reference< uno::XComponentContext >&  rxContext,
     const uno::Reference< ucb::XContentProvider >&  xProvider,
     sal_Int32 nOpenMode,
     const uno::Sequence< beans::Property >& seq,
     const uno::Sequence< ucb::NumberedSortingInfo >& seqSort )
-    : m_xMSF( xMSF ),
+    : m_xContext( rxContext ),
       m_xProvider( xProvider ),
       m_nRow( -1 ),
       m_nWasNull( true ),
@@ -409,7 +409,7 @@ ResultSetBase::queryContentIdentifier(
             if(!url.isEmpty() )
                 m_aIdents[m_nRow] =
                     uno::Reference< ucb::XContentIdentifier >(
-                        new ::ucbhelper::ContentIdentifier(m_xMSF,url) );
+                        new ::ucbhelper::ContentIdentifier(url) );
         }
         return m_aIdents[m_nRow];
     }
@@ -641,8 +641,7 @@ ResultSetBase::getMetaData(
            uno::RuntimeException )
 {
     ::ucbhelper::ResultSetMetaData* p =
-          new ::ucbhelper::ResultSetMetaData(
-              comphelper::getComponentContext(m_xMSF), m_sProperty );
+          new ::ucbhelper::ResultSetMetaData( m_xContext, m_sProperty );
     return uno::Reference< sdbc::XResultSetMetaData >( p );
 }
 

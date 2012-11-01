@@ -181,7 +181,7 @@ ContentProvider::queryContent(
     }
 
     if ( bNewId )
-        xCanonicId = new ::ucbhelper::ContentIdentifier( uno::Reference<lang::XMultiServiceFactory>(m_xContext->getServiceManager(), uno::UNO_QUERY_THROW), aURL );
+        xCanonicId = new ::ucbhelper::ContentIdentifier( aURL );
     else
         xCanonicId = Identifier;
 

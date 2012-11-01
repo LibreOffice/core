@@ -616,7 +616,7 @@ HierarchyContent::createNewContent( const ucb::ContentInfo& Info )
             aURL += rtl::OUString("New_Link");
 
         uno::Reference< ucb::XContentIdentifier > xId
-            = new ::ucbhelper::ContentIdentifier( m_xSMgr, aURL );
+            = new ::ucbhelper::ContentIdentifier( aURL );
 
         return create( m_xSMgr, m_pProvider, xId, Info );
     }
@@ -775,7 +775,7 @@ HierarchyContent::makeNewIdentifier( const rtl::OUString& rTitle )
     aNewURL += ::ucb_impl::urihelper::encodeSegment( rTitle );
 
     return uno::Reference< ucb::XContentIdentifier >(
-        new ::ucbhelper::ContentIdentifier( m_xSMgr, aNewURL ) );
+        new ::ucbhelper::ContentIdentifier( aNewURL ) );
 }
 
 //=========================================================================
@@ -892,8 +892,7 @@ sal_Bool HierarchyContent::exchangeIdentity(
                                         aOldURL.getLength(),
                                         xNewId->getContentIdentifier() );
                     uno::Reference< ucb::XContentIdentifier > xNewChildId
-                        = new ::ucbhelper::ContentIdentifier(
-                            m_xSMgr, aNewChildURL );
+                        = new ::ucbhelper::ContentIdentifier( aNewChildURL );
 
                     if ( !xChild->exchangeIdentity( xNewChildId ) )
                         return sal_False;
@@ -1451,7 +1450,7 @@ void HierarchyContent::insert( sal_Int32 nNameClashResolve,
                     rtl::OUString aNewId = xId->getContentIdentifier();
                     aNewId += rtl::OUString("_");
                     aNewId += rtl::OUString::valueOf( ++nTry );
-                    xId = new ::ucbhelper::ContentIdentifier( m_xSMgr, aNewId );
+                    xId = new ::ucbhelper::ContentIdentifier( aNewId );
                 }
                 while ( hasData( xId ) && ( nTry < 1000 ) );
 
@@ -1650,7 +1649,7 @@ void HierarchyContent::transfer(
     //////////////////////////////////////////////////////////////////////
 
     uno::Reference< ucb::XContentIdentifier > xId
-        = new ::ucbhelper::ContentIdentifier( m_xSMgr, rInfo.SourceURL );
+        = new ::ucbhelper::ContentIdentifier( rInfo.SourceURL );
 
     // Note: The static cast is okay here, because its sure that
     //       m_xProvider is always the HierarchyContentProvider.

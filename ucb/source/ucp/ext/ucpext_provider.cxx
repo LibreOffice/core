@@ -172,7 +172,7 @@ namespace ucb { namespace ucp { namespace ext
                 }
             }
         }
-        const Reference< XContentIdentifier > xNormalizedIdentifier( new ::ucbhelper::ContentIdentifier( Reference<XMultiServiceFactory>(m_xContext->getServiceManager(), UNO_QUERY_THROW), aComposer.makeStringAndClear() ) );
+        const Reference< XContentIdentifier > xNormalizedIdentifier( new ::ucbhelper::ContentIdentifier( aComposer.makeStringAndClear() ) );
 
         ::osl::MutexGuard aGuard( m_aMutex );
 

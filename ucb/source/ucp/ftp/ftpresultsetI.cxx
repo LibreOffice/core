@@ -18,6 +18,7 @@
  */
 
 
+#include "comphelper/processfactory.hxx"
 #include "ucbhelper/propertyvalueset.hxx"
 #include "rtl/ref.hxx"
 #include "com/sun/star/ucb/Command.hpp"
@@ -43,7 +44,7 @@ ResultSetI::ResultSetI(const Reference<XMultiServiceFactory>&  xMSF,
                        const Sequence<Property>& seqProp,
                        const Sequence< NumberedSortingInfo >& seqSort,
                        const std::vector<FTPDirentry>&  dirvec)
-    : ResultSetBase(xMSF,xProvider,nOpenMode,seqProp,seqSort)
+    : ResultSetBase(comphelper::getComponentContext(xMSF),xProvider,nOpenMode,seqProp,seqSort)
 {
     for( unsigned int i = 0; i < dirvec.size(); ++i)
         m_aPath.push_back(dirvec[i].m_aURL);

@@ -1520,7 +1520,7 @@ namespace cmis
         URL aParentURL( sParentURL );
 
         // Set the parent URL for the transient objects
-        uno::Reference< ucb::XContentIdentifier > xId(new ::ucbhelper::ContentIdentifier(m_xSMgr, sParentURL));
+        uno::Reference< ucb::XContentIdentifier > xId(new ::ucbhelper::ContentIdentifier(sParentURL));
 
         try
         {

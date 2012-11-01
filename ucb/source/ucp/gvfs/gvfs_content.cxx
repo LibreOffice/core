@@ -514,7 +514,7 @@ Content::createNewContent( const ucb::ContentInfo& Info )
     aURL += rtl::OUString::createFromAscii( name );
 
     uno::Reference< ucb::XContentIdentifier > xId
-        ( new ::ucbhelper::ContentIdentifier( m_xSMgr, aURL ) );
+        ( new ::ucbhelper::ContentIdentifier( aURL ) );
 
     try {
         return new ::gvfs::Content( m_xSMgr, m_pProvider, xId, !create_document );
@@ -853,8 +853,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
 
         if ( setMask & GNOME_VFS_SET_FILE_INFO_NAME ) {
             uno::Reference< ucb::XContentIdentifier > xNewId
-                = new ::ucbhelper::ContentIdentifier(
-                    m_xSMgr, makeNewURL( newInfo.name ) );
+                = new ::ucbhelper::ContentIdentifier( makeNewURL( newInfo.name ) );
 
             aGuard.clear();
             if (!exchangeIdentity( xNewId ) )
@@ -1100,7 +1099,7 @@ sal_Bool Content::exchangeIdentity(
                              xNewId->getContentIdentifier() );
             uno::Reference< ucb::XContentIdentifier >
                 xNewChildId
-                = new ::ucbhelper::ContentIdentifier( m_xSMgr, aNewChildURL );
+                = new ::ucbhelper::ContentIdentifier( aNewChildURL );
 
             if ( !xChild->exchangeIdentity( xNewChildId ) )
                 return sal_False;

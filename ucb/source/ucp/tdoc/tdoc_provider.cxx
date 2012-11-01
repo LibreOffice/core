@@ -130,7 +130,7 @@ ContentProvider::queryContent(
 
     // Normalize URI.
     uno::Reference< ucb::XContentIdentifier > xCanonicId
-        = new ::ucbhelper::ContentIdentifier( uno::Reference<lang::XMultiServiceFactory>(m_xContext->getServiceManager(), uno::UNO_QUERY_THROW), aUri.getUri() );
+        = new ::ucbhelper::ContentIdentifier( aUri.getUri() );
 
     osl::MutexGuard aGuard( m_aMutex );
 
@@ -171,8 +171,7 @@ ContentProvider::createDocumentContent(
             aBuffer.append( aDocId );
 
             uno::Reference< ucb::XContentIdentifier > xId
-                = new ::ucbhelper::ContentIdentifier(
-                    uno::Reference<lang::XMultiServiceFactory>(m_xContext->getServiceManager(), uno::UNO_QUERY_THROW), aBuffer.makeStringAndClear() );
+                = new ::ucbhelper::ContentIdentifier( aBuffer.makeStringAndClear() );
 
             osl::MutexGuard aGuard( m_aMutex );
 

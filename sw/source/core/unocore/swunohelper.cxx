@@ -123,19 +123,14 @@ sal_Bool UCB_IsCaseSensitiveFileName( const String& rURL )
     sal_Bool bCaseSensitive;
     try
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xMSF =
-                                    comphelper::getProcessServiceFactory();
-
         INetURLObject aTempObj( rURL );
         aTempObj.SetBase( aTempObj.GetBase().toAsciiLowerCase() );
         ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContentIdentifier > xRef1 = new
-                ucbhelper::ContentIdentifier( xMSF,
-                            aTempObj.GetMainURL( INetURLObject::NO_DECODE ));
+                ucbhelper::ContentIdentifier( aTempObj.GetMainURL( INetURLObject::NO_DECODE ));
 
         aTempObj.SetBase(aTempObj.GetBase().toAsciiUpperCase());
         ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContentIdentifier > xRef2 = new
-                ucbhelper::ContentIdentifier( xMSF,
-                            aTempObj.GetMainURL( INetURLObject::NO_DECODE ));
+                ucbhelper::ContentIdentifier( aTempObj.GetMainURL( INetURLObject::NO_DECODE ));
 
         ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XUniversalContentBroker > xUcb =
               com::sun::star::ucb::UniversalContentBroker::create(comphelper::getProcessComponentContext());

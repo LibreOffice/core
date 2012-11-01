@@ -120,9 +120,7 @@ HierarchyContentProvider::queryContent(
 
     // Encode URL and create new Id. This may "correct" user-typed-in URL's.
     uno::Reference< ucb::XContentIdentifier > xCanonicId
-        = new ::ucbhelper::ContentIdentifier( uno::Reference<lang::XMultiServiceFactory>(m_xContext->getServiceManager(), uno::UNO_QUERY_THROW),
-                                              ::ucb_impl::urihelper::encodeURI(
-                                                  aUri.getUri() ) );
+        = new ::ucbhelper::ContentIdentifier( ::ucb_impl::urihelper::encodeURI( aUri.getUri() ) );
     osl::MutexGuard aGuard( m_aMutex );
 
     // Check, if a content with given id already exists...
