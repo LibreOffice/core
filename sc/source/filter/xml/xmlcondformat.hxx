@@ -176,18 +176,18 @@ private:
     ScColorScaleEntry* mpFormatEntry;
 };
 
-class ScXMLDataBarFormatEntryContext : public SvXMLImportContext
+class ScXMLFormattingEntryContext : public SvXMLImportContext
 {
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
 public:
-    ScXMLDataBarFormatEntryContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
+    ScXMLFormattingEntryContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
                         const ::rtl::OUString& rLName,
                         const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                         ScColorScaleEntry*& pData);
 
-    virtual ~ScXMLDataBarFormatEntryContext() {}
+    virtual ~ScXMLFormattingEntryContext() {}
 };
 
 class ScXMLCondContext : public SvXMLImportContext

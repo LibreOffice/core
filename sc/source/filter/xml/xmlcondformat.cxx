@@ -283,7 +283,7 @@ SvXMLImportContext* ScXMLDataBarFormatContext::CreateChildContext( sal_uInt16 nP
         case XML_TOK_DATABAR_DATABARENTRY:
         {
             ScColorScaleEntry* pEntry;
-            pContext = new ScXMLDataBarFormatEntryContext( GetScImport(), nPrefix, rLocalName, xAttrList, pEntry );
+            pContext = new ScXMLFormattingEntryContext( GetScImport(), nPrefix, rLocalName, xAttrList, pEntry );
             if(mpFormatData->mpLowerLimit)
             {
                 mpFormatData->mpUpperLimit.reset(pEntry);
@@ -367,7 +367,7 @@ SvXMLImportContext* ScXMLIconSetFormatContext::CreateChildContext( sal_uInt16 nP
         case XML_TOK_FORMATTING_ENTRY:
             {
                 ScColorScaleEntry* pEntry;
-                pContext = new ScXMLDataBarFormatEntryContext( GetScImport(), nPrefix, rLocalName, xAttrList, pEntry );
+                pContext = new ScXMLFormattingEntryContext( GetScImport(), nPrefix, rLocalName, xAttrList, pEntry );
                 mpFormatData->maEntries.push_back(pEntry);
             }
             break;
@@ -581,7 +581,7 @@ void ScXMLColorScaleFormatEntryContext::EndElement()
 {
 }
 
-ScXMLDataBarFormatEntryContext::ScXMLDataBarFormatEntryContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
+ScXMLFormattingEntryContext::ScXMLFormattingEntryContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
                         const ::rtl::OUString& rLName, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                         ScColorScaleEntry*& pColorScaleEntry):
     SvXMLImportContext( rImport, nPrfx, rLName )
