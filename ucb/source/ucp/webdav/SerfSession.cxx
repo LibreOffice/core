@@ -1509,7 +1509,7 @@ SerfSession::getDataFromInputStream(
                         rData.realloc( nPos + nRead );
 
                     aBuffer.realloc( nRead );
-                    rtl_copyMemory( (void*)( rData.getArray() + nPos ),
+                    memcpy( (void*)( rData.getArray() + nPos ),
                                     (const void*)aBuffer.getConstArray(),
                                     nRead );
                     nPos += nRead;
