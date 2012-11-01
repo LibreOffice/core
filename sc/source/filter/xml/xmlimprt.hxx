@@ -159,7 +159,8 @@ enum ScXMLCondFormatTokens
 {
     XML_TOK_CONDFORMAT_COLORSCALE,
     XML_TOK_CONDFORMAT_DATABAR,
-    XML_TOK_CONDFORMAT_CONDITION
+    XML_TOK_CONDFORMAT_CONDITION,
+    XML_TOK_CONDFORMAT_ICONSET
 };
 
 enum ScXMLCondFormatAttrTokens
@@ -186,9 +187,10 @@ enum ScXMLColorScaleEntryAttrTokens
     XML_TOK_COLORSCALEENTRY_COLOR
 };
 
-enum ScXMLDataBarFormatTokens
+enum ScXMLFormattingFormatTokens
 {
-    XML_TOK_DATABAR_DATABARENTRY
+    XML_TOK_DATABAR_DATABARENTRY,
+    XML_TOK_FORMATTING_ENTRY
 };
 
 enum ScXMLDataBarAttrTokens
@@ -205,6 +207,11 @@ enum ScXMLDataBarEntryAttrTokens
 {
     XML_TOK_DATABARENTRY_TYPE,
     XML_TOK_DATABARENTRY_VALUE
+};
+
+enum ScXMLIconSetAttrTokens
+{
+    XML_TOK_ICONSET_TYPE
 };
 
 enum ScXMLLabelRangesElemTokens
@@ -778,6 +785,7 @@ class ScXMLImport: public SvXMLImport
     SvXMLTokenMap           *pDataBarTokenMap;
     SvXMLTokenMap           *pDataBarAttrMap;
     SvXMLTokenMap           *pDataBarEntryAttrMap;
+    SvXMLTokenMap           *pIconSetAttrMap;
     SvXMLTokenMap           *pLabelRangesElemTokenMap;
     SvXMLTokenMap           *pLabelRangeAttrTokenMap;
     SvXMLTokenMap           *pTableElemTokenMap;
@@ -938,9 +946,10 @@ public:
     const SvXMLTokenMap& GetConditionAttrMap();
     const SvXMLTokenMap& GetColorScaleTokenMap();
     const SvXMLTokenMap& GetColorScaleEntryAttrMap();
-    const SvXMLTokenMap& GetDataBarTokenMap();
+    const SvXMLTokenMap& GetFormattingTokenMap();
     const SvXMLTokenMap& GetDataBarAttrMap();
     const SvXMLTokenMap& GetDataBarEntryAttrMap();
+    const SvXMLTokenMap& GetIconSetAttrMap();
     const SvXMLTokenMap& GetLabelRangesElemTokenMap();
     const SvXMLTokenMap& GetLabelRangeAttrTokenMap();
     const SvXMLTokenMap& GetTableElemTokenMap();

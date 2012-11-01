@@ -35,6 +35,7 @@ class ScColorScaleEntry;
 class ScDataBarFormat;
 struct ScDataBarFormatData;
 class ScConditionalFormat;
+struct ScIconSetFormatData;
 
 class ScXMLConditionalFormatsContext : public SvXMLImportContext
 {
@@ -132,6 +133,29 @@ private:
 
 };
 
+class ScXMLIconSetFormatContext : public SvXMLImportContext
+{
+    const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
+    ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
+
+    ScIconSetFormatData* mpFormatData;
+public:
+
+    ScXMLIconSetFormatContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
+                        const ::rtl::OUString& rLName,
+                        const ::com::sun::star::uno::Reference<
+                                        ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
+                        ScConditionalFormat* pFormat);
+
+    virtual ~ScXMLIconSetFormatContext() {}
+
+
+    virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
+                                     const ::rtl::OUString& rLocalName,
+                                     const ::com::sun::star::uno::Reference<
+                                          ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
+};
+
 class ScXMLColorScaleFormatEntryContext : public SvXMLImportContext
 {
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
@@ -161,11 +185,9 @@ public:
                         const ::rtl::OUString& rLName,
                         const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
-                        ScDataBarFormatData* pData);
+                        ScColorScaleEntry*& pData);
 
     virtual ~ScXMLDataBarFormatEntryContext() {}
-
-    virtual void EndElement();
 };
 
 class ScXMLCondContext : public SvXMLImportContext
@@ -180,8 +202,6 @@ public:
                         ScConditionalFormat* pFormat);
 
     virtual ~ScXMLCondContext() {}
-
-    virtual void EndElement();
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

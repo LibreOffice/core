@@ -121,6 +121,9 @@ SvXMLImportContext* ScXMLConditionalFormatContext::CreateChildContext( sal_uInt1
         case XML_TOK_CONDFORMAT_DATABAR:
             pContext = new ScXMLDataBarFormatContext( GetScImport(), nPrefix, rLocalName, xAttrList, mpFormat );
             break;
+        case XML_TOK_CONDFORMAT_ICONSET:
+            pContext = new ScXMLIconSetFormatContext( GetScImport(), nPrefix, rLocalName, xAttrList, mpFormat );
+            break;
         default:
             break;
     }
@@ -271,14 +274,26 @@ SvXMLImportContext* ScXMLDataBarFormatContext::CreateChildContext( sal_uInt16 nP
         const ::com::sun::star::uno::Reference<
         ::com::sun::star::xml::sax::XAttributeList>& xAttrList )
 {
-    const SvXMLTokenMap& rTokenMap = GetScImport().GetDataBarTokenMap();
+    const SvXMLTokenMap& rTokenMap = GetScImport().GetFormattingTokenMap();
     sal_uInt16 nToken = rTokenMap.Get(nPrefix, rLocalName);
     SvXMLImportContext* pContext = NULL;
     switch (nToken)
     {
+        case XML_TOK_FORMATTING_ENTRY:
         case XML_TOK_DATABAR_DATABARENTRY:
-            pContext = new ScXMLDataBarFormatEntryContext( GetScImport(), nPrefix, rLocalName, xAttrList, mpFormatData );
-            break;
+        {
+            ScColorScaleEntry* pEntry;
+            pContext = new ScXMLDataBarFormatEntryContext( GetScImport(), nPrefix, rLocalName, xAttrList, pEntry );
+            if(mpFormatData->mpLowerLimit)
+            {
+                mpFormatData->mpUpperLimit.reset(pEntry);
+            }
+            else
+            {
+                mpFormatData->mpLowerLimit.reset(pEntry);
+            }
+        }
+        break;
         default:
             break;
     }
@@ -288,6 +303,79 @@ SvXMLImportContext* ScXMLDataBarFormatContext::CreateChildContext( sal_uInt16 nP
 
 void ScXMLDataBarFormatContext::EndElement()
 {
+}
+
+ScXMLIconSetFormatContext::ScXMLIconSetFormatContext(ScXMLImport& rImport, sal_uInt16 nPrfx,
+                        const ::rtl::OUString& rLName,
+                        const ::com::sun::star::uno::Reference<
+                                        ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
+                        ScConditionalFormat* pFormat):
+    SvXMLImportContext( rImport, nPrfx, rLName )
+{
+    rtl::OUString aIconSetType;
+    sal_Int16 nAttrCount(xAttrList.is() ? xAttrList->getLength() : 0);
+    const SvXMLTokenMap& rAttrTokenMap = GetScImport().GetIconSetAttrMap();
+    for( sal_Int16 i=0; i < nAttrCount; ++i )
+    {
+        const rtl::OUString& sAttrName(xAttrList->getNameByIndex( i ));
+        rtl::OUString aLocalName;
+        sal_uInt16 nPrefix(GetScImport().GetNamespaceMap().GetKeyByAttrName(
+                    sAttrName, &aLocalName ));
+        const rtl::OUString& sValue(xAttrList->getValueByIndex( i ));
+
+        switch( rAttrTokenMap.Get( nPrefix, aLocalName ) )
+        {
+            case XML_TOK_ICONSET_TYPE:
+                aIconSetType = sValue;
+                break;
+            default:
+                break;
+        }
+    }
+
+    ScIconSetMap* pMap = ScIconSetFormat::getIconSetMap();
+    ScIconSetType eType = IconSet_3Arrows;
+    for(; pMap->pName; ++pMap)
+    {
+        rtl::OUString aName = rtl::OUString::createFromAscii(pMap->pName);
+        if(aName ==aIconSetType)
+        {
+            eType = pMap->eType;
+            break;
+        }
+    }
+
+    ScIconSetFormat* pIconSetFormat = new ScIconSetFormat(GetScImport().GetDocument());
+    ScIconSetFormatData* pIconSetFormatData = new ScIconSetFormatData;
+    pIconSetFormatData->eIconSetType = eType;
+    pIconSetFormat->SetIconSetData(pIconSetFormatData);
+    pFormat->AddEntry(pIconSetFormat);
+
+    mpFormatData = pIconSetFormatData;
+}
+
+SvXMLImportContext* ScXMLIconSetFormatContext::CreateChildContext( sal_uInt16 nPrefix,
+        const ::rtl::OUString& rLocalName,
+        const ::com::sun::star::uno::Reference<
+        ::com::sun::star::xml::sax::XAttributeList>& xAttrList )
+{
+    const SvXMLTokenMap& rTokenMap = GetScImport().GetFormattingTokenMap();
+    sal_uInt16 nToken = rTokenMap.Get(nPrefix, rLocalName);
+    SvXMLImportContext* pContext = NULL;
+    switch (nToken)
+    {
+        case XML_TOK_FORMATTING_ENTRY:
+            {
+                ScColorScaleEntry* pEntry;
+                pContext = new ScXMLDataBarFormatEntryContext( GetScImport(), nPrefix, rLocalName, xAttrList, pEntry );
+                mpFormatData->maEntries.push_back(pEntry);
+            }
+            break;
+        default:
+            break;
+    }
+
+    return pContext;
 }
 
 namespace {
@@ -411,11 +499,6 @@ ScXMLCondContext::ScXMLCondContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
     pFormat->AddEntry(pFormatEntry);
 }
 
-void ScXMLCondContext::EndElement()
-{
-
-}
-
 namespace {
 
 void setColorEntryType(const rtl::OUString& rType, ScColorScaleEntry* pEntry, const rtl::OUString rFormula,
@@ -500,7 +583,7 @@ void ScXMLColorScaleFormatEntryContext::EndElement()
 
 ScXMLDataBarFormatEntryContext::ScXMLDataBarFormatEntryContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
                         const ::rtl::OUString& rLName, const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
-                        ScDataBarFormatData* pData):
+                        ScColorScaleEntry*& pColorScaleEntry):
     SvXMLImportContext( rImport, nPrfx, rLName )
 {
     rtl::OUString sVal;
@@ -533,19 +616,8 @@ ScXMLDataBarFormatEntryContext::ScXMLDataBarFormatEntryContext( ScXMLImport& rIm
     if(!sVal.isEmpty())
         sax::Converter::convertDouble(nVal, sVal);
 
-    ScColorScaleEntry* pEntry = new ScColorScaleEntry(nVal, Color());
-    setColorEntryType(sType, pEntry, sVal, GetScImport());
-    if(pData->mpLowerLimit)
-    {
-        pData->mpUpperLimit.reset(pEntry);
-    }
-    else
-    {
-        pData->mpLowerLimit.reset(pEntry);
-    }
+    pColorScaleEntry = new ScColorScaleEntry(nVal, Color());
+    setColorEntryType(sType, pColorScaleEntry, sVal, GetScImport());
 }
 
-void ScXMLDataBarFormatEntryContext::EndElement()
-{
-}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -618,6 +618,7 @@ const SvXMLTokenMap& ScXMLImport::GetCondFormatTokenMap()
             { XML_NAMESPACE_CALC_EXT, XML_COLOR_SCALE, XML_TOK_CONDFORMAT_COLORSCALE },
             { XML_NAMESPACE_CALC_EXT, XML_DATA_BAR, XML_TOK_CONDFORMAT_DATABAR },
             { XML_NAMESPACE_CALC_EXT, XML_CONDITION, XML_TOK_CONDFORMAT_CONDITION },
+            { XML_NAMESPACE_CALC_EXT, XML_ICON_SET, XML_TOK_CONDFORMAT_ICONSET },
             XML_TOKEN_MAP_END
         };
 
@@ -695,13 +696,14 @@ const SvXMLTokenMap& ScXMLImport::GetColorScaleEntryAttrMap()
     return *pColorScaleEntryAttrTokenMap;
 }
 
-const SvXMLTokenMap& ScXMLImport::GetDataBarTokenMap()
+const SvXMLTokenMap& ScXMLImport::GetFormattingTokenMap()
 {
     if( !pDataBarTokenMap )
     {
         static SvXMLTokenMapEntry aDataBarElemTokenMap[] =
         {
             { XML_NAMESPACE_CALC_EXT, XML_DATA_BAR_ENTRY, XML_TOK_DATABAR_DATABARENTRY },
+            { XML_NAMESPACE_CALC_EXT, XML_FORMATTING_ENTRY, XML_TOK_FORMATTING_ENTRY },
             XML_TOKEN_MAP_END
         };
 
@@ -730,6 +732,22 @@ const SvXMLTokenMap& ScXMLImport::GetDataBarAttrMap()
     }
 
     return *pDataBarAttrMap;
+}
+
+const SvXMLTokenMap& ScXMLImport::GetIconSetAttrMap()
+{
+    if( !pIconSetAttrMap )
+    {
+        static SvXMLTokenMapEntry aIconSetAttrTokenMap[] =
+        {
+            { XML_NAMESPACE_CALC_EXT, XML_ICON_SET_TYPE, XML_TOK_ICONSET_TYPE },
+            XML_TOKEN_MAP_END
+        };
+
+        pIconSetAttrMap = new SvXMLTokenMap( aIconSetAttrTokenMap );
+    }
+
+    return *pIconSetAttrMap;
 }
 
 const SvXMLTokenMap& ScXMLImport::GetDataBarEntryAttrMap()
@@ -1874,6 +1892,7 @@ ScXMLImport::ScXMLImport(
     pDataBarTokenMap( 0 ),
     pDataBarAttrMap( 0 ),
     pDataBarEntryAttrMap( 0 ),
+    pIconSetAttrMap( 0 ),
     pLabelRangesElemTokenMap( 0 ),
     pLabelRangeAttrTokenMap( 0 ),
     pTableElemTokenMap( 0 ),

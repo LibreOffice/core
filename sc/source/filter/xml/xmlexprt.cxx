@@ -3810,6 +3810,22 @@ rtl::OUString getCondFormatEntryType(const ScColorScaleEntry& rEntry, bool bFirs
     return rtl::OUString();
 }
 
+rtl::OUString getIconSetName(ScIconSetType eType)
+{
+    const char* pName = NULL;
+    ScIconSetMap* pMap = ScIconSetFormat::getIconSetMap();
+    for(;pMap->pName;++pMap)
+    {
+        if(pMap->eType == eType)
+        {
+            pName = pMap->pName;
+            break;
+        }
+    }
+    assert(pName);
+    return rtl::OUString::createFromAscii(pName);
+}
+
 }
 
 void ScXMLExport::ExportConditionalFormat(SCTAB nTab)
@@ -3980,7 +3996,7 @@ void ScXMLExport::ExportConditionalFormat(SCTAB nTab)
                             else
                                 AddAttribute(XML_NAMESPACE_CALC_EXT, XML_VALUE, rtl::OUString::valueOf(pFormatData->mpLowerLimit->GetValue()));
                             AddAttribute(XML_NAMESPACE_CALC_EXT, XML_TYPE, getCondFormatEntryType(*pFormatData->mpLowerLimit, true));
-                            SvXMLElementExport aElementDataBarEntryLower(*this, XML_NAMESPACE_CALC_EXT, XML_DATA_BAR_ENTRY, true, true);
+                            SvXMLElementExport aElementDataBarEntryLower(*this, XML_NAMESPACE_CALC_EXT, XML_FORMATTING_ENTRY, true, true);
                         }
 
                         {
@@ -3992,7 +4008,28 @@ void ScXMLExport::ExportConditionalFormat(SCTAB nTab)
                             else
                                 AddAttribute(XML_NAMESPACE_CALC_EXT, XML_VALUE, rtl::OUString::valueOf(pFormatData->mpUpperLimit->GetValue()));
                             AddAttribute(XML_NAMESPACE_CALC_EXT, XML_TYPE, getCondFormatEntryType(*pFormatData->mpUpperLimit, false));
-                            SvXMLElementExport aElementDataBarEntryUpper(*this, XML_NAMESPACE_CALC_EXT, XML_DATA_BAR_ENTRY, true, true);
+                            SvXMLElementExport aElementDataBarEntryUpper(*this, XML_NAMESPACE_CALC_EXT, XML_FORMATTING_ENTRY, true, true);
+                        }
+                    }
+                    else if(pFormatEntry->GetType() == condformat::ICONSET)
+                    {
+                        const ScIconSetFormat& mrIconSet = static_cast<const ScIconSetFormat&>(*pFormatEntry);
+                        rtl::OUString aIconSetName = getIconSetName(mrIconSet.GetIconSetData()->eIconSetType);
+                        AddAttribute( XML_NAMESPACE_CALC_EXT, XML_ICON_SET_TYPE, aIconSetName );
+                        SvXMLElementExport aElementColorScale(*this, XML_NAMESPACE_CALC_EXT, XML_ICON_SET, true, true);
+                        for(ScIconSetFormat::const_iterator it = mrIconSet.begin();
+                                it != mrIconSet.end(); ++it)
+                        {
+                            if(it->GetType() == COLORSCALE_FORMULA)
+                            {
+                                rtl::OUString sFormula = it->GetFormula(formula::FormulaGrammar::GRAM_ODFF);
+                                AddAttribute(XML_NAMESPACE_CALC_EXT, XML_VALUE, sFormula);
+                            }
+                            else
+                                AddAttribute(XML_NAMESPACE_CALC_EXT, XML_VALUE, rtl::OUString::valueOf(it->GetValue()));
+
+                            AddAttribute(XML_NAMESPACE_CALC_EXT, XML_TYPE, getCondFormatEntryType(*it));
+                            SvXMLElementExport aElementColorScaleEntry(*this, XML_NAMESPACE_CALC_EXT, XML_FORMATTING_ENTRY, true, true);
                         }
                     }
                 }
