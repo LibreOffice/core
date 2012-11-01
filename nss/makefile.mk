@@ -62,7 +62,14 @@ PATCH_FILES=nss.patch nss.aix.patch nss-config.patch \
 PATCH_FILES+=nss_macosx.patch
 .ENDIF # "$(OS)"=="MACOSX"
 
-.IF "$(debug)" != ""
+# For a MSVC build, not exporting BUILD_OPT causes the produced DLLs
+# to use the debug CRT. (The exact mechanism that causes this to
+# happen is a bit of a mystery...) That is confusing and wrong, as
+# nothing in LO otherwise uses that. It also makes testing a build
+# much harder for me at least, as I do that in a fairly pristine
+# virtual machine with no MSVC debugging runtime available. (The
+# normal CRT is bundled in the LO installer.)
+.IF "$(debug)" != "" && "$(OS)$(COM)" != "WNTMSC"
 .ELSE
 BUILD_OPT=1
 .EXPORT: BUILD_OPT
