@@ -3,7 +3,6 @@ a2f6010987e1c601274ab5d63b72c944-hyphen-2.8.4.tar.gz
 51a40a81b3b7abe8a5c33670bd3da0ce-openssl-0.9.8v.tar.gz
 c63f411b3ad147db2bcce1bf262a0e02-pixman-0.24.4.tar.bz2
 6097739c841f671cb21332b9cc593ae7-libexttextcat-3.3.1.tar.bz2
-17410483b5b5f267aa18b7e00b65e6e0-hsqldb_1_8_0.zip
 18f577b374d60b3c760a3a3350407632-STLport-4.5.tar.gz
 1f24ab1d39f4a51faf22244c94a6203f-xmlsec1-1.2.14.tar.gz
 26b3e95ddf3d9c077c480ea45874b3b8-lp_solve_5.5.tar.gz
@@ -31,8 +30,6 @@ a7d6c5f2fe2d481149ed3ba807b5c043-gdk-pixbuf-2.23.0.tar.gz
 3a84ac2da37cae5bf7ce616228c6fbde-libgsf-1.14.19.tar.gz
 22ad1c8d3fda7e73b0798035f3dd96bc-pango-1.28.3.tar.gz
 0611e099e807210cf738dcb41425d104-libcroco-0.6.2.tar.gz
-2ab442d169156f34c379c968f3f482dd-zlib-1.2.7.tar.bz2
-0168229624cfac409e766913506961a8-ucpp-1.3.2.tar.gz
 7c53f83e0327343f4060c0eb83842daf-icu4c-49_1_1-src.tgz
 0f63ee487fda8f21fafa767b3c447ac9-ixion-0.2.0.tar.gz
 a0a861f539f0e7a91d05e6b9457e4db1-nss-3.13.5-with-nspr-4.9.1.tar.gz
@@ -61,6 +58,7 @@ fa6a2f85bd28baab035b2c95e722713f-liblangtag-0.2.tar.bz2
 @FREETYPE_TARBALL@
 @GOOGLE_DOCS_EXTENSION_PACK@
 @GRAPHITE_TARBALL@
+@HSQLDB_TARBALL@
 @HUNSPELL_TARBALL@
 @JFREEREPORT_FLOW_ENGINE_TARBALL@
 @JFREEREPORT_FLUTE_TARBALL@
@@ -87,12 +85,14 @@ fa6a2f85bd28baab035b2c95e722713f-liblangtag-0.2.tar.bz2
 @POSTGRESQL_TARBALL@
 @RHINO_TARBALL@
 @TOMCAT_TARBALL@
+@UCPP_TARBALL@
 @VIGRA_TARBALL@
 @VISIO_TARBALL@
 @WPD_TARBALL@
 @WPG_TARBALL@
 @WPS_TARBALL@
 @XSLTML_TARBALL@
+@ZLIB_TARBALL@
 http://dev-www.libreoffice.org/extern
 @DBGHELP_DLL@
 @UNOWINREG_DLL@

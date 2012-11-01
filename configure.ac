@@ -6553,10 +6553,12 @@ else
         AC_PATH_PROG(SYSTEM_UCPP, ucpp)
     else
         AC_MSG_RESULT([internal])
+        UCPP_TARBALL="0168229624cfac409e766913506961a8-ucpp-1.3.2.tar.gz"
         BUILD_TYPE="$BUILD_TYPE UCPP"
     fi
 fi
 AC_SUBST(SYSTEM_UCPP)
+AC_SUBST(UCPP_TARBALL)
 
 dnl ===================================================================
 dnl Check for epm (not needed for Windows)
@@ -7678,6 +7680,7 @@ if test "$with_system_hsqldb" = "yes"; then
 else
     AC_MSG_RESULT([internal])
     SYSTEM_HSQLDB=NO
+    HSQLDB_TARBALL="17410483b5b5f267aa18b7e00b65e6e0-hsqldb_1_8_0.zip"
     BUILD_TYPE="$BUILD_TYPE HSQLDB"
     AC_MSG_CHECKING([whether hsqldb should be built with JDBC 4.1])
     javanumver=`$JAVAINTERPRETER -version 2>&1 | $AWK -v num=true -f $SRC_ROOT/solenv/bin/getcompver.awk`
@@ -7690,6 +7693,7 @@ else
 fi
 AC_SUBST(SYSTEM_HSQLDB)
 AC_SUBST(HSQLDB_JAR)
+AC_SUBST(HSQLDB_TARBALL)
 AC_SUBST([HSQLDB_USE_JDBC_4_1])
 fi
 
