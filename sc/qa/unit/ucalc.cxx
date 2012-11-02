@@ -228,6 +228,7 @@ public:
     void testFindAreaPosColRight();
     void testSort();
     void testSortWithFormulaRefs();
+    void testShiftCells();
     void testDeleteRow();
     void testDeleteCol();
 
@@ -281,6 +282,7 @@ public:
     CPPUNIT_TEST(testFindAreaPosColRight);
     CPPUNIT_TEST(testSort);
     CPPUNIT_TEST(testSortWithFormulaRefs);
+    CPPUNIT_TEST(testShiftCells);
     CPPUNIT_TEST(testDeleteRow);
     CPPUNIT_TEST(testDeleteCol);
     CPPUNIT_TEST_SUITE_END();
@@ -5197,6 +5199,28 @@ void Test::testSort()
     CPPUNIT_ASSERT(pNote);
 
     pDoc->DeleteTab(0);
+}
+
+void Test::testShiftCells()
+{
+    m_pDoc->InsertTab(0, "foo");
+
+    OUString aTestVal("Some Text");
+
+    // Text into cell E5.
+    m_pDoc->SetString(4, 3, 0, aTestVal);
+
+    // Insert cell at D5. This should shift the string cell to right.
+    m_pDoc->InsertCol(3, 0, 3, 0, 3, 1);
+    OUString aStr = m_pDoc->GetString(5, 3, 0);
+    CPPUNIT_ASSERT_MESSAGE("We should have a string cell here.", aStr == aTestVal);
+
+    // Delete cell D5, to shift the text cell back into D5.
+    m_pDoc->DeleteCol(3, 0, 3, 0, 3, 1);
+    aStr = m_pDoc->GetString(4, 3, 0);
+    CPPUNIT_ASSERT_MESSAGE("We should have a string cell here.", aStr == aTestVal);
+
+    m_pDoc->DeleteTab(0);
 }
 
 void Test::testDeleteRow()
