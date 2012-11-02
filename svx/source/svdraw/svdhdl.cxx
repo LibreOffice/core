@@ -1911,7 +1911,7 @@ void SdrHdlList::TravelFocusHdl(sal_Bool bForward)
         }
 
         // build new HdlNum
-        sal_uInt32 nNewHdlNum(nNewHdl);
+        sal_uIntPtr nNewHdlNum(nNewHdl);
 
         // look for old num in sorted array
         if(nNewHdl != CONTAINER_ENTRY_NOTFOUND)
@@ -2020,7 +2020,7 @@ void SdrHdlList::SetHdlSize(sal_uInt16 nSiz)
         nHdlSize = nSiz;
 
         // propagate change to IAOs
-        for(sal_uInt32 i=0; i<GetHdlCount(); i++)
+        for(sal_uIntPtr i=0; i<GetHdlCount(); i++)
         {
             SdrHdl* pHdl = GetHdl(i);
             pHdl->Touch();
@@ -2036,7 +2036,7 @@ void SdrHdlList::SetMoveOutside(sal_Bool bOn)
         bMoveOutside = bOn;
 
         // propagate change to IAOs
-        for(sal_uInt32 i=0; i<GetHdlCount(); i++)
+        for(sal_uIntPtr i=0; i<GetHdlCount(); i++)
         {
             SdrHdl* pHdl = GetHdl(i);
             pHdl->Touch();
