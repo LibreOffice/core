@@ -98,14 +98,8 @@ namespace ww8
 #endif
         }
 
-#if OSL_DEBUG_LEVEL > 1
-        char sBuffer[256];
-        snprintf(sBuffer, sizeof(sBuffer), "offset=\"%" SAL_PRIuUINT32 "\" count=\"%" SAL_PRIuUINT32 "\"",
-                 nOffset, nCount);
-        ::std::clog << "<WW8Struct-getUString" << sBuffer << ">"
-                    << rtl::OUStringToOString( aResult, RTL_TEXTENCODING_UTF8 ).getStr() << "</WW8Struct-getUString>"
-                    << ::std::endl;
-#endif
+        SAL_INFO( "sw.ww8.level2", "<WW8Struct-getUString" << " offset=\"" << nOffset
+            << "\" count=\"" << nCount << "\"" << ">" << aResult << "</WW8Struct-getUString>" );
 
         return aResult;
 

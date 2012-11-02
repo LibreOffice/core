@@ -468,13 +468,6 @@ void RtfExport::WritePageDescTable()
 
 void RtfExport::ExportDocument_Impl()
 {
-#if OSL_DEBUG_LEVEL > 1
-    // MSWordExportBase::WriteText and others write debug messages to std::clog
-    // which is not interesting while debugging RtfExport
-    std::ostringstream aOss;
-    std::streambuf *pOldBuf = std::clog.rdbuf(aOss.rdbuf());
-#endif
-
     // Make the header
     Strm() << '{' << OOO_STRING_SVTOOLS_RTF_RTF << '1'
         << OOO_STRING_SVTOOLS_RTF_ANSI;
@@ -681,10 +674,6 @@ void RtfExport::ExportDocument_Impl()
     WriteMainText();
 
     Strm() << '}';
-
-#if OSL_DEBUG_LEVEL > 1
-    std::clog.rdbuf(pOldBuf);
-#endif
 }
 
 void RtfExport::PrepareNewPageDesc( const SfxItemSet* pSet,
