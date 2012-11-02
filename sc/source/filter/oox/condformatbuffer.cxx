@@ -667,7 +667,9 @@ void CondFormatRule::finalizeImport()
         break;
         case XML_duplicateValues:
             eOperator = static_cast<ScConditionMode>(CondFormatBuffer::convertToInternalOperator( XML_duplicateValues ));
-            aReplaceFormula = " ";
+        break;
+        case XML_uniqueValues:
+            eOperator = static_cast<ScConditionMode>(CondFormatBuffer::convertToInternalOperator( XML_uniqueValues ));
         break;
         case XML_expression:
             eOperator = SC_COND_DIRECT;
@@ -815,8 +817,7 @@ void CondFormatRule::finalizeImport()
         // set the replacement formula
         maModel.maFormulas.clear();
         appendFormula( aReplaceFormula );
-        if( eOperator != SC_COND_DUPLICATE )
-            eOperator = SC_COND_DIRECT;
+        eOperator = SC_COND_DIRECT;
     }
 
     CellAddress aBaseAddr = mrCondFormat.getRanges().getBaseAddress();
@@ -858,6 +859,13 @@ void CondFormatRule::finalizeImport()
         aTokenArrayDev.AddDouble( maModel.mnStdDev );
         OUString aStyleName = getStyles().createDxfStyle( maModel.mnDxfId );
         ScCondFormatEntry* pNewEntry = new ScCondFormatEntry( eOperator, &aTokenArrayEqual, &aTokenArrayDev, &rDoc, aPos, aStyleName );
+        mpFormat->AddEntry(pNewEntry);
+    }
+    else if( eOperator == SC_COND_DUPLICATE || eOperator == SC_COND_NOTDUPLICATE )
+    {
+        ScDocument& rDoc = getScDocument();
+        OUString aStyleName = getStyles().createDxfStyle( maModel.mnDxfId );
+        ScCondFormatEntry* pNewEntry = new ScCondFormatEntry( eOperator, NULL, NULL, &rDoc, aPos, aStyleName );
         mpFormat->AddEntry(pNewEntry);
     }
     else if( mpColor )
@@ -1041,6 +1049,7 @@ sal_Int32 CondFormatBuffer::convertToInternalOperator( sal_Int32 nToken )
         case XML_notBetween:            return SC_COND_NOTBETWEEN;
         case XML_notEqual:              return SC_COND_NOTEQUAL;
         case XML_duplicateValues:       return SC_COND_DUPLICATE;
+        case XML_uniqueValues:          return SC_COND_NOTDUPLICATE;
     }
     return ConditionOperator2::NONE;
 }
