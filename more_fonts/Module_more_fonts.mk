@@ -16,11 +16,19 @@ $(eval $(call gb_Module_add_targets,more_fonts,\
 	ExternalPackage_liberation \
 	ExternalPackage_liberation_narrow \
 	ExternalPackage_libertineg \
+	ExternalPackage_opensans \
+	ExternalPackage_ptserif \
+	ExternalPackage_sourcecode \
+	ExternalPackage_sourcesans \
 	UnpackedTarball_dejavu \
 	UnpackedTarball_gentium \
 	UnpackedTarball_liberation \
 	UnpackedTarball_liberation_narrow \
 	UnpackedTarball_libertineg \
+	UnpackedTarball_opensans \
+	UnpackedTarball_ptserif \
+	UnpackedTarball_sourcecode \
+	UnpackedTarball_sourcesans \
 ))
 
 # vim: set noet sw=4 ts=4:
