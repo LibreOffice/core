@@ -40,7 +40,7 @@ namespace connectivity
         OSQLParser      m_aFullParser;
 
     public:
-        OSimpleSQLParser(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxServiceFactory,const IParseContext* _pContext);
+        OSimpleSQLParser(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext, const IParseContext* _pContext);
 
         // ISQLParser
         virtual ::rtl::Reference< simple::ISQLParseNode > predicateTree(

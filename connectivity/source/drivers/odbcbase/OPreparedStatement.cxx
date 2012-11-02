@@ -30,6 +30,7 @@
 #include "odbc/OResultSet.hxx"
 #include "odbc/OResultSetMetaData.hxx"
 #include <cppuhelper/typeprovider.hxx>
+#include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include "connectivity/dbtools.hxx"
@@ -73,7 +74,7 @@ OPreparedStatement::OPreparedStatement( OConnection* _pConnection,const ::rtl::O
     {
         if(_pConnection->isParameterSubstitutionEnabled())
         {
-            OSQLParser aParser(_pConnection->getDriver()->getORB());
+            OSQLParser aParser( comphelper::getComponentContext(_pConnection->getDriver()->getORB()) );
             ::rtl::OUString sErrorMessage;
             ::rtl::OUString sNewSql;
             ::std::auto_ptr<OSQLParseNode> pNode( aParser.parseTree(sErrorMessage,sql) );

@@ -216,7 +216,7 @@ void ScCompiler::InitCharClassEnglish()
             OUString( RTL_CONSTASCII_USTRINGPARAM( "US")),
             OUString());
     pCharClassEnglish = new CharClass(
-            ::comphelper::getProcessServiceFactory(), aLocale);
+            ::comphelper::getProcessComponentContext(), aLocale);
 }
 
 

@@ -686,7 +686,7 @@ FmSearchEngine::FmSearchEngine(const Reference< XMultiServiceFactory >& _rxORB,
 
     :m_xSearchCursor(xCursor)
     ,m_xFormatSupplier(xFormatSupplier)
-    ,m_aCharacterClassficator( _rxORB, SvtSysLocale().GetLocaleData().getLocale() )
+    ,m_aCharacterClassficator( comphelper::getComponentContext(_rxORB), SvtSysLocale().GetLocaleData().getLocale() )
     ,m_aStringCompare( _rxORB )
     ,m_nCurrentFieldIndex(-2)   // -1 hat schon eine Bedeutung, also nehme ich -2 fuer 'ungueltig'
     ,m_bUsingTextComponents(sal_False)
@@ -723,7 +723,7 @@ FmSearchEngine::FmSearchEngine(const Reference< XMultiServiceFactory >& _rxORB,
         const Reference< XResultSet > & xCursor, const ::rtl::OUString& sVisibleFields,
         const InterfaceArray& arrFields, FMSEARCH_MODE eMode)
     :m_xSearchCursor(xCursor)
-    ,m_aCharacterClassficator( _rxORB, SvtSysLocale().GetLocaleData().getLocale() )
+    ,m_aCharacterClassficator( comphelper::getComponentContext(_rxORB), SvtSysLocale().GetLocaleData().getLocale() )
     ,m_aStringCompare( _rxORB )
     ,m_nCurrentFieldIndex(-2)   // -1 hat schon eine Bedeutung, also nehme ich -2 fuer 'ungueltig'
     ,m_bUsingTextComponents(sal_True)

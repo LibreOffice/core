@@ -553,7 +553,7 @@ TYPEINIT1(FmFilterModel, FmParentData);
 //------------------------------------------------------------------------
 FmFilterModel::FmFilterModel(const Reference< XMultiServiceFactory >& _rxFactory)
               :FmParentData(_rxFactory,NULL, ::rtl::OUString())
-              ,OSQLParserClient(_rxFactory)
+              ,OSQLParserClient(comphelper::getComponentContext(_rxFactory))
               ,m_xORB(_rxFactory)
               ,m_pAdapter(NULL)
               ,m_pCurrentItems(NULL)

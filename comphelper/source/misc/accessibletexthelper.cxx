@@ -21,6 +21,7 @@
 #include <com/sun/star/accessibility/AccessibleTextType.hpp>
 #include <com/sun/star/i18n/BreakIterator.hpp>
 #include <com/sun/star/i18n/CharacterIteratorMode.hpp>
+#include <com/sun/star/i18n/CharacterClassification.hpp>
 #include <com/sun/star/i18n/WordType.hpp>
 #include <com/sun/star/i18n/KCharacterType.hpp>
 #include <comphelper/processfactory.hxx>
@@ -72,12 +73,7 @@ namespace comphelper
     {
         if ( !m_xCharClass.is() )
         {
-            Reference< lang::XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
-            if ( xMSF.is() )
-            {
-                m_xCharClass = Reference< i18n::XCharacterClassification >
-                    ( xMSF->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.i18n.CharacterClassification" ) ) ), UNO_QUERY );
-            }
+            m_xCharClass = i18n::CharacterClassification::create( ::comphelper::getProcessComponentContext() );
         }
 
         return m_xCharClass;

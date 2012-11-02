@@ -75,6 +75,7 @@
 #include <comphelper/extract.hxx>
 #include <comphelper/interaction.hxx>
 #include <comphelper/namedvaluecollection.hxx>
+#include <comphelper/processfactory.hxx>
 #include <comphelper/propagg.hxx>
 #include <comphelper/property.hxx>
 #include <comphelper/sequence.hxx>
@@ -559,7 +560,7 @@ DBG_NAME( FormController )
 FormController::FormController(const Reference< XMultiServiceFactory > & _rxORB )
                   :FormController_BASE( m_aMutex )
                   ,OPropertySetHelper( FormController_BASE::rBHelper )
-                  ,OSQLParserClient( _rxORB )
+                  ,OSQLParserClient( comphelper::getComponentContext(_rxORB) )
                   ,m_aContext( _rxORB )
                   ,m_aActivateListeners(m_aMutex)
                   ,m_aModifyListeners(m_aMutex)

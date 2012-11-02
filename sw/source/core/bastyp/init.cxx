@@ -810,9 +810,9 @@ CharClass& GetAppCharClass()
 {
     if ( !pAppCharClass )
     {
-        uno::Reference< lang::XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
         pAppCharClass = new CharClass(
-            xMSF, SwBreakIt::Get()->GetLocale( (LanguageType)GetAppLanguage() ));
+            ::comphelper::getProcessComponentContext(),
+            SwBreakIt::Get()->GetLocale( (LanguageType)GetAppLanguage() ));
     }
     return *pAppCharClass;
 }

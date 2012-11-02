@@ -260,7 +260,7 @@ SwCalc::SwCalc( SwDoc& rD )
         ::com::sun::star::lang::Locale aLocale( SvxCreateLocale( eLang ));
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xMSF(
                             ::comphelper::getProcessServiceFactory() );
-        pCharClass = new CharClass( xMSF, aLocale );
+        pCharClass = new CharClass( ::comphelper::getProcessComponentContext(), aLocale );
         pLclData = new LocaleDataWrapper( xMSF, aLocale );
     }
 

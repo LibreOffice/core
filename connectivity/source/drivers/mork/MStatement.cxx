@@ -30,6 +30,7 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/typeprovider.hxx>
+#include <comphelper/processfactory.hxx>
 #include <comphelper/extract.hxx>
 #include <comphelper/types.hxx>
 #include <connectivity/dbexception.hxx>
@@ -79,7 +80,7 @@ OCommonStatement::OCommonStatement(OConnection* _pConnection )
     ,OCommonStatement_SBASE((::cppu::OWeakObject*)_pConnection, this)
     ,m_pTable(NULL)
     ,m_pConnection(_pConnection)
-    ,m_aParser(_pConnection->getDriver()->getFactory())
+    ,m_aParser( comphelper::getComponentContext(_pConnection->getDriver()->getFactory()) )
     ,m_pSQLIterator( new OSQLParseTreeIterator( _pConnection, _pConnection->createCatalog()->getTables(), m_aParser, NULL ) )
     ,rBHelper(OCommonStatement_IBASE::rBHelper)
 {

@@ -119,7 +119,7 @@ namespace dbaui
 
     public:
         DlgFilterCrit(  Window * pParent,
-                        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB,
+                        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
                         const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _rxConnection,
                         const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSingleSelectQueryComposer>& _rxComposer,
                         const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>& _rxCols

@@ -187,7 +187,7 @@ void DbGridColumn::CreateControl(sal_Int32 _nFieldPos, const Reference< ::com::s
     DbCellControl* pCellControl = NULL;
     if (m_rParent.IsFilterMode())
     {
-        pCellControl = new DbFilterField(m_rParent.getServiceManager(),*this);
+        pCellControl = new DbFilterField(comphelper::getComponentContext(m_rParent.getServiceManager()),*this);
     }
     else
     {
@@ -2747,9 +2747,9 @@ sal_Bool DbListBox::commitControl()
 
 DBG_NAME(DbFilterField);
 /*************************************************************************/
-DbFilterField::DbFilterField(const Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB,DbGridColumn& _rColumn)
+DbFilterField::DbFilterField(const Reference< ::com::sun::star::uno::XComponentContext >& rxContext,DbGridColumn& _rColumn)
               :DbCellControl(_rColumn)
-              ,OSQLParserClient(_rxORB)
+              ,OSQLParserClient(rxContext)
               ,m_nControlClass(::com::sun::star::form::FormComponentType::TEXTFIELD)
               ,m_bFilterList(sal_False)
               ,m_bFilterListFilled(sal_False)

@@ -30,6 +30,7 @@
 #include "basegfx/range/b2drange.hxx"
 
 #include "com/sun/star/i18n/BreakIterator.hpp"
+#include "com/sun/star/i18n/CharacterClassification.hpp"
 #include "com/sun/star/lang/XMultiServiceFactory.hpp"
 #include "comphelper/processfactory.hxx"
 #include "com/sun/star/i18n/ScriptType.hpp"
@@ -56,14 +57,12 @@ const Reference< XBreakIterator >& DrawXmlOptimizer::GetBreakIterator()
     return mxBreakIter;
 }
 
-const ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XCharacterClassification >& DrawXmlEmitter::GetCharacterClassification()
+const Reference< XCharacterClassification >& DrawXmlEmitter::GetCharacterClassification()
 {
     if ( !mxCharClass.is() )
     {
         Reference< XComponentContext > xContext( m_rEmitContext.m_xContext, uno::UNO_SET_THROW );
-        Reference< XMultiComponentFactory > xMSF(  xContext->getServiceManager(), uno::UNO_SET_THROW );
-    Reference < XInterface > xInterface = xMSF->createInstanceWithContext(::rtl::OUString("com.sun.star.i18n.CharacterClassification"), xContext);
-        mxCharClass = uno::Reference< i18n::XCharacterClassification >( xInterface, uno::UNO_QUERY );
+        mxCharClass = CharacterClassification::create(xContext);
     }
     return mxCharClass;
 }

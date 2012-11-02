@@ -1468,7 +1468,7 @@ void FontStyleBox::LoseFocus()
 
 void FontStyleBox::Modify()
 {
-    CharClass   aChrCls( ::comphelper::getProcessServiceFactory(),
+    CharClass   aChrCls( ::comphelper::getProcessComponentContext(),
                         GetSettings().GetLocale() );
     XubString   aStr = GetText();
     sal_uInt16      nEntryCount = GetEntryCount();

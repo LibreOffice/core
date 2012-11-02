@@ -66,7 +66,7 @@ void Replace_SQL_PlaceHolder(String& aString)
 DBG_NAME(DlgFilterCrit);
 
 DlgFilterCrit::DlgFilterCrit(Window * pParent,
-                             const Reference< XMultiServiceFactory >& _rxORB,
+                             const Reference< XComponentContext >& rxContext,
                              const Reference< XConnection>& _rxConnection,
                              const Reference< XSingleSelectQueryComposer >& _rxComposer,
                              const Reference< XNameAccess>& _rxCols
@@ -97,7 +97,7 @@ DlgFilterCrit::DlgFilterCrit(Window * pParent,
     ,m_xColumns( _rxCols )
     ,m_xConnection( _rxConnection )
     ,m_xMetaData( _rxConnection->getMetaData() )
-    ,m_aPredicateInput( _rxORB, _rxConnection, getParseContext() )
+    ,m_aPredicateInput( rxContext, _rxConnection, getParseContext() )
 {
     DBG_CTOR(DlgFilterCrit,NULL);
     // Write the String for noEntry into the ListBoxes of the field names

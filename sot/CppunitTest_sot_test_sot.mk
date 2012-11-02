@@ -54,4 +54,8 @@ $(eval $(call gb_CppunitTest_use_api,sot_test_sot,\
 
 $(eval $(call gb_CppunitTest_use_ure,sot_test_sot))
 
+$(eval $(call gb_CppunitTest_use_components,sot_test_sot,\
+    i18npool/util/i18npool \
+))
+
 # vim: set noet sw=4 ts=4:

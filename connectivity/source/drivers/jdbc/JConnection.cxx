@@ -469,7 +469,7 @@ Reference< XStatement > SAL_CALL java_sql_Connection::createStatement(  ) throw(
     {
         try
         {
-            OSQLParser aParser( m_pDriver->getContext().getLegacyServiceFactory() );
+            OSQLParser aParser( m_pDriver->getContext().getUNOContext() );
             ::rtl::OUString sErrorMessage;
             ::rtl::OUString sNewSql;
             OSQLParseNode* pNode = aParser.parseTree(sErrorMessage,_sSQL);

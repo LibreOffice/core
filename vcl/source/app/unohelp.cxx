@@ -36,7 +36,7 @@
 #include <comphelper/processfactory.hxx>
 
 #include <com/sun/star/i18n/BreakIterator.hpp>
-#include <com/sun/star/i18n/XCharacterClassification.hpp>
+#include <com/sun/star/i18n/CharacterClassification.hpp>
 #include <com/sun/star/awt/XExtendedToolkit.hpp>
 #include <com/sun/star/accessibility/AccessibleEventObject.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
@@ -55,15 +55,7 @@ uno::Reference < i18n::XBreakIterator > vcl::unohelper::CreateBreakIterator()
 
 uno::Reference < i18n::XCharacterClassification > vcl::unohelper::CreateCharacterClassification()
 {
-    uno::Reference < i18n::XCharacterClassification > xB;
-    uno::Reference< lang::XMultiServiceFactory > xMSF = comphelper::getProcessServiceFactory();
-    uno::Reference < uno::XInterface > xI = xMSF->createInstance( ::rtl::OUString("com.sun.star.i18n.CharacterClassification") );
-    if ( xI.is() )
-    {
-        uno::Any x = xI->queryInterface( ::getCppuType((const uno::Reference< i18n::XCharacterClassification >*)0) );
-        x >>= xB;
-    }
-    return xB;
+    return i18n::CharacterClassification::create( comphelper::getProcessComponentContext() );
 }
 
 ::rtl::OUString vcl::unohelper::CreateLibraryName( const sal_Char* pModName, sal_Bool bSUPD )

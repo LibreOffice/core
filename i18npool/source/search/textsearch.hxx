@@ -36,6 +36,7 @@
 #include <com/sun/star/i18n/XExtendedTransliteration.hpp>
 #include <com/sun/star/i18n/XCharacterClassification.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <map>
 
@@ -52,7 +53,7 @@ class TextSearch: public cppu::WeakImplHelper2
     ::com::sun::star::lang::XServiceInfo
 >
 {
-    ::com::sun::star::uno::Reference < ::com::sun::star::lang::XMultiServiceFactory > xMSF;
+    ::com::sun::star::uno::Reference < ::com::sun::star::uno::XComponentContext > m_xContext;
 
     ::com::sun::star::util::SearchOptions aSrchPara;
     ::rtl::OUString sSrchStr;
@@ -125,7 +126,7 @@ class TextSearch: public cppu::WeakImplHelper2
 
 public:
     TextSearch(
-        const ::com::sun::star::uno::Reference < ::com::sun::star::lang::XMultiServiceFactory >& rxMSF );
+        const ::com::sun::star::uno::Reference < ::com::sun::star::uno::XComponentContext >& rxContext );
 
     virtual ~TextSearch();
 

@@ -21,7 +21,7 @@
 #define CONNECTIVITY_PREDICATEINPUT_HXX
 
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/util/XNumberFormatter.hpp>
 #include <com/sun/star/i18n/XLocaleData4.hpp>
@@ -42,8 +42,6 @@ namespace dbtools
     class OOO_DLLPUBLIC_DBTOOLS OPredicateInputController
     {
     private:
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
-                m_xORB;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >
                 m_xConnection;
         ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >
@@ -56,7 +54,7 @@ namespace dbtools
 
     public:
         OPredicateInputController(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
             const ::connectivity::IParseContext* _pParseContext = NULL
         );

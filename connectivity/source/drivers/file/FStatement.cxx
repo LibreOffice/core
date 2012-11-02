@@ -29,6 +29,7 @@
 #include <com/sun/star/sdbc/ResultSetType.hpp>
 #include <com/sun/star/sdbc/FetchDirection.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
+#include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include "connectivity/dbexception.hxx"
@@ -57,7 +58,7 @@ OStatement_Base::OStatement_Base(OConnection* _pConnection )
     :OStatement_BASE(m_aMutex)
     ,::comphelper::OPropertyContainer(OStatement_BASE::rBHelper)
     ,m_xDBMetaData(_pConnection->getMetaData())
-    ,m_aParser(_pConnection->getDriver()->getFactory())
+    ,m_aParser( comphelper::getComponentContext(_pConnection->getDriver()->getFactory()) )
     ,m_aSQLIterator( _pConnection, _pConnection->createCatalog()->getTables(), m_aParser, NULL )
     ,m_pConnection(_pConnection)
     ,m_pParseTree(NULL)

@@ -234,7 +234,7 @@ void SvNumberFormatter::ImpConstruct( LanguageType eLang )
     nDefaultSystemCurrencyFormat = NUMBERFORMAT_ENTRY_NOT_FOUND;
 
     aLocale = MsLangId::convertLanguageToLocale( eLang );
-    pCharClass = new CharClass( xServiceManager, aLocale );
+    pCharClass = new CharClass( comphelper::getComponentContext(xServiceManager), aLocale );
     xLocaleData.init( xServiceManager, aLocale, eLang );
     xCalendar.init( comphelper::getComponentContext(xServiceManager), aLocale );
     xTransliteration.init( xServiceManager, eLang,

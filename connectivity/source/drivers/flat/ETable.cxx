@@ -109,7 +109,7 @@ void OFlatTable::fillColumns(const ::com::sun::star::lang::Locale& _aLocale)
     m_aScales.assign(nFieldCount+1,-1);
 
     const sal_Bool bCase = m_pConnection->getMetaData()->supportsMixedCaseQuotedIdentifiers();
-    CharClass aCharClass(pConnection->getDriver()->getFactory(),_aLocale);
+    CharClass aCharClass( comphelper::getComponentContext(pConnection->getDriver()->getFactory()), _aLocale);
     // read description
     const sal_Unicode cDecimalDelimiter  = pConnection->getDecimalDelimiter();
     const sal_Unicode cThousandDelimiter = pConnection->getThousandDelimiter();

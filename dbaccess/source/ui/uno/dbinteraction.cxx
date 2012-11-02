@@ -139,7 +139,7 @@ namespace dbaui
             xParamCallback = Reference< XInteractionSupplyParameters >(_rContinuations[nParamPos], UNO_QUERY);
         OSL_ENSURE(xParamCallback.is(), "BasicInteractionHandler::implHandle(ParametersRequest): can't set the parameters without an appropriate interaction handler!s");
 
-        OParameterDialog aDlg(NULL, _rParamRequest.Parameters, _rParamRequest.Connection, m_xORB);
+        OParameterDialog aDlg(NULL, _rParamRequest.Parameters, _rParamRequest.Connection, comphelper::getComponentContext(m_xORB));
         sal_Int16 nResult = aDlg.Execute();
         try
         {

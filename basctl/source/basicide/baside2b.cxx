@@ -278,7 +278,7 @@ String EditorWindow::GetWordAtCursor()
             const TextPaM& rSelStart = rSelection.GetStart();
             const TextPaM& rSelEnd = rSelection.GetEnd();
             String aText = pTextEngine->GetText( rSelEnd.GetPara() );
-            CharClass aClass( ::comphelper::getProcessServiceFactory() , Application::GetSettings().GetLocale() );
+            CharClass aClass( ::comphelper::getProcessComponentContext() , Application::GetSettings().GetLocale() );
             xub_StrLen nSelStart = static_cast< xub_StrLen >( rSelStart.GetIndex() );
             xub_StrLen nSelEnd = static_cast< xub_StrLen >( rSelEnd.GetIndex() );
             xub_StrLen nLength = static_cast< xub_StrLen >( aText.Len() );

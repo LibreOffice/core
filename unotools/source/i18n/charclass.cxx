@@ -18,13 +18,12 @@
  */
 
 
+#include <comphelper/processfactory.hxx>
 #include <unotools/charclass.hxx>
 #include <tools/string.hxx>
 #include <tools/debug.hxx>
 
-#include "instance.hxx"
-
-#define CHARCLASS_SERVICENAME "com.sun.star.i18n.CharacterClassification"
+#include <com/sun/star/i18n/CharacterClassification.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::i18n;
@@ -32,14 +31,12 @@ using namespace ::com::sun::star::uno;
 
 
 CharClass::CharClass(
-            const Reference< lang::XMultiServiceFactory > & xSF,
+            const Reference< uno::XComponentContext > & rxContext,
             const lang::Locale& rLocale
             )
-        :
-        xSMgr( xSF )
 {
     setLocale( rLocale );
-    xCC = Reference< XCharacterClassification > ( intl_createInstance( xSMgr, CHARCLASS_SERVICENAME, "CharClass" ), uno::UNO_QUERY );
+    xCC = CharacterClassification::create( rxContext );
 }
 
 
@@ -47,8 +44,7 @@ CharClass::CharClass(
             const ::com::sun::star::lang::Locale& rLocale )
 {
     setLocale( rLocale );
-    Reference< lang::XMultiServiceFactory > xNil;
-    xCC = Reference< XCharacterClassification > ( intl_createInstance( xNil, CHARCLASS_SERVICENAME, "CharClass" ), uno::UNO_QUERY );
+    xCC = CharacterClassification::create( comphelper::getProcessComponentContext() );
 }
 
 

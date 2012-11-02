@@ -92,7 +92,7 @@ OptimisticSet::OptimisticSet(const ::comphelper::ComponentContext& _rContext,
                              sal_Int32 i_nMaxRows,
                              sal_Int32& o_nRowCount)
             :OKeySet(NULL,NULL,::rtl::OUString(),_xComposer,_aParameterValueForCache,i_nMaxRows,o_nRowCount)
-            ,m_aSqlParser( _rContext.getLegacyServiceFactory() )
+            ,m_aSqlParser( _rContext.getUNOContext() )
             ,m_aSqlIterator( i_xConnection, Reference<XTablesSupplier>(_xComposer,UNO_QUERY)->getTables(), m_aSqlParser, NULL )
             ,m_bResultSetChanged(false)
 {

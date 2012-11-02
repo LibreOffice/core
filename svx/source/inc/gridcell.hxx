@@ -708,7 +708,7 @@ class DbFilterField
 
 public:
     TYPEINFO();
-    DbFilterField(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB,DbGridColumn& _rColumn);
+    DbFilterField(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext, DbGridColumn& _rColumn);
     virtual ~DbFilterField();
 
     virtual void Init( Window& rParent, const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >& xCursor );

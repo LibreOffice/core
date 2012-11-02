@@ -24,6 +24,7 @@
 #include <chaptercollator.hxx>
 #include <com/sun/star/i18n/KCharacterType.hpp>
 #include <com/sun/star/i18n/ParseResult.hpp>
+#include <com/sun/star/i18n/CharacterClassification.hpp>
 
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
@@ -33,10 +34,7 @@ using namespace ::rtl;
 ChapterCollator::ChapterCollator( const Reference < XMultiServiceFactory >& rxMSF ) : CollatorImpl(rxMSF)
 {
     if ( rxMSF.is()) {
-        Reference < XInterface > xI =
-        rxMSF->createInstance( OUString("com.sun.star.i18n.CharacterClassification"));
-        if ( xI.is() )
-            xI->queryInterface(::getCppuType((const Reference< XCharacterClassification>*)0)) >>= cclass;
+        cclass = CharacterClassification::create( comphelper::getComponentContext( rxMSF ) );
     }
 }
 
