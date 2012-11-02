@@ -4242,7 +4242,7 @@ void Test::testPostIts()
     rtl::OUString aTabName2("Table2");
     m_pDoc->InsertTab(0, aTabName);
 
-    ScAddress rAddr(2, 2, 0);
+    ScAddress rAddr(2, 2, 0); // cell C3
     ScPostIt *pNote = m_pDoc->GetNotes(rAddr.Tab())->GetOrCreateNote(rAddr);
     pNote->SetText(rAddr, aHello);
     pNote->SetAuthor(aJimBob);
@@ -4250,28 +4250,40 @@ void Test::testPostIts()
     ScPostIt *pGetNote = m_pDoc->GetNotes(rAddr.Tab())->findByAddress(rAddr);
     CPPUNIT_ASSERT_MESSAGE("note should be itself", pGetNote == pNote );
 
-    bool bInsertRow = m_pDoc->InsertRow( 0, 0, 100, 0, 1, 1 );
+    // Insert one row at row 1.
+    bool bInsertRow = m_pDoc->InsertRow(0, 0, MAXCOL, 0, 1, 1);
     CPPUNIT_ASSERT_MESSAGE("failed to insert row", bInsertRow );
 
     CPPUNIT_ASSERT_MESSAGE("note hasn't moved", m_pDoc->GetNotes(rAddr.Tab())->findByAddress(rAddr) == NULL);
-    rAddr.IncRow();
+    rAddr.IncRow(); // cell C4
     CPPUNIT_ASSERT_MESSAGE("note not there", m_pDoc->GetNotes(rAddr.Tab())->findByAddress(rAddr) == pNote);
 
-    bool bInsertCol = m_pDoc->InsertCol( 0, 0, 100, 0, 1, 1 );
+    // Insert column at column 1.
+    bool bInsertCol = m_pDoc->InsertCol(0, 0, MAXROW, 0, 1, 1);
     CPPUNIT_ASSERT_MESSAGE("failed to insert column", bInsertCol );
 
     CPPUNIT_ASSERT_MESSAGE("note hasn't moved", m_pDoc->GetNotes(rAddr.Tab())->findByAddress(rAddr) == NULL);
-    rAddr.IncCol();
+    rAddr.IncCol(); // cell D4
     CPPUNIT_ASSERT_MESSAGE("note not there", m_pDoc->GetNotes(rAddr.Tab())->findByAddress(rAddr) == pNote);
 
+    // Insert a new sheet to shift the current sheet to the right.
     m_pDoc->InsertTab(0, aTabName2);
     CPPUNIT_ASSERT_MESSAGE("note hasn't moved", m_pDoc->GetNotes(rAddr.Tab())->findByAddress(rAddr) == NULL);
-    rAddr.IncTab();
+    rAddr.IncTab(); // Move to the next sheet.
     CPPUNIT_ASSERT_MESSAGE("note not there", m_pDoc->GetNotes(rAddr.Tab())->findByAddress(rAddr) == pNote);
 
     m_pDoc->DeleteTab(0);
     rAddr.IncTab(-1);
     CPPUNIT_ASSERT_MESSAGE("note not there", m_pDoc->GetNotes(rAddr.Tab())->findByAddress(rAddr) == pNote);
+
+    // Insert cell at C4.  This should NOT shift the note position.
+    bInsertRow = m_pDoc->InsertRow(2, 0, 2, 0, 3, 1);
+    CPPUNIT_ASSERT_MESSAGE("Failed to insert cell at C4.", bInsertRow);
+    CPPUNIT_ASSERT_MESSAGE("Note shouldn't have moved but it has.", m_pDoc->GetNotes(rAddr.Tab())->findByAddress(rAddr) == pNote);
+
+    // Delete cell at C4.  Again, this should NOT shift the note position.
+    m_pDoc->DeleteRow(2, 0, 2, 0, 3, 1);
+    CPPUNIT_ASSERT_MESSAGE("Note shouldn't have moved but it has.", m_pDoc->GetNotes(rAddr.Tab())->findByAddress(rAddr) == pNote);
 
     m_pDoc->DeleteTab(0);
 }
