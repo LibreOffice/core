@@ -74,6 +74,8 @@ enum ScConditionMode
     SC_COND_BOTTOM10,
     SC_COND_TOP_PERCENT,
     SC_COND_BOTTOM_PERCENT,
+    SC_COND_ABOVE_AVERAGE,
+    SC_COND_BELOW_AVERAGE,
     SC_COND_NONE
 };
 
@@ -257,6 +259,8 @@ private:
     bool IsTopNPercent( double nArg, const ScRangeList& rRanges ) const;
     bool IsBottomNElement( double nArg, const ScRangeList& rRanges ) const;
     bool IsBottomNPercent( double nArg, const ScRangeList& rRanges ) const;
+    bool IsAboveAverage( double nArg, const ScRangeList& rRanges ) const;
+    bool IsBelowAverage( double nArg, const ScRangeList& rRanges ) const;
 
     void FillCache(const ScRangeList& rRanges) const;
 

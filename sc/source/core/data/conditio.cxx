@@ -934,6 +934,40 @@ bool ScConditionEntry::IsBottomNPercent( double nArg, const ScRangeList& rRanges
     return true;
 }
 
+bool ScConditionEntry::IsBelowAverage( double nArg, const ScRangeList& rRanges ) const
+{
+    FillCache( rRanges );
+
+    double nSum = 0;
+    for(ScConditionEntryCache::ValueCacheType::const_iterator itr = mpCache->maValues.begin(),
+            itrEnd = mpCache->maValues.end(); itr != itrEnd; ++itr)
+    {
+        nSum += itr->first * itr->second;
+    }
+
+    if(nVal1)
+        return (nArg <= nSum/mpCache->nValueItems);
+    else
+        return (nArg < nSum/mpCache->nValueItems);
+}
+
+bool ScConditionEntry::IsAboveAverage( double nArg, const ScRangeList& rRanges ) const
+{
+    FillCache( rRanges );
+
+    double nSum = 0;
+    for(ScConditionEntryCache::ValueCacheType::const_iterator itr = mpCache->maValues.begin(),
+            itrEnd = mpCache->maValues.end(); itr != itrEnd; ++itr)
+    {
+        nSum += itr->first * itr->second;
+    }
+
+    if(nVal1)
+        return (nArg >= nSum/mpCache->nValueItems);
+    else
+        return (nArg > nSum/mpCache->nValueItems);
+}
+
 bool ScConditionEntry::IsValid( double nArg ) const
 {
     //  Interpret muss schon gerufen sein
@@ -1017,6 +1051,12 @@ bool ScConditionEntry::IsValid( double nArg ) const
         case SC_COND_BOTTOM_PERCENT:
             bValid = IsBottomNPercent( nArg, pCondFormat->GetRange() );
             break;
+        case SC_COND_ABOVE_AVERAGE:
+            bValid = IsAboveAverage( nArg, pCondFormat->GetRange() );
+            break;
+        case SC_COND_BELOW_AVERAGE:
+            bValid = IsBelowAverage( nArg, pCondFormat->GetRange() );
+            break;
         default:
             OSL_FAIL("unbekannte Operation bei ScConditionEntry");
             break;
@@ -1077,6 +1117,8 @@ bool ScConditionEntry::IsValidStr( const String& rArg ) const
         case SC_COND_BOTTOM_PERCENT:
         case SC_COND_TOP10:
         case SC_COND_BOTTOM10:
+        case SC_COND_ABOVE_AVERAGE:
+        case SC_COND_BELOW_AVERAGE:
             return false;
         default:
         {
