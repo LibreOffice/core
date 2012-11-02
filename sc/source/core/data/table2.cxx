@@ -176,6 +176,7 @@ void ScTable::InsertRow( SCCOL nStartCol, SCCOL nEndCol, SCROW nStartRow, SCSIZE
     for (SCCOL j=nStartCol; j<=nEndCol; j++)
         aCol[j].InsertRow( nStartRow, nSize );
 
+    // Transfer those notes that will get shifted into another container.
     ScNotes aNotes(pDocument);
     ScNotes::iterator itr = maNotes.begin();
     while( itr != maNotes.end() )
@@ -185,13 +186,14 @@ void ScTable::InsertRow( SCCOL nStartCol, SCCOL nEndCol, SCROW nStartRow, SCSIZE
         ScPostIt* pPostIt = itr->second;
         ++itr;
 
-        if (nRow >= nStartRow)
+        if (nStartRow <= nRow && nStartCol <= nCol && nCol <= nEndCol)
         {
             aNotes.insert(nCol, nRow + nSize, pPostIt);
             maNotes.ReleaseNote(nCol, nRow);
         }
     }
 
+    // Re-insert the shifted notes.
     itr = aNotes.begin();
     while( itr != aNotes.end() )
     {
@@ -256,6 +258,7 @@ void ScTable::DeleteRow( SCCOL nStartCol, SCCOL nEndCol, SCROW nStartRow, SCSIZE
         }
     }
 
+    // Transfer those notes that will get shifted into another container.
     ScNotes aNotes(pDocument);
     ScNotes::iterator itr = maNotes.begin();
     while( itr != maNotes.end() )
@@ -265,18 +268,21 @@ void ScTable::DeleteRow( SCCOL nStartCol, SCCOL nEndCol, SCROW nStartRow, SCSIZE
         ScPostIt* pPostIt = itr->second;
         ++itr;
 
-        if (nRow >= nStartRow)
+        if (nStartRow <= nRow && nStartCol <= nCol && nCol <= nEndCol)
         {
             if(nRow - nStartRow > static_cast<SCROW>(nSize))
             {
+                // This note will get shifted.
                 aNotes.insert(nCol, nRow - nSize, pPostIt);
                 maNotes.ReleaseNote(nCol, nRow);
             }
             else
+                // Note is in the deleted area. Remove it.
                 maNotes.erase(nCol, nRow);
         }
     }
 
+    // Re-insert the shifted notes.
     itr = aNotes.begin();
     while( itr != aNotes.end() )
     {
