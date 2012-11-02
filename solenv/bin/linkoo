@@ -54,6 +54,22 @@ export STAR_RESOURCEPATH=$thisdir/resource
 export SAL_DISABLE_FLOATGRAB=1
 export G_SLICE=always-malloc
 export MALLOC_CHECK_=2
+#get some random value between 1 and 255
+rndbyte=$RANDOM
+if test -n "${rndbyte}"; then
+  rndbyte=$(( $rndbyte % 255 + 1 ))
+else
+  if test -r /dev/urandom; then
+    rndbyte=0
+    while test "${rndbyte}" -eq 0; do
+      rndbyte=$(dd if=/dev/urandom bs=1 count=1 2>/dev/null | od -tu1 | head -n1 | awk \'{ print $2 }\')
+    done
+  else
+    rndbyte=$(( (( $(date +%S) + 1 ) * $$ ) % 255 + 1 ))
+  fi
+fi
+export MALLOC_PERTURB_=${rndbyte}
+unset rndbyte
 export OOO_DISABLE_RECOVERY=1
 export SAL_ALLOW_LINKOO_SYMLINKS=1
 ';
