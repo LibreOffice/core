@@ -193,6 +193,7 @@ ScConditionFrmtEntry::ScConditionFrmtEntry( Window* pParent, ScDocument* pDoc, c
                 maLbCondType.SelectEntryPos(9);
                 break;
             case SC_COND_DIRECT:
+                assert(false);
                 //maLbType.SelectEntryPos(2);
                 break;
             case SC_COND_NONE:
