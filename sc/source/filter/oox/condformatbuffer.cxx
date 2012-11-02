@@ -755,8 +755,10 @@ void CondFormatRule::finalizeImport()
             }
         break;
         case XML_aboveAverage:
-            if( maModel.mnStdDev == 0 )
-                aReplaceFormula = "#B#CAVERAGE(#R)";
+            if(maModel.mbAboveAverage)
+                eOperator = SC_COND_ABOVE_AVERAGE;
+            else
+                eOperator = SC_COND_BELOW_AVERAGE;
         break;
         case XML_colorScale:
         break;
@@ -837,14 +839,25 @@ void CondFormatRule::finalizeImport()
                                             &aTokenArray, pTokenArray2.get(), &rDoc, aPos, aStyleName);
         mpFormat->AddEntry(pNewEntry);
     }
-    else if ( eOperator == SC_COND_TOP10 || SC_COND_BOTTOM10 ||
-            SC_COND_TOP_PERCENT || SC_COND_BOTTOM_PERCENT )
+    else if ( eOperator == SC_COND_TOP10 || eOperator == SC_COND_BOTTOM10 ||
+            eOperator == SC_COND_TOP_PERCENT || eOperator == SC_COND_BOTTOM_PERCENT )
     {
         ScDocument& rDoc = getScDocument();
         ScTokenArray aTokenArray;
         aTokenArray.AddDouble( maModel.mnRank );
         OUString aStyleName = getStyles().createDxfStyle( maModel.mnDxfId );
         ScCondFormatEntry* pNewEntry = new ScCondFormatEntry( eOperator, &aTokenArray, NULL, &rDoc, aPos, aStyleName );
+        mpFormat->AddEntry(pNewEntry);
+    }
+    else if( eOperator == SC_COND_ABOVE_AVERAGE || eOperator == SC_COND_BELOW_AVERAGE )
+    {
+        ScDocument& rDoc = getScDocument();
+        ScTokenArray aTokenArrayEqual;
+        aTokenArrayEqual.AddDouble( maModel.mbEqualAverage );
+        ScTokenArray aTokenArrayDev;
+        aTokenArrayDev.AddDouble( maModel.mnStdDev );
+        OUString aStyleName = getStyles().createDxfStyle( maModel.mnDxfId );
+        ScCondFormatEntry* pNewEntry = new ScCondFormatEntry( eOperator, &aTokenArrayEqual, &aTokenArrayDev, &rDoc, aPos, aStyleName );
         mpFormat->AddEntry(pNewEntry);
     }
     else if( mpColor )
