@@ -1481,7 +1481,6 @@ void ScColumn::MoveTo(SCROW nStartRow, SCROW nEndRow, ScColumn& rCol)
         return;
 
     ::std::vector<SCROW> aRows;
-    bool bConsecutive = true;
     SCSIZE i;
     Search( nStartRow, i);  // i points to start row or position thereafter
     SCSIZE nStartPos = i;
@@ -1498,9 +1497,6 @@ void ScColumn::MoveTo(SCROW nStartRow, SCROW nEndRow, ScColumn& rCol)
         typedef ::std::pair<SCSIZE,SCSIZE> PosPair;
         typedef ::std::vector<PosPair> EntryPosPairs;
         EntryPosPairs aEntries;
-        if (bConsecutive)
-            aEntries.push_back( PosPair(nStartPos, nStopPos));
-        else
         {
             bool bFirst = true;
             nStopPos = 0;
