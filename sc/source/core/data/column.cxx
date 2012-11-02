@@ -1555,7 +1555,7 @@ void ScColumn::MoveTo(SCROW nStartRow, SCROW nEndRow, ScColumn& rCol)
                     rAddress.SetRow( maItems[i].nRow );
                     pDocument->AreaBroadcast( aHint );
                 }
-                maItems.erase(maItems.begin() + nStartPos, maItems.begin() + nStopPos - 1);
+                maItems.erase(maItems.begin() + nStartPos, maItems.begin() + nStopPos);
             }
             pNoteCell->Delete();
         }
