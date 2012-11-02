@@ -54,6 +54,7 @@ export STAR_RESOURCEPATH=$thisdir/resource
 export SAL_DISABLE_FLOATGRAB=1
 export G_SLICE=always-malloc
 export MALLOC_CHECK_=2
+export MALLOC_PERTURB_=153
 export OOO_DISABLE_RECOVERY=1
 export SAL_ALLOW_LINKOO_SYMLINKS=1
 ';
