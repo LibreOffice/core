@@ -600,9 +600,15 @@
 #define STR_COND_NOTBETWEEN         475
 #define STR_COND_UNIQUE             476
 #define STR_COND_DUPLICATE          477
+#define STR_COND_TOP10              478
+#define STR_COND_BOTTOM10           479
+#define STR_COND_TOP_PERCENT        480
+#define STR_COND_BOTTOM_PERCENT     481
+#define STR_COND_ABOVE_AVERAGE      482
+#define STR_COND_BELOW_AVERAGE      483
 
-#define STR_ERR_CONDFORMAT_PROTECTED 478
+#define STR_ERR_CONDFORMAT_PROTECTED 484
 
-#define STR_COUNT                   479
+#define STR_COUNT                   485
 
 #endif

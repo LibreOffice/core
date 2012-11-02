@@ -1899,6 +1899,30 @@ Resource RID_GLOBSTR
     {
         Text [ en-US ] = "Formula is";
     };
+    String STR_COND_TOP10
+    {
+        Text [ en-US ] = "Top Elements";
+    };
+    String STR_COND_BOTTOM10
+    {
+        Text [ en-US ] = "Bottom Elements";
+    };
+    String STR_COND_TOP_PERCENT
+    {
+        Text [ en-US ] = "Top Percent";
+    };
+    String STR_COND_BOTTOM_PERCENT
+    {
+        Text [ en-US ] = "Bottom Percent";
+    };
+    String STR_COND_ABOVE_AVERAGE
+    {
+        Text [ en-US ] = "Above Average";
+    };
+    String STR_COND_BELOW_AVERAGE
+    {
+        Text [ en-US ] = "Below Average";
+    };
     String STR_ERR_CONDFORMAT_PROTECTED
     {
         Text [ en-US ] = "Conditional Formats can not be created, deleted or changed in protected sheets!";

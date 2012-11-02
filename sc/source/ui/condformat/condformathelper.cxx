@@ -58,6 +58,20 @@ rtl::OUString getExpression(sal_Int32 nIndex)
             return ScGlobal::GetRscString(STR_COND_DUPLICATE);
         case 9:
             return ScGlobal::GetRscString(STR_COND_UNIQUE);
+        case 10:
+            assert(false);
+        case 11:
+            return ScGlobal::GetRscString(STR_COND_TOP10);
+        case 12:
+            return ScGlobal::GetRscString(STR_COND_BOTTOM10);
+        case 13:
+            return ScGlobal::GetRscString(STR_COND_TOP_PERCENT);
+        case 14:
+            return ScGlobal::GetRscString(STR_COND_BOTTOM_PERCENT);
+        case 15:
+            return ScGlobal::GetRscString(STR_COND_ABOVE_AVERAGE);
+        case 16:
+            return ScGlobal::GetRscString(STR_COND_BELOW_AVERAGE);
     }
     return rtl::OUString();
 }
