@@ -382,7 +382,7 @@ void SwUndoTransliterate::RepeatImpl(::sw::RepeatContext & rContext)
 
 void SwUndoTransliterate::DoTransliterate(SwDoc & rDoc, SwPaM & rPam)
 {
-    utl::TransliterationWrapper aTrans( ::comphelper::getProcessServiceFactory(), nType );
+    utl::TransliterationWrapper aTrans( ::comphelper::getProcessComponentContext(), nType );
     rDoc.TransliterateText( rPam, aTrans );
 }
 

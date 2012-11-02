@@ -27,6 +27,7 @@
  ************************************************************************/
 
 
+#include "comphelper/processfactory.hxx"
 #include "unotools/localedatawrapper.hxx"
 #include "unotools/transliterationwrapper.hxx"
 
@@ -72,7 +73,7 @@ utl::TransliterationWrapper& vcl::I18nHelper::ImplGetTransliterationWrapper() co
         if ( mbTransliterateIgnoreCase )
             nModules |= i18n::TransliterationModules_IGNORE_CASE;
 
-        ((vcl::I18nHelper*)this)->mpTransliterationWrapper = new utl::TransliterationWrapper( mxMSF, (i18n::TransliterationModules)nModules );
+        ((vcl::I18nHelper*)this)->mpTransliterationWrapper = new utl::TransliterationWrapper( comphelper::getComponentContext(mxMSF), (i18n::TransliterationModules)nModules );
         ((vcl::I18nHelper*)this)->mpTransliterationWrapper->loadModuleIfNeeded( MsLangId::convertLocaleToLanguage( maLocale ) );
     }
     return *mpTransliterationWrapper;

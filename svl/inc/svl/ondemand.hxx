@@ -32,6 +32,15 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
+namespace comphelper {
+
+    com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >
+    getComponentContext(
+        com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >
+            const & factory);
+
+}
+
 /*
     On demand instanciation and initialization of several i18n wrappers,
     helping the number formatter to not perform worse than it already does.
@@ -300,7 +309,7 @@ public:
                                         if ( !bValid )
                                         {
                                             if ( !pPtr )
-                                                pPtr = new ::utl::TransliterationWrapper( xSMgr, nType );
+                                                pPtr = new ::utl::TransliterationWrapper( comphelper::getComponentContext(xSMgr), nType );
                                             pPtr->loadModuleIfNeeded( eLanguage );
                                             bValid = true;
                                         }
@@ -310,7 +319,7 @@ public:
     const   ::utl::TransliterationWrapper*  getForModule( const String& rModule, LanguageType eLang ) const
                                     {
                                         if ( !pPtr )
-                                            pPtr = new ::utl::TransliterationWrapper( xSMgr, nType );
+                                            pPtr = new ::utl::TransliterationWrapper( comphelper::getComponentContext(xSMgr), nType );
                                         pPtr->loadModuleByImplName( rModule, eLang );
                                         bValid = false; // reforce settings change in get()
                                         return pPtr;

@@ -1512,7 +1512,7 @@ void ScDocument::TransliterateText( const ScMarkData& rMultiMark, sal_Int32 nTyp
 {
     OSL_ENSURE( rMultiMark.IsMultiMarked(), "TransliterateText: no selection" );
 
-    utl::TransliterationWrapper aTranslitarationWrapper( xServiceManager, nType );
+    utl::TransliterationWrapper aTranslitarationWrapper( comphelper::getComponentContext(xServiceManager), nType );
     bool bConsiderLanguage = aTranslitarationWrapper.needLanguageForTheMode();
     sal_uInt16 nLanguage = LANGUAGE_SYSTEM;
 

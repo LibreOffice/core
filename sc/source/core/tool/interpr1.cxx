@@ -3248,7 +3248,7 @@ void ScInterpreter::ScChar()
 static ::rtl::OUString lcl_convertIntoHalfWidth( const ::rtl::OUString & rStr )
 {
     static bool bFirstASCCall = true;
-    static utl::TransliterationWrapper aTrans( ::comphelper::getProcessServiceFactory(), 0 );
+    static utl::TransliterationWrapper aTrans( ::comphelper::getProcessComponentContext(), 0 );
 
     if( bFirstASCCall )
     {
@@ -3263,7 +3263,7 @@ static ::rtl::OUString lcl_convertIntoHalfWidth( const ::rtl::OUString & rStr )
 static ::rtl::OUString lcl_convertIntoFullWidth( const ::rtl::OUString & rStr )
 {
     static bool bFirstJISCall = true;
-    static utl::TransliterationWrapper aTrans( ::comphelper::getProcessServiceFactory(), 0 );
+    static utl::TransliterationWrapper aTrans( ::comphelper::getProcessComponentContext(), 0 );
 
     if( bFirstJISCall )
     {

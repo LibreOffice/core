@@ -196,7 +196,7 @@ static LocaleDataWrapper& GetLocaleDataWrapper( sal_uInt16 nLang )
 static TransliterationWrapper& GetIgnoreTranslWrapper()
 {
     static int bIsInit = 0;
-    static TransliterationWrapper aWrp( GetProcessFact(),
+    static TransliterationWrapper aWrp( ::comphelper::getProcessComponentContext(),
                 ::com::sun::star::i18n::TransliterationModules_IGNORE_KANA |
                 ::com::sun::star::i18n::TransliterationModules_IGNORE_WIDTH );
     if( !bIsInit )

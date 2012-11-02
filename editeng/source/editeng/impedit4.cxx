@@ -2704,7 +2704,7 @@ EditSelection ImpEditEngine::TransliterateText( const EditSelection& rSelection,
     sal_Bool bLenChanged = sal_False;
     EditUndoTransliteration* pUndo = NULL;
 
-    utl::TransliterationWrapper aTranslitarationWrapper( ::comphelper::getProcessServiceFactory(), nTransliterationMode );
+    utl::TransliterationWrapper aTranslitarationWrapper( ::comphelper::getProcessComponentContext(), nTransliterationMode );
     sal_Bool bConsiderLanguage = aTranslitarationWrapper.needLanguageForTheMode();
 
     for ( sal_uInt16 nNode = nStartNode; nNode <= nEndNode; nNode++ )

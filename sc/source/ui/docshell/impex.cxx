@@ -1293,7 +1293,7 @@ bool ScImportExport::ExtText2Doc( SvStream& rStrm )
 
     // For date recognition
     ::utl::TransliterationWrapper aTransliteration(
-        pDoc->GetServiceManager(), SC_TRANSLITERATION_IGNORECASE );
+        comphelper::getComponentContext(pDoc->GetServiceManager()), SC_TRANSLITERATION_IGNORECASE );
     aTransliteration.loadModuleIfNeeded( eDocLang );
     CalendarWrapper aCalendar( comphelper::getComponentContext(pDoc->GetServiceManager()) );
     aCalendar.loadDefaultCalendar(
@@ -1303,7 +1303,7 @@ bool ScImportExport::ExtText2Doc( SvStream& rStrm )
     if ( eDocLang != LANGUAGE_ENGLISH_US )
     {
         pEnglishTransliteration = new ::utl::TransliterationWrapper (
-            pDoc->GetServiceManager(), SC_TRANSLITERATION_IGNORECASE );
+            comphelper::getComponentContext(pDoc->GetServiceManager()), SC_TRANSLITERATION_IGNORECASE );
         aTransliteration.loadModuleIfNeeded( LANGUAGE_ENGLISH_US );
         pEnglishCalendar = new CalendarWrapper ( comphelper::getComponentContext(pDoc->GetServiceManager()) );
         pEnglishCalendar->loadDefaultCalendar(

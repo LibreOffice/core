@@ -40,6 +40,7 @@
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <com/sun/star/i18n/CharacterIteratorMode.hpp>
 #include <com/sun/star/i18n/KCharacterType.hpp>
+#include <com/sun/star/i18n/Transliteration.hpp>
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/weak.hxx>
@@ -112,19 +113,12 @@ void TextSearch::setOptions( const SearchOptions& rOptions ) throw( RuntimeExcep
     {
         if( !xTranslit.is() )
         {
-            Reference < XInterface > xI = xMSF->createInstance(
-                    OUString(
-                        "com.sun.star.i18n.Transliteration"));
-            if ( xI.is() )
-                xI->queryInterface( ::getCppuType(
-                            (const Reference< XExtendedTransliteration >*)0))
-                    >>= xTranslit;
+            xTranslit.set( Transliteration::create( comphelper::getComponentContext(xMSF) ) );
         }
         // Load transliteration module
-        if( xTranslit.is() )
-            xTranslit->loadModule(
-                    (TransliterationModules)( aSrchPara.transliterateFlags & SIMPLE_TRANS_MASK ),
-                    aSrchPara.Locale);
+        xTranslit->loadModule(
+                (TransliterationModules)( aSrchPara.transliterateFlags & SIMPLE_TRANS_MASK ),
+                aSrchPara.Locale);
     }
     else if( xTranslit.is() )
         xTranslit = 0;
@@ -134,19 +128,12 @@ void TextSearch::setOptions( const SearchOptions& rOptions ) throw( RuntimeExcep
     {
         if( !xTranslit2.is() )
         {
-            Reference < XInterface > xI = xMSF->createInstance(
-                    OUString(
-                        "com.sun.star.i18n.Transliteration"));
-            if ( xI.is() )
-                xI->queryInterface( ::getCppuType(
-                            (const Reference< XExtendedTransliteration >*)0))
-                    >>= xTranslit2;
+            xTranslit2.set( Transliteration::create(  comphelper::getComponentContext(xMSF) ) );
         }
         // Load transliteration module
-        if( xTranslit2.is() )
-            xTranslit2->loadModule(
-                    (TransliterationModules)( aSrchPara.transliterateFlags & COMPLEX_TRANS_MASK ),
-                    aSrchPara.Locale);
+        xTranslit2->loadModule(
+                (TransliterationModules)( aSrchPara.transliterateFlags & COMPLEX_TRANS_MASK ),
+                aSrchPara.Locale);
     }
 
     if ( !xBreak.is() )

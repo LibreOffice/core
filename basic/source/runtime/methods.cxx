@@ -1626,9 +1626,9 @@ RTLFUNC(StrComp)
         ::utl::TransliterationWrapper* pTransliterationWrapper = GetSbData()->pTransliterationWrapper;
         if( !pTransliterationWrapper )
         {
-            uno::Reference< lang::XMultiServiceFactory > xSMgr = getProcessServiceFactory();
+            uno::Reference< uno::XComponentContext > xContext = getProcessComponentContext();
             pTransliterationWrapper = GetSbData()->pTransliterationWrapper =
-                new ::utl::TransliterationWrapper( xSMgr,
+                new ::utl::TransliterationWrapper( xContext,
                     i18n::TransliterationModules_IGNORE_CASE |
                     i18n::TransliterationModules_IGNORE_KANA |
                     i18n::TransliterationModules_IGNORE_WIDTH );
@@ -4082,8 +4082,8 @@ RTLFUNC(StrConv)
     String aNewStr( aOldStr );
     if( nType != 0 )
     {
-        uno::Reference< lang::XMultiServiceFactory > xSMgr = getProcessServiceFactory();
-        ::utl::TransliterationWrapper aTransliterationWrapper( xSMgr,nType );
+        uno::Reference< uno::XComponentContext > xContext = getProcessComponentContext();
+        ::utl::TransliterationWrapper aTransliterationWrapper( xContext, nType );
         uno::Sequence<sal_Int32> aOffsets;
         aTransliterationWrapper.loadModuleIfNeeded( nLanguage );
         aNewStr = aTransliterationWrapper.transliterate( aOldStr, nLanguage, 0, nOldLen, &aOffsets );
