@@ -143,6 +143,42 @@ STD_FONT_FILE( gid_File_Fnt_LinuxBiolinumG_Bold, LinBiolinum_RB_G.ttf, Linux Bio
 STD_FONT_FILE( gid_File_Fnt_LinuxBiolinumG_Italic, LinBiolinum_RI_G.ttf, Linux Biolinum G Italic)
 #endif
 
+// PT Serif fonts
+
+#ifndef WITHOUT_FONTS
+STD_FONT_FILE( gid_File_Fnt_PtSerif_Regular, PT_Serif-Web-Regular.ttf, PT Serif Regular)
+STD_FONT_FILE( gid_File_Fnt_PtSerif_Bold, PT_Serif-Web-Bold.ttf, PT Serif Bold)
+STD_FONT_FILE( gid_File_Fnt_PtSerif_Italic, PT_Serif-Web-Italic.ttf, PT Serif Italic)
+STD_FONT_FILE( gid_File_Fnt_PtSerif_BoldItalic, PT_Serif-Web-BoldItalic.ttf, PT Serif Bold Italic)
+#endif
+
+// Open Sans fonts
+
+#ifndef WITHOUT_FONTS
+STD_FONT_FILE( gid_File_Fnt_OpenSans_Regular, OpenSans-Regular.ttf, Open Sans Regular)
+STD_FONT_FILE( gid_File_Fnt_OpenSans_Bold, OpenSans-Bold.ttf, Open Sans Bold)
+STD_FONT_FILE( gid_File_Fnt_OpenSans_Italic, OpenSans-Italic.ttf, Open Sans Italic)
+STD_FONT_FILE( gid_File_Fnt_OpenSans_BoldItalic, OpenSans-BoldItalic.ttf, Open Sans Bold Italic)
+#endif
+
+
+// Source Sans Pro fonts
+
+#ifndef WITHOUT_FONTS
+STD_FONT_FILE( gid_File_Fnt_SourceSans_Regular, SourceSansPro-Regular.ttf, Source Sans Pro Regular)
+STD_FONT_FILE( gid_File_Fnt_SourceSans_Bold, SourceSansPro-Bold.ttf, Source Sans Pro Bold)
+STD_FONT_FILE( gid_File_Fnt_SourceSans_Italic, SourceSansPro-Italic.ttf, Source Sans Pro Italic)
+STD_FONT_FILE( gid_File_Fnt_SourceSans_BoldItalic, SourceSansPro-BoldItalic.ttf, Source Sans Pro Bold Italic)
+#endif
+
+
+// Source Code Pro fonts
+
+#ifndef WITHOUT_FONTS
+STD_FONT_FILE( gid_File_Fnt_SourceCode_Regular, SourceCodePro-Regular.ttf, Source Code Pro Regular)
+STD_FONT_FILE( gid_File_Fnt_SourceCode_Bold, SourceCodePro-Bold.ttf, Source Code Pro Bold)
+#endif
+
 // fontconfig updates to allow proper use of local fonts
 
 #ifdef UNX
