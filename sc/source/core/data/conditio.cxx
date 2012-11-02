@@ -768,10 +768,11 @@ static bool lcl_GetCellContent( ScBaseCell* pCell, bool bIsStr1, double& rArg, r
     return bVal;
 }
 
-void ScConditionEntry::FillCache( const ScRangeList& rRanges ) const
+void ScConditionEntry::FillCache() const
 {
     if(!mpCache)
     {
+        const ScRangeList& rRanges = pCondFormat->GetRange();
         mpCache.reset(new ScConditionEntryCache);
         size_t nListCount = rRanges.size();
         for( size_t i = 0; i < nListCount; i++ )
@@ -822,9 +823,9 @@ void ScConditionEntry::FillCache( const ScRangeList& rRanges ) const
     }
 }
 
-bool ScConditionEntry::IsDuplicate( double nArg, const rtl::OUString& rStr, const ScRangeList& rRanges ) const
+bool ScConditionEntry::IsDuplicate( double nArg, const rtl::OUString& rStr ) const
 {
-    FillCache( rRanges );
+    FillCache();
 
     if(rStr.isEmpty())
     {
@@ -854,9 +855,9 @@ bool ScConditionEntry::IsDuplicate( double nArg, const rtl::OUString& rStr, cons
     }
 }
 
-bool ScConditionEntry::IsTopNElement( double nArg, const ScRangeList& rRanges ) const
+bool ScConditionEntry::IsTopNElement( double nArg ) const
 {
-    FillCache( rRanges );
+    FillCache();
 
     if(mpCache->nValueItems <= nVal1)
         return true;
@@ -875,9 +876,9 @@ bool ScConditionEntry::IsTopNElement( double nArg, const ScRangeList& rRanges ) 
     return true;
 }
 
-bool ScConditionEntry::IsBottomNElement( double nArg, const ScRangeList& rRanges ) const
+bool ScConditionEntry::IsBottomNElement( double nArg ) const
 {
-    FillCache( rRanges );
+    FillCache();
 
     if(mpCache->nValueItems <= nVal1)
         return true;
@@ -896,9 +897,9 @@ bool ScConditionEntry::IsBottomNElement( double nArg, const ScRangeList& rRanges
     return true;
 }
 
-bool ScConditionEntry::IsTopNPercent( double nArg, const ScRangeList& rRanges ) const
+bool ScConditionEntry::IsTopNPercent( double nArg ) const
 {
-    FillCache( rRanges );
+    FillCache();
 
     size_t nCells = 0;
     size_t nLimitCells = static_cast<size_t>(mpCache->nValueItems*nVal1/100);
@@ -915,9 +916,9 @@ bool ScConditionEntry::IsTopNPercent( double nArg, const ScRangeList& rRanges ) 
     return true;
 }
 
-bool ScConditionEntry::IsBottomNPercent( double nArg, const ScRangeList& rRanges ) const
+bool ScConditionEntry::IsBottomNPercent( double nArg ) const
 {
-    FillCache( rRanges );
+    FillCache();
 
     size_t nCells = 0;
     size_t nLimitCells = static_cast<size_t>(mpCache->nValueItems*nVal1/100);
@@ -934,9 +935,9 @@ bool ScConditionEntry::IsBottomNPercent( double nArg, const ScRangeList& rRanges
     return true;
 }
 
-bool ScConditionEntry::IsBelowAverage( double nArg, const ScRangeList& rRanges ) const
+bool ScConditionEntry::IsBelowAverage( double nArg ) const
 {
-    FillCache( rRanges );
+    FillCache();
 
     double nSum = 0;
     for(ScConditionEntryCache::ValueCacheType::const_iterator itr = mpCache->maValues.begin(),
@@ -951,9 +952,9 @@ bool ScConditionEntry::IsBelowAverage( double nArg, const ScRangeList& rRanges )
         return (nArg < nSum/mpCache->nValueItems);
 }
 
-bool ScConditionEntry::IsAboveAverage( double nArg, const ScRangeList& rRanges ) const
+bool ScConditionEntry::IsAboveAverage( double nArg ) const
 {
-    FillCache( rRanges );
+    FillCache();
 
     double nSum = 0;
     for(ScConditionEntryCache::ValueCacheType::const_iterator itr = mpCache->maValues.begin(),
@@ -1030,8 +1031,7 @@ bool ScConditionEntry::IsValid( double nArg ) const
         case SC_COND_NOTDUPLICATE:
             if( pCondFormat )
             {
-                const ScRangeList& aRanges = pCondFormat->GetRange();
-                bValid = IsDuplicate( nArg, rtl::OUString(), aRanges );
+                bValid = IsDuplicate( nArg, rtl::OUString() );
                 if( eOp == SC_COND_NOTDUPLICATE )
                     bValid = !bValid;
             }
@@ -1040,22 +1040,22 @@ bool ScConditionEntry::IsValid( double nArg ) const
             bValid = !::rtl::math::approxEqual( nComp1, 0.0 );
             break;
         case SC_COND_TOP10:
-            bValid = IsTopNElement( nArg, pCondFormat->GetRange() );
+            bValid = IsTopNElement( nArg );
             break;
         case SC_COND_BOTTOM10:
-            bValid = IsBottomNElement( nArg, pCondFormat->GetRange() );
+            bValid = IsBottomNElement( nArg );
             break;
         case SC_COND_TOP_PERCENT:
-            bValid = IsTopNPercent( nArg, pCondFormat->GetRange() );
+            bValid = IsTopNPercent( nArg );
             break;
         case SC_COND_BOTTOM_PERCENT:
-            bValid = IsBottomNPercent( nArg, pCondFormat->GetRange() );
+            bValid = IsBottomNPercent( nArg );
             break;
         case SC_COND_ABOVE_AVERAGE:
-            bValid = IsAboveAverage( nArg, pCondFormat->GetRange() );
+            bValid = IsAboveAverage( nArg );
             break;
         case SC_COND_BELOW_AVERAGE:
-            bValid = IsBelowAverage( nArg, pCondFormat->GetRange() );
+            bValid = IsBelowAverage( nArg );
             break;
         default:
             OSL_FAIL("unbekannte Operation bei ScConditionEntry");
@@ -1076,8 +1076,7 @@ bool ScConditionEntry::IsValidStr( const String& rArg ) const
     {
         if( pCondFormat && rArg.Len() )
         {
-            const ScRangeList& aRanges = pCondFormat->GetRange();
-            bValid = IsDuplicate( 0.0, rArg, aRanges );
+            bValid = IsDuplicate( 0.0, rArg );
             if( eOp == SC_COND_NOTDUPLICATE )
                 bValid = !bValid;
             return bValid;

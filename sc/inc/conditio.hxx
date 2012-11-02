@@ -254,15 +254,15 @@ protected:
 
 private:
 
-    bool IsDuplicate(double nArg, const rtl::OUString& rStr, const ScRangeList& rRanges) const;
-    bool IsTopNElement( double nArg, const ScRangeList& rRanges ) const;
-    bool IsTopNPercent( double nArg, const ScRangeList& rRanges ) const;
-    bool IsBottomNElement( double nArg, const ScRangeList& rRanges ) const;
-    bool IsBottomNPercent( double nArg, const ScRangeList& rRanges ) const;
-    bool IsAboveAverage( double nArg, const ScRangeList& rRanges ) const;
-    bool IsBelowAverage( double nArg, const ScRangeList& rRanges ) const;
+    bool IsDuplicate(double nArg, const rtl::OUString& rStr) const;
+    bool IsTopNElement( double nArg ) const;
+    bool IsTopNPercent( double nArg ) const;
+    bool IsBottomNElement( double nArg ) const;
+    bool IsBottomNPercent( double nArg ) const;
+    bool IsAboveAverage( double nArg ) const;
+    bool IsBelowAverage( double nArg ) const;
 
-    void FillCache(const ScRangeList& rRanges) const;
+    void FillCache() const;
 
     struct ScConditionEntryCache
     {
