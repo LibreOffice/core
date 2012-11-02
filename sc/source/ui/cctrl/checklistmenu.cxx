@@ -1368,6 +1368,7 @@ void ScCheckListMenuWindow::launch(const Rectangle& rRect)
     }
 
     StartPopupMode(aRect, (FLOATWIN_POPUPMODE_DOWN | FLOATWIN_POPUPMODE_GRABFOCUS));
+    cycleFocus(); // Set initial focus to the check list box.
 }
 
 void ScCheckListMenuWindow::close(bool bOK)
