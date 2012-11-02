@@ -196,6 +196,24 @@ ScConditionFrmtEntry::ScConditionFrmtEntry( Window* pParent, ScDocument* pDoc, c
                 assert(false);
                 //maLbType.SelectEntryPos(2);
                 break;
+            case SC_COND_TOP10:
+                maLbCondType.SelectEntryPos(10);
+                break;
+            case SC_COND_BOTTOM10:
+                maLbCondType.SelectEntryPos(11);
+                break;
+            case SC_COND_TOP_PERCENT:
+                maLbCondType.SelectEntryPos(12);
+                break;
+            case SC_COND_BOTTOM_PERCENT:
+                maLbCondType.SelectEntryPos(13);
+                break;
+            case SC_COND_ABOVE_AVERAGE:
+                maLbCondType.SelectEntryPos(14);
+                break;
+            case SC_COND_BELOW_AVERAGE:
+                maLbCondType.SelectEntryPos(15);
+                break;
             case SC_COND_NONE:
                 break;
         }
@@ -275,6 +293,24 @@ ScFormatEntry* ScConditionFrmtEntry::createConditionEntry() const
             break;
         case 9:
             eMode = SC_COND_NOTDUPLICATE;
+            break;
+        case 10:
+            eMode = SC_COND_TOP10;
+            break;
+        case 11:
+            eMode = SC_COND_BOTTOM10;
+            break;
+        case 12:
+            eMode = SC_COND_TOP_PERCENT;
+            break;
+        case 13:
+            eMode = SC_COND_BOTTOM_PERCENT;
+            break;
+        case 14:
+            eMode = SC_COND_ABOVE_AVERAGE;
+            break;
+        case 15:
+            eMode = SC_COND_BELOW_AVERAGE;
             break;
         default:
             assert(false); // this cannot happen
