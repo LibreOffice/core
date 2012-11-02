@@ -914,6 +914,9 @@ ScCheckListMenuWindow::ScCheckListMenuWindow(Window* pParent, ScDocument* pDoc) 
     maTabStopCtrls.push_back(&maBtnUnselectSingle);
     maTabStopCtrls.push_back(&maBtnOk);
     maTabStopCtrls.push_back(&maBtnCancel);
+
+    // Enable type-ahead search in the check list box.
+    maChecks.SetStyle(maChecks.GetStyle() | WB_QUICK_SEARCH);
 }
 
 ScCheckListMenuWindow::~ScCheckListMenuWindow()
