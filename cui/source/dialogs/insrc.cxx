@@ -21,7 +21,6 @@
 #include <svx/svxdlg.hxx>
 #include <cuires.hrc>
 #include "insrc.hxx"
-#include "insrc.hrc"
 
 bool SvxInsRowColDlg::isInsertBefore() const
 {
@@ -34,10 +33,10 @@ sal_uInt16 SvxInsRowColDlg::getInsertCount() const
 }
 
 SvxInsRowColDlg::SvxInsRowColDlg(Window* pParent, bool bCol, const rtl::OString& sHelpId )
-    : ModalDialog( pParent, "insert_row_dialog", "cui/ui/insrc.ui" ),
-    aRow(CUI_RESSTR(STR_ROW)),
-    aCol(CUI_RESSTR(STR_COL)),
-    bColumn( bCol )
+    : ModalDialog(pParent, "InsertRowColumnDialog", "cui/ui/insertrowcolumn.ui")
+    , aRow(CUI_RESSTR(RID_SVXSTR_ROW))
+    , aCol(CUI_RESSTR(RID_SVXSTR_COL))
+    , bColumn(bCol)
 {
     get(m_pCountEdit, "insert_number");
     get(m_pBeforeBtn, "insert_before");

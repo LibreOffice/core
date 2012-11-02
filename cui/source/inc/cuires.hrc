@@ -259,9 +259,6 @@
 // icon choice
 #define RID_SVXSTR_ICONCHOICEDLG_RESETBUT   (RID_SVX_START + 580)
 
-// insert rows&cols
-#define DLG_INS_ROW_COL                     (RID_SVX_START + 156)
-
 // SvxMultiFileDialog
 #define RID_SVXSTR_FILE_TITLE               (RID_SVX_START + 482)
 #define RID_SVXSTR_FILE_HEADLINE            (RID_SVX_START + 483)
@@ -429,7 +426,9 @@
 #define RID_SVXSTR_PRODMACROS                               (RID_SVX_START + 1198)
 #define RID_SVXSTR_SELECTOR_ADD_COMMANDS                    (RID_SVX_START + 1199)
 #define RID_SVXSTR_SELECTOR_RUN                             (RID_SVX_START + 1200)
+#define RID_SVXSTR_ROW                                      (RID_SVX_START + 1201)
+#define RID_SVXSTR_COL                                      (RID_SVX_START + 1202)
 
-#define RID_SVXDLG_CERTPATH                                 (RID_SVX_START + 1201)
+#define RID_SVXDLG_CERTPATH                                 (RID_SVX_START + 1203)
 
 #endif

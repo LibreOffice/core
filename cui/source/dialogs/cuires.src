@@ -31,12 +31,22 @@ String RID_SVXSTR_PRODMACROS
 
 String RID_SVXSTR_SELECTOR_ADD_COMMANDS
 {
-  TEXT [ en-US ] = "Add Commands" ;
+    TEXT [ en-US ] = "Add Commands" ;
 };
 
 String RID_SVXSTR_SELECTOR_RUN
 {
-  TEXT [ en-US ] = "Run" ;
+    TEXT [ en-US ] = "Run" ;
+};
+
+String RID_SVXSTR_ROW
+{
+    Text [ en-US ] = "Insert Rows" ;
+};
+
+String RID_SVXSTR_COL
+{
+    Text [ en-US ] = "Insert Columns" ;
 };
 
 #define MASKCOLOR  MaskColor = \
