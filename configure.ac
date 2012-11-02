@@ -9347,7 +9347,7 @@ dnl ===================================================================
 AC_PATH_PROG(ZIP, zip)
 test -z "$ZIP" && AC_MSG_ERROR([zip is required])
 if ! "$ZIP" --filesync < /dev/null 2>/dev/null > /dev/null; then
-    AC_MSG_ERROR([Zip version 3.0 or newer is required to build, please install or use --with-zip-home],,)
+    AC_MSG_ERROR([Zip version 3.0 or newer is required to build, please install it and make sure it is the one found first in PATH],,)
 fi
 
 AC_PATH_PROG(UNZIP, unzip)
