@@ -47,8 +47,6 @@ sub print_syntax()
     print " commands:\n";
     print "   --msvc-ver              - print version of MSVC eg. 6.0\n";
     print "   --msvc-copy-dlls <dest> - copy msvc[pr]??.dlls into <dest>/msvcp??/\n";
-    print "   --msvc-find-msms-vc100  - exit with 0 if Microsoft_VC100_CRT_x86.msm\n";
-    print "                             is available\n";
     print "   --msvc-copy-msms <dest> - copy mscrt merge modules to <dest>/msm90/\n";
     print "   --msvc-copy-msms-64 <ds>- copy the x64 mscrt merge modules to <ds>/msm90/\n";
     print "   --msvc-productdir       - print productdir\n";
