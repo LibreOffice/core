@@ -419,7 +419,7 @@ rtl::OUString OCommonStatement::getTableName()
     if( m_pParseTree && m_aSQLIterator.getStatementType() == SQL_STATEMENT_SELECT )
     {
         Any aCatalog;
-        ::rtl::OUString aSchema, aComposedName;
+        ::rtl::OUString aSchema;
         const OSQLParseNode *pSelectStmnt = m_aSQLIterator.getParseTree();
         const OSQLParseNode *pAllTableNames = pSelectStmnt->getChild( 3 )->getChild( 0 )->getChild( 1 );
 
