@@ -765,7 +765,21 @@ Module gid_Module_Root_Fonts_OOo_Hidden
 	gid_File_Fnt_LiberationSerif_Bold,
 	gid_File_Fnt_LiberationSerif_BoldItalic,
 	gid_File_Fnt_LiberationSerif_Italic,
-	gid_File_Fnt_LiberationSerif_Regular);
+	gid_File_Fnt_LiberationSerif_Regular
+	gid_File_Fnt_PtSerif_Regular
+	gid_File_Fnt_PtSerif_Bold
+	gid_File_Fnt_PtSerif_Italic
+	gid_File_Fnt_PtSerif_BoldItalic
+	gid_File_Fnt_OpenSans_Regular
+	gid_File_Fnt_OpenSans_Bold
+	gid_File_Fnt_OpenSans_Italic
+	gid_File_Fnt_OpenSans_BoldItalic
+	gid_File_Fnt_SourceSans_Regular
+	gid_File_Fnt_SourceSans_Bold
+	gid_File_Fnt_SourceSans_Italic
+	gid_File_Fnt_SourceSans_BoldItalic
+	gid_File_Fnt_SourceCode_Regular
+	gid_File_Fnt_SourceCode_Bold);
 End
 #endif
 
