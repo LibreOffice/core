@@ -64,8 +64,8 @@ struct SC_DLLPUBLIC ScNoteData
 
 // ============================================================================
 
-/** An additional class held by an ScBaseCell instance containing all
-    information for a cell annotation.
+/**
+ * Additional class containing cell annotation data.
  */
 class SC_DLLPUBLIC ScPostIt
 {
