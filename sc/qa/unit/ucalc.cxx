@@ -4258,7 +4258,7 @@ void Test::testPostIts()
     rAddr.IncRow(); // cell C4
     CPPUNIT_ASSERT_MESSAGE("note not there", m_pDoc->GetNotes(rAddr.Tab())->findByAddress(rAddr) == pNote);
 
-    // Insert column at column 1.
+    // Insert column at column A.
     bool bInsertCol = m_pDoc->InsertCol(0, 0, MAXROW, 0, 1, 1);
     CPPUNIT_ASSERT_MESSAGE("failed to insert column", bInsertCol );
 
@@ -4284,6 +4284,16 @@ void Test::testPostIts()
     // Delete cell at C4.  Again, this should NOT shift the note position.
     m_pDoc->DeleteRow(2, 0, 2, 0, 3, 1);
     CPPUNIT_ASSERT_MESSAGE("Note shouldn't have moved but it has.", m_pDoc->GetNotes(rAddr.Tab())->findByAddress(rAddr) == pNote);
+
+    // Now, with the note at D4, delete cell D3. This should shift the note one cell up.
+    m_pDoc->DeleteRow(3, 0, 3, 0, 2, 1);
+    rAddr.IncRow(-1); // cell D3
+    CPPUNIT_ASSERT_MESSAGE("Note at D4 should have shifted up to D3.", m_pDoc->GetNotes(rAddr.Tab())->findByAddress(rAddr) == pNote);
+
+    // Delete column C. This should shift the note one cell left.
+    m_pDoc->DeleteCol(0, 0, MAXROW, 0, 2, 1);
+    rAddr.IncCol(-1); // cell C3
+    CPPUNIT_ASSERT_MESSAGE("Note at D3 should have shifted left to C3.", m_pDoc->GetNotes(rAddr.Tab())->findByAddress(rAddr) == pNote);
 
     m_pDoc->DeleteTab(0);
 }
