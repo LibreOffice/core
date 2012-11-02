@@ -5214,11 +5214,13 @@ void Test::testShiftCells()
     m_pDoc->InsertCol(3, 0, 3, 0, 3, 1);
     OUString aStr = m_pDoc->GetString(5, 3, 0);
     CPPUNIT_ASSERT_MESSAGE("We should have a string cell here.", aStr == aTestVal);
+    CPPUNIT_ASSERT_MESSAGE("D5 is supposed to be blank.", m_pDoc->IsBlockEmpty(0, 3, 4, 3, 4));
 
     // Delete cell D5, to shift the text cell back into D5.
     m_pDoc->DeleteCol(3, 0, 3, 0, 3, 1);
     aStr = m_pDoc->GetString(4, 3, 0);
     CPPUNIT_ASSERT_MESSAGE("We should have a string cell here.", aStr == aTestVal);
+    CPPUNIT_ASSERT_MESSAGE("E5 is supposed to be blank.", m_pDoc->IsBlockEmpty(0, 4, 4, 4, 4));
 
     m_pDoc->DeleteTab(0);
 }
