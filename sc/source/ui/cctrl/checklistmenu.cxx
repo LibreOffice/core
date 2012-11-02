@@ -1354,7 +1354,17 @@ void ScCheckListMenuWindow::launch(const Rectangle& rRect)
         // We need to have at least one member selected.
         maBtnOk.Enable(maChecks.GetCheckedEntryCount() != 0);
 
-    StartPopupMode(rRect, (FLOATWIN_POPUPMODE_DOWN | FLOATWIN_POPUPMODE_GRABFOCUS));
+    Rectangle aRect(rRect);
+    if (maWndSize.Width() < aRect.GetWidth())
+    {
+        // Target rectangle (i.e. cell width) is wider than the window.
+        // Simulate right-aligned launch by modifying the target rectangle
+        // size.
+        long nDiff = aRect.GetWidth() - maWndSize.Width();
+        aRect.Left() += nDiff;
+    }
+
+    StartPopupMode(aRect, (FLOATWIN_POPUPMODE_DOWN | FLOATWIN_POPUPMODE_GRABFOCUS));
 }
 
 void ScCheckListMenuWindow::close(bool bOK)
