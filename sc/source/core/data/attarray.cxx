@@ -2231,8 +2231,8 @@ void ScAttrArray::MoveTo(SCROW nStartRow, SCROW nEndRow, ScAttrArray& rAttrArray
 
 // copy between documents (Clipboard)
 
-void ScAttrArray::CopyArea( SCROW nStartRow, SCROW nEndRow, long nDy, ScAttrArray& rAttrArray,
-                                sal_Int16 nStripFlags )
+void ScAttrArray::CopyArea(
+    SCROW nStartRow, SCROW nEndRow, long nDy, ScAttrArray& rAttrArray, sal_Int16 nStripFlags) const
 {
     nStartRow -= nDy;   // Source
     nEndRow -= nDy;

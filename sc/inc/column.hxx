@@ -176,7 +176,7 @@ public:
     void        DeleteRow( SCROW nStartRow, SCSIZE nSize );
     void        DeleteRange( SCSIZE nStartIndex, SCSIZE nEndIndex, sal_uInt16 nDelFlag );
     void        DeleteArea(SCROW nStartRow, SCROW nEndRow, sal_uInt16 nDelFlag );
-    void        CopyToClip(SCROW nRow1, SCROW nRow2, ScColumn& rColumn, bool bKeepScenarioFlags);
+    void CopyToClip(SCROW nRow1, SCROW nRow2, ScColumn& rColumn, bool bKeepScenarioFlags) const;
     void        CopyFromClip(SCROW nRow1, SCROW nRow2, long nDy,
                                 sal_uInt16 nInsFlag, bool bAsLink, bool bSkipAttrForEmpty, ScColumn& rColumn);
     void        StartListeningInArea( SCROW nRow1, SCROW nRow2 );
@@ -207,9 +207,10 @@ public:
                                     ScFlatBoolRowSegments& rHiddenRows,
                                     SCROW nStartRow, SCROW nEndRow );
 
-    void        CopyToColumn(SCROW nRow1, SCROW nRow2, sal_uInt16 nFlags, bool bMarked,
-                                ScColumn& rColumn, const ScMarkData* pMarkData = NULL,
-                                bool bAsLink = false );
+    void CopyToColumn(
+        SCROW nRow1, SCROW nRow2, sal_uInt16 nFlags, bool bMarked,
+        ScColumn& rColumn, const ScMarkData* pMarkData = NULL, bool bAsLink = false) const;
+
     void        UndoToColumn(SCROW nRow1, SCROW nRow2, sal_uInt16 nFlags, bool bMarked,
                                 ScColumn& rColumn, const ScMarkData* pMarkData = NULL );
 
@@ -379,7 +380,7 @@ public:
                                        SCROW nRowStart, SCROW nRowEnd ) const;
 
 private:
-    ScBaseCell* CloneCell(SCSIZE nIndex, sal_uInt16 nFlags, ScDocument& rDestDoc, const ScAddress& rDestPos);
+    ScBaseCell* CloneCell(SCSIZE nIndex, sal_uInt16 nFlags, ScDocument& rDestDoc, const ScAddress& rDestPos) const;
 
     SCROW FindNextVisibleRowWithContent(SCROW nRow, bool bForward) const;
     SCROW FindNextVisibleRow(SCROW nRow, bool bForward) const;

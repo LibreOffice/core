@@ -767,7 +767,8 @@ bool lclCanCloneValue( ScDocument& rDoc, const ScColumn& rCol, SCROW nRow, bool 
 } // namespace
 
 
-ScBaseCell* ScColumn::CloneCell(SCSIZE nIndex, sal_uInt16 nFlags, ScDocument& rDestDoc, const ScAddress& rDestPos)
+ScBaseCell* ScColumn::CloneCell(
+    SCSIZE nIndex, sal_uInt16 nFlags, ScDocument& rDestDoc, const ScAddress& rDestPos) const
 {
     bool bCloneValue    = (nFlags & IDF_VALUE) != 0;
     bool bCloneDateTime = (nFlags & IDF_DATETIME) != 0;

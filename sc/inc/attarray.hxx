@@ -188,8 +188,8 @@ public:
     void    DeleteRange( SCSIZE nStartIndex, SCSIZE nEndIndex );
     void    DeleteArea( SCROW nStartRow, SCROW nEndRow );
     void    MoveTo( SCROW nStartRow, SCROW nEndRow, ScAttrArray& rAttrArray );
-    void    CopyArea( SCROW nStartRow, SCROW nEndRow, long nDy, ScAttrArray& rAttrArray,
-                        sal_Int16 nStripFlags = 0 );
+    void    CopyArea(
+        SCROW nStartRow, SCROW nEndRow, long nDy, ScAttrArray& rAttrArray, sal_Int16 nStripFlags = 0) const;
 
     void    DeleteHardAttr( SCROW nStartRow, SCROW nEndRow );
 };
