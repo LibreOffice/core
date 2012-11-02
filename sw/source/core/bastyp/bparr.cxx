@@ -128,11 +128,8 @@ void BigPtrArray::ForEach( sal_uLong nStart, sal_uLong nEnd,
 ElementPtr BigPtrArray::operator[]( sal_uLong idx ) const
 {
     assert(idx < nSize); // operator[]: Index out of bounds
-    // because this function is not <const>:
-    BigPtrArray* pThis = (BigPtrArray*) this;
-    sal_uInt16 cur = Index2Block( idx );
-    BlockInfo* p = ppInf[ cur ];
-    pThis->nCur = cur;
+    nCur = Index2Block( idx );
+    BlockInfo* p = ppInf[ nCur ];
     return p->pData[ idx - p->nStart ];
 }
 
@@ -337,8 +334,8 @@ void BigPtrArray::Insert( const ElementPtr& rElem, sal_uLong pos )
             ++( *--pTo = *--pFrom )->nOffset;
     }
     // insert element and update indices
-    ((ElementPtr&)rElem)->nOffset = sal_uInt16(pos);
-    ((ElementPtr&)rElem)->pBlock = p;
+    rElem->nOffset = sal_uInt16(pos);
+    rElem->pBlock = p;
     p->pData[ pos ] = rElem;
     p->nEnd++;
     p->nElem++;
@@ -437,13 +434,10 @@ void BigPtrArray::Remove( sal_uLong pos, sal_uLong n )
 void BigPtrArray::Replace( sal_uLong idx, const ElementPtr& rElem)
 {
     assert(idx < nSize); // Index out of bounds
-    // because this function ist not <const>:
-    BigPtrArray* pThis = (BigPtrArray*) this;
-    sal_uInt16 cur = Index2Block( idx );
-    BlockInfo* p = ppInf[ cur ];
-    pThis->nCur = cur;
-    ((ElementPtr&)rElem)->nOffset = sal_uInt16(idx - p->nStart);
-    ((ElementPtr&)rElem)->pBlock = p;
+    nCur = Index2Block( idx );
+    BlockInfo* p = ppInf[ nCur ];
+    rElem->nOffset = sal_uInt16(idx - p->nStart);
+    rElem->pBlock = p;
     p->pData[ idx - p->nStart ] = rElem;
 }
 
