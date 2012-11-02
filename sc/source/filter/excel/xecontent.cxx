@@ -844,6 +844,10 @@ const char* GetTypeString(ScConditionMode eMode)
         case SC_COND_ABOVE_AVERAGE:
         case SC_COND_BELOW_AVERAGE:
             return "aboveAverage";
+        case SC_COND_NOTDUPLICATE:
+            return "uniqueValues";
+        case SC_COND_DUPLICATE:
+            return "duplicateValues";
         default:
             return "cellIs";
     }
