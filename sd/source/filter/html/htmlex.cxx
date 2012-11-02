@@ -877,7 +877,6 @@ void HtmlExport::ExportWebCast()
 
     CreateFileNames();
 
-    String aEmpty;
     if(maCGIPath.Len() == 0)
         maCGIPath.Assign( sal_Unicode('.') );
 
@@ -890,7 +889,6 @@ void HtmlExport::ExportWebCast()
     }
     else
     {
-           String aEmpty2;
         if(maURLPath.Len() == 0)
             maURLPath.Assign( sal_Unicode('.') );
 
@@ -1858,9 +1856,6 @@ bool HtmlExport::CreateHtmlForPresPages()
 // =====================================================================
 bool HtmlExport::CreateContentPage()
 {
-    // Parameter
-    String aEmpty;
-
     if( mbDocColors )
         SetDocColors();
 
@@ -2287,9 +2282,8 @@ bool HtmlExport::CreateFrames()
 
     if(mbNotes)
     {
-        String aEmpty;
         String aSlash( RTL_CONSTASCII_USTRINGPARAM( "//" ) );
-        aFunction.SearchAndReplaceAll( aSlash, aEmpty);
+        aFunction.SearchAndReplaceAll(aSlash, OUString());
     }
 
     // substitute HTML file extension

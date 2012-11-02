@@ -59,6 +59,7 @@ certain functionality.
 
 @section Draw
 
+@li @c sd
 @li @c sd.fwk
 @li @c sd.sls
 @li @c sd.tools
