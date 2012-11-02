@@ -1031,9 +1031,9 @@ sal_Bool WpADOParameter::put_Size(const sal_Int32& _nSize)
     return (SUCCEEDED(pInterface->put_Size(_nSize)));
 }
 
- ::rtl::OUString WpADOColumn::get_Name() const
+::rtl::OUString WpADOColumn::get_Name() const
 {
-     OSL_ENSURE(pInterface,"Interface is null!");
+    OSL_ENSURE(pInterface,"Interface is null!");
     OLEString aBSTR;
     pInterface->get_Name(&aBSTR);
     return aBSTR;
