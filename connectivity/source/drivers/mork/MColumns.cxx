@@ -42,8 +42,12 @@ using namespace ::com::sun::star::lang;
 
 sdbcx::ObjectType OColumns::createObject(const ::rtl::OUString& _rName)
 {
-    Reference< XResultSet > xResult = m_pTable->getConnection()->getMetaData()->getColumns(Any(),
-    m_pTable->getSchema(),m_pTable->getTableName(),_rName);
+    const Any aCatalog;
+    const ::rtl::OUString sCatalogName;
+    const ::rtl::OUString sSchemaName(m_pTable->getSchema());
+    const ::rtl::OUString sTableName(m_pTable->getTableName());
+    Reference< XResultSet > xResult = m_pTable->getConnection()->getMetaData()->getColumns(
+        aCatalog, sSchemaName, sTableName, _rName);
 
     sdbcx::ObjectType xRet = NULL;
     if(xResult.is())
@@ -65,7 +69,10 @@ sdbcx::ObjectType OColumns::createObject(const ::rtl::OUString& _rName)
                                             nPrec,
                                             xRow->getInt(9),
                                             nType,
-                                            sal_False,sal_False,sal_False,sal_True);
+                                            sal_False,sal_False,sal_False,sal_True,
+                                            sCatalogName,
+                                            sSchemaName,
+                                            sTableName));
                 xRet = pRet;
                 break;
             }
