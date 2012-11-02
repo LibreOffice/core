@@ -3250,13 +3250,13 @@ void SvxCharPositionPage::FillUserData()
 {
     const sal_Unicode cTok = ';';
 
-    String sUser( UniString::CreateFromInt32( m_nSuperEsc ) );
-    sUser.Append( cTok );
-    sUser.Append( UniString::CreateFromInt32( m_nSubEsc ) );
-    sUser.Append( cTok );
-    sUser.Append( UniString::CreateFromInt32( m_nSuperProp ) );
-    sUser.Append( cTok );
-    sUser.Append( UniString::CreateFromInt32( m_nSubProp ) );
+    OUString sUser( OUString::valueOf( m_nSuperEsc ) );
+    sUser += OUString( cTok );
+    sUser += OUString::valueOf( m_nSubEsc );
+    sUser += OUString (cTok );
+    sUser += OUString::valueOf( m_nSuperProp );
+    sUser += OUString ( cTok );
+    sUser += OUString::valueOf( m_nSubProp );
     SetUserData( sUser );
 }
 
