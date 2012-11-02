@@ -24,10 +24,15 @@ $(eval $(call gb_Library_use_externals,librsvg-2-2,\
 	pixbuf \
 ))
 
-# Generate a import library
+ifeq ($(COM),MSC)
 $(eval $(call gb_Library_add_ldflags,librsvg-2-2,\
-	-EXPORT:GetVersionInfo \
+	/EXPORT:rsvg_init \
+	/EXPORT:rsvg_handle_new_from_data \
+	/EXPORT:rsvg_handle_set_dpi_x_y \
+	/EXPORT:rsvg_handle_get_dimensions \
+	/EXPORT:rsvg_handle_render_cairo \
 ))
+endif
 
 $(eval $(call gb_Library_add_defs,librsvg-2-2,\
 	-DHAVE_GSF \
