@@ -95,7 +95,7 @@ protected:
 
 public:
     TextConvWrapper( Window* pWindow,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxMSF,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
             const ::com::sun::star::lang::Locale& rSourceLocale,
             const ::com::sun::star::lang::Locale& rTargetLocale,
             const Font* pTargetFont,

@@ -1563,8 +1563,8 @@ void ImpEditEngine::Convert( EditView* pEditView,
 
     bImpConvertFirstCall = true;    // next ImpConvert call is the very first in this conversion turn
 
-    Reference< lang::XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
-    TextConvWrapper aWrp( Application::GetDefDialogParent(), xMSF,
+    TextConvWrapper aWrp( Application::GetDefDialogParent(),
+                          ::comphelper::getProcessComponentContext(),
                           SvxCreateLocale( nSrcLang ), SvxCreateLocale( nDestLang ),
                           pDestFont,
                           nOptions, bIsInteractive,

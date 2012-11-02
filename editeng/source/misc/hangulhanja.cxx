@@ -30,7 +30,7 @@
 #include <com/sun/star/i18n/BreakIterator.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <com/sun/star/i18n/UnicodeScript.hpp>
-#include <com/sun/star/i18n/XTextConversion.hpp>
+#include <com/sun/star/i18n/TextConversion.hpp>
 #include <com/sun/star/i18n/XExtendedTextConversion.hpp>
 #include <com/sun/star/i18n/TextConversionType.hpp>
 #include <com/sun/star/i18n/TextConversionOption.hpp>
@@ -70,9 +70,9 @@ namespace editeng
         AbstractHangulHanjaConversionDialog*
                                 m_pConversionDialog;    // the dialog to display for user interaction
         Window*                 m_pUIParent;            // the parent window for any UI we raise
-        Reference< XMultiServiceFactory >
-                                m_xORB;                 // the service factory to use
-        Reference< XTextConversion >
+        Reference< XComponentContext >
+                                m_xContext;             // the service factory to use
+        Reference< XExtendedTextConversion >
                                 m_xConverter;           // the text conversion service
         Locale                  m_aSourceLocale;        // the locale we're working with
 
@@ -120,7 +120,7 @@ namespace editeng
     public:
         HangulHanjaConversion_Impl(
             Window* _pUIParent,
-            const Reference< XMultiServiceFactory >& _rxORB,
+            const Reference< XComponentContext >& rxContext,
             const Locale& _rSourceLocale,
             const Locale& _rTargetLocale,
             const Font* _pTargetFont,
@@ -233,7 +233,7 @@ namespace editeng
     HangulHanjaConversion_Impl::StringMap HangulHanjaConversion_Impl::m_aRecentlyUsedList = HangulHanjaConversion_Impl::StringMap();
 
     HangulHanjaConversion_Impl::HangulHanjaConversion_Impl( Window* _pUIParent,
-        const Reference< XMultiServiceFactory >& _rxORB,
+        const Reference< XComponentContext >& rxContext,
         const Locale& _rSourceLocale,
         const Locale& _rTargetLocale,
         const Font* _pTargetFont,
@@ -242,7 +242,7 @@ namespace editeng
         HangulHanjaConversion* _pAntiImpl )
 : m_pConversionDialog( NULL )
 , m_pUIParent( _pUIParent )
-, m_xORB( _rxORB )
+, m_xContext( rxContext )
 , m_aSourceLocale( _rSourceLocale )
 , m_nSourceLang( SvxLocaleToLanguage( _rSourceLocale ) )
 , m_nTargetLang( SvxLocaleToLanguage( _rTargetLocale ) )
@@ -259,7 +259,7 @@ namespace editeng
     {
         implReadOptionsFromConfiguration();
 
-        DBG_ASSERT( m_xORB.is(), "HangulHanjaConversion_Impl::HangulHanjaConversion_Impl: no ORB!" );
+        DBG_ASSERT( m_xContext.is(), "HangulHanjaConversion_Impl::HangulHanjaConversion_Impl: no ORB!" );
 
         // determine conversion type
         if (m_nSourceLang == LANGUAGE_KOREAN && m_nTargetLang == LANGUAGE_KOREAN)
@@ -279,14 +279,7 @@ namespace editeng
         m_ePrimaryConversionDirection = HHC::eHangulToHanja;    // used for eConvHangulHanja
         m_eCurrentConversionDirection = HHC::eHangulToHanja;    // used for eConvHangulHanja
 
-        if ( m_xORB.is() )
-        {
-            ::rtl::OUString sTextConversionService( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.i18n.TextConversion" ) );
-            m_xConverter = m_xConverter.query( m_xORB->createInstance( sTextConversionService ) );
-            if ( !m_xConverter.is() )
-                ShowServiceNotAvailableError( m_pUIParent, sTextConversionService, sal_True );
-        }
-
+        m_xConverter = TextConversion::create( m_xContext );
     }
 
     void HangulHanjaConversion_Impl::createDialog()
@@ -606,7 +599,7 @@ namespace editeng
             try
             {
                 // get the break iterator service
-                Reference< XBreakIterator > xBreakIter = BreakIterator::create( comphelper::getComponentContext(m_xORB) );
+                Reference< XBreakIterator > xBreakIter = BreakIterator::create( m_xContext );
                 sal_Int32 nNextAsianScript = xBreakIter->beginOfScript( m_sCurrentPortion, m_nCurrentStartIndex, com::sun::star::i18n::ScriptType::ASIAN );
                 if ( -1 == nNextAsianScript )
                     nNextAsianScript = xBreakIter->nextScript( m_sCurrentPortion, m_nCurrentStartIndex, com::sun::star::i18n::ScriptType::ASIAN );
@@ -614,7 +607,7 @@ namespace editeng
                 {   // found asian text
 
                     // determine if it's Hangul
-                    CharClass aCharClassificaton( comphelper::getComponentContext(m_xORB), m_aSourceLocale );
+                    CharClass aCharClassificaton( m_xContext, m_aSourceLocale );
                     sal_Int16 nScript = aCharClassificaton.getScript( m_sCurrentPortion, sal::static_int_cast< sal_uInt16 >(nNextAsianScript) );
                     if  (   ( UnicodeScript_kHangulJamo == nScript )
                         ||  ( UnicodeScript_kHangulCompatibilityJamo == nScript )
@@ -980,11 +973,11 @@ namespace editeng
     HHC::ConversionDirection HangulHanjaConversion::m_ePrimaryConversionDirectionSave   = HHC::eHangulToHanja;
 
     HangulHanjaConversion::HangulHanjaConversion( Window* _pUIParent,
-        const Reference< XMultiServiceFactory >& _rxORB,
+        const Reference< XComponentContext >& rxContext,
         const Locale& _rSourceLocale, const Locale& _rTargetLocale,
         const Font* _pTargetFont,
         sal_Int32 _nOptions, sal_Bool _bIsInteractive)
-        :m_pImpl( new HangulHanjaConversion_Impl( _pUIParent, _rxORB, _rSourceLocale, _rTargetLocale, _pTargetFont, _nOptions, _bIsInteractive, this ) )
+        :m_pImpl( new HangulHanjaConversion_Impl( _pUIParent, rxContext, _rSourceLocale, _rTargetLocale, _pTargetFont, _nOptions, _bIsInteractive, this ) )
     {
     }
 

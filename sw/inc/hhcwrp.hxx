@@ -96,7 +96,7 @@ protected:
 public:
     SwHHCWrapper(
         SwView* pView,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxMSF,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
         LanguageType nSourceLanguage, LanguageType nTargetLanguage,
         const Font *pTargetFont,
         sal_Int32 nConvOptions, sal_Bool bIsInteractive,

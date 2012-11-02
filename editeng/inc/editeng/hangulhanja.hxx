@@ -110,7 +110,7 @@ namespace editeng
     public:
         HangulHanjaConversion(
             Window* _pUIParent,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
             const ::com::sun::star::lang::Locale& _rSourceLocale,
             const ::com::sun::star::lang::Locale& _rTargetLocale,
             const Font* _pTargetFont,

@@ -46,7 +46,7 @@ using namespace com::sun::star::linguistic2;
 //////////////////////////////////////////////////////////////////////
 
 TextConvWrapper::TextConvWrapper( Window* pWindow,
-        const Reference< XMultiServiceFactory >& rxMSF,
+        const Reference< XComponentContext >& rxContext,
         const Locale& rSourceLocale,
         const Locale& rTargetLocale,
         const Font* pTargetFont,
@@ -54,7 +54,7 @@ TextConvWrapper::TextConvWrapper( Window* pWindow,
         sal_Bool bIsInteractive,
         sal_Bool bIsStart,
         EditView* pView ) :
-    HangulHanjaConversion( pWindow, rxMSF, rSourceLocale, rTargetLocale, pTargetFont, nOptions, bIsInteractive )
+    HangulHanjaConversion( pWindow, rxContext, rSourceLocale, rTargetLocale, pTargetFont, nOptions, bIsInteractive )
 {
     DBG_ASSERT( pWindow, "TextConvWrapper: window missing" );
 

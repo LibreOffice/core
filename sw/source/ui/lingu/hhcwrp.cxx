@@ -99,14 +99,14 @@ public:
 
 SwHHCWrapper::SwHHCWrapper(
         SwView* pSwView,
-        const uno::Reference< lang::XMultiServiceFactory >& rxMSF,
+        const uno::Reference< uno::XComponentContext >& rxContext,
         LanguageType nSourceLanguage,
         LanguageType nTargetLanguage,
         const Font *pTargetFont,
         sal_Int32 nConvOptions,
         sal_Bool bIsInteractive,
         sal_Bool bStart, sal_Bool bOther, sal_Bool bSelection ) :
-    editeng::HangulHanjaConversion( &pSwView->GetEditWin(), rxMSF,
+    editeng::HangulHanjaConversion( &pSwView->GetEditWin(), rxContext,
                                 SvxCreateLocale( nSourceLanguage ),
                                 SvxCreateLocale( nTargetLanguage ),
                                 pTargetFont,

@@ -260,9 +260,9 @@ void SwView::StartTextConversion(
     sal_Bool    bOther = !bSelection && !(pWrtShell->GetFrmType(0,sal_True) & FRMTYPE_BODY);
 
     {
-        const uno::Reference< lang::XMultiServiceFactory > xMgr(
-                    comphelper::getProcessServiceFactory() );
-        SwHHCWrapper aWrap( this, xMgr, nSourceLang, nTargetLang, pTargetFont,
+        const uno::Reference< uno::XComponentContext > xContext(
+                    comphelper::getProcessComponentContext() );
+        SwHHCWrapper aWrap( this, xContext, nSourceLang, nTargetLang, pTargetFont,
                             nOptions, bIsInteractive,
                             bStart, bOther, bSelection );
         aWrap.Convert();

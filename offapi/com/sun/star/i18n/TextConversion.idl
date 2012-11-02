@@ -19,7 +19,7 @@
 #ifndef __com_sun_star_i18n_TextConversion_idl__
 #define __com_sun_star_i18n_TextConversion_idl__
 
-#include <com/sun/star/i18n/XTextConversion.idl>
+#include <com/sun/star/i18n/XExtendedTextConversion.idl>
 
 
 module com { module sun { module star { module i18n {
@@ -30,13 +30,7 @@ module com { module sun { module star { module i18n {
 
      @since OOo 1.1.2
 */
-published service TextConversion
-{
-    /** to access the text conversion functionality.
-    */
-    interface ::com::sun::star::i18n::XTextConversion;
-
-};
+published service TextConversion : XExtendedTextConversion;
 
 
 }; }; }; };
