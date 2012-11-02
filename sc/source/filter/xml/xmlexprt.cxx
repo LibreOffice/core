@@ -3910,6 +3910,8 @@ void ScXMLExport::ExportConditionalFormat(SCTAB nTab)
                                 break;
                             case SC_COND_NONE:
                                 continue;
+                            default:
+                                SAL_WARN("sc", "unimplemented conditional format export");
                         }
                         rtl::OUString sStyle = pEntry->GetStyle();
                         AddAttribute(XML_NAMESPACE_CALC_EXT, XML_APPLY_STYLE_NAME, sStyle);
