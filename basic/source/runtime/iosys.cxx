@@ -47,7 +47,6 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
 #include <com/sun/star/ucb/UniversalContentBroker.hpp>
-#include <com/sun/star/ucb/XSimpleFileAccess2.hpp>
 #include <com/sun/star/ucb/XContentProvider.hpp>
 #include <com/sun/star/ucb/XContentProviderManager.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
@@ -55,7 +54,6 @@
 #include <com/sun/star/io/XStream.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
 
-using namespace comphelper;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::ucb;
@@ -224,7 +222,7 @@ bool needSecurityRestrictions( void )
             return true;
         }
 
-        Reference< XComponentContext > xContext = getProcessComponentContext();
+        Reference< XComponentContext > xContext = comphelper::getProcessComponentContext();
         Reference< XBridgeFactory2 > xBridgeFac( BridgeFactory::create(xContext) );
 
         Sequence< Reference< XBridge > > aBridgeSeq = xBridgeFac->getExistingBridges();
@@ -279,7 +277,7 @@ bool hasUno( void )
     if( bNeedInit )
     {
         bNeedInit = false;
-        Reference< XComponentContext > xContext = getProcessComponentContext();
+        Reference< XComponentContext > xContext = comphelper::getProcessComponentContext();
         if( !xContext.is() )
         {
             // No service manager at all
@@ -571,42 +569,37 @@ SbError SbiStream::Open
 
     if( hasUno() )
     {
-        Reference< XMultiServiceFactory > xSMgr = getProcessServiceFactory();
-        if( xSMgr.is() )
+        Reference< XSimpleFileAccess3 > xSFI( SimpleFileAccess::create( comphelper::getProcessComponentContext() ) );
+        try
         {
-            Reference< XSimpleFileAccess2 >
-                xSFI( SimpleFileAccess::create( comphelper::getComponentContext(xSMgr) ) );
-            try
-            {
 
-            // #??? For write access delete file if it already exists (not for appending)
-            if( (nStrmMode & STREAM_WRITE) != 0 && !IsAppend() && !IsBinary() &&
-                xSFI->exists( aNameStr ) && !xSFI->isFolder( aNameStr ) )
-            {
-                xSFI->kill( aNameStr );
-            }
+        // #??? For write access delete file if it already exists (not for appending)
+        if( (nStrmMode & STREAM_WRITE) != 0 && !IsAppend() && !IsBinary() &&
+            xSFI->exists( aNameStr ) && !xSFI->isFolder( aNameStr ) )
+        {
+            xSFI->kill( aNameStr );
+        }
 
-            if( (nStrmMode & (STREAM_READ | STREAM_WRITE)) == (STREAM_READ | STREAM_WRITE) )
-            {
-                Reference< XStream > xIS = xSFI->openFileReadWrite( aNameStr );
-                pStrm = new UCBStream( xIS );
-            }
-            else if( nStrmMode & STREAM_WRITE )
-            {
-                Reference< XStream > xIS = xSFI->openFileReadWrite( aNameStr );
-                pStrm = new UCBStream( xIS );
-            }
-            else //if( nStrmMode & STREAM_READ )
-            {
-                Reference< XInputStream > xIS = xSFI->openFileRead( aNameStr );
-                pStrm = new UCBStream( xIS );
-            }
+        if( (nStrmMode & (STREAM_READ | STREAM_WRITE)) == (STREAM_READ | STREAM_WRITE) )
+        {
+            Reference< XStream > xIS = xSFI->openFileReadWrite( aNameStr );
+            pStrm = new UCBStream( xIS );
+        }
+        else if( nStrmMode & STREAM_WRITE )
+        {
+            Reference< XStream > xIS = xSFI->openFileReadWrite( aNameStr );
+            pStrm = new UCBStream( xIS );
+        }
+        else //if( nStrmMode & STREAM_READ )
+        {
+            Reference< XInputStream > xIS = xSFI->openFileRead( aNameStr );
+            pStrm = new UCBStream( xIS );
+        }
 
-            }
-            catch(const Exception & )
-            {
-                nError = ERRCODE_IO_GENERAL;
-            }
+        }
+        catch(const Exception & )
+        {
+            nError = ERRCODE_IO_GENERAL;
         }
     }
 

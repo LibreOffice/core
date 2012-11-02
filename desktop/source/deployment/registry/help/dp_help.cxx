@@ -45,7 +45,6 @@
 #include <helpcompiler/HelpIndexer.hxx>
 #endif
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
-#include <com/sun/star/ucb/XSimpleFileAccess2.hpp>
 #include <com/sun/star/util/XMacroExpander.hpp>
 #include <com/sun/star/uri/XUriReferenceFactory.hpp>
 #include <com/sun/star/uri/XVndSunStarExpandUrl.hpp>
@@ -115,8 +114,8 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
     void revokeEntryFromDb(OUString const & url);
     bool activateEntry(OUString const & url);
 
-    Reference< ucb::XSimpleFileAccess2 > getFileAccess( void );
-    Reference< ucb::XSimpleFileAccess2 > m_xSFA;
+    Reference< ucb::XSimpleFileAccess3 > getFileAccess( void );
+    Reference< ucb::XSimpleFileAccess3 > m_xSFA;
 
     const Reference<deployment::XPackageTypeInfo> m_xHelpTypeInfo;
     Sequence< Reference<deployment::XPackageTypeInfo> > m_typeInfos;
@@ -403,7 +402,7 @@ void BackendImpl::implProcessHelp(
                 const OUString sHelpFolder = createFolder(OUString(), xCmdEnv);
                 data.dataUrl = sHelpFolder;
 
-                Reference< ucb::XSimpleFileAccess2 > xSFA = getFileAccess();
+                Reference< ucb::XSimpleFileAccess3 > xSFA = getFileAccess();
                 rtl::OUString aHelpURL = xPackage->getURL();
                 rtl::OUString aExpandedHelpURL = dp_misc::expandUnoRcUrl( aHelpURL );
                 rtl::OUString aName = xPackage->getName();
@@ -586,7 +585,7 @@ void BackendImpl::implProcessHelp(
 void BackendImpl::implCollectXhpFiles( const rtl::OUString& aDir,
     std::vector< rtl::OUString >& o_rXhpFileVector )
 {
-    Reference< ucb::XSimpleFileAccess2 > xSFA = getFileAccess();
+    Reference< ucb::XSimpleFileAccess3 > xSFA = getFileAccess();
 
     // Scan xhp files recursively
     Sequence< rtl::OUString > aSeq = xSFA->getFolderContents( aDir, true );
@@ -612,7 +611,7 @@ void BackendImpl::implCollectXhpFiles( const rtl::OUString& aDir,
     }
 }
 
-Reference< ucb::XSimpleFileAccess2 > BackendImpl::getFileAccess( void )
+Reference< ucb::XSimpleFileAccess3 > BackendImpl::getFileAccess( void )
 {
     if( !m_xSFA.is() )
     {

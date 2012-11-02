@@ -43,7 +43,7 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/deployment/XPackage.hpp>
-#include "com/sun/star/ucb/XSimpleFileAccess2.hpp"
+#include "com/sun/star/ucb/XSimpleFileAccess3.hpp"
 
 namespace treeview {
 
@@ -358,7 +358,7 @@ namespace treeview {
 
         osl::Mutex                                                                  m_aMutex;
         com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >    m_xContext;
-        com::sun::star::uno::Reference< com::sun::star::ucb::XSimpleFileAccess2 >   m_xSFA;
+        com::sun::star::uno::Reference< com::sun::star::ucb::XSimpleFileAccess3 >   m_xSFA;
 
         IteratorState                                                               m_eState;
         rtl::OUString                                                               m_aLanguage;

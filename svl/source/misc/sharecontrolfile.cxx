@@ -21,7 +21,6 @@
 #include <stdio.h>
 
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
-#include <com/sun/star/ucb/XSimpleFileAccess2.hpp>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <com/sun/star/ucb/XContent.hpp>
 #include <com/sun/star/ucb/InsertCommandArgument.hpp>
@@ -352,7 +351,7 @@ void ShareControlFile::RemoveFile()
 
     Close();
 
-    uno::Reference<ucb::XSimpleFileAccess2> xSimpleFileAccess(ucb::SimpleFileAccess::create(comphelper::getProcessComponentContext()));
+    uno::Reference<ucb::XSimpleFileAccess3> xSimpleFileAccess(ucb::SimpleFileAccess::create(comphelper::getProcessComponentContext()));
     xSimpleFileAccess->kill( m_aURL );
 }
 

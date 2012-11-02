@@ -38,7 +38,6 @@
 #include "com/sun/star/deployment/DeploymentException.hpp"
 #include "com/sun/star/ucb/XProgressHandler.hpp"
 #include "com/sun/star/ucb/SimpleFileAccess.hpp"
-#include "com/sun/star/ucb/XSimpleFileAccess2.hpp"
 #include "com/sun/star/io/XSeekable.hpp"
 #include <stdio.h>
 
@@ -104,7 +103,7 @@ ProgressLogImpl::ProgressLogImpl(
     boost::optional< Reference<task::XInteractionHandler> > interactionHandler;
     comphelper::unwrapArgs( args, log_file, interactionHandler );
 
-    Reference<ucb::XSimpleFileAccess2> xSimpleFileAccess( ucb::SimpleFileAccess::create(xContext) );
+    Reference<ucb::XSimpleFileAccess3> xSimpleFileAccess( ucb::SimpleFileAccess::create(xContext) );
     // optional ia handler:
     if (interactionHandler)
         xSimpleFileAccess->setInteractionHandler( *interactionHandler );

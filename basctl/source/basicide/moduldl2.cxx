@@ -53,7 +53,6 @@
 #include <com/sun/star/script/XLibraryContainerExport.hpp>
 #include <com/sun/star/task/InteractionHandler.hpp>
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
-#include <com/sun/star/ucb/XSimpleFileAccess2.hpp>
 #include "com/sun/star/ucb/XCommandEnvironment.hpp"
 #include <com/sun/star/ucb/NameClash.hpp>
 #include "com/sun/star/packages/manifest/ManifestWriter.hpp"
@@ -855,7 +854,7 @@ void LibPage::InsertLib()
 
         if ( xMSF.is() )
         {
-            Reference< XSimpleFileAccess2 > xSFA( SimpleFileAccess::create(comphelper::getProcessComponentContext()) );
+            Reference< XSimpleFileAccess3 > xSFA( SimpleFileAccess::create(comphelper::getProcessComponentContext()) );
 
             OUString aModURL( aModURLObj.GetMainURL( INetURLObject::NO_DECODE ) );
             if ( xSFA->exists( aModURL ) )
@@ -1257,7 +1256,7 @@ void LibPage::ExportAsPackage( const String& aLibName )
     Reference< lang::XMultiServiceFactory > xMSF( ::comphelper::getProcessServiceFactory() );
     Reference< uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
     Reference< task::XInteractionHandler2 > xHandler( task::InteractionHandler::createWithParent(xContext, 0) );
-    Reference< XSimpleFileAccess2 > xSFA = SimpleFileAccess::create(xContext);
+    Reference< XSimpleFileAccess3 > xSFA = SimpleFileAccess::create(xContext);
 
     Reference < XFilePicker > xFP;
     Sequence <Any> aServiceType(1);

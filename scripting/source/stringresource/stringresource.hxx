@@ -25,7 +25,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/ucb/XSimpleFileAccess2.hpp>
+#include <com/sun/star/ucb/XSimpleFileAccess3.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <cppuhelper/implbase1.hxx>
@@ -305,7 +305,7 @@ protected:
     (
         const ::rtl::OUString& Location,
         const ::rtl::OUString& aNameBase,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XSimpleFileAccess2 >& xFileAccess
+        const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XSimpleFileAccess3 >& xFileAccess
     )
     throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
 
@@ -313,7 +313,7 @@ protected:
     (
         const ::rtl::OUString& Location,
         const ::rtl::OUString& aNameBase,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XSimpleFileAccess2 >& xFileAccess
+        const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XSimpleFileAccess3 >& xFileAccess
     )
     throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
 
@@ -322,7 +322,7 @@ protected:
         const ::rtl::OUString& Location,
         const ::rtl::OUString& aNameBase,
         const ::rtl::OUString& aComment,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XSimpleFileAccess2 >& xFileAccess,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XSimpleFileAccess3 >& xFileAccess,
         bool bUsedForStore,
         bool bStoreAll,
         bool bKillAll = false
@@ -557,10 +557,10 @@ class StringResourceWithLocationImpl : public StringResourceWithLocationImpl_BAS
 {
     ::rtl::OUString                                                             m_aLocation;
     bool                                                                        m_bLocationChanged;
-    com::sun::star::uno::Reference< com::sun::star::ucb::XSimpleFileAccess2 >   m_xSFI;
+    com::sun::star::uno::Reference< com::sun::star::ucb::XSimpleFileAccess3 >   m_xSFI;
     com::sun::star::uno::Reference< com::sun::star::task::XInteractionHandler > m_xInteractionHandler;
 
-    const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XSimpleFileAccess2 > getFileAccess( void );
+    const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XSimpleFileAccess3 > getFileAccess( void );
 
     virtual void implScanLocales( void );
     virtual bool implLoadLocale( LocaleItem* pLocaleItem );

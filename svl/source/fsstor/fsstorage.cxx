@@ -25,7 +25,6 @@
 #include <com/sun/star/ucb/XProgressHandler.hpp>
 #include <com/sun/star/ucb/XContentAccess.hpp>
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
-#include <com/sun/star/ucb/XSimpleFileAccess2.hpp>
 
 #include <com/sun/star/ucb/InteractiveIOException.hpp>
 #include <com/sun/star/ucb/IOErrorCode.hpp>
@@ -473,7 +472,7 @@ uno::Reference< io::XStream > SAL_CALL FSStorage::openStreamElement(
         {
             if ( isLocalFile_Impl( aFileURL.GetMainURL( INetURLObject::NO_DECODE ) ) )
             {
-                uno::Reference<ucb::XSimpleFileAccess2> xSimpleFileAccess(
+                uno::Reference<ucb::XSimpleFileAccess3> xSimpleFileAccess(
                     ucb::SimpleFileAccess::create(
                         comphelper::getComponentContext(m_pImpl->m_xFactory) ) );
                 xResult = xSimpleFileAccess->openFileReadWrite( aFileURL.GetMainURL( INetURLObject::NO_DECODE ) );
@@ -1463,7 +1462,7 @@ uno::Reference< embed::XExtendedStorageStream > SAL_CALL FSStorage::openStreamEl
         {
             if ( isLocalFile_Impl( aFileURL.GetMainURL( INetURLObject::NO_DECODE ) ) )
             {
-                uno::Reference<ucb::XSimpleFileAccess2> xSimpleFileAccess(
+                uno::Reference<ucb::XSimpleFileAccess3> xSimpleFileAccess(
                     ucb::SimpleFileAccess::create(
                         comphelper::getComponentContext(m_pImpl->m_xFactory) ) );
                 uno::Reference< io::XStream > xStream =

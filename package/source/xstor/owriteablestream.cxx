@@ -19,7 +19,6 @@
 
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
-#include <com/sun/star/ucb/XSimpleFileAccess2.hpp>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
@@ -215,7 +214,7 @@ sal_Bool KillFile( const ::rtl::OUString& aURL, const uno::Reference< uno::XComp
 
     try
     {
-        uno::Reference < ucb::XSimpleFileAccess2 > xAccess( ucb::SimpleFileAccess::create( xContext ) );
+        uno::Reference < ucb::XSimpleFileAccess3 > xAccess( ucb::SimpleFileAccess::create( xContext ) );
 
         xAccess->kill( aURL );
         bRet = sal_True;
@@ -555,7 +554,7 @@ uno::Reference< lang::XMultiServiceFactory > OWriteStream_Impl::GetServiceFactor
         try {
             if ( !aTempURL.isEmpty() && xStream.is() )
             {
-                uno::Reference < ucb::XSimpleFileAccess2 > xTempAccess( ucb::SimpleFileAccess::create( ::comphelper::getProcessComponentContext() ) );
+                uno::Reference < ucb::XSimpleFileAccess3 > xTempAccess( ucb::SimpleFileAccess::create( ::comphelper::getProcessComponentContext() ) );
 
                 uno::Reference< io::XOutputStream > xTempOutStream = xTempAccess->openFileWrite( aTempURL );
                 if ( xTempOutStream.is() )
@@ -639,7 +638,7 @@ uno::Reference< lang::XMultiServiceFactory > OWriteStream_Impl::GetServiceFactor
                 try {
                     if ( !m_aTempURL.isEmpty() )
                     {
-                        uno::Reference < ucb::XSimpleFileAccess2 > xTempAccess( ucb::SimpleFileAccess::create( ::comphelper::getProcessComponentContext() ) );
+                        uno::Reference < ucb::XSimpleFileAccess3 > xTempAccess( ucb::SimpleFileAccess::create( ::comphelper::getProcessComponentContext() ) );
 
                         uno::Reference< io::XOutputStream > xTempOutStream = xTempAccess->openFileWrite( m_aTempURL );
                         if ( xTempOutStream.is() )
@@ -688,7 +687,7 @@ uno::Reference< io::XStream > OWriteStream_Impl::GetTempFileAsStream()
         if ( !m_aTempURL.isEmpty() )
         {
             // the temporary file is not used if the cache is used
-            uno::Reference < ucb::XSimpleFileAccess2 > xTempAccess( ucb::SimpleFileAccess::create( ::comphelper::getProcessComponentContext() ) );
+            uno::Reference < ucb::XSimpleFileAccess3 > xTempAccess( ucb::SimpleFileAccess::create( ::comphelper::getProcessComponentContext() ) );
 
             try
             {
@@ -727,7 +726,7 @@ uno::Reference< io::XInputStream > OWriteStream_Impl::GetTempFileAsInputStream()
         if ( !m_aTempURL.isEmpty() )
         {
             // the temporary file is not used if the cache is used
-            uno::Reference < ucb::XSimpleFileAccess2 > xTempAccess( ucb::SimpleFileAccess::create( ::comphelper::getProcessComponentContext() ) );
+            uno::Reference < ucb::XSimpleFileAccess3 > xTempAccess( ucb::SimpleFileAccess::create( ::comphelper::getProcessComponentContext() ) );
 
             try
             {

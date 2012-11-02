@@ -3099,7 +3099,7 @@ bool HtmlExport::CopyFile( const String& rSourceFile, const String& rDestPath )
 
 // =====================================================================
 
-bool HtmlExport::checkFileExists( Reference< ::com::sun::star::ucb::XSimpleFileAccess2 >& xFileAccess, String const & aFileName )
+bool HtmlExport::checkFileExists( Reference< ::com::sun::star::ucb::XSimpleFileAccess3 >& xFileAccess, String const & aFileName )
 {
     try
     {
@@ -3125,7 +3125,7 @@ bool HtmlExport::checkForExistingFiles()
     try
     {
         Reference< XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
-        uno::Reference<ucb::XSimpleFileAccess2> xFA(ucb::SimpleFileAccess::create(xContext));
+        uno::Reference<ucb::XSimpleFileAccess3> xFA(ucb::SimpleFileAccess::create(xContext));
 
         sal_uInt16 nSdPage;
         for( nSdPage = 0; !bFound && (nSdPage < mnSdPageCount); nSdPage++)

@@ -74,7 +74,7 @@ using com::sun::star::beans::UnknownPropertyException;
 using com::sun::star::util::VetoException;
 using com::sun::star::lang::WrappedTargetException;
 using com::sun::star::lang::IllegalArgumentException;
-using com::sun::star::ucb::XSimpleFileAccess2;
+using com::sun::star::ucb::XSimpleFileAccess3;
 using com::sun::star::ucb::SimpleFileAccess;
 using com::sun::star::io::XInputStream;
 
@@ -409,7 +409,7 @@ void Model::loadInstance( sal_Int32 nInstance )
         try
         {
             Reference<XInputStream> xInput =
-                Reference<XSimpleFileAccess2>( SimpleFileAccess::create( ::comphelper::getProcessComponentContext() ) )->openFileRead( sURL );
+                Reference<XSimpleFileAccess3>( SimpleFileAccess::create( ::comphelper::getProcessComponentContext() ) )->openFileRead( sURL );
             if( xInput.is() )
             {
                 Reference<XDocument> xInstance =

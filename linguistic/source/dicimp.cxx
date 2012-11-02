@@ -34,7 +34,6 @@
 #include <unotools/ucbstreamhelper.hxx>
 
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
-#include <com/sun/star/ucb/XSimpleFileAccess2.hpp>
 #include <com/sun/star/linguistic2/DictionaryType.hpp>
 #include <com/sun/star/linguistic2/DictionaryEventFlags.hpp>
 #include <com/sun/star/registry/XRegistryKey.hpp>
@@ -264,7 +263,7 @@ sal_uLong DictionaryNeo::loadEntries(const OUString &rMainURL)
     uno::Reference< io::XInputStream > xStream;
     try
     {
-        uno::Reference< ucb::XSimpleFileAccess2 > xAccess( ucb::SimpleFileAccess::create(xContext) );
+        uno::Reference< ucb::XSimpleFileAccess3 > xAccess( ucb::SimpleFileAccess::create(xContext) );
         xStream = xAccess->openFileRead( rMainURL );
     }
     catch (const uno::Exception &)
@@ -400,7 +399,7 @@ sal_uLong DictionaryNeo::saveEntries(const OUString &rURL)
     uno::Reference< io::XStream > xStream;
     try
     {
-        uno::Reference< ucb::XSimpleFileAccess2 > xAccess( ucb::SimpleFileAccess::create(xContext) );
+        uno::Reference< ucb::XSimpleFileAccess3 > xAccess( ucb::SimpleFileAccess::create(xContext) );
         xStream = xAccess->openFileReadWrite( rURL );
     }
     catch (const uno::Exception &)

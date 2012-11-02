@@ -24,7 +24,6 @@
 #include <com/sun/star/ucb/XProgressHandler.hpp>
 #include <com/sun/star/io/TempFile.hpp>
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
-#include <com/sun/star/ucb/XSimpleFileAccess2.hpp>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/container/XNamed.hpp>
@@ -5943,7 +5942,7 @@ void SAL_CALL OStorage::attachToURL( const ::rtl::OUString& sURL,
     if ( !m_pImpl->m_pSwitchStream )
         throw uno::RuntimeException( OSL_LOG_PREFIX, uno::Reference< uno::XInterface >() );
 
-    uno::Reference < ucb::XSimpleFileAccess2 > xAccess(
+    uno::Reference < ucb::XSimpleFileAccess3 > xAccess(
         ucb::SimpleFileAccess::create(
             comphelper::getComponentContext(m_pImpl->m_xFactory) ) );
 

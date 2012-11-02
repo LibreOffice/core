@@ -4278,7 +4278,7 @@ bool SwWW8ImplReader::ReadGlobalTemplateSettings( const rtl::OUString& sCreatedF
     uno::Sequence< rtl::OUString > sGlobalTemplates;
 
     // first get the autoload addins in the directory STARTUP
-    uno::Reference<ucb::XSimpleFileAccess2> xSFA(ucb::SimpleFileAccess::create(::comphelper::getProcessComponentContext()));
+    uno::Reference<ucb::XSimpleFileAccess3> xSFA(ucb::SimpleFileAccess::create(::comphelper::getProcessComponentContext()));
 
     if( xSFA->isFolder( aAddinPath ) )
         sGlobalTemplates = xSFA->getFolderContents( aAddinPath, sal_False );

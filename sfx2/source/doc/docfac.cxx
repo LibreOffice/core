@@ -21,7 +21,6 @@
 #include <com/sun/star/registry/XSimpleRegistry.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
-#include <com/sun/star/ucb/XSimpleFileAccess2.hpp>
 #include <com/sun/star/document/XTypeDetection.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/frame/XLoadable.hpp>
@@ -251,7 +250,7 @@ void SfxObjectFactory::SetSystemTemplate( const String& rServiceName, const Stri
             aUserTemplateURL += DEF_TPL_STR;
             aUserTemplateURL += aExt;
 
-            uno::Reference<ucb::XSimpleFileAccess2> xSimpleFileAccess(
+            uno::Reference<ucb::XSimpleFileAccess3> xSimpleFileAccess(
                 ucb::SimpleFileAccess::create( ::comphelper::getComponentContext(xFactory) ) );
 
             ::rtl::OUString aBackupURL;

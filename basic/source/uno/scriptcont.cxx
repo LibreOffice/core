@@ -26,7 +26,7 @@
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>
-#include <com/sun/star/ucb/XSimpleFileAccess2.hpp>
+#include <com/sun/star/ucb/XSimpleFileAccess3.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/XEncryptionProtectedSource.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -581,14 +581,14 @@ sal_Bool SfxScriptLibraryContainer::implStorePasswordLibrary( SfxLibrary* pLib,
                                                               const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& xHandler )
 {
     OUString aDummyLocation;
-    Reference< XSimpleFileAccess2 > xDummySFA;
+    Reference< XSimpleFileAccess3 > xDummySFA;
     return implStorePasswordLibrary( pLib, aName, xStorage, aDummyLocation, xDummySFA, xHandler );
 }
 
 sal_Bool SfxScriptLibraryContainer::implStorePasswordLibrary( SfxLibrary* pLib, const ::rtl::OUString& aName,
                                                               const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage,
                                                               const ::rtl::OUString& aTargetURL,
-                                                              const Reference< XSimpleFileAccess2 > xToUseSFI,
+                                                              const Reference< XSimpleFileAccess3 > xToUseSFI,
                                                               const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& xHandler )
 {
     bool bExport = !aTargetURL.isEmpty();
@@ -730,7 +730,7 @@ sal_Bool SfxScriptLibraryContainer::implStorePasswordLibrary( SfxLibrary* pLib, 
     {
         try
         {
-            Reference< XSimpleFileAccess2 > xSFI = mxSFI;
+            Reference< XSimpleFileAccess3 > xSFI = mxSFI;
             if( xToUseSFI.is() )
             {
                 xSFI = xToUseSFI;
@@ -1234,7 +1234,7 @@ Reference< XInterface > SAL_CALL SfxScriptLibraryContainer::Create( const Refere
 // Ctor
 SfxScriptLibrary::SfxScriptLibrary( ModifiableHelper& _rModifiable,
                                     const Reference< XMultiServiceFactory >& xMSF,
-                                    const Reference< XSimpleFileAccess2 >& xSFI )
+                                    const Reference< XSimpleFileAccess3 >& xSFI )
     : SfxLibrary( _rModifiable, getCppuType( (const OUString *)0 ), xMSF, xSFI )
     , mbLoadedSource( false )
     , mbLoadedBinary( false )
@@ -1243,7 +1243,7 @@ SfxScriptLibrary::SfxScriptLibrary( ModifiableHelper& _rModifiable,
 
 SfxScriptLibrary::SfxScriptLibrary( ModifiableHelper& _rModifiable,
                                     const Reference< XMultiServiceFactory >& xMSF,
-                                    const Reference< XSimpleFileAccess2 >& xSFI,
+                                    const Reference< XSimpleFileAccess3 >& xSFI,
                                     const OUString& aLibInfoFileURL,
                                     const OUString& aStorageURL,
                                     sal_Bool ReadOnly )

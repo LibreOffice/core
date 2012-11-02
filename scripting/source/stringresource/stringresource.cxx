@@ -1140,7 +1140,7 @@ void StringResourcePersistenceImpl::storeToURL( const ::rtl::OUString& URL,
     bool bUsedForStore = false;
     bool bStoreAll = true;
 
-    Reference< ucb::XSimpleFileAccess2 > xFileAccess = ucb::SimpleFileAccess::create(m_xContext);
+    Reference< ucb::XSimpleFileAccess3 > xFileAccess = ucb::SimpleFileAccess::create(m_xContext);
     if( xFileAccess.is() && Handler.is() )
         xFileAccess->setInteractionHandler( Handler );
 
@@ -1151,7 +1151,7 @@ void StringResourcePersistenceImpl::implKillRemovedLocaleFiles
 (
     const ::rtl::OUString& Location,
     const ::rtl::OUString& aNameBase,
-    const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XSimpleFileAccess2 >& xFileAccess
+    const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XSimpleFileAccess3 >& xFileAccess
 )
     throw (Exception, RuntimeException)
 {
@@ -1177,7 +1177,7 @@ void StringResourcePersistenceImpl::implKillChangedDefaultFiles
 (
     const ::rtl::OUString& Location,
     const ::rtl::OUString& aNameBase,
-    const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XSimpleFileAccess2 >& xFileAccess
+    const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XSimpleFileAccess3 >& xFileAccess
 )
     throw (Exception, RuntimeException)
 {
@@ -1204,7 +1204,7 @@ void StringResourcePersistenceImpl::implStoreAtLocation
     const ::rtl::OUString& Location,
     const ::rtl::OUString& aNameBase,
     const ::rtl::OUString& aComment,
-    const Reference< ucb::XSimpleFileAccess2 >& xFileAccess,
+    const Reference< ucb::XSimpleFileAccess3 >& xFileAccess,
     bool bUsedForStore,
     bool bStoreAll,
     bool bKillAll
@@ -2874,7 +2874,7 @@ void StringResourceWithLocationImpl::store()
     if( !m_bModified && !bStoreAll )
         return;
 
-    Reference< ucb::XSimpleFileAccess2 > xFileAccess = getFileAccess();
+    Reference< ucb::XSimpleFileAccess3 > xFileAccess = getFileAccess();
     implStoreAtLocation( m_aLocation, m_aNameBase, m_aComment,
         xFileAccess, bUsedForStore, bStoreAll );
     m_bModified = false;
@@ -2960,7 +2960,7 @@ void StringResourceWithLocationImpl::setURL( const ::rtl::OUString& URL )
 // Scan locale properties files
 void StringResourceWithLocationImpl::implScanLocales( void )
 {
-    const Reference< ucb::XSimpleFileAccess2 > xFileAccess = getFileAccess();
+    const Reference< ucb::XSimpleFileAccess3 > xFileAccess = getFileAccess();
     if( xFileAccess.is() && xFileAccess->isFolder( m_aLocation ) )
     {
         Sequence< ::rtl::OUString > aContentSeq = xFileAccess->getFolderContents( m_aLocation, false );
@@ -2973,7 +2973,7 @@ bool StringResourceWithLocationImpl::implLoadLocale( LocaleItem* pLocaleItem )
 {
     bool bSuccess = false;
 
-    const Reference< ucb::XSimpleFileAccess2 > xFileAccess = getFileAccess();
+    const Reference< ucb::XSimpleFileAccess3 > xFileAccess = getFileAccess();
     if( xFileAccess.is() )
     {
         ::rtl::OUString aCompleteFileName =
@@ -2996,7 +2996,7 @@ bool StringResourceWithLocationImpl::implLoadLocale( LocaleItem* pLocaleItem )
     return bSuccess;
 }
 
-const Reference< ucb::XSimpleFileAccess2 > StringResourceWithLocationImpl::getFileAccess( void )
+const Reference< ucb::XSimpleFileAccess3 > StringResourceWithLocationImpl::getFileAccess( void )
 {
     ::osl::MutexGuard aGuard( getMutex() );
 

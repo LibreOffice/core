@@ -21,7 +21,6 @@
 #include "dlgprov.hxx"
 #include <com/sun/star/resource/XStringResourceManager.hpp>
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
-#include <com/sun/star/ucb/XSimpleFileAccess2.hpp>
 
 
 // component helper namespace
@@ -70,7 +69,7 @@ void SAL_CALL DialogModelProvider::initialize(const css::uno::Sequence< uno::Any
         if ( !( aArguments[ 0 ] >>= sURL ))
             throw css::lang::IllegalArgumentException();
          // Try any other URL with SimpleFileAccess
-        Reference< ucb::XSimpleFileAccess2 > xSFI = ucb::SimpleFileAccess::create(m_xContext);
+        Reference< ucb::XSimpleFileAccess3 > xSFI = ucb::SimpleFileAccess::create(m_xContext);
 
         try
         {

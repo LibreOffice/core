@@ -40,7 +40,6 @@
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/lang/EventObject.hpp>
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
-#include <com/sun/star/ucb/XSimpleFileAccess2.hpp>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #include <com/sun/star/util/XFlushListener.hpp>
@@ -85,7 +84,7 @@ void ReadThroughDic( const String &rMainURL, ConvDicXMLImport &rImport )
     uno::Reference< io::XInputStream > xIn;
     try
     {
-        uno::Reference< ucb::XSimpleFileAccess2 > xAccess( ucb::SimpleFileAccess::create(xContext) );
+        uno::Reference< ucb::XSimpleFileAccess3 > xAccess( ucb::SimpleFileAccess::create(xContext) );
         xIn = xAccess->openFileRead( rMainURL );
     }
     catch (const uno::Exception &)
@@ -248,7 +247,7 @@ void ConvDic::Save()
     uno::Reference< io::XStream > xStream;
     try
     {
-        uno::Reference< ucb::XSimpleFileAccess2 > xAccess( ucb::SimpleFileAccess::create(xContext) );
+        uno::Reference< ucb::XSimpleFileAccess3 > xAccess( ucb::SimpleFileAccess::create(xContext) );
         xStream = xAccess->openFileReadWrite( aMainURL );
     }
     catch (const uno::Exception &)

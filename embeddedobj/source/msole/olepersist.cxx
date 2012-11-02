@@ -36,7 +36,6 @@
 #include <com/sun/star/io/XTruncate.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
-#include <com/sun/star/ucb/XSimpleFileAccess2.hpp>
 
 #include <rtl/logfile.hxx>
 
@@ -62,7 +61,7 @@ sal_Bool KillFile_Impl( const ::rtl::OUString& aURL, const uno::Reference< lang:
 
     try
     {
-        uno::Reference < ucb::XSimpleFileAccess2 > xAccess(
+        uno::Reference < ucb::XSimpleFileAccess3 > xAccess(
                 ucb::SimpleFileAccess::create( comphelper::getComponentContext(xFactory) ) );
 
         xAccess->kill( aURL );
@@ -114,7 +113,7 @@ sal_Bool KillFile_Impl( const ::rtl::OUString& aURL, const uno::Reference< lang:
     if ( !aResult.isEmpty() )
     {
         try {
-            uno::Reference < ucb::XSimpleFileAccess2 > xTempAccess(
+            uno::Reference < ucb::XSimpleFileAccess3 > xTempAccess(
                     ucb::SimpleFileAccess::create( comphelper::getComponentContext(xFactory) ) );
 
             uno::Reference< io::XOutputStream > xTempOutStream = xTempAccess->openFileWrite( aResult );
@@ -577,7 +576,7 @@ sal_Bool OleEmbeddedObject::HasVisReplInStream()
                 try
                 {
                     // open temporary file for reading
-                    uno::Reference < ucb::XSimpleFileAccess2 > xTempAccess(
+                    uno::Reference < ucb::XSimpleFileAccess3 > xTempAccess(
                             ucb::SimpleFileAccess::create( comphelper::getComponentContext(m_xFactory) ) );
 
                     xStream = xTempAccess->openFileRead( m_aTempURL );
@@ -1043,7 +1042,7 @@ void OleEmbeddedObject::StoreObjectToStream( uno::Reference< io::XOutputStream >
         throw uno::RuntimeException();
 
     // open temporary file for reading
-    uno::Reference < ucb::XSimpleFileAccess2 > xTempAccess(
+    uno::Reference < ucb::XSimpleFileAccess3 > xTempAccess(
             ucb::SimpleFileAccess::create( comphelper::getComponentContext(m_xFactory) ) );
 
     uno::Reference< io::XInputStream > xTempInStream = xTempAccess->openFileRead( m_aTempURL );

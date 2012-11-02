@@ -37,7 +37,6 @@
 #include <basic/basmgr.hxx>
 #include <com/sun/star/resource/StringResourceWithLocation.hpp>
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
-#include <com/sun/star/ucb/XSimpleFileAccess2.hpp>
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
@@ -728,7 +727,7 @@ bool DialogWindow::SaveDialog()
         Reference< XInputStreamProvider > xISP = ::xmlscript::exportDialogModel( xDialogModel, xContext, GetDocument().isDocument() ? GetDocument().getDocument() : Reference< frame::XModel >() );
         Reference< XInputStream > xInput( xISP->createInputStream() );
 
-        Reference< XSimpleFileAccess2 > xSFI( SimpleFileAccess::create(comphelper::getProcessComponentContext()) );
+        Reference< XSimpleFileAccess3 > xSFI( SimpleFileAccess::create(comphelper::getProcessComponentContext()) );
 
         Reference< XOutputStream > xOutput;
         try
@@ -993,7 +992,7 @@ bool implImportDialog( Window* pWin, const OUString& rCurPath, const ScriptDocum
             Reference< container::XNameContainer > xDialogModel( xMSF->createInstance
                 ( "com.sun.star.awt.UnoControlDialogModel" ), UNO_QUERY_THROW );
 
-            Reference< XSimpleFileAccess2 > xSFI( SimpleFileAccess::create(comphelper::getProcessComponentContext()) );
+            Reference< XSimpleFileAccess3 > xSFI( SimpleFileAccess::create(comphelper::getProcessComponentContext()) );
 
             Reference< XInputStream > xInput;
             if( xSFI->exists( aCurPath ) )

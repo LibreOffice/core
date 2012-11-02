@@ -35,7 +35,6 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/xml/dom/XDocumentBuilder.hpp>
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
-#include <com/sun/star/ucb/XSimpleFileAccess2.hpp>
 #include <com/sun/star/deployment/XExtensionManager.hpp>
 
 #include <osl/mutex.hxx>
@@ -77,7 +76,7 @@ namespace migration
     private:
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >      m_ctx;
         ::com::sun::star::uno::Reference< ::com::sun::star::xml::dom::XDocumentBuilder >  m_xDocBuilder;
-        ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XSimpleFileAccess2 >       m_xSimpleFileAccess;
+        ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XSimpleFileAccess3 >       m_xSimpleFileAccess;
         ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XExtensionManager > m_xExtensionManager;
         ::osl::Mutex            m_aMutex;
         ::rtl::OUString         m_sSourceDir;

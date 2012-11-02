@@ -59,7 +59,7 @@ ScriptingFrameworkURIHelper::ScriptingFrameworkURIHelper(
 {
     try
     {
-        m_xSimpleFileAccess = uno::Reference< ucb::XSimpleFileAccess2 >( ucb::SimpleFileAccess::create(xContext) );
+        m_xSimpleFileAccess = ucb::SimpleFileAccess::create(xContext);
     }
     catch (uno::Exception&)
     {

@@ -229,7 +229,7 @@ sal_Bool SoPluginInstance::LoadDocument(NSP_HWND hParent)
         }
 
         //create stream for the document
-        Reference< ucb::XSimpleFileAccess2 > xSimpleFileAccess( ucb::SimpleFileAccess::create(xContext) );
+        Reference< ucb::XSimpleFileAccess3 > xSimpleFileAccess( ucb::SimpleFileAccess::create(xContext) );
         Reference<io::XInputStream> xInputStream = xSimpleFileAccess->openFileRead( m_sURL );
 
         if(!xInputStream.is())

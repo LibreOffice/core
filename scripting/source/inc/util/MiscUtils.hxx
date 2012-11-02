@@ -31,7 +31,6 @@
 #include <com/sun/star/container/XContentEnumerationAccess.hpp>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
-#include <com/sun/star/ucb/XSimpleFileAccess2.hpp>
 #include <com/sun/star/ucb/XContentAccess.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
@@ -57,11 +56,8 @@ public:
         {
             return result;
         }
-        css::uno::Reference < css::ucb::XSimpleFileAccess2 > xSFA( css::ucb::SimpleFileAccess::create(xCtx) );
-        if ( xSFA.is() )
-        {
-            result = xSFA->getFolderContents( OUSTR("vnd.sun.star.tdoc:/"), true );
-        }
+        css::uno::Reference < css::ucb::XSimpleFileAccess3 > xSFA( css::ucb::SimpleFileAccess::create(xCtx) );
+        result = xSFA->getFolderContents( OUSTR("vnd.sun.star.tdoc:/"), true );
     }
     catch ( css::uno::Exception& )
     {

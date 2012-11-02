@@ -52,7 +52,7 @@
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/Locale.hpp>
-#include <com/sun/star/ucb/XSimpleFileAccess3.hpp>
+#include <com/sun/star/ucb/SimpleFileAccess.hpp>
 #include <com/sun/star/script/XErrorQuery.hpp>
 #include <ooo/vba/XHelperInterface.hpp>
 #include <com/sun/star/bridge/oleautomation/XAutomationObject.hpp>
@@ -175,12 +175,7 @@ static uno::Reference< ucb::XSimpleFileAccess3 > getFileAccess( void )
     static uno::Reference< ucb::XSimpleFileAccess3 > xSFI;
     if( !xSFI.is() )
     {
-        uno::Reference< lang::XMultiServiceFactory > xSMgr = getProcessServiceFactory();
-        if( xSMgr.is() )
-        {
-            xSFI = uno::Reference< ucb::XSimpleFileAccess3 >( xSMgr->createInstance
-                ( OUString("com.sun.star.ucb.SimpleFileAccess" ) ), uno::UNO_QUERY );
-        }
+        xSFI = ucb::SimpleFileAccess::create( comphelper::getProcessComponentContext() );
     }
     return xSFI;
 }

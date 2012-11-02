@@ -54,7 +54,6 @@
 #include <com/sun/star/document/XExtendedFilterDetection.hpp>
 #include <com/sun/star/beans/PropertyState.hpp>
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
-#include <com/sun/star/ucb/XSimpleFileAccess2.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
@@ -98,7 +97,7 @@ OUString SAL_CALL FilterDetect::detect(Sequence< PropertyValue >& aArguments )
     if (!xInStream.is())
     {
         // open the stream if it was not suplied by the framework
-        Reference< XSimpleFileAccess2 > xSFI(SimpleFileAccess::create(mxContext));
+        Reference< XSimpleFileAccess3 > xSFI(SimpleFileAccess::create(mxContext));
         if (sURL.getLength() > 0)
         {
             try

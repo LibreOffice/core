@@ -49,7 +49,6 @@
 #include <com/sun/star/util/XModifiable.hpp>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
-#include <com/sun/star/ucb/XSimpleFileAccess2.hpp>
 #include <com/sun/star/script/provider/XScript.hpp>
 #include <com/sun/star/script/provider/XScriptProvider.hpp>
 #include <com/sun/star/script/provider/XScriptProviderSupplier.hpp>
@@ -2099,7 +2098,7 @@ void SfxObjectShell::StoreLog()
             try
             {
                 uno::Reference< uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
-                uno::Reference< ucb::XSimpleFileAccess2 > xSimpleFileAccess(ucb::SimpleFileAccess::create(xContext));
+                uno::Reference< ucb::XSimpleFileAccess3 > xSimpleFileAccess(ucb::SimpleFileAccess::create(xContext));
                 uno::Reference< io::XStream > xStream( xSimpleFileAccess->openFileReadWrite( aFileURL ), uno::UNO_SET_THROW );
                 uno::Reference< io::XOutputStream > xOutStream( xStream->getOutputStream(), uno::UNO_SET_THROW );
                 uno::Reference< io::XTruncate > xTruncate( xOutStream, uno::UNO_QUERY_THROW );

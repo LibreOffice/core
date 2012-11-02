@@ -59,7 +59,6 @@
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
-#include <com/sun/star/ucb/XSimpleFileAccess2.hpp>
 #include <com/sun/star/task/XJobExecutor.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>
@@ -842,7 +841,7 @@ sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
         }
         else if ( m_pCollection->isFileSystemBased(eType) )
         {
-            Reference< XSimpleFileAccess2 > xSimpleFileAccess(ucb::SimpleFileAccess::create(comphelper::getComponentContext(getORB())));
+            Reference< XSimpleFileAccess3 > xSimpleFileAccess(ucb::SimpleFileAccess::create(comphelper::getComponentContext(getORB())));
             INetURLObject aDBPathURL(m_sWorkPath);
             aDBPathURL.Append(m_aDocURL.getBase());
             createUniqueFolderName(&aDBPathURL);
@@ -910,7 +909,7 @@ sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
     //-------------------------------------------------------------------------
     void ODbTypeWizDialogSetup::createUniqueFolderName(INetURLObject* pURL)
     {
-        Reference< XSimpleFileAccess2 > xSimpleFileAccess(ucb::SimpleFileAccess::create(comphelper::getComponentContext(getORB())));
+        Reference< XSimpleFileAccess3 > xSimpleFileAccess(ucb::SimpleFileAccess::create(comphelper::getComponentContext(getORB())));
         :: rtl::OUString sLastSegmentName = pURL->getName();
         sal_Bool bFolderExists = sal_True;
         sal_Int32 i = 1;
@@ -928,7 +927,7 @@ sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
     //-------------------------------------------------------------------------
     String ODbTypeWizDialogSetup::createUniqueFileName(const INetURLObject& _rURL)
     {
-        Reference< XSimpleFileAccess2 > xSimpleFileAccess(ucb::SimpleFileAccess::create(comphelper::getComponentContext(getORB())));
+        Reference< XSimpleFileAccess3 > xSimpleFileAccess(ucb::SimpleFileAccess::create(comphelper::getComponentContext(getORB())));
         :: rtl::OUString sFilename = _rURL.getName();
         ::rtl::OUString BaseName = _rURL.getBase();
         ::rtl::OUString sExtension = _rURL.getExtension();

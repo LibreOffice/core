@@ -13,7 +13,6 @@
 #include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
-#include <com/sun/star/ucb/XSimpleFileAccess2.hpp>
 #include <com/sun/star/script/provider/XScriptProviderSupplier.hpp>
 #include <com/sun/star/document/XTypeDetection.hpp>
 
@@ -40,7 +39,7 @@ using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::uno::UNO_QUERY_THROW;
 using ::com::sun::star::uno::XComponentContext;
 using ::com::sun::star::uno::XInterface;
-using ::com::sun::star::ucb::XSimpleFileAccess;
+using ::com::sun::star::ucb::XSimpleFileAccess3;
 using ::com::sun::star::document::XTypeDetection;
 using ::rtl::OUString;
 
@@ -89,7 +88,7 @@ private:
     Reference< XComponentContext >  mxContext;
     Reference< XMultiComponentFactory > mxMCF;
     Reference< XComponentLoader > mxCompLoader;
-    Reference< XSimpleFileAccess2 > mxSFA;
+    Reference< XSimpleFileAccess3 > mxSFA;
     rtl::OUString msOutDirPath;
 protected:
 public:

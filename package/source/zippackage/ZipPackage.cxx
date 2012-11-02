@@ -50,7 +50,6 @@
 #include <com/sun/star/ucb/XProgressHandler.hpp>
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
 #include <com/sun/star/ucb/UniversalContentBroker.hpp>
-#include <com/sun/star/ucb/XSimpleFileAccess2.hpp>
 #include <com/sun/star/io/XActiveDataStreamer.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>
 #include <com/sun/star/embed/UseBackupException.hpp>
@@ -1440,7 +1439,7 @@ void SAL_CALL ZipPackage::commitChanges()
             if( isLocalFile() )
             {
                 // write directly in case of local file
-                uno::Reference< ::com::sun::star::ucb::XSimpleFileAccess2 > xSimpleAccess(
+                uno::Reference< ::com::sun::star::ucb::XSimpleFileAccess3 > xSimpleAccess(
                     SimpleFileAccess::create( comphelper::getComponentContext(m_xFactory) ) );
                 OSL_ENSURE( xSimpleAccess.is(), "Can't instatiate SimpleFileAccess service!\n" );
                 uno::Reference< io::XTruncate > xOrigTruncate;

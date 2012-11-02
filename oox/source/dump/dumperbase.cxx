@@ -24,7 +24,6 @@
 #include <com/sun/star/io/XActiveDataSource.hpp>
 #include <com/sun/star/io/XTextOutputStream.hpp>
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
-#include <com/sun/star/ucb/XSimpleFileAccess2.hpp>
 #include <comphelper/docpasswordhelper.hxx>
 #include <osl/file.hxx>
 #include <rtl/math.hxx>
@@ -109,7 +108,7 @@ Reference< XInputStream > InputOutputHelper::openInputStream(
     Reference< XInputStream > xInStrm;
     if( rxContext.is() ) try
     {
-        Reference<XSimpleFileAccess2> xFileAccess(SimpleFileAccess::create(rxContext));
+        Reference<XSimpleFileAccess3> xFileAccess(SimpleFileAccess::create(rxContext));
         xInStrm = xFileAccess->openFileRead( rFileName );
     }
     catch( Exception& )
@@ -126,7 +125,7 @@ Reference< XOutputStream > InputOutputHelper::openOutputStream(
     Reference< XOutputStream > xOutStrm;
     if( rxContext.is() ) try
     {
-        Reference<XSimpleFileAccess2> xFileAccess(SimpleFileAccess::create(rxContext));
+        Reference<XSimpleFileAccess3> xFileAccess(SimpleFileAccess::create(rxContext));
         xOutStrm = xFileAccess->openFileWrite( rFileName );
     }
     catch( Exception& )
@@ -1886,7 +1885,7 @@ void StorageObjectBase::implDump()
     if( bIsRoot ) try
     {
         aSysOutPath += OOX_DUMP_DUMPEXT;
-        Reference<XSimpleFileAccess2> xFileAccess(SimpleFileAccess::create(getContext()));
+        Reference<XSimpleFileAccess3> xFileAccess(SimpleFileAccess::create(getContext()));
         xFileAccess->kill( aSysOutPath );
     }
     catch( Exception& )

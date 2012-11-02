@@ -19,7 +19,7 @@
 #ifndef __com_sun_star_ucb_SimpleFileAccess_idl__
 #define __com_sun_star_ucb_SimpleFileAccess_idl__
 
-#include <com/sun/star/ucb/XSimpleFileAccess2.idl>
+#include <com/sun/star/ucb/XSimpleFileAccess3.idl>
 
 
 
@@ -31,7 +31,7 @@ local file system or on an WebDAV server.
     @author Andreas Bregas
     @version 1.0 07/25/2000
 */
-published service SimpleFileAccess : XSimpleFileAccess2;
+published service SimpleFileAccess : XSimpleFileAccess3;
 
 
 }; }; }; };

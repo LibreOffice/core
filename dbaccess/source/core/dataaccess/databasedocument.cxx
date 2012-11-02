@@ -48,7 +48,6 @@
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #include <com/sun/star/task/XStatusIndicatorFactory.hpp>
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
-#include <com/sun/star/ucb/XSimpleFileAccess2.hpp>
 #include <com/sun/star/ui/XUIConfigurationStorage.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
@@ -1129,7 +1128,7 @@ void ODatabaseDocument::impl_storeAs_throw( const ::rtl::OUString& _rURL, const 
 
 Reference< XStorage > ODatabaseDocument::impl_createStorageFor_throw( const ::rtl::OUString& _rURL ) const
 {
-    Reference< ucb::XSimpleFileAccess2 > xTempAccess(ucb::SimpleFileAccess::create(m_pImpl->m_aContext.getUNOContext()));
+    Reference< ucb::XSimpleFileAccess3 > xTempAccess(ucb::SimpleFileAccess::create(m_pImpl->m_aContext.getUNOContext()));
     Reference< io::XStream > xStream = xTempAccess->openFileReadWrite( _rURL );
     Reference< io::XTruncate > xTruncate(xStream,UNO_QUERY);
     if ( xTruncate.is() )

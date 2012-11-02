@@ -539,7 +539,7 @@ Reference< XInterface > SAL_CALL SfxDialogLibraryContainer::Create( const Refere
 SfxDialogLibrary::SfxDialogLibrary( ModifiableHelper& _rModifiable,
                                     const ::rtl::OUString& aName,
                                     const Reference< XMultiServiceFactory >& xMSF,
-                                    const Reference< XSimpleFileAccess2 >& xSFI,
+                                    const Reference< XSimpleFileAccess3 >& xSFI,
                                     SfxDialogLibraryContainer* pParent )
     : SfxLibrary( _rModifiable, getCppuType( (const Reference< XInputStreamProvider > *)0 ), xMSF, xSFI )
     , m_pParent( pParent )
@@ -550,7 +550,7 @@ SfxDialogLibrary::SfxDialogLibrary( ModifiableHelper& _rModifiable,
 SfxDialogLibrary::SfxDialogLibrary( ModifiableHelper& _rModifiable,
                                     const ::rtl::OUString& aName,
                                     const Reference< XMultiServiceFactory >& xMSF,
-                                    const Reference< XSimpleFileAccess2 >& xSFI,
+                                    const Reference< XSimpleFileAccess3 >& xSFI,
                                     const OUString& aLibInfoFileURL,
                                     const OUString& aStorageURL,
                                     sal_Bool ReadOnly,

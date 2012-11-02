@@ -574,7 +574,7 @@ static void checkAndCopyFileImpl( const INetURLObject& rSourceFolderInetObj,
                                   const INetURLObject& rTargetFolderInetObj,
                                   const OUString& rCheckFileName,
                                   const OUString& rCheckExtension,
-                                  Reference< XSimpleFileAccess2 > xSFI )
+                                  Reference< XSimpleFileAccess3 > xSFI )
 {
     INetURLObject aTargetFolderInetObj( rTargetFolderInetObj );
     aTargetFolderInetObj.insertName( rCheckFileName, sal_True, INetURLObject::LAST_SEGMENT,
@@ -1357,7 +1357,7 @@ sal_Bool SfxLibraryContainer::implStorePasswordLibrary(
     const OUString& /*aName*/,
     const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& /*xStorage*/,
     const OUString& /*aTargetURL*/,
-    const Reference< XSimpleFileAccess2 > /*xToUseSFI*/,
+    const Reference< XSimpleFileAccess3 > /*xToUseSFI*/,
     const uno::Reference< task::XInteractionHandler >&  )
 {
     return sal_False;
@@ -1407,7 +1407,7 @@ void SfxLibraryContainer::implStoreLibrary( SfxLibrary* pLib,
                                             const uno::Reference< embed::XStorage >& xStorage )
 {
     OUString aDummyLocation;
-    Reference< XSimpleFileAccess2 > xDummySFA;
+    Reference< XSimpleFileAccess3 > xDummySFA;
     Reference< XInteractionHandler > xDummyHandler;
     implStoreLibrary( pLib, aName, xStorage, aDummyLocation, xDummySFA, xDummyHandler );
 }
@@ -1417,7 +1417,7 @@ void SfxLibraryContainer::implStoreLibrary( SfxLibrary* pLib,
                                             const OUString& aName,
                                             const uno::Reference< embed::XStorage >& xStorage,
                                             const OUString& aTargetURL,
-                                            Reference< XSimpleFileAccess2 > xToUseSFI,
+                                            Reference< XSimpleFileAccess3 > xToUseSFI,
                                             const Reference< XInteractionHandler >& xHandler )
 {
     sal_Bool bLink = pLib->mbLink;
@@ -1483,7 +1483,7 @@ void SfxLibraryContainer::implStoreLibrary( SfxLibrary* pLib,
         bool bExport = !aTargetURL.isEmpty();
         try
         {
-            Reference< XSimpleFileAccess2 > xSFI = mxSFI;
+            Reference< XSimpleFileAccess3 > xSFI = mxSFI;
             if( xToUseSFI.is() )
             {
                 xSFI = xToUseSFI;
@@ -1565,7 +1565,7 @@ void SfxLibraryContainer::implStoreLibraryIndexFile( SfxLibrary* pLib,
                                                      const uno::Reference< embed::XStorage >& xStorage )
 {
     OUString aDummyLocation;
-    Reference< XSimpleFileAccess2 > xDummySFA;
+    Reference< XSimpleFileAccess3 > xDummySFA;
     implStoreLibraryIndexFile( pLib, rLib, xStorage, aDummyLocation, xDummySFA );
 }
 
@@ -1573,8 +1573,8 @@ void SfxLibraryContainer::implStoreLibraryIndexFile( SfxLibrary* pLib,
 void SfxLibraryContainer::implStoreLibraryIndexFile( SfxLibrary* pLib,
                                                      const ::xmlscript::LibDescriptor& rLib,
                                                      const uno::Reference< embed::XStorage >& xStorage,
-                                                     const OUString& aTargetURL,
-                                                     Reference< XSimpleFileAccess2 > xToUseSFI )
+                                                     const ::rtl::OUString& aTargetURL,
+                                                     Reference< XSimpleFileAccess3 > xToUseSFI )
 {
     // Create sax writer
     Reference< XWriter > xWriter = xml::sax::Writer::create(comphelper::getComponentContext(mxMSF));
@@ -1618,7 +1618,7 @@ void SfxLibraryContainer::implStoreLibraryIndexFile( SfxLibrary* pLib,
     {
         // Export?
         bool bExport = !aTargetURL.isEmpty();
-        Reference< XSimpleFileAccess2 > xSFI = mxSFI;
+        Reference< XSimpleFileAccess3 > xSFI = mxSFI;
         if( xToUseSFI.is() )
         {
             xSFI = xToUseSFI;
@@ -2812,7 +2812,7 @@ void SAL_CALL SfxLibraryContainer::exportLibrary( const OUString& Name, const OU
     LibraryContainerMethodGuard aGuard( *this );
     SfxLibrary* pImplLib = getImplLib( Name );
 
-    Reference< XSimpleFileAccess2 > xToUseSFI;
+    Reference< XSimpleFileAccess3 > xToUseSFI;
     if( Handler.is() )
     {
         xToUseSFI = ucb::SimpleFileAccess::create( comphelper::getComponentContext(mxMSF) );
@@ -3021,7 +3021,7 @@ sal_Bool SAL_CALL SfxLibraryContainer::supportsService( const OUString& _rServic
 
 // Ctor
 SfxLibrary::SfxLibrary( ModifiableHelper& _rModifiable, const Type& aType,
-    const Reference< XMultiServiceFactory >& xMSF, const Reference< XSimpleFileAccess2 >& xSFI )
+    const Reference< XMultiServiceFactory >& xMSF, const Reference< XSimpleFileAccess3 >& xSFI )
         : OComponentHelper( m_aMutex )
         , mxMSF( xMSF )
         , mxSFI( xSFI )
@@ -3043,7 +3043,7 @@ SfxLibrary::SfxLibrary( ModifiableHelper& _rModifiable, const Type& aType,
 }
 
 SfxLibrary::SfxLibrary( ModifiableHelper& _rModifiable, const Type& aType,
-    const Reference< XMultiServiceFactory >& xMSF, const Reference< XSimpleFileAccess2 >& xSFI,
+    const Reference< XMultiServiceFactory >& xMSF, const Reference< XSimpleFileAccess3 >& xSFI,
     const OUString& aLibInfoFileURL, const OUString& aStorageURL, sal_Bool ReadOnly )
         : OComponentHelper( m_aMutex )
         , mxMSF( xMSF )

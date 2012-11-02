@@ -60,7 +60,6 @@
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/frame/XModuleManager.hpp>
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
-#include <com/sun/star/ucb/XSimpleFileAccess2.hpp>
 #include <com/sun/star/ui/ModuleUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/ui/XImageManager.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
@@ -792,7 +791,7 @@ void    AssistentDlgImpl::ScanDocmenu   (void)
     uno::Reference< lang::XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
     uno::Reference< container::XNameAccess > xFilterFactory( xFactory->createInstance( "com.sun.star.document.FilterFactory" ), uno::UNO_QUERY );
 
-    uno::Reference<ucb::XSimpleFileAccess2> xFileAccess(ucb::SimpleFileAccess::create(::comphelper::getProcessComponentContext()));
+    uno::Reference<ucb::XSimpleFileAccess3> xFileAccess(ucb::SimpleFileAccess::create(::comphelper::getProcessComponentContext()));
 
     sal_uInt32 nCount = aHistory.getLength();
     for (sal_uInt32 nItem=0; nItem<nCount; ++nItem)

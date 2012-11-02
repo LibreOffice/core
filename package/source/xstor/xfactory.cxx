@@ -18,7 +18,6 @@
  */
 
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
-#include <com/sun/star/ucb/XSimpleFileAccess2.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/StorageFormats.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -153,7 +152,7 @@ uno::Reference< uno::XInterface > SAL_CALL OStorageFactory::createInstanceWithAr
             throw lang::IllegalArgumentException(); // TODO:
         }
 
-        uno::Reference < ucb::XSimpleFileAccess2 > xTempAccess(
+        uno::Reference < ucb::XSimpleFileAccess3 > xTempAccess(
             ucb::SimpleFileAccess::create(
                 comphelper::getComponentContext(m_xFactory) ) );
 

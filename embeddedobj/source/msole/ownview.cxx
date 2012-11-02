@@ -29,7 +29,6 @@
 #include <com/sun/star/io/XSeekable.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
-#include <com/sun/star/ucb/XSimpleFileAccess2.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
@@ -414,7 +413,7 @@ void OwnView_Impl::CreateNative()
 
     try
     {
-        uno::Reference < ucb::XSimpleFileAccess2 > xAccess(
+        uno::Reference < ucb::XSimpleFileAccess3 > xAccess(
                 ucb::SimpleFileAccess::create( comphelper::getComponentContext(m_xFactory) ) );
 
         uno::Reference< io::XInputStream > xInStream = xAccess->openFileRead( m_aTempFileURL );
