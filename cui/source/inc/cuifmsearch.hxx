@@ -140,7 +140,7 @@ public:
 protected:
     virtual sal_Bool Close();
 
-    void Init(const String& strVisibleFields, const String& strInitialText);
+    void Init(const OUString& strVisibleFields, const OUString& strInitialText);
     // only to be used out of the constructors
 
     void OnFound(const ::com::sun::star::uno::Any& aCursorPos, sal_Int16 nFieldPos);
