@@ -57,7 +57,7 @@ void WpADOColumn::Create()
 }
 // -------------------------------------------------------------------------
 OAdoColumn::OAdoColumn(sal_Bool _bCase,OConnection* _pConnection,_ADOColumn* _pColumn)
-    : connectivity::sdbcx::OColumn(::rtl::OUString(),::rtl::OUString(),::rtl::OUString(),::rtl::OUString(),0,0,0,0,sal_False,sal_False,sal_False,_bCase)
+    : connectivity::sdbcx::OColumn(_bCase)
     ,m_pConnection(_pConnection)
 {
     construct();

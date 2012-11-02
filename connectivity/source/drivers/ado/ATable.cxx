@@ -48,7 +48,7 @@ using namespace com::sun::star::lang;
 
 // -------------------------------------------------------------------------
 OAdoTable::OAdoTable(sdbcx::OCollection* _pTables,sal_Bool _bCase,OCatalog* _pCatalog,_ADOTable* _pTable)
-    : OTable_TYPEDEF(_pTables,_bCase,::rtl::OUString(),::rtl::OUString())
+    : OTable_TYPEDEF(_pTables,_bCase)
     ,m_pCatalog(_pCatalog)
 {
     construct();
