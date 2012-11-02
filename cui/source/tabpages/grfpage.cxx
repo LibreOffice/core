@@ -29,6 +29,7 @@
 #include <grfpage.hxx>
 #include <svx/grfcrop.hxx>
 #include <grfpage.hrc>
+#include <rtl/ustring.hxx>
 #include <cuires.hrc>
 #include <svx/dialogs.hrc> // for RID_SVXPAGE_GRFCROP
 
@@ -663,10 +664,10 @@ void SvxGrfCropPage::GraphicHasChanged( sal_Bool bFound )
         aFld.SetMax( LONG_MAX - 1 );
 
         aFld.SetValue( aFld.Normalize( aOrigSize.Width() ), eUnit );
-        String sTemp = aFld.GetText();
+        OUString sTemp = aFld.GetText();
         aFld.SetValue( aFld.Normalize( aOrigSize.Height() ), eUnit );
         // multiplication sign (U+00D7)
-        sTemp += UniString("\xc3\x97", RTL_TEXTENCODING_UTF8);
+        sTemp += OUString("\xc3\x97");
         sTemp += aFld.GetText();
 
         if ( aOrigPixelSize.Width() && aOrigPixelSize.Height() ) {
@@ -674,14 +675,14 @@ void SvxGrfCropPage::GraphicHasChanged( sal_Bool bFound )
                         ((float)aOrigSize.Width()/TWIP_TO_INCH)+0.5));
              int ay = int(floor((float)aOrigPixelSize.Height() /
                         ((float)aOrigSize.Height()/TWIP_TO_INCH)+0.5));
-             sTemp += rtl::OUString(" ");
+             sTemp += OUString(" ");
              sTemp += CUI_RESSTR( STR_PPI );
-             String sPPI = UniString::CreateFromInt32(ax);
+             OUString sPPI = OUString::valueOf(ax);
              if (abs(ax - ay) > 1) {
-                sPPI += UniString("\xc3\x97", RTL_TEXTENCODING_UTF8);
-                sPPI += UniString::CreateFromInt32(ay);
+                sPPI += OUString("\xc3\x97");
+                sPPI += OUString::valueOf(ay);
              }
-             sTemp.SearchAndReplaceAscii("%1", sPPI);
+             sTemp.replaceAll("%1", sPPI);
         }
         aOrigSizeFT.SetText( sTemp );
     }
