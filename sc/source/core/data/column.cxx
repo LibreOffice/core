@@ -1484,6 +1484,7 @@ void ScColumn::MoveTo(SCROW nStartRow, SCROW nEndRow, ScColumn& rCol)
     SCSIZE i;
     Search( nStartRow, i);  // i points to start row or position thereafter
     SCSIZE nStartPos = i;
+    // First, copy the cell instances to the new column.
     for ( ; i < maItems.size() && maItems[i].nRow <= nEndRow; ++i)
     {
         SCROW nRow = maItems[i].nRow;
@@ -1531,15 +1532,16 @@ void ScColumn::MoveTo(SCROW nStartRow, SCROW nEndRow, ScColumn& rCol)
             nStartPos = (*it).first;
             nStopPos = (*it).second;
             for (i=nStartPos; i<nStopPos; ++i)
-                maItems[i].pCell = pNoteCell;
+                maItems[i].pCell = pNoteCell; // Assign the dumpy cell instance to all slots.
             for (i=nStartPos; i<nStopPos; ++i)
             {
                 rAddress.SetRow( maItems[i].nRow );
                 pDocument->AreaBroadcast( aHint );
             }
+            // Erase the slots containing pointers to the dummy cell instance.
             maItems.erase(maItems.begin() + nStartPos, maItems.begin() + nStopPos);
         }
-        pNoteCell->Delete();
+        pNoteCell->Delete(); // Delete the dummy cell instance.
     }
 }
 
