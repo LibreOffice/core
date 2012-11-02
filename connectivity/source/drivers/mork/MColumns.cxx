@@ -72,7 +72,7 @@ sdbcx::ObjectType OColumns::createObject(const ::rtl::OUString& _rName)
                                             sal_False,sal_False,sal_False,sal_True,
                                             sCatalogName,
                                             sSchemaName,
-                                            sTableName));
+                                            sTableName);
                 xRet = pRet;
                 break;
             }
