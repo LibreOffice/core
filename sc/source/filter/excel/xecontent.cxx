@@ -832,9 +832,21 @@ const char* GetOperatorString(ScConditionMode eMode, bool& bFrmla2)
 
 const char* GetTypeString(ScConditionMode eMode)
 {
-    if (eMode == SC_COND_DIRECT)
-        return "expression";
-    return "cellIs";
+    switch(eMode)
+    {
+        case SC_COND_DIRECT:
+            return "expression";
+        case SC_COND_TOP10:
+        case SC_COND_TOP_PERCENT:
+        case SC_COND_BOTTOM10:
+        case SC_COND_BOTTOM_PERCENT:
+            return "top10";
+        case SC_COND_ABOVE_AVERAGE:
+        case SC_COND_BELOW_AVERAGE:
+            return "aboveAverage";
+        default:
+            return "cellIs";
+    }
 }
 
 }
