@@ -270,7 +270,8 @@ void ScTable::DeleteRow( SCCOL nStartCol, SCCOL nEndCol, SCROW nStartRow, SCSIZE
 
         if (nStartRow <= nRow && nStartCol <= nCol && nCol <= nEndCol)
         {
-            if(nRow - nStartRow > static_cast<SCROW>(nSize))
+            SCROW nEndRow = nStartRow + nSize - 1; // last row of deleted region
+            if (nEndRow < nRow)
             {
                 // This note will get shifted.
                 aNotes.insert(nCol, nRow - nSize, pPostIt);
@@ -377,6 +378,7 @@ void ScTable::InsertCol( SCCOL nStartCol, SCROW nStartRow, SCROW nEndRow, SCSIZE
             aCol[MAXCOL - nSize - i].MoveTo(nStartRow, nEndRow, aCol[MAXCOL - i]);
     }
 
+    // Transfer those notes that will get shifted into another container.
     ScNotes aNotes(pDocument);
     ScNotes::iterator itr = maNotes.begin();
     while( itr != maNotes.end() )
@@ -386,13 +388,14 @@ void ScTable::InsertCol( SCCOL nStartCol, SCROW nStartRow, SCROW nEndRow, SCSIZE
         ScPostIt* pPostIt = itr->second;
         ++itr;
 
-        if (nCol >= nStartCol)
+        if (nStartCol <= nCol && nStartRow <= nRow && nRow <= nEndRow)
         {
             aNotes.insert(nCol + nSize, nRow, pPostIt);
             maNotes.ReleaseNote(nCol, nRow);
         }
     }
 
+    // Re-insert the shifted notes.
     itr = aNotes.begin();
     while( itr != aNotes.end() )
     {
@@ -486,6 +489,7 @@ void ScTable::DeleteCol( SCCOL nStartCol, SCROW nStartRow, SCROW nEndRow, SCSIZE
             aCol[nStartCol + nSize + i].MoveTo(nStartRow, nEndRow, aCol[nStartCol + i]);
     }
 
+    // Transfer those notes that will get shifted into another container.
     ScNotes aNotes(pDocument);
     ScNotes::iterator itr = maNotes.begin();
     while( itr != maNotes.end() )
@@ -495,18 +499,22 @@ void ScTable::DeleteCol( SCCOL nStartCol, SCROW nStartRow, SCROW nEndRow, SCSIZE
         ScPostIt* pPostIt = itr->second;
         ++itr;
 
-        if (nCol >= nStartCol)
+        if (nStartCol <= nCol && nStartRow <= nRow && nRow <= nEndRow)
         {
-            if(nCol - nStartCol > static_cast<SCCOL>(nSize))
+            SCCOL nEndCol = nStartCol + nSize - 1;
+            if (nEndCol < nCol)
             {
+                // This note will get shifted.
                 aNotes.insert(nCol - nSize, nRow, pPostIt);
                 maNotes.ReleaseNote(nCol, nRow);
             }
             else
+                // The note is in the deleted region. Remove it.
                 maNotes.erase(nCol, nRow);
         }
     }
 
+    // Re-insert the shifted notes.
     itr = aNotes.begin();
     while( itr != aNotes.end() )
     {
