@@ -89,10 +89,10 @@ inline bool IsAmbiguousScript( sal_uInt8 nScript )
 // -----------------------------------------------------------------------------------------
 
 
-long ScColumn::GetNeededSize( SCROW nRow, OutputDevice* pDev,
-                              double nPPTX, double nPPTY,
-                              const Fraction& rZoomX, const Fraction& rZoomY,
-                              bool bWidth, const ScNeededSizeOptions& rOptions )
+long ScColumn::GetNeededSize(
+    SCROW nRow, OutputDevice* pDev, double nPPTX, double nPPTY,
+    const Fraction& rZoomX, const Fraction& rZoomY,
+    bool bWidth, const ScNeededSizeOptions& rOptions ) const
 {
     long nValue=0;
     SCSIZE nIndex;
@@ -530,11 +530,9 @@ long ScColumn::GetNeededSize( SCROW nRow, OutputDevice* pDev,
 }
 
 
-sal_uInt16 ScColumn::GetOptimalColWidth( OutputDevice* pDev, double nPPTX, double nPPTY,
-                                     const Fraction& rZoomX, const Fraction& rZoomY,
-                                     bool bFormula, sal_uInt16 nOldWidth,
-                                     const ScMarkData* pMarkData,
-                                     const ScColWidthParam* pParam )
+sal_uInt16 ScColumn::GetOptimalColWidth(
+    OutputDevice* pDev, double nPPTX, double nPPTY, const Fraction& rZoomX, const Fraction& rZoomY,
+    bool bFormula, sal_uInt16 nOldWidth, const ScMarkData* pMarkData, const ScColWidthParam* pParam) const
 {
     if ( maItems.empty() )
         return nOldWidth;
@@ -671,11 +669,10 @@ static sal_uInt16 lcl_GetAttribHeight( const ScPatternAttr& rPattern, sal_uInt16
 //  nMinHeight, nMinStart zur Optimierung: ab nRow >= nMinStart ist mindestens nMinHeight
 //  (wird nur bei bStdAllowed ausgewertet)
 
-void ScColumn::GetOptimalHeight( SCROW nStartRow, SCROW nEndRow, sal_uInt16* pHeight,
-                                OutputDevice* pDev,
-                                double nPPTX, double nPPTY,
-                                const Fraction& rZoomX, const Fraction& rZoomY,
-                                bool bShrink, sal_uInt16 nMinHeight, SCROW nMinStart )
+void ScColumn::GetOptimalHeight(
+    SCROW nStartRow, SCROW nEndRow, sal_uInt16* pHeight, OutputDevice* pDev,
+    double nPPTX, double nPPTY, const Fraction& rZoomX, const Fraction& rZoomY,
+    bool bShrink, sal_uInt16 nMinHeight, SCROW nMinStart) const
 {
     ScAttrIterator aIter( pAttrArray, nStartRow, nEndRow );
 
@@ -1640,7 +1637,7 @@ void ScColumn::CompileColRowNameFormula()
         }
 }
 
-static void lcl_UpdateSubTotal( ScFunctionData& rData, ScBaseCell* pCell )
+static void lcl_UpdateSubTotal( ScFunctionData& rData, const ScBaseCell* pCell )
 {
     double nValue = 0.0;
     bool bVal = false;
@@ -1720,10 +1717,9 @@ static void lcl_UpdateSubTotal( ScFunctionData& rData, ScBaseCell* pCell )
 }
 
 //  Mehrfachselektion:
-void ScColumn::UpdateSelectionFunction( const ScMarkData& rMark,
-                                        ScFunctionData& rData,
-                                        ScFlatBoolRowSegments& rHiddenRows,
-                                        bool bDoExclude, SCROW nExStartRow, SCROW nExEndRow )
+void ScColumn::UpdateSelectionFunction(
+    const ScMarkData& rMark, ScFunctionData& rData, ScFlatBoolRowSegments& rHiddenRows,
+    bool bDoExclude, SCROW nExStartRow, SCROW nExEndRow) const
 {
     SCSIZE nIndex;
     ScMarkedDataIter aDataIter(this, &rMark, false);
@@ -1738,9 +1734,8 @@ void ScColumn::UpdateSelectionFunction( const ScMarkData& rMark,
 }
 
 //  bei bNoMarked die Mehrfachselektion weglassen
-void ScColumn::UpdateAreaFunction( ScFunctionData& rData,
-                                   ScFlatBoolRowSegments& rHiddenRows,
-                                    SCROW nStartRow, SCROW nEndRow )
+void ScColumn::UpdateAreaFunction(
+    ScFunctionData& rData, ScFlatBoolRowSegments& rHiddenRows, SCROW nStartRow, SCROW nEndRow) const
 {
     SCSIZE nIndex;
     Search( nStartRow, nIndex );

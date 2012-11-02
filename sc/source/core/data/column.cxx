@@ -1310,8 +1310,9 @@ void ScColumn::CopyToColumn(
 }
 
 
-void ScColumn::UndoToColumn(SCROW nRow1, SCROW nRow2, sal_uInt16 nFlags, bool bMarked,
-                                ScColumn& rColumn, const ScMarkData* pMarkData )
+void ScColumn::UndoToColumn(
+    SCROW nRow1, SCROW nRow2, sal_uInt16 nFlags, bool bMarked, ScColumn& rColumn,
+    const ScMarkData* pMarkData) const
 {
     if (nRow1 > 0)
         CopyToColumn( 0, nRow1-1, IDF_FORMULA, false, rColumn );
@@ -2098,14 +2099,14 @@ bool ScColumn::HasEditCells(SCROW nStartRow, SCROW nEndRow, SCROW& rFirst) const
 }
 
 
-SCsROW ScColumn::SearchStyle( SCsROW nRow, const ScStyleSheet* pSearchStyle,
-                                bool bUp, bool bInSelection, const ScMarkData& rMark )
+SCsROW ScColumn::SearchStyle(
+    SCsROW nRow, const ScStyleSheet* pSearchStyle, bool bUp, bool bInSelection,
+    const ScMarkData& rMark) const
 {
     if (bInSelection)
     {
         if (rMark.IsMultiMarked())
-            return pAttrArray->SearchStyle( nRow, pSearchStyle, bUp,
-                                    (ScMarkArray*) rMark.GetArray()+nCol );     //! const
+            return pAttrArray->SearchStyle(nRow, pSearchStyle, bUp, rMark.GetArray()+nCol);
         else
             return -1;
     }
@@ -2114,14 +2115,15 @@ SCsROW ScColumn::SearchStyle( SCsROW nRow, const ScStyleSheet* pSearchStyle,
 }
 
 
-bool ScColumn::SearchStyleRange( SCsROW& rRow, SCsROW& rEndRow, const ScStyleSheet* pSearchStyle,
-                                    bool bUp, bool bInSelection, const ScMarkData& rMark )
+bool ScColumn::SearchStyleRange(
+    SCsROW& rRow, SCsROW& rEndRow, const ScStyleSheet* pSearchStyle, bool bUp,
+    bool bInSelection, const ScMarkData& rMark) const
 {
     if (bInSelection)
     {
         if (rMark.IsMultiMarked())
-            return pAttrArray->SearchStyleRange( rRow, rEndRow, pSearchStyle, bUp,
-                                    (ScMarkArray*) rMark.GetArray()+nCol );     //! const
+            return pAttrArray->SearchStyleRange(
+                rRow, rEndRow, pSearchStyle, bUp, rMark.GetArray() + nCol);
         else
             return false;
     }

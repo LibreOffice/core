@@ -199,20 +199,20 @@ public:
     SCCOL              GetCol() const { return nCol; }
 
                 //     UpdateSelectionFunction: multi-select
-    void               UpdateSelectionFunction( const ScMarkData& rMark,
-                                    ScFunctionData& rData,
-                                    ScFlatBoolRowSegments& rHiddenRows,
-                                    bool bDoExclude, SCROW nExStartRow, SCROW nExEndRow );
-    void        UpdateAreaFunction( ScFunctionData& rData,
-                                    ScFlatBoolRowSegments& rHiddenRows,
-                                    SCROW nStartRow, SCROW nEndRow );
+    void UpdateSelectionFunction(
+        const ScMarkData& rMark, ScFunctionData& rData, ScFlatBoolRowSegments& rHiddenRows,
+        bool bDoExclude, SCROW nExStartRow, SCROW nExEndRow ) const;
+
+    void UpdateAreaFunction(
+        ScFunctionData& rData, ScFlatBoolRowSegments& rHiddenRows, SCROW nStartRow, SCROW nEndRow) const;
 
     void CopyToColumn(
         SCROW nRow1, SCROW nRow2, sal_uInt16 nFlags, bool bMarked,
         ScColumn& rColumn, const ScMarkData* pMarkData = NULL, bool bAsLink = false) const;
 
-    void        UndoToColumn(SCROW nRow1, SCROW nRow2, sal_uInt16 nFlags, bool bMarked,
-                                ScColumn& rColumn, const ScMarkData* pMarkData = NULL );
+    void UndoToColumn(
+        SCROW nRow1, SCROW nRow2, sal_uInt16 nFlags, bool bMarked,
+        ScColumn& rColumn, const ScMarkData* pMarkData = NULL) const;
 
     void        CopyScenarioFrom( const ScColumn& rSrcCol );
     void        CopyScenarioTo( ScColumn& rDestCol ) const;
@@ -318,10 +318,13 @@ public:
     bool    IsStyleSheetUsed( const ScStyleSheet& rStyle, bool bGatherAllStyles ) const;
 
                 /// May return -1 if not found
-    SCsROW      SearchStyle( SCsROW nRow, const ScStyleSheet* pSearchStyle,
-                                bool bUp, bool bInSelection, const ScMarkData& rMark );
-    bool    SearchStyleRange( SCsROW& rRow, SCsROW& rEndRow, const ScStyleSheet* pSearchStyle,
-                                    bool bUp, bool bInSelection, const ScMarkData& rMark );
+    SCsROW SearchStyle(
+        SCsROW nRow, const ScStyleSheet* pSearchStyle, bool bUp, bool bInSelection,
+        const ScMarkData& rMark) const;
+
+    bool SearchStyleRange(
+        SCsROW& rRow, SCsROW& rEndRow, const ScStyleSheet* pSearchStyle, bool bUp,
+        bool bInSelection, const ScMarkData& rMark) const;
 
     bool    ApplyFlags( SCROW nStartRow, SCROW nEndRow, sal_Int16 nFlags );
     bool    RemoveFlags( SCROW nStartRow, SCROW nEndRow, sal_Int16 nFlags );
@@ -335,20 +338,20 @@ public:
     void        ClearSelectionItems( const sal_uInt16* pWhich, const ScMarkData& rMark );
     void        ChangeSelectionIndent( bool bIncrement, const ScMarkData& rMark );
 
-    long        GetNeededSize( SCROW nRow, OutputDevice* pDev,
-                                    double nPPTX, double nPPTY,
-                                    const Fraction& rZoomX, const Fraction& rZoomY,
-                                    bool bWidth, const ScNeededSizeOptions& rOptions );
-    sal_uInt16  GetOptimalColWidth( OutputDevice* pDev, double nPPTX, double nPPTY,
-                                    const Fraction& rZoomX, const Fraction& rZoomY,
-                                    bool bFormula, sal_uInt16 nOldWidth,
-                                    const ScMarkData* pMarkData,
-                                    const ScColWidthParam* pParam );
-    void        GetOptimalHeight( SCROW nStartRow, SCROW nEndRow, sal_uInt16* pHeight,
-                                    OutputDevice* pDev,
-                                    double nPPTX, double nPPTY,
-                                    const Fraction& rZoomX, const Fraction& rZoomY,
-                                    bool bShrink, sal_uInt16 nMinHeight, SCROW nMinStart );
+    long GetNeededSize(
+        SCROW nRow, OutputDevice* pDev, double nPPTX, double nPPTY,
+        const Fraction& rZoomX, const Fraction& rZoomY,
+        bool bWidth, const ScNeededSizeOptions& rOptions) const;
+
+    sal_uInt16 GetOptimalColWidth(
+        OutputDevice* pDev, double nPPTX, double nPPTY,
+        const Fraction& rZoomX, const Fraction& rZoomY,
+        bool bFormula, sal_uInt16 nOldWidth, const ScMarkData* pMarkData, const ScColWidthParam* pParam) const;
+
+    void GetOptimalHeight(
+        SCROW nStartRow, SCROW nEndRow, sal_uInt16* pHeight, OutputDevice* pDev,
+        double nPPTX, double nPPTY, const Fraction& rZoomX, const Fraction& rZoomY,
+        bool bShrink, sal_uInt16 nMinHeight, SCROW nMinStart) const;
 public:
 
                 /// Including current, may return -1

@@ -148,10 +148,13 @@ public:
     SCsROW  GetNextUnprotected( SCsROW nRow, bool bUp ) const;
 
             /// May return -1 if not found
-    SCsROW  SearchStyle( SCsROW nRow, const ScStyleSheet* pSearchStyle,
-                            bool bUp, ScMarkArray* pMarkArray = NULL );
-    bool    SearchStyleRange( SCsROW& rRow, SCsROW& rEndRow, const ScStyleSheet* pSearchStyle,
-                            bool bUp, ScMarkArray* pMarkArray = NULL );
+    SCsROW SearchStyle(
+        SCsROW nRow, const ScStyleSheet* pSearchStyle, bool bUp,
+        const ScMarkArray* pMarkArray = NULL) const;
+
+    bool SearchStyleRange(
+        SCsROW& rRow, SCsROW& rEndRow, const ScStyleSheet* pSearchStyle, bool bUp,
+        const ScMarkArray* pMarkArray = NULL) const;
 
     bool    ApplyFlags( SCROW nStartRow, SCROW nEndRow, sal_Int16 nFlags );
     bool    RemoveFlags( SCROW nStartRow, SCROW nEndRow, sal_Int16 nFlags );

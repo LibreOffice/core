@@ -2340,8 +2340,9 @@ void ScAttrArray::CopyAreaSafe( SCROW nStartRow, SCROW nEndRow, long nDy, ScAttr
 }
 
 
-SCsROW ScAttrArray::SearchStyle( SCsROW nRow, const ScStyleSheet* pSearchStyle,
-                                    bool bUp, ScMarkArray* pMarkArray )
+SCsROW ScAttrArray::SearchStyle(
+    SCsROW nRow, const ScStyleSheet* pSearchStyle, bool bUp,
+    const ScMarkArray* pMarkArray) const
 {
     bool bFound = false;
 
@@ -2403,8 +2404,9 @@ SCsROW ScAttrArray::SearchStyle( SCsROW nRow, const ScStyleSheet* pSearchStyle,
 }
 
 
-bool ScAttrArray::SearchStyleRange( SCsROW& rRow, SCsROW& rEndRow,
-                        const ScStyleSheet* pSearchStyle, bool bUp, ScMarkArray* pMarkArray )
+bool ScAttrArray::SearchStyleRange(
+    SCsROW& rRow, SCsROW& rEndRow, const ScStyleSheet* pSearchStyle, bool bUp,
+    const ScMarkArray* pMarkArray) const
 {
     SCsROW nStartRow = SearchStyle( rRow, pSearchStyle, bUp, pMarkArray );
     if (VALIDROW(nStartRow))
