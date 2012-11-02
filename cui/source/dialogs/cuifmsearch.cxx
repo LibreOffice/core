@@ -226,7 +226,7 @@ FmSearchDialog::~FmSearchDialog()
 }
 
 //------------------------------------------------------------------------
-void FmSearchDialog::Init(const UniString& strVisibleFields, const UniString& sInitialText)
+void FmSearchDialog::Init(const OUString& strVisibleFields, const OUString& sInitialText)
 {
     //the initialization of all the Controls
     m_rbSearchForText.SetClickHdl(LINK(this, FmSearchDialog, OnClickedFieldRadios));
@@ -279,10 +279,10 @@ void FmSearchDialog::Init(const UniString& strVisibleFields, const UniString& sI
     m_cmbSearchText.SetText(sInitialText);
     // if the Edit-line has changed the text (e.g. because it contains
     // control characters, as can be the case with memo fields), I use
-    // an empty UniString.
-    UniString sRealSetText = m_cmbSearchText.GetText();
-    if (!sRealSetText.Equals(sInitialText))
-        m_cmbSearchText.SetText(UniString());
+    // an empty OUString.
+    OUString sRealSetText = m_cmbSearchText.GetText();
+    if (!sRealSetText.equals(sInitialText))
+        m_cmbSearchText.SetText(OUString());
     LINK(this, FmSearchDialog, OnSearchTextModified).Call(&m_cmbSearchText);
 
     // initial
@@ -336,17 +336,17 @@ IMPL_LINK_NOARG(FmSearchDialog, OnClickedSearchAgain)
 {
     if (m_pbClose.IsEnabled())
     {   // the button has the function 'search'
-        UniString strThisRoundText = m_cmbSearchText.GetText();
+        OUString strThisRoundText = m_cmbSearchText.GetText();
         // to history
         m_cmbSearchText.RemoveEntry(strThisRoundText);
         m_cmbSearchText.InsertEntry(strThisRoundText, 0);
-        // the remove/insert makes sure that a) the UniString does not appear twice and
+        // the remove/insert makes sure that a) the OUString does not appear twice and
         // that b) the last searched strings are at the beginning and limit the list length
         while (m_cmbSearchText.GetEntryCount() > MAX_HISTORY_ENTRIES)
             m_cmbSearchText.RemoveEntry(m_cmbSearchText.GetEntryCount()-1);
 
         // take out the 'overflow' hint
-        m_ftHint.SetText(UniString());
+        m_ftHint.SetText(OUString());
         m_ftHint.Invalidate();
 
         if (m_cbStartOver.IsChecked())
@@ -457,7 +457,7 @@ IMPL_LINK(FmSearchDialog, OnFieldSelected, ListBox*, pBox)
 
     sal_Int32 nCurrentContext = m_lbForm.GetSelectEntryPos();
     if (nCurrentContext != LISTBOX_ENTRY_NOTFOUND)
-        m_arrContextFields[nCurrentContext] = UniString(m_lbField.GetSelectEntry());
+        m_arrContextFields[nCurrentContext] = OUString(m_lbField.GetSelectEntry());
     return 0;
 }
 
