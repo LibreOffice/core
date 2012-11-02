@@ -40,7 +40,8 @@ $(call gb_Helper_abbreviate_dirs,\
 	$(gb_CC) \
 		$(T_CFLAGS) \
 		-c $(3) \
-		-o $(1)) && \
+		-o $(1)) \
+		$(INCLUDE) && \
 	echo "$(1) : $(3)" > $(4)
 endef
 
