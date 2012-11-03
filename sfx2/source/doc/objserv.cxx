@@ -951,7 +951,10 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
         }
         case SID_CANCELCHECKOUT:
         {
-            CancelCheckOut( );
+            if (  QueryBox( NULL, SfxResId( RID_QUERY_CANCELCHECKOUT ) ).Execute( ) == RET_YES )
+            {
+                CancelCheckOut( );
+            }
             break;
         }
         case SID_CHECKIN:

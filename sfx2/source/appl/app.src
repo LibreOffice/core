@@ -432,6 +432,13 @@ QueryBox RID_XMLSEC_QUERY_SAVEBEFORESIGN
     Message [ en-US ] = "The document has to be saved before it can be signed.\nDo you want to save the document?" ;
 };
 
+QueryBox RID_QUERY_CANCELCHECKOUT
+{
+    Buttons = WB_YES_NO ;
+    DefButton = WB_DEF_YES ;
+    Message [ en-US ] = "This will discard all changes on the server since check-out.\nDo you want to proceed?" ;
+};
+
 InfoBox RID_XMLSEC_INFO_WRONGDOCFORMAT
 {
     Message [ en-US ] = "This document must be saved in OpenDocument file format before it can be digitally signed." ;

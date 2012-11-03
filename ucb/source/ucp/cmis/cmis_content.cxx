@@ -837,9 +837,9 @@ namespace cmis
 
             // Get the Original document (latest version)
             vector< libcmis::DocumentPtr > aVersions = pPwc->getAllVersions( );
-            libcmis::DocumentPtr pDoc;
+            bool bFound = false;
             for ( vector< libcmis::DocumentPtr >::iterator it = aVersions.begin();
-                    it != aVersions.end( ) && pDoc != NULL; ++it )
+                    it != aVersions.end( ) && !bFound; ++it )
             {
                 libcmis::DocumentPtr pVersion = *it;
                 map< string, libcmis::PropertyPtr > aProps = pVersion->getProperties( );
@@ -851,25 +851,26 @@ namespace cmis
                 }
 
                 if ( bIsLatestVersion )
-                    pDoc.reset( pVersion.get( ) );
+                {
+                    bFound = true;
+                    // Compute the URL of the Document
+                    URL aCmisUrl( m_sURL );
+                    vector< string > aPaths = pVersion->getPaths( );
+                    if ( !aPaths.empty() )
+                    {
+                        string sPath = aPaths.front( );
+                        aCmisUrl.setObjectPath( STD_TO_OUSTR( sPath ) );
+                    }
+                    else
+                    {
+                        // We may have unfiled doc depending on the server, those
+                        // won't have any path, use their ID instead
+                        string sId = pVersion->getId( );
+                        aCmisUrl.setObjectId( STD_TO_OUSTR( sId ) );
+                    }
+                    aRet = aCmisUrl.asString( );
+                }
             }
-
-            // Compute the URL of the Document
-            URL aCmisUrl( m_sURL );
-            vector< string > aPaths = pDoc->getPaths( );
-            if ( !aPaths.empty() )
-            {
-                string sPath = aPaths.front( );
-                aCmisUrl.setObjectPath( STD_TO_OUSTR( sPath ) );
-            }
-            else
-            {
-                // We may have unfiled doc depending on the server, those
-                // won't have any path, use their ID instead
-                string sId = pDoc->getId( );
-                aCmisUrl.setObjectId( STD_TO_OUSTR( sId ) );
-            }
-            aRet = aCmisUrl.asString( );
         }
         catch ( const libcmis::Exception& e )
         {
