@@ -158,6 +158,7 @@ ScConditionFrmtEntry::ScConditionFrmtEntry( Window* pParent, ScDocument* pDoc, c
         StyleSelectHdl(NULL);
         ScConditionMode eMode = pFormatEntry->GetOperation();
         maEdVal1.SetText(pFormatEntry->GetExpression(maPos, 0));
+        maEdVal2.Hide();
         switch(eMode)
         {
             case SC_COND_EQUAL:
@@ -179,10 +180,12 @@ ScConditionFrmtEntry::ScConditionFrmtEntry( Window* pParent, ScDocument* pDoc, c
                 maLbCondType.SelectEntryPos(5);
                 break;
             case SC_COND_BETWEEN:
+                maEdVal2.Show();
                 maEdVal2.SetText(pFormatEntry->GetExpression(maPos, 1));
                 maLbCondType.SelectEntryPos(6);
                 break;
             case SC_COND_NOTBETWEEN:
+                maEdVal2.Show();
                 maEdVal2.SetText(pFormatEntry->GetExpression(maPos, 1));
                 maLbCondType.SelectEntryPos(7);
                 break;
@@ -209,9 +212,11 @@ ScConditionFrmtEntry::ScConditionFrmtEntry( Window* pParent, ScDocument* pDoc, c
                 maLbCondType.SelectEntryPos(13);
                 break;
             case SC_COND_ABOVE_AVERAGE:
+                maEdVal1.Hide();
                 maLbCondType.SelectEntryPos(14);
                 break;
             case SC_COND_BELOW_AVERAGE:
+                maEdVal1.Hide();
                 maLbCondType.SelectEntryPos(15);
                 break;
             case SC_COND_NONE:
