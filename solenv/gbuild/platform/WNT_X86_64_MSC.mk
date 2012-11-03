@@ -28,9 +28,9 @@
 
 include $(GBUILDDIR)/platform/com_MSC_defs.mk
 
-gb_CPPU_ENV := msci
+gb_CPPU_ENV := msc6
 
-gb_CPUDEFS := -D_X86_=1
+gb_CPUDEFS := -D_AMD64_=1
 
 include $(GBUILDDIR)/platform/com_MSC_class.mk
 
