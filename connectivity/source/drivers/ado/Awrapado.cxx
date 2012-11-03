@@ -1561,6 +1561,13 @@ WpBase::WpBase(IDispatch* pInt)
     }
 }
 
+WpBase::WpBase(const WpBase& aWrapper)
+    :pIUnknown(aWrapper.pIUnknown)
+{
+    if (pIUnknown)
+        pIUnknown->AddRef();
+}
+
 //inline
 WpBase& WpBase::operator=(const WpBase& rhs)
 {
@@ -1586,11 +1593,6 @@ WpBase& WpBase::operator=(IDispatch* rhs)
             pIUnknown->AddRef();
     }
     return *this;
-}
-
-WpBase::WpBase(const WpBase& aWrapper)
-{
-    operator=(aWrapper);
 }
 
 WpBase::~WpBase()
