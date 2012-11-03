@@ -50,21 +50,36 @@ test::BootstrapFixtureBase::BootstrapFixtureBase()
     CPPUNIT_ASSERT_MESSAGE("SRC_ROOT env variable not set", pSrcRoot != NULL && pSrcRoot[0] != 0);
     const char* pSolverRoot = getenv( "OUTDIR_FOR_BUILD" );
     CPPUNIT_ASSERT_MESSAGE("$OUTDIR_FOR_BUILD env variable not set", pSolverRoot != NULL && pSolverRoot[0] != 0);
+    const char* pWorkdirRoot = getenv( "WORKDIR_FOR_BUILD" );
+    CPPUNIT_ASSERT_MESSAGE("$WORKDIR_FOR_BUILD env variable not set", pWorkdirRoot != NULL && pWorkdirRoot[0] != 0);
 #ifdef WNT
     if (pSrcRoot[1] == ':')
+    {
         m_aSrcRootURL += rtl::OUString::createFromAscii( "/" );
+    }
     if (pSolverRoot[1] == ':')
+    {
         m_aSolverRootURL += rtl::OUString::createFromAscii( "/" );
+    }
+    if (pWorkdirRoot[1] == ':')
+    {
+        m_aWorkdirRootURL += rtl::OUString::createFromAscii( "/" );
+    }
 #endif
 #else
     const char* pSrcRoot = "/assets";
     const char* pSolverRoot = "/assets";
+    const char* pWorkdirRoot = "/assets";
 #endif
     m_aSrcRootPath = rtl::OUString::createFromAscii( pSrcRoot );
     m_aSrcRootURL += m_aSrcRootPath;
 
     m_aSolverRootPath = rtl::OUString::createFromAscii( pSolverRoot );
     m_aSolverRootURL += m_aSolverRootPath;
+
+    m_aWorkdirRootPath = rtl::OUString::createFromAscii( pWorkdirRoot );
+    m_aWorkdirRootURL += m_aWorkdirRootPath;
+
 }
 
 test::BootstrapFixtureBase::~BootstrapFixtureBase()
@@ -79,6 +94,18 @@ test::BootstrapFixtureBase::~BootstrapFixtureBase()
 ::rtl::OUString test::BootstrapFixtureBase::getPathFromSrc( const char *pPath )
 {
     return m_aSrcRootPath + rtl::OUString::createFromAscii( pPath );
+}
+
+
+::rtl::OUString test::BootstrapFixtureBase::getURLFromWorkdir( const char *pPath )
+{
+    return m_aWorkdirRootURL + rtl::OUString::createFromAscii( pPath );
+}
+
+::rtl::OUString test::BootstrapFixtureBase::getPathFromWorkdir( const char *pPath )
+{
+    return m_aWorkdirRootPath + rtl::OUString::createFromAscii( pPath );
+
 }
 
 void test::BootstrapFixtureBase::setUp()

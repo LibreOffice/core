@@ -57,6 +57,8 @@ protected:
   ::rtl::OUString m_aSrcRootPath;
   ::rtl::OUString m_aSolverRootURL;
   ::rtl::OUString m_aSolverRootPath;
+  ::rtl::OUString m_aWorkdirRootURL;
+  ::rtl::OUString m_aWorkdirRootPath;
 
   com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext> m_xContext;
   com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> m_xSFactory;
@@ -80,6 +82,12 @@ public:
   // return a Path to a given c-str path from the source directory
   ::rtl::OUString getPathFromSrc( const char *pPath );
 
+
+  // return a URL to a given c-str path from the workdir directory
+  ::rtl::OUString getURLFromWorkdir( const char *pPath );
+
+  // return a Path to a given c-str path from the workdir directory
+  ::rtl::OUString getPathFromWorkdir( const char *pPath );
   virtual void setUp();
   virtual void tearDown();
 
