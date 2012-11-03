@@ -81,11 +81,6 @@ test::BootstrapFixtureBase::~BootstrapFixtureBase()
     return m_aSrcRootPath + rtl::OUString::createFromAscii( pPath );
 }
 
-::rtl::OUString test::BootstrapFixtureBase::getURLFromSolver( const char *pPath )
-{
-    return m_aSolverRootURL + rtl::OUString::createFromAscii( pPath );
-}
-
 void test::BootstrapFixtureBase::setUp()
 {
     // set UserInstallation to user profile dir in test/user-template
