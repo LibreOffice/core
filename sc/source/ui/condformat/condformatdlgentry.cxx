@@ -219,6 +219,14 @@ ScConditionFrmtEntry::ScConditionFrmtEntry( Window* pParent, ScDocument* pDoc, c
                 maEdVal1.Hide();
                 maLbCondType.SelectEntryPos(15);
                 break;
+            case SC_COND_ERROR:
+                maEdVal1.Hide();
+                maLbCondType.SelectEntryPos(16);
+                break;
+            case SC_COND_NOERROR:
+                maEdVal1.Hide();
+                maLbCondType.SelectEntryPos(17);
+                break;
             case SC_COND_NONE:
                 break;
         }
@@ -316,6 +324,12 @@ ScFormatEntry* ScConditionFrmtEntry::createConditionEntry() const
             break;
         case 15:
             eMode = SC_COND_BELOW_AVERAGE;
+            break;
+        case 16:
+            eMode = SC_COND_ERROR;
+            break;
+        case 17:
+            eMode = SC_COND_NOERROR;
             break;
         default:
             assert(false); // this cannot happen
@@ -963,9 +977,14 @@ IMPL_LINK_NOARG( ScConditionFrmtEntry, ConditionTypeSelectHdl )
         maEdVal2.Hide();
         maEdVal1.Hide();
     }
-    else
+    else if(nSelectPos < 6 || (nSelectPos >= 10 && nSelectPos <= 13))
     {
         maEdVal1.Show();
+        maEdVal2.Hide();
+    }
+    else
+    {
+        maEdVal1.Hide();
         maEdVal2.Hide();
     }
 

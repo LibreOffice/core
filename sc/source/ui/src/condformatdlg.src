@@ -147,6 +147,8 @@ Control RID_COND_ENTRY
             "bottom 10 percent";
             "above average";
             "below average";
+            "Error";
+            "No Error";
         };
     };
     Edit ED_VAL1
