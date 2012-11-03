@@ -3693,11 +3693,9 @@ void MSWordExportBase::OutputStartNode( const SwStartNode & rNode)
 
 void MSWordExportBase::OutputEndNode( const SwEndNode &rNode )
 {
-    SAL_INFO( "sw.ww8", "<OutWW8_SwEndNode>"
 #ifdef DBG_UTIL
-        << dbg_out(&rNode)
+    SAL_INFO( "sw.ww8", "<OutWW8_SwEndNode>" << dbg_out(&rNode));
 #endif
-        );
 
     ww8::WW8TableNodeInfo::Pointer_t pNodeInfo = mpTableInfo->getTableNodeInfo( &rNode );
 
