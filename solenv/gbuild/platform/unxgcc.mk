@@ -161,7 +161,11 @@ endif
 
 gb_COMPILERNOOPTFLAGS := -O0
 
+ifeq ($(gb_SYMBOL),$(true))
+gb_LINKERSTRIPDEBUGFLAGS :=
+else
 gb_LINKERSTRIPDEBUGFLAGS := -Wl,-S
+endif
 
 # LinkTarget class
 
@@ -179,6 +183,11 @@ gb_LinkTarget__RPATHS := \
 
 gb_LinkTarget_CFLAGS := $(gb_CFLAGS)
 gb_LinkTarget_CXXFLAGS := $(gb_CXXFLAGS)
+
+ifeq ($(gb_SYMBOL),$(true))
+gb_LinkTarget_CXXFLAGS += $(GGDB2)
+gb_LinkTarget_CFLAGS += $(GGDB2)
+endif
 
 # note that `cat $(extraobjectlist)` is needed to build with older gcc versions, e.g. 4.1.2 on SLED10
 # we want to use @$(extraobjectlist) in the long run
