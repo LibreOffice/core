@@ -204,7 +204,7 @@ private:
     static void flushCode(
         unsigned char const * begin, unsigned char const * end);
 
-    typedef boost::unordered_map< rtl::OUString, Vtables, rtl::OUStringHash > Map;
+    typedef boost::unordered_map< OUString, Vtables, OUStringHash > Map;
 
     osl::Mutex m_mutex;
     Map m_map;

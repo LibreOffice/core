@@ -255,13 +255,13 @@ extern "C" void cpp_vtable_call(
 #endif
     typelib_InterfaceTypeDescription * pTypeDescr = pCppI->getTypeDescr();
 #if OSL_DEBUG_LEVEL > 1
-    fprintf( stderr, "name=%s\n", rtl::OUStringToOString(pTypeDescr->aBase.pTypeName, RTL_TEXTENCODING_UTF8).getStr() );
+    fprintf( stderr, "name=%s\n", OUStringToOString(pTypeDescr->aBase.pTypeName, RTL_TEXTENCODING_UTF8).getStr() );
 #endif
     OSL_ENSURE( nFunctionIndex < pTypeDescr->nMapFunctionIndexToMemberIndex, "### illegal vtable index!" );
     if (nFunctionIndex >= pTypeDescr->nMapFunctionIndexToMemberIndex)
     {
         throw RuntimeException(
-            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "illegal vtable index!" )),
+            OUString( "illegal vtable index!" ),
             (XInterface *)pThis );
     }
 
@@ -271,7 +271,7 @@ extern "C" void cpp_vtable_call(
 
     TypeDescription aMemberDescr( pTypeDescr->ppAllMembers[nMemberPos] );
 #if OSL_DEBUG_LEVEL > 1
-    fprintf(stderr, "calling %s\n", rtl::OUStringToOString(aMemberDescr.get()->pTypeName, RTL_TEXTENCODING_UTF8).getStr());
+    fprintf(stderr, "calling %s\n", OUStringToOString(aMemberDescr.get()->pTypeName, RTL_TEXTENCODING_UTF8).getStr());
 #endif
     switch (aMemberDescr.get()->eTypeClass)
     {
@@ -352,7 +352,7 @@ extern "C" void cpp_vtable_call(
     default:
     {
         throw RuntimeException(
-            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "no member description found!" )),
+            OUString( "no member description found!" ),
             (XInterface *)pThis );
     }
     }
