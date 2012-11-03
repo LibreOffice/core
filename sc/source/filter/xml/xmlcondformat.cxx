@@ -433,6 +433,14 @@ void GetConditionData(const rtl::OUString& rValue, ScConditionMode& eMode, rtl::
         rExpr1 = ScXMLConditionHelper::getExpression( pStart, pEnd, ')');
         eMode = SC_COND_DIRECT;
     }
+    else if(rValue.indexOf("is-error") == 0)
+    {
+        eMode = SC_COND_ERROR;
+    }
+    else if(rValue.indexOf("is-no-error") == 0)
+    {
+        eMode = SC_COND_NOERROR;
+    }
     else
         eMode = SC_COND_NONE;
 }
