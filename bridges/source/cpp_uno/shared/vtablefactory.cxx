@@ -156,14 +156,14 @@ class VtableFactory::BaseOffset {
 public:
     BaseOffset(typelib_InterfaceTypeDescription * type) { calculate(type, 0); }
 
-    sal_Int32 getFunctionOffset(rtl::OUString const & name) const
+    sal_Int32 getFunctionOffset(OUString const & name) const
     { return m_map.find(name)->second; }
 
 private:
     sal_Int32 calculate(
         typelib_InterfaceTypeDescription * type, sal_Int32 offset);
 
-    typedef boost::unordered_map< rtl::OUString, sal_Int32, rtl::OUStringHash > Map;
+    typedef boost::unordered_map< OUString, sal_Int32, OUStringHash > Map;
 
     Map m_map;
 };
@@ -171,7 +171,7 @@ private:
 sal_Int32 VtableFactory::BaseOffset::calculate(
     typelib_InterfaceTypeDescription * type, sal_Int32 offset)
 {
-    rtl::OUString name(type->aBase.pTypeName);
+    OUString name(type->aBase.pTypeName);
     if (m_map.find(name) == m_map.end()) {
         for (sal_Int32 i = 0; i < type->nBaseTypes; ++i) {
             offset = calculate(type->ppBaseTypes[i], offset);
@@ -211,7 +211,7 @@ VtableFactory::~VtableFactory() {
 VtableFactory::Vtables VtableFactory::getVtables(
     typelib_InterfaceTypeDescription * type)
 {
-    rtl::OUString name(type->aBase.pTypeName);
+    OUString name(type->aBase.pTypeName);
     osl::MutexGuard guard(m_mutex);
     Map::iterator i(m_map.find(name));
     if (i == m_map.end()) {
@@ -243,18 +243,18 @@ bool VtableFactory::createBlock(Block &block, sal_Int32 slotCount) const
     block.fd = -1;
 
     osl::Security aSecurity;
-    rtl::OUString strDirectory;
-    rtl::OUString strURLDirectory;
+    OUString strDirectory;
+    OUString strURLDirectory;
     if (aSecurity.getHomeDir(strURLDirectory))
         osl::File::getSystemPathFromFileURL(strURLDirectory, strDirectory);
 
     for (int i = strDirectory.isEmpty() ? 1 : 0; i < 2; ++i)
     {
         if (strDirectory.isEmpty())
-            strDirectory = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/tmp" ));
+            strDirectory = "/tmp";
 
-        strDirectory += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/.execoooXXXXXX" ));
-        rtl::OString aTmpName = rtl::OUStringToOString(strDirectory, osl_getThreadTextEncoding());
+        strDirectory += "/.execoooXXXXXX";
+        rtl::OString aTmpName = OUStringToOString(strDirectory, osl_getThreadTextEncoding());
         char *tmpfname = new char[aTmpName.getLength()+1];
         strncpy(tmpfname, aTmpName.getStr(), aTmpName.getLength()+1);
         if ((block.fd = mkstemp(tmpfname)) == -1)
@@ -297,7 +297,7 @@ bool VtableFactory::createBlock(Block &block, sal_Int32 slotCount) const
 
         freeBlock(block);
 
-        strDirectory = rtl::OUString();
+        strDirectory = OUString();
     }
     if (!block.start || !block.exec || block.fd == -1)
     {
