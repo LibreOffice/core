@@ -773,6 +773,12 @@ AC_ARG_ENABLE(selective-debuginfo,
          more general, and disabling takes precedence).
          Example: --enable-selective-debuginfo="all -sw/ -Library_sc".]))
 
+AC_ARG_ENABLE(symbols-and-preserve-optimization,
+    AS_HELP_STRING([--enable-symbols-and-preserve-optimization],
+        [Include debugging symbols in output while preserve optimization.
+         This enables -g compiler flag for GCC or equivalent,
+         without changing anything else compared to productive code.]))
+
 AC_ARG_ENABLE(compiler-plugins,
     AS_HELP_STRING([--enable-compiler-plugins],
         [Enable compiler plugins that will perform additional checks during
@@ -3343,6 +3349,31 @@ if test -n "$ENABLE_DEBUG"; then
     fi
 fi
 AC_SUBST(ENABLE_DEBUGINFO_FOR)
+
+dnl Check for "enable symbols and preserve optimizsation" option
+dnl ===================================================================
+AC_MSG_CHECKING([whether to include symbols and preserve optimizsation])
+if test -n "$enable_symbols_and_preserve_optimization" \
+        -a "$enable_symbols_and_preserve_optimization" != "no"; then
+    ENABLE_SYMBOLS="TRUE"
+    if test -n "$ENABLE_DBGUTIL"; then
+        AC_MSG_ERROR([--enable-dbgutil cannot be used with \
+--enable-symbols-and-preserve-optimization])
+    elif test -n "$ENABLE_DEBUG"; then
+        AC_MSG_ERROR([--enable-debug cannot be used with \
+--enable-symbols-and-preserve-optimization])
+    fi
+    AC_MSG_RESULT([yes])
+else
+    if test -n "$enable_symbols_and_preserve_optimization" \
+            -a "$enable_symbols_and_preserve_optimization" = "no"; then
+        ENABLE_SYMBOLS="FALSE"
+    else
+        ENABLE_SYMBOLS=
+    fi
+    AC_MSG_RESULT([no])
+fi
+AC_SUBST(ENABLE_SYMBOLS)
 
 dnl Check for explicit C/CXX/OBJC/OBJCXX/LDFLAGS. We by default use the ones specified
 dnl by our build system, but explicit override is possible.
