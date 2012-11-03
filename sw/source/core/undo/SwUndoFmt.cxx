@@ -385,7 +385,7 @@ void SwUndoNumruleCreate::UndoImpl(::sw::UndoRedoContext &)
 
 void SwUndoNumruleCreate::RedoImpl(::sw::UndoRedoContext &)
 {
-    pDoc->MakeNumRule(aNew.GetName(), &aNew, sal_True);
+    pDoc->MakeNumRule(aNew.GetName(), &aNew, true);
 }
 
 SwRewriter SwUndoNumruleCreate::GetRewriter() const
@@ -411,7 +411,7 @@ SwUndoNumruleDelete::SwUndoNumruleDelete(const SwNumRule & rRule,
 
 void SwUndoNumruleDelete::UndoImpl(::sw::UndoRedoContext &)
 {
-    pDoc->MakeNumRule(aOld.GetName(), &aOld, sal_True);
+    pDoc->MakeNumRule(aOld.GetName(), &aOld, true);
 }
 
 void SwUndoNumruleDelete::RedoImpl(::sw::UndoRedoContext &)

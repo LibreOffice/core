@@ -1983,7 +1983,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
                                 }
                             }
                             if ( bCallNumOrNoNum &&
-                                 rSh.NumOrNoNum( !bOnlyBackspaceKey, sal_True ) )
+                                 rSh.NumOrNoNum( !bOnlyBackspaceKey, true ) )
                             {
                                 eKeyState = KS_NumOrNoNum;
                             }

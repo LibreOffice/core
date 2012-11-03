@@ -1642,7 +1642,7 @@ SwNumRule* SwDoc::GetNumRuleFromPool( sal_uInt16 nId )
     {
         sal_Bool bIsModified = IsModified();
 
-        n = MakeNumRule( aNm, 0, sal_False, eNumberFormatPositionAndSpaceMode );
+        n = MakeNumRule( aNm, 0, false, eNumberFormatPositionAndSpaceMode );
 
         pNewRule = GetNumRuleTbl()[ n ];
         pNewRule->SetPoolFmtId( nId );

@@ -1039,7 +1039,7 @@ SwNumRule* WW8ListManager::CreateNextRule(bool bSimple)
     sPrefix += String::CreateFromInt32(nUniqueList++);
     // #i86652#
     sal_uInt16 nRul =
-            rDoc.MakeNumRule( rDoc.GetUniqueNumRuleName(&sPrefix), 0, sal_False,
+            rDoc.MakeNumRule( rDoc.GetUniqueNumRuleName(&sPrefix), 0, false,
                               SvxNumberFormat::LABEL_ALIGNMENT );
     SwNumRule* pMyNumRule = rDoc.GetNumRuleTbl()[nRul];
     pMyNumRule->SetAutoRule(false);

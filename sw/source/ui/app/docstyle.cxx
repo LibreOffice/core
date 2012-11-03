@@ -1749,7 +1749,7 @@ void SwDocStyleSheet::Create()
                     sTmpNm = rDoc.GetUniqueNumRuleName();
 
                 SwNumRule* pRule = rDoc.GetNumRuleTbl()[
-                    rDoc.MakeNumRule( sTmpNm, 0, sal_False,
+                    rDoc.MakeNumRule( sTmpNm, 0, false,
                                       // #i89178#
                                       numfunc::GetDefaultPositionAndSpaceMode() ) ];
                 pRule->SetAutoRule( sal_False );

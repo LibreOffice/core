@@ -364,10 +364,10 @@ void SwRTFParser::ReadListTable()
                     lcl_ExpandNumFmts( *pCurRule );
 
                 String sTmp(rtl::OUString(RTF_NUMRULE_NAME " 1"));
-                aEntry.nListDocPos = pDoc->MakeNumRule( sTmp, 0, sal_False, SvxNumberFormat::LABEL_ALIGNMENT );
+                aEntry.nListDocPos = pDoc->MakeNumRule( sTmp, 0, false, SvxNumberFormat::LABEL_ALIGNMENT );
                 pCurRule = pDoc->GetNumRuleTbl()[ aEntry.nListDocPos ];
                 // #i91400#
-                pCurRule->SetName( pDoc->GetUniqueNumRuleName( &sTmp, sal_False ),
+                pCurRule->SetName( pDoc->GetUniqueNumRuleName( &sTmp, false ),
                                    *pDoc );
 
                 pCurRule->SetAutoRule( sal_False );
@@ -567,7 +567,7 @@ void SwRTFParser::ReadListOverrideTable()
                             aEntry.nListDocPos = pDoc->MakeNumRule( sTmp, pRule );
                             pRule = pDoc->GetNumRuleTbl()[ aEntry.nListDocPos ];
                             // #i91400#
-                            pRule->SetName( pDoc->GetUniqueNumRuleName( &sTmp, sal_False ),
+                            pRule->SetName( pDoc->GetUniqueNumRuleName( &sTmp, false ),
                                             *pDoc );
 
                             pRule->SetAutoRule( sal_False );
@@ -818,7 +818,7 @@ SwNumRule *SwRTFParser::ReadNumSecLevel( int nToken )
         aListArr.push_back( aEntry );
         pCurRule = pDoc->GetNumRuleTbl()[ aEntry.nListDocPos ];
         // #i91400#
-        pCurRule->SetName( pDoc->GetUniqueNumRuleName( &sTmp, sal_False ), *pDoc );
+        pCurRule->SetName( pDoc->GetUniqueNumRuleName( &sTmp, false ), *pDoc );
 
         pCurRule->SetAutoRule( sal_False );
         pCurRule->SetContinusNum( bContinus );

@@ -1833,7 +1833,7 @@ bool SwDoc::MoveParagraph( const SwPaM& rPam, long nOffset, bool bIsOutlMv )
             aStPos.nContent = 0;
             SwCntntNode* pCNd = pEnd->nNode.GetNode().GetCntntNode();
             aEndPos.nContent = pCNd ? pCNd->Len() : 1;
-            sal_Bool bCheckDel = sal_True;
+            bool bCheckDel = true;
 
             // There is a some Redline Delete Object for the range
             for( ; nRedlPos < GetRedlineTbl().size(); ++nRedlPos )
@@ -1854,7 +1854,7 @@ bool SwDoc::MoveParagraph( const SwPaM& rPam, long nOffset, bool bIsOutlMv )
                         break;
                     case POS_INSIDE:            // Pos1 is completely inside Pos2
                         // that's valid, but check all following for overlapping
-                        bCheckDel = sal_False;
+                        bCheckDel = false;
                         break;
 
                     case POS_OUTSIDE:           // Pos2 is completely inside Pos1
@@ -1931,7 +1931,7 @@ bool SwDoc::MoveParagraph( const SwPaM& rPam, long nOffset, bool bIsOutlMv )
             rOrigPam.DeleteMark();
             rOrigPam.GetPoint()->nNode = aIdx.GetIndex() - 1;
 
-            sal_Bool bDelLastPara = !aInsPos.nNode.GetNode().IsCntntNode();
+            bool bDelLastPara = !aInsPos.nNode.GetNode().IsCntntNode();
 
             /* When copying to a non-content node Copy will
                insert a paragraph before that node and insert before
@@ -2079,9 +2079,9 @@ bool SwDoc::MoveParagraph( const SwPaM& rPam, long nOffset, bool bIsOutlMv )
     return true;
 }
 
-sal_Bool SwDoc::NumOrNoNum( const SwNodeIndex& rIdx, sal_Bool bDel )
+bool SwDoc::NumOrNoNum( const SwNodeIndex& rIdx, sal_Bool bDel )
 {
-    sal_Bool bResult = sal_False;
+    bool bResult = false;
     SwTxtNode * pTxtNd = rIdx.GetNode().GetTxtNode();
 
     if (pTxtNd && pTxtNd->GetNumRule() != NULL &&
@@ -2095,7 +2095,7 @@ sal_Bool SwDoc::NumOrNoNum( const SwNodeIndex& rIdx, sal_Bool bDel )
 
             SetModified();
 
-            bResult = sal_True;
+            bResult = true;
 
             if (GetIDocumentUndoRedo().DoesUndo())
             {
@@ -2113,7 +2113,7 @@ sal_Bool SwDoc::NumOrNoNum( const SwNodeIndex& rIdx, sal_Bool bDel )
 
             DelNumRules(aPam);
 
-            bResult = sal_True;
+            bResult = true;
         }
     }
 
@@ -2180,7 +2180,7 @@ void SwDoc::AddNumRule(SwNumRule * pRule)
 
 sal_uInt16 SwDoc::MakeNumRule( const String &rName,
             const SwNumRule* pCpy,
-            sal_Bool bBroadcast,
+            bool bBroadcast,
             const SvxNumberFormat::SvxNumPositionAndSpaceMode eDefaultNumberFormatPositionAndSpaceMode )
 {
     SwNumRule* pNew;
@@ -2222,7 +2222,7 @@ sal_uInt16 SwDoc::MakeNumRule( const String &rName,
     return nRet;
 }
 
-String SwDoc::GetUniqueNumRuleName( const String* pChkStr, sal_Bool bAutoNum ) const
+String SwDoc::GetUniqueNumRuleName( const String* pChkStr, bool bAutoNum ) const
 {
     String aName;
     if( bAutoNum )
@@ -2308,7 +2308,7 @@ void SwDoc::UpdateNumRule()
 
 void SwDoc::MarkListLevel( const String& sListId,
                            const int nListLevel,
-                           const sal_Bool bValue )
+                           const bool bValue )
 {
     SwList* pList = getListByName( sListId );
 
@@ -2320,15 +2320,15 @@ void SwDoc::MarkListLevel( const String& sListId,
 
 void SwDoc::MarkListLevel( SwList& rList,
                            const int nListLevel,
-                           const sal_Bool bValue )
+                           const bool bValue )
 {
     // Set new marked list level and notify all affected nodes of the changed mark.
     rList.MarkListLevel( nListLevel, bValue );
 }
 
-sal_Bool SwDoc::IsFirstOfNumRule(SwPosition & rPos)
+bool SwDoc::IsFirstOfNumRule(SwPosition & rPos)
 {
-    sal_Bool bResult = sal_False;
+    bool bResult = false;
     SwTxtNode * pTxtNode = rPos.nNode.GetNode().GetTxtNode();
 
     if (pTxtNode)

@@ -51,7 +51,7 @@ class SwListImpl
         void ValidateListTree();
 
         void MarkListLevel( const int nListLevel,
-                            const sal_Bool bValue );
+                            const bool bValue );
 
         bool IsListLevelMarked( const int nListLevel ) const;
 
@@ -177,7 +177,7 @@ void SwListImpl::ValidateListTree()
 }
 
 void SwListImpl::MarkListLevel( const int nListLevel,
-                                const sal_Bool bValue )
+                                const bool bValue )
 {
     if ( bValue )
     {
@@ -270,7 +270,7 @@ void SwList::ValidateListTree()
 }
 
 void SwList::MarkListLevel( const int nListLevel,
-                                  const sal_Bool bValue )
+                                  const bool bValue )
 {
     mpListImpl->MarkListLevel( nListLevel, bValue );
 }

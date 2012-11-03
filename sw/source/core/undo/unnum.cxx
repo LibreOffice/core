@@ -338,11 +338,11 @@ void SwUndoNumOrNoNum::RepeatImpl(::sw::RepeatContext & rContext)
     SwDoc & rDoc = rContext.GetDoc();
     if (mbOldNum && ! mbNewNum)
     {
-        rDoc.NumOrNoNum(rContext.GetRepeatPaM().GetPoint()->nNode, sal_False);
+        rDoc.NumOrNoNum(rContext.GetRepeatPaM().GetPoint()->nNode, false);
     }
     else if ( ! mbOldNum && mbNewNum )
     {
-        rDoc.NumOrNoNum(rContext.GetRepeatPaM().GetPoint()->nNode, sal_True);
+        rDoc.NumOrNoNum(rContext.GetRepeatPaM().GetPoint()->nNode, true);
     }
 }
 

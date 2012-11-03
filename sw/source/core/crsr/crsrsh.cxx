@@ -409,11 +409,11 @@ void SwCrsrShell::MarkListLevel( const String& sListId,
          nListLevel != nMarkedListLevel)
     {
         if ( sMarkedListId.Len() > 0 )
-            pDoc->MarkListLevel( sMarkedListId, nMarkedListLevel, sal_False );
+            pDoc->MarkListLevel( sMarkedListId, nMarkedListLevel, false );
 
         if ( sListId.Len() > 0 )
         {
-            pDoc->MarkListLevel( sListId, nListLevel, sal_True );
+            pDoc->MarkListLevel( sListId, nListLevel, true );
         }
 
         sMarkedListId = sListId;

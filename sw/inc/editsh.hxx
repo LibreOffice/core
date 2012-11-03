@@ -502,7 +502,7 @@ public:
     bool MoveNumParas( bool bUpperLower, bool bUpperLeft );
 
     /// Switch on/off of numbering via Delete/Backspace.
-    sal_Bool NumOrNoNum( sal_Bool bDelete = sal_False, sal_Bool bChkStart = sal_True);
+    bool NumOrNoNum( sal_Bool bDelete = sal_False, bool bChkStart = true);
 
     // #i23726#
     // #i90078#
@@ -511,8 +511,8 @@ public:
     void ChangeIndentOfAllListLevels( short nDiff );
     // Adjust method name
     void SetIndent(short nIndent, const SwPosition & rPos);
-    sal_Bool IsFirstOfNumRule() const;
-    sal_Bool IsFirstOfNumRule(const SwPaM & rPaM) const;
+    bool IsFirstOfNumRule() const;
+    bool IsFirstOfNumRule(const SwPaM & rPaM) const;
 
     sal_Bool IsNoNum( sal_Bool bChkStart = sal_True ) const;
 
@@ -532,7 +532,7 @@ public:
     sal_Bool HasNumber() const;
     sal_Bool HasBullet() const;
 
-    String GetUniqueNumRuleName( const String* pChkStr = 0, sal_Bool bAutoNum = sal_True ) const;
+    String GetUniqueNumRuleName( const String* pChkStr = 0, bool bAutoNum = true ) const;
     void ChgNumRuleFmts( const SwNumRule& rRule );
 
     /// Set (and query if) a numbering with StartFlag starts at current PointPos.

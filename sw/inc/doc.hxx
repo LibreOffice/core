@@ -1515,7 +1515,7 @@ public:
     /// add optional parameter <eDefaultNumberFormatPositionAndSpaceMode>
     sal_uInt16 MakeNumRule( const String &rName,
         const SwNumRule* pCpy = 0,
-        sal_Bool bBroadcast = sal_False,
+        bool bBroadcast = false,
         const SvxNumberFormat::SvxNumPositionAndSpaceMode eDefaultNumberFormatPositionAndSpaceMode =
             SvxNumberFormat::LABEL_WIDTH_AND_POSITION );
     sal_uInt16 FindNumRule( const String& rName ) const;
@@ -1525,7 +1525,7 @@ public:
     bool RenameNumRule(const String & aOldName, const String & aNewName,
                            bool bBroadcast = false);
     bool DelNumRule( const String& rName, bool bBroadCast = false );
-    String GetUniqueNumRuleName( const String* pChkStr = 0, sal_Bool bAutoNum = sal_True ) const;
+    String GetUniqueNumRuleName( const String* pChkStr = 0, bool bAutoNum = true ) const;
 
     void UpdateNumRule();   /// Update all invalids.
     void ChgNumRuleFmts( const SwNumRule& rRule, const String * pOldName = 0 );
@@ -1584,7 +1584,7 @@ public:
      according to offsets. (if negative: go to doc start). */
     bool MoveParagraph( const SwPaM&, long nOffset = 1, bool bIsOutlMv = false );
 
-    sal_Bool NumOrNoNum( const SwNodeIndex& rIdx, sal_Bool bDel = sal_False);
+    bool NumOrNoNum( const SwNodeIndex& rIdx, sal_Bool bDel = sal_False);
 
     void StopNumRuleAnimations( OutputDevice* );
 
@@ -1971,12 +1971,12 @@ public:
 
         @param sListId    list Id of the list whose level has to be marked/unmarked
         @param nListLevel level to mark
-        @param bValue     - sal_True  mark the level
-                          - sal_False unmark the level
+        @param bValue     - true  mark the level
+                          - false unmark the level
     */
     void MarkListLevel( const String& sListId,
                         const int nListLevel,
-                        const sal_Bool bValue );
+                        const bool bValue );
 
     /** Marks/Unmarks a list level of a certain list
 
@@ -1984,12 +1984,12 @@ public:
 
         @param rList      list whose level has to be marked/unmarked
         @param nListLevel level to mark
-        @param bValue     - sal_True  mark the level
-                          - sal_False unmark the level
+        @param bValue     - true  mark the level
+                          - false unmark the level
      */
     void MarkListLevel( SwList& rList,
                         const int nListLevel,
-                        const sal_Bool bValue );
+                        const bool bValue );
 
     /// Change a format undoable.
     void ChgFmt(SwFmt & rFmt, const SfxItemSet & rSet);
@@ -2019,7 +2019,7 @@ public:
      */
     String GetPaMDescr(const SwPaM & rPaM) const;
 
-    sal_Bool IsFirstOfNumRule(SwPosition & rPos);
+    bool IsFirstOfNumRule(SwPosition & rPos);
 
     // access methods for XForms model(s)
 

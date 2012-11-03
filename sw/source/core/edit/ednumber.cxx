@@ -270,9 +270,9 @@ bool SwEditShell::NumUpDown( bool bDown )
     return bRet;
 }
 // -> #i23726#
-sal_Bool SwEditShell::IsFirstOfNumRule() const
+bool SwEditShell::IsFirstOfNumRule() const
 {
-    sal_Bool bResult = sal_False;
+    bool bResult = false;
 
     SwPaM * pCrsr = GetCrsr();
     if (pCrsr->GetNext() == pCrsr)
@@ -283,9 +283,9 @@ sal_Bool SwEditShell::IsFirstOfNumRule() const
     return bResult;
 }
 
-sal_Bool SwEditShell::IsFirstOfNumRule(const SwPaM & rPaM) const
+bool SwEditShell::IsFirstOfNumRule(const SwPaM & rPaM) const
 {
-    sal_Bool bResult = sal_False;
+    bool bResult = false;
 
     SwPosition aPos(*rPaM.GetPoint());
     bResult = GetDoc()->IsFirstOfNumRule(aPos);
@@ -597,9 +597,9 @@ sal_Bool SwEditShell::IsOutlineCopyable( sal_uInt16 nIdx ) const
 }
 
 
-sal_Bool SwEditShell::NumOrNoNum( sal_Bool bNumOn, sal_Bool bChkStart )
+bool SwEditShell::NumOrNoNum( sal_Bool bNumOn, bool bChkStart )
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     SwPaM* pCrsr = GetCrsr();
     if( pCrsr->GetNext() == pCrsr && !pCrsr->HasMark() &&
         ( !bChkStart || !pCrsr->GetPoint()->nContent.GetIndex()) )
@@ -696,7 +696,7 @@ void SwEditShell::SetCurNumRule( const SwNumRule& rRule,
     EndAllAction();
 }
 
-String SwEditShell::GetUniqueNumRuleName( const String* pChkStr, sal_Bool bAutoNum ) const
+String SwEditShell::GetUniqueNumRuleName( const String* pChkStr, bool bAutoNum ) const
 {
     return GetDoc()->GetUniqueNumRuleName( pChkStr, bAutoNum );
 }
