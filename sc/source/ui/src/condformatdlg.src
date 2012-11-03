@@ -126,7 +126,7 @@ Control RID_COND_ENTRY
     ListBox LB_CELLIS_TYPE
     {
         Pos = MAP_APPFONT( 90, 15 );
-        Size = MAP_APPFONT( 80, 40 );
+        Size = MAP_APPFONT( 80, 80 );
         Border = TRUE;
         DropDown = TRUE;
         StringList [ en-US ] =
