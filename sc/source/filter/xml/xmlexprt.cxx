@@ -3908,6 +3908,12 @@ void ScXMLExport::ExportConditionalFormat(SCTAB nTab)
                                 aCond.append(pEntry->GetExpression(aPos, 0, 0, formula::FormulaGrammar::GRAM_ODFF));
                                 aCond.append(')');
                                 break;
+                            case SC_COND_ERROR:
+                                aCond.append("is-error");
+                                break;
+                            case SC_COND_NOERROR:
+                                aCond.append("is-no-error");
+                                break;
                             case SC_COND_NONE:
                                 continue;
                             default:
