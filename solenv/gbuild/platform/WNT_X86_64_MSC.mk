@@ -26,11 +26,10 @@
 #
 #*************************************************************************
 
-include $(GBUILDDIR)/platform/com_MSC_defs.mk
-
 gb_CPPU_ENV := msc6
-
 gb_CPUDEFS := -D_AMD64_=1
+
+include $(GBUILDDIR)/platform/com_MSC_defs.mk
 
 include $(GBUILDDIR)/platform/com_MSC_class.mk
 
