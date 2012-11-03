@@ -35,7 +35,7 @@
 
 using namespace ::editeng;
 
-inline const SvxBorderLine* GetLineTB( const SvxBoxItem* pBox, sal_Bool bTop )
+inline const SvxBorderLine* GetLineTB( const SvxBoxItem* pBox, bool bTop )
 {
     return bTop ? pBox->GetTop() : pBox->GetBottom();
 }
@@ -104,7 +104,7 @@ static void lcl_GCBorder_GetLastBox_B( const SwTableBox* pBox, SwTableBoxes* pPa
 
 // Find the "end" of the passed BorderLine. Returns the "Layout"Pos!
 static sal_uInt16 lcl_FindEndPosOfBorder( const SwCollectTblLineBoxes& rCollTLB,
-                        const SvxBorderLine& rBrdLn, sal_uInt16& rStt, sal_Bool bTop )
+                        const SvxBorderLine& rBrdLn, sal_uInt16& rStt, bool bTop )
 {
     sal_uInt16 nPos, nLastPos = 0;
     for( sal_uInt16 nEnd = rCollTLB.Count(); rStt < nEnd; ++rStt )
@@ -123,7 +123,7 @@ static sal_uInt16 lcl_FindEndPosOfBorder( const SwCollectTblLineBoxes& rCollTLB,
 }
 
 static inline const SvxBorderLine* lcl_GCBorder_GetBorder( const SwTableBox& rBox,
-                                                sal_Bool bTop,
+                                                bool bTop,
                                                 const SfxPoolItem** ppItem )
 {
     return SFX_ITEM_SET == rBox.GetFrmFmt()->GetItemState( RES_BOX, sal_True, ppItem )
@@ -132,7 +132,7 @@ static inline const SvxBorderLine* lcl_GCBorder_GetBorder( const SwTableBox& rBo
 }
 
 static void lcl_GCBorder_DelBorder( const SwCollectTblLineBoxes& rCollTLB,
-                                sal_uInt16& rStt, sal_Bool bTop,
+                                sal_uInt16& rStt, bool bTop,
                                 const SvxBorderLine& rLine,
                                 const SfxPoolItem* pItem,
                                 sal_uInt16 nEndPos,
@@ -166,7 +166,7 @@ static void lcl_GCBorder_DelBorder( const SwCollectTblLineBoxes& rCollTLB,
 
         pLn = lcl_GCBorder_GetBorder( *pBox, bTop, &pItem );
 
-    } while( sal_True );
+    } while( true );
 }
 
 static void lcl_GC_Box_Border( const SwTableBox* pBox, _SwGCLineBorder* pPara );
@@ -234,23 +234,23 @@ void sw_GC_Line_Border( const SwTableLine* pLine, _SwGCLineBorder* pGCPara )
                          *pTopBox = &aTop.GetBox( nSttTop++, &nTopPos );
         const SfxPoolItem *pBtmItem = 0, *pTopItem = 0;
         const SvxBorderLine *pBtmLine(0), *pTopLine(0);
-        sal_Bool bGetTopItem = sal_True, bGetBtmItem = sal_True;
+        bool bGetTopItem = true, bGetBtmItem = true;
 
         do {
             if( bGetBtmItem )
-                pBtmLine = lcl_GCBorder_GetBorder( *pBtmBox, sal_False, &pBtmItem );
+                pBtmLine = lcl_GCBorder_GetBorder( *pBtmBox, false, &pBtmItem );
             if( bGetTopItem )
-                pTopLine = lcl_GCBorder_GetBorder( *pTopBox, sal_True, &pTopItem );
+                pTopLine = lcl_GCBorder_GetBorder( *pTopBox, true, &pTopItem );
 
             if( pTopLine && pBtmLine && *pTopLine == *pBtmLine )
             {
                 // We can remove one, but which one?
                 sal_uInt16 nSavSttBtm = nSttBtm, nSavSttTop = nSttTop;
                 sal_uInt16 nBtmEndPos = ::lcl_FindEndPosOfBorder( aBottom,
-                                                *pTopLine, nSttBtm, sal_False );
+                                                *pTopLine, nSttBtm, false );
                 if( !nBtmEndPos ) nBtmEndPos = nBtmPos;
                 sal_uInt16 nTopEndPos = ::lcl_FindEndPosOfBorder( aTop,
-                                                *pTopLine, nSttTop, sal_True );
+                                                *pTopLine, nSttTop, true );
                 if( !nTopEndPos ) nTopEndPos = nTopPos;
 
 
@@ -259,7 +259,7 @@ void sw_GC_Line_Border( const SwTableLine* pLine, _SwGCLineBorder* pGCPara )
                     // Delete the TopBorders until BottomEndPos
                     nSttTop = nSavSttTop;
                     if( nTopPos <= nBtmEndPos )
-                        lcl_GCBorder_DelBorder( aTop, --nSttTop, sal_True,
+                        lcl_GCBorder_DelBorder( aTop, --nSttTop, true,
                                             *pBtmLine, pTopItem, nBtmEndPos,
                                             pGCPara->pShareFmts );
                     else
@@ -270,7 +270,7 @@ void sw_GC_Line_Border( const SwTableLine* pLine, _SwGCLineBorder* pGCPara )
                     // Else delete the BottomBorders until TopEndPos
                     nSttBtm = nSavSttBtm;
                     if( nBtmPos <= nTopEndPos )
-                        lcl_GCBorder_DelBorder( aBottom, --nSttBtm, sal_False,
+                        lcl_GCBorder_DelBorder( aBottom, --nSttBtm, false,
                                             *pTopLine, pBtmItem, nTopEndPos,
                                             pGCPara->pShareFmts );
                     else
@@ -286,26 +286,26 @@ void sw_GC_Line_Border( const SwTableLine* pLine, _SwGCLineBorder* pGCPara )
 
                 pBtmBox = &aBottom.GetBox( nSttBtm++, &nBtmPos );
                 pTopBox = &aTop.GetBox( nSttTop++, &nTopPos );
-                bGetTopItem = bGetBtmItem = sal_True;
+                bGetTopItem = bGetBtmItem = true;
             }
             else if( nTopPos < nBtmPos )
             {
                 if( nSttTop >= nEndTop )
                     break;
                 pTopBox = &aTop.GetBox( nSttTop++, &nTopPos );
-                bGetTopItem = sal_True;
-                bGetBtmItem = sal_False;
+                bGetTopItem = true;
+                bGetBtmItem = false;
             }
             else
             {
                 if( nSttBtm >= nEndBtm )
                     break;
                 pBtmBox = &aBottom.GetBox( nSttBtm++, &nBtmPos );
-                bGetTopItem = sal_False;
-                bGetBtmItem = sal_True;
+                bGetTopItem = false;
+                bGetBtmItem = true;
             }
 
-        } while( sal_True );
+        } while( true );
     }
 
     for( SwTableBoxes::const_iterator it = pLine->GetTabBoxes().begin();

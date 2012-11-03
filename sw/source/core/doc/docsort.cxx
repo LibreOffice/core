@@ -755,7 +755,7 @@ void MoveCell(SwDoc* pDoc, const SwTableBox* pSource, const SwTableBox* pTar,
     pNd = pDoc->GetNodes().GoNext( &aTar );     // next ContentNode
     sal_uLong nCount = pNd->EndOfSectionIndex() - pNd->StartOfSectionIndex();
 
-    sal_Bool bDelFirst = sal_False;
+    bool bDelFirst = false;
     if( nCount == 2 )
     {
         OSL_ENSURE( pNd->GetCntntNode(), "No ContentNode");
@@ -919,7 +919,7 @@ sal_uInt16 FlatFndBox::GetRowCount(const _FndBox& rBox)
  --------------------------------------------------------------------*/
 void FlatFndBox::FillFlat(const _FndBox& rBox, sal_Bool bLastBox)
 {
-    sal_Bool bModRow = sal_False;
+    bool bModRow = false;
     const _FndLines& rLines = rBox.GetLines();
 
     // Iterate over Lines
@@ -958,7 +958,7 @@ void FlatFndBox::FillFlat(const _FndBox& rBox, sal_Bool bLastBox)
                     *(ppItemSets + nOff ) = pSet;
                 }
 
-                bModRow = sal_True;
+                bModRow = true;
             }
             else
             {

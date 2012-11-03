@@ -198,7 +198,7 @@ static void lcl_SetDfltFont( sal_uInt16 nLatinFntType, sal_uInt16 nCJKFntType,
 
 static void lcl_SetHeadline( SwDoc* pDoc, SwTxtFmtColl* pColl,
                         SfxItemSet& rSet,
-                        sal_uInt16 nOutLvlBits, sal_uInt8 nLevel, sal_Bool bItalic )
+                        sal_uInt16 nOutLvlBits, sal_uInt8 nLevel, bool bItalic )
 {
     SetAllScriptItem( rSet, SvxWeightItem( WEIGHT_BOLD, RES_CHRATR_WEIGHT ) );
     SvxFontHeightItem aHItem(240, 100, RES_CHRATR_FONTSIZE);
@@ -257,7 +257,7 @@ static void lcl_SetHeadline( SwDoc* pDoc, SwTxtFmtColl* pColl,
 
 
 static void lcl_SetRegister( SwDoc* pDoc, SfxItemSet& rSet, sal_uInt16 nFact,
-                        sal_Bool bHeader, sal_Bool bTab )
+                        bool bHeader, bool bTab )
 {
     SvxLRSpaceItem aLR( RES_LR_SPACE );
     sal_uInt16 nLeft = nFact ? GetMetricVal( CM_05 ) * nFact : 0;
@@ -508,34 +508,34 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool( sal_uInt16 nId, bool bRegardLanguage )
             break;
 
         case RES_POOLCOLL_HEADLINE1:        // Headinline 1
-            lcl_SetHeadline( this, pNewColl, aSet, nOutLvlBits, 0, sal_False );
+            lcl_SetHeadline( this, pNewColl, aSet, nOutLvlBits, 0, false );
             break;
         case RES_POOLCOLL_HEADLINE2:        // Headinline 2
-            lcl_SetHeadline( this, pNewColl, aSet, nOutLvlBits, 1, sal_True );
+            lcl_SetHeadline( this, pNewColl, aSet, nOutLvlBits, 1, true );
             break;
         case RES_POOLCOLL_HEADLINE3:        // Headinline 3
-            lcl_SetHeadline( this, pNewColl, aSet, nOutLvlBits, 2, sal_False );
+            lcl_SetHeadline( this, pNewColl, aSet, nOutLvlBits, 2, false );
             break;
         case RES_POOLCOLL_HEADLINE4:        // Headinline 4
-            lcl_SetHeadline( this, pNewColl, aSet, nOutLvlBits, 3, sal_True );
+            lcl_SetHeadline( this, pNewColl, aSet, nOutLvlBits, 3, true );
             break;
         case RES_POOLCOLL_HEADLINE5:        // Headinline 5
-            lcl_SetHeadline( this, pNewColl, aSet, nOutLvlBits, 4, sal_False );
+            lcl_SetHeadline( this, pNewColl, aSet, nOutLvlBits, 4, false );
             break;
         case RES_POOLCOLL_HEADLINE6:        // Headinline 6
-            lcl_SetHeadline( this, pNewColl, aSet, nOutLvlBits, 5, sal_False );
+            lcl_SetHeadline( this, pNewColl, aSet, nOutLvlBits, 5, false );
             break;
         case RES_POOLCOLL_HEADLINE7:        // Headinline 7
-            lcl_SetHeadline( this, pNewColl, aSet, nOutLvlBits, 6, sal_False );
+            lcl_SetHeadline( this, pNewColl, aSet, nOutLvlBits, 6, false );
             break;
         case RES_POOLCOLL_HEADLINE8:        // Headinline 8
-            lcl_SetHeadline( this, pNewColl, aSet, nOutLvlBits, 7, sal_False );
+            lcl_SetHeadline( this, pNewColl, aSet, nOutLvlBits, 7, false );
             break;
         case RES_POOLCOLL_HEADLINE9:        // Headinline 9
-            lcl_SetHeadline( this, pNewColl, aSet, nOutLvlBits, 8, sal_False );
+            lcl_SetHeadline( this, pNewColl, aSet, nOutLvlBits, 8, false );
             break;
         case RES_POOLCOLL_HEADLINE10:       // Headinline 10
-            lcl_SetHeadline( this, pNewColl, aSet, nOutLvlBits, 9, sal_False );
+            lcl_SetHeadline( this, pNewColl, aSet, nOutLvlBits, 9, false );
             break;
 
 
@@ -627,108 +627,108 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool( sal_uInt16 nId, bool bRegardLanguage )
 
         // User defined indexes:
         case RES_POOLCOLL_TOX_USERH:            // Header
-            lcl_SetRegister( this, aSet, 0, sal_True, sal_False );
+            lcl_SetRegister( this, aSet, 0, true, false );
             {
                 SwFmtLineNumber aLN; aLN.SetCountLines( sal_False );
                 aSet.Put( aLN );
             }
             break;
         case RES_POOLCOLL_TOX_USER1:            // 1. Level
-            lcl_SetRegister( this, aSet, 0, sal_False, sal_True );
+            lcl_SetRegister( this, aSet, 0, false, true );
             break;
         case RES_POOLCOLL_TOX_USER2:            // 2. Level
-            lcl_SetRegister( this, aSet, 1, sal_False, sal_True );
+            lcl_SetRegister( this, aSet, 1, false, true );
             break;
         case RES_POOLCOLL_TOX_USER3:            // 3. Level
-            lcl_SetRegister( this, aSet, 2, sal_False, sal_True );
+            lcl_SetRegister( this, aSet, 2, false, true );
             break;
         case RES_POOLCOLL_TOX_USER4:            // 4. Level
-            lcl_SetRegister( this, aSet, 3, sal_False, sal_True );
+            lcl_SetRegister( this, aSet, 3, false, true );
             break;
         case RES_POOLCOLL_TOX_USER5:            // 5. Level
-            lcl_SetRegister( this, aSet, 4, sal_False, sal_True );
+            lcl_SetRegister( this, aSet, 4, false, true );
             break;
         case RES_POOLCOLL_TOX_USER6:            // 6. Level
-            lcl_SetRegister( this, aSet, 5, sal_False, sal_True );
+            lcl_SetRegister( this, aSet, 5, false, true );
             break;
         case RES_POOLCOLL_TOX_USER7:            // 7. Level
-            lcl_SetRegister( this, aSet, 6, sal_False, sal_True );
+            lcl_SetRegister( this, aSet, 6, false, true );
             break;
         case RES_POOLCOLL_TOX_USER8:            // 8. Level
-            lcl_SetRegister( this, aSet, 7, sal_False, sal_True );
+            lcl_SetRegister( this, aSet, 7, false, true );
             break;
         case RES_POOLCOLL_TOX_USER9:            // 9. Level
-            lcl_SetRegister( this, aSet, 8, sal_False, sal_True );
+            lcl_SetRegister( this, aSet, 8, false, true );
             break;
         case RES_POOLCOLL_TOX_USER10:           // 10. Level
-            lcl_SetRegister( this, aSet, 9, sal_False, sal_True );
+            lcl_SetRegister( this, aSet, 9, false, true );
             break;
 
         // Index
         case RES_POOLCOLL_TOX_IDXH:         // Header
-            lcl_SetRegister( this, aSet, 0, sal_True, sal_False );
+            lcl_SetRegister( this, aSet, 0, true, false );
             {
                 SwFmtLineNumber aLN; aLN.SetCountLines( sal_False );
                 aSet.Put( aLN );
             }
             break;
         case RES_POOLCOLL_TOX_IDX1:         // 1. Level
-            lcl_SetRegister( this, aSet, 0, sal_False, sal_False );
+            lcl_SetRegister( this, aSet, 0, false, false );
             break;
         case RES_POOLCOLL_TOX_IDX2:         // 2. Level
-            lcl_SetRegister( this, aSet, 1, sal_False, sal_False );
+            lcl_SetRegister( this, aSet, 1, false, false );
             break;
         case RES_POOLCOLL_TOX_IDX3:         // 3. Level
-            lcl_SetRegister( this, aSet, 2, sal_False, sal_False );
+            lcl_SetRegister( this, aSet, 2, false, false );
             break;
         case RES_POOLCOLL_TOX_IDXBREAK:     // Trenner
-            lcl_SetRegister( this, aSet, 0, sal_False, sal_False );
+            lcl_SetRegister( this, aSet, 0, false, false );
             break;
 
         // Table of Content
         case RES_POOLCOLL_TOX_CNTNTH:       // Header
-            lcl_SetRegister( this, aSet, 0, sal_True, sal_False );
+            lcl_SetRegister( this, aSet, 0, true, false );
             {
                 SwFmtLineNumber aLN; aLN.SetCountLines( sal_False );
                 aSet.Put( aLN );
             }
             break;
         case RES_POOLCOLL_TOX_CNTNT1:       // 1. Level
-            lcl_SetRegister( this, aSet, 0, sal_False, sal_True );
+            lcl_SetRegister( this, aSet, 0, false, true );
             break;
         case RES_POOLCOLL_TOX_CNTNT2:       // 2. Level
-            lcl_SetRegister( this, aSet, 1, sal_False, sal_True );
+            lcl_SetRegister( this, aSet, 1, false, true );
             break;
         case RES_POOLCOLL_TOX_CNTNT3:       // 3. Level
-            lcl_SetRegister( this, aSet, 2, sal_False, sal_True );
+            lcl_SetRegister( this, aSet, 2, false, true );
             break;
         case RES_POOLCOLL_TOX_CNTNT4:       // 4. Level
-            lcl_SetRegister( this, aSet, 3, sal_False, sal_True );
+            lcl_SetRegister( this, aSet, 3, false, true );
             break;
         case RES_POOLCOLL_TOX_CNTNT5:       // 5. Level
-            lcl_SetRegister( this, aSet, 4, sal_False, sal_True );
+            lcl_SetRegister( this, aSet, 4, false, true );
             break;
         case RES_POOLCOLL_TOX_CNTNT6:       // 6. Level
-            lcl_SetRegister( this, aSet, 5, sal_False, sal_True );
+            lcl_SetRegister( this, aSet, 5, false, true );
             break;
         case RES_POOLCOLL_TOX_CNTNT7:       // 7. Level
-            lcl_SetRegister( this, aSet, 6, sal_False, sal_True );
+            lcl_SetRegister( this, aSet, 6, false, true );
             break;
         case RES_POOLCOLL_TOX_CNTNT8:       // 8. Level
-            lcl_SetRegister( this, aSet, 7, sal_False, sal_True );
+            lcl_SetRegister( this, aSet, 7, false, true );
             break;
         case RES_POOLCOLL_TOX_CNTNT9:       // 9. Level
-            lcl_SetRegister( this, aSet, 8, sal_False, sal_True );
+            lcl_SetRegister( this, aSet, 8, false, true );
             break;
         case RES_POOLCOLL_TOX_CNTNT10:      // 10. Level
-            lcl_SetRegister( this, aSet, 9, sal_False, sal_True );
+            lcl_SetRegister( this, aSet, 9, false, true );
             break;
 
         case RES_POOLCOLL_TOX_ILLUSH:
         case RES_POOLCOLL_TOX_OBJECTH:
         case RES_POOLCOLL_TOX_TABLESH:
         case RES_POOLCOLL_TOX_AUTHORITIESH:
-            lcl_SetRegister( this, aSet, 0, sal_True, sal_False );
+            lcl_SetRegister( this, aSet, 0, true, false );
             {
                 SwFmtLineNumber aLN; aLN.SetCountLines( sal_False );
                 aSet.Put( aLN );
@@ -738,7 +738,7 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool( sal_uInt16 nId, bool bRegardLanguage )
         case RES_POOLCOLL_TOX_OBJECT1:
         case RES_POOLCOLL_TOX_TABLES1:
         case RES_POOLCOLL_TOX_AUTHORITIES1:
-            lcl_SetRegister( this, aSet, 0, sal_False, sal_True );
+            lcl_SetRegister( this, aSet, 0, false, true );
         break;
 
 
@@ -1062,16 +1062,16 @@ bool SwDoc::IsPoolTxtCollUsed( sal_uInt16 nId ) const
             "Wrong AutoFormat Id" );
 
     SwTxtFmtColl* pNewColl = 0;
-    sal_Bool bFnd = sal_False;
+    bool bFnd = false;
     for( sal_uInt16 n = 0; !bFnd && n < pTxtFmtCollTbl->size(); ++n )
     {
         pNewColl = (*pTxtFmtCollTbl)[ n ];
         if( nId == pNewColl->GetPoolFmtId() )
-            bFnd = sal_True;
+            bFnd = true;
     }
 
     if( !bFnd || !pNewColl->GetDepends() )
-        return sal_False;
+        return false;
 
     SwAutoFmtGetDocNode aGetHt( &GetNodes() );
     return !pNewColl->GetInfo( aGetHt );
@@ -1374,7 +1374,7 @@ bool SwDoc::IsPoolFmtUsed( sal_uInt16 nId ) const
     SwFmt *pNewFmt = 0;
     const SwFmtsBase* pArray[ 2 ];
     sal_uInt16 nArrCnt = 1;
-    sal_Bool bFnd = sal_True;
+    bool bFnd = true;
 
     if( RES_POOLCHR_BEGIN <= nId && nId < RES_POOLCHR_END )
     {
@@ -1389,17 +1389,17 @@ bool SwDoc::IsPoolFmtUsed( sal_uInt16 nId ) const
     else
     {
         OSL_FAIL( "invalid Id" );
-        bFnd = sal_False;
+        bFnd = false;
     }
 
     if( bFnd )
     {
-        bFnd = sal_False;
+        bFnd = false;
         while( nArrCnt-- && !bFnd )
             for( sal_uInt16 n = 0; !bFnd && n < (*pArray[nArrCnt]).GetFmtCount(); ++n )
                 if( nId == ( pNewFmt = (*pArray[ nArrCnt ] ).GetFmt( n ) )->
                         GetPoolFmtId() )
-                    bFnd = sal_True;
+                    bFnd = true;
     }
 
     // Not found or no dependecies?
@@ -1411,7 +1411,7 @@ bool SwDoc::IsPoolFmtUsed( sal_uInt16 nId ) const
         bFnd = !pNewFmt->GetInfo( aGetHt );
     }
     else
-        bFnd = sal_False;
+        bFnd = false;
 
     return bFnd;
 }
@@ -1477,7 +1477,7 @@ SwPageDesc* SwDoc::GetPageDescFromPool( sal_uInt16 nId, bool bRegardLanguage )
     aUL.SetLower( (sal_uInt16)aLR.GetLeft() );
 
     SwAttrSet aSet( GetAttrPool(), aPgFrmFmtSetRange );
-    sal_Bool bSetLeft = sal_True;
+    bool bSetLeft = true;
 
     switch( nId )
     {
@@ -1510,7 +1510,7 @@ SwPageDesc* SwDoc::GetPageDescFromPool( sal_uInt16 nId, bool bRegardLanguage )
             lcl_GetStdPgSize( this, aSet );
             aSet.Put( aLR );
             aSet.Put( aUL );
-            bSetLeft = sal_False;
+            bSetLeft = false;
             if( pNewPgDsc )
             {
                 pNewPgDsc->SetUseOn( nsUseOnPage::PD_LEFT );
@@ -1525,7 +1525,7 @@ SwPageDesc* SwDoc::GetPageDescFromPool( sal_uInt16 nId, bool bRegardLanguage )
             lcl_GetStdPgSize( this, aSet );
             aSet.Put( aLR );
             aSet.Put( aUL );
-            bSetLeft = sal_False;
+            bSetLeft = false;
             if( pNewPgDsc )
             {
                 pNewPgDsc->SetUseOn( nsUseOnPage::PD_RIGHT );
@@ -2276,17 +2276,17 @@ bool SwDoc::IsPoolPageDescUsed( sal_uInt16 nId ) const
     OSL_ENSURE( RES_POOLPAGE_BEGIN <= nId && nId < RES_POOLPAGE_END,
             "Wrong AutoFormat Id" );
     SwPageDesc *pNewPgDsc = 0;
-    sal_Bool bFnd = sal_False;
+    bool bFnd = false;
     for( sal_uInt16 n = 0; !bFnd && n < aPageDescs.size(); ++n )
     {
         pNewPgDsc = aPageDescs[ n ];
         if( nId == pNewPgDsc->GetPoolFmtId() )
-            bFnd = sal_True;
+            bFnd = true;
     }
 
     // Not found or no dependencies?
     if( !bFnd || !pNewPgDsc->GetDepends() )     // ??????
-        return sal_False;
+        return false;
 
     // Check if we have dependent ContentNodes in the Nodes array
     // (also indirect ones for derived Formats)

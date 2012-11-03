@@ -1430,7 +1430,7 @@ void SwTOXBaseSection::UpdateCntnt( SwTOXElement eMyType,
         case nsSwTOXElement::TOX_OLE:
             if( pNd->IsOLENode() )
             {
-                sal_Bool bInclude = sal_True;
+                bool bInclude = true;
                 if(TOX_OBJECTS == SwTOXBase::GetType())
                 {
                     SwOLENode* pOLENode = pNd->GetOLENode();
@@ -1447,7 +1447,7 @@ void SwTOXBaseSection::UpdateCntnt( SwTOXElement eMyType,
                     else
                     {
                         OSL_FAIL("OLE Object no loaded?");
-                        bInclude = sal_False;
+                        bInclude = false;
                     }
                 }
 
@@ -1649,7 +1649,7 @@ void SwTOXBaseSection::GenerateText( sal_uInt16 nArrayIdx,
                     const SwPageDesc* pPageDesc = ((SwFmtPageDesc&)pTOXNd->
                                 SwCntntNode::GetAttr( RES_PAGEDESC )).GetPageDesc();
 
-                    sal_Bool bCallFindRect = sal_True;
+                    bool bCallFindRect = true;
                     long nRightMargin;
                     if( pPageDesc )
                     {
@@ -1657,7 +1657,7 @@ void SwTOXBaseSection::GenerateText( sal_uInt16 nArrayIdx,
                         if( !pFrm || 0 == ( pFrm = pFrm->FindPageFrm() ) ||
                             pPageDesc != ((SwPageFrm*)pFrm)->GetPageDesc() )
                             // we have to go via the PageDesc here
-                            bCallFindRect = sal_False;
+                            bCallFindRect = false;
                     }
 
                     SwRect aNdRect;
@@ -1966,12 +1966,12 @@ void SwTOXBaseSection::UpdatePageNum()
   Description: Replace the PageNumber place holders
  --------------------------------------------------------------------*/
 // search for the page no in the array of main entry page numbers
-static sal_Bool lcl_HasMainEntry( const std::vector<sal_uInt16>* pMainEntryNums, sal_uInt16 nToFind )
+static bool lcl_HasMainEntry( const std::vector<sal_uInt16>* pMainEntryNums, sal_uInt16 nToFind )
 {
     for(sal_uInt16 i = 0; pMainEntryNums && i < pMainEntryNums->size(); ++i)
         if(nToFind == (*pMainEntryNums)[i])
-            return sal_True;
-    return sal_False;
+            return true;
+    return false;
 }
 
 void SwTOXBaseSection::_UpdatePageNum( SwTxtNode* pNd,
@@ -2035,7 +2035,7 @@ void SwTOXBaseSection::_UpdatePageNum( SwTxtNode* pNd,
             // Add up all following
             // break up if main entry starts or ends and
             // insert a char style index
-            sal_Bool bMainEntryChanges = lcl_HasMainEntry(pMainEntryNums, nOld)
+            bool bMainEntryChanges = lcl_HasMainEntry(pMainEntryNums, nOld)
                     != lcl_HasMainEntry(pMainEntryNums, rNums[i]);
 
             if(nOld == rNums[i]-1 && !bMainEntryChanges &&

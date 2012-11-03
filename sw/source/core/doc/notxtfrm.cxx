@@ -267,7 +267,7 @@ void SwNoTxtFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
 
     OutputDevice *pOut = pSh->GetOut();
     pOut->Push();
-    sal_Bool bClip = sal_True;
+    bool bClip = true;
     PolyPolygon aPoly;
 
     SwNoTxtNode& rNoTNd = *(SwNoTxtNode*)GetNode();
@@ -284,7 +284,7 @@ void SwNoTxtFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
        )
     {
         pOut->SetClipRegion( aPoly );
-        bClip = sal_False;
+        bClip = false;
     }
 
     SwRect aOrigPaint( rRect );
@@ -636,7 +636,7 @@ void SwNoTxtFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
         SwCntntFrm::Modify( pOld, pNew );
     }
 
-    sal_Bool bComplete = sal_True;
+    bool bComplete = true;
 
     switch( nWhich )
     {
@@ -646,7 +646,7 @@ void SwNoTxtFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
     case RES_GRF_REREAD_AND_INCACHE:
         if( ND_GRFNODE == GetNode()->GetNodeType() )
         {
-            bComplete = sal_False;
+            bComplete = false;
             SwGrfNode* pNd = (SwGrfNode*) GetNode();
 
             ViewShell *pVSh = 0;
@@ -701,7 +701,7 @@ void SwNoTxtFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
     case RES_LINKED_GRAPHIC_STREAM_ARRIVED:
         if ( GetNode()->GetNodeType() == ND_GRFNODE )
         {
-            bComplete = sal_False;
+            bComplete = false;
             SwGrfNode* pNd = (SwGrfNode*) GetNode();
 
             CLEARCACHE( pNd )
@@ -824,7 +824,7 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
             pOut->SetAntialiasing( nFormerAntialiasingAtOutput | ANTIALIASING_ENABLE_B2DDRAW );
         }
 
-        sal_Bool bForceSwap = sal_False, bContinue = sal_True;
+        bool bForceSwap = false, bContinue = true;
         GraphicObject& rGrfObj = pGrfNd->GetGrfObj();
 
         GraphicAttr aGrfAttr;
@@ -857,7 +857,7 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
                 if ( !aTxt.Len() )
                     GetRealURL( *pGrfNd, aTxt );
                 ::lcl_PaintReplacement( aAlignedGrfArea, aTxt, *pShell, this, sal_False );
-                bContinue = sal_False;
+                bContinue = false;
             }
             else if( rGrfObj.IsCached( pOut, aAlignedGrfArea.Pos(),
                                     aAlignedGrfArea.SSize(), &aGrfAttr ))
@@ -865,17 +865,17 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
                 rGrfObj.DrawWithPDFHandling( *pOut,
                                              aAlignedGrfArea.Pos(), aAlignedGrfArea.SSize(),
                                              &aGrfAttr );
-                bContinue = sal_False;
+                bContinue = false;
             }
         }
 
         if( bContinue )
         {
             const sal_Bool bSwapped = rGrfObj.IsSwappedOut();
-            const sal_Bool bSwappedIn = 0 != pGrfNd->SwapIn( bPrn );
+            const bool bSwappedIn = 0 != pGrfNd->SwapIn( bPrn );
             if( bSwappedIn && rGrfObj.GetGraphic().IsSupportedGraphic())
             {
-                const sal_Bool bAnimate = rGrfObj.IsAnimated() &&
+                const bool bAnimate = rGrfObj.IsAnimated() &&
                                          !pShell->IsPreView() &&
                                          !pShell->GetAccessibilityOptions()->IsStopAnimatedGraphics() &&
                 // #i9684# Stop animation during printing/pdf export
@@ -932,7 +932,7 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
 
             // When printing, we must not collect the graphics
             if( bSwapped && bPrn )
-                bForceSwap = sal_True;
+                bForceSwap = true;
         }
 
         if( bForceSwap )
@@ -971,7 +971,7 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
 
         // We do not have a printer in the BrowseMode and thus no JobSetup, so we create one ...
         const JobSetup* pJobSetup = pOLENd->getIDocumentDeviceAccess()->getJobsetup();
-        sal_Bool bDummyJobSetup = 0 == pJobSetup;
+        bool bDummyJobSetup = 0 == pJobSetup;
         if( bDummyJobSetup )
             pJobSetup = new JobSetup();
 
