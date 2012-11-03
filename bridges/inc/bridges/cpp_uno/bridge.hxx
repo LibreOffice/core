@@ -126,7 +126,7 @@ inline void cppu_cppInterfaceProxy::releaseProxy() SAL_THROW(())
 //__________________________________________________________________________________________________
 inline cppu_cppInterfaceProxy::cppu_cppInterfaceProxy(
     cppu_Bridge * pBridge_, uno_Interface * pUnoI_,
-    typelib_InterfaceTypeDescription * pTypeDescr_, const ::rtl::OUString & rOId_ ) SAL_THROW(())
+    typelib_InterfaceTypeDescription * pTypeDescr_, const OUString & rOId_ ) SAL_THROW(())
     : nRef( 1 )
     , pBridge( pBridge_ )
     , pUnoI( pUnoI_ )
@@ -243,7 +243,7 @@ inline void SAL_CALL cppu_Mapping_cpp2uno(
 //__________________________________________________________________________________________________
 inline cppu_unoInterfaceProxy::cppu_unoInterfaceProxy(
     cppu_Bridge * pBridge_, ::com::sun::star::uno::XInterface * pCppI_,
-    typelib_InterfaceTypeDescription * pTypeDescr_, const ::rtl::OUString & rOId_ ) SAL_THROW(())
+    typelib_InterfaceTypeDescription * pTypeDescr_, const OUString & rOId_ ) SAL_THROW(())
     : nRef( 1 )
     , pBridge( pBridge_ )
     , pCppI( pCppI_ )
@@ -392,22 +392,22 @@ inline void SAL_CALL cppu_ext_getMapping(
 //##################################################################################################
 
 #if (defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500))
-static ::rtl::OUString * s_pStaticOidPart = 0;
+static OUString * s_pStaticOidPart = 0;
 #endif
 
 // environment init stuff
 //--------------------------------------------------------------------------------------------------
-inline const ::rtl::OUString & SAL_CALL cppu_cppenv_getStaticOIdPart() SAL_THROW(())
+inline const OUString & SAL_CALL cppu_cppenv_getStaticOIdPart() SAL_THROW(())
 {
 #if ! (defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500))
-    static ::rtl::OUString * s_pStaticOidPart = 0;
+    static OUString * s_pStaticOidPart = 0;
 #endif
     if (! s_pStaticOidPart)
     {
         ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
         if (! s_pStaticOidPart)
         {
-            ::rtl::OUStringBuffer aRet( 64 );
+            OUStringBuffer aRet( 64 );
             aRet.appendAscii( RTL_CONSTASCII_STRINGPARAM("];") );
             // good guid
             sal_uInt8 ar[16];
@@ -417,9 +417,9 @@ inline const ::rtl::OUString & SAL_CALL cppu_cppenv_getStaticOIdPart() SAL_THROW
                 aRet.append( (sal_Int32)ar[i], 16 );
             }
 #if (defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500))
-            s_pStaticOidPart = new ::rtl::OUString( aRet.makeStringAndClear() );
+            s_pStaticOidPart = new OUString( aRet.makeStringAndClear() );
 #else
-            static ::rtl::OUString s_aStaticOidPart( aRet.makeStringAndClear() );
+            static OUString s_aStaticOidPart( aRet.makeStringAndClear() );
             s_pStaticOidPart = &s_aStaticOidPart;
 #endif
         }
@@ -449,18 +449,18 @@ inline void SAL_CALL cppu_cppenv_computeObjectIdentifier(
             if (xHome.is())
             {
                 // interface
-                ::rtl::OUStringBuffer oid( 64 );
+                OUStringBuffer oid( 64 );
                 oid.append( (sal_Int64)xHome.get(), 16 );
                 oid.append( (sal_Unicode)';' );
                 // ;environment[context]
                 oid.append(
-                    *reinterpret_cast< ::rtl::OUString const * >(
+                    *reinterpret_cast< OUString const * >(
                         &((uno_Environment *) pEnv)->pTypeName ) );
                 oid.append( (sal_Unicode)'[' );
                 oid.append( (sal_Int64)((uno_Environment *)pEnv)->pContext, 16 );
                 // ];good guid
                 oid.append( cppu_cppenv_getStaticOIdPart() );
-                ::rtl::OUString aRet( oid.makeStringAndClear() );
+                OUString aRet( oid.makeStringAndClear() );
                 ::rtl_uString_acquire( *ppOId = aRet.pData );
             }
         }

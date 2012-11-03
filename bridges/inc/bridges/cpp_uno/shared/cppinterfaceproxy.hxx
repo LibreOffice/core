@@ -50,14 +50,14 @@ public:
     static com::sun::star::uno::XInterface * create(
         Bridge * pBridge, uno_Interface * pUnoI,
         typelib_InterfaceTypeDescription * pTypeDescr,
-        rtl::OUString const & rOId) SAL_THROW(());
+        OUString const & rOId) SAL_THROW(());
 
     // Interface for individual CPP--UNO bridges:
 
     Bridge * getBridge() { return pBridge; }
     uno_Interface * getUnoI() { return pUnoI; }
     typelib_InterfaceTypeDescription * getTypeDescr() { return pTypeDescr; }
-    rtl::OUString getOid() { return oid; }
+    OUString getOid() { return oid; }
 
     // non virtual methods called on incoming vtable calls #1, #2
     void acquireProxy() SAL_THROW(());
@@ -72,7 +72,7 @@ private:
     CppInterfaceProxy(
         Bridge * pBridge_, uno_Interface * pUnoI_,
         typelib_InterfaceTypeDescription * pTypeDescr_,
-        rtl::OUString const & rOId_) SAL_THROW(());
+        OUString const & rOId_) SAL_THROW(());
 
     ~CppInterfaceProxy();
 
@@ -85,7 +85,7 @@ private:
     // mapping information
     uno_Interface * pUnoI; // wrapped interface
     typelib_InterfaceTypeDescription * pTypeDescr;
-    rtl::OUString oid;
+    OUString oid;
 
     VtableFactory::Slot * vtables[1];
 
