@@ -3201,27 +3201,29 @@ if test "$_os" = "WINNT"; then
         LINK_X64_BINARY=
         LIBMGR_X64_BINARY=
 
-        AC_MSG_CHECKING([for a x64 compiler and libraries for 64-bit Explorer extensions])
-        if test "$BITNESS_OVERRIDE" = "" -a -f "$with_cl_home/atlmfc/lib/amd64/atls.lib"; then
-            # Prefer native x64 compiler to cross-compiler, in case we are running
-            # the build on a 64-bit OS.
-            if "$with_cl_home/bin/amd64/cl.exe" -? </dev/null >/dev/null 2>&1; then
-                BUILD_X64=TRUE
-                CXX_X64_BINARY="$with_cl_home/bin/amd64/cl.exe"
-                LINK_X64_BINARY="$with_cl_home/bin/amd64/link.exe"
-                LIBMGR_X64_BINARY="$with_cl_home/bin/amd64/lib.exe"
-            elif "$with_cl_home/bin/x86_amd64/cl.exe" -? </dev/null >/dev/null 2>&1; then
-                BUILD_X64=TRUE
-                CXX_X64_BINARY="$with_cl_home/bin/x86_amd64/cl.exe"
-                LINK_X64_BINARY="$with_cl_home/bin/x86_amd64/link.exe"
-                LIBMGR_X64_BINARY="$with_cl_home/bin/x86_amd64/lib.exe"
+        if test "$BITNESS_OVERRIDE" = ""; then
+            AC_MSG_CHECKING([for a x64 compiler and libraries for 64-bit Explorer extensions])
+            if test -f "$with_cl_home/atlmfc/lib/amd64/atls.lib"; then
+                # Prefer native x64 compiler to cross-compiler, in case we are running
+                # the build on a 64-bit OS.
+                if "$with_cl_home/bin/amd64/cl.exe" -? </dev/null >/dev/null 2>&1; then
+                    BUILD_X64=TRUE
+                    CXX_X64_BINARY="$with_cl_home/bin/amd64/cl.exe"
+                    LINK_X64_BINARY="$with_cl_home/bin/amd64/link.exe"
+                    LIBMGR_X64_BINARY="$with_cl_home/bin/amd64/lib.exe"
+                elif "$with_cl_home/bin/x86_amd64/cl.exe" -? </dev/null >/dev/null 2>&1; then
+                    BUILD_X64=TRUE
+                    CXX_X64_BINARY="$with_cl_home/bin/x86_amd64/cl.exe"
+                    LINK_X64_BINARY="$with_cl_home/bin/x86_amd64/link.exe"
+                    LIBMGR_X64_BINARY="$with_cl_home/bin/x86_amd64/lib.exe"
+                fi
             fi
-        fi
-        if test "$BUILD_X64" = TRUE; then
-            AC_MSG_RESULT([found])
-        else
-            AC_MSG_RESULT([not found])
-            AC_MSG_WARN([Installation set will not contain 64-bit Explorer extensions])
+            if test "$BUILD_X64" = TRUE; then
+                AC_MSG_RESULT([found])
+            else
+                AC_MSG_RESULT([not found])
+                AC_MSG_WARN([Installation set will not contain 64-bit Explorer extensions])
+            fi
         fi
         AC_SUBST(BUILD_X64)
 
