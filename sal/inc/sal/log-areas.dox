@@ -185,6 +185,11 @@ certain functionality.
 @li @c sw.ww8 - .doc/.docx export filter, .doc import filter (not writerfilter)
 @li @c sw.ww8.level2 - further info for sw.ww8
 
+@section writerfilter
+
+@li @c writerfilter
+@li @c writerfilter.profile - load times of filters
+
 @section xmloff
 
 @li @c xmloff.core
@@ -219,7 +224,6 @@ certain functionality.
 @li @c stoc
 @li @c svx
 @li @c ucbhelper
-@li @c writerfilter
 @li @c xmlhelp
 @li @c xmloff
 @li @c xmlreader
