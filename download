@@ -208,7 +208,7 @@ if [ ! -z "$failed" ]; then
     exit 1
 fi
 
-if [ "$COM" = "MSC" -a -n "$md5sum" ]; then
+if [ "$COM" = "MSC" -a "$CPUNAME" = "INTEL" -a -n "$md5sum" ]; then
     # This can be run only on Windows itself (Cygwin)
     TMPUNPACK=`cygpath -d $TARFILE_LOCATION/tmp`
     chmod a+w $TARFILE_LOCATION/tmp
