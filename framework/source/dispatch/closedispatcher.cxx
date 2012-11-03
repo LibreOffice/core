@@ -319,23 +319,21 @@ IMPL_LINK_NOARG(CloseDispatcher, impl_asyncCallback)
     //    by others.
     if ( ! xCloseFrame->getCreator().is())
         bCloseFrame = sal_True;
-    else
 
     // b) The help window cant disagree with any request.
     //    Because it doesnt implement a controller - it uses a window only.
     //    Further t cant be the last open frame - if we do all other things
     //    right inside this CloseDispatcher implementation.
     //    => close it!
-    if (aCheck1.m_bReferenceIsHelp)
+    else if (aCheck1.m_bReferenceIsHelp)
         bCloseFrame = sal_True;
-    else
 
     // c) If we are already in "backing mode", we have to terminate
     //    the application, if this special frame is closed.
     //    It doesnt matter, how many other frames (can be the help or hidden frames only)
     //    are open then.
     //    => terminate the application!
-    if (aCheck1.m_bReferenceIsBacking)
+    else if (aCheck1.m_bReferenceIsBacking)
         bTerminateApp = sal_True;
     else
 
@@ -386,10 +384,9 @@ IMPL_LINK_NOARG(CloseDispatcher, impl_asyncCallback)
     sal_Bool bSuccess = sal_False;
     if (bCloseFrame)
         bSuccess = implts_closeFrame();
-    else
-    if (bEstablishBackingMode)
-    #if defined QUARTZ
+    else if (bEstablishBackingMode)
     {
+    #if defined QUARTZ
         // on mac close down, quickstarter keeps the process alive
         // however if someone has shut down the quickstarter
         // behave as any other platform
@@ -411,12 +408,11 @@ IMPL_LINK_NOARG(CloseDispatcher, impl_asyncCallback)
         {
         }
         bSuccess = bQuickstarterRunning ? implts_terminateApplication() : implts_establishBackingMode();
-    }
     #else
         bSuccess = implts_establishBackingMode();
     #endif
-    else
-    if (bTerminateApp)
+    }
+    else if (bTerminateApp)
         bSuccess = implts_terminateApplication();
 
     if (
