@@ -44,6 +44,9 @@ rtl::OUString getConditionalFormatString(ScDocument* pDoc, SCCOL nCol, SCROW nRo
     rtl::OUString aString;
     Color* pColor;
     ScBaseCell* pCell = pDoc->GetCell(ScAddress(nCol, nRow, nTab));
+    if(!pCell)
+        return aString;
+
     const SfxItemSet* pCondSet = pDoc->GetCondResult( nCol, nRow, nTab );
     const ScPatternAttr* pPattern = pDoc->GetPattern(nCol, nRow, nTab);
     SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
