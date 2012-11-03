@@ -853,16 +853,50 @@ const char* GetTypeString(ScConditionMode eMode)
     }
 }
 
+bool IsTopBottomRule(ScConditionMode eMode)
+{
+    switch(eMode)
+    {
+        case SC_COND_TOP10:
+        case SC_COND_BOTTOM10:
+        case SC_COND_TOP_PERCENT:
+        case SC_COND_BOTTOM_PERCENT:
+            return true;
+        default:
+            break;
+    }
+
+    return false;
+}
+
 }
 
 void XclExpCFImpl::SaveXml( XclExpXmlStream& rStrm )
 {
     bool bFmla2 = false;
+    ScConditionMode eOperation = mrFormatEntry.GetOperation();
+    sal_Int32 nAboveAverage = eOperation == SC_COND_ABOVE_AVERAGE;
+    sal_Int32 nBottom = eOperation == SC_COND_BOTTOM10
+        || eOperation == SC_COND_BOTTOM_PERCENT;
+    sal_Int32 nPercent = eOperation == SC_COND_TOP_PERCENT ||
+        eOperation == SC_COND_BOTTOM_PERCENT;
+    rtl::OString aRank;
+    if(IsTopBottomRule(eOperation))
+    {
+        // position and formula grammar are not important
+        // we only store a number there
+        aRank = XclXmlUtils::ToOString(mrFormatEntry.GetExpression(ScAddress(0,0,0), 0));
+    }
+
     sax_fastparser::FSHelperPtr& rWorksheet = rStrm.GetCurrentStream();
     rWorksheet->startElement( XML_cfRule,
             XML_type, GetTypeString( mrFormatEntry.GetOperation() ),
             XML_priority, OString::valueOf( mnPriority + 1 ).getStr(),
             XML_operator, GetOperatorString( mrFormatEntry.GetOperation(), bFmla2 ),
+            XML_aboveAverage, OString::valueOf( nAboveAverage ).getStr(),
+            XML_bottom, OString::valueOf( nBottom ).getStr(),
+            XML_percent, OString::valueOf( nPercent ).getStr(),
+            XML_rank, aRank.getStr(),
             XML_dxfId, OString::valueOf( GetDxfs().GetDxfId( mrFormatEntry.GetStyle() ) ).getStr(),
             FSEND );
     rWorksheet->startElement( XML_formula, FSEND );
