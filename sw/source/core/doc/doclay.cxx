@@ -984,7 +984,7 @@ SwDrawFrmFmt* SwDoc::Insert( const SwPaM &rRg,
     frames at character - o.k. if the PaM starts at least at the same position
                          as the frame
  ---------------------------------------------------------------------------*/
-bool TstFlyRange( const SwPaM* pPam, const SwPosition* pFlyPos,
+static bool lcl_TstFlyRange( const SwPaM* pPam, const SwPosition* pFlyPos,
                         RndStdIds nAnchorId )
 {
     bool bOk = false;
@@ -1042,7 +1042,7 @@ void SwDoc::GetAllFlyFmts( SwPosFlyFrms& rPosFlyFmts,
                  ((FLY_AS_CHAR == rAnchor.GetAnchorId()) && bAsCharAlso)))
             {
                 if( pCmpRange &&
-                    !TstFlyRange( pCmpRange, pAPos, rAnchor.GetAnchorId() ))
+                    !lcl_TstFlyRange( pCmpRange, pAPos, rAnchor.GetAnchorId() ))
                         continue;       // not a valid FlyFrame
                 pFPos = new SwPosFlyFrm( pAPos->nNode, pFly, rPosFlyFmts.size() );
                 rPosFlyFmts.insert( pFPos );
