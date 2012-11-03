@@ -1666,15 +1666,6 @@ void ScFiltersTest::testDataBarODS()
 {
 }
 
-namespace {
-
-void testNewCondFormatData( const rtl::OUString& rFilePath, ScDocument* pDoc )
-{
-
-}
-
-}
-
 void ScFiltersTest::testNewCondFormat()
 {
     const rtl::OUString aFileNameBase("new_cond_format_test.");
