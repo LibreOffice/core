@@ -114,6 +114,7 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
 	lingucomponent \
 	linguistic \
 	lotuswordpro \
+	$(call gb_Helper_optional,LPSOLVE,lpsolve) \
 	MathMLDTD \
 	mdds \
 	Mesa \
