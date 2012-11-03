@@ -118,6 +118,7 @@ libwps\
 lingucomponent\
 linguistic\
 lotuswordpro\
+lpsolve\
 mdds\
 more_fonts\
 mythes\
@@ -228,7 +229,6 @@ libxml2\
 libxmlsec\
 libxslt\
 lcms2\
-lpsolve\
 migrationanalysis\
 moz\
 mysqlc\

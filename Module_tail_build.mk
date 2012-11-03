@@ -104,6 +104,7 @@ $(eval $(call gb_Module_add_moduledirs,tail_end,\
 	lingucomponent \
 	linguistic \
 	lotuswordpro \
+	$(call gb_Helper_optional,LPSOLVE,lpsolve) \
 	$(call gb_Helper_optional,DESKTOP,l10ntools) \
 	MathMLDTD \
 	mdds \
