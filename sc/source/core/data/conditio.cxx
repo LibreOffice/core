@@ -969,7 +969,32 @@ bool ScConditionEntry::IsAboveAverage( double nArg ) const
         return (nArg > nSum/mpCache->nValueItems);
 }
 
-bool ScConditionEntry::IsValid( double nArg ) const
+bool ScConditionEntry::IsError( const ScAddress& rPos ) const
+{
+    ScBaseCell* pCell = mpDoc->GetCell(rPos);
+    if(!pCell)
+        return false;
+
+    switch(pCell->GetCellType())
+    {
+        case CELLTYPE_VALUE:
+            return false;
+        case CELLTYPE_FORMULA:
+        {
+            ScFormulaCell* pFormulaCell = static_cast<ScFormulaCell*>(pCell);
+            if(pFormulaCell->GetErrCode())
+                return true;
+        }
+        case CELLTYPE_STRING:
+        case CELLTYPE_EDIT:
+            return false;
+        default:
+            break;
+    }
+    return false;
+}
+
+bool ScConditionEntry::IsValid( double nArg, const ScAddress& rPos ) const
 {
     //  Interpret muss schon gerufen sein
 
@@ -1057,6 +1082,12 @@ bool ScConditionEntry::IsValid( double nArg ) const
         case SC_COND_BELOW_AVERAGE:
             bValid = IsBelowAverage( nArg );
             break;
+        case SC_COND_ERROR:
+        case SC_COND_NOERROR:
+            bValid = IsError( rPos );
+            if( eOp == SC_COND_NOERROR )
+                bValid = !bValid;
+            break;
         default:
             OSL_FAIL("unbekannte Operation bei ScConditionEntry");
             break;
@@ -1064,7 +1095,7 @@ bool ScConditionEntry::IsValid( double nArg ) const
     return bValid;
 }
 
-bool ScConditionEntry::IsValidStr( const String& rArg ) const
+bool ScConditionEntry::IsValidStr( const String& rArg, const ScAddress& rPos ) const
 {
     bool bValid = false;
     //  Interpret muss schon gerufen sein
@@ -1085,7 +1116,7 @@ bool ScConditionEntry::IsValidStr( const String& rArg ) const
 
     //  Wenn Bedingung Zahl enthaelt, immer FALSE, ausser bei "ungleich"
 
-    if ( !bIsStr1 )
+    if ( !bIsStr1 && (eOp != SC_COND_ERROR && eOp != SC_COND_NOERROR) )
         return ( eOp == SC_COND_NOTEQUAL );
     if ( eOp == SC_COND_BETWEEN || eOp == SC_COND_NOTBETWEEN )
         if ( !bIsStr2 )
@@ -1119,6 +1150,12 @@ bool ScConditionEntry::IsValidStr( const String& rArg ) const
         case SC_COND_ABOVE_AVERAGE:
         case SC_COND_BELOW_AVERAGE:
             return false;
+        case SC_COND_ERROR:
+        case SC_COND_NOERROR:
+            bValid = IsError( rPos );
+            if(eOp == SC_COND_NOERROR)
+                bValid = !bValid;
+        break;
         default:
         {
             sal_Int32 nCompare = ScGlobal::GetCollator()->compareString(
@@ -1165,9 +1202,9 @@ bool ScConditionEntry::IsCellValid( ScBaseCell* pCell, const ScAddress& rPos ) c
     rtl::OUString aArgStr;
     bool bVal = lcl_GetCellContent( pCell, bIsStr1, nArg, aArgStr );
     if (bVal)
-        return IsValid( nArg );
+        return IsValid( nArg, rPos );
     else
-        return IsValidStr( aArgStr );
+        return IsValidStr( aArgStr, rPos );
 }
 
 String ScConditionEntry::GetExpression( const ScAddress& rCursor, sal_uInt16 nIndex,

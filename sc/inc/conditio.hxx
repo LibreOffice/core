@@ -76,6 +76,8 @@ enum ScConditionMode
     SC_COND_BOTTOM_PERCENT,
     SC_COND_ABOVE_AVERAGE,
     SC_COND_BELOW_AVERAGE,
+    SC_COND_ERROR,
+    SC_COND_NOERROR,
     SC_COND_NONE
 };
 
@@ -183,8 +185,8 @@ class SC_DLLPUBLIC ScConditionEntry : public ScFormatEntry
                         bool bTextToReal );
     void    Interpret( const ScAddress& rPos );
 
-    bool    IsValid( double nArg ) const;
-    bool    IsValidStr( const String& rArg ) const;
+    bool    IsValid( double nArg, const ScAddress& rPos ) const;
+    bool    IsValidStr( const String& rArg, const ScAddress& rPos ) const;
 
 public:
             ScConditionEntry( ScConditionMode eOper,
@@ -261,6 +263,8 @@ private:
     bool IsBottomNPercent( double nArg ) const;
     bool IsAboveAverage( double nArg ) const;
     bool IsBelowAverage( double nArg ) const;
+
+    bool IsError( const ScAddress& rPos ) const;
 
     void FillCache() const;
 
