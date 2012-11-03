@@ -1664,12 +1664,40 @@ void ScFiltersTest::testColorScaleXLSX()
 
 void ScFiltersTest::testDataBarODS()
 {
+}
+
+namespace {
+
+void testNewCondFormatData( const rtl::OUString& rFilePath, ScDocument* pDoc )
+{
+
+}
 
 }
 
 void ScFiltersTest::testNewCondFormat()
 {
+    const rtl::OUString aFileNameBase("new_cond_format_test.");
+    rtl::OUString aFileExtension(aFileFormats[XLSX].pName, strlen(aFileFormats[XLSX].pName), RTL_TEXTENCODING_UTF8 );
+    rtl::OUString aFilterName(aFileFormats[XLSX].pFilterName, strlen(aFileFormats[XLSX].pFilterName), RTL_TEXTENCODING_UTF8) ;
+    rtl::OUString aFileName;
+    createFileURL(aFileNameBase, aFileExtension, aFileName);
+    rtl::OUString aFilterType(aFileFormats[XLSX].pTypeName, strlen(aFileFormats[XLSX].pTypeName), RTL_TEXTENCODING_UTF8);
+    std::cout << aFileFormats[XLSX].pName << " Test" << std::endl;
 
+    unsigned int nFormatType = aFileFormats[XLSX].nFormatType;
+    unsigned int nClipboardId = nFormatType ? SFX_FILTER_IMPORT | SFX_FILTER_USESOPTIONS : 0;
+    ScDocShellRef xDocSh = load(aFilterName, aFileName, rtl::OUString(), aFilterType,
+        nFormatType, nClipboardId, SOFFICE_FILEFORMAT_CURRENT);
+
+    CPPUNIT_ASSERT_MESSAGE("Failed to load new_cond_format_test.xlsx", xDocSh.Is());
+
+    ScDocument* pDoc = xDocSh->GetDocument();
+
+    rtl::OUString aCSVFile("new_cond_format_test.");
+    rtl::OUString aCSVPath;
+    createCSVPath( aCSVFile, aCSVPath );
+    testCondFile(aCSVPath, pDoc, 0);
 }
 
 ScFiltersTest::ScFiltersTest()
