@@ -138,16 +138,20 @@ static SbxVariable* Operand
     SbxVariableRef refVar( new SbxVariable );
     const sal_Unicode* p = SkipWhitespace( *ppBuf );
     if( !bVar && ( aCharClass.isDigit( *p )
-     || ( *p == '.' && aCharClass.isDigit( *( p+1 ) ) )
-     || *p == '-'
-     || *p == '&' ) )
+                   || ( *p == '.' && aCharClass.isDigit( *( p+1 ) ) )
+                   || *p == '-'
+                   || *p == '&' ) )
     {
         // A number could be scanned in directly!
         sal_uInt16 nLen;
-        if( !refVar->Scan( rtl::OUString( p ), &nLen ) )
+        if( !refVar->Scan( OUString( p ), &nLen ) )
+        {
             refVar.Clear();
+        }
         else
+        {
             p += nLen;
+        }
     }
     else if( !bVar && *p == '"' )
     {
@@ -168,7 +172,9 @@ static SbxVariable* Operand
         refVar->PutString( aString );
     }
     else
+    {
         refVar = QualifiedName( pObj, pGbl, &p, SbxCLASS_DONTCARE );
+    }
     *ppBuf = p;
     if( refVar.Is() )
         refVar->AddRef();

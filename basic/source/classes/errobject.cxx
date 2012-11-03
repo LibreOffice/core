@@ -210,7 +210,9 @@ void SbxErrObject::setNumberAndDescription( ::sal_Int32 _number, const ::rtl::OU
     throw (uno::RuntimeException)
 {
     if( m_pErrObject != NULL )
+    {
         m_pErrObject->setData( uno::makeAny( _number ), uno::Any(), uno::makeAny( _description ), uno::Any(), uno::Any() );
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

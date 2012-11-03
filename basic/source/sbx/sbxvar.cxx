@@ -84,7 +84,9 @@ SbxVariable::SbxVariable( const SbxVariable& r )
         mpSbxVariableImpl = new SbxVariableImpl( *r.mpSbxVariableImpl );
 #ifndef DISABLE_SCRIPTING
         if( mpSbxVariableImpl->m_xComListener.is() )
+        {
             registerComListenerVariableForBasic( this, mpSbxVariableImpl->m_pComListenerParentBasic );
+        }
 #endif
     }
     pCst = NULL;
@@ -134,7 +136,9 @@ SbxVariable::~SbxVariable()
 #endif
 #ifndef DISABLE_SCRIPTING
     if( IsSet( SBX_DIM_AS_NEW ))
+    {
         removeDimAsNewRecoverItem( this );
+    }
 #endif
     delete mpSbxVariableImpl;
     delete pCst;
@@ -145,7 +149,9 @@ SbxVariable::~SbxVariable()
 SfxBroadcaster& SbxVariable::GetBroadcaster()
 {
     if( !pCst )
+    {
         pCst = new SfxBroadcaster;
+    }
     return *pCst;
 }
 
@@ -169,19 +175,29 @@ void SbxVariable::Broadcast( sal_uIntPtr nHintId )
         // Because the method could be called from outside, check the
         // rights here again
         if( nHintId & SBX_HINT_DATAWANTED )
+        {
             if( !CanRead() )
+            {
                 return;
+            }
+        }
         if( nHintId & SBX_HINT_DATACHANGED )
+        {
             if( !CanWrite() )
+            {
                 return;
+            }
+        }
         // Avoid further broadcasting
         SfxBroadcaster* pSave = pCst;
         pCst = NULL;
         sal_uInt16 nSaveFlags = GetFlags();
         SetFlag( SBX_READWRITE );
         if( mpPar.Is() )
+        {
             // Register this as element 0, but don't change over the parent!
             mpPar->GetRef( 0 ) = this;
+        }
         pSave->Broadcast( SbxHint( nHintId, this ) );
         delete pCst; // who knows already, onto which thoughts someone comes?
         pCst = pSave;
@@ -195,7 +211,9 @@ SbxInfo* SbxVariable::GetInfo()
     {
         Broadcast( SBX_HINT_INFOWANTED );
         if( pInfo.Is() )
+        {
             SetModified( sal_True );
+        }
     }
     return pInfo;
 }
@@ -237,7 +255,9 @@ const XubString& SbxVariable::GetName( SbxNameType t ) const
     if( t == SbxNAME_SHORT_TYPES )
     {
         if( et <= SbxSTRING )
+        {
             cType = cSuffixes[ et ];
+        }
         if( cType != ' ' )
             aTmp += cType;
     }
@@ -328,11 +348,15 @@ SbxVariable& SbxVariable::operator=( const SbxVariable& r )
         mpSbxVariableImpl = new SbxVariableImpl( *r.mpSbxVariableImpl );
 #ifndef DISABLE_SCRIPTING
         if( mpSbxVariableImpl->m_xComListener.is() )
+        {
             registerComListenerVariableForBasic( this, mpSbxVariableImpl->m_pComListenerParentBasic );
+        }
 #endif
     }
     else
+    {
         mpSbxVariableImpl = NULL;
+    }
     return *this;
 }
 
@@ -341,11 +365,17 @@ SbxVariable& SbxVariable::operator=( const SbxVariable& r )
 SbxDataType SbxVariable::GetType() const
 {
     if( aData.eType == SbxOBJECT )
+    {
         return aData.pObj ? aData.pObj->GetType() : SbxOBJECT;
+    }
     else if( aData.eType == SbxVARIANT )
+    {
         return aData.pObj ? aData.pObj->GetType() : SbxVARIANT;
+    }
     else
+    {
         return aData.eType;
+    }
 }
 
 SbxClassType SbxVariable::GetClass() const
@@ -356,10 +386,14 @@ SbxClassType SbxVariable::GetClass() const
 void SbxVariable::SetModified( sal_Bool b )
 {
     if( IsSet( SBX_NO_MODIFY ) )
+    {
         return;
+    }
     SbxBase::SetModified( b );
     if( pParent && pParent != this ) //??? HotFix: Recursion out here MM
+    {
         pParent->SetModified( b );
+    }
 }
 
 void SbxVariable::SetParent( SbxObject* p )
@@ -374,7 +408,9 @@ void SbxVariable::SetParent( SbxObject* p )
         if ( pChildren )
         {
             for ( sal_uInt16 nIdx = 0; !bFound && nIdx < pChildren->Count(); ++nIdx )
+            {
                 bFound = ( this == pChildren->Get(nIdx) );
+            }
         }
         if ( !bFound )
         {
@@ -395,7 +431,9 @@ void SbxVariable::SetParent( SbxObject* p )
 SbxVariableImpl* SbxVariable::getImpl( void )
 {
     if( mpSbxVariableImpl == NULL )
+    {
         mpSbxVariableImpl = new SbxVariableImpl();
+    }
     return mpSbxVariableImpl;
 }
 
@@ -439,9 +477,11 @@ sal_Bool SbxVariable::LoadData( SvStream& rStrm, sal_uInt16 nVer )
     if( cMark == 0xFF )
     {
         if( !SbxValue::LoadData( rStrm, nVer ) )
+        {
             return sal_False;
+        }
         maName = read_lenPrefixed_uInt8s_ToOUString<sal_uInt16>(rStrm,
-            RTL_TEXTENCODING_ASCII_US);
+                                                                RTL_TEXTENCODING_ASCII_US);
         sal_uInt32 nTemp;
         rStrm >> nTemp;
         nUserData = nTemp;
@@ -451,7 +491,7 @@ sal_Bool SbxVariable::LoadData( SvStream& rStrm, sal_uInt16 nVer )
         rStrm.SeekRel( -1L );
         rStrm >> nType;
         maName = read_lenPrefixed_uInt8s_ToOUString<sal_uInt16>(rStrm,
-            RTL_TEXTENCODING_ASCII_US);
+                                                                RTL_TEXTENCODING_ASCII_US);
         sal_uInt32 nTemp;
         rStrm >> nTemp;
         nUserData = nTemp;
@@ -514,7 +554,9 @@ sal_Bool SbxVariable::LoadData( SvStream& rStrm, sal_uInt16 nVer )
         }
         // putt value
         if( nType != SbxNULL && nType != SbxEMPTY && !Put( aTmp ) )
+        {
             return sal_False;
+        }
     }
     rStrm >> cMark;
     // cMark is also a version number!
@@ -523,13 +565,17 @@ sal_Bool SbxVariable::LoadData( SvStream& rStrm, sal_uInt16 nVer )
     if( cMark )
     {
         if( cMark > 2 )
+        {
             return sal_False;
+        }
         pInfo = new SbxInfo;
         pInfo->LoadData( rStrm, (sal_uInt16) cMark );
     }
     // Load private data only, if it is a SbxVariable
     if( GetClass() == SbxCLASS_VARIABLE && !LoadPrivateData( rStrm, nVer ) )
+    {
         return sal_False;
+    }
     ((SbxVariable*) this)->Broadcast( SBX_HINT_DATACHANGED );
     nHash =  MakeHashCode( maName );
     SetModified( sal_True );
@@ -557,11 +603,15 @@ sal_Bool SbxVariable::StoreData( SvStream& rStrm ) const
         pThis->ResetFlag( SBX_NO_BROADCAST );
     }
     else
+    {
         bValStore = SbxValue::StoreData( rStrm );
+    }
     if( !bValStore )
+    {
         return sal_False;
+    }
     write_lenPrefixed_uInt8s_FromOUString<sal_uInt16>(rStrm, maName,
-        RTL_TEXTENCODING_ASCII_US);
+                                                      RTL_TEXTENCODING_ASCII_US);
     rStrm << (sal_uInt32)nUserData;
     if( pInfo.Is() )
     {
@@ -569,12 +619,18 @@ sal_Bool SbxVariable::StoreData( SvStream& rStrm ) const
         pInfo->StoreData( rStrm );
     }
     else
+    {
         rStrm << (sal_uInt8) 0;
+    }
     // Save private data only, if it is a SbxVariable
     if( GetClass() == SbxCLASS_VARIABLE )
+    {
         return StorePrivateData( rStrm );
+    }
     else
+    {
         return sal_True;
+    }
 }
 
 ////////////////////////////// SbxInfo ///////////////////////////////////
@@ -602,7 +658,9 @@ SbxAlias& SbxAlias::operator=( const SbxAlias& r )
 SbxAlias::~SbxAlias()
 {
     if( xAlias.Is() )
+    {
         EndListening( xAlias->GetBroadcaster() );
+    }
 }
 
 void SbxAlias::Broadcast( sal_uIntPtr nHt )
@@ -611,9 +669,13 @@ void SbxAlias::Broadcast( sal_uIntPtr nHt )
     {
         xAlias->SetParameters( GetParameters() );
         if( nHt == SBX_HINT_DATAWANTED )
+        {
             SbxVariable::operator=( *xAlias );
+        }
         else if( nHt == SBX_HINT_DATACHANGED || nHt == SBX_HINT_CONVERTED )
+        {
             *xAlias = *this;
+        }
         else if( nHt == SBX_HINT_INFOWANTED )
         {
             xAlias->Broadcast( nHt );
@@ -631,7 +693,9 @@ void SbxAlias::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
         xAlias.Clear();
         // delete the alias?
         if( pParent )
+        {
             pParent->Remove( this );
+        }
     }
 }
 
@@ -643,9 +707,13 @@ void SbxVariable::Dump( SvStream& rStrm, sal_Bool bFill )
           << aBNameStr.getStr();
     rtl::OString aBParentNameStr(rtl::OUStringToOString(GetParent()->GetName(), RTL_TEXTENCODING_ASCII_US));
     if ( GetParent() )
+    {
         rStrm << " in parent '" << aBParentNameStr.getStr() << "'";
+    }
     else
+    {
         rStrm << " no parent";
+    }
     rStrm << " ) ";
 
     // output also the object at object-vars
@@ -658,7 +726,9 @@ void SbxVariable::Dump( SvStream& rStrm, sal_Bool bFill )
         ((SbxObject*) GetValues_Impl().pObj)->Dump( rStrm, bFill );
     }
     else
+    {
         rStrm << endl;
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

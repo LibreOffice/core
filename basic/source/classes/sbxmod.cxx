@@ -202,7 +202,9 @@ DocObjectWrapper::release() throw ()
         delete this;
     }
     else
+    {
         OSL_TRACE("DocObjectWrapper::release(%s) 0x%x refcount is now %d", rtl::OUStringToOString( mName, RTL_TEXTENCODING_UTF8 ).getStr(), this, m_refCount );
+    }
 }
 
 DocObjectWrapper::~DocObjectWrapper()
@@ -216,15 +218,21 @@ Sequence< Type > SAL_CALL DocObjectWrapper::getTypes()
     {
         Sequence< Type > sTypes;
         if ( m_xAggregateTypeProv.is() )
+        {
             sTypes = m_xAggregateTypeProv->getTypes();
+        }
         m_Types.realloc( sTypes.getLength() + 1 );
         Type* pPtr = m_Types.getArray();
         for ( int i=0; i<m_Types.getLength(); ++i, ++pPtr )
         {
             if ( i == 0 )
+            {
                 *pPtr = XInvocation::static_type( NULL );
+            }
             else
+            {
                 *pPtr = sTypes[ i - 1 ];
+            }
         }
     }
     return m_Types;
@@ -504,7 +512,9 @@ SbModule::SbModule( const String& rName,  sal_Bool bVBACompat )
     // #i92642: Set name property to intitial name
     SbxVariable* pNameProp = pProps->Find( String( RTL_CONSTASCII_USTRINGPARAM("Name") ), SbxCLASS_PROPERTY );
     if( pNameProp != NULL )
+    {
         pNameProp->PutString( GetName() );
+    }
 }
 
 SbModule::~SbModule()
@@ -571,7 +581,9 @@ SbMethod* SbModule::GetMethod( const String& rName, SbxDataType t )
     SbxVariable* p = pMethods->Find( rName, SbxCLASS_METHOD );
     SbMethod* pMeth = p ? PTR_CAST(SbMethod,p) : NULL;
     if( p && !pMeth )
+    {
         pMethods->Remove( p );
+    }
     if( !pMeth )
     {
         pMeth = new SbMethod( rName, t, this );
@@ -588,7 +600,9 @@ SbMethod* SbModule::GetMethod( const String& rName, SbxDataType t )
     pMeth->SetType( t );
     pMeth->ResetFlag( SBX_WRITE );
     if( t != SbxVARIANT )
+    {
         pMeth->SetFlag( SBX_FIXED );
+    }
     return pMeth;
 }
 
@@ -599,7 +613,9 @@ SbProperty* SbModule::GetProperty( const String& rName, SbxDataType t )
     SbxVariable* p = pProps->Find( rName, SbxCLASS_PROPERTY );
     SbProperty* pProp = p ? PTR_CAST(SbProperty,p) : NULL;
     if( p && !pProp )
+    {
         pProps->Remove( p );
+    }
     if( !pProp )
     {
         pProp = new SbProperty( rName, t, this );
@@ -617,7 +633,9 @@ SbProcedureProperty* SbModule::GetProcedureProperty
     SbxVariable* p = pProps->Find( rName, SbxCLASS_PROPERTY );
     SbProcedureProperty* pProp = p ? PTR_CAST(SbProcedureProperty,p) : NULL;
     if( p && !pProp )
+    {
         pProps->Remove( p );
+    }
     if( !pProp )
     {
         pProp = new SbProcedureProperty( rName, t );
@@ -635,7 +653,9 @@ SbIfaceMapperMethod* SbModule::GetIfaceMapperMethod
     SbxVariable* p = pMethods->Find( rName, SbxCLASS_METHOD );
     SbIfaceMapperMethod* pMapperMethod = p ? PTR_CAST(SbIfaceMapperMethod,p) : NULL;
     if( p && !pMapperMethod )
+    {
         pMethods->Remove( p );
+    }
     if( !pMapperMethod )
     {
         pMapperMethod = new SbIfaceMapperMethod( rName, pImplMeth );
@@ -691,7 +711,9 @@ SbxVariable* SbModule::Find( const rtl::OUString& rName, SbxClassType t )
     // make sure a search in an uninstatiated class module will fail
     SbxVariable* pRes = SbxObject::Find( rName, t );
     if ( bIsProxyModule && !GetSbData()->bRunInit )
+    {
         return NULL;
+    }
     if( !pRes && pImage )
     {
         SbiInstance* pInst = GetSbData()->pInst;
@@ -714,7 +736,9 @@ SbxVariable* SbModule::Find( const rtl::OUString& rName, SbxClassType t )
                     pRes->SetParent( this );
                     pRes->SetFlag( SBX_READ );
                     if( bPrivate )
+                    {
                         pRes->SetFlag( SBX_PRIVATE );
+                    }
                     pRes->PutObject( pEnumObject );
                 }
             }
@@ -837,8 +861,10 @@ void SbModule::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
             if( pHint->GetId() == SBX_HINT_DATAWANTED )
             {
                 if( pMeth->bInvalid && !Compile() )
+                {
                     // auto compile has not worked!
                     StarBASIC::Error( SbERR_BAD_PROP_VALUE );
+                }
                 else
                 {
                     // Call of a subprogram
@@ -858,10 +884,13 @@ void SbModule::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
             sal_uIntPtr nId = pHint->GetId();
             if( (nId == SBX_HINT_DATAWANTED || nId == SBX_HINT_DATACHANGED) &&
                 pVar->GetName().EqualsIgnoreCaseAscii( "name" ) )
+            {
                     bForwardToSbxObject = false;
-
+            }
             if( bForwardToSbxObject )
+            {
                 SbxObject::SFX_NOTIFY( rBC, rBCType, rHint, rHintType );
+            }
         }
     }
 }
@@ -881,7 +910,7 @@ void SbModule::SetSource32( const ::rtl::OUString& r )
     aOUSource = r;
     StartDefinitions();
     SbiTokenizer aTok( r );
-        aTok.SetCompatible( IsVBACompat() );
+    aTok.SetCompatible( IsVBACompat() );
     while( !aTok.IsEof() )
     {
         SbiToken eEndTok = NIL;
@@ -910,11 +939,13 @@ void SbModule::SetSource32( const ::rtl::OUString& r )
                 {
                     eCurTok = aTok.Next();
                     if( eCurTok == COMPATIBLE )
+                    {
                         aTok.SetCompatible( true );
+                    }
                     else if ( ( eCurTok == VBASUPPORT ) && ( aTok.Next() == NUMBER ) )
                     {
-                            sal_Bool bIsVBA = ( aTok.GetDbl()== 1 );
-                            SetVBACompat( bIsVBA );
+                        sal_Bool bIsVBA = ( aTok.GetDbl()== 1 );
+                        SetVBACompat( bIsVBA );
                         aTok.SetCompatible( bIsVBA );
                     }
                 }
@@ -1083,7 +1114,7 @@ sal_uInt16 SbModule::Run( SbMethod* pMeth )
 
     sal_uInt16 nRes = 0;
     bool bDelInst = ( GetSbData()->pInst == NULL );
-        bool bQuit = false;
+    bool bQuit = false;
     StarBASICRef xBasic;
     uno::Reference< frame::XModel > xModel;
     uno::Reference< script::vba::XVBACompatibility > xVBACompat;

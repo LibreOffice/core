@@ -628,11 +628,15 @@ void SbiParser::LSet()
 {
     SbiExpression aLvalue( this, SbLVALUE );
     if( aLvalue.GetType() != SbxSTRING )
+    {
         Error( SbERR_INVALID_OBJECT );
+    }
     TestToken( EQ );
     SbiSymDef* pDef = aLvalue.GetRealVar();
     if( pDef && pDef->GetConstDef() )
+    {
         Error( SbERR_DUPLICATE_DEF, pDef->GetName() );
+    }
     SbiExpression aExpr( this );
     aLvalue.Gen();
     aExpr.Gen();
@@ -644,7 +648,9 @@ void SbiParser::RSet()
 {
     SbiExpression aLvalue( this, SbLVALUE );
     if( aLvalue.GetType() != SbxSTRING )
+    {
         Error( SbERR_INVALID_OBJECT );
+    }
     TestToken( EQ );
     SbiSymDef* pDef = aLvalue.GetRealVar();
     if( pDef && pDef->GetConstDef() )
@@ -772,11 +778,17 @@ void SbiParser::Option()
         {
             SbiToken eTok = Next();
             if( eTok == BINARY )
+            {
                 bText = false;
+            }
             else if( eTok == SYMBOL && GetSym().equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("text")) )
+            {
                 bText = true;
+            }
             else
+            {
                 Error( SbERR_EXPECTED, "Text/Binary" );
+            }
             break;
         }
         case COMPATIBLE:
@@ -794,11 +806,15 @@ void SbiParser::Option()
                 {
                     bVBASupportOn = ( nVal == 1 );
                     if ( bVBASupportOn )
+                    {
                         EnableCompatibility();
+                    }
                     // if the module setting is different
                     // reset it to what the Option tells us
                     if ( bVBASupportOn != aGen.GetModule().IsVBACompat() )
+                    {
                         aGen.GetModule().SetVBACompat( bVBASupportOn );
+                    }
                     break;
                 }
             }

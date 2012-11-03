@@ -73,8 +73,6 @@ using namespace com::sun::star;
 using namespace cppu;
 using namespace osl;
 
-using ::rtl::OUString;
-
 //============================================================================
 // Implementation class SfxScriptLibraryContainer
 
@@ -84,8 +82,7 @@ const sal_Char* SAL_CALL SfxScriptLibraryContainer::getLibElementFileExtension()
 const sal_Char* SAL_CALL SfxScriptLibraryContainer::getLibrariesDir() const { return "Basic"; }
 
 // OldBasicPassword interface
-void SfxScriptLibraryContainer::setLibraryPassword
-    ( const OUString& rLibraryName, const OUString& rPassword )
+void SfxScriptLibraryContainer::setLibraryPassword( const OUString& rLibraryName, const OUString& rPassword )
 {
     try
     {
@@ -105,7 +102,9 @@ OUString SfxScriptLibraryContainer::getLibraryPassword( const OUString& rLibrary
     SfxLibrary* pImplLib = getImplLib( rLibraryName );
     OUString aPassword;
     if( pImplLib->mbPasswordVerified )
+    {
         aPassword = pImplLib->maPassword;
+    }
     return aPassword;
 }
 
@@ -149,14 +148,14 @@ SfxLibrary* SfxScriptLibraryContainer::implCreateLibrary( const OUString& aName 
     return pRet;
 }
 
-SfxLibrary* SfxScriptLibraryContainer::implCreateLibraryLink
-    ( const OUString& aName, const OUString& aLibInfoFileURL,
-      const OUString& StorageURL, sal_Bool ReadOnly )
+SfxLibrary* SfxScriptLibraryContainer::implCreateLibraryLink( const OUString& aName,
+                                                              const OUString& aLibInfoFileURL,
+                                                              const OUString& StorageURL,
+                                                              sal_Bool ReadOnly )
 {
     (void)aName;    // Only needed for SfxDialogLibrary
-    SfxLibrary* pRet =
-        new SfxScriptLibrary
-            ( maModifiable, mxMSF, mxSFI, aLibInfoFileURL, StorageURL, ReadOnly );
+    SfxLibrary* pRet = new SfxScriptLibrary( maModifiable, mxMSF, mxSFI,
+                                             aLibInfoFileURL, StorageURL, ReadOnly );
     return pRet;
 }
 
@@ -173,12 +172,9 @@ bool SAL_CALL SfxScriptLibraryContainer::isLibraryElementValid( Any aElement ) c
     return SfxScriptLibrary::containsValidModule( aElement );
 }
 
-void SAL_CALL SfxScriptLibraryContainer::writeLibraryElement
-(
-    const Reference < XNameContainer >& xLib,
-    const OUString& aElementName,
-    const Reference< XOutputStream >& xOutput
-)
+void SAL_CALL SfxScriptLibraryContainer::writeLibraryElement( const Reference < XNameContainer >& xLib,
+                                                              const OUString& aElementName,
+                                                              const Reference< XOutputStream >& xOutput)
     throw(Exception)
 {
     // Create sax writer
@@ -187,8 +183,9 @@ void SAL_CALL SfxScriptLibraryContainer::writeLibraryElement
     Reference< XTruncate > xTruncate( xOutput, UNO_QUERY );
     OSL_ENSURE( xTruncate.is(), "Currently only the streams that can be truncated are expected!" );
     if ( xTruncate.is() )
+    {
         xTruncate->truncate();
-
+    }
     xWriter->setOutputStream( xOutput );
 
     xmlscript::ModuleDescriptor aMod;
@@ -296,7 +293,7 @@ Any SAL_CALL SfxScriptLibraryContainer::importLibraryElement
         {
             Reference< frame::XModel > xModel( mxOwnerDocument );   // weak-ref -> ref
             Reference< XMultiServiceFactory > xFactory( xModel, UNO_QUERY_THROW );
-            xFactory->createInstance( ::rtl::OUString( "ooo.vba.VBAGlobals"  ) );
+            xFactory->createInstance( OUString( "ooo.vba.VBAGlobals"  ) );
         }
         catch(const Exception& )
         {
@@ -347,7 +344,9 @@ Any SAL_CALL SfxScriptLibraryContainer::importLibraryElement
         if( xVBAModuleInfo.is() )
         {
             if( xVBAModuleInfo->hasModuleInfo( aElementName ) )
+            {
                 xVBAModuleInfo->removeModuleInfo( aElementName );
+            }
             xVBAModuleInfo->insertModuleInfo( aElementName, aModInfo );
         }
     }
@@ -396,7 +395,9 @@ sal_Bool SAL_CALL SfxScriptLibraryContainer::isLibraryPasswordVerified( const OU
     LibraryContainerMethodGuard aGuard( *this );
     SfxLibrary* pImplLib = getImplLib( Name );
     if( !pImplLib->mbPasswordProtected )
+    {
         throw IllegalArgumentException();
+    }
     sal_Bool bRet = pImplLib->mbPasswordVerified;
     return bRet;
 }
@@ -408,15 +409,18 @@ sal_Bool SAL_CALL SfxScriptLibraryContainer::verifyLibraryPassword
     LibraryContainerMethodGuard aGuard( *this );
     SfxLibrary* pImplLib = getImplLib( Name );
     if( !pImplLib->mbPasswordProtected || pImplLib->mbPasswordVerified )
+    {
         throw IllegalArgumentException();
-
+    }
     // Test password
     sal_Bool bSuccess = sal_False;
     if( pImplLib->mbDoc50Password )
     {
         bSuccess = ( Password == pImplLib->maPassword );
         if( bSuccess )
+        {
             pImplLib->mbPasswordVerified = sal_True;
+        }
     }
     else
     {
@@ -432,28 +436,33 @@ sal_Bool SAL_CALL SfxScriptLibraryContainer::verifyLibraryPassword
 
             // Reload library to get source
             if( pImplLib->mbLoaded )
+            {
                 implLoadPasswordLibrary( pImplLib, Name );
+            }
         }
     }
     return bSuccess;
 }
 
 void SAL_CALL SfxScriptLibraryContainer::changeLibraryPassword( const OUString& Name,
-    const OUString& OldPassword, const OUString& NewPassword )
+                                                                const OUString& OldPassword,
+                                                                const OUString& NewPassword )
         throw (IllegalArgumentException, NoSuchElementException, RuntimeException)
 {
     LibraryContainerMethodGuard aGuard( *this );
     SfxLibrary* pImplLib = getImplLib( Name );
     if( OldPassword == NewPassword )
+    {
         return;
-
+    }
     sal_Bool bOldPassword = !OldPassword.isEmpty();
     sal_Bool bNewPassword = !NewPassword.isEmpty();
     sal_Bool bStorage = mxStorage.is() && !pImplLib->mbLink;
 
     if( pImplLib->mbReadOnly || (bOldPassword && !pImplLib->mbPasswordProtected) )
+    {
         throw IllegalArgumentException();
-
+    }
     // Library must be loaded
     loadLibrary( Name );
 
@@ -466,13 +475,16 @@ void SAL_CALL SfxScriptLibraryContainer::changeLibraryPassword( const OUString& 
         if( isLibraryPasswordVerified( Name ) )
         {
             if( pImplLib->maPassword != OldPassword )
+            {
                    throw IllegalArgumentException();
+            }
         }
         else
         {
             if( !verifyLibraryPassword( Name, OldPassword ) )
+            {
                    throw IllegalArgumentException();
-
+            }
             // Reload library to get source
             // Should be done in verifyLibraryPassword loadLibrary( Name );
         }
@@ -529,7 +541,8 @@ void SAL_CALL SfxScriptLibraryContainer::changeLibraryPassword( const OUString& 
 
                 INetURLObject aElementInetObj( aLibDirPath );
                 aElementInetObj.insertName( aElementName, sal_False,
-                    INetURLObject::LAST_SEGMENT, sal_True, INetURLObject::ENCODE_ALL );
+                                            INetURLObject::LAST_SEGMENT, sal_True,
+                                            INetURLObject::ENCODE_ALL );
                 if( bKillUncryptedFiles )
                     aElementInetObj.setExtension( maLibElementFileExtension );
                 else
@@ -549,13 +562,17 @@ void setStreamKey( uno::Reference< io::XStream > xStream, const ::rtl::OUString&
 {
     uno::Reference< embed::XEncryptionProtectedSource > xEncrStream( xStream, uno::UNO_QUERY );
     if ( xEncrStream.is() )
+    {
         xEncrStream->setEncryptionPassword( aPass );
+    }
 }
 
 
 // Impl methods
 sal_Bool SfxScriptLibraryContainer::implStorePasswordLibrary( SfxLibrary* pLib,
-    const ::rtl::OUString& aName, const uno::Reference< embed::XStorage >& xStorage, const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& xHandler )
+                                                              const ::rtl::OUString& aName,
+                                                              const uno::Reference< embed::XStorage >& xStorage,
+                                                              const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& xHandler )
 {
     OUString aDummyLocation;
     Reference< XSimpleFileAccess2 > xDummySFA;
@@ -563,16 +580,19 @@ sal_Bool SfxScriptLibraryContainer::implStorePasswordLibrary( SfxLibrary* pLib,
 }
 
 sal_Bool SfxScriptLibraryContainer::implStorePasswordLibrary( SfxLibrary* pLib, const ::rtl::OUString& aName,
-                        const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage,
-                        const ::rtl::OUString& aTargetURL, const Reference< XSimpleFileAccess2 > xToUseSFI, const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& xHandler )
+                                                              const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage,
+                                                              const ::rtl::OUString& aTargetURL,
+                                                              const Reference< XSimpleFileAccess2 > xToUseSFI,
+                                                              const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& xHandler )
 {
     bool bExport = !aTargetURL.isEmpty();
 
     BasicManager* pBasicMgr = getBasicManager();
     OSL_ENSURE( pBasicMgr, "SfxScriptLibraryContainer::implStorePasswordLibrary: cannot do this without a BasicManager!" );
     if ( !pBasicMgr )
+    {
         return sal_False;
-
+    }
     // Only need to handle the export case here,
     // save/saveas etc are handled in sfxbasemodel::storeSelf &
     // sfxbasemodel::impl_store
@@ -585,14 +605,17 @@ sal_Bool SfxScriptLibraryContainer::implStorePasswordLibrary( SfxLibrary* pLib, 
             uno::Reference< task::XInteractionRequest > xReq( pReq );
             xHandler->handle( xReq );
             if ( pReq->isAbort() )
+            {
                 throw util::VetoException();
+            }
         }
     }
 
     StarBASIC* pBasicLib = pBasicMgr->GetLib( aName );
     if( !pBasicLib )
+    {
         return sal_False;
-
+    }
     Sequence< OUString > aElementNames = pLib->getElementNames();
     sal_Int32 nNameCount = aElementNames.getLength();
     const OUString* pNames = aElementNames.getConstArray();
@@ -612,14 +635,16 @@ sal_Bool SfxScriptLibraryContainer::implStorePasswordLibrary( SfxLibrary* pLib, 
                 OUString aCodeStreamName = aElementName;
                 aCodeStreamName += ".bin";
 
-                try {
+                try
+                {
                     uno::Reference< io::XStream > xCodeStream = xStorage->openStreamElement(
-                                        aCodeStreamName,
-                                        embed::ElementModes::READWRITE | embed::ElementModes::TRUNCATE );
+                            aCodeStreamName,
+                            embed::ElementModes::READWRITE | embed::ElementModes::TRUNCATE );
 
                     if ( !xCodeStream.is() )
+                    {
                         throw uno::RuntimeException();
-
+                    }
                     SvMemoryStream aMemStream;
                     /*sal_Bool bStore = */pMod->StoreBinaryData( aMemStream );
 
@@ -630,9 +655,10 @@ sal_Bool SfxScriptLibraryContainer::implStorePasswordLibrary( SfxLibrary* pLib, 
 
                        Reference< XOutputStream > xOut = xCodeStream->getOutputStream();
                     if ( !xOut.is() )
+                    {
                         throw io::IOException(); // access denied because the stream is readonly
-
-                       xOut->writeBytes( aBinSeq );
+                    }
+                    xOut->writeBytes( aBinSeq );
                     xOut->closeOutput();
                 }
                 catch(const uno::Exception& )
@@ -645,27 +671,29 @@ sal_Bool SfxScriptLibraryContainer::implStorePasswordLibrary( SfxLibrary* pLib, 
             {
                 if( !isLibraryElementValid( pLib->getByName( aElementName ) ) )
                 {
-                #if OSL_DEBUG_LEVEL > 0
+                    #if OSL_DEBUG_LEVEL > 0
                     ::rtl::OStringBuffer aMessage;
                     aMessage.append( "invalid library element '" );
                     aMessage.append( ::rtl::OUStringToOString( aElementName, osl_getThreadTextEncoding() ) );
                     aMessage.append( "'." );
                     OSL_FAIL( aMessage.makeStringAndClear().getStr() );
-                #endif
+                    #endif
                     continue;
                 }
 
                 OUString aSourceStreamName = aElementName;
                 aSourceStreamName += ".xml";
 
-                try {
+                try
+                {
                     uno::Reference< io::XStream > xSourceStream = xStorage->openStreamElement(
-                                                                aSourceStreamName,
-                                                                embed::ElementModes::READWRITE );
+                            aSourceStreamName,
+                            embed::ElementModes::READWRITE );
                     uno::Reference< beans::XPropertySet > xProps( xSourceStream, uno::UNO_QUERY );
                     if ( !xProps.is() )
+                    {
                         throw uno::RuntimeException();
-
+                    }
                     OUString aMime( "text/xml" );
                     xProps->setPropertyValue( rtl::OUString("MediaType"), uno::makeAny( aMime ) );
 
@@ -698,17 +726,21 @@ sal_Bool SfxScriptLibraryContainer::implStorePasswordLibrary( SfxLibrary* pLib, 
         {
             Reference< XSimpleFileAccess2 > xSFI = mxSFI;
             if( xToUseSFI.is() )
+            {
                 xSFI = xToUseSFI;
-
+            }
             OUString aLibDirPath;
             if( bExport )
             {
                 INetURLObject aInetObj( aTargetURL );
-                aInetObj.insertName( aName, sal_True, INetURLObject::LAST_SEGMENT, sal_True, INetURLObject::ENCODE_ALL );
+                aInetObj.insertName( aName, sal_True, INetURLObject::LAST_SEGMENT, sal_True,
+                                     INetURLObject::ENCODE_ALL );
                 aLibDirPath = aInetObj.GetMainURL( INetURLObject::NO_DECODE );
 
                 if( !xSFI->isFolder( aLibDirPath ) )
+                {
                     xSFI->createFolder( aLibDirPath );
+                }
             }
             else
             {
@@ -721,31 +753,33 @@ sal_Bool SfxScriptLibraryContainer::implStorePasswordLibrary( SfxLibrary* pLib, 
 
                 INetURLObject aElementInetObj( aLibDirPath );
                 aElementInetObj.insertName( aElementName, sal_False,
-                    INetURLObject::LAST_SEGMENT, sal_True, INetURLObject::ENCODE_ALL );
+                                            INetURLObject::LAST_SEGMENT, sal_True,
+                                            INetURLObject::ENCODE_ALL );
                 aElementInetObj.setExtension( OUString( "pba" ) );
                 OUString aElementPath = aElementInetObj.GetMainURL( INetURLObject::NO_DECODE );
 
                 if( !isLibraryElementValid( pLib->getByName( aElementName ) ) )
                 {
-                #if OSL_DEBUG_LEVEL > 0
+                    #if OSL_DEBUG_LEVEL > 0
                     ::rtl::OStringBuffer aMessage;
                     aMessage.append( "invalid library element '" );
                     aMessage.append( ::rtl::OUStringToOString( aElementName, osl_getThreadTextEncoding() ) );
                     aMessage.append( "'." );
                     OSL_FAIL( aMessage.makeStringAndClear().getStr() );
-                #endif
+                    #endif
                     continue;
                 }
 
                 try
                 {
                     uno::Reference< embed::XStorage > xElementRootStorage =
-                                                            ::comphelper::OStorageHelper::GetStorageFromURL(
-                                                                    aElementPath,
-                                                                    embed::ElementModes::READWRITE );
+                        ::comphelper::OStorageHelper::GetStorageFromURL(
+                                aElementPath,
+                                embed::ElementModes::READWRITE );
                     if ( !xElementRootStorage.is() )
+                    {
                         throw uno::RuntimeException();
-
+                    }
                     // Write binary image stream
                     SbModule* pMod = pBasicLib->FindModule( aElementName );
                     if( pMod )
@@ -787,20 +821,24 @@ sal_Bool SfxScriptLibraryContainer::implStorePasswordLibrary( SfxLibrary* pLib, 
                         OSL_ENSURE( xEncr.is(),
                                     "StorageStream opened for writing must implement XEncryptionProtectedSource!\n" );
                         if ( !xEncr.is() )
+                        {
                             throw uno::RuntimeException();
+                        }
                         xEncr->setEncryptionPassword( pLib->maPassword );
                     }
                     catch(const ::com::sun::star::packages::WrongPasswordException& )
                     {
                         xSourceStream = xElementRootStorage->openEncryptedStreamElement(
-                            aSourceStreamName,
-                            embed::ElementModes::WRITE | embed::ElementModes::TRUNCATE,
-                            pLib->maPassword );
+                                aSourceStreamName,
+                                embed::ElementModes::WRITE | embed::ElementModes::TRUNCATE,
+                                pLib->maPassword );
                     }
 
                     uno::Reference< beans::XPropertySet > xProps( xSourceStream, uno::UNO_QUERY );
                     if ( !xProps.is() )
+                    {
                         throw uno::RuntimeException();
+                    }
                     OUString aMime( "text/xml" );
                     xProps->setPropertyValue( rtl::OUString("MediaType"), uno::makeAny( aMime ) );
 
@@ -813,7 +851,9 @@ sal_Bool SfxScriptLibraryContainer::implStorePasswordLibrary( SfxLibrary* pLib, 
                     uno::Reference< embed::XTransactedObject > xTransact( xElementRootStorage, uno::UNO_QUERY );
                     OSL_ENSURE( xTransact.is(), "The storage must implement XTransactedObject!\n" );
                     if ( !xTransact.is() )
+                    {
                         throw uno::RuntimeException();
+                    }
 
                     xTransact->commit();
                 }
@@ -846,7 +886,9 @@ sal_Bool SfxScriptLibraryContainer::implLoadPasswordLibrary
     {
         if( pScriptLib->mbLoadedBinary && !bVerifyPasswordOnly &&
             (pScriptLib->mbLoadedSource || !pLib->mbPasswordVerified) )
-                return sal_False;
+        {
+            return sal_False;
+        }
     }
 
     StarBASIC* pBasicLib = NULL;
@@ -860,8 +902,9 @@ sal_Bool SfxScriptLibraryContainer::implLoadPasswordLibrary
         pBasicLib = pBasicMgr ? pBasicMgr->GetLib( Name ) : NULL;
         pScriptLib->mbLoaded = bLoaded;    // Restore flag
         if( !pBasicLib )
+        {
             return sal_False;
-
+        }
         bLoadBinary = sal_True;
         pScriptLib->mbLoadedBinary = true;
     }
@@ -886,11 +929,14 @@ sal_Bool SfxScriptLibraryContainer::implLoadPasswordLibrary
             try {
                 xLibrariesStor = mxStorage->openStorageElement( maLibrariesDir, embed::ElementModes::READ );
                 if ( !xLibrariesStor.is() )
+                {
                     throw uno::RuntimeException();
-
+                }
                 xLibraryStor = xLibrariesStor->openStorageElement( Name, embed::ElementModes::READ );
                 if ( !xLibraryStor.is() )
+                {
                     throw uno::RuntimeException();
+                }
             }
             catch(const uno::Exception& )
             {
@@ -916,13 +962,15 @@ sal_Bool SfxScriptLibraryContainer::implLoadPasswordLibrary
                 OUString aCodeStreamName= aElementName;
                 aCodeStreamName += ".bin";
 
-                try {
+                try
+                {
                     uno::Reference< io::XStream > xCodeStream = xLibraryStor->openStreamElement(
                                                                                         aCodeStreamName,
                                                                                         embed::ElementModes::READ );
                     if ( !xCodeStream.is() )
+                    {
                         throw uno::RuntimeException();
-
+                    }
                     SvStream* pStream = ::utl::UcbStreamHelper::CreateStream( xCodeStream );
                     if ( !pStream || pStream->GetError() )
                     {
@@ -949,29 +997,34 @@ sal_Bool SfxScriptLibraryContainer::implLoadPasswordLibrary
                 OUString aSourceStreamName = aElementName;
                 aSourceStreamName += ".xml";
 
-                try {
+                try
+                {
                     uno::Reference< io::XStream > xSourceStream = xLibraryStor->openEncryptedStreamElement(
                                                                     aSourceStreamName,
                                                                     embed::ElementModes::READ,
                                                                     pLib->maPassword );
                     if ( !xSourceStream.is() )
+                    {
                         throw uno::RuntimeException();
-
+                    }
                     // if this point is reached then the password is correct
                     if ( !bVerifyPasswordOnly )
                     {
                         uno::Reference< io::XInputStream > xInStream = xSourceStream->getInputStream();
                         if ( !xInStream.is() )
+                        {
                             throw io::IOException(); // read access denied, seems to be impossible
-
+                        }
                         Reference< XNameContainer > xLib( pLib );
                         Any aAny = importLibraryElement( xLib,
-                                        aElementName, aSourceStreamName,
-                                           xInStream );
+                                                         aElementName, aSourceStreamName,
+                                                         xInStream );
                         if( pLib->hasByName( aElementName ) )
                         {
                             if( aAny.hasValue() )
+                            {
                                 pLib->maNameContainer.replaceByName( aElementName, aAny );
+                            }
                         }
                         else
                         {
@@ -1003,10 +1056,11 @@ sal_Bool SfxScriptLibraryContainer::implLoadPasswordLibrary
                 OUString aElementPath = aElementInetObj.GetMainURL( INetURLObject::NO_DECODE );
 
                 uno::Reference< embed::XStorage > xElementRootStorage;
-                try {
+                try
+                {
                     xElementRootStorage = ::comphelper::OStorageHelper::GetStorageFromURL(
-                                                                    aElementPath,
-                                                                    embed::ElementModes::READ );
+                            aElementPath,
+                            embed::ElementModes::READ );
                 } catch(const uno::Exception& )
                 {
                     // TODO: error handling
@@ -1024,7 +1078,8 @@ sal_Bool SfxScriptLibraryContainer::implLoadPasswordLibrary
                             pBasicLib->SetModified( sal_False );
                         }
 
-                        try {
+                        try
+                        {
                             OUString aCodeStreamName( "code.bin" );
                             uno::Reference< io::XStream > xCodeStream = xElementRootStorage->openStreamElement(
                                                                         aCodeStreamName,
@@ -1056,29 +1111,34 @@ sal_Bool SfxScriptLibraryContainer::implLoadPasswordLibrary
                     {
                         // Access encrypted source stream
                         OUString aSourceStreamName( "source.xml" );
-                        try {
+                        try
+                        {
                             uno::Reference< io::XStream > xSourceStream = xElementRootStorage->openEncryptedStreamElement(
                                                                     aSourceStreamName,
                                                                     embed::ElementModes::READ,
                                                                     pLib->maPassword );
                             if ( !xSourceStream.is() )
+                            {
                                 throw uno::RuntimeException();
-
+                            }
                             if ( !bVerifyPasswordOnly )
                             {
                                 uno::Reference< io::XInputStream > xInStream = xSourceStream->getInputStream();
                                 if ( !xInStream.is() )
+                                {
                                     throw io::IOException(); // read access denied, seems to be impossible
-
+                                }
                                 Reference< XNameContainer > xLib( pLib );
                                 Any aAny = importLibraryElement( xLib,
-                                                aElementName,
-                                                aSourceStreamName,
-                                                xInStream );
+                                                                 aElementName,
+                                                                 aSourceStreamName,
+                                                                 xInStream );
                                 if( pLib->hasByName( aElementName ) )
                                 {
                                     if( aAny.hasValue() )
+                                    {
                                         pLib->maNameContainer.replaceByName( aElementName, aAny );
+                                    }
                                 }
                                 else
                                 {
@@ -1093,7 +1153,6 @@ sal_Bool SfxScriptLibraryContainer::implLoadPasswordLibrary
                     }
                 }
             }
-
         }
         catch(const Exception& )
         {
@@ -1110,13 +1169,15 @@ void SfxScriptLibraryContainer::onNewRootStorage()
 {
 }
 
-sal_Bool SAL_CALL
-SfxScriptLibraryContainer:: HasExecutableCode( const ::rtl::OUString& Library ) throw (uno::RuntimeException)
+sal_Bool SAL_CALL SfxScriptLibraryContainer:: HasExecutableCode( const ::rtl::OUString& Library )
+    throw (uno::RuntimeException)
 {
     BasicManager* pBasicMgr = getBasicManager();
     OSL_ENSURE( pBasicMgr, "we need a basicmanager, really we do" );
     if ( pBasicMgr )
+    {
         return pBasicMgr->HasExeCode( Library ); // need to change this to take name
+    }
     // default to it has code if we can't decide
     return sal_True;
 }
@@ -1128,12 +1189,14 @@ void createRegistryInfo_SfxScriptLibraryContainer()
     static OAutoRegistration< SfxScriptLibraryContainer > aAutoRegistration;
 }
 
-::rtl::OUString SAL_CALL SfxScriptLibraryContainer::getImplementationName( ) throw (RuntimeException)
+OUString SAL_CALL SfxScriptLibraryContainer::getImplementationName( )
+    throw (RuntimeException)
 {
     return getImplementationName_static();
 }
 
-Sequence< ::rtl::OUString > SAL_CALL SfxScriptLibraryContainer::getSupportedServiceNames( ) throw (RuntimeException)
+Sequence< OUString > SAL_CALL SfxScriptLibraryContainer::getSupportedServiceNames( )
+    throw (RuntimeException)
 {
     return getSupportedServiceNames_static();
 }
@@ -1152,12 +1215,10 @@ OUString SfxScriptLibraryContainer::getImplementationName_static()
     return OUString("com.sun.star.comp.sfx2.ScriptLibraryContainer" );
 }
 
-Reference< XInterface > SAL_CALL SfxScriptLibraryContainer::Create
-    ( const Reference< XComponentContext >& )
-        throw( Exception )
+Reference< XInterface > SAL_CALL SfxScriptLibraryContainer::Create( const Reference< XComponentContext >& )
+    throw( Exception )
 {
-    Reference< XInterface > xRet =
-        static_cast< XInterface* >( static_cast< OWeakObject* >(new SfxScriptLibraryContainer()) );
+    Reference< XInterface > xRet = static_cast< XInterface* >( static_cast< OWeakObject* >(new SfxScriptLibraryContainer()) );
     return xRet;
 }
 
@@ -1234,38 +1295,47 @@ bool SAL_CALL SfxScriptLibrary::isLibraryElementValid( ::com::sun::star::uno::An
 IMPLEMENT_FORWARD_XINTERFACE2( SfxScriptLibrary, SfxLibrary, SfxScriptLibrary_BASE );
 IMPLEMENT_FORWARD_XTYPEPROVIDER2( SfxScriptLibrary, SfxLibrary, SfxScriptLibrary_BASE );
 
-script::ModuleInfo SAL_CALL
-SfxScriptLibrary::getModuleInfo( const ::rtl::OUString& ModuleName ) throw (NoSuchElementException, WrappedTargetException, RuntimeException)
+script::ModuleInfo SAL_CALL SfxScriptLibrary::getModuleInfo( const OUString& ModuleName )
+    throw (NoSuchElementException, WrappedTargetException, RuntimeException)
 {
     if ( !hasModuleInfo( ModuleName ) )
+    {
         throw NoSuchElementException();
+    }
     return mModuleInfos[ ModuleName ];
 }
 
-sal_Bool SAL_CALL
-SfxScriptLibrary::hasModuleInfo( const ::rtl::OUString& ModuleName ) throw (RuntimeException)
+sal_Bool SAL_CALL SfxScriptLibrary::hasModuleInfo( const OUString& ModuleName )
+    throw (RuntimeException)
 {
     sal_Bool bRes = sal_False;
     ModuleInfoMap::iterator it = mModuleInfos.find( ModuleName );
 
     if ( it != mModuleInfos.end() )
+    {
         bRes = sal_True;
-
+    }
     return bRes;
 }
 
-void SAL_CALL SfxScriptLibrary::insertModuleInfo( const ::rtl::OUString& ModuleName, const script::ModuleInfo& ModuleInfo ) throw (IllegalArgumentException, ElementExistException, WrappedTargetException, RuntimeException)
+void SAL_CALL SfxScriptLibrary::insertModuleInfo( const OUString& ModuleName, const script::ModuleInfo& ModuleInfo )
+    throw (IllegalArgumentException, ElementExistException, WrappedTargetException, RuntimeException)
 {
     if ( hasModuleInfo( ModuleName ) )
+    {
         throw ElementExistException();
+    }
     mModuleInfos[ ModuleName ] = ModuleInfo;
 }
 
-void SAL_CALL SfxScriptLibrary::removeModuleInfo( const ::rtl::OUString& ModuleName ) throw (NoSuchElementException, WrappedTargetException, RuntimeException)
+void SAL_CALL SfxScriptLibrary::removeModuleInfo( const OUString& ModuleName )
+    throw (NoSuchElementException, WrappedTargetException, RuntimeException)
 {
         // #FIXME add NoSuchElementException to the spec
     if ( !hasModuleInfo( ModuleName ) )
+    {
         throw NoSuchElementException();
+    }
     mModuleInfos.erase( mModuleInfos.find( ModuleName ) );
 }
 

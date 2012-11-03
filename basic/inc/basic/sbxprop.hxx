@@ -32,7 +32,7 @@ public:
     SbxProperty( const SbxProperty& r ) : SvRefBase( r ), SbxVariable( r ) {}
     virtual ~SbxProperty();
     SbxProperty& operator=( const SbxProperty& r )
-    { SbxVariable::operator=( r ); return *this; }
+        { SbxVariable::operator=( r ); return *this; }
     virtual SbxClassType GetClass() const;
 };
 

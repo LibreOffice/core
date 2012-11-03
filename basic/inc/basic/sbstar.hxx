@@ -134,9 +134,9 @@ public:
     void            ClearAllModuleVars( void );
 
     // Calls for error and break handler
-    static sal_uInt16   GetLine();
-    static sal_uInt16   GetCol1();
-    static sal_uInt16   GetCol2();
+    static sal_uInt16 GetLine();
+    static sal_uInt16 GetCol1();
+    static sal_uInt16 GetCol2();
     static void     SetErrorData( SbError nCode, sal_uInt16 nLine,
                                   sal_uInt16 nCol1, sal_uInt16 nCol2 );
 

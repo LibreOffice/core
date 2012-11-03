@@ -2361,7 +2361,9 @@ void LibraryContainer_Impl::removeByName( const ::rtl::OUString& Name )
 {
     StarBASIC* pLib = mpMgr->GetLib( Name );
     if( !pLib )
+    {
         throw container::NoSuchElementException();
+    }
     sal_uInt16 nLibId = mpMgr->GetLibId( Name );
     mpMgr->RemoveLib( nLibId );
 }
@@ -2433,7 +2435,9 @@ void SAL_CALL StarBasicAccess_Impl::addModule
     StarBASIC* pLib = mpMgr->GetLib( LibraryName );
     DBG_ASSERT( pLib, "XML Import: Lib for module unknown");
     if( pLib )
+    {
         pLib->MakeModule32( ModuleName, Source );
+    }
 }
 
 void SAL_CALL StarBasicAccess_Impl::addDialog

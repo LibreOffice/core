@@ -945,9 +945,13 @@ String SbxBasicFormater::BasicFormat( double dNumber, String sFormatStrg )
         if( b0FormatFound )
         {
             if( s0FormatStrg.Len() == 0 && bPosFormatFound )
+            {
                 sTempStrg = sPosFormatStrg;
+            }
             else
+            {
                 sTempStrg = s0FormatStrg;
+            }
         }
         else if( bPosFormatFound )
         {
@@ -967,10 +971,14 @@ String SbxBasicFormater::BasicFormat( double dNumber, String sFormatStrg )
                     sTempStrg += sPosFormatStrg;
                 }
                 else
+                {
                     sTempStrg = sNegFormatStrg;
-           }
+                }
+            }
             else
+            {
                 sTempStrg = sFormatStrg;
+            }
             // if NO format-string especially for negative
             // values is given, output the leading sign
             ScanFormatString( dNumber, sTempStrg, sReturnStrg,/*bCreateSign=*/bNegFormatFound/*sNegFormatStrg!=EMPTYFORMATSTRING*/ );

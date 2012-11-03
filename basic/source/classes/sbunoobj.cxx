@@ -308,7 +308,9 @@ namespace
     void lcl_indent( ::rtl::OUStringBuffer& _inout_rBuffer, sal_Int32 _nLevel )
     {
         while ( _nLevel-- > 0 )
+        {
             _inout_rBuffer.appendAscii( "  " );
+        }
     }
 }
 
@@ -2705,7 +2707,9 @@ SbxVariable* SbUnoObject::Find( const rtl::OUString& rName, SbxClassType t )
             {
                 ::rtl::OUString aUExactName = mxExactNameInvocation->getExactName( aUName );
                 if( !aUExactName.isEmpty() )
+                {
                     aUName = aUExactName;
+                }
             }
 
             try
@@ -2920,11 +2924,17 @@ void createAllObjectProperties( SbxObject* pObj )
     SbUnoObject* pUnoObj = PTR_CAST(SbUnoObject,pObj);
     SbUnoStructRefObject* pUnoStructObj = PTR_CAST(SbUnoStructRefObject,pObj);
     if( pUnoObj )
+    {
         pUnoObj->createAllProperties();
+    }
     else if ( pUnoStructObj )
+    {
         pUnoStructObj->createAllProperties();
+    }
     else
+    {
         pObj->GetAll( SbxCLASS_DONTCARE );
+    }
 }
 
 
@@ -2946,8 +2956,9 @@ void RTL_Impl_CreateUnoStruct( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrit
     // try to create Struct with the same name
     SbUnoObjectRef xUnoObj = Impl_CreateUnoStruct( aClassName );
     if( !xUnoObj )
+    {
         return;
-
+    }
     // return the object
     SbxVariableRef refVar = rPar.Get(0);
     refVar->PutObject( (SbUnoObject*)xUnoObj );
@@ -3109,20 +3120,24 @@ void RTL_Impl_HasInterfaces( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrite 
     // get the Uno-Object
     SbxBaseRef pObj = (SbxBase*)rPar.Get( 1 )->GetObject();
     if( !(pObj && pObj->ISA(SbUnoObject)) )
+    {
         return;
+    }
     Any aAny = ((SbUnoObject*)(SbxBase*)pObj)->getUnoAny();
     TypeClass eType = aAny.getValueType().getTypeClass();
     if( eType != TypeClass_INTERFACE )
+    {
         return;
-
+    }
     // get the interface out of the Any
     Reference< XInterface > x = *(Reference< XInterface >*)aAny.getValue();
 
     // get CoreReflection
     Reference< XIdlReflection > xCoreReflection = getCoreReflection_Impl();
     if( !xCoreReflection.is() )
+    {
         return;
-
+    }
     for( sal_uInt16 i = 2 ; i < nParCount ; i++ )
     {
         // get the name of the interface of the struct
@@ -3131,13 +3146,16 @@ void RTL_Impl_HasInterfaces( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrite 
         // search for the class
         Reference< XIdlClass > xClass = xCoreReflection->forName( aIfaceName );
         if( !xClass.is() )
+        {
             return;
-
+        }
         // check if the interface will be supported
         ::rtl::OUString aClassName = xClass->getName();
         Type aClassType( xClass->getTypeClass(), aClassName.getStr() );
         if( !x->queryInterface( aClassType ).hasValue() )
+        {
             return;
+        }
     }
 
     // Every thing works; then return TRUE
@@ -3163,14 +3181,20 @@ void RTL_Impl_IsUnoStruct( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrite )
     // get the Uno-Object
     SbxVariableRef xParam = rPar.Get( 1 );
     if( !xParam->IsObject() )
+    {
         return;
+    }
     SbxBaseRef pObj = (SbxBase*)rPar.Get( 1 )->GetObject();
     if( !(pObj && pObj->ISA(SbUnoObject)) )
+    {
         return;
+    }
     Any aAny = ((SbUnoObject*)(SbxBase*)pObj)->getUnoAny();
     TypeClass eType = aAny.getValueType().getTypeClass();
     if( eType == TypeClass_STRUCT )
+    {
         refVar->PutBool( sal_True );
+    }
 }
 
 
@@ -3192,32 +3216,46 @@ void RTL_Impl_EqualUnoObjects( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrit
     // get the Uno-Objects
     SbxVariableRef xParam1 = rPar.Get( 1 );
     if( !xParam1->IsObject() )
+    {
         return;
+    }
     SbxBaseRef pObj1 = (SbxBase*)xParam1->GetObject();
     if( !(pObj1 && pObj1->ISA(SbUnoObject)) )
+    {
         return;
+    }
     Any aAny1 = ((SbUnoObject*)(SbxBase*)pObj1)->getUnoAny();
     TypeClass eType1 = aAny1.getValueType().getTypeClass();
     if( eType1 != TypeClass_INTERFACE )
+    {
         return;
+    }
     Reference< XInterface > x1;
     aAny1 >>= x1;
 
     SbxVariableRef xParam2 = rPar.Get( 2 );
     if( !xParam2->IsObject() )
+    {
         return;
+    }
     SbxBaseRef pObj2 = (SbxBase*)xParam2->GetObject();
     if( !(pObj2 && pObj2->ISA(SbUnoObject)) )
+    {
         return;
+    }
     Any aAny2 = ((SbUnoObject*)(SbxBase*)pObj2)->getUnoAny();
     TypeClass eType2 = aAny2.getValueType().getTypeClass();
     if( eType2 != TypeClass_INTERFACE )
+    {
         return;
+    }
     Reference< XInterface > x2;
     aAny2 >>= x2;
 
     if( x1 == x2 )
+    {
         refVar->PutBool( sal_True );
+    }
 }
 
 
@@ -3254,8 +3292,7 @@ VBAConstantHelper::instance()
     return aHelper;
 }
 
-void
-VBAConstantHelper::init()
+void VBAConstantHelper::init()
 {
     if ( !isInited )
     {
@@ -3263,9 +3300,10 @@ VBAConstantHelper::init()
         types[ 0 ] = TypeClass_CONSTANTS;
         Reference< XTypeDescriptionEnumeration > xEnum = getTypeDescriptorEnumeration( rtl::OUString(defaultNameSpace), types, TypeDescriptionSearchDepth_INFINITE  );
 
-        if ( !xEnum.is() )
+        if ( !xEnum.is())
+        {
             return; //NULL;
-
+        }
         while ( xEnum->hasMoreElements() )
         {
             Reference< XConstantsTypeDescription > xConstants( xEnum->nextElement(), UNO_QUERY );
@@ -3823,7 +3861,9 @@ void SbUnoSingleton::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
         unoToSbxValue( pVar, aRetAny );
     }
     else
+    {
         SbxObject::SFX_NOTIFY( rBC, rBCType, rHint, rHintType );
+    }
 }
 
 
@@ -3852,10 +3892,7 @@ public:
 
 
 //========================================================================
-BasicAllListener_Impl::BasicAllListener_Impl
-(
-    const ::rtl::OUString   & aPrefixName_
-)
+BasicAllListener_Impl::BasicAllListener_Impl(const OUString& aPrefixName_)
     : aPrefixName( aPrefixName_ )
 {
 }
@@ -4367,8 +4404,9 @@ void SAL_CALL ModuleInvocationProxy::setValue( const ::rtl::OUString& rProperty,
 Any SAL_CALL ModuleInvocationProxy::getValue( const ::rtl::OUString& rProperty ) throw( UnknownPropertyException )
 {
     if( !m_bProxyIsClassModuleObject )
+    {
         throw UnknownPropertyException();
-
+    }
     SolarMutexGuard guard;
 
     ::rtl::OUString aPropertyFunctionName( "Property Get " );
@@ -4647,8 +4685,9 @@ bool SbModule::createCOMWrapperForIface( Any& o_rRetAny, SbClassModuleObject* pP
             ::rtl::OUString aPureIfaceName = aIfaceName;
             sal_Int32 indexLastDot = aIfaceName.lastIndexOf('.');
             if ( indexLastDot > -1 )
+            {
                 aPureIfaceName = aIfaceName.copy( indexLastDot + 1 );
-
+            }
             Reference< XInvocation > xProxy = new ModuleInvocationProxy( aPureIfaceName, pProxyClassModuleObject );
 
             Sequence<Any> args( 2 );
@@ -4748,7 +4787,9 @@ rtl::OUString StructRefInfo::getTypeName() const
 {
     rtl::OUString sTypeName;
     if ( mpTD )
+    {
         sTypeName = mpTD->pTypeName;
+    }
     return sTypeName;
 }
 
@@ -4913,8 +4954,9 @@ Any SbUnoStructRefObject::getUnoAny( void )
         {
             ::rtl::OUStringBuffer aPropStr;
             if( (i % nPropsPerLine) == 0 )
+            {
                 aPropStr.appendAscii( "\n" );
-
+            }
             // output the type and name
             // Is it in Uno a sequence?
             SbxDataType eType = pVar->GetFullType();
@@ -4930,20 +4972,27 @@ Any SbUnoStructRefObject::getUnoAny( void )
                 if( eType == SbxOBJECT )
                 {
                     if( rPropInfo.getTypeClass() == TypeClass_SEQUENCE )
+                    {
                         eType = (SbxDataType) ( SbxOBJECT | SbxARRAY );
+                    }
                 }
             }
             aPropStr.append( Dbg_SbxDataType2String( eType ) );
             if( bMaybeVoid )
+            {
                 aPropStr.appendAscii( "/void" );
+            }
             aPropStr.appendAscii( " " );
             aPropStr.append( pVar->GetName() );
 
             if( i == nPropCount - 1 )
+            {
                 aPropStr.appendAscii( "\n" );
+            }
             else
+            {
                 aPropStr.appendAscii( "; " );
-
+            }
             aRet.append( aPropStr.makeStringAndClear() );
         }
     }
@@ -5029,7 +5078,9 @@ void SbUnoStructRefObject::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCTyp
 StructRefInfo SbUnoStructRefObject::getStructMember( const rtl::OUString& rMemberName )
 {
     if (!mbMemberCacheInit)
+    {
         initMemberCache();
+    }
     StructFieldInfo::iterator it = maFields.find( rMemberName );
 
     typelib_TypeDescription * pFoundTD = NULL;

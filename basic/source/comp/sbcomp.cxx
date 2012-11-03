@@ -284,8 +284,9 @@ String lcl_dumpMethodParameters( SbMethod* pMethod )
 {
     String aStr;
     if( pMethod == NULL )
+    {
         return aStr;
-
+    }
     SbxError eOld = SbxBase::GetError();
 
     SbxArray* pParams = pMethod->GetParameters();
@@ -299,12 +300,16 @@ String lcl_dumpMethodParameters( SbMethod* pMethod )
             SbxVariable* pVar = pParams->Get( nParam );
             DBG_ASSERT( pVar, "Parameter?!" );
             if ( pVar->GetName().Len() )
+            {
                 aStr += pVar->GetName();
+            }
             else if ( pInfo )
             {
                 const SbxParamInfo* pParam = pInfo->GetParam( nParam );
                 if ( pParam )
+                {
                     aStr += pParam->aName;
+                }
             }
             aStr += '=';
             SbxDataType eType = pVar->GetType();
@@ -320,8 +325,9 @@ String lcl_dumpMethodParameters( SbMethod* pMethod )
 
     SbxBase::ResetError();
     if( eOld != SbxERR_OK )
+    {
         SbxBase::SetError( eOld );
-
+    }
     return aStr;
 }
 
@@ -386,7 +392,9 @@ void lcl_printTimeOutput( void )
         {
             FunctionItem* pFunctionItem = it->second;
             if( pFunctionItem != NULL )
+            {
                 avFunctionItems.push_back( pFunctionItem );
+            }
         }
 
         std::sort( avFunctionItems.begin(), avFunctionItems.end(), compareFunctionNetTime );
@@ -407,10 +415,12 @@ void lcl_printTimeOutput( void )
                 double dFctNetTimePercent = 100.0 * dFctNetTime / dTotalTime;
                 int nSpaceCount = 30 - nNameLen;
                 if( nSpaceCount < 0 )
+                {
                     nSpaceCount = 2;
+                }
                 sprintf( TimeBuffer, "%s:%sCalled %d times\t%f ms (%f%%) / net %f (%f%%) ms",
-                    pName, lcl_getSpaces( nSpaceCount ), pFunctionItem->m_nCallCount,
-                    dFctTotalTime*1000.0, dFctTotalTimePercent, dFctNetTime*1000.0, dFctNetTimePercent );
+                         pName, lcl_getSpaces( nSpaceCount ), pFunctionItem->m_nCallCount,
+                         dFctTotalTime*1000.0, dFctTotalTimePercent, dFctNetTime*1000.0, dFctNetTimePercent );
                 lcl_lineOut( TimeBuffer );
             }
         }
@@ -427,7 +437,9 @@ void dbg_InitTrace( void )
     {
 #ifdef DBG_TRACE_PROFILING
         if( GbTimerOn )
+        {
             GpTimer->continueTimer();
+        }
 #endif
         GpGlobalFile = fopen( GpTraceFileName, "a+" );
         return;
@@ -435,15 +447,19 @@ void dbg_InitTrace( void )
     GbInitTraceAlreadyCalled = true;
 
     if( const sal_Char* pcIniFileName = ::getenv( "OOO_BASICTRACEINI" ) )
+    {
         lcl_ReadIniFile( pcIniFileName );
+    }
     else if( GpTraceIniFile != NULL )
+    {
         lcl_ReadIniFile( GpTraceIniFile );
-
+    }
     GpGlobalFile = fopen( GpTraceFileName, "w" );
     GbSavTraceOn = GbTraceOn;
     if( !GbTraceOn )
+    {
         lcl_lineOut( "### Program started with trace off ###" );
-
+    }
 #ifdef DBG_TRACE_PROFILING
     GpTimer = new canvas::tools::ElapsedTime();
     GdStartTime = GpTimer->getElapsedTime();
@@ -459,14 +475,19 @@ void dbg_DeInitTrace( void )
 
 #ifdef DBG_TRACE_PROFILING
     while( !GaCallEnterTimeStack.empty() )
+    {
         GaCallEnterTimeStack.pop();
+    }
     while( !GaFunctionItemStack.empty() )
+    {
         GaFunctionItemStack.pop();
-
+    }
     lcl_printTimeOutput();
 
     for( FunctionItemMap::iterator it = GaFunctionItemMap.begin() ; it != GaFunctionItemMap.end() ; ++it )
+    {
         delete it->second;
+    }
     GaFunctionItemMap.clear();
 
     if( GpGlobalFile )
@@ -478,7 +499,9 @@ void dbg_DeInitTrace( void )
     if( GbInitOnlyAtOfficeStart )
     {
         if( GbTimerOn )
+        {
             GpTimer->pauseTimer();
+        }
     }
     else
     {
@@ -492,8 +515,9 @@ static sal_Int32 GnLastCallLvl = 0;
 void dbg_tracePrint( const String& aStr, sal_Int32 nCallLvl, bool bCallLvlRelativeToCurrent )
 {
     if( bCallLvlRelativeToCurrent )
+    {
         nCallLvl += GnLastCallLvl;
-
+    }
     int nIndent = nCallLvl * GnIndentPerCallLevel;
     lcl_lineOut( OUStringToOString( rtl::OUString( aStr ), RTL_TEXTENCODING_ASCII_US ).getStr(), lcl_getSpaces( nIndent ) );
 }
@@ -501,12 +525,14 @@ void dbg_tracePrint( const String& aStr, sal_Int32 nCallLvl, bool bCallLvlRelati
 void dbg_traceStep( SbModule* pModule, sal_uInt32 nPC, sal_Int32 nCallLvl )
 {
     if( !GbTraceOn )
+    {
         return;
-
+    }
 #ifdef DBG_TRACE_PROFILING
     if( GbBlockSteps || GbBlockAll )
+    {
         return;
-
+    }
     double dCurTime = 0.0;
     bool bPrintTimeStamp = false;
     if( GbTimerOn )
@@ -562,8 +588,9 @@ void dbg_traceStep( SbModule* pModule, sal_uInt32 nPC, sal_Int32 nCallLvl )
     const rtl::OString& rStr_STMNT = rTraceTextData.m_aTraceStr_STMNT;
     bool bSTMT = false;
     if( rStr_STMNT.getLength() )
+    {
         bSTMT = true;
-
+    }
     char TimeBuffer[200];
 #ifdef DBG_TRACE_PROFILING
     if( bPrintTimeStamp )
@@ -577,14 +604,16 @@ void dbg_traceStep( SbModule* pModule, sal_uInt32 nPC, sal_Int32 nCallLvl )
     if( bSTMT )
     {
         lcl_lineOut( rStr_STMNT.getStr(), lcl_getSpaces( nIndent ),
-            (bPrintTimeStamp && !GbIncludePCodes) ? TimeBuffer : NULL );
+                     (bPrintTimeStamp && !GbIncludePCodes) ? TimeBuffer : NULL );
     }
 
     if( !GbIncludePCodes )
     {
 #ifdef DBG_TRACE_PROFILING
         if( GbTimerOn )
+        {
             GpTimer->continueTimer();
+        }
 #endif
         return;
     }
@@ -594,12 +623,14 @@ void dbg_traceStep( SbModule* pModule, sal_uInt32 nPC, sal_Int32 nCallLvl )
     if( rStr_PCode.getLength() )
     {
         lcl_lineOut( rStr_PCode.getStr(), lcl_getSpaces( nIndent ),
-            bPrintTimeStamp ? TimeBuffer : NULL );
+                     bPrintTimeStamp ? TimeBuffer : NULL );
     }
 
 #ifdef DBG_TRACE_PROFILING
     if( GbTimerOn )
+    {
         GpTimer->continueTimer();
+    }
 #endif
 }
 
@@ -609,8 +640,9 @@ void dbg_traceNotifyCall( SbModule* pModule, SbMethod* pMethod, sal_Int32 nCallL
     static const char* pSeparator = "' ================================================================================";
 
     if( !GbTraceOn )
+    {
         return;
-
+    }
 #ifdef DBG_TRACE_PROFILING
     double dCurTime = 0.0;
     double dExecutionTime = 0.0;
@@ -651,8 +683,9 @@ void dbg_traceNotifyCall( SbModule* pModule, SbMethod* pMethod, sal_Int32 nCallL
     {
         FunctionItemMap::iterator itFunctionItem = GaFunctionItemMap.find( aCompleteFunctionName );
         if( itFunctionItem != GaFunctionItemMap.end() )
+        {
             pFunctionItem = itFunctionItem->second;
-
+        }
         if( pFunctionItem == NULL )
         {
             DBG_ASSERT( !bLeave, "No FunctionItem in leave!" );
@@ -710,13 +743,17 @@ void dbg_traceNotifyCall( SbModule* pModule, SbMethod* pMethod, sal_Int32 nCallL
     if( bOwnBlockAll )
     {
         if( GbTimerOn )
+        {
             GpTimer->continueTimer();
+        }
         return;
     }
 #endif
 
     if( nCallLvl > 0 )
+    {
         nCallLvl--;
+    }
     int nIndent = nCallLvl * GnIndentPerCallLevel;
     if( !bLeave && !bOwnBlockSteps )
     {
@@ -747,8 +784,9 @@ void dbg_traceNotifyCall( SbModule* pModule, SbMethod* pMethod, sal_Int32 nCallL
         aStr.AppendAscii( "]" );
     }
     if( !bLeave )
+    {
         aStr += lcl_dumpMethodParameters( pMethod );
-
+    }
     const char* pPostStr = NULL;
 #ifdef DBG_TRACE_PROFILING
     char TimeBuffer[200];
@@ -759,26 +797,34 @@ void dbg_traceNotifyCall( SbModule* pModule, SbMethod* pMethod, sal_Int32 nCallL
     }
 #endif
     lcl_lineOut( (!bLeave || !bOwnBlockSteps) ? OUStringToOString( rtl::OUString( aStr ), RTL_TEXTENCODING_ASCII_US ).getStr() : "}",
-        lcl_getSpaces( nIndent ), pPostStr );
+                 lcl_getSpaces( nIndent ), pPostStr );
     if( !bLeave )
+    {
         lcl_lineOut( "{", lcl_getSpaces( nIndent ) );
-
+    }
     if( bLeave && !bOwnBlockSteps )
+    {
         lcl_lineOut( "" );
-
+    }
 #ifdef DBG_TRACE_PROFILING
     if( GbTimerOn )
+    {
         GpTimer->continueTimer();
+    }
 #endif
 }
 
 void dbg_traceNotifyError( SbError nTraceErr, const String& aTraceErrMsg, bool bTraceErrHandled, sal_Int32 nCallLvl )
 {
     if( !GbTraceOn )
+    {
         return;
+    }
 #ifdef DBG_TRACE_PROFILING
     if( GbBlockSteps || GbBlockAll )
+    {
         return;
+    }
 #endif
     GnLastCallLvl = nCallLvl;
 
@@ -871,7 +917,9 @@ void RTL_Impl_TraceCommand( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrite )
         lcl_lineOut( Buffer, lcl_getSpaces( nIndent ) );
 
         if( eOld != SbxERR_OK )
+        {
             SbxBase::SetError( eOld );
+        }
     }
 }
 

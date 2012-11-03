@@ -232,8 +232,9 @@ SbxVariable* SbiRuntime::FindElement( SbxObject* pObj, sal_uInt32 nOp1, sal_uInt
         }
         // #39108 Args can already be deleted!
         if( !bFatalError )
+        {
             SetupArgs( pElem, nOp1 );
-
+        }
         // because a particular call-type is requested
         if( pElem->IsA( TYPE(SbxMethod) ) )
         {
@@ -575,7 +576,9 @@ SbxVariable* SbiRuntime::CheckArray( SbxVariable* pElem )
                                     Any aAny2 = xIndexAccess->getByIndex( nIndex );
                                     TypeClass eType = aAny2.getValueType().getTypeClass();
                                     if( eType == TypeClass_INTERFACE )
+                                    {
                                         xRet = *(Reference< XInterface >*)aAny2.getValue();
+                                    }
                                 }
                                 catch (const IndexOutOfBoundsException&)
                                 {
@@ -825,7 +828,9 @@ void SbiRuntime::StepCASEIS( sal_uInt32 nOp1, sal_uInt32 nOp2 )
         SbxVariableRef xComp = PopVar();
         SbxVariableRef xCase = refCaseStk->Get( refCaseStk->Count() - 1 );
         if( xCase->Compare( (SbxOperator) nOp2, *xComp ) )
+        {
             StepJUMP( nOp1 );
+        }
     }
 }
 
@@ -1192,7 +1197,9 @@ void SbiRuntime::implHandleSbxFlags( SbxVariable* pVar, SbxDataType t, sal_uInt3
 
     bool bVarToDim = ((nOp2 & SBX_TYPE_VAR_TO_DIM_FLAG) != 0);
     if( bVarToDim )
+    {
         pVar->SetFlag( SBX_VAR_TO_DIM );
+    }
 }
 
 // establishing a local variable (+StringID+type)

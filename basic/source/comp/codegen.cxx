@@ -149,17 +149,21 @@ void SbiCodeGen::Save()
     {
         GetSbData()->pClassFac->RemoveClassModule( &rMod );
         // Only a ClassModule can revert to Normal
-                if ( rMod.mnType == com::sun::star::script::ModuleType::CLASS )
+        if ( rMod.mnType == com::sun::star::script::ModuleType::CLASS )
+        {
             rMod.mnType = com::sun::star::script::ModuleType::NORMAL;
+        }
         rMod.bIsProxyModule = false;
     }
 
     // GlobalCode-Flag
     if( pParser->HasGlobalCode() )
+    {
         p->SetFlag( SBIMG_INITCODE );
+    }
     // Die Entrypoints:
     for( SbiSymDef* pDef = pParser->aPublics.First(); pDef;
-                   pDef = pParser->aPublics.Next() )
+         pDef = pParser->aPublics.Next() )
     {
         SbiProcDef* pProc = pDef->GetProcDef();
         if( pProc && pProc->IsDefined() )
@@ -198,8 +202,9 @@ void SbiCodeGen::Save()
             for( sal_uInt16 nPass = 0 ; nPass < nPassCount ; nPass++ )
             {
                 if( nPass == 1 )
+                {
                     aProcName = aIfaceProcName;
-
+                }
                 PropertyMode ePropMode = pProc->getPropertyMode();
                 if( ePropMode != PROPERTY_MODE_NONE )
                 {
@@ -249,8 +254,9 @@ void SbiCodeGen::Save()
 
                     // Declare? -> Hidden
                     if( pProc->GetLib().Len() > 0 )
+                    {
                         pMeth->SetFlag( SBX_HIDDEN );
-
+                    }
                     pMeth->nStart = pProc->GetAddr();
                     pMeth->nLine1 = pProc->GetLine1();
                     pMeth->nLine2 = pProc->GetLine2();
@@ -275,24 +281,35 @@ void SbiCodeGen::Save()
                         SbiSymDef* pPar = pPool->Get( i );
                         SbxDataType t = pPar->GetType();
                         if( !pPar->IsByVal() )
+                        {
                             t = (SbxDataType) ( t | SbxBYREF );
+                        }
                         if( pPar->GetDims() )
+                        {
                             t = (SbxDataType) ( t | SbxARRAY );
+                        }
                         // #33677 hand-over an Optional-Info
                         sal_uInt16 nFlags = SBX_READ;
                         if( pPar->IsOptional() )
+                        {
                             nFlags |= SBX_OPTIONAL;
-
+                        }
                         pInfo->AddParam( pPar->GetName(), t, nFlags );
 
                         sal_uInt32 nUserData = 0;
                         sal_uInt16 nDefaultId = pPar->GetDefaultId();
                         if( nDefaultId )
+                        {
                             nUserData |= nDefaultId;
+                        }
                         if( pPar->IsParamArray() )
+                        {
                             nUserData |= PARAM_INFO_PARAMARRAY;
+                        }
                         if( pPar->IsWithBrackets() )
+                        {
                             nUserData |= PARAM_INFO_WITHBRACKETS;
+                        }
                         if( nUserData )
                         {
                             SbxParamInfo* pParam = (SbxParamInfo*)pInfo->GetParam( i );
@@ -301,7 +318,6 @@ void SbiCodeGen::Save()
                     }
                     pMeth->SetInfo( pInfo );
                 }
-
             }   // for( iPass...
         }
     }
@@ -314,23 +330,29 @@ void SbiCodeGen::Save()
     p->MakeStrings( nSize );
     sal_uInt16 i;
     for( i = 1; i <= nSize; i++ )
+    {
         p->AddString( pPool->Find( i ) );
-
+    }
     // Insert types
     sal_uInt16 nCount = pParser->rTypeArray->Count();
     for (i = 0; i < nCount; i++)
+    {
          p->AddType((SbxObject *)pParser->rTypeArray->Get(i));
-
+    }
     // Insert enum objects
     nCount = pParser->rEnumArray->Count();
     for (i = 0; i < nCount; i++)
+    {
          p->AddEnum((SbxObject *)pParser->rEnumArray->Get(i));
-
+    }
     if( !p->IsError() )
+    {
         rMod.pImage = p;
+    }
     else
+    {
         delete p;
-
+    }
     rMod.EndDefinitions();
 }
 

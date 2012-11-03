@@ -96,7 +96,9 @@ SbxVariable* SbxCollection::FindUserData( sal_uInt32 nData )
         return pObj ? pObj->FindUserData( nData ) : NULL;
     }
     else
+    {
         return SbxObject::FindUserData( nData );
+    }
 }
 
 SbxVariable* SbxCollection::Find( const rtl::OUString& rName, SbxClassType t )
@@ -107,7 +109,9 @@ SbxVariable* SbxCollection::Find( const rtl::OUString& rName, SbxClassType t )
         return pObj ? pObj->Find( rName, t ) : NULL;
     }
     else
+    {
         return SbxObject::Find( rName, t );
+    }
 }
 
 void SbxCollection::SFX_NOTIFY( SfxBroadcaster& rCst, const TypeId& rId1,
@@ -151,14 +155,20 @@ void SbxCollection::SFX_NOTIFY( SfxBroadcaster& rCst, const TypeId& rId1,
 void SbxCollection::CollAdd( SbxArray* pPar_ )
 {
     if( pPar_->Count() != 2 )
+    {
         SetError( SbxERR_WRONG_ARGS );
+    }
     else
     {
         SbxBase* pObj = pPar_->Get( 1 )->GetObject();
         if( !pObj || !( pObj->ISA(SbxObject) ) )
+        {
             SetError( SbxERR_NOTIMP );
+        }
         else
+        {
             Insert( (SbxObject*) pObj );
+        }
     }
 }
 
@@ -167,7 +177,9 @@ void SbxCollection::CollAdd( SbxArray* pPar_ )
 void SbxCollection::CollItem( SbxArray* pPar_ )
 {
     if( pPar_->Count() != 2 )
+    {
         SetError( SbxERR_WRONG_ARGS );
+    }
     else
     {
         SbxVariable* pRes = NULL;
@@ -178,10 +190,14 @@ void SbxCollection::CollItem( SbxArray* pPar_ )
         {
             short n = p->GetInteger();
             if( n >= 1 && n <= (short) pObjs->Count() )
+            {
                 pRes = pObjs->Get( (sal_uInt16) n - 1 );
+            }
         }
         if( !pRes )
+        {
             SetError( SbxERR_BAD_INDEX );
+        }
         pPar_->Get( 0 )->PutObject( pRes );
     }
 }
@@ -226,9 +242,13 @@ SbxStdCollection& SbxStdCollection::operator=( const SbxStdCollection& r )
     if( &r != this )
     {
         if( !r.aElemClass.EqualsIgnoreCaseAscii( aElemClass ) )
+        {
             SetError( SbxERR_CONVERSION );
+        }
         else
+        {
             SbxCollection::operator=( r );
+        }
     }
     return *this;
 }

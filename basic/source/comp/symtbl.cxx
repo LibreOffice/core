@@ -168,7 +168,9 @@ void SbiSymPool::Add( SbiSymDef* pDef )
         }
 
         if( !pDef->GetProcDef() )
+        {
             pDef->nProcId = nProcId;
+        }
         pDef->pIn = this;
         aData.insert( aData.begin() + pDef->nPos, pDef );
     }
@@ -186,9 +188,13 @@ SbiSymDef* SbiSymPool::Find( const String& rName ) const
             return p;
     }
     if( pParent )
+    {
         return pParent->Find( rName );
+    }
     else
+    {
         return NULL;
+    }
 }
 
 
@@ -198,12 +204,18 @@ SbiSymDef* SbiSymPool::FindId( sal_uInt16 n ) const
     {
         SbiSymDef* p = aData[ i ];
         if( p->nId == n && ( !p->nProcId || ( p->nProcId == nProcId ) ) )
+        {
             return p;
+        }
     }
     if( pParent )
+    {
         return pParent->FindId( n );
+    }
     else
+    {
         return NULL;
+    }
 }
 
 // find via position (from 0)
@@ -211,20 +223,29 @@ SbiSymDef* SbiSymPool::FindId( sal_uInt16 n ) const
 SbiSymDef* SbiSymPool::Get( sal_uInt16 n ) const
 {
     if( n >= aData.size() )
+    {
         return NULL;
+    }
     else
+    {
         return aData[ n ];
+    }
 }
 
 sal_uInt32 SbiSymPool::Define( const String& rName )
 {
     SbiSymDef* p = Find( rName );
     if( p )
-    {   if( p->IsDefined() )
+    {
+        if( p->IsDefined() )
+        {
             pParser->Error( SbERR_LABEL_DEFINED, rName );
+        }
     }
     else
+    {
         p = AddSym( rName );
+    }
     return p->Define();
 }
 
@@ -232,7 +253,9 @@ sal_uInt32 SbiSymPool::Reference( const String& rName )
 {
     SbiSymDef* p = Find( rName );
     if( !p )
+    {
         p = AddSym( rName );
+    }
     // to be sure
     pParser->aGen.GenStmnt();
     return p->Reference();
@@ -245,7 +268,9 @@ void SbiSymPool::CheckRefs()
     {
         SbiSymDef* p = aData[ i ];
         if( !p->IsDefined() )
+        {
             pParser->Error( SbERR_UNDEF_LABEL, p->GetName() );
+        }
     }
 }
 
@@ -300,7 +325,9 @@ SbiConstDef* SbiSymDef::GetConstDef()
 const String& SbiSymDef::GetName()
 {
     if( pIn )
+    {
         aName = pIn->rStrings.Find( nId );
+    }
     return aName;
 }
 
@@ -354,7 +381,9 @@ sal_uInt32 SbiSymDef::Define()
 SbiSymPool& SbiSymDef::GetPool()
 {
     if( !pPool )
+    {
         pPool = new SbiSymPool( pIn->pParser->aGblStrings, SbLOCAL );   // is dumped
+    }
     return *pPool;
 }
 
@@ -422,7 +451,9 @@ void SbiProcDef::Match( SbiProcDef* pOld )
         // no type matching - that is done during running
         // but is it maybe called with too little parameters?
         if( !po && !pn->IsOptional() && !pn->IsParamArray() )
+        {
             break;
+        }
         po = pOld->aParams.Next();
     }
 
@@ -498,7 +529,9 @@ SbiConstDef* SbiConstDef::GetConstDef()
 SbiSymbols::~SbiSymbols()
 {
     for( const_iterator it = begin(); it != end(); ++it )
+    {
         delete *it;
+    }
 };
 
 

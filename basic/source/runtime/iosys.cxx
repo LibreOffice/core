@@ -142,32 +142,42 @@ SbiStream::~SbiStream()
 void SbiStream::MapError()
 {
     if( pStrm )
-     switch( pStrm->GetError() )
-     {
+    {
+        switch( pStrm->GetError() )
+        {
         case SVSTREAM_OK:
-            nError = 0; break;
+            nError = 0;
+            break;
         case SVSTREAM_FILE_NOT_FOUND:
-            nError = SbERR_FILE_NOT_FOUND; break;
+            nError = SbERR_FILE_NOT_FOUND;
+            break;
         case SVSTREAM_PATH_NOT_FOUND:
-            nError = SbERR_PATH_NOT_FOUND; break;
+            nError = SbERR_PATH_NOT_FOUND;
+            break;
         case SVSTREAM_TOO_MANY_OPEN_FILES:
-            nError = SbERR_TOO_MANY_FILES; break;
+            nError = SbERR_TOO_MANY_FILES;
+            break;
         case SVSTREAM_ACCESS_DENIED:
-            nError = SbERR_ACCESS_DENIED; break;
+            nError = SbERR_ACCESS_DENIED;
+            break;
         case SVSTREAM_INVALID_PARAMETER:
-            nError = SbERR_BAD_ARGUMENT; break;
+            nError = SbERR_BAD_ARGUMENT;
+            break;
         case SVSTREAM_OUTOFMEMORY:
-            nError = SbERR_NO_MEMORY; break;
+            nError = SbERR_NO_MEMORY;
+            break;
         default:
-            nError = SbERR_IO_ERROR; break;
+            nError = SbERR_IO_ERROR;
+            break;
+        }
     }
 }
 
 // TODO: Code is copied from daemons2/source/uno/asciiEncoder.cxx
 
-::rtl::OUString findUserInDescription( const ::rtl::OUString& aDescription )
+OUString findUserInDescription( const ::rtl::OUString& aDescription )
 {
-    ::rtl::OUString user;
+    OUString user;
 
     sal_Int32 index;
     sal_Int32 lastIndex = 0;
@@ -175,13 +185,13 @@ void SbiStream::MapError()
     do
     {
         index = aDescription.indexOf((sal_Unicode) ',', lastIndex);
-        ::rtl::OUString token = (index == -1) ? aDescription.copy(lastIndex) : aDescription.copy(lastIndex, index - lastIndex);
+        OUString token = (index == -1) ? aDescription.copy(lastIndex) : aDescription.copy(lastIndex, index - lastIndex);
 
         lastIndex = index + 1;
 
         sal_Int32 eindex = token.indexOf((sal_Unicode)'=');
-        ::rtl::OUString left = token.copy(0, eindex).toAsciiLowerCase().trim();
-        ::rtl::OUString right = INetURLObject::decode( token.copy(eindex + 1).trim(), '%',
+        OUString left = token.copy(0, eindex).toAsciiLowerCase().trim();
+        OUString right = INetURLObject::decode( token.copy(eindex + 1).trim(), '%',
                             INetURLObject::DECODE_WITH_CHARSET );
 
         if( left == "user" )
@@ -206,7 +216,7 @@ bool needSecurityRestrictions( void )
 
         // Get system user to compare to portal user
         oslSecurity aSecurity = osl_getCurrentSecurity();
-        ::rtl::OUString aSystemUser;
+        OUString aSystemUser;
         sal_Bool bRet = osl_getUserName( aSecurity, &aSystemUser.pData );
         if( !bRet )
         {
@@ -234,8 +244,8 @@ bool needSecurityRestrictions( void )
         for( i = 0 ; i < nBridgeCount ; i++ )
         {
             const Reference< XBridge >& rxBridge = pBridges[ i ];
-            ::rtl::OUString aDescription = rxBridge->getDescription();
-            ::rtl::OUString aPortalUser = findUserInDescription( aDescription );
+            OUString aDescription = rxBridge->getDescription();
+            OUString aPortalUser = findUserInDescription( aDescription );
             if( !aPortalUser.isEmpty() )
             {
                 // User Found, compare to system user
@@ -297,12 +307,12 @@ class OslStream : public SvStream
 
 public:
                     OslStream( const String& rName, short nStrmMode );
-                    ~OslStream();
+                       ~OslStream();
     virtual sal_uIntPtr GetData( void* pData, sal_uIntPtr nSize );
     virtual sal_uIntPtr PutData( const void* pData, sal_uIntPtr nSize );
     virtual sal_uIntPtr SeekPos( sal_uIntPtr nPos );
-    virtual void    FlushData();
-    virtual void    SetSize( sal_uIntPtr nSize );
+    virtual void        FlushData();
+    virtual void        SetSize( sal_uIntPtr nSize );
 };
 
 OslStream::OslStream( const String& rName, short nStrmMode )
@@ -360,9 +370,13 @@ sal_uIntPtr OslStream::SeekPos( sal_uIntPtr nPos )
 {
     ::osl::FileBase::RC rc = ::osl::FileBase::E_None;
     if( nPos == STREAM_SEEK_TO_END )
+    {
         rc = maFile.setPos( osl_Pos_End, 0 );
+    }
     else
+    {
         rc = maFile.setPos( osl_Pos_Absolut, (sal_uInt64)nPos );
+    }
     OSL_VERIFY(rc == ::osl::FileBase::E_None);
     sal_uInt64 nRealPos(0);
     maFile.getPos( nRealPos );
@@ -385,14 +399,14 @@ class UCBStream : public SvStream
     Reference< XStream >        xS;
     Reference< XSeekable >      xSeek;
 public:
-                    UCBStream( Reference< XInputStream > & xIS );
-                    UCBStream( Reference< XStream > & xS );
-                    ~UCBStream();
+                        UCBStream( Reference< XInputStream > & xIS );
+                        UCBStream( Reference< XStream > & xS );
+                       ~UCBStream();
     virtual sal_uIntPtr GetData( void* pData, sal_uIntPtr nSize );
     virtual sal_uIntPtr PutData( const void* pData, sal_uIntPtr nSize );
     virtual sal_uIntPtr SeekPos( sal_uIntPtr nPos );
-    virtual void    FlushData();
-    virtual void    SetSize( sal_uIntPtr nSize );
+    virtual void        FlushData();
+    virtual void        SetSize( sal_uIntPtr nSize );
 };
 
 UCBStream::UCBStream( Reference< XInputStream > & rStm )
@@ -413,12 +427,16 @@ UCBStream::~UCBStream()
     try
     {
         if( xIS.is() )
+        {
             xIS->closeInput();
+        }
         else if( xS.is() )
         {
             Reference< XInputStream > xIS_ = xS->getInputStream();
             if( xIS_.is() )
+            {
                 xIS_->closeInput();
+            }
         }
     }
     catch(const Exception & )
@@ -447,7 +465,9 @@ sal_uIntPtr UCBStream::GetData( void* pData, sal_uIntPtr nSize )
             return nSize;
         }
         else
+        {
             SetError( ERRCODE_IO_GENERAL );
+        }
     }
     catch(const Exception & )
     {
@@ -468,7 +488,9 @@ sal_uIntPtr UCBStream::PutData( const void* pData, sal_uIntPtr nSize )
             return nSize;
         }
         else
+        {
             SetError( ERRCODE_IO_GENERAL );
+        }
     }
     catch(const Exception & )
     {
@@ -485,12 +507,16 @@ sal_uIntPtr UCBStream::SeekPos( sal_uIntPtr nPos )
         {
             sal_uIntPtr nLen = sal::static_int_cast<sal_uIntPtr>( xSeek->getLength() );
             if( nPos > nLen )
+            {
                 nPos = nLen;
+            }
             xSeek->seek( nPos );
             return nPos;
         }
         else
+        {
             SetError( ERRCODE_IO_GENERAL );
+        }
     }
     catch(const Exception & )
     {
@@ -499,15 +525,19 @@ sal_uIntPtr UCBStream::SeekPos( sal_uIntPtr nPos )
     return 0;
 }
 
-void    UCBStream::FlushData()
+void UCBStream::FlushData()
 {
     try
     {
         Reference< XOutputStream > xOSFromS;
         if( xS.is() && (xOSFromS = xS->getOutputStream()).is() )
+        {
             xOSFromS->flush();
+        }
         else
+        {
             SetError( ERRCODE_IO_GENERAL );
+        }
     }
     catch(const Exception & )
     {
@@ -583,10 +613,14 @@ SbError SbiStream::Open
         pStrm = new OslStream( aNameStr, nStrmMode );
     }
     if( IsAppend() )
+    {
         pStrm->Seek( STREAM_SEEK_TO_END );
+    }
     MapError();
     if( nError )
+    {
         delete pStrm, pStrm = NULL;
+    }
     return nError;
 }
 
@@ -613,9 +647,13 @@ SbError SbiStream::Read(rtl::OString& rBuf, sal_uInt16 n, bool bForceReadingPerB
     else
     {
         if( !n )
+        {
             n = nLen;
+        }
         if( !n )
+        {
             return nError = SbERR_BAD_RECORD_LENGTH;
+        }
         rtl::OStringBuffer aBuffer(read_uInt8s_ToOString(*pStrm, n));
         //Pad it out with ' ' to the requested length on short read
         sal_Int32 nRequested = sal::static_int_cast<sal_Int32>(n);
@@ -624,7 +662,9 @@ SbError SbiStream::Read(rtl::OString& rBuf, sal_uInt16 n, bool bForceReadingPerB
     }
     MapError();
     if( !nError && pStrm->IsEof() )
+    {
         nError = SbERR_READ_PAST_EOF;
+    }
     return nError;
 }
 
@@ -651,7 +691,9 @@ void SbiStream::ExpandFile()
             sal_uIntPtr nDiff = nExpandOnWriteTo - nCur;
             char c = 0;
             while( nDiff-- )
+            {
                 *pStrm << c;
+            }
         }
         else
         {
@@ -675,8 +717,9 @@ SbError SbiStream::Write( const rtl::OString& rBuf, sal_uInt16 n )
 {
     ExpandFile();
     if( IsAppend() )
+    {
         pStrm->Seek( STREAM_SEEK_TO_END );
-
+    }
     if( IsText() )
     {
         aLine = aLine + rBuf;
@@ -687,7 +730,9 @@ SbError SbiStream::Write( const rtl::OString& rBuf, sal_uInt16 n )
         {
             aLine = aLine.copy(0, nLineLen);
             if (nLineLen && aLine[--nLineLen] == 0x0D)
+            {
                 aLine = aLine.copy(0, nLineLen);
+            }
             WriteLines(*pStrm, aLine);
             aLine = rtl::OString();
         }
@@ -695,9 +740,13 @@ SbError SbiStream::Write( const rtl::OString& rBuf, sal_uInt16 n )
     else
     {
         if( !n )
+        {
             n = nLen;
+        }
         if( !n )
+        {
             return nError = SbERR_BAD_RECORD_LENGTH;
+        }
         pStrm->Write(rBuf.getStr(), n);
         MapError();
     }
@@ -716,7 +765,9 @@ SbiIoSystem* SbGetIoSystem()
 SbiIoSystem::SbiIoSystem()
 {
     for( short i = 0; i < CHANNELS; i++ )
+    {
         pChan[ i ] = NULL;
+    }
     nChan  = 0;
     nError = 0;
 }
@@ -736,15 +787,21 @@ void SbiIoSystem::Open(short nCh, const rtl::OString& rName, short nMode, short 
 {
     nError = 0;
     if( nCh >= CHANNELS || !nCh )
+    {
         nError = SbERR_BAD_CHANNEL;
+    }
     else if( pChan[ nCh ] )
+    {
         nError = SbERR_FILE_ALREADY_OPEN;
+    }
     else
     {
         pChan[ nCh ] = new SbiStream;
         nError = pChan[ nCh ]->Open( nCh, rName, nMode, nFlags, nLen );
-        if( nError )
+       if( nError )
+       {
             delete pChan[ nCh ], pChan[ nCh ] = NULL;
+       }
     }
     nChan = 0;
 }
@@ -753,9 +810,13 @@ void SbiIoSystem::Open(short nCh, const rtl::OString& rName, short nMode, short 
 void SbiIoSystem::Close()
 {
     if( !nChan )
+    {
         nError = SbERR_BAD_CHANNEL;
+    }
     else if( !pChan[ nChan ] )
+    {
         nError = SbERR_BAD_CHANNEL;
+    }
     else
     {
         nError = pChan[ nChan ]->Close();
@@ -776,7 +837,9 @@ void SbiIoSystem::Shutdown()
             delete pChan[ i ];
             pChan[ i ] = NULL;
             if( n && !nError )
+            {
                 nError = n;
+            }
         }
     }
     nChan = 0;
@@ -798,11 +861,17 @@ void SbiIoSystem::Shutdown()
 void SbiIoSystem::Read(rtl::OString& rBuf, short n)
 {
     if( !nChan )
+    {
         ReadCon( rBuf );
+    }
     else if( !pChan[ nChan ] )
+    {
         nError = SbERR_BAD_CHANNEL;
+    }
     else
+    {
         nError = pChan[ nChan ]->Read( rBuf, n );
+    }
 }
 
 char SbiIoSystem::Read()
@@ -819,20 +888,30 @@ char SbiIoSystem::Read()
         aIn = aIn.copy(1);
     }
     else if( !pChan[ nChan ] )
+    {
         nError = SbERR_BAD_CHANNEL;
+    }
     else
+    {
         nError = pChan[ nChan ]->Read( ch );
+    }
     return ch;
 }
 
 void SbiIoSystem::Write(const rtl::OString& rBuf, short n)
 {
     if( !nChan )
+    {
         WriteCon( rBuf );
+    }
     else if( !pChan[ nChan ] )
+    {
         nError = SbERR_BAD_CHANNEL;
+    }
     else
+    {
         nError = pChan[ nChan ]->Write( rBuf, n );
+    }
 }
 
 // nChannel == 0..CHANNELS-1
@@ -841,7 +920,9 @@ SbiStream* SbiIoSystem::GetStream( short nChannel ) const
 {
     SbiStream* pRet = 0;
     if( nChannel >= 0 && nChannel < CHANNELS )
+    {
         pRet = pChan[ nChannel ];
+    }
     return pRet;
 }
 
@@ -855,7 +936,9 @@ void SbiIoSystem::CloseAll(void)
             delete pChan[ i ];
             pChan[ i ] = NULL;
             if( n && !nError )
+            {
                 nError = n;
+            }
         }
     }
 }
@@ -869,12 +952,16 @@ void SbiIoSystem::CloseAll(void)
 
 void SbiIoSystem::ReadCon(rtl::OString& rIn)
 {
-    rtl::OUString aPromptStr(rtl::OStringToOUString(aPrompt, osl_getThreadTextEncoding()));
+    OUString aPromptStr(rtl::OStringToOUString(aPrompt, osl_getThreadTextEncoding()));
     SbiInputDialog aDlg( NULL, aPromptStr );
     if( aDlg.Execute() )
+    {
         rIn = rtl::OUStringToOString(aDlg.GetInput(), osl_getThreadTextEncoding());
+    }
     else
+    {
         nError = SbERR_USER_ABORT;
+    }
     aPrompt = rtl::OString();
 }
 
@@ -888,9 +975,13 @@ void SbiIoSystem::WriteCon(const rtl::OString& rText)
     if( n1 != -1 || n2 != -1 )
     {
         if( n1 == -1 )
+        {
             n1 = n2;
+        }
         else if( n2 == -1 )
+        {
             n2 = n1;
+        }
         if( n1 > n2 )
             n1 = n2;
         rtl::OString s(aOut.copy(0, n1));
@@ -903,7 +994,9 @@ void SbiIoSystem::WriteCon(const rtl::OString& rText)
             if( !MessBox( GetpApp()->GetDefDialogParent(),
                         WinBits( WB_OK_CANCEL | WB_DEF_OK ),
                         String(), aStr ).Execute() )
+            {
                 nError = SbERR_USER_ABORT;
+            }
         }
     }
 }

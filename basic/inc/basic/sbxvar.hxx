@@ -167,8 +167,8 @@ public:
 
     SbxBase*    GetObject() const;
     sal_uInt8   GetByte() const;
-    sal_uInt16 GetUShort() const;
-    sal_uInt32 GetULong() const;
+    sal_uInt16  GetUShort() const;
+    sal_uInt32  GetULong() const;
 
     sal_Bool PutInteger( sal_Int16 );
     sal_Bool PutLong( sal_Int32 );
@@ -293,7 +293,7 @@ class BASIC_DLLPUBLIC SbxVariable : public SbxValue
     SfxBroadcaster*  pCst;              // Broadcaster, if needed
     String           maName;            // Name, if available
     SbxArrayRef      mpPar;             // Parameter-Array, if set
-    sal_uInt16           nHash;             // Hash-ID for search
+    sal_uInt16       nHash;             // Hash-ID for search
 
     BASIC_DLLPRIVATE SbxVariableImpl* getImpl( void );
 

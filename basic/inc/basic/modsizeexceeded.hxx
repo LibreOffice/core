@@ -43,7 +43,7 @@ class BASIC_DLLPUBLIC ModuleSizeExceeded : public ::cppu::WeakImplHelper1< ::com
 
     // member
     private:
-    rtl::OUString m_sMods;
+    OUString m_sMods;
     com::sun::star::uno::Any m_aRequest;
     com::sun::star::uno::Sequence< com::sun::star::uno::Reference< com::sun::star::task::XInteractionContinuation > > m_lContinuations;
     com::sun::star::uno::Reference< com::sun::star::task::XInteractionContinuation > m_xAbort;

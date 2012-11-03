@@ -260,7 +260,9 @@ const XubString& SbxArray::GetAlias( sal_uInt16 nIdx )
         return String::EmptyString();
 #ifdef DBG_UTIL
     else
+    {
         DBG_CHKOBJ( rRef, SbxBase, 0 );
+    }
 #endif
 
     return *rRef.pAlias;
@@ -269,14 +271,18 @@ const XubString& SbxArray::GetAlias( sal_uInt16 nIdx )
 void SbxArray::PutAlias( const XubString& rAlias, sal_uInt16 nIdx )
 {
     if( !CanWrite() )
+    {
         SetError( SbxERR_PROP_READONLY );
+    }
     else
     {
         SbxVarEntry& rRef = (SbxVarEntry&) GetRef( nIdx );
         if( !rRef.pAlias )
             rRef.pAlias = new XubString( rAlias );
         else
+        {
             *rRef.pAlias = rAlias;
+        }
     }
 }
 
@@ -284,14 +290,20 @@ void SbxArray::Insert32( SbxVariable* pVar, sal_uInt32 nIdx )
 {
     DBG_ASSERT( pData->size() <= SBX_MAXINDEX32, "SBX: Array wird zu gross" );
     if( pData->size() > SBX_MAXINDEX32 )
+    {
             return;
+    }
     SbxVarEntryPtr p = new SbxVarEntry;
     *((SbxVariableRef*) p) = pVar;
     SbxVarEntryPtrVector::size_type nSize = pData->size();
     if( nIdx > nSize )
+    {
         nIdx = nSize;
+    }
     if( eType != SbxVARIANT && pVar )
+    {
         (*p)->Convert( eType );
+    }
     if( nIdx == nSize )
     {
         pData->push_back( p );
@@ -307,7 +319,9 @@ void SbxArray::Insert( SbxVariable* pVar, sal_uInt16 nIdx )
 {
     DBG_ASSERT( pData->size() <= 0x3FF0, "SBX: Array wird zu gross" );
     if( pData->size() > 0x3FF0 )
-            return;
+    {
+        return;
+    }
     Insert32( pVar, nIdx );
 }
 
@@ -441,7 +455,7 @@ SbxVariable* SbxArray::FindUserData( sal_uInt32 nData )
 // Search of an element by his name and type. If an element is an object,
 // it will also be scanned..
 
-SbxVariable* SbxArray::Find( const rtl::OUString& rName, SbxClassType t )
+SbxVariable* SbxArray::Find( const OUString& rName, SbxClassType t )
 {
     SbxVariable* p = NULL;
     sal_uInt32 nCount = pData->size();

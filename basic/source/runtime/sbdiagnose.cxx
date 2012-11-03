@@ -56,7 +56,9 @@ void DbgReportAssertion( const sal_Char* i_assertionMessage )
 
     // prevent infinite recursion
     if ( bReportingAssertion )
+    {
         return;
+    }
     ::comphelper::FlagRestorationGuard aGuard( bReportingAssertion, true );
 
     SbxArrayRef const xArguments( new SbxArray( SbxVARIANT ) );
@@ -66,7 +68,9 @@ void DbgReportAssertion( const sal_Char* i_assertionMessage )
 
     ErrCode const nError = xAssertionChannelBasic->Call( sCaptureFunctionName, xArguments );
     if ( ( nError & SbERR_METHOD_NOT_FOUND ) != 0 )
+    {
         ResetCapturedAssertions();
+    }
 }
 
 #endif

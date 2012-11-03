@@ -68,7 +68,7 @@ class BASIC_DLLPUBLIC SbxInfo : public SvRefBase
 
     String          aComment;
     String          aHelpFile;
-    sal_uInt32          nHelpId;
+    sal_uInt32      nHelpId;
     SbxParams       aParams;
 
 protected:
@@ -209,8 +209,8 @@ public:
     void   AddDim32( sal_Int32, sal_Int32 );
     void   unoAddDim32( sal_Int32, sal_Int32 );
     sal_Bool   GetDim32( sal_Int32, sal_Int32&, sal_Int32& ) const;
-        bool hasFixedSize() { return mbHasFixedSize; };
-        void setHasFixedSize( bool bHasFixedSize ) {mbHasFixedSize = bHasFixedSize; };
+    bool hasFixedSize() { return mbHasFixedSize; };
+    void setHasFixedSize( bool bHasFixedSize ) {mbHasFixedSize = bHasFixedSize; };
 };
 
 class BASIC_DLLPUBLIC SbxCollection : public SbxObject

@@ -28,7 +28,6 @@ static short nToken;                    // number of tokens
 static TokenTable* pTokTable;
 
 static TokenTable aTokTable_Basic [] = {
-
     { CAT,      "&" },
     { MUL,      "*" },
     { PLUS,     "+" },
@@ -188,16 +187,19 @@ TokenLabelInfo::TokenLabelInfo( void )
 {
     m_pTokenCanBeLabelTab = new bool[VBASUPPORT+1];
     for( int i = 0 ; i <= VBASUPPORT ; ++i )
+    {
         m_pTokenCanBeLabelTab[i] = false;
-
+    }
     // Token accepted as label by VBA
     SbiToken eLabelToken[] = { ACCESS, ALIAS, APPEND, BASE, BINARY, CLASSMODULE,
-        COMPARE, COMPATIBLE, DEFERR, _ERROR_, EXPLICIT, LIB, LINE, LPRINT, NAME,
-        TOBJECT, OUTPUT, PROPERTY, RANDOM, READ, STEP, STOP, TEXT, VBASUPPORT, NIL };
+                               COMPARE, COMPATIBLE, DEFERR, _ERROR_, EXPLICIT, LIB, LINE, LPRINT, NAME,
+                               TOBJECT, OUTPUT, PROPERTY, RANDOM, READ, STEP, STOP, TEXT, VBASUPPORT, NIL };
     SbiToken* pTok = eLabelToken;
     SbiToken eTok;
     for( pTok = eLabelToken ; (eTok = *pTok) != NIL ; ++pTok )
+    {
         m_pTokenCanBeLabelTab[eTok] = true;
+    }
 }
 
 TokenLabelInfo::~TokenLabelInfo()
@@ -218,7 +220,10 @@ SbiTokenizer::SbiTokenizer( const ::rtl::OUString& rSrc, StarBASIC* pb )
     ePush = NIL;
     bEos = bKeywords = bErrorIsSymbol = true;
     if( !nToken )
-        for( nToken = 0, tp = pTokTable; tp->t; nToken++, tp++ ) {}
+    {
+        for( nToken = 0, tp = pTokTable; tp->t; nToken++, tp++ )
+        {}
+    }
 }
 
 SbiTokenizer::~SbiTokenizer()
@@ -280,16 +285,17 @@ const ::rtl::OUString& SbiTokenizer::Symbol( SbiToken t )
     }
     switch( t )
     {
-        case NEG   :
-            aSym = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("-"));
-            return aSym;
-        case EOS   :
-            aSym = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(":/CRLF"));
-            return aSym;
-        case EOLN  :
-            aSym = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CRLF"));
-            return aSym;
-        default: break;
+    case NEG   :
+        aSym = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("-"));
+        return aSym;
+    case EOS   :
+        aSym = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(":/CRLF"));
+        return aSym;
+    case EOLN  :
+        aSym = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CRLF"));
+        return aSym;
+    default:
+        break;
     }
     TokenTable* tp = pTokTable;
     for( short i = 0; i < nToken; i++, tp++ )
@@ -302,7 +308,9 @@ const ::rtl::OUString& SbiTokenizer::Symbol( SbiToken t )
     }
     const sal_Unicode *p = aSym.getStr();
     if (*p <= ' ')
+    {
         aSym = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("???"));
+    }
     return aSym;
 }
 
@@ -313,7 +321,10 @@ const ::rtl::OUString& SbiTokenizer::Symbol( SbiToken t )
 
 SbiToken SbiTokenizer::Next()
 {
-    if (bEof) return EOLN;
+    if (bEof)
+    {
+        return EOLN;
+    }
     // have read in one already?
     if( ePush != NIL )
     {
@@ -340,16 +351,23 @@ SbiToken SbiTokenizer::Next()
     bEos = false;
 
     if( bNumber )
+    {
         return eCurTok = NUMBER;
-
+    }
     else if( ( eScanType == SbxDATE || eScanType == SbxSTRING ) && !bSymbol )
+    {
         return eCurTok = FIXSTRING;
+    }
     // Special cases of characters that are between "Z" and "a". ICompare()
     // evaluates the position of these characters in different ways.
     else if( aSym[0] == '^' )
+    {
         return eCurTok = EXPON;
+    }
     else if( aSym[0] == '\\' )
+    {
         return eCurTok = IDIV;
+    }
     else
     {
         if( eScanType != SbxVARIANT
@@ -366,32 +384,52 @@ SbiToken SbiTokenizer::Next()
             sal_Int32 res = aSym.compareToIgnoreAsciiCaseAscii( tp->s );
 
             if( res == 0 )
+            {
                 goto special;
-
+            }
             if( res < 0 )
             {
-                if ((ub - lb) == 2) ub = lb;
-                else ub = ub - delta;
+                if ((ub - lb) == 2)
+                {
+                    ub = lb;
+                }
+                else
+                {
+                    ub = ub - delta;
+                }
             }
             else
             {
-                if ((ub -lb) == 2) lb = ub;
-                else lb = lb + delta;
+                if ((ub -lb) == 2)
+                {
+                    lb = ub;
+                }
+                else
+                {
+                    lb = lb + delta;
+                }
             }
-        } while( delta );
+        }
+        while( delta );
         // Symbol? if not >= token
         sal_Unicode ch = aSym[0];
         if( !theBasicCharClass::get().isAlpha( ch, bCompatible ) && !bSymbol )
+        {
             return eCurTok = (SbiToken) (ch & 0x00FF);
+        }
         return eCurTok = SYMBOL;
     }
 special:
     // #i92642
     bool bStartOfLine = (eCurTok == NIL || eCurTok == REM || eCurTok == EOLN);
     if( !bStartOfLine && (tp->t == NAME || tp->t == LINE) )
+    {
         return eCurTok = SYMBOL;
+    }
     else if( tp->t == TEXT )
+    {
         return eCurTok = SYMBOL;
+    }
     // maybe we can expand this for other statements that have parameters
     // that are keywords ( and those keywords are only used within such
     // statements )
@@ -400,8 +438,9 @@ special:
     // we just treat keyword 'append' as a normal 'SYMBOL'.
     // Also we accept Dim APPEND
     else if ( ( !bInStatement || eCurTok == DIM ) && tp->t == APPEND )
+    {
         return eCurTok = SYMBOL;
-
+    }
     // #i92642: Special LINE token handling -> SbiParser::Line()
 
     // END IF, CASE, SUB, DEF, FUNCTION, TYPE, CLASS, WITH
@@ -419,15 +458,15 @@ special:
         eCurTok = Peek();
         switch( eCurTok )
         {
-            case IF:       Next(); eCurTok = ENDIF; break;
-            case SELECT:   Next(); eCurTok = ENDSELECT; break;
-            case SUB:      Next(); eCurTok = ENDSUB; break;
-            case FUNCTION: Next(); eCurTok = ENDFUNC; break;
-            case PROPERTY: Next(); eCurTok = ENDPROPERTY; break;
-            case TYPE:     Next(); eCurTok = ENDTYPE; break;
-            case ENUM:     Next(); eCurTok = ENDENUM; break;
-            case WITH:     Next(); eCurTok = ENDWITH; break;
-            default :      eCurTok = END;
+        case IF:       Next(); eCurTok = ENDIF; break;
+        case SELECT:   Next(); eCurTok = ENDSELECT; break;
+        case SUB:      Next(); eCurTok = ENDSUB; break;
+        case FUNCTION: Next(); eCurTok = ENDFUNC; break;
+        case PROPERTY: Next(); eCurTok = ENDPROPERTY; break;
+        case TYPE:     Next(); eCurTok = ENDTYPE; break;
+        case ENUM:     Next(); eCurTok = ENDENUM; break;
+        case WITH:     Next(); eCurTok = ENDWITH; break;
+        default :      eCurTok = END; break;
         }
         nCol1 = nOldCol1;
         if( eCurTok == END )
@@ -447,13 +486,19 @@ special:
     eCurTok = tp->t;
     // AS: data types are keywords
     if( tp->t == AS )
+    {
         bAs = true;
+    }
     else
     {
         if( bAs )
+        {
             bAs = false;
+        }
         else if( eCurTok >= DATATYPE1 && eCurTok <= DATATYPE2 && (bErrorIsSymbol || eCurTok != _ERROR_) )
+        {
             eCurTok = SYMBOL;
+        }
     }
 
     // CLASSMODULE, PROPERTY, GET, ENUM token only visible in compatible mode
@@ -462,10 +507,13 @@ special:
     {
         // #129904 Suppress system
         if( eTok == STOP && aSym.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("system")) )
+        {
             eCurTok = SYMBOL;
-
+        }
         if( eTok == GET && bStartOfLine )
+        {
             eCurTok = SYMBOL;
+        }
     }
     else
     {
@@ -493,11 +541,15 @@ special:
 bool SbiTokenizer::MayBeLabel( bool bNeedsColon )
 {
     if( eCurTok == SYMBOL || m_aTokenLabelInfo.canTokenBeLabel( eCurTok ) )
+    {
         return bNeedsColon ? DoesColonFollow() : true;
+    }
     else
+    {
         return ( eCurTok == NUMBER
                   && eScanType == SbxINTEGER
                   && nVal >= 0 );
+    }
 }
 
 #ifdef _MSC_VER

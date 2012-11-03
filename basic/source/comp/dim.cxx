@@ -824,17 +824,25 @@ SbiProcDef* SbiParser::ProcDecl( bool bDecl )
     {
         Next();
         if( Next() == FIXSTRING )
+        {
             pDef->GetLib() = aSym;
+        }
         else
+        {
             Error( SbERR_SYNTAX );
+        }
     }
     if( Peek() == ALIAS )
     {
         Next();
         if( Next() == FIXSTRING )
+        {
             pDef->GetAlias() = aSym;
+        }
         else
+        {
             Error( SbERR_SYNTAX );
+        }
     }
     if( !bDecl )
     {
@@ -844,7 +852,9 @@ SbiProcDef* SbiParser::ProcDecl( bool bDecl )
         if( pDef->GetAlias().Len() )
             Error( SbERR_UNEXPECTED, ALIAS );
         if( pDef->IsCdecl() )
+        {
             Error( SbERR_UNEXPECTED, _CDECL_ );
+        }
         pDef->SetCdecl( false );
         pDef->GetLib().Erase();
         pDef->GetAlias().Erase();
@@ -853,9 +863,13 @@ SbiProcDef* SbiParser::ProcDecl( bool bDecl )
     {
         // ALIAS and CDECL only together with LIB
         if( pDef->GetAlias().Len() )
+        {
             Error( SbERR_UNEXPECTED, ALIAS );
+        }
         if( pDef->IsCdecl() )
+        {
             Error( SbERR_UNEXPECTED, _CDECL_ );
+        }
         pDef->SetCdecl( false );
         pDef->GetAlias().Erase();
     }
@@ -927,9 +941,13 @@ SbiProcDef* SbiParser::ProcDecl( bool bDecl )
     }
     TypeDecl( *pDef );
     if( eType != SbxVARIANT && pDef->GetType() != eType )
+    {
         Error( SbERR_BAD_DECLARATION, aName );
+    }
     if( pDef->GetType() == SbxVARIANT && !( bFunc || bProp ) )
+    {
         pDef->SetType( SbxEMPTY );
+    }
     return pDef;
 }
 
@@ -944,7 +962,9 @@ void SbiParser::DefDeclare( bool bPrivate )
 {
     Next();
     if( eCurTok != SUB && eCurTok != FUNCTION )
+    {
       Error( SbERR_UNEXPECTED, eCurTok );
+    }
     else
     {
         bool bFunction = (eCurTok == FUNCTION);
@@ -953,7 +973,9 @@ void SbiParser::DefDeclare( bool bPrivate )
         if( pDef )
         {
             if( !pDef->GetLib().Len() )
+            {
                 Error( SbERR_EXPECTED, LIB );
+            }
             // Is it already there?
             SbiSymDef* pOld = aPublics.Find( pDef->GetName() );
             if( pOld )
@@ -967,11 +989,14 @@ void SbiParser::DefDeclare( bool bPrivate )
                     pDef = NULL;
                 }
                 else
+                {
                     pDef->Match( p );
+                }
             }
             else
+            {
                 aPublics.Add( pDef );
-
+            }
             if ( pDef )
             {
                 pDef->SetPublic( !bPrivate );
@@ -996,8 +1021,9 @@ void SbiParser::DefDeclare( bool bPrivate )
 
                     SbxDataType eType = pDef->GetType();
                     if( bFunction )
+                    {
                         aGen.Gen( _PARAM, 0, sal::static_int_cast< sal_uInt16 >( eType ) );
-
+                    }
                     if( nParCount > 1 )
                     {
                         aGen.Gen( _ARGC );
@@ -1026,14 +1052,19 @@ void SbiParser::DefDeclare( bool bPrivate )
                     SbiOpcode eOp = pDef->IsCdecl() ? _CALLC : _CALL;
                     sal_uInt16 nId = pDef->GetId();
                     if( pDef->GetAlias().Len() )
+                    {
                         nId = ( nId & 0x8000 ) | aGblStrings.Add( pDef->GetAlias() );
+                    }
                     if( nParCount > 1 )
+                    {
                         nId |= 0x8000;
+                    }
                     aGen.Gen( eOp, nId, sal::static_int_cast< sal_uInt16 >( eType ) );
 
                     if( bFunction )
+                    {
                         aGen.Gen( _PUT );
-
+                    }
                     aGen.Gen( _LEAVE );
                 }
             }
@@ -1047,14 +1078,19 @@ void SbiParser::Attribute()
     while( Next() != EQ )
     {
         if( Next() != DOT)
+        {
             break;
+        }
     }
 
     if( eCurTok != EQ )
+    {
         Error( SbERR_SYNTAX );
+    }
     else
+    {
         SbiExpression aValue( this );
-
+    }
     // Don't generate any code - just discard it.
 }
 
@@ -1086,19 +1122,29 @@ void SbiParser::DefProc( bool bStatic, bool bPrivate )
     {
         Next();
         if( eCurTok == GET )
+        {
             ePropertyMode = PROPERTY_MODE_GET;
+        }
         else if( eCurTok == LET )
+        {
             ePropertyMode = PROPERTY_MODE_LET;
+        }
         else if( eCurTok == SET )
+        {
             ePropertyMode = PROPERTY_MODE_SET;
+        }
         else
+        {
             Error( SbERR_EXPECTED, "Get or Let or Set" );
+        }
     }
 
     SbiToken eExit = eCurTok;
     SbiProcDef* pDef = ProcDecl( false );
     if( !pDef )
+    {
         return;
+    }
     pDef->setPropertyMode( ePropertyMode );
 
     // Is the Proc already declared?
@@ -1137,10 +1183,13 @@ void SbiParser::DefProc( bool bStatic, bool bPrivate )
         }
     }
     else
+    {
         aPublics.Add( pDef ), pProc = pDef;
-
+    }
     if( !pProc )
+    {
         return;
+    }
     pProc->SetPublic( !bPrivate );
 
     // Now we set the search hierarchy for symbols as well as the
@@ -1148,16 +1197,20 @@ void SbiParser::DefProc( bool bStatic, bool bPrivate )
     aPublics.SetProcId( pProc->GetId() );
     pProc->GetParams().SetParent( &aPublics );
     if( bStatic )
-        {
+    {
         if ( bVBASupportOn )
+        {
             pProc->SetStatic( sal_True );
+        }
         else
+        {
             Error( SbERR_NOT_IMPLEMENTED ); // STATIC SUB ...
         }
-     else
+    }
+    else
     {
         pProc->SetStatic( sal_False );
-        }
+    }
     // Normal case: Local variable->parameter->global variable
     pProc->GetLocals().SetParent( &pProc->GetParams() );
     pPool = &pProc->GetLocals();
@@ -1186,30 +1239,35 @@ void SbiParser::Static()
 
 void SbiParser::DefStatic( bool bPrivate )
 {
+    SbiSymPool* p;
+
     switch( Peek() )
     {
-        case SUB:
-        case FUNCTION:
-        case PROPERTY:
-            // End global chain if necessary (not done in
-            // SbiParser::Parse() under these conditions
-            if( bNewGblDefs && nGblChain == 0 )
-            {
-                nGblChain = aGen.Gen( _JUMP, 0 );
-                bNewGblDefs = false;
-            }
-            Next();
-            DefProc( true, bPrivate );
-            break;
-        default: {
-            if( !pProc )
-                Error( SbERR_NOT_IN_SUBR );
-            // Reset the Pool, so that STATIC-Declarations go into the
-            // global Pool
-            SbiSymPool* p = pPool; pPool = &aPublics;
-            DefVar( _STATIC, true );
-            pPool = p;
-            } break;
+    case SUB:
+    case FUNCTION:
+    case PROPERTY:
+        // End global chain if necessary (not done in
+        // SbiParser::Parse() under these conditions
+        if( bNewGblDefs && nGblChain == 0 )
+        {
+            nGblChain = aGen.Gen( _JUMP, 0 );
+            bNewGblDefs = false;
+        }
+        Next();
+        DefProc( true, bPrivate );
+        break;
+    default:
+        if( !pProc )
+        {
+            Error( SbERR_NOT_IN_SUBR );
+        }
+        // Reset the Pool, so that STATIC-Declarations go into the
+        // global Pool
+        p = pPool;
+        pPool = &aPublics;
+        DefVar( _STATIC, true );
+        pPool = p;
+        break;
     }
 }
 

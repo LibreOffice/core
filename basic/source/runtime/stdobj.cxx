@@ -801,9 +801,13 @@ SbxVariable* SbiStdObject::Find( const rtl::OUString& rName, SbxClassType t )
             String aName_ = rtl::OUString::createFromAscii( p->pName );
             SbxClassType eCT = SbxCLASS_OBJECT;
             if( nType & _PROPERTY )
+            {
                 eCT = SbxCLASS_PROPERTY;
+            }
             else if( nType & _METHOD )
+            {
                 eCT = SbxCLASS_METHOD;
+            }
             pVar = Make( aName_, eCT, p->eType );
             pVar->SetUserData( nIndex + 1 );
             pVar->SetFlags( nAccess );

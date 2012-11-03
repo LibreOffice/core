@@ -74,15 +74,15 @@ protected:
     SbProcedureProperty* GetProcedureProperty( const String&, SbxDataType );
     SbIfaceMapperMethod* GetIfaceMapperMethod( const String&, SbMethod* );
     void            EndDefinitions( sal_Bool=sal_False );
-    sal_uInt16          Run( SbMethod* );
+    sal_uInt16      Run( SbMethod* );
     void            RunInit();
     void            ClearPrivateVars();
     void            ClearVarsDependingOnDeletedBasic( StarBASIC* pDeletedBasic );
     void            GlobalRunInit( bool bBasicStart );  // for all modules
     void            GlobalRunDeInit( void );
-    const sal_uInt8*    FindNextStmnt( const sal_uInt8*, sal_uInt16&, sal_uInt16& ) const;
-    const sal_uInt8*    FindNextStmnt( const sal_uInt8*, sal_uInt16&, sal_uInt16&,
-                        sal_Bool bFollowJumps, const SbiImage* pImg=NULL ) const;
+    const sal_uInt8* FindNextStmnt( const sal_uInt8*, sal_uInt16&, sal_uInt16& ) const;
+    const sal_uInt8* FindNextStmnt( const sal_uInt8*, sal_uInt16&, sal_uInt16&,
+                                    sal_Bool bFollowJumps, const SbiImage* pImg=NULL ) const;
     virtual sal_Bool LoadData( SvStream&, sal_uInt16 );
     virtual sal_Bool StoreData( SvStream& ) const;
     virtual sal_Bool LoadCompleted();
@@ -109,27 +109,27 @@ public:
     virtual sal_Bool    IsCompiled() const;
     const SbxObject* FindType( String aTypeName ) const;
 
-    virtual sal_Bool    IsBreakable( sal_uInt16 nLine ) const;
-    virtual size_t  GetBPCount() const;
-    virtual sal_uInt16  GetBP( size_t n ) const;
-    virtual sal_Bool    IsBP( sal_uInt16 nLine ) const;
-    virtual sal_Bool    SetBP( sal_uInt16 nLine );
-    virtual sal_Bool    ClearBP( sal_uInt16 nLine );
-    virtual void    ClearAllBP();
+    virtual sal_Bool IsBreakable( sal_uInt16 nLine ) const;
+    virtual size_t   GetBPCount() const;
+    virtual sal_uInt16 GetBP( size_t n ) const;
+    virtual sal_Bool IsBP( sal_uInt16 nLine ) const;
+    virtual sal_Bool SetBP( sal_uInt16 nLine );
+    virtual sal_Bool ClearBP( sal_uInt16 nLine );
+    virtual void     ClearAllBP();
 
     // Lines of Subs
     virtual SbMethod*   GetFunctionForLine( sal_uInt16 );
 
     // Store only image, no source (needed for new password protection)
-       sal_Bool StoreBinaryData( SvStream& );
-       sal_Bool StoreBinaryData( SvStream&, sal_uInt16 nVer );
+    sal_Bool StoreBinaryData( SvStream& );
+    sal_Bool StoreBinaryData( SvStream&, sal_uInt16 nVer );
     sal_Bool LoadBinaryData( SvStream&, sal_uInt16 nVer );
     sal_Bool LoadBinaryData( SvStream& );
     sal_Bool ExceedsLegacyModuleSize();
-    void fixUpMethodStart( bool bCvtToLegacy, SbiImage* pImg = NULL ) const;
-    bool HasExeCode();
-    bool IsVBACompat() const;
-    void SetVBACompat( bool bCompat );
+    void     fixUpMethodStart( bool bCvtToLegacy, SbiImage* pImg = NULL ) const;
+    bool     HasExeCode();
+    bool     IsVBACompat() const;
+    void     SetVBACompat( bool bCompat );
     sal_Int32 GetModuleType() { return mnType; }
     void SetModuleType( sal_Int32 nType ) { mnType = nType; }
     bool isProxyModule() { return bIsProxyModule; }

@@ -1568,21 +1568,29 @@ void StackWindow::UpdateCalls()
                     SbxVariable* pVar = pParams->Get( nParam );
                     DBG_ASSERT( pVar, "Parameter?!" );
                     if ( pVar->GetName().Len() )
+                    {
                         aEntry += pVar->GetName();
+                    }
                     else if ( pInfo )
                     {
                         const SbxParamInfo* pParam = pInfo->GetParam( nParam );
                         if ( pParam )
+                        {
                             aEntry += pParam->aName;
+                        }
                     }
                     aEntry += '=';
                     SbxDataType eType = pVar->GetType();
                     if( eType & SbxARRAY )
+                    {
                         aEntry += OUString( "..." );
+                    }
                     else if( eType != SbxOBJECT )
                         aEntry += pVar->GetString();
                     if ( nParam < ( pParams->Count() - 1 ) )
+                    {
                         aEntry += OUString( ", " );
+                    }
                 }
                 aEntry += ')';
             }
@@ -2086,11 +2094,13 @@ void WatchTreeListBox::UpdateWatches( bool bBasicStopped )
                             }
                         }
                         else if( pNewArray == NULL || pOldArray == NULL )
+                        {
                             bArrayChanged = true;
-
+                        }
                         if( pNewArray )
+                        {
                             implEnableChildren( pEntry, true );
-
+                        }
                         // #i37227 Clear always and replace array
                         if( pNewArray != pOldArray )
                         {
@@ -2106,12 +2116,15 @@ void WatchTreeListBox::UpdateWatches( bool bBasicStopped )
                             }
                         }
                         if( bArrayChanged && pOldArray != NULL )
+                        {
                             bCollapse = true;
-
+                        }
                         aTypeStr = implCreateTypeStringForDimArray( pItem, eType );
                     }
                     else
+                    {
                         aWatchStr += OUString( "<?>" );
+                    }
                 }
                 else if ( (sal_uInt8)eType == (sal_uInt8)SbxOBJECT )
                 {
@@ -2134,7 +2147,9 @@ void WatchTreeListBox::UpdateWatches( bool bBasicStopped )
                                 }
                             }
                             if( bObjChanged )
+                            {
                                 bCollapse = true;
+                            }
                         }
 
                         pItem->mpObject = pObj;
@@ -2169,20 +2184,28 @@ void WatchTreeListBox::UpdateWatches( bool bBasicStopped )
                         aWatchStr += aStrStr;
                     aWatchStr += pVar->GetString();
                     if( bString )
+                    {
                         aWatchStr += aStrStr;
+                    }
                 }
                 if( !aTypeStr.Len() )
                 {
                     if( !pVar->IsFixed() )
+                    {
                         aTypeStr = OUString( "Variant/" );
+                    }
                     aTypeStr += getBasicTypeName( pVar->GetType() );
                 }
             }
             else if( !bArrayElement )
+            {
                 aWatchStr += OUString( "<Out of Scope>" );
+            }
 
             if( bCollapse )
+            {
                 implCollapseModifiedObjectEntry( pEntry, this );
+            }
 
         }
         else if( bBasicStopped )

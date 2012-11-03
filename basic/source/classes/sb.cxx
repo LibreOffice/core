@@ -876,10 +876,15 @@ SbxObject* SbClassFactory::CreateObject( const rtl::OUString& rClassName )
     SbxObjectRef xToUseClassModules = xClassModules;
 
     if( SbModule* pMod = GetSbData()->pMod )
+    {
         if( StarBASIC* pDocBasic = lclGetDocBasicForModule( pMod ) )
+        {
             if( const DocBasicItem* pDocBasicItem = lclFindDocBasicItem( pDocBasic ) )
+            {
                 xToUseClassModules = pDocBasicItem->getClassModules();
-
+            }
+        }
+    }
     SbxVariable* pVar = xToUseClassModules->Find( rClassName, SbxCLASS_OBJECT );
     SbxObject* pRet = NULL;
     if( pVar )
@@ -1723,7 +1728,9 @@ sal_Bool StarBASIC::RTError( SbError code, const String& rMsg, sal_uInt16 l, sal
 
     SbError c = code;
     if( (c & ERRCODE_CLASS_MASK) == ERRCODE_CLASS_COMPILER )
+    {
         c = 0;
+    }
     MakeErrorText( c, rMsg );
 
     // Implementation of the code for the string transport to SFX-Error

@@ -590,7 +590,9 @@ sal_Bool SbxValue::Scan( const XubString& rSrc, sal_uInt16* pLen )
 {
     SbxError eRes = SbxERR_OK;
     if( !CanWrite() )
+    {
         eRes = SbxERR_PROP_READONLY;
+    }
     else
     {
         double n;
@@ -599,7 +601,9 @@ sal_Bool SbxValue::Scan( const XubString& rSrc, sal_uInt16* pLen )
         if( eRes == SbxERR_OK )
         {
             if( !IsFixed() )
+            {
                 SetType( t );
+            }
             PutDouble( n );
         }
     }
@@ -608,7 +612,9 @@ sal_Bool SbxValue::Scan( const XubString& rSrc, sal_uInt16* pLen )
         SetError( eRes ); return sal_False;
     }
     else
+    {
         return sal_True;
+    }
 }
 
 

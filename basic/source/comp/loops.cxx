@@ -460,11 +460,19 @@ void SbiParser::On()
     SbiToken eTok = Peek();
     String aString = SbiTokenizer::Symbol(eTok);
     if (aString.EqualsIgnoreCaseAscii("ERROR"))
+    {
         eTok = _ERROR_; // Error comes as SYMBOL
-    if( eTok != _ERROR_ && eTok != LOCAL ) OnGoto();
+    }
+    if( eTok != _ERROR_ && eTok != LOCAL )
+    {
+        OnGoto();
+    }
     else
     {
-        if( eTok == LOCAL ) Next();
+        if( eTok == LOCAL )
+        {
+            Next();
+        }
         Next (); // no more TestToken, as there'd be an error otherwise
 
         Next(); // get token after error
@@ -476,7 +484,9 @@ void SbiParser::On()
             if( MayBeLabel() )
             {
                 if( eCurTok == NUMBER && !nVal )
+                {
                     aGen.Gen( _STDERROR );
+                }
                 else
                 {
                     sal_uInt32 nOff = pProc->GetLabels().Reference( aSym );
@@ -487,12 +497,18 @@ void SbiParser::On()
             {
                 Next();
                 if( eCurTok == NUMBER && nVal == 1 )
+                {
                     aGen.Gen( _STDERROR );
+                }
                 else
+                {
                     bError_ = true;
+                }
             }
             if( bError_ )
+            {
                 Error( SbERR_LABEL_EXPECTED );
+            }
         }
         else if( eCurTok == RESUME )
         {

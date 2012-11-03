@@ -127,7 +127,7 @@ SbxValue& SbxValue::operator=( const SbxValue& r )
                 && aData.pObj && ( aData.pObj->GetType() == (SbxARRAY | SbxBYTE) )
                 && (r.aData.eType == SbxSTRING) )
             {
-                ::rtl::OUString aStr = r.GetString();
+                OUString aStr = r.GetOUString();
                 SbxArray* pArr = StringToByteArray(aStr);
                 PutObject(pArr);
                 return *this;
@@ -429,14 +429,15 @@ const XubString& SbxValue::GetCoreString() const
     return aToolString;
 }
 
-::rtl::OUString SbxValue::GetOUString() const
+OUString SbxValue::GetOUString() const
 {
-    ::rtl::OUString aResult;
+    OUString aResult;
     SbxValues aRes;
     aRes.eType = SbxSTRING;
     if( Get( aRes ) )
+    {
         aResult = *aRes.pOUString;
-
+    }
     return aResult;
 }
 
