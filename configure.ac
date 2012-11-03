@@ -773,6 +773,11 @@ AC_ARG_ENABLE(selective-debuginfo,
          more general, and disabling takes precedence).
          Example: --enable-selective-debuginfo="all -sw/ -Library_sc".]))
 
+AC_ARG_ENABLE(symbols-only,
+    AS_HELP_STRING([--symbols-only],
+        [Include debugging information (-g), without changing anything else.
+         This is a syntactic sugar for passing CXXFLAGS='-Os -g' manually.]))
+
 AC_ARG_ENABLE(compiler-plugins,
     AS_HELP_STRING([--enable-compiler-plugins],
         [Enable compiler plugins that will perform additional checks during
@@ -3356,6 +3361,21 @@ if test -n "$ENABLE_DEBUG"; then
     fi
 fi
 AC_SUBST(ENABLE_DEBUGINFO_FOR)
+
+dnl Check for enable symbols only
+dnl ===================================================================
+AC_MSG_CHECKING([whether to enable symbols only])
+if test -n "$enable_symbols_only" -a "$enable_symbols_only" != "no"; then
+    AC_MSG_RESULT([set to $enable_symbols_only])
+    if test -n "$ENABLE_DBGUTIL"; then
+        AC_MSG_ERROR([--enable-dbgutil cannot be used with --enable-symbols-only])
+    elif test -n "$ENABLE_DEBUG"; then
+        AC_MSG_ERROR([--enable-debug cannot be used with --enable-symbols-only])
+    else
+        CXXFLAGS='-Os -g'
+        AC_MSG_RESULT([yes, manually setting CXXFLAGS to '-Os -g'])
+    fi
+fi
 
 dnl Check for explicit C/CXX/OBJC/OBJCXX/LDFLAGS. We by default use the ones specified
 dnl by our build system, but explicit override is possible.
