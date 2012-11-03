@@ -336,6 +336,33 @@ $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
 ))
 endif
 
+ifeq ($(SYSTEM_HYPH),YES)
+
+define gb_LinkTarget__use_hyphen
+$(call gb_LinkTarget_add_libs,$(1),$(HYPHEN_LIB))
+
+endef
+
+else # !SYSTEM_HYPH
+
+$(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
+	hyphen \
+))
+
+define gb_LinkTarget__use_hyphen
+$(call gb_LinkTarget_use_unpacked,$(1),hyphen)
+$(call gb_LinkTarget_set_include,$(1),\
+	-I$(call gb_UnpackedTarball_get_dir,hyphen)\
+	$$(INCLUDE) \
+)
+$(call gb_LinkTarget_use_static_libraries,$(1),\
+	hyphen \
+)
+
+endef
+
+endif # SYSTEM_HYPH
+
 ifeq ($(SYSTEM_HUNSPELL),YES)
 
 define gb_LinkTarget__use_hunspell

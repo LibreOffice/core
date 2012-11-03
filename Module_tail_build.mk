@@ -82,6 +82,7 @@ $(eval $(call gb_Module_add_moduledirs,tail_end,\
 	$(call gb_Helper_optional,HSQLDB,hsqldb) \
 	$(call gb_Helper_optional,HUNSPELL,hunspell) \
 	hwpfilter \
+	$(call gb_Helper_optional,HYPHEN,hyphen) \
 	i18npool \
 	i18nutil \
 	idl \

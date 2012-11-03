@@ -8891,10 +8891,12 @@ if test "$with_system_altlinuxhyph" = "yes"; then
 else
     AC_MSG_RESULT([internal])
     SYSTEM_HYPH=NO
+    HYPHEN_TARBALL="a2f6010987e1c601274ab5d63b72c944-hyphen-2.8.4.tar.gz"
     BUILD_TYPE="$BUILD_TYPE HYPHEN"
 fi
 AC_SUBST(SYSTEM_HYPH)
 AC_SUBST(HYPHEN_LIB)
+AC_SUBST(HYPHEN_TARBALL)
 AC_SUBST([MINGW_HYPHEN_DLL])
 
 dnl ===================================================================

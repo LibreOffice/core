@@ -53,10 +53,7 @@ $(eval $(call gb_Library_use_static_libraries,hyphen,\
 
 $(eval $(call gb_Library_use_externals,hyphen,\
 	hunspell \
-))
-
-$(eval $(call gb_Library_add_libs,hyphen,\
-	$(if $(filter MSC,$(COM)),hyphen.lib,-lhyphen) \
+	hyphen \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,hyphen,\

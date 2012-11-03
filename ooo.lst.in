@@ -1,5 +1,4 @@
 http://dev-www.libreoffice.org/src
-a2f6010987e1c601274ab5d63b72c944-hyphen-2.8.4.tar.gz
 51a40a81b3b7abe8a5c33670bd3da0ce-openssl-0.9.8v.tar.gz
 c63f411b3ad147db2bcce1bf262a0e02-pixman-0.24.4.tar.bz2
 6097739c841f671cb21332b9cc593ae7-libexttextcat-3.3.1.tar.bz2
@@ -60,6 +59,7 @@ fa6a2f85bd28baab035b2c95e722713f-liblangtag-0.2.tar.bz2
 @GRAPHITE_TARBALL@
 @HSQLDB_TARBALL@
 @HUNSPELL_TARBALL@
+@HYPHEN_TARBALL@
 @JFREEREPORT_FLOW_ENGINE_TARBALL@
 @JFREEREPORT_FLUTE_TARBALL@
 @JFREEREPORT_LIBBASE_TARBALL@

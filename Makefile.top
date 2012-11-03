@@ -91,6 +91,7 @@ helpcompiler\
 hsqldb\
 hunspell\
 hwpfilter\
+hyphen\
 i18npool\
 i18nutil\
 idl\
@@ -221,7 +222,6 @@ gdk-pixbuf\
 gettext\
 glib\
 helpcontent2 \
-hyphen\
 icu\
 instsetoo_native\
 libcroco\
