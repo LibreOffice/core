@@ -848,6 +848,10 @@ const char* GetTypeString(ScConditionMode eMode)
             return "uniqueValues";
         case SC_COND_DUPLICATE:
             return "duplicateValues";
+        case SC_COND_ERROR:
+            return "containsErrors";
+        case SC_COND_NOERROR:
+            return "notContainsErrors";
         default:
             return "cellIs";
     }
