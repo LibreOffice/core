@@ -24,6 +24,12 @@ $(eval $(call gb_CppunitTest_use_ure,connectivity_ado))
 
 $(eval $(call gb_CppunitTest_use_sdk_api,connectivity_ado))
 
+ifeq ($(COM),GCC)
+$(eval $(call gb_CppunitTest_add_cxxflags,connectivity_ado,\
+	-fpermissive \
+))
+endif
+
 $(eval $(call gb_CppunitTest_add_exception_objects,connectivity_ado, \
 	connectivity/qa/connectivity/ado/DriverTest \
 ))
