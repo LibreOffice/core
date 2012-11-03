@@ -177,7 +177,7 @@ class TreeListBox : public SvTreeListBox, public DocumentEventListener
 private:
     sal_uInt16 nMode;
     DocumentEventNotifier m_aNotifier;
-
+    void            Init();
     void            SetEntryBitmaps( SvTreeListEntry * pEntry, const Image& rImage );
     virtual void    MouseButtonDown( const MouseEvent& rMEvt );
 
@@ -205,7 +205,8 @@ protected:
     virtual void onDocumentModeChanged( const ScriptDocument& _rDocument );
 
 public:
-    TreeListBox( Window* pParent, const ResId& rRes );
+    TreeListBox(Window* pParent, const ResId& rRes);
+    TreeListBox(Window* pParent);
     ~TreeListBox();
 
     void            ScanEntry( const ScriptDocument& rDocument, LibraryLocation eLocation );

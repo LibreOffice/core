@@ -38,6 +38,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/accel.hxx>
 #include <vcl/i18nhelp.hxx>
+#include <vcl/builder.hxx>
 #include <sot/formats.hxx>
 #include <unotools/accessiblestatesethelper.hxx>
 #include <rtl/instance.hxx>
@@ -480,6 +481,11 @@ SvTreeListBox::SvTreeListBox(Window* pParent, const ResId& rResId) :
     Resize();
 
     SetSublistOpenWithLeftRight();
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvTreeListBox(Window *pParent, VclBuilder::stringmap &)
+{
+    return new SvTreeListBox(pParent);
 }
 
 void SvTreeListBox::Clear()

@@ -712,6 +712,12 @@ Window *VclBuilder::makeObject(Window *pParent, const OString &name, const OStri
     }
     else if (name == "GtkTreeView")
     {
+        //To-Do
+        //a) move svtools SvTreeViewBox into vcl
+        //b) make that the default target for GtkTreeView
+        //c) remove the non-drop down mode of ListBox and convert
+        //   everything over to SvTreeViewBox
+        //d) remove the users of makeSvTreeViewBox
         extractModel(id, rMap);
         pWindow = new ListBox(pParent, WB_LEFT|WB_VCENTER|WB_3DLOOK);
     }

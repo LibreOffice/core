@@ -20,7 +20,8 @@
 
 #include <memory>
 
-#include "vcl/bitmap.hxx"
+#include <vcl/bitmap.hxx>
+#include <vcl/builder.hxx>
 
 #include "basidesh.hxx"
 #include "iderdll.hxx"
@@ -184,13 +185,30 @@ bool EntryDescriptor::operator == (EntryDescriptor const& rDesc) const
 // ===========
 //
 
-TreeListBox::TreeListBox (Window* pParent, ResId const& rRes) :
-    SvTreeListBox( pParent, IDEResId( sal::static_int_cast<sal_uInt16>( rRes.GetId() ) ) ),
-    m_aNotifier( *this )
+TreeListBox::TreeListBox (Window* pParent, ResId const& rRes)
+    : SvTreeListBox( pParent, IDEResId( sal::static_int_cast<sal_uInt16>( rRes.GetId() ) ) )
+    , m_aNotifier( *this )
+{
+    Init();
+}
+
+TreeListBox::TreeListBox (Window* pParent)
+    : SvTreeListBox(pParent)
+    , m_aNotifier( *this )
+{
+    Init();
+}
+
+void TreeListBox::Init()
 {
     SetNodeDefaultImages();
     SetSelectionMode( SINGLE_SELECTION );
     nMode = 0xFF;   // everything
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeTreeListBox(Window *pParent, VclBuilder::stringmap &)
+{
+    return new TreeListBox(pParent);
 }
 
 TreeListBox::~TreeListBox ()
