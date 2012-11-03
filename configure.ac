@@ -5261,7 +5261,7 @@ if test "$_os" = "Linux"; then
     esac
 elif test "$_os" = "SunOS" -a "$COM" = "C52"; then
     BUILD_STLPORT="yes"
-elif test "$_os" = "WINNT" -a "$WITH_MINGW" != "yes"; then
+elif test "$_os" = "WINNT" -a "$CPUNAME" != X86_64 -a "$WITH_MINGW" != "yes"; then
     BUILD_STLPORT="yes"
 elif test "$_os" = "FreeBSD"; then
     BUILD_STLPORT="yes"
@@ -9172,11 +9172,10 @@ if test -n "$ENABLE_DIRECTX" -a "$_os" = "WINNT"; then
         HAVE_DIRECTXSDK_H="no"
     fi
 
-    # MS changed the location of the libraries with Dec 2004 DirectX SDK
-    if test -d "$DIRECTXSDK_HOME/lib/x86"; then
-        DIRECTXSDK_LIB="$DIRECTXSDK_HOME/lib/x86"
+    if test "$BITNESS_OVERRIDE" = 64; then
+        DIRECTXSDK_LIB="$DIRECTXSDK_HOME/lib/x64"
     else
-        DIRECTXSDK_LIB="$DIRECTXSDK_HOME/lib"
+        DIRECTXSDK_LIB="$DIRECTXSDK_HOME/lib/x86"
     fi
     PathFormat "$DIRECTXSDK_LIB"
     DIRECTXSDK_LIB="$formatted_path"
@@ -12608,7 +12607,7 @@ if test "$build_os" = "cygwin"; then
     fi
     if test "$BITNESS_OVERRIDE" = 64; then
         ILIB="$ILIB;$COMPATH/lib/amd64"
-        ILIB="$ILIB;$WINDOWS_SDK_HOME/lib64"
+        ILIB="$ILIB;$WINDOWS_SDK_HOME/lib/x64"
         if test "$WINDOWS_SDK_VERSION" = "80"; then
             ILIB="$ILIB;$WINDOWS_SDK_HOME/lib/win8/um/x64"
         fi
