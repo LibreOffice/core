@@ -606,9 +606,11 @@
 #define STR_COND_BOTTOM_PERCENT     481
 #define STR_COND_ABOVE_AVERAGE      482
 #define STR_COND_BELOW_AVERAGE      483
+#define STR_COND_ERROR              484
+#define STR_COND_NOERROR            485
 
-#define STR_ERR_CONDFORMAT_PROTECTED 484
+#define STR_ERR_CONDFORMAT_PROTECTED 486
 
-#define STR_COUNT                   485
+#define STR_COUNT                   487
 
 #endif

@@ -1923,6 +1923,14 @@ Resource RID_GLOBSTR
     {
         Text [ en-US ] = "Below Average";
     };
+    String STR_COND_ERROR
+    {
+        Text [ en-US ] = "an Error code";
+    };
+    String STR_COND_NOERROR
+    {
+        Text [ en-US ] = "not an Error code";
+    };
     String STR_ERR_CONDFORMAT_PROTECTED
     {
         Text [ en-US ] = "Conditional Formats can not be created, deleted or changed in protected sheets!";
