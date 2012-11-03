@@ -213,7 +213,8 @@ if [ "$COM" = "MSC" -a "$CPUNAME" = "INTEL" ]; then
     # Windows builds need dbghelp.dll in external/dbghelp/
     if [ ! -f ./external/dbghelp/dbghelp.dll -a -f $TARFILE_LOCATION/$DBGHELP_DLL ]; then
         cp $TARFILE_LOCATION/$DBGHELP_DLL ./external/dbghelp/dbghelp.dll
-    else
+    fi
+    if [ ! -f ./external/dbghelp/dbghelp.dll ]; then
         echo "dbghelp.dll is missing in external/dbghelp/."
         echo "Get it from the Microsoft site and put it there."
         echo "(Note: Microsoft seems to enjoy changing the exact location of this file."
@@ -259,7 +260,7 @@ if [ "$COM" = "MSC" -a "$CPUNAME" = "INTEL" ]; then
             echo "WindowsXP-KB958911-x86-ENU.exe did not unpack the expected $gdiplus_dll_path"
         fi
     fi
-    if [ -f ./external/gdiplus/gdiplus.dll ]; then
+    if [ ! -f ./external/gdiplus/gdiplus.dll ]; then
         echo "gdiplus.dll is missing in external/gdiplus/."
         echo "Get it from the Microsoft site and put it there."
         echo "You may have to search Microsoft's website. Last time it was seen at:"
