@@ -87,6 +87,10 @@ CONFIGURE_ACTION=mozilla/nsprpub/configure --prefix=$(my_prefix) --includedir=$(
 CONFIGURE_ACTION+=--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)
 .ENDIF
 
+.IF "$(OS)$(COM)$(CPUNAME)"=="WNTMSCX86_64"
+CONFIGURE_ACTION+=--enable-64bit
+.ENDIF
+
 CONFIGURE_ACTION+= ; \
     sed -e 's\#@prefix@\#$(OUTDIR)\#' -e 's\#@includedir@\#$(OUTDIR)/inc/mozilla/nss\#' -e 's\#@MOD_MAJOR_VERSION@\#$(VER_MAJOR)\#' -e 's\#@MOD_MINOR_VERSION@\#$(VER_MINOR)\#' -e 's\#@MOD_PATCH_VERSION@\#$(VER_PATCH)\#' mozilla/security/nss/nss-config.in > mozilla/security/nss/nss-config ; \
     chmod a+x mozilla/security/nss/nss-config
@@ -224,9 +228,14 @@ OS_TARGET=WIN95
 
 #To build nss one has to call "make nss_build_all" in 
 #mozilla/security/nss
+
+.IF "$(CPUNAME)"=="X86_64"
+PASS_USE_64=USE_64=1
+.ENDIF
+
 NSS_BUILD_DIR=$(ABS_PACKAGE_DIR)/$(TARFILE_ROOTDIR)/mozilla/security/nss
 BUILD_ACTION= PATH="$(moz_build)/msys/bin:$(moz_build)/moztools/bin:$(PATH)" && $(MOZILLABUILD)/msys/bin/bash -i \
-    -c "cd $(NSS_BUILD_DIR) && make nss_build_all"
+    -c "cd $(NSS_BUILD_DIR) && make $(PASS_USE_64) nss_build_all"
 
 OUT2LIB= \
      mozilla/dist/out/lib/nspr4.lib \
