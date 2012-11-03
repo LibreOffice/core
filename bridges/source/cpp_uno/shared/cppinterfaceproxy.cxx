@@ -106,7 +106,7 @@ void freeCppInterfaceProxy(uno_ExtEnvironment * pEnv, void * pInterface)
 
 com::sun::star::uno::XInterface * CppInterfaceProxy::create(
     bridges::cpp_uno::shared::Bridge * pBridge, uno_Interface * pUnoI,
-    typelib_InterfaceTypeDescription * pTypeDescr, rtl::OUString const & rOId)
+    typelib_InterfaceTypeDescription * pTypeDescr, OUString const & rOId)
     SAL_THROW(())
 {
     typelib_typedescription_complete(
@@ -153,7 +153,7 @@ void CppInterfaceProxy::releaseProxy() SAL_THROW(())
 
 CppInterfaceProxy::CppInterfaceProxy(
     bridges::cpp_uno::shared::Bridge * pBridge_, uno_Interface * pUnoI_,
-    typelib_InterfaceTypeDescription * pTypeDescr_, rtl::OUString const & rOId_)
+    typelib_InterfaceTypeDescription * pTypeDescr_, OUString const & rOId_)
     SAL_THROW(())
     : nRef( 1 )
     , pBridge( pBridge_ )
