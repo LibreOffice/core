@@ -144,6 +144,12 @@ $(eval $(call gb_Module_add_check_targets,connectivity,\
 
 endif
 
+ifeq ($(GUI),WNT)
+$(eval $(call gb_Module_add_check_targets,connectivity,\
+	CppunitTest_connectivity_ado \
+))
+endif
+
 ifneq ($(filter QADEVOOO,$(BUILD_TYPE)),)
 $(eval $(call gb_Module_add_subsequentcheck_targets,connectivity,\
 	Jar_ConnectivityTools \
