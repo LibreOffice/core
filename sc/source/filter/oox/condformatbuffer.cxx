@@ -735,10 +735,10 @@ void CondFormatRule::finalizeImport()
             aReplaceFormula = "LEN(TRIM(#B))>0";
         break;
         case XML_containsErrors:
-            aReplaceFormula = "ISERROR(#B)";
+            eOperator = SC_COND_ERROR;
         break;
         case XML_notContainsErrors:
-            aReplaceFormula = "NOT(ISERROR(#B))";
+            eOperator = SC_COND_NOERROR;
         break;
         case XML_top10:
             if(maModel.mbPercent)
@@ -859,6 +859,13 @@ void CondFormatRule::finalizeImport()
         aTokenArrayDev.AddDouble( maModel.mnStdDev );
         OUString aStyleName = getStyles().createDxfStyle( maModel.mnDxfId );
         ScCondFormatEntry* pNewEntry = new ScCondFormatEntry( eOperator, &aTokenArrayEqual, &aTokenArrayDev, &rDoc, aPos, aStyleName );
+        mpFormat->AddEntry(pNewEntry);
+    }
+    else if( eOperator == SC_COND_ERROR || eOperator == SC_COND_NOERROR )
+    {
+        ScDocument& rDoc = getScDocument();
+        OUString aStyleName = getStyles().createDxfStyle( maModel.mnDxfId );
+        ScCondFormatEntry* pNewEntry = new ScCondFormatEntry( eOperator, NULL, NULL, &rDoc, aPos, aStyleName );
         mpFormat->AddEntry(pNewEntry);
     }
     else if( eOperator == SC_COND_DUPLICATE || eOperator == SC_COND_NOTDUPLICATE )
