@@ -54,7 +54,6 @@ void SchXMLAutoStylePoolP::exportStyleAttributes(
     const SvXMLNamespaceMap& rNamespaceMap
     ) const
 {
-    const rtl::OUString sCDATA( GetXMLToken( XML_CDATA ));
     SvXMLAutoStylePoolP::exportStyleAttributes( rAttrList, nFamily, rProperties,
                                                 rPropExp, rUnitConverter, rNamespaceMap );
 

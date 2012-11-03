@@ -273,7 +273,6 @@ void XMLEventOASISTransformerContext::StartElement(
             {
             case XML_ATACTION_HREF:
                 {
-                    OUString aAttrValue( rAttrValue );
                     OUString aName, aLocation;
 
                     bool bNeedsTransform =

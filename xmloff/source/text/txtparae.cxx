@@ -2335,7 +2335,6 @@ void XMLTextParagraphExport::exportTextRangeEnumeration(
                         if (xParameters.is() && xParameters->hasByName("Name"))
                         {
                             const Any aValue = xParameters->getByName("Name");
-                            OUString sValue;
                             aValue >>= sName;
                         }
                         if (sName.isEmpty())
@@ -3672,14 +3671,6 @@ void XMLTextParagraphExport::exportRuby(
     }
     else
     {
-        // prepare element names
-        OUString aRuby(GetXMLToken(XML_RUBY));
-        OUString sTextRuby(GetExport().GetNamespaceMap().
-                           GetQNameByKey(XML_NAMESPACE_TEXT, aRuby));
-        OUString sRubyBase(GetXMLToken(XML_RUBY_BASE));
-        OUString sTextRubyBase(GetExport().GetNamespaceMap().
-                           GetQNameByKey(XML_NAMESPACE_TEXT, sRubyBase));
-
         if (bStart)
         {
             // ruby start

@@ -195,8 +195,6 @@ void SvXMLAutoStylePoolP::exportStyleContent(
 {
     if( nFamily == XML_STYLE_FAMILY_PAGE_MASTER )
     {
-        OUString sWS( GetXMLToken(XML_WS) );
-
         sal_Int32       nHeaderStartIndex(-1);
         sal_Int32       nHeaderEndIndex(-1);
         sal_Int32       nFooterStartIndex(-1);

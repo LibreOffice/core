@@ -239,8 +239,6 @@ sal_Bool XMLShapeExport::ImpExportPresentationAttributes( const uno::Reference< 
 {
     sal_Bool bIsEmpty = sal_False;
 
-    OUStringBuffer sStringBuffer;
-
     // write presentation class entry
     mrExport.AddAttribute(XML_NAMESPACE_PRESENTATION, XML_CLASS, rClass);
 

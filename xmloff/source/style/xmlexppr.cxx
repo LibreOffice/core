@@ -933,8 +933,6 @@ void SvXMLExportPropertyMapper::_exportXML(
         const ::std::vector< XMLPropertyState > *pProperties,
         sal_uInt32 nIdx ) const
 {
-    OUString sCDATA( GetXMLToken(XML_CDATA) );
-
     if ( ( maPropMapper->GetEntryFlags( rProperty.mnIndex ) &
                 MID_FLAG_SPECIAL_ITEM_EXPORT ) != 0 )
     {
@@ -1079,7 +1077,6 @@ void SvXMLExportPropertyMapper::exportElementItems(
     const sal_uInt16 nCount = rIndexArray.size();
 
     sal_Bool bItemsExported = sal_False;
-    OUString sWS( GetXMLToken(XML_WS) );
     for( sal_uInt16 nIndex = 0; nIndex < nCount; nIndex++ )
     {
         const sal_uInt16 nElement = rIndexArray[nIndex];

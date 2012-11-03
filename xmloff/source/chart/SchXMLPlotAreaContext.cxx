@@ -673,7 +673,6 @@ SchXMLDataPointContext::~SchXMLDataPointContext()
 void SchXMLDataPointContext::StartElement( const uno::Reference< xml::sax::XAttributeList >& xAttrList )
 {
     sal_Int16 nAttrCount = xAttrList.is()? xAttrList->getLength(): 0;
-    ::rtl::OUString aValue;
     ::rtl::OUString sAutoStyleName;
     sal_Int32 nRepeat = 1;
 
@@ -1050,7 +1049,6 @@ SchXMLStatisticsObjectContext::~SchXMLStatisticsObjectContext()
 void SchXMLStatisticsObjectContext::StartElement( const uno::Reference< xml::sax::XAttributeList >& xAttrList )
 {
     sal_Int16 nAttrCount = xAttrList.is()? xAttrList->getLength(): 0;
-    ::rtl::OUString aValue;
     ::rtl::OUString sAutoStyleName;
     rtl::OUString aPosRange;
     rtl::OUString aNegRange;
