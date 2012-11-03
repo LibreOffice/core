@@ -22,7 +22,7 @@ $(eval $(call gb_CppunitTest_use_api,connectivity_ado,\
 
 $(eval $(call gb_CppunitTest_use_ure,connectivity_ado))
 
-$(eval $(call gb_CppunitTest_use_sdk_api,connectivity_mork))
+$(eval $(call gb_CppunitTest_use_sdk_api,connectivity_ado))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,connectivity_ado, \
 	connectivity/qa/connectivity/ado/DriverTest \
