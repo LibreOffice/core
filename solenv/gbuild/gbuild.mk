@@ -124,6 +124,20 @@ ENABLE_DEBUGINFO_FOR := all
 endif
 endif
 
+ifeq ($(or $(ENABLE_SYMBOLS),$(enable_symbols)),FALSE)
+gb_SYMBOL := $(false)
+else
+ifneq ($(strip $(ENABLE_SYMBOLS)$(enable_symbols)),)
+gb_SYMBOL := $(true)
+else
+ifneq ($(gb_DEBUGLEVEL),0)
+gb_SYMBOL := $(true)
+else
+gb_SYMBOL := $(false)
+endif
+endif
+endif
+
 ifneq ($(nodep),)
 gb_FULLDEPS := $(false)
 else

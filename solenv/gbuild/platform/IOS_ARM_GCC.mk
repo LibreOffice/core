@@ -132,6 +132,13 @@ gb_LinkTarget_CXXFLAGS := $(gb_CXXFLAGS)
 gb_LinkTarget_OBJCXXFLAGS := $(gb_CXXFLAGS) $(gb_OBJCXXFLAGS)
 gb_LinkTarget_OBJCFLAGS := $(gb_CFLAGS) $(gb_OBJCFLAGS)
 
+ifeq ($(gb_SYMBOL),$(true))
+gb_LinkTarget_CFLAGS += $(gb_DEBUG_CFLAGS)
+gb_LinkTarget_CXXFLAGS += $(gb_DEBUG_CFLAGS)
+gb_LinkTarget_OBJCXXFLAGS += $(gb_DEBUG_CFLAGS)
+gb_LinkTarget_OBJCFLAGS += $(gb_DEBUG_CFLAGS)
+endif
+
 define gb_LinkTarget__get_liblinkflags
 $(patsubst lib%.a,-l%,$(foreach lib,$(filter-out $(gb_Library_UNOLIBS_OOO),$(1)),$(call gb_Library_get_filename,$(lib)))) \
 $(foreach lib,$(filter $(gb_Library_UNOLIBS_OOO),$(1)),$(SOLARVER)/$(INPATH)/lib/$(lib)$(gb_Library_UNOEXT))
