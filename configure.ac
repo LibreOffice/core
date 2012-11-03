@@ -8955,9 +8955,11 @@ if test "$with_system_lpsolve" = "yes"; then
 else
     AC_MSG_RESULT([internal])
     SYSTEM_LPSOLVE=NO
+    LPSOLVE_TARBALL="26b3e95ddf3d9c077c480ea45874b3b8-lp_solve_5.5.tar.gz"
     BUILD_TYPE="$BUILD_TYPE LPSOLVE"
 fi
 AC_SUBST(SYSTEM_LPSOLVE)
+AC_SUBST(LPSOLVE_TARBALL)
 AC_SUBST([MINGW_LPSOLVE_DLL])
 
 dnl ===================================================================

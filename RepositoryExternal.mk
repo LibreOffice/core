@@ -1267,8 +1267,11 @@ endif # SYSTEM_LCMS2
 
 ifeq ($(SYSTEM_LPSOLVE),YES)
 
-define gb_LinkTarget__use_lpsolve55
+define gb_LinkTarget__use_lpsolve
 $(call gb_LinkTarget_add_libs,$(1),-llpsolve55)
+$(call gb_LinkTarget_add_defs,$(1),\
+	-DSYSTEM_LPSOLVE \
+))
 
 endef
 
@@ -1278,9 +1281,13 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
 	lpsolve55 \
 ))
 
-define gb_LinkTarget__use_lpsolve55
+define gb_LinkTarget__use_lpsolve
 $(call gb_LinkTarget_use_libraries,$(1),\
 	lpsolve55 \
+)
+$(call gb_LinkTarget_set_include,$(1),\
+	-I$(call gb_UnpackedTarball_get_dir,lpsolve) \
+	$$(INCLUDE) \
 )
 
 endef
