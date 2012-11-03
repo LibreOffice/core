@@ -103,9 +103,8 @@ namespace connectivity
             }
 
             WpOLEBase(const WpOLEBase<T>& aWrapper)
-                : WpBase(aWrapper)
-                , pInterface(aWrapper.pInterface)
             {
+                operator=(aWrapper);
             }
 
             virtual ~WpOLEBase()
