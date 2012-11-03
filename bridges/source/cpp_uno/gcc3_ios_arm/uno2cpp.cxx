@@ -204,6 +204,13 @@ void callVirtualMethod(
 
 #ifdef __arm
 
+    // Implement!!!
+    abort();
+    (void) nVtableIndex;
+    (void) pRegisterReturn;
+    (void) pReturnTypeDescr;
+    (void) bSimpleReturn;
+
 #else
     volatile long edx = 0, eax = 0; // for register returns
     void * stackptr = 0;
