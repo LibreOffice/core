@@ -755,12 +755,6 @@ AC_ARG_ENABLE(assert-always-abort,
         [make assert() abort even in release code.]),
 ,)
 
-AC_ARG_ENABLE(debug,
-    AS_HELP_STRING([--enable-debug],
-        [Include debugging information, disable compiler optimization and inlining plus
-         extra debugging code like assertions. Extra large build! (enables -g compiler flag
-         and dmake debug=true).]))
-
 AC_ARG_ENABLE(dbgutil,
     AS_HELP_STRING([--enable-dbgutil],
         [Provide debugging support from --enable-debug and include additional debugging
@@ -768,6 +762,12 @@ AC_ARG_ENABLE(dbgutil,
          This is the recommended option for developers.
          Note that this makes the build ABI incompatible, it is not possible to mix object
          files or libraries from a --enable-dbgutil and a --disable-dbgutil build.]))
+
+AC_ARG_ENABLE(debug,
+    AS_HELP_STRING([--enable-debug],
+        [Include debugging information, disable compiler optimization and inlining plus
+         extra debugging code like assertions. Extra large build! (enables -g compiler flag
+         and dmake debug=true).]))
 
 AC_ARG_ENABLE(selective-debuginfo,
     AS_HELP_STRING([--enable-selective-debuginfo],
@@ -777,6 +777,12 @@ AC_ARG_ENABLE(selective-debuginfo,
          everything in the directory; there is no ordering, more specific overrides
          more general, and disabling takes precedence).
          Example: --enable-selective-debuginfo="all -sw/ -Library_sc".]))
+
+AC_ARG_ENABLE(symbols,
+    AS_HELP_STRING([--enable-symbols],
+        [Include debugging symbols in output while preserve optimization.
+         This enables -g compiler flag for GCC or equivalent,
+         without changing anything else compared to productive code.]))
 
 AC_ARG_ENABLE(compiler-plugins,
     AS_HELP_STRING([--enable-compiler-plugins],
@@ -3344,6 +3350,27 @@ if test -n "$ENABLE_DEBUG"; then
     fi
 fi
 AC_SUBST(ENABLE_DEBUGINFO_FOR)
+
+dnl Check for enable symbols option
+dnl ===================================================================
+AC_MSG_CHECKING([whether to include symbols while preserve optimization])
+if test -n "$enable_symbols" -a "$enable_symbols" != "no"; then
+    ENABLE_SYMBOLS="TRUE"
+    if test -n "$ENABLE_DBGUTIL"; then
+        AC_MSG_ERROR([--enable-dbgutil cannot be used with --enable-symbols])
+    elif test -n "$ENABLE_DEBUG"; then
+        AC_MSG_ERROR([--enable-debug cannot be used with --enable-symbols])
+    fi
+    AC_MSG_RESULT([yes])
+else
+    if test -n "$enable_symbols" -a "$enable_symbols" = "no"; then
+        ENABLE_SYMBOLS="FALSE"
+    else
+        ENABLE_SYMBOLS=
+    fi
+    AC_MSG_RESULT([no])
+fi
+AC_SUBST(ENABLE_SYMBOLS)
 
 dnl Check for explicit C/CXX/OBJC/OBJCXX/LDFLAGS. We by default use the ones specified
 dnl by our build system, but explicit override is possible.
