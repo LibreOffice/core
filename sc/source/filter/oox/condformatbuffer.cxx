@@ -823,7 +823,15 @@ void CondFormatRule::finalizeImport()
     CellAddress aBaseAddr = mrCondFormat.getRanges().getBaseAddress();
     ScAddress aPos;
     ScUnoConversion::FillScAddress( aPos, aBaseAddr );
-    if( (eOperator != SC_COND_NONE) && !maModel.maFormulas.empty() )
+
+    if( eOperator == SC_COND_ERROR || eOperator == SC_COND_NOERROR )
+    {
+        ScDocument& rDoc = getScDocument();
+        OUString aStyleName = getStyles().createDxfStyle( maModel.mnDxfId );
+        ScCondFormatEntry* pNewEntry = new ScCondFormatEntry( eOperator, NULL, NULL, &rDoc, aPos, aStyleName );
+        mpFormat->AddEntry(pNewEntry);
+    }
+    else if( (eOperator != SC_COND_NONE) && !maModel.maFormulas.empty() )
     {
         ScDocument& rDoc = getScDocument();
         boost::scoped_ptr<ScTokenArray> pTokenArray2;
@@ -859,13 +867,6 @@ void CondFormatRule::finalizeImport()
         aTokenArrayDev.AddDouble( maModel.mnStdDev );
         OUString aStyleName = getStyles().createDxfStyle( maModel.mnDxfId );
         ScCondFormatEntry* pNewEntry = new ScCondFormatEntry( eOperator, &aTokenArrayEqual, &aTokenArrayDev, &rDoc, aPos, aStyleName );
-        mpFormat->AddEntry(pNewEntry);
-    }
-    else if( eOperator == SC_COND_ERROR || eOperator == SC_COND_NOERROR )
-    {
-        ScDocument& rDoc = getScDocument();
-        OUString aStyleName = getStyles().createDxfStyle( maModel.mnDxfId );
-        ScCondFormatEntry* pNewEntry = new ScCondFormatEntry( eOperator, NULL, NULL, &rDoc, aPos, aStyleName );
         mpFormat->AddEntry(pNewEntry);
     }
     else if( eOperator == SC_COND_DUPLICATE || eOperator == SC_COND_NOTDUPLICATE )
