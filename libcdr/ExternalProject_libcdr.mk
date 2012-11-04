@@ -16,6 +16,7 @@ $(eval $(call gb_ExternalProject_register_targets,libcdr,\
 ))
 
 $(eval $(call gb_ExternalProject_use_externals,libcdr,\
+	lcms2 \
 	wpd \
 	wpg \
 ))
@@ -27,7 +28,7 @@ $(call gb_ExternalProject_get_state_target,libcdr,build) :
 	cd $(EXTERNAL_WORKDIR)/build/win32 \
 	&& export LIBWPD_INCLUDE_DIR=$(OUTDIR)/inc/external \
 	&& export LIBWPG_INCLUDE_DIR=$(OUTDIR)/inc/external \
-	&& export LCMS2_INCLUDE_DIR=$(OUTDIR)/inc/lcms2 \
+	&& export LCMS2_INCLUDE_DIR=$(call gb_UnpackedTarball_get_dir,lcms2/include) \
 	&& export ZLIB_INCLUDE_DIR=$(OUTDIR)/inc/external/zlib \
 	&& $(COMPATH)/vcpackages/vcbuild.exe libcdr.vcproj "Release|Win32" \
 	&& touch $@
@@ -36,7 +37,7 @@ $(call gb_ExternalProject_get_state_target,libcdr,build) :
 	cd $(EXTERNAL_WORKDIR)/build/win32 \
 	&& export LIBWPD_INCLUDE_DIR=$(OUTDIR)/inc/external \
 	&& export LIBWPG_INCLUDE_DIR=$(OUTDIR)/inc/external \
-	&& export LCMS2_INCLUDE_DIR=$(OUTDIR)/inc/lcms2 \
+	&& export LCMS2_INCLUDE_DIR=$(call gb_UnpackedTarball_get_dir,lcms2/include) \
 	&& export ZLIB_INCLUDE_DIR=$(OUTDIR)/inc/external/zlib \
 	&& msbuild.exe libcdr.vcxproj /p:Configuration=Release \
 	&& touch $@
@@ -45,7 +46,7 @@ $(call gb_ExternalProject_get_state_target,libcdr,build) :
 	cd $(EXTERNAL_WORKDIR)/build/win32 \
 	&& export LIBWPD_INCLUDE_DIR=$(OUTDIR)/inc/external \
 	&& export LIBWPG_INCLUDE_DIR=$(OUTDIR)/inc/external \
-	&& export LCMS2_INCLUDE_DIR=$(OUTDIR)/inc/lcms2 \
+	&& export LCMS2_INCLUDE_DIR=$(call gb_UnpackedTarball_get_dir,lcms2/include) \
 	&& export ZLIB_INCLUDE_DIR=$(OUTDIR)/inc/external/zlib \
 	&& msbuild.exe libcdr.vcxproj /p:PlatformToolset=v110 /p:Configuration=Release \
 	&& touch $@
@@ -60,8 +61,12 @@ $(call gb_ExternalProject_get_state_target,libcdr,build) :
 	WPD_LIBS=" $(WPD_LIBS)" \
 	WPG_CFLAGS=" $(WPG_CFLAGS)" \
 	WPG_LIBS=" $(WPG_LIBS)" \
-	LCMS2_CFLAGS=" $(LCMS2_CFLAGS)" \
-	LCMS2_LIBS=" $(LCMS2_LIBS)" \
+	$(if $(filter YES,$(SYSTEM_LCMS2)),\
+	LCMS2_CFLAGS="$(LCMS2_CFLAGS)" \
+	LCMS2_LIBS="$(LCMS2_LIBS)", \
+	LCMS2_CFLAGS="-I$(call gb_UnpackedTarball_get_dir,lcms2/include) \
+	$(if $(filter MACOSX,$(OS)),-Wno-long-long)" \
+	LCMS2_LIBS="-L$(OUTDIR)/lib -llcms2" ) \
 	ZLIB_CFLAGS=" $(ZLIB_CFLAGS)" \
 	ZLIB_LIBS=" $(ZLIB_LIBS)" \
 	./configure \

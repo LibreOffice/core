@@ -102,6 +102,7 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
 	jvmfwk \
 	$(call gb_Helper_optional,DESKTOP,l10ntools) \
 	$(call gb_Helper_optional,LANGUAGETOOL,languagetool) \
+	$(call gb_Helper_optional,LCMS2,lcms2) \
 	libcdr \
 	libcmis \
 	libmspub \
