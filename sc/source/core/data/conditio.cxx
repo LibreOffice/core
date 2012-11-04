@@ -772,7 +772,7 @@ static bool lcl_IsDuplicate( ScDocument *pDoc, double nArg, const String& rStr, 
         SCROW nRow = aRange->aEnd.Row();
         SCCOL nCol = aRange->aEnd.Col();
         SCCOL nColStart = aRange->aStart.Col();
-        SCROW nRowStart = aRange->aEnd.Row();
+        SCROW nRowStart = aRange->aStart.Row();
         SCTAB nTab = aRange->aStart.Tab();
 
         // temporary fix to workaorund slow duplicate entry
