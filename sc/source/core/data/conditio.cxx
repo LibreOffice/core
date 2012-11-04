@@ -1000,9 +1000,18 @@ bool ScConditionEntry::IsValid( double nArg, const ScAddress& rPos ) const
 
     if ( bIsStr1 )
     {
-        // wenn auf String getestet wird, bei Zahlen immer sal_False, ausser bei "ungleich"
-
-        return ( eOp == SC_COND_NOTEQUAL );
+        switch( eOp )
+        {
+            case SC_COND_BEGINS_WITH:
+            case SC_COND_ENDS_WITH:
+            case SC_COND_CONTAINS_TEXT:
+            case SC_COND_NOT_CONTAINS_TEXT:
+                break;
+            case SC_COND_NOTEQUAL:
+                return true;
+            default:
+                return false;
+        }
     }
 
     if ( eOp == SC_COND_BETWEEN || eOp == SC_COND_NOTBETWEEN )
@@ -1088,6 +1097,47 @@ bool ScConditionEntry::IsValid( double nArg, const ScAddress& rPos ) const
             if( eOp == SC_COND_NOERROR )
                 bValid = !bValid;
             break;
+        case SC_COND_BEGINS_WITH:
+            if(!aStrVal1.Len())
+            {
+                rtl::OUString aStr = rtl::OUString::valueOf(nVal1);
+                rtl::OUString aStr2 = rtl::OUString::valueOf(nArg);
+                bValid = aStr2.indexOf(aStr) == 0;
+            }
+            else
+            {
+                rtl::OUString aStr2 = rtl::OUString::valueOf(nArg);
+                bValid = aStr2.indexOf(aStrVal1) == 0;
+            }
+        case SC_COND_ENDS_WITH:
+            if(!aStrVal1.Len())
+            {
+                rtl::OUString aStr = rtl::OUString::valueOf(nVal1);
+                rtl::OUString aStr2 = rtl::OUString::valueOf(nArg);
+                bValid = aStr2.endsWith(aStr) == 0;
+            }
+            else
+            {
+                rtl::OUString aStr2 = rtl::OUString::valueOf(nArg);
+                bValid = aStr2.endsWith(aStrVal1) == 0;
+            }
+        case SC_COND_CONTAINS_TEXT:
+        case SC_COND_NOT_CONTAINS_TEXT:
+            if(!aStrVal1.Len())
+            {
+                rtl::OUString aStr = rtl::OUString::valueOf(nVal1);
+                rtl::OUString aStr2 = rtl::OUString::valueOf(nArg);
+                bValid = aStr2.indexOf(aStr) != -1;
+            }
+            else
+            {
+                rtl::OUString aStr2 = rtl::OUString::valueOf(nArg);
+                bValid = aStr2.indexOf(aStrVal1) != -1;
+            }
+
+            if( eOp == SC_COND_NOT_CONTAINS_TEXT )
+                bValid = !bValid;
+            break;
         default:
             OSL_FAIL("unbekannte Operation bei ScConditionEntry");
             break;
@@ -1154,6 +1204,18 @@ bool ScConditionEntry::IsValidStr( const rtl::OUString& rArg, const ScAddress& r
         case SC_COND_NOERROR:
             bValid = IsError( rPos );
             if(eOp == SC_COND_NOERROR)
+                bValid = !bValid;
+        break;
+        case SC_COND_BEGINS_WITH:
+            bValid = rArg.indexOf(aUpVal1) == 0;
+        break;
+        case SC_COND_ENDS_WITH:
+            bValid = rArg.endsWith(aUpVal1);
+        break;
+        case SC_COND_CONTAINS_TEXT:
+        case SC_COND_NOT_CONTAINS_TEXT:
+            bValid = rArg.indexOf(aUpVal1) != -1;
+            if(eOp == SC_COND_NOT_CONTAINS_TEXT)
                 bValid = !bValid;
         break;
         default:
