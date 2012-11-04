@@ -19,61 +19,66 @@
 #ifndef __com_sun_star_text_XAutoTextContainer_idl__
 #define __com_sun_star_text_XAutoTextContainer_idl__
 
+#include <com/sun/star/container/ElementExistException.idl>
+#include <com/sun/star/container/NoSuchElementException.idl>
 #include <com/sun/star/container/XNameAccess.idl>
-
+#include <com/sun/star/lang/IllegalArgumentException.idl>
 #include <com/sun/star/text/XAutoTextGroup.idl>
 
-#include <com/sun/star/lang/IllegalArgumentException.idl>
-
-#include <com/sun/star/container/ElementExistException.idl>
-
-#include <com/sun/star/container/NoSuchElementException.idl>
-
-
-
- module com {  module sun {  module star {  module text {
+module com {  module sun {  module star {  module text {
 
 /** handles blocks of <type>AutoTextEntry</type>.
-
-
-
-
-
-
-
-    @example <pre>
-    AutoTextPath=d:\office\autotext;f:\user\autotext
-
-    groupname:  "standard*0"
-    -&amp;amp;gt; the group file is located n the path d:\office\autotext
-    groupname:  "all*1"
-    -&amp;amp;gt; the group file is located in the path f:\user\autotext\
-    </pre>
-
-    <p>If the path extension is not specified, then the first directory
-    is used.  For automatic text expansion, the name of an actual group is
-    set to search first in this group.
-
-    </p>@see AutoTextContainer
- */
+    @see AutoTextContainer
+*/
 published interface XAutoTextContainer: com::sun::star::container::XNameAccess
 {
     /** creates a new AutoText group.
-     */
+
+    @param aGroupName the name of the <type>AutoTextContainer</type>
+
+    <p>The name must follow the pattern <code>groupname*pathid</code>, where:</p>
+
+    <ul>
+        <li><code>groupname</code> should contain only alphanumeric characters
+            (A-Za-z0-9), underscore (_) or space (0x20)</li>
+        <li>an asterisk (*) delimiter separates the group name from the path
+            identifier</li>
+        <li><code>pathid</code> is a number (0 or 1) identifying the directory
+        where the AutoText file is stored. Paths are stored in the Office
+        configuration and accessed through
+        <member scope="com::sun::star::util">PathSettings::AutoText</member>.
+            <ul>
+                <li>0 indicates the path of the <b>Office Basis</b> layer</li>
+                <li>1 indicates the path of the <b>user</b> directory</li>
+            </ul>
+        </li>
+    </ul>
+    If only <code>groupname</code> is specified, the path defaults to 0, the
+    <b>Office Basis</b> layer.</br>Note that in some systems the user may lack of
+    write access to the Office Basis directory.
+
+    @example
+
+    <ul>
+        <li><code>standard*0</code></br>the "standard" AutoTextGroup in the Office Basis layer</li>
+        <li><code>template</code></br>the "template" AutoTextGroup in the Office Basis layer</li>
+        <li><code>mytexts*1</code></br>the "mytexts" AutoTextGroup in the user directory</li>
+    </ul>
+
+    */
     com::sun::star::text::XAutoTextGroup insertNewByName( [in] string aGroupName )
             raises( com::sun::star::lang::IllegalArgumentException,
                     com::sun::star::container::ElementExistException );
 
     /** deletes the specified AutoText group.
-     */
+        @param aGroupName see the documentation for <member>XAutoTextContainer::insertNewByName()</member>
+    */
     void removeByName( [in] string aGroupName )
             raises( com::sun::star::container::NoSuchElementException );
 
 };
 
-
 }; }; }; };
-
 
 #endif
 
