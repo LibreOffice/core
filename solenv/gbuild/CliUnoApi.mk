@@ -9,7 +9,7 @@
 
 # CliUnoApiTarget class
 
-gb_CliUnoApiTarget_EXT := $(gb_CliAssembly_POLICYEXT)
+# Handles creation of a CLI assembly from UNO types.rdb.
 
 gb_CliUnoApiTarget_TARGET := $(call gb_Executable_get_target_for_build,climaker)
 gb_CliUnoApiTarget_COMMAND := $(gb_Helper_set_ld_path) $(gb_CliUnoApiTarget_TARGET)
@@ -91,8 +91,8 @@ $(foreach api,$(2),$(call gb_CliUnoApiTarget__use_api,$(1),$(call gb_UnoApi_get_
 endef
 
 define gb_CliUnoApiTarget_use_assembly
-$(call gb_CliUnoApiTarget_get_target,$(1)) : CLI_UNOAPI_ASSEMBLIES += $(call gb_CliUnoApi_get_target,$(2))
-$(call gb_CliUnoApiTarget_get_target,$(1)) : $(call gb_CliUnoApi_get_target,$(2))
+$(call gb_CliUnoApiTarget_get_target,$(1)) : CLI_UNOAPI_ASSEMBLIES += $(call gb_CliAssemblyTarget_get_dll,$(2))
+$(call gb_CliUnoApiTarget_get_target,$(1)) : $(call gb_CliAssemblyTarget_get_target,$(2))
 
 endef
 
@@ -103,38 +103,60 @@ endef
 
 # CliUnoApi class
 
-gb_CliUnoApi_EXT := $(gb_CliUnoApiTarget_EXT)
-gb_CliUnoApi_KEYFILE_DEFAULT := $(gb_CliAssembly_KEYFILE_DEFAULT)
+# Handles creation and delivery of a CLI assembly from UNO types.rdb.
 
-# Create a CLI library for UNO API
+gb_CliUnoApi_KEYFILE_DEFAULT := $(gb_CliAssemblyTarget_KEYFILE_DEFAULT)
+
+$(dir $(call gb_CliUnoApi_get_target,%)).dir :
+	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
+
+$(dir $(call gb_CliUnoApi_get_target,%))%/.dir :
+	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
+
+$(call gb_CliUnoApi_get_target,%) :
+	touch $@
+
+.PHONY : $(call gb_CliUnoApi_get_clean_target,%)
+$(call gb_CliUnoApi_get_clean_target,%) :
+	rm -f $(call gb_CliUnoApi_get_target,$*)
+
+# Create a CLI library for UNO API.
 #
 # gb_CliUnoApi_CliUnoApi target
 define gb_CliUnoApi_CliUnoApi
 $(call gb_CliUnoApiTarget_CliUnoApiTarget,$(1))
-$(call gb_CliAssembly_CliAssembly,$(1))
+$(call gb_CliAssemblyTarget_CliAssemblyTarget,$(1),$(call gb_CliUnoApiTarget_get_target,$(1)))
 
 $(call gb_CliUnoApiTarget_set_keyfile,$(1),$(gb_CliUnoApi_KEYFILE_DEFAULT))
 
 $(call gb_CliUnoApi_get_target,$(1)) : $(call gb_CliUnoApiTarget_get_target,$(1))
-$(call gb_CliUnoApi_get_target,$(1)) :| $(call gb_CliAssembly_get_target,$(1))
+$(call gb_CliUnoApi_get_target,$(1)) : $(call gb_CliAssemblyTarget_get_target,$(1))
 $(call gb_CliUnoApi_get_target,$(1)) :| $(dir $(call gb_CliUnoApi_get_target,$(1))).dir
 $(call gb_CliUnoApi_get_clean_target,$(1)) : $(call gb_CliUnoApiTarget_get_clean_target,$(1))
-$(call gb_CliUnoApi_get_clean_target,$(1)) : $(call gb_CliAssembly_get_clean_target,$(1))
-
-$(call gb_Deliver_add_deliverable,$(call gb_CliUnoApi_get_target,$(1)),$(call gb_CliUnoApiTarget_get_target,$(1)),$(1))
+$(call gb_CliUnoApi_get_clean_target,$(1)) : $(call gb_CliAssemblyTarget_get_clean_target,$(1))
 
 $$(eval $$(call gb_Module_register_target,$(call gb_CliUnoApiTarget_get_target,$(1)),$(call gb_CliUnoApiTarget_get_clean_target,$(1))))
 
 endef
 
+# Set the configuration file for the assembly.
+#
+# The file is given by complete path.
+# 
+# gb_CliUnoApi_set_configfile assembly configfile
 define gb_CliUnoApi_set_configfile
-$(call gb_CliAssembly_set_configfile,$(1),$(2))
+$(call gb_CliAssemblyTarget_set_configfile,$(1),$(2))
 
 endef
 
+# Set the sign key file for the assembly.
+#
+# The file is given by complete path.
+# 
+# gb_CliUnoApi_set_keyfile assembly keyfile
 define gb_CliUnoApi_set_keyfile
 $(call gb_CliUnoApiTarget_set_keyfile,$(1),$(2))
-$(call gb_CliAssembly_set_keyfile,$(1),$(2))
+$(call gb_CliAssemblyTarget_set_keyfile,$(1),$(2))
 
 endef
 
@@ -143,8 +165,13 @@ $(call gb_CliUnoApiTarget_set_version,$(1),$(2))
 
 endef
 
+# Set the policy file for the assembly.
+#
+# The file is given by complete path.
+#
+# gb_CliUnoApiTarget_set_policy assembly policyfile version
 define gb_CliUnoApi_set_policy
-$(call gb_CliAssembly_set_policy,$(1),$(2),$(3))
+$(call gb_CliAssemblyTarget_set_policy,$(1),$(2),$(3))
 
 endef
 
@@ -158,11 +185,17 @@ $(call gb_CliUnoApiTarget_use_api,$(1),$(2))
 
 endef
 
+# Use another assembly for compilation.
+#
+# gb_CliUnoApi_use_assembly assembly dep
 define gb_CliUnoApi_use_assembly
 $(call gb_CliUnoApiTarget_use_assembly,$(1),$(2))
 
 endef
 
+# Use other assemblies for compilation.
+#
+# gb_CliUnoApi_use_assemblies assembly dep(s)
 define gb_CliUnoApi_use_assemblies
 $(call gb_CliUnoApiTarget_use_assemblies,$(1),$(2))
 

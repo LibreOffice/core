@@ -341,9 +341,9 @@ include $(foreach class, \
 	UnoApiMerge \
 	UnpackedTarball \
 	InternalUnoApi \
+	CliAssemblyTarget \
 	CliAssembly \
 	CliLibrary \
-	CliNativeLibrary \
 	CliUnoApi \
 	Zip \
 	AllLangZip \

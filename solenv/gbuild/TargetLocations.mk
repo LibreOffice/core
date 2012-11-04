@@ -28,9 +28,7 @@
 
 # outdir target pattern
 
-gb_CliLibrary_get_target = $(gb_Helper_OUTDIRLIBDIR)/$(1)$(gb_CliLibrary_EXT)
-gb_CliNativeLibrary_get_target = $(gb_Helper_OUTDIRLIBDIR)/$(1)$(gb_CliNativeLibrary_EXT)
-gb_CliUnoApi_get_target = $(gb_Helper_OUTDIRLIBDIR)/$(1)$(gb_CliUnoApi_EXT)
+gb_CliAssemblyTarget_get_outdir_target = $(gb_Helper_OUTDIRLIBDIR)/$(1)
 gb_ComponentTarget_get_outdir_target = $(OUTDIR)/xml/component/$(1).component
 gb_Dictionary_get_target = $(OUTDIR)/pck/$(1).oxt
 gb_Executable_get_target = $(OUTDIR)/bin/$(1)$(gb_Executable_EXT)
@@ -84,12 +82,15 @@ gb_CObject_get_target = $(WORKDIR)/CObject/$(1).o
 gb_GenCObject_get_target = $(WORKDIR)/GenCObject/$(1).o
 gb_CliAssembly_get_target = $(WORKDIR)/CliAssembly/$(1).done
 gb_CliAssemblyTarget_get_target = $(WORKDIR)/CliAssemblyTarget/$(1).done
-gb_CliAssemblyTarget_get_assembly_target = $(WORKDIR)/CliAssemblyTarget/$(1)$(gb_CliAssemblyTarget_POLICYEXT)
 gb_CliConfigTarget_get_target = $(WORKDIR)/CliConfigTarget/$(1).config
-gb_CliLibraryTarget_get_target = $(WORKDIR)/CliLibraryTarget/$(1)$(gb_CliLibraryTarget_EXT)
-gb_CliNativeLibraryTarget_get_external_target = $(WORKDIR)/CliNativeLibraryTarget/$(1).external
-gb_CliNativeLibraryTarget_get_target = $(WORKDIR)/CliNativeLibraryTarget/$(1)$(gb_CliNativeLibraryTarget_EXT)
-gb_CliUnoApiTarget_get_target = $(WORKDIR)/CliUnoApiTarget/$(1)$(gb_CliUnoApiTarget_EXT)
+gb_CliCSharpTarget_get_target = $(WORKDIR)/CliCSharpTarget/$(1).dll
+gb_CliLibrary_get_target = $(WORKDIR)/CliLibrary/$(1).done
+gb_CliPolicyTarget_get_target = $(WORKDIR)/CliPolicyTarget/$(1).done
+gb_CliPolicyTarget_get_assembly_target = $(WORKDIR)/CliPolicyTarget/$(1).dll
+gb_CliSignTarget_get_external_target = $(WORKDIR)/CliSignTarget/$(1).external
+gb_CliSignTarget_get_target = $(WORKDIR)/CliSignTarget/$(1).dll
+gb_CliUnoApi_get_target = $(WORKDIR)/CliUnoApi/$(1).done
+gb_CliUnoApiTarget_get_target = $(WORKDIR)/CliUnoApiTarget/$(1).dll
 gb_ComponentTarget_get_target = $(WORKDIR)/ComponentTarget/$(1).component
 gb_ComponentsTarget_get_target = $(WORKDIR)/ComponentsTarget/$(1).components
 gb_Configuration_get_preparation_target = $(WORKDIR)/Configuration/$(1).prepared
@@ -226,8 +227,11 @@ $(eval $(call gb_Helper_make_clean_targets,\
 	CliAssembly \
 	CliAssemblyTarget \
 	CliConfigTarget \
-	CliLibraryTarget \
-	CliNativeLibraryTarget \
+	CliCSharpTarget \
+	CliLibrary \
+	CliPolicyTarget \
+	CliSignTarget \
+	CliUnoApi \
 	CliUnoApiTarget \
 	ComponentTarget \
 	ComponentsTarget \
@@ -280,9 +284,6 @@ $(eval $(call gb_Helper_make_clean_targets,\
 ))
 
 $(eval $(call gb_Helper_make_outdir_clean_targets,\
-	CliLibrary \
-	CliNativeLibrary \
-	CliUnoApi \
 	Dictionary \
 	Executable \
 	Extension \
@@ -337,6 +338,7 @@ gb_StaticLibrary_get_linktargetname = StaticLibrary/$(call gb_StaticLibrary_get_
 gb_Executable_BINDIR = $(WORKDIR)/LinkTarget/Executable
 gb_Library_OUTDIRLOCATION = $(OUTDIR)/lib
 gb_Library_DLLDIR = $(WORKDIR)/LinkTarget/Library
+gb_CliLibrary_DLLDIR = $(WORKDIR)/LinkTarget/CliLibrary
 gb_CppunitTest_DLLDIR = $(WORKDIR)/LinkTarget/CppunitTest
 gb_StaticLibrary_OUTDIRLOCATION = $(OUTDIR)/lib
 

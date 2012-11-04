@@ -15,9 +15,9 @@ $(eval $(call gb_Module_add_targets,cli_ure,\
 
 ifeq ($(COM),MSC)
 $(eval $(call gb_Module_add_targets,cli_ure,\
-	CliLibrary_cli_basetypes \
-	CliLibrary_cli_ure \
-	CliNativeLibrary_cli_cppuhelper \
+	CliAssembly_cli_basetypes \
+	CliAssembly_cli_ure \
+	CliLibrary_cli_cppuhelper \
 	CliUnoApi_cli_uretypes \
 	CustomTarget_cli_ure_assemblies \
 	Executable_climaker \

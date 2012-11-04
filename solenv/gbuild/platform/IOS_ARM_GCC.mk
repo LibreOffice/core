@@ -298,11 +298,6 @@ gb_ScpConvertTarget_ScpConvertTarget_platform :=
 
 gb_InstallScript_EXT := .ins
 
-# CliAssemblyTarget class
-
-gb_CliAssemblyTarget_POLICYEXT :=
-gb_CliAssemblyTarget_get_dll :=
-
 # ExtensionTarget class
 
 gb_ExtensionTarget_LICENSEFILE_DEFAULT := $(OUTDIR)/bin/osl/LICENSE
@@ -318,6 +313,26 @@ gb_UnoApiHeadersTarget_select_variant = $(if $(filter udkapi,$(1)),comprehensive
 else
 gb_UnoApiHeadersTarget_select_variant = $(2)
 endif
+
+# CliLibrary class
+
+gb_CliLibrary_LIBS :=
+
+gb_CliLibrary_CliLibrary_platform :=
+
+gb_CliLibrary_get_dll :=
+
+gb_CliLibrary_add_delayload_dll :=
+
+gb_CliLibrary_set_link_keyfile :=
+
+# CliCSharpTarget class
+
+gb_CliCSharpTarget__command :=
+
+# CliPolicyTarget class
+
+gb_CliPolicyTarget__command :=
 
 # Python
 gb_PYTHON_PRECOMMAND := DYLD_LIBRARY_PATH=$(OUTDIR_FOR_BUILD)/lib

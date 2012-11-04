@@ -355,6 +355,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(if $(filter Library CppunitTest,$(TARGETTYPE)),$(gb_Library_TARGETTYPEFLAGS)) \
 		$(if $(filter StaticLibrary,$(TARGETTYPE)),$(gb_StaticLibrary_TARGETTYPEFLAGS)) \
 		$(if $(filter Executable,$(TARGETTYPE)),$(gb_Executable_TARGETTYPEFLAGS)) \
+		$(if $(filter CliLibrary,$(TARGETTYPE)),$(gb_CliLibrary_TARGETTYPEFLAGS)) \
 		$(if $(filter YES,$(TARGETGUI)), -SUBSYSTEM:WINDOWS, -SUBSYSTEM:CONSOLE) \
 		$(if $(filter YES,$(LIBRARY_X64)), -MACHINE:X64, -MACHINE:IX86) \
 		$(if $(filter YES,$(LIBRARY_X64)), -LIBPATH:$(OUTDIR)/lib/x64 -LIBPATH:$(COMPATH)/lib/amd64 -LIBPATH:$(WINDOWS_SDK_HOME)/lib/x64 \
@@ -436,13 +437,6 @@ gb_Library_DLLFILENAMES :=\
 	$(foreach lib,$(gb_Library_UNOLIBS_OOO),$(lib):$(lib)$(gb_Library_UNOEXT)) \
 	$(foreach lib,$(gb_Library_UNOVERLIBS),$(lib):$(lib)$(gb_Library_UNOVEREXT)) \
 	$(foreach lib,$(gb_Library_EXTENSIONLIBS),$(lib):$(lib)$(gb_Library_UNOEXT)) \
-
-# An assembly is a special kind of library for CLI
-define gb_Library_Assembly
-$(call gb_Library_Library,$(1))
-$(call gb_LinkTarget_get_target,$(call gb_Library_get_linktargetname,$(1))) : NATIVERES :=
-
-endef
 
 define gb_Library_Library_platform
 $(call gb_LinkTarget_set_dlltarget,$(2),$(3))
@@ -705,11 +699,6 @@ endef
 
 gb_InstallScript_EXT := .inf
 
-# CliAssemblyTarget class
-
-gb_CliAssemblyTarget_POLICYEXT := $(gb_Library_DLLEXT)
-gb_CliAssemblyTarget_get_dll = $(OUTDIR)/bin/$(1)$(gb_CliAssemblyTarget_POLICYEXT)
-
 # ExtensionTarget class
 
 gb_ExtensionTarget_LICENSEFILE_DEFAULT := $(OUTDIR)/bin/osl/license.txt
@@ -725,6 +714,104 @@ gb_UnoApiHeadersTarget_select_variant = $(if $(filter udkapi,$(1)),comprehensive
 else
 gb_UnoApiHeadersTarget_select_variant = $(2)
 endif
+
+# CliLibrary class
+
+gb_CliLibrary_LIBS := \
+	advapi32 \
+	delayimp \
+	mscoree \
+	$(if $(USE_DEBUG_RUNTIME)\
+		,msvcmrtd \
+		,msvcmrt \
+	)
+
+define gb_CliLibrary_CliLibrary_platform
+$(call gb_LinkTarget_set_dlltarget,$(2),$(3))
+
+# When compiling for CLR, disable "warning C4339: use of undefined type detected
+# in CLR meta-data - use of this type may lead to a runtime exception":
+$(call gb_LinkTarget_add_cxxflags,$(2),\
+	-AI $(gb_Helper_OUTDIRLIBDIR) \
+	-clr \
+	-wd4339 \
+)
+
+$(call gb_LinkTarget_add_ldflags,$(2),\
+	-ignore:4248 \
+)
+
+endef
+
+gb_CliLibrary_get_dll = $(gb_CliLibrary_DLLDIR)/$(call gb_CliLibrary_get_linktargetname,$(1)).dll
+
+
+define gb_CliLibrary_add_delayload_dll
+$(call gb_LinkTarget_add_ldflags,$(call gb_CliLibrary_get_linktargetname,$(1)),\
+	-delayload:$(call gb_Library_get_dllname,$(2)) \
+)
+
+endef
+
+define gb_CliLibrary_set_link_keyfile
+$(call gb_LinkTarget_add_ldflags,$(call gb_CliLibrary_get_linktargetname,$(1)),\
+	-keyfile:$(call gb_Helper_windows_path,$(2)) \
+)
+
+endef
+
+# CliCSharpTarget class
+
+gb_CliCSharpTarget_CSCFLAGS := \
+	-noconfig \
+	-nologo \
+
+gb_CliCSharpTarget_CSCFLAGS_DEBUG := \
+	-checked+ \
+	-define:DEBUG \
+	-define:TRACE \
+
+ifeq ($(strip $(debug)),)
+ifeq ($(strip $(PRODUCT)),)
+gb_CliCSharpTarget__get_csflags = $(gb_CliCSharpTarget_CSCFLAGS) $(gb_CliCSharpTarget_CSCFLAGS_DEBUG)
+else
+gb_CliCSharpTarget__get_csflags = $(gb_CliCSharpTarget_CSCFLAGS) -o
+endif
+else
+gb_CliCSharpTarget__get_csflags = $(gb_CliCSharpTarget_CSCFLAGS) $(gb_CliCSharpTarget_CSCFLAGS_DEBUG) -debug+
+endif
+
+define gb_CliCSharpTarget__command
+$(call gb_Output_announce,$(2),$(true),CSC,3)
+$(call gb_Helper_abbreviate_dirs,\
+	csc $(call gb_Helper_windows_path, \
+		$(call gb_CliCSharpTarget__get_csflags) \
+		$(CLI_CSCFLAGS) \
+		-target:library \
+		-out:$(1) \
+		-keyfile:$(call gb_Helper_windows_path,$(CLI_KEYFILE)) \
+		-reference:System.dll \
+		$(foreach assembly,$(CLI_ASSEMBLIES),-reference:$(assembly)) \
+		$(CLI_SOURCES) \
+	) \
+)
+endef
+
+# CliPolicyTarget class
+
+define gb_CliPolicyTarget__command
+$(call gb_Output_announce,$(2),$(true),AL ,2)
+$(call gb_Helper_abbreviate_dirs,\
+	al \
+		-nologo \
+		-out:$(CLI_ASSEMBLY_OUTFILE) \
+		-version:$(CLI_ASSEMBLY_VERSION) \
+		-keyfile:$(call gb_Helper_windows_path,$(CLI_ASSEMBLY_KEYFILE)) \
+		-link:$(CLI_ASSEMBLY_CONFIGFILE) \
+		$(if $(CLI_ASSEMBLY_PLATFORM),-platform:$(CLI_ASSEMBLY_PLATFORM)) && \
+	touch $(1) \
+)
+endef
 
 # Python
 gb_PYTHON_PRECOMMAND := $(gb_Helper_set_ld_path) PYTHONHOME="$(OUTDIR_FOR_BUILD)/lib/python" PYTHONPATH="$(OUTDIR_FOR_BUILD)/lib/python;$(OUTDIR_FOR_BUILD)/lib/python/lib-dynload"

@@ -7,194 +7,232 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-# CliConfigTarget class
+# CliCSharpTarget class
 
-gb_CliConfigTarget_TARGET := $(SOLARENV)/bin/clipatchconfig.pl
-gb_CliConfigTarget_COMMAND := $(PERL) -w $(gb_CliConfigTarget_TARGET)
+# platform defined
+#  gb_CliCSharpTarget__command
 
-gb_CliConfigTarget_VERSIONFILE_DEFAULT := $(SRCDIR)/cli_ure/version/version.txt
+gb_CliCSharpTarget__get_source = $(SRCDIR)/$(1).cs
+gb_CliCSharpTarget__get_generated_source = $(WORKDIR)/$(1).cs
 
-define gb_CliConfigTarget__command
-$(call gb_Output_announce,$(2),$(true),CPA,1)
-$(call gb_Helper_abbreviate_dirs,\
-	$(gb_CliConfigTarget_COMMAND) $(3) $(CLI_CONFIG_VERSIONFILE) $(1) \
-)
-endef
-
-$(dir $(call gb_CliConfigTarget_get_target,%))%/.dir :
+$(dir $(call gb_CliCSharpTarget_get_target,%)).dir :
 	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
 
-$(call gb_CliConfigTarget_get_target,%) :
-	$(call gb_CliConfigTarget__command,$@,$*,$<)
-
-$(call gb_CliConfigTarget_get_clean_target,%) :
-	$(call gb_Output_announce,$*,$(false),CPA,1)
-	rm -f $(call gb_CliConfigTarget_get_target,$*)
-
-# Subst. variables in a config file
-#
-# gb_CliConfigTarget_CliConfigTarget target source
-define gb_CliConfigTarget_CliConfigTarget
-$(call gb_CliConfigTarget_get_target,$(1)) : CLI_CONFIG_VERSIONFILE := $(gb_CliConfigTarget_VERSIONFILE_DEFAULT)
-
-$(call gb_CliConfigTarget_get_target,$(1)) : $(2)
-$(call gb_CliConfigTarget_get_target,$(1)) : $(gb_CliConfigTarget_TARGET)
-$(call gb_CliConfigTarget_get_target,$(1)) : $(gb_CliConfigTarget_VERSIONFILE_DEFAULT)
-$(call gb_CliConfigTarget_get_target,$(1)) :| $(dir $(call gb_CliConfigTarget_get_target,$(1))).dir
-
-endef
-
-# CliAssemblyTarget class
-
-# platform:
-#  CliAssemblyTarget_POLICYEXT
-#  CliAssemblyTarget_get_dll
-
-gb_CliAssemblyTarget_KEYFILE_DEFAULT := $(SRCDIR)/cli_ure/source/cliuno.snk
-
-define gb_CliAssemblyTarget__command
-$(call gb_Output_announce,$(2),$(true),AL ,2)
-$(call gb_Helper_abbreviate_dirs,\
-	al \
-		-nologo \
-		-out:$(CLI_ASSEMBLY_OUTFILE) \
-		-version:$(CLI_ASSEMBLY_VERSION) \
-		-keyfile:$(call gb_Helper_windows_path,$(CLI_ASSEMBLY_KEYFILE)) \
-		-link:$(CLI_ASSEMBLY_CONFIGFILE) \
-		$(if $(CLI_ASSEMBLY_PLATFORM),-platform:$(CLI_ASSEMBLY_PLATFORM)) && \
-	touch $(1) \
-)
-endef
-
-$(dir $(call gb_CliAssemblyTarget_get_target,%)).dir :
+$(dir $(call gb_CliCSharpTarget_get_target,%))%/.dir :
 	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
 
-$(dir $(call gb_CliAssemblyTarget_get_target,%))%/.dir :
-	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
+$(call gb_CliCSharpTarget_get_target,%) :
+	$(call gb_CliCSharpTarget__command,$@,$*,$<,$?,$^)
 
-$(call gb_CliAssemblyTarget_get_target,%) :
-	$(if $(strip $(CLI_ASSEMBLY_VERSION)),,$(call gb_Output_error,assembly version not set))
-	$(if $(strip $(CLI_ASSEMBLY_CONFIGFILE)),,$(call gb_Output_error,assembly configuration file not set))
-	$(if $(strip $(CLI_ASSEMBLY_OUTFILE)),,$(call gb_Output_error,assembly name not set))
-	$(call gb_CliAssemblyTarget__command,$@,$*,$<)
-
-$(call gb_CliAssemblyTarget_get_assembly_target,%) :
-	touch $@
-
-.PHONY : $(call gb_CliAssemblyTarget_get_clean_target,%)
-$(call gb_CliAssemblyTarget_get_clean_target,%) :
-	$(call gb_Output_announce,$*,$(false),AL ,2)
+.PHONY : $(call gb_CliCSharpTarget_get_clean_target,%)
+$(call gb_CliCSharpTarget_get_clean_target,%) :
+	$(call gb_Output_announce,$*,$(false),CSC,3)
 	$(call gb_Helper_abbreviate_dirs,\
-		rm -f $(call gb_CliAssemblyTarget_get_target,$*) $(CLI_ASSEMBLY_OUTFILE) \
+		rm -f $(call gb_CliCSharpTarget_get_target,$*) \
 	)
 
-# Create a CLI assembly
-define gb_CliAssemblyTarget_CliAssemblyTarget
-$(call gb_CliAssemblyTarget_get_target,$(1)) : CLI_ASSEMBLY_CONFIGFILE :=
-$(call gb_CliAssemblyTarget_get_target,$(1)) : CLI_ASSEMBLY_KEYFILE := $(gb_CliAssemblyTarget_KEYFILE_DEFAULT)
-$(call gb_CliAssemblyTarget_get_target,$(1)) : CLI_ASSEMBLY_OUTFILE :=
-$(call gb_CliAssemblyTarget_get_target,$(1)) : CLI_ASSEMBLY_PLATFORM :=
-$(call gb_CliAssemblyTarget_get_target,$(1)) : CLI_ASSEMBLY_VERSION :=
+# Compile one or more C# source files.
+#
+# gb_CliCSharpTarget_CliCSharpTarget assembly
+define gb_CliCSharpTarget_CliCSharpTarget
+$(call gb_CliCSharpTarget_get_target,$(1)) : CLI_ASSEMBLIES :=
+$(call gb_CliCSharpTarget_get_target,$(1)) : CLI_SOURCES :=
+$(call gb_CliCSharpTarget_get_target,$(1)) : CLI_CSCFLAGS :=
+$(call gb_CliCSharpTarget_get_target,$(1)) : CLI_KEYFILE :=
 
-$(call gb_CliAssemblyTarget_get_clean_target,$(1)) : CLI_ASSEMBLY_OUTFILE :=
-
-$(call gb_CliAssemblyTarget_get_target,$(1)) :| $(dir $(call gb_CliAssemblyTarget_get_target,$(1))).dir
-
-endef
-
-define gb_CliAssemblyTarget_set_configfile
-$(call gb_CliAssemblyTarget_get_target,$(1)) : CLI_ASSEMBLY_CONFIGFILE := $(2)
-$(call gb_CliAssemblyTarget_get_target,$(1)) : $(2)
+$(call gb_CliCSharpTarget_get_target,$(1)) :| $(dir $(call gb_CliCSharpTarget_get_target,$(1))).dir
 
 endef
 
-define gb_CliAssemblyTarget_set_keyfile
-$(call gb_CliAssemblyTarget_get_target,$(1)) : CLI_ASSEMBLY_KEYFILE := $(2)
-$(call gb_CliAssemblyTarget_get_target,$(1)) : $(2)
+# Use another assembly for compilation.
+#
+# gb_CliCSharpTarget_use_assembly assembly dep
+define gb_CliCSharpTarget_use_assembly
+$(call gb_CliCSharpTarget_get_target,$(1)) : CLI_ASSEMBLIES += $(call gb_CliAssemblyTarget_get_dll,$(2))
+$(call gb_CliCSharpTarget_get_target,$(1)) : $(call gb_CliAssemblyTarget_get_target,$(2))
 
 endef
 
-define gb_CliAssemblyTarget_set_name
-$(call gb_CliAssemblyTarget_get_target,$(1)) \
-$(call gb_CliAssemblyTarget_get_clean_target,$(1)) : \
-	CLI_ASSEMBLY_OUTFILE := $(call gb_CliAssemblyTarget_get_assembly_target,$(2))
-$(call gb_CliAssemblyTarget_get_assembly_target,$(2)) : $(call gb_CliAssemblyTarget_get_target,$(1))
+# Use other assemblies for compilation.
+#
+# gb_CliCSharpTarget_use_assembly assembly dep(s)
+define gb_CliCSharpTarget_use_assemblies
+$(foreach assembly,$(2),$(call gb_CliCSharpTarget_use_assembly,$(1),$(assembly)))
 
 endef
 
-define gb_CliAssemblyTarget_set_platform
-$(call gb_CliAssemblyTarget_get_target,$(1)) : CLI_ASSEMBLY_PLATFORM := $(2)
+# Add a source file to compile.
+#
+# gb_CliCSharpTarget_add_csfile assembly csfile
+define gb_CliCSharpTarget_add_csfile
+$(call gb_CliCSharpTarget_get_target,$(1)) : CLI_SOURCES += $(call gb_CliCSharpTarget__get_source,$(2))
+$(call gb_CliCSharpTarget_get_target,$(1)) : $(call gb_CliCSharpTarget__get_source,$(2))
 
 endef
 
-define gb_CliAssemblyTarget_set_version
-$(call gb_CliAssemblyTarget_get_target,$(1)) : CLI_ASSEMBLY_VERSION := $(2)
+# Add source files to compile.
+#
+# gb_CliCSharpTarget_add_csfiles assembly csfile(s)
+define gb_CliCSharpTarget_add_csfiles
+$(foreach csfile,$(2),$(call gb_CliCSharpTarget_add_csfile,$(1),$(csfile)))
+
+endef
+
+# Add a generated source file to compile.
+#
+# gb_CliCSharpTarget_add_generated_csfile assembly csfile
+define gb_CliCSharpTarget_add_generated_csfile
+$(call gb_CliCSharpTarget_get_target,$(1)) : CLI_SOURCES += $(call gb_CliCSharpTarget__get_generated_source,$(2))
+$(call gb_CliCSharpTarget_get_target,$(1)) : $(call gb_CliCSharpTarget__get_generated_source,$(2))
+
+endef
+
+# Add generated source files to compile.
+#
+# gb_CliCSharpTarget_add_generated_csfiles assembly csfile(s)
+define gb_CliCSharpTarget_add_generated_csfiles
+$(foreach csfile,$(2),$(call gb_CliCSharpTarget_add_generated_csfile,$(1),$(csfile)))
+
+endef
+
+# Add flags used for compilation.
+# 
+# gb_CliCSharpTarget_add_csflags assembly flags
+define gb_CliCSharpTarget_add_csflags
+$(call gb_CliCSharpTarget_get_target,$(1)) : CLI_CSCFLAGS += $(2)
 
 endef
 
 # CliAssembly class
 
-gb_CliAssembly_KEYFILE_DEFAULT := $(gb_CliAssemblyTarget_KEYFILE_DEFAULT)
-gb_CliAssembly_POLICYEXT := $(gb_CliAssemblyTarget_POLICYEXT)
+# Handles creation of a CLI assembly from C# sources.
 
-gb_CliAssembly_get_dll = $(call gb_CliAssemblyTarget_get_dll,$(1))
+$(dir $(call gb_CliAssembly_get_target,%)).dir :
+	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
+
+$(dir $(call gb_CliAssembly_get_target,%))%/.dir :
+	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
 
 $(call gb_CliAssembly_get_target,%) :
-	$(call gb_Output_announce,$*,$(true),CLA,3)
-	mkdir -p $(dir $@) && touch $@
+	touch $@
 
 .PHONY : $(call gb_CliAssembly_get_clean_target,%)
 $(call gb_CliAssembly_get_clean_target,%) :
-	$(call gb_Output_announce,$*,$(false),CLA,3)
 	rm -f $(call gb_CliAssembly_get_target,$*)
 
+# Create a CLI assembly from C# sources.
+#
+# gb_CliAssembly_CliAssembly assembly
 define gb_CliAssembly_CliAssembly
-$(call gb_CliAssemblyTarget_CliAssemblyTarget,$(1))
-$(call gb_Package_Package_internal,$(1)_assembly,$(WORKDIR))
+$(call gb_CliCSharpTarget_CliCSharpTarget,$(1))
+$(call gb_CliAssemblyTarget_CliAssemblyTarget,$(1),$(call gb_CliCSharpTarget_get_target,$(1)))
 
+$(call gb_CliAssembly_get_target,$(1)) : $(call gb_CliCSharpTarget_get_target,$(1))
 $(call gb_CliAssembly_get_target,$(1)) : $(call gb_CliAssemblyTarget_get_target,$(1))
-$(call gb_CliAssembly_get_target,$(1)) :| $(call gb_Package_get_target,$(1)_assembly)
+$(call gb_CliAssembly_get_target,$(1)) :| $(dir $(call gb_CliAssembly_get_target,$(1))).dir
+$(call gb_CliAssembly_get_clean_target,$(1)) : $(call gb_CliCSharpTarget_get_clean_target,$(1))
 $(call gb_CliAssembly_get_clean_target,$(1)) : $(call gb_CliAssemblyTarget_get_clean_target,$(1))
-$(call gb_CliAssembly_get_clean_target,$(1)) : $(call gb_Package_get_clean_target,$(1)_assembly)
+
+$$(eval $$(call gb_Module_register_target,$(call gb_CliAssembly_get_target,$(1)),$(call gb_CliAssembly_get_clean_target,$(1))))
 
 endef
 
-define gb_CliAssembly__add_file
-$(call gb_Package_add_file,$(1)_assembly,bin/$(notdir $(2)),$(subst $(WORKDIR)/,,$(2)))
-
-endef
-
-define gb_CliAssembly__set_configfile_impl
-$(call gb_CliAssemblyTarget_set_configfile,$(1),$(2))
-$(call gb_CliAssembly__add_file,$(1),$(2))
-
-endef
-
-define gb_CliAssembly__set_configfile
-$(call gb_CliConfigTarget_CliConfigTarget,$(2),$(3))
-$(call gb_CliAssembly__set_configfile_impl,$(1),$(call gb_CliConfigTarget_get_target,$(2)))
-
-endef
-
+# Set the configuration file for the assembly.
+#
+# The file is given by complete path.
+# 
+# gb_CliAssembly_set_configfile assembly configfile
 define gb_CliAssembly_set_configfile
-$(call gb_CliAssembly__set_configfile,$(1),$(patsubst %_config,%,$(2)),$(SRCDIR)/$(2))
+$(call gb_CliAssemblyTarget_set_configfile,$(1),$(2))
 
 endef
 
+# Set the sign key file for the assembly.
+#
+# The file is given by complete path.
+# 
+# gb_CliAssembly_set_keyfile assembly keyfile
 define gb_CliAssembly_set_keyfile
+$(call gb_CliCSharpTarget_get_target,$(1)) : CLI_KEYFILE := $(2)
 $(call gb_CliAssemblyTarget_set_keyfile,$(1),$(2))
 
 endef
 
-define gb_CliAssembly_set_platform
-$(call gb_CliAssemblyTarget_set_platform,$(1),$(2))
+# Set the policy file for the assembly.
+#
+# The file is given by complete path.
+#
+# gb_CliAssembly_set_policy assembly policyfile version
+define gb_CliAssembly_set_policy
+$(call gb_CliAssemblyTarget_set_policy,$(1),$(2),$(3))
 
 endef
 
-define gb_CliAssembly_set_policy
-$(call gb_CliAssemblyTarget_set_version,$(1),$(3))
-$(call gb_CliAssemblyTarget_set_name,$(1),$(2))
-$(call gb_CliAssembly__add_file,$(1),$(call gb_CliAssemblyTarget_get_assembly_target,$(2)))
+# Use another assembly for compilation.
+#
+# gb_CliAssembly_use_assembly assembly dep
+define gb_CliAssembly_use_assembly
+$(call gb_CliCSharpTarget_use_assembly,$(1),$(2))
+
+endef
+
+# Use other assemblies for compilation.
+#
+# gb_CliAssembly_use_assemblies assembly dep(s)
+define gb_CliAssembly_use_assemblies
+$(call gb_CliCSharpTarget_use_assemblies,$(1),$(2))
+
+endef
+
+# Add a C# source file to compile.
+#
+# The file is specified without extension and with path relative to
+# $(SRCDIR).
+#
+# gb_CliAssembly_add_csfile assembly csfile
+define gb_CliAssembly_add_csfile
+$(call gb_CliCSharpTarget_add_csfile,$(1),$(2))
+
+endef
+
+# Add C# source file(s) to compile.
+#
+# The files are specified without extension and with path relative to
+# $(SRCDIR).
+#
+# gb_CliAssembly_add_csfiles assembly csfile(s)
+define gb_CliAssembly_add_csfiles
+$(call gb_CliCSharpTarget_add_csfiles,$(1),$(2))
+
+endef
+
+# Add a generated C# source file to compile.
+#
+# The file is specified without extension and with path relative to
+# $(WORKDIR).
+#
+# gb_CliAssembly_add_generated_csfile assembly csfile
+define gb_CliAssembly_add_generated_csfile
+$(call gb_CliCSharpTarget_add_generated_csfile,$(1),$(2))
+
+endef
+
+# Add generated C# source files to compile
+#
+# The files are specified without extension and with path relative to
+# $(WORKDIR).
+#
+# gb_CliAssembly_add_generated_csfiles assembly csfile(s)
+define gb_CliAssembly_add_generated_csfiles
+$(call gb_CliCSharpTarget_add_generated_csfiles,$(1),$(2))
+
+endef
+
+# Add flags used for compilation.
+#
+# gb_CliAssembly_add_csflags assembly flags
+define gb_CliAssembly_add_csflags
+$(call gb_CliCSharpTarget_add_csflags,$(1),$(2))
 
 endef
 

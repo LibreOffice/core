@@ -42,6 +42,7 @@ $(call gb_CliNativeLibraryTarget_get_clean_target,%) :
 			 $(call gb_CliNativeLibraryTarget_get_external_target,$*) \
 	)
 
+# gb_CliNativeLibraryTarget_CliNativeLibraryTarget target lib
 define gb_CliNativeLibraryTarget_CliNativeLibraryTarget
 $(call gb_CliNativeLibraryTarget_get_target,$(1)) : CLI_NATIVE_ASSEMBLIES := $(gb_Helper_MISCDUMMY)
 $(call gb_CliNativeLibraryTarget_get_target,$(1)) : CLI_NATIVE_KEYFILE :=
@@ -81,11 +82,14 @@ endef
 gb_CliNativeLibrary_PLATFORM_DEFAULT := x86
 gb_CliNativeLibrary_EXT := $(gb_CliNativeLibraryTarget_EXT)
 
+gb_CliNativeLibrary_get_linktargetname = CliNativeLibrary/$(1)
+
 # Create a CLI library for a native library
 #
 # CliNativeLibrary target
 define gb_CliNativeLibrary_CliNativeLibrary
-$(call gb_CliNativeLibraryTarget_CliNativeLibraryTarget,$(1))
+$(call gb_LinkTarget_LinkTarget,$(call gb_CliNativeLibrary_get_linktargetname,$(1)))
+$(call gb_CliNativeLibraryTarget_CliNativeLibraryTarget,$(1),$(call gb_LinkTarget_get_target,$(call gb_CliNativeLibrary_get_linktargetname,$(1))))
 $(call gb_CliAssembly_CliAssembly,$(1))
 
 $(call gb_CliNativeLibraryTarget_set_keyfile,$(1),$(gb_CliAssembly_KEYFILE_DEFAULT))

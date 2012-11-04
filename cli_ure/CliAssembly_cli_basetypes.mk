@@ -9,15 +9,15 @@
 
 include $(SRCDIR)/cli_ure/version/version.txt
 
-$(eval $(call gb_CliLibrary_CliLibrary,cli_basetypes))
+$(eval $(call gb_CliAssembly_CliAssembly,cli_basetypes))
 
-$(eval $(call gb_CliLibrary_set_configfile,cli_basetypes,cli_ure/source/basetypes/cli_basetypes_config))
+$(eval $(call gb_CliAssembly_set_configfile,cli_basetypes,cli_ure/source/basetypes/cli_basetypes_config))
 
-$(eval $(call gb_CliLibrary_set_keyfile,cli_basetypes,$(SRCDIR)/cli_ure/source/cliuno.snk))
+$(eval $(call gb_CliAssembly_set_keyfile,cli_basetypes,$(SRCDIR)/cli_ure/source/cliuno.snk))
 
-$(eval $(call gb_CliLibrary_set_policy,cli_basetypes,$(CLI_BASETYPES_POLICY_ASSEMBLY),$(CLI_BASETYPES_POLICY_VERSION)))
+$(eval $(call gb_CliAssembly_set_policy,cli_basetypes,$(CLI_BASETYPES_POLICY_ASSEMBLY),$(CLI_BASETYPES_POLICY_VERSION)))
 
-$(eval $(call gb_CliLibrary_add_csfiles,cli_basetypes,\
+$(eval $(call gb_CliAssembly_add_csfiles,cli_basetypes,\
     cli_ure/source/basetypes/uno/Any \
     cli_ure/source/basetypes/uno/BoundAttribute \
     cli_ure/source/basetypes/uno/ExceptionAttribute \
@@ -28,7 +28,7 @@ $(eval $(call gb_CliLibrary_add_csfiles,cli_basetypes,\
     cli_ure/source/basetypes/uno/TypeParametersAttribute \
 ))
 
-$(eval $(call gb_CliLibrary_add_generated_csfiles,cli_basetypes,\
+$(eval $(call gb_CliAssembly_add_generated_csfiles,cli_basetypes,\
 	CustomTarget/cli_ure/source/basetypes/assembly \
 ))
 
