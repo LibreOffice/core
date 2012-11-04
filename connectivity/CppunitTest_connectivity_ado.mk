@@ -30,6 +30,12 @@ $(eval $(call gb_CppunitTest_add_cxxflags,connectivity_ado,\
 ))
 endif
 
+ifeq ($(WINDOWS_SDK_VERSION),80)
+$(eval $(call gb_CppunitTest_add_defs,connectivity_ado,\
+	-DNTDDI_VERSION=0x0601 \
+))
+endif
+
 $(eval $(call gb_CppunitTest_add_exception_objects,connectivity_ado, \
 	connectivity/qa/connectivity/ado/DriverTest \
 ))
