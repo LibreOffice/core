@@ -779,36 +779,6 @@ void CondFormatRule::finalizeImport()
                         aAddress = FormulaProcessorBase::generateAddress2dString( mrCondFormat.getRanges().getBaseAddress(), false );
                     aReplaceFormula = aReplaceFormula.replaceAt( nStrPos, 2, aAddress );
                 break;
-                case 'R':       // range list of conditional formatting
-                    if( aRanges.isEmpty() )
-                        aRanges = FormulaProcessorBase::generateRangeList2dString( mrCondFormat.getRanges(), true, ',', true );
-                    aReplaceFormula = aReplaceFormula.replaceAt( nStrPos, 2, aRanges );
-                break;
-                case 'T':       // comparison text
-                    if( aText.isEmpty() )
-                        // quote the comparison text, and handle embedded quote characters
-                        aText = FormulaProcessorBase::generateApiString( maModel.maText );
-                    aReplaceFormula = aReplaceFormula.replaceAt( nStrPos, 2, aText );
-                break;
-                case 'L':       // length of comparison text
-                    aReplaceFormula = aReplaceFormula.replaceAt( nStrPos, 2,
-                        OUString::valueOf( maModel.maText.getLength() ) );
-                break;
-                case 'K':       // top-10 rank
-                    aReplaceFormula = aReplaceFormula.replaceAt( nStrPos, 2,
-                        OUString::valueOf( maModel.mnRank ) );
-                break;
-                case 'M':       // top-10 top/bottom flag
-                    aReplaceFormula = aReplaceFormula.replaceAt( nStrPos, 2,
-                        OUString::valueOf( static_cast< sal_Int32 >( maModel.mbBottom ? 1 : 0 ) ) );
-                break;
-                case 'C':       // average comparison operator
-                    if( aComp.isEmpty() )
-                        aComp = maModel.mbAboveAverage ?
-                            (maModel.mbEqualAverage ? OUString( ">=" ) : OUString( ">" ) ) :
-                            (maModel.mbEqualAverage ? OUString( "<=" ) : OUString( "<" ) );
-                    aReplaceFormula = aReplaceFormula.replaceAt( nStrPos, 2, aComp );
-                break;
                 default:
                     OSL_FAIL( "CondFormatRule::finalizeImport - unknown placeholder" );
             }
