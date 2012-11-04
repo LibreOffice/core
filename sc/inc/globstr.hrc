@@ -608,9 +608,13 @@
 #define STR_COND_BELOW_AVERAGE      483
 #define STR_COND_ERROR              484
 #define STR_COND_NOERROR            485
+#define STR_COND_BEGINS_WITH        486
+#define STR_COND_ENDS_WITH          487
+#define STR_COND_CONTAINS           488
+#define STR_COND_NOT_CONTAINS       489
 
-#define STR_ERR_CONDFORMAT_PROTECTED 486
+#define STR_ERR_CONDFORMAT_PROTECTED 490
 
-#define STR_COUNT                   487
+#define STR_COUNT                   491
 
 #endif

@@ -76,6 +76,14 @@ rtl::OUString getExpression(sal_Int32 nIndex)
             return ScGlobal::GetRscString(STR_COND_ERROR);
         case 18:
             return ScGlobal::GetRscString(STR_COND_NOERROR);
+        case 19:
+            return ScGlobal::GetRscString(STR_COND_BEGINS_WITH);
+        case 20:
+            return ScGlobal::GetRscString(STR_COND_ENDS_WITH);
+        case 21:
+            return ScGlobal::GetRscString(STR_COND_CONTAINS);
+        case 22:
+            return ScGlobal::GetRscString(STR_COND_NOT_CONTAINS);
     }
     return rtl::OUString();
 }
@@ -111,7 +119,7 @@ rtl::OUString ScCondFormatHelper::GetExpression(const ScConditionalFormat& rForm
                             aBuffer.append(rtl::OUString(" and "));
                             aBuffer.append(pEntry->GetExpression(rPos, 1));
                         }
-                        else if(eMode <= SC_COND_NOTEQUAL)
+                        else if(eMode <= SC_COND_NOTEQUAL || eMode >= SC_COND_BEGINS_WITH)
                         {
                             aBuffer.append(pEntry->GetExpression(rPos, 0));
                         }
@@ -141,7 +149,7 @@ rtl::OUString ScCondFormatHelper::GetExpression( ScCondFormatEntryType eType, sa
     if(eType == CONDITION)
     {
         aBuffer.append(getExpression(nIndex));
-        if(nIndex <= 7)
+        if(nIndex <= 7 || nIndex >= 19)
         {
             aBuffer.append(" ").append(aStr1);
             if(nIndex == 6 || nIndex == 7)

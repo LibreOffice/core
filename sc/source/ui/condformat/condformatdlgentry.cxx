@@ -227,6 +227,18 @@ ScConditionFrmtEntry::ScConditionFrmtEntry( Window* pParent, ScDocument* pDoc, c
                 maEdVal1.Hide();
                 maLbCondType.SelectEntryPos(17);
                 break;
+            case SC_COND_BEGINS_WITH:
+                maLbCondType.SelectEntryPos(18);
+                break;
+            case SC_COND_ENDS_WITH:
+                maLbCondType.SelectEntryPos(19);
+                break;
+            case SC_COND_CONTAINS_TEXT:
+                maLbCondType.SelectEntryPos(20);
+                break;
+            case SC_COND_NOT_CONTAINS_TEXT:
+                maLbCondType.SelectEntryPos(21);
+                break;
             case SC_COND_NONE:
                 break;
         }
@@ -330,6 +342,18 @@ ScFormatEntry* ScConditionFrmtEntry::createConditionEntry() const
             break;
         case 17:
             eMode = SC_COND_NOERROR;
+            break;
+        case 18:
+            eMode = SC_COND_BEGINS_WITH;
+            break;
+        case 19:
+            eMode = SC_COND_ENDS_WITH;
+            break;
+        case 20:
+            eMode = SC_COND_CONTAINS_TEXT;
+            break;
+        case 21:
+            eMode = SC_COND_NOT_CONTAINS_TEXT;
             break;
         default:
             assert(false); // this cannot happen
@@ -977,7 +1001,8 @@ IMPL_LINK_NOARG( ScConditionFrmtEntry, ConditionTypeSelectHdl )
         maEdVal2.Hide();
         maEdVal1.Hide();
     }
-    else if(nSelectPos < 6 || (nSelectPos >= 10 && nSelectPos <= 13))
+    else if(nSelectPos <= 5 || (nSelectPos >= 10 && nSelectPos <= 13)
+            || nSelectPos >= 18)
     {
         maEdVal1.Show();
         maEdVal2.Hide();

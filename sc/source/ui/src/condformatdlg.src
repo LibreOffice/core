@@ -149,6 +149,10 @@ Control RID_COND_ENTRY
             "below average";
             "Error";
             "No Error";
+            "Begins with";
+            "Ends with";
+            "Contains";
+            "Not Contains";
         };
     };
     Edit ED_VAL1

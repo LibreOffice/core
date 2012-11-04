@@ -1931,6 +1931,22 @@ Resource RID_GLOBSTR
     {
         Text [ en-US ] = "not an Error code";
     };
+    String STR_COND_BEGINS_WITH
+    {
+        Text [ en-US ] = "Begins with";
+    };
+    String STR_COND_ENDS_WITH
+    {
+        Text [ en-US ] = "Ends with";
+    };
+    String STR_COND_CONTAINS
+    {
+        Text [ en-US ] = "Contains";
+    };
+    String STR_COND_NOT_CONTAINS
+    {
+        Text [ en-US ] = "Not Contains";
+    };
     String STR_ERR_CONDFORMAT_PROTECTED
     {
         Text [ en-US ] = "Conditional Formats can not be created, deleted or changed in protected sheets!";
