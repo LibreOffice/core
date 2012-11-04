@@ -27,7 +27,6 @@ else ifeq ($(DISABLE_DYNLOADING),TRUE)
 $(eval $(call gb_ExternalPackage_add_files,lpsolve,lib,lpsolve55/liblpsolve55.a))
 else
 $(eval $(call gb_ExternalPackage_add_files,lpsolve,lib,lpsolve55/liblpsolve55.so))
-endif # $(DISABLE_DYNLOADING)
 endif # $(OS)
 
 endif # $(GUI)
