@@ -167,7 +167,7 @@ namespace editeng
         virtual void    GetNextPortion(
                 ::rtl::OUString& /* [out] */ _rNextPortion,
                 LanguageType& /* [out] */ _rLangOfPortion,
-                sal_Bool /* [in] */ _bAllowImplicitChangesForNotConvertibleText );
+                sal_Bool /* [in] */ _bAllowImplicitChangesForNotConvertibleText ) = 0;
 
         /** announces a new "current unit"
 
@@ -197,7 +197,7 @@ namespace editeng
 
             @see GetNextPortion
         */
-        virtual void    HandleNewUnit( const sal_Int32 _nUnitStart, const sal_Int32 _nUnitEnd );
+        virtual void    HandleNewUnit( const sal_Int32 _nUnitStart, const sal_Int32 _nUnitEnd ) = 0;
 
         /** replaces a text unit within a text portion with a new text
 
@@ -263,7 +263,7 @@ namespace editeng
                             const ::com::sun::star::uno::Sequence< sal_Int32 > &_rOffsets,
                             ReplacementAction _eAction,
                             LanguageType *pNewUnitLanguage
-                        );
+                        ) = 0;
 
         /** specifies if rubies are supported by the document implementing
             this class.
@@ -271,7 +271,7 @@ namespace editeng
             @return
                 <TRUE/> if rubies are supported.
         */
-        virtual sal_Bool    HasRubySupport() const;
+        virtual sal_Bool    HasRubySupport() const = 0;
     };
 
     sal_Bool HangulHanjaConversion::IsSimplified( LanguageType nLang )

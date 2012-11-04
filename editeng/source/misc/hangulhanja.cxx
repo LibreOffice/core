@@ -1036,33 +1036,6 @@ namespace editeng
         return m_pImpl->IsInteractive();
     }
 
-    void HangulHanjaConversion::HandleNewUnit( const sal_Int32, const sal_Int32 )
-    {
-        // nothing to do, only derived classes need this.
-    }
-
-    void HangulHanjaConversion::GetNextPortion( ::rtl::OUString&, LanguageType&, sal_Bool )
-    {
-        OSL_FAIL( "HangulHanjaConversion::GetNextPortion: to be overridden!" );
-    }
-
-    void HangulHanjaConversion::ReplaceUnit(
-            const sal_Int32, const sal_Int32,
-            const ::rtl::OUString&,
-            const ::rtl::OUString&,
-            const ::com::sun::star::uno::Sequence< sal_Int32 > &,
-            ReplacementAction,
-            LanguageType * )
-    {
-        OSL_FAIL( "HangulHanjaConversion::ReplaceUnit: to be overridden!" );
-    }
-
-    sal_Bool HangulHanjaConversion::HasRubySupport() const
-    {
-        OSL_FAIL( "HangulHanjaConversion::HasRubySupport: to be overridden!" );
-        return sal_False;
-    }
-
     void HangulHanjaConversion::ConvertDocument()
     {
         if ( m_pImpl->IsValid() )
