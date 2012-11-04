@@ -878,6 +878,7 @@ gb_LinkTarget__use_graphite :=
 
 endif # SYSTEM_GRAPHITE
 
+
 ifeq ($(SYSTEM_ICU),YES)
 
 define gb_LinkTarget__use_icudata
@@ -909,7 +910,7 @@ else
 gb_ICU_suffix:=
 endif
 
-# icudata and icui18n is called icudt and icuin when built with MSVC :-/
+# icudata and icui18n is called icudt and icuin when built with MSVC :-(
 ifeq ($(OS)$(COM),WNTMSC)
 $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
 	icudt \
@@ -1218,7 +1219,7 @@ ifeq ($(SYSTEM_LCMS2),YES)
 define gb_LinkTarget__use_lcms2
 $(call gb_LinkTarget_set_include,$(1),\
 	$$(INCLUDE) \
-	$(LCMS2_CFLAGS) \
+    $(LCMS2_CFLAGS) \
 )
 $(call gb_LinkTarget_add_libs,$(1),$(LCMS2_LIBS))
 
@@ -1233,9 +1234,8 @@ $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
 ))
 
 define gb_LinkTarget__use_lcms2
-$(call gb_LinkTarget_use_external_project,$(1),lcms2)
 $(call gb_LinkTarget_set_include,$(1),\
-	-I$(call gb_UnpackedTarball_get_dir,lcms2/include) \
+	-I$(OUTDIR)/inc/lcms2 \
 	$$(INCLUDE) \
 )
 $(call gb_LinkTarget_use_static_libraries,$(1),\
@@ -1251,17 +1251,13 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
 ))
 
 define gb_LinkTarget__use_lcms2
-$(call gb_LinkTarget_use_external_project,$(1),lcms2)
 $(call gb_LinkTarget_set_include,$(1),\
-	-I$(call gb_UnpackedTarball_get_dir,lcms2/include) \
+	-I$(OUTDIR)/inc/lcms2 \
 	$$(INCLUDE) \
 )
-$(call gb_LinkTarget_add_libs,$(1),$(LCMS2_LIBS))
-
-endef
-
-define gb_ExternalProject__use_lcms2
-$(call gb_ExternalProject_use_package,$(1),lcms2)
+$(call gb_LinkTarget_use_libraries,$(1),\
+	lcms2 \
+)
 
 endef
 
@@ -1271,11 +1267,8 @@ endif # SYSTEM_LCMS2
 
 ifeq ($(SYSTEM_LPSOLVE),YES)
 
-define gb_LinkTarget__use_lpsolve
+define gb_LinkTarget__use_lpsolve55
 $(call gb_LinkTarget_add_libs,$(1),-llpsolve55)
-$(call gb_LinkTarget_add_defs,$(1),\
-	-DSYSTEM_LPSOLVE \
-))
 
 endef
 
@@ -1285,13 +1278,9 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
 	lpsolve55 \
 ))
 
-define gb_LinkTarget__use_lpsolve
+define gb_LinkTarget__use_lpsolve55
 $(call gb_LinkTarget_use_libraries,$(1),\
 	lpsolve55 \
-)
-$(call gb_LinkTarget_set_include,$(1),\
-	-I$(call gb_UnpackedTarball_get_dir,lpsolve) \
-	$$(INCLUDE) \
 )
 
 endef

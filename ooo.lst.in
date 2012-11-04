@@ -4,6 +4,7 @@ c63f411b3ad147db2bcce1bf262a0e02-pixman-0.24.4.tar.bz2
 6097739c841f671cb21332b9cc593ae7-libexttextcat-3.3.1.tar.bz2
 18f577b374d60b3c760a3a3350407632-STLport-4.5.tar.gz
 1f24ab1d39f4a51faf22244c94a6203f-xmlsec1-1.2.14.tar.gz
+26b3e95ddf3d9c077c480ea45874b3b8-lp_solve_5.5.tar.gz
 284e768eeda0e2898b0d5bf7e26a016e-raptor-1.4.18.tar.gz
 35c94d2df8893241173de1d16b6034c0-swingExSrc.zip
 4a660ce8466c9df01f19036435425c3a-glibc-2.1.3-stub.tar.gz
@@ -31,6 +32,7 @@ a7d6c5f2fe2d481149ed3ba807b5c043-gdk-pixbuf-2.23.0.tar.gz
 7c53f83e0327343f4060c0eb83842daf-icu4c-49_1_1-src.tgz
 0f63ee487fda8f21fafa767b3c447ac9-ixion-0.2.0.tar.gz
 a0a861f539f0e7a91d05e6b9457e4db1-nss-3.13.5-with-nspr-4.9.1.tar.gz
+861ef15fa0bc018f9ddc932c4ad8b6dd-lcms2-2.4.tar.gz
 fa6a2f85bd28baab035b2c95e722713f-liblangtag-0.2.tar.bz2
 @AFMS_TARBALL@
 @APACHE_COMMONS_CODEC_TARBALL@
@@ -71,9 +73,7 @@ fa6a2f85bd28baab035b2c95e722713f-liblangtag-0.2.tar.bz2
 @JFREEREPORT_SAC_TARBALL@
 @JPEG_TARBALL@
 @LANGUAGETOOL_TARBALL@
-@LCMS2_TARBALL@
 @LIBRSVG_TARBALL@
-@LPSOLVE_TARBALL@
 @MDDS_TARBALL@
 @MOZ_TARBALL@
 @MSPUB_TARBALL@

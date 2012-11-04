@@ -102,7 +102,6 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
 	jvmfwk \
 	$(call gb_Helper_optional,DESKTOP,l10ntools) \
 	$(call gb_Helper_optional,LANGUAGETOOL,languagetool) \
-	$(call gb_Helper_optional,LCMS2,lcms2) \
 	libcdr \
 	libcmis \
 	libmspub \
@@ -116,7 +115,6 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
 	lingucomponent \
 	linguistic \
 	lotuswordpro \
-	$(call gb_Helper_optional,LPSOLVE,lpsolve) \
 	MathMLDTD \
 	mdds \
 	Mesa \

@@ -94,7 +94,6 @@ $(eval $(call gb_Module_add_moduledirs,tail_end,\
 	jvmaccess \
 	jvmfwk \
 	$(call gb_Helper_optional,LANGUAGETOOL,languagetool) \
-	$(call gb_Helper_optional,LCMS2,lcms2) \
 	libcdr \
 	libcmis \
 	libmspub \
@@ -107,7 +106,6 @@ $(eval $(call gb_Module_add_moduledirs,tail_end,\
 	lingucomponent \
 	linguistic \
 	lotuswordpro \
-	$(call gb_Helper_optional,LPSOLVE,lpsolve) \
 	$(call gb_Helper_optional,DESKTOP,l10ntools) \
 	MathMLDTD \
 	mdds \

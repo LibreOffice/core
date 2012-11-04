@@ -7042,17 +7042,15 @@ if test "$with_system_lcms2" = "yes"; then
 else
     AC_MSG_RESULT([internal])
     SYSTEM_LCMS2=NO
+    BUILD_TYPE="$BUILD_TYPE LCMS2"
     LCMS2_CFLAGS="-I${OUTDIR}/inc/lcms2"
     if test $_os = Darwin; then
         LCMS2_CFLAGS="$LCMS2_CFLAGS -Wno-long-long"
     fi
     LCMS2_LIBS="-L${OUTDIR}/lib -llcms2"
-    LCMS2_TARBALL="861ef15fa0bc018f9ddc932c4ad8b6dd-lcms2-2.4.tar.gz"
-    BUILD_TYPE="$BUILD_TYPE LCMS2"
 fi
 AC_SUBST(SYSTEM_LCMS2)
 AC_SUBST(LCMS2_CFLAGS)
-AC_SUBST(LCMS2_TARBALL)
 AC_SUBST(LCMS2_LIBS)
 AC_SUBST([MINGW_LCMS2_DLL])
 
@@ -8957,11 +8955,9 @@ if test "$with_system_lpsolve" = "yes"; then
 else
     AC_MSG_RESULT([internal])
     SYSTEM_LPSOLVE=NO
-    LPSOLVE_TARBALL="26b3e95ddf3d9c077c480ea45874b3b8-lp_solve_5.5.tar.gz"
     BUILD_TYPE="$BUILD_TYPE LPSOLVE"
 fi
 AC_SUBST(SYSTEM_LPSOLVE)
-AC_SUBST(LPSOLVE_TARBALL)
 AC_SUBST([MINGW_LPSOLVE_DLL])
 
 dnl ===================================================================
