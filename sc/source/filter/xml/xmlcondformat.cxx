@@ -441,6 +441,38 @@ void GetConditionData(const rtl::OUString& rValue, ScConditionMode& eMode, rtl::
     {
         eMode = SC_COND_NOERROR;
     }
+    else if(rValue.indexOf("begins-with") == 0)
+    {
+        eMode = SC_COND_BEGINS_WITH;
+        const sal_Unicode* pStr = rValue.getStr();
+        const sal_Unicode* pStart = pStr + 12;
+        const sal_Unicode* pEnd = pStr + rValue.getLength();
+        rExpr1 = ScXMLConditionHelper::getExpression( pStart, pEnd, ')');
+    }
+    else if(rValue.indexOf("ends-with") == 0)
+    {
+        eMode = SC_COND_ENDS_WITH;
+        const sal_Unicode* pStr = rValue.getStr();
+        const sal_Unicode* pStart = pStr + 10;
+        const sal_Unicode* pEnd = pStr + rValue.getLength();
+        rExpr1 = ScXMLConditionHelper::getExpression( pStart, pEnd, ')');
+    }
+    else if(rValue.indexOf("contains-text") == 0)
+    {
+        eMode = SC_COND_CONTAINS_TEXT;
+        const sal_Unicode* pStr = rValue.getStr();
+        const sal_Unicode* pStart = pStr + 14;
+        const sal_Unicode* pEnd = pStr + rValue.getLength();
+        rExpr1 = ScXMLConditionHelper::getExpression( pStart, pEnd, ')');
+    }
+    else if(rValue.indexOf("not-contains-text") == 0)
+    {
+        eMode = SC_COND_NOT_CONTAINS_TEXT;
+        const sal_Unicode* pStr = rValue.getStr();
+        const sal_Unicode* pStart = pStr + 18;
+        const sal_Unicode* pEnd = pStr + rValue.getLength();
+        rExpr1 = ScXMLConditionHelper::getExpression( pStart, pEnd, ')');
+    }
     else
         eMode = SC_COND_NONE;
 }
