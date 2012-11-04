@@ -773,7 +773,6 @@ String SwNumRule::MakeRefNumString( const SwNodeNum& rNodeNum,
                 String aPrevStr = MakeNumString( pWorkingNodeNum->GetNumberVector(),
                                                  sal_True, sal_False, MAXLEVEL,
                                                  &aExtremities);
-                int        nLen = aPrevStr.Len();
                 int        nStrip = 0;
                 sal_Unicode        c;
 
@@ -789,7 +788,6 @@ String SwNumRule::MakeRefNumString( const SwNodeNum& rNodeNum,
                 {
                     aPrevStr.Erase( 0, nStrip );
                     aExtremities.nPrefixChars -= nStrip;
-                    nLen -= nStrip;
                 }
 
                 if ((bFirstIteration || bOldHadPrefix) &&

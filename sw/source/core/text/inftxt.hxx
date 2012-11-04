@@ -404,7 +404,8 @@ protected:
     SwTxtPaintInfo() { pFrm = 0; pWrongList = 0; pGrammarCheckList = 0; pSmartTags = 0; pSpaceAdd = 0;
                        pBrushItem = ((SvxBrushItem*)-1);}
 #else
-    SwTxtPaintInfo() { pFrm = 0; pWrongList = 0; pGrammarCheckList = 0; pWrongList = 0; pSmartTags = 0; pSpaceAdd = 0; pBrushItem = 0;}
+    SwTxtPaintInfo() { pFrm = 0; pWrongList = 0; pGrammarCheckList = 0; pSmartTags = 0; pSpaceAdd = 0;
+                       pBrushItem = 0;}
 #endif
 public:
     SwTxtPaintInfo( const SwTxtPaintInfo &rInf );
