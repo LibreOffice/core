@@ -676,20 +676,20 @@ void CondFormatRule::finalizeImport()
         break;
         case XML_containsText:
             OSL_ENSURE( maModel.mnOperator == XML_containsText, "CondFormatRule::finalizeImport - unexpected operator" );
-            aReplaceFormula = "NOT(ISERROR(SEARCH(#T,#B)))";
+            eOperator = SC_COND_CONTAINS_TEXT;
         break;
         case XML_notContainsText:
             // note: type XML_notContainsText vs. operator XML_notContains
             OSL_ENSURE( maModel.mnOperator == XML_notContains, "CondFormatRule::finalizeImport - unexpected operator" );
-            aReplaceFormula = "ISERROR(SEARCH(#T,#B))";
+            eOperator = SC_COND_NOT_CONTAINS_TEXT;
         break;
         case XML_beginsWith:
             OSL_ENSURE( maModel.mnOperator == XML_beginsWith, "CondFormatRule::finalizeImport - unexpected operator" );
-            aReplaceFormula = "LEFT(#B,#L)=#T";
+            eOperator = SC_COND_BEGINS_WITH;
         break;
         case XML_endsWith:
             OSL_ENSURE( maModel.mnOperator == XML_endsWith, "CondFormatRule::finalizeImport - unexpected operator" );
-            aReplaceFormula = "RIGHT(#B,#L)=#T";
+            eOperator = SC_COND_ENDS_WITH;
         break;
         case XML_timePeriod:
             switch( maModel.mnTimePeriod )
@@ -829,6 +829,16 @@ void CondFormatRule::finalizeImport()
         ScDocument& rDoc = getScDocument();
         OUString aStyleName = getStyles().createDxfStyle( maModel.mnDxfId );
         ScCondFormatEntry* pNewEntry = new ScCondFormatEntry( eOperator, NULL, NULL, &rDoc, aPos, aStyleName );
+        mpFormat->AddEntry(pNewEntry);
+    }
+    else if( eOperator == SC_COND_BEGINS_WITH || eOperator == SC_COND_ENDS_WITH ||
+            eOperator == SC_COND_CONTAINS_TEXT || eOperator == SC_COND_NOT_CONTAINS_TEXT )
+    {
+        ScDocument& rDoc = getScDocument();
+        ScTokenArray aTokenArray;
+        aTokenArray.AddString(maModel.maText);
+        OUString aStyleName = getStyles().createDxfStyle( maModel.mnDxfId );
+        ScCondFormatEntry* pNewEntry = new ScCondFormatEntry( eOperator, &aTokenArray, NULL, &rDoc, aPos, aStyleName );
         mpFormat->AddEntry(pNewEntry);
     }
     else if( (eOperator != SC_COND_NONE) && !maModel.maFormulas.empty() )
