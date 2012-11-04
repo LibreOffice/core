@@ -3914,6 +3914,26 @@ void ScXMLExport::ExportConditionalFormat(SCTAB nTab)
                             case SC_COND_NOERROR:
                                 aCond.append("is-no-error");
                                 break;
+                            case SC_COND_BEGINS_WITH:
+                                aCond.append("begins-with(");
+                                aCond.append(pEntry->GetExpression(aPos, 0, 0, formula::FormulaGrammar::GRAM_ODFF));
+                                aCond.append(")");
+                                break;
+                            case SC_COND_ENDS_WITH:
+                                aCond.append("ends-with(");
+                                aCond.append(pEntry->GetExpression(aPos, 0, 0, formula::FormulaGrammar::GRAM_ODFF));
+                                aCond.append(")");
+                                break;
+                            case SC_COND_CONTAINS_TEXT:
+                                aCond.append("contains-text(");
+                                aCond.append(pEntry->GetExpression(aPos, 0, 0, formula::FormulaGrammar::GRAM_ODFF));
+                                aCond.append(")");
+                                break;
+                            case SC_COND_NOT_CONTAINS_TEXT:
+                                aCond.append("not-contains-text(");
+                                aCond.append(pEntry->GetExpression(aPos, 0, 0, formula::FormulaGrammar::GRAM_ODFF));
+                                aCond.append(")");
+                                break;
                             case SC_COND_NONE:
                                 continue;
                             default:
