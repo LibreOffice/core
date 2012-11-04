@@ -688,11 +688,11 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
                 static_cast<OWeakObject *>(this), static_cast<sal_Int16>(-1) );
     }
 
-    String type, subType;
+    OUString type, subType;
     INetContentTypeParameterList params;
     if (INetContentTypes::parse( mediaType, type, subType, &params ))
     {
-        if (type.EqualsIgnoreCaseAscii("application"))
+        if (type.equalsIgnoreAsciiCaseAscii("application"))
         {
             OUString name;
             if (!bRemoved)
@@ -701,7 +701,7 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
                 name = StrTitle::getTitle( ucbContent );
             }
 
-            if (subType.EqualsIgnoreCaseAscii("vnd.sun.star.uno-component"))
+            if (subType.equalsIgnoreAsciiCaseAscii("vnd.sun.star.uno-component"))
             {
                 // xxx todo: probe and evaluate component xml description
 
@@ -747,7 +747,7 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
                     }
                 }
             }
-            else if (subType.EqualsIgnoreCaseAscii(
+            else if (subType.equalsIgnoreAsciiCaseAscii(
                          "vnd.sun.star.uno-components"))
             {
                 INetContentTypeParameter const * param = params.find(
@@ -758,20 +758,20 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
                         identifier);
                 }
             }
-            else if (subType.EqualsIgnoreCaseAscii(
+            else if (subType.equalsIgnoreAsciiCaseAscii(
                          "vnd.sun.star.uno-typelibrary"))
             {
                 INetContentTypeParameter const * param = params.find(
                     rtl::OString(RTL_CONSTASCII_STRINGPARAM("type")));
                 if (param != 0) {
-                    String const & value = param->m_sValue;
-                    if (value.EqualsIgnoreCaseAscii("RDB"))
+                    OUString const & value = param->m_sValue;
+                    if (value.equalsIgnoreAsciiCaseAscii("RDB"))
                     {
                         return new BackendImpl::TypelibraryPackageImpl(
                             this, url, name, m_xRDBTypelibTypeInfo,
                             false /* rdb */, bRemoved, identifier);
                     }
-                    if (value.EqualsIgnoreCaseAscii("Java")) {
+                    if (value.equalsIgnoreAsciiCaseAscii("Java")) {
                         return new BackendImpl::TypelibraryPackageImpl(
                             this, url, name, m_xJavaTypelibTypeInfo,
                             true /* jar */, bRemoved, identifier);

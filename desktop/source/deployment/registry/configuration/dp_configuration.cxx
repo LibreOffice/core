@@ -339,11 +339,11 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
                 static_cast<OWeakObject *>(this), static_cast<sal_Int16>(-1) );
     }
 
-    String type, subType;
+    OUString type, subType;
     INetContentTypeParameterList params;
     if (INetContentTypes::parse( mediaType, type, subType, &params ))
     {
-        if (type.EqualsIgnoreCaseAscii("application"))
+        if (type.equalsIgnoreAsciiCaseAscii("application"))
         {
             OUString name;
             if (!bRemoved)
@@ -353,14 +353,14 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
             }
 
             ::ucbhelper::Content ucbContent( url, xCmdEnv, m_xComponentContext );
-            if (subType.EqualsIgnoreCaseAscii(
+            if (subType.equalsIgnoreAsciiCaseAscii(
                     "vnd.sun.star.configuration-data"))
             {
                 return new PackageImpl(
                     this, url, name, m_xConfDataTypeInfo, false /* data file */,
                     bRemoved, identifier);
             }
-            else if (subType.EqualsIgnoreCaseAscii(
+            else if (subType.equalsIgnoreAsciiCaseAscii(
                          "vnd.sun.star.configuration-schema")) {
                 return new PackageImpl(
                     this, url, name, m_xConfSchemaTypeInfo, true /* schema file */,

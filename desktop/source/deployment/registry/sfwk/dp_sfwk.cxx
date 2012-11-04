@@ -228,13 +228,13 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
                 static_cast<OWeakObject *>(this), static_cast<sal_Int16>(-1) );
     }
 
-    String type, subType;
+    OUString type, subType;
     INetContentTypeParameterList params;
     if (INetContentTypes::parse( mediaType, type, subType, &params ))
     {
-        if (type.EqualsIgnoreCaseAscii("application"))
+        if (type.equalsIgnoreAsciiCaseAscii("application"))
         {
-            if (subType.EqualsIgnoreCaseAscii("vnd.sun.star.framework-script"))
+            if (subType.equalsIgnoreAsciiCaseAscii("vnd.sun.star.framework-script"))
             {
                 OUString lang = OUString("Script");
                 OUString sParcelDescURL = makeURL(

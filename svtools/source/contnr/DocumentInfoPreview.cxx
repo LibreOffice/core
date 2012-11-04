@@ -103,7 +103,7 @@ void ODocumentInfoPreview::fill(
         insertNonempty(
             DI_MIMETYPE,
             (eTypeID == CONTENT_TYPE_APP_OCTSTREAM
-             ? SvFileInformationManager::GetDescription(INetURLObject(rURL))
+             ? OUString(SvFileInformationManager::GetDescription(INetURLObject(rURL)))
              : INetContentTypes::GetPresentation(eTypeID, m_aLocale)));
     }
 

@@ -256,28 +256,28 @@ enum INetContentType
 class SVL_DLLPUBLIC INetContentTypes
 {
 public:
-    static INetContentType RegisterContentType(UniString const & rTypeName,
-                                               UniString const &
+    static INetContentType RegisterContentType(OUString const & rTypeName,
+                                               OUString const &
                                                    rPresentation,
-                                               UniString const * pExtension
+                                               OUString const * pExtension
                                                    = 0,
-                                               UniString const *
+                                               OUString const *
                                                    pSystemFileType = 0);
 
-    static INetContentType GetContentType(UniString const & rTypeName);
+    static INetContentType GetContentType(OUString const & rTypeName);
 
     static rtl::OUString GetContentType(INetContentType eTypeID);
 
-    static UniString GetPresentation(INetContentType eTypeID,
+    static OUString GetPresentation(INetContentType eTypeID,
                                      const ::com::sun::star::lang::Locale& aLocale);
 
-    static INetContentType GetContentType4Extension(UniString const &
+    static INetContentType GetContentType4Extension(OUString const &
                                                         rExtension);
 
-    static INetContentType GetContentTypeFromURL(UniString const & rURL);
+    static INetContentType GetContentTypeFromURL(OUString const & rURL);
 
-    static bool GetExtensionFromURL(UniString const & rURL,
-                                    UniString & rExtension);
+    static bool GetExtensionFromURL(OUString const & rURL,
+                                    OUString & rExtension);
 
     /** Parse the body of an RFC 2045 Content-Type header field.
 
@@ -306,8 +306,8 @@ public:
         @return  True if the syntax of the field body is correct.  If false is
         returned, none of the output parameters will be modified!
      */
-    static bool parse(UniString const & rMediaType, UniString & rType,
-                      UniString & rSubType,
+    static bool parse(OUString const & rMediaType, OUString & rType,
+                      OUString & rSubType,
                       INetContentTypeParameterList * pParameters = 0);
 };
 

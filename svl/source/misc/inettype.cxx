@@ -40,15 +40,15 @@ struct MediaTypeEntry
 //============================================================================
 struct TypeIDMapEntry
 {
-    UniString m_aTypeName;
-    UniString m_aPresentation;
-    UniString m_aSystemFileType;
+    OUString m_aTypeName;
+    OUString m_aPresentation;
+    OUString m_aSystemFileType;
 };
 
 //============================================================================
 struct TypeNameMapEntry
 {
-    UniString m_aExtension;
+    OUString m_aExtension;
     INetContentType m_eTypeID;
 
     TypeNameMapEntry():
@@ -67,8 +67,8 @@ struct ExtensionMapEntry
 //============================================================================
 class Registration
 {
-    typedef boost::ptr_map<UniString, TypeNameMapEntry>  TypeNameMap;
-    typedef boost::ptr_map<UniString, ExtensionMapEntry> ExtensionMap;
+    typedef boost::ptr_map<OUString, TypeNameMapEntry>  TypeNameMap;
+    typedef boost::ptr_map<OUString, ExtensionMapEntry> ExtensionMap;
     typedef std::map<INetContentType, TypeIDMapEntry*>   TypeIDMap;
 
     TypeIDMap    m_aTypeIDMap;    // map ContentType to TypeID
@@ -83,22 +83,22 @@ public:
 public:
     static inline TypeIDMapEntry * getEntry(INetContentType eTypeID);
 
-    static TypeNameMapEntry * getExtensionEntry(UniString const & rTypeName);
+    static TypeNameMapEntry * getExtensionEntry(OUString const & rTypeName);
 
-    static INetContentType RegisterContentType(UniString const & rTypeName,
-                                               UniString const &
+    static INetContentType RegisterContentType(OUString const & rTypeName,
+                                               OUString const &
                                                    rPresentation,
-                                               UniString const * pExtension,
-                                               UniString const *
+                                               OUString const * pExtension,
+                                               OUString const *
                                                    pSystemFileType);
 
-    static INetContentType GetContentType(UniString const & rTypeName);
+    static INetContentType GetContentType(OUString const & rTypeName);
 
     static rtl::OUString GetContentType(INetContentType eTypeID);
 
-    static UniString GetPresentation(INetContentType eTypeID);
+    static OUString GetPresentation(INetContentType eTypeID);
 
-    static INetContentType GetContentType4Extension(UniString const &
+    static INetContentType GetContentType4Extension(OUString const &
                                                         rExtension);
 
 };
@@ -122,7 +122,7 @@ inline TypeIDMapEntry * Registration::getEntry(INetContentType eTypeID)
 }
 
 //============================================================================
-MediaTypeEntry const * seekEntry(UniString const & rTypeName,
+MediaTypeEntry const * seekEntry(OUString const & rTypeName,
                                  MediaTypeEntry const * pMap, sal_Size nSize);
 
 //============================================================================
@@ -522,11 +522,10 @@ Registration::~Registration()
 
 //============================================================================
 // static
-TypeNameMapEntry * Registration::getExtensionEntry(UniString const &
+TypeNameMapEntry * Registration::getExtensionEntry(OUString const &
                                                        rTypeName)
 {
-    UniString aTheTypeName = rTypeName;
-    aTheTypeName.ToLowerAscii();
+    OUString aTheTypeName = rTypeName.toAsciiLowerCase();
     Registration &rRegistration = theRegistration::get();
     TypeNameMap::iterator it = rRegistration.m_aTypeNameMap.find(aTheTypeName);
     if (it != rRegistration.m_aTypeNameMap.end())
@@ -536,12 +535,12 @@ TypeNameMapEntry * Registration::getExtensionEntry(UniString const &
 
 //============================================================================
 // static
-INetContentType Registration::RegisterContentType(UniString const & rTypeName,
-                                                  UniString const &
+INetContentType Registration::RegisterContentType(OUString const & rTypeName,
+                                                  OUString const &
                                                       rPresentation,
-                                                  UniString const *
+                                                  OUString const *
                                                       pExtension,
-                                                  UniString const *
+                                                  OUString const *
                                                       pSystemFileType)
 {
     Registration &rRegistration = theRegistration::get();
@@ -551,8 +550,7 @@ INetContentType Registration::RegisterContentType(UniString const & rTypeName,
 
     INetContentType eTypeID
         = INetContentType(rRegistration.m_nNextDynamicID++);
-    UniString aTheTypeName = rTypeName;
-    aTheTypeName.ToLowerAscii();
+    OUString aTheTypeName = rTypeName.toAsciiLowerCase();
 
     TypeIDMapEntry * pTypeIDMapEntry = new TypeIDMapEntry;
     pTypeIDMapEntry->m_aTypeName = aTheTypeName;
@@ -579,12 +577,11 @@ INetContentType Registration::RegisterContentType(UniString const & rTypeName,
 
 //============================================================================
 // static
-INetContentType Registration::GetContentType(UniString const & rTypeName)
+INetContentType Registration::GetContentType(OUString const & rTypeName)
 {
     Registration &rRegistration = theRegistration::get();
 
-    UniString aTheTypeName = rTypeName;
-    aTheTypeName.ToLowerAscii();
+    OUString aTheTypeName = rTypeName.toAsciiLowerCase();
     TypeNameMap::iterator it = rRegistration.m_aTypeNameMap.find(aTheTypeName);
     return it != rRegistration.m_aTypeNameMap.end()
         ? it->second->m_eTypeID
@@ -605,7 +602,7 @@ rtl::OUString Registration::GetContentType(INetContentType eTypeID)
 
 //============================================================================
 // static
-UniString Registration::GetPresentation(INetContentType eTypeID)
+OUString Registration::GetPresentation(INetContentType eTypeID)
 {
     Registration &rRegistration = theRegistration::get();
 
@@ -613,12 +610,12 @@ UniString Registration::GetPresentation(INetContentType eTypeID)
     if( pEntry != rRegistration.m_aTypeIDMap.end() )
         return pEntry->second->m_aPresentation;
     else
-        return  UniString();
+        return  OUString();
 }
 
 //============================================================================
 // static
-INetContentType Registration::GetContentType4Extension(UniString const &
+INetContentType Registration::GetContentType4Extension(OUString const &
                                                            rExtension)
 {
     Registration &rRegistration = theRegistration::get();
@@ -638,7 +635,7 @@ INetContentType Registration::GetContentType4Extension(UniString const &
 namespace
 {
 
-MediaTypeEntry const * seekEntry(UniString const & rTypeName,
+MediaTypeEntry const * seekEntry(OUString const & rTypeName,
                                  MediaTypeEntry const * pMap, sal_Size nSize)
 {
 #if defined DBG_UTIL
@@ -655,7 +652,7 @@ MediaTypeEntry const * seekEntry(UniString const & rTypeName,
     {
         sal_Size nMiddle = (nLow + nHigh) / 2;
         MediaTypeEntry const * pEntry = pMap + nMiddle;
-        switch (rTypeName.CompareIgnoreCaseToAscii(pEntry->m_pTypeName))
+        switch (rTypeName.compareToIgnoreAsciiCaseAscii(pEntry->m_pTypeName))
         {
             case COMPARE_LESS:
                 nHigh = nMiddle;
@@ -675,13 +672,13 @@ MediaTypeEntry const * seekEntry(UniString const & rTypeName,
 }
 
 //static
-INetContentType INetContentTypes::RegisterContentType(UniString const &
+INetContentType INetContentTypes::RegisterContentType(OUString const &
                                                           rTypeName,
-                                                      UniString const &
+                                                      OUString const &
                                                           rPresentation,
-                                                      UniString const *
+                                                      OUString const *
                                                           pExtension,
-                                                      UniString const *
+                                                      OUString const *
                                                           pSystemFileType)
 {
     INetContentType eTypeID = GetContentType(rTypeName);
@@ -694,7 +691,7 @@ INetContentType INetContentTypes::RegisterContentType(UniString const &
         TypeIDMapEntry * pTypeEntry = Registration::getEntry(eTypeID);
         if (pTypeEntry)
         {
-            if (rPresentation.Len() != 0)
+            if (rPresentation.getLength() != 0)
                 pTypeEntry->m_aPresentation = rPresentation;
             if (pSystemFileType)
                 pTypeEntry->m_aSystemFileType = *pSystemFileType;
@@ -712,13 +709,13 @@ INetContentType INetContentTypes::RegisterContentType(UniString const &
 
 //============================================================================
 // static
-INetContentType INetContentTypes::GetContentType(UniString const & rTypeName)
+INetContentType INetContentTypes::GetContentType(OUString const & rTypeName)
 {
-    UniString aType;
-    UniString aSubType;
+    OUString aType;
+    OUString aSubType;
     if (parse(rTypeName, aType, aSubType))
     {
-        aType += '/';
+        aType += "/";
         aType += aSubType;
         MediaTypeEntry const * pEntry = seekEntry(aType, aStaticTypeNameMap,
                                                   CONTENT_TYPE_LAST + 1);
@@ -727,7 +724,7 @@ INetContentType INetContentTypes::GetContentType(UniString const & rTypeName)
     }
     else
         return
-            rTypeName.EqualsIgnoreCaseAscii(CONTENT_TYPE_STR_X_STARMAIL) ?
+            rTypeName.equalsIgnoreAsciiCaseAscii(CONTENT_TYPE_STR_X_STARMAIL) ?
                 CONTENT_TYPE_X_STARMAIL : CONTENT_TYPE_UNKNOWN;
             // the content type "x-starmail" has no sub type
 }
@@ -762,7 +759,7 @@ rtl::OUString INetContentTypes::GetContentType(INetContentType eTypeID)
 
 //============================================================================
 //static
-UniString INetContentTypes::GetPresentation(INetContentType eTypeID,
+OUString INetContentTypes::GetPresentation(INetContentType eTypeID,
                                             const ::com::sun::star::lang::Locale& aLocale)
 {
     sal_uInt16 nResID = sal_uInt16();
@@ -770,8 +767,8 @@ UniString INetContentTypes::GetPresentation(INetContentType eTypeID,
         nResID = aStaticResourceIDMap[eTypeID];
     else
     {
-        UniString aPresentation = Registration::GetPresentation(eTypeID);
-        if (aPresentation.Len() == 0)
+        OUString aPresentation = Registration::GetPresentation(eTypeID);
+        if (aPresentation.getLength() == 0)
             nResID = STR_SVT_MIMETYPE_APP_OCTSTREAM;
         else
             return aPresentation;
@@ -781,7 +778,7 @@ UniString INetContentTypes::GetPresentation(INetContentType eTypeID,
 
 //============================================================================
 //static
-INetContentType INetContentTypes::GetContentType4Extension(UniString const &
+INetContentType INetContentTypes::GetContentType4Extension(OUString const &
                                                                rExtension)
 {
     MediaTypeEntry const * pEntry = seekEntry(rExtension, aStaticExtensionMap,
@@ -797,22 +794,22 @@ INetContentType INetContentTypes::GetContentType4Extension(UniString const &
 
 //============================================================================
 //static
-INetContentType INetContentTypes::GetContentTypeFromURL(UniString const &
+INetContentType INetContentTypes::GetContentTypeFromURL(OUString const &
                                                             rURL)
 {
     INetContentType eTypeID = CONTENT_TYPE_UNKNOWN;
-    UniString aToken = rURL.GetToken(0, ':');
-    if (aToken.Len() != 0)
+    OUString aToken = rURL.getToken(0, ':');
+    if (aToken.getLength() != 0)
     {
-        if (aToken.EqualsIgnoreCaseAscii(INETTYPE_URL_PROT_FILE))
-            if (rURL.GetChar(rURL.Len() - 1) == '/') // folder
-                if (rURL.Len() > RTL_CONSTASCII_LENGTH("file:///"))
+        if (aToken.equalsIgnoreAsciiCaseAscii(INETTYPE_URL_PROT_FILE))
+            if (rURL[(rURL.getLength() - 1)] == '/') // folder
+                if (rURL.getLength() > RTL_CONSTASCII_LENGTH("file:///"))
                     if (WildCard("*/{*}/").Matches(rURL)) // special folder
                         eTypeID = CONTENT_TYPE_X_CNT_FSYSSPECIALFOLDER;
                     else
                         // drive? -> "file:///?|/"
-                        if (rURL.Len() == 11
-                            && rURL.GetChar(rURL.Len() - 2) == '|')
+                        if (rURL.getLength() == 11
+                            && rURL[(rURL.getLength() - 2)] == '|')
                         {
                             // Drives need further processing, because of
                             // dynamic type according to underlying volume,
@@ -826,72 +823,72 @@ INetContentType INetContentTypes::GetContentTypeFromURL(UniString const &
             {
                 //@@@
             }
-        else if (aToken.EqualsIgnoreCaseAscii(INETTYPE_URL_PROT_HTTP)
-                 || aToken.EqualsIgnoreCaseAscii(INETTYPE_URL_PROT_HTTPS))
+        else if (aToken.equalsIgnoreAsciiCaseAscii(INETTYPE_URL_PROT_HTTP)
+                 || aToken.equalsIgnoreAsciiCaseAscii(INETTYPE_URL_PROT_HTTPS))
             eTypeID = CONTENT_TYPE_TEXT_HTML;
-        else if (aToken.EqualsIgnoreCaseAscii(INETTYPE_URL_PROT_PRIVATE))
+        else if (aToken.equalsIgnoreAsciiCaseAscii(INETTYPE_URL_PROT_PRIVATE))
         {
-            UniString aSecondPart = rURL.GetToken(1, ':');
-            aToken = aSecondPart.GetToken(0, '/');
-            if (aToken.EqualsAscii(INETTYPE_URL_SUB_FACTORY))
+            OUString aSecondPart = rURL.getToken(1, ':');
+            aToken = aSecondPart.getToken(0, '/');
+            if (aToken.equalsAscii(INETTYPE_URL_SUB_FACTORY))
             {
-                aToken = aSecondPart.GetToken(1, '/');
-                if (aToken.EqualsAscii(INETTYPE_URL_SSUB_SWRITER))
+                aToken = aSecondPart.getToken(1, '/');
+                if (aToken.equalsAscii(INETTYPE_URL_SSUB_SWRITER))
                 {
-                    aToken = aSecondPart.GetToken(2, '/');
-                    eTypeID = aToken.EqualsAscii(INETTYPE_URL_SSSUB_WEB) ?
+                    aToken = aSecondPart.getToken(2, '/');
+                    eTypeID = aToken.equalsAscii(INETTYPE_URL_SSSUB_WEB) ?
                                   CONTENT_TYPE_APP_VND_WRITER_WEB :
-                              aToken.EqualsAscii(INETTYPE_URL_SSSUB_GLOB) ?
+                              aToken.equalsAscii(INETTYPE_URL_SSSUB_GLOB) ?
                                   CONTENT_TYPE_APP_VND_WRITER_GLOBAL :
                                   CONTENT_TYPE_APP_VND_WRITER;
                 }
-                else if (aToken.EqualsAscii(INETTYPE_URL_SSUB_SCALC))
+                else if (aToken.equalsAscii(INETTYPE_URL_SSUB_SCALC))
                     eTypeID = CONTENT_TYPE_APP_VND_CALC;
-                else if (aToken.EqualsAscii(INETTYPE_URL_SSUB_SDRAW))
+                else if (aToken.equalsAscii(INETTYPE_URL_SSUB_SDRAW))
                     eTypeID = CONTENT_TYPE_APP_VND_DRAW;
-                else if (aToken.EqualsAscii(INETTYPE_URL_SSUB_SIMPRESS))
+                else if (aToken.equalsAscii(INETTYPE_URL_SSUB_SIMPRESS))
                     eTypeID = CONTENT_TYPE_APP_VND_IMPRESS;
-                else if (aToken.EqualsAscii(INETTYPE_URL_SSUB_SCHART))
+                else if (aToken.equalsAscii(INETTYPE_URL_SSUB_SCHART))
                     eTypeID = CONTENT_TYPE_APP_VND_CHART;
-                else if (aToken.EqualsAscii(INETTYPE_URL_SSUB_SIMAGE))
+                else if (aToken.equalsAscii(INETTYPE_URL_SSUB_SIMAGE))
                     eTypeID = CONTENT_TYPE_APP_VND_IMAGE;
-                else if (aToken.EqualsAscii(INETTYPE_URL_SSUB_SMATH))
+                else if (aToken.equalsAscii(INETTYPE_URL_SSUB_SMATH))
                     eTypeID = CONTENT_TYPE_APP_VND_MATH;
-                else if (aToken.EqualsAscii(INETTYPE_URL_SSUB_FRAMESET))
+                else if (aToken.equalsAscii(INETTYPE_URL_SSUB_FRAMESET))
                     eTypeID = CONTENT_TYPE_APP_FRAMESET;
             }
-            else if (aToken.EqualsAscii(INETTYPE_URL_SUB_HELPID))
+            else if (aToken.equalsAscii(INETTYPE_URL_SUB_HELPID))
                 eTypeID = CONTENT_TYPE_APP_STARHELP;
         }
-        else if (aToken.EqualsIgnoreCaseAscii(INETTYPE_URL_PROT_COMPONENT))
+        else if (aToken.equalsIgnoreAsciiCaseAscii(INETTYPE_URL_PROT_COMPONENT))
         {
-            aToken = rURL.GetToken(1, ':'); // aToken now equals ss / *
-            aToken = aToken.GetToken(0, '/');
-              if (aToken.EqualsAscii(INETTYPE_URL_SSUB_SS))
-                  eTypeID = rURL.SearchAscii(INETTYPE_URL_SCHED_CMB)
+            aToken = rURL.getToken(1, ':'); // aToken now equals ss / *
+            aToken = aToken.getToken(0, '/');
+              if (aToken.equalsAscii(INETTYPE_URL_SSUB_SS))
+                  eTypeID = rURL.indexOf(INETTYPE_URL_SCHED_CMB)
                               == STRING_NOTFOUND
-                          && rURL.SearchAscii(INETTYPE_URL_SCHED_FORM)
+                          && rURL.indexOf(INETTYPE_URL_SCHED_FORM)
                                  == STRING_NOTFOUND ?
                               CONTENT_TYPE_APP_SCHEDULE :
-                          rURL.SearchAscii(INETTYPE_URL_SCHED_TASK)
+                          rURL.indexOf(INETTYPE_URL_SCHED_TASK)
                                   == STRING_NOTFOUND ?
                               CONTENT_TYPE_APP_SCHEDULE_EVT :
                               CONTENT_TYPE_APP_SCHEDULE_TASK;
         }
-        else if (aToken.EqualsIgnoreCaseAscii(INETTYPE_URL_PROT_MAILTO))
+        else if (aToken.equalsIgnoreAsciiCaseAscii(INETTYPE_URL_PROT_MAILTO))
             eTypeID = CONTENT_TYPE_APP_VND_OUTTRAY;
-        else if (aToken.EqualsIgnoreCaseAscii(INETTYPE_URL_PROT_MACRO))
+        else if (aToken.equalsIgnoreAsciiCaseAscii(INETTYPE_URL_PROT_MACRO))
             eTypeID = CONTENT_TYPE_APP_MACRO;
-        else if (aToken.EqualsIgnoreCaseAscii(INETTYPE_URL_PROT_DATA))
+        else if (aToken.equalsIgnoreAsciiCaseAscii(INETTYPE_URL_PROT_DATA))
         {
-            UniString aSecondPart = rURL.GetToken(1, ':');
-            aToken = aSecondPart.GetToken(0, ',');
+            OUString aSecondPart = rURL.getToken(1, ':');
+            aToken = aSecondPart.getToken(0, ',');
             eTypeID = GetContentType(aToken);
         }
     }
     if (eTypeID == CONTENT_TYPE_UNKNOWN)
     {
-        UniString aExtension;
+        OUString aExtension;
         if (GetExtensionFromURL(rURL, aExtension))
             eTypeID = GetContentType4Extension(aExtension);
     }
@@ -900,26 +897,26 @@ INetContentType INetContentTypes::GetContentTypeFromURL(UniString const &
 
 //============================================================================
 //static
-bool INetContentTypes::GetExtensionFromURL(UniString const & rURL,
-                                           UniString & rExtension)
+bool INetContentTypes::GetExtensionFromURL(OUString const & rURL,
+                                           OUString & rExtension)
 {
     xub_StrLen nSlashPos = 0;
     xub_StrLen i = 0;
     while (i != STRING_NOTFOUND)
     {
         nSlashPos = i;
-        i = rURL.Search('/', i + 1);
+        i = rURL.indexOf('/', i + 1);
     }
     if (nSlashPos != 0)
     {
-        xub_StrLen nLastDotPos = i = rURL.Search('.', nSlashPos);
+        xub_StrLen nLastDotPos = i = rURL.indexOf('.', nSlashPos);
         while (i != STRING_NOTFOUND)
         {
             nLastDotPos = i;
-            i = rURL.Search('.', i + 1);
+            i = rURL.indexOf('.', i + 1);
         }
         if (nLastDotPos != STRING_NOTFOUND)
-            rExtension = rURL.Copy(nLastDotPos + 1);
+            rExtension = rURL.copy(nLastDotPos + 1);
         return true;
     }
     return false;
@@ -927,12 +924,12 @@ bool INetContentTypes::GetExtensionFromURL(UniString const & rURL,
 
 //============================================================================
 // static
-bool INetContentTypes::parse(UniString const & rMediaType,
-                             UniString & rType, UniString & rSubType,
+bool INetContentTypes::parse(OUString const & rMediaType,
+                             OUString & rType, OUString & rSubType,
                              INetContentTypeParameterList * pParameters)
 {
-    sal_Unicode const * p = rMediaType.GetBuffer();
-    sal_Unicode const * pEnd = p + rMediaType.Len();
+    sal_Unicode const * p = rMediaType.getStr();
+    sal_Unicode const * pEnd = p + rMediaType.getLength();
 
     p = INetMIME::skipLinearWhiteSpaceComment(p, pEnd);
     sal_Unicode const * pToken = p;
@@ -946,7 +943,7 @@ bool INetContentTypes::parse(UniString const & rMediaType,
         return false;
     rType = rtl::OUString(pToken, p - pToken);
     if (bDowncase)
-        rType.ToLowerAscii();
+        rType = rType.toAsciiLowerCase();
 
     p = INetMIME::skipLinearWhiteSpaceComment(p, pEnd);
     if (p == pEnd || *p++ != '/')
@@ -964,7 +961,7 @@ bool INetContentTypes::parse(UniString const & rMediaType,
         return false;
     rSubType = rtl::OUString(pToken, p - pToken);
     if (bDowncase)
-        rSubType.ToLowerAscii();
+        rSubType = rSubType.toAsciiLowerCase();
 
     return INetMIME::scanParameters(p, pEnd, pParameters) == pEnd;
 }
