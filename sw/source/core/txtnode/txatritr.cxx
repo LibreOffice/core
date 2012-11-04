@@ -32,7 +32,7 @@
 using namespace ::com::sun::star::i18n;
 
 
-SwScriptIterator::SwScriptIterator( const String& rStr, xub_StrLen nStt, sal_Bool bFrwrd )
+SwScriptIterator::SwScriptIterator( const String& rStr, xub_StrLen nStt, bool bFrwrd )
     : rText( rStr ),
       nChgPos( rStr.Len() ),
       nCurScript( ScriptType::WEAK ),
@@ -65,9 +65,9 @@ SwScriptIterator::SwScriptIterator( const String& rStr, xub_StrLen nStt, sal_Boo
     }
 }
 
-sal_Bool SwScriptIterator::Next()
+bool SwScriptIterator::Next()
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     if( pBreakIt->GetBreakIter().is() )
     {
         if ( bForward && nChgPos < rText.Len() )
@@ -75,7 +75,7 @@ sal_Bool SwScriptIterator::Next()
             nCurScript = pBreakIt->GetBreakIter()->getScriptType( rText, nChgPos );
             nChgPos = (xub_StrLen)pBreakIt->GetBreakIter()->endOfScript(
                                                 rText, nChgPos, nCurScript );
-            bRet = sal_True;
+            bRet = true;
         }
         else if ( ! bForward && nChgPos )
         {
@@ -83,7 +83,7 @@ sal_Bool SwScriptIterator::Next()
             nCurScript = pBreakIt->GetBreakIter()->getScriptType( rText, nChgPos );
             nChgPos = (xub_StrLen)pBreakIt->GetBreakIter()->beginOfScript(
                                                 rText, nChgPos, nCurScript );
-            bRet = sal_True;
+            bRet = true;
         }
     }
     else
@@ -95,7 +95,7 @@ sal_Bool SwScriptIterator::Next()
 
 SwTxtAttrIterator::SwTxtAttrIterator( const SwTxtNode& rTNd, sal_uInt16 nWhchId,
                                         xub_StrLen nStt,
-                                        sal_Bool bUseGetWhichOfScript )
+                                        bool bUseGetWhichOfScript )
     : aSIter( rTNd.GetTxt(), nStt ), rTxtNd( rTNd ),
     pParaItem( 0 ), nChgPos( nStt ), nAttrPos( 0 ), nWhichId( nWhchId ),
     bIsUseGetWhichOfScript( bUseGetWhichOfScript )
@@ -103,12 +103,12 @@ SwTxtAttrIterator::SwTxtAttrIterator( const SwTxtNode& rTNd, sal_uInt16 nWhchId,
     SearchNextChg();
 }
 
-sal_Bool SwTxtAttrIterator::Next()
+bool SwTxtAttrIterator::Next()
 {
-    sal_Bool bRet = sal_False;
+    bool bRet = false;
     if( nChgPos < aSIter.GetText().Len() )
     {
-        bRet = sal_True;
+        bRet = true;
         if( !aStack.empty() )
         {
             do {
