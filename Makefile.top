@@ -105,6 +105,7 @@ jvmaccess\
 jvmfwk\
 l10ntools\
 languagetool\
+lcms2\
 libcdr\
 libcmis\
 libmspub\
@@ -232,7 +233,6 @@ liblangtag\
 libxml2\
 libxmlsec\
 libxslt\
-lcms2\
 migrationanalysis\
 moz\
 mysqlc\

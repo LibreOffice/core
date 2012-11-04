@@ -31,7 +31,6 @@ a7d6c5f2fe2d481149ed3ba807b5c043-gdk-pixbuf-2.23.0.tar.gz
 7c53f83e0327343f4060c0eb83842daf-icu4c-49_1_1-src.tgz
 0f63ee487fda8f21fafa767b3c447ac9-ixion-0.2.0.tar.gz
 a0a861f539f0e7a91d05e6b9457e4db1-nss-3.13.5-with-nspr-4.9.1.tar.gz
-861ef15fa0bc018f9ddc932c4ad8b6dd-lcms2-2.4.tar.gz
 fa6a2f85bd28baab035b2c95e722713f-liblangtag-0.2.tar.bz2
 @AFMS_TARBALL@
 @APACHE_COMMONS_CODEC_TARBALL@
@@ -72,6 +71,7 @@ fa6a2f85bd28baab035b2c95e722713f-liblangtag-0.2.tar.bz2
 @JFREEREPORT_SAC_TARBALL@
 @JPEG_TARBALL@
 @LANGUAGETOOL_TARBALL@
+@LCMS2_TARBALL@
 @LIBRSVG_TARBALL@
 @LPSOLVE_TARBALL@
 @MDDS_TARBALL@
