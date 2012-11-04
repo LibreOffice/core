@@ -917,7 +917,7 @@ void BasicManager::LoadOldBasicManager( SotStorage& rStorage )
     SotStorageStreamRef xManagerStream = rStorage.OpenSotStream( OUString(szOldManagerStream), eStreamReadMode );
 
     OUString aStorName( rStorage.GetName() );
-    DBG_ASSERT( aStorName.Len(), "No Storage Name!" );
+    DBG_ASSERT( aStorName.getLength(), "No Storage Name!" );
 
     if ( !xManagerStream.Is() || xManagerStream->GetError() || ( xManagerStream->Seek( STREAM_SEEK_TO_END ) == 0 ) )
     {
