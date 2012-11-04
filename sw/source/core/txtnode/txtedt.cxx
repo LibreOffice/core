@@ -1139,7 +1139,6 @@ sal_uInt16 SwTxtNode::Convert( SwConversionArgs &rArgs )
 
     if (bFound && bInSelection)     // convertible text found within selection/range?
     {
-        const XubString aTxtPortion = m_Text.Copy( nBegin, nLen );
         OSL_ENSURE( m_Text.Len() > 0, "convertible text portion missing!" );
         rArgs.aConvText     = m_Text.Copy( nBegin, nLen );
         rArgs.nConvTextLang = nLangFound;
