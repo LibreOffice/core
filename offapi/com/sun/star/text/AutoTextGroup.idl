@@ -20,28 +20,33 @@
 #define __com_sun_star_text_AutoTextGroup_idl__
 
 #include <com/sun/star/text/XAutoTextGroup.idl>
-
 #include <com/sun/star/container/XIndexAccess.idl>
-
 #include <com/sun/star/container/XNamed.idl>
 
+module com {  module sun {  module star {  module text {
 
-
- module com {  module sun {  module star {  module text {
-
-/** provides access to text blocks in a group.@see com::sun::star::text::AutoTextContainer
+/** provides access to text blocks in a group.
+    @see com::sun::star::text::AutoTextContainer
  */
 published service AutoTextGroup
 {
     interface com::sun::star::text::XAutoTextGroup;
+
     interface com::sun::star::container::XIndexAccess;
 
     /** provides access to the name of the group.
-     */
+    */
     interface com::sun::star::container::XNamed;
 
-};
+    /** The path to the file containing the AutoTextEntry&apos;s in this group
+     */
+    [property, readonly] string FilePath;
 
+    /** The title of this AutoTextGroup
+     */
+    [property] string Title;
+
+};
 
 }; }; }; };
 
