@@ -193,11 +193,11 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
             StrCannotDetectMediaType::get() + url,
             static_cast<OWeakObject *>(this), static_cast<sal_Int16>(-1) );
 
-    String type, subType;
+    OUString type, subType;
     INetContentTypeParameterList params;
     if (INetContentTypes::parse( mediaType_, type, subType, &params ))
     {
-        if (type.EqualsIgnoreCaseAscii("application"))
+        if (type.equalsIgnoreAsciiCaseAscii("application"))
         {
             OUString name;
             if (!bRemoved)
@@ -207,7 +207,7 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
                 name = StrTitle::getTitle( ucbContent );
             }
 
-            if (subType.EqualsIgnoreCaseAscii(
+            if (subType.equalsIgnoreAsciiCaseAscii(
                     "vnd.sun.star.help"))
             {
                 return new PackageImpl(

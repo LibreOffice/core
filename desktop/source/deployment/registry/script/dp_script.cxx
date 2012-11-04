@@ -254,11 +254,11 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
                 static_cast<OWeakObject *>(this), static_cast<sal_Int16>(-1) );
     }
 
-    String type, subType;
+    OUString type, subType;
     INetContentTypeParameterList params;
     if (INetContentTypes::parse( mediaType, type, subType, &params ))
     {
-        if (type.EqualsIgnoreCaseAscii("application"))
+        if (type.equalsIgnoreAsciiCaseAscii("application"))
         {
             OUString dialogURL( makeURL( url, OUSTR("dialog.xlb") ) );
             if (! create_ucb_content(
@@ -266,7 +266,7 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
                 dialogURL = OUString();
             }
 
-            if (subType.EqualsIgnoreCaseAscii("vnd.sun.star.basic-library"))
+            if (subType.equalsIgnoreAsciiCaseAscii("vnd.sun.star.basic-library"))
             {
                 OUString scriptURL( makeURL( url, OUSTR("script.xlb")));
                 if (! create_ucb_content(
@@ -278,7 +278,7 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
                     this, url, xCmdEnv, scriptURL,
                     dialogURL, bRemoved, identifier);
             }
-            else if (subType.EqualsIgnoreCaseAscii(
+            else if (subType.equalsIgnoreAsciiCaseAscii(
                          "vnd.sun.star.dialog-library")) {
                 return new PackageImpl(
                     this, url, xCmdEnv,

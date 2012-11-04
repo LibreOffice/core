@@ -425,11 +425,11 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
                 static_cast<OWeakObject *>(this), static_cast<sal_Int16>(-1) );
     }
 
-    String type, subType;
+    OUString type, subType;
     INetContentTypeParameterList params;
     if (INetContentTypes::parse( mediaType, type, subType, &params ))
     {
-        if (type.EqualsIgnoreCaseAscii("application"))
+        if (type.equalsIgnoreAsciiCaseAscii("application"))
         {
 
             //In case a XPackage is created for a removed extension, we cannot
@@ -441,12 +441,12 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
                     url, xCmdEnv, getComponentContext() );
                 name = StrTitle::getTitle( ucbContent );
             }
-            if (subType.EqualsIgnoreCaseAscii("vnd.sun.star.package-bundle")) {
+            if (subType.equalsIgnoreAsciiCaseAscii("vnd.sun.star.package-bundle")) {
                 return new PackageImpl(
                     this, url, name, m_xBundleTypeInfo, false, bRemoved,
                     identifier);
             }
-            else if (subType.EqualsIgnoreCaseAscii(
+            else if (subType.equalsIgnoreAsciiCaseAscii(
                          "vnd.sun.star.legacy-package-bundle")) {
                 return new PackageImpl(
                     this, url, name, m_xLegacyBundleTypeInfo, true, bRemoved,
@@ -1322,14 +1322,14 @@ Sequence< Reference<deployment::XPackage> > BackendImpl::PackageImpl::getBundle(
             OSL_ASSERT( xPackageType.is() );
             if (xPackageType.is()) {
                 const OUString mediaType( xPackageType->getMediaType() );
-                String type, subType;
+                OUString type, subType;
                 INetContentTypeParameterList params;
                 if (INetContentTypes::parse(
                         mediaType, type, subType, &params ) &&
-                    type.EqualsIgnoreCaseAscii("application") &&
-                    (subType.EqualsIgnoreCaseAscii(
+                    type.equalsIgnoreAsciiCaseAscii("application") &&
+                    (subType.equalsIgnoreAsciiCaseAscii(
                         "vnd.sun.star.uno-component") ||
-                     subType.EqualsIgnoreCaseAscii(
+                     subType.equalsIgnoreAsciiCaseAscii(
                          "vnd.sun.star.configuration-data")))
                 {
                     --upper_end;
@@ -1465,7 +1465,7 @@ void BackendImpl::PackageImpl::scanBundle(
         if ( fullPath.isEmpty() || mediaType.isEmpty() || mediaType == "text/xml" )// opt: exclude common text/xml
             continue;
 
-        String type, subType;
+        OUString type, subType;
         INetContentTypeParameterList params;
         if (! INetContentTypes::parse( mediaType, type, subType, &params ))
             continue;
@@ -1477,8 +1477,8 @@ void BackendImpl::PackageImpl::scanBundle(
         const OUString url( makeURL( packageRootURL, fullPath ) );
 
         // check for bundle description:
-        if (type.EqualsIgnoreCaseAscii("application") &&
-            subType.EqualsIgnoreCaseAscii(
+        if (type.equalsIgnoreAsciiCaseAscii("application") &&
+            subType.equalsIgnoreAsciiCaseAscii(
                 "vnd.sun.star.package-bundle-description"))
         {
             // check locale:
