@@ -35,7 +35,7 @@ endif # $(COM)
 else # $(GUI)!=WNT
 $(call gb_ExternalProject_get_state_target,lpsolve,build):
 	cd $(EXTERNAL_WORKDIR)/lpsolve55 \
-	&& sh $(if $(filter MACOSX,$(GUI)),ccc.osx, \
+	&& sh $(if $(filter MACOSX,$(OS)),ccc.osx, \
 	$(if $(filter TRUE,$(DISABLE_DYNLOADING)),ccc.static, \
 	$(if $(filter AIXGCC,$(OS)$(COM)),ccc.aix.gcc,ccc))) \
 	&& touch $@
