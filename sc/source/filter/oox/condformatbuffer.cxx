@@ -666,10 +666,10 @@ void CondFormatRule::finalizeImport()
             eOperator = static_cast<ScConditionMode>(CondFormatBuffer::convertToInternalOperator( maModel.mnOperator ));
         break;
         case XML_duplicateValues:
-            eOperator = static_cast<ScConditionMode>(CondFormatBuffer::convertToInternalOperator( XML_duplicateValues ));
+            eOperator = SC_COND_DUPLICATE;
         break;
         case XML_uniqueValues:
-            eOperator = static_cast<ScConditionMode>(CondFormatBuffer::convertToInternalOperator( XML_uniqueValues ));
+            eOperator = SC_COND_NOTDUPLICATE;
         break;
         case XML_expression:
             eOperator = SC_COND_DIRECT;
