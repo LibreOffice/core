@@ -166,8 +166,11 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
             if (nSlot == SID_ATTR_CHAR_FONT)
                 nScriptTypes = pOLV->GetSelectedScriptType();
 
-            aSetItem.PutItemForScriptType( nScriptTypes, pNewAttrs->Get( nWhich ) );
-            aNewAttr.Put( aSetItem.GetItemSet() );
+            if (pNewAttrs)
+            {
+                aSetItem.PutItemForScriptType( nScriptTypes, pNewAttrs->Get( nWhich ) );
+                aNewAttr.Put( aSetItem.GetItemSet() );
+            }
         }
         break;
 
