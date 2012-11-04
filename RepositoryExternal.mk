@@ -878,7 +878,6 @@ gb_LinkTarget__use_graphite :=
 
 endif # SYSTEM_GRAPHITE
 
-
 ifeq ($(SYSTEM_ICU),YES)
 
 define gb_LinkTarget__use_icudata
@@ -910,7 +909,7 @@ else
 gb_ICU_suffix:=
 endif
 
-# icudata and icui18n is called icudt and icuin when built with MSVC :-(
+# icudata and icui18n is called icudt and icuin when built with MSVC :-/
 ifeq ($(OS)$(COM),WNTMSC)
 $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
 	icudt \
@@ -1219,7 +1218,7 @@ ifeq ($(SYSTEM_LCMS2),YES)
 define gb_LinkTarget__use_lcms2
 $(call gb_LinkTarget_set_include,$(1),\
 	$$(INCLUDE) \
-    $(LCMS2_CFLAGS) \
+	$(LCMS2_CFLAGS) \
 )
 $(call gb_LinkTarget_add_libs,$(1),$(LCMS2_LIBS))
 
@@ -1257,9 +1256,12 @@ $(call gb_LinkTarget_set_include,$(1),\
 	-I$(call gb_UnpackedTarball_get_dir,lcms2/include) \
 	$$(INCLUDE) \
 )
-$(call gb_LinkTarget_use_libraries,$(1),\
-	lcms2 \
-)
+$(call gb_LinkTarget_add_libs,$(1),$(LCMS2_LIBS))
+
+endef
+
+define gb_ExternalProject__use_lcms2
+$(call gb_ExternalProject_use_package,$(1),lcms2)
 
 endef
 

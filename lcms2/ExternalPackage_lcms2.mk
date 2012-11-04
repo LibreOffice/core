@@ -10,8 +10,10 @@
 $(eval $(call gb_ExternalPackage_ExternalPackage,lcms2,lcms2))
 $(eval $(call gb_ExternalPackage_use_external_project,lcms2,lcms2))
 
+$(eval $(call gb_ExternalPackage_add_file,lcms2,inc/lcms2/lcms2.h,include/lcms2.h))
+
 ifeq ($(OS),MACOSX)
-$(eval $(call gb_ExternalPackage_add_file,lcms2,lib/liblcms2.2.dylib,src/.libs/liblcms2.2.dylib))
+$(eval $(call gb_ExternalPackage_add_file,lcms2,lib/liblcms2.dylib,src/.libs/liblcms2.2.dylib))
 else ifeq ($(filter-out IOS ANDROID,$(OS)),)
 $(eval $(call gb_ExternalPackage_add_file,lcms2,lib/liblcms2.a,src/.libs/liblcms2.a))
 else ifeq ($(OS),WNT)
@@ -23,6 +25,8 @@ $(eval $(call gb_ExternalPackage_add_file,lcms2,lib/lcms2.lib,bin/lcms2.lib))
 $(eval $(call gb_ExternalPackage_add_file,lcms2,bin/lcms2.dll,bin/lcms2.dll))
 endif
 else
-$(eval $(call gb_ExternalPackage_add_file,lcms2,lib/liblcms2.so,src/.libs/liblcms2.so.2.0.4))
+$(eval $(call gb_ExternalPackage_add_file,lcms2,lib/liblcms2.so,src/.libs/liblcms2.so))
+$(eval $(call gb_ExternalPackage_add_file,lcms2,lib/liblcms2.so.2,src/.libs/liblcms2.so.2))
+$(eval $(call gb_ExternalPackage_add_file,lcms2,lib/liblcms2.so.2.0.4,src/.libs/liblcms2.so.2.0.4))
 endif
 # vim: set noet sw=4 ts=4:
