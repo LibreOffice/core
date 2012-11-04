@@ -210,6 +210,10 @@ void PropParser::Merge( const OString &rMergeSrc, const OString &rDestinationFil
                 lcl_PrintJavaStyle( sNewText, aDestination );
                 aDestination << std::endl;
             }
+            else
+            {
+                aDestination << sLine.getStr() << std::endl;
+            }
         }
         else
         {
