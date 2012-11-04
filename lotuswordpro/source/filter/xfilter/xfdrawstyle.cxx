@@ -76,7 +76,7 @@ XFDrawStyle::XFDrawStyle()
     m_fArrowStartSize = 0.3;
     m_fArrowEndSize = 0.3;
     m_bArrowStartCenter = sal_False;
-    m_bArrowStartCenter = sal_False;
+    m_bArrowEndCenter = sal_False;
 }
 
 XFDrawStyle::~XFDrawStyle()
