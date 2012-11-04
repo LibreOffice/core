@@ -36,13 +36,13 @@ class SwScriptIterator
     const String& rText;
     xub_StrLen nChgPos;
     sal_uInt16 nCurScript;
-    sal_Bool bForward;
+    bool bForward;
 
 public:
     SwScriptIterator( const String& rStr, xub_StrLen nStart = 0,
-                      sal_Bool bFrwrd = sal_True );
+                      bool bFrwrd = true );
 
-    sal_Bool Next();
+    bool Next();
 
     sal_uInt16 GetCurrScript() const        { return nCurScript; }
     xub_StrLen GetScriptChgPos() const      { return nChgPos; }
@@ -58,16 +58,16 @@ class SwTxtAttrIterator
     const SfxPoolItem *pParaItem, *pCurItem;
     xub_StrLen nChgPos;
     sal_uInt16 nAttrPos, nWhichId;
-    sal_Bool bIsUseGetWhichOfScript;
+    bool bIsUseGetWhichOfScript;
 
     void AddToStack( const SwTxtAttr& rAttr );
     void SearchNextChg();
 
 public:
     SwTxtAttrIterator( const SwTxtNode& rTxtNd, sal_uInt16 nWhichId,
-                        xub_StrLen nStart = 0, sal_Bool bUseGetWhichOfScript = sal_True );
+                        xub_StrLen nStart = 0, bool bUseGetWhichOfScript = true );
 
-    sal_Bool Next();
+    bool Next();
 
     const SfxPoolItem& GetAttr() const  { return *pCurItem; }
     xub_StrLen GetChgPos() const        { return nChgPos; }
@@ -79,7 +79,7 @@ class SwLanguageIterator : public SwTxtAttrIterator
 public:
     SwLanguageIterator( const SwTxtNode& rTxtNode, xub_StrLen nStart = 0,
                         sal_uInt16 nWhich = RES_CHRATR_LANGUAGE,
-                        sal_Bool bUseGetWhichOfScript = sal_True )
+                        bool bUseGetWhichOfScript = true )
         : SwTxtAttrIterator( rTxtNode, nWhich, nStart, bUseGetWhichOfScript )
     {}
 
