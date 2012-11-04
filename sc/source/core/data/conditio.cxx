@@ -1095,7 +1095,7 @@ bool ScConditionEntry::IsValid( double nArg, const ScAddress& rPos ) const
     return bValid;
 }
 
-bool ScConditionEntry::IsValidStr( const String& rArg, const ScAddress& rPos ) const
+bool ScConditionEntry::IsValidStr( const rtl::OUString& rArg, const ScAddress& rPos ) const
 {
     bool bValid = false;
     //  Interpret muss schon gerufen sein
@@ -1105,7 +1105,7 @@ bool ScConditionEntry::IsValidStr( const String& rArg, const ScAddress& rPos ) c
 
     if ( eOp == SC_COND_DUPLICATE || eOp == SC_COND_NOTDUPLICATE )
     {
-        if( pCondFormat && rArg.Len() )
+        if( pCondFormat && !rArg.isEmpty() )
         {
             bValid = IsDuplicate( 0.0, rArg );
             if( eOp == SC_COND_NOTDUPLICATE )
@@ -1122,8 +1122,8 @@ bool ScConditionEntry::IsValidStr( const String& rArg, const ScAddress& rPos ) c
         if ( !bIsStr2 )
             return false;
 
-    String aUpVal1( aStrVal1 );     //! als Member? (dann auch in Interpret setzen)
-    String aUpVal2( aStrVal2 );
+    rtl::OUString aUpVal1( aStrVal1 );     //! als Member? (dann auch in Interpret setzen)
+    rtl::OUString aUpVal2( aStrVal2 );
 
     if ( eOp == SC_COND_BETWEEN || eOp == SC_COND_NOTBETWEEN )
         if ( ScGlobal::GetCollator()->compareString( aUpVal1, aUpVal2 )

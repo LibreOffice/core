@@ -186,7 +186,7 @@ class SC_DLLPUBLIC ScConditionEntry : public ScFormatEntry
     void    Interpret( const ScAddress& rPos );
 
     bool    IsValid( double nArg, const ScAddress& rPos ) const;
-    bool    IsValidStr( const String& rArg, const ScAddress& rPos ) const;
+    bool    IsValidStr( const rtl::OUString& rArg, const ScAddress& rPos ) const;
 
 public:
             ScConditionEntry( ScConditionMode eOper,
