@@ -50,8 +50,6 @@ class ScFormulaCell;
 class ScTokenArray;
 
 
-#define SC_COND_GROW 16
-
 //  nOptions Flags
 #define SC_COND_NOBLANKS    1
 
