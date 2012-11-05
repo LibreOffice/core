@@ -70,6 +70,41 @@
     },
     {
       "key": {
+        "uuid": "AAAAQH///6c\u003d",
+        "filename": "basic/source/comp/sbcomp.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 675,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2012-11-05T14:47:58Z",
+      "side": 1,
+      "message": "ah! I should have tested with DBGUTL :-(",
+      "parentUuid": "AAAAQH///8Y\u003d",
+      "revId": "b4f8480fa0f039bd82a647e3e258573a9ddac36a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAQH///6Y\u003d",
+        "filename": "basic/source/comp/sbcomp.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 681,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2012-11-05T14:47:58Z",
+      "side": 1,
+      "message": "caught that one too :-)",
+      "revId": "b4f8480fa0f039bd82a647e3e258573a9ddac36a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAQH///8U\u003d",
         "filename": "basic/source/inc/runtime.hxx",
         "patchSetId": 1
@@ -285,6 +320,24 @@
       "writtenOn": "2012-11-05T11:21:49Z",
       "side": 1,
       "message": "what is the purpose of this code?",
+      "revId": "b4f8480fa0f039bd82a647e3e258573a9ddac36a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAQH///6U\u003d",
+        "filename": "basic/source/sbx/sbxvar.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2012-11-05T14:47:58Z",
+      "side": 1,
+      "message": "beats me... but it was in DBGUTL, so I figured the author may have had his debuging reasons...\nI saw no harm in leaving it be.",
+      "parentUuid": "AAAAQH///7Y\u003d",
       "revId": "b4f8480fa0f039bd82a647e3e258573a9ddac36a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
