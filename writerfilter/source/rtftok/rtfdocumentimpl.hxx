@@ -163,7 +163,8 @@ namespace writerfilter {
         enum RTFBmpStyles
         {
             BMPSTYLE_NONE,
-            BMPSTYLE_PNG
+            BMPSTYLE_PNG,
+            BMPSTYLE_JPEG
         };
 
         enum RTFFieldStatus
