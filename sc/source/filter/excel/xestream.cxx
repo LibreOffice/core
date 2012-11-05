@@ -757,7 +757,7 @@ rtl::OUString XclXmlUtils::GetStreamName( const char* sStreamDir, const char* sS
 OString XclXmlUtils::ToOString( const Color& rColor )
 {
     char buf[9];
-    sprintf( buf, "%.2X%.2X%.2X%.2X", rColor.GetTransparency(), rColor.GetRed(), rColor.GetGreen(), rColor.GetBlue() );
+    sprintf( buf, "%.2X%.2X%.2X%.2X", 0xFF-rColor.GetTransparency(), rColor.GetRed(), rColor.GetGreen(), rColor.GetBlue() );
     buf[8] = '\0';
     return OString( buf );
 }
