@@ -122,6 +122,7 @@ public:
     void testLeftmarginDefault();
     void testDppolyline();
     void testFdo56512();
+    void testFdo52989();
 
     CPPUNIT_TEST_SUITE(Test);
 #if !defined(MACOSX) && !defined(WNT)
@@ -195,6 +196,7 @@ void Test::run()
         {"leftmargin-default.rtf", &Test::testLeftmarginDefault},
         {"dppolyline.rtf", &Test::testDppolyline},
         {"fdo56512.rtf", &Test::testFdo56512},
+        {"fdo52989.rtf", &Test::testFdo52989},
     };
     for (unsigned int i = 0; i < SAL_N_ELEMENTS(aMethods); ++i)
     {
@@ -893,6 +895,15 @@ void Test::testFdo56512()
     uno::Reference<text::XTextRange> xTextRange(xIndexAccess->getByIndex(0), uno::UNO_QUERY);
     OUString aExpected("עוסק מורשה ", 20, RTL_TEXTENCODING_UTF8);
     CPPUNIT_ASSERT_EQUAL(aExpected, xTextRange->getString());
+}
+
+void Test::testFdo52989()
+{
+    // Same as n#192129, but for JPEG files.
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShape(xDraws->getByIndex(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(423), xShape->getSize().Width);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);

@@ -647,9 +647,9 @@ int RTFDocumentImpl::resolvePict(bool bInline)
         pExtHeader = 0;
     OUString aGraphicUrl = m_pGraphicHelper->importGraphicObject(xInputStream, pExtHeader);
 
-    if (m_aStates.top().aPicture.nStyle == BMPSTYLE_PNG)
+    if (m_aStates.top().aPicture.nStyle != BMPSTYLE_NONE)
     {
-        // In case of PNG, the real size is known, don't use the values
+        // In case of PNG/JPEG, the real size is known, don't use the values
         // provided by picw and pich.
         OString aURLBS(OUStringToOString(aGraphicUrl, RTL_TEXTENCODING_UTF8));
         const char aURLBegin[] = "vnd.sun.star.GraphicObject:";
@@ -2260,6 +2260,9 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
             break;
         case RTF_PNGBLIP:
             m_aStates.top().aPicture.nStyle = BMPSTYLE_PNG;
+            break;
+        case RTF_JPEGBLIP:
+            m_aStates.top().aPicture.nStyle = BMPSTYLE_JPEG;
             break;
         case RTF_POSYT: m_aStates.top().aFrame.setSprm(NS_ooxml::LN_CT_FramePr_yAlign, NS_ooxml::LN_Value_wordprocessingml_ST_YAlign_top); break;
         case RTF_POSYB: m_aStates.top().aFrame.setSprm(NS_ooxml::LN_CT_FramePr_yAlign, NS_ooxml::LN_Value_wordprocessingml_ST_YAlign_bottom); break;
