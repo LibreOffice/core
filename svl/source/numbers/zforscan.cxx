@@ -43,27 +43,27 @@ namespace
 {
     struct ImplEnglishColors
     {
-        const String* operator()()
+        const OUString* operator()()
         {
-            static const String aEnglishColors[NF_MAX_DEFAULT_COLORS] =
+            static const OUString aEnglishColors[NF_MAX_DEFAULT_COLORS] =
             {
-                String( RTL_CONSTASCII_USTRINGPARAM( "BLACK" ) ),
-                String( RTL_CONSTASCII_USTRINGPARAM( "BLUE" ) ),
-                String( RTL_CONSTASCII_USTRINGPARAM( "GREEN" ) ),
-                String( RTL_CONSTASCII_USTRINGPARAM( "CYAN" ) ),
-                String( RTL_CONSTASCII_USTRINGPARAM( "RED" ) ),
-                String( RTL_CONSTASCII_USTRINGPARAM( "MAGENTA" ) ),
-                String( RTL_CONSTASCII_USTRINGPARAM( "BROWN" ) ),
-                String( RTL_CONSTASCII_USTRINGPARAM( "GREY" ) ),
-                String( RTL_CONSTASCII_USTRINGPARAM( "YELLOW" ) ),
-                String( RTL_CONSTASCII_USTRINGPARAM( "WHITE" ) )
+                OUString( "BLACK" ),
+                OUString( "BLUE" ),
+                OUString( "GREEN" ),
+                OUString( "CYAN" ),
+                OUString( "RED" ),
+                OUString( "MAGENTA" ),
+                OUString( "BROWN" ),
+                OUString( "GREY" ),
+                OUString( "YELLOW" ),
+                OUString( "WHITE" )
             };
             return &aEnglishColors[0];
         }
     };
 
     struct theEnglishColors
-            : public rtl::StaticAggregate< const String, ImplEnglishColors> {};
+            : public rtl::StaticAggregate< const OUString, ImplEnglishColors> {};
 
 }
 
@@ -455,27 +455,32 @@ void ImpSvNumberformatScan::ChangeStandardPrec(sal_uInt16 nPrec)
 Color* ImpSvNumberformatScan::GetColor(String& sStr)
 {
     String sString = pFormatter->GetCharClass()->uppercase(sStr);
+    OUString aString(sString);
     const NfKeywordTable & rKeyword = GetKeywords();
     size_t i = 0;
-    while (i < NF_MAX_DEFAULT_COLORS &&
-           sString != rKeyword[NF_KEY_FIRSTCOLOR+i] )
+    while (i < NF_MAX_DEFAULT_COLORS && sString != rKeyword[NF_KEY_FIRSTCOLOR+i] )
+    {
         i++;
+    }
     if ( i >= NF_MAX_DEFAULT_COLORS )
     {
-        const String* pEnglishColors = theEnglishColors::get();
+        const OUString* pEnglishColors = theEnglishColors::get();
         size_t j = 0;
-        while ( j < NF_MAX_DEFAULT_COLORS &&
-                sString != pEnglishColors[j] )
+        while ( j < NF_MAX_DEFAULT_COLORS && aString != pEnglishColors[j] )
+        {
             ++j;
+        }
         if ( j < NF_MAX_DEFAULT_COLORS )
+        {
             i = j;
+        }
     }
 
     Color* pResult = NULL;
     if (i >= NF_MAX_DEFAULT_COLORS)
     {
-        const String& rColorWord = rKeyword[NF_KEY_COLOR];
-        xub_StrLen nPos = sString.Match(rColorWord);
+        const OUString& rColorWord = OUString(rKeyword[NF_KEY_COLOR]);
+        sal_Int32 nPos = aString.startsWith(rColorWord);
         if (nPos > 0)
         {
             sStr.Erase(0, nPos);
