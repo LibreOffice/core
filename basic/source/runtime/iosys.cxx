@@ -71,15 +71,15 @@ class SbiInputDialog : public ModalDialog {
     Edit aInput;
     OKButton aOk;
     CancelButton aCancel;
-    String aText;
+    OUString aText;
     DECL_LINK( Ok, Window * );
     DECL_LINK( Cancel, Window * );
 public:
-    SbiInputDialog( Window*, const String& );
-    const String& GetInput() { return aText; }
+    SbiInputDialog( Window*, const OUString& );
+    const OUString& GetInput() { return aText; }
 };
 
-SbiInputDialog::SbiInputDialog( Window* pParent, const String& rPrompt )
+SbiInputDialog::SbiInputDialog( Window* pParent, const OUString& rPrompt )
             :ModalDialog( pParent, WB_3DLOOK | WB_MOVEABLE | WB_CLOSEABLE ),
              aInput( this, WB_3DLOOK | WB_LEFT | WB_BORDER ),
              aOk( this ), aCancel( this )
@@ -306,7 +306,7 @@ class OslStream : public SvStream
     osl::File maFile;
 
 public:
-                    OslStream( const String& rName, short nStrmMode );
+                        OslStream( const OUString& rName, short nStrmMode );
                        ~OslStream();
     virtual sal_uIntPtr GetData( void* pData, sal_uIntPtr nSize );
     virtual sal_uIntPtr PutData( const void* pData, sal_uIntPtr nSize );
@@ -315,7 +315,7 @@ public:
     virtual void        SetSize( sal_uIntPtr nSize );
 };
 
-OslStream::OslStream( const String& rName, short nStrmMode )
+OslStream::OslStream( const OUString& rName, short nStrmMode )
     : maFile( rName )
 {
     sal_uInt32 nFlags;
@@ -563,9 +563,11 @@ SbError SbiStream::Open
     nLine   = 0;
     nExpandOnWriteTo = 0;
     if( ( nStrmMode & ( STREAM_READ|STREAM_WRITE ) ) == STREAM_READ )
+    {
         nStrmMode |= STREAM_NOCREATE;
-    String aStr(rtl::OStringToOUString(rName, osl_getThreadTextEncoding()));
-    String aNameStr = getFullPath( aStr );
+    }
+    OUString aStr(rtl::OStringToOUString(rName, osl_getThreadTextEncoding()));
+    OUString aNameStr = getFullPath( aStr );
 
     if( hasUno() )
     {
@@ -849,9 +851,9 @@ void SbiIoSystem::Shutdown()
         rtl::OUString aOutStr(rtl::OStringToOUString(aOut, osl_getThreadTextEncoding()));
 #if defined GCC
         Window* pParent = Application::GetDefDialogParent();
-        MessBox( pParent, WinBits( WB_OK ), String(), aOutStr ).Execute();
+        MessBox( pParent, WinBits( WB_OK ), OUString(), aOutStr ).Execute();
 #else
-        MessBox( GetpApp()->GetDefDialogParent(), WinBits( WB_OK ), String(), aOutStr ).Execute();
+        MessBox( GetpApp()->GetDefDialogParent(), WinBits( WB_OK ), OUString(), aOutStr ).Execute();
 #endif
     }
     aOut = rtl::OString();
@@ -983,17 +985,21 @@ void SbiIoSystem::WriteCon(const rtl::OString& rText)
             n2 = n1;
         }
         if( n1 > n2 )
+        {
             n1 = n2;
-        rtl::OString s(aOut.copy(0, n1));
+        }
+        OString s(aOut.copy(0, n1));
         aOut = aOut.copy(n1);
         while (aOut[0] == '\n' || aOut[0] == '\r')
+        {
             aOut = aOut.copy(1);
-        String aStr(rtl::OStringToOUString(s, osl_getThreadTextEncoding()));
+        }
+        OUString aStr(rtl::OStringToOUString(s, osl_getThreadTextEncoding()));
         {
             SolarMutexGuard aSolarGuard;
             if( !MessBox( GetpApp()->GetDefDialogParent(),
                         WinBits( WB_OK_CANCEL | WB_DEF_OK ),
-                        String(), aStr ).Execute() )
+                        OUString(), aStr ).Execute() )
             {
                 nError = SbERR_USER_ABORT;
             }

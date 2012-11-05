@@ -3408,7 +3408,9 @@ void ScInterpreter::ScMacro()
                                 pMat->PutDouble( pV->GetDouble(), i, j );
                             }
                             else
-                                pMat->PutString( pV->GetString(), i, j );
+                            {
+                                pMat->PutString( pV->GetOUString(), i, j );
+                            }
                         }
                     }
                     PushMatrix( pMat );
@@ -3424,7 +3426,9 @@ void ScInterpreter::ScMacro()
             }
         }
         else
-            PushString( refRes->GetString() );
+        {
+            PushString( refRes->GetOUString() );
+        }
     }
 
     if (bVolatileMacro && meVolatileType == NOT_VOLATILE)

@@ -458,8 +458,8 @@ done:
 void SbiParser::On()
 {
     SbiToken eTok = Peek();
-    String aString = SbiTokenizer::Symbol(eTok);
-    if (aString.EqualsIgnoreCaseAscii("ERROR"))
+    OUString aString = SbiTokenizer::Symbol(eTok);
+    if (aString.equalsIgnoreAsciiCase("ERROR"))
     {
         eTok = _ERROR_; // Error comes as SYMBOL
     }

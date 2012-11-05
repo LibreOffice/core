@@ -405,27 +405,18 @@ sal_Bool SbxValue::Get( SbxValues& rRes ) const
     return bRes;
 }
 
-const XubString& SbxValue::GetString() const
-{
-    SbxValues aRes;
-    aRes.eType = SbxSTRING;
-    if( Get( aRes ) )
-        ((SbxValue*) this)->aToolString = *aRes.pOUString;
-    else
-        ((SbxValue*) this)->aToolString.Erase();
-
-    return aToolString;
-}
-
-const XubString& SbxValue::GetCoreString() const
+const OUString& SbxValue::GetCoreString() const
 {
     SbxValues aRes;
     aRes.eType = SbxCoreSTRING;
     if( Get( aRes ) )
+    {
         ((SbxValue*) this)->aToolString = *aRes.pOUString;
+    }
     else
-        ((SbxValue*) this)->aToolString.Erase();
-
+    {
+        ((SbxValue*) this)->aToolString = "";
+    }
     return aToolString;
 }
 

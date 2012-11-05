@@ -116,9 +116,8 @@ static sal_Bool DoParametersFollow( SbiParser* p, SbiExprType eCurExpr, SbiToken
 
 // definition of a new symbol
 
-static SbiSymDef* AddSym
-    ( SbiToken eTok, SbiSymPool& rPool, SbiExprType eCurExpr,
-      const String& rName, SbxDataType eType, SbiParameters* pPar )
+static SbiSymDef* AddSym ( SbiToken eTok, SbiSymPool& rPool, SbiExprType eCurExpr,
+                           const OUString& rName, SbxDataType eType, SbiParameters* pPar )
 {
     SbiSymDef* pDef;
     // A= is not a procedure
@@ -145,12 +144,13 @@ static SbiSymDef* AddSym
         if( pPar )
         {
             // generate dummy parameters
-            sal_uInt16 n = 1;
+            sal_Int32 n = 1;
             for( short i = 0; i < pPar->GetSize(); i++ )
             {
-                String aPar = rtl::OUString("PAR");
-                aPar += ++n;
-                pProc->GetParams().AddSym( aPar );
+                n += 1;
+                OUStringBuffer aPar("PAR");
+                aPar.append(n);
+                pProc->GetParams().AddSym( aPar.makeStringAndClear() );
             }
         }
     }
@@ -196,7 +196,7 @@ SbiExprNode* SbiExpression::Term( const KeywordSymbolInfo* pKeywordSymbolInfo )
     SbiToken eTok = (pKeywordSymbolInfo == NULL) ? pParser->Next() : pKeywordSymbolInfo->m_eTok;
     // memorize the parsing's begin
     pParser->LockColumn();
-    String aSym( (pKeywordSymbolInfo == NULL) ? pParser->GetSym() : pKeywordSymbolInfo->m_aKeywordSymbol );
+    OUString aSym( (pKeywordSymbolInfo == NULL) ? pParser->GetSym() : pKeywordSymbolInfo->m_aKeywordSymbol );
     SbxDataType eType = (pKeywordSymbolInfo == NULL) ? pParser->GetType() : pKeywordSymbolInfo->m_eSbxDataType;
     SbiParameters* pPar = NULL;
     SbiExprListVector* pvMoreParLcl = NULL;
@@ -332,10 +332,12 @@ SbiExprNode* SbiExpression::Term( const KeywordSymbolInfo* pKeywordSymbolInfo )
                 bError = true;
             }
             else if ( eType == SbxVARIANT )
+            {
                 // if there's nothing named, take the type of the entry,
                 // but only if the var hasn't been defined with AS XXX
                 // so that we catch n% = 5 : print n
                 eType = eDefType;
+            }
         }
         // checking type of variables:
         // is there named anything different in the scanner?
@@ -360,7 +362,9 @@ SbiExprNode* SbiExpression::Term( const KeywordSymbolInfo* pKeywordSymbolInfo )
     }
     SbiExprNode* pNd = new SbiExprNode( pParser, *pDef, eType );
     if( !pPar )
+    {
         pPar = new SbiParameters( pParser,sal_False,sal_False );
+    }
     pNd->aVar.pPar = pPar;
     pNd->aVar.pvMorePar = pvMoreParLcl;
     if( bObj )
@@ -409,9 +413,10 @@ SbiExprNode* SbiExpression::ObjTerm( SbiSymDef& rObj )
     }
 
     if( bError )
+    {
         return NULL;
-
-    String aSym( pParser->GetSym() );
+    }
+    OUString aSym( pParser->GetSym() );
     SbxDataType eType = pParser->GetType();
     SbiParameters* pPar = NULL;
     SbiExprListVector* pvMoreParLcl = NULL;
@@ -609,7 +614,7 @@ SbiExprNode* SbiExpression::Unary()
             bool bUsedForTypeOf = true;
             SbiExprNode* pObjNode = Operand( bUsedForTypeOf );
             pParser->TestToken( IS );
-            String aDummy;
+            OUString aDummy;
             SbiSymDef* pTypeDef = new SbiSymDef( aDummy );
             pParser->TypeDecl( *pTypeDef, sal_True );
             pNd = new SbiExprNode( pParser, pObjNode, pTypeDef->GetTypeId() );
@@ -618,7 +623,7 @@ SbiExprNode* SbiExpression::Unary()
         case NEW:
         {
             pParser->Next();
-            String aStr;
+            OUString aStr;
             SbiSymDef* pTypeDef = new SbiSymDef( aStr );
             pParser->TypeDecl( *pTypeDef, sal_True );
             pNd = new SbiExprNode( pParser, pTypeDef->GetTypeId() );
@@ -739,10 +744,14 @@ SbiExprNode* SbiExpression::Comp()
         {
             SbiToken eTok = pParser->Peek();
             if( m_eMode == EXPRMODE_ARRAY_OR_OBJECT )
+            {
                 break;
-            if( eTok != EQ && eTok != NE && eTok != LT
-             && eTok != GT && eTok != LE && eTok != GE )
+            }
+            if( eTok != EQ && eTok != NE && eTok != LT &&
+                eTok != GT && eTok != LE && eTok != GE )
+            {
                 break;
+            }
             eTok = pParser->Next();
             pNd = new SbiExprNode( pParser, pNd, eTok, Cat() );
             nCount++;
@@ -775,7 +784,8 @@ SbiExprNode* SbiExpression::Like()
     if( m_eMode != EXPRMODE_EMPTY_PAREN )
     {
         short nCount = 0;
-        while( pParser->Peek() == LIKE ) {
+        while( pParser->Peek() == LIKE )
+        {
             SbiToken eTok = pParser->Next();
             pNd = new SbiExprNode( pParser, pNd, eTok, Comp() ), nCount++;
         }
@@ -797,9 +807,12 @@ SbiExprNode* SbiExpression::Boolean()
         for( ;; )
         {
             SbiToken eTok = pParser->Peek();
-            if( eTok != AND && eTok != OR && eTok != XOR
-             && eTok != EQV && eTok != IMP && eTok != IS )
+            if( (eTok != AND) && (eTok != OR) &&
+                (eTok != XOR) && (eTok != EQV) &&
+                (eTok != IMP) && (eTok != IS) )
+            {
                 break;
+            }
             eTok = pParser->Next();
             pNd = new SbiExprNode( pParser, pNd, eTok, Like() );
         }
@@ -837,12 +850,12 @@ SbiConstExpression::SbiConstExpression( SbiParser* p ) : SbiExpression( p )
             SbiSymDef* pVarDef = pExpr->GetVar();
 
             sal_Bool bBoolVal = sal_False;
-            if( pVarDef->GetName().EqualsIgnoreCaseAscii( "true" ) )
+            if( pVarDef->GetName().equalsIgnoreAsciiCase( "true" ) )
             {
                 bIsBool = sal_True;
                 bBoolVal = sal_True;
             }
-            else if( pVarDef->GetName().EqualsIgnoreCaseAscii( "false" ) )
+            else if( pVarDef->GetName().equalsIgnoreAsciiCase( "false" ) )
             //else if( pVarDef->GetName().ICompare( "false" ) == COMPARE_EQUAL )
             {
                 bIsBool = sal_True;
@@ -1002,15 +1015,17 @@ SbiParameters::SbiParameters( SbiParser* p, bool bStandaloneExpression, bool bPa
     if( ( bBracket && eTok == RPAREN ) || pParser->IsEoln( eTok ) )
     {
         if( eTok == RPAREN )
+        {
             pParser->Next();
+        }
         return;
     }
     // read in parameter table and lay down in correct order!
     SbiExpression* pLast = NULL;
-    String aName;
+    OUString aName;
     while( !bError )
     {
-        aName.Erase();
+        aName = "";
         // missing argument
         if( eTok == COMMA )
         {

@@ -19,7 +19,6 @@
 #ifndef _BASMGR_HXX
 #define _BASMGR_HXX
 
-#include <tools/string.hxx>
 #include <svl/brdcst.hxx>
 #include <basic/sbstar.hxx>
 #include <com/sun/star/script/XStorageBasedLibraryContainer.hpp>
@@ -213,7 +212,7 @@ public:
     /// executes a given macro
     ErrCode         ExecuteMacro( OUString const& i_fullyQualifiedName, SbxArray* i_arguments, SbxValue* i_retValue );
     /// executes a given macro
-    ErrCode         ExecuteMacro( OUString const& i_fullyQualifiedName, String const& i_commaSeparatedArgs, SbxValue* i_retValue );
+    ErrCode         ExecuteMacro( OUString const& i_fullyQualifiedName, OUString const& i_commaSeparatedArgs, SbxValue* i_retValue );
 
 private:
     BASIC_DLLPRIVATE sal_Bool IsReference( sal_uInt16 nLib );

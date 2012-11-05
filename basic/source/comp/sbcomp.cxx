@@ -257,7 +257,7 @@ const char* lcl_getSpaces( int nSpaceCount )
     return pSpacesEnd - nSpaceCount;
 }
 
-static rtl::OString lcl_toOStringSkipLeadingWhites( const String& aStr )
+static rtl::OString lcl_toOStringSkipLeadingWhites( const OUString& aStr )
 {
     static sal_Char Buffer[1000];
 
@@ -282,7 +282,7 @@ static rtl::OString lcl_toOStringSkipLeadingWhites( const String& aStr )
 
 String lcl_dumpMethodParameters( SbMethod* pMethod )
 {
-    String aStr;
+    OUString aStr;
     if( pMethod == NULL )
     {
         return aStr;
@@ -299,7 +299,7 @@ String lcl_dumpMethodParameters( SbMethod* pMethod )
         {
             SbxVariable* pVar = pParams->Get( nParam );
             DBG_ASSERT( pVar, "Parameter?!" );
-            if ( pVar->GetName().Len() )
+            if ( !pVar->GetName().isEmpty() )
             {
                 aStr += pVar->GetName();
             }
@@ -314,11 +314,17 @@ String lcl_dumpMethodParameters( SbMethod* pMethod )
             aStr += '=';
             SbxDataType eType = pVar->GetType();
             if( eType & SbxARRAY )
-                aStr += String( RTL_CONSTASCII_USTRINGPARAM( "..." ) );
+            {
+                aStr += "...";
+            }
             else if( eType != SbxOBJECT )
+            {
                 aStr += pVar->GetString();
+            }
             if ( nParam < ( pParams->Count() - 1 ) )
-                aStr += String( RTL_CONSTASCII_USTRINGPARAM( ", " ) );
+            {
+                aStr += ", ";
+            }
         }
         aStr += ')';
     }
@@ -344,7 +350,7 @@ static bool GbBlockAll = false;
 
 struct FunctionItem
 {
-    String      m_aCompleteFunctionName;
+    OUString    m_aCompleteFunctionName;
     double      m_dTotalTime;
     double      m_dNetTime;
     int         m_nCallCount;
@@ -405,7 +411,7 @@ void lcl_printTimeOutput( void )
             FunctionItem* pFunctionItem = *itv;
             if( pFunctionItem != NULL )
             {
-                rtl::OUString aCompleteFunctionName = pFunctionItem->m_aCompleteFunctionName;
+                OUString aCompleteFunctionName = pFunctionItem->m_aCompleteFunctionName;
                 const char* pName = OUStringToOString( aCompleteFunctionName, RTL_TEXTENCODING_ASCII_US ).getStr();
                 int nNameLen = aCompleteFunctionName.getLength();
 
@@ -512,7 +518,7 @@ void dbg_DeInitTrace( void )
 
 static sal_Int32 GnLastCallLvl = 0;
 
-void dbg_tracePrint( const String& aStr, sal_Int32 nCallLvl, bool bCallLvlRelativeToCurrent )
+void dbg_tracePrint( const OUString& aStr, sal_Int32 nCallLvl, bool bCallLvlRelativeToCurrent )
 {
     if( bCallLvlRelativeToCurrent )
     {
@@ -554,7 +560,7 @@ void dbg_traceStep( SbModule* pModule, sal_uInt32 nPC, sal_Int32 nCallLvl )
         pTraceMod = pClassModuleObj->getClassModule();
     }
 
-    String aModuleName = pTraceMod->GetName();
+    OUString aModuleName = pTraceMod->GetName();
     ModuleTraceMap::iterator it = rModuleTraceMap.find( aModuleName );
     if( it == rModuleTraceMap.end() )
     {
@@ -663,11 +669,11 @@ void dbg_traceNotifyCall( SbModule* pModule, SbMethod* pMethod, sal_Int32 nCallL
         pTraceMod = pClassModuleObj->getClassModule();
     }
 
-    String aCompleteFunctionName = pTraceMod->GetName();
+    OUString aCompleteFunctionName = pTraceMod->GetName();
     if( pMethod != NULL )
     {
         aCompleteFunctionName.AppendAscii( "::" );
-        String aMethodName = pMethod->GetName();
+        OUString aMethodName = pMethod->GetName();
         aCompleteFunctionName += aMethodName;
     }
     else
@@ -761,27 +767,28 @@ void dbg_traceNotifyCall( SbModule* pModule, SbMethod* pMethod, sal_Int32 nCallL
         lcl_lineOut( pSeparator, lcl_getSpaces( nIndent ) );
     }
 
-    String aStr;
+    OUString aStr;
     if( bLeave )
     {
         if( !bOwnBlockSteps )
         {
             lcl_lineOut( "}", lcl_getSpaces( nIndent ) );
-            aStr.AppendAscii( "' Leaving " );
+            aStr = "' Leaving ";
         }
     }
     else
     {
-        aStr.AppendAscii( "Entering " );
+        aStr = "Entering " ;
     }
     if( !bLeave || !bOwnBlockSteps )
+    {
         aStr += aCompleteFunctionName;
-
+    }
     if( !bOwnBlockSteps && pClassModuleObj != NULL )
     {
-        aStr.AppendAscii( "[this=" );
+        aStr += "[this=";
         aStr += pClassModuleObj->GetName();
-        aStr.AppendAscii( "]" );
+        aStr += "]" ;
     }
     if( !bLeave )
     {
@@ -814,7 +821,8 @@ void dbg_traceNotifyCall( SbModule* pModule, SbMethod* pMethod, sal_Int32 nCallL
 #endif
 }
 
-void dbg_traceNotifyError( SbError nTraceErr, const String& aTraceErrMsg, bool bTraceErrHandled, sal_Int32 nCallLvl )
+void dbg_traceNotifyError( SbError nTraceErr, const OUString& aTraceErrMsg,
+                           bool bTraceErrHandled, sal_Int32 nCallLvl )
 {
     if( !GbTraceOn )
     {
@@ -838,9 +846,9 @@ void dbg_traceNotifyError( SbError nTraceErr, const String& aTraceErrMsg, bool b
 }
 
 void dbg_RegisterTraceTextForPC( SbModule* pModule, sal_uInt32 nPC,
-    const String& aTraceStr_STMNT, const String& aTraceStr_PCode )
+                                 const OUString& aTraceStr_STMNT, const OUString& aTraceStr_PCode )
 {
-    String aModuleName = pModule->GetName();
+    OUString aModuleName = pModule->GetName();
     ModuleTraceMap::iterator it = rModuleTraceMap.find( aModuleName );
     PCToTextDataMap* pInnerMap;
     if( it == rModuleTraceMap.end() )
@@ -875,21 +883,25 @@ void RTL_Impl_TraceCommand( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrite )
         return;
     }
 
-    String aCommand = rPar.Get(1)->GetString();
+    OUString aCommand = rPar.Get(1)->GetString();
 
-    if( aCommand.EqualsIgnoreCaseAscii( "TraceOn" ) )
+    if( aCommand.equalsIngoreAsciiCase( "TraceOn" ) )
+    {
         GbTraceOn = true;
-    else
-    if( aCommand.EqualsIgnoreCaseAscii( "TraceOff" ) )
+    }
+    else if( aCommand.equalsIngoreAsciiCase( "TraceOff" ) )
+    {
         GbTraceOn = false;
-    else
-    if( aCommand.EqualsIgnoreCaseAscii( "PCodeOn" ) )
+    }
+    else if( aCommand.equalsIngoreAsciiCase( "PCodeOn" ) )
+    {
         GbIncludePCodes = true;
-    else
-    if( aCommand.EqualsIgnoreCaseAscii( "PCodeOff" ) )
+    }
+    else if( aCommand.equalsIngoreAsciiCase( "PCodeOff" ) )
+    {
         GbIncludePCodes = false;
-    else
-    if( aCommand.EqualsIgnoreCaseAscii( "Print" ) )
+    }
+    else if( aCommand.equalsIngoreAsciiCase( "Print" ) )
     {
         if ( rPar.Count() < 3 )
         {
@@ -901,11 +913,11 @@ void RTL_Impl_TraceCommand( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrite )
         if( eOld != SbxERR_OK )
             SbxBase::ResetError();
 
-        String aValStr = rPar.Get(2)->GetString();
+        OUString aValStr = rPar.Get(2)->GetString();
         SbxError eErr = SbxBase::GetError();
         if( eErr != SbxERR_OK )
         {
-            aValStr = String( RTL_CONSTASCII_USTRINGPARAM( "<ERROR converting value to String>" ) );
+            aValStr = "<ERROR converting value to String>";
             SbxBase::ResetError();
         }
 

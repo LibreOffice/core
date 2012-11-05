@@ -1296,7 +1296,7 @@ ScVbaApplication::Caller( const uno::Any& /*aIndex*/ ) throw ( uno::RuntimeExcep
         SbxVariableRef refTemp = pMeth;
         // forces a broadcast
         SbxVariableRef pNew = new  SbxMethod( *((SbxMethod*)pMeth));
-                OSL_TRACE("pNew has type %d and string value %s", pNew->GetType(), rtl::OUStringToOString( pNew->GetString(), RTL_TEXTENCODING_UTF8 ).getStr() );
+                OSL_TRACE("pNew has type %d and string value %s", pNew->GetType(), rtl::OUStringToOString( pNew->GetOUString(), RTL_TEXTENCODING_UTF8 ).getStr() );
         aRet = sbxToUnoValue( pNew );
     }
     return aRet;

@@ -229,16 +229,17 @@ SbxError ImpScan( const ::rtl::OUString& rWSrc, double& nVal, SbxDataType& rType
 }
 
 // port for CDbl in the Basic
-SbxError SbxValue::ScanNumIntnl( const String& rSrc, double& nVal, bool bSingle )
+SbxError SbxValue::ScanNumIntnl( const OUString& rSrc, double& nVal, bool bSingle )
 {
     SbxDataType t;
     sal_uInt16 nLen = 0;
     SbxError nRetError = ImpScan( rSrc, nVal, t, &nLen,
         /*bAllowIntntl*/false, /*bOnlyIntntl*/true );
     // read completely?
-    if( nRetError == SbxERR_OK && nLen != rSrc.Len() )
+    if( nRetError == SbxERR_OK && nLen != rSrc.getLength() )
+    {
         nRetError = SbxERR_CONVERSION;
-
+    }
     if( bSingle )
     {
         SbxValues aValues( nVal );
@@ -469,7 +470,7 @@ bool ImpConvStringExt( ::rtl::OUString& rSrc, SbxDataType eTargetType )
 #ifdef _old_format_code_
 // leave the code provisionally to copy the previous implementation
 
-static sal_uInt16 printfmtnum( double nNum, XubString& rRes, const XubString& rWFmt )
+static sal_uInt16 printfmtnum( double nNum, OUString& rRes, const OUString& rWFmt )
 {
     const String& rFmt = rWFmt;
     char    cFill  = ' ';           // filling characters
@@ -557,36 +558,41 @@ static sal_uInt16 printfmtnum( double nNum, XubString& rRes, const XubString& rW
 
 #endif //_old_format_code_
 
-static sal_uInt16 printfmtstr( const XubString& rStr, XubString& rRes, const XubString& rFmt )
+static sal_uInt16 printfmtstr( const OUString& rStr, OUString& rRes, const OUString& rFmt )
 {
-    const sal_Unicode* pStr = rStr.GetBuffer();
-    const sal_Unicode* pFmtStart = rFmt.GetBuffer();
+    OUStringBuffer aTemp;
+    const sal_Unicode* pStr = rStr.getStr();
+    const sal_Unicode* pFmtStart = rFmt.getStr();
     const sal_Unicode* pFmt = pFmtStart;
-    rRes.Erase();
+
     switch( *pFmt )
     {
-        case '!':
-                rRes += *pStr++; pFmt++; break;
-        case '\\':
-            do
-            {
-                rRes += *pStr ? *pStr++ : static_cast< sal_Unicode >(' ');
-                pFmt++;
-            } while( *pFmt != '\\' );
-            rRes += *pStr ? *pStr++ : static_cast< sal_Unicode >(' ');
-            pFmt++; break;
-        case '&':
-            rRes = rStr;
-            pFmt++; break;
-        default:
-            rRes = rStr;
-            break;
+    case '!':
+        aTemp.append(*pStr++);
+        pFmt++;
+        break;
+    case '\\':
+        do
+        {
+            aTemp.append( *pStr ? *pStr++ : static_cast< sal_Unicode >(' '));
+            pFmt++;
+        }
+        while( *pFmt != '\\' );
+        aTemp.append(*pStr ? *pStr++ : static_cast< sal_Unicode >(' '));
+        pFmt++; break;
+    case '&':
+        aTemp = rStr;
+        pFmt++; break;
+    default:
+        aTemp = rStr;
+        break;
     }
+    rRes = aTemp.makeStringAndClear();
     return (sal_uInt16) ( pFmt - pFmtStart );
 }
 
 
-sal_Bool SbxValue::Scan( const XubString& rSrc, sal_uInt16* pLen )
+sal_Bool SbxValue::Scan( const OUString& rSrc, sal_uInt16* pLen )
 {
     SbxError eRes = SbxERR_OK;
     if( !CanWrite() )
@@ -696,7 +702,7 @@ VbaFormatInfo* getFormatInfo( const String& rFmt )
 #define VBAFORMAT_LOWERCASE         "<"
 #define VBAFORMAT_UPPERCASE         ">"
 
-void SbxValue::Format( XubString& rRes, const XubString* pFmt ) const
+void SbxValue::Format( OUString& rRes, const OUString* pFmt ) const
 {
     short nComma = 0;
     double d = 0;
@@ -706,16 +712,16 @@ void SbxValue::Format( XubString& rRes, const XubString* pFmt ) const
     // VBA output besides the OOo-basic output
     if( pFmt && !SbxBasicFormater::isBasicFormat( *pFmt ) )
     {
-        String aStr = GetString();
+        OUString aStr = GetOUString();
 
-        if( pFmt->EqualsIgnoreCaseAscii( VBAFORMAT_LOWERCASE ) )
+        if( pFmt->equalsIgnoreAsciiCase( VBAFORMAT_LOWERCASE ) )
         {
-            rRes = aStr.ToLowerAscii();
+            rRes = aStr.toAsciiLowerCase();
             return;
         }
-        if( pFmt->EqualsIgnoreCaseAscii( VBAFORMAT_UPPERCASE ) )
+        if( pFmt->equalsIgnoreAsciiCase( VBAFORMAT_UPPERCASE ) )
         {
-            rRes = aStr.ToUpperAscii();
+            rRes = aStr.toAsciiUpperCase();
             return;
         }
 
@@ -733,74 +739,74 @@ void SbxValue::Format( XubString& rRes, const XubString* pFmt ) const
         // number format, use SvNumberFormatter to handle it.
         if( bSuccess )
         {
-            xub_StrLen nCheckPos = 0;
+            sal_uInt16 nCheckPos = 0;
             short nType;
-            String aFmtStr = *pFmt;
+            OUString aFmtStr = *pFmt;
             VbaFormatInfo* pInfo = getFormatInfo( aFmtStr );
             if( pInfo && pInfo->meType != VBA_FORMAT_TYPE_NULL )
-               {
+            {
                 if( pInfo->meType == VBA_FORMAT_TYPE_OFFSET )
                 {
                     nIndex = aFormatter.GetFormatIndex( pInfo->meOffset, eLangType );
                 }
                 else
-                   {
-                    aFmtStr.AssignAscii( pInfo->mpOOoFormat );
+                {
+                    aFmtStr = rtl::OUString::createFromAscii(pInfo->mpOOoFormat);
                     aFormatter.PutandConvertEntry( aFmtStr, nCheckPos, nType, nIndex, LANGUAGE_ENGLISH, eLangType );
                 }
                 aFormatter.GetOutputString( nNumber, nIndex, rRes, &pCol );
             }
-            else if( aFmtStr.EqualsIgnoreCaseAscii( VBAFORMAT_GENERALDATE )
-                    || aFmtStr.EqualsIgnoreCaseAscii( VBAFORMAT_C ))
+            else if( aFmtStr.equalsIgnoreAsciiCase( VBAFORMAT_GENERALDATE )
+                    || aFmtStr.equalsIgnoreAsciiCase( VBAFORMAT_C ))
             {
                 if( nNumber <=-1.0 || nNumber >= 1.0 )
                 {
                     // short date
                     nIndex = aFormatter.GetFormatIndex( NF_DATE_SYSTEM_SHORT, eLangType );
-                       aFormatter.GetOutputString( nNumber, nIndex, rRes, &pCol );
+                    aFormatter.GetOutputString( nNumber, nIndex, rRes, &pCol );
 
                     // long time
                     if( floor( nNumber ) != nNumber )
                     {
-                        aFmtStr.AssignAscii( "H:MM:SS AM/PM" );
+                        aFmtStr = "H:MM:SS AM/PM";
                         aFormatter.PutandConvertEntry( aFmtStr, nCheckPos, nType, nIndex, LANGUAGE_ENGLISH, eLangType );
-                        String aTime;
+                        OUString aTime;
                         aFormatter.GetOutputString( nNumber, nIndex, aTime, &pCol );
-                        rRes.AppendAscii(" ");
+                        rRes += " ";
                         rRes += aTime;
                     }
                 }
                 else
                 {
                     // long time only
-                    aFmtStr.AssignAscii( "H:MM:SS AM/PM" );
+                    aFmtStr = "H:MM:SS AM/PM";
                     aFormatter.PutandConvertEntry( aFmtStr, nCheckPos, nType, nIndex, LANGUAGE_ENGLISH, eLangType );
                     aFormatter.GetOutputString( nNumber, nIndex, rRes, &pCol );
                 }
             }
-            else if( aFmtStr.EqualsIgnoreCaseAscii( VBAFORMAT_N )
-                    || aFmtStr.EqualsIgnoreCaseAscii( VBAFORMAT_NN ))
+            else if( aFmtStr.equalsIgnoreAsciiCase( VBAFORMAT_N ) ||
+                     aFmtStr.equalsIgnoreAsciiCase( VBAFORMAT_NN ))
             {
                 sal_Int32 nMin = implGetMinute( nNumber );
-                if( nMin < 10 && aFmtStr.EqualsIgnoreCaseAscii( VBAFORMAT_NN ) )
+                if( nMin < 10 && aFmtStr.equalsIgnoreAsciiCase( VBAFORMAT_NN ))
                 {
                     // Minute in two digits
                      sal_Unicode aBuf[2];
                      aBuf[0] = '0';
                      aBuf[1] = '0' + nMin;
-                     rRes = rtl::OUString(aBuf, SAL_N_ELEMENTS(aBuf));
+                     rRes = OUString(aBuf, SAL_N_ELEMENTS(aBuf));
                 }
                 else
                 {
                     rRes = rtl::OUString::valueOf(nMin);
                 }
             }
-            else if( aFmtStr.EqualsIgnoreCaseAscii( VBAFORMAT_W ))
+            else if( aFmtStr.equalsIgnoreAsciiCase( VBAFORMAT_W ))
             {
                 sal_Int32 nWeekDay = implGetWeekDay( nNumber );
                 rRes = rtl::OUString::valueOf(nWeekDay);
             }
-            else if( aFmtStr.EqualsIgnoreCaseAscii( VBAFORMAT_Y ))
+            else if( aFmtStr.equalsIgnoreAsciiCase( VBAFORMAT_Y ))
             {
                 sal_Int16 nYear = implGetDateYear( nNumber );
                 double dBaseDate;
@@ -821,120 +827,115 @@ void SbxValue::Format( XubString& rRes, const XubString* pFmt ) const
     SbxDataType eType = GetType();
     switch( eType )
     {
-        case SbxCHAR:
-        case SbxBYTE:
-        case SbxINTEGER:
-        case SbxUSHORT:
-        case SbxLONG:
-        case SbxULONG:
-        case SbxINT:
-        case SbxUINT:
-        case SbxNULL:       // #45929 NULL with a little cheating
-            nComma = 0;     goto cvt;
-        case SbxSINGLE:
-            nComma = 6;     goto cvt;
-        case SbxDOUBLE:
-            nComma = 14;
+    case SbxCHAR:
+    case SbxBYTE:
+    case SbxINTEGER:
+    case SbxUSHORT:
+    case SbxLONG:
+    case SbxULONG:
+    case SbxINT:
+    case SbxUINT:
+    case SbxNULL:       // #45929 NULL with a little cheating
+        nComma = 0;     goto cvt;
+    case SbxSINGLE:
+        nComma = 6;     goto cvt;
+    case SbxDOUBLE:
+        nComma = 14;
 
-        cvt:
+    cvt:
+        if( eType != SbxNULL )
+        {
+            d = GetDouble();
+        }
+        // #45355 another point to jump in for isnumeric-String
+    cvt2:
+        if( pFmt )
+        {
+            SbxAppData& rAppData = GetSbxData_Impl();
+
+            LanguageType eLangType = GetpApp()->GetSettings().GetLanguage();
+            if( rAppData.pBasicFormater )
+            {
+                if( rAppData.eBasicFormaterLangType != eLangType )
+                {
+                    delete rAppData.pBasicFormater;
+                    rAppData.pBasicFormater = NULL;
+                }
+            }
+            rAppData.eBasicFormaterLangType = eLangType;
+
+
+            if( !rAppData.pBasicFormater )
+            {
+                SvtSysLocale aSysLocale;
+                const LocaleDataWrapper& rData = aSysLocale.GetLocaleData();
+                sal_Unicode cComma = rData.getNumDecimalSep()[0];
+                sal_Unicode c1000  = rData.getNumThousandSep()[0];
+                OUString aCurrencyStrg = rData.getCurrSymbol();
+
+                // initialize the Basic-formater help object:
+                // get resources for predefined output
+                // of the Format()-command, e. g. for "On/Off"
+                OUString aOnStrg = SbxValueFormatResId(STR_BASICKEY_FORMAT_ON).toString();
+                OUString aOffStrg = SbxValueFormatResId(STR_BASICKEY_FORMAT_OFF).toString();
+                OUString aYesStrg = SbxValueFormatResId(STR_BASICKEY_FORMAT_YES).toString();
+                OUString aNoStrg = SbxValueFormatResId(STR_BASICKEY_FORMAT_NO).toString();
+                OUString aTrueStrg = SbxValueFormatResId(STR_BASICKEY_FORMAT_TRUE).toString();
+                OUString aFalseStrg = SbxValueFormatResId(STR_BASICKEY_FORMAT_FALSE).toString();
+                OUString aCurrencyFormatStrg = SbxValueFormatResId(STR_BASICKEY_FORMAT_CURRENCY).toString();
+
+                rAppData.pBasicFormater = new SbxBasicFormater( cComma,c1000,aOnStrg,aOffStrg,
+                                                                aYesStrg,aNoStrg,aTrueStrg,aFalseStrg,
+                                                                aCurrencyStrg,aCurrencyFormatStrg );
+            }
+            // Remark: For performance reasons there's only ONE BasicFormater-
+            //    object created and 'stored', so that the expensive resource-
+            //    loading is saved (for country-specific predefined outputs,
+            //    e. g. "On/Off") and the continous string-creation
+            //    operations, too.
+            // BUT: therefore this code is NOT multithreading capable!
+
+            // here are problems with ;;;Null because this method is only
+            // called, if SbxValue is a number!!!
+            // in addition rAppData.pBasicFormater->BasicFormatNull( *pFmt ); could be called!
             if( eType != SbxNULL )
-                d = GetDouble();
-
-            // #45355 another point to jump in for isnumeric-String
-        cvt2:
-            if( pFmt )
             {
-                SbxAppData& rAppData = GetSbxData_Impl();
-
-                LanguageType eLangType = GetpApp()->GetSettings().GetLanguage();
-                if( rAppData.pBasicFormater )
-                {
-                    if( rAppData.eBasicFormaterLangType != eLangType )
-                    {
-                        delete rAppData.pBasicFormater;
-                        rAppData.pBasicFormater = NULL;
-                    }
-                }
-                rAppData.eBasicFormaterLangType = eLangType;
-
-
-                if( !rAppData.pBasicFormater )
-                {
-                    SvtSysLocale aSysLocale;
-                    const LocaleDataWrapper& rData = aSysLocale.GetLocaleData();
-                    sal_Unicode cComma = rData.getNumDecimalSep()[0];
-                    sal_Unicode c1000  = rData.getNumThousandSep()[0];
-                    String aCurrencyStrg = rData.getCurrSymbol();
-
-                    // initialize the Basic-formater help object:
-                    // get resources for predefined output
-                    // of the Format()-command, e. g. for "On/Off"
-                    rtl::OUString aOnStrg = SbxValueFormatResId(
-                        STR_BASICKEY_FORMAT_ON).toString();
-                    rtl::OUString aOffStrg = SbxValueFormatResId(
-                        STR_BASICKEY_FORMAT_OFF).toString();
-                    rtl::OUString aYesStrg = SbxValueFormatResId(
-                        STR_BASICKEY_FORMAT_YES).toString();
-                    rtl::OUString aNoStrg = SbxValueFormatResId(
-                        STR_BASICKEY_FORMAT_NO).toString();
-                    rtl::OUString aTrueStrg = SbxValueFormatResId(
-                        STR_BASICKEY_FORMAT_TRUE).toString();
-                    rtl::OUString aFalseStrg = SbxValueFormatResId(
-                        STR_BASICKEY_FORMAT_FALSE).toString();
-                    rtl::OUString aCurrencyFormatStrg = SbxValueFormatResId(
-                        STR_BASICKEY_FORMAT_CURRENCY).toString();
-
-                    rAppData.pBasicFormater
-                        = new SbxBasicFormater( cComma,c1000,aOnStrg,aOffStrg,
-                                    aYesStrg,aNoStrg,aTrueStrg,aFalseStrg,
-                                    aCurrencyStrg,aCurrencyFormatStrg );
-                }
-                // Remark: For performance reasons there's only ONE BasicFormater-
-                //    object created and 'stored', so that the expensive resource-
-                //    loading is saved (for country-specific predefined outputs,
-                //    e. g. "On/Off") and the continous string-creation
-                //    operations, too.
-                // BUT: therefore this code is NOT multithreading capable!
-
-                // here are problems with ;;;Null because this method is only
-                // called, if SbxValue is a number!!!
-                // in addition rAppData.pBasicFormater->BasicFormatNull( *pFmt ); could be called!
-                if( eType != SbxNULL )
-                {
-                    rRes = rAppData.pBasicFormater->BasicFormat( d ,*pFmt );
-                }
-                else
-                {
-                    rRes = rAppData.pBasicFormater->BasicFormatNull( *pFmt );
-                }
-
+                rRes = rAppData.pBasicFormater->BasicFormat( d ,*pFmt );
             }
             else
             {
-                ::rtl::OUString aTmpString( rRes );
-                ImpCvtNum( GetDouble(), nComma, aTmpString );
-                rRes = aTmpString;
+                rRes = rAppData.pBasicFormater->BasicFormatNull( *pFmt );
             }
-            break;
-        case SbxSTRING:
-            if( pFmt )
+
+        }
+        else
+        {
+            OUString aTmpString( rRes );
+            ImpCvtNum( GetDouble(), nComma, aTmpString );
+            rRes = aTmpString;
+        }
+        break;
+    case SbxSTRING:
+        if( pFmt )
+        {
+            // #45355 converting if numeric
+            if( IsNumericRTL() )
             {
-                // #45355 converting if numeric
-                if( IsNumericRTL() )
-                {
-                    ScanNumIntnl( GetString(), d, /*bSingle*/false );
-                    goto cvt2;
-                }
-                else
-                {
-                    printfmtstr( GetString(), rRes, *pFmt );
-                }
+                ScanNumIntnl( GetOUString(), d, /*bSingle*/false );
+                goto cvt2;
             }
             else
-                rRes = GetString();
-            break;
-        default:
-            rRes = GetString();
+            {
+                printfmtstr( GetOUString(), rRes, *pFmt );
+            }
+        }
+        else
+        {
+            rRes = GetOUString();
+        }
+        break;
+    default:
+        rRes = GetOUString();
     }
 }
 

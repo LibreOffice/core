@@ -128,7 +128,7 @@ RTLFUNC(CallByName)
     }
 
     // 2. parameter is ProcedureName
-    String aNameStr = rPar.Get(2)->GetString();
+    OUString aNameStr = rPar.Get(2)->GetOUString();
 
     // 3. parameter is CallType
     sal_Int16 nCallType = rPar.Get(3)->GetInteger();
@@ -323,7 +323,7 @@ RTLFUNC(CDbl)  // JSM
         if( pSbxVariable->GetType() == SbxSTRING )
         {
             // #41690
-            String aScanStr = pSbxVariable->GetString();
+            OUString aScanStr = pSbxVariable->GetOUString();
             SbError Error = SbxValue::ScanNumIntnl( aScanStr, nVal );
             if( Error != SbxERR_OK )
             {
@@ -392,7 +392,7 @@ RTLFUNC(CSng)  // JSM
         {
             // #41690
             double dVal = 0.0;
-            String aScanStr = pSbxVariable->GetString();
+            OUString aScanStr = pSbxVariable->GetOUString();
             SbError Error = SbxValue::ScanNumIntnl( aScanStr, dVal, /*bSingle=*/true );
             if( SbxBase::GetError() == SbxERR_OK && Error != SbxERR_OK )
             {
@@ -417,11 +417,11 @@ RTLFUNC(CStr)  // JSM
     (void)pBasic;
     (void)bWrite;
 
-    String aString;
+    OUString aString;
     if ( rPar.Count() == 2 )
     {
         SbxVariable *pSbxVariable = rPar.Get(1);
-        aString = pSbxVariable->GetString();
+        aString = pSbxVariable->GetOUString();
     }
     else
     {
@@ -718,7 +718,7 @@ RTLFUNC(Trim)
     }
     else
     {
-        rtl::OUString aStr(comphelper::string::strip(rPar.Get(1)->GetString(), ' '));
+        rtl::OUString aStr(comphelper::string::strip(rPar.Get(1)->GetOUString(), ' '));
         rPar.Get(0)->PutString(aStr);
     }
 }
@@ -772,8 +772,10 @@ RTLFUNC(FreeLibrary)
     (void)bWrite;
 
     if ( rPar.Count() != 2 )
+    {
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
-    GetSbData()->pInst->GetDllMgr()->FreeDll( rPar.Get(1)->GetString() );
+    }
+    GetSbData()->pInst->GetDllMgr()->FreeDll( rPar.Get(1)->GetOUString() );
 }
 bool IsBaseIndexOne()
 {
@@ -916,7 +918,7 @@ RTLFUNC(FindObject)
         return;
     }
 
-    String aNameStr = rPar.Get(1)->GetString();
+    OUString aNameStr = rPar.Get(1)->GetOUString();
 
     SbxBase* pFind =  StarBASIC::FindSBXInCurrentScope( aNameStr );
     SbxObject* pFindObj = NULL;
@@ -954,7 +956,7 @@ RTLFUNC(FindPropertyObject)
         pObj = PTR_CAST(SbxObject,pObjVarObj);
     }
 
-    String aNameStr = rPar.Get(2)->GetString();
+    OUString aNameStr = rPar.Get(2)->GetOUString();
 
     SbxObject* pFindObj = NULL;
     if( pObj )
@@ -1314,10 +1316,10 @@ RTLFUNC(Environ)
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
         return;
     }
-    String aResult;
+    OUString aResult;
     // should be ANSI but that's not possible under Win16 in the DLL
-    rtl::OString aByteStr(rtl::OUStringToOString(rPar.Get(1)->GetString(),
-        osl_getThreadTextEncoding()));
+    rtl::OString aByteStr(rtl::OUStringToOString(rPar.Get(1)->GetOUString(),
+                                                 osl_getThreadTextEncoding()));
     const char* pEnvStr = getenv(aByteStr.getStr());
     if ( pEnvStr )
     {
@@ -1428,7 +1430,7 @@ RTLFUNC(ResolvePath)
 
     if ( rPar.Count() == 2 )
     {
-        String aStr = rPar.Get(1)->GetString();
+        OUString aStr = rPar.Get(1)->GetOUString();
         DirEntry aEntry( aStr );
         rPar.Get(0)->PutString( aStr );
     }
@@ -1637,7 +1639,7 @@ RTLFUNC(ConvertToUrl)
 
     if ( rPar.Count() == 2 )
     {
-        String aStr = rPar.Get(1)->GetString();
+        OUString aStr = rPar.Get(1)->GetOUString();
         INetURLObject aURLObj( aStr, INET_PROT_FILE );
         OUString aFileURL = aURLObj.GetMainURL( INetURLObject::NO_DECODE );
         if( aFileURL.isEmpty() )
@@ -1648,6 +1650,7 @@ RTLFUNC(ConvertToUrl)
         {
             aFileURL = aStr;
         }
+        rPar.Get(0)->PutString(aFileURL);
     }
     else
     {
@@ -1662,12 +1665,14 @@ RTLFUNC(ConvertFromUrl)
 
     if ( rPar.Count() == 2 )
     {
-        String aStr = rPar.Get(1)->GetString();
+        OUString aStr = rPar.Get(1)->GetOUString();
         OUString aSysPath;
         ::osl::File::getSystemPathFromFileURL( aStr, aSysPath );
         if( aSysPath.isEmpty() )
+        {
             aSysPath = aStr;
-        rPar.Get(0)->PutString( String(aSysPath) );
+        }
+        rPar.Get(0)->PutString(aSysPath);
     }
     else
     {
@@ -1708,20 +1713,24 @@ RTLFUNC(Join)
     if( pArr )
     {
         if( pArr->GetDims() != 1 )
+        {
             StarBASIC::Error( SbERR_WRONG_DIMS );   // Syntax Error?!
-
-        String aDelim;
+        }
+        OUString aDelim;
         if( nParCount == 3 )
-            aDelim = rPar.Get(2)->GetString();
+        {
+            aDelim = rPar.Get(2)->GetOUString();
+        }
         else
-            aDelim = rtl::OUString(" ");
-
-        String aRetStr;
+        {
+            aDelim = " ";
+        }
+        OUString aRetStr;
         short nLower, nUpper;
         pArr->GetDim( 1, nLower, nUpper );
         for( short i = nLower ; i <= nUpper ; ++i )
         {
-            String aStr = pArr->Get( &i )->GetString();
+            OUString aStr = pArr->Get( &i )->GetOUString();
             aRetStr += aStr;
             if( i != nUpper )
             {
@@ -1749,50 +1758,58 @@ RTLFUNC(Split)
         return;
     }
 
-    String aExpression = rPar.Get(1)->GetString();
+    OUString aExpression = rPar.Get(1)->GetOUString();
     short nArraySize = 0;
     StringVector vRet;
-    if( aExpression.Len() )
+    if( !aExpression.isEmpty() )
     {
-        String aDelim;
+        OUString aDelim;
         if( nParCount >= 3 )
-            aDelim = rPar.Get(2)->GetString();
+        {
+            aDelim = rPar.Get(2)->GetOUString();
+        }
         else
-            aDelim = rtl::OUString(" ");
+        {
+            aDelim = " ";
+        }
 
         sal_Int32 nCount = -1;
         if( nParCount == 4 )
+        {
             nCount = rPar.Get(3)->GetLong();
-
-        xub_StrLen nDelimLen = aDelim.Len();
+        }
+        sal_Int32 nDelimLen = aDelim.getLength();
         if( nDelimLen )
         {
-            xub_StrLen iSearch = STRING_NOTFOUND;
-            xub_StrLen iStart = 0;
+            sal_Int32 iSearch = -1;
+            sal_Int32 iStart = 0;
             do
             {
                 bool bBreak = false;
                 if( nCount >= 0 && nArraySize == nCount - 1 )
-                    bBreak = true;
-
-                iSearch = aExpression.Search( aDelim, iStart );
-                String aSubStr;
-                if( iSearch != STRING_NOTFOUND && !bBreak )
                 {
-                    aSubStr = aExpression.Copy( iStart, iSearch - iStart );
+                    bBreak = true;
+                }
+                iSearch = aExpression.match( aDelim, iStart );
+                OUString aSubStr;
+                if( iSearch >= 0 && !bBreak )
+                {
+                    aSubStr = aExpression.copy( iStart, iSearch - iStart );
                     iStart = iSearch + nDelimLen;
                 }
                 else
                 {
-                    aSubStr = aExpression.Copy( iStart );
+                    aSubStr = aExpression.copy( iStart );
                 }
                 vRet.push_back( aSubStr );
                 nArraySize++;
 
                 if( bBreak )
+                {
                     break;
+                }
             }
-            while( iSearch != STRING_NOTFOUND );
+            while( iSearch >= 0 );
         }
         else
         {
@@ -1967,13 +1984,13 @@ enum Interval
 struct IntervalInfo
 {
     Interval    meInterval;
-    const char* mpStringCode;
+    const OUString mStringCode;
     double      mdValue;
     bool        mbSimple;
 
-    IntervalInfo( Interval eInterval, const char* pStringCode, double dValue, bool bSimple )
+    IntervalInfo( Interval eInterval, const OUString sStringCode, double dValue, bool bSimple )
         : meInterval( eInterval )
-        , mpStringCode( pStringCode )
+        , mStringCode( sStringCode )
         , mdValue( dValue )
         , mbSimple( bSimple )
     {}
@@ -1991,17 +2008,19 @@ static IntervalInfo pIntervalTable[] =
     IntervalInfo( INTERVAL_H,       "h",        (1.0 /    24.0),    true ),     // Hour
     IntervalInfo( INTERVAL_N,       "n",        (1.0 /  1440.0),    true),      // Minute
     IntervalInfo( INTERVAL_S,       "s",        (1.0 / 86400.0),    true ),     // Second
-    IntervalInfo( INTERVAL_NONE, NULL, 0.0, false )
+    IntervalInfo( INTERVAL_NONE, "", 0.0, false )
 };
 
-IntervalInfo* getIntervalInfo( const String& rStringCode )
+IntervalInfo* getIntervalInfo( const OUString& rStringCode )
 {
     IntervalInfo* pInfo = NULL;
     sal_Int16 i = 0;
-    while( (pInfo = pIntervalTable + i)->mpStringCode != NULL )
+    while( !(pInfo = pIntervalTable + i)->mStringCode.isEmpty() )
     {
-        if( rStringCode.EqualsIgnoreCaseAscii( pInfo->mpStringCode ) )
+        if( rStringCode.equalsIgnoreAsciiCase( pInfo->mStringCode ) )
+        {
             break;
+        }
         i++;
     }
     return pInfo;
@@ -2039,7 +2058,7 @@ RTLFUNC(DateAdd)
         return;
     }
 
-    String aStringCode = rPar.Get(1)->GetString();
+    OUString aStringCode = rPar.Get(1)->GetOUString();
     IntervalInfo* pInfo = getIntervalInfo( aStringCode );
     if( !pInfo )
     {
@@ -2164,7 +2183,7 @@ RTLFUNC(DateDiff)
         return;
     }
 
-    String aStringCode = rPar.Get(1)->GetString();
+    OUString aStringCode = rPar.Get(1)->GetOUString();
     IntervalInfo* pInfo = getIntervalInfo( aStringCode );
     if( !pInfo )
     {
@@ -2364,7 +2383,7 @@ RTLFUNC(DatePart)
         return;
     }
 
-    String aStringCode = rPar.Get(1)->GetString();
+    OUString aStringCode = rPar.Get(1)->GetOUString();
     IntervalInfo* pInfo = getIntervalInfo( aStringCode );
     if( !pInfo )
     {
@@ -2504,7 +2523,7 @@ RTLFUNC(FormatDateTime)
         return;
     }
 
-    String aRetStr;
+    OUString aRetStr;
     SbxVariableRef pSbxVar = new SbxVariable( SbxSTRING );
     switch( nNamedFormat )
     {
@@ -2515,20 +2534,22 @@ RTLFUNC(FormatDateTime)
 
         // 12/21/2004 11:24:50 AM
         // 21.12.2004 12:13:51
-        case 0:
-            pSbxVar->PutDate( dDate );
-            aRetStr = pSbxVar->GetString();
-            break;
+    case 0:
+        pSbxVar->PutDate( dDate );
+        aRetStr = pSbxVar->GetOUString();
+        break;
 
         // LongDate: Display a date using the long date format specified
         // in your computer's regional settings.
         // Tuesday, December 21, 2004
         // Dienstag, 21. December 2004
-        case 1:
+    case 1:
         {
             SvNumberFormatter* pFormatter = NULL;
             if( GetSbData()->pInst )
+            {
                 pFormatter = GetSbData()->pInst->GetNumberFormatter();
+            }
             else
             {
                 sal_uInt32 n;   // Dummy
@@ -2550,27 +2571,31 @@ RTLFUNC(FormatDateTime)
         // ShortDate: Display a date using the short date format specified
         // in your computer's regional settings.
         // 21.12.2004
-        case 2:
-            pSbxVar->PutDate( floor(dDate) );
-            aRetStr = pSbxVar->GetString();
-            break;
+    case 2:
+        pSbxVar->PutDate( floor(dDate) );
+        aRetStr = pSbxVar->GetOUString();
+        break;
 
         // LongTime: Display a time using the time format specified
         // in your computer's regional settings.
         // 11:24:50 AM
         // 12:13:51
-        case 3:
+    case 3:
         // ShortTime: Display a time using the 24-hour format (hh:mm).
         // 11:24
-        case 4:
-            double n;
-            double dTime = modf( dDate, &n );
-            pSbxVar->PutDate( dTime );
-            if( nNamedFormat == 3 )
-                aRetStr = pSbxVar->GetString();
-            else
-                aRetStr = pSbxVar->GetString().Copy( 0, 5 );
-            break;
+    case 4:
+        double n;
+        double dTime = modf( dDate, &n );
+        pSbxVar->PutDate( dTime );
+        if( nNamedFormat == 3 )
+        {
+            aRetStr = pSbxVar->GetOUString();
+        }
+        else
+        {
+            aRetStr = pSbxVar->GetOUString().copy( 0, 5 );
+        }
+        break;
     }
 
     rPar.Get(0)->PutString( aRetStr );
@@ -3207,7 +3232,7 @@ RTLFUNC(StrReverse)
         return;
     }
 
-    rtl::OUString aStr = comphelper::string::reverseString(pSbxVariable->GetString());
+    rtl::OUString aStr = comphelper::string::reverseString(pSbxVariable->GetOUString());
     rPar.Get(0)->PutString( aStr );
 }
 

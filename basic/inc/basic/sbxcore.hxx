@@ -28,8 +28,6 @@
 #include "basicdllapi.h"
 
 class SvStream;
-class String;
-namespace rtl { class OUString; }
 
 // The following Macro defines four (five) necessary methods within a
 // SBX object. LoadPrivateData() and StorePrivateData() must be implemented.

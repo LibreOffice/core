@@ -31,7 +31,7 @@
 static DbgChannelId nRestoreChannelId = 0;
 static DbgChannelId nAssertionChannelId = 0;
 static StarBASICRef xAssertionChannelBasic;
-static String sCaptureFunctionName;
+static OUString sCaptureFunctionName;
 static bool bReportingAssertion = false;
 
 void ResetCapturedAssertions()
@@ -42,7 +42,7 @@ void ResetCapturedAssertions()
     }
     nRestoreChannelId = 0;
     xAssertionChannelBasic = NULL;
-    sCaptureFunctionName = String();
+    sCaptureFunctionName = OUString();
     bReportingAssertion = false;
 }
 
@@ -90,7 +90,7 @@ RTLFUNC(CaptureAssertions)
 #ifdef DBG_UTIL
     DBG_TESTSOLARMUTEX();
 
-    String const sFunctionName = rPar.Get(1)->GetString();
+    OUString const sFunctionName = rPar.Get(1)->GetString();
     if ( sFunctionName.Len() == 0 )
     {
         ResetCapturedAssertions();

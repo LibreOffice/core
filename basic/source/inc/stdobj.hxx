@@ -35,8 +35,8 @@ class SbiStdObject : public SbxObject
     virtual void SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
                              const SfxHint& rHint, const TypeId& rHintType );
 public:
-    SbiStdObject( const String&, StarBASIC* );
-    virtual SbxVariable* Find( const rtl::OUString&, SbxClassType );
+    SbiStdObject( const OUString&, StarBASIC* );
+    virtual SbxVariable* Find( const OUString&, SbxClassType );
     virtual void SetModified( sal_Bool );
 };
 

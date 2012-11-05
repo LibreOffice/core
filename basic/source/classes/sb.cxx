@@ -94,7 +94,7 @@ private:
 
 DocBasicItem::DocBasicItem( StarBASIC& rDocBasic ) :
     mrDocBasic( rDocBasic ),
-    mxClassModules( new SbxObject( String() ) ),
+    mxClassModules( new SbxObject( OUString() ) ),
     mbDocClosed( false ),
     mbDisposed( false )
 {
@@ -229,7 +229,7 @@ SbxObject* StarBASIC::getVBAGlobals( )
                 }
             }
         }
-        const String aVBAHook( RTL_CONSTASCII_USTRINGPARAM( "VBAGlobals" ) );
+        const OUString aVBAHook("VBAGlobals");
         pVBAGlobals = (SbUnoObject*)Find( aVBAHook , SbxCLASS_DONTCARE );
     }
     return pVBAGlobals;
@@ -393,7 +393,7 @@ SbxBase* SbiFactory::Create( sal_uInt16 nSbxId, sal_uInt32 nCreator )
 {
     if( nCreator ==  SBXCR_SBX )
     {
-        String aEmpty;
+        OUString aEmpty;
         switch( nSbxId )
         {
         case SBXID_BASIC:
@@ -413,7 +413,7 @@ SbxBase* SbiFactory::Create( sal_uInt16 nSbxId, sal_uInt32 nCreator )
     return NULL;
 }
 
-SbxObject* SbiFactory::CreateObject( const rtl::OUString& rClass )
+SbxObject* SbiFactory::CreateObject( const OUString& rClass )
 {
     if( rClass.equalsIgnoreAsciiCase( "StarBASIC" ) )
     {
@@ -421,18 +421,18 @@ SbxObject* SbiFactory::CreateObject( const rtl::OUString& rClass )
     }
     else if( rClass.equalsIgnoreAsciiCase( "StarBASICModule" ) )
     {
-        return new SbModule( rtl::OUString() );
+        return new SbModule( OUString() );
     }
     else if( rClass.equalsIgnoreAsciiCase( "Collection" ) )
     {
-        return new BasicCollection( rtl::OUString("Collection"));
+        return new BasicCollection( OUString("Collection"));
     }
     else if( rClass.equalsIgnoreAsciiCase( "FileSystemObject" ) )
     {
         try
         {
             Reference< XMultiServiceFactory > xFactory( comphelper::getProcessServiceFactory(), UNO_SET_THROW );
-            ::rtl::OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "ooo.vba.FileSystemObject" ) );
+            OUString aServiceName("ooo.vba.FileSystemObject");
             Reference< XInterface > xInterface( xFactory->createInstance( aServiceName ), UNO_SET_THROW );
             return new SbUnoObject( aServiceName, uno::makeAny( xInterface ) );
         }
@@ -449,7 +449,7 @@ class SbOLEFactory : public SbxFactory
 {
 public:
     virtual SbxBase* Create( sal_uInt16 nSbxId, sal_uInt32 = SBXCR_SBX );
-    virtual SbxObject* CreateObject( const rtl::OUString& );
+    virtual SbxObject* CreateObject( const OUString& );
 };
 
 SbxBase* SbOLEFactory::Create( sal_uInt16, sal_uInt32 )
@@ -458,9 +458,9 @@ SbxBase* SbOLEFactory::Create( sal_uInt16, sal_uInt32 )
     return NULL;
 }
 
-SbUnoObject* createOLEObject_Impl( const ::rtl::OUString& aType );  // sbunoobj.cxx
+SbUnoObject* createOLEObject_Impl( const OUString& aType );  // sbunoobj.cxx
 
-SbxObject* SbOLEFactory::CreateObject( const rtl::OUString& rClassName )
+SbxObject* SbOLEFactory::CreateObject( const OUString& rClassName )
 {
     SbxObject* pRet = createOLEObject_Impl( rClassName );
     return pRet;
@@ -474,7 +474,7 @@ class SbFormFactory : public SbxFactory
 {
 public:
     virtual SbxBase* Create( sal_uInt16 nSbxId, sal_uInt32 = SBXCR_SBX );
-    virtual SbxObject* CreateObject( const rtl::OUString& );
+    virtual SbxObject* CreateObject( const OUString& );
 };
 
 SbxBase* SbFormFactory::Create( sal_uInt16, sal_uInt32 )
@@ -483,7 +483,7 @@ SbxBase* SbFormFactory::Create( sal_uInt16, sal_uInt32 )
     return NULL;
 }
 
-SbxObject* SbFormFactory::CreateObject( const rtl::OUString& rClassName )
+SbxObject* SbFormFactory::CreateObject( const OUString& rClassName )
 {
     if( SbModule* pMod = GetSbData()->pMod )
     {
@@ -578,7 +578,7 @@ class SbTypeFactory : public SbxFactory
 {
 public:
     virtual SbxBase* Create( sal_uInt16 nSbxId, sal_uInt32 = SBXCR_SBX );
-    virtual SbxObject* CreateObject( const rtl::OUString& );
+    virtual SbxObject* CreateObject( const OUString& );
 };
 
 SbxBase* SbTypeFactory::Create( sal_uInt16, sal_uInt32 )
@@ -587,7 +587,7 @@ SbxBase* SbTypeFactory::Create( sal_uInt16, sal_uInt32 )
     return NULL;
 }
 
-SbxObject* SbTypeFactory::CreateObject( const rtl::OUString& rClassName )
+SbxObject* SbTypeFactory::CreateObject( const OUString& rClassName )
 {
     SbxObject* pRet = NULL;
     SbModule* pMod = GetSbData()->pMod;
@@ -671,7 +671,7 @@ SbClassModuleObject::SbClassModuleObject( SbModule* pClassModule )
             }
 
             // Search for own copy of ImplMethod
-            String aImplMethodName = pImplMethod->GetName();
+            OUString aImplMethodName = pImplMethod->GetName();
             SbxVariable* p = pMethods->Find( aImplMethodName, SbxCLASS_METHOD );
             SbMethod* pImplMethodCopy = p ? PTR_CAST(SbMethod,p) : NULL;
             if( !pImplMethodCopy )
@@ -722,7 +722,7 @@ SbClassModuleObject::SbClassModuleObject( SbModule* pClassModule )
                     SbxObject* pObj = PTR_CAST(SbxObject,pObjBase);
                     if( pObj != NULL )
                     {
-                        String aObjClass = pObj->GetClassName();
+                        OUString aObjClass = pObj->GetClassName();
 
                         SbClassModuleObject* pClassModuleObj = PTR_CAST(SbClassModuleObject,pObjBase);
                         if( pClassModuleObj != NULL )
@@ -733,9 +733,9 @@ SbClassModuleObject::SbClassModuleObject( SbModule* pClassModule )
                             pNewObj->SetParent( pLclClassModule->pParent );
                             pNewProp->PutObject( pNewObj );
                         }
-                        else if( aObjClass.EqualsIgnoreCaseAscii( "Collection" ) )
+                        else if( aObjClass.equalsIgnoreAsciiCase( "Collection" ) )
                         {
-                            String aCollectionName( RTL_CONSTASCII_USTRINGPARAM("Collection") );
+                            OUString aCollectionName("Collection");
                             BasicCollection* pNewCollection = new BasicCollection( aCollectionName );
                             pNewCollection->SetName( pProp->GetName() );
                             pNewCollection->SetParent( pClassModule->pParent );
@@ -776,7 +776,7 @@ void SbClassModuleObject::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType
     handleProcedureProperties( rBC, rHint );
 }
 
-SbxVariable* SbClassModuleObject::Find( const rtl::OUString& rName, SbxClassType t )
+SbxVariable* SbClassModuleObject::Find( const OUString& rName, SbxClassType t )
 {
     SbxVariable* pRes = SbxObject::Find( rName, t );
     if( pRes )
@@ -803,7 +803,7 @@ void SbClassModuleObject::triggerInitializeEvent( void )
     mbInitializeEventDone = true;
 
     // Search method
-    SbxVariable* pMeth = SbxObject::Find(rtl::OUString("Class_Initialize"), SbxCLASS_METHOD);
+    SbxVariable* pMeth = SbxObject::Find(OUString("Class_Initialize"), SbxCLASS_METHOD);
     if( pMeth )
     {
         SbxValues aVals;
@@ -818,7 +818,7 @@ void SbClassModuleObject::triggerTerminateEvent( void )
         return;
     }
     // Search method
-    SbxVariable* pMeth = SbxObject::Find( rtl::OUString("Class_Terminate"), SbxCLASS_METHOD );
+    SbxVariable* pMeth = SbxObject::Find(OUString("Class_Terminate"), SbxCLASS_METHOD );
     if( pMeth )
     {
         SbxValues aVals;
@@ -840,7 +840,7 @@ void SbClassData::clear( void )
 
 SbClassFactory::SbClassFactory( void )
 {
-    String aDummyName;
+    OUString aDummyName;
     xClassModules = new SbxObject( aDummyName );
 }
 
@@ -871,7 +871,7 @@ SbxBase* SbClassFactory::Create( sal_uInt16, sal_uInt32 )
     return NULL;
 }
 
-SbxObject* SbClassFactory::CreateObject( const rtl::OUString& rClassName )
+SbxObject* SbClassFactory::CreateObject( const OUString& rClassName )
 {
     SbxObjectRef xToUseClassModules = xClassModules;
 
@@ -895,7 +895,7 @@ SbxObject* SbClassFactory::CreateObject( const rtl::OUString& rClassName )
     return pRet;
 }
 
-SbModule* SbClassFactory::FindClass( const String& rClassName )
+SbModule* SbClassFactory::FindClass( const OUString& rClassName )
 {
     SbxVariable* pVar = xClassModules->Find( rClassName, SbxCLASS_DONTCARE );
     SbModule* pMod = pVar ? (SbModule*)pVar : NULL;
@@ -903,7 +903,7 @@ SbModule* SbClassFactory::FindClass( const String& rClassName )
 }
 
 StarBASIC::StarBASIC( StarBASIC* p, bool bIsDocBasic  )
-    : SbxObject( String( RTL_CONSTASCII_USTRINGPARAM("StarBASIC") ) ), bDocBasic( bIsDocBasic )
+    : SbxObject( OUString("StarBASIC") ), bDocBasic( bIsDocBasic )
 {
     SetParent( p );
     pLibInfo = NULL;
@@ -926,7 +926,7 @@ StarBASIC::StarBASIC( StarBASIC* p, bool bIsDocBasic  )
         GetSbData()->pUnoFac = new SbUnoFactory;
         AddFactory( GetSbData()->pUnoFac );
     }
-    pRtl = new SbiStdObject( String( RTL_CONSTASCII_USTRINGPARAM(RTLNAME) ), this );
+    pRtl = new SbiStdObject(OUString(RTLNAME), this );
     // Search via StarBasic is always global
     SetFlag( SBX_GBLSEARCH );
     pVBAGlobals = NULL;
@@ -1050,18 +1050,18 @@ void StarBASIC::implClearDependingVarsOnDelete( StarBASIC* pDeletedBasic )
 *
 **************************************************************************/
 
-SbModule* StarBASIC::MakeModule( const String& rName, const String& rSrc )
+SbModule* StarBASIC::MakeModule( const OUString& rName, const OUString& rSrc )
 {
     return MakeModule32( rName, rSrc );
 }
 
-SbModule* StarBASIC::MakeModule32( const String& rName, const ::rtl::OUString& rSrc )
+SbModule* StarBASIC::MakeModule32( const OUString& rName, const OUString& rSrc )
 {
     ModuleInfo mInfo;
     mInfo.ModuleType = ModuleType::NORMAL;
     return MakeModule32(  rName, mInfo, rSrc );
 }
-SbModule* StarBASIC::MakeModule32( const String& rName, const ModuleInfo& mInfo, const rtl::OUString& rSrc )
+SbModule* StarBASIC::MakeModule32( const OUString& rName, const ModuleInfo& mInfo, const OUString& rSrc )
 {
 
     OSL_TRACE("create module %s type mInfo %d", rtl::OUStringToOString( rName, RTL_TEXTENCODING_UTF8 ).getStr(), mInfo.ModuleType );
@@ -1140,12 +1140,12 @@ void StarBASIC::Clear()
     }
 }
 
-SbModule* StarBASIC::FindModule( const String& rName )
+SbModule* StarBASIC::FindModule( const OUString& rName )
 {
     for( sal_uInt16 i = 0; i < pModules->Count(); i++ )
     {
         SbModule* p = (SbModule*) pModules->Get( i );
-        if( p->GetName().EqualsIgnoreCaseAscii( rName ) )
+        if( p->GetName().equalsIgnoreAsciiCase( rName ) )
         {
             return p;
         }
@@ -1175,8 +1175,8 @@ struct ClassModuleRunInitItem
 // Derive from unordered_map type instead of typedef
 // to allow forward declaration in sbmod.hxx
 class ModuleInitDependencyMap : public
-    boost::unordered_map< ::rtl::OUString, ClassModuleRunInitItem,
-                          ::rtl::OUStringHash, ::std::equal_to< ::rtl::OUString > >
+    boost::unordered_map< OUString, ClassModuleRunInitItem,
+                          ::rtl::OUStringHash, ::std::equal_to< OUString > >
 {};
 
 void SbModule::implProcessModuleRunInit( ModuleInitDependencyMap& rMap, ClassModuleRunInitItem& rItem )
@@ -1191,7 +1191,7 @@ void SbModule::implProcessModuleRunInit( ModuleInitDependencyMap& rMap, ClassMod
         {
             for( StringVector::iterator it = rReqTypes.begin() ; it != rReqTypes.end() ; ++it )
             {
-                String& rStr = *it;
+                OUString& rStr = *it;
 
                 // Is required type a class module?
                 ModuleInitDependencyMap::iterator itFind = rMap.find( rStr );
@@ -1243,7 +1243,7 @@ void StarBASIC::InitAllModules( StarBASIC* pBasicNotToInit )
     for ( sal_uInt16 nMod = 0; nMod < pModules->Count(); nMod++ )
     {
         SbModule* pModule = (SbModule*)pModules->Get( nMod );
-        String aModuleName = pModule->GetName();
+        OUString aModuleName = pModule->GetName();
         if( pModule->isProxyModule() )
         {
             aMIDMap[aModuleName] = ClassModuleRunInitItem( pModule );
@@ -1311,7 +1311,7 @@ void StarBASIC::DeInitAllModules( void )
 // method and a module with the given name is found the search continues
 // for entrypoint "Main".
 // If this fails again a conventional search over objects is performend.
-SbxVariable* StarBASIC::Find( const rtl::OUString& rName, SbxClassType t )
+SbxVariable* StarBASIC::Find( const OUString& rName, SbxClassType t )
 {
     SbxVariable* pRes = NULL;
     SbModule* pNamed = NULL;
@@ -1345,7 +1345,7 @@ SbxVariable* StarBASIC::Find( const rtl::OUString& rName, SbxClassType t )
             {
                 // Remember modul fpr Main() call
                 // or is the name equal?!?
-                if( p->GetName().EqualsIgnoreCaseAscii( rName ) )
+                if( p->GetName().equalsIgnoreAsciiCase( rName ) )
                 {
                     if( t == SbxCLASS_OBJECT || t == SbxCLASS_DONTCARE )
                     {
@@ -1375,7 +1375,7 @@ SbxVariable* StarBASIC::Find( const rtl::OUString& rName, SbxClassType t )
     }
     OUString aMainStr("Main");
     if( !pRes && pNamed && ( t == SbxCLASS_METHOD || t == SbxCLASS_DONTCARE ) &&
-        !pNamed->GetName().EqualsIgnoreCaseAscii( aMainStr ) )
+        !pNamed->GetName().equalsIgnoreAsciiCase( aMainStr ) )
     {
         pRes = pNamed->Find( aMainStr, SbxCLASS_METHOD );
     }
@@ -1386,7 +1386,7 @@ SbxVariable* StarBASIC::Find( const rtl::OUString& rName, SbxClassType t )
     return pRes;
 }
 
-sal_Bool StarBASIC::Call( const String& rName, SbxArray* pParam )
+sal_Bool StarBASIC::Call( const OUString& rName, SbxArray* pParam )
 {
     sal_Bool bRes = SbxObject::Call( rName, pParam );
     if( !bRes )
@@ -1402,7 +1402,7 @@ sal_Bool StarBASIC::Call( const String& rName, SbxArray* pParam )
 }
 
 // Find method via name (e.g. query via BASIC IDE)
-SbxBase* StarBASIC::FindSBXInCurrentScope( const String& rName )
+SbxBase* StarBASIC::FindSBXInCurrentScope( const OUString& rName )
 {
     if( !GetSbData()->pInst )
     {
@@ -1466,7 +1466,7 @@ SbModule* StarBASIC::GetActiveModule()
     }
 }
 
-sal_uInt16 StarBASIC::BreakPoint( sal_uInt16 l, sal_uInt16 c1, sal_uInt16 c2 )
+sal_uInt16 StarBASIC::BreakPoint( sal_Int32 l, sal_Int32 c1, sal_Int32 c2 )
 {
     SetErrorData( 0, l, c1, c2 );
     bBreak = true;
@@ -1480,7 +1480,7 @@ sal_uInt16 StarBASIC::BreakPoint( sal_uInt16 l, sal_uInt16 c1, sal_uInt16 c2 )
     }
 }
 
-sal_uInt16 StarBASIC::StepPoint( sal_uInt16 l, sal_uInt16 c1, sal_uInt16 c2 )
+sal_uInt16 StarBASIC::StepPoint( sal_Int32 l, sal_Int32 c1, sal_Int32 c2 )
 {
     SetErrorData( 0, l, c1, c2 );
     bBreak = false;
@@ -1506,7 +1506,7 @@ sal_uInt16 StarBASIC::GetCol2()     { return GetSbData()->nCol2; }
 
 // Specific to error handler
 SbError StarBASIC::GetErrorCode()       { return GetSbData()->nCode; }
-const String& StarBASIC::GetErrorText() { return GetSbData()->aErrMsg; }
+const OUString& StarBASIC::GetErrorText() { return GetSbData()->aErrMsg; }
 bool StarBASIC::IsCompilerError()       { return GetSbData()->bCompiler; }
 
 // From 1996-03-29:
@@ -1632,13 +1632,13 @@ struct BasicStringList_Impl : private Resource
         : Resource( rErrIdP ),aResId(nId, *rErrIdP.GetResMgr() ){}
     ~BasicStringList_Impl() { FreeResource(); }
 
-    String GetString(){ return aResId.toString(); }
+    OUString GetString(){ return aResId.toString(); }
     sal_Bool IsErrorTextAvailable( void )
         { return IsAvailableRes(aResId.SetRT(RSC_STRING)); }
 };
 //----------------------------------------------------------------
 
-void StarBASIC::MakeErrorText( SbError nId, const ::rtl::OUString& aMsg )
+void StarBASIC::MakeErrorText( SbError nId, const OUString& aMsg )
 {
     SolarMutexGuard aSolarGuard;
     sal_uInt16 nOldID = GetVBErrorCode( nId );
@@ -1650,32 +1650,32 @@ void StarBASIC::MakeErrorText( SbError nId, const ::rtl::OUString& aMsg )
     if( aMyStringList.IsErrorTextAvailable() )
     {
         // merge message with additional text
-        String aMsg1 = aMyStringList.GetString();
+        OUString aMsg1 = aMyStringList.GetString();
         // replace argument placeholder with %s
-        String aSrgStr( RTL_CONSTASCII_USTRINGPARAM("$(ARG1)") );
-        sal_uInt16 nResult = aMsg1.Search( aSrgStr );
+        OUString aSrgStr( "$(ARG1)" );
+        sal_Int32 nResult = aMsg1.match( aSrgStr );
 
-        if( nResult != STRING_NOTFOUND )
+        if( nResult >= 0 )
         {
-            aMsg1.Erase( nResult, aSrgStr.Len() );
-            aMsg1.Insert( aMsg, nResult );
+            aMsg1 = aMsg1.copy( 0, nResult);
+            aMsg1 += aMsg;
         }
         GetSbData()->aErrMsg = aMsg1;
     }
     else if( nOldID != 0 )
     {
-        rtl::OUStringBuffer aStdMsg;
+        OUStringBuffer aStdMsg;
         aStdMsg.append("Fehler ").append(static_cast<sal_Int32>(nOldID)).append(": Kein Fehlertext verfuegbar!");
         GetSbData()->aErrMsg = aStdMsg.makeStringAndClear();
     }
     else
     {
-        GetSbData()->aErrMsg = String::EmptyString();
+        GetSbData()->aErrMsg = "";
     }
 }
 
 sal_Bool StarBASIC::CError( SbError code, const OUString& rMsg,
-                            sal_uInt16 l, sal_uInt16 c1, sal_uInt16 c2 )
+                            sal_Int32 l, sal_Int32 c1, sal_Int32 c2 )
 {
     SolarMutexGuard aSolarGuard;
 
@@ -1717,12 +1717,12 @@ sal_Bool StarBASIC::CError( SbError code, const OUString& rMsg,
     return bRet;
 }
 
-sal_Bool StarBASIC::RTError( SbError code, sal_uInt16 l, sal_uInt16 c1, sal_uInt16 c2 )
+sal_Bool StarBASIC::RTError( SbError code, sal_Int32 l, sal_Int32 c1, sal_Int32 c2 )
 {
-    return RTError( code, String(), l, c1, c2 );
+    return RTError( code, OUString(), l, c1, c2 );
 }
 
-sal_Bool StarBASIC::RTError( SbError code, const String& rMsg, sal_uInt16 l, sal_uInt16 c1, sal_uInt16 c2 )
+sal_Bool StarBASIC::RTError( SbError code, const OUString& rMsg, sal_Int32 l, sal_Int32 c1, sal_Int32 c2 )
 {
     SolarMutexGuard aSolarGuard;
 
@@ -1734,7 +1734,7 @@ sal_Bool StarBASIC::RTError( SbError code, const String& rMsg, sal_uInt16 l, sal
     MakeErrorText( c, rMsg );
 
     // Implementation of the code for the string transport to SFX-Error
-    if( rMsg.Len() )
+    if( !rMsg.isEmpty() )
     {
         // very confusing, even though MakeErrorText sets up the error text
         // seems that this is not used ( if rMsg already has content )
@@ -1742,14 +1742,14 @@ sal_Bool StarBASIC::RTError( SbError code, const String& rMsg, sal_uInt16 l, sal
         // like vba ( adds an error number etc )
         if ( SbiRuntime::isVBAEnabled() && ( code == SbERR_BASIC_COMPAT ) )
         {
-            rtl::OUStringBuffer aTmp;
+            OUStringBuffer aTmp;
             aTmp.append('\'').append(SbxErrObject::getUnoErrObject()->getNumber())
-                .append("\'\n").append(GetSbData()->aErrMsg.Len() ? GetSbData()->aErrMsg : rMsg);
+                .append("\'\n").append(!GetSbData()->aErrMsg.isEmpty() ? GetSbData()->aErrMsg : rMsg);
             code = (sal_uIntPtr)*new StringErrorInfo( code, aTmp.makeStringAndClear() );
         }
         else
         {
-            code = (sal_uIntPtr)*new StringErrorInfo( code, String(rMsg) );
+            code = (sal_uIntPtr)*new StringErrorInfo( code, rMsg );
         }
     }
 
@@ -1766,10 +1766,10 @@ sal_Bool StarBASIC::RTError( SbError code, const String& rMsg, sal_uInt16 l, sal
 
 void StarBASIC::Error( SbError n )
 {
-    Error( n, String() );
+    Error( n, OUString() );
 }
 
-void StarBASIC::Error( SbError n, const String& rMsg )
+void StarBASIC::Error( SbError n, const OUString& rMsg )
 {
     if( GetSbData()->pInst )
     {
@@ -1785,7 +1785,7 @@ void StarBASIC::FatalError( SbError n )
     }
 }
 
-void StarBASIC::FatalError( SbError _errCode, const String& _details )
+void StarBASIC::FatalError( SbError _errCode, const OUString& _details )
 {
     if( GetSbData()->pInst )
     {
@@ -1806,7 +1806,7 @@ SbError StarBASIC::GetErrBasic()
 }
 
 // make the additional message for the RTL function error accessible
-String StarBASIC::GetErrorMsg()
+OUString StarBASIC::GetErrorMsg()
 {
     if( GetSbData()->pInst )
     {
@@ -1814,11 +1814,11 @@ String StarBASIC::GetErrorMsg()
     }
     else
     {
-        return String();
+        return OUString();
     }
 }
 
-sal_uInt16 StarBASIC::GetErl()
+sal_Int32 StarBASIC::GetErl()
 {
     if( GetSbData()->pInst )
     {
@@ -1917,12 +1917,12 @@ sal_Bool StarBASIC::LoadData( SvStream& r, sal_uInt16 nVer )
         }
     }
     // HACK for SFX-Bullshit!
-    SbxVariable* p = Find( String( RTL_CONSTASCII_USTRINGPARAM("FALSE") ), SbxCLASS_PROPERTY );
+    SbxVariable* p = Find( OUString("FALSE"), SbxCLASS_PROPERTY );
     if( p )
     {
         Remove( p );
     }
-    p = Find( String( RTL_CONSTASCII_USTRINGPARAM("TRUE") ), SbxCLASS_PROPERTY );
+    p = Find( OUString("TRUE"), SbxCLASS_PROPERTY );
     if( p )
     {
         Remove( p );
@@ -1975,7 +1975,7 @@ Reference< frame::XModel > StarBASIC::GetModelFromBasic( SbxObject* pBasic )
     // look for the ThisComponent variable, first in the parent (which
     // might be the document's Basic), then in the parent's parent (which might be
     // the application Basic)
-    const OUString sThisComponent( RTL_CONSTASCII_USTRINGPARAM( "ThisComponent" ) );
+    const OUString sThisComponent( "ThisComponent");
     SbxVariable* pThisComponent = NULL;
 
     SbxObject* pLookup = pBasic->GetParent();
@@ -2030,15 +2030,15 @@ static sal_uInt16 nCountHash = 0, nAddHash, nItemHash, nRemoveHash;
 SbxInfoRef BasicCollection::xAddInfo = NULL;
 SbxInfoRef BasicCollection::xItemInfo = NULL;
 
-BasicCollection::BasicCollection( const rtl::OUString& rClass )
+BasicCollection::BasicCollection( const OUString& rClass )
              : SbxObject( rClass )
 {
     if( !nCountHash )
     {
-        nCountHash  = MakeHashCode( rtl::OUString::createFromAscii( pCountStr ) );
-        nAddHash    = MakeHashCode( rtl::OUString::createFromAscii( pAddStr ) );
-        nItemHash   = MakeHashCode( rtl::OUString::createFromAscii( pItemStr ) );
-        nRemoveHash = MakeHashCode( rtl::OUString::createFromAscii( pRemoveStr ) );
+        nCountHash  = MakeHashCode( OUString::createFromAscii( pCountStr ) );
+        nAddHash    = MakeHashCode( OUString::createFromAscii( pAddStr ) );
+        nItemHash   = MakeHashCode( OUString::createFromAscii( pItemStr ) );
+        nRemoveHash = MakeHashCode( OUString::createFromAscii( pRemoveStr ) );
     }
     Initialize();
 
@@ -2060,31 +2060,31 @@ void BasicCollection::Initialize()
     SetFlag( SBX_FIXED );
     ResetFlag( SBX_WRITE );
     SbxVariable* p;
-    p = Make( rtl::OUString::createFromAscii( pCountStr ), SbxCLASS_PROPERTY, SbxINTEGER );
+    p = Make( OUString::createFromAscii( pCountStr ), SbxCLASS_PROPERTY, SbxINTEGER );
     p->ResetFlag( SBX_WRITE );
     p->SetFlag( SBX_DONTSTORE );
-    p = Make( rtl::OUString::createFromAscii( pAddStr ), SbxCLASS_METHOD, SbxEMPTY );
+    p = Make( OUString::createFromAscii( pAddStr ), SbxCLASS_METHOD, SbxEMPTY );
     p->SetFlag( SBX_DONTSTORE );
-    p = Make( rtl::OUString::createFromAscii( pItemStr ), SbxCLASS_METHOD, SbxVARIANT );
+    p = Make( OUString::createFromAscii( pItemStr ), SbxCLASS_METHOD, SbxVARIANT );
     p->SetFlag( SBX_DONTSTORE );
-    p = Make( rtl::OUString::createFromAscii( pRemoveStr ), SbxCLASS_METHOD, SbxEMPTY );
+    p = Make( OUString::createFromAscii( pRemoveStr ), SbxCLASS_METHOD, SbxEMPTY );
     p->SetFlag( SBX_DONTSTORE );
     if ( !xAddInfo.Is() )
     {
         xAddInfo = new SbxInfo;
-        xAddInfo->AddParam(  String( RTL_CONSTASCII_USTRINGPARAM("Item") ), SbxVARIANT, SBX_READ );
-        xAddInfo->AddParam(  String( RTL_CONSTASCII_USTRINGPARAM("Key") ), SbxVARIANT, SBX_READ | SBX_OPTIONAL );
-        xAddInfo->AddParam(  String( RTL_CONSTASCII_USTRINGPARAM("Before") ), SbxVARIANT, SBX_READ | SBX_OPTIONAL );
-        xAddInfo->AddParam(  String( RTL_CONSTASCII_USTRINGPARAM("After") ), SbxVARIANT, SBX_READ | SBX_OPTIONAL );
+        xAddInfo->AddParam(  OUString( "Item" ), SbxVARIANT, SBX_READ );
+        xAddInfo->AddParam(  OUString( "Key" ), SbxVARIANT, SBX_READ | SBX_OPTIONAL );
+        xAddInfo->AddParam(  OUString( "Before" ), SbxVARIANT, SBX_READ | SBX_OPTIONAL );
+        xAddInfo->AddParam(  OUString( "After" ), SbxVARIANT, SBX_READ | SBX_OPTIONAL );
     }
     if ( !xItemInfo.Is() )
     {
         xItemInfo = new SbxInfo;
-        xItemInfo->AddParam(  String( RTL_CONSTASCII_USTRINGPARAM("Index") ), SbxVARIANT, SBX_READ | SBX_OPTIONAL);
+        xItemInfo->AddParam(  OUString( "Index" ), SbxVARIANT, SBX_READ | SBX_OPTIONAL);
     }
 }
 
-SbxVariable* BasicCollection::Find( const rtl::OUString& rName, SbxClassType t )
+SbxVariable* BasicCollection::Find( const OUString& rName, SbxClassType t )
 {
     SbxVariable* pFind = SbxObject::Find( rName, t );
     return pFind;
@@ -2153,7 +2153,7 @@ sal_Int32 BasicCollection::implGetIndex( SbxVariable* pIndexVar )
     sal_Int32 nIndex = -1;
     if( pIndexVar->GetType() == SbxSTRING )
     {
-        nIndex = implGetIndexForName( pIndexVar->GetString() );
+        nIndex = implGetIndexForName( pIndexVar->GetOUString() );
     }
     else
     {
@@ -2162,7 +2162,7 @@ sal_Int32 BasicCollection::implGetIndex( SbxVariable* pIndexVar )
     return nIndex;
 }
 
-sal_Int32 BasicCollection::implGetIndexForName( const String& rName )
+sal_Int32 BasicCollection::implGetIndexForName( const OUString& rName )
 {
     sal_Int32 nIndex = -1;
     sal_Int32 nCount = xItemArray->Count32();
@@ -2171,7 +2171,7 @@ sal_Int32 BasicCollection::implGetIndexForName( const String& rName )
     {
         SbxVariable* pVar = xItemArray->Get32( i );
         if( pVar->GetHashCode() == nNameHash &&
-            pVar->GetName().EqualsIgnoreCaseAscii( rName ) )
+            pVar->GetName().equalsIgnoreAsciiCase( rName ) )
         {
             nIndex = i;
             break;
@@ -2239,7 +2239,7 @@ void BasicCollection::CollAdd( SbxArray* pPar_ )
                     SetError( SbERR_BAD_ARGUMENT );
                     return;
                 }
-                String aKey = pKey->GetString();
+                OUString aKey = pKey->GetOUString();
                 if( implGetIndexForName( aKey ) != -1 )
                 {
                     SetError( SbERR_BAD_ARGUMENT );

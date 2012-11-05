@@ -191,9 +191,9 @@ bool SbiBuffer::operator +=( sal_Int32 n )
 }
 
 
-bool SbiBuffer::operator +=( const String& n )
+bool SbiBuffer::operator +=( const OUString& n )
 {
-    sal_uInt16 l = n.Len() + 1;
+    sal_uInt16 l = n.getLength() + 1;
     if( Check( l ) )
     {
         rtl::OString aByteStr(rtl::OUStringToOString(n, osl_getThreadTextEncoding()));
