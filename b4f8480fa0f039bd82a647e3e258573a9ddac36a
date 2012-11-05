@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAQH///4c\u003d",
+        "filename": "basic/inc/basic/sbxform.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2012-11-05T19:41:43Z",
+      "side": 1,
+      "message": "if you don\u0027t mind, lets keep that rabbit for a later patch :-)",
+      "parentUuid": "AAAAQH///68\u003d",
+      "revId": "b4f8480fa0f039bd82a647e3e258573a9ddac36a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAQH///64\u003d",
         "filename": "basic/inc/basic/sbxform.hxx",
         "patchSetId": 1
@@ -53,6 +71,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAQH///4s\u003d",
+        "filename": "basic/source/basmgr/basmgr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 532,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2012-11-05T19:41:43Z",
+      "side": 1,
+      "message": "done.",
+      "parentUuid": "AAAAQH///60\u003d",
+      "revId": "b4f8480fa0f039bd82a647e3e258573a9ddac36a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAQH///6s\u003d",
         "filename": "basic/source/classes/sb.cxx",
         "patchSetId": 1
@@ -64,6 +100,24 @@
       "writtenOn": "2012-11-05T17:53:15Z",
       "side": 1,
       "message": "I guess for brevity we could just do\nSbxVariable* p \u003d pMethods-\u003eFind( pImplMethod-\u003eGetName(), SbxCLASS_METHOD );\nas GetName surely returns OUString now",
+      "revId": "b4f8480fa0f039bd82a647e3e258573a9ddac36a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAQH///4o\u003d",
+        "filename": "basic/source/classes/sb.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 675,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2012-11-05T19:41:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAAQH///6s\u003d",
       "revId": "b4f8480fa0f039bd82a647e3e258573a9ddac36a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -87,6 +141,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAQH///4k\u003d",
+        "filename": "basic/source/classes/sb.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1656,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2012-11-05T19:41:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAAQH///8k\u003d",
+      "revId": "b4f8480fa0f039bd82a647e3e258573a9ddac36a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAQH///6k\u003d",
         "filename": "basic/source/classes/sb.cxx",
         "patchSetId": 1
@@ -104,6 +176,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAQH///4g\u003d",
+        "filename": "basic/source/classes/sb.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1663,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2012-11-05T19:41:43Z",
+      "side": 1,
+      "message": "Done.",
+      "parentUuid": "AAAAQH///6k\u003d",
+      "revId": "b4f8480fa0f039bd82a647e3e258573a9ddac36a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAQH///6g\u003d",
         "filename": "basic/source/comp/buffer.cxx",
         "patchSetId": 1
@@ -115,6 +205,24 @@
       "writtenOn": "2012-11-05T17:53:15Z",
       "side": 1,
       "message": "l should be sal_uInt32 ?",
+      "revId": "b4f8480fa0f039bd82a647e3e258573a9ddac36a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAQH///40\u003d",
+        "filename": "basic/source/comp/buffer.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 197,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2012-11-05T19:41:43Z",
+      "side": 1,
+      "message": "done... reworked Check() also",
+      "parentUuid": "AAAAQH///6g\u003d",
       "revId": "b4f8480fa0f039bd82a647e3e258573a9ddac36a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -258,6 +366,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAQH///4Y\u003d",
+        "filename": "basic/source/runtime/methods.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 430,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2012-11-05T19:41:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAAQH///8Q\u003d",
+      "revId": "b4f8480fa0f039bd82a647e3e258573a9ddac36a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAQH///8M\u003d",
         "filename": "basic/source/runtime/methods.cxx",
         "patchSetId": 1
@@ -269,6 +395,24 @@
       "writtenOn": "2012-11-05T11:21:49Z",
       "side": 1,
       "message": "should be \"str \u003d str.toAsciiUpperCase();\"",
+      "revId": "b4f8480fa0f039bd82a647e3e258573a9ddac36a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAQH///4U\u003d",
+        "filename": "basic/source/runtime/methods.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 956,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2012-11-05T19:41:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAAQH///8M\u003d",
       "revId": "b4f8480fa0f039bd82a647e3e258573a9ddac36a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -292,6 +436,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAQH///4Q\u003d",
+        "filename": "basic/source/runtime/methods.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1034,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2012-11-05T19:41:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAAQH///8I\u003d",
+      "revId": "b4f8480fa0f039bd82a647e3e258573a9ddac36a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAQH///8E\u003d",
         "filename": "basic/source/runtime/methods.cxx",
         "patchSetId": 1
@@ -303,6 +465,24 @@
       "writtenOn": "2012-11-05T11:21:49Z",
       "side": 1,
       "message": "should be \"str \u003d str.toAsciiUpperCase();\"",
+      "revId": "b4f8480fa0f039bd82a647e3e258573a9ddac36a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAQH///4M\u003d",
+        "filename": "basic/source/runtime/methods.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1383,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2012-11-05T19:41:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAAQH///8E\u003d",
       "revId": "b4f8480fa0f039bd82a647e3e258573a9ddac36a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -326,6 +506,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAQH///4I\u003d",
+        "filename": "basic/source/runtime/methods.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1385,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2012-11-05T19:41:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAAQH///8A\u003d",
+      "revId": "b4f8480fa0f039bd82a647e3e258573a9ddac36a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAQH///6A\u003d",
         "filename": "basic/source/runtime/methods.cxx",
         "patchSetId": 1
@@ -343,6 +541,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAQH///4E\u003d",
+        "filename": "basic/source/runtime/methods.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1581,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2012-11-05T19:41:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAAQH///6A\u003d",
+      "revId": "b4f8480fa0f039bd82a647e3e258573a9ddac36a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAQH///6E\u003d",
         "filename": "basic/source/runtime/methods.cxx",
         "patchSetId": 1
@@ -354,6 +570,24 @@
       "writtenOn": "2012-11-05T17:53:15Z",
       "side": 1,
       "message": "should be aStrNew +\u003d aStr.copy(iZeroSearch) ?",
+      "revId": "b4f8480fa0f039bd82a647e3e258573a9ddac36a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAQH///4A\u003d",
+        "filename": "basic/source/runtime/methods.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1588,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2012-11-05T19:41:43Z",
+      "side": 1,
+      "message": "yep, done",
+      "parentUuid": "AAAAQH///6E\u003d",
       "revId": "b4f8480fa0f039bd82a647e3e258573a9ddac36a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -428,6 +662,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAQH///38\u003d",
+        "filename": "basic/source/sbx/sbxarray.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 264,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2012-11-05T19:41:43Z",
+      "side": 1,
+      "message": "no magic.. just this coder dumbness\ntried another way...",
+      "parentUuid": "AAAAQH///58\u003d",
+      "revId": "b4f8480fa0f039bd82a647e3e258573a9ddac36a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAQH///54\u003d",
         "filename": "basic/source/sbx/sbxform.cxx",
         "patchSetId": 1
@@ -439,6 +691,24 @@
       "writtenOn": "2012-11-05T17:53:15Z",
       "side": 1,
       "message": "doesn\u0027t OUStrintBuffer::remove not do the same thing ?",
+      "revId": "b4f8480fa0f039bd82a647e3e258573a9ddac36a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAQH///34\u003d",
+        "filename": "basic/source/sbx/sbxform.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2012-11-05T19:41:43Z",
+      "side": 1,
+      "message": "yep.. prolly did not know about it at the time :-)",
+      "parentUuid": "AAAAQH///54\u003d",
       "revId": "b4f8480fa0f039bd82a647e3e258573a9ddac36a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -462,6 +732,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAQH///30\u003d",
+        "filename": "basic/source/sbx/sbxform.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2012-11-05T19:41:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "AAAAQH///7o\u003d",
+      "revId": "b4f8480fa0f039bd82a647e3e258573a9ddac36a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAQH///50\u003d",
         "filename": "basic/source/sbx/sbxform.cxx",
         "patchSetId": 1
@@ -479,6 +767,24 @@
     },
     {
       "key": {
+        "uuid": "AAAAQH///3w\u003d",
+        "filename": "basic/source/sbx/sbxform.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 500,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2012-11-05T19:41:43Z",
+      "side": 1,
+      "message": "done",
+      "parentUuid": "AAAAQH///50\u003d",
+      "revId": "b4f8480fa0f039bd82a647e3e258573a9ddac36a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAQH///5w\u003d",
         "filename": "basic/source/sbx/sbxform.cxx",
         "patchSetId": 1
@@ -490,6 +796,24 @@
       "writtenOn": "2012-11-05T17:53:15Z",
       "side": 1,
       "message": "i -\u003e sal_Int32",
+      "revId": "b4f8480fa0f039bd82a647e3e258573a9ddac36a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAQH///3s\u003d",
+        "filename": "basic/source/sbx/sbxform.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 517,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2012-11-05T19:41:43Z",
+      "side": 1,
+      "message": "done",
+      "parentUuid": "AAAAQH///5w\u003d",
       "revId": "b4f8480fa0f039bd82a647e3e258573a9ddac36a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
