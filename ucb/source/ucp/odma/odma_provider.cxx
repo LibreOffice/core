@@ -46,8 +46,8 @@ using namespace odma;
 ODMHANDLE ContentProvider::m_aOdmHandle = NULL;
 
 ContentProvider::ContentProvider(
-                const uno::Reference< lang::XMultiServiceFactory >& rSMgr )
-: ::ucbhelper::ContentProviderImplHelper( rSMgr )
+                const uno::Reference< uno::XComponentContext >& rContext )
+: ::ucbhelper::ContentProviderImplHelper( rContext )
 {
 
 }
@@ -139,7 +139,7 @@ XTYPEPROVIDER_IMPL_3( ContentProvider,
 
 // @@@ Adjust implementation name. Keep the prefix "com.sun.star.comp."!
 // @@@ Adjust service name.
-XSERVICEINFO_IMPL_1( ContentProvider,
+XSERVICEINFO_IMPL_1_CTX( ContentProvider,
                      rtl::OUString( "com.sun.star.comp.odma.ContentProvider" ),
                      rtl::OUString(ODMA_CONTENT_PROVIDER_SERVICE_NAME ) );
 
