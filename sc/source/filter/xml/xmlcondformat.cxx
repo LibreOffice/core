@@ -433,6 +433,38 @@ void GetConditionData(const rtl::OUString& rValue, ScConditionMode& eMode, rtl::
         rExpr1 = ScXMLConditionHelper::getExpression( pStart, pEnd, ')');
         eMode = SC_COND_DIRECT;
     }
+    else if(rValue.indexOf("top-elements") == 0)
+    {
+        const sal_Unicode* pStr = rValue.getStr();
+        const sal_Unicode* pStart = pStr + 13;
+        const sal_Unicode* pEnd = pStr + rValue.getLength();
+        rExpr1 = ScXMLConditionHelper::getExpression( pStart, pEnd, ')');
+        eMode = SC_COND_TOP10;
+    }
+    else if(rValue.indexOf("bottom-elements") == 0)
+    {
+        const sal_Unicode* pStr = rValue.getStr();
+        const sal_Unicode* pStart = pStr + 16;
+        const sal_Unicode* pEnd = pStr + rValue.getLength();
+        rExpr1 = ScXMLConditionHelper::getExpression( pStart, pEnd, ')');
+        eMode = SC_COND_BOTTOM10;
+    }
+    else if(rValue.indexOf("top-percent") == 0)
+    {
+        const sal_Unicode* pStr = rValue.getStr();
+        const sal_Unicode* pStart = pStr + 11;
+        const sal_Unicode* pEnd = pStr + rValue.getLength();
+        rExpr1 = ScXMLConditionHelper::getExpression( pStart, pEnd, ')');
+        eMode = SC_COND_TOP_PERCENT;
+    }
+    else if(rValue.indexOf("bottom-percent") == 0)
+    {
+        const sal_Unicode* pStr = rValue.getStr();
+        const sal_Unicode* pStart = pStr + 15;
+        const sal_Unicode* pEnd = pStr + rValue.getLength();
+        rExpr1 = ScXMLConditionHelper::getExpression( pStart, pEnd, ')');
+        eMode = SC_COND_BOTTOM_PERCENT;
+    }
     else if(rValue.indexOf("is-error") == 0)
     {
         eMode = SC_COND_ERROR;
