@@ -1,0 +1,293 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAQH///8k\u003d",
+        "filename": "basic/source/classes/sb.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1656,
+      "author": {
+        "id": 1000025
+      },
+      "writtenOn": "2012-11-05T11:21:49Z",
+      "side": 1,
+      "message": "match -\u003e indexOf",
+      "revId": "b4f8480fa0f039bd82a647e3e258573a9ddac36a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAQH///8g\u003d",
+        "filename": "basic/source/comp/codegen.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 1000025
+      },
+      "writtenOn": "2012-11-05T11:21:49Z",
+      "side": 1,
+      "message": "match -\u003e indexOf",
+      "revId": "b4f8480fa0f039bd82a647e3e258573a9ddac36a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAQH///8c\u003d",
+        "filename": "basic/source/comp/codegen.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 188,
+      "author": {
+        "id": 1000025
+      },
+      "writtenOn": "2012-11-05T11:21:49Z",
+      "side": 1,
+      "message": "match -\u003e indexOf",
+      "revId": "b4f8480fa0f039bd82a647e3e258573a9ddac36a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAQH///8Y\u003d",
+        "filename": "basic/source/comp/sbcomp.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 675,
+      "author": {
+        "id": 1000025
+      },
+      "writtenOn": "2012-11-05T11:21:49Z",
+      "side": 1,
+      "message": "AppendAscii -\u003e +\u003d",
+      "revId": "b4f8480fa0f039bd82a647e3e258573a9ddac36a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAQH///8U\u003d",
+        "filename": "basic/source/inc/runtime.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1000025
+      },
+      "writtenOn": "2012-11-05T11:21:49Z",
+      "side": 1,
+      "message": "sal_uInt16 -\u003e sal_Int32",
+      "revId": "b4f8480fa0f039bd82a647e3e258573a9ddac36a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAQH///8Q\u003d",
+        "filename": "basic/source/runtime/methods.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 430,
+      "author": {
+        "id": 1000025
+      },
+      "writtenOn": "2012-11-05T11:21:49Z",
+      "side": 1,
+      "message": "remove GetBuffer()",
+      "revId": "b4f8480fa0f039bd82a647e3e258573a9ddac36a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAQH///8M\u003d",
+        "filename": "basic/source/runtime/methods.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 956,
+      "author": {
+        "id": 1000025
+      },
+      "writtenOn": "2012-11-05T11:21:49Z",
+      "side": 1,
+      "message": "should be \"str \u003d str.toAsciiUpperCase();\"",
+      "revId": "b4f8480fa0f039bd82a647e3e258573a9ddac36a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAQH///8I\u003d",
+        "filename": "basic/source/runtime/methods.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1034,
+      "author": {
+        "id": 1000025
+      },
+      "writtenOn": "2012-11-05T11:21:49Z",
+      "side": 1,
+      "message": "should be \"str \u003d str.toAsciiUpperCase();\"",
+      "revId": "b4f8480fa0f039bd82a647e3e258573a9ddac36a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAQH///8E\u003d",
+        "filename": "basic/source/runtime/methods.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1383,
+      "author": {
+        "id": 1000025
+      },
+      "writtenOn": "2012-11-05T11:21:49Z",
+      "side": 1,
+      "message": "should be \"str \u003d str.toAsciiUpperCase();\"",
+      "revId": "b4f8480fa0f039bd82a647e3e258573a9ddac36a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAQH///8A\u003d",
+        "filename": "basic/source/runtime/methods.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1385,
+      "author": {
+        "id": 1000025
+      },
+      "writtenOn": "2012-11-05T11:21:49Z",
+      "side": 1,
+      "message": "match -\u003e indexOf",
+      "revId": "b4f8480fa0f039bd82a647e3e258573a9ddac36a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAQH///70\u003d",
+        "filename": "basic/source/runtime/methods.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3724,
+      "author": {
+        "id": 1000025
+      },
+      "writtenOn": "2012-11-05T11:21:49Z",
+      "side": 1,
+      "message": "redundant cast",
+      "revId": "b4f8480fa0f039bd82a647e3e258573a9ddac36a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAQH///7w\u003d",
+        "filename": "basic/source/runtime/methods1.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1793,
+      "author": {
+        "id": 1000025
+      },
+      "writtenOn": "2012-11-05T11:21:49Z",
+      "side": 1,
+      "message": "match -\u003e indexOf",
+      "revId": "b4f8480fa0f039bd82a647e3e258573a9ddac36a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAQH///7s\u003d",
+        "filename": "basic/source/runtime/sbdiagnose.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1000025
+      },
+      "writtenOn": "2012-11-05T11:21:49Z",
+      "side": 1,
+      "message": "Len() \u003d\u003d 0 -\u003e isEmpty(), GetString -\u003e GetOUString",
+      "revId": "b4f8480fa0f039bd82a647e3e258573a9ddac36a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAQH///7o\u003d",
+        "filename": "basic/source/sbx/sbxform.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1000025
+      },
+      "writtenOn": "2012-11-05T11:21:49Z",
+      "side": 1,
+      "message": "nPos -\u003e nPos-1",
+      "revId": "b4f8480fa0f039bd82a647e3e258573a9ddac36a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAQH///7g\u003d",
+        "filename": "basic/source/sbx/sbxobj.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 541,
+      "author": {
+        "id": 1000025
+      },
+      "writtenOn": "2012-11-05T11:21:49Z",
+      "side": 1,
+      "message": "Len() -\u003e isEmpty()",
+      "revId": "b4f8480fa0f039bd82a647e3e258573a9ddac36a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAQH///7c\u003d",
+        "filename": "basic/source/sbx/sbxobj.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 568,
+      "author": {
+        "id": 1000025
+      },
+      "writtenOn": "2012-11-05T11:21:49Z",
+      "side": 1,
+      "message": "(Draft)\t\tDraft saved at 3:06 PM\n\nLen() -\u003e isEmpty()",
+      "revId": "b4f8480fa0f039bd82a647e3e258573a9ddac36a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAQH///7Y\u003d",
+        "filename": "basic/source/sbx/sbxvar.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1000025
+      },
+      "writtenOn": "2012-11-05T11:21:49Z",
+      "side": 1,
+      "message": "what is the purpose of this code?",
+      "revId": "b4f8480fa0f039bd82a647e3e258573a9ddac36a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
