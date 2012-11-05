@@ -61,28 +61,34 @@ public:
     const NfKeywordTable & GetKeywords() const
         {
             if ( bKeywordsNeedInit )
+            {
                 InitKeywords();
+            }
             return sKeyword;
         }
     // Keywords used in output like true and false
-    const String& GetSpecialKeyword( NfKeywordIndex eIdx ) const
+    const OUString& GetSpecialKeyword( NfKeywordIndex eIdx ) const
         {
-            if ( !sKeyword[eIdx].Len() )
+            if ( sKeyword[eIdx].isEmpty() )
+            {
                 InitSpecialKeyword( eIdx );
+            }
             return sKeyword[eIdx];
         }
-    const String& GetTrueString() const     { return GetSpecialKeyword( NF_KEY_TRUE ); }
-    const String& GetFalseString() const    { return GetSpecialKeyword( NF_KEY_FALSE ); }
-    const String& GetColorString() const    { return GetKeywords()[NF_KEY_COLOR]; }
-    const String& GetRedString() const      { return GetKeywords()[NF_KEY_RED]; }
-    const String& GetBooleanString() const  { return GetKeywords()[NF_KEY_BOOLEAN]; }
+    const OUString& GetTrueString() const     { return GetSpecialKeyword( NF_KEY_TRUE ); }
+    const OUString& GetFalseString() const    { return GetSpecialKeyword( NF_KEY_FALSE ); }
+    const OUString& GetColorString() const    { return GetKeywords()[NF_KEY_COLOR]; }
+    const OUString& GetRedString() const      { return GetKeywords()[NF_KEY_RED]; }
+    const OUString& GetBooleanString() const  { return GetKeywords()[NF_KEY_BOOLEAN]; }
     const String& GetErrorString() const    { return sErrStr; }
 
     Date* GetNullDate() const                   { return pNullDate; }
     const String& GetStandardName() const
         {
             if ( bKeywordsNeedInit )
+            {
                 InitKeywords();
+            }
             return sNameStandardFormat;
         }
     sal_uInt16 GetStandardPrec() const          { return nStandardPrec; }

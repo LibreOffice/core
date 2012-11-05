@@ -1415,9 +1415,9 @@ short SvNumberformat::ImpNextSymbol(String& rString,
                                 BRACKET_SYMBOLTYPE_DBNUM1 - (cDBNum - '1'));
                             eState = SsGetPrefix;
                         }
-                        else if (cUpper == rKeywords[NF_KEY_H].GetChar(0)   ||  // H
-                            cUpper == rKeywords[NF_KEY_MI].GetChar(0)   ||  // M
-                            cUpper == rKeywords[NF_KEY_S].GetChar(0)    )   // S
+                        else if (cUpper == rKeywords[NF_KEY_H][0] ||  // H
+                                 cUpper == rKeywords[NF_KEY_MI][0] ||  // M
+                                 cUpper == rKeywords[NF_KEY_S][0] )   // S
                         {
                             sSymbol += cToken;
                             eState = SsGetTime;
@@ -1454,9 +1454,9 @@ short SvNumberformat::ImpNextSymbol(String& rString,
                 else
                 {
                     sal_Unicode cUpper = rChrCls().uppercase(rString, nPos-1, 1)[0];
-                    if (cUpper == rKeywords[NF_KEY_H].GetChar(0)    ||  // H
-                        cUpper == rKeywords[NF_KEY_MI].GetChar(0)   ||  // M
-                        cUpper == rKeywords[NF_KEY_S].GetChar(0)    )   // S
+                    if (cUpper == rKeywords[NF_KEY_H][0] ||  // H
+                        cUpper == rKeywords[NF_KEY_MI][0] ||  // M
+                        cUpper == rKeywords[NF_KEY_S][0] )   // S
                     {
                         if (cLetter == cToken)
                         {
@@ -1593,10 +1593,10 @@ NfHackConversion SvNumberformat::Load( SvStream& rStream,
             // System-German FARBE nach System-xxx COLOR umsetzen und vice versa,
             //! geht davon aus, dass onSave nur GERMAN und ENGLISH KeyWords in
             //! ImpSvNumberformatScan existierten
-            if ( aLoadedColorName.Len() && !NumFor[i].GetColor()
-                    && aLoadedColorName != rScan.GetColorString() )
+            if ( aLoadedColorName.Len() && !NumFor[i].GetColor() &&
+                 OUString(aLoadedColorName) != rScan.GetColorString() )
             {
-                if ( rScan.GetColorString().EqualsAscii( "FARBE" ) )
+                if ( rScan.GetColorString() == "FARBE" )
                 {   // English -> German
                     eHackConversion = NF_CONVERT_ENGLISH_GERMAN;
                     rScan.GetNumberformatter()->ChangeIntl( LANGUAGE_ENGLISH_US );
@@ -1611,7 +1611,9 @@ NfHackConversion SvNumberformat::Load( SvStream& rStream,
                 String aColorName = NumFor[i].GetColorName();
                 const Color* pColor = rScan.GetColor( aColorName );
                 if ( !pColor && aLoadedColorName == aColorName )
+                {
                     eHackConversion = NF_CONVERT_NONE;
+                }
                 rScan.GetNumberformatter()->ChangeIntl( LANGUAGE_SYSTEM );
                 rScan.SetConvertMode( eOldTmpLang, eOldNewLang );
                 rScan.SetConvertMode( bOldConvert );
@@ -4572,9 +4574,9 @@ static void lcl_SvNumberformat_AddLimitStringImpl( String& rStr,
     }
 }
 
-OUString SvNumberformat::GetMappedFormatstring(
-        const NfKeywordTable& rKeywords, const LocaleDataWrapper& rLocWrp,
-        bool bDontQuote ) const
+OUString SvNumberformat::GetMappedFormatstring( const NfKeywordTable& rKeywords,
+                                                const LocaleDataWrapper& rLocWrp,
+                                                bool bDontQuote ) const
 {
     OUStringBuffer aStr;
     bool bDefault[4];
@@ -4635,16 +4637,16 @@ OUString SvNumberformat::GetMappedFormatstring(
             }
         }
 
-        const String& rColorName = NumFor[n].GetColorName();
-        if ( rColorName.Len() )
+        const OUString& rColorName = NumFor[n].GetColorName();
+        if ( !rColorName.isEmpty() )
         {
             const NfKeywordTable & rKey = rScan.GetKeywords();
-            for ( int j=NF_KEY_FIRSTCOLOR; j<=NF_KEY_LASTCOLOR; j++ )
+            for ( int j = NF_KEY_FIRSTCOLOR; j <= NF_KEY_LASTCOLOR; j++ )
             {
                 if ( rKey[j] == rColorName )
                 {
                     aPrefix += '[';
-                    aPrefix += rKeywords[j];
+                    aPrefix += String(rKeywords[j]);
                     aPrefix += ']';
                     break;  // for
                 }
@@ -4681,56 +4683,56 @@ OUString SvNumberformat::GetMappedFormatstring(
                 {
                     switch ( pType[j] )
                     {
-                        case NF_SYMBOLTYPE_DECSEP :
-                            aStr.append( rLocWrp.getNumDecimalSep() );
+                    case NF_SYMBOLTYPE_DECSEP :
+                        aStr.append( rLocWrp.getNumDecimalSep() );
                         break;
-                        case NF_SYMBOLTYPE_THSEP :
-                            aStr.append( rLocWrp.getNumThousandSep() );
+                    case NF_SYMBOLTYPE_THSEP :
+                        aStr.append( rLocWrp.getNumThousandSep() );
                         break;
-                        case NF_SYMBOLTYPE_DATESEP :
-                            aStr.append( rLocWrp.getDateSep() );
+                    case NF_SYMBOLTYPE_DATESEP :
+                        aStr.append( rLocWrp.getDateSep() );
                         break;
-                        case NF_SYMBOLTYPE_TIMESEP :
-                            aStr.append( rLocWrp.getTimeSep() );
+                    case NF_SYMBOLTYPE_TIMESEP :
+                        aStr.append( rLocWrp.getTimeSep() );
                         break;
-                        case NF_SYMBOLTYPE_TIME100SECSEP :
-                            aStr.append( rLocWrp.getTime100SecSep() );
+                    case NF_SYMBOLTYPE_TIME100SECSEP :
+                        aStr.append( rLocWrp.getTime100SecSep() );
                         break;
-                        case NF_SYMBOLTYPE_STRING :
-                            if( bDontQuote )
-                                aStr.append( pStr[j] );
-                            else if ( pStr[j].getLength() == 1 )
+                    case NF_SYMBOLTYPE_STRING :
+                        if( bDontQuote )
+                            aStr.append( pStr[j] );
+                        else if ( pStr[j].getLength() == 1 )
+                        {
+                            aStr.append( '\\' );
+                            aStr.append( pStr[j] );
+                        }
+                        else
+                        {
+                            aStr.append( '"' );
+                            aStr.append( pStr[j] );
+                            aStr.append( '"' );
+                        }
+                        break;
+                    case NF_SYMBOLTYPE_CALDEL :
+                        if ( pStr[j+1].equalsAscii("buddhist") )
+                        {
+                            aStr.insert( 0, "[$-" );
+                            if ( rNum.IsSet() && rNum.GetNatNum() == 1 &&
+                                 MsLangId::getRealLanguage( rNum.GetLang() ) ==
+                                 LANGUAGE_THAI )
                             {
-                                aStr.append( '\\' );
-                                aStr.append( pStr[j] );
+                                aStr.insert( 3, "D07041E]" ); // date in Thai digit, Buddhist era
                             }
                             else
                             {
-                                aStr.append( '"' );
-                                aStr.append( pStr[j] );
-                                aStr.append( '"' );
+                                aStr.insert( 3, "107041E]" ); // date in Arabic digit, Buddhist era
                             }
-                            break;
-                        case NF_SYMBOLTYPE_CALDEL :
-                            if ( pStr[j+1].equalsAscii("buddhist") )
-                            {
-                                aStr.insert( 0, "[$-" );
-                                if ( rNum.IsSet() && rNum.GetNatNum() == 1 &&
-                                        MsLangId::getRealLanguage( rNum.GetLang() ) ==
-                                        LANGUAGE_THAI )
-                                {
-                                    aStr.insert( 3, "D07041E]" ); // date in Thai digit, Buddhist era
-                                }
-                                else
-                                {
-                                    aStr.insert( 3, "107041E]" ); // date in Arabic digit, Buddhist era
-                                }
-                                j = j+2;
-                            }
-                            LCIDInserted = true;
+                            j = j+2;
+                        }
+                        LCIDInserted = true;
                         break;
-                        default:
-                            aStr.append( pStr[j] );
+                    default:
+                        aStr.append( pStr[j] );
                     }
 
                 }
@@ -4738,9 +4740,9 @@ OUString SvNumberformat::GetMappedFormatstring(
         }
         // The Thai T NatNum modifier during Xcl export.
         if (rNum.IsSet() && rNum.GetNatNum() == 1 &&
-                rKeywords[NF_KEY_THAI_T].EqualsAscii( "T") &&
-                MsLangId::getRealLanguage( rNum.GetLang()) ==
-                LANGUAGE_THAI && !LCIDInserted )
+            rKeywords[NF_KEY_THAI_T].equalsAscii( "T") &&
+            MsLangId::getRealLanguage( rNum.GetLang()) ==
+            LANGUAGE_THAI && !LCIDInserted )
         {
 
             aStr.insert( 0, "[$-D00041E]" ); // number in Thai digit

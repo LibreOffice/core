@@ -527,15 +527,21 @@ inline bool ImpSvNumberInputScan::GetThousandSep(
 short ImpSvNumberInputScan::GetLogical( const String& rString )
 {
     short res;
+    OUString aString(rString);
 
     const ImpSvNumberformatScan* pFS = pFormatter->GetFormatScanner();
-    if ( rString == pFS->GetTrueString() )
+    if ( aString == pFS->GetTrueString() )
+    {
         res = 1;
-    else if ( rString == pFS->GetFalseString() )
+    }
+    else if ( aString == pFS->GetFalseString() )
+    {
         res = -1;
+    }
     else
+    {
         res = 0;
-
+    }
     return res;
 }
 

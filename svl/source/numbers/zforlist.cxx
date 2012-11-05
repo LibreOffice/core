@@ -817,7 +817,7 @@ void SvNumberFormatter::GetUsedLanguages( std::vector<sal_uInt16>& rList )
 
 
 void SvNumberFormatter::FillKeywordTable( NfKeywordTable& rKeywords,
-        LanguageType eLang )
+                                          LanguageType eLang )
 {
     ChangeIntl( eLang );
     const NfKeywordTable & rTable = pFormatScanner->GetKeywords();

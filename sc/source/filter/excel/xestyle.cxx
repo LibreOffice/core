@@ -1247,12 +1247,12 @@ XclExpNumFmtBuffer::XclExpNumFmtBuffer( const XclExpRoot& rRoot ) :
 
     mxFormatter->FillKeywordTable( *mpKeywordTable, LANGUAGE_ENGLISH_US );
     // remap codes unknown to Excel
-    (*mpKeywordTable)[ NF_KEY_NN ] = String( RTL_CONSTASCII_USTRINGPARAM( "DDD" ) );
-    (*mpKeywordTable)[ NF_KEY_NNN ] = String( RTL_CONSTASCII_USTRINGPARAM( "DDDD" ) );
+    (*mpKeywordTable)[ NF_KEY_NN ] = "DDD";
+    (*mpKeywordTable)[ NF_KEY_NNN ] = "DDDD";
     // NNNN gets a separator appended in SvNumberformat::GetMappedFormatString()
-    (*mpKeywordTable)[ NF_KEY_NNNN ] = String( RTL_CONSTASCII_USTRINGPARAM( "DDDD" ) );
+    (*mpKeywordTable)[ NF_KEY_NNNN ] = "DDDD";
     // Export the Thai T NatNum modifier.
-    (*mpKeywordTable)[ NF_KEY_THAI_T ] = String( RTL_CONSTASCII_USTRINGPARAM( "T" ) );
+    (*mpKeywordTable)[ NF_KEY_THAI_T ] = "T";
 }
 
 XclExpNumFmtBuffer::~XclExpNumFmtBuffer()
@@ -2880,12 +2880,12 @@ XclExpDxfs::XclExpDxfs( const XclExpRoot& rRoot )
 {
     mxFormatter->FillKeywordTable( *mpKeywordTable, LANGUAGE_ENGLISH_US );
     // remap codes unknown to Excel
-    (*mpKeywordTable)[ NF_KEY_NN ] = String( RTL_CONSTASCII_USTRINGPARAM( "DDD" ) );
-    (*mpKeywordTable)[ NF_KEY_NNN ] = String( RTL_CONSTASCII_USTRINGPARAM( "DDDD" ) );
+    (*mpKeywordTable)[ NF_KEY_NN ] = "DDD";
+    (*mpKeywordTable)[ NF_KEY_NNN ] = "DDDD";
     // NNNN gets a separator appended in SvNumberformat::GetMappedFormatString()
-    (*mpKeywordTable)[ NF_KEY_NNNN ] = String( RTL_CONSTASCII_USTRINGPARAM( "DDDD" ) );
+    (*mpKeywordTable)[ NF_KEY_NNNN ] = "DDDD";
     // Export the Thai T NatNum modifier.
-    (*mpKeywordTable)[ NF_KEY_THAI_T ] = String( RTL_CONSTASCII_USTRINGPARAM( "T" ) );
+    (*mpKeywordTable)[ NF_KEY_THAI_T ] = "T";
 
     SCTAB nTables = rRoot.GetDoc().GetTableCount();
     for(SCTAB nTab = 0; nTab < nTables; ++nTab)

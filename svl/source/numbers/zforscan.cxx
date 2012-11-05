@@ -72,20 +72,20 @@ ImpSvNumberformatScan::ImpSvNumberformatScan( SvNumberFormatter* pFormatterP )
     pFormatter = pFormatterP;
     bConvertMode = false;
     //! All keywords MUST be UPPERCASE!
-    sKeyword[NF_KEY_E].AssignAscii( RTL_CONSTASCII_STRINGPARAM(     "E" ) );        // Exponent
-    sKeyword[NF_KEY_AMPM].AssignAscii( RTL_CONSTASCII_STRINGPARAM(  "AM/PM" ) );    // AM/PM
-    sKeyword[NF_KEY_AP].AssignAscii( RTL_CONSTASCII_STRINGPARAM(    "A/P" ) );      // AM/PM short
-    sKeyword[NF_KEY_MI].AssignAscii( RTL_CONSTASCII_STRINGPARAM(    "M" ) );        // Minute
-    sKeyword[NF_KEY_MMI].AssignAscii( RTL_CONSTASCII_STRINGPARAM(   "MM" ) );       // Minute 02
-    sKeyword[NF_KEY_S].AssignAscii( RTL_CONSTASCII_STRINGPARAM(     "S" ) );        // Second
-    sKeyword[NF_KEY_SS].AssignAscii( RTL_CONSTASCII_STRINGPARAM(    "SS" ) );       // Second 02
-    sKeyword[NF_KEY_Q].AssignAscii( RTL_CONSTASCII_STRINGPARAM(     "Q" ) );        // Quarter short 'Q'
-    sKeyword[NF_KEY_QQ].AssignAscii( RTL_CONSTASCII_STRINGPARAM(    "QQ" ) );       // Quarter long
-    sKeyword[NF_KEY_NN].AssignAscii( RTL_CONSTASCII_STRINGPARAM(    "NN" ) );       // Day of week short
-    sKeyword[NF_KEY_NNN].AssignAscii( RTL_CONSTASCII_STRINGPARAM(   "NNN" ) );      // Day of week long
-    sKeyword[NF_KEY_NNNN].AssignAscii( RTL_CONSTASCII_STRINGPARAM(  "NNNN" ) );     // Day of week long incl. separator
-    sKeyword[NF_KEY_WW].AssignAscii( RTL_CONSTASCII_STRINGPARAM(    "WW" ) );       // Week of year
-    sKeyword[NF_KEY_CCC].AssignAscii( RTL_CONSTASCII_STRINGPARAM(   "CCC" ) );      // Currency abbreviation
+    sKeyword[NF_KEY_E] =     "E";        // Exponent
+    sKeyword[NF_KEY_AMPM] =  "AM/PM";    // AM/PM
+    sKeyword[NF_KEY_AP] =    "A/P";      // AM/PM short
+    sKeyword[NF_KEY_MI] =    "M";        // Minute
+    sKeyword[NF_KEY_MMI] =   "MM";       // Minute 02
+    sKeyword[NF_KEY_S] =     "S";        // Second
+    sKeyword[NF_KEY_SS] =    "SS";       // Second 02
+    sKeyword[NF_KEY_Q] =     "Q";        // Quarter short 'Q'
+    sKeyword[NF_KEY_QQ] =    "QQ";       // Quarter long
+    sKeyword[NF_KEY_NN] =    "NN";       // Day of week short
+    sKeyword[NF_KEY_NNN] =   "NNN";      // Day of week long
+    sKeyword[NF_KEY_NNNN] =  "NNNN";     // Day of week long incl. separator
+    sKeyword[NF_KEY_WW] =    "WW";       // Week of year
+    sKeyword[NF_KEY_CCC] =   "CCC";      // Currency abbreviation
     bKeywordsNeedInit = true;   // locale dependent keywords
     bCompatCurNeedInit = true;  // locale dependent compatibility currency strings
 
@@ -103,7 +103,7 @@ ImpSvNumberformatScan::ImpSvNumberformatScan( SvNumberFormatter* pFormatterP )
     pNullDate = new Date(30,12,1899);
     nStandardPrec = 2;
 
-    sErrStr.AssignAscii( RTL_CONSTASCII_STRINGPARAM( "###" ) );
+    sErrStr.AssignAscii( RTL_CONSTASCII_STRINGPARAM( "###"));
     Reset();
 }
 
@@ -118,36 +118,34 @@ void ImpSvNumberformatScan::ChangeIntl()
     bKeywordsNeedInit = true;
     bCompatCurNeedInit = true;
     // may be initialized by InitSpecialKeyword()
-    sKeyword[NF_KEY_TRUE].Erase();
-    sKeyword[NF_KEY_FALSE].Erase();
+    sKeyword[NF_KEY_TRUE] = "";
+    sKeyword[NF_KEY_FALSE] = "";
 }
 
 void ImpSvNumberformatScan::InitSpecialKeyword( NfKeywordIndex eIdx ) const
 {
     switch ( eIdx )
     {
-        case NF_KEY_TRUE :
-            ((ImpSvNumberformatScan*)this)->sKeyword[NF_KEY_TRUE] =
-                pFormatter->GetCharClass()->uppercase(
-                pFormatter->GetLocaleData()->getTrueWord() );
-            if ( !sKeyword[NF_KEY_TRUE].Len() )
-            {
-                SAL_WARN( "svl.numbers", "InitSpecialKeyword: TRUE_WORD?" );
-                ((ImpSvNumberformatScan*)this)->sKeyword[NF_KEY_TRUE].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "TRUE" ) );
-            }
+    case NF_KEY_TRUE :
+        ((ImpSvNumberformatScan*)this)->sKeyword[NF_KEY_TRUE] =
+            pFormatter->GetCharClass()->uppercase( pFormatter->GetLocaleData()->getTrueWord() );
+        if ( sKeyword[NF_KEY_TRUE].isEmpty() )
+        {
+            SAL_WARN( "svl.numbers", "InitSpecialKeyword: TRUE_WORD?" );
+            ((ImpSvNumberformatScan*)this)->sKeyword[NF_KEY_TRUE] = "TRUE";
+        }
         break;
-        case NF_KEY_FALSE :
-            ((ImpSvNumberformatScan*)this)->sKeyword[NF_KEY_FALSE] =
-                pFormatter->GetCharClass()->uppercase(
-                pFormatter->GetLocaleData()->getFalseWord() );
-            if ( !sKeyword[NF_KEY_FALSE].Len() )
-            {
-                SAL_WARN( "svl.numbers", "InitSpecialKeyword: FALSE_WORD?" );
-                ((ImpSvNumberformatScan*)this)->sKeyword[NF_KEY_FALSE].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "FALSE" ) );
-            }
+    case NF_KEY_FALSE :
+        ((ImpSvNumberformatScan*)this)->sKeyword[NF_KEY_FALSE] =
+            pFormatter->GetCharClass()->uppercase( pFormatter->GetLocaleData()->getFalseWord() );
+        if ( sKeyword[NF_KEY_FALSE].isEmpty() )
+        {
+            SAL_WARN( "svl.numbers", "InitSpecialKeyword: FALSE_WORD?" );
+            ((ImpSvNumberformatScan*)this)->sKeyword[NF_KEY_FALSE] = "FALSE";
+        }
         break;
-        default:
-            SAL_WARN( "svl.numbers", "InitSpecialKeyword: unknown request" );
+    default:
+        SAL_WARN( "svl.numbers", "InitSpecialKeyword: unknown request" );
     }
 }
 
@@ -230,204 +228,203 @@ void ImpSvNumberformatScan::SetDependentKeywords()
     sKeyword[NF_KEY_GENERAL] = pCharClass->uppercase( sNameStandardFormat );
 
     // preset new calendar keywords
-    sKeyword[NF_KEY_AAA].AssignAscii( RTL_CONSTASCII_STRINGPARAM(   "AAA" ) );
-    sKeyword[NF_KEY_AAAA].AssignAscii( RTL_CONSTASCII_STRINGPARAM(  "AAAA" ) );
-    sKeyword[NF_KEY_EC].AssignAscii( RTL_CONSTASCII_STRINGPARAM(    "E" ) );
-    sKeyword[NF_KEY_EEC].AssignAscii( RTL_CONSTASCII_STRINGPARAM(   "EE" ) );
-    sKeyword[NF_KEY_G].AssignAscii( RTL_CONSTASCII_STRINGPARAM(     "G" ) );
-    sKeyword[NF_KEY_GG].AssignAscii( RTL_CONSTASCII_STRINGPARAM(    "GG" ) );
-    sKeyword[NF_KEY_GGG].AssignAscii( RTL_CONSTASCII_STRINGPARAM(   "GGG" ) );
-    sKeyword[NF_KEY_R].AssignAscii( RTL_CONSTASCII_STRINGPARAM(     "R" ) );
-    sKeyword[NF_KEY_RR].AssignAscii( RTL_CONSTASCII_STRINGPARAM(    "RR" ) );
+    sKeyword[NF_KEY_AAA] =   "AAA";
+    sKeyword[NF_KEY_AAAA] =  "AAAA";
+    sKeyword[NF_KEY_EC] =    "E";
+    sKeyword[NF_KEY_EEC] =   "EE";
+    sKeyword[NF_KEY_G] =     "G";
+    sKeyword[NF_KEY_GG] =    "GG";
+    sKeyword[NF_KEY_GGG] =   "GGG";
+    sKeyword[NF_KEY_R] =     "R";
+    sKeyword[NF_KEY_RR] =    "RR";
 
     // Thai T NatNum special. Other locale's small letter 't' results in upper
     // case comparison not matching but length does in conversion mode. Ugly.
     if (eLang == LANGUAGE_THAI)
-        sKeyword[NF_KEY_THAI_T].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "T"));
+    {
+        sKeyword[NF_KEY_THAI_T] = "T";
+    }
     else
-        sKeyword[NF_KEY_THAI_T].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "t"));
-
+    {
+        sKeyword[NF_KEY_THAI_T] = "t";
+    }
     switch ( eLang )
     {
-        case LANGUAGE_GERMAN:
-        case LANGUAGE_GERMAN_SWISS:
-        case LANGUAGE_GERMAN_AUSTRIAN:
-        case LANGUAGE_GERMAN_LUXEMBOURG:
-        case LANGUAGE_GERMAN_LIECHTENSTEIN:
-        {
-            //! all capital letters
-            sKeyword[NF_KEY_M].AssignAscii( RTL_CONSTASCII_STRINGPARAM(         "M" ) );            // month 1
-            sKeyword[NF_KEY_MM].AssignAscii( RTL_CONSTASCII_STRINGPARAM(        "MM" ) );           // month 01
-            sKeyword[NF_KEY_MMM].AssignAscii( RTL_CONSTASCII_STRINGPARAM(       "MMM" ) );      // month Jan
-            sKeyword[NF_KEY_MMMM].AssignAscii( RTL_CONSTASCII_STRINGPARAM(      "MMMM" ) ); // month Januar
-            sKeyword[NF_KEY_MMMMM].AssignAscii( RTL_CONSTASCII_STRINGPARAM(     "MMMMM" ) );// month J
-            sKeyword[NF_KEY_H].AssignAscii( RTL_CONSTASCII_STRINGPARAM(         "H" ) );            // hour 2
-            sKeyword[NF_KEY_HH].AssignAscii( RTL_CONSTASCII_STRINGPARAM(        "HH" ) );           // hour 02
-            sKeyword[NF_KEY_D].AssignAscii( RTL_CONSTASCII_STRINGPARAM(         "T" ) );
-            sKeyword[NF_KEY_DD].AssignAscii( RTL_CONSTASCII_STRINGPARAM(        "TT" ) );
-            sKeyword[NF_KEY_DDD].AssignAscii( RTL_CONSTASCII_STRINGPARAM(       "TTT" ) );
-            sKeyword[NF_KEY_DDDD].AssignAscii( RTL_CONSTASCII_STRINGPARAM(      "TTTT" ) );
-            sKeyword[NF_KEY_YY].AssignAscii( RTL_CONSTASCII_STRINGPARAM(        "JJ" ) );
-            sKeyword[NF_KEY_YYYY].AssignAscii( RTL_CONSTASCII_STRINGPARAM(      "JJJJ" ) );
-            sKeyword[NF_KEY_BOOLEAN].AssignAscii( RTL_CONSTASCII_STRINGPARAM(   "LOGISCH" ) );
-            sKeyword[NF_KEY_COLOR].AssignAscii( RTL_CONSTASCII_STRINGPARAM(     "FARBE" ) );
-            sKeyword[NF_KEY_BLACK].AssignAscii( RTL_CONSTASCII_STRINGPARAM(     "SCHWARZ" ) );
-            sKeyword[NF_KEY_BLUE].AssignAscii( RTL_CONSTASCII_STRINGPARAM(      "BLAU" ) );
-            sKeyword[NF_KEY_GREEN] = UniString( "GR" "\xDC" "N", RTL_TEXTENCODING_ISO_8859_1 );
-            sKeyword[NF_KEY_CYAN].AssignAscii( RTL_CONSTASCII_STRINGPARAM(      "CYAN" ) );
-            sKeyword[NF_KEY_RED].AssignAscii( RTL_CONSTASCII_STRINGPARAM(       "ROT" ) );
-            sKeyword[NF_KEY_MAGENTA].AssignAscii( RTL_CONSTASCII_STRINGPARAM(   "MAGENTA" ) );
-            sKeyword[NF_KEY_BROWN].AssignAscii( RTL_CONSTASCII_STRINGPARAM(     "BRAUN" ) );
-            sKeyword[NF_KEY_GREY].AssignAscii( RTL_CONSTASCII_STRINGPARAM(      "GRAU" ) );
-            sKeyword[NF_KEY_YELLOW].AssignAscii( RTL_CONSTASCII_STRINGPARAM(    "GELB" ) );
-            sKeyword[NF_KEY_WHITE].AssignAscii( RTL_CONSTASCII_STRINGPARAM(     "WEISS" ) );
-        }
+    case LANGUAGE_GERMAN:
+    case LANGUAGE_GERMAN_SWISS:
+    case LANGUAGE_GERMAN_AUSTRIAN:
+    case LANGUAGE_GERMAN_LUXEMBOURG:
+    case LANGUAGE_GERMAN_LIECHTENSTEIN:
+        //! all capital letters
+        sKeyword[NF_KEY_M] =         "M";            // month 1
+        sKeyword[NF_KEY_MM] =        "MM";           // month 01
+        sKeyword[NF_KEY_MMM] =       "MMM";      // month Jan
+        sKeyword[NF_KEY_MMMM] =      "MMMM"; // month Januar
+        sKeyword[NF_KEY_MMMMM] =     "MMMMM";// month J
+        sKeyword[NF_KEY_H] =         "H";            // hour 2
+        sKeyword[NF_KEY_HH] =        "HH";           // hour 02
+        sKeyword[NF_KEY_D] =         "T";
+        sKeyword[NF_KEY_DD] =        "TT";
+        sKeyword[NF_KEY_DDD] =       "TTT";
+        sKeyword[NF_KEY_DDDD] =      "TTTT";
+        sKeyword[NF_KEY_YY] =        "JJ";
+        sKeyword[NF_KEY_YYYY] =      "JJJJ";
+        sKeyword[NF_KEY_BOOLEAN] =   "LOGISCH";
+        sKeyword[NF_KEY_COLOR] =     "FARBE";
+        sKeyword[NF_KEY_BLACK] =     "SCHWARZ";
+        sKeyword[NF_KEY_BLUE] =      "BLAU";
+        sKeyword[NF_KEY_GREEN] = OUString( "GR" "\xDC" "N", 4, RTL_TEXTENCODING_ISO_8859_1 );
+        sKeyword[NF_KEY_CYAN] =      "CYAN";
+        sKeyword[NF_KEY_RED] =       "ROT";
+        sKeyword[NF_KEY_MAGENTA] =   "MAGENTA";
+        sKeyword[NF_KEY_BROWN] =     "BRAUN";
+        sKeyword[NF_KEY_GREY] =      "GRAU";
+        sKeyword[NF_KEY_YELLOW] =    "GELB";
+        sKeyword[NF_KEY_WHITE] =     "WEISS";
         break;
-        default:
+    default:
+        // day
+        switch ( eLang )
         {
-            // day
-            switch ( eLang )
-            {
-                case LANGUAGE_ITALIAN       :
-                case LANGUAGE_ITALIAN_SWISS :
-                    sKeyword[NF_KEY_D].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "G" ) );
-                    sKeyword[NF_KEY_DD].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "GG" ) );
-                    sKeyword[NF_KEY_DDD].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "GGG" ) );
-                    sKeyword[NF_KEY_DDDD].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "GGGG" ) );
-                    // must exchange the era code, same as Xcl
-                    sKeyword[NF_KEY_G].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "X" ) );
-                    sKeyword[NF_KEY_GG].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "XX" ) );
-                    sKeyword[NF_KEY_GGG].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "XXX" ) );
-                break;
-                case LANGUAGE_FRENCH            :
-                case LANGUAGE_FRENCH_BELGIAN    :
-                case LANGUAGE_FRENCH_CANADIAN   :
-                case LANGUAGE_FRENCH_SWISS      :
-                case LANGUAGE_FRENCH_LUXEMBOURG :
-                case LANGUAGE_FRENCH_MONACO     :
-                    sKeyword[NF_KEY_D].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "J" ) );
-                    sKeyword[NF_KEY_DD].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "JJ" ) );
-                    sKeyword[NF_KEY_DDD].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "JJJ" ) );
-                    sKeyword[NF_KEY_DDDD].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "JJJJ" ) );
-                break;
-                case LANGUAGE_FINNISH :
-                    sKeyword[NF_KEY_D].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "P" ) );
-                    sKeyword[NF_KEY_DD].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "PP" ) );
-                    sKeyword[NF_KEY_DDD].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "PPP" ) );
-                    sKeyword[NF_KEY_DDDD].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "PPPP" ) );
-                break;
-                default:
-                    sKeyword[NF_KEY_D].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "D" ) );
-                    sKeyword[NF_KEY_DD].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "DD" ) );
-                    sKeyword[NF_KEY_DDD].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "DDD" ) );
-                    sKeyword[NF_KEY_DDDD].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "DDDD" ) );
-            }
-            // month
-            switch ( eLang )
-            {
-                case LANGUAGE_FINNISH :
-                    sKeyword[NF_KEY_M].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "K" ) );
-                    sKeyword[NF_KEY_MM].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "KK" ) );
-                    sKeyword[NF_KEY_MMM].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "KKK" ) );
-                    sKeyword[NF_KEY_MMMM].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "KKKK" ) );
-                    sKeyword[NF_KEY_MMMMM].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "KKKKK" ) );
-                break;
-                default:
-                    sKeyword[NF_KEY_M].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "M" ) );
-                    sKeyword[NF_KEY_MM].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "MM" ) );
-                    sKeyword[NF_KEY_MMM].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "MMM" ) );
-                    sKeyword[NF_KEY_MMMM].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "MMMM" ) );
-                    sKeyword[NF_KEY_MMMMM].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "MMMMM" ) );
-            }
-            // year
-            switch ( eLang )
-            {
-                case LANGUAGE_ITALIAN       :
-                case LANGUAGE_ITALIAN_SWISS :
-                case LANGUAGE_FRENCH            :
-                case LANGUAGE_FRENCH_BELGIAN    :
-                case LANGUAGE_FRENCH_CANADIAN   :
-                case LANGUAGE_FRENCH_SWISS      :
-                case LANGUAGE_FRENCH_LUXEMBOURG :
-                case LANGUAGE_FRENCH_MONACO     :
-                case LANGUAGE_PORTUGUESE           :
-                case LANGUAGE_PORTUGUESE_BRAZILIAN :
-                case LANGUAGE_SPANISH_MODERN      :
-                case LANGUAGE_SPANISH_DATED       :
-                case LANGUAGE_SPANISH_MEXICAN     :
-                case LANGUAGE_SPANISH_GUATEMALA   :
-                case LANGUAGE_SPANISH_COSTARICA   :
-                case LANGUAGE_SPANISH_PANAMA      :
-                case LANGUAGE_SPANISH_DOMINICAN_REPUBLIC :
-                case LANGUAGE_SPANISH_VENEZUELA   :
-                case LANGUAGE_SPANISH_COLOMBIA    :
-                case LANGUAGE_SPANISH_PERU        :
-                case LANGUAGE_SPANISH_ARGENTINA   :
-                case LANGUAGE_SPANISH_ECUADOR     :
-                case LANGUAGE_SPANISH_CHILE       :
-                case LANGUAGE_SPANISH_URUGUAY     :
-                case LANGUAGE_SPANISH_PARAGUAY    :
-                case LANGUAGE_SPANISH_BOLIVIA     :
-                case LANGUAGE_SPANISH_EL_SALVADOR :
-                case LANGUAGE_SPANISH_HONDURAS    :
-                case LANGUAGE_SPANISH_NICARAGUA   :
-                case LANGUAGE_SPANISH_PUERTO_RICO :
-                    sKeyword[NF_KEY_YY].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "AA" ) );
-                    sKeyword[NF_KEY_YYYY].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "AAAA" ) );
-                    // must exchange the day of week name code, same as Xcl
-                    sKeyword[NF_KEY_AAA].AssignAscii( RTL_CONSTASCII_STRINGPARAM(   "OOO" ) );
-                    sKeyword[NF_KEY_AAAA].AssignAscii( RTL_CONSTASCII_STRINGPARAM(  "OOOO" ) );
-                break;
-                case LANGUAGE_DUTCH         :
-                case LANGUAGE_DUTCH_BELGIAN :
-                    sKeyword[NF_KEY_YY].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "JJ" ) );
-                    sKeyword[NF_KEY_YYYY].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "JJJJ" ) );
-                break;
-                case LANGUAGE_FINNISH :
-                    sKeyword[NF_KEY_YY].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "VV" ) );
-                    sKeyword[NF_KEY_YYYY].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "VVVV" ) );
-                break;
-                default:
-                    sKeyword[NF_KEY_YY].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "YY" ) );
-                    sKeyword[NF_KEY_YYYY].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "YYYY" ) );
-            }
-            // hour
-            switch ( eLang )
-            {
-                case LANGUAGE_DUTCH         :
-                case LANGUAGE_DUTCH_BELGIAN :
-                    sKeyword[NF_KEY_H].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "U" ) );
-                    sKeyword[NF_KEY_HH].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "UU" ) );
-                break;
-                case LANGUAGE_FINNISH :
-                case LANGUAGE_SWEDISH         :
-                case LANGUAGE_SWEDISH_FINLAND :
-                case LANGUAGE_DANISH :
-                case LANGUAGE_NORWEGIAN         :
-                case LANGUAGE_NORWEGIAN_BOKMAL  :
-                case LANGUAGE_NORWEGIAN_NYNORSK :
-                    sKeyword[NF_KEY_H].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "T" ) );
-                    sKeyword[NF_KEY_HH].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "TT" ) );
-                break;
-                default:
-                    sKeyword[NF_KEY_H].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "H" ) );
-                    sKeyword[NF_KEY_HH].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "HH" ) );
-            }
-            // boolean
-            sKeyword[NF_KEY_BOOLEAN].AssignAscii( RTL_CONSTASCII_STRINGPARAM( "BOOLEAN" ) );
-            // colours
-            sKeyword[NF_KEY_COLOR].AssignAscii( RTL_CONSTASCII_STRINGPARAM(     "COLOR" ) );
-            sKeyword[NF_KEY_BLACK].AssignAscii( RTL_CONSTASCII_STRINGPARAM(     "BLACK" ) );
-            sKeyword[NF_KEY_BLUE].AssignAscii( RTL_CONSTASCII_STRINGPARAM(      "BLUE" ) );
-            sKeyword[NF_KEY_GREEN].AssignAscii( RTL_CONSTASCII_STRINGPARAM(     "GREEN" ) );
-            sKeyword[NF_KEY_CYAN].AssignAscii( RTL_CONSTASCII_STRINGPARAM(      "CYAN" ) );
-            sKeyword[NF_KEY_RED].AssignAscii( RTL_CONSTASCII_STRINGPARAM(       "RED" ) );
-            sKeyword[NF_KEY_MAGENTA].AssignAscii( RTL_CONSTASCII_STRINGPARAM(   "MAGENTA" ) );
-            sKeyword[NF_KEY_BROWN].AssignAscii( RTL_CONSTASCII_STRINGPARAM(     "BROWN" ) );
-            sKeyword[NF_KEY_GREY].AssignAscii( RTL_CONSTASCII_STRINGPARAM(      "GREY" ) );
-            sKeyword[NF_KEY_YELLOW].AssignAscii( RTL_CONSTASCII_STRINGPARAM(    "YELLOW" ) );
-            sKeyword[NF_KEY_WHITE].AssignAscii( RTL_CONSTASCII_STRINGPARAM(     "WHITE" ) );
+        case LANGUAGE_ITALIAN:
+        case LANGUAGE_ITALIAN_SWISS:
+            sKeyword[NF_KEY_D] = "G";
+            sKeyword[NF_KEY_DD] = "GG";
+            sKeyword[NF_KEY_DDD] = "GGG";
+            sKeyword[NF_KEY_DDDD] = "GGGG";
+            // must exchange the era code, same as Xcl
+            sKeyword[NF_KEY_G] = "X";
+            sKeyword[NF_KEY_GG] = "XX";
+            sKeyword[NF_KEY_GGG] = "XXX";
+            break;
+        case LANGUAGE_FRENCH:
+        case LANGUAGE_FRENCH_BELGIAN:
+        case LANGUAGE_FRENCH_CANADIAN:
+        case LANGUAGE_FRENCH_SWISS:
+        case LANGUAGE_FRENCH_LUXEMBOURG:
+        case LANGUAGE_FRENCH_MONACO:
+            sKeyword[NF_KEY_D] = "J";
+            sKeyword[NF_KEY_DD] = "JJ";
+            sKeyword[NF_KEY_DDD] = "JJJ";
+            sKeyword[NF_KEY_DDDD] = "JJJJ";
+            break;
+        case LANGUAGE_FINNISH:
+            sKeyword[NF_KEY_D] = "P";
+            sKeyword[NF_KEY_DD] = "PP";
+            sKeyword[NF_KEY_DDD] = "PPP";
+            sKeyword[NF_KEY_DDDD] = "PPPP";
+            break;
+        default:
+            sKeyword[NF_KEY_D] = "D";
+            sKeyword[NF_KEY_DD] = "DD";
+            sKeyword[NF_KEY_DDD] = "DDD";
+            sKeyword[NF_KEY_DDDD] = "DDDD";
         }
+        // month
+        switch ( eLang )
+        {
+        case LANGUAGE_FINNISH:
+            sKeyword[NF_KEY_M] = "K";
+            sKeyword[NF_KEY_MM] = "KK";
+            sKeyword[NF_KEY_MMM] = "KKK";
+            sKeyword[NF_KEY_MMMM] = "KKKK";
+            sKeyword[NF_KEY_MMMMM] = "KKKKK";
+            break;
+        default:
+            sKeyword[NF_KEY_M] = "M";
+            sKeyword[NF_KEY_MM] = "MM";
+            sKeyword[NF_KEY_MMM] = "MMM";
+            sKeyword[NF_KEY_MMMM] = "MMMM";
+            sKeyword[NF_KEY_MMMMM] = "MMMMM";
+        }
+        // year
+        switch ( eLang )
+        {
+        case LANGUAGE_ITALIAN:
+        case LANGUAGE_ITALIAN_SWISS:
+        case LANGUAGE_FRENCH:
+        case LANGUAGE_FRENCH_BELGIAN:
+        case LANGUAGE_FRENCH_CANADIAN:
+        case LANGUAGE_FRENCH_SWISS:
+        case LANGUAGE_FRENCH_LUXEMBOURG:
+        case LANGUAGE_FRENCH_MONACO:
+        case LANGUAGE_PORTUGUESE:
+        case LANGUAGE_PORTUGUESE_BRAZILIAN:
+        case LANGUAGE_SPANISH_MODERN:
+        case LANGUAGE_SPANISH_DATED:
+        case LANGUAGE_SPANISH_MEXICAN:
+        case LANGUAGE_SPANISH_GUATEMALA:
+        case LANGUAGE_SPANISH_COSTARICA:
+        case LANGUAGE_SPANISH_PANAMA:
+        case LANGUAGE_SPANISH_DOMINICAN_REPUBLIC:
+        case LANGUAGE_SPANISH_VENEZUELA:
+        case LANGUAGE_SPANISH_COLOMBIA:
+        case LANGUAGE_SPANISH_PERU:
+        case LANGUAGE_SPANISH_ARGENTINA:
+        case LANGUAGE_SPANISH_ECUADOR:
+        case LANGUAGE_SPANISH_CHILE:
+        case LANGUAGE_SPANISH_URUGUAY:
+        case LANGUAGE_SPANISH_PARAGUAY:
+        case LANGUAGE_SPANISH_BOLIVIA:
+        case LANGUAGE_SPANISH_EL_SALVADOR:
+        case LANGUAGE_SPANISH_HONDURAS:
+        case LANGUAGE_SPANISH_NICARAGUA:
+        case LANGUAGE_SPANISH_PUERTO_RICO:
+            sKeyword[NF_KEY_YY] = "AA";
+            sKeyword[NF_KEY_YYYY] = "AAAA";
+            // must exchange the day of week name code, same as Xcl
+            sKeyword[NF_KEY_AAA] =   "OOO";
+            sKeyword[NF_KEY_AAAA] =  "OOOO";
+            break;
+        case LANGUAGE_DUTCH:
+        case LANGUAGE_DUTCH_BELGIAN:
+            sKeyword[NF_KEY_YY] = "JJ";
+            sKeyword[NF_KEY_YYYY] = "JJJJ";
+            break;
+        case LANGUAGE_FINNISH:
+            sKeyword[NF_KEY_YY] = "VV";
+            sKeyword[NF_KEY_YYYY] = "VVVV";
+            break;
+        default:
+            sKeyword[NF_KEY_YY] = "YY";
+            sKeyword[NF_KEY_YYYY] = "YYYY";
+        }
+        // hour
+        switch ( eLang )
+        {
+        case LANGUAGE_DUTCH:
+        case LANGUAGE_DUTCH_BELGIAN:
+            sKeyword[NF_KEY_H] = "U";
+            sKeyword[NF_KEY_HH] = "UU";
+            break;
+        case LANGUAGE_FINNISH:
+        case LANGUAGE_SWEDISH:
+        case LANGUAGE_SWEDISH_FINLAND:
+        case LANGUAGE_DANISH:
+        case LANGUAGE_NORWEGIAN:
+        case LANGUAGE_NORWEGIAN_BOKMAL:
+        case LANGUAGE_NORWEGIAN_NYNORSK:
+            sKeyword[NF_KEY_H] = "T";
+            sKeyword[NF_KEY_HH] = "TT";
+            break;
+        default:
+            sKeyword[NF_KEY_H] = "H";
+            sKeyword[NF_KEY_HH] = "HH";
+        }
+        // boolean
+        sKeyword[NF_KEY_BOOLEAN] = "BOOLEAN";
+        // colours
+        sKeyword[NF_KEY_COLOR] =     "COLOR";
+        sKeyword[NF_KEY_BLACK] =     "BLACK";
+        sKeyword[NF_KEY_BLUE] =      "BLUE";
+        sKeyword[NF_KEY_GREEN] =     "GREEN";
+        sKeyword[NF_KEY_CYAN] =      "CYAN";
+        sKeyword[NF_KEY_RED] =       "RED";
+        sKeyword[NF_KEY_MAGENTA] =   "MAGENTA";
+        sKeyword[NF_KEY_BROWN] =     "BROWN";
+        sKeyword[NF_KEY_GREY] =      "GREY";
+        sKeyword[NF_KEY_YELLOW] =    "YELLOW";
+        sKeyword[NF_KEY_WHITE] =     "WHITE";
         break;
     }
 
@@ -454,8 +451,7 @@ void ImpSvNumberformatScan::ChangeStandardPrec(sal_uInt16 nPrec)
 
 Color* ImpSvNumberformatScan::GetColor(String& sStr)
 {
-    String sString = pFormatter->GetCharClass()->uppercase(sStr);
-    OUString aString(sString);
+    OUString sString = pFormatter->GetCharClass()->uppercase(sStr);
     const NfKeywordTable & rKeyword = GetKeywords();
     size_t i = 0;
     while (i < NF_MAX_DEFAULT_COLORS && sString != rKeyword[NF_KEY_FIRSTCOLOR+i] )
@@ -466,7 +462,7 @@ Color* ImpSvNumberformatScan::GetColor(String& sStr)
     {
         const OUString* pEnglishColors = theEnglishColors::get();
         size_t j = 0;
-        while ( j < NF_MAX_DEFAULT_COLORS && aString != pEnglishColors[j] )
+        while ( j < NF_MAX_DEFAULT_COLORS && sString != pEnglishColors[j] )
         {
             ++j;
         }
@@ -479,8 +475,8 @@ Color* ImpSvNumberformatScan::GetColor(String& sStr)
     Color* pResult = NULL;
     if (i >= NF_MAX_DEFAULT_COLORS)
     {
-        const OUString& rColorWord = OUString(rKeyword[NF_KEY_COLOR]);
-        sal_Int32 nPos = aString.startsWith(rColorWord);
+        const OUString& rColorWord = rKeyword[NF_KEY_COLOR];
+        sal_Int32 nPos = sString.startsWith(rColorWord);
         if (nPos > 0)
         {
             sStr.Erase(0, nPos);
@@ -492,15 +488,19 @@ Color* ImpSvNumberformatScan::GetColor(String& sStr)
                 pFormatter->ChangeIntl(eTmpLnge);
             }
             else
+            {
                 sStr.Insert(rColorWord,0);
-            sString.Erase(0, nPos);
+            }
+            sString = sString.copy(nPos);
             sString = comphelper::string::strip(sString, ' ');
 
             if ( CharClass::isAsciiNumeric( sString ) )
             {
-                long nIndex = sString.ToInt32();
+                long nIndex = sString.toInt32();
                 if (nIndex > 0 && nIndex <= 64)
+                {
                     pResult = pFormatter->GetUserDefColor((sal_uInt16)nIndex-1);
+                }
             }
         }
     }
@@ -514,8 +514,9 @@ Color* ImpSvNumberformatScan::GetColor(String& sStr)
             pFormatter->ChangeIntl(eTmpLnge);
         }
         else
+        {
             sStr = rKeyword[NF_KEY_FIRSTCOLOR+i];
-
+        }
         pResult = &(StandardColor[i]);
     }
     return pResult;
@@ -523,17 +524,19 @@ Color* ImpSvNumberformatScan::GetColor(String& sStr)
 
 short ImpSvNumberformatScan::GetKeyWord( const String& sSymbol, xub_StrLen nPos )
 {
-    String sString = pFormatter->GetCharClass()->uppercase( sSymbol, nPos, sSymbol.Len() - nPos );
+    OUString sString = pFormatter->GetCharClass()->uppercase( sSymbol, nPos, sSymbol.Len() - nPos );
     const NfKeywordTable & rKeyword = GetKeywords();
     // #77026# for the Xcl perverts: the GENERAL keyword is recognized anywhere
-    if ( sString.Search( rKeyword[NF_KEY_GENERAL] ) == 0 )
+    if ( sString.startsWith( rKeyword[NF_KEY_GENERAL] ))
+    {
         return NF_KEY_GENERAL;
+    }
     //! MUST be a reverse search to find longer strings first
     short i = NF_KEYWORD_ENTRIES_COUNT-1;
     bool bFound = false;
     for ( ; i > NF_KEY_LASTKEYWORD_SO5; --i )
     {
-        bFound = sString.Search(rKeyword[i]) == 0;
+        bFound = sString.startsWith(rKeyword[i]);
         if ( bFound )
         {
             break;
@@ -541,25 +544,36 @@ short ImpSvNumberformatScan::GetKeyWord( const String& sSymbol, xub_StrLen nPos 
     }
     // new keywords take precedence over old keywords
     if ( !bFound )
-    {   // skip the gap of colors et al between new and old keywords and search on
+    {
+        // skip the gap of colors et al between new and old keywords and search on
         i = NF_KEY_LASTKEYWORD;
-        while ( i > 0 && sString.Search(rKeyword[i]) != 0 )
+        while ( i > 0 && sString.indexOf(rKeyword[i]) != 0 )
+        {
             i--;
+        }
         if ( i > NF_KEY_LASTOLDKEYWORD && sString != rKeyword[i] )
-        {   // found something, but maybe it's something else?
+        {
+            // found something, but maybe it's something else?
             // e.g. new NNN is found in NNNN, for NNNN we must search on
             short j = i - 1;
-            while ( j > 0 && sString.Search(rKeyword[j]) != 0 )
+            while ( j > 0 && sString.indexOf(rKeyword[j]) != 0 )
+            {
                 j--;
-            if ( j && rKeyword[j].Len() > rKeyword[i].Len() )
+            }
+            if ( j && rKeyword[j].getLength() > rKeyword[i].getLength() )
+            {
                 return j;
+            }
         }
     }
     // The Thai T NatNum modifier during Xcl import.
-    if (i == 0 && bConvertMode && sString.GetChar(0) == 'T' && eTmpLnge ==
-            LANGUAGE_ENGLISH_US && MsLangId::getRealLanguage( eNewLnge) ==
-            LANGUAGE_THAI)
+    if (i == 0 && bConvertMode &&
+        sString[0] == 'T' &&
+        eTmpLnge == LANGUAGE_ENGLISH_US &&
+        MsLangId::getRealLanguage( eNewLnge) == LANGUAGE_THAI)
+    {
         i = NF_KEY_THAI_T;
+    }
     return i;       // 0 => not found
 }
 
@@ -729,7 +743,7 @@ short ImpSvNumberformatScan::Next_Symbol( const String& rStr,
                                 // like "R" (Rand) and 'R' (era)
                                 if ( nCurrPos != STRING_NOTFOUND &&
                                     nPos-1 + sCurString.Len() <= rStr.Len() &&
-                                    sCurString.Search( sKeyword[nTmpType] ) == 0 )
+                                     sCurString.Search( String(sKeyword[nTmpType]) ) == 0 )
                                 {
                                     String aTest = pChrCls->uppercase( rStr.Copy( nPos-1, sCurString.Len() ) );
                                     if ( aTest == sCurString )
@@ -743,8 +757,8 @@ short ImpSvNumberformatScan::Next_Symbol( const String& rStr,
                                 else
                                 {
                                     eType = nTmpType;
-                                    xub_StrLen nLen = sKeyword[eType].Len();
-                                    sSymbol = rStr.Copy( nPos-1, nLen );
+                                    sal_Int32 nLen = sKeyword[eType].getLength();
+                                    sSymbol = rStr.Copy( nPos-1, (sal_uInt16)nLen );
                                     if ( eType == NF_KEY_E || IsAmbiguousE( eType ) )
                                     {
                                         sal_Unicode cNext = rStr.GetChar(nPos);
@@ -1459,9 +1473,9 @@ xub_StrLen ImpSvNumberformatScan::FinalScan( String& rString )
     String sOldTime100SecSep= pLoc->getTime100SecSep();
     String sOldCurSymbol    = GetCurSymbol();
     rtl::OUString sOldCurString = GetCurString();
-    sal_Unicode cOldKeyH    = sKeyword[NF_KEY_H].GetChar(0);
-    sal_Unicode cOldKeyMI   = sKeyword[NF_KEY_MI].GetChar(0);
-    sal_Unicode cOldKeyS    = sKeyword[NF_KEY_S].GetChar(0);
+    sal_Unicode cOldKeyH    = sKeyword[NF_KEY_H][0];
+    sal_Unicode cOldKeyMI   = sKeyword[NF_KEY_MI][0];
+    sal_Unicode cOldKeyS    = sKeyword[NF_KEY_S][0];
 
     // If the group separator is a Non-Breaking Space (French) continue with a
     // normal space instead so queries on space work correctly.
@@ -1583,7 +1597,7 @@ xub_StrLen ImpSvNumberformatScan::FinalScan( String& rString )
                     else if (nTypeArray[i] == NF_KEY_THAI_T)
                     {
                         bThaiT = true;
-                        sStrArray[i] = sKeyword[nTypeArray[i]];
+                        sStrArray[i] = String(sKeyword[nTypeArray[i]]);
                     }
                     else if (sStrArray[i].GetChar(0) >= '0' &&
                              sStrArray[i].GetChar(0) <= '9')
@@ -2166,7 +2180,7 @@ xub_StrLen ImpSvNumberformatScan::FinalScan( String& rString )
                     case NF_KEY_GGG :                       // GGG
                     case NF_KEY_R :                         // R
                     case NF_KEY_RR :                        // RR
-                        sStrArray[i] = sKeyword[nTypeArray[i]]; // tTtT -> TTTT
+                        sStrArray[i] = String(sKeyword[nTypeArray[i]]); // tTtT -> TTTT
                         nPos = nPos + sStrArray[i].Len();
                         i++;
                     break;
@@ -2284,7 +2298,7 @@ xub_StrLen ImpSvNumberformatScan::FinalScan( String& rString )
                     case NF_KEY_AP:                         // A/P
                     {
                         bExp = true;                    // missbraucht fuer A/P
-                        sStrArray[i] = sKeyword[nTypeArray[i]]; // tTtT -> TTTT
+                        sStrArray[i] = String(sKeyword[nTypeArray[i]]); // tTtT -> TTTT
                         nPos = nPos + sStrArray[i].Len();
                         i++;
                     }
@@ -2299,7 +2313,7 @@ xub_StrLen ImpSvNumberformatScan::FinalScan( String& rString )
                     case NF_KEY_S:                          // S
                     case NF_KEY_SS:                         // SS
                     {
-                        sStrArray[i] = sKeyword[nTypeArray[i]]; // tTtT -> TTTT
+                        sStrArray[i] = String(sKeyword[nTypeArray[i]]); // tTtT -> TTTT
                         nPos = nPos + sStrArray[i].Len();
                         i++;
                     }
@@ -2414,7 +2428,7 @@ xub_StrLen ImpSvNumberformatScan::FinalScan( String& rString )
                     {
                         bTimePart = true;
                         bExp = true;                    // missbraucht fuer A/P
-                        sStrArray[i] = sKeyword[nTypeArray[i]]; // tTtT -> TTTT
+                        sStrArray[i] = String(sKeyword[nTypeArray[i]]); // tTtT -> TTTT
                         nPos = nPos + sStrArray[i].Len();
                         i++;
                     }
@@ -2426,7 +2440,7 @@ xub_StrLen ImpSvNumberformatScan::FinalScan( String& rString )
                     case NF_KEY_S:                          // S
                     case NF_KEY_SS:                         // SS
                         bTimePart = true;
-                        sStrArray[i] = sKeyword[nTypeArray[i]]; // tTtT -> TTTT
+                        sStrArray[i] = String(sKeyword[nTypeArray[i]]); // tTtT -> TTTT
                         nPos = nPos + sStrArray[i].Len();
                         i++;
                     break;
@@ -2457,13 +2471,13 @@ xub_StrLen ImpSvNumberformatScan::FinalScan( String& rString )
                     case NF_KEY_R :                         // R
                     case NF_KEY_RR :                        // RR
                         bTimePart = false;
-                        sStrArray[i] = sKeyword[nTypeArray[i]]; // tTtT -> TTTT
+                        sStrArray[i] = String(sKeyword[nTypeArray[i]]); // tTtT -> TTTT
                         nPos = nPos + sStrArray[i].Len();
                         i++;
                     break;
                     case NF_KEY_THAI_T :
                         bThaiT = true;
-                        sStrArray[i] = sKeyword[nTypeArray[i]];
+                        sStrArray[i] = String(sKeyword[nTypeArray[i]]);
                         nPos = nPos + sStrArray[i].Len();
                         i++;
                     break;
