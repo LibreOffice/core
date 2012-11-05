@@ -1866,48 +1866,69 @@ bool SvNumberformat::GetNewCurrencySymbol( OUString& rSymbol,
 String SvNumberformat::StripNewCurrencyDelimiters( const String& rStr,
             bool bQuoteSymbol )
 {
-    String aTmp;
-    xub_StrLen nStartPos, nPos, nLen;
-    nLen = rStr.Len();
+    OUString aTmp;
+    OUString aSource(rStr);
+    sal_Int32 nStartPos, nPos, nLen;
+    nLen = aSource.getLength();
     nStartPos = 0;
-    while ( (nPos = rStr.SearchAscii( "[$", nStartPos )) != STRING_NOTFOUND )
+    while ( (nPos = aSource.indexOf( "[$", nStartPos )) >= 0 )
     {
-        xub_StrLen nEnd;
-        if ( (nEnd = GetQuoteEnd( rStr, nPos )) < nLen )
+        sal_Int32 nEnd;
+        if ( (nEnd = GetQuoteEnd( aSource, nPos )) >= 0 )
         {
-            aTmp += rStr.Copy( nStartPos, ++nEnd - nStartPos );
+            aTmp += aSource.copy( nStartPos, ++nEnd - nStartPos );
             nStartPos = nEnd;
         }
         else
         {
-            aTmp += rStr.Copy( nStartPos, nPos - nStartPos );
+            aTmp += aSource.copy( nStartPos, nPos - nStartPos );
             nStartPos = nPos + 2;
-            xub_StrLen nDash;
+            sal_Int32 nDash;
             nEnd = nStartPos - 1;
             do
             {
-                nDash = rStr.Search( '-', ++nEnd );
-            } while ( (nEnd = GetQuoteEnd( rStr, nDash )) < nLen );
-            xub_StrLen nClose;
+                nDash = aSource.indexOf( '-', ++nEnd );
+            }
+            while ( (nEnd = GetQuoteEnd( aSource, nDash )) >= 0 );
+            sal_Int32 nClose;
             nEnd = nStartPos - 1;
             do
             {
-                nClose = rStr.Search( ']', ++nEnd );
-            } while ( (nEnd = GetQuoteEnd( rStr, nClose )) < nLen );
-            nPos = ( nDash < nClose ? nDash : nClose );
-            if ( !bQuoteSymbol || rStr.GetChar( nStartPos ) == '"' )
-                aTmp += rStr.Copy( nStartPos, nPos - nStartPos );
+                nClose = aSource.indexOf( ']', ++nEnd );
+            }
+            while ( (nEnd = GetQuoteEnd( aSource, nClose )) >= 0 );
+
+            if(nClose < 0)
+            {
+                /* there should always be a closing ]
+                 * but the old String class would have hidden
+                 * that. so be conservative too
+                 */
+                nClose = nLen;
+            }
+
+            nPos = nClose;
+            if(nDash >= 0 && nDash < nClose)
+            {
+                nPos = nDash;
+            }
+            if ( !bQuoteSymbol || aSource[ nStartPos ] == '"' )
+            {
+                aTmp += aSource.copy( nStartPos, nPos - nStartPos );
+            }
             else
             {
-                aTmp += '"';
-                aTmp += rStr.Copy( nStartPos, nPos - nStartPos );
-                aTmp += '"';
+                aTmp += "\"";
+                aTmp += aSource.copy( nStartPos, nPos - nStartPos );
+                aTmp += "\"";
             }
             nStartPos = nClose + 1;
         }
     }
     if ( nLen > nStartPos )
-        aTmp += rStr.Copy( nStartPos, nLen - nStartPos );
+    {
+        aTmp += aSource.copy( nStartPos, nLen - nStartPos );
+    }
     return aTmp;
 }
 
@@ -4858,25 +4879,32 @@ bool SvNumberformat::IsInQuote( const String& rStr, xub_StrLen nPos,
 }
 
 // static
-xub_StrLen SvNumberformat::GetQuoteEnd( const String& rStr, xub_StrLen nPos,
-            sal_Unicode cQuote, sal_Unicode cEscIn, sal_Unicode cEscOut )
+sal_Int32 SvNumberformat::GetQuoteEnd( const OUString& rStr, sal_Int32 nPos,
+                                       sal_Unicode cQuote, sal_Unicode cEscIn,
+                                       sal_Unicode cEscOut )
 {
-    xub_StrLen nLen = rStr.Len();
+    sal_Int32 nLen = rStr.getLength();
     if ( nPos >= nLen )
-        return STRING_NOTFOUND;
+    {
+        return -1;
+    }
     if ( !IsInQuote( rStr, nPos, cQuote, cEscIn, cEscOut ) )
     {
-        if ( rStr.GetChar( nPos ) == cQuote )
+        if ( rStr[ nPos ] == cQuote )
+        {
             return nPos;        // schliessendes cQuote
-        return STRING_NOTFOUND;
+        }
+        return -1;
     }
-    register const sal_Unicode* p0 = rStr.GetBuffer();
+    register const sal_Unicode* p0 = rStr.getStr();
     register const sal_Unicode* p = p0 + nPos;
     register const sal_Unicode* p1 = p0 + nLen;
     while ( p < p1 )
     {
         if ( *p == cQuote && p > p0 && *(p-1) != cEscIn )
-            return sal::static_int_cast< xub_StrLen >(p - p0);
+        {
+            return sal::static_int_cast< sal_Int32 >(p - p0);
+        }
         p++;
     }
     return nLen;        // String Ende

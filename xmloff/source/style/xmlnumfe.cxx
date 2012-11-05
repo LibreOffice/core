@@ -771,8 +771,8 @@ xub_StrLen lcl_FindSymbol( const String& sUpperStr, const String& sCurString )
         if (nCPos != STRING_NOTFOUND)
         {
             // in Quotes?
-            xub_StrLen nQ = SvNumberformat::GetQuoteEnd( sUpperStr, nCPos );
-            if ( nQ == STRING_NOTFOUND )
+            sal_Int32 nQ = SvNumberformat::GetQuoteEnd( sUpperStr, nCPos );
+            if ( nQ < 0 )
             {
                 //  dm can be escaped as "dm or \d
                 sal_Unicode c;

@@ -874,8 +874,8 @@ xub_StrLen ImpSvNumberformatScan::Symbol_Division(const String& rString)
         if (nCPos != STRING_NOTFOUND)
         {
             // in Quotes?
-            xub_StrLen nQ = SvNumberformat::GetQuoteEnd( sString, nCPos );
-            if ( nQ == STRING_NOTFOUND )
+            sal_Int32 nQ = SvNumberformat::GetQuoteEnd( sString, nCPos );
+            if ( nQ < 0 )
             {
                 sal_Unicode c;
                 if ( nCPos == 0 ||
@@ -889,7 +889,9 @@ xub_StrLen ImpSvNumberformatScan::Symbol_Division(const String& rString)
                     nCPos++;                        // weitersuchen
             }
             else
+            {
                 nCPos = nQ + 1;                     // weitersuchen
+            }
         }
     }
     nAnzStrings = 0;

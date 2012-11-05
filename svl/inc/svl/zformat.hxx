@@ -375,9 +375,10 @@ public:
         Uses <method>IsInQuote</method> internally, so you don't have to call
         that prior to a call of this method.
      */
-    static xub_StrLen GetQuoteEnd( const String& rString, xub_StrLen nPos,
-                sal_Unicode cQuote = '"',
-                sal_Unicode cEscIn = '\0', sal_Unicode cEscOut = '\\' );
+    static sal_Int32 GetQuoteEnd( const OUString& rString, sal_Int32 nPos,
+                                  sal_Unicode cQuote = '"',
+                                  sal_Unicode cEscIn = '\0',
+                                  sal_Unicode cEscOut = '\\' );
 
     void SetComment( const OUString& rStr )
         { sComment = rStr; }
