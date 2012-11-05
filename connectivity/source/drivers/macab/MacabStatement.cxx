@@ -65,7 +65,7 @@ IMPLEMENT_SERVICE_INFO(MacabStatement, "com.sun.star.sdbc.drivers.MacabStatement
 MacabCommonStatement::MacabCommonStatement(MacabConnection* _pConnection )
     : MacabCommonStatement_BASE(m_aMutex),
     OPropertySetHelper(MacabCommonStatement_BASE::rBHelper),
-    m_aParser(_pConnection->getDriver()->getMSFactory()),
+    m_aParser(_pConnection->getDriver()->getComponentContext()),
     m_aSQLIterator(_pConnection, _pConnection->createCatalog()->getTables(), m_aParser, NULL ),
     m_pParseTree(NULL),
     m_pConnection(_pConnection),

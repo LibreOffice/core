@@ -23,6 +23,7 @@
 #include <com/sun/star/sdbc/XDriver.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/frame/XTerminateListener.hpp>
+#include <comphelper/processfactory.hxx>
 #include <cppuhelper/compbase3.hxx>
 #include <osl/module.h>
 
@@ -134,8 +135,8 @@ namespace connectivity
             static ::rtl::OUString getImplementationName_Static(  ) throw(::com::sun::star::uno::RuntimeException);
             static ::com::sun::star::uno::Sequence< ::rtl::OUString > getSupportedServiceNames_Static(  ) throw (::com::sun::star::uno::RuntimeException);
 
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&
-                    getMSFactory() const { return m_xMSFactory; }
+            ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
+            getComponentContext() const { return comphelper::getComponentContext(m_xMSFactory); }
 
             /** returns the driver's implementation name (being pure ASCII) for reference in various places
             */
