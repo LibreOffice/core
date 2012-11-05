@@ -69,6 +69,8 @@ private:
 
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface  > getDocumentModel( ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xCtx, ::rtl::OUString& docName );
 
+    void Init();
+
 protected:
     void                    ExpandTree( SvTreeListEntry* pRootEntry );
     virtual void            RequestingChildren( SvTreeListEntry* pParent );
@@ -78,7 +80,8 @@ public:
     void                    Init( const ::rtl::OUString& language );
     void  RequestSubEntries(  SvTreeListEntry* pRootEntry, ::com::sun::star::uno::Reference< ::com::sun::star::script::browse::XBrowseNode >& node,
                               ::com::sun::star::uno::Reference< com::sun::star::frame::XModel>& model  );
-                    SFTreeListBox( Window* pParent, const ResId& rRes );
+                    SFTreeListBox(Window* pParent, const ResId& rRes);
+                    SFTreeListBox(Window* pParent);
                     ~SFTreeListBox();
 
     void            ExpandAllTrees();
@@ -139,16 +142,14 @@ public:
 class SvxScriptOrgDialog : public SfxModalDialog
 {
 protected:
-    FixedText               aScriptsTxt;
-    SFTreeListBox           aScriptsBox;
+    SFTreeListBox*          m_pScriptsBox;
 
-    PushButton              aRunButton;
-    CancelButton            aCloseButton;
-    PushButton              aCreateButton;
-    PushButton              aEditButton;
-    PushButton              aRenameButton;
-    PushButton              aDelButton;
-    HelpButton              aHelpButton;
+    PushButton*             m_pRunButton;
+    PushButton*             m_pCloseButton;
+    PushButton*             m_pCreateButton;
+    PushButton*             m_pEditButton;
+    PushButton*             m_pRenameButton;
+    PushButton*             m_pDelButton;
 
     ::rtl::OUString         m_sLanguage;
     static Selection_hash   m_lastSelection;

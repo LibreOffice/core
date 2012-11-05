@@ -387,16 +387,16 @@ struct SvxConfigGroupBoxResource_Impl : public Resource
 
 SvxConfigGroupBoxResource_Impl::SvxConfigGroupBoxResource_Impl() :
     Resource(CUI_RES(RID_SVXPAGE_CONFIGGROUPBOX)),
-    m_hdImage(CUI_RES(IMG_HARDDISK)),
-    m_libImage(CUI_RES(IMG_LIB)),
-    m_macImage(CUI_RES(IMG_MACRO)),
-    m_docImage(CUI_RES(IMG_DOC)),
-    m_sMyMacros(String(CUI_RES(STR_MYMACROS))),
-    m_sProdMacros(String(CUI_RES(STR_PRODMACROS))),
-    m_sMacros(String(CUI_RES(STR_BASICMACROS))),
-    m_sDlgMacros(String(CUI_RES(STR_DLG_MACROS))),
-    m_aHumanAppName(String(CUI_RES(STR_HUMAN_APPNAME))),
-    m_aStrGroupStyles(String(CUI_RES(STR_GROUP_STYLES))),
+    m_hdImage(CUI_RES(RID_CUIIMG_HARDDISK)),
+    m_libImage(CUI_RES(RID_CUIIMG_LIB)),
+    m_macImage(CUI_RES(RID_CUIIMG_MACRO)),
+    m_docImage(CUI_RES(RID_CUIIMG_DOC)),
+    m_sMyMacros(CUI_RESSTR(RID_SVXSTR_MYMACROS)),
+    m_sProdMacros(CUI_RESSTR(RID_SVXSTR_PRODMACROS)),
+    m_sMacros(CUI_RESSTR(STR_BASICMACROS)),
+    m_sDlgMacros(CUI_RESSTR(RID_SVXSTR_PRODMACROS)),
+    m_aHumanAppName(CUI_RESSTR(STR_HUMAN_APPNAME)),
+    m_aStrGroupStyles(CUI_RESSTR(STR_GROUP_STYLES)),
     m_collapsedImage(CUI_RES(BMP_COLLAPSED)),
     m_expandedImage(CUI_RES(BMP_EXPANDED))
 {

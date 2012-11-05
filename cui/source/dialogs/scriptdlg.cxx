@@ -71,16 +71,8 @@ void ShowErrorDialog( const Any& aException )
     delete pDlg;
 }
 
-SFTreeListBox::SFTreeListBox( Window* pParent, const ResId& rResId ) :
-    SvTreeListBox( pParent, ResId( rResId.GetId(),*rResId.GetResMgr() ) ),
-    m_hdImage(ResId(IMG_HARDDISK,*rResId.GetResMgr())),
-    m_libImage(ResId(IMG_LIB,*rResId.GetResMgr())),
-    m_macImage(ResId(IMG_MACRO,*rResId.GetResMgr())),
-    m_docImage(ResId(IMG_DOCUMENT,*rResId.GetResMgr())),
-    m_sMyMacros(String(ResId(STR_MYMACROS,*rResId.GetResMgr()))),
-    m_sProdMacros(String(ResId(STR_PRODMACROS,*rResId.GetResMgr())))
+void SFTreeListBox::Init()
 {
-    FreeResource();
     SetSelectionMode( SINGLE_SELECTION );
 
     SetStyle( GetStyle() | WB_CLIPCHILDREN | WB_HSCROLL |
@@ -89,6 +81,36 @@ SFTreeListBox::SFTreeListBox( Window* pParent, const ResId& rResId ) :
     SetNodeDefaultImages();
 
     nMode = 0xFF;    // everything
+}
+
+SFTreeListBox::SFTreeListBox(Window* pParent, const ResId& rResId)
+    : SvTreeListBox(pParent, ResId(rResId.GetId(),*rResId.GetResMgr()))
+    , m_hdImage(CUI_RES(RID_CUIIMG_HARDDISK))
+    , m_libImage(CUI_RES(RID_CUIIMG_LIB))
+    , m_macImage(CUI_RES(RID_CUIIMG_MACRO))
+    , m_docImage(CUI_RES(RID_CUIIMG_DOC))
+    , m_sMyMacros(CUI_RESSTR(RID_SVXSTR_MYMACROS))
+    , m_sProdMacros(CUI_RES(RID_SVXSTR_PRODMACROS))
+{
+    FreeResource();
+    Init();
+}
+
+SFTreeListBox::SFTreeListBox(Window* pParent)
+    : SvTreeListBox(pParent)
+    , m_hdImage(CUI_RES(RID_CUIIMG_HARDDISK))
+    , m_libImage(CUI_RES(RID_CUIIMG_LIB))
+    , m_macImage(CUI_RES(RID_CUIIMG_MACRO))
+    , m_docImage(CUI_RES(RID_CUIIMG_DOC))
+    , m_sMyMacros(CUI_RESSTR(RID_SVXSTR_MYMACROS))
+    , m_sProdMacros(CUI_RESSTR(RID_SVXSTR_PRODMACROS))
+{
+    Init();
+}
+
+extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSFTreeListBox(Window *pParent, VclBuilder::stringmap &)
+{
+    return new SFTreeListBox(pParent);
 }
 
 SFTreeListBox::~SFTreeListBox()
@@ -235,7 +257,7 @@ void SFTreeListBox::Init( const ::rtl::OUString& language  )
             getLangNodeFromRootNode( children[ n ], lang );
 
         SAL_WNODEPRECATED_DECLARATIONS_PUSH
-        insertEntry( uiName, app ? IMG_HARDDISK : IMG_DOCUMENT,
+        insertEntry( uiName, app ? RID_CUIIMG_HARDDISK : RID_CUIIMG_DOC,
             0, true, std::auto_ptr< SFEntry >(new SFEntry( OBJTYPE_SFROOT, langEntries, xDocumentModel )), factoryURL );
         SAL_WNODEPRECATED_DECLARATIONS_POP
     }
@@ -324,7 +346,7 @@ void SFTreeListBox:: RequestSubEntries( SvTreeListEntry* pRootEntry, Reference< 
         if (  children[ n ]->getType() !=  browse::BrowseNodeTypes::SCRIPT)
         {
             SAL_WNODEPRECATED_DECLARATIONS_PUSH
-            insertEntry( name, IMG_LIB, pRootEntry, true, std::auto_ptr< SFEntry >(new SFEntry( OBJTYPE_SCRIPTCONTAINER, children[ n ],model )));
+            insertEntry( name, RID_CUIIMG_LIB, pRootEntry, true, std::auto_ptr< SFEntry >(new SFEntry( OBJTYPE_SCRIPTCONTAINER, children[ n ],model )));
             SAL_WNODEPRECATED_DECLARATIONS_POP
         }
         else
@@ -332,7 +354,7 @@ void SFTreeListBox:: RequestSubEntries( SvTreeListEntry* pRootEntry, Reference< 
             if ( children[ n ]->getType() == browse::BrowseNodeTypes::SCRIPT )
             {
                 SAL_WNODEPRECATED_DECLARATIONS_PUSH
-                insertEntry( name, IMG_MACRO, pRootEntry, false, std::auto_ptr< SFEntry >(new SFEntry( OBJTYPE_METHOD, children[ n ],model )));
+                insertEntry( name, RID_CUIIMG_MACRO, pRootEntry, false, std::auto_ptr< SFEntry >(new SFEntry( OBJTYPE_METHOD, children[ n ],model )));
                 SAL_WNODEPRECATED_DECLARATIONS_POP
 
             }
@@ -355,7 +377,7 @@ SvTreeListEntry * SFTreeListBox::insertEntry(
     bool bChildrenOnDemand, std::auto_ptr< SFEntry > aUserData, ::rtl::OUString factoryURL )
 {
     SvTreeListEntry * p;
-    if( nBitmap == IMG_DOCUMENT && !factoryURL.isEmpty() )
+    if( nBitmap == RID_CUIIMG_DOC && !factoryURL.isEmpty() )
     {
         Image aImage = SvFileInformationManager::GetFileImage( INetURLObject(factoryURL), false );
         p = InsertEntry(
@@ -376,19 +398,19 @@ SvTreeListEntry * SFTreeListBox::insertEntry(
     bool bChildrenOnDemand, std::auto_ptr< SFEntry > aUserData )
 {
     Image aImage;
-    if( nBitmap == IMG_HARDDISK )
+    if( nBitmap == RID_CUIIMG_HARDDISK )
     {
         aImage = m_hdImage;
     }
-    else if( nBitmap == IMG_LIB )
+    else if( nBitmap == RID_CUIIMG_LIB )
     {
         aImage = m_libImage;
     }
-    else if( nBitmap == IMG_MACRO )
+    else if( nBitmap == RID_CUIIMG_MACRO )
     {
         aImage = m_macImage;
     }
-    else if( nBitmap == IMG_DOCUMENT )
+    else if( nBitmap == RID_CUIIMG_DOC )
     {
         aImage = m_docImage;
     }
@@ -488,57 +510,53 @@ CuiInputDialog::~CuiInputDialog()
 // ScriptOrgDialog ------------------------------------------------------------
 // ----------------------------------------------------------------------------
 SvxScriptOrgDialog::SvxScriptOrgDialog( Window* pParent, ::rtl::OUString language )
-    :    SfxModalDialog( pParent, CUI_RES( RID_DLG_SCRIPTORGANIZER ) ),
-        aScriptsTxt( this, CUI_RES( SF_TXT_SCRIPTS ) ),
-        aScriptsBox( this, CUI_RES( SF_CTRL_SCRIPTSBOX ) ),
-        aRunButton(    this, CUI_RES( SF_PB_RUN ) ),
-        aCloseButton( this, CUI_RES( SF_PB_CLOSE ) ),
-        aCreateButton( this, CUI_RES( SF_PB_CREATE ) ),
-        aEditButton( this, CUI_RES( SF_PB_EDIT ) ),
-        aRenameButton(this, CUI_RES( SF_PB_RENAME ) ),
-        aDelButton(    this, CUI_RES( SF_PB_DEL ) ),
-        aHelpButton( this, CUI_RES( SF_PB_HELP ) ),
-        m_sLanguage( language ),
-        m_delErrStr( CUI_RES( RID_SVXSTR_DELFAILED ) ),
-        m_delErrTitleStr( CUI_RES( RID_SVXSTR_DELFAILED_TITLE ) ),
-        m_delQueryStr( CUI_RES( RID_SVXSTR_DELQUERY ) ),
-        m_delQueryTitleStr( CUI_RES( RID_SVXSTR_DELQUERY_TITLE ) ) ,
-        m_createErrStr( CUI_RES ( RID_SVXSTR_CREATEFAILED ) ),
-        m_createDupStr( CUI_RES ( RID_SVXSTR_CREATEFAILEDDUP ) ),
-        m_createErrTitleStr( CUI_RES( RID_SVXSTR_CREATEFAILED_TITLE ) ),
-        m_renameErrStr( CUI_RES ( RID_SVXSTR_RENAMEFAILED ) ),
-        m_renameErrTitleStr( CUI_RES( RID_SVXSTR_RENAMEFAILED_TITLE ) )
+    : SfxModalDialog(pParent, "ScriptOrganizerDialog", "cui/ui/scriptorganizer.ui")
+    , m_sLanguage(language)
+    , m_delErrStr(CUI_RESSTR(RID_SVXSTR_DELFAILED))
+    , m_delErrTitleStr(CUI_RESSTR(RID_SVXSTR_DELFAILED_TITLE))
+    , m_delQueryStr(CUI_RES(RID_SVXSTR_DELQUERY))
+    , m_delQueryTitleStr(CUI_RESSTR(RID_SVXSTR_DELQUERY_TITLE))
+    , m_createErrStr(CUI_RESSTR(RID_SVXSTR_CREATEFAILED))
+    , m_createDupStr(CUI_RESSTR(RID_SVXSTR_CREATEFAILEDDUP))
+    , m_createErrTitleStr(CUI_RESSTR(RID_SVXSTR_CREATEFAILED_TITLE))
+    , m_renameErrStr(CUI_RESSTR(RID_SVXSTR_RENAMEFAILED))
+    , m_renameErrTitleStr(CUI_RESSTR(RID_SVXSTR_RENAMEFAILED_TITLE))
 {
-
+    get(m_pScriptsBox, "scripts");
+    get(m_pRunButton, "run");
+    get(m_pCloseButton, "close");
+    get(m_pCreateButton, "create");
+    get(m_pEditButton, "edit");
+    get(m_pRenameButton, "rename");
+    get(m_pDelButton, "delete");
     // must be a neater way to deal with the strings than as above
     // append the language to the dialog title
     String winTitle( GetText() );
     winTitle.SearchAndReplace( rtl::OUString( "%MACROLANG" ), m_sLanguage );
     SetText( winTitle );
 
-    aScriptsBox.SetSelectHdl( LINK( this, SvxScriptOrgDialog, ScriptSelectHdl ) );
-    aRunButton.SetClickHdl( LINK( this, SvxScriptOrgDialog, ButtonHdl ) );
-    aCloseButton.SetClickHdl( LINK( this, SvxScriptOrgDialog, ButtonHdl ) );
-    aRenameButton.SetClickHdl( LINK( this, SvxScriptOrgDialog, ButtonHdl ) );
-    aEditButton.SetClickHdl( LINK( this, SvxScriptOrgDialog, ButtonHdl ) );
-    aDelButton.SetClickHdl( LINK( this, SvxScriptOrgDialog, ButtonHdl ) );
-    aCreateButton.SetClickHdl( LINK( this, SvxScriptOrgDialog, ButtonHdl ) );
+    m_pScriptsBox->SetSelectHdl( LINK( this, SvxScriptOrgDialog, ScriptSelectHdl ) );
+    m_pRunButton->SetClickHdl( LINK( this, SvxScriptOrgDialog, ButtonHdl ) );
+    m_pCloseButton->SetClickHdl( LINK( this, SvxScriptOrgDialog, ButtonHdl ) );
+    m_pRenameButton->SetClickHdl( LINK( this, SvxScriptOrgDialog, ButtonHdl ) );
+    m_pEditButton->SetClickHdl( LINK( this, SvxScriptOrgDialog, ButtonHdl ) );
+    m_pDelButton->SetClickHdl( LINK( this, SvxScriptOrgDialog, ButtonHdl ) );
+    m_pCreateButton->SetClickHdl( LINK( this, SvxScriptOrgDialog, ButtonHdl ) );
 
-    aRunButton.Disable();
-    aRenameButton.Disable();
-    aEditButton.Disable();
-    aDelButton.Disable();
-    aCreateButton.Disable();
+    m_pRunButton->Disable();
+    m_pRenameButton->Disable();
+    m_pEditButton->Disable();
+    m_pDelButton->Disable();
+    m_pCreateButton->Disable();
 
-    aScriptsBox.Init( m_sLanguage );
+    m_pScriptsBox->Init( m_sLanguage );
     RestorePreviousSelection();
-    FreeResource();
 }
 
 SvxScriptOrgDialog::~SvxScriptOrgDialog()
 {
     // clear the SelectHdl so that it isn't called during the dtor
-    aScriptsBox.SetSelectHdl( Link() );
+    m_pScriptsBox->SetSelectHdl( Link() );
 };
 
 short SvxScriptOrgDialog::Execute()
@@ -560,7 +578,7 @@ short SvxScriptOrgDialog::Execute()
 
         pDoc = SfxObjectShell::GetNext(*pDoc);
     }
-    aScriptsBox.ExpandAllTrees();
+    m_pScriptsBox->ExpandAllTrees();
 
     Window* pPrevDlgParent = Application::GetDefDialogParent();
     Application::SetDefDialogParent( this );
@@ -575,20 +593,20 @@ void SvxScriptOrgDialog::CheckButtons( Reference< browse::XBrowseNode >& node )
     {
         if ( node->getType() == browse::BrowseNodeTypes::SCRIPT)
         {
-            aRunButton.Enable();
+            m_pRunButton->Enable();
         }
         else
         {
-            aRunButton.Disable();
+            m_pRunButton->Disable();
         }
         Reference< beans::XPropertySet > xProps( node, UNO_QUERY );
 
         if ( !xProps.is() )
         {
-            aEditButton.Disable();
-            aDelButton.Disable();
-            aCreateButton.Disable();
-            aRunButton.Disable();
+            m_pEditButton->Disable();
+            m_pDelButton->Disable();
+            m_pCreateButton->Disable();
+            m_pRunButton->Disable();
             return;
         }
 
@@ -596,54 +614,54 @@ void SvxScriptOrgDialog::CheckButtons( Reference< browse::XBrowseNode >& node )
 
         if ( getBoolProperty( xProps, sName ) )
         {
-            aEditButton.Enable();
+            m_pEditButton->Enable();
         }
         else
         {
-            aEditButton.Disable();
+            m_pEditButton->Disable();
         }
 
         sName = rtl::OUString("Deletable")  ;
 
         if ( getBoolProperty( xProps, sName ) )
         {
-            aDelButton.Enable();
+            m_pDelButton->Enable();
         }
         else
         {
-            aDelButton.Disable();
+            m_pDelButton->Disable();
         }
 
         sName = rtl::OUString("Creatable")  ;
 
         if ( getBoolProperty( xProps, sName ) )
         {
-            aCreateButton.Enable();
+            m_pCreateButton->Enable();
         }
         else
         {
-            aCreateButton.Disable();
+            m_pCreateButton->Disable();
         }
 
         sName = rtl::OUString("Renamable")  ;
 
         if ( getBoolProperty( xProps, sName ) )
         {
-            aRenameButton.Enable();
+            m_pRenameButton->Enable();
         }
         else
         {
-            aRenameButton.Disable();
+            m_pRenameButton->Disable();
         }
     }
     else
     {
         // no node info available, disable all configurable actions
-        aDelButton.Disable();
-        aCreateButton.Disable();
-        aEditButton.Disable();
-        aRunButton.Disable();
-        aRenameButton.Disable();
+        m_pDelButton->Disable();
+        m_pCreateButton->Disable();
+        m_pEditButton->Disable();
+        m_pRunButton->Disable();
+        m_pRenameButton->Disable();
     }
 }
 
@@ -675,21 +693,21 @@ IMPL_LINK( SvxScriptOrgDialog, ScriptSelectHdl, SvTreeListBox *, pBox )
 
 IMPL_LINK( SvxScriptOrgDialog, ButtonHdl, Button *, pButton )
 {
-    if ( pButton == &aCloseButton )
+    if ( pButton == m_pCloseButton )
     {
         StoreCurrentSelection();
         EndDialog( 0 );
     }
-    if ( pButton == &aEditButton ||
-            pButton == &aCreateButton ||
-            pButton == &aDelButton ||
-            pButton == &aRunButton ||
-            pButton == &aRenameButton )
+    if ( pButton == m_pEditButton ||
+            pButton == m_pCreateButton ||
+            pButton == m_pDelButton ||
+            pButton == m_pRunButton ||
+            pButton == m_pRenameButton )
 
     {
-        if ( aScriptsBox.IsSelected( aScriptsBox.GetHdlEntry() ) )
+        if ( m_pScriptsBox->IsSelected( m_pScriptsBox->GetHdlEntry() ) )
         {
-            SvTreeListEntry* pEntry = aScriptsBox.GetHdlEntry();
+            SvTreeListEntry* pEntry = m_pScriptsBox->GetHdlEntry();
             SFEntry* userData = 0;
             if ( !pEntry )
             {
@@ -709,7 +727,7 @@ IMPL_LINK( SvxScriptOrgDialog, ButtonHdl, Button *, pButton )
                     return 0;
                 }
 
-                if ( pButton == &aRunButton )
+                if ( pButton == m_pRunButton )
                 {
                     ::rtl::OUString tmpString;
                     Reference< beans::XPropertySet > xProp( node, UNO_QUERY );
@@ -735,12 +753,12 @@ IMPL_LINK( SvxScriptOrgDialog, ButtonHdl, Button *, pButton )
                     }
 
 
-                    SvTreeListEntry* pParent = aScriptsBox.GetParent( pEntry );
+                    SvTreeListEntry* pParent = m_pScriptsBox->GetParent( pEntry );
                     while ( pParent && !mspNode.is() )
                     {
                         SFEntry* mspUserData = (SFEntry*)pParent->GetUserData();
                         mspNode.set( mspUserData->GetNode() , UNO_QUERY );
-                        pParent = aScriptsBox.GetParent( pParent );
+                        pParent = m_pScriptsBox->GetParent( pParent );
                     }
                     xProp->getPropertyValue( rtl::OUString("URI" ) ) >>= tmpString;
                     const String scriptURL( tmpString );
@@ -782,7 +800,7 @@ IMPL_LINK( SvxScriptOrgDialog, ButtonHdl, Button *, pButton )
                     StoreCurrentSelection();
                     EndDialog( 0 );
                 }
-                else if ( pButton == &aEditButton )
+                else if ( pButton == m_pEditButton )
                 {
                     Reference< script::XInvocation > xInv( node, UNO_QUERY );
                     if ( xInv.is() )
@@ -804,15 +822,15 @@ IMPL_LINK( SvxScriptOrgDialog, ButtonHdl, Button *, pButton )
                         }
                     }
                 }
-                else if ( pButton == &aCreateButton )
+                else if ( pButton == m_pCreateButton )
                 {
                     createEntry( pEntry );
                 }
-                else if ( pButton == &aDelButton )
+                else if ( pButton == m_pDelButton )
                 {
                     deleteEntry( pEntry );
                 }
-                else if ( pButton == &aRenameButton )
+                else if ( pButton == m_pRenameButton )
                 {
                     renameEntry( pEntry );
                 }
@@ -864,7 +882,7 @@ void SvxScriptOrgDialog::createEntry( SvTreeListEntry* pEntry )
         ::rtl::OUString aNewName;
         ::rtl::OUString aNewStdName;
         sal_uInt16 nMode = INPUTMODE_NEWLIB;
-        if( aScriptsBox.GetModel()->GetDepth( pEntry ) == 0 )
+        if( m_pScriptsBox->GetModel()->GetDepth( pEntry ) == 0 )
         {
             aNewStdName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Library") ) ;
         }
@@ -967,7 +985,7 @@ void SvxScriptOrgDialog::createEntry( SvTreeListEntry* pEntry )
         while ( !bValid );
 
         // open up parent node (which ensures it's loaded)
-        aScriptsBox.RequestingChildren( pEntry );
+        m_pScriptsBox->RequestingChildren( pEntry );
 
         Sequence< Any > args( 1 );
         args[ 0 ] <<= aNewName;
@@ -1006,16 +1024,16 @@ void SvxScriptOrgDialog::createEntry( SvTreeListEntry* pEntry )
         if ( aChildNode->getType() == browse::BrowseNodeTypes::SCRIPT )
         {
             SAL_WNODEPRECATED_DECLARATIONS_PUSH
-            pNewEntry = aScriptsBox.insertEntry( aChildName,
-                    IMG_MACRO, pEntry, false, std::auto_ptr< SFEntry >(new SFEntry( OBJTYPE_METHOD, aChildNode,xDocumentModel ) ) );
+            pNewEntry = m_pScriptsBox->insertEntry( aChildName,
+                    RID_CUIIMG_MACRO, pEntry, false, std::auto_ptr< SFEntry >(new SFEntry( OBJTYPE_METHOD, aChildNode,xDocumentModel ) ) );
             SAL_WNODEPRECATED_DECLARATIONS_POP
 
         }
         else
         {
             SAL_WNODEPRECATED_DECLARATIONS_PUSH
-            pNewEntry = aScriptsBox.insertEntry( aChildName,
-                IMG_LIB, pEntry, false, std::auto_ptr< SFEntry >(new SFEntry( OBJTYPE_SCRIPTCONTAINER, aChildNode,xDocumentModel ) ) );
+            pNewEntry = m_pScriptsBox->insertEntry( aChildName,
+                RID_CUIIMG_LIB, pEntry, false, std::auto_ptr< SFEntry >(new SFEntry( OBJTYPE_SCRIPTCONTAINER, aChildNode,xDocumentModel ) ) );
             SAL_WNODEPRECATED_DECLARATIONS_POP
 
             // If the Parent is not loaded then set to
@@ -1028,8 +1046,8 @@ void SvxScriptOrgDialog::createEntry( SvTreeListEntry* pEntry )
                 userData->setLoaded();
             }
         }
-        aScriptsBox.SetCurEntry( pNewEntry );
-        aScriptsBox.Select( aScriptsBox.GetCurEntry() );
+        m_pScriptsBox->SetCurEntry( pNewEntry );
+        m_pScriptsBox->Select( m_pScriptsBox->GetCurEntry() );
 
     }
     else
@@ -1105,9 +1123,9 @@ void SvxScriptOrgDialog::renameEntry( SvTreeListEntry* pEntry )
     }
     if ( aChildNode.is() )
     {
-        aScriptsBox.SetEntryText( pEntry, aChildNode->getName() );
-        aScriptsBox.SetCurEntry( pEntry );
-        aScriptsBox.Select( aScriptsBox.GetCurEntry() );
+        m_pScriptsBox->SetEntryText( pEntry, aChildNode->getName() );
+        m_pScriptsBox->SetCurEntry( pEntry );
+        m_pScriptsBox->Select( m_pScriptsBox->GetCurEntry() );
 
     }
     else
@@ -1155,8 +1173,8 @@ void SvxScriptOrgDialog::deleteEntry( SvTreeListEntry* pEntry )
 
     if ( result == sal_True )
     {
-        aScriptsBox.deleteTree( pEntry );
-        aScriptsBox.GetModel()->Remove( pEntry );
+        m_pScriptsBox->deleteTree( pEntry );
+        m_pScriptsBox->GetModel()->Remove( pEntry );
     }
     else
     {
@@ -1220,13 +1238,13 @@ Selection_hash SvxScriptOrgDialog::m_lastSelection;
 void SvxScriptOrgDialog::StoreCurrentSelection()
 {
     String aDescription;
-    if ( aScriptsBox.IsSelected( aScriptsBox.GetHdlEntry() ) )
+    if ( m_pScriptsBox->IsSelected( m_pScriptsBox->GetHdlEntry() ) )
     {
-        SvTreeListEntry* pEntry = aScriptsBox.GetHdlEntry();
+        SvTreeListEntry* pEntry = m_pScriptsBox->GetHdlEntry();
         while( pEntry )
         {
-            aDescription.Insert( aScriptsBox.GetEntryText( pEntry ), 0 );
-            pEntry = aScriptsBox.GetParent( pEntry );
+            aDescription.Insert( m_pScriptsBox->GetEntryText( pEntry ), 0 );
+            pEntry = m_pScriptsBox->GetParent( pEntry );
             if ( pEntry )
                 aDescription.Insert( ';', 0 );
         }
@@ -1245,21 +1263,21 @@ void SvxScriptOrgDialog::RestorePreviousSelection()
     while ( nIndex != STRING_NOTFOUND )
     {
         String aTmp( aStoredEntry.GetToken( 0, ';', nIndex ) );
-        SvTreeListEntry* pTmpEntry = aScriptsBox.FirstChild( pEntry );
+        SvTreeListEntry* pTmpEntry = m_pScriptsBox->FirstChild( pEntry );
         while ( pTmpEntry )
         {
-            if ( aScriptsBox.GetEntryText( pTmpEntry ) == aTmp )
+            if ( m_pScriptsBox->GetEntryText( pTmpEntry ) == aTmp )
             {
                 pEntry = pTmpEntry;
                 break;
             }
-            pTmpEntry = aScriptsBox.NextSibling( pTmpEntry );
+            pTmpEntry = m_pScriptsBox->NextSibling( pTmpEntry );
         }
         if ( !pTmpEntry )
             break;
-        aScriptsBox.RequestingChildren( pEntry );
+        m_pScriptsBox->RequestingChildren( pEntry );
     }
-    aScriptsBox.SetCurEntry( pEntry );
+    m_pScriptsBox->SetCurEntry( pEntry );
 }
 
 ::rtl::OUString ReplaceString(

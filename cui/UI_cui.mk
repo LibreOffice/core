@@ -17,6 +17,7 @@ $(eval $(call gb_UI_add_uifiles,cui,\
 	cui/uiconfig/ui/insertoleobject \
 	cui/uiconfig/ui/insertplugin \
 	cui/uiconfig/ui/insertrowcolumn \
+	cui/uiconfig/ui/scriptorganizer \
 	cui/uiconfig/ui/macroselectordialog \
 	cui/uiconfig/ui/positionpage \
 	cui/uiconfig/ui/specialcharacters \
