@@ -585,8 +585,6 @@ $(eval $(call gb_Helper_register_libraries,UNOLIBS_OOO, \
     vbaobj \
     vbaswobj \
     vclcanvas \
-    writerfilter_uno \
-    writerfilter_debug \
     $(if $(filter $(GUIBASE),aqua), \
         fps_aqua \
     ) \
