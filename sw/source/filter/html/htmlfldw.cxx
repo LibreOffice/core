@@ -374,6 +374,7 @@ static Writer& OutHTML_SwField( Writer& rWrt, const SwField* pFld,
                 SwHTMLWriter::GetCSS1ScriptForScriptType( nScriptType );
             xub_StrLen nEndPos = (xub_StrLen)pBreakIt->GetBreakIter()->endOfScript(
                                     sExpand, nPos, nScriptType );
+            xub_StrLen nChunkLen = nEndPos - nPos;
             if( nScript != CSS1_OUTMODE_ANY_SCRIPT &&
                 /* #108791# */ nScript != rHTMLWrt.nCSS1Script )
             {
@@ -403,7 +404,7 @@ static Writer& OutHTML_SwField( Writer& rWrt, const SwField* pFld,
                     }
                 }
 
-                HTMLOutFuncs::Out_String( rWrt.Strm(), sExpand.Copy( nPos, nEndPos ),
+                HTMLOutFuncs::Out_String( rWrt.Strm(), sExpand.Copy( nPos, nChunkLen ),
                     rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
 
                 rHTMLWrt.bTagOn = sal_False;
@@ -413,7 +414,7 @@ static Writer& OutHTML_SwField( Writer& rWrt, const SwField* pFld,
             }
             else
             {
-                HTMLOutFuncs::Out_String( rWrt.Strm(), sExpand.Copy( nPos, nEndPos ),
+                HTMLOutFuncs::Out_String( rWrt.Strm(), sExpand.Copy( nPos, nChunkLen ),
                     rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
             }
             nPos = nEndPos;
