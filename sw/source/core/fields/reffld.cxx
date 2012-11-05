@@ -470,9 +470,7 @@ void SwGetRefField::UpdateField( const SwTxtFld* pFldTxtAttr )
             if( !pFldTxtAttr || !pFldTxtAttr->GetpTxtNode() )
                 break;
 
-            LocaleDataWrapper aLocaleData(
-                            ::comphelper::getProcessServiceFactory(),
-                            SvxCreateLocale( GetLanguage() ) );
+            LocaleDataWrapper aLocaleData( SvxCreateLocale( GetLanguage() ) );
 
             // erstmal ein "Kurz" - Test - falls beide im selben
             // Node stehen!

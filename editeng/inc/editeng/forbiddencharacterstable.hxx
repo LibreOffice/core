@@ -29,8 +29,8 @@
 namespace com {
 namespace sun {
 namespace star {
-namespace lang {
-    class XMultiServiceFactory;
+namespace uno {
+    class XComponentContext;
 }}}}
 
 class EDITENG_DLLPUBLIC SvxForbiddenCharactersTable : public salhelper::SimpleReferenceObject
@@ -39,10 +39,10 @@ public:
     typedef std::map<sal_uInt16, com::sun::star::i18n::ForbiddenCharacters> Map;
 private:
     Map maMap;
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > mxMSF;
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > m_xContext;
 
 public:
-    SvxForbiddenCharactersTable( ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xMSF);
+    SvxForbiddenCharactersTable( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext);
     ~SvxForbiddenCharactersTable() {}
 
     Map& GetMap() { return maMap; }

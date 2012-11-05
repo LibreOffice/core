@@ -1697,7 +1697,7 @@ void OfaLanguagesTabPage::Reset( const SfxItemSet& rSet )
     {
         Locale aTempLocale;
         SvxLanguageToLocale( aTempLocale, Application::GetSettings().GetLanguage());
-        LocaleDataWrapper aLocaleWrapper( ::comphelper::getProcessServiceFactory(), aTempLocale );
+        LocaleDataWrapper aLocaleWrapper( aTempLocale );
         aDatePatternsString = lcl_getDatePatternsConfigString( aLocaleWrapper);
     }
     aDatePatternsED.SetText( aDatePatternsString);
@@ -1894,7 +1894,7 @@ IMPL_LINK( OfaLanguagesTabPage, LocaleSettingHdl, SvxLanguageBox*, pBox )
     // obtain corresponding locale data
     Locale aTempLocale;
     SvxLanguageToLocale( aTempLocale, eLang );
-    LocaleDataWrapper aLocaleWrapper( ::comphelper::getProcessServiceFactory(), aTempLocale );
+    LocaleDataWrapper aLocaleWrapper( aTempLocale );
 
     // update the decimal separator key of the related CheckBox
     String sTempLabel(sDecimalSeparatorLabel);

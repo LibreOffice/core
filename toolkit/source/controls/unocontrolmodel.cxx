@@ -337,7 +337,7 @@ sal_Bool UnoControlModel::ImplHasProperty( sal_uInt16 nPropId ) const
                     aLocale.Country = sDefaultCurrency.copy( nSepPos + 1 );
                 }
 
-                LocaleDataWrapper aLocaleInfo( maContext.getLegacyServiceFactory(), aLocale );
+                LocaleDataWrapper aLocaleInfo( maContext.getUNOContext(), aLocale );
                 if ( sBankSymbol.isEmpty() )
                     sBankSymbol = aLocaleInfo.getCurrBankSymbol();
 

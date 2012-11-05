@@ -147,6 +147,7 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,offapi/com/sun/star/i18n,\
 	CharacterClassification \
 	LocaleCalendar \
 	LocaleData \
+	NumberFormatMapper \
 	TextConversion \
 	Transliteration \
 ))
@@ -861,7 +862,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/i18n,\
 	IndexEntrySupplier \
 	InputSequenceChecker \
 	NativeNumberSupplier \
-	NumberFormatMapper \
 	OrdinalSuffix \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/image,\

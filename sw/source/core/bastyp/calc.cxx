@@ -258,10 +258,8 @@ SwCalc::SwCalc( SwDoc& rD )
         eLang != SvxLocaleToLanguage( pCharClass->getLocale() ) )
     {
         ::com::sun::star::lang::Locale aLocale( SvxCreateLocale( eLang ));
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xMSF(
-                            ::comphelper::getProcessServiceFactory() );
         pCharClass = new CharClass( ::comphelper::getProcessComponentContext(), aLocale );
-        pLclData = new LocaleDataWrapper( xMSF, aLocale );
+        pLclData = new LocaleDataWrapper( aLocale );
     }
 
     sCurrSym = comphelper::string::strip(pLclData->getCurrSymbol(), ' ');
@@ -1543,9 +1541,7 @@ bool SwCalc::Str2Double( const String& rCommand, xub_StrLen& rCommandPos,
         if (eLang !=
                 SvxLocaleToLanguage(aSysLocale.GetLocaleData().getLocale()))
         {
-            pLclD.reset( new LocaleDataWrapper(
-                            ::comphelper::getProcessServiceFactory(),
-                            SvxCreateLocale( eLang ) ) );
+            pLclD.reset( new LocaleDataWrapper( SvxCreateLocale( eLang ) ) );
         }
     }
 

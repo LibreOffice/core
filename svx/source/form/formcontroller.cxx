@@ -3172,7 +3172,7 @@ void FormController::setFilter(::std::vector<FmFieldInfo>& rFieldInfos)
         Reference< XNumberFormatter> xFormatter( NumberFormatter::create(m_aContext.getUNOContext()), UNO_QUERY_THROW );
         xFormatter->attachNumberFormatsSupplier(xFormatSupplier);
         Locale aAppLocale = Application::GetSettings().GetUILocale();
-        LocaleDataWrapper aLocaleWrapper( m_aContext.getLegacyServiceFactory(), aAppLocale );
+        LocaleDataWrapper aLocaleWrapper( m_aContext.getUNOContext(), aAppLocale );
 
         // retrieving the filter
         const Sequence < PropertyValue >* pRow = aFilterRows.getConstArray();

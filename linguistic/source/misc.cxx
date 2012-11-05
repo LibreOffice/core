@@ -78,7 +78,6 @@ osl::Mutex &    GetLinguMutex()
 LocaleDataWrapper & GetLocaleDataWrapper( sal_Int16 nLang )
 {
     static LocaleDataWrapper aLclDtaWrp(
-                comphelper::getProcessServiceFactory(),
                 CreateLocale( SvtSysLocale().GetUILanguage() ) );
 
     const Locale &rLcl = aLclDtaWrp.getLoadedLocale();

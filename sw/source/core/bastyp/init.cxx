@@ -701,9 +701,7 @@ void _InitCore()
     for ( i = 38; i <= 136; ++i )
         SwAttrPool::pVersionMap6[ i-1 ] = i + 3;
 
-    uno::Reference< lang::XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
-
-    SwBreakIt::_Create( xMSF );
+    SwBreakIt::_Create( ::comphelper::getProcessComponentContext() );
     pCheckIt = NULL;
 
     _FrmInit();

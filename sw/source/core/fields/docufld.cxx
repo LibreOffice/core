@@ -895,7 +895,6 @@ static void lcl_GetLocalDataWrapper( sal_uLong nLang,
     *ppLocalData = *ppAppLocalData;
     if( nLang != SvxLocaleToLanguage( (*ppLocalData)->getLocale() ) )
         *ppLocalData = new LocaleDataWrapper(
-                        ::comphelper::getProcessServiceFactory(),
                         SvxCreateLocale( static_cast<LanguageType>(nLang) ) );
 }
 

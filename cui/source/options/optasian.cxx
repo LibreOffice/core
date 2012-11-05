@@ -349,8 +349,7 @@ IMPL_LINK_NOARG(SvxAsianLayoutPage, LanguageHdl)
     }
     if(!bAvail)
     {
-        Reference< XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
-        LocaleDataWrapper aWrap( xMSF, aLocale );
+        LocaleDataWrapper aWrap( aLocale );
         ForbiddenCharacters aForbidden = aWrap.getForbiddenCharacters();
         sStart = aForbidden.beginLine;
         sEnd = aForbidden.endLine;

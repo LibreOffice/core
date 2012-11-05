@@ -54,7 +54,7 @@
 
 class OnDemandLocaleDataWrapper
 {
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xSMgr;
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > m_xContext;
             SvtSysLocale        aSysLocale;
             LanguageType        eCurrentLanguage;
             LanguageType        eLastAnyLanguage;
@@ -75,7 +75,7 @@ public:
                                         eCurrentLanguage = LANGUAGE_SYSTEM;
                                     }
                                 OnDemandLocaleDataWrapper(
-                                    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxSMgr,
+                                    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
                                     ::com::sun::star::lang::Locale& rLocale,
                                     LanguageType eLang
                                     )
@@ -85,7 +85,7 @@ public:
                                     , bInitialized(false)
                                     {
                                         pSystem = aSysLocale.GetLocaleDataPtr();
-                                        init( rxSMgr, rLocale, eLang );
+                                        init( rxContext, rLocale, eLang );
                                     }
                                 ~OnDemandLocaleDataWrapper()
                                     {
@@ -98,12 +98,12 @@ public:
             bool                is() const      { return pCurrent != NULL; }
 
             void                init(
-                                    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxSMgr,
+                                    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
                                     ::com::sun::star::lang::Locale& rLocale,
                                     LanguageType eLang
                                     )
                                     {
-                                        xSMgr = rxSMgr;
+                                        m_xContext = rxContext;
                                         changeLocale( rLocale, eLang );
                                         bInitialized = true;
                                     }
@@ -117,13 +117,13 @@ public:
                                             break;
                                             case LANGUAGE_ENGLISH_US :
                                                 if ( !pEnglish )
-                                                    pEnglish = new LocaleDataWrapper( xSMgr, rLocale );
+                                                    pEnglish = new LocaleDataWrapper( m_xContext, rLocale );
                                                 pCurrent = pEnglish;
                                             break;
                                             default:
                                                 if ( !pAny )
                                                 {
-                                                    pAny = new LocaleDataWrapper( xSMgr, rLocale );
+                                                    pAny = new LocaleDataWrapper( m_xContext, rLocale );
                                                     eLastAnyLanguage = eLang;
                                                 }
                                                 else if ( eLastAnyLanguage != eLang )
@@ -143,7 +143,7 @@ public:
                                     {
                                         if ( !pAny )
                                         {
-                                            pAny = new LocaleDataWrapper( xSMgr, pCurrent->getLocale() );
+                                            pAny = new LocaleDataWrapper( m_xContext, pCurrent->getLocale() );
                                             eLastAnyLanguage = eCurrentLanguage;
                                         }
                                         else if ( pCurrent != pAny )
@@ -240,7 +240,7 @@ public:
  */
 class OnDemandTransliterationWrapper
 {
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xSMgr;
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > m_xContext;
             LanguageType        eLanguage;
             ::com::sun::star::i18n::TransliterationModules  nType;
     mutable ::utl::TransliterationWrapper*  pPtr;
@@ -255,14 +255,14 @@ public:
                                     , bInitialized(false)
                                     {}
                                 OnDemandTransliterationWrapper(
-                                    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxSMgr,
+                                    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
                                     LanguageType eLang,
                                     ::com::sun::star::i18n::TransliterationModules nTypeP
                                     )
                                     : bValid(false)
                                     , bInitialized(false)
                                     {
-                                        init( rxSMgr, eLang, nTypeP );
+                                        init( rxContext, eLang, nTypeP );
                                     }
                                 ~OnDemandTransliterationWrapper()
                                     {
@@ -274,12 +274,12 @@ public:
             bool                is() const      { return pPtr != NULL; }
 
             void                init(
-                                    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxSMgr,
+                                    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
                                     LanguageType eLang,
                                     ::com::sun::star::i18n::TransliterationModules nTypeP
                                     )
                                     {
-                                        xSMgr = rxSMgr;
+                                        m_xContext = rxContext;
                                         nType = nTypeP;
                                         changeLocale( eLang );
                                         if ( pPtr )
@@ -301,7 +301,7 @@ public:
                                         if ( !bValid )
                                         {
                                             if ( !pPtr )
-                                                pPtr = new ::utl::TransliterationWrapper( comphelper::getComponentContext(xSMgr), nType );
+                                                pPtr = new ::utl::TransliterationWrapper( m_xContext, nType );
                                             pPtr->loadModuleIfNeeded( eLanguage );
                                             bValid = true;
                                         }
@@ -311,7 +311,7 @@ public:
     const   ::utl::TransliterationWrapper*  getForModule( const String& rModule, LanguageType eLang ) const
                                     {
                                         if ( !pPtr )
-                                            pPtr = new ::utl::TransliterationWrapper( comphelper::getComponentContext(xSMgr), nType );
+                                            pPtr = new ::utl::TransliterationWrapper( m_xContext, nType );
                                         pPtr->loadModuleByImplName( rModule, eLang );
                                         bValid = false; // reforce settings change in get()
                                         return pPtr;

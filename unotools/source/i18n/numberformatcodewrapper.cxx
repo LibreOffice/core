@@ -19,8 +19,8 @@
 
 
 #include <unotools/numberformatcodewrapper.hxx>
+#include <com/sun/star/i18n/NumberFormatMapper.hpp>
 #include <tools/debug.hxx>
-#include "instance.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::i18n;
@@ -28,17 +28,12 @@ using namespace ::com::sun::star::uno;
 
 
 NumberFormatCodeWrapper::NumberFormatCodeWrapper(
-            const Reference< lang::XMultiServiceFactory > & xSF,
+            const Reference< uno::XComponentContext > & rxContext,
             const lang::Locale& rLocale
             )
-        :
-        xSMgr( xSF )
 {
     setLocale( rLocale );
-    xNFC = Reference< XNumberFormatCode > (
-        intl_createInstance( xSMgr, "com.sun.star.i18n.NumberFormatMapper",
-                             "NumberFormatCodeWrapper" ), uno::UNO_QUERY );
-    DBG_ASSERT( xNFC.is(), "NumberFormatCodeWrapper: no NumberFormatMapper" );
+    xNFC = i18n::NumberFormatMapper::create( rxContext );
 }
 
 
@@ -58,8 +53,7 @@ NumberFormatCodeWrapper::getFormatCode( sal_Int16 formatIndex ) const
 {
     try
     {
-        if ( xNFC.is() )
-            return xNFC->getFormatCode( formatIndex, aLocale );
+        return xNFC->getFormatCode( formatIndex, aLocale );
     }
     catch ( const Exception& )
     {
@@ -74,8 +68,7 @@ NumberFormatCodeWrapper::getAllFormatCode( sal_Int16 formatUsage ) const
 {
     try
     {
-        if ( xNFC.is() )
-            return xNFC->getAllFormatCode( formatUsage, aLocale );
+        return xNFC->getAllFormatCode( formatUsage, aLocale );
     }
     catch ( const Exception& )
     {
@@ -90,8 +83,7 @@ NumberFormatCodeWrapper::getAllFormatCodes() const
 {
     try
     {
-        if ( xNFC.is() )
-            return xNFC->getAllFormatCodes( aLocale );
+        return xNFC->getAllFormatCodes( aLocale );
     }
     catch ( const Exception& )
     {

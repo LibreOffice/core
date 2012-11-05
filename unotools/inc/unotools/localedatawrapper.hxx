@@ -30,8 +30,8 @@
 #include "unotools/unotoolsdllapi.h"
 
 namespace com { namespace sun { namespace star {
-    namespace lang {
-        class XMultiServiceFactory;
+    namespace uno {
+        class XComponentContext;
     }
 }}}
 class Date;
@@ -56,7 +56,7 @@ class UNOTOOLS_DLLPUBLIC LocaleDataWrapper : private boost::noncopyable
 {
     static  sal_uInt8                nLocaleDataChecking;    // 0:=dontknow, 1:=yes, 2:=no
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >    xSMgr;
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >        m_xContext;
     ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XLocaleData4 >            xLD;
     ::com::sun::star::lang::Locale                                                      aLocale;
     ::boost::shared_ptr< ::com::sun::star::i18n::Calendar2 >                            xDefaultCalendar;
@@ -111,7 +111,10 @@ class UNOTOOLS_DLLPUBLIC LocaleDataWrapper : private boost::noncopyable
 
 public:
                                 LocaleDataWrapper(
-                                    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & xSF,
+                                    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > & rxContext,
+                                    const ::com::sun::star::lang::Locale& rLocale
+                                    );
+                                LocaleDataWrapper(
                                     const ::com::sun::star::lang::Locale& rLocale
                                     );
                                 ~LocaleDataWrapper();
@@ -122,8 +125,8 @@ public:
         lives "on the grassland". The CalendarWrapper ctor can handle that
         though. */
     const ::com::sun::star::uno::Reference<
-        ::com::sun::star::lang::XMultiServiceFactory > & getServiceFactory()
-        const { return xSMgr; }
+        ::com::sun::star::uno::XComponentContext > & getComponentContext()
+        const { return m_xContext; }
 
     /// set a new Locale to request
             void                setLocale( const ::com::sun::star::lang::Locale& rLocale );

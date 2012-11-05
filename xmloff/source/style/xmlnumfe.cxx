@@ -247,7 +247,7 @@ SvXMLNumFmtExport::SvXMLNumFmtExport(
     {
         pCharClass = new CharClass( comphelper::getComponentContext(pFormatter->GetServiceManager()),
             pFormatter->GetLocale() );
-        pLocaleData = new LocaleDataWrapper( pFormatter->GetServiceManager(),
+        pLocaleData = new LocaleDataWrapper( comphelper::getComponentContext(pFormatter->GetServiceManager()),
             pFormatter->GetLocale() );
     }
     else
@@ -255,7 +255,7 @@ SvXMLNumFmtExport::SvXMLNumFmtExport(
         lang::Locale aLocale( MsLangId::convertLanguageToLocale( MsLangId::getSystemLanguage() ) );
 
         pCharClass = new CharClass( comphelper::getComponentContext(rExport.getServiceFactory()), aLocale );
-        pLocaleData = new LocaleDataWrapper( rExport.getServiceFactory(), aLocale );
+        pLocaleData = new LocaleDataWrapper( comphelper::getComponentContext(rExport.getServiceFactory()), aLocale );
     }
 
     pUsedList = new SvXMLNumUsedList_Impl;
@@ -282,7 +282,7 @@ SvXMLNumFmtExport::SvXMLNumFmtExport(
     {
         pCharClass = new CharClass( comphelper::getComponentContext(pFormatter->GetServiceManager()),
             pFormatter->GetLocale() );
-        pLocaleData = new LocaleDataWrapper( pFormatter->GetServiceManager(),
+        pLocaleData = new LocaleDataWrapper( comphelper::getComponentContext(pFormatter->GetServiceManager()),
             pFormatter->GetLocale() );
     }
     else
@@ -290,7 +290,7 @@ SvXMLNumFmtExport::SvXMLNumFmtExport(
         lang::Locale aLocale( MsLangId::convertLanguageToLocale( MsLangId::getSystemLanguage() ) );
 
         pCharClass = new CharClass( comphelper::getComponentContext(rExport.getServiceFactory()), aLocale );
-        pLocaleData = new LocaleDataWrapper( rExport.getServiceFactory(), aLocale );
+        pLocaleData = new LocaleDataWrapper( comphelper::getComponentContext(rExport.getServiceFactory()), aLocale );
     }
 
     pUsedList = new SvXMLNumUsedList_Impl;

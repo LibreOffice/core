@@ -33,9 +33,9 @@
 
 using namespace ::com::sun::star;
 
-vcl::I18nHelper::I18nHelper(  ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxMSF, const ::com::sun::star::lang::Locale& rLocale )
+vcl::I18nHelper::I18nHelper(  const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext, const ::com::sun::star::lang::Locale& rLocale )
 {
-    mxMSF = rxMSF;
+    m_xContext = rxContext;
     maLocale = rLocale;
     mpLocaleDataWrapper = NULL;
     mpTransliterationWrapper= NULL;
@@ -64,7 +64,7 @@ utl::TransliterationWrapper& vcl::I18nHelper::ImplGetTransliterationWrapper() co
         if ( mbTransliterateIgnoreCase )
             nModules |= i18n::TransliterationModules_IGNORE_CASE;
 
-        ((vcl::I18nHelper*)this)->mpTransliterationWrapper = new utl::TransliterationWrapper( comphelper::getComponentContext(mxMSF), (i18n::TransliterationModules)nModules );
+        ((vcl::I18nHelper*)this)->mpTransliterationWrapper = new utl::TransliterationWrapper( m_xContext, (i18n::TransliterationModules)nModules );
         ((vcl::I18nHelper*)this)->mpTransliterationWrapper->loadModuleIfNeeded( MsLangId::convertLocaleToLanguage( maLocale ) );
     }
     return *mpTransliterationWrapper;
@@ -74,7 +74,7 @@ LocaleDataWrapper& vcl::I18nHelper::ImplGetLocaleDataWrapper() const
 {
     if ( !mpLocaleDataWrapper )
     {
-        ((vcl::I18nHelper*)this)->mpLocaleDataWrapper = new LocaleDataWrapper( mxMSF, maLocale );
+        ((vcl::I18nHelper*)this)->mpLocaleDataWrapper = new LocaleDataWrapper( m_xContext, maLocale );
     }
     return *mpLocaleDataWrapper;
 }

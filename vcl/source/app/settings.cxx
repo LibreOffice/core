@@ -1579,7 +1579,7 @@ LanguageType AllSettings::GetUILanguage() const
 const LocaleDataWrapper& AllSettings::GetLocaleDataWrapper() const
 {
     if ( !mpData->mpLocaleDataWrapper )
-        ((AllSettings*)this)->mpData->mpLocaleDataWrapper = new LocaleDataWrapper( comphelper::getProcessServiceFactory(), GetLocale() );
+        ((AllSettings*)this)->mpData->mpLocaleDataWrapper = new LocaleDataWrapper( comphelper::getProcessComponentContext(), GetLocale() );
     return *mpData->mpLocaleDataWrapper;
 }
 
@@ -1588,7 +1588,7 @@ const LocaleDataWrapper& AllSettings::GetLocaleDataWrapper() const
 const LocaleDataWrapper& AllSettings::GetUILocaleDataWrapper() const
 {
     if ( !mpData->mpUILocaleDataWrapper )
-        ((AllSettings*)this)->mpData->mpUILocaleDataWrapper = new LocaleDataWrapper( comphelper::getProcessServiceFactory(), GetUILocale() );
+        ((AllSettings*)this)->mpData->mpUILocaleDataWrapper = new LocaleDataWrapper( comphelper::getProcessComponentContext(), GetUILocale() );
     return *mpData->mpUILocaleDataWrapper;
 }
 
@@ -1597,8 +1597,7 @@ const LocaleDataWrapper& AllSettings::GetUILocaleDataWrapper() const
 const vcl::I18nHelper& AllSettings::GetLocaleI18nHelper() const
 {
     if ( !mpData->mpI18nHelper ) {
-        ::com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> aFactory(comphelper::getProcessServiceFactory());
-        ((AllSettings*)this)->mpData->mpI18nHelper = new vcl::I18nHelper( aFactory, GetLocale() );
+        ((AllSettings*)this)->mpData->mpI18nHelper = new vcl::I18nHelper( comphelper::getProcessComponentContext(), GetLocale() );
     }
     return *mpData->mpI18nHelper;
 }
@@ -1608,8 +1607,7 @@ const vcl::I18nHelper& AllSettings::GetLocaleI18nHelper() const
 const vcl::I18nHelper& AllSettings::GetUILocaleI18nHelper() const
 {
     if ( !mpData->mpUII18nHelper ) {
-        ::com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> aFactory(comphelper::getProcessServiceFactory());
-        ((AllSettings*)this)->mpData->mpUII18nHelper = new vcl::I18nHelper( aFactory, GetUILocale() );
+        ((AllSettings*)this)->mpData->mpUII18nHelper = new vcl::I18nHelper( comphelper::getProcessComponentContext(), GetUILocale() );
     }
     return *mpData->mpUII18nHelper;
 }

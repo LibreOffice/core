@@ -5590,7 +5590,7 @@ WW8Fib::WW8Fib(sal_uInt8 nVer)
 
     Locale aTempLocale;
     SvxLanguageToLocale( aTempLocale, lid );
-    LocaleDataWrapper aLocaleWrapper( ::comphelper::getProcessServiceFactory(), aTempLocale );
+    LocaleDataWrapper aLocaleWrapper( aTempLocale );
     nNumDecimalSep = aLocaleWrapper.getNumDecimalSep()[0];
 }
 

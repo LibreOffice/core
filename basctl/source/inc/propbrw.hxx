@@ -30,6 +30,9 @@
 class SfxBindings;
 class SdrView;
 class SfxViewShell;
+namespace com { namespace sun { namespace star { namespace lang {
+    class XMultiServiceFactory;
+}}}}
 
 namespace basctl
 {

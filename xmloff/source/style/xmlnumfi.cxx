@@ -609,8 +609,8 @@ const LocaleDataWrapper& SvXMLNumImpData::GetLocaleData( LanguageType nLang )
 {
     if ( !pLocaleData )
         pLocaleData = new LocaleDataWrapper(
-            (pFormatter ? pFormatter->GetServiceManager() :
-            mxServiceFactory),
+            comphelper::getComponentContext(
+               pFormatter ? pFormatter->GetServiceManager() : mxServiceFactory),
             MsLangId::convertLanguageToLocale( nLang ) );
     else
         pLocaleData->setLocale( MsLangId::convertLanguageToLocale( nLang ) );

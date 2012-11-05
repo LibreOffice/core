@@ -172,8 +172,7 @@ rtl::Reference<SvxForbiddenCharactersTable> GlobalEditData::GetForbiddenCharsTab
 {
     if ( !xForbiddenCharsTable.is() )
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
-        xForbiddenCharsTable = new SvxForbiddenCharactersTable( xMSF );
+        xForbiddenCharsTable = new SvxForbiddenCharactersTable( ::comphelper::getProcessComponentContext() );
     }
     return xForbiddenCharsTable;
 }

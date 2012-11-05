@@ -21,6 +21,7 @@
 #include "unotools/intlwrapper.hxx"
 #include <com/sun/star/i18n/CollatorOptions.hpp>
 #include <i18npool/mslangid.hxx>
+#include <comphelper/processfactory.hxx>
 
 IntlWrapper::IntlWrapper(
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & xSF,
@@ -60,7 +61,7 @@ IntlWrapper::~IntlWrapper()
 
 void IntlWrapper::ImplNewLocaleData() const
 {
-    ((IntlWrapper*)this)->pLocaleData = new LocaleDataWrapper( xSMgr, aLocale );
+    ((IntlWrapper*)this)->pLocaleData = new LocaleDataWrapper( comphelper::getComponentContext(xSMgr), aLocale );
 }
 
 

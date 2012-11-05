@@ -223,7 +223,7 @@ void ImpSvNumberformatScan::SetDependentKeywords()
     // requested Locale, otherwise number format codes might not match
     lang::Locale aLoadedLocale = pLocaleData->getLoadedLocale();
     LanguageType eLang = MsLangId::convertLocaleToLanguage( aLoadedLocale );
-    NumberFormatCodeWrapper aNumberFormatCode( pFormatter->GetServiceManager(), aLoadedLocale );
+    NumberFormatCodeWrapper aNumberFormatCode( comphelper::getComponentContext(pFormatter->GetServiceManager()), aLoadedLocale );
 
     i18n::NumberFormatCode aFormat = aNumberFormatCode.getFormatCode( NF_NUMBER_STANDARD );
     sNameStandardFormat = lcl_extractStandardGeneralName( aFormat.Code);

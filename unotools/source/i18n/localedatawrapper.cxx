@@ -66,18 +66,29 @@ namespace
 sal_uInt8 LocaleDataWrapper::nLocaleDataChecking = 0;
 
 LocaleDataWrapper::LocaleDataWrapper(
-            const Reference< lang::XMultiServiceFactory > & xSF,
+            const Reference< uno::XComponentContext > & rxContext,
             const lang::Locale& rLocale
             )
         :
-        xSMgr( xSF ),
-        xLD( LocaleData::create(comphelper::getComponentContext(xSMgr)) ),
+        m_xContext( rxContext ),
+        xLD( LocaleData::create(rxContext) ),
         bLocaleDataItemValid( sal_False ),
         bReservedWordValid( sal_False )
 {
     setLocale( rLocale );
 }
 
+LocaleDataWrapper::LocaleDataWrapper(
+            const lang::Locale& rLocale
+            )
+        :
+        m_xContext( comphelper::getProcessComponentContext() ),
+        xLD( LocaleData::create(m_xContext) ),
+        bLocaleDataItemValid( sal_False ),
+        bReservedWordValid( sal_False )
+{
+    setLocale( rLocale );
+}
 
 LocaleDataWrapper::~LocaleDataWrapper()
 {
@@ -240,7 +251,7 @@ void LocaleDataWrapper::invalidateData()
 
     if ( !rInstalledLocales.getLength() )
     {
-        LocaleDataWrapper aLDW( ::comphelper::getProcessServiceFactory(), lang::Locale() );
+        LocaleDataWrapper aLDW( ::comphelper::getProcessComponentContext(), lang::Locale() );
         aLDW.getAllInstalledLocaleNames();
     }
     return rInstalledLocales;
@@ -698,7 +709,7 @@ void LocaleDataWrapper::scanCurrFormatImpl( const rtl::OUString& rCode,
 
 void LocaleDataWrapper::getCurrFormatsImpl()
 {
-    NumberFormatCodeWrapper aNumberFormatCode( xSMgr, getLocale() );
+    NumberFormatCodeWrapper aNumberFormatCode( m_xContext, getLocale() );
     uno::Sequence< NumberFormatCode > aFormatSeq
         = aNumberFormatCode.getAllFormatCode( KNumberFormatUsage::CURRENCY );
     sal_Int32 nCnt = aFormatSeq.getLength();
@@ -955,7 +966,7 @@ DateFormat LocaleDataWrapper::scanDateFormatImpl( const rtl::OUString& rCode )
 
 void LocaleDataWrapper::getDateFormatsImpl()
 {
-    NumberFormatCodeWrapper aNumberFormatCode( xSMgr, getLocale() );
+    NumberFormatCodeWrapper aNumberFormatCode( m_xContext, getLocale() );
     uno::Sequence< NumberFormatCode > aFormatSeq
         = aNumberFormatCode.getAllFormatCode( KNumberFormatUsage::DATE );
     sal_Int32 nCnt = aFormatSeq.getLength();

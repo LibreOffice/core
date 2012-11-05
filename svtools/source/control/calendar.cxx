@@ -257,7 +257,7 @@ void Calendar::ImplInitSettings()
 
 Calendar::Calendar( Window* pParent, WinBits nWinStyle ) :
     Control( pParent, nWinStyle & (WB_TABSTOP | WB_GROUP | WB_BORDER | WB_3DLOOK | WB_RANGESELECT | WB_MULTISELECT) ),
-    maCalendarWrapper( comphelper::getComponentContext(Application::GetAppLocaleDataWrapper().getServiceFactory()) ),
+    maCalendarWrapper( Application::GetAppLocaleDataWrapper().getComponentContext() ),
     maOldFormatFirstDate( 0, 0, 1900 ),
     maOldFormatLastDate( 0, 0, 1900 ),
     maFirstDate( 0, 0, 1900 ),

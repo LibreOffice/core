@@ -1146,7 +1146,7 @@ void DoubleNumericField::ResetConformanceTester()
     {
         Locale aLocale;
         MsLangId::convertLanguageToLocale( pFormatEntry->GetLanguage(), aLocale );
-        LocaleDataWrapper aLocaleInfo(::comphelper::getProcessServiceFactory(), aLocale);
+        LocaleDataWrapper aLocaleInfo( aLocale );
 
         String sSeparator = aLocaleInfo.getNumThousandSep();
         if (sSeparator.Len())
@@ -1238,7 +1238,7 @@ void DoubleCurrencyField::UpdateCurrencyFormat()
     // build a new format string with the base class' and my own settings
     Locale aLocale;
     MsLangId::convertLanguageToLocale( eLanguage, aLocale );
-    LocaleDataWrapper aLocaleInfo(::comphelper::getProcessServiceFactory(), aLocale);
+    LocaleDataWrapper aLocaleInfo( aLocale );
 
     XubString sNewFormat;
     if (bThSep)

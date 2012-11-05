@@ -43,9 +43,9 @@ using namespace com::sun::star;
 
 SwBreakIt* pBreakIt = 0;
 
-void SwBreakIt::_Create( const uno::Reference<lang::XMultiServiceFactory> & rxMSF )
+void SwBreakIt::_Create( const uno::Reference<uno::XComponentContext> & rxContext )
 {
-    delete pBreakIt, pBreakIt = new SwBreakIt( rxMSF );
+    delete pBreakIt, pBreakIt = new SwBreakIt( rxContext );
 }
 
 void SwBreakIt::_Delete()
@@ -58,14 +58,14 @@ SwBreakIt * SwBreakIt::Get()
     return pBreakIt;
 }
 
-SwBreakIt::SwBreakIt( const uno::Reference<lang::XMultiServiceFactory> & rxMSF )
-    : m_xMSF( rxMSF ),
+SwBreakIt::SwBreakIt( const uno::Reference<uno::XComponentContext> & rxContext )
+    : m_xContext( rxContext ),
       m_pLocale( NULL ),
       m_pForbidden( NULL ),
       aLast( LANGUAGE_DONTKNOW ),
       aForbiddenLang( LANGUAGE_DONTKNOW )
 {
-    OSL_ENSURE( m_xMSF.is(), "SwBreakIt: no MultiServiceFactory" );
+    OSL_ENSURE( m_xContext.is(), "SwBreakIt: no MultiServiceFactory" );
 }
 
 SwBreakIt::~SwBreakIt()
@@ -76,8 +76,8 @@ SwBreakIt::~SwBreakIt()
 
 void SwBreakIt::createBreakIterator() const
 {
-    if ( m_xMSF.is() && !xBreak.is() )
-        xBreak.set( i18n::BreakIterator::create(comphelper::getComponentContext(m_xMSF)) );
+    if ( m_xContext.is() && !xBreak.is() )
+        xBreak.set( i18n::BreakIterator::create(m_xContext) );
 }
 
 void SwBreakIt::_GetLocale( const LanguageType aLang )
@@ -89,7 +89,7 @@ void SwBreakIt::_GetLocale( const LanguageType aLang )
 
 void SwBreakIt::_GetForbidden( const LanguageType aLang )
 {
-    LocaleDataWrapper aWrap( m_xMSF, GetLocale( aLang ) );
+    LocaleDataWrapper aWrap( m_xContext, GetLocale( aLang ) );
 
     aForbiddenLang = aLang;
     delete m_pForbidden;

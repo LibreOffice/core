@@ -425,10 +425,7 @@ void SwDoc::setForbiddenCharacters(/*[in]*/ sal_uInt16 nLang,
 {
     if( !xForbiddenCharsTable.is() )
     {
-        uno::Reference<
-            lang::XMultiServiceFactory > xMSF =
-                                    ::comphelper::getProcessServiceFactory();
-        xForbiddenCharsTable = new SvxForbiddenCharactersTable( xMSF );
+        xForbiddenCharsTable = new SvxForbiddenCharactersTable( ::comphelper::getProcessComponentContext() );
     }
     xForbiddenCharsTable->SetForbiddenCharacters( nLang, rFChars );
     if( pDrawModel )
@@ -453,10 +450,7 @@ rtl::Reference<SvxForbiddenCharactersTable>& SwDoc::getForbiddenCharacterTable()
 {
     if( !xForbiddenCharsTable.is() )
     {
-        uno::Reference<
-            lang::XMultiServiceFactory > xMSF =
-                                    ::comphelper::getProcessServiceFactory();
-        xForbiddenCharsTable = new SvxForbiddenCharactersTable( xMSF );
+        xForbiddenCharsTable = new SvxForbiddenCharactersTable( ::comphelper::getProcessComponentContext() );
     }
     return xForbiddenCharsTable;
 }

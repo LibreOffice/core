@@ -309,7 +309,7 @@ LocaleDataWrapper& FormatterBase::ImplGetLocaleDataWrapper() const
 {
     if ( !mpLocaleDataWrapper )
     {
-        ((FormatterBase*)this)->mpLocaleDataWrapper = new LocaleDataWrapper( comphelper::getProcessServiceFactory(), GetLocale() );
+        ((FormatterBase*)this)->mpLocaleDataWrapper = new LocaleDataWrapper( GetLocale() );
     }
     return *mpLocaleDataWrapper;
 }

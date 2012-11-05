@@ -202,8 +202,7 @@ static sal_uInt16 GetAppLang()
 }
 static LocaleDataWrapper& GetLocaleDataWrapper( sal_uInt16 nLang )
 {
-    static LocaleDataWrapper aLclDtWrp( GetProcessFact(),
-                                        SvxCreateLocale( GetAppLang() ) );
+    static LocaleDataWrapper aLclDtWrp(  SvxCreateLocale( GetAppLang() ) );
     ::com::sun::star::lang::Locale aLcl( SvxCreateLocale( nLang ));
     const ::com::sun::star::lang::Locale& rLcl = aLclDtWrp.getLoadedLocale();
     if( aLcl.Language != rLcl.Language ||

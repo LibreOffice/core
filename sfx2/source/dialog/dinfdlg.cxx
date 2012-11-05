@@ -724,7 +724,7 @@ namespace
 {
     String GetDateTimeString( sal_Int32 _nDate, sal_Int32 _nTime )
     {
-        LocaleDataWrapper aWrapper( ::comphelper::getProcessServiceFactory(), Application::GetSettings().GetLocale() );
+        LocaleDataWrapper aWrapper( Application::GetSettings().GetLocale() );
 
         Date aDate( _nDate );
         Time aTime( _nTime );
@@ -878,7 +878,7 @@ IMPL_LINK_NOARG(SfxDocumentPage, DeleteHdl)
     String aName;
     if ( bEnableUseUserData && aUseUserDataCB.IsChecked() )
         aName = SvtUserOptions().GetFullName();
-    LocaleDataWrapper aLocaleWrapper( ::comphelper::getProcessServiceFactory(), Application::GetSettings().GetLocale() );
+    LocaleDataWrapper aLocaleWrapper( Application::GetSettings().GetLocale() );
     DateTime now( DateTime::SYSTEM );
     util::DateTime uDT(
         now.Get100Sec(), now.GetSec(), now.GetMin(), now.GetHour(),
@@ -1148,7 +1148,7 @@ void SfxDocumentPage::Reset( const SfxItemSet& rSet )
 
     // handle access data
     sal_Bool m_bUseUserData = pInfoItem->IsUseUserData();
-    LocaleDataWrapper aLocaleWrapper( ::comphelper::getProcessServiceFactory(), Application::GetSettings().GetLocale() );
+    LocaleDataWrapper aLocaleWrapper( Application::GetSettings().GetLocale() );
     aCreateValFt.SetText( ConvertDateTime_Impl( pInfoItem->getAuthor(),
         pInfoItem->getCreationDate(), aLocaleWrapper ) );
     util::DateTime aTime( pInfoItem->getModificationDate() );

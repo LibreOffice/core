@@ -164,9 +164,7 @@ void ODocumentInfoPreview::insertDateTime(
         Time(
             value.Hours, value.Minutes, value.Seconds, value.HundredthSeconds));
     if (aToolsDT.IsValidAndGregorian()) {
-        LocaleDataWrapper aLocaleWrapper(
-            comphelper::getProcessServiceFactory(),
-            Application::GetSettings().GetLocale());
+        LocaleDataWrapper aLocaleWrapper( Application::GetSettings().GetLocale() );
         rtl::OUStringBuffer buf(aLocaleWrapper.getDate(aToolsDT));
         buf.appendAscii(RTL_CONSTASCII_STRINGPARAM(", "));
         buf.append(aLocaleWrapper.getTime(aToolsDT));

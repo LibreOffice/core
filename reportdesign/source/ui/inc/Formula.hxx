@@ -26,6 +26,10 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/report/meta/XFormulaParser.hpp>
 
+namespace com { namespace sun { namespace star { namespace lang {
+    class XMultiServiceFactory;
+} } } }
+
 //============================================================================
 namespace rptui
 {

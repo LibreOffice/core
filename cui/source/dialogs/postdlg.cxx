@@ -124,7 +124,7 @@ SvxPostItDialog::SvxPostItDialog( Window* pParent,
     }
     else
     {
-        LocaleDataWrapper aLocaleWrapper( ::comphelper::getProcessServiceFactory(), Application::GetSettings().GetLocale() );
+        LocaleDataWrapper aLocaleWrapper( Application::GetSettings().GetLocale() );
         aDateStr = aLocaleWrapper.getDate( Date( Date::SYSTEM ) );
     }
 
@@ -212,7 +212,7 @@ IMPL_LINK_NOARG(SvxPostItDialog, Stamp)
     Date aDate( Date::SYSTEM );
     Time aTime( Time::SYSTEM );
     String aTmp( SvtUserOptions().GetID() );
-    LocaleDataWrapper aLocaleWrapper( ::comphelper::getProcessServiceFactory(), Application::GetSettings().GetLocale() );
+    LocaleDataWrapper aLocaleWrapper( Application::GetSettings().GetLocale() );
     String aStr( aEditED.GetText() );
     aStr.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "\n---- " ) );
 
@@ -239,7 +239,7 @@ IMPL_LINK_NOARG(SvxPostItDialog, Stamp)
 
 IMPL_LINK_NOARG(SvxPostItDialog, OKHdl)
 {
-    LocaleDataWrapper aLocaleWrapper( ::comphelper::getProcessServiceFactory(), Application::GetSettings().GetLocale() );
+    LocaleDataWrapper aLocaleWrapper( Application::GetSettings().GetLocale() );
     pOutSet = new SfxItemSet( rSet );
     pOutSet->Put( SvxPostItAuthorItem( SvtUserOptions().GetID(),
                                          rSet.GetPool()->GetWhich( SID_ATTR_POSTIT_AUTHOR ) ) );

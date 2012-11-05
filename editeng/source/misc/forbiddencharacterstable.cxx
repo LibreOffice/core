@@ -25,9 +25,9 @@
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
-SvxForbiddenCharactersTable::SvxForbiddenCharactersTable( ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xMSF)
+SvxForbiddenCharactersTable::SvxForbiddenCharactersTable( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext)
 {
-    mxMSF = xMSF;
+    m_xContext = rxContext;
 }
 
 const com::sun::star::i18n::ForbiddenCharacters* SvxForbiddenCharactersTable::GetForbiddenCharacters( sal_uInt16 nLanguage, sal_Bool bGetDefault )
@@ -36,9 +36,9 @@ const com::sun::star::i18n::ForbiddenCharacters* SvxForbiddenCharactersTable::Ge
     Map::iterator it = maMap.find( nLanguage );
     if ( it != maMap.end() )
         pForbiddenCharacters = &(it->second);
-    else if ( bGetDefault && mxMSF.is() )
+    else if ( bGetDefault && m_xContext.is() )
     {
-        LocaleDataWrapper aWrapper( mxMSF, SvxCreateLocale( nLanguage ) );
+        LocaleDataWrapper aWrapper( m_xContext, SvxCreateLocale( nLanguage ) );
         maMap[ nLanguage ] = aWrapper.getForbiddenCharacters();
         pForbiddenCharacters = &maMap[ nLanguage ];
     }

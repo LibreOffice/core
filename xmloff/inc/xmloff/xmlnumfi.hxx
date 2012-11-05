@@ -71,6 +71,10 @@ class SvXMLStylesContext;
 struct SvXMLNumberInfo;
 class SvNumberFormatter;
 class SvtSysLocale;
+namespace com { namespace sun { namespace star { namespace lang {
+    class XMultiServiceFactory;
+}}}}
+
 
 //  use SvXMLNumFmtHelper in the context for <office:styles> to create
 //  child contexts for data styles

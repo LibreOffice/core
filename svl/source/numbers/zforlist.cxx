@@ -235,9 +235,9 @@ void SvNumberFormatter::ImpConstruct( LanguageType eLang )
 
     aLocale = MsLangId::convertLanguageToLocale( eLang );
     pCharClass = new CharClass( comphelper::getComponentContext(xServiceManager), aLocale );
-    xLocaleData.init( xServiceManager, aLocale, eLang );
+    xLocaleData.init( comphelper::getComponentContext(xServiceManager), aLocale, eLang );
     xCalendar.init( comphelper::getComponentContext(xServiceManager), aLocale );
-    xTransliteration.init( xServiceManager, eLang,
+    xTransliteration.init( comphelper::getComponentContext(xServiceManager), eLang,
         ::com::sun::star::i18n::TransliterationModules_IGNORE_CASE );
     xNatNum.init( xServiceManager );
 
@@ -449,7 +449,7 @@ void SvNumberFormatter::ReplaceSystemCL( LanguageType eOldLanguage )
     pStdFormat->SetLastInsertKey( sal_uInt16(nLastKey - nCLOffset) );
 
     // append new system additional formats
-    NumberFormatCodeWrapper aNumberFormatCode( xServiceManager, GetLocale() );
+    NumberFormatCodeWrapper aNumberFormatCode( comphelper::getComponentContext(xServiceManager), GetLocale() );
     ImpGenerateAdditionalFormats( nCLOffset, aNumberFormatCode, true );
 }
 
@@ -744,7 +744,7 @@ bool SvNumberFormatter::Load( SvStream& rStream )
 
     // generate additional i18n standard formats for all used locales
     LanguageType eOldLanguage = ActLnge;
-    NumberFormatCodeWrapper aNumberFormatCode( xServiceManager, GetLocale() );
+    NumberFormatCodeWrapper aNumberFormatCode( comphelper::getComponentContext(xServiceManager), GetLocale() );
     std::vector<sal_uInt16> aList;
     GetUsedLanguages( aList );
     for ( std::vector<sal_uInt16>::const_iterator it(aList.begin()); it != aList.end(); ++it )
@@ -2163,7 +2163,7 @@ void SvNumberFormatter::ImpGenerateFormats( sal_uInt32 CLOffset, bool bNoAdditio
     if (bOldConvertMode)
         pFormatScanner->SetConvertMode(false);      // switch off for this function
 
-    NumberFormatCodeWrapper aNumberFormatCode( xServiceManager, GetLocale() );
+    NumberFormatCodeWrapper aNumberFormatCode( comphelper::getComponentContext(xServiceManager), GetLocale() );
 
     xub_StrLen nCheckPos = 0;
     SvNumberformat* pNewFormat = NULL;
@@ -3546,7 +3546,7 @@ void SvNumberFormatter::ImpInitCurrencyTable()
 
     LanguageType eSysLang = SvtSysLocale().GetLanguage();
     LocaleDataWrapper* pLocaleData = new LocaleDataWrapper(
-        ::comphelper::getProcessServiceFactory(),
+        ::comphelper::getProcessComponentContext(),
         MsLangId::convertLanguageToLocale( eSysLang ) );
     // get user configured currency
     String aConfiguredCurrencyAbbrev;

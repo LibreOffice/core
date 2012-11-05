@@ -1365,12 +1365,12 @@ sal_Bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditVie
                                 lang::Locale aLocale( MsLangId::convertLanguageToLocale( eLang));
 
                                 if (!pImpEditEngine->xLocaleDataWrapper.isInitialized())
-                                    pImpEditEngine->xLocaleDataWrapper.init( SvtSysLocale().GetLocaleData().getServiceFactory(), aLocale, eLang);
+                                    pImpEditEngine->xLocaleDataWrapper.init( SvtSysLocale().GetLocaleData().getComponentContext(), aLocale, eLang);
                                 else
                                     pImpEditEngine->xLocaleDataWrapper.changeLocale( aLocale, eLang);
 
                                 if (!pImpEditEngine->xTransliterationWrapper.isInitialized())
-                                    pImpEditEngine->xTransliterationWrapper.init( SvtSysLocale().GetLocaleData().getServiceFactory(), eLang, i18n::TransliterationModules_IGNORE_CASE);
+                                    pImpEditEngine->xTransliterationWrapper.init( SvtSysLocale().GetLocaleData().getComponentContext(), eLang, i18n::TransliterationModules_IGNORE_CASE);
                                 else
                                     pImpEditEngine->xTransliterationWrapper.changeLocale( eLang);
 

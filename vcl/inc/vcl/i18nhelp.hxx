@@ -29,8 +29,8 @@
 namespace com {
 namespace sun {
 namespace star {
-namespace lang {
-    class XMultiServiceFactory;
+namespace uno {
+    class XComponentContext;
 }
 }}}
 
@@ -50,7 +50,7 @@ class VCL_DLLPUBLIC I18nHelper
 private:
     ::osl::Mutex                    maMutex;
     ::com::sun::star::lang::Locale  maLocale;
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > mxMSF;
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > m_xContext;
 
     LocaleDataWrapper*              mpLocaleDataWrapper;
     utl::TransliterationWrapper*    mpTransliterationWrapper;
@@ -67,7 +67,7 @@ protected:
 
 public:
 
-                I18nHelper( ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxMSF, const ::com::sun::star::lang::Locale& rLocale );
+                I18nHelper( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext, const ::com::sun::star::lang::Locale& rLocale );
                 ~I18nHelper();
 
     sal_Int32   CompareString( const rtl::OUString& rStr1, const rtl::OUString& rStr2 ) const;

@@ -2970,7 +2970,7 @@ void TextEngine::SetLocale( const ::com::sun::star::lang::Locale& rLocale )
 LocaleDataWrapper* TextEngine::ImpGetLocaleDataWrapper()
 {
     if ( !mpLocaleDataWrapper )
-        mpLocaleDataWrapper = new LocaleDataWrapper( comphelper::getProcessServiceFactory(), GetLocale() );
+        mpLocaleDataWrapper = new LocaleDataWrapper( GetLocale() );
 
     return mpLocaleDataWrapper;
 }

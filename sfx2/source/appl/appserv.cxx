@@ -712,7 +712,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
 
 void SfxApplication::MiscState_Impl(SfxItemSet &rSet)
 {
-    LocaleDataWrapper aLocaleWrapper( ::comphelper::getProcessServiceFactory(), Application::GetSettings().GetLocale() );
+    LocaleDataWrapper aLocaleWrapper( Application::GetSettings().GetLocale() );
     const sal_uInt16 *pRanges = rSet.GetRanges();
     DBG_ASSERT(pRanges && *pRanges, "Set without range");
     while ( *pRanges )

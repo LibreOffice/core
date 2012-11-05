@@ -57,7 +57,7 @@ private:
 
 SvtSysLocale_Impl::SvtSysLocale_Impl() : pCharClass(NULL)
 {
-    pLocaleData = new LocaleDataWrapper( ::comphelper::getProcessServiceFactory(), aSysLocaleOptions.GetRealLocale() );
+    pLocaleData = new LocaleDataWrapper( aSysLocaleOptions.GetRealLocale() );
     setDateAcceptancePatternsConfig();
 
     // listen for further changes
