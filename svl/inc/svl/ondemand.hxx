@@ -329,7 +329,7 @@ public:
  */
 class OnDemandNativeNumberWrapper
 {
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xSMgr;
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > m_xContext;
     mutable NativeNumberWrapper*    pPtr;
             bool                bInitialized;
 
@@ -339,12 +339,12 @@ public:
                                     , bInitialized(false)
                                     {}
                                 OnDemandNativeNumberWrapper(
-                                    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxSMgr
+                                    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext
                                     )
                                     : pPtr(0)
                                     , bInitialized(false)
                                     {
-                                        init( rxSMgr );
+                                        init( rxContext );
                                     }
                                 ~OnDemandNativeNumberWrapper()
                                     {
@@ -354,10 +354,10 @@ public:
             bool                isInitialized() const   { return bInitialized; }
 
             void                init(
-                                    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxSMgr
+                                    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext
                                     )
                                     {
-                                        xSMgr = rxSMgr;
+                                        m_xContext = rxContext;
                                         if ( pPtr )
                                         {
                                             delete pPtr;
@@ -371,7 +371,7 @@ public:
             NativeNumberWrapper*    get() const
                                     {
                                         if ( !pPtr )
-                                            pPtr = new NativeNumberWrapper( xSMgr );
+                                            pPtr = new NativeNumberWrapper( m_xContext );
                                         return pPtr;
                                     }
 

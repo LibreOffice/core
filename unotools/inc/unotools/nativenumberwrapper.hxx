@@ -23,15 +23,14 @@
 #include <com/sun/star/i18n/XNativeNumberSupplier.hpp>
 
 namespace com { namespace sun { namespace star {
-    namespace lang {
-        class XMultiServiceFactory;
+    namespace uno {
+        class XComponentContext;
     }
 }}}
 
 
 class UNOTOOLS_DLLPUBLIC NativeNumberWrapper
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xSMgr;
     ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XNativeNumberSupplier >   xNNS;
                                 // not implemented, prevent usage
                                 NativeNumberWrapper( const NativeNumberWrapper& );
@@ -39,7 +38,7 @@ class UNOTOOLS_DLLPUBLIC NativeNumberWrapper
 
 public:
                                 NativeNumberWrapper(
-                                    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & xSF
+                                    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > & rxContext
                                     );
 
                                 ~NativeNumberWrapper();

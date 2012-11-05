@@ -27,6 +27,7 @@
 #include <com/sun/star/i18n/UnicodeType.hpp>
 #include <com/sun/star/i18n/LocaleData.hpp>
 #include <com/sun/star/i18n/NativeNumberMode.hpp>
+#include <com/sun/star/i18n/NativeNumberSupplier.hpp>
 #include <comphelper/processfactory.hxx>
 
 #include <string.h>     // memcpy()
@@ -1006,26 +1007,10 @@ void cclass_Unicode::parseText( ParseResult& r, const OUString& rText, sal_Int32
     {
         if ( !xNatNumSup.is() )
         {
-#define NATIVENUMBERSUPPLIER_SERVICENAME "com.sun.star.i18n.NativeNumberSupplier"
             if ( xMSF.is() )
             {
-                xNatNumSup = Reference< XNativeNumberSupplier > (
-                        xMSF->createInstance( OUString(
-                                RTL_CONSTASCII_USTRINGPARAM(
-                                    NATIVENUMBERSUPPLIER_SERVICENAME ) ) ),
-                        UNO_QUERY );
+                xNatNumSup = NativeNumberSupplier::create( comphelper::getComponentContext(xMSF) );
             }
-            if ( !xNatNumSup.is() )
-            {
-                throw RuntimeException( OUString(
-#ifdef DBG_UTIL
-                    RTL_CONSTASCII_USTRINGPARAM(
-                        "cclass_Unicode::parseText: can't instanciate "
-                        NATIVENUMBERSUPPLIER_SERVICENAME )
-#endif
-                    ), *this );
-            }
-#undef NATIVENUMBERSUPPLIER_SERVICENAME
         }
         OUString aTmp( pTextStart + r.LeadingWhiteSpace, r.EndPos - nPos +
                 r.LeadingWhiteSpace );

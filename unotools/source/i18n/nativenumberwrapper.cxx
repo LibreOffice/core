@@ -20,20 +20,15 @@
 
 #include <unotools/nativenumberwrapper.hxx>
 #include <tools/debug.hxx>
-#include "instance.hxx"
+#include <com/sun/star/i18n/NativeNumberSupplier.hpp>
 
 using namespace ::com::sun::star;
 
 NativeNumberWrapper::NativeNumberWrapper(
-            const uno::Reference< lang::XMultiServiceFactory > & xSF
+            const uno::Reference< uno::XComponentContext > & rxContext
             )
-        :
-        xSMgr( xSF )
 {
-    xNNS = uno::Reference< i18n::XNativeNumberSupplier > (
-        intl_createInstance( xSMgr, "com.sun.star.i18n.NativeNumberSupplier",
-                             "NativeNumberWrapper"), uno::UNO_QUERY );
-    DBG_ASSERT( xNNS.is(), "NativeNumberWrapper: no NativeNumberSupplier" );
+    xNNS = i18n::NativeNumberSupplier::create(rxContext);
 }
 
 

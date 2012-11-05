@@ -240,7 +240,7 @@ void SvNumberFormatter::ImpConstruct( LanguageType eLang )
     xCalendar.init( comphelper::getComponentContext(xServiceManager), maLanguageTag.getLocale() );
     xTransliteration.init( comphelper::getComponentContext(xServiceManager), eLang,
         ::com::sun::star::i18n::TransliterationModules_IGNORE_CASE );
-    xNatNum.init( xServiceManager );
+    xNatNum.init( comphelper::getComponentContext(xServiceManager) );
 
     // cached locale data items
     const LocaleDataWrapper* pLoc = GetLocaleData();
