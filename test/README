@@ -1,0 +1,6 @@
+when you build, gdb will start with the cppunit test loaded, type "run" to execute the test under gdb.
+If you have consistent test failures on testCVEs, that probably means your antivirus is blocking the test files (as they are known to be exploits of fixed security issues). You may want to disable the monitoring of <root of repo>\*\pass in your AV.
+A top-level "make check" will first do a full build, then run all the subsequent tests, while a top-level "make subsequentcheck" will only run all the subsequent tests. You can run a single subsequent test via its target
+There will be a log file of the failed test, you can look at it with a text editor:
+workdir/unxlngx6/JunitTest/<module>_complex/done.log
+The log file will contain a Java stack trace of the failed test

@@ -1,0 +1,5 @@
+l10ntools is scanners module during gbuild'fication. 
+l10ntools delivers some header files and scripts as well. To 
+handle these, you should create two Packages, one for the headers and 
+other for the scripts.
+l10ntools module has three lexer files
