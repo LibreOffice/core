@@ -1097,12 +1097,15 @@ endef
 else # !SYSTEM_LIBVISIO
 
 $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
-	visiolib \
+	visio-0.0 \
 ))
 
 define gb_LinkTarget__use_visio
+$(call gb_LinkTarget_use_package,$(1),\
+	libvisio \
+)
 $(call gb_LinkTarget_use_static_libraries,$(1),\
-	visiolib \
+	visio-0.0 \
 )
 
 endef

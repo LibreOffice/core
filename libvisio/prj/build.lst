@@ -1,2 +1,2 @@
-vsd	libvisio	: libwpd libwpg BOOST:boost soltools NULL
+vsd	libvisio	: LIBWPD:libwpd LIBWPD:libwpg BOOST:boost LIBXML2:libxml2 ZLIB:zlib soltools NULL
 vsd	libvisio\prj	nmake	-	all	vsd_libvisio NULL

@@ -7,12 +7,21 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_ExternalPackage_ExternalPackage,libvisio_inc,visio))
+$(eval $(call gb_ExternalPackage_ExternalPackage,libvisio,visio))
 
-$(eval $(call gb_ExternalPackage_add_unpacked_files,libvisio_inc,inc/external/libvisio,\
+$(eval $(call gb_ExternalPackage_add_unpacked_files,libvisio,inc/external/libvisio,\
 	src/lib/libvisio.h \
 	src/lib/VisioDocument.h \
 	src/lib/VSDStringVector.h \
 ))
+
+$(eval $(call gb_ExternalPackage_use_external_project,libvisio,libvisio))
+
+ifeq ($(OS)$(COM),WNTMSC)
+$(eval $(call gb_ExternalPackage_add_file,libvisio,lib/visio-0.0.lib,build/win32/Release/lib/libvisio-0.0.lib))
+else
+$(eval $(call gb_ExternalPackage_add_file,libvisio,lib/libvisio-0.0.a,src/lib/.libs/libvisio-0.0.a))
+endif
+
 
 # vim: set noet sw=4 ts=4:

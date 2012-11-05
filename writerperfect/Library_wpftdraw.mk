@@ -51,6 +51,7 @@ $(eval $(call gb_Library_use_externals,wpftdraw,\
 	cdr \
     mspub \
 	lcms2 \
+	libxml2 \
 	zlib \
 ))
 
