@@ -9,6 +9,7 @@
 
 #include <osl/module.hxx>
 #include <sal/log.hxx>
+#include <unotools/configmgr.hxx>
 #include <vcl/builder.hxx>
 #include <vcl/button.hxx>
 #include <vcl/dialog.hxx>
@@ -75,6 +76,7 @@ namespace
 VclBuilder::VclBuilder(Window *pParent, OUString sUIDir, OUString sUIFile, OString sID)
     : m_sID(sID)
     , m_sHelpRoot(OUStringToOString(sUIFile, RTL_TEXTENCODING_UTF8))
+    , m_sProductName(OUStringToOString(utl::ConfigManager::getProductName(), RTL_TEXTENCODING_UTF8))
     , m_pParent(pParent)
     , m_pParserState(new ParserState)
 {
@@ -1509,7 +1511,7 @@ void VclBuilder::collectProperty(xmlreader::XmlReader &reader, const OString &rI
     if (!sProperty.isEmpty())
     {
         sProperty = sProperty.replace('_', '-');
-        rMap[sProperty] = sValue;
+        rMap[sProperty] = sValue.replaceAll("%PRODUCTNAME", m_sProductName);
     }
 }
 

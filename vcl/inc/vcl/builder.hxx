@@ -120,6 +120,7 @@ private:
 
     OString m_sID;
     OString m_sHelpRoot;
+    OString m_sProductName;
     Window *m_pParent;
     bool m_bToplevelHasDeferredInit;
     ParserState *m_pParserState;
