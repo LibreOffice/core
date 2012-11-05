@@ -31,15 +31,7 @@
 #include <unotools/nativenumberwrapper.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-
-namespace comphelper {
-
-    com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >
-    getComponentContext(
-        com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >
-            const & factory);
-
-}
+#include <comphelper/processfactory.hxx>
 
 /*
     On demand instanciation and initialization of several i18n wrappers,

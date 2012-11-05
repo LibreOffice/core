@@ -34,9 +34,9 @@ using namespace ::utl;
 TransliterationWrapper::TransliterationWrapper(
                     const Reference< XComponentContext > & rxContext,
                     sal_uInt32 nTyp )
-    : nType( nTyp ), nLanguage( 0 ), bFirstCall( sal_True )
+    : xTrans( Transliteration::create(rxContext) ), nType( nTyp ),
+      nLanguage( 0 ), bFirstCall( sal_True )
 {
-    xTrans = Transliteration::create(rxContext);
 }
 
 
