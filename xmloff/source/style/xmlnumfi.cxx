@@ -1098,13 +1098,13 @@ void SvXMLNumFmtElementContext::EndElement()
             break;
 
         case XML_TOK_STYLE_TEXT_CONTENT:
-            rParent.AddToCode( OUString::valueOf((sal_Unicode)'@') );
+            rParent.AddToCode( (sal_Unicode)'@');
             break;
         case XML_TOK_STYLE_FILL_CHARACTER:
             if ( aContent.getLength() )
             {
-                rParent.AddToCode( OUString::valueOf((sal_Unicode)'*') );
-                rParent.AddToCode( OUString::valueOf( aContent[0] ) );
+                rParent.AddToCode( (sal_Unicode)'*' );
+                rParent.AddToCode( aContent[0] );
             }
             break;
         case XML_TOK_STYLE_BOOLEAN:
@@ -1188,13 +1188,11 @@ void SvXMLNumFmtElementContext::EndElement()
             if ( aNumInfo.nDecimals > 0 )
             {
                 //  manually add the decimal places
-                const String& rSep = rParent.GetLocaleData().getNumDecimalSep();
-                for ( xub_StrLen j=0; j<rSep.Len(); j++ )
-                {
-                    rParent.AddToCode( OUString::valueOf( rSep.GetChar(j) ) );
-                }
+                rParent.AddToCode(rParent.GetLocaleData().getNumDecimalSep());
                 for (sal_Int32 i=0; i<aNumInfo.nDecimals; i++)
-                    rParent.AddToCode( OUString::valueOf((sal_Unicode)'0') );
+                {
+                    rParent.AddToCode( (sal_Unicode)'0');
+                }
             }
             break;
 
@@ -1205,15 +1203,17 @@ void SvXMLNumFmtElementContext::EndElement()
                     // add integer part only if min-integer-digits attribute is there
                     aNumInfo.nDecimals = 0;
                     rParent.AddNumber( aNumInfo );      // number without decimals
-                    rParent.AddToCode( OUString::valueOf((sal_Unicode)' ') );
+                    rParent.AddToCode( (sal_Unicode)' ' );
                 }
 
                 //! build string and add at once
 
                 sal_Int32 i;
                 for (i=0; i<aNumInfo.nNumerDigits; i++)
-                    rParent.AddToCode( OUString::valueOf((sal_Unicode)'?') );
-                rParent.AddToCode( OUString::valueOf((sal_Unicode)'/') );
+                {
+                    rParent.AddToCode( (sal_Unicode)'?' );
+                }
+                rParent.AddToCode( (sal_Unicode)'/' );
                 if ( aNumInfo.nFracDenominator > 0 )
                 {
                     rParent.AddToCode(  OUString::valueOf( aNumInfo.nFracDenominator ) );
@@ -1221,7 +1221,9 @@ void SvXMLNumFmtElementContext::EndElement()
                 else
                 {
                     for (i=0; i<aNumInfo.nDenomDigits; i++)
-                        rParent.AddToCode( OUString::valueOf((sal_Unicode)'?') );
+                    {
+                        rParent.AddToCode( (sal_Unicode)'?');
+                    }
                 }
             }
             break;
@@ -1232,7 +1234,9 @@ void SvXMLNumFmtElementContext::EndElement()
 
                 rParent.AddToCode( OUString("E+") );
                 for (sal_Int32 i=0; i<aNumInfo.nExpDigits; i++)
-                    rParent.AddToCode( OUString::valueOf((sal_Unicode)'0') );
+                {
+                    rParent.AddToCode( (sal_Unicode)'0' );
+                }
             }
             break;
 
@@ -1711,6 +1715,12 @@ void SvXMLNumFormatContext::Finish( sal_Bool bOverwrite )
 const LocaleDataWrapper& SvXMLNumFormatContext::GetLocaleData() const
 {
     return pData->GetLocaleData( nFormatLang );
+}
+
+void SvXMLNumFormatContext::AddToCode( sal_Unicode c )
+{
+    aFormatCode.append( c );
+    bHasExtraText = sal_True;
 }
 
 void SvXMLNumFormatContext::AddToCode( const rtl::OUString& rString )

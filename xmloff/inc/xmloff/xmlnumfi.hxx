@@ -202,6 +202,7 @@ public:
     const LocaleDataWrapper& GetLocaleData() const;
 
     void AddToCode( const rtl::OUString& rString );
+    void AddToCode( sal_Unicode c );
     void AddNumber( const SvXMLNumberInfo& rInfo );
     void AddCurrency( const rtl::OUString& rContent, LanguageType nLang );
 
