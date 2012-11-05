@@ -201,75 +201,79 @@ namespace
         }
     }
 
-    String VBALikeToRegexp(const String &rIn)
+    OUString VBALikeToRegexp(const OUString &rIn)
     {
-        String sResult;
-        const sal_Unicode *start = rIn.GetBuffer();
-        const sal_Unicode *end = start + rIn.Len();
+        OUStringBuffer sResult;
+        const sal_Unicode *start = rIn.getStr();
+        const sal_Unicode *end = start + rIn.getLength();
 
         int seenright = 0;
 
-        sResult.Append('^');
+        sResult.append('^');
 
         while (start < end)
         {
             switch (*start)
             {
-                case '?':
-                    sResult.Append('.');
-                    start++;
-                    break;
-                case '*':
-                    sResult.Append(String(RTL_CONSTASCII_USTRINGPARAM(".*")));
-                    start++;
-                    break;
-                case '#':
-                    sResult.Append(String(RTL_CONSTASCII_USTRINGPARAM("[0-9]")));
-                    start++;
-                    break;
-                case ']':
-                    sResult.Append('\\');
-                    sResult.Append(*start++);
-                    break;
-                case '[':
-                    sResult.Append(*start++);
-                    seenright = 0;
-                    while (start < end && !seenright)
+            case '?':
+                sResult.append('.');
+                start++;
+                break;
+            case '*':
+                sResult.append(".*");
+                start++;
+                break;
+            case '#':
+                sResult.append("[0-9]");
+                start++;
+                break;
+            case ']':
+                sResult.append('\\');
+                sResult.append(*start++);
+                break;
+            case '[':
+                sResult.append(*start++);
+                seenright = 0;
+                while (start < end && !seenright)
+                {
+                    switch (*start)
                     {
-                        switch (*start)
+                    case '[':
+                    case '?':
+                    case '*':
+                        sResult.append('\\');
+                        sResult.append(*start);
+                        break;
+                    case ']':
+                        sResult.append(*start);
+                        seenright = 1;
+                        break;
+                    case '!':
+                        sResult.append('^');
+                        break;
+                    default:
+                        if (NeedEsc(*start))
                         {
-                            case '[':
-                            case '?':
-                            case '*':
-                            sResult.Append('\\');
-                            sResult.Append(*start);
-                                break;
-                            case ']':
-                            sResult.Append(*start);
-                                seenright = 1;
-                                break;
-                            case '!':
-                                sResult.Append('^');
-                                break;
-                            default:
-                            if (NeedEsc(*start))
-                                    sResult.Append('\\');
-                            sResult.Append(*start);
-                                break;
+                            sResult.append('\\');
                         }
-                        start++;
+                        sResult.append(*start);
+                        break;
                     }
-                    break;
-                default:
-                    if (NeedEsc(*start))
-                        sResult.Append('\\');
-                    sResult.Append(*start++);
+                    start++;
+                }
+                break;
+            default:
+                if (NeedEsc(*start))
+                {
+                    sResult.append('\\');
+                }
+                sResult.append(*start++);
             }
         }
 
-        sResult.Append('$');
+        sResult.append('$');
 
-        return sResult;
+        return sResult.makeStringAndClear();
     }
 }
 
@@ -278,8 +282,8 @@ void SbiRuntime::StepLIKE()
     SbxVariableRef refVar1 = PopVar();
     SbxVariableRef refVar2 = PopVar();
 
-    String pattern = VBALikeToRegexp(refVar1->GetString());
-    String value = refVar2->GetString();
+    OUString pattern = VBALikeToRegexp(refVar1->GetOUString());
+    OUString value = refVar2->GetOUString();
 
     com::sun::star::util::SearchOptions aSearchOpt;
 
@@ -300,7 +304,7 @@ void SbiRuntime::StepLIKE()
     }
     SbxVariable* pRes = new SbxVariable;
     utl::TextSearch aSearch(aSearchOpt);
-    xub_StrLen nStart=0, nEnd=value.Len();
+    sal_uInt16 nStart=0, nEnd=value.getLength();
     int bRes = aSearch.SearchFrwrd(value, &nStart, &nEnd);
     pRes->PutBool( bRes != 0 );
 
@@ -390,8 +394,8 @@ inline bool checkUnoStructCopy( bool bVBA, SbxVariableRef& refVal, SbxVariableRe
         if ( ( !pUnoVal && !pUnoStructVal ) )
             return false;
 
-        String sClassName = pUnoVal ? pUnoVal->GetClassName() : pUnoStructVal->GetClassName();
-        String sName = pUnoVal ? pUnoVal->GetName() : pUnoStructVal->GetName();
+        OUString sClassName = pUnoVal ? pUnoVal->GetClassName() : pUnoStructVal->GetClassName();
+        OUString sName = pUnoVal ? pUnoVal->GetName() : pUnoStructVal->GetName();
 
         if ( pUnoStructObj )
         {
@@ -633,7 +637,7 @@ void SbiRuntime::StepSET_Impl( SbxVariableRef& refVal, SbxVariableRef& refVar, b
             if( pUnoObj != NULL )
             {
                 Any aControlAny = pUnoObj->getUnoAny();
-                String aDeclareClassName = refVar->GetDeclareClassName();
+                OUString aDeclareClassName = refVar->GetDeclareClassName();
                 OUString aVBAType = aDeclareClassName;
                 OUString aPrefix = refVar->GetName();
                 SbxObjectRef xScopeObj = refVar->GetParent();
@@ -696,7 +700,7 @@ void SbiRuntime::StepSET_Impl( SbxVariableRef& refVal, SbxVariableRef& refVar, b
                         SbxObject* pValObj = PTR_CAST(SbxObject,pValObjBase);
                         if( pValObj != NULL )
                         {
-                            String aObjClass = pValObj->GetClassName();
+                            OUString aObjClass = pValObj->GetClassName();
 
                             SbClassModuleObject* pClassModuleObj = PTR_CAST(SbClassModuleObject,pValObjBase);
                             DimAsNewRecoverHash &rDimAsNewRecoverHash = GaDimAsNewRecoverHash::get();
@@ -706,7 +710,7 @@ void SbiRuntime::StepSET_Impl( SbxVariableRef& refVal, SbxVariableRef& refVar, b
                                 rDimAsNewRecoverHash[refVar] =
                                     DimAsNewRecoverItem( aObjClass, pValObj->GetName(), pValObj->GetParent(), pClassModule );
                             }
-                            else if( aObjClass.EqualsIgnoreCaseAscii( "Collection" ) )
+                            else if( aObjClass.equalsIgnoreAsciiCase( "Collection" ) )
                             {
                                 rDimAsNewRecoverHash[refVar] =
                                     DimAsNewRecoverItem( aObjClass, pValObj->GetName(), pValObj->GetParent(), NULL );
@@ -753,13 +757,15 @@ void SbiRuntime::StepLSET()
     {
         sal_uInt16 n = refVar->GetFlags();
         if( (SbxVariable*) refVar == (SbxVariable*) pMeth )
+        {
             refVar->SetFlag( SBX_WRITE );
-        String aRefVarString = refVar->GetString();
-        String aRefValString = refVal->GetString();
+        }
+        OUString aRefVarString = refVar->GetOUString();
+        OUString aRefValString = refVal->GetOUString();
 
-        sal_uInt16 nVarStrLen = aRefVarString.Len();
-        sal_uInt16 nValStrLen = aRefValString.Len();
-        rtl::OUStringBuffer aNewStr;
+        sal_Int32 nVarStrLen = aRefVarString.getLength();
+        sal_Int32 nValStrLen = aRefValString.getLength();
+        OUStringBuffer aNewStr;
         if( nVarStrLen > nValStrLen )
         {
             aNewStr.append(aRefValString);
@@ -767,7 +773,7 @@ void SbiRuntime::StepLSET()
         }
         else
         {
-            aNewStr.append(aRefValString.Copy(0, nVarStrLen));
+            aNewStr = aRefValString.copy( 0, nVarStrLen );
         }
 
         refVar->PutString(aNewStr.makeStringAndClear());
@@ -787,13 +793,15 @@ void SbiRuntime::StepRSET()
     {
         sal_uInt16 n = refVar->GetFlags();
         if( (SbxVariable*) refVar == (SbxVariable*) pMeth )
+        {
             refVar->SetFlag( SBX_WRITE );
-        String aRefVarString = refVar->GetString();
-        String aRefValString = refVal->GetString();
+        }
+        OUString aRefVarString = refVar->GetOUString();
+        OUString aRefValString = refVal->GetOUString();
+        sal_Int32 nVarStrLen = aRefVarString.getLength();
+        sal_Int32 nValStrLen = aRefValString.getLength();
 
-        sal_uInt16 nVarStrLen = aRefVarString.Len();
-        sal_uInt16 nValStrLen = aRefValString.Len();
-        rtl::OUStringBuffer aNewStr;
+        OUStringBuffer aNewStr(nVarStrLen);
         if (nVarStrLen > nValStrLen)
         {
             comphelper::string::padToLength(aNewStr, nVarStrLen - nValStrLen, ' ');
@@ -801,7 +809,7 @@ void SbiRuntime::StepRSET()
         }
         else
         {
-            aNewStr.append(aRefValString.Copy(0, nVarStrLen));
+            aNewStr.append(aRefValString.copy(0, nVarStrLen));
         }
         refVar->PutString(aNewStr.makeStringAndClear());
 
@@ -1161,10 +1169,10 @@ void SbiRuntime::StepARGV()
 
 // Input to Variable. The variable is on TOS and is
 // is removed afterwards.
-
 void SbiRuntime::StepINPUT()
 {
-    String s;
+    OUStringBuffer sin = "";
+    OUString s;
     char ch = 0;
     SbError err;
     // Skip whitespace
@@ -1195,8 +1203,10 @@ void SbiRuntime::StepINPUT()
                 }
             }
             else if( !sep && (ch == ',' || ch == '\n') )
+            {
                 break;
-            s += ch;
+            }
+            sin.append( ch );
             ch = pIosys->Read();
         }
         // skip whitespace
@@ -1214,6 +1224,7 @@ void SbiRuntime::StepINPUT()
     }
     if( !err )
     {
+        s = sin.makeStringAndClear();
         SbxVariableRef pVar = GetTOS();
         // try to fill the variable with a numeric value first,
         // then with a string value
@@ -1226,12 +1237,12 @@ void SbiRuntime::StepINPUT()
                 SbxBase::ResetError();
             }
             // the value has to be scanned in completely
-            else if( nLen != s.Len() && !pVar->PutString( s ) )
+            else if( nLen != s.getLength() && !pVar->PutString( s ) )
             {
                 err = SbxBase::GetError();
                 SbxBase::ResetError();
             }
-            else if( nLen != s.Len() && pVar->IsNumeric() )
+            else if( nLen != s.getLength() && pVar->IsNumeric() )
             {
                 err = SbxBase::GetError();
                 SbxBase::ResetError();
@@ -1344,7 +1355,7 @@ void SbiRuntime::StepENDCASE()
 void SbiRuntime::StepSTDERROR()
 {
     pError = NULL; bError = true;
-    pInst->aErrorMsg = String();
+    pInst->aErrorMsg = OUString();
     pInst->nErr = 0L;
     pInst->nErl = 0;
     nError = 0L;
@@ -1353,7 +1364,7 @@ void SbiRuntime::StepSTDERROR()
 
 void SbiRuntime::StepNOERROR()
 {
-    pInst->aErrorMsg = String();
+    pInst->aErrorMsg = OUString();
     pInst->nErr = 0L;
     pInst->nErl = 0;
     nError = 0L;
@@ -1389,12 +1400,14 @@ void SbiRuntime::StepCHANNEL0()
 void SbiRuntime::StepPRINT()        // print TOS
 {
     SbxVariableRef p = PopVar();
-    String s1 = p->GetString();
-    String s;
+    OUString s1 = p->GetOUString();
+    OUString s;
     if( p->GetType() >= SbxINTEGER && p->GetType() <= SbxDOUBLE )
-        s = ' ';    // one blank before
+    {
+        s = " ";    // one blank before
+    }
     s += s1;
-    rtl::OString aByteStr(rtl::OUStringToOString(s, osl_getThreadTextEncoding()));
+    OString aByteStr(rtl::OUStringToOString(s, osl_getThreadTextEncoding()));
     pIosys->Write( aByteStr );
     Error( pIosys->GetError() );
 }
@@ -1402,7 +1415,7 @@ void SbiRuntime::StepPRINT()        // print TOS
 void SbiRuntime::StepPRINTF()       // print TOS in field
 {
     SbxVariableRef p = PopVar();
-    OUString s1 = p->GetString();
+    OUString s1 = p->GetOUString();
     OUStringBuffer s;
     if( p->GetType() >= SbxINTEGER && p->GetType() <= SbxDOUBLE )
     {
@@ -1428,13 +1441,17 @@ void SbiRuntime::StepWRITE()        // write TOS
     case SbxDATE: ch = '#'; break;
     default: break;
     }
-    String s;
+    OUString s;
     if( ch )
-        s += ch;
-    s += p->GetString();
+    {
+        s += OUString(ch);
+    }
+    s += p->GetOUString();
     if( ch )
-        s += ch;
-    rtl::OString aByteStr(rtl::OUStringToOString(s, osl_getThreadTextEncoding()));
+    {
+        s += OUString(ch);
+    }
+    OString aByteStr(rtl::OUStringToOString(s, osl_getThreadTextEncoding()));
     pIosys->Write( aByteStr );
     Error( pIosys->GetError() );
 }
@@ -1443,8 +1460,8 @@ void SbiRuntime::StepRENAME()       // Rename Tos+1 to Tos
 {
     SbxVariableRef pTos1 = PopVar();
     SbxVariableRef pTos  = PopVar();
-    String aDest = pTos1->GetString();
-    String aSource = pTos->GetString();
+    OUString aDest = pTos1->GetOUString();
+    OUString aSource = pTos->GetOUString();
 
     if( hasUno() )
     {
@@ -1461,7 +1478,7 @@ void SbiRuntime::StepRENAME()       // Rename Tos+1 to Tos
 void SbiRuntime::StepPROMPT()
 {
     SbxVariableRef p = PopVar();
-    rtl::OString aStr(rtl::OUStringToOString(p->GetString(), osl_getThreadTextEncoding()));
+    rtl::OString aStr(rtl::OUStringToOString(p->GetOUString(), osl_getThreadTextEncoding()));
     pIosys->SetPrompt( aStr );
 }
 

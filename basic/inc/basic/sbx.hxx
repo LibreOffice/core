@@ -33,7 +33,6 @@
 
 #include <boost/ptr_container/ptr_vector.hpp>
 
-class String;
 class SvStream;
 class SbxBase;
 class SbxVariable;
@@ -49,13 +48,13 @@ class SfxBroadcaster;
 // Parameter information
 struct SbxParamInfo
 {
-    const String aName;          // Name of the parameter
-    SbxBaseRef   aTypeRef;       // Object, if object type
-    SbxDataType  eType;          // Data type
-    sal_uInt16       nFlags;         // Flag-Bits
-    sal_uInt32       nUserData;      // IDs etc.
-    SbxParamInfo( const String& s, SbxDataType t, sal_uInt16 n, SbxBase* b = NULL )
-    : aName( s ), aTypeRef( b ), eType( t ), nFlags( n ), nUserData( 0 ) {}
+    const OUString aName;          // Name of the parameter
+    SbxBaseRef     aTypeRef;       // Object, if object type
+    SbxDataType    eType;          // Data type
+    sal_uInt16     nFlags;         // Flag-Bits
+    sal_uInt32     nUserData;      // IDs etc.
+    SbxParamInfo( const OUString& s, SbxDataType t, sal_uInt16 n, SbxBase* b = NULL )
+        : aName( s ), aTypeRef( b ), eType( t ), nFlags( n ), nUserData( 0 ) {}
     ~SbxParamInfo() {}
 };
 
@@ -66,8 +65,8 @@ class BASIC_DLLPUBLIC SbxInfo : public SvRefBase
     friend class SbxVariable;
     friend class SbMethod;
 
-    String          aComment;
-    String          aHelpFile;
+    OUString        aComment;
+    OUString        aHelpFile;
     sal_uInt32      nHelpId;
     SbxParams       aParams;
 
@@ -77,16 +76,16 @@ protected:
     virtual ~SbxInfo();
 public:
     SbxInfo();
-    SbxInfo( const String&, sal_uInt32 );
+    SbxInfo( const OUString&, sal_uInt32 );
 
-    void                AddParam( const rtl::OUString&, SbxDataType, sal_uInt16=SBX_READ );
+    void                AddParam( const OUString&, SbxDataType, sal_uInt16=SBX_READ );
     const SbxParamInfo* GetParam( sal_uInt16 n ) const; // index starts with 1!
-    const String&       GetComment() const              { return aComment; }
-    const String&       GetHelpFile() const             { return aHelpFile; }
-    sal_uInt32              GetHelpId() const               { return nHelpId;   }
+    const OUString&     GetComment() const              { return aComment; }
+    const OUString&     GetHelpFile() const             { return aHelpFile; }
+    sal_uInt32          GetHelpId() const               { return nHelpId;   }
 
-    void                SetComment( const String& r )   { aComment = r; }
-    void                SetHelpFile( const String& r )  { aHelpFile = r; }
+    void                SetComment( const OUString& r )   { aComment = r; }
+    void                SetHelpFile( const OUString& r )  { aHelpFile = r; }
     void                SetHelpId( sal_uInt32 nId )         { nHelpId = nId; }
 };
 
@@ -142,28 +141,28 @@ public:
     SbxArray( const SbxArray& );
     SbxArray& operator=( const SbxArray& );
     virtual void Clear();
-    sal_uInt16 Count() const;
-    virtual SbxDataType GetType() const;
+    sal_uInt16           Count() const;
+    virtual SbxDataType  GetType() const;
     virtual SbxClassType GetClass() const;
-    SbxVariableRef& GetRef( sal_uInt16 );
-    SbxVariable* Get( sal_uInt16 );
-    void Put( SbxVariable*, sal_uInt16 );
-    void Insert( SbxVariable*, sal_uInt16 );
-    void Remove( sal_uInt16 );
-    void Remove( SbxVariable* );
-    void Merge( SbxArray* );
-    const String& GetAlias( sal_uInt16 );
-    void PutAlias( const String&, sal_uInt16 );
-    SbxVariable* FindUserData( sal_uInt32 nUserData );
-    virtual SbxVariable* Find( const rtl::OUString&, SbxClassType );
+    SbxVariableRef&      GetRef( sal_uInt16 );
+    SbxVariable*         Get( sal_uInt16 );
+    void                 Put( SbxVariable*, sal_uInt16 );
+    void                 Insert( SbxVariable*, sal_uInt16 );
+    void                 Remove( sal_uInt16 );
+    void                 Remove( SbxVariable* );
+    void                 Merge( SbxArray* );
+    const OUString&      GetAlias( sal_uInt16 );
+    void                 PutAlias( const OUString&, sal_uInt16 );
+    SbxVariable*         FindUserData( sal_uInt32 nUserData );
+    virtual SbxVariable* Find( const OUString&, SbxClassType );
 
     // Additional methods for 32-bit indices
-    sal_uInt32 Count32() const;
-    SbxVariableRef& GetRef32( sal_uInt32 );
-    SbxVariable* Get32( sal_uInt32 );
-    void Put32( SbxVariable*, sal_uInt32 );
-    void Insert32( SbxVariable*, sal_uInt32 );
-    void Remove32( sal_uInt32 );
+    sal_uInt32           Count32() const;
+    SbxVariableRef&      GetRef32( sal_uInt32 );
+    SbxVariable*         Get32( sal_uInt32 );
+    void                 Put32( SbxVariable*, sal_uInt32 );
+    void                 Insert32( SbxVariable*, sal_uInt32 );
+    void                 Remove32( sal_uInt32 );
 };
 
 // SbxDimArray is an array that can dimensioned using BASIC conventions.
@@ -229,19 +228,19 @@ protected:
 public:
     SBX_DECL_PERSIST_NODATA(SBXCR_SBX,SBXID_COLLECTION,1);
     TYPEINFO();
-    SbxCollection( const String& rClassname );
+    SbxCollection( const OUString& rClassname );
     SbxCollection( const SbxCollection& );
     SbxCollection& operator=( const SbxCollection& );
     virtual SbxVariable* FindUserData( sal_uInt32 nUserData );
-    virtual SbxVariable* Find( const rtl::OUString&, SbxClassType );
+    virtual SbxVariable* Find( const OUString&, SbxClassType );
     virtual void Clear();
 };
 
 class BASIC_DLLPUBLIC SbxStdCollection : public SbxCollection
 {
 protected:
-    String aElemClass;
-    sal_Bool   bAddRemoveOk;
+    OUString aElemClass;
+    sal_Bool bAddRemoveOk;
     virtual ~SbxStdCollection();
     virtual sal_Bool LoadData( SvStream&, sal_uInt16 );
     virtual sal_Bool StoreData( SvStream& ) const;
@@ -250,12 +249,11 @@ protected:
 public:
     SBX_DECL_PERSIST_NODATA(SBXCR_SBX,SBXID_FIXCOLLECTION,1);
     TYPEINFO();
-    SbxStdCollection
-        ( const String& rClassname, const String& rElemClass, sal_Bool=sal_True );
+    SbxStdCollection( const OUString& rClassname, const OUString& rElemClass, sal_Bool=sal_True );
     SbxStdCollection( const SbxStdCollection& );
     SbxStdCollection& operator=( const SbxStdCollection& );
     virtual void Insert( SbxVariable* );
-    const String& GetElementClass() const { return aElemClass; }
+    const OUString& GetElementClass() const { return aElemClass; }
 };
 
 SV_IMPL_REF(SbxBase)

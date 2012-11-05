@@ -216,7 +216,7 @@ void SbiExprList::Gen()
         for( SbiExpression* pExpr = pFirst; pExpr; pExpr = pExpr->pNext,nCount++ )
         {
             pExpr->Gen();
-            if( pExpr->GetName().Len() )
+            if( !pExpr->GetName().isEmpty() )
             {
                 // named arg
                 sal_uInt16 nSid = pParser->aGblStrings.Add( pExpr->GetName() );

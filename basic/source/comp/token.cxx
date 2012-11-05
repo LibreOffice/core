@@ -452,7 +452,7 @@ special:
         sal_uInt16 nOldCol  = nCol;
         sal_uInt16 nOldCol1 = nCol1;
         sal_uInt16 nOldCol2 = nCol2;
-        String aOldSym = aSym;
+        OUString aOldSym = aSym;
         SaveLine();             // save pLine in the scanner
 
         eCurTok = Peek();
