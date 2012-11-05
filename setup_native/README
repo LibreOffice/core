@@ -1,6 +1,0 @@
-To get one gbuild instance build only (tail_build only), migrating the "real" 
-module should be the enough for a start. I assume extras, setup_native, 
-readlicense not being depended upon by anything other than scp2 (so they could 
-be run after tail_build for now). So bridges, soltools, sysui, cli_ure are the 
-ones that should allow us to do a 'complete' gbuild-only build, if anyone is 
-looking for the 'important' remaining modules. 

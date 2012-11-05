@@ -1,1 +1,0 @@
-soltools: fix memory errors uncovered by valgrind and other tools.
