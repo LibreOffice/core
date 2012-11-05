@@ -14,7 +14,6 @@ $(eval $(call gb_Library_use_package,ucbhelper,ucbhelper_inc))
 $(eval $(call gb_Library_use_sdk_api,ucbhelper))
 
 $(eval $(call gb_Library_use_libraries,ucbhelper,\
-    comphelper \
     cppu \
     cppuhelper \
     sal \
@@ -39,6 +38,7 @@ $(eval $(call gb_Library_add_exception_objects,ucbhelper,\
     ucbhelper/source/provider/contentidentifier \
     ucbhelper/source/provider/contentinfo \
     ucbhelper/source/provider/fd_inputstream \
+    ucbhelper/source/provider/getcomponentcontext \
     ucbhelper/source/provider/interactionrequest \
     ucbhelper/source/provider/propertyvalueset \
     ucbhelper/source/provider/providerhelper \

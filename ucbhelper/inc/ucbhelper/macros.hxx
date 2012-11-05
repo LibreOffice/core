@@ -27,6 +27,7 @@
 #include <cppuhelper/typeprovider.hxx>
 
 #include "osl/mutex.hxx"
+#include "ucbhelper/getcomponentcontext.hxx"
 
 //=========================================================================
 
@@ -664,7 +665,7 @@ Class##_CreateInstance( const com::sun::star::uno::Reference<               \
     throw( com::sun::star::uno::Exception )                                 \
 {                                                                           \
     com::sun::star::lang::XServiceInfo* pX =                                \
-                (com::sun::star::lang::XServiceInfo*)new Class( comphelper::getComponentContext(rSMgr) );    \
+                (com::sun::star::lang::XServiceInfo*)new Class( ucbhelper::getComponentContext(rSMgr) );    \
     return com::sun::star::uno::Reference<                                  \
                             com::sun::star::uno::XInterface >::query( pX ); \
 }
