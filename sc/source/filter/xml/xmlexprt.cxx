@@ -3908,6 +3908,26 @@ void ScXMLExport::ExportConditionalFormat(SCTAB nTab)
                                 aCond.append(pEntry->GetExpression(aPos, 0, 0, formula::FormulaGrammar::GRAM_ODFF));
                                 aCond.append(')');
                                 break;
+                            case SC_COND_TOP10:
+                                aCond.append("top-elements(");
+                                aCond.append(pEntry->GetExpression(aPos, 0, 0, formula::FormulaGrammar::GRAM_ODFF));
+                                aCond.append(")");
+                                break;
+                            case SC_COND_BOTTOM10:
+                                aCond.append("bottom-elements(");
+                                aCond.append(pEntry->GetExpression(aPos, 0, 0, formula::FormulaGrammar::GRAM_ODFF));
+                                aCond.append(")");
+                                break;
+                            case SC_COND_TOP_PERCENT:
+                                aCond.append("top-percent(");
+                                aCond.append(pEntry->GetExpression(aPos, 0, 0, formula::FormulaGrammar::GRAM_ODFF));
+                                aCond.append(")");
+                                break;
+                            case SC_COND_BOTTOM_PERCENT:
+                                aCond.append("bottom-percent(");
+                                aCond.append(pEntry->GetExpression(aPos, 0, 0, formula::FormulaGrammar::GRAM_ODFF));
+                                aCond.append(")");
+                                break;
                             case SC_COND_ERROR:
                                 aCond.append("is-error");
                                 break;
