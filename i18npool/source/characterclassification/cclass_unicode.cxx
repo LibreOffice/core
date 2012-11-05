@@ -35,7 +35,7 @@ namespace com { namespace sun { namespace star { namespace i18n {
 //  class cclass_Unicode
 //  ----------------------------------------------------;
 
-cclass_Unicode::cclass_Unicode( uno::Reference < XMultiServiceFactory > xSMgr ) : xMSF( xSMgr ),
+cclass_Unicode::cclass_Unicode( const uno::Reference < XComponentContext >& rxContext ) : m_xContext( rxContext ),
         pTable( NULL ),
         pStart( NULL ),
         pCont( NULL ),
@@ -90,7 +90,7 @@ cclass_Unicode::toTitle( const OUString& Text, sal_Int32 nPos, sal_Int32 nCount,
     trans->setMappingType(MappingTypeToTitle, rLocale);
     rtl_uString* pStr = comphelper::string::rtl_uString_alloc(nCount);
     sal_Unicode* out = pStr->buffer;
-    BreakIteratorImpl brk(xMSF);
+    BreakIteratorImpl brk(m_xContext);
     Boundary bdy = brk.getWordBoundary(Text, nPos, rLocale,
                 WordType::ANYWORD_IGNOREWHITESPACES, sal_True);
     for (sal_Int32 i = nPos; i < nCount + nPos; i++, out++) {

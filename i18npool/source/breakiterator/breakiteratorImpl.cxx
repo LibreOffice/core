@@ -29,7 +29,7 @@ using namespace ::rtl;
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
-BreakIteratorImpl::BreakIteratorImpl( const Reference < XMultiServiceFactory >& rxMSF ) : xMSF( rxMSF )
+BreakIteratorImpl::BreakIteratorImpl( const Reference < XComponentContext >& rxContext ) : m_xContext( rxContext )
 {
 }
 
@@ -545,8 +545,8 @@ sal_Bool SAL_CALL BreakIteratorImpl::createLocaleSpecificBreakIterator(const OUS
             }
         }
 
-        Reference < uno::XInterface > xI = xMSF->createInstance(
-            OUString("com.sun.star.i18n.BreakIterator_") + aLocaleName);
+        Reference < uno::XInterface > xI = m_xContext->getServiceManager()->createInstanceWithContext(
+            OUString("com.sun.star.i18n.BreakIterator_") + aLocaleName, m_xContext);
 
         if ( xI.is() ) {
             xI->queryInterface( getCppuType((const Reference< XBreakIterator>*)0) ) >>= xBI;
@@ -563,7 +563,7 @@ BreakIteratorImpl::getLocaleSpecificBreakIterator(const Locale& rLocale) throw (
 {
         if (xBI.is() && rLocale == aLocale)
             return xBI;
-        else if (xMSF.is()) {
+        else if (m_xContext.is()) {
             aLocale = rLocale;
 
             for (size_t i = 0; i < lookupTable.size(); i++) {

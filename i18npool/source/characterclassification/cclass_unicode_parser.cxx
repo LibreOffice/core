@@ -402,7 +402,7 @@ sal_Bool cclass_Unicode::setupInternational( const Locale& rLocale )
     }
     if ( !mxLocaleData.is() )
     {
-        mxLocaleData.set( LocaleData::create(comphelper::getComponentContext(xMSF)) );
+        mxLocaleData.set( LocaleData::create(m_xContext) );
     }
     return bChanged;
 }
@@ -1007,9 +1007,9 @@ void cclass_Unicode::parseText( ParseResult& r, const OUString& rText, sal_Int32
     {
         if ( !xNatNumSup.is() )
         {
-            if ( xMSF.is() )
+            if ( m_xContext.is() )
             {
-                xNatNumSup = NativeNumberSupplier::create( comphelper::getComponentContext(xMSF) );
+                xNatNumSup = NativeNumberSupplier::create( m_xContext );
             }
         }
         OUString aTmp( pTextStart + r.LeadingWhiteSpace, r.EndPos - nPos +

@@ -46,7 +46,7 @@ class BreakIteratorImpl : public cppu::WeakImplHelper2
 >
 {
 public:
-    BreakIteratorImpl( const com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory >& rxMSF );
+    BreakIteratorImpl( const com::sun::star::uno::Reference < com::sun::star::uno::XComponentContext >& rxContext );
     BreakIteratorImpl();
     ~BreakIteratorImpl();
 
@@ -123,8 +123,8 @@ private :
     std::vector<lookupTableItem*> lookupTable;
     com::sun::star::lang::Locale aLocale;
     com::sun::star::uno::Reference < XBreakIterator > xBI;
+    com::sun::star::uno::Reference < com::sun::star::uno::XComponentContext > m_xContext;
 
-    com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory > xMSF;
     sal_Bool SAL_CALL createLocaleSpecificBreakIterator( const rtl::OUString& aLocaleName )
         throw( com::sun::star::uno::RuntimeException );
     com::sun::star::uno::Reference < XBreakIterator > SAL_CALL getLocaleSpecificBreakIterator( const com::sun::star::lang::Locale& rLocale )

@@ -22,7 +22,6 @@
 #include <com/sun/star/i18n/XNativeNumberSupplier.hpp>
 #include <com/sun/star/i18n/XCharacterClassification.hpp>
 #include <com/sun/star/i18n/XLocaleData4.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <cppuhelper/implbase1.hxx> // helper for implementations
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
@@ -36,7 +35,7 @@ typedef sal_uInt32 UPT_FLAG_TYPE;
 class cclass_Unicode : public cppu::WeakImplHelper1 < XCharacterClassification >
 {
 public:
-    cclass_Unicode(com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory > xSMgr );
+    cclass_Unicode(const com::sun::star::uno::Reference < com::sun::star::uno::XComponentContext >& rxContext );
     ~cclass_Unicode();
 
     virtual rtl::OUString SAL_CALL toUpper( const rtl::OUString& Text, sal_Int32 nPos, sal_Int32 nCount,
@@ -118,7 +117,7 @@ private:
     static  const sal_Unicode*  StrChr( const sal_Unicode* pStr, sal_Unicode c );
 
 
-    com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory > xMSF;
+    com::sun::star::uno::Reference < com::sun::star::uno::XComponentContext > m_xContext;
 
     /// used for parser only
     com::sun::star::lang::Locale    aParserLocale;
