@@ -2,6 +2,74 @@
   "comments": [
     {
       "key": {
+        "uuid": "AAAAQH///68\u003d",
+        "filename": "basic/inc/basic/sbxform.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1000065
+      },
+      "writtenOn": "2012-11-05T17:53:15Z",
+      "side": 1,
+      "message": "I know not strictly to do with this rework but probably would be best to attempt to make the OUString params const references. Of course that is assuming doing that wont trigger a const correctness avalanche",
+      "revId": "b4f8480fa0f039bd82a647e3e258573a9ddac36a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAQH///64\u003d",
+        "filename": "basic/inc/basic/sbxform.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1000065
+      },
+      "writtenOn": "2012-11-05T17:53:15Z",
+      "side": 1,
+      "message": "same const reference wish for the above",
+      "revId": "b4f8480fa0f039bd82a647e3e258573a9ddac36a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAQH///60\u003d",
+        "filename": "basic/source/basmgr/basmgr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 532,
+      "author": {
+        "id": 1000065
+      },
+      "writtenOn": "2012-11-05T17:53:15Z",
+      "side": 1,
+      "message": "although of course entirely not necessary but nicer...\n\n\u0027aStorageName \u003d szImbedded\u0027 should work also shouldn\u0027t it",
+      "revId": "b4f8480fa0f039bd82a647e3e258573a9ddac36a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAQH///6s\u003d",
+        "filename": "basic/source/classes/sb.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 675,
+      "author": {
+        "id": 1000065
+      },
+      "writtenOn": "2012-11-05T17:53:15Z",
+      "side": 1,
+      "message": "I guess for brevity we could just do\nSbxVariable* p \u003d pMethods-\u003eFind( pImplMethod-\u003eGetName(), SbxCLASS_METHOD );\nas GetName surely returns OUString now",
+      "revId": "b4f8480fa0f039bd82a647e3e258573a9ddac36a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAQH///8k\u003d",
         "filename": "basic/source/classes/sb.cxx",
         "patchSetId": 1
@@ -13,6 +81,40 @@
       "writtenOn": "2012-11-05T11:21:49Z",
       "side": 1,
       "message": "match -\u003e indexOf",
+      "revId": "b4f8480fa0f039bd82a647e3e258573a9ddac36a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAQH///6k\u003d",
+        "filename": "basic/source/classes/sb.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1663,
+      "author": {
+        "id": 1000065
+      },
+      "writtenOn": "2012-11-05T17:53:15Z",
+      "side": 1,
+      "message": "doesn\u0027t this cut off any message content after $(ARG1) ? \nI think aMsg1 might be better as an OUStringBuffer where \u0027($ARG)\u0027 is removed and the replacement text inserted into the buffer at the position the placeholder has been removed",
+      "revId": "b4f8480fa0f039bd82a647e3e258573a9ddac36a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAQH///6g\u003d",
+        "filename": "basic/source/comp/buffer.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 197,
+      "author": {
+        "id": 1000065
+      },
+      "writtenOn": "2012-11-05T17:53:15Z",
+      "side": 1,
+      "message": "l should be sal_uInt32 ?",
       "revId": "b4f8480fa0f039bd82a647e3e258573a9ddac36a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -47,6 +149,23 @@
       "writtenOn": "2012-11-05T11:21:49Z",
       "side": 1,
       "message": "match -\u003e indexOf",
+      "revId": "b4f8480fa0f039bd82a647e3e258573a9ddac36a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAQH///6I\u003d",
+        "filename": "basic/source/comp/exprtree.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1000065
+      },
+      "writtenOn": "2012-11-05T17:53:15Z",
+      "side": 1,
+      "message": "argh, I wonder what the orig implementation here was about ( operator +\u003d (sal_uIn16 ) ) surely tries to append a unicode char, it looks like it was wrong and that what you have now is correct :-)",
       "revId": "b4f8480fa0f039bd82a647e3e258573a9ddac36a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -207,6 +326,40 @@
     },
     {
       "key": {
+        "uuid": "AAAAQH///6A\u003d",
+        "filename": "basic/source/runtime/methods.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1581,
+      "author": {
+        "id": 1000065
+      },
+      "writtenOn": "2012-11-05T17:53:15Z",
+      "side": 1,
+      "message": "how about getting rid of the if (with no body) and else and replacing with\n\nif ( pBuf[0] !\u003d \u0027 \u0027 )\n{\n    aStrNew +\u003d \" \";\n}",
+      "revId": "b4f8480fa0f039bd82a647e3e258573a9ddac36a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAQH///6E\u003d",
+        "filename": "basic/source/runtime/methods.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1588,
+      "author": {
+        "id": 1000065
+      },
+      "writtenOn": "2012-11-05T17:53:15Z",
+      "side": 1,
+      "message": "should be aStrNew +\u003d aStr.copy(iZeroSearch) ?",
+      "revId": "b4f8480fa0f039bd82a647e3e258573a9ddac36a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAQH///70\u003d",
         "filename": "basic/source/runtime/methods.cxx",
         "patchSetId": 1
@@ -258,6 +411,40 @@
     },
     {
       "key": {
+        "uuid": "AAAAQH///58\u003d",
+        "filename": "basic/source/sbx/sbxarray.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 264,
+      "author": {
+        "id": 1000065
+      },
+      "writtenOn": "2012-11-05T17:53:15Z",
+      "side": 1,
+      "message": "isn\u0027t it a leak ( or is there some magic going on ? )",
+      "revId": "b4f8480fa0f039bd82a647e3e258573a9ddac36a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAQH///54\u003d",
+        "filename": "basic/source/sbx/sbxform.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1000065
+      },
+      "writtenOn": "2012-11-05T17:53:15Z",
+      "side": 1,
+      "message": "doesn\u0027t OUStrintBuffer::remove not do the same thing ?",
+      "revId": "b4f8480fa0f039bd82a647e3e258573a9ddac36a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "AAAAQH///7o\u003d",
         "filename": "basic/source/sbx/sbxform.cxx",
         "patchSetId": 1
@@ -269,6 +456,40 @@
       "writtenOn": "2012-11-05T11:21:49Z",
       "side": 1,
       "message": "nPos -\u003e nPos-1",
+      "revId": "b4f8480fa0f039bd82a647e3e258573a9ddac36a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAQH///50\u003d",
+        "filename": "basic/source/sbx/sbxform.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 500,
+      "author": {
+        "id": 1000065
+      },
+      "writtenOn": "2012-11-05T17:53:15Z",
+      "side": 1,
+      "message": "nLen-\u003esal_uInt32",
+      "revId": "b4f8480fa0f039bd82a647e3e258573a9ddac36a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "AAAAQH///5w\u003d",
+        "filename": "basic/source/sbx/sbxform.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 517,
+      "author": {
+        "id": 1000065
+      },
+      "writtenOn": "2012-11-05T17:53:15Z",
+      "side": 1,
+      "message": "i -\u003e sal_Int32",
       "revId": "b4f8480fa0f039bd82a647e3e258573a9ddac36a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
