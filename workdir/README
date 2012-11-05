@@ -1,0 +1,6 @@
+A workdir allow you to have a separate build environment without having to duplicate the git history, but it will still cost you 6 to 9 Gb per workdir.
+
+This makes use of git-new-workdir, and saves a lot of
+diskspace when having multiple trees side-by-side.
+Enables the use of the OpenLDAP LDAP SDK instead of
+the Netscape/Mozilla one.

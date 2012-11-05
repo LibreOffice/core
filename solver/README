@@ -1,0 +1,2 @@
+A solver allows to solve equations with multiple unknown variables by goal seeking methods. Choose Tools - Solver 
+By default the solver is stripped unless a build with debugging symbols (--enable-symbols) is requested.
