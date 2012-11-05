@@ -3067,8 +3067,8 @@ void XclExpXmlStyleSheet::SaveXml( XclExpXmlStream& rStrm )
     CreateRecord( EXC_ID_FORMATLIST )->SaveXml( rStrm );
     CreateRecord( EXC_ID_FONTLIST )->SaveXml( rStrm );
     CreateRecord( EXC_ID_XFLIST )->SaveXml( rStrm );
-    CreateRecord( EXC_ID_PALETTE )->SaveXml( rStrm );
     CreateRecord( EXC_ID_DXFS )->SaveXml( rStrm );
+    CreateRecord( EXC_ID_PALETTE )->SaveXml( rStrm );
 
     aStyleSheet->endElement( XML_styleSheet );
 
