@@ -224,7 +224,7 @@ class ScConditionalFormat;
 class XclExpCondfmt : public XclExpRecord, protected XclExpRoot
 {
 public:
-    explicit            XclExpCondfmt( const XclExpRoot& rRoot, const ScConditionalFormat& rCondFormat, XclExtLstRef xExtLst );
+    explicit            XclExpCondfmt( const XclExpRoot& rRoot, const ScConditionalFormat& rCondFormat, XclExtLstRef xExtLst, sal_Int32& rIndex );
     virtual             ~XclExpCondfmt();
 
     /** Returns true, if this conditional format contains at least one cell range and CF record. */

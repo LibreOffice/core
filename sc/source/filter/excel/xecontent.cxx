@@ -824,7 +824,7 @@ const char* GetOperatorString(ScConditionMode eMode, bool& bFrmla2)
             break;
         case SC_COND_NONE:
         default:
-            pRet = "";
+            pRet = "equal";
             break;
     }
     return pRet;
@@ -852,6 +852,14 @@ const char* GetTypeString(ScConditionMode eMode)
             return "containsErrors";
         case SC_COND_NOERROR:
             return "notContainsErrors";
+        case SC_COND_BEGINS_WITH:
+            return "beginsWith";
+        case SC_COND_ENDS_WITH:
+            return "endsWith";
+        case SC_COND_CONTAINS_TEXT:
+            return "containsText";
+        case SC_COND_NOT_CONTAINS_TEXT:
+            return "notContainsText";
         default:
             return "cellIs";
     }
@@ -873,6 +881,22 @@ bool IsTopBottomRule(ScConditionMode eMode)
     return false;
 }
 
+bool IsTextRule(ScConditionMode eMode)
+{
+    switch(eMode)
+    {
+        case SC_COND_BEGINS_WITH:
+        case SC_COND_ENDS_WITH:
+        case SC_COND_CONTAINS_TEXT:
+        case SC_COND_NOT_CONTAINS_TEXT:
+            return true;
+        default:
+            break;
+    }
+
+    return false;
+}
+
 }
 
 void XclExpCFImpl::SaveXml( XclExpXmlStream& rStrm )
@@ -884,12 +908,22 @@ void XclExpCFImpl::SaveXml( XclExpXmlStream& rStrm )
         || eOperation == SC_COND_BOTTOM_PERCENT;
     sal_Int32 nPercent = eOperation == SC_COND_TOP_PERCENT ||
         eOperation == SC_COND_BOTTOM_PERCENT;
-    rtl::OString aRank;
+    rtl::OString aRank("0");
     if(IsTopBottomRule(eOperation))
     {
         // position and formula grammar are not important
         // we only store a number there
         aRank = XclXmlUtils::ToOString(mrFormatEntry.GetExpression(ScAddress(0,0,0), 0));
+    }
+    rtl::OString aText;
+    if(IsTextRule(eOperation))
+    {
+        // we need to write the text without quotes
+        // we have to actually get the string from
+        // the token array for that
+        ScTokenArray* pTokenArray = mrFormatEntry.CreateTokenArry(0);
+        if(pTokenArray->GetLen())
+            aText = XclXmlUtils::ToOString(pTokenArray->First()->GetString());
     }
 
     sax_fastparser::FSHelperPtr& rWorksheet = rStrm.GetCurrentStream();
@@ -901,16 +935,20 @@ void XclExpCFImpl::SaveXml( XclExpXmlStream& rStrm )
             XML_bottom, OString::valueOf( nBottom ).getStr(),
             XML_percent, OString::valueOf( nPercent ).getStr(),
             XML_rank, aRank.getStr(),
+            XML_text, aText.getStr(),
             XML_dxfId, OString::valueOf( GetDxfs().GetDxfId( mrFormatEntry.GetStyle() ) ).getStr(),
             FSEND );
-    rWorksheet->startElement( XML_formula, FSEND );
-    rWorksheet->write(XclXmlUtils::ToOUString( GetRoot().GetDoc(), mrFormatEntry.GetValidSrcPos(), mrFormatEntry.CreateTokenArry( 0 ) ));
-    rWorksheet->endElement( XML_formula );
-    if (bFmla2)
+    if(!IsTextRule(eOperation) && !IsTopBottomRule(eOperation))
     {
         rWorksheet->startElement( XML_formula, FSEND );
-        rWorksheet->write(XclXmlUtils::ToOUString( GetRoot().GetDoc(), mrFormatEntry.GetValidSrcPos(), mrFormatEntry.CreateTokenArry( 1 ) ));
+        rWorksheet->write(XclXmlUtils::ToOUString( GetRoot().GetDoc(), mrFormatEntry.GetValidSrcPos(), mrFormatEntry.CreateTokenArry( 0 ) ));
         rWorksheet->endElement( XML_formula );
+        if (bFmla2)
+        {
+            rWorksheet->startElement( XML_formula, FSEND );
+            rWorksheet->write(XclXmlUtils::ToOUString( GetRoot().GetDoc(), mrFormatEntry.GetValidSrcPos(), mrFormatEntry.CreateTokenArry( 1 ) ));
+            rWorksheet->endElement( XML_formula );
+        }
     }
     // OOXTODO: XML_extLst
     rWorksheet->endElement( XML_cfRule );
@@ -1025,7 +1063,7 @@ void XclExpColScaleCol::SaveXml( XclExpXmlStream& rStrm )
 
 // ----------------------------------------------------------------------------
 
-XclExpCondfmt::XclExpCondfmt( const XclExpRoot& rRoot, const ScConditionalFormat& rCondFormat, XclExtLstRef xExtLst ) :
+XclExpCondfmt::XclExpCondfmt( const XclExpRoot& rRoot, const ScConditionalFormat& rCondFormat, XclExtLstRef xExtLst, sal_Int32& rIndex ) :
     XclExpRecord( EXC_ID_CONDFMT ),
     XclExpRoot( rRoot )
 {
@@ -1037,13 +1075,13 @@ XclExpCondfmt::XclExpCondfmt( const XclExpRoot& rRoot, const ScConditionalFormat
             if( const ScFormatEntry* pFormatEntry = rCondFormat.GetEntry( nIndex ) )
             {
                 if(pFormatEntry->GetType() == condformat::CONDITION)
-                    maCFList.AppendNewRecord( new XclExpCF( GetRoot(), static_cast<const ScCondFormatEntry&>(*pFormatEntry), nIndex ) );
+                    maCFList.AppendNewRecord( new XclExpCF( GetRoot(), static_cast<const ScCondFormatEntry&>(*pFormatEntry), ++rIndex ) );
                 else if(pFormatEntry->GetType() == condformat::COLORSCALE)
-                    maCFList.AppendNewRecord( new XclExpColorScale( GetRoot(), static_cast<const ScColorScaleFormat&>(*pFormatEntry), nIndex ) );
+                    maCFList.AppendNewRecord( new XclExpColorScale( GetRoot(), static_cast<const ScColorScaleFormat&>(*pFormatEntry), ++rIndex ) );
                 else if(pFormatEntry->GetType() == condformat::DATABAR)
-                    maCFList.AppendNewRecord( new XclExpDataBar( GetRoot(), static_cast<const ScDataBarFormat&>(*pFormatEntry), nIndex, xExtLst ) );
+                    maCFList.AppendNewRecord( new XclExpDataBar( GetRoot(), static_cast<const ScDataBarFormat&>(*pFormatEntry), ++rIndex, xExtLst ) );
                 else if(pFormatEntry->GetType() == condformat::ICONSET)
-                    maCFList.AppendNewRecord( new XclExpIconSet( GetRoot(), static_cast<const ScIconSetFormat&>(*pFormatEntry), nIndex ) );
+                    maCFList.AppendNewRecord( new XclExpIconSet( GetRoot(), static_cast<const ScIconSetFormat&>(*pFormatEntry), ++rIndex ) );
             }
         aScRanges.Format( msSeqRef, SCA_VALID, NULL, formula::FormulaGrammar::CONV_XL_A1 );
     }
@@ -1293,10 +1331,11 @@ XclExpCondFormatBuffer::XclExpCondFormatBuffer( const XclExpRoot& rRoot, XclExtL
 {
     if( const ScConditionalFormatList* pCondFmtList = GetDoc().GetCondFormList(GetCurrScTab()) )
     {
+        sal_Int32 nIndex = 0;
         for( ScConditionalFormatList::const_iterator itr = pCondFmtList->begin();
                         itr != pCondFmtList->end(); ++itr)
         {
-            XclExpCondfmtList::RecordRefType xCondfmtRec( new XclExpCondfmt( GetRoot(), *itr, xExtLst ) );
+            XclExpCondfmtList::RecordRefType xCondfmtRec( new XclExpCondfmt( GetRoot(), *itr, xExtLst, nIndex ));
             if( xCondfmtRec->IsValid() )
                 maCondfmtList.AppendRecord( xCondfmtRec );
         }
