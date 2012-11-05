@@ -759,16 +759,16 @@ void SvXMLNumFmtExport::WriteMapElement_Impl( sal_Int32 nOp, double fLimit,
 //-------------------------------------------------------------------------
 //  for old (automatic) currency formats: parse currency symbol from text
 
-xub_StrLen lcl_FindSymbol( const String& sUpperStr, const String& sCurString )
+sal_Int32 lcl_FindSymbol( const OUString& sUpperStr, const OUString& sCurString )
 {
     //  search for currency symbol
     //  Quoting as in ImpSvNumberformatScan::Symbol_Division
 
-    xub_StrLen nCPos = 0;
-    while (nCPos != STRING_NOTFOUND)
+    sal_Int32 nCPos = 0;
+    while (nCPos >= 0)
     {
-        nCPos = sUpperStr.Search( sCurString, nCPos );
-        if (nCPos != STRING_NOTFOUND)
+        nCPos = sUpperStr.indexOf( sCurString, nCPos );
+        if (nCPos >= 0)
         {
             // in Quotes?
             sal_Int32 nQ = SvNumberformat::GetQuoteEnd( sUpperStr, nCPos );
@@ -777,19 +777,23 @@ xub_StrLen lcl_FindSymbol( const String& sUpperStr, const String& sCurString )
                 //  dm can be escaped as "dm or \d
                 sal_Unicode c;
                 if ( nCPos == 0 ||
-                    ((c = sUpperStr.GetChar(xub_StrLen(nCPos-1))) != '"'
-                            && c != '\\') )
+                    ((c = sUpperStr[nCPos-1]) != '"'
+                     && c != '\\') )
                 {
                     return nCPos;                   // found
                 }
                 else
+                {
                     nCPos++;                        // continue
+                }
             }
             else
+            {
                 nCPos = nQ + 1;                     // continue after quote end
+            }
         }
     }
-    return STRING_NOTFOUND;                         // not found
+    return -1;
 }
 
 sal_Bool SvXMLNumFmtExport::WriteTextWithCurrency_Impl( const OUString& rString,
@@ -805,9 +809,9 @@ sal_Bool SvXMLNumFmtExport::WriteTextWithCurrency_Impl( const OUString& rString,
     pFormatter->GetCompatibilityCurrency( sCurString, sDummy );
 
     pCharClass->setLocale( rLocale );
-    String sUpperStr = pCharClass->uppercase(rString);
-    xub_StrLen nPos = lcl_FindSymbol( sUpperStr, sCurString );
-    if ( nPos != STRING_NOTFOUND )
+    OUString sUpperStr = pCharClass->uppercase(rString);
+    sal_Int32 nPos = lcl_FindSymbol( sUpperStr, OUString(sCurString) );
+    if ( nPos >= 0 )
     {
         sal_Int32 nLength = rString.getLength();
         sal_Int32 nCurLen = sCurString.Len();
@@ -815,8 +819,9 @@ sal_Bool SvXMLNumFmtExport::WriteTextWithCurrency_Impl( const OUString& rString,
 
         //  text before currency symbol
         if ( nPos > 0 )
+        {
             AddToTextElement_Impl( rString.copy( 0, nPos ) );
-
+        }
         //  currency symbol (empty string -> default)
         OUString sEmpty;
         WriteCurrencyElement_Impl( sEmpty, sEmpty );
@@ -824,10 +829,14 @@ sal_Bool SvXMLNumFmtExport::WriteTextWithCurrency_Impl( const OUString& rString,
 
         //  text after currency symbol
         if ( nCont < nLength )
+        {
             AddToTextElement_Impl( rString.copy( nCont, nLength-nCont ) );
+        }
     }
     else
+    {
         AddToTextElement_Impl( rString );       // simple text
+    }
 
     return bRet;        // sal_True: currency element written
 }
