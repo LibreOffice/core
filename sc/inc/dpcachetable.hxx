@@ -37,18 +37,9 @@
 #include <vector>
 #include <boost/unordered_set.hpp>
 #include <boost/shared_ptr.hpp>
-#include <com/sun/star/uno/Reference.hxx>
 
-namespace com { namespace sun { namespace star {
-    namespace sdbc {
-        class XRowSet;
-    }
-    namespace sheet {
-        struct DataPilotFieldFilter;
-    }
-}}}
+#include <mdds/flat_segment_tree.hpp>
 
-class Date;
 class ScDPItemData;
 class ScDPCache;
 class ScDocument;
@@ -64,15 +55,7 @@ struct ScQueryParam;
  */
 class SC_DLLPUBLIC ScDPCacheTable
 {
-    struct RowFlag
-    {
-        bool mbShowByFilter:1;
-        bool mbShowByPage:1;
-        bool isActive() const;
-        RowFlag();
-    };
 public:
-
     /** interface class used for filtering of rows. */
     class FilterBase
     {
@@ -142,7 +125,7 @@ public:
     /** Check whether a specified row is active or not.  When a row is active,
         it is used in calculation of the results data.  A row becomes inactive
         when it is filtered out by page field. */
-    bool isRowActive(sal_Int32 nRow) const;
+    bool isRowActive(sal_Int32 nRow, sal_Int32* pLastRow = NULL) const;
 
     /** Set filter on/off flag to each row to control visibility.  The caller
         must ensure that the table is filled before calling this function. */
@@ -185,11 +168,15 @@ private:
     bool isRowQualified(sal_Int32 nRow, const ::std::vector<Criterion>& rCriteria, const ::boost::unordered_set<sal_Int32>& rRepeatIfEmptyDims) const;
 
 private:
+    typedef mdds::flat_segment_tree<SCROW, bool> RowFlagType;
+
     /** unique field entires for each field (column). */
     ::std::vector< ::std::vector<SCROW> > maFieldEntries;
 
-    /** Row flags. The first row below the header row has the index of 0. */
-    ::std::vector<RowFlag> maRowFlags;
+    /** Rows visible by standard filter query. */
+    RowFlagType maShowByFilter;
+    /** Rows visible by page dimension filtering. */
+    RowFlagType maShowByPage;
 
     const ScDPCache* mpCache;
 };

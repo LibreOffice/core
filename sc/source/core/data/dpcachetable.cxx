@@ -64,17 +64,6 @@ using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::uno::UNO_QUERY_THROW;
 using ::com::sun::star::sheet::DataPilotFieldFilter;
 
-bool ScDPCacheTable::RowFlag::isActive() const
-{
-    return mbShowByFilter && mbShowByPage;
-}
-
-ScDPCacheTable::RowFlag::RowFlag() :
-    mbShowByFilter(true),
-    mbShowByPage(true)
-{
-}
-
 ScDPCacheTable::SingleFilter::SingleFilter(const ScDPItemData& rItem) :
     maItem(rItem) {}
 
@@ -125,7 +114,7 @@ ScDPCacheTable::Criterion::Criterion() :
 // ----------------------------------------------------------------------------
 
 ScDPCacheTable::ScDPCacheTable(const ScDPCache* pCache) :
-    mpCache(pCache)
+    maShowByFilter(0, MAXROW+1, false), maShowByPage(0, MAXROW+1, true), mpCache(pCache)
 {
 }
 
@@ -146,124 +135,145 @@ sal_Int32 ScDPCacheTable::getColSize() const
 void ScDPCacheTable::fillTable(
     const ScQueryParam& rQuery, bool bIgnoreEmptyRows, bool bRepeatIfEmpty)
 {
-    const SCROW nRowCount = getRowSize();
-    const SCCOL  nColCount = (SCCOL) getColSize();
-    if ( nRowCount <= 0 || nColCount <= 0)
+    SCROW nRowCount = getRowSize();
+    SCROW nDataSize = mpCache->GetDataSize();
+    SCCOL nColCount = getColSize();
+    if (nRowCount <= 0 || nColCount <= 0)
         return;
 
-    maRowFlags.clear();
-    maRowFlags.reserve(nRowCount);
+    maShowByFilter.clear();
+    maShowByPage.clear();
+
+    // Process the non-empty data rows.
+    for (SCROW nRow = 0; nRow < nDataSize; ++nRow)
+    {
+        if (!getCache()->ValidQuery(nRow, rQuery))
+            continue;
+
+        if (bIgnoreEmptyRows && getCache()->IsRowEmpty(nRow))
+            continue;
+
+        maShowByFilter.insert_back(nRow, nRow+1, true);
+    }
+
+    // Process the trailing empty rows.
+    if (!bIgnoreEmptyRows)
+        maShowByFilter.insert_back(nDataSize, nRowCount, true);
+
+    maShowByFilter.build_tree();
 
     // Initialize field entries container.
     maFieldEntries.clear();
     maFieldEntries.reserve(nColCount);
 
-    // Data rows
+    // Build unique field entries.
     for (SCCOL nCol = 0; nCol < nColCount; ++nCol)
     {
         maFieldEntries.push_back( vector<SCROW>() );
         SCROW nMemCount = getCache()->GetDimMemberCount( nCol );
-        if ( nMemCount )
+        if (!nMemCount)
+            continue;
+
+        std::vector<SCROW> aAdded(nMemCount, -1);
+        bool bShow = false;
+        SCROW nEndSegment = -1;
+        for (SCROW nRow = 0; nRow < nRowCount; ++nRow)
         {
-            std::vector<SCROW> aAdded( nMemCount, -1 );
-
-            for (SCROW nRow = 0; nRow < nRowCount; ++nRow )
+            if (nRow > nEndSegment)
             {
-                SCROW nIndex = getCache()->GetItemDataId( nCol, nRow, bRepeatIfEmpty );
-                SCROW nOrder = getOrder( nCol, nIndex );
-
-                if ( nCol == 0 )
+                if (!maShowByFilter.search_tree(nRow, bShow, NULL, &nEndSegment))
                 {
-                    maRowFlags.push_back(RowFlag());
-                    maRowFlags.back().mbShowByFilter = false;
+                    OSL_FAIL("Tree search failed!");
+                    continue;
                 }
-
-                if (!getCache()->ValidQuery(nRow, rQuery))
-                    continue;
-
-                if ( bIgnoreEmptyRows &&  getCache()->IsRowEmpty( nRow ) )
-                    continue;
-
-                if ( nCol == 0 )
-                     maRowFlags.back().mbShowByFilter = true;
-
-                aAdded[nOrder] = nIndex;
+                --nEndSegment; // End position is not inclusive. Move back one.
             }
-            for ( SCROW nRow = 0; nRow < nMemCount; nRow++ )
+
+            if (!bShow)
             {
-                if ( aAdded[nRow] != -1 )
-                    maFieldEntries.back().push_back( aAdded[nRow] );
+                nRow = nEndSegment;
+                continue;
             }
+
+            SCROW nIndex = getCache()->GetItemDataId(nCol, nRow, bRepeatIfEmpty);
+            SCROW nOrder = getOrder(nCol, nIndex);
+            aAdded[nOrder] = nIndex;
+        }
+        for (SCROW nRow = 0; nRow < nMemCount; ++nRow)
+        {
+            if (aAdded[nRow] != -1)
+                maFieldEntries.back().push_back(aAdded[nRow]);
         }
     }
 }
 
 void ScDPCacheTable::fillTable()
 {
-   const SCROW  nRowCount = getRowSize();
-   const SCCOL  nColCount = (SCCOL) getColSize();
-   if ( nRowCount <= 0 || nColCount <= 0)
+   SCROW nRowCount = getRowSize();
+   SCCOL nColCount = getColSize();
+   if (nRowCount <= 0 || nColCount <= 0)
         return;
 
-    maRowFlags.clear();
-    maRowFlags.reserve(nRowCount);
+   maShowByFilter.clear();
+   maShowByPage.clear();
+   maShowByFilter.insert_front(0, nRowCount, true);
 
+   // Initialize field entries container.
+   maFieldEntries.clear();
+   maFieldEntries.reserve(nColCount);
 
-    // Initialize field entries container.
-    maFieldEntries.clear();
-    maFieldEntries.reserve(nColCount);
+   // Data rows
+   for (SCCOL nCol = 0; nCol < nColCount; ++nCol)
+   {
+       maFieldEntries.push_back( vector<SCROW>() );
+       SCROW nMemCount = getCache()->GetDimMemberCount( nCol );
+       if (!nMemCount)
+           continue;
 
-    // Data rows
-    for (SCCOL nCol = 0; nCol < nColCount; ++nCol)
-    {
-        maFieldEntries.push_back( vector<SCROW>() );
-        SCROW nMemCount = getCache()->GetDimMemberCount( nCol );
-        if ( nMemCount )
-        {
-            std::vector< SCROW > pAdded( nMemCount, -1 );
+       std::vector<SCROW> aAdded(nMemCount, -1);
 
-            for (SCROW nRow = 0; nRow < nRowCount; ++nRow )
-            {
-                SCROW nIndex = getCache()->GetItemDataId( nCol, nRow, false );
-                SCROW nOrder = getOrder( nCol, nIndex );
-
-                if ( nCol == 0 )
-                {
-                     maRowFlags.push_back(RowFlag());
-                     maRowFlags.back().mbShowByFilter = true;
-                }
-
-                pAdded[nOrder] = nIndex;
-            }
-            for ( SCROW nRow = 0; nRow < nMemCount; nRow++ )
-            {
-                if ( pAdded[nRow] != -1 )
-                    maFieldEntries.back().push_back( pAdded[nRow] );
-            }
-        }
-    }
+       for (SCROW nRow = 0; nRow < nRowCount; ++nRow)
+       {
+           SCROW nIndex = getCache()->GetItemDataId(nCol, nRow, false);
+           SCROW nOrder = getOrder(nCol, nIndex);
+           aAdded[nOrder] = nIndex;
+       }
+       for (SCROW nRow = 0; nRow < nMemCount; ++nRow)
+       {
+           if (aAdded[nRow] != -1)
+               maFieldEntries.back().push_back(aAdded[nRow]);
+       }
+   }
 }
 
-bool ScDPCacheTable::isRowActive(sal_Int32 nRow) const
+bool ScDPCacheTable::isRowActive(sal_Int32 nRow, sal_Int32* pLastRow) const
 {
-    if (nRow < 0 || static_cast<size_t>(nRow) >= maRowFlags.size())
-        // row index out of bound
-        return false;
+    bool bFilter = false, bPage = true;
+    SCROW nLastRowFilter = MAXROW, nLastRowPage = MAXROW;
+    maShowByFilter.search_tree(nRow, bFilter, NULL, &nLastRowFilter);
+    maShowByPage.search_tree(nRow, bPage, NULL, &nLastRowPage);
+    if (pLastRow)
+    {
+        // Return the last row of current segment.
+        *pLastRow = nLastRowFilter < nLastRowPage ? nLastRowFilter : nLastRowPage;
+        *pLastRow -= 1; // End position is not inclusive. Move back one.
+    }
 
-    return maRowFlags[nRow].isActive();
+    return bFilter && bPage;
 }
 
 void ScDPCacheTable::filterByPageDimension(const vector<Criterion>& rCriteria, const boost::unordered_set<sal_Int32>& rRepeatIfEmptyDims)
 {
-    sal_Int32 nRowSize = getRowSize();
-    if (nRowSize != static_cast<sal_Int32>(maRowFlags.size()))
+    SCROW nRowSize = getRowSize();
+
+    maShowByPage.clear();
+    for (SCROW nRow = 0; nRow < nRowSize; ++nRow)
     {
-        // sizes of the two tables differ!
-        return;
+        bool bShow = isRowQualified(nRow, rCriteria, rRepeatIfEmptyDims);
+        maShowByPage.insert_back(nRow, nRow+1, bShow);
     }
 
-    for (sal_Int32 nRow = 0; nRow < nRowSize; ++nRow)
-        maRowFlags[nRow].mbShowByPage = isRowQualified(nRow, rCriteria, rRepeatIfEmptyDims);
+    maShowByPage.build_tree();
 }
 
 const ScDPItemData* ScDPCacheTable::getCell(SCCOL nCol, SCROW nRow, bool bRepeatIfEmpty) const
@@ -333,12 +343,15 @@ void ScDPCacheTable::filterTable(const vector<Criterion>& rCriteria, Sequence< S
     }
     tableData.push_back(headerRow);
 
-
     for (sal_Int32 nRow = 0; nRow < nRowSize; ++nRow)
     {
-        if (!maRowFlags[nRow].isActive())
+        sal_Int32 nLastRow;
+        if (!isRowActive(nRow, &nLastRow))
+        {
             // This row is filtered out.
+            nRow = nLastRow;
             continue;
+        }
 
         if (!isRowQualified(nRow, rCriteria, rRepeatIfEmptyDims))
             continue;
@@ -378,7 +391,8 @@ SCROW ScDPCacheTable::getOrder(long nDim, SCROW nIndex) const
 void ScDPCacheTable::clear()
 {
     maFieldEntries.clear();
-    maRowFlags.clear();
+    maShowByFilter.clear();
+    maShowByPage.clear();
 }
 
 bool ScDPCacheTable::empty() const

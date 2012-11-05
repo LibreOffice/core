@@ -36,9 +36,11 @@ TARGET=mdds
 
 # --- Files --------------------------------------------------------
 
-TARFILE_NAME=mdds_0.5.3
-TARFILE_MD5=0ff7d225d087793c8c2c680d77aac3e7
-PATCH_FILES=mdds_0.5.3.patch
+TARFILE_NAME=mdds_0.6.1
+TARFILE_MD5=9f9e15966b5624834157fe3d748312bc
+
+PATCH_FILES=mdds_0.6.0.patch \
+	    0001-Workaround-for-gcc-bug.patch
 
 CONFIGURE_DIR=
 CONFIGURE_ACTION=

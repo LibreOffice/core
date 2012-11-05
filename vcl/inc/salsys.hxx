@@ -133,6 +133,10 @@ public:
         The effect of specifying a button that doesn't belong
         to the specified button combination is undefined.
 
+        @param  bUseResources
+        If false, assume initialization of the application failed early and do
+        not try to access any resources.
+
         @returns the identifier of the button that was pressed by the user.
         See button identifier above. If the function fails the
         return value is 0.
@@ -140,7 +144,8 @@ public:
     virtual int ShowNativeMessageBox( const rtl::OUString& rTitle,
                                       const rtl::OUString& rMessage,
                                       int nButtonCombination,
-                                      int nDefaultButton) = 0;
+                                      int nDefaultButton,
+                                      bool bUseResources ) = 0;
 };
 
 SalSystem* ImplGetSalSystem();

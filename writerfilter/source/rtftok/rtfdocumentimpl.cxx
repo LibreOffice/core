@@ -991,6 +991,14 @@ void RTFDocumentImpl::text(OUString& rString)
         return;
     }
 
+    // Are we in the middle of the table definition? (No cell defs yet, but we already have some cell props.)
+    if (m_aStates.top().aTableCellSprms.find(NS_ooxml::LN_CT_TcPrBase_vAlign).get() &&
+        m_aStates.top().nCells == 0)
+    {
+        m_aTableBuffer.push_back(make_pair(BUFFER_UTEXT, RTFValue::Pointer_t(new RTFValue(rString))));
+        return;
+    }
+
     checkFirstRun();
     checkNeedPap();
 
@@ -2441,9 +2449,8 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                 m_aDefaultState.aCharacterSprms.set(NS_sprm::LN_CLidBi, pIntValue);
             break;
         case RTF_CHCBPAT:
-            if (nParam)
             {
-                RTFValue::Pointer_t pValue(new RTFValue(getColorTable(nParam)));
+                RTFValue::Pointer_t pValue(new RTFValue(nParam ? getColorTable(nParam) : COL_AUTO));
                 lcl_putNestedAttribute(m_aStates.top().aCharacterSprms, NS_sprm::LN_CShd, NS_ooxml::LN_CT_Shd_fill, pValue);
             }
             break;
@@ -3483,6 +3490,8 @@ int RTFDocumentImpl::popState()
     // This is the end of the doc, see if we need to close the last section.
     if (m_nGroup == 1 && !m_bFirstRun)
     {
+        if (m_bNeedCr)
+            dispatchSymbol(RTF_PAR);
         m_bDeferredContSectBreak = false;
         sectBreak(true);
     }

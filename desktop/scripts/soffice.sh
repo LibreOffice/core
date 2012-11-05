@@ -158,21 +158,5 @@ if [ -n "$VALGRINDCHECK" -a -z "$VALGRIND" ] ; then
     exec &>valgrind.log
 fi
 
-# do not pass the request for command line help to oosplash
-for arg in $@ ; do
-    case "$arg" in
-        -h | --h | --he | --hel | --help)
-            "$sd_prog/soffice.bin" --help
-            exit 0
-            ;;
-        -V | --v | --ve | --ver | --vers | --versi | --versio | --version)
-            "$sd_prog/soffice.bin" --version
-            exit 0
-            ;;
-        *)
-            ;;
-    esac
-done
-
 # oosplash does the rest: forcing pages in, javaldx etc. are
 exec $VALGRINDCHECK $STRACECHECK "$sd_prog/oosplash" "$@"

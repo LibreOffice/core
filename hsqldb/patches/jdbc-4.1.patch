@@ -231,7 +231,7 @@
  // boucherb@users 20040411 - doc 1.7.2 - javadoc updates toward 1.7.2 final
  
  /**
-@@ -323,4 +328,12 @@
+@@ -323,4 +328,15 @@
      }
  
  //#endif JAVA6
@@ -239,7 +239,10 @@
 +//#ifdef JAVA7
 +    public Logger getParentLogger() throws SQLFeatureNotSupportedException
 +    {
-+        throw new SQLFeatureNotSupportedException("Not supported yet.");
++        throw new AbstractMethodError(
++            "org.hsqldb.jdbc.jdbcDataSource.getParentLogger should throw" +
++            " SQLFeatureNotSupportedException, but that is not yet available" +
++            " in Java 5");
 +    }
 +
 +//#endif JAVA7
@@ -299,7 +302,7 @@
  // fredt@users 20011220 - patch 1.7.0 by fredt
  // new version numbering scheme
  // fredt@users 20020320 - patch 1.7.0 - JDBC 2 support and error trapping
-@@ -321,4 +326,12 @@
+@@ -321,4 +326,15 @@
              DriverManager.registerDriver(new jdbcDriver());
          } catch (Exception e) {}
      }
@@ -307,7 +310,10 @@
 +//#ifdef JAVA7
 +    public Logger getParentLogger() throws SQLFeatureNotSupportedException
 +    {
-+        throw new SQLFeatureNotSupportedException("Not supported yet.");
++        throw new AbstractMethodError(
++            "org.hsqldb.jdbcDriver.getParentLogger should throw" +
++            " SQLFeatureNotSupportedException, but that is not yet available" +
++            " in Java 5");
 +    }
 +
 +//#endif JAVA7

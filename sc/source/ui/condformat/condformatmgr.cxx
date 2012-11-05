@@ -77,7 +77,7 @@ String ScCondFormatManagerWindow::createEntryString(const ScConditionalFormat& r
     String aStr;
     aRange.Format(aStr, SCA_VALID, mpDoc, mpDoc->GetAddressConvention());
     aStr += '\t';
-    aStr += ScCondFormatHelper::GetExpression(rFormat, mrPos);
+    aStr += ScCondFormatHelper::GetExpression(rFormat, aRange.GetTopLeftCorner());
     return aStr;
 }
 
@@ -209,7 +209,8 @@ IMPL_LINK_NOARG(ScCondFormatManagerDlg, EditBtnHdl)
     if(!pFormat)
         return 0;
 
-    ScCondFormatDlg* pDlg = new ScCondFormatDlg(this, mpDoc, pFormat, pFormat->GetRange(), maPos);
+    ScCondFormatDlg* pDlg = new ScCondFormatDlg(this, mpDoc, pFormat, pFormat->GetRange(),
+                                                pFormat->GetRange().GetTopLeftCorner());
     if(pDlg->Execute() == RET_OK)
     {
         sal_Int32 nKey = pFormat->GetKey();

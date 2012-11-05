@@ -52,7 +52,7 @@ public:
     virtual int ShowNativeMessageBox( const rtl::OUString& rTitle,
                                       const rtl::OUString& rMessage,
                                       int nButtonCombination,
-                                      int nDefaultButton);
+                                      int nDefaultButton, bool bUseResources);
 };
 
 

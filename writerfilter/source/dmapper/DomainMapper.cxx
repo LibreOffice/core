@@ -3617,8 +3617,7 @@ void DomainMapper::lcl_utext(const sal_uInt8 * data_, size_t len)
     {
         m_pImpl->getTableManager().utext(data_, len);
 
-        // RTF always uses text() instead of utext() for run break
-        if(len == 1 && ((*data_) == 0x0d || (*data_) == 0x07) && !IsRTFImport())
+        if(len == 1 && (sText[0] == 0x0d || sText[0] == 0x07))
         {
             PropertyMapPtr pContext = m_pImpl->GetTopContextOfType(CONTEXT_PARAGRAPH);
             if (pContext && m_pImpl->GetSettingsTable()->GetSplitPgBreakAndParaMark())

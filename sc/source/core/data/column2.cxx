@@ -1131,7 +1131,8 @@ bool ScColumn::IsEmptyVisData() const
         SCSIZE i;
         for (i=0; i<maItems.size() && !bVisData; i++)
         {
-            bVisData = true;
+            if(!maItems[i].pCell->IsBlank())
+                bVisData = true;
         }
         return !bVisData;
     }
@@ -1165,8 +1166,11 @@ SCROW ScColumn::GetLastVisDataPos() const
         for (i=maItems.size(); i>0 && !bFound; )
         {
             --i;
-            bFound = true;
-            nRet = maItems[i].nRow;
+            if(!maItems[i].pCell->IsBlank())
+            {
+                bFound = true;
+                nRet = maItems[i].nRow;
+            }
         }
     }
     return nRet;

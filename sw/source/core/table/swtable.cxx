@@ -1747,10 +1747,9 @@ SwTableBox::SwTableBox( SwTableBoxFmt* pFmt, const SwStartNode& rSttNd, SwTableL
     rSrtArr.Insert( p );        // eintragen
 }
 
-SwTableBox::~SwTableBox()
+void SwTableBox::RemoveFromTable()
 {
-    // Inhaltstragende Box ?
-    if( !GetFrmFmt()->GetDoc()->IsInDtor() && pSttNd )
+    if (pSttNd) // box containing contents?
     {
         // an der Table austragen
         const SwTableNode* pTblNd = pSttNd->FindTableNode();
@@ -1759,6 +1758,15 @@ SwTableBox::~SwTableBox()
                                     GetTabSortBoxes();
         SwTableBox *p = this;   // error: &this
         rSrtArr.Remove( p );        // austragen
+        pSttNd = 0; // clear it so this is only run once
+    }
+}
+
+SwTableBox::~SwTableBox()
+{
+    if (!GetFrmFmt()->GetDoc()->IsInDtor())
+    {
+        RemoveFromTable();
     }
 
     // ist die TabelleBox der letzte Client im FrameFormat, kann dieses

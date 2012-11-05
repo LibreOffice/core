@@ -35,6 +35,7 @@
 #include <com/sun/star/uno/Sequence.hxx>
 
 #include <com/sun/star/beans/PropertyValue.hpp>
+#include <comphelper/sequenceasvector.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/wldcrd.hxx>
 
@@ -490,7 +491,7 @@ void SvtSecurityOptions_Impl::LoadAuthors( void )
         Sequence< Any >         lValues = GetProperties( lAllAuthors );
         if( lValues.getLength() == c2 )
         {
-            m_seqTrustedAuthors.realloc( c1 );
+            comphelper::SequenceAsVector< SvtSecurityOptions::Certificate > v;
             SvtSecurityOptions::Certificate aCert( 3 );
             for( i1 = 0, i2 = 0 ; i1 < c1 ; ++i1 )
             {
@@ -500,8 +501,16 @@ void SvtSecurityOptions_Impl::LoadAuthors( void )
                 ++i2;
                 lValues[ i2 ] >>= aCert[ 2 ];
                 ++i2;
-                m_seqTrustedAuthors[ i1 ] = aCert;
+                // Filter out TrustedAuthor entries with empty RawData, which
+                // would cause an unexpected std::bad_alloc in
+                // SecurityEnvironment_NssImpl::createCertificateFromAscii and
+                // have been observed in the wild (fdo#55019):
+                if( !aCert[ 2 ].isEmpty() )
+                {
+                    v.push_back( aCert );
+                }
             }
+            m_seqTrustedAuthors = v.getAsConstList();
         }
     }
 }

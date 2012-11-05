@@ -67,6 +67,7 @@ sal_Bool XMLCharHeightHdl::importXML( const OUString& rStrImpValue, uno::Any& rV
         if (::sax::Converter::convertDouble(fSize, rStrImpValue,
                     eSrcUnit, util::MeasureUnit::POINT))
         {
+            fSize = ::std::max<double>(fSize, 1.0); // fdo#49876: 0pt is invalid
             rValue <<= (float)fSize;
             return sal_True;
         }
@@ -82,6 +83,7 @@ sal_Bool XMLCharHeightHdl::exportXML( OUString& rStrExpValue, const uno::Any& rV
     float fSize = 0;
     if( rValue >>= fSize )
     {
+        fSize = ::std::max<float>(fSize, 1.0f); // fdo#49876: 0pt is invalid
         ::sax::Converter::convertDouble(aOut, (double)fSize, true,
                 util::MeasureUnit::POINT, util::MeasureUnit::POINT);
         aOut.append( sal_Unicode('p'));

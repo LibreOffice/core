@@ -598,9 +598,6 @@ PyRef Runtime::any2PyObject (const Any &a ) const
         throw RuntimeException(buf.makeStringAndClear( ), Reference< XInterface > () );
     }
     }
-    //We shouldn't be here...
-    Py_INCREF( Py_None );
-    return Py_None;
 }
 
 static Sequence< Type > invokeGetTypes( const Runtime & r , PyObject * o )

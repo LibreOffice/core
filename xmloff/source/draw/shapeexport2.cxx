@@ -1452,6 +1452,24 @@ void XMLShapeExport::ImpExportConnectorShape(
         }
     }
 
+    // get matrix
+    ::basegfx::B2DHomMatrix aMatrix;
+    ImpExportNewTrans_GetB2DHomMatrix(aMatrix, xProps);
+
+    // decompose and correct about pRefPoint
+    ::basegfx::B2DTuple aTRScale;
+    double fTRShear(0.0);
+    double fTRRotate(0.0);
+    ::basegfx::B2DTuple aTRTranslate;
+    ImpExportNewTrans_DecomposeAndRefPoint(aMatrix, aTRScale, fTRShear,
+            fTRRotate, aTRTranslate, pRefPoint);
+
+    // fdo#49678: create and export ViewBox
+    awt::Point aPoint(0, 0);
+    awt::Size aSize(FRound(aTRScale.getX()), FRound(aTRScale.getY()));
+    SdXMLImExViewBox aViewBox(0, 0, aSize.Width, aSize.Height);
+    mrExport.AddAttribute(XML_NAMESPACE_SVG, XML_VIEWBOX, aViewBox.GetExportString());
+
     // write connector shape. Add Export later.
     sal_Bool bCreateNewline( (nFeatures & SEF_EXPORT_NO_WS) == 0 ); // #86116#/#92210#
     SvXMLElementExport aOBJ(mrExport, XML_NAMESPACE_DRAW, XML_CONNECTOR, bCreateNewline, sal_True);

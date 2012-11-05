@@ -438,6 +438,9 @@ bool ScRangeList::UpdateReference(
         }
     }
 
+    if(maRanges.empty())
+        return true;
+
     vector<ScRange*>::iterator itr = maRanges.begin(), itrEnd = maRanges.end();
     for (; itr != itrEnd; ++itr)
     {
@@ -460,6 +463,16 @@ bool ScRangeList::UpdateReference(
             pR->aEnd.Set( theCol2, theRow2, theTab2 );
         }
     }
+
+    if(eUpdateRefMode == URM_INSDEL)
+    {
+        if(nDx < 0 || nDy < 0)
+        {
+            size_t n = maRanges.size();
+            Join(*maRanges[n-1], true);
+        }
+    }
+
     return bChanged;
 }
 
@@ -1133,6 +1146,21 @@ const ScRange* ScRangeList::back() const
 void ScRangeList::push_back(ScRange* p)
 {
     maRanges.push_back(p);
+}
+
+ScAddress ScRangeList::GetTopLeftCorner() const
+{
+    if(empty())
+        return ScAddress();
+
+    ScAddress aAddr = maRanges[0]->aStart;
+    for(size_t i = 1, n = size(); i < n; ++i)
+    {
+        if(maRanges[i]->aStart < aAddr)
+            aAddr = maRanges[i]->aStart;
+    }
+
+    return aAddr;
 }
 
 // === ScRangePairList ========================================================

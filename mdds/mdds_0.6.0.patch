@@ -1,13 +1,5 @@
---- misc/mdds_0.5.3/include/mdds/mixed_type_matrix_def.inl	2011-07-13 13:26:27.000000000 -0600
-+++ misc/build/mdds_0.5.3/include/mdds/mixed_type_matrix_def.inl	2011-07-20 02:02:21.164198900 -0600
-@@ -44,7 +44,6 @@
-         default:
-             throw matrix_error("unknown density type");
-     }
--    return NULL;
- }
- 
- template<typename _String, typename _Flag>
+--- misc/mdds_0.6.1/include/mdds/mixed_type_matrix_def.inl	2011-07-13 13:26:27.000000000 -0600
++++ misc/build/mdds_0.6.1/include/mdds/mixed_type_matrix_def.inl	2011-07-20 02:02:21.164198900 -0600
 @@ -216,8 +216,8 @@
          // assignment to self.
          return;
@@ -19,8 +11,8 @@
      for (size_t i = 0; i < row_count; ++i)
          for (size_t j = 0; j < col_count; ++j)
              mp_storage->get_element(i, j) = r.mp_storage->get_element(i, j);
---- misc/mdds_0.5.3/include/mdds/mixed_type_matrix_storage_filled_linear.inl	2011-07-13 13:26:27.000000000 -0600
-+++ misc/build/mdds_0.5.3/include/mdds/mixed_type_matrix_storage_filled_linear.inl	2011-07-20 02:02:21.179798900 -0600
+--- misc/mdds_0.6.1/include/mdds/mixed_type_matrix_storage_filled_linear.inl	2011-07-13 13:26:27.000000000 -0600
++++ misc/build/mdds_0.6.1/include/mdds/mixed_type_matrix_storage_filled_linear.inl	2011-07-20 02:02:21.179798900 -0600
 @@ -354,8 +354,8 @@
          }
  
@@ -43,8 +35,8 @@
          for (size_t i = 0; i < min_rows; ++i)
          {
              for (size_t j = 0; j < min_cols; ++j)
---- misc/mdds_0.5.3/include/mdds/point_quad_tree.hpp	2011-07-13 13:26:27.000000000 -0600
-+++ misc/build/mdds_0.5.3/include/mdds/point_quad_tree.hpp	2011-07-20 02:04:36.088835900 -0600
+--- misc/mdds_0.6.1/include/mdds/point_quad_tree.hpp	2011-07-13 13:26:27.000000000 -0600
++++ misc/build/mdds_0.6.1/include/mdds/point_quad_tree.hpp	2011-07-20 02:04:36.088835900 -0600
 @@ -623,10 +623,10 @@
  template<typename _Key, typename _Data>
  void point_quad_tree<_Key,_Data>::insert(key_type x, key_type y, data_type data)

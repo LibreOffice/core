@@ -67,19 +67,13 @@ typedef boost::unordered_map
 // a page buffer, even if a read fails. It is up to the caller to determine
 // the correctness of the I/O.
 
-StgPage::StgPage( StgCache* p, short n )
+StgPage::StgPage( StgCache* , short n )
 {
     OSL_ENSURE( n >= 512, "Unexpected page size is provided!" );
-    pCache = p;
     nData  = n;
     bDirty = sal_False;
     nPage  = 0;
     pData  = new sal_uInt8[ nData ];
-    pNext1 =
-    pNext2 =
-    pLast1 =
-    pLast2 = NULL;
-    pOwner = NULL;
 }
 
 StgPage::~StgPage()
@@ -99,6 +93,11 @@ void StgPage::SetPage( short nOff, sal_Int32 nVal )
     }
 }
 
+bool StgPage::IsPageGreater( const StgPage *pA, const StgPage *pB )
+{
+    return pA->nPage < pB->nPage;
+}
+
 //////////////////////////////// class StgCache ////////////////////////////
 
 // The disk cache holds the cached sectors. The sector type differ according
@@ -115,7 +114,6 @@ StgCache::StgCache()
 {
     nRef = 0;
     pStrm = NULL;
-    pCur = pElem1 = NULL;
     nPageSize = 512;
     nError = SVSTREAM_OK;
     bMyStream = sal_False;
@@ -145,7 +143,6 @@ void StgCache::SetPhysPageSize( short n )
 }
 
 // Create a new cache element
-// pCur points to this element
 
 StgPage* StgCache::Create( sal_Int32 nPg )
 {
@@ -154,40 +151,10 @@ StgPage* StgCache::Create( sal_Int32 nPg )
     // For data security, clear the buffer contents
     memset( pElem->pData, 0, pElem->nData );
 
-    // insert to LRU
-    if( pCur )
-    {
-        pElem->pNext1 = pCur;
-        pElem->pLast1 = pCur->pLast1;
-        pElem->pNext1->pLast1 =
-        pElem->pLast1->pNext1 = pElem;
-    }
-    else
-        pElem->pNext1 = pElem->pLast1 = pElem;
     if( !pLRUCache )
         pLRUCache = new UsrStgPagePtr_Impl();
     (*(UsrStgPagePtr_Impl*)pLRUCache)[pElem->nPage] = pElem;
-    pCur = pElem;
 
-    // insert to Sorted
-    if( !pElem1 )
-        pElem1 = pElem->pNext2 = pElem->pLast2 = pElem;
-    else
-    {
-        StgPage* p = pElem1;
-        do
-        {
-            if( pElem->nPage < p->nPage )
-                break;
-            p = p->pNext2;
-        } while( p != pElem1 );
-        pElem->pNext2 = p;
-        pElem->pLast2 = p->pLast2;
-        pElem->pNext2->pLast2 =
-        pElem->pLast2->pNext2 = pElem;
-        if( p->nPage < pElem1->nPage )
-            pElem1 = pElem;
-    }
     return pElem;
 }
 
@@ -198,19 +165,8 @@ void StgCache::Erase( StgPage* pElem )
     OSL_ENSURE( pElem, "The pointer should not be NULL!" );
     if ( pElem )
     {
-        OSL_ENSURE( pElem->pNext1 && pElem->pLast1, "The pointers may not be NULL!" );
-        //remove from LRU
-        pElem->pNext1->pLast1 = pElem->pLast1;
-        pElem->pLast1->pNext1 = pElem->pNext1;
-        if( pCur == pElem )
-            pCur = ( pElem->pNext1 == pElem ) ? NULL : pElem->pNext1;
         if( pLRUCache )
             ((UsrStgPagePtr_Impl*)pLRUCache)->erase( pElem->nPage );
-        // remove from Sorted
-        pElem->pNext2->pLast2 = pElem->pLast2;
-        pElem->pLast2->pNext2 = pElem->pNext2;
-        if( pElem1 == pElem )
-            pElem1 = ( pElem->pNext2 == pElem ) ? NULL : pElem->pNext2;
         delete pElem;
     }
 }
@@ -219,16 +175,6 @@ void StgCache::Erase( StgPage* pElem )
 
 void StgCache::Clear()
 {
-    StgPage* pElem = pCur;
-    if( pCur ) do
-    {
-        StgPage* pDelete = pElem;
-        pElem = pElem->pNext1;
-        delete pDelete;
-    }
-    while( pCur != pElem );
-    pCur = NULL;
-    pElem1 = NULL;
     delete (UsrStgPagePtr_Impl*)pLRUCache;
     pLRUCache = NULL;
 }
@@ -245,19 +191,6 @@ StgPage* StgCache::Find( sal_Int32 nPage )
         // page found
         StgPage* pFound = (*aIt).second;
         OSL_ENSURE( pFound, "The pointer may not be NULL!" );
-
-        if( pFound != pCur )
-        {
-            OSL_ENSURE( pFound->pNext1 && pFound->pLast1, "The pointers may not be NULL!" );
-            // remove from LRU
-            pFound->pNext1->pLast1 = pFound->pLast1;
-            pFound->pLast1->pNext1 = pFound->pNext1;
-            // insert to LRU
-            pFound->pNext1 = pCur;
-            pFound->pLast1 = pCur->pLast1;
-            pFound->pNext1->pLast1 =
-            pFound->pLast1->pNext1 = pFound;
-        }
         return pFound;
     }
     return NULL;
@@ -304,52 +237,34 @@ StgPage* StgCache::Copy( sal_Int32 nNew, sal_Int32 nOld )
     return p;
 }
 
-// Flush the cache whose owner is given. NULL flushes all.
+// Historically this wrote pages in a sorted, ascending order;
+// continue that tradition.
 
 sal_Bool StgCache::Commit()
 {
-    StgPage* p = pElem1;
-    if( p ) do
+    UsrStgPagePtr_Impl *pCache = (UsrStgPagePtr_Impl*)pLRUCache;
+
+    std::vector< StgPage * > aToWrite;
+    for ( UsrStgPagePtr_Impl::iterator aIt = pCache->begin();
+          aIt != pCache->end(); ++aIt )
     {
-        if( p->bDirty )
-        {
-            sal_Bool b = Write( p->nPage, p->pData, 1 );
-            if( !b )
-                return sal_False;
-            p->bDirty = sal_False;
-        }
-        p = p->pNext2;
-    } while( p != pElem1 );
+        if ( aIt->second->bDirty )
+            aToWrite.push_back( aIt->second );
+    }
+
+    std::sort( aToWrite.begin(), aToWrite.end(), StgPage::IsPageGreater );
+    for (std::vector< StgPage * >::iterator aWr = aToWrite.begin();
+         aWr != aToWrite.end(); ++aWr)
+    {
+        StgPage *pPage = *aWr;
+        if ( !Write( pPage->GetPage(), pPage->GetData(), 1 ) )
+            return sal_False;
+        pPage->bDirty = sal_False;
+    }
+
     pStrm->Flush();
     SetError( pStrm->GetError() );
-#ifdef CHECK_DIRTY
-    p = pElem1;
-    if( p ) do
-    {
-        if( p->bDirty )
-        {
-            ErrorBox( NULL, WB_OK, String("SO2: Dirty Block in Ordered List") ).Execute();
-            sal_Bool b = Write( p->nPage, p->pData, 1 );
-            if( !b )
-                return sal_False;
-            p->bDirty = sal_False;
-        }
-        p = p->pNext2;
-    } while( p != pElem1 );
-    p = pElem1;
-    if( p ) do
-    {
-        if( p->bDirty )
-        {
-            ErrorBox( NULL, WB_OK, String("SO2: Dirty Block in LRU List") ).Execute();
-            sal_Bool b = Write( p->nPage, p->pData, 1 );
-            if( !b )
-                return sal_False;
-            p->bDirty = sal_False;
-        }
-        p = p->pNext1;
-    } while( p != pElem1 );
-#endif
+
     return sal_True;
 }
 

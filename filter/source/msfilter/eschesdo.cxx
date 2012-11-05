@@ -208,7 +208,7 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
 
         if( ( rObj.ImplGetPropertyValue( ::rtl::OUString( "IsFontwork" ) ) &&
             ::cppu::any2bool( rObj.GetUsrAny() ) ) ||
-            rObj.GetType().EqualsAscii( "drawing.Measure" ) || rObj.GetType().EqualsAscii( "drawing.Caption" ) )
+            rObj.GetType().EqualsAscii( "drawing.Measure" ) )
         {
             rObj.SetType( String( RTL_CONSTASCII_STRINGPARAM(
                                 "drawing.dontknow" ),
@@ -612,6 +612,14 @@ sal_uInt32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
             ADD_SHAPE( ESCHER_ShpInst_PictureFrame, 0xa00 );
 
                 if ( aPropOpt.CreateGraphicProperties( rObj.mXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "Bitmap" ) ), sal_False ) )
+                aPropOpt.AddOpt( ESCHER_Prop_LockAgainstGrouping, 0x800080 );
+        }
+        else if ( rObj.GetType().EqualsAscii( "drawing.Caption" ))
+        {
+            rObj.SetAngle( 0 );
+            mpEscherEx->OpenContainer( ESCHER_SpContainer );
+            ADD_SHAPE( ESCHER_ShpInst_TextBox, 0xa00 );
+            if ( aPropOpt.CreateGraphicProperties( rObj.mXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "MetaFile" ) ), sal_False ) )
                 aPropOpt.AddOpt( ESCHER_Prop_LockAgainstGrouping, 0x800080 );
         }
         else if ( rObj.GetType().EqualsAscii( "drawing.dontknow" ))

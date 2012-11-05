@@ -76,7 +76,7 @@ public:
     virtual int ShowNativeMessageBox( const rtl::OUString& rTitle,
                                       const rtl::OUString& rMessage,
                                       int nButtonCombination,
-                                      int nDefaultButton);
+                                      int nDefaultButton, bool bUseResources);
     bool initMonitors();
     // discards monitorinfo; used by WM_DISPLAYCHANGED handler
     void clearMonitors();

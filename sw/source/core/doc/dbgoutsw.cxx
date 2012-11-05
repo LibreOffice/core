@@ -973,12 +973,9 @@ String lcl_TokenType2Str(FormTokenType nType)
     case TOKEN_END:
         return String("END", RTL_TEXTENCODING_ASCII_US);
     default:
+        OSL_FAIL("should not be reached");
         return String("??", RTL_TEXTENCODING_ASCII_US);
     }
-
-    OSL_FAIL("should not be reached");
-
-    return  String("??", RTL_TEXTENCODING_ASCII_US);
 }
 
 String lcl_dbg_out(const SwFormToken & rToken)

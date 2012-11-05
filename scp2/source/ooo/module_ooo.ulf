@@ -241,10 +241,10 @@ en-US = "Polish"
 [STR_DESC_MODULE_EXTENSION_DICTIONARY_PL]
 en-US = "Polish spelling dictionary, hyphenation rules, and thesaurus"
 
-[STR_NAME_MODULE_EXTENSION_DICTIONARY_PT]
+[STR_NAME_MODULE_EXTENSION_DICTIONARY_PT_BR]
 en-US = "Brazilian Portuguese"
 
-[STR_DESC_MODULE_EXTENSION_DICTIONARY_PT]
+[STR_DESC_MODULE_EXTENSION_DICTIONARY_PT_BR]
 en-US = "Brazilian Portuguese spelling Dictionary (1990 Spelling Agreement), and hyphenation rules"
 
 [STR_NAME_MODULE_EXTENSION_DICTIONARY_PT_PT]

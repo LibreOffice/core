@@ -106,9 +106,13 @@ rtl::OUString AquaSalSystem::GetDisplayScreenName( unsigned int nScreen )
    return aRet;
 }
 
-static NSString* getStandardString( int nButtonId )
+static NSString* getStandardString( int nButtonId, bool bUseResources )
 {
-    rtl::OUString aText( Button::GetStandardText( nButtonId ) );
+    rtl::OUString aText;
+    if( bUseResources )
+    {
+        aText = Button::GetStandardText( nButtonId );
+    }
     if( aText.isEmpty() ) // this is for bad cases, we might be missing the vcl resource
     {
         switch( nButtonId )
@@ -127,7 +131,7 @@ static NSString* getStandardString( int nButtonId )
 int AquaSalSystem::ShowNativeMessageBox( const rtl::OUString& rTitle,
                                         const rtl::OUString& rMessage,
                                         int nButtonCombination,
-                                        int nDefaultButton)
+                                        int nDefaultButton, bool bUseResources)
 {
     NSString* pTitle = CreateNSString( rTitle );
     NSString* pMessage = CreateNSString( rMessage );
@@ -166,11 +170,14 @@ int AquaSalSystem::ShowNativeMessageBox( const rtl::OUString& rTitle,
             if( aButtonIds[nC].nDefaultButton == nDefaultButton )
             {
                 if( aButtonIds[nC].nTextIds[0] != -1 )
-                    pDefText = getStandardString( aButtonIds[nC].nTextIds[0] );
+                    pDefText = getStandardString(
+                        aButtonIds[nC].nTextIds[0], bUseResources );
                 if( aButtonIds[nC].nTextIds[1] != -1 )
-                    pAltText = getStandardString( aButtonIds[nC].nTextIds[1] );
+                    pAltText = getStandardString(
+                        aButtonIds[nC].nTextIds[1], bUseResources );
                 if( aButtonIds[nC].nTextIds[2] != -1 )
-                    pOthText = getStandardString( aButtonIds[nC].nTextIds[2] );
+                    pOthText = getStandardString(
+                        aButtonIds[nC].nTextIds[2], bUseResources );
                 break;
             }
         }

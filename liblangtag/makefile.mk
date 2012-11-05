@@ -37,6 +37,7 @@ PATCH_FILES=liblangtag-0.2-0001-Fix-a-memory-leak.patch
 PATCH_FILES+=liblangtag-0.2-0002-Fix-invalid-memory-access.patch
 PATCH_FILES+=liblangtag-0.2-configure.patch
 PATCH_FILES+=liblangtag-0.2-datadir.patch
+PATCH_FILES+=liblangtag-0.2-xmlCleanupParser.patch
 
 CONFIGURE_DIR=.
 BUILD_DIR=$(CONFIGURE_DIR)
@@ -72,6 +73,14 @@ CONFIGURE_ACTION=$(AUGMENT_LIBRARY_PATH) .$/configure
 BUILD_ACTION=$(AUGMENT_LIBRARY_PATH) $(GNUMAKE) -j$(EXTMAXPROCESS) && \
 			 $(AUGMENT_LIBRARY_PATH) $(GNUMAKE) install
 
+.IF "$(SYSTEM_LIBXML)"!="YES" || "$(SYSTEM_GLIB)"!="YES"
+.IF "$(OS)"=="FREEBSD" || "$(OS)"=="LINUX"
+CONFIGURE_FLAGS+= \
+ LDFLAGS=-Wl,-z,origin\ -Wl,-rpath,\'\$$\$$ORIGIN:\$$\$$ORIGIN/../ure-link/lib\'
+.ELIF "$(OS)"=="SOLARIS"
+CONFIGURE_FLAGS+= LDFLAGS=-Wl,-R\'\$$\$$ORIGIN:\$$\$$ORIGIN/../ure-link/lib\'
+.END
+.END
 
 .IF "$(GUI)"=="WNT"
 .IF "$(COM)"=="GCC"
