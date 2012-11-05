@@ -34,8 +34,8 @@ enum SbiSymScope { SbLOCAL, SbPARAM, SbPUBLIC, SbGLOBAL, SbRTL };
 // makes sure that they don't exist twice.
 
 class SbiStringPool {
-    const rtl::OUString aEmpty;
-    std::vector<rtl::OUString> aData;
+    const OUString aEmpty;
+    std::vector<OUString> aData;
     SbiParser* pParser;
 public:
     SbiStringPool( SbiParser* );
@@ -43,9 +43,9 @@ public:
     sal_uInt32 GetSize() const { return aData.size(); }
     // From 8.4.1999: default changed to true because of #64236 -
     // change it back to false when the bug is cleanly removed.
-    short Add( const rtl::OUString&, bool=true );
+    short Add( const OUString&, bool=true );
     short Add( double, SbxDataType );
-    const rtl::OUString& Find( sal_uInt32 ) const;
+    const OUString& Find( sal_uInt32 ) const;
     SbiParser* GetParser() { return pParser; }
 };
 
@@ -78,16 +78,16 @@ public:
     void   SetScope( SbiSymScope s )    { eScope = s;       }
     SbiParser* GetParser()              { return pParser;   }
 
-    SbiSymDef* AddSym( const String& );
-    SbiProcDef* AddProc( const String& );
+    SbiSymDef* AddSym( const OUString& );
+    SbiProcDef* AddProc( const OUString& );
     void Add( SbiSymDef* );
-    SbiSymDef* Find( const String& ) const; // variable name
+    SbiSymDef* Find( const OUString& ) const; // variable name
     SbiSymDef* FindId( sal_uInt16 ) const;
     SbiSymDef* Get( sal_uInt16 ) const;     // find variable per position
     SbiSymDef* First(), *Next();            // iterators
 
-    sal_uInt32 Define( const String& );
-    sal_uInt32 Reference( const String& );
+    sal_uInt32 Define( const OUString& );
+    sal_uInt32 Reference( const OUString& );
     void   CheckRefs();
 };
 
@@ -95,7 +95,7 @@ public:
 class SbiSymDef {                   // general symbol entry
     friend class SbiSymPool;
 protected:
-    String     aName;
+    OUString     aName;
     SbxDataType eType;
     SbiSymPool* pIn;                // parent pool
     SbiSymPool* pPool;              // pool for sub-elements
@@ -119,21 +119,21 @@ protected:
     sal_uInt16     nDefaultId;          // Symbol number of default value
     short      nFixedStringLength;  // String length in: Dim foo As String*Length
 public:
-    SbiSymDef( const String& );
+    SbiSymDef( const OUString& );
     virtual ~SbiSymDef();
     virtual SbiProcDef* GetProcDef();
     virtual SbiConstDef* GetConstDef();
 
     SbxDataType GetType() const { return eType;     }
     virtual void SetType( SbxDataType );
-    const String& GetName();
+    const OUString& GetName();
     SbiSymScope GetScope() const;
-    sal_uInt16     GetProcId() const{ return nProcId;   }
-    sal_uInt32     GetAddr() const  { return nChain;    }
-    sal_uInt16     GetId() const    { return nId;       }
-    sal_uInt16     GetTypeId() const{ return nTypeId;   }
+    sal_uInt16 GetProcId() const{ return nProcId;   }
+    sal_uInt32 GetAddr() const  { return nChain;    }
+    sal_uInt16 GetId() const    { return nId;       }
+    sal_uInt16 GetTypeId() const{ return nTypeId;   }
     void       SetTypeId( sal_uInt16 n ) { nTypeId = n; eType = SbxOBJECT; }
-    sal_uInt16     GetPos() const   { return nPos;      }
+    sal_uInt16 GetPos() const   { return nPos;      }
     void       SetLen( short n ){ nLen = n;         }
     short      GetLen() const   { return nLen;      }
     void       SetDims( short n ) { nDims = n;      }
@@ -143,14 +143,13 @@ public:
     void       SetParamArray()  { bParamArray = true;       }
     void       SetWithEvents()  { bWithEvents = true;       }
     void       SetWithBrackets(){ bWithBrackets = true;     }
-    void       SetByVal( bool bByVal_ = true )
-                { bByVal = bByVal_; }
+    void       SetByVal( bool bByVal_ = true ) { bByVal = bByVal_; }
     void       SetStatic( bool bAsStatic = true )      { bStatic = bAsStatic;  }
     void       SetNew()         { bNew = true;      }
     void       SetDefinedAs()   { bAs = true;       }
     void       SetGlobal(bool b){ bGlobal = b;  }
     void       SetDefaultId( sal_uInt16 n ) { nDefaultId = n; }
-    sal_uInt16     GetDefaultId( void ) { return nDefaultId; }
+    sal_uInt16 GetDefaultId( void ) { return nDefaultId; }
     bool       IsOptional() const{ return bOpt;     }
     bool       IsParamArray() const{ return bParamArray; }
     bool       IsWithEvents() const{ return bWithEvents; }
@@ -175,36 +174,36 @@ private:
 class SbiProcDef : public SbiSymDef {   // procedure definition (from basic):
     SbiSymPool aParams;
     SbiSymPool aLabels;             // local jump targets
-    String aLibName;
-    String aAlias;
+    OUString aLibName;
+    OUString aAlias;
     sal_uInt16 nLine1, nLine2;      // line area
     PropertyMode mePropMode;        // Marks if this is a property procedure and which
-    String maPropName;              // Property name if property procedure (!= proc name)
+    OUString maPropName;              // Property name if property procedure (!= proc name)
     bool   bCdecl  : 1;             // true: CDECL given
     bool   bPublic : 1;             // true: proc is PUBLIC
     bool   mbProcDecl : 1;          // true: instanciated by SbiParser::ProcDecl
 public:
-    SbiProcDef( SbiParser*, const String&, bool bProcDecl=false );
+    SbiProcDef( SbiParser*, const OUString&, bool bProcDecl=false );
     virtual ~SbiProcDef();
     virtual SbiProcDef* GetProcDef();
     virtual void SetType( SbxDataType );
     SbiSymPool& GetParams()         { return aParams;  }
     SbiSymPool& GetLabels()         { return aLabels;  }
     SbiSymPool& GetLocals()         { return GetPool();}
-    String& GetLib()                { return aLibName; }
-    String& GetAlias()              { return aAlias;   }
+    OUString& GetLib()              { return aLibName; }
+    OUString& GetAlias()            { return aAlias;   }
     void SetPublic( bool b )        { bPublic = b;     }
     bool IsPublic() const           { return bPublic;  }
     void SetCdecl( bool b = true)   { bCdecl = b;      }
     bool IsCdecl() const            { return bCdecl;   }
     bool IsUsedForProcDecl() const  { return mbProcDecl; }
-    void SetLine1( sal_uInt16 n )       { nLine1 = n;      }
-    sal_uInt16 GetLine1() const         { return nLine1;   }
-    void SetLine2( sal_uInt16 n )       { nLine2 = n;      }
-    sal_uInt16 GetLine2() const         { return nLine2;   }
+    void SetLine1( sal_uInt16 n )   { nLine1 = n;      }
+    sal_uInt16 GetLine1() const     { return nLine1;   }
+    void SetLine2( sal_uInt16 n )   { nLine2 = n;      }
+    sal_uInt16 GetLine2() const     { return nLine2;   }
     PropertyMode getPropertyMode()  { return mePropMode; }
     void setPropertyMode( PropertyMode ePropMode );
-    const String& GetPropName()     { return maPropName; }
+    const OUString& GetPropName()     { return maPropName; }
 
     // Match with a forward-declaration. The parameter names are
     // compared and the forward declaration is replaced by this
@@ -218,15 +217,15 @@ private:
 class SbiConstDef : public SbiSymDef
 {
     double nVal;
-    String aVal;
+    OUString aVal;
 public:
-    SbiConstDef( const String& );
+    SbiConstDef( const OUString& );
     virtual ~SbiConstDef();
     virtual SbiConstDef* GetConstDef();
     void Set( double, SbxDataType );
-    void Set( const String& );
+    void Set( const OUString& );
     double GetValue()           { return nVal; }
-    const String& GetString()   { return aVal; }
+    const OUString& GetString() { return aVal; }
 };
 
 

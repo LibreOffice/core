@@ -405,27 +405,18 @@ sal_Bool SbxValue::Get( SbxValues& rRes ) const
     return bRes;
 }
 
-const XubString& SbxValue::GetString() const
-{
-    SbxValues aRes;
-    aRes.eType = SbxSTRING;
-    if( Get( aRes ) )
-        ((SbxValue*) this)->aToolString = *aRes.pOUString;
-    else
-        ((SbxValue*) this)->aToolString.Erase();
-
-    return aToolString;
-}
-
-const XubString& SbxValue::GetCoreString() const
+const OUString& SbxValue::GetCoreString() const
 {
     SbxValues aRes;
     aRes.eType = SbxCoreSTRING;
     if( Get( aRes ) )
+    {
         ((SbxValue*) this)->aToolString = *aRes.pOUString;
+    }
     else
-        ((SbxValue*) this)->aToolString.Erase();
-
+    {
+        ((SbxValue*) this)->aToolString = "";
+    }
     return aToolString;
 }
 
@@ -816,7 +807,7 @@ sal_Bool SbxValue::SetType( SbxDataType t )
                         sal_uInt16 nSlotId = pThisVar
                                     ? ( (sal_Int16) ( pThisVar->GetUserData() & 0xFFFF ) )
                                     : 0;
-                        DBG_ASSERT( nSlotId != 5345 || pThisVar->GetName().EqualsAscii("Parent"),
+                        DBG_ASSERT( nSlotId != 5345 || pThisVar->GetName().equalsAscii("Parent"),
                                     "SID_PARENTOBJECT heisst nicht 'Parent'" );
                         sal_Bool bParentProp = 5345 == nSlotId;
                         if ( !bParentProp )

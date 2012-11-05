@@ -26,7 +26,7 @@
 
 
 #include <vector>
-typedef ::std::vector< String > StringVector;
+typedef ::std::vector< OUString > StringVector;
 
 struct SbiParseStack;
 
@@ -82,7 +82,7 @@ public:
     SbiExprNode* GetWithVar();
 
     // from 31.3.1996, search symbol in the runtime-library
-    SbiSymDef* CheckRTLForSym( const String& rSym, SbxDataType eType );
+    SbiSymDef* CheckRTLForSym( const OUString& rSym, SbxDataType eType );
     void AddConstants( void );
 
     bool HasGlobalCode();

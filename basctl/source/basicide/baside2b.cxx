@@ -358,7 +358,7 @@ void EditorWindow::RequestHelp( const HelpEvent& rHEvt )
                             if ( !aHelpText.Len() )     // name is not copied with the passed parameters
                                 aHelpText = aWord;
                             aHelpText += '=';
-                            aHelpText += pVar->GetString();
+                            aHelpText += pVar->GetOUString();
                         }
                     }
                     if ( aHelpText.Len() )
@@ -1567,7 +1567,7 @@ void StackWindow::UpdateCalls()
                 {
                     SbxVariable* pVar = pParams->Get( nParam );
                     DBG_ASSERT( pVar, "Parameter?!" );
-                    if ( pVar->GetName().Len() )
+                    if ( !pVar->GetName().isEmpty() )
                     {
                         aEntry += pVar->GetName();
                     }
@@ -1586,7 +1586,9 @@ void StackWindow::UpdateCalls()
                         aEntry += OUString( "..." );
                     }
                     else if( eType != SbxOBJECT )
-                        aEntry += pVar->GetString();
+                    {
+                        aEntry += pVar->GetOUString();
+                    }
                     if ( nParam < ( pParams->Count() - 1 ) )
                     {
                         aEntry += OUString( ", " );
@@ -2181,8 +2183,10 @@ void WatchTreeListBox::UpdateWatches( bool bBasicStopped )
                     bool bString = ((sal_uInt8)eType == (sal_uInt8)SbxSTRING);
                     OUString aStrStr( "\"" );
                     if( bString )
+                    {
                         aWatchStr += aStrStr;
-                    aWatchStr += pVar->GetString();
+                    }
+                    aWatchStr += pVar->GetOUString();
                     if( bString )
                     {
                         aWatchStr += aStrStr;

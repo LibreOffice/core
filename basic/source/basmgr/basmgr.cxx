@@ -143,17 +143,17 @@ typedef ::cppu::WeakImplHelper1< container::XContainerListener > ContainerListen
 class BasMgrContainerListenerImpl: public ContainerListenerHelper
 {
     BasicManager* mpMgr;
-    ::rtl::OUString maLibName;      // empty -> no lib, but lib container
+    OUString maLibName;      // empty -> no lib, but lib container
 
 public:
-    BasMgrContainerListenerImpl( BasicManager* pMgr, ::rtl::OUString aLibName )
+    BasMgrContainerListenerImpl( BasicManager* pMgr, OUString aLibName )
         : mpMgr( pMgr )
         , maLibName( aLibName ) {}
 
     static void insertLibraryImpl( const uno::Reference< script::XLibraryContainer >& xScriptCont, BasicManager* pMgr,
-        uno::Any aLibAny, ::rtl::OUString aLibName );
+                                   uno::Any aLibAny, OUString aLibName );
     static void addLibraryModulesImpl( BasicManager* pMgr, uno::Reference< container::XNameAccess > xLibNameAccess,
-        ::rtl::OUString aLibName );
+                                       OUString aLibName );
 
 
     // XEventListener
@@ -175,7 +175,7 @@ public:
 //============================================================================
 
 void BasMgrContainerListenerImpl::insertLibraryImpl( const uno::Reference< script::XLibraryContainer >& xScriptCont,
-    BasicManager* pMgr, uno::Any aLibAny, ::rtl::OUString aLibName )
+    BasicManager* pMgr, uno::Any aLibAny, OUString aLibName )
 {
     Reference< container::XNameAccess > xLibNameAccess;
     aLibAny >>= xLibNameAccess;
@@ -208,21 +208,21 @@ void BasMgrContainerListenerImpl::insertLibraryImpl( const uno::Reference< scrip
 
 
 void BasMgrContainerListenerImpl::addLibraryModulesImpl( BasicManager* pMgr,
-    uno::Reference< container::XNameAccess > xLibNameAccess, ::rtl::OUString aLibName )
+    uno::Reference< container::XNameAccess > xLibNameAccess, OUString aLibName )
 {
-    uno::Sequence< ::rtl::OUString > aModuleNames = xLibNameAccess->getElementNames();
+    uno::Sequence< OUString > aModuleNames = xLibNameAccess->getElementNames();
     sal_Int32 nModuleCount = aModuleNames.getLength();
 
     StarBASIC* pLib = pMgr->GetLib( aLibName );
     DBG_ASSERT( pLib, "BasMgrContainerListenerImpl::addLibraryModulesImpl: Unknown lib!");
     if( pLib )
     {
-        const ::rtl::OUString* pNames = aModuleNames.getConstArray();
+        const OUString* pNames = aModuleNames.getConstArray();
         for( sal_Int32 j = 0 ; j < nModuleCount ; j++ )
         {
-            ::rtl::OUString aModuleName = pNames[ j ];
+            OUString aModuleName = pNames[ j ];
             uno::Any aElement = xLibNameAccess->getByName( aModuleName );
-            ::rtl::OUString aMod;
+            OUString aMod;
             aElement >>= aMod;
             uno::Reference< vba::XVBAModuleInfo > xVBAModuleInfo( xLibNameAccess, uno::UNO_QUERY );
             if ( xVBAModuleInfo.is() && xVBAModuleInfo->hasModuleInfo( aModuleName ) )
@@ -257,7 +257,7 @@ void SAL_CALL BasMgrContainerListenerImpl::elementInserted( const container::Con
     throw( uno::RuntimeException )
 {
     sal_Bool bLibContainer = ( maLibName.getLength() == 0 );
-    ::rtl::OUString aName;
+    OUString aName;
     Event.Accessor >>= aName;
 
     if( bLibContainer )
@@ -282,7 +282,7 @@ void SAL_CALL BasMgrContainerListenerImpl::elementInserted( const container::Con
             SbModule* pMod = pLib->FindModule( aName );
             if( !pMod )
             {
-            ::rtl::OUString aMod;
+            OUString aMod;
             Event.Element >>= aMod;
                 uno::Reference< vba::XVBAModuleInfo > xVBAModuleInfo( Event.Source, uno::UNO_QUERY );
                 if ( xVBAModuleInfo.is() && xVBAModuleInfo->hasModuleInfo( aName ) )
@@ -303,7 +303,7 @@ void SAL_CALL BasMgrContainerListenerImpl::elementInserted( const container::Con
 void SAL_CALL BasMgrContainerListenerImpl::elementReplaced( const container::ContainerEvent& Event )
     throw( uno::RuntimeException )
 {
-    ::rtl::OUString aName;
+    OUString aName;
     Event.Accessor >>= aName;
 
     // Replace not possible for library container
@@ -316,7 +316,7 @@ void SAL_CALL BasMgrContainerListenerImpl::elementReplaced( const container::Con
     if( pLib )
     {
         SbModule* pMod = pLib->FindModule( aName );
-        ::rtl::OUString aMod;
+        OUString aMod;
         Event.Element >>= aMod;
 
         if( pMod )
@@ -333,7 +333,7 @@ void SAL_CALL BasMgrContainerListenerImpl::elementReplaced( const container::Con
 void SAL_CALL BasMgrContainerListenerImpl::elementRemoved( const container::ContainerEvent& Event )
     throw( uno::RuntimeException )
 {
-    ::rtl::OUString aName;
+    OUString aName;
     Event.Accessor >>= aName;
 
     sal_Bool bLibContainer = ( maLibName.getLength() == 0 );
@@ -380,7 +380,7 @@ class BasicLibInfo
 private:
     StarBASICRef    xLib;
     OUString          aLibName;
-    OUString          aStorageName;   // String is sufficient, unique at runtime
+    OUString          aStorageName;   // string is sufficient, unique at runtime
     OUString          aRelStorageName;
     OUString          aPassword;
 
@@ -529,8 +529,8 @@ BasicLibInfo::BasicLibInfo()
     bPasswordVerified   = sal_False;
     bDoLoad             = sal_False;
     mxScriptCont        = NULL;
-    aStorageName        = rtl::OUString(szImbedded);
-    aRelStorageName     = rtl::OUString(szImbedded);
+    aStorageName        = szImbedded;
+    aRelStorageName     = szImbedded;
 }
 
 BasicLibInfo* BasicLibInfo::Create( SotStorageStream& rSStream )
@@ -653,7 +653,7 @@ BasicManager::BasicManager( SotStorage& rStorage, const OUString& rBaseURL, Star
     else
     {
         ImpCreateStdLib( pParentFromStdLib );
-        if ( rStorage.IsStream( rtl::OUString(szOldManagerStream) ) )
+        if ( rStorage.IsStream( OUString(szOldManagerStream) ) )
             LoadOldBasicManager( rStorage );
     }
 }
@@ -786,8 +786,8 @@ BasicManager::BasicManager( StarBASIC* pSLib, OUString* pLibPath, bool bDocMgr )
     BasicLibInfo* pStdLibInfo = CreateLibInfo();
     pStdLibInfo->SetLib( pSLib );
     StarBASICRef xStdLib = pStdLibInfo->GetLib();
-    xStdLib->SetName(rtl::OUString(szStdLibName));
-    pStdLibInfo->SetLibName( rtl::OUString(szStdLibName) );
+    xStdLib->SetName(OUString(szStdLibName));
+    pStdLibInfo->SetLibName(OUString(szStdLibName) );
     pSLib->SetFlag( SBX_DONTSTORE | SBX_EXTSEARCH );
 
     // Save is only necessary if basic has changed
@@ -805,8 +805,8 @@ void BasicManager::ImpMgrNotLoaded( const OUString& rStorageName )
     BasicLibInfo* pStdLibInfo = CreateLibInfo();
     pStdLibInfo->SetLib( new StarBASIC( NULL, mbDocMgr ) );
     StarBASICRef xStdLib = pStdLibInfo->GetLib();
-    xStdLib->SetName( rtl::OUString(szStdLibName) );
-    pStdLibInfo->SetLibName( rtl::OUString(szStdLibName) );
+    xStdLib->SetName( OUString(szStdLibName) );
+    pStdLibInfo->SetLibName( OUString(szStdLibName) );
     xStdLib->SetFlag( SBX_DONTSTORE | SBX_EXTSEARCH );
     xStdLib->SetModified( sal_False );
 }
@@ -817,8 +817,8 @@ void BasicManager::ImpCreateStdLib( StarBASIC* pParentFromStdLib )
     BasicLibInfo* pStdLibInfo = CreateLibInfo();
     StarBASIC* pStdLib = new StarBASIC( pParentFromStdLib, mbDocMgr );
     pStdLibInfo->SetLib( pStdLib );
-    pStdLib->SetName( rtl::OUString(szStdLibName) );
-    pStdLibInfo->SetLibName( rtl::OUString(szStdLibName) );
+    pStdLib->SetName( OUString(szStdLibName) );
+    pStdLibInfo->SetLibName( OUString(szStdLibName) );
     pStdLib->SetFlag( SBX_DONTSTORE | SBX_EXTSEARCH );
 }
 
@@ -898,7 +898,7 @@ void BasicManager::LoadBasicManager( SotStorage& rStorage, const OUString& rBase
         // Libs from external files should be loaded only when necessary.
         // But references are loaded at once, otherwise some big customers get into trouble
         if ( bLoadLibs && pInfo->DoLoad() &&
-            ( ( !pInfo->IsExtern() ) || ( pInfo->IsReference() ) ) )
+            ( !pInfo->IsExtern() ||  pInfo->IsReference()))
         {
             ImpLoadLibrary( pInfo, &rStorage );
         }
@@ -1144,7 +1144,7 @@ sal_Bool BasicManager::ImpLoadLibrary( BasicLibInfo* pLibInfo, SotStorage* pCurS
                         xBasicStream->GetStreamCharSet());
                     pLibInfo->SetPassword( aPassword );
                 }
-                xBasicStream->SetCryptMaskKey(rtl::OString());
+                xBasicStream->SetCryptMaskKey(OString());
                 CheckModules( pLibInfo->GetLib(), pLibInfo->IsReference() );
             }
             return bLoaded;
@@ -1203,7 +1203,7 @@ sal_Bool BasicManager::ImplLoadBasic( SvStream& rStrm, StarBASICRef& rOldBasic )
     }
     if ( bProtected )
     {
-        rStrm.SetCryptMaskKey(rtl::OString());
+        rStrm.SetCryptMaskKey(OString());
     }
     return bLoaded;
 }
@@ -1275,7 +1275,7 @@ StarBASIC* BasicManager::AddLib( SotStorage& rStorage, const OUString& rLibName,
         else
         {
             pLibInfo->GetLib()->SetModified( sal_True ); // Must be saved after Add!
-            pLibInfo->SetStorageName( rtl::OUString(szImbedded) ); // Save in BasicManager-Storage
+            pLibInfo->SetStorageName( OUString(szImbedded) ); // Save in BasicManager-Storage
         }
     }
     else
@@ -1666,16 +1666,16 @@ uno::Any BasicManager::SetGlobalUNOConstant( const sal_Char* _pAsciiName, const 
     return aOldValue;
 }
 
-bool BasicManager::LegacyPsswdBinaryLimitExceeded( uno::Sequence< rtl::OUString >& _out_rModuleNames )
+bool BasicManager::LegacyPsswdBinaryLimitExceeded( uno::Sequence< OUString >& _out_rModuleNames )
 {
     try
     {
         uno::Reference< container::XNameAccess > xScripts( GetScriptLibraryContainer(), uno::UNO_QUERY_THROW );
         uno::Reference< script::XLibraryContainerPassword > xPassword( GetScriptLibraryContainer(), uno::UNO_QUERY_THROW );
 
-        uno::Sequence< ::rtl::OUString > aNames( xScripts->getElementNames() );
-        const ::rtl::OUString* pNames = aNames.getConstArray();
-        const ::rtl::OUString* pNamesEnd = aNames.getConstArray() + aNames.getLength();
+        uno::Sequence< OUString > aNames( xScripts->getElementNames() );
+        const OUString* pNames = aNames.getConstArray();
+        const OUString* pNamesEnd = aNames.getConstArray() + aNames.getLength();
         for ( ; pNames != pNamesEnd; ++pNames )
         {
             if( !xPassword->isLibraryPasswordProtected( *pNames ) )
@@ -1686,14 +1686,14 @@ bool BasicManager::LegacyPsswdBinaryLimitExceeded( uno::Sequence< rtl::OUString 
                 continue;
 
             uno::Reference< container::XNameAccess > xScriptLibrary( xScripts->getByName( *pNames ), uno::UNO_QUERY_THROW );
-            uno::Sequence< ::rtl::OUString > aElementNames( xScriptLibrary->getElementNames() );
+            uno::Sequence< OUString > aElementNames( xScriptLibrary->getElementNames() );
             sal_Int32 nLen = aElementNames.getLength();
 
-            uno::Sequence< ::rtl::OUString > aBigModules( nLen );
+            uno::Sequence< OUString > aBigModules( nLen );
             sal_Int32 nBigModules = 0;
 
-            const ::rtl::OUString* pElementNames = aElementNames.getConstArray();
-            const ::rtl::OUString* pElementNamesEnd = aElementNames.getConstArray() + aElementNames.getLength();
+            const OUString* pElementNames = aElementNames.getConstArray();
+            const OUString* pElementNamesEnd = aElementNames.getConstArray() + aElementNames.getLength();
             for ( ; pElementNames != pElementNamesEnd; ++pElementNames )
             {
                 SbModule* pMod = pBasicLib->FindModule( *pElementNames );
@@ -1790,50 +1790,56 @@ ErrCode BasicManager::ExecuteMacro( OUString const& i_fullyQualifiedName, SbxArr
     return nError;
 }
 
-ErrCode BasicManager::ExecuteMacro( OUString const& i_fullyQualifiedName, String const& i_commaSeparatedArgs, SbxValue* i_retValue )
+ErrCode BasicManager::ExecuteMacro( OUString const& i_fullyQualifiedName, OUString const& i_commaSeparatedArgs, SbxValue* i_retValue )
 {
     SbMethod* pMethod = lcl_queryMacro( this, i_fullyQualifiedName );
     if ( !pMethod )
+    {
         return ERRCODE_BASIC_PROC_UNDEFINED;
-
+    }
     // arguments must be quoted
-    String sQuotedArgs;
-    String sArgs( i_commaSeparatedArgs );
-    if ( sArgs.Len()<2 || sArgs.GetBuffer()[1] == '\"')
+    OUString sQuotedArgs;
+    OUStringBuffer sArgs( i_commaSeparatedArgs );
+    if ( sArgs.getLength()<2 || sArgs[1] == '\"')
+    {
         // no args or already quoted args
-        sQuotedArgs = sArgs;
+        sQuotedArgs = sArgs.makeStringAndClear();
+    }
     else
     {
         // quote parameters
-        sArgs.Erase( 0, 1 );
-        sArgs.Erase( sArgs.Len()-1, 1 );
+        sArgs.remove( 0, 1 );
+        sArgs.remove( sArgs.getLength() - 1, 1 );
 
-        sQuotedArgs = '(';
-
-        sal_Int32 nCount = comphelper::string::getTokenCount(sArgs, ',');
-        for (sal_Int32 n=0; n < nCount; ++n)
+        sQuotedArgs = "(";
+        OUString sArgs2 = sArgs.makeStringAndClear();
+        sal_Int32 nCount = comphelper::string::getTokenCount(sArgs2, ',');
+        for (sal_Int32 n = 0; n < nCount; ++n)
         {
-            sQuotedArgs += '\"';
-            sQuotedArgs += comphelper::string::getToken(sArgs, n, ',');
-            sQuotedArgs += '\"';
-            if ( n<nCount-1 )
-                sQuotedArgs += ',';
+            sQuotedArgs += "\"";
+            sQuotedArgs += comphelper::string::getToken(sArgs2, n, ',');
+            sQuotedArgs += "\"";
+            if ( n < nCount - 1 )
+            {
+                sQuotedArgs += ",";
+            }
         }
 
-        sQuotedArgs += ')';
+        sQuotedArgs += ")";
     }
 
     // add quoted arguments and do the call
-    rtl::OUString sCall = rtl::OUStringBuffer().
-        append('[').
-        append(pMethod->GetName()).
-        append(sQuotedArgs).
-        append(']').
-        makeStringAndClear();
+    OUString sCall;
+    sCall += "[";
+    sCall += pMethod->GetName();
+    sCall += sQuotedArgs;
+    sCall += "]";
 
     SbxVariable* pRet = pMethod->GetParent()->Execute( sCall );
     if ( pRet && ( pRet != pMethod ) )
+    {
         *i_retValue = *pRet;
+    }
     return SbxBase::GetError();
 }
 
@@ -1841,20 +1847,20 @@ ErrCode BasicManager::ExecuteMacro( OUString const& i_fullyQualifiedName, String
 
 class ModuleInfo_Impl : public ModuleInfoHelper
 {
-    ::rtl::OUString maName;
-    ::rtl::OUString maLanguage;
-    ::rtl::OUString maSource;
+    OUString maName;
+    OUString maLanguage;
+    OUString maSource;
 
 public:
-    ModuleInfo_Impl( const ::rtl::OUString& aName, const ::rtl::OUString& aLanguage, const ::rtl::OUString& aSource )
+    ModuleInfo_Impl( const OUString& aName, const OUString& aLanguage, const OUString& aSource )
         : maName( aName ), maLanguage( aLanguage), maSource( aSource ) {}
 
     // Methods XStarBasicModuleInfo
-    virtual ::rtl::OUString SAL_CALL getName() throw(uno::RuntimeException)
+    virtual OUString SAL_CALL getName() throw(uno::RuntimeException)
         { return maName; }
-    virtual ::rtl::OUString SAL_CALL getLanguage() throw(uno::RuntimeException)
+    virtual OUString SAL_CALL getLanguage() throw(uno::RuntimeException)
         { return maLanguage; }
-    virtual ::rtl::OUString SAL_CALL getSource() throw(uno::RuntimeException)
+    virtual OUString SAL_CALL getSource() throw(uno::RuntimeException)
         { return maSource; }
 };
 
@@ -1863,15 +1869,15 @@ public:
 
 class DialogInfo_Impl : public DialogInfoHelper
 {
-    ::rtl::OUString maName;
+    OUString maName;
     uno::Sequence< sal_Int8 > mData;
 
 public:
-    DialogInfo_Impl( const ::rtl::OUString& aName, uno::Sequence< sal_Int8 > Data )
+    DialogInfo_Impl( const OUString& aName, uno::Sequence< sal_Int8 > Data )
         : maName( aName ), mData( Data ) {}
 
     // Methods XStarBasicDialogInfo
-    virtual ::rtl::OUString SAL_CALL getName() throw(uno::RuntimeException)
+    virtual OUString SAL_CALL getName() throw(uno::RuntimeException)
         { return maName; }
     virtual uno::Sequence< sal_Int8 > SAL_CALL getData() throw(uno::RuntimeException)
         { return mData; }
@@ -1882,22 +1888,22 @@ public:
 
 class LibraryInfo_Impl : public LibraryInfoHelper
 {
-    ::rtl::OUString maName;
+    OUString maName;
     uno::Reference< container::XNameContainer > mxModuleContainer;
     uno::Reference< container::XNameContainer > mxDialogContainer;
-    ::rtl::OUString maPassword;
-    ::rtl::OUString maExternaleSourceURL;
-    ::rtl::OUString maLinkTargetURL;
+    OUString maPassword;
+    OUString maExternaleSourceURL;
+    OUString maLinkTargetURL;
 
 public:
     LibraryInfo_Impl
     (
-        const ::rtl::OUString& aName,
+        const OUString& aName,
         uno::Reference< container::XNameContainer > xModuleContainer,
         uno::Reference< container::XNameContainer > xDialogContainer,
-        const ::rtl::OUString& aPassword,
-        const ::rtl::OUString& aExternaleSourceURL,
-        const ::rtl::OUString& aLinkTargetURL
+        const OUString& aPassword,
+        const OUString& aExternaleSourceURL,
+        const OUString& aLinkTargetURL
     )
         : maName( aName )
         , mxModuleContainer( xModuleContainer )
@@ -1908,17 +1914,17 @@ public:
     {}
 
     // Methods XStarBasicLibraryInfo
-    virtual ::rtl::OUString SAL_CALL getName() throw(uno::RuntimeException)
+    virtual OUString SAL_CALL getName() throw(uno::RuntimeException)
         { return maName; }
     virtual uno::Reference< container::XNameContainer > SAL_CALL getModuleContainer() throw(uno::RuntimeException)
         { return mxModuleContainer; }
     virtual uno::Reference< container::XNameContainer > SAL_CALL getDialogContainer() throw(uno::RuntimeException)
         { return mxDialogContainer; }
-    virtual ::rtl::OUString SAL_CALL getPassword() throw(uno::RuntimeException)
+    virtual OUString SAL_CALL getPassword() throw(uno::RuntimeException)
         { return maPassword; }
-    virtual ::rtl::OUString SAL_CALL getExternalSourceURL() throw(uno::RuntimeException)
+    virtual OUString SAL_CALL getExternalSourceURL() throw(uno::RuntimeException)
         { return maExternaleSourceURL; }
-    virtual ::rtl::OUString SAL_CALL getLinkTargetURL() throw(uno::RuntimeException)
+    virtual OUString SAL_CALL getLinkTargetURL() throw(uno::RuntimeException)
         { return maLinkTargetURL; }
 };
 
@@ -1939,23 +1945,23 @@ public:
         throw(uno::RuntimeException);
 
     // Methods XNameAccess
-    virtual uno::Any SAL_CALL getByName( const ::rtl::OUString& aName )
+    virtual uno::Any SAL_CALL getByName( const OUString& aName )
         throw(container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException);
-    virtual uno::Sequence< ::rtl::OUString > SAL_CALL getElementNames()
+    virtual uno::Sequence< OUString > SAL_CALL getElementNames()
         throw(uno::RuntimeException);
-    virtual sal_Bool SAL_CALL hasByName( const ::rtl::OUString& aName )
+    virtual sal_Bool SAL_CALL hasByName( const OUString& aName )
         throw(uno::RuntimeException);
 
     // Methods XNameReplace
-    virtual void SAL_CALL replaceByName( const ::rtl::OUString& aName, const uno::Any& aElement )
+    virtual void SAL_CALL replaceByName( const OUString& aName, const uno::Any& aElement )
         throw(lang::IllegalArgumentException, container::NoSuchElementException,
               lang::WrappedTargetException, uno::RuntimeException);
 
     // Methods XNameContainer
-    virtual void SAL_CALL insertByName( const ::rtl::OUString& aName, const uno::Any& aElement )
+    virtual void SAL_CALL insertByName( const OUString& aName, const uno::Any& aElement )
         throw(lang::IllegalArgumentException, container::ElementExistException,
               lang::WrappedTargetException, uno::RuntimeException);
-    virtual void SAL_CALL removeByName( const ::rtl::OUString& Name )
+    virtual void SAL_CALL removeByName( const OUString& Name )
         throw(container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException);
 };
 
@@ -1975,7 +1981,7 @@ sal_Bool ModuleContainer_Impl::hasElements()
 }
 
 // Methods XNameAccess
-uno::Any ModuleContainer_Impl::getByName( const ::rtl::OUString& aName )
+uno::Any ModuleContainer_Impl::getByName( const OUString& aName )
     throw(container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
 {
     SbModule* pMod = mpLib ? mpLib->FindModule( aName ) : NULL;
@@ -1988,22 +1994,22 @@ uno::Any ModuleContainer_Impl::getByName( const ::rtl::OUString& aName )
     return aRetAny;
 }
 
-uno::Sequence< ::rtl::OUString > ModuleContainer_Impl::getElementNames()
+uno::Sequence< OUString > ModuleContainer_Impl::getElementNames()
     throw(uno::RuntimeException)
 {
     SbxArray* pMods = mpLib ? mpLib->GetModules() : NULL;
     sal_uInt16 nMods = pMods ? pMods->Count() : 0;
-    uno::Sequence< ::rtl::OUString > aRetSeq( nMods );
-    ::rtl::OUString* pRetSeq = aRetSeq.getArray();
+    uno::Sequence< OUString > aRetSeq( nMods );
+    OUString* pRetSeq = aRetSeq.getArray();
     for( sal_uInt16 i = 0 ; i < nMods ; i++ )
     {
         SbxVariable* pMod = pMods->Get( i );
-        pRetSeq[i] = ::rtl::OUString( pMod->GetName() );
+        pRetSeq[i] = OUString( pMod->GetName() );
     }
     return aRetSeq;
 }
 
-sal_Bool ModuleContainer_Impl::hasByName( const ::rtl::OUString& aName )
+sal_Bool ModuleContainer_Impl::hasByName( const OUString& aName )
     throw(uno::RuntimeException)
 {
     SbModule* pMod = mpLib ? mpLib->FindModule( aName ) : NULL;
@@ -2013,7 +2019,7 @@ sal_Bool ModuleContainer_Impl::hasByName( const ::rtl::OUString& aName )
 
 
 // Methods XNameReplace
-void ModuleContainer_Impl::replaceByName( const ::rtl::OUString& aName, const uno::Any& aElement )
+void ModuleContainer_Impl::replaceByName( const OUString& aName, const uno::Any& aElement )
     throw(lang::IllegalArgumentException, container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
 {
     removeByName( aName );
@@ -2022,24 +2028,28 @@ void ModuleContainer_Impl::replaceByName( const ::rtl::OUString& aName, const un
 
 
 // Methods XNameContainer
-void ModuleContainer_Impl::insertByName( const ::rtl::OUString& aName, const uno::Any& aElement )
+void ModuleContainer_Impl::insertByName( const OUString& aName, const uno::Any& aElement )
     throw(lang::IllegalArgumentException, container::ElementExistException, lang::WrappedTargetException, uno::RuntimeException)
 {
     uno::Type aModuleType = ::getCppuType( (const uno::Reference< script::XStarBasicModuleInfo > *)0 );
     uno::Type aAnyType = aElement.getValueType();
     if( aModuleType != aAnyType )
+    {
         throw lang::IllegalArgumentException();
+    }
     uno::Reference< script::XStarBasicModuleInfo > xMod;
     aElement >>= xMod;
     mpLib->MakeModule32( aName, xMod->getSource() );
 }
 
-void ModuleContainer_Impl::removeByName( const ::rtl::OUString& Name )
+void ModuleContainer_Impl::removeByName( const OUString& Name )
     throw(container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
 {
     SbModule* pMod = mpLib ? mpLib->FindModule( Name ) : NULL;
     if( !pMod )
+    {
         throw container::NoSuchElementException();
+    }
     mpLib->Remove( pMod );
 }
 
@@ -2086,21 +2096,21 @@ public:
         throw(uno::RuntimeException);
 
     // Methods XNameAccess
-    virtual uno::Any SAL_CALL getByName( const ::rtl::OUString& aName )
+    virtual uno::Any SAL_CALL getByName( const OUString& aName )
         throw(container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException);
-    virtual uno::Sequence< ::rtl::OUString > SAL_CALL getElementNames()
+    virtual uno::Sequence< OUString > SAL_CALL getElementNames()
         throw(uno::RuntimeException);
-    virtual sal_Bool SAL_CALL hasByName( const ::rtl::OUString& aName )
+    virtual sal_Bool SAL_CALL hasByName( const OUString& aName )
         throw(uno::RuntimeException);
 
     // Methods XNameReplace
-    virtual void SAL_CALL replaceByName( const ::rtl::OUString& aName, const uno::Any& aElement )
+    virtual void SAL_CALL replaceByName( const OUString& aName, const uno::Any& aElement )
         throw(lang::IllegalArgumentException, container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException);
 
     // Methods XNameContainer
-    virtual void SAL_CALL insertByName( const ::rtl::OUString& aName, const uno::Any& aElement )
+    virtual void SAL_CALL insertByName( const OUString& aName, const uno::Any& aElement )
         throw(lang::IllegalArgumentException, container::ElementExistException, lang::WrappedTargetException, uno::RuntimeException);
-    virtual void SAL_CALL removeByName( const ::rtl::OUString& Name )
+    virtual void SAL_CALL removeByName( const OUString& Name )
         throw(container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException);
 };
 
@@ -2132,7 +2142,7 @@ sal_Bool DialogContainer_Impl::hasElements()
 }
 
 // Methods XNameAccess
-uno::Any DialogContainer_Impl::getByName( const ::rtl::OUString& aName )
+uno::Any DialogContainer_Impl::getByName( const OUString& aName )
     throw(container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
 {
     SbxVariable* pVar = mpLib->GetObjects()->Find( aName, SbxCLASS_DONTCARE );
@@ -2151,13 +2161,13 @@ uno::Any DialogContainer_Impl::getByName( const ::rtl::OUString& aName )
     return aRetAny;
 }
 
-uno::Sequence< ::rtl::OUString > DialogContainer_Impl::getElementNames()
+uno::Sequence< OUString > DialogContainer_Impl::getElementNames()
     throw(uno::RuntimeException)
 {
     mpLib->GetAll( SbxCLASS_OBJECT );
     sal_Int16 nCount = mpLib->GetObjects()->Count();
-    uno::Sequence< ::rtl::OUString > aRetSeq( nCount );
-    ::rtl::OUString* pRetSeq = aRetSeq.getArray();
+    uno::Sequence< OUString > aRetSeq( nCount );
+    OUString* pRetSeq = aRetSeq.getArray();
     sal_Int32 nDialogCounter = 0;
 
     for( sal_Int16 nObj = 0; nObj < nCount ; nObj++ )
@@ -2165,7 +2175,7 @@ uno::Sequence< ::rtl::OUString > DialogContainer_Impl::getElementNames()
         SbxVariable* pVar = mpLib->GetObjects()->Get( nObj );
         if ( pVar->ISA( SbxObject ) && ( ((SbxObject*)pVar)->GetSbxId() == SBXID_DIALOG ) )
         {
-            pRetSeq[ nDialogCounter ] = ::rtl::OUString( pVar->GetName() );
+            pRetSeq[ nDialogCounter ] = OUString( pVar->GetName() );
             nDialogCounter++;
         }
     }
@@ -2173,7 +2183,7 @@ uno::Sequence< ::rtl::OUString > DialogContainer_Impl::getElementNames()
     return aRetSeq;
 }
 
-sal_Bool DialogContainer_Impl::hasByName( const ::rtl::OUString& aName )
+sal_Bool DialogContainer_Impl::hasByName( const OUString& aName )
     throw(uno::RuntimeException)
 {
     sal_Bool bRet = sal_False;
@@ -2188,7 +2198,7 @@ sal_Bool DialogContainer_Impl::hasByName( const ::rtl::OUString& aName )
 
 
 // Methods XNameReplace
-void DialogContainer_Impl::replaceByName( const ::rtl::OUString& aName, const uno::Any& aElement )
+void DialogContainer_Impl::replaceByName( const OUString& aName, const uno::Any& aElement )
     throw(lang::IllegalArgumentException, container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
 {
     removeByName( aName );
@@ -2197,21 +2207,23 @@ void DialogContainer_Impl::replaceByName( const ::rtl::OUString& aName, const un
 
 
 // Methods XNameContainer
-void DialogContainer_Impl::insertByName( const ::rtl::OUString& aName, const uno::Any& aElement )
+void DialogContainer_Impl::insertByName( const OUString& aName, const uno::Any& aElement )
     throw(lang::IllegalArgumentException, container::ElementExistException, lang::WrappedTargetException, uno::RuntimeException)
 {
     (void)aName;
     uno::Type aModuleType = ::getCppuType( (const uno::Reference< script::XStarBasicDialogInfo > *)0 );
     uno::Type aAnyType = aElement.getValueType();
     if( aModuleType != aAnyType )
+    {
         throw lang::IllegalArgumentException();
+    }
     uno::Reference< script::XStarBasicDialogInfo > xMod;
     aElement >>= xMod;
     SbxObjectRef xDialog = implCreateDialog( xMod->getData() );
     mpLib->Insert( xDialog );
 }
 
-void DialogContainer_Impl::removeByName( const ::rtl::OUString& Name )
+void DialogContainer_Impl::removeByName( const OUString& Name )
     throw(container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
 {
     (void)Name;
@@ -2243,21 +2255,21 @@ public:
         throw(uno::RuntimeException);
 
     // Methods XNameAccess
-    virtual uno::Any SAL_CALL getByName( const ::rtl::OUString& aName )
+    virtual uno::Any SAL_CALL getByName( const OUString& aName )
         throw(container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException);
-    virtual uno::Sequence< ::rtl::OUString > SAL_CALL getElementNames()
+    virtual uno::Sequence< OUString > SAL_CALL getElementNames()
         throw(uno::RuntimeException);
-    virtual sal_Bool SAL_CALL hasByName( const ::rtl::OUString& aName )
+    virtual sal_Bool SAL_CALL hasByName( const OUString& aName )
         throw(uno::RuntimeException);
 
     // Methods XNameReplace
-    virtual void SAL_CALL replaceByName( const ::rtl::OUString& aName, const uno::Any& aElement )
+    virtual void SAL_CALL replaceByName( const OUString& aName, const uno::Any& aElement )
         throw(lang::IllegalArgumentException, container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException);
 
     // Methods XNameContainer
-    virtual void SAL_CALL insertByName( const ::rtl::OUString& aName, const uno::Any& aElement )
+    virtual void SAL_CALL insertByName( const OUString& aName, const uno::Any& aElement )
         throw(lang::IllegalArgumentException, container::ElementExistException, lang::WrappedTargetException, uno::RuntimeException);
-    virtual void SAL_CALL removeByName( const ::rtl::OUString& Name )
+    virtual void SAL_CALL removeByName( const OUString& Name )
         throw(container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException);
 };
 
@@ -2279,7 +2291,7 @@ sal_Bool LibraryContainer_Impl::hasElements()
 }
 
 // Methods XNameAccess
-uno::Any LibraryContainer_Impl::getByName( const ::rtl::OUString& aName )
+uno::Any LibraryContainer_Impl::getByName( const OUString& aName )
     throw(container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
 {
     uno::Any aRetAny;
@@ -2295,16 +2307,19 @@ uno::Any LibraryContainer_Impl::getByName( const ::rtl::OUString& aName )
 
     BasicLibInfo* pLibInfo = mpMgr->FindLibInfo( pLib );
 
-    ::rtl::OUString aPassword = pLibInfo->GetPassword();
+    OUString aPassword = pLibInfo->GetPassword();
 
     // TODO Only provide extern info!
-    ::rtl::OUString aExternaleSourceURL;
-    ::rtl::OUString aLinkTargetURL;
+    OUString aExternaleSourceURL;
+    OUString aLinkTargetURL;
     if( pLibInfo->IsReference() )
+    {
         aLinkTargetURL = pLibInfo->GetStorageName();
+    }
     else if( pLibInfo->IsExtern() )
+    {
         aExternaleSourceURL = pLibInfo->GetStorageName();
-
+    }
     uno::Reference< script::XStarBasicLibraryInfo > xLibInfo = new LibraryInfo_Impl
     (
         aName,
@@ -2319,20 +2334,20 @@ uno::Any LibraryContainer_Impl::getByName( const ::rtl::OUString& aName )
     return aRetAny;
 }
 
-uno::Sequence< ::rtl::OUString > LibraryContainer_Impl::getElementNames()
+uno::Sequence< OUString > LibraryContainer_Impl::getElementNames()
     throw(uno::RuntimeException)
 {
     sal_uInt16 nLibs = mpMgr->GetLibCount();
-    uno::Sequence< ::rtl::OUString > aRetSeq( nLibs );
-    ::rtl::OUString* pRetSeq = aRetSeq.getArray();
+    uno::Sequence< OUString > aRetSeq( nLibs );
+    OUString* pRetSeq = aRetSeq.getArray();
     for( sal_uInt16 i = 0 ; i < nLibs ; i++ )
     {
-        pRetSeq[i] = ::rtl::OUString( mpMgr->GetLibName( i ) );
+        pRetSeq[i] = OUString( mpMgr->GetLibName( i ) );
     }
     return aRetSeq;
 }
 
-sal_Bool LibraryContainer_Impl::hasByName( const ::rtl::OUString& aName )
+sal_Bool LibraryContainer_Impl::hasByName( const OUString& aName )
     throw(uno::RuntimeException)
 {
     sal_Bool bRet = mpMgr->HasLib( aName );
@@ -2340,7 +2355,7 @@ sal_Bool LibraryContainer_Impl::hasByName( const ::rtl::OUString& aName )
 }
 
 // Methods XNameReplace
-void LibraryContainer_Impl::replaceByName( const ::rtl::OUString& aName, const uno::Any& aElement )
+void LibraryContainer_Impl::replaceByName( const OUString& aName, const uno::Any& aElement )
     throw(lang::IllegalArgumentException, container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
 {
     removeByName( aName );
@@ -2348,7 +2363,7 @@ void LibraryContainer_Impl::replaceByName( const ::rtl::OUString& aName, const u
 }
 
 // Methods XNameContainer
-void LibraryContainer_Impl::insertByName( const ::rtl::OUString& aName, const uno::Any& aElement )
+void LibraryContainer_Impl::insertByName( const OUString& aName, const uno::Any& aElement )
     throw(lang::IllegalArgumentException, container::ElementExistException, lang::WrappedTargetException, uno::RuntimeException)
 {
     (void)aName;
@@ -2356,7 +2371,7 @@ void LibraryContainer_Impl::insertByName( const ::rtl::OUString& aName, const un
     // TODO: Insert a complete Library?!
 }
 
-void LibraryContainer_Impl::removeByName( const ::rtl::OUString& Name )
+void LibraryContainer_Impl::removeByName( const OUString& Name )
     throw(container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
 {
     StarBASIC* pLib = mpMgr->GetLib( Name );
@@ -2386,13 +2401,13 @@ public:
     // Methods
     virtual uno::Reference< container::XNameContainer > SAL_CALL getLibraryContainer()
         throw(uno::RuntimeException);
-    virtual void SAL_CALL createLibrary( const ::rtl::OUString& LibName, const ::rtl::OUString& Password,
-        const ::rtl::OUString& ExternalSourceURL, const ::rtl::OUString& LinkTargetURL )
+    virtual void SAL_CALL createLibrary( const OUString& LibName, const OUString& Password,
+        const OUString& ExternalSourceURL, const OUString& LinkTargetURL )
             throw(container::ElementExistException, uno::RuntimeException);
-    virtual void SAL_CALL addModule( const ::rtl::OUString& LibraryName, const ::rtl::OUString& ModuleName,
-        const ::rtl::OUString& Language, const ::rtl::OUString& Source )
+    virtual void SAL_CALL addModule( const OUString& LibraryName, const OUString& ModuleName,
+        const OUString& Language, const OUString& Source )
             throw(container::NoSuchElementException, uno::RuntimeException);
-    virtual void SAL_CALL addDialog( const ::rtl::OUString& LibraryName, const ::rtl::OUString& DialogName,
+    virtual void SAL_CALL addDialog( const OUString& LibraryName, const OUString& DialogName,
         const uno::Sequence< sal_Int8 >& Data )
             throw(container::NoSuchElementException, uno::RuntimeException);
 };
@@ -2407,10 +2422,10 @@ uno::Reference< container::XNameContainer > SAL_CALL StarBasicAccess_Impl::getLi
 
 void SAL_CALL StarBasicAccess_Impl::createLibrary
 (
-    const ::rtl::OUString& LibName,
-    const ::rtl::OUString& Password,
-    const ::rtl::OUString& ExternalSourceURL,
-    const ::rtl::OUString& LinkTargetURL
+    const OUString& LibName,
+    const OUString& Password,
+    const OUString& ExternalSourceURL,
+    const OUString& LinkTargetURL
 )
     throw(container::ElementExistException, uno::RuntimeException)
 {
@@ -2424,10 +2439,10 @@ void SAL_CALL StarBasicAccess_Impl::createLibrary
 
 void SAL_CALL StarBasicAccess_Impl::addModule
 (
-    const ::rtl::OUString& LibraryName,
-    const ::rtl::OUString& ModuleName,
-    const ::rtl::OUString& Language,
-    const ::rtl::OUString& Source
+    const OUString& LibraryName,
+    const OUString& ModuleName,
+    const OUString& Language,
+    const OUString& Source
 )
     throw(container::NoSuchElementException, uno::RuntimeException)
 {
@@ -2442,8 +2457,8 @@ void SAL_CALL StarBasicAccess_Impl::addModule
 
 void SAL_CALL StarBasicAccess_Impl::addDialog
 (
-    const ::rtl::OUString& LibraryName,
-    const ::rtl::OUString& DialogName,
+    const OUString& LibraryName,
+    const OUString& DialogName,
     const uno::Sequence< sal_Int8 >& Data
 )
     throw(container::NoSuchElementException, uno::RuntimeException)

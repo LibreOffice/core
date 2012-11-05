@@ -60,7 +60,7 @@ static Sequence<Any> *lcl_docbasic_convertArgs( SbxArray& rArgs )
             switch( pVar->GetType() )
             {
             case SbxSTRING:
-                pUnoArgs[i] <<= OUString( pVar->GetString() );
+                pUnoArgs[i] <<= OUString( pVar->GetOUString() );
                 break;
             case SbxCHAR:
                 pUnoArgs[i] <<= (sal_Int16)pVar->GetChar() ;
@@ -97,8 +97,10 @@ bool SwDoc::ExecMacro( const SvxMacro& rMacro, String* pRet, SbxArray* pArgs )
 
             if( pRet && SbxNULL <  pRetValue->GetType() &&
                         SbxVOID != pRetValue->GetType() )
+            {
                 // valid value, so set it
-                *pRet = pRetValue->GetString();
+                *pRet = pRetValue->GetOUString();
+            }
         }
         break;
     case JAVASCRIPT:

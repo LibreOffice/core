@@ -70,23 +70,31 @@
         case SbxSTRING:
         case SbxLPSTR:
             if ( p->pOUString )
+            {
                 *aTmp.pOUString = *p->pOUString;
+            }
             break;
         case SbxOBJECT:
         {
             SbxValue* pVal = PTR_CAST(SbxValue,p->pObj);
             if( pVal )
-                aRes = pVal->GetString();
+            {
+                aRes = pVal->GetOUString();
+            }
             else if( p->pObj && p->pObj->IsFixed()
                     && (p->pObj->GetType() == (SbxARRAY | SbxBYTE )) )
             {
                 // convert byte array to string
                 SbxArray* pArr = PTR_CAST(SbxArray, p->pObj);
                 if( pArr )
+                {
                     aRes = ByteArrayToString( pArr );
+                }
             }
             else
+            {
                 SbxBase::SetError( SbxERR_NO_OBJECT );
+            }
             break;
         }
         case SbxERROR:

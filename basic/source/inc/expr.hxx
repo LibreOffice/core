@@ -46,7 +46,7 @@ struct SbVar {
 
 struct KeywordSymbolInfo
 {
-    ::rtl::OUString m_aKeywordSymbol;
+    OUString m_aKeywordSymbol;
     SbxDataType     m_eSbxDataType;
     SbiToken        m_eTok;
 };
@@ -94,7 +94,7 @@ class SbiExprNode {                  // operators (and operands)
         double nVal;                // numeric value
         SbVar  aVar;                // or variable
     };
-    String aStrVal;                 // #i59791/#i45570 Store string directly
+    OUString aStrVal;               // #i59791/#i45570 Store string directly
     SbiExprNode* pLeft;             // right branch
     SbiExprNode* pRight;            // right branch (NULL for unary ops)
     SbiExprNode* pWithParent;       // node, whose member is "this per with"
@@ -118,7 +118,7 @@ class SbiExprNode {                  // operators (and operands)
 public:
     SbiExprNode( void );
     SbiExprNode( SbiParser*, double, SbxDataType );
-    SbiExprNode( SbiParser*, const String& );
+    SbiExprNode( SbiParser*, const OUString& );
     SbiExprNode( SbiParser*, const SbiSymDef&, SbxDataType, SbiExprList* = NULL );
     SbiExprNode( SbiParser*, SbiExprNode*, SbiToken, SbiExprNode* );
     SbiExprNode( SbiParser*, SbiExprNode*, sal_uInt16 );    // #120061 TypeOf
@@ -141,7 +141,7 @@ public:
     SbiSymDef* GetRealVar();        // last variable in x.y.z
     SbiExprNode* GetRealNode();     // last node in x.y.z
     short GetDepth();               // compute a tree's depth
-    const String& GetString()       { return aStrVal; }
+    const OUString& GetString()     { return aStrVal; }
     short GetNumber()               { return (short)nVal; }
     SbiExprList* GetParameters()    { return aVar.pPar; }
     SbiExprListVector* GetMoreParameters()  { return aVar.pvMorePar; }
@@ -156,7 +156,7 @@ class SbiExpression {
     friend class SbiParameters;
     friend class SbiDimList;
 protected:
-    String        aArgName;
+    OUString      aArgName;
     SbiParser*    pParser;
     SbiExpression* pNext;            // link at parameter lists
     SbiExprNode*   pExpr;            // expression tree
@@ -187,7 +187,7 @@ public:
     SbiExpression( SbiParser*, double, SbxDataType = SbxDOUBLE );
     SbiExpression( SbiParser*, const SbiSymDef&, SbiExprList* = NULL );
    ~SbiExpression();
-    String& GetName()               { return aArgName;            }
+    OUString& GetName()             { return aArgName;            }
     void SetBased()                 { bBased = true;              }
     bool IsBased()                  { return bBased;              }
     void SetByVal()                 { bByVal = true;              }
@@ -198,7 +198,7 @@ public:
     bool IsVariable()               { return pExpr->IsVariable(); }
     bool IsLvalue()                 { return pExpr->IsLvalue();   }
     bool IsIntConstant()            { return pExpr->IsIntConst(); }
-    const String& GetString()       { return pExpr->GetString();  }
+    const OUString& GetString()     { return pExpr->GetString();  }
     SbiSymDef* GetVar()             { return pExpr->GetVar();     }
     SbiSymDef* GetRealVar()         { return pExpr->GetRealVar(); }
     SbiExprNode* GetExprNode()      { return pExpr; }
@@ -209,12 +209,12 @@ public:
 
 class SbiConstExpression : public SbiExpression {
     double nVal;
-    String aVal;
+    OUString aVal;
     SbxDataType eType;
 public:                             // numeric constant
     SbiConstExpression( SbiParser* );
     SbxDataType GetType() { return eType; }
-    const String& GetString() { return aVal; }
+    const OUString& GetString() { return aVal; }
     double GetValue() { return nVal; }
     short GetShortValue();
 };

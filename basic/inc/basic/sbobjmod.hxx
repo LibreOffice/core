@@ -40,8 +40,8 @@ protected:
 
 public:
     TYPEINFO();
-    SbObjModule( const String& rName, const com::sun::star::script::ModuleInfo& mInfo, bool bIsVbaCompatible );
-    virtual SbxVariable* Find( const rtl::OUString& rName, SbxClassType t );
+    SbObjModule( const OUString& rName, const com::sun::star::script::ModuleInfo& mInfo, bool bIsVbaCompatible );
+    virtual SbxVariable* Find( const OUString& rName, SbxClassType t );
 
     virtual void SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
                              const SfxHint& rHint, const TypeId& rHintType );
@@ -59,21 +59,21 @@ class BASIC_DLLPUBLIC SbUserFormModule : public SbObjModule
     ::rtl::Reference< FormObjEventListenerImpl > m_DialogListener;
     css::uno::Reference<css::awt::XDialog> m_xDialog;
     css::uno::Reference<css::frame::XModel> m_xModel;
-    String sFormName;
+    OUString sFormName;
     bool mbInit;
 
 //protected:
     virtual void InitObject();
 public:
     TYPEINFO();
-    SbUserFormModule( const String& rName, const com::sun::star::script::ModuleInfo& mInfo, bool bIsVBACompat );
+    SbUserFormModule( const OUString& rName, const com::sun::star::script::ModuleInfo& mInfo, bool bIsVBACompat );
     virtual ~SbUserFormModule();
-    virtual SbxVariable* Find( const rtl::OUString& rName, SbxClassType t );
+    virtual SbxVariable* Find( const OUString& rName, SbxClassType t );
     void ResetApiObj( bool bTriggerTerminateEvent = true );
     void Unload();
     void Load();
-    void triggerMethod( const String& );
-    void triggerMethod( const String&, css::uno::Sequence< css::uno::Any >&  );
+    void triggerMethod( const OUString& );
+    void triggerMethod( const OUString&, css::uno::Sequence< css::uno::Any >&  );
     void triggerActivateEvent();
     void triggerDeactivateEvent();
     void triggerInitializeEvent();
@@ -94,11 +94,11 @@ class BASIC_DLLPUBLIC SbUserFormModuleInstance : public SbUserFormModule
     SbUserFormModule* m_pParentModule;
 
 public:
-    SbUserFormModuleInstance( SbUserFormModule* pParentModule, const rtl::OUString& rName,
+    SbUserFormModuleInstance( SbUserFormModule* pParentModule, const OUString& rName,
         const com::sun::star::script::ModuleInfo& mInfo, bool bIsVBACompat );
 
-    virtual sal_Bool IsClass( const rtl::OUString& ) const;
-    virtual SbxVariable* Find( const rtl::OUString& rName, SbxClassType t );
+    virtual sal_Bool IsClass( const OUString& ) const;
+    virtual SbxVariable* Find( const OUString& rName, SbxClassType t );
 };
 
 #endif

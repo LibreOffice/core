@@ -35,8 +35,8 @@ protected:
     SbxArrayRef  pProps;                    // Properties
     SbxArrayRef  pObjs;                     // Objects
     SbxProperty* pDfltProp;                 // Default-Property
-    String       aClassName;                // Classname
-    String       aDfltPropName;
+    OUString     aClassName;                // Classname
+    OUString     aDfltPropName;
     virtual sal_Bool LoadData( SvStream&, sal_uInt16 );
     virtual sal_Bool StoreData( SvStream& ) const;
     virtual ~SbxObject();
@@ -45,41 +45,41 @@ protected:
 public:
     SBX_DECL_PERSIST_NODATA(SBXCR_SBX,SBXID_OBJECT,1);
     TYPEINFO();
-    SbxObject( const String& rClassname );
+    SbxObject( const OUString& rClassname );
     SbxObject( const SbxObject& );
     SbxObject& operator=( const SbxObject& );
     virtual SbxDataType GetType() const;
     virtual SbxClassType GetClass() const;
     virtual void Clear();
 
-    virtual sal_Bool  IsClass( const rtl::OUString& ) const;
-    const String& GetClassName() const { return aClassName; }
-    void          SetClassName( const String &rNew ) { aClassName = rNew; }
+    virtual sal_Bool  IsClass( const OUString& ) const;
+    const OUString& GetClassName() const { return aClassName; }
+    void SetClassName( const OUString &rNew ) { aClassName = rNew; }
     // Default-Property
     SbxProperty* GetDfltProperty();
-    void SetDfltProperty( const String& r );
+    void SetDfltProperty( const OUString& r );
     // Search for an element
     virtual SbxVariable* FindUserData( sal_uInt32 nUserData );
-    virtual SbxVariable* Find( const rtl::OUString&, SbxClassType );
-    SbxVariable* FindQualified( const String&, SbxClassType );
+    virtual SbxVariable* Find( const OUString&, SbxClassType );
+    SbxVariable* FindQualified( const OUString&, SbxClassType );
     // Quick-Call-Interface for Methods
-    virtual sal_Bool Call( const String&, SbxArray* = NULL );
+    virtual sal_Bool Call( const OUString&, SbxArray* = NULL );
     // Execution of DDE-Commands
-    SbxVariable* Execute( const String& );
+    SbxVariable* Execute( const OUString& );
     // Manage elements
     virtual sal_Bool GetAll( SbxClassType ) { return sal_True; }
-    SbxVariable* Make( const String&, SbxClassType, SbxDataType );
-    virtual SbxObject* MakeObject( const String&, const String& );
+    SbxVariable* Make( const OUString&, SbxClassType, SbxDataType );
+    virtual SbxObject* MakeObject( const OUString&, const OUString& );
     virtual void Insert( SbxVariable* );
     // AB 23.4.1997, Optimization, Insertion without check for duplicate Entries and
     // without Broadcasts, only used in SO2/auto.cxx
     void QuickInsert( SbxVariable* );
-    virtual void Remove( const String&, SbxClassType );
+    virtual void Remove( const OUString&, SbxClassType );
     virtual void Remove( SbxVariable* );
 
     // Macro-Recording
-    virtual String GenerateSource( const String &rLinePrefix,
-                                   const SbxObject *pRelativeTo );
+    virtual OUString GenerateSource( const OUString &rLinePrefix,
+                                     const SbxObject *pRelativeTo );
     // Direct access on arrays
     SbxArray* GetMethods()      { return pMethods;  }
     SbxArray* GetProperties()   { return pProps;    }

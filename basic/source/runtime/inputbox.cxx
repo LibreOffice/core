@@ -156,11 +156,11 @@ RTLFUNC(InputBox)
         String aTitle;
         String aDefault;
         sal_Int32 nX = -1, nY = -1;  // center
-        const String& rPrompt = rPar.Get(1)->GetString();
+        const String& rPrompt = rPar.Get(1)->GetOUString();
         if ( nArgCount > 2 && !rPar.Get(2)->IsErr() )
-            aTitle = rPar.Get(2)->GetString();
+            aTitle = rPar.Get(2)->GetOUString();
         if ( nArgCount > 3 && !rPar.Get(3)->IsErr() )
-            aDefault = rPar.Get(3)->GetString();
+            aDefault = rPar.Get(3)->GetOUString();
         if ( nArgCount > 4 )
         {
             if ( nArgCount != 6 )
