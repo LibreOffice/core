@@ -88,7 +88,9 @@ uno::Sequence< OUString > SAL_CALL OrdinalSuffix::getOrdinalSuffix( sal_Int32 nN
         return retValue;
 
     icu::UnicodeString sFormatWithNoOrdinal;
-    xNumberFormat->format((int32_t)nNumber, sFormatWithNoOrdinal, NULL, nCode);
+    icu::Formattable ftmNumber((int32_t)nNumber);
+    icu::FieldPosition icuPos;
+    xNumberFormat->format(ftmNumber, sFormatWithNoOrdinal, icuPos, nCode);
     if (!U_SUCCESS(nCode))
         return retValue;
 
