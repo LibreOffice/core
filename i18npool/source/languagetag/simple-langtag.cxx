@@ -45,7 +45,7 @@ static void g_free(gpointer p)
         free(p);
 }
 
-static void g_error_free(GError *error) __attribute__((used))
+static void  __attribute__((used)) g_error_free(GError *error)
 {
     if (error)
     {
