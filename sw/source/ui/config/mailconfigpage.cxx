@@ -548,7 +548,7 @@ IMPL_LINK_NOARG(SwAuthenticationSettingsDialog, RadioButtonHdl_Impl)
 {
     sal_Bool bSeparate = m_aSeparateAuthenticationRB.IsChecked();
     sal_Bool bIsEnabled = m_aSeparateAuthenticationRB.IsEnabled();
-    sal_Bool bNotSeparate = !bSeparate & bIsEnabled;
+    sal_Bool bNotSeparate = !bSeparate && bIsEnabled;
     bSeparate &= bIsEnabled;
 
     m_aOutgoingServerFT.Enable(bSeparate);

@@ -276,8 +276,6 @@ void SwHeaderFooterWin::Paint( const Rectangle& )
     const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
     if ( rSettings.GetHighContrastMode() )
     {
-        aLineColor = rSettings.GetDialogTextColor().getBColor();
-
         aFillColor = rSettings.GetDialogColor( ).getBColor();
         aLineColor = rSettings.GetDialogTextColor( ).getBColor();
 
