@@ -371,6 +371,8 @@ public:
     xub_StrLen  GetMaxNumberStringLen( sal_uInt16& nPrecision,
                                        SCROW nRowStart, SCROW nRowEnd ) const;
 
+    void SetTextWidth(SCROW nRow, sal_uInt16 nWidth);
+
 private:
     ScBaseCell* CloneCell(SCSIZE nIndex, sal_uInt16 nFlags, ScDocument& rDestDoc, const ScAddress& rDestPos) const;
 
@@ -378,8 +380,10 @@ private:
     SCROW FindNextVisibleRow(SCROW nRow, bool bForward) const;
 
     /**
-     * Called whenever the state of cell array gets modified i.e. a new cell
-     * is inserted, a cell is moved or removed, cells are swapped, and so on.
+     * Called whenever the state of cell array gets modified i.e. new cell
+     * insertion, cell removal or relocation, cell value update and so on.
+     *
+     * Call this only from those methods where maItems is modified directly.
      */
     void CellStorageModified();
 };

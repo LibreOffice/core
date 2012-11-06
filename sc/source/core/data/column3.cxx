@@ -87,12 +87,14 @@ void ScColumn::Insert( SCROW nRow, ScBaseCell* pNewCell )
             }
             pOldCell->Delete();
             maItems[nIndex].pCell = pNewCell;
+            CellStorageModified();
         }
         else
         {
             maItems.insert(maItems.begin() + nIndex, ColEntry());
             maItems[nIndex].pCell = pNewCell;
             maItems[nIndex].nRow  = nRow;
+            CellStorageModified();
         }
     }
     // When we insert from the Clipboard we still have wrong (old) References!
@@ -136,6 +138,8 @@ void ScColumn::Append( SCROW nRow, ScBaseCell* pCell )
     maItems.push_back(ColEntry());
     maItems.back().pCell = pCell;
     maItems.back().nRow  = nRow;
+
+    CellStorageModified();
 }
 
 
@@ -162,6 +166,8 @@ void ScColumn::Delete( SCROW nRow )
         }
         pCell->EndListeningTo( pDocument );
         pCell->Delete();
+
+        CellStorageModified();
     }
 }
 
@@ -177,6 +183,8 @@ void ScColumn::DeleteAtIndex( SCSIZE nIndex )
     maItems.erase(maItems.begin() + nIndex);
     pCell->EndListeningTo( pDocument );
     pCell->Delete();
+
+    CellStorageModified();
 }
 
 
@@ -185,6 +193,8 @@ void ScColumn::FreeAll()
     for (SCSIZE i = 0; i < maItems.size(); i++)
         maItems[i].pCell->Delete();
     maItems.clear();
+
+    CellStorageModified();
 }
 
 
@@ -480,6 +490,7 @@ void ScColumn::DeleteRange( SCSIZE nStartIndex, SCSIZE nEndIndex, sal_uInt16 nDe
         if (bRemoved)
             nShift += maItems.size() - nStartSegment;
         maItems.erase(maItems.end() - nShift, maItems.end());
+        CellStorageModified();
     }
 
     // *** delete all formula cells ***
@@ -1403,8 +1414,11 @@ bool ScColumn::SetString( SCROW nRow, SCTAB nTabP, const String& rString,
                     if ( i >= maItems.size() || maItems[i].nRow != nRow )
                         Search(nRow, i);
                 }
+
                 pOldCell->Delete();
                 maItems[i].pCell = pNewCell; // Replace
+                CellStorageModified();
+
                 if ( pNewCell->GetCellType() == CELLTYPE_FORMULA )
                 {
                     pNewCell->StartListeningTo( pDocument );
@@ -1626,6 +1640,8 @@ void ScColumn::RemoveProtected( SCROW nStartRow, SCROW nEndRow )
                         maItems[nIndex].pCell = new ScStringCell( aString );
                     }
                     delete pFormula;
+
+                    CellStorageModified();
                 }
                 ++nIndex;
             }
@@ -1934,6 +1950,10 @@ xub_StrLen ScColumn::GetMaxNumberStringLen(
         }
     }
     return nStringLen;
+}
+
+void ScColumn::SetTextWidth(SCROW nRow, sal_uInt16 nWidth)
+{
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

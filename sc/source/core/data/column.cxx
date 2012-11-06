@@ -793,13 +793,13 @@ void lclTakeBroadcaster( ScBaseCell*& rpCell, SvtBroadcaster* pBC )
 //  SwapRow for sorting
 void ScColumn::SwapRow(SCROW nRow1, SCROW nRow2)
 {
+    if (nRow1 == nRow2)
+        // Nothing to swap.
+        return;
+
     /*  Simple swap of cell pointers does not work if broadcasters exist (crash
         if cell broadcasts directly or indirectly to itself). While swapping
         the cells, broadcasters have to remain at old positions! */
-
-    /*  While cloning cells, do not clone notes, but move note pointers to new
-        cells. This prevents creation of new caption drawing objects for every
-        swap operation while sorting. */
 
     ScBaseCell* pCell1 = 0;
     SCSIZE nIndex1;
@@ -850,6 +850,8 @@ void ScColumn::SwapRow(SCROW nRow1, SCROW nRow2)
             SvtBroadcaster* pBC2 = pCell2->ReleaseBroadcaster();
             pCell1->TakeBroadcaster( pBC2 );
             pCell2->TakeBroadcaster( pBC1 );
+
+            CellStorageModified();
         }
         else
         {
@@ -858,11 +860,13 @@ void ScColumn::SwapRow(SCROW nRow1, SCROW nRow2)
             {
                 // insert dummy note cell (without note) containing old broadcaster
                 maItems[nIndex1].pCell = pDummyCell;
+                CellStorageModified();
             }
             else
             {
                 // remove ColEntry at old position
                 maItems.erase( maItems.begin() + nIndex1 );
+                CellStorageModified();
             }
 
             // insert ColEntry at new position
@@ -910,8 +914,7 @@ void ScColumn::SwapRow(SCROW nRow1, SCROW nRow2)
     }
 
     /*  Create clone of pCell1 at position of pCell2 (pCell1 exists always, see
-        variable swapping above). Do not clone the note, but move pointer of
-        old note to new cell. */
+        variable swapping above).*/
     ScBaseCell* pNew2 = pCell1->Clone( *pDocument, aPos2, SC_CLONECELL_ADJUST3DREL );
 
     /*  Create clone of pCell2 at position of pCell1. Do not clone the note,
@@ -971,7 +974,10 @@ void ScColumn::SwapCell( SCROW nRow, ScColumn& rCol)
     {
         // swap
         maItems[nIndex1].pCell = pCell2;
+        CellStorageModified();
         rCol.maItems[nIndex2].pCell = pCell1;
+        rCol.CellStorageModified();
+
         // update references
         SCsCOL dx = rCol.nCol - nCol;
         if ( pFmlaCell1 )
@@ -993,6 +999,8 @@ void ScColumn::SwapCell( SCROW nRow, ScColumn& rCol)
     {
         // remove
         maItems.erase(maItems.begin() + nIndex1);
+        CellStorageModified();
+
         // update references
         SCsCOL dx = rCol.nCol - nCol;
         if ( pFmlaCell1 )
@@ -1148,6 +1156,8 @@ void ScColumn::InsertRow( SCROW nStartRow, SCSIZE nSize )
     }
 
     pDocument->SetAutoCalc( bOldAutoCalc );
+
+    CellStorageModified();
 }
 
 
@@ -1545,6 +1555,8 @@ void ScColumn::MarkScenarioIn( ScMarkData& rDestMark ) const
 void ScColumn::SwapCol(ScColumn& rCol)
 {
     maItems.swap(rCol.maItems);
+    CellStorageModified();
+    rCol.CellStorageModified();
 
     ScAttrArray* pTempAttr = rCol.pAttrArray;
     rCol.pAttrArray = pAttrArray;
@@ -1637,9 +1649,11 @@ void ScColumn::MoveTo(SCROW nStartRow, SCROW nEndRow, ScColumn& rCol)
             }
             // Erase the slots containing pointers to the dummy cell instance.
             maItems.erase(maItems.begin() + nStartPos, maItems.begin() + nStopPos);
+            CellStorageModified();
         }
         pNoteCell->Delete(); // Delete the dummy cell instance.
     }
+
 }
 
 bool ScColumn::UpdateReference( UpdateRefMode eUpdateRefMode, SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
@@ -1780,6 +1794,7 @@ void ScColumn::UpdateInsertTabOnlyCells(SCTAB nInsPos, SCTAB nNewSheets)
             {
                 ScEditCell* p = static_cast<ScEditCell*>(maItems[i].pCell);
                 p->UpdateFields(nTab);
+                SetTextWidth(maItems[i].nRow, TEXTWIDTH_DIRTY);
             }
             break;
             default:
@@ -1810,6 +1825,7 @@ void ScColumn::UpdateInsertTabAbs(SCTAB nNewPos)
             {
                 ScEditCell* p = static_cast<ScEditCell*>(maItems[i].pCell);
                 p->UpdateFields(nTab);
+                SetTextWidth(maItems[i].nRow, TEXTWIDTH_DIRTY);
             }
             break;
             default:
@@ -1859,6 +1875,7 @@ void ScColumn::UpdateDeleteTab(SCTAB nDelPos, bool bIsMove, ScColumn* pRefUndo, 
             {
                 ScEditCell* p = static_cast<ScEditCell*>(maItems[i].pCell);
                 p->UpdateFields(nTab);
+                SetTextWidth(maItems[i].nRow, TEXTWIDTH_DIRTY);
             }
             break;
             default:
@@ -1891,6 +1908,7 @@ void ScColumn::UpdateMoveTab( SCTAB nOldPos, SCTAB nNewPos, SCTAB nTabNo )
             {
                 ScEditCell* p = static_cast<ScEditCell*>(maItems[i].pCell);
                 p->UpdateFields(nTab);
+                SetTextWidth(maItems[i].nRow, TEXTWIDTH_DIRTY);
             }
             break;
             default:
