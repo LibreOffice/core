@@ -32,6 +32,8 @@ struct GError {
     GError() : message(NULL) {}
 };
 
+typedef struct GError lt_error_t;
+
 static gpointer g_malloc(size_t s)
 {
     return malloc(s);
@@ -43,7 +45,7 @@ static void g_free(gpointer p)
         free(p);
 }
 
-static void g_error_free(GError *error)
+static void g_error_free(GError *error) __attribute__((used))
 {
     if (error)
     {
