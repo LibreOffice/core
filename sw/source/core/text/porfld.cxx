@@ -244,7 +244,9 @@ void SwFldPortion::CheckScript( const SwTxtSizeInfo &rInf )
         const sal_uInt8 nFldDir = ( IsNumberPortion() || IsFtnNumPortion() ) ?
                              rSI.GetDefaultDir() :
                              rSI.DirType( IsFollow() ? rInf.GetIdx() - 1 : rInf.GetIdx() );
-        if ( UBIDI_RTL == nFldDir )
+
+        bool bPerformUBA = UBIDI_LTR != nFldDir ? true : i18n::ScriptType::COMPLEX == nScript;
+        if (bPerformUBA)
         {
             UErrorCode nError = U_ZERO_ERROR;
             UBiDi* pBidi = ubidi_openSized( aTxt.Len(), 0, &nError );
@@ -274,8 +276,16 @@ void SwFldPortion::CheckScript( const SwTxtSizeInfo &rInf )
                 }
             }
 
-            if ( nCurrDir == UBIDI_RTL )
+            if (nCurrDir == UBIDI_RTL)
+            {
                 nTmp = SW_CTL;
+                //If we decided that this range was RTL after all and the
+                //previous range was complex but clipped to the start of this
+                //range, then extend it to be complex over the additional RTL
+                //range
+                if (nScript == i18n::ScriptType::COMPLEX)
+                    nNextScriptChg = nNextDirChg;
+            }
         }
 
         // #i98418#
