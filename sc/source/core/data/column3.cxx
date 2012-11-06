@@ -1952,6 +1952,11 @@ xub_StrLen ScColumn::GetMaxNumberStringLen(
     return nStringLen;
 }
 
+sal_uInt16 ScColumn::GetTextWidth(SCROW nRow) const
+{
+    return 0;
+}
+
 void ScColumn::SetTextWidth(SCROW nRow, sal_uInt16 nWidth)
 {
 }

@@ -371,6 +371,7 @@ public:
     xub_StrLen  GetMaxNumberStringLen( sal_uInt16& nPrecision,
                                        SCROW nRowStart, SCROW nRowEnd ) const;
 
+    sal_uInt16 GetTextWidth(SCROW nRow) const;
     void SetTextWidth(SCROW nRow, sal_uInt16 nWidth);
 
 private:
